@@ -44,6 +44,7 @@ describe('success cases', () => {
     expect(placed).toEqual(expected);
     expect(placed[0].slides[0].slide).toBe(why);
   });
+
   it('joins a Slide anchor and an element name with a double hyphen, never equal to a two-part Slide anchor', () => {
     // ARRANGE
     const expected = 'foundations--why--prose';
@@ -53,6 +54,17 @@ describe('success cases', () => {
     // ASSERT
     expect(anchor).toBe(expected);
     expect(anchor).not.toBe(slideAnchor);
+  });
+
+  describe('the Title slide anchor', () => {
+    it('is `top`, the one id no Section or Slide may take', () => {
+      // ARRANGE
+      const reserved = 'top';
+      // ACT
+      const anchor = titleAnchor();
+      // ASSERT
+      expect(anchor).toBe(reserved);
+    });
   });
 });
 
@@ -76,6 +88,7 @@ describe('failure cases', () => {
     // ASSERT
     expect(build).toThrow(badSlug);
   });
+
   it('rejects an element name that is not kebab-case', () => {
     // ARRANGE
     const bad = 'Not Kebab';
@@ -83,6 +96,26 @@ describe('failure cases', () => {
     const build = () => targetAnchor('foundations--why', bad);
     // ASSERT
     expect(build).toThrow(bad);
+  });
+
+  describe('the Title slide anchor', () => {
+    it('rejects `top` as a Section slug, which would collide with the Title slide', () => {
+      // ARRANGE
+      const sections = [outline('top', [])];
+      // ACT
+      const build = () => slidesOf(sections);
+      // ASSERT
+      expect(build).toThrow('top');
+    });
+
+    it('rejects `top` as a Slide slug', () => {
+      // ARRANGE
+      const sections = [outline('intro', ['top'])];
+      // ACT
+      const build = () => slidesOf(sections);
+      // ASSERT
+      expect(build).toThrow('top');
+    });
   });
 });
 
@@ -104,32 +137,5 @@ describe('edge cases', () => {
     const build = () => slidesOf(sections);
     // ASSERT
     expect(build).toThrow(badSlug);
-  });
-});
-
-describe('the Title slide anchor', () => {
-  it('is `top`, the one id no Section or Slide may take', () => {
-    // ARRANGE / ACT
-    const anchor = titleAnchor();
-    // ASSERT
-    expect(anchor).toBe('top');
-  });
-
-  it('rejects `top` as a Section slug, which would collide with the Title slide', () => {
-    // ARRANGE
-    const sections = [outline('top', [])];
-    // ACT
-    const build = () => slidesOf(sections);
-    // ASSERT
-    expect(build).toThrow('top');
-  });
-
-  it('rejects `top` as a Slide slug', () => {
-    // ARRANGE
-    const sections = [outline('intro', ['top'])];
-    // ACT
-    const build = () => slidesOf(sections);
-    // ASSERT
-    expect(build).toThrow('top');
   });
 });

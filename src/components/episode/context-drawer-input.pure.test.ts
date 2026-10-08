@@ -119,29 +119,29 @@ describe('success cases', () => {
     // ASSERT
     expect(result).toBeUndefined();
   });
-});
 
-describe('the Title slide', () => {
-  it('comes first, with the explainer and no notes or script', () => {
-    // ARRANGE
-    const placed = [section('a', { title: 'A' })];
-    const expected = [titleItem, 'a'];
-    // ACT
-    const [first, second] = itemsOf(placed, EXPLAINER);
-    // ASSERT
-    expect([first, second.id]).toEqual(expected);
-  });
+  describe('the Title slide', () => {
+    it('comes first, with the explainer and no notes or script', () => {
+      // ARRANGE
+      const placed = [section('a', { title: 'A' })];
+      const expected = [titleItem, 'a'];
+      // ACT
+      const [first, second] = itemsOf(placed, EXPLAINER);
+      // ASSERT
+      expect([first, second.id]).toEqual(expected);
+    });
 
-  it('is the only item with an explainer', () => {
-    // ARRANGE
-    const placed = [section('a', { title: 'A' }, [page('a--b', { slug: 'b', title: 'B' })])];
-    const expected = ['top'];
-    // ACT
-    const withExplainer = itemsOf(placed, EXPLAINER)
-      .filter((item) => item.explainer !== undefined)
-      .map((item) => item.id);
-    // ASSERT
-    expect(withExplainer).toEqual(expected);
+    it('is the only item with an explainer', () => {
+      // ARRANGE
+      const placed = [section('a', { title: 'A' }, [page('a--b', { slug: 'b', title: 'B' })])];
+      const expected = ['top'];
+      // ACT
+      const withExplainer = itemsOf(placed, EXPLAINER)
+        .filter((item) => item.explainer !== undefined)
+        .map((item) => item.id);
+      // ASSERT
+      expect(withExplainer).toEqual(expected);
+    });
   });
 });
 

@@ -3,9 +3,9 @@ type: adr
 id: ARCH-003
 title: 'Testing'
 domain: architecture
-rules: false
+rules: true
 files: ['**/*.test.ts']
-paths: ['**/*.test.ts', '**/*.pure.ts']
+paths: ['**/*.test.ts', '**/*.pure.ts', '.archgate/adrs/ARCH-003-testing.rules.ts']
 description: "What a test file may do and how it is shaped: six behavioural Don'ts that keep green meaningful everywhere, plus a three-block suite split, marked test bodies and two import homes under src/."
 ---
 
@@ -24,12 +24,12 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 
 ### 2. Suite structure
 
-1. Under `src/**/*.test.ts`, a top-level suite MUST split into exactly three `describe` blocks — `success cases`, `failure cases`, `edge cases` — each holding at least one test. There is no fourth name.
+1. Under `src/**/*.test.ts`, a top-level suite MUST split into exactly three `describe` blocks — `success cases`, `failure cases`, `edge cases` — each holding at least one test. There is no fourth name. (📜 Rule: `suite-three-blocks`)
 2. `describe` MUST NOT nest past two levels; a test MUST NOT sit at file top level.
 
 ### 3. Test-body structure
 
-1. Every test body MUST carry `// ARRANGE`, `// ACT` and `// ASSERT`, uppercase, exactly once each, in that order.
+1. Every test body MUST carry `// ARRANGE`, `// ACT` and `// ASSERT`, uppercase, exactly once each, in that order; one marker per comment, so `// ARRANGE / ACT` is two markers short. (📜 Rule: `test-body-aaa`)
 2. The `// ASSERT` block MUST NOT hold a magic string or number; name it in `// ARRANGE`, so a reviewer can disagree with it. Exempt as pure noise: `0`, `1`, `-1`, `true`, `false`, `null`, `undefined`, `''`, `[]`, `{}`.
 3. An assertion MUST NOT collapse into a boolean inside `// ACT`. Put the observation in `// ACT` and keep the rich matcher in `// ASSERT` — `expect(seen).toContain(key)` names the missing key, while `expect(isSeen).toBe(true)` discards why it failed.
 
@@ -45,9 +45,9 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 1. **DO** pass every instant, seed and input a test depends on into the test explicitly. (Decision 1.1)
 2. **DO** write the expected value out by hand, so a reviewer can disagree with it. (Decision 1.2)
 3. **DO** hand-write a stand-in when a collaborator must be substituted, and keep it in the test file where a reader can see what it does. (Decision 1.2)
-4. **DO** split every suite under `src/` into `success cases`, `failure cases` and `edge cases`, with at least one test in each. (Decision 2.1)
+4. **DO** split every suite under `src/` into `success cases`, `failure cases` and `edge cases`, with at least one test in each. (Decision 2, 📜 Rule: `suite-three-blocks`)
 5. **DO** treat a block you cannot fill as a question about the subject, not a rule to route around. (Decision 2.1)
-6. **DO** mark every body `// ARRANGE`, `// ACT`, `// ASSERT`, naming expected values before asserting them. (Decision 3.1)
+6. **DO** mark every body `// ARRANGE`, `// ACT`, `// ASSERT`, naming expected values before asserting them. (Decision 3, 📜 Rule: `test-body-aaa`)
 7. **DO** test a `*.pure.ts` file from its same-name sibling, and everything else through an entry point. (Decision 4.2)
 8. **DO** assert an absence of side effects by comparing an observation taken before the action against the same observation taken after it. (Decision 1.2)
 
@@ -82,8 +82,8 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 ## Compliance and Enforcement
 
 1. **Determinism & Real Execution (Decision 1)** — ESLint `no-restricted-syntax` and `no-restricted-properties` in `eslint.config.mjs` (`**/*.test.ts`). Ambient network calls are not mechanically checkable (review duty).
-2. **Suite Structure (Decision 2)** — ESLint `no-restricted-syntax` in `eslint.config.mjs` (`src/**/*.test.ts`).
-3. **Test-Body Structure (Decision 3)** — Inline ESLint rule `test-body-aaa` in `eslint.config.mjs`. Rich matcher usage is a review duty.
+2. **Suite Structure (Decision 2)** — `ARCH-003-testing.rules.ts` rule `suite-three-blocks`, `error` tier, over `src/**/*.test.ts`: top-level `describe` names are exactly the three blocks, once each. The two-level nesting limit and "at least one test per block" are review duties (an empty block also fails vitest and `no-empty-function`).
+3. **Test-Body Structure (Decision 3)** — `ARCH-003-testing.rules.ts` rule `test-body-aaa`, `error` tier, over `src/**/*.test.ts`: each `it`/`test` body carries the three uppercase markers once each, in order, one per comment. Line-scanned, so a body runs to the next test or `describe` line. §3.2 magic values and §3.3 rich matchers are review duties.
 4. **Test Homes & Boundaries (Decision 4)** — Dependency-cruiser rules `tests-through-entrypoints` and `colocated-test-lane` in `.dependency-cruiser.cjs` (`npm run lint:boundaries`).
 5. **Tautological Assertions** — Not mechanically checkable (review duty).
 

@@ -15,6 +15,18 @@ const SECTIONS: readonly TocSection[] = [
   { id: 'outro', title: 'Outro', minutes: 1, items: [{ id: 'outro--next', title: 'Next', minutes: 5 }] },
 ];
 
+const folded: readonly TocSection[] = [
+  {
+    id: 'a',
+    title: 'A',
+    minutes: 3,
+    unlisted: [{ id: 'a--opening', minutes: 2 }],
+    items: [{ id: 'a--why', title: 'Why', minutes: 7, unlisted: [{ id: 'a--visual', minutes: 4 }] }],
+  },
+];
+
+const owners = { 'a--visual': 'a--why' };
+
 describe('success cases', () => {
   it('tells the pill which numbered Section the reader is in, from a page Slide too', () => {
     // ARRANGE
@@ -60,6 +72,64 @@ describe('success cases', () => {
     const time = readingTime(minutes, 1, 0.25);
     // ASSERT
     expect(time).toEqual(expected);
+  });
+
+  describe('reading order with unlisted Slides', () => {
+    it('lists every Slide in page order with its own minutes, and maps unlisted ones to their entry', () => {
+      // ARRANGE
+      const expected = {
+        ids: ['a', 'a--opening', 'a--why', 'a--visual'],
+        minutes: [1, 2, 3, 4],
+        owners: { 'a--opening': 'a', 'a--visual': 'a--why' },
+      };
+      // ACT
+      const order = readingOrder(folded);
+      // ASSERT
+      expect(order).toEqual(expected);
+    });
+
+    it('counts an active untitled Slide as read up to its place, so remaining time keeps falling past it', () => {
+      // ARRANGE
+      const order = readingOrder(folded);
+      const index = order.ids.indexOf('a--visual');
+      // ACT
+      const time = readingTime(order.minutes, index, 0.5);
+      // ASSERT
+      expect(time).toMatchObject({ total: 10, remaining: 2 });
+    });
+
+    it('is the plain entry order when nothing is unlisted', () => {
+      // ARRANGE
+      const expected = {
+        ids: ['intro', 'intro--why', 'pause', 'outro', 'outro--next'],
+        minutes: [1, 3, 1, 1, 5],
+        owners: {},
+      };
+      // ACT
+      const order = readingOrder(SECTIONS);
+      // ASSERT
+      expect(order).toEqual(expected);
+    });
+  });
+
+  describe('the active entry', () => {
+    it('is the owning entry for an untitled Slide', () => {
+      // ARRANGE
+      const activeSlide = 'a--visual';
+      // ACT
+      const active = activeEntry(owners, activeSlide, 'top');
+      // ASSERT
+      expect(active).toBe('a--why');
+    });
+
+    it('is the Slide itself when it has an entry', () => {
+      // ARRANGE
+      const activeSlide = 'a--why';
+      // ACT
+      const active = activeEntry(owners, activeSlide, 'top');
+      // ASSERT
+      expect(active).toBe('a--why');
+    });
   });
 });
 
@@ -140,89 +210,7 @@ describe('edge cases', () => {
     // ASSERT
     expect(time).toEqual(done);
   });
-});
 
-describe('reading order with unlisted Slides', () => {
-  const folded: readonly TocSection[] = [
-    {
-      id: 'a',
-      title: 'A',
-      minutes: 3,
-      unlisted: [{ id: 'a--opening', minutes: 2 }],
-      items: [{ id: 'a--why', title: 'Why', minutes: 7, unlisted: [{ id: 'a--visual', minutes: 4 }] }],
-    },
-  ];
-
-  it('lists every Slide in page order with its own minutes, and maps unlisted ones to their entry', () => {
-    // ARRANGE
-    const expected = {
-      ids: ['a', 'a--opening', 'a--why', 'a--visual'],
-      minutes: [1, 2, 3, 4],
-      owners: { 'a--opening': 'a', 'a--visual': 'a--why' },
-    };
-    // ACT
-    const order = readingOrder(folded);
-    // ASSERT
-    expect(order).toEqual(expected);
-  });
-
-  it('counts an active untitled Slide as read up to its place, so remaining time keeps falling past it', () => {
-    // ARRANGE
-    const order = readingOrder(folded);
-    const index = order.ids.indexOf('a--visual');
-    // ACT
-    const time = readingTime(order.minutes, index, 0.5);
-    // ASSERT
-    expect(time).toMatchObject({ total: 10, remaining: 2 });
-  });
-
-  it('is the plain entry order when nothing is unlisted', () => {
-    // ARRANGE
-    const expected = {
-      ids: ['intro', 'intro--why', 'pause', 'outro', 'outro--next'],
-      minutes: [1, 3, 1, 1, 5],
-      owners: {},
-    };
-    // ACT
-    const order = readingOrder(SECTIONS);
-    // ASSERT
-    expect(order).toEqual(expected);
-  });
-});
-
-describe('the active entry', () => {
-  const owners = { 'a--visual': 'a--why' };
-
-  it('is none on the Title slide, so no entry is highlighted', () => {
-    // ARRANGE / ACT
-    const active = activeEntry(owners, 'top', 'top');
-    // ASSERT
-    expect(active).toBeNull();
-  });
-
-  it('is none while the Slide is not known yet', () => {
-    // ARRANGE / ACT
-    const active = activeEntry(owners, null, 'top');
-    // ASSERT
-    expect(active).toBeNull();
-  });
-
-  it('is the owning entry for an untitled Slide', () => {
-    // ARRANGE / ACT
-    const active = activeEntry(owners, 'a--visual', 'top');
-    // ASSERT
-    expect(active).toBe('a--why');
-  });
-
-  it('is the Slide itself when it has an entry', () => {
-    // ARRANGE / ACT
-    const active = activeEntry(owners, 'a--why', 'top');
-    // ASSERT
-    expect(active).toBe('a--why');
-  });
-});
-
-describe('reading time on the Title slide', () => {
   it('leaves the full total remaining, because nothing is read yet', () => {
     // ARRANGE
     const { ids, minutes } = readingOrder(SECTIONS);
@@ -230,5 +218,25 @@ describe('reading time on the Title slide', () => {
     const time = readingTime(minutes, ids.indexOf('top'), 0.5);
     // ASSERT
     expect([time.remaining, time.progress]).toEqual([time.total, 0]);
+  });
+
+  describe('the active entry', () => {
+    it('is none on the Title slide, so no entry is highlighted', () => {
+      // ARRANGE
+      const activeSlide = 'top';
+      // ACT
+      const active = activeEntry(owners, activeSlide, 'top');
+      // ASSERT
+      expect(active).toBeNull();
+    });
+
+    it('is none while the Slide is not known yet', () => {
+      // ARRANGE
+      const activeSlide = null;
+      // ACT
+      const active = activeEntry(owners, activeSlide, 'top');
+      // ASSERT
+      expect(active).toBeNull();
+    });
   });
 });

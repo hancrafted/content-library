@@ -59,100 +59,85 @@ describe('success cases', () => {
     // ASSERT
     expect(minutes).toEqual(germanMinutes);
   });
-});
 
-describe('optional declarations', () => {
-  it('leaves an untitled Slide out of the table of contents', () => {
-    // ARRANGE
-    const placed = [
-      section('foundations', { title: 'Foundations', minutes: { en: 1, de: 1 } }, [
-        page('foundations--why', { slug: 'why', title: 'Why', minutes: { en: 3, de: 3 } }),
-        page('foundations--visual', { slug: 'visual' }),
-        page('foundations--how', { slug: 'how', title: 'How', minutes: { en: 2, de: 2 } }),
-      ]),
-    ];
-    const listed = ['foundations', 'foundations--why', 'foundations--how'];
-    // ACT
-    const [first] = tocSectionsOf(placed, 'en');
-    const ids = [first.id, ...first.items.map((item) => item.id)];
-    // ASSERT
-    expect(ids).toEqual(listed);
+  describe('optional declarations', () => {
+    it('leaves an untitled Slide out of the table of contents', () => {
+      // ARRANGE
+      const placed = [
+        section('foundations', { title: 'Foundations', minutes: { en: 1, de: 1 } }, [
+          page('foundations--why', { slug: 'why', title: 'Why', minutes: { en: 3, de: 3 } }),
+          page('foundations--visual', { slug: 'visual' }),
+          page('foundations--how', { slug: 'how', title: 'How', minutes: { en: 2, de: 2 } }),
+        ]),
+      ];
+      const listed = ['foundations', 'foundations--why', 'foundations--how'];
+      // ACT
+      const [first] = tocSectionsOf(placed, 'en');
+      const ids = [first.id, ...first.items.map((item) => item.id)];
+      // ASSERT
+      expect(ids).toEqual(listed);
+    });
+
+    it('keeps the minutes of an untitled Slide in the Section total', () => {
+      // ARRANGE
+      const placed = [
+        section('foundations', { title: 'Foundations', minutes: { en: 1, de: 1 } }, [
+          page('foundations--why', { slug: 'why', title: 'Why', minutes: { en: 3, de: 3 } }),
+          page('foundations--visual', { slug: 'visual', minutes: { en: 2, de: 5 } }),
+        ]),
+      ];
+      const total = { en: 6, de: 9 };
+      // ACT
+      const sum = (locale: 'en' | 'de') => {
+        const [toc] = tocSectionsOf(placed, locale);
+        return toc.minutes + toc.items.reduce((acc, item) => acc + item.minutes, 0);
+      };
+      // ASSERT
+      expect({ en: sum('en'), de: sum('de') }).toEqual(total);
+    });
+
+    it('adds the minutes of an untitled Slide to the entry it follows, so reading time keeps its order', () => {
+      // ARRANGE
+      const placed = [
+        section('a', { title: 'A', minutes: { en: 1, de: 1 } }, [
+          page('a--opening', { slug: 'opening', minutes: { en: 2, de: 2 } }),
+          page('a--why', { slug: 'why', title: 'Why', minutes: { en: 3, de: 3 } }),
+          page('a--visual', { slug: 'visual', minutes: { en: 4, de: 4 } }),
+        ]),
+      ];
+      const expected = [3, 7];
+      // ACT
+      const [toc] = tocSectionsOf(placed, 'en');
+      const minutes = [toc.minutes, toc.items[0].minutes];
+      // ASSERT
+      expect(minutes).toEqual(expected);
+    });
   });
 
-  it('keeps the minutes of an untitled Slide in the Section total', () => {
-    // ARRANGE
-    const placed = [
-      section('foundations', { title: 'Foundations', minutes: { en: 1, de: 1 } }, [
-        page('foundations--why', { slug: 'why', title: 'Why', minutes: { en: 3, de: 3 } }),
-        page('foundations--visual', { slug: 'visual', minutes: { en: 2, de: 5 } }),
-      ]),
-    ];
-    const total = { en: 6, de: 9 };
-    // ACT
-    const sum = (locale: 'en' | 'de') => {
-      const [toc] = tocSectionsOf(placed, locale);
-      return toc.minutes + toc.items.reduce((acc, item) => acc + item.minutes, 0);
-    };
-    // ASSERT
-    expect({ en: sum('en'), de: sum('de') }).toEqual(total);
-  });
-
-  it('counts a Slide without minutes as zero', () => {
-    // ARRANGE
-    const placed = [
-      section('foundations', { title: 'Foundations', minutes: { en: 1, de: 1 } }, [
-        page('foundations--visual', { slug: 'visual' }),
-        page('foundations--quiet', { slug: 'quiet', title: 'Quiet' }),
-      ]),
-    ];
-    const expected = [{ id: 'foundations--quiet', title: 'Quiet', minutes: 0 }];
-    // ACT
-    const [toc] = tocSectionsOf(placed, 'en');
-    // ASSERT
-    expect(toc.items).toEqual(expected);
-  });
-
-  it('adds the minutes of an untitled Slide to the entry it follows, so reading time keeps its order', () => {
-    // ARRANGE
-    const placed = [
-      section('a', { title: 'A', minutes: { en: 1, de: 1 } }, [
-        page('a--opening', { slug: 'opening', minutes: { en: 2, de: 2 } }),
-        page('a--why', { slug: 'why', title: 'Why', minutes: { en: 3, de: 3 } }),
-        page('a--visual', { slug: 'visual', minutes: { en: 4, de: 4 } }),
-      ]),
-    ];
-    const expected = [3, 7];
-    // ACT
-    const [toc] = tocSectionsOf(placed, 'en');
-    const minutes = [toc.minutes, toc.items[0].minutes];
-    // ASSERT
-    expect(minutes).toEqual(expected);
-  });
-});
-
-describe('unlisted Slides', () => {
-  it('names each untitled Slide on the entry that owns its minutes, in page order, with its own minutes', () => {
-    // ARRANGE
-    const placed = [
-      section('a', { title: 'A', minutes: { en: 1, de: 1 } }, [
-        page('a--opening', { slug: 'opening', minutes: { en: 2, de: 2 } }),
-        page('a--why', { slug: 'why', title: 'Why', minutes: { en: 3, de: 3 } }),
-        page('a--visual', { slug: 'visual', minutes: { en: 4, de: 4 } }),
-        page('a--silent', { slug: 'silent' }),
-      ]),
-    ];
-    const expected = {
-      section: [{ id: 'a--opening', minutes: 2 }],
-      item: [
-        { id: 'a--visual', minutes: 4 },
-        { id: 'a--silent', minutes: 0 },
-      ],
-    };
-    // ACT
-    const [toc] = tocSectionsOf(placed, 'en');
-    const owned = { section: toc.unlisted, item: toc.items[0].unlisted };
-    // ASSERT
-    expect(owned).toEqual(expected);
+  describe('unlisted Slides', () => {
+    it('names each untitled Slide on the entry that owns its minutes, in page order, with its own minutes', () => {
+      // ARRANGE
+      const placed = [
+        section('a', { title: 'A', minutes: { en: 1, de: 1 } }, [
+          page('a--opening', { slug: 'opening', minutes: { en: 2, de: 2 } }),
+          page('a--why', { slug: 'why', title: 'Why', minutes: { en: 3, de: 3 } }),
+          page('a--visual', { slug: 'visual', minutes: { en: 4, de: 4 } }),
+          page('a--silent', { slug: 'silent' }),
+        ]),
+      ];
+      const expected = {
+        section: [{ id: 'a--opening', minutes: 2 }],
+        item: [
+          { id: 'a--visual', minutes: 4 },
+          { id: 'a--silent', minutes: 0 },
+        ],
+      };
+      // ACT
+      const [toc] = tocSectionsOf(placed, 'en');
+      const owned = { section: toc.unlisted, item: toc.items[0].unlisted };
+      // ASSERT
+      expect(owned).toEqual(expected);
+    });
   });
 });
 
@@ -181,5 +166,22 @@ describe('edge cases', () => {
     const toc = tocSectionsOf(placed, 'en');
     // ASSERT
     expect(toc).toEqual([]);
+  });
+
+  describe('optional declarations', () => {
+    it('counts a Slide without minutes as zero', () => {
+      // ARRANGE
+      const placed = [
+        section('foundations', { title: 'Foundations', minutes: { en: 1, de: 1 } }, [
+          page('foundations--visual', { slug: 'visual' }),
+          page('foundations--quiet', { slug: 'quiet', title: 'Quiet' }),
+        ]),
+      ];
+      const expected = [{ id: 'foundations--quiet', title: 'Quiet', minutes: 0 }];
+      // ACT
+      const [toc] = tocSectionsOf(placed, 'en');
+      // ASSERT
+      expect(toc.items).toEqual(expected);
+    });
   });
 });
