@@ -11,7 +11,7 @@ export interface TabSpec<T extends string> {
 /**
  * `transition-colors` replaces the Button's `transition-all`: that one also
  * transitions the inherited `visibility`, so on open the tab stays `hidden` for
- * its first frames and the drawer's focus move on open is dropped (FE-010 §6).
+ * its first frames and the drawer's focus move on open is dropped (FE-010 §5).
  */
 /** Dressed like the site header's nav links: a ghost button, the selected one on `accent`. */
 function TabButton<T extends string>(props: {
@@ -34,7 +34,7 @@ function TabButton<T extends string>(props: {
       tabIndex={props.selected ? 0 : -1}
       onClick={() => props.onSelect(props.tab.id)}
       className={cn(
-        'cursor-pointer transition-colors max-md:h-10',
+        'shrink-0 cursor-pointer transition-colors max-md:h-10',
         props.selected
           ? 'bg-selected text-selected-foreground hover:bg-selected hover:text-selected-foreground'
           : 'text-muted-foreground',
@@ -76,7 +76,7 @@ export function DrawerTabs<T extends string>(props: {
 }) {
   const onKeyDown = tabKeyHandler(props);
   return (
-    <div role="tablist" onKeyDown={onKeyDown} className="flex gap-1 print:hidden">
+    <div role="tablist" onKeyDown={onKeyDown} className="-m-0.5 flex min-w-0 gap-1 overflow-x-auto p-0.5 print:hidden">
       {props.tabs.map((tab) => (
         <TabButton
           key={tab.id}

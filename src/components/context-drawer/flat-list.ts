@@ -1,6 +1,6 @@
 /*
  * Notes and segments are a flat list inside the drawer card, never cards of
- * their own (FE-010 §9.7): a short, centred divider and generous space set one
+ * their own (docs/agents/context-drawer-design.md): a short, centred divider and generous space set one
  * item from the next.
  */
 export const FLAT_LIST = 'flex flex-col';

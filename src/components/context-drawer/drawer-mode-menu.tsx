@@ -133,14 +133,14 @@ function Popover(props: {
 
 /**
  * The "more" menu in the card's head: pick how the card sits beside the Slides.
- * A menu button with `menuitemradio` items. Hidden below `md`, where the card
+ * A menu button with `menuitemradio` items. Hidden below `xl`, where the card
  * is always an overlay.
  */
 export function ModeMenu(props: { labels: ModeMenuLabels; mode: DrawerMode; onChange: (mode: DrawerMode) => void }) {
   const { labels, mode } = props;
   const menu = useModeMenu(mode);
   return (
-    <div ref={menu.wrapper} onKeyDown={menu.onKeyDown} className="relative max-md:hidden print:hidden">
+    <div ref={menu.wrapper} onKeyDown={menu.onKeyDown} className="relative max-xl:hidden print:hidden">
       <button
         ref={menu.button}
         type="button"

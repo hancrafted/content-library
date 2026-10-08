@@ -2,7 +2,7 @@ import type { Locale } from '@/lib/locale.pure';
 import { getTranslations } from 'next-intl/server';
 
 /**
- * Pre-translated chrome for the Context drawer's entries (FE-010 §8). It stays
+ * Pre-translated chrome for the Context drawer's entries (FE-010 §6). It stays
  * on the server: `sources` is a function, so it never crosses to the client
  * drawer, which takes `DrawerLabels` instead.
  */
@@ -16,6 +16,8 @@ export interface ContextLabels {
   readonly empty: { readonly notes: string; readonly script: string };
   /** The disclosure label of a note's sources, e.g. `Sources (2)`. */
   readonly sources: (count: number) => string;
+  /** The accessible name of citation marker `n`, e.g. `Source 2`. */
+  readonly citation: (number: number) => string;
   /** Said to assistive tech after a source link, e.g. `opens in a new tab`. */
   readonly opensInNewTab: string;
   readonly keywords: string;
@@ -34,6 +36,7 @@ export async function contextLabels(locale: Locale): Promise<ContextLabels> {
     menu: { label: t('menu.label'), layout: t('menu.layout'), side: t('menu.side'), overlay: t('menu.overlay') },
     empty: { notes: t('empty.notes'), script: t('empty.script') },
     sources: (count) => t('sourcesCount', { count }),
+    citation: (number) => t('citation', { number }),
     opensInNewTab: t('opensInNewTab'),
     keywords: t('keywords'),
     bridge: t('bridge'),

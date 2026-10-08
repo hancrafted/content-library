@@ -193,6 +193,50 @@ describe('amnesiac-freelancer', () => {
     expect(counts).toEqual(DOGFOOD_COUNTS);
   });
 
+  it.each(LOCALES)('wraps three phrases in context references that each resolve to their own note, in %s', (locale) => {
+    // ARRANGE
+    const $ = page(localizePath(episodeRoute('amnesiac-freelancer'), locale));
+    const refs = $('[data-slot="slides"] button[data-context-ref]').toArray();
+    // ACT
+    const resolved = refs.map((ref) => {
+      const wrapper = $(ref).parent();
+      const id = wrapper.attr('id') ?? '';
+      const owner = wrapper.closest('[data-slide]').attr('data-slide') ?? '';
+      const notes = entry($, 'notes', owner).find(`[data-note-target="${id}"]`);
+      return {
+        native: ref.tagName === 'button' && $(ref).attr('type') === 'button' && $(ref).attr('href') === undefined,
+        id: id === `${owner}--${$(ref).attr('data-context-ref')}`,
+        notes: notes.length,
+        number: /^\d+$/.test($(ref).find('sup').text()),
+      };
+    });
+    // ASSERT
+    expect(refs).toHaveLength(3);
+    resolved.forEach((r) => expect(r).toEqual({ native: true, id: true, notes: 1, number: true }));
+  });
+
+  it.each(LOCALES)('numbers sources in a list and points every citation marker into it, in %s', (locale) => {
+    // ARRANGE
+    const $ = page(localizePath(episodeRoute('amnesiac-freelancer'), locale));
+    const notes = $('[data-slot="context"] [data-note-target]').toArray();
+    // ACT
+    const broken = notes.flatMap((note) => {
+      const sources = $(note).find('details ol > li[data-source]').length;
+      const cited = $(note)
+        .find('button[data-citation]')
+        .toArray()
+        .map((marker) => Number($(marker).attr('data-citation')));
+      return cited.filter((n) => n < 1 || n > sources).length + (sources > 0 && cited.length === 0 ? 1 : 0);
+    });
+    const raw = $('[data-slot="context"] details a')
+      .toArray()
+      .filter((a) => /^https?:/.test($(a).children('span').first().text()));
+    // ASSERT
+    expect(notes.length).toBeGreaterThan(0);
+    expect(broken.filter(Boolean)).toHaveLength(0);
+    expect(raw).toHaveLength(0);
+  });
+
   it('gives each note the same slug and ids in both locales, with German words differing from English', () => {
     // ARRANGE
     const [en, de] = LOCALES.map((locale) => page(localizePath(episodeRoute('amnesiac-freelancer'), locale)));

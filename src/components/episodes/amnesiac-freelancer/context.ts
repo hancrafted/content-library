@@ -1,9 +1,10 @@
 import { slideContext, type ReadString, type SlideContextSpec } from '@/components/episode/slide-context.pure';
 import { slideAnchor } from '@/lib/episode.pure';
+import { SOURCE } from './sources';
 
 /*
  * The non-localized facts of the amnesiac-freelancer Episode's Speaker notes
- * and Voice script (FE-010 §8): slugs, targets, sources and time spans. The
+ * and Voice script (FE-010 §6): slugs, targets, sources and time spans. The
  * words live in the catalogs. Transcribed from
  * docs/research/amnesiac-freelancer-script.md.
  */
@@ -20,17 +21,18 @@ export const AMNESIAC_CONTEXT = {
       notes: [
         {
           slug: 'stateless-by-design',
-          target: 'prose',
-          sources: [
-            'https://platform.openai.com/docs/guides/conversation-state',
-            'https://platform.claude.com/docs/en/build-with-claude/context-windows',
-          ],
+          target: 'stateless-by-design',
+          sources: [SOURCE.openaiConversationState, SOURCE.claudeContextWindows],
         },
-        { slug: 'fresh-window-per-session', target: 'prose', sources: ['https://code.claude.com/docs/en/memory'] },
+        {
+          slug: 'fresh-window-per-session',
+          target: 'prose',
+          sources: [SOURCE.claudeCodeMemory],
+        },
         {
           slug: 'shift-workers-per-anthropic',
           target: 'prose',
-          sources: ['https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents'],
+          sources: [SOURCE.anthropicLongRunningHarnesses],
         },
         { slug: 'our-word-not-theirs', target: 'caption' },
       ],
@@ -48,26 +50,22 @@ export const AMNESIAC_CONTEXT = {
         {
           slug: 'training',
           target: 'training',
-          sources: ['https://code.claude.com/docs/en/memory', 'https://developers.openai.com/codex/memories'],
+          sources: [SOURCE.claudeCodeMemory, SOURCE.codexMemories],
         },
         {
           slug: 'the-session',
           target: 'session',
-          sources: [
-            'https://research.trychroma.com/context-rot',
-            'https://arxiv.org/abs/2307.03172',
-            'https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents',
-          ],
+          sources: [SOURCE.chromaContextRot, SOURCE.lostInTheMiddle, SOURCE.anthropicContextEngineering],
         },
         {
           slug: 'files',
           target: 'files',
-          sources: ['https://code.claude.com/docs/en/how-claude-code-works', 'https://code.claude.com/docs/en/memory'],
+          sources: [SOURCE.claudeCodeHowItWorks, SOURCE.claudeCodeMemory],
         },
         {
           slug: 'compaction-is-lossy',
           target: 'session',
-          sources: ['https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents'],
+          sources: [SOURCE.anthropicContextEngineering],
         },
       ],
       segments: [
@@ -84,25 +82,22 @@ export const AMNESIAC_CONTEXT = {
         {
           slug: 'the-brief',
           target: 'brief',
-          sources: ['https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/be-clear-and-direct'],
+          sources: [SOURCE.claudeBeClearAndDirect],
         },
         {
           slug: 'house-rules',
           target: 'house-rules',
-          sources: ['https://code.claude.com/docs/en/best-practices', 'https://agents.md'],
+          sources: [SOURCE.claudeCodeBestPractices, SOURCE.agentsMd],
         },
         {
           slug: 'definition-of-done',
           target: 'definition-of-done',
-          sources: [
-            'https://code.claude.com/docs/en/best-practices',
-            'https://docs.github.com/en/copilot/how-tos/configure-custom-instructions/add-repository-instructions',
-          ],
+          sources: [SOURCE.claudeCodeBestPractices, SOURCE.githubCopilotRepositoryInstructions],
         },
         {
           slug: 'colleague-test',
           target: 'brief',
-          sources: ['https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/be-clear-and-direct'],
+          sources: [SOURCE.claudeBeClearAndDirect],
         },
       ],
       segments: [
@@ -116,22 +111,20 @@ export const AMNESIAC_CONTEXT = {
     base: 'onboarding.slides.keep-it-short',
     spec: {
       notes: [
-        { slug: 'bloat-gets-ignored', target: 'prose', sources: ['https://code.claude.com/docs/en/best-practices'] },
+        {
+          slug: 'bloat-gets-ignored',
+          target: 'bloat-gets-ignored',
+          sources: [SOURCE.claudeCodeBestPractices],
+        },
         {
           slug: 'numbers-to-cite',
           target: 'prose',
-          sources: [
-            'https://code.claude.com/docs/en/memory',
-            'https://docs.github.com/en/copilot/how-tos/configure-custom-instructions/add-repository-instructions',
-          ],
+          sources: [SOURCE.claudeCodeMemory, SOURCE.githubCopilotRepositoryInstructions],
         },
         {
           slug: 'minimal-is-not-short',
           target: 'caption',
-          sources: [
-            'https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents',
-            'https://code.claude.com/docs/en/memory',
-          ],
+          sources: [SOURCE.anthropicContextEngineering, SOURCE.claudeCodeMemory],
         },
       ],
       segments: [
@@ -148,17 +141,17 @@ export const AMNESIAC_CONTEXT = {
         {
           slug: 'a-conversation-with-a-future-developer',
           target: 'caption',
-          sources: ['https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions'],
+          sources: [SOURCE.nygardArchitectureDecisions],
         },
         {
           slug: 'superseded-not-deleted',
-          target: 'prose',
-          sources: ['https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions'],
+          target: 'superseded-not-deleted',
+          sources: [SOURCE.nygardArchitectureDecisions],
         },
         {
           slug: 'the-newcomers-two-bad-options',
           target: 'prose',
-          sources: ['https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions'],
+          sources: [SOURCE.nygardArchitectureDecisions],
         },
         { slug: 'mapping-not-a-sourced-claim', target: 'prose' },
       ],
@@ -173,17 +166,25 @@ export const AMNESIAC_CONTEXT = {
     base: 'where-it-breaks.slides.metaphor-breaks',
     spec: {
       notes: [
-        { slug: 'no-learning', target: 'no-learning', sources: ['https://code.claude.com/docs/en/memory'] },
+        {
+          slug: 'no-learning',
+          target: 'no-learning',
+          sources: [SOURCE.claudeCodeMemory],
+        },
         {
           slug: 'context-not-enforcement',
           target: 'not-enforced',
-          sources: ['https://code.claude.com/docs/en/memory'],
+          sources: [SOURCE.claudeCodeMemory],
         },
-        { slug: 'reading-costs', target: 'reading-costs', sources: ['https://code.claude.com/docs/en/best-practices'] },
+        {
+          slug: 'reading-costs',
+          target: 'reading-costs',
+          sources: [SOURCE.claudeCodeBestPractices],
+        },
         {
           slug: 'beyond-the-sources',
           target: 'not-enforced',
-          sources: ['https://agents.md', 'https://developers.openai.com/codex/guides/agents-md'],
+          sources: [SOURCE.agentsMd, SOURCE.codexAgentsMd],
         },
       ],
       segments: [
@@ -200,9 +201,13 @@ export const AMNESIAC_CONTEXT = {
         {
           slug: 'verification-you-can-run',
           target: 'prose',
-          sources: ['https://code.claude.com/docs/en/best-practices'],
+          sources: [SOURCE.claudeCodeBestPractices],
         },
-        { slug: 'a-different-grader', target: 'caption', sources: ['https://code.claude.com/docs/en/best-practices'] },
+        {
+          slug: 'a-different-grader',
+          target: 'caption',
+          sources: [SOURCE.claudeCodeBestPractices],
+        },
         { slug: 'independent-of-prose', target: 'prose' },
         { slug: 'close', target: 'title' },
       ],
@@ -221,7 +226,7 @@ export type SlideSlug = keyof typeof AMNESIAC_CONTEXT;
  * A Slide's anchor, notes and voice script. `read` is the Episode's `sections`
  * translator seen as a plain key-to-string function: the Episode file casts it
  * once, because these keys are built at run time and tsc cannot check them.
- * The unit key-shape test and the post-build raw-key test do (FE-010 §8).
+ * The unit key-shape test and the post-build raw-key test do (FE-010 §6).
  */
 export function contextFor(read: ReadString, slug: SlideSlug) {
   const { base, spec } = AMNESIAC_CONTEXT[slug];

@@ -14,7 +14,7 @@ function Hint({ hint }: { hint: string }) {
 /**
  * The pill that opens the drawer, bottom-right as the table of contents' pill
  * sits bottom-left. The shortcut hint is visible from `md` and announced everywhere
- * (FE-010 §6). It is `invisible` while the card is open, which covers its corner.
+ * (FE-010 §5). It is `invisible` while the card is open, which covers its corner.
  */
 export function DrawerTrigger(props: {
   label: string;

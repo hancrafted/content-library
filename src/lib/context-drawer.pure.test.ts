@@ -11,7 +11,10 @@ import {
   formatMark,
   matchesShortcut,
   menuItemAfter,
+  noteNumber,
   reservesSpace,
+  sourceDomain,
+  splitCitations,
   tabAfter,
   titleOfSlide,
   type KeyEventLike,
@@ -23,8 +26,17 @@ function key(overrides: Partial<KeyEventLike>): KeyEventLike {
   return { code: 'KeyN', altKey: true, ctrlKey: false, metaKey: false, shiftKey: false, repeat: false, ...overrides };
 }
 
-function note(slug: string, target = 'prose'): SpeakerNoteItem {
-  return { slug, header: 'h', description: 'd', target };
+function note(
+  slug: string,
+  target = 'prose',
+  cited?: { description?: string; sources?: SpeakerNoteItem['sources'] },
+): SpeakerNoteItem {
+  const { description = 'd', sources } = cited ?? {};
+  return { slug, header: 'h', description, target, ...(sources && { sources }) };
+}
+
+function source(slug: string, url = 'https://example.com/a') {
+  return { slug, url, title: slug };
 }
 
 function segment(slug: string, from = 0, to = 1): VoiceScriptSegment {
@@ -178,6 +190,51 @@ describe('success cases', () => {
     // ASSERT
     expect(title).toBe(expected);
   });
+
+  it('splits a description into text and citation markers in order', () => {
+    // ARRANGE
+    const text = 'Stateless [1] by design [2].';
+    const expected = ['Stateless ', { cite: 1 }, ' by design ', { cite: 2 }, '.'];
+    // ACT
+    const parts = splitCitations(text);
+    // ASSERT
+    expect(parts).toEqual(expected);
+  });
+
+  it('names a source by its host, without a leading www', () => {
+    // ARRANGE
+    const urls = ['https://www.anthropic.com/engineering/x', 'https://code.claude.com/docs/en/memory'];
+    const expected = ['anthropic.com', 'code.claude.com'];
+    // ACT
+    const domains = urls.map(sourceDomain);
+    // ASSERT
+    expect(domains).toEqual(expected);
+  });
+
+  it('numbers a note by its position, from one', () => {
+    // ARRANGE
+    const notes = [note('a'), note('b')];
+    const expected = 2;
+    // ACT
+    const number = noteNumber(notes, 'b');
+    // ASSERT
+    expect(number).toBe(expected);
+  });
+
+  it('accepts markers that each name a source of their note', () => {
+    // ARRANGE
+    const notes = [
+      note('a', 'prose', {
+        description: 'One [1] and two [2], again [1].',
+        sources: [source('x'), source('y', 'https://example.com/b')],
+      }),
+    ];
+    const check = () => checkContext('s', notes, []);
+    // ACT
+    const result = check();
+    // ASSERT
+    expect(result).toBeUndefined();
+  });
 });
 
 describe('failure cases', () => {
@@ -266,6 +323,47 @@ describe('failure cases', () => {
     // ASSERT
     expect(title).toBe(fallback);
   });
+
+  it('rejects a citation marker that names no source', () => {
+    // ARRANGE
+    const marker = '[2]';
+    const notes = [note('a', 'prose', { description: `Only one source ${marker}.`, sources: [source('x')] })];
+    const check = () => checkContext('s', notes, []);
+    // ACT
+    const run = () => check();
+    // ASSERT
+    expect(run).toThrow(marker);
+  });
+
+  it('rejects a citation marker on a note with no sources', () => {
+    // ARRANGE
+    const marker = '[1]';
+    const check = () => checkContext('s', [note('a', 'prose', { description: `Cited ${marker}.` })], []);
+    // ACT
+    const run = () => check();
+    // ASSERT
+    expect(run).toThrow(marker);
+  });
+
+  it('rejects two sources of one note sharing a slug', () => {
+    // ARRANGE
+    const dup = '"x"';
+    const check = () => checkContext('s', [note('a', 'prose', { sources: [source('x'), source('x')] })], []);
+    // ACT
+    const run = () => check();
+    // ASSERT
+    expect(run).toThrow(dup);
+  });
+
+  it('throws when a context reference names a note the Slide does not have', () => {
+    // ARRANGE
+    const missing = '"nope"';
+    const run = () => noteNumber([note('a')], 'nope');
+    // ACT
+    const result = run;
+    // ASSERT
+    expect(result).toThrow(missing);
+  });
 });
 
 describe('edge cases', () => {
@@ -322,5 +420,25 @@ describe('edge cases', () => {
     const target = menuItemAfter('ArrowDown', 'side', items);
     // ASSERT
     expect(target).toBe(items[0]);
+  });
+
+  it('leaves text without markers, and brackets that are not a positive number, as one text part', () => {
+    // ARRANGE
+    const text = 'See [0], [a] and [] here';
+    const expected = [text];
+    // ACT
+    const parts = splitCitations(text);
+    // ASSERT
+    expect(parts).toEqual(expected);
+  });
+
+  it('keeps a marker at the very start or end of a description', () => {
+    // ARRANGE
+    const text = '[1]middle[2]';
+    const expected = [{ cite: 1 }, 'middle', { cite: 2 }];
+    // ACT
+    const parts = splitCitations(text);
+    // ASSERT
+    expect(parts).toEqual(expected);
   });
 });

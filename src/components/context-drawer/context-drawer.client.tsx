@@ -1,6 +1,7 @@
 'use client';
 
 import { useContextDrawer } from '@/hooks/use-context-drawer';
+import { revealCitation } from '@/hooks/use-context-links';
 import {
   DRAWER_PANEL_ID,
   DRAWER_TABS,
@@ -121,7 +122,7 @@ function PanelBody(props: { labels: DrawerLabels; drawer: Drawer; entries: reado
     body.current?.scrollTo({ top: 0 });
   }, [drawer.current, drawer.tab]);
   return (
-    <div ref={body} className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-4">
+    <div ref={body} onClick={revealCitation} className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-4">
       {DRAWER_TABS.map((kind) => (
         <Panel key={kind} tab={kind} selected={drawer.tab} heading={labels.tabs[kind]}>
           <Entries entries={entries} current={drawer.current} kind={kind} />
@@ -152,7 +153,7 @@ function Spacer({ reserve }: { reserve: boolean }) {
     <div
       aria-hidden
       data-slot="context-spacer"
-      className={cn('hidden md:block', reserve ? 'md:ml-12 md:w-(--drawer-width)' : 'md:w-0')}
+      className={cn('hidden xl:block', reserve ? 'xl:ml-12 xl:w-(--drawer-width)' : 'xl:w-0')}
     />
   );
 }
@@ -175,10 +176,10 @@ function Scrim({ open, onClose }: { open: boolean; onClose: () => void }) {
 }
 
 /**
- * The Context drawer (FE-010 §9): a floating card on the right. From `md` it
+ * The Context drawer (FE-010 §7): a floating card on the right. From `xl` it
  * sits beside the Slides (the grid's third column opens at once, through the
- * spacer) or over them; below `md` it is always an overlay under a dimmed
- * scrim. It holds every Slide's server-rendered notes and script in the DOM and
+ * spacer) or over them; below `xl` it is always an overlay, under a dimmed
+ * scrim below `md`. It holds every Slide's server-rendered notes and script in the DOM and
  * only decides which are visible. Closed it is `invisible` and off-screen, so
  * print and find-in-page still reach the text.
  */

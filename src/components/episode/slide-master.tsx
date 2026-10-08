@@ -15,7 +15,7 @@ export function SlideFrame({ className, children }: { className?: string; childr
 }
 
 /**
- * The id of one element a Speaker note can point at (FE-010 §5): `<slide
+ * The id of one element a Speaker note can point at (FE-010 §4): `<slide
  * anchor>--<element>`, or none when the layout was given no anchor.
  */
 export function elementId(anchor: string | undefined, element: string): string | undefined {

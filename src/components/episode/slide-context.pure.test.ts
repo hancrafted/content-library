@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { slideContext } from './slide-context.pure';
 
 // Stands in for a catalog reader: answers with the key it was asked for, so
-// the assertions pin the exact key shape (FE-010 §8).
+// the assertions pin the exact key shape (FE-010 §6).
 const read = (key: string) => key;
 
 describe('success cases', () => {
@@ -13,7 +13,7 @@ describe('success cases', () => {
         {
           slug: 'stateless',
           target: 'prose',
-          sources: ['https://example.com/a'],
+          sources: [{ slug: 'spec', url: 'https://example.com/a' }],
           image: { src: '/img/a.png' },
         },
       ],
@@ -24,7 +24,13 @@ describe('success cases', () => {
       header: 'foundations.slides.why.notes.stateless.header',
       description: 'foundations.slides.why.notes.stateless.description',
       target: 'prose',
-      sources: ['https://example.com/a'],
+      sources: [
+        {
+          slug: 'spec',
+          url: 'https://example.com/a',
+          title: 'foundations.slides.why.notes.stateless.sources.spec.title',
+        },
+      ],
       image: { src: '/img/a.png', alt: 'foundations.slides.why.notes.stateless.image.alt' },
     };
     const expectedSegment = {

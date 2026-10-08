@@ -1,4 +1,5 @@
 import { BasicPageSlide } from '@/components/episode/basic-page-slide';
+import { contextRefOf, type ContextRefOf } from '@/components/episode/context-ref';
 import type {
   Episode,
   EpisodeSection,
@@ -22,12 +23,13 @@ import { contextFor, type SlideSlug } from './context';
  */
 type SectionsT = Awaited<ReturnType<typeof getTranslations<'episodes.amnesiac-freelancer.sections'>>>;
 
-/** The one place the typed translator is read as a plain key reader (FE-010 §8). */
+/** The one place the typed translator is read as a plain key reader (FE-010 §6). */
 const contextOf = (t: SectionsT, slug: SlideSlug) => contextFor(t as ReadString, slug);
 
-function blankEveryTime(t: SectionsT): EpisodeSlide {
+function blankEveryTime(t: SectionsT, ref: ContextRefOf): EpisodeSlide {
   const title = t('blank-slate.slides.blank-every-time.title');
-  const { anchor, notes, voiceScript } = contextOf(t, 'blank-every-time');
+  const context = contextOf(t, 'blank-every-time');
+  const { anchor, notes, voiceScript } = context;
   return {
     slug: 'blank-every-time',
     title,
@@ -39,7 +41,7 @@ function blankEveryTime(t: SectionsT): EpisodeSlide {
         anchor={anchor}
         title={title}
         caption={t('blank-slate.slides.blank-every-time.caption')}
-        prose={t('blank-slate.slides.blank-every-time.prose')}
+        prose={t.rich('blank-slate.slides.blank-every-time.prose', { ref: ref(context, 'stateless-by-design') })}
       />
     ),
   };
@@ -95,9 +97,10 @@ function briefAndRules(t: SectionsT): EpisodeSlide {
   };
 }
 
-function keepItShort(t: SectionsT): EpisodeSlide {
+function keepItShort(t: SectionsT, ref: ContextRefOf): EpisodeSlide {
   const title = t('onboarding.slides.keep-it-short.title');
-  const { anchor, notes, voiceScript } = contextOf(t, 'keep-it-short');
+  const context = contextOf(t, 'keep-it-short');
+  const { anchor, notes, voiceScript } = context;
   return {
     slug: 'keep-it-short',
     title,
@@ -109,15 +112,16 @@ function keepItShort(t: SectionsT): EpisodeSlide {
         anchor={anchor}
         title={title}
         caption={t('onboarding.slides.keep-it-short.caption')}
-        prose={t('onboarding.slides.keep-it-short.prose')}
+        prose={t.rich('onboarding.slides.keep-it-short.prose', { ref: ref(context, 'bloat-gets-ignored') })}
       />
     ),
   };
 }
 
-function decisionsInWriting(t: SectionsT): EpisodeSlide {
+function decisionsInWriting(t: SectionsT, ref: ContextRefOf): EpisodeSlide {
   const title = t('onboarding.slides.decisions-in-writing.title');
-  const { anchor, notes, voiceScript } = contextOf(t, 'decisions-in-writing');
+  const context = contextOf(t, 'decisions-in-writing');
+  const { anchor, notes, voiceScript } = context;
   return {
     slug: 'decisions-in-writing',
     title,
@@ -129,7 +133,7 @@ function decisionsInWriting(t: SectionsT): EpisodeSlide {
         anchor={anchor}
         title={title}
         caption={t('onboarding.slides.decisions-in-writing.caption')}
-        prose={t('onboarding.slides.decisions-in-writing.prose')}
+        prose={t.rich('onboarding.slides.decisions-in-writing.prose', { ref: ref(context, 'superseded-not-deleted') })}
       />
     ),
   };
@@ -184,14 +188,14 @@ type SectionSlug = 'blank-slate' | 'onboarding' | 'where-it-breaks';
 
 const SECTION_MINUTES: PerLocale<number> = { en: 1, de: 1 };
 
-function sections(t: SectionsT): EpisodeSection[] {
-  const onboarding = [briefAndRules(t), keepItShort(t), decisionsInWriting(t)];
+function sections(t: SectionsT, ref: ContextRefOf): EpisodeSection[] {
+  const onboarding = [briefAndRules(t), keepItShort(t, ref), decisionsInWriting(t, ref)];
   const sectionOf = (slug: SectionSlug, caption: string, slides: EpisodeSlide[]): EpisodeSection => {
     const title = t(`${slug}.title`);
     return { slug, title, minutes: SECTION_MINUTES, content: <SectionSlide title={title} caption={caption} />, slides };
   };
   return [
-    sectionOf('blank-slate', t('blank-slate.caption'), [blankEveryTime(t), whereKnowledgeLives(t)]),
+    sectionOf('blank-slate', t('blank-slate.caption'), [blankEveryTime(t, ref), whereKnowledgeLives(t)]),
     sectionOf('onboarding', t('onboarding.caption', { count: onboarding.length }), onboarding),
     sectionOf('where-it-breaks', t('where-it-breaks.caption'), [metaphorBreaks(t), enforceAndVerify(t)]),
   ];
@@ -202,6 +206,8 @@ export const amnesiacFreelancer = {
   async content(locale: Locale) {
     const t = await getTranslations({ locale, namespace: 'episodes.amnesiac-freelancer' });
     const sectionsT = await getTranslations({ locale, namespace: 'episodes.amnesiac-freelancer.sections' });
-    return { title: t('title'), caption: t('caption'), sections: sections(sectionsT) };
+    const chrome = await getTranslations({ locale, namespace: 'contextDrawer' });
+    const ref = contextRefOf((number) => chrome('refNote', { number }));
+    return { title: t('title'), caption: t('caption'), sections: sections(sectionsT, ref) };
   },
 } satisfies Episode;

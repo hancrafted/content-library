@@ -1,16 +1,22 @@
-import type { SpeakerNoteItem, VoiceScriptSegment } from '@/lib/context-drawer.pure';
+import type { NoteSource, SpeakerNoteItem, VoiceScriptSegment } from '@/lib/context-drawer.pure';
 
 /*
  * Builds a Slide's notes and voice script from catalog strings plus the
- * non-localized facts an Episode keeps in the record (FE-010 §8). The output is
+ * non-localized facts an Episode keeps in the record (FE-010 §6). The output is
  * content records, not markup, so FE-002's "no renderer between a Slide and its
  * markup" does not apply to it.
  */
 
+/** A source's non-localized facts; its title is a catalog leaf. */
+export interface SourceSpec {
+  readonly slug: string;
+  readonly url: string;
+}
+
 export interface NoteSpec {
   readonly slug: string;
   readonly target: string;
-  readonly sources?: readonly string[];
+  readonly sources?: readonly SourceSpec[];
   readonly image?: { readonly src: string };
 }
 
@@ -30,6 +36,10 @@ export interface SlideContextSpec {
 /** Reads one catalog leaf by key, relative to the Episode's namespace. */
 export type ReadString = (key: string) => string;
 
+function sourceOf(read: ReadString, key: string, spec: SourceSpec): NoteSource {
+  return { slug: spec.slug, url: spec.url, title: read(`${key}.sources.${spec.slug}.title`) };
+}
+
 function noteOf(read: ReadString, base: string, spec: NoteSpec): SpeakerNoteItem {
   const key = `${base}.notes.${spec.slug}`;
   return {
@@ -37,7 +47,7 @@ function noteOf(read: ReadString, base: string, spec: NoteSpec): SpeakerNoteItem
     header: read(`${key}.header`),
     description: read(`${key}.description`),
     target: spec.target,
-    ...(spec.sources && { sources: spec.sources }),
+    ...(spec.sources && { sources: spec.sources.map((source) => sourceOf(read, key, source)) }),
     ...(spec.image && { image: { src: spec.image.src, alt: read(`${key}.image.alt`) } }),
   };
 }

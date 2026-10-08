@@ -6,7 +6,8 @@ import {
   type DrawerMode,
   type DrawerTab,
 } from '@/lib/context-drawer.pure';
-import { useEffect, useRef, useState, type RefObject } from 'react';
+import { useCallback, useEffect, useRef, useState, type RefObject } from 'react';
+import { useContextLinks, usePinnedNote } from './use-context-links';
 
 /** Alt+N toggles and Escape closes, from anywhere on the page. */
 function useDrawerKeys(open: boolean, toggle: () => void, close: () => void) {
@@ -48,7 +49,7 @@ function useFocusHandoff(open: boolean, tab: RefObject<HTMLElement | null>, fall
 
 /**
  * Sources sit in closed `<details>`, which print drops; open them for the print
- * job and put them back after (FE-010 §9).
+ * job and put them back after (FE-010 §2).
  */
 function usePrintDisclosure() {
   useEffect(() => {
@@ -70,18 +71,43 @@ function usePrintDisclosure() {
   }, []);
 }
 
-/** State of the Context drawer: open, selected tab, layout mode (in memory, not a stored preference), and the Slide at the reading line. */
+/** A note a context reference opened, and the Slide it was shown for (valid while that Slide stays current). */
+interface Revealed {
+  readonly note: string;
+  readonly slide: string;
+  readonly observed: string | null;
+}
+
+/**
+ * State of the Context drawer: open, selected tab, layout mode (in memory, not
+ * a stored preference), and the Slide at the reading line. A context reference
+ * opens the drawer on Notes at its note; its Slide is shown until the reading
+ * line moves on.
+ */
 export function useContextDrawer(anchors: readonly string[], targetAttribute: string) {
-  const current = currentSlideAnchor(useActiveId(anchors, targetAttribute), anchors);
+  const observed = currentSlideAnchor(useActiveId(anchors, targetAttribute), anchors);
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<DrawerTab>('notes');
   const [mode, setMode] = useState<DrawerMode>(DEFAULT_DRAWER_MODE);
+  const [revealed, setRevealed] = useState<Revealed | null>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const selectedTab = useRef<HTMLButtonElement>(null);
   const toggle = () => setOpen((value) => !value);
   const close = () => setOpen(false);
+  const live = revealed && revealed.observed === observed ? revealed : null;
+  const reveal = useCallback(
+    (ref: { id: string; slide: string }) => {
+      setRevealed({ note: ref.id, slide: ref.slide, observed });
+      setTab('notes');
+      setOpen(true);
+    },
+    [observed],
+  );
   useDrawerKeys(open, toggle, close);
   useFocusHandoff(open, selectedTab, trigger);
   usePrintDisclosure();
+  useContextLinks(reveal);
+  usePinnedNote(open && live ? live.note : null);
+  const current = live && anchors.includes(live.slide) ? live.slide : observed;
   return { current, open, tab, setTab, mode, setMode, toggle, close, trigger, selectedTab };
 }
