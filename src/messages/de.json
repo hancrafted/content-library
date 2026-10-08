@@ -28,7 +28,7 @@
     "templateTitle": "Episoden-Seitenvorlage",
     "templateDescription": "Die Layout-Referenz für jede Episode: Abschnitte aus Folien, untereinander angeordnet.",
     "about": {
-      "eyebrow": "Kapitel 04 // Über mich",
+      "eyebrow": "Über mich",
       "headlineStepOut": "Ich bewege Veränderung, indem ich aus der Debatte heraustrete.",
       "headlineNotPushing": "Veränderung hält, wenn nicht ich sie vorantreibe.",
       "headlineLead": "Vier Geschichten, ein Zug: Sobald ich nicht mehr das bin, worüber gestritten wird, trägt sich die Veränderung selbst.",
@@ -41,24 +41,18 @@
         "languages": "English · Deutsch"
       },
       "axes": {
-        "whoLabel": "Wen ich verändere",
-        "whatLabel": "Was ich verändere",
         "individual": "Einzelperson",
         "team": "Team",
         "organisation": "Organisation & Stakeholder",
         "process": "Prozesswandel",
         "technology": "Technologie-Einführung"
       },
-      "painLabel": "Vorher",
-      "shiftLabel": "Nachher",
       "spillNote": "Die Team-Geschichte reicht bis hierher",
       "stories": {
         "pitch": {
           "title": "Ein Pitch, der dem Gründer gehört",
           "caption": "Pitch-Coaching für Startups",
           "labels": ["Coaching", "Gründer"],
-          "pain": "Jede Anmerkung zum Deck wurde zur Verteidigung des Decks.",
-          "shift": "Der Gründer probte gegen echte Fragen statt gegen meine Meinung.",
           "statValue": "3",
           "statUnit": "Runden",
           "statLabel": "vom ersten Entwurf zum tragfähigen Pitch"
@@ -67,8 +61,6 @@
           "title": "Größter Engpass → selbstlaufendes Team",
           "caption": "RIB Software",
           "labels": ["Teamleitung", "Delivery"],
-          "pain": "Jede Entscheidung wartete auf eine Person: mich.",
-          "shift": "Vom Team geschriebene Vereinbarungen ersetzten meine Freigabe.",
           "statValue": "30",
           "statUnit": "Min.",
           "statLabel": "ein wöchentlicher Sync statt täglicher Eskalationen"
@@ -77,8 +69,6 @@
           "title": "Freigabe-Gates, modernisiert",
           "caption": "Audi",
           "labels": ["Governance", "Stakeholder"],
-          "pain": "Jedes Gate war eine Verhandlung zwischen Abteilungen.",
-          "shift": "Gemeinsame Kriterien machten das Gate zur Checkliste statt zur Debatte.",
           "statValue": "4",
           "statUnit": "Gates",
           "statLabel": "neu gestaltet mit den Menschen, die sie betreiben"
@@ -87,8 +77,6 @@
           "title": "KI-Befähigung bei RIB",
           "caption": "RIB Software",
           "labels": ["KI", "Befähigung"],
-          "pain": "Die Einführung steckte zwischen Hype und Richtlinie fest.",
-          "shift": "Teams setzten eigene Leitplanken in einem gemeinsamen Rahmen.",
           "statValue": "120",
           "statUnit": "Personen",
           "statLabel": "an KI-gestützte Arbeit herangeführt"

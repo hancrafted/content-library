@@ -16,8 +16,6 @@ function storyCopy(t: AboutT, id: StoryId): StoryCardCopy {
     title: t(`stories.${id}.title`),
     caption: t(`stories.${id}.caption`),
     labels: t.raw(`stories.${id}.labels`) as string[],
-    pain: t(`stories.${id}.pain`),
-    shift: t(`stories.${id}.shift`),
     statValue: Number(value),
     statDecimals: value.split('.')[1]?.length ?? 0,
     statUnit: t(`stories.${id}.statUnit`),
@@ -26,12 +24,7 @@ function storyCopy(t: AboutT, id: StoryId): StoryCardCopy {
 }
 
 function matrixLabels(t: AboutT): MatrixLabels {
-  const axes = t.raw('axes') as MatrixLabels['axes'];
-  return {
-    axes,
-    pair: { pain: t('painLabel'), shift: t('shiftLabel') },
-    spillNote: t('spillNote'),
-  };
+  return { axes: t.raw('axes') as MatrixLabels['axes'], spillNote: t('spillNote') };
 }
 
 function IdentityCard({ t }: { t: AboutT }) {
@@ -54,7 +47,7 @@ function IdentityCard({ t }: { t: AboutT }) {
 function AboutHeader({ t }: { t: AboutT }) {
   return (
     <header className="max-w-3xl space-y-4">
-      <div className="font-mono text-xs font-bold uppercase tracking-widest text-muted-foreground">{t('eyebrow')}</div>
+      <p className="text-sm font-medium text-muted-foreground">{t('eyebrow')}</p>
       <h2 className="text-3xl font-bold leading-tight tracking-tight text-foreground sm:text-4xl">{t(HEADLINE_KEY)}</h2>
       <p className="text-base leading-relaxed text-muted-foreground">{t('headlineLead')}</p>
     </header>

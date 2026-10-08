@@ -2,15 +2,15 @@ import { describe, expect, it } from 'vitest';
 import { countUpAt, formatStat, highlightedAxes, matrixCells, type StoryPlacement } from './story-matrix.pure';
 
 describe('success cases', () => {
-  it('lays the six crossings out row by row, a story where one is placed', () => {
+  it('lays the six crossings out one row per who, process before technology, a story where one is placed', () => {
     // ARRANGE
     const placements: StoryPlacement[] = [{ id: 'pitch', who: 'individual', what: 'process' }];
     const expected = [
       { kind: 'story', who: 'individual', what: 'process', storyId: 'pitch' },
-      { kind: 'empty', who: 'team', what: 'process' },
-      { kind: 'empty', who: 'organisation', what: 'process' },
       { kind: 'empty', who: 'individual', what: 'technology' },
+      { kind: 'empty', who: 'team', what: 'process' },
       { kind: 'empty', who: 'team', what: 'technology' },
+      { kind: 'empty', who: 'organisation', what: 'process' },
       { kind: 'empty', who: 'organisation', what: 'technology' },
     ];
     // ACT
@@ -77,7 +77,7 @@ describe('edge cases', () => {
       { id: 'rib-team', who: 'team', what: 'process', spillsInto: { who: 'team', what: 'technology' } },
     ];
     const spill = { kind: 'spill', who: 'team', what: 'technology', storyId: 'rib-team' };
-    const spillIndex = 4;
+    const spillIndex = 3;
     // ACT
     const cells = matrixCells(placements);
     // ASSERT
@@ -91,7 +91,7 @@ describe('edge cases', () => {
       { id: 'tooling', who: 'team', what: 'technology' },
     ];
     const owner = { kind: 'story', who: 'team', what: 'technology', storyId: 'tooling' };
-    const crossingIndex = 4;
+    const crossingIndex = 3;
     // ACT
     const cells = matrixCells(placements);
     // ASSERT

@@ -1,8 +1,8 @@
 import type { Locale } from './locale.pure';
 
-/** Columns of the story matrix — who the change lands on. */
+/** Rows of the story matrix — who the change lands on. */
 export const WHO = ['individual', 'team', 'organisation'] as const;
-/** Rows of the story matrix — what kind of change it is. */
+/** Columns of the story matrix — what kind of change it is. */
 export const WHAT = ['process', 'technology'] as const;
 
 export type Who = (typeof WHO)[number];
@@ -36,9 +36,9 @@ function cellAt(crossing: Crossing, placements: readonly StoryPlacement[]): Matr
   return { kind: 'empty', ...crossing };
 }
 
-/** The six crossings in reading order — row by row, columns left to right. */
+/** The six crossings in reading order — one row per who, process before technology. */
 export function matrixCells(placements: readonly StoryPlacement[]): MatrixCell[] {
-  return WHAT.flatMap((what) => WHO.map((who) => cellAt({ who, what }, placements)));
+  return WHO.flatMap((who) => WHAT.map((what) => cellAt({ who, what }, placements)));
 }
 
 export interface HighlightedAxes {
