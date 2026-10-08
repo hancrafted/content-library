@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { activeEntry, openSectionIds, readingOrder, readingTime, type TocSection } from './table-of-contents.pure';
+import {
+  activeEntry,
+  openSectionIds,
+  readingOrder,
+  readingTime,
+  sectionNumber,
+  whereAt,
+  type TocSection,
+} from './table-of-contents.pure';
 
 const SECTIONS: readonly TocSection[] = [
   { id: 'intro', title: 'Intro', minutes: 1, items: [{ id: 'intro--why', title: 'Why', minutes: 3 }] },
@@ -8,6 +16,24 @@ const SECTIONS: readonly TocSection[] = [
 ];
 
 describe('success cases', () => {
+  it('tells the pill which numbered Section the reader is in, from a page Slide too', () => {
+    // ARRANGE
+    const expected = { number: '03', title: 'Outro' };
+    // ACT
+    const where = whereAt(SECTIONS, 'outro--next');
+    // ASSERT
+    expect(where).toEqual(expected);
+  });
+
+  it('numbers Sections from 01, two digits', () => {
+    // ARRANGE
+    const expected = ['01', '10'];
+    // ACT
+    const numbers = [sectionNumber(0), sectionNumber(9)];
+    // ASSERT
+    expect(numbers).toEqual(expected);
+  });
+
   it('opens the section that owns the active slide', () => {
     // ARRANGE
     const owner = ['outro'];
@@ -38,6 +64,15 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('tells the pill nothing for an active id outside the outline', () => {
+    // ARRANGE
+    const active = 'stray';
+    // ACT
+    const where = whereAt(SECTIONS, active);
+    // ASSERT
+    expect(where).toBeNull();
+  });
+
   it('opens no section for an active id outside the outline', () => {
     // ARRANGE
     const none: string[] = [];
@@ -60,6 +95,15 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('tells the pill nothing while no entry is active, as on the Title slide', () => {
+    // ARRANGE
+    const active = null;
+    // ACT
+    const where = whereAt(SECTIONS, active);
+    // ASSERT
+    expect(where).toBeNull();
+  });
+
   it('closes the active section when its chevron is toggled', () => {
     // ARRANGE
     const none: string[] = [];

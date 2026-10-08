@@ -1,5 +1,5 @@
 import type { UrlState } from '@/lib/url-state';
-import { createContext, useContext, useSyncExternalStore } from 'react';
+import { createContext, useContext, useSyncExternalStore, type MouseEvent } from 'react';
 
 /** The page's URL-state service, provided once per Episode page by `UrlStateProvider` (FE-001 §2). */
 export const UrlStateContext = createContext<UrlState | null>(null);
@@ -27,4 +27,28 @@ export function useActiveSlide(): string | null {
     service ? service.getSlide : NO_SLIDE,
     NO_SLIDE,
   );
+}
+
+function isPlainClick(event: MouseEvent): boolean {
+  return event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
+}
+
+/**
+ * A click handler factory: tells the page's URL-state service the reader chose
+ * this Slide, then glides to it. Every consumer shows it at once and the
+ * observer stays quiet until the glide ends. The service replaces the URL, so
+ * Back leaves the page instead of replaying every jump. Only a click glides: a
+ * reload or a shared link lands on its fragment at once, without scrolling
+ * through what precedes it. A modified click is left to the browser.
+ */
+export function useGlideTo(): (event: MouseEvent<HTMLAnchorElement>, id: string) => void {
+  const url = useUrlState();
+  return (event, id) => {
+    const target = document.getElementById(id);
+    if (!url || !target || !isPlainClick(event)) return;
+    event.preventDefault();
+    url.navigateTo(id);
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    target.scrollIntoView({ behavior: still ? 'instant' : 'smooth' });
+  };
 }

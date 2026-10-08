@@ -1,5 +1,5 @@
 import { localizePath, type Locale } from '@/lib/locale.pure';
-import { ownerOf, type ReadingTime, type TocItem, type TocSection } from '@/lib/table-of-contents.pure';
+import { ownerOf, sectionNumber, type ReadingTime, type TocItem, type TocSection } from '@/lib/table-of-contents.pure';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { useId, type MouseEvent, type ReactNode } from 'react';
@@ -25,11 +25,6 @@ export interface TocView {
   revealed: boolean;
   /** Unique per rendered panel, since the desktop panel and the drawer both render one. */
   idPrefix?: string;
-}
-
-/** `01`, `02`, … — numbering lives in the table of contents only. */
-export function sectionNumber(index: number): string {
-  return String(index + 1).padStart(2, '0');
 }
 
 function EntryLink(props: { view: TocView; id: string; className: string; children: ReactNode }) {

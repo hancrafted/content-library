@@ -1,23 +1,16 @@
 'use client';
 
-import { useFractionInto, useGlideTo, useOpenSections, useRevealed, useSettled } from '@/hooks/use-table-of-contents';
-import { useActiveSlide } from '@/hooks/use-url-state';
+import { useFractionInto, useOpenSections, useRevealed, useSettled } from '@/hooks/use-table-of-contents';
+import { useActiveSlide, useGlideTo } from '@/hooks/use-url-state';
 import type { Locale } from '@/lib/locale.pure';
-import { activeEntry, ownerOf, readingOrder, readingTime, type TocSection } from '@/lib/table-of-contents.pure';
+import { activeEntry, readingOrder, readingTime, whereAt, type TocSection } from '@/lib/table-of-contents.pure';
 import { useMemo, useSyncExternalStore } from 'react';
 import { TocDrawer } from './toc-drawer';
 import { remainingLabel, type TocLabels } from './toc-heading';
-import { sectionNumber, TocPanel, type TocView } from './toc-panel';
+import { TocPanel, type TocView } from './toc-panel';
 
 export type { TocSection } from '@/lib/table-of-contents.pure';
 export type { TocLabels } from './toc-heading';
-
-/** The section the reader is in, for the pill; chevron toggles do not move it. */
-function whereAt(sections: readonly TocSection[], active: string | null) {
-  const owner = ownerOf(sections, active);
-  const index = sections.findIndex((section) => section.id === owner);
-  return index < 0 ? null : { number: sectionNumber(index), title: sections[index].title };
-}
 
 const NOTHING = () => undefined;
 const NEVER_CHANGES = () => NOTHING;
