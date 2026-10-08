@@ -1,0 +1,1 @@
+../../.archgate/adrs/FE-007-module-layering.md
