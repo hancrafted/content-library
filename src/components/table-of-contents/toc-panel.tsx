@@ -1,5 +1,6 @@
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { ownerOf, type ReadingTime, type TocItem, type TocSection } from '@/lib/table-of-contents.pure';
+import { urlState } from '@/lib/url-state';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { useId, type MouseEvent, type ReactNode } from 'react';
@@ -13,8 +14,6 @@ export interface TocView {
   active: string | null;
   open: ReadonlySet<string>;
   toggle: (id: string) => void;
-  /** Marks the entry a click is gliding to, so the table updates before the scroll arrives. */
-  headTo: (id: string) => void;
   /** False until the first observation has painted; motion stays off until then, so a reload mid-page never animates its way there. */
   settled: boolean;
   /** False while the compact loading box stands in for the table, masking the first settle. */
@@ -33,18 +32,19 @@ function isPlainClick(event: MouseEvent): boolean {
 }
 
 /**
- * Glides to the entry's slide and replaces the URL, so Back leaves the page
- * instead of replaying every jump. Only a click glides: a reload or a shared
- * link lands on its fragment at once, without scrolling through what precedes it.
+ * Tells the URL-state service the reader chose this entry, then glides to its
+ * slide: every consumer shows it at once and the observer stays quiet until the
+ * glide ends. The service replaces the URL, so Back leaves the page instead of
+ * replaying every jump. Only a click glides: a reload or a shared link lands on
+ * its fragment at once, without scrolling through what precedes it.
  */
-function glideTo(event: MouseEvent<HTMLAnchorElement>, id: string): boolean {
+function glideTo(event: MouseEvent<HTMLAnchorElement>, id: string) {
   const target = document.getElementById(id);
-  if (!target || !isPlainClick(event)) return false;
+  if (!target || !isPlainClick(event)) return;
   event.preventDefault();
+  urlState.navigateTo(id);
   const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   target.scrollIntoView({ behavior: still ? 'instant' : 'smooth' });
-  history.replaceState(history.state, '', event.currentTarget.href);
-  return true;
 }
 
 function EntryLink(props: { view: TocView; id: string; className: string; children: ReactNode }) {
@@ -53,7 +53,7 @@ function EntryLink(props: { view: TocView; id: string; className: string; childr
     <Link
       href={localizePath(route, locale, props.id)}
       replace
-      onClick={(event) => glideTo(event, props.id) && props.view.headTo(props.id)}
+      onClick={(event) => glideTo(event, props.id)}
       aria-current={active === props.id ? 'location' : undefined}
       data-testid={`toc-${props.id}`}
       className={props.className}

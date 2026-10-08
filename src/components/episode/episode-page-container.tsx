@@ -1,12 +1,13 @@
 import { ContextDrawerSlot } from '@/components/context-drawer/context-drawer-slot';
 import { TableOfContents, type TocLabels } from '@/components/table-of-contents/table-of-contents.client';
-import { sectionAnchor, slideAnchor } from '@/lib/episode.pure';
+import { episodeAnchors, sectionAnchor, slideAnchor } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { episodeRoute } from '@/lib/routes';
 import { getTranslations } from 'next-intl/server';
 import { ContentArea } from './content-area';
 import { contextDrawerInput } from './context-drawer-input';
 import { tocSectionsOf, type Episode, type EpisodeSection } from './episode-page-container.pure';
+import { SlideObserver } from './slide-observer.client';
 import { SlideWrapper } from './slide-wrapper';
 import { TitleSlide } from './title-slide';
 
@@ -45,6 +46,7 @@ async function tocLabels(locale: Locale): Promise<TocLabels> {
 export async function EpisodePageContainer({ locale, episode }: { locale: Locale; episode: Episode }) {
   const { title, caption, sections } = await episode.content(locale);
   const toc = tocSectionsOf(sections, locale);
+  const ids = episodeAnchors(sections.map(({ slug, slides }) => ({ slug, slides: slides.map((slide) => slide.slug) })));
   return (
     <div data-slot="episode-page" className="mx-4 mt-6 md:grid md:grid-cols-[17rem_minmax(0,1fr)_auto]">
       <aside data-slot="toc">
@@ -56,6 +58,7 @@ export async function EpisodePageContainer({ locale, episode }: { locale: Locale
           labels={await tocLabels(locale)}
         />
       </aside>
+      <SlideObserver ids={ids} />
       <ContentArea>
         <TitleSlide title={title} caption={caption} />
         {sections.map((section) => (

@@ -7,7 +7,7 @@ import {
 } from '@/lib/context-drawer.pure';
 import { useCallback, useEffect, useRef, useState, type RefObject } from 'react';
 import { itemOfNote, useContextLinks, usePinnedNote } from './use-context-links';
-import { useReadingLineId } from './use-reading-line-id';
+import { useActiveSlide } from './use-url-state';
 
 /** Alt+N toggles and Escape closes, from anywhere on the page. */
 function useDrawerKeys(open: boolean, toggle: () => void, close: () => void) {
@@ -80,12 +80,12 @@ interface Revealed {
 
 /**
  * State of the Context drawer: open, selected tab, layout mode (in memory, not
- * a stored preference), and the item at the reading line. The ids it observes
- * are exactly the ones given. A context reference opens the drawer on Notes at
+ * a stored preference), and the item of the active Slide in the URL, falling
+ * back to the first of the given ids. A context reference opens the drawer on Notes at
  * its note; that note's item is shown until the reading line moves on.
  */
 export function useContextDrawer(ids: readonly string[]) {
-  const observed = currentItemId(useReadingLineId(ids), ids);
+  const observed = currentItemId(useActiveSlide(), ids);
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<DrawerTab>('notes');
   const [mode, setMode] = useState<DrawerMode>(DEFAULT_DRAWER_MODE);
