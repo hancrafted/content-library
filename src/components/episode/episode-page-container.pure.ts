@@ -73,9 +73,9 @@ export function tocSectionsOf(sections: readonly EpisodeSection[], locale: Local
     for (const slide of section.slides) {
       const minutes = slide.minutes?.[locale] ?? 0;
       if (slide.title === undefined) {
-        const [last] = items.slice(-1);
-        if (last) last.minutes += minutes;
-        else entry.minutes += minutes;
+        const owner = items.at(-1) ?? entry;
+        owner.minutes += minutes;
+        owner.unlisted = [...(owner.unlisted ?? []), { id: slideAnchor(section.slug, slide.slug), minutes }];
       } else {
         items.push({ id: slideAnchor(section.slug, slide.slug), title: slide.title, minutes });
       }

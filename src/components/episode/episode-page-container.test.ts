@@ -118,6 +118,32 @@ describe('optional declarations', () => {
   });
 });
 
+describe('unlisted Slides', () => {
+  it('names each untitled Slide on the entry that owns its minutes, in page order, with its own minutes', () => {
+    // ARRANGE
+    const sections = [
+      section({ slug: 'a', title: 'A', minutes: { en: 1, de: 1 } }, [
+        { slug: 'opening', minutes: { en: 2, de: 2 }, content: null },
+        slide('why', 'Why', { en: 3, de: 3 }),
+        { slug: 'visual', minutes: { en: 4, de: 4 }, content: null },
+        { slug: 'silent', content: null },
+      ]),
+    ];
+    const expected = {
+      section: [{ id: 'a--opening', minutes: 2 }],
+      item: [
+        { id: 'a--visual', minutes: 4 },
+        { id: 'a--silent', minutes: 0 },
+      ],
+    };
+    // ACT
+    const [toc] = tocSectionsOf(sections, 'en');
+    const owned = { section: toc.unlisted, item: toc.items[0].unlisted };
+    // ASSERT
+    expect(owned).toEqual(expected);
+  });
+});
+
 describe('failure cases', () => {
   it('rejects two page Slides sharing a slug, so the table of contents never points at an ambiguous anchor', () => {
     // ARRANGE

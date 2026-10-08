@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { openSectionIds, readingTime, type TocSection } from './table-of-contents.pure';
+import { openSectionIds, readingOrder, readingTime, type TocSection } from './table-of-contents.pure';
 
 const SECTIONS: readonly TocSection[] = [
   { id: 'intro', title: 'Intro', minutes: 1, items: [{ id: 'intro--why', title: 'Why', minutes: 3 }] },
@@ -95,5 +95,53 @@ describe('edge cases', () => {
     const time = readingTime([0, 0], 0, 0);
     // ASSERT
     expect(time).toEqual(done);
+  });
+});
+
+describe('reading order with unlisted Slides', () => {
+  const folded: readonly TocSection[] = [
+    {
+      id: 'a',
+      title: 'A',
+      minutes: 3,
+      unlisted: [{ id: 'a--opening', minutes: 2 }],
+      items: [{ id: 'a--why', title: 'Why', minutes: 7, unlisted: [{ id: 'a--visual', minutes: 4 }] }],
+    },
+  ];
+
+  it('lists every Slide in page order with its own minutes, and maps unlisted ones to their entry', () => {
+    // ARRANGE
+    const expected = {
+      ids: ['a', 'a--opening', 'a--why', 'a--visual'],
+      minutes: [1, 2, 3, 4],
+      owners: { 'a--opening': 'a', 'a--visual': 'a--why' },
+    };
+    // ACT
+    const order = readingOrder(folded);
+    // ASSERT
+    expect(order).toEqual(expected);
+  });
+
+  it('counts an active untitled Slide as read up to its place, so remaining time keeps falling past it', () => {
+    // ARRANGE
+    const order = readingOrder(folded);
+    const index = order.ids.indexOf('a--visual');
+    // ACT
+    const time = readingTime(order.minutes, index, 0.5);
+    // ASSERT
+    expect(time).toMatchObject({ total: 10, remaining: 2 });
+  });
+
+  it('is the plain entry order when nothing is unlisted', () => {
+    // ARRANGE
+    const expected = {
+      ids: ['intro', 'intro--why', 'pause', 'outro', 'outro--next'],
+      minutes: [1, 3, 1, 1, 5],
+      owners: {},
+    };
+    // ACT
+    const order = readingOrder(SECTIONS);
+    // ASSERT
+    expect(order).toEqual(expected);
   });
 });

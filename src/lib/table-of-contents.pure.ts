@@ -8,12 +8,45 @@ export interface TocItem {
   id: string;
   title: string;
   /** Reading time of the target slide, in minutes. */
+  /** Total reading time this entry stands for: its own Slide plus every Slide in `unlisted`. */
+  minutes: number;
+  /** Untitled Slides folded into this entry, in page order: listed nowhere, but this entry stays current while they are. */
+  unlisted?: readonly UnlistedSlide[];
+}
+
+/** An untitled Slide: its id and its own reading time. */
+export interface UnlistedSlide {
+  id: string;
   minutes: number;
 }
 
 /** A section heading with the items it collapses over; `items` may be empty. */
 export interface TocSection extends TocItem {
   items: readonly TocItem[];
+}
+
+/**
+ * Every Slide in page order with its own minutes (an entry's total minus what
+ * it owns for its unlisted Slides), plus which entry each unlisted Slide
+ * belongs to. One honest sequence for reading time, one lookup for highlights.
+ */
+export function readingOrder(sections: readonly TocSection[]): {
+  ids: string[];
+  minutes: number[];
+  owners: Record<string, string>;
+} {
+  const order = { ids: [] as string[], minutes: [] as number[], owners: {} as Record<string, string> };
+  for (const entry of sections.flatMap((section) => [section, ...section.items])) {
+    const unlisted = entry.unlisted ?? [];
+    order.ids.push(entry.id);
+    order.minutes.push(entry.minutes - unlisted.reduce((sum, slide) => sum + slide.minutes, 0));
+    for (const slide of unlisted) {
+      order.ids.push(slide.id);
+      order.minutes.push(slide.minutes);
+      order.owners[slide.id] = entry.id;
+    }
+  }
+  return order;
 }
 
 /** The id of the section that is the active entry or holds it. */
