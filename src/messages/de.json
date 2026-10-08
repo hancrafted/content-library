@@ -1,8 +1,95 @@
 {
-  "brand": { "name": "hancrafted", "home": "hancrafted, zur Startseite" },
-  "nav": { "label": "Hauptnavigation", "episodes": "Episoden" },
-  "theme": { "label": "Farbschema", "light": "Hell", "dark": "Dunkel", "system": "System" },
-  "locale": { "label": "Sprache" },
-  "landing": { "title": "Start", "link": "Seitenvorlage" },
-  "episodeTemplate": { "title": "Seitenvorlage" }
+  "brand": {
+    "name": "hancrafted",
+    "home": "hancrafted, zur Startseite"
+  },
+  "nav": {
+    "label": "Hauptnavigation",
+    "episodes": "Episoden"
+  },
+  "theme": {
+    "label": "Farbschema",
+    "light": "Hell",
+    "dark": "Dunkel",
+    "system": "System"
+  },
+  "locale": {
+    "label": "Sprache"
+  },
+  "landing": {
+    "title": "Start",
+    "link": "Seitenvorlage"
+  },
+  "episodeNav": {
+    "label": "Inhalt der Episode"
+  },
+  "episodes": {
+    "page-template": {
+      "title": "Seitenvorlage",
+      "sections": {
+        "foundations": {
+          "title": "Grundlagen",
+          "caption": "Das System, aus dem jede Episode entsteht: ein Master, wenige Varianten, Texte mit Schlüsseln.",
+          "slides": {
+            "why-a-template": {
+              "title": "Warum eine Vorlage",
+              "caption": "Jede Episode teilt dasselbe Rückgrat: Episode, Abschnitt, Folie.",
+              "prose": "Das Markup bleibt frei. Nur die Wörter tragen Schlüssel, aus Abschnitts-Slug, Folien-Slug und Rolle, sodass eine Übersetzung nie durch ein Layout-Schema muss."
+            },
+            "three-layers": {
+              "title": "Drei Ebenen",
+              "caption": "Jede Ebene verantwortet genau eine Sache.",
+              "columns": {
+                "master": {
+                  "title": "Master",
+                  "prose": "Verantwortet das Allgemeine: Rahmen, Abstände, Schriftskala."
+                },
+                "variants": {
+                  "title": "Varianten",
+                  "prose": "Setzen den Master zu einem Layout zusammen. Ein neuer Folientyp ist eine neue Variante."
+                },
+                "catalog": {
+                  "title": "Katalog",
+                  "prose": "Hält jeden Text je Sprache, adressiert nach Bedeutung, nie nach Position."
+                }
+              }
+            }
+          }
+        },
+        "interlude": {
+          "title": "Zwischenspiel",
+          "caption": "Ein Abschnitt kann für sich stehen, ganz ohne Inhaltsfolien."
+        },
+        "next-steps": {
+          "title": "Nächste Schritte",
+          "caption": "{count, plural, one {# Folie} other {# Folien}} zum Abschluss der Episode.",
+          "slides": {
+            "building-blocks": {
+              "title": "Bausteine",
+              "caption": "Drei Varianten belegen die Aufteilung.",
+              "columns": {
+                "section": {
+                  "title": "Abschnittsfolie",
+                  "prose": "Titel und Untertitel, vertikal zentriert."
+                },
+                "basic": {
+                  "title": "Einfache Seite",
+                  "prose": "Titel, Untertitel und ein Absatz Fließtext."
+                },
+                "three-column": {
+                  "title": "Drei Spalten",
+                  "prose": "Titel, Untertitel und drei Spalten mit eigenem Schlüssel."
+                }
+              }
+            },
+            "what-comes-next": {
+              "title": "Wie es weitergeht",
+              "caption": "Echte Episoden wachsen von hier aus.",
+              "prose": "Diagramme, Sprechernotizen und der Videolink hängen sich später an dasselbe Rückgrat, ohne Bestehendes umzuschreiben."
+            }
+          }
+        }
+      }
+    }
+  }
 }

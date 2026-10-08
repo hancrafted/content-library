@@ -7,8 +7,16 @@ Localized visualisations of theory content, captured from YouTube training video
 **Episode**: one next js tower page, representing one piece of visualised theory content, localized into en and de. Its title is the page's h1; it holds Sections.
 _Avoid_: Post, article, video
 
-**Section**: a titled group of related content within an Episode, headed by an h2; it holds Slides.
+## Episode structure
+
+**Section**: an Episode's second level, a renderable unit with its own section slide, holding zero or more page Slides.
 _Avoid_: Chapter, part
 
-**Slide**: one unit of content within a Section, headed by an h3, laid out like a PowerPoint slide and stacked down the Episode's tower page.
-_Avoid_: Page — that word means the Next.js route the whole Episode renders as
+**Slide**: one full-height frame in an Episode's tower. A Section's own slide is a **section slide**; the slides it holds are **page slides**.
+_Avoid_: Card, panel; page, which means the Next.js route the whole Episode renders as
+
+**Master**: the shared slide frame and type scale that every variant composes.
+_Avoid_: Base slide, template
+
+**Variant**: a slide layout composed from the master, e.g. section slide, basic page slide, three-column page slide.
+_Avoid_: Slide type, schema

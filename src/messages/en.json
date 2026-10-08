@@ -1,8 +1,95 @@
 {
-  "brand": { "name": "hancrafted", "home": "hancrafted, go to the landing page" },
-  "nav": { "label": "Main", "episodes": "Episodes" },
-  "theme": { "label": "Theme", "light": "Light", "dark": "Dark", "system": "System" },
-  "locale": { "label": "Language" },
-  "landing": { "title": "Home", "link": "Page template" },
-  "episodeTemplate": { "title": "Page template" }
+  "brand": {
+    "name": "hancrafted",
+    "home": "hancrafted, go to the landing page"
+  },
+  "nav": {
+    "label": "Main",
+    "episodes": "Episodes"
+  },
+  "theme": {
+    "label": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "locale": {
+    "label": "Language"
+  },
+  "landing": {
+    "title": "Home",
+    "link": "Page template"
+  },
+  "episodeNav": {
+    "label": "Episode contents"
+  },
+  "episodes": {
+    "page-template": {
+      "title": "Page template",
+      "sections": {
+        "foundations": {
+          "title": "Foundations",
+          "caption": "The system every Episode is built from: one master, a few variants, keyed strings.",
+          "slides": {
+            "why-a-template": {
+              "title": "Why a template",
+              "caption": "Every Episode shares one spine: Episode, Section, Slide.",
+              "prose": "Markup stays free. Only the words are keyed, by Section slug, Slide slug and role, so a translation never has to pass through a layout schema."
+            },
+            "three-layers": {
+              "title": "Three layers",
+              "caption": "Each layer owns one concern and nothing else.",
+              "columns": {
+                "master": {
+                  "title": "Master",
+                  "prose": "Owns the universals: frame, spacing, type scale."
+                },
+                "variants": {
+                  "title": "Variants",
+                  "prose": "Compose the master into a layout. A new slide type is a new variant."
+                },
+                "catalog": {
+                  "title": "Catalog",
+                  "prose": "Holds every string per locale, keyed by meaning, never by position."
+                }
+              }
+            }
+          }
+        },
+        "interlude": {
+          "title": "Interlude",
+          "caption": "A Section can stand on its own, without any page slides."
+        },
+        "next-steps": {
+          "title": "Next steps",
+          "caption": "{count, plural, one {# slide} other {# slides}} to close the Episode.",
+          "slides": {
+            "building-blocks": {
+              "title": "Building blocks",
+              "caption": "Three variants prove the split.",
+              "columns": {
+                "section": {
+                  "title": "Section slide",
+                  "prose": "Title and caption, vertically centred."
+                },
+                "basic": {
+                  "title": "Basic page",
+                  "prose": "Title, caption and one block of prose."
+                },
+                "three-column": {
+                  "title": "Three columns",
+                  "prose": "Title, caption and three keyed columns."
+                }
+              }
+            },
+            "what-comes-next": {
+              "title": "What comes next",
+              "caption": "Real Episodes grow from here.",
+              "prose": "Charts, speaker notes and the video link attach to the same spine later, without rewriting what exists."
+            }
+          }
+        }
+      }
+    }
+  }
 }
