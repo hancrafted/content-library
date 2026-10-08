@@ -109,11 +109,11 @@ function sections(t: SectionsT): EpisodeSection[] {
   ];
 }
 
-export const pageTemplate: Episode = {
+export const pageTemplate = {
   slug: 'page-template',
   async content(locale: Locale) {
     const t = await getTranslations({ locale, namespace: 'episodes.page-template' });
     const sectionsT = await getTranslations({ locale, namespace: 'episodes.page-template.sections' });
     return { title: t('title'), caption: t('caption'), sections: sections(sectionsT) };
   },
-};
+} satisfies Episode;

@@ -6,12 +6,10 @@ import { pageTemplate } from './page-template/page-template';
 
 /**
  * Every Episode, by slug (FE-002). Typed against `EPISODE_SLUGS`, so a slug
- * without a record or a record without a slug fails `tsc`. A key that differs
- * from its record's own slug is caught by the post-build structure test, which
- * renders every slug in `EPISODE_SLUGS`; `Episode.slug` is the whole union, so
- * `tsc` cannot narrow it per record.
+ * without a record or a record without a slug fails `tsc`, and so does a key
+ * that differs from its record's own slug.
  */
-const EPISODES: Readonly<Record<EpisodeSlug, Episode>> = {
+const EPISODES: { readonly [S in EpisodeSlug]: Episode & { readonly slug: S } } = {
   'page-template': pageTemplate,
   'amnesiac-freelancer': amnesiacFreelancer,
 };

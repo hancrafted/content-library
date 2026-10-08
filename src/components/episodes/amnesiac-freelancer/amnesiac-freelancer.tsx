@@ -164,11 +164,11 @@ function sections(t: SectionsT): EpisodeSection[] {
   ];
 }
 
-export const amnesiacFreelancer: Episode = {
+export const amnesiacFreelancer = {
   slug: 'amnesiac-freelancer',
   async content(locale: Locale) {
     const t = await getTranslations({ locale, namespace: 'episodes.amnesiac-freelancer' });
     const sectionsT = await getTranslations({ locale, namespace: 'episodes.amnesiac-freelancer.sections' });
     return { title: t('title'), caption: t('caption'), sections: sections(sectionsT) };
   },
-};
+} satisfies Episode;
