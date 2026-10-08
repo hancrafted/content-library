@@ -62,10 +62,10 @@ category matter more here than in a typical app.
 
 | Practice                                                                                                               | Repo state                         | Fit                | Check notes                                                                                                                |
 | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------- | ------------------ | -------------------------------------------------------------------------------------------------------------------------- |
-| **Every `page.tsx` exports `metadata` or `generateMetadata`**, with canonical and `hreflang` alternates (en ↔ de). [4] | Only a static title in the layouts | 📜 high            | ⏳ Open. Still a static `title` in the layouts only. No `alternates`.                                                      |
-| `sitemap.ts` and `robots.ts` (both work in a static export). [4]                                                       | Missing                            | 📜                 | ⏳ Open. Neither exists.                                                                                                   |
+| **Every `page.tsx` exports `metadata` or `generateMetadata`**, with canonical and `hreflang` alternates (en ↔ de). [4] | Only a static title in the layouts | 📜 high            | ✅ **FE-008**. Archgate rules `page-exports-metadata`, `layout-holds-site-metadata-only`; post-build reciprocity test.     |
+| `sitemap.ts` and `robots.ts` (both work in a static export). [4]                                                       | Missing                            | 📜                 | ⏳ Deferred by FE-008 §5 until a custom domain: `robots.txt` is read only at an origin root.                               |
 | Internal links use `next/link`; no raw `<a href="/…">`. [4]                                                            | Partly covered by FE-003           | 📜 (extend FE-003) | 🟡 FE-003 `href-via-localize-path` checks how every `href` is built, but not the element. No raw `<a>` under `src/` today. |
-| Custom `not-found.tsx` and error UI. [4]                                                                               | Missing                            | 📜                 | ⏳ Open. Neither exists.                                                                                                   |
+| Custom `not-found.tsx` and error UI. [4]                                                                               | Missing                            | 📜                 | ⏳ Open. FE-008 §5 leaves it to a separate UI record.                                                                      |
 
 ## 6. Performance and assets
 
@@ -88,7 +88,7 @@ category matter more here than in a typical app.
 
 1. Static-export contract (section 1) — ✅ FE-005
 2. Server/client boundary placement (section 1) — ✅ FE-006, pending merge
-3. Per-page metadata with hreflang and canonical (section 5)
+3. Per-page metadata with hreflang and canonical (section 5) — ✅ FE-008
 4. Module layering (section 2) — ✅ FE-007; the pure/effect split stays open
 5. YouTube embed and font privacy (section 6)
 6. React lint baseline: hooks and a11y (sections 3 and 7)
