@@ -75,7 +75,12 @@ function contextOf(anchor: string, slide: EpisodeSlide): ContextSlide {
   const notes = slide.notes ?? [];
   const segments = slide.voiceScript ?? [];
   checkContext(anchor, notes, segments);
-  return { anchor, notes: notes.map((note) => ({ ...note, target: targetAnchor(anchor, note.target) })), segments };
+  return {
+    anchor,
+    title: slide.title,
+    notes: notes.map((note) => ({ ...note, target: targetAnchor(anchor, note.target) })),
+    segments,
+  };
 }
 
 /**

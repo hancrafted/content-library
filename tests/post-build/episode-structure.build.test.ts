@@ -66,7 +66,7 @@ describe('episode structure', () => {
   describe.each(PAGES)('$url', ({ slug, url }) => {
     it('holds the table of contents, then the slides', () => {
       // ARRANGE
-      const expected = ['toc', 'slides'];
+      const expected = ['toc', 'slides', 'context'];
       // ACT
       const slots = slotsOf(page(url), '[data-slot="episode-page"]');
       // ASSERT

@@ -34,6 +34,8 @@ export interface VoiceScriptSegment {
 /** Everything the drawer shows for one Slide; each note's `target` is the full element id. */
 export interface ContextSlide {
   readonly anchor: string;
+  /** The Slide's plain title, to label its entry. */
+  readonly title: string;
   readonly notes: readonly SpeakerNoteItem[];
   readonly segments: readonly VoiceScriptSegment[];
 }

@@ -66,13 +66,16 @@
 
 /* Context drawer (FE-010): print reveals every Slide's notes and script, whether or not the drawer was ever opened. */
 @media print {
-  [data-slot='context'] {
+  [data-slot='context'],
+  [data-slot='context'] [data-context-panel] {
     position: static !important;
     visibility: visible !important;
     transform: none !important;
     display: block !important;
     width: auto !important;
     height: auto !important;
+    border: 0 !important;
+    box-shadow: none !important;
     break-before: page;
   }
   [data-slot='context'] [role='tabpanel'],

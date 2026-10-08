@@ -55,8 +55,13 @@ describe('context slides', () => {
       },
     ];
     const expected = [
-      { anchor: 'foundations', notes: [{ ...note, target: 'foundations--title' }], segments: [] },
-      { anchor: 'foundations--why', notes: [{ ...note, target: 'foundations--why--prose' }], segments: [segment] },
+      { anchor: 'foundations', title: 'Foundations', notes: [{ ...note, target: 'foundations--title' }], segments: [] },
+      {
+        anchor: 'foundations--why',
+        title: 'Why',
+        notes: [{ ...note, target: 'foundations--why--prose' }],
+        segments: [segment],
+      },
     ];
     // ACT
     const context = contextSlidesOf(sections);
@@ -70,7 +75,7 @@ describe('context slides', () => {
     // ACT
     const context = contextSlidesOf(sections);
     // ASSERT
-    expect(context).toEqual([{ anchor: 'a', notes: [], segments: [] }]);
+    expect(context).toEqual([{ anchor: 'a', title: 'A', notes: [], segments: [] }]);
   });
 
   it('rejects a Slide whose notes share a slug', () => {
