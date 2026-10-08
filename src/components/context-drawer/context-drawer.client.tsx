@@ -18,13 +18,21 @@ export interface DrawerLabels {
   readonly tabs: { readonly notes: string; readonly script: string };
 }
 
+// From `md` the panel starts below the sticky site header (top-4 plus its ~3.5rem
+// height) so it never covers the header; below `md` the sheet sits above the
+// table of contents pill (bottom-4, min-h-11), so it never covers that either.
 const PANEL = cn(
   'fixed z-40 flex flex-col gap-3 overflow-y-auto border bg-background p-4 shadow-header',
-  'md:top-0 md:right-0 md:h-dvh md:w-[min(26rem,92vw)] md:border-y-0 md:border-r-0',
-  'max-md:inset-x-0 max-md:bottom-0 max-md:h-[60dvh] max-md:border-x-0 max-md:border-b-0',
-  'transition-[transform,visibility] duration-300 motion-reduce:transition-none',
+  'md:top-24 md:right-0 md:h-[calc(100dvh-6rem)] md:w-[min(26rem,92vw)] md:border-y-0 md:border-r-0',
+  'max-md:inset-x-0 max-md:bottom-20 max-md:h-[60dvh] max-md:border-x-0 max-md:border-b-0',
+  'motion-reduce:[transition:none]',
 );
-const CLOSED = 'invisible max-md:translate-y-full md:translate-x-full';
+// `visibility` must flip to visible the instant the drawer opens, or the focus
+// move on open lands on a still-hidden panel and is dropped; on close it waits
+// for the slide-out to finish.
+const OPENING = '[transition:transform_300ms,visibility_0s]';
+const CLOSED =
+  'invisible max-md:translate-y-full md:translate-x-full [transition:transform_300ms,visibility_0s_linear_300ms]';
 
 function Entries({
   entries,
@@ -129,7 +137,7 @@ export function ContextDrawer(props: {
         id={DRAWER_PANEL_ID}
         data-context-panel
         aria-label={labels.title}
-        className={cn(PANEL, !drawer.open && CLOSED)}
+        className={cn(PANEL, drawer.open ? OPENING : CLOSED)}
       >
         <PanelBody labels={labels} drawer={drawer} entries={entries} />
       </div>
