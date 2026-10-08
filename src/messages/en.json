@@ -107,6 +107,105 @@
           }
         }
       }
+    },
+    "amnesiac-freelancer": {
+      "title": "Treat AI like an amnesiac freelancer you have to onboard",
+      "caption": "Why an AI coding agent starts every session blank, and how to brief it so the work still lands.",
+      "description": "An AI coding agent keeps nothing between sessions. Treat it like a skilled freelancer who forgets: brief it in files, keep the brief short, and verify the work.",
+      "sections": {
+        "blank-slate": {
+          "title": "The freelancer who forgets",
+          "caption": "Why the agent arrives with no memory of your project, and where its knowledge does and does not live.",
+          "slides": {
+            "blank-every-time": {
+              "title": "Why every session starts from a blank slate",
+              "caption": "“Amnesiac” is our metaphor, not a vendor term, but the mechanism is documented.",
+              "prose": "The model keeps nothing between requests: a chat only feels continuous because the history is sent again every turn. Claude Code says each session begins with a fresh context window. Anthropic itself pictures engineers working in shifts, each arriving with no memory of the previous shift."
+            },
+            "where-knowledge-lives": {
+              "title": "Where an agent’s knowledge lives, and where it stops",
+              "caption": "Three places, and only one of them is yours to shape.",
+              "columns": {
+                "training": {
+                  "title": "Training",
+                  "prose": "General knowledge up to a cutoff date. Your repo, your conventions and last Tuesday’s decision were never part of it. That is our framing; vendors point to files for exactly this reason."
+                },
+                "session": {
+                  "title": "The session",
+                  "prose": "The context window is its working memory. Recall degrades as it fills, and information buried in the middle of a long input is used worst."
+                },
+                "files": {
+                  "title": "Files",
+                  "prose": "CLAUDE.md and AGENTS.md are loaded as text at the start. A project-root CLAUDE.md is re-read from disk after compaction; an instruction given only in chat can be lost."
+                }
+              }
+            }
+          }
+        },
+        "onboarding": {
+          "title": "Onboarding the newcomer",
+          "caption": "{count, plural, one {# slide} other {# slides}} on briefing an agent the way you would brief a skilled contractor.",
+          "slides": {
+            "brief-and-rules": {
+              "title": "What a good onboarding package contains",
+              "caption": "Each human artefact has an agent counterpart.",
+              "columns": {
+                "brief": {
+                  "title": "The brief",
+                  "prose": "Anthropic: think of Claude as a brilliant but new employee who lacks context on your norms and workflows. State the task, constraints and format explicitly."
+                },
+                "house-rules": {
+                  "title": "House rules",
+                  "prose": "A file read at the start of every conversation: build and test commands, code style, workflow rules. AGENTS.md calls it a README for agents."
+                },
+                "definition-of-done": {
+                  "title": "Definition of done",
+                  "prose": "Tests, builds or scripts the agent can run itself. Anthropic: give Claude a way to verify its work."
+                }
+              }
+            },
+            "keep-it-short": {
+              "title": "Why a short brief beats a thorough handbook",
+              "caption": "Attention is finite, for agents and humans alike.",
+              "prose": "Anthropic warns that bloated CLAUDE.md files cause Claude to ignore your actual instructions, and suggests under 200 lines per file. GitHub caps its own template at two pages. Point to detail the agent can load on demand instead of pasting it all in."
+            },
+            "decisions-in-writing": {
+              "title": "Why decisions belong in writing",
+              "caption": "Write each one as a conversation with a future developer.",
+              "prose": "Michael Nygard’s decision records keep the why for whoever arrives later, in one or two pages, and mark a reversed decision as superseded instead of deleting it. For an agent that arrives later every time, the record is the memory it can read."
+            }
+          }
+        },
+        "where-it-breaks": {
+          "title": "Where the metaphor breaks",
+          "caption": "Three differences between a freelancer and an agent, and what follows from them.",
+          "slides": {
+            "metaphor-breaks": {
+              "title": "Three ways an agent is not a freelancer",
+              "caption": "Each difference changes how you onboard.",
+              "columns": {
+                "no-learning": {
+                  "title": "No learning",
+                  "prose": "A freelancer improves by week three unprompted. A fresh session starts from the files alone, so anything not written down is gone."
+                },
+                "not-enforced": {
+                  "title": "Not enforced",
+                  "prose": "Claude treats CLAUDE.md as context, not enforced configuration. Rules that must hold belong in checks or hooks, not prose."
+                },
+                "reading-costs": {
+                  "title": "Reading costs",
+                  "prose": "Every line is paid for at the start of every session, and quality drops as context fills. Prune the brief."
+                }
+              }
+            },
+            "enforce-and-verify": {
+              "title": "Why checks matter more than good intentions",
+              "caption": "Let something other than the author grade the work.",
+              "prose": "Give the agent commands that prove the work, and add a fresh-context reviewer, so the agent doing the work is not the one grading it. That is the one part that does not depend on the agent reading and obeying prose."
+            }
+          }
+        }
+      }
     }
   }
 }

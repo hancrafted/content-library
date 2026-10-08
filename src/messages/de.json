@@ -107,6 +107,105 @@
           }
         }
       }
+    },
+    "amnesiac-freelancer": {
+      "title": "Die KI wie einen Freelancer mit Gedächtnisverlust einarbeiten",
+      "caption": "Warum ein KI-Coding-Agent jede Sitzung bei null beginnt und wie die Einarbeitung trotzdem gelingt.",
+      "description": "Ein KI-Coding-Agent behält nichts von Sitzung zu Sitzung. Wer ihn wie einen fähigen, aber vergesslichen Freelancer einarbeitet, hält das Briefing in Dateien kurz und prüft das Ergebnis.",
+      "sections": {
+        "blank-slate": {
+          "title": "Der Freelancer, der alles vergisst",
+          "caption": "Warum der Agent ohne Erinnerung an das Projekt startet und wo sein Wissen liegt, und wo nicht.",
+          "slides": {
+            "blank-every-time": {
+              "title": "Warum jede Sitzung bei null beginnt",
+              "caption": "„Gedächtnisverlust“ ist unser Bild, kein Begriff der Hersteller, doch der Mechanismus ist dokumentiert.",
+              "prose": "Das Modell behält zwischen zwei Anfragen nichts. Ein Chat wirkt nur zusammenhängend, weil der Verlauf bei jedem Zug erneut mitgeschickt wird. Laut Claude-Code-Dokumentation beginnt jede Sitzung mit einem frischen Kontextfenster. Anthropic selbst beschreibt Entwickler im Schichtbetrieb, die jeweils ohne Erinnerung an die vorherige Schicht antreten."
+            },
+            "where-knowledge-lives": {
+              "title": "Wo das Wissen eines Agenten liegt und wo es endet",
+              "caption": "Drei Orte, nur einer davon lässt sich gestalten.",
+              "columns": {
+                "training": {
+                  "title": "Training",
+                  "prose": "Allgemeinwissen bis zu einem Stichtag. Das eigene Repository, die Konventionen und die Entscheidung von letztem Dienstag gehörten nie dazu. Das ist unsere Einordnung; die Hersteller verweisen für genau diesen Zweck auf Dateien."
+                },
+                "session": {
+                  "title": "Die Sitzung",
+                  "prose": "Das Kontextfenster ist das Arbeitsgedächtnis. Die Erinnerung wird schlechter, je voller es wird, und Informationen mitten in einer langen Eingabe werden am schlechtesten genutzt."
+                },
+                "files": {
+                  "title": "Dateien",
+                  "prose": "CLAUDE.md und AGENTS.md werden zu Beginn als Text geladen. Eine CLAUDE.md im Projektstamm wird nach einer Verdichtung neu von der Platte gelesen; was nur im Chat gesagt wurde, kann verloren gehen."
+                }
+              }
+            }
+          }
+        },
+        "onboarding": {
+          "title": "Die Einarbeitung",
+          "caption": "{count, plural, one {# Folie} other {# Folien}} dazu, einen Agenten so einzuweisen wie eine fähige Honorarkraft.",
+          "slides": {
+            "brief-and-rules": {
+              "title": "Was ein gutes Einarbeitungspaket enthält",
+              "caption": "Jedem Hilfsmittel für Menschen entspricht eines für den Agenten.",
+              "columns": {
+                "brief": {
+                  "title": "Das Briefing",
+                  "prose": "Anthropic rät, Claude wie einen brillanten, aber neuen Mitarbeiter zu sehen, dem der Kontext zu Normen und Abläufen fehlt. Aufgabe, Rahmenbedingungen und Format ausdrücklich nennen."
+                },
+                "house-rules": {
+                  "title": "Hausregeln",
+                  "prose": "Eine Datei, die zu Beginn jedes Gesprächs gelesen wird: Build- und Testbefehle, Code-Stil, Arbeitsregeln. AGENTS.md nennt sie ein README für Agenten."
+                },
+                "definition-of-done": {
+                  "title": "Fertig heißt geprüft",
+                  "prose": "Tests, Builds oder Skripte, die der Agent selbst ausführen kann. Anthropic: Claude eine Möglichkeit geben, die eigene Arbeit zu prüfen."
+                }
+              }
+            },
+            "keep-it-short": {
+              "title": "Warum ein kurzes Briefing besser ist als ein gründliches Handbuch",
+              "caption": "Aufmerksamkeit ist begrenzt, bei Agenten wie bei Menschen.",
+              "prose": "Anthropic warnt, dass überladene CLAUDE.md-Dateien dazu führen, dass Claude die eigentlichen Anweisungen ignoriert, und empfiehlt unter 200 Zeilen pro Datei. GitHub begrenzt die eigene Vorlage auf zwei Seiten. Besser auf Details verweisen, die der Agent bei Bedarf lädt, als alles hineinzukopieren."
+            },
+            "decisions-in-writing": {
+              "title": "Warum Entscheidungen schriftlich festgehalten gehören",
+              "caption": "Jede so schreiben, als wäre es ein Gespräch mit einem künftigen Entwickler.",
+              "prose": "Michael Nygards Entscheidungsprotokolle bewahren das Warum für alle, die später dazukommen: auf ein bis zwei Seiten, und eine revidierte Entscheidung wird als abgelöst markiert statt gelöscht. Für einen Agenten, der jedes Mal später dazukommt, ist das Protokoll die Erinnerung, die er lesen kann."
+            }
+          }
+        },
+        "where-it-breaks": {
+          "title": "Wo das Bild hinkt",
+          "caption": "Drei Unterschiede zwischen Freelancer und Agent und was daraus folgt.",
+          "slides": {
+            "metaphor-breaks": {
+              "title": "Drei Punkte, in denen ein Agent kein Freelancer ist",
+              "caption": "Jeder Unterschied verändert die Einarbeitung.",
+              "columns": {
+                "no-learning": {
+                  "title": "Kein Lernen",
+                  "prose": "Ein Freelancer wird bis zur dritten Woche von selbst besser. Eine neue Sitzung startet allein aus den Dateien; was nicht aufgeschrieben ist, ist weg."
+                },
+                "not-enforced": {
+                  "title": "Nicht erzwungen",
+                  "prose": "Claude behandelt CLAUDE.md als Kontext, nicht als erzwungene Konfiguration. Regeln, die gelten müssen, gehören in Prüfungen oder Hooks, nicht in Fließtext."
+                },
+                "reading-costs": {
+                  "title": "Lesen kostet",
+                  "prose": "Jede Zeile wird zu Beginn jeder Sitzung bezahlt, und die Qualität sinkt, je voller der Kontext wird. Das Briefing gehört gekürzt."
+                }
+              }
+            },
+            "enforce-and-verify": {
+              "title": "Warum Prüfungen mehr zählen als gute Absichten",
+              "caption": "Wer die Arbeit bewertet, sollte nicht derselbe sein, der sie gemacht hat.",
+              "prose": "Der Agent braucht Befehle, die die Arbeit belegen, und einen Reviewer mit frischem Kontext. Das ist der einzige Teil, der nicht davon abhängt, dass der Agent Fließtext liest und befolgt."
+            }
+          }
+        }
+      }
     }
   }
 }
