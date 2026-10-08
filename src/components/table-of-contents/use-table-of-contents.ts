@@ -93,6 +93,24 @@ export function useRevealed(settled: boolean): boolean {
 }
 
 /**
+ * The entry a table-of-contents click is gliding to. It stands in for the
+ * observed entry until the glide ends, so sections open and the ring turns on
+ * click, not after scrolling past everything in between.
+ */
+export function useHeadingTo(observed: string | null) {
+  const [heading, setHeading] = useState<string | null>(null);
+  // Arrived: hand back to the observer, during render so no frame shows the stale target.
+  if (heading !== null && heading === observed) setHeading(null);
+  useEffect(() => {
+    if (heading === null) return;
+    const arrive = () => setHeading(null);
+    window.addEventListener('scrollend', arrive, { once: true });
+    return () => window.removeEventListener('scrollend', arrive);
+  }, [heading]);
+  return { heading, headTo: setHeading };
+}
+
+/**
  * Open sections plus a chevron toggle. Toggles are remembered only while the
  * reader stays in the same section; scrolling into another one resets them.
  */

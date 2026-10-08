@@ -6,7 +6,14 @@ import { ownerOf, readingTime, type TocSection } from './table-of-contents.pure'
 import { TocDrawer } from './toc-drawer';
 import { remainingLabel, type TocLabels } from './toc-heading';
 import { sectionNumber, TocPanel, type TocView } from './toc-panel';
-import { useActiveId, useFractionInto, useOpenSections, useRevealed, useSettled } from './use-table-of-contents';
+import {
+  useActiveId,
+  useFractionInto,
+  useHeadingTo,
+  useOpenSections,
+  useRevealed,
+  useSettled,
+} from './use-table-of-contents';
 
 export type { TocSection } from './table-of-contents.pure';
 export type { TocLabels } from './toc-heading';
@@ -36,10 +43,11 @@ function useTocState(props: {
   const settled = useSettled(observed);
   const revealed = useRevealed(settled);
   const time = readingTime(order.minutes, observed ? order.ids.indexOf(observed) : -1, fraction);
-  // Before the first observation, treat the first entry as active, so nothing collapses on load.
-  const active = observed ?? order.ids[0] ?? null;
+  const { heading, headTo } = useHeadingTo(observed);
+  // A clicked target wins until the glide ends; before the first observation, the first entry stands in.
+  const active = heading ?? observed ?? order.ids[0] ?? null;
   const { open, toggle } = useOpenSections(props.sections, active);
-  const view: TocView = { locale: props.locale, route: props.route, active, open, toggle, settled, revealed };
+  const view: TocView = { locale: props.locale, route: props.route, active, open, toggle, headTo, settled, revealed };
   return { view, time };
 }
 
