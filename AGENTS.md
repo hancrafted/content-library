@@ -11,6 +11,10 @@ This project is a localized Next.js application which serves to visualize theory
 - For any /grill-with-docs and /wayfinder, using the /grilling skill read the `docs/agents/grilling-format.md`, which overwrites the grill format. Analog for voice sessions read `docs/agents/grilling-voice.md`.
 - Create worktrees in `.worktrees`
 
+## Testing
+
+- `*.test.ts` is the fast suite in `npm run verify`; `*.build.test.ts` needs `out/` and runs only via `npm run test:build` after `npm run build`. Keep the two vitest configs split — `verify` must stay fast and must not require a build.
+
 ## Audiences
 
 International English via YouTube — reach. German businesses for coaching and
