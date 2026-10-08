@@ -9,6 +9,7 @@ import type {
 import { SectionSlide } from '@/components/episode/section-slide';
 import { SessionLoop } from '@/components/episode/session-loop.client';
 import type { ReadString } from '@/components/episode/slide-context.pure';
+import { SlideFrame } from '@/components/episode/slide-master';
 import { ThreeColumnSlide } from '@/components/episode/three-column-slide';
 import type { Locale } from '@/lib/locale.pure';
 import { getTranslations } from 'next-intl/server';
@@ -168,6 +169,25 @@ function metaphorBreaks(t: SectionsT): EpisodeSlide {
   };
 }
 
+/**
+ * The untitled Slide (FE-002 §2): a purely visual closing beat. It declares no
+ * `title`, so it renders but has no table-of-contents entry; its minutes still
+ * count toward the reading time.
+ */
+function oneLine(t: SectionsT): EpisodeSlide {
+  return {
+    slug: 'one-line',
+    minutes: { en: 1, de: 1 },
+    content: (
+      <SlideFrame className="justify-center">
+        <p className="max-w-3xl text-4xl font-semibold tracking-tight text-balance md:text-6xl">
+          {t('where-it-breaks.slides.one-line.statement')}
+        </p>
+      </SlideFrame>
+    ),
+  };
+}
+
 function enforceAndVerify(t: SectionsT): EpisodeSlide {
   const title = t('where-it-breaks.slides.enforce-and-verify.title');
   const { anchor, notes, voiceScript } = contextOf(t, 'enforce-and-verify');
@@ -201,7 +221,7 @@ function sections(t: SectionsT, ref: ContextRefOf): EpisodeSection[] {
   return [
     sectionOf('blank-slate', t('blank-slate.caption'), [blankEveryTime(t, ref), whereKnowledgeLives(t)]),
     sectionOf('onboarding', t('onboarding.caption', { count: onboarding.length }), onboarding),
-    sectionOf('where-it-breaks', t('where-it-breaks.caption'), [metaphorBreaks(t), enforceAndVerify(t)]),
+    sectionOf('where-it-breaks', t('where-it-breaks.caption'), [metaphorBreaks(t), enforceAndVerify(t), oneLine(t)]),
   ];
 }
 

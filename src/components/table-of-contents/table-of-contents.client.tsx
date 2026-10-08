@@ -3,7 +3,7 @@
 import { useFractionInto, useOpenSections, useRevealed, useSettled } from '@/hooks/use-table-of-contents';
 import { useActiveSlide } from '@/hooks/use-url-state';
 import type { Locale } from '@/lib/locale.pure';
-import { ownerOf, readingTime, type TocSection } from '@/lib/table-of-contents.pure';
+import { ownerOf, readingOrder, readingTime, type TocSection } from '@/lib/table-of-contents.pure';
 import { useMemo, useSyncExternalStore } from 'react';
 import { TocDrawer } from './toc-drawer';
 import { remainingLabel, type TocLabels } from './toc-heading';
@@ -11,11 +11,6 @@ import { sectionNumber, TocPanel, type TocView } from './toc-panel';
 
 export type { TocSection } from '@/lib/table-of-contents.pure';
 export type { TocLabels } from './toc-heading';
-
-function pageOrder(sections: readonly TocSection[]): { ids: string[]; minutes: number[] } {
-  const entries = sections.flatMap((section) => [section, ...section.items]);
-  return { ids: entries.map((entry) => entry.id), minutes: entries.map((entry) => entry.minutes) };
-}
 
 /** The section the reader is in, for the pill; chevron toggles do not move it. */
 function whereAt(sections: readonly TocSection[], active: string | null) {
@@ -43,10 +38,11 @@ function useTocState(props: {
   sections: readonly TocSection[];
   targetAttribute: string;
 }) {
-  const order = useMemo(() => pageOrder(props.sections), [props.sections]);
+  const order = useMemo(() => readingOrder(props.sections), [props.sections]);
   const slide = useActiveSlide();
   // With no Slide in the URL (the reader is on the Title slide), the first entry stands in.
-  const active = slide ?? order.ids[0] ?? null;
+  // An untitled Slide has no entry of its own: its owning entry stays current.
+  const active = (slide && order.owners[slide]) || slide || order.ids[0] || null;
   const fraction = useFractionInto(slide, props.targetAttribute);
   // The server cannot know the hash, so the table holds its loading box until the client has read it.
   const settled = useSettled(useHydrated() ? active : null);

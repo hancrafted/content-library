@@ -3,7 +3,7 @@ import type { EpisodeSlug } from '@/lib/routes';
 import type { ReactNode } from 'react';
 import type { SpeakerNoteItem, VoiceScriptSegment } from '../../lib/context-drawer.pure';
 import { episodeAnchors, sectionAnchor, slideAnchor } from '../../lib/episode.pure';
-import type { TocSection } from '../../lib/table-of-contents.pure';
+import type { TocItem, TocSection } from '../../lib/table-of-contents.pure';
 
 /*
  * The Episode record (FE-002): the typed structure an Episode page file hands
@@ -17,10 +17,13 @@ export type PerLocale<T> = Readonly<Record<Locale, T>>;
 export interface EpisodeSlide {
   /** Stable once published; becomes the anchor and the catalog key segment. */
   readonly slug: string;
-  /** Plain text for the table of contents; the Slide renders its own heading. */
-  readonly title: string;
-  /** Spoken reading time per locale, in minutes. */
-  readonly minutes: PerLocale<number>;
+  /**
+   * Plain text for the table of contents; the Slide renders its own heading.
+   * Leave it out of a purely visual Slide: it renders but is not listed (FE-002).
+   */
+  readonly title?: string;
+  /** Spoken reading time per locale, in minutes; counts as 0 when left out. */
+  readonly minutes?: PerLocale<number>;
   readonly content: ReactNode;
   /** Speaker notes (FE-010); each `target` is the short name of an element of this Slide. */
   readonly notes?: readonly SpeakerNoteItem[];
@@ -28,7 +31,10 @@ export interface EpisodeSlide {
   readonly voiceScript?: readonly VoiceScriptSegment[];
 }
 
-export interface EpisodeSection extends EpisodeSlide {
+/** A Section's own slide is its table-of-contents entry, so it always names itself and carries a time. */
+export interface EpisodeSection extends Omit<EpisodeSlide, 'title' | 'minutes'> {
+  readonly title: string;
+  readonly minutes: PerLocale<number>;
   /** Page Slides after the Section's own slide; may be empty. */
   readonly slides: readonly EpisodeSlide[];
 }
@@ -50,18 +56,30 @@ export interface Episode {
 /**
  * The table of contents' entries, derived from the same anchors the slides
  * carry, so the two cannot drift. Throws on a bad or duplicate slug, which
- * fails `next dev` and the static build alike.
+ * fails `next dev` and the static build alike. An untitled Slide gets no
+ * entry; its minutes (0 when undeclared) are added to the entry it follows,
+ * so the Section's total and the reading-time order both stay honest.
  */
 export function tocSectionsOf(sections: readonly EpisodeSection[], locale: Locale): TocSection[] {
   episodeAnchors(sections.map(({ slug, slides }) => ({ slug, slides: slides.map((slide) => slide.slug) })));
-  return sections.map((section) => ({
-    id: sectionAnchor(section.slug),
-    title: section.title,
-    minutes: section.minutes[locale],
-    items: section.slides.map((slide) => ({
-      id: slideAnchor(section.slug, slide.slug),
-      title: slide.title,
-      minutes: slide.minutes[locale],
-    })),
-  }));
+  return sections.map((section) => {
+    const entry: TocSection = {
+      id: sectionAnchor(section.slug),
+      title: section.title,
+      minutes: section.minutes[locale],
+      items: [],
+    };
+    const items: TocItem[] = [];
+    for (const slide of section.slides) {
+      const minutes = slide.minutes?.[locale] ?? 0;
+      if (slide.title === undefined) {
+        const owner = items.at(-1) ?? entry;
+        owner.minutes += minutes;
+        owner.unlisted = [...(owner.unlisted ?? []), { id: slideAnchor(section.slug, slide.slug), minutes }];
+      } else {
+        items.push({ id: slideAnchor(section.slug, slide.slug), title: slide.title, minutes });
+      }
+    }
+    return { ...entry, items };
+  });
 }

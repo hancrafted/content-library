@@ -627,6 +627,9 @@
                   }
                 }
               }
+            },
+            "one-line": {
+              "statement": "Write it down, or the next session never knew it."
             }
           }
         }

@@ -13,8 +13,8 @@ import type { SpeakerNoteItem, VoiceScriptSegment } from '@/lib/context-drawer.p
 export interface ContextItem {
   /** The DOM id of the element whose visibility makes this item current. The drawer observes it as given. */
   readonly id: string;
-  /** Names the item in the drawer's head and, in print, above its entry. */
-  readonly title: string;
+  /** Names the item in the drawer's head and, in print, above its entry; none for an untitled Slide. */
+  readonly title?: string;
   /** Each note's `target` is the full DOM id of the element it explains; a context reference there carries the same id. */
   readonly notes: readonly SpeakerNoteItem[];
   readonly script: readonly VoiceScriptSegment[];
