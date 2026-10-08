@@ -27,8 +27,14 @@ _Avoid_: Variant, slide type, schema
 **Speaker notes**: a Slide's short list of talking points, each a Speaker note item.
 _Avoid_: Notes, comments
 
-**Speaker note item**: one talking point: a header, a description, optional sources and image, and the element of its Slide it explains.
+**Speaker note item**: one talking point: a header, a description, optional titled sources and image, and the element of its Slide it explains.
 _Avoid_: Note, bullet, comment
+
+**Context reference**: a phrase inside a Slide's text that names one Speaker note item and opens it in the Context drawer; a button, not a link.
+_Avoid_: Footnote, tooltip, annotation
+
+**Citation marker**: the `[n]` in a Speaker note item's description, shown as a superscript number that points at source n of that note.
+_Avoid_: Footnote, reference
 
 **Voice script**: a Slide's teleprompter text, a list of Voice script segments.
 _Avoid_: Transcript, manuscript

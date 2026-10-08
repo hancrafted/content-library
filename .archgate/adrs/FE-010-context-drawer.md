@@ -6,8 +6,8 @@ domain: frontend
 rules: true
 files: ['src/components/context-drawer/**/*', 'src/app/globals.css']
 # prettier-ignore
-paths: ['src/components/context-drawer/**', 'src/components/episode/**', 'src/components/episodes/**', 'src/hooks/use-context-drawer.ts', 'src/hooks/use-table-of-contents.ts', 'src/lib/context-drawer.pure.ts', 'src/lib/context-drawer.pure.test.ts', 'src/lib/episode.pure.ts', 'src/lib/episode.test.ts', '.archgate/adrs/FE-010-context-drawer.rules.ts', 'src/app/globals.css', 'src/messages/*.json', 'tests/post-build/context-drawer.build.test.ts', 'tests/post-build/episode-structure.build.test.ts', '.dependency-cruiser.cjs', 'docs/agents/episode-catalog-keys.md', 'GLOSSARY.md']
-description: 'The Context drawer: a non-modal floating card, side by side with or over the Slides, showing the current Slide Speaker notes and Voice script, both server-rendered into the page and printed in full, with the note and segment shapes typed as content and kept apart from design.'
+paths: ['src/components/context-drawer/**', 'src/components/episode/**', 'src/components/episodes/**', 'src/hooks/use-context-drawer.ts', 'src/hooks/use-table-of-contents.ts', 'src/lib/context-drawer.pure.ts', 'src/lib/context-drawer.pure.test.ts', 'src/lib/episode.pure.ts', 'src/lib/episode.test.ts', '.archgate/adrs/FE-010-context-drawer.rules.ts', 'src/app/globals.css', 'src/messages/*.json', 'tests/post-build/context-drawer.build.test.ts', 'tests/post-build/episode-structure.build.test.ts', '.dependency-cruiser.cjs', 'docs/agents/episode-catalog-keys.md', 'docs/agents/context-drawer-design.md', 'GLOSSARY.md']
+description: 'The Context drawer: a non-modal floating card, side by side with or over the Slides, showing the current Slide Speaker notes and Voice script, both server-rendered into the page and printed in full, linked to the Slide by targets and context references, with the note and segment shapes typed as content and kept apart from design.'
 ---
 
 # Context Drawer
@@ -20,7 +20,13 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 
 **Why structure here, when FE-002 says content is free.** FE-002 §3 keeps Slide markup free because a schema made visualisations bend to it. A note or a segment is different: it is text with a fixed role, the same on every Slide, and a drawer, a handout and later a guided tour all read it. So content may be typed and keyed. Design may not. The boundary of FE-002 §3 and FE-007 §4 stays where it was.
 
-**Details.** `Alt+N` matches `event.code`. The drawer is a floating card on the right at every width, by CSS alone: from `md` it either takes a column beside the Slides or floats over them; below `md` it always floats over them, above a dimmed scrim. Notes and segments keep a kebab-case `slug` as key identity, never a position. Print overrides a `hidden` class but not a `hidden` attribute.
+**Why `xl`.** Side by side takes a 17rem table of contents, the card and the Slides' column. Below about 1280px that leaves the Slides too narrow, so the card overlays them instead. The menu is hidden there and the stored mode is kept for when the window widens; the card never needs JavaScript to know the width.
+
+**Why plain `[n]` markers.** A description is one catalog string, so a citation has to live inside it. A bare `[1]` survives a translator, a handout and a reader without JavaScript; a pure function turns it into a superscript button and checks it against the note's sources, so a marker cannot dangle. Rich-text tags would put markup in a catalog leaf the drawer's types forbid.
+
+**Why `ContextRef` is a button.** It names a note from inside Slide text, so the Slide reads in full without the drawer. It is a button, not a link, because it acts on the drawer rather than navigating; the drawer listens by delegation, so the Slide stays a server component (FE-006).
+
+**Details.** `Alt+N` matches `event.code`. Notes, segments and sources keep a kebab-case `slug` as key identity, never a position. Print overrides a `hidden` class but not a `hidden` attribute. Card, head, menu, disclosure and selected-state detail: [`docs/agents/context-drawer-design.md`](../../docs/agents/context-drawer-design.md).
 
 **Out of scope:**
 
@@ -34,52 +40,37 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 
 ### 1. Non-modal (📜 Rule: `drawer-is-non-modal`)
 
-1. The drawer MUST be a non-modal region: no `showModal(` or `aria-modal` under `src/components/context-drawer/`.
+1. The drawer MUST be non-modal: no `showModal(` or `aria-modal` in `src/components/context-drawer/`.
 
-### 2. In the DOM, printed in full (📜 Rule: `print-reveals-context`)
+### 2. In the DOM, printed (📜 Rule: `print-reveals-context`)
 
-1. The server MUST render every Slide's notes and script into one `data-slot="context"` slot in page order, entries tagged `data-context-for`.
-2. A closed drawer MUST hide with `invisible` plus a transform, never the `hidden` attribute, `display: none` or `inert`. Inactive tab panels MAY use the `hidden` class. A Slide's sources MAY sit in a closed `<details>`; print opens them (§9).
+1. The server MUST render every Slide's notes, script and sources into one `data-slot="context"` slot, entries tagged `data-context-for`.
+2. A closed drawer MUST hide with `invisible` plus a transform, never `hidden`, `display: none` or `inert`; inactive tab panels MAY use the `hidden` class.
 3. `globals.css` MUST hold an `@media print` block setting `[data-slot='context']` to `display: block`.
 
-### 3. Per Slide
+### 3. Typed content
 
-1. The drawer shows the Slide at the reading line, via the table of contents' observer.
+1. A note: `header`, `description`, optional `sources` (`slug`, `url`, localized `title`) and `image`, required `target`. A segment: `from`, `to`, `title`, `keywords`, `script`, optional `bridge`. Neither MAY carry design.
+2. A description cites sources by `[n]` markers, each naming a source of its note.
 
-### 4. Schema boundary: content typed, design never
+### 4. Targets
 
-1. A **speaker note item**: `header`, `description`, optional `sources`, optional `image` (`src`, `alt`), required `target`, the element of its Slide it explains (a whole-Slide note targets the title).
-2. A **voice script segment**: `from`, `to` (minutes), `title`, `keywords`, `script`, optional `bridge` into the next Section.
-3. Both MAY be typed and keyed; neither MAY carry layout, style or markup.
+1. A layout given `anchor` MUST emit ids `<slide anchor>--<element>`; a `target` MUST resolve to one id in its own Slide.
+2. A `ContextRef` wraps a Slide phrase, emits its note's id, is a native `<button type="button">`, no `href`.
 
-### 5. Targets
+### 5. Interaction
 
-1. A layout given `anchor` MUST emit ids `<slide anchor>--<element>`. A `target` is the element name and MUST resolve to one id inside its own Slide.
+1. `Alt+N` toggles, Escape closes; focus enters on open, returns on close.
+2. The drawer MUST be a `*.client.tsx` leaf in `src/components/context-drawer/`, reached only from `EpisodePageContainer`; Slides stay server-rendered, the drawer listens by delegation.
 
-### 6. Interaction
+### 6. Strings and links
 
-1. `Alt+N` toggles, Escape closes; the trigger shows the hint (from `md`, where a keyboard is likely) and `aria-keyshortcuts`. Focus enters on open, returns on close.
-2. The trigger is a bottom-right pill like the table of contents' pill, `invisible` while open; both pills MUST fit at 375px.
+1. Keys `...notes.<note>.{header,description,image.alt,sources.<source>.title}` and `...segments.<segment>.{title,keywords,script,bridge}`; chrome under `contextDrawer.*`; en and de together.
+2. A source MUST be an `https` link (FE-003 §1.4) whose name says it opens in a new tab.
 
-### 7. Layering
+### 7. Card and modes
 
-1. The drawer MUST be a `*.client.tsx` leaf in `src/components/context-drawer/`, reached only from `EpisodePageContainer`.
-
-### 8. Strings
-
-1. Keys `...slides.<slide>.notes.<note>.{header,description,image.alt}` and `...voiceScript.segments.<segment>.{title,keywords,script,bridge}`; chrome, including the mode menu's and the sources count (ICU), under `contextDrawer.*`; en and de together. Non-localized facts stay in the record. A source renders as a real `https` link (FE-003 §1.4) whose accessible name says it opens in a new tab (`contextDrawer.opensInNewTab`).
-
-### 9. Card, layout and modes
-
-1. **Card.** A floating card in the table of contents' chrome (corners, border, shadow, translucency): `top-24`, below the sticky site header, with a 1rem gap at the right and bottom edges. A sticky head, then one scroll container. It slides in from the right by `transform` alone: 250ms ease-out in, 200ms ease-in out, and not at all under `prefers-reduced-motion`.
-2. **Modes, from `md`.** A "more" menu in the head picks **side by side** (default) or **overlay**. Side by side reserves the card's width by changing the Episode grid's third column at once, through a spacer in the context slot, so the Slides reflow once; width, grid and margin MUST NOT transition. The mode is in-memory, not a stored preference, so FE-004 is not engaged.
-3. **Below `md`** the mode is always overlay and the menu is hidden. A dimmed scrim (`bg-black/40`, backdrop blur) covers the page; tapping it closes the drawer. It is pointer-only: Escape and the close button still work.
-4. **Head.** Sticky. Row one: the tabs left, the menu and close right. Row two: the current Slide's title once, wrapping freely, so a long title never moves the tabs. The per-entry title shows only in print.
-5. **Menu.** `aria-haspopup="menu"`, `aria-expanded`, `menuitemradio` items with `aria-checked`; arrows, Home and End move; Escape closes the menu alone and returns focus to its button.
-6. **Disclosure.** A note's sources sit in a closed `<details>` "Sources (n)", links with an external-link icon in the HTML; `beforeprint` opens every `<details>` in the slot, `afterprint` restores them.
-
-7. **Flat items.** A note or segment is no bordered card inside the card: a flat list, items spaced apart by a short centred divider, hierarchy by type alone. Chips and badges are fine.
-8. **Selected.** One `--selected` / `--selected-foreground` pair in `globals.css` marks the selected tab, active table-of-contents entry and current nav link: 3:1 against the surface, text 4.5:1, light and dark.
+1. A floating card: width reserved in one step, only `transform` animates, none under reduced motion. Side by side from `xl`, else overlay. Detail: `docs/agents/context-drawer-design.md`.
 
 ## Do's and Don'ts
 
@@ -88,18 +79,18 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 1. **DO** keep the drawer a non-modal region. (Decision 1, 📜 Rule: `drawer-is-non-modal`)
 2. **DO** keep the `@media print` block for `[data-slot='context']` in `globals.css`. (Decision 2, 📜 Rule: `print-reveals-context`)
 3. **DO** hide a closed drawer with `invisible` and a transform. (Decision 2)
-4. **DO** give every note a `target` and pass `anchor` to the layout that holds it. (Decision 4, Decision 5)
-5. **DO** write German notes from the same facts, not as translations. (Decision 8)
-6. **DO** reserve the card's width in one step and animate only its `transform`. (Decision 9)
+4. **DO** give every note a `target` and pass `anchor` to the layout that holds it. (Decision 3, Decision 4)
+5. **DO** write German notes from the same facts, not as translations. (Decision 6)
+6. **DO** reserve the card's width in one step and animate only its `transform`. (Decision 7)
 
 ### Don'ts
 
 1. **DON'T** call `showModal(` or set `aria-modal` in the drawer. (Decision 1)
 2. **DON'T** put the `hidden` attribute, `display: none` or `inert` on the context slot. (Decision 2)
-3. **DON'T** add a layout, style or placement field to a note or segment. (Decision 4)
-4. **DON'T** render the drawer from an Episode file. (Decision 7)
-5. **DON'T** show a source as plain text, or open it without `rel="noopener noreferrer"`. (Decision 8)
-6. **DON'T** transition width, grid tracks or margins for the card. (Decision 9)
+3. **DON'T** add a layout, style or placement field to a note or segment. (Decision 3)
+4. **DON'T** render the drawer from an Episode file. (Decision 5)
+5. **DON'T** show a source as plain text, or open it without `rel="noopener noreferrer"`. (Decision 6)
+6. **DON'T** transition width, grid tracks or margins for the card. (Decision 7)
 
 ## Consequences
 
@@ -111,10 +102,12 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 
 **Negative:**
 
-1. **Sources leave the site:** a source opens in a new tab and its target is not checked; a dead link is found by hand.
+1. **Sources leave the site:** a source opens in a new tab and its target is not checked; a dead link is found by hand. Each needs a localized title.
 2. **`Alt+N` is untested on every assistive stack;** `aria-keyshortcuts` announces a shortcut and implements nothing.
 3. **Side by side reflows the Slides once** per open or close; overlay covers them instead. Print appends notes after the Slides, not between them.
 4. **Closed sources rely on `beforeprint`** to print; a browser without it prints them closed.
+5. **Between `md` and `xl` the card only overlays,** whatever the menu last chose.
+6. **A `ContextRef` does nothing without JavaScript;** its phrase and the note still read.
 
 **Risks:**
 
@@ -129,14 +122,14 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 2. **Fast** (`npm run verify`): unit tests beside `src/lib/context-drawer.pure.ts` and `src/lib/episode.pure.ts`.
 3. **archgate:** `FE-010-context-drawer.rules.ts`, both rules at `error`: `print-reveals-context` over `src/app/globals.css`, `drawer-is-non-modal` over `src/components/context-drawer/**`. §1, §2.
 4. **dependency-cruiser** (`.dependency-cruiser.cjs`): `context-drawer-reached-only-from-container`. §7.
-5. **Post-build** (`npm run test:build`): `tests/post-build/context-drawer.build.test.ts` checks the slot, notes in static HTML, no `hidden` attribute, resolving targets, locale parity, sources as links and the print block; `tests/post-build/episode-structure.build.test.ts` keeps the slot order. §2, §5, §8.
+5. **Post-build** (`npm run test:build`): `tests/post-build/context-drawer.build.test.ts` checks the slot, notes in static HTML, no `hidden` attribute, resolving targets (incl. every `ContextRef` id), locale parity, numbered sources as links, citation markers and the print block; `tests/post-build/episode-structure.build.test.ts` keeps the slot order. §2, §5, §8.
 
-**Manual review duties:** the card's placement, motion and one-step layout at 1440px and 375px; the pills' fit at 375px; the mode menu with a keyboard; German copy quality; `Alt+N` on real screen readers; a real print preview; focus return; no design field in the note shape; catalog key shape (`docs/agents/episode-catalog-keys.md`, `GLOSSARY.md`).
+**Manual review duties:** the card's placement, motion and one-step layout at 1440px, 1100px and 375px; the head row at 360px; the pills' fit at 375px; `ContextRef` hover, focus and click; the mode menu with a keyboard; German copy quality; `Alt+N` on real screen readers; a real print preview; focus return; no design field in the note shape; catalog key shape (`docs/agents/episode-catalog-keys.md`, `GLOSSARY.md`).
 
 **Exceptions:** raise a separate ADR; human approval required.
 
 ## References
 
 - [FE-002 Episode Page](./FE-002-episode-page.md), [FE-003 Localization](./FE-003-localization.md), [FE-006 Server/Client Boundary](./FE-006-server-client-boundary.md), [FE-007 Module Layering](./FE-007-module-layering.md), [ARCH-001](./ARCH-001-dependency-admission-bar.md).
-- [`GLOSSARY.md`](../../GLOSSARY.md) — Speaker note item, Voice script segment, Bridge, Context drawer.
+- [`GLOSSARY.md`](../../GLOSSARY.md) — Speaker note item, Voice script segment, Bridge, Context drawer, Context reference, Citation marker.
 - [APG tabs](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/), [WCAG 2.1.4](https://www.w3.org/WAI/WCAG21/Understanding/character-key-shortcuts.html), [`docs/research/context-drawer-patterns.md`](../../docs/research/context-drawer-patterns.md).
