@@ -5,3 +5,6 @@ export const ROUTES = {
   episodes: '/episode',
   episodeTemplate: '/episode/page-template',
 } as const;
+
+/** The routes a page is exported at: every route except the `episodes` section prefix. */
+export type PageKey = Exclude<keyof typeof ROUTES, 'episodes'>;
