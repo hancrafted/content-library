@@ -20,6 +20,12 @@
     "title": "Home",
     "link": "Page template"
   },
+  "meta": {
+    "home": {
+      "title": "Visualised theory · hancrafted",
+      "description": "Theory from the hancrafted training videos, visualised page by page."
+    }
+  },
   "tableOfContents": {
     "title": "Contents",
     "progress": "Reading time",
@@ -36,6 +42,7 @@
     "page-template": {
       "title": "Page template",
       "caption": "One Episode, from its Title slide to its last Section: the reference every other Episode is built from.",
+      "description": "The layout every episode follows: sections of slides stacked down one page.",
       "sections": {
         "foundations": {
           "title": "Foundations",

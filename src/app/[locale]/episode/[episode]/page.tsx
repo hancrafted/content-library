@@ -1,12 +1,22 @@
-import { EpisodePageContainer } from '@/components/episode/episode-page-container';
-import { episodeParams, findEpisode } from '@/episodes/registry';
+import { EpisodePage } from '@/components/pages/episode-page';
+import { pageMetadata } from '@/lib/page-metadata.pure';
+import { episodeParams, isEpisodeSlug } from '@/lib/routes';
+import { notFound } from 'next/navigation';
 import { resolveLocale } from '../../params';
+
+interface EpisodeParams {
+  params: Promise<{ locale: string; episode: string }>;
+}
 
 export const dynamicParams = false;
 export const generateStaticParams = episodeParams;
 
-/** Every Episode in each prefixed locale, one static page per registry entry (FE-002). */
-export default async function Page({ params }: { params: Promise<{ locale: string; episode: string }> }) {
+export async function generateMetadata({ params }: EpisodeParams) {
   const { episode } = await params;
-  return <EpisodePageContainer locale={await resolveLocale(params)} episode={findEpisode(episode)} />;
+  if (!isEpisodeSlug(episode)) notFound();
+  return pageMetadata({ episode }, await resolveLocale(params));
+}
+
+export default async function Page({ params }: EpisodeParams) {
+  return <EpisodePage slug={(await params).episode} locale={await resolveLocale(params)} />;
 }

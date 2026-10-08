@@ -1,8 +1,8 @@
 import { localizePath, type Locale } from '@/lib/locale.pure';
+import { ownerOf, type ReadingTime, type TocItem, type TocSection } from '@/lib/table-of-contents.pure';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { useId, type MouseEvent, type ReactNode } from 'react';
-import { ownerOf, type ReadingTime, type TocItem, type TocSection } from './table-of-contents.pure';
 import { ProgressBar, TocHeading, type TocLabels } from './toc-heading';
 import { NumberToggle, SECTION_NUMBER } from './toc-number-toggle';
 

@@ -1,5 +1,5 @@
 // @ts-check
-// FE-006: edges across the server/client boundary that no single file can see.
+// FE-006 (boundary) and FE-007 (layering): import edges no single file can see.
 // Read the dependency count on the summary line, never the checkmark: without
 // `tsPreCompilationDeps` every `import type` is erased and the rules below
 // cruise a thinner graph while still reporting success.
@@ -37,7 +37,7 @@ module.exports = {
       comment:
         'Inside Episode code, the table of contents is reached only through EpisodePageContainer, which derives its entries from the same anchors the slides carry. Other page kinds may still use it (FE-002).',
       from: {
-        path: '^src/(episodes|components/episode)/',
+        path: '^src/components/(episodes|episode)/',
         pathNot: '^src/components/episode/episode-page-container\\.(tsx|pure\\.ts)$',
       },
       to: { path: '^src/components/table-of-contents/' },
@@ -47,16 +47,104 @@ module.exports = {
       severity: 'error',
       comment:
         'An Episode page file composes the Slide master, Slide layouts and the Episode record, plus src/lib helpers — never the table of contents, page shells or routes (FE-002).',
-      from: { path: '^src/episodes/' },
-      to: { pathNot: ['^src/episodes/', '^src/components/episode/', '^src/lib/', 'node_modules'] },
+      from: { path: '^src/components/episodes/' },
+      to: { pathNot: ['^src/components/(episodes|episode)/', '^src/lib/', 'node_modules'] },
     },
     {
       name: 'episodes-never-render-the-shell',
       severity: 'error',
       comment:
-        'The Title slide and the container are rendered once, by the route. An Episode page file imports only the Episode record types from episode-page-container.pure.ts (FE-002).',
-      from: { path: '^src/episodes/' },
+        'The Title slide and the container are rendered once, by the EpisodePage page component. An Episode page file imports only the Episode record types from episode-page-container.pure.ts (FE-002).',
+      from: { path: '^src/components/episodes/' },
       to: { path: '^src/components/episode/(title-slide|episode-page-container)\\.tsx$' },
+    },
+
+    // FE-007: layering. Tiers run app → components → hooks → lib; an edge may
+    // skip a tier downward, never point upward. Boundary rules above (FE-006)
+    // and the layering rules below can both fire on one edge.
+    {
+      name: 'no-circular',
+      severity: 'error',
+      comment: 'No import cycle anywhere under src/; a cycle makes the tier order meaningless (FE-007).',
+      from: { path: '^src/' },
+      to: { circular: true },
+    },
+    {
+      name: 'lib-imports-no-react',
+      severity: 'error',
+      comment:
+        'src/lib/** imports no React — not runtime, not types — so every lib module stays a plain module a vitest test imports without a DOM (FE-007).',
+      from: { path: '^src/lib/' },
+      to: { path: '(^|/)node_modules/(@types/)?(react|react-dom)/' },
+    },
+    {
+      name: 'lib-tsx-never-imported',
+      severity: 'error',
+      comment: 'JSX needs a .tsx file; src/lib/** holds none, so nothing may import a .tsx module from it (FE-007).',
+      from: {},
+      to: { path: '^src/lib/.+\\.tsx$' },
+    },
+    {
+      name: 'lib-imports-no-upper-tier',
+      severity: 'error',
+      comment: 'src/lib/** is the bottom tier: it MUST NOT import src/app, src/components or src/hooks (FE-007).',
+      from: { path: '^src/lib/' },
+      to: { path: '^src/(app|components|hooks)/' },
+    },
+    {
+      name: 'hooks-import-no-upper-tier',
+      severity: 'error',
+      comment: 'src/hooks/** sits above lib only: it MUST NOT import src/app or src/components (FE-007).',
+      from: { path: '^src/hooks/' },
+      to: { path: '^src/(app|components)/' },
+    },
+    // Relies on options.exclude '\.css$': site-shell.tsx imports @/app/globals.css, so dropping that exclusion fires this rule.
+    {
+      name: 'components-never-import-app',
+      severity: 'error',
+      comment: 'src/components/** sits below the routes: it MUST NOT import src/app/** (FE-007).',
+      from: { path: '^src/components/' },
+      to: { path: '^src/app/' },
+    },
+    {
+      name: 'pages-reached-only-from-app',
+      severity: 'error',
+      comment:
+        'src/components/pages/** is the top sub-tier of components: only a route under src/app/** (or a test) imports it, never another component or a page (FE-007).',
+      from: { pathNot: ['^src/app/', '\\.test\\.tsx?$'] },
+      to: { path: '^src/components/pages/' },
+    },
+    {
+      name: 'site-shell-reached-only-from-root-layouts',
+      severity: 'error',
+      comment:
+        'SiteShell renders <html>; only the two root layouts (or a test) import it. A nested layout or page doing so would nest a second <html> (FE-007).',
+      from: { pathNot: ['^src/app/(\\(en\\)|\\[locale\\])/layout\\.tsx$', '\\.test\\.tsx?$'] },
+      to: { path: '^src/components/site-shell\\.tsx$' },
+    },
+    {
+      name: 'route-reaches-components-only-via-roots',
+      severity: 'error',
+      comment:
+        'A route composes; it does not lay out. src/app/** reaches src/components/** only through a page component under src/components/pages/ or SiteShell (FE-007).',
+      from: { path: '^src/app/' },
+      to: { path: '^src/components/', pathNot: '^src/components/(pages/|site-shell\\.tsx$)' },
+    },
+  ],
+  required: [
+    {
+      name: 'page-composes-a-page-component',
+      severity: 'error',
+      comment: 'Every src/app/**/page.tsx renders a component from src/components/pages/ (FE-007).',
+      module: { path: '^src/app/(.+/)?page\\.tsx$' },
+      to: { path: '^src/components/pages/' },
+    },
+    {
+      name: 'root-layout-composes-site-shell',
+      severity: 'error',
+      comment: 'Each root layout — the one rendering <html> — renders SiteShell (FE-007).',
+      module: { path: '^src/app/(\\(en\\)|\\[locale\\])/layout\\.tsx$' },
+      to: { path: '^src/components/site-shell\\.tsx$' },
     },
   ],
   options: {

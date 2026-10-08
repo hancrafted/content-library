@@ -1,4 +1,4 @@
-import { activeId, openSectionIds, type TocSection } from '@/components/table-of-contents/table-of-contents.pure';
+import { activeId, openSectionIds, type TocSection } from '@/lib/table-of-contents.pure';
 import { useEffect, useState } from 'react';
 
 /** The reading line, as a share of the viewport height from its top. */

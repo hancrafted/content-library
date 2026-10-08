@@ -1,6 +1,6 @@
 import type { Locale } from '@/lib/locale.pure';
+import type { ReadingTime } from '@/lib/table-of-contents.pure';
 import { cn } from '@/lib/utils';
-import type { ReadingTime } from './table-of-contents.pure';
 
 export interface TocLabels {
   title: string;

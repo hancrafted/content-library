@@ -9,13 +9,13 @@ import {
   useSettled,
 } from '@/hooks/use-table-of-contents';
 import type { Locale } from '@/lib/locale.pure';
+import { ownerOf, readingTime, type TocSection } from '@/lib/table-of-contents.pure';
 import { useMemo } from 'react';
-import { ownerOf, readingTime, type TocSection } from './table-of-contents.pure';
 import { TocDrawer } from './toc-drawer';
 import { remainingLabel, type TocLabels } from './toc-heading';
 import { sectionNumber, TocPanel, type TocView } from './toc-panel';
 
-export type { TocSection } from './table-of-contents.pure';
+export type { TocSection } from '@/lib/table-of-contents.pure';
 export type { TocLabels } from './toc-heading';
 
 function pageOrder(sections: readonly TocSection[]): { ids: string[]; minutes: number[] } {

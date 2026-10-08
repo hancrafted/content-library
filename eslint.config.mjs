@@ -16,7 +16,7 @@ const OPTIONAL_CLIENT = '+([a-z0-9-])?(.client)';
 // FE-002: inside an Episode, headings h1–h3 mirror the manuscript's spine and
 // come only from the container and the Slide layouts. A one-off slide may still
 // write `<SlideTitle as="h3">`; h4 and below are free.
-const EPISODE_FILES = 'src/episodes/**/*.{ts,tsx}';
+const EPISODE_FILES = 'src/components/episodes/**/*.{ts,tsx}';
 const SPINE_HEADINGS = [
   {
     selector: 'JSXOpeningElement[name.name=/^h[1-3]$/]',
@@ -87,12 +87,11 @@ export default tseslint.config(
         {
           'src/app/**/*.{ts,tsx}': 'KEBAB_CASE',
           'src/{components,hooks}/**/*.tsx': OPTIONAL_CLIENT,
-          'src/episodes/**/*.{ts,tsx}': 'KEBAB_CASE',
           'src/**/*.ts': '!(*.client)',
         },
         {
           errorMessage:
-            '"{{ target }}" does not match "{{ pattern }}". File names are kebab-case; a `.client` file is a `.tsx` leaf under src/components or src/hooks, never under src/app or src/episodes (FE-006, FE-002).',
+            '"{{ target }}" does not match "{{ pattern }}". A `.client` file is a `.tsx` leaf under src/components or src/hooks, never under src/app (FE-006).',
         },
       ],
     },

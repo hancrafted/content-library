@@ -5,9 +5,9 @@ title: 'Episode Page'
 domain: frontend
 rules: false
 # prettier-ignore
-files: ['src/episodes/**', 'src/components/episode/**', 'src/app/**/episode/**', 'src/lib/routes.ts', 'src/lib/episode.pure.ts', 'src/messages/*.json', 'tests/post-build/episode-structure.build.test.ts', 'eslint.config.mjs', '.dependency-cruiser.cjs']
+files: ['src/components/episodes/**', 'src/components/episode/**', 'src/components/pages/episode-page.tsx', 'src/app/**/episode/**', 'src/lib/routes.ts', 'src/lib/episode.pure.ts', 'src/messages/*.json', 'tests/post-build/episode-structure.build.test.ts', 'eslint.config.mjs', '.dependency-cruiser.cjs']
 # prettier-ignore
-paths: ['src/episodes/**', 'src/components/episode/**', 'src/app/**/episode/**', 'src/lib/routes.ts', 'src/lib/episode.pure.ts', 'src/messages/*.json', 'tests/post-build/episode-structure.build.test.ts', 'eslint.config.mjs', '.dependency-cruiser.cjs']
+paths: ['src/components/episodes/**', 'src/components/episode/**', 'src/components/pages/episode-page.tsx', 'src/app/**/episode/**', 'src/lib/routes.ts', 'src/lib/episode.pure.ts', 'src/messages/*.json', 'tests/post-build/episode-structure.build.test.ts', 'eslint.config.mjs', '.dependency-cruiser.cjs']
 description: 'The authoring floor for an Episode page: a typed Episode record rendered only by EpisodePageContainer, headings mirroring the manuscript, free slide content, keyed strings, and the table of contents consumed through the container.'
 ---
 
@@ -31,7 +31,7 @@ A page file never writes slots or anchors, so the table of contents (which reads
 
 ### 2. The Episode record
 
-1. Each Episode MUST be `src/episodes/<slug>/` exporting an `Episode` record, listed in `src/episodes/registry.ts` and `EPISODE_SLUGS`, and served by the shared `episode/[episode]` routes.
+1. Each Episode MUST be `src/components/episodes/<slug>/` exporting an `Episode` record, listed in its `registry.ts` and `EPISODE_SLUGS`, served via `EpisodePage` (FE-007 §1).
 2. Every Section and Slide MUST carry a stable kebab-case `slug`, a plain `title` and `minutes: PerLocale<number>`.
 
 ### 3. Slide content is free
@@ -41,11 +41,11 @@ A page file never writes slots or anchors, so the table of contents (which reads
 ### 4. Headings mirror the manuscript
 
 1. `h1` MUST be the Title slide's Episode title, `h2` only a section slide's title, `h3` only a page slide's title; `h4`+ are free.
-2. `src/episodes/**` MUST NOT write raw `h1`–`h3` or `SlideTitle as="h1"|"h2"`.
+2. `src/components/episodes/**` MUST NOT write raw `h1`–`h3` or `SlideTitle as="h1"|"h2"`.
 
 ### 5. Every string is a keyed leaf
 
-1. Episode strings MUST be keyed `episodes.<episode>.<role>` (Title slide) or `episodes.<episode>.sections.<section>[.slides.<slide>…].<role>`, by slug, never position; leaves only; variable text via ICU, never concatenated; in every catalog in the same change.
+1. Episode strings MUST be keyed `episodes.<episode>.<role>` (Title slide and page metadata) or `episodes.<episode>.sections.<section>[.slides.<slide>…].<role>`, by slug, never position; leaves only; variable text via ICU, never concatenated; in every catalog in the same change.
 
 ### 6. The table of contents is consumed through the container
 
@@ -59,7 +59,7 @@ A page file never writes slots or anchors, so the table of contents (which reads
 
 ### Do's
 
-1. **DO** start an Episode as `src/episodes/<slug>/<slug>.tsx` exporting an `Episode` record, plus a registry line and an `EPISODE_SLUGS` entry. (Decision 2)
+1. **DO** start an Episode as `src/components/episodes/<slug>/<slug>.tsx` exporting an `Episode` record, plus a registry line, an `EPISODE_SLUGS` entry and a `description` key per locale for its page metadata ([FE-008](./FE-008-page-metadata.md)). (Decision 2)
 2. **DO** give each Slide a function returning its record, with free JSX in `content`. (Decision 2, Decision 3)
 3. **DO** set `minutes` per locale, from your speaking pace on each manuscript. (Decision 2)
 4. **DO** build slides from the Slide master and Slide layouts, or one-off with `SlideFrame` and `<SlideTitle as="h3">`. (Decision 3, Decision 4)
@@ -98,10 +98,10 @@ A page file never writes slots or anchors, so the table of contents (which reads
 
 1. **Types** (`tsc`, editor and `next dev`): `Episode` in `src/components/episode/episode-page-container.pure.ts` types the record; `PerLocale` fails a missing locale; the registry is typed against `EPISODE_SLUGS` in `src/lib/routes.ts`; `de.json` is typed against `en.json`. §2, §5.
 2. **Derivation** (`npm run verify`): `src/components/episode/episode-page-container.test.ts` checks table-of-contents entries derive from the anchors, in the page's locale, and reject duplicate slugs. §1.
-3. **Lint** (`eslint.config.mjs`): `no-restricted-syntax` over `src/episodes/**` refuses raw `h1`–`h3` and `SlideTitle as` `h1`/`h2` (string, braced or template literal; a variable level is left to layer 4); `check-file` keeps `src/episodes/**` kebab-case. `.dependency-cruiser.cjs`: `toc-reached-only-from-container` (from `src/episodes/**`, `src/components/episode/**`), `episodes-reach-only-slide-parts` and `episodes-never-render-the-shell` (no Title slide or container import in an Episode). The registry type makes each key equal its record's `slug`. §1, §3, §4.2.
+3. **Lint** (`eslint.config.mjs`): `no-restricted-syntax` over `src/components/episodes/**` refuses raw `h1`–`h3` and `SlideTitle as` `h1`/`h2` (string, braced or template literal; a variable level is left to layer 4). `.dependency-cruiser.cjs`: `toc-reached-only-from-container` (from `src/components/episodes/**`, `src/components/episode/**`), `episodes-reach-only-slide-parts` and `episodes-never-render-the-shell` (no Title slide or container import in an Episode). The registry type makes each key equal its record's `slug`. §1, §3, §4.2.
 4. **Post-build** (`npm run test:build`, CI): `tests/post-build/episode-structure.build.test.ts` reads every exported Episode in every locale with `cheerio`: slots in order; Title slide first with the only `h1`; one `h2` per section slide, one `h3` per page slide, none elsewhere; table-of-contents links equal the slide anchors in order; no duplicate `id`; no YouTube iframe or URL; anchors identical across locales. §1, §4.1, §7.
 
-**Measured:** probe files in `src/episodes/` and `src/components/` fired every lint and dependency-cruiser rule above, including `as={'h1'}` and ``as={`h2`}``, while `<SlideTitle as="h3">` and `h4` passed; a registry key differing from its record's slug failed `tsc`; the post-build test found a real duplicate `id` in the table of contents on its first run.
+**Measured:** probe files in the Episode folder and `src/components/` fired every lint and dependency-cruiser rule above, including `as={'h1'}` and ``as={`h2`}``, while `<SlideTitle as="h3">` and `h4` passed; a registry key differing from its record's slug failed `tsc`; the post-build test found a real duplicate `id` in the table of contents on its first run.
 
 **Manual review duties:** placement at `md` and below (§6); reserved fields stay unrendered (§7); slugs stay stable once published.
 

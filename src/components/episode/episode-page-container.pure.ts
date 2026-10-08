@@ -1,8 +1,8 @@
-import type { TocSection } from '@/components/table-of-contents/table-of-contents.pure';
 import type { Locale } from '@/lib/locale.pure';
 import type { EpisodeSlug } from '@/lib/routes';
 import type { ReactNode } from 'react';
 import { episodeAnchors, sectionAnchor, slideAnchor } from '../../lib/episode.pure';
+import type { TocSection } from '../../lib/table-of-contents.pure';
 
 /*
  * The Episode record (FE-002): the typed structure an Episode page file hands

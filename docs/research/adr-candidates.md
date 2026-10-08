@@ -32,12 +32,12 @@ Check notes, added 2026-10-08 against `main` at `a687b33` plus branch
 
 ## 2. Structure and module boundaries
 
-| Practice                                                                                                                   | Repo state                                                       | Fit     | Check notes                                                                                                                                                                                         |
-| -------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Thin routes.** `app/**/page.tsx` only composes a `components/pages/*` component. [3]                                     | Already the pattern: `(en)` and `[locale]` share page components | 📜 high | 🟡 Holds in all 3 `page.tsx` files, but nothing checks it.                                                                                                                                          |
-| **Import direction.** `app → components → hooks → lib`; `lib` never imports React.                                         | `*.pure.ts` split exists informally                              | 📜 high | 🟡 Holds: `src/lib/**` imports no React, Next, component or hook. Only part is enforced: FE-006 `hooks-reached-only-from-client`. dependency-cruiser is now installed, so the rest is cheap to add. |
-| **Pure/effect split.** Logic lives in tested `*.pure.ts`; browser side effects live in thin adapters. Pairs with ARCH-003. | Convention in use, not written down                              | 📜/🧠   | 🟡 Practised: `prefs.pure.ts` and `prefs-storage.ts`, `theme.pure.ts` and `use-theme.ts`. Not written down. ARCH-003 governs only the tests.                                                        |
-| Colocation, `_private` folders, route groups. [3]                                                                          | Partly in use                                                    | 🧠 low  | ⏳ Open. `(en)` route group in use. No `_private` folders.                                                                                                                                          |
+| Practice                                                                                                                   | Repo state                                                       | Fit     | Check notes                                                                                                                                                |
+| -------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Thin routes.** `app/**/page.tsx` only composes a `components/pages/*` component. [3]                                     | Already the pattern: `(en)` and `[locale]` share page components | 📜 high | ✅ **FE-007** §1. dependency-cruiser `page-composes-a-page-component` and `route-reaches-components-only-via-roots`; logic-free routes stay a review duty. |
+| **Import direction.** `app → components → hooks → lib`; `lib` never imports React.                                         | `*.pure.ts` split exists informally                              | 📜 high | ✅ **FE-007** §2–§3. dependency-cruiser direction rules, `no-circular`, `lib-imports-no-react`, `lib-tsx-never-imported`.                                  |
+| **Pure/effect split.** Logic lives in tested `*.pure.ts`; browser side effects live in thin adapters. Pairs with ARCH-003. | Convention in use, not written down                              | 📜/🧠   | 🟡 Practised: `prefs.pure.ts` and `prefs-storage.ts`, `theme.pure.ts` and `use-theme.ts`. Not written down. ARCH-003 governs only the tests.               |
+| Colocation, `_private` folders, route groups. [3]                                                                          | Partly in use                                                    | 🧠 low  | ⏳ Open. `(en)` route group in use. No `_private` folders.                                                                                                 |
 
 ## 3. React component discipline
 
@@ -62,10 +62,10 @@ category matter more here than in a typical app.
 
 | Practice                                                                                                               | Repo state                         | Fit                | Check notes                                                                                                                |
 | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------- | ------------------ | -------------------------------------------------------------------------------------------------------------------------- |
-| **Every `page.tsx` exports `metadata` or `generateMetadata`**, with canonical and `hreflang` alternates (en ↔ de). [4] | Only a static title in the layouts | 📜 high            | ⏳ Open. Still a static `title` in the layouts only. No `alternates`.                                                      |
-| `sitemap.ts` and `robots.ts` (both work in a static export). [4]                                                       | Missing                            | 📜                 | ⏳ Open. Neither exists.                                                                                                   |
+| **Every `page.tsx` exports `metadata` or `generateMetadata`**, with canonical and `hreflang` alternates (en ↔ de). [4] | Only a static title in the layouts | 📜 high            | ✅ **FE-008**. Archgate rules `page-exports-metadata`, `layout-holds-site-metadata-only`; post-build reciprocity test.     |
+| `sitemap.ts` and `robots.ts` (both work in a static export). [4]                                                       | Missing                            | 📜                 | ⏳ Deferred by FE-008 §5 until a custom domain: `robots.txt` is read only at an origin root.                               |
 | Internal links use `next/link`; no raw `<a href="/…">`. [4]                                                            | Partly covered by FE-003           | 📜 (extend FE-003) | 🟡 FE-003 `href-via-localize-path` checks how every `href` is built, but not the element. No raw `<a>` under `src/` today. |
-| Custom `not-found.tsx` and error UI. [4]                                                                               | Missing                            | 📜                 | ⏳ Open. Neither exists.                                                                                                   |
+| Custom `not-found.tsx` and error UI. [4]                                                                               | Missing                            | 📜                 | ⏳ Open. FE-008 §5 leaves it to a separate UI record.                                                                      |
 
 ## 6. Performance and assets
 
@@ -88,8 +88,8 @@ category matter more here than in a typical app.
 
 1. Static-export contract (section 1) — ✅ FE-005
 2. Server/client boundary placement (section 1) — ✅ FE-006, pending merge
-3. Per-page metadata with hreflang and canonical (section 5)
-4. Module layering and the pure/effect split (section 2)
+3. Per-page metadata with hreflang and canonical (section 5) — ✅ FE-008
+4. Module layering (section 2) — ✅ FE-007; the pure/effect split stays open
 5. YouTube embed and font privacy (section 6)
 6. React lint baseline: hooks and a11y (sections 3 and 7)
 

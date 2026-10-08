@@ -20,6 +20,12 @@
     "title": "Start",
     "link": "Seitenvorlage"
   },
+  "meta": {
+    "home": {
+      "title": "Visualisierte Theorie · hancrafted",
+      "description": "Theorie aus den hancrafted-Schulungsvideos, Seite für Seite visualisiert."
+    }
+  },
   "tableOfContents": {
     "title": "Inhalt",
     "progress": "Lesezeit",
@@ -36,6 +42,7 @@
     "page-template": {
       "title": "Seitenvorlage",
       "caption": "Eine Episode, von der Titelfolie bis zum letzten Abschnitt: die Vorlage, aus der jede weitere Episode entsteht.",
+      "description": "Das Layout jeder Episode: Abschnitte aus Folien, untereinander auf einer Seite.",
       "sections": {
         "foundations": {
           "title": "Grundlagen",

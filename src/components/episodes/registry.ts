@@ -1,5 +1,5 @@
 import type { Episode } from '@/components/episode/episode-page-container.pure';
-import { EPISODE_SLUGS, isEpisodeSlug, type EpisodeSlug } from '@/lib/routes';
+import { isEpisodeSlug, type EpisodeSlug } from '@/lib/routes';
 import { notFound } from 'next/navigation';
 import { pageTemplate } from './page-template/page-template';
 
@@ -11,11 +11,6 @@ import { pageTemplate } from './page-template/page-template';
 const EPISODES: { readonly [S in EpisodeSlug]: Episode & { readonly slug: S } } = {
   'page-template': pageTemplate,
 };
-
-/** One static param per Episode; the dynamic route exports exactly these. */
-export function episodeParams(): { episode: EpisodeSlug }[] {
-  return EPISODE_SLUGS.map((episode) => ({ episode }));
-}
 
 export function findEpisode(slug: string): Episode {
   if (!isEpisodeSlug(slug)) notFound();

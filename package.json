@@ -15,7 +15,7 @@
     "knip": "knip",
     "prepare": "husky",
     "verify": "archgate check && npm run lint && prettier --check . && npm run typecheck && vitest run && knip && mh check",
-    "verify:commit": "lint-staged && archgate check && npm run typecheck && vitest run",
+    "verify:commit": "lint-staged && archgate check && npm run lint:boundaries && npm run typecheck && vitest run",
     "test:build": "vitest run --config vitest.build.config.ts"
   },
   "devDependencies": {
