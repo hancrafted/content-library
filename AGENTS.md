@@ -1,6 +1,28 @@
-# AGENTS.md
+# Content library
 
-Primary agent memory for this repo. `CLAUDE.md` is a symlink to this file; edit `AGENTS.md` only.
+This project is a localized Next.js application which serves to visualize theory and content I use for training materials which are captured as YouTube videos for an English and German audience. The current deploy target are static pages on github pages.
+
+## Rules
+
+- Do not edit`CLAUDE.md`, it is a symlink to `AGENTS.md`.
+- Always use `/commit` to commit, `/tdd` and `/code-review` for implementation
+- Use `npm run verify` frequently to verify that the changes are correct.
+- Binding decisions live in Archgate ADRs under `.archgate/adrs/`.
+- For any /grill-with-docs and /wayfinder, using the /grilling skill read the `docs/agents/grilling-format.md`, which overwrites the grill format. Analog for voice sessions read `docs/agents/grilling-voice.md`.
+
+## Audiences
+
+International English via YouTube — reach. German businesses for coaching and
+consulting — conversion. They want different things from the same site, and the
+locale split serves both: English canonical at the bare root so shared links
+just work, German canonical at `/de` because search indexes locales separately
+and German buyers arrive from German queries.
+
+## How work arrives
+
+Sessions run as voice brainstorms; the output is a copy-pasted handoff executed
+by a separate agent — usually Gemini, sometimes Claude Code with browser access
+for work needing more reasoning.
 
 ## Agent skills
 
