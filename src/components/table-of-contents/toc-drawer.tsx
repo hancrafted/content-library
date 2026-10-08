@@ -3,7 +3,7 @@
 import { cn } from '@/lib/utils';
 import { X } from 'lucide-react';
 import { useEffect, useRef, type MouseEvent, type ReactNode, type RefObject } from 'react';
-import type { TocLabels } from './toc-panel';
+import type { TocLabels } from './toc-heading';
 
 const DIALOG = cn(
   'fixed inset-y-0 left-0 m-0 h-dvh max-h-none w-[min(22rem,88vw)] max-w-none bg-transparent p-3 text-inherit',
@@ -40,6 +40,8 @@ interface DrawerProps {
   where: { number: string; title: string } | null;
   /** Time left, already formatted. */
   left: string;
+  /** False while the table masks its first settle; the pill then reads "Contents · Loading". */
+  revealed: boolean;
 }
 
 /** Where the reader is, at a glance; tapping it opens the drawer. */
@@ -52,7 +54,14 @@ function DrawerPill(props: DrawerProps & { onOpen: () => void }) {
       <span aria-hidden className="text-muted-foreground">
         ·
       </span>
-      <span className="shrink-0 text-xs whitespace-nowrap text-muted-foreground tabular-nums">{props.left}</span>
+      <span
+        className={cn(
+          'shrink-0 text-xs whitespace-nowrap text-muted-foreground tabular-nums',
+          !props.revealed && 'animate-pulse',
+        )}
+      >
+        {props.revealed ? props.left : props.labels.loading}
+      </span>
     </button>
   );
 }

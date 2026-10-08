@@ -5,6 +5,8 @@ import { activeId, openSectionIds, type TocSection } from './table-of-contents.p
 
 /** The reading line, as a share of the viewport height from its top. */
 const READING_LINE = 0.35;
+/** How long the compact loading box holds after mount, so the table never visibly settles into place. */
+const REVEAL_AFTER_MS = 1000;
 const NOTHING_TOGGLED: ReadonlySet<string> = new Set();
 
 /** Tracks which `[targetAttribute]` element spans the reading line; `null` before the first observation. */
@@ -78,6 +80,16 @@ export function useSettled(observed: string | null): boolean {
     };
   }, [observed, settled]);
   return settled;
+}
+
+/** True once a second has passed since mount and the first observation has painted; until then the table shows its loading box. */
+export function useRevealed(settled: boolean): boolean {
+  const [elapsed, setElapsed] = useState(false);
+  useEffect(() => {
+    const timer = setTimeout(() => setElapsed(true), REVEAL_AFTER_MS);
+    return () => clearTimeout(timer);
+  }, []);
+  return elapsed && settled;
 }
 
 /**

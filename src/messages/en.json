@@ -28,6 +28,7 @@
       "other": "# min left"
     },
     "toggle": "Show or hide slides",
+    "loading": "Loading",
     "open": "Open contents",
     "close": "Close contents"
   },

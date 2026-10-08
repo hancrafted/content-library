@@ -116,6 +116,7 @@ export async function EpisodeTemplatePage({ locale }: { locale: Locale }) {
         toggle: toc('toggle'),
         open: toc('open'),
         close: toc('close'),
+        loading: toc('loading'),
       }}
       sections={sections(sectionsT)}
     />
