@@ -23,9 +23,13 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      - run: npx archgate check
       - run: npm run lint
+      - run: npm run format:check
       - run: npm run typecheck
       - run: npm test
+      - run: npm run knip
+      - run: npx mh check
       - run: npm run build
       # FE-005: every page URL the app derives landed in out/. Needs the build above.
       - run: npm run test:build
