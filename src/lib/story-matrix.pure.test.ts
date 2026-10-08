@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { countUpAt, formatStat, highlightedAxes, matrixCells, type StoryPlacement } from './story-matrix.pure';
+import { countUpAt, highlightedAxes, matrixCells, statAt, type StoryPlacement } from './story-matrix.pure';
 
 describe('success cases', () => {
   it('lays the six crossings out one row per who, process before technology, a story where one is placed', () => {
@@ -40,13 +40,14 @@ describe('success cases', () => {
     expect(shown).toBe(expected);
   });
 
-  it("writes a decimal stat with each locale's own separator", () => {
+  it('counts every number in a stat up together, keeping the marks around them', () => {
     // ARRANGE
-    const expected = ['2.5', '2,5'];
+    const halfway = 0.5;
+    const expected = ['8–10', '25+', '~3'];
     // ACT
-    const written = [formatStat(2.5, 1, 'en'), formatStat(2.5, 1, 'de')];
+    const shown = ['15–20', '50+', '~5'].map((stat) => statAt(stat, halfway));
     // ASSERT
-    expect(written).toEqual(expected);
+    expect(shown).toEqual(expected);
   });
 });
 
@@ -60,6 +61,15 @@ describe('failure cases', () => {
     expect(axes).toEqual(expected);
   });
 
+  it('leaves a stat with no number in it as written', () => {
+    // ARRANGE
+    const stat = 'n/a';
+    // ACT
+    const shown = statAt(stat, 0);
+    // ASSERT
+    expect(shown).toBe(stat);
+  });
+
   it('lands on the target rather than NaN when the duration is zero', () => {
     // ARRANGE
     const target = 30;
@@ -71,26 +81,13 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('marks the crossing a story spills into without giving it a second card', () => {
+  it('keeps the first story when two are placed on the same crossing', () => {
     // ARRANGE
     const placements: StoryPlacement[] = [
-      { id: 'rib-team', who: 'team', what: 'process', spillsInto: { who: 'team', what: 'technology' } },
+      { id: 'first', who: 'team', what: 'technology' },
+      { id: 'second', who: 'team', what: 'technology' },
     ];
-    const spill = { kind: 'spill', who: 'team', what: 'technology', storyId: 'rib-team' };
-    const spillIndex = 3;
-    // ACT
-    const cells = matrixCells(placements);
-    // ASSERT
-    expect(cells[spillIndex]).toEqual(spill);
-  });
-
-  it('keeps the owning story when a spill lands on a crossing that has its own story', () => {
-    // ARRANGE
-    const placements: StoryPlacement[] = [
-      { id: 'rib-team', who: 'team', what: 'process', spillsInto: { who: 'team', what: 'technology' } },
-      { id: 'tooling', who: 'team', what: 'technology' },
-    ];
-    const owner = { kind: 'story', who: 'team', what: 'technology', storyId: 'tooling' };
+    const owner = { kind: 'story', who: 'team', what: 'technology', storyId: 'first' };
     const crossingIndex = 3;
     // ACT
     const cells = matrixCells(placements);
@@ -109,12 +106,14 @@ describe('edge cases', () => {
     expect(shown).toEqual(expected);
   });
 
-  it("rounds a mid-count value to the stat's own precision, so no fraction flickers past", () => {
+  it('rounds a mid-count number to a whole one, so no fraction flickers past', () => {
     // ARRANGE
-    const expected = '35';
+    const stat = '30';
+    const justUnderHalfway = 0.49;
+    const expected = '15'; // 30 × 0.49 = 14.7
     // ACT
-    const written = formatStat(34.7, 0, 'en');
+    const shown = statAt(stat, justUnderHalfway);
     // ASSERT
-    expect(written).toBe(expected);
+    expect(shown).toBe(expected);
   });
 });

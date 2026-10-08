@@ -3,10 +3,9 @@
 import { StoryCard, type StoryCardCopy } from '@/components/landing/story-card';
 import { useCountUp } from '@/hooks/use-count-up';
 import { useRevealedOnView } from '@/hooks/use-revealed-on-view';
-import type { Locale } from '@/lib/locale.pure';
 import {
-  formatStat,
   highlightedAxes,
+  statAt,
   WHAT,
   WHO,
   type Crossing,
@@ -22,14 +21,12 @@ const STAGGER_MS = 70;
 
 export interface MatrixLabels {
   axes: Record<Who | What, string>;
-  spillNote: string;
 }
 
 interface StoryMatrixProps {
   cells: MatrixCell[];
   stories: Record<string, StoryCardCopy>;
   labels: MatrixLabels;
-  locale: Locale;
 }
 
 /** Grid lines at `lg`: one row per who, one column per what; a missing axis spans the whole grid. */
@@ -89,7 +86,7 @@ function Bands({ lit, labels }: { lit: HighlightedAxes; labels: MatrixLabels }) 
   );
 }
 
-function QuietCrossing({ cell, index, labels }: { cell: MatrixCell; index: number; labels: MatrixLabels }) {
+function QuietCrossing({ cell, index }: { cell: MatrixCell; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const revealed = useRevealedOnView(ref);
   return (
@@ -97,7 +94,7 @@ function QuietCrossing({ cell, index, labels }: { cell: MatrixCell; index: numbe
       ref={ref}
       aria-hidden
       className={cn(
-        'relative z-10 hidden min-h-48 flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-border lg:flex',
+        'relative z-10 hidden min-h-48 items-center justify-center rounded-2xl border border-dashed border-border lg:flex',
         ON_GRID,
         FADE_IN,
         revealed === false && 'opacity-0',
@@ -105,7 +102,6 @@ function QuietCrossing({ cell, index, labels }: { cell: MatrixCell; index: numbe
       style={gridArea(cell, index * STAGGER_MS)}
     >
       <span className="text-lg text-muted-foreground/40">+</span>
-      {cell.kind === 'spill' && <span className="text-xs text-muted-foreground/70">{labels.spillNote}</span>}
     </div>
   );
 }
@@ -121,7 +117,7 @@ function StoryCell({ cell, index, story, matrix }: StoryCellProps) {
   const ref = useRef<HTMLElement>(null);
   const revealed = useRevealedOnView(ref);
   const delay = index * STAGGER_MS;
-  const value = useCountUp(story.statValue, revealed, delay);
+  const progress = useCountUp(revealed, delay);
   const hover = (on: boolean) => (event: PointerEvent) => {
     if (event.pointerType === 'mouse') matrix.onHover(on ? cell : null);
   };
@@ -137,14 +133,14 @@ function StoryCell({ cell, index, story, matrix }: StoryCellProps) {
       <p className="text-xs text-muted-foreground lg:sr-only">
         {matrix.labels.axes[cell.who]} × {matrix.labels.axes[cell.what]}
       </p>
-      <StoryCard story={story} stat={formatStat(value, story.statDecimals, matrix.locale)} />
+      <StoryCard story={story} shownStat={statAt(story.stat, progress)} />
     </article>
   );
 }
 
 /**
  * The 3×2 story matrix: one row per who, one column per what. Below `lg` it is a plain list of story
- * cards, each tagged with its crossing; at `lg` the same nodes sit on the grid, empty crossings appear,
+ * cards, each tagged with its crossing; at `lg` the same nodes sit on the grid, any empty crossing appears,
  * and hovering a story lights its row and column and names them.
  */
 export function StoryMatrix(props: StoryMatrixProps) {
@@ -154,13 +150,13 @@ export function StoryMatrix(props: StoryMatrixProps) {
   return (
     <div
       data-story-matrix
-      className="flex flex-col gap-10 lg:grid lg:grid-cols-2 lg:grid-rows-3 lg:gap-x-4 lg:gap-y-8 lg:pt-4"
+      className="flex flex-col gap-14 lg:grid lg:grid-cols-2 lg:grid-rows-3 lg:gap-x-6 lg:gap-y-14 lg:pt-4"
     >
       <Bands lit={lit} labels={props.labels} />
       {props.cells.map((cell, index) => {
         const story = cell.kind === 'story' ? props.stories[cell.storyId] : undefined;
         const key = `${cell.who}-${cell.what}`;
-        if (!story) return <QuietCrossing key={key} cell={cell} index={index} labels={props.labels} />;
+        if (!story) return <QuietCrossing key={key} cell={cell} index={index} />;
         return <StoryCell key={key} cell={cell} index={index} story={story} matrix={matrix} />;
       })}
     </div>

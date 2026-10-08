@@ -42,8 +42,8 @@ describe('landing page post-build structure', () => {
     const steps = desktopSlides.map((_, el) => $(el).attr('data-method-slide')).get();
     expect(steps).toEqual(['01', '02', '03', '04', '05']);
 
-    // About: four story cards on the matrix, after the method rail; the bridge placeholder is gone
-    expect($('#about [data-story-matrix] article[data-story-cell]').length).toBe(4);
+    // About: six story cards on the matrix, after the method rail; the bridge placeholder is gone
+    expect($('#about [data-story-matrix] article[data-story-cell]').length).toBe(6);
     expect($('#narrative-bridge').length).toBe(0);
     const chapters = $('main [data-chapter]')
       .map((_, el) => $(el).attr('data-chapter'))

@@ -10,21 +10,18 @@ type AboutT = Awaited<ReturnType<typeof getTranslations<'landing.about'>>>;
 const HEADLINE_KEY = 'headlineStepOut' satisfies 'headlineStepOut' | 'headlineNotPushing';
 
 function storyCopy(t: AboutT, id: StoryId): StoryCardCopy {
-  const value = t(`stories.${id}.statValue`);
   return {
     id,
     title: t(`stories.${id}.title`),
-    caption: t(`stories.${id}.caption`),
-    labels: t.raw(`stories.${id}.labels`) as string[],
-    statValue: Number(value),
-    statDecimals: value.split('.')[1]?.length ?? 0,
+    stat: t(`stories.${id}.stat`),
     statUnit: t(`stories.${id}.statUnit`),
-    statLabel: t(`stories.${id}.statLabel`),
+    description: t(`stories.${id}.description`),
+    labels: t.raw(`stories.${id}.labels`) as string[],
   };
 }
 
 function matrixLabels(t: AboutT): MatrixLabels {
-  return { axes: t.raw('axes') as MatrixLabels['axes'], spillNote: t('spillNote') };
+  return { axes: t.raw('axes') as MatrixLabels['axes'] };
 }
 
 function IdentityCard({ t }: { t: AboutT }) {
@@ -64,12 +61,7 @@ export async function AboutSection({ locale }: { locale: Locale }) {
         <IdentityCard t={t} />
         <div className="flex flex-col gap-10">
           <AboutHeader t={t} />
-          <StoryMatrix
-            cells={matrixCells(STORY_PLACEMENTS)}
-            stories={stories}
-            labels={matrixLabels(t)}
-            locale={locale}
-          />
+          <StoryMatrix cells={matrixCells(STORY_PLACEMENTS)} stories={stories} labels={matrixLabels(t)} />
         </div>
       </div>
     </section>

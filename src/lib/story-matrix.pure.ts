@@ -1,5 +1,3 @@
-import type { Locale } from './locale.pure';
-
 /** Rows of the story matrix — who the change lands on. */
 export const WHO = ['individual', 'team', 'organisation'] as const;
 /** Columns of the story matrix — what kind of change it is. */
@@ -13,16 +11,12 @@ export interface Crossing {
   what: What;
 }
 
-/** Where a story sits; `spillsInto` marks a second crossing the story reaches without owning it. */
+/** Where a story sits. */
 export interface StoryPlacement extends Crossing {
   id: string;
-  spillsInto?: Crossing;
 }
 
-export type MatrixCell =
-  | (Crossing & { kind: 'story'; storyId: string })
-  | (Crossing & { kind: 'spill'; storyId: string })
-  | (Crossing & { kind: 'empty' });
+export type MatrixCell = (Crossing & { kind: 'story'; storyId: string }) | (Crossing & { kind: 'empty' });
 
 function sameCrossing(a: Crossing, b: Crossing): boolean {
   return a.who === b.who && a.what === b.what;
@@ -31,8 +25,6 @@ function sameCrossing(a: Crossing, b: Crossing): boolean {
 function cellAt(crossing: Crossing, placements: readonly StoryPlacement[]): MatrixCell {
   const story = placements.find((placement) => sameCrossing(placement, crossing));
   if (story) return { kind: 'story', ...crossing, storyId: story.id };
-  const spilling = placements.find((placement) => placement.spillsInto && sameCrossing(placement.spillsInto, crossing));
-  if (spilling) return { kind: 'spill', ...crossing, storyId: spilling.id };
   return { kind: 'empty', ...crossing };
 }
 
@@ -58,17 +50,20 @@ export function countUpAt(target: number, elapsedMs: number, durationMs: number)
   return target * (1 - (1 - progress) ** 3);
 }
 
-/** A stat written in the reader's locale at a fixed precision, so a count-up never shows stray fractions. */
-export function formatStat(value: number, decimals: number, locale: Locale): string {
-  return new Intl.NumberFormat(locale, { minimumFractionDigits: decimals, maximumFractionDigits: decimals }).format(
-    value,
-  );
+/**
+ * A stat as written, with every whole number in it scaled to `progress` (0 to 1) and rounded, so
+ * `~5`, `50+` and `15–20` all count up while their marks stay put.
+ */
+export function statAt(stat: string, progress: number): string {
+  return stat.replace(/\d+/g, (digits) => String(Math.round(Number(digits) * progress)));
 }
 
 /** The banked stories and where they sit. Copy lives in `landing.about.stories.<id>` of each catalog. */
 export const STORY_PLACEMENTS = [
   { id: 'pitch', who: 'individual', what: 'process' },
-  { id: 'ribTeam', who: 'team', what: 'process', spillsInto: { who: 'team', what: 'technology' } },
+  { id: 'gatekeeper', who: 'individual', what: 'technology' },
+  { id: 'ribTeam', who: 'team', what: 'process' },
+  { id: 'teachBack', who: 'team', what: 'technology' },
   { id: 'audiGates', who: 'organisation', what: 'process' },
   { id: 'ribAi', who: 'organisation', what: 'technology' },
 ] as const satisfies readonly StoryPlacement[];

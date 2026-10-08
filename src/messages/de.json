@@ -31,7 +31,7 @@
       "eyebrow": "Über mich",
       "headlineStepOut": "Ich bewege Veränderung, indem ich aus der Debatte heraustrete.",
       "headlineNotPushing": "Veränderung hält, wenn nicht ich sie vorantreibe.",
-      "headlineLead": "Vier Geschichten, ein Zug: Sobald ich nicht mehr das bin, worüber gestritten wird, trägt sich die Veränderung selbst.",
+      "headlineLead": "Jede Geschichte hier macht denselben Zug: Sobald ich nicht mehr das bin, worüber gestritten wird, trägt sich die Veränderung selbst.",
       "identity": {
         "kicker": "Die Person",
         "name": "Han Che",
@@ -47,39 +47,48 @@
         "process": "Prozesswandel",
         "technology": "Technologie-Einführung"
       },
-      "spillNote": "Die Team-Geschichte reicht bis hierher",
       "stories": {
         "pitch": {
           "title": "Ein Pitch, der dem Gründer gehört",
-          "caption": "Pitch-Coaching für Startups",
-          "labels": ["Coaching", "Gründer"],
-          "statValue": "3",
-          "statUnit": "Runden",
-          "statLabel": "vom ersten Entwurf zum tragfähigen Pitch"
+          "stat": "2",
+          "statUnit": "Gründer",
+          "description": "Beide Decks drehten um 180°: weg von der Produkterklärung, hin zu den Verkaufszahlen, die ein Investor wirklich kauft. Das Schwierige war ein Gründer, der in seine eigene Lösung verliebt war.",
+          "labels": ["Pitch-Coaching für Startups", "Coaching", "Gründer"]
+        },
+        "gatekeeper": {
+          "title": "Der Gatekeeper wird zum Reviewer",
+          "stat": "50+",
+          "statUnit": "PRs pro Woche",
+          "description": "Eine Person hat sie alle von Hand reviewt. Er bekam KI-gestütztes Code-Review in der CI als eigenes Projekt — der Engpass baute selbst, was ihn auflöste.",
+          "labels": ["RIB Software", "KI", "Verantwortung"]
         },
         "ribTeam": {
           "title": "Größter Engpass → selbstlaufendes Team",
-          "caption": "RIB Software",
-          "labels": ["Teamleitung", "Delivery"],
-          "statValue": "30",
-          "statUnit": "Min.",
-          "statLabel": "ein wöchentlicher Sync statt täglicher Eskalationen"
+          "stat": "~5",
+          "statUnit": "Monate",
+          "description": "Ich übernahm das Team, das die Organisation ihren schlimmsten Engpass nannte. Refinement, Schätzung und Planung gab ich ihm zurück; nach wenigen Monaten lief sein Scrum ohne mich.",
+          "labels": ["RIB Software", "Teamleitung", "Agile"]
+        },
+        "teachBack": {
+          "title": "Fähigkeiten, die sie weitergeben können",
+          "stat": "6",
+          "statUnit": "Entwickler, 2 Länder",
+          "description": "Als Agile von selbst lief, gingen wir zu KI-Workflows und Human-in-the-Loop-Skills über. Der Maßstab war nicht, sie zu nutzen — sondern einem anderen Team zu zeigen, wie, und die Spur dazu zu hinterlassen.",
+          "labels": ["RIB Software", "KI", "Befähigung"]
         },
         "audiGates": {
           "title": "Freigabe-Gates, modernisiert",
-          "caption": "Audi",
-          "labels": ["Governance", "Stakeholder"],
-          "statValue": "4",
-          "statUnit": "Gates",
-          "statLabel": "neu gestaltet mit den Menschen, die sie betreiben"
+          "stat": "30",
+          "statUnit": "Min. pro Meeting",
+          "description": "Zwei Jahre lang passierte nichts, weil niemand den Prozess modelliert hatte. Sechs Wochen Interviews und Zustandsdiagramme später hatten die Stakeholder ein Datenmodell, das sie als ihr eigenes erkannten.",
+          "labels": ["Audi", "Governance", "Stakeholder"]
         },
         "ribAi": {
           "title": "KI-Befähigung bei RIB",
-          "caption": "RIB Software",
-          "labels": ["KI", "Befähigung"],
-          "statValue": "120",
-          "statUnit": "Personen",
-          "statLabel": "an KI-gestützte Arbeit herangeführt"
+          "stat": "15–20",
+          "statUnit": "Senior Engineers",
+          "description": "Kein Vortrag über KI — ein Vortrag, der mit ihr gebaut war, über Token-Ökonomie und Modellwahl. Erst der Beweis; die Befähigungsrolle folgte.",
+          "labels": ["RIB Software", "KI", "Befähigung"]
         }
       }
     }

@@ -31,7 +31,7 @@
       "eyebrow": "About me",
       "headlineStepOut": "I make change happen by stepping out of the argument.",
       "headlineNotPushing": "Change sticks when I'm not the one pushing it.",
-      "headlineLead": "Four stories, one move: once I stop being the thing people argue with, the change carries itself.",
+      "headlineLead": "Every story here makes the same move: once I stop being the thing people argue with, the change carries itself.",
       "identity": {
         "kicker": "The person",
         "name": "Han Che",
@@ -47,39 +47,48 @@
         "process": "Process change",
         "technology": "Technology adoption"
       },
-      "spillNote": "The team story reaches here too",
       "stories": {
         "pitch": {
           "title": "A pitch the founder owns",
-          "caption": "Startup pitch coaching",
-          "labels": ["Coaching", "Founders"],
-          "statValue": "3",
-          "statUnit": "rounds",
-          "statLabel": "from first draft to a pitch that held"
+          "stat": "2",
+          "statUnit": "founders",
+          "description": "Both decks pivoted 180°, away from explaining the product and toward the sales data an investor actually buys. The hard part was a founder in love with their own solution.",
+          "labels": ["Startup pitch coaching", "Coaching", "Founders"]
+        },
+        "gatekeeper": {
+          "title": "The gatekeeper becomes the reviewer",
+          "stat": "50+",
+          "statUnit": "PRs a week",
+          "description": "One person was reviewing all of them by hand. He got AI-driven code review in CI as his own project — the bottleneck built the thing that removed it.",
+          "labels": ["RIB Software", "AI", "Ownership"]
         },
         "ribTeam": {
           "title": "Biggest bottleneck → self-running team",
-          "caption": "RIB Software",
-          "labels": ["Team lead", "Delivery"],
-          "statValue": "30",
-          "statUnit": "min",
-          "statLabel": "one weekly sync instead of daily escalations"
+          "stat": "~5",
+          "statUnit": "months",
+          "description": "Inherited the team the org called its worst bottleneck. Gave refinement, estimation and planning back to them; within months they ran their own scrum without me.",
+          "labels": ["RIB Software", "Team lead", "Agile"]
+        },
+        "teachBack": {
+          "title": "Skills they can teach back",
+          "stat": "6",
+          "statUnit": "developers, 2 countries",
+          "description": "Once agile ran itself, we moved to AI workflows and human-in-the-loop skills. The bar wasn't using them — it was being able to show another team how, and leave the paper trail.",
+          "labels": ["RIB Software", "AI", "Enablement"]
         },
         "audiGates": {
           "title": "Approval gates, modernised",
-          "caption": "Audi",
-          "labels": ["Governance", "Stakeholders"],
-          "statValue": "4",
-          "statUnit": "gates",
-          "statLabel": "redesigned with the people who run them"
+          "stat": "30",
+          "statUnit": "min per meeting",
+          "description": "Two years of nothing, because nobody had modelled the process. Six weeks of interviews and state diagrams later, the stakeholders had a data model they recognised as their own.",
+          "labels": ["Audi", "Governance", "Stakeholders"]
         },
         "ribAi": {
           "title": "AI enablement at RIB",
-          "caption": "RIB Software",
-          "labels": ["AI", "Enablement"],
-          "statValue": "120",
-          "statUnit": "people",
-          "statLabel": "onboarded to AI-assisted work"
+          "stat": "15–20",
+          "statUnit": "senior engineers",
+          "description": "Not a talk about AI — a talk built with it, on token economy and model selection. Proof first; the enablement role followed.",
+          "labels": ["RIB Software", "AI", "Enablement"]
         }
       }
     }
