@@ -5,7 +5,7 @@ import { configDefaults, defineConfig } from 'vitest/config';
 export default defineConfig({
   test: {
     include: ['**/*.{test,spec}.ts'],
-    exclude: [...configDefaults.exclude, '**/*.build.test.ts'],
+    exclude: [...configDefaults.exclude, '**/*.build.test.ts', '.worktrees/**'],
     coverage: {
       provider: 'v8',
     },
