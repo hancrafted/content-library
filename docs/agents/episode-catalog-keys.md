@@ -15,6 +15,21 @@ episodes.page-template.sections.foundations.slides.three-layers.caption   → pa
 episodes.page-template.sections.foundations.slides.three-layers.columns.layouts.prose
 ```
 
+Speaker notes and Voice script keys ([FE-010](../../.archgate/adrs/FE-010-context-drawer.md) §6) hang off the Slide, or off the Section for a section slide:
+
+```text
+episodes.<episode>.sections.<section>.slides.<slide>.notes.<note>.header
+episodes.<episode>.sections.<section>.slides.<slide>.notes.<note>.description
+episodes.<episode>.sections.<section>.slides.<slide>.notes.<note>.image.alt
+episodes.<episode>.sections.<section>.slides.<slide>.notes.<note>.sources.<source>.title
+episodes.<episode>.sections.<section>.slides.<slide>.voiceScript.segments.<segment>.title
+episodes.<episode>.sections.<section>.slides.<slide>.voiceScript.segments.<segment>.keywords
+episodes.<episode>.sections.<section>.slides.<slide>.voiceScript.segments.<segment>.script
+episodes.<episode>.sections.<section>.slides.<slide>.voiceScript.segments.<segment>.bridge
+```
+
+`keywords` is one leaf: a comma-separated string. `<note>` and `<segment>` are kebab-case slugs. A `source`'s title is a leaf; its `url` is not. A description cites its sources with plain `[1]`, `[2]` markers, numbered in the order of the note's `sources`; every marker must name an existing source. Slide text can wrap one phrase in `<ref>…</ref>` (read with `t.rich`) for a `ContextRef`. Time spans, `target`, source `slug`s and `url`s and `image.src` are not strings in the catalog; they sit in the Episode's record (see `src/components/episodes/amnesiac-freelancer/context.ts`).
+
 Chrome shared by all Episodes (e.g. `tableOfContents.title`) sits outside `episodes.*` and is not bound by the role table.
 
 ## Role vocabulary
@@ -25,6 +40,8 @@ Chrome shared by all Episodes (e.g. `tableOfContents.title`) sits outside `episo
 | `caption`     | one-line framing under the title                     | episode, section, slide         |
 | `description` | the page's meta description for search results       | episode                         |
 | `prose`       | a body paragraph                                     | slide, column                   |
+| `header`      | a speaker note's heading                             | note                            |
+| `script`      | spoken text of a voice script segment                | segment                         |
 
 Add a role only when a new Slide layout needs a leaf none of these describe, and add it to this table in the same change.
 

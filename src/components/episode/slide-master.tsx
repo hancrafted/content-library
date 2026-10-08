@@ -1,3 +1,4 @@
+import { targetAnchor } from '@/lib/episode.pure';
 import { cn } from '@/lib/utils';
 import type { ReactNode } from 'react';
 
@@ -11,6 +12,14 @@ export function SlideFrame({ className, children }: { className?: string; childr
   return (
     <article className={cn('flex min-h-[calc(100svh-8rem)] flex-col py-16 md:py-24', className)}>{children}</article>
   );
+}
+
+/**
+ * The id of one element a Speaker note can point at (FE-010 §4): `<slide
+ * anchor>--<element>`, or none when the layout was given no anchor.
+ */
+export function elementId(anchor: string | undefined, element: string): string | undefined {
+  return anchor === undefined ? undefined : targetAnchor(anchor, element);
 }
 
 /** The rule between stacked slides, shared by the Title slide and every slide anchor. */
@@ -27,14 +36,34 @@ const TITLE_SIZE = {
  * H-level follows the manuscript's spine (FE-002): Title slide `h1`, section
  * slide `h2`, page slide `h3`; `h4` and below are free inside a slide.
  */
-export function SlideTitle({ as: Heading, children }: { as: keyof typeof TITLE_SIZE; children: ReactNode }) {
-  return <Heading className={cn('font-semibold tracking-tight text-balance', TITLE_SIZE[Heading])}>{children}</Heading>;
+export function SlideTitle({
+  as: Heading,
+  id,
+  children,
+}: {
+  as: keyof typeof TITLE_SIZE;
+  id?: string;
+  children: ReactNode;
+}) {
+  return (
+    <Heading id={id} className={cn('font-semibold tracking-tight text-balance', TITLE_SIZE[Heading])}>
+      {children}
+    </Heading>
+  );
 }
 
-export function SlideCaption({ children }: { children: ReactNode }) {
-  return <p className="mt-4 max-w-prose text-lg text-balance text-muted-foreground md:text-xl">{children}</p>;
+export function SlideCaption({ id, children }: { id?: string; children: ReactNode }) {
+  return (
+    <p id={id} className="mt-4 max-w-prose text-lg text-balance text-muted-foreground md:text-xl">
+      {children}
+    </p>
+  );
 }
 
-export function SlideProse({ children }: { children: ReactNode }) {
-  return <p className="max-w-prose text-base leading-relaxed md:text-lg">{children}</p>;
+export function SlideProse({ id, children }: { id?: string; children: ReactNode }) {
+  return (
+    <p id={id} className="max-w-prose text-base leading-relaxed md:text-lg">
+      {children}
+    </p>
+  );
 }

@@ -1,3 +1,4 @@
+import { ContextDrawerSlot } from '@/components/context-drawer/context-drawer-slot';
 import { TableOfContents, type TocLabels } from '@/components/table-of-contents/table-of-contents.client';
 import { sectionAnchor, slideAnchor } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
@@ -5,6 +6,7 @@ import { episodeRoute } from '@/lib/routes';
 import { cn } from '@/lib/utils';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
+import { contextDrawerInput } from './context-drawer-input';
 import { tocSectionsOf, type Episode, type EpisodeSection } from './episode-page-container.pure';
 import { SLIDE_DIVIDER } from './slide-master';
 import { TitleSlide } from './title-slide';
@@ -53,7 +55,7 @@ export async function EpisodePageContainer({ locale, episode }: { locale: Locale
   const { title, caption, sections } = await episode.content(locale);
   const toc = tocSectionsOf(sections, locale);
   return (
-    <div data-slot="episode-page" className="mx-4 mt-6 md:grid md:grid-cols-[17rem_minmax(0,1fr)] md:gap-12">
+    <div data-slot="episode-page" className="mx-4 mt-6 md:grid md:grid-cols-[17rem_minmax(0,1fr)_auto]">
       <aside data-slot="toc">
         <TableOfContents
           locale={locale}
@@ -63,12 +65,13 @@ export async function EpisodePageContainer({ locale, episode }: { locale: Locale
           labels={await tocLabels(locale)}
         />
       </aside>
-      <main data-slot="slides" data-testid="episode-page" className="flex min-w-0 flex-col pb-24">
+      <main data-slot="slides" data-testid="episode-page" className="flex min-w-0 flex-col pb-24 md:ml-12">
         <TitleSlide title={title} caption={caption} />
         {sections.map((section) => (
           <SectionSlides key={section.slug} section={section} />
         ))}
       </main>
+      <ContextDrawerSlot input={await contextDrawerInput(locale, sections)} />
     </div>
   );
 }

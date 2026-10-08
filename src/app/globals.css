@@ -13,11 +13,16 @@
   --muted-foreground: oklch(0.556 0 0);
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
-  /* Selected item in a list (the active table-of-contents entry): visible at a glance, not just on hover. */
-  --highlight: oklch(0.91 0 0);
+  /* The selected or active item (drawer tab, current nav link, active table-of-contents entry): 3:1 against the surface, text 4.5:1 (docs/agents/context-drawer-design.md). */
+  --selected: oklch(0.4 0 0);
+  --selected-foreground: oklch(0.985 0 0);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
+  /* The outline between a note and the Slide element it explains: 3:1 against the surface, light and dark. */
+  --highlight-target: oklch(0.5 0.19 260);
+  /* The Context drawer card's width, shared by the card and the grid spacer that makes room for it (FE-010 §7). */
+  --drawer-width: 26rem;
 }
 
 .dark {
@@ -30,10 +35,12 @@
   --muted-foreground: oklch(0.708 0 0);
   --accent: oklch(0.269 0 0);
   --accent-foreground: oklch(0.985 0 0);
-  --highlight: oklch(0.32 0 0);
+  --selected: oklch(0.8 0 0);
+  --selected-foreground: oklch(0.2 0 0);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
+  --highlight-target: oklch(0.75 0.14 260);
 }
 
 @theme inline {
@@ -49,7 +56,8 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
-  --color-highlight: var(--highlight);
+  --color-selected: var(--selected);
+  --color-selected-foreground: var(--selected-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -61,5 +69,57 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/*
+ * A note and the page element it explains light each other up while one is
+ * hovered or focused, or a note is pinned open by a context reference: a soft
+ * background tint over the whole item, with no border, outline or ring. A
+ * background takes no space, so nothing shifts. The page element, which has no
+ * padding of its own, gets the same tint spread 0.25rem past its box by a
+ * shadow. Screen only.
+ */
+@media screen {
+  [data-context-active],
+  [data-context-pinned] {
+    border-radius: 0.375rem;
+    background-color: color-mix(in oklab, var(--highlight-target) 14%, transparent);
+  }
+  [data-context-active]:not([data-note-target]) {
+    box-shadow: 0 0 0 0.25rem color-mix(in oklab, var(--highlight-target) 14%, transparent);
+  }
+}
+
+/* Context drawer (FE-010): print reveals every Slide's notes and script, whether or not the drawer was ever opened. */
+@media print {
+  [data-slot='context'],
+  [data-slot='context'] [data-context-panel] {
+    position: static !important;
+    visibility: visible !important;
+    transform: none !important;
+    display: block !important;
+    width: auto !important;
+    height: auto !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    break-before: page;
+  }
+  [data-slot='context'] [role='tabpanel'],
+  [data-slot='context'] [data-context-for] {
+    display: block !important;
+  }
+  [data-slot='context'] {
+    grid-column: 1 / -1;
+  }
+  /* Closed sources print too, even where beforeprint never fires (headless PDF export). */
+  [data-slot='context'] details::details-content {
+    content-visibility: visible;
+    display: block;
+  }
+  [data-slot='context-trigger'],
+  [data-slot='context-scrim'],
+  [data-slot='context-spacer'] {
+    display: none !important;
   }
 }

@@ -1,6 +1,7 @@
 import type { Locale } from '@/lib/locale.pure';
 import type { EpisodeSlug } from '@/lib/routes';
 import type { ReactNode } from 'react';
+import type { SpeakerNoteItem, VoiceScriptSegment } from '../../lib/context-drawer.pure';
 import { episodeAnchors, sectionAnchor, slideAnchor } from '../../lib/episode.pure';
 import type { TocSection } from '../../lib/table-of-contents.pure';
 
@@ -13,21 +14,6 @@ import type { TocSection } from '../../lib/table-of-contents.pure';
 /** One value per locale, so a missing German value fails `tsc`. */
 export type PerLocale<T> = Readonly<Record<Locale, T>>;
 
-/** Reserved (FE-002): one talking point. Provisional shape, not yet rendered. */
-interface SpeakerNote {
-  readonly title: string;
-  readonly caption: string;
-}
-
-/** Reserved (FE-002): one teleprompter passage. Provisional shape, not yet rendered. */
-interface VoiceCue {
-  readonly at: string;
-  readonly cue: string;
-  readonly text: string;
-  readonly keywords?: readonly string[];
-  readonly bridge?: string;
-}
-
 export interface EpisodeSlide {
   /** Stable once published; becomes the anchor and the catalog key segment. */
   readonly slug: string;
@@ -36,8 +22,10 @@ export interface EpisodeSlide {
   /** Spoken reading time per locale, in minutes. */
   readonly minutes: PerLocale<number>;
   readonly content: ReactNode;
-  readonly notes?: readonly SpeakerNote[];
-  readonly voiceScript?: readonly VoiceCue[];
+  /** Speaker notes (FE-010); each `target` is the short name of an element of this Slide. */
+  readonly notes?: readonly SpeakerNoteItem[];
+  /** Voice script (FE-010). */
+  readonly voiceScript?: readonly VoiceScriptSegment[];
 }
 
 export interface EpisodeSection extends EpisodeSlide {

@@ -19,7 +19,12 @@ export function NavLink({
       asChild
       variant="ghost"
       size="sm"
-      className={cn(active ? 'bg-accent text-accent-foreground' : 'text-muted-foreground', className)}
+      className={cn(
+        active
+          ? 'bg-selected text-selected-foreground hover:bg-selected hover:text-selected-foreground'
+          : 'text-muted-foreground',
+        className,
+      )}
     >
       <Link aria-current={active ? 'page' : undefined} data-active={active} {...props} />
     </Button>

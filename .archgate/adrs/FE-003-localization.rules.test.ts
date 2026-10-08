@@ -56,7 +56,15 @@ describe('href-via-localize-path', () => {
     ['a string literal', `<Link href="/de/episode">x</Link>\n`],
     ['a hand-written prefix', `<Link href={'/de' + path}>x</Link>\n`],
     ['another helper', `<Link href={switchLocalePath(pathname, option)}>x</Link>\n`],
-    ['an external URL', `<a href="https://example.com">x</a>\n`],
+    ['an insecure external URL', `<a href="http://example.com" target="_blank" rel="noopener noreferrer">x</a>\n`],
+    ['a bare variable', `<a href={url} target="_blank" rel="noopener noreferrer">x</a>\n`],
+    ['an external URL without target and rel', `<a href="https://example.com">x</a>\n`],
+    ['an external URL without target', `<a href="https://example.com" rel="noopener noreferrer">x</a>\n`],
+    ['an external URL without rel', `<a href="https://example.com" target="_blank">x</a>\n`],
+    [
+      'an external URL whose rel lacks noreferrer',
+      `<a href="https://example.com" target="_blank" rel="noopener">x</a>\n`,
+    ],
   ];
 
   for (const [label, source] of failing) {
@@ -70,6 +78,20 @@ describe('href-via-localize-path', () => {
       expect(violations[0].file).toBe(FILE);
     });
   }
+
+  it('passes an https literal or externalHref() that opens in a new tab with noopener noreferrer', async () => {
+    // ARRANGE
+    const source = [
+      `<a href="https://example.com" target="_blank" rel="noopener noreferrer">x</a>`,
+      `<a rel="noreferrer noopener" target="_blank" href={'https://example.com'}>y</a>`,
+      `<a\n  href={externalHref(source)}\n  onClick={() => go()}\n  target="_blank"\n  rel="noopener noreferrer"\n>z</a>`,
+    ].join('\n');
+    const { ctx, violations } = makeCtx({ [FILE]: source });
+    // ACT
+    await rule.check(ctx);
+    // ASSERT
+    expect(violations).toEqual([]);
+  });
 
   it('reports the line the href sits on, even when its value wraps', async () => {
     // ARRANGE

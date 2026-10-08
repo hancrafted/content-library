@@ -21,13 +21,13 @@ An Episode is one page: a Title slide, then its Sections, each a section slide f
 
 A page file never writes slots or anchors, so the table of contents (which reads the same anchors) cannot drift from the slides. Reading time is per locale because German narration runs longer; it lives beside the slug until a manuscript pipeline supplies it. A schema for the Slide master's basic structures is a separate, later decision. The catalog's role vocabulary and worked examples live in [`docs/agents/episode-catalog-keys.md`](../../docs/agents/episode-catalog-keys.md).
 
-**Out of scope, with a reserved place (Decision 7):** the Episode's video, back-to-top and corner allocation ([#6](https://github.com/hancrafted/content-library/issues/6)); arrow-key navigation; speaker notes and voice script. **Elsewhere:** URL and fragment stability ([#7](https://github.com/hancrafted/content-library/issues/7)); table-of-contents internals and motion (code comments); locale routing ([FE-003](./FE-003-localization.md)); the client boundary ([FE-006](./FE-006-server-client-boundary.md)).
+**Out of scope, with a reserved place (Decision 7):** the Episode's video, back-to-top and corner allocation ([#6](https://github.com/hancrafted/content-library/issues/6)); arrow-key navigation. Speaker notes and voice script: [FE-010](./FE-010-context-drawer.md). **Elsewhere:** URL and fragment stability ([#7](https://github.com/hancrafted/content-library/issues/7)); table-of-contents internals and motion (code comments); locale routing ([FE-003](./FE-003-localization.md)); the client boundary ([FE-006](./FE-006-server-client-boundary.md)).
 
 ## Decision
 
 ### 1. One container renders every Episode
 
-1. Only `EpisodePageContainer` MAY emit an Episode's slots (`episode-page` > `toc`, `slides`), Title slide, `section[data-section]` wrappers, anchors (`id`, `data-slide`) and table of contents, all derived from one record via `src/lib/episode.pure.ts`.
+1. Only `EpisodePageContainer` MAY emit an Episode's slots (`episode-page` > `toc`, `slides`, `context`), Title slide, `section[data-section]` wrappers, anchors (`id`, `data-slide`) and table of contents, all derived from one record via `src/lib/episode.pure.ts`.
 
 ### 2. The Episode record
 
@@ -53,7 +53,7 @@ A page file never writes slots or anchors, so the table of contents (which reads
 
 ### 7. Reserved places
 
-1. Speaker notes and voice script attach per Slide (`notes`, `voiceScript`), unrendered; the YouTube link per Episode and locale, on the Title slide, loading nothing before play; arrow keys and back-to-top belong to the container; corners: drawer pill bottom-left, back-to-top bottom-right, player top-right.
+1. Speaker notes and voice script attach per Slide (`notes`, `voiceScript`), see FE-010; YouTube link per Episode and locale, on the Title slide, loaded only on play; arrow keys and back-to-top are the container's; corners: TOC pill bottom-left, drawer trigger bottom-right, back-to-top above it, player top-right.
 
 ## Do's and Don'ts
 
@@ -103,12 +103,12 @@ A page file never writes slots or anchors, so the table of contents (which reads
 
 **Measured:** probe files in the Episode folder and `src/components/` fired every lint and dependency-cruiser rule above, including `as={'h1'}` and ``as={`h2`}``, while `<SlideTitle as="h3">` and `h4` passed; a registry key differing from its record's slug failed `tsc`; the post-build test found a real duplicate `id` in the table of contents on its first run.
 
-**Manual review duties:** placement at `md` and below (§6); reserved fields stay unrendered (§7); slugs stay stable once published.
+**Manual review duties:** placement at `md` and below (§6); reserved places stay as §7 allocates them; slugs stay stable once published.
 
 **Exceptions:** raise a separate ADR; human approval required.
 
 ## References
 
 - [`GLOSSARY.md`](../../GLOSSARY.md) — Episode, Section, Slide, Title slide, Slide master, Slide layout, Speaker notes, Voice script, Table of contents.
-- [FE-003 Localization](./FE-003-localization.md), [FE-005 Static Export Contract](./FE-005-static-export-contract.md), [FE-006 Server/Client Boundary](./FE-006-server-client-boundary.md), [ARCH-001 Dependency Admission Bar](./ARCH-001-dependency-admission-bar.md) (`cheerio`: 30.5k stars, 100+ contributors, 33M weekly downloads, pushed 2026-10-08).
+- [FE-003 Localization](./FE-003-localization.md), [FE-005 Static Export Contract](./FE-005-static-export-contract.md), [FE-006 Server/Client Boundary](./FE-006-server-client-boundary.md), [FE-010 Context Drawer](./FE-010-context-drawer.md), [ARCH-001 Dependency Admission Bar](./ARCH-001-dependency-admission-bar.md) (`cheerio`: 30.5k stars, 100+ contributors, 33M weekly downloads, pushed 2026-10-08).
 - [cheerio](https://cheerio.js.org/) — parses with `parse5`, the spec parser browsers follow.

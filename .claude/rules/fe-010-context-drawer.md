@@ -1,0 +1,1 @@
+../../.archgate/adrs/FE-010-context-drawer.md

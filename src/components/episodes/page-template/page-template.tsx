@@ -6,7 +6,9 @@ import type {
   PerLocale,
 } from '@/components/episode/episode-page-container.pure';
 import { SectionSlide } from '@/components/episode/section-slide';
+import { slideContext, type ReadString, type SlideContextSpec } from '@/components/episode/slide-context.pure';
 import { ThreeColumnSlide } from '@/components/episode/three-column-slide';
+import { slideAnchor } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { getTranslations } from 'next-intl/server';
 
@@ -18,14 +20,24 @@ import { getTranslations } from 'next-intl/server';
  */
 type SectionsT = Awaited<ReturnType<typeof getTranslations<'episodes.page-template.sections'>>>;
 
+/** The one Slide with notes: shows the pattern and exercises the empty state on the rest. */
+const WHY_CONTEXT: SlideContextSpec = {
+  notes: [{ slug: 'reference-episode', target: 'prose' }],
+  segments: [{ slug: 'one-breath', from: 0, to: 1 }],
+};
+
 function whyATemplate(t: SectionsT): EpisodeSlide {
   const title = t('foundations.slides.why-a-template.title');
+  const { notes, voiceScript } = slideContext(t as ReadString, 'foundations.slides.why-a-template', WHY_CONTEXT);
   return {
     slug: 'why-a-template',
     title,
     minutes: { en: 3, de: 4 },
+    notes,
+    voiceScript,
     content: (
       <BasicPageSlide
+        anchor={slideAnchor('foundations', 'why-a-template')}
         title={title}
         caption={t('foundations.slides.why-a-template.caption')}
         prose={t('foundations.slides.why-a-template.prose')}
@@ -109,11 +121,11 @@ function sections(t: SectionsT): EpisodeSection[] {
   ];
 }
 
-export const pageTemplate: Episode = {
+export const pageTemplate = {
   slug: 'page-template',
   async content(locale: Locale) {
     const t = await getTranslations({ locale, namespace: 'episodes.page-template' });
     const sectionsT = await getTranslations({ locale, namespace: 'episodes.page-template.sections' });
     return { title: t('title'), caption: t('caption'), sections: sections(sectionsT) };
   },
-};
+} satisfies Episode;

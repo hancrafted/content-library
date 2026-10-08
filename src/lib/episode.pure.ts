@@ -23,7 +23,7 @@ export function slideAnchor(section: string, slide: string): string {
 /** Lowercase kebab-case; a single hyphen only, since `--` joins section and slide. */
 const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
-function checkedSlug(slug: string): string {
+export function checkedSlug(slug: string): string {
   if (!SLUG_RE.test(slug)) throw new Error(`Invalid slug "${slug}": use lowercase kebab-case.`);
   return slug;
 }
@@ -34,6 +34,14 @@ function assertUnique(anchors: readonly string[]): void {
     if (seen.has(anchor)) throw new Error(`Duplicate slide anchor "${anchor}": slugs must be unique.`);
     seen.add(anchor);
   }
+}
+
+/**
+ * DOM id of one element inside a Slide: `<slide anchor>--<element>`. Three
+ * parts, so it cannot collide with a two-part page-slide anchor (FE-010).
+ */
+export function targetAnchor(slide: string, target: string): string {
+  return `${slide}--${checkedSlug(target)}`;
 }
 
 /**

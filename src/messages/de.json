@@ -51,7 +51,22 @@
             "why-a-template": {
               "title": "Warum jede Episode mit derselben gemeinsamen Referenzvorlage beginnt",
               "caption": "Jede Episode teilt dasselbe Rückgrat: Episode, Abschnitt, Folie.",
-              "prose": "Das Markup bleibt frei. Nur die Wörter tragen Schlüssel, aus Abschnitts-Slug, Folien-Slug und Rolle, sodass eine Übersetzung nie durch ein Layout-Schema muss."
+              "prose": "Das Markup bleibt frei. Nur die Wörter tragen Schlüssel, aus Abschnitts-Slug, Folien-Slug und Rolle, sodass eine Übersetzung nie durch ein Layout-Schema muss.",
+              "notes": {
+                "reference-episode": {
+                  "header": "Warum eine Referenz-Episode",
+                  "description": "Die Vorlage sorgt dafür, dass jede Episode gleich aufgebaut ist. Zeigen Sie dabei auf den Fließtext."
+                }
+              },
+              "voiceScript": {
+                "segments": {
+                  "one-breath": {
+                    "title": "Die Vorlage in einem Atemzug",
+                    "keywords": "Vorlage, gleiche Form, jede Episode",
+                    "script": "Eine Referenz-Episode zeigt die Form einmal, damit die nächste Episode ein funktionierendes Beispiel kopiert, statt eine neue zu erfinden."
+                  }
+                }
+              }
             },
             "three-layers": {
               "title": "Warum Masterrahmen und Übersetzungskataloge mit Schlüsseln niemals Zuständigkeiten teilen",
@@ -107,6 +122,539 @@
           }
         }
       }
+    },
+    "amnesiac-freelancer": {
+      "title": "Die KI wie einen Freelancer mit Gedächtnisverlust einarbeiten",
+      "caption": "Warum ein KI-Coding-Agent jede Sitzung bei null beginnt und wie die Einarbeitung trotzdem gelingt.",
+      "description": "Ein KI-Coding-Agent behält nichts von Sitzung zu Sitzung. Wer ihn wie einen fähigen, aber vergesslichen Freelancer einarbeitet, hält das Briefing in Dateien kurz und prüft das Ergebnis.",
+      "sections": {
+        "blank-slate": {
+          "title": "Der Freelancer, der alles vergisst",
+          "caption": "Warum der Agent ohne Erinnerung an das Projekt startet und wo sein Wissen liegt, und wo nicht.",
+          "slides": {
+            "blank-every-time": {
+              "title": "Warum jede Sitzung bei null beginnt",
+              "caption": "„Gedächtnisverlust“ ist unser Bild, kein Begriff der Hersteller, doch der Mechanismus ist dokumentiert.",
+              "prose": "Das Modell <ref>behält zwischen zwei Anfragen nichts</ref>. Ein Chat wirkt nur zusammenhängend, weil der Verlauf bei jedem Zug erneut mitgeschickt wird. Laut Claude-Code-Dokumentation beginnt jede Sitzung mit einem frischen Kontextfenster. Anthropic selbst beschreibt Entwickler im Schichtbetrieb, die jeweils ohne Erinnerung an die vorherige Schicht antreten.",
+              "notes": {
+                "stateless-by-design": {
+                  "header": "Zustandslos von Haus aus",
+                  "description": "Das Modell behält zwischen Anfragen nichts.[2] Ein Chat wirkt nur zusammenhängend, weil bei jedem Zug der gesamte Verlauf erneut mitgeschickt wird.[1]",
+                  "sources": {
+                    "openai-conversation-state": {
+                      "title": "OpenAI: Gesprächszustand (Conversation state)"
+                    },
+                    "claude-context-windows": {
+                      "title": "Claude API: Kontextfenster"
+                    }
+                  }
+                },
+                "fresh-window-per-session": {
+                  "header": "Jede Sitzung beginnt frisch",
+                  "description": "Laut Claude Code startet jede Sitzung mit einem frischen Kontextfenster.[1] Nur CLAUDE.md-Dateien und der Auto-Speicher tragen Wissen von einer Sitzung in die nächste.",
+                  "sources": {
+                    "claude-code-memory": {
+                      "title": "Claude Code: Speicher (Memory)"
+                    }
+                  }
+                },
+                "shift-workers-per-anthropic": {
+                  "header": "Schichtarbeit, so Anthropic",
+                  "description": "Anthropic stellt sich Entwickler im Schichtbetrieb vor: Jede neue Schicht kommt ohne Erinnerung an die vorige.[1] Die Lösung sind schriftliche Artefakte, die die nächste Sitzung zuerst liest.",
+                  "sources": {
+                    "anthropic-long-running-harnesses": {
+                      "title": "Anthropic: Wirksame Harnesses für lang laufende Agenten"
+                    }
+                  }
+                },
+                "our-word-not-theirs": {
+                  "header": "Unser Wort, nicht ihres",
+                  "description": "„Amnesie“ ist unsere Metapher. Das ausdrücklich sagen und sie nicht Anthropic zuschreiben."
+                }
+              },
+              "voiceScript": {
+                "segments": {
+                  "blank-slate": {
+                    "title": "Leeres Blatt",
+                    "keywords": "zustandslos, Verlauf neu gesendet, jeder Zug",
+                    "script": "Beginnen Sie mit der unbequemen Tatsache: Das Modell behält zwischen Anfragen nichts. Wenn sich ein Chat wie ein Gespräch anfühlt, dann nur, weil bei jedem Zug der gesamte Verlauf erneut gesendet wird. Nichts wurde erinnert; es wurde neu gelesen."
+                  },
+                  "new-session-new-window": {
+                    "title": "Neue Sitzung, neues Fenster",
+                    "keywords": "frisches Kontextfenster, CLAUDE.md, Auto-Speicher",
+                    "script": "In der Dokumentation von Claude Code steht: Jede Sitzung beginnt mit einem frischen Kontextfenster. Nur zwei Dinge überbrücken die Lücke: Anweisungsdateien wie CLAUDE.md und Notizen, die der Agent selbst aufgeschrieben hat. Beides ist nur Text, der am Anfang geladen wird."
+                  },
+                  "shifts": {
+                    "title": "Schichten",
+                    "keywords": "Ingenieure in Schichten, keine Erinnerung, schriftliche Artefakte",
+                    "script": "Anthropic beschreibt es so: Ingenieure arbeiten in Schichten, und jede neue kommt ohne Erinnerung an die letzte an. Ich nenne das den vergesslichen Freelancer. Das Wort ist meins, nicht ihres, aber der Mechanismus ist ihrer. Und ihre Antwort ist dieselbe wie unsere: aufschreiben.",
+                    "bridge": "Wenn der Agent nichts über uns weiß, woher kommt dann das, was er doch weiß?"
+                  }
+                }
+              }
+            },
+            "where-knowledge-lives": {
+              "title": "Wo das Wissen eines Agenten liegt und wo es endet",
+              "caption": "Drei Orte, nur einer davon lässt sich gestalten.",
+              "columns": {
+                "training": {
+                  "title": "Training",
+                  "prose": "Allgemeinwissen bis zu einem Stichtag. Das eigene Repository, die Konventionen und die Entscheidung von letztem Dienstag gehörten nie dazu. Das ist unsere Einordnung; die Hersteller verweisen für genau diesen Zweck auf Dateien."
+                },
+                "session": {
+                  "title": "Die Sitzung",
+                  "prose": "Das Kontextfenster ist das Arbeitsgedächtnis. Die Erinnerung wird schlechter, je voller es wird, und Informationen mitten in einer langen Eingabe werden am schlechtesten genutzt."
+                },
+                "files": {
+                  "title": "Dateien",
+                  "prose": "CLAUDE.md und AGENTS.md werden zu Beginn als Text geladen. Eine CLAUDE.md im Projektstamm wird nach einer Verdichtung neu von der Platte gelesen; was nur im Chat gesagt wurde, kann verloren gehen."
+                }
+              },
+              "notes": {
+                "training": {
+                  "header": "Training",
+                  "description": "Allgemeinwissen bis zu einem Stichtag. Ihr Repository, Ihre Konventionen und die Entscheidung von letztem Dienstag standen nie darin. Das ist unsere Schlussfolgerung; kein Anbieter formuliert es so, aber die Anleitungen der Anbieter verweisen genau deshalb auf Dateien.[1][2]",
+                  "sources": {
+                    "claude-code-memory": {
+                      "title": "Claude Code: Speicher (Memory)"
+                    },
+                    "codex-memories": {
+                      "title": "OpenAI Codex: Speicher (Memories)"
+                    }
+                  }
+                },
+                "the-session": {
+                  "header": "Die Sitzung",
+                  "description": "Das Kontextfenster ist das Arbeitsgedächtnis. Die Erinnerung lässt nach, je voller es wird (Anthropic, Chroma).[1][3] Was mitten in einer langen Eingabe steht, wird am schlechtesten genutzt (Liu et al., Modelle von damals; nur die Richtung nennen, keine Zahlen).[2]",
+                  "sources": {
+                    "chroma-context-rot": {
+                      "title": "Chroma: Context Rot (Kontextverfall)"
+                    },
+                    "lost-in-the-middle": {
+                      "title": "Liu et al.: Lost in the Middle (verloren in der Mitte)"
+                    },
+                    "anthropic-context-engineering": {
+                      "title": "Anthropic: Wirksames Context Engineering für KI-Agenten"
+                    }
+                  }
+                },
+                "files": {
+                  "header": "Dateien",
+                  "description": "CLAUDE.md und AGENTS.md werden am Anfang als Text geladen.[1] Eine CLAUDE.md im Projektstamm wird nach /compact neu von der Platte gelesen; Anweisungen, die nur im Chat fielen, können verloren gehen.[2]",
+                  "sources": {
+                    "claude-code-how-it-works": {
+                      "title": "Claude Code: So funktioniert Claude Code"
+                    },
+                    "claude-code-memory": {
+                      "title": "Claude Code: Speicher (Memory)"
+                    }
+                  }
+                },
+                "compaction-is-lossy": {
+                  "header": "Verdichten verliert Information",
+                  "description": "Anthropic warnt, dass aggressives Verdichten subtilen, aber entscheidenden Kontext verwerfen kann.[1] Wie groß der Verlust ist, hat die Recherche nicht beziffert.",
+                  "sources": {
+                    "anthropic-context-engineering": {
+                      "title": "Anthropic: Wirksames Context Engineering für KI-Agenten"
+                    }
+                  }
+                }
+              },
+              "voiceScript": {
+                "segments": {
+                  "training": {
+                    "title": "Training",
+                    "keywords": "Stichtag, kannte Ihr Repo nie",
+                    "script": "Erster Ort: das Training. Es ist breit, und es endet an einem Stichtag. Ihr Repository, Ihre Namensregeln oder die Entscheidung von letztem Dienstag hat es nie gesehen. Fairerweise: Das ist meine Einordnung und kein Zitat eines Anbieters, aber jeder Anbieter rät dazu, Projektkontext in Dateien abzulegen, und genau deshalb."
+                  },
+                  "the-session": {
+                    "title": "Die Sitzung",
+                    "keywords": "Arbeitsgedächtnis, Kontextverfall, Mitte",
+                    "script": "Zweiter Ort: die Sitzung. Das Kontextfenster ist das Arbeitsgedächtnis des Agenten. Anthropic und ein unabhängiger Bericht von Chroma finden beide, dass die Erinnerung nachlässt, je voller es wird. Und die Studie „Lost in the Middle“ fand: Was in der Mitte einer langen Eingabe steht, wird am schlechtesten genutzt. Die Studie nutzte ältere Modelle; nehmen Sie also die Richtung mit, nicht die Zahlen."
+                  },
+                  "files": {
+                    "title": "Dateien",
+                    "keywords": "CLAUDE.md, AGENTS.md, Verdichtung, von der Platte neu gelesen",
+                    "script": "Dritter Ort: Dateien. Das ist der einzige, den Sie in der Hand haben. CLAUDE.md und AGENTS.md werden am Anfang als Text geladen. Nach einer Verdichtung wird die CLAUDE.md im Projektstamm erneut von der Platte gelesen, während etwas, das Sie nur im Chat gesagt haben, weg sein kann.",
+                    "bridge": "Dateien sind also der Hebel. Als Nächstes: was hineingehört. Denken Sie an Einarbeitung."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "onboarding": {
+          "title": "Die Einarbeitung",
+          "caption": "{count, plural, one {# Folie} other {# Folien}} dazu, einen Agenten so einzuweisen wie eine fähige Honorarkraft.",
+          "slides": {
+            "brief-and-rules": {
+              "title": "Was ein gutes Einarbeitungspaket enthält",
+              "caption": "Jedem Hilfsmittel für Menschen entspricht eines für den Agenten.",
+              "columns": {
+                "brief": {
+                  "title": "Das Briefing",
+                  "prose": "Anthropic rät, Claude wie einen brillanten, aber neuen Mitarbeiter zu sehen, dem der Kontext zu Normen und Abläufen fehlt. Aufgabe, Rahmenbedingungen und Format ausdrücklich nennen."
+                },
+                "house-rules": {
+                  "title": "Hausregeln",
+                  "prose": "Eine Datei, die zu Beginn jedes Gesprächs gelesen wird: Build- und Testbefehle, Code-Stil, Arbeitsregeln. AGENTS.md nennt sie ein README für Agenten."
+                },
+                "definition-of-done": {
+                  "title": "Fertig heißt geprüft",
+                  "prose": "Tests, Builds oder Skripte, die der Agent selbst ausführen kann. Anthropic: Claude eine Möglichkeit geben, die eigene Arbeit zu prüfen."
+                }
+              },
+              "notes": {
+                "the-brief": {
+                  "header": "Das Briefing",
+                  "description": "Anthropic: „Stellen Sie sich Claude als brillanten, aber neuen Mitarbeiter vor, dem der Kontext zu Ihren Normen und Abläufen fehlt.“[1] Seien Sie ausdrücklich; „darüber hinaus“ muss verlangt werden, es wird nicht gefolgert.",
+                  "sources": {
+                    "claude-be-clear-and-direct": {
+                      "title": "Claude-Dokumentation: Klar und direkt formulieren"
+                    }
+                  }
+                },
+                "house-rules": {
+                  "header": "Hausregeln",
+                  "description": "Eine Datei, die zu Beginn jeder Unterhaltung gelesen wird: Befehle, Code-Stil, Arbeitsregeln.[1] agents.md nennt sie ein „README für Agenten“; die nächstgelegene Datei gewinnt.[2]",
+                  "sources": {
+                    "claude-code-best-practices": {
+                      "title": "Claude Code: Best Practices"
+                    },
+                    "agents-md": {
+                      "title": "AGENTS.md"
+                    }
+                  }
+                },
+                "definition-of-done": {
+                  "header": "Definition von „fertig“",
+                  "description": "Geben Sie dem Agenten einen Weg, seine Arbeit zu prüfen: Tests, Skripte, Screenshots.[1] Dazu GitHub: Sagen Sie, wie gebaut und geprüft wird, damit der Agent nicht jedes Mal suchen muss.[2]",
+                  "sources": {
+                    "claude-code-best-practices": {
+                      "title": "Claude Code: Best Practices"
+                    },
+                    "github-copilot-repository-instructions": {
+                      "title": "GitHub Docs: Repository-Anweisungen für Copilot hinzufügen"
+                    }
+                  }
+                },
+                "colleague-test": {
+                  "header": "Kollegentest",
+                  "description": "Zeigen Sie Ihren Prompt einem Kollegen mit wenig Kontext; wäre er verwirrt, ist es Claude auch.[1]",
+                  "sources": {
+                    "claude-be-clear-and-direct": {
+                      "title": "Claude-Dokumentation: Klar und direkt formulieren"
+                    }
+                  }
+                }
+              },
+              "voiceScript": {
+                "segments": {
+                  "the-brief": {
+                    "title": "Das Briefing",
+                    "keywords": "brillanter neuer Mitarbeiter, ausdrücklich, Kollegentest",
+                    "script": "Anthropic selbst nutzt dieses Bild: ein brillanter, aber neuer Mitarbeiter, dem der Kontext zu Ihren Normen und Abläufen fehlt. Schreiben Sie das Briefing also genau so. Aufgabe, Rahmenbedingungen, Format. Und machen Sie den Kollegentest: Geben Sie es jemandem ohne Kontext. Wäre er verwirrt, ist es der Agent auch."
+                  },
+                  "house-rules": {
+                    "title": "Hausregeln",
+                    "keywords": "README für Agenten, jede Unterhaltung, Befehle",
+                    "script": "Hausregeln stehen in einer Datei, die der Agent zu Beginn jeder Unterhaltung liest. Build- und Test-Befehle, Code-Stil, Arbeitsregeln. Die Seite agents.md nennt sie ein README für Agenten. Und die Datei, die dem Code am nächsten liegt, gewinnt, als würden Sie in dieser Ecke der Codebasis den alten Hasen fragen."
+                  },
+                  "definition-of-done": {
+                    "title": "Definition von „fertig“",
+                    "keywords": "Arbeit prüfen, Tests, Skripte",
+                    "script": "Der dritte Punkt zählt am meisten. Geben Sie dem Agenten einen Weg, seine Arbeit zu prüfen. Ein Test, den er ausführen kann, ein Befehl, der durchlaufen muss. Ohne das kann er nicht erkennen, ob er fertig ist, und Sie auch nicht.",
+                    "bridge": "Jetzt die Versuchung: alles hineinpacken. Und warum das nach hinten losgeht."
+                  }
+                }
+              }
+            },
+            "keep-it-short": {
+              "title": "Warum ein kurzes Briefing besser ist als ein gründliches Handbuch",
+              "caption": "Aufmerksamkeit ist begrenzt, bei Agenten wie bei Menschen.",
+              "prose": "Anthropic warnt, dass <ref>überladene CLAUDE.md-Dateien dazu führen, dass Claude die eigentlichen Anweisungen ignoriert</ref>, und empfiehlt unter 200 Zeilen pro Datei. GitHub begrenzt die eigene Vorlage auf zwei Seiten. Besser auf Details verweisen, die der Agent bei Bedarf lädt, als alles hineinzukopieren.",
+              "notes": {
+                "bloat-gets-ignored": {
+                  "header": "Aufgeblähtes wird ignoriert",
+                  "description": "Anthropic: „Aufgeblähte CLAUDE.md-Dateien führen dazu, dass Claude Ihre eigentlichen Anweisungen ignoriert.“[1] Prüffrage zum Kürzen: Würde das Entfernen dieser Zeile Fehler verursachen?",
+                  "sources": {
+                    "claude-code-best-practices": {
+                      "title": "Claude Code: Best Practices"
+                    }
+                  }
+                },
+                "numbers-to-cite": {
+                  "header": "Zahlen zum Zitieren",
+                  "description": "Unter 200 Zeilen pro CLAUDE.md-Datei (Anthropic).[1] Die Vorlage von GitHub begrenzt Anweisungen auf 2 Seiten.[2]",
+                  "sources": {
+                    "claude-code-memory": {
+                      "title": "Claude Code: Speicher (Memory)"
+                    },
+                    "github-copilot-repository-instructions": {
+                      "title": "GitHub Docs: Repository-Anweisungen für Copilot hinzufügen"
+                    }
+                  }
+                },
+                "minimal-is-not-short": {
+                  "header": "Minimal heißt nicht kurz",
+                  "description": "„Minimal heißt nicht zwingend kurz“: die kleinste Menge, die das Verhalten vollständig umreißt.[1] Zeiger, die bei Bedarf geladen werden, sind Einfügen vorzuziehen. Importe sparen keinen Kontext.[2]",
+                  "sources": {
+                    "anthropic-context-engineering": {
+                      "title": "Anthropic: Wirksames Context Engineering für KI-Agenten"
+                    },
+                    "claude-code-memory": {
+                      "title": "Claude Code: Speicher (Memory)"
+                    }
+                  }
+                }
+              },
+              "voiceScript": {
+                "segments": {
+                  "more-is-worse": {
+                    "title": "Mehr ist schlechter",
+                    "keywords": "aufgebläht, ignorieren, 200 Zeilen",
+                    "script": "Der Instinkt ist, das komplette Handbuch zu schreiben. Anthropic rät das Gegenteil: Aufgeblähte CLAUDE.md-Dateien führen dazu, dass Claude Ihre eigentlichen Anweisungen ignoriert. Die Richtlinie lautet unter 200 Zeilen pro Datei, und GitHub begrenzt die eigene Vorlage auf zwei Seiten."
+                  },
+                  "prune": {
+                    "title": "Kürzen",
+                    "keywords": "würde das Entfernen Fehler verursachen, Zeiger",
+                    "script": "Nutzen Sie die Prüffrage: Würde das Entfernen dieser Zeile einen Fehler verursachen? Wenn nicht, streichen. Und verweisen statt einfügen: Ein Pfad, den der Agent bei Bedarf öffnen kann, kostet bis dahin nichts."
+                  },
+                  "minimal-is-not-short": {
+                    "title": "Minimal heißt nicht kurz",
+                    "keywords": "minimale Menge, ausreichend",
+                    "script": "Eine Warnung von Anthropic. Minimal heißt nicht kurz. Es heißt die kleinste Menge, die vollständig umreißt, was Sie erwarten. Genug, nicht alles.",
+                    "bridge": "Eine Art Inhalt verdient immer seinen Platz: das Warum hinter Entscheidungen."
+                  }
+                }
+              }
+            },
+            "decisions-in-writing": {
+              "title": "Warum Entscheidungen schriftlich festgehalten gehören",
+              "caption": "Jede so schreiben, als wäre es ein Gespräch mit einem künftigen Entwickler.",
+              "prose": "Michael Nygards Entscheidungsprotokolle bewahren das Warum für alle, die später dazukommen: auf ein bis zwei Seiten, und <ref>eine revidierte Entscheidung wird als abgelöst markiert statt gelöscht</ref>. Für einen Agenten, der jedes Mal später dazukommt, ist das Protokoll die Erinnerung, die er lesen kann.",
+              "notes": {
+                "a-conversation-with-a-future-developer": {
+                  "header": "Ein Gespräch mit einem künftigen Entwickler",
+                  "description": "Nygards Regel für Entscheidungsprotokolle.[1] Kurze Prosa, eine oder zwei Seiten.",
+                  "sources": {
+                    "nygard-architecture-decisions": {
+                      "title": "Michael Nygard: Architekturentscheidungen dokumentieren"
+                    }
+                  }
+                },
+                "superseded-not-deleted": {
+                  "header": "Abgelöst, nicht gelöscht",
+                  "description": "Eine umgekehrte Entscheidung bleibt erhalten und wird als abgelöst markiert.[1]",
+                  "sources": {
+                    "nygard-architecture-decisions": {
+                      "title": "Michael Nygard: Architekturentscheidungen dokumentieren"
+                    }
+                  }
+                },
+                "the-newcomers-two-bad-options": {
+                  "header": "Die zwei schlechten Optionen des Neuankömmlings",
+                  "description": "Ohne das Protokoll muss der Neuankömmling eine Entscheidung blind hinnehmen oder blind ändern.[1]",
+                  "sources": {
+                    "nygard-architecture-decisions": {
+                      "title": "Michael Nygard: Architekturentscheidungen dokumentieren"
+                    }
+                  }
+                },
+                "mapping-not-a-sourced-claim": {
+                  "header": "Eine Zuordnung, keine belegte Aussage",
+                  "description": "Dass ein Agent dasselbe Protokoll liest, ist unsere Zuordnung. Keine zitierte Anbieterseite sagt das."
+                }
+              },
+              "voiceScript": {
+                "segments": {
+                  "why-it-was-done": {
+                    "title": "Warum es so gemacht wurde",
+                    "keywords": "Nygard, künftiger Entwickler",
+                    "script": "Michael Nygard hat Entscheidungsprotokolle genau für diese Person geschrieben: jemand, der später dazukommt. Seine Regel: Schreiben Sie jedes wie ein Gespräch mit einem künftigen Entwickler. Eine oder zwei Seiten, einfache Prosa."
+                  },
+                  "superseded": {
+                    "title": "Abgelöst",
+                    "keywords": "altes behalten, als abgelöst markieren",
+                    "script": "Wenn Sie eine Entscheidung umkehren, behalten Sie das alte Protokoll und markieren es als abgelöst. Ganz ohne Protokoll hat der Neuankömmling zwei schlechte Optionen: die Entscheidung blind akzeptieren oder blind ändern."
+                  },
+                  "our-agent-arrives-later-every-time": {
+                    "title": "Unser Agent kommt jedes Mal später dazu",
+                    "keywords": "das Protokoll ist das Gedächtnis",
+                    "script": "Unser Freelancer ist immer der Neuankömmling. Das ist meine Zuordnung, keine Aussage eines Anbieters, aber sie folgt daraus: Für jemanden, der jedes einzelne Mal später dazukommt, ist das schriftliche Protokoll das einzige Gedächtnis, das er lesen kann.",
+                    "bridge": "Wir haben ein ordentliches Einarbeitungspaket. Nun, wo uns das Bild vom Freelancer in die Irre führt."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "where-it-breaks": {
+          "title": "Wo das Bild hinkt",
+          "caption": "Drei Unterschiede zwischen Freelancer und Agent und was daraus folgt.",
+          "slides": {
+            "metaphor-breaks": {
+              "title": "Drei Punkte, in denen ein Agent kein Freelancer ist",
+              "caption": "Jeder Unterschied verändert die Einarbeitung.",
+              "columns": {
+                "no-learning": {
+                  "title": "Kein Lernen",
+                  "prose": "Ein Freelancer wird bis zur dritten Woche von selbst besser. Eine neue Sitzung startet allein aus den Dateien; was nicht aufgeschrieben ist, ist weg."
+                },
+                "not-enforced": {
+                  "title": "Nicht erzwungen",
+                  "prose": "Claude behandelt CLAUDE.md als Kontext, nicht als erzwungene Konfiguration. Regeln, die gelten müssen, gehören in Prüfungen oder Hooks, nicht in Fließtext."
+                },
+                "reading-costs": {
+                  "title": "Lesen kostet",
+                  "prose": "Jede Zeile wird zu Beginn jeder Sitzung bezahlt, und die Qualität sinkt, je voller der Kontext wird. Das Briefing gehört gekürzt."
+                }
+              },
+              "notes": {
+                "no-learning": {
+                  "header": "Kein Lernen",
+                  "description": "Ein Freelancer wird bis Woche drei ungefragt besser.[1] Eine frische Sitzung startet nur mit Dateien. Der Auto-Speicher verringert die Lücke, aber es sind gespeicherte Notizen, die am Anfang geladen werden, kein Lernen.",
+                  "sources": {
+                    "claude-code-memory": {
+                      "title": "Claude Code: Speicher (Memory)"
+                    }
+                  }
+                },
+                "context-not-enforcement": {
+                  "header": "Kontext, keine Durchsetzung",
+                  "description": "„Claude behandelt sie als Kontext, nicht als erzwungene Konfiguration.“[1] Harte Regeln brauchen Hooks, Berechtigungen oder Prüfungen.",
+                  "sources": {
+                    "claude-code-memory": {
+                      "title": "Claude Code: Speicher (Memory)"
+                    }
+                  }
+                },
+                "reading-costs": {
+                  "header": "Lesen kostet",
+                  "description": "Der Agent bezahlt jede Zeile bei jedem Sitzungsstart, und „die Leistung sinkt, je voller es wird“.[1] Pflegen und kürzen.",
+                  "sources": {
+                    "claude-code-best-practices": {
+                      "title": "Claude Code: Best Practices"
+                    }
+                  }
+                },
+                "beyond-the-sources": {
+                  "header": "Jenseits der Quellen",
+                  "description": "Stille Konflikte zwischen Regeln (nächste Datei gewinnt, Verkettung von der Wurzel abwärts) sind mechanisch, nicht verhandelt.[1][2] Übergehorsam ist unsere Schlussfolgerung, keine Aussage eines Anbieters.",
+                  "sources": {
+                    "agents-md": {
+                      "title": "AGENTS.md"
+                    },
+                    "codex-agents-md": {
+                      "title": "OpenAI Codex: Leitfaden zu AGENTS.md"
+                    }
+                  }
+                }
+              },
+              "voiceScript": {
+                "segments": {
+                  "no-learning": {
+                    "title": "Kein Lernen",
+                    "keywords": "Woche drei, gespeicherte Notizen",
+                    "script": "Erster Bruch: Ein Freelancer wird bis Woche drei besser, ohne dass man es ihm sagt. Der Agent nicht. Der Auto-Speicher hilft, aber es sind gespeicherte Notizen, die am Anfang geladen werden, kein Lernen. Was nicht aufgeschrieben ist, ist weg."
+                  },
+                  "not-enforced": {
+                    "title": "Nicht erzwungen",
+                    "keywords": "Kontext, Hooks, Prüfungen",
+                    "script": "Zweitens: Anweisungen sind Kontext, keine erzwungene Konfiguration. So formuliert es Anthropic. Prosa ist eine Bitte. Was immer gelten muss, gehört in eine Prüfung oder einen Hook."
+                  },
+                  "reading-costs": {
+                    "title": "Lesen kostet",
+                    "keywords": "jede Zeile, jede Sitzung",
+                    "script": "Drittens: Lesen ist nicht gratis. Ein Mensch überfliegt das Handbuch einmal. Der Agent bezahlt jede Zeile am Anfang jeder Sitzung, und die Qualität sinkt, je voller das Fenster wird. Also kürzen.",
+                    "bridge": "Das hat eine praktische Folge für den zweiten Punkt: wer die Arbeit prüft."
+                  }
+                }
+              }
+            },
+            "enforce-and-verify": {
+              "title": "Warum Prüfungen mehr zählen als gute Absichten",
+              "caption": "Wer die Arbeit bewertet, sollte nicht derselbe sein, der sie gemacht hat.",
+              "prose": "Der Agent braucht Befehle, die die Arbeit belegen, und einen Reviewer mit frischem Kontext. Das ist der einzige Teil, der nicht davon abhängt, dass der Agent Fließtext liest und befolgt.",
+              "notes": {
+                "verification-you-can-run": {
+                  "header": "Prüfung, die Sie ausführen können",
+                  "description": "„Wenn Sie es nicht prüfen können, liefern Sie es nicht aus.“[1] Tests, Skripte, Screenshots.",
+                  "sources": {
+                    "claude-code-best-practices": {
+                      "title": "Claude Code: Best Practices"
+                    }
+                  }
+                },
+                "a-different-grader": {
+                  "header": "Ein anderer Prüfer",
+                  "description": "Ein Reviewer mit frischem Kontext, „damit der Agent, der die Arbeit macht, sie nicht auch bewertet“.[1] Die Quelle stützt die Praxis, keine Aussage über die Psychologie des Agenten.",
+                  "sources": {
+                    "claude-code-best-practices": {
+                      "title": "Claude Code: Best Practices"
+                    }
+                  }
+                },
+                "independent-of-prose": {
+                  "header": "Unabhängig von Prosa",
+                  "description": "Prüfungen sind der einzige Teil, der nicht davon abhängt, dass der Agent Text liest und befolgt."
+                },
+                "close": {
+                  "header": "Schluss",
+                  "description": "Aufschreiben, kurz halten, prüfbar machen."
+                }
+              },
+              "voiceScript": {
+                "segments": {
+                  "prove-it": {
+                    "title": "Beweisen",
+                    "keywords": "prüfen, Tests, nicht ausliefern",
+                    "script": "Geben Sie dem Agenten Befehle, die die Arbeit beweisen. Anthropic ist deutlich: Wenn Sie es nicht prüfen können, liefern Sie es nicht aus."
+                  },
+                  "another-pair-of-eyes": {
+                    "title": "Ein zweites Augenpaar",
+                    "keywords": "Reviewer mit frischem Kontext",
+                    "script": "Und holen Sie einen Reviewer mit frischem Kontext dazu, damit der Agent, der die Arbeit macht, sie nicht auch bewertet. Warum ein Agent sich selbst zu sehr vertraut, behaupte ich nicht zu wissen; die Quelle stützt die Praxis."
+                  },
+                  "wrap-up": {
+                    "title": "Zum Schluss",
+                    "keywords": "aufschreiben, kurz, prüfbar",
+                    "script": "Drei Dinge zum Mitnehmen. Schreiben Sie es auf, denn sonst bleibt nichts erhalten. Halten Sie es kurz, denn Aufmerksamkeit ist begrenzt. Machen Sie es prüfbar, denn Prosa ist nur eine Bitte.",
+                    "bridge": "Ende der Episode. Laden Sie die Zuschauer ein, das diese Woche an einem Repository auszuprobieren."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
+  },
+  "contextDrawer": {
+    "title": "Kontext",
+    "open": "Kontext öffnen",
+    "close": "Kontext schließen",
+    "tabs": {
+      "notes": "Sprechernotizen",
+      "script": "Sprechtext"
+    },
+    "empty": {
+      "notes": "Keine Sprechernotizen für diese Folie.",
+      "script": "Kein Sprechtext für diese Folie."
+    },
+    "keywords": "Stichworte",
+    "bridge": "Überleitung",
+    "slide": "Folie",
+    "shortcut": "Tastenkürzel",
+    "sourcesCount": "Quellen ({count})",
+    "opensInNewTab": "öffnet in neuem Tab",
+    "menu": {
+      "label": "Weitere Optionen",
+      "layout": "Darstellung",
+      "side": "Nebeneinander",
+      "overlay": "Überlagert"
+    },
+    "refNote": "öffnet Sprechernotiz",
+    "citation": "Quelle {number}"
   }
 }
