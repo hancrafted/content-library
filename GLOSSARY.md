@@ -18,6 +18,18 @@ _Avoid_: Card, panel; page, which means the Next.js route the whole Episode rend
 **Title slide**: an Episode's opening Slide: its title, caption and, once recorded, its video. Not listed in the table of contents.
 _Avoid_: Hero, cover
 
+**Content area**: the single-column grid that holds an Episode's Slide wrappers, owns the spacing between Slides and hosts the Episode's portal root.
+_Avoid_: Main, article body, slide list, slides slot
+
+**Slide wrapper**: the server-rendered box around one Slide that holds its mechanics: anchor, at least viewport height, never clipping, and the mount that drops far content.
+_Avoid_: Slide frame, outer slide, slide container
+
+**Canvas**: the free interior of a Slide, where its visualisation and layout live, ungoverned by the Slide wrapper's mechanics.
+_Avoid_: Inner slide, slide body
+
+**Zone**: where a Slide stands relative to the reader: far (content unmounted), near (mounted, paused) or active (mounted, playing, the current Slide).
+_Avoid_: Visibility state, scroll phase
+
 **Slide master**: the shared slide frame and type scale that every Slide layout composes, named after PowerPoint's.
 _Avoid_: Master, base slide, template
 

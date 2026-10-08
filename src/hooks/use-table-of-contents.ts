@@ -1,32 +1,11 @@
-import { activeId, READING_LINE, readingLineMargin } from '@/lib/reading-line.pure';
+import { READING_LINE } from '@/lib/reading-line.pure';
 import { openSectionIds, type TocSection } from '@/lib/table-of-contents.pure';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type MouseEvent } from 'react';
+import { useUrlState } from './use-url-state';
 
 /** How long the compact loading box holds after mount, so the table never visibly settles into place. */
 const REVEAL_AFTER_MS = 1000;
 const NOTHING_TOGGLED: ReadonlySet<string> = new Set();
-
-/** Tracks which `[targetAttribute]` element spans the reading line; `null` before the first observation. */
-export function useActiveId(order: readonly string[], targetAttribute: string): string | null {
-  const [active, setActive] = useState<string | null>(null);
-  useEffect(() => {
-    const intersecting = new Set<string>();
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          const id = entry.target.getAttribute(targetAttribute) ?? '';
-          if (entry.isIntersecting) intersecting.add(id);
-          else intersecting.delete(id);
-        }
-        setActive((previous) => activeId(intersecting, order, previous));
-      },
-      { rootMargin: readingLineMargin() },
-    );
-    document.querySelectorAll(`[${targetAttribute}]`).forEach((element) => observer.observe(element));
-    return () => observer.disconnect();
-  }, [order, targetAttribute]);
-  return active;
-}
 
 function fractionInto(element: Element | null): number {
   const root = document.documentElement;
@@ -90,24 +69,6 @@ export function useRevealed(settled: boolean): boolean {
 }
 
 /**
- * The entry a table-of-contents click is gliding to. It stands in for the
- * observed entry until the glide ends, so sections open and the ring turns on
- * click, not after scrolling past everything in between.
- */
-export function useHeadingTo(observed: string | null) {
-  const [heading, setHeading] = useState<string | null>(null);
-  // Arrived: hand back to the observer, during render so no frame shows the stale target.
-  if (heading !== null && heading === observed) setHeading(null);
-  useEffect(() => {
-    if (heading === null) return;
-    const arrive = () => setHeading(null);
-    window.addEventListener('scrollend', arrive, { once: true });
-    return () => window.removeEventListener('scrollend', arrive);
-  }, [heading]);
-  return { heading, headTo: setHeading };
-}
-
-/**
  * Open sections plus a chevron toggle. Toggles are remembered only while the
  * reader stays in the same section; scrolling into another one resets them.
  */
@@ -123,4 +84,28 @@ export function useOpenSections(sections: readonly TocSection[], active: string 
     setState({ owner, toggled: next });
   };
   return { open: openSectionIds(sections, active, toggled), toggle };
+}
+
+function isPlainClick(event: MouseEvent): boolean {
+  return event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
+}
+
+/**
+ * A click handler factory: tells the page's URL-state service the reader chose
+ * this Slide, then glides to it. Every consumer shows it at once and the
+ * observer stays quiet until the glide ends. The service replaces the URL, so
+ * Back leaves the page instead of replaying every jump. Only a click glides: a
+ * reload or a shared link lands on its fragment at once, without scrolling
+ * through what precedes it. A modified click is left to the browser.
+ */
+export function useGlideTo(): (event: MouseEvent<HTMLAnchorElement>, id: string) => void {
+  const url = useUrlState();
+  return (event, id) => {
+    const target = document.getElementById(id);
+    if (!url || !target || !isPlainClick(event)) return;
+    event.preventDefault();
+    url.navigateTo(id);
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    target.scrollIntoView({ behavior: still ? 'instant' : 'smooth' });
+  };
 }

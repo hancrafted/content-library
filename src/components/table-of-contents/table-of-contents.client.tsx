@@ -1,27 +1,16 @@
 'use client';
 
-import {
-  useActiveId,
-  useFractionInto,
-  useHeadingTo,
-  useOpenSections,
-  useRevealed,
-  useSettled,
-} from '@/hooks/use-table-of-contents';
+import { useFractionInto, useGlideTo, useOpenSections, useRevealed, useSettled } from '@/hooks/use-table-of-contents';
+import { useActiveSlide } from '@/hooks/use-url-state';
 import type { Locale } from '@/lib/locale.pure';
-import { ownerOf, readingTime, type TocSection } from '@/lib/table-of-contents.pure';
-import { useMemo } from 'react';
+import { activeEntry, ownerOf, readingOrder, readingTime, type TocSection } from '@/lib/table-of-contents.pure';
+import { useMemo, useSyncExternalStore } from 'react';
 import { TocDrawer } from './toc-drawer';
 import { remainingLabel, type TocLabels } from './toc-heading';
 import { sectionNumber, TocPanel, type TocView } from './toc-panel';
 
 export type { TocSection } from '@/lib/table-of-contents.pure';
 export type { TocLabels } from './toc-heading';
-
-function pageOrder(sections: readonly TocSection[]): { ids: string[]; minutes: number[] } {
-  const entries = sections.flatMap((section) => [section, ...section.items]);
-  return { ids: entries.map((entry) => entry.id), minutes: entries.map((entry) => entry.minutes) };
-}
 
 /** The section the reader is in, for the pill; chevron toggles do not move it. */
 function whereAt(sections: readonly TocSection[], active: string | null) {
@@ -30,24 +19,40 @@ function whereAt(sections: readonly TocSection[], active: string | null) {
   return index < 0 ? null : { number: sectionNumber(index), title: sections[index].title };
 }
 
-/** Active entry, open sections and reading time, all derived from what the observer sees. */
+const NOTHING = () => undefined;
+const NEVER_CHANGES = () => NOTHING;
+
+/** False in prerendered HTML and during hydration, true after: the URL's hash is only known to the client. */
+function useHydrated(): boolean {
+  return useSyncExternalStore(
+    NEVER_CHANGES,
+    () => true,
+    () => false,
+  );
+}
+
+/** Active entry, open sections and reading time, all derived from the active Slide in the URL. */
 function useTocState(props: {
   locale: Locale;
   route: string;
   sections: readonly TocSection[];
   targetAttribute: string;
+  topId: string;
 }) {
-  const order = useMemo(() => pageOrder(props.sections), [props.sections]);
-  const observed = useActiveId(order.ids, props.targetAttribute);
-  const fraction = useFractionInto(observed, props.targetAttribute);
-  const settled = useSettled(observed);
+  const glideTo = useGlideTo();
+  const order = useMemo(() => readingOrder(props.sections), [props.sections]);
+  const slide = useActiveSlide();
+  const active = activeEntry(order.owners, slide, props.topId);
+  const atTop = slide === props.topId;
+  const fraction = useFractionInto(slide, props.targetAttribute);
+  // The server cannot know the hash, so the table holds its loading box until the client has read it.
+  const settled = useSettled(useHydrated() ? slide : null);
   const revealed = useRevealed(settled);
-  const time = readingTime(order.minutes, observed ? order.ids.indexOf(observed) : -1, fraction);
-  const { heading, headTo } = useHeadingTo(observed);
-  // A clicked target wins until the glide ends; before the first observation, the first entry stands in.
-  const active = heading ?? observed ?? order.ids[0] ?? null;
+  const time = readingTime(order.minutes, slide ? order.ids.indexOf(slide) : -1, fraction);
   const { open, toggle } = useOpenSections(props.sections, active);
-  const view: TocView = { locale: props.locale, route: props.route, active, open, toggle, headTo, settled, revealed };
+  const { locale, route, topId } = props;
+  const base = { locale, route, topId, atTop, glideTo, active, open, toggle };
+  const view: TocView = { ...base, settled, revealed };
   return { view, time };
 }
 
@@ -62,6 +67,8 @@ export function TableOfContents(props: {
   route: string;
   sections: readonly TocSection[];
   targetAttribute: string;
+  /** The id of the Slide at the top of the page: no entry is current there, and the heading links to it. */
+  topId: string;
   labels: TocLabels;
 }) {
   const { view, time } = useTocState(props);

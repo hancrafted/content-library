@@ -135,6 +135,9 @@
             "blank-every-time": {
               "title": "Warum jede Sitzung bei null beginnt",
               "caption": "„Gedächtnisverlust“ ist unser Bild, kein Begriff der Hersteller, doch der Mechanismus ist dokumentiert.",
+              "demo": {
+                "caption": "Jede Sitzung füllt sich und beginnt dann wieder bei null."
+              },
               "prose": "Das Modell <ref>behält zwischen zwei Anfragen nichts</ref>. Ein Chat wirkt nur zusammenhängend, weil der Verlauf bei jedem Zug erneut mitgeschickt wird. Laut Claude-Code-Dokumentation beginnt jede Sitzung mit einem frischen Kontextfenster. Anthropic selbst beschreibt Entwickler im Schichtbetrieb, die jeweils ohne Erinnerung an die vorherige Schicht antreten.",
               "notes": {
                 "stateless-by-design": {
@@ -624,6 +627,9 @@
                   }
                 }
               }
+            },
+            "one-line": {
+              "statement": "Schreib es auf, sonst hat die nächste Sitzung es nie gewusst."
             }
           }
         }
@@ -638,6 +644,7 @@
       "notes": "Sprechernotizen",
       "script": "Sprechtext"
     },
+    "explainer": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit {shortcut} öffnen und schließen Sie es.",
     "empty": {
       "notes": "Keine Sprechernotizen für diese Folie.",
       "script": "Kein Sprechtext für diese Folie."
@@ -651,8 +658,8 @@
     "menu": {
       "label": "Weitere Optionen",
       "layout": "Darstellung",
-      "side": "Nebeneinander",
-      "overlay": "Überlagert"
+      "beside": "Nebeneinander",
+      "over": "Überlagert"
     },
     "refNote": "öffnet Sprechernotiz",
     "citation": "Quelle {number}"

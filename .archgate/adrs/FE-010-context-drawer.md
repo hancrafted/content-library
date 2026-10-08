@@ -6,7 +6,7 @@ domain: frontend
 rules: true
 files: ['src/components/context-drawer/**/*', 'src/app/globals.css']
 # prettier-ignore
-paths: ['src/components/context-drawer/**', 'src/components/episode/**', 'src/components/episodes/**', 'src/hooks/use-context-*.ts', 'src/hooks/use-reading-line-id.ts', 'src/hooks/use-table-of-contents*', 'src/components/table-of-contents/**', 'src/lib/context-drawer.pure*', 'src/lib/context-check.pure*', 'src/lib/reading-line.pure*', 'src/lib/episode*', 'src/lib/routes*', 'src/lib/table-of-contents*', '.archgate/adrs/FE-010-context-drawer.rules.ts', 'src/app/globals.css', 'src/messages/*.json', 'tests/post-build/context-drawer.build.test.ts', 'tests/post-build/episode-structure.build.test.ts', '.dependency-cruiser.cjs', 'docs/agents/episode-catalog-keys.md', 'docs/agents/context-drawer-design.md', 'GLOSSARY.md']
+paths: ['src/components/context-drawer/**', 'src/components/episode/**', 'src/components/episodes/**', 'src/hooks/use-context-*.ts', 'src/hooks/use-reading-line-id.ts', 'src/hooks/use-url-state.ts', 'src/hooks/use-table-of-contents*', 'src/components/table-of-contents/**', 'src/lib/context-drawer.pure*', 'src/lib/context-check.pure*', 'src/lib/reading-line.pure*', 'src/lib/episode*', 'src/lib/routes*', 'src/lib/table-of-contents*', '.archgate/adrs/FE-010-context-drawer.rules.ts', 'src/app/globals.css', 'src/messages/*.json', 'tests/post-build/context-drawer.build.test.ts', 'tests/post-build/episode-structure.build.test.ts', '.dependency-cruiser.cjs', 'docs/agents/episode-catalog-keys.md', 'docs/agents/context-drawer-design.md', 'GLOSSARY.md']
 description: 'The Context drawer: a non-modal floating card, side by side with or over the Slides, showing the current Slide Speaker notes and Voice script, both server-rendered into the page and printed in full, linked to the Slide by targets and context references, with the note and segment shapes typed as content and kept apart from design.'
 ---
 
@@ -20,15 +20,15 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 
 **Why structure here, when FE-002 says content is free.** FE-002 §3 keeps Slide markup free because a schema made visualisations bend to it. A note or a segment is different: it is text with a fixed role, the same on every Slide, and a drawer, a handout and later a guided tour all read it. So content may be typed and keyed. Design may not. The boundary of FE-002 §3 and FE-007 §4 stays where it was.
 
-**Why `xl`.** Side by side takes a 17rem table of contents, the card and the Slides' column. Below about 1280px that leaves the Slides too narrow, so the card overlays them instead. The menu is hidden there and the stored mode is kept for when the window widens; the card never needs JavaScript to know the width.
+**Why `xl`.** Side by side takes a 17rem table of contents, the card and the Slides' column; below about 1280px the Slides get too narrow, so the card overlays them. The menu is hidden there and the stored mode kept; the card never needs JavaScript to know the width.
 
-**Why plain `[n]` markers.** A description is one catalog string, so a citation has to live inside it. A bare `[1]` survives a translator, a handout and a reader without JavaScript; a pure function turns it into a superscript button and checks it against the note's sources, so a marker cannot dangle. Rich-text tags would put markup in a catalog leaf the drawer's types forbid.
+**Why plain `[n]` markers.** A description is one catalog string, so a citation lives inside it. A bare `[1]` survives a translator, a handout and a reader without JavaScript; a pure function makes it a superscript button, checked against the note's sources. Rich-text tags would put markup in a catalog leaf.
 
-**Why `ContextRef` is a button.** It names a note from inside Slide text, so the Slide reads in full without the drawer. It is an underlined phrase with no number: the only superscript is a citation marker. It is a button, not a link, because it acts on the drawer rather than navigating; the drawer listens by delegation, so the Slide stays a server component (FE-006).
+**Why `ContextRef` is a button.** It names a note from inside Slide text, so the Slide reads in full without the drawer: an underlined phrase, no number (the only superscript is a citation marker). It is a button, not a link, because it acts on the drawer rather than navigating; the drawer listens by delegation, so the Slide stays a server component (FE-006).
 
-**Why the drawer takes input.** It is a view, so it must not know where its text came from. One adapter in the Episode code maps the Episode record to the drawer's input; a later Slide-registration contract replaces that adapter, not the drawer.
+**Why the drawer takes input.** It is a view, so it must not know where its text came from. Its feeding is FE-002 §6. Open state and selected tab are transient ([FE-001](./FE-001-state-management.md)): a shared link never opens someone's drawer. The layout mode is a preference ([FE-004](./FE-004-user-preference.md)).
 
-**Details.** `Alt+N` matches `event.code`. Notes, segments and sources keep a kebab-case `slug` as key identity, never a position. Print overrides a `hidden` class but not a `hidden` attribute. Card, head, menu, disclosure and selected-state detail: [`docs/agents/context-drawer-design.md`](../../docs/agents/context-drawer-design.md).
+**Details.** `Alt+N` matches `event.code`. Notes, segments and sources key on a kebab-case `slug`, never a position. Print overrides a `hidden` class, not a `hidden` attribute. Card, head, menu, disclosure and selected-state detail: [`docs/agents/context-drawer-design.md`](../../docs/agents/context-drawer-design.md).
 
 **Out of scope:**
 
@@ -45,14 +45,14 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 
 ### 2. In the DOM, printed (📜 Rule: `print-reveals-context`)
 
-1. The server MUST render every item's notes, script and sources into one `data-slot="context"` slot, entries tagged `data-context-for`.
+1. The server MUST render all notes, scripts and sources into one `data-slot="context"` slot, entries tagged `data-context-for`.
 2. A closed drawer MUST hide with `invisible` plus a transform, never `hidden`, `display: none` or `inert`.
 3. `globals.css` MUST hold an `@media print` block setting `[data-slot='context']` to `display: block`.
 
 ### 3. Typed content
 
-1. A note: `header`, `description`, optional `sources` (`slug`, `url`, `title`) and `image`, required `target`. A segment: `from`, `to`, `title`, `keywords`, `script`, optional `bridge`. Neither MAY carry design.
-2. A description cites sources by `[n]` markers, each naming a source of its note.
+1. A note: `header`, `description`, optional `sources` and `image`, required `target`. A segment: `from`, `to`, `title`, `keywords`, `script`, optional `bridge`. Neither MAY carry design.
+2. A description cites by `[n]` markers, each naming a source of its note.
 
 ### 4. Targets
 
@@ -71,12 +71,13 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 
 ### 7. Card and modes
 
-1. A floating card: one-step width, only `transform` animates; side by side from `xl`, else overlay.
+1. A floating card: one-step width, only `transform` animates; beside from `xl`, else over.
+2. Layout MUST be FE-004's `drawerMode`; open state and tab stay in memory (FE-001).
 
 ### 8. Input only
 
-1. The drawer MUST render from one `ContextDrawerInput` (items with `id`, notes, script; labels) and MUST NOT import Episode, route, table-of-contents or `next-intl` code.
-2. It MUST observe its items' ids at the shared reading line; a `ContextRef` finds its note by target id, not `data-slide`.
+1. The drawer MUST render from one `ContextDrawerInput` and import no Episode, route, table-of-contents or `next-intl` code.
+2. It MUST take the active Slide from `useActiveSlide()`, never observe the viewport; a `ContextRef` finds its note by target id, not `data-slide`.
 
 ## Do's and Don'ts
 
@@ -105,12 +106,12 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 **Positive:**
 
 1. **Handout-safe:** notes and script are in the static HTML, selectable and printed in full whether or not the drawer ever opened. A closed or inactive panel is not reachable by browser find-in-page, since `invisible` and `hidden` content is skipped; `hidden=until-found` is not used.
-2. **Tour-ready:** every note already names its element, so a tour needs no migration.
-3. **No new dependency:** native elements plus one small client leaf.
+2. **Tour-ready:** every note names its element, so a tour needs no migration.
+3. **No new dependency:** native elements, one small client leaf.
 
 **Negative:**
 
-1. **Sources leave the site:** a source opens in a new tab and its target is not checked; a dead link is found by hand. Each needs a localized title.
+1. **Sources leave the site:** a source opens in a new tab, unchecked; a dead link is found by hand. Each needs a localized title.
 2. **`Alt+N` is untested on every assistive stack;** `aria-keyshortcuts` announces a shortcut and implements nothing.
 3. **Side by side reflows the Slides once** per open or close; overlay covers them instead. Print appends notes after the Slides, not between them.
 4. **Closed sources rely on `beforeprint`** to print; a browser without it prints them closed.
@@ -119,7 +120,7 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 
 **Risks:**
 
-1. **The drawer and the table of contents disagree on the current Slide.** **Mitigation:** both use the one reading-line rule in `src/lib/reading-line.pure.ts`.
+1. **Drawer and table of contents disagree on the current Slide.** **Mitigation:** one observer, one hook: both read `useActiveSlide()` (FE-001, FE-009).
 2. **A design field creeps into the note shape.** **Mitigation:** review duty below.
 
 ## Compliance and Enforcement
@@ -129,7 +130,7 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 1. **Types** (`tsc`): note and segment types in `src/lib/context-drawer.pure.ts`; `de.json` typed against `en.json`. `tsc` does not check that a note or segment catalog key exists: the unit key-shape test and the post-build raw-key test do. The adapter is `src/components/episode/context-drawer-input.ts`, unit-tested in its `.pure` sibling.
 2. **Fast** (`npm run verify`): unit tests beside `src/lib/context-drawer.pure.ts` and `src/lib/episode.pure.ts`.
 3. **archgate:** `FE-010-context-drawer.rules.ts`, both rules at `error`: `print-reveals-context` over `src/app/globals.css`, `drawer-is-non-modal` over `src/components/context-drawer/**`. §1, §2.
-4. **dependency-cruiser** (`.dependency-cruiser.cjs`): `context-drawer-reached-only-from-container`, `context-drawer-takes-input-only` (drawer, its hooks and lib files import no Episode, table-of-contents, route or `next-intl` code). §5, §8.
+4. **dependency-cruiser** (`.dependency-cruiser.cjs`): `context-drawer-reached-only-from-container`, `context-drawer-takes-input-only` (drawer, hooks and lib import no Episode, table-of-contents, route or `next-intl` code). §5, §8.
 5. **Post-build** (`npm run test:build`): `tests/post-build/context-drawer.build.test.ts` checks the slot, notes in static HTML, no `hidden` attribute, resolving targets (incl. every `ContextRef` id), locale parity, numbered sources as links, citation markers and the print block; `tests/post-build/episode-structure.build.test.ts` keeps the slot order. §2, §5, §8.
 
 **Manual review duties:** the card's placement, motion and one-step layout at 1440px, 1100px and 375px; the head row at 360px; the pills' fit at 375px; `ContextRef` hover, focus and click; the mode menu with a keyboard; German copy quality; `Alt+N` on real screen readers; a real print preview; focus return; no design field in the note shape; catalog key shape (`docs/agents/episode-catalog-keys.md`, `GLOSSARY.md`).

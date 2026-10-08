@@ -31,6 +31,30 @@ const SPINE_HEADINGS = [
   },
 ];
 
+// FE-001: the URL-state service alone writes history; FE-009: the Slide observer
+// alone creates an IntersectionObserver. `no-restricted-properties` catches a bare
+// `history.replaceState(...)`; the selector catches `window.history.*` and
+// `globalThis.history.*`, which `object: 'history'` does not match.
+const URL_STATE_FILE = 'src/lib/url-state.ts';
+const SLIDE_OBSERVER_FILE = 'src/components/episode/slide-observer.client.tsx';
+const HISTORY_WRITE = {
+  selector:
+    "CallExpression > MemberExpression[object.property.name='history'][property.name=/^(pushState|replaceState)$/]",
+  message: 'Only src/lib/url-state.ts writes browser history; call urlState.navigateTo(id) instead (FE-001).',
+};
+const NEW_OBSERVER = {
+  selector: "NewExpression[callee.name='IntersectionObserver']",
+  message: 'The Slide observer is the only IntersectionObserver; read the active Slide with useActiveSlide() (FE-009).',
+};
+const CLIENT_DIRECTIVE_MISSING = {
+  selector: `Program:not(:has(> ExpressionStatement[directive='use client']))`,
+  message: "A *.client.tsx file MUST open with 'use client'; add it, or drop the suffix (FE-006).",
+};
+const NO_USE_CLIENT = {
+  selector: USE_CLIENT,
+  message: "'use client' marks a client entry point; rename the file to *.client.tsx, or drop the directive (FE-006).",
+};
+
 export default tseslint.config(
   {
     ignores: ['node_modules/**', 'dist/**', 'coverage/**', '.archgate/**', '.next/**', 'out/**', 'next-env.d.ts'],
@@ -97,48 +121,47 @@ export default tseslint.config(
     },
   },
   {
+    // FE-001 and FE-009: history writes and viewport observers have one owner each.
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: [URL_STATE_FILE],
+    rules: {
+      'no-restricted-properties': [
+        'error',
+        ...['pushState', 'replaceState'].map((property) => ({
+          object: 'history',
+          property,
+          message: HISTORY_WRITE.message,
+        })),
+      ],
+    },
+  },
+  // Flat config replaces a rule's options per block, so every `no-restricted-syntax`
+  // list below repeats the selectors it must keep (FE-001 compliance): the FE-006
+  // directive pair, the FE-001 history selector, the FE-009 observer selector.
+  {
     // FE-006: the directive appears only in a `.client.tsx` file.
     files: ['src/**/*.{ts,tsx}'],
     ignores: [CLIENT_FILES],
-    rules: {
-      'no-restricted-syntax': [
-        'error',
-        {
-          selector: USE_CLIENT,
-          message:
-            "'use client' marks a client entry point; rename the file to *.client.tsx, or drop the directive (FE-006).",
-        },
-      ],
-    },
+    rules: { 'no-restricted-syntax': ['error', NO_USE_CLIENT, HISTORY_WRITE, NEW_OBSERVER] },
   },
   {
     // FE-006: a `.client.tsx` file carries the directive.
     files: [CLIENT_FILES],
-    rules: {
-      'no-restricted-syntax': [
-        'error',
-        {
-          selector: `Program:not(:has(> ExpressionStatement[directive='use client']))`,
-          message: "A *.client.tsx file MUST open with 'use client'; add it, or drop the suffix (FE-006).",
-        },
-      ],
-    },
+    rules: { 'no-restricted-syntax': ['error', CLIENT_DIRECTIVE_MISSING, HISTORY_WRITE, NEW_OBSERVER] },
   },
   {
-    // FE-002 headings. This block replaces the FE-006 `no-restricted-syntax`
-    // list for Episode files, so it repeats the directive selector.
+    // FE-002 headings, for Episode files.
     files: [EPISODE_FILES],
-    rules: {
-      'no-restricted-syntax': [
-        'error',
-        {
-          selector: USE_CLIENT,
-          message:
-            "'use client' marks a client entry point; rename the file to *.client.tsx, or drop the directive (FE-006).",
-        },
-        ...SPINE_HEADINGS,
-      ],
-    },
+    rules: { 'no-restricted-syntax': ['error', NO_USE_CLIENT, HISTORY_WRITE, NEW_OBSERVER, ...SPINE_HEADINGS] },
+  },
+  {
+    // The owners: each is exempt from its own selector only.
+    files: [URL_STATE_FILE],
+    rules: { 'no-restricted-syntax': ['error', NO_USE_CLIENT, NEW_OBSERVER] },
+  },
+  {
+    files: [SLIDE_OBSERVER_FILE],
+    rules: { 'no-restricted-syntax': ['error', CLIENT_DIRECTIVE_MISSING, HISTORY_WRITE] },
   },
   {
     files: ['**/*.test.ts'],

@@ -1,5 +1,6 @@
 import { formatMark, type VoiceScriptSegment } from '@/lib/context-drawer.pure';
 import type { ContextDrawerLabels } from './context-drawer-input';
+import { DrawerExplainer } from './drawer-explainer';
 import { FLAT_ITEM, FLAT_LIST } from './flat-list';
 
 function Keywords({ keywords, label }: { keywords: readonly string[]; label: string }) {
@@ -37,14 +38,17 @@ function Segment({ segment, labels }: { segment: VoiceScriptSegment; labels: Con
   );
 }
 
-/** One Slide's Voice script, or the empty state. Server-rendered into the page (FE-010 §2). */
+/** One Slide's Voice script, its explainer, or the empty state. Server-rendered into the page (FE-010 §2). */
 export function SlideScript({
   segments,
   labels,
+  explainer,
 }: {
   segments: readonly VoiceScriptSegment[];
   labels: ContextDrawerLabels;
+  explainer?: string;
 }) {
+  if (explainer !== undefined) return <DrawerExplainer text={explainer} />;
   if (segments.length === 0) return <p className="text-sm text-muted-foreground">{labels.empty.script}</p>;
   return (
     <ol className={FLAT_LIST}>

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { episodeAnchors, targetAnchor, type EpisodeOutline } from './episode.pure';
+import { episodeAnchors, targetAnchor, titleAnchor, type EpisodeOutline } from './episode.pure';
 
 describe('success cases', () => {
   it('lists every slide anchor in page order, a slideless section included', () => {
@@ -76,5 +76,32 @@ describe('edge cases', () => {
     const build = () => episodeAnchors(outline);
     // ASSERT
     expect(build).toThrow(badSlug);
+  });
+});
+
+describe('the Title slide anchor', () => {
+  it('is `top`, the one id no Section or Slide may take', () => {
+    // ARRANGE / ACT
+    const anchor = titleAnchor();
+    // ASSERT
+    expect(anchor).toBe('top');
+  });
+
+  it('rejects `top` as a Section slug, which would collide with the Title slide', () => {
+    // ARRANGE
+    const outline: EpisodeOutline = [{ slug: 'top', slides: [] }];
+    // ACT
+    const build = () => episodeAnchors(outline);
+    // ASSERT
+    expect(build).toThrow('top');
+  });
+
+  it('rejects `top` as a Slide slug', () => {
+    // ARRANGE
+    const outline: EpisodeOutline = [{ slug: 'intro', slides: ['top'] }];
+    // ACT
+    const build = () => episodeAnchors(outline);
+    // ASSERT
+    expect(build).toThrow('top');
   });
 });

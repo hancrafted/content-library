@@ -7,6 +7,7 @@ import { load, type CheerioAPI } from 'cheerio';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
+import { sectionAnchor, slideAnchor, titleAnchor } from '../../src/lib/episode.pure';
 import { DEFAULT_LOCALE, LOCALES, localizePath } from '../../src/lib/locale.pure';
 import { EPISODE_SLUGS, episodeRoute } from '../../src/lib/routes';
 import { exportedFile, OUT_DIR } from './exported-pages';
@@ -14,6 +15,11 @@ import { exportedFile, OUT_DIR } from './exported-pages';
 const PAGES = EPISODE_SLUGS.flatMap((slug) =>
   LOCALES.map((locale) => ({ slug, locale, url: localizePath(episodeRoute(slug), locale) })),
 );
+
+/** Slides an Episode leaves untitled on purpose (FE-002 §2): rendered, never listed. */
+const UNTITLED: Readonly<Record<string, readonly string[]>> = {
+  'amnesiac-freelancer': [slideAnchor('where-it-breaks', 'one-line')],
+};
 
 function html(url: string): string {
   return readFileSync(join(OUT_DIR, exportedFile(url)), 'utf8');
@@ -54,6 +60,19 @@ function tocFragments($: CheerioAPI): string[] {
     .map((link) => ($(link).attr('href') ?? '').split('#')[1]);
 }
 
+/** Every Slide wrapper under one Section, with its id: the Section's own slide first. */
+function wrapperIdsBySection($: CheerioAPI): { section: string; ids: string[] }[] {
+  return $('[data-slot="slides"] > section[data-section]')
+    .toArray()
+    .map((section) => ({
+      section: $(section).attr('data-section') ?? '',
+      ids: $(section)
+        .children('[data-slide]')
+        .toArray()
+        .map((wrapper) => $(wrapper).attr('id') ?? ''),
+    }));
+}
+
 describe('episode structure', () => {
   beforeAll(() => {
     if (!existsSync(OUT_DIR)) {
@@ -63,7 +82,7 @@ describe('episode structure', () => {
     console.info(`episode structure: walking ${PAGES.length} Episode pages`);
   });
 
-  describe.each(PAGES)('$url', ({ slug, url }) => {
+  describe.each(PAGES)('$url', ({ slug, locale, url }) => {
     it('holds the table of contents, then the slides', () => {
       // ARRANGE
       const expected = ['toc', 'slides', 'context'];
@@ -87,30 +106,143 @@ describe('episode structure', () => {
       expect(h1InTitleSlide).toBe(1);
     });
 
-    it('gives each section slide one h2, each page slide one h3, and h2/h3 nowhere else', () => {
+    it('gives the Title slide wrapper the reserved id top, and links the table of contents heading to it', () => {
       // ARRANGE
       const $ = page(url);
+      // ACT
+      const wrapper = $('[data-slot="title-slide"]');
+      const heading = $('[data-slot="toc"] [data-testid="toc"] [data-testid="toc-top"]');
+      // ASSERT
+      expect(wrapper.attr('id')).toBe(titleAnchor());
+      expect(wrapper.attr('data-slide')).toBe('top');
+      expect((heading.attr('href') ?? '').split('#')[1]).toBe('top');
+    });
+
+    it("explains the Context drawer on both tabs of the Title slide's item, in the page's locale", () => {
+      // ARRANGE
+      const $ = page(url);
+      const catalog = JSON.parse(
+        readFileSync(join(import.meta.dirname, '..', '..', 'src', 'messages', `${locale}.json`), 'utf8'),
+      );
+      const expected = String(catalog.contextDrawer.explainer).replace('{shortcut}', 'Alt+N');
+      // ACT
+      const item = (tab: string) => $(`#context-panel-${tab} [data-context-for="top"]`);
+      const notes = item('notes').find('[role="note"]');
+      const script = item('script').find('[role="note"]');
+      const others = $('[data-slot="context"] [data-context-for]:not([data-context-for="top"]) [role="note"]');
+      // ASSERT
+      expect([notes.text().trim(), script.text().trim()]).toEqual([expected, expected]);
+      expect($('[data-slot="context"] [role="alert"]').length).toBe(0);
+      expect(others.length).toBe(0);
+    });
+
+    it('gives each section slide one h2, each titled page slide one h3, an untitled one none, and h2/h3 nowhere else', () => {
+      // ARRANGE
+      const $ = page(url);
+      const untitled = UNTITLED[slug] ?? [];
       const sectionSlide = { h2: 1, h3: 0 };
-      const pageSlide = { h2: 0, h3: 1 };
+      const titledSlide = { h2: 0, h3: 1 };
+      const untitledSlide = { h2: 0, h3: 0 };
       // ACT
       const sections = headingsBySlide($);
-      const expected = sections.map((slides) => slides.map((_, index) => (index === 0 ? sectionSlide : pageSlide)));
+      const ids = wrapperIdsBySection($);
+      const expected = ids.map(({ ids: wrappers }) =>
+        wrappers.map((id, index) => (index === 0 ? sectionSlide : untitled.includes(id) ? untitledSlide : titledSlide)),
+      );
       const totals = { h2: $('h2').length, h3: $('h3').length };
-      const slideTotals = { h2: sections.length, h3: sections.flat().length - sections.length };
+      const slideTotals = {
+        h2: sections.length,
+        h3: sections.flat().length - sections.length - untitled.length,
+      };
       // ASSERT
       expect(sections.length).toBeGreaterThan(0);
       expect(sections).toEqual(expected);
       expect(totals).toEqual(slideTotals);
     });
 
-    it('links the table of contents to every slide anchor, in page order', () => {
+    it('links the table of contents to every titled slide anchor, in page order', () => {
+      // ARRANGE
+      const $ = page(url);
+      const untitled = UNTITLED[slug] ?? [];
+      // ACT
+      const fragments = tocFragments($);
+      const anchors = slideAnchors($).filter((anchor) => !untitled.includes(anchor));
+      // ASSERT: the heading's link to the Title slide comes first
+      expect(fragments).toEqual(anchors);
+      expect(fragments[0]).toBe(titleAnchor());
+    });
+
+    it('renders an untitled Slide with its content, and lists it nowhere in the table of contents', () => {
+      // ARRANGE
+      const $ = page(url);
+      const untitled = UNTITLED[slug] ?? [];
+      // ACT
+      const wrappers = untitled.map((id) => $(`[data-slot="slides"] [data-slide="${id}"]`));
+      const fragments = tocFragments($);
+      // ASSERT
+      for (const wrapper of wrappers) {
+        expect(wrapper.attr('id')).toBeTruthy();
+        expect(wrapper.text().trim().length).toBeGreaterThan(0);
+        expect(wrapper.find('h1, h2, h3').length).toBe(0);
+      }
+      for (const id of untitled) expect(fragments).not.toContain(id);
+    });
+
+    it('lays the slides out in a single-column grid that hosts the portal root', () => {
       // ARRANGE
       const $ = page(url);
       // ACT
-      const fragments = tocFragments($);
-      const anchors = slideAnchors($);
+      const area = $('[data-slot="slides"]');
+      const portalRoots = area.children('[data-slot="portal-root"]').length;
       // ASSERT
-      expect(fragments).toEqual(anchors);
+      expect(area.is('main')).toBe(true);
+      expect((area.attr('class') ?? '').split(/\s+/)).toEqual(expect.arrayContaining(['grid', 'grid-cols-1']));
+      expect(portalRoots).toBe(1);
+    });
+
+    it('keeps every Section a display:contents group, so each wrapper is a grid cell', () => {
+      // ARRANGE
+      const $ = page(url);
+      // ACT
+      const groups = $('[data-slot="slides"] > section[data-section]').toArray();
+      const classes = groups.map((group) => ($(group).attr('class') ?? '').split(/\s+/));
+      // ASSERT
+      expect(groups.length).toBeGreaterThan(0);
+      for (const list of classes) expect(list).toContain('contents');
+    });
+
+    it('gives each Slide wrapper the id slideAnchor() derives, and no wrapper clips', () => {
+      // ARRANGE
+      const $ = page(url);
+      // ACT
+      const sections = wrapperIdsBySection($);
+      const derived = sections.map(({ section, ids }) => ({
+        section,
+        ids: ids.map((id, index) =>
+          index === 0 ? sectionAnchor(section) : slideAnchor(section, id.slice(slideAnchor(section, '').length)),
+        ),
+      }));
+      const clipping = $('[data-slide]')
+        .toArray()
+        .filter((wrapper) => /\boverflow-/.test($(wrapper).attr('class') ?? ''));
+      // ASSERT
+      expect(sections).toEqual(derived);
+      expect(clipping).toEqual([]);
+    });
+
+    it('prerenders every Slide with its content mounted, inside one mount per wrapper', () => {
+      // ARRANGE
+      const $ = page(url);
+      // ACT
+      const wrappers = $('[data-slide]').toArray();
+      const mounts = wrappers.map((wrapper) => $(wrapper).children('[data-slot="slide-mount"]'));
+      // ASSERT: no Slide is far in the static HTML, so deep links, print and crawlers see everything
+      expect(wrappers.length).toBeGreaterThan(0);
+      for (const mount of mounts) {
+        expect(mount.length).toBe(1);
+        expect(mount.attr('data-zone')).toBe('near');
+        expect(mount.children().length).toBeGreaterThan(0);
+      }
     });
 
     it('carries no id twice', () => {

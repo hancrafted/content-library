@@ -135,6 +135,9 @@
             "blank-every-time": {
               "title": "Why every session starts from a blank slate",
               "caption": "“Amnesiac” is our metaphor, not a vendor term, but the mechanism is documented.",
+              "demo": {
+                "caption": "Each session fills up, then starts over blank."
+              },
               "prose": "The model <ref>keeps nothing between requests</ref>: a chat only feels continuous because the history is sent again every turn. Claude Code says each session begins with a fresh context window. Anthropic itself pictures engineers working in shifts, each arriving with no memory of the previous shift.",
               "notes": {
                 "stateless-by-design": {
@@ -624,6 +627,9 @@
                   }
                 }
               }
+            },
+            "one-line": {
+              "statement": "Write it down, or the next session never knew it."
             }
           }
         }
@@ -638,6 +644,7 @@
       "notes": "Speaker notes",
       "script": "Voice script"
     },
+    "explainer": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press {shortcut} to open or close it.",
     "empty": {
       "notes": "No speaker notes for this Slide.",
       "script": "No voice script for this Slide."
@@ -651,8 +658,8 @@
     "menu": {
       "label": "More options",
       "layout": "Layout",
-      "side": "Side by side",
-      "overlay": "Overlay"
+      "beside": "Side by side",
+      "over": "Overlay"
     },
     "refNote": "opens speaker note",
     "citation": "Source {number}"

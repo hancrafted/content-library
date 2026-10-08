@@ -13,11 +13,13 @@ import type { SpeakerNoteItem, VoiceScriptSegment } from '@/lib/context-drawer.p
 export interface ContextItem {
   /** The DOM id of the element whose visibility makes this item current. The drawer observes it as given. */
   readonly id: string;
-  /** Names the item in the drawer's head and, in print, above its entry. */
-  readonly title: string;
+  /** Names the item in the drawer's head and, in print, above its entry; none for an untitled Slide. */
+  readonly title?: string;
   /** Each note's `target` is the full DOM id of the element it explains; a context reference there carries the same id. */
   readonly notes: readonly SpeakerNoteItem[];
   readonly script: readonly VoiceScriptSegment[];
+  /** Pre-translated text shown on both tabs in place of the empty message, for an item that explains the drawer itself. */
+  readonly explainer?: string;
 }
 
 /**
@@ -31,7 +33,7 @@ export interface ContextDrawerLabels {
   readonly close: string;
   readonly shortcut: string;
   readonly tabs: { readonly notes: string; readonly script: string };
-  readonly menu: { readonly label: string; readonly layout: string; readonly side: string; readonly overlay: string };
+  readonly menu: { readonly label: string; readonly layout: string; readonly beside: string; readonly over: string };
   readonly empty: { readonly notes: string; readonly script: string };
   /** The disclosure label of a note's sources, e.g. `Sources (2)`. */
   readonly sources: (count: number) => string;

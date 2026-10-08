@@ -1,4 +1,5 @@
-import { DRAWER_MODES, menuItemAfter, type DrawerMode } from '@/lib/context-drawer.pure';
+import { menuItemAfter } from '@/lib/context-drawer.pure';
+import { DRAWER_MODES, type DrawerMode } from '@/lib/prefs.pure';
 import { cn } from '@/lib/utils';
 import { Check, Ellipsis } from 'lucide-react';
 import { useEffect, useId, useRef, useState, type KeyboardEvent, type RefObject } from 'react';
@@ -6,8 +7,8 @@ import { useEffect, useId, useRef, useState, type KeyboardEvent, type RefObject 
 export interface ModeMenuLabels {
   readonly label: string;
   readonly layout: string;
-  readonly side: string;
-  readonly overlay: string;
+  readonly beside: string;
+  readonly over: string;
 }
 
 /** Closes when a pointer lands outside `wrapper`, since a menu item button does not always take focus on click. */

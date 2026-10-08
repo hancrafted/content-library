@@ -1,8 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
   currentItemId,
-  DEFAULT_DRAWER_MODE,
-  DRAWER_MODES,
   DRAWER_PANEL_ID,
   DRAWER_TABS,
   drawerIds,
@@ -103,41 +101,31 @@ describe('success cases', () => {
     expect(tabs).toEqual(expected);
   });
 
-  it('reserves the card width only when it is open side by side', () => {
+  it('reserves the card width only when it is open beside the Slides', () => {
     // ARRANGE
     const expected = [true, false, false, false];
     // ACT
     const reserved = [
-      reservesSpace('side', true),
-      reservesSpace('side', false),
-      reservesSpace('overlay', true),
-      reservesSpace('overlay', false),
+      reservesSpace('beside', true),
+      reservesSpace('beside', false),
+      reservesSpace('over', true),
+      reservesSpace('over', false),
     ];
     // ASSERT
     expect(reserved).toEqual(expected);
   });
 
-  it('offers side by side first and by default, then overlay', () => {
-    // ARRANGE
-    const expected = ['side', 'overlay'];
-    // ACT
-    const modes = [...DRAWER_MODES];
-    // ASSERT
-    expect(modes).toEqual(expected);
-    expect(DEFAULT_DRAWER_MODE).toBe(expected[0]);
-  });
-
   it('moves between menu items with the vertical arrows, wrapping, and jumps with Home and End', () => {
     // ARRANGE
-    const items = ['side', 'overlay'];
-    const expected = ['overlay', 'overlay', 'side', 'side', 'overlay'];
+    const items = ['beside', 'over'];
+    const expected = ['over', 'over', 'beside', 'beside', 'over'];
     // ACT
     const targets = [
-      menuItemAfter('ArrowDown', 'side', items),
-      menuItemAfter('ArrowUp', 'side', items),
-      menuItemAfter('ArrowDown', 'overlay', items),
-      menuItemAfter('Home', 'overlay', items),
-      menuItemAfter('End', 'side', items),
+      menuItemAfter('ArrowDown', 'beside', items),
+      menuItemAfter('ArrowUp', 'beside', items),
+      menuItemAfter('ArrowDown', 'over', items),
+      menuItemAfter('Home', 'over', items),
+      menuItemAfter('End', 'beside', items),
     ];
     // ASSERT
     expect(targets).toEqual(expected);
@@ -204,9 +192,9 @@ describe('failure cases', () => {
 
   it('returns no menu item for a key that is not a menu key, horizontal arrows included', () => {
     // ARRANGE
-    const items = ['side', 'overlay'];
+    const items = ['beside', 'over'];
     // ACT
-    const targets = ['Enter', 'ArrowRight', 'ArrowLeft'].map((key) => menuItemAfter(key, 'side', items));
+    const targets = ['Enter', 'ArrowRight', 'ArrowLeft'].map((key) => menuItemAfter(key, 'beside', items));
     // ASSERT
     expect(targets).toEqual([null, null, null]);
   });
@@ -262,9 +250,9 @@ describe('edge cases', () => {
 
   it('stays on the only menu item', () => {
     // ARRANGE
-    const items = ['side'];
+    const items = ['beside'];
     // ACT
-    const target = menuItemAfter('ArrowDown', 'side', items);
+    const target = menuItemAfter('ArrowDown', 'beside', items);
     // ASSERT
     expect(target).toBe(items[0]);
   });

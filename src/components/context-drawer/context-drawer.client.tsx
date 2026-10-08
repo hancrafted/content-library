@@ -63,7 +63,9 @@ function Entries({
     // The Tailwind `hidden` class, not the attribute: print overrides a class (FE-010 §2).
     <div key={entry.id} {...{ [CONTEXT_ITEM_ATTR]: entry.id }} className={cn(entry.id !== current && 'hidden')}>
       {/* The head names the current item on screen; print has no head, so each entry names itself. */}
-      <h5 className="mb-2 hidden text-sm font-medium text-muted-foreground print:block">{entry.title}</h5>
+      {entry.title && (
+        <h5 className="mb-2 hidden text-sm font-medium text-muted-foreground print:block">{entry.title}</h5>
+      )}
       {entry[kind]}
     </div>
   ));

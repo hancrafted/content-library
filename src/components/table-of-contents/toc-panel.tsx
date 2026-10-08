@@ -10,11 +10,15 @@ import { NumberToggle, SECTION_NUMBER } from './toc-number-toggle';
 export interface TocView {
   locale: Locale;
   route: string;
+  /** The Slide id that means the top of the page: no entry is current while it is active, and the heading links to it. */
+  topId: string;
+  /** True while `topId` is the active Slide. */
+  atTop: boolean;
+  /** The click handler of every link: tells the page the reader chose that Slide, then glides to it. */
+  glideTo: (event: MouseEvent<HTMLAnchorElement>, id: string) => void;
   active: string | null;
   open: ReadonlySet<string>;
   toggle: (id: string) => void;
-  /** Marks the entry a click is gliding to, so the table updates before the scroll arrives. */
-  headTo: (id: string) => void;
   /** False until the first observation has painted; motion stays off until then, so a reload mid-page never animates its way there. */
   settled: boolean;
   /** False while the compact loading box stands in for the table, masking the first settle. */
@@ -28,32 +32,13 @@ export function sectionNumber(index: number): string {
   return String(index + 1).padStart(2, '0');
 }
 
-function isPlainClick(event: MouseEvent): boolean {
-  return event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
-}
-
-/**
- * Glides to the entry's slide and replaces the URL, so Back leaves the page
- * instead of replaying every jump. Only a click glides: a reload or a shared
- * link lands on its fragment at once, without scrolling through what precedes it.
- */
-function glideTo(event: MouseEvent<HTMLAnchorElement>, id: string): boolean {
-  const target = document.getElementById(id);
-  if (!target || !isPlainClick(event)) return false;
-  event.preventDefault();
-  const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  target.scrollIntoView({ behavior: still ? 'instant' : 'smooth' });
-  history.replaceState(history.state, '', event.currentTarget.href);
-  return true;
-}
-
 function EntryLink(props: { view: TocView; id: string; className: string; children: ReactNode }) {
   const { locale, route, active } = props.view;
   return (
     <Link
       href={localizePath(route, locale, props.id)}
       replace
-      onClick={(event) => glideTo(event, props.id) && props.view.headTo(props.id)}
+      onClick={(event) => props.view.glideTo(event, props.id)}
       aria-current={active === props.id ? 'location' : undefined}
       data-testid={`toc-${props.id}`}
       className={props.className}
@@ -189,6 +174,22 @@ function TocBody(props: { view: TocView; sections: readonly TocSection[]; labels
   );
 }
 
+function PanelHeading(props: { view: TocView; labels: TocLabels; time: ReadingTime }) {
+  const { view } = props;
+  return (
+    <TocHeading
+      labels={props.labels}
+      locale={view.locale}
+      route={view.route}
+      topId={view.topId}
+      atTop={view.atTop}
+      onGlide={view.glideTo}
+      time={props.time}
+      revealed={view.revealed}
+    />
+  );
+}
+
 /** The bounded panel: heading with time left and progress, then the numbered sections. */
 export function TocPanel(props: {
   view: TocView;
@@ -213,7 +214,7 @@ export function TocPanel(props: {
         props.className,
       )}
     >
-      <TocHeading labels={labels} locale={view.locale} time={props.time} revealed={revealed} />
+      <PanelHeading {...props} view={view} />
       <TocBody {...props} view={view} />
     </nav>
   );

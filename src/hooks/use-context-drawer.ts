@@ -1,13 +1,9 @@
-import {
-  currentItemId,
-  DEFAULT_DRAWER_MODE,
-  drawerKeyAction,
-  type DrawerMode,
-  type DrawerTab,
-} from '@/lib/context-drawer.pure';
+import { currentItemId, drawerKeyAction, type DrawerTab } from '@/lib/context-drawer.pure';
+import { readPrefs, writePrefs } from '@/lib/prefs-storage';
+import { DEFAULT_DRAWER_MODE, type DrawerMode } from '@/lib/prefs.pure';
 import { useCallback, useEffect, useRef, useState, type RefObject } from 'react';
 import { itemOfNote, useContextLinks, usePinnedNote } from './use-context-links';
-import { useReadingLineId } from './use-reading-line-id';
+import { useActiveSlide } from './use-url-state';
 
 /** Alt+N toggles and Escape closes, from anywhere on the page. */
 function useDrawerKeys(open: boolean, toggle: () => void, close: () => void) {
@@ -71,6 +67,23 @@ function usePrintDisclosure() {
   }, []);
 }
 
+/**
+ * The layout mode and a setter that persists it (FE-004). Starts on the default
+ * and adopts the stored choice after mount, like the theme, so the static page
+ * and the first client render agree.
+ */
+function useDrawerMode(): [DrawerMode, (mode: DrawerMode) => void] {
+  const [mode, setModeState] = useState<DrawerMode>(DEFAULT_DRAWER_MODE);
+  useEffect(() => {
+    setModeState(readPrefs().drawerMode ?? DEFAULT_DRAWER_MODE);
+  }, []);
+  const setMode = useCallback((next: DrawerMode) => {
+    writePrefs({ drawerMode: next });
+    setModeState(next);
+  }, []);
+  return [mode, setMode];
+}
+
 /** A note a context reference opened, and the item it was shown for (valid while that item stays current). */
 interface Revealed {
   readonly note: string;
@@ -79,16 +92,16 @@ interface Revealed {
 }
 
 /**
- * State of the Context drawer: open, selected tab, layout mode (in memory, not
- * a stored preference), and the item at the reading line. The ids it observes
- * are exactly the ones given. A context reference opens the drawer on Notes at
- * its note; that note's item is shown until the reading line moves on.
+ * State of the Context drawer: open, selected tab, layout mode (a stored
+ * preference, FE-004), and the item of the active Slide in the URL, falling
+ * back to the first of the given ids. A context reference opens the drawer on
+ * Notes at its note; that note's item is shown until the reading line moves on.
  */
 export function useContextDrawer(ids: readonly string[]) {
-  const observed = currentItemId(useReadingLineId(ids), ids);
+  const observed = currentItemId(useActiveSlide(), ids);
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<DrawerTab>('notes');
-  const [mode, setMode] = useState<DrawerMode>(DEFAULT_DRAWER_MODE);
+  const [mode, setMode] = useDrawerMode();
   const [revealed, setRevealed] = useState<Revealed | null>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const selectedTab = useRef<HTMLButtonElement>(null);
