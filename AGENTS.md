@@ -8,6 +8,7 @@ This project is a localized Next.js application which serves to visualize theory
 - Always use `/commit` to commit, `/tdd` and `/code-review` for implementation
 - Use `npm run verify` frequently to verify that the changes are correct.
 - Binding decisions live in Archgate ADRs under `.archgate/adrs/`.
+- An ADR's frontmatter `paths:` covers every glob its Compliance section names, so no check fires in a file the record disclaims. FE-005 and FE-006 both shipped with `paths:` narrower than their enforcers' reach.
 - For any /grill-with-docs and /wayfinder, using the /grilling skill read the `docs/agents/grilling-format.md`, which overwrites the grill format. Analog for voice sessions read `docs/agents/grilling-voice.md`.
 - Create worktrees in `.worktrees`
 
