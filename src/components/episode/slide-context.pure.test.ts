@@ -59,10 +59,11 @@ describe('failure cases', () => {
   it('returns empty lists for an empty spec', () => {
     // ARRANGE
     const spec = {};
+    const expected = { notes: [], voiceScript: [] };
     // ACT
     const context = slideContext(read, 'b', spec);
     // ASSERT
-    expect(context).toEqual({ notes: [], voiceScript: [] });
+    expect(context).toEqual(expected);
   });
 });
 
@@ -70,11 +71,12 @@ describe('edge cases', () => {
   it('omits the bridge, sources and image when the spec does not set them', () => {
     // ARRANGE
     const spec = { notes: [{ slug: 'n', target: 'title' }], segments: [{ slug: 's', from: 0, to: 1 }] };
+    const [absentSources, absentImage, absentBridge] = ['sources', 'image', 'bridge'];
     // ACT
     const context = slideContext(read, 'b', spec);
     // ASSERT
-    expect(context.notes[0]).not.toHaveProperty('sources');
-    expect(context.notes[0]).not.toHaveProperty('image');
-    expect(context.voiceScript[0]).not.toHaveProperty('bridge');
+    expect(context.notes[0]).not.toHaveProperty(absentSources);
+    expect(context.notes[0]).not.toHaveProperty(absentImage);
+    expect(context.voiceScript[0]).not.toHaveProperty(absentBridge);
   });
 });

@@ -125,6 +125,8 @@ describe('failure cases', () => {
 
   it('rejects two notes, or two segments, sharing a slug', () => {
     // ARRANGE
+    const dupNoteSlug = '"x"';
+    const dupSegmentSlug = '"y"';
     const dupNote = () => checkContext('s', [note('x'), note('x')], []);
     const dupSegment = () => checkContext('s', [], [segment('y'), segment('y', 1, 2)]);
     // ACT
@@ -137,28 +139,31 @@ describe('failure cases', () => {
       }
     });
     // ASSERT
-    expect(messages[0]).toContain('"x"');
-    expect(messages[1]).toContain('"y"');
+    expect(messages[0]).toContain(dupNoteSlug);
+    expect(messages[1]).toContain(dupSegmentSlug);
   });
 
   it('rejects a target or slug that is not kebab-case', () => {
     // ARRANGE
-    const badTarget = () => checkContext('s', [note('x', 'Not Kebab')], []);
-    const badSlug = () => checkContext('s', [], [segment('Bad Slug')]);
+    const badTargetName = 'Not Kebab';
+    const badSlugName = 'Bad Slug';
+    const badTarget = () => checkContext('s', [note('x', badTargetName)], []);
+    const badSlug = () => checkContext('s', [], [segment(badSlugName)]);
     // ACT
     const attempts = [badTarget, badSlug];
     // ASSERT
-    expect(attempts[0]).toThrow('Not Kebab');
-    expect(attempts[1]).toThrow('Bad Slug');
+    expect(attempts[0]).toThrow(badTargetName);
+    expect(attempts[1]).toThrow(badSlugName);
   });
 
   it('rejects a segment that ends before it starts', () => {
     // ARRANGE
+    const segmentSlug = '"x"';
     const backwards = () => checkContext('s', [], [segment('x', 2, 1)]);
     // ACT
     const attempt = backwards;
     // ASSERT
-    expect(attempt).toThrow('"x"');
+    expect(attempt).toThrow(segmentSlug);
   });
 });
 
@@ -175,10 +180,11 @@ describe('edge cases', () => {
   it('stays on the only tab', () => {
     // ARRANGE
     const tabs = ['notes'];
+    const expected = 'notes';
     // ACT
     const target = tabAfter('ArrowRight', 'notes', tabs);
     // ASSERT
-    expect(target).toBe('notes');
+    expect(target).toBe(expected);
   });
 
   it('has no current Slide when none has notes', () => {

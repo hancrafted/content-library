@@ -22,26 +22,15 @@ describe('success cases', () => {
     // ASSERT
     expect(anchors).toEqual(expected);
   });
-});
-
-describe('target anchors', () => {
   it('joins a Slide anchor and an element name with a double hyphen, never equal to a two-part Slide anchor', () => {
     // ARRANGE
     const expected = 'foundations--why--prose';
+    const slideAnchor = 'foundations--why';
     // ACT
-    const anchor = targetAnchor('foundations--why', 'prose');
+    const anchor = targetAnchor(slideAnchor, 'prose');
     // ASSERT
     expect(anchor).toBe(expected);
-    expect(anchor).not.toBe('foundations--why');
-  });
-
-  it('rejects an element name that is not kebab-case', () => {
-    // ARRANGE
-    const bad = 'Not Kebab';
-    // ACT
-    const build = () => targetAnchor('foundations--why', bad);
-    // ASSERT
-    expect(build).toThrow(bad);
+    expect(anchor).not.toBe(slideAnchor);
   });
 });
 
@@ -64,6 +53,14 @@ describe('failure cases', () => {
     const build = () => episodeAnchors(outline);
     // ASSERT
     expect(build).toThrow(badSlug);
+  });
+  it('rejects an element name that is not kebab-case', () => {
+    // ARRANGE
+    const bad = 'Not Kebab';
+    // ACT
+    const build = () => targetAnchor('foundations--why', bad);
+    // ASSERT
+    expect(build).toThrow(bad);
   });
 });
 
