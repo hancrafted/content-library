@@ -46,10 +46,9 @@ module.exports = {
       name: 'context-drawer-reached-only-from-container',
       severity: 'error',
       comment:
-        'Inside Episode code, the Context drawer is reached only through EpisodePageContainer, which derives its entries from the same anchors the slides carry (FE-010).',
+        'The Context drawer is reached only through EpisodePageContainer, which derives its entries from the same anchors the slides carry; no other module imports it (FE-010 §7).',
       from: {
-        path: '^src/components/(episodes|episode)/',
-        pathNot: '^src/components/episode/episode-page-container\\.(tsx|pure\\.ts)$',
+        pathNot: ['^src/components/episode/episode-page-container\\.tsx$', '^src/components/context-drawer/'],
       },
       to: { path: '^src/components/context-drawer/' },
     },
