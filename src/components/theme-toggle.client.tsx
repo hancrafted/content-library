@@ -3,7 +3,7 @@
 import { SEGMENTED_GROUP, segmentedItem } from '@/components/segmented';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/hooks/use-theme';
-import type { Messages } from '@/lib/messages';
+import type { Messages } from '@/i18n/catalogs';
 import { THEMES, type Theme } from '@/lib/prefs.pure';
 import { Monitor, Moon, Sun, type LucideIcon } from 'lucide-react';
 

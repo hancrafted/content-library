@@ -1,15 +1,15 @@
 import { localizePath, type Locale } from '@/lib/locale.pure';
-import { MESSAGES } from '@/lib/messages';
 import { ROUTES } from '@/lib/routes';
+import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 
 /** Placeholder logo plus site name; both lead to the landing page. */
-export function SiteBrand({ locale }: { locale: Locale }) {
-  const t = MESSAGES[locale].brand;
+export async function SiteBrand({ locale }: { locale: Locale }) {
+  const t = await getTranslations({ locale, namespace: 'brand' });
   return (
     <Link
       href={localizePath(ROUTES.home, locale)}
-      aria-label={t.home}
+      aria-label={t('home')}
       data-testid="brand"
       className="flex items-center gap-2.5 rounded-md outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
     >
@@ -19,7 +19,7 @@ export function SiteBrand({ locale }: { locale: Locale }) {
       >
         H
       </span>
-      <span className="text-base font-semibold tracking-tight">{t.name}</span>
+      <span className="text-base font-semibold tracking-tight">{t('name')}</span>
     </Link>
   );
 }

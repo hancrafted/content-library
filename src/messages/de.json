@@ -1,0 +1,8 @@
+{
+  "brand": { "name": "hancrafted", "home": "hancrafted, zur Startseite" },
+  "nav": { "label": "Hauptnavigation", "episodes": "Episoden" },
+  "theme": { "label": "Farbschema", "light": "Hell", "dark": "Dunkel", "system": "System" },
+  "locale": { "label": "Sprache" },
+  "landing": { "title": "Start", "link": "Seitenvorlage" },
+  "episodeTemplate": { "title": "Seitenvorlage" }
+}

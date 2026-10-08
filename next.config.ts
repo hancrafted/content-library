@@ -1,4 +1,5 @@
 import type { NextConfig } from 'next';
+import createNextIntlPlugin from 'next-intl/plugin';
 
 /**
  * Sub-path the site is served from, e.g. `/content-library` on
@@ -15,4 +16,6 @@ const nextConfig: NextConfig = {
   assetPrefix: basePath || undefined,
 };
 
-export default nextConfig;
+const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
+
+export default withNextIntl(nextConfig);

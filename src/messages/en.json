@@ -1,0 +1,8 @@
+{
+  "brand": { "name": "hancrafted", "home": "hancrafted, go to the landing page" },
+  "nav": { "label": "Main", "episodes": "Episodes" },
+  "theme": { "label": "Theme", "light": "Light", "dark": "Dark", "system": "System" },
+  "locale": { "label": "Language" },
+  "landing": { "title": "Home", "link": "Page template" },
+  "episodeTemplate": { "title": "Page template" }
+}
