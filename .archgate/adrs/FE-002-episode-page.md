@@ -53,7 +53,7 @@ A page file never writes slots or anchors, so the table of contents (which reads
 
 ### 7. Reserved places
 
-1. Speaker notes and voice script attach per Slide (`notes`, `voiceScript`), see FE-010; YouTube link per Episode and locale, on the Title slide, loaded only on play; arrow keys and back-to-top are the container's; corners: TOC pill bottom-left, back-to-top bottom-right, player top-right, drawer trigger right edge, mid-height.
+1. Speaker notes and voice script attach per Slide (`notes`, `voiceScript`), see FE-010; YouTube link per Episode and locale, on the Title slide, loaded only on play; arrow keys and back-to-top are the container's; corners: TOC pill bottom-left, drawer trigger bottom-right, back-to-top above it, player top-right.
 
 ## Do's and Don'ts
 

@@ -7,7 +7,7 @@ rules: true
 files: ['src/components/context-drawer/**/*', 'src/app/globals.css']
 # prettier-ignore
 paths: ['src/components/context-drawer/**', 'src/components/episode/**', 'src/components/episodes/**', 'src/hooks/use-context-drawer.ts', 'src/hooks/use-table-of-contents.ts', 'src/lib/context-drawer.pure.ts', 'src/lib/context-drawer.pure.test.ts', 'src/lib/episode.pure.ts', 'src/lib/episode.test.ts', '.archgate/adrs/FE-010-context-drawer.rules.ts', 'src/app/globals.css', 'src/messages/*.json', 'tests/post-build/context-drawer.build.test.ts', 'tests/post-build/episode-structure.build.test.ts', '.dependency-cruiser.cjs', 'docs/agents/episode-catalog-keys.md', 'GLOSSARY.md']
-description: 'The Context drawer: a non-modal panel beside an Episode showing the current Slide Speaker notes and Voice script, both server-rendered into the page and printed in full, with the note and segment shapes typed as content and kept apart from design.'
+description: 'The Context drawer: a non-modal floating card, side by side with or over the Slides, showing the current Slide Speaker notes and Voice script, both server-rendered into the page and printed in full, with the note and segment shapes typed as content and kept apart from design.'
 ---
 
 # Context Drawer
@@ -20,7 +20,7 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 
 **Why structure here, when FE-002 says content is free.** FE-002 §3 keeps Slide markup free because a schema made visualisations bend to it. A note or a segment is different: it is text with a fixed role, the same on every Slide, and a drawer, a handout and later a guided tour all read it. So content may be typed and keyed. Design may not. The boundary of FE-002 §3 and FE-007 §4 stays where it was.
 
-**Details.** `Alt+N` matches `event.code`. The drawer is a right panel from `md` and a bottom sheet below, by CSS alone. Notes and segments keep a kebab-case `slug` as key identity, never a position. Print overrides a `hidden` class but not a `hidden` attribute.
+**Details.** `Alt+N` matches `event.code`. The drawer is a floating card on the right at every width, by CSS alone: from `md` it either takes a column beside the Slides or floats over them; below `md` it always floats over them, above a dimmed scrim. Notes and segments keep a kebab-case `slug` as key identity, never a position. Print overrides a `hidden` class but not a `hidden` attribute.
 
 **Out of scope:**
 
@@ -39,7 +39,7 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 ### 2. In the DOM, printed in full (📜 Rule: `print-reveals-context`)
 
 1. The server MUST render every Slide's notes and script into one `data-slot="context"` slot in page order, entries tagged `data-context-for`.
-2. A closed drawer MUST hide with `invisible` plus a transform, never the `hidden` attribute, `display: none` or `inert`. Inactive tab panels MAY use the `hidden` class.
+2. A closed drawer MUST hide with `invisible` plus a transform, never the `hidden` attribute, `display: none` or `inert`. Inactive tab panels MAY use the `hidden` class. A Slide's sources MAY sit in a closed `<details>`; print opens them (§9).
 3. `globals.css` MUST hold an `@media print` block setting `[data-slot='context']` to `display: block`.
 
 ### 3. Per Slide
@@ -58,7 +58,8 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 
 ### 6. Interaction
 
-1. `Alt+N` toggles, Escape closes; the trigger shows the hint and `aria-keyshortcuts`. Focus enters on open, returns on close.
+1. `Alt+N` toggles, Escape closes; the trigger shows the hint (from `md`, where a keyboard is likely) and `aria-keyshortcuts`. Focus enters on open, returns on close.
+2. The trigger is a bottom-right pill like the table of contents' pill, `invisible` while open; both pills MUST fit at 375px.
 
 ### 7. Layering
 
@@ -66,7 +67,16 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 
 ### 8. Strings
 
-1. Keys `...slides.<slide>.notes.<note>.{header,description,image.alt}` and `...voiceScript.segments.<segment>.{title,keywords,script,bridge}`; chrome under `contextDrawer.*`; en and de together. Non-localized facts stay in the record. A source renders as selectable text, never an `href`.
+1. Keys `...slides.<slide>.notes.<note>.{header,description,image.alt}` and `...voiceScript.segments.<segment>.{title,keywords,script,bridge}`; chrome, including the mode menu's and the sources count (ICU), under `contextDrawer.*`; en and de together. Non-localized facts stay in the record. A source renders as selectable text, never an `href`.
+
+### 9. Card, layout and modes
+
+1. **Card.** A floating card in the table of contents' chrome (corners, border, shadow, translucency): `top-24`, below the sticky site header, with a 1rem gap at the right and bottom edges. A sticky head, then one scroll container. It slides in from the right by `transform` alone, and not at all under `prefers-reduced-motion`.
+2. **Modes, from `md`.** A "more" menu in the head picks **side by side** (default) or **overlay**. Side by side reserves the card's width by changing the Episode grid's third column at once, through a spacer in the context slot, so the Slides reflow once; width, grid and margin MUST NOT transition. The mode is in-memory, not a stored preference, so FE-004 is not engaged.
+3. **Below `md`** the mode is always overlay and the menu is hidden. A dimmed scrim (`bg-black/40`, backdrop blur) covers the page; tapping it closes the drawer. It is pointer-only: Escape and the close button still work.
+4. **Head.** The current Slide's title once, then tabs, menu and close. The per-entry title shows only in print.
+5. **Menu.** `aria-haspopup="menu"`, `aria-expanded`, `menuitemradio` items with `aria-checked`; arrows, Home and End move; Escape closes the menu alone and returns focus to its button.
+6. **Disclosure.** A note's sources sit in a closed `<details>` "Sources (n)", selectable text in the HTML; `beforeprint` opens every `<details>` in the slot, `afterprint` restores them.
 
 ## Do's and Don'ts
 
@@ -77,6 +87,7 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 3. **DO** hide a closed drawer with `invisible` and a transform. (Decision 2)
 4. **DO** give every note a `target` and pass `anchor` to the layout that holds it. (Decision 4, Decision 5)
 5. **DO** write German notes from the same facts, not as translations. (Decision 8)
+6. **DO** reserve the card's width in one step and animate only its `transform`. (Decision 9)
 
 ### Don'ts
 
@@ -85,6 +96,7 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 3. **DON'T** add a layout, style or placement field to a note or segment. (Decision 4)
 4. **DON'T** render the drawer from an Episode file. (Decision 7)
 5. **DON'T** write an `href` for a source. (Decision 8)
+6. **DON'T** transition width, grid tracks or margins for the card. (Decision 9)
 
 ## Consequences
 
@@ -98,7 +110,8 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 
 1. **Sources are not links.** FE-003's `href-via-localize-path` rule leaves external links inexpressible, so sources are selectable text until an external-link decision exists. This is a gap.
 2. **`Alt+N` is untested on every assistive stack;** `aria-keyshortcuts` announces a shortcut and implements nothing.
-3. **The drawer overlays rather than reflows** the Slides, and print appends notes after them in page order, not between Slides.
+3. **Side by side reflows the Slides once** per open or close; overlay covers them instead. Print appends notes after the Slides, not between them.
+4. **Closed sources rely on `beforeprint`** to print; a browser without it prints them closed.
 
 **Risks:**
 
@@ -115,7 +128,7 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 4. **dependency-cruiser** (`.dependency-cruiser.cjs`): `context-drawer-reached-only-from-container`. §7.
 5. **Post-build** (`npm run test:build`): `tests/post-build/context-drawer.build.test.ts` checks the slot, notes in static HTML, no `hidden` attribute, resolving targets, locale parity, sources as text and the print block; `tests/post-build/episode-structure.build.test.ts` keeps the slot order. §2, §5, §8.
 
-**Manual review duties:** German copy quality; `Alt+N` on real screen readers; a real print preview; focus return; no design field in the note shape; catalog key shape (`docs/agents/episode-catalog-keys.md`, `GLOSSARY.md`).
+**Manual review duties:** the card's placement, motion and one-step layout at 1440px and 375px; the pills' fit at 375px; the mode menu with a keyboard; German copy quality; `Alt+N` on real screen readers; a real print preview; focus return; no design field in the note shape; catalog key shape (`docs/agents/episode-catalog-keys.md`, `GLOSSARY.md`).
 
 **Exceptions:** raise a separate ADR; human approval required.
 

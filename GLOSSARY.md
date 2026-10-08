@@ -39,7 +39,7 @@ _Avoid_: Paragraph, line, cue card
 **Bridge**: the closing line of a Voice script segment that hands the speaker over to the next Section.
 _Avoid_: Transition, segue
 
-**Context drawer**: the panel beside an Episode that shows the current Slide's Speaker notes and Voice script; a view onto text already in the page.
+**Context drawer**: the floating card beside or over an Episode's Slides that shows the current Slide's Speaker notes and Voice script; a view onto text already in the page.
 _Avoid_: Sidebar, notes panel, teleprompter
 
 **Table of contents**: an Episode's own navigation: its Sections, numbered, with the active Section's page Slides expanded, plus the reading time left. A sticky panel on wide screens, a pill-opened drawer on narrow ones.
