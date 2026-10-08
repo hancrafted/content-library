@@ -50,6 +50,18 @@ export interface KeyEventLike {
   readonly repeat: boolean;
 }
 
+/** The two tabs, defined once: the type, the tab order and every element id derive from this. */
+export const DRAWER_TABS = ['notes', 'script'] as const;
+export type DrawerTab = (typeof DRAWER_TABS)[number];
+
+/** The drawer panel's element id; the trigger's `aria-controls` points at it. */
+export const DRAWER_PANEL_ID = 'context-panel';
+
+/** Element ids of one tab and its tab panel, derived from the tab id. */
+export function drawerIds(tab: DrawerTab): { tab: string; panel: string } {
+  return { tab: `context-tab-${tab}`, panel: `${DRAWER_PANEL_ID}-${tab}` };
+}
+
 /** Shown on the trigger; matched on `event.code` so a layout cannot move it. */
 export const SHORTCUT_LABEL = 'Alt+N';
 

@@ -1,8 +1,6 @@
 import { useActiveId } from '@/hooks/use-table-of-contents';
-import { currentSlideAnchor, drawerKeyAction } from '@/lib/context-drawer.pure';
+import { currentSlideAnchor, drawerKeyAction, type DrawerTab } from '@/lib/context-drawer.pure';
 import { useEffect, useRef, useState, type RefObject } from 'react';
-
-export type DrawerTab = 'notes' | 'script';
 
 /** Alt+N toggles and Escape closes, from anywhere on the page. */
 function useDrawerKeys(open: boolean, toggle: () => void, close: () => void) {

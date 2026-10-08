@@ -2,6 +2,9 @@ import { describe, expect, it } from 'vitest';
 import {
   checkContext,
   currentSlideAnchor,
+  DRAWER_PANEL_ID,
+  DRAWER_TABS,
+  drawerIds,
   drawerKeyAction,
   formatMark,
   matchesShortcut,
@@ -203,5 +206,26 @@ describe('edge cases', () => {
     const result = check();
     // ASSERT
     expect(result).toBeUndefined();
+  });
+});
+
+describe('drawer ids', () => {
+  it('derives a distinct tab id and panel id for every tab from DRAWER_TABS', () => {
+    // ARRANGE
+    const ids = DRAWER_TABS.map((tab) => drawerIds(tab));
+    const all = ids.flatMap(({ tab, panel }) => [tab, panel]);
+    // ACT
+    const unique = new Set([...all, DRAWER_PANEL_ID]);
+    // ASSERT
+    expect(unique.size).toBe(DRAWER_TABS.length * 2 + 1);
+  });
+
+  it('names the tabs notes then script', () => {
+    // ARRANGE
+    const expected = ['notes', 'script'];
+    // ACT
+    const tabs = [...DRAWER_TABS];
+    // ASSERT
+    expect(tabs).toEqual(expected);
   });
 });

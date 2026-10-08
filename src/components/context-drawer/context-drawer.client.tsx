@@ -1,6 +1,7 @@
 'use client';
 
-import { useContextDrawer, type DrawerTab } from '@/hooks/use-context-drawer';
+import { useContextDrawer } from '@/hooks/use-context-drawer';
+import { DRAWER_PANEL_ID, DRAWER_TABS, drawerIds, type DrawerTab } from '@/lib/context-drawer.pure';
 import { cn } from '@/lib/utils';
 import { X } from 'lucide-react';
 import { useMemo, type ReactNode } from 'react';
@@ -25,8 +26,6 @@ const PANEL = cn(
 );
 const CLOSED = 'invisible max-md:translate-y-full md:translate-x-full';
 
-const tabIds = (tab: DrawerTab) => ({ tab: `context-tab-${tab}`, panel: `context-panel-${tab}` });
-
 function Entries({
   entries,
   current,
@@ -48,10 +47,10 @@ function Entries({
 function Panel(props: { tab: DrawerTab; selected: DrawerTab; heading: string; children: ReactNode }) {
   return (
     <div
-      id={tabIds(props.tab).panel}
+      id={drawerIds(props.tab).panel}
       role="tabpanel"
       tabIndex={0}
-      aria-labelledby={tabIds(props.tab).tab}
+      aria-labelledby={drawerIds(props.tab).tab}
       className={cn('flex flex-col gap-3', props.tab !== props.selected && 'hidden')}
     >
       <h4 className="hidden text-lg font-semibold print:block">{props.heading}</h4>
@@ -62,16 +61,13 @@ function Panel(props: { tab: DrawerTab; selected: DrawerTab; heading: string; ch
 
 function PanelHead(props: { labels: DrawerLabels; drawer: ReturnType<typeof useContextDrawer> }) {
   const { labels, drawer } = props;
-  const tabs = [
-    { id: 'notes', label: labels.tabs.notes },
-    { id: 'script', label: labels.tabs.script },
-  ] as const;
+  const tabs = DRAWER_TABS.map((id) => ({ id, label: labels.tabs[id] }));
   return (
     <div className="flex items-center justify-between gap-2">
       <DrawerTabs
         tabs={tabs}
         selected={drawer.tab}
-        idOf={tabIds}
+        idOf={drawerIds}
         onSelect={drawer.setTab}
         selectedRef={drawer.selectedTab}
       />
@@ -96,7 +92,7 @@ function PanelBody(props: {
   return (
     <>
       <PanelHead labels={labels} drawer={drawer} />
-      {(['notes', 'script'] as const).map((kind) => (
+      {DRAWER_TABS.map((kind) => (
         <Panel key={kind} tab={kind} selected={drawer.tab} heading={labels.tabs[kind]}>
           <Entries entries={entries} current={drawer.current} kind={kind} />
         </Panel>
@@ -126,11 +122,11 @@ export function ContextDrawer(props: {
         label={drawer.open ? labels.close : labels.open}
         hint={labels.shortcut}
         open={drawer.open}
-        controls="context-panel"
+        controls={DRAWER_PANEL_ID}
         onToggle={drawer.toggle}
       />
       <div
-        id="context-panel"
+        id={DRAWER_PANEL_ID}
         data-context-panel
         aria-label={labels.title}
         className={cn(PANEL, !drawer.open && CLOSED)}
