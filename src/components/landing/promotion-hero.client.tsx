@@ -13,21 +13,30 @@ interface PromotionHeroProps {
   eyebrow: string;
   caption: ReactNode;
   scene: ReactNode;
-  labels: { episodes: string; contact: string; newTab: string; open: string; skip: string };
+  labels: { episodes: string; contact: string; newTab: string; open: string; skip: string; motionHint: string };
   words: string[];
 }
 
-function usePromiseHover() {
-  const [accelerated, setAccelerated] = useState(false);
+function promiseTarget(target: EventTarget | null) {
+  return target instanceof Element
+    ? target.closest('[data-caption-word], [data-testid="hero-episodes"], [data-testid="hero-contact"]')
+    : null;
+}
+
+function usePromiseInteraction() {
+  const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
   const events = {
-    onPointerEnter: (event: React.PointerEvent) => {
-      if (event.pointerType === 'mouse') setAccelerated(true);
+    onPointerOver: (event: React.PointerEvent) => {
+      if (event.pointerType === 'mouse') setHovered(!!promiseTarget(event.target));
     },
-    onPointerLeave: () => setAccelerated(false),
-    onFocus: () => setAccelerated(true),
-    onBlur: () => setAccelerated(false),
+    onPointerOut: (event: React.PointerEvent) => {
+      if (event.pointerType === 'mouse') setHovered(!!promiseTarget(event.relatedTarget));
+    },
+    onFocus: (event: React.FocusEvent) => setFocused(!!promiseTarget(event.target)?.matches(':focus-visible')),
+    onBlur: () => setFocused(false),
   };
-  return { accelerated, events };
+  return { draining: hovered || focused, events };
 }
 
 function HeroActions({ locale, labels }: Pick<PromotionHeroProps, 'locale' | 'labels'>) {
@@ -57,25 +66,17 @@ function HeroActions({ locale, labels }: Pick<PromotionHeroProps, 'locale' | 'la
   );
 }
 
-function HeroCopy({
-  copy,
-  events,
-}: {
-  copy: PromotionHeroProps;
-  events: ReturnType<typeof usePromiseHover>['events'];
-}) {
+function HeroCopy({ copy }: { copy: PromotionHeroProps }) {
   return (
     <div className={styles.copy}>
       <p className={styles.eyebrow}>{copy.eyebrow}</p>
       <h1 id="hero-title" data-testid="page-title" className={styles.headline}>
         {copy.headline}
       </h1>
-      <p data-hero-caption className={styles.caption} {...events}>
+      <p data-hero-caption className={styles.caption}>
         {copy.caption}
       </p>
-      <div {...events}>
-        <HeroActions locale={copy.locale} labels={copy.labels} />
-      </div>
+      <HeroActions locale={copy.locale} labels={copy.labels} />
     </div>
   );
 }
@@ -88,27 +89,36 @@ function FlyingWords({ words }: Pick<PromotionHeroProps, 'words'>) {
   ));
 }
 
+function SceneControls({ labels, burst }: { labels: PromotionHeroProps['labels']; burst: () => void }) {
+  return (
+    <button
+      data-testid="hero-open"
+      type="button"
+      className={styles.envelopeTrigger}
+      onClick={burst}
+      aria-label={labels.open}
+    />
+  );
+}
+
 export function PromotionHero(props: PromotionHeroProps) {
   const root = useRef<HTMLElement>(null);
-  // Transient: a reload only replays this one-shot illustration.
-  const { accelerated, events } = usePromiseHover();
-  const { burst, finish } = usePromotionAnimation(root, accelerated);
+  // Transient: the illustrated workload is not the reader's application state.
+  const { draining, events } = usePromiseInteraction();
+  const { burst, finish } = usePromotionAnimation(root, draining);
   return (
-    <section ref={root} data-promotion-hero aria-labelledby="hero-title" className={styles.hero}>
-      <HeroCopy copy={props} events={events} />
+    <section ref={root} data-promotion-hero aria-labelledby="hero-title" className={styles.hero} {...events}>
+      <HeroCopy copy={props} />
       <div className={styles.scene}>
         {props.scene}
-        <button
-          data-testid="hero-open"
-          type="button"
-          className={styles.envelopeTrigger}
-          onClick={burst}
-          aria-label={props.labels.open}
-        />
-        <button data-testid="hero-skip" type="button" className={styles.skip} onClick={finish}>
-          {props.labels.skip}
-        </button>
+        <SceneControls labels={props.labels} burst={burst} />
       </div>
+      <button data-testid="hero-skip" type="button" className={styles.skip} onClick={finish}>
+        {props.labels.skip}
+      </button>
+      <p id="hero-motion-hint" className="sr-only">
+        {props.labels.motionHint}
+      </p>
       <FlyingWords words={props.words} />
     </section>
   );

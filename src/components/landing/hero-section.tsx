@@ -12,6 +12,7 @@ function heroLabels(t: HeroT) {
     newTab: t('newTab'),
     open: t('open'),
     skip: t('skip'),
+    motionHint: t('motionHint'),
   };
 }
 
@@ -29,19 +30,30 @@ function heroScene(t: HeroT) {
 
 export async function HeroSection({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'landing.hero' });
-  const words = [t('plan'), t('spec'), t('review')];
   return (
     <PromotionHero
       locale={locale}
       headline={t('headline')}
       eyebrow={t('eyebrow')}
       caption={t.rich('caption', {
-        plan: (text) => <span data-caption-word>{text}</span>,
-        spec: (text) => <span data-caption-word>{text}</span>,
-        review: (text) => <span data-caption-word>{text}</span>,
+        plan: (text) => (
+          <span data-caption-word data-testid="hero-plan" aria-describedby="hero-motion-hint">
+            {text}
+          </span>
+        ),
+        spec: (text) => (
+          <span data-caption-word data-testid="hero-spec" aria-describedby="hero-motion-hint">
+            {text}
+          </span>
+        ),
+        review: (text) => (
+          <span data-caption-word data-testid="hero-review" aria-describedby="hero-motion-hint">
+            {text}
+          </span>
+        ),
       })}
       scene={heroScene(t)}
-      words={words}
+      words={[t('plan'), t('spec'), t('review')]}
       labels={heroLabels(t)}
     />
   );

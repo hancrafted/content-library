@@ -23,15 +23,23 @@ Preview a production build with any static server, e.g. `npx serve out`.
 ### Landing hero
 
 `HeroSection` supplies localized copy and the SVG desk to the isolated
-`PromotionHero` client leaf. On wide, fine-pointer screens, GSAP builds the task
-pile, opens the envelope after two seconds (or an earlier click), flies the words
-into the caption, and drains the pile once. Hovering or focusing the caption or
-CTAs accelerates only the drain. The desk stays cleared; **Skip animation**
-settles it immediately.
+`PromotionHero` client leaf. A full-width desktop, paper trays and non-digital
+stationery use layered SVG, material gradients and soft shadows. On wide,
+fine-pointer screens, the workload grows continuously. The envelope slides in,
+waits and jitters for four seconds, then opens automatically (or on an earlier
+click). The caption is visually blank until it opens; the three words then fly
+into their reserved slots.
+
+After the words land, hovering or keyboard-focusing **plan**, **spec**, **review**
+or either CTA rapidly empties the tray. Leaving lets it grow again. A bounded
+pool of 96 sheets reaches past the scene's upper edge without accumulating DOM
+nodes. Motion pauses off-screen and in background tabs. **Stop animation** clears
+the tray and reveals the complete caption permanently for that visit.
 
 Narrow screens, reduced motion and JavaScript-free visits get the open envelope
-and complete, crisp caption directly. The static caption is never hidden by the
-animation. Copy is under `landing.hero` in both catalogs; the secondary CTA opens
+and complete, crisp caption directly. The caption stays available to assistive
+technology while visually hidden on animated desktop. Copy is under `landing.hero`
+in both catalogs; the secondary CTA opens
 the approved Calendly booking page in a new tab.
 
 The existing GSAP dependency is used without new packages. Its
@@ -39,10 +47,11 @@ The existing GSAP dependency is used without new packages. Its
 website animation is a permitted use; competing no-code visual animation builders
 are restricted.
 
-Pure flight geometry runs in `npm run verify`. Static copy and CTA checks run in
+Pure flight geometry and reversible pile progression run in `npm run verify`. Static copy and CTA checks run in
 `npm run test:build` after a build. For visual changes, also preview both locales
 at desktop and 390px widths, with reduced motion and JavaScript disabled, and
-check early opening, automatic opening, hover acceleration and resize during flight.
+check early opening, the four-second wait, blank-caption reveal, hover/focus
+draining and rebuilding, off-screen pausing, and resize during flight.
 
 ## Routes and locales
 

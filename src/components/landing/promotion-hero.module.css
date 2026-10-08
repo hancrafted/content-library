@@ -1,86 +1,100 @@
 .hero {
-  --hero-ink: #252b29;
-  --hero-line: #b7b5a9;
-  --hero-paper: #fffdf6;
-  --hero-envelope: #ede4ce;
-  --hero-envelope-inner: #d6c9ae;
-  --hero-desk: #e2e3dc;
-  --hero-desk-edge: #c8cdc3;
-  --hero-seal: #73573b;
+  --hero-wall: #f4f3ee;
+  --hero-light: #fffef6;
+  --hero-window: #9ca397;
+  --hero-wood-back: #cdb99a;
+  --hero-wood-front: #e2d1b6;
+  --hero-grain: #998365;
+  --hero-shadow: #302b22;
+  --hero-metal-light: #777e76;
+  --hero-metal: #414a44;
+  --hero-metal-dark: #27332c;
+  --hero-tray-inner: #556159;
+  --hero-paper: #fffef8;
+  --hero-paper-edge: #e5e1d6;
+  --hero-paper-rule: #ccc9bf;
+  --hero-paper-ink: #3c4540;
+  --hero-envelope: #ece4d1;
+  --hero-envelope-inner: #d8ccb2;
+  --hero-envelope-rule: #b8aa8b;
+  --hero-envelope-ink: #4c4436;
+  --hero-brass: #9b7950;
+  --hero-notebook: #677169;
+  --hero-line: #aaa797;
   position: relative;
   isolation: isolate;
-  /* Keep the following section's oversized ink layer below the hero, but below the site header ourselves. */
+  /* The following ink transition stays below the scene; the site header stays above it. */
   z-index: 41;
-  background: var(--background);
+  overflow: clip;
+  background: var(--hero-wall);
   width: 100%;
-  padding: 5rem 1.5rem 3rem;
+  padding: 4rem 1.5rem 3rem;
 }
 
 :global(.dark) .hero {
-  --hero-ink: #dce0d5;
-  --hero-line: #777e70;
-  --hero-paper: #343a34;
-  --hero-envelope: #4b493b;
-  --hero-envelope-inner: #38392f;
-  --hero-desk: #252e29;
-  --hero-desk-edge: #1c251f;
-  --hero-seal: #a39477;
+  --hero-wall: #171d19;
+  --hero-light: #777963;
+  --hero-window: #111b15;
+  --hero-wood-back: #494339;
+  --hero-wood-front: #625848;
+  --hero-grain: #a38e6b;
+  --hero-shadow: #0b100b;
+  --hero-metal-light: #838c7f;
+  --hero-metal: #39453b;
+  --hero-metal-dark: #202b23;
+  --hero-tray-inner: #2e3a31;
+  --hero-paper: #d5d4c6;
+  --hero-paper-edge: #b3b5a4;
+  --hero-paper-rule: #929986;
+  --hero-envelope: #c5b896;
+  --hero-envelope-inner: #a39576;
+  --hero-envelope-rule: #8d8165;
+  --hero-brass: #bca374;
+  --hero-notebook: #293b2d;
 }
 
+.copy {
+  position: relative;
+  z-index: 2;
+}
 .eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
   margin-bottom: 1.75rem;
   font: 500 0.65rem/1.5 monospace;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--muted-foreground);
 }
-
-.eyebrow::before {
-  content: '';
-  width: 1.5rem;
-  height: 1px;
-  background: currentColor;
-}
-
 .headline {
-  max-width: 12ch;
-  font-size: clamp(2.6rem, 5.3vw, 4.75rem);
+  max-width: 13ch;
+  font-size: clamp(2.6rem, 5.1vw, 4.65rem);
   font-weight: 650;
   letter-spacing: -0.055em;
-  line-height: 1.05;
+  line-height: 1.06;
   text-wrap: balance;
   overflow-wrap: anywhere;
 }
-
 .caption {
-  max-width: 33rem;
+  max-width: 32rem;
   margin-top: 2rem;
-  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+  font-size: clamp(1.05rem, 1.5vw, 1.25rem);
   line-height: 1.75;
-  color: var(--muted-foreground);
+  color: var(--foreground);
 }
-
 .caption [data-caption-word] {
   display: inline-block;
   position: relative;
-  color: var(--foreground);
   font-weight: 600;
   text-decoration: underline;
-  text-decoration-color: var(--hero-line);
+  text-decoration-color: var(--hero-brass);
   text-underline-offset: 0.3em;
   text-decoration-thickness: 1px;
 }
-
 .actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
   margin-top: 1.75rem;
 }
-
 .primary,
 .secondary {
   display: inline-flex;
@@ -93,58 +107,66 @@
   font-size: 0.875rem;
   font-weight: 550;
 }
-
 .primary {
   background: var(--primary);
   color: var(--primary-foreground);
 }
-
 .secondary {
-  border: 1px solid var(--border);
+  border: 1px solid var(--hero-line);
   color: var(--foreground);
+  background: var(--hero-wall);
 }
-
 .hero a:focus-visible,
-.hero button:focus-visible {
+.hero button:focus-visible,
+.caption [data-caption-word]:focus-visible {
   outline: 2px solid var(--foreground);
   outline-offset: 5px;
 }
-
 .scene {
   position: relative;
-  width: min(100%, 32rem);
-  margin: 1rem auto 0;
+  width: calc(100% + 3rem);
+  aspect-ratio: 1.6;
+  margin: 2rem -1.5rem -3rem;
+  overflow: hidden;
 }
-
+.scene svg {
+  position: absolute;
+  width: 210%;
+  max-width: none;
+  right: 0;
+  bottom: 0;
+}
 .envelopeTrigger,
 .skip {
   display: none;
   cursor: pointer;
 }
-
 .envelopeTrigger {
   position: absolute;
-  left: 43%;
-  top: 25%;
-  width: 40%;
-  height: 33%;
-  border-radius: 0.5rem;
-  transform: rotate(-8deg);
+  right: 3%;
+  bottom: 22.7%;
+  width: 17.4%;
+  height: 18.6%;
+  border-radius: 0.4rem;
+  transform: rotate(-9deg);
+  pointer-events: auto;
 }
-
 .skip {
   position: absolute;
-  right: 8%;
-  bottom: 0;
+  z-index: 3;
+  right: 1.5rem;
+  top: 1rem;
   min-height: 44px;
-  padding: 0.5rem;
-  color: var(--muted-foreground);
+  padding: 0.5rem 0.8rem;
+  border: 1px solid var(--hero-line);
+  border-radius: 999px;
+  color: var(--foreground);
+  background: var(--hero-wall);
   font: 0.7rem monospace;
 }
-
 .flyingWord {
   position: absolute;
-  z-index: 3;
+  z-index: 4;
   pointer-events: none;
   color: var(--foreground);
   font-weight: 600;
@@ -153,44 +175,45 @@
 
 @media (min-width: 1024px) {
   .hero {
-    display: grid;
-    grid-template-columns: 1.05fr 1fr;
-    align-items: center;
-    min-height: min(780px, calc(100svh - 4rem));
-    padding: 6rem max(3.5rem, calc((100% - 80rem) / 2 + 3.5rem)) 7rem;
+    min-height: max(800px, calc(100svh - 5rem));
+    padding: 5.5rem max(3.5rem, calc((100% - 84rem) / 2 + 3.5rem)) 17rem;
   }
-
   .copy {
-    position: relative;
-    z-index: 2;
+    width: 49%;
   }
-
   .scene {
-    width: 115%;
-    max-width: none;
-    margin: -3rem 0 0 -5%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    margin: 0;
+    overflow: visible;
+    pointer-events: none;
+  }
+  .scene svg {
+    width: 100%;
+    right: 0;
+    overflow: visible;
   }
 }
 
 @media (prefers-reduced-motion: no-preference) and (min-width: 1024px) and (hover: hover) and (pointer: fine) {
-  .hero[data-animated='building'] .envelopeTrigger,
+  .hero[data-animated='waiting'] .envelopeTrigger,
   .hero[data-animated] .skip {
     display: block;
   }
-
   .primary,
   .secondary {
-    transition:
-      background-color 180ms ease,
-      box-shadow 180ms ease;
+    transition: box-shadow 180ms ease;
   }
-
-  .primary:hover {
+  .primary:hover,
+  .secondary:hover {
     box-shadow: 0 4px 18px color-mix(in srgb, var(--foreground) 18%, transparent);
   }
-
-  .secondary:hover {
-    background: var(--muted);
+  .hero[data-animated='arriving'] .caption,
+  .hero[data-animated='waiting'] .caption {
+    opacity: 0;
   }
 }
 
@@ -198,11 +221,10 @@
   .hero {
     break-inside: avoid;
   }
-
+  .hero .caption,
   .hero [data-caption-word] {
-    filter: none !important;
+    opacity: 1 !important;
   }
-
   .flyingWord,
   .envelopeTrigger,
   .skip,

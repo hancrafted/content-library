@@ -26,19 +26,20 @@
       "plan": "planen",
       "spec": "spezifizieren",
       "review": "reviewen",
-      "promotion": "Beförderung",
+      "promotion": "KI-Beförderung",
       "episodes": "Episoden entdecken",
       "contact": "Mit mir arbeiten",
       "newTab": "öffnet in einem neuen Tab",
       "open": "Deine Beförderung öffnen",
-      "skip": "Animation überspringen",
+      "skip": "Animation stoppen",
+      "motionHint": "Mit Mauszeiger oder Tastaturfokus auf diesen Wörtern oder einem der Buttons leert sich der Stapel. Außerhalb wächst er wieder.",
       "tasks": {
-        "bug": "Regression beheben",
-        "ticket": "Tickets priorisieren",
-        "release": "Release ausliefern",
-        "tests": "Grenzfälle prüfen",
-        "spec": "Auftrag klären",
-        "review": "Pull Request reviewen"
+        "bug": "DEADLINE",
+        "ticket": "AUFGABE",
+        "release": "DEPLOY",
+        "tests": "PROJEKT",
+        "spec": "PLAN",
+        "review": "CODE REVIEW"
       }
     },
     "episodesSectionTitle": "Verfügbare Episoden",

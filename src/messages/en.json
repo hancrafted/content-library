@@ -26,19 +26,20 @@
       "plan": "plan",
       "spec": "spec",
       "review": "review",
-      "promotion": "Promotion",
+      "promotion": "AI promotion",
       "episodes": "Explore Episodes",
       "contact": "Work with me",
       "newTab": "opens in a new tab",
       "open": "Open your promotion",
-      "skip": "Skip animation",
+      "skip": "Stop animation",
+      "motionHint": "Hover or focus these words or either button to clear the workload. Move away to let it grow again.",
       "tasks": {
-        "bug": "Fix the regression",
-        "ticket": "Triage the tickets",
-        "release": "Ship the release",
-        "tests": "Check the edge cases",
-        "spec": "Clarify the brief",
-        "review": "Review the pull request"
+        "bug": "DEADLINE",
+        "ticket": "TASK",
+        "release": "DEPLOY",
+        "tests": "PROJECT",
+        "spec": "PLAN",
+        "review": "CODE REVIEW"
       }
     },
     "episodesSectionTitle": "Available Episodes",
