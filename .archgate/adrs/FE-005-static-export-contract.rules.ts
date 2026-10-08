@@ -8,7 +8,8 @@
 // archgate forbids imports between rules files.
 const SRC_GLOB = 'src/**/*';
 const ROOT_GLOB = '*';
-const NEXT_CONFIG = 'next.config.ts';
+// Next.js accepts any of these names; a legal rename must not crash the rule.
+const NEXT_CONFIG_RE = /^next\.config\.(ts|js|mjs)$/;
 
 const CODE_FILE_RE = /\.(ts|tsx|js|jsx|mjs)$/;
 const SEGMENT_FILE_RE = /^src\/app\/(.+\/)?(page|layout)\.(tsx|ts|jsx|js)$/;
@@ -91,6 +92,28 @@ function checkSource(ctx: RuleContext, file: string, source: string): void {
   );
 }
 
+function checkConfig(ctx: RuleContext, file: string, source: string): void {
+  if (!OUTPUT_EXPORT_RE.test(source)) {
+    ctx.report.violation({
+      message: `${file} must set output: 'export' — the site deploys as static files (FE-005 [export-config-intact]).`,
+      file,
+    });
+  }
+  if (!UNOPTIMIZED_RE.test(source)) {
+    ctx.report.violation({
+      message: `${file} must set images: { unoptimized: true } — the default next/image loader optimises at request time (FE-005 [export-config-intact]).`,
+      file,
+    });
+  }
+  reportMatches(
+    ctx,
+    file,
+    source,
+    SERVER_CONFIG_RE,
+    'rewrites, redirects and headers are applied by a Next.js server, which GitHub Pages is not — remove the key (FE-005 [export-config-intact]).',
+  );
+}
+
 export default {
   rules: {
     'dynamic-segment-static-params': {
@@ -120,31 +143,18 @@ export default {
     },
     'export-config-intact': {
       description:
-        "next.config.ts keeps output: 'export' and images.unoptimized: true, and declares no rewrites, redirects or headers.",
+        "next.config.{ts,js,mjs} exists, keeps output: 'export' and images.unoptimized: true, and declares no rewrites, redirects or headers.",
       severity: 'error',
       async check(ctx) {
-        const source = await ctx.readFile(NEXT_CONFIG);
-        if (!OUTPUT_EXPORT_RE.test(source)) {
+        const configFile = (await ctx.glob(ROOT_GLOB)).find((file) => NEXT_CONFIG_RE.test(file));
+        if (configFile === undefined) {
           ctx.report.violation({
             message:
-              "next.config.ts must set output: 'export' — the site deploys as static files (FE-005 [export-config-intact]).",
-            file: NEXT_CONFIG,
+              "No next.config.{ts,js,mjs} found — restore it with output: 'export' and images: { unoptimized: true } (FE-005 [export-config-intact]).",
           });
+          return;
         }
-        if (!UNOPTIMIZED_RE.test(source)) {
-          ctx.report.violation({
-            message:
-              'next.config.ts must set images: { unoptimized: true } — the default next/image loader optimises at request time (FE-005 [export-config-intact]).',
-            file: NEXT_CONFIG,
-          });
-        }
-        reportMatches(
-          ctx,
-          NEXT_CONFIG,
-          source,
-          SERVER_CONFIG_RE,
-          'rewrites, redirects and headers are applied by a Next.js server, which GitHub Pages is not — remove the key (FE-005 [export-config-intact]).',
-        );
+        checkConfig(ctx, configFile, await ctx.readFile(configFile));
       },
     },
     'no-request-time-features': {

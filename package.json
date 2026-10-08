@@ -14,7 +14,8 @@
     "knip": "knip",
     "prepare": "husky",
     "verify": "archgate check && eslint . && prettier --check . && npm run typecheck && vitest run && knip && mh check",
-    "verify:commit": "lint-staged && archgate check && npm run typecheck && vitest run"
+    "verify:commit": "lint-staged && archgate check && npm run typecheck && vitest run",
+    "test:build": "vitest run --config vitest.build.config.ts"
   },
   "devDependencies": {
     "@eslint/js": "~10.0.1",

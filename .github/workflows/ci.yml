@@ -1,6 +1,6 @@
 name: CI
 
-# Lint, typecheck and a full static build on every pull request, so a change
+# Lint, typecheck, a full static build and the post-build export test on every pull request, so a change
 # that would break the Pages deploy fails before it merges.
 on:
   pull_request:
@@ -27,3 +27,5 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+      # FE-005: every page URL the app derives landed in out/. Needs the build above.
+      - run: npm run test:build

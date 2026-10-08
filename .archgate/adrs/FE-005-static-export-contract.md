@@ -4,8 +4,8 @@ id: FE-005
 title: 'Static Export Contract'
 domain: frontend
 rules: true
-files: ['src/**/*', 'next.config.ts', 'proxy.ts', 'middleware.ts']
-paths: ['src/app/**/*', 'src/lib/**/*', 'next.config.ts']
+files: ['src/**/*', 'next.config.ts', 'next.config.js', 'next.config.mjs', 'proxy.ts', 'middleware.ts']
+paths: ['src/**/*', 'next.config.ts']
 description: "What output: 'export' forbids — every request-time Next.js feature — and what every dynamic route segment must export so its path set is closed at build time."
 ---
 
@@ -17,7 +17,9 @@ The site deploys to GitHub Pages as the static files `next build` writes to `out
 
 The repo already practises the contract: `src/app/[locale]/page.tsx`, `layout.tsx` and `episode/page-template/page.tsx` export `generateStaticParams = prefixedLocaleParams` and `dynamicParams = false`, with `resolveLocale()` in `src/app/[locale]/params.ts` calling `notFound()` on anything else. Nothing enforced it. This record writes the live convention down and puts checks behind it; it changes no behaviour.
 
-Rejected alternatives: a self-hosted Node server (gives up free static hosting for features this content site does not need); relying on `next build` errors alone (silent for the features that build but no-op); a post-build assertion over `out/` (rejected: its one unique catch — a page silently dropping out of the export — is rare here, and it needs a hand-kept route list plus a `scripts/` home for loose tooling).
+Rejected alternatives: a self-hosted Node server (gives up free static hosting for features this content site does not need); relying on `next build` errors alone (silent for the features that build but no-op).
+
+A post-build assertion over `out/` was first rejected on two premises: it needed a hand-kept route list, and a `scripts/` home for loose tooling. The first was wrong — the expected URL set derives from `ROUTES` and `LOCALES`/`localizePath`, the modules the site already renders from, so no page list is hand-kept — only the section prefix `ROUTES.episodes` is excluded — and the check cannot drift from the app. The second is answered by making it a test, not a script: assertions, failure output and CI reporting come free. It is now adopted as a post-build test lane (Compliance).
 
 ## Decision
 
@@ -65,7 +67,7 @@ Rejected alternatives: a self-hosted Node server (gives up free static hosting f
 **Negative:**
 
 1. **No request-time escape hatch:** forms, auth, personalisation and server redirects need a third-party service or a client-side design; the next such feature costs an amendment or a different host.
-2. **A dropped page is silent:** nothing asserts the contents of `out/`. If `generateStaticParams` returns an incomplete list, or a route moves, the affected URLs vanish from the export and the build may still exit 0.
+2. **A dropped page is only partly held:** the post-build test fails when a URL derived from `ROUTES` × `LOCALES` has no file in `out/` — an incomplete `generateStaticParams`, a moved or deleted page. It cannot see a page that `ROUTES` itself never lists, nor an entry deleted from `ROUTES` (the expected set shrinks with it; only the printed page count drops). It runs post-build, off the commit path, so a dropped page fails the pull request's CI and blocks the Pages deploy, not the commit.
 
 **Risks:**
 
@@ -77,9 +79,12 @@ Rejected alternatives: a self-hosted Node server (gives up free static hosting f
 **Enforcers per Discipline:**
 
 - §1, §2 and §3.2–§3.5: `FE-005-static-export-contract.rules.ts`, `error` tier — rules `dynamic-segment-static-params`, `export-config-intact`, `no-request-time-features`.
-- §3.1: ESLint `no-restricted-imports` scoped to `src/**/*.{ts,tsx}` in `eslint.config.mjs`. Measured on introduction: a probe file with four banned import statements under `src/` went from 0 errors to 4; the same probe outside `src/` stays at 0; the repo stays at 0.- Backstop: the CI `check` job's `npm run build`, which fails on many request-time APIs but does not assert which pages landed in `out/` (Negative 2).
+- §3.1: ESLint `no-restricted-imports` scoped to `src/**/*.{ts,tsx}` in `eslint.config.mjs`. Measured on introduction: a probe file with four banned import statements under `src/` went from 0 errors to 4; the same probe outside `src/` stays at 0; the repo stays at 0.
+- §1 outcome (pages land in `out/`): `tests/post-build/static-export.build.test.ts`, run by `npm run test:build` right after `npm run build` in the CI `check` job and in the Pages `deploy` workflow, before the artifact upload, so an export missing a page is never published — post-build, off the commit path, excluded from `npm run verify` by its `*.build.test.ts` suffix. Prints the page count walked, since a walk over zero pages would pass silently. Measured on introduction: 4 pages walked, 0 missing; with `src/app/[locale]/episode/page-template/page.tsx` removed and rebuilt, red with `de/episode/page-template/index.html` missing; restored, green at 4. Deleting `ROUTES.episodeTemplate` stays green at 2 pages walked (Negative 2) — `tsc` fails on its callers instead.
+- Archgate rules: `FE-005-static-export-contract.rules.test.ts` carries the measurement duty the ESLint line above carries inline — a pass and fail case per rule, plus pinned known cases: a commented `headers:` false positive in `export-config-intact`, and the arrow-form `GET(request)` gap of Risk 1.
+- Backstop: the CI `check` job's `npm run build`, which fails on many request-time APIs.
 
-**Manual review duties** (never linted): new dependencies are checked for request-time Next.js APIs (Risk 1); `generateStaticParams` returns the complete list (Negative 2).
+**Manual review duties** (never linted): new dependencies are checked for request-time Next.js APIs (Risk 1); a new page has a `ROUTES` entry, so the post-build test expects it (Negative 2).
 
 **Exceptions:** raise a separate ADR; human approval required.
 
