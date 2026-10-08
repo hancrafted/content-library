@@ -1,0 +1,9 @@
+# Placeholder until markdown-harness is set up for real (handled separately).
+# The tool refuses an empty file and an empty rule list, so this holds one
+# rule that matches no markdown file: it governs nothing and `mh check` passes.
+frontmatter:
+  rules:
+    - ruleId: placeholder
+      folders: [docs/markdown-harness/]
+      intent: Placeholder that governs nothing until real rules are authored
+      fields: {}
