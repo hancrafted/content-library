@@ -4,8 +4,8 @@ id: FE-007
 title: 'Module Layering'
 domain: frontend
 rules: false
-files: ['src/**/*', '.dependency-cruiser.cjs']
-paths: ['src/**/*', '.dependency-cruiser.cjs']
+files: ['src/**/*', '.dependency-cruiser.cjs', 'knip.json']
+paths: ['src/**/*', '.dependency-cruiser.cjs', 'knip.json']
 description: 'Two zones under different laws — src/app governed by content, the authored zone by position — one import direction app → components → hooks → lib with no cycles and no React in lib, and Slide internals left explicitly ungoverned.'
 ---
 
@@ -33,15 +33,15 @@ This record writes the live convention down and puts checks behind it; it change
 ### 1. Thin routes
 
 1. A `page.tsx` under `src/app/**` MUST render a page component from `src/components/pages/**`, plus the segment exports [FE-005](./FE-005-static-export-contract.md) requires.
-2. A `layout.tsx` MUST render `SiteShell`, plus `metadata` and the FE-005 segment exports.
-3. Route files MUST hold no layout markup, no data shaping and no business logic. Locale param plumbing lives in `src/app/[locale]/params.ts`; everything else lives in the authored zone.
+2. A root layout (`(en)/layout.tsx`, `[locale]/layout.tsx`) MUST render `SiteShell`, plus `metadata` and FE-005's segment exports. A nested layout MUST NOT (`SiteShell` renders `<html>`); it MAY wrap its children.
+3. Route files MUST hold no layout markup, data shaping or business logic. Locale param plumbing lives in `src/app/[locale]/params.ts`.
 4. A route MUST reach `src/components/**` only through those two composition roots: `src/components/pages/**` and `site-shell.tsx`.
 
 ### 2. Import direction
 
-1. Tiers run `app → components → hooks → lib`. An edge MAY skip a tier downward (a page importing `@/lib/locale.pure`); it MUST NOT point upward.
+1. Tiers run `app → components → hooks → lib`. An edge MAY skip a tier downward; it MUST NOT point upward.
 2. No import cycle MAY exist anywhere under `src/`.
-3. `src/components/pages/**` is the top sub-tier of `components`, not a peer layer: only a route (or a test) imports it. No other component and no page component imports a page component. Only page components sit there; shared helpers live lower.
+3. `src/components/pages/**` is the top sub-tier of `components`, not a peer layer: only a route (or a test) imports it. No other component and no page component imports a page component. Shared helpers live lower.
 4. A stylesheet import is not a tier edge. `site-shell.tsx` imports `@/app/globals.css`; the cruise excludes `\.css$`.
 
 ### 3. `src/lib/**` imports no React
@@ -78,7 +78,7 @@ This record writes the live convention down and puts checks behind it; it change
 
 **Positive:**
 
-1. **Direction held mechanically:** every upward edge, cycle and React import in lib fails `npm run verify` at commit, not at review.
+1. **Direction held mechanically:** every upward edge, cycle and React import in lib fails `npm run verify` at push and `npm run lint` in CI, not at review.
 2. **Lib stays plain:** pure logic tests without a DOM, so ARCH-003's discipline stays cheap.
 3. **Thin routes are partly checkable:** a route that imports a UI primitive, or a page that renders no page component, fails the cruise.
 4. **The visualization keeps its freedom:** the one area a prior prototype degraded by over-structuring is fenced off in writing.
@@ -88,6 +88,7 @@ This record writes the live convention down and puts checks behind it; it change
 1. **`site-shell.tsx` is named by path:** the second composition root carries no classifier, so a second shell needs the rule widened by hand.
 2. **Two laws to learn:** a contributor must know which zone a file sits in before knowing which rules apply.
 3. **Logic-free routes are review-held:** "no data shaping" is not a glob; only the import ceiling is mechanical.
+4. **The `\.css$` exclusion is load-bearing:** `site-shell.tsx` imports `@/app/globals.css`, and `options.exclude` in `.dependency-cruiser.cjs` is the only reason `components-never-import-app` does not fire on it. Dropping it turns the repo red on a rule that reads as unrelated.
 
 **Risks:**
 
@@ -98,18 +99,18 @@ This record writes the live convention down and puts checks behind it; it change
 
 **Enforcers per Discipline:**
 
-- §1.1, §1.2: `.dependency-cruiser.cjs` `required` rules `page-composes-a-page-component` and `layout-composes-site-shell`, `error`; both match a root-level file too. A `required` rule asserts presence, not count.
+- §1.1, §1.2: `.dependency-cruiser.cjs` `required` rules `page-composes-a-page-component` (every `page.tsx`, root-level included) and `root-layout-composes-site-shell` (the two root layouts, by path), plus rule `site-shell-reached-only-from-root-layouts`, all `error`. `required` asserts presence, not count.
 - §1.4: `.dependency-cruiser.cjs` rule `route-reaches-components-only-via-roots`, `error`.
-- §2.1: rules `lib-imports-no-upper-tier`, `hooks-import-no-upper-tier`, `components-never-import-app`, `error`. FE-006's `hooks-reached-only-from-client` already bars app → hooks and server components → hooks; this record adds no rule restating it. `components-never-import-app` and FE-006's `client-never-imports-app` both fire on a `.client` → app edge.
+- §2.1: rules `lib-imports-no-upper-tier`, `hooks-import-no-upper-tier`, `components-never-import-app`, `error`. FE-006's `hooks-reached-only-from-client` already bars app → hooks and server components → hooks; no rule here restates it. `components-never-import-app` and FE-006's `client-never-imports-app` both fire on a `.client` → app edge.
 - §2.2: rule `no-circular`, `error`. §2.3: rule `pages-reached-only-from-app`, `error`.
-- §3.1: rules `lib-imports-no-react` and `lib-tsx-never-imported`, `error`. A `.tsx` in lib that nothing imports is reported by `knip` as an unused file.
-- Runner for all: `npm run lint:boundaries` (`depcruise src`) inside `npm run lint`, which `npm run verify` and CI run. The rule names above belong to this record; the three FE-006 rules in the same file do not.
+- §3.1: rules `lib-imports-no-react` and `lib-tsx-never-imported`, `error`. `lib-tsx-never-imported` sees only an imported `.tsx`; an unimported one is an unused file to `knip` (`knip.json` projects `src/**/*.{ts,tsx,css}`), exit 1. `knip` runs only in `npm run verify` (pre-push) — not at commit, not in CI.
+- Runner for every dependency-cruiser rule: `npm run lint:boundaries` (`depcruise src`) inside `npm run lint`, which `npm run verify` (pre-push) and CI run; the commit hook does not. `no-circular` is scoped `from: { path: '^src/' }`, so its reach does not depend on the runner's argument. The names above belong to this record; FE-006's three do not.
 
-**Measured on introduction** (probe files under `src/`, removed after): 8 probes — a lib type-only React import, a lib `.tsx` imported by a component, lib → components, hooks → components, components → app, a component importing a page component, a route page importing `ui/button`, and a two-file lib cycle — gave 9 errors, one per rule — the probe page fired both `route-reaches-components-only-via-roots` and `page-composes-a-page-component`. Repo: 0 errors, **77 dependencies cruised, 54 local, 12 type-only**, 0 edges from `src/lib/**` to React. With `tsPreCompilationDeps: false` the same probes still gave 9 errors — but the type-only React import vanished and the lib `.tsx`'s injected `react/jsx-runtime` edge fired in its place; the clean repo reads 80 cruised, 49 local, 0 type-only, 15 injected `react/jsx-runtime` — FE-006's figures. A stable error count over a changed edge set is the failure signature. A root `src/app/page.tsx` rendering no page component and a layout rendering no `SiteShell` each fired its `required` rule (2 errors). `knip` listed an unimported `src/lib/probe-b.tsx` as 1 unused file.
+**Measured on introduction** (probe files under `src/`, removed after): 8 probes, one breach per rule (a lib type-only React import, a lib `.tsx` imported, a two-file lib cycle, …), gave 9 errors — the probe page fired both `route-reaches-components-only-via-roots` and `page-composes-a-page-component`. Repo: 0 errors, **77 dependencies cruised, 54 local, 12 type-only**, 0 edges from `src/lib/**` to React. With `tsPreCompilationDeps: false` the same probes still gave 9 errors — but the type-only React import vanished and the lib `.tsx`'s injected `react/jsx-runtime` edge fired in its place; the clean repo reads 80 cruised, 49 local, 0 type-only, 15 injected `react/jsx-runtime` — FE-006's figures. Same count, different edges: the failure signature. A root `src/app/page.tsx` rendering no page component fired its `required` rule. Amended: a nested `[locale]/episode/probe/layout.tsx` without `SiteShell` gave 0 errors, importing it 1 (`site-shell-reached-only-from-root-layouts`); the scoped `no-circular` still fired on the lib cycle; repo 0 errors at 77 / 54 / 12 type-only. `knip` listed an unimported `src/lib/probe-b.tsx` as 1 unused file and exited 1; clean, it exits 0.
 
-**Known reach gap.** `src/lib/**` is only partly classified: `messages.ts`, `routes.ts`, `prefs-storage.ts` and `utils.ts` carry no classifier, and `utils.ts` is a name `ARCH-004` Decision 4 bans. Both belong to a future lib-tree record; this record leaves them as they are. The `\.css$` exclusion hides any stylesheet edge from every rule (§2.4).
+**Known reach gap.** `src/lib/**` is only partly classified: `messages.ts`, `routes.ts`, `prefs-storage.ts` and `utils.ts` carry no classifier, and `utils.ts` is a name `ARCH-004` Decision 4 bans. Both belong to a future lib-tree record; this record leaves them as they are. The `\.css$` exclusion in `.dependency-cruiser.cjs` hides any stylesheet edge from every rule (§2.4), and `components-never-import-app` currently depends on it to stay green (Negative 4). The root layouts are named by path in two rules; a third root layout needs both widened by hand.
 
-**Manual review duties** (never linted): route files hold no layout markup, data shaping or business logic (§1.3); no shared Slide shape, prop interface or layout rule is introduced (§4).
+**Manual review duties** (never linted): route files hold no layout markup, data shaping or business logic (§1.3); no nested layout renders its own `<html>` (§1.2); no shared Slide shape, prop interface or layout rule is introduced (§4).
 
 **Exceptions:** raise a separate ADR; human approval required.
 
@@ -121,4 +122,4 @@ This record writes the live convention down and puts checks behind it; it change
 - markdown-harness `ARCH-004 Folders and Files` — the flat-Package model rejected in Context.
 - [Next.js — Project Structure](https://nextjs.org/docs/app/getting-started/project-structure) — folder-as-route.
 - [dependency-cruiser — rules reference](https://github.com/sverweij/dependency-cruiser/blob/main/doc/rules-reference.md) — `forbidden`, `required`, `circular`.
-- [`docs/research/adr-candidates.md`](../../docs/research/adr-candidates.md) §2 — the survey this record was chosen from.
+- [`docs/research/adr-candidates.md`](../../docs/research/adr-candidates.md) §2 — the survey this record came from.

@@ -39,7 +39,7 @@ module.exports = {
       name: 'no-circular',
       severity: 'error',
       comment: 'No import cycle anywhere under src/; a cycle makes the tier order meaningless (FE-007).',
-      from: {},
+      from: { path: '^src/' },
       to: { circular: true },
     },
     {
@@ -71,6 +71,7 @@ module.exports = {
       from: { path: '^src/hooks/' },
       to: { path: '^src/(app|components)/' },
     },
+    // Relies on options.exclude '\.css$': site-shell.tsx imports @/app/globals.css, so dropping that exclusion fires this rule.
     {
       name: 'components-never-import-app',
       severity: 'error',
@@ -85,6 +86,14 @@ module.exports = {
         'src/components/pages/** is the top sub-tier of components: only a route under src/app/** (or a test) imports it, never another component or a page (FE-007).',
       from: { pathNot: ['^src/app/', '\\.test\\.tsx?$'] },
       to: { path: '^src/components/pages/' },
+    },
+    {
+      name: 'site-shell-reached-only-from-root-layouts',
+      severity: 'error',
+      comment:
+        'SiteShell renders <html>; only the two root layouts (or a test) import it. A nested layout or page doing so would nest a second <html> (FE-007).',
+      from: { pathNot: ['^src/app/(\\(en\\)|\\[locale\\])/layout\\.tsx$', '\\.test\\.tsx?$'] },
+      to: { path: '^src/components/site-shell\\.tsx$' },
     },
     {
       name: 'route-reaches-components-only-via-roots',
@@ -104,10 +113,10 @@ module.exports = {
       to: { path: '^src/components/pages/' },
     },
     {
-      name: 'layout-composes-site-shell',
+      name: 'root-layout-composes-site-shell',
       severity: 'error',
-      comment: 'Every src/app/**/layout.tsx renders SiteShell from src/components/site-shell.tsx (FE-007).',
-      module: { path: '^src/app/(.+/)?layout\\.tsx$' },
+      comment: 'Each root layout — the one rendering <html> — renders SiteShell (FE-007).',
+      module: { path: '^src/app/(\\(en\\)|\\[locale\\])/layout\\.tsx$' },
       to: { path: '^src/components/site-shell\\.tsx$' },
     },
   ],
