@@ -25,8 +25,8 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 **Out of scope:**
 
 - **Guided tour:** designed for, not built. There are no finished Episode pages to tour yet. The `target` pairing is the hook, as in Shepherd's `attachTo`: walking the note items in order and resolving each target is the tour.
-- **PDF export:** not built here. This ADR only keeps it possible, by printing notes and script in full.
-- **Live annotation:** it implies an editable content layer, which is to be decided on purpose, not by drift.
+- **PDF export:** not built; full print keeps it possible.
+- **Live annotation:** needs an editable content layer, to be decided on purpose.
 - **axe coverage:** a separate accessibility-testing decision.
 - **Slide internals:** they stay ungoverned.
 
@@ -67,16 +67,19 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 
 ### 8. Strings
 
-1. Keys `...slides.<slide>.notes.<note>.{header,description,image.alt}` and `...voiceScript.segments.<segment>.{title,keywords,script,bridge}`; chrome, including the mode menu's and the sources count (ICU), under `contextDrawer.*`; en and de together. Non-localized facts stay in the record. A source renders as selectable text, never an `href`.
+1. Keys `...slides.<slide>.notes.<note>.{header,description,image.alt}` and `...voiceScript.segments.<segment>.{title,keywords,script,bridge}`; chrome, including the mode menu's and the sources count (ICU), under `contextDrawer.*`; en and de together. Non-localized facts stay in the record. A source renders as a real `https` link (FE-003 §1.4) whose accessible name says it opens in a new tab (`contextDrawer.opensInNewTab`).
 
 ### 9. Card, layout and modes
 
-1. **Card.** A floating card in the table of contents' chrome (corners, border, shadow, translucency): `top-24`, below the sticky site header, with a 1rem gap at the right and bottom edges. A sticky head, then one scroll container. It slides in from the right by `transform` alone, and not at all under `prefers-reduced-motion`.
+1. **Card.** A floating card in the table of contents' chrome (corners, border, shadow, translucency): `top-24`, below the sticky site header, with a 1rem gap at the right and bottom edges. A sticky head, then one scroll container. It slides in from the right by `transform` alone: 250ms ease-out in, 200ms ease-in out, and not at all under `prefers-reduced-motion`.
 2. **Modes, from `md`.** A "more" menu in the head picks **side by side** (default) or **overlay**. Side by side reserves the card's width by changing the Episode grid's third column at once, through a spacer in the context slot, so the Slides reflow once; width, grid and margin MUST NOT transition. The mode is in-memory, not a stored preference, so FE-004 is not engaged.
 3. **Below `md`** the mode is always overlay and the menu is hidden. A dimmed scrim (`bg-black/40`, backdrop blur) covers the page; tapping it closes the drawer. It is pointer-only: Escape and the close button still work.
-4. **Head.** The current Slide's title once, then tabs, menu and close. The per-entry title shows only in print.
+4. **Head.** Sticky. Row one: the tabs left, the menu and close right. Row two: the current Slide's title once, wrapping freely, so a long title never moves the tabs. The per-entry title shows only in print.
 5. **Menu.** `aria-haspopup="menu"`, `aria-expanded`, `menuitemradio` items with `aria-checked`; arrows, Home and End move; Escape closes the menu alone and returns focus to its button.
-6. **Disclosure.** A note's sources sit in a closed `<details>` "Sources (n)", selectable text in the HTML; `beforeprint` opens every `<details>` in the slot, `afterprint` restores them.
+6. **Disclosure.** A note's sources sit in a closed `<details>` "Sources (n)", links with an external-link icon in the HTML; `beforeprint` opens every `<details>` in the slot, `afterprint` restores them.
+
+7. **Flat items.** A note or segment is no bordered card inside the card: a flat list, items spaced apart by a short centred divider, hierarchy by type alone. Chips and badges are fine.
+8. **Selected.** One `--selected` / `--selected-foreground` pair in `globals.css` marks the selected tab, active table-of-contents entry and current nav link: 3:1 against the surface, text 4.5:1, light and dark.
 
 ## Do's and Don'ts
 
@@ -95,7 +98,7 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 2. **DON'T** put the `hidden` attribute, `display: none` or `inert` on the context slot. (Decision 2)
 3. **DON'T** add a layout, style or placement field to a note or segment. (Decision 4)
 4. **DON'T** render the drawer from an Episode file. (Decision 7)
-5. **DON'T** write an `href` for a source. (Decision 8)
+5. **DON'T** show a source as plain text, or open it without `rel="noopener noreferrer"`. (Decision 8)
 6. **DON'T** transition width, grid tracks or margins for the card. (Decision 9)
 
 ## Consequences
@@ -108,7 +111,7 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 
 **Negative:**
 
-1. **Sources are not links.** FE-003's `href-via-localize-path` rule leaves external links inexpressible, so sources are selectable text until an external-link decision exists. This is a gap.
+1. **Sources leave the site:** a source opens in a new tab and its target is not checked; a dead link is found by hand.
 2. **`Alt+N` is untested on every assistive stack;** `aria-keyshortcuts` announces a shortcut and implements nothing.
 3. **Side by side reflows the Slides once** per open or close; overlay covers them instead. Print appends notes after the Slides, not between them.
 4. **Closed sources rely on `beforeprint`** to print; a browser without it prints them closed.
@@ -126,7 +129,7 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 2. **Fast** (`npm run verify`): unit tests beside `src/lib/context-drawer.pure.ts` and `src/lib/episode.pure.ts`.
 3. **archgate:** `FE-010-context-drawer.rules.ts`, both rules at `error`: `print-reveals-context` over `src/app/globals.css`, `drawer-is-non-modal` over `src/components/context-drawer/**`. §1, §2.
 4. **dependency-cruiser** (`.dependency-cruiser.cjs`): `context-drawer-reached-only-from-container`. §7.
-5. **Post-build** (`npm run test:build`): `tests/post-build/context-drawer.build.test.ts` checks the slot, notes in static HTML, no `hidden` attribute, resolving targets, locale parity, sources as text and the print block; `tests/post-build/episode-structure.build.test.ts` keeps the slot order. §2, §5, §8.
+5. **Post-build** (`npm run test:build`): `tests/post-build/context-drawer.build.test.ts` checks the slot, notes in static HTML, no `hidden` attribute, resolving targets, locale parity, sources as links and the print block; `tests/post-build/episode-structure.build.test.ts` keeps the slot order. §2, §5, §8.
 
 **Manual review duties:** the card's placement, motion and one-step layout at 1440px and 375px; the pills' fit at 375px; the mode menu with a keyboard; German copy quality; `Alt+N` on real screen readers; a real print preview; focus return; no design field in the note shape; catalog key shape (`docs/agents/episode-catalog-keys.md`, `GLOSSARY.md`).
 
