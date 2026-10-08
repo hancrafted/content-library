@@ -1,0 +1,112 @@
+{
+  "brand": {
+    "name": "hancrafted",
+    "home": "hancrafted, go to the landing page"
+  },
+  "nav": {
+    "label": "Main",
+    "episodes": "Episodes"
+  },
+  "theme": {
+    "label": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "locale": {
+    "label": "Language"
+  },
+  "landing": {
+    "title": "Home",
+    "link": "Page template"
+  },
+  "meta": {
+    "home": {
+      "title": "Visualised theory · hancrafted",
+      "description": "Theory from the hancrafted training videos, visualised page by page."
+    }
+  },
+  "tableOfContents": {
+    "title": "Contents",
+    "progress": "Reading time",
+    "remaining": {
+      "one": "# min left",
+      "other": "# min left"
+    },
+    "toggle": "Show or hide slides",
+    "loading": "Loading",
+    "open": "Open contents",
+    "close": "Close contents"
+  },
+  "episodes": {
+    "page-template": {
+      "title": "Page template",
+      "caption": "One Episode, from its Title slide to its last Section: the reference every other Episode is built from.",
+      "description": "The layout every episode follows: sections of slides stacked down one page.",
+      "sections": {
+        "foundations": {
+          "title": "Foundations",
+          "caption": "The system every Episode is built from: one Slide master, a few Slide layouts, keyed strings.",
+          "slides": {
+            "why-a-template": {
+              "title": "Why every Episode starts from one shared reference template",
+              "caption": "Every Episode shares one spine: Episode, Section, Slide.",
+              "prose": "Markup stays free. Only the words are keyed, by Section slug, Slide slug and role, so a translation never has to pass through a layout schema."
+            },
+            "three-layers": {
+              "title": "Why master frames and keyed localization catalogs never share responsibilities",
+              "caption": "Each layer owns one concern and nothing else.",
+              "columns": {
+                "master": {
+                  "title": "Slide master",
+                  "prose": "Owns the universals: frame, spacing, type scale."
+                },
+                "layouts": {
+                  "title": "Slide layouts",
+                  "prose": "Compose the Slide master into one design. A new kind of slide is a new Slide layout."
+                },
+                "catalog": {
+                  "title": "Catalog",
+                  "prose": "Holds every string per locale, keyed by meaning, never by position."
+                }
+              }
+            }
+          }
+        },
+        "interlude": {
+          "title": "Interlude",
+          "caption": "A Section can stand on its own, without any page slides."
+        },
+        "next-steps": {
+          "title": "Where the template goes once the open questions are settled",
+          "caption": "{count, plural, one {# slide} other {# slides}} to close the Episode.",
+          "slides": {
+            "building-blocks": {
+              "title": "Building blocks",
+              "caption": "Three Slide layouts prove the split.",
+              "columns": {
+                "section": {
+                  "title": "Section slide",
+                  "prose": "Title and caption, vertically centred."
+                },
+                "basic": {
+                  "title": "Basic page",
+                  "prose": "Title, caption and one block of prose."
+                },
+                "three-column": {
+                  "title": "Three columns",
+                  "prose": "Title, caption and three keyed columns."
+                }
+              }
+            },
+            "what-comes-next": {
+              "title": "What comes next",
+              "caption": "Real Episodes grow from here.",
+              "prose": "Charts, speaker notes and the video link attach to the same spine later, without rewriting what exists."
+            }
+          }
+        }
+      }
+    }
+  }
+}

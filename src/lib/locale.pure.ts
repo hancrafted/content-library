@@ -35,11 +35,18 @@ export function stripLocale(pathname: string): string {
   return prefix === undefined ? path : normalize(path.slice(prefix.length + 1));
 }
 
-/** The URL of a logical path in a locale: unprefixed for the default locale. */
-export function localizePath(logicalPath: string, locale: Locale): string {
-  const path = normalize(logicalPath);
+function prefixPath(path: string, locale: Locale): string {
   if (locale === DEFAULT_LOCALE) return path;
   return path === '/' ? `/${locale}` : `/${locale}${path}`;
+}
+
+/**
+ * The URL of a logical path in a locale: unprefixed for the default locale.
+ * `fragment` (without `#`) targets an anchor on that page, e.g. a slide.
+ */
+export function localizePath(logicalPath: string, locale: Locale, fragment?: string): string {
+  const url = prefixPath(normalize(logicalPath), locale);
+  return fragment ? `${url}#${fragment}` : url;
 }
 
 /** Whether a pathname sits inside a logical section: the section's own path or anything beneath it. */

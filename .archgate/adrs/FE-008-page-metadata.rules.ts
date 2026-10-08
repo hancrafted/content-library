@@ -38,7 +38,7 @@ export default {
           } else if (!PAGE_HELPER_RE.test(source)) {
             ctx.report.violation({
               message:
-                'Page metadata is built by hand — return pageMetadata(<page>, locale) from @/lib/page-metadata.pure so copy comes from messages.ts and alternates from localizePath (FE-008 [page-exports-metadata]).',
+                'Page metadata is built by hand — return pageMetadata(<page>, locale) from @/lib/page-metadata.pure so copy comes from the catalogs and alternates from localizePath (FE-008 [page-exports-metadata]).',
               file,
             });
           }

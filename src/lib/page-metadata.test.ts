@@ -6,7 +6,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = '/de/episode/page-template';
     // ACT
-    const metadata = pageMetadata('episodeTemplate', 'de');
+    const metadata = pageMetadata({ episode: 'page-template' }, 'de');
     // ASSERT
     expect(metadata.alternates?.canonical).toBe(expected);
   });
@@ -19,18 +19,18 @@ describe('success cases', () => {
       'x-default': '/episode/page-template',
     };
     // ACT
-    const fromEnglish = pageMetadata('episodeTemplate', 'en').alternates?.languages;
-    const fromGerman = pageMetadata('episodeTemplate', 'de').alternates?.languages;
+    const fromEnglish = pageMetadata({ episode: 'page-template' }, 'en').alternates?.languages;
+    const fromGerman = pageMetadata({ episode: 'page-template' }, 'de').alternates?.languages;
     // ASSERT
     expect(fromEnglish).toEqual(expected);
     expect(fromGerman).toEqual(expected);
   });
 
-  it('takes title and description from the locale messages', () => {
+  it('takes title and description from the locale catalog', () => {
     // ARRANGE
     const expectedTitle = 'Seitenvorlage';
     // ACT
-    const metadata = pageMetadata('episodeTemplate', 'de');
+    const metadata = pageMetadata({ episode: 'page-template' }, 'de');
     // ASSERT
     expect(metadata.title).toBe(expectedTitle);
     expect(metadata.description).toEqual(expect.any(String));

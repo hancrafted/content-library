@@ -5,8 +5,9 @@ title: 'Page Metadata'
 domain: frontend
 rules: true
 files: ['src/app/**/*']
-paths: ['src/app/**', 'src/lib/{page-metadata*,site-url,messages,routes}.ts', 'tests/**', '.github/**/deploy.yml']
-description: 'Every page exports metadata built by pageMetadata(): per-locale title and description from messages.ts, a canonical, and reciprocal en/de/x-default hreflang, resolved against a SITE_URL the deploy sets. Layouts hold site-wide metadata only.'
+# prettier-ignore
+paths: ['src/app/**', 'src/lib/{page-metadata*,site-url,routes}.ts', 'src/i18n/catalogs.ts', 'src/messages/*.json', 'tests/**', '.github/**/deploy.yml']
+description: 'Every page exports metadata built by pageMetadata(): per-locale title and description from the next-intl catalogs, a canonical, and reciprocal en/de/x-default hreflang, resolved against a SITE_URL the deploy sets. Layouts hold site-wide metadata only.'
 ---
 
 # Page Metadata
@@ -35,13 +36,13 @@ Settled points, argued here so Decision stays short:
 
 ### 1. Every page exports metadata built by `pageMetadata()` (📜 Rule: `page-exports-metadata`)
 
-1. Every `src/app/**/page.tsx` MUST export `metadata` or `generateMetadata` returning `pageMetadata(<PageKey>, locale)` from `src/lib/page-metadata.pure.ts`.
+1. Every `src/app/**/page.tsx` MUST export `metadata` or `generateMetadata` returning `pageMetadata(<PageRef>, locale)` from `src/lib/page-metadata.pure.ts`.
 2. `pageMetadata` derives the canonical and one alternate per `LOCALES` entry plus `x-default` (the `DEFAULT_LOCALE` URL) with `localizePath`. No route writes a URL.
-3. `PageKey` (`src/lib/routes.ts`) is every `ROUTES` key except `episodes`; a page MUST have one.
+3. `PageRef` (`src/lib/routes.ts`) is `'home'` or `{ episode: <EpisodeSlug> }`; a page MUST have one. An Episode route reads its slug from the params.
 
-### 2. Title and description are messages
+### 2. Title and description are catalog strings
 
-1. They MUST live in `MESSAGES[locale].meta[<PageKey>]` in `src/lib/messages.ts`, typed so a missing page or locale fails `tsc`.
+1. They MUST live in `src/messages/<locale>.json`: `meta.home` for the landing page, `episodes.<slug>.title` and `.description` for an Episode. `de.json` is typed against `en.json`, so a missing key fails `tsc`.
 2. A page at a root layout's own segment MUST name the brand in its title; `title.template` skips that segment.
 
 ### 3. `SITE_URL` is the absolute base
@@ -65,7 +66,7 @@ Settled points, argued here so Decision stays short:
 ### Do's
 
 1. **DO** write `export const metadata = pageMetadata('<page>', DEFAULT_LOCALE)` in the unprefixed tree and `generateMetadata` returning `pageMetadata('<page>', await resolveLocale(params))` under `[locale]`. (Decision 1, 📜 Rule: `page-exports-metadata`)
-2. **DO** add a new page's `ROUTES` key and its `meta` entry in both locales before its route. (Decisions 1 and 2)
+2. **DO** add a new page's `PageRef` and its title and description in both catalogs before its route. (Decisions 1 and 2)
 3. **DO** write titles and descriptions for the reader of a search result in that language, not as translations of each other. (Decision 2)
 4. **DO** keep root layouts to `siteMetadata(locale, SITE_URL)`. (Decision 4, 📜 Rule: `layout-holds-site-metadata-only`)
 5. **DO** run `npm run build` then `npm run test:build` after touching metadata, routes or locales. (Decisions 1 and 3)
@@ -83,7 +84,7 @@ Settled points, argued here so Decision stays short:
 **Positive:**
 
 1. **Each audience finds its locale:** every page names its own canonical and its counterpart, so a German query can surface the `/de` page and an English one the bare page.
-2. **One source per fact:** URLs from `localizePath`, copy from `messages.ts`, the origin from the deploy. The duplicated title cannot recur.
+2. **One source per fact:** URLs from `localizePath`, copy from the next-intl catalogs, the origin from the deploy. The duplicated title cannot recur.
 3. **Domain-portable:** a custom domain changes `configure-pages`' output, not code.
 4. **Held at three depths:** route text by archgate, copy completeness by `tsc`, the emitted HTML by the post-build test.
 
@@ -96,7 +97,7 @@ Settled points, argued here so Decision stays short:
 **Risks:**
 
 1. **A deploy loses `SITE_URL`:** canonicals would publish as localhost. **Mitigation:** the deploy passes `SITE_URL` to the post-build test separately from the build step; a build that lost it fails against the workflow's value. Dropping it from both steps is not caught.
-2. **A page missing from `ROUTES`:** the post-build test walks `ROUTES` × `LOCALES`, so it cannot see it. **Mitigation:** `page-exports-metadata` still forces `pageMetadata(<PageKey>)`, which accepts only a `ROUTES` key — `tsc` fails first.
+2. **A page missing from the walk:** the post-build test walks `ROUTES.home` and `EPISODE_SLUGS` × `LOCALES`, so it cannot see another page. **Mitigation:** `page-exports-metadata` still forces `pageMetadata(<PageRef>)`, which accepts only `'home'` or a known Episode slug — `tsc` fails first.
 
 ## Compliance and Enforcement
 

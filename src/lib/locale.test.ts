@@ -22,6 +22,20 @@ describe('success cases', () => {
     expect(url).toBe('/de/episode/page-template');
   });
 
+  it('appends a fragment after the localized path', () => {
+    // ARRANGE
+    const logicalPath = '/episode/page-template';
+    const fragment = 'foundations--why-a-template';
+    const expectedEnglish = '/episode/page-template#foundations--why-a-template';
+    const expectedGerman = '/de/episode/page-template#foundations--why-a-template';
+    // ACT
+    const english = localizePath(logicalPath, 'en', fragment);
+    const german = localizePath(logicalPath, 'de', fragment);
+    // ASSERT
+    expect(english).toBe(expectedEnglish);
+    expect(german).toBe(expectedGerman);
+  });
+
   it('switches to the same logical page in the other locale', () => {
     // ARRANGE
     const english = '/episode/page-template';
@@ -100,6 +114,21 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('anchors on the prefixed locale root and drops an empty fragment', () => {
+    // ARRANGE
+    const root = '/';
+    const fragment = 'intro';
+    const empty = '';
+    const expectedAnchored = '/de#intro';
+    const expectedBare = '/de';
+    // ACT
+    const germanRoot = localizePath(root, 'de', fragment);
+    const noFragment = localizePath(root, 'de', empty);
+    // ASSERT
+    expect(germanRoot).toBe(expectedAnchored);
+    expect(noFragment).toBe(expectedBare);
+  });
+
   it('maps the prefixed locale root to the default root and back', () => {
     // ARRANGE
     const germanRoot = '/de';

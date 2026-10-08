@@ -31,6 +31,33 @@ module.exports = {
       from: { path: '\\.client\\.tsx$' },
       to: { path: '^src/app/' },
     },
+    {
+      name: 'toc-reached-only-from-container',
+      severity: 'error',
+      comment:
+        'Inside Episode code, the table of contents is reached only through EpisodePageContainer, which derives its entries from the same anchors the slides carry. Other page kinds may still use it (FE-002).',
+      from: {
+        path: '^src/components/(episodes|episode)/',
+        pathNot: '^src/components/episode/episode-page-container\\.(tsx|pure\\.ts)$',
+      },
+      to: { path: '^src/components/table-of-contents/' },
+    },
+    {
+      name: 'episodes-reach-only-slide-parts',
+      severity: 'error',
+      comment:
+        'An Episode page file composes the Slide master, Slide layouts and the Episode record, plus src/lib helpers — never the table of contents, page shells or routes (FE-002).',
+      from: { path: '^src/components/episodes/' },
+      to: { pathNot: ['^src/components/(episodes|episode)/', '^src/lib/', 'node_modules'] },
+    },
+    {
+      name: 'episodes-never-render-the-shell',
+      severity: 'error',
+      comment:
+        'The Title slide and the container are rendered once, by the EpisodePage page component. An Episode page file imports only the Episode record types from episode-page-container.pure.ts (FE-002).',
+      from: { path: '^src/components/episodes/' },
+      to: { path: '^src/components/episode/(title-slide|episode-page-container)\\.tsx$' },
+    },
 
     // FE-007: layering. Tiers run app → components → hooks → lib; an edge may
     // skip a tier downward, never point upward. Boundary rules above (FE-006)
