@@ -17,15 +17,15 @@ episodes.<episode-slug>.sections.<section-slug>.slides.<slide-slug>.columns.<col
 - **Never a position.** A column, slide or section is keyed by what it _is_ (`master`, `three-layers`), not where it sits (`0`, `first`). Reordering must not touch the catalog.
 - Name levels by domain (`sections`, `slides`, `columns`), never by heading level (`h2`). Heading level is a render detail of the variant.
 
-Chrome shared by all Episodes (e.g. `episodeNav.label`, the sitenav's accessible name) sits outside `episodes.*` and is not bound by the role table.
+Chrome shared by all Episodes (e.g. `tableOfContents.title`, the table of contents' heading) sits outside `episodes.*` and is not bound by the role table.
 
 ## Role vocabulary
 
-| Role      | Meaning                                    | Used on                         |
-| --------- | ------------------------------------------ | ------------------------------- |
-| `title`   | the unit's heading; also its sitenav label | episode, section, slide, column |
-| `caption` | one-line framing under the title           | section, slide                  |
-| `prose`   | a body paragraph                           | slide, column                   |
+| Role      | Meaning                                              | Used on                         |
+| --------- | ---------------------------------------------------- | ------------------------------- |
+| `title`   | the unit's heading; also its table-of-contents label | episode, section, slide, column |
+| `caption` | one-line framing under the title                     | section, slide                  |
+| `prose`   | a body paragraph                                     | slide, column                   |
 
 Add a role only when a new variant needs a leaf none of these describe, and add it to this table in the same change.
 

@@ -20,16 +20,16 @@
     "title": "Home",
     "link": "Page template"
   },
-  "episodeNav": {
-    "label": "Episode contents",
-    "progress": "Reading progress",
-    "open": "Open episode contents",
-    "close": "Close episode contents",
-    "preview": {
-      "label": "Sitenav design (temporary)",
-      "rail": "Rail",
-      "index": "Index"
-    }
+  "tableOfContents": {
+    "title": "Contents",
+    "progress": "Reading time",
+    "remaining": {
+      "one": "# min left",
+      "other": "# min left"
+    },
+    "toggle": "Show or hide slides",
+    "open": "Open contents",
+    "close": "Close contents"
   },
   "episodes": {
     "page-template": {
@@ -40,12 +40,12 @@
           "caption": "The system every Episode is built from: one master, a few variants, keyed strings.",
           "slides": {
             "why-a-template": {
-              "title": "Why a template",
+              "title": "Why every Episode starts from one shared reference template",
               "caption": "Every Episode shares one spine: Episode, Section, Slide.",
               "prose": "Markup stays free. Only the words are keyed, by Section slug, Slide slug and role, so a translation never has to pass through a layout schema."
             },
             "three-layers": {
-              "title": "Three layers",
+              "title": "Why master frames and keyed localization catalogs never share responsibilities",
               "caption": "Each layer owns one concern and nothing else.",
               "columns": {
                 "master": {
@@ -69,7 +69,7 @@
           "caption": "A Section can stand on its own, without any page slides."
         },
         "next-steps": {
-          "title": "Next steps",
+          "title": "Where the template goes once the open questions are settled",
           "caption": "{count, plural, one {# slide} other {# slides}} to close the Episode.",
           "slides": {
             "building-blocks": {

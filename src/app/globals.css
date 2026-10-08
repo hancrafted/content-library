@@ -58,7 +58,7 @@
   body {
     @apply bg-background text-foreground;
   }
-  /* Sitenav links glide to their slide; `data-scroll-behavior` on <html> keeps route changes instant. */
+  /* Table-of-contents links glide to their slide; `data-scroll-behavior` on <html> keeps route changes instant. */
   @media (prefers-reduced-motion: no-preference) {
     html {
       scroll-behavior: smooth;

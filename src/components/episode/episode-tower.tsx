@@ -1,13 +1,14 @@
-import type { SitenavLabels, SitenavSection, SitenavVariant } from '@/components/sitenav/sitenav';
+import { TableOfContents, type TocLabels, type TocSection } from '@/components/table-of-contents/table-of-contents';
 import { episodeAnchors, sectionAnchor, slideAnchor, type EpisodeOutline } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
 import type { ReactNode } from 'react';
-import { SitenavPreview } from './sitenav-preview';
 
 export interface TowerSlide {
   slug: string;
-  /** Plain text for the sitenav; the slide renders its own heading. */
+  /** Plain text for the table of contents; the slide renders its own heading. */
   title: string;
+  /** Reading time, in minutes. */
+  minutes: number;
   content: ReactNode;
 }
 
@@ -20,19 +21,18 @@ function outlineOf(sections: readonly TowerSection[]): EpisodeOutline {
   return sections.map(({ slug, slides }) => ({ slug, slides: slides.map((slide) => slide.slug) }));
 }
 
-/** The tower's own outline, as the page-agnostic sitenav reads it. */
-function sitenavSections(sections: readonly TowerSection[]): SitenavSection[] {
+/** The tower's own outline, as the page-agnostic table of contents reads it. */
+function tocSections(sections: readonly TowerSection[]): TocSection[] {
   return sections.map((section) => ({
     id: sectionAnchor(section.slug),
     title: section.title,
-    items: section.slides.map((slide) => ({ id: slideAnchor(section.slug, slide.slug), title: slide.title })),
+    minutes: section.minutes,
+    items: section.slides.map((slide) => ({
+      id: slideAnchor(section.slug, slide.slug),
+      title: slide.title,
+      minutes: slide.minutes,
+    })),
   }));
-}
-
-export interface TowerLabels {
-  sitenav: SitenavLabels;
-  /** TEMPORARY: the Rail/Index design switch. */
-  preview: Record<'label' | SitenavVariant, string>;
 }
 
 function SlideAnchor({ anchor, children }: { anchor: string; children: ReactNode }) {
@@ -57,7 +57,7 @@ function SectionSlides({ section }: { section: TowerSection }) {
 }
 
 /**
- * The Episode tower page: sticky sitenav left, slides stacked right. Every
+ * The Episode tower page: sticky table of contents left, slides stacked right. Every
  * Section renders uniformly — its own slide, then its page slides — so a
  * Section without page slides needs no special case.
  */
@@ -65,18 +65,19 @@ export function EpisodeTower(props: {
   locale: Locale;
   route: string;
   title: string;
-  labels: TowerLabels;
+  labels: TocLabels;
   sections: readonly TowerSection[];
 }) {
   episodeAnchors(outlineOf(props.sections));
-  const { locale, route } = props;
-  const sitenav = { locale, route, targetAttribute: 'data-slide', labels: props.labels.sitenav };
   return (
     <div className="mx-4 mt-6 md:grid md:grid-cols-[17rem_minmax(0,1fr)] md:gap-12">
       <aside>
-        <SitenavPreview
-          sitenav={{ ...sitenav, sections: sitenavSections(props.sections) }}
-          labels={props.labels.preview}
+        <TableOfContents
+          locale={props.locale}
+          route={props.route}
+          sections={tocSections(props.sections)}
+          targetAttribute="data-slide"
+          labels={props.labels}
         />
       </aside>
       <main data-testid="episode-page" className="flex min-w-0 flex-col pb-24">

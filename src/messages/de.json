@@ -20,16 +20,16 @@
     "title": "Start",
     "link": "Seitenvorlage"
   },
-  "episodeNav": {
-    "label": "Inhalt der Episode",
-    "progress": "Lesefortschritt",
-    "open": "Inhalt der Episode öffnen",
-    "close": "Inhalt der Episode schließen",
-    "preview": {
-      "label": "Sitenav-Design (vorübergehend)",
-      "rail": "Rail",
-      "index": "Index"
-    }
+  "tableOfContents": {
+    "title": "Inhalt",
+    "progress": "Lesezeit",
+    "remaining": {
+      "one": "noch # Min.",
+      "other": "noch # Min."
+    },
+    "toggle": "Folien ein- oder ausblenden",
+    "open": "Inhalt öffnen",
+    "close": "Inhalt schließen"
   },
   "episodes": {
     "page-template": {
@@ -40,12 +40,12 @@
           "caption": "Das System, aus dem jede Episode entsteht: ein Master, wenige Varianten, Texte mit Schlüsseln.",
           "slides": {
             "why-a-template": {
-              "title": "Warum eine Vorlage",
+              "title": "Warum jede Episode mit derselben gemeinsamen Referenzvorlage beginnt",
               "caption": "Jede Episode teilt dasselbe Rückgrat: Episode, Abschnitt, Folie.",
               "prose": "Das Markup bleibt frei. Nur die Wörter tragen Schlüssel, aus Abschnitts-Slug, Folien-Slug und Rolle, sodass eine Übersetzung nie durch ein Layout-Schema muss."
             },
             "three-layers": {
-              "title": "Drei Ebenen",
+              "title": "Warum Masterrahmen und Übersetzungskataloge mit Schlüsseln niemals Zuständigkeiten teilen",
               "caption": "Jede Ebene verantwortet genau eine Sache.",
               "columns": {
                 "master": {
@@ -69,7 +69,7 @@
           "caption": "Ein Abschnitt kann für sich stehen, ganz ohne Inhaltsfolien."
         },
         "next-steps": {
-          "title": "Nächste Schritte",
+          "title": "Wohin sich die Vorlage entwickelt, sobald die offenen Fragen geklärt sind",
           "caption": "{count, plural, one {# Folie} other {# Folien}} zum Abschluss der Episode.",
           "slides": {
             "building-blocks": {

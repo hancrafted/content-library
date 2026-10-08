@@ -37,7 +37,7 @@ function assertUnique(anchors: readonly string[]): void {
 }
 
 /**
- * Every slide anchor in page order: the order the sitenav lists and arrow keys
+ * Every slide anchor in page order: the order the table of contents lists and arrow keys
  * walk. Throws on a bad outline, so a broken Episode fails the static build.
  */
 export function episodeAnchors(outline: EpisodeOutline): string[] {

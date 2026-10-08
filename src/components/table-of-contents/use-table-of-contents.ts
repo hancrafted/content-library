@@ -1,0 +1,82 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { activeId, openSectionIds, type TocSection } from './table-of-contents.pure';
+
+/** The reading line, as a share of the viewport height from its top. */
+const READING_LINE = 0.35;
+const NOTHING_TOGGLED: ReadonlySet<string> = new Set();
+
+/** Tracks which `[targetAttribute]` element spans the reading line; `null` before the first observation. */
+export function useActiveId(order: readonly string[], targetAttribute: string): string | null {
+  const [active, setActive] = useState<string | null>(null);
+  useEffect(() => {
+    const intersecting = new Set<string>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const id = entry.target.getAttribute(targetAttribute) ?? '';
+          if (entry.isIntersecting) intersecting.add(id);
+          else intersecting.delete(id);
+        }
+        setActive((previous) => activeId(intersecting, order, previous));
+      },
+      { rootMargin: `-${READING_LINE * 100}% 0px -${(1 - READING_LINE) * 100}% 0px` },
+    );
+    document.querySelectorAll(`[${targetAttribute}]`).forEach((element) => observer.observe(element));
+    return () => observer.disconnect();
+  }, [order, targetAttribute]);
+  return active;
+}
+
+function fractionInto(element: Element | null): number {
+  const root = document.documentElement;
+  if (window.scrollY + window.innerHeight >= root.scrollHeight - 1) return 1;
+  if (!element) return 0;
+  const box = element.getBoundingClientRect();
+  return box.height > 0 ? (window.innerHeight * READING_LINE - box.top) / box.height : 0;
+}
+
+/** How far the reading line has travelled through the active element, sampled once per frame; 1 at the page end. */
+export function useFractionInto(active: string | null, targetAttribute: string): number {
+  // Keyed by the entry it was measured on, so a new active entry never borrows the previous one's fraction.
+  const [sample, setSample] = useState({ active, fraction: 0 });
+  useEffect(() => {
+    const element = active && document.querySelector(`[${targetAttribute}="${CSS.escape(active)}"]`);
+    let frame = 0;
+    const schedule = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() =>
+        // Hundredths are plenty for a progress bar and skip re-renders between them.
+        setSample({ active, fraction: Math.round(fractionInto(element || null) * 100) / 100 }),
+      );
+    };
+    schedule();
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+    };
+  }, [active, targetAttribute]);
+  return sample.active === active ? sample.fraction : 0;
+}
+
+/**
+ * Open sections plus a chevron toggle. Toggles are remembered only while the
+ * reader stays in the same section; scrolling into another one resets them.
+ */
+export function useOpenSections(sections: readonly TocSection[], active: string | null) {
+  const [owner] = openSectionIds(sections, active, NOTHING_TOGGLED);
+  const [state, setState] = useState({ owner, toggled: NOTHING_TOGGLED });
+  // Adjusting state during render (not in an effect) drops stale toggles before they ever paint.
+  if (state.owner !== owner) setState({ owner, toggled: NOTHING_TOGGLED });
+  const toggled = state.owner === owner ? state.toggled : NOTHING_TOGGLED;
+  const toggle = (id: string) => {
+    const next = new Set(toggled);
+    if (!next.delete(id)) next.add(id);
+    setState({ owner, toggled: next });
+  };
+  return { open: openSectionIds(sections, active, toggled), toggle };
+}

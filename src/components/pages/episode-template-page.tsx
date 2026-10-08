@@ -18,6 +18,7 @@ function whyATemplate(t: SectionsT): TowerSlide {
   return {
     slug: 'why-a-template',
     title,
+    minutes: 3,
     content: (
       <BasicPageSlide
         title={title}
@@ -38,6 +39,7 @@ function threeLayers(t: SectionsT): TowerSlide {
   return {
     slug: 'three-layers',
     title,
+    minutes: 4,
     content: (
       <ThreeColumnSlide
         title={title}
@@ -58,6 +60,7 @@ function buildingBlocks(t: SectionsT): TowerSlide {
   return {
     slug: 'building-blocks',
     title,
+    minutes: 5,
     content: (
       <ThreeColumnSlide
         title={title}
@@ -73,6 +76,7 @@ function whatComesNext(t: SectionsT): TowerSlide {
   return {
     slug: 'what-comes-next',
     title,
+    minutes: 2,
     content: (
       <BasicPageSlide
         title={title}
@@ -87,7 +91,7 @@ function sections(t: SectionsT): TowerSection[] {
   const nextSteps = [buildingBlocks(t), whatComesNext(t)];
   const sectionOf = (slug: 'foundations' | 'interlude' | 'next-steps', caption: string, slides: TowerSlide[]) => {
     const title = t(`${slug}.title`);
-    return { slug, title, content: <SectionSlide title={title} caption={caption} />, slides };
+    return { slug, title, minutes: 1, content: <SectionSlide title={title} caption={caption} />, slides };
   };
   return [
     sectionOf('foundations', t('foundations.caption'), [whyATemplate(t), threeLayers(t)]),
@@ -98,7 +102,7 @@ function sections(t: SectionsT): TowerSection[] {
 
 export async function EpisodeTemplatePage({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'episodes.page-template' });
-  const nav = await getTranslations({ locale, namespace: 'episodeNav' });
+  const toc = await getTranslations({ locale, namespace: 'tableOfContents' });
   const sectionsT = await getTranslations({ locale, namespace: 'episodes.page-template.sections' });
   return (
     <EpisodeTower
@@ -106,8 +110,12 @@ export async function EpisodeTemplatePage({ locale }: { locale: Locale }) {
       route={ROUTES.episodeTemplate}
       title={t('title')}
       labels={{
-        sitenav: { nav: nav('label'), progress: nav('progress'), open: nav('open'), close: nav('close') },
-        preview: { label: nav('preview.label'), rail: nav('preview.rail'), index: nav('preview.index') },
+        title: toc('title'),
+        progress: toc('progress'),
+        remaining: { one: toc('remaining.one'), other: toc('remaining.other') },
+        toggle: toc('toggle'),
+        open: toc('open'),
+        close: toc('close'),
       }}
       sections={sections(sectionsT)}
     />
