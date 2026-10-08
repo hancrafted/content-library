@@ -56,6 +56,31 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it.each([
+    ['an empty string', ''],
+    ['only separators and blanks', ' , ,'],
+  ])('yields no keywords for %s', (_label, raw) => {
+    // ARRANGE
+    const keywordsRead = (key: string) => (key.endsWith('.keywords') ? raw : key);
+    const spec = { segments: [{ slug: 's', from: 0, to: 1 }] };
+    const expected: string[] = [];
+    // ACT
+    const [segment] = slideContext(keywordsRead, 'b', spec).voiceScript;
+    // ASSERT
+    expect(segment.keywords).toEqual(expected);
+  });
+
+  it('drops empty entries between real keywords', () => {
+    // ARRANGE
+    const keywordsRead = (key: string) => (key.endsWith('.keywords') ? 'a,, b,' : key);
+    const spec = { segments: [{ slug: 's', from: 0, to: 1 }] };
+    const expected = ['a', 'b'];
+    // ACT
+    const [segment] = slideContext(keywordsRead, 'b', spec).voiceScript;
+    // ASSERT
+    expect(segment.keywords).toEqual(expected);
+  });
+
   it('returns empty lists for an empty spec', () => {
     // ARRANGE
     const spec = {};

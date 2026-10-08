@@ -51,7 +51,8 @@ function segmentOf(read: ReadString, base: string, spec: SegmentSpec): VoiceScri
     title: read(`${key}.title`),
     keywords: read(`${key}.keywords`)
       .split(',')
-      .map((word) => word.trim()),
+      .map((word) => word.trim())
+      .filter((word) => word !== ''),
     script: read(`${key}.script`),
     ...(spec.bridge && { bridge: read(`${key}.bridge`) }),
   };
