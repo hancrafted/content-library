@@ -8,12 +8,10 @@ import { contextEntries } from './context-entries';
  * A Server Component; it takes one `ContextDrawerInput` and nothing else.
  */
 export function ContextDrawerSlot({ input }: { input: ContextDrawerInput }) {
-  const { title, open, close, shortcut, slide, tabs, menu } = input.labels;
-  // Only plain strings cross to the client: `labels.sources` is a function.
-  const labels = { title, open, close, shortcut, slide, tabs, menu };
+  const { strings } = input.labels;
   return (
-    <aside data-slot="context" aria-label={title}>
-      <ContextDrawer labels={labels} entries={contextEntries(input.items, input.labels)} />
+    <aside data-slot="context" aria-label={strings.title}>
+      <ContextDrawer labels={strings} entries={contextEntries(input.items, input.labels)} />
     </aside>
   );
 }

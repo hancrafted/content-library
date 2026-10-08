@@ -1,4 +1,5 @@
-import type { ContextDrawerInput, ContextDrawerLabels } from '@/components/context-drawer/context-drawer-input';
+import type { ContextDrawerInput } from '@/components/context-drawer/context-drawer-input';
+import { readCatalogStrings } from '@/i18n/catalog-strings';
 import { SHORTCUT_LABEL } from '@/lib/context-drawer.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { getTranslations } from 'next-intl/server';
@@ -11,24 +12,11 @@ import type { PlacedEpisodeSection } from './episode-page-container.pure';
  * turned into `ContextDrawerInput`. Replaced by the Slide-registration contract.
  */
 
-async function drawerLabels(locale: Locale): Promise<ContextDrawerLabels> {
-  const t = await getTranslations({ locale, namespace: 'contextDrawer' });
-  return {
-    title: t('title'),
-    open: t('open'),
-    close: t('close'),
-    shortcut: t('shortcut'),
-    tabs: { notes: t('tabs.notes'), script: t('tabs.script') },
-    menu: { label: t('menu.label'), layout: t('menu.layout'), beside: t('menu.beside'), over: t('menu.over') },
-    empty: { notes: t('empty.notes'), script: t('empty.script') },
-    sources: (count) => t('sourcesCount', { count }),
-    citation: (number) => t('citation', { number }),
-    opensInNewTab: t('opensInNewTab'),
-    keywords: t('keywords'),
-    bridge: t('bridge'),
-    slide: t('slide'),
-  };
-}
+/*
+ * The ICU leaves (formatted here, with their arguments) and `refNote` (read by
+ * Slide text, not the drawer) stay out of the strings the drawer receives.
+ */
+const NOT_DRAWER_STRINGS = ['explainer', 'sourcesCount', 'citation', 'refNote'] as const;
 
 export async function contextDrawerInput(
   locale: Locale,
@@ -36,5 +24,12 @@ export async function contextDrawerInput(
 ): Promise<ContextDrawerInput> {
   const t = await getTranslations({ locale, namespace: 'contextDrawer' });
   const explainer = t('explainer', { shortcut: SHORTCUT_LABEL });
-  return { items: contextItemsOf(placed, explainer), labels: await drawerLabels(locale) };
+  return {
+    items: contextItemsOf(placed, explainer),
+    labels: {
+      strings: await readCatalogStrings(locale, 'contextDrawer', NOT_DRAWER_STRINGS),
+      sources: (count) => t('sourcesCount', { count }),
+      citation: (number) => t('citation', { number }),
+    },
+  };
 }

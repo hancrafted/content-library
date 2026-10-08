@@ -24,12 +24,12 @@ function Segment({ segment, labels }: { segment: VoiceScriptSegment; labels: Con
         </span>
         <h6 className="text-base leading-snug font-semibold text-pretty">{segment.title}</h6>
       </div>
-      <Keywords keywords={segment.keywords} label={labels.keywords} />
+      <Keywords keywords={segment.keywords} label={labels.strings.keywords} />
       <p className="text-sm leading-relaxed">{segment.script}</p>
       {segment.bridge && (
         <p className="border-l-2 border-foreground/30 pl-3 text-sm leading-relaxed italic">
           <span className="block text-xs font-medium tracking-wide text-muted-foreground uppercase not-italic">
-            {labels.bridge}
+            {labels.strings.bridge}
           </span>
           {segment.bridge}
         </p>
@@ -49,7 +49,7 @@ export function SlideScript({
   explainer?: string;
 }) {
   if (explainer !== undefined) return <DrawerExplainer text={explainer} />;
-  if (segments.length === 0) return <p className="text-sm text-muted-foreground">{labels.empty.script}</p>;
+  if (segments.length === 0) return <p className="text-sm text-muted-foreground">{labels.strings.empty.script}</p>;
   return (
     <ol className={FLAT_LIST}>
       {segments.map((segment) => (

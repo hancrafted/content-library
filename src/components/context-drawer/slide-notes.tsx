@@ -55,7 +55,7 @@ function Source({ source, number, labels }: { source: NoteSource; number: number
       >
         <span>{source.title}</span>
         <ExternalLink aria-hidden className="mt-0.5 size-3 shrink-0" />
-        <span className="sr-only">({labels.opensInNewTab})</span>
+        <span className="sr-only">({labels.strings.opensInNewTab})</span>
       </a>
       <span className="block text-[0.7rem] opacity-80">{sourceDomain(source.url)}</span>
     </li>
@@ -118,7 +118,7 @@ export function SlideNotes({
   explainer?: string;
 }) {
   if (explainer !== undefined) return <DrawerExplainer text={explainer} />;
-  if (notes.length === 0) return <p className="text-sm text-muted-foreground">{labels.empty.notes}</p>;
+  if (notes.length === 0) return <p className="text-sm text-muted-foreground">{labels.strings.empty.notes}</p>;
   return (
     <ol className={FLAT_LIST}>
       {notes.map((note) => (

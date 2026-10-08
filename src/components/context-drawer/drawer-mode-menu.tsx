@@ -3,13 +3,10 @@ import { DRAWER_MODES, type DrawerMode } from '@/lib/prefs.pure';
 import { cn } from '@/lib/utils';
 import { Check, Ellipsis } from 'lucide-react';
 import { useEffect, useId, useRef, useState, type KeyboardEvent, type RefObject } from 'react';
+import type { DrawerStrings } from './context-drawer-input';
 
-export interface ModeMenuLabels {
-  readonly label: string;
-  readonly layout: string;
-  readonly beside: string;
-  readonly over: string;
-}
+/** The menu's slice of the drawer's strings. */
+type ModeMenuLabels = DrawerStrings['menu'];
 
 /** Closes when a pointer lands outside `wrapper`, since a menu item button does not always take focus on click. */
 function useDismissOutside(open: boolean, wrapper: RefObject<HTMLElement | null>, close: () => void) {

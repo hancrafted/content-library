@@ -1,9 +1,9 @@
 import { ContextDrawerSlot } from '@/components/context-drawer/context-drawer-slot';
-import { TableOfContents, type TocLabels } from '@/components/table-of-contents/table-of-contents.client';
+import { TableOfContents } from '@/components/table-of-contents/table-of-contents.client';
+import { readCatalogStrings } from '@/i18n/catalog-strings';
 import { slidesInPageOrder, slidesOf, titleAnchor } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { episodeRoute } from '@/lib/routes';
-import { getTranslations } from 'next-intl/server';
 import { ContentArea } from './content-area';
 import { contextDrawerInput } from './context-drawer-input';
 import { tocSectionsOf, type Episode, type PlacedEpisodeSection } from './episode-page-container.pure';
@@ -18,7 +18,7 @@ function SectionSlides({ placed }: { placed: PlacedEpisodeSection }) {
     <section data-section={placed.slide.slug} className="contents">
       <SlideWrapper id={placed.id}>{placed.slide.content}</SlideWrapper>
       {placed.slides.map(({ id, slide }) => (
-        <SlideWrapper key={id} id={id}>
+        <SlideWrapper key={slide.slug} id={id}>
           {slide.content}
         </SlideWrapper>
       ))}
@@ -45,19 +45,6 @@ function SlideColumn(props: {
   );
 }
 
-async function tocLabels(locale: Locale): Promise<TocLabels> {
-  const toc = await getTranslations({ locale, namespace: 'tableOfContents' });
-  return {
-    title: toc('title'),
-    progress: toc('progress'),
-    remaining: { one: toc('remaining.one'), other: toc('remaining.other') },
-    toggle: toc('toggle'),
-    open: toc('open'),
-    close: toc('close'),
-    loading: toc('loading'),
-  };
-}
-
 /**
  * The shell every Episode page renders through (FE-002). It alone turns the
  * Episode record into the page: the named slots, the Title slide with the
@@ -80,7 +67,7 @@ export async function EpisodePageContainer({ locale, episode }: { locale: Locale
             sections={tocSectionsOf(placed, locale)}
             targetAttribute="data-slide"
             topId={titleAnchor()}
-            labels={await tocLabels(locale)}
+            labels={await readCatalogStrings(locale, 'tableOfContents')}
           />
         </aside>
         <SlideColumn ids={ids} title={title} caption={caption} placed={placed} />
