@@ -13,3 +13,6 @@ docs/markdown-harness/activity.csv
 out/
 next-env.d.ts
 *.tsbuildinfo
+
+# OS
+.DS_Store
