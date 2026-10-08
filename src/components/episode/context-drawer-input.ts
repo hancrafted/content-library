@@ -3,7 +3,7 @@ import { SHORTCUT_LABEL } from '@/lib/context-drawer.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { getTranslations } from 'next-intl/server';
 import { contextItemsOf } from './context-drawer-input.pure';
-import type { EpisodeSection } from './episode-page-container.pure';
+import type { PlacedEpisodeSection } from './episode-page-container.pure';
 
 /*
  * THE SEAM, with `context-drawer-input.pure.ts`: the one place the Context
@@ -32,9 +32,9 @@ async function drawerLabels(locale: Locale): Promise<ContextDrawerLabels> {
 
 export async function contextDrawerInput(
   locale: Locale,
-  sections: readonly EpisodeSection[],
+  placed: readonly PlacedEpisodeSection[],
 ): Promise<ContextDrawerInput> {
   const t = await getTranslations({ locale, namespace: 'contextDrawer' });
   const explainer = t('explainer', { shortcut: SHORTCUT_LABEL });
-  return { items: contextItemsOf(sections, explainer), labels: await drawerLabels(locale) };
+  return { items: contextItemsOf(placed, explainer), labels: await drawerLabels(locale) };
 }

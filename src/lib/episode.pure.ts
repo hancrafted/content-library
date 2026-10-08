@@ -1,14 +1,27 @@
-/**
- * An Episode's spine: its Sections in page order, each listing its page Slides
- * by stable slug. Every Section also renders its own section slide, so a
- * Section without page Slides still has an anchor.
- */
-export interface SectionOutline {
+/** The least a Slide record carries to be placed: its stable slug. */
+export interface SlideOutline {
   readonly slug: string;
-  readonly slides: readonly string[];
 }
 
-export type EpisodeOutline = readonly SectionOutline[];
+/**
+ * An Episode's spine: a Section, by stable slug, listing its page Slides in
+ * page order. Every Section also renders its own section slide, so a Section
+ * without page Slides still has an anchor.
+ */
+export interface SectionOutline extends SlideOutline {
+  readonly slides: readonly SlideOutline[];
+}
+
+/** One Slide record with the id its Slide wrapper carries. */
+export interface PlacedSlide<T> {
+  readonly id: string;
+  readonly slide: T;
+}
+
+/** A section slide with its page Slides, each placed. */
+export interface PlacedSection<S extends SectionOutline> extends PlacedSlide<S> {
+  readonly slides: readonly PlacedSlide<S['slides'][number]>[];
+}
 
 /**
  * The DOM id of the Title slide, and the active-Slide value for "no hash": the
@@ -56,14 +69,25 @@ export function targetAnchor(slide: string, target: string): string {
 }
 
 /**
- * Every slide anchor in page order: the order the table of contents lists and arrow keys
- * walk. Throws on a bad outline, so a broken Episode fails the static build.
+ * The one walk over an Episode: each Section and its page Slides, in page
+ * order, with the anchor each Slide wrapper carries. The slides, the table of
+ * contents, the Context drawer and the Slide observer all read this list, so
+ * no consumer derives an id of its own. Throws on a bad or duplicate slug, so
+ * a broken Episode fails `next dev` and the static build alike.
  */
-export function episodeAnchors(outline: EpisodeOutline): string[] {
-  const anchors = outline.flatMap(({ slug, slides }) => [
-    sectionAnchor(checkedSlug(slug)),
-    ...slides.map((slide) => slideAnchor(slug, checkedSlug(slide))),
-  ]);
-  assertUnique(anchors);
-  return anchors;
+export function slidesOf<S extends SectionOutline>(sections: readonly S[]): PlacedSection<S>[] {
+  const placed = sections.map((section) => ({
+    id: sectionAnchor(checkedSlug(section.slug)),
+    slide: section,
+    slides: section.slides.map((slide) => ({ id: slideAnchor(section.slug, checkedSlug(slide.slug)), slide })),
+  }));
+  assertUnique(slidesInPageOrder(placed).map(({ id }) => id));
+  return placed;
+}
+
+/** Placed Slides flattened in page order: the order the table of contents lists and arrow keys walk. */
+export function slidesInPageOrder<S extends SectionOutline>(
+  placed: readonly PlacedSection<S>[],
+): PlacedSlide<S | S['slides'][number]>[] {
+  return placed.flatMap((section) => [section, ...section.slides]);
 }

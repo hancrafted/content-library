@@ -1,30 +1,41 @@
 import { describe, expect, it } from 'vitest';
 import { contextItemsOf as itemsOf } from './context-drawer-input.pure';
-import type { EpisodeSection, EpisodeSlide } from './episode-page-container.pure';
+import type { EpisodeSection, EpisodeSlide, PlacedEpisodeSection } from './episode-page-container.pure';
 
-function slide(
-  slug: string,
-  title: string,
-  minutes: EpisodeSection['minutes'],
-): EpisodeSlide & Pick<EpisodeSection, 'title' | 'minutes'> {
-  return { slug, title, minutes, content: null };
+/** A page Slide placed under `id`, the anchor the walk would give it. */
+function page(id: string, slide: Omit<EpisodeSlide, 'content'>): PlacedEpisodeSection['slides'][number] {
+  return { id, slide: { ...slide, content: null } };
+}
+
+/** A section slide placed under `id`, holding its placed page Slides. */
+function section(
+  id: string,
+  head: Omit<EpisodeSlide, 'slug' | 'content' | 'title'> & { title: string },
+  slides: PlacedEpisodeSection['slides'] = [],
+): PlacedEpisodeSection {
+  const record: EpisodeSection = {
+    slug: id,
+    minutes: { en: 1, de: 1 },
+    ...head,
+    content: null,
+    slides: slides.map(({ slide }) => slide),
+  };
+  return { id, slide: record, slides };
 }
 
 const EXPLAINER = 'How the drawer works';
 const titleItem = { id: 'top', title: undefined, notes: [], script: [], explainer: EXPLAINER };
-const contextItemsOf = (sections: readonly EpisodeSection[]) => itemsOf(sections, EXPLAINER).slice(1);
+const contextItemsOf = (placed: readonly PlacedEpisodeSection[]) => itemsOf(placed, EXPLAINER).slice(1);
 const note = { slug: 'n', header: 'H', description: 'D', target: 'prose' };
 const segment = { slug: 's', from: 0, to: 1, title: 'T', keywords: [], script: 'S' };
 
 describe('success cases', () => {
-  it('lists every section slide and page Slide in page order, with notes and script and full target ids', () => {
+  it('gives each placed Slide an item under its id, with notes, script and full target ids', () => {
     // ARRANGE
-    const sections: EpisodeSection[] = [
-      {
-        ...slide('foundations', 'Foundations', { en: 1, de: 1 }),
-        notes: [{ ...note, target: 'title' }],
-        slides: [{ ...slide('why', 'Why', { en: 3, de: 4 }), notes: [note], voiceScript: [segment] }],
-      },
+    const placed = [
+      section('foundations', { title: 'Foundations', notes: [{ ...note, target: 'title' }] }, [
+        page('foundations--why', { slug: 'why', title: 'Why', notes: [note], voiceScript: [segment] }),
+      ]),
     ];
     const expected = [
       { id: 'foundations', title: 'Foundations', notes: [{ ...note, target: 'foundations--title' }], script: [] },
@@ -36,35 +47,20 @@ describe('success cases', () => {
       },
     ];
     // ACT
-    const context = contextItemsOf(sections);
+    const context = contextItemsOf(placed);
     // ASSERT
     expect(context).toEqual(expected);
   });
 
   it('keeps an untitled Slide as an item without a title, so the drawer still follows it', () => {
     // ARRANGE
-    const sections: EpisodeSection[] = [
-      {
-        ...slide('a', 'A', { en: 1, de: 1 }),
-        slides: [{ slug: 'visual', content: null }],
-      },
-    ];
+    const placed = [section('a', { title: 'A' }, [page('a--visual', { slug: 'visual' })])];
     const expected = [
       { id: 'a', title: 'A', notes: [], script: [] },
       { id: 'a--visual', title: undefined, notes: [], script: [] },
     ];
     // ACT
-    const context = contextItemsOf(sections);
-    // ASSERT
-    expect(context).toEqual(expected);
-  });
-
-  it('gives a Slide without notes empty lists', () => {
-    // ARRANGE
-    const sections: EpisodeSection[] = [{ ...slide('a', 'A', { en: 1, de: 1 }), slides: [] }];
-    const expected = [{ id: 'a', title: 'A', notes: [], script: [] }];
-    // ACT
-    const context = contextItemsOf(sections);
+    const context = contextItemsOf(placed);
     // ASSERT
     expect(context).toEqual(expected);
   });
@@ -73,51 +69,46 @@ describe('success cases', () => {
 describe('the Title slide', () => {
   it('comes first, with the explainer and no notes or script', () => {
     // ARRANGE
-    const sections: EpisodeSection[] = [{ ...slide('a', 'A', { en: 1, de: 1 }), slides: [] }];
+    const placed = [section('a', { title: 'A' })];
+    const expected = [titleItem, 'a'];
     // ACT
-    const [first, second] = itemsOf(sections, EXPLAINER);
+    const [first, second] = itemsOf(placed, EXPLAINER);
     // ASSERT
-    expect([first, second.id]).toEqual([titleItem, 'a']);
+    expect([first, second.id]).toEqual(expected);
   });
 
   it('is the only item with an explainer', () => {
     // ARRANGE
-    const sections: EpisodeSection[] = [
-      { ...slide('a', 'A', { en: 1, de: 1 }), slides: [slide('b', 'B', { en: 1, de: 1 })] },
-    ];
+    const placed = [section('a', { title: 'A' }, [page('a--b', { slug: 'b', title: 'B' })])];
+    const expected = ['top'];
     // ACT
-    const withExplainer = itemsOf(sections, EXPLAINER).filter((item) => item.explainer !== undefined);
+    const withExplainer = itemsOf(placed, EXPLAINER)
+      .filter((item) => item.explainer !== undefined)
+      .map((item) => item.id);
     // ASSERT
-    expect(withExplainer.map((item) => item.id)).toEqual(['top']);
-  });
-
-  it('is still there for an Episode with no Sections', () => {
-    // ARRANGE / ACT
-    const items = itemsOf([], EXPLAINER);
-    // ASSERT
-    expect(items).toEqual([titleItem]);
+    expect(withExplainer).toEqual(expected);
   });
 });
 
 describe('failure cases', () => {
   it('rejects a Slide whose notes share a slug', () => {
     // ARRANGE
-    const sections: EpisodeSection[] = [{ ...slide('a', 'A', { en: 1, de: 1 }), notes: [note, note], slides: [] }];
+    const placed = [section('a', { title: 'A', notes: [note, note] })];
     const duplicate = '"n"';
     // ACT
-    const derive = () => contextItemsOf(sections);
+    const derive = () => contextItemsOf(placed);
     // ASSERT
     expect(derive).toThrow(duplicate);
   });
 });
 
 describe('edge cases', () => {
-  it('derives nothing for an Episode with no Sections', () => {
+  it('still gives the Title slide its item for an Episode with no Sections', () => {
     // ARRANGE
-    const sections: EpisodeSection[] = [];
+    const placed: PlacedEpisodeSection[] = [];
     // ACT
-    const context = contextItemsOf(sections);
+    const items = itemsOf(placed, EXPLAINER);
     // ASSERT
-    expect(context).toEqual([]);
+    expect(items).toEqual([titleItem]);
   });
 });
