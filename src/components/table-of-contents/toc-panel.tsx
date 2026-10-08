@@ -214,7 +214,7 @@ export function TocPanel(props: {
       )}
     >
       <TocHeading labels={labels} locale={view.locale} time={props.time} revealed={revealed} />
-      <TocBody {...props} />
+      <TocBody {...props} view={view} />
     </nav>
   );
 }
