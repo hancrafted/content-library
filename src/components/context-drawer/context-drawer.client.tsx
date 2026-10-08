@@ -3,7 +3,6 @@
 import { useContextDrawer } from '@/hooks/use-context-drawer';
 import { revealCitation } from '@/hooks/use-context-links';
 import {
-  CONTEXT_ITEM_ATTR,
   DRAWER_PANEL_ID,
   DRAWER_TABS,
   drawerIds,
@@ -11,23 +10,15 @@ import {
   titleOfItem,
   type DrawerTab,
 } from '@/lib/context-drawer.pure';
+import { CONTEXT_ITEM_ATTR } from '@/lib/context-link.pure';
 import { cn } from '@/lib/utils';
 import { X } from 'lucide-react';
 import { useEffect, useMemo, useRef, type ReactNode } from 'react';
+import type { DrawerStrings } from './context-drawer-input';
 import type { ContextEntry } from './context-entries';
-import { ModeMenu, type ModeMenuLabels } from './drawer-mode-menu';
+import { ModeMenu } from './drawer-mode-menu';
 import { DrawerTabs } from './drawer-tabs';
 import { DrawerTrigger } from './drawer-trigger';
-
-export interface DrawerLabels {
-  readonly title: string;
-  readonly open: string;
-  readonly close: string;
-  readonly shortcut: string;
-  readonly slide: string;
-  readonly tabs: { readonly notes: string; readonly script: string };
-  readonly menu: ModeMenuLabels;
-}
 
 type Drawer = ReturnType<typeof useContextDrawer>;
 
@@ -87,7 +78,7 @@ function Panel(props: { tab: DrawerTab; selected: DrawerTab; heading: string; ch
 }
 
 /** Sticky. Row one: tabs left, layout menu and close right. Row two: the current item's title, free to wrap without moving the tabs. */
-function PanelHead(props: { labels: DrawerLabels; drawer: Drawer; title: string }) {
+function PanelHead(props: { labels: DrawerStrings; drawer: Drawer; title: string }) {
   const { labels, drawer } = props;
   const tabs = DRAWER_TABS.map((id) => ({ id, label: labels.tabs[id] }));
   return (
@@ -118,7 +109,7 @@ function PanelHead(props: { labels: DrawerLabels; drawer: Drawer; title: string 
 }
 
 /** The one scroll container; it returns to the top when the item or tab changes. */
-function PanelBody(props: { labels: DrawerLabels; drawer: Drawer; entries: readonly ContextEntry[] }) {
+function PanelBody(props: { labels: DrawerStrings; drawer: Drawer; entries: readonly ContextEntry[] }) {
   const { labels, drawer, entries } = props;
   const body = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -135,7 +126,7 @@ function PanelBody(props: { labels: DrawerLabels; drawer: Drawer; entries: reado
   );
 }
 
-function Card(props: { labels: DrawerLabels; drawer: Drawer; entries: readonly ContextEntry[] }) {
+function Card(props: { labels: DrawerStrings; drawer: Drawer; entries: readonly ContextEntry[] }) {
   const { labels, drawer, entries } = props;
   return (
     <div
@@ -186,7 +177,7 @@ function Scrim({ open, onClose }: { open: boolean; onClose: () => void }) {
  * only decides which are visible. Closed it is `invisible` and off-screen, so
  * print and find-in-page still reach the text.
  */
-export function ContextDrawer(props: { labels: DrawerLabels; entries: readonly ContextEntry[] }) {
+export function ContextDrawer(props: { labels: DrawerStrings; entries: readonly ContextEntry[] }) {
   const { labels, entries } = props;
   const ids = useMemo(() => entries.map((entry) => entry.id), [entries]);
   const drawer = useContextDrawer(ids);

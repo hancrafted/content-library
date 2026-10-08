@@ -4,7 +4,7 @@ id: FE-005
 title: 'Static Export Contract'
 domain: frontend
 rules: true
-files: ['src/**/*', 'next.config.ts', 'next.config.js', 'next.config.mjs', 'proxy.ts', 'middleware.ts']
+files: ['src/**/*', '{next.config,proxy,middleware}.{ts,js,mjs}']
 paths: ['src/**/*', 'next.config.ts']
 description: "What output: 'export' forbids — every request-time Next.js feature — and what every dynamic route segment must export so its path set is closed at build time."
 ---

@@ -1,7 +1,8 @@
-import { checkedNote } from '@/lib/context-check.pure';
-import { CONTEXT_REF_ATTR, type SpeakerNoteItem } from '@/lib/context-drawer.pure';
+import type { SpeakerNoteItem } from '@/lib/context-drawer.pure';
+import { CONTEXT_REF_ATTR } from '@/lib/context-link.pure';
 import { targetAnchor } from '@/lib/episode.pure';
 import type { ReactNode } from 'react';
+import { checkedNote } from './context-drawer-input.pure';
 
 /*
  * The phrase underline grows from the left on hover and focus. Under reduced

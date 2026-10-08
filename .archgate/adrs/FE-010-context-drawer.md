@@ -6,7 +6,7 @@ domain: frontend
 rules: true
 files: ['src/components/context-drawer/**/*', 'src/app/globals.css']
 # prettier-ignore
-paths: ['src/components/context-drawer/**', 'src/components/episode/**', 'src/components/episodes/**', 'src/hooks/use-context-*.ts', 'src/hooks/use-reading-line-id.ts', 'src/hooks/use-url-state.ts', 'src/hooks/use-table-of-contents*', 'src/components/table-of-contents/**', 'src/lib/context-drawer.pure*', 'src/lib/context-check.pure*', 'src/lib/reading-line.pure*', 'src/lib/episode*', 'src/lib/routes*', 'src/lib/table-of-contents*', '.archgate/adrs/FE-010-context-drawer.rules.ts', 'src/app/globals.css', 'src/messages/*.json', 'tests/post-build/context-drawer.build.test.ts', 'tests/post-build/episode-structure.build.test.ts', '.dependency-cruiser.cjs', 'docs/agents/episode-catalog-keys.md', 'docs/agents/context-drawer-design.md', 'GLOSSARY.md']
+paths: ['src/components/context-drawer/**', 'src/components/episode/**', 'src/components/episodes/**', 'src/hooks/use-context-*.ts', 'src/hooks/use-url-state.ts', 'src/hooks/use-table-of-contents*', 'src/components/table-of-contents/**', 'src/lib/context-drawer.pure*', 'src/lib/context-link.pure*', 'src/lib/roving-focus.pure*', 'src/i18n/catalog-strings*', 'src/lib/reading-line.pure*', 'src/lib/episode*', 'src/lib/routes*', 'src/lib/table-of-contents*', '.archgate/adrs/FE-010-context-drawer.rules.ts', 'src/app/globals.css', 'src/messages/*.json', 'tests/post-build/context-drawer.build.test.ts', 'tests/post-build/episode-structure.build.test.ts', '.dependency-cruiser.cjs', 'docs/agents/episode-catalog-keys.md', 'docs/agents/context-drawer-design.md', 'GLOSSARY.md']
 description: 'The Context drawer: a non-modal floating card, side by side with or over the Slides, showing the current Slide Speaker notes and Voice script, both server-rendered into the page and printed in full, linked to the Slide by targets and context references, with the note and segment shapes typed as content and kept apart from design.'
 ---
 
@@ -128,7 +128,7 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 **Enforcers, earliest first:**
 
 1. **Types** (`tsc`): note and segment types in `src/lib/context-drawer.pure.ts`; `de.json` typed against `en.json`. `tsc` does not check that a note or segment catalog key exists: the unit key-shape test and the post-build raw-key test do. The adapter is `src/components/episode/context-drawer-input.ts`, unit-tested in its `.pure` sibling.
-2. **Fast** (`npm run verify`): unit tests beside `src/lib/context-drawer.pure.ts` and `src/lib/episode.pure.ts`.
+2. **Fast** (`npm run verify`): unit tests beside `src/lib/{context-drawer,context-link,roving-focus,episode}.pure.ts` and `src/i18n/catalog-strings.pure.ts`.
 3. **archgate:** `FE-010-context-drawer.rules.ts`, both rules at `error`: `print-reveals-context` over `src/app/globals.css`, `drawer-is-non-modal` over `src/components/context-drawer/**`. §1, §2.
 4. **dependency-cruiser** (`.dependency-cruiser.cjs`): `context-drawer-reached-only-from-container`, `context-drawer-takes-input-only` (drawer, hooks and lib import no Episode, table-of-contents, route or `next-intl` code). §5, §8.
 5. **Post-build** (`npm run test:build`): `tests/post-build/context-drawer.build.test.ts` checks the slot, notes in static HTML, no `hidden` attribute, resolving targets (incl. every `ContextRef` id), locale parity, numbered sources as links, citation markers and the print block; `tests/post-build/episode-structure.build.test.ts` keeps the slot order. §2, §5, §8.

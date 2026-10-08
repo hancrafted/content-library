@@ -10,17 +10,30 @@ interface Reported {
   file?: string;
 }
 
+// A glob stand-in faithful enough for archgate's matcher: `**/` spans zero or
+// more directories, `*` stays inside one segment, `{a,b}` alternates.
 function globToRegExp(pattern: string): RegExp {
-  const escaped = pattern
-    .split('**')
-    .map((chunk) =>
-      chunk
-        .split('*')
-        .map((part) => part.replace(/[.+?^${}()|[\]\\]/g, '\\$&'))
-        .join('[^/]*'),
-    )
-    .join('.*');
-  return new RegExp(`^${escaped}$`);
+  let source = '';
+  let braceDepth = 0;
+  for (let i = 0; i < pattern.length; i++) {
+    const c = pattern[i];
+    if (pattern.startsWith('**/', i)) {
+      source += '(?:.*/)?';
+      i += 2;
+    } else if (pattern.startsWith('**', i)) {
+      source += '.*';
+      i += 1;
+    } else if (c === '*') source += '[^/]*';
+    else if (c === '{') {
+      braceDepth++;
+      source += '(?:';
+    } else if (c === '}' && braceDepth > 0) {
+      braceDepth--;
+      source += ')';
+    } else if (c === ',' && braceDepth > 0) source += '|';
+    else source += c.replace(/[.+?^${}()|[\]\\]/g, '\\$&');
+  }
+  return new RegExp(`^${source}$`);
 }
 
 function makeCtx(files: Record<string, string>, opts?: { config?: unknown }) {
@@ -548,6 +561,72 @@ describe('adr-glob-inline', () => {
     await rules['adr-glob-inline'].check(ctx);
     // ASSERT
     expect(violations.some((v) => /must be an inline flow list/.test(v.message))).toBe(true);
+  });
+});
+
+describe('adr-paths-resolve', () => {
+  it('passes when every files: and paths: entry, glob or brace glob, matches a file', async () => {
+    // ARRANGE
+    const { ctx, violations } = makeCtx(passingFiles());
+    // ACT
+    await rules['adr-paths-resolve'].check(ctx);
+    // ASSERT
+    expect(violations).toEqual([]);
+  });
+
+  it('fails a literal entry naming a file that does not exist', async () => {
+    // ARRANGE
+    const files = passingFiles();
+    files[ADR_PATH] = VALID_ADR.replace(
+      'paths: [".archgate/adrs/**/*.md"]',
+      'paths: [".archgate/adrs/**/*.md", "src/hooks/use-deleted.ts"]',
+    );
+    const { ctx, violations } = makeCtx(files);
+    // ACT
+    await rules['adr-paths-resolve'].check(ctx);
+    // ASSERT
+    expect(violations).toHaveLength(1);
+    expect(violations[0].message).toMatch(/'paths:' entry 'src\/hooks\/use-deleted.ts' matches no file/);
+    expect(violations[0].file).toBe(ADR_PATH);
+  });
+
+  it('fails a glob entry that matches nothing, in files: as well as paths:', async () => {
+    // ARRANGE
+    const files = passingFiles();
+    files[ADR_PATH] = VALID_ADR.replace(
+      'files: [".archgate/adrs/**/*.{md,ts}"]',
+      "files: ['.archgate/adrs/**/*.{md,ts}', 'src/lib/gone.pure*']",
+    );
+    const { ctx, violations } = makeCtx(files);
+    // ACT
+    await rules['adr-paths-resolve'].check(ctx);
+    // ASSERT
+    expect(violations.map((v) => v.message)).toEqual([
+      expect.stringMatching(/'files:' entry 'src\/lib\/gone.pure\*' matches no file/),
+    ]);
+  });
+
+  it('leaves a block-style list to adr-glob-inline', async () => {
+    // ARRANGE
+    const files = passingFiles();
+    files[ADR_PATH] = VALID_ADR.replace('paths: [".archgate/adrs/**/*.md"]', 'paths:\n  - "nowhere/**"');
+    const { ctx, violations } = makeCtx(files);
+    // ACT
+    await rules['adr-paths-resolve'].check(ctx);
+    // ASSERT
+    expect(violations).toEqual([]);
+  });
+
+  it('carries the GEN-001 provenance tag in its messages', async () => {
+    // ARRANGE
+    const provenance = '(GEN-001 [adr-paths-resolve])';
+    const files = passingFiles();
+    files[ADR_PATH] = VALID_ADR.replace('paths: [".archgate/adrs/**/*.md"]', 'paths: ["missing.ts"]');
+    const { ctx, violations } = makeCtx(files);
+    // ACT
+    await rules['adr-paths-resolve'].check(ctx);
+    // ASSERT
+    expect(violations[0].message).toContain(provenance);
   });
 });
 

@@ -1,11 +1,5 @@
-import {
-  CITATION_ATTR,
-  NOTE_TARGET_ATTR,
-  sourceDomain,
-  splitCitations,
-  type NoteSource,
-  type SpeakerNoteItem,
-} from '@/lib/context-drawer.pure';
+import { sourceDomain, splitCitations, type NoteSource, type SpeakerNoteItem } from '@/lib/context-drawer.pure';
+import { CITATION_ATTR, NOTE_TARGET_ATTR, SOURCE_ATTR } from '@/lib/context-link.pure';
 import { externalHref } from '@/lib/external-link.pure';
 import { ChevronRight, ExternalLink } from 'lucide-react';
 import Image from 'next/image';
@@ -46,7 +40,7 @@ function Description({ text, labels }: { text: string; labels: ContextDrawerLabe
 
 function Source({ source, number, labels }: { source: NoteSource; number: number; labels: ContextDrawerLabels }) {
   return (
-    <li data-source={number} className="pl-1">
+    <li {...{ [SOURCE_ATTR]: number }} className="pl-1">
       <a
         {...{ href: externalHref(source.url) }}
         target="_blank"
@@ -55,7 +49,7 @@ function Source({ source, number, labels }: { source: NoteSource; number: number
       >
         <span>{source.title}</span>
         <ExternalLink aria-hidden className="mt-0.5 size-3 shrink-0" />
-        <span className="sr-only">({labels.opensInNewTab})</span>
+        <span className="sr-only">({labels.strings.opensInNewTab})</span>
       </a>
       <span className="block text-[0.7rem] opacity-80">{sourceDomain(source.url)}</span>
     </li>
@@ -118,7 +112,7 @@ export function SlideNotes({
   explainer?: string;
 }) {
   if (explainer !== undefined) return <DrawerExplainer text={explainer} />;
-  if (notes.length === 0) return <p className="text-sm text-muted-foreground">{labels.empty.notes}</p>;
+  if (notes.length === 0) return <p className="text-sm text-muted-foreground">{labels.strings.empty.notes}</p>;
   return (
     <ol className={FLAT_LIST}>
       {notes.map((note) => (

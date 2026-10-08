@@ -1,24 +1,34 @@
 import { describe, expect, it } from 'vitest';
-import { tocSectionsOf, type EpisodeSection, type EpisodeSlide } from './episode-page-container.pure';
+import {
+  tocSectionsOf,
+  type EpisodeSection,
+  type EpisodeSlide,
+  type PlacedEpisodeSection,
+} from './episode-page-container.pure';
 
-function slide(
-  slug: string,
-  title: string,
-  minutes: EpisodeSection['minutes'],
-): EpisodeSlide & Pick<EpisodeSection, 'title' | 'minutes'> {
-  return { slug, title, minutes, content: null };
+/** A page Slide placed under `id`, the anchor the walk would give it. */
+function page(id: string, slide: Omit<EpisodeSlide, 'content'>): PlacedEpisodeSection['slides'][number] {
+  return { id, slide: { ...slide, content: null } };
 }
 
-function section(head: Pick<EpisodeSection, 'slug' | 'title' | 'minutes'>, slides: EpisodeSlide[]): EpisodeSection {
-  return { ...head, content: null, slides };
+/** A section slide placed under `id`, holding its placed page Slides. */
+function section(
+  id: string,
+  head: Pick<EpisodeSection, 'title' | 'minutes'>,
+  slides: PlacedEpisodeSection['slides'] = [],
+): PlacedEpisodeSection {
+  const record: EpisodeSection = { slug: id, ...head, content: null, slides: slides.map(({ slide }) => slide) };
+  return { id, slide: record, slides };
 }
 
 describe('success cases', () => {
-  it('lists every Section with its page Slides, keyed by anchor, in page order', () => {
+  it('lists every Section with its page Slides, under the ids they were placed at, in page order', () => {
     // ARRANGE
-    const sections: EpisodeSection[] = [
-      { ...slide('foundations', 'Foundations', { en: 1, de: 1 }), slides: [slide('why', 'Why', { en: 3, de: 4 })] },
-      { ...slide('interlude', 'Interlude', { en: 2, de: 2 }), slides: [] },
+    const placed = [
+      section('foundations', { title: 'Foundations', minutes: { en: 1, de: 1 } }, [
+        page('foundations--why', { slug: 'why', title: 'Why', minutes: { en: 3, de: 4 } }),
+      ]),
+      section('interlude', { title: 'Interlude', minutes: { en: 2, de: 2 } }),
     ];
     const expected = [
       {
@@ -30,144 +40,148 @@ describe('success cases', () => {
       { id: 'interlude', title: 'Interlude', minutes: 2, items: [] },
     ];
     // ACT
-    const toc = tocSectionsOf(sections, 'en');
+    const toc = tocSectionsOf(placed, 'en');
     // ASSERT
     expect(toc).toEqual(expected);
   });
 
   it("reads each entry's reading time in the page's locale", () => {
     // ARRANGE
-    const sections: EpisodeSection[] = [
-      { ...slide('foundations', 'Grundlagen', { en: 1, de: 2 }), slides: [slide('why', 'Warum', { en: 3, de: 4 })] },
+    const placed = [
+      section('foundations', { title: 'Grundlagen', minutes: { en: 1, de: 2 } }, [
+        page('foundations--why', { slug: 'why', title: 'Warum', minutes: { en: 3, de: 4 } }),
+      ]),
     ];
     const germanMinutes = [2, 4];
     // ACT
-    const [section] = tocSectionsOf(sections, 'de');
-    const minutes = [section.minutes, section.items[0].minutes];
+    const [entry] = tocSectionsOf(placed, 'de');
+    const minutes = [entry.minutes, entry.items[0].minutes];
     // ASSERT
     expect(minutes).toEqual(germanMinutes);
   });
-});
 
-describe('optional declarations', () => {
-  it('leaves an untitled Slide out of the table of contents', () => {
-    // ARRANGE
-    const sections = [
-      section({ slug: 'foundations', title: 'Foundations', minutes: { en: 1, de: 1 } }, [
-        slide('why', 'Why', { en: 3, de: 3 }),
-        { slug: 'visual', content: null },
-        slide('how', 'How', { en: 2, de: 2 }),
-      ]),
-    ];
-    const listed = ['foundations', 'foundations--why', 'foundations--how'];
-    // ACT
-    const [first] = tocSectionsOf(sections, 'en');
-    const ids = [first.id, ...first.items.map((item) => item.id)];
-    // ASSERT
-    expect(ids).toEqual(listed);
+  describe('optional declarations', () => {
+    it('leaves an untitled Slide out of the table of contents', () => {
+      // ARRANGE
+      const placed = [
+        section('foundations', { title: 'Foundations', minutes: { en: 1, de: 1 } }, [
+          page('foundations--why', { slug: 'why', title: 'Why', minutes: { en: 3, de: 3 } }),
+          page('foundations--visual', { slug: 'visual' }),
+          page('foundations--how', { slug: 'how', title: 'How', minutes: { en: 2, de: 2 } }),
+        ]),
+      ];
+      const listed = ['foundations', 'foundations--why', 'foundations--how'];
+      // ACT
+      const [first] = tocSectionsOf(placed, 'en');
+      const ids = [first.id, ...first.items.map((item) => item.id)];
+      // ASSERT
+      expect(ids).toEqual(listed);
+    });
+
+    it('keeps the minutes of an untitled Slide in the Section total', () => {
+      // ARRANGE
+      const placed = [
+        section('foundations', { title: 'Foundations', minutes: { en: 1, de: 1 } }, [
+          page('foundations--why', { slug: 'why', title: 'Why', minutes: { en: 3, de: 3 } }),
+          page('foundations--visual', { slug: 'visual', minutes: { en: 2, de: 5 } }),
+        ]),
+      ];
+      const total = { en: 6, de: 9 };
+      // ACT
+      const sum = (locale: 'en' | 'de') => {
+        const [toc] = tocSectionsOf(placed, locale);
+        return toc.minutes + toc.items.reduce((acc, item) => acc + item.minutes, 0);
+      };
+      // ASSERT
+      expect({ en: sum('en'), de: sum('de') }).toEqual(total);
+    });
+
+    it('adds the minutes of an untitled Slide to the entry it follows, so reading time keeps its order', () => {
+      // ARRANGE
+      const placed = [
+        section('a', { title: 'A', minutes: { en: 1, de: 1 } }, [
+          page('a--opening', { slug: 'opening', minutes: { en: 2, de: 2 } }),
+          page('a--why', { slug: 'why', title: 'Why', minutes: { en: 3, de: 3 } }),
+          page('a--visual', { slug: 'visual', minutes: { en: 4, de: 4 } }),
+        ]),
+      ];
+      const expected = [3, 7];
+      // ACT
+      const [toc] = tocSectionsOf(placed, 'en');
+      const minutes = [toc.minutes, toc.items[0].minutes];
+      // ASSERT
+      expect(minutes).toEqual(expected);
+    });
   });
 
-  it('keeps the minutes of an untitled Slide in the Section total', () => {
-    // ARRANGE
-    const sections = [
-      section({ slug: 'foundations', title: 'Foundations', minutes: { en: 1, de: 1 } }, [
-        slide('why', 'Why', { en: 3, de: 3 }),
-        { slug: 'visual', minutes: { en: 2, de: 5 }, content: null },
-      ]),
-    ];
-    const total = { en: 6, de: 9 };
-    // ACT
-    const sum = (locale: 'en' | 'de') => {
-      const [toc] = tocSectionsOf(sections, locale);
-      return toc.minutes + toc.items.reduce((acc, item) => acc + item.minutes, 0);
-    };
-    // ASSERT
-    expect({ en: sum('en'), de: sum('de') }).toEqual(total);
-  });
-
-  it('counts a Slide without minutes as zero', () => {
-    // ARRANGE
-    const sections = [
-      section({ slug: 'foundations', title: 'Foundations', minutes: { en: 1, de: 1 } }, [
-        { slug: 'visual', content: null },
-        { slug: 'quiet', title: 'Quiet', content: null },
-      ]),
-    ];
-    const expected = [{ id: 'foundations--quiet', title: 'Quiet', minutes: 0 }];
-    // ACT
-    const [toc] = tocSectionsOf(sections, 'en');
-    // ASSERT
-    expect(toc.items).toEqual(expected);
-  });
-
-  it('adds the minutes of an untitled Slide to the entry it follows, so reading time keeps its order', () => {
-    // ARRANGE
-    const sections = [
-      section({ slug: 'a', title: 'A', minutes: { en: 1, de: 1 } }, [
-        { slug: 'opening', minutes: { en: 2, de: 2 }, content: null },
-        slide('why', 'Why', { en: 3, de: 3 }),
-        { slug: 'visual', minutes: { en: 4, de: 4 }, content: null },
-      ]),
-    ];
-    const expected = [3, 7];
-    // ACT
-    const [toc] = tocSectionsOf(sections, 'en');
-    const minutes = [toc.minutes, toc.items[0].minutes];
-    // ASSERT
-    expect(minutes).toEqual(expected);
-  });
-});
-
-describe('unlisted Slides', () => {
-  it('names each untitled Slide on the entry that owns its minutes, in page order, with its own minutes', () => {
-    // ARRANGE
-    const sections = [
-      section({ slug: 'a', title: 'A', minutes: { en: 1, de: 1 } }, [
-        { slug: 'opening', minutes: { en: 2, de: 2 }, content: null },
-        slide('why', 'Why', { en: 3, de: 3 }),
-        { slug: 'visual', minutes: { en: 4, de: 4 }, content: null },
-        { slug: 'silent', content: null },
-      ]),
-    ];
-    const expected = {
-      section: [{ id: 'a--opening', minutes: 2 }],
-      item: [
-        { id: 'a--visual', minutes: 4 },
-        { id: 'a--silent', minutes: 0 },
-      ],
-    };
-    // ACT
-    const [toc] = tocSectionsOf(sections, 'en');
-    const owned = { section: toc.unlisted, item: toc.items[0].unlisted };
-    // ASSERT
-    expect(owned).toEqual(expected);
+  describe('unlisted Slides', () => {
+    it('names each untitled Slide on the entry that owns its minutes, in page order, with its own minutes', () => {
+      // ARRANGE
+      const placed = [
+        section('a', { title: 'A', minutes: { en: 1, de: 1 } }, [
+          page('a--opening', { slug: 'opening', minutes: { en: 2, de: 2 } }),
+          page('a--why', { slug: 'why', title: 'Why', minutes: { en: 3, de: 3 } }),
+          page('a--visual', { slug: 'visual', minutes: { en: 4, de: 4 } }),
+          page('a--silent', { slug: 'silent' }),
+        ]),
+      ];
+      const expected = {
+        section: [{ id: 'a--opening', minutes: 2 }],
+        item: [
+          { id: 'a--visual', minutes: 4 },
+          { id: 'a--silent', minutes: 0 },
+        ],
+      };
+      // ACT
+      const [toc] = tocSectionsOf(placed, 'en');
+      const owned = { section: toc.unlisted, item: toc.items[0].unlisted };
+      // ASSERT
+      expect(owned).toEqual(expected);
+    });
   });
 });
 
 describe('failure cases', () => {
-  it('rejects two page Slides sharing a slug, so the table of contents never points at an ambiguous anchor', () => {
+  it('leaves the placed Slides it folds untouched, so other consumers of the walk read the same record', () => {
     // ARRANGE
-    const sections: EpisodeSection[] = [
-      {
-        ...slide('next', 'Next', { en: 1, de: 1 }),
-        slides: [slide('recap', 'A', { en: 1, de: 1 }), slide('recap', 'B', { en: 1, de: 1 })],
-      },
+    const placed = [
+      section('a', { title: 'A', minutes: { en: 1, de: 1 } }, [
+        page('a--opening', { slug: 'opening', minutes: { en: 2, de: 2 } }),
+        page('a--why', { slug: 'why', title: 'Why', minutes: { en: 3, de: 3 } }),
+      ]),
     ];
-    const duplicate = 'next--recap';
+    const before = structuredClone(placed);
     // ACT
-    const derive = () => tocSectionsOf(sections, 'en');
+    tocSectionsOf(placed, 'en');
     // ASSERT
-    expect(derive).toThrow(duplicate);
+    expect(placed).toEqual(before);
   });
 });
 
 describe('edge cases', () => {
   it('derives an empty table of contents for an Episode with no Sections yet', () => {
     // ARRANGE
-    const sections: EpisodeSection[] = [];
+    const placed: PlacedEpisodeSection[] = [];
     // ACT
-    const toc = tocSectionsOf(sections, 'en');
+    const toc = tocSectionsOf(placed, 'en');
     // ASSERT
     expect(toc).toEqual([]);
+  });
+
+  describe('optional declarations', () => {
+    it('counts a Slide without minutes as zero', () => {
+      // ARRANGE
+      const placed = [
+        section('foundations', { title: 'Foundations', minutes: { en: 1, de: 1 } }, [
+          page('foundations--visual', { slug: 'visual' }),
+          page('foundations--quiet', { slug: 'quiet', title: 'Quiet' }),
+        ]),
+      ];
+      const expected = [{ id: 'foundations--quiet', title: 'Quiet', minutes: 0 }];
+      // ACT
+      const [toc] = tocSectionsOf(placed, 'en');
+      // ASSERT
+      expect(toc.items).toEqual(expected);
+    });
   });
 });

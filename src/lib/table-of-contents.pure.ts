@@ -68,6 +68,24 @@ export function ownerOf(sections: readonly TocSection[], active: string | null):
   return sections.find((section) => section.id === active || section.items.some((item) => item.id === active))?.id;
 }
 
+/** `01`, `02`, … — numbering lives in the table of contents only. */
+export function sectionNumber(index: number): string {
+  return String(index + 1).padStart(2, '0');
+}
+
+/**
+ * The Section the reader is in, numbered, for the narrow-screen pill; `null`
+ * while no entry is active. Chevron toggles do not move it.
+ */
+export function whereAt(
+  sections: readonly TocSection[],
+  active: string | null,
+): { number: string; title: string } | null {
+  const owner = ownerOf(sections, active);
+  const index = sections.findIndex((section) => section.id === owner);
+  return index < 0 ? null : { number: sectionNumber(index), title: sections[index].title };
+}
+
 /**
  * Open sections, in page order: the one owning the active entry, flipped for
  * every section whose chevron the reader toggled.

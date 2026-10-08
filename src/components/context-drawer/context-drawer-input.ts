@@ -22,28 +22,33 @@ export interface ContextItem {
   readonly explainer?: string;
 }
 
-/**
- * Chrome strings, already translated. `sources` and `citation` format a count
- * or number for the locale; they are called on the server and never cross to
- * the client drawer, which takes only the plain strings (`DrawerLabels`).
- */
-export interface ContextDrawerLabels {
+/** Chrome strings, already translated: plain strings only, so they cross to the client drawer as they are (FE-006 §4). */
+export interface DrawerStrings {
   readonly title: string;
   readonly open: string;
   readonly close: string;
   readonly shortcut: string;
+  readonly slide: string;
   readonly tabs: { readonly notes: string; readonly script: string };
   readonly menu: { readonly label: string; readonly layout: string; readonly beside: string; readonly over: string };
   readonly empty: { readonly notes: string; readonly script: string };
-  /** The disclosure label of a note's sources, e.g. `Sources (2)`. */
-  readonly sources: (count: number) => string;
-  /** The accessible name of citation marker `n`, e.g. `Source 2`. */
-  readonly citation: (number: number) => string;
   /** Said to assistive tech after a source link, e.g. `opens in a new tab`. */
   readonly opensInNewTab: string;
   readonly keywords: string;
   readonly bridge: string;
-  readonly slide: string;
+}
+
+/**
+ * Every label the drawer renders. `strings` go to the client drawer whole;
+ * `sources` and `citation` format a count or number for the locale, are
+ * called on the server while the entries render, and never cross.
+ */
+export interface ContextDrawerLabels {
+  readonly strings: DrawerStrings;
+  /** The disclosure label of a note's sources, e.g. `Sources (2)`. */
+  readonly sources: (count: number) => string;
+  /** The accessible name of citation marker `n`, e.g. `Source 2`. */
+  readonly citation: (number: number) => string;
 }
 
 export interface ContextDrawerInput {

@@ -28,6 +28,7 @@ This ADR pins the shape every other ADR relies on. `archgate check --strict` gat
 1. Frontmatter MUST lead with `type: adr`, declaring non-empty `id` (matching filename prefix), `title`, registered `domain`, `rules` (true iff sibling `.rules.ts` exists), `files`, `description`, and optional `paths`.
 2. `paths:` MAY differ from `files:`: `files:` inspects, `paths:` steers the author.
 3. Both globs MUST be inline YAML flow lists — `['glob']`. (📜 Rule: `adr-glob-inline`)
+4. Every glob entry MUST match an existing file; a literal path must exist. (📜 Rule: `adr-paths-resolve`)
 
 ### 3. Required sections (📜 Rule: `adr-required-sections`)
 
@@ -58,14 +59,15 @@ This ADR pins the shape every other ADR relies on. `archgate check --strict` gat
 
 1. **DO** open every ADR frontmatter with `type: adr`, declaring required keys with `id` matching the filename. (Decision 2, 📜 Rule: `adr-frontmatter`)
 2. **DO** write `files:` and `paths:` as inline flow lists, each scoped for its own channel. (Decision 2, 📜 Rule: `adr-glob-inline`)
-3. **DO** emit all six canonical H2 sections; empty bodies pass the linter but not review. (Decision 3, 📜 Rule: `adr-required-sections`)
-4. **DO** keep every ADR markdown file under the character budget, this one included. (Decision 4, 📜 Rule: `adr-size-budget`)
-5. **DO** number Decision anchors `### N.` from 1, with sequential ordered items inside each. (Decision 5, 📜 Rule: `adr-numbered-decision`)
-6. **DO** head the blocks `### Do's` then `### Don'ts`, each restarting at 1 with its bold prefix. (Decision 5, 📜 Rule: `adr-numbered-dos-donts`)
-7. **DO** anchor every companion rule to prose on both sides. (Decision 5, 📜 Rule: `adr-rule-mentions`)
-8. **DO** give every `.rules.ts` a sibling `.rules.test.ts` exercising each rule's pass and fail path. (Decision 6, 📜 Rule: `adr-rules-test-sibling`)
-9. **DO** embed `(<ID> [<rule-key>])` in every report message. (Decision 6, 📜 Rule: `adr-message-provenance`)
-10. **DO** run every companion rule at the `error` tier. (Decision 7, 📜 Rule: `adr-error-tier`)
+3. **DO** repoint or drop a `files:`/`paths:` entry in the same change that moves or deletes the file it names. (Decision 2, 📜 Rule: `adr-paths-resolve`)
+4. **DO** emit all six canonical H2 sections; empty bodies pass the linter but not review. (Decision 3, 📜 Rule: `adr-required-sections`)
+5. **DO** keep every ADR markdown file under the character budget, this one included. (Decision 4, 📜 Rule: `adr-size-budget`)
+6. **DO** number Decision anchors `### N.` from 1, with sequential ordered items inside each. (Decision 5, 📜 Rule: `adr-numbered-decision`)
+7. **DO** head the blocks `### Do's` then `### Don'ts`, each restarting at 1 with its bold prefix. (Decision 5, 📜 Rule: `adr-numbered-dos-donts`)
+8. **DO** anchor every companion rule to prose on both sides. (Decision 5, 📜 Rule: `adr-rule-mentions`)
+9. **DO** give every `.rules.ts` a sibling `.rules.test.ts` exercising each rule's pass and fail path. (Decision 6, 📜 Rule: `adr-rules-test-sibling`)
+10. **DO** embed `(<ID> [<rule-key>])` in every report message. (Decision 6, 📜 Rule: `adr-message-provenance`)
+11. **DO** run every companion rule at the `error` tier. (Decision 7, 📜 Rule: `adr-error-tier`)
 
 ### Don'ts
 
@@ -90,6 +92,7 @@ This ADR pins the shape every other ADR relies on. `archgate check --strict` gat
 2. **Regex meta-parsing:** the meta-rules parse YAML and TypeScript with regexes, making quoted kebab-case rule keys and inline flow globs load-bearing. AST hardening: [#7](https://github.com/hancrafted/typescript-ai-harness/issues/7).
 3. **Authoring ceremony:** numbered anchors, subsection headings, twin markers, a sibling rules-test and provenance tags cost more than plain prose. Mitigated: `archgate:adr-author` encodes the shape and each message names its fix.
 4. **The budget forces splits:** a Discipline set outgrowing the cap must split by glob, buying a frontmatter block and six sections per new ADR.
+5. **No sentinel entries:** §2.4 rejects a literal entry naming a file that must never exist (a forbidden `middleware.ts`). Scoping such a file needs a glob that also matches an existing sibling — `{next.config,proxy,middleware}.{ts,js,mjs}` — which reads less plainly than the literal list it replaces.
 
 **Risks:**
 
@@ -101,6 +104,8 @@ This ADR pins the shape every other ADR relies on. `archgate check --strict` gat
 **Enforcer per Discipline:** `GEN-001-adr.rules.ts` holds every Discipline above at the `error` tier (§7), scoped by `files:` to ADR bundle files, and is the source-of-truth for the full set. `.archgate/**` sits outside this repo's eslint and `tsc --noEmit` gates until a dedicated script ADR governs rules-file authoring ([#9](https://github.com/hancrafted/typescript-ai-harness/issues/9)), so every rules file is self-contained; prettier and vitest cover `.archgate/**/*.ts`, and `archgate check` is the sole gate on ADR markdown.
 
 **Second budget channel:** `archgate check` reports a per-section briefing budget over `Decision` and `Do's and Don'ts`, stricter than §4's whole-file cap and independent of it. `archgate check --strict` promotes those warnings to failures — not adopted here, since `--strict` also promotes suppression and unparsed-ADR warnings, a `verify`-pipeline decision of its own.
+
+**Dead-entry check:** `adr-paths-resolve` resolves each `files:` and `paths:` entry through archgate's own `ctx.glob`, so it catches a refactor that deleted or moved a governed file; it cannot tell whether a resolving glob still names the _right_ files.
 
 **Manual review duties** (never linted): each glob describes its channel's real scope; each rule's prose describes what that rule does (§5.3 pairs names, not meanings); section bodies are substantive, not presence-only placeholders; `## Compliance and Enforcement` names a real enforcer and config location; the sibling test covers each rule's pass and fail path (§6.1).
 

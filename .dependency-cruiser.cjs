@@ -61,7 +61,7 @@ module.exports = {
       comment:
         'The Context drawer knows nothing of Episodes: it renders from one ContextDrawerInput and observes the ids it is given. Its components, hooks and lib files MUST NOT import Episode, table-of-contents, route or next-intl code (FE-010 §8). The one adapter that builds the input lives under src/components/episode/.',
       from: {
-        path: '^src/(components/context-drawer/|hooks/use-(context-|reading-line)|lib/(context-drawer|reading-line)\\.pure\\.ts$)',
+        path: '^src/(components/context-drawer/|hooks/use-(context-|reading-line)|lib/(context-drawer|context-link|roving-focus|reading-line)\\.pure\\.ts$)',
         pathNot: '\\.test\\.tsx?$',
       },
       to: {

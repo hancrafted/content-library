@@ -3,21 +3,23 @@ import {
   CONTEXT_ACTIVE_ATTR,
   CONTEXT_ITEM_ATTR,
   CONTEXT_REF_ATTR,
+  ITEM_SELECTOR,
+  NOTE_SELECTOR,
   NOTE_TARGET_ATTR,
+  noteSelector,
   PINNED_ATTR,
-} from '@/lib/context-drawer.pure';
+  sourceLinkSelector,
+} from '@/lib/context-link.pure';
 import { useEffect } from 'react';
-
-const NOTE = `[data-slot="context"] [${NOTE_TARGET_ATTR}]`;
 
 /** The note inside the drawer that a context reference's wrapper id names. */
 export function noteOfRef(refId: string): HTMLElement | null {
-  return document.querySelector<HTMLElement>(`${NOTE}[${NOTE_TARGET_ATTR}="${CSS.escape(refId)}"]`);
+  return document.querySelector<HTMLElement>(noteSelector(refId));
 }
 
 /** The id of the drawer item holding the note a context reference's wrapper id names. */
 export function itemOfNote(refId: string): string | null {
-  return noteOfRef(refId)?.closest(`[${CONTEXT_ITEM_ATTR}]`)?.getAttribute(CONTEXT_ITEM_ATTR) ?? null;
+  return noteOfRef(refId)?.closest(ITEM_SELECTOR)?.getAttribute(CONTEXT_ITEM_ATTR) ?? null;
 }
 
 /** The page element a note explains: its `target` is that element's full id. */
@@ -28,7 +30,7 @@ function targetOfNote(note: Element): HTMLElement | null {
 /** The element on the other side of a note and its Slide element, for whichever one `from` sits in. */
 function counterpart(from: EventTarget | null): Element | null {
   if (!(from instanceof Element)) return null;
-  const note = from.closest(NOTE);
+  const note = from.closest(NOTE_SELECTOR);
   if (note) return targetOfNote(note);
   const id = refButton(from)?.parentElement?.id;
   return id ? noteOfRef(id) : null;
@@ -100,5 +102,5 @@ export function revealCitation(event: { target: EventTarget | null }): void {
   const details = note?.querySelector('details');
   if (!marker || !details) return;
   details.open = true;
-  details.querySelector<HTMLElement>(`[data-source="${marker.getAttribute(CITATION_ATTR)}"] a`)?.focus();
+  details.querySelector<HTMLElement>(sourceLinkSelector(String(marker.getAttribute(CITATION_ATTR))))?.focus();
 }
