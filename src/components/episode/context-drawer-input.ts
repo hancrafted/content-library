@@ -18,7 +18,7 @@ async function drawerLabels(locale: Locale): Promise<ContextDrawerLabels> {
     close: t('close'),
     shortcut: t('shortcut'),
     tabs: { notes: t('tabs.notes'), script: t('tabs.script') },
-    menu: { label: t('menu.label'), layout: t('menu.layout'), side: t('menu.side'), overlay: t('menu.overlay') },
+    menu: { label: t('menu.label'), layout: t('menu.layout'), beside: t('menu.beside'), over: t('menu.over') },
     empty: { notes: t('empty.notes'), script: t('empty.script') },
     sources: (count) => t('sourcesCount', { count }),
     citation: (number) => t('citation', { number }),

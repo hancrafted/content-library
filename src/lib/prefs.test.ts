@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { mergePrefs, parsePrefs } from './prefs.pure';
+import { DEFAULT_DRAWER_MODE, DRAWER_MODES, mergePrefs, parsePrefs } from './prefs.pure';
 
 describe('success cases', () => {
   it('parses a stored theme and locale', () => {
@@ -18,6 +18,54 @@ describe('success cases', () => {
     const merged = mergePrefs(raw, { locale: 'de' });
     // ASSERT
     expect(JSON.parse(merged)).toEqual({ theme: 'dark', locale: 'de' });
+  });
+});
+
+describe('drawerMode', () => {
+  it('parses a stored drawer mode alongside the other prefs', () => {
+    // ARRANGE
+    const raw = '{"theme":"dark","drawerMode":"over"}';
+    // ACT
+    const prefs = parsePrefs(raw);
+    // ASSERT
+    expect(prefs).toEqual({ theme: 'dark', drawerMode: 'over' });
+  });
+
+  it('offers beside first and by default, then over', () => {
+    // ARRANGE
+    const expected = ['beside', 'over'];
+    // ACT
+    const modes = [...DRAWER_MODES];
+    // ASSERT
+    expect(modes).toEqual(expected);
+    expect(DEFAULT_DRAWER_MODE).toBe('beside');
+  });
+
+  it('leaves drawerMode absent when none is stored, so the default applies', () => {
+    // ARRANGE
+    const raw = '{"theme":"dark"}';
+    // ACT
+    const prefs = parsePrefs(raw);
+    // ASSERT
+    expect(prefs.drawerMode).toBeUndefined();
+  });
+
+  it('drops unknown values, including the legacy side and overlay names', () => {
+    // ARRANGE
+    const raws = ['{"drawerMode":"side"}', '{"drawerMode":"overlay"}', '{"drawerMode":"floating"}', '{"drawerMode":1}'];
+    // ACT
+    const parsed = raws.map(parsePrefs);
+    // ASSERT
+    expect(parsed).toEqual([{}, {}, {}, {}]);
+  });
+
+  it('merges a drawer mode patch without dropping theme or locale', () => {
+    // ARRANGE
+    const raw = '{"theme":"dark","locale":"de"}';
+    // ACT
+    const merged = mergePrefs(raw, { drawerMode: 'over' });
+    // ASSERT
+    expect(JSON.parse(merged)).toEqual({ theme: 'dark', locale: 'de', drawerMode: 'over' });
   });
 });
 

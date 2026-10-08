@@ -654,8 +654,8 @@
     "menu": {
       "label": "Weitere Optionen",
       "layout": "Darstellung",
-      "side": "Nebeneinander",
-      "overlay": "Überlagert"
+      "beside": "Nebeneinander",
+      "over": "Überlagert"
     },
     "refNote": "öffnet Sprechernotiz",
     "citation": "Quelle {number}"

@@ -3,6 +3,8 @@
  * content, never design: no field carries layout, style, placement or markup.
  */
 
+import type { DrawerMode } from './prefs.pure';
+
 /** One source of a note: a stable slug, an `https` URL and its localized, human title. */
 export interface NoteSource {
   readonly slug: string;
@@ -50,14 +52,9 @@ export interface KeyEventLike {
 export const DRAWER_TABS = ['notes', 'script'] as const;
 export type DrawerTab = (typeof DRAWER_TABS)[number];
 
-/** How the card sits from `md`: beside the Slides (they make room) or over them. */
-export const DRAWER_MODES = ['side', 'overlay'] as const;
-export type DrawerMode = (typeof DRAWER_MODES)[number];
-export const DEFAULT_DRAWER_MODE: DrawerMode = 'side';
-
 /** Whether the Episode grid keeps a column for the card, which changes at once rather than animating. */
 export function reservesSpace(mode: DrawerMode, open: boolean): boolean {
-  return open && mode === 'side';
+  return open && mode === 'beside';
 }
 
 /** The drawer panel's element id; the trigger's `aria-controls` points at it. */

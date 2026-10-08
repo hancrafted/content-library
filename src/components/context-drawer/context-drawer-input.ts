@@ -31,7 +31,7 @@ export interface ContextDrawerLabels {
   readonly close: string;
   readonly shortcut: string;
   readonly tabs: { readonly notes: string; readonly script: string };
-  readonly menu: { readonly label: string; readonly layout: string; readonly side: string; readonly overlay: string };
+  readonly menu: { readonly label: string; readonly layout: string; readonly beside: string; readonly over: string };
   readonly empty: { readonly notes: string; readonly script: string };
   /** The disclosure label of a note's sources, e.g. `Sources (2)`. */
   readonly sources: (count: number) => string;

@@ -654,8 +654,8 @@
     "menu": {
       "label": "More options",
       "layout": "Layout",
-      "side": "Side by side",
-      "overlay": "Overlay"
+      "beside": "Side by side",
+      "over": "Overlay"
     },
     "refNote": "opens speaker note",
     "citation": "Source {number}"
