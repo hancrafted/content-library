@@ -497,10 +497,16 @@
       "notes": "Keine Sprechernotizen für diese Folie.",
       "script": "Kein Sprechtext für diese Folie."
     },
-    "sources": "Quellen",
     "keywords": "Stichworte",
     "bridge": "Überleitung",
     "slide": "Folie",
-    "shortcut": "Tastenkürzel"
+    "shortcut": "Tastenkürzel",
+    "sourcesCount": "Quellen ({count})",
+    "menu": {
+      "label": "Weitere Optionen",
+      "layout": "Darstellung",
+      "side": "Nebeneinander",
+      "overlay": "Überlagert"
+    }
   }
 }

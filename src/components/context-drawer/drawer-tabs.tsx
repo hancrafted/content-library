@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 import { tabAfter } from '@/lib/context-drawer.pure';
 import { cn } from '@/lib/utils';
 import type { KeyboardEvent, Ref } from 'react';
@@ -7,6 +8,7 @@ export interface TabSpec<T extends string> {
   readonly label: string;
 }
 
+/** Dressed like the site header's nav links: a ghost button, the selected one on `accent`. */
 function TabButton<T extends string>(props: {
   tab: TabSpec<T>;
   selected: boolean;
@@ -15,22 +17,24 @@ function TabButton<T extends string>(props: {
   ref: Ref<HTMLButtonElement> | undefined;
 }) {
   return (
-    <button
+    <Button
       ref={props.ref}
       id={props.ids.tab}
       type="button"
       role="tab"
+      variant="ghost"
+      size="sm"
       aria-selected={props.selected}
       aria-controls={props.ids.panel}
       tabIndex={props.selected ? 0 : -1}
       onClick={() => props.onSelect(props.tab.id)}
       className={cn(
-        'cursor-pointer rounded-md px-3 py-1.5 text-sm font-medium',
-        props.selected ? 'bg-highlight' : 'text-muted-foreground hover:bg-accent',
+        'cursor-pointer max-md:h-10',
+        props.selected ? 'bg-accent text-accent-foreground' : 'text-muted-foreground',
       )}
     >
       {props.tab.label}
-    </button>
+    </Button>
   );
 }
 

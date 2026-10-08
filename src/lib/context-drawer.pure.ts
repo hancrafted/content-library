@@ -54,6 +54,16 @@ export interface KeyEventLike {
 export const DRAWER_TABS = ['notes', 'script'] as const;
 export type DrawerTab = (typeof DRAWER_TABS)[number];
 
+/** How the card sits from `md`: beside the Slides (they make room) or over them. */
+export const DRAWER_MODES = ['side', 'overlay'] as const;
+export type DrawerMode = (typeof DRAWER_MODES)[number];
+export const DEFAULT_DRAWER_MODE: DrawerMode = 'side';
+
+/** Whether the Episode grid keeps a column for the card, which changes at once rather than animating. */
+export function reservesSpace(mode: DrawerMode, open: boolean): boolean {
+  return open && mode === 'side';
+}
+
 /** The drawer panel's element id; the trigger's `aria-controls` points at it. */
 export const DRAWER_PANEL_ID = 'context-panel';
 
@@ -62,7 +72,7 @@ export function drawerIds(tab: DrawerTab): { tab: string; panel: string } {
   return { tab: `context-tab-${tab}`, panel: `${DRAWER_PANEL_ID}-${tab}` };
 }
 
-/** Shown on the trigger; matched on `event.code` so a layout cannot move it. */
+/** Shown on the trigger (from `md`); matched on `event.code` so a layout cannot move it. */
 export const SHORTCUT_LABEL = 'Alt+N';
 
 export function matchesShortcut(event: KeyEventLike): boolean {
@@ -81,6 +91,23 @@ export function tabAfter(key: string, current: string, tabs: readonly string[]):
   const step: Record<string, number> = { ArrowRight: at + 1, ArrowLeft: at - 1, Home: 0, End: tabs.length - 1 };
   if (!(key in step)) return null;
   return tabs[(step[key] + tabs.length) % tabs.length];
+}
+
+/** APG menu: vertical arrows wrap, Home and End jump; any other key is not ours. */
+export function menuItemAfter(key: string, current: string, items: readonly string[]): string | null {
+  const at = items.indexOf(current);
+  const step: Record<string, number> = { ArrowDown: at + 1, ArrowUp: at - 1, Home: 0, End: items.length - 1 };
+  if (!(key in step)) return null;
+  return items[(step[key] + items.length) % items.length];
+}
+
+/** The drawer's heading: the current Slide's title, or the fallback while none is current. */
+export function titleOfSlide(
+  anchor: string | null,
+  slides: readonly { readonly anchor: string; readonly title: string }[],
+  fallback: string,
+): string {
+  return slides.find((slide) => slide.anchor === anchor)?.title ?? fallback;
 }
 
 /** The Slide to show: the active one if it has context, else the first; none when empty. */

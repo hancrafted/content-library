@@ -2,13 +2,18 @@ import { describe, expect, it } from 'vitest';
 import {
   checkContext,
   currentSlideAnchor,
+  DEFAULT_DRAWER_MODE,
+  DRAWER_MODES,
   DRAWER_PANEL_ID,
   DRAWER_TABS,
   drawerIds,
   drawerKeyAction,
   formatMark,
   matchesShortcut,
+  menuItemAfter,
+  reservesSpace,
   tabAfter,
+  titleOfSlide,
   type KeyEventLike,
   type SpeakerNoteItem,
   type VoiceScriptSegment,
@@ -120,6 +125,59 @@ describe('success cases', () => {
     // ASSERT
     expect(tabs).toEqual(expected);
   });
+
+  it('reserves the card width only when it is open side by side', () => {
+    // ARRANGE
+    const expected = [true, false, false, false];
+    // ACT
+    const reserved = [
+      reservesSpace('side', true),
+      reservesSpace('side', false),
+      reservesSpace('overlay', true),
+      reservesSpace('overlay', false),
+    ];
+    // ASSERT
+    expect(reserved).toEqual(expected);
+  });
+
+  it('offers side by side first and by default, then overlay', () => {
+    // ARRANGE
+    const expected = ['side', 'overlay'];
+    // ACT
+    const modes = [...DRAWER_MODES];
+    // ASSERT
+    expect(modes).toEqual(expected);
+    expect(DEFAULT_DRAWER_MODE).toBe(expected[0]);
+  });
+
+  it('moves between menu items with the vertical arrows, wrapping, and jumps with Home and End', () => {
+    // ARRANGE
+    const items = ['side', 'overlay'];
+    const expected = ['overlay', 'overlay', 'side', 'side', 'overlay'];
+    // ACT
+    const targets = [
+      menuItemAfter('ArrowDown', 'side', items),
+      menuItemAfter('ArrowUp', 'side', items),
+      menuItemAfter('ArrowDown', 'overlay', items),
+      menuItemAfter('Home', 'overlay', items),
+      menuItemAfter('End', 'side', items),
+    ];
+    // ASSERT
+    expect(targets).toEqual(expected);
+  });
+
+  it('titles the drawer with the title of the current Slide', () => {
+    // ARRANGE
+    const slides = [
+      { anchor: 'a', title: 'First' },
+      { anchor: 'b--c', title: 'Second' },
+    ];
+    const expected = 'Second';
+    // ACT
+    const title = titleOfSlide('b--c', slides, 'fallback');
+    // ASSERT
+    expect(title).toBe(expected);
+  });
 });
 
 describe('failure cases', () => {
@@ -189,6 +247,25 @@ describe('failure cases', () => {
     // ASSERT
     expect(attempt).toThrow(segmentSlug);
   });
+
+  it('returns no menu item for a key that is not a menu key, horizontal arrows included', () => {
+    // ARRANGE
+    const items = ['side', 'overlay'];
+    // ACT
+    const targets = ['Enter', 'ArrowRight', 'ArrowLeft'].map((key) => menuItemAfter(key, 'side', items));
+    // ASSERT
+    expect(targets).toEqual([null, null, null]);
+  });
+
+  it('falls back to the given title when the current Slide is unknown', () => {
+    // ARRANGE
+    const slides = [{ anchor: 'a', title: 'First' }];
+    const fallback = 'Context';
+    // ACT
+    const title = titleOfSlide('missing', slides, fallback);
+    // ASSERT
+    expect(title).toBe(fallback);
+  });
 });
 
 describe('edge cases', () => {
@@ -227,5 +304,23 @@ describe('edge cases', () => {
     const result = check();
     // ASSERT
     expect(result).toBeUndefined();
+  });
+
+  it('falls back to the given title when no Slide is current', () => {
+    // ARRANGE
+    const fallback = 'Context';
+    // ACT
+    const title = titleOfSlide(null, [], fallback);
+    // ASSERT
+    expect(title).toBe(fallback);
+  });
+
+  it('stays on the only menu item', () => {
+    // ARRANGE
+    const items = ['side'];
+    // ACT
+    const target = menuItemAfter('ArrowDown', 'side', items);
+    // ASSERT
+    expect(target).toBe(items[0]);
   });
 });

@@ -114,7 +114,56 @@ describe.each(PAGES)('$url', ({ slug, url }) => {
   });
 });
 
+describe.each(PAGES)('$url card', ({ url }) => {
+  it('keeps one trigger pill with the shortcut announced, a spacer for the grid and a scrim', () => {
+    // ARRANGE
+    const $ = page(url);
+    const shortcut = 'Alt+N';
+    // ACT
+    const slot = $('[data-slot="context"]');
+    // ASSERT
+    expect(slot.find('button[data-slot="context-trigger"]').attr('aria-keyshortcuts')).toBe(shortcut);
+    expect(slot.find('[data-slot="context-spacer"]')).toHaveLength(1);
+    expect(slot.find('[data-slot="context-scrim"]')).toHaveLength(1);
+  });
+
+  it('closes the card with a transform and never lets the spacer or the Slides animate their width', () => {
+    // ARRANGE
+    const $ = page(url);
+    // ACT
+    const card = $('#context-panel').attr('class') ?? '';
+    const spacer = $('[data-slot="context-spacer"]').attr('class') ?? '';
+    const grid = $('[data-slot="episode-page"]').attr('class') ?? '';
+    // ASSERT
+    expect(card).toContain('translateX');
+    expect(`${spacer} ${grid}`).not.toMatch(/transition/);
+  });
+
+  it('holds the layout menu only on a client render, never as static HTML', () => {
+    // ARRANGE
+    const $ = page(url);
+    // ACT
+    const popups = $('[data-slot="context"] [role="menu"], [data-slot="context"] [role="menuitemradio"]').length;
+    // ASSERT
+    expect(popups).toBe(0);
+  });
+});
+
 describe('amnesiac-freelancer', () => {
+  it.each(LOCALES)('keeps sources closed behind a counted toggle, with their text in the HTML, in %s', (locale) => {
+    // ARRANGE
+    const $ = page(localizePath(episodeRoute('amnesiac-freelancer'), locale));
+    const counted = /\(\d+\)/;
+    // ACT
+    const disclosures = $('[data-slot="context"] [data-note-target] details').toArray();
+    const open = disclosures.filter((details) => $(details).attr('open') !== undefined);
+    const labels = disclosures.map((details) => $(details).children('summary').text());
+    // ASSERT
+    expect(disclosures.length).toBeGreaterThan(0);
+    expect(open).toHaveLength(0);
+    labels.forEach((label) => expect(label).toMatch(counted));
+  });
+
   it.each(LOCALES)('carries the scripted notes and segments on every page Slide in %s', (locale) => {
     // ARRANGE
     const $ = page(localizePath(episodeRoute('amnesiac-freelancer'), locale));
@@ -122,7 +171,7 @@ describe('amnesiac-freelancer', () => {
     const counts = DOGFOOD_COUNTS.map(({ slide }) => ({
       slide,
       notes: entry($, 'notes', slide).find('[data-note-target]').length,
-      segments: entry($, 'script', slide).find('li').length,
+      segments: entry($, 'script', slide).find('[data-segment]').length,
     }));
     // ASSERT
     expect(counts).toEqual(DOGFOOD_COUNTS);
@@ -159,7 +208,7 @@ describe('page-template', () => {
 });
 
 describe('print stylesheet', () => {
-  it('reveals the context slot and hides the trigger inside @media print', () => {
+  it('reveals the context slot and hides the trigger, scrim and spacer inside @media print', () => {
     // ARRANGE
     const blocks = cssFiles(join(OUT_DIR, '_next', 'static')).flatMap((file) =>
       printBlocks(readFileSync(file, 'utf8')),
@@ -167,8 +216,12 @@ describe('print stylesheet', () => {
     // ACT
     const reveals = blocks.some((b) => b.includes('[data-slot=context]') && b.includes('display:block'));
     const hides = blocks.some((b) => b.includes('[data-slot=context-trigger]') && b.includes('display:none'));
+    const hidesAll = blocks.some(
+      (b) => b.includes('[data-slot=context-scrim]') && b.includes('[data-slot=context-spacer]'),
+    );
     // ASSERT
     expect(reveals).toBe(true);
     expect(hides).toBe(true);
+    expect(hidesAll).toBe(true);
   });
 });

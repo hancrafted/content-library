@@ -1,20 +1,38 @@
 import { formatMark, type VoiceScriptSegment } from '@/lib/context-drawer.pure';
 import type { ContextLabels } from './context-labels';
 
+function Keywords({ keywords, label }: { keywords: readonly string[]; label: string }) {
+  return (
+    <ul aria-label={label} className="flex flex-wrap gap-1">
+      {keywords.map((keyword) => (
+        <li key={keyword} className="rounded-full border px-2 py-0.5 text-xs text-muted-foreground">
+          {keyword}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 function Segment({ segment, labels }: { segment: VoiceScriptSegment; labels: ContextLabels }) {
   return (
-    <li className="flex flex-col gap-1 break-inside-avoid border-t pt-3">
-      <p className="font-mono text-xs text-muted-foreground tabular-nums">
-        {formatMark(segment.from)}–{formatMark(segment.to)}
-      </p>
-      <h6 className="text-sm font-semibold">{segment.title}</h6>
-      <p className="text-xs text-muted-foreground">
-        <span className="font-medium">{labels.keywords}:</span> {segment.keywords.join(', ')}
-      </p>
+    <li
+      data-segment={segment.slug}
+      className="flex flex-col gap-2 break-inside-avoid rounded-xl border bg-muted/40 p-3"
+    >
+      <div className="flex items-baseline gap-2">
+        <span className="shrink-0 rounded-md bg-highlight px-1.5 py-0.5 font-mono text-xs tabular-nums">
+          {formatMark(segment.from)}–{formatMark(segment.to)}
+        </span>
+        <h6 className="text-base leading-snug font-semibold text-pretty">{segment.title}</h6>
+      </div>
+      <Keywords keywords={segment.keywords} label={labels.keywords} />
       <p className="text-sm leading-relaxed">{segment.script}</p>
       {segment.bridge && (
-        <p className="text-sm leading-relaxed italic">
-          <span className="font-medium not-italic">{labels.bridge}:</span> {segment.bridge}
+        <p className="rounded-lg border-l-2 border-foreground/30 bg-accent px-3 py-2 text-sm leading-relaxed italic">
+          <span className="block text-xs font-medium tracking-wide text-muted-foreground uppercase not-italic">
+            {labels.bridge}
+          </span>
+          {segment.bridge}
         </p>
       )}
     </li>

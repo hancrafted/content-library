@@ -497,10 +497,16 @@
       "notes": "No speaker notes for this Slide.",
       "script": "No voice script for this Slide."
     },
-    "sources": "Sources",
     "keywords": "Keywords",
     "bridge": "Bridge",
     "slide": "Slide",
-    "shortcut": "Shortcut"
+    "shortcut": "Shortcut",
+    "sourcesCount": "Sources ({count})",
+    "menu": {
+      "label": "More options",
+      "layout": "Layout",
+      "side": "Side by side",
+      "overlay": "Overlay"
+    }
   }
 }

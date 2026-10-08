@@ -33,12 +33,18 @@ function SectionSlides({ section }: { section: EpisodeSection }) {
   );
 }
 
+/** Only what the client drawer reads, so nothing unserializable (`labels.sources` is a function) crosses the boundary. */
+function drawerLabels(labels: ContextLabels) {
+  const { title, open, close, shortcut, slide, tabs, menu } = labels;
+  return { title, open, close, shortcut, slide, tabs, menu };
+}
+
 /** The Context drawer's slot: every Slide's notes and script, pre-rendered (FE-010). */
 function ContextSlot({ labels, sections }: { labels: ContextLabels; sections: readonly EpisodeSection[] }) {
   return (
     <aside data-slot="context" aria-label={labels.title}>
       <ContextDrawer
-        labels={labels}
+        labels={drawerLabels(labels)}
         entries={contextEntries(contextSlidesOf(sections), labels)}
         targetAttribute="data-slide"
       />
@@ -70,7 +76,7 @@ export async function EpisodePageContainer({ locale, episode }: { locale: Locale
   const toc = tocSectionsOf(sections, locale);
   const labels = await contextLabels(locale);
   return (
-    <div data-slot="episode-page" className="mx-4 mt-6 md:grid md:grid-cols-[17rem_minmax(0,1fr)] md:gap-12">
+    <div data-slot="episode-page" className="mx-4 mt-6 md:grid md:grid-cols-[17rem_minmax(0,1fr)_auto]">
       <aside data-slot="toc">
         <TableOfContents
           locale={locale}
@@ -80,7 +86,7 @@ export async function EpisodePageContainer({ locale, episode }: { locale: Locale
           labels={await tocLabels(locale)}
         />
       </aside>
-      <main data-slot="slides" data-testid="episode-page" className="flex min-w-0 flex-col pb-24">
+      <main data-slot="slides" data-testid="episode-page" className="flex min-w-0 flex-col pb-24 md:ml-12">
         <TitleSlide title={title} caption={caption} />
         {sections.map((section) => (
           <SectionSlides key={section.slug} section={section} />

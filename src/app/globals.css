@@ -18,6 +18,8 @@
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
+  /* The Context drawer card's width, shared by the card and the grid spacer that makes room for it (FE-010 §9). */
+  --drawer-width: 26rem;
 }
 
 .dark {
@@ -82,7 +84,12 @@
   [data-slot='context'] [data-context-for] {
     display: block !important;
   }
-  [data-slot='context-trigger'] {
+  [data-slot='context'] {
+    grid-column: 1 / -1;
+  }
+  [data-slot='context-trigger'],
+  [data-slot='context-scrim'],
+  [data-slot='context-spacer'] {
     display: none !important;
   }
 }

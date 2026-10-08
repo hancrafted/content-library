@@ -1,5 +1,11 @@
 import { useActiveId } from '@/hooks/use-table-of-contents';
-import { currentSlideAnchor, drawerKeyAction, type DrawerTab } from '@/lib/context-drawer.pure';
+import {
+  currentSlideAnchor,
+  DEFAULT_DRAWER_MODE,
+  drawerKeyAction,
+  type DrawerMode,
+  type DrawerTab,
+} from '@/lib/context-drawer.pure';
 import { useEffect, useRef, useState, type RefObject } from 'react';
 
 /** Alt+N toggles and Escape closes, from anywhere on the page. */
@@ -40,16 +46,42 @@ function useFocusHandoff(open: boolean, tab: RefObject<HTMLElement | null>, fall
   }, [open, tab, fallback]);
 }
 
-/** State of the Context drawer: open, selected tab, and the Slide at the reading line. */
+/**
+ * Sources sit in closed `<details>`, which print drops; open them for the print
+ * job and put them back after (FE-010 §9).
+ */
+function usePrintDisclosure() {
+  useEffect(() => {
+    let opened: HTMLDetailsElement[] = [];
+    const before = () => {
+      opened = [...document.querySelectorAll<HTMLDetailsElement>('[data-slot="context"] details:not([open])')];
+      opened.forEach((details) => (details.open = true));
+    };
+    const after = () => {
+      opened.forEach((details) => (details.open = false));
+      opened = [];
+    };
+    window.addEventListener('beforeprint', before);
+    window.addEventListener('afterprint', after);
+    return () => {
+      window.removeEventListener('beforeprint', before);
+      window.removeEventListener('afterprint', after);
+    };
+  }, []);
+}
+
+/** State of the Context drawer: open, selected tab, layout mode (in memory, not a stored preference), and the Slide at the reading line. */
 export function useContextDrawer(anchors: readonly string[], targetAttribute: string) {
   const current = currentSlideAnchor(useActiveId(anchors, targetAttribute), anchors);
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<DrawerTab>('notes');
+  const [mode, setMode] = useState<DrawerMode>(DEFAULT_DRAWER_MODE);
   const trigger = useRef<HTMLButtonElement>(null);
   const selectedTab = useRef<HTMLButtonElement>(null);
   const toggle = () => setOpen((value) => !value);
   const close = () => setOpen(false);
   useDrawerKeys(open, toggle, close);
   useFocusHandoff(open, selectedTab, trigger);
-  return { current, open, tab, setTab, toggle, close, trigger, selectedTab };
+  usePrintDisclosure();
+  return { current, open, tab, setTab, mode, setMode, toggle, close, trigger, selectedTab };
 }
