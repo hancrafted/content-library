@@ -22,9 +22,6 @@ export function elementId(anchor: string | undefined, element: string): string |
   return anchor === undefined ? undefined : targetAnchor(anchor, element);
 }
 
-/** The rule between stacked slides, shared by the Title slide and every slide anchor. */
-export const SLIDE_DIVIDER = 'border-b border-border/60';
-
 const TITLE_SIZE = {
   h1: 'text-5xl md:text-7xl',
   h2: 'text-4xl md:text-6xl',

@@ -3,30 +3,21 @@ import { TableOfContents, type TocLabels } from '@/components/table-of-contents/
 import { sectionAnchor, slideAnchor } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { episodeRoute } from '@/lib/routes';
-import { cn } from '@/lib/utils';
 import { getTranslations } from 'next-intl/server';
-import type { ReactNode } from 'react';
+import { ContentArea } from './content-area';
 import { contextDrawerInput } from './context-drawer-input';
 import { tocSectionsOf, type Episode, type EpisodeSection } from './episode-page-container.pure';
-import { SLIDE_DIVIDER } from './slide-master';
+import { SlideWrapper } from './slide-wrapper';
 import { TitleSlide } from './title-slide';
-
-function SlideAnchor({ anchor, children }: { anchor: string; children: ReactNode }) {
-  return (
-    <div id={anchor} data-slide={anchor} className={cn('scroll-mt-24', SLIDE_DIVIDER)}>
-      {children}
-    </div>
-  );
-}
 
 function SectionSlides({ section }: { section: EpisodeSection }) {
   return (
-    <section data-section={section.slug} className="flex flex-col">
-      <SlideAnchor anchor={sectionAnchor(section.slug)}>{section.content}</SlideAnchor>
+    <section data-section={section.slug} className="contents">
+      <SlideWrapper id={sectionAnchor(section.slug)}>{section.content}</SlideWrapper>
       {section.slides.map((slide) => (
-        <SlideAnchor key={slide.slug} anchor={slideAnchor(section.slug, slide.slug)}>
+        <SlideWrapper key={slide.slug} id={slideAnchor(section.slug, slide.slug)}>
           {slide.content}
-        </SlideAnchor>
+        </SlideWrapper>
       ))}
     </section>
   );
@@ -65,12 +56,12 @@ export async function EpisodePageContainer({ locale, episode }: { locale: Locale
           labels={await tocLabels(locale)}
         />
       </aside>
-      <main data-slot="slides" data-testid="episode-page" className="flex min-w-0 flex-col pb-24 md:ml-12">
+      <ContentArea>
         <TitleSlide title={title} caption={caption} />
         {sections.map((section) => (
           <SectionSlides key={section.slug} section={section} />
         ))}
-      </main>
+      </ContentArea>
       <ContextDrawerSlot input={await contextDrawerInput(locale, sections)} />
     </div>
   );

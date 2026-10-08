@@ -7,6 +7,7 @@ import { load, type CheerioAPI } from 'cheerio';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
+import { sectionAnchor, slideAnchor } from '../../src/lib/episode.pure';
 import { DEFAULT_LOCALE, LOCALES, localizePath } from '../../src/lib/locale.pure';
 import { EPISODE_SLUGS, episodeRoute } from '../../src/lib/routes';
 import { exportedFile, OUT_DIR } from './exported-pages';
@@ -52,6 +53,19 @@ function tocFragments($: CheerioAPI): string[] {
   return $('[data-slot="toc"] [data-testid="toc"] a[href*="#"]')
     .toArray()
     .map((link) => ($(link).attr('href') ?? '').split('#')[1]);
+}
+
+/** Every Slide wrapper under one Section, with its id: the Section's own slide first. */
+function wrapperIdsBySection($: CheerioAPI): { section: string; ids: string[] }[] {
+  return $('[data-slot="slides"] > section[data-section]')
+    .toArray()
+    .map((section) => ({
+      section: $(section).attr('data-section') ?? '',
+      ids: $(section)
+        .children('[data-slide]')
+        .toArray()
+        .map((wrapper) => $(wrapper).attr('id') ?? ''),
+    }));
 }
 
 describe('episode structure', () => {
@@ -111,6 +125,48 @@ describe('episode structure', () => {
       const anchors = slideAnchors($);
       // ASSERT
       expect(fragments).toEqual(anchors);
+    });
+
+    it('lays the slides out in a single-column grid that hosts the portal root', () => {
+      // ARRANGE
+      const $ = page(url);
+      // ACT
+      const area = $('[data-slot="slides"]');
+      const portalRoots = area.children('[data-slot="portal-root"]').length;
+      // ASSERT
+      expect(area.is('main')).toBe(true);
+      expect((area.attr('class') ?? '').split(/\s+/)).toEqual(expect.arrayContaining(['grid', 'grid-cols-1']));
+      expect(portalRoots).toBe(1);
+    });
+
+    it('keeps every Section a display:contents group, so each wrapper is a grid cell', () => {
+      // ARRANGE
+      const $ = page(url);
+      // ACT
+      const groups = $('[data-slot="slides"] > section[data-section]').toArray();
+      const classes = groups.map((group) => ($(group).attr('class') ?? '').split(/\s+/));
+      // ASSERT
+      expect(groups.length).toBeGreaterThan(0);
+      for (const list of classes) expect(list).toContain('contents');
+    });
+
+    it('gives each Slide wrapper the id slideAnchor() derives, and no wrapper clips', () => {
+      // ARRANGE
+      const $ = page(url);
+      // ACT
+      const sections = wrapperIdsBySection($);
+      const derived = sections.map(({ section, ids }) => ({
+        section,
+        ids: ids.map((id, index) =>
+          index === 0 ? sectionAnchor(section) : slideAnchor(section, id.slice(slideAnchor(section, '').length)),
+        ),
+      }));
+      const clipping = $('[data-slide]')
+        .toArray()
+        .filter((wrapper) => /\boverflow-/.test($(wrapper).attr('class') ?? ''));
+      // ASSERT
+      expect(sections).toEqual(derived);
+      expect(clipping).toEqual([]);
     });
 
     it('carries no id twice', () => {

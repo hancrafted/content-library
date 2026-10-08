@@ -1,4 +1,5 @@
-import { SLIDE_DIVIDER, SlideCaption, SlideFrame, SlideTitle } from './slide-master';
+import { SlideCaption, SlideFrame, SlideTitle } from './slide-master';
+import { SlideWrapper } from './slide-wrapper';
 
 /**
  * The Episode's opening slide and the page's only `h1` (FE-002). Rendered by
@@ -7,11 +8,11 @@ import { SLIDE_DIVIDER, SlideCaption, SlideFrame, SlideTitle } from './slide-mas
  */
 export function TitleSlide({ title, caption }: { title: string; caption?: string }) {
   return (
-    <div data-slot="title-slide" className={SLIDE_DIVIDER}>
+    <SlideWrapper data-slot="title-slide">
       <SlideFrame className="justify-center">
         <SlideTitle as="h1">{title}</SlideTitle>
         {caption && <SlideCaption>{caption}</SlideCaption>}
       </SlideFrame>
-    </div>
+    </SlideWrapper>
   );
 }
