@@ -1,5 +1,3 @@
-'use client';
-
 import { cn } from '@/lib/utils';
 import { X } from 'lucide-react';
 import { useEffect, useRef, type MouseEvent, type ReactNode, type RefObject } from 'react';

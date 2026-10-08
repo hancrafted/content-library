@@ -1,11 +1,5 @@
 'use client';
 
-import type { Locale } from '@/lib/locale.pure';
-import { useMemo } from 'react';
-import { ownerOf, readingTime, type TocSection } from './table-of-contents.pure';
-import { TocDrawer } from './toc-drawer';
-import { remainingLabel, type TocLabels } from './toc-heading';
-import { sectionNumber, TocPanel, type TocView } from './toc-panel';
 import {
   useActiveId,
   useFractionInto,
@@ -13,7 +7,13 @@ import {
   useOpenSections,
   useRevealed,
   useSettled,
-} from './use-table-of-contents';
+} from '@/hooks/use-table-of-contents';
+import type { Locale } from '@/lib/locale.pure';
+import { useMemo } from 'react';
+import { ownerOf, readingTime, type TocSection } from './table-of-contents.pure';
+import { TocDrawer } from './toc-drawer';
+import { remainingLabel, type TocLabels } from './toc-heading';
+import { sectionNumber, TocPanel, type TocView } from './toc-panel';
 
 export type { TocSection } from './table-of-contents.pure';
 export type { TocLabels } from './toc-heading';

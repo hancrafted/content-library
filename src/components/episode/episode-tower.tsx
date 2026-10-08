@@ -1,4 +1,8 @@
-import { TableOfContents, type TocLabels, type TocSection } from '@/components/table-of-contents/table-of-contents';
+import {
+  TableOfContents,
+  type TocLabels,
+  type TocSection,
+} from '@/components/table-of-contents/table-of-contents.client';
 import { episodeAnchors, sectionAnchor, slideAnchor, type EpisodeOutline } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
 import type { ReactNode } from 'react';
