@@ -1,5 +1,5 @@
 // @ts-check
-// FE-006: edges across the server/client boundary that no single file can see.
+// FE-006 (boundary) and FE-007 (layering): import edges no single file can see.
 // Read the dependency count on the summary line, never the checkmark: without
 // `tsPreCompilationDeps` every `import type` is erased and the rules below
 // cruise a thinner graph while still reporting success.
@@ -30,6 +30,94 @@ module.exports = {
         'A *.client.tsx leaf MUST NOT import from src/app/**; route code would ride into the client bundle and the dependency would run against the tree (FE-006).',
       from: { path: '\\.client\\.tsx$' },
       to: { path: '^src/app/' },
+    },
+
+    // FE-007: layering. Tiers run app → components → hooks → lib; an edge may
+    // skip a tier downward, never point upward. Boundary rules above (FE-006)
+    // and the layering rules below can both fire on one edge.
+    {
+      name: 'no-circular',
+      severity: 'error',
+      comment: 'No import cycle anywhere under src/; a cycle makes the tier order meaningless (FE-007).',
+      from: { path: '^src/' },
+      to: { circular: true },
+    },
+    {
+      name: 'lib-imports-no-react',
+      severity: 'error',
+      comment:
+        'src/lib/** imports no React — not runtime, not types — so every lib module stays a plain module a vitest test imports without a DOM (FE-007).',
+      from: { path: '^src/lib/' },
+      to: { path: '(^|/)node_modules/(@types/)?(react|react-dom)/' },
+    },
+    {
+      name: 'lib-tsx-never-imported',
+      severity: 'error',
+      comment: 'JSX needs a .tsx file; src/lib/** holds none, so nothing may import a .tsx module from it (FE-007).',
+      from: {},
+      to: { path: '^src/lib/.+\\.tsx$' },
+    },
+    {
+      name: 'lib-imports-no-upper-tier',
+      severity: 'error',
+      comment: 'src/lib/** is the bottom tier: it MUST NOT import src/app, src/components or src/hooks (FE-007).',
+      from: { path: '^src/lib/' },
+      to: { path: '^src/(app|components|hooks)/' },
+    },
+    {
+      name: 'hooks-import-no-upper-tier',
+      severity: 'error',
+      comment: 'src/hooks/** sits above lib only: it MUST NOT import src/app or src/components (FE-007).',
+      from: { path: '^src/hooks/' },
+      to: { path: '^src/(app|components)/' },
+    },
+    // Relies on options.exclude '\.css$': site-shell.tsx imports @/app/globals.css, so dropping that exclusion fires this rule.
+    {
+      name: 'components-never-import-app',
+      severity: 'error',
+      comment: 'src/components/** sits below the routes: it MUST NOT import src/app/** (FE-007).',
+      from: { path: '^src/components/' },
+      to: { path: '^src/app/' },
+    },
+    {
+      name: 'pages-reached-only-from-app',
+      severity: 'error',
+      comment:
+        'src/components/pages/** is the top sub-tier of components: only a route under src/app/** (or a test) imports it, never another component or a page (FE-007).',
+      from: { pathNot: ['^src/app/', '\\.test\\.tsx?$'] },
+      to: { path: '^src/components/pages/' },
+    },
+    {
+      name: 'site-shell-reached-only-from-root-layouts',
+      severity: 'error',
+      comment:
+        'SiteShell renders <html>; only the two root layouts (or a test) import it. A nested layout or page doing so would nest a second <html> (FE-007).',
+      from: { pathNot: ['^src/app/(\\(en\\)|\\[locale\\])/layout\\.tsx$', '\\.test\\.tsx?$'] },
+      to: { path: '^src/components/site-shell\\.tsx$' },
+    },
+    {
+      name: 'route-reaches-components-only-via-roots',
+      severity: 'error',
+      comment:
+        'A route composes; it does not lay out. src/app/** reaches src/components/** only through a page component under src/components/pages/ or SiteShell (FE-007).',
+      from: { path: '^src/app/' },
+      to: { path: '^src/components/', pathNot: '^src/components/(pages/|site-shell\\.tsx$)' },
+    },
+  ],
+  required: [
+    {
+      name: 'page-composes-a-page-component',
+      severity: 'error',
+      comment: 'Every src/app/**/page.tsx renders a component from src/components/pages/ (FE-007).',
+      module: { path: '^src/app/(.+/)?page\\.tsx$' },
+      to: { path: '^src/components/pages/' },
+    },
+    {
+      name: 'root-layout-composes-site-shell',
+      severity: 'error',
+      comment: 'Each root layout — the one rendering <html> — renders SiteShell (FE-007).',
+      module: { path: '^src/app/(\\(en\\)|\\[locale\\])/layout\\.tsx$' },
+      to: { path: '^src/components/site-shell\\.tsx$' },
     },
   ],
   options: {
