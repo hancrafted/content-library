@@ -9,6 +9,7 @@ import { SectionSlide } from '@/components/episode/section-slide';
 import { ThreeColumnSlide } from '@/components/episode/three-column-slide';
 import type { Locale } from '@/lib/locale.pure';
 import { getTranslations } from 'next-intl/server';
+import { contextFor } from './context';
 
 /*
  * The dogfood Episode: "Treat AI like an amnesiac freelancer you have to
@@ -22,12 +23,16 @@ type SectionsT = Awaited<ReturnType<typeof getTranslations<'episodes.amnesiac-fr
 
 function blankEveryTime(t: SectionsT): EpisodeSlide {
   const title = t('blank-slate.slides.blank-every-time.title');
+  const { anchor, notes, voiceScript } = contextFor(t, 'blank-every-time');
   return {
     slug: 'blank-every-time',
     title,
     minutes: { en: 3, de: 4 },
+    notes,
+    voiceScript,
     content: (
       <BasicPageSlide
+        anchor={anchor}
         title={title}
         caption={t('blank-slate.slides.blank-every-time.caption')}
         prose={t('blank-slate.slides.blank-every-time.prose')}
@@ -38,6 +43,7 @@ function blankEveryTime(t: SectionsT): EpisodeSlide {
 
 function whereKnowledgeLives(t: SectionsT): EpisodeSlide {
   const title = t('blank-slate.slides.where-knowledge-lives.title');
+  const { anchor, notes, voiceScript } = contextFor(t, 'where-knowledge-lives');
   const column = (slug: 'training' | 'session' | 'files') => ({
     slug,
     title: t(`blank-slate.slides.where-knowledge-lives.columns.${slug}.title`),
@@ -47,8 +53,11 @@ function whereKnowledgeLives(t: SectionsT): EpisodeSlide {
     slug: 'where-knowledge-lives',
     title,
     minutes: { en: 4, de: 5 },
+    notes,
+    voiceScript,
     content: (
       <ThreeColumnSlide
+        anchor={anchor}
         title={title}
         caption={t('blank-slate.slides.where-knowledge-lives.caption')}
         columns={[column('training'), column('session'), column('files')]}
@@ -59,6 +68,7 @@ function whereKnowledgeLives(t: SectionsT): EpisodeSlide {
 
 function briefAndRules(t: SectionsT): EpisodeSlide {
   const title = t('onboarding.slides.brief-and-rules.title');
+  const { anchor, notes, voiceScript } = contextFor(t, 'brief-and-rules');
   const column = (slug: 'brief' | 'house-rules' | 'definition-of-done') => ({
     slug,
     title: t(`onboarding.slides.brief-and-rules.columns.${slug}.title`),
@@ -68,8 +78,11 @@ function briefAndRules(t: SectionsT): EpisodeSlide {
     slug: 'brief-and-rules',
     title,
     minutes: { en: 4, de: 5 },
+    notes,
+    voiceScript,
     content: (
       <ThreeColumnSlide
+        anchor={anchor}
         title={title}
         caption={t('onboarding.slides.brief-and-rules.caption')}
         columns={[column('brief'), column('house-rules'), column('definition-of-done')]}
@@ -80,12 +93,16 @@ function briefAndRules(t: SectionsT): EpisodeSlide {
 
 function keepItShort(t: SectionsT): EpisodeSlide {
   const title = t('onboarding.slides.keep-it-short.title');
+  const { anchor, notes, voiceScript } = contextFor(t, 'keep-it-short');
   return {
     slug: 'keep-it-short',
     title,
     minutes: { en: 3, de: 3 },
+    notes,
+    voiceScript,
     content: (
       <BasicPageSlide
+        anchor={anchor}
         title={title}
         caption={t('onboarding.slides.keep-it-short.caption')}
         prose={t('onboarding.slides.keep-it-short.prose')}
@@ -96,12 +113,16 @@ function keepItShort(t: SectionsT): EpisodeSlide {
 
 function decisionsInWriting(t: SectionsT): EpisodeSlide {
   const title = t('onboarding.slides.decisions-in-writing.title');
+  const { anchor, notes, voiceScript } = contextFor(t, 'decisions-in-writing');
   return {
     slug: 'decisions-in-writing',
     title,
     minutes: { en: 3, de: 4 },
+    notes,
+    voiceScript,
     content: (
       <BasicPageSlide
+        anchor={anchor}
         title={title}
         caption={t('onboarding.slides.decisions-in-writing.caption')}
         prose={t('onboarding.slides.decisions-in-writing.prose')}
@@ -112,6 +133,7 @@ function decisionsInWriting(t: SectionsT): EpisodeSlide {
 
 function metaphorBreaks(t: SectionsT): EpisodeSlide {
   const title = t('where-it-breaks.slides.metaphor-breaks.title');
+  const { anchor, notes, voiceScript } = contextFor(t, 'metaphor-breaks');
   const column = (slug: 'no-learning' | 'not-enforced' | 'reading-costs') => ({
     slug,
     title: t(`where-it-breaks.slides.metaphor-breaks.columns.${slug}.title`),
@@ -121,8 +143,11 @@ function metaphorBreaks(t: SectionsT): EpisodeSlide {
     slug: 'metaphor-breaks',
     title,
     minutes: { en: 4, de: 5 },
+    notes,
+    voiceScript,
     content: (
       <ThreeColumnSlide
+        anchor={anchor}
         title={title}
         caption={t('where-it-breaks.slides.metaphor-breaks.caption')}
         columns={[column('no-learning'), column('not-enforced'), column('reading-costs')]}
@@ -133,12 +158,16 @@ function metaphorBreaks(t: SectionsT): EpisodeSlide {
 
 function enforceAndVerify(t: SectionsT): EpisodeSlide {
   const title = t('where-it-breaks.slides.enforce-and-verify.title');
+  const { anchor, notes, voiceScript } = contextFor(t, 'enforce-and-verify');
   return {
     slug: 'enforce-and-verify',
     title,
     minutes: { en: 3, de: 4 },
+    notes,
+    voiceScript,
     content: (
       <BasicPageSlide
+        anchor={anchor}
         title={title}
         caption={t('where-it-breaks.slides.enforce-and-verify.caption')}
         prose={t('where-it-breaks.slides.enforce-and-verify.prose')}
