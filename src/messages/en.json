@@ -19,8 +19,28 @@
   "landing": {
     "title": "Home",
     "link": "Page template",
-    "heroSubtitle": "Theory from the hancrafted training videos, visualised page by page.",
-    "exploreEpisodes": "Explore Episodes",
+    "hero": {
+      "eyebrow": "hancrafted / Human-led. AI-accelerated.",
+      "headline": "AI gave you a promotion you never asked for.",
+      "caption": "It 10x's your execution — if you learn to <plan>plan,</plan> <spec>spec</spec> and <review>review.</review>",
+      "plan": "plan",
+      "spec": "spec",
+      "review": "review",
+      "promotion": "Promotion",
+      "episodes": "Explore Episodes",
+      "contact": "Work with me",
+      "newTab": "opens in a new tab",
+      "open": "Open your promotion",
+      "skip": "Skip animation",
+      "tasks": {
+        "bug": "Fix the regression",
+        "ticket": "Triage the tickets",
+        "release": "Ship the release",
+        "tests": "Check the edge cases",
+        "spec": "Clarify the brief",
+        "review": "Review the pull request"
+      }
+    },
     "episodesSectionTitle": "Available Episodes",
     "episodesSectionSubtitle": "Browse the interactive slide decks and visualised essays.",
     "amnesiacTitle": "Treat AI like an amnesiac freelancer",

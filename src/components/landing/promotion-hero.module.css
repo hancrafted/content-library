@@ -1,0 +1,212 @@
+.hero {
+  --hero-ink: #252b29;
+  --hero-line: #b7b5a9;
+  --hero-paper: #fffdf6;
+  --hero-envelope: #ede4ce;
+  --hero-envelope-inner: #d6c9ae;
+  --hero-desk: #e2e3dc;
+  --hero-desk-edge: #c8cdc3;
+  --hero-seal: #73573b;
+  position: relative;
+  isolation: isolate;
+  /* Keep the following section's oversized ink layer below the hero, but below the site header ourselves. */
+  z-index: 41;
+  background: var(--background);
+  width: 100%;
+  padding: 5rem 1.5rem 3rem;
+}
+
+:global(.dark) .hero {
+  --hero-ink: #dce0d5;
+  --hero-line: #777e70;
+  --hero-paper: #343a34;
+  --hero-envelope: #4b493b;
+  --hero-envelope-inner: #38392f;
+  --hero-desk: #252e29;
+  --hero-desk-edge: #1c251f;
+  --hero-seal: #a39477;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.75rem;
+  font: 500 0.65rem/1.5 monospace;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+.eyebrow::before {
+  content: '';
+  width: 1.5rem;
+  height: 1px;
+  background: currentColor;
+}
+
+.headline {
+  max-width: 12ch;
+  font-size: clamp(2.6rem, 5.3vw, 4.75rem);
+  font-weight: 650;
+  letter-spacing: -0.055em;
+  line-height: 1.05;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+.caption {
+  max-width: 33rem;
+  margin-top: 2rem;
+  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+  line-height: 1.75;
+  color: var(--muted-foreground);
+}
+
+.caption [data-caption-word] {
+  display: inline-block;
+  position: relative;
+  color: var(--foreground);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--hero-line);
+  text-underline-offset: 0.3em;
+  text-decoration-thickness: 1px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: 3rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 550;
+}
+
+.primary {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.secondary {
+  border: 1px solid var(--border);
+  color: var(--foreground);
+}
+
+.hero a:focus-visible,
+.hero button:focus-visible {
+  outline: 2px solid var(--foreground);
+  outline-offset: 5px;
+}
+
+.scene {
+  position: relative;
+  width: min(100%, 32rem);
+  margin: 1rem auto 0;
+}
+
+.envelopeTrigger,
+.skip {
+  display: none;
+  cursor: pointer;
+}
+
+.envelopeTrigger {
+  position: absolute;
+  left: 43%;
+  top: 25%;
+  width: 40%;
+  height: 33%;
+  border-radius: 0.5rem;
+  transform: rotate(-8deg);
+}
+
+.skip {
+  position: absolute;
+  right: 8%;
+  bottom: 0;
+  min-height: 44px;
+  padding: 0.5rem;
+  color: var(--muted-foreground);
+  font: 0.7rem monospace;
+}
+
+.flyingWord {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+  color: var(--foreground);
+  font-weight: 600;
+  opacity: 0;
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    align-items: center;
+    min-height: min(780px, calc(100svh - 4rem));
+    padding: 6rem max(3.5rem, calc((100% - 80rem) / 2 + 3.5rem)) 7rem;
+  }
+
+  .copy {
+    position: relative;
+    z-index: 2;
+  }
+
+  .scene {
+    width: 115%;
+    max-width: none;
+    margin: -3rem 0 0 -5%;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) and (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+  .hero[data-animated='building'] .envelopeTrigger,
+  .hero[data-animated] .skip {
+    display: block;
+  }
+
+  .primary,
+  .secondary {
+    transition:
+      background-color 180ms ease,
+      box-shadow 180ms ease;
+  }
+
+  .primary:hover {
+    box-shadow: 0 4px 18px color-mix(in srgb, var(--foreground) 18%, transparent);
+  }
+
+  .secondary:hover {
+    background: var(--muted);
+  }
+}
+
+@media print {
+  .hero {
+    break-inside: avoid;
+  }
+
+  .hero [data-caption-word] {
+    filter: none !important;
+  }
+
+  .flyingWord,
+  .envelopeTrigger,
+  .skip,
+  .hero [data-task-paper] {
+    display: none !important;
+  }
+}

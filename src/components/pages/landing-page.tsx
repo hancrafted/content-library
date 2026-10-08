@@ -1,5 +1,6 @@
 import { LiquidInkTransition } from '@/components/animations/liquid-ink-transition.client';
 import { AboutSection } from '@/components/landing/about-section';
+import { HeroSection } from '@/components/landing/hero-section';
 import { MethodRailSection } from '@/components/landing/method-rail-section.client';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { episodeRoute } from '@/lib/routes';
@@ -10,32 +11,6 @@ import Link from 'next/link';
 interface SubComponentProps {
   locale: Locale;
   t: Awaited<ReturnType<typeof getTranslations<'landing'>>>;
-}
-
-function LandingHero({ locale, t }: SubComponentProps) {
-  return (
-    <section className="relative px-6 pt-24 pb-20 sm:pt-32 sm:pb-28 max-w-5xl mx-auto space-y-6 text-center">
-      <div className="inline-flex items-center gap-2 font-mono text-xs font-semibold text-primary uppercase tracking-wider bg-primary/10 px-3 py-1 rounded-full">
-        <span>hancrafted // theory</span>
-      </div>
-      <h1
-        data-testid="page-title"
-        className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-foreground leading-[1.08]"
-      >
-        {t('title')}
-      </h1>
-      <p className="text-muted-foreground text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed">{t('heroSubtitle')}</p>
-      <div className="pt-4 flex items-center justify-center gap-4">
-        <Link
-          href={localizePath(episodeRoute('amnesiac-freelancer'), locale)}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-mono text-sm font-semibold bg-primary text-primary-foreground shadow-md hover:opacity-90 transition-all"
-        >
-          <span>{t('exploreEpisodes')}</span>
-          <ArrowRight className="h-4 w-4" />
-        </Link>
-      </div>
-    </section>
-  );
 }
 
 interface EpisodeCardProps {
@@ -85,7 +60,7 @@ function EpisodesHeader({ title, subtitle }: { title: string; subtitle: string }
 
 function LandingEpisodes({ locale, t }: SubComponentProps) {
   return (
-    <section data-chapter="02" className="relative">
+    <section id="episodes" data-chapter="02" className="relative">
       <div className="py-24 sm:py-32 px-6 max-w-6xl mx-auto space-y-12">
         <EpisodesHeader title={t('episodesSectionTitle')} subtitle={t('episodesSectionSubtitle')} />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -116,7 +91,7 @@ export async function LandingPage({ locale }: { locale: Locale }) {
 
   return (
     <main data-testid="landing-page" className="flex flex-col min-h-screen">
-      <LandingHero locale={locale} t={t} />
+      <HeroSection locale={locale} />
       <LandingEpisodes locale={locale} t={t} />
       <MethodRailSection locale={locale} />
       <AboutSection locale={locale} />
