@@ -1,0 +1,1 @@
+../../.archgate/adrs/FE-005-static-export-contract.md
