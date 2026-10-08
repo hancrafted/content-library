@@ -171,8 +171,10 @@ function TocBody(props: { view: TocView; sections: readonly TocSection[]; labels
     <div
       inert={!revealed}
       className={cn(
-        `grid min-h-0 transition-[grid-template-rows,opacity] ${UNFOLD}`,
-        revealed ? 'grid-rows-[1fr]' : 'grid-rows-[0fr] opacity-0 noscript:grid-rows-[1fr] noscript:opacity-100',
+        // Height animates straight to the measured `auto` (`interpolate-size` on the panel). The 0fr→1fr grid
+        // trick sized the box ahead of its row and opened an empty band; browsers without support show the body at once.
+        `flex min-h-0 flex-col overflow-hidden transition-[height] ${UNFOLD}`,
+        revealed ? 'h-auto' : 'h-0 noscript:h-auto',
       )}
     >
       <div className="flex min-h-0 flex-col overflow-hidden">
@@ -205,7 +207,7 @@ export function TocPanel(props: {
       aria-busy={!revealed}
       data-testid={props.testId}
       className={cn(
-        'flex flex-col border bg-background/70 p-3 text-sm shadow-header backdrop-blur-xl backdrop-saturate-150',
+        'flex flex-col border bg-background/70 p-3 text-sm shadow-header backdrop-blur-xl backdrop-saturate-150 [interpolate-size:allow-keywords]',
         `transition-[width,border-radius] ${WIDEN}`,
         revealed ? 'w-full rounded-2xl' : 'w-44 rounded-[1.375rem] noscript:w-full noscript:rounded-2xl',
         props.className,
