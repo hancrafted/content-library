@@ -644,6 +644,7 @@
       "notes": "Speaker notes",
       "script": "Voice script"
     },
+    "explainer": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press {shortcut} to open or close it.",
     "empty": {
       "notes": "No speaker notes for this Slide.",
       "script": "No voice script for this Slide."

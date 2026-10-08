@@ -644,6 +644,7 @@
       "notes": "Sprechernotizen",
       "script": "Sprechtext"
     },
+    "explainer": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit {shortcut} öffnen und schließen Sie es.",
     "empty": {
       "notes": "Keine Sprechernotizen für diese Folie.",
       "script": "Kein Sprechtext für diese Folie."

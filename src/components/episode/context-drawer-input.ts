@@ -1,4 +1,5 @@
 import type { ContextDrawerInput, ContextDrawerLabels } from '@/components/context-drawer/context-drawer-input';
+import { SHORTCUT_LABEL } from '@/lib/context-drawer.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { getTranslations } from 'next-intl/server';
 import { contextItemsOf } from './context-drawer-input.pure';
@@ -33,5 +34,7 @@ export async function contextDrawerInput(
   locale: Locale,
   sections: readonly EpisodeSection[],
 ): Promise<ContextDrawerInput> {
-  return { items: contextItemsOf(sections), labels: await drawerLabels(locale) };
+  const t = await getTranslations({ locale, namespace: 'contextDrawer' });
+  const explainer = t('explainer', { shortcut: SHORTCUT_LABEL });
+  return { items: contextItemsOf(sections, explainer), labels: await drawerLabels(locale) };
 }

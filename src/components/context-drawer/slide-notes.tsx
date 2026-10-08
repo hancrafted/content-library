@@ -10,6 +10,7 @@ import { externalHref } from '@/lib/external-link.pure';
 import { ChevronRight, ExternalLink } from 'lucide-react';
 import Image from 'next/image';
 import type { ContextDrawerLabels } from './context-drawer-input';
+import { DrawerExplainer } from './drawer-explainer';
 import { FLAT_ITEM, FLAT_LIST } from './flat-list';
 
 /*
@@ -106,8 +107,17 @@ function Note({ note, labels }: { note: SpeakerNoteItem; labels: ContextDrawerLa
   );
 }
 
-/** One Slide's Speaker notes, or the empty state. Server-rendered into the page (FE-010 §2). */
-export function SlideNotes({ notes, labels }: { notes: readonly SpeakerNoteItem[]; labels: ContextDrawerLabels }) {
+/** One Slide's Speaker notes, its explainer, or the empty state. Server-rendered into the page (FE-010 §2). */
+export function SlideNotes({
+  notes,
+  labels,
+  explainer,
+}: {
+  notes: readonly SpeakerNoteItem[];
+  labels: ContextDrawerLabels;
+  explainer?: string;
+}) {
+  if (explainer !== undefined) return <DrawerExplainer text={explainer} />;
   if (notes.length === 0) return <p className="text-sm text-muted-foreground">{labels.empty.notes}</p>;
   return (
     <ol className={FLAT_LIST}>

@@ -18,6 +18,8 @@ export interface ContextItem {
   /** Each note's `target` is the full DOM id of the element it explains; a context reference there carries the same id. */
   readonly notes: readonly SpeakerNoteItem[];
   readonly script: readonly VoiceScriptSegment[];
+  /** Pre-translated text shown on both tabs in place of the empty message, for an item that explains the drawer itself. */
+  readonly explainer?: string;
 }
 
 /**

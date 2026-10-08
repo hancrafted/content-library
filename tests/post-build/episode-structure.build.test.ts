@@ -7,7 +7,7 @@ import { load, type CheerioAPI } from 'cheerio';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { sectionAnchor, slideAnchor } from '../../src/lib/episode.pure';
+import { sectionAnchor, slideAnchor, titleAnchor } from '../../src/lib/episode.pure';
 import { DEFAULT_LOCALE, LOCALES, localizePath } from '../../src/lib/locale.pure';
 import { EPISODE_SLUGS, episodeRoute } from '../../src/lib/routes';
 import { exportedFile, OUT_DIR } from './exported-pages';
@@ -82,7 +82,7 @@ describe('episode structure', () => {
     console.info(`episode structure: walking ${PAGES.length} Episode pages`);
   });
 
-  describe.each(PAGES)('$url', ({ slug, url }) => {
+  describe.each(PAGES)('$url', ({ slug, locale, url }) => {
     it('holds the table of contents, then the slides', () => {
       // ARRANGE
       const expected = ['toc', 'slides', 'context'];
@@ -104,6 +104,36 @@ describe('episode structure', () => {
       expect(first).toBe(titleSlide);
       expect(h1Total).toBe(1);
       expect(h1InTitleSlide).toBe(1);
+    });
+
+    it('gives the Title slide wrapper the reserved id top, and links the table of contents heading to it', () => {
+      // ARRANGE
+      const $ = page(url);
+      // ACT
+      const wrapper = $('[data-slot="title-slide"]');
+      const heading = $('[data-slot="toc"] [data-testid="toc"] [data-testid="toc-top"]');
+      // ASSERT
+      expect(wrapper.attr('id')).toBe(titleAnchor());
+      expect(wrapper.attr('data-slide')).toBe('top');
+      expect((heading.attr('href') ?? '').split('#')[1]).toBe('top');
+    });
+
+    it("explains the Context drawer on both tabs of the Title slide's item, in the page's locale", () => {
+      // ARRANGE
+      const $ = page(url);
+      const catalog = JSON.parse(
+        readFileSync(join(import.meta.dirname, '..', '..', 'src', 'messages', `${locale}.json`), 'utf8'),
+      );
+      const expected = String(catalog.contextDrawer.explainer).replace('{shortcut}', 'Alt+N');
+      // ACT
+      const item = (tab: string) => $(`#context-panel-${tab} [data-context-for="top"]`);
+      const notes = item('notes').find('[role="note"]');
+      const script = item('script').find('[role="note"]');
+      const others = $('[data-slot="context"] [data-context-for]:not([data-context-for="top"]) [role="note"]');
+      // ASSERT
+      expect([notes.text().trim(), script.text().trim()]).toEqual([expected, expected]);
+      expect($('[data-slot="context"] [role="alert"]').length).toBe(0);
+      expect(others.length).toBe(0);
     });
 
     it('gives each section slide one h2, each titled page slide one h3, an untitled one none, and h2/h3 nowhere else', () => {
@@ -137,8 +167,9 @@ describe('episode structure', () => {
       // ACT
       const fragments = tocFragments($);
       const anchors = slideAnchors($).filter((anchor) => !untitled.includes(anchor));
-      // ASSERT
+      // ASSERT: the heading's link to the Title slide comes first
       expect(fragments).toEqual(anchors);
+      expect(fragments[0]).toBe(titleAnchor());
     });
 
     it('renders an untitled Slide with its content, and lists it nowhere in the table of contents', () => {
