@@ -15,7 +15,7 @@ description: 'Where client-side user preferences live: one localStorage key, nam
 
 Preferences such as theme and locale outlive a page load, and a static site can only keep them in the browser. Each one claiming its own storage key scatters state across keys nobody inventories, and lets one preference's writer clobber or misread another's.
 
-The Context drawer's layout (beside or over the Slides) is a preference too: a reader sets it once, and a shared link must not impose it. Today it lives in component state as `'side' | 'overlay'` (`src/lib/context-drawer.pure.ts`); it moves into the preferences object under the names below, so a reader sees the same layout after a reload.
+The Context drawer's layout (beside or over the Slides) is a preference too: a reader sets it once, and a shared link must not impose it. It lived in component state as `'side' | 'overlay'` before moving into the preferences object under the names below, so a reader sees the same layout after a reload.
 
 ## Decision
 

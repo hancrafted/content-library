@@ -29,6 +29,8 @@ An Episode stacks many Slides, some heavy (charts, looping demos). Navigation ne
 
 **Unmount discards state, by choice.** A played animation replays on return. That is chosen, not discovered; persisting it is a Canvas concern outside the wrapper.
 
+**Title slide:** its id leads the observer's ids, so scrolling back makes it `active`, clears the previous Slide and pauses looping islands. **Cost of the `near` default:** an unreported Slide reads `near`, so hydration mounts every Slide's content once; the first observer callback only removes content.
+
 **Reserved, not built:** overview mode (disables the observer, re-tiles the grid); guided-tour popovers (only the portal root exists); keyboard landing, a scroll target distinct from the wrapper's top, so an arrow-key jump to a Slide with a centred heading does not land on empty space.
 
 ## Decision
@@ -57,8 +59,8 @@ An Episode stacks many Slides, some heavy (charts, looping demos). Navigation ne
 
 ### 5. One observer
 
-1. One Slide observer per Episode page MUST be the only `IntersectionObserver` under `src/`.
-2. Its reading-line threshold decides `active` and MUST call `urlState.reportReading(id)` (FE-001 §2); its approach threshold decides `near` and touches nothing else.
+1. One Slide observer component per Episode page (two instances, one per threshold) MUST be the only code under `src/` creating an `IntersectionObserver`; the Title slide's id (`top`) leads its ids.
+2. Its reading-line threshold decides `active` and MUST call the page service's `reportReading(id)` (FE-001 §2); its approach threshold decides `near` and touches nothing else.
 3. It MUST write zones to one zone store provided at page level, so a new Episode starts fresh.
 
 ### 6. Good citizen

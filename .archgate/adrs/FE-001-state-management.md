@@ -25,6 +25,8 @@ An Episode page has two companions that show "the current Slide": the Table of c
 
 **Why the hash, behind one service.** Verified facts (research §2): no Next.js hook exposes the hash, so it is read from `window.location.hash`; `pushState`/`replaceState` never fire `hashchange`, so a store must notify its own subscribers after it writes; prerendered HTML cannot know the hash; WebKit throws `SecurityError` after 100 history writes per 10 s on the main frame, `pushState` and `replaceState` sharing the counter; Blink drops writes past its limit silently. Scrolling reports a new Slide many times a second, so writes must be throttled and owned by one module. 150 ms caps us at about 67 writes per 10 s; the research infers, without measuring, that Next.js's own router writes share the quota, so the gap is kept as headroom.
 
+**One instance per page.** A module singleton kept the previous Episode's Slide across a router navigation, which fires no `popstate` (#17). `dispose()` cancels the pending trailing write, a navigation in flight and the window listeners, so a dead page cannot rewrite the next page's URL. The Title slide is `top`: the page opens with no hash, scrolling back into it removes the hash, and `null` is never the Title slide.
+
 **Intent versus report.** A click is intent: the reader chose a Slide, and every consumer should show it now. The observer is a report: it says what the reading line crosses, including every Slide a smooth scroll passes. Two calls make the suppression rule explicit. The fallback timeout exists because a click on a Slide already in view scrolls nothing and fires no `scrollend`. Clicks use `replaceState` for now; switching them to `pushState` is a one-line change inside the service.
 
 **Rejected:** a state library (none manages the hash without replacing the router; ARCH-001 not invoked); per-feature stores (the bug above); query parameters (in a static export `useSearchParams` needs a Suspense boundary and the value exists only after hydration).
@@ -38,27 +40,27 @@ An Episode page has two companions that show "the current Slide": the Table of c
 1. Application state MUST live in the URL: path, locale segment (FE-003) and hash; no query-parameter state without amending this record.
 2. User preference MUST live in the FE-004 preferences object.
 3. Transient and derived state MAY live in memory only if a reload loses nothing the reader would miss and cannot recover in one action; derived values MUST be computed during render, not stored.
-4. A new piece of state MUST be classed as one of the three before it is written.
+4. New state MUST be classed as one of the three first.
 
 ### 2. One URL-state service
 
-1. `src/lib/url-state.ts` MUST be the only module that calls `history.pushState` or `history.replaceState`; it imports no React (FE-007 §3).
-2. It MUST be built by a factory over a window (`createUrlState(window)`), so tests create isolated instances; one client singleton serves the app.
-3. It MUST expose: read the active Slide (from the hash, `null` when empty); `subscribe(listener)`; `navigateTo(id)`; `reportReading(id)`.
-4. `subscribe` MUST re-read the hash on `popstate`, so Back and Forward notify every subscriber.
-5. Any component MAY call `navigateTo`; only the Slide observer (FE-009) MAY call `reportReading`.
+1. Only `src/lib/url-state.ts` MAY call `history.pushState`/`replaceState`; it imports no React (FE-007 §3).
+2. It MUST be built by a factory over a window (`createUrlState(window)`), and there MUST be one instance per Episode page, made by the page's provider and disposed on unmount; no module-wide singleton.
+3. It MUST expose: the active Slide; `subscribe(listener)`; `navigateTo(id)`; `reportReading(id)`; `dispose()`. An empty hash and `#top` read `top` (the Title slide, FE-002); writing `top` removes the hash, keeping path and query.
+4. `subscribe` MUST re-read the hash on `popstate` and on first subscription.
+5. Any component MAY call `navigateTo`; only the Slide observer MAY call `reportReading`.
 
 ### 3. Intent and report
 
 1. `navigateTo(id)` MUST notify subscribers immediately, write the hash, and suppress reports until `scrollend` or a fallback timeout, whichever comes first.
-2. `reportReading(id)` MUST be ignored while a navigation is in flight; otherwise it notifies subscribers immediately when the id changes.
+2. `reportReading(id)` MUST be ignored while a navigation is in flight; otherwise it notifies at once when the id changes.
 3. The service MUST write history at most once per 150 ms, always flushing the trailing value.
-4. A write MUST pass the current `history.state` through and MUST catch a `SecurityError`, keeping subscribers correct while the URL lags.
+4. A write MUST pass `history.state` through and catch a `SecurityError`.
 5. Both calls use `replaceState` for now.
 
 ### 4. One hook
 
-1. Components MUST read the active Slide only through `useActiveSlide()` in `src/hooks/use-url-state.ts`, built on `useSyncExternalStore` with a server snapshot of `null`.
+1. Components MUST read the active Slide only through `useActiveSlide()` (`src/hooks/use-url-state.ts`), on `useSyncExternalStore` over the page's service, with a server snapshot of `null`, meaning only "not known yet".
 
 ## Do's and Don'ts
 
@@ -66,7 +68,7 @@ An Episode page has two companions that show "the current Slide": the Table of c
 
 1. **DO** ask "does a reload lose something the reader would miss?" before adding `useState` for anything the reader sees. (Decision 1)
 2. **DO** put a new preference on `Prefs` per FE-004, never in the URL or memory. (Decision 1)
-3. **DO** call `urlState.navigateTo(id)` from a click that moves the reader. (Decision 2, Decision 3)
+3. **DO** call `navigateTo(id)` on the page's service from a click that moves the reader. (Decision 2, Decision 3)
 4. **DO** read the active Slide with `useActiveSlide()`. (Decision 4)
 5. **DO** test the service through `createUrlState` with a fake window and fake timers. (Decision 2)
 
@@ -104,10 +106,10 @@ An Episode page has two companions that show "the current Slide": the Table of c
 **Enforcers, earliest first:**
 
 1. **Types** (`tsc`): `useActiveSlide()` returns `string | null`; the service is the only export that writes.
-2. **Fast** (`npm run verify`): the service's test beside `src/lib/url-state.ts` drives a fake window: intent notifies at once; reports suppressed in flight; resume on `scrollend` and on timeout; at most one write per 150 ms with trailing flush; `popstate` notifies; the hash is read on creation.
+2. **Fast** (`npm run verify`): the service's test beside `src/lib/url-state.ts` drives a fake window: intent notifies at once; an empty hash reads `top`, `#top` lands there, `top` clears the hash and keeps path and query; `dispose` cancels the pending write; two instances stay isolated; reports suppressed in flight; resume on `scrollend` and on timeout; at most one write per 150 ms with trailing flush; `popstate` notifies; the hash is read on creation.
 3. **Lint** (`eslint.config.mjs`, added in [#13](https://github.com/hancrafted/content-library/issues/13)): `no-restricted-properties` refuses `history.pushState`/`history.replaceState` under `src/**` outside `src/lib/url-state.ts`, plus a `no-restricted-syntax` selector for the `window.history.*` and `globalThis.history.*` forms, which `object: 'history'` does not match (probed: 1 of 3 forms fired); `no-restricted-syntax` refuses `NewExpression[callee.name='IntersectionObserver']` outside the Slide observer (FE-009). Flat config replaces a rule's options per block, so the observer selector MUST be appended to every existing `no-restricted-syntax` list (FE-006's two blocks and FE-002's Episode block), not set in a new block that overrides them.
 
-**Measured** on `main` (4c412c3), by running ESLint over `src` with both rules passed on the command line: `no-restricted-properties` 1 hit (`src/components/table-of-contents/toc-panel.tsx:46`, `history.replaceState`); `no-restricted-syntax` 2 hits (`src/hooks/use-reading-line-id.ts:15`, `src/hooks/use-table-of-contents.ts:14`). Target after #13: 0 and 0, with one probe file per rule shown to fire.
+**Measured** on `main` (4c412c3): `no-restricted-properties` 1 hit, `no-restricted-syntax` 2 hits. On `b392fc0`: 0 history writes and 0 observers outside the owners, 16 of 16 probes fired.
 
 **Manual review duties:** every new piece of state is classed by §1 and passes the memory test; no transient state in the URL.
 
