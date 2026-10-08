@@ -99,6 +99,27 @@ describe('success cases', () => {
     // ASSERT
     expect(check).not.toThrow();
   });
+
+  it('derives a distinct tab id and panel id for every tab from DRAWER_TABS', () => {
+    // ARRANGE
+    const ids = DRAWER_TABS.map((tab) => drawerIds(tab));
+    const all = ids.flatMap(({ tab, panel }) => [tab, panel]);
+    const idsPerTab = 2;
+    const expectedCount = DRAWER_TABS.length * idsPerTab + 1;
+    // ACT
+    const unique = new Set([...all, DRAWER_PANEL_ID]);
+    // ASSERT
+    expect(unique.size).toBe(expectedCount);
+  });
+
+  it('names the tabs notes then script', () => {
+    // ARRANGE
+    const expected = ['notes', 'script'];
+    // ACT
+    const tabs = [...DRAWER_TABS];
+    // ASSERT
+    expect(tabs).toEqual(expected);
+  });
 });
 
 describe('failure cases', () => {
@@ -206,26 +227,5 @@ describe('edge cases', () => {
     const result = check();
     // ASSERT
     expect(result).toBeUndefined();
-  });
-});
-
-describe('drawer ids', () => {
-  it('derives a distinct tab id and panel id for every tab from DRAWER_TABS', () => {
-    // ARRANGE
-    const ids = DRAWER_TABS.map((tab) => drawerIds(tab));
-    const all = ids.flatMap(({ tab, panel }) => [tab, panel]);
-    // ACT
-    const unique = new Set([...all, DRAWER_PANEL_ID]);
-    // ASSERT
-    expect(unique.size).toBe(DRAWER_TABS.length * 2 + 1);
-  });
-
-  it('names the tabs notes then script', () => {
-    // ARRANGE
-    const expected = ['notes', 'script'];
-    // ACT
-    const tabs = [...DRAWER_TABS];
-    // ASSERT
-    expect(tabs).toEqual(expected);
   });
 });
