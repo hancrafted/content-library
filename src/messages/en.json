@@ -21,7 +21,15 @@
     "link": "Page template"
   },
   "episodeNav": {
-    "label": "Episode contents"
+    "label": "Episode contents",
+    "progress": "Reading progress",
+    "open": "Open episode contents",
+    "close": "Close episode contents",
+    "preview": {
+      "label": "Sitenav design (temporary)",
+      "rail": "Rail",
+      "index": "Index"
+    }
   },
   "episodes": {
     "page-template": {

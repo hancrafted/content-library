@@ -21,7 +21,15 @@
     "link": "Seitenvorlage"
   },
   "episodeNav": {
-    "label": "Inhalt der Episode"
+    "label": "Inhalt der Episode",
+    "progress": "Lesefortschritt",
+    "open": "Inhalt der Episode öffnen",
+    "close": "Inhalt der Episode schließen",
+    "preview": {
+      "label": "Sitenav-Design (vorübergehend)",
+      "rail": "Rail",
+      "index": "Index"
+    }
   },
   "episodes": {
     "page-template": {

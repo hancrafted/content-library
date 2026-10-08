@@ -20,3 +20,6 @@ _Avoid_: Base slide, template
 
 **Variant**: a slide layout composed from the master, e.g. section slide, basic page slide, three-column page slide.
 _Avoid_: Slide type, schema
+
+**Sitenav**: an Episode's own navigation: its Sections, numbered, with the page Slides of the active Section expanded and a reading-progress track. A sticky panel on wide screens, a pill-opened drawer on narrow ones.
+_Avoid_: Sidebar, table of contents, TOC

@@ -12,7 +12,7 @@ const THEME_INIT_SCRIPT = buildThemeInitScript();
  */
 export function SiteShell({ locale, children }: { locale: Locale; children: ReactNode }) {
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={locale} data-scroll-behavior="smooth" suppressHydrationWarning>
       <body className="min-h-screen antialiased">
         {/* First in <body>: sets the theme class before anything below paints. */}
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />

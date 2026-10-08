@@ -105,7 +105,10 @@ export async function EpisodeTemplatePage({ locale }: { locale: Locale }) {
       locale={locale}
       route={ROUTES.episodeTemplate}
       title={t('title')}
-      navLabel={nav('label')}
+      labels={{
+        sitenav: { nav: nav('label'), progress: nav('progress'), open: nav('open'), close: nav('close') },
+        preview: { label: nav('preview.label'), rail: nav('preview.rail'), index: nav('preview.index') },
+      }}
       sections={sections(sectionsT)}
     />
   );

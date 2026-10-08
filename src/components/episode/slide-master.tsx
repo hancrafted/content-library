@@ -8,14 +8,7 @@ import type { ReactNode } from 'react';
  */
 export function SlideFrame({ className, children }: { className?: string; children: ReactNode }) {
   return (
-    <article
-      className={cn(
-        'flex min-h-[calc(100svh-8rem)] flex-col rounded-2xl border bg-muted/30 p-8 shadow-sm md:p-14',
-        className,
-      )}
-    >
-      {children}
-    </article>
+    <article className={cn('flex min-h-[calc(100svh-8rem)] flex-col py-16 md:py-24', className)}>{children}</article>
   );
 }
 
