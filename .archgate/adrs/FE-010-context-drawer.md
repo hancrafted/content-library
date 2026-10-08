@@ -6,7 +6,7 @@ domain: frontend
 rules: true
 files: ['src/components/context-drawer/**/*', 'src/app/globals.css']
 # prettier-ignore
-paths: ['src/components/context-drawer/**', 'src/components/episode/**', 'src/components/episodes/**', 'src/hooks/use-context-drawer.ts', 'src/lib/context-drawer.pure.ts', 'src/lib/episode.pure.ts', 'src/app/globals.css', 'src/messages/*.json', 'tests/post-build/context-drawer.build.test.ts', 'tests/post-build/episode-structure.build.test.ts', '.dependency-cruiser.cjs', 'docs/agents/episode-catalog-keys.md', 'GLOSSARY.md']
+paths: ['src/components/context-drawer/**', 'src/components/episode/**', 'src/components/episodes/**', 'src/hooks/use-context-drawer.ts', 'src/hooks/use-table-of-contents.ts', 'src/lib/context-drawer.pure.ts', 'src/lib/context-drawer.pure.test.ts', 'src/lib/episode.pure.ts', 'src/lib/episode.test.ts', '.archgate/adrs/FE-010-context-drawer.rules.ts', 'src/app/globals.css', 'src/messages/*.json', 'tests/post-build/context-drawer.build.test.ts', 'tests/post-build/episode-structure.build.test.ts', '.dependency-cruiser.cjs', 'docs/agents/episode-catalog-keys.md', 'GLOSSARY.md']
 description: 'The Context drawer: a non-modal panel beside an Episode showing the current Slide Speaker notes and Voice script, both server-rendered into the page and printed in full, with the note and segment shapes typed as content and kept apart from design.'
 ---
 
@@ -22,7 +22,13 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 
 **Details.** `Alt+N` matches `event.code`. The drawer is a right panel from `md` and a bottom sheet below, by CSS alone. Notes and segments keep a kebab-case `slug` as key identity, never a position. Print overrides a `hidden` class but not a `hidden` attribute.
 
-**Out of scope:** a guided tour (the `target` pairing is the designed-for hook, as in Shepherd's `attachTo`; no tour is built), live annotation, axe coverage (a separate accessibility-testing decision), and the Slide internals, which stay ungoverned.
+**Out of scope:**
+
+- **Guided tour:** designed for, not built. There are no finished Episode pages to tour yet. The `target` pairing is the hook, as in Shepherd's `attachTo`: walking the note items in order and resolving each target is the tour.
+- **PDF export:** not built here. This ADR only keeps it possible, by printing notes and script in full.
+- **Live annotation:** it implies an editable content layer, which is to be decided on purpose, not by drift.
+- **axe coverage:** a separate accessibility-testing decision.
+- **Slide internals:** they stay ungoverned.
 
 ## Decision
 
@@ -84,7 +90,7 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 
 **Positive:**
 
-1. **Handout-safe:** notes and script print and are findable whether or not the drawer ever opened.
+1. **Handout-safe:** notes and script are in the static HTML, selectable and printed in full whether or not the drawer ever opened. A closed or inactive panel is not reachable by browser find-in-page, since `invisible` and `hidden` content is skipped; `hidden=until-found` is not used.
 2. **Tour-ready:** every note already names its element, so a tour needs no migration.
 3. **No new dependency:** native elements plus one small client leaf.
 
@@ -103,7 +109,7 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 
 **Enforcers, earliest first:**
 
-1. **Types** (`tsc`): note and segment types in `src/lib/context-drawer.pure.ts`; `de.json` typed against `en.json`.
+1. **Types** (`tsc`): note and segment types in `src/lib/context-drawer.pure.ts`; `de.json` typed against `en.json`. `tsc` does not check that a note or segment catalog key exists: the unit key-shape test and the post-build raw-key test do.
 2. **Fast** (`npm run verify`): unit tests beside `src/lib/context-drawer.pure.ts` and `src/lib/episode.pure.ts`.
 3. **archgate:** `FE-010-context-drawer.rules.ts`, both rules at `error`: `print-reveals-context` over `src/app/globals.css`, `drawer-is-non-modal` over `src/components/context-drawer/**`. §1, §2.
 4. **dependency-cruiser** (`.dependency-cruiser.cjs`): `context-drawer-reached-only-from-container`. §7.
