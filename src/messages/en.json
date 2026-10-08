@@ -26,7 +26,75 @@
     "amnesiacTitle": "Treat AI like an amnesiac freelancer",
     "amnesiacDescription": "Why an AI coding agent starts every session blank, and how to brief it so the work still lands.",
     "templateTitle": "Episode Page Template",
-    "templateDescription": "The layout reference every episode follows: sections of slides stacked down one page."
+    "templateDescription": "The layout reference every episode follows: sections of slides stacked down one page.",
+    "about": {
+      "eyebrow": "Chapter 04 // About",
+      "headlineStepOut": "I make change happen by stepping out of the argument.",
+      "headlineNotPushing": "Change sticks when I'm not the one pushing it.",
+      "headlineLead": "Four stories, one move: once I stop being the thing people argue with, the change carries itself.",
+      "identity": {
+        "kicker": "The person",
+        "name": "Han Che",
+        "positioning": "People and technology are one system. You cannot improve one side alone.",
+        "body": "I work on socio-technological ecosystems — the teams, processes and tools that only change together.",
+        "practice": "Coaching · Consulting · Engineering leadership",
+        "languages": "English · Deutsch"
+      },
+      "axes": {
+        "whoLabel": "Who I change",
+        "whatLabel": "What I change",
+        "individual": "Individual",
+        "team": "Team",
+        "organisation": "Organisation & Stakeholder",
+        "process": "Process change",
+        "technology": "Technology adoption"
+      },
+      "painLabel": "Before",
+      "shiftLabel": "After",
+      "spillNote": "The team story reaches here too",
+      "stories": {
+        "pitch": {
+          "title": "A pitch the founder owns",
+          "caption": "Startup pitch coaching",
+          "labels": ["Coaching", "Founders"],
+          "pain": "Every note on the deck became a defence of the deck.",
+          "shift": "The founder rehearsed against real questions instead of my opinions.",
+          "statValue": "3",
+          "statUnit": "rounds",
+          "statLabel": "from first draft to a pitch that held"
+        },
+        "ribTeam": {
+          "title": "Biggest bottleneck → self-running team",
+          "caption": "RIB Software",
+          "labels": ["Team lead", "Delivery"],
+          "pain": "Every decision queued behind one person: me.",
+          "shift": "Agreements the team wrote replaced my sign-off.",
+          "statValue": "30",
+          "statUnit": "min",
+          "statLabel": "one weekly sync instead of daily escalations"
+        },
+        "audiGates": {
+          "title": "Approval gates, modernised",
+          "caption": "Audi",
+          "labels": ["Governance", "Stakeholders"],
+          "pain": "Each gate was a negotiation between departments.",
+          "shift": "Shared criteria turned the gate into a checklist, not a debate.",
+          "statValue": "4",
+          "statUnit": "gates",
+          "statLabel": "redesigned with the people who run them"
+        },
+        "ribAi": {
+          "title": "AI enablement at RIB",
+          "caption": "RIB Software",
+          "labels": ["AI", "Enablement"],
+          "pain": "Adoption stalled between hype and policy.",
+          "shift": "Teams set their own guardrails inside a shared frame.",
+          "statValue": "120",
+          "statUnit": "people",
+          "statLabel": "onboarded to AI-assisted work"
+        }
+      }
+    }
   },
   "meta": {
     "home": {

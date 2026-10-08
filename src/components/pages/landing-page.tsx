@@ -1,4 +1,5 @@
-import { BridgeSection } from '@/components/landing/bridge-section';
+import { LiquidInkTransition } from '@/components/animations/liquid-ink-transition.client';
+import { AboutSection } from '@/components/landing/about-section';
 import { MethodRailSection } from '@/components/landing/method-rail-section.client';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { episodeRoute } from '@/lib/routes';
@@ -74,7 +75,7 @@ function EpisodesHeader({ title, subtitle }: { title: string; subtitle: string }
   return (
     <div className="max-w-2xl space-y-4">
       <div className="font-mono text-xs font-bold tracking-widest uppercase text-primary">
-        CHAPTER 04 // THE ARCHIVE
+        CHAPTER 02 // THE ARCHIVE
       </div>
       <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-foreground">{title}</h2>
       <p className="text-muted-foreground text-base sm:text-lg">{subtitle}</p>
@@ -84,25 +85,28 @@ function EpisodesHeader({ title, subtitle }: { title: string; subtitle: string }
 
 function LandingEpisodes({ locale, t }: SubComponentProps) {
   return (
-    <section className="py-24 sm:py-32 px-6 max-w-6xl mx-auto space-y-12">
-      <EpisodesHeader title={t('episodesSectionTitle')} subtitle={t('episodesSectionSubtitle')} />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <EpisodeCard
-          title={t('amnesiacTitle')}
-          description={t('amnesiacDescription')}
-          route={episodeRoute('amnesiac-freelancer')}
-          locale={locale}
-          icon={BookOpen}
-        />
-        <EpisodeCard
-          title={t('templateTitle')}
-          description={t('templateDescription')}
-          route={episodeRoute('page-template')}
-          locale={locale}
-          testId="landing-page-link"
-          icon={Layers}
-        />
+    <section data-chapter="02" className="relative">
+      <div className="py-24 sm:py-32 px-6 max-w-6xl mx-auto space-y-12">
+        <EpisodesHeader title={t('episodesSectionTitle')} subtitle={t('episodesSectionSubtitle')} />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <EpisodeCard
+            title={t('amnesiacTitle')}
+            description={t('amnesiacDescription')}
+            route={episodeRoute('amnesiac-freelancer')}
+            locale={locale}
+            icon={BookOpen}
+          />
+          <EpisodeCard
+            title={t('templateTitle')}
+            description={t('templateDescription')}
+            route={episodeRoute('page-template')}
+            locale={locale}
+            testId="landing-page-link"
+            icon={Layers}
+          />
+        </div>
       </div>
+      <LiquidInkTransition targetId="services" />
     </section>
   );
 }
@@ -113,9 +117,9 @@ export async function LandingPage({ locale }: { locale: Locale }) {
   return (
     <main data-testid="landing-page" className="flex flex-col min-h-screen">
       <LandingHero locale={locale} t={t} />
-      <BridgeSection locale={locale} />
-      <MethodRailSection locale={locale} />
       <LandingEpisodes locale={locale} t={t} />
+      <MethodRailSection locale={locale} />
+      <AboutSection locale={locale} />
     </main>
   );
 }
