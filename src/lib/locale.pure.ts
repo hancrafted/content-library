@@ -41,3 +41,10 @@ export function localizePath(logicalPath: string, locale: Locale): string {
   if (locale === DEFAULT_LOCALE) return path;
   return path === '/' ? `/${locale}` : `/${locale}${path}`;
 }
+
+/** Whether a pathname sits inside a logical section: the section's own path or anything beneath it. */
+export function isSectionActive(pathname: string, section: string): boolean {
+  const logical = stripLocale(pathname);
+  const base = normalize(section);
+  return logical === base || logical.startsWith(`${base}/`);
+}

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isLocale, localeFromPathname, localizePath, stripLocale, type Locale } from './locale.pure';
+import { isLocale, isSectionActive, localeFromPathname, localizePath, stripLocale, type Locale } from './locale.pure';
 
 const switchLocale = (pathname: string, target: Locale) => localizePath(stripLocale(pathname), target);
 
@@ -45,9 +45,41 @@ describe('success cases', () => {
     expect(fromGerman).toBe('de');
     expect(fromEnglish).toBe('en');
   });
+
+  it('marks a section active on its pages in either locale', () => {
+    // ARRANGE
+    const section = '/episode';
+    const english = '/episode/page-template';
+    const german = '/de/episode/page-template';
+    // ACT
+    const activeInEnglish = isSectionActive(english, section);
+    const activeInGerman = isSectionActive(german, section);
+    // ASSERT
+    expect([activeInEnglish, activeInGerman]).toEqual([true, true]);
+  });
 });
 
 describe('failure cases', () => {
+  it('does not mark a section active on an unrelated page', () => {
+    // ARRANGE
+    const section = '/episode';
+    const pathname = '/de';
+    // ACT
+    const active = isSectionActive(pathname, section);
+    // ASSERT
+    expect(active).toBe(false);
+  });
+
+  it('does not mark a section active on a sibling that shares its prefix', () => {
+    // ARRANGE
+    const section = '/episode';
+    const pathname = '/episodes-archive';
+    // ACT
+    const active = isSectionActive(pathname, section);
+    // ASSERT
+    expect(active).toBe(false);
+  });
+
   it('rejects values that are not supported locales', () => {
     // ARRANGE
     const candidates: unknown[] = ['fr', 'EN', '', undefined, 1];

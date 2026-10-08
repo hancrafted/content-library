@@ -1,7 +1,8 @@
 import type { Locale } from './locale.pure';
 
 const en = {
-  nav: { label: 'Main', home: 'Home', page: 'Page' },
+  brand: { name: 'hancrafted', home: 'hancrafted, go to the landing page' },
+  nav: { label: 'Main', episodes: 'Episodes' },
   theme: { label: 'Theme', light: 'Light', dark: 'Dark', system: 'System' },
   locale: { label: 'Language' },
   landing: { title: 'Home', link: 'Page template' },
@@ -11,7 +12,8 @@ const en = {
 export type Messages = typeof en;
 
 const de: Messages = {
-  nav: { label: 'Hauptnavigation', home: 'Start', page: 'Seite' },
+  brand: { name: 'hancrafted', home: 'hancrafted, zur Startseite' },
+  nav: { label: 'Hauptnavigation', episodes: 'Episoden' },
   theme: { label: 'Farbschema', light: 'Hell', dark: 'Dunkel', system: 'System' },
   locale: { label: 'Sprache' },
   landing: { title: 'Start', link: 'Seitenvorlage' },
