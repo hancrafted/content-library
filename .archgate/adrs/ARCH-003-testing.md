@@ -81,7 +81,7 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 
 ## Compliance and Enforcement
 
-1. **Determinism & Real Execution (Decision 1)** — ESLint `no-restricted-syntax` and `no-restricted-properties` in `eslint.config.mjs` (`**/*.test.ts`). Ambient network calls are not mechanically checkable (review duty).
+1. **Determinism & Real Execution (Decision 1)** — Review duty; no mechanical check exists (`eslint.config.mjs` has no test-file block). Reviewers MUST reject `vi.mock`/`vi.spyOn`, snapshots, `.skip`/`.only`, ambient time or randomness (`Date.now()`, `Math.random()`), network calls and assertion-free bodies.
 2. **Suite Structure (Decision 2)** — `ARCH-003-testing.rules.ts` rule `suite-three-blocks`, `error` tier, over `src/**/*.test.ts`: top-level `describe` names are exactly the three blocks, once each. The two-level nesting limit and "at least one test per block" are review duties (an empty block also fails vitest and `no-empty-function`).
 3. **Test-Body Structure (Decision 3)** — `ARCH-003-testing.rules.ts` rule `test-body-aaa`, `error` tier, over `src/**/*.test.ts`: each `it`/`test` body carries the three uppercase markers once each, in order, one per comment. Line-scanned, so a body runs to the next test or `describe` line. §3.2 magic values and §3.3 rich matchers are review duties.
 4. **Test Homes & Boundaries (Decision 4)** — Dependency-cruiser rules `tests-through-entrypoints` and `colocated-test-lane` in `.dependency-cruiser.cjs` (`npm run lint:boundaries`).
