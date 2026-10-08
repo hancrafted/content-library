@@ -14,10 +14,10 @@ const DIALOG = cn(
 );
 
 const CLOSE =
-  'absolute top-3 right-3 z-10 grid size-11 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground';
+  'absolute top-3 right-3 z-10 grid size-11 cursor-pointer place-items-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground';
 
 const PILL =
-  'fixed bottom-4 left-4 z-40 flex min-h-11 max-w-[calc(100vw-2rem)] items-center gap-3 rounded-full border bg-background/80 px-4 py-2 text-sm shadow-header backdrop-blur-xl backdrop-saturate-150 md:hidden';
+  'fixed bottom-4 left-4 z-40 flex cursor-pointer min-h-11 max-w-[calc(100vw-2rem)] items-center gap-3 rounded-full border bg-background/80 px-4 py-2 text-sm shadow-header backdrop-blur-xl backdrop-saturate-150 md:hidden';
 
 /** The drawer is a narrow-screen affordance; widening past `md` hands over to the sticky panel. */
 function useCloseAtDesktop(dialog: RefObject<HTMLDialogElement | null>) {

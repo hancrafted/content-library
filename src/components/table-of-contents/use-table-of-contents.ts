@@ -63,6 +63,23 @@ export function useFractionInto(active: string | null, targetAttribute: string):
   return sample.active === active ? sample.fraction : 0;
 }
 
+/** True two frames after the first observation, once the restored scroll position has painted without motion. */
+export function useSettled(observed: string | null): boolean {
+  const [settled, setSettled] = useState(false);
+  useEffect(() => {
+    if (observed === null || settled) return;
+    let inner = 0;
+    const outer = requestAnimationFrame(() => {
+      inner = requestAnimationFrame(() => setSettled(true));
+    });
+    return () => {
+      cancelAnimationFrame(outer);
+      cancelAnimationFrame(inner);
+    };
+  }, [observed, settled]);
+  return settled;
+}
+
 /**
  * Open sections plus a chevron toggle. Toggles are remembered only while the
  * reader stays in the same section; scrolling into another one resets them.
