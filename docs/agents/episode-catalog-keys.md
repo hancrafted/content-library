@@ -15,7 +15,7 @@ episodes.page-template.sections.foundations.slides.three-layers.caption   → pa
 episodes.page-template.sections.foundations.slides.three-layers.columns.layouts.prose
 ```
 
-Speaker notes and Voice script keys ([FE-010](../../.archgate/adrs/FE-010-context-drawer.md) §8) hang off the Slide, or off the Section for a section slide:
+Speaker notes and Voice script keys ([FE-010](../../.archgate/adrs/FE-010-context-drawer.md) §6) hang off the Slide, or off the Section for a section slide:
 
 ```text
 episodes.<episode>.sections.<section>.slides.<slide>.notes.<note>.header

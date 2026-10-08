@@ -23,17 +23,21 @@ Sticky. Row one: the tabs left, the menu and close right. The tabs may shrink an
 ## Notes
 
 - **Flat items.** A note or segment is no bordered card inside the card: a flat list, items spaced apart by a short centred divider, hierarchy by type alone. Chips and badges are fine.
-- **Numbers.** Notes are numbered in order; a `ContextRef` shows its note's number as a superscript.
+- **No numbers.** A note header and a `ContextRef` carry no number. The only superscript is a citation marker.
 - **Sources.** A closed `<details>` "Sources (n)" holding a numbered list. Each source is a link whose text is its localized title, with the domain as muted meta and an external-link icon. `beforeprint` opens every `<details>` in the slot, `afterprint` restores them.
-- **Citation markers.** `[n]` in a description becomes a `<sup>` button. Click expands that note's Sources and moves focus to source n. In print it is plain superscript text.
+- **Citation markers.** `[n]` in a description becomes a `<sup>` button in the body font (`0.7em`, tabular numerals, padded for a comfortable target, focus ring on `:focus-visible` only). Click expands that note's Sources and moves focus to source n. In print it is plain superscript text.
 
 ## Linking a Slide and its notes
 
 - **Block target.** A note's `target` names a layout element (a column, title or prose); the element carries the id `<slide anchor>--<element>`.
 - **Inline target.** `ContextRef` wraps a phrase inside Slide text and emits the id `<slide anchor>--<note slug>`, so the note's `target` is its own slug. In a catalog string the phrase sits inside a `<ref>` rich-text tag.
-- **Behaviour.** Hovering or focusing a note, or a `ContextRef`, sets `data-context-active` on the other side; CSS draws an outline in `--highlight-target`, which takes no space, so nothing shifts. Clicking a `ContextRef` opens the drawer on Notes at that note.
-- **Print.** A `ContextRef` prints as its phrase plus a plain superscript.
+- **Behaviour.** Hovering or focusing a note, or a `ContextRef`, sets `data-context-active` on the other side; CSS tints the whole item (or Slide element) with `--highlight-target` at low opacity: no border, outline or ring, and it takes no space, so nothing shifts. Clicking a `ContextRef` opens the drawer on Notes at that note.
+- **Print.** A `ContextRef` prints as its plain phrase.
 
 ## Selected
 
-One `--selected` / `--selected-foreground` pair in `globals.css` marks the selected tab, active table-of-contents entry and current nav link: 3:1 against the surface, text 4.5:1, light and dark. `--highlight-target` is the hover and focus outline between a note and its target, with the same contrast.
+One `--selected` / `--selected-foreground` pair in `globals.css` marks the selected tab, active table-of-contents entry and current nav link: 3:1 against the surface, text 4.5:1, light and dark. `--highlight-target` is the tint behind a note and its target while one is hovered, focused or pinned.
+
+## Input contract
+
+The drawer renders from one `ContextDrawerInput` (`src/components/context-drawer/context-drawer-input.ts`): items, each with the DOM `id` whose visibility makes it current, a title, notes (each with its `target` already a full element id) and script segments, plus translated labels. It observes those ids itself at the shared reading line (`src/lib/reading-line.pure.ts`), so it imports nothing from the table of contents. A `ContextRef` links to its note through the wrapper id the note's `target` names, and the drawer finds the owning item from the note's place in the slot. `src/components/episode/context-drawer-input.ts` is the only adapter from an Episode record; it is the seam a Slide-registration contract replaces.
