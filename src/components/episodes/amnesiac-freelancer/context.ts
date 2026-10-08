@@ -215,16 +215,16 @@ export const AMNESIAC_CONTEXT = {
   },
 } as const satisfies Readonly<Record<string, SlideContextEntry>>;
 
-type SlideSlug = keyof typeof AMNESIAC_CONTEXT;
+export type SlideSlug = keyof typeof AMNESIAC_CONTEXT;
 
 /**
- * A Slide's anchor, notes and voice script. `t` is the Episode's `sections`
- * translator; its keys are built at run time, so it is read as a plain
- * key-to-string function. `slideContext`'s key-shape test pins the keys, and
- * the post-build test fails a raw key left in the page.
+ * A Slide's anchor, notes and voice script. `read` is the Episode's `sections`
+ * translator seen as a plain key-to-string function: the Episode file casts it
+ * once, because these keys are built at run time and tsc cannot check them.
+ * The unit key-shape test and the post-build raw-key test do (FE-010 §8).
  */
-export function contextFor(t: unknown, slug: SlideSlug) {
+export function contextFor(read: ReadString, slug: SlideSlug) {
   const { base, spec } = AMNESIAC_CONTEXT[slug];
-  const { notes, voiceScript } = slideContext(t as ReadString, base, spec);
+  const { notes, voiceScript } = slideContext(read, base, spec);
   return { anchor: slideAnchor(base.split('.')[0], slug), notes, voiceScript };
 }

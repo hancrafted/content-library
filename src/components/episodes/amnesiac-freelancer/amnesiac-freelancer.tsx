@@ -6,10 +6,11 @@ import type {
   PerLocale,
 } from '@/components/episode/episode-page-container.pure';
 import { SectionSlide } from '@/components/episode/section-slide';
+import type { ReadString } from '@/components/episode/slide-context.pure';
 import { ThreeColumnSlide } from '@/components/episode/three-column-slide';
 import type { Locale } from '@/lib/locale.pure';
 import { getTranslations } from 'next-intl/server';
-import { contextFor } from './context';
+import { contextFor, type SlideSlug } from './context';
 
 /*
  * The dogfood Episode: "Treat AI like an amnesiac freelancer you have to
@@ -21,9 +22,12 @@ import { contextFor } from './context';
  */
 type SectionsT = Awaited<ReturnType<typeof getTranslations<'episodes.amnesiac-freelancer.sections'>>>;
 
+/** The one place the typed translator is read as a plain key reader (FE-010 §8). */
+const contextOf = (t: SectionsT, slug: SlideSlug) => contextFor(t as ReadString, slug);
+
 function blankEveryTime(t: SectionsT): EpisodeSlide {
   const title = t('blank-slate.slides.blank-every-time.title');
-  const { anchor, notes, voiceScript } = contextFor(t, 'blank-every-time');
+  const { anchor, notes, voiceScript } = contextOf(t, 'blank-every-time');
   return {
     slug: 'blank-every-time',
     title,
@@ -43,7 +47,7 @@ function blankEveryTime(t: SectionsT): EpisodeSlide {
 
 function whereKnowledgeLives(t: SectionsT): EpisodeSlide {
   const title = t('blank-slate.slides.where-knowledge-lives.title');
-  const { anchor, notes, voiceScript } = contextFor(t, 'where-knowledge-lives');
+  const { anchor, notes, voiceScript } = contextOf(t, 'where-knowledge-lives');
   const column = (slug: 'training' | 'session' | 'files') => ({
     slug,
     title: t(`blank-slate.slides.where-knowledge-lives.columns.${slug}.title`),
@@ -68,7 +72,7 @@ function whereKnowledgeLives(t: SectionsT): EpisodeSlide {
 
 function briefAndRules(t: SectionsT): EpisodeSlide {
   const title = t('onboarding.slides.brief-and-rules.title');
-  const { anchor, notes, voiceScript } = contextFor(t, 'brief-and-rules');
+  const { anchor, notes, voiceScript } = contextOf(t, 'brief-and-rules');
   const column = (slug: 'brief' | 'house-rules' | 'definition-of-done') => ({
     slug,
     title: t(`onboarding.slides.brief-and-rules.columns.${slug}.title`),
@@ -93,7 +97,7 @@ function briefAndRules(t: SectionsT): EpisodeSlide {
 
 function keepItShort(t: SectionsT): EpisodeSlide {
   const title = t('onboarding.slides.keep-it-short.title');
-  const { anchor, notes, voiceScript } = contextFor(t, 'keep-it-short');
+  const { anchor, notes, voiceScript } = contextOf(t, 'keep-it-short');
   return {
     slug: 'keep-it-short',
     title,
@@ -113,7 +117,7 @@ function keepItShort(t: SectionsT): EpisodeSlide {
 
 function decisionsInWriting(t: SectionsT): EpisodeSlide {
   const title = t('onboarding.slides.decisions-in-writing.title');
-  const { anchor, notes, voiceScript } = contextFor(t, 'decisions-in-writing');
+  const { anchor, notes, voiceScript } = contextOf(t, 'decisions-in-writing');
   return {
     slug: 'decisions-in-writing',
     title,
@@ -133,7 +137,7 @@ function decisionsInWriting(t: SectionsT): EpisodeSlide {
 
 function metaphorBreaks(t: SectionsT): EpisodeSlide {
   const title = t('where-it-breaks.slides.metaphor-breaks.title');
-  const { anchor, notes, voiceScript } = contextFor(t, 'metaphor-breaks');
+  const { anchor, notes, voiceScript } = contextOf(t, 'metaphor-breaks');
   const column = (slug: 'no-learning' | 'not-enforced' | 'reading-costs') => ({
     slug,
     title: t(`where-it-breaks.slides.metaphor-breaks.columns.${slug}.title`),
@@ -158,7 +162,7 @@ function metaphorBreaks(t: SectionsT): EpisodeSlide {
 
 function enforceAndVerify(t: SectionsT): EpisodeSlide {
   const title = t('where-it-breaks.slides.enforce-and-verify.title');
-  const { anchor, notes, voiceScript } = contextFor(t, 'enforce-and-verify');
+  const { anchor, notes, voiceScript } = contextOf(t, 'enforce-and-verify');
   return {
     slug: 'enforce-and-verify',
     title,
