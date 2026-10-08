@@ -18,7 +18,15 @@
   },
   "landing": {
     "title": "Start",
-    "link": "Seitenvorlage"
+    "link": "Seitenvorlage",
+    "heroSubtitle": "Theorie aus den hancrafted-Schulungsvideos, Seite für Seite visualisiert.",
+    "exploreEpisodes": "Episoden erkunden",
+    "episodesSectionTitle": "Verfügbare Episoden",
+    "episodesSectionSubtitle": "Interaktive Foliensätze und visualisierte Essays durchstöbern.",
+    "amnesiacTitle": "KI wie einen Freelancer mit Amnesie behandeln",
+    "amnesiacDescription": "Warum ein KI-Coding-Agent jede Session ohne Gedächtnis beginnt und wie man ihn briefen muss.",
+    "templateTitle": "Episoden-Seitenvorlage",
+    "templateDescription": "Die Layout-Referenz für jede Episode: Abschnitte aus Folien, untereinander angeordnet."
   },
   "meta": {
     "home": {
