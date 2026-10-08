@@ -5,11 +5,11 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
-import nextConfig from '../next.config';
-import { LOCALES, localizePath } from '../src/lib/locale.pure';
-import { ROUTES } from '../src/lib/routes';
+import nextConfig from '../../next.config';
+import { LOCALES, localizePath } from '../../src/lib/locale.pure';
+import { ROUTES } from '../../src/lib/routes';
 
-const OUT_DIR = join(import.meta.dirname, '..', 'out');
+const OUT_DIR = join(import.meta.dirname, '..', '..', 'out');
 
 // ROUTES.episodes is a section prefix for nav highlighting; no page is exported at it.
 const PAGE_ROUTES = Object.values(ROUTES).filter((route) => route !== ROUTES.episodes);
