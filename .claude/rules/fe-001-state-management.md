@@ -1,0 +1,1 @@
+../../.archgate/adrs/FE-001-state-management.md
