@@ -31,7 +31,7 @@ export interface VoiceScriptSegment {
   readonly bridge?: string;
 }
 
-/** Everything the drawer shows for one Slide. */
+/** Everything the drawer shows for one Slide; each note's `target` is the full element id. */
 export interface ContextSlide {
   readonly anchor: string;
   readonly notes: readonly SpeakerNoteItem[];

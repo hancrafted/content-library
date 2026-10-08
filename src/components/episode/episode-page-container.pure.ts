@@ -1,7 +1,13 @@
 import type { Locale } from '@/lib/locale.pure';
 import type { EpisodeSlug } from '@/lib/routes';
 import type { ReactNode } from 'react';
-import { episodeAnchors, sectionAnchor, slideAnchor } from '../../lib/episode.pure';
+import {
+  checkContext,
+  type ContextSlide,
+  type SpeakerNoteItem,
+  type VoiceScriptSegment,
+} from '../../lib/context-drawer.pure';
+import { episodeAnchors, sectionAnchor, slideAnchor, targetAnchor } from '../../lib/episode.pure';
 import type { TocSection } from '../../lib/table-of-contents.pure';
 
 /*
@@ -13,21 +19,6 @@ import type { TocSection } from '../../lib/table-of-contents.pure';
 /** One value per locale, so a missing German value fails `tsc`. */
 export type PerLocale<T> = Readonly<Record<Locale, T>>;
 
-/** Reserved (FE-002): one talking point. Provisional shape, not yet rendered. */
-interface SpeakerNote {
-  readonly title: string;
-  readonly caption: string;
-}
-
-/** Reserved (FE-002): one teleprompter passage. Provisional shape, not yet rendered. */
-interface VoiceCue {
-  readonly at: string;
-  readonly cue: string;
-  readonly text: string;
-  readonly keywords?: readonly string[];
-  readonly bridge?: string;
-}
-
 export interface EpisodeSlide {
   /** Stable once published; becomes the anchor and the catalog key segment. */
   readonly slug: string;
@@ -36,8 +27,10 @@ export interface EpisodeSlide {
   /** Spoken reading time per locale, in minutes. */
   readonly minutes: PerLocale<number>;
   readonly content: ReactNode;
-  readonly notes?: readonly SpeakerNote[];
-  readonly voiceScript?: readonly VoiceCue[];
+  /** Speaker notes (FE-010); each `target` is the short name of an element of this Slide. */
+  readonly notes?: readonly SpeakerNoteItem[];
+  /** Voice script (FE-010). */
+  readonly voiceScript?: readonly VoiceScriptSegment[];
 }
 
 export interface EpisodeSection extends EpisodeSlide {
@@ -76,4 +69,24 @@ export function tocSectionsOf(sections: readonly EpisodeSection[], locale: Local
       minutes: slide.minutes[locale],
     })),
   }));
+}
+
+function contextOf(anchor: string, slide: EpisodeSlide): ContextSlide {
+  const notes = slide.notes ?? [];
+  const segments = slide.voiceScript ?? [];
+  checkContext(anchor, notes, segments);
+  return { anchor, notes: notes.map((note) => ({ ...note, target: targetAnchor(anchor, note.target) })), segments };
+}
+
+/**
+ * What the Context drawer shows, one entry per section slide and page Slide in
+ * page order (the order the table of contents lists). Each note's `target` is
+ * resolved to the full id its Slide's markup carries. Throws on a malformed
+ * Slide, so a broken Episode fails `next dev` and the static build alike.
+ */
+export function contextSlidesOf(sections: readonly EpisodeSection[]): ContextSlide[] {
+  return sections.flatMap((section) => [
+    contextOf(sectionAnchor(section.slug), section),
+    ...section.slides.map((slide) => contextOf(slideAnchor(section.slug, slide.slug), slide)),
+  ]);
 }
