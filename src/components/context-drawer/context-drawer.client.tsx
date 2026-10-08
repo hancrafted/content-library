@@ -30,14 +30,16 @@ export interface DrawerLabels {
 type Drawer = ReturnType<typeof useContextDrawer>;
 
 /*
- * The card wears the table of contents' chrome and keeps its gaps: it starts
- * below the sticky site header (top-24) and clears the bottom edge by 1rem.
+ * The card wears the table of contents' border, radius and shadow, but is opaque:
+ * it overlaps Slide text in overlay mode and under the scrim, where translucency
+ * ghosts. It starts below the sticky site header (top-24; top-32 below `md`,
+ * where the header wraps to two rows) and clears the bottom edge by 1rem.
  * Below `md` it rises above the scrim (z-70 over the scrim's 60 and the
  * header's 50). Its width is the one `--drawer-width` the grid spacer reads.
  */
 const CARD = cn(
-  'fixed top-24 right-4 bottom-4 z-40 flex w-[min(var(--drawer-width),calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border bg-background/85 text-sm shadow-header backdrop-blur-xl backdrop-saturate-150',
-  'max-md:z-[70] md:w-(--drawer-width) motion-reduce:[transition:none]',
+  'fixed top-24 right-4 bottom-4 z-40 flex w-[min(var(--drawer-width),calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border bg-background text-sm shadow-header',
+  'max-md:top-32 max-md:z-[70] md:w-(--drawer-width) motion-reduce:[transition:none]',
 );
 // Only `transform` animates, never width or position. `visibility` flips to
 // visible the instant the drawer opens, or the focus move on open lands on a
