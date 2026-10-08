@@ -41,8 +41,3 @@ export function localizePath(logicalPath: string, locale: Locale): string {
   if (locale === DEFAULT_LOCALE) return path;
   return path === '/' ? `/${locale}` : `/${locale}${path}`;
 }
-
-/** The same logical page as `pathname`, in `target`. */
-export function switchLocalePath(pathname: string, target: Locale): string {
-  return localizePath(stripLocale(pathname), target);
-}

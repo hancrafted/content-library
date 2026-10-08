@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { isLocale, localeFromPathname, localizePath, stripLocale, switchLocalePath } from './locale.pure';
+import { isLocale, localeFromPathname, localizePath, stripLocale, type Locale } from './locale.pure';
+
+const switchLocale = (pathname: string, target: Locale) => localizePath(stripLocale(pathname), target);
 
 describe('success cases', () => {
   it('keeps the default locale unprefixed', () => {
@@ -25,8 +27,8 @@ describe('success cases', () => {
     const english = '/episode/page-template';
     const german = '/de/episode/page-template';
     // ACT
-    const toGerman = switchLocalePath(english, 'de');
-    const toEnglish = switchLocalePath(german, 'en');
+    const toGerman = switchLocale(english, 'de');
+    const toEnglish = switchLocale(german, 'en');
     // ASSERT
     expect(toGerman).toBe('/de/episode/page-template');
     expect(toEnglish).toBe('/episode/page-template');
@@ -70,8 +72,8 @@ describe('edge cases', () => {
     // ARRANGE
     const germanRoot = '/de';
     // ACT
-    const toEnglish = switchLocalePath(germanRoot, 'en');
-    const toGerman = switchLocalePath('/', 'de');
+    const toEnglish = switchLocale(germanRoot, 'en');
+    const toGerman = switchLocale('/', 'de');
     // ASSERT
     expect(toEnglish).toBe('/');
     expect(toGerman).toBe('/de');
@@ -90,7 +92,7 @@ describe('edge cases', () => {
     // ARRANGE
     const pathname = '/de/episode/page-template';
     // ACT
-    const url = switchLocalePath(pathname, 'de');
+    const url = switchLocale(pathname, 'de');
     // ASSERT
     expect(url).toBe('/de/episode/page-template');
   });

@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { LOCALES, switchLocalePath, type Locale } from '@/lib/locale.pure';
+import { LOCALES, localizePath, stripLocale, type Locale } from '@/lib/locale.pure';
 import { writePrefs } from '@/lib/prefs-storage';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -14,7 +14,7 @@ export function LocaleToggle({ locale, label }: { locale: Locale; label: string 
       {LOCALES.map((option) => (
         <Button key={option} asChild size="sm" variant={option === locale ? 'default' : 'outline'}>
           <Link
-            href={switchLocalePath(pathname, option)}
+            href={localizePath(stripLocale(pathname), option)}
             hrefLang={option}
             aria-current={option === locale ? 'true' : undefined}
             data-testid={`locale-${option}`}
