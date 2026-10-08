@@ -13,6 +13,23 @@ const USE_CLIENT = "Program > ExpressionStatement[directive='use client']";
 // so the pattern reads `*.client`, never `*.client.tsx`. `+([a-z0-9-])` excludes
 // `.`, which refuses a stacked suffix.
 const OPTIONAL_CLIENT = '+([a-z0-9-])?(.client)';
+// FE-002: inside an Episode, headings h1–h3 mirror the manuscript's spine and
+// come only from the container and the Slide layouts. A one-off slide may still
+// write `<SlideTitle as="h3">`; h4 and below are free.
+const EPISODE_FILES = 'src/episodes/**/*.{ts,tsx}';
+const SPINE_HEADINGS = [
+  {
+    selector: 'JSXOpeningElement[name.name=/^h[1-3]$/]',
+    message:
+      'Headings h1–h3 come from EpisodePageContainer and the Slide layouts; write <SlideTitle as="h3"> for a one-off page slide (FE-002).',
+  },
+  {
+    // Matches `as="h1"`, `as={'h1'}` and `as={`h1`}`; a variable level is left to the post-build test.
+    selector:
+      "JSXOpeningElement[name.name='SlideTitle'] > JSXAttribute[name.name='as'] :matches(Literal[value=/^h[12]$/], TemplateElement[value.raw=/^h[12]$/])",
+    message: 'h1 is the Title slide and h2 a section slide, both rendered for you; a page slide title is h3 (FE-002).',
+  },
+];
 
 export default tseslint.config(
   {
@@ -70,11 +87,12 @@ export default tseslint.config(
         {
           'src/app/**/*.{ts,tsx}': 'KEBAB_CASE',
           'src/{components,hooks}/**/*.tsx': OPTIONAL_CLIENT,
+          'src/episodes/**/*.{ts,tsx}': 'KEBAB_CASE',
           'src/**/*.ts': '!(*.client)',
         },
         {
           errorMessage:
-            '"{{ target }}" does not match "{{ pattern }}". A `.client` file is a `.tsx` leaf under src/components or src/hooks, never under src/app (FE-006).',
+            '"{{ target }}" does not match "{{ pattern }}". File names are kebab-case; a `.client` file is a `.tsx` leaf under src/components or src/hooks, never under src/app or src/episodes (FE-006, FE-002).',
         },
       ],
     },
@@ -104,6 +122,22 @@ export default tseslint.config(
           selector: `Program:not(:has(> ExpressionStatement[directive='use client']))`,
           message: "A *.client.tsx file MUST open with 'use client'; add it, or drop the suffix (FE-006).",
         },
+      ],
+    },
+  },
+  {
+    // FE-002 headings. This block replaces the FE-006 `no-restricted-syntax`
+    // list for Episode files, so it repeats the directive selector.
+    files: [EPISODE_FILES],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: USE_CLIENT,
+          message:
+            "'use client' marks a client entry point; rename the file to *.client.tsx, or drop the directive (FE-006).",
+        },
+        ...SPINE_HEADINGS,
       ],
     },
   },

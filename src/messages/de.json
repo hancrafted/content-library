@@ -35,10 +35,11 @@
   "episodes": {
     "page-template": {
       "title": "Seitenvorlage",
+      "caption": "Eine Episode, von der Titelfolie bis zum letzten Abschnitt: die Vorlage, aus der jede weitere Episode entsteht.",
       "sections": {
         "foundations": {
           "title": "Grundlagen",
-          "caption": "Das System, aus dem jede Episode entsteht: ein Master, wenige Varianten, Texte mit Schlüsseln.",
+          "caption": "Das System, aus dem jede Episode entsteht: ein Folienmaster, wenige Folienlayouts, Texte mit Schlüsseln.",
           "slides": {
             "why-a-template": {
               "title": "Warum jede Episode mit derselben gemeinsamen Referenzvorlage beginnt",
@@ -50,12 +51,12 @@
               "caption": "Jede Ebene verantwortet genau eine Sache.",
               "columns": {
                 "master": {
-                  "title": "Master",
+                  "title": "Folienmaster",
                   "prose": "Verantwortet das Allgemeine: Rahmen, Abstände, Schriftskala."
                 },
-                "variants": {
-                  "title": "Varianten",
-                  "prose": "Setzen den Master zu einem Layout zusammen. Ein neuer Folientyp ist eine neue Variante."
+                "layouts": {
+                  "title": "Folienlayouts",
+                  "prose": "Setzen den Folienmaster zu einem Entwurf zusammen. Eine neue Art Folie ist ein neues Folienlayout."
                 },
                 "catalog": {
                   "title": "Katalog",
@@ -75,7 +76,7 @@
           "slides": {
             "building-blocks": {
               "title": "Bausteine",
-              "caption": "Drei Varianten belegen die Aufteilung.",
+              "caption": "Drei Folienlayouts belegen die Aufteilung.",
               "columns": {
                 "section": {
                   "title": "Abschnittsfolie",

@@ -5,22 +5,13 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
-import nextConfig from '../../next.config';
 import { LOCALES, localizePath } from '../../src/lib/locale.pure';
-import { ROUTES } from '../../src/lib/routes';
+import { EPISODE_SLUGS, episodeRoute, ROUTES } from '../../src/lib/routes';
+import { exportedFile, OUT_DIR } from './exported';
 
-const OUT_DIR = join(import.meta.dirname, '..', '..', 'out');
-
-// ROUTES.episodes is a section prefix for nav highlighting; no page is exported at it.
-const PAGE_ROUTES = Object.values(ROUTES).filter((route) => route !== ROUTES.episodes);
+// ROUTES.episodes is only a prefix; every Episode is exported under it, one per registry slug.
+const PAGE_ROUTES = [ROUTES.home, ...EPISODE_SLUGS.map(episodeRoute)];
 const PAGE_URLS = LOCALES.flatMap((locale) => PAGE_ROUTES.map((route) => localizePath(route, locale)));
-
-/** The file `next build` writes for a URL: `trailingSlash` puts `/de` at `de/index.html`, else `de.html`. */
-function exportedFile(url: string): string {
-  if (url === '/') return 'index.html';
-  const path = url.slice(1);
-  return nextConfig.trailingSlash ? join(path, 'index.html') : `${path}.html`;
-}
 
 describe('static export', () => {
   beforeAll(() => {

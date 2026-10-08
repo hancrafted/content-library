@@ -3,7 +3,7 @@ import { NavLink } from '@/components/nav-link.client';
 import { SiteBrand } from '@/components/site-brand';
 import { ThemeToggle } from '@/components/theme-toggle.client';
 import { localizePath, type Locale } from '@/lib/locale.pure';
-import { ROUTES } from '@/lib/routes';
+import { episodeRoute, ROUTES } from '@/lib/routes';
 import { getTranslations } from 'next-intl/server';
 
 /**
@@ -27,7 +27,7 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
       <nav aria-label={t('nav.label')} data-testid="site-nav" className="flex gap-1">
         <NavLink
           section={ROUTES.episodes}
-          href={localizePath(ROUTES.episodeTemplate, locale)}
+          href={localizePath(episodeRoute('page-template'), locale)}
           data-testid="nav-episodes"
         >
           {t('nav.episodes')}

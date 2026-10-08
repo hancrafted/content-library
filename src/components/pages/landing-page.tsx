@@ -1,5 +1,5 @@
 import { localizePath, type Locale } from '@/lib/locale.pure';
-import { ROUTES } from '@/lib/routes';
+import { episodeRoute } from '@/lib/routes';
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 
@@ -11,7 +11,7 @@ export async function LandingPage({ locale }: { locale: Locale }) {
         {t('title')}
       </h1>
       <Link
-        href={localizePath(ROUTES.episodeTemplate, locale)}
+        href={localizePath(episodeRoute('page-template'), locale)}
         data-testid="landing-page-link"
         className="underline underline-offset-4"
       >

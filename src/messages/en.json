@@ -35,10 +35,11 @@
   "episodes": {
     "page-template": {
       "title": "Page template",
+      "caption": "One Episode, from its Title slide to its last Section: the reference every other Episode is built from.",
       "sections": {
         "foundations": {
           "title": "Foundations",
-          "caption": "The system every Episode is built from: one master, a few variants, keyed strings.",
+          "caption": "The system every Episode is built from: one Slide master, a few Slide layouts, keyed strings.",
           "slides": {
             "why-a-template": {
               "title": "Why every Episode starts from one shared reference template",
@@ -50,12 +51,12 @@
               "caption": "Each layer owns one concern and nothing else.",
               "columns": {
                 "master": {
-                  "title": "Master",
+                  "title": "Slide master",
                   "prose": "Owns the universals: frame, spacing, type scale."
                 },
-                "variants": {
-                  "title": "Variants",
-                  "prose": "Compose the master into a layout. A new slide type is a new variant."
+                "layouts": {
+                  "title": "Slide layouts",
+                  "prose": "Compose the Slide master into one design. A new kind of slide is a new Slide layout."
                 },
                 "catalog": {
                   "title": "Catalog",
@@ -75,7 +76,7 @@
           "slides": {
             "building-blocks": {
               "title": "Building blocks",
-              "caption": "Three variants prove the split.",
+              "caption": "Three Slide layouts prove the split.",
               "columns": {
                 "section": {
                   "title": "Section slide",

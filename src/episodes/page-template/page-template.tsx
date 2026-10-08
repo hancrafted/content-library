@@ -1,24 +1,29 @@
 import { BasicPageSlide } from '@/components/episode/basic-page-slide';
-import { EpisodeTower, type TowerSection, type TowerSlide } from '@/components/episode/episode-tower';
+import type {
+  Episode,
+  EpisodeSection,
+  EpisodeSlide,
+  PerLocale,
+} from '@/components/episode/episode-page-container.pure';
 import { SectionSlide } from '@/components/episode/section-slide';
 import { ThreeColumnSlide } from '@/components/episode/three-column-slide';
 import type { Locale } from '@/lib/locale.pure';
-import { ROUTES } from '@/lib/routes';
 import { getTranslations } from 'next-intl/server';
 
 /*
- * The reference Episode: three Sections holding 2, 0 and 2 page slides. Markup
- * is free JSX, one function per slide; every leaf string is a catalog key under
- * `episodes.page-template.sections` (see docs/agents/episode-catalog-keys.md).
+ * The reference Episode (FE-002): three Sections holding 2, 0 and 2 page
+ * Slides. Structure is the typed record; each Slide's content is free JSX,
+ * one function per Slide, and every leaf string is a catalog key under
+ * `episodes.page-template` (see docs/agents/episode-catalog-keys.md).
  */
 type SectionsT = Awaited<ReturnType<typeof getTranslations<'episodes.page-template.sections'>>>;
 
-function whyATemplate(t: SectionsT): TowerSlide {
+function whyATemplate(t: SectionsT): EpisodeSlide {
   const title = t('foundations.slides.why-a-template.title');
   return {
     slug: 'why-a-template',
     title,
-    minutes: 3,
+    minutes: { en: 3, de: 4 },
     content: (
       <BasicPageSlide
         title={title}
@@ -29,9 +34,9 @@ function whyATemplate(t: SectionsT): TowerSlide {
   };
 }
 
-function threeLayers(t: SectionsT): TowerSlide {
+function threeLayers(t: SectionsT): EpisodeSlide {
   const title = t('foundations.slides.three-layers.title');
-  const column = (slug: 'master' | 'variants' | 'catalog') => ({
+  const column = (slug: 'master' | 'layouts' | 'catalog') => ({
     slug,
     title: t(`foundations.slides.three-layers.columns.${slug}.title`),
     prose: t(`foundations.slides.three-layers.columns.${slug}.prose`),
@@ -39,18 +44,18 @@ function threeLayers(t: SectionsT): TowerSlide {
   return {
     slug: 'three-layers',
     title,
-    minutes: 4,
+    minutes: { en: 4, de: 5 },
     content: (
       <ThreeColumnSlide
         title={title}
         caption={t('foundations.slides.three-layers.caption')}
-        columns={[column('master'), column('variants'), column('catalog')]}
+        columns={[column('master'), column('layouts'), column('catalog')]}
       />
     ),
   };
 }
 
-function buildingBlocks(t: SectionsT): TowerSlide {
+function buildingBlocks(t: SectionsT): EpisodeSlide {
   const title = t('next-steps.slides.building-blocks.title');
   const column = (slug: 'section' | 'basic' | 'three-column') => ({
     slug,
@@ -60,7 +65,7 @@ function buildingBlocks(t: SectionsT): TowerSlide {
   return {
     slug: 'building-blocks',
     title,
-    minutes: 5,
+    minutes: { en: 5, de: 6 },
     content: (
       <ThreeColumnSlide
         title={title}
@@ -71,12 +76,12 @@ function buildingBlocks(t: SectionsT): TowerSlide {
   };
 }
 
-function whatComesNext(t: SectionsT): TowerSlide {
+function whatComesNext(t: SectionsT): EpisodeSlide {
   const title = t('next-steps.slides.what-comes-next.title');
   return {
     slug: 'what-comes-next',
     title,
-    minutes: 2,
+    minutes: { en: 2, de: 2 },
     content: (
       <BasicPageSlide
         title={title}
@@ -87,11 +92,15 @@ function whatComesNext(t: SectionsT): TowerSlide {
   };
 }
 
-function sections(t: SectionsT): TowerSection[] {
+type SectionSlug = 'foundations' | 'interlude' | 'next-steps';
+
+const SECTION_MINUTES: PerLocale<number> = { en: 1, de: 1 };
+
+function sections(t: SectionsT): EpisodeSection[] {
   const nextSteps = [buildingBlocks(t), whatComesNext(t)];
-  const sectionOf = (slug: 'foundations' | 'interlude' | 'next-steps', caption: string, slides: TowerSlide[]) => {
+  const sectionOf = (slug: SectionSlug, caption: string, slides: EpisodeSlide[]): EpisodeSection => {
     const title = t(`${slug}.title`);
-    return { slug, title, minutes: 1, content: <SectionSlide title={title} caption={caption} />, slides };
+    return { slug, title, minutes: SECTION_MINUTES, content: <SectionSlide title={title} caption={caption} />, slides };
   };
   return [
     sectionOf('foundations', t('foundations.caption'), [whyATemplate(t), threeLayers(t)]),
@@ -100,25 +109,11 @@ function sections(t: SectionsT): TowerSection[] {
   ];
 }
 
-export async function EpisodeTemplatePage({ locale }: { locale: Locale }) {
-  const t = await getTranslations({ locale, namespace: 'episodes.page-template' });
-  const toc = await getTranslations({ locale, namespace: 'tableOfContents' });
-  const sectionsT = await getTranslations({ locale, namespace: 'episodes.page-template.sections' });
-  return (
-    <EpisodeTower
-      locale={locale}
-      route={ROUTES.episodeTemplate}
-      title={t('title')}
-      labels={{
-        title: toc('title'),
-        progress: toc('progress'),
-        remaining: { one: toc('remaining.one'), other: toc('remaining.other') },
-        toggle: toc('toggle'),
-        open: toc('open'),
-        close: toc('close'),
-        loading: toc('loading'),
-      }}
-      sections={sections(sectionsT)}
-    />
-  );
-}
+export const pageTemplate: Episode = {
+  slug: 'page-template',
+  async content(locale: Locale) {
+    const t = await getTranslations({ locale, namespace: 'episodes.page-template' });
+    const sectionsT = await getTranslations({ locale, namespace: 'episodes.page-template.sections' });
+    return { title: t('title'), caption: t('caption'), sections: sections(sectionsT) };
+  },
+};

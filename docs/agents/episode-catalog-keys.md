@@ -2,36 +2,32 @@
 
 Read before adding or changing an Episode, a slide, or any string in `src/messages/<locale>.json`.
 
-## Key shape
+The binding rules (key shape, slugs never positions, leaf strings only, ICU for variable text, every key in both catalogs) live in [FE-002 Episode Page](../../.archgate/adrs/FE-002-episode-page.md) §5. This guide holds the role vocabulary and worked examples.
 
-Every string an Episode's content owns lives under one path: domain role, then stable slug, ending on a semantic **role**.
+## Key shape, by example
 
 ```
-episodes.<episode-slug>.title
-episodes.<episode-slug>.sections.<section-slug>.<role>
-episodes.<episode-slug>.sections.<section-slug>.slides.<slide-slug>.<role>
-episodes.<episode-slug>.sections.<section-slug>.slides.<slide-slug>.columns.<column-slug>.<role>
+episodes.page-template.title                                              → Title slide h1
+episodes.page-template.caption                                            → Title slide caption
+episodes.page-template.sections.foundations.title                         → section slide h2, TOC label
+episodes.page-template.sections.foundations.slides.three-layers.caption   → page slide caption
+episodes.page-template.sections.foundations.slides.three-layers.columns.layouts.prose
 ```
 
-- **Slugs** are lowercase kebab-case with single hyphens, and they never change once published. `episodeAnchors` in `src/lib/episode.pure.ts` throws on a bad or duplicate slug, so the build fails.
-- **Never a position.** A column, slide or section is keyed by what it _is_ (`master`, `three-layers`), not where it sits (`0`, `first`). Reordering must not touch the catalog.
-- Name levels by domain (`sections`, `slides`, `columns`), never by heading level (`h2`). Heading level is a render detail of the variant.
-
-Chrome shared by all Episodes (e.g. `tableOfContents.title`, the table of contents' heading) sits outside `episodes.*` and is not bound by the role table.
+Chrome shared by all Episodes (e.g. `tableOfContents.title`) sits outside `episodes.*` and is not bound by the role table.
 
 ## Role vocabulary
 
 | Role      | Meaning                                              | Used on                         |
 | --------- | ---------------------------------------------------- | ------------------------------- |
 | `title`   | the unit's heading; also its table-of-contents label | episode, section, slide, column |
-| `caption` | one-line framing under the title                     | section, slide                  |
+| `caption` | one-line framing under the title                     | episode, section, slide         |
 | `prose`   | a body paragraph                                     | slide, column                   |
 
-Add a role only when a new variant needs a leaf none of these describe, and add it to this table in the same change.
+Add a role only when a new Slide layout needs a leaf none of these describe, and add it to this table in the same change.
 
-## Rules
+## Worked notes
 
-- **Only leaf strings are keyed.** Layout, order and variant choice live in the Episode's JSX (`src/components/pages/episode-template-page.tsx` is the reference), never in the catalog.
-- **ICU for anything variable.** Counts and names go through ICU arguments, e.g. `"{count, plural, one {# slide} other {# slides}}"`. Never concatenate translated fragments.
-- **`en.json` is the reference.** `de.json` is typed against it, so a key missing in German fails `npm run typecheck`. Add every key to both catalogs in the same change.
-- **Section-only strings** sit directly on the section (`title`, `caption`). A section without page slides has no `slides` key.
+- Counts and names go through ICU arguments: `"{count, plural, one {# slide} other {# slides}}"`, passed as `t('next-steps.caption', { count })`.
+- A Section without page Slides has no `slides` key: `title` and `caption` sit directly on the Section.
+- `src/episodes/page-template/page-template.tsx` is the reference Episode: one function per Slide, reading its keys through one `getTranslations` namespace.

@@ -2,9 +2,10 @@ import { cn } from '@/lib/utils';
 import type { ReactNode } from 'react';
 
 /**
- * The slide master: universals every variant shares — the frame, spacing and
- * type scale. Variants compose these parts; a one-off slide can use them
- * directly with any markup. Anchors and order belong to the tower, not here.
+ * The Slide master: universals every Slide layout shares — the frame, spacing
+ * and type scale. Slide layouts compose these parts; a one-off slide can use
+ * them directly with any markup. Anchors and order belong to
+ * `EpisodePageContainer`, not here.
  */
 export function SlideFrame({ className, children }: { className?: string; children: ReactNode }) {
   return (
@@ -12,13 +13,20 @@ export function SlideFrame({ className, children }: { className?: string; childr
   );
 }
 
+/** The rule between stacked slides, shared by the Title slide and every slide anchor. */
+export const SLIDE_DIVIDER = 'border-b border-border/60';
+
 const TITLE_SIZE = {
+  h1: 'text-5xl md:text-7xl',
   h2: 'text-4xl md:text-6xl',
   h3: 'text-3xl md:text-5xl',
   h4: 'text-xl md:text-2xl',
 } as const;
 
-/** H-level follows the spine: section slide `h2`, page slide `h3`, inside a slide `h4`. */
+/**
+ * H-level follows the manuscript's spine (FE-002): Title slide `h1`, section
+ * slide `h2`, page slide `h3`; `h4` and below are free inside a slide.
+ */
 export function SlideTitle({ as: Heading, children }: { as: keyof typeof TITLE_SIZE; children: ReactNode }) {
   return <Heading className={cn('font-semibold tracking-tight text-balance', TITLE_SIZE[Heading])}>{children}</Heading>;
 }
