@@ -7,3 +7,9 @@ coverage/
 
 # markdown-harness's activity log: local evidence that the freshness hook ran.
 docs/markdown-harness/activity.csv
+
+# Next.js
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo

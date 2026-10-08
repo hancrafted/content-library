@@ -5,3 +5,6 @@ dist
 .agents
 .vitest
 .claude/settings.local.json
+.next
+out
+next-env.d.ts
