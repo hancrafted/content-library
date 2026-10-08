@@ -627,6 +627,9 @@
                   }
                 }
               }
+            },
+            "one-line": {
+              "statement": "Schreib es auf, sonst hat die nächste Sitzung es nie gewusst."
             }
           }
         }

@@ -5,7 +5,7 @@ import { SlideScript } from './slide-script';
 /** One item's pre-rendered panels, handed to the client drawer, which only picks which to show. */
 export interface ContextEntry {
   readonly id: string;
-  readonly title: string;
+  readonly title?: string;
   readonly notes: React.ReactNode;
   readonly script: React.ReactNode;
 }

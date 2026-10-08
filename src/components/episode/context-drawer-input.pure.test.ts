@@ -2,7 +2,11 @@ import { describe, expect, it } from 'vitest';
 import { contextItemsOf } from './context-drawer-input.pure';
 import type { EpisodeSection, EpisodeSlide } from './episode-page-container.pure';
 
-function slide(slug: string, title: string, minutes: EpisodeSlide['minutes']): EpisodeSlide {
+function slide(
+  slug: string,
+  title: string,
+  minutes: EpisodeSection['minutes'],
+): EpisodeSlide & Pick<EpisodeSection, 'title' | 'minutes'> {
   return { slug, title, minutes, content: null };
 }
 
@@ -27,6 +31,24 @@ describe('success cases', () => {
         notes: [{ ...note, target: 'foundations--why--prose' }],
         script: [segment],
       },
+    ];
+    // ACT
+    const context = contextItemsOf(sections);
+    // ASSERT
+    expect(context).toEqual(expected);
+  });
+
+  it('keeps an untitled Slide as an item without a title, so the drawer still follows it', () => {
+    // ARRANGE
+    const sections: EpisodeSection[] = [
+      {
+        ...slide('a', 'A', { en: 1, de: 1 }),
+        slides: [{ slug: 'visual', content: null }],
+      },
+    ];
+    const expected = [
+      { id: 'a', title: 'A', notes: [], script: [] },
+      { id: 'a--visual', title: undefined, notes: [], script: [] },
     ];
     // ACT
     const context = contextItemsOf(sections);

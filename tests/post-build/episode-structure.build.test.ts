@@ -16,6 +16,11 @@ const PAGES = EPISODE_SLUGS.flatMap((slug) =>
   LOCALES.map((locale) => ({ slug, locale, url: localizePath(episodeRoute(slug), locale) })),
 );
 
+/** Slides an Episode leaves untitled on purpose (FE-002 §2): rendered, never listed. */
+const UNTITLED: Readonly<Record<string, readonly string[]>> = {
+  'amnesiac-freelancer': [slideAnchor('where-it-breaks', 'one-line')],
+};
+
 function html(url: string): string {
   return readFileSync(join(OUT_DIR, exportedFile(url)), 'utf8');
 }
@@ -101,30 +106,55 @@ describe('episode structure', () => {
       expect(h1InTitleSlide).toBe(1);
     });
 
-    it('gives each section slide one h2, each page slide one h3, and h2/h3 nowhere else', () => {
+    it('gives each section slide one h2, each titled page slide one h3, an untitled one none, and h2/h3 nowhere else', () => {
       // ARRANGE
       const $ = page(url);
+      const untitled = UNTITLED[slug] ?? [];
       const sectionSlide = { h2: 1, h3: 0 };
-      const pageSlide = { h2: 0, h3: 1 };
+      const titledSlide = { h2: 0, h3: 1 };
+      const untitledSlide = { h2: 0, h3: 0 };
       // ACT
       const sections = headingsBySlide($);
-      const expected = sections.map((slides) => slides.map((_, index) => (index === 0 ? sectionSlide : pageSlide)));
+      const ids = wrapperIdsBySection($);
+      const expected = ids.map(({ ids: wrappers }) =>
+        wrappers.map((id, index) => (index === 0 ? sectionSlide : untitled.includes(id) ? untitledSlide : titledSlide)),
+      );
       const totals = { h2: $('h2').length, h3: $('h3').length };
-      const slideTotals = { h2: sections.length, h3: sections.flat().length - sections.length };
+      const slideTotals = {
+        h2: sections.length,
+        h3: sections.flat().length - sections.length - untitled.length,
+      };
       // ASSERT
       expect(sections.length).toBeGreaterThan(0);
       expect(sections).toEqual(expected);
       expect(totals).toEqual(slideTotals);
     });
 
-    it('links the table of contents to every slide anchor, in page order', () => {
+    it('links the table of contents to every titled slide anchor, in page order', () => {
       // ARRANGE
       const $ = page(url);
+      const untitled = UNTITLED[slug] ?? [];
       // ACT
       const fragments = tocFragments($);
-      const anchors = slideAnchors($);
+      const anchors = slideAnchors($).filter((anchor) => !untitled.includes(anchor));
       // ASSERT
       expect(fragments).toEqual(anchors);
+    });
+
+    it('renders an untitled Slide with its content, and lists it nowhere in the table of contents', () => {
+      // ARRANGE
+      const $ = page(url);
+      const untitled = UNTITLED[slug] ?? [];
+      // ACT
+      const wrappers = untitled.map((id) => $(`[data-slot="slides"] [data-slide="${id}"]`));
+      const fragments = tocFragments($);
+      // ASSERT
+      for (const wrapper of wrappers) {
+        expect(wrapper.attr('id')).toBeTruthy();
+        expect(wrapper.text().trim().length).toBeGreaterThan(0);
+        expect(wrapper.find('h1, h2, h3').length).toBe(0);
+      }
+      for (const id of untitled) expect(fragments).not.toContain(id);
     });
 
     it('lays the slides out in a single-column grid that hosts the portal root', () => {

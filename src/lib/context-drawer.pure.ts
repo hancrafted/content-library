@@ -100,7 +100,7 @@ export function menuItemAfter(key: string, current: string, items: readonly stri
 /** The drawer's heading: the current item's title, or the fallback while none is current. */
 export function titleOfItem(
   id: string | null,
-  items: readonly { readonly id: string; readonly title: string }[],
+  items: readonly { readonly id: string; readonly title?: string }[],
   fallback: string,
 ): string {
   return items.find((item) => item.id === id)?.title ?? fallback;
