@@ -1,7 +1,7 @@
-import { LocaleToggle } from '@/components/locale-toggle';
-import { NavLink } from '@/components/nav-link';
+import { LocaleToggle } from '@/components/locale-toggle.client';
+import { NavLink } from '@/components/nav-link.client';
 import { SiteBrand } from '@/components/site-brand';
-import { ThemeToggle } from '@/components/theme-toggle';
+import { ThemeToggle } from '@/components/theme-toggle.client';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { MESSAGES } from '@/lib/messages';
 import { ROUTES } from '@/lib/routes';

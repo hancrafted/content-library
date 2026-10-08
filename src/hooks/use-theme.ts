@@ -1,5 +1,3 @@
-'use client';
-
 import { readPrefs, writePrefs } from '@/lib/prefs-storage';
 import type { Theme } from '@/lib/prefs.pure';
 import { DARK_QUERY, resolveTheme } from '@/lib/theme.pure';
