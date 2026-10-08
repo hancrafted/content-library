@@ -59,6 +59,8 @@ class UrlStateStore implements UrlState {
   private pending: string | null = null;
   private trailing: ReturnType<typeof setTimeout> | null = null;
   private lastWrite = -Infinity;
+  /** The path this page lives at, taken on first subscription: a router writes the URL after the first render. */
+  private ownPath: string | null = null;
 
   constructor(private readonly win: UrlWindow) {
     this.current = hashOf(win);
@@ -68,7 +70,10 @@ class UrlStateStore implements UrlState {
 
   subscribe = (listener: () => void) => {
     const first = this.listeners.size === 0;
-    if (first) this.win.addEventListener('popstate', this.onPopState);
+    if (first) {
+      this.ownPath ??= this.win.location.pathname;
+      this.win.addEventListener('popstate', this.onPopState);
+    }
     this.listeners.add(listener);
     // The URL may have moved since creation: a router writes it after the new page first renders.
     if (first) this.resync();
@@ -109,8 +114,17 @@ class UrlStateStore implements UrlState {
     this.resync();
   };
 
+  /**
+   * The URL moved to another path while this page stayed mounted: Back onto an entry made by fragment
+   * navigation, which Next ignores (no router state change, so no unmount). The hash is then not ours.
+   */
+  private isForeign(): boolean {
+    return this.ownPath !== null && this.win.location.pathname !== this.ownPath;
+  }
+
   /** Adopts the hash the URL carries now, notifying only when it differs. */
   private resync() {
+    if (this.isForeign()) return;
     const hash = hashOf(this.win);
     if (hash === this.current) return;
     this.current = hash;
@@ -137,6 +151,7 @@ class UrlStateStore implements UrlState {
     if (this.pending === null) return;
     const id = this.pending;
     this.pending = null;
+    if (this.isForeign()) return;
     this.lastWrite = Date.now();
     try {
       this.win.history.replaceState(this.win.history.state, '', this.urlOf(id));

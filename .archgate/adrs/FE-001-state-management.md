@@ -47,14 +47,14 @@ An Episode page has two companions that show "the current Slide": the Table of c
 1. Only `src/lib/url-state.ts` MAY call `history.pushState`/`replaceState`; it imports no React (FE-007 §3).
 2. It MUST be built by a factory over a window (`createUrlState(window)`), and there MUST be one instance per Episode page, made by the page's provider and disposed on unmount; no module-wide singleton.
 3. It MUST expose: the active Slide; `subscribe(listener)`; `navigateTo(id)`; `reportReading(id)`; `dispose()`. An empty hash and `#top` read `top` (the Title slide, FE-002); writing `top` removes the hash, keeping path and query.
-4. `subscribe` MUST re-read the hash on `popstate` and on first subscription.
+4. `subscribe` MUST re-read the hash on `popstate` and first subscription, unless `location.pathname` left the page's own.
 5. Any component MAY call `navigateTo`; only the Slide observer MAY call `reportReading`.
 
 ### 3. Intent and report
 
-1. `navigateTo(id)` MUST notify subscribers immediately, write the hash, and suppress reports until `scrollend` or a fallback timeout, whichever comes first.
+1. `navigateTo(id)` MUST notify subscribers immediately, write the hash, and suppress reports until `scrollend` or a fallback timeout.
 2. `reportReading(id)` MUST be ignored while a navigation is in flight; otherwise it notifies at once when the id changes.
-3. The service MUST write history at most once per 150 ms, always flushing the trailing value.
+3. The service MUST write history at most once per 150 ms, flushing the trailing value.
 4. A write MUST pass `history.state` through and catch a `SecurityError`.
 5. Both calls use `replaceState` for now.
 
@@ -106,7 +106,7 @@ An Episode page has two companions that show "the current Slide": the Table of c
 **Enforcers, earliest first:**
 
 1. **Types** (`tsc`): `useActiveSlide()` returns `string | null`; the service is the only export that writes.
-2. **Fast** (`npm run verify`): the service's test beside `src/lib/url-state.ts` drives a fake window: intent notifies at once; an empty hash reads `top`, `#top` lands there, `top` clears the hash and keeps path and query; `dispose` cancels the pending write; two instances stay isolated; reports suppressed in flight; resume on `scrollend` and on timeout; at most one write per 150 ms with trailing flush; `popstate` notifies; the hash is read on creation.
+2. **Fast** (`npm run verify`): the service's test beside `src/lib/url-state.ts` drives a fake window: intent notifies at once; an empty hash reads `top`, `#top` lands there, `top` clears the hash and keeps path and query; `dispose` cancels the pending write; two instances stay isolated; reports suppressed in flight; resume on `scrollend` and on timeout; at most one write per 150 ms with trailing flush; `popstate` notifies; the hash is read on creation; a foreign path is neither adopted nor written to.
 3. **Lint** (`eslint.config.mjs`, added in [#13](https://github.com/hancrafted/content-library/issues/13)): `no-restricted-properties` refuses `history.pushState`/`history.replaceState` under `src/**` outside `src/lib/url-state.ts`, plus a `no-restricted-syntax` selector for the `window.history.*` and `globalThis.history.*` forms, which `object: 'history'` does not match (probed: 1 of 3 forms fired); `no-restricted-syntax` refuses `NewExpression[callee.name='IntersectionObserver']` outside the Slide observer (FE-009). Flat config replaces a rule's options per block, so the observer selector MUST be appended to every existing `no-restricted-syntax` list (FE-006's two blocks and FE-002's Episode block), not set in a new block that overrides them.
 
 **Measured** on `main` (4c412c3): `no-restricted-properties` 1 hit, `no-restricted-syntax` 2 hits. On `b392fc0`: 0 history writes and 0 observers outside the owners, 16 of 16 probes fired.

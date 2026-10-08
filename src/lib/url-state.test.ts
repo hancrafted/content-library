@@ -231,6 +231,61 @@ describe('popstate', () => {
   });
 });
 
+describe('a page that is no longer on screen', () => {
+  it('neither adopts the hash nor writes when Back lands on another path', () => {
+    // ARRANGE
+    const { state, win, seen, writes, fire } = setup('#a');
+    state.reportReading('b');
+    vi.advanceTimersByTime(WRITE_INTERVAL_MS);
+    win.location.pathname = '/episodes/other';
+    win.location.hash = '#foreign';
+    // ACT
+    fire('popstate');
+    vi.advanceTimersByTime(WRITE_INTERVAL_MS * 2);
+    // ASSERT
+    expect([state.getSlide(), seen, writes, win.location.hash]).toEqual(['b', ['b'], ['#b'], '#foreign']);
+  });
+
+  it('cancels a pending write when the path changed under it', () => {
+    // ARRANGE
+    const { state, win, writes, fire } = setup();
+    state.reportReading('a');
+    state.reportReading('b');
+    win.location.pathname = '/episodes/other';
+    // ACT
+    fire('popstate');
+    vi.advanceTimersByTime(WRITE_INTERVAL_MS * 2);
+    // ASSERT
+    expect(writes).toEqual(['#a']);
+  });
+
+  it('drops a trailing write when the path changed without a popstate', () => {
+    // ARRANGE
+    const { state, win, writes } = setup();
+    state.reportReading('a');
+    state.reportReading('b');
+    win.location.pathname = '/episodes/other';
+    // ACT
+    vi.advanceTimersByTime(WRITE_INTERVAL_MS * 2);
+    // ASSERT
+    expect(writes).toEqual(['#a']);
+  });
+
+  it('takes the path it first subscribes on as its own, since a router writes the URL after the first render', () => {
+    // ARRANGE
+    const fake = fakeWindow('#x');
+    fake.win.location.pathname = '/episodes/previous';
+    const state = createUrlState(fake.win as unknown as UrlWindow);
+    fake.win.location.pathname = '/episodes/demo';
+    fake.win.location.hash = '#y';
+    const seen: (string | null)[] = [];
+    // ACT
+    state.subscribe(() => seen.push(state.getSlide()));
+    // ASSERT
+    expect([state.getSlide(), seen]).toEqual(['y', ['y']]);
+  });
+});
+
 describe('subscriptions', () => {
   it('stops notifying after unsubscribe and releases the window listeners', () => {
     // ARRANGE

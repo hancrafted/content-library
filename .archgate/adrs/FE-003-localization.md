@@ -21,7 +21,7 @@ The site is a static export, so no middleware can detect a locale or rewrite a p
 
 1. The default locale (`DEFAULT_LOCALE`, currently `en`) MUST be served at the bare path, which is its canonical URL; no `/<default-locale>` route may exist.
 2. Every other locale MUST be served under a leading `/<locale>` segment (`/de`, `/de/episode/page-template`).
-3. Every internal JSX `href` MUST be the expression `{localizePath(<logical path>, locale)}`, with `localizePath` from `src/lib/locale.pure.ts`. A locale switch passes `stripLocale(pathname)` as the logical path, so it keeps the reader on the same logical page.
+3. Every internal JSX `href` MUST be the expression `{localizePath(<logical path>, locale)}`, with `localizePath` from `src/lib/locale.pure.ts`. A locale switch passes `stripLocale(pathname)` as the logical path, so it keeps the reader on the same logical page; a switch via `router.push` MAY carry the current Slide as the fragment (third argument of `localizePath`).
 4. An external link is the one other `href`: a string literal starting `https://`, or `{externalHref(<url>)}` from `src/lib/external-link.pure.ts` for a URL held in data, which throws on anything but `https:`. Its tag MUST carry `target="_blank"` and `rel="noopener noreferrer"`. A bare variable, `http:` and any other helper stay banned.
 
 ## Do's and Don'ts
