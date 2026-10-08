@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { tabAfter } from '@/lib/context-drawer.pure';
+import { tabAfter } from '@/lib/roving-focus.pure';
 import { cn } from '@/lib/utils';
 import type { KeyboardEvent, Ref } from 'react';
 

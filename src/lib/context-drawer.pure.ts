@@ -78,22 +78,6 @@ export function drawerKeyAction(event: KeyEventLike, open: boolean): 'toggle' | 
   return open && event.code === 'Escape' ? 'close' : null;
 }
 
-/** APG tabs: arrows wrap, Home and End jump; any other key is not ours. */
-export function tabAfter(key: string, current: string, tabs: readonly string[]): string | null {
-  const at = tabs.indexOf(current);
-  const step: Record<string, number> = { ArrowRight: at + 1, ArrowLeft: at - 1, Home: 0, End: tabs.length - 1 };
-  if (!(key in step)) return null;
-  return tabs[(step[key] + tabs.length) % tabs.length];
-}
-
-/** APG menu: vertical arrows wrap, Home and End jump; any other key is not ours. */
-export function menuItemAfter(key: string, current: string, items: readonly string[]): string | null {
-  const at = items.indexOf(current);
-  const step: Record<string, number> = { ArrowDown: at + 1, ArrowUp: at - 1, Home: 0, End: items.length - 1 };
-  if (!(key in step)) return null;
-  return items[(step[key] + items.length) % items.length];
-}
-
 /** The drawer's heading: the current item's title, or the fallback while none is current. */
 export function titleOfItem(
   id: string | null,
@@ -137,12 +121,3 @@ export function splitCitations(text: string): DescriptionPart[] {
 export function sourceDomain(url: string): string {
   return new URL(url).hostname.replace(/^www\./, '');
 }
-
-/** Data attributes the page's context references and the drawer's notes share, so the two cannot drift. */
-export const CONTEXT_REF_ATTR = 'data-context-ref';
-/** Tags each item's entry in the slot; its value is the item's `id`. */
-export const CONTEXT_ITEM_ATTR = 'data-context-for';
-export const CONTEXT_ACTIVE_ATTR = 'data-context-active';
-export const NOTE_TARGET_ATTR = 'data-note-target';
-export const CITATION_ATTR = 'data-citation';
-export const PINNED_ATTR = 'data-context-pinned';

@@ -3,7 +3,6 @@
 import { useContextDrawer } from '@/hooks/use-context-drawer';
 import { revealCitation } from '@/hooks/use-context-links';
 import {
-  CONTEXT_ITEM_ATTR,
   DRAWER_PANEL_ID,
   DRAWER_TABS,
   drawerIds,
@@ -11,6 +10,7 @@ import {
   titleOfItem,
   type DrawerTab,
 } from '@/lib/context-drawer.pure';
+import { CONTEXT_ITEM_ATTR } from '@/lib/context-link.pure';
 import { cn } from '@/lib/utils';
 import { X } from 'lucide-react';
 import { useEffect, useMemo, useRef, type ReactNode } from 'react';

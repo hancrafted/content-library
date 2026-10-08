@@ -1,5 +1,5 @@
-import { menuItemAfter } from '@/lib/context-drawer.pure';
 import { DRAWER_MODES, type DrawerMode } from '@/lib/prefs.pure';
+import { menuItemAfter } from '@/lib/roving-focus.pure';
 import { cn } from '@/lib/utils';
 import { Check, Ellipsis } from 'lucide-react';
 import { useEffect, useId, useRef, useState, type KeyboardEvent, type RefObject } from 'react';
