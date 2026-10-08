@@ -135,6 +135,9 @@
             "blank-every-time": {
               "title": "Why every session starts from a blank slate",
               "caption": "“Amnesiac” is our metaphor, not a vendor term, but the mechanism is documented.",
+              "demo": {
+                "caption": "Each session fills up, then starts over blank."
+              },
               "prose": "The model <ref>keeps nothing between requests</ref>: a chat only feels continuous because the history is sent again every turn. Claude Code says each session begins with a fresh context window. Anthropic itself pictures engineers working in shifts, each arriving with no memory of the previous shift.",
               "notes": {
                 "stateless-by-design": {

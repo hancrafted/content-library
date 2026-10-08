@@ -169,6 +169,21 @@ describe('episode structure', () => {
       expect(clipping).toEqual([]);
     });
 
+    it('prerenders every Slide with its content mounted, inside one mount per wrapper', () => {
+      // ARRANGE
+      const $ = page(url);
+      // ACT
+      const wrappers = $('[data-slide]').toArray();
+      const mounts = wrappers.map((wrapper) => $(wrapper).children('[data-slot="slide-mount"]'));
+      // ASSERT: no Slide is far in the static HTML, so deep links, print and crawlers see everything
+      expect(wrappers.length).toBeGreaterThan(0);
+      for (const mount of mounts) {
+        expect(mount.length).toBe(1);
+        expect(mount.attr('data-zone')).toBe('near');
+        expect(mount.children().length).toBeGreaterThan(0);
+      }
+    });
+
     it('carries no id twice', () => {
       // ARRANGE
       const $ = page(url);

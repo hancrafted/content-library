@@ -9,6 +9,7 @@ import { contextDrawerInput } from './context-drawer-input';
 import { tocSectionsOf, type Episode, type EpisodeSection } from './episode-page-container.pure';
 import { SlideObserver } from './slide-observer.client';
 import { SlideWrapper } from './slide-wrapper';
+import { SlideZones } from './slide-zones.client';
 import { TitleSlide } from './title-slide';
 
 function SectionSlides({ section }: { section: EpisodeSection }) {
@@ -58,13 +59,15 @@ export async function EpisodePageContainer({ locale, episode }: { locale: Locale
           labels={await tocLabels(locale)}
         />
       </aside>
-      <SlideObserver ids={ids} />
-      <ContentArea>
-        <TitleSlide title={title} caption={caption} />
-        {sections.map((section) => (
-          <SectionSlides key={section.slug} section={section} />
-        ))}
-      </ContentArea>
+      <SlideZones>
+        <SlideObserver ids={ids} />
+        <ContentArea>
+          <TitleSlide title={title} caption={caption} />
+          {sections.map((section) => (
+            <SectionSlides key={section.slug} section={section} />
+          ))}
+        </ContentArea>
+      </SlideZones>
       <ContextDrawerSlot input={await contextDrawerInput(locale, sections)} />
     </div>
   );

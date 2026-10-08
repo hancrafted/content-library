@@ -135,6 +135,9 @@
             "blank-every-time": {
               "title": "Warum jede Sitzung bei null beginnt",
               "caption": "„Gedächtnisverlust“ ist unser Bild, kein Begriff der Hersteller, doch der Mechanismus ist dokumentiert.",
+              "demo": {
+                "caption": "Jede Sitzung füllt sich und beginnt dann wieder bei null."
+              },
               "prose": "Das Modell <ref>behält zwischen zwei Anfragen nichts</ref>. Ein Chat wirkt nur zusammenhängend, weil der Verlauf bei jedem Zug erneut mitgeschickt wird. Laut Claude-Code-Dokumentation beginnt jede Sitzung mit einem frischen Kontextfenster. Anthropic selbst beschreibt Entwickler im Schichtbetrieb, die jeweils ohne Erinnerung an die vorherige Schicht antreten.",
               "notes": {
                 "stateless-by-design": {

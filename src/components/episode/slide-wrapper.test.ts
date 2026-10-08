@@ -45,4 +45,12 @@ describe('SlideWrapper', () => {
     expect(html).toContain('id="my-section--my-slide"');
     expect(html).toContain('data-slide="my-section--my-slide"');
   });
+
+  it('renders its content through a mount, so prerendered HTML keeps the content a far Slide drops later', () => {
+    // ARRANGE & ACT
+    const html = renderToStaticMarkup(createElement(SlideWrapper, { id: 'a--b' }, createElement('p', null, 'kept')));
+
+    // ASSERT
+    expect(html).toMatch(/data-slot="slide-mount"[^>]*>.*<p>kept<\/p>/);
+  });
 });

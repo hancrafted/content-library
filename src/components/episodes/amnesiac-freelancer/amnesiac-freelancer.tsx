@@ -7,6 +7,7 @@ import type {
   PerLocale,
 } from '@/components/episode/episode-page-container.pure';
 import { SectionSlide } from '@/components/episode/section-slide';
+import { SessionLoop } from '@/components/episode/session-loop.client';
 import type { ReadString } from '@/components/episode/slide-context.pure';
 import { ThreeColumnSlide } from '@/components/episode/three-column-slide';
 import type { Locale } from '@/lib/locale.pure';
@@ -37,12 +38,15 @@ function blankEveryTime(t: SectionsT, ref: ContextRefOf): EpisodeSlide {
     notes,
     voiceScript,
     content: (
-      <BasicPageSlide
-        anchor={anchor}
-        title={title}
-        caption={t('blank-slate.slides.blank-every-time.caption')}
-        prose={t.rich('blank-slate.slides.blank-every-time.prose', { ref: ref(context, 'stateless-by-design') })}
-      />
+      <>
+        <BasicPageSlide
+          anchor={anchor}
+          title={title}
+          caption={t('blank-slate.slides.blank-every-time.caption')}
+          prose={t.rich('blank-slate.slides.blank-every-time.prose', { ref: ref(context, 'stateless-by-design') })}
+        />
+        <SessionLoop caption={t('blank-slate.slides.blank-every-time.demo.caption')} />
+      </>
     ),
   };
 }
