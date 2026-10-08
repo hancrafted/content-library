@@ -502,6 +502,7 @@
     "slide": "Folie",
     "shortcut": "Tastenkürzel",
     "sourcesCount": "Quellen ({count})",
+    "opensInNewTab": "öffnet in neuem Tab",
     "menu": {
       "label": "Weitere Optionen",
       "layout": "Darstellung",

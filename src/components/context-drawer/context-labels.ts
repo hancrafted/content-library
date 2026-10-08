@@ -16,6 +16,8 @@ export interface ContextLabels {
   readonly empty: { readonly notes: string; readonly script: string };
   /** The disclosure label of a note's sources, e.g. `Sources (2)`. */
   readonly sources: (count: number) => string;
+  /** Said to assistive tech after a source link, e.g. `opens in a new tab`. */
+  readonly opensInNewTab: string;
   readonly keywords: string;
   readonly bridge: string;
   readonly slide: string;
@@ -32,6 +34,7 @@ export async function contextLabels(locale: Locale): Promise<ContextLabels> {
     menu: { label: t('menu.label'), layout: t('menu.layout'), side: t('menu.side'), overlay: t('menu.overlay') },
     empty: { notes: t('empty.notes'), script: t('empty.script') },
     sources: (count) => t('sourcesCount', { count }),
+    opensInNewTab: t('opensInNewTab'),
     keywords: t('keywords'),
     bridge: t('bridge'),
     slide: t('slide'),

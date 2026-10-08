@@ -44,9 +44,9 @@ const CARD = cn(
 // Only `transform` animates, never width or position. `visibility` flips to
 // visible the instant the drawer opens, or the focus move on open lands on a
 // still-hidden card and is dropped; on close it waits for the slide-out.
-const OPENING = '[transform:translateX(0)] [transition:transform_300ms_ease-out,visibility_0s]';
+const OPENING = '[transform:translateX(0)] [transition:transform_250ms_ease-out,visibility_0s]';
 const CLOSED =
-  'invisible [transform:translateX(calc(100%+2rem))] [transition:transform_300ms_ease-in,visibility_0s_linear_300ms]';
+  'invisible [transform:translateX(calc(100%+2rem))] [transition:transform_200ms_ease-in,visibility_0s_linear_200ms]';
 
 function Entries({
   entries,
@@ -82,31 +82,33 @@ function Panel(props: { tab: DrawerTab; selected: DrawerTab; heading: string; ch
   );
 }
 
-/** Sticky: the Slide's title once, then the tabs, the layout menu and close. */
+/** Sticky. Row one: tabs left, layout menu and close right. Row two: the Slide's title, free to wrap without moving the tabs. */
 function PanelHead(props: { labels: DrawerLabels; drawer: Drawer; title: string }) {
   const { labels, drawer } = props;
   const tabs = DRAWER_TABS.map((id) => ({ id, label: labels.tabs[id] }));
   return (
-    <div className="flex shrink-0 flex-col gap-3 border-b p-3 print:hidden">
-      <div className="flex items-start gap-1 pl-1">
-        <h4 className="flex-1 pt-1 text-base leading-snug font-semibold text-pretty">{props.title}</h4>
-        <ModeMenu labels={labels.menu} mode={drawer.mode} onChange={drawer.setMode} />
-        <button
-          type="button"
-          aria-label={labels.close}
-          onClick={drawer.close}
-          className="grid size-10 cursor-pointer place-items-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground md:size-8"
-        >
-          <X aria-hidden className="size-4" />
-        </button>
+    <div className="flex shrink-0 flex-col gap-2 border-b p-3 print:hidden">
+      <div className="flex items-center justify-between gap-1">
+        <DrawerTabs
+          tabs={tabs}
+          selected={drawer.tab}
+          idOf={drawerIds}
+          onSelect={drawer.setTab}
+          selectedRef={drawer.selectedTab}
+        />
+        <div className="flex shrink-0 items-center gap-1">
+          <ModeMenu labels={labels.menu} mode={drawer.mode} onChange={drawer.setMode} />
+          <button
+            type="button"
+            aria-label={labels.close}
+            onClick={drawer.close}
+            className="grid size-10 cursor-pointer place-items-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground md:size-8"
+          >
+            <X aria-hidden className="size-4" />
+          </button>
+        </div>
       </div>
-      <DrawerTabs
-        tabs={tabs}
-        selected={drawer.tab}
-        idOf={drawerIds}
-        onSelect={drawer.setTab}
-        selectedRef={drawer.selectedTab}
-      />
+      <h4 className="px-1 text-lg leading-snug font-semibold text-balance break-words">{props.title}</h4>
     </div>
   );
 }
@@ -165,8 +167,8 @@ function Scrim({ open, onClose }: { open: boolean; onClose: () => void }) {
       className={cn(
         'fixed inset-0 z-[60] bg-black/40 backdrop-blur-sm motion-reduce:[transition:none] md:hidden print:hidden',
         open
-          ? '[transition:opacity_300ms,visibility_0s]'
-          : 'pointer-events-none invisible opacity-0 [transition:opacity_300ms,visibility_0s_linear_300ms]',
+          ? '[transition:opacity_250ms_ease-out,visibility_0s]'
+          : 'pointer-events-none invisible opacity-0 [transition:opacity_200ms_ease-in,visibility_0s_linear_200ms]',
       )}
     />
   );

@@ -75,7 +75,7 @@ function ItemEntry({ view, item }: { view: TocView; item: TocItem }) {
         className={cn(
           ITEM,
           active
-            ? 'bg-highlight font-medium text-foreground'
+            ? 'bg-selected font-medium text-selected-foreground'
             : 'text-muted-foreground hover:bg-accent/70 hover:text-foreground',
         )}
       >
@@ -144,7 +144,7 @@ function SectionEntry(props: { view: TocView; section: TocSection; index: number
           id={section.id}
           className={cn(
             'flex-1 rounded-lg px-2 py-1.5 text-pretty transition-colors hover:bg-accent/70 hover:text-foreground',
-            view.active === section.id && 'bg-highlight',
+            view.active === section.id && 'bg-selected text-selected-foreground',
           )}
         >
           {section.title}

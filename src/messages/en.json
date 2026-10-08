@@ -502,6 +502,7 @@
     "slide": "Slide",
     "shortcut": "Shortcut",
     "sourcesCount": "Sources ({count})",
+    "opensInNewTab": "opens in a new tab",
     "menu": {
       "label": "More options",
       "layout": "Layout",

@@ -35,7 +35,9 @@ function TabButton<T extends string>(props: {
       onClick={() => props.onSelect(props.tab.id)}
       className={cn(
         'cursor-pointer transition-colors max-md:h-10',
-        props.selected ? 'bg-accent text-accent-foreground' : 'text-muted-foreground',
+        props.selected
+          ? 'bg-selected text-selected-foreground hover:bg-selected hover:text-selected-foreground'
+          : 'text-muted-foreground',
       )}
     >
       {props.tab.label}

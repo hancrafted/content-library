@@ -1,5 +1,6 @@
 import { formatMark, type VoiceScriptSegment } from '@/lib/context-drawer.pure';
 import type { ContextLabels } from './context-labels';
+import { FLAT_ITEM, FLAT_LIST } from './flat-list';
 
 function Keywords({ keywords, label }: { keywords: readonly string[]; label: string }) {
   return (
@@ -15,12 +16,9 @@ function Keywords({ keywords, label }: { keywords: readonly string[]; label: str
 
 function Segment({ segment, labels }: { segment: VoiceScriptSegment; labels: ContextLabels }) {
   return (
-    <li
-      data-segment={segment.slug}
-      className="flex flex-col gap-2 break-inside-avoid rounded-xl border bg-muted/40 p-3"
-    >
+    <li data-segment={segment.slug} className={FLAT_ITEM}>
       <div className="flex items-baseline gap-2">
-        <span className="shrink-0 rounded-md bg-highlight px-1.5 py-0.5 font-mono text-xs tabular-nums">
+        <span className="shrink-0 rounded-md bg-muted px-1.5 py-0.5 font-mono text-xs tabular-nums">
           {formatMark(segment.from)}–{formatMark(segment.to)}
         </span>
         <h6 className="text-base leading-snug font-semibold text-pretty">{segment.title}</h6>
@@ -28,7 +26,7 @@ function Segment({ segment, labels }: { segment: VoiceScriptSegment; labels: Con
       <Keywords keywords={segment.keywords} label={labels.keywords} />
       <p className="text-sm leading-relaxed">{segment.script}</p>
       {segment.bridge && (
-        <p className="rounded-lg border-l-2 border-foreground/30 bg-accent px-3 py-2 text-sm leading-relaxed italic">
+        <p className="border-l-2 border-foreground/30 pl-3 text-sm leading-relaxed italic">
           <span className="block text-xs font-medium tracking-wide text-muted-foreground uppercase not-italic">
             {labels.bridge}
           </span>
@@ -43,7 +41,7 @@ function Segment({ segment, labels }: { segment: VoiceScriptSegment; labels: Con
 export function SlideScript({ segments, labels }: { segments: readonly VoiceScriptSegment[]; labels: ContextLabels }) {
   if (segments.length === 0) return <p className="text-sm text-muted-foreground">{labels.empty.script}</p>;
   return (
-    <ol className="flex flex-col gap-3">
+    <ol className={FLAT_LIST}>
       {segments.map((segment) => (
         <Segment key={segment.slug} segment={segment} labels={labels} />
       ))}

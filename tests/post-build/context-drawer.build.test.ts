@@ -102,15 +102,19 @@ describe.each(PAGES)('$url', ({ slug, url }) => {
     expect(text).not.toMatch(/\bepisodes\.[a-z-]+\.|\bcontextDrawer\./);
   });
 
-  it('renders sources as selectable text and never as links', () => {
+  it('renders sources as https links that open a new tab safely, with that said in their name', () => {
     // ARRANGE
     const $ = page(url);
     // ACT
-    const links = $('[data-slot="context"] a[href]').length;
+    const links = $('[data-slot="context"] a[href]').toArray();
     // ASSERT
-    expect(links).toBe(0);
-    if (slug === 'amnesiac-freelancer')
-      expect($('[data-slot="context"]').text()).toContain('https://code.claude.com/docs/en/memory');
+    if (slug === 'amnesiac-freelancer') expect(links.length).toBeGreaterThan(0);
+    for (const link of links) {
+      expect($(link).attr('href')).toMatch(/^https:\/\//);
+      expect($(link).attr('target')).toBe('_blank');
+      expect($(link).attr('rel')).toBe('noopener noreferrer');
+      expect($(link).text()).toMatch(/new tab|neuem Tab/);
+    }
   });
 });
 
