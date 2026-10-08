@@ -155,7 +155,13 @@ function SectionEntry(props: { view: TocView; section: TocSection; index: number
   );
 }
 
-const GROW = 'duration-500 ease-out motion-reduce:transition-none';
+/**
+ * The reveal runs in two beats: the box widens first while its body is still
+ * folded away, then the body unfolds at its final width. Widening and
+ * unfolding together would rewrap every title on each frame of the growth.
+ */
+const WIDEN = 'duration-300 ease-out motion-reduce:transition-none';
+const UNFOLD = 'duration-500 ease-out delay-300 motion-reduce:transition-none motion-reduce:delay-0';
 
 /** Progress bar and sections, folded away while the loading box shows. */
 function TocBody(props: { view: TocView; sections: readonly TocSection[]; labels: TocLabels; time: ReadingTime }) {
@@ -165,7 +171,7 @@ function TocBody(props: { view: TocView; sections: readonly TocSection[]; labels
     <div
       inert={!revealed}
       className={cn(
-        `grid min-h-0 transition-[grid-template-rows,opacity] ${GROW}`,
+        `grid min-h-0 transition-[grid-template-rows,opacity] ${UNFOLD}`,
         revealed ? 'grid-rows-[1fr]' : 'grid-rows-[0fr] opacity-0 noscript:grid-rows-[1fr] noscript:opacity-100',
       )}
     >
@@ -200,7 +206,7 @@ export function TocPanel(props: {
       data-testid={props.testId}
       className={cn(
         'flex flex-col border bg-background/70 p-3 text-sm shadow-header backdrop-blur-xl backdrop-saturate-150',
-        `transition-[width,border-radius] ${GROW}`,
+        `transition-[width,border-radius] ${WIDEN}`,
         revealed ? 'w-full rounded-2xl' : 'w-44 rounded-[1.375rem] noscript:w-full noscript:rounded-2xl',
         props.className,
       )}
