@@ -6,13 +6,13 @@ function fakeWindow(initialHash = '') {
   const listeners = new Map<string, Set<() => void>>();
   const writes: string[] = [];
   const win = {
-    location: { hash: initialHash },
+    location: { hash: initialHash, pathname: '/episodes/demo', search: '?ref=mail' },
     history: {
       state: { as: 'router' } as unknown,
       replaceState(state: unknown, _unused: string, url: string) {
         if (win.failWrites) throw new DOMException('too many calls', 'SecurityError');
         win.history.state = state;
-        win.location.hash = url;
+        win.location.hash = url.includes('#') ? url.slice(url.indexOf('#')) : '';
         writes.push(url);
       },
     },
@@ -47,11 +47,18 @@ describe('reading the hash', () => {
     expect(slide).toBe('intro--why');
   });
 
-  it('has no active Slide without a hash', () => {
+  it('reads an empty hash as the Title slide', () => {
     // ARRANGE / ACT
     const { state } = setup('');
     // ASSERT
-    expect(state.getSlide()).toBeNull();
+    expect(state.getSlide()).toBe('top');
+  });
+
+  it('lands a #top deep link on the Title slide', () => {
+    // ARRANGE / ACT
+    const { state } = setup('#top');
+    // ASSERT
+    expect(state.getSlide()).toBe('top');
   });
 });
 
@@ -242,6 +249,106 @@ describe('subscriptions', () => {
     // ACT
     first.state.reportReading('a');
     // ASSERT
-    expect(second.state.getSlide()).toBeNull();
+    expect(second.state.getSlide()).toBe('top');
+  });
+
+  it("keeps one instance free of another instance's pending write and flight", () => {
+    // ARRANGE
+    const first = setup();
+    const second = setup();
+    first.state.navigateTo('outro');
+    // ACT
+    second.state.reportReading('intro');
+    // ASSERT
+    expect([second.state.getSlide(), second.writes]).toEqual(['intro', ['#intro']]);
+  });
+});
+
+describe('the Title slide', () => {
+  it('clears the hash and keeps path and query when the reader returns to the Title slide', () => {
+    // ARRANGE
+    const { state, writes, win } = setup('#intro');
+    // ACT
+    state.reportReading('top');
+    // ASSERT
+    expect([state.getSlide(), writes, win.location.hash]).toEqual(['top', ['/episodes/demo?ref=mail'], '']);
+  });
+
+  it('clears the hash when a click navigates to the Title slide', () => {
+    // ARRANGE
+    const { state, writes } = setup('#intro');
+    // ACT
+    state.navigateTo('top');
+    // ASSERT
+    expect(writes).toEqual(['/episodes/demo?ref=mail']);
+  });
+
+  it('writes nothing for a #top deep link until the reader moves', () => {
+    // ARRANGE
+    const { state, writes } = setup('#top');
+    // ACT
+    state.reportReading('top');
+    // ASSERT
+    expect(writes).toEqual([]);
+  });
+
+  it('reads Back to a hash-less entry as the Title slide', () => {
+    // ARRANGE
+    const { state, win, seen, fire } = setup('#a');
+    win.location.hash = '';
+    // ACT
+    fire('popstate');
+    // ASSERT
+    expect([state.getSlide(), seen]).toEqual(['top', ['top']]);
+  });
+});
+
+describe('the first subscription', () => {
+  it('re-reads a hash that changed since creation, as when a router writes the URL after the page rendered', () => {
+    // ARRANGE
+    const fake = fakeWindow('');
+    const state = createUrlState(fake.win as unknown as UrlWindow);
+    fake.win.location.hash = '#onboarding--keep-it-short';
+    const seen: (string | null)[] = [];
+    // ACT
+    state.subscribe(() => seen.push(state.getSlide()));
+    // ASSERT
+    expect([state.getSlide(), seen]).toEqual(['onboarding--keep-it-short', ['onboarding--keep-it-short']]);
+  });
+});
+
+describe('dispose', () => {
+  it("cancels a pending trailing write so a dead page cannot rewrite the next page's URL", () => {
+    // ARRANGE
+    const { state, writes } = setup();
+    state.reportReading('a');
+    state.reportReading('b');
+    // ACT
+    state.dispose();
+    vi.advanceTimersByTime(WRITE_INTERVAL_MS * 2);
+    // ASSERT
+    expect(writes).toEqual(['#a']);
+  });
+
+  it('ends a navigation in flight and releases every window listener', () => {
+    // ARRANGE
+    const { state, listenerCount } = setup();
+    state.navigateTo('outro');
+    // ACT
+    state.dispose();
+    // ASSERT
+    expect([listenerCount('scrollend'), listenerCount('popstate')]).toEqual([0, 0]);
+  });
+
+  it('stays usable afterwards, as a remount in strict mode needs', () => {
+    // ARRANGE
+    const { state, seen } = setup();
+    state.dispose();
+    // ACT
+    const unsubscribe = state.subscribe(() => undefined);
+    state.reportReading('a');
+    unsubscribe();
+    // ASSERT
+    expect([state.getSlide(), seen]).toEqual(['a', []]);
   });
 });

@@ -1,9 +1,9 @@
 'use client';
 
-import { useFractionInto, useOpenSections, useRevealed, useSettled } from '@/hooks/use-table-of-contents';
+import { useFractionInto, useGlideTo, useOpenSections, useRevealed, useSettled } from '@/hooks/use-table-of-contents';
 import { useActiveSlide } from '@/hooks/use-url-state';
 import type { Locale } from '@/lib/locale.pure';
-import { ownerOf, readingOrder, readingTime, type TocSection } from '@/lib/table-of-contents.pure';
+import { activeEntry, ownerOf, readingOrder, readingTime, type TocSection } from '@/lib/table-of-contents.pure';
 import { useMemo, useSyncExternalStore } from 'react';
 import { TocDrawer } from './toc-drawer';
 import { remainingLabel, type TocLabels } from './toc-heading';
@@ -37,19 +37,22 @@ function useTocState(props: {
   route: string;
   sections: readonly TocSection[];
   targetAttribute: string;
+  topId: string;
 }) {
+  const glideTo = useGlideTo();
   const order = useMemo(() => readingOrder(props.sections), [props.sections]);
   const slide = useActiveSlide();
-  // With no Slide in the URL (the reader is on the Title slide), the first entry stands in.
-  // An untitled Slide has no entry of its own: its owning entry stays current.
-  const active = (slide && order.owners[slide]) || slide || order.ids[0] || null;
+  const active = activeEntry(order.owners, slide, props.topId);
+  const atTop = slide === props.topId;
   const fraction = useFractionInto(slide, props.targetAttribute);
   // The server cannot know the hash, so the table holds its loading box until the client has read it.
-  const settled = useSettled(useHydrated() ? active : null);
+  const settled = useSettled(useHydrated() ? slide : null);
   const revealed = useRevealed(settled);
   const time = readingTime(order.minutes, slide ? order.ids.indexOf(slide) : -1, fraction);
   const { open, toggle } = useOpenSections(props.sections, active);
-  const view: TocView = { locale: props.locale, route: props.route, active, open, toggle, settled, revealed };
+  const { locale, route, topId } = props;
+  const base = { locale, route, topId, atTop, glideTo, active, open, toggle };
+  const view: TocView = { ...base, settled, revealed };
   return { view, time };
 }
 
@@ -64,6 +67,8 @@ export function TableOfContents(props: {
   route: string;
   sections: readonly TocSection[];
   targetAttribute: string;
+  /** The id of the Slide at the top of the page: no entry is current there, and the heading links to it. */
+  topId: string;
   labels: TocLabels;
 }) {
   const { view, time } = useTocState(props);

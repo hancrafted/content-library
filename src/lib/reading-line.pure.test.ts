@@ -64,4 +64,14 @@ describe('edge cases', () => {
     // ASSERT
     expect(active).toBe(first);
   });
+
+  it('activates the Title slide when the line crosses it, so scrolling back up clears the previous Slide', () => {
+    // ARRANGE
+    const order = ['top', 'intro', 'outro'];
+    const crossing = new Set(['top']);
+    // ACT
+    const active = activeId(crossing, order, 'intro');
+    // ASSERT
+    expect(active).toBe('top');
+  });
 });

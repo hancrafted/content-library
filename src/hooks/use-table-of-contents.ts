@@ -1,6 +1,7 @@
 import { READING_LINE } from '@/lib/reading-line.pure';
 import { openSectionIds, type TocSection } from '@/lib/table-of-contents.pure';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type MouseEvent } from 'react';
+import { useUrlState } from './use-url-state';
 
 /** How long the compact loading box holds after mount, so the table never visibly settles into place. */
 const REVEAL_AFTER_MS = 1000;
@@ -83,4 +84,28 @@ export function useOpenSections(sections: readonly TocSection[], active: string 
     setState({ owner, toggled: next });
   };
   return { open: openSectionIds(sections, active, toggled), toggle };
+}
+
+function isPlainClick(event: MouseEvent): boolean {
+  return event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
+}
+
+/**
+ * A click handler factory: tells the page's URL-state service the reader chose
+ * this Slide, then glides to it. Every consumer shows it at once and the
+ * observer stays quiet until the glide ends. The service replaces the URL, so
+ * Back leaves the page instead of replaying every jump. Only a click glides: a
+ * reload or a shared link lands on its fragment at once, without scrolling
+ * through what precedes it. A modified click is left to the browser.
+ */
+export function useGlideTo(): (event: MouseEvent<HTMLAnchorElement>, id: string) => void {
+  const url = useUrlState();
+  return (event, id) => {
+    const target = document.getElementById(id);
+    if (!url || !target || !isPlainClick(event)) return;
+    event.preventDefault();
+    url.navigateTo(id);
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    target.scrollIntoView({ behavior: still ? 'instant' : 'smooth' });
+  };
 }

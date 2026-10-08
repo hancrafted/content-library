@@ -1,6 +1,9 @@
+import { titleAnchor } from './episode.pure';
+
 /*
  * The URL-state service (FE-001): the only module that writes browser history,
- * and the one place the active Slide lives. A click is intent (`navigateTo`),
+ * and the one place the active Slide lives. One instance per Episode page,
+ * made by the page's provider, so another Episode starts from its own URL. A click is intent (`navigateTo`),
  * the Slide observer is a report (`reportReading`); the two are separate calls
  * so the rule "ignore reports while a click's scroll is in flight" is explicit.
  * No React: the hook lives in `src/hooks/use-url-state.ts`.
@@ -20,14 +23,14 @@ export const NAVIGATION_TIMEOUT_MS = 1000;
 
 /** The slice of `Window` the service touches, so tests hand it a fake. */
 export interface UrlWindow {
-  readonly location: { readonly hash: string };
+  readonly location: { readonly hash: string; readonly pathname: string; readonly search: string };
   readonly history: { readonly state: unknown; replaceState(state: unknown, unused: string, url: string): void };
   addEventListener(type: 'popstate' | 'scrollend', listener: () => void): void;
   removeEventListener(type: 'popstate' | 'scrollend', listener: () => void): void;
 }
 
 export interface UrlState {
-  /** The active Slide id from the hash; `null` when there is none. */
+  /** The active Slide id from the hash; an empty hash is the Title slide (`top`). */
   getSlide(): string | null;
   /** Calls `listener` whenever the active Slide changes; returns the unsubscribe. */
   subscribe(listener: () => void): () => void;
@@ -35,11 +38,13 @@ export interface UrlState {
   navigateTo(id: string): void;
   /** Report: the reading line crossed this Slide. Ignored while a navigation is in flight. */
   reportReading(id: string): void;
+  /** Cancels a pending write and a navigation in flight and releases window listeners; the instance stays usable. */
+  dispose(): void;
 }
 
-function hashOf(win: UrlWindow): string | null {
+function hashOf(win: UrlWindow): string {
   const raw = win.location.hash.slice(1);
-  if (raw === '') return null;
+  if (raw === '') return titleAnchor();
   try {
     return decodeURIComponent(raw);
   } catch {
@@ -48,7 +53,7 @@ function hashOf(win: UrlWindow): string | null {
 }
 
 class UrlStateStore implements UrlState {
-  private current: string | null;
+  private current: string;
   private readonly listeners = new Set<() => void>();
   private flight: ReturnType<typeof setTimeout> | null = null;
   private pending: string | null = null;
@@ -62,8 +67,11 @@ class UrlStateStore implements UrlState {
   getSlide = () => this.current;
 
   subscribe = (listener: () => void) => {
-    if (this.listeners.size === 0) this.win.addEventListener('popstate', this.onPopState);
+    const first = this.listeners.size === 0;
+    if (first) this.win.addEventListener('popstate', this.onPopState);
     this.listeners.add(listener);
+    // The URL may have moved since creation: a router writes it after the new page first renders.
+    if (first) this.resync();
     return () => {
       this.listeners.delete(listener);
       if (this.listeners.size === 0) this.win.removeEventListener('popstate', this.onPopState);
@@ -81,6 +89,13 @@ class UrlStateStore implements UrlState {
     if (this.flight === null) this.set(id);
   };
 
+  dispose = () => {
+    this.endFlight();
+    this.cancelWrite();
+    this.listeners.clear();
+    this.win.removeEventListener('popstate', this.onPopState);
+  };
+
   private set(id: string) {
     if (id === this.current) return;
     this.current = id;
@@ -91,11 +106,16 @@ class UrlStateStore implements UrlState {
   private onPopState = () => {
     this.endFlight();
     this.cancelWrite();
+    this.resync();
+  };
+
+  /** Adopts the hash the URL carries now, notifying only when it differs. */
+  private resync() {
     const hash = hashOf(this.win);
     if (hash === this.current) return;
     this.current = hash;
     this.listeners.forEach((listener) => listener());
-  };
+  }
 
   private endFlight = () => {
     if (this.flight !== null) clearTimeout(this.flight);
@@ -119,11 +139,17 @@ class UrlStateStore implements UrlState {
     this.pending = null;
     this.lastWrite = Date.now();
     try {
-      this.win.history.replaceState(this.win.history.state, '', `#${encodeURIComponent(id)}`);
+      this.win.history.replaceState(this.win.history.state, '', this.urlOf(id));
     } catch {
       // WebKit throws SecurityError past its history-write limit; subscribers stay correct while the URL lags.
     }
   };
+
+  /** The Title slide is the bare path: no `#`, query kept. */
+  private urlOf(id: string): string {
+    if (id === titleAnchor()) return `${this.win.location.pathname}${this.win.location.search}`;
+    return `#${encodeURIComponent(id)}`;
+  }
 
   private cancelWrite() {
     if (this.trailing !== null) clearTimeout(this.trailing);
@@ -135,14 +161,3 @@ class UrlStateStore implements UrlState {
 export function createUrlState(win: UrlWindow): UrlState {
   return new UrlStateStore(win);
 }
-
-let client: UrlState | undefined;
-const onClient = (): UrlState => (client ??= createUrlState(window));
-
-/** The client singleton. Built on first use, so importing it during prerender never touches `window`. */
-export const urlState: UrlState = {
-  getSlide: () => onClient().getSlide(),
-  subscribe: (listener) => onClient().subscribe(listener),
-  navigateTo: (id) => onClient().navigateTo(id),
-  reportReading: (id) => onClient().reportReading(id),
-};

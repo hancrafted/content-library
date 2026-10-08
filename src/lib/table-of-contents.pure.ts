@@ -49,6 +49,20 @@ export function readingOrder(sections: readonly TocSection[]): {
   return order;
 }
 
+/**
+ * The entry to highlight for the active Slide. None on the Title slide (`top`)
+ * and while the Slide is unknown (`null`, before the client has read the URL);
+ * an untitled Slide has no entry of its own, so its owning entry stays current.
+ */
+export function activeEntry(
+  owners: Readonly<Record<string, string>>,
+  slide: string | null,
+  top: string,
+): string | null {
+  if (slide === null || slide === top) return null;
+  return owners[slide] ?? slide;
+}
+
 /** The id of the section that is the active entry or holds it. */
 export function ownerOf(sections: readonly TocSection[], active: string | null): string | undefined {
   return sections.find((section) => section.id === active || section.items.some((item) => item.id === active))?.id;

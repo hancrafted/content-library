@@ -1,6 +1,8 @@
-import type { Locale } from '@/lib/locale.pure';
+import { localizePath, type Locale } from '@/lib/locale.pure';
 import type { ReadingTime } from '@/lib/table-of-contents.pure';
 import { cn } from '@/lib/utils';
+import Link from 'next/link';
+import type { MouseEvent } from 'react';
 
 export interface TocLabels {
   title: string;
@@ -22,12 +24,34 @@ export function remainingLabel(labels: TocLabels, locale: Locale, minutes: numbe
   return labels.remaining[category].replace('#', String(whole));
 }
 
-/** Title on the left; time left on the right, or "Loading" while the box masks the first settle. */
-export function TocHeading(props: { labels: TocLabels; locale: Locale; time: ReadingTime; revealed: boolean }) {
+/**
+ * Title on the left, a link to the top of the page (the Title slide), current
+ * while the reader is there; time left on the right, or "Loading" while the box
+ * masks the first settle.
+ */
+export function TocHeading(props: {
+  labels: TocLabels;
+  locale: Locale;
+  route: string;
+  topId: string;
+  atTop: boolean;
+  onGlide: (event: MouseEvent<HTMLAnchorElement>, id: string) => void;
+  time: ReadingTime;
+  revealed: boolean;
+}) {
   const { labels } = props;
   return (
     <div className="flex items-baseline justify-between gap-3 px-2 text-xs whitespace-nowrap text-muted-foreground">
-      <span className="font-medium tracking-widest uppercase">{labels.title}</span>
+      <Link
+        href={localizePath(props.route, props.locale, props.topId)}
+        replace
+        onClick={(event) => props.onGlide(event, props.topId)}
+        aria-current={props.atTop ? 'location' : undefined}
+        data-testid="toc-top"
+        className="rounded font-medium tracking-widest uppercase hover:text-foreground focus-visible:outline-2"
+      >
+        {labels.title}
+      </Link>
       {props.revealed ? null : <span className="animate-pulse noscript:hidden">{labels.loading}</span>}
       <span className={cn('tabular-nums', !props.revealed && 'hidden noscript:inline')}>
         {remainingLabel(labels, props.locale, props.time.remaining)}
