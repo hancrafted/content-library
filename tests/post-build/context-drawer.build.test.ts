@@ -139,6 +139,18 @@ describe.each(PAGES)('$url card', ({ url }) => {
     expect(`${spacer} ${grid}`).not.toMatch(/transition/);
   });
 
+  it('keeps the tabs off transition-all, which would hold them hidden when focus enters on open', () => {
+    // ARRANGE
+    const $ = page(url);
+    // ACT
+    const classes = $('[data-slot="context"] [role="tab"]')
+      .toArray()
+      .map((tab) => $(tab).attr('class') ?? '');
+    // ASSERT
+    expect(classes.length).toBeGreaterThan(0);
+    classes.forEach((value) => expect(value).not.toContain('transition-all'));
+  });
+
   it('holds the layout menu only on a client render, never as static HTML', () => {
     // ARRANGE
     const $ = page(url);
@@ -219,7 +231,11 @@ describe('print stylesheet', () => {
     const hidesAll = blocks.some(
       (b) => b.includes('[data-slot=context-scrim]') && b.includes('[data-slot=context-spacer]'),
     );
+    const opensSources = blocks.some(
+      (b) => b.includes('details::details-content') && b.includes('content-visibility:visible'),
+    );
     // ASSERT
+    expect(opensSources).toBe(true);
     expect(reveals).toBe(true);
     expect(hides).toBe(true);
     expect(hidesAll).toBe(true);

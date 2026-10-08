@@ -8,6 +8,11 @@ export interface TabSpec<T extends string> {
   readonly label: string;
 }
 
+/**
+ * `transition-colors` replaces the Button's `transition-all`: that one also
+ * transitions the inherited `visibility`, so on open the tab stays `hidden` for
+ * its first frames and the drawer's focus move on open is dropped (FE-010 §6).
+ */
 /** Dressed like the site header's nav links: a ghost button, the selected one on `accent`. */
 function TabButton<T extends string>(props: {
   tab: TabSpec<T>;
@@ -29,7 +34,7 @@ function TabButton<T extends string>(props: {
       tabIndex={props.selected ? 0 : -1}
       onClick={() => props.onSelect(props.tab.id)}
       className={cn(
-        'cursor-pointer max-md:h-10',
+        'cursor-pointer transition-colors max-md:h-10',
         props.selected ? 'bg-accent text-accent-foreground' : 'text-muted-foreground',
       )}
     >

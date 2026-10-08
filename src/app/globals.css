@@ -87,6 +87,11 @@
   [data-slot='context'] {
     grid-column: 1 / -1;
   }
+  /* Closed sources print too, even where beforeprint never fires (headless PDF export). */
+  [data-slot='context'] details::details-content {
+    content-visibility: visible;
+    display: block;
+  }
   [data-slot='context-trigger'],
   [data-slot='context-scrim'],
   [data-slot='context-spacer'] {
