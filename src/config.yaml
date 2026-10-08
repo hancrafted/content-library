@@ -1,3 +1,13 @@
 # The one localStorage key the site may use (FE-004). `PREFS_KEY` in
 # src/lib/prefs.pure.ts must equal it; `archgate check` fails when they drift.
 localStorageKey: 'hancrafted:prefs'
+
+# Visual style for the scroll transition between dark and light sections.
+# Available options:
+#   - liquid   : Organic fluid / ink bleed
+#   - paper    : Handmade torn paper / deckled fibrous edge
+#   - glitch   : Digital scanline tearing / horizontal cyber glitch
+#   - goo      : Viscous lava lamp / high-surface-tension metaballs
+#   - dither   : 1-bit CRT particulate static / halftone noise dissolve
+#   - wave     : Harmonic soundwave / audio oscilloscope ripple
+transition_style: liquid

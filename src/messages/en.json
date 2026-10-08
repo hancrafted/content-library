@@ -18,7 +18,80 @@
   },
   "landing": {
     "title": "Home",
-    "link": "Page template"
+    "link": "Page template",
+    "heroSubtitle": "Theory from the hancrafted training videos, visualised page by page.",
+    "exploreEpisodes": "Explore Episodes",
+    "episodesSectionTitle": "Available Episodes",
+    "episodesSectionSubtitle": "Browse the interactive slide decks and visualised essays.",
+    "amnesiacTitle": "Treat AI like an amnesiac freelancer",
+    "amnesiacDescription": "Why an AI coding agent starts every session blank, and how to brief it so the work still lands.",
+    "templateTitle": "Episode Page Template",
+    "templateDescription": "The layout reference every episode follows: sections of slides stacked down one page.",
+    "about": {
+      "eyebrow": "About me",
+      "headlineStepOut": "I make change happen by stepping out of the argument.",
+      "headlineNotPushing": "Change sticks when I'm not the one pushing it.",
+      "headlineLead": "Every story here makes the same move: once I stop being the thing people argue with, the change carries itself.",
+      "identity": {
+        "kicker": "The person",
+        "name": "Han Che",
+        "positioning": "People and technology are one system. You cannot improve one side alone.",
+        "body": "I work on socio-technological ecosystems — the teams, processes and tools that only change together.",
+        "practice": "Coaching · Consulting · Engineering leadership",
+        "languages": "English · Deutsch"
+      },
+      "axes": {
+        "individual": "Individual",
+        "team": "Team",
+        "organisation": "Organisation & Stakeholder",
+        "process": "Process change",
+        "technology": "Technology adoption"
+      },
+      "stories": {
+        "pitch": {
+          "title": "A pitch the founder owns",
+          "stat": "2",
+          "statUnit": "founders",
+          "description": "Both decks pivoted 180°, away from explaining the product and toward the sales data an investor actually buys. The hard part was a founder in love with their own solution.",
+          "labels": ["Startup pitch coaching", "Coaching", "Founders"]
+        },
+        "gatekeeper": {
+          "title": "The gatekeeper becomes the reviewer",
+          "stat": "50+",
+          "statUnit": "PRs a week",
+          "description": "One person was reviewing all of them by hand. He got AI-driven code review in CI as his own project — the bottleneck built the thing that removed it.",
+          "labels": ["RIB Software", "AI", "Ownership"]
+        },
+        "ribTeam": {
+          "title": "Biggest bottleneck → self-running team",
+          "stat": "~5",
+          "statUnit": "months",
+          "description": "Inherited the team the org called its worst bottleneck. Gave refinement, estimation and planning back to them; within months they ran their own scrum without me.",
+          "labels": ["RIB Software", "Team lead", "Agile"]
+        },
+        "teachBack": {
+          "title": "Skills they can teach back",
+          "stat": "6",
+          "statUnit": "developers, 2 countries",
+          "description": "Once agile ran itself, we moved to AI workflows and human-in-the-loop skills. The bar wasn't using them — it was being able to show another team how, and leave the paper trail.",
+          "labels": ["RIB Software", "AI", "Enablement"]
+        },
+        "audiGates": {
+          "title": "Approval gates, modernised",
+          "stat": "30",
+          "statUnit": "min per meeting",
+          "description": "Two years of nothing, because nobody had modelled the process. Six weeks of interviews and state diagrams later, the stakeholders had a data model they recognised as their own.",
+          "labels": ["Audi", "Governance", "Stakeholders"]
+        },
+        "ribAi": {
+          "title": "AI enablement at RIB",
+          "stat": "15–20",
+          "statUnit": "senior engineers",
+          "description": "Not a talk about AI — a talk built with it, on token economy and model selection. Proof first; the enablement role followed.",
+          "labels": ["RIB Software", "AI", "Enablement"]
+        }
+      }
+    }
   },
   "meta": {
     "home": {
