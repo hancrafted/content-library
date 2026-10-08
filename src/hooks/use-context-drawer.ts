@@ -1,13 +1,13 @@
-import { useActiveId } from '@/hooks/use-table-of-contents';
 import {
-  currentSlideAnchor,
+  currentItemId,
   DEFAULT_DRAWER_MODE,
   drawerKeyAction,
   type DrawerMode,
   type DrawerTab,
 } from '@/lib/context-drawer.pure';
 import { useCallback, useEffect, useRef, useState, type RefObject } from 'react';
-import { useContextLinks, usePinnedNote } from './use-context-links';
+import { itemOfNote, useContextLinks, usePinnedNote } from './use-context-links';
+import { useReadingLineId } from './use-reading-line-id';
 
 /** Alt+N toggles and Escape closes, from anywhere on the page. */
 function useDrawerKeys(open: boolean, toggle: () => void, close: () => void) {
@@ -71,21 +71,21 @@ function usePrintDisclosure() {
   }, []);
 }
 
-/** A note a context reference opened, and the Slide it was shown for (valid while that Slide stays current). */
+/** A note a context reference opened, and the item it was shown for (valid while that item stays current). */
 interface Revealed {
   readonly note: string;
-  readonly slide: string;
+  readonly item: string;
   readonly observed: string | null;
 }
 
 /**
  * State of the Context drawer: open, selected tab, layout mode (in memory, not
- * a stored preference), and the Slide at the reading line. A context reference
- * opens the drawer on Notes at its note; its Slide is shown until the reading
- * line moves on.
+ * a stored preference), and the item at the reading line. The ids it observes
+ * are exactly the ones given. A context reference opens the drawer on Notes at
+ * its note; that note's item is shown until the reading line moves on.
  */
-export function useContextDrawer(anchors: readonly string[], targetAttribute: string) {
-  const observed = currentSlideAnchor(useActiveId(anchors, targetAttribute), anchors);
+export function useContextDrawer(ids: readonly string[]) {
+  const observed = currentItemId(useReadingLineId(ids), ids);
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<DrawerTab>('notes');
   const [mode, setMode] = useState<DrawerMode>(DEFAULT_DRAWER_MODE);
@@ -96,8 +96,9 @@ export function useContextDrawer(anchors: readonly string[], targetAttribute: st
   const close = () => setOpen(false);
   const live = revealed && revealed.observed === observed ? revealed : null;
   const reveal = useCallback(
-    (ref: { id: string; slide: string }) => {
-      setRevealed({ note: ref.id, slide: ref.slide, observed });
+    (note: string) => {
+      const item = itemOfNote(note);
+      if (item) setRevealed({ note, item, observed });
       setTab('notes');
       setOpen(true);
     },
@@ -108,6 +109,6 @@ export function useContextDrawer(anchors: readonly string[], targetAttribute: st
   usePrintDisclosure();
   useContextLinks(reveal);
   usePinnedNote(open && live ? live.note : null);
-  const current = live && anchors.includes(live.slide) ? live.slide : observed;
+  const current = live && ids.includes(live.item) ? live.item : observed;
   return { current, open, tab, setTab, mode, setMode, toggle, close, trigger, selectedTab };
 }

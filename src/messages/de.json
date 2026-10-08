@@ -654,7 +654,7 @@
       "side": "Nebeneinander",
       "overlay": "Überlagert"
     },
-    "refNote": "Sprechernotiz {number}",
+    "refNote": "öffnet Sprechernotiz",
     "citation": "Quelle {number}"
   }
 }

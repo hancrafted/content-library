@@ -207,12 +207,12 @@ describe('amnesiac-freelancer', () => {
         native: ref.tagName === 'button' && $(ref).attr('type') === 'button' && $(ref).attr('href') === undefined,
         id: id === `${owner}--${$(ref).attr('data-context-ref')}`,
         notes: notes.length,
-        number: /^\d+$/.test($(ref).find('sup').text()),
+        numbered: $(ref).find('sup').length > 0 || /\d/.test($(ref).text()),
       };
     });
     // ASSERT
     expect(refs).toHaveLength(3);
-    resolved.forEach((r) => expect(r).toEqual({ native: true, id: true, notes: 1, number: true }));
+    resolved.forEach((r) => expect(r).toEqual({ native: true, id: true, notes: 1, numbered: false }));
   });
 
   it.each(LOCALES)('numbers sources in a list and points every citation marker into it, in %s', (locale) => {

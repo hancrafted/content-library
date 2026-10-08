@@ -1,5 +1,5 @@
 import { formatMark, type VoiceScriptSegment } from '@/lib/context-drawer.pure';
-import type { ContextLabels } from './context-labels';
+import type { ContextDrawerLabels } from './context-drawer-input';
 import { FLAT_ITEM, FLAT_LIST } from './flat-list';
 
 function Keywords({ keywords, label }: { keywords: readonly string[]; label: string }) {
@@ -14,7 +14,7 @@ function Keywords({ keywords, label }: { keywords: readonly string[]; label: str
   );
 }
 
-function Segment({ segment, labels }: { segment: VoiceScriptSegment; labels: ContextLabels }) {
+function Segment({ segment, labels }: { segment: VoiceScriptSegment; labels: ContextDrawerLabels }) {
   return (
     <li data-segment={segment.slug} className={FLAT_ITEM}>
       <div className="flex items-baseline gap-2">
@@ -38,7 +38,13 @@ function Segment({ segment, labels }: { segment: VoiceScriptSegment; labels: Con
 }
 
 /** One Slide's Voice script, or the empty state. Server-rendered into the page (FE-010 §2). */
-export function SlideScript({ segments, labels }: { segments: readonly VoiceScriptSegment[]; labels: ContextLabels }) {
+export function SlideScript({
+  segments,
+  labels,
+}: {
+  segments: readonly VoiceScriptSegment[];
+  labels: ContextDrawerLabels;
+}) {
   if (segments.length === 0) return <p className="text-sm text-muted-foreground">{labels.empty.script}</p>;
   return (
     <ol className={FLAT_LIST}>

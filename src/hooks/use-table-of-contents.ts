@@ -1,8 +1,7 @@
-import { activeId, openSectionIds, type TocSection } from '@/lib/table-of-contents.pure';
+import { activeId, READING_LINE, readingLineMargin } from '@/lib/reading-line.pure';
+import { openSectionIds, type TocSection } from '@/lib/table-of-contents.pure';
 import { useEffect, useState } from 'react';
 
-/** The reading line, as a share of the viewport height from its top. */
-const READING_LINE = 0.35;
 /** How long the compact loading box holds after mount, so the table never visibly settles into place. */
 const REVEAL_AFTER_MS = 1000;
 const NOTHING_TOGGLED: ReadonlySet<string> = new Set();
@@ -21,7 +20,7 @@ export function useActiveId(order: readonly string[], targetAttribute: string): 
         }
         setActive((previous) => activeId(intersecting, order, previous));
       },
-      { rootMargin: `-${READING_LINE * 100}% 0px -${(1 - READING_LINE) * 100}% 0px` },
+      { rootMargin: readingLineMargin() },
     );
     document.querySelectorAll(`[${targetAttribute}]`).forEach((element) => observer.observe(element));
     return () => observer.disconnect();

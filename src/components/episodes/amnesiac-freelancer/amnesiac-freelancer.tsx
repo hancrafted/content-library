@@ -207,7 +207,7 @@ export const amnesiacFreelancer = {
     const t = await getTranslations({ locale, namespace: 'episodes.amnesiac-freelancer' });
     const sectionsT = await getTranslations({ locale, namespace: 'episodes.amnesiac-freelancer.sections' });
     const chrome = await getTranslations({ locale, namespace: 'contextDrawer' });
-    const ref = contextRefOf((number) => chrome('refNote', { number }));
+    const ref = contextRefOf(chrome('refNote'));
     return { title: t('title'), caption: t('caption'), sections: sections(sectionsT, ref) };
   },
 } satisfies Episode;

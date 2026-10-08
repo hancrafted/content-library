@@ -9,19 +9,23 @@ import {
 import { externalHref } from '@/lib/external-link.pure';
 import { ChevronRight, ExternalLink } from 'lucide-react';
 import Image from 'next/image';
-import type { ContextLabels } from './context-labels';
+import type { ContextDrawerLabels } from './context-drawer-input';
 import { FLAT_ITEM, FLAT_LIST } from './flat-list';
 
+/*
+ * A citation marker, the only superscript in the drawer: a small, tabular
+ * number in the body font. A button defaults to the system font, so `font:
+ * inherit` hands it the body's. The hit area grows by a pseudo-element, which
+ * takes no layout space; the ring shows on keyboard focus only.
+ */
+const CITATION =
+  "relative inline-block cursor-pointer rounded-sm px-px [font:inherit] text-foreground after:absolute after:-inset-1.5 after:content-[''] hover:bg-accent focus-visible:outline-2 print:cursor-auto print:hover:bg-transparent";
+
 /** A citation marker: a superscript button the drawer's delegated click turns into "open source n". Plain text in print. */
-function Citation({ number, labels }: { number: number; labels: ContextLabels }) {
+function Citation({ number, labels }: { number: number; labels: ContextDrawerLabels }) {
   return (
-    <sup className="mx-px">
-      <button
-        type="button"
-        {...{ [CITATION_ATTR]: number }}
-        aria-label={labels.citation(number)}
-        className="cursor-pointer rounded-sm px-0.5 text-[0.7rem] font-semibold text-foreground underline decoration-dotted underline-offset-2 hover:decoration-solid focus-visible:outline-2 print:cursor-auto print:no-underline"
-      >
+    <sup className="mx-px align-super text-[0.7em] leading-none tabular-nums">
+      <button type="button" {...{ [CITATION_ATTR]: number }} aria-label={labels.citation(number)} className={CITATION}>
         {number}
       </button>
     </sup>
@@ -29,7 +33,7 @@ function Citation({ number, labels }: { number: number; labels: ContextLabels })
 }
 
 /** The description with its `[n]` markers turned into citation buttons. */
-function Description({ text, labels }: { text: string; labels: ContextLabels }) {
+function Description({ text, labels }: { text: string; labels: ContextDrawerLabels }) {
   return (
     <p className="text-sm leading-relaxed text-muted-foreground">
       {splitCitations(text).map((part, at) =>
@@ -39,7 +43,7 @@ function Description({ text, labels }: { text: string; labels: ContextLabels }) 
   );
 }
 
-function Source({ source, number, labels }: { source: NoteSource; number: number; labels: ContextLabels }) {
+function Source({ source, number, labels }: { source: NoteSource; number: number; labels: ContextDrawerLabels }) {
   return (
     <li data-source={number} className="pl-1">
       <a
@@ -62,7 +66,7 @@ function Source({ source, number, labels }: { source: NoteSource; number: number
  * keeps the text in the HTML; the drawer opens them for print (FE-010 §2). The
  * numbered list is what a description's `[n]` markers point into.
  */
-function Sources({ sources, labels }: { sources: readonly NoteSource[]; labels: ContextLabels }) {
+function Sources({ sources, labels }: { sources: readonly NoteSource[]; labels: ContextDrawerLabels }) {
   return (
     <details className="group text-xs text-muted-foreground">
       <summary className="inline-flex cursor-pointer items-center gap-1 rounded-md py-1 font-medium select-none marker:content-none hover:text-foreground [&::-webkit-details-marker]:hidden">
@@ -81,15 +85,10 @@ function Sources({ sources, labels }: { sources: readonly NoteSource[]; labels: 
   );
 }
 
-function Note({ note, number, labels }: { note: SpeakerNoteItem; number: number; labels: ContextLabels }) {
+function Note({ note, labels }: { note: SpeakerNoteItem; labels: ContextDrawerLabels }) {
   return (
     <li {...{ [NOTE_TARGET_ATTR]: note.target }} data-note={note.slug} className={FLAT_ITEM}>
-      <h6 className="text-base leading-snug font-semibold text-pretty">
-        <span aria-hidden className="mr-2 text-sm font-normal text-muted-foreground tabular-nums">
-          {number}
-        </span>
-        {note.header}
-      </h6>
+      <h6 className="text-base leading-snug font-semibold text-pretty">{note.header}</h6>
       <Description text={note.description} labels={labels} />
       {note.image && (
         <Image
@@ -108,12 +107,12 @@ function Note({ note, number, labels }: { note: SpeakerNoteItem; number: number;
 }
 
 /** One Slide's Speaker notes, or the empty state. Server-rendered into the page (FE-010 §2). */
-export function SlideNotes({ notes, labels }: { notes: readonly SpeakerNoteItem[]; labels: ContextLabels }) {
+export function SlideNotes({ notes, labels }: { notes: readonly SpeakerNoteItem[]; labels: ContextDrawerLabels }) {
   if (notes.length === 0) return <p className="text-sm text-muted-foreground">{labels.empty.notes}</p>;
   return (
     <ol className={FLAT_LIST}>
-      {notes.map((note, at) => (
-        <Note key={note.slug} note={note} number={at + 1} labels={labels} />
+      {notes.map((note) => (
+        <Note key={note.slug} note={note} labels={labels} />
       ))}
     </ol>
   );

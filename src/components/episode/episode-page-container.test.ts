@@ -1,12 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { contextSlidesOf, tocSectionsOf, type EpisodeSection, type EpisodeSlide } from './episode-page-container.pure';
+import { tocSectionsOf, type EpisodeSection, type EpisodeSlide } from './episode-page-container.pure';
 
 function slide(slug: string, title: string, minutes: EpisodeSlide['minutes']): EpisodeSlide {
   return { slug, title, minutes, content: null };
 }
-
-const note = { slug: 'n', header: 'H', description: 'D', target: 'prose' };
-const segment = { slug: 's', from: 0, to: 1, title: 'T', keywords: [], script: 'S' };
 
 describe('success cases', () => {
   it('lists every Section with its page Slides, keyed by anchor, in page order', () => {
@@ -42,38 +39,6 @@ describe('success cases', () => {
     // ASSERT
     expect(minutes).toEqual(germanMinutes);
   });
-  it('lists every section slide and page Slide in page order, with notes and script and full target ids', () => {
-    // ARRANGE
-    const sections: EpisodeSection[] = [
-      {
-        ...slide('foundations', 'Foundations', { en: 1, de: 1 }),
-        notes: [{ ...note, target: 'title' }],
-        slides: [{ ...slide('why', 'Why', { en: 3, de: 4 }), notes: [note], voiceScript: [segment] }],
-      },
-    ];
-    const expected = [
-      { anchor: 'foundations', title: 'Foundations', notes: [{ ...note, target: 'foundations--title' }], segments: [] },
-      {
-        anchor: 'foundations--why',
-        title: 'Why',
-        notes: [{ ...note, target: 'foundations--why--prose' }],
-        segments: [segment],
-      },
-    ];
-    // ACT
-    const context = contextSlidesOf(sections);
-    // ASSERT
-    expect(context).toEqual(expected);
-  });
-  it('gives a Slide without notes empty lists', () => {
-    // ARRANGE
-    const sections: EpisodeSection[] = [{ ...slide('a', 'A', { en: 1, de: 1 }), slides: [] }];
-    const expected = [{ anchor: 'a', title: 'A', notes: [], segments: [] }];
-    // ACT
-    const context = contextSlidesOf(sections);
-    // ASSERT
-    expect(context).toEqual(expected);
-  });
 });
 
 describe('failure cases', () => {
@@ -91,15 +56,6 @@ describe('failure cases', () => {
     // ASSERT
     expect(derive).toThrow(duplicate);
   });
-  it('rejects a Slide whose notes share a slug', () => {
-    // ARRANGE
-    const sections: EpisodeSection[] = [{ ...slide('a', 'A', { en: 1, de: 1 }), notes: [note, note], slides: [] }];
-    const duplicate = '"n"';
-    // ACT
-    const derive = () => contextSlidesOf(sections);
-    // ASSERT
-    expect(derive).toThrow(duplicate);
-  });
 });
 
 describe('edge cases', () => {
@@ -110,13 +66,5 @@ describe('edge cases', () => {
     const toc = tocSectionsOf(sections, 'en');
     // ASSERT
     expect(toc).toEqual([]);
-  });
-  it('derives nothing for an Episode with no Sections', () => {
-    // ARRANGE
-    const sections: EpisodeSection[] = [];
-    // ACT
-    const context = contextSlidesOf(sections);
-    // ASSERT
-    expect(context).toEqual([]);
   });
 });

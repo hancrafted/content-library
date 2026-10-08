@@ -48,9 +48,30 @@ module.exports = {
       comment:
         'The Context drawer is reached only through EpisodePageContainer, which derives its entries from the same anchors the slides carry; no other module imports it (FE-010 §5).',
       from: {
-        pathNot: ['^src/components/episode/episode-page-container\\.tsx$', '^src/components/context-drawer/'],
+        pathNot: [
+          '^src/components/episode/(episode-page-container\\.tsx|context-drawer-input(\\.pure)?\\.ts)$',
+          '^src/components/context-drawer/',
+        ],
       },
       to: { path: '^src/components/context-drawer/' },
+    },
+    {
+      name: 'context-drawer-takes-input-only',
+      severity: 'error',
+      comment:
+        'The Context drawer knows nothing of Episodes: it renders from one ContextDrawerInput and observes the ids it is given. Its components, hooks and lib files MUST NOT import Episode, table-of-contents, route or next-intl code (FE-010 §8). The one adapter that builds the input lives under src/components/episode/.',
+      from: {
+        path: '^src/(components/context-drawer/|hooks/use-(context-|reading-line)|lib/(context-drawer|reading-line)\\.pure\\.ts$)',
+        pathNot: '\\.test\\.tsx?$',
+      },
+      to: {
+        path: [
+          '^src/components/(episode|episodes|table-of-contents)/',
+          '^src/hooks/use-table-of-contents',
+          '^src/lib/(episode|routes|table-of-contents)',
+          '(^|/)node_modules/next-intl/',
+        ],
+      },
     },
     {
       name: 'episodes-reach-only-slide-parts',

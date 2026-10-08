@@ -57,12 +57,12 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 ### 4. Targets
 
 1. A layout given `anchor` MUST emit ids `<slide anchor>--<element>`; a `target` MUST resolve to one id in its Slide.
-2. A `ContextRef` wraps a phrase, shows no number, emits its note's id, is a `<button type="button">`, no `href`.
+2. A `ContextRef` wraps a phrase, shows no number, emits its note's id, is a `<button type="button">`.
 
 ### 5. Interaction
 
 1. `Alt+N` toggles, Escape closes; focus enters on open, returns on close.
-2. The drawer MUST be a `*.client.tsx` leaf in `src/components/context-drawer/`, reached only from `EpisodePageContainer`.
+2. The drawer MUST be a `*.client.tsx` leaf in `src/components/context-drawer/`, reached only from `EpisodePageContainer` and its adapter.
 
 ### 6. Strings and links
 
@@ -76,7 +76,7 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 ### 8. Input only
 
 1. The drawer MUST render from one `ContextDrawerInput` (items with `id`, notes, script; labels) and MUST NOT import Episode, route, table-of-contents or `next-intl` code.
-2. It MUST observe the item ids it is given at the shared reading line; a `ContextRef` finds its note by target id, never via `data-slide`.
+2. It MUST observe its items' ids at the shared reading line; a `ContextRef` finds its note by target id, not `data-slide`.
 
 ## Do's and Don'ts
 

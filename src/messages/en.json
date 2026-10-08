@@ -654,7 +654,7 @@
       "side": "Side by side",
       "overlay": "Overlay"
     },
-    "refNote": "Speaker note {number}",
+    "refNote": "opens speaker note",
     "citation": "Source {number}"
   }
 }

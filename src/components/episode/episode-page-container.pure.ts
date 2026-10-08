@@ -1,13 +1,8 @@
 import type { Locale } from '@/lib/locale.pure';
 import type { EpisodeSlug } from '@/lib/routes';
 import type { ReactNode } from 'react';
-import {
-  checkContext,
-  type ContextSlide,
-  type SpeakerNoteItem,
-  type VoiceScriptSegment,
-} from '../../lib/context-drawer.pure';
-import { episodeAnchors, sectionAnchor, slideAnchor, targetAnchor } from '../../lib/episode.pure';
+import type { SpeakerNoteItem, VoiceScriptSegment } from '../../lib/context-drawer.pure';
+import { episodeAnchors, sectionAnchor, slideAnchor } from '../../lib/episode.pure';
 import type { TocSection } from '../../lib/table-of-contents.pure';
 
 /*
@@ -69,29 +64,4 @@ export function tocSectionsOf(sections: readonly EpisodeSection[], locale: Local
       minutes: slide.minutes[locale],
     })),
   }));
-}
-
-function contextOf(anchor: string, slide: EpisodeSlide): ContextSlide {
-  const notes = slide.notes ?? [];
-  const segments = slide.voiceScript ?? [];
-  checkContext(anchor, notes, segments);
-  return {
-    anchor,
-    title: slide.title,
-    notes: notes.map((note) => ({ ...note, target: targetAnchor(anchor, note.target) })),
-    segments,
-  };
-}
-
-/**
- * What the Context drawer shows, one entry per section slide and page Slide in
- * page order (the order the table of contents lists). Each note's `target` is
- * resolved to the full id its Slide's markup carries. Throws on a malformed
- * Slide, so a broken Episode fails `next dev` and the static build alike.
- */
-export function contextSlidesOf(sections: readonly EpisodeSection[]): ContextSlide[] {
-  return sections.flatMap((section) => [
-    contextOf(sectionAnchor(section.slug), section),
-    ...section.slides.map((slide) => contextOf(slideAnchor(section.slug, slide.slug), slide)),
-  ]);
 }

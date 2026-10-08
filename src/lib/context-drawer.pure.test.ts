@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
-  checkContext,
-  currentSlideAnchor,
+  currentItemId,
   DEFAULT_DRAWER_MODE,
   DRAWER_MODES,
   DRAWER_PANEL_ID,
@@ -11,36 +10,16 @@ import {
   formatMark,
   matchesShortcut,
   menuItemAfter,
-  noteNumber,
   reservesSpace,
   sourceDomain,
   splitCitations,
   tabAfter,
-  titleOfSlide,
+  titleOfItem,
   type KeyEventLike,
-  type SpeakerNoteItem,
-  type VoiceScriptSegment,
 } from './context-drawer.pure';
 
 function key(overrides: Partial<KeyEventLike>): KeyEventLike {
   return { code: 'KeyN', altKey: true, ctrlKey: false, metaKey: false, shiftKey: false, repeat: false, ...overrides };
-}
-
-function note(
-  slug: string,
-  target = 'prose',
-  cited?: { description?: string; sources?: SpeakerNoteItem['sources'] },
-): SpeakerNoteItem {
-  const { description = 'd', sources } = cited ?? {};
-  return { slug, header: 'h', description, target, ...(sources && { sources }) };
-}
-
-function source(slug: string, url = 'https://example.com/a') {
-  return { slug, url, title: slug };
-}
-
-function segment(slug: string, from = 0, to = 1): VoiceScriptSegment {
-  return { slug, from, to, title: 't', keywords: [], script: 's' };
 }
 
 describe('success cases', () => {
@@ -89,11 +68,7 @@ describe('success cases', () => {
     const anchors = ['a', 'b--c'];
     const expected = ['b--c', 'a', 'a'];
     // ACT
-    const picked = [
-      currentSlideAnchor('b--c', anchors),
-      currentSlideAnchor(null, anchors),
-      currentSlideAnchor('unknown', anchors),
-    ];
+    const picked = [currentItemId('b--c', anchors), currentItemId(null, anchors), currentItemId('unknown', anchors)];
     // ASSERT
     expect(picked).toEqual(expected);
   });
@@ -105,16 +80,6 @@ describe('success cases', () => {
     const marks = [0, 0.75, 1.75, 12.5].map(formatMark);
     // ASSERT
     expect(marks).toEqual(expected);
-  });
-
-  it('accepts a Slide with distinct notes and segments', () => {
-    // ARRANGE
-    const notes = [note('one'), note('two', 'caption')];
-    const segments = [segment('a', 0, 1), segment('b', 1, 2)];
-    // ACT
-    const check = () => checkContext('foundations--why', notes, segments);
-    // ASSERT
-    expect(check).not.toThrow();
   });
 
   it('derives a distinct tab id and panel id for every tab from DRAWER_TABS', () => {
@@ -181,12 +146,12 @@ describe('success cases', () => {
   it('titles the drawer with the title of the current Slide', () => {
     // ARRANGE
     const slides = [
-      { anchor: 'a', title: 'First' },
-      { anchor: 'b--c', title: 'Second' },
+      { id: 'a', title: 'First' },
+      { id: 'b--c', title: 'Second' },
     ];
     const expected = 'Second';
     // ACT
-    const title = titleOfSlide('b--c', slides, 'fallback');
+    const title = titleOfItem('b--c', slides, 'fallback');
     // ASSERT
     expect(title).toBe(expected);
   });
@@ -209,31 +174,6 @@ describe('success cases', () => {
     const domains = urls.map(sourceDomain);
     // ASSERT
     expect(domains).toEqual(expected);
-  });
-
-  it('numbers a note by its position, from one', () => {
-    // ARRANGE
-    const notes = [note('a'), note('b')];
-    const expected = 2;
-    // ACT
-    const number = noteNumber(notes, 'b');
-    // ASSERT
-    expect(number).toBe(expected);
-  });
-
-  it('accepts markers that each name a source of their note', () => {
-    // ARRANGE
-    const notes = [
-      note('a', 'prose', {
-        description: 'One [1] and two [2], again [1].',
-        sources: [source('x'), source('y', 'https://example.com/b')],
-      }),
-    ];
-    const check = () => checkContext('s', notes, []);
-    // ACT
-    const result = check();
-    // ASSERT
-    expect(result).toBeUndefined();
   });
 });
 
@@ -262,49 +202,6 @@ describe('failure cases', () => {
     expect(target).toBeNull();
   });
 
-  it('rejects two notes, or two segments, sharing a slug', () => {
-    // ARRANGE
-    const dupNoteSlug = '"x"';
-    const dupSegmentSlug = '"y"';
-    const dupNote = () => checkContext('s', [note('x'), note('x')], []);
-    const dupSegment = () => checkContext('s', [], [segment('y'), segment('y', 1, 2)]);
-    // ACT
-    const messages = [dupNote, dupSegment].map((run) => {
-      try {
-        run();
-        return '';
-      } catch (error) {
-        return (error as Error).message;
-      }
-    });
-    // ASSERT
-    expect(messages[0]).toContain(dupNoteSlug);
-    expect(messages[1]).toContain(dupSegmentSlug);
-  });
-
-  it('rejects a target or slug that is not kebab-case', () => {
-    // ARRANGE
-    const badTargetName = 'Not Kebab';
-    const badSlugName = 'Bad Slug';
-    const badTarget = () => checkContext('s', [note('x', badTargetName)], []);
-    const badSlug = () => checkContext('s', [], [segment(badSlugName)]);
-    // ACT
-    const attempts = [badTarget, badSlug];
-    // ASSERT
-    expect(attempts[0]).toThrow(badTargetName);
-    expect(attempts[1]).toThrow(badSlugName);
-  });
-
-  it('rejects a segment that ends before it starts', () => {
-    // ARRANGE
-    const segmentSlug = '"x"';
-    const backwards = () => checkContext('s', [], [segment('x', 2, 1)]);
-    // ACT
-    const attempt = backwards;
-    // ASSERT
-    expect(attempt).toThrow(segmentSlug);
-  });
-
   it('returns no menu item for a key that is not a menu key, horizontal arrows included', () => {
     // ARRANGE
     const items = ['side', 'overlay'];
@@ -316,53 +213,12 @@ describe('failure cases', () => {
 
   it('falls back to the given title when the current Slide is unknown', () => {
     // ARRANGE
-    const slides = [{ anchor: 'a', title: 'First' }];
+    const slides = [{ id: 'a', title: 'First' }];
     const fallback = 'Context';
     // ACT
-    const title = titleOfSlide('missing', slides, fallback);
+    const title = titleOfItem('missing', slides, fallback);
     // ASSERT
     expect(title).toBe(fallback);
-  });
-
-  it('rejects a citation marker that names no source', () => {
-    // ARRANGE
-    const marker = '[2]';
-    const notes = [note('a', 'prose', { description: `Only one source ${marker}.`, sources: [source('x')] })];
-    const check = () => checkContext('s', notes, []);
-    // ACT
-    const run = () => check();
-    // ASSERT
-    expect(run).toThrow(marker);
-  });
-
-  it('rejects a citation marker on a note with no sources', () => {
-    // ARRANGE
-    const marker = '[1]';
-    const check = () => checkContext('s', [note('a', 'prose', { description: `Cited ${marker}.` })], []);
-    // ACT
-    const run = () => check();
-    // ASSERT
-    expect(run).toThrow(marker);
-  });
-
-  it('rejects two sources of one note sharing a slug', () => {
-    // ARRANGE
-    const dup = '"x"';
-    const check = () => checkContext('s', [note('a', 'prose', { sources: [source('x'), source('x')] })], []);
-    // ACT
-    const run = () => check();
-    // ASSERT
-    expect(run).toThrow(dup);
-  });
-
-  it('throws when a context reference names a note the Slide does not have', () => {
-    // ARRANGE
-    const missing = '"nope"';
-    const run = () => noteNumber([note('a')], 'nope');
-    // ACT
-    const result = run;
-    // ASSERT
-    expect(result).toThrow(missing);
   });
 });
 
@@ -390,25 +246,16 @@ describe('edge cases', () => {
     // ARRANGE
     const anchors: string[] = [];
     // ACT
-    const picked = currentSlideAnchor('a', anchors);
+    const picked = currentItemId('a', anchors);
     // ASSERT
     expect(picked).toBeNull();
-  });
-
-  it('accepts a Slide with no notes and no script', () => {
-    // ARRANGE
-    const check = () => checkContext('s', [], []);
-    // ACT
-    const result = check();
-    // ASSERT
-    expect(result).toBeUndefined();
   });
 
   it('falls back to the given title when no Slide is current', () => {
     // ARRANGE
     const fallback = 'Context';
     // ACT
-    const title = titleOfSlide(null, [], fallback);
+    const title = titleOfItem(null, [], fallback);
     // ASSERT
     expect(title).toBe(fallback);
   });

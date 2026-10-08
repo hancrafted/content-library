@@ -3,11 +3,12 @@
 import { useContextDrawer } from '@/hooks/use-context-drawer';
 import { revealCitation } from '@/hooks/use-context-links';
 import {
+  CONTEXT_ITEM_ATTR,
   DRAWER_PANEL_ID,
   DRAWER_TABS,
   drawerIds,
   reservesSpace,
-  titleOfSlide,
+  titleOfItem,
   type DrawerTab,
 } from '@/lib/context-drawer.pure';
 import { cn } from '@/lib/utils';
@@ -60,8 +61,8 @@ function Entries({
 }) {
   return entries.map((entry) => (
     // The Tailwind `hidden` class, not the attribute: print overrides a class (FE-010 §2).
-    <div key={entry.anchor} data-context-for={entry.anchor} className={cn(entry.anchor !== current && 'hidden')}>
-      {/* The head names the current Slide on screen; print has no head, so each entry names itself. */}
+    <div key={entry.id} {...{ [CONTEXT_ITEM_ATTR]: entry.id }} className={cn(entry.id !== current && 'hidden')}>
+      {/* The head names the current item on screen; print has no head, so each entry names itself. */}
       <h5 className="mb-2 hidden text-sm font-medium text-muted-foreground print:block">{entry.title}</h5>
       {entry[kind]}
     </div>
@@ -83,7 +84,7 @@ function Panel(props: { tab: DrawerTab; selected: DrawerTab; heading: string; ch
   );
 }
 
-/** Sticky. Row one: tabs left, layout menu and close right. Row two: the Slide's title, free to wrap without moving the tabs. */
+/** Sticky. Row one: tabs left, layout menu and close right. Row two: the current item's title, free to wrap without moving the tabs. */
 function PanelHead(props: { labels: DrawerLabels; drawer: Drawer; title: string }) {
   const { labels, drawer } = props;
   const tabs = DRAWER_TABS.map((id) => ({ id, label: labels.tabs[id] }));
@@ -114,7 +115,7 @@ function PanelHead(props: { labels: DrawerLabels; drawer: Drawer; title: string 
   );
 }
 
-/** The one scroll container; it returns to the top when the Slide or tab changes. */
+/** The one scroll container; it returns to the top when the item or tab changes. */
 function PanelBody(props: { labels: DrawerLabels; drawer: Drawer; entries: readonly ContextEntry[] }) {
   const { labels, drawer, entries } = props;
   const body = useRef<HTMLDivElement>(null);
@@ -141,7 +142,7 @@ function Card(props: { labels: DrawerLabels; drawer: Drawer; entries: readonly C
       aria-label={labels.title}
       className={cn(CARD, drawer.open ? OPENING : CLOSED)}
     >
-      <PanelHead labels={labels} drawer={drawer} title={titleOfSlide(drawer.current, entries, labels.title)} />
+      <PanelHead labels={labels} drawer={drawer} title={titleOfItem(drawer.current, entries, labels.title)} />
       <PanelBody labels={labels} drawer={drawer} entries={entries} />
     </div>
   );
@@ -179,18 +180,14 @@ function Scrim({ open, onClose }: { open: boolean; onClose: () => void }) {
  * The Context drawer (FE-010 §7): a floating card on the right. From `xl` it
  * sits beside the Slides (the grid's third column opens at once, through the
  * spacer) or over them; below `xl` it is always an overlay, under a dimmed
- * scrim below `md`. It holds every Slide's server-rendered notes and script in the DOM and
+ * scrim below `md`. It holds every item's server-rendered notes and script in the DOM and
  * only decides which are visible. Closed it is `invisible` and off-screen, so
  * print and find-in-page still reach the text.
  */
-export function ContextDrawer(props: {
-  labels: DrawerLabels;
-  entries: readonly ContextEntry[];
-  targetAttribute: string;
-}) {
+export function ContextDrawer(props: { labels: DrawerLabels; entries: readonly ContextEntry[] }) {
   const { labels, entries } = props;
-  const anchors = useMemo(() => entries.map((entry) => entry.anchor), [entries]);
-  const drawer = useContextDrawer(anchors, props.targetAttribute);
+  const ids = useMemo(() => entries.map((entry) => entry.id), [entries]);
+  const drawer = useContextDrawer(ids);
   return (
     <>
       <DrawerTrigger

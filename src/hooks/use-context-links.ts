@@ -1,6 +1,7 @@
 import {
   CITATION_ATTR,
   CONTEXT_ACTIVE_ATTR,
+  CONTEXT_ITEM_ATTR,
   CONTEXT_REF_ATTR,
   NOTE_TARGET_ATTR,
   PINNED_ATTR,
@@ -14,7 +15,12 @@ export function noteOfRef(refId: string): HTMLElement | null {
   return document.querySelector<HTMLElement>(`${NOTE}[${NOTE_TARGET_ATTR}="${CSS.escape(refId)}"]`);
 }
 
-/** The Slide element a note explains: its `target` is that element's full id. */
+/** The id of the drawer item holding the note a context reference's wrapper id names. */
+export function itemOfNote(refId: string): string | null {
+  return noteOfRef(refId)?.closest(`[${CONTEXT_ITEM_ATTR}]`)?.getAttribute(CONTEXT_ITEM_ATTR) ?? null;
+}
+
+/** The page element a note explains: its `target` is that element's full id. */
 function targetOfNote(note: Element): HTMLElement | null {
   return document.getElementById(note.getAttribute(NOTE_TARGET_ATTR) ?? '');
 }
@@ -33,21 +39,18 @@ function refButton(from: EventTarget | null): Element | null {
   return from instanceof Element ? from.closest(`[${CONTEXT_REF_ATTR}]`) : null;
 }
 
-/** A context reference's click target: its note's id (the wrapper's id), and the Slide that holds it. */
-function refOf(from: EventTarget | null): { id: string; slide: string } | null {
-  const button = refButton(from);
-  const id = button?.parentElement?.id;
-  const slide = button?.closest('[data-slide]')?.getAttribute('data-slide');
-  return id && slide ? { id, slide } : null;
+/** A context reference's click target: the wrapper's id, which is also its note's `target`. */
+function refOf(from: EventTarget | null): string | null {
+  return refButton(from)?.parentElement?.id || null;
 }
 
 /**
- * Hovering or focusing a note lights up the Slide element it explains, and a
+ * Hovering or focusing a note lights up the page element it explains, and a
  * context reference lights up its note, by `data-context-active` (CSS draws it
  * without shifting layout). Clicking a context reference calls `reveal`.
  * Delegated from `document`, so the Slides stay server components (FE-006).
  */
-export function useContextLinks(reveal: (note: { id: string; slide: string }) => void) {
+export function useContextLinks(reveal: (noteId: string) => void) {
   useEffect(() => {
     const set = (on: boolean) => (event: Event) => {
       const other = counterpart(event.target);
@@ -57,8 +60,8 @@ export function useContextLinks(reveal: (note: { id: string; slide: string }) =>
     };
     const [over, out] = [set(true), set(false)];
     const click = (event: MouseEvent) => {
-      const ref = refOf(event.target);
-      if (ref) reveal(ref);
+      const id = refOf(event.target);
+      if (id) reveal(id);
     };
     document.addEventListener('pointerover', over);
     document.addEventListener('pointerout', out);

@@ -1,5 +1,5 @@
 /**
- * Pure logic behind the table of contents: which entry is active, which
+ * Pure logic behind the table of contents: which
  * sections are open, how much reading time is left. No DOM, no React.
  */
 
@@ -14,20 +14,6 @@ export interface TocItem {
 /** A section heading with the items it collapses over; `items` may be empty. */
 export interface TocSection extends TocItem {
   items: readonly TocItem[];
-}
-
-/**
- * The entry crossing the reading line, earliest in page order when several
- * do. While the line sits in a gap between entries, the previous one stays
- * active; before anything has crossed it, the first entry is.
- */
-export function activeId(
-  intersecting: ReadonlySet<string>,
-  order: readonly string[],
-  previous: string | null,
-): string | null {
-  const crossing = order.find((id) => intersecting.has(id));
-  return crossing ?? previous ?? order[0] ?? null;
 }
 
 /** The id of the section that is the active entry or holds it. */

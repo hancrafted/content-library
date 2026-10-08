@@ -1,5 +1,3 @@
-import { checkedSlug } from './episode.pure';
-
 /*
  * The Context drawer's content shapes and pure logic (FE-010). The shapes are
  * content, never design: no field carries layout, style, placement or markup.
@@ -21,7 +19,7 @@ export interface SpeakerNoteItem {
   /** Further reading, numbered in this order: `[n]` in `description` cites source n. */
   readonly sources?: readonly NoteSource[];
   readonly image?: { readonly src: string; readonly alt: string };
-  /** Short element name; the full id is `targetAnchor(slideAnchor, target)`. */
+  /** On an Episode record, a short element name; in a drawer item, the element's full DOM id. */
   readonly target: string;
 }
 
@@ -36,15 +34,6 @@ export interface VoiceScriptSegment {
   readonly script: string;
   /** How this segment closes and hands to the next Section. */
   readonly bridge?: string;
-}
-
-/** Everything the drawer shows for one Slide; each note's `target` is the full element id. */
-export interface ContextSlide {
-  readonly anchor: string;
-  /** The Slide's plain title, to label its entry. */
-  readonly title: string;
-  readonly notes: readonly SpeakerNoteItem[];
-  readonly segments: readonly VoiceScriptSegment[];
 }
 
 /** The slice of a `KeyboardEvent` the drawer reads. */
@@ -108,19 +97,19 @@ export function menuItemAfter(key: string, current: string, items: readonly stri
   return items[(step[key] + items.length) % items.length];
 }
 
-/** The drawer's heading: the current Slide's title, or the fallback while none is current. */
-export function titleOfSlide(
-  anchor: string | null,
-  slides: readonly { readonly anchor: string; readonly title: string }[],
+/** The drawer's heading: the current item's title, or the fallback while none is current. */
+export function titleOfItem(
+  id: string | null,
+  items: readonly { readonly id: string; readonly title: string }[],
   fallback: string,
 ): string {
-  return slides.find((slide) => slide.anchor === anchor)?.title ?? fallback;
+  return items.find((item) => item.id === id)?.title ?? fallback;
 }
 
-/** The Slide to show: the active one if it has context, else the first; none when empty. */
-export function currentSlideAnchor(active: string | null, anchors: readonly string[]): string | null {
-  if (active !== null && anchors.includes(active)) return active;
-  return anchors[0] ?? null;
+/** The item to show: the observed one if the drawer holds it, else the first; none when empty. */
+export function currentItemId(observed: string | null, ids: readonly string[]): string | null {
+  if (observed !== null && ids.includes(observed)) return observed;
+  return ids[0] ?? null;
 }
 
 /** Minutes as `m:ss`, e.g. 0.75 gives `0:45`. */
@@ -152,63 +141,11 @@ export function sourceDomain(url: string): string {
   return new URL(url).hostname.replace(/^www\./, '');
 }
 
-/** A note's 1-based number on its Slide, the superscript a context reference shows. */
-export function noteNumber(notes: readonly { readonly slug: string }[], slug: string): number {
-  const at = notes.findIndex((note) => note.slug === slug);
-  if (at < 0) throw new Error(`No note "${slug}" on this Slide: a context reference must name one of its notes.`);
-  return at + 1;
-}
-
-/** Data attributes the Slide's context references and the drawer's notes share, so the two cannot drift. */
+/** Data attributes the page's context references and the drawer's notes share, so the two cannot drift. */
 export const CONTEXT_REF_ATTR = 'data-context-ref';
+/** Tags each item's entry in the slot; its value is the item's `id`. */
+export const CONTEXT_ITEM_ATTR = 'data-context-for';
 export const CONTEXT_ACTIVE_ATTR = 'data-context-active';
 export const NOTE_TARGET_ATTR = 'data-note-target';
 export const CITATION_ATTR = 'data-citation';
 export const PINNED_ATTR = 'data-context-pinned';
-
-function assertUniqueSlugs(kind: string, slide: string, slugs: readonly string[]): void {
-  const seen = new Set<string>();
-  for (const slug of slugs) {
-    checkedSlug(slug);
-    if (seen.has(slug)) throw new Error(`Duplicate ${kind} slug "${slug}" on "${slide}": slugs must be unique.`);
-    seen.add(slug);
-  }
-}
-
-function checkCitations(slide: string, note: SpeakerNoteItem): void {
-  const sources = note.sources ?? [];
-  assertUniqueSlugs(
-    'source',
-    `${slide}/${note.slug}`,
-    sources.map((source) => source.slug),
-  );
-  for (const part of splitCitations(note.description)) {
-    if (typeof part === 'string' || part.cite <= sources.length) continue;
-    throw new Error(
-      `Note "${note.slug}" on "${slide}" cites [${part.cite}] but has ${sources.length} source(s): a marker must name one.`,
-    );
-  }
-}
-
-/** Throws on a malformed Slide context, so a broken Episode fails `next dev` and the static build. */
-export function checkContext(
-  slide: string,
-  notes: readonly SpeakerNoteItem[],
-  segments: readonly VoiceScriptSegment[],
-): void {
-  assertUniqueSlugs(
-    'note',
-    slide,
-    notes.map((n) => n.slug),
-  );
-  assertUniqueSlugs(
-    'segment',
-    slide,
-    segments.map((s) => s.slug),
-  );
-  notes.forEach((n) => checkedSlug(n.target));
-  notes.forEach((n) => checkCitations(slide, n));
-  for (const { slug, from, to } of segments) {
-    if (to < from) throw new Error(`Segment "${slug}" on "${slide}" ends (${to}) before it starts (${from}).`);
-  }
-}
