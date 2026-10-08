@@ -37,6 +37,8 @@ const SPINE_HEADINGS = [
 // `globalThis.history.*`, which `object: 'history'` does not match.
 const URL_STATE_FILE = 'src/lib/url-state.ts';
 const SLIDE_OBSERVER_FILE = 'src/components/episode/slide-observer.client.tsx';
+/** FE-009 §5.1: the one-shot reveal hook, the only other file allowed an IntersectionObserver. */
+const REVEAL_OBSERVER_FILE = 'src/hooks/use-revealed-on-view.ts';
 const HISTORY_WRITE = {
   selector:
     "CallExpression > MemberExpression[object.property.name='history'][property.name=/^(pushState|replaceState)$/]",
@@ -162,6 +164,10 @@ export default tseslint.config(
   {
     files: [SLIDE_OBSERVER_FILE],
     rules: { 'no-restricted-syntax': ['error', CLIENT_DIRECTIVE_MISSING, HISTORY_WRITE] },
+  },
+  {
+    files: [REVEAL_OBSERVER_FILE],
+    rules: { 'no-restricted-syntax': ['error', NO_USE_CLIENT, HISTORY_WRITE] },
   },
   {
     files: ['**/*.test.ts'],

@@ -5,9 +5,9 @@ title: 'Slide Frame'
 domain: frontend
 rules: false
 # prettier-ignore
-files: ['src/components/episode/**', 'src/components/episodes/**', 'src/hooks/use-slide-zone*', 'src/lib/slide-zone.pure*', 'src/lib/reading-line.pure*', 'src/app/globals.css', 'eslint.config.mjs', '.dependency-cruiser.cjs', 'tests/post-build/episode-structure.build.test.ts']
+files: ['src/components/episode/**', 'src/components/episodes/**', 'src/hooks/use-slide-zone*', 'src/hooks/use-revealed-on-view.ts', 'src/lib/slide-zone.pure*', 'src/lib/reading-line.pure*', 'src/app/globals.css', 'eslint.config.mjs', '.dependency-cruiser.cjs', 'tests/post-build/episode-structure.build.test.ts']
 # prettier-ignore
-paths: ['src/components/episode/**', 'src/components/episodes/**', 'src/hooks/use-slide-zone*', 'src/lib/slide-zone.pure*', 'src/lib/reading-line.pure*', 'src/app/globals.css', 'eslint.config.mjs', '.dependency-cruiser.cjs', 'tests/post-build/episode-structure.build.test.ts']
+paths: ['src/components/episode/**', 'src/components/episodes/**', 'src/hooks/use-slide-zone*', 'src/hooks/use-revealed-on-view.ts', 'src/lib/slide-zone.pure*', 'src/lib/reading-line.pure*', 'src/app/globals.css', 'eslint.config.mjs', '.dependency-cruiser.cjs', 'tests/post-build/episode-structure.build.test.ts']
 description: 'Wrapper owns mechanics, canvas owns creativity: a single-column Content area, a server Slide wrapper that never clips, a client SlideMount that drops far content, one observer with two thresholds, and a pause duty for looping animation.'
 ---
 
@@ -59,7 +59,7 @@ An Episode stacks many Slides, some heavy (charts, looping demos). Navigation ne
 
 ### 5. One observer
 
-1. One Slide observer component per Episode page (two instances, one per threshold) MUST be the only code under `src/` creating an `IntersectionObserver`; the Title slide's id (`top`) leads its ids.
+1. One Slide observer component per Episode page (two instances, one per threshold) MUST be the only code under `src/` creating an `IntersectionObserver` but the reveal hook; the Title slide's id (`top`) leads its ids.
 2. Its reading-line threshold decides `active` and MUST call the page service's `reportReading(id)` (FE-001 §2); its approach threshold decides `near` and touches nothing else.
 3. It MUST write zones to one zone store provided at page level, so a new Episode starts fresh.
 
@@ -81,7 +81,7 @@ An Episode stacks many Slides, some heavy (charts, looping demos). Navigation ne
 
 1. **DON'T** use a Slide heading as an anchor or observer target. (Decision 1)
 2. **DON'T** clip a wrapper or give it an inner scrollbar. (Decision 3)
-3. **DON'T** create an `IntersectionObserver` outside the Slide observer. (Decision 5)
+3. **DON'T** create an `IntersectionObserver` outside the Slide observer and the one-shot reveal hook, or use the reveal hook (`src/hooks/use-revealed-on-view.ts`) inside an Episode. (Decision 5)
 4. **DON'T** flatten the Content area to flow layout. (Decision 2)
 5. **DON'T** let a looping animation run in `near` or `far`. (Decision 6)
 6. **DON'T** add a rule that reaches inside the Canvas. (Decision 1)
@@ -113,11 +113,13 @@ An Episode stacks many Slides, some heavy (charts, looping demos). Navigation ne
 **Enforcers, earliest first:**
 
 1. **Fast** (`npm run verify`): zone derivation tests beside `src/lib/slide-zone.pure.ts`; wrapper and mount contract tests under `src/components/episode/`.
-2. **Lint** (`eslint.config.mjs`, [#13](https://github.com/hancrafted/content-library/issues/13)): `no-restricted-syntax` on `new IntersectionObserver` outside the Slide observer; baseline in FE-001.
+2. **Lint** (`eslint.config.mjs`, [#13](https://github.com/hancrafted/content-library/issues/13)): `no-restricted-syntax` on `new IntersectionObserver` outside the Slide observer and the reveal hook, each exempted by its own `files:` block; baseline in FE-001.
 3. **Boundary** (`.dependency-cruiser.cjs`, FE-006): `SlideMount` and the observer are client leaves reached from the container.
 4. **Post-build** (`npm run test:build`): `tests/post-build/episode-structure.build.test.ts` checks the Content area grid, the portal root, wrappers as grid children and anchors in the static HTML.
 
-**Manual review duties:** looping islands pause outside `active` (§6); no `overflow` on wrappers; the Canvas stays ungoverned. **Browser verification:** far content absent with no scroll-height jump; a looping demo pauses and resumes.
+**Amended exception (§5.1):** `src/hooks/use-revealed-on-view.ts` is the reveal hook. It observes once to stagger in the landing page's About cards and start their count-up, then disconnects. It reports to no page service and writes no zone, so it cannot compete with the Slide observer for `active`.
+
+**Manual review duties:** looping islands pause outside `active` (§6); the reveal hook is not imported under an Episode (§5.1); no `overflow` on wrappers; the Canvas stays ungoverned. **Browser verification:** far content absent with no scroll-height jump; a looping demo pauses and resumes.
 
 **Exceptions:** raise a separate ADR; human approval required.
 
