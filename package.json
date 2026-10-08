@@ -1,0 +1,31 @@
+{
+  "name": "content-library",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "knip": "knip",
+    "prepare": "husky",
+    "verify": "archgate check && eslint . && prettier --check . && tsc --noEmit && vitest run && knip && mh check",
+    "verify:commit": "lint-staged && archgate check && tsc --noEmit && vitest run"
+  },
+  "devDependencies": {
+    "@eslint/js": "~10.0.1",
+    "@hancrafted/markdown-harness": "~0.0.6",
+    "@vitest/coverage-v8": "~5.0.3",
+    "archgate": "~0.55.0",
+    "eslint": "~10.12.0",
+    "eslint-config-prettier": "~10.1.8",
+    "husky": "~9.1.7",
+    "knip": "~6.40.0",
+    "lint-staged": "~17.6.0",
+    "prettier": "~3.9.9",
+    "prettier-plugin-organize-imports": "~4.3.0",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "~8.71.1",
+    "vitest": "~5.0.3"
+  }
+}

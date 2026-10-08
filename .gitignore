@@ -1,0 +1,9 @@
+node_modules/
+.env
+coverage/
+.worktrees
+.vitest/
+.claude/settings.local.json
+
+# markdown-harness's activity log: local evidence that the freshness hook ran.
+docs/markdown-harness/activity.csv

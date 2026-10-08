@@ -1,0 +1,7 @@
+.archgate/rules.d.ts
+node_modules
+coverage
+dist
+.agents
+.vitest
+.claude/settings.local.json
