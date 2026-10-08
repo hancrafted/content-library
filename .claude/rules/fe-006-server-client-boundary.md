@@ -1,0 +1,1 @@
+../../.archgate/adrs/FE-006-server-client-boundary.md
