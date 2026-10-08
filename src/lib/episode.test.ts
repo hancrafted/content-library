@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { episodeAnchors, type EpisodeOutline } from './episode.pure';
+import { episodeAnchors, targetAnchor, type EpisodeOutline } from './episode.pure';
 
 describe('success cases', () => {
   it('lists every slide anchor in page order, a slideless section included', () => {
@@ -21,6 +21,27 @@ describe('success cases', () => {
     const anchors = episodeAnchors(outline);
     // ASSERT
     expect(anchors).toEqual(expected);
+  });
+});
+
+describe('target anchors', () => {
+  it('joins a Slide anchor and an element name with a double hyphen, never equal to a two-part Slide anchor', () => {
+    // ARRANGE
+    const expected = 'foundations--why--prose';
+    // ACT
+    const anchor = targetAnchor('foundations--why', 'prose');
+    // ASSERT
+    expect(anchor).toBe(expected);
+    expect(anchor).not.toBe('foundations--why');
+  });
+
+  it('rejects an element name that is not kebab-case', () => {
+    // ARRANGE
+    const bad = 'Not Kebab';
+    // ACT
+    const build = () => targetAnchor('foundations--why', bad);
+    // ASSERT
+    expect(build).toThrow(bad);
   });
 });
 
