@@ -142,6 +142,11 @@ function ruleKeysOf(rulesSource: string): string[] {
   return keys;
 }
 
+// Quoted entries of an inline flow list body — `'a', "b"` → ['a', 'b'].
+function flowListEntries(body: string): string[] {
+  return [...body.matchAll(/(["'])(.*?)\1/g)].map((m) => m[2]).filter((e) => e.length > 0);
+}
+
 // Sequentiality helper: numbers must read 1, 2, 3, … with no gap or restart.
 function checkSequential(nums: number[]): boolean {
   return nums.every((n, i) => n === i + 1);
@@ -565,6 +570,30 @@ export default {
             if (m && !/^\[.*\]$/.test(m[1].trim())) {
               ctx.report.violation({
                 message: `ADR '${key}:' must be an inline flow list like ${key}: ["glob"] — a bare, block-style, or null value parses as empty and silently drops the scope (GEN-001 [adr-glob-inline]).`,
+                file,
+              });
+            }
+          }
+        }
+      },
+    },
+
+    'adr-paths-resolve': {
+      description:
+        "Every entry in an ADR's files: and paths: flow lists matches at least one file in the repo (§2) — a literal path must exist, a glob must match something — so a refactor that deletes or moves a governed file cannot leave a dead entry behind.",
+      severity: 'error',
+      async check(ctx) {
+        const files = adrFiles(await ctx.glob(ADR_MD_GLOB));
+        for (const file of files) {
+          const fm = extractFrontmatter(await ctx.readFile(file));
+          if (fm === null) continue; // adr-frontmatter owns the missing-frontmatter finding
+          for (const key of GLOB_KEYS) {
+            const list = fm.match(new RegExp(`^${key}[ \\t]*:[ \\t]*\\[(.*)\\][ \\t]*$`, 'm'));
+            if (!list) continue; // adr-glob-inline owns a non-flow-list value
+            for (const entry of flowListEntries(list[1])) {
+              if ((await ctx.glob(entry)).length > 0) continue;
+              ctx.report.violation({
+                message: `ADR '${key}:' entry '${entry}' matches no file in the repo — repoint it at the moved file or drop it (GEN-001 [adr-paths-resolve]).`,
                 file,
               });
             }
