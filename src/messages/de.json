@@ -19,8 +19,29 @@
   "landing": {
     "title": "Start",
     "link": "Seitenvorlage",
-    "heroSubtitle": "Theorie aus den hancrafted-Schulungsvideos, Seite für Seite visualisiert.",
-    "exploreEpisodes": "Episoden erkunden",
+    "hero": {
+      "eyebrow": "hancrafted / Menschlich geführt. KI-beschleunigt.",
+      "headline": "Die KI hat dich befördert. Gefragt hat sie nicht.",
+      "caption": "Mit KI setzt du 10× so viel um — wenn du lernst, zu <plan>planen,</plan> zu <spec>spezifizieren</spec> und zu <review>reviewen.</review>",
+      "plan": "planen",
+      "spec": "spezifizieren",
+      "review": "reviewen",
+      "promotion": "KI-Beförderung",
+      "episodes": "Episoden entdecken",
+      "contact": "Mit mir arbeiten",
+      "newTab": "öffnet in einem neuen Tab",
+      "open": "Deine Beförderung öffnen",
+      "skip": "Animation stoppen",
+      "motionHint": "Mit Mauszeiger oder Tastaturfokus auf Folgen leert sich der Stapel. Mit mir arbeiten leert ihn dreimal so schnell. Außerhalb wächst er wieder.",
+      "tasks": {
+        "bug": "DEADLINE",
+        "ticket": "AUFGABE",
+        "release": "DEPLOY",
+        "tests": "PROJEKT",
+        "spec": "PLAN",
+        "review": "CODE REVIEW"
+      }
+    },
     "episodesSectionTitle": "Verfügbare Episoden",
     "episodesSectionSubtitle": "Interaktive Foliensätze und visualisierte Essays durchstöbern.",
     "amnesiacTitle": "KI wie einen Freelancer mit Amnesie behandeln",
