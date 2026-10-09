@@ -132,7 +132,7 @@ export function hasChoice(choices: FacetChoices<string>): boolean {
   return choices.options.length >= 2;
 }
 
-/** Fills `{count}` in a label template read from the message catalog. */
+/** Fills `{count}` in a label template read from the Translation file. */
 export function fillCount(template: string, count: number): string {
   return template.replaceAll('{count}', String(count));
 }

@@ -26,7 +26,7 @@ const UPCOMING: EpisodeIndexEntry = {
 };
 
 describe('success cases', () => {
-  it('builds a published card that links to its Episode and reads its copy from the Episode catalog', () => {
+  it('builds a published card that links to its Episode and reads its copy from its own Translation keys', () => {
     // ARRANGE
     const expected = {
       slug: 'ai-token-economy',
@@ -58,7 +58,7 @@ describe('success cases', () => {
     expect({ route, href }).toEqual(expected);
   });
 
-  it('builds an upcoming card with no link, reading its copy from the landing catalog', () => {
+  it('builds an upcoming card with no link, reading its copy from the landing Translation keys', () => {
     // ARRANGE
     const expected = {
       slug: 'choosing-the-right-model',
