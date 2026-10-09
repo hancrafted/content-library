@@ -1,4 +1,4 @@
-import type { Episode, EpisodeSection } from '@/components/episode/episode-page-container.pure';
+import type { Episode, EpisodeSection } from '@/components/episode-page/episode-page-container.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { getTranslations } from 'next-intl/server';
 import type { SectionsT } from './context';

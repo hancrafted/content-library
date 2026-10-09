@@ -1,6 +1,6 @@
-import type { EpisodeSection } from '@/components/episode/episode-page-container.pure';
-import { SectionSlide } from '@/components/episode/section-slide';
-import { elementId, SlideProse } from '@/components/episode/slide-master';
+import type { EpisodeSection } from '@/components/episode-page/episode-page-container.pure';
+import { SectionSlide } from '@/components/slide-master/section-slide';
+import { elementId, SlideProse } from '@/components/slide-master/slide-master';
 import { externalHref } from '@/lib/external-link.pure';
 import type { ReactElement } from 'react';
 import { contextOf, type SectionsT } from './context';

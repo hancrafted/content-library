@@ -1,8 +1,8 @@
-import { ClaudeContextTerminalClient } from '@/components/episode/claude-context-terminal.client';
-import type { EpisodeSection, EpisodeSlide } from '@/components/episode/episode-page-container.pure';
-import { SectionSlide } from '@/components/episode/section-slide';
-import { elementId, SlideCaption, SlideFrame, SlideProse, SlideTitle } from '@/components/episode/slide-master';
-import { TokenizerPlaygroundClient } from '@/components/episode/tokenizer-playground.client';
+import { ClaudeContextTerminalClient } from '@/components/episodes/ai-token-economy/client/claude-context-terminal.client';
+import type { EpisodeSection, EpisodeSlide } from '@/components/episode-page/episode-page-container.pure';
+import { SectionSlide } from '@/components/slide-master/section-slide';
+import { elementId, SlideCaption, SlideFrame, SlideProse, SlideTitle } from '@/components/slide-master/slide-master';
+import { TokenizerPlaygroundClient } from '@/components/episodes/ai-token-economy/client/tokenizer-playground.client';
 import Image from 'next/image';
 import type { ReactElement } from 'react';
 import { contextOf, type SectionsT } from './context';

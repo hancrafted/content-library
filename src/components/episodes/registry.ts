@@ -1,4 +1,4 @@
-import type { Episode } from '@/components/episode/episode-page-container.pure';
+import type { Episode } from '@/components/episode-page/episode-page-container.pure';
 import { isEpisodeSlug, type EpisodeSlug } from '@/lib/routes';
 import { notFound } from 'next/navigation';
 import { aiTokenEconomy } from './ai-token-economy/ai-token-economy';

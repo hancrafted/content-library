@@ -7,8 +7,7 @@ import type { EpisodeSlide, PlacedEpisodeSection } from './episode-page-containe
  * THE SEAM. This file and `context-drawer-input.ts` are the only place the
  * Context drawer meets an Episode record. They turn placed Slides into
  * `ContextItem`s: item id = the id the walk placed the Slide at (the id its
- * wrapper carries), note target = the full element id. A Slide-registration
- * contract replaces these two files; the drawer itself is untouched (FE-010 §8).
+ * wrapper carries), note target = the full element id (FE-010 §8).
  */
 
 /*

@@ -4,7 +4,7 @@ import {
   evaluateThreshold,
   MODEL_PRICINGS,
   tokenizeText,
-} from '@/components/episode/token-economy-data.pure';
+} from '@/components/episodes/ai-token-economy/client/token-economy-data.pure';
 import {
   AI_TOKEN_ECONOMY_CONTEXT,
   contextFor,

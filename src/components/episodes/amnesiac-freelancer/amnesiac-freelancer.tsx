@@ -1,16 +1,16 @@
-import { BasicPageSlide } from '@/components/episode/basic-page-slide';
-import { contextRefOf, type ContextRefOf } from '@/components/episode/context-ref';
+import { BasicPageSlide } from '@/components/slide-master/basic-page-slide';
+import { contextRefOf, type ContextRefOf } from '@/components/slide-master/context-ref';
 import type {
   Episode,
   EpisodeSection,
   EpisodeSlide,
   PerLocale,
-} from '@/components/episode/episode-page-container.pure';
-import { SectionSlide } from '@/components/episode/section-slide';
-import { SessionLoop } from '@/components/episode/session-loop.client';
-import type { ReadString } from '@/components/episode/slide-context.pure';
-import { SlideFrame } from '@/components/episode/slide-master';
-import { ThreeColumnSlide } from '@/components/episode/three-column-slide';
+} from '@/components/episode-page/episode-page-container.pure';
+import { SectionSlide } from '@/components/slide-master/section-slide';
+import { SessionLoop } from '@/components/episodes/amnesiac-freelancer/client/session-loop.client';
+import type { ReadString } from '@/components/episode-page/slide-context.pure';
+import { SlideFrame } from '@/components/slide-master/slide-master';
+import { ThreeColumnSlide } from '@/components/slide-master/three-column-slide';
 import type { Locale } from '@/lib/locale.pure';
 import { getTranslations } from 'next-intl/server';
 import { contextFor, type SlideSlug } from './context';

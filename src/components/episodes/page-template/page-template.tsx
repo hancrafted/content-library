@@ -1,13 +1,13 @@
-import { BasicPageSlide } from '@/components/episode/basic-page-slide';
+import { BasicPageSlide } from '@/components/slide-master/basic-page-slide';
 import type {
   Episode,
   EpisodeSection,
   EpisodeSlide,
   PerLocale,
-} from '@/components/episode/episode-page-container.pure';
-import { SectionSlide } from '@/components/episode/section-slide';
-import { slideContext, type ReadString, type SlideContextSpec } from '@/components/episode/slide-context.pure';
-import { ThreeColumnSlide } from '@/components/episode/three-column-slide';
+} from '@/components/episode-page/episode-page-container.pure';
+import { SectionSlide } from '@/components/slide-master/section-slide';
+import { slideContext, type ReadString, type SlideContextSpec } from '@/components/episode-page/slide-context.pure';
+import { ThreeColumnSlide } from '@/components/slide-master/three-column-slide';
 import { slideAnchor } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { getTranslations } from 'next-intl/server';

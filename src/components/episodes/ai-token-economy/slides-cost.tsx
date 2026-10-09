@@ -1,8 +1,8 @@
-import type { EpisodeSection, EpisodeSlide } from '@/components/episode/episode-page-container.pure';
-import { FixesSliderClient } from '@/components/episode/fixes-slider.client';
-import { SectionSlide } from '@/components/episode/section-slide';
-import { elementId, SlideCaption, SlideFrame, SlideProse, SlideTitle } from '@/components/episode/slide-master';
-import { MODEL_PRICINGS } from '@/components/episode/token-economy-data.pure';
+import type { EpisodeSection, EpisodeSlide } from '@/components/episode-page/episode-page-container.pure';
+import { FixesSliderClient } from '@/components/episodes/ai-token-economy/client/fixes-slider.client';
+import { SectionSlide } from '@/components/slide-master/section-slide';
+import { elementId, SlideCaption, SlideFrame, SlideProse, SlideTitle } from '@/components/slide-master/slide-master';
+import { MODEL_PRICINGS } from '@/components/episodes/ai-token-economy/client/token-economy-data.pure';
 import type { ReactElement } from 'react';
 import { contextOf, type SectionsT } from './context';
 

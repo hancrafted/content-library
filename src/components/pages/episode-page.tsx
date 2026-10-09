@@ -1,4 +1,4 @@
-import { EpisodePageContainer } from '@/components/episode/episode-page-container';
+import { EpisodePageContainer } from '@/components/episode-page/episode-page-container';
 import { findEpisode } from '@/components/episodes/registry';
 import type { Locale } from '@/lib/locale.pure';
 

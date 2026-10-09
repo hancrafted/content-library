@@ -1,5 +1,5 @@
 import { titleAnchor } from '@/lib/episode.pure';
-import { SlideCaption, SlideFrame, SlideTitle } from './slide-master';
+import { SlideCaption, SlideFrame, SlideTitle } from '@/components/slide-master/slide-master';
 import { SlideWrapper } from './slide-wrapper';
 import { TalkLauncher, type TalkPlayerLabels } from './talk-player.client';
 

@@ -9,7 +9,7 @@ import type { PlacedEpisodeSection } from './episode-page-container.pure';
 /*
  * THE SEAM, with `context-drawer-input.pure.ts`: the one place the Context
  * drawer's translated chrome is read from the Translation file and an Episode record is
- * turned into `ContextDrawerInput`. Replaced by the Slide-registration contract.
+ * turned into `ContextDrawerInput`.
  */
 
 /*
