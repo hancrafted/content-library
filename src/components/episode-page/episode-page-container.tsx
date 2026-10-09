@@ -1,4 +1,6 @@
 import { ContextDrawerSlot } from '@/components/context-drawer/context-drawer-slot';
+import type { AnyEpisode } from '@/components/episodes/registry';
+import { isEpisodeRecord } from '@/components/slide-master/episode-record';
 import { TableOfContents, type TocLabels } from '@/components/table-of-contents/table-of-contents.client';
 import { readTranslationStrings } from '@/i18n/translation-strings';
 import { slidesInPageOrder, slidesOf, titleAnchor } from '@/lib/episode.pure';
@@ -6,7 +8,8 @@ import type { Locale } from '@/lib/locale.pure';
 import { episodeRoute, type EpisodeSlug } from '@/lib/routes';
 import { ContentArea } from './content-area';
 import { contextDrawerInput } from './context-drawer-input';
-import { tocSectionsOf, type Episode, type PlacedEpisodeSection } from './episode-page-container.pure';
+import { tocSectionsOf, type EpisodeContent, type PlacedEpisodeSection } from './episode-page-container.pure';
+import { recordContent } from './record-content';
 import { SlideObserver } from './slide-observer.client';
 import { SlideWrapper } from './slide-wrapper';
 import { SlideZones } from './slide-zones.client';
@@ -81,8 +84,13 @@ function EpisodeToc(props: {
  * reads that list, so no id is derived twice and none can drift. It also
  * provides the page's one URL-state service (FE-001 §2).
  */
-export async function EpisodePageContainer({ locale, episode }: { locale: Locale; episode: Episode }) {
-  const { title, caption, sections } = await episode.content(locale);
+/** One locale of an Episode: an Episode record through its adapter, a legacy Episode by itself. */
+function contentOf(episode: AnyEpisode, locale: Locale): Promise<EpisodeContent> {
+  return isEpisodeRecord(episode) ? recordContent(episode, locale) : episode.content(locale);
+}
+
+export async function EpisodePageContainer({ locale, episode }: { locale: Locale; episode: AnyEpisode }) {
+  const { title, caption, sections } = await contentOf(episode, locale);
   const placed = slidesOf(sections);
   const ids = [titleAnchor(), ...slidesInPageOrder(placed).map(({ id }) => id)];
   const youtubeId = episode.youtube?.[locale];

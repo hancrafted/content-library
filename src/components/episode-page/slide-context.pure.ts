@@ -33,15 +33,20 @@ export interface SlideContextSpec {
   readonly segments?: readonly SegmentSpec[];
 }
 
-/** Reads one Translation file leaf by key, relative to the Episode's namespace. */
+/** Reads one Translation file leaf by key, relative to the translator's namespace. */
 export type ReadString = (key: string) => string;
+
+/** `base.key`, or `key` alone when the translator is already namespaced to the Slide. */
+function under(base: string, key: string): string {
+  return base === '' ? key : `${base}.${key}`;
+}
 
 function sourceOf(read: ReadString, key: string, spec: SourceSpec): NoteSource {
   return { slug: spec.slug, url: spec.url, title: read(`${key}.sources.${spec.slug}.title`) };
 }
 
 function noteOf(read: ReadString, base: string, spec: NoteSpec): SpeakerNoteItem {
-  const key = `${base}.notes.${spec.slug}`;
+  const key = under(base, `notes.${spec.slug}`);
   return {
     slug: spec.slug,
     header: read(`${key}.header`),
@@ -53,7 +58,7 @@ function noteOf(read: ReadString, base: string, spec: NoteSpec): SpeakerNoteItem
 }
 
 function segmentOf(read: ReadString, base: string, spec: SegmentSpec): VoiceScriptSegment {
-  const key = `${base}.voiceScript.segments.${spec.slug}`;
+  const key = under(base, `voiceScript.segments.${spec.slug}`);
   return {
     slug: spec.slug,
     from: spec.from,
@@ -68,7 +73,11 @@ function segmentOf(read: ReadString, base: string, spec: SegmentSpec): VoiceScri
   };
 }
 
-/** `base` is the Slide's Translation file path, e.g. `foundations.slides.why`, or a Section's, e.g. `foundations`. */
+/**
+ * `base` is the Slide's path under the translator's namespace: empty for a
+ * translator namespaced to the Slide itself (`episodes.<ep>.slides.<slide>`);
+ * legacy Episodes pass e.g. `foundations.slides.why`, or a Section's `foundations`.
+ */
 export function slideContext(
   read: ReadString,
   base: string,

@@ -1,5 +1,5 @@
 import type { EpisodeSection } from '@/components/episode-page/episode-page-container.pure';
-import { SectionSlide } from '@/components/slide-master/section-slide';
+import { SectionSlide } from '@/components/slide-master/legacy/section-slide';
 import { elementId, SlideProse } from '@/components/slide-master/slide-master';
 import type { ReactElement } from 'react';
 import { contextOf, type SectionsT } from './context';
