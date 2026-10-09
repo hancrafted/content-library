@@ -1,4 +1,14 @@
-import { PAPER_PILE_ORIGIN } from '@/lib/paper-pile.pure';
+import { OfficeWindow } from '@/components/landing/promotion-window';
+
+function ShadowMaterials() {
+  return (
+    <>
+      <filter id="hero-soft-shadow" x="-.3" y="-.8" width="1.6" height="2.6">
+        <feGaussianBlur stdDeviation="12" />
+      </filter>
+    </>
+  );
+}
 
 function LightMaterials() {
   return (
@@ -15,9 +25,6 @@ function LightMaterials() {
         <stop stopColor="var(--hero-light)" stopOpacity=".75" />
         <stop offset="1" stopColor="var(--hero-light)" stopOpacity="0" />
       </radialGradient>
-      <filter id="hero-soft-shadow" x="-.3" y="-.8" width="1.6" height="2.6">
-        <feGaussianBlur stdDeviation="12" />
-      </filter>
       <filter id="hero-blur" x="-.5" y="-.5" width="2" height="2">
         <feGaussianBlur stdDeviation="28" />
       </filter>
@@ -29,6 +36,7 @@ function DeskMaterials() {
   return (
     <defs>
       <LightMaterials />
+      <ShadowMaterials />
       <linearGradient id="hero-marble" x2=".18" y2="1">
         <stop stopColor="var(--hero-desk-back)" />
         <stop offset="1" stopColor="var(--hero-desk-front)" />
@@ -46,31 +54,6 @@ function DeskMaterials() {
   );
 }
 
-/** The window sits where the pile grows, so clearing the workload reveals the outside. */
-function Window() {
-  return (
-    <g data-office-window>
-      <rect x="1010" y="130" width="420" height="340" rx="6" fill="url(#hero-sky)" />
-      <g data-sky-day>
-        <circle cx="1300" cy="235" r="120" fill="url(#hero-glow)" />
-        <circle cx="1300" cy="235" r="44" fill="var(--hero-sun)" />
-      </g>
-      <g data-sky-night>
-        <circle cx="1300" cy="235" r="110" fill="url(#hero-glow)" opacity=".5" />
-        <circle cx="1300" cy="235" r="40" fill="var(--hero-moon)" />
-        <circle cx="1321" cy="222" r="36" fill="var(--hero-sky-top)" />
-        <circle cx="1090" cy="180" r="2" fill="var(--hero-moon)" />
-        <circle cx="1160" cy="300" r="1.6" fill="var(--hero-moon)" />
-        <circle cx="1400" cy="170" r="2" fill="var(--hero-moon)" />
-      </g>
-      <path d="M1010 460q210-130 420 0V470H1010Z" fill="var(--hero-skyline)" />
-      <path d="M1220 130v340M1010 310h420" stroke="var(--hero-window-frame)" strokeWidth="14" strokeLinecap="round" />
-      <rect x="1002" y="122" width="436" height="356" rx="10" stroke="var(--hero-window-frame)" strokeWidth="16" />
-      <rect x="980" y="470" width="480" height="18" rx="3" fill="var(--hero-window-sill)" />
-    </g>
-  );
-}
-
 function Pen() {
   return (
     <g transform="translate(437 752) rotate(-24)">
@@ -85,24 +68,9 @@ function Pen() {
   );
 }
 
-function Clipboard() {
-  return (
-    <g transform="translate(165 711) rotate(-12)">
-      <path d="M-2 10h242l40 112H30Z" fill="var(--hero-shadow)" opacity=".18" filter="url(#hero-soft-shadow)" />
-      <path d="M4 0h230q6 0 8 6l36 103q2 6-5 6H34q-6 0-8-6L0 6q-2-6 4-6Z" fill="var(--hero-board)" />
-      <path d="M11 9h218l31 96H42Z" fill="url(#hero-paper)" />
-      <path d="m48 32 128 1m-122 20 134 1m-128 20 134 1" stroke="var(--hero-paper-rule)" strokeWidth="2" />
-      <rect x="92" y="-14" width="78" height="30" rx="7" fill="url(#hero-metal)" />
-      <rect x="104" y="-6" width="54" height="10" rx="5" fill="var(--hero-metal-dark)" />
-      <path d="M110-14v-10q21-14 42 0v10" stroke="var(--hero-metal-light)" strokeWidth="3" fill="none" />
-    </g>
-  );
-}
-
 function Stationery() {
   return (
     <g data-office-props>
-      <Clipboard />
       <Pen />
     </g>
   );
@@ -123,26 +91,29 @@ function Desk() {
 }
 
 export function PromotionOffice() {
-  const { x, y } = PAPER_PILE_ORIGIN;
   return (
     <>
       <DeskMaterials />
       <rect width="1600" height="900" fill="var(--hero-wall)" />
-      <Window />
+      <OfficeWindow />
       <Desk />
       <path d="M1040 530h370l230 370H700Z" fill="url(#hero-light-pool)" filter="url(#hero-blur)" />
-      <g data-pile-shadow transform={`translate(${x - 10} ${y + 160})`}>
-        <path d="M0 0h395l-250 130H-160Z" fill="var(--hero-shadow)" opacity=".3" filter="url(#hero-soft-shadow)" />
-      </g>
       <Stationery />
     </>
   );
 }
 
+/** The tray's solid parts in tray coordinates, shared with the shadow that must leave them unshaded. */
+export const TRAY_OUTLINE = {
+  back: 'M-8-35Q-12-45 0-45h260q10 0 18 10l105 119q9 11-3 17H85Z',
+  wall: 'M-8-35 85 79v60q-8 3-15-7L-8 29q-4-5-4-15v-44Z',
+  front: 'M85 79h72q14 0 20 11 5 10 22 10h60q17 0 23-10 6-11 20-11h72q15 0 15 12v42q0 12-14 12H98q-13 0-13-12Z',
+};
+
 export function PaperTray({ x, y }: { x: number; y: number }) {
   return (
     <g transform={`translate(${x} ${y})`}>
-      <path d="M-8-35Q-12-45 0-45h260q10 0 18 10l105 119q9 11-3 17H85Z" fill="var(--hero-metal-dark)" />
+      <path d={TRAY_OUTLINE.back} fill="var(--hero-metal-dark)" />
       <path d="M0-6h261l101 115H88Z" fill="var(--hero-tray-inner)" />
       <path
         d="M-8-35Q-12-45 0-45h260q10 0 18 10l105 119"
@@ -157,12 +128,9 @@ export function PaperTray({ x, y }: { x: number; y: number }) {
 export function PaperTrayFront({ x, y }: { x: number; y: number }) {
   return (
     <g transform={`translate(${x} ${y})`}>
-      <path d="M-8-35 85 79v60q-8 3-15-7L-8 29q-4-5-4-15v-44Z" fill="url(#hero-metal)" />
+      <path d={TRAY_OUTLINE.wall} fill="url(#hero-metal)" />
       <path d="M-8-35 85 79" stroke="var(--hero-metal-light)" strokeWidth="3" strokeLinecap="round" />
-      <path
-        d="M85 79h72q14 0 20 11 5 10 22 10h60q17 0 23-10 6-11 20-11h72q15 0 15 12v42q0 12-14 12H98q-13 0-13-12Z"
-        fill="url(#hero-metal)"
-      />
+      <path d={TRAY_OUTLINE.front} fill="url(#hero-metal)" />
       <path
         d="M85 79h72q14 0 20 11 5 10 22 10h60q17 0 23-10 6-11 20-11h72"
         stroke="var(--hero-metal-light)"

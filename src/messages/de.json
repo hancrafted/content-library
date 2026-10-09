@@ -5,7 +5,9 @@
   },
   "nav": {
     "label": "Hauptnavigation",
-    "episodes": "Episoden"
+    "episodes": "Episoden",
+    "contact": "Mit mir arbeiten",
+    "newTab": "öffnet in einem neuen Tab"
   },
   "theme": {
     "label": "Farbschema",
@@ -21,18 +23,21 @@
     "link": "Seitenvorlage",
     "hero": {
       "eyebrow": "hancrafted / Menschlich geführt. KI-beschleunigt.",
+      "offers": {
+        "consulting": "Beratung",
+        "coaching": "Coaching",
+        "leadership": "Engineering-Leadership"
+      },
       "headline": "Die KI hat dich <accent>befördert.</accent> <br></br>Gefragt hat sie nicht.",
       "caption": "Du wirst 10× so produktiv — wenn du lernst, zu <plan>planen,</plan> zu <spec>spezifizieren</spec> und zu <review>reviewen,</review> …",
       "plan": "planen",
       "spec": "spezifizieren",
       "review": "reviewen",
-      "promotion": "KI-Beförderung",
-      "episodes": "Episoden entdecken",
-      "contact": "Mit mir arbeiten",
-      "newTab": "öffnet in einem neuen Tab",
+      "promotion": "Befördert von KI",
+      "episodes": "Erfahre, warum",
       "open": "Deine Beförderung öffnen",
       "skip": "Animation stoppen",
-      "motionHint": "Mit Mauszeiger oder Tastaturfokus auf Folgen leert sich der Stapel. Mit mir arbeiten leert ihn dreimal so schnell. Außerhalb wächst er wieder.",
+      "motionHint": "Nähert sich der Mauszeiger „Erfahre, warum“, beginnt der Stapel zu schrumpfen; Mauszeiger oder Tastaturfokus darauf leeren ihn ganz. Außerhalb wächst er wieder.",
       "tasks": {
         "bug": "DEADLINE",
         "ticket": "AUFGABE",

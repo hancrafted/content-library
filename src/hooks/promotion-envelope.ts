@@ -80,6 +80,17 @@ export function animateEnvelope(timeline: gsap.core.Timeline, root: HTMLElement)
   indignation(timeline, root);
 }
 
+/** A reader who opens the envelope before it loses its temper never sees the anger flash past. */
+export function skipIndignation(timeline: gsap.core.Timeline, root: HTMLElement) {
+  const indignation = root.querySelectorAll('[data-envelope-face], [data-envelope-red]');
+  timeline
+    .getTweensOf(indignation)
+    .filter((tween) => tween.startTime() < ENVELOPE_BURST_AT)
+    .forEach((tween) => tween.kill());
+  // A face already fading in would otherwise linger through the burst's own fade-out.
+  gsap.set(indignation, { opacity: 0 });
+}
+
 function breakSeal(timeline: gsap.core.Timeline, root: HTMLElement) {
   timeline.to(
     root.querySelector('[data-envelope-flap]'),

@@ -1,4 +1,5 @@
 import { PaperTray, PaperTrayFront, PromotionOffice } from '@/components/landing/promotion-office';
+import { PileShadow } from '@/components/landing/promotion-shadow';
 import { PAPER_CAPACITY, PAPER_PILE_ORIGIN } from '@/lib/paper-pile.pure';
 
 interface PromotionDeskProps {
@@ -10,7 +11,7 @@ function TaskLabel({ task }: { task: string }) {
   return (
     <g transform="matrix(1 0 .78 1 25 14)">
       <rect width="4" height="53" rx="1" fill="var(--hero-brass)" />
-      <text x="18" y="24" fill="var(--hero-paper-ink)" fontSize="20" fontFamily="Arial, sans-serif" fontWeight="600">
+      <text x="18" y="24" fill="var(--hero-paper-ink)" fontSize="20" fontFamily="Arial, sans-serif" fontWeight="500">
         {task}
       </text>
       <path d="M18 39h146m-146 11h103" stroke="var(--hero-paper-rule)" strokeWidth="2" />
@@ -44,15 +45,7 @@ function TaskPaper({ task, index }: { task: string; index: number }) {
 function EnvelopeDetails({ promotion }: { promotion: string }) {
   return (
     <>
-      <text
-        x="139"
-        y="140"
-        textAnchor="middle"
-        fill="var(--hero-envelope-ink)"
-        fontSize="22"
-        fontFamily="Georgia, serif"
-        letterSpacing=".8"
-      >
+      <text x="139" y="140" textAnchor="middle" fill="var(--hero-envelope-ink)" fontSize="22" fontWeight="500">
         {promotion}
       </text>
       <g data-envelope-seal opacity="0">
@@ -94,7 +87,7 @@ function EnvelopeStock() {
 
 function Envelope({ promotion }: { promotion: string }) {
   return (
-    <g transform="translate(755 680)">
+    <g transform="translate(640 680)">
       <g data-envelope>
         <EnvelopeStock />
         <path
@@ -136,6 +129,7 @@ export function PromotionDesk({ promotion, tasks }: PromotionDeskProps) {
       <PaperTrayFront x={PAPER_PILE_ORIGIN.x} y={PAPER_PILE_ORIGIN.y + 15} />
       <g data-completed-papers />
       <Envelope promotion={promotion} />
+      <PileShadow />
     </svg>
   );
 }

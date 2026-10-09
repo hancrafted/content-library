@@ -1,16 +1,26 @@
+import { createInkMagnet } from '@/hooks/promotion-ink';
 import { createPromotionTimeline } from '@/hooks/promotion-timeline';
 import type { PaperDrain } from '@/lib/paper-pile.pure';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { useEffect, useRef, type RefObject } from 'react';
 
-type Animation = ReturnType<typeof createPromotionTimeline>;
+type Timeline = ReturnType<typeof createPromotionTimeline>;
+interface Point {
+  x: number;
+  y: number;
+}
+type Animation = Timeline & { follow: (point: Point | null) => void };
 const ANIMATED_VIEW =
   '(min-width: 1024px) and (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine)';
 
 function mountAnimation(element: HTMLElement, animation: RefObject<Animation | null>, draining: RefObject<PaperDrain>) {
   const active = createPromotionTimeline(element);
-  animation.current = active;
+  const ink = createInkMagnet(element);
+  // Until the copy is interactive there is no button to reach for.
+  const follow = (point: Point | null) =>
+    active.setProximity(ink.follow(element.dataset.animated === 'interactive' ? point : null));
+  animation.current = { ...active, follow };
   active.setDraining(draining.current);
   // Resizing during flight must not strand a word at an obsolete caption position.
   window.addEventListener('resize', active.finish);
@@ -21,11 +31,12 @@ function mountAnimation(element: HTMLElement, animation: RefObject<Animation | n
     window.removeEventListener('beforeprint', active.finish);
     stopVisibility();
     active.dispose();
+    ink.stop();
     animation.current = null;
   };
 }
 
-function watchVisibility(element: HTMLElement, active: Animation) {
+function watchVisibility(element: HTMLElement, active: Timeline) {
   const update = () => {
     const bounds = element.getBoundingClientRect();
     active.suspend(document.hidden || bounds.bottom <= 0 || bounds.top >= window.innerHeight);
@@ -59,5 +70,6 @@ export function usePromotionAnimation(root: RefObject<HTMLElement | null>, drain
   return {
     burst: () => animation.current?.burst(),
     finish: () => animation.current?.finish(),
+    follow: (point: Point | null) => animation.current?.follow(point),
   };
 }
