@@ -33,20 +33,15 @@ export interface SlideContextSpec {
   readonly segments?: readonly SegmentSpec[];
 }
 
-/** Reads one Translation file leaf by key, relative to the translator's namespace. */
+/** Reads one Translation file leaf by key, relative to the Slide's namespace. */
 export type ReadString = (key: string) => string;
-
-/** `base.key`, or `key` alone when the translator is already namespaced to the Slide. */
-function under(base: string, key: string): string {
-  return base === '' ? key : `${base}.${key}`;
-}
 
 function sourceOf(read: ReadString, key: string, spec: SourceSpec): NoteSource {
   return { slug: spec.slug, url: spec.url, title: read(`${key}.sources.${spec.slug}.title`) };
 }
 
-function noteOf(read: ReadString, base: string, spec: NoteSpec): SpeakerNoteItem {
-  const key = under(base, `notes.${spec.slug}`);
+function noteOf(read: ReadString, spec: NoteSpec): SpeakerNoteItem {
+  const key = `notes.${spec.slug}`;
   return {
     slug: spec.slug,
     header: read(`${key}.header`),
@@ -57,8 +52,8 @@ function noteOf(read: ReadString, base: string, spec: NoteSpec): SpeakerNoteItem
   };
 }
 
-function segmentOf(read: ReadString, base: string, spec: SegmentSpec): VoiceScriptSegment {
-  const key = under(base, `voiceScript.segments.${spec.slug}`);
+function segmentOf(read: ReadString, spec: SegmentSpec): VoiceScriptSegment {
+  const key = `voiceScript.segments.${spec.slug}`;
   return {
     slug: spec.slug,
     from: spec.from,
@@ -73,18 +68,13 @@ function segmentOf(read: ReadString, base: string, spec: SegmentSpec): VoiceScri
   };
 }
 
-/**
- * `base` is the Slide's path under the translator's namespace: empty for a
- * translator namespaced to the Slide itself (`episodes.<ep>.slides.<slide>`);
- * legacy Episodes pass e.g. `foundations.slides.why`, or a Section's `foundations`.
- */
+/** `read` is a translator namespaced to the Slide itself (`episodes.<ep>.slides.<slide>`). */
 export function slideContext(
   read: ReadString,
-  base: string,
   spec: SlideContextSpec,
 ): { notes: SpeakerNoteItem[]; voiceScript: VoiceScriptSegment[] } {
   return {
-    notes: (spec.notes ?? []).map((note) => noteOf(read, base, note)),
-    voiceScript: (spec.segments ?? []).map((segment) => segmentOf(read, base, segment)),
+    notes: (spec.notes ?? []).map((note) => noteOf(read, note)),
+    voiceScript: (spec.segments ?? []).map((segment) => segmentOf(read, segment)),
   };
 }

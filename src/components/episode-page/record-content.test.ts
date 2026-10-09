@@ -56,13 +56,25 @@ describe('success cases', () => {
     // ASSERT
     expect({
       title: content.title,
-      sections: content.sections.map((section) => ({
-        slug: section.slug,
-        title: section.title,
-        slides: section.slides.map(({ slug }) => slug),
+      sections: content.sections.map(({ slide, slides }) => ({
+        slug: slide.slug,
+        title: slide.title,
+        slides: slides.map((page) => page.slide.slug),
       })),
     }).toEqual(expected);
     expect(content.caption).toBeTruthy();
+  });
+
+  it('places each Slide under the id its position gives it', async () => {
+    // ARRANGE
+    const expected = [
+      { id: 'foundations', slides: ['foundations--why-a-template'] },
+      { id: 'interlude', slides: [] },
+    ];
+    // ACT
+    const { sections } = await recordContent(RECORD, 'en');
+    // ASSERT
+    expect(sections.map(({ id, slides }) => ({ id, slides: slides.map((page) => page.id) }))).toEqual(expected);
   });
 
   it('gives each Slide a translator namespaced to its own keys and a Title at the level its position gives it', async () => {
@@ -71,7 +83,7 @@ describe('success cases', () => {
     const expectedTarget = 'title';
     // ACT
     const { sections } = await recordContent(RECORD, 'en');
-    const [head, page] = [sections[0].content, sections[0].slides[0].content].map(headingOf);
+    const [head, page] = [sections[0].slide.content, sections[0].slides[0].slide.content].map(headingOf);
     // ASSERT
     expect([head.props.as, page.props.as]).toEqual(expectedLevels);
     expect(head.props['data-target']).toBe(expectedTarget);
@@ -83,7 +95,7 @@ describe('success cases', () => {
     const expectedSegment = { slug: 'one-breath', from: 0, to: 1, title: 'The template in one breath' };
     // ACT
     const { sections } = await recordContent(RECORD, 'en');
-    const why = sections[0].slides[0];
+    const why = sections[0].slides[0].slide;
     // ASSERT
     expect(why.notes).toEqual([expect.objectContaining(expectedNote)]);
     expect(why.voiceScript).toEqual([expect.objectContaining(expectedSegment)]);
@@ -125,7 +137,7 @@ describe('edge cases', () => {
     const { sections } = await recordContent(record, 'de');
     const [section] = sections;
     // ASSERT
-    expect(section.minutes).toBeUndefined();
-    expect(section.slides[0].minutes).toBeUndefined();
+    expect(section.slide.minutes).toBeUndefined();
+    expect(section.slides[0].slide.minutes).toBeUndefined();
   });
 });

@@ -34,19 +34,9 @@ function entry($: CheerioAPI, panel: 'notes' | 'script', anchor: string) {
   return $(`#context-panel-${panel} [data-context-for="${anchor}"]`);
 }
 
-/**
- * Whether a page's Slides are written as Slide files: their Canvas marks note
- * targets with `data-target`. A legacy Episode gives each target the id
- * `<slide>--<target>` instead; that branch goes with the last legacy Episode.
- */
-function marksTargets($: CheerioAPI): boolean {
-  return $('[data-slot="slides"] [data-target]').length > 0;
-}
-
-/** The elements a note's short target names inside its own Slide: scoped `data-target`, or a legacy id. */
+/** The elements a note's short target names inside its own Slide: its scoped `data-target`. */
 function targetsOf($: CheerioAPI, owner: string, target: string) {
-  const slide = $(`[data-slot="slides"] [data-slide="${owner}"]`);
-  return marksTargets($) ? slide.find(`[data-target="${target}"]`) : slide.find(`[id="${owner}--${target}"]`);
+  return $(`[data-slot="slides"] [data-slide="${owner}"]`).find(`[data-target="${target}"]`);
 }
 
 function cssFiles(dir: string): string[] {

@@ -1,9 +1,8 @@
 import { cn } from '@/lib/utils';
 import type { ReactNode } from 'react';
 
-/** What a part takes besides its content: a legacy `id`, or the `data-target` a Slide kit's `target(…)` returns. */
+/** What a part takes besides its content: the `data-target` a Slide kit's `target(…)` returns. */
 interface PartProps {
-  id?: string;
   'data-target'?: string;
   children: ReactNode;
 }

@@ -64,13 +64,6 @@ export function checkContext(
   }
 }
 
-/** The note a context reference names; throws when the Slide has no such note. */
-export function checkedNote(notes: readonly SpeakerNoteItem[], slug: string): SpeakerNoteItem {
-  const note = notes.find((candidate) => candidate.slug === slug);
-  if (!note) throw new Error(`No note "${slug}" on this Slide: a context reference must name one of its notes.`);
-  return note;
-}
-
 function itemOf({ id, slide }: PlacedSlide<EpisodeSlide>): ContextItem {
   const notes = slide.notes ?? [];
   const script = slide.voiceScript ?? [];

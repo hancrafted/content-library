@@ -1,7 +1,6 @@
 import { findEpisode } from '@/components/episodes/registry';
-import { isEpisodeRecord, type Slide } from '@/components/slide-master/episode-record';
-import { placeSections, slidesInPageOrder, slidesOf } from '@/lib/episode.pure';
-import { LOCALES, type Locale } from '@/lib/locale.pure';
+import type { Slide } from '@/components/slide-master/episode-record';
+import { placeSections } from '@/lib/episode.pure';
 import { EPISODE_SLUGS } from '@/lib/routes';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -11,7 +10,8 @@ import { describe, expect, it } from 'vitest';
  * Published anchors (FE-002): every Slide anchor an Episode has ever put in a
  * URL stays reachable. `<episode>/published-anchors.json` snapshots them; a
  * Slide may be added freely, but an anchor in the snapshot MUST still be
- * produced by the walk (`slidesOf`) in every locale.
+ * produced by the walk (`placeSections`). Anchors come from the record's
+ * Section lists alone, so they cannot differ by locale.
  */
 
 function snapshotPath(slug: string): string {
@@ -30,49 +30,29 @@ function publishedAnchorsOf(slug: string): string[] {
 }
 
 /** One message per published anchor the walk no longer produces. */
-function lostAnchors(walk: {
-  slug: string;
-  locale: string;
-  published: readonly string[];
-  produced: readonly string[];
-}): string[] {
-  const { slug, locale, published, produced } = walk;
+function lostAnchors(walk: { slug: string; published: readonly string[]; produced: readonly string[] }): string[] {
+  const { slug, published, produced } = walk;
   return published
     .filter((anchor) => !produced.includes(anchor))
     .map(
       (anchor) =>
-        `Episode "${slug}" (${locale}) no longer produces the anchor "${anchor}". It is a published anchor: a shared link may point at it. Remove it from published-anchors.json only deliberately.`,
+        `Episode "${slug}" no longer produces the anchor "${anchor}". It is a published anchor: a shared link may point at it. Remove it from published-anchors.json only deliberately.`,
     );
 }
 
-/**
- * The anchors the walk produces for one Episode in one locale, as the Episode
- * page does: an Episode record's Section lists, or a legacy Episode's outline.
- */
-async function producedAnchors(slug: (typeof EPISODE_SLUGS)[number], locale: Locale): Promise<string[]> {
-  const episode = findEpisode(slug);
-  if (isEpisodeRecord(episode))
-    return placeSections<Slide>(episode.sections).flatMap((section) => section.map(({ id }) => id));
-  const { sections } = await episode.content(locale);
-  return slidesInPageOrder(slidesOf(sections)).map(({ id }) => id);
+/** The anchors the walk produces for one Episode, as the Episode page does: its record's Section lists. */
+function producedAnchors(slug: (typeof EPISODE_SLUGS)[number]): string[] {
+  return placeSections<Slide>(findEpisode(slug).sections).flatMap((section) => section.map(({ id }) => id));
 }
 
 describe('success cases', () => {
-  it('still produces every published anchor of every registered Episode, in every locale', async () => {
+  it('still produces every published anchor of every registered Episode', () => {
     // ARRANGE
-    const cases = EPISODE_SLUGS.flatMap((slug) => LOCALES.map((locale) => ({ slug, locale })));
+    const cases = [...EPISODE_SLUGS];
     // ACT
-    const lost: string[] = [];
-    for (const { slug, locale } of cases) {
-      lost.push(
-        ...lostAnchors({
-          slug,
-          locale,
-          published: publishedAnchorsOf(slug),
-          produced: await producedAnchors(slug, locale),
-        }),
-      );
-    }
+    const lost = cases.flatMap((slug) =>
+      lostAnchors({ slug, published: publishedAnchorsOf(slug), produced: producedAnchors(slug) }),
+    );
     // ASSERT
     expect(lost).toEqual([]);
   });
@@ -96,7 +76,7 @@ describe('failure cases', () => {
     const expectedShared = 'published anchor';
     const expectedAdvice = 'Remove it from published-anchors.json only deliberately.';
     // ACT
-    const [message, ...rest] = lostAnchors({ slug: 'demo', locale: 'en', published, produced });
+    const [message, ...rest] = lostAnchors({ slug: 'demo', published, produced });
     // ASSERT
     expect(message).toContain(expectedAnchor);
     expect(message).toContain(expectedShared);
@@ -121,24 +101,8 @@ describe('edge cases', () => {
     const published = ['foundations'];
     const produced = ['foundations', 'foundations--brand-new'];
     // ACT
-    const lost = lostAnchors({ slug: 'demo', locale: 'en', published, produced });
+    const lost = lostAnchors({ slug: 'demo', published, produced });
     // ASSERT
     expect(lost).toEqual([]);
-  });
-
-  it('produces the same anchors in every locale, so one snapshot covers all of them', async () => {
-    // ARRANGE
-    const [first, ...others] = LOCALES;
-    // ACT
-    const mismatches: string[] = [];
-    for (const slug of EPISODE_SLUGS) {
-      const reference = await producedAnchors(slug, first);
-      for (const locale of others) {
-        const anchors = await producedAnchors(slug, locale);
-        if (anchors.join() !== reference.join()) mismatches.push(`${slug}: ${locale} differs from ${first}`);
-      }
-    }
-    // ASSERT
-    expect(mismatches).toEqual([]);
   });
 });

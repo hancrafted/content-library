@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { checkContext, checkedNote, contextItemsOf as itemsOf } from './context-drawer-input.pure';
+import { checkContext, contextItemsOf as itemsOf } from './context-drawer-input.pure';
 import type { EpisodeSection, EpisodeSlide, PlacedEpisodeSection } from './episode-page-container.pure';
 
 type SpeakerNoteItem = NonNullable<EpisodeSlide['notes']>[number];
@@ -93,16 +93,6 @@ describe('success cases', () => {
     const check = () => checkContext('foundations--why', notes, segments);
     // ASSERT
     expect(check).not.toThrow();
-  });
-
-  it('finds the note a context reference names', () => {
-    // ARRANGE
-    const notes = [noteOf('a'), noteOf('b')];
-    const expected = 'b';
-    // ACT
-    const found = checkedNote(notes, 'b');
-    // ASSERT
-    expect(found.slug).toBe(expected);
   });
 
   it('accepts markers that each name a source of their note', () => {
@@ -228,16 +218,6 @@ describe('failure cases', () => {
     const run = () => check();
     // ASSERT
     expect(run).toThrow(dup);
-  });
-
-  it('throws when a context reference names a note the Slide does not have', () => {
-    // ARRANGE
-    const missing = '"nope"';
-    const run = () => checkedNote([noteOf('a')], 'nope');
-    // ACT
-    const result = run;
-    // ASSERT
-    expect(result).toThrow(missing);
   });
 });
 

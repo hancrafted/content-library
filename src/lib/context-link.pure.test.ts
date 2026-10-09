@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import {
   ITEM_SELECTOR,
   itemSelector,
-  legacyTargetId,
   NOTE_SELECTOR,
   noteSelector,
   sourceLinkSelector,
@@ -35,15 +34,6 @@ describe('success cases', () => {
     const selector = itemSelector('foundations--why');
     // ASSERT
     expect(selector).toBe(expected);
-  });
-
-  it('still names the element id a legacy Episode gives a note target, `<item>--<target>`', () => {
-    // ARRANGE
-    const expected = 'foundations--why--prose';
-    // ACT
-    const id = legacyTargetId('foundations--why', 'prose');
-    // ASSERT
-    expect(id).toBe(expected);
   });
 
   it('matches any Speaker note item in the drawer, and the drawer item holding one', () => {

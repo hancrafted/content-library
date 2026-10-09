@@ -1,6 +1,5 @@
 import type { PerLocale } from '@/components/slide-master/episode-record';
 import type { Locale } from '@/lib/locale.pure';
-import type { EpisodeSlug } from '@/lib/routes';
 import type { ReactNode } from 'react';
 import type { SpeakerNoteItem, VoiceScriptSegment } from '../../lib/context-drawer.pure';
 import type { PlacedSection } from '../../lib/episode.pure';
@@ -38,27 +37,14 @@ export interface EpisodeSection extends Omit<EpisodeSlide, 'title'> {
   readonly slides: readonly EpisodeSlide[];
 }
 
-/** What one locale of an Episode renders: the Title slide's text and the Sections. */
+/** What one locale of an Episode renders: the Title slide's text and the placed Sections. */
 export interface EpisodeContent {
   readonly title: string;
   readonly caption?: string;
-  readonly sections: readonly EpisodeSection[];
+  readonly sections: readonly PlacedEpisodeSection[];
 }
 
-/**
- * Legacy: an Episode that renders itself per locale. Episodes written as Slide
- * files are an `EpisodeRecord` (`slide-master/episode-record.ts`) instead,
- * which `recordContent` turns into the same `EpisodeContent`. Delete with the
- * last legacy Episode.
- */
-export interface Episode {
-  readonly slug: EpisodeSlug;
-  /** One recording per locale, shown on the Title slide; optional until recorded. */
-  readonly youtube?: PerLocale<string>;
-  content(locale: Locale): Promise<EpisodeContent>;
-}
-
-/** An Episode's Section as the one walk (`slidesOf`) places it: its id and its page Slides' ids. */
+/** An Episode's Section as the one walk (`placeSections`) places it: its id and its page Slides' ids. */
 export type PlacedEpisodeSection = PlacedSection<EpisodeSection>;
 
 /** A Slide's spoken minutes in one locale; 0 when it declares none. */
