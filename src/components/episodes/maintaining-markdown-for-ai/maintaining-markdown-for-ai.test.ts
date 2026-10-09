@@ -1,3 +1,4 @@
+import { MODALS_DATA, ROLES_DATA } from '@/components/episode/markdown-roles-data.pure';
 import {
   MAINTAINING_CONTEXT,
   contextFor,
@@ -109,6 +110,39 @@ describe('success cases', () => {
     expect(metaDe.description).toBeTruthy();
     expect(metaEn.alternates?.canonical).toBe(expectedCanonicalEn);
     expect(metaDe.alternates?.canonical).toBe(expectedCanonicalDe);
+  });
+
+  it('defines 3 interactive role specifications with matching files and frontmatter', () => {
+    // ARRANGE
+    const roles = Object.values(ROLES_DATA);
+
+    // ACT
+    const count = roles.length;
+
+    // ASSERT
+    expect(count).toBe(3);
+    for (const r of roles) {
+      expect(r.filename).toBeTruthy();
+      expect(r.bodyTitle).toBeTruthy();
+      expect(r.items.length).toBeGreaterThan(0);
+      expect(r.quote).toBeTruthy();
+    }
+  });
+
+  it('defines 5 card back modals with titles and ledes', () => {
+    // ARRANGE
+    const modals = Object.values(MODALS_DATA);
+
+    // ACT
+    const count = modals.length;
+
+    // ASSERT
+    expect(count).toBe(5);
+    for (const m of modals) {
+      expect(m.title).toBeTruthy();
+      expect(m.eyebrow).toBeTruthy();
+      expect(m.lede).toBeTruthy();
+    }
   });
 });
 

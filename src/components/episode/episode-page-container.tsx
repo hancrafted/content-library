@@ -1,15 +1,16 @@
 import { ContextDrawerSlot } from '@/components/context-drawer/context-drawer-slot';
-import { TableOfContents } from '@/components/table-of-contents/table-of-contents.client';
+import { TableOfContents, type TocLabels } from '@/components/table-of-contents/table-of-contents.client';
 import { readCatalogStrings } from '@/i18n/catalog-strings';
 import { slidesInPageOrder, slidesOf, titleAnchor } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
-import { episodeRoute } from '@/lib/routes';
+import { episodeRoute, type EpisodeSlug } from '@/lib/routes';
 import { ContentArea } from './content-area';
 import { contextDrawerInput } from './context-drawer-input';
 import { tocSectionsOf, type Episode, type PlacedEpisodeSection } from './episode-page-container.pure';
 import { SlideObserver } from './slide-observer.client';
 import { SlideWrapper } from './slide-wrapper';
 import { SlideZones } from './slide-zones.client';
+import { TalkPlayer, type TalkPlayerLabels } from './talk-player.client';
 import { TitleSlide } from './title-slide';
 import { UrlStateProvider } from './url-state-provider.client';
 
@@ -31,17 +32,44 @@ function SlideColumn(props: {
   title: string;
   caption?: string;
   placed: readonly PlacedEpisodeSection[];
+  youtubeId?: string;
+  talkLabels?: TalkPlayerLabels;
 }) {
   return (
     <SlideZones>
       <SlideObserver ids={props.ids} />
       <ContentArea>
-        <TitleSlide title={props.title} caption={props.caption} />
+        <TitleSlide
+          title={props.title}
+          caption={props.caption}
+          youtubeId={props.youtubeId}
+          talkLabels={props.talkLabels}
+        />
         {props.placed.map((section) => (
           <SectionSlides key={section.id} placed={section} />
         ))}
       </ContentArea>
     </SlideZones>
+  );
+}
+
+function EpisodeToc(props: {
+  locale: Locale;
+  slug: EpisodeSlug;
+  placed: readonly PlacedEpisodeSection[];
+  labels: TocLabels;
+}) {
+  return (
+    <aside data-slot="toc">
+      <TableOfContents
+        locale={props.locale}
+        route={episodeRoute(props.slug)}
+        sections={tocSectionsOf(props.placed, props.locale)}
+        targetAttribute="data-slide"
+        topId={titleAnchor()}
+        labels={props.labels}
+      />
+    </aside>
   );
 }
 
@@ -57,21 +85,28 @@ export async function EpisodePageContainer({ locale, episode }: { locale: Locale
   const { title, caption, sections } = await episode.content(locale);
   const placed = slidesOf(sections);
   const ids = [titleAnchor(), ...slidesInPageOrder(placed).map(({ id }) => id)];
+  const youtubeId = episode.youtube?.[locale];
+  const talkLabels = youtubeId ? await readCatalogStrings(locale, 'talkPlayer') : undefined;
+  const tocLabels = await readCatalogStrings(locale, 'tableOfContents');
+  const drawer = await contextDrawerInput(locale, placed);
   return (
     <UrlStateProvider key={`${locale}/${episode.slug}`}>
-      <div data-slot="episode-page" className="mx-4 mt-6 md:grid md:grid-cols-[17rem_minmax(0,1fr)_auto]">
-        <aside data-slot="toc">
-          <TableOfContents
-            locale={locale}
-            route={episodeRoute(episode.slug)}
-            sections={tocSectionsOf(placed, locale)}
-            targetAttribute="data-slide"
-            topId={titleAnchor()}
-            labels={await readCatalogStrings(locale, 'tableOfContents')}
-          />
-        </aside>
-        <SlideColumn ids={ids} title={title} caption={caption} placed={placed} />
-        <ContextDrawerSlot input={await contextDrawerInput(locale, placed)} />
+      <div
+        data-slot="episode-page"
+        data-episode={episode.slug}
+        className="mx-4 mt-6 md:grid md:grid-cols-[17rem_minmax(0,1fr)_auto]"
+      >
+        <EpisodeToc locale={locale} slug={episode.slug} placed={placed} labels={tocLabels} />
+        <SlideColumn
+          ids={ids}
+          title={title}
+          caption={caption}
+          placed={placed}
+          youtubeId={youtubeId}
+          talkLabels={talkLabels}
+        />
+        <ContextDrawerSlot input={drawer} />
+        {youtubeId && talkLabels && <TalkPlayer youtubeId={youtubeId} labels={talkLabels} />}
       </div>
     </UrlStateProvider>
   );

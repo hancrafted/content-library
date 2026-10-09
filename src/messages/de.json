@@ -927,5 +927,14 @@
     },
     "refNote": "öffnet Sprechernotiz",
     "citation": "Quelle {number}"
+  },
+  "talkPlayer": {
+    "watch": "Vortrag ansehen",
+    "playing": "Wird abgespielt",
+    "subtitle": "Ihre KI liest jedes Mal veraltete Dokumente · 22 Min.",
+    "heading": "DER VORTRAG",
+    "shrink": "Verkleinern",
+    "expand": "Vergrößern",
+    "close": "Videoplayer schließen"
   }
 }

@@ -13,6 +13,11 @@
   --muted-foreground: oklch(0.556 0 0);
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.55 0.18 290);
+  --secondary-foreground: oklch(0.985 0 0);
+  --machine: oklch(0.58 0.16 242);
+  --human: oklch(0.55 0.18 290);
+  --ai: oklch(0.6 0.14 185);
   /* The selected or active item (drawer tab, current nav link, active table-of-contents entry): 3:1 against the surface, text 4.5:1 (docs/agents/context-drawer-design.md). */
   --selected: oklch(0.4 0 0);
   --selected-foreground: oklch(0.985 0 0);
@@ -35,6 +40,11 @@
   --muted-foreground: oklch(0.708 0 0);
   --accent: oklch(0.269 0 0);
   --accent-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.68 0.16 280);
+  --secondary-foreground: oklch(0.145 0 0);
+  --machine: oklch(0.72 0.14 235);
+  --human: oklch(0.68 0.16 280);
+  --ai: oklch(0.72 0.17 185);
   --selected: oklch(0.8 0 0);
   --selected-foreground: oklch(0.2 0 0);
   --border: oklch(1 0 0 / 10%);
@@ -51,6 +61,11 @@
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-machine: var(--machine);
+  --color-human: var(--human);
+  --color-ai: var(--ai);
   --color-header: var(--header);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
@@ -121,5 +136,183 @@
   [data-slot='context-scrim'],
   [data-slot='context-spacer'] {
     display: none !important;
+  }
+}
+
+/* Episode scoped tokens: maintaining-markdown-for-ai tripartite palette */
+[data-episode='maintaining-markdown-for-ai'] {
+  --primary: var(--machine);
+  --secondary: var(--human);
+  --accent: var(--ai);
+}
+
+/* Keyframes */
+@keyframes hero-drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(16px, -12px) scale(1.04);
+  }
+}
+
+@keyframes hero-drift-alt {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-14px, 14px) scale(1.05);
+  }
+}
+
+@keyframes s2-flow-travel {
+  from {
+    stroke-dashoffset: 32;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes s2-breathe-primary {
+  0%,
+  100% {
+    border-color: color-mix(in srgb, var(--primary) 50%, transparent);
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--primary) 30%, transparent),
+      0 4px 18px -2px color-mix(in srgb, var(--primary) 20%, transparent);
+  }
+  50% {
+    border-color: var(--primary);
+    box-shadow:
+      0 0 0 2px color-mix(in srgb, var(--primary) 65%, transparent),
+      0 8px 24px -2px color-mix(in srgb, var(--primary) 35%, transparent);
+  }
+}
+
+@keyframes s2-breathe-secondary {
+  0%,
+  100% {
+    border-color: color-mix(in srgb, var(--secondary) 50%, transparent);
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--secondary) 30%, transparent),
+      0 4px 18px -2px color-mix(in srgb, var(--secondary) 20%, transparent);
+  }
+  50% {
+    border-color: var(--secondary);
+    box-shadow:
+      0 0 0 2px color-mix(in srgb, var(--secondary) 65%, transparent),
+      0 8px 24px -2px color-mix(in srgb, var(--secondary) 35%, transparent);
+  }
+}
+
+@keyframes s2-breathe-accent {
+  0%,
+  100% {
+    border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--accent) 30%, transparent),
+      0 4px 18px -2px color-mix(in srgb, var(--accent) 20%, transparent);
+  }
+  50% {
+    border-color: var(--accent);
+    box-shadow:
+      0 0 0 2px color-mix(in srgb, var(--accent) 65%, transparent),
+      0 8px 24px -2px color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+}
+
+@keyframes deck-unsettled {
+  0%,
+  100% {
+    opacity: 0.85;
+    transform: rotate(0deg);
+  }
+  25% {
+    opacity: 1;
+    transform: rotate(-1.5deg) scale(1.02);
+  }
+  75% {
+    opacity: 0.95;
+    transform: rotate(1.5deg) scale(0.99);
+  }
+}
+
+@keyframes venn-ai-running {
+  0%,
+  100% {
+    stroke-opacity: 0.45;
+  }
+  50% {
+    stroke-opacity: 1;
+  }
+}
+
+@keyframes venn-ai-running-dot {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* S2 Flow & Arrows */
+.s2-arrow-group {
+  transition:
+    opacity 300ms ease,
+    filter 300ms ease;
+}
+
+.s2-flow-dash {
+  opacity: 0;
+  stroke-width: 4;
+  stroke-dasharray: 9 23;
+  stroke-linecap: round;
+  transition: opacity 400ms ease;
+}
+
+.s2-arrows-active .s2-arrow-group.is-active .s2-flow-dash {
+  opacity: 0.95;
+  animation: s2-flow-travel 1.15s linear infinite;
+}
+
+.hero-glow {
+  background: radial-gradient(
+    55% 55% at 22% 18%,
+    color-mix(in oklab, currentColor 26%, transparent) 0%,
+    color-mix(in oklab, currentColor 8%, transparent) 45%,
+    transparent 72%
+  );
+  animation: hero-drift 28s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.hero-glow--accent {
+  background: radial-gradient(
+    50% 50% at 82% 30%,
+    color-mix(in oklab, currentColor 22%, transparent) 0%,
+    color-mix(in oklab, currentColor 7%, transparent) 48%,
+    transparent 74%
+  );
+  animation: hero-drift-alt 34s ease-in-out infinite alternate;
+}
+
+.deck-unsettled {
+  animation: deck-unsettled 3.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-glow,
+  .hero-glow--accent,
+  .deck-unsettled,
+  .s2-flow-dash {
+    animation: none !important;
+  }
+  .s2-flow-dash {
+    opacity: 0 !important;
   }
 }

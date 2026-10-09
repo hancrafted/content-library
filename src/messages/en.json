@@ -927,5 +927,14 @@
     },
     "refNote": "opens speaker note",
     "citation": "Source {number}"
+  },
+  "talkPlayer": {
+    "watch": "Watch the talk",
+    "playing": "Now playing",
+    "subtitle": "Your AI reads stale docs every time · 22 min",
+    "heading": "THE TALK",
+    "shrink": "Shrink",
+    "expand": "Expand",
+    "close": "Close video player"
   }
 }

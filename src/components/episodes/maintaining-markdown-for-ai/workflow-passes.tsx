@@ -116,7 +116,7 @@ export function HumanJudgmentCard({ id }: { id?: string }) {
       <div id={id} className="rounded-2xl border border-secondary/40 bg-secondary/5 p-6 shadow-xs">
         <div className="flex items-center justify-between border-b border-secondary/20 pb-4">
           <span className="font-mono text-sm font-bold text-secondary">Human judgment</span>
-          <span className="rounded-full border border-secondary/40 bg-secondary/10 px-2.5 py-0.5 font-mono text-xs font-semibold text-secondary">
+          <span className="deck-unsettled rounded-full border border-secondary/40 bg-secondary/10 px-2.5 py-0.5 font-mono text-xs font-semibold text-secondary">
             Open · Unresolved
           </span>
         </div>
