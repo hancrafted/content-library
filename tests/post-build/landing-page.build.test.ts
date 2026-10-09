@@ -50,4 +50,16 @@ describe('landing page post-build structure', () => {
       .get();
     expect(chapters).toEqual(['02', '03', '04']);
   });
+
+  it.each(LANDING_PAGES)('renders all available episode cards for locale $locale', ({ url, locale }) => {
+    const $ = getPage(url);
+    const episodeLinks = $('#episodes a')
+      .map((_, el) => $(el).attr('href'))
+      .get();
+    const expected = ['amnesiac-freelancer', 'maintaining-markdown-for-ai', 'ai-token-economy', 'page-template'].map(
+      (slug) => (locale === 'de' ? `/de/episode/${slug}/` : `/episode/${slug}/`),
+    );
+
+    expect(episodeLinks).toEqual(expected);
+  });
 });

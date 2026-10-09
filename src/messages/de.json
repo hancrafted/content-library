@@ -46,6 +46,10 @@
     "episodesSectionSubtitle": "Interaktive Foliensätze und visualisierte Essays durchstöbern.",
     "amnesiacTitle": "KI wie einen Freelancer mit Amnesie behandeln",
     "amnesiacDescription": "Warum ein KI-Coding-Agent jede Session ohne Gedächtnis beginnt und wie man ihn briefen muss.",
+    "markdownTitle": "Markdown für KI pflegen",
+    "markdownDescription": "Warum das Verifizieren von Dokumentation aufwendiger wurde als das Schreiben, und wie man den maschinellen Teil steuert.",
+    "tokenEconomyTitle": "Die KI-Token-Ökonomie",
+    "tokenEconomyDescription": "Was KI tatsächlich kostet, warum der Zähler unsichtbar bleibt und wie Sie Kontext und Modelle effizient steuern.",
     "templateTitle": "Episoden-Seitenvorlage",
     "templateDescription": "Die Layout-Referenz für jede Episode: Abschnitte aus Folien, untereinander angeordnet.",
     "about": {

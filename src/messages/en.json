@@ -46,6 +46,10 @@
     "episodesSectionSubtitle": "Browse the interactive slide decks and visualised essays.",
     "amnesiacTitle": "Treat AI like an amnesiac freelancer",
     "amnesiacDescription": "Why an AI coding agent starts every session blank, and how to brief it so the work still lands.",
+    "markdownTitle": "Maintaining markdown for AI",
+    "markdownDescription": "Why verifying documentation became harder than writing it, and how to steer the machine half.",
+    "tokenEconomyTitle": "The AI Token Economy",
+    "tokenEconomyDescription": "What AI actually costs, why the meter stays invisible, and how to manage context and models efficiently.",
     "templateTitle": "Episode Page Template",
     "templateDescription": "The layout reference every episode follows: sections of slides stacked down one page.",
     "about": {

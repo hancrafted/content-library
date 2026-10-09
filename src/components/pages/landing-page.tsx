@@ -4,7 +4,7 @@ import { HeroSection } from '@/components/landing/hero-section';
 import { MethodRailSection } from '@/components/landing/method-rail-section.client';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { episodeRoute } from '@/lib/routes';
-import { ArrowRight, BookOpen, Layers } from 'lucide-react';
+import { ArrowRight, BookOpen, Coins, FileText, Layers, type LucideIcon } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 
@@ -19,7 +19,7 @@ interface EpisodeCardProps {
   route: string;
   locale: Locale;
   testId?: string;
-  icon: typeof BookOpen;
+  icon: LucideIcon;
 }
 
 function EpisodeCard({ title, description, route, locale, testId, icon: Icon }: EpisodeCardProps) {
@@ -58,28 +58,64 @@ function EpisodesHeader({ title, subtitle }: { title: string; subtitle: string }
   );
 }
 
+const EPISODE_CARDS: readonly {
+  slug: Parameters<typeof episodeRoute>[0];
+  titleKey: 'amnesiacTitle' | 'markdownTitle' | 'tokenEconomyTitle' | 'templateTitle';
+  descKey: 'amnesiacDescription' | 'markdownDescription' | 'tokenEconomyDescription' | 'templateDescription';
+  icon: LucideIcon;
+  testId?: string;
+}[] = [
+  {
+    slug: 'amnesiac-freelancer',
+    titleKey: 'amnesiacTitle',
+    descKey: 'amnesiacDescription',
+    icon: BookOpen,
+  },
+  {
+    slug: 'maintaining-markdown-for-ai',
+    titleKey: 'markdownTitle',
+    descKey: 'markdownDescription',
+    icon: FileText,
+  },
+  {
+    slug: 'ai-token-economy',
+    titleKey: 'tokenEconomyTitle',
+    descKey: 'tokenEconomyDescription',
+    icon: Coins,
+  },
+  {
+    slug: 'page-template',
+    titleKey: 'templateTitle',
+    descKey: 'templateDescription',
+    icon: Layers,
+    testId: 'landing-page-link',
+  },
+];
+
+function EpisodeCardsGrid({ locale, t }: SubComponentProps) {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {EPISODE_CARDS.map(({ slug, titleKey, descKey, icon, testId }) => (
+        <EpisodeCard
+          key={slug}
+          title={t(titleKey)}
+          description={t(descKey)}
+          route={episodeRoute(slug)}
+          locale={locale}
+          testId={testId}
+          icon={icon}
+        />
+      ))}
+    </div>
+  );
+}
+
 function LandingEpisodes({ locale, t }: SubComponentProps) {
   return (
     <section id="episodes" data-chapter="02" className="relative">
       <div className="py-24 sm:py-32 px-6 max-w-6xl mx-auto space-y-12">
         <EpisodesHeader title={t('episodesSectionTitle')} subtitle={t('episodesSectionSubtitle')} />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <EpisodeCard
-            title={t('amnesiacTitle')}
-            description={t('amnesiacDescription')}
-            route={episodeRoute('amnesiac-freelancer')}
-            locale={locale}
-            icon={BookOpen}
-          />
-          <EpisodeCard
-            title={t('templateTitle')}
-            description={t('templateDescription')}
-            route={episodeRoute('page-template')}
-            locale={locale}
-            testId="landing-page-link"
-            icon={Layers}
-          />
-        </div>
+        <EpisodeCardsGrid locale={locale} t={t} />
       </div>
       <LiquidInkTransition targetId="services" />
     </section>
