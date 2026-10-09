@@ -1,14 +1,15 @@
 import { ContextDrawerSlot } from '@/components/context-drawer/context-drawer-slot';
-import type { AnyEpisodeRecord } from '@/components/slide-master/episode-record';
+import type { AnyEpisodeRecord, RuntimeTranslator } from '@/components/slide-master/episode-record';
 import { TableOfContents, type TocLabels } from '@/components/table-of-contents/table-of-contents.client';
 import { readTranslationStrings } from '@/i18n/translation-strings';
 import { slidesInPageOrder, TITLE_ANCHOR } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { episodeRoute, type EpisodeSlug } from '@/lib/routes';
+import { getTranslations } from 'next-intl/server';
 import { ContentArea } from './content-area';
 import { contextDrawerInput } from './context-drawer-input';
 import { tocSectionsOf, type PlacedEpisodeSection } from './episode-page-container.pure';
-import { recordContent } from './record-content';
+import { recordContent, type TranslatorOf } from './record-content';
 import { SlideObserver } from './slide-observer.client';
 import { SlideWrapper } from './slide-wrapper';
 import { SlideZones } from './slide-zones.client';
@@ -75,6 +76,12 @@ function EpisodeToc(props: {
   );
 }
 
+/** next-intl's translator for one locale, read by runtime key: the one cast from typed keys. */
+function translatorOf(locale: Locale): TranslatorOf {
+  return async (namespace) =>
+    (await getTranslations({ locale, namespace: namespace as never })) as unknown as RuntimeTranslator;
+}
+
 /**
  * The shell every Episode page renders through (FE-002). It alone turns the
  * Episode record into the page: the named slots, the Title slide with the
@@ -84,7 +91,7 @@ function EpisodeToc(props: {
  * provides the page's one URL-state service (FE-001 §2).
  */
 export async function EpisodePageContainer({ locale, episode }: { locale: Locale; episode: AnyEpisodeRecord }) {
-  const { title, caption, sections: placed } = await recordContent(episode, locale);
+  const { title, caption, sections: placed } = await recordContent(episode, translatorOf(locale));
   const ids = [TITLE_ANCHOR, ...slidesInPageOrder(placed).map(({ id }) => id)];
   const youtubeId = episode.youtube?.[locale];
   const talkLabels = youtubeId ? await readTranslationStrings(locale, 'talkPlayer') : undefined;
