@@ -55,6 +55,17 @@ Check notes, added 2026-10-08 against `main` at `a687b33` plus branch
 | **Content is build-time data.** One typed loader, validated by a schema at build; no client-side content fetching. [1][5] | 📜 + 🧠, a design decision    | ⏳ Open. No content or loader yet. |
 | Source of truth (MD, MDX or JSON) and how YouTube captures map to Episodes.                                               | 🧠, likely a design-ADR first | ⏳ Open. Design-ADR first.         |
 
+**Where locale-neutral data lives** (added 2026-10-09). 🟡 Practised once,
+not written down. `src/lib/episode-index.json` holds the Episode index: facts
+per Episode with no copy (Topic, Format, dates, featured rank, accent, icon).
+`parseEpisodeIndex` in `src/lib/episode-index.pure.ts` validates it at build
+and rejects unknown fields, so no title slips into the data; copy stays in the
+Translation files. It makes both rows above concrete. FE-007 fixes import
+direction but not where a data file sits, so this one landed in `src/lib/`
+beside its parser. Decide the home when a second data file arrives: `src/lib/`
+beside its parser, or a dedicated `src/content/`. 📜 once decided: a rule can
+pin data files to that folder.
+
 ## 5. Navigation, metadata and SEO
 
 The bilingual audience split (English at `/`, German at `/de`) makes this
