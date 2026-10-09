@@ -91,7 +91,7 @@ flowchart LR
 ### Do's
 
 1. **DO** start an Episode by copying the `page-template/` folder, in this order: rename the slug; register it in `EPISODE_SLUGS` and the Episode registry; write its Translation keys, en and de, before any Slide file (the types derive from them); then the Slide files; then `published-anchors.json`. (Decision 2, Decision 5)
-2. **DO** set `minutes` only on a Slide with a Voice script; the minutes derive from it. No Voice script, no minutes. (Decision 2)
+2. **DO** set `minutes` only on a Slide with a Voice script. No Voice script, no minutes. (Decision 2)
 3. **DO** leave `title` off a purely visual Slide. (Decision 2)
 4. **DO** build a one-off Canvas from `SlideFrame` and the kit's `<Title>`. (Decision 3, Decision 4)
 5. **DO** mark the element a note explains with `{...target('chart')}`. (Decision 3)

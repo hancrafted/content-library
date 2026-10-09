@@ -133,7 +133,7 @@ export interface RuntimeKit {
 export interface Slide<Ep extends RecordEpisodeSlug = RecordEpisodeSlug, S extends string = string> {
   readonly episode: Ep;
   readonly slug: S;
-  /** Spoken reading time per locale; 0 when left out. Set it only from a Voice script. */
+  /** Spoken reading time per locale; 0 when left out. Set it only on a Slide with a Voice script. */
   readonly minutes?: PerLocale<number>;
   readonly notes: readonly NoteSpec[];
   readonly segments: readonly SegmentSpec[];

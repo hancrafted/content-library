@@ -69,7 +69,7 @@ Done when: every Slide of step 1 has a file and `npm run typecheck` passes.
 - A Context reference is `<ref>phrase</ref>` in the string and `ref('<note>')` in `t.rich`.
 - `sources: [{ slug, url }]` on the note that cites them; titles under `notes.<note>.sources.<source>.title`.
 - Voice script: `segments` with `from`/`to` in minutes, strings under `voiceScript.segments.<segment>`. A segment's `bridge: true` needs a `bridge` string.
-- Set `minutes` only on a Slide with a Voice script; the minutes derive from it. No Voice script: leave `minutes` off.
+- Set `minutes` only on a Slide with a Voice script. No Voice script, no minutes.
 
 Done when: every note target resolves to one element of its Slide, and every Voice script Slide has `minutes`.
 
