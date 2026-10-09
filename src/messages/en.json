@@ -707,6 +707,197 @@
           }
         }
       }
+    },
+    "maintaining-markdown-for-ai": {
+      "title": "Maintaining markdown for AI",
+      "caption": "AI collapsed the cost of writing documentation and raised the cost of verifying it. The work moved — and the verifying half is nobody else's job.",
+      "description": "AI collapsed the cost of writing documentation and raised the cost of verifying it. Maintaining markdown for AI: where the effort goes and how to steer the machine half.",
+      "sections": {
+        "markdown-in-ai-workflows": {
+          "title": "Markdown in AI workflows",
+          "caption": "A single format carrying three of the six context types: Knowledge, Instructions, and Memory.",
+          "prose": "A plain text file with nothing mechanical underneath. What matters is how and when it is consumed: as knowledge, as instructions, as memory — and whether the agent pays for it on every turn or only when it reaches for it.",
+          "notes": {
+            "three-contexts": {
+              "header": "Three context types",
+              "description": "Markdown carries Knowledge, Instructions, and Memory with distinct lifecycle and retrieval costs."
+            },
+            "retrieval-cost": {
+              "header": "Consumption cost",
+              "description": "What matters is whether the agent pays context tokens on every turn or retrieves on demand."
+            }
+          }
+        },
+        "volume-outruns-review": {
+          "title": "Volume outruns review",
+          "caption": "On one document, maintenance effort decays while drift climbs — that crossing is where the work moved. Across a corpus, the maintenance surface grows faster than the file count.",
+          "prose": "Two different things get harder. On a single document, maintenance effort decays while drift keeps climbing. Across a corpus, the maintenance surface grows faster than the file count.",
+          "notes": {
+            "decay-vs-drift": {
+              "header": "Decay and drift crossing",
+              "description": "On a single document, maintenance effort decays while drift climbs — that crossing is where the work moved."
+            },
+            "corpus-compounding": {
+              "header": "Compounding surface",
+              "description": "Across a corpus, the verification surface multiplies faster than the raw file count."
+            }
+          }
+        },
+        "where-the-effort-goes": {
+          "title": "Where the effort goes",
+          "caption": "What a machine can check, what AI can help with, and what only a human can check.",
+          "prose": "Three boundaries: what a machine automates, what AI accelerates, and what only a human can decide.",
+          "notes": {
+            "three-boundaries": {
+              "header": "Three boundaries",
+              "description": "Document verification is three distinct jobs: deterministic machine checks, AI acceleration, and human judgment."
+            },
+            "division-of-labour": {
+              "header": "Division of labour",
+              "description": "Push mechanics to the machine and discovery to AI so humans only handle genuine judgment calls."
+            }
+          },
+          "slides": {
+            "what-the-machine-verifies": {
+              "title": "What the machine verifies",
+              "caption": "Syntactic and structural checks that run deterministically in milliseconds without an LLM.",
+              "prose": "Syntax parses, URI format is validated, and ISO dates validate.",
+              "notes": {
+                "deterministic-checks": {
+                  "header": "Deterministic checks",
+                  "description": "Syntax, schemas, dates, and URIs validate deterministically in milliseconds without an LLM."
+                },
+                "mechanical-ceiling": {
+                  "header": "Mechanical ceiling",
+                  "description": "A clean pass proves structural integrity, never that the underlying statement is true."
+                }
+              }
+            },
+            "what-ai-accelerates": {
+              "title": "What AI accelerates",
+              "caption": "Cross-referencing prose against source handbooks to flag discrepancies for human review.",
+              "prose": "The answer comes back rapid, insightful, and itself in need of checking.",
+              "notes": {
+                "cross-referencing": {
+                  "header": "Cross-referencing prose",
+                  "description": "AI can follow references across files and flag contradictions for human review."
+                },
+                "signals-not-resolutions": {
+                  "header": "Signals, not truth",
+                  "description": "The AI recommendation is rapid and insightful, but remains an unverified claim itself."
+                }
+              }
+            },
+            "what-remains-human": {
+              "title": "What remains human",
+              "caption": "Is the policy still in force? Is the owner correct? Ground truth that no machine or model can know.",
+              "prose": "This judgment stays open on screen.",
+              "notes": {
+                "ground-truth": {
+                  "header": "Ground truth and policy",
+                  "description": "Whether a policy is active or an owner is correct requires ground truth outside the repository."
+                },
+                "accountability": {
+                  "header": "Accountability",
+                  "description": "Tooling narrows the decision surface, but accountability stays with the human."
+                }
+              }
+            }
+          }
+        },
+        "google-okf": {
+          "title": "Google OKF",
+          "caption": "Full OKF v0.2 frontmatter schema governing provenance, trust, and lifecycle.",
+          "prose": "A standardized frontmatter schema to govern AI knowledge bases. Provenance, trust tiers, and lifecycle fields sit directly in markdown alongside the content.",
+          "notes": {
+            "open-knowledge-format": {
+              "header": "Shared metadata standard",
+              "description": "OKF v0.2 standardizes frontmatter fields for AI knowledge bases."
+            },
+            "lifecycle-fields": {
+              "header": "Governance fields",
+              "description": "Provenance, trust tiers, and lifecycle sit directly in markdown next to the content."
+            }
+          }
+        },
+        "steering-the-ai": {
+          "title": "Steering the AI",
+          "caption": "markdown-harness steers the machine half",
+          "prose": "A document can tell you how much of itself to believe. Not full trust — a floor that holds, and a reliable signal when a human needs to act.",
+          "notes": {
+            "raising-the-floor": {
+              "header": "Raising the floor",
+              "description": "A document can declare how much of itself to believe; reliable signals warn when humans must step in."
+            },
+            "tool-boundary": {
+              "header": "Stopping before judgment",
+              "description": "markdown-harness steers the machine layer and prepares signals without claiming human judgment."
+            }
+          },
+          "slides": {
+            "deterministic-core": {
+              "title": "Runs on a 100% deterministic core",
+              "caption": "One mechanism, three triggers, one deterministic core.",
+              "prose": "Three things can start it and it does three different things with the answer. What happens in between is the same every time.",
+              "notes": {
+                "three-triggers": {
+                  "header": "Three triggers, one core",
+                  "description": "Pre-read agent hook, pre-commit gate, or manual check all execute the identical deterministic core."
+                },
+                "predictable-eval": {
+                  "header": "Deterministic evaluation",
+                  "description": "Configuration and file inputs produce the exact same verdict every run."
+                }
+              }
+            },
+            "live-demo": {
+              "title": "Live demo",
+              "caption": "The check, run live.",
+              "prose": "File under test: docs/handbook/onboarding.md. Asked of the agent: What are the first-week onboarding steps for a new hire?",
+              "notes": {
+                "demo-contrast": {
+                  "header": "Comparative evaluation",
+                  "description": "Three agents receive the same stale document; only the hooked agents are prevented from hallucinating outdated facts."
+                },
+                "holding-slide": {
+                  "header": "Live terminal run",
+                  "description": "Talk switches to terminal here; the slide acts as the anchor framing the test."
+                }
+              }
+            },
+            "feature-roadmap": {
+              "title": "Feature Roadmap",
+              "caption": "Three shipped, three planned.",
+              "prose": "v0.0.4 Shipped: frontmatter linting, staleness checking, markdown harness skill.",
+              "notes": {
+                "v0-0-4-scope": {
+                  "header": "Current release (v0.0.4)",
+                  "description": "Shipped: frontmatter linting, staleness checks, and markdown-harness skill."
+                },
+                "future-checks": {
+                  "header": "Planned capabilities",
+                  "description": "Future: drift detection and corpus validation; do not promise them as shipping today."
+                }
+              }
+            }
+          }
+        },
+        "the-verifying-half-is-yours": {
+          "title": "The verifying half is yours",
+          "caption": "Back to the Venn, with the human region lit and the rest dimmed. Nothing new to read.",
+          "prose": "The work moved. It moved to you.",
+          "notes": {
+            "the-work-moved": {
+              "header": "The work moved",
+              "description": "Writing docs is automated; verifying them is the real work, and it belongs to you."
+            },
+            "closing-thesis": {
+              "header": "Summary thesis",
+              "description": "Machines verify structure, AI accelerates cross-references, and human judgment owns accountability."
+            }
+          }
+        }
+      }
     }
   },
   "contextDrawer": {

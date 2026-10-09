@@ -707,6 +707,197 @@
           }
         }
       }
+    },
+    "maintaining-markdown-for-ai": {
+      "title": "Markdown für KI pflegen",
+      "caption": "KI senkte die Kosten für das Schreiben von Dokumentation und erhöhte die Kosten für deren Verifikation. Die Arbeit hat sich verlagert — und der verifizierende Teil ist die Aufgabe von niemand anderem.",
+      "description": "KI senkte die Kosten für das Schreiben von Dokumentation und erhöhte die Kosten für deren Verifikation. Markdown für KI pflegen: wohin der Aufwand fließt und wie der maschinelle Teil gesteuert wird.",
+      "sections": {
+        "markdown-in-ai-workflows": {
+          "title": "Markdown in KI-Workflows",
+          "caption": "Ein einziges Format für drei der sechs Kontextarten: Wissen, Anweisungen und Speicher.",
+          "prose": "Eine reine Textdatei ohne mechanischen Unterbau. Entscheidend ist, wie und wann sie genutzt wird: als Wissen, als Anweisungen, als Speicher — und ob der Agent bei jedem Schritt dafür bezahlt oder nur beim Abruf.",
+          "notes": {
+            "three-contexts": {
+              "header": "Drei Kontextarten",
+              "description": "Markdown trägt Wissen, Anweisungen und Speicher mit unterschiedlichen Lebenszyklus- und Abrufkosten."
+            },
+            "retrieval-cost": {
+              "header": "Abrufkosten",
+              "description": "Entscheidend ist, ob der Agent bei jeder Anfrage Kontext-Token bezahlt oder nur bei gezieltem Abruf."
+            }
+          }
+        },
+        "volume-outruns-review": {
+          "title": "Volumen überholt die Prüfung",
+          "caption": "Bei einem einzelnen Dokument nimmt der Pflegeaufwand ab, während die Drift zunimmt — an dieser Schnittstelle hat sich die Arbeit verlagert.",
+          "prose": "Zwei unterschiedliche Dinge werden schwieriger: Bei einem einzelnen Dokument sinkt der Pflegeaufwand, während inhaltliche Drift steigt. Über einen Korpus hinweg wächst die Pflegefläche schneller als die Dateianzahl.",
+          "notes": {
+            "decay-vs-drift": {
+              "header": "Verfall und Drift",
+              "description": "Bei einem Dokument fällt der Pflegeaufwand ab, während Drift ansteigt — an diesem Schnittpunkt verlagert sich die Arbeit."
+            },
+            "corpus-compounding": {
+              "header": "Wachsende Angriffsfläche",
+              "description": "Über einen Korpus hinweg vervielfacht sich die Verifikationsfläche schneller als die bloße Dateianzahl."
+            }
+          }
+        },
+        "where-the-effort-goes": {
+          "title": "Wohin der Aufwand fließt",
+          "caption": "Was eine Maschine prüfen kann, wobei KI beschleunigt und was nur ein Mensch entscheiden kann.",
+          "prose": "Drei Grenzen: Was eine Maschine automatisiert, was KI beschleunigt und was nur ein Mensch entscheiden kann.",
+          "notes": {
+            "three-boundaries": {
+              "header": "Drei Grenzen",
+              "description": "Dokumentenprüfung umfasst drei getrennte Aufgaben: deterministische Maschinenprüfungen, KI-Beschleunigung und menschliches Urteil."
+            },
+            "division-of-labour": {
+              "header": "Arbeitsteilung",
+              "description": "Mechanik an die Maschine delegieren und Entdeckung an die KI, damit Menschen nur echte Urteilsfragen klären."
+            }
+          },
+          "slides": {
+            "what-the-machine-verifies": {
+              "title": "Was die Maschine verifiziert",
+              "caption": "Syntaktische und strukturelle Prüfungen, die deterministisch in Millisekunden ohne LLM laufen.",
+              "prose": "Syntax parst, URI-Formate werden validiert und ISO-Daten stimmen.",
+              "notes": {
+                "deterministic-checks": {
+                  "header": "Deterministische Prüfungen",
+                  "description": "Syntax, Schemata, Daten und URIs validieren deterministisch in Millisekunden ohne LLM."
+                },
+                "mechanical-ceiling": {
+                  "header": "Mechanische Obergrenze",
+                  "description": "Ein fehlerfreier Durchlauf beweist strukturelle Integrität, niemals aber die inhaltliche Richtigkeit."
+                }
+              }
+            },
+            "what-ai-accelerates": {
+              "title": "Was KI beschleunigt",
+              "caption": "Gegenprüfung von Texten gegen Handbücher, um Widersprüche für menschliche Reviews zu markieren.",
+              "prose": "Die Antwort kommt schnell, aufschlussreich und selbst prüfbedürftig zurück.",
+              "notes": {
+                "cross-referencing": {
+                  "header": "Querverweise prüfen",
+                  "description": "KI kann Referenzen dateiübergreifend verfolgen und Widersprüche für menschliche Reviews aufzeigen."
+                },
+                "signals-not-resolutions": {
+                  "header": "Signale, keine Wahrheiten",
+                  "description": "Die KI-Empfehlung ist schnell und einsichtsreich, bleibt jedoch selbst eine ungeprüfte Behauptung."
+                }
+              }
+            },
+            "what-remains-human": {
+              "title": "Was menschlich bleibt",
+              "caption": "Gilt die Richtlinie noch? Ist die Zuständigkeit korrekt? Grundwahrheiten, die kein Modell kennen kann.",
+              "prose": "Dieses Urteil bleibt auf dem Bildschirm offen.",
+              "notes": {
+                "ground-truth": {
+                  "header": "Grundwahrheiten und Richtlinien",
+                  "description": "Ob eine Richtlinie aktiv ist oder eine Zuständigkeit stimmt, erfordert Fakten außerhalb des Repositorys."
+                },
+                "accountability": {
+                  "header": "Verantwortung",
+                  "description": "Werkzeuge verengen die Entscheidungsfläche, doch die Verantwortung bleibt beim Menschen."
+                }
+              }
+            }
+          }
+        },
+        "google-okf": {
+          "title": "Google OKF",
+          "caption": "Vollständiges OKF v0.2 Frontmatter-Schema für Provenienz, Vertrauensstufen und Lebenszyklus.",
+          "prose": "Ein standardisiertes Frontmatter-Schema zur Governance von KI-Wissensbasen. Provenienz, Vertrauensstufen und Lebenszyklus-Felder stehen direkt im Markdown neben dem Inhalt.",
+          "notes": {
+            "open-knowledge-format": {
+              "header": "Standardisierte Metadaten",
+              "description": "OKF v0.2 standardisiert Frontmatter-Felder für KI-Wissensbasen."
+            },
+            "lifecycle-fields": {
+              "header": "Governance-Felder",
+              "description": "Provenienz, Vertrauensstufen und Lebenszyklus stehen direkt im Markdown neben dem Inhalt."
+            }
+          }
+        },
+        "steering-the-ai": {
+          "title": "Die KI steuern",
+          "caption": "markdown-harness steuert den maschinellen Teil",
+          "prose": "Ein Dokument kann angeben, wie viel man ihm glauben darf. Kein blindes Vertrauen — ein verlässliches Fundament und ein klares Signal, wann ein Mensch eingreifen muss.",
+          "notes": {
+            "raising-the-floor": {
+              "header": "Das Fundament heben",
+              "description": "Ein Dokument kann deklarieren, wie weit es belastbar ist; verlässliche Signale warnen vor Handlungsbedarf."
+            },
+            "tool-boundary": {
+              "header": "Halt vor dem Urteil",
+              "description": "markdown-harness steuert die Maschinenebene und bereitet Signale vor, ohne menschliches Urteil zu beanspruchen."
+            }
+          },
+          "slides": {
+            "deterministic-core": {
+              "title": "Läuft auf einem 100% deterministischen Kern",
+              "caption": "Ein Mechanismus, drei Auslöser, ein deterministischer Kern.",
+              "prose": "Drei Wege hinein, drei Wege hinaus. Was dazwischen geschieht, ist jedes Mal identisch.",
+              "notes": {
+                "three-triggers": {
+                  "header": "Drei Auslöser, ein Kern",
+                  "description": "Agenten-Pre-Read-Hook, Pre-Commit-Gate oder manuelle Prüfung führen denselben Kern aus."
+                },
+                "predictable-eval": {
+                  "header": "Deterministische Auswertung",
+                  "description": "Konfiguration und Dateieingaben liefern bei jedem Lauf exakt dasselbe Ergebnis."
+                }
+              }
+            },
+            "live-demo": {
+              "title": "Live-Demo",
+              "caption": "Die Prüfung live ausgeführt.",
+              "prose": "Testdatei: docs/handbook/onboarding.md. An den Agenten gestellte Frage: Was sind die Onboarding-Schritte in der ersten Woche für neue Mitarbeiter?",
+              "notes": {
+                "demo-contrast": {
+                  "header": "Vergleichende Auswertung",
+                  "description": "Drei Agenten erhalten dieselbe veraltete Datei; nur gesteuerte Agenten werden an Halluzinationen gehindert."
+                },
+                "holding-slide": {
+                  "header": "Live-Terminal-Lauf",
+                  "description": "Der Vortrag wechselt hier ins Terminal; die Folie bildet den Rahmen für den Testlauf."
+                }
+              }
+            },
+            "feature-roadmap": {
+              "title": "Feature-Roadmap",
+              "caption": "Drei veröffentlicht, drei geplant.",
+              "prose": "v0.0.4 Veröffentlicht: Frontmatter-Linting, Frischeprüfung, Markdown-Harness-Skill.",
+              "notes": {
+                "v0-0-4-scope": {
+                  "header": "Aktuelle Version (v0.0.4)",
+                  "description": "Veröffentlicht: Frontmatter-Linting, Frischeprüfung und Markdown-Harness-Skill."
+                },
+                "future-checks": {
+                  "header": "Geplante Fähigkeiten",
+                  "description": "Geplant: Drift-Erkennung und Korpus-Validierung; noch nicht im aktuellen Release."
+                }
+              }
+            }
+          }
+        },
+        "the-verifying-half-is-yours": {
+          "title": "Der verifizierende Teil liegt bei Ihnen",
+          "caption": "Zurück zum Venn-Diagramm: Der menschliche Bereich hervorgehoben, der Rest gedimmt.",
+          "prose": "Die Arbeit hat sich verlagert. Sie liegt bei Ihnen.",
+          "notes": {
+            "the-work-moved": {
+              "header": "Die Arbeit hat sich verlagert",
+              "description": "Dokumentation zu schreiben ist automatisiert; sie zu prüfen ist die eigentliche Arbeit."
+            },
+            "closing-thesis": {
+              "header": "Zusammenfassung",
+              "description": "Maschinen prüfen Strukturen, KI beschleunigt Querverweise, und das menschliche Urteil trägt die Verantwortung."
+            }
+          }
+        }
+      }
     }
   },
   "contextDrawer": {

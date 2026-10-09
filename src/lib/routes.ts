@@ -6,7 +6,7 @@ export const ROUTES = {
 } as const;
 
 /** Every published Episode, by slug. The Episode registry must list each one. */
-export const EPISODE_SLUGS = ['page-template', 'amnesiac-freelancer'] as const;
+export const EPISODE_SLUGS = ['page-template', 'amnesiac-freelancer', 'maintaining-markdown-for-ai'] as const;
 
 export type EpisodeSlug = (typeof EPISODE_SLUGS)[number];
 
