@@ -7,8 +7,6 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      // The real `getTranslations` needs a Next request scope; see the stand-in.
-      'next-intl/server': path.resolve(__dirname, './tests/support/next-intl-server.ts'),
     },
   },
   test: {

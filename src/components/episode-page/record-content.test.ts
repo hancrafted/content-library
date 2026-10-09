@@ -1,13 +1,48 @@
-import { slidesFor, type EpisodeRecord, type RuntimeKit } from '@/components/slide-master/episode-record';
+import {
+  slidesFor,
+  type EpisodeRecord,
+  type RuntimeKit,
+  type RuntimeTranslator,
+} from '@/components/slide-master/episode-record';
+import { TRANSLATIONS } from '@/i18n/translations';
+import type { Locale } from '@/lib/locale.pure';
 import { createElement, isValidElement, type ReactElement } from 'react';
 import { describe, expect, it } from 'vitest';
-import { recordContent } from './record-content';
+import { recordContent, type TranslatorOf } from './record-content';
 
 /*
- * `recordContent` reads the real Translation files through the next-intl
- * stand-in (vitest.config.ts), which returns each string as written, so these
- * tests read structure and keys, never wording.
+ * Stand-in for next-intl: reads the real Translation files and returns each
+ * string as written (no ICU formatting), so these tests read structure and
+ * keys, never wording. A missing key throws, as in the static build.
  */
+function translatorOf(locale: Locale): TranslatorOf {
+  return async (namespace) => {
+    const read = (key: string): string => {
+      const path = [...namespace.split('.'), ...key.split('.')];
+      const leaf = path.reduce<unknown>(
+        (node, part) => (node as Record<string, unknown> | undefined)?.[part],
+        TRANSLATIONS[locale],
+      );
+      if (typeof leaf !== 'string') throw new Error(`Missing Translation key "${path.join('.')}" in ${locale}.`);
+      return leaf;
+    };
+    const has = (key: string): boolean => {
+      try {
+        read(key);
+        return true;
+      } catch {
+        return false;
+      }
+    };
+    const t: RuntimeTranslator = Object.assign((key: string) => read(key), {
+      rich: read,
+      markup: read,
+      raw: read,
+      has,
+    });
+    return t;
+  };
+}
 const slide = slidesFor('page-template');
 
 /** What a Slide's Canvas saw of its kit: the strings it read and the heading level it got. */
@@ -52,7 +87,7 @@ describe('success cases', () => {
       ],
     };
     // ACT
-    const content = await recordContent(RECORD, 'en');
+    const content = await recordContent(RECORD, translatorOf('en'));
     // ASSERT
     expect({
       title: content.title,
@@ -72,7 +107,7 @@ describe('success cases', () => {
       { id: 'next-steps', slides: [] },
     ];
     // ACT
-    const { sections } = await recordContent(RECORD, 'en');
+    const { sections } = await recordContent(RECORD, translatorOf('en'));
     // ASSERT
     expect(sections.map(({ id, slides }) => ({ id, slides: slides.map((page) => page.id) }))).toEqual(expected);
   });
@@ -82,7 +117,7 @@ describe('success cases', () => {
     const expectedLevels = ['h2', 'h3'];
     const expectedTarget = 'title';
     // ACT
-    const { sections } = await recordContent(RECORD, 'en');
+    const { sections } = await recordContent(RECORD, translatorOf('en'));
     const [head, page] = [sections[0].slide.content, sections[0].slides[0].slide.content].map(headingOf);
     // ASSERT
     expect([head.props.as, page.props.as]).toEqual(expectedLevels);
@@ -94,7 +129,7 @@ describe('success cases', () => {
     const expectedNote = { slug: 'reference-episode', header: 'Why a reference Episode', target: 'prose' };
     const expectedSegment = { slug: 'one-breath', from: 0, to: 1, title: 'The template in one breath' };
     // ACT
-    const { sections } = await recordContent(RECORD, 'en');
+    const { sections } = await recordContent(RECORD, translatorOf('en'));
     const why = sections[0].slides[0].slide;
     // ASSERT
     expect(why.notes).toEqual([expect.objectContaining(expectedNote)]);
@@ -108,7 +143,7 @@ describe('failure cases', () => {
     const record: EpisodeRecord<'page-template'> = { slug: 'page-template', sections: [[foundations], [foundations]] };
     const expected = 'foundations';
     // ACT
-    const build = recordContent(record, 'en');
+    const build = recordContent(record, translatorOf('en'));
     // ASSERT
     await expect(build).rejects.toThrow(expected);
   });
@@ -122,7 +157,7 @@ describe('failure cases', () => {
     const record: EpisodeRecord<'page-template'> = { slug: 'page-template', sections: [[foundations, rogue]] };
     const expected = 'reference-episode';
     // ACT
-    const build = recordContent(record, 'en');
+    const build = recordContent(record, translatorOf('en'));
     // ASSERT
     await expect(build).rejects.toThrow(expected);
   });
@@ -134,7 +169,7 @@ describe('edge cases', () => {
     const bare = slide({ slug: 'what-comes-next', content: () => null });
     const record: EpisodeRecord<'page-template'> = { slug: 'page-template', sections: [[nextSteps, bare]] };
     // ACT
-    const { sections } = await recordContent(record, 'de');
+    const { sections } = await recordContent(record, translatorOf('de'));
     const [section] = sections;
     // ASSERT
     expect(section.slide.minutes).toBeUndefined();
