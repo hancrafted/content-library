@@ -7,12 +7,11 @@ const slide = slidesFor('maintaining-markdown-for-ai');
 
 export const theVerifyingHalfIsYours = slide({
   slug: 'the-verifying-half-is-yours',
-  minutes: { en: 2, de: 2 },
   notes: [
     { slug: 'the-work-moved', target: 'title' },
     { slug: 'closing-thesis', target: 'conclusion-card' },
   ],
-  segments: [{ slug: 'closing-thesis', from: 0.0, to: 0.85 }],
+  segments: [{ slug: 'closing-thesis' }],
   content: ({ t, target, Title }) => (
     <SectionSlide title={<Title>{t('title')}</Title>} caption={t('caption')}>
       <SlideProse>{t('prose')}</SlideProse>

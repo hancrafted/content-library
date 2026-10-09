@@ -21,7 +21,6 @@ function SubsidyCallout(): ReactElement {
 
 export const outcomePerEuro = slide({
   slug: 'outcome-per-euro',
-  minutes: { en: 2, de: 2 },
   notes: [{ slug: 'budget-accountability', target: 'title' }],
   content: ({ t, Title }) => (
     <SlideFrame>

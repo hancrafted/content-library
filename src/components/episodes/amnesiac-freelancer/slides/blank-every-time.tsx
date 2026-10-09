@@ -6,7 +6,6 @@ const slide = slidesFor('amnesiac-freelancer');
 
 export const blankEveryTime = slide({
   slug: 'blank-every-time',
-  minutes: { en: 3, de: 4 },
   notes: [
     {
       slug: 'stateless-by-design',
@@ -36,11 +35,7 @@ export const blankEveryTime = slide({
     },
     { slug: 'our-word-not-theirs', target: 'caption' },
   ],
-  segments: [
-    { slug: 'blank-slate', from: 0.0, to: 0.75 },
-    { slug: 'new-session-new-window', from: 0.75, to: 1.75 },
-    { slug: 'shifts', from: 1.75, to: 2.75, bridge: true },
-  ],
+  segments: [{ slug: 'blank-slate' }, { slug: 'new-session-new-window' }, { slug: 'shifts', bridge: true }],
   content: ({ t, ref, Title }) => (
     <>
       <BasicPageSlide

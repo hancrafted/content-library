@@ -103,7 +103,6 @@ function ToolsGrid(target: TargetProps): ReactElement {
 
 export const toolsAndTips = slide({
   slug: 'tools-and-tips',
-  minutes: { en: 2, de: 2 },
   notes: [
     { slug: 'tooling-and-steering', target: 'title' },
     { slug: 'operational-habits', target: 'tools-grid' },

@@ -6,12 +6,11 @@ const slide = slidesFor('maintaining-markdown-for-ai');
 
 export const whatAiAccelerates = slide({
   slug: 'what-ai-accelerates',
-  minutes: { en: 2, de: 2 },
   notes: [
     { slug: 'cross-referencing', target: 'title' },
     { slug: 'signals-not-resolutions', target: 'discrepancy-card' },
   ],
-  segments: [{ slug: 'signals-and-contradictions', from: 0.0, to: 0.85 }],
+  segments: [{ slug: 'signals-and-contradictions' }],
   content: ({ t, target, Title }) => (
     <SlideFrame>
       <Title>{t('title')}</Title>

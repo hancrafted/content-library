@@ -6,7 +6,6 @@ const slide = slidesFor('maintaining-markdown-for-ai');
 
 export const featureRoadmap = slide({
   slug: 'feature-roadmap',
-  minutes: { en: 2, de: 2 },
   notes: [
     { slug: 'v0-0-4-scope', target: 'shipped-col' },
     { slug: 'future-checks', target: 'planned-col' },

@@ -5,7 +5,6 @@ const slide = slidesFor('amnesiac-freelancer');
 
 export const keepItShort = slide({
   slug: 'keep-it-short',
-  minutes: { en: 3, de: 3 },
   notes: [
     {
       slug: 'bloat-gets-ignored',
@@ -35,11 +34,7 @@ export const keepItShort = slide({
       ],
     },
   ],
-  segments: [
-    { slug: 'more-is-worse', from: 0.0, to: 1.0 },
-    { slug: 'prune', from: 1.0, to: 2.0 },
-    { slug: 'minimal-is-not-short', from: 2.0, to: 3.0, bridge: true },
-  ],
+  segments: [{ slug: 'more-is-worse' }, { slug: 'prune' }, { slug: 'minimal-is-not-short', bridge: true }],
   content: ({ t, ref, Title }) => (
     <BasicPageSlide
       title={<Title>{t('title')}</Title>}

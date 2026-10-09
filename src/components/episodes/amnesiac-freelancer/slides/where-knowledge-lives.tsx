@@ -5,7 +5,6 @@ const slide = slidesFor('amnesiac-freelancer');
 
 export const whereKnowledgeLives = slide({
   slug: 'where-knowledge-lives',
-  minutes: { en: 4, de: 5 },
   notes: [
     {
       slug: 'training',
@@ -46,11 +45,7 @@ export const whereKnowledgeLives = slide({
       ],
     },
   ],
-  segments: [
-    { slug: 'training', from: 0.0, to: 1.0 },
-    { slug: 'the-session', from: 1.0, to: 2.5 },
-    { slug: 'files', from: 2.5, to: 3.5, bridge: true },
-  ],
+  segments: [{ slug: 'training' }, { slug: 'the-session' }, { slug: 'files', bridge: true }],
   content: ({ t, Title }) => {
     const column = (slug: 'training' | 'session' | 'files') => ({
       slug,

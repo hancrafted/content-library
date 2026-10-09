@@ -33,7 +33,6 @@ function LostMiddleDiagram(): ReactElement {
 
 export const theLostMiddle = slide({
   slug: 'the-lost-middle',
-  minutes: { en: 2, de: 2 },
   notes: [{ slug: 'attention-valley', target: 'title' }],
   content: ({ t, Title }) => (
     <SlideFrame>

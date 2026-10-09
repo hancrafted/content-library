@@ -59,7 +59,6 @@ function AttentionLanes(): ReactElement {
 
 export const managingContext = slide({
   slug: 'managing-context',
-  minutes: { en: 2, de: 2 },
   notes: [{ slug: 'cognitive-stamina', target: 'title' }],
   content: ({ t, Title }) => (
     <SectionSlide title={<Title>{t('title')}</Title>} caption={t('caption')}>

@@ -8,7 +8,6 @@ const PAGE_SLIDES = 3;
 
 export const onboarding = slide({
   slug: 'onboarding',
-  minutes: { en: 1, de: 1 },
   content: ({ t, Title }) => (
     <SectionSlide title={<Title>{t('title')}</Title>} caption={t('caption', { count: PAGE_SLIDES })} />
   ),

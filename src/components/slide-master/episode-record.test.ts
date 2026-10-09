@@ -32,9 +32,8 @@ function recordingKit(): { kit: RuntimeKit; calls: string[] } {
 
 const whyATemplate = slide({
   slug: 'why-a-template',
-  minutes: { en: 3, de: 4 },
   notes: [{ slug: 'reference-episode', target: 'prose' }],
-  segments: [{ slug: 'one-breath', from: 0, to: 1 }],
+  segments: [{ slug: 'one-breath' }],
   content: ({ t, ref, target, slideHref, template }) => {
     t('title');
     ref('reference-episode');
@@ -65,14 +64,13 @@ describe('success cases', () => {
     expect(whyATemplate).toMatchObject({
       episode: 'page-template',
       slug: 'why-a-template',
-      minutes: { en: 3, de: 4 },
       notes: [{ slug: 'reference-episode', target: 'prose' }],
-      segments: [{ slug: 'one-breath', from: 0, to: 1 }],
+      segments: [{ slug: 'one-breath' }],
     });
     expect(calls).toEqual(expected);
   });
 
-  it('defaults notes and segments to none and leaves minutes out', () => {
+  it('defaults notes and segments to none', () => {
     // ARRANGE
     const expected = { episode: 'page-template', slug: 'foundations', notes: [], segments: [] };
     // ACT

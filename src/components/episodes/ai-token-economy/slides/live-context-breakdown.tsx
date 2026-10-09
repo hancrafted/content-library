@@ -6,7 +6,6 @@ const slide = slidesFor('ai-token-economy');
 
 export const liveContextBreakdown = slide({
   slug: 'live-context-breakdown',
-  minutes: { en: 2, de: 2 },
   notes: [{ slug: 'synthetic-abstractions', target: 'title' }],
   content: ({ t, Title }) => (
     <SlideFrame>
