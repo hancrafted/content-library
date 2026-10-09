@@ -18,12 +18,13 @@ function snapshotPath(slug: string): string {
   return path.join(__dirname, slug, 'published-anchors.json');
 }
 
-/** The snapshot's anchors, or a thrown instruction when the Episode has none. */
-function publishedAnchorsOf(slug: string): string[] {
+/** The snapshot's anchors, or a thrown file to paste when the Episode has none. */
+function publishedAnchorsOf(slug: string, produced: readonly string[]): string[] {
   const file = snapshotPath(slug);
   if (!existsSync(file)) {
+    const contents = JSON.stringify([...new Set(produced)].sort());
     throw new Error(
-      `Episode "${slug}" has no published-anchors.json. Add ${file}: a sorted JSON array of its Slide anchors.`,
+      `Episode "${slug}" has no published-anchors.json. Create ${file} with this content:\n${contents}\n`,
     );
   }
   return JSON.parse(readFileSync(file, 'utf8')) as string[];
@@ -50,16 +51,17 @@ describe('success cases', () => {
     // ARRANGE
     const cases = [...EPISODE_SLUGS];
     // ACT
-    const lost = cases.flatMap((slug) =>
-      lostAnchors({ slug, published: publishedAnchorsOf(slug), produced: producedAnchors(slug) }),
-    );
+    const lost = cases.flatMap((slug) => {
+      const produced = producedAnchors(slug);
+      return lostAnchors({ slug, published: publishedAnchorsOf(slug, produced), produced });
+    });
     // ASSERT
     expect(lost).toEqual([]);
   });
 
   it('keeps each published-anchors.json a sorted array of unique strings', () => {
     // ARRANGE
-    const snapshots = EPISODE_SLUGS.map((slug) => publishedAnchorsOf(slug));
+    const snapshots = EPISODE_SLUGS.map((slug) => publishedAnchorsOf(slug, producedAnchors(slug)));
     // ACT
     const unsorted = snapshots.filter((anchors) => anchors.join() !== [...new Set(anchors)].sort().join());
     // ASSERT
@@ -84,14 +86,17 @@ describe('failure cases', () => {
     expect(rest).toEqual([]);
   });
 
-  it('fails an Episode that has no published-anchors.json', () => {
+  it('fails an Episode that has no published-anchors.json and prints the sorted file to paste', () => {
     // ARRANGE
     const unregistered = 'no-such-episode';
-    const expectedFile = 'published-anchors.json';
+    const produced = ['demo--why', 'demo', 'demo--how'];
+    const expectedFile = path.join('no-such-episode', 'published-anchors.json');
+    const expectedJson = '["demo","demo--how","demo--why"]';
     // ACT
-    const read = () => publishedAnchorsOf(unregistered);
+    const read = () => publishedAnchorsOf(unregistered, produced);
     // ASSERT
     expect(read).toThrow(expectedFile);
+    expect(read).toThrow(expectedJson);
   });
 });
 
