@@ -4,6 +4,7 @@ import { placeSections } from '@/lib/episode.pure';
 import { EPISODE_SLUGS } from '@/lib/routes';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
+import { format, resolveConfig } from 'prettier';
 import { describe, expect, it } from 'vitest';
 
 /*
@@ -18,11 +19,17 @@ function snapshotPath(slug: string): string {
   return path.join(__dirname, slug, 'published-anchors.json');
 }
 
+/** The file to paste for a new Episode: its anchors sorted, formatted with the repo's prettier config so `prettier --check` accepts it. */
+async function snapshotFile(file: string, produced: readonly string[]): Promise<string> {
+  const options = await resolveConfig(file);
+  return format(JSON.stringify([...new Set(produced)].sort()), { ...options, filepath: file });
+}
+
 /** The snapshot's anchors, or a thrown file to paste when the Episode has none. */
-function publishedAnchorsOf(slug: string, produced: readonly string[]): string[] {
+async function publishedAnchorsOf(slug: string, produced: readonly string[]): Promise<string[]> {
   const file = snapshotPath(slug);
   if (!existsSync(file)) {
-    const contents = JSON.stringify([...new Set(produced)].sort());
+    const contents = await snapshotFile(file, produced);
     throw new Error(
       `Episode "${slug}" has no published-anchors.json. Create ${file} with this content:\n${contents}\n`,
     );
@@ -47,21 +54,24 @@ function producedAnchors(slug: (typeof EPISODE_SLUGS)[number]): string[] {
 }
 
 describe('success cases', () => {
-  it('still produces every published anchor of every registered Episode', () => {
+  it('still produces every published anchor of every registered Episode', async () => {
     // ARRANGE
     const cases = [...EPISODE_SLUGS];
     // ACT
-    const lost = cases.flatMap((slug) => {
-      const produced = producedAnchors(slug);
-      return lostAnchors({ slug, published: publishedAnchorsOf(slug, produced), produced });
-    });
+    const lostPerEpisode = await Promise.all(
+      cases.map(async (slug) => {
+        const produced = producedAnchors(slug);
+        return lostAnchors({ slug, published: await publishedAnchorsOf(slug, produced), produced });
+      }),
+    );
+    const lost = lostPerEpisode.flat();
     // ASSERT
     expect(lost).toEqual([]);
   });
 
-  it('keeps each published-anchors.json a sorted array of unique strings', () => {
+  it('keeps each published-anchors.json a sorted array of unique strings', async () => {
     // ARRANGE
-    const snapshots = EPISODE_SLUGS.map((slug) => publishedAnchorsOf(slug, producedAnchors(slug)));
+    const snapshots = await Promise.all(EPISODE_SLUGS.map((slug) => publishedAnchorsOf(slug, producedAnchors(slug))));
     // ACT
     const unsorted = snapshots.filter((anchors) => anchors.join() !== [...new Set(anchors)].sort().join());
     // ASSERT
@@ -86,17 +96,17 @@ describe('failure cases', () => {
     expect(rest).toEqual([]);
   });
 
-  it('fails an Episode that has no published-anchors.json and prints the sorted file to paste', () => {
+  it('fails an Episode that has no published-anchors.json and prints the sorted file as prettier writes it', async () => {
     // ARRANGE
     const unregistered = 'no-such-episode';
     const produced = ['demo--why', 'demo', 'demo--how'];
     const expectedFile = path.join('no-such-episode', 'published-anchors.json');
-    const expectedJson = '["demo","demo--how","demo--why"]';
+    const expectedJson = '\n["demo", "demo--how", "demo--why"]\n\n';
     // ACT
-    const read = () => publishedAnchorsOf(unregistered, produced);
+    const read = publishedAnchorsOf(unregistered, produced);
     // ASSERT
-    expect(read).toThrow(expectedFile);
-    expect(read).toThrow(expectedJson);
+    await expect(read).rejects.toThrow(expectedFile);
+    await expect(read).rejects.toThrow(expectedJson);
   });
 });
 
@@ -109,5 +119,28 @@ describe('edge cases', () => {
     const lost = lostAnchors({ slug: 'demo', published, produced });
     // ASSERT
     expect(lost).toEqual([]);
+  });
+
+  it('prints a list too long for one line one anchor per line, as prettier writes it', async () => {
+    // ARRANGE
+    const produced = [
+      'why-context-runs-out',
+      'why-context-runs-out--the-lost-middle',
+      'why-context-runs-out--the-fullness-gauge',
+      'why-context-runs-out--levers',
+    ];
+    const expectedJson = [
+      '[',
+      '  "why-context-runs-out",',
+      '  "why-context-runs-out--levers",',
+      '  "why-context-runs-out--the-fullness-gauge",',
+      '  "why-context-runs-out--the-lost-middle"',
+      ']',
+      '',
+    ].join('\n');
+    // ACT
+    const read = publishedAnchorsOf('no-such-episode', produced);
+    // ASSERT
+    await expect(read).rejects.toThrow(expectedJson);
   });
 });

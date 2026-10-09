@@ -157,7 +157,6 @@ flowchart LR
 ## References
 
 - [`GLOSSARY.md`](../../GLOSSARY.md#episode-structure) — Episode structure: Section, Slide, Canvas, Slide master, Slide layout, Voice script.
-- [`docs/adr/0002-reading-time-from-voice-script.md`](../../docs/adr/0002-reading-time-from-voice-script.md) — why minutes are counted, the rates, hiding 0.
 - [`docs/agents/episode-translation-keys.md`](../../docs/agents/episode-translation-keys.md) — key roles, worked examples.
 - [`docs/agents/episode-migration.md`](../../docs/agents/episode-migration.md) — converting a prototype into an Episode, step by step.
 - [`docs/agents/episode-page-layout.md`](../../docs/agents/episode-page-layout.md) — table of contents placement, corner allocation, reserved places.
