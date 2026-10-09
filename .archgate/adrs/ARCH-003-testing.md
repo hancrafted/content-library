@@ -4,8 +4,8 @@ id: ARCH-003
 title: 'Testing'
 domain: architecture
 rules: true
-files: ['**/*.test.ts']
-paths: ['**/*.test.ts', '**/*.pure.ts', '.archgate/adrs/ARCH-003-testing.rules.ts']
+files: ['src/**/*.test.ts']
+paths: ['**/*.test.ts', 'src/**/*.pure.ts']
 description: "What a test file may do and how it is shaped: six behavioural Don'ts that keep green meaningful everywhere, plus a three-block suite split, marked test bodies and two import homes under src/."
 ---
 
@@ -33,10 +33,11 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 2. The `// ASSERT` block MUST NOT hold a magic string or number; name it in `// ARRANGE`, so a reviewer can disagree with it. Exempt as pure noise: `0`, `1`, `-1`, `true`, `false`, `null`, `undefined`, `''`, `[]`, `{}`.
 3. An assertion MUST NOT collapse into a boolean inside `// ACT`. Put the observation in `// ACT` and keep the rich matcher in `// ASSERT` — `expect(seen).toContain(key)` names the missing key, while `expect(isSeen).toBe(true)` discards why it failed.
 
-### 4. Two homes for a test
+### 4. Where a test lives
 
-1. `<pkg>/tests/*.test.ts` is the Package's integration suite: entry points only, at the grain a caller sees; `*.impure.ts` is exercised here too — through the entry point, never imported directly.
-2. `<pkg>/<subfolder>/*.test.ts` is a unit suite. It MAY import its same-directory, same-name `.pure.ts` sibling, Package root entry points, and platform builtins (exempted by `only-the-gate-imports-a-builtin` when needed for in-test file fixtures), and no other Package internals.
+1. A unit test sits beside its subject under `src/` — `slide-zone.pure.test.ts` beside `slide-zone.pure.ts` — and runs in the fast suite.
+2. A test that needs the built site is `*.build.test.ts` under `tests/post-build/`, run only after `npm run build`; the fast suite never needs a build.
+3. An Episode test reaches only what an Episode file may, plus Node builtins for in-test fixtures.
 
 ## Do's and Don'ts
 
@@ -48,7 +49,7 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 4. **DO** split every suite under `src/` into `success cases`, `failure cases` and `edge cases`, with at least one test in each. (Decision 2, 📜 Rule: `suite-three-blocks`)
 5. **DO** treat a block you cannot fill as a question about the subject, not a rule to route around. (Decision 2.1)
 6. **DO** mark every body `// ARRANGE`, `// ACT`, `// ASSERT`, naming expected values before asserting them. (Decision 3, 📜 Rule: `test-body-aaa`)
-7. **DO** test a `*.pure.ts` file from its same-name sibling, and everything else through an entry point. (Decision 4.2)
+7. **DO** put pure logic in a `*.pure.ts` and test it from its same-name sibling. (Decision 4)
 8. **DO** assert an absence of side effects by comparing an observation taken before the action against the same observation taken after it. (Decision 1.2)
 
 ### Don'ts
@@ -72,7 +73,7 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 ### Negative
 
 - **Collaborator substitution requires hand-written stand-ins.** In-file test doubles are more verbose than `vi.spyOn`, trading brevity for transparency.
-- **Impure modules have no cheap unit tests.** Logic in `*.impure.ts` must be exercised through entry points against real files or refactored into pure units.
+- **Built-output tests run late.** A `*.build.test.ts` fails on the pull request, not at commit.
 
 ### Risks
 
@@ -81,13 +82,13 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 
 ## Compliance and Enforcement
 
-1. **Determinism & Real Execution (Decision 1)** — Review duty; no mechanical check exists (`eslint.config.mjs` has no test-file block). Reviewers MUST reject `vi.mock`/`vi.spyOn`, snapshots, `.skip`/`.only`, ambient time or randomness (`Date.now()`, `Math.random()`), network calls and assertion-free bodies.
-2. **Suite Structure (Decision 2)** — `ARCH-003-testing.rules.ts` rule `suite-three-blocks`, `error` tier, over `src/**/*.test.ts`: top-level `describe` names are exactly the three blocks, once each. The two-level nesting limit and "at least one test per block" are review duties (an empty block also fails vitest and `no-empty-function`).
-3. **Test-Body Structure (Decision 3)** — `ARCH-003-testing.rules.ts` rule `test-body-aaa`, `error` tier, over `src/**/*.test.ts`: each `it`/`test` body carries the three uppercase markers once each, in order, one per comment. Line-scanned, so a body runs to the next test or `describe` line. §3.2 magic values and §3.3 rich matchers are review duties.
-4. **Test Homes & Boundaries (Decision 4)** — Dependency-cruiser rules `tests-through-entrypoints` and `colocated-test-lane` in `.dependency-cruiser.cjs` (`npm run lint:boundaries`).
-5. **Tautological Assertions** — Not mechanically checkable (review duty).
+1. **Rules** (archgate, error): `suite-three-blocks` (§2.1), `test-body-aaa` (§3.1), over `src/**/*.test.ts`.
+2. **Dependency rules:** Episode tests reach only Slide parts and builtins (§4.3).
+3. **Test config:** the fast suite excludes `*.build.test.ts` (§4.2).
 
-**Exceptions** are granted by amending this record, never by an inline suppression comment.
+**Manual review duties:** §1 — no mocks, spies, snapshots, `.skip`/`.only`, ambient time or randomness, network, assertion-free or tautological bodies; nesting depth and a test per block (§2); no magic values in `// ASSERT`, rich matchers (§3.2, §3.3).
+
+**Exceptions:** amend this record; never an inline suppression.
 
 ## References
 
