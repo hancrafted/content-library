@@ -8,7 +8,7 @@ A floating card in the table of contents' chrome (corners, border, shadow), opaq
 
 ## Modes
 
-- **From `xl` (1280px):** a "more" menu in the head picks **beside** (default) or **over**. Beside reserves the card's width by changing the Episode grid's third column at once, through a spacer in the context slot, so the Slides reflow once. Width, grid and margin never transition. The mode is the `drawerMode` user preference (FE-004): read and written only through `readPrefs`/`writePrefs`, so it survives reloads; the drawer's open state and tab stay transient (FE-001).
+- **From `xl` (1280px):** a "more" menu in the head picks **beside** (default) or **over**. Beside reserves the card's width by changing the Episode grid's third column at once, through a spacer in the context slot, so the Slides reflow once. Width, grid and margin never transition. The mode is the `drawerMode` user preference (FE-001): read and written only through `readPrefs`/`writePrefs`, so it survives reloads; the drawer's open state and tab stay transient (FE-001).
 - **Below `xl`:** the card is always an overlay and the menu is hidden. The stored mode is kept, not reset, so widening the window restores it. This is decided by CSS alone (`xl:` classes on the spacer and the menu), never by a JavaScript width check.
 - **Below `md`:** a dimmed scrim (`bg-black/40`, backdrop blur) covers the page; tapping it closes the drawer. It is pointer-only: Escape and the close button still work.
 

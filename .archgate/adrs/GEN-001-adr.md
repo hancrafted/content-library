@@ -6,113 +6,103 @@ domain: general
 rules: true
 files: ['.archgate/adrs/**/*.{md,ts}']
 paths: ['.archgate/adrs/**/*.{md,ts}']
-description: 'The shape contract every ADR under .archgate/adrs/ obeys: frontmatter bundle and order, six canonical sections, authoring discipline, a size budget, and companion rules-file duties.'
+description: 'What every ADR under .archgate/adrs/ is: a short, standalone, high-level decision with examples, in a fixed shape held by rules.'
 ---
 
 # ADR Contract
 
 ## Context
 
-An ADR records an **ADR Discipline**: one universal constraint on how code is written, at an altitude no future feature can invalidate. An **ADR rule** is the mechanical check a Discipline earns in a companion `.rules.ts`; a Discipline may have none. Feature- and contract-shaped reasoning belongs in a design-ADR — if the next feature could make the record wrong, the altitude is wrong.
+An ADR records a **Discipline**: one lasting constraint on how code is written, and why. A **rule** is its mechanical check in a companion `.rules.ts`; a Discipline may have none.
 
-This ADR pins the shape every other ADR relies on. `archgate check --strict` gates it at commit and push.
+ADRs get loaded into agent context on every matching Read. Long ones bury the rule; low-level detail (signatures, constants, lint selectors) goes stale on the next refactor; links to other ADRs and issues drag readers elsewhere and rot when those move. Code, tests and rules already hold the detail — the ADR holds the decision.
+
+Altitude test: if the next feature could make the record wrong, it's too low. Feature- and contract-shaped reasoning goes in a design-ADR under `docs/adr/`.
 
 ## Decision
 
-### 1. Scope and directory layout
+### 1. Content: high-level, short, standalone
 
-1. `.archgate/adrs/` MUST stay flat: top-level `<PREFIX>-<NNN>-<slug>` `.md`, `.rules.ts`, or `.rules.test.ts`, with rules files backed by an `.md`. (📜 Rule: `adr-governed-files`)
+1. Decision MUST state the rule and its reason, not the mechanism. Signatures, timings, selectors live in code, tests, rules.
+2. Prose MUST be terse; grammar MAY be dropped. Examples beat paragraphs — `#drawer=open` opens a stranger's drawer.
+3. An ADR MUST stand alone: no links or ID references to other ADRs, no issue links. External docs and repo research files allowed.
+4. Name a file or symbol only where a rule or reviewer checks it.
 
-### 2. Frontmatter contract (📜 Rule: `adr-frontmatter`)
+### 2. Layout (📜 Rule: `adr-governed-files`)
 
-1. Frontmatter MUST lead with `type: adr`, declaring non-empty `id` (matching filename prefix), `title`, registered `domain`, `rules` (true iff sibling `.rules.ts` exists), `files`, `description`, and optional `paths`.
-2. `paths:` MAY differ from `files:`: `files:` inspects, `paths:` steers the author.
-3. Both globs MUST be inline YAML flow lists — `['glob']`. (📜 Rule: `adr-glob-inline`)
-4. Every glob entry MUST match an existing file; a literal path must exist. (📜 Rule: `adr-paths-resolve`)
+1. `.archgate/adrs/` MUST stay flat: `<PREFIX>-<NNN>-<slug>` as `.md`, `.rules.ts` or `.rules.test.ts`, rules files backed by an `.md`.
 
-### 3. Required sections (📜 Rule: `adr-required-sections`)
+### 3. Frontmatter
 
-1. Every ADR MUST carry all six canonical H2 headings: `## Context`, `## Decision`, `## Do's and Don'ts`, `## Consequences`, `## Compliance and Enforcement`, `## References`.
+1. Lead with `type: adr`, then `id` (matching filename), `title`, registered `domain`, `rules` (true iff `.rules.ts` exists), `files`, `description`, optional `paths` (📜 Rule: `adr-frontmatter`).
+2. `files:` scopes checks, `paths:` steers the author; both inline flow lists — `['src/**/*.ts']` (📜 Rule: `adr-glob-inline`).
+3. Every glob MUST match an existing file; scope a forbidden file via a glob matching a real sibling — `{proxy,middleware}.ts` (📜 Rule: `adr-paths-resolve`).
 
-### 4. Size budget (📜 Rule: `adr-size-budget`)
+### 4. Shape
 
-1. An ADR markdown file MUST stay under 12,000 characters.
+1. Six H2s in order: Context, Decision, Do's and Don'ts, Consequences, Compliance and Enforcement, References (📜 Rule: `adr-required-sections`).
+2. Under 12,000 characters; aim far lower (📜 Rule: `adr-size-budget`).
+3. Decision as `### N.` anchors from 1, each a numbered list (📜 Rule: `adr-numbered-decision`); Do's then Don'ts, each from 1, bold `**DO**`/`**DON'T**` (📜 Rule: `adr-numbered-dos-donts`).
+4. Each rule marked once in Decision and once in Do's/Don'ts with its Decision number (📜 Rule: `adr-rule-mentions`).
 
-### 5. Authoring discipline
+### 5. Rules files
 
-1. Number Decision anchors `### N.` sequentially from 1, each holding a sequential ordered list. (📜 Rule: `adr-numbered-decision`)
-2. Head blocks `### Do's` then `### Don'ts`, each restarting at 1 with bold `**DO**` / `**DON'T**` prefixes. (📜 Rule: `adr-numbered-dos-donts`)
-3. Anchor every companion rule twice: in Decision (`📜 Rule: <id>`) and in Do's/Don'ts (`Decision <N>, 📜 Rule: <id>`). (📜 Rule: `adr-rule-mentions`)
-
-### 6. Companion rules-file discipline
-
-1. Every `.rules.ts` MUST have a sibling `.rules.test.ts` covering pass and fail paths. (📜 Rule: `adr-rules-test-sibling`)
-2. Every rule report message MUST embed `(<ID> [<rule-key>])`. (📜 Rule: `adr-message-provenance`)
-
-### 7. Enforcement tier
-
-1. Every rule MUST run at `error` tier. (📜 Rule: `adr-error-tier`)
+1. Every `.rules.ts` MUST have a `.rules.test.ts` covering pass and fail (📜 Rule: `adr-rules-test-sibling`).
+2. Every message MUST embed `(<ID> [<rule-key>])` (📜 Rule: `adr-message-provenance`).
+3. Every rule runs at `error` (📜 Rule: `adr-error-tier`).
 
 ## Do's and Don'ts
 
 ### Do's
 
-1. **DO** open every ADR frontmatter with `type: adr`, declaring required keys with `id` matching the filename. (Decision 2, 📜 Rule: `adr-frontmatter`)
-2. **DO** write `files:` and `paths:` as inline flow lists, each scoped for its own channel. (Decision 2, 📜 Rule: `adr-glob-inline`)
-3. **DO** repoint or drop a `files:`/`paths:` entry in the same change that moves or deletes the file it names. (Decision 2, 📜 Rule: `adr-paths-resolve`)
-4. **DO** emit all six canonical H2 sections; empty bodies pass the linter but not review. (Decision 3, 📜 Rule: `adr-required-sections`)
-5. **DO** keep every ADR markdown file under the character budget, this one included. (Decision 4, 📜 Rule: `adr-size-budget`)
-6. **DO** number Decision anchors `### N.` from 1, with sequential ordered items inside each. (Decision 5, 📜 Rule: `adr-numbered-decision`)
-7. **DO** head the blocks `### Do's` then `### Don'ts`, each restarting at 1 with its bold prefix. (Decision 5, 📜 Rule: `adr-numbered-dos-donts`)
-8. **DO** anchor every companion rule to prose on both sides. (Decision 5, 📜 Rule: `adr-rule-mentions`)
-9. **DO** give every `.rules.ts` a sibling `.rules.test.ts` exercising each rule's pass and fail path. (Decision 6, 📜 Rule: `adr-rules-test-sibling`)
-10. **DO** embed `(<ID> [<rule-key>])` in every report message. (Decision 6, 📜 Rule: `adr-message-provenance`)
-11. **DO** run every companion rule at the `error` tier. (Decision 7, 📜 Rule: `adr-error-tier`)
+1. **DO** show one example instead of explaining — `{ theme, locale, drawerMode }` + one. (Decision 1)
+2. **DO** keep the bundle flat — `FE-001-state-management.{md,rules.ts,rules.test.ts}`. (Decision 2, 📜 Rule: `adr-governed-files`)
+3. **DO** open frontmatter with `type: adr` and an `id` matching the filename. (Decision 3, 📜 Rule: `adr-frontmatter`)
+4. **DO** write globs inline — `files: ['src/**/*.ts']`. (Decision 3, 📜 Rule: `adr-glob-inline`)
+5. **DO** repoint a glob in the change that moves its file. (Decision 3, 📜 Rule: `adr-paths-resolve`)
+6. **DO** emit all six H2s with real bodies. (Decision 4, 📜 Rule: `adr-required-sections`)
+7. **DO** number anchors `### 1.`, `### 2.` with numbered items. (Decision 4, 📜 Rule: `adr-numbered-decision`)
+8. **DO** restart Do's and Don'ts at 1. (Decision 4, 📜 Rule: `adr-numbered-dos-donts`)
+9. **DO** give every `.rules.ts` a sibling test. (Decision 5, 📜 Rule: `adr-rules-test-sibling`)
+10. **DO** tag messages — `(FE-001 [single-storage-key])`. (Decision 5, 📜 Rule: `adr-message-provenance`)
 
 ### Don'ts
 
-1. **DON'T** omit `files:` — archgate then widens the check to every project file. (Decision 2)
-2. **DON'T** park stray files, subdirectories, or ADR-less rules files under `.archgate/adrs/`. (Decision 1, 📜 Rule: `adr-governed-files`)
-3. **DON'T** exempt an ADR from the size budget or widen this contract beyond `.archgate/adrs/`. (Decision 4)
-4. **DON'T** flip the enforcement tier or add rules outside an explicit ADR amendment. (Decision 7)
+1. **DON'T** spell out mechanism — no `createUrlState(window)`, `150 ms`, `NewExpression[...]`. (Decision 1)
+2. **DON'T** link another ADR or an issue — `[FE-004](./FE-004-…)`, `#13`. (Decision 1)
+3. **DON'T** split one Discipline's prose to dodge the budget; cut words first. (Decision 4, 📜 Rule: `adr-size-budget`)
+4. **DON'T** mark a rule twice on one side, or name one that doesn't exist. (Decision 4, 📜 Rule: `adr-rule-mentions`)
+5. **DON'T** ship a rule at `warning` or `info`. (Decision 5, 📜 Rule: `adr-error-tier`)
 
 ## Consequences
 
 **Positive:**
 
-1. **Fork-proof shape:** the frontmatter bundle, six sections and numbering are machine-held, not habit-held.
-2. **Scoped checks:** `files:` keeps an ADR's rules off changes they have no business judging.
-3. **Bounded context cost:** the budget caps what any one ADR adds to a matching Read.
-4. **Dogfooded:** GEN-001's rules validate its own bundle on every `archgate check`.
-5. **Rule ↔ prose traceability:** markers are checked both directions — no unmentioned rule, no marker naming a rule that does not exist.
+1. **Cheap context:** short ADRs load fast and read in one pass.
+2. **Stable:** high-level rules survive refactors; detail drifts in code, where tests catch it.
+3. **Isolated:** each ADR readable alone; renaming or deleting one breaks no other.
+4. **Machine-held shape:** frontmatter, sections, numbering and markers checked every `archgate check`.
 
 **Negative:**
 
-1. **Name-level pairing only:** markers pair names, not meanings. A marked sentence that outruns its rule reads as compliant, so alignment is a review duty.
-2. **Regex meta-parsing:** the meta-rules parse YAML and TypeScript with regexes, making quoted kebab-case rule keys and inline flow globs load-bearing. AST hardening: [#7](https://github.com/hancrafted/typescript-ai-harness/issues/7).
-3. **Authoring ceremony:** numbered anchors, subsection headings, twin markers, a sibling rules-test and provenance tags cost more than plain prose. Mitigated: `archgate:adr-author` encodes the shape and each message names its fix.
-4. **The budget forces splits:** a Discipline set outgrowing the cap must split by glob, buying a frontmatter block and six sections per new ADR.
-5. **No sentinel entries:** §2.4 rejects a literal entry naming a file that must never exist (a forbidden `middleware.ts`). Scoping such a file needs a glob that also matches an existing sibling — `{next.config,proxy,middleware}.{ts,js,mjs}` — which reads less plainly than the literal list it replaces.
+1. **Detail lives elsewhere:** reader opens code or tests for the how.
+2. **Some repetition:** standalone ADRs may restate a neighbour's concept in a few words.
+3. **Ceremony:** markers, numbering, sibling tests cost more than free prose.
 
 **Risks:**
 
-1. **Two budgets disagree:** archgate's briefing budget caps `Decision` and `Do's and Don'ts` far below the whole-file cap, so a file under budget can still overflow a briefing. **Mitigation:** `archgate check` reports both figures every run; `--strict` promotes briefing overflow to a failure if adopted.
-2. **Vendor drift:** the cap tracks one vendor's published limit, on no measured evidence. **Mitigation:** re-measure against Claude Code `InstructionsLoaded` output and amend this ADR rather than the rule alone.
+1. **Content rules unchecked:** §1 is judgement; old ADRs still link and over-explain. **Mitigation:** reviewer duty; trim each ADR when next touched; add a no-link rule once all comply.
+2. **Markers pair names, not meanings:** a marked sentence can outrun its rule. **Mitigation:** review checks prose matches rule.
 
 ## Compliance and Enforcement
 
-**Enforcer per Discipline:** `GEN-001-adr.rules.ts` holds every Discipline above at the `error` tier (§7), scoped by `files:` to ADR bundle files, and is the source-of-truth for the full set. `.archgate/**` sits outside this repo's eslint and `tsc --noEmit` gates until a dedicated script ADR governs rules-file authoring ([#9](https://github.com/hancrafted/typescript-ai-harness/issues/9)), so every rules file is self-contained; prettier and vitest cover `.archgate/**/*.ts`, and `archgate check` is the sole gate on ADR markdown.
+1. **Rules** (`GEN-001-adr.rules.ts`, error): §2–§5, scoped to `.archgate/adrs/`.
+2. **Gate:** `archgate check` in `npm run verify`.
 
-**Second budget channel:** `archgate check` reports a per-section briefing budget over `Decision` and `Do's and Don'ts`, stricter than §4's whole-file cap and independent of it. `archgate check --strict` promotes those warnings to failures — not adopted here, since `--strict` also promotes suppression and unparsed-ADR warnings, a `verify`-pipeline decision of its own.
-
-**Dead-entry check:** `adr-paths-resolve` resolves each `files:` and `paths:` entry through archgate's own `ctx.glob`, so it catches a refactor that deleted or moved a governed file; it cannot tell whether a resolving glob still names the _right_ files.
-
-**Manual review duties** (never linted): each glob describes its channel's real scope; each rule's prose describes what that rule does (§5.3 pairs names, not meanings); section bodies are substantive, not presence-only placeholders; `## Compliance and Enforcement` names a real enforcer and config location; the sibling test covers each rule's pass and fail path (§6.1).
+**Manual review duties:** §1 — altitude, terseness, examples, no cross-links; prose matches its rule; globs name the right files, not just existing ones; tests cover pass and fail.
 
 **Exceptions:** raise a separate ADR; human approval required.
 
 ## References
 
-- [archgate](https://archgate.dev/) — `files:`, `ctx.scopedFiles`, registered domains, the deterministic rule model.
-- [GEN-002](./GEN-002-adr-symlink-claude-rules.md) — the `.claude/rules` runtime channel that carries a scoped ADR into agent context.
-- Deferred hardening: [#7 AST-harden the meta-parsers](https://github.com/hancrafted/typescript-ai-harness/issues/7), [#8 contract evolution mechanism](https://github.com/hancrafted/typescript-ai-harness/issues/8), [#9 script ADR + toolchain guardrails](https://github.com/hancrafted/typescript-ai-harness/issues/9).
+- [archgate](https://archgate.dev/) — `files:`, registered domains, rule model.

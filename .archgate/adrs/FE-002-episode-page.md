@@ -4,114 +4,109 @@ id: FE-002
 title: 'Episode Page'
 domain: frontend
 rules: false
-# prettier-ignore
-files: ['src/components/episodes/**', 'src/components/episode/**', 'src/components/pages/episode-page.tsx', 'src/components/table-of-contents/**', 'src/hooks/use-url-state.ts', 'src/app/**/episode/**', 'src/lib/routes.ts', 'src/lib/episode*', 'src/lib/table-of-contents*', 'src/messages/*.json', 'tests/post-build/episode-structure.build.test.ts', 'eslint.config.mjs', '.dependency-cruiser.cjs']
-# prettier-ignore
-paths: ['src/components/episodes/**', 'src/components/episode/**', 'src/components/pages/episode-page.tsx', 'src/components/table-of-contents/**', 'src/hooks/use-url-state.ts', 'src/app/**/episode/**', 'src/lib/routes.ts', 'src/lib/episode*', 'src/lib/table-of-contents*', 'src/messages/*.json', 'tests/post-build/episode-structure.build.test.ts', 'eslint.config.mjs', '.dependency-cruiser.cjs']
-description: 'The authoring floor for an Episode page: a typed Episode record rendered only by EpisodePageContainer, headings mirroring the manuscript, free slide content, keyed strings, and the table of contents consumed through the container.'
+files: ['src/components/episode*/**', 'src/components/table-of-contents/**', 'src/app/**/episode/**']
+paths: ['src/components/episode*/**', 'src/components/table-of-contents/**', 'src/app/**/episode/**']
+description: 'How an Episode page is built: structure is a typed record rendered by one container, Slide content is free JSX, headings mirror the manuscript, strings keyed by slug.'
 ---
 
 # Episode Page
 
 ## Context
 
-An Episode is one page: a Title slide, then its Sections, each a section slide followed by zero or more page Slides, stacked vertically beside the Episode's table of contents. Every Episode is built the same way, and the manuscript (Markdown, not yet in the repo) shares its H1/H2/H3 spine with the page, so a future pipeline can map one onto the other.
+Episode = one page: Title slide, then Sections, each a section slide plus page Slides, beside a table of contents. Every Episode shares this shape, and the Markdown manuscript shares its H1/H2/H3 spine, so a later pipeline can map one onto the other.
 
-**Why structure is schema and content is not.** A prior prototype forced each slide through a per-slide type interface. The agent then bent its visual design to fit the schema, and the visualisations degraded. A visualisation needs creative freedom a schema cannot anticipate. One level up the case reverses: how an Episode is put together (title, Sections, Slides, anchors, reading times, the table of contents) is the same for every Episode, and drift there breaks navigation, translation and the manuscript mapping. So the Episode's _structure_ is a typed record rendered by one container, and each Slide's _content_ is free JSX.
+**Structure is schema, content is not.** A prototype forced each slide through a typed interface; the agent bent visuals to fit and they degraded. Visualisations need freedom no schema anticipates. One level up it flips: title, Sections, anchors, reading times and table of contents are identical for every Episode, and drift there breaks navigation, translation and the manuscript mapping.
 
-A page file never writes slots or anchors, so the table of contents (which reads the same anchors) cannot drift from the slides. The record is the one place a Slide's static metadata (id, title, minutes, Section, Speaker notes) is declared: the Slide wrapper ([FE-009](./FE-009-slide-frame.md)) receives it, and each page consumer reads it through its adapter, with the live active Slide from [FE-001](./FE-001-state-management.md). A title and reading time are a capability, not a duty: an untitled Slide renders but is not listed, and its minutes still count. The Title slide's wrapper carries the reserved id `top` (`titleAnchor()`), which no slug may take. The table of contents heading links to it (`aria-current` there) and the pill shows remaining time only. The drawer's `top` item shows `contextDrawer.explainer` on both tabs, a `role="note"` shadcn Alert; the container provides the page's one URL-state service (FE-001 §2); other note-less Slides keep the one-line empty message. Section wrappers are `section[data-section]`; anchors are `id` and `data-slide`, derived in `src/lib/episode.pure.ts`. Reading time is per locale because German narration runs longer; it lives beside the slug until a manuscript pipeline supplies it. A schema for the Slide master's basic structures is a separate, later decision. The catalog's role vocabulary and worked examples live in [`docs/agents/episode-catalog-keys.md`](../../docs/agents/episode-catalog-keys.md).
+So: typed record for structure, rendered by one container; free JSX for each Slide.
 
-**Out of scope, with a reserved place (Decision 7):** the Episode's video, back-to-top and corner allocation ([#6](https://github.com/hancrafted/content-library/issues/6)); arrow-key navigation. Speaker notes and voice script: [FE-010](./FE-010-context-drawer.md). **Elsewhere:** URL and fragment stability ([#7](https://github.com/hancrafted/content-library/issues/7)); table-of-contents internals and motion (code comments); locale routing ([FE-003](./FE-003-localization.md)); the client boundary ([FE-006](./FE-006-server-client-boundary.md)).
+**How it fits.** Each Slide is declared once, in the record; every page part reads it from there.
+
+```
+episodes/<slug>/  → Episode record (Sections → Slides: slug, title, minutes, notes)
+      ↓ registered by slug (typed: no record without slug, no slug without record)
+container         → Title slide, Section wrappers, anchors
+      ↓ same record
+consumers         → table of contents, Context drawer, URL state
+```
+
+**Reference implementation: `src/components/episodes/page-template/`** — copy it to start an Episode. How a Slide is written (layouts, context notes, catalog keys) lives there, not here.
 
 ## Decision
 
 ### 1. One container renders every Episode
 
-1. Only `EpisodePageContainer` MAY emit an Episode's slots (`episode-page` > `toc`, `slides`, `context`), Title slide, Section wrappers, anchors and table of contents, all derived from one record.
+1. Only `EpisodePageContainer` MAY emit an Episode's slots, Title slide, Section wrappers, anchors and table of contents — all derived from the record. Page files never write them, so table of contents and Slides can't drift.
 
-### 2. The Episode record
+### 2. The record
 
-1. Each Episode MUST be `src/components/episodes/<slug>/` exporting an `Episode` record, in `registry.ts` and `EPISODE_SLUGS` (FE-007 §1).
-2. Every Section and Slide MUST carry a stable kebab-case `slug` (never `top`); a Slide MAY add a plain `title` and `minutes: PerLocale<number>`.
-3. The record MUST be the single declaration surface for Slide metadata; ids come only from `slideAnchor()`.
+1. Each Episode MUST be one folder `src/components/episodes/<slug>/` exporting an `Episode` record, registered by slug.
+2. The record MUST be the only place Slide metadata is declared: stable kebab-case slug (`what-is-context`, never `top`, reserved for the Title slide), optional title, minutes per locale.
+3. Title and minutes are a capability: an untitled Slide renders, isn't listed, still counts its minutes.
 
 ### 3. Slide content is free
 
-1. A Slide's `content` MUST be free JSX from the Slide master and layouts; no slide-type union, renderer or schema MAY sit between it and its markup.
+1. A Slide's content MUST be free JSX from the Slide master and layouts; no slide-type union, renderer or schema between it and its markup.
 
 ### 4. Headings mirror the manuscript
 
-1. `h1` MUST be the Title slide's Episode title, `h2` only a section slide's title, `h3` only a page slide's title; `h4`+ are free.
-2. `src/components/episodes/**` MUST NOT write raw `h1`–`h3` or `SlideTitle as="h1"|"h2"`.
+1. Exactly one `h1` MUST exist: the Episode title, on the Title slide. `h2` a section slide, `h3` a page slide; `h4`+ free.
+2. Episode files MUST NOT write `h1`–`h3` themselves; the container and layouts do.
 
-### 5. Every string is a keyed leaf
+### 5. Strings keyed by slug
 
-1. Episode strings MUST be keyed `episodes.<episode>.<role>` or `episodes.<episode>.sections.<section>[.slides.<slide>…].<role>`, by slug, never position; leaves only; ICU for variables; every catalog in one change.
+1. Episode strings MUST be keyed by slug, never position — `episodes.x.sections.intro.title`, not `episodes.x.sections.0.title`. Every locale in one change.
 
-### 6. Page consumers
+### 6. Consumers read the record
 
-1. A consumer (table of contents, Context drawer) MUST take Slide data from its adapter (`tocSectionsOf`, `contextDrawerInput`) and the active Slide from `useActiveSlide()`, never the DOM.
-2. Table of contents: pre-translated props; sticky left from `md`, a pill-opened drawer below; no Title slide entry or highlight on `top`.
-
-### 7. Reserved places
-
-1. Notes and script attach per Slide (FE-010); YouTube per Episode and locale, on the Title slide, loaded on play; arrow keys, back-to-top are the container's; corners: TOC pill bottom-left, drawer trigger bottom-right, back-to-top above it, player top-right.
+1. Table of contents, Context drawer and any later consumer MUST take Slide data from the record and the active Slide from URL state — never from the DOM.
 
 ## Do's and Don'ts
 
 ### Do's
 
-1. **DO** start an Episode as `src/components/episodes/<slug>/<slug>.tsx` exporting an `Episode` record, plus a registry line, an `EPISODE_SLUGS` entry and a `description` key per locale for its page metadata ([FE-008](./FE-008-page-metadata.md)). (Decision 2)
-2. **DO** give each Slide a function returning its record, with free JSX in `content`. (Decision 2, Decision 3)
-3. **DO** set `minutes` per locale, from your speaking pace on each manuscript; leave `title` out of a purely visual Slide. (Decision 2)
-4. **DO** build slides from the Slide master and Slide layouts, or one-off with `SlideFrame` and `<SlideTitle as="h3">`. (Decision 3, Decision 4)
-5. **DO** add every new key to `en.json` and `de.json` together. (Decision 5)
+1. **DO** start an Episode from `page-template/`: copy the folder, register its slug. (Decision 2)
+2. **DO** set minutes per locale — German narration runs longer. (Decision 2)
+3. **DO** leave `title` off a purely visual Slide. (Decision 2)
+4. **DO** build one-off slides with `SlideFrame` and `<SlideTitle as="h3">`. (Decision 3, Decision 4)
 
 ### Don'ts
 
-1. **DON'T** render `TableOfContents`, set an `id`/`data-slide`, or add a route file for one Episode. (Decision 1, Decision 2, Decision 6)
-2. **DON'T** query the DOM for a Slide's title, minutes or id in a page consumer. (Decision 6)
-3. **DON'T** introduce a slide-type union or a renderer that picks markup from data. (Decision 3)
-4. **DON'T** write raw `h1`–`h3` or `SlideTitle as="h1"|"h2"` in an Episode. (Decision 4)
-5. **DON'T** key a string by position (`0`, `first`) or heading level (`h2`). (Decision 5)
-6. **DON'T** embed a YouTube iframe or URL that loads with the page. (Decision 7)
+1. **DON'T** render the table of contents, set an anchor `id` or add a route for one Episode. (Decision 1)
+2. **DON'T** add a slide-type union or a renderer picking markup from data. (Decision 3)
+3. **DON'T** write `<h2>` in an Episode file. (Decision 4)
+4. **DON'T** read a Slide's title, minutes or id from the DOM. (Decision 6)
+5. **DON'T** rename a published slug — it is a shared link. (Decision 2, Decision 5)
 
 ## Consequences
 
 **Positive:**
 
-1. **Structure is right while drafting:** most rules hold by construction or show up in the editor during `npm run dev`, before any build.
-2. **One-place change:** a layout or table-of-contents change in the container reaches every Episode.
-3. **Manuscript-ready:** the H1/H2/H3 spine and stable slugs let a manuscript pipeline target the record without touching design.
+1. **Structure right while drafting:** most rules hold by construction or fail in the editor.
+2. **One-place change:** a container change reaches every Episode.
+3. **Manuscript-ready:** fixed spine and stable slugs let a pipeline target the record without touching design.
 
 **Negative:**
 
-1. **Every Episode looks structurally alike** by design; an Episode wanting a different page shape needs this ADR amended.
-2. **Per-locale minutes double the bookkeeping** until a pipeline estimates them.
-3. **Placement is not machine-checked:** the HTML shows order, not that the table of contents sits left and sticky.
+1. **Every Episode looks structurally alike;** a different page shape needs this ADR amended.
+2. **Per-locale minutes double bookkeeping** until a pipeline estimates them.
 
 **Risks:**
 
-1. **Reserved fields rot unused.** **Mitigation:** #6 and the manuscript pipeline are their first consumers; drop a field rather than guess its shape.
-2. **The post-build net runs only after `npm run build`.** **Mitigation:** CI runs it on every pull request; layers 1–3 below catch most breaks earlier.
+1. **Structure breaks only visible after build** (duplicate ids, heading order). **Mitigation:** post-build test over every exported Episode, run in CI on every pull request.
 
 ## Compliance and Enforcement
 
-**Enforcers, earliest first:**
+1. **Types:** record, registry and catalogs typed; a missing locale or unregistered slug fails `tsc`.
+2. **Unit tests:** anchor derivation — `top` reserved, duplicate slugs rejected, untitled Slides counted but unlisted.
+3. **Lint and dependency rules:** Episode files can't write `h1`–`h3`, render the table of contents or import the container.
+4. **Post-build test:** every Episode in every locale — slot order, one `h1`, heading spine, table of contents equals anchors, no duplicate ids.
 
-1. **Types** (`tsc`, editor and `next dev`): `Episode` in `src/components/episode/episode-page-container.pure.ts` types the record; `PerLocale` fails a missing locale; the registry is typed against `EPISODE_SLUGS` in `src/lib/routes.ts`; `de.json` is typed against `en.json`. §2, §5.
-2. **Derivation** (`npm run verify`): `episode.test.ts` (`top` reserved, duplicate slugs rejected in the one Episode walk), `context-drawer-input.pure.test.ts` (the drawer's Title item), `table-of-contents.test.ts` (no entry active on `top`) and `episode-page-container.test.ts` (table-of-contents entries derive from the anchors, in the page's locale, skip untitled Slides while counting their minutes and naming each on the entry that owns them (so that entry stays current while the Slide is)). §1, §2.
-3. **Lint** (`eslint.config.mjs`): `no-restricted-syntax` over `src/components/episodes/**` refuses raw `h1`–`h3` and `SlideTitle as` `h1`/`h2` (string, braced or template literal; a variable level is left to layer 4). `.dependency-cruiser.cjs`: `toc-reached-only-from-container` (from `src/components/episodes/**`, `src/components/episode/**`), `episodes-reach-only-slide-parts` and `episodes-never-render-the-shell` (no Title slide or container import in an Episode). The registry type makes each key equal its record's `slug`. §1, §3, §4.2.
-4. **Post-build** (`npm run test:build`, CI): `tests/post-build/episode-structure.build.test.ts` reads every exported Episode in every locale with `cheerio`: slots in order; Title slide first with the only `h1`; one `h2` per section slide, one `h3` per titled page slide (an untitled Slide has none and no table-of-contents link), none elsewhere; Title slide id `top`, heading link and explainer in both locales; table-of-contents links equal the titled slide anchors in order; no duplicate `id`; no YouTube iframe or URL; anchors identical across locales. §1, §4.1, §7.
-
-**Measured:** probe files in the Episode folder and `src/components/` fired every lint and dependency-cruiser rule above, including `as={'h1'}` and ``as={`h2`}``, while `<SlideTitle as="h3">` and `h4` passed; a registry key differing from its record's slug failed `tsc`; the post-build test found a real duplicate `id` in the table of contents on its first run.
-
-**Manual review duties:** placement at `md` and below (§6); no consumer reads Slide metadata from the DOM (§6.1); reserved places stay as §7 allocates them; slugs stay stable once published.
+**Manual review duties:** no consumer reads Slide data from the DOM; published slugs stay stable.
 
 **Exceptions:** raise a separate ADR; human approval required.
 
 ## References
 
-- [`GLOSSARY.md`](../../GLOSSARY.md) — Episode, Section, Slide, Title slide, Slide master, Slide layout, Speaker notes, Voice script, Table of contents.
-- [FE-001 State Management](./FE-001-state-management.md), [FE-009 Slide Frame](./FE-009-slide-frame.md), [FE-003 Localization](./FE-003-localization.md), [FE-005 Static Export Contract](./FE-005-static-export-contract.md), [FE-006 Server/Client Boundary](./FE-006-server-client-boundary.md), [FE-010 Context Drawer](./FE-010-context-drawer.md), [ARCH-001 Dependency Admission Bar](./ARCH-001-dependency-admission-bar.md) (`cheerio`: 30.5k stars, 100+ contributors, 33M weekly downloads, pushed 2026-10-08).
-- [cheerio](https://cheerio.js.org/) — parses with `parse5`, the spec parser browsers follow.
+- [`GLOSSARY.md`](../../GLOSSARY.md) — Episode, Section, Slide, Title slide, Slide master, Slide layout.
+- [`docs/agents/episode-catalog-keys.md`](../../docs/agents/episode-catalog-keys.md) — key roles, worked examples.
+- [`docs/agents/episode-page-layout.md`](../../docs/agents/episode-page-layout.md) — table of contents placement, corner allocation, reserved places.
