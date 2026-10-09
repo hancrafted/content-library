@@ -4,7 +4,7 @@
 // text: a page exports its metadata through pageMetadata(), and a layout carries
 // no page-level field a page would silently inherit. Canonical/hreflang
 // correctness lives in tests/post-build/page-metadata.build.test.ts, over the
-// built HTML. Matched textually; runs at error (GEN-001 §7). Self-contained by
+// built HTML. Matched textually. Self-contained by
 // design: archgate forbids imports between rules files.
 const APP_GLOB = 'src/app/**/*';
 const PAGE_FILE_RE = /^src\/app\/(.+\/)?page\.(tsx|ts|jsx|js)$/;
