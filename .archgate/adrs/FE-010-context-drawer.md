@@ -56,7 +56,7 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 ### 4. Targets
 
 1. A note's `target` MUST be a short name (`prose`, `chart`), marked `data-target` on one element inside its Slide's wrapper; found there only.
-2. A `ContextRef` wraps a phrase, shows no number, names its note by slug, is a `<button type="button">`, carries no id.
+2. A `ContextRef` wraps a phrase, shows no number, names its note by slug, is a `<button type="button">`, carries no id or target.
 
 ### 5. Interaction
 

@@ -9,7 +9,7 @@ export const keepItShort = slide({
   notes: [
     {
       slug: 'bloat-gets-ignored',
-      target: 'bloat-gets-ignored',
+      target: 'prose',
       sources: [{ slug: 'claude-code-best-practices', url: 'https://code.claude.com/docs/en/best-practices' }],
     },
     {

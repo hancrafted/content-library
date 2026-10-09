@@ -23,11 +23,11 @@ function RefButton({ note, label, children }: { note: string; label: string; chi
 /**
  * A context reference (FE-010 §4): a phrase in Slide text that names one
  * Speaker note of its Slide, by slug. The drawer finds the note inside the
- * Slide that holds the phrase, so it carries no id. Its wrapper is also the
- * target named after the note, so a note may point at its own phrase. It is
- * only the underlined phrase, with no number. Rendered on the server: without
- * JavaScript the phrase still reads, and print shows it as plain text. A Slide
- * reaches it through its kit's `ref`.
+ * Slide that holds the phrase, so it carries no id. It is never a target: a
+ * note's `target` names a Canvas element, not the phrase that opens the note.
+ * It is only the underlined phrase, with no number. Rendered on the server:
+ * without JavaScript the phrase still reads, and print shows it as plain text.
+ * A Slide reaches it through its kit's `ref`.
  */
 export function ContextRef(props: {
   note: string;
@@ -36,10 +36,8 @@ export function ContextRef(props: {
   children: ReactNode;
 }) {
   return (
-    <span data-target={props.note} className="rounded-sm">
-      <RefButton note={props.note} label={props.label}>
-        {props.children}
-      </RefButton>
-    </span>
+    <RefButton note={props.note} label={props.label}>
+      {props.children}
+    </RefButton>
   );
 }

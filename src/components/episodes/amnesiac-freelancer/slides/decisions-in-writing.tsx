@@ -13,7 +13,7 @@ export const decisionsInWriting = slide({
   minutes: { en: 3, de: 4 },
   notes: [
     { slug: 'a-conversation-with-a-future-developer', target: 'caption', sources: [NYGARD] },
-    { slug: 'superseded-not-deleted', target: 'superseded-not-deleted', sources: [NYGARD] },
+    { slug: 'superseded-not-deleted', target: 'prose', sources: [NYGARD] },
     { slug: 'the-newcomers-two-bad-options', target: 'prose', sources: [NYGARD] },
     { slug: 'mapping-not-a-sourced-claim', target: 'prose' },
   ],
