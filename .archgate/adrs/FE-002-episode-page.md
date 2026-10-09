@@ -4,7 +4,9 @@ id: FE-002
 title: 'Episode Page'
 domain: frontend
 rules: false
+# prettier-ignore
 files: ['src/components/{episode-page,slide-master,episodes}/**', 'src/components/table-of-contents/**', 'src/app/**/episode/**']
+# prettier-ignore
 paths: ['src/components/{episode-page,slide-master,episodes}/**', 'src/components/table-of-contents/**', 'src/app/**/episode/**']
 description: 'How an Episode page is built: structure is a typed record rendered by one container, Slide content is free JSX, headings mirror the manuscript, strings keyed by slug.'
 ---
