@@ -3,7 +3,7 @@ import { findEpisode } from '@/components/episodes/registry';
 import rawIndex from '@/lib/episode-index.json';
 import { featured, parseEpisodeIndex, upcoming, type EpisodeIndexEntry } from '@/lib/episode-index.pure';
 import type { Locale } from '@/lib/locale.pure';
-import { wholeMinutes } from '@/lib/speaking-time.pure';
+import { hasReadingTime, wholeMinutes } from '@/lib/speaking-time.pure';
 import { getTranslations } from 'next-intl/server';
 import { episodeCard, type EpisodeCard, type ReadKey } from './episode-card.pure';
 
@@ -22,7 +22,7 @@ function minutesOf(entry: EpisodeIndexEntry, locale: Locale, read: ReadKey): num
     .flat()
     .map((slide) => slideMinutes((key) => read(`episodes.${record.slug}.slides.${slide.slug}.${key}`), slide, locale))
     .reduce((sum, minutes) => sum + minutes, 0);
-  return total > 0 ? wholeMinutes(total) : undefined;
+  return hasReadingTime(total) ? wholeMinutes(total) : undefined;
 }
 
 /**

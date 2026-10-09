@@ -77,6 +77,16 @@ function EpisodeToc(props: {
 }
 
 /** next-intl's translator for one locale, read by runtime key: the one cast from typed keys. */
+/** The table of contents' labels; `remaining` stays raw, `{count}` unfilled, for the client to fill as the reader scrolls. */
+async function tocLabelsOf(locale: Locale): Promise<TocLabels> {
+  const t = await getTranslations({ locale, namespace: 'tableOfContents' });
+  const strings = await readTranslationStrings(locale, 'tableOfContents', ['remaining']);
+  return {
+    ...strings,
+    remaining: { one: t.raw('remaining.one') as string, other: t.raw('remaining.other') as string },
+  };
+}
+
 function translatorOf(locale: Locale): TranslatorOf {
   return async (namespace) =>
     (await getTranslations({ locale, namespace: namespace as never })) as unknown as RuntimeTranslator;
@@ -95,7 +105,7 @@ export async function EpisodePageContainer({ locale, episode }: { locale: Locale
   const ids = [TITLE_ANCHOR, ...slidesInPageOrder(placed).map(({ id }) => id)];
   const youtubeId = episode.youtube?.[locale];
   const talkLabels = youtubeId ? await readTranslationStrings(locale, 'talkPlayer') : undefined;
-  const tocLabels = await readTranslationStrings(locale, 'tableOfContents');
+  const tocLabels = await tocLabelsOf(locale);
   const drawer = await contextDrawerInput(locale, placed);
   return (
     <UrlStateProvider key={`${locale}/${episode.slug}`}>

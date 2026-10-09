@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { segmentSpans, wholeMinutes, wordsIn } from './speaking-time.pure';
+import { hasReadingTime, remainingLabel, segmentSpans, wholeMinutes, wordsIn } from './speaking-time.pure';
+
+const REMAINING = { one: '{count} min left', other: '{count} mins left' };
 
 describe('success cases', () => {
   it('counts the words of a spoken sentence', () => {
@@ -64,6 +66,26 @@ describe('success cases', () => {
     // ASSERT
     expect(whole).toEqual(expected);
   });
+
+  it('has a reading time once any spoken minute is counted', () => {
+    // ARRANGE
+    const totals = [0.01, 12];
+    const expected = [true, true];
+    // ACT
+    const shown = totals.map(hasReadingTime);
+    // ASSERT
+    expect(shown).toEqual(expected);
+  });
+
+  it('labels the time left in whole minutes, picking the plural form', () => {
+    // ARRANGE
+    const minutes = [0.4, 11.2];
+    const expected = ['1 min left', '12 mins left'];
+    // ACT
+    const labels = minutes.map((left) => remainingLabel(REMAINING, 'en', left));
+    // ASSERT
+    expect(labels).toEqual(expected);
+  });
 });
 
 describe('failure cases', () => {
@@ -84,6 +106,15 @@ describe('failure cases', () => {
     const spans = segmentSpans([], 'en');
     // ASSERT
     expect(spans).toEqual(expected);
+  });
+
+  it('has no reading time when nothing is spoken', () => {
+    // ARRANGE
+    const total = 0;
+    // ACT
+    const shown = hasReadingTime(total);
+    // ASSERT
+    expect(shown).toBe(false);
   });
 });
 
@@ -106,6 +137,15 @@ describe('edge cases', () => {
     const words = wordsIn(text);
     // ASSERT
     expect(words).toBe(expected);
+  });
+
+  it('labels zero minutes left with the plural form once the Episode is read', () => {
+    // ARRANGE
+    const expected = '0 mins left';
+    // ACT
+    const label = remainingLabel(REMAINING, 'en', 0);
+    // ASSERT
+    expect(label).toBe(expected);
   });
 });
 

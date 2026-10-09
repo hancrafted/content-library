@@ -38,14 +38,14 @@ interface DrawerProps {
   where: { number: string; title: string } | null;
   /** Time left, already formatted; absent for an Episode without a Voice script. */
   left?: string;
-  /** False while the table masks its first settle; the pill then reads "Contents · Loading". */
+  /** False while the table masks its first settle; the pill then reads "Contents · Loading" where it has a time. */
   revealed: boolean;
 }
 
-/** " · 12 min left", or " · Loading" while the table settles; nothing for an Episode without a Voice script. */
+/** " · 12 min left", or " · Loading" while the table settles; nothing at all for an Episode without a Voice script. */
 function PillTime(props: Pick<DrawerProps, 'left' | 'revealed' | 'labels'>) {
+  if (props.left === undefined) return null;
   const text = props.revealed ? props.left : props.labels.loading;
-  if (!text) return null;
   return (
     <>
       <span aria-hidden className="text-muted-foreground">

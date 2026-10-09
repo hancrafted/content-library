@@ -182,8 +182,8 @@
     "title": "Contents",
     "progress": "Reading time",
     "remaining": {
-      "one": "# min left",
-      "other": "# min left"
+      "one": "{count} min left",
+      "other": "{count} min left"
     },
     "toggle": "Show or hide slides",
     "loading": "Loading",
