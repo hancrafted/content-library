@@ -2,7 +2,9 @@
 node_modules
 coverage
 dist
-.agents
+.agents/skills/*
+!.agents/skills/worktree
+!.agents/skills/visual-check
 .vitest
 .claude/settings.local.json
 .next

@@ -1,1 +1,12 @@
-npm run verify
+# git passes the pushed refs on stdin. Read them first: archgate reads a non-TTY
+# stdin as its file list, which once shrank this hook's check to zero rules.
+refs=$(cat)
+
+npm run verify </dev/null || exit 1
+
+# A push to main triggers the Pages deploy, so it also runs the build lanes
+# verify skips. Branch pushes stay fast; CI builds them on the PR.
+if printf '%s\n' "$refs" | grep -q ' refs/heads/main '; then
+  echo "push to main: running build and test:build"
+  npm run build </dev/null && npm run test:build </dev/null || exit 1
+fi

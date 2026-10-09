@@ -11,7 +11,7 @@ export default defineConfig({
   },
   test: {
     include: ['**/*.{test,spec}.ts'],
-    exclude: [...configDefaults.exclude, '**/*.build.test.ts', '.worktrees/**'],
+    exclude: [...configDefaults.exclude, '**/*.build.test.ts', '.worktrees/**', '.claude/**'],
     coverage: {
       provider: 'v8',
     },

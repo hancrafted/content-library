@@ -18,12 +18,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          # Full history: `archgate:full` diffs from the root commit.
+          fetch-depth: 0
       - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npx archgate check
+      - run: npm run preflight
+      - run: npm run archgate:full
       - run: npm run lint
       - run: npm run format:check
       - run: npm run typecheck

@@ -19,3 +19,6 @@ next-env.d.ts
 
 # Profile documents
 docs/profile/han/
+
+# Per-feature handoffs and agent scratch work (see AGENTS.md).
+.scratch/
