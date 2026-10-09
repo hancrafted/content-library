@@ -10,7 +10,7 @@ export const blankEveryTime = slide({
   notes: [
     {
       slug: 'stateless-by-design',
-      target: 'stateless-by-design',
+      target: 'prose',
       sources: [
         { slug: 'openai-conversation-state', url: 'https://platform.openai.com/docs/guides/conversation-state' },
         {

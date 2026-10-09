@@ -233,21 +233,20 @@ describe('amnesiac-freelancer', () => {
     const refs = $('[data-slot="slides"] button[data-context-ref]').toArray();
     // ACT
     const resolved = refs.map((ref) => {
-      const wrapper = $(ref).parent();
       const slug = $(ref).attr('data-context-ref') ?? '';
-      const owner = wrapper.closest('[data-slide]').attr('data-slide') ?? '';
+      const owner = $(ref).closest('[data-slide]').attr('data-slide') ?? '';
       const notes = entry($, 'notes', owner).find(`[data-note="${slug}"]`);
       return {
         native: ref.tagName === 'button' && $(ref).attr('type') === 'button' && $(ref).attr('href') === undefined,
-        // The phrase's wrapper is the target named after its note, so a note may point at it.
-        target: wrapper.attr('data-target') === slug,
+        // A reference is never a target: it and its phrase carry no `data-target`.
+        marksTarget: $(ref).attr('data-target') !== undefined || $(ref).find('[data-target]').length > 0,
         notes: notes.length,
         numbered: $(ref).find('sup').length > 0 || /\d/.test($(ref).text()),
       };
     });
     // ASSERT
     expect(refs).toHaveLength(3);
-    resolved.forEach((r) => expect(r).toEqual({ native: true, target: true, notes: 1, numbered: false }));
+    resolved.forEach((r) => expect(r).toEqual({ native: true, marksTarget: false, notes: 1, numbered: false }));
   });
 
   it.each(LOCALES)('numbers sources in a list and points every citation marker into it, in %s', (locale) => {
