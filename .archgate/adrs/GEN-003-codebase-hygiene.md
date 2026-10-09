@@ -6,44 +6,47 @@ domain: general
 rules: true
 files: ['src/**/*']
 paths: ['src/**/*']
-description: 'Repo-wide hygiene Disciplines binding every file under src/ whatever its language: the admission test for what belongs in the collection, and the ban on inline lint suppression.'
+description: 'Hygiene Disciplines binding every file under src/ whatever its language and belonging to no one subsystem: so far, the ban on inline lint suppression.'
 ---
 
 # Codebase Hygiene
 
 ## Context
 
-This record is a **collection**: the home for hygiene Disciplines that bind every file under `src/` whatever its language, and that belong to no one subsystem.
+A home for hygiene Disciplines that bind every file under `src/`, whatever its language, and belong to no one subsystem.
+
+An inline `eslint-disable` silences a rule where no reviewer looks for it, and agents reach for it to turn red green. ESLint honours every directive it's handed, so only a separate check can refuse them.
 
 ## Decision
 
 ### 1. No inline eslint suppression (📜 Rule: `no-eslint-disable`)
 
-1. A file under `src/` MUST NOT carry an eslint directive comment — `eslint-disable`, `eslint-disable-line`, `eslint-disable-next-line`, or the paired `eslint-enable` — in either the `//` or the `/* */` form.
+1. A file under `src/` MUST NOT carry an eslint directive comment — `eslint-disable`, `-line`, `-next-line` or `eslint-enable`, in `//` or `/* */` form.
+2. A wrong rule is turned off in the lint config, behind a `files:` glob, with its reason.
 
 ## Do's and Don'ts
 
 ### Do's
 
-1. **DO** turn a wrong lint rule off in `eslint.config.mjs`, behind a `files:` glob and carrying its reason. (Decision 1)
+1. **DO** turn a wrong lint rule off in the lint config, scoped by `files:` and carrying its reason. (Decision 1)
 
 ### Don'ts
 
-1. **DON'T** write an eslint directive comment in any form under `src/`. (Decision 1, 📜 Rule: `no-eslint-disable`)
+1. **DON'T** write `// eslint-disable-next-line` or any other directive under `src/`. (Decision 1, 📜 Rule: `no-eslint-disable`)
 
 ## Consequences
 
 **Positive:**
 
-1. **Centralized and auditable lint governance:** eliminates silent inline suppressions textually across all src/ files, consolidates exceptions into eslint.config.mjs, and provides an easily extensible structure for future hygiene disciplines.
+1. **Auditable suppression:** every exception sits in one config, with a glob and a reason.
 
 **Negative:**
 
-1. **Zero local escape hatches:** comment false-positives and irreducible one-off suppressions cannot be bypassed inline, pushing all exceptions into broader eslint.config.mjs globs or ADR amendments.
+1. **No local escape hatch:** a one-off false positive needs a config glob or an ADR amendment.
 
 ## Compliance and Enforcement
 
-**Enforcer:** `GEN-003-codebase-hygiene.rules.ts`, `error` tier, scoped by `files:` to `src/**/*`. eslint declares no `linterOptions`, so it honours every directive it is handed — the gap this rule closes.
+1. **Rule** `no-eslint-disable` (archgate, error): every file under `src/`.
 
 **Exceptions:** raise a separate ADR; human approval required.
 
