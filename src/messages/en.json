@@ -47,6 +47,21 @@
     "episodeIndex": {
       "open": "Open Episode",
       "comingSoon": "Coming soon",
+      "minutesUnit": "min read",
+      "spotlightTitle": "Featured",
+      "browseTitle": "Browse all Episodes",
+      "topicFilter": "Filter by topic",
+      "formatFilter": "Filter by format",
+      "all": "All",
+      "showAll": "Show all {count} Episodes",
+      "showFewer": "Show fewer",
+      "results": {
+        "none": "No Episodes match",
+        "one": "1 Episode",
+        "other": "{count} Episodes"
+      },
+      "empty": "No Episodes match these filters yet.",
+      "reset": "Reset filters",
       "topics": {
         "ai-collaboration": "Working with AI",
         "documentation": "Documentation",

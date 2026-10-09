@@ -47,6 +47,21 @@
     "episodeIndex": {
       "open": "Episode öffnen",
       "comingSoon": "Demnächst",
+      "minutesUnit": "Min. Lesezeit",
+      "spotlightTitle": "Im Fokus",
+      "browseTitle": "Alle Episoden durchstöbern",
+      "topicFilter": "Nach Thema filtern",
+      "formatFilter": "Nach Format filtern",
+      "all": "Alle",
+      "showAll": "Alle {count} Episoden anzeigen",
+      "showFewer": "Weniger anzeigen",
+      "results": {
+        "none": "Keine passende Episode",
+        "one": "1 Episode",
+        "other": "{count} Episoden"
+      },
+      "empty": "Zu diesen Filtern gibt es noch keine Episode.",
+      "reset": "Filter zurücksetzen",
       "topics": {
         "ai-collaboration": "Arbeiten mit KI",
         "documentation": "Dokumentation",

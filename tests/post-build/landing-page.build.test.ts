@@ -69,20 +69,70 @@ describe('landing page post-build structure', () => {
     expect(sections).toEqual(['episodes', 'services', 'about']);
   });
 
+  const PUBLISHED_SLUGS = ['amnesiac-freelancer', 'maintaining-markdown-for-ai', 'ai-token-economy'];
+
+  function episodeHref(slug: string, locale: string): string {
+    return `${basePath}${locale === 'de' ? `/de/episode/${slug}/` : `/episode/${slug}/`}`;
+  }
+
+  function hrefsIn($: CheerioAPI, selector: string): (string | undefined)[] {
+    return $(`${selector} a`)
+      .map((_, el) => $(el).attr('href'))
+      .get();
+  }
+
   it.each(LANDING_PAGES)(
-    'links every published Episode, then the template, and no upcoming card for locale $locale',
+    'spotlights the published Episodes by featured rank, and never an upcoming one, for locale $locale',
     ({ url, locale }) => {
       const $ = getPage(url);
-      const episodeLinks = $('#episodes a')
-        .map((_, el) => $(el).attr('href'))
-        .get();
-      const expected = ['amnesiac-freelancer', 'maintaining-markdown-for-ai', 'ai-token-economy', 'page-template'].map(
-        (slug) => `${basePath}${locale === 'de' ? `/de/episode/${slug}/` : `/episode/${slug}/`}`,
-      );
+      const expected = PUBLISHED_SLUGS.map((slug) => episodeHref(slug, locale));
 
-      expect(episodeLinks).toEqual(expected);
-      expect($('#episodes [data-episode-status="upcoming"] a').length).toBe(0);
-      expect($('#episodes [data-episode-status="upcoming"]').length).toBeGreaterThan(0);
+      expect(hrefsIn($, '#episodes [data-episode-spotlight]')).toEqual(expected);
+      expect($('#episodes [data-episode-spotlight] [data-spotlight="lead"]').length).toBe(1);
+      expect($('#episodes [data-episode-spotlight] [data-episode-status="upcoming"]').length).toBe(0);
+    },
+  );
+
+  it.each(LANDING_PAGES)(
+    'lists every Episode in the browse grid, linking the published ones and no upcoming card, for locale $locale',
+    ({ url, locale }) => {
+      const $ = getPage(url);
+      const expected = PUBLISHED_SLUGS.map((slug) => episodeHref(slug, locale));
+      const publishedFirst = $('#episodes [data-episode-browse] [data-episode-card]')
+        .map((_, el) => $(el).attr('data-episode-status'))
+        .get();
+
+      expect(hrefsIn($, '#episodes [data-episode-browse]')).toEqual(expected);
+      expect(publishedFirst).toEqual([...publishedFirst].sort((a, b) => (a === b ? 0 : a === 'published' ? -1 : 1)));
+      expect($('#episodes [data-episode-browse] [data-browse-item]').length).toBe(publishedFirst.length);
+      expect($('#episodes [data-episode-browse] [data-episode-status="upcoming"] a').length).toBe(0);
+      expect($('#episodes [data-episode-browse] [data-episode-status="upcoming"]').length).toBeGreaterThan(0);
+    },
+  );
+
+  it.each(LANDING_PAGES)(
+    'offers topic chips as toggle buttons that start on All, then the template link last, for locale $locale',
+    ({ url, locale }) => {
+      const $ = getPage(url);
+      const chips = $('#episodes [data-browse-controls] button[aria-pressed]');
+      const pressed = chips.filter('[aria-pressed="true"]');
+      const order = $(
+        '#episodes [data-episode-spotlight], #episodes [data-episode-browse], #episodes [data-testid="landing-page-link"]',
+      )
+        .map((_, el) =>
+          el.attribs['data-episode-spotlight'] !== undefined
+            ? 'spotlight'
+            : el.attribs['data-episode-browse'] !== undefined
+              ? 'browse'
+              : 'template',
+        )
+        .get();
+
+      expect(chips.length).toBeGreaterThan(pressed.length);
+      expect(pressed.length).toBe(2);
+      expect($('#episodes [role="status"]').length).toBe(1);
+      expect($('#episodes a[data-testid="landing-page-link"]').attr('href')).toBe(episodeHref('page-template', locale));
+      expect(order).toEqual(['spotlight', 'browse', 'template']);
     },
   );
 });
