@@ -87,7 +87,7 @@ describe('success cases', () => {
       ],
     };
     // ACT
-    const content = await recordContent(RECORD, translatorOf('en'));
+    const content = await recordContent(RECORD, 'en', translatorOf('en'));
     // ASSERT
     expect({
       title: content.title,
@@ -107,7 +107,7 @@ describe('success cases', () => {
       { id: 'next-steps', slides: [] },
     ];
     // ACT
-    const { sections } = await recordContent(RECORD, translatorOf('en'));
+    const { sections } = await recordContent(RECORD, 'en', translatorOf('en'));
     // ASSERT
     expect(sections.map(({ id, slides }) => ({ id, slides: slides.map((page) => page.id) }))).toEqual(expected);
   });
@@ -117,7 +117,7 @@ describe('success cases', () => {
     const expectedLevels = ['h2', 'h3'];
     const expectedTarget = 'title';
     // ACT
-    const { sections } = await recordContent(RECORD, translatorOf('en'));
+    const { sections } = await recordContent(RECORD, 'en', translatorOf('en'));
     const [head, page] = [sections[0].slide.content, sections[0].slides[0].slide.content].map(headingOf);
     // ASSERT
     expect([head.props.as, page.props.as]).toEqual(expectedLevels);
@@ -129,11 +129,28 @@ describe('success cases', () => {
     const expectedNote = { slug: 'reference-episode', header: 'Why a reference Episode', target: 'prose' };
     const expectedSegment = { slug: 'one-breath', from: 0, to: 1, title: 'The template in one breath' };
     // ACT
-    const { sections } = await recordContent(RECORD, translatorOf('en'));
+    const { sections } = await recordContent(RECORD, 'en', translatorOf('en'));
     const why = sections[0].slides[0].slide;
     // ASSERT
     expect(why.notes).toEqual([expect.objectContaining(expectedNote)]);
     expect(why.voiceScript).toEqual([expect.objectContaining(expectedSegment)]);
+  });
+
+  it("gives every kit the page's locale and links each Slide slug to the anchor the walk placed it at", async () => {
+    // ARRANGE
+    const linker = slide({
+      slug: 'next-steps',
+      content: ({ locale, slideHref }) => `${locale} ${slideHref('why-a-template')} ${slideHref('next-steps')}`,
+    });
+    const record: EpisodeRecord<'page-template'> = {
+      slug: 'page-template',
+      sections: [[foundations, whyATemplate], [linker]],
+    };
+    const expected = 'de /de/episode/page-template#foundations--why-a-template /de/episode/page-template#next-steps';
+    // ACT
+    const { sections } = await recordContent(record, 'de', translatorOf('de'));
+    // ASSERT
+    expect(sections[1].slide.content).toBe(expected);
   });
 });
 
@@ -143,7 +160,7 @@ describe('failure cases', () => {
     const record: EpisodeRecord<'page-template'> = { slug: 'page-template', sections: [[foundations], [foundations]] };
     const expected = 'foundations';
     // ACT
-    const build = recordContent(record, translatorOf('en'));
+    const build = recordContent(record, 'en', translatorOf('en'));
     // ASSERT
     await expect(build).rejects.toThrow(expected);
   });
@@ -157,7 +174,7 @@ describe('failure cases', () => {
     const record: EpisodeRecord<'page-template'> = { slug: 'page-template', sections: [[foundations, rogue]] };
     const expected = 'reference-episode';
     // ACT
-    const build = recordContent(record, translatorOf('en'));
+    const build = recordContent(record, 'en', translatorOf('en'));
     // ASSERT
     await expect(build).rejects.toThrow(expected);
   });
@@ -169,7 +186,7 @@ describe('edge cases', () => {
     const bare = slide({ slug: 'what-comes-next', content: () => null });
     const record: EpisodeRecord<'page-template'> = { slug: 'page-template', sections: [[nextSteps, bare]] };
     // ACT
-    const { sections } = await recordContent(record, translatorOf('de'));
+    const { sections } = await recordContent(record, 'de', translatorOf('de'));
     const [section] = sections;
     // ASSERT
     expect(section.slide.minutes).toBeUndefined();
