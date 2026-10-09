@@ -94,6 +94,15 @@ module.exports = {
       to: { pathNot: ['^src/components/episodes/[^/]+/client/', '^src/(lib|hooks)/', 'node_modules'] },
     },
     {
+      name: 'episode-canvas-never-imports-slides',
+      severity: 'error',
+      comment:
+        "An Episode's canvas/ holds server parts several Slides share; a part takes plain props and never imports a Slide, so the dependency runs Slide → canvas only (FE-002).",
+      from: { path: '^src/components/episodes/([^/]+)/canvas/' },
+      to: { path: '^src/components/episodes/[^/]+/slides/' },
+    },
+
+    {
       name: 'episode-tests-reach-only-slide-parts',
       severity: 'error',
       comment:
