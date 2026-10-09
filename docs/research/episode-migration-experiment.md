@@ -47,6 +47,15 @@ AGENTS.md, GLOSSARY.md, FE-002, FE-005, FE-006, FE-007, FE-009, FE-010, docs/age
 … /de, every ADR gap and friction found (the real output test): for each, the rule, the file, what blocked you. Do not "fix" an ADR to make the port pass.
 ```
 
+## Run 2 read-first
+
+The handoff's read-first list changed in the slide-as-unit refactor. For run 2, the agent reads:
+
+- `docs/agents/episode-translation-keys.md` (replaces `docs/agents/episode-catalog-keys.md`).
+- `docs/agents/episode-migration.md` (new): the conversion recipe.
+- FE-002 (rewritten around the Slide as the unit), plus FE-006, FE-009, FE-010.
+- `src/components/episodes/page-template/` (minimal copy source) and `src/components/episodes/slide-layouts/` (every Slide layout rendered).
+
 ## Follow-ups (run 1)
 
 1. The agent asked to confirm its plan; confirmed.
