@@ -5,6 +5,7 @@ import { aiTokenEconomy } from './ai-token-economy/ai-token-economy';
 import { amnesiacFreelancer } from './amnesiac-freelancer/amnesiac-freelancer';
 import { maintainingMarkdownForAi } from './maintaining-markdown-for-ai/maintaining-markdown-for-ai';
 import { pageTemplate } from './page-template/page-template';
+import { slideLayouts } from './slide-layouts/slide-layouts';
 
 /**
  * Every Episode, by slug (FE-002). Typed against `EPISODE_SLUGS`, so a slug
@@ -16,6 +17,7 @@ const EPISODES: { readonly [S in EpisodeSlug]: AnyEpisodeRecord & { readonly slu
   'amnesiac-freelancer': amnesiacFreelancer,
   'maintaining-markdown-for-ai': maintainingMarkdownForAi,
   'ai-token-economy': aiTokenEconomy,
+  'slide-layouts': slideLayouts,
 };
 
 export function findEpisode(slug: string): AnyEpisodeRecord {
