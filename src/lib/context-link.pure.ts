@@ -13,6 +13,11 @@
 export const CONTEXT_REF_ATTR = 'data-context-ref';
 /** On the element a note explains, inside its item's element; its value is the note's short `target`. */
 export const TARGET_ATTR = 'data-target';
+/** What a Slide's `target(name)` returns: spread it on the element a note explains. */
+export interface TargetProps {
+  readonly 'data-target': string;
+}
+
 /** On a Speaker note item in the drawer; its value is the note's slug. */
 export const NOTE_ATTR = 'data-note';
 /** Tags each item's entry in the slot; its value is the item's `id`. */

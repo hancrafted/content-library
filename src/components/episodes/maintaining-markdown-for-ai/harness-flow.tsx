@@ -1,4 +1,4 @@
-import type { TargetProps } from '@/components/slide-master/episode-record';
+import type { TargetProps } from '@/lib/context-link.pure';
 
 function HarnessTriggers() {
   return (

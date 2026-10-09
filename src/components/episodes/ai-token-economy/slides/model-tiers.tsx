@@ -1,6 +1,7 @@
-import { slidesFor, type TargetProps } from '@/components/slide-master/episode-record';
+import { slidesFor } from '@/components/slide-master/episode-record';
 import { SectionSlide } from '@/components/slide-master/section-slide';
 import { SlideProse } from '@/components/slide-master/slide-master';
+import type { TargetProps } from '@/lib/context-link.pure';
 import type { ReactElement } from 'react';
 
 const slide = slidesFor('ai-token-economy');
