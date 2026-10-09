@@ -1082,17 +1082,7 @@
       "title": "Die KI-Token-Ökonomie",
       "caption": "KI kann Ihnen und Ihrem Team Superkräfte verleihen, bringt jedoch versteckte Managementverantwortung mit sich.",
       "description": "Ein Leitfaden zur Token-Ökonomie: Was KI tatsächlich kostet, warum der Zähler unsichtbar bleibt und wie Sie Kontext und Modelle effizient steuern.",
-      "notes": {
-        "hidden-responsibilities": {
-          "header": "Versteckte Managementverantwortung",
-          "description": "Der Drang zur KI-Einführung fokussiert auf Entwicklungsgeschwindigkeit, doch Teams erben stillschweigend Managementaufgaben, die früher höheren Führungsebenen vorbehalten waren."
-        },
-        "compute-as-resource": {
-          "header": "Rechenleistung als Ressource",
-          "description": "Prompts sind architektonische und budgetäre Entscheidungen. Rechenleistung muss als verwaltete Ressource gesteuert werden."
-        }
-      },
-      "sections": {
+      "slides": {
         "motivation": {
           "title": "Motivation",
           "caption": "Gedankenexperiment: Stellen Sie sich vor, Ihnen wird ein Freelancer mit diesen seltsamen Eigenschaften zugewiesen.",
@@ -1106,51 +1096,49 @@
               "header": "Führung als Notwendigkeit",
               "description": "Wer ein LLM als Teammitglied begreift, muss dessen Fehlermuster erkennen, statt es als allwissendes Orakel zu behandeln."
             }
-          },
-          "slides": {
-            "lead-one-upskill-many": {
-              "title": "Einen führen, viele befähigen",
-              "caption": "Es ist ein LLM — aber wie würden Sie es führen, wenn es ein Mensch wäre?",
-              "prose": "Das Anleiten eines KI-Agenten verlangt dieselbe Delegations- und Review-Disziplin wie das Einarbeiten externer Spezialisten.",
-              "notes": {
-                "upskill-vs-replace": {
-                  "header": "Befähigen statt ersetzen",
-                  "description": "Ziel ist nicht das Ersetzen von Fachkräften, sondern das Befähigen von Menschen zur wirksamen Steuerung synthetischer Arbeit."
-                }
-              }
-            },
-            "the-four-eras-of-ai": {
-              "title": "Die vier Epochen der KI",
-              "caption": "Neue Technologie bringt neue Disziplinen hervor, damit Menschen Schritt halten können.",
-              "prose": "Vom Prompt Engineering 2023 über Context Engineering 2024 und Harness Engineering 2025 zur Token-Ökonomie von heute.",
-              "notes": {
-                "emerging-disciplines": {
-                  "header": "Entstehende Disziplinen",
-                  "description": "Mit wachsender Modellfähigkeit verschiebt sich der Fokus vom Prompt-Text zur Steuerung von Kontext, Testumgebungen und Token-Budgets."
-                }
-              }
-            },
-            "the-invisible-invoice": {
-              "title": "Die unsichtbare Rechnung",
-              "caption": "Für einen echten Freelancer brauchen Sie einen Business Case. KI stellt einfach Rechnungen.",
-              "prose": "Eine Beraterrechnung über 3.200 € erfordert Bestellungen und Freigaben. KI häuft dieselben Kosten still über tausende Mikro-Prompts an.",
-              "notes": {
-                "governance-asymmetry": {
-                  "header": "Governance-Asymmetrie",
-                  "description": "Finanzabteilungen verlangen Freigaben für Dienstleister, während KI vergleichbare Budgets ohne Einkaufsprüfungen abrechnet."
-                }
-              }
-            },
-            "outcome-per-euro": {
-              "title": "Ergebnis pro Euro",
-              "caption": "Sie verantworten nun ein Budget, für das Sie sich nie gemeldet haben.",
-              "prose": "Für Routineaufgaben stets Spitzenmodelle einzusetzen, verbrennt Kapital. Wirtschaftlich gewinnt, wer das Ergebnis pro Euro optimiert.",
-              "notes": {
-                "budget-accountability": {
-                  "header": "Budgetverantwortung",
-                  "description": "Die gezielte Modellwahl für jede Teilaufgabe ist das Fundament moderner technischer Führung."
-                }
-              }
+          }
+        },
+        "lead-one-upskill-many": {
+          "title": "Einen führen, viele befähigen",
+          "caption": "Es ist ein LLM — aber wie würden Sie es führen, wenn es ein Mensch wäre?",
+          "prose": "Das Anleiten eines KI-Agenten verlangt dieselbe Delegations- und Review-Disziplin wie das Einarbeiten externer Spezialisten.",
+          "notes": {
+            "upskill-vs-replace": {
+              "header": "Befähigen statt ersetzen",
+              "description": "Ziel ist nicht das Ersetzen von Fachkräften, sondern das Befähigen von Menschen zur wirksamen Steuerung synthetischer Arbeit."
+            }
+          }
+        },
+        "the-four-eras-of-ai": {
+          "title": "Die vier Epochen der KI",
+          "caption": "Neue Technologie bringt neue Disziplinen hervor, damit Menschen Schritt halten können.",
+          "prose": "Vom Prompt Engineering 2023 über Context Engineering 2024 und Harness Engineering 2025 zur Token-Ökonomie von heute.",
+          "notes": {
+            "emerging-disciplines": {
+              "header": "Entstehende Disziplinen",
+              "description": "Mit wachsender Modellfähigkeit verschiebt sich der Fokus vom Prompt-Text zur Steuerung von Kontext, Testumgebungen und Token-Budgets."
+            }
+          }
+        },
+        "the-invisible-invoice": {
+          "title": "Die unsichtbare Rechnung",
+          "caption": "Für einen echten Freelancer brauchen Sie einen Business Case. KI stellt einfach Rechnungen.",
+          "prose": "Eine Beraterrechnung über 3.200 € erfordert Bestellungen und Freigaben. KI häuft dieselben Kosten still über tausende Mikro-Prompts an.",
+          "notes": {
+            "governance-asymmetry": {
+              "header": "Governance-Asymmetrie",
+              "description": "Finanzabteilungen verlangen Freigaben für Dienstleister, während KI vergleichbare Budgets ohne Einkaufsprüfungen abrechnet."
+            }
+          }
+        },
+        "outcome-per-euro": {
+          "title": "Ergebnis pro Euro",
+          "caption": "Sie verantworten nun ein Budget, für das Sie sich nie gemeldet haben.",
+          "prose": "Für Routineaufgaben stets Spitzenmodelle einzusetzen, verbrennt Kapital. Wirtschaftlich gewinnt, wer das Ergebnis pro Euro optimiert.",
+          "notes": {
+            "budget-accountability": {
+              "header": "Budgetverantwortung",
+              "description": "Die gezielte Modellwahl für jede Teilaufgabe ist das Fundament moderner technischer Führung."
             }
           }
         },
@@ -1163,29 +1151,27 @@
               "header": "Probabilistische Einheiten",
               "description": "LLMs verarbeiten numerische Token-IDs statt menschlicher Sprache. Die Zerlegung zeigt, wo Kosten entstehen."
             }
-          },
-          "slides": {
-            "live-context-breakdown": {
-              "title": "Kontext-Aufschlüsselung",
-              "caption": "Die meisten Tools verbergen den Zähler — so sieht er tatsächlich aus.",
-              "prose": "Typische Zusammensetzung einer 200k-Sitzung: System-Prompts, Gesprächsverlauf, Tool-Aufrufe und abgerufene Dokumentation.",
-              "notes": {
-                "synthetic-abstractions": {
-                  "header": "Synthetische Abstraktionen",
-                  "description": "Kommerzielle Oberflächen verschleiern den echten Token-Verbrauch hinter Credits. Direkte Transparenz ist entscheidend für Optimierung."
-                }
-              }
-            },
-            "cli-vs-web-tool-obscurity": {
-              "title": "Verschleierung in Web-Tools",
-              "caption": "Der Zähler wird mit Absicht versteckt.",
-              "prose": "Undurchsichtigkeit ist ein Produktmuster: reibungsloser Einstieg, gewohnte Abläufe und überraschend hohe Monatsrechnungen.",
-              "notes": {
-                "the-obscurity-playbook": {
-                  "header": "Das Muster der Verschleierung",
-                  "description": "Das Verbergen von Nutzungsdaten schafft Abhängigkeiten, bevor Organisationen die exponentiellen Kosten ungesteuerter Agenten-Schleifen erkennen."
-                }
-              }
+          }
+        },
+        "live-context-breakdown": {
+          "title": "Kontext-Aufschlüsselung",
+          "caption": "Die meisten Tools verbergen den Zähler — so sieht er tatsächlich aus.",
+          "prose": "Typische Zusammensetzung einer 200k-Sitzung: System-Prompts, Gesprächsverlauf, Tool-Aufrufe und abgerufene Dokumentation.",
+          "notes": {
+            "synthetic-abstractions": {
+              "header": "Synthetische Abstraktionen",
+              "description": "Kommerzielle Oberflächen verschleiern den echten Token-Verbrauch hinter Credits. Direkte Transparenz ist entscheidend für Optimierung."
+            }
+          }
+        },
+        "cli-vs-web-tool-obscurity": {
+          "title": "Verschleierung in Web-Tools",
+          "caption": "Der Zähler wird mit Absicht versteckt.",
+          "prose": "Undurchsichtigkeit ist ein Produktmuster: reibungsloser Einstieg, gewohnte Abläufe und überraschend hohe Monatsrechnungen.",
+          "notes": {
+            "the-obscurity-playbook": {
+              "header": "Das Muster der Verschleierung",
+              "description": "Das Verbergen von Nutzungsdaten schafft Abhängigkeiten, bevor Organisationen die exponentiellen Kosten ungesteuerter Agenten-Schleifen erkennen."
             }
           }
         },
@@ -1198,29 +1184,27 @@
               "header": "Kognitive Ausdauer",
               "description": "Kontextfenster verhalten sich wie menschliche Konzentration an einem langen Arbeitstag: anfangs scharf, später zunehmend abgelenkt."
             }
-          },
-          "slides": {
-            "the-lost-middle": {
-              "title": "Verloren in der Mitte",
-              "caption": "Wie wichtige Instruktionen in der Mitte untergehen.",
-              "prose": "Modelle erfassen Anfang und Ende eines Kontexts präzise, doch die Mitte versinkt in einem Tal nachlassender Aufmerksamkeit.",
-              "notes": {
-                "attention-valley": {
-                  "header": "Das Aufmerksamkeitstal",
-                  "description": "Studien belegen den U-förmigen Abrufverlauf: Informationen in der Mitte langer Kontexte leiden unter drastischen Erinnerungsverlusten."
-                }
-              }
-            },
-            "the-fullness-gauge-and-levers": {
-              "title": "Auslastungsanzeige & Hebel",
-              "caption": "Ab etwa halber Fülle verliert das Modell den Faden.",
-              "prose": "Unter 50 % liegt die Smart Zone. Darüber sinkt die Präzision, ab 75 % drohen Halluzinationen. Drei Hebel: Beobachten, Komprimieren, Übergeben.",
-              "notes": {
-                "smart-zone-discipline": {
-                  "header": "Disziplin in der Smart Zone",
-                  "description": "Kontexte unter 50 % Kapazität zu halten, sichert hohe Genauigkeit und verhindert unbemerktes Abdriften."
-                }
-              }
+          }
+        },
+        "the-lost-middle": {
+          "title": "Verloren in der Mitte",
+          "caption": "Wie wichtige Instruktionen in der Mitte untergehen.",
+          "prose": "Modelle erfassen Anfang und Ende eines Kontexts präzise, doch die Mitte versinkt in einem Tal nachlassender Aufmerksamkeit.",
+          "notes": {
+            "attention-valley": {
+              "header": "Das Aufmerksamkeitstal",
+              "description": "Studien belegen den U-förmigen Abrufverlauf: Informationen in der Mitte langer Kontexte leiden unter drastischen Erinnerungsverlusten."
+            }
+          }
+        },
+        "the-fullness-gauge-and-levers": {
+          "title": "Auslastungsanzeige & Hebel",
+          "caption": "Ab etwa halber Fülle verliert das Modell den Faden.",
+          "prose": "Unter 50 % liegt die Smart Zone. Darüber sinkt die Präzision, ab 75 % drohen Halluzinationen. Drei Hebel: Beobachten, Komprimieren, Übergeben.",
+          "notes": {
+            "smart-zone-discipline": {
+              "header": "Disziplin in der Smart Zone",
+              "description": "Kontexte unter 50 % Kapazität zu halten, sichert hohe Genauigkeit und verhindert unbemerktes Abdriften."
             }
           }
         },
@@ -1233,18 +1217,16 @@
               "header": "Agentische Kumulierung",
               "description": "Jeder Tool-Aufruf fügt vollständige Dateiinhalte zum Verlauf hinzu und lässt die Input-Token-Zahlen exponentiell steigen."
             }
-          },
-          "slides": {
-            "the-compounding-cost-curve": {
-              "title": "Die kumulierte Kostenkurve",
-              "caption": "Dieselbe Fehlerbehebung, verglichen über Modelle.",
-              "prose": "Abrechnung erfolgt pro verarbeitetem Token in jedem Schritt. Eine Routineaufgabe führt zu einer 14-fachen Preisspanne zwischen Modellen.",
-              "notes": {
-                "the-14x-spread": {
-                  "header": "Die 14-fache Preisspanne",
-                  "description": "Über Organisationen hinweg führt die Modellwahl bei identischen Schleifen monatlich zu Tausenden Euro Differenz."
-                }
-              }
+          }
+        },
+        "the-compounding-cost-curve": {
+          "title": "Die kumulierte Kostenkurve",
+          "caption": "Dieselbe Fehlerbehebung, verglichen über Modelle.",
+          "prose": "Abrechnung erfolgt pro verarbeitetem Token in jedem Schritt. Eine Routineaufgabe führt zu einer 14-fachen Preisspanne zwischen Modellen.",
+          "notes": {
+            "the-14x-spread": {
+              "header": "Die 14-fache Preisspanne",
+              "description": "Über Organisationen hinweg führt die Modellwahl bei identischen Schleifen monatlich zu Tausenden Euro Differenz."
             }
           }
         },

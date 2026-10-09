@@ -1,3 +1,4 @@
+import { aiTokenEconomy } from '@/components/episodes/ai-token-economy/ai-token-economy';
 import {
   calcSessionCost,
   evaluateContextGauge,
@@ -5,30 +6,6 @@ import {
   MODEL_PRICINGS,
   tokenizeText,
 } from '@/components/episodes/ai-token-economy/client/token-economy-data.pure';
-import {
-  AI_TOKEN_ECONOMY_CONTEXT,
-  contextFor,
-  type AiTokenSlideKey,
-  type SectionsT,
-} from '@/components/episodes/ai-token-economy/context';
-import {
-  costOfAgenticAi,
-  managingContext,
-  modelTiers,
-  motivation,
-  theCompoundingCostCurve,
-  theFullnessGaugeAndLevers,
-  theLostMiddle,
-  toolsAndTips,
-  whatIsAToken,
-} from '@/components/episodes/ai-token-economy/slides-content';
-import {
-  leadOneUpskillMany,
-  outcomePerEuro,
-  theFourErasOfAi,
-  theInvisibleInvoice,
-} from '@/components/episodes/ai-token-economy/slides-motivation';
-import { cliVsWebToolObscurity, liveContextBreakdown } from '@/components/episodes/ai-token-economy/slides-tokens';
 import { findEpisode } from '@/components/episodes/registry';
 import { pageMetadata } from '@/lib/page-metadata.pure';
 import { isEpisodeSlug } from '@/lib/routes';
@@ -51,11 +28,8 @@ describe('success cases', () => {
     expect(episode.youtube?.de).toBe(expectedYoutube);
   });
 
-  it('provides 6 sections with 15 content slides in manuscript order', () => {
+  it('composes 6 sections with 15 slides in manuscript order', () => {
     // ARRANGE
-    const t: SectionsT = (key: string) => `mock:${key}`;
-    const expectedSectionCount = 6;
-    const expectedTotalSlides = 15;
     const expectedSections = [
       { slug: 'motivation', pageSlides: 4 },
       { slug: 'what-is-a-token', pageSlides: 2 },
@@ -64,49 +38,18 @@ describe('success cases', () => {
       { slug: 'model-tiers', pageSlides: 0 },
       { slug: 'tools-and-tips', pageSlides: 0 },
     ];
+    const expectedTotalSlides = 15;
 
     // ACT
-    const sections = [
-      motivation(t, [leadOneUpskillMany(t), theFourErasOfAi(t), theInvisibleInvoice(t), outcomePerEuro(t)]),
-      whatIsAToken(t, [liveContextBreakdown(t), cliVsWebToolObscurity(t)]),
-      managingContext(t, [theLostMiddle(t), theFullnessGaugeAndLevers(t)]),
-      costOfAgenticAi(t, [theCompoundingCostCurve(t)]),
-      modelTiers(t),
-      toolsAndTips(t),
-    ];
-    const totalSlides = sections.reduce((acc, sec) => acc + 1 + sec.slides.length, 0);
-    const mapped = sections.map((s) => ({
-      slug: s.slug,
-      pageSlides: s.slides.length,
+    const mapped = aiTokenEconomy.sections.map(([sectionSlide, ...pages]) => ({
+      slug: sectionSlide.slug,
+      pageSlides: pages.length,
     }));
+    const totalSlides = aiTokenEconomy.sections.reduce((acc, section) => acc + section.length, 0);
 
     // ASSERT
-    expect(sections).toHaveLength(expectedSectionCount);
-    expect(totalSlides).toBe(expectedTotalSlides);
     expect(mapped).toEqual(expectedSections);
-  });
-
-  it('defines 15 context entries matching all 15 content slides with valid notes and targets', () => {
-    // ARRANGE
-    const keys = Object.keys(AI_TOKEN_ECONOMY_CONTEXT) as AiTokenSlideKey[];
-    const expectedContextEntries = 15;
-    const read = (path: string) => `str:${path}`;
-
-    // ACT
-    const results = keys.map((key) => contextFor(read, key));
-
-    // ASSERT
-    expect(keys).toHaveLength(expectedContextEntries);
-    for (const result of results) {
-      expect(result.anchor).toBeTruthy();
-      expect(result.notes.length).toBeGreaterThan(0);
-      for (const note of result.notes) {
-        expect(note.slug).toBeTruthy();
-        expect(note.header).toMatch(/^str:/);
-        expect(note.description).toMatch(/^str:/);
-        expect(note.target).toBeTruthy();
-      }
-    }
+    expect(totalSlides).toBe(expectedTotalSlides);
   });
 
   it('produces valid page metadata for en and de', () => {
