@@ -1,4 +1,6 @@
 @import 'tailwindcss';
+/* Tracked skill symlinks under .agents point into ~/.claude; Turbopack refuses to scan outside the repo. */
+@source not '../../.agents';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
