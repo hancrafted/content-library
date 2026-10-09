@@ -1235,6 +1235,52 @@
           }
         }
       }
+    },
+    "slide-layouts": {
+      "title": "Folienlayouts",
+      "caption": "Jedes Folienlayout, je eine Folie.",
+      "description": "Eine Galerie aller Folienlayouts, die eine Episode nutzen kann: Abschnittsfolie, einfache Seite und drei Spalten.",
+      "slides": {
+        "section-slide": {
+          "title": "Abschnittsfolie",
+          "caption": "Titel und Untertitel, vertikal zentriert. Sie eröffnet jeden Abschnitt und benennt ihn."
+        },
+        "basic-page": {
+          "title": "Einfache Seite",
+          "caption": "Oben Titel und Untertitel, darunter ein Absatz Fließtext.",
+          "prose": "Der Fließtext ist ein Ziel, das eine Sprechernotiz benennen kann, genau wie Titel und Untertitel.",
+          "notes": {
+            "layout-target": {
+              "header": "Das Ziel Fließtext",
+              "description": "Layouts bieten Ziele von Haus aus: Titel, Untertitel und Fließtext. Wer eines als Ziel einer Notiz benennt, sieht es im Drawer hervorgehoben."
+            }
+          }
+        },
+        "three-column": {
+          "title": "Drei Spalten",
+          "caption": "Oben Titel und Untertitel, darunter genau drei Spalten mit eigenem Schlüssel.",
+          "columns": {
+            "first": {
+              "title": "Erste Spalte",
+              "prose": "Jede Spalte hat einen Slug, und dieser Slug ist das Ziel, unter dem eine Notiz sie benennt."
+            },
+            "second": {
+              "title": "Zweite Spalte",
+              "prose": "Spalten tragen einen Titel und Fließtext, nie eine Position."
+            },
+            "third": {
+              "title": "Dritte Spalte",
+              "prose": "Eine vierte Spalte wäre ein anderes Layout."
+            }
+          },
+          "notes": {
+            "column-target": {
+              "header": "Eine Spalte ist ein Ziel",
+              "description": "Der Slug jeder Spalte ist zugleich ihr Ziel, sodass eine Notiz auf eine Spalte zeigen kann."
+            }
+          }
+        }
+      }
     }
   },
   "contextDrawer": {

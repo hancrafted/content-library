@@ -1235,6 +1235,52 @@
           }
         }
       }
+    },
+    "slide-layouts": {
+      "title": "Slide layouts",
+      "caption": "Every Slide layout, one Slide each.",
+      "description": "A gallery of every Slide layout an Episode can use: section slide, basic page and three columns.",
+      "slides": {
+        "section-slide": {
+          "title": "Section slide",
+          "caption": "Title and caption, vertically centred. It opens every Section and names it."
+        },
+        "basic-page": {
+          "title": "Basic page",
+          "caption": "Title and caption up top, one block of prose below.",
+          "prose": "The prose is a target a Speaker note can name, like the title and the caption.",
+          "notes": {
+            "layout-target": {
+              "header": "The prose target",
+              "description": "Layouts offer targets for free: title, caption and prose. Name one in a note's target and the drawer highlights it."
+            }
+          }
+        },
+        "three-column": {
+          "title": "Three columns",
+          "caption": "Title and caption up top, exactly three keyed columns below.",
+          "columns": {
+            "first": {
+              "title": "First column",
+              "prose": "Each column has a slug, and its slug is the target a note names it by."
+            },
+            "second": {
+              "title": "Second column",
+              "prose": "Columns hold a title and prose, never a position."
+            },
+            "third": {
+              "title": "Third column",
+              "prose": "A fourth column is a different layout."
+            }
+          },
+          "notes": {
+            "column-target": {
+              "header": "A column is a target",
+              "description": "Each column's slug doubles as its target, so a note can point at one column."
+            }
+          }
+        }
+      }
     }
   },
   "contextDrawer": {
