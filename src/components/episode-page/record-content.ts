@@ -1,4 +1,4 @@
-import type { EpisodeRecord, RuntimeTranslator, Slide } from '@/components/slide-master/episode-record';
+import type { AnyEpisodeRecord, RuntimeTranslator, Slide } from '@/components/slide-master/episode-record';
 import { slideKit } from '@/components/slide-master/slide-kit';
 import { placeSections, type PlacedListSlide } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
@@ -48,8 +48,8 @@ function sectionOf([head, ...slides]: readonly EpisodeSlide[]): EpisodeSection {
 }
 
 /** One locale of an Episode record: the Title slide's text and every Section, walked once (`placeSections`). */
-export async function recordContent(record: EpisodeRecord, locale: Locale): Promise<EpisodeContent> {
-  const placed = placeSections(record.sections);
+export async function recordContent(record: AnyEpisodeRecord, locale: Locale): Promise<EpisodeContent> {
+  const placed = placeSections<Slide>(record.sections);
   const t = await getTranslations({ locale, namespace: 'episodes' });
   const refLabel = (await getTranslations({ locale, namespace: 'contextDrawer' }))('refNote');
   const sections = await Promise.all(

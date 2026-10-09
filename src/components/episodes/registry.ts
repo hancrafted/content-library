@@ -1,5 +1,5 @@
 import type { Episode } from '@/components/episode-page/episode-page-container.pure';
-import type { EpisodeRecord } from '@/components/slide-master/episode-record';
+import type { AnyEpisodeRecord } from '@/components/slide-master/episode-record';
 import { isEpisodeSlug, type EpisodeSlug } from '@/lib/routes';
 import { notFound } from 'next/navigation';
 import { aiTokenEconomy } from './ai-token-economy/ai-token-economy';
@@ -8,7 +8,7 @@ import { maintainingMarkdownForAi } from './maintaining-markdown-for-ai/maintain
 import { pageTemplate } from './page-template/page-template';
 
 /** An Episode record, or a legacy Episode not yet written as Slide files. */
-export type AnyEpisode = EpisodeRecord | Episode;
+export type AnyEpisode = AnyEpisodeRecord | Episode;
 
 /**
  * Every Episode, by slug (FE-002). Typed against `EPISODE_SLUGS`, so a slug

@@ -173,7 +173,10 @@ describe('episode structure', () => {
             .toArray()
             .map((slide) => $(slide).find('[data-target="title"]').first().prop('tagName')?.toLowerCase() ?? 'none'),
         );
-      const expected = levels.map((section) => section.map((_, index) => (index === 0 ? 'h2' : 'h3')));
+      const untitled = UNTITLED[slug] ?? [];
+      const expected = wrapperIdsBySection($).map(({ ids }) =>
+        ids.map((id, index) => (index === 0 ? 'h2' : untitled.includes(id) ? 'none' : 'h3')),
+      );
       // ASSERT: a legacy Episode marks no title target; its levels are held by the heading-count test above
       if (marked) expect(levels).toEqual(expected);
       else expect(levels.flat().every((level) => level === 'none')).toBe(true);

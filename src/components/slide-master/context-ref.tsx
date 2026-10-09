@@ -1,7 +1,4 @@
-import { checkedNote } from '@/components/episode-page/context-drawer-input.pure';
-import type { SpeakerNoteItem } from '@/lib/context-drawer.pure';
 import { CONTEXT_REF_ATTR } from '@/lib/context-link.pure';
-import { targetAnchor } from '@/lib/episode.pure';
 import type { ReactNode } from 'react';
 
 /*
@@ -44,42 +41,5 @@ export function ContextRef(props: {
         {props.children}
       </RefButton>
     </span>
-  );
-}
-
-/**
- * Legacy context reference, for Episodes not yet written as Slide files: its
- * wrapper carries the id `<slide anchor>--<note>`. Delete with the last legacy
- * Episode.
- */
-function LegacyContextRef(props: {
-  anchor: string;
-  notes: readonly SpeakerNoteItem[];
-  note: string;
-  label: string;
-  children: ReactNode;
-}) {
-  checkedNote(props.notes, props.note);
-  return (
-    <span id={targetAnchor(props.anchor, props.note)} className="rounded-sm">
-      <RefButton note={props.note} label={props.label}>
-        {props.children}
-      </RefButton>
-    </span>
-  );
-}
-
-/** Legacy: what `t.rich` calls for a `<ref>` tag, bound to a Slide by anchor and notes. */
-export type ContextRefOf = (
-  context: { readonly anchor: string; readonly notes: readonly SpeakerNoteItem[] },
-  note: string,
-) => (chunks: ReactNode) => ReactNode;
-
-/** Legacy: binds the localized label once per Episode render, so a Slide builder writes `ref(ctx, 'note')`. */
-export function contextRefOf(label: string): ContextRefOf {
-  return (context, note) => (chunks) => (
-    <LegacyContextRef anchor={context.anchor} notes={context.notes} note={note} label={label}>
-      {chunks}
-    </LegacyContextRef>
   );
 }
