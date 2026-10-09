@@ -1,7 +1,7 @@
-import { ContextGaugeSliderClient } from '@/components/episode/context-gauge-slider.client';
-import type { EpisodeSection, EpisodeSlide } from '@/components/episode/episode-page-container.pure';
-import { SectionSlide } from '@/components/episode/section-slide';
-import { elementId, SlideCaption, SlideFrame, SlideProse, SlideTitle } from '@/components/episode/slide-master';
+import { ContextGaugeSliderClient } from '@/components/episodes/ai-token-economy/client/context-gauge-slider.client';
+import type { EpisodeSection, EpisodeSlide } from '@/components/episode-page/episode-page-container.pure';
+import { SectionSlide } from '@/components/slide-master/section-slide';
+import { elementId, SlideCaption, SlideFrame, SlideProse, SlideTitle } from '@/components/slide-master/slide-master';
 import type { ReactElement } from 'react';
 import { contextOf, type SectionsT } from './context';
 

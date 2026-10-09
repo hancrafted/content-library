@@ -80,7 +80,7 @@ function ModalHeader({ data, onClose }: { data: ModalContent; onClose: () => voi
         <p className="font-mono text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
           {data.eyebrow}
         </p>
-        <h3 className="mt-1 font-display text-lg font-bold text-foreground sm:text-xl">{data.title}</h3>
+        <h4 className="mt-1 font-display text-lg font-bold text-foreground sm:text-xl">{data.title}</h4>
         <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">{data.lede}</p>
       </div>
       <button

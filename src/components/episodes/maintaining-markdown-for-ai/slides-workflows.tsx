@@ -1,6 +1,6 @@
-import type { EpisodeSection, EpisodeSlide } from '@/components/episode/episode-page-container.pure';
-import { SectionSlide } from '@/components/episode/section-slide';
-import { elementId, SlideCaption, SlideFrame, SlideProse, SlideTitle } from '@/components/episode/slide-master';
+import type { EpisodeSection, EpisodeSlide } from '@/components/episode-page/episode-page-container.pure';
+import { SectionSlide } from '@/components/slide-master/section-slide';
+import { elementId, SlideCaption, SlideFrame, SlideProse, SlideTitle } from '@/components/slide-master/slide-master';
 import { contextOf, type SectionsT } from './context';
 import { EffortCorpusChart, EffortDecayChart } from './effort-charts';
 import { EffortVenn } from './effort-venn';

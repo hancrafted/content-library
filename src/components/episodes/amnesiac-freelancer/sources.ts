@@ -1,4 +1,4 @@
-import type { SourceSpec } from '@/components/episode/slide-context.pure';
+import type { SourceSpec } from '@/components/episode-page/slide-context.pure';
 
 /*
  * The sources the amnesiac-freelancer Episode cites, one entry each (FE-010 §3).

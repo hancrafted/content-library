@@ -2,7 +2,7 @@ import type { SpeakerNoteItem } from '@/lib/context-drawer.pure';
 import { CONTEXT_REF_ATTR } from '@/lib/context-link.pure';
 import { targetAnchor } from '@/lib/episode.pure';
 import type { ReactNode } from 'react';
-import { checkedNote } from './context-drawer-input.pure';
+import { checkedNote } from '@/components/episode-page/context-drawer-input.pure';
 
 /*
  * The phrase underline grows from the left on hover and focus. Under reduced

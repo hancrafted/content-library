@@ -5,9 +5,9 @@ title: 'Slide Frame'
 domain: frontend
 rules: false
 # prettier-ignore
-files: ['src/components/episode/**', 'src/components/episodes/**', 'src/hooks/use-slide-zone*', 'src/hooks/use-revealed-on-view.ts', 'src/lib/slide-zone.pure*', 'src/lib/reading-line.pure*', 'src/app/globals.css', 'eslint.config.mjs', '.dependency-cruiser.cjs', 'tests/post-build/episode-structure.build.test.ts']
+files: ['src/components/episode-page/**', 'src/components/slide-master/**', 'src/components/episodes/**', 'src/hooks/use-slide-zone*', 'src/hooks/use-revealed-on-view.ts', 'src/lib/slide-zone.pure*', 'src/lib/reading-line.pure*', 'src/app/globals.css', 'eslint.config.mjs', '.dependency-cruiser.cjs', 'tests/post-build/episode-structure.build.test.ts']
 # prettier-ignore
-paths: ['src/components/episode/**', 'src/components/episodes/**', 'src/hooks/use-slide-zone*', 'src/hooks/use-revealed-on-view.ts', 'src/lib/slide-zone.pure*', 'src/lib/reading-line.pure*', 'src/app/globals.css', 'eslint.config.mjs', '.dependency-cruiser.cjs', 'tests/post-build/episode-structure.build.test.ts']
+paths: ['src/components/episode-page/**', 'src/components/slide-master/**', 'src/components/episodes/**', 'src/hooks/use-slide-zone*', 'src/hooks/use-revealed-on-view.ts', 'src/lib/slide-zone.pure*', 'src/lib/reading-line.pure*', 'src/app/globals.css', 'eslint.config.mjs', '.dependency-cruiser.cjs', 'tests/post-build/episode-structure.build.test.ts']
 description: 'Wrapper owns mechanics, canvas owns creativity: a single-column Content area, a server Slide wrapper that never clips, a client SlideMount that drops far content, one observer with two thresholds, and a pause duty for looping animation.'
 ---
 
@@ -112,7 +112,7 @@ An Episode stacks many Slides, some heavy (charts, looping demos). Navigation ne
 
 **Enforcers, earliest first:**
 
-1. **Fast** (`npm run verify`): zone derivation tests beside `src/lib/slide-zone.pure.ts`; wrapper and mount contract tests under `src/components/episode/`.
+1. **Fast** (`npm run verify`): zone derivation tests beside `src/lib/slide-zone.pure.ts`; wrapper and mount contract tests under `src/components/episode-page/`.
 2. **Lint** (`eslint.config.mjs`, [#13](https://github.com/hancrafted/content-library/issues/13)): `no-restricted-syntax` on `new IntersectionObserver` outside the Slide observer and the reveal hook, each exempted by its own `files:` block; baseline in FE-001.
 3. **Boundary** (`.dependency-cruiser.cjs`, FE-006): `SlideMount` and the observer are client leaves reached from the container.
 4. **Post-build** (`npm run test:build`): `tests/post-build/episode-structure.build.test.ts` checks the Content area grid, the portal root, wrappers as grid children and anchors in the static HTML.

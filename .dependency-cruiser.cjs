@@ -4,6 +4,15 @@
 // `tsPreCompilationDeps` every `import type` is erased and the rules below
 // cruise a thinner graph while still reporting success.
 
+// What an Episode file may reach: the Slide master, its own Episode folder and
+// src/lib. The two Episode-record modules are still page machinery; they move to
+// src/lib in the slide-as-unit refactor, and this exemption goes with them.
+const EPISODE_REACH = [
+  '^src/components/(slide-master|episodes)/',
+  '^src/lib/',
+  '^src/components/episode-page/(episode-page-container|slide-context)\\.pure\\.ts$',
+];
+
 /** @type {import('dependency-cruiser').IConfiguration} */
 module.exports = {
   forbidden: [
@@ -37,8 +46,8 @@ module.exports = {
       comment:
         'Inside Episode code, the table of contents is reached only through EpisodePageContainer, which derives its entries from the same anchors the slides carry. Other page kinds may still use it (FE-002).',
       from: {
-        path: '^src/components/(episodes|episode)/',
-        pathNot: '^src/components/episode/episode-page-container\\.(tsx|pure\\.ts)$',
+        path: '^src/components/(episode-page|slide-master|episodes)/',
+        pathNot: '^src/components/episode-page/episode-page-container\\.(tsx|pure\\.ts)$',
       },
       to: { path: '^src/components/table-of-contents/' },
     },
@@ -49,7 +58,7 @@ module.exports = {
         'The Context drawer is reached only through EpisodePageContainer, which derives its entries from the same anchors the slides carry; no other module imports it (FE-010 §5).',
       from: {
         pathNot: [
-          '^src/components/episode/(episode-page-container\\.tsx|context-drawer-input(\\.pure)?\\.ts)$',
+          '^src/components/episode-page/(episode-page-container\\.tsx|context-drawer-input(\\.pure)?\\.ts)$',
           '^src/components/context-drawer/',
         ],
       },
@@ -59,14 +68,14 @@ module.exports = {
       name: 'context-drawer-takes-input-only',
       severity: 'error',
       comment:
-        'The Context drawer knows nothing of Episodes: it renders from one ContextDrawerInput and observes the ids it is given. Its components, hooks and lib files MUST NOT import Episode, table-of-contents, route or next-intl code (FE-010 §8). The one adapter that builds the input lives under src/components/episode/.',
+        'The Context drawer knows nothing of Episodes: it renders from one ContextDrawerInput and observes the ids it is given. Its components, hooks and lib files MUST NOT import Episode, table-of-contents, route or next-intl code (FE-010 §8). The one adapter that builds the input lives under src/components/episode-page/.',
       from: {
         path: '^src/(components/context-drawer/|hooks/use-(context-|reading-line)|lib/(context-drawer|context-link|roving-focus|reading-line)\\.pure\\.ts$)',
         pathNot: '\\.test\\.tsx?$',
       },
       to: {
         path: [
-          '^src/components/(episode|episodes|table-of-contents)/',
+          '^src/components/(episode-page|slide-master|episodes|table-of-contents)/',
           '^src/hooks/use-table-of-contents',
           '^src/lib/(episode|routes|table-of-contents)',
           '(^|/)node_modules/next-intl/',
@@ -78,8 +87,16 @@ module.exports = {
       severity: 'error',
       comment:
         'An Episode page file composes the Slide master, Slide layouts and the Episode record, plus src/lib helpers — never the table of contents, page shells or routes (FE-002).',
-      from: { path: '^src/components/episodes/', pathNot: '\\.test\\.ts$' },
-      to: { pathNot: ['^src/components/(episodes|episode)/', '^src/lib/', 'node_modules'] },
+      from: { path: '^src/components/episodes/', pathNot: ['\\.test\\.ts$', '^src/components/episodes/[^/]+/client/'] },
+      to: { pathNot: [...EPISODE_REACH, 'node_modules'] },
+    },
+    {
+      name: 'episode-client-reach-only-hooks-and-lib',
+      severity: 'error',
+      comment:
+        'A one-Episode widget under episodes/<ep>/client/ is the only place an Episode runs in the browser. It reaches its own client/ folder, src/lib helpers and src/hooks — never the Slide master, page shells or other components (FE-002, FE-006).',
+      from: { path: '^src/components/episodes/[^/]+/client/', pathNot: '\\.test\\.ts$' },
+      to: { pathNot: ['^src/components/episodes/[^/]+/client/', '^src/(lib|hooks)/', 'node_modules'] },
     },
     {
       name: 'episode-tests-reach-only-slide-parts',
@@ -88,7 +105,7 @@ module.exports = {
         'An Episode test reaches what an Episode file does, plus Node builtins for reading in-test file fixtures such as published-anchors.json (ARCH-003 §4.2).',
       from: { path: '^src/components/episodes/.+\\.test\\.ts$' },
       to: {
-        pathNot: ['^src/components/(episodes|episode)/', '^src/lib/', 'node_modules'],
+        pathNot: [...EPISODE_REACH, 'node_modules'],
         dependencyTypesNot: ['core'],
       },
     },
@@ -98,7 +115,7 @@ module.exports = {
       comment:
         'The Title slide and the container are rendered once, by the EpisodePage page component. An Episode page file imports only the Episode record types from episode-page-container.pure.ts (FE-002).',
       from: { path: '^src/components/episodes/' },
-      to: { path: '^src/components/episode/(title-slide|episode-page-container)\\.tsx$' },
+      to: { path: '^src/components/episode-page/(title-slide|episode-page-container)\\.tsx$' },
     },
 
     // FE-007: layering. Tiers run app → components → hooks → lib; an edge may

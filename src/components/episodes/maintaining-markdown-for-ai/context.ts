@@ -1,4 +1,4 @@
-import { slideContext, type ReadString, type SlideContextSpec } from '@/components/episode/slide-context.pure';
+import { slideContext, type ReadString, type SlideContextSpec } from '@/components/episode-page/slide-context.pure';
 import { sectionAnchor, slideAnchor } from '@/lib/episode.pure';
 
 /*
