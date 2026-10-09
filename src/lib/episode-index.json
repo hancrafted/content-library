@@ -1,0 +1,80 @@
+[
+  {
+    "slug": "amnesiac-freelancer",
+    "status": "published",
+    "topic": "ai-collaboration",
+    "format": "foundations",
+    "accent": "violet",
+    "icon": "book-open",
+    "publishedOn": "2026-10-08",
+    "featuredRank": 1
+  },
+  {
+    "slug": "maintaining-markdown-for-ai",
+    "status": "published",
+    "topic": "documentation",
+    "format": "foundations",
+    "accent": "sky",
+    "icon": "file-text",
+    "publishedOn": "2026-10-09",
+    "featuredRank": 2
+  },
+  {
+    "slug": "ai-token-economy",
+    "status": "published",
+    "topic": "economics",
+    "format": "foundations",
+    "accent": "amber",
+    "icon": "coins",
+    "publishedOn": "2026-10-09",
+    "featuredRank": 3
+  },
+  {
+    "slug": "specs-an-agent-can-follow",
+    "status": "upcoming",
+    "topic": "ai-collaboration",
+    "format": "foundations",
+    "accent": "violet",
+    "icon": "compass"
+  },
+  {
+    "slug": "ai-code-review-in-ci",
+    "status": "upcoming",
+    "topic": "ai-collaboration",
+    "format": "teardown",
+    "accent": "emerald",
+    "icon": "git-branch"
+  },
+  {
+    "slug": "verifying-ai-written-docs",
+    "status": "upcoming",
+    "topic": "documentation",
+    "format": "short",
+    "accent": "sky",
+    "icon": "shield-check"
+  },
+  {
+    "slug": "choosing-the-right-model",
+    "status": "upcoming",
+    "topic": "economics",
+    "format": "short",
+    "accent": "amber",
+    "icon": "brain"
+  },
+  {
+    "slug": "rolling-out-ai-in-a-team",
+    "status": "upcoming",
+    "topic": "adoption",
+    "format": "foundations",
+    "accent": "rose",
+    "icon": "users"
+  },
+  {
+    "slug": "the-bottleneck-builds-the-fix",
+    "status": "upcoming",
+    "topic": "adoption",
+    "format": "teardown",
+    "accent": "primary",
+    "icon": "users"
+  }
+]

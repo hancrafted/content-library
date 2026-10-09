@@ -88,12 +88,12 @@ function useRailScrub(options: ScrubOptions) {
 }
 
 function RailHeader({ locale }: { locale: Locale }) {
-  const chapter = locale === 'de' ? 'KAPITEL 03 // DIE METHODE' : 'CHAPTER 03 // THE METHOD';
+  const title = locale === 'de' ? 'DIE METHODE' : 'THE METHOD';
   const hint = locale === 'de' ? 'HORIZONTAL SCROLLEN →' : 'SCROLL TO PROGRESS →';
 
   return (
     <div className="absolute top-20 sm:top-24 left-0 right-0 z-20 px-8 sm:px-16 flex items-center justify-between pointer-events-none text-[var(--method-fg)]">
-      <div className="font-mono text-xs font-bold tracking-widest uppercase text-primary">{chapter}</div>
+      <div className="font-mono text-xs font-bold tracking-widest uppercase text-primary">{title}</div>
       <div className="font-mono text-xs opacity-60">{hint}</div>
     </div>
   );
@@ -172,14 +172,9 @@ function MobileStack({ locale, isDark }: { locale: Locale; isDark: boolean }) {
       className={`md:hidden py-16 px-4 space-y-12 transition-colors ${!isDark ? 'bg-[#0A0E1A] text-[#F8FAFC]' : ''}`}
       style={{ '--method-fg': fg, '--method-bg': bg } as React.CSSProperties}
     >
-      <div className="space-y-2">
-        <div className="font-mono text-xs font-semibold text-primary uppercase tracking-widest">
-          {locale === 'de' ? 'KAPITEL 03 // DIE METHODE' : 'CHAPTER 03 // THE METHOD'}
-        </div>
-        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
-          {locale === 'de' ? 'Die Methode' : 'The Method'}
-        </h2>
-      </div>
+      <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
+        {locale === 'de' ? 'Die Methode' : 'The Method'}
+      </h2>
       <div className="space-y-16">
         {FRAMEWORK_SLIDES.map((slide) => (
           <MethodSlideItem key={slide.id} slide={slide} locale={locale} />
@@ -194,7 +189,7 @@ export function MethodRailSection({ locale }: { locale: Locale }) {
   const isDark = resolvedTheme === 'dark';
 
   return (
-    <section data-chapter="03" className="relative" id="services">
+    <section className="relative" id="services">
       <DesktopRail locale={locale} isDark={isDark} />
       <MobileStack locale={locale} isDark={isDark} />
     </section>

@@ -49,14 +49,48 @@
     },
     "episodesSectionTitle": "Verfügbare Episoden",
     "episodesSectionSubtitle": "Interaktive Foliensätze und visualisierte Essays durchstöbern.",
-    "amnesiacTitle": "KI wie einen Freelancer mit Amnesie behandeln",
-    "amnesiacDescription": "Warum ein KI-Coding-Agent jede Session ohne Gedächtnis beginnt und wie man ihn briefen muss.",
-    "markdownTitle": "Markdown für KI pflegen",
-    "markdownDescription": "Warum das Verifizieren von Dokumentation aufwendiger wurde als das Schreiben, und wie man den maschinellen Teil steuert.",
-    "tokenEconomyTitle": "Die KI-Token-Ökonomie",
-    "tokenEconomyDescription": "Was KI tatsächlich kostet, warum der Zähler unsichtbar bleibt und wie Sie Kontext und Modelle effizient steuern.",
+    "episodeIndex": {
+      "open": "Episode öffnen",
+      "comingSoon": "Demnächst",
+      "topics": {
+        "ai-collaboration": "Arbeiten mit KI",
+        "documentation": "Dokumentation",
+        "economics": "Kosten und Ökonomie",
+        "adoption": "Einführung und Wandel"
+      },
+      "formats": {
+        "foundations": "Grundlagen",
+        "teardown": "Teardown",
+        "short": "Kurz"
+      },
+      "upcoming": {
+        "specs-an-agent-can-follow": {
+          "title": "Specs schreiben, denen ein Agent folgen kann",
+          "caption": "Was in eine Spezifikation gehört, damit ein KI-Coding-Agent das Richtige baut, ohne dass du jeden Schritt beobachtest."
+        },
+        "ai-code-review-in-ci": {
+          "title": "KI-Code-Review in der CI",
+          "caption": "Ein Teardown eines Review-Bots, der einer einzelnen Person die Pull-Request-Schlange abgenommen hat."
+        },
+        "verifying-ai-written-docs": {
+          "title": "KI-geschriebene Doku prüfen",
+          "caption": "Ein schneller Check, ob generierte Dokumentation noch zum beschriebenen Code passt."
+        },
+        "choosing-the-right-model": {
+          "title": "Das richtige Modell wählen",
+          "caption": "Wann ein günstigeres Modell reicht und wann die Aufgabe das teure verdient."
+        },
+        "rolling-out-ai-in-a-team": {
+          "title": "KI im Team einführen",
+          "caption": "Wie sich die Einführung verbreitet, wenn niemand das Werkzeug vorschreibt, und was sie bremst."
+        },
+        "the-bottleneck-builds-the-fix": {
+          "title": "Der Engpass baut die Lösung",
+          "caption": "Ein Teardown einer Veränderung, die hielt, weil die am stärksten betroffene Person sie besaß."
+        }
+      }
+    },
     "templateTitle": "Episoden-Seitenvorlage",
-    "templateDescription": "Die Layout-Referenz für jede Episode: Abschnitte aus Folien, untereinander angeordnet.",
     "about": {
       "eyebrow": "Über mich",
       "headlineStepOut": "Ich bewege Veränderung, indem ich aus der Debatte heraustrete.",
