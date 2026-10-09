@@ -17,6 +17,9 @@ const OPTIONAL_CLIENT = '+([a-z0-9-])?(.client)';
 // come only from the container and the Slide layouts. A one-off slide may still
 // write `<SlideTitle as="h3">`; h4 and below are free.
 const EPISODE_FILES = 'src/components/episodes/**/*.{ts,tsx}';
+// A one-Episode widget under `episodes/<ep>/client/` is the only place an Episode
+// may carry 'use client'; it keeps the spine rule but not the directive ban.
+const EPISODE_CLIENT_FILES = 'src/components/episodes/*/client/**/*.client.tsx';
 const SPINE_HEADINGS = [
   {
     selector: 'JSXOpeningElement[name.name=/^h[1-3]$/]',
@@ -36,7 +39,7 @@ const SPINE_HEADINGS = [
 // `history.replaceState(...)`; the selector catches `window.history.*` and
 // `globalThis.history.*`, which `object: 'history'` does not match.
 const URL_STATE_FILE = 'src/lib/url-state.ts';
-const SLIDE_OBSERVER_FILE = 'src/components/episode/slide-observer.client.tsx';
+const SLIDE_OBSERVER_FILE = 'src/components/episode-page/slide-observer.client.tsx';
 /** FE-009 §5.1: the one-shot reveal hook, the only other file allowed an IntersectionObserver. */
 const REVEAL_OBSERVER_FILE = 'src/hooks/use-revealed-on-view.ts';
 const HISTORY_WRITE = {
@@ -59,7 +62,16 @@ const NO_USE_CLIENT = {
 
 export default tseslint.config(
   {
-    ignores: ['node_modules/**', 'dist/**', 'coverage/**', '.archgate/**', '.next/**', 'out/**', 'next-env.d.ts'],
+    ignores: [
+      'node_modules/**',
+      'dist/**',
+      'coverage/**',
+      '.archgate/**',
+      '.next/**',
+      'out/**',
+      'next-env.d.ts',
+      '.worktrees/**',
+    ],
   },
   {
     files: ['**/*.{ts,tsx}'],
@@ -152,9 +164,17 @@ export default tseslint.config(
     rules: { 'no-restricted-syntax': ['error', CLIENT_DIRECTIVE_MISSING, HISTORY_WRITE, NEW_OBSERVER] },
   },
   {
-    // FE-002 headings, for Episode files.
+    // FE-002 headings, for Episode files; the directive stays out of them.
     files: [EPISODE_FILES],
+    ignores: [EPISODE_CLIENT_FILES],
     rules: { 'no-restricted-syntax': ['error', NO_USE_CLIENT, HISTORY_WRITE, NEW_OBSERVER, ...SPINE_HEADINGS] },
+  },
+  {
+    // FE-002 headings and FE-006 directive, for an Episode's client widgets.
+    files: [EPISODE_CLIENT_FILES],
+    rules: {
+      'no-restricted-syntax': ['error', CLIENT_DIRECTIVE_MISSING, HISTORY_WRITE, NEW_OBSERVER, ...SPINE_HEADINGS],
+    },
   },
   {
     // The owners: each is exempt from its own selector only.

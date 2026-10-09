@@ -6,8 +6,8 @@ domain: frontend
 rules: true
 files: ['src/app/**/*']
 # prettier-ignore
-paths: ['src/app/**', 'src/lib/{page-metadata*,site-url,routes}.ts', 'src/i18n/catalogs.ts', 'src/messages/*.json', 'tests/**', '.github/**/deploy.yml']
-description: 'Every page exports metadata built by pageMetadata(): per-locale title and description from the next-intl catalogs, a canonical, and reciprocal en/de/x-default hreflang, resolved against a SITE_URL the deploy sets. Layouts hold site-wide metadata only.'
+paths: ['src/app/**', 'src/lib/{page-metadata*,site-url,routes}.ts', 'src/i18n/translations.ts', 'src/messages/*.json', 'tests/**', '.github/**/deploy.yml']
+description: 'Every page exports metadata built by pageMetadata(): per-locale title and description from the next-intl Translation files, a canonical, and reciprocal en/de/x-default hreflang, resolved against a SITE_URL the deploy sets. Layouts hold site-wide metadata only.'
 ---
 
 # Page Metadata
@@ -40,9 +40,9 @@ Settled points, argued here so Decision stays short:
 2. `pageMetadata` derives the canonical and one alternate per `LOCALES` entry plus `x-default` (the `DEFAULT_LOCALE` URL) with `localizePath`. No route writes a URL.
 3. `PageRef` (`src/lib/routes.ts`) is `'home'` or `{ episode: <EpisodeSlug> }`; a page MUST have one. An Episode route reads its slug from the params.
 
-### 2. Title and description are catalog strings
+### 2. Title and description are translated strings
 
-1. They MUST live in `src/messages/<locale>.json`: `meta.home` for the landing page, `episodes.<slug>.title` and `.description` for an Episode. `de.json` is typed against `en.json`, so a missing key fails `tsc`.
+1. They MUST live in the Translation file `src/messages/<locale>.json`, under the Translation keys `meta.home` for the landing page, `episodes.<slug>.title` and `.description` for an Episode. `de.json` is typed against `en.json`, so a missing key fails `tsc`.
 2. A page at a root layout's own segment MUST name the brand in its title; `title.template` skips that segment.
 
 ### 3. `SITE_URL` is the absolute base
@@ -66,7 +66,7 @@ Settled points, argued here so Decision stays short:
 ### Do's
 
 1. **DO** write `export const metadata = pageMetadata('<page>', DEFAULT_LOCALE)` in the unprefixed tree and `generateMetadata` returning `pageMetadata('<page>', await resolveLocale(params))` under `[locale]`. (Decision 1, 📜 Rule: `page-exports-metadata`)
-2. **DO** add a new page's `PageRef` and its title and description in both catalogs before its route. (Decisions 1 and 2)
+2. **DO** add a new page's `PageRef` and its title and description in both Translation files before its route. (Decisions 1 and 2)
 3. **DO** write titles and descriptions for the reader of a search result in that language, not as translations of each other. (Decision 2)
 4. **DO** keep root layouts to `siteMetadata(locale, SITE_URL)`. (Decision 4, 📜 Rule: `layout-holds-site-metadata-only`)
 5. **DO** run `npm run build` then `npm run test:build` after touching metadata, routes or locales. (Decisions 1 and 3)
@@ -84,7 +84,7 @@ Settled points, argued here so Decision stays short:
 **Positive:**
 
 1. **Each audience finds its locale:** every page names its own canonical and its counterpart, so a German query can surface the `/de` page and an English one the bare page.
-2. **One source per fact:** URLs from `localizePath`, copy from the next-intl catalogs, the origin from the deploy. The duplicated title cannot recur.
+2. **One source per fact:** URLs from `localizePath`, copy from the next-intl Translation files, the origin from the deploy. The duplicated title cannot recur.
 3. **Domain-portable:** a custom domain changes `configure-pages`' output, not code.
 4. **Held at three depths:** route text by archgate, copy completeness by `tsc`, the emitted HTML by the post-build test.
 

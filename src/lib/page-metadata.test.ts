@@ -26,7 +26,7 @@ describe('success cases', () => {
     expect(fromGerman).toEqual(expected);
   });
 
-  it('takes title and description from the locale catalog', () => {
+  it('takes title and description from the locale Translation file', () => {
     // ARRANGE
     const expectedTitle = 'Seitenvorlage';
     // ACT

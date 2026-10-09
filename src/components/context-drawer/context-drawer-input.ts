@@ -3,19 +3,19 @@ import type { SpeakerNoteItem, VoiceScriptSegment } from '@/lib/context-drawer.p
 /*
  * The Context drawer's whole input contract (FE-010 §8). The drawer knows
  * nothing about Episodes, Sections, anchors, the table of contents or the
- * catalog: everything it renders, and every element id it watches, arrives here.
+ * Translation file: everything it renders, and every item id it matches against the active Slide, arrives here.
  * Whoever owns the content builds one of these (today the adapter in
- * `src/components/episode/context-drawer-input.ts`); the drawer never asks where
+ * `src/components/episode-page/context-drawer-input.ts`); the drawer never asks where
  * it came from.
  */
 
 /** One thing the drawer can show notes and script for, current while its element spans the reading line. */
 export interface ContextItem {
-  /** The DOM id of the element whose visibility makes this item current. The drawer observes it as given. */
+  /** The DOM id of the element whose visibility makes this item current. The drawer matches it against the active Slide id as given. */
   readonly id: string;
   /** Names the item in the drawer's head and, in print, above its entry; none for an untitled Slide. */
   readonly title?: string;
-  /** Each note's `target` is the full DOM id of the element it explains; a context reference there carries the same id. */
+  /** Each note's `target` names the element it explains by `data-target`, inside the element with this item's `id`. */
   readonly notes: readonly SpeakerNoteItem[];
   readonly script: readonly VoiceScriptSegment[];
   /** Pre-translated text shown on both tabs in place of the empty message, for an item that explains the drawer itself. */

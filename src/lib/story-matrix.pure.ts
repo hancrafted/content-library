@@ -58,7 +58,7 @@ export function statAt(stat: string, progress: number): string {
   return stat.replace(/\d+/g, (digits) => String(Math.round(Number(digits) * progress)));
 }
 
-/** The banked stories and where they sit. Copy lives in `landing.about.stories.<id>` of each catalog. */
+/** The banked stories and where they sit. Copy lives in `landing.about.stories.<id>` of each Translation file. */
 export const STORY_PLACEMENTS = [
   { id: 'pitch', who: 'individual', what: 'process' },
   { id: 'gatekeeper', who: 'individual', what: 'technology' },

@@ -32,22 +32,25 @@ describe('exported landing hero', () => {
     expect(hero.attr('data-animated')).toBeUndefined();
   });
 
-  it.each(HERO_COPY)('links to the local Episodes section and approved booking page at $url', ({ url }) => {
-    // ARRANGE
-    const $ = load(readFileSync(join(OUT_DIR, exportedFile(url)), 'utf8'));
-    const booking = 'https://calendly.com/hanche2001/30min';
-    const target = '_blank';
-    const relation = 'noopener noreferrer';
-    const section = 'episodes';
-    const path = url === '/' ? /\/#episodes$/ : /\/de\/?#episodes$/;
-    // ACT
-    const primary = $('[data-testid="hero-episodes"]');
-    const secondary = $('[data-testid="hero-contact"]');
-    // ASSERT
-    expect(primary.attr('href')).toMatch(path);
-    expect($(`#${section}`).length).toBe(1);
-    expect(secondary.attr('href')).toBe(booking);
-    expect(secondary.attr('target')).toBe(target);
-    expect(secondary.attr('rel')).toBe(relation);
-  });
+  it.each(HERO_COPY)(
+    'links Explore why to the local Episodes section and the header to the booking page at $url',
+    ({ url }) => {
+      // ARRANGE
+      const $ = load(readFileSync(join(OUT_DIR, exportedFile(url)), 'utf8'));
+      const booking = 'https://calendly.com/hanche2001/30min';
+      const target = '_blank';
+      const relation = 'noopener noreferrer';
+      const section = 'episodes';
+      const path = url === '/' ? /\/#episodes$/ : /\/de\/?#episodes$/;
+      // ACT
+      const primary = $('[data-testid="hero-episodes"]');
+      const contact = $('[data-testid="header-contact"]');
+      // ASSERT
+      expect(primary.attr('href')).toMatch(path);
+      expect($(`#${section}`).length).toBe(1);
+      expect(contact.attr('href')).toBe(booking);
+      expect(contact.attr('target')).toBe(target);
+      expect(contact.attr('rel')).toBe(relation);
+    },
+  );
 });

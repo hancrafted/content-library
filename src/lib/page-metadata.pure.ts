@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { CATALOGS } from '../i18n/catalogs';
+import { TRANSLATIONS } from '../i18n/translations';
 import { DEFAULT_LOCALE, LOCALES, localizePath, type Locale } from './locale.pure';
 import { routeOf, type PageRef } from './routes';
 
@@ -20,22 +20,22 @@ export function resolveSiteUrl(env: Readonly<Record<string, string | undefined>>
 
 /** A root layout's metadata: the absolute base and the site-name title frame. Nothing page-specific. */
 export function siteMetadata(locale: Locale, siteUrl: string): Metadata {
-  const name = CATALOGS[locale].brand.name;
+  const name = TRANSLATIONS[locale].brand.name;
   return {
     metadataBase: new URL(`${siteUrl}/`),
     title: { default: name, template: `%s · ${name}` },
   };
 }
 
-/** A page's `<title>` and meta description, from the locale's catalog (FE-008 §2). */
+/** A page's `<title>` and meta description, from the locale's Translation file (FE-008 §2). */
 function copyOf(page: PageRef, locale: Locale): { title: string; description: string } {
-  const catalog = CATALOGS[locale];
-  if (page === 'home') return catalog.meta.home;
-  const { title, description } = catalog.episodes[page.episode];
+  const translation = TRANSLATIONS[locale];
+  if (page === 'home') return translation.meta.home;
+  const { title, description } = translation.episodes[page.episode];
   return { title, description };
 }
 
-/** A page's metadata: its copy from the catalog, its canonical, and reciprocal hreflang alternates. */
+/** A page's metadata: its copy from the Translation file, its canonical, and reciprocal hreflang alternates. */
 export function pageMetadata(page: PageRef, locale: Locale): Metadata {
   const route = routeOf(page);
   const languages = Object.fromEntries(LOCALES.map((each) => [each, localizePath(route, each)]));

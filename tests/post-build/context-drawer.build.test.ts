@@ -34,6 +34,11 @@ function entry($: CheerioAPI, panel: 'notes' | 'script', anchor: string) {
   return $(`#context-panel-${panel} [data-context-for="${anchor}"]`);
 }
 
+/** The elements a note's short target names inside its own Slide: its scoped `data-target`. */
+function targetsOf($: CheerioAPI, owner: string, target: string) {
+  return $(`[data-slot="slides"] [data-slide="${owner}"]`).find(`[data-target="${target}"]`);
+}
+
 function cssFiles(dir: string): string[] {
   return readdirSync(dir).flatMap((name) => {
     const path = join(dir, name);
@@ -77,23 +82,52 @@ describe.each(PAGES)('$url', ({ slug, url }) => {
     expect(slot.find('#context-panel').attr('class')).toContain('invisible');
   });
 
-  it('resolves every note target to one element inside the note’s own Slide', () => {
+  it('resolves every note target to exactly one element inside the note’s own Slide', () => {
     // ARRANGE
     const $ = page(url);
-    const notes = $('[data-note-target]').toArray();
+    const notes = $('#context-panel-notes [data-note-target]').toArray();
     // ACT
-    const unresolved = notes.filter((note) => {
-      const id = $(note).attr('data-note-target') ?? '';
-      const owner = $(note).closest('[data-context-for]').attr('data-context-for') ?? '';
-      const found = $(`[id="${id}"]`);
-      return found.length !== 1 || found.closest('[data-slide]').attr('data-slide') !== owner;
-    });
+    const unresolved = notes
+      .map((note) => ({
+        owner: $(note).closest('[data-context-for]').attr('data-context-for') ?? '',
+        target: $(note).attr('data-note-target') ?? '',
+      }))
+      .filter(({ owner, target }) => targetsOf($, owner, target).length !== 1)
+      .map(({ owner, target }) => `${owner} → ${target}`);
     // ASSERT
     expect(notes.length).toBeGreaterThan(0);
-    expect(unresolved).toHaveLength(0);
+    expect(unresolved).toEqual([]);
   });
 
-  it('shows no raw catalog key as text', () => {
+  it('gives every note a short target, never a full element id', () => {
+    // ARRANGE
+    const $ = page(url);
+    // ACT
+    const full = $('[data-note-target]')
+      .toArray()
+      .map((note) => $(note).attr('data-note-target') ?? '')
+      .filter((target) => target.includes('--'));
+    // ASSERT
+    expect(full).toEqual([]);
+  });
+
+  it('resolves every context reference to exactly one note of its own Slide, by slug', () => {
+    // ARRANGE
+    const $ = page(url);
+    const refs = $('[data-slot="slides"] button[data-context-ref]').toArray();
+    // ACT
+    const unresolved = refs
+      .map((ref) => ({
+        owner: $(ref).closest('[data-slide]').attr('data-slide') ?? '',
+        note: $(ref).attr('data-context-ref') ?? '',
+      }))
+      .filter(({ owner, note }) => entry($, 'notes', owner).find(`[data-note="${note}"]`).length !== 1)
+      .map(({ owner, note }) => `${owner} → ${note}`);
+    // ASSERT
+    expect(unresolved).toEqual([]);
+  });
+
+  it('shows no raw Translation key as text', () => {
     // ARRANGE
     const $ = page(url);
     // ACT
@@ -199,20 +233,20 @@ describe('amnesiac-freelancer', () => {
     const refs = $('[data-slot="slides"] button[data-context-ref]').toArray();
     // ACT
     const resolved = refs.map((ref) => {
-      const wrapper = $(ref).parent();
-      const id = wrapper.attr('id') ?? '';
-      const owner = wrapper.closest('[data-slide]').attr('data-slide') ?? '';
-      const notes = entry($, 'notes', owner).find(`[data-note-target="${id}"]`);
+      const slug = $(ref).attr('data-context-ref') ?? '';
+      const owner = $(ref).closest('[data-slide]').attr('data-slide') ?? '';
+      const notes = entry($, 'notes', owner).find(`[data-note="${slug}"]`);
       return {
         native: ref.tagName === 'button' && $(ref).attr('type') === 'button' && $(ref).attr('href') === undefined,
-        id: id === `${owner}--${$(ref).attr('data-context-ref')}`,
+        // A reference is never a target: it and its phrase carry no `data-target`.
+        marksTarget: $(ref).attr('data-target') !== undefined || $(ref).find('[data-target]').length > 0,
         notes: notes.length,
         numbered: $(ref).find('sup').length > 0 || /\d/.test($(ref).text()),
       };
     });
     // ASSERT
     expect(refs).toHaveLength(3);
-    resolved.forEach((r) => expect(r).toEqual({ native: true, id: true, notes: 1, numbered: false }));
+    resolved.forEach((r) => expect(r).toEqual({ native: true, marksTarget: false, notes: 1, numbered: false }));
   });
 
   it.each(LOCALES)('numbers sources in a list and points every citation marker into it, in %s', (locale) => {

@@ -55,6 +55,17 @@ next-intl, FE-002 Episode Page and the table of contents landed):
 | **Content is build-time data.** One typed loader, validated by a schema at build; no client-side content fetching. [1][5] | 📜 + 🧠, a design decision    | 🟡 Partly settled by **FE-002**: each Episode is a typed `Episode` record in `src/components/episodes/<slug>/`, listed in `registry.ts` and `EPISODE_SLUGS`, rendered only by `EpisodePageContainer`. Site strings live in next-intl catalogs, with `de.json` typed against `en.json`. No loader or build-time schema validation yet; Slide content is free JSX by decision. |
 | Source of truth (MD, MDX or JSON) and how YouTube captures map to Episodes.                                               | 🧠, likely a design-ADR first | ⏳ Open. FE-002 fixes the shared H1/H2/H3 spine with the Markdown manuscript, which is not yet in the repo; the pipeline is deferred. Design-ADR first.                                                                                                                                                                                                                      |
 
+**Where locale-neutral data lives** (added 2026-10-09). 🟡 Practised once,
+not written down. `src/lib/episode-index.json` holds the Episode index: facts
+per Episode with no copy (Topic, Format, dates, featured rank, accent, icon).
+`parseEpisodeIndex` in `src/lib/episode-index.pure.ts` validates it at build
+and rejects unknown fields, so no title slips into the data; copy stays in the
+Translation files. It makes both rows above concrete. FE-007 fixes import
+direction but not where a data file sits, so this one landed in `src/lib/`
+beside its parser. Decide the home when a second data file arrives: `src/lib/`
+beside its parser, or a dedicated `src/content/`. 📜 once decided: a rule can
+pin data files to that folder.
+
 ## 5. Navigation, metadata and SEO
 
 The bilingual audience split (English at `/`, German at `/de`) makes this

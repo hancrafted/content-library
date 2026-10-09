@@ -10,6 +10,8 @@ export const EPISODE_SLUGS = [
   'amnesiac-freelancer',
   'maintaining-markdown-for-ai',
   'ai-token-economy',
+  // Unlisted: built and exported, linked from neither the landing page nor the header.
+  'slide-layouts',
 ] as const;
 
 export type EpisodeSlug = (typeof EPISODE_SLUGS)[number];

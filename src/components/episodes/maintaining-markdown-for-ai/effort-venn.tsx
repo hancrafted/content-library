@@ -1,3 +1,4 @@
+import type { TargetProps } from '@/lib/context-link.pure';
 import { cn } from '@/lib/utils';
 
 export type VennEmphasis = 'establish' | 'machine' | 'human';
@@ -171,14 +172,13 @@ function HypothesisFootnote() {
 export function EffortVenn({
   emphasis = 'establish',
   className,
-  id,
-}: {
+  ...target
+}: Partial<TargetProps> & {
   emphasis?: VennEmphasis;
   className?: string;
-  id?: string;
 }) {
   return (
-    <div id={id} className={cn('relative flex flex-col items-center justify-center', className)}>
+    <div {...target} className={cn('relative flex flex-col items-center justify-center', className)}>
       <svg
         viewBox="115 15 700 540"
         role="img"

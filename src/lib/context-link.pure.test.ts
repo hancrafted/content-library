@@ -1,12 +1,37 @@
 import { describe, expect, it } from 'vitest';
-import { ITEM_SELECTOR, NOTE_SELECTOR, noteSelector, sourceLinkSelector } from './context-link.pure';
+import {
+  ITEM_SELECTOR,
+  itemSelector,
+  NOTE_SELECTOR,
+  noteSelector,
+  sourceLinkSelector,
+  targetSelector,
+} from './context-link.pure';
 
 describe('success cases', () => {
-  it("finds a Context reference's Speaker note item inside the drawer by the reference's id, which is the note's target", () => {
+  it("finds a Context reference's Speaker note item by its item's id and the note's slug", () => {
     // ARRANGE
-    const expected = '[data-slot="context"] [data-note-target][data-note-target="foundations--why--prose"]';
+    const expected = '[data-slot="context"] [data-context-for="foundations--why"] [data-note="stateless"]';
     // ACT
-    const selector = noteSelector('foundations--why--prose');
+    const selector = noteSelector({ item: 'foundations--why', note: 'stateless' });
+    // ASSERT
+    expect(selector).toBe(expected);
+  });
+
+  it("finds a note's page element by its short target, to be queried inside the item's element", () => {
+    // ARRANGE
+    const expected = '[data-target="prose"]';
+    // ACT
+    const selector = targetSelector('prose');
+    // ASSERT
+    expect(selector).toBe(expected);
+  });
+
+  it("finds a drawer item's entry by its id", () => {
+    // ARRANGE
+    const expected = '[data-slot="context"] [data-context-for="foundations--why"]';
+    // ACT
+    const selector = itemSelector('foundations--why');
     // ASSERT
     expect(selector).toBe(expected);
   });
@@ -33,20 +58,20 @@ describe('success cases', () => {
 describe('failure cases', () => {
   it('quotes an id that would end the attribute value, so it can never select another note', () => {
     // ARRANGE
-    const expected = '[data-slot="context"] [data-note-target][data-note-target="a\\"] b\\\\"]';
+    const expected = '[data-slot="context"] [data-context-for="a\\"] b\\\\"] [data-note="n"]';
     // ACT
-    const selector = noteSelector('a"] b\\');
+    const selector = noteSelector({ item: 'a"] b\\', note: 'n' });
     // ASSERT
     expect(selector).toBe(expected);
   });
 });
 
 describe('edge cases', () => {
-  it('selects no note for an empty id rather than every note', () => {
+  it('selects no note for an empty slug rather than every note of the item', () => {
     // ARRANGE
-    const expected = '[data-slot="context"] [data-note-target][data-note-target=""]';
+    const expected = '[data-slot="context"] [data-context-for="top"] [data-note=""]';
     // ACT
-    const selector = noteSelector('');
+    const selector = noteSelector({ item: 'top', note: '' });
     // ASSERT
     expect(selector).toBe(expected);
   });

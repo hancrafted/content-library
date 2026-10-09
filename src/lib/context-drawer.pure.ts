@@ -14,14 +14,14 @@ export interface NoteSource {
 
 /** One talking point (a Speaker note item), pointing at the Slide element it explains. */
 export interface SpeakerNoteItem {
-  /** Stable key identity for the catalog; never a position. */
+  /** Stable key identity for the Translation file; never a position. */
   readonly slug: string;
   readonly header: string;
   readonly description: string;
   /** Further reading, numbered in this order: `[n]` in `description` cites source n. */
   readonly sources?: readonly NoteSource[];
   readonly image?: { readonly src: string; readonly alt: string };
-  /** On an Episode record, a short element name; in a drawer item, the element's full DOM id. */
+  /** The short name of the element it explains, marked `data-target` inside its Slide (FE-010 §4). */
   readonly target: string;
 }
 

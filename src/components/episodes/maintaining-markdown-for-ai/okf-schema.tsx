@@ -1,3 +1,4 @@
+import type { TargetProps } from '@/lib/context-link.pure';
 import { cn } from '@/lib/utils';
 
 interface SchemaRow {
@@ -82,9 +83,9 @@ function OkfSpecLink() {
   );
 }
 
-export function OkfSchema({ id }: { id?: string }) {
+export function OkfSchema(target: TargetProps) {
   return (
-    <div id={id} className="mt-8 space-y-4">
+    <div {...target} className="mt-8 space-y-4">
       <OkfTable />
       <OkfSpecLink />
     </div>

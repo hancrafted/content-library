@@ -1,6 +1,6 @@
 import { DEFAULT_LOCALE, isLocale } from '@/lib/locale.pure';
 import { getRequestConfig } from 'next-intl/server';
-import { CATALOGS } from './catalogs';
+import { TRANSLATIONS } from './translations';
 
 /**
  * next-intl's per-render config. Callers pass the locale explicitly
@@ -13,7 +13,7 @@ export default getRequestConfig(async ({ locale, requestLocale }) => {
   const resolved = isLocale(requested) ? requested : DEFAULT_LOCALE;
   return {
     locale: resolved,
-    messages: CATALOGS[resolved],
+    messages: TRANSLATIONS[resolved],
     onError(error) {
       throw error;
     },

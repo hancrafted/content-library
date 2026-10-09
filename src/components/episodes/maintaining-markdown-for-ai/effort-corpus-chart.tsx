@@ -1,3 +1,4 @@
+import type { TargetProps } from '@/lib/context-link.pure';
 import { cn } from '@/lib/utils';
 
 function CorpusAxesLabels() {
@@ -87,9 +88,13 @@ function CorpusCurves() {
   );
 }
 
-export function EffortCorpusChart({ className, id }: { className?: string; id?: string }) {
+interface EffortCorpusChartProps extends TargetProps {
+  className?: string;
+}
+
+export function EffortCorpusChart({ className, ...target }: EffortCorpusChartProps) {
   return (
-    <div id={id} className="relative">
+    <div {...target} className="relative">
       <svg
         viewBox="0 0 560 360"
         role="img"

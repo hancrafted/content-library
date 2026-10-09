@@ -4,36 +4,32 @@ import {
   CONTEXT_ITEM_ATTR,
   CONTEXT_REF_ATTR,
   ITEM_SELECTOR,
+  itemSelector,
   NOTE_SELECTOR,
   NOTE_TARGET_ATTR,
   noteSelector,
   PINNED_ATTR,
   sourceLinkSelector,
+  targetSelector,
+  type NoteRef,
 } from '@/lib/context-link.pure';
 import { useEffect } from 'react';
 
-/** The note inside the drawer that a context reference's wrapper id names. */
-export function noteOfRef(refId: string): HTMLElement | null {
-  return document.querySelector<HTMLElement>(noteSelector(refId));
+/** The Speaker note item a Context reference names, inside the drawer. */
+export function noteOfRef(ref: NoteRef): HTMLElement | null {
+  return document.querySelector<HTMLElement>(noteSelector(ref));
 }
 
-/** The id of the drawer item holding the note a context reference's wrapper id names. */
-export function itemOfNote(refId: string): string | null {
-  return noteOfRef(refId)?.closest(ITEM_SELECTOR)?.getAttribute(CONTEXT_ITEM_ATTR) ?? null;
-}
-
-/** The page element a note explains: its `target` is that element's full id. */
+/**
+ * The page element a note explains: the `data-target` it names, inside the
+ * element of the note's item (the Slide wrapper), so two Slides may both say
+ * `prose`.
+ */
 function targetOfNote(note: Element): HTMLElement | null {
-  return document.getElementById(note.getAttribute(NOTE_TARGET_ATTR) ?? '');
-}
-
-/** The element on the other side of a note and its Slide element, for whichever one `from` sits in. */
-function counterpart(from: EventTarget | null): Element | null {
-  if (!(from instanceof Element)) return null;
-  const note = from.closest(NOTE_SELECTOR);
-  if (note) return targetOfNote(note);
-  const id = refButton(from)?.parentElement?.id;
-  return id ? noteOfRef(id) : null;
+  const item = note.closest(ITEM_SELECTOR)?.getAttribute(CONTEXT_ITEM_ATTR) ?? '';
+  const target = note.getAttribute(NOTE_TARGET_ATTR) ?? '';
+  const scope = document.getElementById(item);
+  return scope?.querySelector<HTMLElement>(targetSelector(target)) ?? null;
 }
 
 /** The context reference button `from` sits in, if any. */
@@ -41,9 +37,28 @@ function refButton(from: EventTarget | null): Element | null {
   return from instanceof Element ? from.closest(`[${CONTEXT_REF_ATTR}]`) : null;
 }
 
-/** A context reference's click target: the wrapper's id, which is also its note's `target`. */
-function refOf(from: EventTarget | null): string | null {
-  return refButton(from)?.parentElement?.id || null;
+/**
+ * The note a context reference names: its own slug, in the item whose element
+ * holds the reference. Found by walking up to the nearest ancestor that is a
+ * drawer item's element, so the drawer needs no knowledge of Slides.
+ */
+function refOf(from: EventTarget | null): NoteRef | null {
+  const button = refButton(from);
+  const note = button?.getAttribute(CONTEXT_REF_ATTR);
+  if (!button || !note) return null;
+  for (let at = button.parentElement; at; at = at.parentElement) {
+    if (at.id && document.querySelector(itemSelector(at.id))) return { item: at.id, note };
+  }
+  return null;
+}
+
+/** The element on the other side of a note and its Slide element, for whichever one `from` sits in. */
+function counterpart(from: EventTarget | null): Element | null {
+  if (!(from instanceof Element)) return null;
+  const note = from.closest(NOTE_SELECTOR);
+  if (note) return targetOfNote(note);
+  const ref = refOf(from);
+  return ref ? noteOfRef(ref) : null;
 }
 
 /**
@@ -52,7 +67,7 @@ function refOf(from: EventTarget | null): string | null {
  * without shifting layout). Clicking a context reference calls `reveal`.
  * Delegated from `document`, so the Slides stay server components (FE-006).
  */
-export function useContextLinks(reveal: (noteId: string) => void) {
+export function useContextLinks(reveal: (ref: NoteRef) => void) {
   useEffect(() => {
     const set = (on: boolean) => (event: Event) => {
       const other = counterpart(event.target);
@@ -62,8 +77,8 @@ export function useContextLinks(reveal: (noteId: string) => void) {
     };
     const [over, out] = [set(true), set(false)];
     const click = (event: MouseEvent) => {
-      const id = refOf(event.target);
-      if (id) reveal(id);
+      const ref = refOf(event.target);
+      if (ref) reveal(ref);
     };
     document.addEventListener('pointerover', over);
     document.addEventListener('pointerout', out);
@@ -80,15 +95,15 @@ export function useContextLinks(reveal: (noteId: string) => void) {
   }, [reveal]);
 }
 
-/** Pins a note (so it stays lit, and in view) while `id` is set; unpins when it clears. */
-export function usePinnedNote(id: string | null) {
+/** Pins a note (so it stays lit, and in view) while `ref` is set; unpins when it clears. */
+export function usePinnedNote(ref: NoteRef | null) {
   useEffect(() => {
-    if (!id) return;
-    const note = noteOfRef(id);
+    if (!ref) return;
+    const note = noteOfRef(ref);
     note?.setAttribute(PINNED_ATTR, '');
     note?.scrollIntoView({ block: 'nearest' });
     return () => note?.removeAttribute(PINNED_ATTR);
-  }, [id]);
+  }, [ref]);
 }
 
 /**

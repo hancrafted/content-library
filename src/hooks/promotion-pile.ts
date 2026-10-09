@@ -1,11 +1,22 @@
 import { createPaperFlights } from '@/hooks/promotion-paper-flights';
 import { paperOverflow } from '@/lib/paper-overflow.pure';
-import { advancePaperPile, PAPER_CAPACITY, type PaperDrain } from '@/lib/paper-pile.pure';
+import {
+  advancePaperPile,
+  PAPER_CAPACITY,
+  pileShadowPath,
+  type PaperDrain,
+  type PilePull,
+} from '@/lib/paper-pile.pure';
 import gsap from 'gsap';
 
 /** The window light throws the pile's shadow across the desk; it lengthens as the sheets stack up. */
 function drawShadow(shadow: Element | null, count: number) {
-  shadow?.setAttribute('transform', `scale(1 ${0.12 + (0.88 * count) / PAPER_CAPACITY})`);
+  shadow?.setAttribute('d', pileShadowPath(count));
+}
+
+/** Whole sheets only: redrawing a blurred shadow every frame costs more than it shows. */
+function followPile(shadow: Element | null, before: number, after: number) {
+  if (Math.ceil(after) !== Math.ceil(before)) drawShadow(shadow, Math.ceil(after));
 }
 
 function drawPile(papers: SVGGElement[], before: number, after: number) {
@@ -22,6 +33,7 @@ function pileState() {
   return {
     count: 0,
     draining: 'none' as PaperDrain,
+    proximity: 0,
     ready: false,
     stopped: false,
     wait: 0,
@@ -46,39 +58,41 @@ interface PileScene {
   flights: ReturnType<typeof createPaperFlights>;
 }
 
+/** Until the promise is readable the reader cannot act on it, so the pile only grows. */
+function currentPull(state: PileState): PilePull {
+  if (!state.ready) return 'none';
+  return state.draining === 'none' ? state.proximity : state.draining;
+}
+
 function pileTicker(state: PileState, { papers, shadow, flights }: PileScene) {
   return (_time: number, delta: number) => {
     const elapsed = Math.min(delta / 1000, 0.05);
-    const drain = state.ready ? state.draining : 'none';
-    const next = advancePaperPile(state.count, elapsed, drain);
+    const pull = currentPull(state);
+    const next = advancePaperPile(state.count, elapsed, pull);
     for (let index = Math.ceil(state.count) - 1; index >= Math.ceil(next); index--) {
       flights.launch(papers[index], index);
     }
-    if (next !== state.count) {
-      drawPile(papers, state.count, next);
-      drawShadow(shadow, next);
-    }
+    if (next !== state.count) drawPile(papers, state.count, next);
+    followPile(shadow, state.count, next);
+    if (next < state.count) state.wait = 0;
     state.count = next;
-    if (drain !== 'none') state.wait = 0;
     if (next >= PAPER_CAPACITY - 1) state.wait += elapsed;
     if (next === PAPER_CAPACITY) spillTop(state, papers, flights);
   };
 }
 
-export function createPaperPile(root: HTMLElement) {
-  const papers = Array.from(root.querySelectorAll<SVGGElement>('[data-task-paper]'));
-  const shadow = root.querySelector('[data-pile-shadow] path');
-  const state = pileState();
-  const flights = createPaperFlights(root);
-  const tick = pileTicker(state, { papers, shadow, flights });
-  drawShadow(shadow, 0);
-  gsap.ticker.add(tick);
+type PileTick = (time: number, delta: number) => void;
+
+function pileControls(state: PileState, tick: PileTick, { papers, shadow, flights }: PileScene) {
   return {
     enable: () => {
       state.ready = true;
     },
     setDraining: (draining: PaperDrain) => {
       state.draining = draining;
+    },
+    setProximity: (proximity: number) => {
+      state.proximity = proximity;
     },
     suspend: (suspended: boolean) => {
       gsap.ticker.remove(tick);
@@ -94,4 +108,15 @@ export function createPaperPile(root: HTMLElement) {
       state.count = 0;
     },
   };
+}
+
+export function createPaperPile(root: HTMLElement) {
+  const papers = Array.from(root.querySelectorAll<SVGGElement>('[data-task-paper]'));
+  const shadow = root.querySelector('[data-pile-shadow] > path');
+  const state = pileState();
+  const flights = createPaperFlights(root);
+  const tick = pileTicker(state, { papers, shadow, flights });
+  drawShadow(shadow, 0);
+  gsap.ticker.add(tick);
+  return pileControls(state, tick, { papers, shadow, flights });
 }

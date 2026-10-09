@@ -20,8 +20,17 @@ function storyCopy(t: AboutT, id: StoryId): StoryCardCopy {
   };
 }
 
+/** Leaf by leaf: next-intl types `t.raw` to leaf keys only, so an object node cannot be read whole. */
 function matrixLabels(t: AboutT): MatrixLabels {
-  return { axes: t.raw('axes') as MatrixLabels['axes'] };
+  return {
+    axes: {
+      individual: t('axes.individual'),
+      team: t('axes.team'),
+      organisation: t('axes.organisation'),
+      process: t('axes.process'),
+      technology: t('axes.technology'),
+    },
+  };
 }
 
 function IdentityCard({ t }: { t: AboutT }) {
@@ -56,7 +65,7 @@ export async function AboutSection({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'landing.about' });
   const stories = Object.fromEntries(STORY_PLACEMENTS.map(({ id }) => [id, storyCopy(t, id)]));
   return (
-    <section id="about" data-chapter="04" className="mx-auto w-full max-w-7xl px-6 py-24 sm:py-32">
+    <section id="about" className="mx-auto w-full max-w-7xl px-6 py-24 sm:py-32">
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,17rem)_minmax(0,1fr)] lg:gap-12">
         <IdentityCard t={t} />
         <div className="flex flex-col gap-10">
