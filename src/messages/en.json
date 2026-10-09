@@ -21,8 +21,8 @@
     "link": "Page template",
     "hero": {
       "eyebrow": "hancrafted / Human-led. AI-accelerated.",
-      "headline": "AI gave you a promotion you never asked for.",
-      "caption": "It 10x's your execution — if you learn to <plan>plan,</plan> <spec>spec</spec> and <review>review.</review>",
+      "headline": "AI gave you a <accent>promotion</accent> <br></br>you never asked for.",
+      "caption": "You get to 10x your productivity — if you learn to <plan>plan,</plan> <spec>spec</spec> and <review>review,</review> …",
       "plan": "plan",
       "spec": "spec",
       "review": "review",

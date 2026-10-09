@@ -8,12 +8,12 @@ const HERO_COPY = [
   {
     url: '/',
     headline: 'AI gave you a promotion you never asked for.',
-    caption: "It 10x's your execution — if you learn to plan, spec and review.",
+    caption: 'You get to 10x your productivity — if you learn to plan, spec and review, …',
   },
   {
     url: '/de',
     headline: 'Die KI hat dich befördert. Gefragt hat sie nicht.',
-    caption: 'Mit KI setzt du 10× so viel um — wenn du lernst, zu planen, zu spezifizieren und zu reviewen.',
+    caption: 'Du wirst 10× so produktiv — wenn du lernst, zu planen, zu spezifizieren und zu reviewen, …',
   },
 ];
 

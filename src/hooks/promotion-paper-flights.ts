@@ -1,4 +1,5 @@
-import type { paperOverflow } from '@/lib/paper-overflow.pure';
+import { paperExit } from '@/lib/paper-exit.pure';
+import { paperOverflow } from '@/lib/paper-overflow.pure';
 import { PAPER_PILE_ORIGIN } from '@/lib/paper-pile.pure';
 import gsap from 'gsap';
 
@@ -17,26 +18,38 @@ function departingPaper(paper: SVGGElement, index: number) {
   return { wrapper, sheet };
 }
 
-function checkedExit(timeline: gsap.core.Timeline, sheet: SVGGElement) {
+/** A checked sheet lifts clear of the tray walls, then is thrown off the desk to the right. */
+function checkedExit(timeline: gsap.core.Timeline, sheet: SVGGElement, index: number) {
+  const exit = paperExit(index, Math.random);
   const check = sheet.querySelector('[data-paper-check]');
+  const thrownAt = 0.12 + exit.hang;
   gsap.set(check, { opacity: 1, strokeDasharray: 130, strokeDashoffset: 130 });
   timeline.to(check, { strokeDashoffset: 0, duration: 0.16 });
-  timeline.to(sheet, { x: 1750, y: 45, rotation: 8, duration: 0.9, ease: 'power2.in' }, 0.18);
+  timeline.to(sheet, { y: -exit.lift, x: exit.sideways, rotation: -3, duration: exit.hang, ease: 'power2.out' }, 0.12);
+  timeline.to(sheet, { x: 1750, duration: exit.throwTime, ease: 'power2.in' }, thrownAt);
+  timeline.to(sheet, { y: exit.drop, rotation: exit.spin, duration: exit.throwTime, ease: 'power1.in' }, thrownAt);
 }
 
+/** Falling paper accelerates while gliding side to side; each glide tilts and flattens the sheet. */
 function overflowExit(timeline: gsap.core.Timeline, sheet: SVGGElement, flight: Overflow) {
-  timeline.to(sheet, {
-    keyframes: [
-      { x: flight.drift * 0.2 + 80, y: 65, rotation: 14, scaleY: 0.55 },
-      { x: flight.drift * 0.45 - 65, y: 230, rotation: -19, scaleY: 0.95 },
-      { x: flight.drift * 0.7 + 95, y: 410, rotation: 21, scaleY: 0.4 },
-      { x: flight.drift, y: 790, rotation: -10, scaleY: 0.8 },
-    ],
-    duration: flight.duration,
-    ease: 'none',
-    defaults: { ease: 'sine.inOut' },
-    transformOrigin: '50% 50%',
-  });
+  const glides = Array.from({ length: flight.swings + 1 }, (_, swing) => (swing === 0 ? 0 : swing % 2 ? 1 : -1));
+  timeline.to(sheet, { y: 790, duration: flight.duration, ease: 'power1.in' }, 0);
+  timeline.to(
+    sheet,
+    {
+      keyframes: {
+        x: glides.map((glide) => glide * flight.sway),
+        rotation: glides.map((glide) => glide * flight.tilt),
+        scaleY: glides.map((glide, swing) => (swing === 0 ? 1 : 0.45 + (swing % 3) * 0.2)),
+        easeEach: 'sine.inOut',
+      },
+      duration: flight.duration,
+      ease: 'none',
+      transformOrigin: '50% 50%',
+    },
+    0,
+  );
+  timeline.to(sheet.parentElement, { x: `+=${flight.drift}`, duration: flight.duration, ease: 'sine.in' }, 0);
 }
 
 function flightLayers(root: HTMLElement) {
@@ -61,7 +74,7 @@ export function createPaperFlights(root: HTMLElement) {
     });
     flights.set(timeline, wrapper);
     if (drift) overflowExit(timeline, sheet, drift);
-    else checkedExit(timeline, sheet);
+    else checkedExit(timeline, sheet, index);
   };
   return {
     launch,

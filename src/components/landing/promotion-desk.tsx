@@ -28,9 +28,10 @@ function TaskPaper({ task, index }: { task: string; index: number }) {
         <TaskLabel task={task} />
         <path
           data-paper-check
-          d="m126 54 36 28 70-57"
+          d="m82 60 30 26 68-52"
+          transform="matrix(1 0 .78 1 0 0)"
           stroke="var(--hero-check)"
-          strokeWidth="14"
+          strokeWidth="13"
           strokeLinecap="round"
           strokeLinejoin="round"
           opacity="0"
@@ -83,13 +84,10 @@ function EnvelopeStock() {
         fillOpacity=".22"
         stroke="var(--hero-envelope-rule)"
       />
-      <path
-        data-envelope-flap
-        d="m0 0 139 88L278 0Z"
-        fill="var(--hero-envelope-inner)"
-        stroke="var(--hero-envelope-rule)"
-        opacity="0"
-      />
+      <g data-envelope-flap opacity="0">
+        <path d="m0 0 139 88L278 0Z" fill="var(--hero-envelope-inner)" stroke="var(--hero-envelope-rule)" />
+        <path data-envelope-red d="m0 0 139 88L278 0Z" fill="var(--hero-envelope-angry)" opacity="0" />
+      </g>
     </>
   );
 }

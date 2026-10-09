@@ -1,5 +1,6 @@
 import { PromotionDesk } from '@/components/landing/promotion-desk';
 import { PromotionHero } from '@/components/landing/promotion-hero.client';
+import styles from '@/components/landing/promotion-hero.module.css';
 import type { Locale } from '@/lib/locale.pure';
 import { getTranslations } from 'next-intl/server';
 
@@ -14,6 +15,13 @@ function heroLabels(t: HeroT) {
     skip: t('skip'),
     motionHint: t('motionHint'),
   };
+}
+
+function heroHeadline(t: HeroT) {
+  return t.rich('headline', {
+    accent: (text) => <em className={styles.accent}>{text}</em>,
+    br: () => <br className={styles.lineBreak} />,
+  });
 }
 
 function heroScene(t: HeroT) {
@@ -33,7 +41,7 @@ export async function HeroSection({ locale }: { locale: Locale }) {
   return (
     <PromotionHero
       locale={locale}
-      headline={t('headline')}
+      headline={heroHeadline(t)}
       eyebrow={t('eyebrow')}
       caption={t.rich('caption', {
         plan: (text) => (

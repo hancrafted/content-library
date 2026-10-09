@@ -23,19 +23,30 @@ Preview a production build with any static server, e.g. `npx serve out`.
 ### Landing hero
 
 `HeroSection` supplies localized copy and the SVG desk to the isolated
-`PromotionHero` client leaf. A full-width desktop, one rounded high-sided paper tray and non-digital
-stationery use layered SVG, material gradients and soft shadows. On wide,
+`PromotionHero` client leaf. A neutral wall, a marble desktop (white in light
+mode, dark in dark mode), a window behind the paper tray and non-digital
+stationery (clipboard, pen) use layered SVG, material gradients and soft shadows.
+The window shows a sun by day and a moon by night; its light pools on the desk
+and the tray's shadow lengthens as the sheets stack up. Clearing the workload
+reveals the outside. The headline accents "promotion" in the hero's orange
+accent; on desktop it breaks after that word. On wide,
 fine-pointer screens, the workload grows continuously. The envelope slides along
 the desk and turns as it stops. Over the next ten seconds it wiggles, then jumps,
-stands up and turns red with an angry face before bursting open (or on an earlier
-click). The complete caption zooms out of it; both CTAs follow curved flights.
-All three remain visually hidden beforehand, with the CTAs inert until landing.
+stands up and turns red — flap included — with an angry face before bursting
+open (or on an earlier click). Every caption word and both CTAs explode out of
+it along their own randomized bowed arc straight to their resting place; the
+caption is split into words only for the flight and restored afterwards.
+All remain visually hidden beforehand, with the CTAs inert until landing.
 
 After landing, hovering or keyboard-focusing **Episodes** clears 80/3 sheets per
 second; **Work with me** clears 80. The caption words are not controls. Leaving
-lets the pile grow again. Completed sheets receive a green check and slide fully
-off-screen right. At capacity, unchecked sheets flutter individually off the far
-edge at randomized one-to-four-second intervals. A bounded
+lets the pile grow again. Completed sheets receive a green check drawn in the
+sheet's own perspective, lift clear of the tray walls (lower sheets lift
+further) and are thrown off-screen right with their own lift, pace, drop and
+tilt. At capacity, unchecked sheets fall off the far edge at randomized
+one-to-four-second intervals, accelerating under gravity while gliding side to
+side with randomized sway, swing count, tilt and drift. The tray's left wall and
+front sit in front of the pile. A bounded
 pool of 96 sheets reaches past the scene's upper edge without accumulating DOM
 nodes; departing copies are removed as each flight ends. Motion pauses off-screen
 and in background tabs. **Stop animation** clears the tray and all flying papers,
@@ -47,17 +58,20 @@ technology while visually hidden on animated desktop. Copy is under `landing.her
 in both catalogs; the secondary CTA opens
 the approved Calendly booking page in a new tab.
 
-The existing GSAP dependency is used without new packages. Its
+The existing GSAP dependency (core plus its bundled SplitText plugin) is used
+without new packages. Its
 [standard license](https://gsap.com/standard-license/) was checked on 2026-10-09:
 website animation is a permitted use; competing no-code visual animation builders
 are restricted.
 
-Pure flight geometry and reversible pile progression run in `npm run verify`. Static copy and CTA checks run in
+Pure flight geometry (arcs, exits, overflow falls) and reversible pile
+progression run in `npm run verify`. Static copy and CTA checks run in
 `npm run test:build` after a build. For visual changes, also preview both locales
-at desktop and 390px widths, with reduced motion and JavaScript disabled, and
-check early opening, the ten-second escalation, caption/CTA flights, both hover/focus
-drain rates, green-check exits, overflow flutter, rebuilding, off-screen pausing,
-and resize during flight.
+at desktop and 390px widths, in light and dark mode, with reduced motion and
+JavaScript disabled, and
+check early opening, the ten-second escalation, word/CTA flights, both hover/focus
+drain rates, green-check exits, overflow falls, rebuilding, the growing shadow,
+off-screen pausing, and resize during flight.
 
 ## Routes and locales
 

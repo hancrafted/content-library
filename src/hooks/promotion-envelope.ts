@@ -49,7 +49,7 @@ function indignation(timeline: gsap.core.Timeline, root: HTMLElement) {
     { scaleY: 1, skewX: 0, rotation: 0, y: -35, x: 0, duration: 1, ease: 'power2.inOut' },
     REST_AT + 6,
   );
-  timeline.to(root.querySelector('[data-envelope-red]'), { opacity: 1, duration: 2.5 }, REST_AT + 6);
+  timeline.to(root.querySelectorAll('[data-envelope-red]'), { opacity: 1, duration: 2.5 }, REST_AT + 6);
   timeline.to(root.querySelector('[data-envelope-face]'), { opacity: 1, duration: 0.7 }, REST_AT + 6.5);
   timeline.to(envelope, { rotation: 4, x: 4, y: -43, duration: 0.07, repeat: 39, yoyo: true }, REST_AT + 7.1);
 }

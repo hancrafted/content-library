@@ -1,11 +1,21 @@
 .hero {
-  --hero-wall: #f4f3ee;
-  --hero-light: #fffef6;
-  --hero-window: #9ca397;
-  --hero-wood-back: #cdb99a;
-  --hero-wood-front: #e2d1b6;
-  --hero-grain: #998365;
-  --hero-shadow: #302b22;
+  --hero-accent: #dd5f27;
+  --hero-wall: #eceeef;
+  --hero-light: #fff1d2;
+  --hero-sky-top: #8db6df;
+  --hero-sky-bottom: #dbe9f3;
+  --hero-sun: #f5b14a;
+  --hero-moon: #e9edf3;
+  --hero-skyline: #9ba7ae;
+  --hero-window-frame: #d9dbd8;
+  --hero-window-sill: #e4e6e3;
+  --hero-desk-back: #e6e5e1;
+  --hero-desk-front: #f8f7f3;
+  --hero-vein: #b1b3b0;
+  --hero-pen: #2d3236;
+  --hero-pen-light: #9aa2a7;
+  --hero-board: #55606a;
+  --hero-shadow: #252a2e;
   --hero-metal-light: #777e76;
   --hero-metal: #414a44;
   --hero-metal-dark: #27332c;
@@ -21,7 +31,6 @@
   --hero-envelope-angry: #d95445;
   --hero-check: #218349;
   --hero-brass: #9b7950;
-  --hero-notebook: #677169;
   --hero-line: #aaa797;
   position: relative;
   isolation: isolate;
@@ -34,13 +43,22 @@
 }
 
 :global(.dark) .hero {
-  --hero-wall: #171d19;
-  --hero-light: #777963;
-  --hero-window: #111b15;
-  --hero-wood-back: #494339;
-  --hero-wood-front: #625848;
-  --hero-grain: #a38e6b;
-  --hero-shadow: #0b100b;
+  --hero-accent: #f08a4b;
+  --hero-wall: #15191b;
+  --hero-light: #b7c7dc;
+  --hero-sky-top: #0a152e;
+  --hero-sky-bottom: #1e2c49;
+  --hero-moon: #e7ebf1;
+  --hero-skyline: #090e16;
+  --hero-window-frame: #2a3034;
+  --hero-window-sill: #343b3f;
+  --hero-desk-back: #212426;
+  --hero-desk-front: #34383b;
+  --hero-vein: #585d60;
+  --hero-pen: #c9ced2;
+  --hero-pen-light: #f0f2f3;
+  --hero-board: #3f4850;
+  --hero-shadow: #000;
   --hero-metal-light: #838c7f;
   --hero-metal: #39453b;
   --hero-metal-dark: #202b23;
@@ -52,7 +70,15 @@
   --hero-envelope-inner: #a39576;
   --hero-envelope-rule: #8d8165;
   --hero-brass: #bca374;
-  --hero-notebook: #293b2d;
+}
+.hero [data-sky-night] {
+  display: none;
+}
+:global(.dark) .hero [data-sky-day] {
+  display: none;
+}
+:global(.dark) .hero [data-sky-night] {
+  display: inline;
 }
 
 .copy {
@@ -75,6 +101,13 @@
   text-wrap: balance;
   overflow-wrap: anywhere;
 }
+.accent {
+  font-style: normal;
+  color: var(--hero-accent);
+}
+.lineBreak {
+  display: none;
+}
 .caption {
   max-width: 32rem;
   margin-top: 2rem;
@@ -87,7 +120,7 @@
   position: relative;
   font-weight: 600;
   text-decoration: underline;
-  text-decoration-color: var(--hero-brass);
+  text-decoration-color: var(--hero-accent);
   text-underline-offset: 0.3em;
   text-decoration-thickness: 1px;
 }
@@ -167,6 +200,14 @@
   }
   .copy {
     width: 49%;
+  }
+  .headline {
+    max-width: none;
+    font-size: clamp(2.6rem, 3.9vw, 3.7rem);
+    text-wrap: nowrap;
+  }
+  .lineBreak {
+    display: inline;
   }
   .scene {
     position: absolute;

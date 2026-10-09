@@ -21,8 +21,8 @@
     "link": "Seitenvorlage",
     "hero": {
       "eyebrow": "hancrafted / Menschlich geführt. KI-beschleunigt.",
-      "headline": "Die KI hat dich befördert. Gefragt hat sie nicht.",
-      "caption": "Mit KI setzt du 10× so viel um — wenn du lernst, zu <plan>planen,</plan> zu <spec>spezifizieren</spec> und zu <review>reviewen.</review>",
+      "headline": "Die KI hat dich <accent>befördert.</accent> <br></br>Gefragt hat sie nicht.",
+      "caption": "Du wirst 10× so produktiv — wenn du lernst, zu <plan>planen,</plan> zu <spec>spezifizieren</spec> und zu <review>reviewen,</review> …",
       "plan": "planen",
       "spec": "spezifizieren",
       "review": "reviewen",

@@ -10,9 +10,11 @@ This project is a localized Next.js application which serves to visualize theory
 - Binding decisions live in Archgate ADRs under `.archgate/adrs/`.
 - An ADR's frontmatter `paths:` covers every glob its Compliance section names, so no check fires in a file the record disclaims. FE-005 and FE-006 both shipped with `paths:` narrower than their enforcers' reach.
 - For any /grill-with-docs and /wayfinder, using the /grilling skill read the `docs/agents/grilling-format.md`, which overwrites the grill format. Analog for voice sessions read `docs/agents/grilling-voice.md`.
-- Create worktrees in `.worktrees`
+- Create worktrees in `.worktrees`. A worktree has no `node_modules`: symlink the main checkout's and exclude it in `.git/worktrees/<name>/info/exclude`. `next dev` refuses a second server while the main checkout's is running — preview a worktree with `next build && npx serve out -l 3100` instead.
 
 ## Testing
+
+- Browser checks of GSAP motion (the landing hero): a background or occluded tab never fires `requestAnimationFrame`, so the animation stays paused and any window resize finishes it by design. Bring the tab to the front before judging motion; DOM counts (`[data-task-paper]` opacity, `[data-completed-papers]`, `[data-overflow-papers]`) verify the mechanics without it.
 
 - `*.test.ts` is the fast suite in `npm run verify`; `*.build.test.ts` needs `out/` and runs only via `npm run test:build` after `npm run build`. Keep the two vitest configs split — `verify` must stay fast and must not require a build.
 

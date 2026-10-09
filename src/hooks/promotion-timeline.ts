@@ -1,7 +1,14 @@
 import { animateEnvelope, burstEnvelope, ENVELOPE_BURST_AT } from '@/hooks/promotion-envelope';
 import { createPaperPile } from '@/hooks/promotion-pile';
-import { promotionFlight } from '@/lib/promotion-flight.pure';
+import { promotionArc, promotionFlight } from '@/lib/promotion-flight.pure';
 import gsap from 'gsap';
+import { SplitText } from 'gsap/SplitText';
+
+gsap.registerPlugin(SplitText);
+
+const WORD_STAGGER = 0.035;
+const BUTTON_STAGGER = 0.14;
+const INTERACTIVE_AFTER_BURST = 2.3;
 
 function sceneElements(root: HTMLElement) {
   const envelope = root.querySelector<SVGGElement>('[data-envelope]');
@@ -11,7 +18,10 @@ function sceneElements(root: HTMLElement) {
   if (!envelope || !caption || !actions || buttons.length !== 2) {
     throw new Error('Promotion animation requires an envelope, a caption and two actions.');
   }
-  return { root, envelope, caption, actions, buttons, restoreFocus: false };
+  // Each caption word flies on its own; the split is reverted once the animation is over.
+  const split = SplitText.create(caption, { type: 'words' });
+  const words = split.words.filter((word): word is HTMLElement => word instanceof HTMLElement);
+  return { root, envelope, caption, actions, buttons, words, split, restoreFocus: false };
 }
 
 type Scene = ReturnType<typeof sceneElements>;
@@ -25,29 +35,38 @@ function focusPromise(scene: Scene) {
   scene.restoreFocus = false;
 }
 
+function launchTime(scene: Scene, target: HTMLElement) {
+  const index = [...scene.words, ...scene.buttons].indexOf(target);
+  const buttonIndex = index - scene.words.length;
+  if (buttonIndex < 0) return ENVELOPE_BURST_AT + 0.08 + index * WORD_STAGGER;
+  return ENVELOPE_BURST_AT + 0.18 + scene.words.length * WORD_STAGGER + buttonIndex * BUTTON_STAGGER;
+}
+
+/** Each piece explodes out of the envelope along its own bowed arc straight to its resting place. */
 function contentFlight(timeline: gsap.core.Timeline, scene: Scene, target: HTMLElement) {
-  const index = [scene.caption, ...scene.buttons].indexOf(target);
-  const at = ENVELOPE_BURST_AT + 0.08 + index * 0.16;
+  const at = launchTime(scene, target);
   const destination = target.getBoundingClientRect();
+  let arc = promotionArc({ x: 0, y: 0 }, () => 0.5);
   let offset = { x: 0, y: 0 };
   timeline.call(
     () => {
       offset = promotionFlight(scene.envelope.getBoundingClientRect(), destination);
+      arc = promotionArc(offset, Math.random);
     },
     [],
     at,
   );
+  const apex = { x: () => arc.apex.x, y: () => arc.apex.y, rotation: () => arc.spin * -0.4 };
   timeline.fromTo(
     target,
-    { x: () => offset.x, y: () => offset.y, scale: 0.12, opacity: 0, rotation: -12 },
+    { x: () => offset.x, y: () => offset.y, scale: 0.15, opacity: 0, rotation: () => arc.spin },
     {
       keyframes: [
-        { x: () => offset.x * 0.55, y: () => offset.y * 0.55 - 140 - index * 35, scale: 0.7, opacity: 1, rotation: 9 },
-        { x: 0, y: 0, scale: 1, opacity: 1, rotation: 0 },
+        { ...apex, scale: 0.85, opacity: 1, ease: 'power2.out' },
+        { x: 0, y: 0, scale: 1, opacity: 1, rotation: 0, ease: 'power1.inOut' },
       ],
       duration: 1.2,
       ease: 'none',
-      defaults: { ease: 'power2.inOut' },
       immediateRender: false,
     },
     at,
@@ -65,31 +84,39 @@ function releaseContents(timeline: gsap.core.Timeline, scene: Scene) {
     'burst',
   );
   burstEnvelope(timeline, scene.root);
-  [scene.caption, ...scene.buttons].forEach((target) => contentFlight(timeline, scene, target));
+  [...scene.words, ...scene.buttons].forEach((target) => contentFlight(timeline, scene, target));
 }
 
-function animationControls(scene: Scene, timeline: gsap.core.Timeline, pile: ReturnType<typeof createPaperPile>) {
+type Pile = ReturnType<typeof createPaperPile>;
+
+function disposer(scene: Scene, timeline: gsap.core.Timeline, pile: Pile) {
   let stopped = false;
   const dispose = () => {
     stopped = true;
     timeline.kill();
     pile.stop();
+    if (scene.split.isSplit) scene.split.revert();
     scene.actions.inert = false;
     scene.root.removeAttribute('data-animated');
   };
+  return { dispose, isStopped: () => stopped };
+}
+
+function animationControls(scene: Scene, timeline: gsap.core.Timeline, pile: Pile) {
+  const { dispose, isStopped } = disposer(scene, timeline, pile);
   return {
     setDraining: pile.setDraining,
     suspend: (suspended: boolean) => {
-      if (!stopped) {
+      if (!isStopped()) {
         timeline.paused(suspended);
         pile.suspend(suspended);
       }
     },
     burst: () => {
-      if (!stopped && timeline.time() < ENVELOPE_BURST_AT) timeline.seek('burst', false).play();
+      if (!isStopped() && timeline.time() < ENVELOPE_BURST_AT) timeline.seek('burst', false).play();
     },
     finish: () => {
-      if (stopped) return;
+      if (isStopped()) return;
       timeline.progress(1);
       scene.actions.inert = false;
       focusPromise(scene);
@@ -107,7 +134,7 @@ export function createPromotionTimeline(root: HTMLElement) {
   const timeline = gsap.timeline();
   // Measure destinations before applying the entrance transforms.
   releaseContents(timeline, scene);
-  gsap.set([scene.caption, ...scene.buttons], { opacity: 0 });
+  gsap.set([...scene.words, ...scene.buttons], { opacity: 0 });
   animateEnvelope(timeline, root);
   timeline.call(
     () => {
@@ -115,9 +142,10 @@ export function createPromotionTimeline(root: HTMLElement) {
       scene.actions.inert = false;
       focusPromise(scene);
       pile.enable();
+      scene.split.revert();
     },
     [],
-    ENVELOPE_BURST_AT + 1.65,
+    ENVELOPE_BURST_AT + INTERACTIVE_AFTER_BURST,
   );
   return animationControls(scene, timeline, pile);
 }

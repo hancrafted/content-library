@@ -10,7 +10,7 @@ import styles from './promotion-hero.module.css';
 
 interface PromotionHeroProps {
   locale: Locale;
-  headline: string;
+  headline: ReactNode;
   eyebrow: string;
   caption: ReactNode;
   scene: ReactNode;
