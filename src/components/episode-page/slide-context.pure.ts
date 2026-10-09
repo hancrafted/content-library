@@ -1,3 +1,4 @@
+import type { NoteSpec, SegmentSpec, SourceSpec } from '@/components/slide-master/episode-record';
 import type { NoteSource, SpeakerNoteItem, VoiceScriptSegment } from '@/lib/context-drawer.pure';
 
 /*
@@ -6,27 +7,6 @@ import type { NoteSource, SpeakerNoteItem, VoiceScriptSegment } from '@/lib/cont
  * content records, not markup, so FE-002's "no renderer between a Slide and its
  * markup" does not apply to it.
  */
-
-/** A source's non-localized facts; its title is a Translation file leaf. */
-export interface SourceSpec {
-  readonly slug: string;
-  readonly url: string;
-}
-
-export interface NoteSpec {
-  readonly slug: string;
-  readonly target: string;
-  readonly sources?: readonly SourceSpec[];
-  readonly image?: { readonly src: string };
-}
-
-export interface SegmentSpec {
-  readonly slug: string;
-  readonly from: number;
-  readonly to: number;
-  /** True when the Translation file holds a `bridge` string for this segment. */
-  readonly bridge?: boolean;
-}
 
 export interface SlideContextSpec {
   readonly notes?: readonly NoteSpec[];

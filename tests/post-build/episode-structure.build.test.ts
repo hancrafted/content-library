@@ -7,7 +7,7 @@ import { load, type CheerioAPI } from 'cheerio';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { sectionAnchor, slideAnchor, titleAnchor } from '../../src/lib/episode.pure';
+import { TITLE_ANCHOR } from '../../src/lib/episode.pure';
 import { DEFAULT_LOCALE, LOCALES, localizePath } from '../../src/lib/locale.pure';
 import { EPISODE_SLUGS, episodeRoute } from '../../src/lib/routes';
 import { exportedFile, OUT_DIR } from './exported-pages';
@@ -18,8 +18,8 @@ const PAGES = EPISODE_SLUGS.flatMap((slug) =>
 
 /** Slides an Episode leaves untitled on purpose (FE-002 §2): rendered, never listed. */
 const UNTITLED: Readonly<Record<string, readonly string[]>> = {
-  'page-template': [slideAnchor('next-steps', 'what-comes-next')],
-  'amnesiac-freelancer': [slideAnchor('where-it-breaks', 'one-line')],
+  'page-template': ['next-steps--what-comes-next'],
+  'amnesiac-freelancer': ['where-it-breaks--one-line'],
 };
 
 function html(url: string): string {
@@ -114,7 +114,7 @@ describe('episode structure', () => {
       const wrapper = $('[data-slot="title-slide"]');
       const heading = $('[data-slot="toc"] [data-testid="toc"] [data-testid="toc-top"]');
       // ASSERT
-      expect(wrapper.attr('id')).toBe(titleAnchor());
+      expect(wrapper.attr('id')).toBe(TITLE_ANCHOR);
       expect(wrapper.attr('data-slide')).toBe('top');
       expect((heading.attr('href') ?? '').split('#')[1]).toBe('top');
     });
@@ -190,7 +190,7 @@ describe('episode structure', () => {
       const anchors = slideAnchors($).filter((anchor) => !untitled.includes(anchor));
       // ASSERT: the heading's link to the Title slide comes first
       expect(fragments).toEqual(anchors);
-      expect(fragments[0]).toBe(titleAnchor());
+      expect(fragments[0]).toBe(TITLE_ANCHOR);
     });
 
     it('renders an untitled Slide with its content, and lists it nowhere in the table of contents', () => {
@@ -232,22 +232,20 @@ describe('episode structure', () => {
       for (const list of classes) expect(list).toContain('contents');
     });
 
-    it('gives each Slide wrapper the id slideAnchor() derives, and no wrapper clips', () => {
+    it('gives the section slide its Section as id and each page Slide `<section>--<slide>`, and no wrapper clips', () => {
       // ARRANGE
       const $ = page(url);
       // ACT
       const sections = wrapperIdsBySection($);
-      const derived = sections.map(({ section, ids }) => ({
-        section,
-        ids: ids.map((id, index) =>
-          index === 0 ? sectionAnchor(section) : slideAnchor(section, id.slice(slideAnchor(section, '').length)),
-        ),
-      }));
+      const misplaced = sections.flatMap(({ section, ids }) =>
+        ids.filter((id, index) => (index === 0 ? id !== section : !id.startsWith(`${section}--`))),
+      );
       const clipping = $('[data-slide]')
         .toArray()
         .filter((wrapper) => /\boverflow-/.test($(wrapper).attr('class') ?? ''));
       // ASSERT
-      expect(sections).toEqual(derived);
+      expect(sections.length).toBeGreaterThan(0);
+      expect(misplaced).toEqual([]);
       expect(clipping).toEqual([]);
     });
 

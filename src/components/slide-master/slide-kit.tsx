@@ -14,7 +14,7 @@ export interface KitInput {
   /** Said after a Context reference's phrase, e.g. `opens speaker note`. */
   readonly refLabel: string;
   /** The Slide's id, named in the error a bad `ref` throws. */
-  readonly slide: string;
+  readonly slideId: string;
 }
 
 /**
@@ -25,7 +25,7 @@ export interface KitInput {
  * `ref` and `target` to declared names; `ref` checks again at render, so a
  * cast in a Slide still fails the build.
  */
-export function slideKit({ t, level, notes, refLabel, slide }: KitInput): RuntimeKit {
+export function slideKit({ t, level, notes, refLabel, slideId }: KitInput): RuntimeKit {
   const Title = ({ children }: { children: ReactNode }) => (
     <SlideTitle as={level} data-target="title">
       {children}
@@ -33,7 +33,7 @@ export function slideKit({ t, level, notes, refLabel, slide }: KitInput): Runtim
   );
   const ref = (note: string) => {
     if (!notes.includes(note)) {
-      throw new Error(`No note "${note}" on "${slide}": a context reference must name one of its notes.`);
+      throw new Error(`No note "${note}" on "${slideId}": a context reference must name one of its notes.`);
     }
     return (chunks: ReactNode) => (
       <ContextRef note={note} label={refLabel}>
