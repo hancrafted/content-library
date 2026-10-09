@@ -4,9 +4,10 @@
 // `tsPreCompilationDeps` every `import type` is erased and the rules below
 // cruise a thinner graph while still reporting success.
 
-// What an Episode file may reach: the Slide master, its own Episode folder and
-// src/lib. The two Episode-record modules are still page machinery; they move to
-// src/lib in the slide-as-unit refactor, and this exemption goes with them.
+// What an Episode file may reach: the Slide master (which holds the Episode
+// record, `slide-master/episode-record.ts`), its own Episode folder and src/lib.
+// Legacy: the two `episode-page/*.pure.ts` modules are reached only by Episodes
+// not yet written as Slide files; this exemption goes with the last of them.
 const EPISODE_REACH = [
   '^src/components/(slide-master|episodes)/',
   '^src/lib/',
