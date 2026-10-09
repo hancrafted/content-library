@@ -29,8 +29,8 @@ Sticky. Row one: the tabs left, the menu and close right. The tabs may shrink an
 
 ## Linking a Slide and its notes
 
-- **Block target.** A note's `target` names a layout element (a column, title or prose); the element carries the id `<slide anchor>--<element>`.
-- **Inline target.** `ContextRef` wraps a phrase inside Slide text and emits the id `<slide anchor>--<note slug>`, so the note's `target` is its own slug. In a translated string the phrase sits inside a `<ref>` rich-text tag.
+- **Block target.** A note's `target` is a short name (`title`, `prose`, a column slug, or one the Slide marks with the kit's `target('chart')`); the element carries `data-target="<name>"`. The drawer looks it up inside the Slide's wrapper only, so two Slides may both say `prose`.
+- **Inline target.** `ContextRef` (the kit's `ref('<note>')`) wraps a phrase inside Slide text; the phrase is itself the target named after its note, so a note may use its own slug as `target`. The reference finds its note by (Slide, note slug). In a translated string the phrase sits inside a `<ref>` rich-text tag.
 - **Behaviour.** Hovering or focusing a note, or a `ContextRef`, sets `data-context-active` on the other side; CSS tints the whole item (or Slide element) with `--highlight-target` at low opacity: no border, outline or ring, and it takes no space, so nothing shifts. Clicking a `ContextRef` opens the drawer on Notes at that note.
 - **Print.** A `ContextRef` prints as its plain phrase.
 
@@ -40,4 +40,4 @@ One `--selected` / `--selected-foreground` pair in `globals.css` marks the selec
 
 ## Input contract
 
-The drawer renders from one `ContextDrawerInput` (`src/components/context-drawer/context-drawer-input.ts`): items, each with the DOM `id` whose visibility makes it current, a title, notes (each with its `target` already a full element id) and script segments, plus translated labels. It takes the active Slide from `useActiveSlide()` (the Slide observer in `src/components/episode-page/` owns the one `IntersectionObserver`, at the shared reading line in `src/lib/reading-line.pure.ts`) and shows the item whose id matches, so it imports nothing from the table of contents. A `ContextRef` links to its note through the wrapper id the note's `target` names, and the drawer finds the owning item from the note's place in the slot. `src/components/episode-page/context-drawer-input.ts` is the only adapter from an Episode record.
+The drawer renders from one `ContextDrawerInput` (`src/components/context-drawer/context-drawer-input.ts`): items, each with the DOM `id` whose visibility makes it current, a title, notes (each with its short `target`) and script segments, plus translated labels. It takes the active Slide from `useActiveSlide()` (the Slide observer in `src/components/episode-page/` owns the one `IntersectionObserver`, at the shared reading line in `src/lib/reading-line.pure.ts`) and shows the item whose id matches, so it imports nothing from the table of contents. A `ContextRef` links to its note by (Slide, note slug): the drawer finds the owning item from the Slide wrapper that holds the reference. `src/components/episode-page/context-drawer-input.ts` is the only adapter from an Episode record.

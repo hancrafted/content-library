@@ -49,7 +49,7 @@ An Episode stacks many Slides, some heavy (charts, looping demos). Navigation ne
 
 ### 3. Slide wrapper
 
-1. `SlideWrapper` MUST be a server component rendered by `EpisodePageContainer` from one record entry, receiving its id from `slideAnchor()` (FE-002 §2); it declares nothing itself.
+1. `SlideWrapper` MUST be a server component rendered by `EpisodePageContainer` from one record entry, receiving the id its position gives it (FE-002 §2); it declares nothing itself.
 2. It MUST be at least viewport height (`min-h-svh`), grow with its content and never clip: no `overflow: hidden | auto | scroll` on it.
 
 ### 4. SlideMount

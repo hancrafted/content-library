@@ -21,7 +21,7 @@ A glob cannot see inside a file. With the directive alone, "which files are clie
 
 Repo state at adoption: four files carried the directive. Three are leaf components, renamed here — `src/components/locale-toggle.client.tsx`, `nav-link.client.tsx`, `theme-toggle.client.tsx`. The fourth, `src/hooks/use-theme.ts`, dropped its directive: a hook is not a boundary — it is imported only by client leaves and joins the bundle through them; the import-graph rule below holds that instead.
 
-Rejected alternatives: the directive alone (not addressable); a `client/` folder (position cannot carry it — leaves sit beside the server components that render them); the third-party `server-only` / `client-only` marker packages (they fail the build on a wrong import but address nothing by glob, and pass [ARCH-001](./ARCH-001-dependency-admission-bar.md) for no gain today).
+Rejected alternatives: the directive alone (not addressable); a `client/` folder as the classifier (position cannot carry it — leaves sit beside the server components that render them; inside one Episode it is a second fence, §5); the third-party `server-only` / `client-only` marker packages (they fail the build on a wrong import but address nothing by glob, and pass [ARCH-001](./ARCH-001-dependency-admission-bar.md) for no gain today).
 
 ## Decision
 
@@ -46,7 +46,11 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 
 ### 4. Props crossing the boundary
 
-1. Every prop a Server Component passes to a `*.client.tsx` component MUST be serializable by React: primitives, plain objects and arrays of them, `Date`, `Map`, `Set`, promises, JSX — never a function, class instance or unregistered symbol. Pass a message bundle slice (as `ThemeToggle` takes `labels`), not a callback.
+1. Every prop a Server Component passes to a `*.client.tsx` component MUST be serializable by React: primitives, plain objects and arrays of them, `Date`, `Map`, `Set`, promises, JSX — never a function, class instance or unregistered symbol. Pass a Translation file slice (as `ThemeToggle` takes `labels`), not a callback.
+
+### 5. Episode client files
+
+1. An Episode's `*.client.tsx` files MUST live in `episodes/<ep>/client/` — `'use client'` is allowed nowhere else in an Episode; its Slide files stay Server Components.
 
 ## Do's and Don'ts
 
@@ -58,7 +62,8 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 4. **DO** rename the file when the directive is added or removed — the suffix and the directive move together. (Decision 2)
 5. **DO** keep hooks in `src/hooks/**` without the directive, imported from client leaves. (Decision 3)
 6. **DO** reach `readPrefs` / `writePrefs` through a hook or a `*.client.tsx` leaf, as `use-theme.ts` and `locale-toggle.client.tsx` do. (Decision 3)
-7. **DO** pass serializable data from server to client: strings, numbers, plain objects, message slices. (Decision 4)
+7. **DO** pass serializable data from server to client: strings, numbers, plain objects, Translation file slices. (Decision 4)
+8. **DO** put an Episode's interactive visualisation in `episodes/<ep>/client/`, its logic in a `.pure.ts` beside it. (Decision 5)
 
 ### Don'ts
 
@@ -67,6 +72,7 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 3. **DON'T** name a `.ts` file `*.client.ts` or stack the suffix (`x.client.pure.tsx`). (Decision 2)
 4. **DON'T** import a hook or `src/lib/prefs-storage.ts` from a Server Component, or import `src/app/**` from a client leaf. (Decision 3)
 5. **DON'T** pass a function, class instance or unregistered symbol as a prop to a `*.client.tsx` component. (Decision 4)
+6. **DON'T** put `'use client'` in a Slide file or Episode file. (Decision 5)
 
 ## Consequences
 
@@ -94,14 +100,13 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 
 - §2.1: ESLint core `no-restricted-syntax`, selector `Program > ExpressionStatement[directive='use client']`, over `src/**/*.{ts,tsx}` ignoring `src/**/*.client.tsx`.
 - §2.2: ESLint core `no-restricted-syntax`, selector `Program:not(:has(> ExpressionStatement[directive='use client']))`, over `src/**/*.client.tsx`.
-- §2.3, §2.4 and so §1.3: `check-file/filename-naming-convention` in `eslint.config.mjs` — `src/app/**/*.{ts,tsx}` is `KEBAB_CASE`, `src/{components,hooks}/**/*.tsx` is `+([a-z0-9-])?(.client)`, `src/**/*.ts` is `!(*.client)`. `check-file` matches the basename with the final extension stripped. §1.3 needs no own check: an app file cannot carry the suffix (§2.4), and an unsuffixed file cannot carry the directive (§2.1).
+- §2.3, §2.4 and so §1.3: `check-file/filename-naming-convention` in `eslint.config.mjs` — `src/app/**/*.{ts,tsx}` is `KEBAB_CASE`, `src/{components,hooks}/**/*.tsx` is `+([a-z0-9-])?(.client)`, `src/**/*.ts` is `!(*.client)`. §1.3 needs no own check: an app file cannot carry the suffix (§2.4), and an unsuffixed file cannot carry the directive (§2.1).
+- §5: `eslint.config.mjs` forbids the directive in Episode files except under `episodes/*/client/`; `.dependency-cruiser.cjs` rule `episode-client-reach-only-hooks-and-lib` limits what a client widget reaches.
 - §3: `.dependency-cruiser.cjs` rules `hooks-reached-only-from-client`, `client-never-imports-app` and `prefs-storage-reached-only-from-client`, `error` severity, run by `npm run lint:boundaries` (`depcruise src`) inside `npm run lint`, which `npm run verify` and CI run.
 
-**Measured on introduction** (probe files under `src/`, removed after): a directive in `probe-a.tsx`, a directiveless `probe-b.client.tsx`, a `src/app/probe/probe-c.client.tsx` and a `src/hooks/probe-d.client.ts` gave 5 errors, one per breach plus §2.1 on `probe-d`; a correct `probe-e.client.tsx` gave 0. A server file importing `@/hooks/use-theme` and a `.client` file importing `@/app/[locale]/params` each fired its depcruise rule. Repo: 0 errors. dependency-cruiser with `tsPreCompilationDeps: true`: **77 dependencies cruised, 54 local, 12 type-only**; with `false`: 80 cruised, 49 local, 0 type-only, 15 injected `react/jsx-runtime`. A falling local count with a rising total is the failure signature.
+**Measured on introduction** (probe files under `src/`, removed after): a directive in `probe-a.tsx`, a directiveless `probe-b.client.tsx`, a `src/app/probe/probe-c.client.tsx` and a `src/hooks/probe-d.client.ts` gave 5 errors, one per breach plus §2.1 on `probe-d`; a correct `probe-e.client.tsx` gave 0. Repo: 0 errors. dependency-cruiser with `tsPreCompilationDeps: true`: **77 dependencies cruised, 54 local, 12 type-only**; with `false`: 80 cruised, 49 local, 0 type-only, 15 injected `react/jsx-runtime`. A falling local count with a rising total is the failure signature.
 
-**Measured for §3.3:** a probe Server Component `src/components/probe-brand.tsx` importing `@/lib/prefs-storage` fired `prefs-storage-reached-only-from-client` (1 error, 78 dependencies cruised); removed, the repo is clean at 77 cruised, 54 local, 12 type-only. The 2 live edges into the module come from `use-theme.ts` and `locale-toggle.client.tsx`.
-
-**Known reach gap.** §3.3 names one module by path, not by glob: no classifier marks "touches a browser API", so the addressability argument this record makes for `.client` arrives again one directory over. A second browser-API module under `src/lib/**` is unguarded until the rule is widened by hand. A classifier to close it is a separate decision.
+**Known reach gap.** §3.3 names one module by path, not by glob: no classifier marks "touches a browser API", so the addressability argument this record makes for `.client` arrives again one directory over. A second browser-API module under `src/lib/**` is unguarded until the rule is widened by hand.
 
 **Manual review duties** (never linted): props from a server parent to a `.client` component are serializable (§4); the directive sits at the smallest leaf, not a wrapper widened for convenience (§1.2).
 

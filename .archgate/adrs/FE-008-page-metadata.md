@@ -42,7 +42,7 @@ Settled points, argued here so Decision stays short:
 
 ### 2. Title and description are translated strings
 
-1. They MUST live in `src/messages/<locale>.json`: `meta.home` for the landing page, `episodes.<slug>.title` and `.description` for an Episode. `de.json` is typed against `en.json`, so a missing key fails `tsc`.
+1. They MUST live in the Translation file `src/messages/<locale>.json`, under the Translation keys `meta.home` for the landing page, `episodes.<slug>.title` and `.description` for an Episode. `de.json` is typed against `en.json`, so a missing key fails `tsc`.
 2. A page at a root layout's own segment MUST name the brand in its title; `title.template` skips that segment.
 
 ### 3. `SITE_URL` is the absolute base
