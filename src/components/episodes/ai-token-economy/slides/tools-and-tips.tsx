@@ -1,9 +1,10 @@
-import type { EpisodeSection } from '@/components/episode-page/episode-page-container.pure';
-import { SectionSlide } from '@/components/slide-master/legacy/section-slide';
-import { elementId, SlideProse } from '@/components/slide-master/slide-master';
+import { slidesFor, type TargetProps } from '@/components/slide-master/episode-record';
+import { SectionSlide } from '@/components/slide-master/section-slide';
+import { SlideProse } from '@/components/slide-master/slide-master';
 import { externalHref } from '@/lib/external-link.pure';
 import type { ReactElement } from 'react';
-import { contextOf, type SectionsT } from './context';
+
+const slide = slidesFor('ai-token-economy');
 
 interface AutomatedTool {
   readonly name: string;
@@ -89,9 +90,9 @@ function HabitsCard(): ReactElement {
   );
 }
 
-function ToolsGrid({ id }: { id?: string }): ReactElement {
+function ToolsGrid({ 'data-target': dataTarget }: TargetProps): ReactElement {
   return (
-    <div id={id} className="mt-8 grid gap-6 lg:grid-cols-3">
+    <div data-target={dataTarget} className="mt-8 grid gap-6 lg:grid-cols-3">
       <AutomatedCard />
       <SteeringCard />
       <HabitsCard />
@@ -99,23 +100,17 @@ function ToolsGrid({ id }: { id?: string }): ReactElement {
   );
 }
 
-export function toolsAndTips(t: SectionsT): EpisodeSection {
-  const title = t('tools-and-tips.title');
-  const caption = t('tools-and-tips.caption');
-  const { anchor, notes, voiceScript } = contextOf(t, 'tools-and-tips');
-
-  return {
-    slug: 'tools-and-tips',
-    title,
-    minutes: { en: 2, de: 2 },
-    notes,
-    voiceScript,
-    slides: [],
-    content: (
-      <SectionSlide anchor={anchor} title={title} caption={caption}>
-        <SlideProse id={elementId(anchor, 'prose')}>{t('tools-and-tips.prose')}</SlideProse>
-        <ToolsGrid id={elementId(anchor, 'tools-grid')} />
-      </SectionSlide>
-    ),
-  };
-}
+export const toolsAndTips = slide({
+  slug: 'tools-and-tips',
+  minutes: { en: 2, de: 2 },
+  notes: [
+    { slug: 'tooling-and-steering', target: 'title' },
+    { slug: 'operational-habits', target: 'tools-grid' },
+  ],
+  content: ({ t, target, Title }) => (
+    <SectionSlide title={<Title>{t('title')}</Title>} caption={t('caption')}>
+      <SlideProse>{t('prose')}</SlideProse>
+      <ToolsGrid {...target('tools-grid')} />
+    </SectionSlide>
+  ),
+});

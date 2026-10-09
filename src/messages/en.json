@@ -1082,17 +1082,7 @@
       "title": "The AI Token Economy",
       "caption": "AI can give you and the people you lead super powers, but it comes with hidden managing responsibilities you didn't sign up for.",
       "description": "A field guide to the token economy: what AI actually costs, why the meter stays invisible, and how to manage context and models efficiently.",
-      "notes": {
-        "hidden-responsibilities": {
-          "header": "Hidden management responsibilities",
-          "description": "The rush to adopt AI focuses on engineering velocity, but teams quietly inherit managing responsibilities previously belonging to staff- or director-level decisions."
-        },
-        "compute-as-resource": {
-          "header": "Compute as a managed resource",
-          "description": "Prompts are architectural and budgetary choices. Compute must be treated as a managed resource balancing capability against degradation and cost."
-        }
-      },
-      "sections": {
+      "slides": {
         "motivation": {
           "title": "Motivation",
           "caption": "Thought experiment: Imagine you're assigned a freelancer with these weird characteristics.",
@@ -1106,51 +1096,49 @@
               "header": "Opting into management",
               "description": "Treating an LLM as a teammate requires recognizing its failure modes rather than treating it as an infallible search oracle."
             }
-          },
-          "slides": {
-            "lead-one-upskill-many": {
-              "title": "Lead One, Upskill Many",
-              "caption": "It's an LLM — but if it were a human, how would you manage it?",
-              "prose": "Directing an AI agent requires the same delegation and review rigor as onboarding an external specialist.",
-              "notes": {
-                "upskill-vs-replace": {
-                  "header": "Upskill many vs replace",
-                  "description": "The objective is not replacing workers but elevating human operators into effective directors of synthetic labor."
-                }
-              }
-            },
-            "the-four-eras-of-ai": {
-              "title": "The Four Eras of AI",
-              "caption": "New technology gives rise to new disciplines for humans to cope.",
-              "prose": "From Prompt Engineering in 2023 to Context Engineering in 2024, Harness Engineering in 2025, and Token Economics today.",
-              "notes": {
-                "emerging-disciplines": {
-                  "header": "Emerging disciplines",
-                  "description": "As model capabilities advance, operational focus shifts from prompt words to managing context, harnesses, and token budgets."
-                }
-              }
-            },
-            "the-invisible-invoice": {
-              "title": "The Invisible Invoice",
-              "caption": "For a real freelancer you need a business case. AI just bills you.",
-              "prose": "A €3,200 consultant invoice requires purchase orders and approvals. AI accumulates identical costs silently across thousands of micro-prompts.",
-              "notes": {
-                "governance-asymmetry": {
-                  "header": "Governance asymmetry",
-                  "description": "Corporate finance demands formal approval for contractors, yet AI charges comparable budgets without procurement gates."
-                }
-              }
-            },
-            "outcome-per-euro": {
-              "title": "Outcome Per Euro",
-              "caption": "You're now accountable for a budget you never signed up to manage.",
-              "prose": "Defaulting to flagship frontier models for routine chores burns capital. The economic winner optimizes outcome per euro.",
-              "notes": {
-                "budget-accountability": {
-                  "header": "Budget accountability",
-                  "description": "Selecting the right tier for each task is the foundation of modern engineering leadership."
-                }
-              }
+          }
+        },
+        "lead-one-upskill-many": {
+          "title": "Lead One, Upskill Many",
+          "caption": "It's an LLM — but if it were a human, how would you manage it?",
+          "prose": "Directing an AI agent requires the same delegation and review rigor as onboarding an external specialist.",
+          "notes": {
+            "upskill-vs-replace": {
+              "header": "Upskill many vs replace",
+              "description": "The objective is not replacing workers but elevating human operators into effective directors of synthetic labor."
+            }
+          }
+        },
+        "the-four-eras-of-ai": {
+          "title": "The Four Eras of AI",
+          "caption": "New technology gives rise to new disciplines for humans to cope.",
+          "prose": "From Prompt Engineering in 2023 to Context Engineering in 2024, Harness Engineering in 2025, and Token Economics today.",
+          "notes": {
+            "emerging-disciplines": {
+              "header": "Emerging disciplines",
+              "description": "As model capabilities advance, operational focus shifts from prompt words to managing context, harnesses, and token budgets."
+            }
+          }
+        },
+        "the-invisible-invoice": {
+          "title": "The Invisible Invoice",
+          "caption": "For a real freelancer you need a business case. AI just bills you.",
+          "prose": "A €3,200 consultant invoice requires purchase orders and approvals. AI accumulates identical costs silently across thousands of micro-prompts.",
+          "notes": {
+            "governance-asymmetry": {
+              "header": "Governance asymmetry",
+              "description": "Corporate finance demands formal approval for contractors, yet AI charges comparable budgets without procurement gates."
+            }
+          }
+        },
+        "outcome-per-euro": {
+          "title": "Outcome Per Euro",
+          "caption": "You're now accountable for a budget you never signed up to manage.",
+          "prose": "Defaulting to flagship frontier models for routine chores burns capital. The economic winner optimizes outcome per euro.",
+          "notes": {
+            "budget-accountability": {
+              "header": "Budget accountability",
+              "description": "Selecting the right tier for each task is the foundation of modern engineering leadership."
             }
           }
         },
@@ -1163,29 +1151,27 @@
               "header": "Probabilistic units",
               "description": "LLMs process numerical token IDs, not human prose. Understanding token granularity reveals where costs accumulate."
             }
-          },
-          "slides": {
-            "live-context-breakdown": {
-              "title": "Live Context Breakdown",
-              "caption": "Most tools hide the meter — this is what seeing it looks like.",
-              "prose": "A typical 200k session breakdown: system prompts, conversation history, tool payloads, and retrieved documentation.",
-              "notes": {
-                "synthetic-abstractions": {
-                  "header": "Synthetic abstractions",
-                  "description": "Commercial interfaces conceal real token usage behind credits and bars. Direct transparency is essential for optimization."
-                }
-              }
-            },
-            "cli-vs-web-tool-obscurity": {
-              "title": "CLI vs Web Tool Obscurity",
-              "caption": "The meter is hidden on purpose.",
-              "prose": "Obscurity is a product pattern: frictionless initiation, habitual workflows, and surprising monthly invoices.",
-              "notes": {
-                "the-obscurity-playbook": {
-                  "header": "The obscurity playbook",
-                  "description": "Hiding usage metrics fosters dependency before organizations realize the compounding cost of unmanaged agentic loops."
-                }
-              }
+          }
+        },
+        "live-context-breakdown": {
+          "title": "Live Context Breakdown",
+          "caption": "Most tools hide the meter — this is what seeing it looks like.",
+          "prose": "A typical 200k session breakdown: system prompts, conversation history, tool payloads, and retrieved documentation.",
+          "notes": {
+            "synthetic-abstractions": {
+              "header": "Synthetic abstractions",
+              "description": "Commercial interfaces conceal real token usage behind credits and bars. Direct transparency is essential for optimization."
+            }
+          }
+        },
+        "cli-vs-web-tool-obscurity": {
+          "title": "CLI vs Web Tool Obscurity",
+          "caption": "The meter is hidden on purpose.",
+          "prose": "Obscurity is a product pattern: frictionless initiation, habitual workflows, and surprising monthly invoices.",
+          "notes": {
+            "the-obscurity-playbook": {
+              "header": "The obscurity playbook",
+              "description": "Hiding usage metrics fosters dependency before organizations realize the compounding cost of unmanaged agentic loops."
             }
           }
         },
@@ -1198,29 +1184,27 @@
               "header": "Cognitive stamina",
               "description": "Context windows behave like cognitive stamina across a long workday: alert early on, distracted as history piles up."
             }
-          },
-          "slides": {
-            "the-lost-middle": {
-              "title": "The Lost Middle",
-              "caption": "How key instructions get lost in the middle.",
-              "prose": "Models attend sharply to the start and end of context, but the middle blurs into an attention valley.",
-              "notes": {
-                "attention-valley": {
-                  "header": "The attention valley",
-                  "description": "Research proves the U-shaped retrieval curve: information placed in the middle of long contexts suffers dramatic recall drops."
-                }
-              }
-            },
-            "the-fullness-gauge-and-levers": {
-              "title": "The Fullness Gauge & Levers",
-              "caption": "Past ~half full, the model starts losing the plot.",
-              "prose": "Below 50% is the smart zone. Above 50%, accuracy degrades. Above 75%, hallucination risk spikes. Three levers: Monitor, Compact, Hand off.",
-              "notes": {
-                "smart-zone-discipline": {
-                  "header": "Smart zone discipline",
-                  "description": "Keeping context windows under 50% capacity guarantees high accuracy and prevents silent prompt drift."
-                }
-              }
+          }
+        },
+        "the-lost-middle": {
+          "title": "The Lost Middle",
+          "caption": "How key instructions get lost in the middle.",
+          "prose": "Models attend sharply to the start and end of context, but the middle blurs into an attention valley.",
+          "notes": {
+            "attention-valley": {
+              "header": "The attention valley",
+              "description": "Research proves the U-shaped retrieval curve: information placed in the middle of long contexts suffers dramatic recall drops."
+            }
+          }
+        },
+        "the-fullness-gauge-and-levers": {
+          "title": "The Fullness Gauge & Levers",
+          "caption": "Past ~half full, the model starts losing the plot.",
+          "prose": "Below 50% is the smart zone. Above 50%, accuracy degrades. Above 75%, hallucination risk spikes. Three levers: Monitor, Compact, Hand off.",
+          "notes": {
+            "smart-zone-discipline": {
+              "header": "Smart zone discipline",
+              "description": "Keeping context windows under 50% capacity guarantees high accuracy and prevents silent prompt drift."
             }
           }
         },
@@ -1233,18 +1217,16 @@
               "header": "Agentic compounding",
               "description": "Each tool call and test run appends full file outputs into history, compounding input token counts exponentially."
             }
-          },
-          "slides": {
-            "the-compounding-cost-curve": {
-              "title": "The Compounding Cost Curve",
-              "caption": "The same bug fix, priced across models.",
-              "prose": "You are billed for tokens processed on every turn, not window capacity. A routine bug fix produces a 14× price swing across models.",
-              "notes": {
-                "the-14x-spread": {
-                  "header": "The 14x cost spread",
-                  "description": "At scale, routing identical loops between frontier and economy tiers creates a multi-thousand-dollar difference each month."
-                }
-              }
+          }
+        },
+        "the-compounding-cost-curve": {
+          "title": "The Compounding Cost Curve",
+          "caption": "The same bug fix, priced across models.",
+          "prose": "You are billed for tokens processed on every turn, not window capacity. A routine bug fix produces a 14× price swing across models.",
+          "notes": {
+            "the-14x-spread": {
+              "header": "The 14x cost spread",
+              "description": "At scale, routing identical loops between frontier and economy tiers creates a multi-thousand-dollar difference each month."
             }
           }
         },

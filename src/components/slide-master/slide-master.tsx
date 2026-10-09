@@ -1,4 +1,3 @@
-import { targetAnchor } from '@/lib/episode.pure';
 import { cn } from '@/lib/utils';
 import type { ReactNode } from 'react';
 
@@ -19,16 +18,6 @@ export function SlideFrame({ className, children }: { className?: string; childr
   return (
     <article className={cn('flex min-h-[calc(100svh-8rem)] flex-col py-16 md:py-24', className)}>{children}</article>
   );
-}
-
-/**
- * Legacy: the id of one element a Speaker note can point at (FE-010 §4),
- * `<slide anchor>--<element>`, or none when the layout was given no anchor.
- * Slides written with a kit mark targets with `data-target` instead. Delete
- * with the last legacy Episode.
- */
-export function elementId(anchor: string | undefined, element: string): string | undefined {
-  return anchor === undefined ? undefined : targetAnchor(anchor, element);
 }
 
 const TITLE_SIZE = {

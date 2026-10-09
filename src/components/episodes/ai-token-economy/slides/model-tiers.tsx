@@ -1,8 +1,9 @@
-import type { EpisodeSection } from '@/components/episode-page/episode-page-container.pure';
-import { SectionSlide } from '@/components/slide-master/legacy/section-slide';
-import { elementId, SlideProse } from '@/components/slide-master/slide-master';
+import { slidesFor, type TargetProps } from '@/components/slide-master/episode-record';
+import { SectionSlide } from '@/components/slide-master/section-slide';
+import { SlideProse } from '@/components/slide-master/slide-master';
 import type { ReactElement } from 'react';
-import { contextOf, type SectionsT } from './context';
+
+const slide = slidesFor('ai-token-economy');
 
 function Phase1Card(): ReactElement {
   return (
@@ -49,9 +50,9 @@ function Phase3Card(): ReactElement {
   );
 }
 
-function RoutingFlow({ id }: { id?: string }): ReactElement {
+function RoutingFlow({ 'data-target': dataTarget }: TargetProps): ReactElement {
   return (
-    <div id={id} className="mt-8 grid gap-4 lg:grid-cols-3">
+    <div data-target={dataTarget} className="mt-8 grid gap-4 lg:grid-cols-3">
       <Phase1Card />
       <Phase2Card />
       <Phase3Card />
@@ -59,23 +60,17 @@ function RoutingFlow({ id }: { id?: string }): ReactElement {
   );
 }
 
-export function modelTiers(t: SectionsT): EpisodeSection {
-  const title = t('model-tiers.title');
-  const caption = t('model-tiers.caption');
-  const { anchor, notes, voiceScript } = contextOf(t, 'model-tiers');
-
-  return {
-    slug: 'model-tiers',
-    title,
-    minutes: { en: 2, de: 2 },
-    notes,
-    voiceScript,
-    slides: [],
-    content: (
-      <SectionSlide anchor={anchor} title={title} caption={caption}>
-        <SlideProse id={elementId(anchor, 'prose')}>{t('model-tiers.prose')}</SlideProse>
-        <RoutingFlow id={elementId(anchor, 'routing-flow')} />
-      </SectionSlide>
-    ),
-  };
-}
+export const modelTiers = slide({
+  slug: 'model-tiers',
+  minutes: { en: 2, de: 2 },
+  notes: [
+    { slug: 'tiered-stack-architecture', target: 'title' },
+    { slug: 'zero-marginal-thinking', target: 'routing-flow' },
+  ],
+  content: ({ t, target, Title }) => (
+    <SectionSlide title={<Title>{t('title')}</Title>} caption={t('caption')}>
+      <SlideProse>{t('prose')}</SlideProse>
+      <RoutingFlow {...target('routing-flow')} />
+    </SectionSlide>
+  ),
+});
