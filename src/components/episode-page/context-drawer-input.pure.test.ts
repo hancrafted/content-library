@@ -50,7 +50,7 @@ const note = { slug: 'n', header: 'H', description: 'D', target: 'prose' };
 const segment = { slug: 's', from: 0, to: 1, title: 'T', keywords: [], script: 'S' };
 
 describe('success cases', () => {
-  it('gives each placed Slide an item under its id, with notes, script and full target ids', () => {
+  it("gives each placed Slide an item under its id, with notes, script and each note's short target, scoped by the item id", () => {
     // ARRANGE
     const placed = [
       section('foundations', { title: 'Foundations', notes: [{ ...note, target: 'title' }] }, [
@@ -58,11 +58,11 @@ describe('success cases', () => {
       ]),
     ];
     const expected = [
-      { id: 'foundations', title: 'Foundations', notes: [{ ...note, target: 'foundations--title' }], script: [] },
+      { id: 'foundations', title: 'Foundations', notes: [{ ...note, target: 'title' }], script: [] },
       {
         id: 'foundations--why',
         title: 'Why',
-        notes: [{ ...note, target: 'foundations--why--prose' }],
+        notes: [{ ...note, target: 'prose' }],
         script: [segment],
       },
     ];

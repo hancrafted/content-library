@@ -21,7 +21,7 @@ export interface SpeakerNoteItem {
   /** Further reading, numbered in this order: `[n]` in `description` cites source n. */
   readonly sources?: readonly NoteSource[];
   readonly image?: { readonly src: string; readonly alt: string };
-  /** On an Episode record, a short element name; in a drawer item, the element's full DOM id. */
+  /** The short name of the element it explains, marked `data-target` inside its Slide (FE-010 §4). */
   readonly target: string;
 }
 
