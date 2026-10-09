@@ -31,7 +31,8 @@ export const maintainingMarkdownForAi = {
     return {
       title: t('title'),
       caption: t('caption'),
-      sections: sections(sectionsT),
+      // Legacy: the slide builders read by runtime key; converting this Episode to Slide files drops the cast.
+      sections: sections(sectionsT as unknown as SectionsT),
     };
   },
 } satisfies Episode;
