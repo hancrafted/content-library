@@ -4,7 +4,7 @@
 // .archgate/adrs/ and their companion .rules.ts files — frontmatter bundle and
 // order, the six canonical sections, the size budget, the shape grammar, and
 // the rules-file duties. The .claude/rules runtime-loading channel is GEN-002's.
-// All rules run at error (GEN-001 §7); there is no migration epoch — an ADR
+// All rules run at error (§5.3); there is no migration epoch — an ADR
 // conforms fully or the build fails. Further rules or a tier change land only by
 // deliberate ADR amendment.
 const ADR_MD_GLOB = '.archgate/adrs/*.md';
@@ -604,7 +604,7 @@ export default {
 
     'adr-error-tier': {
       description:
-        'Every companion rule runs at the error tier (§7): a rules file must not declare a warning- or info-tier severity.',
+        'Every companion rule runs at the error tier (§5.3): a rules file must not declare a warning- or info-tier severity.',
       severity: 'error',
       async check(ctx) {
         const rulesFiles = await ctx.glob(RULES_GLOB);
@@ -612,7 +612,7 @@ export default {
           const source = await ctx.readFile(rf);
           for (const m of source.matchAll(/severity[ \t]*:[ \t]*["'](warning|info)["']/g)) {
             ctx.report.violation({
-              message: `Rules file declares a '${m[1]}' severity but GEN-001 §7 runs every rule at 'error' — change or drop it (GEN-001 [adr-error-tier]).`,
+              message: `Rules file declares a '${m[1]}' severity but GEN-001 §5.3 runs every rule at 'error' — change or drop it (GEN-001 [adr-error-tier]).`,
               file: rf,
             });
           }

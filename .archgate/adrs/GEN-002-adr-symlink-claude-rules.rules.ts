@@ -4,7 +4,7 @@
 // governing ADR into agent context on Read. One entry per ADR with a non-empty
 // paths:, none for an unscoped ADR, and no orphan left behind. Presence only —
 // archgate's reader resolves symlinks, so a copied body is indistinguishable
-// from a pointer (GEN-002 §1.4, a review duty). Runs at error (GEN-001 §7).
+// from a pointer (GEN-002 §1.4, a review duty).
 // Self-contained by design: archgate forbids imports between rules files.
 const ADR_MD_GLOB = '.archgate/adrs/*.md';
 const CLAUDE_RULES_GLOB = '.claude/rules/*.md';
