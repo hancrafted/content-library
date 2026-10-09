@@ -193,5 +193,12 @@ export default tseslint.config(
     files: ['**/*.test.ts'],
     rules: { 'max-lines-per-function': 'off', 'max-lines': 'off' },
   },
+  {
+    // FE-002: a Slide's Canvas is free-form markup, so its server files drop the
+    // per-function line cap; complexity and the file cap still hold, and
+    // `client/` keeps every cap.
+    files: ['src/components/episodes/*/{slides,canvas}/**/*.{ts,tsx}'],
+    rules: { 'max-lines-per-function': 'off' },
+  },
   eslintConfigPrettier,
 );
