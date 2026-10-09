@@ -193,21 +193,31 @@
   "episodes": {
     "page-template": {
       "title": "Seitenvorlage",
-      "caption": "Eine Episode, von der Titelfolie bis zum letzten Abschnitt: die Vorlage, aus der jede weitere Episode entsteht.",
-      "description": "Das Layout jeder Episode: Abschnitte aus Folien, untereinander auf einer Seite.",
+      "caption": "Die kleinste Episode, die sich zu kopieren lohnt: zwei Abschnitte, eine Folie mit Notizen und Sprechtext, eine nur mit Bild.",
+      "description": "Diese Episode kopieren, um eine neue zu beginnen: Abschnitte aus Folien, untereinander auf einer Seite.",
       "slides": {
         "foundations": {
           "title": "Grundlagen",
-          "caption": "Das System, aus dem jede Episode entsteht: ein Folienmaster, wenige Folienlayouts, Texte mit Schlüsseln."
+          "caption": "Ein Abschnitt beginnt mit einer eigenen Folie; ihr Titel benennt den Abschnitt."
         },
         "why-a-template": {
-          "title": "Warum jede Episode mit derselben gemeinsamen Referenzvorlage beginnt",
-          "caption": "Jede Episode teilt dasselbe Rückgrat: Episode, Abschnitt, Folie.",
-          "prose": "Das Markup bleibt frei. Nur die Wörter tragen Schlüssel, aus Abschnitts-Slug, Folien-Slug und Rolle, sodass eine Übersetzung nie durch ein Layout-Schema muss.",
+          "title": "Warum jede Episode als Kopie beginnt",
+          "caption": "Ein Rückgrat: Episode, Abschnitt, Folie.",
+          "prose": "Diesen Ordner kopieren, dann die Wörter ersetzen. Eine <ref>Referenz-Episode</ref> hält jede Episode in derselben Form.",
+          "spine": {
+            "episode": "Episode",
+            "section": "Abschnitt",
+            "slide": "Folie",
+            "next": "Nächste Ebene"
+          },
           "notes": {
             "reference-episode": {
               "header": "Warum eine Referenz-Episode",
               "description": "Die Vorlage sorgt dafür, dass jede Episode gleich aufgebaut ist. Zeigen Sie dabei auf den Fließtext."
+            },
+            "spine": {
+              "header": "Drei Ebenen, eine Seite",
+              "description": "Eine Episode enthält Abschnitte, ein Abschnitt enthält Folien. Mit dem Knopf gehen Sie das Rückgrat hinab."
             }
           },
           "voiceScript": {
@@ -216,58 +226,22 @@
                 "title": "Die Vorlage in einem Atemzug",
                 "keywords": "Vorlage, gleiche Form, jede Episode",
                 "script": "Eine Referenz-Episode zeigt die Form einmal, damit die nächste Episode ein funktionierendes Beispiel kopiert, statt eine neue zu erfinden."
+              },
+              "the-spine": {
+                "title": "Das Rückgrat",
+                "keywords": "Episode, Abschnitt, Folie",
+                "script": "Gehen Sie die drei Ebenen hinab: die Episode, ihre Abschnitte und die Folien in jedem.",
+                "bridge": "Als Nächstes eine Folie, die nur ein Bild ist."
               }
             }
           }
         },
-        "three-layers": {
-          "title": "Warum Masterrahmen und Übersetzungskataloge mit Schlüsseln niemals Zuständigkeiten teilen",
-          "caption": "Jede Ebene verantwortet genau eine Sache.",
-          "columns": {
-            "master": {
-              "title": "Folienmaster",
-              "prose": "Verantwortet das Allgemeine: Rahmen, Abstände, Schriftskala."
-            },
-            "layouts": {
-              "title": "Folienlayouts",
-              "prose": "Setzen den Folienmaster zu einem Entwurf zusammen. Eine neue Art Folie ist ein neues Folienlayout."
-            },
-            "catalog": {
-              "title": "Katalog",
-              "prose": "Hält jeden Text je Sprache, adressiert nach Bedeutung, nie nach Position."
-            }
-          }
-        },
-        "interlude": {
-          "title": "Zwischenspiel",
-          "caption": "Ein Abschnitt kann für sich stehen, ganz ohne Inhaltsfolien."
-        },
         "next-steps": {
-          "title": "Wohin sich die Vorlage entwickelt, sobald die offenen Fragen geklärt sind",
-          "caption": "{count, plural, one {# Folie} other {# Folien}} zum Abschluss der Episode."
-        },
-        "building-blocks": {
-          "title": "Bausteine",
-          "caption": "Drei Folienlayouts belegen die Aufteilung.",
-          "columns": {
-            "section": {
-              "title": "Abschnittsfolie",
-              "prose": "Titel und Untertitel, vertikal zentriert."
-            },
-            "basic": {
-              "title": "Einfache Seite",
-              "prose": "Titel, Untertitel und ein Absatz Fließtext."
-            },
-            "three-column": {
-              "title": "Drei Spalten",
-              "prose": "Titel, Untertitel und drei Spalten mit eigenem Schlüssel."
-            }
-          }
+          "title": "Nächste Schritte",
+          "caption": "Ein zweiter Abschnitt, der zeigt, wie Abschnitte sich stapeln."
         },
         "what-comes-next": {
-          "title": "Wie es weitergeht",
-          "caption": "Echte Episoden wachsen von hier aus.",
-          "prose": "Diagramme, Sprechernotizen und der Videolink hängen sich später an dasselbe Rückgrat, ohne Bestehendes umzuschreiben."
+          "statement": "Jetzt die Wörter ersetzen."
         }
       }
     },
