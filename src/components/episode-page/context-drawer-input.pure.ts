@@ -1,13 +1,14 @@
 import type { ContextItem } from '@/components/context-drawer/context-drawer-input';
 import { splitCitations, type SpeakerNoteItem, type VoiceScriptSegment } from '../../lib/context-drawer.pure';
-import { checkedSlug, slidesInPageOrder, targetAnchor, titleAnchor, type PlacedSlide } from '../../lib/episode.pure';
+import { checkedSlug, slidesInPageOrder, titleAnchor, type PlacedSlide } from '../../lib/episode.pure';
 import type { EpisodeSlide, PlacedEpisodeSection } from './episode-page-container.pure';
 
 /*
  * THE SEAM. This file and `context-drawer-input.ts` are the only place the
  * Context drawer meets an Episode record. They turn placed Slides into
  * `ContextItem`s: item id = the id the walk placed the Slide at (the id its
- * wrapper carries), note target = the full element id (FE-010 §8).
+ * wrapper carries); each note keeps its short `target`, which the drawer looks
+ * up inside that wrapper (FE-010 §8).
  */
 
 /*
@@ -77,7 +78,7 @@ function itemOf({ id, slide }: PlacedSlide<EpisodeSlide>): ContextItem {
   return {
     id,
     title: slide.title,
-    notes: notes.map((note) => ({ ...note, target: targetAnchor(id, note.target) })),
+    notes,
     script,
   };
 }
@@ -92,8 +93,7 @@ function titleItem(explainer: string): ContextItem {
 
 /**
  * The Title slide's item, then one item per placed Slide in page order (the
- * order the table of contents lists). Each note's `target` is resolved to the
- * full id its Slide's markup carries. Throws on a malformed Slide, so a broken
+ * order the table of contents lists). Throws on a malformed Slide, so a broken
  * Episode fails `next dev` and the static build alike.
  */
 export function contextItemsOf(placed: readonly PlacedEpisodeSection[], explainer: string): ContextItem[] {

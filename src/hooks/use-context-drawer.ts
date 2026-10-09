@@ -1,8 +1,9 @@
 import { currentItemId, drawerKeyAction, type DrawerTab } from '@/lib/context-drawer.pure';
+import type { NoteRef } from '@/lib/context-link.pure';
 import { readPrefs, writePrefs } from '@/lib/prefs-storage';
 import { DEFAULT_DRAWER_MODE, type DrawerMode } from '@/lib/prefs.pure';
 import { useCallback, useEffect, useRef, useState, type RefObject } from 'react';
-import { itemOfNote, useContextLinks, usePinnedNote } from './use-context-links';
+import { noteOfRef, useContextLinks, usePinnedNote } from './use-context-links';
 import { useActiveSlide } from './use-url-state';
 
 /** Alt+N toggles and Escape closes, from anywhere on the page. */
@@ -86,7 +87,7 @@ function useDrawerMode(): [DrawerMode, (mode: DrawerMode) => void] {
 
 /** A note a context reference opened, and the item it was shown for (valid while that item stays current). */
 interface Revealed {
-  readonly note: string;
+  readonly note: NoteRef;
   readonly item: string;
   readonly observed: string | null;
 }
@@ -109,9 +110,8 @@ export function useContextDrawer(ids: readonly string[]) {
   const close = () => setOpen(false);
   const live = revealed && revealed.observed === observed ? revealed : null;
   const reveal = useCallback(
-    (note: string) => {
-      const item = itemOfNote(note);
-      if (item) setRevealed({ note, item, observed });
+    (note: NoteRef) => {
+      if (noteOfRef(note)) setRevealed({ note, item: note.item, observed });
       setTab('notes');
       setOpen(true);
     },
