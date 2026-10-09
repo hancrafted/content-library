@@ -37,23 +37,22 @@ export async function HeroSection({ locale }: { locale: Locale }) {
       eyebrow={t('eyebrow')}
       caption={t.rich('caption', {
         plan: (text) => (
-          <span data-caption-word data-testid="hero-plan" aria-describedby="hero-motion-hint">
+          <span data-caption-word data-testid="hero-plan">
             {text}
           </span>
         ),
         spec: (text) => (
-          <span data-caption-word data-testid="hero-spec" aria-describedby="hero-motion-hint">
+          <span data-caption-word data-testid="hero-spec">
             {text}
           </span>
         ),
         review: (text) => (
-          <span data-caption-word data-testid="hero-review" aria-describedby="hero-motion-hint">
+          <span data-caption-word data-testid="hero-review">
             {text}
           </span>
         ),
       })}
       scene={heroScene(t)}
-      words={[t('plan'), t('spec'), t('review')]}
       labels={heroLabels(t)}
     />
   );

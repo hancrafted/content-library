@@ -32,7 +32,7 @@
       "newTab": "öffnet in einem neuen Tab",
       "open": "Deine Beförderung öffnen",
       "skip": "Animation stoppen",
-      "motionHint": "Mit Mauszeiger oder Tastaturfokus auf diesen Wörtern oder einem der Buttons leert sich der Stapel. Außerhalb wächst er wieder.",
+      "motionHint": "Mit Mauszeiger oder Tastaturfokus auf Folgen leert sich der Stapel. Mit mir arbeiten leert ihn dreimal so schnell. Außerhalb wächst er wieder.",
       "tasks": {
         "bug": "DEADLINE",
         "ticket": "AUFGABE",

@@ -98,12 +98,33 @@ export function PaperTray({ x, y }: { x: number; y: number }) {
         opacity=".22"
         filter="url(#hero-soft-shadow)"
       />
-      <path d="M-10-16h283l116 133H83Z" fill="var(--hero-metal-dark)" />
-      <path d="M-4-10h271l104 119H88Z" fill="var(--hero-tray-inner)" />
-      <path d="M-10-16 83 117v28L-10 11Z" fill="var(--hero-metal)" />
-      <path d="M83 117h306v28H83Z" fill="url(#hero-metal)" />
-      <path d="M-10-16h283l116 133M83 117h306" stroke="var(--hero-metal-light)" strokeWidth="3" />
-      <path d="M200 126h72" stroke="var(--hero-metal-dark)" strokeWidth="6" strokeLinecap="round" />
+      <path d="M-8-35Q-12-45 0-45h260q10 0 18 10l105 119q9 11-3 17H85Z" fill="var(--hero-metal-dark)" />
+      <path d="M0-6h261l101 115H88Z" fill="var(--hero-tray-inner)" />
+      <path d="M-8-35 85 79v60q-8 3-15-7L-8 29q-4-5-4-15v-44Z" fill="url(#hero-metal)" />
+      <path
+        d="M-8-35Q-12-45 0-45h260q10 0 18 10l105 119"
+        stroke="var(--hero-metal-light)"
+        strokeWidth="3"
+        strokeLinecap="round"
+      />
+    </g>
+  );
+}
+
+export function PaperTrayFront({ x, y }: { x: number; y: number }) {
+  return (
+    <g transform={`translate(${x} ${y})`}>
+      <path
+        d="M85 79h72q14 0 20 11 5 10 22 10h60q17 0 23-10 6-11 20-11h72q15 0 15 12v42q0 12-14 12H98q-13 0-13-12Z"
+        fill="url(#hero-metal)"
+      />
+      <path
+        d="M85 79h72q14 0 20 11 5 10 22 10h60q17 0 23-10 6-11 20-11h72"
+        stroke="var(--hero-metal-light)"
+        strokeWidth="3"
+        strokeLinecap="round"
+      />
+      <path d="M108 135h250" stroke="var(--hero-metal-dark)" strokeOpacity=".5" />
     </g>
   );
 }

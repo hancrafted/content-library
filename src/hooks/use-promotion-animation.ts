@@ -1,4 +1,5 @@
 import { createPromotionTimeline } from '@/hooks/promotion-timeline';
+import type { PaperDrain } from '@/lib/paper-pile.pure';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { useEffect, useRef, type RefObject } from 'react';
@@ -7,7 +8,7 @@ type Animation = ReturnType<typeof createPromotionTimeline>;
 const ANIMATED_VIEW =
   '(min-width: 1024px) and (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine)';
 
-function mountAnimation(element: HTMLElement, animation: RefObject<Animation | null>, draining: RefObject<boolean>) {
+function mountAnimation(element: HTMLElement, animation: RefObject<Animation | null>, draining: RefObject<PaperDrain>) {
   const active = createPromotionTimeline(element);
   animation.current = active;
   active.setDraining(draining.current);
@@ -38,7 +39,7 @@ function watchVisibility(element: HTMLElement, active: Animation) {
   };
 }
 
-export function usePromotionAnimation(root: RefObject<HTMLElement | null>, draining: boolean) {
+export function usePromotionAnimation(root: RefObject<HTMLElement | null>, draining: PaperDrain) {
   const animation = useRef<Animation | null>(null);
   const desiredDrain = useRef(draining);
   useGSAP(

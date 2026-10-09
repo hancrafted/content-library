@@ -2,6 +2,7 @@
 
 import { usePromotionAnimation } from '@/hooks/use-promotion-animation';
 import { localizePath, type Locale } from '@/lib/locale.pure';
+import type { PaperDrain } from '@/lib/paper-pile.pure';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
 import { useRef, useState, type ReactNode } from 'react';
@@ -14,37 +15,38 @@ interface PromotionHeroProps {
   caption: ReactNode;
   scene: ReactNode;
   labels: { episodes: string; contact: string; newTab: string; open: string; skip: string; motionHint: string };
-  words: string[];
 }
 
-function promiseTarget(target: EventTarget | null) {
-  return target instanceof Element
-    ? target.closest('[data-caption-word], [data-testid="hero-episodes"], [data-testid="hero-contact"]')
-    : null;
+function promiseTarget(target: EventTarget | null): PaperDrain {
+  if (!(target instanceof Element)) return 'none';
+  if (target.closest('[data-hero-primary]')) return 'primary';
+  return target.closest('[data-hero-secondary]') ? 'secondary' : 'none';
 }
 
 function usePromiseInteraction() {
-  const [hovered, setHovered] = useState(false);
-  const [focused, setFocused] = useState(false);
+  const [hovered, setHovered] = useState<PaperDrain>('none');
+  const [focused, setFocused] = useState<PaperDrain>('none');
   const events = {
     onPointerOver: (event: React.PointerEvent) => {
-      if (event.pointerType === 'mouse') setHovered(!!promiseTarget(event.target));
+      if (event.pointerType === 'mouse') setHovered(promiseTarget(event.target));
     },
     onPointerOut: (event: React.PointerEvent) => {
-      if (event.pointerType === 'mouse') setHovered(!!promiseTarget(event.relatedTarget));
+      if (event.pointerType === 'mouse') setHovered(promiseTarget(event.relatedTarget));
     },
-    onFocus: (event: React.FocusEvent) => setFocused(!!promiseTarget(event.target)?.matches(':focus-visible')),
-    onBlur: () => setFocused(false),
+    onFocus: (event: React.FocusEvent) =>
+      setFocused(event.target.matches(':focus-visible') ? promiseTarget(event.target) : 'none'),
+    onBlur: () => setFocused('none'),
   };
-  return { draining: hovered || focused, events };
+  return { draining: hovered === 'none' ? focused : hovered, events };
 }
 
 function HeroActions({ locale, labels }: Pick<PromotionHeroProps, 'locale' | 'labels'>) {
   return (
-    <div className={styles.actions}>
+    <div data-hero-actions className={styles.actions}>
       <Link
         data-testid="hero-episodes"
         data-hero-primary
+        aria-describedby="hero-motion-hint"
         href={localizePath('/', locale, 'episodes')}
         className={styles.primary}
       >
@@ -53,6 +55,8 @@ function HeroActions({ locale, labels }: Pick<PromotionHeroProps, 'locale' | 'la
       </Link>
       <a
         data-testid="hero-contact"
+        data-hero-secondary
+        aria-describedby="hero-motion-hint"
         href="https://calendly.com/hanche2001/30min"
         target="_blank"
         rel="noopener noreferrer"
@@ -79,14 +83,6 @@ function HeroCopy({ copy }: { copy: PromotionHeroProps }) {
       <HeroActions locale={copy.locale} labels={copy.labels} />
     </div>
   );
-}
-
-function FlyingWords({ words }: Pick<PromotionHeroProps, 'words'>) {
-  return words.map((word, index) => (
-    <span key={index} data-flying-word className={styles.flyingWord} aria-hidden="true">
-      {word}
-    </span>
-  ));
 }
 
 function SceneControls({ labels, burst }: { labels: PromotionHeroProps['labels']; burst: () => void }) {
@@ -119,7 +115,6 @@ export function PromotionHero(props: PromotionHeroProps) {
       <p id="hero-motion-hint" className="sr-only">
         {props.labels.motionHint}
       </p>
-      <FlyingWords words={props.words} />
     </section>
   );
 }
