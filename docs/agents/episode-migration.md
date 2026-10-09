@@ -110,13 +110,13 @@ Done when: both pass, the build lists `/episode/<ep>` and `/de/episode/<ep>`, an
 
 ## 9. Check every Slide in both themes
 
-Preview a worktree with `npx serve out -l 3100`, then shoot each locale in each theme:
+After step 8's build, shoot each locale in each theme; the script serves `out/` itself:
 
 ```sh
-npm run screenshot -- /episode/<ep> --theme light --base http://localhost:3100
-npm run screenshot -- /episode/<ep> --theme dark --base http://localhost:3100
-npm run screenshot -- /de/episode/<ep> --theme light --base http://localhost:3100
-npm run screenshot -- /de/episode/<ep> --theme dark --base http://localhost:3100
+npm run screenshot -- /episode/<ep> --theme light
+npm run screenshot -- /episode/<ep> --theme dark
+npm run screenshot -- /de/episode/<ep> --theme light
+npm run screenshot -- /de/episode/<ep> --theme dark
 ```
 
 First run on a machine: `npx playwright install chromium`. Read every PNG in `.screenshots/<ep>[-de]/<theme>/`.
