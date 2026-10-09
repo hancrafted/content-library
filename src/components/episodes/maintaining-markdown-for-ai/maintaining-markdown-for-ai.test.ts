@@ -1,4 +1,7 @@
-import { MODALS_DATA, ROLES_DATA } from '@/components/episodes/maintaining-markdown-for-ai/client/markdown-roles-data.pure';
+import {
+  MODALS_DATA,
+  ROLES_DATA,
+} from '@/components/episodes/maintaining-markdown-for-ai/client/markdown-roles-data.pure';
 import {
   MAINTAINING_CONTEXT,
   contextFor,
