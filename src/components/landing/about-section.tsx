@@ -20,8 +20,17 @@ function storyCopy(t: AboutT, id: StoryId): StoryCardCopy {
   };
 }
 
+/** Leaf by leaf: next-intl types `t.raw` to leaf keys only, so an object node cannot be read whole. */
 function matrixLabels(t: AboutT): MatrixLabels {
-  return { axes: t.raw('axes') as MatrixLabels['axes'] };
+  return {
+    axes: {
+      individual: t('axes.individual'),
+      team: t('axes.team'),
+      organisation: t('axes.organisation'),
+      process: t('axes.process'),
+      technology: t('axes.technology'),
+    },
+  };
 }
 
 function IdentityCard({ t }: { t: AboutT }) {
