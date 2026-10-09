@@ -2,9 +2,12 @@ import { load, type CheerioAPI } from 'cheerio';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
+import nextConfig from '../../next.config';
 import { LOCALES, localizePath } from '../../src/lib/locale.pure';
 import { ROUTES } from '../../src/lib/routes';
 import { exportedFile, OUT_DIR } from './exported-pages';
+
+const basePath = nextConfig.basePath ?? '';
 
 const LANDING_PAGES = LOCALES.map((locale) => ({
   locale,
@@ -57,7 +60,7 @@ describe('landing page post-build structure', () => {
       .map((_, el) => $(el).attr('href'))
       .get();
     const expected = ['amnesiac-freelancer', 'maintaining-markdown-for-ai', 'ai-token-economy', 'page-template'].map(
-      (slug) => (locale === 'de' ? `/de/episode/${slug}/` : `/episode/${slug}/`),
+      (slug) => `${basePath}${locale === 'de' ? `/de/episode/${slug}/` : `/episode/${slug}/`}`,
     );
 
     expect(episodeLinks).toEqual(expected);
