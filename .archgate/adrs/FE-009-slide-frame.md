@@ -4,10 +4,8 @@ id: FE-009
 title: 'Slide Frame'
 domain: frontend
 rules: false
-# prettier-ignore
-files: ['src/components/episode-page/**', 'src/components/slide-master/**', 'src/components/episodes/**', 'src/hooks/use-slide-zone*', 'src/hooks/use-revealed-on-view.ts', 'src/lib/slide-zone.pure*', 'src/lib/reading-line.pure*', 'src/app/globals.css', 'eslint.config.mjs', '.dependency-cruiser.cjs', 'tests/post-build/episode-structure.build.test.ts']
-# prettier-ignore
-paths: ['src/components/episode-page/**', 'src/components/slide-master/**', 'src/components/episodes/**', 'src/hooks/use-slide-zone*', 'src/hooks/use-revealed-on-view.ts', 'src/lib/slide-zone.pure*', 'src/lib/reading-line.pure*', 'src/app/globals.css', 'eslint.config.mjs', '.dependency-cruiser.cjs', 'tests/post-build/episode-structure.build.test.ts']
+files: ['src/components/{episode*,slide-master}/**', 'src/hooks/**', 'src/lib/{slide-zone,reading-line}.pure*.ts']
+paths: ['src/components/{episode*,slide-master}/**', 'src/hooks/**', 'src/lib/{slide-zone,reading-line}.pure*.ts']
 description: 'Wrapper owns mechanics, canvas owns creativity: a single-column Content area, a server Slide wrapper that never clips, a client SlideMount that drops far content, one observer with two thresholds, and a pause duty for looping animation.'
 ---
 
@@ -15,53 +13,49 @@ description: 'Wrapper owns mechanics, canvas owns creativity: a single-column Co
 
 ## Context
 
-**Status: proposal** ([#11](https://github.com/hancrafted/content-library/issues/11)). Supersedes the FE-011 and FE-012 proposals from the Slide frame prototypes, which were never merged; their numbers are not reused.
+An Episode stacks many Slides, some heavy (charts, looping demos). Navigation needs every Slide to be a stable, measurable box; a visualisation needs total freedom inside it. The two conflict only if one element serves both.
 
-An Episode stacks many Slides, some heavy (charts, looping demos). Navigation needs every Slide to be a stable, measurable box; a visualisation needs total freedom inside it. Those demands conflict only if one element serves both.
+**The split:** the Slide wrapper owns mechanics — anchor, height, mount boundary. The Canvas inside is ungoverned. A heading may sit centred, top or lower right, so it is never an anchor: placement would move the observer's target.
 
-**The split: the wrapper owns mechanics, the Canvas owns creativity.** The Slide wrapper is governed by position: anchor, height, mount boundary. The Canvas inside is governed by nothing (FE-007 §4). A Slide heading may sit centred, top or lower right, so it is never a mechanical anchor: content placement would move the observer's target. The wrapper anchors instead.
+**Why a grid:** reading mode looks like flow layout, but a future overview mode re-tiles the same cells into columns without new markup.
 
-**Why a grid.** The Content area is a single-column CSS grid, one cell per Slide. Reading mode looks like flow layout, but a future overview mode re-tiles the same cells into columns without restructuring markup. A flattened flow layout would cost that.
+**Why a server wrapper and a client mount:** the wrapper carries anchor and min-height, so it must be in the static HTML for deep links, print and crawlers. Only "mount or not" needs JavaScript.
 
-**Why a server wrapper and a client mount.** The wrapper carries the anchor and the min-height, so it must exist in the static HTML for deep links, print and crawlers (FE-005, FE-006). Only the decision "mount or not" needs JavaScript, so a small `SlideMount` inside it holds that.
+**Why three zones, two thresholds:** `far` (unmounted, height kept), `near` (mounted, paused), `active` (mounted, playing, highlighted). The reading line decides `active`; a wider margin decides `near`, so content is ready before it arrives. One threshold gives either pop-in or a premature highlight. One observer runs both, so the reading-line rule runs once.
 
-**Why three zones, two thresholds.** `far` (content unmounted, wrapper keeps its height), `near` (mounted, paused) and `active` (mounted, playing, highlighted). The reading line (`src/lib/reading-line.pure.ts`) decides `active`; a wider approach margin decides `near`, so content is ready before it arrives. One threshold gives either a pop-in or a premature highlight. Both come from one observer, so the reading-line rule runs once ([FE-001](./FE-001-state-management.md)).
+**Unmount discards state, by choice:** a played animation replays on return; persisting it is a Canvas concern.
 
-**Unmount discards state, by choice.** A played animation replays on return. That is chosen, not discovered; persisting it is a Canvas concern outside the wrapper.
-
-**Title slide:** its id leads the observer's ids, so scrolling back makes it `active`, clears the previous Slide and pauses looping islands. **Cost of the `near` default:** an unreported Slide reads `near`, so hydration mounts every Slide's content once; the first observer callback only removes content.
-
-**Reserved, not built:** overview mode (disables the observer, re-tiles the grid); guided-tour popovers (only the portal root exists); keyboard landing, a scroll target distinct from the wrapper's top, so an arrow-key jump to a Slide with a centred heading does not land on empty space.
+**Reserved, not built:** overview mode; guided-tour popovers (only the portal root exists); keyboard landing on a scroll target distinct from the wrapper's top.
 
 ## Decision
 
 ### 1. The split
 
 1. The Slide wrapper MUST own a Slide's mechanics: anchor, min-height, mount boundary, zone.
-2. The Canvas MUST stay ungoverned (FE-007 §4); no rule here constrains markup inside `SlideMount`.
+2. The Canvas MUST stay ungoverned; nothing here constrains markup inside `SlideMount`.
 
 ### 2. Content area
 
-1. Slides MUST render inside one Content area: a single-column grid (`grid grid-cols-1`), one cell per Slide wrapper.
+1. Slides MUST render inside one Content area: a single-column grid, one cell per Slide wrapper.
 2. The Content area MUST own vertical rhythm; a wrapper MUST NOT declare outer margins or gaps.
-3. Grouping elements between the Content area and a wrapper (the Section `<section>`) MUST use `display: contents`.
-4. The Content area MUST host the Episode portal root (`data-slot="portal-root"`).
+3. Grouping elements between Content area and wrapper (the Section `<section>`) MUST use `display: contents`.
+4. The Content area MUST host the Episode portal root.
 
 ### 3. Slide wrapper
 
-1. `SlideWrapper` MUST be a server component rendered by `EpisodePageContainer` from one record entry, receiving the id its position gives it (FE-002 §2); it declares nothing itself.
-2. It MUST be at least viewport height (`min-h-svh`), grow with its content and never clip: no `overflow: hidden | auto | scroll` on it.
+1. `SlideWrapper` MUST be a server component rendered by the container from one record entry, taking the id its position gives it.
+2. It MUST be at least viewport height, grow with its content and never clip — no `overflow: hidden | auto | scroll`.
 
 ### 4. SlideMount
 
-1. `SlideMount` MUST be a `*.client.tsx` leaf inside the wrapper that renders its children only outside `far`, keeping the wrapper's measured height while unmounted.
+1. `SlideMount` MUST be a client leaf inside the wrapper that renders its children only outside `far`, keeping the wrapper's height while unmounted.
 2. It MUST provide its Slide id to its subtree, so `useSlideZone()` reads that Slide's zone.
 
 ### 5. One observer
 
-1. One Slide observer component per Episode page (two instances, one per threshold) MUST be the only code under `src/` creating an `IntersectionObserver` but the reveal hook; the Title slide's id (`top`) leads its ids.
-2. Its reading-line threshold decides `active` and MUST call the page service's `reportReading(id)` (FE-001 §2); its approach threshold decides `near` and touches nothing else.
-3. It MUST write zones to one zone store provided at page level, so a new Episode starts fresh.
+1. The Slide observer MUST be the only code under `src/` creating an `IntersectionObserver`, besides the one-shot reveal hook; the Title slide's id (`top`) leads its ids.
+2. Its reading-line threshold decides `active` and reports the reading Slide to the page service; its approach threshold decides `near` and touches nothing else.
+3. It MUST write zones to one page-level zone store, so a new Episode starts fresh.
 
 ### 6. Good citizen
 
@@ -73,15 +67,15 @@ An Episode stacks many Slides, some heavy (charts, looping demos). Navigation ne
 
 1. **DO** add rhythm, gaps and grid changes on the Content area only. (Decision 2)
 2. **DO** let tall Slides grow the page. (Decision 3)
-3. **DO** read a Slide's zone with `useSlideZone()` in any looping island. (Decision 4, Decision 6)
+3. **DO** read a Slide's zone with `useSlideZone()` in any looping island. (Decisions 4 and 6)
 4. **DO** portal popovers into the Episode portal root. (Decision 2)
-5. **DO** put zone and threshold maths in `src/lib/slide-zone.pure.ts`, beside the reading-line rule. (Decision 5)
+5. **DO** put zone and threshold maths beside the reading-line rule in a `.pure.ts`. (Decision 5)
 
 ### Don'ts
 
 1. **DON'T** use a Slide heading as an anchor or observer target. (Decision 1)
 2. **DON'T** clip a wrapper or give it an inner scrollbar. (Decision 3)
-3. **DON'T** create an `IntersectionObserver` outside the Slide observer and the one-shot reveal hook, or use the reveal hook (`src/hooks/use-revealed-on-view.ts`) inside an Episode. (Decision 5)
+3. **DON'T** create another `IntersectionObserver`, or use the reveal hook inside an Episode. (Decision 5)
 4. **DON'T** flatten the Content area to flow layout. (Decision 2)
 5. **DON'T** let a looping animation run in `near` or `far`. (Decision 6)
 6. **DON'T** add a rule that reaches inside the Canvas. (Decision 1)
@@ -100,31 +94,29 @@ An Episode stacks many Slides, some heavy (charts, looping demos). Navigation ne
 
 1. **State resets on return:** interactive Canvas state is lost when a Slide goes `far`.
 2. **Two margins to tune** across breakpoints.
-3. **Pausing is a duty, not a mechanism:** the wrapper cannot see inside the Canvas.
+3. **Pausing is a duty, not a mechanism:** the wrapper can't see inside the Canvas.
+4. **Hydration mounts everything once:** an unreported Slide reads `near`; the first observer callback only removes content.
 
 **Risks:**
 
-1. **A non-grid element between Content area and wrapper breaks the cells.** **Mitigation:** Decision 2.3; the post-build test checks wrappers are grid children.
-2. **Unclipped content bleeds into the next Slide.** **Mitigation:** the Canvas manages its own bounds; browser verification at 375px and 1440px.
-3. **The height kept for a `far` Slide is stale after a resize.** **Mitigation:** the mount re-measures while mounted; a jump is a browser-verification step.
+1. **A non-grid element between Content area and wrapper breaks the cells.** **Mitigation:** §2.3; the post-build test checks wrappers are grid children.
+2. **Unclipped content bleeds into the next Slide.** **Mitigation:** the Canvas manages its own bounds; browser check at 375px and 1440px.
+3. **A `far` Slide's kept height goes stale after a resize.** **Mitigation:** the mount re-measures while mounted; a jump is a browser-check step.
 
 ## Compliance and Enforcement
 
-**Enforcers, earliest first:**
+1. **Unit tests:** zone derivation; wrapper and mount contracts.
+2. **Lint:** `new IntersectionObserver` refused outside the Slide observer and the reveal hook (§5.1).
+3. **Dependency rules:** `SlideMount` and the observer are client leaves reached from the container (§4, §5).
+4. **Post-build test:** Content area grid, portal root, wrappers as grid children, anchors in static HTML (§2, §3).
 
-1. **Fast** (`npm run verify`): zone derivation tests beside `src/lib/slide-zone.pure.ts`; wrapper and mount contract tests under `src/components/episode-page/`.
-2. **Lint** (`eslint.config.mjs`, [#13](https://github.com/hancrafted/content-library/issues/13)): `no-restricted-syntax` on `new IntersectionObserver` outside the Slide observer and the reveal hook, each exempted by its own `files:` block; baseline in FE-001.
-3. **Boundary** (`.dependency-cruiser.cjs`, FE-006): `SlideMount` and the observer are client leaves reached from the container.
-4. **Post-build** (`npm run test:build`): `tests/post-build/episode-structure.build.test.ts` checks the Content area grid, the portal root, wrappers as grid children and anchors in the static HTML.
+**Exception (§5.1):** the reveal hook observes once to stagger in the landing page's About cards, then disconnects. It reports to no page service and writes no zone, so it can't compete for `active`.
 
-**Amended exception (§5.1):** `src/hooks/use-revealed-on-view.ts` is the reveal hook. It observes once to stagger in the landing page's About cards and start their count-up, then disconnects. It reports to no page service and writes no zone, so it cannot compete with the Slide observer for `active`.
-
-**Manual review duties:** looping islands pause outside `active` (§6); the reveal hook is not imported under an Episode (§5.1); no `overflow` on wrappers; the Canvas stays ungoverned. **Browser verification:** far content absent with no scroll-height jump; a looping demo pauses and resumes.
+**Manual review duties:** looping islands pause outside `active` (§6); the reveal hook isn't imported under an Episode (§5.1); no `overflow` on wrappers; the Canvas stays ungoverned. **Browser check:** far content absent with no scroll-height jump; a looping demo pauses and resumes.
 
 **Exceptions:** raise a separate ADR; human approval required.
 
 ## References
 
-- [FE-001 State Management](./FE-001-state-management.md), [FE-002 Episode Page](./FE-002-episode-page.md), [FE-005 Static Export Contract](./FE-005-static-export-contract.md), [FE-006 Server/Client Boundary](./FE-006-server-client-boundary.md), [FE-007 Module Layering](./FE-007-module-layering.md), [FE-010 Context Drawer](./FE-010-context-drawer.md).
 - [`GLOSSARY.md`](../../GLOSSARY.md) — Content area, Slide wrapper, Canvas, Zone.
 - [MDN IntersectionObserver `rootMargin`](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/rootMargin), [MDN `display: contents`](https://developer.mozilla.org/en-US/docs/Web/CSS/display#contents).
