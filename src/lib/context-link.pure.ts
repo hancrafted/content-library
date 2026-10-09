@@ -60,14 +60,6 @@ export function targetSelector(target: string): string {
   return `[${TARGET_ATTR}=${quoted(target)}]`;
 }
 
-/**
- * Legacy: the element id an Episode not yet written as Slide files gives a
- * note target, `<item>--<target>`. Delete with the last legacy Episode.
- */
-export function legacyTargetId(item: string, target: string): string {
-  return `${item}--${target}`;
-}
-
 /** The link of source `number` inside a note's sources, as a citation marker names it. */
 export function sourceLinkSelector(number: string): string {
   return `[${SOURCE_ATTR}=${quoted(number)}] a`;

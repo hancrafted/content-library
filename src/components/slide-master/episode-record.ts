@@ -195,8 +195,3 @@ export function slidesFor<Ep extends RecordEpisodeSlug>(episode: Ep) {
 export function episode<Ep extends RecordEpisodeSlug>(record: EpisodeRecord<Ep>): EpisodeRecord<Ep> {
   return record;
 }
-
-/** True for an Episode record; false for a legacy Episode that renders through `content(locale)`. */
-export function isEpisodeRecord(value: object): value is AnyEpisodeRecord {
-  return 'sections' in value;
-}

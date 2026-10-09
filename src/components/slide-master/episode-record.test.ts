@@ -1,13 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import {
-  episode,
-  isEpisodeRecord,
-  slidesFor,
-  type RuntimeKit,
-  type Section,
-  type SlideKit,
-  type TitledSlide,
-} from './episode-record';
+import { episode, slidesFor, type RuntimeKit, type Section, type SlideKit, type TitledSlide } from './episode-record';
 
 /*
  * The record's typing is its contract: each `@ts-expect-error` below is a
@@ -79,14 +71,13 @@ describe('success cases', () => {
     expect(typeof content).toBe('function');
   });
 
-  it('composes an Episode from Sections whose first Slide is titled, and tells it from a legacy Episode', () => {
+  it('composes an Episode from Sections whose first Slide is titled', () => {
     // ARRANGE
     const sections = [[foundations, whyATemplate], [interlude]] as const;
     // ACT
     const record = episode({ slug: 'page-template', sections });
     // ASSERT
-    expect(isEpisodeRecord(record)).toBe(true);
-    expect(isEpisodeRecord({ slug: 'legacy', content: async () => ({}) })).toBe(false);
+    expect(record.sections).toBe(sections);
   });
 });
 

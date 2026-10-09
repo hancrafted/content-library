@@ -19,15 +19,6 @@ export interface PlacedListSlide<S> extends PlacedSlide<S> {
   readonly level: SlideLevel;
 }
 
-/**
- * An Episode's spine: a Section, by stable slug, listing its page Slides in
- * page order. Every Section also renders its own section slide, so a Section
- * without page Slides still has an anchor.
- */
-export interface SectionOutline extends SlideOutline {
-  readonly slides: readonly SlideOutline[];
-}
-
 /** One Slide record with the id its Slide wrapper carries. */
 export interface PlacedSlide<T> {
   readonly id: string;
@@ -35,7 +26,7 @@ export interface PlacedSlide<T> {
 }
 
 /** A section slide with its page Slides, each placed. */
-export interface PlacedSection<S extends SectionOutline> extends PlacedSlide<S> {
+export interface PlacedSection<S extends { readonly slides: readonly unknown[] }> extends PlacedSlide<S> {
   readonly slides: readonly PlacedSlide<S['slides'][number]>[];
 }
 
@@ -66,22 +57,6 @@ export function checkedSlug(slug: string): string {
   if (!SLUG_RE.test(slug)) throw new Error(`Invalid slug "${slug}": use lowercase kebab-case.`);
   if (slug === TITLE_ANCHOR) throw new Error(`Invalid slug "${slug}": reserved for the Title slide.`);
   return slug;
-}
-
-function assertUnique(anchors: readonly string[]): void {
-  const seen = new Set<string>();
-  for (const anchor of anchors) {
-    if (seen.has(anchor)) throw new Error(`Duplicate slide anchor "${anchor}": slugs must be unique.`);
-    seen.add(anchor);
-  }
-}
-
-/**
- * DOM id of one element inside a Slide: `<slide anchor>--<element>`. Three
- * parts, so it cannot collide with a two-part page-slide anchor (FE-010).
- */
-export function targetAnchor(slide: string, target: string): string {
-  return `${slide}--${checkedSlug(target)}`;
 }
 
 /**
@@ -122,28 +97,8 @@ function assertUniqueSlugs(slugs: readonly string[]): void {
   }
 }
 
-/**
- * Legacy walk over Section outlines (Episodes not yet converted to Section
- * lists). Delete with the last legacy Episode.
- *
- * The one walk over an Episode: each Section and its page Slides, in page
- * order, with the anchor each Slide wrapper carries. The slides, the table of
- * contents, the Context drawer and the Slide observer all read this list, so
- * no consumer derives an id of its own. Throws on a bad or duplicate slug, so
- * a broken Episode fails `next dev` and the static build alike.
- */
-export function slidesOf<S extends SectionOutline>(sections: readonly S[]): PlacedSection<S>[] {
-  const placed = sections.map((section) => ({
-    id: sectionAnchor(checkedSlug(section.slug)),
-    slide: section,
-    slides: section.slides.map((slide) => ({ id: slideAnchor(section.slug, checkedSlug(slide.slug)), slide })),
-  }));
-  assertUnique(slidesInPageOrder(placed).map(({ id }) => id));
-  return placed;
-}
-
 /** Placed Slides flattened in page order: the order the table of contents lists and arrow keys walk. */
-export function slidesInPageOrder<S extends SectionOutline>(
+export function slidesInPageOrder<S extends { readonly slides: readonly unknown[] }>(
   placed: readonly PlacedSection<S>[],
 ): PlacedSlide<S | S['slides'][number]>[] {
   return placed.flatMap((section) => [section, ...section.slides]);

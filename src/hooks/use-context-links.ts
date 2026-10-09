@@ -5,7 +5,6 @@ import {
   CONTEXT_REF_ATTR,
   ITEM_SELECTOR,
   itemSelector,
-  legacyTargetId,
   NOTE_SELECTOR,
   NOTE_TARGET_ATTR,
   noteSelector,
@@ -24,15 +23,13 @@ export function noteOfRef(ref: NoteRef): HTMLElement | null {
 /**
  * The page element a note explains: the `data-target` it names, inside the
  * element of the note's item (the Slide wrapper), so two Slides may both say
- * `prose`. Legacy Episodes give the element the id `<item>--<target>` instead.
+ * `prose`.
  */
 function targetOfNote(note: Element): HTMLElement | null {
   const item = note.closest(ITEM_SELECTOR)?.getAttribute(CONTEXT_ITEM_ATTR) ?? '';
   const target = note.getAttribute(NOTE_TARGET_ATTR) ?? '';
   const scope = document.getElementById(item);
-  return (
-    scope?.querySelector<HTMLElement>(targetSelector(target)) ?? document.getElementById(legacyTargetId(item, target)) // legacy: delete with the last legacy Episode
-  );
+  return scope?.querySelector<HTMLElement>(targetSelector(target)) ?? null;
 }
 
 /** The context reference button `from` sits in, if any. */

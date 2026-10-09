@@ -163,7 +163,6 @@ describe('episode structure', () => {
     it('heads each Slide written as a Slide file at the level its position gives it: h2 first in its Section, else h3', () => {
       // ARRANGE
       const $ = page(url);
-      const marked = $('[data-slot="slides"] [data-slide] [data-target="title"]').length > 0;
       // ACT
       const levels = $('[data-slot="slides"] > section[data-section]')
         .toArray()
@@ -177,9 +176,8 @@ describe('episode structure', () => {
       const expected = wrapperIdsBySection($).map(({ ids }) =>
         ids.map((id, index) => (index === 0 ? 'h2' : untitled.includes(id) ? 'none' : 'h3')),
       );
-      // ASSERT: a legacy Episode marks no title target; its levels are held by the heading-count test above
-      if (marked) expect(levels).toEqual(expected);
-      else expect(levels.flat().every((level) => level === 'none')).toBe(true);
+      // ASSERT
+      expect(levels).toEqual(expected);
     });
 
     it('links the table of contents to every titled slide anchor, in page order', () => {

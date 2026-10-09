@@ -6,13 +6,7 @@
 
 // What an Episode file may reach: the Slide master (which holds the Episode
 // record, `slide-master/episode-record.ts`), its own Episode folder and src/lib.
-// Legacy: the two `episode-page/*.pure.ts` modules are reached only by Episodes
-// not yet written as Slide files; this exemption goes with the last of them.
-const EPISODE_REACH = [
-  '^src/components/(slide-master|episodes)/',
-  '^src/lib/',
-  '^src/components/episode-page/(episode-page-container|slide-context)\\.pure\\.ts$',
-];
+const EPISODE_REACH = ['^src/components/(slide-master|episodes)/', '^src/lib/'];
 
 /** @type {import('dependency-cruiser').IConfiguration} */
 module.exports = {
@@ -114,7 +108,7 @@ module.exports = {
       name: 'episodes-never-render-the-shell',
       severity: 'error',
       comment:
-        'The Title slide and the container are rendered once, by the EpisodePage page component. An Episode page file imports only the Episode record types from episode-page-container.pure.ts (FE-002).',
+        'The Title slide and the container are rendered once, by the EpisodePage page component. An Episode page file never imports either (FE-002).',
       from: { path: '^src/components/episodes/' },
       to: { path: '^src/components/episode-page/(title-slide|episode-page-container)\\.tsx$' },
     },
