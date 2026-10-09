@@ -78,8 +78,19 @@ module.exports = {
       severity: 'error',
       comment:
         'An Episode page file composes the Slide master, Slide layouts and the Episode record, plus src/lib helpers — never the table of contents, page shells or routes (FE-002).',
-      from: { path: '^src/components/episodes/' },
+      from: { path: '^src/components/episodes/', pathNot: '\\.test\\.ts$' },
       to: { pathNot: ['^src/components/(episodes|episode)/', '^src/lib/', 'node_modules'] },
+    },
+    {
+      name: 'episode-tests-reach-only-slide-parts',
+      severity: 'error',
+      comment:
+        'An Episode test reaches what an Episode file does, plus Node builtins for reading in-test file fixtures such as published-anchors.json (ARCH-003 §4.2).',
+      from: { path: '^src/components/episodes/.+\\.test\\.ts$' },
+      to: {
+        pathNot: ['^src/components/(episodes|episode)/', '^src/lib/', 'node_modules'],
+        dependencyTypesNot: ['core'],
+      },
     },
     {
       name: 'episodes-never-render-the-shell',
