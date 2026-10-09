@@ -19,5 +19,18 @@ export async function getTranslations({ locale, namespace }: { locale: Locale; n
     if (typeof leaf !== 'string') throw new Error(`Missing Translation key "${path.join('.')}" in ${locale}.`);
     return leaf;
   };
-  return Object.assign((key: string) => read(key), { rich: (key: string) => read(key) });
+  const has = (key: string): boolean => {
+    try {
+      read(key);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+  return Object.assign((key: string) => read(key), {
+    rich: (key: string) => read(key),
+    markup: (key: string) => read(key),
+    raw: (key: string) => read(key),
+    has,
+  });
 }

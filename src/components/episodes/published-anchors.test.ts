@@ -1,5 +1,6 @@
 import { findEpisode } from '@/components/episodes/registry';
-import { slidesInPageOrder, slidesOf } from '@/lib/episode.pure';
+import { isEpisodeRecord } from '@/components/slide-master/episode-record';
+import { placeSections, slidesInPageOrder, slidesOf } from '@/lib/episode.pure';
 import { LOCALES, type Locale } from '@/lib/locale.pure';
 import { EPISODE_SLUGS } from '@/lib/routes';
 import { existsSync, readFileSync } from 'node:fs';
@@ -44,9 +45,15 @@ function lostAnchors(walk: {
     );
 }
 
-/** The anchors the walk produces for one Episode in one locale, as the Episode page does. */
+/**
+ * The anchors the walk produces for one Episode in one locale, as the Episode
+ * page does: an Episode record's Section lists, or a legacy Episode's outline.
+ */
 async function producedAnchors(slug: (typeof EPISODE_SLUGS)[number], locale: Locale): Promise<string[]> {
-  const { sections } = await findEpisode(slug).content(locale);
+  const episode = findEpisode(slug);
+  if (isEpisodeRecord(episode))
+    return placeSections(episode.sections).flatMap((section) => section.map(({ id }) => id));
+  const { sections } = await episode.content(locale);
   return slidesInPageOrder(slidesOf(sections)).map(({ id }) => id);
 }
 

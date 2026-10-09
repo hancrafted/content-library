@@ -1,3 +1,4 @@
+import type { PerLocale } from '@/components/slide-master/episode-record';
 import type { Locale } from '@/lib/locale.pure';
 import type { EpisodeSlug } from '@/lib/routes';
 import type { ReactNode } from 'react';
@@ -11,8 +12,7 @@ import type { TocItem, TocSection } from '../../lib/table-of-contents.pure';
  * free JSX composed from the Slide master and Slide layouts.
  */
 
-/** One value per locale, so a missing German value fails `tsc`. */
-export type PerLocale<T> = Readonly<Record<Locale, T>>;
+export type { PerLocale } from '@/components/slide-master/episode-record';
 
 export interface EpisodeSlide {
   /** Stable once published; becomes the anchor and the Translation key segment. */
@@ -31,10 +31,9 @@ export interface EpisodeSlide {
   readonly voiceScript?: readonly VoiceScriptSegment[];
 }
 
-/** A Section's own slide is its table-of-contents entry, so it always names itself and carries a time. */
-export interface EpisodeSection extends Omit<EpisodeSlide, 'title' | 'minutes'> {
+/** A Section's own slide is its table-of-contents entry, so it always names itself; its minutes count as 0 when left out. */
+export interface EpisodeSection extends Omit<EpisodeSlide, 'title'> {
   readonly title: string;
-  readonly minutes: PerLocale<number>;
   /** Page Slides after the Section's own slide; may be empty. */
   readonly slides: readonly EpisodeSlide[];
 }
@@ -46,6 +45,12 @@ export interface EpisodeContent {
   readonly sections: readonly EpisodeSection[];
 }
 
+/**
+ * Legacy: an Episode that renders itself per locale. Episodes written as Slide
+ * files are an `EpisodeRecord` (`slide-master/episode-record.ts`) instead,
+ * which `recordContent` turns into the same `EpisodeContent`. Delete with the
+ * last legacy Episode.
+ */
 export interface Episode {
   readonly slug: EpisodeSlug;
   /** One recording per locale, shown on the Title slide; optional until recorded. */
@@ -56,6 +61,11 @@ export interface Episode {
 /** An Episode's Section as the one walk (`slidesOf`) places it: its id and its page Slides' ids. */
 export type PlacedEpisodeSection = PlacedSection<EpisodeSection>;
 
+/** A Slide's spoken minutes in one locale; 0 when it declares none. */
+function minutesIn(slide: Pick<EpisodeSlide, 'minutes'>, locale: Locale): number {
+  return slide.minutes?.[locale] ?? 0;
+}
+
 /**
  * The table of contents' entries: a fold over the placed Slides, so each entry
  * carries the very id its Slide wrapper does and the two cannot drift. An
@@ -65,10 +75,10 @@ export type PlacedEpisodeSection = PlacedSection<EpisodeSection>;
  */
 export function tocSectionsOf(placed: readonly PlacedEpisodeSection[], locale: Locale): TocSection[] {
   return placed.map(({ id, slide: section, slides }) => {
-    const entry: TocSection = { id, title: section.title, minutes: section.minutes[locale], items: [] };
+    const entry: TocSection = { id, title: section.title, minutes: minutesIn(section, locale), items: [] };
     const items: TocItem[] = [];
     for (const { id: slideId, slide } of slides) {
-      const minutes = slide.minutes?.[locale] ?? 0;
+      const minutes = minutesIn(slide, locale);
       if (slide.title === undefined) {
         const owner = items.at(-1) ?? entry;
         owner.minutes += minutes;

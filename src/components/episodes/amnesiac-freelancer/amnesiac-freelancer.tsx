@@ -1,16 +1,16 @@
-import { BasicPageSlide } from '@/components/slide-master/basic-page-slide';
-import { contextRefOf, type ContextRefOf } from '@/components/slide-master/context-ref';
 import type {
   Episode,
   EpisodeSection,
   EpisodeSlide,
   PerLocale,
 } from '@/components/episode-page/episode-page-container.pure';
-import { SectionSlide } from '@/components/slide-master/section-slide';
-import { SessionLoop } from '@/components/episodes/amnesiac-freelancer/client/session-loop.client';
 import type { ReadString } from '@/components/episode-page/slide-context.pure';
+import { SessionLoop } from '@/components/episodes/amnesiac-freelancer/client/session-loop.client';
+import { contextRefOf, type ContextRefOf } from '@/components/slide-master/context-ref';
+import { BasicPageSlide } from '@/components/slide-master/legacy/basic-page-slide';
+import { SectionSlide } from '@/components/slide-master/legacy/section-slide';
+import { ThreeColumnSlide } from '@/components/slide-master/legacy/three-column-slide';
 import { SlideFrame } from '@/components/slide-master/slide-master';
-import { ThreeColumnSlide } from '@/components/slide-master/three-column-slide';
 import type { Locale } from '@/lib/locale.pure';
 import { getTranslations } from 'next-intl/server';
 import { contextFor, type SlideSlug } from './context';

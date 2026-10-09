@@ -159,6 +159,20 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('counts a section slide without minutes as 0, as it does a page Slide', () => {
+    // ARRANGE
+    const placed = [
+      section('foundations', { title: 'Foundations' }, [
+        page('foundations--why', { slug: 'why', title: 'Why', minutes: { en: 3, de: 4 } }),
+      ]),
+    ];
+    const expected = [0, 3];
+    // ACT
+    const [entry] = tocSectionsOf(placed, 'en');
+    // ASSERT
+    expect([entry.minutes, entry.items[0].minutes]).toEqual(expected);
+  });
+
   it('derives an empty table of contents for an Episode with no Sections yet', () => {
     // ARRANGE
     const placed: PlacedEpisodeSection[] = [];

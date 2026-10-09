@@ -99,6 +99,16 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('reads keys relative to the translator when the base is empty, as a Slide-namespaced translator needs', () => {
+    // ARRANGE
+    const spec = { notes: [{ slug: 'stateless', target: 'prose' }], segments: [{ slug: 'one', from: 0, to: 1 }] };
+    const expected = ['notes.stateless.header', 'voiceScript.segments.one.title'];
+    // ACT
+    const context = slideContext(read, '', spec);
+    // ASSERT
+    expect([context.notes[0].header, context.voiceScript[0].title]).toEqual(expected);
+  });
+
   it('omits the bridge, sources and image when the spec does not set them', () => {
     // ARRANGE
     const spec = { notes: [{ slug: 'n', target: 'title' }], segments: [{ slug: 's', from: 0, to: 1 }] };

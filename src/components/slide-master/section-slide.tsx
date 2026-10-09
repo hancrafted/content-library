@@ -1,16 +1,18 @@
 import { cn } from '@/lib/utils';
 import type { ReactNode } from 'react';
-import { elementId, SlideCaption, SlideFrame, SlideTitle } from './slide-master';
+import { SlideCaption, SlideFrame } from './slide-master';
 
-/** A Section's own slide: its heading and an optional caption, vertically centred or with children. */
+/**
+ * A Section's own slide: its heading and an optional caption, vertically
+ * centred, or with children below. Pass the kit's `<Title>` as `title`; the
+ * caption is the `caption` target.
+ */
 export function SectionSlide({
-  anchor,
   title,
   caption,
   className,
   children,
 }: {
-  anchor?: string;
   title: ReactNode;
   caption?: ReactNode;
   className?: string;
@@ -18,10 +20,8 @@ export function SectionSlide({
 }) {
   return (
     <SlideFrame className={cn(!children && 'items-center justify-center text-center', className)}>
-      <SlideTitle as="h2" id={elementId(anchor, 'title')}>
-        {title}
-      </SlideTitle>
-      {caption && <SlideCaption id={elementId(anchor, 'caption')}>{caption}</SlideCaption>}
+      {title}
+      {caption && <SlideCaption data-target="caption">{caption}</SlideCaption>}
       {children}
     </SlideFrame>
   );
