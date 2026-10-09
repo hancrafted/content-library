@@ -175,43 +175,43 @@ describe('edge cases', () => {
   it('stacks a single published Episode as the lead with nothing beside it', () => {
     // ARRANGE
     const only = [MIXED[0]!, MIXED[3]!];
+    const expected = { lead: 'p1', side: [] };
     // ACT
     const { lead, side } = spotlightOf(only);
     // ASSERT
-    expect({ lead: lead?.slug, side }).toEqual({ lead: 'p1', side: [] });
+    expect({ lead: lead?.slug, side }).toEqual(expected);
   });
 
   it('gives the lead one companion when only two Episodes are published', () => {
     // ARRANGE
     const two = MIXED.filter((entry) => entry.slug !== 'p3');
+    const expected = { lead: 'p1', side: ['p2'] };
     // ACT
     const { lead, side } = spotlightOf(two);
     // ASSERT
-    expect({ lead: lead?.slug, side: slugs(side) }).toEqual({ lead: 'p1', side: ['p2'] });
+    expect({ lead: lead?.slug, side: slugs(side) }).toEqual(expected);
   });
 
   it('caps the grid at the first cards in order and reports how many matches remain', () => {
     // ARRANGE
     const many = Array.from({ length: 12 }, (_, index) => card(`e${index}`));
     const cap = 9;
+    const expected = { size: cap, overflow: 3, last: 'e8' };
     // ACT
     const view = browseView(many, INITIAL_SELECTION, cap);
     // ASSERT
-    expect({ size: view.visible.size, overflow: view.overflow, last: [...view.visible].pop() }).toEqual({
-      size: cap,
-      overflow: 3,
-      last: 'e8',
-    });
+    expect({ size: view.visible.size, overflow: view.overflow, last: [...view.visible].pop() }).toEqual(expected);
   });
 
   it('lifts the cap once the visitor has asked for every card', () => {
     // ARRANGE
     const many = Array.from({ length: 12 }, (_, index) => card(`e${index}`));
     const selection: BrowseSelection = { ...INITIAL_SELECTION, expanded: true };
+    const expected = { size: 12, overflow: 0 };
     // ACT
     const view = browseView(many, selection, 9);
     // ASSERT
-    expect({ size: view.visible.size, overflow: view.overflow }).toEqual({ size: 12, overflow: 0 });
+    expect({ size: view.visible.size, overflow: view.overflow }).toEqual(expected);
   });
 
   it('does not overflow when the matches are exactly the cap', () => {
