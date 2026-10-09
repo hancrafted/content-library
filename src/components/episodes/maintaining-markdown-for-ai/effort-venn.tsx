@@ -1,3 +1,4 @@
+import type { TargetProps } from '@/components/slide-master/episode-record';
 import { cn } from '@/lib/utils';
 
 export type VennEmphasis = 'establish' | 'machine' | 'human';
@@ -171,14 +172,13 @@ function HypothesisFootnote() {
 export function EffortVenn({
   emphasis = 'establish',
   className,
-  'data-target': dataTarget,
-}: {
+  ...target
+}: Partial<TargetProps> & {
   emphasis?: VennEmphasis;
   className?: string;
-  'data-target'?: string;
 }) {
   return (
-    <div data-target={dataTarget} className={cn('relative flex flex-col items-center justify-center', className)}>
+    <div {...target} className={cn('relative flex flex-col items-center justify-center', className)}>
       <svg
         viewBox="115 15 700 540"
         role="img"

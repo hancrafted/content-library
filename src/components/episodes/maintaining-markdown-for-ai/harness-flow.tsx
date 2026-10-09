@@ -1,3 +1,5 @@
+import type { TargetProps } from '@/components/slide-master/episode-record';
+
 function HarnessTriggers() {
   return (
     <div className="flex flex-col gap-3">
@@ -61,9 +63,9 @@ function HarnessOutcomes() {
   );
 }
 
-export function HarnessFlow({ 'data-target': dataTarget }: { 'data-target'?: string }) {
+export function HarnessFlow(target: TargetProps) {
   return (
-    <div data-target={dataTarget} className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
+    <div {...target} className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
       <HarnessTriggers />
       <HarnessHub />
       <HarnessOutcomes />

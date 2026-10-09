@@ -19,7 +19,7 @@ export const markdownInAiWorkflows = slide({
   content: ({ t, target, Title }) => (
     <SectionSlide title={<Title>{t('title')}</Title>} caption={t('caption')}>
       <SlideProse>{t('prose')}</SlideProse>
-      <MarkdownRoles knowledgeTarget={target('knowledge')['data-target']} />
+      <MarkdownRoles knowledgeTarget={target('knowledge')} />
     </SectionSlide>
   ),
 });

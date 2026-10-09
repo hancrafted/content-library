@@ -50,9 +50,9 @@ function Phase3Card(): ReactElement {
   );
 }
 
-function RoutingFlow({ 'data-target': dataTarget }: TargetProps): ReactElement {
+function RoutingFlow(target: TargetProps): ReactElement {
   return (
-    <div data-target={dataTarget} className="mt-8 grid gap-4 lg:grid-cols-3">
+    <div {...target} className="mt-8 grid gap-4 lg:grid-cols-3">
       <Phase1Card />
       <Phase2Card />
       <Phase3Card />

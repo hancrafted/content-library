@@ -157,9 +157,9 @@ function FlawCards(): ReactElement {
   );
 }
 
-export function FreelancerCards({ 'data-target': dataTarget }: TargetProps): ReactElement {
+export function FreelancerCards(target: TargetProps): ReactElement {
   return (
-    <div data-target={dataTarget} className="mt-12 grid items-center gap-6 lg:grid-cols-[1fr_13rem_1fr]">
+    <div {...target} className="mt-12 grid items-center gap-6 lg:grid-cols-[1fr_13rem_1fr]">
       <StrengthCards />
       <div className="flex justify-center self-stretch">
         <Image

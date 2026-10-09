@@ -1,3 +1,4 @@
+import type { TargetProps } from '@/components/slide-master/episode-record';
 import { cn } from '@/lib/utils';
 
 function CorpusAxesLabels() {
@@ -87,14 +88,13 @@ function CorpusCurves() {
   );
 }
 
-interface EffortCorpusChartProps {
+interface EffortCorpusChartProps extends TargetProps {
   className?: string;
-  'data-target'?: string;
 }
 
-export function EffortCorpusChart({ className, 'data-target': dataTarget }: EffortCorpusChartProps) {
+export function EffortCorpusChart({ className, ...target }: EffortCorpusChartProps) {
   return (
-    <div data-target={dataTarget} className="relative">
+    <div {...target} className="relative">
       <svg
         viewBox="0 0 560 360"
         role="img"
