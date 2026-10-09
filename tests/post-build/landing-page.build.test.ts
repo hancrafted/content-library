@@ -7,7 +7,20 @@ import { LOCALES, localizePath } from '../../src/lib/locale.pure';
 import { ROUTES } from '../../src/lib/routes';
 import { exportedFile, OUT_DIR } from './exported-pages';
 
-const basePath = nextConfig.basePath ?? '';
+function resolveBasePath(): string {
+  if (process.env.NEXT_PUBLIC_BASE_PATH) return process.env.NEXT_PUBLIC_BASE_PATH;
+  if (process.env.SITE_URL) {
+    try {
+      const pathname = new URL(process.env.SITE_URL).pathname.replace(/\/+$/, '');
+      if (pathname) return pathname;
+    } catch {
+      // ignore
+    }
+  }
+  return nextConfig.basePath ?? '';
+}
+
+const basePath = resolveBasePath();
 
 const LANDING_PAGES = LOCALES.map((locale) => ({
   locale,

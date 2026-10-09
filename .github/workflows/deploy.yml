@@ -37,6 +37,7 @@ jobs:
       # FE-008: refuse one whose canonicals miss this URL or whose alternates are one-way.
       - run: npm run test:build
         env:
+          NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
           SITE_URL: ${{ steps.pages.outputs.base_url }}
       - uses: actions/upload-pages-artifact@v5
         with:
