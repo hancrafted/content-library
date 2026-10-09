@@ -3,7 +3,7 @@ import type { TargetProps } from '@/lib/context-link.pure';
 import type { SectionList } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
 import type { EpisodeSlug } from '@/lib/routes';
-import type { createTranslator, NamespaceKeys, NestedKeyOf } from 'next-intl';
+import type { createTranslator, MessageKeys, NamespaceKeys, NestedKeyOf } from 'next-intl';
 import type { ReactElement, ReactNode } from 'react';
 
 /*
@@ -48,9 +48,19 @@ export type NoteSlug<Ep extends RecordEpisodeSlug, S> =
 export type SegmentSlug<Ep extends RecordEpisodeSlug, S> =
   SlideMessages<Ep, S> extends { readonly voiceScript: { readonly segments: infer G } } ? KeysOf<G> : never;
 
+/** A dotted key to a string leaf of a Slide's subtree: what `template` reads. */
+export type TemplateKey<Ep extends RecordEpisodeSlug, S> = MessageKeys<
+  SlideMessages<Ep, S>,
+  NestedKeyOf<SlideMessages<Ep, S>>
+>;
+
 type Namespace = NamespaceKeys<Messages, NestedKeyOf<Messages>>;
 
-/** next-intl's translator, namespaced to one Slide: a key outside its subtree fails `tsc`. */
+/**
+ * next-intl's translator, namespaced to one Slide: a key outside its subtree
+ * fails `tsc`. Its `t.rich` already knows the default `em`, `b` and `code`
+ * tags (`rich-tags.tsx`); a Slide passes only `ref` and tags of its own.
+ */
 export type SlideTranslator<Ep extends RecordEpisodeSlug, S> = `episodes.${Ep}.slides.${S & string}` extends infer N
   ? N extends Namespace
     ? ReturnType<typeof createTranslator<Messages, N>>
@@ -92,12 +102,18 @@ export type TitleComponent = (props: { children: ReactNode }) => ReactElement;
 export type RichTag = (chunks: ReactNode) => ReactNode;
 
 /**
- * The kit a Slide's `content` receives. `t` reads only this Slide's
- * Translation keys; `ref` and `target` take only the notes and targets the
- * Slide declares.
+ * The kit a Slide's `content` receives. `t` and `template` read only this
+ * Slide's Translation keys; `ref` and `target` take only the notes and
+ * targets the Slide declares; `slideHref` only this Episode's Slides.
  */
 export interface SlideKit<Ep extends RecordEpisodeSlug, S, N extends NoteSpec> {
   readonly t: SlideTranslator<Ep, S>;
+  /** The page's locale, for formatting a number or date the Translation file does not hold. */
+  readonly locale: Locale;
+  /** The localized `href` of another Slide of this Episode: its page path and the anchor its position gives it. */
+  readonly slideHref: (slug: SlideSlug<Ep>) => string;
+  /** A string leaf as written, `{name}` placeholders unfilled, for a client component to fill with `fillTemplate`. */
+  readonly template: (key: TemplateKey<Ep, S>) => string;
   /** The `t.rich` tag for a Context reference to one of this Slide's notes. */
   readonly ref: (note: N['slug']) => RichTag;
   /** Marks the element one of this Slide's notes explains. */
@@ -120,6 +136,9 @@ export interface RuntimeTranslator {
 /** The kit as the container builds it, by runtime key. Every `SlideKit` accepts it (see the type tests). */
 export interface RuntimeKit {
   readonly t: RuntimeTranslator;
+  readonly locale: Locale;
+  readonly slideHref: (slug: string) => string;
+  readonly template: (key: string) => string;
   readonly ref: (note: string) => RichTag;
   readonly target: (name: string) => TargetProps;
   readonly Title: TitleComponent;

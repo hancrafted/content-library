@@ -20,6 +20,9 @@ function recordingKit(): { kit: RuntimeKit; calls: string[] } {
   });
   const kit: RuntimeKit = {
     t,
+    locale: 'en',
+    slideHref: (slug) => (calls.push(`slideHref:${slug}`), `#${slug}`),
+    template: (key) => (calls.push(`template:${key}`), key),
     ref: (note) => (calls.push(`ref:${note}`), (chunks) => chunks),
     target: (name) => (calls.push(`target:${name}`), { 'data-target': name }),
     Title: () => null as never,
@@ -32,10 +35,12 @@ const whyATemplate = slide({
   minutes: { en: 3, de: 4 },
   notes: [{ slug: 'reference-episode', target: 'prose' }],
   segments: [{ slug: 'one-breath', from: 0, to: 1 }],
-  content: ({ t, ref, target }) => {
+  content: ({ t, ref, target, slideHref, template }) => {
     t('title');
     ref('reference-episode');
     target('prose');
+    slideHref('what-comes-next');
+    template('spine.next');
     return null;
   },
 });
@@ -47,7 +52,13 @@ describe('success cases', () => {
   it('keeps what a Slide declares and renders its Canvas from the kit it is given', () => {
     // ARRANGE
     const { kit, calls } = recordingKit();
-    const expected = ['t:title', 'ref:reference-episode', 'target:prose'];
+    const expected = [
+      't:title',
+      'ref:reference-episode',
+      'target:prose',
+      'slideHref:what-comes-next',
+      'template:spine.next',
+    ];
     // ACT
     whyATemplate.content(kit);
     // ASSERT
@@ -88,9 +99,15 @@ describe('failure cases', () => {
       slide({
         slug: 'why-a-template',
         notes: [{ slug: 'reference-episode', target: 'prose' }],
-        content: ({ t, ref, target }) => {
+        content: ({ t, ref, target, slideHref, template }) => {
           // @ts-expect-error -- a key outside this Slide's Translation subtree
           t('columns.master.title');
+          // @ts-expect-error -- a Slide slug this Episode's Translation file does not hold
+          slideHref('no-such-slide');
+          // @ts-expect-error -- a key of another Slide's subtree
+          template('statement');
+          // @ts-expect-error -- a subtree, not a string leaf
+          template('spine');
           // @ts-expect-error -- a note this Slide does not declare
           ref('no-such-note');
           // @ts-expect-error -- a target no note of this Slide names

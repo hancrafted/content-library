@@ -91,7 +91,7 @@ function translatorOf(locale: Locale): TranslatorOf {
  * provides the page's one URL-state service (FE-001 §2).
  */
 export async function EpisodePageContainer({ locale, episode }: { locale: Locale; episode: AnyEpisodeRecord }) {
-  const { title, caption, sections: placed } = await recordContent(episode, translatorOf(locale));
+  const { title, caption, sections: placed } = await recordContent(episode, locale, translatorOf(locale));
   const ids = [TITLE_ANCHOR, ...slidesInPageOrder(placed).map(({ id }) => id)];
   const youtubeId = episode.youtube?.[locale];
   const talkLabels = youtubeId ? await readTranslationStrings(locale, 'talkPlayer') : undefined;
