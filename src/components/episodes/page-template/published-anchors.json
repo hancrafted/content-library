@@ -1,9 +1,1 @@
-[
-  "foundations",
-  "foundations--three-layers",
-  "foundations--why-a-template",
-  "interlude",
-  "next-steps",
-  "next-steps--building-blocks",
-  "next-steps--what-comes-next"
-]
+["foundations", "foundations--why-a-template", "next-steps", "next-steps--what-comes-next"]

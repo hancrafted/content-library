@@ -28,11 +28,11 @@ const whyATemplate = slide({
   segments: [{ slug: 'one-breath', from: 0, to: 1 }],
   content: (kit) => probe(kit as unknown as RuntimeKit, ['prose']),
 });
-const interlude = slide({ slug: 'interlude', content: (kit) => probe(kit as unknown as RuntimeKit, []) });
+const nextSteps = slide({ slug: 'next-steps', content: (kit) => probe(kit as unknown as RuntimeKit, []) });
 
 const RECORD: EpisodeRecord<'page-template'> = {
   slug: 'page-template',
-  sections: [[foundations, whyATemplate], [interlude]],
+  sections: [[foundations, whyATemplate], [nextSteps]],
 };
 
 /** The heading element a Slide's content rendered, as `Title` built it. */
@@ -48,7 +48,7 @@ describe('success cases', () => {
       title: 'Page template',
       sections: [
         { slug: 'foundations', title: 'Foundations', slides: ['why-a-template'] },
-        { slug: 'interlude', title: 'Interlude', slides: [] },
+        { slug: 'next-steps', title: 'Next steps', slides: [] },
       ],
     };
     // ACT
@@ -69,7 +69,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = [
       { id: 'foundations', slides: ['foundations--why-a-template'] },
-      { id: 'interlude', slides: [] },
+      { id: 'next-steps', slides: [] },
     ];
     // ACT
     const { sections } = await recordContent(RECORD, 'en');
@@ -131,8 +131,8 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('leaves minutes out where a Slide declares none, so the table of contents counts them as 0', async () => {
     // ARRANGE
-    const bare = slide({ slug: 'three-layers', content: () => null });
-    const record: EpisodeRecord<'page-template'> = { slug: 'page-template', sections: [[interlude, bare]] };
+    const bare = slide({ slug: 'what-comes-next', content: () => null });
+    const record: EpisodeRecord<'page-template'> = { slug: 'page-template', sections: [[nextSteps, bare]] };
     // ACT
     const { sections } = await recordContent(record, 'de');
     const [section] = sections;

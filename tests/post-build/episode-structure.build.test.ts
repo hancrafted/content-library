@@ -18,6 +18,7 @@ const PAGES = EPISODE_SLUGS.flatMap((slug) =>
 
 /** Slides an Episode leaves untitled on purpose (FE-002 §2): rendered, never listed. */
 const UNTITLED: Readonly<Record<string, readonly string[]>> = {
+  'page-template': [slideAnchor('next-steps', 'what-comes-next')],
   'amnesiac-freelancer': [slideAnchor('where-it-breaks', 'one-line')],
 };
 

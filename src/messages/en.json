@@ -193,21 +193,31 @@
   "episodes": {
     "page-template": {
       "title": "Page template",
-      "caption": "One Episode, from its Title slide to its last Section: the reference every other Episode is built from.",
-      "description": "The layout every episode follows: sections of slides stacked down one page.",
+      "caption": "The smallest Episode worth copying: two Sections, one Slide with notes and a Voice script, one with only a picture.",
+      "description": "Copy this Episode to start a new one: sections of slides stacked down one page.",
       "slides": {
         "foundations": {
           "title": "Foundations",
-          "caption": "The system every Episode is built from: one Slide master, a few Slide layouts, keyed strings."
+          "caption": "A Section opens with its own slide; its title names the Section."
         },
         "why-a-template": {
-          "title": "Why every Episode starts from one shared reference template",
-          "caption": "Every Episode shares one spine: Episode, Section, Slide.",
-          "prose": "Markup stays free. Only the words are keyed, by Section slug, Slide slug and role, so a translation never has to pass through a layout schema.",
+          "title": "Why every Episode starts from a copy",
+          "caption": "One spine: Episode, Section, Slide.",
+          "prose": "Copy this folder, then replace the words. A <ref>reference Episode</ref> keeps every Episode the same shape.",
+          "spine": {
+            "episode": "Episode",
+            "section": "Section",
+            "slide": "Slide",
+            "next": "Next level"
+          },
           "notes": {
             "reference-episode": {
               "header": "Why a reference Episode",
               "description": "The template exists so every Episode is built the same way. Point at the prose when you say so."
+            },
+            "spine": {
+              "header": "Three levels, one page",
+              "description": "An Episode holds Sections, a Section holds Slides. Press the button to walk down the spine."
             }
           },
           "voiceScript": {
@@ -216,58 +226,22 @@
                 "title": "The template in one breath",
                 "keywords": "template, same shape, every Episode",
                 "script": "A reference Episode shows the shape once, so the next Episode copies a working example instead of inventing one."
+              },
+              "the-spine": {
+                "title": "The spine",
+                "keywords": "Episode, Section, Slide",
+                "script": "Walk down the three levels: the Episode, its Sections, and the Slides inside each.",
+                "bridge": "Next, a Slide that is only a picture."
               }
             }
           }
         },
-        "three-layers": {
-          "title": "Why master frames and keyed localization catalogs never share responsibilities",
-          "caption": "Each layer owns one concern and nothing else.",
-          "columns": {
-            "master": {
-              "title": "Slide master",
-              "prose": "Owns the universals: frame, spacing, type scale."
-            },
-            "layouts": {
-              "title": "Slide layouts",
-              "prose": "Compose the Slide master into one design. A new kind of slide is a new Slide layout."
-            },
-            "catalog": {
-              "title": "Catalog",
-              "prose": "Holds every string per locale, keyed by meaning, never by position."
-            }
-          }
-        },
-        "interlude": {
-          "title": "Interlude",
-          "caption": "A Section can stand on its own, without any page slides."
-        },
         "next-steps": {
-          "title": "Where the template goes once the open questions are settled",
-          "caption": "{count, plural, one {# slide} other {# slides}} to close the Episode."
-        },
-        "building-blocks": {
-          "title": "Building blocks",
-          "caption": "Three Slide layouts prove the split.",
-          "columns": {
-            "section": {
-              "title": "Section slide",
-              "prose": "Title and caption, vertically centred."
-            },
-            "basic": {
-              "title": "Basic page",
-              "prose": "Title, caption and one block of prose."
-            },
-            "three-column": {
-              "title": "Three columns",
-              "prose": "Title, caption and three keyed columns."
-            }
-          }
+          "title": "Next steps",
+          "caption": "A second Section, to show how Sections stack."
         },
         "what-comes-next": {
-          "title": "What comes next",
-          "caption": "Real Episodes grow from here.",
-          "prose": "Charts, speaker notes and the video link attach to the same spine later, without rewriting what exists."
+          "statement": "Now replace the words."
         }
       }
     },

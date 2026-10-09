@@ -41,7 +41,7 @@ const whyATemplate = slide({
 });
 
 const foundations = slide({ slug: 'foundations', content: ({ t }) => t('title') });
-const interlude = slide({ slug: 'interlude', content: ({ t }) => t('caption') });
+const nextSteps = slide({ slug: 'next-steps', content: ({ t }) => t('caption') });
 
 describe('success cases', () => {
   it('keeps what a Slide declares and renders its Canvas from the kit it is given', () => {
@@ -73,7 +73,7 @@ describe('success cases', () => {
 
   it('composes an Episode from Sections whose first Slide is titled', () => {
     // ARRANGE
-    const sections = [[foundations, whyATemplate], [interlude]] as const;
+    const sections = [[foundations, whyATemplate], [nextSteps]] as const;
     // ACT
     const record = episode({ slug: 'page-template', sections });
     // ASSERT
@@ -100,8 +100,8 @@ describe('failure cases', () => {
       }),
       // @ts-expect-error -- no `episodes.page-template.slides.no-such-slide` subtree
       slide({ slug: 'no-such-slide', content: () => null }),
-      // @ts-expect-error -- `three-layers` translates no notes
-      slide({ slug: 'three-layers', notes: [{ slug: 'reference-episode', target: 'title' }], content: () => null }),
+      // @ts-expect-error -- `what-comes-next` translates no notes
+      slide({ slug: 'what-comes-next', notes: [{ slug: 'reference-episode', target: 'title' }], content: () => null }),
       // @ts-expect-error -- a segment the Slide's Voice script does not translate
       slide({ slug: 'why-a-template', segments: [{ slug: 'two-breaths', from: 0, to: 1 }], content: () => null }),
     ];
