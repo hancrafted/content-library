@@ -44,14 +44,48 @@
     },
     "episodesSectionTitle": "Available Episodes",
     "episodesSectionSubtitle": "Browse the interactive slide decks and visualised essays.",
-    "amnesiacTitle": "Treat AI like an amnesiac freelancer",
-    "amnesiacDescription": "Why an AI coding agent starts every session blank, and how to brief it so the work still lands.",
-    "markdownTitle": "Maintaining markdown for AI",
-    "markdownDescription": "Why verifying documentation became harder than writing it, and how to steer the machine half.",
-    "tokenEconomyTitle": "The AI Token Economy",
-    "tokenEconomyDescription": "What AI actually costs, why the meter stays invisible, and how to manage context and models efficiently.",
+    "episodeIndex": {
+      "open": "Open Episode",
+      "comingSoon": "Coming soon",
+      "topics": {
+        "ai-collaboration": "Working with AI",
+        "documentation": "Documentation",
+        "economics": "Cost and economics",
+        "adoption": "Adoption and change"
+      },
+      "formats": {
+        "foundations": "Foundations",
+        "teardown": "Teardown",
+        "short": "Short"
+      },
+      "upcoming": {
+        "specs-an-agent-can-follow": {
+          "title": "Write specs an agent can follow",
+          "caption": "What to put in a spec so an AI coding agent builds the right thing without you watching every step."
+        },
+        "ai-code-review-in-ci": {
+          "title": "AI code review in CI",
+          "caption": "A teardown of a review bot that took the pull-request queue off one person's desk."
+        },
+        "verifying-ai-written-docs": {
+          "title": "Verifying AI-written docs",
+          "caption": "A quick check for whether generated documentation still matches the code it describes."
+        },
+        "choosing-the-right-model": {
+          "title": "Choosing the right model",
+          "caption": "When a cheaper model is enough, and when the task deserves the expensive one."
+        },
+        "rolling-out-ai-in-a-team": {
+          "title": "Rolling out AI in a team",
+          "caption": "How adoption spreads when nobody is told to use the tool, and what slows it down."
+        },
+        "the-bottleneck-builds-the-fix": {
+          "title": "The bottleneck builds the fix",
+          "caption": "A teardown of a change that stuck because the person it affected most owned it."
+        }
+      }
+    },
     "templateTitle": "Episode Page Template",
-    "templateDescription": "The layout reference every episode follows: sections of slides stacked down one page.",
     "about": {
       "eyebrow": "About me",
       "headlineStepOut": "I make change happen by stepping out of the argument.",

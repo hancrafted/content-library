@@ -61,21 +61,28 @@ describe('landing page post-build structure', () => {
     // About: six story cards on the matrix, after the method rail; the bridge placeholder is gone
     expect($('#about [data-story-matrix] article[data-story-cell]').length).toBe(6);
     expect($('#narrative-bridge').length).toBe(0);
-    const chapters = $('main [data-chapter]')
-      .map((_, el) => $(el).attr('data-chapter'))
+
+    // The identified sections stand in page order, after the id-less hero
+    const sections = $('main > section[id]')
+      .map((_, el) => $(el).attr('id'))
       .get();
-    expect(chapters).toEqual(['02', '03', '04']);
+    expect(sections).toEqual(['episodes', 'services', 'about']);
   });
 
-  it.each(LANDING_PAGES)('renders all available episode cards for locale $locale', ({ url, locale }) => {
-    const $ = getPage(url);
-    const episodeLinks = $('#episodes a')
-      .map((_, el) => $(el).attr('href'))
-      .get();
-    const expected = ['amnesiac-freelancer', 'maintaining-markdown-for-ai', 'ai-token-economy', 'page-template'].map(
-      (slug) => `${basePath}${locale === 'de' ? `/de/episode/${slug}/` : `/episode/${slug}/`}`,
-    );
+  it.each(LANDING_PAGES)(
+    'links every published Episode, then the template, and no upcoming card for locale $locale',
+    ({ url, locale }) => {
+      const $ = getPage(url);
+      const episodeLinks = $('#episodes a')
+        .map((_, el) => $(el).attr('href'))
+        .get();
+      const expected = ['amnesiac-freelancer', 'maintaining-markdown-for-ai', 'ai-token-economy', 'page-template'].map(
+        (slug) => `${basePath}${locale === 'de' ? `/de/episode/${slug}/` : `/episode/${slug}/`}`,
+      );
 
-    expect(episodeLinks).toEqual(expected);
-  });
+      expect(episodeLinks).toEqual(expected);
+      expect($('#episodes [data-episode-status="upcoming"] a').length).toBe(0);
+      expect($('#episodes [data-episode-status="upcoming"]').length).toBeGreaterThan(0);
+    },
+  );
 });

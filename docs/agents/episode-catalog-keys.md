@@ -50,3 +50,14 @@ Add a role only when a new Slide layout needs a leaf none of these describe, and
 - Counts and names go through ICU arguments: `"{count, plural, one {# slide} other {# slides}}"`, passed as `t('next-steps.caption', { count })`.
 - A Section without page Slides has no `slides` key: `title` and `caption` sit directly on the Section.
 - `src/components/episodes/page-template/page-template.tsx` is the reference Episode: one function per Slide, reading its keys through one `getTranslations` namespace.
+
+## Landing page cards
+
+The landing page lists Episodes from the Episode index (`src/lib/episode-index.json`), which holds ids, dates and ranks but no strings. A card reads its text from:
+
+- A published Episode: `episodes.<slug>.title` and `episodes.<slug>.caption`, the keys its own page already uses.
+- An upcoming Episode: `landing.episodeIndex.upcoming.<slug>.title` and `.caption`. Move them to `episodes.<slug>.*` when it is published.
+- Every Episode: `landing.episodeIndex.topics.<topic>` and `landing.episodeIndex.formats.<format>`, one per id in `src/lib/episode-index.pure.ts`.
+- Card chrome: `landing.episodeIndex.open` and `landing.episodeIndex.comingSoon`.
+
+`page-template` is the layout reference, not content: it is not in the index, and the landing page links to it separately.

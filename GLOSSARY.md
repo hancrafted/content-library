@@ -7,6 +7,21 @@ Localized visualisations of theory content, captured from YouTube training video
 **Episode**: one page of visualised theory content, localized into en and de: its Slides stacked vertically beside its table of contents. Its title is the page's h1; it holds Sections and has one YouTube recording per locale.
 _Avoid_: Post, article, video, tower
 
+**Episode index**: the locale-neutral list of every Episode the landing page can show, published or upcoming: ids, dates, ranks and colours only. Every title and caption is a Translation key, so a later data source replaces the list without touching a locale.
+_Avoid_: Catalog, episode list, manifest
+
+**Upcoming Episode**: an Episode announced in the Episode index but not yet written: it has a slug and copy but no page, so its card carries no link. Publishing it means adding its Episode record and flipping its entry to published.
+_Avoid_: Draft, coming-soon episode, stub
+
+**Topic**: the subject an Episode is about, one per Episode, from a closed list in the Episode index (e.g. documentation, economics).
+_Avoid_: Category, tag, theme
+
+**Format**: the shape an Episode is written in, one per Episode: Foundations, Teardown or Short.
+_Avoid_: Type, kind, length
+
+**Episode card**: one Episode of the Episode index as a landing design draws it: its strings read in one locale, plain data only.
+_Avoid_: Tile, teaser, Slide
+
 ## Episode structure
 
 **Section**: an Episode's second level: an ordered group of Slides whose first is its section slide, which names the Section. A Slide's heading level comes from its place in the Section, not from the Slide.
