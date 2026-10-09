@@ -15,7 +15,7 @@ import type { TocItem, TocSection } from '../../lib/table-of-contents.pure';
 export type PerLocale<T> = Readonly<Record<Locale, T>>;
 
 export interface EpisodeSlide {
-  /** Stable once published; becomes the anchor and the catalog key segment. */
+  /** Stable once published; becomes the anchor and the Translation key segment. */
   readonly slug: string;
   /**
    * Plain text for the table of contents; the Slide renders its own heading.

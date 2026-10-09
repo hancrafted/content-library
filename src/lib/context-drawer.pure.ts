@@ -14,7 +14,7 @@ export interface NoteSource {
 
 /** One talking point (a Speaker note item), pointing at the Slide element it explains. */
 export interface SpeakerNoteItem {
-  /** Stable key identity for the catalog; never a position. */
+  /** Stable key identity for the Translation file; never a position. */
   readonly slug: string;
   readonly header: string;
   readonly description: string;

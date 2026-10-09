@@ -55,7 +55,7 @@ and reveals the caption and CTAs permanently for that animation instance.
 Narrow screens, reduced motion and JavaScript-free visits get the open envelope
 and complete, crisp caption and CTAs directly. The caption stays available to assistive
 technology while visually hidden on animated desktop. Copy is under `landing.hero`
-in both catalogs; the secondary CTA opens
+in both Translation files; the secondary CTA opens
 the approved Calendly booking page in a new tab.
 
 The existing GSAP dependency (core plus its bundled SplitText plugin) is used
@@ -89,7 +89,7 @@ Static export runs no middleware, so locales are an explicit route tree; next-in
 
 Both are root layouts that render the same `SiteShell`, header and page components from `src/components/`. Build URLs with `localizePath` from `src/lib/locale.pure.ts`; never hand-write a `/de` prefix.
 
-Strings live in `src/messages/<locale>.json`. Read them with `getTranslations({ locale, namespace })` from `next-intl/server`, passing the locale explicitly. Episode keys follow `docs/agents/episode-catalog-keys.md`. `de.json` is typed against `en.json`, so a missing German key fails `npm run typecheck`, and a missing key at render time fails the build.
+Strings live in `src/messages/<locale>.json`. Read them with `getTranslations({ locale, namespace })` from `next-intl/server`, passing the locale explicitly. Episode keys follow `docs/agents/episode-translation-keys.md`. `de.json` is typed against `en.json`, so a missing German key fails `npm run typecheck`, and a missing key at render time fails the build.
 
 ## Preferences
 

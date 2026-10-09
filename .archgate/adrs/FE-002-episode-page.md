@@ -29,7 +29,7 @@ container         → Title slide, Section wrappers, anchors
 consumers         → table of contents, Context drawer, URL state
 ```
 
-**Reference implementation: `src/components/episodes/page-template/`** — copy it to start an Episode. How a Slide is written (layouts, context notes, catalog keys) lives there, not here.
+**Reference implementation: `src/components/episodes/page-template/`** — copy it to start an Episode. How a Slide is written (layouts, context notes, Translation keys) lives there, not here.
 
 ## Decision
 
@@ -96,7 +96,7 @@ consumers         → table of contents, Context drawer, URL state
 
 ## Compliance and Enforcement
 
-1. **Types:** record, registry and catalogs typed; a missing locale or unregistered slug fails `tsc`.
+1. **Types:** record, registry and Translation files typed; a missing locale or unregistered slug fails `tsc`.
 2. **Unit tests:** anchor derivation — `top` reserved, duplicate slugs rejected, untitled Slides counted but unlisted.
 3. **Lint and dependency rules:** Episode files can't write `h1`–`h3`, render the table of contents or import the container.
 4. **Post-build test:** every Episode in every locale — slot order, one `h1`, heading spine, table of contents equals anchors, no duplicate ids.
@@ -108,5 +108,5 @@ consumers         → table of contents, Context drawer, URL state
 ## References
 
 - [`GLOSSARY.md`](../../GLOSSARY.md) — Episode, Section, Slide, Title slide, Slide master, Slide layout.
-- [`docs/agents/episode-catalog-keys.md`](../../docs/agents/episode-catalog-keys.md) — key roles, worked examples.
+- [`docs/agents/episode-translation-keys.md`](../../docs/agents/episode-translation-keys.md) — key roles, worked examples.
 - [`docs/agents/episode-page-layout.md`](../../docs/agents/episode-page-layout.md) — table of contents placement, corner allocation, reserved places.

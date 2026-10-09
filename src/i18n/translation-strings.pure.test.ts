@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { catalogStrings } from './catalog-strings.pure';
+import { translationStrings } from './translation-strings.pure';
 
 /** A stand-in for next-intl's `t`: tags each full key, so a test sees which key was read for which leaf. */
 const tagged = (key: string) => `<${key}>`;
@@ -13,7 +13,7 @@ describe('success cases', () => {
       remaining: { one: '<toc.remaining.one>', other: '<toc.remaining.other>' },
     };
     // ACT
-    const strings = catalogStrings('toc', shape, { read: tagged });
+    const strings = translationStrings('toc', shape, { read: tagged });
     // ASSERT
     expect(strings).toEqual(expected);
   });
@@ -23,7 +23,7 @@ describe('success cases', () => {
     const shape = { title: 'Context', citation: 'Source {number}', tabs: { notes: 'Notes' } };
     const expected = { title: '<drawer.title>', tabs: { notes: '<drawer.tabs.notes>' } };
     // ACT
-    const strings = catalogStrings('drawer', shape, { read: tagged, omit: ['citation'] });
+    const strings = translationStrings('drawer', shape, { read: tagged, omit: ['citation'] });
     // ASSERT
     expect(strings).toEqual(expected);
   });
@@ -38,7 +38,7 @@ describe('failure cases', () => {
       throw new Error(`FORMATTING_ERROR: ${key}`);
     };
     // ACT
-    const read = () => catalogStrings('drawer', shape, { read: strict });
+    const read = () => translationStrings('drawer', shape, { read: strict });
     // ASSERT
     expect(read).toThrow(message);
   });
@@ -49,7 +49,7 @@ describe('edge cases', () => {
     // ARRANGE
     const shape = {};
     // ACT
-    const strings = catalogStrings('empty', shape, { read: tagged });
+    const strings = translationStrings('empty', shape, { read: tagged });
     // ASSERT
     expect(strings).toEqual({});
   });

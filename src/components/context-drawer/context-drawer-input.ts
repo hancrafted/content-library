@@ -3,7 +3,7 @@ import type { SpeakerNoteItem, VoiceScriptSegment } from '@/lib/context-drawer.p
 /*
  * The Context drawer's whole input contract (FE-010 §8). The drawer knows
  * nothing about Episodes, Sections, anchors, the table of contents or the
- * catalog: everything it renders, and every element id it watches, arrives here.
+ * Translation file: everything it renders, and every element id it watches, arrives here.
  * Whoever owns the content builds one of these (today the adapter in
  * `src/components/episode/context-drawer-input.ts`); the drawer never asks where
  * it came from.

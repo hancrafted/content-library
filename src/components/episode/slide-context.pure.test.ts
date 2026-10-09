@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { slideContext } from './slide-context.pure';
 
-// Stands in for a catalog reader: answers with the key it was asked for, so
+// Stands in for a Translation file reader: answers with the key it was asked for, so
 // the assertions pin the exact key shape (FE-010 §6).
 const read = (key: string) => key;
 
 describe('success cases', () => {
-  it('reads each note and segment string from its FE-010 catalog key', () => {
+  it('reads each note and segment string from its FE-010 Translation key', () => {
     // ARRANGE
     const spec = {
       notes: [

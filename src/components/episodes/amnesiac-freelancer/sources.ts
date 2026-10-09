@@ -2,7 +2,7 @@ import type { SourceSpec } from '@/components/episode/slide-context.pure';
 
 /*
  * The sources the amnesiac-freelancer Episode cites, one entry each (FE-010 §3).
- * A note lists them in citation order; each title is a catalog leaf under the
+ * A note lists them in citation order; each title is a Translation file leaf under the
  * note, so the same page can be titled per locale.
  */
 export const SOURCE = {
