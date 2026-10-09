@@ -1,0 +1,211 @@
+.case {
+  border-top: 1px solid var(--border);
+}
+.case:last-child {
+  border-bottom: 1px solid var(--border);
+}
+.summary {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  margin-inline: -1rem;
+  padding: 1.5rem 1rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  list-style: none;
+}
+.summary::-webkit-details-marker,
+.evidence summary::-webkit-details-marker {
+  display: none;
+}
+.company {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-weight: 600;
+}
+.number {
+  font:
+    0.75rem/1.5 ui-monospace,
+    monospace;
+  color: var(--brand-accent);
+}
+.outcome {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 0.25rem;
+}
+.outcome strong {
+  color: var(--brand-accent);
+  font-size: clamp(2rem, 3.5vw, 2.75rem);
+  font-weight: 600;
+  letter-spacing: -0.055em;
+  line-height: 1.2;
+}
+.outcome > span {
+  color: var(--muted-foreground);
+  font-size: 0.9375rem;
+}
+.disclosure {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 44px;
+  font-size: 0.75rem;
+  color: var(--primary);
+}
+.detailsIcon {
+  flex-shrink: 0;
+}
+.case > details[open] > summary .detailsIcon,
+.evidence[open] .detailsIcon {
+  transform: rotate(45deg);
+}
+.summary:focus-visible,
+.evidence summary:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 4px;
+  border-radius: 0.25rem;
+}
+.summary:hover {
+  background: var(--muted);
+}
+.summary:hover .company,
+.evidence summary:hover {
+  color: var(--primary);
+}
+.flow {
+  margin-bottom: 1.5rem;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--background);
+}
+.context {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+.context h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+.context > span {
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+}
+.sequence {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.phase {
+  min-width: 0;
+  padding: 1.25rem 0;
+}
+.phase + .phase {
+  border-top: 1px dashed var(--border);
+}
+.phaseLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  font:
+    0.75rem/1.6 ui-monospace,
+    monospace;
+  color: var(--muted-foreground);
+}
+.phase[data-phase='intervention'] .phaseLabel {
+  color: var(--brand-accent);
+}
+.phase[data-phase='result'] .phaseLabel {
+  color: var(--brand-accent);
+}
+.phase h4 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+.scopeNote {
+  display: grid;
+  gap: 0.5rem;
+  padding-block: 1rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+.scopeNote > span {
+  font:
+    0.75rem/1.8 ui-monospace,
+    monospace;
+  color: var(--brand-accent);
+}
+.evidence summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+  cursor: pointer;
+  list-style: none;
+  font-size: 0.8125rem;
+}
+.evidenceBody {
+  max-width: 78ch;
+  font-size: 0.875rem;
+  line-height: 1.75;
+}
+.evidenceBody p {
+  margin-top: 1rem;
+}
+.source {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+@media (min-width: 768px) {
+  .summary {
+    grid-template-columns: 1fr 2fr auto;
+    gap: 2rem;
+  }
+  .outcome,
+  .disclosure {
+    grid-column: auto;
+    grid-row: auto;
+  }
+  .flow {
+    padding: 1.5rem 2rem;
+  }
+  .sequence {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+  }
+  .phase + .phase {
+    border-top: 0;
+  }
+  .phaseLabel svg {
+    transform: rotate(-90deg);
+  }
+  .scopeNote {
+    grid-template-columns: auto 1fr;
+    gap: 1.5rem;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .summary {
+    transition: background-color 150ms ease-out;
+  }
+  .detailsIcon {
+    transition: transform 150ms ease-out;
+  }
+}

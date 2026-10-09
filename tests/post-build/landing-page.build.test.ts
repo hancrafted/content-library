@@ -58,8 +58,8 @@ describe('landing page post-build structure', () => {
     const steps = desktopSlides.map((_, el) => $(el).attr('data-method-slide')).get();
     expect(steps).toEqual(['01', '02', '03', '04', '05']);
 
-    // About: six story cards on the matrix, after the method rail; the bridge placeholder is gone
-    expect($('#about [data-story-matrix] article[data-story-cell]').length).toBe(6);
+    // About remains a destination after the method rail.
+    expect($('#about').length).toBe(1);
     expect($('#narrative-bridge').length).toBe(0);
 
     // The identified sections stand in page order, after the id-less hero
@@ -67,6 +67,88 @@ describe('landing page post-build structure', () => {
       .map((_, el) => $(el).attr('id'))
       .get();
     expect(sections).toEqual(['episodes', 'services', 'about']);
+  });
+
+  it.each(LANDING_PAGES)('shows every About outcome in a collapsible case summary for $locale', ({ url, locale }) => {
+    // ARRANGE
+    const expected =
+      locale === 'de'
+        ? {
+            outcomes: [
+              ['RIB Software', '~5', 'Monate'],
+              ['Audi', '30', 'Minuten'],
+              ['Selfbits', '5', 'Werke'],
+            ],
+            newTab: 'neuer Tab',
+          }
+        : {
+            outcomes: [
+              ['RIB Software', '~5', 'months'],
+              ['Audi', '30', 'minutes'],
+              ['Selfbits', '5', 'factories'],
+            ],
+            newTab: 'new tab',
+          };
+    const linkedInUrl = 'https://www.linkedin.com/in/han-che/';
+    const blankTarget = '_blank';
+    const safeRel = ['noopener', 'noreferrer'];
+    const caseCount = expected.outcomes.length;
+    const initiallyOpenCaseCount = 1;
+    const initiallyOpenCaseIndex = 0;
+    const openAttribute = 'open';
+    const maximumWordsPerSummary = 30;
+
+    // ACT
+    const $ = getPage(url);
+    const about = $('#about');
+    const cases = about.find('article');
+    const caseDetails = cases.children('details');
+    const caseSummaries = caseDetails.children('summary');
+    const openCases = caseDetails.filter('[open]');
+    const profile = about.find(`a[href="${linkedInUrl}"]`);
+
+    // ASSERT
+    expect(cases.length).toBe(caseCount);
+    expected.outcomes.forEach((outcomes, index) => {
+      const summaryText = caseSummaries.eq(index).text().replace(/\s+/g, ' ');
+      outcomes.forEach((text) => expect(summaryText).toContain(text));
+      expect(summaryText.trim().split(/\s+/).length).toBeLessThanOrEqual(maximumWordsPerSummary);
+    });
+    expect(caseDetails.length).toBe(caseCount);
+    expect(caseSummaries.length).toBe(caseCount);
+    expect(openCases.length).toBe(initiallyOpenCaseCount);
+    expect(caseDetails.eq(initiallyOpenCaseIndex).attr('open')).toBe(openAttribute);
+    expect(profile.attr('target')).toBe(blankTarget);
+    safeRel.forEach((rel) => expect(profile.attr('rel')).toContain(rel));
+    expect(profile.text()).toContain(expected.newTab);
+  });
+
+  it.each(LANDING_PAGES)('keeps the fuller case evidence in native disclosures for $locale', ({ url, locale }) => {
+    // ARRANGE
+    const expected =
+      locale === 'de'
+        ? {
+            phases: ['Vorher', 'Mein Beitrag', 'Ergebnis'],
+            evidence: ['6–8 Wochen', '6 Monaten', '200+', '3 HEPA-Linien', '2 Fabriken', '9 Monaten'],
+          }
+        : {
+            phases: ['Before', 'My contribution', 'Result'],
+            evidence: ['6–8 weeks', '6 months', '200+', '3 HEPA lines', '2 factories', '9 months'],
+          };
+    const expectedCount = 3;
+
+    // ACT
+    const $ = getPage(url);
+    const cases = $('#about article');
+    const caseDetails = cases.children('details');
+    const evidenceDetails = caseDetails.find('details');
+    const detailText = caseDetails.text();
+
+    // ASSERT
+    expect(caseDetails.length).toBe(expectedCount);
+    expect(evidenceDetails.length).toBe(expectedCount);
+    expected.phases.forEach((phase) => expect(detailText).toContain(phase));
+    expected.evidence.forEach((fact) => expect(detailText).toContain(fact));
   });
 
   const PUBLISHED_SLUGS = ['amnesiac-freelancer', 'maintaining-markdown-for-ai', 'ai-token-economy'];

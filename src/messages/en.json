@@ -107,67 +107,102 @@
     },
     "templateTitle": "Episode Page Template",
     "about": {
-      "eyebrow": "About me",
-      "headlineStepOut": "I make change happen by stepping out of the argument.",
-      "headlineNotPushing": "Change sticks when I'm not the one pushing it.",
-      "headlineLead": "Every story here makes the same move: once I stop being the thing people argue with, the change carries itself.",
+      "eyebrow": "About / Proof in practice",
+      "edition": "People × process × technology",
+      "headline": "Change you can",
+      "headlineAccent": "point to.",
+      "lead": "Less dependency. Better decisions. Software people actually use. Three changes I helped teams deliver.",
+      "exploreCase": "Explore case",
       "identity": {
-        "kicker": "The person",
+        "label": "About Han Che",
         "name": "Han Che",
-        "positioning": "People and technology are one system. You cannot improve one side alone.",
-        "body": "I work on socio-technological ecosystems — the teams, processes and tools that only change together.",
-        "practice": "Coaching · Consulting · Engineering leadership",
-        "languages": "English · Deutsch"
+        "practice": "Engineering leader · Consultant · Coach",
+        "body": "I connect the commercial, technical and human sides of change. Engineer, team lead and trainer, with 2,000+ hours of coaching and training.",
+        "link": "Meet me on LinkedIn",
+        "newTab": "new tab"
       },
-      "axes": {
-        "individual": "Individual",
-        "team": "Team",
-        "organisation": "Organisation & Stakeholder",
-        "process": "Process change",
-        "technology": "Technology adoption"
+      "readingKey": "Read each case: before → intervention → result",
+      "schematic": "Illustrations are schematics, not charts.",
+      "phases": {
+        "before": "Before",
+        "intervention": "My contribution",
+        "result": "Result"
       },
-      "stories": {
-        "pitch": {
-          "title": "A pitch the founder owns",
-          "stat": "2",
-          "statUnit": "founders",
-          "description": "Both decks pivoted 180°, away from explaining the product and toward the sales data an investor actually buys. The hard part was a founder in love with their own solution.",
-          "labels": ["Startup pitch coaching", "Coaching", "Founders"]
+      "scope": "Scope & timing",
+      "readNote": "See the case evidence",
+      "contactTitle": "Where is the work getting stuck?",
+      "contact": "Let's find the next step",
+      "closing": "Start with the people, the process and the tools. Not another tool in isolation.",
+      "provenance": "Selected first-person accounts, cross-checked against my CV and professional profile. These describe my contribution within teams, not independently audited results.",
+      "cases": {
+        "rib": {
+          "company": "RIB Software",
+          "role": "Engineering Manager",
+          "tag": "Distributed ownership",
+          "title": "A team that doesn't wait for its manager.",
+          "metric": "~5",
+          "unit": "months to self-running Scrum",
+          "before": {
+            "title": "One gatekeeper",
+            "body": "Refinement, estimates, assignments and reviews converged on one gatekeeper. The team had too little ownership to move independently."
+          },
+          "intervention": {
+            "title": "Shared decisions",
+            "body": "I coached shared refinement and estimation, made capacity explicit and built peer review. Team members took responsibility for planning and their own Scrum rituals."
+          },
+          "result": {
+            "title": "Independent team",
+            "body": "In ~5 months, the team was running its own Scrum rituals with little need for me to be in the room. Distributed ownership became daily practice."
+          },
+          "scope": "About five months of team development. “Runs itself” refers to day-to-day team routines, not an organisation without leadership.",
+          "note": "My intervention was not another approval layer. I helped the team refine and estimate together, communicate its capacity and unblock work with other teams. Peer review gave colleagues a way to build agreement and carry decisions themselves.",
+          "source": "Basis: personal accomplishment notes; Engineering Manager role and five-month transformation recorded in my CV."
         },
-        "gatekeeper": {
-          "title": "The gatekeeper becomes the reviewer",
-          "stat": "50+",
-          "statUnit": "PRs a week",
-          "description": "One person was reviewing all of them by hand. He got AI-driven code review in CI as his own project — the bottleneck built the thing that removed it.",
-          "labels": ["RIB Software", "AI", "Ownership"]
+        "audi": {
+          "company": "Audi",
+          "role": "Tech Lead at XL2",
+          "tag": "A process people recognise",
+          "title": "Less meeting. More deciding.",
+          "metric": "30",
+          "unit": "minutes saved per meeting, on average",
+          "before": {
+            "title": "Legacy approval",
+            "body": "The final approval before serial production depended on a legacy process. The starting request was to reproduce the existing Excel workflow."
+          },
+          "intervention": {
+            "title": "Model the process",
+            "body": "With an architect colleague, I worked through stakeholder sessions, state diagrams and a relational data model. We built one core process end to end."
+          },
+          "result": {
+            "title": "Digital sign-off",
+            "body": "The core-process demo made the model tangible. The digitisation effort also shortened approval meetings by an average of 30 minutes."
+          },
+          "scope": "6–8 weeks refers to the working core-process demo. The initial release took 6 months. The 30-minute figure is the average meeting reduction, not a demo benchmark.",
+          "note": "State transitions gave stakeholders a model in their own domain language. The demo ran on pre-production with data import and export, side by side with the existing tool. It was a concrete basis for agreement on how the process should work.",
+          "source": "Basis: personal accomplishment notes for the demo; CV for the six-month initial release and average meeting reduction."
         },
-        "ribTeam": {
-          "title": "Biggest bottleneck → self-running team",
-          "stat": "~5",
-          "statUnit": "months",
-          "description": "Inherited the team the org called its worst bottleneck. Gave refinement, estimation and planning back to them; within months they ran their own scrum without me.",
-          "labels": ["RIB Software", "Team lead", "Agile"]
-        },
-        "teachBack": {
-          "title": "Skills they can teach back",
-          "stat": "6",
-          "statUnit": "developers, 2 countries",
-          "description": "Once agile ran itself, we moved to AI workflows and human-in-the-loop skills. The bar wasn't using them — it was being able to show another team how, and leave the paper trail.",
-          "labels": ["RIB Software", "AI", "Enablement"]
-        },
-        "audiGates": {
-          "title": "Approval gates, modernised",
-          "stat": "30",
-          "statUnit": "min per meeting",
-          "description": "Two years of nothing, because nobody had modelled the process. Six weeks of interviews and state diagrams later, the stakeholders had a data model they recognised as their own.",
-          "labels": ["Audi", "Governance", "Stakeholders"]
-        },
-        "ribAi": {
-          "title": "AI enablement at RIB",
-          "stat": "15–20",
-          "statUnit": "senior engineers",
-          "description": "Not a talk about AI — a talk built with it, on token economy and model selection. Proof first; the enablement role followed.",
-          "labels": ["RIB Software", "AI", "Enablement"]
+        "selfbits": {
+          "company": "Selfbits",
+          "role": "Founding Engineer",
+          "tag": "Software put into use",
+          "title": "Beyond the demo. Into production.",
+          "metric": "5",
+          "unit": "factories across Europe",
+          "before": {
+            "title": "Production data",
+            "body": "How can production orders become usable data about equipment effectiveness? The work needed to connect manufacturing processes with the people operating them."
+          },
+          "intervention": {
+            "title": "Build and pilot",
+            "body": "I designed, implemented and operated manufacturing execution software with the team: web, mobile and TV interfaces for scheduling, master data and OEE."
+          },
+          "result": {
+            "title": "Software in use",
+            "body": "The software served 200+ users across the total deployment. A defined pilot acquired order-based OEE data on 3 HEPA lines in 2 factories within 9 months."
+          },
+          "scope": "5 factories and 200+ users describe the total deployment in my CV. The nine-month milestone covers the 3-line, 2-factory pilot, not the full rollout.",
+          "note": "Manufacturing execution software connects production planning with work on the factory floor. OEE means overall equipment effectiveness. Here, the pilot concerned acquiring that data per production order; no percentage improvement in OEE is claimed.",
+          "source": "Basis: CV for deployment and pilot scope; professional profile for work on scheduling, OEE dashboards and master data."
         }
       }
     }

@@ -22,8 +22,8 @@ function SlideBullets({ bullets, deliverable }: { bullets: readonly string[]; de
           <span>{bullet}</span>
         </li>
       ))}
-      <li className="flex items-start gap-3 mt-1 font-semibold text-emerald-500">
-        <span className="mt-[0.65em] inline-block h-[1px] w-3 shrink-0 bg-emerald-500" />
+      <li className="flex items-start gap-3 mt-1 font-semibold text-brand-accent">
+        <span className="mt-[0.65em] inline-block h-[1px] w-3 shrink-0 bg-brand-accent" />
         <span>{deliverable}</span>
       </li>
     </ul>

@@ -1,77 +1,174 @@
-import type { StoryCardCopy } from '@/components/landing/story-card';
-import { StoryMatrix, type MatrixLabels } from '@/components/landing/story-matrix.client';
+import { AboutAnchor } from '@/components/landing/about-anchor.client';
+import caseStyles from '@/components/landing/fieldnote-case.module.css';
+import { FieldnoteSketch } from '@/components/landing/fieldnote-sketch';
+import styles from '@/components/landing/fieldnotes.module.css';
+import { Button } from '@/components/ui/button';
 import type { Locale } from '@/lib/locale.pure';
-import { matrixCells, STORY_PLACEMENTS, type StoryId } from '@/lib/story-matrix.pure';
+import { ArrowDown, ArrowUpRight, Plus } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 type AboutT = Awaited<ReturnType<typeof getTranslations<'landing.about'>>>;
+type CaseId = 'rib' | 'audi' | 'selfbits';
 
-/** Which of the two candidate headlines renders — open question 1, pending Han's pick. */
-const HEADLINE_KEY = 'headlineStepOut' satisfies 'headlineStepOut' | 'headlineNotPushing';
+const CASES = ['rib', 'audi', 'selfbits'] as const;
+const PHASES = ['before', 'intervention', 'result'] as const;
 
-function storyCopy(t: AboutT, id: StoryId): StoryCardCopy {
-  return {
-    id,
-    title: t(`stories.${id}.title`),
-    stat: t(`stories.${id}.stat`),
-    statUnit: t(`stories.${id}.statUnit`),
-    description: t(`stories.${id}.description`),
-    labels: t.raw(`stories.${id}.labels`) as string[],
-  };
-}
-
-/** Leaf by leaf: next-intl types `t.raw` to leaf keys only, so an object node cannot be read whole. */
-function matrixLabels(t: AboutT): MatrixLabels {
-  return {
-    axes: {
-      individual: t('axes.individual'),
-      team: t('axes.team'),
-      organisation: t('axes.organisation'),
-      process: t('axes.process'),
-      technology: t('axes.technology'),
-    },
-  };
-}
-
-function IdentityCard({ t }: { t: AboutT }) {
+function Identity({ t }: { t: AboutT }) {
   return (
-    <aside className="flex flex-col gap-6 rounded-3xl bg-foreground p-8 text-background lg:sticky lg:top-24 lg:self-start">
-      <div className="font-mono text-[0.65rem] uppercase tracking-widest opacity-60">{t('identity.kicker')}</div>
-      <div className="space-y-1">
-        <h3 className="text-2xl font-bold tracking-tight">{t('identity.name')}</h3>
-        <p className="font-mono text-xs opacity-70">{t('identity.practice')}</p>
+    <aside className={styles.identity} aria-label={t('identity.label')}>
+      <span className={styles.monogram} aria-hidden="true">
+        hc.
+      </span>
+      <div>
+        <p className={styles.name}>{t('identity.name')}</p>
+        <p className={styles.practice}>{t('identity.practice')}</p>
       </div>
-      <p className="text-xl font-semibold leading-snug">{t('identity.positioning')}</p>
-      <p className="text-sm leading-relaxed opacity-75">{t('identity.body')}</p>
-      <p className="mt-auto border-t border-background/20 pt-4 font-mono text-xs opacity-70">
-        {t('identity.languages')}
-      </p>
+      <p className={styles.identityBody}>{t('identity.body')}</p>
+      <a
+        href="https://www.linkedin.com/in/han-che/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className={styles.profileLink}
+      >
+        <span>
+          {t('identity.link')} <span className={styles.newTab}>({t('identity.newTab')})</span>
+        </span>
+        <ArrowUpRight size={18} aria-hidden="true" />
+      </a>
     </aside>
   );
 }
 
-function AboutHeader({ t }: { t: AboutT }) {
+function CaseSequence({ id, t }: { id: CaseId; t: AboutT }) {
   return (
-    <header className="max-w-3xl space-y-4">
-      <p className="text-sm font-medium text-muted-foreground">{t('eyebrow')}</p>
-      <h2 className="text-3xl font-bold leading-tight tracking-tight text-foreground sm:text-4xl">{t(HEADLINE_KEY)}</h2>
-      <p className="text-base leading-relaxed text-muted-foreground">{t('headlineLead')}</p>
-    </header>
+    <ol className={caseStyles.sequence}>
+      {PHASES.map((phase) => (
+        <li key={phase} className={caseStyles.phase} data-phase={phase}>
+          <p className={caseStyles.phaseLabel}>
+            {t(`phases.${phase}`)} <ArrowDown size={14} aria-hidden="true" />
+          </p>
+          <FieldnoteSketch story={id} phase={phase} />
+          <h4>{t(`cases.${id}.${phase}.title`)}</h4>
+        </li>
+      ))}
+    </ol>
   );
 }
 
-/** About: the identity card beside the story matrix; on narrow screens the card comes first, then the story list. */
+function WorkingNote({ id, t }: { id: CaseId; t: AboutT }) {
+  return (
+    <details className={caseStyles.evidence}>
+      <summary>
+        <span>{t('readNote')}</span>
+        <Plus size={18} className={caseStyles.detailsIcon} aria-hidden="true" />
+      </summary>
+      <div className={caseStyles.evidenceBody}>
+        {PHASES.map((phase) => (
+          <p key={phase}>{t(`cases.${id}.${phase}.body`)}</p>
+        ))}
+        <p>{t(`cases.${id}.note`)}</p>
+        <p className={caseStyles.source}>{t(`cases.${id}.source`)}</p>
+      </div>
+    </details>
+  );
+}
+
+function CaseSummary({ id, index, t }: { id: CaseId; index: number; t: AboutT }) {
+  return (
+    <summary className={caseStyles.summary}>
+      <span className={caseStyles.company}>
+        <span className={caseStyles.number} aria-hidden="true">
+          0{index + 1}
+        </span>
+        <span id={`about-${id}`}>{t(`cases.${id}.company`)}</span>
+      </span>
+      <span className={caseStyles.outcome}>
+        <strong>{t(`cases.${id}.metric`)}</strong>
+        <span>{t(`cases.${id}.unit`)}</span>
+      </span>
+      <span className={caseStyles.disclosure}>
+        <span>{t('exploreCase')}</span>
+        <Plus size={20} className={caseStyles.detailsIcon} aria-hidden="true" />
+      </span>
+    </summary>
+  );
+}
+
+function CaseNote({ id, index, t }: { id: CaseId; index: number; t: AboutT }) {
+  return (
+    <article className={caseStyles.case} aria-labelledby={`about-${id}`}>
+      <details open={index === 0}>
+        <CaseSummary id={id} index={index} t={t} />
+        <div className={caseStyles.flow}>
+          <header className={caseStyles.context}>
+            <h3>{t(`cases.${id}.title`)}</h3>
+            <span>{t(`cases.${id}.role`)}</span>
+          </header>
+          <CaseSequence id={id} t={t} />
+          <p className={caseStyles.scopeNote}>
+            <span>{t('scope')}</span>
+            {t(`cases.${id}.scope`)}
+          </p>
+          <WorkingNote id={id} t={t} />
+        </div>
+      </details>
+    </article>
+  );
+}
+
+function Introduction({ t }: { t: AboutT }) {
+  return (
+    <div className={styles.intro}>
+      <header>
+        <h2 id="about-heading">
+          {t('headline')} <em>{t('headlineAccent')}</em>
+        </h2>
+        <p className={styles.lead}>{t('lead')}</p>
+      </header>
+      <Identity t={t} />
+    </div>
+  );
+}
+
+function AboutContact({ t }: { t: AboutT }) {
+  return (
+    <footer className={styles.footer}>
+      <div>
+        <p className={styles.contactTitle}>{t('contactTitle')}</p>
+        <p>{t('closing')}</p>
+      </div>
+      <Button asChild className={styles.contactButton}>
+        <a href="https://calendly.com/hanche2001/30min" target="_blank" rel="noopener noreferrer">
+          {t('contact')} <ArrowUpRight size={18} aria-hidden="true" />
+          <span className="sr-only"> ({t('identity.newTab')})</span>
+        </a>
+      </Button>
+    </footer>
+  );
+}
+
+/** Outcomes stay in each summary; native disclosure reveals the process and its scope. */
 export async function AboutSection({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'landing.about' });
-  const stories = Object.fromEntries(STORY_PLACEMENTS.map(({ id }) => [id, storyCopy(t, id)]));
   return (
-    <section id="about" className="mx-auto w-full max-w-7xl px-6 py-24 sm:py-32">
-      <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,17rem)_minmax(0,1fr)] lg:gap-12">
-        <IdentityCard t={t} />
-        <div className="flex flex-col gap-10">
-          <AboutHeader t={t} />
-          <StoryMatrix cells={matrixCells(STORY_PLACEMENTS)} stories={stories} labels={matrixLabels(t)} />
+    <section id="about" className={styles.section} aria-labelledby="about-heading">
+      <AboutAnchor />
+      <div className={styles.inner}>
+        <div className={styles.masthead}>
+          <p>{t('eyebrow')}</p>
+          <span>{t('edition')}</span>
         </div>
+        <Introduction t={t} />
+        <div className={styles.readingKey}>
+          <p>{t('readingKey')}</p>
+          <span>{t('schematic')}</span>
+        </div>
+        <div>
+          {CASES.map((id, index) => (
+            <CaseNote key={id} id={id} index={index} t={t} />
+          ))}
+        </div>
+        <AboutContact t={t} />
       </div>
     </section>
   );
