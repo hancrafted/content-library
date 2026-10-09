@@ -1,4 +1,5 @@
 import type { Locale } from './locale.pure';
+import { fillTemplate } from './template.pure';
 
 /*
  * Spoken time, counted from the Voice script (FE-010): a Slide's minutes and
@@ -8,7 +9,7 @@ import type { Locale } from './locale.pure';
  */
 
 /** Speaking pace per locale: German words run longer, so fewer fit in a minute. */
-export const WORDS_PER_MINUTE: Readonly<Record<Locale, number>> = { en: 140, de: 120 };
+const WORDS_PER_MINUTE: Readonly<Record<Locale, number>> = { en: 140, de: 120 };
 
 /** A rich-text tag as the Translation file writes it: `<em>`, `</ref>`. */
 const TAG = /<\/?[a-z][\w-]*>/gi;
@@ -46,8 +47,28 @@ export function segmentSpans(segments: readonly SpokenSegment[], locale: Locale)
   return spans;
 }
 
+/** Sums of fractions drift by far less than a millionth of a minute: trim that noise before rounding up. */
+const FLOAT_NOISE_STEPS = 1e6;
+
 /** Minutes as the reader sees them: whole, rounded up so the last minute never reads as zero too early. */
 export function wholeMinutes(minutes: number): number {
   // Trim float noise first, so 12.000000001 never reads as 13.
-  return Math.ceil(Math.round(minutes * 1e6) / 1e6);
+  return Math.ceil(Math.round(minutes * FLOAT_NOISE_STEPS) / FLOAT_NOISE_STEPS);
+}
+
+/** Whether an Episode shows a reading time at all: one without a Voice script totals 0 and shows none. */
+export function hasReadingTime(totalMinutes: number): boolean {
+  return totalMinutes > 0;
+}
+
+/** "12 min left" per plural category, `{count}` standing for the whole minutes. */
+export type RemainingTemplates = Readonly<Record<'one' | 'other', string>>;
+
+/** "12 min left" in the reader's locale, rounded up so the last minute never reads as zero too early. */
+export function remainingLabel(templates: RemainingTemplates, locale: Locale, minutes: number): string {
+  // Plurals are resolved here, not by ICU: the count changes on the client, and functions cannot cross
+  // the server/client boundary.
+  const count = wholeMinutes(minutes);
+  const category = new Intl.PluralRules(locale).select(count) === 'one' ? 'one' : 'other';
+  return fillTemplate(templates[category], { count });
 }

@@ -182,8 +182,8 @@
     "title": "Inhalt",
     "progress": "Lesezeit",
     "remaining": {
-      "one": "noch # Min.",
-      "other": "noch # Min."
+      "one": "noch {count} Min.",
+      "other": "noch {count} Min."
     },
     "toggle": "Folien ein- oder ausblenden",
     "loading": "Wird geladen",
