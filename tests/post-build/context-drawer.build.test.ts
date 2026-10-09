@@ -249,15 +249,15 @@ describe('amnesiac-freelancer', () => {
       const notes = entry($, 'notes', owner).find(`[data-note="${slug}"]`);
       return {
         native: ref.tagName === 'button' && $(ref).attr('type') === 'button' && $(ref).attr('href') === undefined,
-        // Legacy: the phrase's wrapper carries `<slide>--<note>`, so a note may target it.
-        id: wrapper.attr('id') === `${owner}--${slug}`,
+        // The phrase's wrapper is the target named after its note, so a note may point at it.
+        target: wrapper.attr('data-target') === slug,
         notes: notes.length,
         numbered: $(ref).find('sup').length > 0 || /\d/.test($(ref).text()),
       };
     });
     // ASSERT
     expect(refs).toHaveLength(3);
-    resolved.forEach((r) => expect(r).toEqual({ native: true, id: true, notes: 1, numbered: false }));
+    resolved.forEach((r) => expect(r).toEqual({ native: true, target: true, notes: 1, numbered: false }));
   });
 
   it.each(LOCALES)('numbers sources in a list and points every citation marker into it, in %s', (locale) => {

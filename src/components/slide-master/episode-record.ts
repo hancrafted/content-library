@@ -155,6 +155,13 @@ export interface EpisodeRecord<Ep extends RecordEpisodeSlug = RecordEpisodeSlug>
   readonly sections: readonly Section<Ep>[];
 }
 
+/**
+ * The record of any one Episode: a union of `EpisodeRecord<E>` per Episode,
+ * not `EpisodeRecord<union>`, whose Slide slugs would collapse to the keys
+ * every Episode shares.
+ */
+export type AnyEpisodeRecord = { [E in RecordEpisodeSlug]: EpisodeRecord<E> }[RecordEpisodeSlug];
+
 /** What a Slide file declares; `slug` is const-inferred and types the rest. */
 export interface SlideSpec<Ep extends RecordEpisodeSlug, S extends SlideSlug<Ep>, N extends NoteSpec> {
   readonly slug: S;
@@ -190,6 +197,6 @@ export function episode<Ep extends RecordEpisodeSlug>(record: EpisodeRecord<Ep>)
 }
 
 /** True for an Episode record; false for a legacy Episode that renders through `content(locale)`. */
-export function isEpisodeRecord(value: object): value is EpisodeRecord {
+export function isEpisodeRecord(value: object): value is AnyEpisodeRecord {
   return 'sections' in value;
 }
