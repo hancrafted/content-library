@@ -5,15 +5,18 @@ This project is a localized Next.js application which serves to visualize theory
 ## Rules
 
 - Do not edit`CLAUDE.md`, it is a symlink to `AGENTS.md`.
-- Always use `/commit` to commit, `/tdd` and `/code-review` for implementation
+- Always use `/commit` to commit, `/tdd` and `/code-review` for implementation.
+- `/code-review` is the reviewer. `archgate check` is the ADR gate; `archgate:reviewer` findings are advisory: confirm each against the ADR text before acting.
+- Save a pasted handoff verbatim to `.scratch/<feature>/handoff.md` before starting; review agents read that file as the spec.
 - Use `npm run verify` frequently to verify that the changes are correct.
 - Binding decisions live in Archgate ADRs under `.archgate/adrs/`.
 - An ADR's `files:`/`paths:` name where authors of governed code work, two or three globs, and cover every file its checks fire in. Compliance names kinds of enforcer (types, lint, tests), not config files.
 - For any /grill-with-docs and /wayfinder, using the /grilling skill read the `docs/agents/grilling-format.md`, which overwrites the grill format. Analog for voice sessions read `docs/agents/grilling-voice.md`.
-- Create worktrees in `.worktrees` and run `npm i` inside the new worktree before using it.
+- Worktrees: `npm run wt:new -- <branch>` and `npm run wt:done -- <branch>` (the `worktree` skill). They override any worktree path a handoff names.
 
 ## Testing
 
+- Visual checks: `npm run shot` (the `visual-check` skill) prints DOM numbers; prefer them, and read at most one image per iteration. The claude-in-chrome tools are deferred: load them via ToolSearch before concluding they are unavailable.
 - Browser checks of GSAP motion (the landing hero): a background or occluded tab never fires `requestAnimationFrame`, so the animation stays paused and any window resize finishes it by design. Bring the tab to the front before judging motion; DOM counts (`[data-task-paper]` opacity, `[data-completed-papers]`, `[data-overflow-papers]`) verify the mechanics without it.
 
 - `*.test.ts` is the fast suite in `npm run verify`; `*.build.test.ts` needs `out/` and runs only via `npm run test:build` after `npm run build`. Keep the two vitest configs split — `verify` must stay fast and must not require a build.
