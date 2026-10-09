@@ -71,6 +71,7 @@ export default tseslint.config(
       'out/**',
       'next-env.d.ts',
       '.worktrees/**',
+      '.screenshots/**',
     ],
   },
   {
