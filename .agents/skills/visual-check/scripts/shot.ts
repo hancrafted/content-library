@@ -29,6 +29,7 @@ const { values: args } = parseArgs({
     probe: { type: 'string', multiple: true, default: [] },
     styles: { type: 'string', default: '' },
     wait: { type: 'string', default: '500' },
+    theme: { type: 'string' },
   },
 });
 
@@ -98,6 +99,11 @@ async function load(send: Send, events: EventTarget, viewport: Box): Promise<voi
     deviceScaleFactor: 1,
     mobile: false,
   });
+  // The site's theme defaults to the system preference, so emulating it sets the theme a fresh reader sees.
+  if (args.theme) {
+    if (!['light', 'dark'].includes(args.theme)) throw new Error(`--theme must be light or dark, got ${args.theme}`);
+    await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: args.theme }] });
+  }
   await send('Page.enable');
   const loaded = new Promise((resolve) => events.addEventListener('Page.loadEventFired', resolve, { once: true }));
   await send('Page.navigate', { url: args.url });
@@ -107,6 +113,9 @@ async function load(send: Send, events: EventTarget, viewport: Box): Promise<voi
 
 async function clipBox(send: Send, viewport: Box): Promise<Box> {
   if (!args.clip) return viewport;
+  // Scroll the element in first: an Episode mounts a Slide's content only near the viewport.
+  await evaluate(send, `document.querySelector(${JSON.stringify(args.clip)})?.scrollIntoView({ block: 'start' })`);
+  await delay(Number(args.wait));
   const [probe] = await evaluate<{ box?: Box }[]>(send, probeExpression([args.clip], []));
   if (!probe.box) throw new Error(`--clip selector matched nothing: ${args.clip}`);
   return probe.box;
@@ -126,7 +135,9 @@ async function screenshot(send: Send, viewport: Box): Promise<{ path: string; wi
 
 async function main(): Promise<void> {
   if (!args.url)
-    throw new Error('usage: npm run shot -- --url <url> [--out file.png] [--clip sel] [--probe sel]... [--styles a,b]');
+    throw new Error(
+      'usage: npm run shot -- --url <url> [--out file.png] [--clip sel] [--theme light|dark] [--probe sel]... [--styles a,b]',
+    );
   const viewport: Box = { x: 0, y: 0, width: Number(args.width), height: Number(args.height) };
   const profile = mkdtempSync(path.join(tmpdir(), 'shot-'));
   const { chrome, port } = await launchChrome(profile);

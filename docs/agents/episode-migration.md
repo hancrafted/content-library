@@ -110,16 +110,15 @@ Done when: both pass, the build lists `/episode/<ep>` and `/de/episode/<ep>`, an
 
 ## 9. Check every Slide in both themes
 
-After step 8's build, shoot each locale in each theme; the script serves `out/` itself:
+After step 8's build, serve the export and shoot each Slide in each theme and locale. A Slide's id is its entry in `published-anchors.json`; `--clip` scrolls it into view so its content mounts, and `--theme` sets the system colour scheme the site follows by default:
 
 ```sh
-npm run screenshot -- /episode/<ep> --theme light
-npm run screenshot -- /episode/<ep> --theme dark
-npm run screenshot -- /de/episode/<ep> --theme light
-npm run screenshot -- /de/episode/<ep> --theme dark
+npm run preview &   # serves out/ at http://localhost:4300/
+npm run shot -- --url http://localhost:4300/episode/<ep> --clip '#<slide-id>' --theme light --out <scratchpad>/<slide-id>-light.png
+npm run shot -- --url http://localhost:4300/de/episode/<ep> --clip '#<slide-id>' --theme dark --out <scratchpad>/<slide-id>-de-dark.png
 ```
 
-First run on a machine: `npx playwright install chromium`. Read every PNG in `.screenshots/<ep>[-de]/<theme>/`.
+Read the images one at a time (the `visual-check` skill has the probe options for layout questions a picture is not needed for).
 
 - Text and marks readable on both backgrounds; no colour that only works in one theme.
 - Layout and wording match the source Slide.

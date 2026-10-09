@@ -150,7 +150,7 @@ flowchart LR
 3. **Lint and dependency rules:** Episode files can't write `h1`–`h3`, carry `'use client'` outside `client/`, render the table of contents or import the container; `canvas/` never imports a Slide; the per-function line cap is off only in `slides/` and `canvas/` (a Canvas is one long expression; complexity and file caps hold, `client/` keeps every cap).
 4. **Post-build test:** every Episode in every locale — slot order, one `h1`, heading level by position, every note target resolves in its Slide, no duplicate ids.
 
-**Manual review duties:** no part reads Slide data from the DOM; a Slide file declares only its own names; a `canvas/` part takes plain props; Episode CSS is scoped; every Slide looks right in light and dark (`npm run screenshot`, then a browser).
+**Manual review duties:** no part reads Slide data from the DOM; a Slide file declares only its own names; a `canvas/` part takes plain props; Episode CSS is scoped; every Slide looks right in light and dark (screenshots, then a browser).
 
 **Exceptions:** raise a separate ADR; human approval required.
 
