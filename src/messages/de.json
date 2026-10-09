@@ -107,67 +107,102 @@
     },
     "templateTitle": "Episoden-Seitenvorlage",
     "about": {
-      "eyebrow": "Über mich",
-      "headlineStepOut": "Ich bewege Veränderung, indem ich aus der Debatte heraustrete.",
-      "headlineNotPushing": "Veränderung hält, wenn nicht ich sie vorantreibe.",
-      "headlineLead": "Jede Geschichte hier macht denselben Zug: Sobald ich nicht mehr das bin, worüber gestritten wird, trägt sich die Veränderung selbst.",
+      "eyebrow": "Über mich / Wirkung in der Praxis",
+      "edition": "Menschen × Prozesse × Technologie",
+      "headline": "Veränderung, die",
+      "headlineAccent": "sichtbar wird.",
+      "lead": "Weniger Abhängigkeiten. Bessere Entscheidungen. Software, die genutzt wird. Drei Veränderungen, die ich mit Teams umgesetzt habe.",
+      "exploreCase": "Fall erkunden",
       "identity": {
-        "kicker": "Die Person",
+        "label": "Über Han Che",
         "name": "Han Che",
-        "positioning": "Menschen und Technologie sind ein System. Keine Seite lässt sich allein verbessern.",
-        "body": "Ich arbeite an sozio-technologischen Ökosystemen — Teams, Prozessen und Werkzeugen, die sich nur gemeinsam verändern.",
-        "practice": "Coaching · Beratung · Engineering-Führung",
-        "languages": "English · Deutsch"
+        "practice": "Engineering-Führung · Beratung · Coaching",
+        "body": "Ich verbinde die wirtschaftliche, technische und menschliche Seite von Veränderung. Entwickler, Teamleiter und Trainer mit über 2.000 Stunden Coaching und Training.",
+        "link": "Mein Profil auf LinkedIn",
+        "newTab": "neuer Tab"
       },
-      "axes": {
-        "individual": "Einzelperson",
-        "team": "Team",
-        "organisation": "Organisation & Stakeholder",
-        "process": "Prozesswandel",
-        "technology": "Technologie-Einführung"
+      "readingKey": "Je Fall: Ausgangslage → Beitrag → Ergebnis",
+      "schematic": "Schematische Illustrationen, keine Diagramme.",
+      "phases": {
+        "before": "Vorher",
+        "intervention": "Mein Beitrag",
+        "result": "Ergebnis"
       },
-      "stories": {
-        "pitch": {
-          "title": "Ein Pitch, der dem Gründer gehört",
-          "stat": "2",
-          "statUnit": "Gründer",
-          "description": "Beide Decks drehten um 180°: weg von der Produkterklärung, hin zu den Verkaufszahlen, die ein Investor wirklich kauft. Das Schwierige war ein Gründer, der in seine eigene Lösung verliebt war.",
-          "labels": ["Pitch-Coaching für Startups", "Coaching", "Gründer"]
+      "scope": "Umfang & Zeitraum",
+      "readNote": "Den Fall genauer ansehen",
+      "contactTitle": "Wo kommt die Arbeit ins Stocken?",
+      "contact": "Den nächsten Schritt finden",
+      "closing": "Bei Menschen, Prozessen und Werkzeugen ansetzen. Nicht beim nächsten isolierten Tool.",
+      "provenance": "Ausgewählte eigene Erfahrungsberichte, abgeglichen mit meinem Lebenslauf und beruflichen Profil. Sie beschreiben meinen Beitrag im Team, keine unabhängig geprüften Ergebnisse.",
+      "cases": {
+        "rib": {
+          "company": "RIB Software",
+          "role": "Engineering Manager",
+          "tag": "Verteilte Verantwortung",
+          "title": "Ein Team, das nicht auf den Chef wartet.",
+          "metric": "~5",
+          "unit": "Monate bis zum selbstständigen Scrum",
+          "before": {
+            "title": "Ein Gatekeeper",
+            "body": "Refinement, Schätzungen, Aufgabenverteilung und Reviews liefen bei einem Gatekeeper zusammen. Dem Team fehlte die Verantwortung, um eigenständig voranzukommen."
+          },
+          "intervention": {
+            "title": "Gemeinsam entscheiden",
+            "body": "Ich coachte gemeinsames Refinement und Schätzen, machte Kapazität sichtbar und baute Peer Review auf. Teammitglieder übernahmen Planung und eigene Scrum-Rituale."
+          },
+          "result": {
+            "title": "Eigenständiges Team",
+            "body": "Nach ca. 5 Monaten lief der Scrum-Alltag weitgehend ohne meine Anwesenheit. Verteilte Verantwortung wurde zur täglichen Praxis."
+          },
+          "scope": "Rund fünf Monate Teamentwicklung. „Organisiert sich selbst“ bezieht sich auf den Teamalltag, nicht auf eine Organisation ohne Führung.",
+          "note": "Mein Beitrag war keine weitere Freigabeinstanz. Ich unterstützte das Team dabei, gemeinsam zu verfeinern und zu schätzen, seine Kapazität zu kommunizieren und Abhängigkeiten mit anderen Teams zu klären. Peer Review gab Kolleginnen und Kollegen einen Rahmen, um Entscheidungen gemeinsam zu tragen.",
+          "source": "Grundlage: eigene Praxisnotizen; Rolle als Engineering Manager und fünfmonatige Transformation im Lebenslauf."
         },
-        "gatekeeper": {
-          "title": "Der Gatekeeper wird zum Reviewer",
-          "stat": "50+",
-          "statUnit": "PRs pro Woche",
-          "description": "Eine Person hat sie alle von Hand reviewt. Er bekam KI-gestütztes Code-Review in der CI als eigenes Projekt — der Engpass baute selbst, was ihn auflöste.",
-          "labels": ["RIB Software", "KI", "Verantwortung"]
+        "audi": {
+          "company": "Audi",
+          "role": "Tech Lead bei XL2",
+          "tag": "Ein gemeinsames Prozessverständnis",
+          "title": "Weniger Meeting. Mehr entscheiden.",
+          "metric": "30",
+          "unit": "Minuten weniger pro Meeting, im Schnitt",
+          "before": {
+            "title": "Gewachsene Freigabe",
+            "body": "Die letzte Freigabe vor der Serienproduktion hing an einem gewachsenen Prozess. Der erste Wunsch: den bestehenden Excel-Ablauf nachbauen."
+          },
+          "intervention": {
+            "title": "Prozess modellieren",
+            "body": "Mit einem Architekturkollegen erarbeitete ich in Stakeholder-Terminen Zustandsdiagramme und ein relationales Datenmodell. Wir setzten einen Kernprozess durchgängig um."
+          },
+          "result": {
+            "title": "Digital freigeben",
+            "body": "Die Kernprozess-Demo machte das Modell greifbar. Die Digitalisierung verkürzte Freigabemeetings zudem im Durchschnitt um 30 Minuten."
+          },
+          "scope": "6–8 Wochen gelten für die lauffähige Kernprozess-Demo. Der erste Release erfolgte nach 6 Monaten. Die 30 Minuten sind die durchschnittliche Meeting-Verkürzung, kein Demo-Benchmark.",
+          "note": "Zustandsübergänge machten den Prozess in der Fachsprache der Stakeholder sichtbar. Die Demo lief auf der Vorproduktionsumgebung mit Datenimport und -export, neben dem bestehenden Werkzeug. Damit gab es eine konkrete Grundlage, um sich über den Ablauf zu verständigen.",
+          "source": "Grundlage: eigene Praxisnotizen zur Demo; Lebenslauf zum ersten Release nach sechs Monaten und zur durchschnittlichen Meeting-Verkürzung."
         },
-        "ribTeam": {
-          "title": "Größter Engpass → selbstlaufendes Team",
-          "stat": "~5",
-          "statUnit": "Monate",
-          "description": "Ich übernahm das Team, das die Organisation ihren schlimmsten Engpass nannte. Refinement, Schätzung und Planung gab ich ihm zurück; nach wenigen Monaten lief sein Scrum ohne mich.",
-          "labels": ["RIB Software", "Teamleitung", "Agile"]
-        },
-        "teachBack": {
-          "title": "Fähigkeiten, die sie weitergeben können",
-          "stat": "6",
-          "statUnit": "Entwickler, 2 Länder",
-          "description": "Als Agile von selbst lief, gingen wir zu KI-Workflows und Human-in-the-Loop-Skills über. Der Maßstab war nicht, sie zu nutzen — sondern einem anderen Team zu zeigen, wie, und die Spur dazu zu hinterlassen.",
-          "labels": ["RIB Software", "KI", "Befähigung"]
-        },
-        "audiGates": {
-          "title": "Freigabe-Gates, modernisiert",
-          "stat": "30",
-          "statUnit": "Min. pro Meeting",
-          "description": "Zwei Jahre lang passierte nichts, weil niemand den Prozess modelliert hatte. Sechs Wochen Interviews und Zustandsdiagramme später hatten die Stakeholder ein Datenmodell, das sie als ihr eigenes erkannten.",
-          "labels": ["Audi", "Governance", "Stakeholder"]
-        },
-        "ribAi": {
-          "title": "KI-Befähigung bei RIB",
-          "stat": "15–20",
-          "statUnit": "Senior Engineers",
-          "description": "Kein Vortrag über KI — ein Vortrag, der mit ihr gebaut war, über Token-Ökonomie und Modellwahl. Erst der Beweis; die Befähigungsrolle folgte.",
-          "labels": ["RIB Software", "KI", "Befähigung"]
+        "selfbits": {
+          "company": "Selfbits",
+          "role": "Founding Engineer",
+          "tag": "Software im Einsatz",
+          "title": "Nach der Demo kommt der Einsatz.",
+          "metric": "5",
+          "unit": "Werke in Europa",
+          "before": {
+            "title": "Daten im Werk",
+            "body": "Wie werden aus Produktionsaufträgen nutzbare Daten zur Anlageneffektivität? Dafür mussten Fertigungsprozesse und die Menschen an den Anlagen zusammengebracht werden."
+          },
+          "intervention": {
+            "title": "Bauen und pilotieren",
+            "body": "Ich konzipierte, entwickelte und betrieb mit dem Team ein Manufacturing Execution System: Web-, Mobil- und TV-Oberflächen für Planung, Stammdaten und OEE."
+          },
+          "result": {
+            "title": "Software im Einsatz",
+            "body": "Die Software erreichte insgesamt 200+ Nutzer. Ein abgegrenzter Pilot erfasste auftragsbezogene OEE-Daten an 3 HEPA-Linien in 2 Fabriken innerhalb von 9 Monaten."
+          },
+          "scope": "5 Fabriken und 200+ Nutzer bezeichnen den gesamten Einsatz laut Lebenslauf. Der Neunmonats-Meilenstein gilt für den Pilot mit 3 Linien in 2 Fabriken, nicht für den gesamten Rollout.",
+          "note": "Ein Manufacturing Execution System verbindet Produktionsplanung und Fabrikalltag. OEE steht für Overall Equipment Effectiveness, also Gesamtanlageneffektivität. Im Pilot ging es um die Datenerfassung je Produktionsauftrag; eine prozentuale OEE-Steigerung wird hier nicht behauptet.",
+          "source": "Grundlage: Lebenslauf zu Einsatz und Pilotumfang; berufliches Profil zur Arbeit an Planung, OEE-Dashboards und Stammdaten."
         }
       }
     }

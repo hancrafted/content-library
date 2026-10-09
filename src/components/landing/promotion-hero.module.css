@@ -1,5 +1,5 @@
 .hero {
-  --hero-accent: #dd5f27;
+  --hero-accent: var(--brand-accent);
   --hero-wall: #eceeef;
   --hero-light: #fff1d2;
   --hero-sky-top: #8db6df;
@@ -46,7 +46,6 @@
 }
 
 :global(.dark) .hero {
-  --hero-accent: #f08a4b;
   --hero-wall: #15191b;
   --hero-light: #b7c7dc;
   --hero-sky-top: #0a152e;

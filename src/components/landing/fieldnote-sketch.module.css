@@ -1,0 +1,29 @@
+.sketch {
+  margin-block: 0.75rem 1rem;
+  color: var(--primary);
+}
+.sketch svg {
+  display: block;
+  width: 100%;
+  height: 6.5rem;
+}
+.paperFill {
+  fill: var(--background);
+}
+.accentStroke {
+  stroke: var(--brand-accent);
+  stroke-width: 2;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .revealed svg {
+    animation: fieldnote-settle 600ms ease-out both;
+  }
+}
+@keyframes fieldnote-settle {
+  from {
+    transform: translateY(6px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}

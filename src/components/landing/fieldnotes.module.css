@@ -1,0 +1,158 @@
+.section {
+  padding: 5rem 1.5rem 4rem;
+  scroll-margin-top: 7rem;
+  background: var(--background);
+  color: var(--foreground);
+}
+.inner {
+  max-width: 72rem;
+  margin-inline: auto;
+}
+.masthead,
+.readingKey,
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.masthead {
+  padding-top: 1rem;
+  border-top: 2px solid var(--primary);
+  font:
+    0.75rem/1.5 ui-monospace,
+    monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.masthead p {
+  color: var(--primary);
+  font-weight: 600;
+}
+.masthead > span,
+.readingKey > span {
+  color: var(--muted-foreground);
+}
+.intro {
+  display: grid;
+  gap: 2rem;
+  padding-block: 3rem;
+}
+.intro h2 {
+  max-width: 17ch;
+  font-size: clamp(2.5rem, 5.2vw, 4.5rem);
+  font-weight: 650;
+  line-height: 1.05;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+}
+.intro h2 em {
+  display: block;
+  color: var(--brand-accent);
+  font-style: normal;
+}
+.lead {
+  max-width: 43ch;
+  margin-top: 1.25rem;
+  color: var(--muted-foreground);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+.identity {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-content: start;
+  align-items: center;
+  align-self: end;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+.monogram {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border: 1px solid var(--brand-accent);
+  border-radius: var(--radius);
+  color: var(--brand-accent);
+  font-size: 1.75rem;
+  font-weight: 650;
+  letter-spacing: -0.08em;
+}
+.name {
+  font-size: 1.25rem;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+}
+.practice,
+.identityBody {
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+.identityBody,
+.profileLink {
+  grid-column: 1 / -1;
+}
+.profileLink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 44px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.875rem;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.newTab {
+  color: var(--muted-foreground);
+}
+.profileLink:hover,
+.profileLink:active {
+  color: var(--primary);
+}
+.profileLink:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 4px;
+}
+.readingKey {
+  padding-block: 1rem;
+  font:
+    0.75rem/1.6 ui-monospace,
+    monospace;
+}
+.footer {
+  align-items: center;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+.footer p {
+  max-width: 48ch;
+  color: var(--muted-foreground);
+  line-height: 1.6;
+}
+.footer .contactTitle {
+  margin-bottom: 0.5rem;
+  color: var(--foreground);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+.contactButton {
+  min-height: 48px;
+  padding-inline: 1.5rem;
+}
+@media (min-width: 768px) {
+  .section {
+    padding-block: 6rem 5rem;
+    scroll-margin-top: 5rem;
+  }
+  .intro {
+    grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+    gap: 4rem;
+  }
+}

@@ -8,7 +8,7 @@ import { episodeRoute, ROUTES } from '@/lib/routes';
 import { ArrowUpRight } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-type HeaderT = Awaited<ReturnType<typeof getTranslations>>;
+type HeaderT = Awaited<ReturnType<typeof getTranslations<never>>>;
 
 function themeLabels(t: HeaderT) {
   return { label: t('theme.label'), light: t('theme.light'), dark: t('theme.dark'), system: t('theme.system') };
