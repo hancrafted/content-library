@@ -29,7 +29,7 @@ async function renderedSlide(
 ): Promise<PlacedSlide<EpisodeSlide>> {
   const t = await translatorOf(locale, slide.episode, slide.slug);
   const notes = slide.notes.map((note) => note.slug);
-  const content = slide.content(slideKit({ t, level, notes, refLabel, slide: id }));
+  const content = slide.content(slideKit({ t, level, notes, refLabel, slideId: id }));
   const { notes: noteItems, voiceScript } = slideContext(t, slide);
   return {
     id,

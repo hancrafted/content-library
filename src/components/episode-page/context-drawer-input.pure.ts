@@ -1,6 +1,6 @@
 import type { ContextItem } from '@/components/context-drawer/context-drawer-input';
-import { splitCitations, type SpeakerNoteItem, type VoiceScriptSegment } from '../../lib/context-drawer.pure';
-import { checkedSlug, slidesInPageOrder, titleAnchor, type PlacedSlide } from '../../lib/episode.pure';
+import { splitCitations, type SpeakerNoteItem, type VoiceScriptSegment } from '@/lib/context-drawer.pure';
+import { checkedSlug, slidesInPageOrder, TITLE_ANCHOR, type PlacedSlide } from '@/lib/episode.pure';
 import type { EpisodeSlide, PlacedEpisodeSection } from './episode-page-container.pure';
 
 /*
@@ -17,7 +17,7 @@ import type { EpisodeSlide, PlacedEpisodeSection } from './episode-page-containe
  * nothing from the Episode modules (FE-010 §8).
  */
 
-function assertUniqueSlugs(kind: string, slide: string, slugs: readonly string[]): void {
+function assertValidUniqueSlugs(kind: string, slide: string, slugs: readonly string[]): void {
   const seen = new Set<string>();
   for (const slug of slugs) {
     checkedSlug(slug);
@@ -28,7 +28,7 @@ function assertUniqueSlugs(kind: string, slide: string, slugs: readonly string[]
 
 function checkCitations(slide: string, note: SpeakerNoteItem): void {
   const sources = note.sources ?? [];
-  assertUniqueSlugs(
+  assertValidUniqueSlugs(
     'source',
     `${slide}/${note.slug}`,
     sources.map((source) => source.slug),
@@ -47,12 +47,12 @@ export function checkContext(
   notes: readonly SpeakerNoteItem[],
   segments: readonly VoiceScriptSegment[],
 ): void {
-  assertUniqueSlugs(
+  assertValidUniqueSlugs(
     'note',
     slide,
     notes.map((n) => n.slug),
   );
-  assertUniqueSlugs(
+  assertValidUniqueSlugs(
     'segment',
     slide,
     segments.map((s) => s.slug),
@@ -81,7 +81,7 @@ function itemOf({ id, slide }: PlacedSlide<EpisodeSlide>): ContextItem {
  * drawer works, which the drawer shows on both tabs (FE-010).
  */
 function titleItem(explainer: string): ContextItem {
-  return { id: titleAnchor(), notes: [], script: [], explainer };
+  return { id: TITLE_ANCHOR, notes: [], script: [], explainer };
 }
 
 /**

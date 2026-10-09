@@ -34,21 +34,7 @@ export interface PlacedSection<S extends { readonly slides: readonly unknown[] }
  * The DOM id of the Title slide, and the active-Slide value for "no hash": the
  * top of the page. Reserved, so no Section or Slide slug may be `top`.
  */
-export function titleAnchor(): string {
-  return TITLE_ANCHOR;
-}
-
-const TITLE_ANCHOR = 'top';
-
-/** The DOM id of a Section's own slide. */
-export function sectionAnchor(section: string): string {
-  return section;
-}
-
-/** The DOM id of a page Slide inside a Section. */
-export function slideAnchor(section: string, slide: string): string {
-  return `${section}--${slide}`;
-}
+export const TITLE_ANCHOR = 'top';
 
 /** Lowercase kebab-case; a single hyphen only, since `--` joins section and slide. */
 const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -74,20 +60,20 @@ export function placeSections<S extends SlideOutline>(
   const placed = sections.map(([head, ...pages]) => {
     const section = checkedSlug(head.slug);
     return [
-      { id: sectionAnchor(section), slide: head, section, level: 'h2' as const },
+      { id: section, slide: head, section, level: 'h2' as const },
       ...pages.map((slide) => ({
-        id: slideAnchor(section, checkedSlug(slide.slug)),
+        id: `${section}--${checkedSlug(slide.slug)}`,
         slide,
         section,
         level: 'h3' as const,
       })),
     ];
   });
-  assertUniqueSlugs(placed.flat().map(({ slide }) => slide.slug));
+  assertUniqueSlideSlugs(placed.flat().map(({ slide }) => slide.slug));
   return placed;
 }
 
-function assertUniqueSlugs(slugs: readonly string[]): void {
+function assertUniqueSlideSlugs(slugs: readonly string[]): void {
   const seen = new Set<string>();
   for (const slug of slugs) {
     if (seen.has(slug)) {

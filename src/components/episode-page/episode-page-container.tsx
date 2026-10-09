@@ -2,7 +2,7 @@ import { ContextDrawerSlot } from '@/components/context-drawer/context-drawer-sl
 import type { AnyEpisodeRecord } from '@/components/slide-master/episode-record';
 import { TableOfContents, type TocLabels } from '@/components/table-of-contents/table-of-contents.client';
 import { readTranslationStrings } from '@/i18n/translation-strings';
-import { slidesInPageOrder, titleAnchor } from '@/lib/episode.pure';
+import { slidesInPageOrder, TITLE_ANCHOR } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { episodeRoute, type EpisodeSlug } from '@/lib/routes';
 import { ContentArea } from './content-area';
@@ -68,7 +68,7 @@ function EpisodeToc(props: {
         route={episodeRoute(props.slug)}
         sections={tocSectionsOf(props.placed, props.locale)}
         targetAttribute="data-slide"
-        topId={titleAnchor()}
+        topId={TITLE_ANCHOR}
         labels={props.labels}
       />
     </aside>
@@ -85,7 +85,7 @@ function EpisodeToc(props: {
  */
 export async function EpisodePageContainer({ locale, episode }: { locale: Locale; episode: AnyEpisodeRecord }) {
   const { title, caption, sections: placed } = await recordContent(episode, locale);
-  const ids = [titleAnchor(), ...slidesInPageOrder(placed).map(({ id }) => id)];
+  const ids = [TITLE_ANCHOR, ...slidesInPageOrder(placed).map(({ id }) => id)];
   const youtubeId = episode.youtube?.[locale];
   const talkLabels = youtubeId ? await readTranslationStrings(locale, 'talkPlayer') : undefined;
   const tocLabels = await readTranslationStrings(locale, 'tableOfContents');

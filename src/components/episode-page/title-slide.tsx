@@ -1,5 +1,5 @@
 import { SlideCaption, SlideFrame, SlideTitle } from '@/components/slide-master/slide-master';
-import { titleAnchor } from '@/lib/episode.pure';
+import { TITLE_ANCHOR } from '@/lib/episode.pure';
 import { SlideWrapper } from './slide-wrapper';
 import { TalkLauncher, type TalkPlayerLabels } from './talk-player.client';
 
@@ -21,7 +21,7 @@ export function TitleSlide({
   talkLabels?: TalkPlayerLabels;
 }) {
   return (
-    <SlideWrapper id={titleAnchor()} data-slot="title-slide">
+    <SlideWrapper id={TITLE_ANCHOR} data-slot="title-slide">
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
         <div className="hero-glow absolute inset-0 text-primary" />
         <div className="hero-glow hero-glow--accent absolute inset-0 text-accent" />

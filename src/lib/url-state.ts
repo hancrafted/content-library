@@ -1,4 +1,4 @@
-import { titleAnchor } from './episode.pure';
+import { TITLE_ANCHOR } from './episode.pure';
 
 /*
  * The URL-state service (FE-001): the only module that writes browser history,
@@ -44,7 +44,7 @@ export interface UrlState {
 
 function hashOf(win: UrlWindow): string {
   const raw = win.location.hash.slice(1);
-  if (raw === '') return titleAnchor();
+  if (raw === '') return TITLE_ANCHOR;
   try {
     return decodeURIComponent(raw);
   } catch {
@@ -162,7 +162,7 @@ class UrlStateStore implements UrlState {
 
   /** The Title slide is the bare path: no `#`, query kept. */
   private urlOf(id: string): string {
-    if (id === titleAnchor()) return `${this.win.location.pathname}${this.win.location.search}`;
+    if (id === TITLE_ANCHOR) return `${this.win.location.pathname}${this.win.location.search}`;
     return `#${encodeURIComponent(id)}`;
   }
 

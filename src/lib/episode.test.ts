@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { placeSections, titleAnchor, type SectionList, type SlideOutline } from './episode.pure';
+import { placeSections, TITLE_ANCHOR, type SectionList, type SlideOutline } from './episode.pure';
 
 /** A Section as a Slide record lists it: its section slide's slug first, then its page Slides'. */
 function list(...slugs: [string, ...string[]]): readonly [SlideOutline, ...SlideOutline[]] {
@@ -74,7 +74,7 @@ describe('success cases', () => {
       // ARRANGE
       const reserved = 'top';
       // ACT
-      const anchor = titleAnchor();
+      const anchor = TITLE_ANCHOR;
       // ASSERT
       expect(anchor).toBe(reserved);
     });
