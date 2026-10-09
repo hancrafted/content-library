@@ -4,7 +4,7 @@
 // source text and that an import-based eslint rule cannot see: per-segment
 // exports, next.config keys, directives, segment exports, file names and
 // folder names. Banned module imports live in eslint.config.mjs instead.
-// Matched textually; runs at error (GEN-001 §7). Self-contained by design:
+// Matched textually. Self-contained by design:
 // archgate forbids imports between rules files.
 const SRC_GLOB = 'src/**/*';
 const ROOT_GLOB = '*';
