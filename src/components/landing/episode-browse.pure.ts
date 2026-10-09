@@ -1,4 +1,5 @@
 import { FORMATS, TOPICS, type FormatId, type TopicId } from '@/lib/episode-index.pure';
+import { fillTemplate } from '@/lib/template.pure';
 import type { EpisodeCard, Labelled } from './episode-card.pure';
 
 /*
@@ -132,11 +133,6 @@ export function hasChoice(choices: FacetChoices<string>): boolean {
   return choices.options.length >= 2;
 }
 
-/** Fills `{count}` in a label template read from the Translation file. */
-export function fillCount(template: string, count: number): string {
-  return template.replaceAll('{count}', String(count));
-}
-
 export interface ResultsLabels {
   readonly none: string;
   readonly one: string;
@@ -146,5 +142,5 @@ export interface ResultsLabels {
 /** The sentence for the live region: German and English both put exactly 1 in the singular. */
 export function resultsText(labels: ResultsLabels, count: number): string {
   if (count === 0) return labels.none;
-  return count === 1 ? labels.one : fillCount(labels.other, count);
+  return count === 1 ? labels.one : fillTemplate(labels.other, { count });
 }

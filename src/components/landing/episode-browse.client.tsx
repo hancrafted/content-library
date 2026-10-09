@@ -2,7 +2,6 @@
 
 import {
   browseView,
-  fillCount,
   formatChoices,
   hasChoice,
   INITIAL_SELECTION,
@@ -16,6 +15,7 @@ import { FormatSegments, TopicChips, type FilterLabels } from '@/components/land
 import { EpisodeGridCard, type CardLabels } from '@/components/landing/episode-grid-card';
 import { Button } from '@/components/ui/button';
 import type { Locale } from '@/lib/locale.pure';
+import { fillTemplate } from '@/lib/template.pure';
 import { cn } from '@/lib/utils';
 import { ChevronDown } from 'lucide-react';
 import { useRef, useState } from 'react';
@@ -63,7 +63,7 @@ function FoldButton({ expanded, total, labels, onToggle }: FoldProps) {
         onClick={onToggle}
         className="rounded-full px-5 motion-reduce:transition-none"
       >
-        {expanded ? labels.showFewer : fillCount(labels.showAll, total)}
+        {expanded ? labels.showFewer : fillTemplate(labels.showAll, { count: total })}
         <ChevronDown
           aria-hidden
           className={cn('transition-transform duration-200 motion-reduce:transition-none', expanded && 'rotate-180')}
