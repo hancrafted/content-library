@@ -3,10 +3,11 @@
 import { useFractionInto, useOpenSections, useRevealed, useSettled } from '@/hooks/use-table-of-contents';
 import { useActiveSlide, useGlideTo } from '@/hooks/use-url-state';
 import type { Locale } from '@/lib/locale.pure';
+import { hasReadingTime, remainingLabel } from '@/lib/speaking-time.pure';
 import { activeEntry, readingOrder, readingTime, whereAt, type TocSection } from '@/lib/table-of-contents.pure';
 import { useMemo, useSyncExternalStore } from 'react';
 import { TocDrawer } from './toc-drawer';
-import { remainingLabel, type TocLabels } from './toc-heading';
+import type { TocLabels } from './toc-heading';
 import { TocPanel, type TocView } from './toc-panel';
 
 export type { TocSection } from '@/lib/table-of-contents.pure';
@@ -73,7 +74,9 @@ export function TableOfContents(props: {
         labels={props.labels}
         where={view.revealed ? whereAt(props.sections, view.active) : null}
         revealed={view.revealed}
-        left={remainingLabel(props.labels, props.locale, time.remaining)}
+        left={
+          hasReadingTime(time.total) ? remainingLabel(props.labels.remaining, props.locale, time.remaining) : undefined
+        }
       >
         <TocPanel {...panel} view={{ ...view, revealed: true }} className="h-full max-h-full bg-background pt-14" />
       </TocDrawer>

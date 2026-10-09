@@ -33,7 +33,6 @@ function BillingDimensions(): ReactElement {
 
 export const whatIsAToken = slide({
   slug: 'what-is-a-token',
-  minutes: { en: 2, de: 2 },
   notes: [{ slug: 'probabilistic-units', target: 'title' }],
   content: ({ t, Title }) => (
     <SectionSlide title={<Title>{t('title')}</Title>} caption={t('caption')}>

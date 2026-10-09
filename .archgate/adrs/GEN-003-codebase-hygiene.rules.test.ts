@@ -38,7 +38,7 @@ function globToRegExp(pattern: string): RegExp {
 
 // Stands in for archgate's RuleContext: a line-based grepFiles over an
 // in-memory file set, and a report sink that keeps violations and drops the
-// tiers this ADR does not use (GEN-001 §7 pins every rule to error).
+// tiers this ADR does not use (every rule runs at error).
 function makeCtx(files: Record<string, string>) {
   const violations: Reported[] = [];
   const ctx = {

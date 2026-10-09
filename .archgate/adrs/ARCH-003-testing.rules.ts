@@ -10,7 +10,7 @@
 // `// ASSERT`, uppercase, once each, in that order, one marker per comment
 // (§3.1). A body runs from its `it(`/`test(` line to the next test or describe
 // line, so markers in a helper between tests count toward the test above it.
-// Runs at error (GEN-001 §7). Self-contained: archgate forbids imports
+// Self-contained: archgate forbids imports
 // between rules files.
 const TEST_GLOB = 'src/**/*.test.ts';
 const BLOCKS = ['success cases', 'failure cases', 'edge cases'];

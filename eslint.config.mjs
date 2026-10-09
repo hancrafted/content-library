@@ -33,6 +33,13 @@ const SPINE_HEADINGS = [
     message: 'h1 is the Title slide and h2 a section slide, both rendered for you; a page slide title is h3 (FE-002).',
   },
 ];
+// FE-003 §2: an Episode never reads a raw Translation string; the kit's `template(key)`
+// hands over a typed one. Shared by both Episode blocks, like the spine headings.
+const NO_RAW_READ = {
+  selector: "CallExpression > MemberExpression.callee[property.name='raw']",
+  message:
+    "An Episode never reads a raw Translation string: pass the kit's template('<key>') to the widget and fill it with fillTemplate (FE-003).",
+};
 
 // FE-001: the URL-state service alone writes history; FE-009: the Slide observer
 // alone creates an IntersectionObserver. `no-restricted-properties` catches a bare
@@ -164,16 +171,25 @@ export default tseslint.config(
     rules: { 'no-restricted-syntax': ['error', CLIENT_DIRECTIVE_MISSING, HISTORY_WRITE, NEW_OBSERVER] },
   },
   {
-    // FE-002 headings, for Episode files; the directive stays out of them.
+    // FE-002 headings and FE-003 raw reads, for Episode files; the directive stays out of them.
     files: [EPISODE_FILES],
     ignores: [EPISODE_CLIENT_FILES],
-    rules: { 'no-restricted-syntax': ['error', NO_USE_CLIENT, HISTORY_WRITE, NEW_OBSERVER, ...SPINE_HEADINGS] },
+    rules: {
+      'no-restricted-syntax': ['error', NO_USE_CLIENT, HISTORY_WRITE, NEW_OBSERVER, ...SPINE_HEADINGS, NO_RAW_READ],
+    },
   },
   {
-    // FE-002 headings and FE-006 directive, for an Episode's client widgets.
+    // FE-002 headings, FE-003 raw reads and FE-006 directive, for an Episode's client widgets.
     files: [EPISODE_CLIENT_FILES],
     rules: {
-      'no-restricted-syntax': ['error', CLIENT_DIRECTIVE_MISSING, HISTORY_WRITE, NEW_OBSERVER, ...SPINE_HEADINGS],
+      'no-restricted-syntax': [
+        'error',
+        CLIENT_DIRECTIVE_MISSING,
+        HISTORY_WRITE,
+        NEW_OBSERVER,
+        ...SPINE_HEADINGS,
+        NO_RAW_READ,
+      ],
     },
   },
   {
@@ -192,6 +208,13 @@ export default tseslint.config(
   {
     files: ['**/*.test.ts'],
     rules: { 'max-lines-per-function': 'off', 'max-lines': 'off' },
+  },
+  {
+    // FE-002: a Slide's Canvas is free-form markup, so its server files drop the
+    // per-function line cap; complexity and the file cap still hold, and
+    // `client/` keeps every cap.
+    files: ['src/components/episodes/*/{slides,canvas}/**/*.{ts,tsx}'],
+    rules: { 'max-lines-per-function': 'off' },
   },
   eslintConfigPrettier,
 );

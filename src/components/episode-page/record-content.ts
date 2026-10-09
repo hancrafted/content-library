@@ -1,6 +1,7 @@
 import type { AnyEpisodeRecord, RuntimeTranslator, Slide } from '@/components/slide-master/episode-record';
-import { slideKit } from '@/components/slide-master/slide-kit';
+import { slideKit, type EpisodeKitInput } from '@/components/slide-master/slide-kit';
 import { placeSections, type PlacedListSlide, type PlacedSlide } from '@/lib/episode.pure';
+import type { Locale } from '@/lib/locale.pure';
 import type { EpisodeContent, EpisodeSlide, PlacedEpisodeSection } from './episode-page-container.pure';
 import { slideContext } from './slide-context.pure';
 
@@ -19,19 +20,19 @@ export type TranslatorOf = (namespace: string) => Promise<RuntimeTranslator>;
 /** One placed Slide, rendered: its Canvas from the kit, its notes and Voice script from its own subtree. */
 async function renderedSlide(
   translatorOf: TranslatorOf,
-  refLabel: string,
+  episode: EpisodeKitInput,
   { id, slide, level }: PlacedListSlide<Slide>,
 ): Promise<PlacedSlide<EpisodeSlide>> {
   const t = await translatorOf(`episodes.${slide.episode}.slides.${slide.slug}`);
   const notes = slide.notes.map((note) => note.slug);
-  const content = slide.content(slideKit({ t, level, notes, refLabel, slideId: id }));
-  const { notes: noteItems, voiceScript } = slideContext(t, slide);
+  const content = slide.content(slideKit(episode, { t, level, notes, slideId: id }));
+  const { notes: noteItems, voiceScript, minutes } = slideContext(t, slide, episode.locale);
   return {
     id,
     slide: {
       slug: slide.slug,
       ...(t.has('title') && { title: t('title') }),
-      ...(slide.minutes && { minutes: slide.minutes }),
+      minutes,
       content,
       notes: noteItems,
       voiceScript,
@@ -46,14 +47,28 @@ function sectionOf([head, ...pages]: readonly PlacedSlide<EpisodeSlide>[]): Plac
   return { id: head.id, slide: { ...head.slide, title, slides: pages.map(({ slide }) => slide) }, slides: pages };
 }
 
-/** One locale of an Episode record, read through `translatorOf`: the Title slide's text and every Section, walked once (`placeSections`). */
-export async function recordContent(record: AnyEpisodeRecord, translatorOf: TranslatorOf): Promise<EpisodeContent> {
+/**
+ * One locale of an Episode record, read through `translatorOf`: the Title
+ * slide's text and every Section, walked once (`placeSections`). The walk's
+ * ids are also every kit's `slideHref` targets, so a link cannot drift from
+ * the anchor it points at.
+ */
+export async function recordContent(
+  record: AnyEpisodeRecord,
+  locale: Locale,
+  translatorOf: TranslatorOf,
+): Promise<EpisodeContent> {
   const placed = placeSections<Slide>(record.sections);
   const t = await translatorOf('episodes');
-  const refLabel = (await translatorOf('contextDrawer'))('refNote');
+  const episode: EpisodeKitInput = {
+    episode: record.slug,
+    locale,
+    anchors: new Map(placed.flat().map(({ id, slide }) => [slide.slug, id])),
+    refLabel: (await translatorOf('contextDrawer'))('refNote'),
+  };
   const sections = await Promise.all(
     placed.map(async (section) =>
-      sectionOf(await Promise.all(section.map((s) => renderedSlide(translatorOf, refLabel, s)))),
+      sectionOf(await Promise.all(section.map((s) => renderedSlide(translatorOf, episode, s)))),
     ),
   );
   return { title: t(`${record.slug}.title`), caption: t(`${record.slug}.caption`), sections };

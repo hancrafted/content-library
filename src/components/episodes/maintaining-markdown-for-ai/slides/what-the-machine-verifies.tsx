@@ -6,12 +6,11 @@ const slide = slidesFor('maintaining-markdown-for-ai');
 
 export const whatTheMachineVerifies = slide({
   slug: 'what-the-machine-verifies',
-  minutes: { en: 2, de: 2 },
   notes: [
     { slug: 'deterministic-checks', target: 'title' },
     { slug: 'mechanical-ceiling', target: 'check-result' },
   ],
-  segments: [{ slug: 'mechanical-ceiling', from: 0.0, to: 0.75 }],
+  segments: [{ slug: 'mechanical-ceiling' }],
   content: ({ t, target, Title }) => (
     <SlideFrame>
       <Title>{t('title')}</Title>

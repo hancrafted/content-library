@@ -53,14 +53,12 @@ function probe(kit: RuntimeKit, keys: readonly string[]): ReactElement {
 
 const foundations = slide({
   slug: 'foundations',
-  minutes: { en: 1, de: 2 },
   content: (kit) => probe(kit as unknown as RuntimeKit, ['caption']),
 });
 const whyATemplate = slide({
   slug: 'why-a-template',
-  minutes: { en: 3, de: 4 },
   notes: [{ slug: 'reference-episode', target: 'prose' }],
-  segments: [{ slug: 'one-breath', from: 0, to: 1 }],
+  segments: [{ slug: 'one-breath' }],
   content: (kit) => probe(kit as unknown as RuntimeKit, ['prose']),
 });
 const nextSteps = slide({ slug: 'next-steps', content: (kit) => probe(kit as unknown as RuntimeKit, []) });
@@ -87,7 +85,7 @@ describe('success cases', () => {
       ],
     };
     // ACT
-    const content = await recordContent(RECORD, translatorOf('en'));
+    const content = await recordContent(RECORD, 'en', translatorOf('en'));
     // ASSERT
     expect({
       title: content.title,
@@ -107,7 +105,7 @@ describe('success cases', () => {
       { id: 'next-steps', slides: [] },
     ];
     // ACT
-    const { sections } = await recordContent(RECORD, translatorOf('en'));
+    const { sections } = await recordContent(RECORD, 'en', translatorOf('en'));
     // ASSERT
     expect(sections.map(({ id, slides }) => ({ id, slides: slides.map((page) => page.id) }))).toEqual(expected);
   });
@@ -117,7 +115,7 @@ describe('success cases', () => {
     const expectedLevels = ['h2', 'h3'];
     const expectedTarget = 'title';
     // ACT
-    const { sections } = await recordContent(RECORD, translatorOf('en'));
+    const { sections } = await recordContent(RECORD, 'en', translatorOf('en'));
     const [head, page] = [sections[0].slide.content, sections[0].slides[0].slide.content].map(headingOf);
     // ASSERT
     expect([head.props.as, page.props.as]).toEqual(expectedLevels);
@@ -127,13 +125,47 @@ describe('success cases', () => {
   it("resolves a Slide's notes and segments from its own Translation subtree, with short targets", async () => {
     // ARRANGE
     const expectedNote = { slug: 'reference-episode', header: 'Why a reference Episode', target: 'prose' };
-    const expectedSegment = { slug: 'one-breath', from: 0, to: 1, title: 'The template in one breath' };
+    const expectedSegment = { slug: 'one-breath', from: 0, title: 'The template in one breath' };
     // ACT
-    const { sections } = await recordContent(RECORD, translatorOf('en'));
+    const { sections } = await recordContent(RECORD, 'en', translatorOf('en'));
     const why = sections[0].slides[0].slide;
     // ASSERT
     expect(why.notes).toEqual([expect.objectContaining(expectedNote)]);
     expect(why.voiceScript).toEqual([expect.objectContaining(expectedSegment)]);
+  });
+
+  it("times a Slide from its Voice script's words in the page's locale", async () => {
+    // ARRANGE
+    // "A reference Episode shows the shape once, so the next Episode copies a working example instead of inventing
+    // one." is 19 words; the German line "Eine Referenz-Episode zeigt die Form einmal, damit die nächste Episode ein
+    // funktionierendes Beispiel kopiert, statt eine neue zu erfinden." is 19 too, read slower.
+    const expected = { en: 19 / 140, de: 19 / 120 };
+    // ACT
+    const minutes = await Promise.all(
+      (['en', 'de'] as const).map(async (locale) => {
+        const { sections } = await recordContent(RECORD, locale, translatorOf(locale));
+        return sections[0].slides[0].slide.minutes;
+      }),
+    );
+    // ASSERT
+    expect({ en: minutes[0], de: minutes[1] }).toEqual(expected);
+  });
+
+  it("gives every kit the page's locale and links each Slide slug to the anchor the walk placed it at", async () => {
+    // ARRANGE
+    const linker = slide({
+      slug: 'next-steps',
+      content: ({ locale, slideHref }) => `${locale} ${slideHref('why-a-template')} ${slideHref('next-steps')}`,
+    });
+    const record: EpisodeRecord<'page-template'> = {
+      slug: 'page-template',
+      sections: [[foundations, whyATemplate], [linker]],
+    };
+    const expected = 'de /de/episode/page-template#foundations--why-a-template /de/episode/page-template#next-steps';
+    // ACT
+    const { sections } = await recordContent(record, 'de', translatorOf('de'));
+    // ASSERT
+    expect(sections[1].slide.content).toBe(expected);
   });
 });
 
@@ -143,7 +175,7 @@ describe('failure cases', () => {
     const record: EpisodeRecord<'page-template'> = { slug: 'page-template', sections: [[foundations], [foundations]] };
     const expected = 'foundations';
     // ACT
-    const build = recordContent(record, translatorOf('en'));
+    const build = recordContent(record, 'en', translatorOf('en'));
     // ASSERT
     await expect(build).rejects.toThrow(expected);
   });
@@ -157,22 +189,22 @@ describe('failure cases', () => {
     const record: EpisodeRecord<'page-template'> = { slug: 'page-template', sections: [[foundations, rogue]] };
     const expected = 'reference-episode';
     // ACT
-    const build = recordContent(record, translatorOf('en'));
+    const build = recordContent(record, 'en', translatorOf('en'));
     // ASSERT
     await expect(build).rejects.toThrow(expected);
   });
 });
 
 describe('edge cases', () => {
-  it('leaves minutes out where a Slide declares none, so the table of contents counts them as 0', async () => {
+  it('gives a Slide without a Voice script 0 minutes, so the table of contents shows no time for it', async () => {
     // ARRANGE
     const bare = slide({ slug: 'what-comes-next', content: () => null });
     const record: EpisodeRecord<'page-template'> = { slug: 'page-template', sections: [[nextSteps, bare]] };
+    const expected = [0, 0];
     // ACT
-    const { sections } = await recordContent(record, translatorOf('de'));
+    const { sections } = await recordContent(record, 'de', translatorOf('de'));
     const [section] = sections;
     // ASSERT
-    expect(section.slide.minutes).toBeUndefined();
-    expect(section.slides[0].slide.minutes).toBeUndefined();
+    expect([section.slide.minutes, section.slides[0].slide.minutes]).toEqual(expected);
   });
 });

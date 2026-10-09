@@ -1,13 +1,14 @@
 # Episode migration experiment
 
-Measures how well the Episode architecture guides an agent: the same handoff runs against two designs, and the diffs show what the guidance changed.
+Measures how well the Episode architecture guides an agent: the same handoff runs against successive designs, and the diffs show what the guidance changed.
 
 ## Runs
 
-| Run | Date       | Agent  | Design                                       | Result                                                                |
-| --- | ---------- | ------ | -------------------------------------------- | --------------------------------------------------------------------- |
-| 1   | 2026-10-09 | Gemini | `context.ts` per Episode, hand-built anchors | `df25149` (maintaining-markdown-for-ai), `743eeea` (ai-token-economy) |
-| 2   | —          | Gemini | Slide-as-unit redesign                       | —                                                                     |
+| Run | Date       | Agent             | Design                                                                                    | Result                                                                |
+| --- | ---------- | ----------------- | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| 1   | 2026-10-09 | Gemini            | `context.ts` per Episode, hand-built anchors                                              | `df25149` (maintaining-markdown-for-ai), `743eeea` (ai-token-economy) |
+| 2   | 2026-10-09 | Sonnet sub-agents | Slide-as-unit redesign                                                                    | `7196c88` (maintaining-markdown-for-ai), `45737ca` (ai-token-economy) |
+| 3   | —          | Sonnet sub-agents | Authoring gaps closed: kit fields, `canvas/`, counted reading time, screenshot self-check | —                                                                     |
 
 Hold constant: the handoff below, the source folders, the follow-up prompts. Run in a fresh worktree from `main`.
 
@@ -56,6 +57,10 @@ The handoff's read-first list changed in the slide-as-unit refactor. For run 2, 
 - FE-002 (rewritten around the Slide as the unit), plus FE-006, FE-009, FE-010.
 - `src/components/episodes/page-template/` (minimal copy source) and `src/components/episodes/slide-layouts/` (every Slide layout rendered).
 
+## Run 3 read-first
+
+Run 2's handoff, changing only the read-first list (the updated `docs/agents/episode-migration.md`, `docs/agents/episode-translation-keys.md`, FE-002, FE-003, FE-006, FE-010) and adding the screenshot self-check in both themes (migration step 9). The orchestrator does the final review in Chrome, screenshots as fallback (step 10).
+
 ## Follow-ups (run 1)
 
 1. The agent asked to confirm its plan; confirmed.
@@ -66,3 +71,19 @@ The handoff's read-first list changed in the slide-as-unit refactor. For run 2, 
 
 - `git diff df25149 <run-2-commit> -- src/components/episodes/maintaining-markdown-for-ai/`
 - Count: files touched outside the Episode folder, questions the agent asked, ADR gaps it reported, fix-up rounds until faithful.
+
+### Run 3 against run 2
+
+Per Episode, against the `experiment/migration-run-2` worktree:
+
+| Metric                                                                                                                                                        | Run 2 | Run 3 |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- | ----- |
+| Files touched outside the Episode folder                                                                                                                      |       |       |
+| Workarounds: `t.raw`, `as` casts, own locale keys or kit aliases, client buttons for links, raw colours without a dark value, hand-written anchors or minutes |       |       |
+| First-draft lint failures the agent reported                                                                                                                  |       |       |
+| Lines, files, tests                                                                                                                                           |       |       |
+| Folder shape (`slides/`, `canvas/`, `client/`); do the two agents agree                                                                                       |       |       |
+| ADR gaps the agent reported                                                                                                                                   |       |       |
+| Visual review findings, light and dark                                                                                                                        |       |       |
+
+Fidelity to the source stays Han's call.

@@ -3,15 +3,15 @@ import type { TargetProps } from '@/lib/context-link.pure';
 import type { SectionList } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
 import type { EpisodeSlug } from '@/lib/routes';
-import type { createTranslator, NamespaceKeys, NestedKeyOf } from 'next-intl';
+import type { createTranslator, MessageKeys, NamespaceKeys, NestedKeyOf } from 'next-intl';
 import type { ReactElement, ReactNode } from 'react';
 
 /*
  * The Episode record (FE-002): an Episode is static data that composes Slides;
- * each Slide declares its slug, minutes, notes and segments and renders its
- * Canvas from a kit. Types and factories only. The walk lives in
- * `src/lib/episode.pure.ts`; the kit is built in `slide-kit.tsx`, by the
- * container. Every string a Slide shows lives under its own Translation key,
+ * each Slide declares its slug, notes and segments and renders its Canvas
+ * from a kit; its minutes are counted from its Voice script's words. Types
+ * and factories only. The walk lives in `src/lib/episode.pure.ts`; the kit
+ * is built in `slide-kit.tsx`, by the container. Every string a Slide shows lives under its own Translation key,
  * `episodes.<ep>.slides.<slide>.*`, so the slug is written once and `t`, `ref`
  * and `target` are typed from it.
  */
@@ -48,9 +48,19 @@ export type NoteSlug<Ep extends RecordEpisodeSlug, S> =
 export type SegmentSlug<Ep extends RecordEpisodeSlug, S> =
   SlideMessages<Ep, S> extends { readonly voiceScript: { readonly segments: infer G } } ? KeysOf<G> : never;
 
+/** A dotted key to a string leaf of a Slide's subtree: what `template` reads. */
+export type TemplateKey<Ep extends RecordEpisodeSlug, S> = MessageKeys<
+  SlideMessages<Ep, S>,
+  NestedKeyOf<SlideMessages<Ep, S>>
+>;
+
 type Namespace = NamespaceKeys<Messages, NestedKeyOf<Messages>>;
 
-/** next-intl's translator, namespaced to one Slide: a key outside its subtree fails `tsc`. */
+/**
+ * next-intl's translator, namespaced to one Slide: a key outside its subtree
+ * fails `tsc`. Its `t.rich` already knows the default `em`, `b` and `code`
+ * tags (`rich-tags.tsx`); a Slide passes only `ref` and tags of its own.
+ */
 export type SlideTranslator<Ep extends RecordEpisodeSlug, S> = `episodes.${Ep}.slides.${S & string}` extends infer N
   ? N extends Namespace
     ? ReturnType<typeof createTranslator<Messages, N>>
@@ -76,11 +86,9 @@ export interface NoteSpec<N extends string = string> {
   readonly image?: { readonly src: string };
 }
 
-/** A Voice script segment as a Slide declares it: its time span in minutes into the Slide. */
+/** A Voice script segment as a Slide declares it; its time span is counted from its words (`speaking-time.pure.ts`). */
 export interface SegmentSpec<G extends string = string> {
   readonly slug: G;
-  readonly from: number;
-  readonly to: number;
   /** True when the Translation file holds a `bridge` string for this segment. */
   readonly bridge?: boolean;
 }
@@ -92,12 +100,18 @@ export type TitleComponent = (props: { children: ReactNode }) => ReactElement;
 export type RichTag = (chunks: ReactNode) => ReactNode;
 
 /**
- * The kit a Slide's `content` receives. `t` reads only this Slide's
- * Translation keys; `ref` and `target` take only the notes and targets the
- * Slide declares.
+ * The kit a Slide's `content` receives. `t` and `template` read only this
+ * Slide's Translation keys; `ref` and `target` take only the notes and
+ * targets the Slide declares; `slideHref` only this Episode's Slides.
  */
 export interface SlideKit<Ep extends RecordEpisodeSlug, S, N extends NoteSpec> {
   readonly t: SlideTranslator<Ep, S>;
+  /** The page's locale, for formatting a number or date the Translation file does not hold. */
+  readonly locale: Locale;
+  /** The localized `href` of another Slide of this Episode: its page path and the anchor its position gives it. */
+  readonly slideHref: (slug: SlideSlug<Ep>) => string;
+  /** A string leaf as written, `{name}` placeholders unfilled, for a client component to fill with `fillTemplate`. */
+  readonly template: (key: TemplateKey<Ep, S>) => string;
   /** The `t.rich` tag for a Context reference to one of this Slide's notes. */
   readonly ref: (note: N['slug']) => RichTag;
   /** Marks the element one of this Slide's notes explains. */
@@ -120,6 +134,9 @@ export interface RuntimeTranslator {
 /** The kit as the container builds it, by runtime key. Every `SlideKit` accepts it (see the type tests). */
 export interface RuntimeKit {
   readonly t: RuntimeTranslator;
+  readonly locale: Locale;
+  readonly slideHref: (slug: string) => string;
+  readonly template: (key: string) => string;
   readonly ref: (note: string) => RichTag;
   readonly target: (name: string) => TargetProps;
   readonly Title: TitleComponent;
@@ -129,8 +146,6 @@ export interface RuntimeKit {
 export interface Slide<Ep extends RecordEpisodeSlug = RecordEpisodeSlug, S extends string = string> {
   readonly episode: Ep;
   readonly slug: S;
-  /** Spoken reading time per locale; 0 when left out. Set it only on a Slide with a Voice script. */
-  readonly minutes?: PerLocale<number>;
   readonly notes: readonly NoteSpec[];
   readonly segments: readonly SegmentSpec[];
   readonly content: (kit: RuntimeKit) => ReactNode;
@@ -161,7 +176,6 @@ export type AnyEpisodeRecord = { [E in RecordEpisodeSlug]: EpisodeRecord<E> }[Re
 /** What a Slide file declares; `slug` is const-inferred and types the rest. */
 export interface SlideSpec<Ep extends RecordEpisodeSlug, S extends SlideSlug<Ep>, N extends NoteSpec> {
   readonly slug: S;
-  readonly minutes?: PerLocale<number>;
   readonly notes?: readonly N[];
   readonly segments?: readonly SegmentSpec<SegmentSlug<Ep, S>>[];
   readonly content: (kit: SlideKit<Ep, S, N>) => ReactNode;
@@ -178,7 +192,6 @@ export function slidesFor<Ep extends RecordEpisodeSlug>(episode: Ep) {
     return {
       episode,
       slug: spec.slug,
-      ...(spec.minutes && { minutes: spec.minutes }),
       notes: spec.notes ?? [],
       segments: spec.segments ?? [],
       // The runtime kit is assignable to every concrete `SlideKit` (proved in the test); generics hide that here.

@@ -7,15 +7,11 @@ const slide = slidesFor('maintaining-markdown-for-ai');
 
 export const volumeOutrunsReview = slide({
   slug: 'volume-outruns-review',
-  minutes: { en: 2, de: 2 },
   notes: [
     { slug: 'decay-vs-drift', target: 'title' },
     { slug: 'corpus-compounding', target: 'corpus-chart' },
   ],
-  segments: [
-    { slug: 'effort-decay', from: 0.0, to: 0.6 },
-    { slug: 'corpus-compounding', from: 0.6, to: 1.25, bridge: true },
-  ],
+  segments: [{ slug: 'effort-decay' }, { slug: 'corpus-compounding', bridge: true }],
   content: ({ t, target, Title }) => (
     <SectionSlide title={<Title>{t('title')}</Title>} caption={t('caption')}>
       <SlideProse>{t('prose')}</SlideProse>

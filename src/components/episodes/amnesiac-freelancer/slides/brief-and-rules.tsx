@@ -5,7 +5,6 @@ const slide = slidesFor('amnesiac-freelancer');
 
 export const briefAndRules = slide({
   slug: 'brief-and-rules',
-  minutes: { en: 4, de: 5 },
   notes: [
     {
       slug: 'the-brief',
@@ -47,11 +46,7 @@ export const briefAndRules = slide({
       ],
     },
   ],
-  segments: [
-    { slug: 'the-brief', from: 0.0, to: 1.0 },
-    { slug: 'house-rules', from: 1.0, to: 2.5 },
-    { slug: 'definition-of-done', from: 2.5, to: 4.0, bridge: true },
-  ],
+  segments: [{ slug: 'the-brief' }, { slug: 'house-rules' }, { slug: 'definition-of-done', bridge: true }],
   content: ({ t, Title }) => {
     const column = (slug: 'brief' | 'house-rules' | 'definition-of-done') => ({
       slug,

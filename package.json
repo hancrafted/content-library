@@ -14,9 +14,15 @@
     "test:watch": "vitest watch",
     "knip": "knip",
     "prepare": "husky",
-    "verify": "archgate check && npm run lint && prettier --check . && npm run typecheck && vitest run && knip && mh check",
-    "verify:commit": "lint-staged && archgate check && npm run lint:boundaries && npm run typecheck && vitest run",
-    "test:build": "vitest run --config vitest.build.config.ts"
+    "preflight": "node .agents/skills/worktree/scripts/preflight.ts",
+    "archgate:full": "archgate check --base $(git rev-list --max-parents=0 HEAD)",
+    "verify": "npm run preflight && npm run archgate:full && npm run lint && prettier --check . && npm run typecheck && vitest run && knip && mh check && echo \"✔ verify: PASS\" || (echo \"✖ verify: FAIL (the first error above names the step)\" >&2; exit 1)",
+    "verify:commit": "npm run preflight && lint-staged && archgate check && npm run lint:boundaries && npm run typecheck && vitest run",
+    "test:build": "vitest run --config vitest.build.config.ts",
+    "wt:new": "node .agents/skills/worktree/scripts/worktree.ts new",
+    "wt:done": "node .agents/skills/worktree/scripts/worktree.ts done",
+    "preview": "node .agents/skills/visual-check/scripts/preview.ts",
+    "shot": "node .agents/skills/visual-check/scripts/shot.ts"
   },
   "devDependencies": {
     "@eslint/js": "~10.0.1",

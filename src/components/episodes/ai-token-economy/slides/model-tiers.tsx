@@ -63,7 +63,6 @@ function RoutingFlow(target: TargetProps): ReactElement {
 
 export const modelTiers = slide({
   slug: 'model-tiers',
-  minutes: { en: 2, de: 2 },
   notes: [
     { slug: 'tiered-stack-architecture', target: 'title' },
     { slug: 'zero-marginal-thinking', target: 'routing-flow' },

@@ -36,19 +36,18 @@ function closeOnDismiss(event: MouseEvent<HTMLDialogElement>) {
 interface DrawerProps {
   labels: TocLabels;
   where: { number: string; title: string } | null;
-  /** Time left, already formatted. */
-  left: string;
-  /** False while the table masks its first settle; the pill then reads "Contents · Loading". */
+  /** Time left, already formatted; absent for an Episode without a Voice script. */
+  left?: string;
+  /** False while the table masks its first settle; the pill then reads "Contents · Loading" where it has a time. */
   revealed: boolean;
 }
 
-/** Where the reader is, at a glance; tapping it opens the drawer. */
-function DrawerPill(props: DrawerProps & { onOpen: () => void }) {
+/** " · 12 min left", or " · Loading" while the table settles; nothing at all for an Episode without a Voice script. */
+function PillTime(props: Pick<DrawerProps, 'left' | 'revealed' | 'labels'>) {
+  if (props.left === undefined) return null;
+  const text = props.revealed ? props.left : props.labels.loading;
   return (
-    <button type="button" aria-haspopup="dialog" data-testid="toc-open" className={PILL} onClick={props.onOpen}>
-      <span className="sr-only">{props.labels.open}:</span>
-      {props.where && <span className="font-mono text-xs text-muted-foreground">{props.where.number}</span>}
-      <span className="truncate font-medium">{props.where?.title ?? props.labels.title}</span>
+    <>
       <span aria-hidden className="text-muted-foreground">
         ·
       </span>
@@ -58,8 +57,20 @@ function DrawerPill(props: DrawerProps & { onOpen: () => void }) {
           !props.revealed && 'animate-pulse',
         )}
       >
-        {props.revealed ? props.left : props.labels.loading}
+        {text}
       </span>
+    </>
+  );
+}
+
+/** Where the reader is, at a glance; tapping it opens the drawer. */
+function DrawerPill(props: DrawerProps & { onOpen: () => void }) {
+  return (
+    <button type="button" aria-haspopup="dialog" data-testid="toc-open" className={PILL} onClick={props.onOpen}>
+      <span className="sr-only">{props.labels.open}:</span>
+      {props.where && <span className="font-mono text-xs text-muted-foreground">{props.where.number}</span>}
+      <span className="truncate font-medium">{props.where?.title ?? props.labels.title}</span>
+      <PillTime left={props.left} revealed={props.revealed} labels={props.labels} />
     </button>
   );
 }

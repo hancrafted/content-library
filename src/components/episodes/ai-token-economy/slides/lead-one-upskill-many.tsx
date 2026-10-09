@@ -27,7 +27,6 @@ function DoorCards(): ReactElement {
 
 export const leadOneUpskillMany = slide({
   slug: 'lead-one-upskill-many',
-  minutes: { en: 2, de: 2 },
   notes: [{ slug: 'upskill-vs-replace', target: 'title' }],
   content: ({ t, Title }) => (
     <SlideFrame>

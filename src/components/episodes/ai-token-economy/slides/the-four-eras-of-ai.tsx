@@ -49,7 +49,6 @@ function ErasGrid(): ReactElement {
 
 export const theFourErasOfAi = slide({
   slug: 'the-four-eras-of-ai',
-  minutes: { en: 2, de: 2 },
   notes: [{ slug: 'emerging-disciplines', target: 'title' }],
   content: ({ t, Title }) => (
     <SlideFrame>

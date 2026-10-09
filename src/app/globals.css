@@ -1,4 +1,6 @@
 @import 'tailwindcss';
+/* Tracked skill symlinks under .agents point into ~/.claude; Turbopack refuses to scan outside the repo. */
+@source not '../../.agents';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -17,7 +19,7 @@
   --secondary-foreground: oklch(0.985 0 0);
   --machine: oklch(0.58 0.16 242);
   --human: oklch(0.55 0.18 290);
-  --ai: oklch(0.6 0.14 185);
+  --ai: oklch(0.6 0.14 62);
   /* The brand accent: the hero's 'promotion', About emphasis, method deliverables. `--accent` is shadcn's neutral hover surface. */
   --brand-accent: #dd5f27;
   /* The selected or active item (drawer tab, current nav link, active table-of-contents entry): 3:1 against the surface, text 4.5:1 (docs/agents/context-drawer-design.md). */
@@ -46,7 +48,7 @@
   --secondary-foreground: oklch(0.145 0 0);
   --machine: oklch(0.72 0.14 235);
   --human: oklch(0.68 0.16 280);
-  --ai: oklch(0.72 0.17 185);
+  --ai: oklch(0.72 0.14 62);
   --brand-accent: #f08a4b;
   --selected: oklch(0.8 0 0);
   --selected-foreground: oklch(0.2 0 0);

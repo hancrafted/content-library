@@ -29,7 +29,6 @@ function PricingBars(): ReactElement {
 
 export const theCompoundingCostCurve = slide({
   slug: 'the-compounding-cost-curve',
-  minutes: { en: 2, de: 2 },
   notes: [{ slug: 'the-14x-spread', target: 'title' }],
   content: ({ t, Title }) => (
     <SlideFrame>

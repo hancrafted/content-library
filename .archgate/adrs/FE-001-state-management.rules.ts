@@ -7,7 +7,7 @@
 // must pass that key, either as `PREFS_KEY` or as the literal itself, and every
 // `PREFS_KEY` declaration must equal it, so the config and the code cannot
 // drift. Accepted trade-off: the next legitimate second key breaks this rule,
-// and the ADR is amended first. Runs at error (GEN-001 §7). Self-contained by
+// and the ADR is amended first. Self-contained by
 // design: archgate forbids imports between rules files.
 const CONFIG_PATH = 'src/config.yaml';
 const CONFIG_FIELD = 'localStorageKey';

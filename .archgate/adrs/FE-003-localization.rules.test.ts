@@ -58,6 +58,7 @@ describe('href-via-localize-path', () => {
     ['another helper', `<Link href={switchLocalePath(pathname, option)}>x</Link>\n`],
     ['an insecure external URL', `<a href="http://example.com" target="_blank" rel="noopener noreferrer">x</a>\n`],
     ['a bare variable', `<a href={url} target="_blank" rel="noopener noreferrer">x</a>\n`],
+    ['an href spread in', `<a {...{ href: externalHref(url) }} target="_blank" rel="noopener noreferrer">x</a>\n`],
     ['an external URL without target and rel', `<a href="https://example.com">x</a>\n`],
     ['an external URL without target', `<a href="https://example.com" rel="noopener noreferrer">x</a>\n`],
     ['an external URL without rel', `<a href="https://example.com" target="_blank">x</a>\n`],

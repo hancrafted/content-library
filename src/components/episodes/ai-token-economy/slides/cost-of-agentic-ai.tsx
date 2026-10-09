@@ -43,7 +43,6 @@ function CompoundingTable(): ReactElement {
 
 export const costOfAgenticAi = slide({
   slug: 'cost-of-agentic-ai',
-  minutes: { en: 2, de: 2 },
   notes: [{ slug: 'agentic-compounding', target: 'title' }],
   content: ({ t, Title }) => (
     <SectionSlide title={<Title>{t('title')}</Title>} caption={t('caption')}>

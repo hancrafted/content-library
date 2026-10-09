@@ -6,19 +6,19 @@ type SpeakerNoteItem = NonNullable<EpisodeSlide['notes']>[number];
 type VoiceScriptSegment = NonNullable<EpisodeSlide['voiceScript']>[number];
 
 /** A page Slide placed under `id`, the anchor the walk would give it. */
-function page(id: string, slide: Omit<EpisodeSlide, 'content'>): PlacedEpisodeSection['slides'][number] {
-  return { id, slide: { ...slide, content: null } };
+function page(id: string, slide: Omit<EpisodeSlide, 'content' | 'minutes'>): PlacedEpisodeSection['slides'][number] {
+  return { id, slide: { minutes: 1, ...slide, content: null } };
 }
 
 /** A section slide placed under `id`, holding its placed page Slides. */
 function section(
   id: string,
-  head: Omit<EpisodeSlide, 'slug' | 'content' | 'title'> & { title: string },
+  head: Omit<EpisodeSlide, 'slug' | 'content' | 'title' | 'minutes'> & { title: string },
   slides: PlacedEpisodeSection['slides'] = [],
 ): PlacedEpisodeSection {
   const record: EpisodeSection = {
     slug: id,
-    minutes: { en: 1, de: 1 },
+    minutes: 1,
     ...head,
     content: null,
     slides: slides.map(({ slide }) => slide),
