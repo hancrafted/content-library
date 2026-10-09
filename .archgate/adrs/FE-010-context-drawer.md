@@ -26,7 +26,7 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 
 **Why `ContextRef` is a button.** It names a note from inside Slide text, so the Slide reads in full without the drawer: an underlined phrase, no number (the only superscript is a citation marker). It is a button, not a link, because it acts on the drawer rather than navigating; the drawer listens by delegation, so the Slide stays a server component (FE-006).
 
-**Why the drawer takes input.** It is a view, so it must not know where its text came from. Its feeding is FE-002 §6. Open state and selected tab are transient ([FE-001](./FE-001-state-management.md)): a shared link never opens someone's drawer. The layout mode is a preference ([FE-004](./FE-004-user-preference.md)).
+**Why the drawer takes input.** It is a view, so it must not know where its text came from. Its feeding is FE-002 §6. Open state and selected tab are transient ([FE-001](./FE-001-state-management.md)): a shared link never opens someone's drawer. The layout mode is a preference ([FE-001](./FE-001-state-management.md)).
 
 **Details.** `Alt+N` matches `event.code`. Notes, segments and sources key on a kebab-case `slug`, never a position. Print overrides a `hidden` class, not a `hidden` attribute. Card, head, menu, disclosure and selected-state detail: [`docs/agents/context-drawer-design.md`](../../docs/agents/context-drawer-design.md).
 
@@ -72,7 +72,7 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 ### 7. Card and modes
 
 1. A floating card: one-step width, only `transform` animates; beside from `xl`, else over.
-2. Layout MUST be FE-004's `drawerMode`; open state and tab stay in memory (FE-001).
+2. Layout MUST be FE-001's `drawerMode`; open state and tab stay in memory (FE-001).
 
 ### 8. Input only
 

@@ -1,1 +1,0 @@
-../../.archgate/adrs/FE-004-user-preference.md

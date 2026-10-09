@@ -1,11 +1,11 @@
 /// <reference path="../rules.d.ts" />
 
-// Sibling test for FE-004-user-preference.rules.ts — pass and fail path for
+// Sibling test for FE-001-state-management.rules.ts — pass and fail path for
 // `single-storage-key`: calls passing the constant or the literal, calls
 // passing anything else, a drifted `PREFS_KEY`, and a missing or empty config.
 
 import { describe, expect, it } from 'vitest';
-import ruleSet from './FE-004-user-preference.rules';
+import ruleSet from './FE-001-state-management.rules';
 
 interface Reported {
   message: string;
@@ -125,9 +125,9 @@ describe('single-storage-key', () => {
     expect(violations).toEqual([]);
   });
 
-  it('carries the FE-004 provenance tag in its messages', async () => {
+  it('carries the FE-001 provenance tag in its messages', async () => {
     // ARRANGE
-    const provenance = '(FE-004 [single-storage-key])';
+    const provenance = '(FE-001 [single-storage-key])';
     const { ctx, violations } = makeCtx({ [STORAGE]: `localStorage.getItem('x');\n` });
     // ACT
     await rule.check(ctx);

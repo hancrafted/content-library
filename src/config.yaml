@@ -1,4 +1,4 @@
-# The one localStorage key the site may use (FE-004). `PREFS_KEY` in
+# The one localStorage key the site may use (FE-001 §3). `PREFS_KEY` in
 # src/lib/prefs.pure.ts must equal it; `archgate check` fails when they drift.
 localStorageKey: 'hancrafted:prefs'
 

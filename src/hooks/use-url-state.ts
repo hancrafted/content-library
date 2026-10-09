@@ -14,7 +14,7 @@ const NO_UNSUBSCRIBE = () => undefined;
 const NEVER_NOTIFIES = () => NO_UNSUBSCRIBE;
 
 /**
- * The active Slide id (FE-001 §4): `top` for the Title slide, which an empty
+ * The active Slide id (FE-001 §2): `top` for the Title slide, which an empty
  * hash also reads as. The one way a component reads it. `null` only means
  * "not known yet": the server snapshot, because prerendered HTML cannot know
  * the hash, and any render outside an Episode page. The client snapshot is

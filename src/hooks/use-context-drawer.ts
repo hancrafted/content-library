@@ -68,7 +68,7 @@ function usePrintDisclosure() {
 }
 
 /**
- * The layout mode and a setter that persists it (FE-004). Starts on the default
+ * The layout mode and a setter that persists it (FE-001 §3). Starts on the default
  * and adopts the stored choice after mount, like the theme, so the static page
  * and the first client render agree.
  */
@@ -93,7 +93,7 @@ interface Revealed {
 
 /**
  * State of the Context drawer: open, selected tab, layout mode (a stored
- * preference, FE-004), and the item of the active Slide in the URL, falling
+ * preference, FE-001 §3), and the item of the active Slide in the URL, falling
  * back to the first of the given ids. A context reference opens the drawer on
  * Notes at its note; that note's item is shown until the reading line moves on.
  */

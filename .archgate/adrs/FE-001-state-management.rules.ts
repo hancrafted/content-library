@@ -1,9 +1,9 @@
 /// <reference path="../rules.d.ts" />
 
-// FE-004 — User Preference. One Discipline so far.
+// FE-001 — State Management. Preferences Discipline (§3).
 //
 // `single-storage-key` — the site touches exactly one localStorage key, named
-// once in src/config.yaml (FE-004 §1). Every getItem/setItem call under src/
+// once in src/config.yaml (FE-001 §3). Every getItem/setItem call under src/
 // must pass that key, either as `PREFS_KEY` or as the literal itself, and every
 // `PREFS_KEY` declaration must equal it, so the config and the code cannot
 // drift. Accepted trade-off: the next legitimate second key breaks this rule,
@@ -20,7 +20,7 @@ const KEY_CONSTANT = 'PREFS_KEY';
 const CALL_RE = /localStorage\s*\.\s*(?:getItem|setItem)\s*\(\s*([^,)]*)/g;
 const DECLARATION_RE = /\bPREFS_KEY\s*=\s*(['"`])(.*?)\1/g;
 const LITERAL_RE = /^(['"`])(.*)\1$/;
-const PROVENANCE = '(FE-004 [single-storage-key])';
+const PROVENANCE = '(FE-001 [single-storage-key])';
 
 async function readConfiguredKey(ctx: RuleContext): Promise<string | undefined> {
   try {

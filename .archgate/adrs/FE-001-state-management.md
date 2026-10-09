@@ -3,120 +3,98 @@ type: adr
 id: FE-001
 title: 'State Management'
 domain: frontend
-rules: false
-files: ['src/**/*.{ts,tsx}', 'eslint.config.mjs']
-paths: ['src/**/*.{ts,tsx}', 'eslint.config.mjs']
-description: 'Three kinds of state and where each lives — application state in the URL, user preference in FE-004 storage, transient state in memory under a reload test — plus the one URL-state service that alone writes browser history.'
+rules: true
+files: ['src/**/*.{ts,tsx}', 'src/config.yaml', 'eslint.config.mjs']
+paths: ['src/**/*.{ts,tsx}', 'src/config.yaml', 'eslint.config.mjs']
+description: 'Where state lives: application state in the URL, user preference in one localStorage key, the rest in memory. One module writes history, one writes storage.'
 ---
 
 # State Management
 
 ## Context
 
-**Status: proposal** ([#11](https://github.com/hancrafted/content-library/issues/11)). FE-008 is the last approved record.
+Table of contents and Context drawer each tracked "current Slide" with own observer. Mid-scroll they disagreed; a click made the drawer flick through every Slide in between. Preferences had the same drift risk: one storage key per feature, nobody inventories, writers clobber each other.
 
-An Episode page has two companions that show "the current Slide": the Table of contents and the Context drawer. Each worked it out alone, with its own `IntersectionObserver` and its own click override. With the drawer open, a Table of contents click several Slides down made the drawer flick through every Slide in between, because only the Table of contents knew a click was in flight. Nothing said where live state lives or who may write it, so each feature grew its own channel, and the next one would grow a third.
+Cause: no rule for where state lives or who writes it. Fix: class every piece of state by **what it must survive**.
 
-**Three kinds of state.** The split below is our working vocabulary, not a standard: no first-party source names it ([research](../../docs/research/url-as-application-state.md) §1). It answers one question per piece of state: _where does it survive?_
+| Kind        | Survives                                     | Lives in             | Examples                                          |
+| ----------- | -------------------------------------------- | -------------------- | ------------------------------------------------- |
+| Application | reload, bookmark, shared link                | URL                  | locale, active Slide — `/de/episodes/x#slide-4`   |
+| Preference  | reload on this device; never imposed by link | one localStorage key | theme, drawer beside/over                         |
+| Transient   | nothing                                      | memory               | drawer open, selected tab, menu open, scroll zone |
 
-- **Application state** — what the reader is looking at: route, locale (FE-003), active Slide. It survives a reload, a bookmark and a shared link, so it lives in the URL.
-- **User preference** — how the reader likes the site: theme, locale choice, Context drawer layout. It survives a reload on this device and is never forced on someone else by a link, so it lives in the FE-004 key.
-- **Transient and derived state** — everything else: drawer open, selected tab, zones, menu open. It lives in memory, admitted by one test: **a reload loses nothing the reader would miss and cannot recover in one action.**
+**Reload test** admits transient state: reload loses nothing reader would miss and can't get back in one action.
 
-**Why the hash, behind one service.** Verified facts (research §2): no Next.js hook exposes the hash, so it is read from `window.location.hash`; `pushState`/`replaceState` never fire `hashchange`, so a store must notify its own subscribers after it writes; prerendered HTML cannot know the hash; WebKit throws `SecurityError` after 100 history writes per 10 s on the main frame, `pushState` and `replaceState` sharing the counter; Blink drops writes past its limit silently. Scrolling reports a new Slide many times a second, so writes must be throttled and owned by one module. 150 ms caps us at about 67 writes per 10 s; the research infers, without measuring, that Next.js's own router writes share the quota, so the gap is kept as headroom.
+**Why one URL writer.** Browsers rate-limit history writes (Safari throws past ~100 per 10 s); scrolling reports a new Slide many times a second. Only a single owner can throttle. Click is _intent_ (show now), scroll is _report_ (passes Slides on the way) — a single owner lets intent win.
 
-**One instance per page.** A module singleton kept the previous Episode's Slide across a router navigation, which fires no `popstate` (#17). `dispose()` cancels the pending trailing write, a navigation in flight and the window listeners, so a dead page cannot rewrite the next page's URL. The Title slide is `top`: the page opens with no hash, scrolling back into it removes the hash, and `null` is never the Title slide.
+**Why one storage key.** One inventory in devtools; malformed data degrades to defaults in one place.
 
-**Intent versus report.** A click is intent: the reader chose a Slide, and every consumer should show it now. The observer is a report: it says what the reading line crosses, including every Slide a smooth scroll passes. Two calls make the suppression rule explicit. The fallback timeout exists because a click on a Slide already in view scrolls nothing and fires no `scrollend`. Clicks use `replaceState` for now; switching them to `pushState` is a one-line change inside the service.
-
-**Rejected:** a state library (none manages the hash without replacing the router; ARCH-001 not invoked); per-feature stores (the bug above); query parameters (in a static export `useSearchParams` needs a Suspense boundary and the value exists only after hydration).
-
-**Elsewhere:** the Slide observer and zones, [FE-009](./FE-009-slide-frame.md); the preference key, [FE-004](./FE-004-user-preference.md); page consumers, [FE-002](./FE-002-episode-page.md) §6.
+**Rejected:** state library (can't own the hash without replacing the router); per-feature stores (the bug above); query params (static export sees them only after hydration).
 
 ## Decision
 
-### 1. Three kinds of state
+### 1. Class state first
 
-1. Application state MUST live in the URL: path, locale segment (FE-003) and hash; no query-parameter state without amending this record.
-2. User preference MUST live in the FE-004 preferences object.
-3. Transient and derived state MAY live in memory only if a reload loses nothing the reader would miss and cannot recover in one action; derived values MUST be computed during render, not stored.
-4. New state MUST be classed as one of the three first.
+1. New state MUST be classed application, preference or transient before it is written.
+2. Application state MUST live in the URL: path, locale segment, hash. No query-param state.
+3. Transient state MAY live in memory only if it passes the reload test. Derived values computed in render, never stored.
 
-### 2. One URL-state service
+### 2. URL: one writer, one reader
 
-1. Only `src/lib/url-state.ts` MAY call `history.pushState`/`replaceState`; it imports no React (FE-007 §3).
-2. It MUST be built by a factory over a window (`createUrlState(window)`), and there MUST be one instance per Episode page, made by the page's provider and disposed on unmount; no module-wide singleton.
-3. It MUST expose: the active Slide; `subscribe(listener)`; `navigateTo(id)`; `reportReading(id)`; `dispose()`. An empty hash and `#top` read `top` (the Title slide, FE-002); writing `top` removes the hash, keeping path and query.
-4. `subscribe` MUST re-read the hash on `popstate` and first subscription, unless `location.pathname` left the page's own.
-5. Any component MAY call `navigateTo`; only the Slide observer MAY call `reportReading`.
+1. Only `src/lib/url-state.ts` MAY write browser history; one instance per page, disposed on leave.
+2. Writes MUST be throttled. A click shows its Slide at once and wins over scroll reports until the scroll ends.
+3. Components MUST read the active Slide through `useActiveSlide()`, never mirror it into own state.
 
-### 3. Intent and report
+### 3. Preferences: one key (📜 Rule: `single-storage-key`)
 
-1. `navigateTo(id)` MUST notify subscribers immediately, write the hash, and suppress reports until `scrollend` or a fallback timeout.
-2. `reportReading(id)` MUST be ignored while a navigation is in flight; otherwise it notifies at once when the id changes.
-3. The service MUST write history at most once per 150 ms, flushing the trailing value.
-4. A write MUST pass `history.state` through and catch a `SecurityError`.
-5. Both calls use `replaceState` for now.
-
-### 4. One hook
-
-1. Components MUST read the active Slide only through `useActiveSlide()` (`src/hooks/use-url-state.ts`), on `useSyncExternalStore` over the page's service, with a server snapshot of `null`, meaning only "not known yet".
+1. Every preference MUST be a field of one JSON object under one localStorage key, named once in `src/config.yaml`.
+2. Storage MUST be read and written only through the prefs module (`src/lib/prefs-storage.ts`); writes merge, never overwrite. Pre-paint theme script: read-only exception.
 
 ## Do's and Don'ts
 
 ### Do's
 
-1. **DO** ask "does a reload lose something the reader would miss?" before adding `useState` for anything the reader sees. (Decision 1)
-2. **DO** put a new preference on `Prefs` per FE-004, never in the URL or memory. (Decision 1)
-3. **DO** call `navigateTo(id)` on the page's service from a click that moves the reader. (Decision 2, Decision 3)
-4. **DO** read the active Slide with `useActiveSlide()`. (Decision 4)
-5. **DO** test the service through `createUrlState` with a fake window and fake timers. (Decision 2)
+1. **DO** ask "would a reload lose something the reader misses?" before `useState` for anything visible. (Decision 1)
+2. **DO** move the reader with the page service's `navigateTo(id)`; read with `useActiveSlide()`. (Decision 2)
+3. **DO** add a preference as a new field — `{ theme, locale, drawerMode }` + one. (Decision 3)
 
 ### Don'ts
 
-1. **DON'T** call `history.pushState`/`replaceState` outside `src/lib/url-state.ts`. (Decision 2)
-2. **DON'T** write `location.hash` or call `router.push('#…')` to move between Slides. (Decision 2)
-3. **DON'T** mirror the hash into `useState` or a context. (Decision 1, Decision 4)
-4. **DON'T** put drawer open state, tab, zones or any other transient state in the URL. (Decision 1)
-5. **DON'T** add a state-management library or a per-feature store. (Decision 1, Decision 2)
+1. **DON'T** put transient state in the URL — `#drawer=open` opens a stranger's drawer. (Decision 1)
+2. **DON'T** add a state library or a per-feature store. (Decision 1)
+3. **DON'T** write history outside the URL module: no `pushState`/`replaceState`, `location.hash =`, `router.push('#…')`. (Decision 2)
+4. **DON'T** add a second storage key, sessionStorage or cookie for a preference. (Decision 3, 📜 Rule: `single-storage-key`)
 
 ## Consequences
 
 **Positive:**
 
-1. **One answer to "what is current":** every consumer subscribes to the same value, so the Table of contents and Context drawer cannot disagree.
-2. **Shareable place:** manual scrolling updates the hash, so a copied URL reopens the reader where they were.
-3. **Safari-safe:** the throttle and the `SecurityError` catch keep fast flings below WebKit's limit instead of throwing.
-4. **Testable without a browser:** the factory runs against a fake window in the fast suite (ARCH-003).
-5. **A reviewable test:** any new state is judged by one sentence, not taste.
+1. **One "current":** every consumer subscribes to one value; Table of contents and drawer can't disagree.
+2. **Shareable place:** scrolling updates the hash; a copied link reopens where reader was.
+3. **One inventory:** every stored preference under one key.
 
 **Negative:**
 
-1. **The URL lags by up to 150 ms** behind the reading line; subscribers do not.
-2. **Clicks do not add history entries** while `replaceState` is used; Back leaves the Episode rather than the previous Slide.
-3. **The memory test is judgement:** no tool decides whether a reader "would miss" something.
+1. **URL lags** reading line by the throttle; subscribers don't.
+2. **Back leaves the Episode:** clicks replace, not push, history entries.
+3. **No self-storing libraries:** e.g. `next-themes` writes own key — unusable as-is.
+4. **Reload test is judgement:** no tool decides what a reader "would miss".
 
 **Risks:**
 
-1. **A fast fling still hits the limit** together with router writes. **Mitigation:** the 150 ms cap leaves about a third of WebKit's budget; the catch keeps the page working; a Safari fling is a browser-verification step.
-2. **A navigation never ends** (no `scrollend`, timeout misjudged) and reports stay suppressed. **Mitigation:** the fallback timeout always resumes reports; the factory test covers both paths.
+1. **Fast fling hits Safari's limit** alongside router writes. **Mitigation:** throttle leaves headroom; a caught error keeps the page working.
 
 ## Compliance and Enforcement
 
-**Enforcers, earliest first:**
+1. **Rule** `single-storage-key` (`FE-001-state-management.rules.ts`, error): every `getItem`/`setItem` under `src/` passes the configured key; `PREFS_KEY` equals `src/config.yaml`.
+2. **Lint** (`eslint.config.mjs`): history writes refused outside `src/lib/url-state.ts`.
+3. **Tests** (`npm run verify`): URL service driven against a fake window — intent, throttle, dispose, isolation.
 
-1. **Types** (`tsc`): `useActiveSlide()` returns `string | null`; the service is the only export that writes.
-2. **Fast** (`npm run verify`): the service's test beside `src/lib/url-state.ts` drives a fake window: intent notifies at once; an empty hash reads `top`, `#top` lands there, `top` clears the hash and keeps path and query; `dispose` cancels the pending write; two instances stay isolated; reports suppressed in flight; resume on `scrollend` and on timeout; at most one write per 150 ms with trailing flush; `popstate` notifies; the hash is read on creation; a foreign path is neither adopted nor written to.
-3. **Lint** (`eslint.config.mjs`, added in [#13](https://github.com/hancrafted/content-library/issues/13)): `no-restricted-properties` refuses `history.pushState`/`history.replaceState` under `src/**` outside `src/lib/url-state.ts`, plus a `no-restricted-syntax` selector for the `window.history.*` and `globalThis.history.*` forms, which `object: 'history'` does not match (probed: 1 of 3 forms fired); `no-restricted-syntax` refuses `NewExpression[callee.name='IntersectionObserver']` outside the Slide observer (FE-009). Flat config replaces a rule's options per block, so the observer selector MUST be appended to every existing `no-restricted-syntax` list (FE-006's two blocks and FE-002's Episode block), not set in a new block that overrides them.
-
-**Measured** on `main` (4c412c3): `no-restricted-properties` 1 hit, `no-restricted-syntax` 2 hits. On `b392fc0`: 0 history writes and 0 observers outside the owners, 16 of 16 probes fired.
-
-**Manual review duties:** every new piece of state is classed by §1 and passes the memory test; no transient state in the URL.
+**Manual review duties:** new state classed per §1; no `location.hash` or `router.push('#…')` writes; storage touched only via the prefs module.
 
 **Exceptions:** raise a separate ADR; human approval required.
 
 ## References
 
-- [`docs/research/url-as-application-state.md`](../../docs/research/url-as-application-state.md) — every external fact above, with sources.
-- [FE-002 Episode Page](./FE-002-episode-page.md), [FE-003 Localization](./FE-003-localization.md), [FE-004 User Preference](./FE-004-user-preference.md), [FE-007 Module Layering](./FE-007-module-layering.md), [FE-009 Slide Frame](./FE-009-slide-frame.md), [ARCH-001](./ARCH-001-dependency-admission-bar.md), [ARCH-003 Testing](./ARCH-003-testing.md).
-- [React `useSyncExternalStore`](https://react.dev/reference/react/useSyncExternalStore), [MDN `pushState`](https://developer.mozilla.org/en-US/docs/Web/API/History/pushState), [WebKit `History.cpp`](https://github.com/WebKit/WebKit/blob/main/Source/WebCore/page/History.cpp).
+- [`docs/research/url-as-application-state.md`](../../docs/research/url-as-application-state.md) — browser facts behind §2.
+- [MDN `pushState`](https://developer.mozilla.org/en-US/docs/Web/API/History/pushState), [MDN `localStorage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage).

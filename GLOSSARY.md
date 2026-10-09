@@ -9,10 +9,10 @@ _Avoid_: Post, article, video, tower
 
 ## Episode structure
 
-**Section**: an Episode's second level, a renderable unit with its own section slide, holding zero or more page Slides.
+**Section**: an Episode's second level: an ordered group of Slides whose first is its section slide, which names the Section. A Slide's heading level comes from its place in the Section, not from the Slide.
 _Avoid_: Chapter, part
 
-**Slide**: one full-height frame in an Episode, stacked under the one before it. A Section's own slide is a **section slide**; the slides it holds are **page slides**.
+**Slide**: one full-height frame in an Episode, stacked under the one before it; self-contained, carrying its own Canvas, Speaker notes and Voice script, so an Episode is a composition of Slides. A Section's own slide is a **section slide**; the slides it holds are **page slides**.
 _Avoid_: Card, panel; page, which means the Next.js route the whole Episode renders as
 
 **Title slide**: an Episode's opening Slide: its title, caption and, once recorded, its video. Not listed in the table of contents.
@@ -65,3 +65,11 @@ _Avoid_: Drawer props, entries
 
 **Table of contents**: an Episode's own navigation: its Sections, numbered, with the active Section's page Slides expanded, plus the reading time left. A sticky panel on wide screens, a pill-opened drawer on narrow ones.
 _Avoid_: Sitenav, sidebar
+
+## Localization
+
+**Translation file**: one locale's strings for the whole site, nested by namespace; English is the source every other locale is checked against. Localization libraries call it a catalog; that jargon stays out of this project.
+_Avoid_: Catalog, messages file, dictionary
+
+**Translation key**: the dotted path naming one string in a Translation file, e.g. `episodes.ai-token-economy.slides.the-lost-middle.title`.
+_Avoid_: Catalog key, catalog path, message id
