@@ -20,7 +20,7 @@ Prints JSON: per selector its match `count`, the first match's `box` (page coord
 
 ## Screenshot
 
-Add `--out <scratchpad path>.png`, optionally `--clip <selector>` to frame one element. The image is capped at 800 px on its longest edge. Read at most one image per iteration, and only when a probe cannot answer the question (colour, overlap, visual balance).
+Add `--out <scratchpad path>.png`, optionally `--clip <selector>` to frame one element (scrolled into view first, so an Episode Slide mounts) and `--theme light|dark` to emulate the system colour scheme the site follows by default. The image is capped at 800 px on its longest edge. Read at most one image per iteration, and only when a probe cannot answer the question (colour, overlap, visual balance).
 
 ## Browser tools
 
