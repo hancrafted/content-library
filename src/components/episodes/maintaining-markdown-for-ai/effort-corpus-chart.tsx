@@ -87,9 +87,14 @@ function CorpusCurves() {
   );
 }
 
-export function EffortCorpusChart({ className, id }: { className?: string; id?: string }) {
+interface EffortCorpusChartProps {
+  className?: string;
+  'data-target'?: string;
+}
+
+export function EffortCorpusChart({ className, 'data-target': dataTarget }: EffortCorpusChartProps) {
   return (
-    <div id={id} className="relative">
+    <div data-target={dataTarget} className="relative">
       <svg
         viewBox="0 0 560 360"
         role="img"

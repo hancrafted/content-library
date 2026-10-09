@@ -64,13 +64,13 @@ function RoleCardFooter({ source, url }: { source: string; url: string }) {
 }
 
 function RoleCard({
-  id,
+  'data-target': dataTarget,
   role,
   isActive,
   onSelect,
   onOpen,
 }: {
-  id?: string;
+  'data-target'?: string;
   role: RoleDetail;
   isActive: boolean;
   onSelect: () => void;
@@ -78,7 +78,7 @@ function RoleCard({
 }) {
   return (
     <div
-      id={id}
+      data-target={dataTarget}
       onClick={onSelect}
       className={cn(
         'cursor-pointer rounded-2xl border bg-card/90 p-4 shadow-xs transition-all hover:border-foreground/30',
@@ -161,7 +161,7 @@ function useConnectorPaths(
 interface RightCardsProps {
   readonly rightRefs: RefObject<Record<RoleKey, HTMLDivElement | null>>;
   readonly activeRole: RoleKey;
-  readonly knowledgeId?: string;
+  readonly knowledgeTarget?: string;
   readonly onSelect: (key: RoleKey) => void;
   readonly onOpen: (modal: ModalKey) => void;
 }
@@ -169,7 +169,7 @@ interface RightCardsProps {
 const ROLE_KEYS: readonly RoleKey[] = ['knowledge', 'instruction', 'memory'];
 const INIT_REFS: Record<RoleKey, HTMLDivElement | null> = { knowledge: null, instruction: null, memory: null };
 
-function RightRoleCards({ rightRefs, activeRole, knowledgeId, onSelect, onOpen }: RightCardsProps) {
+function RightRoleCards({ rightRefs, activeRole, knowledgeTarget, onSelect, onOpen }: RightCardsProps) {
   return (
     <div className="flex flex-col justify-between gap-4 lg:col-span-5">
       {ROLE_KEYS.map((key) => (
@@ -180,7 +180,7 @@ function RightRoleCards({ rightRefs, activeRole, knowledgeId, onSelect, onOpen }
           }}
         >
           <RoleCard
-            id={key === 'knowledge' ? knowledgeId : undefined}
+            data-target={key === 'knowledge' ? knowledgeTarget : undefined}
             role={ROLES_DATA[key]}
             isActive={activeRole === key}
             onSelect={() => onSelect(key)}
@@ -211,7 +211,7 @@ function useInteractiveRoles() {
   return { activeRole, activeModal, setActiveModal, containerRef, leftCardRef, rightRefs, paths, onSelectRole };
 }
 
-export function MarkdownRolesInteractive({ knowledgeId }: { knowledgeId?: string }) {
+export function MarkdownRolesInteractive({ knowledgeTarget }: { knowledgeTarget?: string }) {
   const s = useInteractiveRoles();
   const closeModal = useCallback(() => s.setActiveModal(null), [s]);
 
@@ -222,7 +222,7 @@ export function MarkdownRolesInteractive({ knowledgeId }: { knowledgeId?: string
       <RightRoleCards
         rightRefs={s.rightRefs}
         activeRole={s.activeRole}
-        knowledgeId={knowledgeId}
+        knowledgeTarget={knowledgeTarget}
         onSelect={s.onSelectRole}
         onOpen={s.setActiveModal}
       />

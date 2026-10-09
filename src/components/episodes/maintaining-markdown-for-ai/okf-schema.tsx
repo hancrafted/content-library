@@ -82,9 +82,9 @@ function OkfSpecLink() {
   );
 }
 
-export function OkfSchema({ id }: { id?: string }) {
+export function OkfSchema({ 'data-target': dataTarget }: { 'data-target'?: string }) {
   return (
-    <div id={id} className="mt-8 space-y-4">
+    <div data-target={dataTarget} className="mt-8 space-y-4">
       <OkfTable />
       <OkfSpecLink />
     </div>
