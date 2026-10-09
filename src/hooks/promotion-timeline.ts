@@ -1,4 +1,4 @@
-import { animateEnvelope, burstEnvelope, ENVELOPE_BURST_AT } from '@/hooks/promotion-envelope';
+import { animateEnvelope, burstEnvelope, ENVELOPE_BURST_AT, skipIndignation } from '@/hooks/promotion-envelope';
 import { createPaperPile } from '@/hooks/promotion-pile';
 import { promotionArc, promotionFlight } from '@/lib/promotion-flight.pure';
 import gsap from 'gsap';
@@ -15,8 +15,8 @@ function sceneElements(root: HTMLElement) {
   const caption = root.querySelector<HTMLElement>('[data-hero-caption]');
   const actions = root.querySelector<HTMLElement>('[data-hero-actions]');
   const buttons = Array.from(root.querySelectorAll<HTMLAnchorElement>('[data-hero-actions] a'));
-  if (!envelope || !caption || !actions || buttons.length !== 2) {
-    throw new Error('Promotion animation requires an envelope, a caption and two actions.');
+  if (!envelope || !caption || !actions || buttons.length !== 1) {
+    throw new Error('Promotion animation requires an envelope, a caption and one action.');
   }
   // Each caption word flies on its own; the split is reverted once the animation is over.
   const split = SplitText.create(caption, { type: 'words' });
@@ -106,6 +106,7 @@ function animationControls(scene: Scene, timeline: gsap.core.Timeline, pile: Pil
   const { dispose, isStopped } = disposer(scene, timeline, pile);
   return {
     setDraining: pile.setDraining,
+    setProximity: pile.setProximity,
     suspend: (suspended: boolean) => {
       if (!isStopped()) {
         timeline.paused(suspended);
@@ -113,7 +114,9 @@ function animationControls(scene: Scene, timeline: gsap.core.Timeline, pile: Pil
       }
     },
     burst: () => {
-      if (!isStopped() && timeline.time() < ENVELOPE_BURST_AT) timeline.seek('burst', false).play();
+      if (isStopped() || timeline.time() >= ENVELOPE_BURST_AT) return;
+      skipIndignation(timeline, scene.root);
+      timeline.seek('burst', false).play();
     },
     finish: () => {
       if (isStopped()) return;

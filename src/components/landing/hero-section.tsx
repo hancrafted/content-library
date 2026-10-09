@@ -9,8 +9,6 @@ type HeroT = Awaited<ReturnType<typeof getTranslations<'landing.hero'>>>;
 function heroLabels(t: HeroT) {
   return {
     episodes: t('episodes'),
-    contact: t('contact'),
-    newTab: t('newTab'),
     open: t('open'),
     skip: t('skip'),
     motionHint: t('motionHint'),
@@ -43,6 +41,7 @@ export async function HeroSection({ locale }: { locale: Locale }) {
       locale={locale}
       headline={heroHeadline(t)}
       eyebrow={t('eyebrow')}
+      offers={[t('offers.consulting'), t('offers.coaching'), t('offers.leadership')]}
       caption={t.rich('caption', {
         plan: (text) => (
           <span data-caption-word data-testid="hero-plan">

@@ -5,7 +5,9 @@
   },
   "nav": {
     "label": "Main",
-    "episodes": "Episodes"
+    "episodes": "Episodes",
+    "contact": "Work with me",
+    "newTab": "opens in a new tab"
   },
   "theme": {
     "label": "Theme",
@@ -21,18 +23,21 @@
     "link": "Page template",
     "hero": {
       "eyebrow": "hancrafted / Human-led. AI-accelerated.",
+      "offers": {
+        "consulting": "Consulting",
+        "coaching": "Coaching",
+        "leadership": "Engineering leadership"
+      },
       "headline": "AI gave you a <accent>promotion</accent> <br></br>you never asked for.",
       "caption": "You get to 10x your productivity — if you learn to <plan>plan,</plan> <spec>spec</spec> and <review>review,</review> …",
       "plan": "plan",
       "spec": "spec",
       "review": "review",
-      "promotion": "AI promotion",
-      "episodes": "Explore Episodes",
-      "contact": "Work with me",
-      "newTab": "opens in a new tab",
+      "promotion": "Promoted by AI",
+      "episodes": "Explore why",
       "open": "Open your promotion",
       "skip": "Stop animation",
-      "motionHint": "Hover or focus Episodes to clear the workload. Work with me clears it three times faster. Move away to let it grow again.",
+      "motionHint": "Move toward Explore why to start clearing the workload; hover or focus it to clear it fully. Move away to let it grow again.",
       "tasks": {
         "bug": "DEADLINE",
         "ticket": "TASK",
