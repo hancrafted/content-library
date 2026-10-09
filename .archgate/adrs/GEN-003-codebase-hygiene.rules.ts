@@ -6,8 +6,8 @@
 // `no-eslint-disable` — inline lint suppression stays unspent. eslint.config.mjs
 // is the single source of truth for what this repo enforces; a directive comment
 // forks that truth at one line and does it invisibly, since `npm run verify`
-// stays green while the rule stops holding at that site (GEN-003 §2). Runs at
-// error (GEN-001 §7). Self-contained by design: archgate forbids imports
+// stays green while the rule stops holding at that site (GEN-003 §1).
+// Self-contained by design: archgate forbids imports
 // between rules files.
 const SRC_GLOB = 'src/**/*';
 
