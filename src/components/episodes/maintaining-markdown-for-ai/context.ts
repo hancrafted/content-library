@@ -21,6 +21,10 @@ export const MAINTAINING_CONTEXT = {
         { slug: 'three-contexts', target: 'title' },
         { slug: 'retrieval-cost', target: 'knowledge' },
       ],
+      segments: [
+        { slug: 'agentic-era', from: 0.0, to: 0.75 },
+        { slug: 'three-categories', from: 0.75, to: 1.5, bridge: true },
+      ],
     },
   },
   'volume-outruns-review': {
@@ -30,6 +34,10 @@ export const MAINTAINING_CONTEXT = {
       notes: [
         { slug: 'decay-vs-drift', target: 'title' },
         { slug: 'corpus-compounding', target: 'corpus-chart' },
+      ],
+      segments: [
+        { slug: 'effort-decay', from: 0.0, to: 0.6 },
+        { slug: 'corpus-compounding', from: 0.6, to: 1.25, bridge: true },
       ],
     },
   },
@@ -41,6 +49,7 @@ export const MAINTAINING_CONTEXT = {
         { slug: 'three-boundaries', target: 'title' },
         { slug: 'division-of-labour', target: 'venn' },
       ],
+      segments: [{ slug: 'three-boundaries', from: 0.0, to: 0.75, bridge: true }],
     },
   },
   'what-the-machine-verifies': {
@@ -51,6 +60,7 @@ export const MAINTAINING_CONTEXT = {
         { slug: 'deterministic-checks', target: 'title' },
         { slug: 'mechanical-ceiling', target: 'check-result' },
       ],
+      segments: [{ slug: 'mechanical-ceiling', from: 0.0, to: 0.75 }],
     },
   },
   'what-ai-accelerates': {
@@ -61,6 +71,7 @@ export const MAINTAINING_CONTEXT = {
         { slug: 'cross-referencing', target: 'title' },
         { slug: 'signals-not-resolutions', target: 'discrepancy-card' },
       ],
+      segments: [{ slug: 'signals-and-contradictions', from: 0.0, to: 0.85 }],
     },
   },
   'what-remains-human': {
@@ -71,6 +82,7 @@ export const MAINTAINING_CONTEXT = {
         { slug: 'ground-truth', target: 'title' },
         { slug: 'accountability', target: 'judgment-card' },
       ],
+      segments: [{ slug: 'accountability-ground-truth', from: 0.0, to: 0.75 }],
     },
   },
   'google-okf': {
@@ -81,6 +93,7 @@ export const MAINTAINING_CONTEXT = {
         { slug: 'open-knowledge-format', target: 'title' },
         { slug: 'lifecycle-fields', target: 'schema-card' },
       ],
+      segments: [{ slug: 'shared-vocabulary', from: 0.0, to: 1.08, bridge: true }],
     },
   },
   'steering-the-ai': {
@@ -91,6 +104,7 @@ export const MAINTAINING_CONTEXT = {
         { slug: 'raising-the-floor', target: 'title' },
         { slug: 'tool-boundary', target: 'venn' },
       ],
+      segments: [{ slug: 'raising-the-floor', from: 0.0, to: 0.85 }],
     },
   },
   'deterministic-core': {
@@ -101,6 +115,7 @@ export const MAINTAINING_CONTEXT = {
         { slug: 'three-triggers', target: 'title' },
         { slug: 'predictable-eval', target: 'flow-diagram' },
       ],
+      segments: [{ slug: 'three-triggers', from: 0.0, to: 0.85, bridge: true }],
     },
   },
   'live-demo': {
@@ -111,6 +126,7 @@ export const MAINTAINING_CONTEXT = {
         { slug: 'demo-contrast', target: 'title' },
         { slug: 'holding-slide', target: 'terminal-panel' },
       ],
+      segments: [{ slug: 'demo-walkthrough', from: 0.0, to: 3.5 }],
     },
   },
   'feature-roadmap': {
@@ -131,6 +147,7 @@ export const MAINTAINING_CONTEXT = {
         { slug: 'the-work-moved', target: 'title' },
         { slug: 'closing-thesis', target: 'conclusion-card' },
       ],
+      segments: [{ slug: 'closing-thesis', from: 0.0, to: 0.85 }],
     },
   },
 } as const satisfies Readonly<Record<string, SlideContextEntry>>;

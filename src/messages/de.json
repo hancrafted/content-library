@@ -747,6 +747,21 @@
               "header": "Abrufkosten",
               "description": "Entscheidend ist, ob der Agent bei jeder Anfrage Kontext-Token bezahlt oder nur bei gezieltem Abruf."
             }
+          },
+          "voiceScript": {
+            "segments": {
+              "agentic-era": {
+                "title": "Das agentische Zeitalter",
+                "keywords": "nicht mehr 2023, lokale Dateien, Werkzeuge, Schleifen",
+                "script": "Bevor wir starten, möchte ich festhalten, warum Markdown-Dateien in KI-Workflows eine so zentrale Rolle spielen. Wir befinden uns im agentischen Zeitalter – es ist nicht mehr 2023. Agenten sind keine Chatbots, in die man Texte kopiert. Sie lesen Dateien auf dem Rechner, schreiben Änderungen, rufen Tools auf und durchsuchen das Web. In einer Schleife erledigen sie echte Aufgaben – genau wie ein neuer Kollege, den Sie gerade einarbeiten."
+              },
+              "three-categories": {
+                "title": "Drei Dokument-Kategorien",
+                "keywords": "Wissen, Anweisungen, Gedächtnis, stiller Fehler",
+                "script": "Und wie dieser Kollege braucht ein Agent die richtigen Informationen zur richtigen Zeit. Diese Informationen leben in Markdown. Diese Dateien teilen sich in drei Kategorien: Wissen – was der Agent bei Bedarf nachschlägt. Anweisungen – Skills, einmal formuliert und namentlich aufgerufen. Und Gedächtnis – eine Datei, die der Agent zu Beginn jedes Gesprächs liest. Ist diese Datei veraltet, liest der Agent jedes Mal die falsche Information. Zuverlässig und lautlos – ohne dass Sie es bemerken.",
+                "bridge": "Und das ist nur ein einziges Dokument."
+              }
+            }
           }
         },
         "volume-outruns-review": {
@@ -761,6 +776,21 @@
             "corpus-compounding": {
               "header": "Wachsende Angriffsfläche",
               "description": "Über einen Korpus hinweg vervielfacht sich die Verifikationsfläche schneller als die bloße Dateianzahl."
+            }
+          },
+          "voiceScript": {
+            "segments": {
+              "effort-decay": {
+                "title": "Aufwandsverfall und Drift",
+                "keywords": "Verfallskurve, sinkender Aufwand, steigende Drift",
+                "script": "Wissensmanagement war in Unternehmen schon immer schwer – lange vor KI. Und zwar wegen dieser Dynamik. Ein Dokument im Zeitverlauf: Die blaue Linie zeigt den Aufwand. Anfangs gibt es eine Spitze bei der Erstellung. Danach fällt der Aufwand rapide ab, weil niemand ein Budget für Pflege vorsieht. Und während der Aufwand sinkt, wächst die Drift: Das Dokument existiert weiter, ist aber unbemerkt nicht mehr wahr."
+              },
+              "corpus-compounding": {
+                "title": "Exponentieller Prüfaufwand",
+                "keywords": "Bestand wächst, Verweise untereinander, Bremse weg",
+                "script": "Dokumente häufen sich kontinuierlich an. Man prüft nicht nur jede einzelne Datei, sondern jeden Querverweis auf andere Dateien. Das potenziert sich. Früher war das Schreiben die Bremse: Der Mensch war der Flaschenhals, der die Menge begrenzte. Diese Bremse existiert nicht mehr.",
+                "bridge": "Die Bremse ist weg. Was bedeutet das für die Prüfung eines Dokuments?"
+              }
             }
           }
         },
@@ -778,6 +808,16 @@
               "description": "Mechanik an die Maschine delegieren und Entdeckung an die KI, damit Menschen nur echte Urteilsfragen klären."
             }
           },
+          "voiceScript": {
+            "segments": {
+              "three-boundaries": {
+                "title": "Drei getrennte Ebenen",
+                "keywords": "Maschine, Mensch, KI, deterministisch bis semantisch",
+                "script": "Prüfen ist nicht eine einzige Aufgabe, sondern drei – und sie sind nicht austauschbar. Links die Maschine: deterministisch, binär, günstig und schnell. Rechts der Mensch: nicht-deterministisch, langsam, teuer – aber hier entsteht semantisches Urteil und Vertrauen. In der Mitte die KI: arbeitet in natürlicher Sprache, kostet Tokens und ist nicht deterministisch. Von links nach rechts: von günstig und sicher zu teuer und menschlich.",
+                "bridge": "Gehen wir sie der Reihe nach durch."
+              }
+            }
+          },
           "slides": {
             "what-the-machine-verifies": {
               "title": "Was die Maschine verifiziert",
@@ -791,6 +831,15 @@
                 "mechanical-ceiling": {
                   "header": "Mechanische Obergrenze",
                   "description": "Ein fehlerfreier Durchlauf beweist strukturelle Integrität, niemals aber die inhaltliche Richtigkeit."
+                }
+              },
+              "voiceScript": {
+                "segments": {
+                  "mechanical-ceiling": {
+                    "title": "Was die Maschine prüft",
+                    "keywords": "Frontmatter, Metadaten-Struktur, Linkprüfung, Grenze",
+                    "script": "Was kann eine Maschine kostenlos prüfen? Im Frontmatter einer Markdown-Datei liegen Metadaten. Die Maschine prüft die Struktur: Ist der Typ angegeben? Ist das Datum valide? Sind Links erreichbar? Das ist die Grenze: Sie bestätigt die Existenz eines Feldes, nicht aber den Wahrheitsgehalt des Inhalts."
+                  }
                 }
               }
             },
@@ -807,6 +856,15 @@
                   "header": "Signale, keine Wahrheiten",
                   "description": "Die KI-Empfehlung ist schnell und einsichtsreich, bleibt jedoch selbst eine ungeprüfte Behauptung."
                 }
+              },
+              "voiceScript": {
+                "segments": {
+                  "signals-and-contradictions": {
+                    "title": "Was KI beschleunigt",
+                    "keywords": "Widersprüche, Querverweise, Tickets, Signale",
+                    "script": "Was leistet KI? Sie folgt Querverweisen und erkennt, wenn Dokument A fünf Tage nennt und Dokument B sieben. Sie deckt Widersprüche auf und erstellt ein Ticket, sodass ein Mensch gezielt eine Zeile prüft statt alles neu zu lesen. Das sind Signale, die den Prüfaufwand eingrenzen. Doch die finale Entscheidung kann man ihr nicht anvertrauen."
+                  }
+                }
               }
             },
             "what-remains-human": {
@@ -821,6 +879,15 @@
                 "accountability": {
                   "header": "Verantwortung",
                   "description": "Werkzeuge verengen die Entscheidungsfläche, doch die Verantwortung bleibt beim Menschen."
+                }
+              },
+              "voiceScript": {
+                "segments": {
+                  "accountability-ground-truth": {
+                    "title": "Was menschlich bleibt",
+                    "keywords": "Verantwortung, Grundwahrheit, bleibt Ihre Aufgabe",
+                    "script": "Stimmt der Prozess im Alltag noch? Ist diese Person noch zuständig? Kein Tool beantwortet das. Sie müssen es wissen – und Sie tragen die Verantwortung, wenn es falsch ist. Die Maschine grenzt ein, die KI filtert vor, doch der entscheidende Rest bleibt Ihre Aufgabe."
+                  }
                 }
               }
             }
@@ -839,6 +906,16 @@
               "header": "Governance-Felder",
               "description": "Provenienz, Vertrauensstufen und Lebenszyklus stehen direkt im Markdown neben dem Inhalt."
             }
+          },
+          "voiceScript": {
+            "segments": {
+              "shared-vocabulary": {
+                "title": "Google Open Knowledge Format",
+                "keywords": "OKF v0.2, offener Standard, Prüf-Vertrag, Lebenszyklus",
+                "script": "Um den maschinellen Anteil zu vergrößern, braucht es ein gemeinsames Vokabular. Googles Open Knowledge Format standardisiert Metadaten, Prüf-Verträge und Lebenszyklen: Erstellt durch einen Agenten, verifiziert durch einen Menschen, sowie Verfallsdaten. Mit einheitlichen Feldern funktioniert ein Prüf-Tool in jedem Repository.",
+                "bridge": "Damit kann die Maschine weit mehr prüfen als reine Syntax."
+              }
+            }
           }
         },
         "steering-the-ai": {
@@ -855,6 +932,15 @@
               "description": "markdown-harness steuert die Maschinenebene und bereitet Signale vor, ohne menschliches Urteil zu beanspruchen."
             }
           },
+          "voiceScript": {
+            "segments": {
+              "raising-the-floor": {
+                "title": "Die Basis anheben",
+                "keywords": "markdown-harness, Mindeststandard, Lenkung, Grenze zum Menschen",
+                "script": "Dafür baue ich markdown-harness. Der Leitgedanke: Ein Dokument verrät selbst, wie sehr man ihm vertrauen darf. Es erzeugt kein künstliches Vertrauen, sondern hebt den Mindeststandard mit deterministischen Signalen an. Die Maschine lenkt die KI. Die menschliche Seite bleibt bewusst unberührt: Diese Verantwortung gehört dem Menschen."
+              }
+            }
+          },
           "slides": {
             "deterministic-core": {
               "title": "Läuft auf einem 100% deterministischen Kern",
@@ -868,6 +954,16 @@
                 "predictable-eval": {
                   "header": "Deterministische Auswertung",
                   "description": "Konfiguration und Dateieingaben liefern bei jedem Lauf exakt dasselbe Ergebnis."
+                }
+              },
+              "voiceScript": {
+                "segments": {
+                  "three-triggers": {
+                    "title": "Ein deterministischer Kern",
+                    "keywords": "drei Auslöser, Laufzeit, Commit-Gate, nächtlicher Lauf",
+                    "script": "Drei Wege rein, drei Wege raus – und in der Mitte dieselbe Logik: Konfiguration lesen, Regeln deterministisch anwenden. Zur Laufzeit warnt das Tool den Agenten vor veralteten Dateien. Beim Commit fungiert es als Qualitäts-Gate. Im nächtlichen Lauf regeneriert es Indizes und meldet Handlungsbedarf.",
+                    "bridge": "Sehen wir uns die Laufzeit live an."
+                  }
                 }
               }
             },
@@ -883,6 +979,15 @@
                 "holding-slide": {
                   "header": "Live-Terminal-Lauf",
                   "description": "Der Vortrag wechselt hier ins Terminal; die Folie bildet den Rahmen für den Testlauf."
+                }
+              },
+              "voiceScript": {
+                "segments": {
+                  "demo-walkthrough": {
+                    "title": "Die Live-Prüfung",
+                    "keywords": "drei Terminals, ohne Hook, Piraten-Injektion, Zugriff verweigert",
+                    "script": "Drei Terminals, dieselbe Frage, dasselbe Dokument. Ohne Hook antwortet der Agent gutgläubig auf veraltete Daten. Mit Hook beweist die Piraten-Antwort, dass die Instruktion gegriffen hat. Im dritten Fall wird der Zugriff verweigert. Das Protokoll erfasst das Verfallsdatum deterministisch – unabhängig vom Modell."
+                  }
                 }
               }
             },
@@ -915,6 +1020,15 @@
             "closing-thesis": {
               "header": "Zusammenfassung",
               "description": "Maschinen prüfen Strukturen, KI beschleunigt Querverweise, und das menschliche Urteil trägt die Verantwortung."
+            }
+          },
+          "voiceScript": {
+            "segments": {
+              "closing-thesis": {
+                "title": "Die Verantwortung bleibt menschlich",
+                "keywords": "Venn-Diagramm, Prüfaufwand, Verantwortung",
+                "script": "Die Maschine prüft Struktur. KI beschleunigt die Vorarbeit. Und die eigentliche Arbeit wandert dahin, wo sie immer lag: zur menschlichen Urteilskraft. Das Tool steht bereit. Vielen Dank."
+              }
             }
           }
         }

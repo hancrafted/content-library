@@ -747,6 +747,21 @@
               "header": "Consumption cost",
               "description": "What matters is whether the agent pays context tokens on every turn or retrieves on demand."
             }
+          },
+          "voiceScript": {
+            "segments": {
+              "agentic-era": {
+                "title": "The agentic era",
+                "keywords": "not 2023, local files, tools, loops",
+                "script": "Before we start, I want to establish why markdown files matter so much in AI workflows. We're in the agentic era now — it isn't 2023 anymore. Agents aren't chatbots you copy-paste into. They read files on your machine, write files, call tools, search the web. Put those in a loop and they carry out real tasks, the way the new colleague you just onboarded would."
+              },
+              "three-categories": {
+                "title": "Three categories of markdown",
+                "keywords": "knowledge, instructions, memory, silent failure",
+                "script": "And like that colleague, an agent needs the right information at the right time. That information lives in markdown — which is just a plain text file. Those files fall into three categories. Knowledge — what the agent looks up on demand, when the task calls for it. Instructions — skills: how to do a release, step by step, written once and called by name. And memory — not ChatGPT's memory, but a file the agent reads at the start of every single conversation. And if that file is stale, or wrong, the agent reads that wrong information every single time. Confidently, and silently — without you ever noticing.",
+                "bridge": "And that's one document."
+              }
+            }
           }
         },
         "volume-outruns-review": {
@@ -761,6 +776,21 @@
             "corpus-compounding": {
               "header": "Compounding surface",
               "description": "Across a corpus, the verification surface multiplies faster than the raw file count."
+            }
+          },
+          "voiceScript": {
+            "segments": {
+              "effort-decay": {
+                "title": "Effort decay and drift",
+                "keywords": "decay curve, effort drops, drift climbs, maintenance budget",
+                "script": "And that's one document. There's a reason knowledge management was always hard in enterprise — long before any of this. And it's this shape. One document, over time: the blue line is effort. There's a spike at the start, when someone writes it. At least, that's how it used to be — with AI, creating a document now costs almost nothing. After that, effort drops. Because nobody budgets for maintenance. It's never in the plan. And as effort drops, drift climbs. The document is still sitting there. It's just quietly stopped being true."
+              },
+              "corpus-compounding": {
+                "title": "Corpus compounding",
+                "keywords": "accumulate steadily, claims and references, brake is gone",
+                "script": "Now scale that. Your documents don't arrive one at a time — they accumulate, steadily. And you're not just verifying each file. You're verifying every claim each file makes about the others. Every reference. That compounds. So here's what changed: writing was the brake. The human was the bottleneck — you could only produce documentation as fast as someone could write it, and that held the whole thing in check. That brake is gone.",
+                "bridge": "So the brake is gone. Which raises the obvious question: what does it actually take to check a document?"
+              }
             }
           }
         },
@@ -778,6 +808,16 @@
               "description": "Push mechanics to the machine and discovery to AI so humans only handle genuine judgment calls."
             }
           },
+          "voiceScript": {
+            "segments": {
+              "three-boundaries": {
+                "title": "Three non-interchangeable tiers",
+                "keywords": "machine, human, AI, deterministic to semantic",
+                "script": "It's not one job. It's three, and they're not interchangeable. On the left, the machine: deterministic — same input, same answer, every time. Binary: it passes or it fails. Cheap, and fast. This is the part you want doing as much as possible. On the right, the human: not deterministic, slow, expensive. This is where the semantic work happens — is this actually true, is it still useful. And it's still where almost all trust comes from. And in the middle, AI: it works in natural language, so it sits on the human side of that line — not deterministic. It costs tokens. What it can and can't be trusted with is genuinely unsettled.",
+                "bridge": "Left to right. Cheap and certain, to expensive and human. Let's take them in order."
+              }
+            }
+          },
           "slides": {
             "what-the-machine-verifies": {
               "title": "What the machine verifies",
@@ -791,6 +831,15 @@
                 "mechanical-ceiling": {
                   "header": "Mechanical ceiling",
                   "description": "A clean pass proves structural integrity, never that the underlying statement is true."
+                }
+              },
+              "voiceScript": {
+                "segments": {
+                  "mechanical-ceiling": {
+                    "title": "What the machine verifies",
+                    "keywords": "frontmatter, metadata shape, link checker, ceiling",
+                    "script": "Start with the low-hanging fruit. What can a machine check, every time, for free? Here's a markdown file — an onboarding process. At the top, the frontmatter: key-value pairs in YAML that carry metadata, mostly for the machine and the agent. Underneath, the body. A machine can check the shape of that metadata. Is the type declared. Is the date a real date. Is the link well-formed — and it can even follow it and see if it's still there. And that's the ceiling. It can tell you the field exists. It can't tell you whether what's written in it is true."
+                  }
                 }
               }
             },
@@ -807,6 +856,15 @@
                   "header": "Signals, not truth",
                   "description": "The AI recommendation is rapid and insightful, but remains an unverified claim itself."
                 }
+              },
+              "voiceScript": {
+                "segments": {
+                  "signals-and-contradictions": {
+                    "title": "What AI accelerates",
+                    "keywords": "contradictions, cross-references, tickets, signals",
+                    "script": "So what does AI add? It can follow that reference. Read the document on the other end. And notice that this one says five days and that one says seven. That's a contradiction it found on its own — and what it does with it matters more than finding it. It can flag that one section and raise a ticket, so a human resolves a single line instead of re-reading the document. Those are signals. Every signal narrows what a human actually has to look at. But can it make the call? It can produce one. It's like stopping someone in the street, handing them both documents, and asking which is right. You'll get an answer. If you own this process — would you trust that person?"
+                  }
+                }
               }
             },
             "what-remains-human": {
@@ -821,6 +879,15 @@
                 "accountability": {
                   "header": "Accountability",
                   "description": "Tooling narrows the decision surface, but accountability stays with the human."
+                }
+              },
+              "voiceScript": {
+                "segments": {
+                  "accountability-ground-truth": {
+                    "title": "What remains human",
+                    "keywords": "accountability, ground truth, always yours",
+                    "script": "Which leaves this: is the coffee thing still how the team works? Is this person still the owner? No amount of tooling answers those. You have to know — and you're the one accountable when it's wrong. The machine narrows it. The AI narrows it further. What's left is the part that was always yours."
+                  }
                 }
               }
             }
@@ -839,6 +906,16 @@
               "header": "Governance fields",
               "description": "Provenance, trust tiers, and lifecycle sit directly in markdown next to the content."
             }
+          },
+          "voiceScript": {
+            "segments": {
+              "shared-vocabulary": {
+                "title": "Google Open Knowledge Format",
+                "keywords": "OKF v0.2, shared vocabulary, agent generated human verified, lifecycle",
+                "script": "The machine finds structure. The AI adds a first layer of meaning, to help a human decide faster. And what's left was always yours. So let's go back to the machine half, and ask how we make it bigger. A machine works on structure. Which means it only works if we agree on a shared vocabulary. This is Google's Open Knowledge Format. It's open, and it's early — version 0.2, still moving. It names the fields, and says what each one means: type, title, description, sources, and the interesting ones: trust, and lifecycle. That a document was generated by an agent, and verified by a human. And stale_after — freshness. If we all agree to use the same vocabulary, the checker gets written once, and works everywhere.",
+                "bridge": "Which makes the machine's half a lot bigger than checking that a date is a date."
+              }
+            }
           }
         },
         "steering-the-ai": {
@@ -855,6 +932,15 @@
               "description": "markdown-harness steers the machine layer and prepares signals without claiming human judgment."
             }
           },
+          "voiceScript": {
+            "segments": {
+              "raising-the-floor": {
+                "title": "Steering the AI",
+                "keywords": "markdown-harness, raise floor, steer arrow, human boundary",
+                "script": "So the goal is to make the machine's half do more. And this is what I've been building over the past couple of weeks: markdown-harness. The idea is one sentence: a document can tell you how much of itself to believe. It's not about generating trust. Trust is semantic — a machine can never produce it. What it can do is raise the floor. Reliable signals that tell an agent or a human that something needs attention. You've seen these three circles before: deterministic, cheap, fast signals handed to the AI while it's working. The machine column reaching into the AI column. That's the arrow. And the human side is greyed out on purpose: this tool stops before it. That part was always yours."
+              }
+            }
+          },
           "slides": {
             "deterministic-core": {
               "title": "Runs on a 100% deterministic core",
@@ -868,6 +954,16 @@
                 "predictable-eval": {
                   "header": "Deterministic evaluation",
                   "description": "Configuration and file inputs produce the exact same verdict every run."
+                }
+              },
+              "voiceScript": {
+                "segments": {
+                  "three-triggers": {
+                    "title": "One deterministic core",
+                    "keywords": "three triggers, runtime pre-read, commit gate, nightly schedule",
+                    "script": "Three ways in. Three ways out. And the middle is the same every time. Whatever starts it, the core does one thing: read the configuration, run the logic. Same input, same answer. It's fully deterministic. The one I want to show you is the first: the agent goes to read a file — and before it does, it's told that file is stale. The other two, briefly: on commit, a check that the frontmatter meets the standard, passing or blocking. And on a schedule: a nightly run that regenerates what can be regenerated, and raises a ticket on what can't.",
+                    "bridge": "Let me show you the first one."
+                  }
                 }
               }
             },
@@ -883,6 +979,15 @@
                 "holding-slide": {
                   "header": "Live terminal run",
                   "description": "Talk switches to terminal here; the slide acts as the anchor framing the test."
+                }
+              },
+              "voiceScript": {
+                "segments": {
+                  "demo-walkthrough": {
+                    "title": "The check run live",
+                    "keywords": "three terminals, un-hooked, pirate injection, deny read",
+                    "script": "Three panels: same question, same document. The only difference is what each one is allowed to know. Before the run: watch the un-hooked panel answering confidently from a document that went out of date. If it noticed the date, that detection was luck — dependent on the model. The injected panel: the pirate response proves the harness governed what the agent was allowed to know. The deny panel: read was refused explicitly. And deterministic detection was recorded in the log, independent of what any model chose to say."
+                  }
                 }
               }
             },
@@ -915,6 +1020,15 @@
             "closing-thesis": {
               "header": "Summary thesis",
               "description": "Machines verify structure, AI accelerates cross-references, and human judgment owns accountability."
+            }
+          },
+          "voiceScript": {
+            "segments": {
+              "closing-thesis": {
+                "title": "The verifying half is yours",
+                "keywords": "third time, lit human region, work moved, always yours",
+                "script": "This is the third time you've seen this picture. First as what verification costs. Then as what the tool does — reaching into the middle, and stopping at the edge of the human. Same three circles. All that's changed is which one is dark. Machines check structure. AI accelerates drafting. And the work moved — to the part that was always yours. One thing I want to be straight about: the middle region is my hypothesis. How much an agent can be trusted with is not settled — an open problem. The tool's here if you want it. It's early. Thank you."
+              }
             }
           }
         }

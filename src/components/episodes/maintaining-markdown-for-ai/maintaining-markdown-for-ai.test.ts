@@ -164,7 +164,7 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('returns empty voiceScript when no segments are authored', () => {
     // ARRANGE
-    const key = 'markdown-in-ai-workflows';
+    const key = 'feature-roadmap';
     const read = (path: string) => `str:${path}`;
 
     // ACT
@@ -172,5 +172,25 @@ describe('edge cases', () => {
 
     // ASSERT
     expect(context.voiceScript).toEqual([]);
+  });
+
+  it('populates voiceScript with valid segments when authored', () => {
+    // ARRANGE
+    const key = 'markdown-in-ai-workflows';
+    const read = (path: string) => `str:${path}`;
+    const expectedSegmentCount = 2;
+
+    // ACT
+    const context = contextFor(read, key);
+
+    // ASSERT
+    expect(context.voiceScript).toHaveLength(expectedSegmentCount);
+    expect(context.voiceScript[0].slug).toBe('agentic-era');
+    expect(context.voiceScript[0].from).toBe(0.0);
+    expect(context.voiceScript[0].to).toBe(0.75);
+    expect(context.voiceScript[1].slug).toBe('three-categories');
+    expect(context.voiceScript[1].bridge).toBe(
+      'str:markdown-in-ai-workflows.voiceScript.segments.three-categories.bridge',
+    );
   });
 });
