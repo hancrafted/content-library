@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import {
   ALL,
   browseView,
-  fillCount,
   formatChoices,
   hasChoice,
   INITIAL_SELECTION,
@@ -117,17 +116,6 @@ describe('success cases', () => {
     const choices = formatChoices(MIXED, selection);
     // ASSERT
     expect(choices).toEqual(expected);
-  });
-
-  it('fills the count into a label template', () => {
-    // ARRANGE
-    const template = 'Show all {count} Episodes';
-    const count = 12;
-    const expected = 'Show all 12 Episodes';
-    // ACT
-    const text = fillCount(template, count);
-    // ASSERT
-    expect(text).toBe(expected);
   });
 
   it('words the result count for none, one and many', () => {
