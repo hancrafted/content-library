@@ -42,7 +42,7 @@ function Source({ source, number, labels }: { source: NoteSource; number: number
   return (
     <li {...{ [SOURCE_ATTR]: number }} className="pl-1">
       <a
-        {...{ href: externalHref(source.url) }}
+        href={externalHref(source.url)}
         target="_blank"
         rel="noopener noreferrer"
         className="inline-flex items-start gap-1 underline underline-offset-2 hover:text-foreground focus-visible:outline-2"
