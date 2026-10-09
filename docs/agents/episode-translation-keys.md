@@ -34,7 +34,7 @@ A Section's own slide is a Slide like any other: its `title` names the Section a
 
 `<note>`, `<seg>`, `<column>` and `<source>` are kebab-case slugs. A Slide may add a leaf no role describes (the untitled Slide in page-template keeps its sentence under `statement`); add a role to the table in the same change when a new Slide layout needs one.
 
-The record, not the Translation file, holds what is not a string: a note's `slug` and `target`, a source's `slug` and `url`, an image's `src`, a segment's `from` and `to` in minutes, and the Slide's `minutes`. Slide text wraps one phrase in `<ref>…</ref>`, read with `t.rich('prose', { ref: ref('<note>') })`, to make a Context reference to a note of the same Slide. Chrome shared by every Episode (for example `tableOfContents.title`) sits outside `episodes.*` and is not bound by this table.
+The record, not the Translation file, holds what is not a string: a note's `slug` and `target`, a source's `slug` and `url`, an image's `src`, a segment's `slug` and `bridge` flag. Neither holds a time: a Slide's minutes and each segment's span are counted from the `script` and `bridge` words. Slide text wraps one phrase in `<ref>…</ref>`, read with `t.rich('prose', { ref: ref('<note>') })`, to make a Context reference to a note of the same Slide. Chrome shared by every Episode (for example `tableOfContents.title`) sits outside `episodes.*` and is not bound by this table.
 
 ## Worked example: page-template
 
@@ -59,6 +59,8 @@ episodes.page-template.slides.what-comes-next.statement                 untitled
 ## Worked notes
 
 - Counts and names go through ICU arguments: `"{count, plural, one {# slide} other {# slides}}"`, passed as `t('caption', { count })` inside `content`.
+- Rich text: `t.rich` already renders `<em>`, `<b>` and `<code>` in site styles, so a string may write `Keep it <em>short</em>` and the Slide passes only its own tags (`ref`, or a same-named tag to restyle one).
+- Template: a string a `client/` widget completes after the reader acts keeps a plain `{name}` placeholder (`"showAll": "Show all {count}"`, no ICU plural). The Slide reads it with `template('showAll')` and passes it as a prop; the widget renders `fillTemplate(label, { count })`. `template` accepts only a string leaf of the Slide's own subtree.
 - A Section of one Slide needs no extra key: its section slide holds `title` and `caption` like any other Slide.
 - Types back the shape: `t` accepts only keys under its own Slide's subtree, `ref` only declared notes, `target` only targets a note names. A `tsc` error there means the Translation file or the declaration is wrong; fix it, never cast.
 - `src/components/episodes/page-template/` is the copy source for a new Episode; `src/components/episodes/slide-layouts/` shows each Slide layout.
