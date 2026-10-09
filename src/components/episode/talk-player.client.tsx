@@ -178,7 +178,7 @@ export function TalkPlayer({ youtubeId, labels }: { youtubeId?: string; labels: 
     <div
       id="talk-player"
       className={cn(
-        'fixed bottom-4 right-4 z-40 overflow-hidden rounded-xl border border-border bg-card shadow-2xl transition-[width] duration-500 ease-out motion-reduce:transition-none',
+        'fixed top-20 right-4 z-40 overflow-hidden rounded-xl border border-border bg-card shadow-2xl transition-[width] duration-500 ease-out motion-reduce:transition-none',
         isDocked ? 'w-[min(22rem,calc(100vw-2rem))]' : 'w-[min(46rem,calc(100vw-2rem))]',
       )}
     >

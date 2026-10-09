@@ -1,6 +1,7 @@
 import type { Episode } from '@/components/episode/episode-page-container.pure';
 import { isEpisodeSlug, type EpisodeSlug } from '@/lib/routes';
 import { notFound } from 'next/navigation';
+import { aiTokenEconomy } from './ai-token-economy/ai-token-economy';
 import { amnesiacFreelancer } from './amnesiac-freelancer/amnesiac-freelancer';
 import { maintainingMarkdownForAi } from './maintaining-markdown-for-ai/maintaining-markdown-for-ai';
 import { pageTemplate } from './page-template/page-template';
@@ -14,6 +15,7 @@ const EPISODES: { readonly [S in EpisodeSlug]: Episode & { readonly slug: S } } 
   'page-template': pageTemplate,
   'amnesiac-freelancer': amnesiacFreelancer,
   'maintaining-markdown-for-ai': maintainingMarkdownForAi,
+  'ai-token-economy': aiTokenEconomy,
 };
 
 export function findEpisode(slug: string): Episode {
