@@ -27,6 +27,8 @@ A Slide's Speaker notes and Voice script are the author's working text: what to 
 
 **Why the drawer takes input:** it is a view and must not know where its text came from. Open state and tab are transient — a shared link never opens someone's drawer; the layout mode is a preference.
 
+**Why spans are counted:** hand-written `from`/`to` minutes drifted from the script they timed, once per locale. Counting script plus bridge words at the locale's speaking pace retimes a segment whenever its text changes.
+
 Card, head, menu and selected-state detail: [`docs/agents/context-drawer-design.md`](../../docs/agents/context-drawer-design.md).
 
 **Out of scope:** guided tour (the `target` pairing is the hook, as in Shepherd's `attachTo`); PDF export (full print keeps it possible); live annotation.
@@ -45,9 +47,10 @@ Card, head, menu and selected-state detail: [`docs/agents/context-drawer-design.
 
 ### 3. Typed content
 
-1. A note: `header`, `description`, optional `sources` and `image`, required `target`. A segment: `from`, `to`, `title`, `keywords`, `script`, optional `bridge`. Neither MAY carry design.
+1. A note: `header`, `description`, optional `sources` and `image`, required `target`. A segment: `title`, `keywords`, `script`, optional `bridge`. Neither MAY carry design.
 2. A description cites by `[n]` markers naming its note's sources.
 3. Notes, segments and sources key on a kebab-case `slug`, never a position.
+4. A segment's time span MUST be counted from its words; it declares no time.
 
 ### 4. Targets
 
@@ -90,7 +93,7 @@ Card, head, menu and selected-state detail: [`docs/agents/context-drawer-design.
 
 1. **DON'T** call `showModal(` or set `aria-modal` in the drawer. (Decision 1)
 2. **DON'T** put the `hidden` attribute, `display: none` or `inert` on the context slot. (Decision 2)
-3. **DON'T** add a layout, style or placement field to a note or segment. (Decision 3)
+3. **DON'T** add a layout, style, placement or time field to a note or segment. (Decision 3)
 4. **DON'T** render the drawer from an Episode file. (Decision 5)
 5. **DON'T** show a source as plain text, or open it without `rel="noopener noreferrer"`. (Decision 6)
 6. **DON'T** transition width, grid tracks or margins for the card. (Decision 7)
@@ -122,7 +125,7 @@ Card, head, menu and selected-state detail: [`docs/agents/context-drawer-design.
 
 1. **Rules** (archgate, error): `drawer-is-non-modal` (§1), `print-reveals-context` (§2.3).
 2. **Types:** note and segment shapes; German Translation file typed against English; every note and segment slug has a Translation subtree (§3, §6).
-3. **Unit tests:** citation parsing, context links, roving focus, the input adapter, Translation key shape.
+3. **Unit tests:** citation parsing, context links, roving focus, the input adapter, Translation key shape, counted spans.
 4. **Dependency rules:** drawer reached only from the container; drawer code imports no Episode, table-of-contents, route or `next-intl` code (§5.2, §8).
 5. **Post-build test:** slot and notes in static HTML, no `hidden` attribute, each target resolving to one element in its Slide, each `ContextRef` to one note, locale parity, sources as links, citation markers, print block (§2, §4, §6).
 
