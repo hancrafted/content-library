@@ -61,9 +61,9 @@ function HarnessOutcomes() {
   );
 }
 
-export function HarnessFlow({ id }: { id?: string }) {
+export function HarnessFlow({ 'data-target': dataTarget }: { 'data-target'?: string }) {
   return (
-    <div id={id} className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
+    <div data-target={dataTarget} className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
       <HarnessTriggers />
       <HarnessHub />
       <HarnessOutcomes />

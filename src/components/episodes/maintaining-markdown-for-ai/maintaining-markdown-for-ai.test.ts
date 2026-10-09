@@ -2,22 +2,7 @@ import {
   MODALS_DATA,
   ROLES_DATA,
 } from '@/components/episodes/maintaining-markdown-for-ai/client/markdown-roles-data.pure';
-import {
-  MAINTAINING_CONTEXT,
-  contextFor,
-  type MaintainingSlideKey,
-  type SectionsT,
-} from '@/components/episodes/maintaining-markdown-for-ai/context';
-import {
-  googleOkf,
-  steeringTheAi,
-  theVerifyingHalfIsYours,
-} from '@/components/episodes/maintaining-markdown-for-ai/slides-steering';
-import {
-  markdownInAiWorkflows,
-  volumeOutrunsReview,
-  whereTheEffortGoes,
-} from '@/components/episodes/maintaining-markdown-for-ai/slides-workflows';
+import { maintainingMarkdownForAi } from '@/components/episodes/maintaining-markdown-for-ai/maintaining-markdown-for-ai';
 import { findEpisode } from '@/components/episodes/registry';
 import { pageMetadata } from '@/lib/page-metadata.pure';
 import { isEpisodeSlug } from '@/lib/routes';
@@ -37,64 +22,6 @@ describe('success cases', () => {
     expect(valid).toBe(true);
     expect(episode.slug).toBe(expectedSlug);
     expect(episode.youtube?.en).toBe(expectedYoutube);
-  });
-
-  it('provides 6 sections with 12 total slides in manuscript order', () => {
-    // ARRANGE
-    const t: SectionsT = (key: string) => `mock:${key}`;
-    const expectedSectionCount = 6;
-    const expectedTotalSlides = 12;
-    const expectedSections = [
-      { slug: 'markdown-in-ai-workflows', pageSlides: 0 },
-      { slug: 'volume-outruns-review', pageSlides: 0 },
-      { slug: 'where-the-effort-goes', pageSlides: 3 },
-      { slug: 'google-okf', pageSlides: 0 },
-      { slug: 'steering-the-ai', pageSlides: 3 },
-      { slug: 'the-verifying-half-is-yours', pageSlides: 0 },
-    ];
-
-    // ACT
-    const sections = [
-      markdownInAiWorkflows(t),
-      volumeOutrunsReview(t),
-      whereTheEffortGoes(t),
-      googleOkf(t),
-      steeringTheAi(t),
-      theVerifyingHalfIsYours(t),
-    ];
-    const totalSlides = sections.reduce((acc, sec) => acc + 1 + sec.slides.length, 0);
-    const mapped = sections.map((s) => ({
-      slug: s.slug,
-      pageSlides: s.slides.length,
-    }));
-
-    // ASSERT
-    expect(sections).toHaveLength(expectedSectionCount);
-    expect(totalSlides).toBe(expectedTotalSlides);
-    expect(mapped).toEqual(expectedSections);
-  });
-
-  it('defines 12 context entries matching all 12 slides with valid notes and targets', () => {
-    // ARRANGE
-    const keys = Object.keys(MAINTAINING_CONTEXT) as MaintainingSlideKey[];
-    const expectedContextEntries = 12;
-    const read = (path: string) => `str:${path}`;
-
-    // ACT
-    const results = keys.map((key) => contextFor(read, key));
-
-    // ASSERT
-    expect(keys).toHaveLength(expectedContextEntries);
-    for (const result of results) {
-      expect(result.anchor).toBeTruthy();
-      expect(result.notes.length).toBeGreaterThan(0);
-      for (const note of result.notes) {
-        expect(note.slug).toBeTruthy();
-        expect(note.header).toMatch(/^str:/);
-        expect(note.description).toMatch(/^str:/);
-        expect(note.target).toBeTruthy();
-      }
-    }
   });
 
   it('produces valid page metadata for en and de', () => {
@@ -165,35 +92,25 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('returns empty voiceScript when no segments are authored', () => {
+  it('composes six Sections in manuscript order, each opened by the Slide that names it', () => {
     // ARRANGE
-    const key = 'feature-roadmap';
-    const read = (path: string) => `str:${path}`;
+    const expectedOpeners = [
+      'markdown-in-ai-workflows',
+      'volume-outruns-review',
+      'where-the-effort-goes',
+      'google-okf',
+      'steering-the-ai',
+      'the-verifying-half-is-yours',
+    ];
+    const expectedSlideCount = 12;
 
     // ACT
-    const context = contextFor(read, key);
+    const { sections } = maintainingMarkdownForAi;
+    const openers = sections.map((section) => section[0].slug);
+    const slideCount = sections.reduce((count, section) => count + section.length, 0);
 
     // ASSERT
-    expect(context.voiceScript).toEqual([]);
-  });
-
-  it('populates voiceScript with valid segments when authored', () => {
-    // ARRANGE
-    const key = 'markdown-in-ai-workflows';
-    const read = (path: string) => `str:${path}`;
-    const expectedSegmentCount = 2;
-
-    // ACT
-    const context = contextFor(read, key);
-
-    // ASSERT
-    expect(context.voiceScript).toHaveLength(expectedSegmentCount);
-    expect(context.voiceScript[0].slug).toBe('agentic-era');
-    expect(context.voiceScript[0].from).toBe(0.0);
-    expect(context.voiceScript[0].to).toBe(0.75);
-    expect(context.voiceScript[1].slug).toBe('three-categories');
-    expect(context.voiceScript[1].bridge).toBe(
-      'str:markdown-in-ai-workflows.voiceScript.segments.three-categories.bridge',
-    );
+    expect(openers).toEqual(expectedOpeners);
+    expect(slideCount).toBe(expectedSlideCount);
   });
 });

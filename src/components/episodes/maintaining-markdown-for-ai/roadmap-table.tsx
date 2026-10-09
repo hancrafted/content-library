@@ -1,6 +1,9 @@
-function ShippedCol({ id }: { id?: string }) {
+function ShippedCol({ 'data-target': dataTarget }: { 'data-target'?: string }) {
   return (
-    <div id={id} className="flex flex-col rounded-2xl border border-primary/30 bg-primary/5 p-6 shadow-xs">
+    <div
+      data-target={dataTarget}
+      className="flex flex-col rounded-2xl border border-primary/30 bg-primary/5 p-6 shadow-xs"
+    >
       <div className="flex items-center justify-between border-b border-primary/20 pb-4">
         <span className="font-mono text-sm font-bold text-primary">v0.0.4 Shipped</span>
         <span className="rounded-full border border-primary/40 bg-primary/10 px-2.5 py-0.5 font-mono text-xs font-semibold text-primary">
@@ -25,9 +28,9 @@ function ShippedCol({ id }: { id?: string }) {
   );
 }
 
-function PlannedCol({ id }: { id?: string }) {
+function PlannedCol({ 'data-target': dataTarget }: { 'data-target'?: string }) {
   return (
-    <div id={id} className="flex flex-col rounded-2xl border border-border bg-card p-6 shadow-xs">
+    <div data-target={dataTarget} className="flex flex-col rounded-2xl border border-border bg-card p-6 shadow-xs">
       <div className="flex items-center justify-between border-b border-border pb-4">
         <span className="font-mono text-sm font-bold text-muted-foreground">Planned Roadmap</span>
         <span className="rounded-full border border-border bg-muted px-2.5 py-0.5 font-mono text-xs font-semibold text-muted-foreground">
@@ -52,11 +55,11 @@ function PlannedCol({ id }: { id?: string }) {
   );
 }
 
-export function RoadmapTable({ shippedId, plannedId }: { shippedId?: string; plannedId?: string }) {
+export function RoadmapTable({ shipped, planned }: { shipped?: string; planned?: string }) {
   return (
     <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
-      <ShippedCol id={shippedId} />
-      <PlannedCol id={plannedId} />
+      <ShippedCol data-target={shipped} />
+      <PlannedCol data-target={planned} />
     </div>
   );
 }

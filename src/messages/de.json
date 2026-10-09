@@ -781,7 +781,7 @@
       "title": "Markdown für KI pflegen",
       "caption": "KI senkte die Kosten für das Schreiben von Dokumentation und erhöhte die Kosten für deren Verifikation. Die Arbeit hat sich verlagert — und der verifizierende Teil ist die Aufgabe von niemand anderem.",
       "description": "KI senkte die Kosten für das Schreiben von Dokumentation und erhöhte die Kosten für deren Verifikation. Markdown für KI pflegen: wohin der Aufwand fließt und wie der maschinelle Teil gesteuert wird.",
-      "sections": {
+      "slides": {
         "markdown-in-ai-workflows": {
           "title": "Markdown in KI-Workflows",
           "caption": "Ein einziges Format für drei der sechs Kontextarten: Wissen, Anweisungen und Speicher.",
@@ -865,78 +865,76 @@
                 "bridge": "Gehen wir sie der Reihe nach durch."
               }
             }
+          }
+        },
+        "what-the-machine-verifies": {
+          "title": "Was die Maschine verifiziert",
+          "caption": "Syntaktische und strukturelle Prüfungen, die deterministisch in Millisekunden ohne LLM laufen.",
+          "prose": "Syntax parst, URI-Formate werden validiert und ISO-Daten stimmen.",
+          "notes": {
+            "deterministic-checks": {
+              "header": "Deterministische Prüfungen",
+              "description": "Syntax, Schemata, Daten und URIs validieren deterministisch in Millisekunden ohne LLM."
+            },
+            "mechanical-ceiling": {
+              "header": "Mechanische Obergrenze",
+              "description": "Ein fehlerfreier Durchlauf beweist strukturelle Integrität, niemals aber die inhaltliche Richtigkeit."
+            }
           },
-          "slides": {
-            "what-the-machine-verifies": {
-              "title": "Was die Maschine verifiziert",
-              "caption": "Syntaktische und strukturelle Prüfungen, die deterministisch in Millisekunden ohne LLM laufen.",
-              "prose": "Syntax parst, URI-Formate werden validiert und ISO-Daten stimmen.",
-              "notes": {
-                "deterministic-checks": {
-                  "header": "Deterministische Prüfungen",
-                  "description": "Syntax, Schemata, Daten und URIs validieren deterministisch in Millisekunden ohne LLM."
-                },
-                "mechanical-ceiling": {
-                  "header": "Mechanische Obergrenze",
-                  "description": "Ein fehlerfreier Durchlauf beweist strukturelle Integrität, niemals aber die inhaltliche Richtigkeit."
-                }
-              },
-              "voiceScript": {
-                "segments": {
-                  "mechanical-ceiling": {
-                    "title": "Was die Maschine prüft",
-                    "keywords": "Frontmatter, Metadaten-Struktur, Linkprüfung, Grenze",
-                    "script": "Was kann eine Maschine kostenlos prüfen? Im Frontmatter einer Markdown-Datei liegen Metadaten. Die Maschine prüft die Struktur: Ist der Typ angegeben? Ist das Datum valide? Sind Links erreichbar? Das ist die Grenze: Sie bestätigt die Existenz eines Feldes, nicht aber den Wahrheitsgehalt des Inhalts."
-                  }
-                }
+          "voiceScript": {
+            "segments": {
+              "mechanical-ceiling": {
+                "title": "Was die Maschine prüft",
+                "keywords": "Frontmatter, Metadaten-Struktur, Linkprüfung, Grenze",
+                "script": "Was kann eine Maschine kostenlos prüfen? Im Frontmatter einer Markdown-Datei liegen Metadaten. Die Maschine prüft die Struktur: Ist der Typ angegeben? Ist das Datum valide? Sind Links erreichbar? Das ist die Grenze: Sie bestätigt die Existenz eines Feldes, nicht aber den Wahrheitsgehalt des Inhalts."
               }
+            }
+          }
+        },
+        "what-ai-accelerates": {
+          "title": "Was KI beschleunigt",
+          "caption": "Gegenprüfung von Texten gegen Handbücher, um Widersprüche für menschliche Reviews zu markieren.",
+          "prose": "Die Antwort kommt schnell, aufschlussreich und selbst prüfbedürftig zurück.",
+          "notes": {
+            "cross-referencing": {
+              "header": "Querverweise prüfen",
+              "description": "KI kann Referenzen dateiübergreifend verfolgen und Widersprüche für menschliche Reviews aufzeigen."
             },
-            "what-ai-accelerates": {
-              "title": "Was KI beschleunigt",
-              "caption": "Gegenprüfung von Texten gegen Handbücher, um Widersprüche für menschliche Reviews zu markieren.",
-              "prose": "Die Antwort kommt schnell, aufschlussreich und selbst prüfbedürftig zurück.",
-              "notes": {
-                "cross-referencing": {
-                  "header": "Querverweise prüfen",
-                  "description": "KI kann Referenzen dateiübergreifend verfolgen und Widersprüche für menschliche Reviews aufzeigen."
-                },
-                "signals-not-resolutions": {
-                  "header": "Signale, keine Wahrheiten",
-                  "description": "Die KI-Empfehlung ist schnell und einsichtsreich, bleibt jedoch selbst eine ungeprüfte Behauptung."
-                }
-              },
-              "voiceScript": {
-                "segments": {
-                  "signals-and-contradictions": {
-                    "title": "Was KI beschleunigt",
-                    "keywords": "Widersprüche, Querverweise, Tickets, Signale",
-                    "script": "Was leistet KI? Sie folgt Querverweisen und erkennt, wenn Dokument A fünf Tage nennt und Dokument B sieben. Sie deckt Widersprüche auf und erstellt ein Ticket, sodass ein Mensch gezielt eine Zeile prüft statt alles neu zu lesen. Das sind Signale, die den Prüfaufwand eingrenzen. Doch die finale Entscheidung kann man ihr nicht anvertrauen."
-                  }
-                }
+            "signals-not-resolutions": {
+              "header": "Signale, keine Wahrheiten",
+              "description": "Die KI-Empfehlung ist schnell und einsichtsreich, bleibt jedoch selbst eine ungeprüfte Behauptung."
+            }
+          },
+          "voiceScript": {
+            "segments": {
+              "signals-and-contradictions": {
+                "title": "Was KI beschleunigt",
+                "keywords": "Widersprüche, Querverweise, Tickets, Signale",
+                "script": "Was leistet KI? Sie folgt Querverweisen und erkennt, wenn Dokument A fünf Tage nennt und Dokument B sieben. Sie deckt Widersprüche auf und erstellt ein Ticket, sodass ein Mensch gezielt eine Zeile prüft statt alles neu zu lesen. Das sind Signale, die den Prüfaufwand eingrenzen. Doch die finale Entscheidung kann man ihr nicht anvertrauen."
               }
+            }
+          }
+        },
+        "what-remains-human": {
+          "title": "Was menschlich bleibt",
+          "caption": "Gilt die Richtlinie noch? Ist die Zuständigkeit korrekt? Grundwahrheiten, die kein Modell kennen kann.",
+          "prose": "Dieses Urteil bleibt auf dem Bildschirm offen.",
+          "notes": {
+            "ground-truth": {
+              "header": "Grundwahrheiten und Richtlinien",
+              "description": "Ob eine Richtlinie aktiv ist oder eine Zuständigkeit stimmt, erfordert Fakten außerhalb des Repositorys."
             },
-            "what-remains-human": {
-              "title": "Was menschlich bleibt",
-              "caption": "Gilt die Richtlinie noch? Ist die Zuständigkeit korrekt? Grundwahrheiten, die kein Modell kennen kann.",
-              "prose": "Dieses Urteil bleibt auf dem Bildschirm offen.",
-              "notes": {
-                "ground-truth": {
-                  "header": "Grundwahrheiten und Richtlinien",
-                  "description": "Ob eine Richtlinie aktiv ist oder eine Zuständigkeit stimmt, erfordert Fakten außerhalb des Repositorys."
-                },
-                "accountability": {
-                  "header": "Verantwortung",
-                  "description": "Werkzeuge verengen die Entscheidungsfläche, doch die Verantwortung bleibt beim Menschen."
-                }
-              },
-              "voiceScript": {
-                "segments": {
-                  "accountability-ground-truth": {
-                    "title": "Was menschlich bleibt",
-                    "keywords": "Verantwortung, Grundwahrheit, bleibt Ihre Aufgabe",
-                    "script": "Stimmt der Prozess im Alltag noch? Ist diese Person noch zuständig? Kein Tool beantwortet das. Sie müssen es wissen – und Sie tragen die Verantwortung, wenn es falsch ist. Die Maschine grenzt ein, die KI filtert vor, doch der entscheidende Rest bleibt Ihre Aufgabe."
-                  }
-                }
+            "accountability": {
+              "header": "Verantwortung",
+              "description": "Werkzeuge verengen die Entscheidungsfläche, doch die Verantwortung bleibt beim Menschen."
+            }
+          },
+          "voiceScript": {
+            "segments": {
+              "accountability-ground-truth": {
+                "title": "Was menschlich bleibt",
+                "keywords": "Verantwortung, Grundwahrheit, bleibt Ihre Aufgabe",
+                "script": "Stimmt der Prozess im Alltag noch? Ist diese Person noch zuständig? Kein Tool beantwortet das. Sie müssen es wissen – und Sie tragen die Verantwortung, wenn es falsch ist. Die Maschine grenzt ein, die KI filtert vor, doch der entscheidende Rest bleibt Ihre Aufgabe."
               }
             }
           }
@@ -988,71 +986,69 @@
                 "script": "Dafür baue ich markdown-harness. Der Leitgedanke: Ein Dokument verrät selbst, wie sehr man ihm vertrauen darf. Es erzeugt kein künstliches Vertrauen, sondern hebt den Mindeststandard mit deterministischen Signalen an. Die Maschine lenkt die KI. Die menschliche Seite bleibt bewusst unberührt: Diese Verantwortung gehört dem Menschen."
               }
             }
+          }
+        },
+        "deterministic-core": {
+          "title": "Läuft auf einem 100% deterministischen Kern",
+          "caption": "Ein Mechanismus, drei Auslöser, ein deterministischer Kern.",
+          "prose": "Drei Wege hinein, drei Wege hinaus. Was dazwischen geschieht, ist jedes Mal identisch.",
+          "notes": {
+            "three-triggers": {
+              "header": "Drei Auslöser, ein Kern",
+              "description": "Agenten-Pre-Read-Hook, Pre-Commit-Gate oder manuelle Prüfung führen denselben Kern aus."
+            },
+            "predictable-eval": {
+              "header": "Deterministische Auswertung",
+              "description": "Konfiguration und Dateieingaben liefern bei jedem Lauf exakt dasselbe Ergebnis."
+            }
           },
-          "slides": {
-            "deterministic-core": {
-              "title": "Läuft auf einem 100% deterministischen Kern",
-              "caption": "Ein Mechanismus, drei Auslöser, ein deterministischer Kern.",
-              "prose": "Drei Wege hinein, drei Wege hinaus. Was dazwischen geschieht, ist jedes Mal identisch.",
-              "notes": {
-                "three-triggers": {
-                  "header": "Drei Auslöser, ein Kern",
-                  "description": "Agenten-Pre-Read-Hook, Pre-Commit-Gate oder manuelle Prüfung führen denselben Kern aus."
-                },
-                "predictable-eval": {
-                  "header": "Deterministische Auswertung",
-                  "description": "Konfiguration und Dateieingaben liefern bei jedem Lauf exakt dasselbe Ergebnis."
-                }
-              },
-              "voiceScript": {
-                "segments": {
-                  "three-triggers": {
-                    "title": "Ein deterministischer Kern",
-                    "keywords": "drei Auslöser, Laufzeit, Commit-Gate, nächtlicher Lauf",
-                    "script": "Drei Wege rein, drei Wege raus – und in der Mitte dieselbe Logik: Konfiguration lesen, Regeln deterministisch anwenden. Zur Laufzeit warnt das Tool den Agenten vor veralteten Dateien. Beim Commit fungiert es als Qualitäts-Gate. Im nächtlichen Lauf regeneriert es Indizes und meldet Handlungsbedarf.",
-                    "bridge": "Sehen wir uns die Laufzeit live an."
-                  }
-                }
+          "voiceScript": {
+            "segments": {
+              "three-triggers": {
+                "title": "Ein deterministischer Kern",
+                "keywords": "drei Auslöser, Laufzeit, Commit-Gate, nächtlicher Lauf",
+                "script": "Drei Wege rein, drei Wege raus – und in der Mitte dieselbe Logik: Konfiguration lesen, Regeln deterministisch anwenden. Zur Laufzeit warnt das Tool den Agenten vor veralteten Dateien. Beim Commit fungiert es als Qualitäts-Gate. Im nächtlichen Lauf regeneriert es Indizes und meldet Handlungsbedarf.",
+                "bridge": "Sehen wir uns die Laufzeit live an."
               }
+            }
+          }
+        },
+        "live-demo": {
+          "title": "Live-Demo",
+          "caption": "Die Prüfung live ausgeführt.",
+          "prose": "Testdatei: docs/handbook/onboarding.md. An den Agenten gestellte Frage: Was sind die Onboarding-Schritte in der ersten Woche für neue Mitarbeiter?",
+          "notes": {
+            "demo-contrast": {
+              "header": "Vergleichende Auswertung",
+              "description": "Drei Agenten erhalten dieselbe veraltete Datei; nur gesteuerte Agenten werden an Halluzinationen gehindert."
             },
-            "live-demo": {
-              "title": "Live-Demo",
-              "caption": "Die Prüfung live ausgeführt.",
-              "prose": "Testdatei: docs/handbook/onboarding.md. An den Agenten gestellte Frage: Was sind die Onboarding-Schritte in der ersten Woche für neue Mitarbeiter?",
-              "notes": {
-                "demo-contrast": {
-                  "header": "Vergleichende Auswertung",
-                  "description": "Drei Agenten erhalten dieselbe veraltete Datei; nur gesteuerte Agenten werden an Halluzinationen gehindert."
-                },
-                "holding-slide": {
-                  "header": "Live-Terminal-Lauf",
-                  "description": "Der Vortrag wechselt hier ins Terminal; die Folie bildet den Rahmen für den Testlauf."
-                }
-              },
-              "voiceScript": {
-                "segments": {
-                  "demo-walkthrough": {
-                    "title": "Die Live-Prüfung",
-                    "keywords": "drei Terminals, ohne Hook, Piraten-Injektion, Zugriff verweigert",
-                    "script": "Drei Terminals, dieselbe Frage, dasselbe Dokument. Ohne Hook antwortet der Agent gutgläubig auf veraltete Daten. Mit Hook beweist die Piraten-Antwort, dass die Instruktion gegriffen hat. Im dritten Fall wird der Zugriff verweigert. Das Protokoll erfasst das Verfallsdatum deterministisch – unabhängig vom Modell."
-                  }
-                }
+            "holding-slide": {
+              "header": "Live-Terminal-Lauf",
+              "description": "Der Vortrag wechselt hier ins Terminal; die Folie bildet den Rahmen für den Testlauf."
+            }
+          },
+          "voiceScript": {
+            "segments": {
+              "demo-walkthrough": {
+                "title": "Die Live-Prüfung",
+                "keywords": "drei Terminals, ohne Hook, Piraten-Injektion, Zugriff verweigert",
+                "script": "Drei Terminals, dieselbe Frage, dasselbe Dokument. Ohne Hook antwortet der Agent gutgläubig auf veraltete Daten. Mit Hook beweist die Piraten-Antwort, dass die Instruktion gegriffen hat. Im dritten Fall wird der Zugriff verweigert. Das Protokoll erfasst das Verfallsdatum deterministisch – unabhängig vom Modell."
               }
+            }
+          }
+        },
+        "feature-roadmap": {
+          "title": "Feature-Roadmap",
+          "caption": "Drei veröffentlicht, drei geplant.",
+          "prose": "v0.0.4 Veröffentlicht: Frontmatter-Linting, Frischeprüfung, Markdown-Harness-Skill.",
+          "notes": {
+            "v0-0-4-scope": {
+              "header": "Aktuelle Version (v0.0.4)",
+              "description": "Veröffentlicht: Frontmatter-Linting, Frischeprüfung und Markdown-Harness-Skill."
             },
-            "feature-roadmap": {
-              "title": "Feature-Roadmap",
-              "caption": "Drei veröffentlicht, drei geplant.",
-              "prose": "v0.0.4 Veröffentlicht: Frontmatter-Linting, Frischeprüfung, Markdown-Harness-Skill.",
-              "notes": {
-                "v0-0-4-scope": {
-                  "header": "Aktuelle Version (v0.0.4)",
-                  "description": "Veröffentlicht: Frontmatter-Linting, Frischeprüfung und Markdown-Harness-Skill."
-                },
-                "future-checks": {
-                  "header": "Geplante Fähigkeiten",
-                  "description": "Geplant: Drift-Erkennung und Korpus-Validierung; noch nicht im aktuellen Release."
-                }
-              }
+            "future-checks": {
+              "header": "Geplante Fähigkeiten",
+              "description": "Geplant: Drift-Erkennung und Korpus-Validierung; noch nicht im aktuellen Release."
             }
           }
         },

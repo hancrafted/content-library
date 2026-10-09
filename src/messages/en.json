@@ -781,7 +781,7 @@
       "title": "Maintaining markdown for AI",
       "caption": "AI collapsed the cost of writing documentation and raised the cost of verifying it. The work moved — and the verifying half is nobody else's job.",
       "description": "AI collapsed the cost of writing documentation and raised the cost of verifying it. Maintaining markdown for AI: where the effort goes and how to steer the machine half.",
-      "sections": {
+      "slides": {
         "markdown-in-ai-workflows": {
           "title": "Markdown in AI workflows",
           "caption": "A single format carrying three of the six context types: Knowledge, Instructions, and Memory.",
@@ -865,78 +865,76 @@
                 "bridge": "Left to right. Cheap and certain, to expensive and human. Let's take them in order."
               }
             }
+          }
+        },
+        "what-the-machine-verifies": {
+          "title": "What the machine verifies",
+          "caption": "Syntactic and structural checks that run deterministically in milliseconds without an LLM.",
+          "prose": "Syntax parses, URI format is validated, and ISO dates validate.",
+          "notes": {
+            "deterministic-checks": {
+              "header": "Deterministic checks",
+              "description": "Syntax, schemas, dates, and URIs validate deterministically in milliseconds without an LLM."
+            },
+            "mechanical-ceiling": {
+              "header": "Mechanical ceiling",
+              "description": "A clean pass proves structural integrity, never that the underlying statement is true."
+            }
           },
-          "slides": {
-            "what-the-machine-verifies": {
-              "title": "What the machine verifies",
-              "caption": "Syntactic and structural checks that run deterministically in milliseconds without an LLM.",
-              "prose": "Syntax parses, URI format is validated, and ISO dates validate.",
-              "notes": {
-                "deterministic-checks": {
-                  "header": "Deterministic checks",
-                  "description": "Syntax, schemas, dates, and URIs validate deterministically in milliseconds without an LLM."
-                },
-                "mechanical-ceiling": {
-                  "header": "Mechanical ceiling",
-                  "description": "A clean pass proves structural integrity, never that the underlying statement is true."
-                }
-              },
-              "voiceScript": {
-                "segments": {
-                  "mechanical-ceiling": {
-                    "title": "What the machine verifies",
-                    "keywords": "frontmatter, metadata shape, link checker, ceiling",
-                    "script": "Start with the low-hanging fruit. What can a machine check, every time, for free? Here's a markdown file — an onboarding process. At the top, the frontmatter: key-value pairs in YAML that carry metadata, mostly for the machine and the agent. Underneath, the body. A machine can check the shape of that metadata. Is the type declared. Is the date a real date. Is the link well-formed — and it can even follow it and see if it's still there. And that's the ceiling. It can tell you the field exists. It can't tell you whether what's written in it is true."
-                  }
-                }
+          "voiceScript": {
+            "segments": {
+              "mechanical-ceiling": {
+                "title": "What the machine verifies",
+                "keywords": "frontmatter, metadata shape, link checker, ceiling",
+                "script": "Start with the low-hanging fruit. What can a machine check, every time, for free? Here's a markdown file — an onboarding process. At the top, the frontmatter: key-value pairs in YAML that carry metadata, mostly for the machine and the agent. Underneath, the body. A machine can check the shape of that metadata. Is the type declared. Is the date a real date. Is the link well-formed — and it can even follow it and see if it's still there. And that's the ceiling. It can tell you the field exists. It can't tell you whether what's written in it is true."
               }
+            }
+          }
+        },
+        "what-ai-accelerates": {
+          "title": "What AI accelerates",
+          "caption": "Cross-referencing prose against source handbooks to flag discrepancies for human review.",
+          "prose": "The answer comes back rapid, insightful, and itself in need of checking.",
+          "notes": {
+            "cross-referencing": {
+              "header": "Cross-referencing prose",
+              "description": "AI can follow references across files and flag contradictions for human review."
             },
-            "what-ai-accelerates": {
-              "title": "What AI accelerates",
-              "caption": "Cross-referencing prose against source handbooks to flag discrepancies for human review.",
-              "prose": "The answer comes back rapid, insightful, and itself in need of checking.",
-              "notes": {
-                "cross-referencing": {
-                  "header": "Cross-referencing prose",
-                  "description": "AI can follow references across files and flag contradictions for human review."
-                },
-                "signals-not-resolutions": {
-                  "header": "Signals, not truth",
-                  "description": "The AI recommendation is rapid and insightful, but remains an unverified claim itself."
-                }
-              },
-              "voiceScript": {
-                "segments": {
-                  "signals-and-contradictions": {
-                    "title": "What AI accelerates",
-                    "keywords": "contradictions, cross-references, tickets, signals",
-                    "script": "So what does AI add? It can follow that reference. Read the document on the other end. And notice that this one says five days and that one says seven. That's a contradiction it found on its own — and what it does with it matters more than finding it. It can flag that one section and raise a ticket, so a human resolves a single line instead of re-reading the document. Those are signals. Every signal narrows what a human actually has to look at. But can it make the call? It can produce one. It's like stopping someone in the street, handing them both documents, and asking which is right. You'll get an answer. If you own this process — would you trust that person?"
-                  }
-                }
+            "signals-not-resolutions": {
+              "header": "Signals, not truth",
+              "description": "The AI recommendation is rapid and insightful, but remains an unverified claim itself."
+            }
+          },
+          "voiceScript": {
+            "segments": {
+              "signals-and-contradictions": {
+                "title": "What AI accelerates",
+                "keywords": "contradictions, cross-references, tickets, signals",
+                "script": "So what does AI add? It can follow that reference. Read the document on the other end. And notice that this one says five days and that one says seven. That's a contradiction it found on its own — and what it does with it matters more than finding it. It can flag that one section and raise a ticket, so a human resolves a single line instead of re-reading the document. Those are signals. Every signal narrows what a human actually has to look at. But can it make the call? It can produce one. It's like stopping someone in the street, handing them both documents, and asking which is right. You'll get an answer. If you own this process — would you trust that person?"
               }
+            }
+          }
+        },
+        "what-remains-human": {
+          "title": "What remains human",
+          "caption": "Is the policy still in force? Is the owner correct? Ground truth that no machine or model can know.",
+          "prose": "This judgment stays open on screen.",
+          "notes": {
+            "ground-truth": {
+              "header": "Ground truth and policy",
+              "description": "Whether a policy is active or an owner is correct requires ground truth outside the repository."
             },
-            "what-remains-human": {
-              "title": "What remains human",
-              "caption": "Is the policy still in force? Is the owner correct? Ground truth that no machine or model can know.",
-              "prose": "This judgment stays open on screen.",
-              "notes": {
-                "ground-truth": {
-                  "header": "Ground truth and policy",
-                  "description": "Whether a policy is active or an owner is correct requires ground truth outside the repository."
-                },
-                "accountability": {
-                  "header": "Accountability",
-                  "description": "Tooling narrows the decision surface, but accountability stays with the human."
-                }
-              },
-              "voiceScript": {
-                "segments": {
-                  "accountability-ground-truth": {
-                    "title": "What remains human",
-                    "keywords": "accountability, ground truth, always yours",
-                    "script": "Which leaves this: is the coffee thing still how the team works? Is this person still the owner? No amount of tooling answers those. You have to know — and you're the one accountable when it's wrong. The machine narrows it. The AI narrows it further. What's left is the part that was always yours."
-                  }
-                }
+            "accountability": {
+              "header": "Accountability",
+              "description": "Tooling narrows the decision surface, but accountability stays with the human."
+            }
+          },
+          "voiceScript": {
+            "segments": {
+              "accountability-ground-truth": {
+                "title": "What remains human",
+                "keywords": "accountability, ground truth, always yours",
+                "script": "Which leaves this: is the coffee thing still how the team works? Is this person still the owner? No amount of tooling answers those. You have to know — and you're the one accountable when it's wrong. The machine narrows it. The AI narrows it further. What's left is the part that was always yours."
               }
             }
           }
@@ -988,71 +986,69 @@
                 "script": "So the goal is to make the machine's half do more. And this is what I've been building over the past couple of weeks: markdown-harness. The idea is one sentence: a document can tell you how much of itself to believe. It's not about generating trust. Trust is semantic — a machine can never produce it. What it can do is raise the floor. Reliable signals that tell an agent or a human that something needs attention. You've seen these three circles before: deterministic, cheap, fast signals handed to the AI while it's working. The machine column reaching into the AI column. That's the arrow. And the human side is greyed out on purpose: this tool stops before it. That part was always yours."
               }
             }
+          }
+        },
+        "deterministic-core": {
+          "title": "Runs on a 100% deterministic core",
+          "caption": "One mechanism, three triggers, one deterministic core.",
+          "prose": "Three things can start it and it does three different things with the answer. What happens in between is the same every time.",
+          "notes": {
+            "three-triggers": {
+              "header": "Three triggers, one core",
+              "description": "Pre-read agent hook, pre-commit gate, or manual check all execute the identical deterministic core."
+            },
+            "predictable-eval": {
+              "header": "Deterministic evaluation",
+              "description": "Configuration and file inputs produce the exact same verdict every run."
+            }
           },
-          "slides": {
-            "deterministic-core": {
-              "title": "Runs on a 100% deterministic core",
-              "caption": "One mechanism, three triggers, one deterministic core.",
-              "prose": "Three things can start it and it does three different things with the answer. What happens in between is the same every time.",
-              "notes": {
-                "three-triggers": {
-                  "header": "Three triggers, one core",
-                  "description": "Pre-read agent hook, pre-commit gate, or manual check all execute the identical deterministic core."
-                },
-                "predictable-eval": {
-                  "header": "Deterministic evaluation",
-                  "description": "Configuration and file inputs produce the exact same verdict every run."
-                }
-              },
-              "voiceScript": {
-                "segments": {
-                  "three-triggers": {
-                    "title": "One deterministic core",
-                    "keywords": "three triggers, runtime pre-read, commit gate, nightly schedule",
-                    "script": "Three ways in. Three ways out. And the middle is the same every time. Whatever starts it, the core does one thing: read the configuration, run the logic. Same input, same answer. It's fully deterministic. The one I want to show you is the first: the agent goes to read a file — and before it does, it's told that file is stale. The other two, briefly: on commit, a check that the frontmatter meets the standard, passing or blocking. And on a schedule: a nightly run that regenerates what can be regenerated, and raises a ticket on what can't.",
-                    "bridge": "Let me show you the first one."
-                  }
-                }
+          "voiceScript": {
+            "segments": {
+              "three-triggers": {
+                "title": "One deterministic core",
+                "keywords": "three triggers, runtime pre-read, commit gate, nightly schedule",
+                "script": "Three ways in. Three ways out. And the middle is the same every time. Whatever starts it, the core does one thing: read the configuration, run the logic. Same input, same answer. It's fully deterministic. The one I want to show you is the first: the agent goes to read a file — and before it does, it's told that file is stale. The other two, briefly: on commit, a check that the frontmatter meets the standard, passing or blocking. And on a schedule: a nightly run that regenerates what can be regenerated, and raises a ticket on what can't.",
+                "bridge": "Let me show you the first one."
               }
+            }
+          }
+        },
+        "live-demo": {
+          "title": "Live demo",
+          "caption": "The check, run live.",
+          "prose": "File under test: docs/handbook/onboarding.md. Asked of the agent: What are the first-week onboarding steps for a new hire?",
+          "notes": {
+            "demo-contrast": {
+              "header": "Comparative evaluation",
+              "description": "Three agents receive the same stale document; only the hooked agents are prevented from hallucinating outdated facts."
             },
-            "live-demo": {
-              "title": "Live demo",
-              "caption": "The check, run live.",
-              "prose": "File under test: docs/handbook/onboarding.md. Asked of the agent: What are the first-week onboarding steps for a new hire?",
-              "notes": {
-                "demo-contrast": {
-                  "header": "Comparative evaluation",
-                  "description": "Three agents receive the same stale document; only the hooked agents are prevented from hallucinating outdated facts."
-                },
-                "holding-slide": {
-                  "header": "Live terminal run",
-                  "description": "Talk switches to terminal here; the slide acts as the anchor framing the test."
-                }
-              },
-              "voiceScript": {
-                "segments": {
-                  "demo-walkthrough": {
-                    "title": "The check run live",
-                    "keywords": "three terminals, un-hooked, pirate injection, deny read",
-                    "script": "Three panels: same question, same document. The only difference is what each one is allowed to know. Before the run: watch the un-hooked panel answering confidently from a document that went out of date. If it noticed the date, that detection was luck — dependent on the model. The injected panel: the pirate response proves the harness governed what the agent was allowed to know. The deny panel: read was refused explicitly. And deterministic detection was recorded in the log, independent of what any model chose to say."
-                  }
-                }
+            "holding-slide": {
+              "header": "Live terminal run",
+              "description": "Talk switches to terminal here; the slide acts as the anchor framing the test."
+            }
+          },
+          "voiceScript": {
+            "segments": {
+              "demo-walkthrough": {
+                "title": "The check run live",
+                "keywords": "three terminals, un-hooked, pirate injection, deny read",
+                "script": "Three panels: same question, same document. The only difference is what each one is allowed to know. Before the run: watch the un-hooked panel answering confidently from a document that went out of date. If it noticed the date, that detection was luck — dependent on the model. The injected panel: the pirate response proves the harness governed what the agent was allowed to know. The deny panel: read was refused explicitly. And deterministic detection was recorded in the log, independent of what any model chose to say."
               }
+            }
+          }
+        },
+        "feature-roadmap": {
+          "title": "Feature Roadmap",
+          "caption": "Three shipped, three planned.",
+          "prose": "v0.0.4 Shipped: frontmatter linting, staleness checking, markdown harness skill.",
+          "notes": {
+            "v0-0-4-scope": {
+              "header": "Current release (v0.0.4)",
+              "description": "Shipped: frontmatter linting, staleness checks, and markdown-harness skill."
             },
-            "feature-roadmap": {
-              "title": "Feature Roadmap",
-              "caption": "Three shipped, three planned.",
-              "prose": "v0.0.4 Shipped: frontmatter linting, staleness checking, markdown harness skill.",
-              "notes": {
-                "v0-0-4-scope": {
-                  "header": "Current release (v0.0.4)",
-                  "description": "Shipped: frontmatter linting, staleness checks, and markdown-harness skill."
-                },
-                "future-checks": {
-                  "header": "Planned capabilities",
-                  "description": "Future: drift detection and corpus validation; do not promise them as shipping today."
-                }
-              }
+            "future-checks": {
+              "header": "Planned capabilities",
+              "description": "Future: drift detection and corpus validation; do not promise them as shipping today."
             }
           }
         },

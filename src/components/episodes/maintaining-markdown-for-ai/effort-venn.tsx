@@ -171,14 +171,14 @@ function HypothesisFootnote() {
 export function EffortVenn({
   emphasis = 'establish',
   className,
-  id,
+  'data-target': dataTarget,
 }: {
   emphasis?: VennEmphasis;
   className?: string;
-  id?: string;
+  'data-target'?: string;
 }) {
   return (
-    <div id={id} className={cn('relative flex flex-col items-center justify-center', className)}>
+    <div data-target={dataTarget} className={cn('relative flex flex-col items-center justify-center', className)}>
       <svg
         viewBox="115 15 700 540"
         role="img"

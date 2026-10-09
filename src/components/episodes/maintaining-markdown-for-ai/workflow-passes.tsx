@@ -17,9 +17,9 @@ function MachineCheckList() {
   );
 }
 
-export function MachineCheckCard({ id }: { id?: string }) {
+export function MachineCheckCard({ 'data-target': dataTarget }: { 'data-target'?: string }) {
   return (
-    <div id={id} className="mt-8 rounded-2xl border border-primary/30 bg-primary/5 p-6 shadow-xs">
+    <div data-target={dataTarget} className="mt-8 rounded-2xl border border-primary/30 bg-primary/5 p-6 shadow-xs">
       <div className="flex items-center justify-between border-b border-primary/20 pb-4">
         <span className="font-mono text-sm font-bold text-primary">Machine check</span>
         <span className="rounded-full border border-primary/40 bg-primary/10 px-2.5 py-0.5 font-mono text-xs font-semibold text-primary">
@@ -52,14 +52,14 @@ function AiDiscrepancyBody() {
   );
 }
 
-export function AiRecommendationCard({ id }: { id?: string }) {
+export function AiRecommendationCard({ 'data-target': dataTarget }: { 'data-target'?: string }) {
   return (
     <div className="mt-8 space-y-4">
       <div className="flex items-center justify-between rounded-xl border border-border bg-card p-4 text-xs">
         <span className="font-mono font-medium text-muted-foreground">Machine check</span>
         <span className="text-muted-foreground">✓ Resolved cleanly</span>
       </div>
-      <div id={id} className="rounded-2xl border border-accent/40 bg-accent/5 p-6 shadow-xs">
+      <div data-target={dataTarget} className="rounded-2xl border border-accent/40 bg-accent/5 p-6 shadow-xs">
         <div className="flex items-center justify-between border-b border-accent/20 pb-4">
           <span className="font-mono text-sm font-bold text-accent">AI recommendation</span>
           <span className="rounded-full border border-accent/40 bg-accent/10 px-2.5 py-0.5 font-mono text-xs font-semibold text-accent">
@@ -109,11 +109,11 @@ function HumanJudgmentQuestions() {
   );
 }
 
-export function HumanJudgmentCard({ id }: { id?: string }) {
+export function HumanJudgmentCard({ 'data-target': dataTarget }: { 'data-target'?: string }) {
   return (
     <div className="mt-8 space-y-4">
       <SettledWorkflowPasses />
-      <div id={id} className="rounded-2xl border border-secondary/40 bg-secondary/5 p-6 shadow-xs">
+      <div data-target={dataTarget} className="rounded-2xl border border-secondary/40 bg-secondary/5 p-6 shadow-xs">
         <div className="flex items-center justify-between border-b border-secondary/20 pb-4">
           <span className="font-mono text-sm font-bold text-secondary">Human judgment</span>
           <span className="deck-unsettled rounded-full border border-secondary/40 bg-secondary/10 px-2.5 py-0.5 font-mono text-xs font-semibold text-secondary">
