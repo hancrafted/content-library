@@ -1,6 +1,6 @@
 'use client';
 
-import type { TargetProps } from '@/components/slide-master/episode-record';
+import type { TargetProps } from '@/lib/context-link.pure';
 import { externalHref } from '@/lib/external-link.pure';
 import { cn } from '@/lib/utils';
 import { useCallback, useEffect, useRef, useState, type RefObject } from 'react';

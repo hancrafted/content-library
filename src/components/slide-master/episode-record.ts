@@ -1,4 +1,5 @@
 import type { Messages } from '@/i18n/translations';
+import type { TargetProps } from '@/lib/context-link.pure';
 import type { SectionList } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
 import type { EpisodeSlug } from '@/lib/routes';
@@ -82,11 +83,6 @@ export interface SegmentSpec<G extends string = string> {
   readonly to: number;
   /** True when the Translation file holds a `bridge` string for this segment. */
   readonly bridge?: boolean;
-}
-
-/** What `target(name)` returns: spread it on the element a note explains. */
-export interface TargetProps {
-  readonly 'data-target': string;
 }
 
 /** The Slide's heading at the level its position gives it (FE-002 §4), marked as the `title` target. */
