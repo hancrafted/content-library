@@ -4,7 +4,8 @@ import { SlideCaption, SlideFrame, SlideProse } from '@/components/slide-master/
 
 const slide = slidesFor('page-template');
 
-// Notes: `target` is the Canvas element a note explains (title, caption, prose, or a name set with the kit's `target`).
+// Notes: `target` is the Canvas element a note explains. Mark it with the kit's `{...target('name')}`, as the spine and
+// the prose below do; the kit's `<Title>` marks `title`, and a Slide layout such as BasicPageSlide marks its own.
 // Add `sources: [{ slug, url }]` to cite; its title goes under `notes.<note>.sources.<slug>.title`.
 // Minutes are spoken time, so set them only on a Slide with a Voice script.
 export const whyATemplate = slide({
@@ -21,7 +22,7 @@ export const whyATemplate = slide({
   content: ({ t, ref, target, Title }) => (
     <SlideFrame>
       <Title>{t('title')}</Title>
-      <SlideCaption data-target="caption">{t('caption')}</SlideCaption>
+      <SlideCaption>{t('caption')}</SlideCaption>
       <div {...target('spine')} className="mt-10">
         <SpineStepper
           labels={{ episode: t('spine.episode'), section: t('spine.section'), slide: t('spine.slide') }}
@@ -29,7 +30,7 @@ export const whyATemplate = slide({
         />
       </div>
       <div className="mt-auto pt-10">
-        <SlideProse data-target="prose">{t.rich('prose', { ref: ref('reference-episode') })}</SlideProse>
+        <SlideProse {...target('prose')}>{t.rich('prose', { ref: ref('reference-episode') })}</SlideProse>
       </div>
     </SlideFrame>
   ),

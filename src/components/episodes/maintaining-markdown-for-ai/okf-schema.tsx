@@ -1,3 +1,4 @@
+import type { TargetProps } from '@/components/slide-master/episode-record';
 import { cn } from '@/lib/utils';
 
 interface SchemaRow {
@@ -82,9 +83,9 @@ function OkfSpecLink() {
   );
 }
 
-export function OkfSchema({ 'data-target': dataTarget }: { 'data-target'?: string }) {
+export function OkfSchema(target: TargetProps) {
   return (
-    <div data-target={dataTarget} className="mt-8 space-y-4">
+    <div {...target} className="mt-8 space-y-4">
       <OkfTable />
       <OkfSpecLink />
     </div>

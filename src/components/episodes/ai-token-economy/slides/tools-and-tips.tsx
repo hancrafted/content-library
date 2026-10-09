@@ -90,9 +90,9 @@ function HabitsCard(): ReactElement {
   );
 }
 
-function ToolsGrid({ 'data-target': dataTarget }: TargetProps): ReactElement {
+function ToolsGrid(target: TargetProps): ReactElement {
   return (
-    <div data-target={dataTarget} className="mt-8 grid gap-6 lg:grid-cols-3">
+    <div {...target} className="mt-8 grid gap-6 lg:grid-cols-3">
       <AutomatedCard />
       <SteeringCard />
       <HabitsCard />

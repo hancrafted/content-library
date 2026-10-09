@@ -15,7 +15,7 @@ export const featureRoadmap = slide({
     <SlideFrame>
       <Title>{t('title')}</Title>
       <SlideCaption>{t('caption')}</SlideCaption>
-      <RoadmapTable shipped={target('shipped-col')['data-target']} planned={target('planned-col')['data-target']} />
+      <RoadmapTable shipped={target('shipped-col')} planned={target('planned-col')} />
     </SlideFrame>
   ),
 });

@@ -1,6 +1,8 @@
-export function LiveDemoCard({ 'data-target': dataTarget }: { 'data-target'?: string }) {
+import type { TargetProps } from '@/components/slide-master/episode-record';
+
+export function LiveDemoCard(target: TargetProps) {
   return (
-    <div data-target={dataTarget} className="mt-8 max-w-3xl space-y-6">
+    <div {...target} className="mt-8 max-w-3xl space-y-6">
       <div className="rounded-xl border border-border bg-card p-5 shadow-xs">
         <p className="font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
           File under test

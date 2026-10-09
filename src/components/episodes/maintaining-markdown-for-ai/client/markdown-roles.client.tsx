@@ -1,5 +1,6 @@
 'use client';
 
+import type { TargetProps } from '@/components/slide-master/episode-record';
 import { externalHref } from '@/lib/external-link.pure';
 import { cn } from '@/lib/utils';
 import { useCallback, useEffect, useRef, useState, type RefObject } from 'react';
@@ -64,13 +65,13 @@ function RoleCardFooter({ source, url }: { source: string; url: string }) {
 }
 
 function RoleCard({
-  'data-target': dataTarget,
+  target,
   role,
   isActive,
   onSelect,
   onOpen,
 }: {
-  'data-target'?: string;
+  target?: TargetProps;
   role: RoleDetail;
   isActive: boolean;
   onSelect: () => void;
@@ -78,7 +79,7 @@ function RoleCard({
 }) {
   return (
     <div
-      data-target={dataTarget}
+      {...target}
       onClick={onSelect}
       className={cn(
         'cursor-pointer rounded-2xl border bg-card/90 p-4 shadow-xs transition-all hover:border-foreground/30',
@@ -161,7 +162,7 @@ function useConnectorPaths(
 interface RightCardsProps {
   readonly rightRefs: RefObject<Record<RoleKey, HTMLDivElement | null>>;
   readonly activeRole: RoleKey;
-  readonly knowledgeTarget?: string;
+  readonly knowledgeTarget?: TargetProps;
   readonly onSelect: (key: RoleKey) => void;
   readonly onOpen: (modal: ModalKey) => void;
 }
@@ -180,7 +181,7 @@ function RightRoleCards({ rightRefs, activeRole, knowledgeTarget, onSelect, onOp
           }}
         >
           <RoleCard
-            data-target={key === 'knowledge' ? knowledgeTarget : undefined}
+            target={key === 'knowledge' ? knowledgeTarget : undefined}
             role={ROLES_DATA[key]}
             isActive={activeRole === key}
             onSelect={() => onSelect(key)}
@@ -211,7 +212,7 @@ function useInteractiveRoles() {
   return { activeRole, activeModal, setActiveModal, containerRef, leftCardRef, rightRefs, paths, onSelectRole };
 }
 
-export function MarkdownRolesInteractive({ knowledgeTarget }: { knowledgeTarget?: string }) {
+export function MarkdownRolesInteractive({ knowledgeTarget }: { knowledgeTarget?: TargetProps }) {
   const s = useInteractiveRoles();
   const closeModal = useCallback(() => s.setActiveModal(null), [s]);
 
