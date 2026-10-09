@@ -1,6 +1,6 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
   "entry": [".archgate/adrs/*.rules.ts"],
-  "project": ["src/**/*.{ts,tsx,css}", "*.ts", "*.mjs", ".archgate/**/*.ts"],
+  "project": ["src/**/*.{ts,tsx,css}", "*.ts", "*.mjs", "scripts/*.mjs", ".archgate/**/*.ts"],
   "ignoreExportsUsedInFile": true
 }
