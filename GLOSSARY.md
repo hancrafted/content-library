@@ -66,7 +66,7 @@ _Avoid_: Footnote, reference
 **Voice script**: a Slide's teleprompter text, a list of Voice script segments.
 _Avoid_: Transcript, manuscript
 
-**Voice script segment**: one timed passage of a Voice script: a title, keywords, the spoken text and, optionally, a Bridge. Its time span is derived from its words at the locale's speaking pace, never written; the spans add up to the Slide's reading time.
+**Voice script segment**: one timed passage of a Voice script: a title, keywords, the spoken text and, optionally, a Bridge. Its time span is never written; the spans add up to the Slide's reading time.
 _Avoid_: Paragraph, line, cue card
 
 **Bridge**: the closing line of a Voice script segment that hands the speaker over to the next Section.

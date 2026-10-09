@@ -28,31 +28,32 @@ export interface SlideKitInput {
   readonly slideId: string;
 }
 
-/** The Slide's translator with `t.rich` knowing the default tags; a tag the Slide passes wins. */
+/**
+ * The Slide's translator with `t.rich` knowing the default tags; a tag the Slide passes wins.
+ * Every other member is copied from next-intl's translator as it is, so one it adds later arrives too.
+ */
 function withDefaultTags(t: RuntimeTranslator): RuntimeTranslator {
   const rich = (key: string, values?: object, ...rest: unknown[]) =>
     t.rich(key, { ...DEFAULT_RICH_TAGS, ...values }, ...rest);
-  return Object.assign((key: string, ...args: unknown[]) => t(key, ...args), {
-    rich,
-    markup: t.markup,
-    raw: t.raw,
-    has: t.has,
-  });
+  return Object.assign((key: string, ...args: unknown[]) => t(key, ...args), t, { rich });
 }
 
-/** Links and templates: the kit's fields that read the Episode, not the Slide's own markup. */
-function lookups(episode: EpisodeKitInput, { t, slideId }: SlideKitInput): Pick<RuntimeKit, 'slideHref' | 'template'> {
-  const slideHref = (slug: string) => {
+/** `slideHref`: the localized link to a Slide of this Episode, by the anchor the walk placed it at. */
+function slideHrefOf(episode: EpisodeKitInput, slideId: string): RuntimeKit['slideHref'] {
+  return (slug) => {
     const anchor = episode.anchors.get(slug);
     if (anchor === undefined) throw new Error(`No Slide "${slug}" in "${episode.episode}" to link from "${slideId}".`);
     return localizePath(episodeRoute(episode.episode), episode.locale, anchor);
   };
-  const template = (key: string) => {
+}
+
+/** `template`: a string leaf of the Slide's keys as written, for a client component to fill. */
+function templateOf(t: RuntimeTranslator, slideId: string): RuntimeKit['template'] {
+  return (key) => {
     const value = t.raw(key);
     if (typeof value !== 'string') throw new Error(`Template "${key}" on "${slideId}" is not a string leaf.`);
     return value;
   };
-  return { slideHref, template };
 }
 
 /**
@@ -88,6 +89,7 @@ export function slideKit(episode: EpisodeKitInput, slide: SlideKitInput): Runtim
     ref,
     target: (name) => ({ 'data-target': name }),
     Title,
-    ...lookups(episode, slide),
+    slideHref: slideHrefOf(episode, slideId),
+    template: templateOf(slide.t, slideId),
   };
 }

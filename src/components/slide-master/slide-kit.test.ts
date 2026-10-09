@@ -138,4 +138,16 @@ describe('edge cases', () => {
     // ASSERT
     expect(isValidElement(rendered) && rendered.type).toBe(expected);
   });
+
+  it('carries a translator member the kit does not know of over unchanged, so a new next-intl member arrives', () => {
+    // ARRANGE
+    const { t } = stubTranslator();
+    const dateTime = (): string => 'a formatted date';
+    const kit = slideKit(episodeInput('en'), slideInput(Object.assign(t, { dateTime })));
+    const expected = dateTime;
+    // ACT
+    const carried: unknown = Reflect.get(kit.t, 'dateTime');
+    // ASSERT
+    expect(carried).toBe(expected);
+  });
 });
