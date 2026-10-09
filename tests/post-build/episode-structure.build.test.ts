@@ -160,6 +160,25 @@ describe('episode structure', () => {
       expect(totals).toEqual(slideTotals);
     });
 
+    it('heads each Slide written as a Slide file at the level its position gives it: h2 first in its Section, else h3', () => {
+      // ARRANGE
+      const $ = page(url);
+      const marked = $('[data-slot="slides"] [data-slide] [data-target="title"]').length > 0;
+      // ACT
+      const levels = $('[data-slot="slides"] > section[data-section]')
+        .toArray()
+        .map((section) =>
+          $(section)
+            .children('[data-slide]')
+            .toArray()
+            .map((slide) => $(slide).find('[data-target="title"]').first().prop('tagName')?.toLowerCase() ?? 'none'),
+        );
+      const expected = levels.map((section) => section.map((_, index) => (index === 0 ? 'h2' : 'h3')));
+      // ASSERT: a legacy Episode marks no title target; its levels are held by the heading-count test above
+      if (marked) expect(levels).toEqual(expected);
+      else expect(levels.flat().every((level) => level === 'none')).toBe(true);
+    });
+
     it('links the table of contents to every titled slide anchor, in page order', () => {
       // ARRANGE
       const $ = page(url);
