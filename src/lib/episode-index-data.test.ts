@@ -7,10 +7,10 @@ import { EPISODE_SLUGS } from './routes';
 
 /*
  * The shipped index, checked as data: it must parse, cover every real Episode,
- * and have every string a card reads in every locale. `page-template` is the
- * layout reference, not content, so it is left out on purpose.
+ * and have every string a card reads in every locale. `page-template` and
+ * `slide-layouts` are layout references, not content, so they are left out on purpose.
  */
-const CATALOGS = { en, de };
+const TRANSLATIONS = { en, de };
 
 describe('success cases', () => {
   it('parses the shipped index without throwing', () => {
@@ -22,10 +22,10 @@ describe('success cases', () => {
     expect(entries).toHaveLength(expectedCount);
   });
 
-  it('lists every registered Episode but the layout reference as published', () => {
+  it('lists every registered Episode but the layout references as published', () => {
     // ARRANGE
     const expected = ['ai-token-economy', 'amnesiac-freelancer', 'maintaining-markdown-for-ai'];
-    const expectedUnlisted = ['page-template'];
+    const expectedUnlisted = ['page-template', 'slide-layouts'];
     // ACT
     const published = parseEpisodeIndex(raw)
       .filter(({ status }) => status === 'published')
@@ -50,7 +50,7 @@ describe('success cases', () => {
 describe('failure cases', () => {
   it.each(['en', 'de'] as const)('leaves no string a card reads untranslated in %s', (locale) => {
     // ARRANGE
-    const { episodeIndex } = CATALOGS[locale].landing;
+    const { episodeIndex } = TRANSLATIONS[locale].landing;
     const entries = parseEpisodeIndex(raw);
     const expected: string[] = [];
     // ACT
@@ -64,7 +64,7 @@ describe('failure cases', () => {
       ...entries
         .filter(({ status }) => status === 'published')
         .flatMap(({ slug }) => {
-          const copy = (CATALOGS[locale].episodes as Record<string, { title?: string; caption?: string }>)[slug];
+          const copy = (TRANSLATIONS[locale].episodes as Record<string, { title?: string; caption?: string }>)[slug];
           return [!copy?.title && `episodes.${slug}.title`, !copy?.caption && `episodes.${slug}.caption`].filter(
             Boolean,
           );
