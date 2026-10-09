@@ -67,7 +67,7 @@ function EpisodeToc(props: {
       <TableOfContents
         locale={props.locale}
         route={episodeRoute(props.slug)}
-        sections={tocSectionsOf(props.placed, props.locale)}
+        sections={tocSectionsOf(props.placed)}
         targetAttribute="data-slide"
         topId={TITLE_ANCHOR}
         labels={props.labels}

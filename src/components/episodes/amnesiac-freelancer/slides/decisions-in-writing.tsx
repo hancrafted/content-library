@@ -10,7 +10,6 @@ const NYGARD = {
 
 export const decisionsInWriting = slide({
   slug: 'decisions-in-writing',
-  minutes: { en: 3, de: 4 },
   notes: [
     { slug: 'a-conversation-with-a-future-developer', target: 'caption', sources: [NYGARD] },
     { slug: 'superseded-not-deleted', target: 'prose', sources: [NYGARD] },
@@ -18,9 +17,9 @@ export const decisionsInWriting = slide({
     { slug: 'mapping-not-a-sourced-claim', target: 'prose' },
   ],
   segments: [
-    { slug: 'why-it-was-done', from: 0.0, to: 1.0 },
-    { slug: 'superseded', from: 1.0, to: 2.0 },
-    { slug: 'our-agent-arrives-later-every-time', from: 2.0, to: 3.0, bridge: true },
+    { slug: 'why-it-was-done' },
+    { slug: 'superseded' },
+    { slug: 'our-agent-arrives-later-every-time', bridge: true },
   ],
   content: ({ t, ref, Title }) => (
     <BasicPageSlide

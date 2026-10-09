@@ -5,7 +5,6 @@ const slide = slidesFor('amnesiac-freelancer');
 
 export const metaphorBreaks = slide({
   slug: 'metaphor-breaks',
-  minutes: { en: 4, de: 5 },
   notes: [
     {
       slug: 'no-learning',
@@ -31,11 +30,7 @@ export const metaphorBreaks = slide({
       ],
     },
   ],
-  segments: [
-    { slug: 'no-learning', from: 0.0, to: 1.25 },
-    { slug: 'not-enforced', from: 1.25, to: 2.75 },
-    { slug: 'reading-costs', from: 2.75, to: 4.0, bridge: true },
-  ],
+  segments: [{ slug: 'no-learning' }, { slug: 'not-enforced' }, { slug: 'reading-costs', bridge: true }],
   content: ({ t, Title }) => {
     const column = (slug: 'no-learning' | 'not-enforced' | 'reading-costs') => ({
       slug,

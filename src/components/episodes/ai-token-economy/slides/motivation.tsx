@@ -7,7 +7,6 @@ const slide = slidesFor('ai-token-economy');
 
 export const motivation = slide({
   slug: 'motivation',
-  minutes: { en: 2, de: 2 },
   notes: [
     { slug: 'freelancer-metaphor', target: 'title' },
     { slug: 'management-opt-in', target: 'freelancer-cards' },

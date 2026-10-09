@@ -44,7 +44,6 @@ function ObscurityFigure(): ReactElement {
 
 export const cliVsWebToolObscurity = slide({
   slug: 'cli-vs-web-tool-obscurity',
-  minutes: { en: 2, de: 2 },
   notes: [{ slug: 'the-obscurity-playbook', target: 'title' }],
   content: ({ t, Title }) => (
     <SlideFrame>

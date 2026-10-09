@@ -6,12 +6,11 @@ const slide = slidesFor('maintaining-markdown-for-ai');
 
 export const liveDemo = slide({
   slug: 'live-demo',
-  minutes: { en: 3, de: 4 },
   notes: [
     { slug: 'demo-contrast', target: 'title' },
     { slug: 'holding-slide', target: 'terminal-panel' },
   ],
-  segments: [{ slug: 'demo-walkthrough', from: 0.0, to: 3.5 }],
+  segments: [{ slug: 'demo-walkthrough' }],
   content: ({ t, target, Title }) => (
     <SlideFrame>
       <Title>{t('title')}</Title>

@@ -6,7 +6,6 @@ const slide = slidesFor('ai-token-economy');
 
 export const theInvisibleInvoice = slide({
   slug: 'the-invisible-invoice',
-  minutes: { en: 2, de: 2 },
   notes: [{ slug: 'governance-asymmetry', target: 'title' }],
   content: ({ t, Title }) => (
     <SlideFrame>

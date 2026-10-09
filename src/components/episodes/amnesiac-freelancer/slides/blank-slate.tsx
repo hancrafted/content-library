@@ -6,6 +6,5 @@ const slide = slidesFor('amnesiac-freelancer');
 /** The first Section's own slide: its Translation subtree names the Section. */
 export const blankSlate = slide({
   slug: 'blank-slate',
-  minutes: { en: 1, de: 1 },
   content: ({ t, Title }) => <SectionSlide title={<Title>{t('title')}</Title>} caption={t('caption')} />,
 });

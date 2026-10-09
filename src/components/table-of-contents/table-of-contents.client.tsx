@@ -73,7 +73,7 @@ export function TableOfContents(props: {
         labels={props.labels}
         where={view.revealed ? whereAt(props.sections, view.active) : null}
         revealed={view.revealed}
-        left={remainingLabel(props.labels, props.locale, time.remaining)}
+        left={time.total > 0 ? remainingLabel(props.labels, props.locale, time.remaining) : undefined}
       >
         <TocPanel {...panel} view={{ ...view, revealed: true }} className="h-full max-h-full bg-background pt-14" />
       </TocDrawer>

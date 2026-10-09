@@ -26,13 +26,13 @@ async function renderedSlide(
   const t = await translatorOf(`episodes.${slide.episode}.slides.${slide.slug}`);
   const notes = slide.notes.map((note) => note.slug);
   const content = slide.content(slideKit(episode, { t, level, notes, slideId: id }));
-  const { notes: noteItems, voiceScript } = slideContext(t, slide);
+  const { notes: noteItems, voiceScript, minutes } = slideContext(t, slide, episode.locale);
   return {
     id,
     slide: {
       slug: slide.slug,
       ...(t.has('title') && { title: t('title') }),
-      ...(slide.minutes && { minutes: slide.minutes }),
+      minutes,
       content,
       notes: noteItems,
       voiceScript,

@@ -6,7 +6,6 @@ const slide = slidesFor('ai-token-economy');
 
 export const theFullnessGaugeAndLevers = slide({
   slug: 'the-fullness-gauge-and-levers',
-  minutes: { en: 2, de: 2 },
   notes: [{ slug: 'smart-zone-discipline', target: 'title' }],
   content: ({ t, Title }) => (
     <SlideFrame>
