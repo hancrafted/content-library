@@ -5,11 +5,11 @@ import { SOURCE } from './sources';
 /*
  * The non-localized facts of the amnesiac-freelancer Episode's Speaker notes
  * and Voice script (FE-010 §6): slugs, targets, sources and time spans. The
- * words live in the catalogs. Transcribed from
+ * words live in the Translation files. Transcribed from
  * docs/research/amnesiac-freelancer-script.md.
  */
 interface SlideContextEntry {
-  /** The Slide's catalog path under the Episode's `sections` namespace. */
+  /** The Slide's Translation file path under the Episode's `sections` namespace. */
   readonly base: string;
   readonly spec: SlideContextSpec;
 }

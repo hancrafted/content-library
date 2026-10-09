@@ -30,7 +30,7 @@ Sticky. Row one: the tabs left, the menu and close right. The tabs may shrink an
 ## Linking a Slide and its notes
 
 - **Block target.** A note's `target` names a layout element (a column, title or prose); the element carries the id `<slide anchor>--<element>`.
-- **Inline target.** `ContextRef` wraps a phrase inside Slide text and emits the id `<slide anchor>--<note slug>`, so the note's `target` is its own slug. In a catalog string the phrase sits inside a `<ref>` rich-text tag.
+- **Inline target.** `ContextRef` wraps a phrase inside Slide text and emits the id `<slide anchor>--<note slug>`, so the note's `target` is its own slug. In a translated string the phrase sits inside a `<ref>` rich-text tag.
 - **Behaviour.** Hovering or focusing a note, or a `ContextRef`, sets `data-context-active` on the other side; CSS tints the whole item (or Slide element) with `--highlight-target` at low opacity: no border, outline or ring, and it takes no space, so nothing shifts. Clicking a `ContextRef` opens the drawer on Notes at that note.
 - **Print.** A `ContextRef` prints as its plain phrase.
 

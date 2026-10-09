@@ -15,8 +15,8 @@ import { getTranslations } from 'next-intl/server';
 /*
  * The reference Episode (FE-002): three Sections holding 2, 0 and 2 page
  * Slides. Structure is the typed record; each Slide's content is free JSX,
- * one function per Slide, and every leaf string is a catalog key under
- * `episodes.page-template` (see docs/agents/episode-catalog-keys.md).
+ * one function per Slide, and every leaf string is a Translation key under
+ * `episodes.page-template` (see docs/agents/episode-translation-keys.md).
  */
 type SectionsT = Awaited<ReturnType<typeof getTranslations<'episodes.page-template.sections'>>>;
 

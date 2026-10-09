@@ -121,10 +121,10 @@ describe('episode structure', () => {
     it("explains the Context drawer on both tabs of the Title slide's item, in the page's locale", () => {
       // ARRANGE
       const $ = page(url);
-      const catalog = JSON.parse(
+      const translation = JSON.parse(
         readFileSync(join(import.meta.dirname, '..', '..', 'src', 'messages', `${locale}.json`), 'utf8'),
       );
-      const expected = String(catalog.contextDrawer.explainer).replace('{shortcut}', 'Alt+N');
+      const expected = String(translation.contextDrawer.explainer).replace('{shortcut}', 'Alt+N');
       // ACT
       const item = (tab: string) => $(`#context-panel-${tab} [data-context-for="top"]`);
       const notes = item('notes').find('[role="note"]');

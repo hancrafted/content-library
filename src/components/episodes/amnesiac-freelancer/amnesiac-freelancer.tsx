@@ -21,7 +21,7 @@ import { contextFor, type SlideSlug } from './context';
  * reference Episode (page-template). Every claim traces to
  * docs/research/ai-amnesia-mechanics.md and ai-onboarding-freelancer.md;
  * "amnesiac" is our metaphor, not a vendor term. Keys live under
- * `episodes.amnesiac-freelancer` (docs/agents/episode-catalog-keys.md).
+ * `episodes.amnesiac-freelancer` (docs/agents/episode-translation-keys.md).
  */
 type SectionsT = Awaited<ReturnType<typeof getTranslations<'episodes.amnesiac-freelancer.sections'>>>;
 

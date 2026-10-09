@@ -1,4 +1,4 @@
-import { CATALOGS } from '@/i18n/catalogs';
+import { TRANSLATIONS } from '@/i18n/translations';
 import type { Locale } from '@/lib/locale.pure';
 
 /**
@@ -14,7 +14,7 @@ export async function getTranslations({ locale, namespace }: { locale: Locale; n
     const path = [...(namespace?.split('.') ?? []), ...key.split('.')];
     const leaf = path.reduce<unknown>(
       (node, part) => (node as Record<string, unknown> | undefined)?.[part],
-      CATALOGS[locale],
+      TRANSLATIONS[locale],
     );
     if (typeof leaf !== 'string') throw new Error(`Missing Translation key "${path.join('.')}" in ${locale}.`);
     return leaf;

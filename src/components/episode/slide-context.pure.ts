@@ -1,13 +1,13 @@
 import type { NoteSource, SpeakerNoteItem, VoiceScriptSegment } from '@/lib/context-drawer.pure';
 
 /*
- * Builds a Slide's notes and voice script from catalog strings plus the
+ * Builds a Slide's notes and voice script from translated strings plus the
  * non-localized facts an Episode keeps in the record (FE-010 §6). The output is
  * content records, not markup, so FE-002's "no renderer between a Slide and its
  * markup" does not apply to it.
  */
 
-/** A source's non-localized facts; its title is a catalog leaf. */
+/** A source's non-localized facts; its title is a Translation file leaf. */
 export interface SourceSpec {
   readonly slug: string;
   readonly url: string;
@@ -24,7 +24,7 @@ export interface SegmentSpec {
   readonly slug: string;
   readonly from: number;
   readonly to: number;
-  /** True when the catalog holds a `bridge` string for this segment. */
+  /** True when the Translation file holds a `bridge` string for this segment. */
   readonly bridge?: boolean;
 }
 
@@ -33,7 +33,7 @@ export interface SlideContextSpec {
   readonly segments?: readonly SegmentSpec[];
 }
 
-/** Reads one catalog leaf by key, relative to the Episode's namespace. */
+/** Reads one Translation file leaf by key, relative to the Episode's namespace. */
 export type ReadString = (key: string) => string;
 
 function sourceOf(read: ReadString, key: string, spec: SourceSpec): NoteSource {
@@ -68,7 +68,7 @@ function segmentOf(read: ReadString, base: string, spec: SegmentSpec): VoiceScri
   };
 }
 
-/** `base` is the Slide's catalog path, e.g. `foundations.slides.why`, or a Section's, e.g. `foundations`. */
+/** `base` is the Slide's Translation file path, e.g. `foundations.slides.why`, or a Section's, e.g. `foundations`. */
 export function slideContext(
   read: ReadString,
   base: string,

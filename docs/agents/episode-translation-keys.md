@@ -1,8 +1,8 @@
-# Episode catalog keys
+# Episode translation keys
 
 Read before adding or changing an Episode, a slide, or any string in `src/messages/<locale>.json`.
 
-The binding rules (key shape, slugs never positions, leaf strings only, ICU for variable text, every key in both catalogs) live in [FE-002 Episode Page](../../.archgate/adrs/FE-002-episode-page.md) §5. This guide holds the role vocabulary and worked examples.
+The binding rules (key shape, slugs never positions, leaf strings only, ICU for variable text, every key in both Translation files) live in [FE-002 Episode Page](../../.archgate/adrs/FE-002-episode-page.md) §5. This guide holds the role vocabulary and worked examples.
 
 ## Key shape, by example
 
@@ -28,7 +28,7 @@ episodes.<episode>.sections.<section>.slides.<slide>.voiceScript.segments.<segme
 episodes.<episode>.sections.<section>.slides.<slide>.voiceScript.segments.<segment>.bridge
 ```
 
-`keywords` is one leaf: a comma-separated string. `<note>` and `<segment>` are kebab-case slugs. A `source`'s title is a leaf; its `url` is not. A description cites its sources with plain `[1]`, `[2]` markers, numbered in the order of the note's `sources`; every marker must name an existing source. Slide text can wrap one phrase in `<ref>…</ref>` (read with `t.rich`) for a `ContextRef`. Time spans, `target`, source `slug`s and `url`s and `image.src` are not strings in the catalog; they sit in the Episode's record (see `src/components/episodes/amnesiac-freelancer/context.ts`).
+`keywords` is one leaf: a comma-separated string. `<note>` and `<segment>` are kebab-case slugs. A `source`'s title is a leaf; its `url` is not. A description cites its sources with plain `[1]`, `[2]` markers, numbered in the order of the note's `sources`; every marker must name an existing source. Slide text can wrap one phrase in `<ref>…</ref>` (read with `t.rich`) for a `ContextRef`. Time spans, `target`, source `slug`s and `url`s and `image.src` are not strings in the Translation file; they sit in the Episode's record (see `src/components/episodes/amnesiac-freelancer/context.ts`).
 
 Chrome shared by all Episodes (e.g. `tableOfContents.title`) sits outside `episodes.*` and is not bound by the role table.
 

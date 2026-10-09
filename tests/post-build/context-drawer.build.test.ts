@@ -93,7 +93,7 @@ describe.each(PAGES)('$url', ({ slug, url }) => {
     expect(unresolved).toHaveLength(0);
   });
 
-  it('shows no raw catalog key as text', () => {
+  it('shows no raw Translation key as text', () => {
     // ARRANGE
     const $ = page(url);
     // ACT

@@ -1,4 +1,4 @@
-/** One story's copy, resolved from the catalog on the server; plain data so it crosses to the client. */
+/** One story's copy, resolved from the Translation file on the server; plain data so it crosses to the client. */
 export interface StoryCardCopy {
   id: string;
   title: string;

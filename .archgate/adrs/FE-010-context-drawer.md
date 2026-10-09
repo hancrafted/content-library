@@ -6,7 +6,7 @@ domain: frontend
 rules: true
 files: ['src/components/context-drawer/**/*', 'src/app/globals.css']
 # prettier-ignore
-paths: ['src/components/context-drawer/**', 'src/components/episode/**', 'src/components/episodes/**', 'src/hooks/use-context-*.ts', 'src/hooks/use-url-state.ts', 'src/hooks/use-table-of-contents*', 'src/components/table-of-contents/**', 'src/lib/context-drawer.pure*', 'src/lib/context-link.pure*', 'src/lib/roving-focus.pure*', 'src/i18n/catalog-strings*', 'src/lib/reading-line.pure*', 'src/lib/episode*', 'src/lib/routes*', 'src/lib/table-of-contents*', '.archgate/adrs/FE-010-context-drawer.rules.ts', 'src/app/globals.css', 'src/messages/*.json', 'tests/post-build/context-drawer.build.test.ts', 'tests/post-build/episode-structure.build.test.ts', '.dependency-cruiser.cjs', 'docs/agents/episode-catalog-keys.md', 'docs/agents/context-drawer-design.md', 'GLOSSARY.md']
+paths: ['src/components/context-drawer/**', 'src/components/episode/**', 'src/components/episodes/**', 'src/hooks/use-context-*.ts', 'src/hooks/use-url-state.ts', 'src/hooks/use-table-of-contents*', 'src/components/table-of-contents/**', 'src/lib/context-drawer.pure*', 'src/lib/context-link.pure*', 'src/lib/roving-focus.pure*', 'src/i18n/translation-strings*', 'src/lib/reading-line.pure*', 'src/lib/episode*', 'src/lib/routes*', 'src/lib/table-of-contents*', '.archgate/adrs/FE-010-context-drawer.rules.ts', 'src/app/globals.css', 'src/messages/*.json', 'tests/post-build/context-drawer.build.test.ts', 'tests/post-build/episode-structure.build.test.ts', '.dependency-cruiser.cjs', 'docs/agents/episode-translation-keys.md', 'docs/agents/context-drawer-design.md', 'GLOSSARY.md']
 description: 'The Context drawer: a non-modal floating card, side by side with or over the Slides, showing the current Slide Speaker notes and Voice script, both server-rendered into the page and printed in full, linked to the Slide by targets and context references, with the note and segment shapes typed as content and kept apart from design.'
 ---
 
@@ -22,7 +22,7 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 
 **Why `xl`.** Side by side takes a 17rem table of contents, the card and the Slides' column; below about 1280px the Slides get too narrow, so the card overlays them. The menu is hidden there and the stored mode kept; the card never needs JavaScript to know the width.
 
-**Why plain `[n]` markers.** A description is one catalog string, so a citation lives inside it. A bare `[1]` survives a translator, a handout and a reader without JavaScript; a pure function makes it a superscript button, checked against the note's sources. Rich-text tags would put markup in a catalog leaf.
+**Why plain `[n]` markers.** A description is one translated string, so a citation lives inside it. A bare `[1]` survives a translator, a handout and a reader without JavaScript; a pure function makes it a superscript button, checked against the note's sources. Rich-text tags would put markup in a Translation file leaf.
 
 **Why `ContextRef` is a button.** It names a note from inside Slide text, so the Slide reads in full without the drawer: an underlined phrase, no number (the only superscript is a citation marker). It is a button, not a link, because it acts on the drawer rather than navigating; the drawer listens by delegation, so the Slide stays a server component (FE-006).
 
@@ -66,7 +66,7 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 
 ### 6. Strings and links
 
-1. Catalog keys follow `docs/agents/episode-catalog-keys.md`; chrome under `contextDrawer.*`; en and de together.
+1. Translation keys follow `docs/agents/episode-translation-keys.md`; chrome under `contextDrawer.*`; en and de together.
 2. A source MUST be an `https` link (FE-003 §1.4) named as opening a new tab.
 
 ### 7. Card and modes
@@ -99,7 +99,7 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 4. **DON'T** render the drawer from an Episode file. (Decision 5)
 5. **DON'T** show a source as plain text, or open it without `rel="noopener noreferrer"`. (Decision 6)
 6. **DON'T** transition width, grid tracks or margins for the card. (Decision 7)
-7. **DON'T** read Episode, table-of-contents or catalog code from the drawer, or number a `ContextRef`. (Decision 4, Decision 8)
+7. **DON'T** read Episode, table-of-contents or Translation file code from the drawer, or number a `ContextRef`. (Decision 4, Decision 8)
 
 ## Consequences
 
@@ -127,13 +127,13 @@ The Speaker notes and Voice script of a Slide are the author's working text: wha
 
 **Enforcers, earliest first:**
 
-1. **Types** (`tsc`): note and segment types in `src/lib/context-drawer.pure.ts`; `de.json` typed against `en.json`. `tsc` does not check that a note or segment catalog key exists: the unit key-shape test and the post-build raw-key test do. The adapter is `src/components/episode/context-drawer-input.ts`, unit-tested in its `.pure` sibling.
-2. **Fast** (`npm run verify`): unit tests beside `src/lib/{context-drawer,context-link,roving-focus,episode}.pure.ts` and `src/i18n/catalog-strings.pure.ts`.
+1. **Types** (`tsc`): note and segment types in `src/lib/context-drawer.pure.ts`; `de.json` typed against `en.json`. `tsc` does not check that a note or segment Translation key exists: the unit key-shape test and the post-build raw-key test do. The adapter is `src/components/episode/context-drawer-input.ts`, unit-tested in its `.pure` sibling.
+2. **Fast** (`npm run verify`): unit tests beside `src/lib/{context-drawer,context-link,roving-focus,episode}.pure.ts` and `src/i18n/translation-strings.pure.ts`.
 3. **archgate:** `FE-010-context-drawer.rules.ts`, both rules at `error`: `print-reveals-context` over `src/app/globals.css`, `drawer-is-non-modal` over `src/components/context-drawer/**`. §1, §2.
 4. **dependency-cruiser** (`.dependency-cruiser.cjs`): `context-drawer-reached-only-from-container`, `context-drawer-takes-input-only` (drawer, hooks and lib import no Episode, table-of-contents, route or `next-intl` code). §5, §8.
 5. **Post-build** (`npm run test:build`): `tests/post-build/context-drawer.build.test.ts` checks the slot, notes in static HTML, no `hidden` attribute, resolving targets (incl. every `ContextRef` id), locale parity, numbered sources as links, citation markers and the print block; `tests/post-build/episode-structure.build.test.ts` keeps the slot order. §2, §5, §8.
 
-**Manual review duties:** the card's placement, motion and one-step layout at 1440px, 1100px and 375px; the head row at 360px; the pills' fit at 375px; `ContextRef` hover, focus and click; the mode menu with a keyboard; German copy quality; `Alt+N` on real screen readers; a real print preview; focus return; no design field in the note shape; catalog key shape (`docs/agents/episode-catalog-keys.md`, `GLOSSARY.md`).
+**Manual review duties:** the card's placement, motion and one-step layout at 1440px, 1100px and 375px; the head row at 360px; the pills' fit at 375px; `ContextRef` hover, focus and click; the mode menu with a keyboard; German copy quality; `Alt+N` on real screen readers; a real print preview; focus return; no design field in the note shape; Translation key shape (`docs/agents/episode-translation-keys.md`, `GLOSSARY.md`).
 
 **Exceptions:** raise a separate ADR; human approval required.
 

@@ -1,5 +1,5 @@
 import type { ContextDrawerInput } from '@/components/context-drawer/context-drawer-input';
-import { readCatalogStrings } from '@/i18n/catalog-strings';
+import { readTranslationStrings } from '@/i18n/translation-strings';
 import { SHORTCUT_LABEL } from '@/lib/context-drawer.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { getTranslations } from 'next-intl/server';
@@ -8,7 +8,7 @@ import type { PlacedEpisodeSection } from './episode-page-container.pure';
 
 /*
  * THE SEAM, with `context-drawer-input.pure.ts`: the one place the Context
- * drawer's translated chrome is read from the catalog and an Episode record is
+ * drawer's translated chrome is read from the Translation file and an Episode record is
  * turned into `ContextDrawerInput`. Replaced by the Slide-registration contract.
  */
 
@@ -27,7 +27,7 @@ export async function contextDrawerInput(
   return {
     items: contextItemsOf(placed, explainer),
     labels: {
-      strings: await readCatalogStrings(locale, 'contextDrawer', NOT_DRAWER_STRINGS),
+      strings: await readTranslationStrings(locale, 'contextDrawer', NOT_DRAWER_STRINGS),
       sources: (count) => t('sourcesCount', { count }),
       citation: (number) => t('citation', { number }),
     },

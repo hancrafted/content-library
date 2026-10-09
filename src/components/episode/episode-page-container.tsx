@@ -1,6 +1,6 @@
 import { ContextDrawerSlot } from '@/components/context-drawer/context-drawer-slot';
 import { TableOfContents, type TocLabels } from '@/components/table-of-contents/table-of-contents.client';
-import { readCatalogStrings } from '@/i18n/catalog-strings';
+import { readTranslationStrings } from '@/i18n/translation-strings';
 import { slidesInPageOrder, slidesOf, titleAnchor } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { episodeRoute, type EpisodeSlug } from '@/lib/routes';
@@ -86,8 +86,8 @@ export async function EpisodePageContainer({ locale, episode }: { locale: Locale
   const placed = slidesOf(sections);
   const ids = [titleAnchor(), ...slidesInPageOrder(placed).map(({ id }) => id)];
   const youtubeId = episode.youtube?.[locale];
-  const talkLabels = youtubeId ? await readCatalogStrings(locale, 'talkPlayer') : undefined;
-  const tocLabels = await readCatalogStrings(locale, 'tableOfContents');
+  const talkLabels = youtubeId ? await readTranslationStrings(locale, 'talkPlayer') : undefined;
+  const tocLabels = await readTranslationStrings(locale, 'tableOfContents');
   const drawer = await contextDrawerInput(locale, placed);
   return (
     <UrlStateProvider key={`${locale}/${episode.slug}`}>
