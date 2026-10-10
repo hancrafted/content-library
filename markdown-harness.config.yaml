@@ -19,3 +19,10 @@ frontmatter:
           presence: required
           allowed:
             - { value: agent-guide, intent: Method and procedure that does not depend on the product. }
+    - ruleId: glossary
+      fileNames: [GLOSSARY.md]
+      intent: 'The glossary holds the words spoken in voice sessions, so it carries a review date and an agent past it re-checks the terms'
+      assess:
+        stale: Check each term against the code and ADRs before relying on it, then move stale_after.
+      fields:
+        stale_after: { presence: required, format: datetime }
