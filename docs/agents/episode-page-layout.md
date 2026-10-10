@@ -1,3 +1,7 @@
+---
+type: agent-guide
+---
+
 # Episode page layout
 
 Read before changing where things sit on an Episode page. Binding rules live in FE-002; this page holds layout detail that doesn't need to bind.
