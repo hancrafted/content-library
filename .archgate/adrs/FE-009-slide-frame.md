@@ -29,16 +29,20 @@ An Episode stacks many Slides, some heavy (charts, looping demos). Navigation ne
 
 **Insets.** The container sets `--inset-l` and `--inset-r`. Below `md`: `1rem` and `1rem`. From `md`, left is the table of contents' width plus its gap (`21rem`); right is `3rem`, or `--drawer-width` plus `4rem` when the drawer is beside and open (beside applies from `xl`; below it the drawer overlays). Insets never transition (FE-010 §7).
 
+**Backdrop contract.** `SlideBackdrop` covers the wrapper's padding box at `-z-10`, with `overflow: hidden`, `pointer-events: none` and `aria-hidden`. It is hidden below `md` unless `mobile`, hidden in print, and sits inside the mount, so far content drops it. Parallax shows its resting state under reduced motion. A Foreground element MAY break out to the full width with negative inset margins, explicitly.
+
 **Ladder, lowest to highest:**
 
-| Layer                                                  | z    |
-| ------------------------------------------------------ | ---- |
-| Backdrop (inside the `isolate` wrapper)                | -10  |
-| Foreground                                             | auto |
-| Chrome: table of contents, talk player, drawer trigger | 40   |
-| Episode portal root (popovers), site header            | 50   |
-| Scrim                                                  | 60   |
-| Context drawer card, sheets and modals                 | 70   |
+| Layer                                                                                     | z    |
+| ----------------------------------------------------------------------------------------- | ---- |
+| Backdrop (inside the `isolate` wrapper)                                                   | -10  |
+| Foreground                                                                                | auto |
+| Chrome from `md`: table of contents, drawer card (non-modal), talk player, drawer trigger | 40   |
+| Episode portal root (popovers), site header                                               | 50   |
+| Scrim (below `md`)                                                                        | 60   |
+| Drawer card below `md`, sheets                                                            | 70   |
+
+The card stays at 40 from `md` so a popover on the portal root (50) still shows above it. Modals are native `<dialog>`s in the top layer and take no z-index.
 
 A new layer picks a rung here. The `isolate` wrapper would trap a popover under the chrome, hence the portal root.
 
@@ -48,45 +52,43 @@ A new layer picks a rung here. The `isolate` wrapper would trap a popover under 
 
 ### 1. The split
 
-1. The Slide wrapper MUST own a Slide's mechanics: anchor, width, height, mount, stacking, zone.
+1. The Slide wrapper MUST own a Slide's mechanics: anchor, width, min-height, mount boundary, stacking, zone.
 2. The Scene MUST stay ungoverned beyond §7.
 
 ### 2. Content area
 
-1. Slides MUST render inside one Content area: a single-column grid spanning the viewport, one cell per Slide wrapper.
-2. It MUST own rhythm and the insets: `--inset-l` and `--inset-r` as inline padding on every wrapper, in one step. A wrapper MUST NOT declare margins, gaps or padding.
-3. Grouping elements between Content area and wrapper MUST use `display: contents`.
+1. Slides MUST render inside one Content area: a full-width single-column grid, one cell per Slide wrapper.
+2. It MUST own vertical rhythm and the insets (`--inset-l` and `--inset-r` as one-step wrapper padding; see Context); a wrapper MUST NOT declare margins, gaps or padding.
+3. Grouping elements between Content area and wrapper (the Section `<section>`) MUST use `display: contents`.
 4. It MUST host the Episode portal root.
-5. A Foreground element MAY break out via negative inset margins.
 
 ### 3. Slide wrapper
 
-1. `SlideWrapper` MUST be a server component the container renders from one record entry.
-2. It MUST be full width, at least viewport height, never clip (no `overflow`), and be `isolate`.
+1. `SlideWrapper` MUST be a server component rendered by the container from one record entry, taking the id its position gives it.
+2. It MUST be full width, at least viewport height, grow with its content, never clip — no `overflow: hidden | auto | scroll` — and be `isolate`.
 
 ### 4. SlideMount
 
-1. `SlideMount` MUST be a client leaf rendering its children only outside `far`, keeping the wrapper's height.
+1. `SlideMount` MUST be a client leaf inside the wrapper that renders its children only outside `far`, keeping the wrapper's height while unmounted.
 2. It MUST provide its Slide id to its subtree, so `useSlideZone()` reads that Slide's zone.
 
 ### 5. One observer
 
-1. The Slide observer MUST be the only code under `src/` creating an `IntersectionObserver`, besides the one-shot reveal hook.
-2. Its reading-line threshold decides `active` and reports the reading Slide; its approach threshold decides `near`.
-3. It MUST write zones to one page-level zone store.
+1. The Slide observer MUST be the only code under `src/` creating an `IntersectionObserver`, besides the one-shot reveal hook; the Title slide's id (`top`) leads its ids.
+2. Its reading-line threshold decides `active` and reports the reading Slide to the page service; its approach threshold decides `near` and touches nothing else.
+3. It MUST write zones to one page-level zone store, so a new Episode starts fresh.
 
 ### 6. Good citizen
 
-1. A looping island MUST pause outside `active` (`useSlideZone()`); in a Backdrop also while it is hidden or under `prefers-reduced-motion`, where parallax MUST rest.
+1. A looping island MUST pause outside `active`, reading `useSlideZone()`, and in a Backdrop also while hidden or under reduced motion. One-shot entrance animations are exempt.
 
 ### 7. Backdrop
 
-1. A Slide MAY draw a Backdrop through `SlideBackdrop` (Slide master): `z-index: -10`, `overflow: hidden`, `pointer-events: none`, `aria-hidden`; hidden below `md` unless `mobile`, hidden in print, inside the mount.
-2. It MUST be decoration only.
+1. A Backdrop MUST use `SlideBackdrop`, decoration only.
 
 ### 8. Stacking ladder
 
-1. Every layer MUST use its rung (Context). Scene popovers MUST render into the Episode portal root.
+1. Layers MUST follow the ladder; popovers MUST use the portal root.
 
 ## Do's and Don'ts
 

@@ -67,3 +67,13 @@ export function tocSectionsOf(placed: readonly PlacedEpisodeSection[]): TocSecti
     return { ...entry, items };
   });
 }
+
+/*
+ * The Foreground's insets (FE-009 §2), the only width mechanism: every Slide wrapper pads itself with these two
+ * variables. Below `md` a small even margin. From `md` the left inset clears the fixed table of contents
+ * (1rem + 17rem + 3rem) and the right keeps 3rem; from `xl`, while the drawer sits beside and open, the attribute
+ * `DRAWER_BESIDE_ATTR` widens the right inset past the card. Tailwind reads the class written out, so a test ties
+ * the attribute name to the one the drawer sets.
+ */
+export const INSET_CLASSES =
+  '[--inset-l:1rem] [--inset-r:1rem] md:[--inset-l:21rem] md:[--inset-r:3rem] xl:data-[drawer-beside=true]:[--inset-r:calc(var(--drawer-width)+4rem)]';
