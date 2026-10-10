@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { DRAWER_BESIDE_ATTR } from '../../lib/context-drawer.pure';
-import { TALK_DOCKED_ATTR } from '../../lib/talk-dock.pure';
+import { TALK_DOCKED_ATTR, tocReserveRem } from '../../lib/talk-dock.pure';
 import {
   INSET_CLASSES,
   TOC_RESERVE_CLASS,
@@ -207,7 +207,7 @@ describe('edge cases', () => {
 
   it('reserves the docked player height and a gap on the table of contents, from lg, on the attribute the player sets', () => {
     // ARRANGE
-    const expected = `lg:data-[${TALK_DOCKED_ATTR.replace('data-', '')}=true]:[--toc-reserve:12.5625rem]`;
+    const expected = `lg:data-[${TALK_DOCKED_ATTR.replace('data-', '')}=true]:[--toc-reserve:${tocReserveRem()}rem]`;
     // ACT
     const reserve = TOC_RESERVE_CLASS;
     // ASSERT: 2rem header + 17rem * 9/16 frame + 1rem gap
