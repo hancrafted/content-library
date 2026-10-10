@@ -14,6 +14,7 @@ import type { EpisodeCard } from './episode-card.pure';
 
 function card(slug: string, over: Partial<EpisodeCard> = {}): EpisodeCard {
   const published = over.status !== 'upcoming';
+  const topic = over.topic ?? { id: 'economics', label: 'Cost' };
   return {
     slug,
     route: published ? `/episode/${slug}` : null,
@@ -21,9 +22,10 @@ function card(slug: string, over: Partial<EpisodeCard> = {}): EpisodeCard {
     status: published ? 'published' : 'upcoming',
     title: `Title ${slug}`,
     caption: `Caption ${slug}`,
-    topic: { id: 'economics', label: 'Cost' },
+    topic,
+    topics: [topic],
     format: { id: 'foundations', label: 'Foundations' },
-    featuredRank: published ? 1 : null,
+    featuredRank: null,
     accent: 'amber',
     icon: 'coins',
     ...over,
@@ -31,9 +33,9 @@ function card(slug: string, over: Partial<EpisodeCard> = {}): EpisodeCard {
 }
 
 const MIXED: EpisodeCard[] = [
-  card('p1', { topic: { id: 'ai-collaboration', label: 'AI' } }),
-  card('p2', { topic: { id: 'documentation', label: 'Docs' } }),
-  card('p3'),
+  card('p1', { topic: { id: 'ai-collaboration', label: 'AI' }, featuredRank: 1 }),
+  card('p2', { topic: { id: 'documentation', label: 'Docs' }, featuredRank: 2 }),
+  card('p3', { featuredRank: 3 }),
   card('u1', {
     status: 'upcoming',
     topic: { id: 'ai-collaboration', label: 'AI' },
@@ -118,6 +120,37 @@ describe('success cases', () => {
     expect(choices).toEqual(expected);
   });
 
+  it('follows the Featured rank, not the order of the cards it is given', () => {
+    // ARRANGE
+    const shuffled = [MIXED[2]!, MIXED[3]!, MIXED[0]!, MIXED[1]!];
+    const expected = { lead: 'p1', side: ['p2', 'p3'] };
+    // ACT
+    const { lead, side } = spotlightOf(shuffled);
+    // ASSERT
+    expect({ lead: lead?.slug, side: slugs(side) }).toEqual(expected);
+  });
+
+  it('finds an Episode under each Topic it appears in, and counts it under each', () => {
+    // ARRANGE
+    const docs = { id: 'documentation', label: 'Docs' } as const;
+    const adoption = { id: 'adoption', label: 'Change' } as const;
+    const overlapping = [...MIXED, card('x', { topic: docs, topics: [docs, adoption] })];
+    const selection: BrowseSelection = { ...INITIAL_SELECTION, topic: 'adoption' };
+    const expectedVisible = ['x'];
+    const expectedCounts = [
+      { id: 'ai-collaboration', label: 'AI', count: 2 },
+      { id: 'documentation', label: 'Docs', count: 2 },
+      { id: 'economics', label: 'Cost', count: 2 },
+      { id: 'adoption', label: 'Change', count: 1 },
+    ];
+    // ACT
+    const view = browseView(overlapping, selection, 9);
+    const { options } = topicChoices(overlapping, INITIAL_SELECTION);
+    // ASSERT
+    expect([...view.visible]).toEqual(expectedVisible);
+    expect(options).toEqual(expectedCounts);
+  });
+
   it('words the result count for none, one and many', () => {
     // ARRANGE
     const labels = { none: 'No Episodes', one: 'One Episode', other: '{count} Episodes' };
@@ -137,6 +170,16 @@ describe('failure cases', () => {
     const { lead, side } = spotlightOf(upcomingOnly);
     // ASSERT
     expect({ lead, side }).toEqual({ lead: null, side: [] });
+  });
+
+  it('never spotlights a published card that holds no Featured slot', () => {
+    // ARRANGE
+    const unranked = [card('loose'), ...MIXED];
+    const expected = { lead: 'p1', side: ['p2', 'p3'] };
+    // ACT
+    const { lead, side } = spotlightOf(unranked);
+    // ASSERT
+    expect({ lead: lead?.slug, side: slugs(side) }).toEqual(expected);
   });
 
   it('shows nothing and reports no match when the selection fits no card', () => {

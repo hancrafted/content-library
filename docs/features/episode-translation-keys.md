@@ -1,6 +1,6 @@
 ---
 type: feature-guide
-stale_after: 2027-01-10T00:00:00Z
+stale_after: 2027-01-11T00:00:00Z
 ---
 
 # Episode translation keys
@@ -87,11 +87,19 @@ episodes.page-template.slides.what-comes-next.statement                  untitle
 
 ## Episode overview entries
 
-The Episode overview on the landing page reads its data from `src/lib/episode-index.json` (ids, dates and ranks, no strings; #40 replaces it). An entry reads its text from:
+Each Episode declares its own overview metadata in `episodes/<slug>/episode-metadata.ts`: status, primary Topic, extra Topics, Format, Tags and, once published, its publish date. It holds ids only, no strings. `listEpisodes()` in `src/components/episodes/episode-repository.ts` collects every Episode's metadata, and the landing page reads only that. The central lists live in `src/lib/episode-overview.ts`:
+
+- `TOPICS`: the curated Topics, each with the icon and accent that every Episode whose primary Topic it is takes.
+- `FORMATS`: the closed list of Formats.
+- `FEATURED`: exactly three published slugs, lead first.
+
+An entry reads its text from:
 
 - A published Episode: `episodes.<slug>.title` and `episodes.<slug>.caption`, the keys its own page already uses.
-- An upcoming Episode: `landing.episodeIndex.upcoming.<slug>.title` and `.caption`. Move them to `episodes.<slug>.*` when it is published.
-- Every Episode: `landing.episodeIndex.topics.<topic>` and `landing.episodeIndex.formats.<format>`, one per id in `src/lib/episode-index.pure.ts`.
-- Entry chrome: `landing.episodeIndex.open` and `landing.episodeIndex.comingSoon`.
+- An Upcoming Episode: `landing.episodeOverview.upcoming.<slug>.title` and `.caption`. Move them to `episodes.<slug>.*` when it is published.
+- Every Episode: `landing.episodeOverview.topics.<topic>` and `landing.episodeOverview.formats.<format>`, one per id in `TOPICS` and `FORMATS`.
+- Entry chrome: `landing.episodeOverview.open` and `landing.episodeOverview.comingSoon`.
+
+To announce an Upcoming Episode, create `episodes/<slug>/` holding only `episode-metadata.ts` with `status: 'upcoming'`, add it to `UPCOMING` in the repository, and write its two `upcoming` keys in en and de.
 
 `page-template` is the layout reference, not content: it is not in the Episode overview, and the landing page links to it separately.

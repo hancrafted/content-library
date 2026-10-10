@@ -55,7 +55,7 @@
     },
     "episodesSectionTitle": "Available Episodes",
     "episodesSectionSubtitle": "Browse the interactive slide decks and visualised essays.",
-    "episodeIndex": {
+    "episodeOverview": {
       "open": "Open Episode",
       "comingSoon": "Coming soon",
       "minutesUnit": "min read",

@@ -13,9 +13,9 @@ type LandingT = Awaited<ReturnType<typeof getTranslations<'landing'>>>;
 
 function cardLabels(t: LandingT): CardLabels {
   return {
-    open: t('episodeIndex.open'),
-    comingSoon: t('episodeIndex.comingSoon'),
-    minutesUnit: t('episodeIndex.minutesUnit'),
+    open: t('episodeOverview.open'),
+    comingSoon: t('episodeOverview.comingSoon'),
+    minutesUnit: t('episodeOverview.minutesUnit'),
   };
 }
 
@@ -23,18 +23,18 @@ function cardLabels(t: LandingT): CardLabels {
 function browseLabels(t: LandingT): BrowseLabels {
   return {
     ...cardLabels(t),
-    topicFilter: t('episodeIndex.topicFilter'),
-    formatFilter: t('episodeIndex.formatFilter'),
-    all: t('episodeIndex.all'),
-    showAll: t.raw('episodeIndex.showAll') as string,
-    showFewer: t('episodeIndex.showFewer'),
+    topicFilter: t('episodeOverview.topicFilter'),
+    formatFilter: t('episodeOverview.formatFilter'),
+    all: t('episodeOverview.all'),
+    showAll: t.raw('episodeOverview.showAll') as string,
+    showFewer: t('episodeOverview.showFewer'),
     results: {
-      none: t('episodeIndex.results.none'),
-      one: t('episodeIndex.results.one'),
-      other: t.raw('episodeIndex.results.other') as string,
+      none: t('episodeOverview.results.none'),
+      one: t('episodeOverview.results.one'),
+      other: t.raw('episodeOverview.results.other') as string,
     },
-    empty: t('episodeIndex.empty'),
-    reset: t('episodeIndex.reset'),
+    empty: t('episodeOverview.empty'),
+    reset: t('episodeOverview.reset'),
   };
 }
 
@@ -57,7 +57,7 @@ function PartHeading({ children }: { children: string }) {
   );
 }
 
-/** The layout reference is not content, so it sits outside the index: a plain link under the cards. */
+/** The layout reference is not content, so it sits outside the Episode overview: a plain link under the cards. */
 function TemplateLink({ locale, t }: { locale: Locale; t: LandingT }) {
   return (
     <Link
@@ -84,11 +84,11 @@ export async function EpisodesSection({ locale }: { locale: Locale }) {
       <div className="mx-auto max-w-6xl space-y-16 px-6 py-24 sm:py-32">
         <EpisodesHeader title={t('episodesSectionTitle')} subtitle={t('episodesSectionSubtitle')} />
         <div>
-          <PartHeading>{t('episodeIndex.spotlightTitle')}</PartHeading>
+          <PartHeading>{t('episodeOverview.spotlightTitle')}</PartHeading>
           <EpisodeSpotlight cards={cards} locale={locale} labels={cardLabels(t)} />
         </div>
         <div>
-          <PartHeading>{t('episodeIndex.browseTitle')}</PartHeading>
+          <PartHeading>{t('episodeOverview.browseTitle')}</PartHeading>
           <EpisodeBrowse cards={cards} locale={locale} labels={browseLabels(t)} />
         </div>
         <TemplateLink locale={locale} t={t} />

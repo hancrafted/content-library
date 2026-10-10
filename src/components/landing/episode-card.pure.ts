@@ -1,11 +1,5 @@
-import {
-  type Accent,
-  type EpisodeIcon,
-  type EpisodeIndexEntry,
-  type EpisodeStatus,
-  type FormatId,
-  type TopicId,
-} from '@/lib/episode-index.pure';
+import { topicsOf, type EpisodeMetadata, type EpisodeStatus } from '@/lib/episode-metadata.pure';
+import { TOPICS, type Accent, type FormatId, type TopicIcon, type TopicId } from '@/lib/episode-overview';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { episodeRoute } from '@/lib/routes';
 
@@ -16,9 +10,10 @@ export interface Labelled<Id extends string> {
 }
 
 /**
- * One Episode as a landing design draws it: the index entry with its strings
- * read in one locale. Plain values only, so a Server Component can hand it to a
- * `*.client.tsx` leaf (FE-006 §4).
+ * One Episode as a landing design draws it: the Episode's metadata with its
+ * strings read in one locale and its look taken from its primary Topic. Plain
+ * values only, so a Server Component can hand it to a `*.client.tsx` leaf
+ * (FE-006 §4).
  */
 export interface EpisodeCard {
   readonly slug: string;
@@ -33,15 +28,18 @@ export interface EpisodeCard {
   readonly status: EpisodeStatus;
   readonly title: string;
   readonly caption: string;
+  /** The primary Topic, which the card names and draws its look from. */
   readonly topic: Labelled<TopicId>;
+  /** Every Topic the Episode appears under, primary first: what a Topic filter matches. */
+  readonly topics: readonly Labelled<TopicId>[];
   readonly format: Labelled<FormatId>;
   /** Reading time in this locale; left off when the Episode's record was not read. */
   readonly minutes?: number;
   readonly publishedOn?: string;
-  /** Editorial order among published Episodes, 1 first; `null` for an upcoming one. */
+  /** Position in the Featured slots, 1 first; `null` for every other card. */
   readonly featuredRank: number | null;
   readonly accent: Accent;
-  readonly icon: EpisodeIcon;
+  readonly icon: TopicIcon;
 }
 
 /** Reads one Translation key by its full dotted path. */
@@ -51,36 +49,46 @@ export interface CardContext {
   readonly locale: Locale;
   readonly read: ReadKey;
   readonly minutes?: number;
+  /** The Episode's Featured slot, 1 first; left off when it is not Featured. */
+  readonly featuredRank?: number;
 }
 
-const INDEX_KEYS = 'landing.episodeIndex';
+const OVERVIEW_KEYS = 'landing.episodeOverview';
 
-function copyOf(entry: EpisodeIndexEntry, read: ReadKey): Pick<EpisodeCard, 'title' | 'caption'> {
-  const base = entry.status === 'published' ? `episodes.${entry.slug}` : `${INDEX_KEYS}.upcoming.${entry.slug}`;
+function copyOf(entry: EpisodeMetadata, read: ReadKey): Pick<EpisodeCard, 'title' | 'caption'> {
+  const base = entry.status === 'published' ? `episodes.${entry.slug}` : `${OVERVIEW_KEYS}.upcoming.${entry.slug}`;
   return { title: read(`${base}.title`), caption: read(`${base}.caption`) };
 }
 
-function publishedFields(entry: EpisodeIndexEntry, ctx: CardContext): Partial<EpisodeCard> {
+function publishedFields(entry: EpisodeMetadata, ctx: CardContext): Partial<EpisodeCard> {
   if (entry.status !== 'published') return {};
   const minutes = ctx.minutes === undefined ? {} : { minutes: ctx.minutes };
   const route = episodeRoute(entry.slug);
-  return { route, href: localizePath(route, ctx.locale), publishedOn: entry.publishedOn, ...minutes };
+  return {
+    route,
+    href: localizePath(route, ctx.locale),
+    publishedOn: entry.publishedOn,
+    featuredRank: ctx.featuredRank ?? null,
+    ...minutes,
+  };
 }
 
 /** Assembles one card; throws when a string it needs is missing, so the build fails rather than ships a blank. */
-export function episodeCard(entry: EpisodeIndexEntry, ctx: CardContext): EpisodeCard {
+export function episodeCard(entry: EpisodeMetadata, ctx: CardContext): EpisodeCard {
   const { read } = ctx;
+  const copy = copyOf(entry, read);
+  const topics = topicsOf(entry).map((id) => ({ id, label: read(`${OVERVIEW_KEYS}.topics.${id}`) }));
   return {
     slug: entry.slug,
     route: null,
     href: null,
     status: entry.status,
-    ...copyOf(entry, read),
-    topic: { id: entry.topic, label: read(`${INDEX_KEYS}.topics.${entry.topic}`) },
-    format: { id: entry.format, label: read(`${INDEX_KEYS}.formats.${entry.format}`) },
-    featuredRank: entry.status === 'published' ? entry.featuredRank : null,
-    accent: entry.accent,
-    icon: entry.icon,
+    ...copy,
+    topic: topics[0],
+    topics,
+    format: { id: entry.format, label: read(`${OVERVIEW_KEYS}.formats.${entry.format}`) },
+    featuredRank: null,
+    ...TOPICS[entry.topic],
     ...publishedFields(entry, ctx),
   };
 }
