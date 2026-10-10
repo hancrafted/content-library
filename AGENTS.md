@@ -52,4 +52,4 @@ Single-context: `GLOSSARY.md` at the root. When an engineering skill says "ADR",
 
 ### Claude Desktop project
 
-When you change a file listed in `.agents/skills/claude-project-context/assets/files.md`, run the `claude-project-context` skill and end your final report with the `Re-upload Claude Desktop:` paths it names.
+When you change a file listed in `.agents/skills/claude-project-context/assets/files.md`, run the `claude-project-context` skill and end your final report with the `Re-upload to Claude Desktop:` paths it names.

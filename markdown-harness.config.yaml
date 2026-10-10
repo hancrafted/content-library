@@ -4,7 +4,7 @@ frontmatter:
       folders: [docs/features/]
       intent: 'docs/features/ holds product reference that drifts from the code, so every guide declares itself a feature guide and carries a review date'
       assess:
-        stale: 'Check src/ and the ADRs before relying on it, then move stale_after.'
+        stale: 'Check this against src/ and the ADRs before relying on it, then move stale_after.'
       fields:
         type:
           presence: required

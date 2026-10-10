@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { parseList, planLinks } from './plan.pure.ts';
+import { expandEntries, parseList, planLinks } from './plan.pure.ts';
 
 describe('parseList', () => {
   it('reads backticked bullet entries and ignores prose', () => {
@@ -17,5 +17,19 @@ describe('planLinks', () => {
 
   it('fails when two files flatten to one name', () => {
     expect(() => planLinks(['docs/agents/domain.md', 'docs/features/domain.md'], 'out')).toThrow(/domain\.md/);
+  });
+});
+
+describe('expandEntries', () => {
+  it('concatenates each entry\'s matches in list order', () => {
+    const matches: Record<string, string[]> = { 'AGENTS.md': ['AGENTS.md'], 'docs/adr/*.md': ['docs/adr/0001-a.md'] };
+    expect(expandEntries(['AGENTS.md', 'docs/adr/*.md'], (entry) => matches[entry] ?? [])).toEqual([
+      'AGENTS.md',
+      'docs/adr/0001-a.md',
+    ]);
+  });
+
+  it('fails when an entry matches no file, so a renamed doc never drops out silently', () => {
+    expect(() => expandEntries(['GLOSARY.md'], () => [])).toThrow(/GLOSARY\.md/);
   });
 });

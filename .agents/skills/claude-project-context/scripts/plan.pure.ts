@@ -15,6 +15,14 @@ export function parseList(markdown: string): string[] {
     .filter((entry) => entry !== '');
 }
 
+export function expandEntries(entries: string[], match: (entry: string) => string[]): string[] {
+  return entries.flatMap((entry) => {
+    const files = match(entry);
+    if (files.length === 0) throw new Error(`${entry} in assets/files.md matches no file`);
+    return files;
+  });
+}
+
 export function planLinks(files: string[], folder: string): Link[] {
   const owners = new Map<string, string>();
   for (const file of files) {

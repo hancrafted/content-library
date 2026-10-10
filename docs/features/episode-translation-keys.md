@@ -85,13 +85,13 @@ episodes.page-template.slides.what-comes-next.statement                  untitle
 - A `tsc` error from `t`, `ref` or `target` means the Translation file or the declaration is wrong; fix it, never cast ([FE-002 §3](../../.archgate/adrs/FE-002-episode-page.md#3-canvas-is-free)).
 - `src/components/episodes/page-template/` is the copy source for a new Episode; `src/components/episodes/slide-layouts/` shows each Slide layout.
 
-## Landing page cards
+## Episode overview entries
 
-The landing page lists Episodes from the Episode index (`src/lib/episode-index.json`), which holds ids, dates and ranks but no strings. A card reads its text from:
+The Episode overview on the landing page reads its data from `src/lib/episode-index.json` (ids, dates and ranks, no strings; #40 replaces it). An entry reads its text from:
 
 - A published Episode: `episodes.<slug>.title` and `episodes.<slug>.caption`, the keys its own page already uses.
 - An upcoming Episode: `landing.episodeIndex.upcoming.<slug>.title` and `.caption`. Move them to `episodes.<slug>.*` when it is published.
 - Every Episode: `landing.episodeIndex.topics.<topic>` and `landing.episodeIndex.formats.<format>`, one per id in `src/lib/episode-index.pure.ts`.
-- Card chrome: `landing.episodeIndex.open` and `landing.episodeIndex.comingSoon`.
+- Entry chrome: `landing.episodeIndex.open` and `landing.episodeIndex.comingSoon`.
 
-`page-template` is the layout reference, not content: it is not in the index, and the landing page links to it separately.
+`page-template` is the layout reference, not content: it is not in the Episode overview, and the landing page links to it separately.
