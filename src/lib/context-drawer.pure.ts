@@ -52,10 +52,13 @@ export interface KeyEventLike {
 export const DRAWER_TABS = ['notes', 'script'] as const;
 export type DrawerTab = (typeof DRAWER_TABS)[number];
 
-/** Whether the Episode grid keeps a column for the card, which changes at once rather than animating. */
-export function reservesSpace(mode: DrawerMode, open: boolean): boolean {
+/** Whether the card sits beside the Slides, widening the Foreground's right inset, which changes at once rather than animating. */
+export function sitsBeside(mode: DrawerMode, open: boolean): boolean {
   return open && mode === 'beside';
 }
+
+/** The attribute the drawer sets on the Episode page while its card sits beside the Slides; the page's right inset widens on it (FE-009 §2). */
+export const DRAWER_BESIDE_ATTR = 'data-drawer-beside';
 
 /** The drawer panel's element id; the trigger's `aria-controls` points at it. */
 export const DRAWER_PANEL_ID = 'context-panel';

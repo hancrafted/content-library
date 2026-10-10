@@ -51,7 +51,7 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 ### 5. Episode client files
 
 1. An Episode's `*.client.tsx` files MUST live in `episodes/<ep>/client/` — `'use client'` is allowed nowhere else in an Episode; its Slide files stay Server Components.
-2. An Episode's `canvas/` MUST stay server-only; a part needing the browser moves to `client/`.
+2. An Episode's `parts/` MUST stay server-only; a part needing the browser moves to `client/`.
 
 ## Do's and Don'ts
 
@@ -73,7 +73,7 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 3. **DON'T** name a `.ts` file `*.client.ts` or stack the suffix (`x.client.pure.tsx`). (Decision 2)
 4. **DON'T** import a hook or `src/lib/prefs-storage.ts` from a Server Component, or import `src/app/**` from a client leaf. (Decision 3)
 5. **DON'T** pass a function, class instance or unregistered symbol as a prop to a `*.client.tsx` component. (Decision 4)
-6. **DON'T** put `'use client'` in a Slide file, a `canvas/` part or an Episode file. (Decision 5)
+6. **DON'T** put `'use client'` in a Slide file, a `parts/` part or an Episode file. (Decision 5)
 
 ## Consequences
 
@@ -102,7 +102,7 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 - §2.1: ESLint core `no-restricted-syntax`, selector `Program > ExpressionStatement[directive='use client']`, over `src/**/*.{ts,tsx}` ignoring `src/**/*.client.tsx`.
 - §2.2: ESLint core `no-restricted-syntax`, selector `Program:not(:has(> ExpressionStatement[directive='use client']))`, over `src/**/*.client.tsx`.
 - §2.3, §2.4 and so §1.3: `check-file/filename-naming-convention` in `eslint.config.mjs` — `src/app/**/*.{ts,tsx}` is `KEBAB_CASE`, `src/{components,hooks}/**/*.tsx` is `+([a-z0-9-])?(.client)`, `src/**/*.ts` is `!(*.client)`. §1.3 needs no own check: an app file cannot carry the suffix (§2.4), and an unsuffixed file cannot carry the directive (§2.1).
-- §5: `eslint.config.mjs` forbids the directive in Episode files except under `episodes/*/client/`, so `canvas/` included; `.dependency-cruiser.cjs` rule `episode-client-reach-only-hooks-and-lib` limits what a client widget reaches.
+- §5: `eslint.config.mjs` forbids the directive in Episode files except under `episodes/*/client/`, so `parts/` included; `.dependency-cruiser.cjs` rule `episode-client-reach-only-hooks-and-lib` limits what a client widget reaches.
 - §3: `.dependency-cruiser.cjs` rules `hooks-reached-only-from-client`, `client-never-imports-app` and `prefs-storage-reached-only-from-client`, `error` severity, run by `npm run lint:boundaries` (`depcruise src`) inside `npm run lint`, which `npm run verify` and CI run.
 
 **Measured on introduction** (probe files under `src/`, removed after): a directive in `probe-a.tsx`, a directiveless `probe-b.client.tsx`, a `src/app/probe/probe-c.client.tsx` and a `src/hooks/probe-d.client.ts` gave 5 errors, one per breach plus §2.1 on `probe-d`; a correct `probe-e.client.tsx` gave 0. Repo: 0 errors. dependency-cruiser with `tsPreCompilationDeps: true`: **77 dependencies cruised, 54 local, 12 type-only**; with `false`: 80 cruised, 49 local, 0 type-only, 15 injected `react/jsx-runtime`. A falling local count with a rising total is the failure signature.

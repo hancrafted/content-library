@@ -8,8 +8,8 @@ A floating card in the table of contents' chrome (corners, border, shadow), opaq
 
 ## Modes
 
-- **From `xl` (1280px):** a "more" menu in the head picks **beside** (default) or **over**. Beside reserves the card's width by changing the Episode grid's third column at once, through a spacer in the context slot, so the Slides reflow once. Width, grid and margin never transition. The mode is the `drawerMode` user preference (FE-001): read and written only through `readPrefs`/`writePrefs`, so it survives reloads; the drawer's open state and tab stay transient (FE-001).
-- **Below `xl`:** the card is always an overlay and the menu is hidden. The stored mode is kept, not reset, so widening the window restores it. This is decided by CSS alone (`xl:` classes on the spacer and the menu), never by a JavaScript width check.
+- **From `xl` (1280px):** a "more" menu in the head picks **beside** (default) or **over**. Beside widens the Foreground's right inset (`--inset-r`) at once, through a `data-drawer-beside` flag the drawer sets on the Episode page, so the Slides reflow once; the card itself is fixed and takes no layout space. Width, padding and margin never transition. The mode is the `drawerMode` user preference (FE-001): read and written only through `readPrefs`/`writePrefs`, so it survives reloads; the drawer's open state and tab stay transient (FE-001).
+- **Below `xl`:** the card is always an overlay and the menu is hidden. The stored mode is kept, not reset, so widening the window restores it. This is decided by CSS alone (`xl:` classes on the inset and the menu), never by a JavaScript width check.
 - **Below `md`:** a dimmed scrim (`bg-black/40`, backdrop blur) covers the page; tapping it closes the drawer. It is pointer-only: Escape and the close button still work.
 
 ## Head
@@ -30,7 +30,7 @@ Sticky. Row one: the tabs left, the menu and close right. The tabs may shrink an
 ## Linking a Slide and its notes
 
 - **Block target.** A note's `target` is a short name (`title`, `prose`, a column slug, or one the Slide marks with the kit's `target('chart')`); the element carries `data-target="<name>"`. The drawer looks it up inside the Slide's wrapper only, so two Slides may both say `prose`.
-- **Inline reference.** `ContextRef` (the kit's `ref('<note>')`) wraps a phrase inside Slide text and is never a target: it carries no `data-target`, so a note's `target` names a Canvas element (the prose block that holds the phrase, say), not the phrase. The reference finds its note by (Slide, note slug). In a translated string the phrase sits inside a `<ref>` rich-text tag.
+- **Inline reference.** `ContextRef` (the kit's `ref('<note>')`) wraps a phrase inside Slide text and is never a target: it carries no `data-target`, so a note's `target` names a Scene element (the prose block that holds the phrase, say), not the phrase. The reference finds its note by (Slide, note slug). In a translated string the phrase sits inside a `<ref>` rich-text tag.
 - **Behaviour.** Hovering or focusing a note, or a `ContextRef`, sets `data-context-active` on the other side; CSS tints the whole item (or Slide element) with `--highlight-target` at low opacity: no border, outline or ring, and it takes no space, so nothing shifts. Clicking a `ContextRef` opens the drawer on Notes at that note.
 - **Print.** A `ContextRef` prints as its plain phrase.
 

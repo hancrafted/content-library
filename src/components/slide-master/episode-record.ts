@@ -8,7 +8,7 @@ import type { ReactElement, ReactNode } from 'react';
 
 /*
  * The Episode record (FE-002): an Episode is static data that composes Slides;
- * each Slide declares its slug, notes and segments and renders its Canvas
+ * each Slide declares its slug, notes and segments and renders its Scene
  * from a kit; its minutes are counted from its Voice script's words. Types
  * and factories only. The walk lives in `src/lib/episode.pure.ts`; the kit
  * is built in `slide-kit.tsx`, by the container. Every string a Slide shows lives under its own Translation key,
@@ -75,8 +75,8 @@ export interface SourceSpec {
 
 /**
  * A Speaker note item as a Slide declares it. `target` is the short name of
- * the Canvas element it explains (`title`, `prose`, a column slug, or one the
- * Canvas marks with the kit's `target`); the drawer finds it inside the Slide
+ * the Scene element it explains (`title`, `prose`, a column slug, or one the
+ * Scene marks with the kit's `target`); the drawer finds it inside the Slide
  * (FE-010).
  */
 export interface NoteSpec<N extends string = string> {
@@ -142,7 +142,7 @@ export interface RuntimeKit {
   readonly Title: TitleComponent;
 }
 
-/** One Slide of an Episode record. Static data: its Canvas renders only when the container calls `content`. */
+/** One Slide of an Episode record. Static data: its Scene renders only when the container calls `content`. */
 export interface Slide<Ep extends RecordEpisodeSlug = RecordEpisodeSlug, S extends string = string> {
   readonly episode: Ep;
   readonly slug: S;

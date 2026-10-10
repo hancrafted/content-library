@@ -54,7 +54,7 @@ function useTocState(props: {
  * A reusable, page-agnostic table of contents. It knows only its entries
  * (with reading minutes), the data attribute its targets carry (value = entry
  * id = URL fragment), the route those fragments sit on, and pre-translated
- * labels. Sticky panel from `md`, pill-and-drawer below it.
+ * labels. Fixed panel from `md`, pill-and-drawer below it.
  */
 export function TableOfContents(props: {
   locale: Locale;
@@ -69,7 +69,7 @@ export function TableOfContents(props: {
   const panel = { view, sections: props.sections, labels: props.labels, time };
   return (
     <>
-      <TocPanel {...panel} testId="toc" className="sticky top-24 hidden max-h-[calc(100svh-7rem)] md:flex" />
+      <TocPanel {...panel} testId="toc" className="hidden max-h-[calc(100svh-7rem)] md:flex" />
       <TocDrawer
         labels={props.labels}
         where={view.revealed ? whereAt(props.sections, view.active) : null}

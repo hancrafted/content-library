@@ -3,12 +3,13 @@
 // them. Reads the files exactly as a visitor, a crawler or a print job gets them.
 
 import { load, type CheerioAPI } from 'cheerio';
-import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { LOCALES, localizePath } from '../../src/lib/locale.pure';
 import { EPISODE_SLUGS, episodeRoute } from '../../src/lib/routes';
 import { exportedFile, OUT_DIR } from './exported-pages';
+import { cssFiles, printBlocks } from './stylesheets';
 
 const PAGES = EPISODE_SLUGS.flatMap((slug) =>
   LOCALES.map((locale) => ({ slug, locale, url: localizePath(episodeRoute(slug), locale) })),
@@ -37,20 +38,6 @@ function entry($: CheerioAPI, panel: 'notes' | 'script', anchor: string) {
 /** The elements a note's short target names inside its own Slide: its scoped `data-target`. */
 function targetsOf($: CheerioAPI, owner: string, target: string) {
   return $(`[data-slot="slides"] [data-slide="${owner}"]`).find(`[data-target="${target}"]`);
-}
-
-function cssFiles(dir: string): string[] {
-  return readdirSync(dir).flatMap((name) => {
-    const path = join(dir, name);
-    if (statSync(path).isDirectory()) return cssFiles(path);
-    return name.endsWith('.css') ? [path] : [];
-  });
-}
-
-/** The text of each `@media print{...}` block, whitespace and quotes stripped. */
-function printBlocks(css: string): string[] {
-  const flat = css.replace(/\s+/g, '').replace(/["']/g, '');
-  return flat.split('@mediaprint{').slice(1);
 }
 
 describe.each(PAGES)('$url', ({ slug, url }) => {
@@ -153,7 +140,7 @@ describe.each(PAGES)('$url', ({ slug, url }) => {
 });
 
 describe.each(PAGES)('$url card', ({ url }) => {
-  it('keeps one trigger pill with the shortcut announced, a spacer for the grid and a scrim', () => {
+  it('keeps one trigger pill with the shortcut announced and a scrim, and no layout spacer', () => {
     // ARRANGE
     const $ = page(url);
     const shortcut = 'Alt+N';
@@ -161,20 +148,19 @@ describe.each(PAGES)('$url card', ({ url }) => {
     const slot = $('[data-slot="context"]');
     // ASSERT
     expect(slot.find('button[data-slot="context-trigger"]').attr('aria-keyshortcuts')).toBe(shortcut);
-    expect(slot.find('[data-slot="context-spacer"]')).toHaveLength(1);
+    expect($('[data-slot="context-spacer"]')).toHaveLength(0);
     expect(slot.find('[data-slot="context-scrim"]')).toHaveLength(1);
   });
 
-  it('closes the card with a transform and never lets the spacer or the Slides animate their width', () => {
+  it('closes the card with a transform and never lets the Slides animate their insets', () => {
     // ARRANGE
     const $ = page(url);
     // ACT
     const card = $('#context-panel').attr('class') ?? '';
-    const spacer = $('[data-slot="context-spacer"]').attr('class') ?? '';
     const grid = $('[data-slot="episode-page"]').attr('class') ?? '';
     // ASSERT
     expect(card).toContain('translateX');
-    expect(`${spacer} ${grid}`).not.toMatch(/transition/);
+    expect(grid).not.toMatch(/transition/);
   });
 
   it('keeps the tabs off transition-all, which would hold them hidden when focus enters on open', () => {
@@ -302,7 +288,7 @@ describe('page-template', () => {
 });
 
 describe('print stylesheet', () => {
-  it('reveals the context slot and hides the trigger, scrim and spacer inside @media print', () => {
+  it('reveals the context slot and hides the trigger and scrim inside @media print', () => {
     // ARRANGE
     const blocks = cssFiles(join(OUT_DIR, '_next', 'static')).flatMap((file) =>
       printBlocks(readFileSync(file, 'utf8')),
@@ -311,7 +297,7 @@ describe('print stylesheet', () => {
     const reveals = blocks.some((b) => b.includes('[data-slot=context]') && b.includes('display:block'));
     const hides = blocks.some((b) => b.includes('[data-slot=context-trigger]') && b.includes('display:none'));
     const hidesAll = blocks.some(
-      (b) => b.includes('[data-slot=context-scrim]') && b.includes('[data-slot=context-spacer]'),
+      (b) => b.includes('[data-slot=context-scrim]') && b.includes('[data-slot=context-trigger]'),
     );
     const opensSources = blocks.some(
       (b) => b.includes('details::details-content') && b.includes('content-visibility:visible'),

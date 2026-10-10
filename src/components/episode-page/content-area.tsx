@@ -22,7 +22,10 @@ export function ContentArea({ className, children, ...props }: ContentAreaProps)
       data-slot="slides"
       data-testid="episode-page"
       className={cn(
-        'grid min-w-0 grid-cols-1 pb-24 md:ml-12',
+        'grid min-w-0 grid-cols-1 pb-24',
+        // The insets are the only width mechanism (FE-009 §2): the container sets the variables, and every
+        // wrapper takes them as inline padding. No transition, so a drawer switch reflows once.
+        '[&_[data-slide]]:pl-(--inset-l) [&_[data-slide]]:pr-(--inset-r)',
         // Rhythm: a rule under every Slide wrapper. Sections between the grid
         // and a wrapper are `display: contents`, so the rule targets the
         // wrappers, not the grid's direct children.

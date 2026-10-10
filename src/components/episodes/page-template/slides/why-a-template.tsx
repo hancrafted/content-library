@@ -4,7 +4,7 @@ import { SlideCaption, SlideFrame, SlideProse } from '@/components/slide-master/
 
 const slide = slidesFor('page-template');
 
-// Notes: `target` is the Canvas element a note explains. Mark it with the kit's `{...target('name')}`, as the spine and
+// Notes: `target` is the Scene element a note explains. Mark it with the kit's `{...target('name')}`, as the spine and
 // the prose below do; the kit's `<Title>` marks `title`, and a Slide layout such as BasicPageSlide marks its own.
 // Add `sources: [{ slug, url }]` to cite; its title goes under `notes.<note>.sources.<slug>.title`.
 // Reading time is counted from the Voice script's words (`speaking-time.pure.ts`): no minutes or spans to set.
