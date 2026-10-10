@@ -118,5 +118,10 @@ An Episode stacks many Slides, some heavy (charts, looping demos). Navigation ne
 
 ## References
 
-- [`GLOSSARY.md`](../../GLOSSARY.md) — Content area, Slide wrapper, Canvas, Zone.
 - [MDN IntersectionObserver `rootMargin`](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/rootMargin), [MDN `display: contents`](https://developer.mozilla.org/en-US/docs/Web/CSS/display#contents).
+
+### Terms
+
+**Content area**: the single-column grid that holds an Episode's Slide wrappers, owns the spacing between Slides and hosts the Episode's portal root.
+
+**Slide wrapper**: the server-rendered box around one Slide that holds its mechanics: anchor, at least viewport height, never clipping, and the mount that drops far content.
