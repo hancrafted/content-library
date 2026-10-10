@@ -3,6 +3,7 @@
 import { useContextDrawer } from '@/hooks/use-context-drawer';
 import { revealCitation } from '@/hooks/use-context-links';
 import {
+  DRAWER_BESIDE_ATTR,
   DRAWER_PANEL_ID,
   DRAWER_TABS,
   drawerIds,
@@ -149,8 +150,8 @@ function Card(props: { labels: DrawerStrings; drawer: Drawer; entries: readonly 
 function BesideFlag({ beside }: { beside: boolean }) {
   useEffect(() => {
     const page = document.querySelector('[data-slot="episode-page"]');
-    page?.setAttribute('data-drawer-beside', String(beside));
-    return () => page?.removeAttribute('data-drawer-beside');
+    page?.setAttribute(DRAWER_BESIDE_ATTR, String(beside));
+    return () => page?.removeAttribute(DRAWER_BESIDE_ATTR);
   }, [beside]);
   return null;
 }

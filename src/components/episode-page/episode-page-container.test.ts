@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import { DRAWER_BESIDE_ATTR } from '../../lib/context-drawer.pure';
 import {
+  INSET_CLASSES,
   tocSectionsOf,
   type EpisodeSection,
   type EpisodeSlide,
@@ -180,5 +182,24 @@ describe('edge cases', () => {
       // ASSERT
       expect(toc.items).toEqual(expected);
     });
+  });
+
+  it('widen the right inset on the very attribute the drawer sets when it sits beside the Slides', () => {
+    // ARRANGE
+    const attribute = DRAWER_BESIDE_ATTR;
+    // ACT
+    const classes = INSET_CLASSES.split(/\s+/);
+    // ASSERT: Tailwind needs the class written out, so the two sides are tied here
+    expect(classes.some((name) => name.startsWith(`xl:data-[${attribute.replace('data-', '')}=true]:`))).toBe(true);
+  });
+
+  it('set both inset variables for narrow screens and again from md', () => {
+    // ARRANGE
+    const classes = INSET_CLASSES.split(/\s+/);
+    // ACT
+    const names = classes.map((name) => /\[(--inset-[lr]):/.exec(name)?.[1]);
+    // ASSERT
+    expect(names.filter((name) => name === '--inset-l')).toHaveLength(2);
+    expect(names.filter((name) => name === '--inset-r')).toHaveLength(3);
   });
 });
