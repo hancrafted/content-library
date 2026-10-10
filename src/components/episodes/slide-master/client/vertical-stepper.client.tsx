@@ -33,8 +33,15 @@ function useStepper() {
   return { state, headers, toggle, onKeyDown };
 }
 
+interface StepperProps {
+  label: string;
+  items: Record<StepperStep, StepCopy>;
+  /** Each state in words (done, current, upcoming), announced after a step's title. */
+  states: Record<StepStatus, string>;
+}
+
 /** A numbered process on one spine: each step is a disclosure, one open at a time, and opening one makes it current. */
-export function VerticalStepper({ label, items }: { label: string; items: Record<StepperStep, StepCopy> }) {
+export function VerticalStepper({ label, items, states }: StepperProps) {
   const baseId = useId();
   const { state, headers, toggle, onKeyDown } = useStepper();
   return (
@@ -45,6 +52,7 @@ export function VerticalStepper({ label, items }: { label: string; items: Record
           index={index}
           copy={items[step]}
           status={stepStatus(index, state.current)}
+          stateLabel={states[stepStatus(index, state.current)]}
           open={state.open === index}
           id={`${baseId}-${step}`}
           headerRef={(node) => {
@@ -62,6 +70,8 @@ interface ItemProps {
   index: number;
   copy: StepCopy;
   status: StepStatus;
+  /** The step's state in words, for screen readers: the marker shows it only visually. */
+  stateLabel: string;
   open: boolean;
   id: string;
   headerRef: (node: HTMLButtonElement | null) => void;
@@ -69,7 +79,7 @@ interface ItemProps {
   onKeyDown: (event: KeyboardEvent) => void;
 }
 
-function StepperItem({ index, copy, status, open, id, headerRef, onToggle, onKeyDown }: ItemProps) {
+function StepperItem({ index, copy, status, stateLabel, open, id, headerRef, onToggle, onKeyDown }: ItemProps) {
   const last = index === STEPPER_STEPS.length - 1;
   return (
     <li
@@ -91,6 +101,7 @@ function StepperItem({ index, copy, status, open, id, headerRef, onToggle, onKey
         >
           <StepMarker index={index} status={status} />
           <StepHeading copy={copy} status={status} open={open} />
+          <span className="sr-only">, {stateLabel}</span>
         </button>
       </h4>
       <StepPanel id={id} open={open} caption={copy.caption} />

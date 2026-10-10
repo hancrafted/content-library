@@ -1640,6 +1640,11 @@
               "caption": "Messen, lernen und das Nächste entscheiden."
             }
           },
+          "states": {
+            "done": "erledigt",
+            "current": "aktuell",
+            "upcoming": "ausstehend"
+          },
           "notes": {
             "layout": {
               "header": "So liest man die Zeitleiste",

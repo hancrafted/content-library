@@ -1640,6 +1640,11 @@
               "caption": "Measure, learn and decide what is next."
             }
           },
+          "states": {
+            "done": "done",
+            "current": "current",
+            "upcoming": "upcoming"
+          },
           "notes": {
             "layout": {
               "header": "How to read the timeline",

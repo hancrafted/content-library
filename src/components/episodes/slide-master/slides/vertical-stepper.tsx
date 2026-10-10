@@ -15,6 +15,7 @@ export const verticalStepper = slide({
       <div {...target('timeline')} className="mt-10 md:mt-14">
         <VerticalStepper
           label={t('title')}
+          states={{ done: t('states.done'), current: t('states.current'), upcoming: t('states.upcoming') }}
           items={{
             a: { date: t('items.a.date'), title: t('items.a.title'), caption: t('items.a.caption') },
             b: { date: t('items.b.date'), title: t('items.b.title'), caption: t('items.b.caption') },
