@@ -12,6 +12,8 @@ export const EPISODE_SLUGS = [
   'ai-token-economy',
   // Unlisted: built and exported, linked from neither the landing page nor the header.
   'slide-layouts',
+  // A catalog of reusable Slide layouts, linked from the landing page beside the page template.
+  'slide-master',
 ] as const;
 
 export type EpisodeSlug = (typeof EPISODE_SLUGS)[number];

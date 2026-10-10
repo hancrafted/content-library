@@ -6,6 +6,7 @@ import { amnesiacFreelancer } from './amnesiac-freelancer/amnesiac-freelancer';
 import { maintainingMarkdownForAi } from './maintaining-markdown-for-ai/maintaining-markdown-for-ai';
 import { pageTemplate } from './page-template/page-template';
 import { slideLayouts } from './slide-layouts/slide-layouts';
+import { slideMaster } from './slide-master/slide-master';
 
 /**
  * Every Episode, by slug (FE-002). Typed against `EPISODE_SLUGS`, so a slug
@@ -18,6 +19,7 @@ const EPISODES: { readonly [S in EpisodeSlug]: AnyEpisodeRecord & { readonly slu
   'maintaining-markdown-for-ai': maintainingMarkdownForAi,
   'ai-token-economy': aiTokenEconomy,
   'slide-layouts': slideLayouts,
+  'slide-master': slideMaster,
 };
 
 export function findEpisode(slug: string): AnyEpisodeRecord {

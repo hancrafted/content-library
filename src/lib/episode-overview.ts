@@ -38,7 +38,11 @@ export const FORMATS = ['foundations', 'teardown', 'short'] as const;
 export type FormatId = (typeof FORMATS)[number];
 
 /** Registered Episodes that are layout references, not content: never in the overview. */
-export const LAYOUT_REFERENCES = ['page-template', 'slide-layouts'] as const satisfies readonly EpisodeSlug[];
+export const LAYOUT_REFERENCES = [
+  'page-template',
+  'slide-layouts',
+  'slide-master',
+] as const satisfies readonly EpisodeSlug[];
 
 /** A registered Episode the overview lists: every one but the layout references. */
 export type ListedEpisodeSlug = Exclude<EpisodeSlug, (typeof LAYOUT_REFERENCES)[number]>;

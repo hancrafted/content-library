@@ -241,6 +241,9 @@ describe('landing page post-build structure', () => {
       expect(pressed.length).toBe(2);
       expect($('#episodes [role="status"]').length).toBe(1);
       expect($('#episodes a[data-testid="landing-page-link"]').attr('href')).toBe(episodeHref('page-template', locale));
+      expect($('#episodes a[data-testid="landing-slide-master-link"]').attr('href')).toBe(
+        episodeHref('slide-master', locale),
+      );
       expect(order).toEqual(['spotlight', 'browse', 'template']);
     },
   );
