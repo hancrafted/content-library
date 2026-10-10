@@ -45,7 +45,7 @@ function TalkLauncherBadge() {
 }
 
 const LAUNCHER =
-  'group mt-8 flex w-full max-w-md items-center gap-3 rounded-2xl border border-border bg-card/95 px-4 py-3 text-left shadow-xs transition-all hover:border-secondary hover:bg-secondary/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary cursor-pointer';
+  'group mt-8 flex w-full max-w-md items-center gap-3 rounded-2xl border border-border bg-background/95 px-4 py-3 text-left shadow-xs transition-all hover:border-secondary hover:bg-secondary/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary cursor-pointer';
 
 interface LauncherProps {
   youtubeId: string;
@@ -77,10 +77,6 @@ function LauncherButton({ youtubeId, labels, hidden }: LauncherProps) {
   );
 }
 
-/**
- * The Title slide's launcher while the talk is closed; while it plays, the 16:9 talk slot takes its place.
- * Both stay in the static HTML (one hidden), so the slot is there for the player to follow once it opens.
- */
 /**
  * The Title slide's launcher while the talk is closed; while it plays, the 16:9 talk slot takes its place.
  * Both stay in the static HTML (one hidden), so the slot is there for the player to follow once it opens.
@@ -179,7 +175,7 @@ export function TalkPlayer({ youtubeId, labels }: { youtubeId?: string; labels: 
   const activeSlide = useActiveSlide();
   const [host, setHost] = useState<HTMLDivElement | null>(null);
   const docked = isOpen && shouldDock({ active: activeSlide, wide });
-  useTalkHostPlacement(host, slot, docked);
+  useTalkHostPlacement({ host, slot, docked });
   useDockedPageMark(docked);
   if (!isOpen || !youtubeId) return null;
   return (

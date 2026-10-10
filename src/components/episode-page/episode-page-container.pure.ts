@@ -2,7 +2,6 @@ import type { ReactNode } from 'react';
 import type { SpeakerNoteItem, VoiceScriptSegment } from '../../lib/context-drawer.pure';
 import type { PlacedSection } from '../../lib/episode.pure';
 import type { TocItem, TocSection } from '../../lib/table-of-contents.pure';
-import { TALK_DOCKED_ATTR, tocReserveRem } from '../../lib/talk-dock.pure';
 
 /*
  * The Episode record (FE-002): the typed structure an Episode page file hands
@@ -81,6 +80,6 @@ export const INSET_CLASSES =
 
 /**
  * While the talk player is docked bottom-left (from `lg`), the table of contents gives up that much height so the two
- * never overlap; the panel reads `--toc-reserve` and scrolls inside itself. The attribute is the one the player sets.
+ * never overlap; the panel reads `--toc-reserve` and scrolls inside itself. Written out literally for Tailwind; a unit test ties the attribute and the rem value to `talk-dock.pure`.
  */
-export const TOC_RESERVE_CLASS = `lg:data-[${TALK_DOCKED_ATTR.replace('data-', '')}=true]:[--toc-reserve:${tocReserveRem()}rem]`;
+export const TOC_RESERVE_CLASS = 'lg:data-[talk-docked=true]:[--toc-reserve:12.5625rem]';

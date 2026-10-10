@@ -371,3 +371,17 @@ describe('print stylesheet', () => {
     expect(hidesBackdrop).toBe(true);
   });
 });
+
+describe('talk player stylesheet', () => {
+  it('emits the rule that reserves the table of contents room while the player is docked', () => {
+    // ARRANGE
+    const css = cssFiles(join(OUT_DIR, '_next', 'static'))
+      .map((file) => readFileSync(file, 'utf8'))
+      .join('')
+      .replace(/\s+/g, '');
+    // ACT
+    const hasRule = /\[data-talk-docked=(["']?)true\1\][^{}]*\{[^}]*--toc-reserve:12\.5625rem/.test(css);
+    // ASSERT: Tailwind only emits a class it can read written out, so interpolating it would silently drop the rule
+    expect(hasRule).toBe(true);
+  });
+});
