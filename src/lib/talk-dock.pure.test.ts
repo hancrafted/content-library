@@ -34,7 +34,14 @@ describe('success cases', () => {
   it('lays the header over the strip above the slot and follows its width', () => {
     // ARRANGE
     const input = { docked: false, slot: SLOT };
-    const expected = { left: '0px', top: '0px', bottom: 'auto', width: '600px', translate: '300px 368px' };
+    const expected = {
+      position: 'absolute',
+      left: '0px',
+      top: '0px',
+      bottom: 'auto',
+      width: '600px',
+      translate: '300px 368px',
+    };
     // ACT
     const placement = placementOf(input);
     // ASSERT
@@ -44,11 +51,27 @@ describe('success cases', () => {
   it('docks to the bottom-left corner at the table of contents width', () => {
     // ARRANGE
     const input = { docked: true, slot: SLOT };
-    const expected = { left: '1rem', top: 'auto', bottom: '1rem', width: '17rem', translate: 'none' };
+    const expected = {
+      position: 'fixed',
+      left: '1rem',
+      top: 'auto',
+      bottom: '1rem',
+      width: '17rem',
+      translate: 'none',
+    };
     // ACT
     const placement = placementOf(input);
     // ASSERT
     expect(placement).toEqual(expected);
+  });
+
+  it('anchors the undocked host to the page, so the slot rect gains the scroll offset', () => {
+    // ARRANGE
+    const input = { docked: false, slot: SLOT, scroll: { x: 0, y: 1000 } };
+    // ACT
+    const placement = placementOf(input);
+    // ASSERT
+    expect([placement.position, placement.translate]).toEqual(['absolute', '300px 1368px']);
   });
 
   it('maps the new box back onto the old one with a translate and a uniform scale', () => {

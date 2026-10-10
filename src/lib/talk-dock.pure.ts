@@ -44,6 +44,8 @@ export function shouldDock({ active, wide }: { active: string | null; wide: bool
 }
 
 export interface Placement {
+  /** `absolute` against the page while undocked, so it scrolls with the content; `fixed` only when docked. */
+  readonly position: 'absolute' | 'fixed';
   readonly left: string;
   readonly top: string;
   readonly bottom: string;
@@ -53,13 +55,19 @@ export interface Placement {
 }
 
 /**
- * The host's inline position. Undocked it sits at the page origin and a translate carries it
- * to the slot, with the header in the strip above, so following a scroll only moves a
- * translate. Docked it takes the corner.
+ * The host's position. Undocked it is `absolute` against the page at the origin and a translate carries it to the
+ * slot's page coordinates (viewport rect plus scroll), header in the strip above, so it scrolls natively and never
+ * lags. Docked it is `fixed` in the corner.
  */
-export function placementOf({ docked, slot }: { docked: boolean; slot: Rect | null }): Placement {
+export function placementOf(input: {
+  docked: boolean;
+  slot: Rect | null;
+  scroll?: { x: number; y: number };
+}): Placement {
+  const { docked, slot, scroll = { x: 0, y: 0 } } = input;
   if (docked) {
     return {
+      position: 'fixed',
       left: `${DOCK_GAP_REM}rem`,
       top: 'auto',
       bottom: `${DOCK_GAP_REM}rem`,
@@ -68,8 +76,8 @@ export function placementOf({ docked, slot }: { docked: boolean; slot: Rect | nu
     };
   }
   const headerPx = HEADER_REM * PX_PER_REM;
-  const translate = slot ? `${slot.left}px ${slot.top - headerPx}px` : '0px -100vh';
-  return { left: '0px', top: '0px', bottom: 'auto', width: `${slot?.width ?? 0}px`, translate };
+  const translate = slot ? `${slot.left + scroll.x}px ${slot.top + scroll.y - headerPx}px` : '0px -100vh';
+  return { position: 'absolute', left: '0px', top: '0px', bottom: 'auto', width: `${slot?.width ?? 0}px`, translate };
 }
 
 /**
