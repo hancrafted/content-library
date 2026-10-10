@@ -9,6 +9,12 @@
     "contact": "Mit mir arbeiten",
     "newTab": "öffnet in einem neuen Tab"
   },
+  "social": {
+    "label": "Profile in sozialen Netzwerken",
+    "youtube": "YouTube",
+    "github": "GitHub",
+    "linkedin": "LinkedIn"
+  },
   "theme": {
     "label": "Farbschema",
     "light": "Hell",
@@ -118,7 +124,6 @@
         "name": "Han Che",
         "practice": "Engineering-Führung · Beratung · Coaching",
         "body": "Ich verbinde die wirtschaftliche, technische und menschliche Seite von Veränderung. Entwickler, Teamleiter und Trainer mit über 2.000 Stunden Coaching und Training.",
-        "link": "Mein Profil auf LinkedIn",
         "newTab": "neuer Tab"
       },
       "readingKey": "Je Fall: Ausgangslage → Beitrag → Ergebnis",
@@ -144,14 +149,17 @@
           "unit": "Monate bis zum selbstständigen Scrum",
           "before": {
             "title": "Ein Gatekeeper",
+            "caption": "Jede Entscheidung wartete auf eine Person.",
             "body": "Refinement, Schätzungen, Aufgabenverteilung und Reviews liefen bei einem Gatekeeper zusammen. Dem Team fehlte die Verantwortung, um eigenständig voranzukommen."
           },
           "intervention": {
             "title": "Gemeinsam entscheiden",
+            "caption": "Gemeinsame Planung, Kapazität, Peer Review.",
             "body": "Ich coachte gemeinsames Refinement und Schätzen, machte Kapazität sichtbar und baute Peer Review auf. Teammitglieder übernahmen Planung und eigene Scrum-Rituale."
           },
           "result": {
             "title": "Eigenständiges Team",
+            "caption": "Nach ca. 5 Monaten trug sich das Team selbst.",
             "body": "Nach ca. 5 Monaten lief der Scrum-Alltag weitgehend ohne meine Anwesenheit. Verteilte Verantwortung wurde zur täglichen Praxis."
           },
           "scope": "Rund fünf Monate Teamentwicklung. „Organisiert sich selbst“ bezieht sich auf den Teamalltag, nicht auf eine Organisation ohne Führung.",
@@ -167,14 +175,17 @@
           "unit": "Minuten weniger pro Meeting, im Schnitt",
           "before": {
             "title": "Gewachsene Freigabe",
+            "caption": "Gewünscht: der Excel-Ablauf als Software.",
             "body": "Die letzte Freigabe vor der Serienproduktion hing an einem gewachsenen Prozess. Der erste Wunsch: den bestehenden Excel-Ablauf nachbauen."
           },
           "intervention": {
             "title": "Prozess modellieren",
+            "caption": "Aus Terminen wurde ein Zustandsmodell.",
             "body": "Mit einem Architekturkollegen erarbeitete ich in Stakeholder-Terminen Zustandsdiagramme und ein relationales Datenmodell. Wir setzten einen Kernprozess durchgängig um."
           },
           "result": {
             "title": "Digital freigeben",
+            "caption": "Kernprozess-Demo, Meetings 30 Min. kürzer.",
             "body": "Die Kernprozess-Demo machte das Modell greifbar. Die Digitalisierung verkürzte Freigabemeetings zudem im Durchschnitt um 30 Minuten."
           },
           "scope": "6–8 Wochen gelten für die lauffähige Kernprozess-Demo. Der erste Release erfolgte nach 6 Monaten. Die 30 Minuten sind die durchschnittliche Meeting-Verkürzung, kein Demo-Benchmark.",
@@ -190,14 +201,17 @@
           "unit": "Werke in Europa",
           "before": {
             "title": "Daten im Werk",
+            "caption": "Aufträge sollten zu nutzbaren OEE-Daten werden.",
             "body": "Wie werden aus Produktionsaufträgen nutzbare Daten zur Anlageneffektivität? Dafür mussten Fertigungsprozesse und die Menschen an den Anlagen zusammengebracht werden."
           },
           "intervention": {
             "title": "Bauen und pilotieren",
+            "caption": "Web-, Mobil- und TV-Software, gebaut und betrieben.",
             "body": "Ich konzipierte, entwickelte und betrieb mit dem Team ein Manufacturing Execution System: Web-, Mobil- und TV-Oberflächen für Planung, Stammdaten und OEE."
           },
           "result": {
             "title": "Software im Einsatz",
+            "caption": "200+ Nutzer, 3 HEPA-Linien in 9 Monaten pilotiert.",
             "body": "Die Software erreichte insgesamt 200+ Nutzer. Ein abgegrenzter Pilot erfasste auftragsbezogene OEE-Daten an 3 HEPA-Linien in 2 Fabriken innerhalb von 9 Monaten."
           },
           "scope": "5 Fabriken und 200+ Nutzer bezeichnen den gesamten Einsatz laut Lebenslauf. Der Neunmonats-Meilenstein gilt für den Pilot mit 3 Linien in 2 Fabriken, nicht für den gesamten Rollout.",

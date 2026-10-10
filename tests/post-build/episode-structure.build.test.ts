@@ -278,13 +278,16 @@ describe('episode structure', () => {
 
     it('requests nothing from YouTube before the reader presses play', () => {
       // ARRANGE
-      const source = html(url);
       const youtube = /youtube(-nocookie)?\.com|youtu\.be/;
-      // ACT
-      const iframes = load(source)('iframe').length;
+      // ACT: a plain link (the header's channel link) requests nothing; embeds, sources and stylesheets do
+      const $page = load(html(url));
+      const iframes = $page('iframe').length;
+      const requested = $page('[src], link[href]')
+        .toArray()
+        .map((element) => [$page(element).attr('src'), $page(element).attr('href')].join(' '));
       // ASSERT
       expect(iframes).toBe(0);
-      expect(source).not.toMatch(youtube);
+      requested.forEach((reference) => expect(reference).not.toMatch(youtube));
     });
 
     it('carries the same slide anchors as the default locale', () => {

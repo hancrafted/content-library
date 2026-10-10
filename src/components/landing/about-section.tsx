@@ -2,6 +2,7 @@ import { AboutAnchor } from '@/components/landing/about-anchor.client';
 import caseStyles from '@/components/landing/fieldnote-case.module.css';
 import { FieldnoteSketch } from '@/components/landing/fieldnote-sketch';
 import styles from '@/components/landing/fieldnotes.module.css';
+import { SocialLinks } from '@/components/social-links';
 import { Button } from '@/components/ui/button';
 import type { Locale } from '@/lib/locale.pure';
 import { ArrowDown, ArrowUpRight, Plus } from 'lucide-react';
@@ -13,7 +14,7 @@ type CaseId = 'rib' | 'audi' | 'selfbits';
 const CASES = ['rib', 'audi', 'selfbits'] as const;
 const PHASES = ['before', 'intervention', 'result'] as const;
 
-function Identity({ t }: { t: AboutT }) {
+function Identity({ t, locale }: { t: AboutT; locale: Locale }) {
   return (
     <aside className={styles.identity} aria-label={t('identity.label')}>
       <span className={styles.monogram} aria-hidden="true">
@@ -24,17 +25,7 @@ function Identity({ t }: { t: AboutT }) {
         <p className={styles.practice}>{t('identity.practice')}</p>
       </div>
       <p className={styles.identityBody}>{t('identity.body')}</p>
-      <a
-        href="https://www.linkedin.com/in/han-che/"
-        target="_blank"
-        rel="noopener noreferrer"
-        className={styles.profileLink}
-      >
-        <span>
-          {t('identity.link')} <span className={styles.newTab}>({t('identity.newTab')})</span>
-        </span>
-        <ArrowUpRight size={18} aria-hidden="true" />
-      </a>
+      <SocialLinks locale={locale} className={styles.profileLinks} />
     </aside>
   );
 }
@@ -49,6 +40,7 @@ function CaseSequence({ id, t }: { id: CaseId; t: AboutT }) {
           </p>
           <FieldnoteSketch story={id} phase={phase} />
           <h4>{t(`cases.${id}.${phase}.title`)}</h4>
+          <p className={caseStyles.caption}>{t(`cases.${id}.${phase}.caption`)}</p>
         </li>
       ))}
     </ol>
@@ -116,7 +108,7 @@ function CaseNote({ id, index, t }: { id: CaseId; index: number; t: AboutT }) {
   );
 }
 
-function Introduction({ t }: { t: AboutT }) {
+function Introduction({ t, locale }: { t: AboutT; locale: Locale }) {
   return (
     <div className={styles.intro}>
       <header>
@@ -125,7 +117,7 @@ function Introduction({ t }: { t: AboutT }) {
         </h2>
         <p className={styles.lead}>{t('lead')}</p>
       </header>
-      <Identity t={t} />
+      <Identity t={t} locale={locale} />
     </div>
   );
 }
@@ -158,7 +150,7 @@ export async function AboutSection({ locale }: { locale: Locale }) {
           <p>{t('eyebrow')}</p>
           <span>{t('edition')}</span>
         </div>
-        <Introduction t={t} />
+        <Introduction t={t} locale={locale} />
         <div className={styles.readingKey}>
           <p>{t('readingKey')}</p>
           <span>{t('schematic')}</span>

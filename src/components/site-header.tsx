@@ -1,6 +1,7 @@
 import { LocaleToggle } from '@/components/locale-toggle.client';
 import { NavLink } from '@/components/nav-link.client';
 import { SiteBrand } from '@/components/site-brand';
+import { SocialLinks } from '@/components/social-links';
 import { ThemeToggle } from '@/components/theme-toggle.client';
 import { Button } from '@/components/ui/button';
 import { localizePath, type Locale } from '@/lib/locale.pure';
@@ -56,7 +57,8 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
           {t('nav.episodes')}
         </NavLink>
       </nav>
-      <div className="ml-auto flex items-center gap-3 max-sm:order-1">
+      <SocialLinks locale={locale} className="ml-auto max-sm:order-1" />
+      <div className="flex items-center gap-3 max-sm:order-2 max-sm:ml-auto">
         <ThemeToggle labels={themeLabels(t)} />
         <LocaleToggle locale={locale} label={t('locale.label')} />
       </div>

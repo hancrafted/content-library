@@ -9,6 +9,12 @@
     "contact": "Work with me",
     "newTab": "opens in a new tab"
   },
+  "social": {
+    "label": "Social profiles",
+    "youtube": "YouTube",
+    "github": "GitHub",
+    "linkedin": "LinkedIn"
+  },
   "theme": {
     "label": "Theme",
     "light": "Light",
@@ -118,7 +124,6 @@
         "name": "Han Che",
         "practice": "Engineering leader · Consultant · Coach",
         "body": "I connect the commercial, technical and human sides of change. Engineer, team lead and trainer, with 2,000+ hours of coaching and training.",
-        "link": "Meet me on LinkedIn",
         "newTab": "new tab"
       },
       "readingKey": "Read each case: before → intervention → result",
@@ -144,14 +149,17 @@
           "unit": "months to self-running Scrum",
           "before": {
             "title": "One gatekeeper",
+            "caption": "Every decision queued behind one person.",
             "body": "Refinement, estimates, assignments and reviews converged on one gatekeeper. The team had too little ownership to move independently."
           },
           "intervention": {
             "title": "Shared decisions",
+            "caption": "Shared planning, capacity and peer review.",
             "body": "I coached shared refinement and estimation, made capacity explicit and built peer review. Team members took responsibility for planning and their own Scrum rituals."
           },
           "result": {
             "title": "Independent team",
+            "caption": "The team ran its own Scrum in ~5 months.",
             "body": "In ~5 months, the team was running its own Scrum rituals with little need for me to be in the room. Distributed ownership became daily practice."
           },
           "scope": "About five months of team development. “Runs itself” refers to day-to-day team routines, not an organisation without leadership.",
@@ -167,14 +175,17 @@
           "unit": "minutes saved per meeting, on average",
           "before": {
             "title": "Legacy approval",
+            "caption": "Brief: rebuild the Excel approval flow.",
             "body": "The final approval before serial production depended on a legacy process. The starting request was to reproduce the existing Excel workflow."
           },
           "intervention": {
             "title": "Model the process",
+            "caption": "Stakeholder sessions became a state model.",
             "body": "With an architect colleague, I worked through stakeholder sessions, state diagrams and a relational data model. We built one core process end to end."
           },
           "result": {
             "title": "Digital sign-off",
+            "caption": "A core-process demo, meetings 30 min shorter.",
             "body": "The core-process demo made the model tangible. The digitisation effort also shortened approval meetings by an average of 30 minutes."
           },
           "scope": "6–8 weeks refers to the working core-process demo. The initial release took 6 months. The 30-minute figure is the average meeting reduction, not a demo benchmark.",
@@ -190,14 +201,17 @@
           "unit": "factories across Europe",
           "before": {
             "title": "Production data",
+            "caption": "Orders needed to become usable OEE data.",
             "body": "How can production orders become usable data about equipment effectiveness? The work needed to connect manufacturing processes with the people operating them."
           },
           "intervention": {
             "title": "Build and pilot",
+            "caption": "Web, mobile and TV software, built and run.",
             "body": "I designed, implemented and operated manufacturing execution software with the team: web, mobile and TV interfaces for scheduling, master data and OEE."
           },
           "result": {
             "title": "Software in use",
+            "caption": "200+ users, 3 HEPA lines piloted in 9 months.",
             "body": "The software served 200+ users across the total deployment. A defined pilot acquired order-based OEE data on 3 HEPA lines in 2 factories within 9 months."
           },
           "scope": "5 factories and 200+ users describe the total deployment in my CV. The nine-month milestone covers the 3-line, 2-factory pilot, not the full rollout.",
