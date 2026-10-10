@@ -1,30 +1,37 @@
 ---
 type: feature-guide
-stale_after: 2027-01-10T00:00:00Z
+stale_after: 2027-01-11T00:00:00Z
 ---
 
 # Episode chrome
 
 Read before changing the look, layout or interaction of what surrounds an Episode's Slides: the table of contents, the Context drawer, the video player and where each sits. Binding rules: [FE-010 Context Drawer](../../.archgate/adrs/FE-010-context-drawer.md) and [FE-002 Episode Page](../../.archgate/adrs/FE-002-episode-page.md). This guide holds the detail that does not bind.
 
+## Layers
+
+- The Chrome (table of contents, Context drawer, talk player) floats over the Slides and takes no layout space; each Slide gets the full viewport width. The Content area pads every wrapper with `--inset-l` and `--inset-r` ([FE-009 §2](../../.archgate/adrs/FE-009-slide-frame.md)), so the Foreground clears the Chrome while the Backdrop stays full-bleed.
+- Insets: `1rem` each side below `md`; from `md`, `21rem` left (the table of contents plus its gap) and `3rem` right, or the drawer width plus `4rem` while the drawer sits beside.
+- Full-bleed decoration goes in `SlideBackdrop`, content in `SlideFrame` (the Foreground). Z-index values come from the ladder in FE-009 §8; popovers render through the Episode portal root, modals as a native `<dialog>`.
+
 ## Corners
 
-- Top-right: video player (`fixed top-20 right-4`).
-- Bottom-left: table of contents pill, below `md` only; from `md` the table of contents is a sticky left column.
+- Top-right: the Context drawer card, never the video.
+- Bottom-left: the table of contents pill, below `md` only; from `lg`, the docked talk player (17rem wide, 1rem from the edges) under the table of contents.
 - Bottom-right: Context drawer trigger.
 - There is no back-to-top button.
 
 ## Table of contents
 
-- Sticky left column from `md`; below `md`, the pill opens it as a drawer sliding in from the left.
+- Fixed overlay on the left from `md`, taking no layout space; below `md`, the pill opens it as a drawer sliding in from the left.
+- While the talk player is docked, its max-height leaves the player room (`--toc-reserve`) and it scrolls inside itself.
 - The pill shows where the reader is, the current Slide's number and title, plus the remaining reading time.
 - The heading links to the Title slide (`#top`) and is current there. The Title slide has no entry, so nothing is highlighted on `top`.
 - It takes pre-translated props from the container.
 
 ## Reserved places
 
-- YouTube: one player per Episode and locale, on the Title slide, loaded on play, never with the page.
-- Arrow-key Slide navigation: planned (#33), not built. The container will own it; build neither it nor anything that assumes it exists.
+- YouTube: one player per Episode and locale, loaded on play, never with the page. It plays in a 16:9 talk slot in the Title slide's Foreground through one host that is never re-parented (re-parenting reloads the video). Undocked it is `absolute` at the slot's page coordinates, re-measured on resize, not on scroll, so it scrolls natively and cannot lag. From `lg` it docks, becoming `fixed`, when the active Slide leaves `top`; the glide between the two animates `transform` only, and is instant under `prefers-reduced-motion`. Docked it offers "Back to video" and Close; undocked, Close only. Below `lg` it never docks.
+- Arrow-key Slide navigation: ←/→ step to the previous or next Slide, without wrapping; ignored with a modifier and inside editable fields, tab/menu/listbox/slider/radio widgets, the drawer, open dialogs and iframes. ↑/↓ and PageUp/PageDown scroll natively. The URL follows through the observer, not the keys.
 
 ## Card
 
@@ -32,8 +39,8 @@ A floating card in the table of contents' chrome (corners, border, shadow), opaq
 
 ## Modes
 
-- **From `xl` (1280px):** a "more" menu in the head picks **beside** (default) or **over**. Beside reserves the card's width by changing the Episode grid's third column at once, through a spacer in the context slot, so the Slides reflow once. The mode is the `drawerMode` user preference, read and written only through `readPrefs`/`writePrefs` (FE-001).
-- **Below `xl`:** the card is always an overlay and the menu is hidden. The stored mode is kept, not reset, so widening the window restores it. CSS alone decides: the menu hides through `max-xl:hidden`, and only the spacer uses `xl:` classes.
+- **From `xl` (1280px):** a "more" menu in the head picks **beside** (default) or **over**. Beside widens the Foreground's right inset to clear the card at once, through `data-drawer-beside` on the Episode page, so the Slides reflow once while Backdrops keep the full width. The mode is the `drawerMode` user preference, read and written only through `readPrefs`/`writePrefs` (FE-001).
+- **Below `xl`:** the card is always an overlay and the menu is hidden. The stored mode is kept, not reset, so widening the window restores it. CSS alone decides: the menu hides through `max-xl:hidden`, and only the beside inset uses `xl:` classes.
 - **Below `md`:** a dimmed scrim (`bg-black/40`, backdrop blur) covers the page; tapping it closes the drawer. It is pointer-only: Escape and the close button still work.
 
 ## Head
