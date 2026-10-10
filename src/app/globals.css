@@ -30,7 +30,7 @@
   --ring: oklch(0.708 0 0);
   /* The outline between a note and the Slide element it explains: 3:1 against the surface, light and dark. */
   --highlight-target: oklch(0.5 0.19 260);
-  /* The Context drawer card's width, shared by the card and the grid spacer that makes room for it (FE-010 §7). */
+  /* The Context drawer card's width, shared by the card and the right inset that makes room for it beside the Slides (FE-010 §7). */
   --drawer-width: 26rem;
 }
 
@@ -140,7 +140,7 @@
   }
   [data-slot='context-trigger'],
   [data-slot='context-scrim'],
-  [data-slot='context-spacer'] {
+  [data-slot='slide-backdrop'] {
     display: none !important;
   }
 }

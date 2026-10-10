@@ -27,7 +27,7 @@ An Episode stacks many Slides, some heavy (charts, looping demos). Navigation ne
 
 **Unmount discards state, by choice:** a played animation replays on return; persisting it is a Scene concern.
 
-**Insets.** The container sets `--inset-l` and `--inset-r`. Below `md`: `1rem` and `1rem`. From `md`, left is the table of contents' width plus its gap (`21rem`); right is `3rem`, or `--drawer-width` plus `3rem` when the drawer is beside and open (beside applies from `xl`; below it the drawer overlays). Insets never transition (FE-010 §7).
+**Insets.** The container sets `--inset-l` and `--inset-r`. Below `md`: `1rem` and `1rem`. From `md`, left is the table of contents' width plus its gap (`21rem`); right is `3rem`, or `--drawer-width` plus `4rem` when the drawer is beside and open (beside applies from `xl`; below it the drawer overlays). Insets never transition (FE-010 §7).
 
 **Ladder, lowest to highest:**
 

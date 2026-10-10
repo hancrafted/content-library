@@ -8,14 +8,37 @@ interface PartProps {
 }
 
 /**
- * The Slide master: universals every Slide layout shares — the frame, spacing
- * and type scale. Slide layouts compose these parts; a one-off slide can use
+ * The Slide master: universals every Slide layout shares — the frame (the
+ * Foreground), the Backdrop, spacing and type scale. Slide layouts compose these parts; a one-off slide can use
  * them directly with any markup. Anchors and order belong to
  * `EpisodePageContainer`, not here.
  */
 export function SlideFrame({ className, children }: { className?: string; children: ReactNode }) {
   return (
     <article className={cn('flex min-h-[calc(100svh-8rem)] flex-col py-16 md:py-24', className)}>{children}</article>
+  );
+}
+
+/**
+ * The Backdrop (FE-009 §7): the Scene's full-bleed, decorative layer, behind the
+ * Foreground. It covers the Slide wrapper's padding box, so it reaches both
+ * viewport edges whatever the insets; it clips only its own content. Hidden
+ * below `md` unless `mobile` opts a cheap one in, and never printed. Put
+ * decoration only here; a looping island inside it pauses while it is hidden
+ * (FE-009 §6).
+ */
+export function SlideBackdrop({ mobile = false, children }: { mobile?: boolean; children?: ReactNode }) {
+  return (
+    <div
+      data-slot="slide-backdrop"
+      aria-hidden="true"
+      className={cn(
+        'pointer-events-none absolute inset-0 -z-10 overflow-hidden print:hidden',
+        !mobile && 'hidden md:block',
+      )}
+    >
+      {children}
+    </div>
   );
 }
 

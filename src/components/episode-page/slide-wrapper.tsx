@@ -7,6 +7,8 @@ import { SlideMount } from './slide-mount.client';
  * mechanics. `EpisodePageContainer` renders it from one record entry and hands
  * it the id its position gives it (FE-002 §2); it declares nothing itself.
  *
+ * Full width (the Content area pads it with the insets) and `isolate`, so a
+ * Backdrop at a negative z-index stays inside its own Slide (FE-009 §3, §8).
  * At least viewport height, free to grow with its content, never clipped: no
  * `overflow`, so a tall Slide grows the page and nothing gets an inner
  * scrollbar. It sets no margins or gaps; rhythm belongs to the Content area.
@@ -17,7 +19,7 @@ export function SlideWrapper({ id, className, children, ...props }: ComponentPro
     <div
       id={id}
       data-slide={id}
-      className={cn('relative flex min-h-svh w-full scroll-mt-24 flex-col', className)}
+      className={cn('relative isolate flex min-h-svh w-full scroll-mt-24 flex-col', className)}
       {...props}
     >
       <SlideMount id={id}>{children}</SlideMount>
