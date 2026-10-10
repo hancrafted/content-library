@@ -22,7 +22,7 @@ Read before changing where things sit on an Episode page. Binding rules live in 
 
 ## Reserved places
 
-- YouTube: one per Episode and locale, loaded on play, never with the page. It plays in a 16:9 talk slot in the Title slide's Foreground through one fixed host that is never re-parented (re-parenting reloads the video). The host follows the slot, docks when the active Slide leaves `top` (from `lg`), and moves by `transform` only. Below `lg` it never docks.
+- YouTube: one per Episode and locale, loaded on play, never with the page. It plays in a 16:9 talk slot in the Title slide's Foreground through one host that is never re-parented (re-parenting reloads the video). Undocked it is `absolute` against the page at the slot's page coordinates, re-measured on resize, not on scroll, so it scrolls natively and cannot lag. From `lg` it docks, becoming `fixed`, when the active Slide leaves `top`; the glide between the two animates `transform` only. Below `lg` it never docks.
 - Back-to-top: owned by the container.
 - Arrow-key navigation (implemented): ←/→ step to the previous or next Slide, no wrap; ignored with a modifier and inside editable fields, tab/menu/listbox/slider/radio widgets, the drawer, open dialogs and iframes. ↑/↓ and PageUp/PageDown scroll natively. The URL follows through the observer, not the keys.
 - Speaker notes and voice script: per Slide, shown in the Context drawer.

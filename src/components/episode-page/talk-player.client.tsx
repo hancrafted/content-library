@@ -164,7 +164,7 @@ function TalkPlayerFrame({ youtubeId, title }: { youtubeId: string; title: strin
 const HOST = 'overflow-hidden rounded-xl border border-border bg-background shadow-2xl';
 
 /**
- * The talk player (FE-009 §8, chrome). Its host is one `position: fixed` element that is never re-parented, so
+ * The talk player (FE-009 §8, chrome). Its host is one element, `absolute` against the page while undocked and `fixed` only when docked, that is never re-parented, so
  * the video never reloads: it follows the Title slide's talk slot, and from `lg` docks bottom-left under the table
  * of contents when the active Slide leaves `top`. Below `lg` it never docks, so it follows the slot off screen with
  * the page. While the slot is unmounted (far from the Title slide) an undocked host parks out of sight, still playing.
@@ -179,7 +179,7 @@ export function TalkPlayer({ youtubeId, labels }: { youtubeId?: string; labels: 
   useDockedPageMark(docked);
   if (!isOpen || !youtubeId) return null;
   return (
-    <div ref={setHost} id="talk-player" className={cn(HOST, 'fixed z-40 origin-top-left')}>
+    <div ref={setHost} id="talk-player" className={cn(HOST, 'z-40 origin-top-left')}>
       <TalkPlayerHeader isDocked={docked} labels={labels} />
       <TalkPlayerFrame youtubeId={youtubeId} title={labels.heading} />
     </div>

@@ -8,7 +8,7 @@ import {
   tocReserveRem,
   type Rect,
 } from '@/lib/talk-dock.pure';
-import { useEffect, useLayoutEffect, useRef, type RefObject } from 'react';
+import { useEffect, useLayoutEffect, useRef } from 'react';
 
 function boxOf(element: Element): Rect {
   const { left, top, width, height } = element.getBoundingClientRect();
@@ -16,7 +16,8 @@ function boxOf(element: Element): Rect {
 }
 
 function place(host: HTMLElement, slot: HTMLElement | null, docked: boolean): Rect {
-  const placement = placementOf({ docked, slot: slot ? boxOf(slot) : null });
+  const scroll = { x: window.scrollX, y: window.scrollY };
+  const placement = placementOf({ docked, slot: slot ? boxOf(slot) : null, scroll });
   Object.assign(host.style, placement);
   return boxOf(host);
 }
@@ -37,54 +38,57 @@ let gliding: Animation | undefined;
 
 /** Glides the host from its old box to its new one by animating `transform` alone, unless the reader asked for less motion. */
 function glide(host: HTMLElement, first: Rect | null, last: Rect) {
-  gliding?.cancel();
   const from = first && flipTransform(first, last);
   if (!from || prefersReducedMotion()) return;
   gliding = host.animate([{ transform: from }, { transform: 'none' }], { duration: GLIDE_MS, easing: GLIDE_EASING });
 }
 
-/** Follows the slot while undocked: re-places the host on scroll, resize and slot resize, coalesced into one frame. */
-function useFollowSlot(target: Target, last: RefObject<Rect | null>) {
+/**
+ * Re-measures the undocked host's page position on resize, slot and body resize, and font load, coalesced into one
+ * frame. Not on scroll: the host is absolute against the page and scrolls with it.
+ */
+function useFollowSlot(target: Target) {
   const { host, slot, docked } = target;
   useEffect(() => {
     if (!host || !slot || docked) return;
     let frame = 0;
     const follow = () => {
       cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => {
-        last.current = place(host, slot, false);
-      });
+      frame = requestAnimationFrame(() => place(host, slot, false));
     };
     const observer = new ResizeObserver(follow);
     observer.observe(slot);
-    window.addEventListener('scroll', follow, { passive: true });
+    observer.observe(document.body);
     window.addEventListener('resize', follow);
+    void document.fonts?.ready.then(follow);
     return () => {
       cancelAnimationFrame(frame);
       observer.disconnect();
-      window.removeEventListener('scroll', follow);
       window.removeEventListener('resize', follow);
     };
-  }, [host, slot, docked, last]);
+  }, [host, slot, docked]);
 }
 
 /**
- * Places the one fixed talk host: over the slot while undocked, bottom-left while docked, with a
+ * Places the one talk host: over the slot while undocked, bottom-left while docked, with a
  * transform-only glide between the two. The host is never re-parented, so the video keeps playing.
  */
 export function useTalkHostPlacement(target: Target) {
   const { host, slot, docked } = target;
-  const last = useRef<Rect | null>(null);
   const wasDocked = useRef<boolean | null>(null);
   useLayoutEffect(() => {
-    const first = last.current;
-    const before = wasDocked.current;
-    last.current = host ? place(host, slot, docked) : null;
-    wasDocked.current = host ? docked : null;
-    // A re-place that keeps the dock state (a new slot box) jumps; only a switch glides.
-    if (host && last.current && switched(before, docked)) glide(host, first, last.current);
+    if (!host) {
+      wasDocked.current = null;
+      return;
+    }
+    gliding?.cancel();
+    // FLIP: the old viewport box, then the switch of position, then the new box.
+    const first = wasDocked.current === null ? null : boxOf(host);
+    const last = place(host, slot, docked);
+    if (switched(wasDocked.current, docked)) glide(host, first, last);
+    wasDocked.current = docked;
   }, [host, slot, docked]);
-  useFollowSlot(target, last);
+  useFollowSlot(target);
 }
 
 /** Marks the Episode page while the card is docked, so the table of contents leaves it room. */
