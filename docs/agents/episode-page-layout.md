@@ -18,5 +18,6 @@ Read before changing where things sit on an Episode page. Binding rules live in 
 ## Reserved places
 
 - YouTube: one per Episode and locale, on the Title slide, loaded on play — never with the page.
-- Arrow-key navigation and back-to-top: owned by the container.
+- Back-to-top: owned by the container.
+- Arrow-key navigation (implemented): ←/→ step to the previous or next Slide, no wrap; ignored with a modifier and inside editable fields, tab/menu/listbox/slider/radio widgets, the drawer, open dialogs and iframes. ↑/↓ and PageUp/PageDown scroll natively. The URL follows through the observer, not the keys.
 - Speaker notes and voice script: per Slide, shown in the Context drawer.

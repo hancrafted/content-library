@@ -10,6 +10,7 @@ import { ContentArea } from './content-area';
 import { contextDrawerInput } from './context-drawer-input';
 import { tocSectionsOf, type PlacedEpisodeSection } from './episode-page-container.pure';
 import { recordContent, type TranslatorOf } from './record-content';
+import { SlideKeys } from './slide-keys.client';
 import { SlideObserver } from './slide-observer.client';
 import { SlideWrapper } from './slide-wrapper';
 import { SlideZones } from './slide-zones.client';
@@ -41,6 +42,7 @@ function SlideColumn(props: {
   return (
     <SlideZones>
       <SlideObserver ids={props.ids} />
+      <SlideKeys ids={props.ids} />
       <ContentArea>
         <TitleSlide
           title={props.title}
