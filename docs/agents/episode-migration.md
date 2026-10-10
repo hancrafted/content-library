@@ -59,16 +59,16 @@ export const theLostMiddle = slide({
 });
 ```
 
-- Pick the layout from `slide-layouts/`: section slide, basic page, three-column. A Canvas that fits none is free JSX in a `SlideFrame` with the kit's `<Title>`.
+- Pick the layout from `slide-layouts/`: section slide, basic page, three-column. A Scene that fits none is free JSX in a `SlideFrame` with the kit's `<Title>`.
 - A type error from a kit field means the Translation keys or the declaration are wrong. Fix them; never cast.
-- The kit is everything a Canvas needs:
+- The kit is everything a Scene needs:
   - `t('caption')`, `t('count', { n })`; `t.rich('prose', { ref: ref('<note>') })` already knows `<em>`, `<b>`, `<code>` — pass a tag only to restyle it.
   - `template('show-all')`: the raw string, `{count}` unfilled, for a `client/` widget to fill with `fillTemplate` from `@/lib/template.pure`.
   - `slideHref('the-lost-middle')`: the localized link to another Slide of this Episode.
   - `locale`: for `Intl` number or date formatting.
   - `ref`, `target`, `Title`: notes and heading, below.
-- A part or data several Slides share goes in `episodes/<ep>/canvas/`: a server component with plain props (`<Statement>{t('statement')}</Statement>`), never the kit, never importing a Slide. See `page-template/canvas/statement.tsx`.
-- Episode CSS, when Tailwind is not enough, sits in `canvas/` with every selector under `[data-episode='<ep>']`. Machine, human, AI, primary and secondary use the site tokens (`text-machine`, `text-human`, `text-ai`, `text-primary`, `text-secondary`); any other colour gets a light and a dark value. `globals.css` changes only for a token two Episodes share.
+- A part or data several Slides share goes in `episodes/<ep>/parts/`: a server component with plain props (`<Statement>{t('statement')}</Statement>`), never the kit, never importing a Slide. See `page-template/parts/statement.tsx`.
+- Episode CSS, when Tailwind is not enough, sits in `parts/` with every selector under `[data-episode='<ep>']`. Machine, human, AI, primary and secondary use the site tokens (`text-machine`, `text-human`, `text-ai`, `text-primary`, `text-secondary`); any other colour gets a light and a dark value. `globals.css` changes only for a token two Episodes share.
 
 Done when: every Slide of step 1 has a file and `npm run typecheck` passes.
 

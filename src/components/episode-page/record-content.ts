@@ -17,7 +17,7 @@ import { slideContext } from './slide-context.pure';
 /** One locale's translator for a namespace, read by runtime key: next-intl in the page, a stand-in in tests. */
 export type TranslatorOf = (namespace: string) => Promise<RuntimeTranslator>;
 
-/** One placed Slide, rendered: its Canvas from the kit, its notes and Voice script from its own subtree. */
+/** One placed Slide, rendered: its Scene from the kit, its notes and Voice script from its own subtree. */
 async function renderedSlide(
   translatorOf: TranslatorOf,
   episode: EpisodeKitInput,

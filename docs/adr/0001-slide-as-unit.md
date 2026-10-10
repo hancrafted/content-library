@@ -5,7 +5,7 @@ status: accepted
 
 # The Slide is the unit of an Episode
 
-An Episode composes Slide files: each declares its own slug, notes, Voice script segments and Canvas, and a Section is a list of Slides whose first names it. Everything else (Translation keys, anchors, heading level, kit names) derives from the slug or the position. The rules live in `FE-002`; this records what was traded away.
+An Episode composes Slide files: each declares its own slug, notes, Voice script segments and Scene, and a Section is a list of Slides whose first names it. Everything else (Translation keys, anchors, heading level, kit names) derives from the slug or the position. The rules live in `FE-002`; this records what was traded away.
 
 ## Why
 

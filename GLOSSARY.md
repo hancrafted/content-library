@@ -27,20 +27,29 @@ _Avoid_: Tile, teaser, Slide
 **Section**: an Episode's second level: an ordered group of Slides whose first is its section slide, which names the Section. A Slide's heading level comes from its place in the Section, not from the Slide.
 _Avoid_: Chapter, part
 
-**Slide**: one full-height frame in an Episode, stacked under the one before it; self-contained, carrying its own Canvas, Speaker notes and Voice script, so an Episode is a composition of Slides. A Section's own slide is a **section slide**; the slides it holds are **page slides**.
+**Slide**: one full-height frame in an Episode, stacked under the one before it; self-contained, carrying its own Scene, Speaker notes and Voice script, so an Episode is a composition of Slides. A Section's own slide is a **section slide**; the slides it holds are **page slides**.
 _Avoid_: Card, panel; page, which means the Next.js route the whole Episode renders as
 
 **Title slide**: an Episode's opening Slide: its title, caption and, once recorded, its video. Not listed in the table of contents.
 _Avoid_: Hero, cover
 
-**Content area**: the single-column grid that holds an Episode's Slide wrappers, owns the spacing between Slides and hosts the Episode's portal root.
+**Content area**: the single-column grid that holds an Episode's Slide wrappers, spans the viewport, owns the spacing between Slides and the inline insets of every wrapper, and hosts the Episode's portal root.
 _Avoid_: Main, article body, slide list, slides slot
 
-**Slide wrapper**: the server-rendered box around one Slide that holds its mechanics: anchor, at least viewport height, never clipping, and the mount that drops far content.
+**Slide wrapper**: the server-rendered box around one Slide that holds its mechanics: anchor, full viewport width, at least viewport height, never clipping, its own stacking context, and the mount that drops far content.
 _Avoid_: Slide frame, outer slide, slide container
 
-**Canvas**: the free interior of a Slide, where its visualisation and layout live, ungoverned by the Slide wrapper's mechanics.
-_Avoid_: Inner slide, slide body
+**Scene**: the free interior of a Slide, where its visualisation and layout live, ungoverned by the Slide wrapper's mechanics. It has two layers: a **Backdrop** and a **Foreground**.
+_Avoid_: Canvas (confuses with the HTML `<canvas>` element), inner slide, slide body
+
+**Backdrop**: the full-bleed, decorative layer of a Scene, behind the Foreground. Clipped to its own Slide, hidden below `md` unless it opts in, hidden from assistive technology and pointer events, and left out of print.
+_Avoid_: Background
+
+**Foreground**: the primary layer of a Scene, inset so it never sits under the table of contents or the Context drawer. A Slide with no Backdrop is just a Foreground.
+_Avoid_: Content, front layer
+
+**Chrome**: what floats over the Slides and takes no layout space: the table of contents, the Context drawer and the talk player.
+_Avoid_: Furniture, overlay
 
 **Zone**: where a Slide stands relative to the reader: far (content unmounted), near (mounted, paused) or active (mounted, playing, the current Slide).
 _Avoid_: Visibility state, scroll phase
