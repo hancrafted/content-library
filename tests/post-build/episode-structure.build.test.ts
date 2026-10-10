@@ -265,6 +265,20 @@ describe('episode structure', () => {
       expect((inTitle.attr('class') ?? '').split(/\s+/)).not.toContain('hidden');
     });
 
+    it('holds one talk slot in the Title slide, beside the launcher, when the Episode has a recording, and no iframe', () => {
+      // ARRANGE
+      const $ = page(url);
+      const launchers = $('[data-slot="title-slide"] #talk-launcher').length;
+      // ACT
+      const slots = $('[data-slot="title-slide"] [data-slot="talk-slot"]');
+      const everywhere = $('[data-slot="talk-slot"]').length;
+      // ASSERT: a recording shows as the launcher; the slot is hidden until the player opens, and nothing loads with the page
+      expect(slots).toHaveLength(launchers);
+      expect(everywhere).toBe(launchers);
+      expect(slots.attr('hidden')).toBe(launchers ? 'hidden' : undefined);
+      expect($('iframe')).toHaveLength(0);
+    });
+
     it('keeps every Section a display:contents group, so each wrapper is a grid cell', () => {
       // ARRANGE
       const $ = page(url);
