@@ -30,14 +30,19 @@ describe('success cases', () => {
     FEATURED.forEach((slug) => expect(published).toContain(slug));
   });
 
-  it.each(topicsInUse())('gives Topic %s an icon and an accent the landing can draw', (topic) => {
+  it('gives every Topic in use an icon and an accent the landing can draw', () => {
     // ARRANGE
-    const { icon, accent } = TOPICS[topic];
+    const expected: string[] = [];
     // ACT
-    const drawn = { icon: TOPIC_ICONS[icon], accent: TOPIC_ACCENTS[accent] };
+    const undrawable = topicsInUse().flatMap((topic) => {
+      const { icon, accent } = TOPICS[topic];
+      return [
+        ...(TOPIC_ICONS[icon] === undefined ? [`${topic}: icon ${icon}`] : []),
+        ...(TOPIC_ACCENTS[accent] === undefined ? [`${topic}: accent ${accent}`] : []),
+      ];
+    });
     // ASSERT
-    expect(drawn.icon).toBeDefined();
-    expect(drawn.accent).toBeDefined();
+    expect(undrawable).toEqual(expected);
   });
 });
 

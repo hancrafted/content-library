@@ -55,11 +55,11 @@ describe('success cases', () => {
 
   it.each(listEpisodes().map(({ slug }) => slug))('keeps the metadata of %s in its own folder', (slug) => {
     // ARRANGE
-    const file = path.join(EPISODES_DIR, slug, METADATA_FILE);
+    const folder = path.join(EPISODES_DIR, slug);
     // ACT
-    const present = existsSync(file);
+    const files = existsSync(folder) ? readdirSync(folder) : [];
     // ASSERT
-    expect(present).toBe(true);
+    expect(files).toContain(METADATA_FILE);
   });
 });
 
