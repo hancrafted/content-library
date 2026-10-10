@@ -18,6 +18,27 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('pads every Slide wrapper with the two inset variables, and keeps no margin of its own for chrome', () => {
+    // ARRANGE
+    const area = createElement(ContentArea, null, createElement('div', null, 'slide'));
+    // ACT
+    const html = renderToStaticMarkup(area);
+    // ASSERT
+    const classes = html.replaceAll('&amp;', '&');
+    expect(classes).toContain('[&_[data-slide]]:pl-(--inset-l)');
+    expect(classes).toContain('[&_[data-slide]]:pr-(--inset-r)');
+    expect(html).not.toContain('md:ml-12');
+  });
+
+  it('never transitions the insets, so a drawer switch reflows once', () => {
+    // ARRANGE
+    const area = createElement(ContentArea, null, createElement('div', null, 'slide'));
+    // ACT
+    const html = renderToStaticMarkup(area);
+    // ASSERT
+    expect(html).not.toMatch(/transition/);
+  });
+
   it('hosts an episode-level portal root out of the grid flow', () => {
     // ARRANGE
     const area = createElement(ContentArea, null, createElement('div', null, 'slide'));

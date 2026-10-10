@@ -5,6 +5,7 @@ import { readTranslationStrings } from '@/i18n/translation-strings';
 import { slidesInPageOrder, TITLE_ANCHOR } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { episodeRoute, type EpisodeSlug } from '@/lib/routes';
+import { cn } from '@/lib/utils';
 import { getTranslations } from 'next-intl/server';
 import { ContentArea } from './content-area';
 import { contextDrawerInput } from './context-drawer-input';
@@ -65,7 +66,7 @@ function EpisodeToc(props: {
   labels: TocLabels;
 }) {
   return (
-    <aside data-slot="toc">
+    <aside data-slot="toc" className="md:fixed md:top-24 md:left-4 md:z-40 md:w-[17rem]">
       <TableOfContents
         locale={props.locale}
         route={episodeRoute(props.slug)}
@@ -94,6 +95,17 @@ function translatorOf(locale: Locale): TranslatorOf {
     (await getTranslations({ locale, namespace: namespace as never })) as unknown as RuntimeTranslator;
 }
 
+/*
+ * The Foreground's insets (FE-009 §2), the only width mechanism: every Slide wrapper pads itself with these.
+ * Below `md` a small even margin. From `md` the left inset clears the fixed table of contents (1rem + 17rem + 3rem)
+ * and the right keeps 3rem; from `xl`, while the drawer sits beside and open, the drawer's own `data-drawer-beside`
+ * widens the right inset past the card. The chrome floats, so only these variables move the Foreground.
+ */
+const INSETS = cn(
+  'mt-6 [--inset-l:1rem] [--inset-r:1rem] md:[--inset-l:21rem] md:[--inset-r:3rem]',
+  'xl:data-[drawer-beside=true]:[--inset-r:calc(var(--drawer-width)+4rem)]',
+);
+
 /**
  * The shell every Episode page renders through (FE-002). It alone turns the
  * Episode record into the page: the named slots, the Title slide with the
@@ -111,11 +123,7 @@ export async function EpisodePageContainer({ locale, episode }: { locale: Locale
   const drawer = await contextDrawerInput(locale, placed);
   return (
     <UrlStateProvider key={`${locale}/${episode.slug}`}>
-      <div
-        data-slot="episode-page"
-        data-episode={episode.slug}
-        className="mx-4 mt-6 md:grid md:grid-cols-[17rem_minmax(0,1fr)_auto]"
-      >
+      <div data-slot="episode-page" data-episode={episode.slug} className={INSETS}>
         <EpisodeToc locale={locale} slug={episode.slug} placed={placed} labels={tocLabels} />
         <SlideColumn
           ids={ids}

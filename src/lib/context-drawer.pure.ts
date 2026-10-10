@@ -52,7 +52,7 @@ export interface KeyEventLike {
 export const DRAWER_TABS = ['notes', 'script'] as const;
 export type DrawerTab = (typeof DRAWER_TABS)[number];
 
-/** Whether the Episode grid keeps a column for the card, which changes at once rather than animating. */
+/** Whether the card sits beside the Slides, widening the Foreground's right inset, which changes at once rather than animating. */
 export function reservesSpace(mode: DrawerMode, open: boolean): boolean {
   return open && mode === 'beside';
 }
