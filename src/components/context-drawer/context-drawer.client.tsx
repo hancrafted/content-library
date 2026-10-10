@@ -7,7 +7,7 @@ import {
   DRAWER_PANEL_ID,
   DRAWER_TABS,
   drawerIds,
-  reservesSpace,
+  sitsBeside,
   titleOfItem,
   type DrawerTab,
 } from '@/lib/context-drawer.pure';
@@ -195,7 +195,7 @@ export function ContextDrawer(props: { labels: DrawerStrings; entries: readonly 
         controls={DRAWER_PANEL_ID}
         onToggle={drawer.toggle}
       />
-      <BesideFlag beside={reservesSpace(drawer.mode, drawer.open)} />
+      <BesideFlag beside={sitsBeside(drawer.mode, drawer.open)} />
       <Scrim open={drawer.open} onClose={drawer.close} />
       <Card labels={labels} drawer={drawer} entries={entries} />
     </>
