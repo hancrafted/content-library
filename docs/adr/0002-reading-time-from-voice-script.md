@@ -33,4 +33,4 @@ Run 2 of the migration experiment wrote minutes by hand twice per Slide (once pe
 ## Related
 
 - `FE-002` (reading time from the script, hidden at 0), `FE-010` (segment spans counted, no time fields).
-- `design-ADR-0001` (Slide-as-unit): a Slide declares slug, notes, segments, Canvas — no longer minutes.
+- `design-ADR-0001` (Slide-as-unit): a Slide declares slug, notes, segments, Scene — no longer minutes.

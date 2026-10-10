@@ -5,11 +5,18 @@ import { readTranslationStrings } from '@/i18n/translation-strings';
 import { slidesInPageOrder, TITLE_ANCHOR } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { episodeRoute, type EpisodeSlug } from '@/lib/routes';
+import { cn } from '@/lib/utils';
 import { getTranslations } from 'next-intl/server';
 import { ContentArea } from './content-area';
 import { contextDrawerInput } from './context-drawer-input';
-import { tocSectionsOf, type PlacedEpisodeSection } from './episode-page-container.pure';
+import {
+  INSET_CLASSES,
+  TOC_RESERVE_CLASS,
+  tocSectionsOf,
+  type PlacedEpisodeSection,
+} from './episode-page-container.pure';
 import { recordContent, type TranslatorOf } from './record-content';
+import { SlideKeys } from './slide-keys.client';
 import { SlideObserver } from './slide-observer.client';
 import { SlideWrapper } from './slide-wrapper';
 import { SlideZones } from './slide-zones.client';
@@ -41,6 +48,7 @@ function SlideColumn(props: {
   return (
     <SlideZones>
       <SlideObserver ids={props.ids} />
+      <SlideKeys ids={props.ids} />
       <ContentArea>
         <TitleSlide
           title={props.title}
@@ -63,7 +71,7 @@ function EpisodeToc(props: {
   labels: TocLabels;
 }) {
   return (
-    <aside data-slot="toc">
+    <aside data-slot="toc" className="md:fixed md:top-24 md:left-4 md:z-40 md:w-[17rem]">
       <TableOfContents
         locale={props.locale}
         route={episodeRoute(props.slug)}
@@ -112,7 +120,7 @@ export async function EpisodePageContainer({ locale, episode }: { locale: Locale
       <div
         data-slot="episode-page"
         data-episode={episode.slug}
-        className="mx-4 mt-6 md:grid md:grid-cols-[17rem_minmax(0,1fr)_auto]"
+        className={cn('mt-6', INSET_CLASSES, TOC_RESERVE_CLASS)}
       >
         <EpisodeToc locale={locale} slug={episode.slug} placed={placed} labels={tocLabels} />
         <SlideColumn

@@ -1,7 +1,7 @@
 'use client';
 
 import { externalHref } from '@/lib/external-link.pure';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { MODALS_DATA, type ModalContent, type ModalKey } from './markdown-roles-data.pure';
 
 const CHEATSHEET_ROWS = [
@@ -118,31 +118,33 @@ function ModalContentBody({ modal, data }: { modal: ModalKey; data: ModalContent
   );
 }
 
+/**
+ * A native `<dialog>` opened with `showModal()`: it lives in the top layer, so no
+ * z-index and no Slide wrapper's `isolate` can trap it under the chrome (FE-009 §8).
+ * The browser gives Escape, the focus trap and the inert page; a click on the
+ * dialog's own box, outside the panel, closes it.
+ */
 export function MarkdownRolesModal({ modal, onClose }: { modal: ModalKey | null; onClose: () => void }) {
+  const dialog = useRef<HTMLDialogElement>(null);
   useEffect(() => {
-    if (!modal) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [modal, onClose]);
+    const element = dialog.current;
+    if (modal && element && !element.open) element.showModal();
+  }, [modal]);
 
   if (!modal) return null;
   const data = MODALS_DATA[modal];
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs sm:p-6"
-      onClick={onClose}
+    <dialog
+      ref={dialog}
+      onClose={onClose}
+      onClick={(e) => e.target === e.currentTarget && onClose()}
+      className="m-0 h-dvh max-h-none w-full max-w-none items-center justify-center bg-transparent p-4 text-inherit backdrop:bg-black/60 backdrop:backdrop-blur-xs open:flex sm:p-6"
     >
-      <div
-        className="relative max-h-[85vh] w-full max-w-4xl overflow-y-auto rounded-2xl border border-border bg-card p-6 shadow-2xl sm:p-8"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="relative max-h-[85vh] w-full max-w-4xl overflow-y-auto rounded-2xl border border-border bg-card p-6 shadow-2xl sm:p-8">
         <ModalHeader data={data} onClose={onClose} />
         <ModalContentBody modal={modal} data={data} />
       </div>
-    </div>
+    </dialog>
   );
 }

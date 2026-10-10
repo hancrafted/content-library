@@ -1,5 +1,5 @@
 ---
-stale_after: 2027-01-10T00:00:00Z
+stale_after: 2027-01-11T00:00:00Z
 ---
 
 # Content library
@@ -37,11 +37,23 @@ _Avoid_: Sitenav, sidebar
 **Section**: an Episode's second level: an ordered group of Slides whose first is its section slide, which names the Section. A Slide's heading level comes from its place in the Section, not from the Slide.
 _Avoid_: Chapter, part
 
-**Slide**: one full-height frame in an Episode, stacked under the one before it; self-contained, carrying its own visuals, Speaker notes and Voice script, so an Episode is a composition of Slides. A Section's own slide is a **section slide**; the slides it holds are **page slides**.
+**Slide**: one full-height frame in an Episode, stacked under the one before it; self-contained, carrying its own Scene, Speaker notes and Voice script, so an Episode is a composition of Slides. A Section's own slide is a **section slide**; the slides it holds are **page slides**.
 _Avoid_: Card, panel; page, which means the Next.js route the whole Episode renders as
 
 **Title slide**: an Episode's opening Slide: its title, caption and, once recorded, its video. Not listed in the table of contents.
 _Avoid_: Hero, cover
+
+**Scene**: the free interior of a Slide, where its visualisation and layout live, ungoverned by the mechanics of the box around it. It has two layers: a **Backdrop** and a **Foreground**.
+_Avoid_: Canvas (confuses with the HTML `<canvas>` element), inner slide, slide body
+
+**Backdrop**: the full-bleed, decorative layer of a Scene, behind the Foreground. Clipped to its own Slide, hidden below `md` unless it opts in, hidden from assistive technology and pointer events, and left out of print.
+_Avoid_: Background
+
+**Foreground**: the primary layer of a Scene, inset so it never sits under the table of contents or the Context drawer. A Slide with no Backdrop is just a Foreground.
+_Avoid_: Content, front layer
+
+**Chrome**: what floats over the Slides and takes no layout space: the table of contents, the Context drawer and the talk player.
+_Avoid_: Furniture, overlay
 
 **Speaker notes**: a Slide's short list of talking points, each a Speaker note item.
 _Avoid_: Notes, comments

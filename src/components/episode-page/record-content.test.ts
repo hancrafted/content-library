@@ -45,7 +45,7 @@ function translatorOf(locale: Locale): TranslatorOf {
 }
 const slide = slidesFor('page-template');
 
-/** What a Slide's Canvas saw of its kit: the strings it read and the heading level it got. */
+/** What a Slide's Scene saw of its kit: the strings it read and the heading level it got. */
 function probe(kit: RuntimeKit, keys: readonly string[]): ReactElement {
   const title = kit.Title({ children: kit.t('title') });
   return createElement('div', { 'data-read': keys.map((key) => kit.t(key)).join('|') }, title);

@@ -7,7 +7,7 @@ import {
   drawerKeyAction,
   formatMark,
   matchesShortcut,
-  reservesSpace,
+  sitsBeside,
   sourceDomain,
   splitCitations,
   titleOfItem,
@@ -88,10 +88,10 @@ describe('success cases', () => {
     const expected = [true, false, false, false];
     // ACT
     const reserved = [
-      reservesSpace('beside', true),
-      reservesSpace('beside', false),
-      reservesSpace('over', true),
-      reservesSpace('over', false),
+      sitsBeside('beside', true),
+      sitsBeside('beside', false),
+      sitsBeside('over', true),
+      sitsBeside('over', false),
     ];
     // ASSERT
     expect(reserved).toEqual(expected);

@@ -1,4 +1,4 @@
-import { Statement } from '@/components/episodes/page-template/canvas/statement';
+import { Statement } from '@/components/episodes/page-template/parts/statement';
 import { slidesFor } from '@/components/slide-master/episode-record';
 import { SlideFrame } from '@/components/slide-master/slide-master';
 

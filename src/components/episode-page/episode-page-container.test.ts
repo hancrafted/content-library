@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
+import { DRAWER_BESIDE_ATTR } from '../../lib/context-drawer.pure';
+import { TALK_DOCKED_ATTR, tocReserveRem } from '../../lib/talk-dock.pure';
 import {
+  INSET_CLASSES,
+  TOC_RESERVE_CLASS,
   tocSectionsOf,
   type EpisodeSection,
   type EpisodeSlide,
@@ -180,5 +184,33 @@ describe('edge cases', () => {
       // ASSERT
       expect(toc.items).toEqual(expected);
     });
+  });
+
+  it('widen the right inset on the very attribute the drawer sets when it sits beside the Slides', () => {
+    // ARRANGE
+    const attribute = DRAWER_BESIDE_ATTR;
+    // ACT
+    const classes = INSET_CLASSES.split(/\s+/);
+    // ASSERT: Tailwind needs the class written out, so the two sides are tied here
+    expect(classes.some((name) => name.startsWith(`xl:data-[${attribute.replace('data-', '')}=true]:`))).toBe(true);
+  });
+
+  it('set both inset variables for narrow screens and again from md', () => {
+    // ARRANGE
+    const classes = INSET_CLASSES.split(/\s+/);
+    // ACT
+    const names = classes.map((name) => /\[(--inset-[lr]):/.exec(name)?.[1]);
+    // ASSERT
+    expect(names.filter((name) => name === '--inset-l')).toHaveLength(2);
+    expect(names.filter((name) => name === '--inset-r')).toHaveLength(3);
+  });
+
+  it('reserves the docked player height and a gap on the table of contents, from lg, on the attribute the player sets', () => {
+    // ARRANGE
+    const expected = `lg:data-[${TALK_DOCKED_ATTR.replace('data-', '')}=true]:[--toc-reserve:${tocReserveRem()}rem]`;
+    // ACT
+    const reserve = TOC_RESERVE_CLASS;
+    // ASSERT: 2rem header + 17rem * 9/16 frame + 1rem gap
+    expect(reserve).toBe(expected);
   });
 });

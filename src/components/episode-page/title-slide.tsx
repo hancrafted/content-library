@@ -1,4 +1,4 @@
-import { SlideCaption, SlideFrame, SlideTitle } from '@/components/slide-master/slide-master';
+import { SlideBackdrop, SlideCaption, SlideFrame, SlideTitle } from '@/components/slide-master/slide-master';
 import { TITLE_ANCHOR } from '@/lib/episode.pure';
 import { SlideWrapper } from './slide-wrapper';
 import { TalkLauncher, type TalkPlayerLabels } from './talk-player.client';
@@ -22,10 +22,10 @@ export function TitleSlide({
 }) {
   return (
     <SlideWrapper id={TITLE_ANCHOR} data-slot="title-slide">
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
+      <SlideBackdrop mobile>
         <div className="hero-glow absolute inset-0 text-primary" />
         <div className="hero-glow hero-glow--accent absolute inset-0 text-accent" />
-      </div>
+      </SlideBackdrop>
       <SlideFrame className="justify-center">
         <SlideTitle as="h1">{title}</SlideTitle>
         {caption && <SlideCaption>{caption}</SlideCaption>}

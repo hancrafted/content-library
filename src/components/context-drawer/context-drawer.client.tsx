@@ -3,10 +3,11 @@
 import { useContextDrawer } from '@/hooks/use-context-drawer';
 import { revealCitation } from '@/hooks/use-context-links';
 import {
+  DRAWER_BESIDE_ATTR,
   DRAWER_PANEL_ID,
   DRAWER_TABS,
   drawerIds,
-  reservesSpace,
+  sitsBeside,
   titleOfItem,
   type DrawerTab,
 } from '@/lib/context-drawer.pure';
@@ -28,7 +29,7 @@ type Drawer = ReturnType<typeof useContextDrawer>;
  * ghosts. It starts below the sticky site header (top-24; top-32 below `md`,
  * where the header wraps to two rows) and clears the bottom edge by 1rem.
  * Below `md` it rises above the scrim (z-70 over the scrim's 60 and the
- * header's 50). Its width is the one `--drawer-width` the grid spacer reads.
+ * header's 50). Its width is the one `--drawer-width` the right inset reads.
  */
 const CARD = cn(
   'fixed top-24 right-4 bottom-4 z-40 flex w-[min(var(--drawer-width),calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border bg-background text-sm shadow-header',
@@ -141,15 +142,18 @@ function Card(props: { labels: DrawerStrings; drawer: Drawer; entries: readonly 
   );
 }
 
-/** The grid's reserved column, with no transition: the Slides reflow once, never per frame of the slide-in. */
-function Spacer({ reserve }: { reserve: boolean }) {
-  return (
-    <div
-      aria-hidden
-      data-slot="context-spacer"
-      className={cn('hidden xl:block', reserve ? 'xl:ml-12 xl:w-(--drawer-width)' : 'xl:w-0')}
-    />
-  );
+/**
+ * Tells the page the card sits beside the Slides: it flags the Episode page, whose
+ * right inset then widens in one step (FE-009 §2). The card itself is fixed and
+ * takes no layout space, so this is the only thing the Slides see of it.
+ */
+function BesideFlag({ beside }: { beside: boolean }) {
+  useEffect(() => {
+    const page = document.querySelector('[data-slot="episode-page"]');
+    page?.setAttribute(DRAWER_BESIDE_ATTR, String(beside));
+    return () => page?.removeAttribute(DRAWER_BESIDE_ATTR);
+  }, [beside]);
+  return null;
 }
 
 /** Pointer-only dismiss for narrow screens; Escape and the close button serve the keyboard. */
@@ -171,8 +175,7 @@ function Scrim({ open, onClose }: { open: boolean; onClose: () => void }) {
 
 /**
  * The Context drawer (FE-010 §7): a floating card on the right. From `xl` it
- * sits beside the Slides (the grid's third column opens at once, through the
- * spacer) or over them; below `xl` it is always an overlay, under a dimmed
+ * sits beside the Slides (the Foreground's right inset widens at once) or over them; below `xl` it is always an overlay, under a dimmed
  * scrim below `md`. It holds every item's server-rendered notes and script in the DOM and
  * only decides which are visible. Closed it is `invisible` and off-screen, so
  * print and find-in-page still reach the text.
@@ -192,7 +195,7 @@ export function ContextDrawer(props: { labels: DrawerStrings; entries: readonly 
         controls={DRAWER_PANEL_ID}
         onToggle={drawer.toggle}
       />
-      <Spacer reserve={reservesSpace(drawer.mode, drawer.open)} />
+      <BesideFlag beside={sitsBeside(drawer.mode, drawer.open)} />
       <Scrim open={drawer.open} onClose={drawer.close} />
       <Card labels={labels} drawer={drawer} entries={entries} />
     </>

@@ -37,6 +37,15 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('isolates its stacking context, so a Backdrop at a negative z-index stays inside its own Slide', () => {
+    // ARRANGE
+    const wrapper = createElement(SlideWrapper, { id: 'test-slide' }, 'content');
+    // ACT
+    const html = renderToStaticMarkup(wrapper);
+    // ASSERT
+    expect(html).toMatch(/class="[^"]*\bisolate\b/);
+  });
+
   it('never clips and never creates an inner scrollbar', () => {
     // ARRANGE
     const wrapper = createElement(SlideWrapper, { id: 'test-slide' }, 'content');
@@ -66,5 +75,6 @@ describe('edge cases', () => {
     expect(html).not.toMatch(/(?:^|\s)(m|my|mt|mb)-\d+/);
     expect(html).not.toMatch(/(?:^|\s)gap-/);
     expect(html).not.toContain('border-b');
+    expect(html).not.toMatch(/(?:^|[\s"])(p|px|pl|pr)-/);
   });
 });

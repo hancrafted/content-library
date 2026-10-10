@@ -11,6 +11,7 @@ import { TITLE_ANCHOR } from '../../src/lib/episode.pure';
 import { DEFAULT_LOCALE, LOCALES, localizePath } from '../../src/lib/locale.pure';
 import { EPISODE_SLUGS, episodeRoute } from '../../src/lib/routes';
 import { exportedFile, OUT_DIR } from './exported-pages';
+import { cssFiles, printBlocks } from './stylesheets';
 
 const PAGES = EPISODE_SLUGS.flatMap((slug) =>
   LOCALES.map((locale) => ({ slug, locale, url: localizePath(episodeRoute(slug), locale) })),
@@ -221,6 +222,63 @@ describe('episode structure', () => {
       expect(portalRoots).toBe(1);
     });
 
+    it('lays out the page as overlays over a full-width Content area, with no three-column grid', () => {
+      // ARRANGE
+      const $ = page(url);
+      // ACT
+      const container = ($('[data-slot="episode-page"]').attr('class') ?? '').split(/\s+/);
+      const toc = ($('[data-slot="toc"]').attr('class') ?? '').split(/\s+/);
+      const area = ($('[data-slot="slides"]').attr('class') ?? '').split(/\s+/);
+      // ASSERT
+      expect(container.some((name) => /grid-cols|^md:grid$/.test(name))).toBe(false);
+      expect(container).toEqual(expect.arrayContaining(['[--inset-l:1rem]', '[--inset-r:1rem]']));
+      expect(toc).toEqual(expect.arrayContaining(['md:fixed']));
+      expect(area).toEqual(
+        expect.arrayContaining(['[&_[data-slide]]:pl-(--inset-l)', '[&_[data-slide]]:pr-(--inset-r)']),
+      );
+      expect(area).not.toContain('md:ml-12');
+    });
+
+    it('isolates every Slide wrapper, so a Backdrop stays inside its own Slide', () => {
+      // ARRANGE
+      const $ = page(url);
+      // ACT
+      const wrappers = $('[data-slot="slides"] [data-slide]').toArray();
+      const missing = wrappers.filter((wrapper) => !($(wrapper).attr('class') ?? '').split(/\s+/).includes('isolate'));
+      // ASSERT
+      expect(wrappers.length).toBeGreaterThan(0);
+      expect(missing).toEqual([]);
+    });
+
+    it('hides every Backdrop from assistive technology inside its own Slide wrapper, and the Title slide has one', () => {
+      // ARRANGE
+      const $ = page(url);
+      // ACT
+      const backdrops = $('[data-slot="slide-backdrop"]').toArray();
+      const outside = backdrops.filter((backdrop) => $(backdrop).closest('[data-slide]').length === 0);
+      const visible = backdrops.filter((backdrop) => $(backdrop).attr('aria-hidden') !== 'true');
+      const inTitle = $('[data-slot="title-slide"] [data-slot="slide-backdrop"]');
+      // ASSERT
+      expect(outside).toEqual([]);
+      expect(visible).toEqual([]);
+      expect(inTitle).toHaveLength(1);
+      expect((inTitle.attr('class') ?? '').split(/\s+/)).not.toContain('hidden');
+    });
+
+    it('holds one talk slot in the Title slide, beside the launcher, when the Episode has a recording, and no iframe', () => {
+      // ARRANGE
+      const $ = page(url);
+      const launchers = $('[data-slot="title-slide"] #talk-launcher').length;
+      // ACT
+      const slots = $('[data-slot="title-slide"] [data-slot="talk-slot"]');
+      const everywhere = $('[data-slot="talk-slot"]').length;
+      // ASSERT: a recording shows as the launcher; the slot is hidden until the player opens, and nothing loads with the page
+      expect(slots).toHaveLength(launchers);
+      expect(everywhere).toBe(launchers);
+      expect(slots.attr('hidden')).toBe(launchers ? 'hidden' : undefined);
+      expect($('iframe')).toHaveLength(0);
+    });
+
     it('keeps every Section a display:contents group, so each wrapper is a grid cell', () => {
       // ARRANGE
       const $ = page(url);
@@ -298,5 +356,32 @@ describe('episode structure', () => {
       // ASSERT
       expect(anchors).toEqual(reference);
     });
+  });
+});
+
+describe('print stylesheet', () => {
+  it('leaves decorative Backdrops off the page', () => {
+    // ARRANGE
+    const blocks = cssFiles(join(OUT_DIR, '_next', 'static')).flatMap((file) =>
+      printBlocks(readFileSync(file, 'utf8')),
+    );
+    // ACT
+    const hidesBackdrop = blocks.some((b) => b.includes('[data-slot=slide-backdrop]') && b.includes('display:none'));
+    // ASSERT
+    expect(hidesBackdrop).toBe(true);
+  });
+});
+
+describe('talk player stylesheet', () => {
+  it('emits the rule that reserves the table of contents room while the player is docked', () => {
+    // ARRANGE
+    const css = cssFiles(join(OUT_DIR, '_next', 'static'))
+      .map((file) => readFileSync(file, 'utf8'))
+      .join('')
+      .replace(/\s+/g, '');
+    // ACT
+    const hasRule = /\[data-talk-docked=(["']?)true\1\][^{}]*\{[^}]*--toc-reserve:12\.5625rem/.test(css);
+    // ASSERT: Tailwind only emits a class it can read written out, so interpolating it would silently drop the rule
+    expect(hasRule).toBe(true);
   });
 });
