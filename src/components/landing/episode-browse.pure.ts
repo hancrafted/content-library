@@ -1,4 +1,4 @@
-import { FORMATS, TOPICS, type FormatId, type TopicId } from '@/lib/episode-index.pure';
+import { FORMATS, TOPIC_IDS, type FormatId, type TopicId } from '@/lib/episode-overview';
 import { fillTemplate } from '@/lib/template.pure';
 import type { EpisodeCard, Labelled } from './episode-card.pure';
 
@@ -16,7 +16,7 @@ export type Facet<Id extends string> = Id | typeof ALL;
 /** A grid longer than this folds behind "Show all"; with 9 Episodes today the fold is not yet visible. */
 export const BROWSE_CAP = 9;
 
-/** Lead plus two companions: the bento holds three, so rank 1 to 3 is the editorial contract. */
+/** Lead plus two companions: the bento holds three, as the Featured slots do. */
 export const SPOTLIGHT_SIZE = 3;
 
 /** The visitor's choices in the Browse grid; transient, held in memory only (FE-001). */
@@ -34,15 +34,18 @@ export interface Spotlight {
   readonly side: readonly EpisodeCard[];
 }
 
-/** The first published cards in the order given (featured rank), one lead and the rest beside it; upcoming cards never qualify. */
+/** The published cards holding a Featured slot, by rank: one lead and the rest beside it; upcoming cards never qualify. */
 export function spotlightOf(cards: readonly EpisodeCard[], size: number = SPOTLIGHT_SIZE): Spotlight {
-  const [lead = null, ...side] = cards.filter((card) => card.status === 'published').slice(0, Math.max(size, 0));
+  const ranked = cards
+    .filter((card) => card.status === 'published' && card.featuredRank !== null)
+    .sort((a, b) => (a.featuredRank ?? 0) - (b.featuredRank ?? 0));
+  const [lead = null, ...side] = ranked.slice(0, Math.max(size, 0));
   return { lead, side };
 }
 
 function matches(card: EpisodeCard, selection: Pick<BrowseSelection, 'topic' | 'format'>): boolean {
   return (
-    (selection.topic === ALL || card.topic.id === selection.topic) &&
+    (selection.topic === ALL || card.topics.some((topic) => topic.id === selection.topic)) &&
     (selection.format === ALL || card.format.id === selection.format)
   );
 }
@@ -87,33 +90,34 @@ export interface FacetChoices<Id extends string> {
 interface ChoiceSource<Id extends string> {
   readonly cards: readonly EpisodeCard[];
   readonly vocabulary: readonly Id[];
-  readonly read: (card: EpisodeCard) => Labelled<Id>;
+  /** Every value the card holds for this facet: a card counts under each. */
+  readonly read: (card: EpisodeCard) => readonly Labelled<Id>[];
   /** What the other filter lets through: the cards this facet counts. */
   readonly counted: (card: EpisodeCard) => boolean;
 }
 
 function choicesOf<Id extends string>({ cards, vocabulary, read, counted }: ChoiceSource<Id>): FacetChoices<Id> {
   const labels = new Map<Id, string>();
-  for (const card of cards) labels.set(read(card).id, read(card).label);
+  for (const { id, label } of cards.flatMap(read)) labels.set(id, label);
   const kept = cards.filter(counted);
   const options = vocabulary.flatMap((id) => {
     const label = labels.get(id);
     if (label === undefined) return [];
-    return [{ id, label, count: kept.filter((card) => read(card).id === id).length }];
+    return [{ id, label, count: kept.filter((card) => read(card).some((value) => value.id === id)).length }];
   });
   return { all: kept.length, options };
 }
 
 /**
- * One chip per Topic any card holds, in vocabulary order, counting what each
- * would show under the chosen Format. A chip the Format empties stays, at zero,
+ * One chip per Topic any card appears under, in vocabulary order, counting what
+ * each would show under the chosen Format; an Episode in two Topics counts in both. A chip the Format empties stays, at zero,
  * so the row does not jump while the visitor narrows.
  */
 export function topicChoices(cards: readonly EpisodeCard[], selection: BrowseSelection): FacetChoices<TopicId> {
   return choicesOf({
     cards,
-    vocabulary: TOPICS,
-    read: (card) => card.topic,
+    vocabulary: TOPIC_IDS,
+    read: (card) => card.topics,
     counted: (card) => matches(card, { topic: ALL, format: selection.format }),
   });
 }
@@ -123,7 +127,7 @@ export function formatChoices(cards: readonly EpisodeCard[], selection: BrowseSe
   return choicesOf({
     cards,
     vocabulary: FORMATS,
-    read: (card) => card.format,
+    read: (card) => [card.format],
     counted: (card) => matches(card, { topic: selection.topic, format: ALL }),
   });
 }

@@ -1,6 +1,6 @@
 ---
 type: feature-guide
-stale_after: 2027-01-10T00:00:00Z
+stale_after: 2027-01-11T00:00:00Z
 ---
 
 # Episode migration
@@ -98,6 +98,7 @@ Done when: each widget's pure logic has a passing test.
 
 - `episodes/<ep>/<ep>.ts`: `episode({ slug, youtube, sections: [[sectionSlide, ...pages], ...] })`.
 - Add the slug to `EPISODE_SLUGS` in `src/lib/routes.ts`, and the record to `EPISODES` in `src/components/episodes/registry.ts`.
+- `episodes/<ep>/episode-metadata.ts`: `status: 'published'`, its primary Topic, any extra Topics, its Format, its Tags and `publishedOn`; add it to `PUBLISHED` in `src/components/episodes/episode-repository.ts`. If the Episode was an Upcoming Episode, flip its existing file, move it out of `UPCOMING` and move its copy from `landing.episodeOverview.upcoming.<ep>` to `episodes.<ep>` ([Episode overview entries](episode-translation-keys.md#episode-overview-entries)). To feature it, edit the three slugs in `FEATURED` in `src/lib/episode-overview.ts`.
 - Run `npx vitest run src/components/episodes/published-anchors.test.ts`. It fails for the new Episode and prints the file path and its JSON; create `episodes/<ep>/published-anchors.json` with exactly that content.
 
 Done when: the same test run is green.

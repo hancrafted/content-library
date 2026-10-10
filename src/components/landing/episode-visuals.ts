@@ -1,26 +1,12 @@
-import type { Accent, EpisodeIcon } from '@/lib/episode-index.pure';
-import {
-  BookOpen,
-  Brain,
-  Coins,
-  Compass,
-  FileText,
-  GitBranch,
-  ShieldCheck,
-  Users,
-  type LucideIcon,
-} from 'lucide-react';
+import type { Accent, TopicIcon } from '@/lib/episode-overview';
+import { BookOpen, Coins, FileText, Users, type LucideIcon } from 'lucide-react';
 
-/** The index names an icon as data; this is the one place the landing turns the name into a drawing. */
-export const EPISODE_ICONS: Record<EpisodeIcon, LucideIcon> = {
+/** A Topic names its icon as data; this is the one place the landing turns the name into a drawing. */
+export const TOPIC_ICONS: Record<TopicIcon, LucideIcon> = {
   'book-open': BookOpen,
   'file-text': FileText,
   coins: Coins,
-  brain: Brain,
   users: Users,
-  compass: Compass,
-  'shield-check': ShieldCheck,
-  'git-branch': GitBranch,
 };
 
 /** One colour family drawn as the classes a card needs; whole strings, so Tailwind can see each one. */
@@ -35,7 +21,7 @@ export interface AccentClasses {
   readonly edge: string;
 }
 
-export const EPISODE_ACCENTS: Record<Accent, AccentClasses> = {
+export const TOPIC_ACCENTS: Record<Accent, AccentClasses> = {
   primary: {
     tile: 'bg-primary/10 text-primary',
     ink: 'text-primary',

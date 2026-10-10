@@ -1,7 +1,7 @@
 import { spotlightOf } from '@/components/landing/episode-browse.pure';
 import type { EpisodeCard } from '@/components/landing/episode-card.pure';
 import type { CardLabels } from '@/components/landing/episode-grid-card';
-import { EPISODE_ACCENTS, EPISODE_ICONS, type AccentClasses } from '@/components/landing/episode-visuals';
+import { TOPIC_ACCENTS, TOPIC_ICONS, type AccentClasses } from '@/components/landing/episode-visuals';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
@@ -42,7 +42,7 @@ const FRAME =
 
 /** The corner wash and the large faded glyph behind the text; decorative, so they take no clicks and sit under the content. */
 function Art({ card, size, accent }: { card: EpisodeCard; size: Size; accent: AccentClasses }) {
-  const Icon = EPISODE_ICONS[card.icon];
+  const Icon = TOPIC_ICONS[card.icon];
   return (
     <>
       <span
@@ -58,7 +58,7 @@ function Art({ card, size, accent }: { card: EpisodeCard; size: Size; accent: Ac
 }
 
 function Kicker({ card, size, accent }: { card: EpisodeCard; size: Size; accent: AccentClasses }) {
-  const Icon = EPISODE_ICONS[card.icon];
+  const Icon = TOPIC_ICONS[card.icon];
   const { tile, glyph } = SIZES[size];
   return (
     <div className="flex items-center gap-3">
@@ -108,7 +108,7 @@ interface CardProps {
 
 function SpotlightCard({ card, size, sideCount, locale, labels }: CardProps) {
   if (card.route === null) return null;
-  const accent = EPISODE_ACCENTS[card.accent];
+  const accent = TOPIC_ACCENTS[card.accent];
   const { pad, title, caption } = SIZES[size];
   return (
     <article

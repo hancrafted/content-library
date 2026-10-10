@@ -1,32 +1,30 @@
-import type { EpisodeIndexEntry } from '@/lib/episode-index.pure';
+import type { EpisodeMetadata } from '@/lib/episode-metadata.pure';
 import { describe, expect, it } from 'vitest';
 import { episodeCard } from './episode-card.pure';
 
 /** A stand-in for next-intl's `t`: answers each full key with a fixed sentence naming the key. */
 const read = (key: string) => `[${key}]`;
 
-const PUBLISHED: EpisodeIndexEntry = {
+const PUBLISHED: EpisodeMetadata = {
   slug: 'ai-token-economy',
   status: 'published',
   topic: 'economics',
   format: 'foundations',
-  accent: 'amber',
-  icon: 'coins',
+  tags: ['tokens'],
   publishedOn: '2026-10-09',
-  featuredRank: 3,
 };
 
-const UPCOMING: EpisodeIndexEntry = {
+const UPCOMING: EpisodeMetadata = {
   slug: 'choosing-the-right-model',
   status: 'upcoming',
   topic: 'economics',
+  extraTopics: ['ai-collaboration'],
   format: 'short',
-  accent: 'amber',
-  icon: 'brain',
+  tags: [],
 };
 
 describe('success cases', () => {
-  it('builds a published card that links to its Episode and reads its copy from its own Translation keys', () => {
+  it('builds a published card that links to its Episode, reads its copy from its own Translation keys and takes its Topic look', () => {
     // ARRANGE
     const expected = {
       slug: 'ai-token-economy',
@@ -35,8 +33,9 @@ describe('success cases', () => {
       status: 'published',
       title: '[episodes.ai-token-economy.title]',
       caption: '[episodes.ai-token-economy.caption]',
-      topic: { id: 'economics', label: '[landing.episodeIndex.topics.economics]' },
-      format: { id: 'foundations', label: '[landing.episodeIndex.formats.foundations]' },
+      topic: { id: 'economics', label: '[landing.episodeOverview.topics.economics]' },
+      topics: [{ id: 'economics', label: '[landing.episodeOverview.topics.economics]' }],
+      format: { id: 'foundations', label: '[landing.episodeOverview.formats.foundations]' },
       minutes: 42,
       publishedOn: '2026-10-09',
       featuredRank: 3,
@@ -44,7 +43,7 @@ describe('success cases', () => {
       icon: 'coins',
     };
     // ACT
-    const card = episodeCard(PUBLISHED, { locale: 'en', read, minutes: 42 });
+    const card = episodeCard(PUBLISHED, { locale: 'en', read, minutes: 42, featuredRank: 3 });
     // ASSERT
     expect(card).toEqual(expected);
   });
@@ -58,20 +57,24 @@ describe('success cases', () => {
     expect({ route, href }).toEqual(expected);
   });
 
-  it('builds an upcoming card with no link, reading its copy from the landing Translation keys', () => {
+  it('builds an upcoming card with no link, reading its copy from the landing Translation keys and listing every Topic it appears under', () => {
     // ARRANGE
     const expected = {
       slug: 'choosing-the-right-model',
       route: null,
       href: null,
       status: 'upcoming',
-      title: '[landing.episodeIndex.upcoming.choosing-the-right-model.title]',
-      caption: '[landing.episodeIndex.upcoming.choosing-the-right-model.caption]',
-      topic: { id: 'economics', label: '[landing.episodeIndex.topics.economics]' },
-      format: { id: 'short', label: '[landing.episodeIndex.formats.short]' },
+      title: '[landing.episodeOverview.upcoming.choosing-the-right-model.title]',
+      caption: '[landing.episodeOverview.upcoming.choosing-the-right-model.caption]',
+      topic: { id: 'economics', label: '[landing.episodeOverview.topics.economics]' },
+      topics: [
+        { id: 'economics', label: '[landing.episodeOverview.topics.economics]' },
+        { id: 'ai-collaboration', label: '[landing.episodeOverview.topics.ai-collaboration]' },
+      ],
+      format: { id: 'short', label: '[landing.episodeOverview.formats.short]' },
       featuredRank: null,
       accent: 'amber',
-      icon: 'brain',
+      icon: 'coins',
     };
     // ACT
     const card = episodeCard(UPCOMING, { locale: 'en', read });
@@ -92,25 +95,36 @@ describe('failure cases', () => {
     // ASSERT
     expect(build).toThrow(message);
   });
+
+  it('never ranks an upcoming card as Featured', () => {
+    // ARRANGE
+    const expected = null;
+    // ACT
+    const { featuredRank } = episodeCard(UPCOMING, { locale: 'en', read, featuredRank: 1 });
+    // ASSERT
+    expect(featuredRank).toBe(expected);
+  });
 });
 
 describe('edge cases', () => {
-  it('leaves minutes off a published card whose reading time is not known', () => {
+  it('leaves minutes off a published card whose reading time is not known, and ranks a card outside Featured as null', () => {
     // ARRANGE
     const expectedKeys = ['accent', 'caption', 'featuredRank', 'format', 'href', 'icon'];
     const absent = 'minutes';
     // ACT
-    const keys = Object.keys(episodeCard(PUBLISHED, { locale: 'en', read }));
+    const card = episodeCard(PUBLISHED, { locale: 'en', read });
+    const keys = Object.keys(card);
     // ASSERT
     expect(keys).toEqual(expect.arrayContaining(expectedKeys));
     expect(keys).not.toContain(absent);
+    expect(card.featuredRank).toBeNull();
   });
 
   it('holds only values React can pass to a client component', () => {
     // ARRANGE
-    const expected = JSON.parse(JSON.stringify(episodeCard(PUBLISHED, { locale: 'en', read, minutes: 42 })));
+    const expected = JSON.parse(JSON.stringify(episodeCard(UPCOMING, { locale: 'en', read, minutes: 42 })));
     // ACT
-    const card = episodeCard(PUBLISHED, { locale: 'en', read, minutes: 42 });
+    const card = episodeCard(UPCOMING, { locale: 'en', read, minutes: 42 });
     // ASSERT
     expect(card).toEqual(expected);
   });

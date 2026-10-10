@@ -1,5 +1,5 @@
 import type { EpisodeCard } from '@/components/landing/episode-card.pure';
-import { EPISODE_ACCENTS, EPISODE_ICONS } from '@/components/landing/episode-visuals';
+import { TOPIC_ACCENTS, TOPIC_ICONS } from '@/components/landing/episode-visuals';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
@@ -63,9 +63,9 @@ function CardFooter({ card, labels }: { card: EpisodeCard; labels: CardLabels })
 
 /** A compact Episode card for the Browse grid: a published one is a link, an upcoming one a muted card with a "coming soon" tag and no link. */
 export function EpisodeGridCard({ card, locale, labels }: { card: EpisodeCard; locale: Locale; labels: CardLabels }) {
-  const Icon = EPISODE_ICONS[card.icon];
+  const Icon = TOPIC_ICONS[card.icon];
   const upcoming = card.route === null;
-  const accent = EPISODE_ACCENTS[card.accent];
+  const accent = TOPIC_ACCENTS[card.accent];
   const tone = upcoming
     ? 'border-dashed border-border bg-muted/40'
     : `border-border/60 bg-background hover:-translate-y-0.5 hover:shadow-lg motion-reduce:hover:translate-y-0 ${accent.edge}`;
