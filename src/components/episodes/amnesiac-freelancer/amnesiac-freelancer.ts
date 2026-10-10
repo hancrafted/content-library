@@ -17,7 +17,7 @@ import { whereKnowledgeLives } from './slides/where-knowledge-lives';
  * slide, modelled on the reference Episode (page-template). Every claim traces
  * to docs/research/ai-amnesia-mechanics.md and ai-onboarding-freelancer.md;
  * "amnesiac" is our metaphor, not a vendor term. Keys live under
- * `episodes.amnesiac-freelancer.slides.<slide>` (docs/agents/episode-translation-keys.md).
+ * `episodes.amnesiac-freelancer.slides.<slide>` (docs/features/episode-translation-keys.md).
  */
 export const amnesiacFreelancer = episode({
   slug: 'amnesiac-freelancer',
