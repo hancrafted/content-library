@@ -1,16 +1,72 @@
 .case {
-  border-top: 1px solid var(--border);
+  --surface: oklch(1 0 0);
+  --lift-rest: 0 1px 2px rgb(15 23 42 / 0.06), 0 4px 12px -4px rgb(15 23 42 / 0.08);
+  --lift-hover: 0 2px 4px rgb(15 23 42 / 0.06), 0 12px 28px -8px rgb(15 23 42 / 0.16);
+  --lift-open:
+    0 2px 4px rgb(15 23 42 / 0.05), 0 8px 16px -6px rgb(15 23 42 / 0.1), 0 28px 56px -20px rgb(15 23 42 / 0.22);
+  --edge: inset 0 1px 0 rgb(255 255 255 / 0.9);
+  position: relative;
+  margin-bottom: 1.25rem;
+  padding-inline: 1rem;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) + 6px);
+  background: var(--surface);
+  box-shadow: var(--edge), var(--lift-rest);
 }
-.case:last-child {
-  border-bottom: 1px solid var(--border);
+:global(.dark) .case {
+  --surface: oklch(0.2 0 0);
+  --lift-rest: 0 1px 2px rgb(0 0 0 / 0.5), 0 4px 12px -4px rgb(0 0 0 / 0.5);
+  --lift-hover: 0 2px 4px rgb(0 0 0 / 0.5), 0 14px 30px -8px rgb(0 0 0 / 0.7);
+  --lift-open: 0 2px 4px rgb(0 0 0 / 0.5), 0 10px 20px -6px rgb(0 0 0 / 0.6), 0 30px 60px -20px rgb(0 0 0 / 0.8);
+  --edge: inset 0 1px 0 rgb(255 255 255 / 0.08);
+}
+@property --trace {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+/* Hover/focus trace: an orange 1px border grows from top-centre both ways round the card and meets at the bottom. */
+.case::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border: 1px solid transparent;
+  border-radius: inherit;
+  background: conic-gradient(
+      from calc(var(--trace) * -1) at 50% 50%,
+      var(--brand-accent) calc(var(--trace) * 2),
+      transparent 0
+    )
+    border-box;
+  -webkit-mask:
+    linear-gradient(#000 0 0) padding-box,
+    linear-gradient(#000 0 0) border-box;
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) padding-box,
+    linear-gradient(#000 0 0) border-box;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+.case:has(> details > .summary:focus-visible) {
+  --trace: 180deg;
+}
+@media (hover: hover) {
+  .case:hover {
+    --trace: 180deg;
+    box-shadow: var(--edge), var(--lift-hover);
+  }
+}
+.case:has(> details[open]),
+.case:has(> details[open]):hover {
+  box-shadow: var(--edge), var(--lift-open);
 }
 .summary {
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
   gap: 1rem;
-  margin-inline: -1rem;
-  padding: 1.5rem 1rem;
+  padding: 1.5rem 0;
   border-radius: var(--radius);
   cursor: pointer;
   list-style: none;
@@ -38,9 +94,10 @@
 }
 .outcome strong {
   color: var(--brand-accent);
-  font-size: clamp(2rem, 3.5vw, 2.75rem);
-  font-weight: 600;
-  letter-spacing: -0.055em;
+  font-size: clamp(2.5rem, 4.5vw, 3.5rem);
+  font-weight: 800;
+  letter-spacing: -0.06em;
+  font-variant-numeric: tabular-nums;
   line-height: 1.2;
 }
 .outcome > span {
@@ -70,22 +127,18 @@
   outline-offset: 4px;
   border-radius: 0.25rem;
 }
-.summary:hover {
-  background: var(--muted);
-}
 .summary:hover .company,
 .evidence summary:hover {
   color: var(--primary);
 }
 .flow {
-  margin-bottom: 1.5rem;
-  padding: 1.25rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--background);
+  margin-bottom: 1.25rem;
+  padding: 0;
 }
 .context {
   display: flex;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 0.5rem 1.5rem;
@@ -107,12 +160,30 @@
   padding: 0;
   list-style: none;
 }
+/* Phases sit directly on the card; hairlines split them and a small chip on each hairline carries the progress arrow. */
 .phase {
+  position: relative;
   min-width: 0;
-  padding: 1.25rem 0;
+  padding: 1.75rem 0;
 }
 .phase + .phase {
-  border-top: 1px dashed var(--border);
+  border-top: 1px solid var(--border);
+}
+.phase + .phase::before {
+  content: '↓' / '';
+  position: absolute;
+  top: -0.75rem;
+  left: 0;
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--brand-accent);
+  font-size: 0.8125rem;
+  line-height: 1;
 }
 .phaseLabel {
   display: flex;
@@ -130,9 +201,16 @@
 .phase[data-phase='result'] .phaseLabel {
   color: var(--brand-accent);
 }
+.caption {
+  margin-top: 0.375rem;
+  color: var(--muted-foreground);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
 .phase h4 {
   font-size: 1.125rem;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.4;
   letter-spacing: -0.025em;
   text-wrap: balance;
@@ -174,6 +252,9 @@
   color: var(--muted-foreground);
 }
 @media (min-width: 768px) {
+  .case {
+    padding-inline: 1.75rem;
+  }
   .summary {
     grid-template-columns: 1fr 2fr auto;
     gap: 2rem;
@@ -183,15 +264,26 @@
     grid-column: auto;
     grid-row: auto;
   }
-  .flow {
-    padding: 1.5rem 2rem;
-  }
   .sequence {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 2rem;
+  }
+  .phase {
+    padding-inline: 2rem;
+  }
+  .phase:first-child {
+    padding-left: 0;
+  }
+  .phase:last-child {
+    padding-right: 0;
   }
   .phase + .phase {
     border-top: 0;
+    border-left: 1px solid var(--border);
+  }
+  .phase + .phase::before {
+    content: '→' / '';
+    top: 1.5rem;
+    left: -0.75rem;
   }
   .phaseLabel svg {
     transform: rotate(-90deg);
@@ -202,10 +294,124 @@
   }
 }
 @media (prefers-reduced-motion: no-preference) {
-  .summary {
-    transition: background-color 150ms ease-out;
+  .case {
+    transition:
+      transform 200ms ease-out,
+      box-shadow 200ms ease-out,
+      border-color 200ms ease-out;
+  }
+  .case:has(> details[open]) {
+    transform: translateY(-2px);
+  }
+  @media (hover: hover) {
+    .case:hover {
+      transform: translateY(-3px);
+    }
+    .case:has(> details[open]):hover {
+      transform: translateY(-4px);
+    }
+    /* Micro-animations: while the pointer rests on a phase column, its pictogram wrapper keeps a low-amplitude loop. */
+    .phase:hover [data-micro='jitter'] {
+      animation: micro-jitter 1.4s ease-in-out infinite;
+    }
+    .phase:hover [data-micro='nudge'] {
+      animation: micro-nudge 1.2s ease-in-out infinite;
+    }
+    .phase:hover [data-micro='retick'] {
+      animation: micro-retick 2.2s ease-in-out infinite calc(var(--i, 0) * 60ms);
+    }
+    .phase:hover [data-micro='pulse'] {
+      animation: micro-pulse 1.6s ease-in-out infinite;
+    }
+    .phase:hover [data-micro='bob'] {
+      animation: micro-bob 1.4s ease-in-out infinite calc(var(--i, 0) * 60ms);
+    }
+    .phase:hover [data-micro='tick'] {
+      animation: micro-tick 2s ease-in-out infinite;
+    }
+  }
+  .phase [data-micro] {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .phase [data-micro='tick'] {
+    transform-box: view-box;
+    transform-origin: 187px 60px;
+  }
+  .case::after {
+    transition: --trace 800ms ease-in-out;
   }
   .detailsIcon {
     transition: transform 150ms ease-out;
+  }
+}
+@keyframes micro-jitter {
+  0%,
+  100% {
+    transform: none;
+  }
+  25% {
+    transform: translate(1.5px, -1px) rotate(2deg);
+  }
+  50% {
+    transform: translate(-1.5px, 0.5px) rotate(-2deg);
+  }
+  75% {
+    transform: translate(1px, 1px) rotate(1deg);
+  }
+}
+@keyframes micro-nudge {
+  0%,
+  100% {
+    transform: none;
+  }
+  50% {
+    transform: translateX(4px);
+  }
+}
+@keyframes micro-retick {
+  0%,
+  40%,
+  100% {
+    transform: none;
+  }
+  15% {
+    transform: scale(0.75);
+  }
+  28% {
+    transform: scale(1.15);
+  }
+}
+@keyframes micro-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+@keyframes micro-bob {
+  0%,
+  100% {
+    transform: none;
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+@keyframes micro-tick {
+  0%,
+  20%,
+  100% {
+    transform: rotate(0);
+  }
+  30%,
+  60% {
+    transform: rotate(30deg);
+  }
+  70%,
+  90% {
+    transform: rotate(60deg);
   }
 }

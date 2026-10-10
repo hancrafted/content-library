@@ -92,31 +92,14 @@
   font-size: 0.875rem;
   line-height: 1.6;
 }
-.identityBody,
-.profileLink {
+.identityBody {
   grid-column: 1 / -1;
 }
-.profileLink {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  min-height: 44px;
+.profileLinks {
+  grid-column: 1 / -1;
+  gap: 0.25rem;
+  margin-inline: -0.75rem;
   border-bottom: 1px solid var(--border);
-  font-size: 0.875rem;
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
-}
-.newTab {
-  color: var(--muted-foreground);
-}
-.profileLink:hover,
-.profileLink:active {
-  color: var(--primary);
-}
-.profileLink:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 4px;
 }
 .readingKey {
   padding-block: 1rem;

@@ -79,7 +79,7 @@ describe('landing page post-build structure', () => {
               ['Audi', '30', 'Minuten'],
               ['Selfbits', '5', 'Werke'],
             ],
-            newTab: 'neuer Tab',
+            newTab: 'neuen Tab',
           }
         : {
             outcomes: [
@@ -121,6 +121,33 @@ describe('landing page post-build structure', () => {
     expect(profile.attr('target')).toBe(blankTarget);
     safeRel.forEach((rel) => expect(profile.attr('rel')).toContain(rel));
     expect(profile.text()).toContain(expected.newTab);
+  });
+
+  it.each(LANDING_PAGES)('links the three social profiles from the header for $locale', ({ url, locale }) => {
+    // ARRANGE
+    const expectedLinks = [
+      { id: 'youtube', href: 'https://www.youtube.com/@codeadjacent', name: 'YouTube' },
+      { id: 'github', href: 'https://github.com/hancrafted', name: 'GitHub' },
+      { id: 'linkedin', href: 'https://www.linkedin.com/in/han-che/', name: 'LinkedIn' },
+    ];
+    const newTabHint = locale === 'de' ? 'neuen Tab' : 'new tab';
+    const blankTarget = '_blank';
+    const safeRel = ['noopener', 'noreferrer'];
+
+    // ACT
+    const $ = getPage(url);
+    const header = $('[data-testid="site-header"]');
+
+    // ASSERT
+    expectedLinks.forEach(({ id, href, name }) => {
+      const link = header.find(`a[data-testid="social-${id}"]`);
+      expect(link.length).toBe(1);
+      expect(link.attr('href')).toBe(href);
+      expect(link.attr('target')).toBe(blankTarget);
+      safeRel.forEach((rel) => expect(link.attr('rel')).toContain(rel));
+      expect(link.text()).toContain(name);
+      expect(link.text()).toContain(newTabHint);
+    });
   });
 
   it.each(LANDING_PAGES)('keeps the fuller case evidence in native disclosures for $locale', ({ url, locale }) => {
