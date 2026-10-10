@@ -1,3 +1,7 @@
+---
+type: agent-guide
+---
+
 # Episode translation keys
 
 Read before adding or changing an Episode, a Slide, or any string in `src/messages/<locale>.json`. The binding rules (keys come from the Slide slug, never a position; leaf strings only; ICU for variable text; every key in both Translation files) live in [FE-002 Episode Page](../../.archgate/adrs/FE-002-episode-page.md) §5. This guide holds the role vocabulary and a worked example.

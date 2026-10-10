@@ -1,3 +1,7 @@
+---
+type: agent-guide
+---
+
 # Domain Docs
 
 How engineering skills should consume this repo's domain documentation when exploring the codebase. This repo is **single-context**.

@@ -1,9 +1,10 @@
-# Placeholder until markdown-harness is set up for real (handled separately).
-# The tool refuses an empty file and an empty rule list, so this holds one
-# rule that matches no markdown file: it governs nothing and `mh check` passes.
 frontmatter:
   rules:
-    - ruleId: placeholder
-      folders: [docs/markdown-harness/]
-      intent: Placeholder that governs nothing until real rules are authored
-      fields: {}
+    - ruleId: agent-guide
+      folders: [docs/agents/]
+      intent: 'docs/agents/ holds method and procedure only, so every file declares itself an agent guide and product reference is caught here'
+      fields:
+        type:
+          presence: required
+          allowed:
+            - { value: agent-guide, intent: Method and procedure that does not depend on the product. }

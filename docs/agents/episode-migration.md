@@ -1,3 +1,7 @@
+---
+type: agent-guide
+---
+
 # Episode migration
 
 Read before turning a prototype (for example an HTML tower page) into an Episode, or before adding any Episode. Binding rules: [FE-002 Episode Page](../../.archgate/adrs/FE-002-episode-page.md). Key roles: [episode-translation-keys.md](episode-translation-keys.md). Copy source: `src/components/episodes/page-template/`. Every Slide layout rendered: `src/components/episodes/slide-layouts/`.

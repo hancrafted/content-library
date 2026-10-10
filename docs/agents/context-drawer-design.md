@@ -1,3 +1,7 @@
+---
+type: agent-guide
+---
+
 # Context drawer design
 
 Read before changing the drawer's look, layout or interaction. The binding rules live in [FE-010](../../.archgate/adrs/FE-010-context-drawer.md); this page holds the detail that does not need to bind.
