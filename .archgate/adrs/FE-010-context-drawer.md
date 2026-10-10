@@ -69,7 +69,7 @@ Card, head, menu and selected-state detail: [`docs/features/episode-chrome.md`](
 
 ### 7. Card and modes
 
-1. A floating card: one-step width, only `transform` animates; beside from `xl`.
+1. Fixed card; only `transform` animates. Beside (from `xl`) widens the right inset in one step (FE-009 §2); over covers it.
 2. Layout MUST be the `drawerMode` preference; open state and tab stay in memory.
 
 ### 8. Input only
@@ -86,7 +86,7 @@ Card, head, menu and selected-state detail: [`docs/features/episode-chrome.md`](
 3. **DO** hide a closed drawer with `invisible` and a transform. (Decision 2)
 4. **DO** give every note a short `target` and mark that element — a layout's own (`title`, `prose`) or `{...target('chart')}`. (Decisions 3 and 4)
 5. **DO** write German notes from the same facts, not as translations. (Decision 6)
-6. **DO** reserve the card's width in one step and animate only `transform`. (Decision 7)
+6. **DO** widen the Foreground's right inset in one step when beside, and animate only `transform`. (Decision 7)
 7. **DO** pass the drawer everything as `ContextDrawerInput`, built by the Episode-side adapter. (Decision 8)
 
 ### Don'ts
@@ -96,7 +96,7 @@ Card, head, menu and selected-state detail: [`docs/features/episode-chrome.md`](
 3. **DON'T** add a layout, style, placement or time field to a note or segment. (Decision 3)
 4. **DON'T** render the drawer from an Episode file. (Decision 5)
 5. **DON'T** show a source as plain text, or open it without `rel="noopener noreferrer"`. (Decision 6)
-6. **DON'T** transition width, grid tracks or margins for the card. (Decision 7)
+6. **DON'T** transition width, padding or margins for the card, or give it a layout spacer or grid column. (Decision 7)
 7. **DON'T** read Episode, table-of-contents or Translation code from the drawer, or number a `ContextRef`. (Decisions 4 and 8)
 
 ## Consequences

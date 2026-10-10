@@ -48,7 +48,7 @@ const foundations = slide({ slug: 'foundations', content: ({ t }) => t('title') 
 const nextSteps = slide({ slug: 'next-steps', content: ({ t }) => t('caption') });
 
 describe('success cases', () => {
-  it('keeps what a Slide declares and renders its Canvas from the kit it is given', () => {
+  it('keeps what a Slide declares and renders its Scene from the kit it is given', () => {
     // ARRANGE
     const { kit, calls } = recordingKit();
     const expected = [

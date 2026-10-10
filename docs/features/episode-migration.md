@@ -63,15 +63,15 @@ export const theLostMiddle = slide({
 });
 ```
 
-- Pick the layout from `slide-layouts/`: section slide, basic page, three-column. A Slide that fits none is free JSX in a `SlideFrame` with the kit's `<Title>` ([FE-002 §3](../../.archgate/adrs/FE-002-episode-page.md#3-canvas-is-free)).
+- Pick the layout from `slide-layouts/`: section slide, basic page, three-column. A Scene that fits none is free JSX in a `SlideFrame` with the kit's `<Title>` ([FE-002 §3](../../.archgate/adrs/FE-002-episode-page.md#3-scene-is-free)).
 - A type error from a kit field means the Translation keys or the declaration are wrong. Fix them; never cast.
-- The kit is everything a Slide's content needs:
+- The kit is everything a Scene needs:
   - `t('caption')`, `t('count', { n })`; `t.rich('prose', { ref: ref('<note>') })` already knows `<em>`, `<b>`, `<code>` — pass a tag only to restyle it.
   - `template('showAll')`: the raw string, `{count}` unfilled, for a `client/` widget to fill with `fillTemplate` from `@/lib/template.pure`.
   - `slideHref('the-lost-middle')`: the localized link to another Slide of this Episode.
   - `locale`: for `Intl` number or date formatting.
   - `ref`, `target`, `Title`: notes and heading, below.
-- A part or data several Slides share goes in `episodes/<ep>/canvas/`; see `page-template/canvas/statement.tsx`. Its rules, and those for Episode CSS and colour tokens: [FE-002 §3 and §7](../../.archgate/adrs/FE-002-episode-page.md#3-canvas-is-free).
+- A part or data several Slides share goes in `episodes/<ep>/parts/`; see `page-template/parts/statement.tsx`. Its rules, and those for Episode CSS and colour tokens: [FE-002 §3 and §7](../../.archgate/adrs/FE-002-episode-page.md#3-scene-is-free).
 
 Done when: every Slide of step 1 has a file and `npm run typecheck` passes.
 
@@ -87,7 +87,7 @@ Done when: every note target resolves to one element of its Slide, and every sou
 
 ## 6. Client widgets
 
-- Interactive or animated parts go in `episodes/<ep>/client/<name>.client.tsx` ([FE-002 §3](../../.archgate/adrs/FE-002-episode-page.md#3-canvas-is-free)).
+- Interactive or animated parts go in `episodes/<ep>/client/<name>.client.tsx` ([FE-002 §3](../../.archgate/adrs/FE-002-episode-page.md#3-scene-is-free)).
 - Logic goes in `client/<name>.pure.ts` with a `.pure.test.ts` beside it; test the logic, not the markup.
 - Respect `prefers-reduced-motion`; pause looping animation outside the active Slide.
 - Slide files render the widget like any component and stay server components.
