@@ -10,6 +10,7 @@ This project is a localized Next.js application which serves to visualize theory
 - Save a pasted handoff verbatim to `.scratch/<feature>/handoff.md` before starting; review agents read that file as the spec.
 - Use `npm run verify` frequently to verify that the changes are correct.
 - Binding decisions live in Archgate ADRs under `.archgate/adrs/`.
+- `docs/agents/` holds method and procedure, product-agnostic. Feature reference (Episodes, Context drawer, Translation keys) lives in `docs/features/`.
 - An ADR's `files:`/`paths:` name where authors of governed code work, two or three globs, and cover every file its checks fire in. Compliance names kinds of enforcer (types, lint, tests), not config files.
 - For any /grill-with-docs and /wayfinder, using the /grilling skill read the `docs/agents/grilling-format.md`, which overwrites the grill format. Analog for voice sessions read `docs/agents/grilling-voice.md`.
 - Worktrees: `npm run wt:new -- <branch>` and `npm run wt:done -- <branch>` (the `worktree` skill). They override any worktree path a handoff names.
@@ -48,3 +49,7 @@ Default vocabulary: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-
 ### Domain docs
 
 Single-context: `GLOSSARY.md` at the root. When an engineering skill says "ADR", it means a **design-ADR**: it goes in `docs/adr/` with `type: design-adr` front matter. Archgate ADRs in `.archgate/adrs/` are separate, and engineering skills never write them. See `docs/agents/domain.md`.
+
+### Claude Desktop project
+
+When you change a file listed in `.agents/skills/claude-project-context/assets/files.md`, run the `claude-project-context` skill and end your final report with the `Re-upload to Claude Desktop:` paths it names.

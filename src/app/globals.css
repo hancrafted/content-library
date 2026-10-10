@@ -22,7 +22,7 @@
   --ai: oklch(0.6 0.14 62);
   /* The brand accent: the hero's 'promotion', About emphasis, method deliverables. `--accent` is shadcn's neutral hover surface. */
   --brand-accent: #dd5f27;
-  /* The selected or active item (drawer tab, current nav link, active table-of-contents entry): 3:1 against the surface, text 4.5:1 (docs/agents/context-drawer-design.md). */
+  /* The selected or active item (drawer tab, current nav link, active table-of-contents entry): 3:1 against the surface, text 4.5:1 (docs/features/episode-chrome.md). */
   --selected: oklch(0.4 0 0);
   --selected-foreground: oklch(0.985 0 0);
   --border: oklch(0.922 0 0);

@@ -52,14 +52,14 @@ AGENTS.md, GLOSSARY.md, FE-002, FE-005, FE-006, FE-007, FE-009, FE-010, docs/age
 
 The handoff's read-first list changed in the slide-as-unit refactor. For run 2, the agent reads:
 
-- `docs/agents/episode-translation-keys.md` (replaces `docs/agents/episode-catalog-keys.md`).
-- `docs/agents/episode-migration.md` (new): the conversion recipe.
+- `docs/features/episode-translation-keys.md` (replaces `docs/agents/episode-catalog-keys.md`).
+- `docs/features/episode-migration.md` (new): the conversion recipe.
 - FE-002 (rewritten around the Slide as the unit), plus FE-006, FE-009, FE-010.
 - `src/components/episodes/page-template/` (minimal copy source) and `src/components/episodes/slide-layouts/` (every Slide layout rendered).
 
 ## Run 3 read-first
 
-Run 2's handoff, changing only the read-first list (the updated `docs/agents/episode-migration.md`, `docs/agents/episode-translation-keys.md`, FE-002, FE-003, FE-006, FE-010) and adding the screenshot self-check in both themes (migration step 9). The orchestrator does the final review in Chrome, screenshots as fallback (step 10).
+Run 2's handoff, changing only the read-first list (the updated `docs/features/episode-migration.md`, `docs/features/episode-translation-keys.md`, FE-002, FE-003, FE-006, FE-010) and adding the screenshot self-check in both themes (migration step 9). The orchestrator does the final review in Chrome, screenshots as fallback (step 10).
 
 ## Follow-ups (run 1)
 

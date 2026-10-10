@@ -1,3 +1,8 @@
+---
+type: feature-guide
+stale_after: 2027-01-10T00:00:00Z
+---
+
 # Episode migration
 
 Read before turning a prototype (for example an HTML tower page) into an Episode, or before adding any Episode. Binding rules: [FE-002 Episode Page](../../.archgate/adrs/FE-002-episode-page.md). Key roles: [episode-translation-keys.md](episode-translation-keys.md). Copy source: `src/components/episodes/page-template/`. Every Slide layout rendered: `src/components/episodes/slide-layouts/`.
@@ -21,8 +26,7 @@ Done when: a table lists every Section with its Slides in order, and each Slide 
 
 Kebab-case, from the titles: `the-lost-middle`.
 
-- One slug per Slide, unique across the whole Episode, section slides included.
-- Never `top`, never a position.
+- One slug per Slide, unique across the whole Episode, section slides included; never `top` or a position ([FE-002 §2](../../.archgate/adrs/FE-002-episode-page.md#2-the-slide-is-the-unit)).
 - The Episode slug is the folder name and the route: `episode/<ep>`.
 
 Done when: no two slugs match and each Section's first slug names the Section.
@@ -59,16 +63,15 @@ export const theLostMiddle = slide({
 });
 ```
 
-- Pick the layout from `slide-layouts/`: section slide, basic page, three-column. A Canvas that fits none is free JSX in a `SlideFrame` with the kit's `<Title>`.
+- Pick the layout from `slide-layouts/`: section slide, basic page, three-column. A Slide that fits none is free JSX in a `SlideFrame` with the kit's `<Title>` ([FE-002 §3](../../.archgate/adrs/FE-002-episode-page.md#3-canvas-is-free)).
 - A type error from a kit field means the Translation keys or the declaration are wrong. Fix them; never cast.
-- The kit is everything a Canvas needs:
+- The kit is everything a Slide's content needs:
   - `t('caption')`, `t('count', { n })`; `t.rich('prose', { ref: ref('<note>') })` already knows `<em>`, `<b>`, `<code>` — pass a tag only to restyle it.
-  - `template('show-all')`: the raw string, `{count}` unfilled, for a `client/` widget to fill with `fillTemplate` from `@/lib/template.pure`.
+  - `template('showAll')`: the raw string, `{count}` unfilled, for a `client/` widget to fill with `fillTemplate` from `@/lib/template.pure`.
   - `slideHref('the-lost-middle')`: the localized link to another Slide of this Episode.
   - `locale`: for `Intl` number or date formatting.
   - `ref`, `target`, `Title`: notes and heading, below.
-- A part or data several Slides share goes in `episodes/<ep>/canvas/`: a server component with plain props (`<Statement>{t('statement')}</Statement>`), never the kit, never importing a Slide. See `page-template/canvas/statement.tsx`.
-- Episode CSS, when Tailwind is not enough, sits in `canvas/` with every selector under `[data-episode='<ep>']`. Machine, human, AI, primary and secondary use the site tokens (`text-machine`, `text-human`, `text-ai`, `text-primary`, `text-secondary`); any other colour gets a light and a dark value. `globals.css` changes only for a token two Episodes share.
+- A part or data several Slides share goes in `episodes/<ep>/canvas/`; see `page-template/canvas/statement.tsx`. Its rules, and those for Episode CSS and colour tokens: [FE-002 §3 and §7](../../.archgate/adrs/FE-002-episode-page.md#3-canvas-is-free).
 
 Done when: every Slide of step 1 has a file and `npm run typecheck` passes.
 
@@ -78,13 +81,13 @@ Done when: every Slide of step 1 has a file and `npm run typecheck` passes.
 - A Context reference is `<ref>phrase</ref>` in the string and `ref('<note>')` in `t.rich`.
 - `sources: [{ slug, url }]` on the note that cites them; titles under `notes.<note>.sources.<source>.title`.
 - Voice script: `segments` by slug, strings under `voiceScript.segments.<segment>`. A segment's `bridge: true` needs a `bridge` string.
-- Reading time is counted from the script and bridge words (en 140, de 120 per minute). Write no minutes and no segment times; a Slide without a script adds no time.
+- Reading time is counted from the script and bridge words (en 140, de 120 per minute), so write no minutes and no segment times ([FE-002 §2](../../.archgate/adrs/FE-002-episode-page.md#2-the-slide-is-the-unit)).
 
 Done when: every note target resolves to one element of its Slide, and every source voice-script passage sits in a segment.
 
 ## 6. Client widgets
 
-- Interactive or animated parts go in `episodes/<ep>/client/<name>.client.tsx`: the only place an Episode carries `'use client'`.
+- Interactive or animated parts go in `episodes/<ep>/client/<name>.client.tsx` ([FE-002 §3](../../.archgate/adrs/FE-002-episode-page.md#3-canvas-is-free)).
 - Logic goes in `client/<name>.pure.ts` with a `.pure.test.ts` beside it; test the logic, not the markup.
 - Respect `prefers-reduced-motion`; pause looping animation outside the active Slide.
 - Slide files render the widget like any component and stay server components.

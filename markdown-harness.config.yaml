@@ -1,9 +1,28 @@
-# Placeholder until markdown-harness is set up for real (handled separately).
-# The tool refuses an empty file and an empty rule list, so this holds one
-# rule that matches no markdown file: it governs nothing and `mh check` passes.
 frontmatter:
   rules:
-    - ruleId: placeholder
-      folders: [docs/markdown-harness/]
-      intent: Placeholder that governs nothing until real rules are authored
-      fields: {}
+    - ruleId: feature-guide
+      folders: [docs/features/]
+      intent: 'docs/features/ holds product reference that drifts from the code, so every guide declares itself a feature guide and carries a review date'
+      assess:
+        stale: 'Check this against src/ and the ADRs before relying on it, then move stale_after.'
+      fields:
+        type:
+          presence: required
+          allowed:
+            - { value: feature-guide, intent: Product reference that must be re-checked against the code. }
+        stale_after: { presence: required, format: datetime }
+    - ruleId: agent-guide
+      folders: [docs/agents/]
+      intent: 'docs/agents/ holds method and procedure only, so every file declares itself an agent guide and product reference is caught here'
+      fields:
+        type:
+          presence: required
+          allowed:
+            - { value: agent-guide, intent: Method and procedure that does not depend on the product. }
+    - ruleId: glossary
+      fileNames: [GLOSSARY.md]
+      intent: 'The glossary holds the words spoken in voice sessions, so it carries a review date and an agent past it re-checks the terms'
+      assess:
+        stale: Check each term against the code and ADRs before relying on it, then move stale_after.
+      fields:
+        stale_after: { presence: required, format: datetime }

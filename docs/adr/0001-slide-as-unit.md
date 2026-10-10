@@ -28,7 +28,7 @@ The first two Episode migrations (run 1 of the migration experiment) copied a sh
 2. **Slide slugs are unique across the whole Episode**, not per Section, because Translation keys are flat by slug.
 3. **Many small files.** An Episode is a folder of Slide files plus `client/` widgets, not one page file.
 4. **Types before content.** Translation keys must exist (en, de) before a Slide file compiles, since the kit's types derive from them.
-5. **Authoring needs a copy source.** `page-template` is the minimal one; `slide-layouts` shows each layout rendered; `docs/agents/episode-migration.md` is the recipe for converting a prototype.
+5. **Authoring needs a copy source.** `page-template` is the minimal one; `slide-layouts` shows each layout rendered; `docs/features/episode-migration.md` is the recipe for converting a prototype.
 
 ## Related
 
