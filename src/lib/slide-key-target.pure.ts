@@ -24,7 +24,7 @@ export const SLIDE_KEY_EXCLUDED_SELECTOR = [
   'input',
   'textarea',
   'select',
-  '[contenteditable]',
+  '[contenteditable]:not([contenteditable="false"])',
   'iframe',
   '[role=tablist]',
   '[role=menu]',
@@ -47,15 +47,18 @@ export interface SlidePlace {
   readonly active: string | null;
 }
 
-const STEPS: Record<string, number> = { ArrowRight: 1, ArrowLeft: -1 };
+const STEPS: ReadonlyMap<string, number> = new Map([
+  ['ArrowRight', 1],
+  ['ArrowLeft', -1],
+]);
 
 function isBare(event: SlideKeyEvent): boolean {
   return !(event.altKey || event.ctrlKey || event.metaKey || event.shiftKey);
 }
 
 /** The Slide id an arrow press goes to, or `null` when the press is not ours or there is nowhere to go. */
-export function slideKeyAction(event: SlideKeyEvent, excluded: boolean, place: SlidePlace): string | null {
-  const step = STEPS[event.key];
+export function slideKeyTarget(event: SlideKeyEvent, excluded: boolean, place: SlidePlace): string | null {
+  const step = STEPS.get(event.key);
   const at = place.active === null ? -1 : place.ids.indexOf(place.active);
   if (excluded || !isBare(event) || step === undefined || at === -1) return null;
   return place.ids[at + step] ?? null;
