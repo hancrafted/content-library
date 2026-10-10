@@ -69,7 +69,7 @@ export function TableOfContents(props: {
   const panel = { view, sections: props.sections, labels: props.labels, time };
   return (
     <>
-      <TocPanel {...panel} testId="toc" className="hidden max-h-[calc(100svh-7rem)] md:flex" />
+      <TocPanel {...panel} testId="toc" className="hidden max-h-[calc(100svh-7rem-var(--toc-reserve,0px))] md:flex" />
       <TocDrawer
         labels={props.labels}
         where={view.revealed ? whereAt(props.sections, view.active) : null}

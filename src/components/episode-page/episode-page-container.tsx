@@ -9,7 +9,12 @@ import { cn } from '@/lib/utils';
 import { getTranslations } from 'next-intl/server';
 import { ContentArea } from './content-area';
 import { contextDrawerInput } from './context-drawer-input';
-import { INSET_CLASSES, tocSectionsOf, type PlacedEpisodeSection } from './episode-page-container.pure';
+import {
+  INSET_CLASSES,
+  TOC_RESERVE_CLASS,
+  tocSectionsOf,
+  type PlacedEpisodeSection,
+} from './episode-page-container.pure';
 import { recordContent, type TranslatorOf } from './record-content';
 import { SlideKeys } from './slide-keys.client';
 import { SlideObserver } from './slide-observer.client';
@@ -112,7 +117,11 @@ export async function EpisodePageContainer({ locale, episode }: { locale: Locale
   const drawer = await contextDrawerInput(locale, placed);
   return (
     <UrlStateProvider key={`${locale}/${episode.slug}`}>
-      <div data-slot="episode-page" data-episode={episode.slug} className={cn('mt-6', INSET_CLASSES)}>
+      <div
+        data-slot="episode-page"
+        data-episode={episode.slug}
+        className={cn('mt-6', INSET_CLASSES, TOC_RESERVE_CLASS)}
+      >
         <EpisodeToc locale={locale} slug={episode.slug} placed={placed} labels={tocLabels} />
         <SlideColumn
           ids={ids}

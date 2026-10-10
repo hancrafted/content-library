@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { DRAWER_BESIDE_ATTR } from '../../lib/context-drawer.pure';
+import { TALK_DOCKED_ATTR } from '../../lib/talk-dock.pure';
 import {
   INSET_CLASSES,
+  TOC_RESERVE_CLASS,
   tocSectionsOf,
   type EpisodeSection,
   type EpisodeSlide,
@@ -201,5 +203,14 @@ describe('edge cases', () => {
     // ASSERT
     expect(names.filter((name) => name === '--inset-l')).toHaveLength(2);
     expect(names.filter((name) => name === '--inset-r')).toHaveLength(3);
+  });
+
+  it('reserves the docked player height and a gap on the table of contents, from lg, on the attribute the player sets', () => {
+    // ARRANGE
+    const expected = `lg:data-[${TALK_DOCKED_ATTR.replace('data-', '')}=true]:[--toc-reserve:12.5625rem]`;
+    // ACT
+    const reserve = TOC_RESERVE_CLASS;
+    // ASSERT: 2rem header + 17rem * 9/16 frame + 1rem gap
+    expect(reserve).toBe(expected);
   });
 });
