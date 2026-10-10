@@ -1,6 +1,6 @@
 /*
  * Notes and segments are a flat list inside the drawer card, never cards of
- * their own (docs/agents/context-drawer-design.md). A short, centred divider
+ * their own (docs/features/episode-chrome.md). A short, centred divider
  * sits in the gap above each item, absolutely placed so a tint behind the item
  * (`data-context-active`, see globals.css) never covers it. The padding gives
  * that tint room; the negative margin keeps the text aligned with its neighbours.

@@ -29,7 +29,7 @@ A Slide's Speaker notes and Voice script are the author's working text: what to 
 
 **Why spans are counted:** hand-written `from`/`to` minutes drifted from the script they timed, once per locale. Counting script plus bridge words at the locale's speaking pace retimes a segment whenever its text changes.
 
-Card, head, menu and selected-state detail: [`docs/agents/context-drawer-design.md`](../../docs/agents/context-drawer-design.md).
+Card, head, menu and selected-state detail: [`docs/features/episode-chrome.md`](../../docs/features/episode-chrome.md).
 
 **Out of scope:** guided tour (the `target` pairing is the hook, as in Shepherd's `attachTo`); PDF export (full print keeps it possible); live annotation.
 
@@ -64,7 +64,7 @@ Card, head, menu and selected-state detail: [`docs/agents/context-drawer-design.
 
 ### 6. Strings and links
 
-1. Translation keys follow `docs/agents/episode-translation-keys.md`; chrome under `contextDrawer.*`.
+1. Translation keys follow `docs/features/episode-translation-keys.md`; chrome under `contextDrawer.*`.
 2. A source MUST be an `https` link named as opening a new tab.
 
 ### 7. Card and modes
