@@ -34,7 +34,7 @@ Why layouts stay site-wide: Next.js inherits a layout's field into every page th
 
 ### 2. Title and description are translated strings
 
-1. They MUST live in Translation files typed so a missing German key fails `tsc` — the landing page's in `meta.home`; an Episode's in its own folder's `i18n/`, read through its record and handed to `pageMetadata` by the route (old shape, until every Episode moves: `episodes.<slug>.title` / `.description`).
+1. They MUST live in Translation files typed so a missing German key fails `tsc` — the landing page's in `meta.home`; an Episode's in its own folder's `i18n/`, read through its record and handed to `pageMetadata` by the route; the site-wide files hold no Episode text.
 2. A page at a root layout's own segment MUST name the brand in its title; `title.template` skips that segment.
 
 ### 3. `SITE_URL` is the absolute base

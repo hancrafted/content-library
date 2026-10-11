@@ -1,4 +1,4 @@
-import { selfContainedEpisode } from '@/components/slide-master/slide';
+import { episode } from '@/components/slide-master/slide';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { grid1x1 } from './slides/grid-1x1/slide';
@@ -29,7 +29,7 @@ import { verticalStickyYears } from './slides/vertical-sticky-years/slide';
  * Note the name clash: the Episode slug is `slide-master`, while the Slide
  * master proper is the shared frame in `src/components/slide-master/`.
  */
-export const slideMaster = selfContainedEpisode({
+export const slideMaster = episode({
   slug: 'slide-master',
   messages: { en, de },
   sections: [

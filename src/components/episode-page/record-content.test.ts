@@ -1,4 +1,4 @@
-import { selfContainedEpisode, slide, type SelfContainedEpisodeRecord } from '@/components/slide-master/slide';
+import { episode, slide, type EpisodeRecord } from '@/components/slide-master/slide';
 import type { RuntimeKit, RuntimeTranslator } from '@/components/slide-master/slide-base';
 import { TRANSLATIONS } from '@/i18n/translations';
 import type { Locale } from '@/lib/locale.pure';
@@ -10,7 +10,7 @@ import { recordContent, type TranslatorOf } from './record-content';
  * Stand-in for next-intl's site-wide translator: reads the real Translation
  * files and returns each string as written (no ICU formatting), so these tests
  * read structure and keys, never wording. A missing key throws, as in the
- * static build. A self-contained Slide never reaches it: the kit builds its
+ * static build. A Slide never reaches it: the kit builds its
  * translator from the Slide's own messages.
  */
 function translatorOf(locale: Locale): TranslatorOf {
@@ -119,7 +119,7 @@ const nextSteps = slide({
   content: (kit) => probe(kit as unknown as RuntimeKit, []),
 });
 
-const RECORD = selfContainedEpisode({
+const RECORD = episode({
   slug: 'page-template',
   messages: EPISODE,
   sections: [[foundations, whyATemplate], [nextSteps]],
@@ -209,7 +209,7 @@ describe('success cases', () => {
       messages: NEXT,
       content: ({ locale, slideHref }) => `${locale} ${slideHref('why-a-template')} ${slideHref('next-steps')}`,
     });
-    const record = selfContainedEpisode({
+    const record = episode({
       slug: 'page-template',
       messages: EPISODE,
       sections: [[foundations, whyATemplate], [linker]],
@@ -225,7 +225,7 @@ describe('success cases', () => {
 describe('failure cases', () => {
   it('rejects a Slide slug used twice in one Episode, as when a copied Slide collides', async () => {
     // ARRANGE
-    const record = selfContainedEpisode({
+    const record = episode({
       slug: 'page-template',
       messages: EPISODE,
       sections: [[foundations], [foundations]],
@@ -244,7 +244,7 @@ describe('failure cases', () => {
       messages: NEXT,
       content: ({ slideHref }) => slideHref('no-such-slide'),
     });
-    const record = selfContainedEpisode({
+    const record = episode({
       slug: 'page-template',
       messages: EPISODE,
       sections: [[foundations], [linker]],
@@ -259,7 +259,7 @@ describe('failure cases', () => {
   it("rejects a key missing from the Slide's own file in the page's locale, even past the types", async () => {
     // ARRANGE
     const gap = { en: { title: 'Next steps' }, de: {} as { title: string } };
-    const record = selfContainedEpisode({
+    const record = episode({
       slug: 'page-template',
       messages: EPISODE,
       sections: [[slide({ slug: 'next-steps', messages: gap, content: ({ t }) => t('title') })]],
@@ -278,7 +278,7 @@ describe('failure cases', () => {
       messages: NEXT,
       content: (kit) => (kit as unknown as RuntimeKit).ref('reference-episode')('phrase'),
     });
-    const record = selfContainedEpisode({ slug: 'page-template', messages: EPISODE, sections: [[foundations, rogue]] });
+    const record = episode({ slug: 'page-template', messages: EPISODE, sections: [[foundations, rogue]] });
     const expected = 'reference-episode';
     // ACT
     const build = recordContent(record, 'en', translatorOf('en'));
@@ -291,7 +291,7 @@ describe('edge cases', () => {
   it('gives a Slide without a Voice script 0 minutes, so the table of contents shows no time for it', async () => {
     // ARRANGE
     const bare = slide({ slug: 'what-comes-next', messages: NEXT, content: () => null });
-    const record: SelfContainedEpisodeRecord = {
+    const record: EpisodeRecord = {
       slug: 'page-template',
       messages: EPISODE,
       sections: [[nextSteps, bare]],
@@ -311,7 +311,7 @@ describe('edge cases', () => {
       de: { title: 'Nächste Schritte', prose: 'Ein <b>kräftiger</b> Anfang' },
     };
     const rich = slide({ slug: 'next-steps', messages: bold, content: ({ t }) => t.rich('prose') });
-    const record = selfContainedEpisode({ slug: 'page-template', messages: EPISODE, sections: [[rich]] });
+    const record = episode({ slug: 'page-template', messages: EPISODE, sections: [[rich]] });
     const expected = 'b';
     // ACT
     const { sections } = await recordContent(record, 'en', translatorOf('en'));

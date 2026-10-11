@@ -1,5 +1,5 @@
 import { ContextDrawerSlot } from '@/components/context-drawer/context-drawer-slot';
-import type { AnyEpisodeRecord } from '@/components/slide-master/episode-record';
+import type { EpisodeRecord } from '@/components/slide-master/slide';
 import type { RuntimeTranslator } from '@/components/slide-master/slide-base';
 import { TableOfContents, type TocLabels } from '@/components/table-of-contents/table-of-contents.client';
 import { readTranslationStrings } from '@/i18n/translation-strings';
@@ -109,7 +109,7 @@ function translatorOf(locale: Locale): TranslatorOf {
  * reads that list, so no id is derived twice and none can drift. It also
  * provides the page's one URL-state service (FE-001 §2).
  */
-export async function EpisodePageContainer({ locale, episode }: { locale: Locale; episode: AnyEpisodeRecord }) {
+export async function EpisodePageContainer({ locale, episode }: { locale: Locale; episode: EpisodeRecord }) {
   const { title, caption, sections: placed } = await recordContent(episode, locale, translatorOf(locale));
   const ids = [TITLE_ANCHOR, ...slidesInPageOrder(placed).map(({ id }) => id)];
   const youtubeId = episode.youtube?.[locale];

@@ -1,4 +1,4 @@
-import { isSelfContainedSlide, type SelfContainedSlide } from '@/components/slide-master/slide';
+import { type Slide } from '@/components/slide-master/slide';
 import { ownTranslator, slideKit } from '@/components/slide-master/slide-kit';
 import { EPISODE_SLUGS, type EpisodeSlug } from '@/lib/routes';
 import { createElement, Fragment } from 'react';
@@ -15,15 +15,14 @@ import { findEpisode } from './registry';
 
 interface PlacedSlide {
   readonly episode: EpisodeSlug;
-  readonly slide: SelfContainedSlide;
+  readonly slide: Slide;
 }
 
-/** Every self-contained Slide of every registered Episode. */
-function selfContainedSlides(): PlacedSlide[] {
+/** Every Slide of every registered Episode. */
+function allSlides(): PlacedSlide[] {
   return EPISODE_SLUGS.flatMap((episode) =>
     findEpisode(episode)
       .sections.flat()
-      .filter(isSelfContainedSlide)
       .map((slide) => ({ episode, slide })),
   );
 }
@@ -58,9 +57,7 @@ function repeated(ids: readonly string[]): string[] {
 describe('success cases', () => {
   it('points every aria-labelledby of a twice-rendered grid Slide at an id in its own copy', () => {
     // ARRANGE
-    const grid = selfContainedSlides().find(
-      ({ episode, slide }) => episode === 'slide-master' && slide.slug === 'grid-2x2',
-    );
+    const grid = allSlides().find(({ episode, slide }) => episode === 'slide-master' && slide.slug === 'grid-2x2');
     if (grid === undefined) throw new Error('No grid-2x2 Slide in slide-master.');
     const expected = 8;
     // ACT
@@ -74,7 +71,7 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it.each(selfContainedSlides().map((placed) => [`${placed.episode}/${placed.slide.slug}`, placed] as const))(
+  it.each(allSlides().map((placed) => [`${placed.episode}/${placed.slide.slug}`, placed] as const))(
     'repeats no DOM id when %s sits twice on one page',
     (_, placed) => {
       // ARRANGE
@@ -93,7 +90,7 @@ describe('edge cases', () => {
     // ARRANGE
     const expected = { 'slide-layouts': 3, 'slide-master': 20 };
     // ACT
-    const slides = selfContainedSlides();
+    const slides = allSlides();
     const count = (episode: EpisodeSlug) => slides.filter((placed) => placed.episode === episode).length;
     // ASSERT
     expect({ 'slide-layouts': count('slide-layouts'), 'slide-master': count('slide-master') }).toEqual(expected);

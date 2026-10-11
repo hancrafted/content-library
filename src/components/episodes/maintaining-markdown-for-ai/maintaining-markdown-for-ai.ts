@@ -1,4 +1,4 @@
-import { selfContainedEpisode } from '@/components/slide-master/slide';
+import { episode } from '@/components/slide-master/slide';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import './palette.css';
@@ -15,7 +15,7 @@ import { whatRemainsHuman } from './slides/what-remains-human/slide';
 import { whatTheMachineVerifies } from './slides/what-the-machine-verifies/slide';
 import { whereTheEffortGoes } from './slides/where-the-effort-goes/slide';
 
-export const maintainingMarkdownForAi = selfContainedEpisode({
+export const maintainingMarkdownForAi = episode({
   slug: 'maintaining-markdown-for-ai',
   youtube: { en: 'YxCVw4bUbW0', de: 'YxCVw4bUbW0' },
   messages: { en, de },

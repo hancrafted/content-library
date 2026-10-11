@@ -1,4 +1,4 @@
-import { selfContainedEpisode } from '@/components/slide-master/slide';
+import { episode } from '@/components/slide-master/slide';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { blankEveryTime } from './slides/blank-every-time/slide';
@@ -22,7 +22,7 @@ import { whereKnowledgeLives } from './slides/where-knowledge-lives/slide';
  * `slides/` holding its own Translation files; the Episode's title, caption
  * and description sit in `i18n/`.
  */
-export const amnesiacFreelancer = selfContainedEpisode({
+export const amnesiacFreelancer = episode({
   slug: 'amnesiac-freelancer',
   messages: { en, de },
   sections: [

@@ -27,7 +27,7 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 ### 1. Thin routes
 
 1. A `page.tsx` MUST render one page component from `src/components/pages/**`, plus its segment exports.
-2. A root layout MUST render `SiteShell`, plus `metadata` and segment exports. A nested layout MUST NOT (`SiteShell` renders `<html>`); it MAY wrap its children.
+2. A root layout MUST render `SiteShell`, plus `metadata` and segment exports; a nested layout MUST NOT (`<html>`), it MAY wrap children.
 3. Route files MUST hold no layout markup, data shaping or business logic.
 4. A route MUST reach `src/components/**` only through the two composition roots: `src/components/pages/**` and `SiteShell`.
 
@@ -45,15 +45,13 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 ### 4. The ungoverned zone: Slide internals
 
 1. What renders inside one Slide — markup, props, layout — is explicitly **not** governed: no mandated component shape, prop interface or layout rule.
-2. Why: a prior prototype failed because an agent invented a per-slide type interface and forced bespoke markup through it, degrading the visualization across repeated attempts and models.
-3. Governance binds boundaries — routes, locale, client bundle, build output, import direction — never the inside of a Slide. Written down because unstated silence gets filled with structure by the next agent.
+2. Why: a prototype's per-slide type interface forced bespoke markup through it and degraded every visualisation. Governance binds boundaries, never a Slide's inside; written down because silence gets filled with structure.
 
 ### 5. A Slide folder imports only global shared code
 
-1. A Slide folder, `src/components/episodes/<ep>/slides/<slide>/`, MUST import only its own files and the global shared locations: `src/components/slide-master/`, `src/components/slide-shared/`, `src/components/ui/`, `src/hooks/`, `src/lib/`.
-2. It MUST NOT import another Slide, its Episode file, or anything else Episode-local; a part two Slides share moves to `src/components/slide-shared/`.
-3. A `slide-shared` part MUST import only other `slide-shared` parts, `src/components/ui/` and `src/lib/` — never a Slide, an Episode, the Slide master or its kit — so a Slide copied into another Episode finds it unchanged.
-4. Why: a Slide copied into another Episode with `cp -r`, one import and one list entry must need nothing it left behind. §4 still holds inside the folder: the boundary fences what a Slide reaches, not how it renders.
+1. A Slide folder, `episodes/<ep>/slides/<slide>/`, MUST import only its own files and `slide-master/`, `slide-shared/`, `ui/`, `src/hooks/`, `src/lib/` — never another Slide or its Episode file.
+2. A `slide-shared` part MUST import only `slide-shared/`, `ui/` and `src/lib/` — never a Slide, an Episode or the Slide master.
+3. Why: a Slide copied with `cp -r`, one import and one list entry needs nothing it left behind. §4 holds inside the folder.
 
 ## Do's and Don'ts
 

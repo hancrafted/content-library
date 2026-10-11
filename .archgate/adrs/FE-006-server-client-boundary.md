@@ -27,8 +27,8 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 
 ### 1. Server Components are the default
 
-1. A component MUST be a Server Component unless it needs state, effects, event handlers or a browser API.
-2. `'use client'` MUST sit at a leaf: the smallest component that needs the browser, rendered by a server parent. A layout, page or shell MUST NOT become a client component to give one child interactivity.
+1. A component MUST be a Server Component unless it needs state, effects, handlers or a browser API.
+2. `'use client'` MUST sit at a leaf, rendered by a server parent. A layout, page or shell MUST NOT turn client to give one child interactivity.
 3. No file under `src/app/**` MAY carry `'use client'`.
 
 ### 2. The `.client` classifier, checked in both directions
@@ -42,7 +42,7 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 
 1. `src/hooks/**` MUST be reached only from a `*.client.tsx` file, another hook, or a test; a hook does not carry the directive.
 2. A `*.client.tsx` file MUST NOT import from `src/app/**`.
-3. `src/lib/prefs-storage.ts`, which calls `window.localStorage`, MUST be reached only from a hook, a `*.client.tsx` file, or a test. A Server Component calling `readPrefs` at build time gets `{}` and renders silently wrong — no throw, no failed build.
+3. `src/lib/prefs-storage.ts` (`window.localStorage`) MUST be reached only from a hook, a `*.client.tsx` file, or a test: read at build time it returns `{}` and renders silently wrong.
 
 ### 4. Props crossing the boundary
 
@@ -50,9 +50,8 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 
 ### 5. Episode client files
 
-1. An Episode's `*.client.tsx` files MUST live in a Slide folder `episodes/<ep>/slides/<slide>/` — nowhere else in an Episode; the Slide's entry stays server. (Old shape, until every Episode moves: `episodes/<ep>/client/`.)
+1. An Episode's `*.client.tsx` files MUST live in a Slide folder `episodes/<ep>/slides/<slide>/`, nowhere else; the Slide's entry stays server.
 2. A Slide's client widget MUST reach only its own folder, hooks and lib.
-3. An Episode's `parts/` (old shape) MUST stay server-only.
 
 ## Do's and Don'ts
 
@@ -104,7 +103,7 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 - §2.1: ESLint core `no-restricted-syntax`, selector `Program > ExpressionStatement[directive='use client']`, over `src/**/*.{ts,tsx}` ignoring `src/**/*.client.tsx`.
 - §2.2: ESLint core `no-restricted-syntax`, selector `Program:not(:has(> ExpressionStatement[directive='use client']))`, over `src/**/*.client.tsx`.
 - §2.3, §2.4 and so §1.3: `check-file/filename-naming-convention` in `eslint.config.mjs` — `src/app/**/*.{ts,tsx}` is `KEBAB_CASE`, `src/{components,hooks}/**/*.tsx` is `+([a-z0-9-])?(.client)`, `src/**/*.ts` is `!(*.client)`. §1.3 needs no own check: an app file cannot carry the suffix (§2.4), and an unsuffixed file cannot carry the directive (§2.1).
-- §5: ESLint forbids the directive in Episode files except a Slide folder's `*.client.tsx` (old shape: `episodes/*/client/`); dependency rules `slide-client-reaches-only-hooks-and-lib` and `episode-client-reach-only-hooks-and-lib` limit a widget's reach.
+- §5: ESLint forbids the directive in Episode files except a Slide folder's `*.client.tsx`; the dependency rule `slide-client-reaches-only-hooks-and-lib` limits a widget's reach.
 - §3: `.dependency-cruiser.cjs` rules `hooks-reached-only-from-client`, `client-never-imports-app` and `prefs-storage-reached-only-from-client`, `error` severity, run by `npm run lint:boundaries` (`depcruise src`) inside `npm run lint`, which `npm run verify` and CI run.
 
 **Measured on introduction** (probe files under `src/`, removed after): a directive in `probe-a.tsx`, a directiveless `probe-b.client.tsx`, a `src/app/probe/probe-c.client.tsx` and a `src/hooks/probe-d.client.ts` gave 5 errors, one per breach plus §2.1 on `probe-d`; a correct `probe-e.client.tsx` gave 0. Repo: 0 errors. dependency-cruiser with `tsPreCompilationDeps: true`: **77 dependencies cruised, 54 local, 12 type-only**; with `false`: 80 cruised, 49 local, 0 type-only, 15 injected `react/jsx-runtime`. A falling local count with a rising total is the failure signature.

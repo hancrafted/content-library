@@ -1,10 +1,12 @@
+import { pageMetadata } from '@/lib/page-metadata.pure';
 import { EPISODE_SLUGS, isEpisodeSlug } from '@/lib/routes';
 import { describe, expect, it } from 'vitest';
 import { findEpisode } from './registry';
 
 /*
- * What every registered Episode shares (FE-002): a record under its own slug
- * and the Section list its manuscript fixes.
+ * What every registered Episode shares (FE-002): a record under its own slug,
+ * its own text from its folder's `i18n/` (what the Title slide, the page
+ * metadata and the landing card read) and the Section list its manuscript fixes.
  * Per-Episode facts sit in the tables below, written out by hand.
  */
 
@@ -50,6 +52,37 @@ describe('success cases', () => {
     // ASSERT
     expect(valid).toBe(true);
     expect(episode.slug).toBe(expectedSlug);
+  });
+
+  it.each(EPISODE_SLUGS)('gives %s its own title, caption and description in en and de', (slug) => {
+    // ARRANGE
+    const expected = { title: expect.any(String), caption: expect.any(String), description: expect.any(String) };
+    // ACT
+    const texts = (['en', 'de'] as const).map((locale) => findEpisode(slug).messages[locale]);
+    // ASSERT
+    expect(texts).toEqual([expected, expected]);
+    expect(texts.flatMap(Object.values)).not.toContain('');
+  });
+
+  it.each(EPISODE_SLUGS)('produces page metadata for %s in en and de, canonical per locale', (slug) => {
+    // ARRANGE
+    const expectedCanonical = { en: `/episode/${slug}`, de: `/de/episode/${slug}` };
+    // ACT
+    const meta = (['en', 'de'] as const).map((locale) =>
+      pageMetadata({ episode: slug }, locale, findEpisode(slug).messages[locale]),
+    );
+    // ASSERT
+    expect({ en: meta[0].alternates?.canonical, de: meta[1].alternates?.canonical }).toEqual(expectedCanonical);
+    expect(meta.map(({ title }) => title)).not.toContain('');
+  });
+
+  it("reads an Episode's German text from its own folder", () => {
+    // ARRANGE
+    const expected = 'Seitenvorlage';
+    // ACT
+    const { title } = findEpisode('page-template').messages.de;
+    // ASSERT
+    expect(title).toBe(expected);
   });
 
   it.each(COMPOSITION)('composes $slug in manuscript order, each Section opened by the Slide that names it', (c) => {

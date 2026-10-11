@@ -1,4 +1,3 @@
-import { episodeMessagesOf } from '@/components/episode-page/episode-messages';
 import { listEpisodes } from '@/components/episodes/episode-repository';
 import { findEpisode } from '@/components/episodes/registry';
 import { topicsOf } from '@/lib/episode-metadata.pure';
@@ -59,7 +58,7 @@ describe('failure cases', () => {
       ...TOPIC_IDS.filter((id) => !episodeOverview.topics[id]).map((id) => `topics.${id}`),
       ...FORMATS.filter((id) => !episodeOverview.formats[id]).map((id) => `formats.${id}`),
       ...listEpisodes().flatMap(({ slug, status }) => {
-        const copy = status === 'published' ? episodeMessagesOf(findEpisode(slug), locale) : upcomingCopy[slug];
+        const copy = status === 'published' ? findEpisode(slug).messages[locale] : upcomingCopy[slug];
         return copy?.title && copy.caption ? [] : [`${status}.${slug}`];
       }),
     ];

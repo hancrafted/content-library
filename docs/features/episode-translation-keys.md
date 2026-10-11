@@ -9,23 +9,16 @@ Read before adding or changing an Episode, a Slide, or any Translation file. The
 
 ## Key shape
 
-A self-contained Slide (page-template; every Episode once #51 lands) keeps its strings in its own folder, `slides/<slide>/i18n/en.json` and `de.json`, and its Episode's own text sits in `<episode>/i18n/`. The roles below are the same, one level shorter:
+A Slide keeps its strings in its own folder, `slides/<slide>/i18n/en.json` and `de.json`; its Episode's own text sits in `<episode>/i18n/`. The site-wide Translation files hold no Episode text:
 
 ```text
 <episode>/i18n/<locale>.json                  title, caption, description of the Episode
 <episode>/slides/<slide>/i18n/<locale>.json   <role>: one string of one Slide
 ```
 
-The German file must have the English file's shape: a missing key fails `tsc` inside the Slide. Not moved yet, an Episode keeps the site-wide shape: its strings sit under `episodes.<episode>`. A Slide's strings sit one level down, flat by Slide slug, with no Section level in between:
+The German file must have the English file's shape: a missing key fails `tsc` inside the Slide. Keys are flat by role, with no Episode, Section or Slide prefix: the Episode's `title` is its Title slide `h1` and `<title>`, `caption` the Title slide caption, `description` the meta description (FE-008).
 
-```text
-episodes.<episode>.title                      Title slide h1, <title>
-episodes.<episode>.caption                    Title slide caption
-episodes.<episode>.description                meta description (FE-008)
-episodes.<episode>.slides.<slide>.<role>      one string of one Slide
-```
-
-A Section's own slide is a Slide like any other: its `title` names the Section and is the table-of-contents label. The Slide file reads its strings with `t('<role>')`, namespaced to its own subtree, so the slug is written once, in the file's `slug`.
+A Section's own slide is a Slide like any other: its `title` names the Section and is the table-of-contents label. The Slide's `slide.tsx` reads its strings with `t('<role>')` over its own files, so the slug is written once, in its `slug`.
 
 ## Role vocabulary
 
@@ -100,7 +93,7 @@ Each Episode declares its own overview metadata in `episodes/<slug>/episode-meta
 
 An entry reads its text from:
 
-- A published Episode: its title and caption, read through the registry (`episodeMessagesOf`): its own `i18n/` once self-contained, else `episodes.<slug>.*`.
+- A published Episode: its title and caption from its own `i18n/`, read through the registry (`findEpisode(slug).messages[locale]`).
 - An Upcoming Episode: `landing.episodeOverview.upcoming.<slug>.title` and `.caption`. It has no record, so this is landing text and stays site-wide; move it into the Episode folder's `i18n/` when the Episode is published.
 - Every Episode: `landing.episodeOverview.topics.<topic>` and `landing.episodeOverview.formats.<format>`, one per id in `TOPICS` and `FORMATS`.
 - Entry chrome: `landing.episodeOverview.open` and `landing.episodeOverview.comingSoon`.

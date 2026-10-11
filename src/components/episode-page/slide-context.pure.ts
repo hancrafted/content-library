@@ -89,7 +89,7 @@ export interface SlideContext {
   readonly minutes: number;
 }
 
-/** `read` is a translator namespaced to the Slide itself (`episodes.<ep>.slides.<slide>`). */
+/** `read` is a translator over the Slide's own messages. */
 export function slideContext(read: ReadString, spec: SlideContextSpec, locale: Locale): SlideContext {
   const voiceScript = voiceScriptOf(read, spec.segments ?? [], locale);
   return {

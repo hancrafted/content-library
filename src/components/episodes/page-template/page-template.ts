@@ -1,4 +1,4 @@
-import { selfContainedEpisode } from '@/components/slide-master/slide';
+import { episode } from '@/components/slide-master/slide';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { foundations } from './slides/foundations/slide';
@@ -14,7 +14,7 @@ import { whyATemplate } from './slides/why-a-template/slide';
  * another Episode is one import and one list entry. Every Slide layout is
  * shown in the `slide-layouts` Episode.
  */
-export const pageTemplate = selfContainedEpisode({
+export const pageTemplate = episode({
   slug: 'page-template',
   messages: { en, de },
   sections: [
