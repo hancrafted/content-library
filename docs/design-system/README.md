@@ -30,16 +30,16 @@ Colours are CSS custom properties, in two tiers:
 Everywhere else a colour is a reference: a Tailwind token utility (`bg-primary`, `text-muted-foreground`) or `var(--…)`.
 
 - **Shared meanings use the global token.** Primary, secondary, accent, machine, human and AI are referenced, never re-declared under the same name in a Slide.
-- **Every raw colour has a light and a dark value.** In a Slide token file, the dark value goes under `:global(.dark) .scene`.
+- **Every raw colour has a light and a dark value.** In a Slide token file, the dark value goes under the same selector prefixed with `:global(.dark)`.
 - **Slide-local names are free.** The CSS module already scopes them, so they need no prefix.
 
 ```css
-/* slides/<slide>/<token file>.module.css */
-.scene {
-  --loop-edge: oklch(0.6 0.12 200);
+/* slides/metro-map/metro-map.module.css */
+.laneA {
+  --lane: #d0342c;
 }
-:global(.dark) .scene {
-  --loop-edge: oklch(0.75 0.1 200);
+:global(.dark) .laneA {
+  --lane: #ff7a6e;
 }
 ```
 
@@ -64,7 +64,7 @@ Heading level and visual size are separate. The h1/h2/h3 elements follow the man
 - **Four sizes, plus hero as the one exception.** `caption` is allowed everywhere, Scenes included. A Scene has no fifth size. Hierarchy inside a Scene comes from weight first, then colour.
 - **One value per role.** Each size scales fluidly with `clamp()`, so no breakpoint prefix (`md:text-…`) ever appears on a size.
 - **Weights:** 400, 500, 600 (normal, medium, semibold). A card title inside a Scene is `text-body font-semibold`.
-- **Text strengths:** full (`text-foreground`) and muted (`text-muted-foreground`). A caption is `caption` + muted.
+- **Text strengths:** full (`text-foreground`) and muted (`text-muted-foreground`). A Slide caption is `body` + muted; `caption` is the smaller secondary size.
 - **Fonts:** `--font-sans` (the system sans) and `--font-mono`, declared once in `globals.css`. Both stacks are Tailwind's defaults. Changing the typeface is a one-line edit.
 - **Heading tracking:** `--tracking-heading` is `-0.02em`, applied to hero, heading and subheading.
 - **Two relative sizes are allowed, one file each:** the citation marker `<sup>` at `0.7em` and inline `code` at `0.9em`. They scale with the text around them.
@@ -84,17 +84,17 @@ Raw values sit on `:root` and `.dark`; `@theme inline` maps each utility to the 
 }
 ```
 
-Tailwind's default palette and size scale are not reset, because legacy files still use them. A check bans them in new code instead.
+Tailwind's default palette and size scale are not reset, because legacy files still use them. Checks ban them in new code instead: ESLint (`better-tailwindcss`, in `eslint.config.mjs`) rejects a class Tailwind does not generate (E1), a palette colour, off-role size or other weight (E2), and `text-hero` outside `HeroTitle` (E3); the Archgate rules in FE-011 (A1–A6) cover raw values in CSS and code, Slide token files, `globals.css` and the legacy list.
 
 ## Design-system token editor
 
-`src/components/design-system-token-editor/` is a dev-only popover (it renders only under `next dev`). It edits the global tokens (colours, sizes, weights, fonts) and the current Slide's own tokens, in whichever theme is active.
+`src/components/design-system-token-editor/` is a dev-only popover (it renders only under `next dev`). It sits bottom-right, above the Context trigger. It edits the global tokens (colours, sizes, weights, fonts) and the current Slide's own tokens, one row per selector that declares them, in whichever theme is active.
 
 Edits are not saved. **Copy changed** exports only the tokens you changed, as a prompt to paste to an agent, which then adopts them into source. Saving edits as a user preference is a later feature.
 
 ## Legacy
 
-The landing page, `ai-token-economy` and `maintaining-markdown-for-ai` predate these rules and sit on a legacy list. The list only shrinks: touching one of these files is the moment to migrate it.
+The landing page, `ai-token-economy` and `maintaining-markdown-for-ai` predate these rules and sit on a legacy list, `src/design-system/legacy.json`, which ESLint and Archgate both read. Legacy files are exempt from E2 and the raw-value rules, not from E1 and E3. The list only shrinks: touching one of these files is the moment to migrate it.
 
 ## Out of scope
 

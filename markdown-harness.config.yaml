@@ -1,8 +1,8 @@
 frontmatter:
   rules:
     - ruleId: feature-guide
-      folders: [docs/features/]
-      intent: 'docs/features/ holds product reference that drifts from the code, so every guide declares itself a feature guide and carries a review date'
+      folders: [docs/features/, docs/design-system/]
+      intent: 'docs/features/ and docs/design-system/ hold product reference that drifts from the code, so every guide declares itself a feature guide and carries a review date'
       assess:
         stale: 'Check this against src/ and the ADRs before relying on it, then move stale_after.'
       fields:
