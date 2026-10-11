@@ -1,6 +1,6 @@
 /*
  * Grid 1 × 1: the poster tile's gradient surface. Layout, elevation and the dark-theme tonal lift live in the Slide's
- * Tailwind classes. The gradient is oversized so hover and keyboard focus can drift it a few percent; under reduced
+ * Tailwind classes. The gradient is oversized so hover can drift it a few percent; under reduced
  * motion the drift is instant.
  */
 
@@ -15,8 +15,7 @@
   transition: background-position 600ms cubic-bezier(0.2, 0, 0, 1);
 }
 
-[data-episode='slide-master'] .surface:hover,
-[data-episode='slide-master'] .surface:focus-visible {
+[data-episode='slide-master'] .surface:hover {
   background-position: 30% 70%;
 }
 

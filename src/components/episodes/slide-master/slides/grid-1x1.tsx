@@ -17,11 +17,11 @@ export const grid1x1 = slide({
       <div {...target('grid')} className="mt-10">
         <article
           aria-labelledby="grid-1x1-c1"
-          className={`${styles.surface} group relative isolate flex min-h-[26rem] flex-col justify-between overflow-hidden rounded-xl border border-border p-4 shadow-sm transition-[translate,box-shadow] duration-300 ease-out outline-none hover:-translate-y-0.5 hover:shadow-lg focus-visible:-translate-y-0.5 focus-visible:shadow-lg focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none sm:p-6 md:min-h-[32rem] md:p-10`}
+          className={`${styles.surface} group relative isolate flex min-h-[26rem] flex-col justify-between overflow-hidden rounded-xl border border-border p-4 shadow-sm transition-[translate,box-shadow] duration-300 ease-out hover:-translate-y-0.5 hover:shadow-lg motion-reduce:transition-none sm:p-6 md:min-h-[32rem] md:p-10`}
         >
           <span
             aria-hidden
-            className="pointer-events-none absolute inset-0 -z-10 transition-colors duration-300 dark:group-hover:bg-white/[0.06] dark:group-focus-visible:bg-white/[0.06] motion-reduce:transition-none"
+            className="pointer-events-none absolute inset-0 -z-10 transition-colors duration-300 dark:group-hover:bg-white/[0.06] motion-reduce:transition-none"
           />
           <span aria-hidden className="font-mono text-xs tracking-[0.3em] text-muted-foreground tabular-nums">
             01 / 01
