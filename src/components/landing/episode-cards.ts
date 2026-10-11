@@ -1,7 +1,6 @@
-import { slideMinutes } from '@/components/episode-page/slide-context.pure';
 import { listEpisodes } from '@/components/episodes/episode-repository';
 import { episodeCopy, findEpisode } from '@/components/episodes/registry';
-import { ownTranslator } from '@/components/slide-master/slide-translator';
+import { slideText } from '@/components/slide-master/localized-slide';
 import { overviewOrder, type EpisodeMetadata } from '@/lib/episode-metadata.pure';
 import { FEATURED } from '@/lib/episode-overview';
 import type { Locale } from '@/lib/locale.pure';
@@ -19,7 +18,7 @@ function minutesOf(entry: EpisodeMetadata, locale: Locale): number | undefined {
   const record = findEpisode(entry.slug);
   const total = record.sections
     .flat()
-    .map((slide) => slideMinutes(ownTranslator(slide.messages[locale], locale), slide, locale))
+    .map((slide) => slideText(slide, locale).minutes)
     .reduce((sum, minutes) => sum + minutes, 0);
   return hasReadingTime(total) ? wholeMinutes(total) : undefined;
 }

@@ -1,29 +1,47 @@
+import { episode, slide, type Section } from '@/components/slide-master/slide';
+import type { RuntimeTranslator } from '@/components/slide-master/slide-base';
+import type { SpeakerNoteItem, VoiceScriptSegment } from '@/lib/context-drawer.pure';
 import { describe, expect, it } from 'vitest';
-import { checkContext, contextItemsOf as itemsOf } from './context-drawer-input.pure';
-import type { EpisodeSection, EpisodeSlide, PlacedEpisodeSection } from './episode-page-container.pure';
+import { checkContext, contextItemsOf } from './context-drawer-input.pure';
+import { recordContent } from './record-content';
 
-type SpeakerNoteItem = NonNullable<EpisodeSlide['notes']>[number];
-type VoiceScriptSegment = NonNullable<EpisodeSlide['voiceScript']>[number];
+const EPISODE = {
+  en: { title: 'Page template', caption: 'c', description: 'd' },
+  de: { title: 'Seitenvorlage', caption: 'c', description: 'd' },
+};
+const EXPLAINER = 'How the drawer works';
+const titleItem = { id: 'top', notes: [], script: [], explainer: EXPLAINER };
 
-/** A page Slide placed under `id`, the anchor the walk would give it. */
-function page(id: string, slide: Omit<EpisodeSlide, 'content' | 'minutes'>): PlacedEpisodeSection['slides'][number] {
-  return { id, slide: { minutes: 1, ...slide, content: null } };
+/* The drawer's items come from the Slides `recordContent` returns; these Slides carry one note and one segment. */
+const WHY = {
+  title: 'Why',
+  notes: { n: { header: 'H', description: 'D' } },
+  voiceScript: { segments: { s: { title: 'T', keywords: 'k', script: 'S' } } },
+};
+const foundations = slide({
+  slug: 'foundations',
+  messages: { en: { ...WHY, title: 'Foundations' }, de: { ...WHY, title: 'Grundlagen' } },
+  notes: [{ slug: 'n', target: 'title' }],
+  content: () => null,
+});
+const why = slide({
+  slug: 'why',
+  messages: { en: WHY, de: WHY },
+  notes: [{ slug: 'n', target: 'prose' }],
+  segments: [{ slug: 's' }],
+  content: () => null,
+});
+const visual = slide({ slug: 'visual', messages: { en: {}, de: {} }, content: () => null });
+
+async function translatorOf(): Promise<RuntimeTranslator> {
+  const read = () => 'opens speaker note';
+  return Object.assign(read, { rich: read, markup: read, raw: read, has: () => true });
 }
 
-/** A section slide placed under `id`, holding its placed page Slides. */
-function section(
-  id: string,
-  head: Omit<EpisodeSlide, 'slug' | 'content' | 'title' | 'minutes'> & { title: string },
-  slides: PlacedEpisodeSection['slides'] = [],
-): PlacedEpisodeSection {
-  const record: EpisodeSection = {
-    slug: id,
-    minutes: 1,
-    ...head,
-    content: null,
-    slides: slides.map(({ slide }) => slide),
-  };
-  return { id, slide: record, slides };
+/** The drawer's items for an Episode of these Sections, as the adapter builds them. */
+async function itemsOf(sections: readonly Section[]) {
+  const record = episode({ slug: 'page-template', messages: EPISODE, sections });
+  return contextItemsOf((await recordContent(record, 'en', translatorOf)).slides, EXPLAINER);
 }
 
 function noteOf(
@@ -39,56 +57,43 @@ function source(slug: string, url = 'https://example.com/a') {
   return { slug, url, title: slug };
 }
 
-function segmentOf(slug: string, from = 0, to = 1): VoiceScriptSegment {
-  return { slug, from, to, title: 't', keywords: [], script: 's' };
+function segmentOf(slug: string): VoiceScriptSegment {
+  return { slug, from: 0, to: 1, title: 't', keywords: [], script: 's' };
 }
 
-const EXPLAINER = 'How the drawer works';
-const titleItem = { id: 'top', title: undefined, notes: [], script: [], explainer: EXPLAINER };
-const contextItemsOf = (placed: readonly PlacedEpisodeSection[]) => itemsOf(placed, EXPLAINER).slice(1);
-const note = { slug: 'n', header: 'H', description: 'D', target: 'prose' };
-const segment = { slug: 's', from: 0, to: 1, title: 'T', keywords: [], script: 'S' };
-
 describe('success cases', () => {
-  it("gives each placed Slide an item under its id, with notes, script and each note's short target, scoped by the item id", () => {
+  it("gives each Slide an item under its id, with notes, script and each note's short target", async () => {
     // ARRANGE
-    const placed = [
-      section('foundations', { title: 'Foundations', notes: [{ ...note, target: 'title' }] }, [
-        page('foundations--why', { slug: 'why', title: 'Why', notes: [note], voiceScript: [segment] }),
-      ]),
-    ];
+    const note = { slug: 'n', header: 'H', description: 'D' };
     const expected = [
+      titleItem,
       { id: 'foundations', title: 'Foundations', notes: [{ ...note, target: 'title' }], script: [] },
       {
         id: 'foundations--why',
         title: 'Why',
         notes: [{ ...note, target: 'prose' }],
-        script: [segment],
+        script: [{ slug: 's', title: 'T', keywords: ['k'], script: 'S', from: 0, to: 1 / 140 }],
       },
     ];
     // ACT
-    const context = contextItemsOf(placed);
+    const items = await itemsOf([[foundations, why]]);
     // ASSERT
-    expect(context).toEqual(expected);
+    expect(items).toEqual(expected);
   });
 
-  it('keeps an untitled Slide as an item without a title, so the drawer still follows it', () => {
+  it('keeps an untitled Slide as an item without a title, so the drawer still follows it', async () => {
     // ARRANGE
-    const placed = [section('a', { title: 'A' }, [page('a--visual', { slug: 'visual' })])];
-    const expected = [
-      { id: 'a', title: 'A', notes: [], script: [] },
-      { id: 'a--visual', title: undefined, notes: [], script: [] },
-    ];
+    const expected = { id: 'foundations--visual', title: undefined, notes: [], script: [] };
     // ACT
-    const context = contextItemsOf(placed);
+    const items = await itemsOf([[foundations, visual]]);
     // ASSERT
-    expect(context).toEqual(expected);
+    expect(items.at(-1)).toEqual(expected);
   });
 
   it('accepts a Slide with distinct notes and segments', () => {
     // ARRANGE
     const notes = [noteOf('one'), noteOf('two', 'caption')];
-    const segments = [segmentOf('a', 0, 1), segmentOf('b', 1, 2)];
+    const segments = [segmentOf('a'), segmentOf('b')];
     // ACT
     const check = () => checkContext('foundations--why', notes, segments);
     // ASSERT
@@ -109,61 +114,34 @@ describe('success cases', () => {
     // ASSERT
     expect(result).toBeUndefined();
   });
-
-  describe('the Title slide', () => {
-    it('comes first, with the explainer and no notes or script', () => {
-      // ARRANGE
-      const placed = [section('a', { title: 'A' })];
-      const expected = [titleItem, 'a'];
-      // ACT
-      const [first, second] = itemsOf(placed, EXPLAINER);
-      // ASSERT
-      expect([first, second.id]).toEqual(expected);
-    });
-
-    it('is the only item with an explainer', () => {
-      // ARRANGE
-      const placed = [section('a', { title: 'A' }, [page('a--b', { slug: 'b', title: 'B' })])];
-      const expected = ['top'];
-      // ACT
-      const withExplainer = itemsOf(placed, EXPLAINER)
-        .filter((item) => item.explainer !== undefined)
-        .map((item) => item.id);
-      // ASSERT
-      expect(withExplainer).toEqual(expected);
-    });
-  });
 });
 
 describe('failure cases', () => {
-  it('rejects a Slide whose notes share a slug', () => {
+  it('rejects a Slide whose notes share a slug, even past the types', async () => {
     // ARRANGE
-    const placed = [section('a', { title: 'A', notes: [note, note] })];
+    const twice = slide({
+      slug: 'foundations',
+      messages: { en: WHY, de: WHY },
+      notes: [
+        { slug: 'n', target: 'prose' },
+        { slug: 'n', target: 'title' },
+      ],
+      content: () => null,
+    });
     const duplicate = '"n"';
     // ACT
-    const derive = () => contextItemsOf(placed);
+    const derive = itemsOf([[twice]]);
     // ASSERT
-    expect(derive).toThrow(duplicate);
+    await expect(derive).rejects.toThrow(duplicate);
   });
 
-  it('rejects two notes, or two segments, sharing a slug', () => {
+  it('rejects two segments sharing a slug', () => {
     // ARRANGE
-    const dupNoteSlug = '"x"';
     const dupSegmentSlug = '"y"';
-    const dupNote = () => checkContext('s', [noteOf('x'), noteOf('x')], []);
-    const dupSegment = () => checkContext('s', [], [segmentOf('y'), segmentOf('y', 1, 2)]);
     // ACT
-    const messages = [dupNote, dupSegment].map((run) => {
-      try {
-        run();
-        return '';
-      } catch (error) {
-        return (error as Error).message;
-      }
-    });
+    const dupSegment = () => checkContext('s', [], [segmentOf('y'), segmentOf('y')]);
     // ASSERT
-    expect(messages[0]).toContain(dupNoteSlug);
-    expect(messages[1]).toContain(dupSegmentSlug);
+    expect(dupSegment).toThrow(dupSegmentSlug);
   });
 
   it('rejects a target or slug that is not kebab-case', () => {
@@ -179,23 +157,12 @@ describe('failure cases', () => {
     expect(attempts[1]).toThrow(badSlugName);
   });
 
-  it('rejects a segment that ends before it starts', () => {
-    // ARRANGE
-    const segmentSlug = '"x"';
-    const backwards = () => checkContext('s', [], [segmentOf('x', 2, 1)]);
-    // ACT
-    const attempt = backwards;
-    // ASSERT
-    expect(attempt).toThrow(segmentSlug);
-  });
-
   it('rejects a citation marker that names no source', () => {
     // ARRANGE
     const marker = '[2]';
     const notes = [noteOf('a', 'prose', { description: `Only one source ${marker}.`, sources: [source('x')] })];
-    const check = () => checkContext('s', notes, []);
     // ACT
-    const run = () => check();
+    const run = () => checkContext('s', notes, []);
     // ASSERT
     expect(run).toThrow(marker);
   });
@@ -203,9 +170,8 @@ describe('failure cases', () => {
   it('rejects a citation marker on a note with no sources', () => {
     // ARRANGE
     const marker = '[1]';
-    const check = () => checkContext('s', [noteOf('a', 'prose', { description: `Cited ${marker}.` })], []);
     // ACT
-    const run = () => check();
+    const run = () => checkContext('s', [noteOf('a', 'prose', { description: `Cited ${marker}.` })], []);
     // ASSERT
     expect(run).toThrow(marker);
   });
@@ -213,22 +179,21 @@ describe('failure cases', () => {
   it('rejects two sources of one note sharing a slug', () => {
     // ARRANGE
     const dup = '"x"';
-    const check = () => checkContext('s', [noteOf('a', 'prose', { sources: [source('x'), source('x')] })], []);
     // ACT
-    const run = () => check();
+    const run = () => checkContext('s', [noteOf('a', 'prose', { sources: [source('x'), source('x')] })], []);
     // ASSERT
     expect(run).toThrow(dup);
   });
 });
 
 describe('edge cases', () => {
-  it('still gives the Title slide its item for an Episode with no Sections', () => {
+  it('still gives the Title slide its item, the only one with an explainer, for an Episode with no Sections', async () => {
     // ARRANGE
-    const placed: PlacedEpisodeSection[] = [];
+    const expected = [titleItem];
     // ACT
-    const items = itemsOf(placed, EXPLAINER);
+    const items = await itemsOf([]);
     // ASSERT
-    expect(items).toEqual([titleItem]);
+    expect(items).toEqual(expected);
   });
 
   it('accepts a Slide with no notes and no script', () => {

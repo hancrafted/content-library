@@ -1,6 +1,6 @@
+import { localizeSlide } from '@/components/slide-master/localized-slide';
 import { type Slide } from '@/components/slide-master/slide';
-import { slideKit } from '@/components/slide-master/slide-kit';
-import { ownTranslator } from '@/components/slide-master/slide-translator';
+import { placeSections } from '@/lib/episode.pure';
 import { EPISODE_SLUGS, type EpisodeSlug } from '@/lib/routes';
 import { createElement, Fragment } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -28,21 +28,12 @@ function allSlides(): PlacedSlide[] {
   );
 }
 
-/** The Slide's Scene as the page renders it in English, with a kit the container would build. */
+/** The Slide's Scene as the page renders it in English, localized into its own Episode. */
 function scene({ episode, slide }: PlacedSlide) {
-  const slugs = findEpisode(episode)
-    .sections.flat()
-    .map(({ slug }) => slug);
-  const kit = slideKit(
-    { episode, locale: 'en', anchors: new Map(slugs.map((slug) => [slug, slug])), refLabel: 'opens speaker note' },
-    {
-      t: ownTranslator(slide.messages.en, 'en'),
-      level: 'h3',
-      notes: slide.notes.map(({ slug }) => slug),
-      slideId: slide.slug,
-    },
-  );
-  return slide.content(kit);
+  const placed = placeSections<Slide>(findEpisode(episode).sections).flat();
+  const own = placed.find((entry) => entry.slide === slide);
+  if (own === undefined) throw new Error(`No Slide "${slide.slug}" in "${episode}".`);
+  return localizeSlide(own, { episode, locale: 'en', placed, refLabel: 'opens speaker note' }).content;
 }
 
 /** Every `id="..."` in rendered markup, in document order. */
