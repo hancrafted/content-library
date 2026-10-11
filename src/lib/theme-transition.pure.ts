@@ -1,56 +1,33 @@
-import gsap from 'gsap';
-
 export interface ThemeColors {
   bg: string;
   fg: string;
   border: string;
 }
 
-const DARK_INTERPOLATION = {
-  bg: ['#FAF9F6', '#CBD5E1', '#475569', '#1E293B', '#0B0F17'],
-  fg: ['#0A0E1A', '#0A0E1A', '#1E293B', '#F8FAFC', '#F8FAFC'],
-  border: [
-    'rgba(10, 14, 26, 0.12)',
-    'rgba(10, 14, 26, 0.12)',
-    'rgba(255, 255, 255, 0.15)',
-    'rgba(255, 255, 255, 0.12)',
-    'rgba(255, 255, 255, 0.08)',
-  ],
-};
+/** Progress at which the rail starts to hand its inverted theme back to the site theme. */
+const FLIP_START = 0.75;
+/** Progress span over which the hand-back runs. */
+const FLIP_SPAN = 0.22;
 
-const LIGHT_INTERPOLATION = {
-  bg: ['#0A0E1A', '#1E293B', '#475569', '#CBD5E1', '#FAF9F6'],
-  fg: ['#F8FAFC', '#F8FAFC', '#1E293B', '#0A0E1A', '#0A0E1A'],
-  border: [
-    'rgba(255, 255, 255, 0.12)',
-    'rgba(255, 255, 255, 0.12)',
-    'rgba(10, 14, 26, 0.15)',
-    'rgba(10, 14, 26, 0.12)',
-    'rgba(10, 14, 26, 0.08)',
-  ],
-};
-
-function interpolateTheme(t: number, palette: typeof LIGHT_INTERPOLATION): ThemeColors {
-  const toBg = gsap.utils.interpolate(palette.bg);
-  const toFg = gsap.utils.interpolate(palette.fg);
-  const toBorder = gsap.utils.interpolate(palette.border);
-  return { bg: toBg(t), fg: toFg(t), border: toBorder(t) };
+/** `color-mix` of two colour expressions in oklab, `share`% of `from` over `to`. */
+function mix(from: string, share: number, to: string): string {
+  return `color-mix(in oklab, ${from} ${(share * 100).toFixed(1)}%, ${to})`;
 }
 
-export function computeThemeColors(p: number, isDarkSiteTheme: boolean): ThemeColors {
-  if (isDarkSiteTheme) {
-    if (p <= 0.75) {
-      return { bg: '#FAF9F6', fg: '#0A0E1A', border: 'rgba(10, 14, 26, 0.12)' };
-    }
-    const t = Math.min(1, (p - 0.75) / 0.22);
-    return interpolateTheme(t, DARK_INTERPOLATION);
-  }
-
-  if (p <= 0.75) {
-    return { bg: '#0A0E1A', fg: '#F8FAFC', border: 'rgba(255, 255, 255, 0.12)' };
-  }
-  const t = Math.min(1, (p - 0.75) / 0.22);
-  return interpolateTheme(t, LIGHT_INTERPOLATION);
+/**
+ * The method rail's colours at scroll progress `p`: it opens in the inverse of the site theme (dark on a light
+ * site, light on a dark one) and hands back to the site theme as the rail ends. Every colour is a mix of the global
+ * tokens (`--background`, `--foreground`, `--border`), so the same maths serves both themes and the browser resolves
+ * the values; a pure function cannot read the computed style, and does not need to.
+ */
+export function computeThemeColors(p: number): ThemeColors {
+  const t = Math.min(1, Math.max(0, (p - FLIP_START) / FLIP_SPAN));
+  const invertedBorder = 'color-mix(in oklab, var(--background) 12%, transparent)';
+  return {
+    bg: mix('var(--background)', t, 'var(--foreground)'),
+    fg: mix('var(--foreground)', t, 'var(--background)'),
+    border: mix('var(--border)', t, invertedBorder),
+  };
 }
 
 export function computeActiveStep(p: number): number {

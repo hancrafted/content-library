@@ -37,7 +37,7 @@ function PaperFilter() {
       <feComponentTransfer in="presmooth" result="cut">
         <feFuncA type="discrete" tableValues="0 0 0 0 0 1 1 1 1 1" />
       </feComponentTransfer>
-      <feDropShadow dx={0} dy={-2} stdDeviation={1.5} floodColor="#000000" floodOpacity={0.25} />
+      <feDropShadow dx={0} dy={-2} stdDeviation={1.5} floodOpacity={0.25} style={{ floodColor: 'var(--overlay)' }} />
     </filter>
   );
 }

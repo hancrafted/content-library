@@ -1,20 +1,29 @@
 /*
  * Metro map: the lane colours, the Slide's own tokens (FE-011). Signal red, cobalt and jade, the classic metro trio,
- * each with a lighter value for the dark theme. A lane class sets both; the Scene picks one with `dark:`.
+ * each with a lighter value under `:global(.dark)`. A lane class sets `--lane`; the theme picks the value.
  * Hex, not oklch, so metro-map.pure.test.ts can check each against the page at 3:1.
  */
 
 .laneA {
-  --lane-light: #d0342c;
-  --lane-dark: #ff7a6e;
+  --lane: #d0342c;
+}
+
+:global(.dark) .laneA {
+  --lane: #ff7a6e;
 }
 
 .laneB {
-  --lane-light: #1f63d6;
-  --lane-dark: #6aa8ff;
+  --lane: #1f63d6;
+}
+
+:global(.dark) .laneB {
+  --lane: #6aa8ff;
 }
 
 .laneC {
-  --lane-light: #14804a;
-  --lane-dark: #3fcf86;
+  --lane: #14804a;
+}
+
+:global(.dark) .laneC {
+  --lane: #3fcf86;
 }

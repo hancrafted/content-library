@@ -27,7 +27,7 @@ function LaneLine({ lane, lit, drawn }: { lane: Lane; lit: boolean; drawn: boole
         pathLength={1}
         style={{ transitionDuration: `${DRAW_MS}ms` }}
         className={cn(
-          'fill-none stroke-(--lane-light) [stroke-dasharray:1] [stroke-linecap:round] [stroke-linejoin:round] [stroke-width:10] transition-[stroke-dashoffset] ease-[cubic-bezier(0.65,0,0.35,1)] dark:stroke-(--lane-dark)',
+          'fill-none stroke-(--lane) [stroke-dasharray:1] [stroke-linecap:round] [stroke-linejoin:round] [stroke-width:10] transition-[stroke-dashoffset] ease-[cubic-bezier(0.65,0,0.35,1)]',
           drawn ? '[stroke-dashoffset:0]' : '[stroke-dashoffset:1]',
           'motion-reduce:[stroke-dashoffset:0]! print:[stroke-dashoffset:0]!',
         )}
