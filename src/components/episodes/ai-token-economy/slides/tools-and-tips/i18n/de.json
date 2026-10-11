@@ -1,0 +1,15 @@
+{
+  "title": "Werkzeuge & Tipps",
+  "caption": "Drei Hebel zur Optimierung Ihrer Token-Ökonomie",
+  "prose": "Kombinieren Sie automatisierte Werkzeuge (rtk, Kompression) mit strukturierter Kontextsteuerung und disziplinierten Teamgewohnheiten.",
+  "notes": {
+    "tooling-and-steering": {
+      "header": "Werkzeuge und Steuerung",
+      "description": "Filter kürzen Tool-Payloads vor dem Modellkontakt, während strukturierte Regeln die Ausführung deterministisch leiten."
+    },
+    "operational-habits": {
+      "header": "Praktische Gewohnheiten",
+      "description": "Prompts bearbeiten statt Korrekturen anzuhängen, inaktive Sitzungen vor dem Cache-Ablauf bereinigen und Terminal-Transparenz nutzen."
+    }
+  }
+}

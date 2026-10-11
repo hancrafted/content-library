@@ -1,0 +1,15 @@
+{
+  "title": "Tools & Tips",
+  "caption": "Three levers to improve your token economy",
+  "prose": "Combine automated tooling (rtk, compression, linting) with structural context steering and disciplined team habits (edit don't append, session hygiene).",
+  "notes": {
+    "tooling-and-steering": {
+      "header": "Tooling and steering",
+      "description": "Automated compressors prune tool payloads before they reach the model, while structured rules steer execution deterministically."
+    },
+    "operational-habits": {
+      "header": "Operational habits",
+      "description": "Edit flawed prompts instead of stacking corrections, clear idle sessions before cache expiry, and monitor usage via transparent CLIs."
+    }
+  }
+}

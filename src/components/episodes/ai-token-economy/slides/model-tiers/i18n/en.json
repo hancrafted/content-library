@@ -1,0 +1,15 @@
+{
+  "title": "Model Tiers",
+  "caption": "My real model stack: one workflow, many models.",
+  "prose": "Route each phase to the most economical capable model: flat-rate chats for ideation, frontier reasoning for architecture, fast models for code execution.",
+  "notes": {
+    "tiered-stack-architecture": {
+      "header": "Tiered model stack",
+      "description": "Economic fluency means matching engine cost to task risk, switching models seamlessly as project phases progress."
+    },
+    "zero-marginal-thinking": {
+      "header": "Zero-marginal thinking",
+      "description": "Use flat-rate consumer subscriptions for exploratory chats, reserving pay-per-token frontier calls for high-leverage decisions."
+    }
+  }
+}

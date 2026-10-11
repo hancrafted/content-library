@@ -1,0 +1,11 @@
+{
+  "title": "The Compounding Cost Curve",
+  "caption": "The same bug fix, priced across models.",
+  "prose": "You are billed for tokens processed on every turn, not window capacity. A routine bug fix produces a 14× price swing across models.",
+  "notes": {
+    "the-14x-spread": {
+      "header": "The 14x cost spread",
+      "description": "At scale, routing identical loops between frontier and economy tiers creates a multi-thousand-dollar difference each month."
+    }
+  }
+}

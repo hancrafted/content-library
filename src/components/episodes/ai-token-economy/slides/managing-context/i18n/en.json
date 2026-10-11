@@ -1,0 +1,11 @@
+{
+  "title": "Managing Context",
+  "caption": "Context window is the model's attention span.",
+  "prose": "Tokens accumulate in the context window. As the window fills, attention degrades and critical instructions slip away.",
+  "notes": {
+    "cognitive-stamina": {
+      "header": "Cognitive stamina",
+      "description": "Context windows behave like cognitive stamina across a long workday: alert early on, distracted as history piles up."
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "title": "CLI vs Web Tool Obscurity",
+  "caption": "The meter is hidden on purpose.",
+  "prose": "Obscurity is a product pattern: frictionless initiation, habitual workflows, and surprising monthly invoices.",
+  "notes": {
+    "the-obscurity-playbook": {
+      "header": "The obscurity playbook",
+      "description": "Hiding usage metrics fosters dependency before organizations realize the compounding cost of unmanaged agentic loops."
+    }
+  }
+}

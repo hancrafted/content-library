@@ -1,0 +1,11 @@
+{
+  "title": "Auslastungsanzeige & Hebel",
+  "caption": "Ab etwa halber Fülle verliert das Modell den Faden.",
+  "prose": "Unter 50 % liegt die Smart Zone. Darüber sinkt die Präzision, ab 75 % drohen Halluzinationen. Drei Hebel: Beobachten, Komprimieren, Übergeben.",
+  "notes": {
+    "smart-zone-discipline": {
+      "header": "Disziplin in der Smart Zone",
+      "description": "Kontexte unter 50 % Kapazität zu halten, sichert hohe Genauigkeit und verhindert unbemerktes Abdriften."
+    }
+  }
+}

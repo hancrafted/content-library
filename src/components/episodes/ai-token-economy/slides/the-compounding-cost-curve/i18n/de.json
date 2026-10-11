@@ -1,0 +1,11 @@
+{
+  "title": "Die kumulierte Kostenkurve",
+  "caption": "Dieselbe Fehlerbehebung, verglichen über Modelle.",
+  "prose": "Abrechnung erfolgt pro verarbeitetem Token in jedem Schritt. Eine Routineaufgabe führt zu einer 14-fachen Preisspanne zwischen Modellen.",
+  "notes": {
+    "the-14x-spread": {
+      "header": "Die 14-fache Preisspanne",
+      "description": "Über Organisationen hinweg führt die Modellwahl bei identischen Schleifen monatlich zu Tausenden Euro Differenz."
+    }
+  }
+}
