@@ -1,0 +1,170 @@
+{
+  "title": "The AI Token Economy · hancrafted",
+  "description": "A field guide to the token economy: what AI actually costs, why the meter stays invisible, and how to manage context and models efficiently.",
+  "toc": "Contents Loading 01 Motivation Lead One, Upskill Many The Four Eras of AI The Invisible Invoice Outcome Per Euro 02 What Is a Token Live Context Breakdown CLI vs Web Tool Obscurity 03 Managing Context The Lost Middle The Fullness Gauge & Levers 04 Cost of Agentic AI The Compounding Cost Curve 05 Model Tiers 06 Tools & Tips Open contents : Contents Contents 01 Motivation Lead One, Upskill Many The Four Eras of AI The Invisible Invoice Outcome Per Euro 02 What Is a Token Live Context Breakdown CLI vs Web Tool Obscurity 03 Managing Context The Lost Middle The Fullness Gauge & Levers 04 Cost of Agentic AI The Compounding Cost Curve 05 Model Tiers 06 Tools & Tips",
+  "slides": [
+    {
+      "id": "top",
+      "text": "The AI Token Economy AI can give you and the people you lead super powers, but it comes with hidden managing responsibilities you didn't sign up for. Watch the talk Your AI reads stale docs every time · 22 min"
+    },
+    {
+      "id": "motivation",
+      "text": "Motivation Thought experiment: Imagine you're assigned a freelancer with these weird characteristics. On paper, this collaborator arrives with encyclopedic knowledge, works instantly, and accepts tasks without hesitation. But they carry three peculiar flaws. strength (?) Fast & well-read Knows about everything you ask them, and can produce results fast without breaks. strength (?) Accepts any task No task too big or too niche — it will take a swing at whatever you hand it. strength (?) Tireless Never stops, never sleeps, unless you stop paying. flaw Never asks questions Takes tasks literally, fills gaps with assumptions, never pushes back. ? flaw Bills by the word No flat day rate. Every prompt, tool call, and correction adds to the tab. flaw It remembers nothing. Every new conversation starts from zero. Yesterday’s work never happened. 0"
+    },
+    {
+      "id": "motivation--lead-one-upskill-many",
+      "text": "Lead One, Upskill Many It's an LLM — but if it were a human, how would you manage it? Directing an AI agent requires the same delegation and review rigor as onboarding an external specialist. You can opt out of managing it. The people who don’t will simply out-produce you. door 1 · the individual Human with AI 5–20× individual throughput by directing synthetic labor. door 2 · the organization Leader of humans with AI Upskilling whole teams into fluent directors of automated systems."
+    },
+    {
+      "id": "motivation--the-four-eras-of-ai",
+      "text": "The Four Eras of AI New technology gives rise to new disciplines for humans to cope. From Prompt Engineering in 2023 to Context Engineering in 2024, Harness Engineering in 2025, and Token Economics today. 2022–23 chat workflow Prompt Engineering Phrasing, few-shot examples, and asking clearly. 2024–25 agentic workflow Context Engineering AGENTS.md, skills, and compact structured memory. 2025–26 autonomous workflow Harness Engineering Tools, deterministic tests, and guardrail verification. 2026 → emerging Loop Engineering? Self-improving autonomous feedback cycles. Foundation Token Economy — the currency of every era"
+    },
+    {
+      "id": "motivation--the-invisible-invoice",
+      "text": "The Invisible Invoice For a real freelancer you need a business case. AI just bills you. A €3,200 consultant invoice requires purchase orders and approvals. AI accumulates identical costs silently across thousands of micro-prompts. Invoice #0042 approved Slide design €1,800 Alignment €900 Revisions €500 Total €3,200 AI · No Invoice never quoted +€0.80 +€1.20 +€0.60 +€2.10 +€0.90 + thousands more… Cumulative Total €3,200"
+    },
+    {
+      "id": "motivation--outcome-per-euro",
+      "text": "Outcome Per Euro You're now accountable for a budget you never signed up to manage. Defaulting to flagship frontier models for routine chores burns capital. The economic winner optimizes outcome per euro. Premium model 5× the price Quality delivered 99% Outcome per euro financial winner Cheaper model 1× the price Quality delivered 95% Outcome per euro ≈5× Drag: what quality does your customer actually need? 93 % At 93%, both models clear the bar — the cheaper one wins ≈5× outcome per euro. 2–10× Today’s prices are subsidized — vendors sell intelligence below cost to build adoption. When subsidies expire, outcome per euro decides who survives."
+    },
+    {
+      "id": "what-is-a-token",
+      "text": "What Is a Token Tokens are the basic unit of data for LLMs — every one is billed. LLMs calculate statistical probabilities over numerical tokens. Every word, character, and prompt translates to billable units. Try it — type anything Insa nity is doin g the same thin g over and over agai n and expe ctin g diff eren t resu lts . ≈ 24 tokens (approximate — every model splits differently) re-sent across a 50-turn agent session ≈ $ 0.0060 at Opus 4.8 input rates Every token is billed 4 ways input every word you send — and re-send on every turn output every word generated in return and reasoning traces cache write storing recurring context blocks for reuse cache read reusing cached blocks — ~10% of base input rate"
+    },
+    {
+      "id": "what-is-a-token--live-context-breakdown",
+      "text": "Live Context Breakdown Most tools hide the meter — this is what seeing it looks like. A typical 200k session breakdown: system prompts, conversation history, tool payloads, and retrieved documentation. claude-code — /context $ /context ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛀ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ Sonnet 5 claude-sonnet-5 79.5k /200k tokens ( 40 %) Estimated usage by category ⛁ System prompt 9.4k · 4.7% ⛁ System tools 42.9k · 21.5% ⛁ MCP tools 3.9k · 2.0% ⛁ Custom agents 703 · 0.4% ⛁ Memory files 407 · 0.2% ⛁ Skills 2.2k · 1.1% ⛁ Messages 20.0k · 10.0% ⛶ Free space 87.5k · 43.7% ⛝ Autocompact buffer 33k · 16.5%"
+    },
+    {
+      "id": "what-is-a-token--cli-vs-web-tool-obscurity",
+      "text": "CLI vs Web Tool Obscurity The meter is hidden on purpose. Obscurity is a product pattern: frictionless initiation, habitual workflows, and surprising monthly invoices. 01 The initiation Unlimited on the house. The intelligence feels like magic and the bill is invisible — so you build the habit. 02 The hook Now you are fluent — and the meter is gone. Out of credits? Just top up. The real rate never shows."
+    },
+    {
+      "id": "managing-context",
+      "text": "Managing Context Context window is the model's attention span. Tokens accumulate in the context window. As the window fills, attention degrades and critical instructions slip away. Plain chat 25% · fresh Boot-up Agentic coding 85% · full Boot-up 9 AM · fresh 12 PM 3 PM 5 PM · running on fumes"
+    },
+    {
+      "id": "managing-context--the-lost-middle",
+      "text": "The Lost Middle How key instructions get lost in the middle. Models attend sharply to the start and end of context, but the middle blurs into an attention valley. System prompt (Primacy) “You are an expert coder…” [msg 12: read utils.js] [msg 13: modify api.js] [msg 14: read config.json] Latest request (Recency) “Why is the build failing?” Serial-position effect: Models recall the first and last exchanges sharply, while the middle blurs into an attention valley."
+    },
+    {
+      "id": "managing-context--the-fullness-gauge-and-levers",
+      "text": "The Fullness Gauge & Levers Past ~half full, the model starts losing the plot. Below 50% is the smart zone. Above 50%, accuracy degrades. Above 75%, hallucination risk spikes. Three levers: Monitor, Compact, Hand off. ~50% · hallucination onset Smart zone · grounded Danger zone · hallucinates drag the fill 85 % Danger zone · Running on fumes past ~50% what “losing the plot” looks like · misremembers the middle · contradicts earlier steps · invents files & APIs that don’t exist ~illustrative threshold, not an exact number — but degradation well before the limit is measured across frontier models Monitor · /context Watch the gauge before it degrades — catch it while it is still grounded. Compact · handoff Summarize where you are into a clean handoff, then start fresh from it."
+    },
+    {
+      "id": "cost-of-agentic-ai",
+      "text": "Cost of Agentic AI One small bug fix compounds to ~73,000 tokens of context. Agentic loops re-transmit the entire conversation history on every single tool call and reflection step. System prompt · rules, tools, memory +35,000 35,000 User query · the bug report +1,000 36,000 Thought #1 & Tool call · read file #1 +4,200 40,200 File #1 contents · entire 400-line file +12,000 52,200 Thought #2 & Tool call · read helper module +4,200 56,400 File #2 contents · second full file +9,000 65,400 Thought #3 & Patch apply · write and verify patch +8,050 73,450 Total context hauler ~73,450 tokens"
+    },
+    {
+      "id": "cost-of-agentic-ai--the-compounding-cost-curve",
+      "text": "The Compounding Cost Curve The same bug fix, priced across models. You are billed for tokens processed on every turn, not window capacity. A routine bug fix produces a 14× price swing across models. DeepSeek V4 Pro $ 0.11 Claude Sonnet 5 $ 0.62 Claude Opus 4.8 $ 1.54 ~14× spread for identical output. At 50 fixes a day, that is roughly $ 6 vs $ 77 per developer per day — before anyone has shipped a single feature. This is why model routing matters. fixes / day 50"
+    },
+    {
+      "id": "model-tiers",
+      "text": "Model Tiers My real model stack: one workflow, many models. Route each phase to the most economical capable model: flat-rate chats for ideation, frontier reasoning for architecture, fast models for code execution. Phase 1 Ideation & Refinement Web chat · flat-rate · Simple research → Gemini Flash · Brainstorms → Gemini Flash / Pro · Voice notes → DeepSeek V4 Pro Phase 2 Specs & Planning Claude Code CLI · Desktop · PRD & Architecture → Opus 4.8 · Deep research → Sonnet 5 → Opus · Type checks → Sonnet 5 Phase 3 Execution All CLI · Commits → Gemini Flash · Implementation → Sonnet 5 · Exploration → Haiku 4.5"
+    },
+    {
+      "id": "tools-and-tips",
+      "text": "Tools & Tips Three levers to improve your token economy Combine automated tooling (rtk, compression, linting) with structural context steering and disciplined team habits (edit don't append, session hygiene). Automated Headroom : Compresses agent transcripts before they hit the LLM. rtk : Compresses CLI command outputs with low overhead. Model Routers : Route dynamically to the most economical capable tier. caveman : Enforces concise output saving up to 75% on generation. Agent Steering Memory Files : Persist durable rules via AGENTS.md, CLAUDE.md, and profiles. Specialized Skills : Separate operational workflow guides from base instructions. Team Habits Edit, Don’t Append : Fix prompt mistakes at the root rather than stacking corrective turns. Session Hygiene : Clear finished context rather than paying stale cache re-reads."
+    }
+  ],
+  "notes": [
+    {
+      "id": "top",
+      "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
+    },
+    {
+      "id": "motivation",
+      "text": "Motivation The freelancer metaphor Translates abstract LLM mechanics into intuitive human management terms: encyclopedic knowledge, instant execution, but crucial blind spots. Opting into management Treating an LLM as a teammate requires recognizing its failure modes rather than treating it as an infallible search oracle."
+    },
+    {
+      "id": "motivation--lead-one-upskill-many",
+      "text": "Lead One, Upskill Many Upskill many vs replace The objective is not replacing workers but elevating human operators into effective directors of synthetic labor."
+    },
+    {
+      "id": "motivation--the-four-eras-of-ai",
+      "text": "The Four Eras of AI Emerging disciplines As model capabilities advance, operational focus shifts from prompt words to managing context, harnesses, and token budgets."
+    },
+    {
+      "id": "motivation--the-invisible-invoice",
+      "text": "The Invisible Invoice Governance asymmetry Corporate finance demands formal approval for contractors, yet AI charges comparable budgets without procurement gates."
+    },
+    {
+      "id": "motivation--outcome-per-euro",
+      "text": "Outcome Per Euro Budget accountability Selecting the right tier for each task is the foundation of modern engineering leadership."
+    },
+    {
+      "id": "what-is-a-token",
+      "text": "What Is a Token Probabilistic units LLMs process numerical token IDs, not human prose. Understanding token granularity reveals where costs accumulate."
+    },
+    {
+      "id": "what-is-a-token--live-context-breakdown",
+      "text": "Live Context Breakdown Synthetic abstractions Commercial interfaces conceal real token usage behind credits and bars. Direct transparency is essential for optimization."
+    },
+    {
+      "id": "what-is-a-token--cli-vs-web-tool-obscurity",
+      "text": "CLI vs Web Tool Obscurity The obscurity playbook Hiding usage metrics fosters dependency before organizations realize the compounding cost of unmanaged agentic loops."
+    },
+    {
+      "id": "managing-context",
+      "text": "Managing Context Cognitive stamina Context windows behave like cognitive stamina across a long workday: alert early on, distracted as history piles up."
+    },
+    {
+      "id": "managing-context--the-lost-middle",
+      "text": "The Lost Middle The attention valley Research proves the U-shaped retrieval curve: information placed in the middle of long contexts suffers dramatic recall drops."
+    },
+    {
+      "id": "managing-context--the-fullness-gauge-and-levers",
+      "text": "The Fullness Gauge & Levers Smart zone discipline Keeping context windows under 50% capacity guarantees high accuracy and prevents silent prompt drift."
+    },
+    {
+      "id": "cost-of-agentic-ai",
+      "text": "Cost of Agentic AI Agentic compounding Each tool call and test run appends full file outputs into history, compounding input token counts exponentially."
+    },
+    {
+      "id": "cost-of-agentic-ai--the-compounding-cost-curve",
+      "text": "The Compounding Cost Curve The 14x cost spread At scale, routing identical loops between frontier and economy tiers creates a multi-thousand-dollar difference each month."
+    },
+    {
+      "id": "model-tiers",
+      "text": "Model Tiers Tiered model stack Economic fluency means matching engine cost to task risk, switching models seamlessly as project phases progress. Zero-marginal thinking Use flat-rate consumer subscriptions for exploratory chats, reserving pay-per-token frontier calls for high-leverage decisions."
+    },
+    {
+      "id": "tools-and-tips",
+      "text": "Tools & Tips Tooling and steering Automated compressors prune tool payloads before they reach the model, while structured rules steer execution deterministically. Operational habits Edit flawed prompts instead of stacking corrections, clear idle sessions before cache expiry, and monitor usage via transparent CLIs."
+    }
+  ],
+  "script": [
+    {
+      "id": "top",
+      "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
+    },
+    { "id": "motivation", "text": "Motivation No voice script for this Slide." },
+    { "id": "motivation--lead-one-upskill-many", "text": "Lead One, Upskill Many No voice script for this Slide." },
+    { "id": "motivation--the-four-eras-of-ai", "text": "The Four Eras of AI No voice script for this Slide." },
+    { "id": "motivation--the-invisible-invoice", "text": "The Invisible Invoice No voice script for this Slide." },
+    { "id": "motivation--outcome-per-euro", "text": "Outcome Per Euro No voice script for this Slide." },
+    { "id": "what-is-a-token", "text": "What Is a Token No voice script for this Slide." },
+    {
+      "id": "what-is-a-token--live-context-breakdown",
+      "text": "Live Context Breakdown No voice script for this Slide."
+    },
+    {
+      "id": "what-is-a-token--cli-vs-web-tool-obscurity",
+      "text": "CLI vs Web Tool Obscurity No voice script for this Slide."
+    },
+    { "id": "managing-context", "text": "Managing Context No voice script for this Slide." },
+    { "id": "managing-context--the-lost-middle", "text": "The Lost Middle No voice script for this Slide." },
+    {
+      "id": "managing-context--the-fullness-gauge-and-levers",
+      "text": "The Fullness Gauge & Levers No voice script for this Slide."
+    },
+    { "id": "cost-of-agentic-ai", "text": "Cost of Agentic AI No voice script for this Slide." },
+    {
+      "id": "cost-of-agentic-ai--the-compounding-cost-curve",
+      "text": "The Compounding Cost Curve No voice script for this Slide."
+    },
+    { "id": "model-tiers", "text": "Model Tiers No voice script for this Slide." },
+    { "id": "tools-and-tips", "text": "Tools & Tips No voice script for this Slide." }
+  ]
+}
