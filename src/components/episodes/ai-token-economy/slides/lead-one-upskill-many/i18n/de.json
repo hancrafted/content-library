@@ -1,0 +1,11 @@
+{
+  "title": "Einen führen, viele befähigen",
+  "caption": "Es ist ein LLM — aber wie würden Sie es führen, wenn es ein Mensch wäre?",
+  "prose": "Das Anleiten eines KI-Agenten verlangt dieselbe Delegations- und Review-Disziplin wie das Einarbeiten externer Spezialisten.",
+  "notes": {
+    "upskill-vs-replace": {
+      "header": "Befähigen statt ersetzen",
+      "description": "Ziel ist nicht das Ersetzen von Fachkräften, sondern das Befähigen von Menschen zur wirksamen Steuerung synthetischer Arbeit."
+    }
+  }
+}

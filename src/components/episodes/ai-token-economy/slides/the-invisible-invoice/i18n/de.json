@@ -1,0 +1,11 @@
+{
+  "title": "Die unsichtbare Rechnung",
+  "caption": "Für einen echten Freelancer brauchen Sie einen Business Case. KI stellt einfach Rechnungen.",
+  "prose": "Eine Beraterrechnung über 3.200 € erfordert Bestellungen und Freigaben. KI häuft dieselben Kosten still über tausende Mikro-Prompts an.",
+  "notes": {
+    "governance-asymmetry": {
+      "header": "Governance-Asymmetrie",
+      "description": "Finanzabteilungen verlangen Freigaben für Dienstleister, während KI vergleichbare Budgets ohne Einkaufsprüfungen abrechnet."
+    }
+  }
+}

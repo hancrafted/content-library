@@ -1,0 +1,11 @@
+{
+  "title": "Was ist ein Token",
+  "caption": "Token sind die Basiseinheit für LLMs — jedes einzelne wird abgerechnet.",
+  "prose": "LLMs berechnen statistische Wahrscheinlichkeiten über numerische Token. Jedes Wort und jedes Zeichen schlägt als abrechenbare Einheit zu Buche.",
+  "notes": {
+    "probabilistic-units": {
+      "header": "Probabilistische Einheiten",
+      "description": "LLMs verarbeiten numerische Token-IDs statt menschlicher Sprache. Die Zerlegung zeigt, wo Kosten entstehen."
+    }
+  }
+}

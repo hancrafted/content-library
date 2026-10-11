@@ -1,0 +1,11 @@
+{
+  "title": "The Lost Middle",
+  "caption": "How key instructions get lost in the middle.",
+  "prose": "Models attend sharply to the start and end of context, but the middle blurs into an attention valley.",
+  "notes": {
+    "attention-valley": {
+      "header": "The attention valley",
+      "description": "Research proves the U-shaped retrieval curve: information placed in the middle of long contexts suffers dramatic recall drops."
+    }
+  }
+}

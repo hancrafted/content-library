@@ -1,0 +1,11 @@
+{
+  "title": "Cost of Agentic AI",
+  "caption": "One small bug fix compounds to ~73,000 tokens of context.",
+  "prose": "Agentic loops re-transmit the entire conversation history on every single tool call and reflection step.",
+  "notes": {
+    "agentic-compounding": {
+      "header": "Agentic compounding",
+      "description": "Each tool call and test run appends full file outputs into history, compounding input token counts exponentially."
+    }
+  }
+}

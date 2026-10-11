@@ -1,0 +1,11 @@
+{
+  "title": "Verloren in der Mitte",
+  "caption": "Wie wichtige Instruktionen in der Mitte untergehen.",
+  "prose": "Modelle erfassen Anfang und Ende eines Kontexts präzise, doch die Mitte versinkt in einem Tal nachlassender Aufmerksamkeit.",
+  "notes": {
+    "attention-valley": {
+      "header": "Das Aufmerksamkeitstal",
+      "description": "Studien belegen den U-förmigen Abrufverlauf: Informationen in der Mitte langer Kontexte leiden unter drastischen Erinnerungsverlusten."
+    }
+  }
+}

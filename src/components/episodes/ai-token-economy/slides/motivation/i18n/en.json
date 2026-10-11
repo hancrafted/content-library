@@ -1,0 +1,15 @@
+{
+  "title": "Motivation",
+  "caption": "Thought experiment: Imagine you're assigned a freelancer with these weird characteristics.",
+  "prose": "On paper, this collaborator arrives with encyclopedic knowledge, works instantly, and accepts tasks without hesitation. But they carry three peculiar flaws.",
+  "notes": {
+    "freelancer-metaphor": {
+      "header": "The freelancer metaphor",
+      "description": "Translates abstract LLM mechanics into intuitive human management terms: encyclopedic knowledge, instant execution, but crucial blind spots."
+    },
+    "management-opt-in": {
+      "header": "Opting into management",
+      "description": "Treating an LLM as a teammate requires recognizing its failure modes rather than treating it as an infallible search oracle."
+    }
+  }
+}

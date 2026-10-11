@@ -1,0 +1,11 @@
+{
+  "title": "The Invisible Invoice",
+  "caption": "For a real freelancer you need a business case. AI just bills you.",
+  "prose": "A €3,200 consultant invoice requires purchase orders and approvals. AI accumulates identical costs silently across thousands of micro-prompts.",
+  "notes": {
+    "governance-asymmetry": {
+      "header": "Governance asymmetry",
+      "description": "Corporate finance demands formal approval for contractors, yet AI charges comparable budgets without procurement gates."
+    }
+  }
+}
