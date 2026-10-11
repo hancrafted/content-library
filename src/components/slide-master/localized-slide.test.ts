@@ -129,8 +129,9 @@ describe('success cases', () => {
     const expected = ['Warum jede Episode als Kopie beginnt', '2 Tokens', 'de'];
     // ACT
     const kit = kitOf(localized('de')[1]);
+    const read = [kit.t('title'), kit.t('count', { n: 2 }), kit.locale];
     // ASSERT
-    expect([kit.t('title'), kit.t('count', { n: 2 }), kit.locale]).toEqual(expected);
+    expect(read).toEqual(expected);
   });
 
   it('gives the Scene a Title at its position level, marked as the title target', () => {
@@ -153,8 +154,9 @@ describe('success cases', () => {
     const expected = ['/de/episode/page-template#foundations--why-a-template', '/de/episode/page-template#foundations'];
     // ACT
     const kit = kitOf(localized('de')[2]);
+    const hrefs = [kit.slideHref('why-a-template'), kit.slideHref('foundations')];
     // ASSERT
-    expect([kit.slideHref('why-a-template'), kit.slideHref('foundations')]).toEqual(expected);
+    expect(hrefs).toEqual(expected);
   });
 
   it("returns a key's raw string, placeholders unfilled, for a client component to fill", () => {
@@ -301,8 +303,9 @@ describe('edge cases', () => {
     const expected = [true, false];
     // ACT
     const kit = kitOf(localized('en')[1]);
+    const has = [kit.t.has('title'), kit.t.has('missing')];
     // ASSERT
-    expect([kit.t.has('title'), kit.t.has('missing')]).toEqual(expected);
+    expect(has).toEqual(expected);
   });
 
   it('omits the bridge, sources and image a Slide does not declare', () => {
