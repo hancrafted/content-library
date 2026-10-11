@@ -1,4 +1,5 @@
 import { ContextDrawerSlot } from '@/components/context-drawer/context-drawer-slot';
+import { DevSlideReporter } from '@/components/design-system-token-editor/dev-slide-reporter';
 import type { LocalizedSlide } from '@/components/slide-master/localized-slide';
 import type { EpisodeRecord } from '@/components/slide-master/slide';
 import type { RuntimeTranslator } from '@/components/slide-master/slide-base';
@@ -11,7 +12,6 @@ import { cn } from '@/lib/utils';
 import { getTranslations } from 'next-intl/server';
 import { ContentArea } from './content-area';
 import { contextDrawerInput } from './context-drawer-input';
-import { DevTokenEditor } from './dev-token-editor';
 import { INSET_CLASSES, TOC_RESERVE_CLASS, tocSectionsOf } from './episode-page-container.pure';
 import { recordContent, type TranslatorOf } from './record-content';
 import { SlideKeys } from './slide-keys.client';
@@ -144,7 +144,7 @@ export async function EpisodePageContainer({ locale, episode }: { locale: Locale
         <ContextDrawerSlot input={drawer} />
         {youtubeId && talkLabels && <TalkPlayer youtubeId={youtubeId} labels={talkLabels} />}
       </div>
-      <DevTokenEditor />
+      <DevSlideReporter />
     </UrlStateProvider>
   );
 }

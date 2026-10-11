@@ -1,5 +1,6 @@
 // The DOM side of the token editor: reads the loaded stylesheets into the plain
 // snapshot token discovery works on, finds a Slide by id, and applies edits.
+import { toPickerHex } from './colour-convert.pure';
 import type { Edits, Scope } from './token-changes.pure';
 import { editKey } from './token-changes.pure';
 import {
@@ -88,4 +89,29 @@ export function applyEdits({ scope, tokens }: TokenSet, edits: Edits, theme: The
       else element.style.setProperty(token.name, value);
     }
   }
+}
+
+/**
+ * A colour as the picker's hex. The stylesheet the browser serves may hold a colour
+ * in a form the pure reader does not know (it reports `oklch` as `lab()`), so what
+ * that cannot read is painted onto a one-pixel canvas and read back as sRGB.
+ */
+export function pickerHexOf(value: string): string | null {
+  const direct = toPickerHex(value);
+  if (direct) return direct;
+  const context = document.createElement('canvas').getContext('2d', { willReadFrequently: true });
+  if (!context) return null;
+  // An unparseable value leaves fillStyle as it was, so two different starting points tell it apart.
+  const resolve = (start: string) => {
+    context.fillStyle = start;
+    context.fillStyle = value;
+    return context.fillStyle;
+  };
+  if (resolve('black') === resolve('white')) {
+    context.clearRect(0, 0, 1, 1);
+    context.fillRect(0, 0, 1, 1);
+    const [r, g, b, a] = context.getImageData(0, 0, 1, 1).data;
+    return toPickerHex(`rgba(${r}, ${g}, ${b}, ${a / 255})`);
+  }
+  return null;
 }

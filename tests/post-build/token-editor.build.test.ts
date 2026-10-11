@@ -5,7 +5,12 @@ import { OUT_DIR } from './exported-pages';
 
 // The design-system token editor is dev-only (docs/design-system/README.md): `next build` must not ship it.
 // These strings occur only in its source, so any hit means its code reached the export.
-const MARKERS = ['design-system-token-editor', 'Copy changed', 'Adopt these design-token changes'];
+const MARKERS = [
+  'design-system-token-editor',
+  'Copy changed',
+  'Adopt these design-token changes',
+  'Corner rounding of cards',
+];
 
 function files(dir: string): string[] {
   return readdirSync(dir).flatMap((name) => {

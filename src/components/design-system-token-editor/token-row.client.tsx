@@ -1,40 +1,91 @@
 'use client';
 
+import { pickerHexOf } from '@/lib/page-tokens';
 import { classifyToken, type Theme, type Token } from '@/lib/token-discovery.pure';
+import { describeToken } from '@/lib/token-groups.pure';
 import { cn } from '@/lib/utils';
+import { useState } from 'react';
+import { TokenColourPicker } from './token-colour-picker.client';
 
-function Swatch({ value }: { value: string }) {
-  return <span aria-hidden className="border-border size-5 shrink-0 rounded-sm border" style={{ background: value }} />;
+function Swatch({
+  value,
+  editable,
+  open,
+  onToggle,
+}: {
+  value: string;
+  editable: boolean;
+  open: boolean;
+  onToggle: () => void;
+}) {
+  const look = 'border-border size-8 shrink-0 rounded-md border';
+  if (!editable) return <span aria-hidden className={look} style={{ background: value }} />;
+  return (
+    <button
+      type="button"
+      aria-label="Pick a colour"
+      aria-expanded={open}
+      onClick={onToggle}
+      className={cn(
+        look,
+        'focus-visible:ring-ring cursor-pointer outline-none focus-visible:ring-2',
+        open && 'ring-ring ring-2',
+      )}
+      style={{ background: value }}
+    />
+  );
 }
 
-/** One token: a swatch for a colour, its name, and a text field holding the active theme's value. */
-export function TokenRow({
-  token,
-  theme,
+/** The token's name, a dot when changed, what it affects, and its text field. */
+function RowText({
+  name,
   value,
   changed,
   onChange,
 }: {
+  name: string;
+  value: string;
+  changed: boolean;
+  onChange: (value: string) => void;
+}) {
+  const description = describeToken(name);
+  return (
+    <label className="flex min-w-0 flex-1 flex-col gap-0.5">
+      <span className="flex items-center gap-2" title={description}>
+        <span className={cn('truncate font-mono text-caption', changed && 'font-semibold')}>{name}</span>
+        {changed && <span aria-label="changed" className="bg-brand-accent size-1.5 shrink-0 rounded-full" />}
+      </span>
+      {description && <span className="text-muted-foreground text-caption">{description}</span>}
+      <input
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        className="border-input bg-background mt-1 w-full rounded-md border px-2 py-1 font-mono text-caption"
+        spellCheck={false}
+      />
+    </label>
+  );
+}
+
+interface RowProps {
   token: Token;
   theme: Theme;
   value: string;
   changed: boolean;
   onChange: (value: string) => void;
-}) {
+}
+
+/** One token: a swatch that opens a picker for a colour, and its name, description and text field for the active theme. */
+export function TokenRow({ token, theme, value, changed, onChange }: RowProps) {
+  const [picking, setPicking] = useState(false);
   const isColour = classifyToken(token.name, token[theme]) === 'colour';
+  const pickable = isColour && pickerHexOf(token[theme]) !== null;
   return (
-    <li className="flex items-center gap-2 text-body" data-token={token.name} data-changed={changed}>
-      {isColour && <Swatch value={value} />}
-      <label className="flex min-w-0 flex-1 flex-col">
-        <span className={cn('truncate font-mono text-body', changed && 'font-semibold')}>{token.name}</span>
-        {token.target && <span className="text-muted-foreground truncate font-mono text-body">{token.target}</span>}
-        <input
-          value={value}
-          onChange={(event) => onChange(event.target.value)}
-          className="border-input bg-background w-full rounded-md border px-2 py-1 font-mono text-body"
-          spellCheck={false}
-        />
-      </label>
+    <li className="flex flex-col gap-2 py-2" data-token={token.name} data-changed={changed}>
+      <div className="flex items-start gap-3">
+        {isColour && <Swatch value={value} editable={pickable} open={picking} onToggle={() => setPicking((p) => !p)} />}
+        <RowText name={token.name} value={value} changed={changed} onChange={onChange} />
+      </div>
+      {picking && pickable && <TokenColourPicker value={value} original={token[theme]} onChange={onChange} />}
     </li>
   );
 }

@@ -2,7 +2,7 @@ import { applyEdits, readGlobalTokens, readSlide, type TokenSet } from '@/lib/pa
 import { diffTokens, type Change, type Edits } from '@/lib/token-changes.pure';
 import type { Theme } from '@/lib/token-discovery.pure';
 import { useEffect, useState } from 'react';
-import { useActiveSlide } from './use-url-state';
+import { useDevSlide } from './use-dev-slide';
 
 export const GLOBAL_SCOPE = { kind: 'global' } as const;
 
@@ -15,13 +15,13 @@ export interface PageTokens {
 
 /**
  * The tokens on the page. Global tokens are read once; the active Slide comes
- * from `useActiveSlide()` (FE-001 §2.3) and its own tokens are read when it
+ * from the dev relay, fed by `useActiveSlide()` (FE-001 §2.3) and its own tokens are read when it
  * becomes active. A Slide read before its content mounted is read again.
  */
 export function usePageTokens(): PageTokens {
   const [globals, setGlobals] = useState<TokenSet>({ scope: GLOBAL_SCOPE, tokens: [] });
   const [slides, setSlides] = useState<Record<string, TokenSet>>({});
-  const currentSlide = useActiveSlide();
+  const currentSlide = useDevSlide();
 
   useEffect(() => {
     setGlobals({ scope: GLOBAL_SCOPE, tokens: readGlobalTokens() });

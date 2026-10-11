@@ -88,7 +88,11 @@ Tailwind's default palette and size scale are not reset, because legacy files st
 
 ## Design-system token editor
 
-`src/components/design-system-token-editor/` is a dev-only popover (it renders only under `next dev`, inside an Episode page, so it is absent from the landing page). It follows the active Slide through `useActiveSlide()`; its hook is `src/hooks/use-page-tokens.ts` and its stylesheet and DOM logic are in `src/lib/page-tokens.ts`. It sits bottom-right, above the Context trigger. It edits the global tokens (colours, sizes, weights, fonts) and the current Slide's own tokens, one row per selector that declares them, in whichever theme is active.
+`src/components/design-system-token-editor/` is a dev-only popover (it renders only under `next dev`, so it is absent from `out/`). Its trigger is an icon button in the site header, beside the theme and locale toggles, and the panel drops down from it on every page. The panel is always dark, so it reads the same whichever theme's values you edit.
+
+The Global tab lists the global tokens in designer order, each in a group under a sticky header (Brand, Surface & text, Feedback, Lines & focus, Domain, Chrome, Typography, Shape, Layout, Other), a colour beside its `-foreground` pair, each with a one-line description. The order and the descriptions live in `src/lib/token-groups.pure.ts`; a token missing from its table shows no description and lands under Other. The Slide tab lists the active Slide's own tokens, one group per selector that declares them, colours first; it is disabled off an Episode page. Clicking a colour's swatch opens a picker (`react-colorful`) that writes the pick back in the token's own format: `oklch(L C H)` stays oklch, a hex token stays hex (`src/lib/colour-convert.pure.ts`).
+
+The header is outside the Episode page and its URL-state service, so the active Slide reaches the editor through a dev-only relay: `DevSlideReporter` inside the page reads `useActiveSlide()` and hands the id to `src/hooks/use-dev-slide.ts`. The editor's hook is `src/hooks/use-page-tokens.ts`; its stylesheet and DOM logic are in `src/lib/page-tokens.ts`.
 
 Edits are not saved. **Copy changed** exports only the tokens you changed, as a prompt to paste to an agent, which then adopts them into source. Saving edits as a user preference is a later feature.
 

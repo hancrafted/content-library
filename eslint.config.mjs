@@ -18,6 +18,7 @@ const CSS_HOOK_CLASSES = [
   '^s2-arrow-group$',
   '^s2-flow-dash$',
   '^is-active$',
+  '^dark$',
 ];
 const HERO_TITLE_FILE = 'src/components/slide-master/slide-master.tsx';
 const TAILWIND_ENTRY = 'src/app/globals.css';
