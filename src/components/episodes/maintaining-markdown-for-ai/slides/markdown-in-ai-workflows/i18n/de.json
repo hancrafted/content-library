@@ -1,0 +1,30 @@
+{
+  "title": "Markdown in KI-Workflows",
+  "caption": "Ein einziges Format für drei der sechs Kontextarten: Wissen, Anweisungen und Speicher.",
+  "prose": "Eine reine Textdatei ohne mechanischen Unterbau. Entscheidend ist, wie und wann sie genutzt wird: als Wissen, als Anweisungen, als Speicher — und ob der Agent bei jedem Schritt dafür bezahlt oder nur beim Abruf.",
+  "notes": {
+    "three-contexts": {
+      "header": "Drei Kontextarten",
+      "description": "Markdown trägt Wissen, Anweisungen und Speicher mit unterschiedlichen Lebenszyklus- und Abrufkosten."
+    },
+    "retrieval-cost": {
+      "header": "Abrufkosten",
+      "description": "Entscheidend ist, ob der Agent bei jeder Anfrage Kontext-Token bezahlt oder nur bei gezieltem Abruf."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "agentic-era": {
+        "title": "Das agentische Zeitalter",
+        "keywords": "nicht mehr 2023, lokale Dateien, Werkzeuge, Schleifen",
+        "script": "Bevor wir starten, möchte ich festhalten, warum Markdown-Dateien in KI-Workflows eine so zentrale Rolle spielen. Wir befinden uns im agentischen Zeitalter – es ist nicht mehr 2023. Agenten sind keine Chatbots, in die man Texte kopiert. Sie lesen Dateien auf dem Rechner, schreiben Änderungen, rufen Tools auf und durchsuchen das Web. In einer Schleife erledigen sie echte Aufgaben – genau wie ein neuer Kollege, den Sie gerade einarbeiten."
+      },
+      "three-categories": {
+        "title": "Drei Dokument-Kategorien",
+        "keywords": "Wissen, Anweisungen, Gedächtnis, stiller Fehler",
+        "script": "Und wie dieser Kollege braucht ein Agent die richtigen Informationen zur richtigen Zeit. Diese Informationen leben in Markdown. Diese Dateien teilen sich in drei Kategorien: Wissen – was der Agent bei Bedarf nachschlägt. Anweisungen – Skills, einmal formuliert und namentlich aufgerufen. Und Gedächtnis – eine Datei, die der Agent zu Beginn jedes Gesprächs liest. Ist diese Datei veraltet, liest der Agent jedes Mal die falsche Information. Zuverlässig und lautlos – ohne dass Sie es bemerken.",
+        "bridge": "Und das ist nur ein einziges Dokument."
+      }
+    }
+  }
+}

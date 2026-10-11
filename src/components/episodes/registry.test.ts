@@ -1,11 +1,12 @@
 import { pageMetadata } from '@/lib/page-metadata.pure';
 import { EPISODE_SLUGS, isEpisodeSlug } from '@/lib/routes';
 import { describe, expect, it } from 'vitest';
-import { findEpisode } from './registry';
+import { episodeCopy, findEpisode } from './registry';
 
 /*
  * What every registered Episode shares (FE-002): a record under its own slug,
- * page metadata in both locales, and the Section list its manuscript fixes.
+ * its own text from its folder's `i18n/` (what the Title slide, the page
+ * metadata and the landing card read) and the Section list its manuscript fixes.
  * Per-Episode facts sit in the tables below, written out by hand.
  */
 
@@ -53,20 +54,46 @@ describe('success cases', () => {
     expect(episode.slug).toBe(expectedSlug);
   });
 
+  it.each(EPISODE_SLUGS)('gives %s its own title, caption and description in en and de', (slug) => {
+    // ARRANGE
+    const expected = { title: expect.any(String), caption: expect.any(String), description: expect.any(String) };
+    // ACT
+    const texts = (['en', 'de'] as const).map((locale) => findEpisode(slug).messages[locale]);
+    // ASSERT
+    expect(texts).toEqual([expected, expected]);
+    expect(texts.flatMap(Object.values)).not.toContain('');
+  });
+
   it.each(EPISODE_SLUGS)('produces page metadata for %s in en and de, canonical per locale', (slug) => {
     // ARRANGE
-    const expectedCanonicalEn = `/episode/${slug}`;
-    const expectedCanonicalDe = `/de/episode/${slug}`;
+    const expectedCanonical = { en: `/episode/${slug}`, de: `/de/episode/${slug}` };
     // ACT
-    const metaEn = pageMetadata({ episode: slug }, 'en');
-    const metaDe = pageMetadata({ episode: slug }, 'de');
+    const meta = (['en', 'de'] as const).map((locale) =>
+      pageMetadata({ episode: slug }, locale, findEpisode(slug).messages[locale]),
+    );
     // ASSERT
-    expect(metaEn.title).toBeTruthy();
-    expect(metaEn.description).toBeTruthy();
-    expect(metaDe.title).toBeTruthy();
-    expect(metaDe.description).toBeTruthy();
-    expect(metaEn.alternates?.canonical).toBe(expectedCanonicalEn);
-    expect(metaDe.alternates?.canonical).toBe(expectedCanonicalDe);
+    expect({ en: meta[0].alternates?.canonical, de: meta[1].alternates?.canonical }).toEqual(expectedCanonical);
+    expect(meta.map(({ title }) => title)).not.toContain('');
+  });
+
+  it("reads an Episode's German text from its own folder", () => {
+    // ARRANGE
+    const expected = 'Seitenvorlage';
+    // ACT
+    const { title } = findEpisode('page-template').messages.de;
+    // ASSERT
+    expect(title).toBe(expected);
+  });
+
+  it('hands the page metadata and the landing card one Episode text in the locale asked for', () => {
+    // ARRANGE
+    const expectedTitle = 'Seitenvorlage';
+    const expectedKeys = ['caption', 'description', 'title'];
+    // ACT
+    const copy = episodeCopy('page-template', 'de');
+    // ASSERT
+    expect(copy.title).toBe(expectedTitle);
+    expect(Object.keys(copy).sort()).toEqual(expectedKeys);
   });
 
   it.each(COMPOSITION)('composes $slug in manuscript order, each Section opened by the Slide that names it', (c) => {
@@ -101,6 +128,15 @@ describe('failure cases', () => {
     // ASSERT
     expect(valid).toBe(false);
     expect(lookup).toThrow();
+  });
+
+  it('finds no Episode text for an unlisted slug', () => {
+    // ARRANGE
+    const unlisted = 'non-existent-episode';
+    // ACT
+    const read = () => episodeCopy(unlisted, 'en');
+    // ASSERT
+    expect(read).toThrow();
   });
 });
 

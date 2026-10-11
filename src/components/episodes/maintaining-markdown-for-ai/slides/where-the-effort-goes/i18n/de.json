@@ -1,0 +1,25 @@
+{
+  "title": "Wohin der Aufwand fließt",
+  "caption": "Was eine Maschine prüfen kann, wobei KI beschleunigt und was nur ein Mensch entscheiden kann.",
+  "prose": "Drei Grenzen: Was eine Maschine automatisiert, was KI beschleunigt und was nur ein Mensch entscheiden kann.",
+  "notes": {
+    "three-boundaries": {
+      "header": "Drei Grenzen",
+      "description": "Dokumentenprüfung umfasst drei getrennte Aufgaben: deterministische Maschinenprüfungen, KI-Beschleunigung und menschliches Urteil."
+    },
+    "division-of-labour": {
+      "header": "Arbeitsteilung",
+      "description": "Mechanik an die Maschine delegieren und Entdeckung an die KI, damit Menschen nur echte Urteilsfragen klären."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "three-boundaries": {
+        "title": "Drei getrennte Ebenen",
+        "keywords": "Maschine, Mensch, KI, deterministisch bis semantisch",
+        "script": "Prüfen ist nicht eine einzige Aufgabe, sondern drei – und sie sind nicht austauschbar. Links die Maschine: deterministisch, binär, günstig und schnell. Rechts der Mensch: nicht-deterministisch, langsam, teuer – aber hier entsteht semantisches Urteil und Vertrauen. In der Mitte die KI: arbeitet in natürlicher Sprache, kostet Tokens und ist nicht deterministisch. Von links nach rechts: von günstig und sicher zu teuer und menschlich.",
+        "bridge": "Gehen wir sie der Reihe nach durch."
+      }
+    }
+  }
+}

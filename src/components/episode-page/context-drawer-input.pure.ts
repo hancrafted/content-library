@@ -1,11 +1,11 @@
 import type { ContextItem } from '@/components/context-drawer/context-drawer-input';
+import type { LocalizedSlide } from '@/components/slide-master/localized-slide';
 import { splitCitations, type SpeakerNoteItem, type VoiceScriptSegment } from '@/lib/context-drawer.pure';
-import { checkedSlug, slidesInPageOrder, TITLE_ANCHOR, type PlacedSlide } from '@/lib/episode.pure';
-import type { EpisodeSlide, PlacedEpisodeSection } from './episode-page-container.pure';
+import { checkedSlug, TITLE_ANCHOR } from '@/lib/episode.pure';
 
 /*
  * THE SEAM. This file and `context-drawer-input.ts` are the only place the
- * Context drawer meets an Episode record. They turn placed Slides into
+ * Context drawer meets an Episode record. They turn Localized Slides into
  * `ContextItem`s: item id = the id the walk placed the Slide at (the id its
  * wrapper carries); each note keeps its short `target`, which the drawer looks
  * up inside that wrapper (FE-010 §8).
@@ -59,21 +59,11 @@ export function checkContext(
   );
   notes.forEach((n) => checkedSlug(n.target));
   notes.forEach((n) => checkCitations(slide, n));
-  for (const { slug, from, to } of segments) {
-    if (to < from) throw new Error(`Segment "${slug}" on "${slide}" ends (${to}) before it starts (${from}).`);
-  }
 }
 
-function itemOf({ id, slide }: PlacedSlide<EpisodeSlide>): ContextItem {
-  const notes = slide.notes ?? [];
-  const script = slide.voiceScript ?? [];
-  checkContext(id, notes, script);
-  return {
-    id,
-    title: slide.title,
-    notes,
-    script,
-  };
+function itemOf({ id, title, notes, voiceScript }: LocalizedSlide): ContextItem {
+  checkContext(id, notes, voiceScript);
+  return { id, title, notes, script: voiceScript };
 }
 
 /**
@@ -85,10 +75,10 @@ function titleItem(explainer: string): ContextItem {
 }
 
 /**
- * The Title slide's item, then one item per placed Slide in page order (the
- * order the table of contents lists). Throws on a malformed Slide, so a broken
+ * The Title slide's item, then one item per Slide in page order (the order
+ * the table of contents lists). Throws on a malformed Slide, so a broken
  * Episode fails `next dev` and the static build alike.
  */
-export function contextItemsOf(placed: readonly PlacedEpisodeSection[], explainer: string): ContextItem[] {
-  return [titleItem(explainer), ...slidesInPageOrder(placed).map(itemOf)];
+export function contextItemsOf(slides: readonly LocalizedSlide[], explainer: string): ContextItem[] {
+  return [titleItem(explainer), ...slides.map(itemOf)];
 }

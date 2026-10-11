@@ -1,4 +1,5 @@
-import type { AnyEpisodeRecord } from '@/components/slide-master/episode-record';
+import type { EpisodeMessages, EpisodeRecord } from '@/components/slide-master/slide';
+import type { Locale } from '@/lib/locale.pure';
 import { isEpisodeSlug, type EpisodeSlug } from '@/lib/routes';
 import { notFound } from 'next/navigation';
 import { aiTokenEconomy } from './ai-token-economy/ai-token-economy';
@@ -13,7 +14,7 @@ import { slideMaster } from './slide-master/slide-master';
  * without a record or a record without a slug fails `tsc`, and so does a key
  * that differs from its record's own slug.
  */
-const EPISODES: { readonly [S in EpisodeSlug]: AnyEpisodeRecord & { readonly slug: S } } = {
+const EPISODES: { readonly [S in EpisodeSlug]: EpisodeRecord & { readonly slug: S } } = {
   'page-template': pageTemplate,
   'amnesiac-freelancer': amnesiacFreelancer,
   'maintaining-markdown-for-ai': maintainingMarkdownForAi,
@@ -22,7 +23,12 @@ const EPISODES: { readonly [S in EpisodeSlug]: AnyEpisodeRecord & { readonly slu
   'slide-master': slideMaster,
 };
 
-export function findEpisode(slug: string): AnyEpisodeRecord {
+export function findEpisode(slug: string): EpisodeRecord {
   if (!isEpisodeSlug(slug)) notFound();
   return EPISODES[slug];
+}
+
+/** An Episode's own text in one locale, from its record: what the page metadata and the landing card read. */
+export function episodeCopy(slug: string, locale: Locale): EpisodeMessages {
+  return findEpisode(slug).messages[locale];
 }

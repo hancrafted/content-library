@@ -1,0 +1,44 @@
+{
+  "title": "Slide layouts · hancrafted",
+  "description": "A gallery of every Slide layout an Episode can use: section slide, basic page and three columns.",
+  "toc": "Contents Loading 01 Section slide Basic page Three columns Open contents : Contents Contents 01 Section slide Basic page Three columns",
+  "slides": [
+    { "id": "top", "text": "Slide layouts Every Slide layout, one Slide each." },
+    {
+      "id": "section-slide",
+      "text": "Section slide Title and caption, vertically centred. It opens every Section and names it."
+    },
+    {
+      "id": "section-slide--basic-page",
+      "text": "Basic page Title and caption up top, one block of prose below. The prose is a target a Speaker note can name, like the title and the caption."
+    },
+    {
+      "id": "section-slide--three-column",
+      "text": "Three columns Title and caption up top, exactly three keyed columns below. First column Each column has a slug, and its slug is the target a note names it by. Second column Columns hold a title and prose, never a position. Third column A fourth column is a different layout."
+    }
+  ],
+  "notes": [
+    {
+      "id": "top",
+      "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
+    },
+    { "id": "section-slide", "text": "Section slide No speaker notes for this Slide." },
+    {
+      "id": "section-slide--basic-page",
+      "text": "Basic page The prose target Layouts offer targets for free: title, caption and prose. Name one in a note's target and the drawer highlights it."
+    },
+    {
+      "id": "section-slide--three-column",
+      "text": "Three columns A column is a target Each column's slug doubles as its target, so a note can point at one column."
+    }
+  ],
+  "script": [
+    {
+      "id": "top",
+      "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
+    },
+    { "id": "section-slide", "text": "Section slide No voice script for this Slide." },
+    { "id": "section-slide--basic-page", "text": "Basic page No voice script for this Slide." },
+    { "id": "section-slide--three-column", "text": "Three columns No voice script for this Slide." }
+  ]
+}

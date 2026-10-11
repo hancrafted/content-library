@@ -3,8 +3,8 @@ import { localizePath, type Locale } from '@/lib/locale.pure';
 import { episodeRoute, type EpisodeSlug } from '@/lib/routes';
 import type { ReactNode } from 'react';
 import { ContextRef } from './context-ref';
-import type { RuntimeKit, RuntimeTranslator } from './episode-record';
 import { DEFAULT_RICH_TAGS } from './rich-tags';
+import type { RuntimeKit, RuntimeTranslator } from './slide-base';
 import { SlideTitle } from './slide-master';
 
 /** What the container knows about the whole Episode when it builds a kit: the same for every Slide. */

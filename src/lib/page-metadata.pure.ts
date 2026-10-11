@@ -27,20 +27,27 @@ export function siteMetadata(locale: Locale, siteUrl: string): Metadata {
   };
 }
 
-/** A page's `<title>` and meta description, from the locale's Translation file (FE-008 §2). */
-function copyOf(page: PageRef, locale: Locale): { title: string; description: string } {
-  const translation = TRANSLATIONS[locale];
-  if (page === 'home') return translation.meta.home;
-  const { title, description } = translation.episodes[page.episode];
-  return { title, description };
+/** A page's `<title>` and meta description in one locale (FE-008 §2). */
+export interface PageCopy {
+  readonly title: string;
+  readonly description: string;
 }
 
-/** A page's metadata: its copy from the Translation file, its canonical, and reciprocal hreflang alternates. */
-export function pageMetadata(page: PageRef, locale: Locale): Metadata {
+/**
+ * A page's metadata: its copy, its canonical, and reciprocal hreflang
+ * alternates. The landing page's copy is `meta.home` of the site-wide
+ * Translation file; an Episode's comes from its record, which this tier cannot
+ * reach, so the route hands it in.
+ */
+export function pageMetadata(page: 'home', locale: Locale): Metadata;
+export function pageMetadata(page: Exclude<PageRef, 'home'>, locale: Locale, copy: PageCopy): Metadata;
+export function pageMetadata(page: PageRef, locale: Locale, copy?: PageCopy): Metadata {
   const route = routeOf(page);
   const languages = Object.fromEntries(LOCALES.map((each) => [each, localizePath(route, each)]));
+  const { title, description } = copy ?? TRANSLATIONS[locale].meta.home;
   return {
-    ...copyOf(page, locale),
+    title,
+    description,
     alternates: {
       canonical: localizePath(route, locale),
       languages: { ...languages, 'x-default': localizePath(route, DEFAULT_LOCALE) },

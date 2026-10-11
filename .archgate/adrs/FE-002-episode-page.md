@@ -5,10 +5,10 @@ title: 'Episode Page'
 domain: frontend
 rules: false
 # prettier-ignore
-files: ['src/components/{episode-page,slide-master,episodes,table-of-contents}/**', 'src/app/**/episode/**', 'src/lib/speaking-time.pure*']
+files: ['src/components/{episode-page,slide-master,slide-shared,episodes,table-of-contents}/**', 'src/app/**/episode/**', 'src/lib/speaking-time.pure*']
 # prettier-ignore
-paths: ['src/components/{episode-page,slide-master,episodes,table-of-contents}/**', 'src/app/**/episode/**', 'src/lib/speaking-time.pure*']
-description: 'How an Episode page is built: the Slide is the unit, composed into Sections by a typed record and rendered by one container; Scene is free JSX, position sets headings, strings and anchors keyed by Slide slug, reading time counted from the Voice script, Episode CSS scoped to its page.'
+paths: ['src/components/{episode-page,slide-master,slide-shared,episodes,table-of-contents}/**', 'src/app/**/episode/**', 'src/lib/speaking-time.pure*']
+description: 'How an Episode page is built: the Slide is the unit, one folder carrying its own text, composed into Sections by a typed record and rendered by one container; Scene is free JSX, position sets headings, strings and anchors keyed by Slide slug, reading time counted from the Voice script, Episode CSS scoped to its page.'
 ---
 
 # Episode Page
@@ -19,11 +19,11 @@ Episode = one page: Title slide, then Sections, each a list of Slides whose firs
 
 **Structure is schema, content is not.** A prototype forced each slide through a typed interface; the agent bent visuals to fit and they degraded. Visualisations need freedom no schema anticipates. One level up it flips: title, Sections, anchors, reading time and table of contents are identical for every Episode, and drift there breaks navigation, translation and the manuscript mapping.
 
-**The Slide is the unit.** A Slide's identity once sat in four hand-kept places (context key, translation path, anchor, record slug) and drifted. Now a Slide file writes its slug once; the rest follows by type or by position:
+**The Slide is the unit, and the unit is a folder.** A Slide's identity, then its files, once sat in four places and drifted; typed to its Episode, it could not be copied out. Now a Slide is one folder named after its slug, holding its own text; the rest follows by type or position:
 
 ```
-slug 'the-lost-middle', second Slide of Section 'attention'
-  → keys    episodes.x.slides.the-lost-middle.*
+folder slides/the-lost-middle/, second Slide of Section 'attention'
+  → text    slides/the-lost-middle/i18n/{en,de}.json
   → anchor  attention--the-lost-middle
   → heading h3
 ```
@@ -35,9 +35,8 @@ slug 'the-lost-middle', second Slide of Section 'attention'
 ```mermaid
 flowchart LR
   subgraph build["Build time: props"]
-    S["Slide files<br/>slug, notes, segments, Scene"] --> R["Episode record<br/>Sections of Slides"]
+    S["Slide folders<br/>slug, notes, segments, Scene, text"] --> R["Episode record<br/>Sections of Slides, Episode text"]
     R --> C[EpisodePageContainer]
-    K[Translation file] --> C
     C -->|"content(kit)"| W[Slide wrappers]
   end
   subgraph run["Runtime: useActiveSlide"]
@@ -54,61 +53,60 @@ flowchart LR
   CD -->|"note hover lights [data-target] in the Slide"| W
 ```
 
-**The kit** gives a Slide `t` (whose `t.rich` knows `em`, `b`, `code`), `template`, `ref`, `target`, `slideHref`, `locale` and `Title`.
+**The kit** gives a Slide `t` (built from the Slide's own messages; its `t.rich` knows `em`, `b`, `code`), `template`, `ref`, `target`, `slideHref`, `locale` and `Title`.
 
-**Reference implementation: `src/components/episodes/page-template/`** is the minimal copy source; `slide-layouts/` shows every Slide layout rendered. How to write a Slide lives there and in the feature guides, not here.
+**Reference implementation: `src/components/episodes/page-template/`** is the copy source; `slide-layouts/` shows every Slide layout. How to write a Slide lives there and in the feature guides.
 
 ## Decision
 
 ### 1. One container renders every Episode
 
-1. Only `EpisodePageContainer` MAY emit an Episode's slots, Title slide, Sections, anchors, table of contents, drawer input.
+1. Only `EpisodePageContainer` MAY emit an Episode's slots: Title slide, Sections, anchors, contents, drawer.
 
 ### 2. The Slide is the unit
 
-1. Each Slide MUST be one file `slides/<slide>.tsx`: slug, notes, Voice script segments, Scene. The Episode file only composes.
-2. A Section MUST be a list of Slides, the first naming it. Anchors by position: `<section>--<slide>`; slugs kebab-case, unique, never `top`.
-3. An untitled Slide renders unlisted, still timed; only a titled one opens a Section.
-4. Reading time MUST be counted from Voice script words per locale; nothing declares minutes. 0 shows none.
+1. Each Slide MUST be one flat folder `slides/<slide>/`, named after its slug: `slide.tsx`, `*.client.tsx`, `*.pure.ts`, CSS module, `i18n/{en,de}.json`. The Episode file only composes.
+2. A Section MUST be a list of Slides, the first, titled, naming it. Anchor `<section>--<slide>`; slugs kebab-case, unique, not `top`; untitled Slides render unlisted.
+3. Reading time MUST be counted from Voice script words per locale.
 
 ### 3. Scene is free
 
-1. A Scene MUST be free JSX (FE-009 §7); no slide-type union.
-2. The Scene MUST reach the record only via its typed kit. Never cast.
-3. Browser code MUST live in `episodes/<ep>/client/`; Slide files stay server.
-4. Parts several Slides share MUST live in `episodes/<ep>/parts/`: plain props, no kit, no Slide import.
+1. A Scene MUST be free JSX, no slide-type union, reaching the record only via its typed kit.
+2. Browser code MUST live in its Slide's folder as `*.client.tsx`.
+3. A Slide folder MUST import only its own files, Slide master, `slide-shared`, UI kit, hooks, lib. A part two Slides share lives in `slide-shared`: plain props.
 
 ### 4. Headings mirror the manuscript
 
-1. One `h1` MUST exist: the Episode title. Position sets `h2` section slide, `h3` page slide via the kit's `Title`.
-2. No Episode file MAY write `h1`–`h3`.
+1. One `h1`: the Episode title. Position sets `h2`/`h3` via the kit's `Title`; no Episode file MAY write `h1`–`h3`.
 
 ### 5. Strings and anchors keyed by Slide slug
 
-1. Translation keys MUST be flat by Slide slug — `episodes.x.slides.intro.title`, not `…sections.0.title`. Every locale in one change.
-2. Published anchors MUST stay, snapshotted in `published-anchors.json`; remove one only deliberately.
+1. A Slide's text MUST live in its own `i18n/<locale>.json`, by role — `title`, not `sections.0.title`; German matches the English shape. Episode text: `<episode>/i18n/`.
+2. Published anchors MUST stay (`published-anchors.json`); `slideHref` MUST name a Slide of the same Episode.
 
 ### 6. Table of contents and Context drawer read the record
 
-1. Both MUST take Slide data from the record, the active Slide from `useActiveSlide()`, never the DOM.
+1. Both MUST read Slide data from the record and the active Slide from `useActiveSlide()`, never the DOM.
 
 ### 7. Episode styling stays in the Episode
 
-1. `globals.css` MUST change only for a token two Episodes share.
-2. Episode CSS MUST sit in its `parts/`, every selector under `[data-episode='<slug>']`.
-3. Shared meanings (machine, human, AI, primary, secondary) MUST use site tokens; any other colour needs a light and a dark value.
+1. `globals.css` MUST hold only tokens Episodes share.
+2. A Slide's CSS MUST sit in a CSS module in its folder.
+3. An Episode MAY keep one stylesheet beside its record, under `[data-episode='<slug>']`, only to remap tokens its chrome reads — `palette.css`.
+4. Shared meanings MUST use site tokens; other colours need a dark value.
 
 ## Do's and Don'ts
 
 ### Do's
 
-1. **DO** start an Episode by copying the `page-template/` folder, in this order: rename the slug; register it in `EPISODE_SLUGS` and the Episode registry; write its Translation keys, en and de, before any Slide file (the types derive from them); then the Slide files; then `published-anchors.json`. (Decision 2, Decision 5)
+1. **DO** start an Episode by copying `page-template/`: rename the slug; register it in `EPISODE_SLUGS` and the registry; write its `i18n/`; then each Slide as a whole folder, text included, the Episode file adding only its import and list entry; then `published-anchors.json`. (Decision 2, Decision 5)
 2. **DO** write a Voice script for every Slide the speaker talks over; its words are the reading time. (Decision 2)
 3. **DO** leave `title` off a purely visual Slide. (Decision 2)
 4. **DO** build a one-off Scene from `SlideFrame` and the kit's `<Title>`. (Decision 3, Decision 4)
 5. **DO** mark the element a note explains with `{...target('chart')}`. (Decision 3)
-6. **DO** link another Slide with `slideHref('the-lost-middle')`, and pass a shared part its strings — `<Statement>{t('statement')}</Statement>`. (Decision 3)
+6. **DO** link with `slideHref('the-lost-middle')`; pass a part its strings — `<Statement>{t('statement')}</Statement>`. (Decision 3)
 7. **DO** colour a machine/human/AI meaning with `text-machine`, `text-human`, `text-ai`; check every Slide in both themes. (Decision 7)
+8. **DO** copy a Slide with `cp -r` of its folder, one import, one list entry. (Decision 2)
 
 ### Don'ts
 
@@ -119,8 +117,9 @@ flowchart LR
 5. **DON'T** rename or drop a published slug — it is a shared link. (Decision 2, Decision 5)
 6. **DON'T** read a Slide's title, reading time or id from the DOM. (Decision 6)
 7. **DON'T** write minutes or segment times by hand — `minutes: { en: 2, de: 2 }`, `from: 0, to: 2`. (Decision 2)
-8. **DON'T** hand the kit to a `parts/` part, or import a Slide from `parts/`. (Decision 3)
+8. **DON'T** hand the kit to a part, or import another Slide or the Episode file from a Slide folder. (Decision 3)
 9. **DON'T** add an Episode selector to `globals.css` or a colour with no dark value. (Decision 7)
+10. **DON'T** style one Slide from the Episode stylesheet — `.gantt-bar` belongs in its CSS module. (Decision 7)
 
 ## Consequences
 
@@ -134,23 +133,25 @@ flowchart LR
 **Negative:**
 
 1. **Reading time is only as good as the Voice script:** a short or missing script understates it; a fixed words-per-minute rate ignores pauses and demos.
-2. **Many small files:** an Episode is a folder of Slide files, not one page file.
-3. **No colour lint:** a raw colour without a dark value is caught only by looking at both themes.
+2. **Many small files:** an Episode is a folder of Slide folders, not one page file.
+3. **German checked by shape only:** an empty German string compiles; review catches it.
+4. **No colour lint:** a raw colour without a dark value is caught only by looking at both themes.
 
 **Risks:**
 
 1. **Structure breaks only visible after build** (duplicate ids, heading order). **Mitigation:** post-build test over every exported Episode, run in CI on every pull request.
 2. **A published anchor lost by a rename.** **Mitigation:** the snapshot test names it.
-3. **Episode CSS leaking into another page.** **Mitigation:** every selector under `[data-episode]`; reviewer duty.
+3. **Episode CSS leaking into another page.** **Mitigation:** Slide CSS is a module; the one Episode stylesheet sits under `[data-episode]`; a unit test keeps `[data-episode` out of `globals.css`; reviewer duty.
+4. **A copied Slide collides or links outside its Episode.** **Mitigation:** the container throws on both.
 
 ## Compliance and Enforcement
 
-1. **Types:** record, registry, kit and Translation files typed; a missing locale, unregistered slug, foreign key, undeclared note or untitled Section opener fails `tsc`.
-2. **Unit tests:** anchor derivation — `top` reserved, duplicate slugs rejected, untitled Slides counted but unlisted; reading time from words, 0 hidden; published anchors still produced, and a missing snapshot prints the file to paste.
-3. **Lint and dependency rules:** Episode files can't write `h1`–`h3`, carry `'use client'` outside `client/`, render the table of contents or import the container; `parts/` never imports a Slide; the per-function line cap is off only in `slides/` and `parts/` (a Scene is one long expression; complexity and file caps hold, `client/` keeps every cap).
-4. **Post-build test:** every Episode in every locale — slot order, one `h1`, heading level by position, every note target resolves in its Slide, no duplicate ids.
+1. **Types:** record, registry, kit and Translation files typed; a missing locale, a German Slide file missing an English key, unregistered slug, foreign key, undeclared note or untitled Section opener fails `tsc`.
+2. **Unit tests:** anchor derivation — `top` reserved, duplicate slugs rejected, untitled Slides counted but unlisted; `slideHref` to a slug outside the Episode rejected; every Slide folder named after its slug; reading time from words, 0 hidden; published anchors still produced, and a missing snapshot prints the file to paste.
+3. **Lint and dependency rules:** Episode files can't write `h1`–`h3`, carry `'use client'` outside a Slide's `*.client.tsx`, render the table of contents or import the container; a Slide folder reaches only its own files and shared locations; no Episode keeps a `parts/` or `client/` folder; the per-function line cap is off only for Slide server files (complexity and file caps hold; `*.client.tsx` and `*.pure.ts` keep every cap).
+4. **Post-build test:** every Episode in every locale — slot order, one `h1`, heading level by position, note targets resolve, no duplicate ids, anchors equal the snapshot, no raw key, reader text equals its capture.
 
-**Manual review duties:** no part reads Slide data from the DOM; a Slide file declares only its own names; a `parts/` part takes plain props; Episode CSS is scoped; every Slide looks right in light and dark (screenshots, then a browser).
+**Manual review duties:** no part reads Slide data from the DOM; a Slide declares only its own names; a part takes plain props; Slide CSS is scoped, the Episode stylesheet only remaps tokens; every Slide looks right in light and dark (screenshots, then a browser).
 
 **Exceptions:** raise a separate ADR; human approval required.
 
@@ -159,6 +160,7 @@ flowchart LR
 - [`GLOSSARY.md`](../../GLOSSARY.md#episode-structure) — Episode structure: Section, Slide, Scene, Voice script.
 - [`docs/features/episode-translation-keys.md`](../../docs/features/episode-translation-keys.md) — key roles, worked examples.
 - [`docs/features/episode-migration.md`](../../docs/features/episode-migration.md) — converting a prototype into an Episode, step by step.
+- [`docs/adr/0001-the-slide-is-a-self-contained-folder.md`](../../docs/adr/0001-the-slide-is-a-self-contained-folder.md) — why a Slide is a folder.
 - [`docs/features/episode-chrome.md`](../../docs/features/episode-chrome.md) — table of contents placement, corner allocation, reserved places.
 
 ### Terms

@@ -1,0 +1,25 @@
+{
+  "title": "Google OKF",
+  "caption": "Vollständiges OKF v0.2 Frontmatter-Schema für Provenienz, Vertrauensstufen und Lebenszyklus.",
+  "prose": "Ein standardisiertes Frontmatter-Schema zur Governance von KI-Wissensbasen. Provenienz, Vertrauensstufen und Lebenszyklus-Felder stehen direkt im Markdown neben dem Inhalt.",
+  "notes": {
+    "open-knowledge-format": {
+      "header": "Standardisierte Metadaten",
+      "description": "OKF v0.2 standardisiert Frontmatter-Felder für KI-Wissensbasen."
+    },
+    "lifecycle-fields": {
+      "header": "Governance-Felder",
+      "description": "Provenienz, Vertrauensstufen und Lebenszyklus stehen direkt im Markdown neben dem Inhalt."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "shared-vocabulary": {
+        "title": "Google Open Knowledge Format",
+        "keywords": "OKF v0.2, offener Standard, Prüf-Vertrag, Lebenszyklus",
+        "script": "Um den maschinellen Anteil zu vergrößern, braucht es ein gemeinsames Vokabular. Googles Open Knowledge Format standardisiert Metadaten, Prüf-Verträge und Lebenszyklen: Erstellt durch einen Agenten, verifiziert durch einen Menschen, sowie Verfallsdaten. Mit einheitlichen Feldern funktioniert ein Prüf-Tool in jedem Repository.",
+        "bridge": "Damit kann die Maschine weit mehr prüfen als reine Syntax."
+      }
+    }
+  }
+}

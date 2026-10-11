@@ -1,22 +1,25 @@
-import { episode } from '@/components/slide-master/episode-record';
-import { cliVsWebToolObscurity } from './slides/cli-vs-web-tool-obscurity';
-import { costOfAgenticAi } from './slides/cost-of-agentic-ai';
-import { leadOneUpskillMany } from './slides/lead-one-upskill-many';
-import { liveContextBreakdown } from './slides/live-context-breakdown';
-import { managingContext } from './slides/managing-context';
-import { modelTiers } from './slides/model-tiers';
-import { motivation } from './slides/motivation';
-import { outcomePerEuro } from './slides/outcome-per-euro';
-import { theCompoundingCostCurve } from './slides/the-compounding-cost-curve';
-import { theFourErasOfAi } from './slides/the-four-eras-of-ai';
-import { theFullnessGaugeAndLevers } from './slides/the-fullness-gauge-and-levers';
-import { theInvisibleInvoice } from './slides/the-invisible-invoice';
-import { theLostMiddle } from './slides/the-lost-middle';
-import { toolsAndTips } from './slides/tools-and-tips';
-import { whatIsAToken } from './slides/what-is-a-token';
+import { episode } from '@/components/slide-master/slide';
+import de from './i18n/de.json';
+import en from './i18n/en.json';
+import { cliVsWebToolObscurity } from './slides/cli-vs-web-tool-obscurity/slide';
+import { costOfAgenticAi } from './slides/cost-of-agentic-ai/slide';
+import { leadOneUpskillMany } from './slides/lead-one-upskill-many/slide';
+import { liveContextBreakdown } from './slides/live-context-breakdown/slide';
+import { managingContext } from './slides/managing-context/slide';
+import { modelTiers } from './slides/model-tiers/slide';
+import { motivation } from './slides/motivation/slide';
+import { outcomePerEuro } from './slides/outcome-per-euro/slide';
+import { theCompoundingCostCurve } from './slides/the-compounding-cost-curve/slide';
+import { theFourErasOfAi } from './slides/the-four-eras-of-ai/slide';
+import { theFullnessGaugeAndLevers } from './slides/the-fullness-gauge-and-levers/slide';
+import { theInvisibleInvoice } from './slides/the-invisible-invoice/slide';
+import { theLostMiddle } from './slides/the-lost-middle/slide';
+import { toolsAndTips } from './slides/tools-and-tips/slide';
+import { whatIsAToken } from './slides/what-is-a-token/slide';
 
 export const aiTokenEconomy = episode({
   slug: 'ai-token-economy',
+  messages: { en, de },
   youtube: { en: 'S0Nx4faEebY', de: 'S0Nx4faEebY' },
   sections: [
     [motivation, leadOneUpskillMany, theFourErasOfAi, theInvisibleInvoice, outcomePerEuro],

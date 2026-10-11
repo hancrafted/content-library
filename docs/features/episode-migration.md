@@ -9,6 +9,8 @@ Read before turning a prototype (for example an HTML tower page) into an Episode
 
 Each step ends on a completion criterion. Stop at a step only when its criterion holds. Work in a worktree; commit through `/commit`.
 
+**Splitting the work across agents.** The orchestrator does steps 1–3 and 7–10. Each sub-agent owns whole Slide folders, steps 4–6: Scene, widgets, CSS module and its `i18n/` text, and touches no file outside them. The orchestrator then adds only one import and one list entry per Slide to the Episode file. No two agents write the same file.
+
 ## 1. Read the source
 
 List the source's Sections and Slides, in order.
@@ -31,26 +33,28 @@ Kebab-case, from the titles: `the-lost-middle`.
 
 Done when: no two slugs match and each Section's first slug names the Section.
 
-## 3. Write the Translation keys
+## 3. Copy the template and write the Episode's text
 
-In `src/messages/en.json` and `src/messages/de.json`, before any Slide file: the Slide types derive from these keys.
+Copy `page-template/` to `episodes/<ep>/`, rename its slug, delete its Slide folders. Write the Episode's own text in `episodes/<ep>/i18n/en.json` and `de.json`: `title`, `caption`, `description`. English goes in verbatim from the source; German is written fresh from the same facts, not translated.
 
-- Episode: `episodes.<ep>.{title,caption,description}`.
-- Slides: `episodes.<ep>.slides.<slide>.<role>`; roles in [episode-translation-keys.md](episode-translation-keys.md). No Section level.
-- English text goes in verbatim from the source. German is written fresh from the same facts, not translated.
-- Leave `title` out of a purely visual Slide, so it renders but is not listed. A section slide always has one.
+Done when: both files hold the three keys.
 
-Done when: `npm run typecheck` accepts both files and every English key has a German one.
+## 4. Write each Slide as one folder
 
-## 4. Write the Slide files
+One folder per Slide, `slides/<slide>/`, named after its slug. Write its text and its server entry together, Slide by Slide:
 
-Copy `page-template/` to `episodes/<ep>/`, rename its slug, delete its Slides. Then one file per Slide, `slides/<slide>.tsx`:
+- `i18n/en.json` and `i18n/de.json`: the Slide's strings by role ([episode-translation-keys.md](episode-translation-keys.md)), no Episode or Slide prefix. Leave `title` out of a purely visual Slide, so it renders but is not listed. A section slide always has one.
+- `slide.tsx`, the server entry:
 
 ```tsx
-const slide = slidesFor('<ep>');
+import { BasicPageSlide } from '@/components/slide-master/basic-page-slide';
+import { slide } from '@/components/slide-master/slide';
+import de from './i18n/de.json';
+import en from './i18n/en.json';
 
 export const theLostMiddle = slide({
   slug: 'the-lost-middle',
+  messages: { en, de },
   notes: [{ slug: 'attention-valley', target: 'prose' }],
   segments: [{ slug: 'blank-slate' }],
   content: ({ t, ref, target, Title }) => (
@@ -64,16 +68,18 @@ export const theLostMiddle = slide({
 ```
 
 - Pick the layout from `slide-layouts/`: section slide, basic page, three-column. A Scene that fits none is free JSX in a `SlideFrame` with the kit's `<Title>` ([FE-002 §3](../../.archgate/adrs/FE-002-episode-page.md#3-scene-is-free)).
-- A type error from a kit field means the Translation keys or the declaration are wrong. Fix them; never cast.
+- A type error from a kit field or from `messages` means the Slide's own files or its declaration are wrong: German must have every English key. Fix them; never cast.
 - The kit is everything a Scene needs:
   - `t('caption')`, `t('count', { n })`; `t.rich('prose', { ref: ref('<note>') })` already knows `<em>`, `<b>`, `<code>` — pass a tag only to restyle it.
-  - `template('showAll')`: the raw string, `{count}` unfilled, for a `client/` widget to fill with `fillTemplate` from `@/lib/template.pure`.
-  - `slideHref('the-lost-middle')`: the localized link to another Slide of this Episode.
+  - `template('showAll')`: the raw string, `{count}` unfilled, for a client widget to fill with `fillTemplate` from `@/lib/template.pure`.
+  - `slideHref('the-lost-middle')`: the localized link to another Slide of this Episode; a slug not in the Episode fails the build.
   - `locale`: for `Intl` number or date formatting.
   - `ref`, `target`, `Title`: notes and heading, below.
-- A part or data several Slides share goes in `episodes/<ep>/parts/`; see `page-template/parts/statement.tsx`. Its rules, and those for Episode CSS and colour tokens: [FE-002 §3 and §7](../../.archgate/adrs/FE-002-episode-page.md#3-scene-is-free).
+- A Slide folder imports only its own files and the global shared locations: `src/components/slide-master/`, `src/components/slide-shared/`, `src/components/ui/`, `src/hooks/`, `src/lib/`. A server part only this Slide uses sits in its folder (see `page-template/slides/what-comes-next/statement.tsx`); a part two Slides share goes in `src/components/slide-shared/`, plain props, no kit. Colour tokens: [FE-002 §7](../../.archgate/adrs/FE-002-episode-page.md#7-episode-styling-stays-in-the-episode).
+- A Slide's own CSS is a CSS module in its folder, combined with Tailwind via `cn()` (see `ai-token-economy/slides/motivation/freelancer-cards.module.css`). Only a token remap that the chrome reads too (the Title slide glow, `<em>`, the talk player) goes in one Episode stylesheet beside the Episode file, every selector under `[data-episode='<ep>']` (see `maintaining-markdown-for-ai/palette.css`). Never style one Slide from it.
+- A `slide-shared` part reaches only other slide-shared parts, the UI kit and `src/lib` (dependency-cruiser rule `slide-shared-reaches-only-ui-and-lib`, [FE-007 §5](../../.archgate/adrs/FE-007-module-layering.md#5-a-slide-folder-imports-only-global-shared-code)). A popover uses the shared `usePopoverPlacement` hook; see [Episode chrome](episode-chrome.md).
 
-Done when: every Slide of step 1 has a file and `npm run typecheck` passes.
+Done when: every Slide of step 1 has a folder and `npm run typecheck` passes.
 
 ## 5. Notes, targets and the Voice script
 
@@ -87,8 +93,8 @@ Done when: every note target resolves to one element of its Slide, and every sou
 
 ## 6. Client widgets
 
-- Interactive or animated parts go in `episodes/<ep>/client/<name>.client.tsx` ([FE-002 §3](../../.archgate/adrs/FE-002-episode-page.md#3-scene-is-free)).
-- Logic goes in `client/<name>.pure.ts` with a `.pure.test.ts` beside it; test the logic, not the markup.
+- Interactive or animated parts go in the Slide's folder as `<name>.client.tsx` ([FE-002 §3](../../.archgate/adrs/FE-002-episode-page.md#3-scene-is-free)); they reach only their own folder, `src/hooks/` and `src/lib/`.
+- Logic goes in `<name>.pure.ts` beside it with a `.pure.test.ts`; test the logic, not the markup.
 - Respect `prefers-reduced-motion`; pause looping animation outside the active Slide.
 - Slide files render the widget like any component and stay server components.
 
@@ -96,9 +102,9 @@ Done when: each widget's pure logic has a passing test.
 
 ## 7. Compose, register, snapshot
 
-- `episodes/<ep>/<ep>.ts`: `episode({ slug, youtube, sections: [[sectionSlide, ...pages], ...] })`.
+- `episodes/<ep>/<ep>.ts`: `episode({ slug, youtube, messages: { en, de }, sections: [[sectionSlide, ...pages], ...] })` from `@/components/slide-master/slide`, `en` and `de` imported from `./i18n/`. Copying a Slide in from another Episode is `cp -r` of its folder plus one import and one entry here.
 - Add the slug to `EPISODE_SLUGS` in `src/lib/routes.ts`, and the record to `EPISODES` in `src/components/episodes/registry.ts`.
-- `episodes/<ep>/episode-metadata.ts`: `status: 'published'`, its primary Topic, any extra Topics, its Format, its Tags and `publishedOn`; add it to `PUBLISHED` in `src/components/episodes/episode-repository.ts`. If the Episode was an Upcoming Episode, flip its existing file, move it out of `UPCOMING` and move its copy from `landing.episodeOverview.upcoming.<ep>` to `episodes.<ep>` ([Episode overview entries](episode-translation-keys.md#episode-overview-entries)). To feature it, edit the three slugs in `FEATURED` in `src/lib/episode-overview.ts`.
+- `episodes/<ep>/episode-metadata.ts`: `status: 'published'`, its primary Topic, any extra Topics, its Format, its Tags and `publishedOn`; add it to `PUBLISHED` in `src/components/episodes/episode-repository.ts`. If the Episode was an Upcoming Episode, flip its existing file, move it out of `UPCOMING` and move its copy from `landing.episodeOverview.upcoming.<ep>` into `episodes/<ep>/i18n/` ([Episode overview entries](episode-translation-keys.md#episode-overview-entries)). To feature it, edit the three slugs in `FEATURED` in `src/lib/episode-overview.ts`.
 - Run `npx vitest run src/components/episodes/published-anchors.test.ts`. It fails for the new Episode and prints the file path and its JSON; create `episodes/<ep>/published-anchors.json` with exactly that content.
 
 Done when: the same test run is green.
@@ -135,6 +141,6 @@ The orchestrator, not a sub-agent, does this step. Open the source and the Episo
 
 - Same Sections, Slides, wording and visual intent; table of contents tracks scroll.
 - Hovering a note lights its element; a Context reference opens its note.
-- Each `client/` widget plays, and pauses off-screen.
+- Each client widget plays, and pauses off-screen.
 
 Done when: no Slide differs from the source in either theme without a recorded reason.

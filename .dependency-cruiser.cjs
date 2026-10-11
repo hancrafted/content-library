@@ -5,8 +5,16 @@
 // cruise a thinner graph while still reporting success.
 
 // What an Episode file may reach: the Slide master (which holds the Episode
-// record, `slide-master/episode-record.ts`), its own Episode folder and src/lib.
-const EPISODE_REACH = ['^src/components/(slide-master|episodes)/', '^src/lib/'];
+// record, `slide-master/slide.ts`), slide-shared (server parts several Slides
+// of any Episode share), the Episode folders and src/lib.
+const EPISODE_REACH = ['^src/components/(slide-master|slide-shared|episodes)/', '^src/lib/'];
+
+// A self-contained Slide is one folder, `episodes/<ep>/slides/<slide>/` (FE-002, FE-007 §5). The two capture
+// groups name the Episode and the Slide, so a rule's `to` can say "this same folder" as `$1`/`$2`.
+const SLIDE_FOLDER = '^src/components/episodes/([^/]+)/slides/([^/]+)/';
+const OWN_SLIDE_FOLDER = '^src/components/episodes/$1/slides/$2/';
+// The global shared locations a Slide may import: the Slide master, slide-shared, the UI kit, hooks and lib.
+const SLIDE_SHARED_REACH = ['^src/components/(slide-master|slide-shared|ui)/', '^src/(hooks|lib)/'];
 
 /** @type {import('dependency-cruiser').IConfiguration} */
 module.exports = {
@@ -82,26 +90,36 @@ module.exports = {
       severity: 'error',
       comment:
         'An Episode page file composes the Slide master, Slide layouts and the Episode record, plus src/lib helpers — never the table of contents, page shells or routes (FE-002).',
-      from: { path: '^src/components/episodes/', pathNot: ['\\.test\\.ts$', '^src/components/episodes/[^/]+/client/'] },
+      from: {
+        path: '^src/components/episodes/',
+        pathNot: ['\\.test\\.ts$', SLIDE_FOLDER],
+      },
       to: { pathNot: [...EPISODE_REACH, 'node_modules'] },
     },
     {
-      name: 'episode-client-reach-only-hooks-and-lib',
+      name: 'slide-folder-reaches-only-own-and-shared',
       severity: 'error',
       comment:
-        'A one-Episode widget under episodes/<ep>/client/ is the only place an Episode runs in the browser. It reaches its own client/ folder, src/lib helpers and src/hooks — never the Slide master, page shells or other components (FE-002, FE-006).',
-      from: { path: '^src/components/episodes/[^/]+/client/', pathNot: '\\.test\\.ts$' },
-      to: { pathNot: ['^src/components/episodes/[^/]+/client/', '^src/(lib|hooks)/', 'node_modules'] },
+        'A Slide folder (episodes/<ep>/slides/<slide>/) imports only its own files and the global shared locations: src/components/slide-master/, src/components/slide-shared/, src/components/ui/, src/hooks/ and src/lib/. Never another Slide, the Episode file, or anything else Episode-local; a part two Slides share moves to src/components/slide-shared/ (FE-007).',
+      from: { path: SLIDE_FOLDER },
+      to: { pathNot: [OWN_SLIDE_FOLDER, ...SLIDE_SHARED_REACH, 'node_modules'], dependencyTypesNot: ['core'] },
     },
     {
-      name: 'episode-parts-never-imports-slides',
+      name: 'slide-client-reaches-only-hooks-and-lib',
       severity: 'error',
       comment:
-        "An Episode's parts/ holds server parts several Slides share; a part takes plain props and never imports a Slide, so the dependency runs Slide → parts only (FE-002).",
-      from: { path: '^src/components/episodes/([^/]+)/parts/' },
-      to: { path: '^src/components/episodes/[^/]+/slides/' },
+        "A Slide's *.client.tsx widget runs in the browser. It reaches its own Slide folder, src/hooks/ and src/lib/ only — never the Slide master, slide-shared, the UI kit or other components (FE-002, FE-006).",
+      from: { path: `${SLIDE_FOLDER}.+\\.client\\.tsx$` },
+      to: { pathNot: [OWN_SLIDE_FOLDER, '^src/(hooks|lib)/', 'node_modules'] },
     },
-
+    {
+      name: 'slide-shared-reaches-only-ui-and-lib',
+      severity: 'error',
+      comment:
+        'src/components/slide-shared/ holds server parts several Slides of any Episode share. A part takes plain props: it reaches only other slide-shared parts, the UI kit (src/components/ui/) and src/lib — never a Slide, an Episode, the Slide master or its kit, so a Slide copied into another Episode finds it unchanged (FE-002, epic #51).',
+      from: { path: '^src/components/slide-shared/', pathNot: '\\.test\\.ts$' },
+      to: { pathNot: ['^src/components/(slide-shared|ui)/', '^src/lib/', 'node_modules'] },
+    },
     {
       name: 'episode-tests-reach-only-slide-parts',
       severity: 'error',

@@ -1,0 +1,45 @@
+{
+  "title": "Bento-Raster",
+  "caption": "Kacheln verschiedener Größe auf einem Raster: eine Hauptkachel, fünf stützende.",
+  "cells": {
+    "c1": {
+      "title": "Die Hauptzelle",
+      "caption": "Die größte Kachel trägt die Hauptidee; die anderen stützen sie."
+    },
+    "c2": {
+      "title": "Zelle zwei",
+      "caption": "Eine stützende Kachel mit kurzer Bildunterschrift."
+    },
+    "c3": {
+      "title": "Zelle drei",
+      "caption": "Eine stützende Kachel mit kurzer Bildunterschrift."
+    },
+    "c4": {
+      "title": "Zelle vier",
+      "caption": "Eine stützende Kachel mit kurzer Bildunterschrift."
+    },
+    "c5": {
+      "title": "Zelle fünf",
+      "caption": "Eine stützende Kachel mit kurzer Bildunterschrift."
+    },
+    "c6": {
+      "title": "Zelle sechs",
+      "caption": "Eine stützende Kachel mit kurzer Bildunterschrift."
+    }
+  },
+  "notes": {
+    "layout": {
+      "header": "So fließt das Raster",
+      "description": "Platzhalter-Zellen: Jede Zelle behält Titel und Bildunterschrift; beides ersetzen."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "walkthrough": {
+        "title": "Rundgang",
+        "keywords": "Bento-Raster, Layout, Platzhalter",
+        "script": "Das ist das Layout Bento-Raster. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+      }
+    }
+  }
+}

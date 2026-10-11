@@ -14,20 +14,11 @@ export type SectionList<S extends SlideOutline = SlideOutline> = readonly [S, ..
 export type SlideLevel = 'h2' | 'h3';
 
 /** One Slide of a Section list, placed: its wrapper id, its Section's slug and its heading level. */
-export interface PlacedListSlide<S> extends PlacedSlide<S> {
+export interface PlacedListSlide<S> {
+  readonly id: string;
+  readonly slide: S;
   readonly section: string;
   readonly level: SlideLevel;
-}
-
-/** One Slide record with the id its Slide wrapper carries. */
-export interface PlacedSlide<T> {
-  readonly id: string;
-  readonly slide: T;
-}
-
-/** A section slide with its page Slides, each placed. */
-export interface PlacedSection<S extends { readonly slides: readonly unknown[] }> extends PlacedSlide<S> {
-  readonly slides: readonly PlacedSlide<S['slides'][number]>[];
 }
 
 /**
@@ -81,11 +72,4 @@ function assertUniqueSlideSlugs(slugs: readonly string[]): void {
     }
     seen.add(slug);
   }
-}
-
-/** Placed Slides flattened in page order: the order the table of contents lists and arrow keys walk. */
-export function slidesInPageOrder<S extends { readonly slides: readonly unknown[] }>(
-  placed: readonly PlacedSection<S>[],
-): PlacedSlide<S | S['slides'][number]>[] {
-  return placed.flatMap((section) => [section, ...section.slides]);
 }

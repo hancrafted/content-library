@@ -69,7 +69,7 @@ describe('success cases', () => {
     const minutes = [2, 4, 4];
     const expected = { total: 10, remaining: 7, progress: 0.3 };
     // ACT
-    const time = readingTime(minutes, 1, 0.25);
+    const time = readingTime({ minutes, total: 10 }, 1, 0.25);
     // ASSERT
     expect(time).toEqual(expected);
   });
@@ -93,7 +93,7 @@ describe('success cases', () => {
       const order = readingOrder(folded);
       const index = order.ids.indexOf('a--visual');
       // ACT
-      const time = readingTime(order.minutes, index, 0.5);
+      const time = readingTime({ minutes: order.minutes, total: 10 }, index, 0.5);
       // ASSERT
       expect(time).toMatchObject({ total: 10, remaining: 2 });
     });
@@ -158,7 +158,7 @@ describe('failure cases', () => {
     const atStart = { total: 6, remaining: 6, progress: 0 };
     const atEnd = { total: 6, remaining: 0, progress: 1 };
     // ACT
-    const time = [readingTime(minutes, 0, -0.5), readingTime(minutes, 1, 1.5)];
+    const time = [readingTime({ minutes, total: 6 }, 0, -0.5), readingTime({ minutes, total: 6 }, 1, 1.5)];
     // ASSERT
     expect(time).toEqual([atStart, atEnd]);
   });
@@ -197,7 +197,7 @@ describe('edge cases', () => {
     const minutes = [2, 4];
     const unread = { total: 6, remaining: 6, progress: 0 };
     // ACT
-    const time = readingTime(minutes, -1, 0);
+    const time = readingTime({ minutes, total: 6 }, -1, 0);
     // ASSERT
     expect(time).toEqual(unread);
   });
@@ -206,7 +206,7 @@ describe('edge cases', () => {
     // ARRANGE
     const done = { total: 0, remaining: 0, progress: 1 };
     // ACT
-    const time = readingTime([0, 0], 0, 0);
+    const time = readingTime({ minutes: [0, 0], total: 0 }, 0, 0);
     // ASSERT
     expect(time).toEqual(done);
   });
@@ -215,7 +215,7 @@ describe('edge cases', () => {
     // ARRANGE
     const { ids, minutes } = readingOrder(SECTIONS);
     // ACT
-    const time = readingTime(minutes, ids.indexOf('top'), 0.5);
+    const time = readingTime({ minutes, total: 11 }, ids.indexOf('top'), 0.5);
     // ASSERT
     expect([time.remaining, time.progress]).toEqual([time.total, 0]);
   });

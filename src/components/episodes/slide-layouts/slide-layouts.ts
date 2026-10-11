@@ -1,7 +1,9 @@
-import { episode } from '@/components/slide-master/episode-record';
-import { basicPage } from './slides/basic-page';
-import { sectionSlide } from './slides/section-slide';
-import { threeColumn } from './slides/three-column';
+import { episode } from '@/components/slide-master/slide';
+import de from './i18n/de.json';
+import en from './i18n/en.json';
+import { basicPage } from './slides/basic-page/slide';
+import { sectionSlide } from './slides/section-slide/slide';
+import { threeColumn } from './slides/three-column/slide';
 
 /*
  * A gallery, not a talk: one Slide per Slide layout, so a reader can see each
@@ -11,5 +13,6 @@ import { threeColumn } from './slides/three-column';
  */
 export const slideLayouts = episode({
   slug: 'slide-layouts',
+  messages: { en, de },
   sections: [[sectionSlide, basicPage, threeColumn]],
 });

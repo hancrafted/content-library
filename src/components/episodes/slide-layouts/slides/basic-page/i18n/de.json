@@ -1,0 +1,11 @@
+{
+  "title": "Einfache Seite",
+  "caption": "Oben Titel und Untertitel, darunter ein Absatz Fließtext.",
+  "prose": "Der Fließtext ist ein Ziel, das eine Sprechernotiz benennen kann, genau wie Titel und Untertitel.",
+  "notes": {
+    "layout-target": {
+      "header": "Das Ziel Fließtext",
+      "description": "Layouts bieten Ziele von Haus aus: Titel, Untertitel und Fließtext. Wer eines als Ziel einer Notiz benennt, sieht es im Drawer hervorgehoben."
+    }
+  }
+}

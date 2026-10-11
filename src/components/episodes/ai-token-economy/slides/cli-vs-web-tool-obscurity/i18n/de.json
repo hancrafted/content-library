@@ -1,0 +1,11 @@
+{
+  "title": "Verschleierung in Web-Tools",
+  "caption": "Der Zähler wird mit Absicht versteckt.",
+  "prose": "Undurchsichtigkeit ist ein Produktmuster: reibungsloser Einstieg, gewohnte Abläufe und überraschend hohe Monatsrechnungen.",
+  "notes": {
+    "the-obscurity-playbook": {
+      "header": "Das Muster der Verschleierung",
+      "description": "Das Verbergen von Nutzungsdaten schafft Abhängigkeiten, bevor Organisationen die exponentiellen Kosten ungesteuerter Agenten-Schleifen erkennen."
+    }
+  }
+}

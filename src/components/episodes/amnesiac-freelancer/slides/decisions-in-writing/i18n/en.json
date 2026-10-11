@@ -1,0 +1,58 @@
+{
+  "title": "Why decisions belong in writing",
+  "caption": "Write each one as a conversation with a future developer.",
+  "prose": "Michael Nygard’s decision records keep the why for whoever arrives later, in one or two pages, and <ref>mark a reversed decision as superseded instead of deleting it</ref>. For an agent that arrives later every time, the record is the memory it can read.",
+  "notes": {
+    "a-conversation-with-a-future-developer": {
+      "header": "A conversation with a future developer",
+      "description": "Nygard's rule for decision records.[1] Short prose, one or two pages.",
+      "sources": {
+        "nygard-architecture-decisions": {
+          "title": "Michael Nygard: Documenting architecture decisions"
+        }
+      }
+    },
+    "superseded-not-deleted": {
+      "header": "Superseded, not deleted",
+      "description": "A reversed decision is kept and marked superseded.[1]",
+      "sources": {
+        "nygard-architecture-decisions": {
+          "title": "Michael Nygard: Documenting architecture decisions"
+        }
+      }
+    },
+    "the-newcomers-two-bad-options": {
+      "header": "The newcomer's two bad options",
+      "description": "Without the record, the newcomer must blindly accept or blindly change a decision.[1]",
+      "sources": {
+        "nygard-architecture-decisions": {
+          "title": "Michael Nygard: Documenting architecture decisions"
+        }
+      }
+    },
+    "mapping-not-a-sourced-claim": {
+      "header": "Mapping, not a sourced claim",
+      "description": "That an agent reads the same record is our mapping. No vendor page quoted says so."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "why-it-was-done": {
+        "title": "Why it was done",
+        "keywords": "Nygard, future developer",
+        "script": "Michael Nygard wrote decision records for exactly this person: someone who arrives later. His rule: write each one as if it is a conversation with a future developer. One or two pages, plain prose."
+      },
+      "superseded": {
+        "title": "Superseded",
+        "keywords": "keep the old one, mark superseded",
+        "script": "When you reverse a decision, keep the old record and mark it superseded. Without any record, the newcomer has two bad options: accept the decision blindly, or change it blindly."
+      },
+      "our-agent-arrives-later-every-time": {
+        "title": "Our agent arrives later, every time",
+        "keywords": "record is the memory",
+        "script": "Our freelancer is always the newcomer. That is my mapping, not a vendor claim, but it follows: for someone who arrives later every single time, the written record is the only memory they can read.",
+        "bridge": "We have a decent onboarding package. Now where the freelancer picture misleads us."
+      }
+    }
+  }
+}

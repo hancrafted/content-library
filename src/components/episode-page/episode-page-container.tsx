@@ -1,20 +1,17 @@
 import { ContextDrawerSlot } from '@/components/context-drawer/context-drawer-slot';
-import type { AnyEpisodeRecord, RuntimeTranslator } from '@/components/slide-master/episode-record';
+import type { LocalizedSlide } from '@/components/slide-master/localized-slide';
+import type { EpisodeRecord } from '@/components/slide-master/slide';
+import type { RuntimeTranslator } from '@/components/slide-master/slide-base';
 import { TableOfContents, type TocLabels } from '@/components/table-of-contents/table-of-contents.client';
 import { readTranslationStrings } from '@/i18n/translation-strings';
-import { slidesInPageOrder, TITLE_ANCHOR } from '@/lib/episode.pure';
+import { TITLE_ANCHOR } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { episodeRoute, type EpisodeSlug } from '@/lib/routes';
 import { cn } from '@/lib/utils';
 import { getTranslations } from 'next-intl/server';
 import { ContentArea } from './content-area';
 import { contextDrawerInput } from './context-drawer-input';
-import {
-  INSET_CLASSES,
-  TOC_RESERVE_CLASS,
-  tocSectionsOf,
-  type PlacedEpisodeSection,
-} from './episode-page-container.pure';
+import { INSET_CLASSES, TOC_RESERVE_CLASS, tocSectionsOf } from './episode-page-container.pure';
 import { recordContent, type TranslatorOf } from './record-content';
 import { SlideKeys } from './slide-keys.client';
 import { SlideObserver } from './slide-observer.client';
@@ -24,13 +21,23 @@ import { TalkPlayer, type TalkPlayerLabels } from './talk-player.client';
 import { TitleSlide } from './title-slide';
 import { UrlStateProvider } from './url-state-provider.client';
 
-function SectionSlides({ placed }: { placed: PlacedEpisodeSection }) {
+/** The Slides grouped by the Section the walk placed each in, in page order. */
+function bySection(slides: readonly LocalizedSlide[]): (readonly LocalizedSlide[])[] {
+  const groups: LocalizedSlide[][] = [];
+  for (const slide of slides) {
+    const last = groups.at(-1);
+    if (last?.[0].section === slide.section) last.push(slide);
+    else groups.push([slide]);
+  }
+  return groups;
+}
+
+function SectionSlides({ slides }: { slides: readonly LocalizedSlide[] }) {
   return (
-    <section data-section={placed.slide.slug} className="contents">
-      <SlideWrapper id={placed.id}>{placed.slide.content}</SlideWrapper>
-      {placed.slides.map(({ id, slide }) => (
-        <SlideWrapper key={slide.slug} id={id}>
-          {slide.content}
+    <section data-section={slides[0].section} className="contents">
+      {slides.map(({ id, slug, content }) => (
+        <SlideWrapper key={slug} id={id}>
+          {content}
         </SlideWrapper>
       ))}
     </section>
@@ -41,7 +48,7 @@ function SlideColumn(props: {
   ids: readonly string[];
   title: string;
   caption?: string;
-  placed: readonly PlacedEpisodeSection[];
+  slides: readonly LocalizedSlide[];
   youtubeId?: string;
   talkLabels?: TalkPlayerLabels;
 }) {
@@ -56,8 +63,8 @@ function SlideColumn(props: {
           youtubeId={props.youtubeId}
           talkLabels={props.talkLabels}
         />
-        {props.placed.map((section) => (
-          <SectionSlides key={section.id} placed={section} />
+        {bySection(props.slides).map((section) => (
+          <SectionSlides key={section[0].id} slides={section} />
         ))}
       </ContentArea>
     </SlideZones>
@@ -67,7 +74,8 @@ function SlideColumn(props: {
 function EpisodeToc(props: {
   locale: Locale;
   slug: EpisodeSlug;
-  placed: readonly PlacedEpisodeSection[];
+  slides: readonly LocalizedSlide[];
+  minutes: number;
   labels: TocLabels;
 }) {
   return (
@@ -75,7 +83,8 @@ function EpisodeToc(props: {
       <TableOfContents
         locale={props.locale}
         route={episodeRoute(props.slug)}
-        sections={tocSectionsOf(props.placed)}
+        sections={tocSectionsOf(props.slides)}
+        total={props.minutes}
         targetAttribute="data-slide"
         topId={TITLE_ANCHOR}
         labels={props.labels}
@@ -108,13 +117,13 @@ function translatorOf(locale: Locale): TranslatorOf {
  * reads that list, so no id is derived twice and none can drift. It also
  * provides the page's one URL-state service (FE-001 §2).
  */
-export async function EpisodePageContainer({ locale, episode }: { locale: Locale; episode: AnyEpisodeRecord }) {
-  const { title, caption, sections: placed } = await recordContent(episode, locale, translatorOf(locale));
-  const ids = [TITLE_ANCHOR, ...slidesInPageOrder(placed).map(({ id }) => id)];
+export async function EpisodePageContainer({ locale, episode }: { locale: Locale; episode: EpisodeRecord }) {
+  const { title, caption, minutes, slides } = await recordContent(episode, locale, translatorOf(locale));
+  const ids = [TITLE_ANCHOR, ...slides.map(({ id }) => id)];
   const youtubeId = episode.youtube?.[locale];
   const talkLabels = youtubeId ? await readTranslationStrings(locale, 'talkPlayer') : undefined;
   const tocLabels = await tocLabelsOf(locale);
-  const drawer = await contextDrawerInput(locale, placed);
+  const drawer = await contextDrawerInput(locale, slides);
   return (
     <UrlStateProvider key={`${locale}/${episode.slug}`}>
       <div
@@ -122,12 +131,12 @@ export async function EpisodePageContainer({ locale, episode }: { locale: Locale
         data-episode={episode.slug}
         className={cn('mt-6', INSET_CLASSES, TOC_RESERVE_CLASS)}
       >
-        <EpisodeToc locale={locale} slug={episode.slug} placed={placed} labels={tocLabels} />
+        <EpisodeToc locale={locale} slug={episode.slug} slides={slides} minutes={minutes} labels={tocLabels} />
         <SlideColumn
           ids={ids}
           title={title}
           caption={caption}
-          placed={placed}
+          slides={slides}
           youtubeId={youtubeId}
           talkLabels={talkLabels}
         />

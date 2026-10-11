@@ -1,0 +1,15 @@
+{
+  "title": "Modellstufen",
+  "caption": "Mein Modell-Stack: Ein Workflow, viele Modelle.",
+  "prose": "Jede Phase nutzt das wirtschaftlichste Modell: Pauschal-Chats für Ideen, Spitzenmodelle für Architektur, schnelle Modelle für Code.",
+  "notes": {
+    "tiered-stack-architecture": {
+      "header": "Gestaffelte Modellarchitektur",
+      "description": "Wirtschaftliche Kompetenz bedeutet, Modellkosten an Projektrisiken anzupassen und Modelle flexibel zu wechseln."
+    },
+    "zero-marginal-thinking": {
+      "header": "Kostenneutrale Erkundung",
+      "description": "Verbraucher-Abonnements eignen sich für explorative Diskussionen; verbrauchsbasierte Spitzenmodelle gehören an Hebelpunkte."
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "title": "Runs on a 100% deterministic core",
+  "caption": "One mechanism, three triggers, one deterministic core.",
+  "prose": "Three things can start it and it does three different things with the answer. What happens in between is the same every time.",
+  "notes": {
+    "three-triggers": {
+      "header": "Three triggers, one core",
+      "description": "Pre-read agent hook, pre-commit gate, or manual check all execute the identical deterministic core."
+    },
+    "predictable-eval": {
+      "header": "Deterministic evaluation",
+      "description": "Configuration and file inputs produce the exact same verdict every run."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "three-triggers": {
+        "title": "One deterministic core",
+        "keywords": "three triggers, runtime pre-read, commit gate, nightly schedule",
+        "script": "Three ways in. Three ways out. And the middle is the same every time. Whatever starts it, the core does one thing: read the configuration, run the logic. Same input, same answer. It's fully deterministic. The one I want to show you is the first: the agent goes to read a file — and before it does, it's told that file is stale. The other two, briefly: on commit, a check that the frontmatter meets the standard, passing or blocking. And on a schedule: a nightly run that regenerates what can be regenerated, and raises a ticket on what can't.",
+        "bridge": "Let me show you the first one."
+      }
+    }
+  }
+}

@@ -2,6 +2,8 @@
 
 For an agent fixing the harness after PR #50 (`slide-master` Episode). Each item names the evidence, a proposed fix, and whether a human decision is needed first. Items marked **decide** wait for the user; the others are ready to execute.
 
+**Follow-up:** epic [#51 Self-contained Slides](https://github.com/hancrafted/content-library/issues/51) acts on the Slide-shape findings: one folder per Slide with its text, no `client/` or `parts/`, `slide-shared` for parts two Slides share, a shared popover hook. Read it before acting on an item here.
+
 Context:
 
 - The run built 18 page Slides with sub-agents. Each Slide was merged one at a time, with `npm run verify` after every merge.

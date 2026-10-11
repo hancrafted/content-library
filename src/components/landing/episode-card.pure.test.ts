@@ -1,11 +1,14 @@
-import type { EpisodeMetadata } from '@/lib/episode-metadata.pure';
+import type { PublishedEpisodeMetadata, UpcomingEpisodeMetadata } from '@/lib/episode-metadata.pure';
 import { describe, expect, it } from 'vitest';
 import { episodeCard } from './episode-card.pure';
 
 /** A stand-in for next-intl's `t`: answers each full key with a fixed sentence naming the key. */
 const read = (key: string) => `[${key}]`;
 
-const PUBLISHED: EpisodeMetadata = {
+/** A published Episode's copy, as the registry reads it from the Episode's record. */
+const COPY = { title: 'Your AI token economy', caption: 'Hidden managing responsibilities.' };
+
+const PUBLISHED_METADATA: PublishedEpisodeMetadata = {
   slug: 'ai-token-economy',
   status: 'published',
   topic: 'economics',
@@ -14,7 +17,10 @@ const PUBLISHED: EpisodeMetadata = {
   publishedOn: '2026-10-09',
 };
 
-const UPCOMING: EpisodeMetadata = {
+/** The published Episode as the card reads it: its metadata with its copy from the registry. */
+const PUBLISHED = { ...PUBLISHED_METADATA, copy: COPY };
+
+const UPCOMING: UpcomingEpisodeMetadata = {
   slug: 'choosing-the-right-model',
   status: 'upcoming',
   topic: 'economics',
@@ -24,15 +30,15 @@ const UPCOMING: EpisodeMetadata = {
 };
 
 describe('success cases', () => {
-  it('builds a published card that links to its Episode, reads its copy from its own Translation keys and takes its Topic look', () => {
+  it('builds a published card that links to its Episode, takes its copy from its record and its Topic look', () => {
     // ARRANGE
     const expected = {
       slug: 'ai-token-economy',
       route: '/episode/ai-token-economy',
       href: '/episode/ai-token-economy',
       status: 'published',
-      title: '[episodes.ai-token-economy.title]',
-      caption: '[episodes.ai-token-economy.caption]',
+      title: 'Your AI token economy',
+      caption: 'Hidden managing responsibilities.',
       topic: { id: 'economics', label: '[landing.episodeOverview.topics.economics]' },
       topics: [{ id: 'economics', label: '[landing.episodeOverview.topics.economics]' }],
       format: { id: 'foundations', label: '[landing.episodeOverview.formats.foundations]' },
@@ -89,11 +95,21 @@ describe('failure cases', () => {
     const strict = (key: string): string => {
       throw new Error(`MISSING_MESSAGE: ${key}`);
     };
-    const message = 'MISSING_MESSAGE: episodes.ai-token-economy.title';
+    const message = 'MISSING_MESSAGE: landing.episodeOverview.upcoming.choosing-the-right-model.title';
     // ACT
-    const build = () => episodeCard(PUBLISHED, { locale: 'en', read: strict, minutes: 42 });
+    const build = () => episodeCard(UPCOMING, { locale: 'en', read: strict });
     // ASSERT
     expect(build).toThrow(message);
+  });
+
+  it('rejects at compile time a published card without the copy its record holds, so it never reads a stale key', () => {
+    // ARRANGE
+    // @ts-expect-error -- a published Episode's card needs its copy from the registry
+    const build = () => episodeCard(PUBLISHED_METADATA, { locale: 'en', read, minutes: 42 });
+    // ACT
+    const built = typeof build;
+    // ASSERT
+    expect(built).toBe('function');
   });
 
   it('never ranks an upcoming card as Featured', () => {

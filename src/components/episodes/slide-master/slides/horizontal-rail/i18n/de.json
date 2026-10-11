@@ -1,0 +1,51 @@
+{
+  "title": "Horizontale Schiene",
+  "caption": "Sechs Meilensteine auf einer Achse, Beschriftungen abwechselnd oben und unten.",
+  "items": {
+    "a": {
+      "date": "2019",
+      "title": "Auftakt",
+      "caption": "Ziel und Beteiligte benennen."
+    },
+    "b": {
+      "date": "2020",
+      "title": "Recherche",
+      "caption": "Sammeln, was schon bekannt ist."
+    },
+    "c": {
+      "date": "2021",
+      "title": "Prototyp",
+      "caption": "Das Kleinste bauen, das eine Frage beantwortet."
+    },
+    "d": {
+      "date": "2022",
+      "title": "Pilot",
+      "caption": "Mit wenigen echten Nutzern ausprobieren."
+    },
+    "e": {
+      "date": "2023",
+      "title": "Start",
+      "caption": "Für alle öffnen."
+    },
+    "f": {
+      "date": "2024",
+      "title": "Rückblick",
+      "caption": "Messen, lernen und das Nächste entscheiden."
+    }
+  },
+  "notes": {
+    "layout": {
+      "header": "So liest man die Zeitleiste",
+      "description": "Platzhalter-Meilensteine: Daten, Titel und Bildunterschriften durch die echte Geschichte ersetzen."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "walkthrough": {
+        "title": "Rundgang",
+        "keywords": "Horizontale Schiene, Layout, Platzhalter",
+        "script": "Das ist das Layout Horizontale Schiene. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+      }
+    }
+  }
+}

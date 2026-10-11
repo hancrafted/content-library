@@ -34,7 +34,7 @@ Why layouts stay site-wide: Next.js inherits a layout's field into every page th
 
 ### 2. Title and description are translated strings
 
-1. They MUST live in the Translation files — `meta.home`, `episodes.<slug>.title` / `.description` — so a missing German key fails `tsc`.
+1. They MUST live in Translation files typed so a missing German key fails `tsc` — the landing page's in `meta.home`; an Episode's in its own folder's `i18n/`, read through its record and handed to `pageMetadata` by the route; the site-wide files hold no Episode text.
 2. A page at a root layout's own segment MUST name the brand in its title; `title.template` skips that segment.
 
 ### 3. `SITE_URL` is the absolute base
@@ -58,7 +58,7 @@ Why layouts stay site-wide: Next.js inherits a layout's field into every page th
 ### Do's
 
 1. **DO** write `export const metadata = pageMetadata('home', DEFAULT_LOCALE)` in the unprefixed tree and `generateMetadata` returning `pageMetadata('home', await resolveLocale(params))` under `[locale]`. (Decision 1, 📜 Rule: `page-exports-metadata`)
-2. **DO** add a new page's `PageRef`, title and description in both Translation files before its route. (Decisions 1 and 2)
+2. **DO** add a new page's `PageRef`, title and description in both locales before its route. (Decisions 1 and 2)
 3. **DO** write each locale's title and description for a searcher in that language, not as translations of each other. (Decision 2)
 4. **DO** keep root layouts to `siteMetadata(locale, SITE_URL)`. (Decision 4, 📜 Rule: `layout-holds-site-metadata-only`)
 5. **DO** run `npm run build` then `npm run test:build` after touching metadata, routes or locales. (Decisions 1 and 3)

@@ -1,0 +1,24 @@
+{
+  "title": "Was menschlich bleibt",
+  "caption": "Gilt die Richtlinie noch? Ist die Zuständigkeit korrekt? Grundwahrheiten, die kein Modell kennen kann.",
+  "prose": "Dieses Urteil bleibt auf dem Bildschirm offen.",
+  "notes": {
+    "ground-truth": {
+      "header": "Grundwahrheiten und Richtlinien",
+      "description": "Ob eine Richtlinie aktiv ist oder eine Zuständigkeit stimmt, erfordert Fakten außerhalb des Repositorys."
+    },
+    "accountability": {
+      "header": "Verantwortung",
+      "description": "Werkzeuge verengen die Entscheidungsfläche, doch die Verantwortung bleibt beim Menschen."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "accountability-ground-truth": {
+        "title": "Was menschlich bleibt",
+        "keywords": "Verantwortung, Grundwahrheit, bleibt Ihre Aufgabe",
+        "script": "Stimmt der Prozess im Alltag noch? Ist diese Person noch zuständig? Kein Tool beantwortet das. Sie müssen es wissen – und Sie tragen die Verantwortung, wenn es falsch ist. Die Maschine grenzt ein, die KI filtert vor, doch der entscheidende Rest bleibt Ihre Aufgabe."
+      }
+    }
+  }
+}

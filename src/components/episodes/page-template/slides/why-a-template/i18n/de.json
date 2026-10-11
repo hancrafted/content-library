@@ -1,0 +1,36 @@
+{
+  "title": "Warum jede Episode als Kopie beginnt",
+  "caption": "Ein Rückgrat: Episode, Abschnitt, Folie.",
+  "prose": "Diesen Ordner kopieren, dann die Wörter ersetzen. Eine <ref>Referenz-Episode</ref> hält jede Episode in derselben Form.",
+  "spine": {
+    "episode": "Episode",
+    "section": "Abschnitt",
+    "slide": "Folie",
+    "next": "Nächste Ebene"
+  },
+  "notes": {
+    "reference-episode": {
+      "header": "Warum eine Referenz-Episode",
+      "description": "Die Vorlage sorgt dafür, dass jede Episode gleich aufgebaut ist. Zeigen Sie dabei auf den Fließtext."
+    },
+    "spine": {
+      "header": "Drei Ebenen, eine Seite",
+      "description": "Eine Episode enthält Abschnitte, ein Abschnitt enthält Folien. Mit dem Knopf gehen Sie das Rückgrat hinab."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "one-breath": {
+        "title": "Die Vorlage in einem Atemzug",
+        "keywords": "Vorlage, gleiche Form, jede Episode",
+        "script": "Eine Referenz-Episode zeigt die Form einmal, damit die nächste Episode ein funktionierendes Beispiel kopiert, statt eine neue zu erfinden."
+      },
+      "the-spine": {
+        "title": "Das Rückgrat",
+        "keywords": "Episode, Abschnitt, Folie",
+        "script": "Gehen Sie die drei Ebenen hinab: die Episode, ihre Abschnitte und die Folien in jedem.",
+        "bridge": "Als Nächstes eine Folie, die nur ein Bild ist."
+      }
+    }
+  }
+}

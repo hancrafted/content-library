@@ -1,0 +1,11 @@
+{
+  "title": "Live Context Breakdown",
+  "caption": "Most tools hide the meter — this is what seeing it looks like.",
+  "prose": "A typical 200k session breakdown: system prompts, conversation history, tool payloads, and retrieved documentation.",
+  "notes": {
+    "synthetic-abstractions": {
+      "header": "Synthetic abstractions",
+      "description": "Commercial interfaces conceal real token usage behind credits and bars. Direct transparency is essential for optimization."
+    }
+  }
+}

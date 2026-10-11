@@ -30,6 +30,7 @@ function useTocState(props: {
   locale: Locale;
   route: string;
   sections: readonly TocSection[];
+  total: number;
   targetAttribute: string;
   topId: string;
 }) {
@@ -42,7 +43,11 @@ function useTocState(props: {
   // The server cannot know the hash, so the table holds its loading box until the client has read it.
   const settled = useSettled(useHydrated() ? slide : null);
   const revealed = useRevealed(settled);
-  const time = readingTime(order.minutes, slide ? order.ids.indexOf(slide) : -1, fraction);
+  const time = readingTime(
+    { minutes: order.minutes, total: props.total },
+    slide ? order.ids.indexOf(slide) : -1,
+    fraction,
+  );
   const { open, toggle } = useOpenSections(props.sections, active);
   const { locale, route, topId } = props;
   const base = { locale, route, topId, atTop, glideTo, active, open, toggle };
@@ -60,6 +65,8 @@ export function TableOfContents(props: {
   locale: Locale;
   route: string;
   sections: readonly TocSection[];
+  /** The whole reading time in minutes, as the landing card quotes it; 0 shows no time. */
+  total: number;
   targetAttribute: string;
   /** The id of the Slide at the top of the page: no entry is current there, and the heading links to it. */
   topId: string;

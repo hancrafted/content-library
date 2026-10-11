@@ -107,12 +107,16 @@ export interface ReadingTime {
 }
 
 /**
- * Reading time over slides in page order. The active slide counts as read up
- * to `fraction` (clamped to 0–1); `activeIndex` -1 means nothing is read yet.
- * An outline with no time at all is fully read.
+ * Reading time over slides' `minutes` in page order, against the Episode's `total` as
+ * the page was given it (the landing card quotes the same number). The active
+ * slide counts as read up to `fraction` (clamped to 0–1); `activeIndex` -1
+ * means nothing is read yet. An outline with no time at all is fully read.
  */
-export function readingTime(minutes: readonly number[], activeIndex: number, fraction: number): ReadingTime {
-  const total = minutes.reduce((sum, value) => sum + value, 0);
+export function readingTime(
+  { minutes, total }: { readonly minutes: readonly number[]; readonly total: number },
+  activeIndex: number,
+  fraction: number,
+): ReadingTime {
   const before = minutes.slice(0, Math.max(activeIndex, 0)).reduce((sum, value) => sum + value, 0);
   const current = activeIndex < 0 ? 0 : (minutes[activeIndex] ?? 0) * Math.min(Math.max(fraction, 0), 1);
   const elapsed = before + current;

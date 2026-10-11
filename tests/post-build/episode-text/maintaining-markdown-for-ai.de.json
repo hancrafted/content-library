@@ -1,0 +1,164 @@
+{
+  "title": "Markdown für KI pflegen · hancrafted",
+  "description": "KI senkte die Kosten für das Schreiben von Dokumentation und erhöhte die Kosten für deren Verifikation. Markdown für KI pflegen: wohin der Aufwand fließt und wie der maschinelle Teil gesteuert wird.",
+  "toc": "Inhalt Wird geladen noch 6 Min. 01 Markdown in KI-Workflows 02 Volumen überholt die Prüfung 03 Wohin der Aufwand fließt Was die Maschine verifiziert Was KI beschleunigt Was menschlich bleibt 04 Google OKF 05 Die KI steuern Läuft auf einem 100% deterministischen Kern Live-Demo Feature-Roadmap 06 Der verifizierende Teil liegt bei Ihnen Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 6 Min. 01 Markdown in KI-Workflows 02 Volumen überholt die Prüfung 03 Wohin der Aufwand fließt Was die Maschine verifiziert Was KI beschleunigt Was menschlich bleibt 04 Google OKF 05 Die KI steuern Läuft auf einem 100% deterministischen Kern Live-Demo Feature-Roadmap 06 Der verifizierende Teil liegt bei Ihnen",
+  "slides": [
+    {
+      "id": "top",
+      "text": "Markdown für KI pflegen KI senkte die Kosten für das Schreiben von Dokumentation und erhöhte die Kosten für deren Verifikation. Die Arbeit hat sich verlagert — und der verifizierende Teil ist die Aufgabe von niemand anderem. Vortrag ansehen Ihre KI liest jedes Mal veraltete Dokumente · 22 Min."
+    },
+    {
+      "id": "markdown-in-ai-workflows",
+      "text": "Markdown in KI-Workflows Ein einziges Format für drei der sechs Kontextarten: Wissen, Anweisungen und Speicher. Eine reine Textdatei ohne mechanischen Unterbau. Entscheidend ist, wie und wann sie genutzt wird: als Wissen, als Anweisungen, als Speicher — und ob der Agent bei jedem Schritt dafür bezahlt oder nur beim Abruf. docs/handbook/onboarding.md Retrieved on demand Front matter header What is front matter? --- type: Handbook stale_after: 2026-07-01 owner: \"@people-ops\" --- Document body What is the body? # Employee onboarding Handbook for first-week setup. Dynamic context: the agent pays token costs only when a question reaches for it. 1. Collect laptop from IT on day one 2. Complete security training module 3. Meet your onboarding buddy Retrieved on demand. Stale pages answer just as fluently as fresh ones. Knowledge Retrieved on demand Pay only when fetched Show details onboarding.md · wiki · docs ↗ Instructions User or model invoked Progressive disclosure Show details commit · skills · commands ↗ Memory Always loaded Paid on every turn Show details AGENTS.md · CLAUDE.md ↗"
+    },
+    {
+      "id": "volume-outruns-review",
+      "text": "Volumen überholt die Prüfung Bei einem einzelnen Dokument nimmt der Pflegeaufwand ab, während die Drift zunimmt — an dieser Schnittstelle hat sich die Arbeit verlagert. Zwei unterschiedliche Dinge werden schwieriger: Bei einem einzelnen Dokument sinkt der Pflegeaufwand, während inhaltliche Drift steigt. Über einen Korpus hinweg wächst die Pflegefläche schneller als die Dateianzahl. One document decays Effort Day zero before it ships after it ships life of one document Drift / staleness never flattens Maintenance effort decays to nothing where the work moved The corpus compounds Maintenance surface number of files Maintenance surface superlinear growth File count linear growth"
+    },
+    {
+      "id": "where-the-effort-goes",
+      "text": "Wohin der Aufwand fließt Was eine Maschine prüfen kann, wobei KI beschleunigt und was nur ein Mensch entscheiden kann. Drei Grenzen: Was eine Maschine automatisiert, was KI beschleunigt und was nur ein Mensch entscheiden kann. machine deterministic cheap fast human non-deterministic time consuming trust AI non-deterministic AI judging token cost the AI region is my hypothesis — still unsettled"
+    },
+    {
+      "id": "where-the-effort-goes--what-the-machine-verifies",
+      "text": "Was die Maschine verifiziert Syntaktische und strukturelle Prüfungen, die deterministisch in Millisekunden ohne LLM laufen. Machine check Resolves cleanly ✓ Syntax: valid YAML frontmatter delimiter (---) & structure ✓ Resource: present and well-formed URI (https://intranet.example.com/people-ops/handbook#onboarding) ✓ Staleness: 2026-07-01T00:00:00Z parses with valid ISO timestamp Machine checking proves the file is mechanically sound. It cannot determine if the policy is still active."
+    },
+    {
+      "id": "where-the-effort-goes--what-ai-accelerates",
+      "text": "Was KI beschleunigt Gegenprüfung von Texten gegen Handbücher, um Widersprüche für menschliche Reviews zu markieren. Machine check ✓ Resolved cleanly AI recommendation ⚠ Discrepancy flagged (needs check) Observation Compared onboarding.md against linked People Ops handbook. Section 4 of the handbook updated equipment lead times from 5 working days to 7 working days. Proposal Recommend updating line 15 and notifying the hiring manager. The recommendation is rapid and insightful, but remains an unverified claim itself."
+    },
+    {
+      "id": "where-the-effort-goes--what-remains-human",
+      "text": "Was menschlich bleibt Gilt die Richtlinie noch? Ist die Zuständigkeit korrekt? Grundwahrheiten, die kein Modell kennen kann. Machine check ✓ Resolved cleanly AI recommendation ⚠ Discrepancy flagged Human judgment Open · Unresolved ? Does the buddy coffee on day one still match team practice? ? Does People Ops still close provisional accounts on Friday 5pm? ? Is the stated owner (@people-ops) still the accountable team? Ground truth that no machine or language model can know. You are the one accountable when it is wrong."
+    },
+    {
+      "id": "google-okf",
+      "text": "Google OKF Vollständiges OKF v0.2 Frontmatter-Schema für Provenienz, Vertrauensstufen und Lebenszyklus. Ein standardisiertes Frontmatter-Schema zur Governance von KI-Wissensbasen. Provenienz, Vertrauensstufen und Lebenszyklus-Felder stehen direkt im Markdown neben dem Inhalt. 1 --- 2 # --- Provenance (§5.1) --- 3 title: <Concept name> # REQUIRED — Human-readable concept title 4 version: 0.2.0 # SemVer concept version 5 description: <Summary> # Summary statement for agent indexing 6 tags: [onboarding, ops] # Categorical indexing keys 7 sources: # Optional — materials this concept derives from 8 - id: <citation-key> # Stable citation key for claim attribution 9 resource: <URI> # REQUIRED within entry — URI or path 10 # --- Trust (§5.2, §5.3) --- 11 generated: # Content production record 12 by: <Actor> # REQUIRED within generated — agent or human 13 at: <ISO 8601> # Timestamp of generation 14 verified: # Content verification event log 15 - by: <Actor> # REQUIRED — reviewer who sets trust tier 16 at: <ISO 8601> # Timestamp of verification 17 # --- Lifecycle (§5.4) --- 18 stale_after: <ISO 8601> # Temporal expiration date 19 owner: \"@people-ops\" # Accountable team or user 20 --- OKF Official Open Knowledge Format Specification (v0.2) Open specification by Google Cloud Platform for agent-maintained knowledge repositories. Read SPEC.md on GitHub ↗"
+    },
+    {
+      "id": "steering-the-ai",
+      "text": "Die KI steuern markdown-harness steuert den maschinellen Teil Ein Dokument kann angeben, wie viel man ihm glauben darf. Kein blindes Vertrauen — ein verlässliches Fundament und ein klares Signal, wann ein Mensch eingreifen muss. machine deterministic cheap fast human non-deterministic time consuming trust AI non-deterministic AI judging token cost steer running"
+    },
+    {
+      "id": "steering-the-ai--deterministic-core",
+      "text": "Läuft auf einem 100% deterministischen Kern Ein Mechanismus, drei Auslöser, ein deterministischer Kern. 3 Entry Triggers 1. Agent read Pre-read hook intercepts document read before injection. 2. Git commit Pre-commit husky gate blocks invalid frontmatter. 3. Manual / CI run CLI command `mh check` verifies entire corpus. the same core, every time Retrieve configuration config.yaml ↗ ↓ Deterministic validation pure function 3 Corresponding Outcomes Steer or block Injects freshness warning or denies stale knowledge. Prevent drift Rejects commits lacking mandatory metadata fields. Report corpus health Outputs JSON violation summary for build pipelines."
+    },
+    {
+      "id": "steering-the-ai--live-demo",
+      "text": "Live-Demo Die Prüfung live ausgeführt. File under test docs/handbook/onboarding.md Asked of the agent “What are the first-week onboarding steps for a new hire?” Comparative contrast in terminal Unhooked panel answers confidently from stale documentation. Hooked panels either warn the agent with steering instructions or deny access entirely."
+    },
+    {
+      "id": "steering-the-ai--feature-roadmap",
+      "text": "Feature-Roadmap Drei veröffentlicht, drei geplant. v0.0.4 Shipped ✓ Available now ✓ Frontmatter linting — field constraints declared per path ✓ Staleness checking — stale_after against a stated instant ✓ Markdown harness skill — skill to install and configure harness Planned Roadmap In progress ○ Drift detection — semantic checks against git commit diffs ○ Corpus validation — cross-file reference integrity ○ GitHub Action — automated verification in CI pipelines"
+    },
+    {
+      "id": "the-verifying-half-is-yours",
+      "text": "Der verifizierende Teil liegt bei Ihnen Zurück zum Venn-Diagramm: Der menschliche Bereich hervorgehoben, der Rest gedimmt. Die Arbeit hat sich verlagert. Sie liegt bei Ihnen. machine deterministic cheap fast human non-deterministic time consuming trust AI non-deterministic AI judging token cost the AI region is my hypothesis — still unsettled markdown-harness · github.com/hancrafted/markdown-harness"
+    }
+  ],
+  "notes": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    {
+      "id": "markdown-in-ai-workflows",
+      "text": "Markdown in KI-Workflows Drei Kontextarten Markdown trägt Wissen, Anweisungen und Speicher mit unterschiedlichen Lebenszyklus- und Abrufkosten. Abrufkosten Entscheidend ist, ob der Agent bei jeder Anfrage Kontext-Token bezahlt oder nur bei gezieltem Abruf."
+    },
+    {
+      "id": "volume-outruns-review",
+      "text": "Volumen überholt die Prüfung Verfall und Drift Bei einem Dokument fällt der Pflegeaufwand ab, während Drift ansteigt — an diesem Schnittpunkt verlagert sich die Arbeit. Wachsende Angriffsfläche Über einen Korpus hinweg vervielfacht sich die Verifikationsfläche schneller als die bloße Dateianzahl."
+    },
+    {
+      "id": "where-the-effort-goes",
+      "text": "Wohin der Aufwand fließt Drei Grenzen Dokumentenprüfung umfasst drei getrennte Aufgaben: deterministische Maschinenprüfungen, KI-Beschleunigung und menschliches Urteil. Arbeitsteilung Mechanik an die Maschine delegieren und Entdeckung an die KI, damit Menschen nur echte Urteilsfragen klären."
+    },
+    {
+      "id": "where-the-effort-goes--what-the-machine-verifies",
+      "text": "Was die Maschine verifiziert Deterministische Prüfungen Syntax, Schemata, Daten und URIs validieren deterministisch in Millisekunden ohne LLM. Mechanische Obergrenze Ein fehlerfreier Durchlauf beweist strukturelle Integrität, niemals aber die inhaltliche Richtigkeit."
+    },
+    {
+      "id": "where-the-effort-goes--what-ai-accelerates",
+      "text": "Was KI beschleunigt Querverweise prüfen KI kann Referenzen dateiübergreifend verfolgen und Widersprüche für menschliche Reviews aufzeigen. Signale, keine Wahrheiten Die KI-Empfehlung ist schnell und einsichtsreich, bleibt jedoch selbst eine ungeprüfte Behauptung."
+    },
+    {
+      "id": "where-the-effort-goes--what-remains-human",
+      "text": "Was menschlich bleibt Grundwahrheiten und Richtlinien Ob eine Richtlinie aktiv ist oder eine Zuständigkeit stimmt, erfordert Fakten außerhalb des Repositorys. Verantwortung Werkzeuge verengen die Entscheidungsfläche, doch die Verantwortung bleibt beim Menschen."
+    },
+    {
+      "id": "google-okf",
+      "text": "Google OKF Standardisierte Metadaten OKF v0.2 standardisiert Frontmatter-Felder für KI-Wissensbasen. Governance-Felder Provenienz, Vertrauensstufen und Lebenszyklus stehen direkt im Markdown neben dem Inhalt."
+    },
+    {
+      "id": "steering-the-ai",
+      "text": "Die KI steuern Das Fundament heben Ein Dokument kann deklarieren, wie weit es belastbar ist; verlässliche Signale warnen vor Handlungsbedarf. Halt vor dem Urteil markdown-harness steuert die Maschinenebene und bereitet Signale vor, ohne menschliches Urteil zu beanspruchen."
+    },
+    {
+      "id": "steering-the-ai--deterministic-core",
+      "text": "Läuft auf einem 100% deterministischen Kern Drei Auslöser, ein Kern Agenten-Pre-Read-Hook, Pre-Commit-Gate oder manuelle Prüfung führen denselben Kern aus. Deterministische Auswertung Konfiguration und Dateieingaben liefern bei jedem Lauf exakt dasselbe Ergebnis."
+    },
+    {
+      "id": "steering-the-ai--live-demo",
+      "text": "Live-Demo Vergleichende Auswertung Drei Agenten erhalten dieselbe veraltete Datei; nur gesteuerte Agenten werden an Halluzinationen gehindert. Live-Terminal-Lauf Der Vortrag wechselt hier ins Terminal; die Folie bildet den Rahmen für den Testlauf."
+    },
+    {
+      "id": "steering-the-ai--feature-roadmap",
+      "text": "Feature-Roadmap Aktuelle Version (v0.0.4) Veröffentlicht: Frontmatter-Linting, Frischeprüfung und Markdown-Harness-Skill. Geplante Fähigkeiten Geplant: Drift-Erkennung und Korpus-Validierung; noch nicht im aktuellen Release."
+    },
+    {
+      "id": "the-verifying-half-is-yours",
+      "text": "Der verifizierende Teil liegt bei Ihnen Die Arbeit hat sich verlagert Dokumentation zu schreiben ist automatisiert; sie zu prüfen ist die eigentliche Arbeit. Zusammenfassung Maschinen prüfen Strukturen, KI beschleunigt Querverweise, und das menschliche Urteil trägt die Verantwortung."
+    }
+  ],
+  "script": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    {
+      "id": "markdown-in-ai-workflows",
+      "text": "Markdown in KI-Workflows 0:00 – 0:33 Das agentische Zeitalter nicht mehr 2023 lokale Dateien Werkzeuge Schleifen Bevor wir starten, möchte ich festhalten, warum Markdown-Dateien in KI-Workflows eine so zentrale Rolle spielen. Wir befinden uns im agentischen Zeitalter – es ist nicht mehr 2023. Agenten sind keine Chatbots, in die man Texte kopiert. Sie lesen Dateien auf dem Rechner, schreiben Änderungen, rufen Tools auf und durchsuchen das Web. In einer Schleife erledigen sie echte Aufgaben – genau wie ein neuer Kollege, den Sie gerade einarbeiten. 0:33 – 1:12 Drei Dokument-Kategorien Wissen Anweisungen Gedächtnis stiller Fehler Und wie dieser Kollege braucht ein Agent die richtigen Informationen zur richtigen Zeit. Diese Informationen leben in Markdown. Diese Dateien teilen sich in drei Kategorien: Wissen – was der Agent bei Bedarf nachschlägt. Anweisungen – Skills, einmal formuliert und namentlich aufgerufen. Und Gedächtnis – eine Datei, die der Agent zu Beginn jedes Gesprächs liest. Ist diese Datei veraltet, liest der Agent jedes Mal die falsche Information. Zuverlässig und lautlos – ohne dass Sie es bemerken. Überleitung Und das ist nur ein einziges Dokument."
+    },
+    {
+      "id": "volume-outruns-review",
+      "text": "Volumen überholt die Prüfung 0:00 – 0:32 Aufwandsverfall und Drift Verfallskurve sinkender Aufwand steigende Drift Wissensmanagement war in Unternehmen schon immer schwer – lange vor KI. Und zwar wegen dieser Dynamik. Ein Dokument im Zeitverlauf: Die blaue Linie zeigt den Aufwand. Anfangs gibt es eine Spitze bei der Erstellung. Danach fällt der Aufwand rapide ab, weil niemand ein Budget für Pflege vorsieht. Und während der Aufwand sinkt, wächst die Drift: Das Dokument existiert weiter, ist aber unbemerkt nicht mehr wahr. 0:32 – 0:59 Exponentieller Prüfaufwand Bestand wächst Verweise untereinander Bremse weg Dokumente häufen sich kontinuierlich an. Man prüft nicht nur jede einzelne Datei, sondern jeden Querverweis auf andere Dateien. Das potenziert sich. Früher war das Schreiben die Bremse: Der Mensch war der Flaschenhals, der die Menge begrenzte. Diese Bremse existiert nicht mehr. Überleitung Die Bremse ist weg. Was bedeutet das für die Prüfung eines Dokuments?"
+    },
+    {
+      "id": "where-the-effort-goes",
+      "text": "Wohin der Aufwand fließt 0:00 – 0:34 Drei getrennte Ebenen Maschine Mensch KI deterministisch bis semantisch Prüfen ist nicht eine einzige Aufgabe, sondern drei – und sie sind nicht austauschbar. Links die Maschine: deterministisch, binär, günstig und schnell. Rechts der Mensch: nicht-deterministisch, langsam, teuer – aber hier entsteht semantisches Urteil und Vertrauen. In der Mitte die KI: arbeitet in natürlicher Sprache, kostet Tokens und ist nicht deterministisch. Von links nach rechts: von günstig und sicher zu teuer und menschlich. Überleitung Gehen wir sie der Reihe nach durch."
+    },
+    {
+      "id": "where-the-effort-goes--what-the-machine-verifies",
+      "text": "Was die Maschine verifiziert 0:00 – 0:22 Was die Maschine prüft Frontmatter Metadaten-Struktur Linkprüfung Grenze Was kann eine Maschine kostenlos prüfen? Im Frontmatter einer Markdown-Datei liegen Metadaten. Die Maschine prüft die Struktur: Ist der Typ angegeben? Ist das Datum valide? Sind Links erreichbar? Das ist die Grenze: Sie bestätigt die Existenz eines Feldes, nicht aber den Wahrheitsgehalt des Inhalts."
+    },
+    {
+      "id": "where-the-effort-goes--what-ai-accelerates",
+      "text": "Was KI beschleunigt 0:00 – 0:27 Was KI beschleunigt Widersprüche Querverweise Tickets Signale Was leistet KI? Sie folgt Querverweisen und erkennt, wenn Dokument A fünf Tage nennt und Dokument B sieben. Sie deckt Widersprüche auf und erstellt ein Ticket, sodass ein Mensch gezielt eine Zeile prüft statt alles neu zu lesen. Das sind Signale, die den Prüfaufwand eingrenzen. Doch die finale Entscheidung kann man ihr nicht anvertrauen."
+    },
+    {
+      "id": "where-the-effort-goes--what-remains-human",
+      "text": "Was menschlich bleibt 0:00 – 0:22 Was menschlich bleibt Verantwortung Grundwahrheit bleibt Ihre Aufgabe Stimmt der Prozess im Alltag noch? Ist diese Person noch zuständig? Kein Tool beantwortet das. Sie müssen es wissen – und Sie tragen die Verantwortung, wenn es falsch ist. Die Maschine grenzt ein, die KI filtert vor, doch der entscheidende Rest bleibt Ihre Aufgabe."
+    },
+    {
+      "id": "google-okf",
+      "text": "Google OKF 0:00 – 0:25 Google Open Knowledge Format OKF v0.2 offener Standard Prüf-Vertrag Lebenszyklus Um den maschinellen Anteil zu vergrößern, braucht es ein gemeinsames Vokabular. Googles Open Knowledge Format standardisiert Metadaten, Prüf-Verträge und Lebenszyklen: Erstellt durch einen Agenten, verifiziert durch einen Menschen, sowie Verfallsdaten. Mit einheitlichen Feldern funktioniert ein Prüf-Tool in jedem Repository. Überleitung Damit kann die Maschine weit mehr prüfen als reine Syntax."
+    },
+    {
+      "id": "steering-the-ai",
+      "text": "Die KI steuern 0:00 – 0:23 Die Basis anheben markdown-harness Mindeststandard Lenkung Grenze zum Menschen Dafür baue ich markdown-harness. Der Leitgedanke: Ein Dokument verrät selbst, wie sehr man ihm vertrauen darf. Es erzeugt kein künstliches Vertrauen, sondern hebt den Mindeststandard mit deterministischen Signalen an. Die Maschine lenkt die KI. Die menschliche Seite bleibt bewusst unberührt: Diese Verantwortung gehört dem Menschen."
+    },
+    {
+      "id": "steering-the-ai--deterministic-core",
+      "text": "Läuft auf einem 100% deterministischen Kern 0:00 – 0:25 Ein deterministischer Kern drei Auslöser Laufzeit Commit-Gate nächtlicher Lauf Drei Wege rein, drei Wege raus – und in der Mitte dieselbe Logik: Konfiguration lesen, Regeln deterministisch anwenden. Zur Laufzeit warnt das Tool den Agenten vor veralteten Dateien. Beim Commit fungiert es als Qualitäts-Gate. Im nächtlichen Lauf regeneriert es Indizes und meldet Handlungsbedarf. Überleitung Sehen wir uns die Laufzeit live an."
+    },
+    {
+      "id": "steering-the-ai--live-demo",
+      "text": "Live-Demo 0:00 – 0:21 Die Live-Prüfung drei Terminals ohne Hook Piraten-Injektion Zugriff verweigert Drei Terminals, dieselbe Frage, dasselbe Dokument. Ohne Hook antwortet der Agent gutgläubig auf veraltete Daten. Mit Hook beweist die Piraten-Antwort, dass die Instruktion gegriffen hat. Im dritten Fall wird der Zugriff verweigert. Das Protokoll erfasst das Verfallsdatum deterministisch – unabhängig vom Modell."
+    },
+    { "id": "steering-the-ai--feature-roadmap", "text": "Feature-Roadmap Kein Sprechtext für diese Folie." },
+    {
+      "id": "the-verifying-half-is-yours",
+      "text": "Der verifizierende Teil liegt bei Ihnen 0:00 – 0:14 Die Verantwortung bleibt menschlich Venn-Diagramm Prüfaufwand Verantwortung Die Maschine prüft Struktur. KI beschleunigt die Vorarbeit. Und die eigentliche Arbeit wandert dahin, wo sie immer lag: zur menschlichen Urteilskraft. Das Tool steht bereit. Vielen Dank."
+    }
+  ]
+}

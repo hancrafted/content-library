@@ -1,0 +1,24 @@
+{
+  "title": "Der verifizierende Teil liegt bei Ihnen",
+  "caption": "Zurück zum Venn-Diagramm: Der menschliche Bereich hervorgehoben, der Rest gedimmt.",
+  "prose": "Die Arbeit hat sich verlagert. Sie liegt bei Ihnen.",
+  "notes": {
+    "the-work-moved": {
+      "header": "Die Arbeit hat sich verlagert",
+      "description": "Dokumentation zu schreiben ist automatisiert; sie zu prüfen ist die eigentliche Arbeit."
+    },
+    "closing-thesis": {
+      "header": "Zusammenfassung",
+      "description": "Maschinen prüfen Strukturen, KI beschleunigt Querverweise, und das menschliche Urteil trägt die Verantwortung."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "closing-thesis": {
+        "title": "Die Verantwortung bleibt menschlich",
+        "keywords": "Venn-Diagramm, Prüfaufwand, Verantwortung",
+        "script": "Die Maschine prüft Struktur. KI beschleunigt die Vorarbeit. Und die eigentliche Arbeit wandert dahin, wo sie immer lag: zur menschlichen Urteilskraft. Das Tool steht bereit. Vielen Dank."
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "title": "Kontext-Aufschlüsselung",
+  "caption": "Die meisten Tools verbergen den Zähler — so sieht er tatsächlich aus.",
+  "prose": "Typische Zusammensetzung einer 200k-Sitzung: System-Prompts, Gesprächsverlauf, Tool-Aufrufe und abgerufene Dokumentation.",
+  "notes": {
+    "synthetic-abstractions": {
+      "header": "Synthetische Abstraktionen",
+      "description": "Kommerzielle Oberflächen verschleiern den echten Token-Verbrauch hinter Credits. Direkte Transparenz ist entscheidend für Optimierung."
+    }
+  }
+}
