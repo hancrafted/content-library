@@ -1,11 +1,11 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { formatChangePrompt } from '@/lib/change-prompt.pure';
+import type { TokenSet } from '@/lib/page-tokens';
+import { editKey, setEdit, type Change, type Edits } from '@/lib/token-changes.pure';
+import type { Theme } from '@/lib/token-discovery.pure';
 import { useState } from 'react';
-import { formatChangePrompt } from './change-prompt.pure';
-import type { TokenSet } from './page-tokens';
-import { editKey, setEdit, type Change, type Edits } from './token-changes.pure';
-import type { Theme } from './token-discovery.pure';
 import { TokenRow } from './token-row.client';
 
 type Tab = 'global' | 'slide';

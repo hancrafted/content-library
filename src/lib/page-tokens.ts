@@ -1,5 +1,5 @@
 // The DOM side of the token editor: reads the loaded stylesheets into the plain
-// snapshot token discovery works on, finds the current Slide, and applies edits.
+// snapshot token discovery works on, finds a Slide by id, and applies edits.
 import type { Edits, Scope } from './token-changes.pure';
 import { editKey } from './token-changes.pure';
 import {
@@ -9,8 +9,6 @@ import {
   type Theme,
   type Token,
 } from './token-discovery.pure';
-
-const TITLE_SLIDE_ID = 'top';
 
 function snapshotRule(rule: CSSStyleRule, layer: string | undefined): RuleSnapshot | null {
   const declarations: Record<string, string> = {};
@@ -47,14 +45,13 @@ export function readGlobalTokens(): Token[] {
   return discoverGlobalTokens(readRules());
 }
 
-function activeSlideElement(): HTMLElement | null {
-  const id = decodeURIComponent(window.location.hash.slice(1)) || TITLE_SLIDE_ID;
+function slideElement(id: string): HTMLElement | null {
   return document.querySelector<HTMLElement>(`[data-slide="${CSS.escape(id)}"]`);
 }
 
-/** The current Slide's scope and its own tokens; `null` when the page has no Slide (the landing page). */
-export function readSlide(): TokenSet | null {
-  const slide = activeSlideElement();
+/** The Slide with this id: its scope and its own tokens; `null` when the page has no such Slide. */
+export function readSlide(id: string): TokenSet | null {
+  const slide = slideElement(id);
   if (!slide) return null;
   const appliesInSlide = (selector: string) => {
     try {
@@ -77,7 +74,7 @@ export interface TokenSet {
 
 function carriers(scope: Scope, token: Token): HTMLElement[] {
   if (scope.kind === 'global') return [document.documentElement];
-  const slide = document.querySelector<HTMLElement>(`[data-slide="${CSS.escape(scope.id)}"]`);
+  const slide = slideElement(scope.id);
   if (!slide || !token.target) return [];
   return [...slide.querySelectorAll<HTMLElement>(token.target), ...(slide.matches(token.target) ? [slide] : [])];
 }

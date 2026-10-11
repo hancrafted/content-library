@@ -1,12 +1,12 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { changedTokens, useLiveEdits, usePageTokens } from '@/hooks/use-page-tokens';
 import { useResolvedTheme } from '@/hooks/use-resolved-theme';
+import type { Edits } from '@/lib/token-changes.pure';
 import { Palette } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import type { Edits } from './token-changes.pure';
 import { TokenPanel } from './token-panel.client';
-import { changedTokens, useLiveEdits, usePageTokens } from './use-page-tokens';
 
 function Launcher({ open, onToggle }: { open: boolean; onToggle: () => void }) {
   return (

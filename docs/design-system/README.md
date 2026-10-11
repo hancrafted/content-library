@@ -88,7 +88,7 @@ Tailwind's default palette and size scale are not reset, because legacy files st
 
 ## Design-system token editor
 
-`src/components/design-system-token-editor/` is a dev-only popover (it renders only under `next dev`). It sits bottom-right, above the Context trigger. It edits the global tokens (colours, sizes, weights, fonts) and the current Slide's own tokens, one row per selector that declares them, in whichever theme is active.
+`src/components/design-system-token-editor/` is a dev-only popover (it renders only under `next dev`, inside an Episode page, so it is absent from the landing page). It follows the active Slide through `useActiveSlide()`; its hook is `src/hooks/use-page-tokens.ts` and its stylesheet and DOM logic are in `src/lib/page-tokens.ts`. It sits bottom-right, above the Context trigger. It edits the global tokens (colours, sizes, weights, fonts) and the current Slide's own tokens, one row per selector that declares them, in whichever theme is active.
 
 Edits are not saved. **Copy changed** exports only the tokens you changed, as a prompt to paste to an agent, which then adopts them into source. Saving edits as a user preference is a later feature.
 
