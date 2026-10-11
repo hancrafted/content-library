@@ -90,7 +90,7 @@ function MenuItems(props: {
           tabIndex={-1}
           onClick={() => props.onChoose(item)}
           className={cn(
-            'flex w-full cursor-pointer items-center gap-2 rounded-lg px-2 py-1.5 text-left text-sm hover:bg-accent',
+            'flex w-full cursor-pointer items-center gap-2 rounded-lg px-2 py-1.5 text-left text-body hover:bg-accent',
             item === mode && 'font-medium',
           )}
         >

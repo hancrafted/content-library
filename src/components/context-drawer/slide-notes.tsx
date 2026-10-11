@@ -30,7 +30,7 @@ function Citation({ number, labels }: { number: number; labels: ContextDrawerLab
 /** The description with its `[n]` markers turned into citation buttons. */
 function Description({ text, labels }: { text: string; labels: ContextDrawerLabels }) {
   return (
-    <p className="text-sm leading-relaxed text-muted-foreground">
+    <p className="text-body leading-relaxed text-muted-foreground">
       {splitCitations(text).map((part, at) =>
         typeof part === 'string' ? part : <Citation key={at} number={part.cite} labels={labels} />,
       )}
@@ -51,7 +51,7 @@ function Source({ source, number, labels }: { source: NoteSource; number: number
         <ExternalLink aria-hidden className="mt-0.5 size-3 shrink-0" />
         <span className="sr-only">({labels.strings.opensInNewTab})</span>
       </a>
-      <span className="block text-[0.7rem] opacity-80">{sourceDomain(source.url)}</span>
+      <span className="block text-body opacity-80">{sourceDomain(source.url)}</span>
     </li>
   );
 }
@@ -63,7 +63,7 @@ function Source({ source, number, labels }: { source: NoteSource; number: number
  */
 function Sources({ sources, labels }: { sources: readonly NoteSource[]; labels: ContextDrawerLabels }) {
   return (
-    <details className="group text-xs text-muted-foreground">
+    <details className="group text-body text-muted-foreground">
       <summary className="inline-flex cursor-pointer items-center gap-1 rounded-md py-1 font-medium select-none marker:content-none hover:text-foreground [&::-webkit-details-marker]:hidden">
         <ChevronRight
           aria-hidden
@@ -83,7 +83,7 @@ function Sources({ sources, labels }: { sources: readonly NoteSource[]; labels: 
 function Note({ note, labels }: { note: SpeakerNoteItem; labels: ContextDrawerLabels }) {
   return (
     <li {...{ [NOTE_TARGET_ATTR]: note.target }} data-note={note.slug} className={FLAT_ITEM}>
-      <h6 className="text-base leading-snug font-semibold text-pretty">{note.header}</h6>
+      <h6 className="text-body leading-snug font-semibold text-pretty">{note.header}</h6>
       <Description text={note.description} labels={labels} />
       {note.image && (
         <Image
@@ -112,7 +112,7 @@ export function SlideNotes({
   explainer?: string;
 }) {
   if (explainer !== undefined) return <DrawerExplainer text={explainer} />;
-  if (notes.length === 0) return <p className="text-sm text-muted-foreground">{labels.strings.empty.notes}</p>;
+  if (notes.length === 0) return <p className="text-body text-muted-foreground">{labels.strings.empty.notes}</p>;
   return (
     <ol className={FLAT_LIST}>
       {notes.map((note) => (

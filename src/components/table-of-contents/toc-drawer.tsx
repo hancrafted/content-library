@@ -7,15 +7,15 @@ const DIALOG = cn(
   'fixed inset-y-0 left-0 m-0 h-dvh max-h-none w-[min(22rem,88vw)] max-w-none bg-transparent p-3 text-inherit',
   '-translate-x-full opacity-0 transition-all transition-discrete duration-300 ease-out motion-reduce:transition-none',
   'open:translate-x-0 open:opacity-100 starting:open:-translate-x-full starting:open:opacity-0',
-  'backdrop:bg-black/0 backdrop:backdrop-blur-none backdrop:transition-all backdrop:transition-discrete backdrop:duration-300',
-  'open:backdrop:bg-black/40 open:backdrop:backdrop-blur-sm starting:open:backdrop:bg-black/0',
+  'backdrop:bg-overlay/0 backdrop:backdrop-blur-none backdrop:transition-all backdrop:transition-discrete backdrop:duration-300',
+  'open:backdrop:bg-overlay/40 open:backdrop:backdrop-blur-sm starting:open:backdrop:bg-overlay/0',
 );
 
 const CLOSE =
   'absolute top-3 right-3 z-10 grid size-11 cursor-pointer place-items-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground';
 
 const PILL =
-  'fixed bottom-4 left-4 z-40 flex cursor-pointer min-h-11 max-w-[calc(100vw-9.5rem)] items-center gap-3 rounded-full border bg-background/80 px-4 py-2 text-sm shadow-header backdrop-blur-xl backdrop-saturate-150 md:hidden';
+  'fixed bottom-4 left-4 z-40 flex cursor-pointer min-h-11 max-w-[calc(100vw-9.5rem)] items-center gap-3 rounded-full border bg-background/80 px-4 py-2 text-body shadow-header backdrop-blur-xl backdrop-saturate-150 md:hidden';
 
 /** The drawer is a narrow-screen affordance; widening past `md` hands over to the sticky panel. */
 function useCloseAtDesktop(dialog: RefObject<HTMLDialogElement | null>) {
@@ -53,7 +53,7 @@ function PillTime(props: Pick<DrawerProps, 'left' | 'revealed' | 'labels'>) {
       </span>
       <span
         className={cn(
-          'shrink-0 text-xs whitespace-nowrap text-muted-foreground tabular-nums',
+          'shrink-0 text-body whitespace-nowrap text-muted-foreground tabular-nums',
           !props.revealed && 'animate-pulse',
         )}
       >
@@ -68,7 +68,7 @@ function DrawerPill(props: DrawerProps & { onOpen: () => void }) {
   return (
     <button type="button" aria-haspopup="dialog" data-testid="toc-open" className={PILL} onClick={props.onOpen}>
       <span className="sr-only">{props.labels.open}:</span>
-      {props.where && <span className="font-mono text-xs text-muted-foreground">{props.where.number}</span>}
+      {props.where && <span className="font-mono text-body text-muted-foreground">{props.where.number}</span>}
       <span className="truncate font-medium">{props.where?.title ?? props.labels.title}</span>
       <PillTime left={props.left} revealed={props.revealed} labels={props.labels} />
     </button>

@@ -36,7 +36,7 @@ function useWide(): boolean {
 
 function TalkLauncherBadge() {
   return (
-    <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-[#FF0000]/10 text-[#FF0000] transition-transform group-hover:scale-110">
+    <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-youtube/10 text-youtube transition-transform group-hover:scale-110">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
         <path d="M8 5v14l11-7z" />
       </svg>
@@ -67,11 +67,11 @@ function LauncherButton({ youtubeId, labels, hidden }: LauncherProps) {
       <span className="min-w-0 flex-1">
         <span
           id="talk-launcher-kicker"
-          className="block font-mono text-[0.6rem] uppercase tracking-[0.25em] text-muted-foreground"
+          className="block font-mono text-body uppercase tracking-[0.25em] text-muted-foreground"
         >
           {labels.watch}
         </span>
-        <span className="mt-0.5 block text-sm leading-snug text-foreground/80">{labels.subtitle}</span>
+        <span className="mt-0.5 block text-body leading-snug text-foreground/80">{labels.subtitle}</span>
       </span>
     </button>
   );
@@ -98,7 +98,7 @@ export function TalkLauncher({ youtubeId, labels }: { youtubeId: string; labels:
 }
 
 const CONTROL =
-  'cursor-pointer rounded px-2 py-0.5 text-xs text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-secondary';
+  'cursor-pointer rounded px-2 py-0.5 text-body text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-secondary';
 
 function BackToVideo({ label }: { label: string }) {
   const url = useUrlState();
@@ -135,10 +135,10 @@ function TalkPlayerControls({ isDocked, labels }: { isDocked: boolean; labels: T
 /** Opaque on purpose: Slide text must not show through the controls. (This theme has no card token, so bg-background.) */
 function TalkPlayerHeader({ isDocked, labels }: { isDocked: boolean; labels: TalkPlayerLabels }) {
   return (
-    <div className="flex h-8 items-center justify-between border-b border-border bg-background px-3 text-xs">
+    <div className="flex h-8 items-center justify-between border-b border-border bg-background px-3 text-body">
       <div className="flex min-w-0 items-center gap-2">
         <span className="size-1.5 shrink-0 rounded-full bg-secondary" />
-        <span className="truncate font-mono text-[0.65rem] font-semibold tracking-wider text-muted-foreground">
+        <span className="truncate font-mono text-body font-semibold tracking-wider text-muted-foreground">
           {labels.heading}
         </span>
       </div>
@@ -149,7 +149,7 @@ function TalkPlayerHeader({ isDocked, labels }: { isDocked: boolean; labels: Tal
 
 function TalkPlayerFrame({ youtubeId, title }: { youtubeId: string; title: string }) {
   return (
-    <div className="aspect-video w-full bg-black">
+    <div className="aspect-video w-full bg-overlay">
       <iframe
         src={`https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1`}
         title={title}

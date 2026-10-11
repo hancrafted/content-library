@@ -33,6 +33,10 @@
   --ring: oklch(0.708 0 0);
   /* The outline between a note and the Slide element it explains: 3:1 against the surface, light and dark. */
   --highlight-target: oklch(0.5 0.19 260);
+  /* YouTube's brand red: the talk player's icon and tint. */
+  --youtube: oklch(0.628 0.258 29.2);
+  /* The scrim behind a modal drawer and the video frame's backdrop; callers set the opacity (`bg-overlay/40`). */
+  --overlay: oklch(0 0 0);
   /* The Context drawer card's width, shared by the card and the right inset that makes room for it beside the Slides (FE-010 §7). */
   --drawer-width: 26rem;
   /* Type roles (docs/design-system/README.md): one fluid size and line height per role, so no breakpoint prefix ever appears on a size. */
@@ -78,6 +82,8 @@
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
   --highlight-target: oklch(0.75 0.14 260);
+  --youtube: oklch(0.68 0.23 29.2);
+  --overlay: oklch(0 0 0);
 }
 
 @theme inline {
@@ -107,6 +113,8 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-youtube: var(--youtube);
+  --color-overlay: var(--overlay);
   --text-hero: var(--size-hero);
   --text-hero--line-height: var(--leading-hero);
   --text-hero--letter-spacing: var(--tracking-heading);
