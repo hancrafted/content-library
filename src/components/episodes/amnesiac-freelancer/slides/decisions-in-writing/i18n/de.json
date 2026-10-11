@@ -1,0 +1,58 @@
+{
+  "title": "Warum Entscheidungen schriftlich festgehalten gehören",
+  "caption": "Jede so schreiben, als wäre es ein Gespräch mit einem künftigen Entwickler.",
+  "prose": "Michael Nygards Entscheidungsprotokolle bewahren das Warum für alle, die später dazukommen: auf ein bis zwei Seiten, und <ref>eine revidierte Entscheidung wird als abgelöst markiert statt gelöscht</ref>. Für einen Agenten, der jedes Mal später dazukommt, ist das Protokoll die Erinnerung, die er lesen kann.",
+  "notes": {
+    "a-conversation-with-a-future-developer": {
+      "header": "Ein Gespräch mit einem künftigen Entwickler",
+      "description": "Nygards Regel für Entscheidungsprotokolle.[1] Kurze Prosa, eine oder zwei Seiten.",
+      "sources": {
+        "nygard-architecture-decisions": {
+          "title": "Michael Nygard: Architekturentscheidungen dokumentieren"
+        }
+      }
+    },
+    "superseded-not-deleted": {
+      "header": "Abgelöst, nicht gelöscht",
+      "description": "Eine umgekehrte Entscheidung bleibt erhalten und wird als abgelöst markiert.[1]",
+      "sources": {
+        "nygard-architecture-decisions": {
+          "title": "Michael Nygard: Architekturentscheidungen dokumentieren"
+        }
+      }
+    },
+    "the-newcomers-two-bad-options": {
+      "header": "Die zwei schlechten Optionen des Neuankömmlings",
+      "description": "Ohne das Protokoll muss der Neuankömmling eine Entscheidung blind hinnehmen oder blind ändern.[1]",
+      "sources": {
+        "nygard-architecture-decisions": {
+          "title": "Michael Nygard: Architekturentscheidungen dokumentieren"
+        }
+      }
+    },
+    "mapping-not-a-sourced-claim": {
+      "header": "Eine Zuordnung, keine belegte Aussage",
+      "description": "Dass ein Agent dasselbe Protokoll liest, ist unsere Zuordnung. Keine zitierte Anbieterseite sagt das."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "why-it-was-done": {
+        "title": "Warum es so gemacht wurde",
+        "keywords": "Nygard, künftiger Entwickler",
+        "script": "Michael Nygard hat Entscheidungsprotokolle genau für diese Person geschrieben: jemand, der später dazukommt. Seine Regel: Schreiben Sie jedes wie ein Gespräch mit einem künftigen Entwickler. Eine oder zwei Seiten, einfache Prosa."
+      },
+      "superseded": {
+        "title": "Abgelöst",
+        "keywords": "altes behalten, als abgelöst markieren",
+        "script": "Wenn Sie eine Entscheidung umkehren, behalten Sie das alte Protokoll und markieren es als abgelöst. Ganz ohne Protokoll hat der Neuankömmling zwei schlechte Optionen: die Entscheidung blind akzeptieren oder blind ändern."
+      },
+      "our-agent-arrives-later-every-time": {
+        "title": "Unser Agent kommt jedes Mal später dazu",
+        "keywords": "das Protokoll ist das Gedächtnis",
+        "script": "Unser Freelancer ist immer der Neuankömmling. Das ist meine Zuordnung, keine Aussage eines Anbieters, aber sie folgt daraus: Für jemanden, der jedes einzelne Mal später dazukommt, ist das schriftliche Protokoll das einzige Gedächtnis, das er lesen kann.",
+        "bridge": "Wir haben ein ordentliches Einarbeitungspaket. Nun, wo uns das Bild vom Freelancer in die Irre führt."
+      }
+    }
+  }
+}

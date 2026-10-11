@@ -1,10 +1,11 @@
 import { BasicPageSlide } from '@/components/slide-master/basic-page-slide';
-import { slidesFor } from '@/components/slide-master/episode-record';
-
-const slide = slidesFor('amnesiac-freelancer');
+import { slide } from '@/components/slide-master/slide';
+import de from './i18n/de.json';
+import en from './i18n/en.json';
 
 export const keepItShort = slide({
   slug: 'keep-it-short',
+  messages: { en, de },
   notes: [
     {
       slug: 'bloat-gets-ignored',

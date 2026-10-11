@@ -1,0 +1,60 @@
+{
+  "title": "Warum ein kurzes Briefing besser ist als ein gründliches Handbuch",
+  "caption": "Aufmerksamkeit ist begrenzt, bei Agenten wie bei Menschen.",
+  "prose": "Anthropic warnt, dass <ref>überladene CLAUDE.md-Dateien dazu führen, dass Claude die eigentlichen Anweisungen ignoriert</ref>, und empfiehlt unter 200 Zeilen pro Datei. GitHub begrenzt die eigene Vorlage auf zwei Seiten. Besser auf Details verweisen, die der Agent bei Bedarf lädt, als alles hineinzukopieren.",
+  "notes": {
+    "bloat-gets-ignored": {
+      "header": "Aufgeblähtes wird ignoriert",
+      "description": "Anthropic: „Aufgeblähte CLAUDE.md-Dateien führen dazu, dass Claude Ihre eigentlichen Anweisungen ignoriert.“[1] Prüffrage zum Kürzen: Würde das Entfernen dieser Zeile Fehler verursachen?",
+      "sources": {
+        "claude-code-best-practices": {
+          "title": "Claude Code: Best Practices"
+        }
+      }
+    },
+    "numbers-to-cite": {
+      "header": "Zahlen zum Zitieren",
+      "description": "Unter 200 Zeilen pro CLAUDE.md-Datei (Anthropic).[1] Die Vorlage von GitHub begrenzt Anweisungen auf 2 Seiten.[2]",
+      "sources": {
+        "claude-code-memory": {
+          "title": "Claude Code: Speicher (Memory)"
+        },
+        "github-copilot-repository-instructions": {
+          "title": "GitHub Docs: Repository-Anweisungen für Copilot hinzufügen"
+        }
+      }
+    },
+    "minimal-is-not-short": {
+      "header": "Minimal heißt nicht kurz",
+      "description": "„Minimal heißt nicht zwingend kurz“: die kleinste Menge, die das Verhalten vollständig umreißt.[1] Zeiger, die bei Bedarf geladen werden, sind Einfügen vorzuziehen. Importe sparen keinen Kontext.[2]",
+      "sources": {
+        "anthropic-context-engineering": {
+          "title": "Anthropic: Wirksames Context Engineering für KI-Agenten"
+        },
+        "claude-code-memory": {
+          "title": "Claude Code: Speicher (Memory)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "more-is-worse": {
+        "title": "Mehr ist schlechter",
+        "keywords": "aufgebläht, ignorieren, 200 Zeilen",
+        "script": "Der Instinkt ist, das komplette Handbuch zu schreiben. Anthropic rät das Gegenteil: Aufgeblähte CLAUDE.md-Dateien führen dazu, dass Claude Ihre eigentlichen Anweisungen ignoriert. Die Richtlinie lautet unter 200 Zeilen pro Datei, und GitHub begrenzt die eigene Vorlage auf zwei Seiten."
+      },
+      "prune": {
+        "title": "Kürzen",
+        "keywords": "würde das Entfernen Fehler verursachen, Zeiger",
+        "script": "Nutzen Sie die Prüffrage: Würde das Entfernen dieser Zeile einen Fehler verursachen? Wenn nicht, streichen. Und verweisen statt einfügen: Ein Pfad, den der Agent bei Bedarf öffnen kann, kostet bis dahin nichts."
+      },
+      "minimal-is-not-short": {
+        "title": "Minimal heißt nicht kurz",
+        "keywords": "minimale Menge, ausreichend",
+        "script": "Eine Warnung von Anthropic. Minimal heißt nicht kurz. Es heißt die kleinste Menge, die vollständig umreißt, was Sie erwarten. Genug, nicht alles.",
+        "bridge": "Eine Art Inhalt verdient immer seinen Platz: das Warum hinter Entscheidungen."
+      }
+    }
+  }
+}

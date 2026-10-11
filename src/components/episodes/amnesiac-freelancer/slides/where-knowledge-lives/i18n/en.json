@@ -1,0 +1,88 @@
+{
+  "title": "Where an agent’s knowledge lives, and where it stops",
+  "caption": "Three places, and only one of them is yours to shape.",
+  "columns": {
+    "training": {
+      "title": "Training",
+      "prose": "General knowledge up to a cutoff date. Your repo, your conventions and last Tuesday’s decision were never part of it. That is our framing; vendors point to files for exactly this reason."
+    },
+    "session": {
+      "title": "The session",
+      "prose": "The context window is its working memory. Recall degrades as it fills, and information buried in the middle of a long input is used worst."
+    },
+    "files": {
+      "title": "Files",
+      "prose": "CLAUDE.md and AGENTS.md are loaded as text at the start. A project-root CLAUDE.md is re-read from disk after compaction; an instruction given only in chat can be lost."
+    }
+  },
+  "notes": {
+    "training": {
+      "header": "Training",
+      "description": "General knowledge up to a cutoff. Your repo, conventions and last Tuesday's decision were never in it. That is our inference; no vendor states it as a sentence, but vendor guidance points to files for exactly this reason.[1][2]",
+      "sources": {
+        "claude-code-memory": {
+          "title": "Claude Code: Memory"
+        },
+        "codex-memories": {
+          "title": "OpenAI Codex: Memories"
+        }
+      }
+    },
+    "the-session": {
+      "header": "The session",
+      "description": "The context window is working memory. Recall degrades as it fills (Anthropic, Chroma).[1][3] Information in the middle of a long input is used worst (Liu et al., 2023-era models; state the direction, not numbers).[2]",
+      "sources": {
+        "chroma-context-rot": {
+          "title": "Chroma: Context Rot"
+        },
+        "lost-in-the-middle": {
+          "title": "Liu et al.: Lost in the Middle"
+        },
+        "anthropic-context-engineering": {
+          "title": "Anthropic: Effective context engineering for AI agents"
+        }
+      }
+    },
+    "files": {
+      "header": "Files",
+      "description": "CLAUDE.md and AGENTS.md are loaded as text at the start.[1] A project-root CLAUDE.md is re-read from disk after /compact; instructions given only in chat can be lost.[2]",
+      "sources": {
+        "claude-code-how-it-works": {
+          "title": "Claude Code: How Claude Code works"
+        },
+        "claude-code-memory": {
+          "title": "Claude Code: Memory"
+        }
+      }
+    },
+    "compaction-is-lossy": {
+      "header": "Compaction is lossy",
+      "description": "Anthropic warns aggressive compaction can drop subtle but critical context.[1] The research did not quantify the loss.",
+      "sources": {
+        "anthropic-context-engineering": {
+          "title": "Anthropic: Effective context engineering for AI agents"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "training": {
+        "title": "Training",
+        "keywords": "cutoff, never saw your repo",
+        "script": "First place: training. It is broad and it stops at a cutoff date. It never saw your repository, your naming rules, or the decision you made last Tuesday. To be fair, that is my framing rather than a vendor quote, but every vendor tells you to put project context in files, and that is why."
+      },
+      "the-session": {
+        "title": "The session",
+        "keywords": "working memory, context rot, middle",
+        "script": "Second place: the session. The context window is the agent's working memory. Anthropic and an independent report from Chroma both find that recall gets worse as it fills. And the Lost in the Middle paper found that what sits in the middle of a long input is used worst. That study used older models, so take the direction, not the numbers."
+      },
+      "files": {
+        "title": "Files",
+        "keywords": "CLAUDE.md, AGENTS.md, compaction, re-read from disk",
+        "script": "Third place: files. This is the only one you control. CLAUDE.md and AGENTS.md are loaded as text at the start. After a compaction, the project-root CLAUDE.md is read from disk again, while something you only said in chat may be gone.",
+        "bridge": "So files are the lever. Next: what goes in them. Think of it as onboarding."
+      }
+    }
+  }
+}
