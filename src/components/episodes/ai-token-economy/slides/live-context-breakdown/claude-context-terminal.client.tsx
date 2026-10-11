@@ -57,9 +57,9 @@ function GridReadout(): ReactElement {
         <div className="font-bold text-background">Sonnet 5</div>
         <div className="text-background/50">claude-sonnet-5</div>
         <div className="mt-1">
-          <span className="font-bold tabular-nums text-primary">79.5k</span>
+          <span className="font-bold tabular-nums text-background">79.5k</span>
           <span className="text-background/60">/200k tokens (</span>
-          <span className="font-bold tabular-nums text-primary">40</span>
+          <span className="font-bold tabular-nums text-background">40</span>
           <span className="text-background/60">%)</span>
         </div>
       </div>

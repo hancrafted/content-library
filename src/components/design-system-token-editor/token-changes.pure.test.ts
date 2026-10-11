@@ -29,6 +29,19 @@ describe('success cases', () => {
     // ASSERT
     expect([globalChanges.length, slideChanges.length]).toEqual([0, 1]);
   });
+
+  it('edits and reports each selector separately', () => {
+    // ARRANGE
+    const a = { name: '--lane', light: 'red', dark: 'red', target: '.a' };
+    const b = { name: '--lane', light: 'blue', dark: 'blue', target: '.b' };
+    const edits = setEdit({}, { scope: slide, theme: 'light', token: b }, 'green');
+    // ACT
+    const changes = diffTokens(slide, [a, b], edits);
+    // ASSERT
+    expect(changes).toEqual([
+      { scope: slide, theme: 'light', name: '--lane', target: '.b', from: 'blue', to: 'green' },
+    ]);
+  });
 });
 
 describe('failure cases', () => {

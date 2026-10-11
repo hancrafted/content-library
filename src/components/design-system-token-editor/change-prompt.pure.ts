@@ -20,7 +20,13 @@ export function formatChangePrompt(changes: readonly Change[]): string {
     groups.set(line, [...(groups.get(line) ?? []), change]);
   }
   const body = [...groups].map(([line, items]) =>
-    [`${line}:`, ...items.map((c) => `- \`${c.name}\` (${c.theme} theme): \`${c.from}\` -> \`${c.to}\``)].join('\n'),
+    [
+      `${line}:`,
+      ...items.map(
+        (c) =>
+          `- \`${c.name}\`${c.target ? ` on \`${c.target}\`` : ''} (${c.theme} theme): \`${c.from}\` -> \`${c.to}\``,
+      ),
+    ].join('\n'),
   );
   return [
     'Adopt these design-token changes into the source, following docs/design-system/README.md.',

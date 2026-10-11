@@ -31,6 +31,22 @@ describe('success cases', () => {
     expect(tokens).toEqual([{ name: '--hero-sun', light: '#f5b14a', dark: '#aa8800', target: '.hero' }]);
   });
 
+  it('keeps one row per selector when a Slide token name is declared by several rules', () => {
+    // ARRANGE
+    const rules: RuleSnapshot[] = [
+      { selector: '.laneA', declarations: { '--lane-light': 'red' } },
+      { selector: '.dark .laneA', declarations: { '--lane-light': 'darkred' } },
+      { selector: '.laneB', declarations: { '--lane-light': 'blue' } },
+    ];
+    // ACT
+    const tokens = discoverSlideTokens(rules, () => true);
+    // ASSERT
+    expect(tokens).toEqual([
+      { name: '--lane-light', light: 'red', dark: 'darkred', target: '.laneA' },
+      { name: '--lane-light', light: 'blue', dark: 'blue', target: '.laneB' },
+    ]);
+  });
+
   it.each([
     ['--primary', 'oklch(0.2 0 0)', 'colour'],
     ['--brand-accent', '#dd5f27', 'colour'],
