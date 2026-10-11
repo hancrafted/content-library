@@ -1,0 +1,159 @@
+import type { NoteSource, SpeakerNoteItem, VoiceScriptSegment } from '@/lib/context-drawer.pure';
+import type { PlacedListSlide, SlideLevel } from '@/lib/episode.pure';
+import type { Locale } from '@/lib/locale.pure';
+import type { EpisodeSlug } from '@/lib/routes';
+import { segmentSpans, type SpokenSegment } from '@/lib/speaking-time.pure';
+import { createTranslator } from 'next-intl';
+import type { ReactNode } from 'react';
+import type { Slide } from './slide';
+import type { NoteSpec, RuntimeTranslator, SegmentSpec, SourceSpec } from './slide-base';
+import { slideKit } from './slide-kit';
+
+/*
+ * The Localized Slide: one Slide in one locale, as the page renders it
+ * (docs/adr/0001-the-slide-is-a-self-contained-folder.md). It hides the Slide's translator over its
+ * own messages, its kit and the reading of its title, Speaker notes and Voice
+ * script, so the container, a landing card and an Episode test all ask one
+ * interface. Translation keys follow FE-010 §6; each segment's span is counted
+ * from its translated words (docs/adr/0002), so a locale's times follow its
+ * own Voice script.
+ */
+
+/** A Slide's text in one locale, without an Episode around it: what a landing card reads. */
+export interface SlideText {
+  readonly slug: string;
+  /** Plain text for the table of contents; a purely visual Slide has none and is not listed (FE-002). */
+  readonly title?: string;
+  /** Spoken reading time in minutes: where its Voice script's last segment ends, 0 without one. */
+  readonly minutes: number;
+  /** Speaker notes (FE-010); each `target` is the short name of an element of this Slide. */
+  readonly notes: readonly SpeakerNoteItem[];
+  readonly voiceScript: readonly VoiceScriptSegment[];
+}
+
+/** Where the walk put a Slide: its wrapper id and its Section's slug. */
+interface Placement {
+  readonly id: string;
+  readonly section: string;
+}
+
+/**
+ * One Slide of an Episode page, localized and placed: its text, its Scene
+ * rendered with its kit, and its place. A section slide always has a title,
+ * since it names its Section in the table of contents.
+ */
+export type LocalizedSlide = Placement &
+  Omit<SlideText, 'title'> & { readonly content: ReactNode } & (
+    | { readonly level: Extract<SlideLevel, 'h2'>; readonly title: string }
+    | { readonly level: Extract<SlideLevel, 'h3'>; readonly title?: string }
+  );
+
+/** What a Slide needs to know of the Episode page it is localized into: the same for every Slide. */
+export interface EpisodeContext {
+  readonly episode: EpisodeSlug;
+  readonly locale: Locale;
+  /** Every Slide of the Episode as the walk (`placeSections`) placed it: what `slideHref` links to. */
+  readonly placed: readonly PlacedListSlide<Slide>[];
+  /** Said after a Context reference's phrase, e.g. `opens speaker note`. */
+  readonly refLabel: string;
+}
+
+/**
+ * next-intl's `createTranslator` over the Slide's own messages. Like the
+ * site-wide config (`src/i18n/request.ts`), any missing message or formatting
+ * error throws, so untranslated text fails the build instead of shipping.
+ */
+function ownTranslator(slide: Slide, locale: Locale): RuntimeTranslator {
+  const t = createTranslator({
+    locale,
+    messages: slide.messages[locale],
+    onError(error) {
+      throw error;
+    },
+  });
+  // `messages` is a runtime record, so next-intl types `t` over unknown keys and
+  // its overloads don't line up with RuntimeTranslator's open signature. The
+  // members are the same at runtime; each Slide's typed translator is checked
+  // against its own JSON at the Slide (the type tests in slide.test.ts).
+  return t as unknown as RuntimeTranslator;
+}
+
+type Read = (key: string) => string;
+
+function sourceOf(read: Read, key: string, spec: SourceSpec): NoteSource {
+  return { slug: spec.slug, url: spec.url, title: read(`${key}.sources.${spec.slug}.title`) };
+}
+
+function noteOf(read: Read, spec: NoteSpec): SpeakerNoteItem {
+  const key = `notes.${spec.slug}`;
+  return {
+    slug: spec.slug,
+    header: read(`${key}.header`),
+    description: read(`${key}.description`),
+    target: spec.target,
+    ...(spec.sources && { sources: spec.sources.map((source) => sourceOf(read, key, source)) }),
+    ...(spec.image && { image: { src: spec.image.src, alt: read(`${key}.image.alt`) } }),
+  };
+}
+
+type UntimedSegment = Omit<VoiceScriptSegment, 'from' | 'to'> & SpokenSegment;
+
+function segmentOf(read: Read, spec: SegmentSpec): UntimedSegment {
+  const key = `voiceScript.segments.${spec.slug}`;
+  return {
+    slug: spec.slug,
+    title: read(`${key}.title`),
+    keywords: read(`${key}.keywords`)
+      .split(',')
+      .map((word) => word.trim())
+      .filter((word) => word !== ''),
+    script: read(`${key}.script`),
+    ...(spec.bridge && { bridge: read(`${key}.bridge`) }),
+  };
+}
+
+/** A Slide's Voice script, each segment timed after the last from its own words in `locale`. */
+function voiceScriptOf(read: Read, specs: readonly SegmentSpec[], locale: Locale): VoiceScriptSegment[] {
+  const segments = specs.map((spec) => segmentOf(read, spec));
+  const spans = segmentSpans(segments, locale);
+  return segments.map((segment, index) => ({ ...segment, ...spans[index] }));
+}
+
+function textOf(slide: Slide, t: RuntimeTranslator, locale: Locale): SlideText {
+  const voiceScript = voiceScriptOf(t, slide.segments, locale);
+  return {
+    slug: slide.slug,
+    ...(t.has('title') && { title: t('title') }),
+    minutes: voiceScript.at(-1)?.to ?? 0,
+    notes: slide.notes.map((note) => noteOf(t, note)),
+    voiceScript,
+  };
+}
+
+/** A Slide's title, minutes, Speaker notes and Voice script in `locale`; its Scene is not rendered. */
+export function slideText(slide: Slide, locale: Locale): SlideText {
+  return textOf(slide, ownTranslator(slide, locale), locale);
+}
+
+/**
+ * One placed Slide of an Episode, localized: its text, and its Scene rendered
+ * with the kit (FE-002 §3). Throws on a missing message, a bad `ref`,
+ * `slideHref` or `template`, or a section slide without a title, so a broken
+ * Episode fails `next dev` and the static build alike.
+ */
+export function localizeSlide(
+  { id, slide, section, level }: PlacedListSlide<Slide>,
+  episode: EpisodeContext,
+): LocalizedSlide {
+  const { locale } = episode;
+  const t = ownTranslator(slide, locale);
+  const text = textOf(slide, t, locale);
+  const kit = slideKit(
+    { ...episode, anchors: new Map(episode.placed.map((placed) => [placed.slide.slug, placed.id])) },
+    { t, level, notes: slide.notes.map((note) => note.slug), slideId: id },
+  );
+  const placed = { id, section, ...text, content: slide.content(kit) };
+  if (level === 'h3') return { ...placed, level };
+  if (text.title === undefined) throw new Error(`Section "${slide.slug}" opens with a Slide that has no title.`);
+  return { ...placed, level, title: text.title };
+}
