@@ -65,7 +65,7 @@ function MitigationLevers(): ReactElement {
         </p>
       </div>
       <div className="rounded-xl border border-border bg-muted p-5 shadow-xs">
-        <h4 className="font-mono text-lg font-bold text-accent">Compact · handoff</h4>
+        <h4 className="font-mono text-lg font-bold text-human">Compact · handoff</h4>
         <p className="mt-1 text-sm text-muted-foreground">
           Summarize where you are into a clean handoff, then start fresh from it.
         </p>

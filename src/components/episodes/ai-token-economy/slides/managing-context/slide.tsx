@@ -18,7 +18,7 @@ function ChatLane(): ReactElement {
           Boot-up
         </div>
         <div className="w-[15%] bg-primary" />
-        <div className="w-[10%] bg-accent" />
+        <div className="w-[10%] bg-human" />
       </div>
     </div>
   );
