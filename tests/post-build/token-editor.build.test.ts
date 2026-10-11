@@ -17,12 +17,15 @@ function files(dir: string): string[] {
 
 describe('the exported site', () => {
   it('holds none of the design-system token editor', () => {
+    // ARRANGE
     const all = files(OUT_DIR);
-    expect(all.length).toBeGreaterThan(0);
+    // ACT
     const hits = all.flatMap((file) => {
       const text = readFileSync(file, 'utf8');
       return MARKERS.filter((marker) => text.includes(marker)).map((marker) => `${file}: ${marker}`);
     });
+    // ASSERT
+    expect(all.length).toBeGreaterThan(0);
     expect(hits).toEqual([]);
   });
 });

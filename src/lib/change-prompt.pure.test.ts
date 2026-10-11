@@ -14,14 +14,17 @@ describe('success cases', () => {
         to: '#eee',
       },
     ];
+    const expectedParts = [
+      '- `--primary` (dark theme): `white` -> `grey`',
+      'Global tokens',
+      'Slide `intro--hero`',
+      'src/components/episodes/ai-token-economy/',
+      '- `--sun` (light theme): `#fff` -> `#eee`',
+    ];
     // ACT
     const prompt = formatChangePrompt(changes);
     // ASSERT
-    expect(prompt).toEqual(expect.stringContaining('- `--primary` (dark theme): `white` -> `grey`'));
-    expect(prompt).toContain('Global tokens');
-    expect(prompt).toContain('Slide `intro--hero`');
-    expect(prompt).toContain('src/components/episodes/ai-token-economy/');
-    expect(prompt).toContain('- `--sun` (light theme): `#fff` -> `#eee`');
+    for (const part of expectedParts) expect(prompt).toContain(part);
   });
 });
 
@@ -48,9 +51,10 @@ describe('edge cases', () => {
         to: '2',
       },
     ];
+    const expectedPart = "Slide `x` (the Slide's token file, a CSS module in the Slide's folder)";
     // ACT
     const prompt = formatChangePrompt(changes);
     // ASSERT
-    expect(prompt).toContain("Slide `x` (the Slide's token file, a CSS module in the Slide's folder)");
+    expect(prompt).toContain(expectedPart);
   });
 });

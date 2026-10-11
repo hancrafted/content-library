@@ -179,11 +179,12 @@ describe('edge cases', () => {
 
   it('widen the right inset on the very attribute the drawer sets when it sits beside the Slides', () => {
     // ARRANGE
-    const attribute = DRAWER_BESIDE_ATTR;
+    // Tailwind needs the class written out, so the two sides are tied here.
+    const prefix = `xl:data-[${DRAWER_BESIDE_ATTR.replace('data-', '')}=true]:`;
     // ACT
-    const classes = INSET_CLASSES.split(/\s+/);
-    // ASSERT: Tailwind needs the class written out, so the two sides are tied here
-    expect(classes.some((name) => name.startsWith(`xl:data-[${attribute.replace('data-', '')}=true]:`))).toBe(true);
+    const matching = INSET_CLASSES.split(/\s+/).filter((name) => name.startsWith(prefix));
+    // ASSERT
+    expect(matching).toEqual(expect.arrayContaining([expect.stringContaining(prefix)]));
   });
 
   it('set both inset variables for narrow screens and again from md', () => {
