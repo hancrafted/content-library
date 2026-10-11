@@ -1,30 +1,30 @@
 /*
  * The horizontal rail's geometry and timing: which side of the line a label
- * sits on, when each dot pops in behind the drawing line, and where a dot's
- * toggletip lands in the viewport. No DOM, no React.
+ * sits on, when each dot pops in behind the drawing line, and how wide a
+ * dot's toggletip grows. No DOM, no React.
  */
+
+import type { PopoverRules, PopoverSide } from '@/lib/popover-placement.pure';
 
 /** The milestones on the rail, in order; each names its Translation keys under `items.<key>`. */
 export const RAIL_ITEMS = ['a', 'b', 'c', 'd', 'e', 'f'] as const;
 
 export type RailItem = (typeof RAIL_ITEMS)[number];
 
-export type RailSide = 'above' | 'below';
+export type RailSide = PopoverSide;
 
 /** How long the line takes to draw from the first dot to the last. */
 export const LINE_DRAW_MS = 1200;
 
-/** The widest a toggletip grows; a phone narrows it to the viewport minus its margins. */
-export const TOGGLETIP_MAX_WIDTH = 256;
-
-/** Space kept between a toggletip and its label. */
-const GAP = 12;
-
-/** Space kept between a toggletip and the viewport edge. */
-const MARGIN = 16;
-
-/** The least room a side needs before a toggletip opens there instead of flipping. */
-const MIN_ROOM = 120;
+/** The toggletip's widths and gaps for the shared popover placement (`@/lib/popover-placement.pure`). */
+export const TOGGLETIP_RULES: PopoverRules = {
+  /** The widest a toggletip grows; a phone narrows it to the viewport minus its margins. */
+  maxWidth: 256,
+  /** Space kept between a toggletip and its label. */
+  gap: 12,
+  /** The least room a side needs before a toggletip opens there instead of flipping. */
+  minRoom: 120,
+};
 
 function assertOnRail(index: number, count: number): void {
   if (!Number.isInteger(index) || index < 0 || index >= count) {
@@ -52,50 +52,4 @@ export function segmentTiming(index: number, count: number): { delayMs: number; 
   assertOnRail(index, count);
   const durationMs = LINE_DRAW_MS / count;
   return { delayMs: durationMs * index, durationMs };
-}
-
-export interface Box {
-  readonly top: number;
-  readonly left: number;
-  readonly width: number;
-  readonly height: number;
-}
-
-export interface ToggletipPlacement {
-  readonly side: RailSide;
-  /** Set for `below`: the fixed `top`. */
-  readonly top?: number;
-  /** Set for `above`: the fixed `bottom`, so the toggletip grows upward whatever its height. */
-  readonly bottom?: number;
-  readonly left: number;
-  readonly width: number;
-  /** The arrow's x inside the toggletip, pointing at the label's centre. */
-  readonly arrowX: number;
-}
-
-/**
- * Where a toggletip opens for a label at `anchor` (viewport coordinates):
- * on the label's side, flipped when that side has less than `MIN_ROOM`,
- * centred on the label and clamped inside the viewport.
- */
-export function placeToggletip({
-  anchor,
-  viewport,
-  side,
-}: {
-  anchor: Box;
-  viewport: { width: number; height: number };
-  side: RailSide;
-}): ToggletipPlacement {
-  const roomAbove = anchor.top - GAP;
-  const roomBelow = viewport.height - (anchor.top + anchor.height) - GAP;
-  const preferredRoom = side === 'above' ? roomAbove : roomBelow;
-  const placed: RailSide = preferredRoom >= MIN_ROOM ? side : side === 'above' ? 'below' : 'above';
-  const width = Math.min(TOGGLETIP_MAX_WIDTH, viewport.width - 2 * MARGIN);
-  const centre = anchor.left + anchor.width / 2;
-  const left = Math.min(Math.max(centre - width / 2, MARGIN), viewport.width - MARGIN - width);
-  const arrowX = centre - left;
-  return placed === 'above'
-    ? { side: placed, bottom: viewport.height - anchor.top + GAP, left, width, arrowX }
-    : { side: placed, top: anchor.top + anchor.height + GAP, left, width, arrowX };
 }

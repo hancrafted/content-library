@@ -1,47 +1,16 @@
 'use client';
 
-import { useEpisodePortalRoot } from '@/hooks/use-episode-portal-root';
+import { usePopoverPlacement } from '@/hooks/use-popover-placement';
 import { cn } from '@/lib/utils';
-import { useLayoutEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { placeToggletip, type RailSide, type ToggletipPlacement } from './horizontal-rail.pure';
+import { TOGGLETIP_RULES, type RailSide } from './horizontal-rail.pure';
+
+const SLOT = 'rail-toggletip';
 
 export interface ToggletipCopy {
   date: string;
   title: string;
   caption: string;
-}
-
-/** Keeps the placement in step with the label while the page scrolls or resizes, and closes on Esc or a press elsewhere. */
-function usePlacement(anchor: HTMLElement, side: RailSide, onClose: () => void): ToggletipPlacement | null {
-  const [placement, setPlacement] = useState<ToggletipPlacement | null>(null);
-  useLayoutEffect(() => {
-    const place = () =>
-      setPlacement(
-        placeToggletip({
-          anchor: anchor.getBoundingClientRect(),
-          viewport: { width: window.innerWidth, height: window.innerHeight },
-          side,
-        }),
-      );
-    const onKey = (event: KeyboardEvent) => event.key === 'Escape' && onClose();
-    const onPress = (event: PointerEvent) => {
-      const target = event.target as Element;
-      if (!anchor.contains(target) && !target.closest('[data-slot="rail-toggletip"]')) onClose();
-    };
-    place();
-    window.addEventListener('scroll', place, { capture: true, passive: true });
-    window.addEventListener('resize', place);
-    document.addEventListener('keydown', onKey);
-    document.addEventListener('pointerdown', onPress);
-    return () => {
-      window.removeEventListener('scroll', place, { capture: true });
-      window.removeEventListener('resize', place);
-      document.removeEventListener('keydown', onKey);
-      document.removeEventListener('pointerdown', onPress);
-    };
-  }, [anchor, side, onClose]);
-  return placement;
 }
 
 /** Points from the toggletip's edge at the label's centre. */
@@ -72,20 +41,21 @@ interface ToggletipProps {
 }
 
 export function RailToggletip({ id, anchor, side, copy, onClose }: ToggletipProps) {
-  const root = useEpisodePortalRoot();
-  const placement = usePlacement(anchor, side, onClose);
-  if (root === null || placement === null) return null;
-  const { side: placed, top, bottom, left, width, arrowX } = placement;
+  const placed = usePopoverPlacement({ anchor, side, rules: TOGGLETIP_RULES, slot: SLOT, onClose });
+  if (placed === null) return null;
+  const { root, placement } = placed;
+  const { left, width, arrowX } = placement;
+  const edge = placement.side === 'above' ? { bottom: placement.bottom } : { top: placement.top };
   return createPortal(
     <div
       id={id}
       role="tooltip"
-      data-slot="rail-toggletip"
-      data-side={placed}
-      style={{ top, bottom, left, width }}
+      data-slot={SLOT}
+      data-side={placement.side}
+      style={{ ...edge, left, width }}
       className="pointer-events-auto fixed rounded-lg border border-border bg-background p-4 text-foreground shadow-xl"
     >
-      <ToggletipArrow side={placed} x={arrowX} />
+      <ToggletipArrow side={placement.side} x={arrowX} />
       <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground tabular-nums">
         <span aria-hidden="true" className="h-px w-4 bg-brand-accent" />
         {copy.date}

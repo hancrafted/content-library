@@ -1,15 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import {
-  dotDelayMs,
-  LINE_DRAW_MS,
-  placeToggletip,
-  RAIL_ITEMS,
-  railSide,
-  segmentTiming,
-  TOGGLETIP_MAX_WIDTH,
-} from './horizontal-rail.pure';
-
-const DESKTOP = { width: 1440, height: 900 };
+import { dotDelayMs, LINE_DRAW_MS, RAIL_ITEMS, railSide, segmentTiming } from './horizontal-rail.pure';
 
 describe('success cases', () => {
   it('alternates labels above and below the line, starting above', () => {
@@ -40,34 +30,6 @@ describe('success cases', () => {
     const timings = [0, 1, 2, 3].map((index) => segmentTiming(index, count));
     // ASSERT
     expect(timings).toEqual(expected);
-  });
-
-  it('opens an above label’s toggletip above it, centred on the label, its arrow on the centre', () => {
-    // ARRANGE
-    const anchor = { top: 400, left: 600, width: 120, height: 60 };
-    const gap = 12;
-    const expected = {
-      side: 'above',
-      bottom: DESKTOP.height - anchor.top + gap,
-      left: anchor.left + anchor.width / 2 - TOGGLETIP_MAX_WIDTH / 2,
-      width: TOGGLETIP_MAX_WIDTH,
-      arrowX: TOGGLETIP_MAX_WIDTH / 2,
-    };
-    // ACT
-    const placement = placeToggletip({ anchor, viewport: DESKTOP, side: 'above' });
-    // ASSERT
-    expect(placement).toEqual(expected);
-  });
-
-  it('opens a below label’s toggletip under it', () => {
-    // ARRANGE
-    const anchor = { top: 400, left: 600, width: 120, height: 60 };
-    const gap = 12;
-    const expectedTop = anchor.top + anchor.height + gap;
-    // ACT
-    const placement = placeToggletip({ anchor, viewport: DESKTOP, side: 'below' });
-    // ASSERT
-    expect(placement).toMatchObject({ side: 'below', top: expectedTop });
   });
 });
 
@@ -102,38 +64,13 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('flips to the other side when the preferred side has no room', () => {
+  it('pops the only dot of a one-stop rail in halfway through the line', () => {
     // ARRANGE
-    const anchor = { top: 40, left: 600, width: 120, height: 60 };
-    const expected = 'below';
+    const count = 1;
+    const expected = LINE_DRAW_MS / 2;
     // ACT
-    const placement = placeToggletip({ anchor, viewport: DESKTOP, side: 'above' });
+    const delay = dotDelayMs(0, count);
     // ASSERT
-    expect(placement.side).toBe(expected);
-  });
-
-  it('clamps the toggletip inside a phone viewport and still points its arrow at the label', () => {
-    // ARRANGE
-    const phone = { width: 375, height: 700 };
-    const margin = 16;
-    const anchor = { top: 300, left: 300, width: 60, height: 40 };
-    const expectedLeft = phone.width - margin - TOGGLETIP_MAX_WIDTH;
-    const expectedArrowX = anchor.left + anchor.width / 2 - expectedLeft;
-    // ACT
-    const placement = placeToggletip({ anchor, viewport: phone, side: 'below' });
-    // ASSERT
-    expect(placement).toMatchObject({ left: expectedLeft, arrowX: expectedArrowX });
-  });
-
-  it('narrows the toggletip to a viewport slimmer than its widest', () => {
-    // ARRANGE
-    const slim = { width: 240, height: 700 };
-    const margin = 16;
-    const anchor = { top: 300, left: 40, width: 60, height: 40 };
-    const expected = { left: margin, width: slim.width - 2 * margin };
-    // ACT
-    const placement = placeToggletip({ anchor, viewport: slim, side: 'below' });
-    // ASSERT
-    expect(placement).toMatchObject(expected);
+    expect(delay).toBe(expected);
   });
 });

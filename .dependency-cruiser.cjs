@@ -5,8 +5,9 @@
 // cruise a thinner graph while still reporting success.
 
 // What an Episode file may reach: the Slide master (which holds the Episode
-// record, `slide-master/episode-record.ts`), its own Episode folder and src/lib.
-const EPISODE_REACH = ['^src/components/(slide-master|episodes)/', '^src/lib/'];
+// record, `slide-master/episode-record.ts`), slide-shared (server parts
+// several Slides of any Episode share), its own Episode folder and src/lib.
+const EPISODE_REACH = ['^src/components/(slide-master|slide-shared|episodes)/', '^src/lib/'];
 
 /** @type {import('dependency-cruiser').IConfiguration} */
 module.exports = {
@@ -102,6 +103,14 @@ module.exports = {
       to: { path: '^src/components/episodes/[^/]+/slides/' },
     },
 
+    {
+      name: 'slide-shared-reaches-only-ui-and-lib',
+      severity: 'error',
+      comment:
+        'src/components/slide-shared/ holds server parts several Slides of any Episode share. A part takes plain props: it reaches only other slide-shared parts, the UI kit (src/components/ui/) and src/lib — never a Slide, an Episode, the Slide master or its kit, so a Slide copied into another Episode finds it unchanged (FE-002, epic #51).',
+      from: { path: '^src/components/slide-shared/', pathNot: '\\.test\\.ts$' },
+      to: { pathNot: ['^src/components/(slide-shared|ui)/', '^src/lib/', 'node_modules'] },
+    },
     {
       name: 'episode-tests-reach-only-slide-parts',
       severity: 'error',

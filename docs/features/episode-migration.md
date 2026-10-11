@@ -72,6 +72,7 @@ export const theLostMiddle = slide({
   - `locale`: for `Intl` number or date formatting.
   - `ref`, `target`, `Title`: notes and heading, below.
 - A part or data several Slides share goes in `episodes/<ep>/parts/`; see `page-template/parts/statement.tsx`. Its rules, and those for Episode CSS and colour tokens: [FE-002 §3 and §7](../../.archgate/adrs/FE-002-episode-page.md#3-scene-is-free).
+- A server part Slides of more than one Episode share goes in `src/components/slide-shared/`: plain props, no kit; it reaches only other slide-shared parts, the UI kit and `src/lib` (dependency-cruiser rule `slide-shared-reaches-only-ui-and-lib`). A popover uses the shared `usePopoverPlacement` hook; see [Episode chrome](episode-chrome.md).
 
 Done when: every Slide of step 1 has a file and `npm run typecheck` passes.
 
