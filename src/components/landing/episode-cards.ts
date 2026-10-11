@@ -1,12 +1,16 @@
+import { episodeMessagesOf } from '@/components/episode-page/episode-messages';
 import { slideMinutes } from '@/components/episode-page/slide-context.pure';
 import { listEpisodes } from '@/components/episodes/episode-repository';
 import { findEpisode } from '@/components/episodes/registry';
+import type { Slide } from '@/components/slide-master/episode-record';
+import { isSelfContainedSlide, type SelfContainedSlide } from '@/components/slide-master/slide';
+import { ownTranslator } from '@/components/slide-master/slide-kit';
 import { overviewOrder, type EpisodeMetadata } from '@/lib/episode-metadata.pure';
 import { FEATURED } from '@/lib/episode-overview';
 import type { Locale } from '@/lib/locale.pure';
 import { hasReadingTime, wholeMinutes } from '@/lib/speaking-time.pure';
 import { getTranslations } from 'next-intl/server';
-import { episodeCard, type EpisodeCard, type ReadKey } from './episode-card.pure';
+import { episodeCard, type CardContext, type EpisodeCard, type ReadKey } from './episode-card.pure';
 
 /**
  * What the table of contents totals for a published Episode: every Slide's
@@ -16,11 +20,22 @@ import { episodeCard, type EpisodeCard, type ReadKey } from './episode-card.pure
 function minutesOf(entry: EpisodeMetadata, locale: Locale, read: ReadKey): number | undefined {
   if (entry.status !== 'published') return undefined;
   const record = findEpisode(entry.slug);
-  const total = record.sections
-    .flat()
-    .map((slide) => slideMinutes((key) => read(`episodes.${record.slug}.slides.${slide.slug}.${key}`), slide, locale))
+  const slides: readonly (Slide | SelfContainedSlide)[] = record.sections.flat();
+  const total = slides
+    .map((slide) => {
+      if (isSelfContainedSlide(slide))
+        return slideMinutes(ownTranslator(slide.messages[locale], locale), slide, locale);
+      return slideMinutes((key) => read(`episodes.${record.slug}.slides.${slide.slug}.${key}`), slide, locale);
+    })
     .reduce((sum, minutes) => sum + minutes, 0);
   return hasReadingTime(total) ? wholeMinutes(total) : undefined;
+}
+
+/** A published Episode's title and caption, read through the registry; an upcoming one has no record. */
+function copyOf(entry: EpisodeMetadata, locale: Locale): Pick<CardContext, 'copy'> {
+  if (entry.status !== 'published') return {};
+  const { title, caption } = episodeMessagesOf(findEpisode(entry.slug), locale);
+  return { copy: { title, caption } };
 }
 
 /** The Episode's Featured slot, 1 first; none when it holds no slot. */
@@ -38,6 +53,12 @@ export async function episodeCards(locale: Locale): Promise<EpisodeCard[]> {
   const t = await getTranslations({ locale });
   const read = t as unknown as ReadKey;
   return overviewOrder(listEpisodes(), FEATURED).map((entry) =>
-    episodeCard(entry, { locale, read, minutes: minutesOf(entry, locale, read), ...featuredRankOf(entry.slug) }),
+    episodeCard(entry, {
+      locale,
+      read,
+      minutes: minutesOf(entry, locale, read),
+      ...copyOf(entry, locale),
+      ...featuredRankOf(entry.slug),
+    }),
   );
 }

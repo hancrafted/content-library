@@ -1,0 +1,36 @@
+{
+  "title": "Why every Episode starts from a copy",
+  "caption": "One spine: Episode, Section, Slide.",
+  "prose": "Copy this folder, then replace the words. A <ref>reference Episode</ref> keeps every Episode the same shape.",
+  "spine": {
+    "episode": "Episode",
+    "section": "Section",
+    "slide": "Slide",
+    "next": "Next level"
+  },
+  "notes": {
+    "reference-episode": {
+      "header": "Why a reference Episode",
+      "description": "The template exists so every Episode is built the same way. Point at the prose when you say so."
+    },
+    "spine": {
+      "header": "Three levels, one page",
+      "description": "An Episode holds Sections, a Section holds Slides. Press the button to walk down the spine."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "one-breath": {
+        "title": "The template in one breath",
+        "keywords": "template, same shape, every Episode",
+        "script": "A reference Episode shows the shape once, so the next Episode copies a working example instead of inventing one."
+      },
+      "the-spine": {
+        "title": "The spine",
+        "keywords": "Episode, Section, Slide",
+        "script": "Walk down the three levels: the Episode, its Sections, and the Slides inside each.",
+        "bridge": "Next, a Slide that is only a picture."
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import type { RichTag } from './episode-record';
+import type { RichTag } from './slide-base';
 
 /**
  * The tags every Slide's `t.rich` knows without passing them (FE-002 §3): a

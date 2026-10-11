@@ -1,4 +1,4 @@
-import type { NoteSpec, SegmentSpec, SourceSpec } from '@/components/slide-master/episode-record';
+import type { NoteSpec, SegmentSpec, SourceSpec } from '@/components/slide-master/slide-base';
 import type { NoteSource, SpeakerNoteItem, VoiceScriptSegment } from '@/lib/context-drawer.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { segmentSpans, type Span, type SpokenSegment } from '@/lib/speaking-time.pure';

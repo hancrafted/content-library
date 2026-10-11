@@ -45,9 +45,14 @@ export interface EpisodeCard {
 /** Reads one Translation key by its full dotted path. */
 export type ReadKey = (key: string) => string;
 
+/** A published Episode's own title and caption, read through the registry from its record. */
+export type EpisodeCopy = Pick<EpisodeCard, 'title' | 'caption'>;
+
 export interface CardContext {
   readonly locale: Locale;
   readonly read: ReadKey;
+  /** A published Episode's copy; an upcoming one reads its own from the landing Translation keys. */
+  readonly copy?: EpisodeCopy;
   readonly minutes?: number;
   /** The Episode's Featured slot, 1 first; left off when it is not Featured. */
   readonly featuredRank?: number;
@@ -55,9 +60,13 @@ export interface CardContext {
 
 const OVERVIEW_KEYS = 'landing.episodeOverview';
 
-function copyOf(entry: EpisodeMetadata, read: ReadKey): Pick<EpisodeCard, 'title' | 'caption'> {
-  const base = entry.status === 'published' ? `episodes.${entry.slug}` : `${OVERVIEW_KEYS}.upcoming.${entry.slug}`;
-  return { title: read(`${base}.title`), caption: read(`${base}.caption`) };
+function copyOf(entry: EpisodeMetadata, ctx: CardContext): EpisodeCopy {
+  if (entry.status === 'published') {
+    if (ctx.copy === undefined) throw new Error(`Published Episode "${entry.slug}" needs its copy from the registry.`);
+    return { title: ctx.copy.title, caption: ctx.copy.caption };
+  }
+  const base = `${OVERVIEW_KEYS}.upcoming.${entry.slug}`;
+  return { title: ctx.read(`${base}.title`), caption: ctx.read(`${base}.caption`) };
 }
 
 function publishedFields(entry: EpisodeMetadata, ctx: CardContext): Partial<EpisodeCard> {
@@ -76,7 +85,7 @@ function publishedFields(entry: EpisodeMetadata, ctx: CardContext): Partial<Epis
 /** Assembles one card; throws when a string it needs is missing, so the build fails rather than ships a blank. */
 export function episodeCard(entry: EpisodeMetadata, ctx: CardContext): EpisodeCard {
   const { read } = ctx;
-  const copy = copyOf(entry, read);
+  const copy = copyOf(entry, ctx);
   const topics = topicsOf(entry).map((id) => ({ id, label: read(`${OVERVIEW_KEYS}.topics.${id}`) }));
   return {
     slug: entry.slug,

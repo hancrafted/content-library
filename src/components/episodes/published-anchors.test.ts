@@ -1,6 +1,6 @@
 import { findEpisode } from '@/components/episodes/registry';
-import type { Slide } from '@/components/slide-master/episode-record';
-import { placeSections } from '@/lib/episode.pure';
+
+import { placeSections, type SlideOutline } from '@/lib/episode.pure';
 import { EPISODE_SLUGS } from '@/lib/routes';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -50,7 +50,7 @@ function lostAnchors(walk: { slug: string; published: readonly string[]; produce
 
 /** The anchors the walk produces for one Episode, as the Episode page does: its record's Section lists. */
 function producedAnchors(slug: (typeof EPISODE_SLUGS)[number]): string[] {
-  return placeSections<Slide>(findEpisode(slug).sections).flatMap((section) => section.map(({ id }) => id));
+  return placeSections<SlideOutline>(findEpisode(slug).sections).flatMap((section) => section.map(({ id }) => id));
 }
 
 describe('success cases', () => {

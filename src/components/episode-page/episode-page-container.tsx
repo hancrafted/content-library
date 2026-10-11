@@ -1,5 +1,6 @@
 import { ContextDrawerSlot } from '@/components/context-drawer/context-drawer-slot';
-import type { AnyEpisodeRecord, RuntimeTranslator } from '@/components/slide-master/episode-record';
+import type { AnyEpisodeRecord } from '@/components/slide-master/episode-record';
+import type { RuntimeTranslator } from '@/components/slide-master/slide-base';
 import { TableOfContents, type TocLabels } from '@/components/table-of-contents/table-of-contents.client';
 import { readTranslationStrings } from '@/i18n/translation-strings';
 import { slidesInPageOrder, TITLE_ANCHOR } from '@/lib/episode.pure';

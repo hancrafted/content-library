@@ -4,7 +4,9 @@ import type { SectionList } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
 import type { EpisodeSlug } from '@/lib/routes';
 import type { createTranslator, MessageKeys, NamespaceKeys, NestedKeyOf } from 'next-intl';
-import type { ReactElement, ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import type { SelfContainedEpisodeRecord } from './slide';
+import type { NoteSpec, PerLocale, RichTag, RuntimeKit, SegmentSpec, TitleComponent } from './slide-base';
 
 /*
  * The Episode record (FE-002): an Episode is static data that composes Slides;
@@ -16,18 +18,15 @@ import type { ReactElement, ReactNode } from 'react';
  * and `target` are typed from it.
  */
 
-/** One value per locale, so a missing German value fails `tsc`. */
-export type PerLocale<T> = Readonly<Record<Locale, T>>;
-
-type EpisodeMessages = Messages['episodes'];
+type EpisodesMessages = Messages['episodes'];
 
 /** Episodes whose Translation file subtree is flat by Slide slug: `episodes.<ep>.slides.<slide>.*`. */
 export type RecordEpisodeSlug = {
-  [E in keyof EpisodeMessages]: EpisodeMessages[E] extends { readonly slides: object } ? E : never;
-}[keyof EpisodeMessages] &
+  [E in keyof EpisodesMessages]: EpisodesMessages[E] extends { readonly slides: object } ? E : never;
+}[keyof EpisodesMessages] &
   EpisodeSlug;
 
-type SlidesMessages<Ep extends RecordEpisodeSlug> = EpisodeMessages[Ep] extends { readonly slides: infer S }
+type SlidesMessages<Ep extends RecordEpisodeSlug> = EpisodesMessages[Ep] extends { readonly slides: infer S }
   ? S
   : never;
 type SlideMessages<Ep extends RecordEpisodeSlug, S> = S extends keyof SlidesMessages<Ep>
@@ -67,38 +66,6 @@ export type SlideTranslator<Ep extends RecordEpisodeSlug, S> = `episodes.${Ep}.s
     : never
   : never;
 
-/** A source's non-localized facts; its title is a Translation file leaf. */
-export interface SourceSpec {
-  readonly slug: string;
-  readonly url: string;
-}
-
-/**
- * A Speaker note item as a Slide declares it. `target` is the short name of
- * the Scene element it explains (`title`, `prose`, a column slug, or one the
- * Scene marks with the kit's `target`); the drawer finds it inside the Slide
- * (FE-010).
- */
-export interface NoteSpec<N extends string = string> {
-  readonly slug: N;
-  readonly target: string;
-  readonly sources?: readonly SourceSpec[];
-  readonly image?: { readonly src: string };
-}
-
-/** A Voice script segment as a Slide declares it; its time span is counted from its words (`speaking-time.pure.ts`). */
-export interface SegmentSpec<G extends string = string> {
-  readonly slug: G;
-  /** True when the Translation file holds a `bridge` string for this segment. */
-  readonly bridge?: boolean;
-}
-
-/** The Slide's heading at the level its position gives it (FE-002 §4), marked as the `title` target. */
-export type TitleComponent = (props: { children: ReactNode }) => ReactElement;
-
-/** What a `<tag>` in `t.rich` calls: wraps the tagged chunks. */
-export type RichTag = (chunks: ReactNode) => ReactNode;
-
 /**
  * The kit a Slide's `content` receives. `t` and `template` read only this
  * Slide's Translation keys; `ref` and `target` take only the notes and
@@ -116,29 +83,6 @@ export interface SlideKit<Ep extends RecordEpisodeSlug, S, N extends NoteSpec> {
   readonly ref: (note: N['slug']) => RichTag;
   /** Marks the element one of this Slide's notes explains. */
   readonly target: (name: N['target']) => TargetProps;
-  readonly Title: TitleComponent;
-}
-
-/**
- * A translator read by runtime key: what the container hands every Slide. Its
- * arguments are left open, so it stands in for any Slide's typed translator.
- */
-export interface RuntimeTranslator {
-  (key: string, ...args: unknown[]): string;
-  rich(key: string, ...args: unknown[]): ReactNode;
-  markup(key: string, ...args: unknown[]): string;
-  raw(key: string): unknown;
-  has(key: string): boolean;
-}
-
-/** The kit as the container builds it, by runtime key. Every `SlideKit` accepts it (see the type tests). */
-export interface RuntimeKit {
-  readonly t: RuntimeTranslator;
-  readonly locale: Locale;
-  readonly slideHref: (slug: string) => string;
-  readonly template: (key: string) => string;
-  readonly ref: (note: string) => RichTag;
-  readonly target: (name: string) => TargetProps;
   readonly Title: TitleComponent;
 }
 
@@ -171,7 +115,8 @@ export interface EpisodeRecord<Ep extends RecordEpisodeSlug = RecordEpisodeSlug>
  * not `EpisodeRecord<union>`, whose Slide slugs would collapse to the keys
  * every Episode shares.
  */
-export type AnyEpisodeRecord = { [E in RecordEpisodeSlug]: EpisodeRecord<E> }[RecordEpisodeSlug];
+export type AnyEpisodeRecord =
+  { [E in RecordEpisodeSlug]: EpisodeRecord<E> }[RecordEpisodeSlug] | SelfContainedEpisodeRecord;
 
 /** What a Slide file declares; `slug` is const-inferred and types the rest. */
 export interface SlideSpec<Ep extends RecordEpisodeSlug, S extends SlideSlug<Ep>, N extends NoteSpec> {

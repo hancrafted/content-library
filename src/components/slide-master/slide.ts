@@ -1,0 +1,135 @@
+import type { TargetProps } from '@/lib/context-link.pure';
+import type { SectionList } from '@/lib/episode.pure';
+import type { Locale } from '@/lib/locale.pure';
+import type { EpisodeSlug } from '@/lib/routes';
+import type { createTranslator, MessageKeys, NestedKeyOf } from 'next-intl';
+import type { ReactNode } from 'react';
+import type { NoteSpec, PerLocale, RichTag, RuntimeKit, SegmentSpec, TitleComponent } from './slide-base';
+
+/*
+ * The self-contained Slide (FE-002, design-ADR 0003): one folder
+ * `slides/<slide>/` holding its server entry, client widgets, CSS and its own
+ * Translation files, `i18n/en.json` and `i18n/de.json`. The Slide hands the
+ * container its text with its slug, notes, segments and Scene, so it is typed
+ * from its own files and knows no Episode: copying the folder into another
+ * Episode is one import and one list entry.
+ */
+
+/** A Slide's own Translation file, as `import en from './i18n/en.json'` types it. */
+export type SlideMessages = Readonly<Record<string, unknown>>;
+
+type KeysOf<T> = T extends object ? keyof T & string : never;
+
+/** The note slugs a Slide's own file translates: `notes.<note>`. */
+export type OwnNoteSlug<M> = M extends { readonly notes: infer N } ? KeysOf<N> : never;
+/** The segment slugs a Slide's own file translates: `voiceScript.segments.<segment>`. */
+export type OwnSegmentSlug<M> = M extends { readonly voiceScript: { readonly segments: infer G } } ? KeysOf<G> : never;
+/** A dotted key to a string leaf of a Slide's own file: what `template` reads. */
+export type OwnTemplateKey<M> = MessageKeys<M, NestedKeyOf<M>>;
+
+/**
+ * next-intl's translator over a Slide's own file: a key outside it fails
+ * `tsc`. Its `t.rich` already knows the default `em`, `b` and `code` tags.
+ */
+export type OwnTranslator<M extends SlideMessages> = ReturnType<typeof createTranslator<M>>;
+
+/**
+ * The kit a self-contained Slide's `content` receives: `t` and `template` read
+ * only its own file; `ref` and `target` take only the notes it declares.
+ * `slideHref` takes any slug: the container fails the build for one that is not
+ * a Slide of the same Episode, since the Slide cannot know which Episode it is in.
+ */
+export interface OwnSlideKit<M extends SlideMessages, N extends NoteSpec> {
+  readonly t: OwnTranslator<M>;
+  /** The page's locale, for formatting a number or date the Translation file does not hold. */
+  readonly locale: Locale;
+  /** The localized `href` of another Slide of this Episode: its page path and the anchor its position gives it. */
+  readonly slideHref: (slug: string) => string;
+  /** A string leaf as written, `{name}` placeholders unfilled, for a client component to fill with `fillTemplate`. */
+  readonly template: (key: OwnTemplateKey<M>) => string;
+  /** The `t.rich` tag for a Context reference to one of this Slide's notes. */
+  readonly ref: (note: N['slug']) => RichTag;
+  /** Marks the element one of this Slide's notes explains. */
+  readonly target: (name: N['target']) => TargetProps;
+  readonly Title: TitleComponent;
+}
+
+/**
+ * A self-contained Slide, as the Episode record holds it. Static data: its
+ * Scene renders only when the container calls `content`, with a translator it
+ * builds from `messages` for the page's locale.
+ */
+export interface SelfContainedSlide<S extends string = string, M extends SlideMessages = SlideMessages> {
+  readonly slug: S;
+  readonly messages: PerLocale<M>;
+  readonly notes: readonly NoteSpec[];
+  readonly segments: readonly SegmentSpec[];
+  readonly content: (kit: RuntimeKit) => ReactNode;
+}
+
+/** True for a self-contained Slide, which carries its own messages; false for a `slidesFor` Slide. */
+export function isSelfContainedSlide(slide: { readonly slug: string }): slide is SelfContainedSlide {
+  return 'messages' in slide;
+}
+
+/** A self-contained Slide whose own file holds a `title`: the only kind that may open a Section. */
+export type TitledSelfContainedSlide = SelfContainedSlide<string, { readonly title: string }>;
+
+/**
+ * What a Slide's server entry declares. `messages.de` must have the shape of
+ * `messages.en` (and is never used to infer it), so a key missing from German
+ * fails `tsc` inside the Slide.
+ */
+export interface OwnSlideSpec<S extends string, M extends SlideMessages, N extends NoteSpec> {
+  readonly slug: S;
+  readonly messages: { readonly en: M; readonly de: NoInfer<M> };
+  readonly notes?: readonly N[];
+  readonly segments?: readonly SegmentSpec<OwnSegmentSlug<M>>[];
+  readonly content: (kit: OwnSlideKit<M, N>) => ReactNode;
+}
+
+/** Declares a self-contained Slide; its own Translation files type `t`, `template`, notes and segments. */
+export function slide<
+  const S extends string,
+  M extends SlideMessages,
+  const N extends NoteSpec<OwnNoteSlug<M>> = never,
+>(spec: OwnSlideSpec<S, M, N>): SelfContainedSlide<S, M> {
+  return {
+    slug: spec.slug,
+    messages: spec.messages,
+    notes: spec.notes ?? [],
+    segments: spec.segments ?? [],
+    // The runtime kit is assignable to every concrete `OwnSlideKit` (proved in the test); generics hide that here.
+    content: spec.content as unknown as SelfContainedSlide['content'],
+  };
+}
+
+/** A Section of self-contained Slides: its section slide, which names it, then its page Slides. */
+export type SelfContainedSection = SectionList<SelfContainedSlide> &
+  readonly [TitledSelfContainedSlide, ...SelfContainedSlide[]];
+
+/** An Episode's own text, from `i18n/<locale>.json` in its folder: the Title slide's and the page metadata's. */
+export interface EpisodeMessages {
+  readonly title: string;
+  readonly caption: string;
+  readonly description: string;
+}
+
+/**
+ * An Episode record of self-contained Slides: static data. It carries its own
+ * text, so the site-wide Translation files hold nothing of it.
+ */
+export interface SelfContainedEpisodeRecord<Ep extends EpisodeSlug = EpisodeSlug> {
+  readonly slug: Ep;
+  /** One recording per locale, shown on the Title slide; optional until recorded. */
+  readonly youtube?: PerLocale<string>;
+  readonly messages: PerLocale<EpisodeMessages>;
+  readonly sections: readonly SelfContainedSection[];
+}
+
+/** An Episode record from its own text and its Sections; each Section's first Slide names it. */
+export function selfContainedEpisode<Ep extends EpisodeSlug>(
+  record: SelfContainedEpisodeRecord<Ep>,
+): SelfContainedEpisodeRecord<Ep> {
+  return record;
+}
