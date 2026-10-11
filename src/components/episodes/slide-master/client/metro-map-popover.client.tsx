@@ -74,7 +74,7 @@ export function MetroPopover({ id, anchor, copy, lanes, laneNames, onClose }: Po
       data-slot="metro-popover"
       data-side={side}
       style={{ ...vertical, left, width }}
-      className="pointer-events-auto fixed rounded-xl border border-border bg-card p-4 text-card-foreground shadow-xl"
+      className="pointer-events-auto fixed rounded-xl border border-border bg-background p-4 text-foreground shadow-xl"
     >
       <p className="font-mono text-xs tracking-widest text-muted-foreground tabular-nums">{copy.date}</p>
       <p className="mt-1 font-semibold">{copy.title}</p>

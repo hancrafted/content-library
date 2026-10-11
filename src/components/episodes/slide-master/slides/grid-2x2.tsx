@@ -63,7 +63,7 @@ export const grid2x2 = slide({
         <SlideCaption>{t('caption')}</SlideCaption>
         <div
           {...target('grid')}
-          className="group/matrix relative mt-10 grid grid-cols-1 gap-3 rounded-2xl border border-border bg-card p-3 sm:auto-rows-fr sm:grid-cols-2 sm:gap-8 sm:p-4"
+          className="group/matrix relative mt-10 grid grid-cols-1 gap-3 rounded-2xl border border-border bg-background p-3 sm:auto-rows-fr sm:grid-cols-2 sm:gap-8 sm:p-4"
         >
           <span
             aria-hidden
@@ -83,7 +83,7 @@ export const grid2x2 = slide({
           />
           <span
             aria-hidden
-            className="pointer-events-none absolute top-1/2 left-1/2 z-10 hidden size-3 -translate-1/2 rounded-full border border-foreground/30 bg-card transition-colors duration-300 group-hover/matrix:border-foreground group-hover/matrix:bg-foreground motion-reduce:transition-none sm:block"
+            className="pointer-events-none absolute top-1/2 left-1/2 z-10 hidden size-3 -translate-1/2 rounded-full border border-foreground/30 bg-background transition-colors duration-300 group-hover/matrix:border-foreground group-hover/matrix:bg-foreground motion-reduce:transition-none sm:block"
           />
           {quadrants.map((quadrant) => (
             <article

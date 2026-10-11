@@ -29,7 +29,7 @@ function CentreDisc({ index, copy }: { index: number; copy: PhaseCopy }) {
     <div
       aria-hidden="true"
       style={{ width: DISC_SHARE }}
-      className="pointer-events-none absolute top-1/2 left-1/2 grid aspect-square -translate-1/2 place-items-center rounded-full border border-border bg-card text-card-foreground shadow-sm"
+      className="pointer-events-none absolute top-1/2 left-1/2 grid aspect-square -translate-1/2 place-items-center rounded-full border border-border bg-background text-foreground shadow-sm"
     >
       <div
         key={index}

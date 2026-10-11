@@ -18,7 +18,7 @@ function Banner({ id, index, title, caption }: BannerProps) {
   return (
     <article
       aria-labelledby={id}
-      className="group relative grid grid-cols-1 items-end gap-4 overflow-hidden rounded-2xl bg-card px-5 py-8 ring-1 ring-border transition-colors duration-300 ease-out hover:bg-ai/10 motion-reduce:transition-none sm:px-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] md:gap-10 md:px-10 md:py-12"
+      className="group relative grid grid-cols-1 items-end gap-4 overflow-hidden rounded-2xl bg-background px-5 py-8 ring-1 ring-border transition-colors duration-300 ease-out hover:bg-ai/10 motion-reduce:transition-none sm:px-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] md:gap-10 md:px-10 md:py-12"
     >
       <span
         aria-hidden
