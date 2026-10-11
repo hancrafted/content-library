@@ -35,9 +35,10 @@ export default function TokenEditor() {
   useLiveEdits(tokens, edits, theme);
   const changes = useMemo(() => changedTokens(tokens, edits), [tokens, edits]);
   return (
+    // Bottom-right, above the Context trigger: bottom-left is the Next.js dev badge.
     <div
       data-testid="design-system-token-editor"
-      className="fixed bottom-4 left-4 z-50 flex flex-col items-start gap-2"
+      className="fixed right-4 bottom-20 z-50 flex flex-col items-end gap-2"
     >
       {open && (
         <TokenPanel
