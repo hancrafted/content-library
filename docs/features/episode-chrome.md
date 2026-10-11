@@ -9,7 +9,7 @@ Read before changing the look, layout or interaction of what surrounds an Episod
 
 ## Layers
 
-- The Chrome (table of contents, Context drawer, talk player) floats over the Slides and takes no layout space; each Slide gets the full viewport width. The Content area pads every wrapper with `--inset-l` and `--inset-r` ([FE-009 §2](../../.archgate/adrs/FE-009-slide-frame.md)), so the Foreground clears the Chrome while the Backdrop stays full-bleed.
+- The Chrome (table of contents, Context drawer, talk player) floats over the Slides and takes no layout space; each Slide gets the full viewport width. The Content area pads every wrapper with `--inset-l` and `--inset-r` ([FE-009 §2](../../.archgate/adrs/FE-009-slide-wrapper-and-scene.md)), so the Foreground clears the Chrome while the Backdrop stays full-bleed.
 - Insets: `1rem` each side below `md`; from `md`, `21rem` left (the table of contents plus its gap) and `3rem` right, or the drawer width plus `4rem` while the drawer sits beside.
 - Full-bleed decoration goes in `SlideBackdrop`, content in `SlideFrame` (the Foreground). Z-index values come from the ladder in FE-009 §8; popovers render through the Episode portal root, placed by the shared `usePopoverPlacement` hook (`src/hooks/use-popover-placement.ts`, maths in `src/lib/popover-placement.pure.ts`); modals as a native `<dialog>`.
 
