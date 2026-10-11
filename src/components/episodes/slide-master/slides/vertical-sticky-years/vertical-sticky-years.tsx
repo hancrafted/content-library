@@ -62,16 +62,7 @@ function EntryRow({ entry }: { entry: PlacedEntry }) {
         'motion-safe:before:transition-colors motion-safe:before:duration-300',
       )}
     >
-      <span
-        aria-hidden="true"
-        className={cn(
-          'mt-1 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono text-xs leading-none tabular-nums ring-1 ring-inset',
-          TONE[entry.tone],
-        )}
-      >
-        <span>{entry.glyph}</span>
-        {pad(entry.index + 1)}
-      </span>
+      <EntryBadge entry={entry} />
       <div className="min-w-0">
         <h5 className="text-xl font-semibold tracking-tight md:text-2xl">{entry.title}</h5>
         <p className="mt-2 max-w-prose text-base text-muted-foreground md:text-lg">{entry.caption}</p>
@@ -86,5 +77,21 @@ function EntryRow({ entry }: { entry: PlacedEntry }) {
         →
       </span>
     </li>
+  );
+}
+
+/** The entry's tone glyph and number, decorative: the row's title carries the meaning. */
+function EntryBadge({ entry }: { entry: PlacedEntry }) {
+  return (
+    <span
+      aria-hidden="true"
+      className={cn(
+        'mt-1 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono text-xs leading-none tabular-nums ring-1 ring-inset',
+        TONE[entry.tone],
+      )}
+    >
+      <span>{entry.glyph}</span>
+      {pad(entry.index + 1)}
+    </span>
   );
 }

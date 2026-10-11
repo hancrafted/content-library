@@ -1,13 +1,13 @@
 import { slideMinutes } from '@/components/episode-page/slide-context.pure';
 import { listEpisodes } from '@/components/episodes/episode-repository';
-import { findEpisode } from '@/components/episodes/registry';
-import { ownTranslator } from '@/components/slide-master/slide-kit';
+import { episodeCopy, findEpisode } from '@/components/episodes/registry';
+import { ownTranslator } from '@/components/slide-master/slide-translator';
 import { overviewOrder, type EpisodeMetadata } from '@/lib/episode-metadata.pure';
 import { FEATURED } from '@/lib/episode-overview';
 import type { Locale } from '@/lib/locale.pure';
 import { hasReadingTime, wholeMinutes } from '@/lib/speaking-time.pure';
 import { getTranslations } from 'next-intl/server';
-import { episodeCard, type CardContext, type EpisodeCard, type ReadKey } from './episode-card.pure';
+import { episodeCard, type CardEntry, type EpisodeCard, type ReadKey } from './episode-card.pure';
 
 /**
  * What the table of contents totals for a published Episode: every Slide's
@@ -24,11 +24,11 @@ function minutesOf(entry: EpisodeMetadata, locale: Locale): number | undefined {
   return hasReadingTime(total) ? wholeMinutes(total) : undefined;
 }
 
-/** A published Episode's title and caption, read through the registry; an upcoming one has no record. */
-function copyOf(entry: EpisodeMetadata, locale: Locale): Pick<CardContext, 'copy'> {
-  if (entry.status !== 'published') return {};
-  const { title, caption } = findEpisode(entry.slug).messages[locale];
-  return { copy: { title, caption } };
+/** A published Episode with its title and caption from the registry; an upcoming one has no record. */
+function withCopy(entry: EpisodeMetadata, locale: Locale): CardEntry {
+  if (entry.status !== 'published') return entry;
+  const { title, caption } = episodeCopy(entry.slug, locale);
+  return { ...entry, copy: { title, caption } };
 }
 
 /** The Episode's Featured slot, 1 first; none when it holds no slot. */
@@ -46,11 +46,10 @@ export async function episodeCards(locale: Locale): Promise<EpisodeCard[]> {
   const t = await getTranslations({ locale });
   const read = t as unknown as ReadKey;
   return overviewOrder(listEpisodes(), FEATURED).map((entry) =>
-    episodeCard(entry, {
+    episodeCard(withCopy(entry, locale), {
       locale,
       read,
       minutes: minutesOf(entry, locale),
-      ...copyOf(entry, locale),
       ...featuredRankOf(entry.slug),
     }),
   );

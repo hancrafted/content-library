@@ -211,12 +211,10 @@ export default tseslint.config(
     rules: { 'max-lines-per-function': 'off', 'max-lines': 'off' },
   },
   {
-    // FE-002: a Slide's Scene is free-form markup, so its server files drop the
-    // per-function line cap; complexity and the file cap still hold. Caps follow
-    // file kind: a Slide folder's `*.client.tsx` and its `*.pure.ts` logic keep
-    // every cap.
-    files: ['src/components/episodes/*/slides/**/*.{ts,tsx}'],
-    ignores: ['src/components/episodes/*/slides/**/*.client.tsx', 'src/components/episodes/*/slides/**/*.pure.ts'],
+    // FE-002: a Slide's Scene is free-form markup, so its server entry `slide.tsx`
+    // drops the per-function line cap; complexity and the file cap still hold.
+    // Caps follow file kind: every other file in a Slide folder keeps every cap.
+    files: ['src/components/episodes/*/slides/*/slide.tsx'],
     rules: { 'max-lines-per-function': 'off' },
   },
   eslintConfigPrettier,

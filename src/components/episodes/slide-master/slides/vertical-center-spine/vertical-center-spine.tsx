@@ -45,53 +45,72 @@ export function CentreSpine({ label, entries }: { label: string; entries: SpineE
 }
 
 function SpineItem({ entry, index, count, side }: { entry: SpineEntry; index: number; count: number; side: Side }) {
-  const left = side === 'left';
   return (
     <li className="group relative grid grid-cols-[2.5rem_1fr] gap-y-2 md:grid-cols-[1fr_4rem_1fr] md:gap-y-0">
-      <p
-        className={cn(
-          styles.date,
-          'col-start-2 row-start-1 font-mono text-sm text-foreground tabular-nums',
-          'md:row-start-1 md:pt-0.5 md:font-sans md:text-6xl md:leading-none md:font-black md:tracking-tighter',
-          left ? 'md:col-start-3 md:pl-6 md:text-left' : 'md:col-start-1 md:pr-6 md:text-right',
-        )}
-      >
-        {entry.date}
-      </p>
-      <span aria-hidden="true" className="relative col-start-1 row-span-2 row-start-1 md:col-start-2 md:row-span-1">
-        <span
-          className={cn(
-            'absolute top-8 hidden h-px w-1/2 bg-border group-hover:bg-brand-accent md:block',
-            'motion-safe:transition-colors motion-safe:duration-300',
-            left ? 'left-0' : 'right-0',
-          )}
-        />
-        <span
-          className={cn(
-            styles.node,
-            'absolute top-2.5 left-1/2 size-3.5 -translate-1/2 rounded-full border-2 border-brand-accent bg-brand-accent md:top-8',
-            'ring-brand-accent/25 group-hover:scale-150 group-hover:ring-4',
-            'motion-safe:transition-[scale,box-shadow] motion-safe:duration-300',
-          )}
-        />
-      </span>
-      <div
-        data-side={side}
-        className={cn(
-          styles.card,
-          'col-start-2 row-start-2 rounded-xl border border-border bg-background p-6 shadow-sm',
-          'group-hover:border-brand-accent/60 group-hover:shadow-md',
-          'motion-safe:transition-[border-color,box-shadow] motion-safe:duration-300',
-          'md:row-start-1',
-          left ? 'md:col-start-1' : 'md:col-start-3',
-        )}
-      >
-        <p aria-hidden="true" className="font-mono text-xs leading-4 tracking-widest text-muted-foreground">
-          {pad(index + 1)} / {pad(count)}
-        </p>
-        <h4 className="mt-3 text-xl font-semibold tracking-tight">{entry.title}</h4>
-        <p className="mt-1.5 text-sm text-muted-foreground md:text-base">{entry.caption}</p>
-      </div>
+      <SpineDate date={entry.date} side={side} />
+      <SpineNode side={side} />
+      <SpineCard entry={entry} index={index} count={count} side={side} />
     </li>
+  );
+}
+
+/** The entry's year: small beside the card below `md`, a large numeral across the spine from it above. */
+function SpineDate({ date, side }: { date: string; side: Side }) {
+  return (
+    <p
+      className={cn(
+        styles.date,
+        'col-start-2 row-start-1 font-mono text-sm text-foreground tabular-nums',
+        'md:row-start-1 md:pt-0.5 md:font-sans md:text-6xl md:leading-none md:font-black md:tracking-tighter',
+        side === 'left' ? 'md:col-start-3 md:pl-6 md:text-left' : 'md:col-start-1 md:pr-6 md:text-right',
+      )}
+    >
+      {date}
+    </p>
+  );
+}
+
+/** The node on the spine and the connector to the card, both lighting on hover. */
+function SpineNode({ side }: { side: Side }) {
+  return (
+    <span aria-hidden="true" className="relative col-start-1 row-span-2 row-start-1 md:col-start-2 md:row-span-1">
+      <span
+        className={cn(
+          'absolute top-8 hidden h-px w-1/2 bg-border group-hover:bg-brand-accent md:block',
+          'motion-safe:transition-colors motion-safe:duration-300',
+          side === 'left' ? 'left-0' : 'right-0',
+        )}
+      />
+      <span
+        className={cn(
+          styles.node,
+          'absolute top-2.5 left-1/2 size-3.5 -translate-1/2 rounded-full border-2 border-brand-accent bg-brand-accent md:top-8',
+          'ring-brand-accent/25 group-hover:scale-150 group-hover:ring-4',
+          'motion-safe:transition-[scale,box-shadow] motion-safe:duration-300',
+        )}
+      />
+    </span>
+  );
+}
+
+function SpineCard({ entry, index, count, side }: { entry: SpineEntry; index: number; count: number; side: Side }) {
+  return (
+    <div
+      data-side={side}
+      className={cn(
+        styles.card,
+        'col-start-2 row-start-2 rounded-xl border border-border bg-background p-6 shadow-sm',
+        'group-hover:border-brand-accent/60 group-hover:shadow-md',
+        'motion-safe:transition-[border-color,box-shadow] motion-safe:duration-300',
+        'md:row-start-1',
+        side === 'left' ? 'md:col-start-1' : 'md:col-start-3',
+      )}
+    >
+      <p aria-hidden="true" className="font-mono text-xs leading-4 tracking-widest text-muted-foreground">
+        {pad(index + 1)} / {pad(count)}
+      </p>
+      <h4 className="mt-3 text-xl font-semibold tracking-tight">{entry.title}</h4>
+      <p className="mt-1.5 text-sm text-muted-foreground md:text-base">{entry.caption}</p>
+    </div>
   );
 }

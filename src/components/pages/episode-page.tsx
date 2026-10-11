@@ -1,5 +1,5 @@
 import { EpisodePageContainer } from '@/components/episode-page/episode-page-container';
-import { findEpisode } from '@/components/episodes/registry';
+import { episodeCopy, findEpisode } from '@/components/episodes/registry';
 import type { Locale } from '@/lib/locale.pure';
 import type { PageCopy } from '@/lib/page-metadata.pure';
 
@@ -10,6 +10,6 @@ export function EpisodePage({ slug, locale }: { slug: string; locale: Locale }) 
 
 /** An Episode page's title and description in one locale, read through the registry, for `pageMetadata` (FE-008). */
 export function episodePageCopy(slug: string, locale: Locale): PageCopy {
-  const { title, description } = findEpisode(slug).messages[locale];
+  const { title, description } = episodeCopy(slug, locale);
   return { title, description };
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import { usePopoverPlacement } from '@/hooks/use-popover-placement';
+import { popoverBox } from '@/lib/popover-placement.pure';
 import { createPortal } from 'react-dom';
 import { laneStyle } from './metro-map-lines.client';
 import type { StationCopy } from './metro-map-station.client';
@@ -36,16 +37,14 @@ export function MetroPopover({ id, anchor, copy, lanes, laneNames, onClose }: Po
   const placed = usePopoverPlacement({ anchor, side: 'below', rules: POPOVER_RULES, slot: SLOT, onClose });
   if (placed === null) return null;
   const { root, placement } = placed;
-  const { side, left, width } = placement;
-  const vertical = placement.side === 'below' ? { top: placement.top } : { bottom: placement.bottom };
   return createPortal(
     <div
       id={id}
       role="dialog"
       aria-label={copy.title}
       data-slot={SLOT}
-      data-side={side}
-      style={{ ...vertical, left, width }}
+      data-side={placement.side}
+      style={popoverBox(placement)}
       className="pointer-events-auto fixed rounded-xl border border-border bg-background p-4 text-foreground shadow-xl"
     >
       <p className="font-mono text-xs tracking-widest text-muted-foreground tabular-nums">{copy.date}</p>

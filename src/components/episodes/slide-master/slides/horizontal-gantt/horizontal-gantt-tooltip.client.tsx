@@ -1,7 +1,7 @@
 'use client';
 
 import { usePopoverPlacement } from '@/hooks/use-popover-placement';
-import type { PopoverPlacement } from '@/lib/popover-placement.pure';
+import { popoverBox } from '@/lib/popover-placement.pure';
 import { cn } from '@/lib/utils';
 import { createPortal } from 'react-dom';
 import { TOOLTIP_RULES } from './horizontal-gantt.pure';
@@ -24,12 +24,6 @@ interface TooltipProps {
   onClose: () => void;
 }
 
-/** The fixed box: `bottom` above the bar so the tooltip grows upward, `top` below it. */
-function fixedStyle(placement: PopoverPlacement) {
-  const { left, width } = placement;
-  return placement.side === 'above' ? { bottom: placement.bottom, left, width } : { top: placement.top, left, width };
-}
-
 /**
  * A bar's date range and caption, portaled into the Episode portal root
  * (FE-009 §8) so the Slide wrapper's stacking context never traps it under
@@ -46,7 +40,7 @@ export function GanttTooltip({ id, anchor, copy, lane, laneClass, onClose }: Too
       role="tooltip"
       data-slot={SLOT}
       data-side={placement.side}
-      style={fixedStyle(placement)}
+      style={popoverBox(placement)}
       className={cn(
         'pointer-events-auto fixed overflow-hidden rounded-2xl border border-border bg-background text-foreground shadow-lg',
         laneClass,

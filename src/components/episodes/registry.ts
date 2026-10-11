@@ -1,4 +1,5 @@
-import type { EpisodeRecord } from '@/components/slide-master/slide';
+import type { EpisodeMessages, EpisodeRecord } from '@/components/slide-master/slide';
+import type { Locale } from '@/lib/locale.pure';
 import { isEpisodeSlug, type EpisodeSlug } from '@/lib/routes';
 import { notFound } from 'next/navigation';
 import { aiTokenEconomy } from './ai-token-economy/ai-token-economy';
@@ -25,4 +26,9 @@ const EPISODES: { readonly [S in EpisodeSlug]: EpisodeRecord & { readonly slug: 
 export function findEpisode(slug: string): EpisodeRecord {
   if (!isEpisodeSlug(slug)) notFound();
   return EPISODES[slug];
+}
+
+/** An Episode's own text in one locale, from its record: what the page metadata and the landing card read. */
+export function episodeCopy(slug: string, locale: Locale): EpisodeMessages {
+  return findEpisode(slug).messages[locale];
 }
