@@ -3,7 +3,7 @@
 import { useSlideZone } from '@/hooks/use-slide-zone';
 import { cn } from '@/lib/utils';
 import { useCallback, useId, useState, type MouseEvent } from 'react';
-import { laneStyle, MetroLines } from './metro-map-lines.client';
+import { laneClass, MetroLines } from './metro-map-lines.client';
 import { MetroPopover } from './metro-map-popover.client';
 import { MetroStation, type StationCopy, type StationHandlers } from './metro-map-station.client';
 import { LANES, litLanes, stationLanes, STATIONS, type Lane, type MapFocus, type Station } from './metro-map.pure';
@@ -121,7 +121,7 @@ function MetroLegend({ lanes, state }: { lanes: Record<Lane, string>; state: Map
   return (
     <ul className="flex flex-wrap gap-2">
       {LANES.map((lane) => (
-        <li key={lane} style={laneStyle(lane)}>
+        <li key={lane} className={laneClass(lane)}>
           <button
             type="button"
             aria-pressed={pinnedLane === lane}
@@ -131,7 +131,7 @@ function MetroLegend({ lanes, state }: { lanes: Record<Lane, string>; state: Map
             onBlur={clear}
             onClick={() => togglePin(lane)}
             className={cn(
-              'flex cursor-pointer items-center gap-2.5 rounded-full border border-border py-1.5 pr-4 pl-2 text-sm font-medium outline-none transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring',
+              'flex cursor-pointer items-center gap-2.5 rounded-full border border-border py-1.5 pr-4 pl-2 text-body font-medium outline-none transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring',
               state.lit.includes(lane) ? 'text-foreground' : 'text-muted-foreground',
               pinnedLane === lane && 'bg-muted',
             )}

@@ -152,7 +152,7 @@ function QuarterAxis() {
   return (
     <div aria-hidden="true" className="col-start-2 row-start-1 grid grid-cols-4 border-b border-border pb-2">
       {QUARTERS.map((quarter) => (
-        <span key={quarter} className="pl-2 text-2xl font-light text-muted-foreground tabular-nums">
+        <span key={quarter} className="pl-2 text-subheading font-normal text-muted-foreground tabular-nums">
           {quarter}
         </span>
       ))}
@@ -187,7 +187,7 @@ function GanttLaneRow({ lane, name, laneId, children }: LaneProps) {
       <div
         id={laneId}
         className={cn(
-          'sticky left-0 z-10 col-start-1 flex items-center gap-2 border-b border-border bg-background pr-3 text-sm font-medium md:text-base',
+          'sticky left-0 z-10 col-start-1 flex items-center gap-2 border-b border-border bg-background pr-3 text-body font-medium',
           LANE_ROW[lane],
           LANE_CLASS[lane],
         )}

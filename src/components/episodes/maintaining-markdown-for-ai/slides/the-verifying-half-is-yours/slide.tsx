@@ -18,9 +18,7 @@ export const theVerifyingHalfIsYours = slide({
       <SlideProse>{t('prose')}</SlideProse>
       <EffortVenn emphasis="human" className="mt-4" />
       <div {...target('conclusion-card')} className="mt-6 flex flex-col items-center justify-center gap-2">
-        <p className="font-mono text-base font-semibold text-accent">
-          the AI region is my hypothesis — still unsettled
-        </p>
+        <p className="font-mono text-base font-semibold text-ai">the AI region is my hypothesis — still unsettled</p>
         <p className="font-mono text-xs text-muted-foreground">
           markdown-harness · github.com/hancrafted/markdown-harness
         </p>

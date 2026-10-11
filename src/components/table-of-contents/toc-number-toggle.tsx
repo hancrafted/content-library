@@ -4,7 +4,8 @@ import type { ReactNode } from 'react';
 /** Spring with a slight overshoot, so the arc lands rather than stops. */
 const SPRING = 'ease-[cubic-bezier(0.34,1.56,0.64,1)] duration-[220ms]';
 /** The section number's slot; sections without slides show the bare number in it. */
-export const SECTION_NUMBER = '-my-0.5 grid size-9 shrink-0 place-items-center rounded-full font-mono text-[0.7rem]';
+export const SECTION_NUMBER =
+  'grid size-8 shrink-0 place-items-center rounded-full text-caption leading-none tabular-nums';
 
 interface NumberToggleProps {
   open: boolean;

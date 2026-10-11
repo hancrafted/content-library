@@ -162,21 +162,6 @@ export function stationDelayMs(station: Station): number {
   return Math.round((DRAW_MS * (STATION_AT[station].x - start)) / (end - start));
 }
 
-export interface ThemedColour {
-  readonly light: string;
-  readonly dark: string;
-}
-
-/** The page background in each theme (`--background`), as hex, to check lane contrast against. */
-export const PAGE_BACKGROUND: ThemedColour = { light: '#fafafa', dark: '#0a0a0a' };
-
-/** Signal red, cobalt and jade, the classic metro trio, each with a lighter value for the dark theme. */
-export const LANE_COLOURS: Record<Lane, ThemedColour> = {
-  a: { light: '#d0342c', dark: '#ff7a6e' },
-  b: { light: '#1f63d6', dark: '#6aa8ff' },
-  c: { light: '#14804a', dark: '#3fcf86' },
-};
-
 function luminance(hex: string): number {
   const match = /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(hex);
   if (match === null) throw new Error(`${hex} is not a six-digit hex colour.`);

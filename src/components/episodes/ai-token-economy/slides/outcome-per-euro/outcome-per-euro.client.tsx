@@ -4,7 +4,7 @@ import { useId, useState, type ReactElement } from 'react';
 
 function QualityBar({ percent, marker }: { percent: number; marker: number }): ReactElement {
   return (
-    <div className="relative h-3 overflow-hidden rounded-full bg-base-300">
+    <div className="relative h-3 overflow-hidden rounded-full bg-muted">
       <div
         className="h-full rounded-full bg-primary transition-[width] duration-300"
         style={{ width: `${percent}%` }}
@@ -16,7 +16,7 @@ function QualityBar({ percent, marker }: { percent: number; marker: number }): R
 
 function OutcomeBar({ percent }: { percent: number }): ReactElement {
   return (
-    <div className="h-3 overflow-hidden rounded-full bg-base-300">
+    <div className="h-3 overflow-hidden rounded-full bg-muted">
       <div
         className="h-full rounded-full bg-primary transition-[width] duration-300"
         style={{ width: `${percent}%` }}
@@ -27,20 +27,22 @@ function OutcomeBar({ percent }: { percent: number }): ReactElement {
 
 function PremiumModelCard({ threshold }: { threshold: number }): ReactElement {
   return (
-    <div className="card border border-base-300 bg-base-100 p-5 shadow-xs">
+    <div className="rounded-xl border border-border bg-card p-5 shadow-xs">
       <div className="flex items-center justify-between">
-        <h4 className="font-display text-xl font-bold">Premium model</h4>
-        <span className="badge badge-outline badge-sm font-mono text-[0.65rem]">5× the price</span>
+        <h4 className="text-xl font-bold">Premium model</h4>
+        <span className="inline-flex items-center rounded-full px-2 py-0.5 border border-border text-foreground font-mono text-[0.65rem]">
+          5× the price
+        </span>
       </div>
       <div className="mt-4">
-        <div className="mb-1 flex items-baseline justify-between font-mono text-[0.65rem] uppercase tracking-wider text-base-content/50">
+        <div className="mb-1 flex items-baseline justify-between font-mono text-[0.65rem] uppercase tracking-wider text-muted-foreground">
           <span>Quality delivered</span>
-          <span className="tabular-nums text-base-content/70">99%</span>
+          <span className="tabular-nums text-muted-foreground">99%</span>
         </div>
         <QualityBar percent={99} marker={threshold} />
       </div>
       <div className="mt-4">
-        <p className="mb-1 font-mono text-[0.65rem] uppercase tracking-wider text-base-content/50">Outcome per euro</p>
+        <p className="mb-1 font-mono text-[0.65rem] uppercase tracking-wider text-muted-foreground">Outcome per euro</p>
         <OutcomeBar percent={20} />
       </div>
     </div>
@@ -51,14 +53,14 @@ function CheaperCardBars({ threshold }: { threshold: number }): ReactElement {
   return (
     <>
       <div className="mt-4">
-        <div className="mb-1 flex items-baseline justify-between font-mono text-[0.65rem] uppercase tracking-wider text-base-content/50">
+        <div className="mb-1 flex items-baseline justify-between font-mono text-[0.65rem] uppercase tracking-wider text-muted-foreground">
           <span>Quality delivered</span>
-          <span className="tabular-nums text-base-content/70">95%</span>
+          <span className="tabular-nums text-muted-foreground">95%</span>
         </div>
         <QualityBar percent={95} marker={threshold} />
       </div>
       <div className="mt-4">
-        <div className="mb-1 flex items-baseline justify-between font-mono text-[0.65rem] uppercase tracking-wider text-base-content/50">
+        <div className="mb-1 flex items-baseline justify-between font-mono text-[0.65rem] uppercase tracking-wider text-muted-foreground">
           <span>Outcome per euro</span>
           <span className="font-semibold tabular-nums text-primary">≈5×</span>
         </div>
@@ -71,15 +73,17 @@ function CheaperCardBars({ threshold }: { threshold: number }): ReactElement {
 function CheaperModelCard({ threshold }: { threshold: number }): ReactElement {
   const isWinner = threshold <= 95;
   return (
-    <div className="card relative border border-primary/50 bg-primary/5 p-5 shadow-xs">
+    <div className="rounded-xl relative border border-primary/50 bg-primary/5 p-5 shadow-xs">
       {isWinner && (
-        <span className="badge badge-primary badge-sm absolute -top-2.5 right-4 font-mono text-[0.65rem] uppercase tracking-wider">
+        <span className="inline-flex items-center rounded-full px-2 py-0.5 bg-primary text-primary-foreground absolute -top-2.5 right-4 font-mono text-[0.65rem] uppercase tracking-wider">
           financial winner
         </span>
       )}
       <div className="flex items-center justify-between">
-        <h4 className="font-display text-xl font-bold">Cheaper model</h4>
-        <span className="badge badge-primary badge-outline badge-sm font-mono text-[0.65rem]">1× the price</span>
+        <h4 className="text-xl font-bold">Cheaper model</h4>
+        <span className="inline-flex items-center rounded-full px-2 py-0.5 border border-primary text-primary font-mono text-[0.65rem]">
+          1× the price
+        </span>
       </div>
       <CheaperCardBars threshold={threshold} />
     </div>
@@ -104,9 +108,9 @@ interface ThresholdSliderProps {
 function ThresholdSliderBox({ threshold, onChange }: ThresholdSliderProps): ReactElement {
   const inputId = useId();
   return (
-    <div className="rounded-box border border-base-300 bg-base-200/50 p-4">
+    <div className="rounded-xl border border-border bg-muted/50 p-4">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <label htmlFor={inputId} className="text-sm font-medium text-base-content/80">
+        <label htmlFor={inputId} className="text-sm font-medium text-foreground">
           Drag: what quality does your customer actually need?
         </label>
         <span className="font-mono text-sm font-bold tabular-nums text-primary">{threshold}%</span>
@@ -119,10 +123,10 @@ function ThresholdSliderBox({ threshold, onChange }: ThresholdSliderProps): Reac
         value={threshold}
         step="1"
         onChange={(e) => onChange(Number(e.target.value))}
-        className="range range-primary range-sm mt-3 w-full"
+        className="accent-primary mt-3 w-full"
         aria-label="Customer quality threshold"
       />
-      <p className="mt-3 text-sm leading-relaxed text-base-content/70">{thresholdText(threshold)}</p>
+      <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{thresholdText(threshold)}</p>
     </div>
   );
 }

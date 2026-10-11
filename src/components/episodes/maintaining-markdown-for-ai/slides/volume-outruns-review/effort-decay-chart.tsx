@@ -65,7 +65,7 @@ function DecayCurves() {
         stroke="currentColor"
         strokeWidth="3"
         strokeLinecap="round"
-        className="text-accent"
+        className="text-ai"
       />
       <path
         d="M 160 296 C 196 288, 228 264, 262 230 C 300 192, 342 146, 400 76"
@@ -73,7 +73,7 @@ function DecayCurves() {
         stroke="currentColor"
         strokeWidth="3"
         strokeLinecap="round"
-        className="text-secondary"
+        className="text-human"
       />
     </g>
   );
@@ -82,14 +82,14 @@ function DecayCurves() {
 function DecayLegend() {
   return (
     <g>
-      <line x1="408" y1="76" x2="424" y2="76" className="stroke-secondary" strokeWidth="3" strokeLinecap="round" />
+      <line x1="408" y1="76" x2="424" y2="76" className="stroke-human" strokeWidth="3" strokeLinecap="round" />
       <text x="432" y="73" className="fill-foreground text-[11px] font-semibold">
         Drift / staleness
       </text>
       <text x="432" y="88" className="fill-muted-foreground text-[11px]">
         never flattens
       </text>
-      <line x1="408" y1="290" x2="424" y2="290" className="stroke-accent" strokeWidth="3" strokeLinecap="round" />
+      <line x1="408" y1="290" x2="424" y2="290" className="stroke-ai" strokeWidth="3" strokeLinecap="round" />
       <text x="432" y="287" className="fill-foreground text-[11px] font-semibold">
         Maintenance effort
       </text>
@@ -103,18 +103,18 @@ function DecayLegend() {
 function DecayCallout() {
   return (
     <g>
-      <line x1="272" y1="122" x2="271" y2="209" className="stroke-secondary/50" strokeWidth="1" strokeDasharray="2 3" />
-      <rect x="236" y="92" width="150" height="28" rx="9" className="fill-card stroke-secondary/50" strokeWidth="1" />
+      <line x1="272" y1="122" x2="271" y2="209" className="stroke-human/50" strokeWidth="1" strokeDasharray="2 3" />
+      <rect x="236" y="92" width="150" height="28" rx="9" className="fill-card stroke-human/50" strokeWidth="1" />
       <text
         x="311"
         y="110"
         textAnchor="middle"
-        className="fill-secondary font-mono text-[10px] font-semibold tracking-wide"
+        className="fill-human font-mono text-[10px] font-semibold tracking-wide"
       >
         where the work moved
       </text>
-      <circle cx="271" cy="220" r="7" fill="none" className="stroke-secondary" strokeWidth="2" />
-      <circle cx="271" cy="220" r="5" className="fill-secondary stroke-card" strokeWidth="2" />
+      <circle cx="271" cy="220" r="7" fill="none" className="stroke-human" strokeWidth="2" />
+      <circle cx="271" cy="220" r="5" className="fill-human stroke-card" strokeWidth="2" />
     </g>
   );
 }

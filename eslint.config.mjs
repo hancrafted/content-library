@@ -1,8 +1,26 @@
 import js from '@eslint/js';
 import nextPlugin from '@next/eslint-plugin-next';
 import eslintConfigPrettier from 'eslint-config-prettier';
+import betterTailwind from 'eslint-plugin-better-tailwindcss';
 import checkFile from 'eslint-plugin-check-file';
+import { readFileSync } from 'node:fs';
 import tseslint from 'typescript-eslint';
+
+// Design tokens (FE-011): the legacy list is one file that ESLint and Archgate both read.
+// Legacy files are exempt from E2 only; E1 (no phantom class) holds everywhere.
+const LEGACY_FILES = JSON.parse(
+  readFileSync(new URL('./src/design-system/legacy.json', import.meta.url), 'utf8'),
+).globs;
+const CSS_HOOK_CLASSES = [
+  '^hero-glow(--accent)?$',
+  '^deck-unsettled$',
+  '^s2-arrows-active$',
+  '^s2-arrow-group$',
+  '^s2-flow-dash$',
+  '^is-active$',
+];
+const HERO_TITLE_FILE = 'src/components/slide-master/slide-master.tsx';
+const TAILWIND_ENTRY = 'src/app/globals.css';
 
 // FE-006: the `.client` classifier. A file carrying 'use client' is named
 // `*.client.tsx`, and a `*.client.tsx` file carries the directive, so the client
@@ -68,6 +86,58 @@ const NO_USE_CLIENT = {
   message: "'use client' marks a client entry point; rename the file to *.client.tsx, or drop the directive (FE-006).",
 };
 
+// FE-011 design tokens. `no-restricted-classes` matches each class WITH its variants
+// (`md:hover:text-lg`), so every pattern anchors on `(?:^|:)` and an optional `!`.
+const UTIL = '(?:^|:)!?-?';
+const PALETTE =
+  'slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose';
+const COLOUR_UTILS =
+  'text|bg|border|ring|ring-offset|outline|fill|stroke|from|via|to|shadow|divide|accent|caret|decoration|placeholder';
+// A `color-mix()` over a `var(--token)` is a token reference, so it stays allowed.
+const COLOUR_FN = '#|rgba?\\(|hsla?\\(|oklch\\(|oklab\\(|lab\\(|lch\\(|hwb\\(|color-mix\\((?![^\\]]*var\\()';
+const ROLES = 'hero|heading|subheading|body|caption';
+const E3_MESSAGE = 'text-hero is for HeroTitle only: render <HeroTitle> instead (FE-011).';
+const E3 = { pattern: `${UTIL}text-hero$`, message: E3_MESSAGE };
+/** E2: the token-only vocabulary; `allowedSize` is a lookahead for the one relative size a file may spell. */
+const tokenRestrictions = (allowedSize = '') => [
+  {
+    pattern: `${UTIL}(?:${COLOUR_UTILS})-(?:(?:${PALETTE})-\\d|black|white)`,
+    message: 'Palette colour: use a token utility (bg-primary, text-muted-foreground) or bg-(--slide-token) (FE-011).',
+  },
+  {
+    pattern: `${UTIL}(?:${COLOUR_UTILS})-\\[(?:color:)?(?:${COLOUR_FN})`,
+    message: 'Arbitrary colour: declare a Slide token in the CSS module, light and dark, and reference it (FE-011).',
+  },
+  {
+    pattern: `${UTIL}text-(?:xs|sm|base|lg|[2-9]xl)$`,
+    message: 'Size outside the roles: use text-heading, text-subheading, text-body or text-caption (FE-011).',
+  },
+  {
+    pattern: `${UTIL}text-\\[${allowedSize}[\\d.]+(?:px|rem|em|vw|vh|%|ch|pt)\\]`,
+    message: 'Arbitrary size: use a role (text-heading, text-subheading, text-body, text-caption) (FE-011).',
+  },
+  {
+    pattern: `(?:^|:)(?:sm|md|lg|xl|2xl|min-[^:]+|max-[^:]+|@[^:]+):(?:[^:]+:)*!?text-(?:${ROLES})$`,
+    message: 'A role scales fluidly with clamp(): drop the breakpoint prefix from a size (FE-011).',
+  },
+  {
+    pattern: `${UTIL}font-(?:thin|extralight|light|bold|extrabold|black|\\[\\d.*)$`,
+    message: 'Weights are font-normal, font-medium and font-semibold (FE-011).',
+  },
+];
+const TOKEN_RULES = {
+  'better-tailwindcss/no-restricted-classes': ['error', { restrict: [...tokenRestrictions(), E3] }],
+};
+/** A file's one allowed relative size, e.g. the citation marker `text-[0.7em]`. */
+const allowSize = (size) => ({
+  'better-tailwindcss/no-restricted-classes': [
+    'error',
+    { restrict: [...tokenRestrictions(`(?!${size.replace('.', '\\.')}em\\])`), E3] },
+  ],
+});
+const CITATION_FILE = 'src/components/context-drawer/slide-notes.tsx';
+const INLINE_CODE_FILE = 'src/components/slide-master/rich-tags.tsx';
+
 export default tseslint.config(
   {
     ignores: [
@@ -79,6 +149,7 @@ export default tseslint.config(
       'out/**',
       'next-env.d.ts',
       '.worktrees/**',
+      '.claude/worktrees/**',
     ],
   },
   {
@@ -216,6 +287,27 @@ export default tseslint.config(
     // Caps follow file kind: every other file in a Slide folder keeps every cap.
     files: ['src/components/episodes/*/slides/*/slide.tsx'],
     rules: { 'max-lines-per-function': 'off' },
+  },
+  {
+    // FE-011 E1: a class Tailwind does not register is a phantom, legacy files included.
+    // `ignore` is narrow: Tailwind sees only utilities, so the plain class hooks that
+    // globals.css styles by name (keyframe hooks, a state marker) are listed one by one.
+    files: ['src/**/*.{ts,tsx}'],
+    plugins: { 'better-tailwindcss': betterTailwind },
+    settings: { 'better-tailwindcss': { entryPoint: TAILWIND_ENTRY } },
+    rules: { 'better-tailwindcss/no-unknown-classes': ['error', { ignore: CSS_HOOK_CLASSES }], ...TOKEN_RULES },
+  },
+  {
+    // FE-011 E2: the legacy list is exempt from the token vocabulary; E3 still holds.
+    files: LEGACY_FILES,
+    rules: { 'better-tailwindcss/no-restricted-classes': ['error', { restrict: [E3] }] },
+  },
+  { files: [CITATION_FILE], rules: allowSize('0.7') },
+  { files: [INLINE_CODE_FILE], rules: allowSize('0.9') },
+  {
+    // FE-011 E3: the HeroTitle file alone may spell text-hero.
+    files: [HERO_TITLE_FILE],
+    rules: { 'better-tailwindcss/no-restricted-classes': ['error', { restrict: tokenRestrictions() }] },
   },
   eslintConfigPrettier,
 );

@@ -4,6 +4,7 @@ import { SlideProse } from '@/components/slide-master/slide-master';
 import type { ReactElement } from 'react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
+import styles from './status.module.css';
 
 const COST_STEPS = [
   { title: 'System prompt', sub: 'rules, tools, memory', cost: '+35,000', cum: '35,000' },
@@ -17,25 +18,25 @@ const COST_STEPS = [
 
 function CompoundingTable(): ReactElement {
   return (
-    <div className="mt-8 space-y-3">
+    <div className={`${styles.scene} mt-8 space-y-3`}>
       {COST_STEPS.map((step) => (
         <div
           key={step.title}
-          className="flex items-center justify-between rounded-lg border border-base-200 bg-base-100 p-3 shadow-xs"
+          className="flex items-center justify-between rounded-lg border border-border bg-card p-3 shadow-xs"
         >
           <div>
             <span className="font-semibold text-sm">{step.title}</span>
-            <span className="ml-2 text-xs text-base-content/50">· {step.sub}</span>
+            <span className="ml-2 text-xs text-muted-foreground">· {step.sub}</span>
           </div>
           <div className="flex items-center gap-4 font-mono text-sm">
-            <span className="text-error font-semibold">{step.cost}</span>
-            <span className="text-info font-bold">{step.cum}</span>
+            <span className="text-destructive font-semibold">{step.cost}</span>
+            <span className="text-(--info) font-bold">{step.cum}</span>
           </div>
         </div>
       ))}
-      <div className="flex items-center justify-between rounded-box border border-info/50 bg-info/10 p-4">
-        <span className="font-display font-bold">Total context hauler</span>
-        <span className="font-mono text-2xl font-bold text-info">~73,450 tokens</span>
+      <div className="flex items-center justify-between rounded-xl border border-(--info)/50 bg-(--info)/10 p-4">
+        <span className="font-bold">Total context hauler</span>
+        <span className="font-mono text-2xl font-bold text-(--info)">~73,450 tokens</span>
       </div>
     </div>
   );

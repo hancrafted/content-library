@@ -1,17 +1,17 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import type { CSSProperties } from 'react';
-import { CANVAS, DRAW_MS, LANE_COLOURS, LANE_ROUTES, LANES, metroPath, type Lane } from './metro-map.pure';
+import styles from './metro-map.module.css';
+import { CANVAS, DRAW_MS, LANE_ROUTES, LANES, metroPath, type Lane } from './metro-map.pure';
 
 /** Lanes are thick, bends round over this many canvas units. */
 const BEND_RADIUS = 18;
 
-type LaneStyle = CSSProperties & Record<'--lane-light' | '--lane-dark', string>;
+const LANE_CLASS: Record<Lane, string> = { a: styles.laneA, b: styles.laneB, c: styles.laneC };
 
-/** A lane's two theme colours as custom properties, so one class picks the theme's value. */
-export function laneStyle(lane: Lane): LaneStyle {
-  return { '--lane-light': LANE_COLOURS[lane].light, '--lane-dark': LANE_COLOURS[lane].dark };
+/** A lane's two theme colours as custom properties (the Slide's token file), so one class picks the theme's value. */
+export function laneClass(lane: Lane): string {
+  return LANE_CLASS[lane];
 }
 
 /** One lane: drawn on with `stroke-dashoffset` the first time the Slide is active, dimmed when another lane is lit. */
@@ -20,8 +20,7 @@ function LaneLine({ lane, lit, drawn }: { lane: Lane; lit: boolean; drawn: boole
     <g
       data-lane={lane}
       data-lit={lit}
-      style={laneStyle(lane)}
-      className={cn('transition-opacity duration-300', lit ? 'opacity-100' : 'opacity-15')}
+      className={cn(laneClass(lane), 'transition-opacity duration-300', lit ? 'opacity-100' : 'opacity-15')}
     >
       <path
         d={metroPath(LANE_ROUTES[lane], BEND_RADIUS)}

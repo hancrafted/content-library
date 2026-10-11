@@ -10,7 +10,10 @@
   --foreground: oklch(0.145 0 0);
   --primary: oklch(0.205 0 0);
   --primary-foreground: oklch(0.985 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
   --header: hsl(210 20% 98%);
+  --destructive: oklch(0.577 0.245 27.325);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
   --accent: oklch(0.97 0 0);
@@ -30,8 +33,30 @@
   --ring: oklch(0.708 0 0);
   /* The outline between a note and the Slide element it explains: 3:1 against the surface, light and dark. */
   --highlight-target: oklch(0.5 0.19 260);
+  /* YouTube's brand red: the talk player's icon and tint. */
+  --youtube: oklch(0.628 0.258 29.2);
+  /* The scrim behind a modal drawer and the video frame's backdrop; callers set the opacity (`bg-overlay/40`). */
+  --overlay: oklch(0 0 0);
   /* The Context drawer card's width, shared by the card and the right inset that makes room for it beside the Slides (FE-010 §7). */
   --drawer-width: 26rem;
+  /* Type roles (docs/design-system/README.md): one fluid size and line height per role, so no breakpoint prefix ever appears on a size. */
+  --size-hero: clamp(2.5rem, 5.2vw, 4.5rem);
+  --size-heading: clamp(2.25rem, 4.2vw, 3.75rem);
+  --size-subheading: clamp(1.875rem, 3.4vw, 3rem);
+  --size-body: 1rem;
+  --size-caption: 0.875rem;
+  --leading-hero: 1.05;
+  --leading-heading: 1.1;
+  --leading-subheading: 1.15;
+  --leading-body: 1.6;
+  --leading-caption: 1.5;
+  --tracking-heading: -0.02em;
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --font-sans:
+    ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 }
 
 .dark {
@@ -39,7 +64,10 @@
   --foreground: oklch(0.985 0 0);
   --primary: oklch(0.922 0 0);
   --primary-foreground: oklch(0.205 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
   --header: oklch(0.205 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
   --muted: oklch(0.269 0 0);
   --muted-foreground: oklch(0.708 0 0);
   --accent: oklch(0.269 0 0);
@@ -56,6 +84,8 @@
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
   --highlight-target: oklch(0.75 0.14 260);
+  --youtube: oklch(0.68 0.23 29.2);
+  --overlay: oklch(0 0 0);
 }
 
 @theme inline {
@@ -66,6 +96,8 @@
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-machine: var(--machine);
@@ -73,6 +105,7 @@
   --color-ai: var(--ai);
   --color-brand-accent: var(--brand-accent);
   --color-header: var(--header);
+  --color-destructive: var(--destructive);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
@@ -82,6 +115,24 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-youtube: var(--youtube);
+  --color-overlay: var(--overlay);
+  --text-hero: var(--size-hero);
+  --text-hero--line-height: var(--leading-hero);
+  --text-hero--letter-spacing: var(--tracking-heading);
+  --text-heading: var(--size-heading);
+  --text-heading--line-height: var(--leading-heading);
+  --text-heading--letter-spacing: var(--tracking-heading);
+  --text-subheading: var(--size-subheading);
+  --text-subheading--line-height: var(--leading-subheading);
+  --text-subheading--letter-spacing: var(--tracking-heading);
+  --text-body: var(--size-body);
+  --text-body--line-height: var(--leading-body);
+  --text-caption: var(--size-caption);
+  --text-caption--line-height: var(--leading-caption);
+  --font-weight-normal: var(--weight-normal);
+  --font-weight-medium: var(--weight-medium);
+  --font-weight-semibold: var(--weight-semibold);
 }
 
 @layer base {

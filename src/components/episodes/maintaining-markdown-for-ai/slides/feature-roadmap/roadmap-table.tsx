@@ -2,24 +2,24 @@ import type { TargetProps } from '@/lib/context-link.pure';
 
 function ShippedCol(target: TargetProps) {
   return (
-    <div {...target} className="flex flex-col rounded-2xl border border-primary/30 bg-primary/5 p-6 shadow-xs">
-      <div className="flex items-center justify-between border-b border-primary/20 pb-4">
-        <span className="font-mono text-sm font-bold text-primary">v0.0.4 Shipped</span>
-        <span className="rounded-full border border-primary/40 bg-primary/10 px-2.5 py-0.5 font-mono text-xs font-semibold text-primary">
+    <div {...target} className="flex flex-col rounded-2xl border border-machine/30 bg-machine/5 p-6 shadow-xs">
+      <div className="flex items-center justify-between border-b border-machine/20 pb-4">
+        <span className="font-mono text-sm font-bold text-machine">v0.0.4 Shipped</span>
+        <span className="rounded-full border border-machine/40 bg-machine/10 px-2.5 py-0.5 font-mono text-xs font-semibold text-machine">
           ✓ Available now
         </span>
       </div>
       <ul className="mt-4 space-y-3 font-mono text-xs text-foreground/90">
         <li className="flex items-start gap-2">
-          <span className="text-primary font-bold">✓</span>
+          <span className="text-machine font-bold">✓</span>
           <span>Frontmatter linting — field constraints declared per path</span>
         </li>
         <li className="flex items-start gap-2">
-          <span className="text-primary font-bold">✓</span>
+          <span className="text-machine font-bold">✓</span>
           <span>Staleness checking — stale_after against a stated instant</span>
         </li>
         <li className="flex items-start gap-2">
-          <span className="text-primary font-bold">✓</span>
+          <span className="text-machine font-bold">✓</span>
           <span>Markdown harness skill — skill to install and configure harness</span>
         </li>
       </ul>

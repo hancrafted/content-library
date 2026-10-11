@@ -5,7 +5,7 @@ import { configDefaults, defineConfig } from 'vitest/config';
 export default defineConfig({
   test: {
     include: ['**/*.build.test.ts'],
-    exclude: [...configDefaults.exclude, '.worktrees/**'],
+    exclude: [...configDefaults.exclude, '.worktrees/**', '.claude/**'],
     // Show the page-count diagnostic even when every test passes.
     silent: false,
   },

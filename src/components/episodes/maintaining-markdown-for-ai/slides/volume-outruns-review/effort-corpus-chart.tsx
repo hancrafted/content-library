@@ -30,7 +30,7 @@ function CorpusAxes({ arrowId }: { arrowId: string }) {
       <CorpusAxesLabels />
       <path
         d="M 76 288 C 108 272, 170 238, 238 200 C 292 170, 346 110, 400 50 L 400 160 C 292 203, 184 245, 76 288 Z"
-        className="fill-secondary/15"
+        className="fill-human/15"
       />
     </g>
   );
@@ -39,14 +39,14 @@ function CorpusAxes({ arrowId }: { arrowId: string }) {
 function CorpusLegend() {
   return (
     <>
-      <line x1="408" y1="50" x2="424" y2="50" className="stroke-secondary" strokeWidth="3" strokeLinecap="round" />
+      <line x1="408" y1="50" x2="424" y2="50" className="stroke-human" strokeWidth="3" strokeLinecap="round" />
       <text x="432" y="47" className="fill-foreground text-[11px] font-semibold">
         Maintenance surface
       </text>
       <text x="432" y="62" className="fill-muted-foreground text-[11px]">
         superlinear growth
       </text>
-      <line x1="408" y1="160" x2="424" y2="160" className="stroke-accent" strokeWidth="3" strokeLinecap="round" />
+      <line x1="408" y1="160" x2="424" y2="160" className="stroke-ai" strokeWidth="3" strokeLinecap="round" />
       <text x="432" y="157" className="fill-foreground text-[11px] font-semibold">
         File count
       </text>
@@ -66,7 +66,7 @@ function CorpusCurves() {
         stroke="currentColor"
         strokeWidth="3"
         strokeLinecap="round"
-        className="text-accent"
+        className="text-ai"
       />
       <path
         d="M 76 288 C 108 272, 170 238, 238 200 C 292 170, 346 110, 400 50"
@@ -74,7 +74,7 @@ function CorpusCurves() {
         stroke="currentColor"
         strokeWidth="3"
         strokeLinecap="round"
-        className="text-secondary"
+        className="text-human"
       />
       <CorpusLegend />
     </g>

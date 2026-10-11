@@ -118,7 +118,6 @@
 }
 .headline {
   max-width: 13ch;
-  font-size: clamp(2.6rem, 5.1vw, 4.65rem);
   font-weight: 650;
   letter-spacing: -0.055em;
   line-height: 1.06;
@@ -241,7 +240,6 @@
   }
   .headline {
     max-width: none;
-    font-size: clamp(2.6rem, 3.9vw, 3.7rem);
     text-wrap: nowrap;
   }
   .lineBreak {

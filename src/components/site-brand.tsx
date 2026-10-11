@@ -15,11 +15,11 @@ export async function SiteBrand({ locale }: { locale: Locale }) {
     >
       <span
         aria-hidden
-        className="grid size-8 place-items-center rounded-full bg-primary font-mono text-sm font-semibold text-primary-foreground"
+        className="grid size-8 place-items-center rounded-full bg-primary font-mono text-body font-semibold text-primary-foreground"
       >
         H
       </span>
-      <span className="text-base font-semibold tracking-tight">{t('name')}</span>
+      <span className="text-body font-semibold tracking-tight">{t('name')}</span>
     </Link>
   );
 }

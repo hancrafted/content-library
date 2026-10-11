@@ -8,9 +8,9 @@ function FileHeader({ role }: { role: RoleDetail }) {
   return (
     <div className="flex items-center justify-between border-b border-border bg-muted/60 px-4 py-2.5">
       <div className="flex items-center gap-2">
-        <span className="size-2.5 rounded-full bg-primary/70" />
-        <span className="size-2.5 rounded-full bg-accent/70" />
-        <span className="size-2.5 rounded-full bg-secondary/70" />
+        <span className="size-2.5 rounded-full bg-machine/70" />
+        <span className="size-2.5 rounded-full bg-ai/70" />
+        <span className="size-2.5 rounded-full bg-human/70" />
         <span className="ml-2 font-mono text-xs font-semibold text-foreground/80">{role.filename}</span>
       </div>
       <span className={cn('rounded-full border px-2 py-0.5 font-mono text-[10px] font-semibold', role.badgeClass)}>
@@ -31,7 +31,7 @@ function FrontmatterRegion({ role, onOpen }: { role: RoleDetail; onOpen: (modal:
           type="button"
           data-card-open="frontmatter"
           onClick={() => onOpen('frontmatter')}
-          className="cursor-pointer rounded-lg border border-border bg-card px-2.5 py-1 font-mono text-xs text-muted-foreground shadow-2xs hover:border-secondary hover:text-secondary"
+          className="cursor-pointer rounded-lg border border-border bg-card px-2.5 py-1 font-mono text-xs text-muted-foreground shadow-2xs hover:border-human hover:text-human"
         >
           What is front matter?
         </button>
@@ -48,9 +48,9 @@ function BodyItems({ items }: { items: RoleDetail['items'] }) {
     <div className="space-y-1.5 pt-1">
       {items.map((it) => (
         <div key={it.id} className="flex items-center gap-2 text-xs text-foreground/90">
-          {it.badge && <span className="font-mono font-semibold text-secondary">{it.badge}</span>}
+          {it.badge && <span className="font-mono font-semibold text-human">{it.badge}</span>}
           {it.checked !== undefined && (
-            <input type="checkbox" checked={it.checked} disabled className="size-3.5 rounded accent-accent" />
+            <input type="checkbox" checked={it.checked} disabled className="size-3.5 rounded accent-ai" />
           )}
           <span>{it.label}</span>
         </div>
@@ -70,13 +70,13 @@ function BodyRegion({ role, onOpen }: { role: RoleDetail; onOpen: (modal: ModalK
           type="button"
           data-card-open="syntax"
           onClick={() => onOpen('syntax')}
-          className="cursor-pointer rounded-lg border border-border bg-card px-2.5 py-1 font-mono text-xs text-muted-foreground shadow-2xs hover:border-secondary hover:text-secondary"
+          className="cursor-pointer rounded-lg border border-border bg-card px-2.5 py-1 font-mono text-xs text-muted-foreground shadow-2xs hover:border-human hover:text-human"
         >
           What is the body?
         </button>
       </div>
       <div className="mt-3 space-y-2">
-        <h4 className="font-display text-sm font-bold text-foreground"># {role.bodyTitle}</h4>
+        <h4 className="text-sm font-bold text-foreground"># {role.bodyTitle}</h4>
         <p className="text-xs leading-relaxed text-muted-foreground">{role.bodyDesc}</p>
         <BodyItems items={role.items} />
         <blockquote

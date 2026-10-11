@@ -1,0 +1,8 @@
+{
+  "description": "Files that predate the design-token rules (docs/design-system/README.md, Legacy). The list only shrinks: migrate a file, then delete its entry. ESLint (E2) and Archgate read this one file.",
+  "globs": [
+    "src/components/landing/**",
+    "src/components/episodes/ai-token-economy/**",
+    "src/components/episodes/maintaining-markdown-for-ai/**"
+  ]
+}

@@ -5,7 +5,7 @@ import type { Ref } from 'react';
 
 function Hint({ hint }: { hint: string }) {
   return (
-    <kbd title={hint} className="rounded border px-1 font-mono text-[0.65rem] text-muted-foreground max-md:hidden">
+    <kbd title={hint} className="rounded border px-1 font-mono text-body text-muted-foreground max-md:hidden">
       {SHORTCUT_LABEL}
     </kbd>
   );
@@ -36,7 +36,7 @@ export function DrawerTrigger(props: {
       aria-keyshortcuts={SHORTCUT_LABEL}
       onClick={props.onToggle}
       className={cn(
-        'fixed right-4 bottom-4 z-40 flex min-h-11 cursor-pointer items-center gap-2 rounded-full border bg-background/80 px-4 py-2 text-sm shadow-header backdrop-blur-xl backdrop-saturate-150 print:hidden',
+        'fixed right-4 bottom-4 z-40 flex min-h-11 cursor-pointer items-center gap-2 rounded-full border bg-background/80 px-4 py-2 text-body shadow-header backdrop-blur-xl backdrop-saturate-150 print:hidden',
         props.open && 'invisible',
       )}
     >

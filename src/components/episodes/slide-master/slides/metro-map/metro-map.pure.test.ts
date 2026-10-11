@@ -1,15 +1,15 @@
 import { placePopover, type Box, type Viewport } from '@/lib/popover-placement.pure';
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
   canvasShare,
   contrastRatio,
   DRAW_MS,
-  LANE_COLOURS,
   LANE_ROUTES,
   LANES,
   litLanes,
   metroPath,
-  PAGE_BACKGROUND,
   POPOVER_RULES,
   stationDelayMs,
   stationLanes,
@@ -17,6 +17,14 @@ import {
 } from './metro-map.pure';
 
 const DESKTOP = { width: 1440, height: 900 };
+
+/** The page background in each theme (`--background`), as hex, to check lane contrast against. */
+const PAGE_BACKGROUND = { light: '#fafafa', dark: '#0a0a0a' };
+
+/** The lane colours live in the Slide's token file; read them from its text, like the token boundary test. */
+const TOKENS = readFileSync(path.join(__dirname, 'metro-map.module.css'), 'utf8');
+const laneColour = (lane: string, theme: 'light' | 'dark'): string =>
+  new RegExp(`\\.lane${lane.toUpperCase()} \\{[^}]*--lane-${theme}: (#[0-9a-f]{6});`).exec(TOKENS)?.[1] ?? '';
 
 /** Where the shared popover maths open a station's popover under this Slide's rules: below the station by preference. */
 function placeStationPopover(anchor: Box, viewport: Viewport) {
@@ -79,8 +87,8 @@ describe('success cases', () => {
     // ACT
     const lowest = Math.min(
       ...LANES.flatMap((lane) => [
-        contrastRatio(LANE_COLOURS[lane].light, PAGE_BACKGROUND.light),
-        contrastRatio(LANE_COLOURS[lane].dark, PAGE_BACKGROUND.dark),
+        contrastRatio(laneColour(lane, 'light'), PAGE_BACKGROUND.light),
+        contrastRatio(laneColour(lane, 'dark'), PAGE_BACKGROUND.dark),
       ]),
     );
     // ASSERT
