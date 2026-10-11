@@ -7,7 +7,7 @@ import type { ReactNode } from 'react';
 import type { NoteSpec, PerLocale, RichTag, RuntimeKit, SegmentSpec, TitleComponent } from './slide-base';
 
 /*
- * The Slide (FE-002, `docs/adr/0003-self-contained-slides.md`): one folder
+ * The Slide (FE-002, `docs/adr/0001-the-slide-is-a-self-contained-folder.md`): one folder
  * `slides/<slide>/` holding its server entry, client widgets, CSS and its own
  * Translation files, `i18n/en.json` and `i18n/de.json`. The Slide hands the
  * container its text with its slug, notes, segments and Scene, so it is typed
