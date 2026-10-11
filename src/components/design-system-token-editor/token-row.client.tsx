@@ -27,6 +27,7 @@ export function TokenRow({
       {isColour && <Swatch value={value} />}
       <label className="flex min-w-0 flex-1 flex-col">
         <span className={cn('truncate font-mono text-body', changed && 'font-semibold')}>{token.name}</span>
+        {token.target && <span className="text-muted-foreground truncate font-mono text-body">{token.target}</span>}
         <input
           value={value}
           onChange={(event) => onChange(event.target.value)}

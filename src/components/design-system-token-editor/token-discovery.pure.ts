@@ -16,7 +16,7 @@ export interface Token {
   name: string;
   light: string;
   dark: string;
-  /** Slide tokens only: the selector of the rule that declares it, to find the element carrying it. */
+  /** Slide tokens only: the selector of the rule that declares it, to find the element carrying it. It tells apart one name declared under several selectors. */
   target?: string;
 }
 
@@ -58,17 +58,18 @@ interface Entry {
 
 /** Accumulates values per token; a theme never declared falls back to the other one at the end. */
 class TokenBook {
-  private readonly tokens = new Map<string, { light?: string; dark?: string; target?: string }>();
+  private readonly tokens = new Map<string, { name: string; light?: string; dark?: string; target?: string }>();
 
   add({ name, theme, value, target }: Entry) {
-    const entry = this.tokens.get(name) ?? {};
+    // A Slide token declared under several selectors is one token per selector.
+    const key = `${name}|${target ?? ''}`;
+    const entry = this.tokens.get(key) ?? { name, ...(target ? { target } : {}) };
     entry[theme] = value;
-    if (target && !entry.target) entry.target = target;
-    this.tokens.set(name, entry);
+    this.tokens.set(key, entry);
   }
 
   list(): Token[] {
-    return [...this.tokens].map(([name, { light, dark, target }]) => ({
+    return [...this.tokens.values()].map(({ name, light, dark, target }) => ({
       name,
       light: light ?? dark ?? '',
       dark: dark ?? light ?? '',

@@ -7,6 +7,8 @@ export interface Change {
   scope: Scope;
   theme: Theme;
   name: string;
+  /** Slide tokens: the selector of the declaring rule. */
+  target?: string;
   from: string;
   to: string;
 }
@@ -18,8 +20,8 @@ function scopeKey(scope: Scope): string {
   return scope.kind === 'global' ? 'global' : `slide:${scope.id}`;
 }
 
-export function editKey(scope: Scope, theme: Theme, name: string): string {
-  return `${scopeKey(scope)}|${theme}|${name}`;
+export function editKey(scope: Scope, theme: Theme, token: Pick<Token, 'name' | 'target'>): string {
+  return `${scopeKey(scope)}|${theme}|${token.name}|${token.target ?? ''}`;
 }
 
 /** Which value of which token an edit addresses. */
@@ -31,7 +33,7 @@ export interface EditRef {
 
 /** Records an edit; typing the original value back removes it. */
 export function setEdit(edits: Edits, { scope, theme, token }: EditRef, value: string): Edits {
-  const key = editKey(scope, theme, token.name);
+  const key = editKey(scope, theme, token);
   const rest = Object.fromEntries(Object.entries(edits).filter(([k]) => k !== key));
   return value === token[theme] ? rest : { ...rest, [key]: value };
 }
@@ -40,10 +42,19 @@ export function setEdit(edits: Edits, { scope, theme, token }: EditRef, value: s
 export function diffTokens(scope: Scope, tokens: readonly Token[], edits: Edits): Change[] {
   return (['light', 'dark'] as const).flatMap((theme) =>
     tokens.flatMap((token) => {
-      const to = edits[editKey(scope, theme, token.name)];
+      const to = edits[editKey(scope, theme, token)];
       return to === undefined || to === token[theme]
         ? []
-        : [{ scope, theme, name: token.name, from: token[theme], to }];
+        : [
+            {
+              scope,
+              theme,
+              name: token.name,
+              ...(token.target ? { target: token.target } : {}),
+              from: token[theme],
+              to,
+            },
+          ];
     }),
   );
 }

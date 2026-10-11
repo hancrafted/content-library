@@ -23,10 +23,10 @@ function TokenList({
 }) {
   if (!set || set.tokens.length === 0) return <li className="text-muted-foreground text-body">No tokens here.</li>;
   return set.tokens.map((token) => {
-    const key = editKey(set.scope, theme, token.name);
+    const key = editKey(set.scope, theme, token);
     return (
       <TokenRow
-        key={token.name}
+        key={key}
         token={token}
         theme={theme}
         value={edits[key] ?? token[theme]}
