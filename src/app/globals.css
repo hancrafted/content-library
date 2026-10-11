@@ -91,7 +91,9 @@
 @theme inline {
   --radius-md: calc(var(--radius) - 2px);
   --radius-xl: calc(var(--radius) + 4px);
-  --shadow-header: 0 10px 30px -12px rgb(15 23 42 / 0.2), 0 1px 3px rgb(15 23 42 / 0.05);
+  --shadow-header:
+    0 10px 30px -12px color-mix(in oklab, var(--overlay) 20%, transparent),
+    0 1px 3px color-mix(in oklab, var(--overlay) 5%, transparent);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);

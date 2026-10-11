@@ -15,7 +15,7 @@ function LaneTicks({ lanes, names }: { lanes: readonly Lane[]; names: Record<Lan
     <ul className="mt-3 flex flex-wrap gap-x-3 gap-y-1 border-t border-border pt-3 text-body text-muted-foreground">
       {lanes.map((lane) => (
         <li key={lane} className={`${laneClass(lane)} flex items-center gap-1.5`}>
-          <span aria-hidden="true" className="h-1.5 w-4 rounded-full bg-(--lane-light) dark:bg-(--lane-dark)" />
+          <span aria-hidden="true" className="h-1.5 w-4 rounded-full bg-(--lane)" />
           {names[lane]}
         </li>
       ))}

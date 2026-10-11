@@ -3,8 +3,8 @@ type: adr
 id: FE-011
 title: 'Design Tokens'
 domain: frontend
-rules: false
-files: ['src/{components,app,design-system}/**/*.{ts,tsx,css,json}']
+rules: true
+files: ['src/**/*.{ts,tsx,css,json}']
 paths: ['src/components/{episodes,slide-master,slide-shared,landing}/**', 'src/app/globals.css']
 description: 'Values, not shape: every colour, font size and font weight in the site and inside a Scene is a token reference — raw colours only in the global palette and a Slide token file, four type roles plus one hero exception, weights normal to semibold — while Scene markup, props and layout stay free; legacy files sit on a list that only shrinks.'
 ---
@@ -32,41 +32,41 @@ Reasons, values and the token reference: [`docs/design-system/README.md`](../../
 
 ### 2. Colour
 
-1. A raw colour (hex, `rgb()`, `hsl()`, `oklch()`) MAY appear only in `globals.css` under `:root` / `.dark` and in a Slide token file. Elsewhere use a token utility or `var(--…)`.
-2. A Slide token file is a CSS module in the Slide's folder. It MUST NOT declare a global token name (`--primary`).
-3. Every raw colour in a Slide token file MUST have a dark counterpart under `:global(.dark)`.
+1. A raw colour (hex, `rgb()`, `hsl()`, `oklch()`) MAY appear only in `globals.css` under `:root` / `.dark` and in a Slide token file. (📜 Rule: `no-raw-colour-in-css`)
+2. A Slide token file (a CSS module in the Slide's folder) MUST NOT declare a global token name (`--primary`). (📜 Rule: `slide-token-no-global-name`)
+3. Every raw colour in a Slide token file MUST have a dark counterpart under `:global(.dark)`. (📜 Rule: `slide-token-dark-counterpart`)
 4. Slide-local token names are free and unprefixed.
 
 ### 3. Type
 
-1. Size comes from a role: `body`, `caption`, `subheading`, `heading`, allowed everywhere, Scenes included. Hierarchy comes from weight, then colour.
+1. Size comes from a role: `body`, `caption`, `subheading`, `heading`. Hierarchy comes from weight, then colour.
 2. `hero` is the one exception, reached only through `HeroTitle` in `slide-master/`.
-3. A role MUST NOT take a breakpoint prefix; each scales fluidly.
-4. Weights are normal, medium, semibold. Fonts are `--font-sans`, `--font-mono`.
+3. A role MUST NOT take a breakpoint prefix.
+4. Weights are normal, medium, semibold.
 5. Two relative sizes stay allowed, one file each: the citation marker at `0.7em`, inline `code` at `0.9em`.
 
 ### 4. Where values may not appear
 
-1. In `.tsx` / `.ts` (`style={{…}}`, SVG `fill="#…"`, `.pure.ts` tables), a raw colour, `font-size`, `font-weight` or `font-family` MUST NOT appear.
+1. In `.tsx` / `.ts` (style objects, SVG attributes, `.pure.ts` tables), a raw colour, `font-size`, `font-weight` or `font-family` MUST NOT appear. (📜 Rule: `no-raw-value-in-code`)
 2. In a CSS module, `font-size`, `font-weight` and `font-family` MUST NOT appear.
-3. Class strings MUST NOT use palette colours (`bg-amber-500`), arbitrary colours (`[#…]`), sizes outside the roles (`text-xs`, `text-[…]`) or other weights. A Slide token is `bg-(--loop-edge)`.
+3. Class strings MUST NOT use palette colours (`bg-amber-500`), arbitrary colours (`[#…]`), sizes outside the roles (`text-xs`, `text-[…]`) or other weights.
 4. A class Tailwind cannot generate MUST NOT appear, legacy too.
 
 ### 5. `globals.css` holds tokens only
 
-1. It MUST NOT hold an Episode selector (`[data-episode=`).
+1. It MUST NOT hold an Episode selector (`[data-episode=`). (📜 Rule: `no-episode-selector-in-globals`)
 
 ### 6. Legacy list
 
-1. Files predating these rules (landing, `ai-token-economy`, `maintaining-markdown-for-ai`) sit in `src/design-system/legacy.json`, exempt from §2–§4 except §4.4.
-2. Entries are only removed, never added; a dead entry MUST go.
+1. Files predating these rules sit in `src/design-system/legacy.json`, exempt from §2–§4 except §4.4.
+2. Entries are only removed, never added; a dead entry MUST go. (📜 Rule: `no-dead-legacy-entry`)
 
 ## Do's and Don'ts
 
 ### Do's
 
-1. **DO** colour with `text-foreground`, `text-muted-foreground`, `bg-card`, or `var(--…)`. (Decision 2)
-2. **DO** put a Slide's own colours in its token file, with `:global(.dark) .scene` values. (Decision 2)
+1. **DO** colour with `text-foreground`, `text-muted-foreground`, `bg-card`, or `var(--…)`. (Decision 2, 📜 Rule: `no-raw-colour-in-css`)
+2. **DO** put a Slide's own colours in its token file, with `:global(.dark) .scene` values. (Decision 2, 📜 Rule: `slide-token-dark-counterpart`)
 3. **DO** reference `--primary`, `--machine`, `--human`, `--ai` for shared meanings. (Decision 2)
 4. **DO** size text with `text-body`, `text-caption`, `text-subheading` or `text-heading`; a card title is `text-body font-semibold`. (Decision 3)
 5. **DO** render a hero title through `HeroTitle`. (Decision 3)
@@ -77,13 +77,13 @@ Reasons, values and the token reference: [`docs/design-system/README.md`](../../
 ### Don'ts
 
 1. **DON'T** write `bg-amber-500`, `text-[#ff0000]`, `fill="#0af"` or `color: 'red'`. (Decision 2, Decision 4)
-2. **DON'T** re-declare `--primary` or any global name in a Slide token file. (Decision 2)
+2. **DON'T** re-declare `--primary` or any global name in a Slide token file. (Decision 2, 📜 Rule: `slide-token-no-global-name`)
 3. **DON'T** add a raw colour without a dark value. (Decision 2)
 4. **DON'T** write `text-xs`, `text-2xl`, `text-[13px]`, `md:text-heading` or `font-bold`. (Decision 3, Decision 4)
-5. **DON'T** set `font-size`, `font-weight` or `font-family` in a CSS module or inline style. (Decision 4)
+5. **DON'T** set `font-size`, `font-weight` or `font-family` in a CSS module or inline style. (Decision 4, 📜 Rule: `no-raw-value-in-code`)
 6. **DON'T** use `text-hero` outside `HeroTitle`. (Decision 3)
-7. **DON'T** add `[data-episode='…']` to `globals.css`. (Decision 5)
-8. **DON'T** add a file to the legacy list or leave a dead entry. (Decision 6)
+7. **DON'T** add `[data-episode='…']` to `globals.css`. (Decision 5, 📜 Rule: `no-episode-selector-in-globals`)
+8. **DON'T** add a file to the legacy list or leave a dead entry. (Decision 6, 📜 Rule: `no-dead-legacy-entry`)
 9. **DON'T** bind Scene markup, props or layout with a token rule. (Decision 1)
 
 ## Consequences
@@ -115,7 +115,7 @@ Reasons, values and the token reference: [`docs/design-system/README.md`](../../
 2. **Archgate rules** (`FE-011-design-tokens.rules.ts`, error): raw colour, font size, weight or family in CSS or `.tsx`/`.ts` (§2, §4); a Slide token file declaring a global name or lacking a dark value (§2); `[data-episode=` in `globals.css` (§5); a dead legacy entry (§6).
 3. **Gate:** `archgate check` and the lint in `npm run verify`.
 
-**Rollout:** this record ships with `rules: false`; the rules file and its probe tests land separately and flip it to `true`. Until then the checks above are not enforced.
+**Rollout:** the rules file and its probe tests have landed and `rules: true`; the Archgate checks above are enforced. The class-string lint is enforced separately by ESLint.
 
 **Manual review duties:** the legacy list only shrinks; a Scene's markup, props and layout stay unconstrained; Slides look right in light and dark; repeated Slide colours get promoted.
 

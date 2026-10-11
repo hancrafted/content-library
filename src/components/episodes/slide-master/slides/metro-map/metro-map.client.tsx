@@ -136,7 +136,7 @@ function MetroLegend({ lanes, state }: { lanes: Record<Lane, string>; state: Map
               pinnedLane === lane && 'bg-muted',
             )}
           >
-            <span aria-hidden="true" className="h-2.5 w-7 rounded-full bg-(--lane-light) dark:bg-(--lane-dark)" />
+            <span aria-hidden="true" className="h-2.5 w-7 rounded-full bg-(--lane)" />
             {lanes[lane]}
           </button>
         </li>
