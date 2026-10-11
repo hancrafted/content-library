@@ -273,3 +273,12 @@
     transform: none !important;
   }
 }
+
+/* Status colour local to this Slide, not a global token. Light value on the scene, dark value under .dark. */
+.scene {
+  --success: oklch(0.5 0.13 150);
+}
+
+:global(.dark) .scene {
+  --success: oklch(0.78 0.16 150);
+}

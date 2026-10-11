@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import type { ReactNode } from 'react';
+import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 /** What a part takes besides its content: the `data-target` a Slide kit's `target(…)` returns. */
 interface PartProps {
@@ -42,28 +42,41 @@ export function SlideBackdrop({ mobile = false, children }: { mobile?: boolean; 
   );
 }
 
-const TITLE_SIZE = {
-  h1: 'text-5xl md:text-7xl',
-  h2: 'text-4xl md:text-6xl',
-  h3: 'text-3xl md:text-5xl',
-  h4: 'text-xl md:text-2xl',
+const TITLE_ROLE = {
+  h2: 'text-heading',
+  h3: 'text-subheading',
+  h4: 'text-body',
 } as const;
 
 /**
- * H-level follows the manuscript's spine (FE-002): Title slide `h1`, section
- * slide `h2`, page slide `h3`; `h4` and below are free inside a slide.
+ * H-level follows the manuscript's spine (FE-002): section slide `h2`, page
+ * slide `h3`; `h4` and below are free inside a slide. Size follows the level's
+ * role, never a breakpoint. The Title slide's `h1` is `HeroTitle`.
  */
-export function SlideTitle({ as: Heading, children, ...props }: PartProps & { as: keyof typeof TITLE_SIZE }) {
+export function SlideTitle({ as: Heading, children, ...props }: PartProps & { as: keyof typeof TITLE_ROLE }) {
   return (
-    <Heading {...props} className={cn('font-semibold tracking-tight text-balance', TITLE_SIZE[Heading])}>
+    <Heading {...props} className={cn('font-semibold text-balance', TITLE_ROLE[Heading])}>
       {children}
     </Heading>
   );
 }
 
+/**
+ * The page's `h1` in the hero role, the only user of `text-hero`: the Title
+ * slide and the landing hero render it. Takes rich children and passes `id`,
+ * `className` and data attributes through to the `h1`.
+ */
+export function HeroTitle({ className, children, ...props }: ComponentPropsWithoutRef<'h1'>) {
+  return (
+    <h1 {...props} className={cn('font-semibold text-balance text-hero', className)}>
+      {children}
+    </h1>
+  );
+}
+
 export function SlideCaption({ children, ...props }: PartProps) {
   return (
-    <p {...props} className="mt-4 max-w-prose text-lg text-balance text-muted-foreground md:text-xl">
+    <p {...props} className="mt-4 max-w-prose text-body text-balance text-muted-foreground">
       {children}
     </p>
   );
@@ -71,7 +84,7 @@ export function SlideCaption({ children, ...props }: PartProps) {
 
 export function SlideProse({ children, ...props }: PartProps) {
   return (
-    <p {...props} className="max-w-prose text-base leading-relaxed md:text-lg">
+    <p {...props} className="max-w-prose text-body">
       {children}
     </p>
   );
