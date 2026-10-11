@@ -21,7 +21,7 @@ function TokenList({
   edits: Edits;
   onEdit: (next: Edits) => void;
 }) {
-  if (!set || set.tokens.length === 0) return <li className="text-muted-foreground text-sm">No tokens here.</li>;
+  if (!set || set.tokens.length === 0) return <li className="text-muted-foreground text-body">No tokens here.</li>;
   return set.tokens.map((token) => {
     const key = editKey(set.scope, theme, token.name);
     return (
@@ -90,7 +90,7 @@ export function TokenPanel({ theme, globals, slide, edits, changes, onEdits }: P
     >
       <div className="flex items-center justify-between gap-2">
         <Tabs tab={tab} slideId={slideId} onTab={setTab} />
-        <span className="text-muted-foreground text-xs">{theme} theme</span>
+        <span className="text-muted-foreground text-body">{theme} theme</span>
       </div>
       <ul className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto">
         <TokenList set={tab === 'global' ? globals : slide} theme={theme} edits={edits} onEdit={onEdits} />

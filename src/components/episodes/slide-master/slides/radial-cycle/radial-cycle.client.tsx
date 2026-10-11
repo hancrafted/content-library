@@ -35,12 +35,12 @@ function CentreDisc({ index, copy }: { index: number; copy: PhaseCopy }) {
         key={index}
         className="flex max-w-[78%] flex-col items-center gap-1 text-center transition-opacity duration-300 motion-safe:starting:opacity-0"
       >
-        <span className="font-mono text-[0.65rem] tracking-[0.3em] text-muted-foreground tabular-nums">
+        <span className="font-mono text-body tracking-[0.3em] text-muted-foreground tabular-nums">
           {String(index + 1).padStart(2, '0')} / {String(CYCLE_ITEMS.length).padStart(2, '0')}
         </span>
-        <span className="text-xs font-medium text-brand-accent tabular-nums sm:text-sm">{copy.date}</span>
-        <p className="text-lg leading-tight font-semibold tracking-tight sm:text-2xl">{copy.title}</p>
-        <p className="hidden text-sm leading-snug text-muted-foreground sm:block">{copy.caption}</p>
+        <span className="text-body font-medium text-brand-accent tabular-nums">{copy.date}</span>
+        <p className="text-subheading leading-tight font-semibold tracking-tight">{copy.title}</p>
+        <p className="hidden text-body leading-snug text-muted-foreground sm:block">{copy.caption}</p>
       </div>
     </div>
   );
@@ -79,7 +79,7 @@ export function RadialCycle({ label, items }: { label: string; items: Record<Cyc
         </svg>
         <CentreDisc index={index} copy={items[shown]} />
       </div>
-      <p aria-hidden="true" className="mt-4 text-center text-sm leading-snug text-muted-foreground sm:hidden">
+      <p aria-hidden="true" className="mt-4 text-center text-body leading-snug text-muted-foreground sm:hidden">
         {items[shown].caption}
       </p>
       <PhaseList label={label} items={items} />

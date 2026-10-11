@@ -55,12 +55,12 @@ export function RailToggletip({ id, anchor, side, copy, onClose }: ToggletipProp
       className="pointer-events-auto fixed rounded-lg border border-border bg-background p-4 text-foreground shadow-xl"
     >
       <ToggletipArrow side={placement.side} x={placement.arrowX} />
-      <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground tabular-nums">
+      <p className="flex items-center gap-2 font-mono text-body tracking-widest text-muted-foreground tabular-nums">
         <span aria-hidden="true" className="h-px w-4 bg-brand-accent" />
         {copy.date}
       </p>
       <p className="mt-1 font-semibold">{copy.title}</p>
-      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{copy.caption}</p>
+      <p className="mt-2 text-body leading-relaxed text-muted-foreground">{copy.caption}</p>
     </div>,
     root,
   );

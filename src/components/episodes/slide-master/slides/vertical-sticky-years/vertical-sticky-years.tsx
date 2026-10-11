@@ -36,7 +36,7 @@ function YearSection({ group }: { group: YearGroup }) {
   return (
     <li className={cn(styles.group, 'grid border-t border-border md:grid-cols-[11rem_1fr]')}>
       <div className="sticky top-32 z-10 self-start bg-background/85 py-4 backdrop-blur md:top-28 md:bg-transparent md:py-12 md:pr-6 md:backdrop-blur-none">
-        <h4 className={cn(styles.year, 'text-5xl leading-none font-black tracking-tighter tabular-nums md:text-6xl')}>
+        <h4 className={cn(styles.year, 'text-heading leading-none font-semibold tracking-tighter tabular-nums')}>
           <time dateTime={group.year}>{group.year}</time>
         </h4>
         <span
@@ -64,8 +64,8 @@ function EntryRow({ entry }: { entry: PlacedEntry }) {
     >
       <EntryBadge entry={entry} />
       <div className="min-w-0">
-        <h5 className="text-xl font-semibold tracking-tight md:text-2xl">{entry.title}</h5>
-        <p className="mt-2 max-w-prose text-base text-muted-foreground md:text-lg">{entry.caption}</p>
+        <h5 className="text-subheading font-semibold tracking-tight">{entry.title}</h5>
+        <p className="mt-2 max-w-prose text-body text-muted-foreground">{entry.caption}</p>
       </div>
       <span
         aria-hidden="true"
@@ -86,7 +86,7 @@ function EntryBadge({ entry }: { entry: PlacedEntry }) {
     <span
       aria-hidden="true"
       className={cn(
-        'mt-1 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono text-xs leading-none tabular-nums ring-1 ring-inset',
+        'mt-1 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono text-body leading-none tabular-nums ring-1 ring-inset',
         TONE[entry.tone],
       )}
     >

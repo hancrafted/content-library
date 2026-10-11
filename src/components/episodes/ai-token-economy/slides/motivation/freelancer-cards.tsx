@@ -10,7 +10,7 @@ function FastCard(): ReactElement {
       <span className="w-fit rounded-md bg-(--success)/10 px-2 py-1 font-mono text-[0.6rem] uppercase tracking-widest text-(--success)">
         strength (?)
       </span>
-      <h4 className="mt-2 font-display text-lg font-semibold">Fast &amp; well-read</h4>
+      <h4 className="mt-2 text-lg font-semibold">Fast &amp; well-read</h4>
       <p className="text-sm leading-relaxed text-muted-foreground">
         Knows about everything you ask them, and can produce results fast without breaks.
       </p>
@@ -30,7 +30,7 @@ function AcceptsCard(): ReactElement {
       <span className="w-fit rounded-md bg-(--success)/10 px-2 py-1 font-mono text-[0.6rem] uppercase tracking-widest text-(--success)">
         strength (?)
       </span>
-      <h4 className="mt-2 font-display text-lg font-semibold">Accepts any task</h4>
+      <h4 className="mt-2 text-lg font-semibold">Accepts any task</h4>
       <p className="text-sm leading-relaxed text-muted-foreground">
         No task too big or too niche — it will take a swing at whatever you hand it.
       </p>
@@ -56,7 +56,7 @@ function TirelessCard(): ReactElement {
       <span className="w-fit rounded-md bg-(--success)/10 px-2 py-1 font-mono text-[0.6rem] uppercase tracking-widest text-(--success)">
         strength (?)
       </span>
-      <h4 className="mt-2 font-display text-lg font-semibold">Tireless</h4>
+      <h4 className="mt-2 text-lg font-semibold">Tireless</h4>
       <p className="text-sm leading-relaxed text-muted-foreground">
         Never stops, never sleeps, unless you stop paying.
       </p>
@@ -101,7 +101,7 @@ function NoqCard(): ReactElement {
       <span className="w-fit rounded-md bg-destructive/10 px-2 py-1 font-mono text-[0.6rem] uppercase tracking-widest text-destructive">
         flaw
       </span>
-      <h4 className="mt-2 font-display text-lg font-semibold">Never asks questions</h4>
+      <h4 className="mt-2 text-lg font-semibold">Never asks questions</h4>
       <p className="text-sm leading-relaxed text-muted-foreground">
         Takes tasks literally, fills gaps with assumptions, never pushes back.
       </p>
@@ -118,7 +118,7 @@ function BillsCard(): ReactElement {
       <span className="w-fit rounded-md bg-destructive/10 px-2 py-1 font-mono text-[0.6rem] uppercase tracking-widest text-destructive">
         flaw
       </span>
-      <h4 className="mt-2 font-display text-lg font-semibold">Bills by the word</h4>
+      <h4 className="mt-2 text-lg font-semibold">Bills by the word</h4>
       <p className="text-sm leading-relaxed text-muted-foreground">
         No flat day rate. Every prompt, tool call, and correction adds to the tab.
       </p>
@@ -139,7 +139,7 @@ function MemCard(): ReactElement {
       <span className="w-fit rounded-md bg-destructive/10 px-2 py-1 font-mono text-[0.6rem] uppercase tracking-widest text-destructive">
         flaw
       </span>
-      <h4 className="mt-2 font-display text-lg font-semibold">It remembers nothing.</h4>
+      <h4 className="mt-2 text-lg font-semibold">It remembers nothing.</h4>
       <p className="text-sm leading-relaxed text-muted-foreground">
         Every new conversation starts from zero. Yesterday&rsquo;s work never happened.
       </p>

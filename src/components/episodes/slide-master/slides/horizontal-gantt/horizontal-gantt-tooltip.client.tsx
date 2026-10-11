@@ -48,12 +48,12 @@ export function GanttTooltip({ id, anchor, copy, lane, laneClass, onClose }: Too
     >
       <div aria-hidden="true" className="h-1 bg-(--lane)" />
       <div className="p-4">
-        <p className="flex items-baseline justify-between gap-3 text-sm">
+        <p className="flex items-baseline justify-between gap-3 text-body">
           <span className="font-semibold tabular-nums">{copy.date}</span>
           <span className="text-muted-foreground">{lane}</span>
         </p>
-        <p className="mt-2 text-lg leading-snug font-semibold">{copy.title}</p>
-        <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{copy.caption}</p>
+        <p className="mt-2 text-body leading-snug font-semibold">{copy.title}</p>
+        <p className="mt-1 text-body leading-relaxed text-muted-foreground">{copy.caption}</p>
       </div>
     </div>,
     root,

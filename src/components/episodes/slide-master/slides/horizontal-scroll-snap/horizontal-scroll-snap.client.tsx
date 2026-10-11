@@ -27,7 +27,7 @@ const CARD = cn(
 );
 
 const NUMERAL = cn(
-  'mt-6 text-[7rem] leading-[0.85] font-black tracking-tighter select-none md:text-[9rem]',
+  'mt-6 text-heading leading-[0.85] font-semibold tracking-tighter select-none',
   '[-webkit-text-stroke:3px_var(--color-foreground)] [paint-order:stroke_fill] motion-safe:transition-colors motion-safe:duration-500',
 );
 
@@ -133,8 +133,8 @@ function TrackCardItem({
       <CardCounter index={index} count={count} />
       <p className={cn(NUMERAL, isActive ? 'text-brand-accent' : 'text-background')}>{card.date}</p>
       <div className="mt-auto">
-        <h4 className="text-xl font-semibold tracking-tight md:text-2xl">{card.title}</h4>
-        <p className="mt-2 text-sm text-muted-foreground md:text-base">{card.caption}</p>
+        <h4 className="text-subheading font-semibold tracking-tight">{card.title}</h4>
+        <p className="mt-2 text-body text-muted-foreground">{card.caption}</p>
       </div>
     </li>
   );
@@ -142,7 +142,7 @@ function TrackCardItem({
 
 function CardCounter({ index, count }: { index: number; count: number }) {
   return (
-    <div className="flex items-center font-mono text-xs tracking-widest text-muted-foreground">
+    <div className="flex items-center font-mono text-body tracking-widest text-muted-foreground">
       <span>{pad(index + 1)}</span>
       <span aria-hidden="true" className="mx-3 h-px flex-1 bg-border" />
       <span>{pad(count)}</span>
@@ -161,7 +161,7 @@ interface TrackControlsProps {
 function TrackControls({ reading, count, trackId, labels, onStep }: TrackControlsProps) {
   return (
     <div className="mt-4 flex items-center gap-4 md:gap-6">
-      <span aria-hidden="true" className="font-mono text-sm text-muted-foreground tabular-nums">
+      <span aria-hidden="true" className="font-mono text-body text-muted-foreground tabular-nums">
         <span className="text-foreground">{pad(reading.active + 1)}</span> / {pad(count)}
       </span>
       <div aria-hidden="true" className="relative h-0.5 flex-1 overflow-hidden rounded-full bg-border">

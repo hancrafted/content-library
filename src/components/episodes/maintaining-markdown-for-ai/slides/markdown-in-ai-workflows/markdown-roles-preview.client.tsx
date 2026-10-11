@@ -76,7 +76,7 @@ function BodyRegion({ role, onOpen }: { role: RoleDetail; onOpen: (modal: ModalK
         </button>
       </div>
       <div className="mt-3 space-y-2">
-        <h4 className="font-display text-sm font-bold text-foreground"># {role.bodyTitle}</h4>
+        <h4 className="text-sm font-bold text-foreground"># {role.bodyTitle}</h4>
         <p className="text-xs leading-relaxed text-muted-foreground">{role.bodyDesc}</p>
         <BodyItems items={role.items} />
         <blockquote

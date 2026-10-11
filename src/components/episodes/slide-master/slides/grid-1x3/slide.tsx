@@ -23,14 +23,14 @@ function Column({ cell }: { cell: ColumnCopy }) {
       />
       <span
         aria-hidden
-        className="block text-7xl leading-none font-extralight tracking-tighter text-muted-foreground/50 tabular-nums transition-colors duration-500 group-hover:text-foreground motion-reduce:transition-none md:text-8xl"
+        className="block text-heading leading-none font-normal tracking-tighter text-muted-foreground/50 tabular-nums transition-colors duration-500 group-hover:text-foreground motion-reduce:transition-none"
       >
         {cell.index}
       </span>
-      <h4 id={id} className="mt-6 text-xl font-semibold tracking-tight text-balance text-foreground md:text-2xl">
+      <h4 id={id} className="mt-6 text-subheading font-semibold tracking-tight text-balance text-foreground">
         {cell.title}
       </h4>
-      <p className="mt-3 max-w-xs text-base text-pretty text-muted-foreground">{cell.caption}</p>
+      <p className="mt-3 max-w-xs text-body text-pretty text-muted-foreground">{cell.caption}</p>
     </article>
   );
 }

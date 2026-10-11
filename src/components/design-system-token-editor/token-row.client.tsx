@@ -23,14 +23,14 @@ export function TokenRow({
 }) {
   const isColour = classifyToken(token.name, token[theme]) === 'colour';
   return (
-    <li className="flex items-center gap-2 text-sm" data-token={token.name} data-changed={changed}>
+    <li className="flex items-center gap-2 text-body" data-token={token.name} data-changed={changed}>
       {isColour && <Swatch value={value} />}
       <label className="flex min-w-0 flex-1 flex-col">
-        <span className={cn('truncate font-mono text-xs', changed && 'font-semibold')}>{token.name}</span>
+        <span className={cn('truncate font-mono text-body', changed && 'font-semibold')}>{token.name}</span>
         <input
           value={value}
           onChange={(event) => onChange(event.target.value)}
-          className="border-input bg-background w-full rounded-md border px-2 py-1 font-mono text-xs"
+          className="border-input bg-background w-full rounded-md border px-2 py-1 font-mono text-body"
           spellCheck={false}
         />
       </label>

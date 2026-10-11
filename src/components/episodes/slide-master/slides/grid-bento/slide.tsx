@@ -80,11 +80,11 @@ function LeadTile({ title, caption }: { title: string; caption: string }) {
       <GridBentoLoop className={styles.bloom} />
       <h4
         id={id}
-        className="max-w-md text-3xl leading-tight font-semibold tracking-tight text-balance text-foreground md:text-5xl"
+        className="max-w-md text-heading leading-tight font-semibold tracking-tight text-balance text-foreground"
       >
         {title}
       </h4>
-      <p className="mt-3 max-w-sm text-base text-pretty text-foreground/80 md:text-lg">{caption}</p>
+      <p className="mt-3 max-w-sm text-body text-pretty text-foreground/80">{caption}</p>
     </article>
   );
 }
@@ -97,15 +97,15 @@ function SupportTile(props: { cell: GridBentoCell; index: number; title: string;
     <article data-bento-tile aria-labelledby={id} className={cn(TILE, 'gap-6 bg-background')}>
       <div aria-hidden className="flex items-center justify-between">
         <span className={`h-1.5 w-8 rounded-full ${MARK[cell]}`} />
-        <span className="font-mono text-xs tracking-widest text-muted-foreground tabular-nums">
+        <span className="font-mono text-body tracking-widest text-muted-foreground tabular-nums">
           {String(index + 1).padStart(2, '0')}
         </span>
       </div>
       <div className="mt-auto">
-        <h4 id={id} className="text-lg font-semibold tracking-tight text-balance text-foreground">
+        <h4 id={id} className="text-body font-semibold tracking-tight text-balance text-foreground">
           {title}
         </h4>
-        <p className="mt-1.5 text-sm text-pretty text-muted-foreground">{caption}</p>
+        <p className="mt-1.5 text-body text-pretty text-muted-foreground">{caption}</p>
       </div>
     </article>
   );

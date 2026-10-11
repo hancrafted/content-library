@@ -26,17 +26,14 @@ function Banner({ index, title, caption }: BannerProps) {
         className="absolute inset-y-0 left-0 w-1 origin-left bg-ai transition-[width] duration-300 ease-out group-hover:w-2 motion-reduce:transition-none"
       />
       <div className="flex items-baseline gap-5">
-        <span aria-hidden className="font-mono text-xs tracking-[0.3em] text-muted-foreground tabular-nums">
+        <span aria-hidden className="font-mono text-body tracking-[0.3em] text-muted-foreground tabular-nums">
           {index}
         </span>
-        <h4
-          id={id}
-          className="text-3xl leading-[0.95] font-semibold tracking-tight text-balance text-foreground sm:text-5xl"
-        >
+        <h4 id={id} className="text-heading leading-[0.95] font-semibold tracking-tight text-balance text-foreground">
           {title}
         </h4>
       </div>
-      <p className="max-w-md text-base text-pretty text-muted-foreground md:justify-self-end md:text-right">
+      <p className="max-w-md text-body text-pretty text-muted-foreground md:justify-self-end md:text-right">
         {caption}
       </p>
       <ArrowRight

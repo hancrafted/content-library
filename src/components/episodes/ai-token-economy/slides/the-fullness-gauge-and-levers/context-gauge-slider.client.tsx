@@ -16,7 +16,7 @@ function GaugeBar({ percent }: { percent: number }): ReactElement {
         <div className="absolute inset-y-0 left-0 w-1/2 bg-(--success)/20" />
         <div className="absolute inset-y-0 right-0 w-1/2 bg-destructive/20" />
         <div
-          className="context-gauge-fill relative h-full rounded-full bg-gradient-to-r from-(--success) to-destructive transition-all duration-150 ease-out"
+          className="relative h-full rounded-full bg-gradient-to-r from-(--success) to-destructive transition-all duration-150 ease-out"
           style={{ width: `${percent}%` }}
         >
           <div className="absolute right-0 top-1/2 z-20 h-12 w-1.5 -translate-y-1/2 translate-x-1/2 rounded-full bg-foreground shadow-md" />

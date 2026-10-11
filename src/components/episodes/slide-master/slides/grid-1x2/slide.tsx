@@ -22,18 +22,15 @@ function Half({ index, title, caption, side }: HalfProps) {
       aria-labelledby={id}
       className={`flex min-h-56 flex-col justify-between gap-10 py-8 transition-opacity duration-300 ease-out group-hover:[&:not(:hover)]:opacity-30 motion-reduce:transition-none md:min-h-80 md:py-4 ${facing}`}
     >
-      <span aria-hidden className="flex items-center gap-3 font-mono text-xs tracking-[0.3em] text-muted-foreground">
+      <span aria-hidden className="flex items-center gap-3 font-mono text-body tracking-[0.3em] text-muted-foreground">
         <span className={`size-2 rounded-full ${accent}`} />
         {index}
       </span>
       <div className="max-w-sm">
-        <h4
-          id={id}
-          className="text-4xl leading-[0.95] font-semibold tracking-tight text-balance text-foreground sm:text-5xl lg:text-6xl"
-        >
+        <h4 id={id} className="text-heading leading-[0.95] font-semibold tracking-tight text-balance text-foreground">
           {title}
         </h4>
-        <p className="mt-4 text-base text-pretty text-muted-foreground">{caption}</p>
+        <p className="mt-4 text-body text-pretty text-muted-foreground">{caption}</p>
       </div>
     </article>
   );

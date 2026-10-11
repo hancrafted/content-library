@@ -12,7 +12,7 @@ function Phase1Card(): ReactElement {
       <span className="inline-flex items-center rounded-full px-2 py-0.5 text-xs bg-primary text-primary-foreground font-mono">
         Phase 1
       </span>
-      <h4 className="mt-2 font-display text-lg font-bold">Ideation &amp; Refinement</h4>
+      <h4 className="mt-2 text-lg font-bold">Ideation &amp; Refinement</h4>
       <p className="mt-1 font-mono text-xs text-muted-foreground">Web chat · flat-rate</p>
       <ul className="mt-4 space-y-2 text-sm text-foreground">
         <li>· Simple research &rarr; Gemini Flash</li>
@@ -29,7 +29,7 @@ function Phase2Card(): ReactElement {
       <span className="inline-flex items-center rounded-full px-2 py-0.5 text-xs bg-primary text-primary-foreground font-mono">
         Phase 2
       </span>
-      <h4 className="mt-2 font-display text-lg font-bold">Specs &amp; Planning</h4>
+      <h4 className="mt-2 text-lg font-bold">Specs &amp; Planning</h4>
       <p className="mt-1 font-mono text-xs text-muted-foreground">Claude Code CLI · Desktop</p>
       <ul className="mt-4 space-y-2 text-sm text-foreground">
         <li>· PRD &amp; Architecture &rarr; Opus 4.8</li>
@@ -46,7 +46,7 @@ function Phase3Card(): ReactElement {
       <span className="inline-flex items-center rounded-full px-2 py-0.5 text-xs bg-primary text-primary-foreground font-mono">
         Phase 3
       </span>
-      <h4 className="mt-2 font-display text-lg font-bold">Execution</h4>
+      <h4 className="mt-2 text-lg font-bold">Execution</h4>
       <p className="mt-1 font-mono text-xs text-muted-foreground">All CLI</p>
       <ul className="mt-4 space-y-2 text-sm text-foreground">
         <li>· Commits &rarr; Gemini Flash</li>
