@@ -5,7 +5,7 @@ import type { CardLabels } from '@/components/landing/episode-grid-card';
 import { EpisodeSpotlight } from '@/components/landing/episode-spotlight';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { episodeRoute } from '@/lib/routes';
-import { Layers } from 'lucide-react';
+import { Layers, LayoutTemplate } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 
@@ -57,17 +57,30 @@ function PartHeading({ children }: { children: string }) {
   );
 }
 
-/** The layout reference is not content, so it sits outside the Episode overview: a plain link under the cards. */
-function TemplateLink({ locale, t }: { locale: Locale; t: LandingT }) {
+const REFERENCE_LINK =
+  'inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground transition-colors hover:text-primary';
+
+/** The layout references are not content, so they sit outside the Episode overview: plain links under the cards. */
+function ReferenceLinks({ locale, t }: { locale: Locale; t: LandingT }) {
   return (
-    <Link
-      href={localizePath(episodeRoute('page-template'), locale)}
-      data-testid="landing-page-link"
-      className="inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground transition-colors hover:text-primary"
-    >
-      <Layers className="h-3.5 w-3.5" />
-      <span>{t('templateTitle')}</span>
-    </Link>
+    <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
+      <Link
+        href={localizePath(episodeRoute('page-template'), locale)}
+        data-testid="landing-page-link"
+        className={REFERENCE_LINK}
+      >
+        <Layers className="h-3.5 w-3.5" />
+        <span>{t('templateTitle')}</span>
+      </Link>
+      <Link
+        href={localizePath(episodeRoute('slide-master'), locale)}
+        data-testid="landing-slide-master-link"
+        className={REFERENCE_LINK}
+      >
+        <LayoutTemplate className="h-3.5 w-3.5" />
+        <span>{t('slideMasterTitle')}</span>
+      </Link>
+    </div>
   );
 }
 
@@ -91,7 +104,7 @@ export async function EpisodesSection({ locale }: { locale: Locale }) {
           <PartHeading>{t('episodeOverview.browseTitle')}</PartHeading>
           <EpisodeBrowse cards={cards} locale={locale} labels={browseLabels(t)} />
         </div>
-        <TemplateLink locale={locale} t={t} />
+        <ReferenceLinks locale={locale} t={t} />
       </div>
       <LiquidInkTransition targetId="services" />
     </section>

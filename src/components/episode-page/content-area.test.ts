@@ -1,7 +1,8 @@
+import { EPISODE_PORTAL_ROOT_ID } from '@/lib/episode-portal.pure';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import { ContentArea, EPISODE_PORTAL_ROOT_ID } from './content-area';
+import { ContentArea } from './content-area';
 
 /** The Content area with one Slide inside, as static HTML. */
 function renderArea(): string {

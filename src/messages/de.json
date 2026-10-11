@@ -219,7 +219,8 @@
           "source": "Grundlage: Lebenslauf zu Einsatz und Pilotumfang; berufliches Profil zur Arbeit an Planung, OEE-Dashboards und Stammdaten."
         }
       }
-    }
+    },
+    "slideMasterTitle": "Slide-Master"
   },
   "meta": {
     "home": {
@@ -1326,6 +1327,826 @@
             "column-target": {
               "header": "Eine Spalte ist ein Ziel",
               "description": "Der Slug jeder Spalte ist zugleich ihr Ziel, sodass eine Notiz auf eine Spalte zeigen kann."
+            }
+          }
+        }
+      }
+    },
+    "slide-master": {
+      "title": "Slide-Master",
+      "caption": "Ein Katalog wiederverwendbarer Folien-Layouts: Zeitleisten und Raster, nur Platzhaltertext.",
+      "description": "Wiederverwendbare Folien-Layouts in zwei Abschnitten: acht Zeitleisten und zehn Raster, jeweils mit Platzhalterinhalt.",
+      "slides": {
+        "timelines": {
+          "title": "Zeitleisten",
+          "caption": "Acht Arten, Ereignisse zu ordnen: drei horizontal, drei vertikal, zwei, die die Linie biegen."
+        },
+        "horizontal-rail": {
+          "title": "Horizontale Schiene",
+          "caption": "Sechs Meilensteine auf einer Achse, Beschriftungen abwechselnd oben und unten.",
+          "items": {
+            "a": {
+              "date": "2019",
+              "title": "Auftakt",
+              "caption": "Ziel und Beteiligte benennen."
+            },
+            "b": {
+              "date": "2020",
+              "title": "Recherche",
+              "caption": "Sammeln, was schon bekannt ist."
+            },
+            "c": {
+              "date": "2021",
+              "title": "Prototyp",
+              "caption": "Das Kleinste bauen, das eine Frage beantwortet."
+            },
+            "d": {
+              "date": "2022",
+              "title": "Pilot",
+              "caption": "Mit wenigen echten Nutzern ausprobieren."
+            },
+            "e": {
+              "date": "2023",
+              "title": "Start",
+              "caption": "Für alle öffnen."
+            },
+            "f": {
+              "date": "2024",
+              "title": "Rückblick",
+              "caption": "Messen, lernen und das Nächste entscheiden."
+            }
+          },
+          "notes": {
+            "layout": {
+              "header": "So liest man die Zeitleiste",
+              "description": "Platzhalter-Meilensteine: Daten, Titel und Bildunterschriften durch die echte Geschichte ersetzen."
+            }
+          },
+          "voiceScript": {
+            "segments": {
+              "walkthrough": {
+                "title": "Rundgang",
+                "keywords": "Horizontale Schiene, Layout, Platzhalter",
+                "script": "Das ist das Layout Horizontale Schiene. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+              }
+            }
+          }
+        },
+        "horizontal-scroll-snap": {
+          "title": "Scroll-Leiste",
+          "caption": "Eine Kartenreihe breiter als die Folie: scrollen oder wischen, jede Karte rastet ein.",
+          "items": {
+            "a": {
+              "date": "Jan",
+              "title": "Auftakt",
+              "caption": "Ziel und Beteiligte benennen."
+            },
+            "b": {
+              "date": "Mar",
+              "title": "Recherche",
+              "caption": "Sammeln, was schon bekannt ist."
+            },
+            "c": {
+              "date": "May",
+              "title": "Prototyp",
+              "caption": "Das Kleinste bauen, das eine Frage beantwortet."
+            },
+            "d": {
+              "date": "Jul",
+              "title": "Pilot",
+              "caption": "Mit wenigen echten Nutzern ausprobieren."
+            },
+            "e": {
+              "date": "Sep",
+              "title": "Start",
+              "caption": "Für alle öffnen."
+            },
+            "f": {
+              "date": "Nov",
+              "title": "Rückblick",
+              "caption": "Messen, lernen und das Nächste entscheiden."
+            }
+          },
+          "controls": {
+            "previous": "Vorherige Karte",
+            "next": "Nächste Karte"
+          },
+          "notes": {
+            "layout": {
+              "header": "So liest man die Zeitleiste",
+              "description": "Platzhalter-Meilensteine: Daten, Titel und Bildunterschriften durch die echte Geschichte ersetzen."
+            }
+          },
+          "voiceScript": {
+            "segments": {
+              "walkthrough": {
+                "title": "Rundgang",
+                "keywords": "Scroll-Leiste, Layout, Platzhalter",
+                "script": "Das ist das Layout Scroll-Leiste. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+              }
+            }
+          }
+        },
+        "horizontal-gantt": {
+          "title": "Phasenbalken",
+          "caption": "Phasen als Balken auf einer gemeinsamen Zeitachse, Überlappungen sind sofort sichtbar.",
+          "items": {
+            "a": {
+              "date": "Q1",
+              "title": "Auftakt",
+              "caption": "Ziel und Beteiligte benennen."
+            },
+            "b": {
+              "date": "Q1–Q2",
+              "title": "Recherche",
+              "caption": "Sammeln, was schon bekannt ist."
+            },
+            "c": {
+              "date": "Q2–Q3",
+              "title": "Prototyp",
+              "caption": "Das Kleinste bauen, das eine Frage beantwortet."
+            },
+            "d": {
+              "date": "Q3",
+              "title": "Pilot",
+              "caption": "Mit wenigen echten Nutzern ausprobieren."
+            },
+            "e": {
+              "date": "Q3–Q4",
+              "title": "Start",
+              "caption": "Für alle öffnen."
+            },
+            "f": {
+              "date": "Q4",
+              "title": "Rückblick",
+              "caption": "Messen, lernen und das Nächste entscheiden."
+            }
+          },
+          "lanes": {
+            "a": "Produkt",
+            "b": "Forschung",
+            "c": "Betrieb"
+          },
+          "notes": {
+            "layout": {
+              "header": "So liest man die Zeitleiste",
+              "description": "Platzhalter-Meilensteine: Daten, Titel und Bildunterschriften durch die echte Geschichte ersetzen."
+            }
+          },
+          "voiceScript": {
+            "segments": {
+              "walkthrough": {
+                "title": "Rundgang",
+                "keywords": "Phasenbalken, Layout, Platzhalter",
+                "script": "Das ist das Layout Phasenbalken. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+              }
+            }
+          }
+        },
+        "vertical-center-spine": {
+          "title": "Mittelachse",
+          "caption": "Eine Achse in der Mitte, Einträge abwechselnd links und rechts.",
+          "items": {
+            "a": {
+              "date": "2019",
+              "title": "Auftakt",
+              "caption": "Ziel und Beteiligte benennen."
+            },
+            "b": {
+              "date": "2020",
+              "title": "Recherche",
+              "caption": "Sammeln, was schon bekannt ist."
+            },
+            "c": {
+              "date": "2021",
+              "title": "Prototyp",
+              "caption": "Das Kleinste bauen, das eine Frage beantwortet."
+            },
+            "d": {
+              "date": "2022",
+              "title": "Pilot",
+              "caption": "Mit wenigen echten Nutzern ausprobieren."
+            },
+            "e": {
+              "date": "2023",
+              "title": "Start",
+              "caption": "Für alle öffnen."
+            },
+            "f": {
+              "date": "2024",
+              "title": "Rückblick",
+              "caption": "Messen, lernen und das Nächste entscheiden."
+            }
+          },
+          "notes": {
+            "layout": {
+              "header": "So liest man die Zeitleiste",
+              "description": "Platzhalter-Meilensteine: Daten, Titel und Bildunterschriften durch die echte Geschichte ersetzen."
+            }
+          },
+          "voiceScript": {
+            "segments": {
+              "walkthrough": {
+                "title": "Rundgang",
+                "keywords": "Mittelachse, Layout, Platzhalter",
+                "script": "Das ist das Layout Mittelachse. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+              }
+            }
+          }
+        },
+        "vertical-sticky-years": {
+          "title": "Haftende Jahre",
+          "caption": "Das Jahr bleibt links stehen, während seine Einträge vorbeiziehen.",
+          "items": {
+            "a": {
+              "date": "2022",
+              "title": "Auftakt",
+              "caption": "Ziel und Beteiligte benennen."
+            },
+            "b": {
+              "date": "2022",
+              "title": "Recherche",
+              "caption": "Sammeln, was schon bekannt ist."
+            },
+            "c": {
+              "date": "2023",
+              "title": "Prototyp",
+              "caption": "Das Kleinste bauen, das eine Frage beantwortet."
+            },
+            "d": {
+              "date": "2023",
+              "title": "Pilot",
+              "caption": "Mit wenigen echten Nutzern ausprobieren."
+            },
+            "e": {
+              "date": "2024",
+              "title": "Start",
+              "caption": "Für alle öffnen."
+            },
+            "f": {
+              "date": "2024",
+              "title": "Rückblick",
+              "caption": "Messen, lernen und das Nächste entscheiden."
+            }
+          },
+          "notes": {
+            "layout": {
+              "header": "So liest man die Zeitleiste",
+              "description": "Platzhalter-Meilensteine: Daten, Titel und Bildunterschriften durch die echte Geschichte ersetzen."
+            }
+          },
+          "voiceScript": {
+            "segments": {
+              "walkthrough": {
+                "title": "Rundgang",
+                "keywords": "Haftende Jahre, Layout, Platzhalter",
+                "script": "Das ist das Layout Haftende Jahre. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+              }
+            }
+          }
+        },
+        "vertical-stepper": {
+          "title": "Schrittfolge",
+          "caption": "Ein nummerierter Ablauf: einen Schritt öffnen, um Details zu lesen.",
+          "items": {
+            "a": {
+              "date": "Schritt 1",
+              "title": "Auftakt",
+              "caption": "Ziel und Beteiligte benennen."
+            },
+            "b": {
+              "date": "Schritt 2",
+              "title": "Recherche",
+              "caption": "Sammeln, was schon bekannt ist."
+            },
+            "c": {
+              "date": "Schritt 3",
+              "title": "Prototyp",
+              "caption": "Das Kleinste bauen, das eine Frage beantwortet."
+            },
+            "d": {
+              "date": "Schritt 4",
+              "title": "Pilot",
+              "caption": "Mit wenigen echten Nutzern ausprobieren."
+            },
+            "e": {
+              "date": "Schritt 5",
+              "title": "Start",
+              "caption": "Für alle öffnen."
+            },
+            "f": {
+              "date": "Schritt 6",
+              "title": "Rückblick",
+              "caption": "Messen, lernen und das Nächste entscheiden."
+            }
+          },
+          "states": {
+            "done": "erledigt",
+            "current": "aktuell",
+            "upcoming": "ausstehend"
+          },
+          "notes": {
+            "layout": {
+              "header": "So liest man die Zeitleiste",
+              "description": "Platzhalter-Meilensteine: Daten, Titel und Bildunterschriften durch die echte Geschichte ersetzen."
+            }
+          },
+          "voiceScript": {
+            "segments": {
+              "walkthrough": {
+                "title": "Rundgang",
+                "keywords": "Schrittfolge, Layout, Platzhalter",
+                "script": "Das ist das Layout Schrittfolge. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+              }
+            }
+          }
+        },
+        "radial-cycle": {
+          "title": "Zyklus",
+          "caption": "Eine Zeitleiste, die zu ihrem Anfang zurückkehrt: sechs Phasen auf einem Zifferblatt.",
+          "items": {
+            "a": {
+              "date": "Jan–Feb",
+              "title": "Auftakt",
+              "caption": "Ziel und Beteiligte benennen."
+            },
+            "b": {
+              "date": "Mär–Apr",
+              "title": "Recherche",
+              "caption": "Sammeln, was schon bekannt ist."
+            },
+            "c": {
+              "date": "Mai–Jun",
+              "title": "Prototyp",
+              "caption": "Das Kleinste bauen, das eine Frage beantwortet."
+            },
+            "d": {
+              "date": "Jul–Aug",
+              "title": "Pilot",
+              "caption": "Mit wenigen echten Nutzern ausprobieren."
+            },
+            "e": {
+              "date": "Sep–Okt",
+              "title": "Start",
+              "caption": "Für alle öffnen."
+            },
+            "f": {
+              "date": "Nov–Dez",
+              "title": "Rückblick",
+              "caption": "Messen, lernen und das Nächste entscheiden."
+            }
+          },
+          "notes": {
+            "layout": {
+              "header": "So liest man die Zeitleiste",
+              "description": "Platzhalter-Meilensteine: Daten, Titel und Bildunterschriften durch die echte Geschichte ersetzen."
+            }
+          },
+          "voiceScript": {
+            "segments": {
+              "walkthrough": {
+                "title": "Rundgang",
+                "keywords": "Zyklus, Layout, Platzhalter",
+                "script": "Das ist das Layout Zyklus. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+              }
+            }
+          }
+        },
+        "metro-map": {
+          "title": "Liniennetz",
+          "caption": "Parallele Linien, die sich teilen und wieder treffen, gelesen wie ein U-Bahn-Plan.",
+          "items": {
+            "a": {
+              "date": "2019",
+              "title": "Auftakt",
+              "caption": "Ziel und Beteiligte benennen."
+            },
+            "b": {
+              "date": "2020",
+              "title": "Recherche",
+              "caption": "Sammeln, was schon bekannt ist."
+            },
+            "c": {
+              "date": "2021",
+              "title": "Prototyp",
+              "caption": "Das Kleinste bauen, das eine Frage beantwortet."
+            },
+            "d": {
+              "date": "2022",
+              "title": "Pilot",
+              "caption": "Mit wenigen echten Nutzern ausprobieren."
+            },
+            "e": {
+              "date": "2023",
+              "title": "Start",
+              "caption": "Für alle öffnen."
+            },
+            "f": {
+              "date": "2024",
+              "title": "Rückblick",
+              "caption": "Messen, lernen und das Nächste entscheiden."
+            }
+          },
+          "lanes": {
+            "a": "Produkt",
+            "b": "Forschung",
+            "c": "Betrieb"
+          },
+          "notes": {
+            "layout": {
+              "header": "So liest man die Zeitleiste",
+              "description": "Platzhalter-Meilensteine: Daten, Titel und Bildunterschriften durch die echte Geschichte ersetzen."
+            }
+          },
+          "voiceScript": {
+            "segments": {
+              "walkthrough": {
+                "title": "Rundgang",
+                "keywords": "Liniennetz, Layout, Platzhalter",
+                "script": "Das ist das Layout Liniennetz. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+              }
+            }
+          }
+        },
+        "grids": {
+          "title": "Raster",
+          "caption": "Jedes Raster von eins mal eins bis drei mal drei, Zeilen mal Spalten, dazu ein Bento. Jede Zelle hat Titel und Bildunterschrift."
+        },
+        "grid-1x1": {
+          "title": "Raster 1 × 1",
+          "caption": "1 Zeile mal 1 Spalte.",
+          "cells": {
+            "c1": {
+              "title": "Zelle eins",
+              "caption": "Zeile 1, Spalte 1: eine kurze Bildunterschrift unter dem Titel."
+            }
+          },
+          "notes": {
+            "layout": {
+              "header": "So fließt das Raster",
+              "description": "Platzhalter-Zellen: Jede Zelle behält Titel und Bildunterschrift; beides ersetzen."
+            }
+          },
+          "voiceScript": {
+            "segments": {
+              "walkthrough": {
+                "title": "Rundgang",
+                "keywords": "Raster 1 × 1, Layout, Platzhalter",
+                "script": "Das ist das Layout Raster 1 × 1. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+              }
+            }
+          }
+        },
+        "grid-1x2": {
+          "title": "Raster 1 × 2",
+          "caption": "1 Zeile mal 2 Spalten.",
+          "cells": {
+            "c1": {
+              "title": "Zelle eins",
+              "caption": "Zeile 1, Spalte 1: eine kurze Bildunterschrift unter dem Titel."
+            },
+            "c2": {
+              "title": "Zelle zwei",
+              "caption": "Zeile 1, Spalte 2: eine kurze Bildunterschrift unter dem Titel."
+            }
+          },
+          "notes": {
+            "layout": {
+              "header": "So fließt das Raster",
+              "description": "Platzhalter-Zellen: Jede Zelle behält Titel und Bildunterschrift; beides ersetzen."
+            }
+          },
+          "voiceScript": {
+            "segments": {
+              "walkthrough": {
+                "title": "Rundgang",
+                "keywords": "Raster 1 × 2, Layout, Platzhalter",
+                "script": "Das ist das Layout Raster 1 × 2. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+              }
+            }
+          }
+        },
+        "grid-1x3": {
+          "title": "Raster 1 × 3",
+          "caption": "1 Zeile mal 3 Spalten.",
+          "cells": {
+            "c1": {
+              "title": "Zelle eins",
+              "caption": "Zeile 1, Spalte 1: eine kurze Bildunterschrift unter dem Titel."
+            },
+            "c2": {
+              "title": "Zelle zwei",
+              "caption": "Zeile 1, Spalte 2: eine kurze Bildunterschrift unter dem Titel."
+            },
+            "c3": {
+              "title": "Zelle drei",
+              "caption": "Zeile 1, Spalte 3: eine kurze Bildunterschrift unter dem Titel."
+            }
+          },
+          "notes": {
+            "layout": {
+              "header": "So fließt das Raster",
+              "description": "Platzhalter-Zellen: Jede Zelle behält Titel und Bildunterschrift; beides ersetzen."
+            }
+          },
+          "voiceScript": {
+            "segments": {
+              "walkthrough": {
+                "title": "Rundgang",
+                "keywords": "Raster 1 × 3, Layout, Platzhalter",
+                "script": "Das ist das Layout Raster 1 × 3. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+              }
+            }
+          }
+        },
+        "grid-2x1": {
+          "title": "Raster 2 × 1",
+          "caption": "2 Zeilen mal 1 Spalte.",
+          "cells": {
+            "c1": {
+              "title": "Zelle eins",
+              "caption": "Zeile 1, Spalte 1: eine kurze Bildunterschrift unter dem Titel."
+            },
+            "c2": {
+              "title": "Zelle zwei",
+              "caption": "Zeile 2, Spalte 1: eine kurze Bildunterschrift unter dem Titel."
+            }
+          },
+          "notes": {
+            "layout": {
+              "header": "So fließt das Raster",
+              "description": "Platzhalter-Zellen: Jede Zelle behält Titel und Bildunterschrift; beides ersetzen."
+            }
+          },
+          "voiceScript": {
+            "segments": {
+              "walkthrough": {
+                "title": "Rundgang",
+                "keywords": "Raster 2 × 1, Layout, Platzhalter",
+                "script": "Das ist das Layout Raster 2 × 1. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+              }
+            }
+          }
+        },
+        "grid-2x2": {
+          "title": "Raster 2 × 2",
+          "caption": "2 Zeilen mal 2 Spalten.",
+          "cells": {
+            "c1": {
+              "title": "Zelle eins",
+              "caption": "Zeile 1, Spalte 1: eine kurze Bildunterschrift unter dem Titel."
+            },
+            "c2": {
+              "title": "Zelle zwei",
+              "caption": "Zeile 1, Spalte 2: eine kurze Bildunterschrift unter dem Titel."
+            },
+            "c3": {
+              "title": "Zelle drei",
+              "caption": "Zeile 2, Spalte 1: eine kurze Bildunterschrift unter dem Titel."
+            },
+            "c4": {
+              "title": "Zelle vier",
+              "caption": "Zeile 2, Spalte 2: eine kurze Bildunterschrift unter dem Titel."
+            }
+          },
+          "notes": {
+            "layout": {
+              "header": "So fließt das Raster",
+              "description": "Platzhalter-Zellen: Jede Zelle behält Titel und Bildunterschrift; beides ersetzen."
+            }
+          },
+          "voiceScript": {
+            "segments": {
+              "walkthrough": {
+                "title": "Rundgang",
+                "keywords": "Raster 2 × 2, Layout, Platzhalter",
+                "script": "Das ist das Layout Raster 2 × 2. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+              }
+            }
+          }
+        },
+        "grid-2x3": {
+          "title": "Raster 2 × 3",
+          "caption": "2 Zeilen mal 3 Spalten.",
+          "cells": {
+            "c1": {
+              "title": "Zelle eins",
+              "caption": "Zeile 1, Spalte 1: eine kurze Bildunterschrift unter dem Titel."
+            },
+            "c2": {
+              "title": "Zelle zwei",
+              "caption": "Zeile 1, Spalte 2: eine kurze Bildunterschrift unter dem Titel."
+            },
+            "c3": {
+              "title": "Zelle drei",
+              "caption": "Zeile 1, Spalte 3: eine kurze Bildunterschrift unter dem Titel."
+            },
+            "c4": {
+              "title": "Zelle vier",
+              "caption": "Zeile 2, Spalte 1: eine kurze Bildunterschrift unter dem Titel."
+            },
+            "c5": {
+              "title": "Zelle fünf",
+              "caption": "Zeile 2, Spalte 2: eine kurze Bildunterschrift unter dem Titel."
+            },
+            "c6": {
+              "title": "Zelle sechs",
+              "caption": "Zeile 2, Spalte 3: eine kurze Bildunterschrift unter dem Titel."
+            }
+          },
+          "notes": {
+            "layout": {
+              "header": "So fließt das Raster",
+              "description": "Platzhalter-Zellen: Jede Zelle behält Titel und Bildunterschrift; beides ersetzen."
+            }
+          },
+          "voiceScript": {
+            "segments": {
+              "walkthrough": {
+                "title": "Rundgang",
+                "keywords": "Raster 2 × 3, Layout, Platzhalter",
+                "script": "Das ist das Layout Raster 2 × 3. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+              }
+            }
+          }
+        },
+        "grid-3x1": {
+          "title": "Raster 3 × 1",
+          "caption": "3 Zeilen mal 1 Spalte.",
+          "cells": {
+            "c1": {
+              "title": "Zelle eins",
+              "caption": "Zeile 1, Spalte 1: eine kurze Bildunterschrift unter dem Titel."
+            },
+            "c2": {
+              "title": "Zelle zwei",
+              "caption": "Zeile 2, Spalte 1: eine kurze Bildunterschrift unter dem Titel."
+            },
+            "c3": {
+              "title": "Zelle drei",
+              "caption": "Zeile 3, Spalte 1: eine kurze Bildunterschrift unter dem Titel."
+            }
+          },
+          "notes": {
+            "layout": {
+              "header": "So fließt das Raster",
+              "description": "Platzhalter-Zellen: Jede Zelle behält Titel und Bildunterschrift; beides ersetzen."
+            }
+          },
+          "voiceScript": {
+            "segments": {
+              "walkthrough": {
+                "title": "Rundgang",
+                "keywords": "Raster 3 × 1, Layout, Platzhalter",
+                "script": "Das ist das Layout Raster 3 × 1. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+              }
+            }
+          }
+        },
+        "grid-3x2": {
+          "title": "Raster 3 × 2",
+          "caption": "3 Zeilen mal 2 Spalten.",
+          "cells": {
+            "c1": {
+              "title": "Zelle eins",
+              "caption": "Zeile 1, Spalte 1: eine kurze Bildunterschrift unter dem Titel."
+            },
+            "c2": {
+              "title": "Zelle zwei",
+              "caption": "Zeile 1, Spalte 2: eine kurze Bildunterschrift unter dem Titel."
+            },
+            "c3": {
+              "title": "Zelle drei",
+              "caption": "Zeile 2, Spalte 1: eine kurze Bildunterschrift unter dem Titel."
+            },
+            "c4": {
+              "title": "Zelle vier",
+              "caption": "Zeile 2, Spalte 2: eine kurze Bildunterschrift unter dem Titel."
+            },
+            "c5": {
+              "title": "Zelle fünf",
+              "caption": "Zeile 3, Spalte 1: eine kurze Bildunterschrift unter dem Titel."
+            },
+            "c6": {
+              "title": "Zelle sechs",
+              "caption": "Zeile 3, Spalte 2: eine kurze Bildunterschrift unter dem Titel."
+            }
+          },
+          "notes": {
+            "layout": {
+              "header": "So fließt das Raster",
+              "description": "Platzhalter-Zellen: Jede Zelle behält Titel und Bildunterschrift; beides ersetzen."
+            }
+          },
+          "voiceScript": {
+            "segments": {
+              "walkthrough": {
+                "title": "Rundgang",
+                "keywords": "Raster 3 × 2, Layout, Platzhalter",
+                "script": "Das ist das Layout Raster 3 × 2. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+              }
+            }
+          }
+        },
+        "grid-3x3": {
+          "title": "Raster 3 × 3",
+          "caption": "3 Zeilen mal 3 Spalten.",
+          "cells": {
+            "c1": {
+              "title": "Zelle eins",
+              "caption": "Zeile 1, Spalte 1: eine kurze Bildunterschrift unter dem Titel."
+            },
+            "c2": {
+              "title": "Zelle zwei",
+              "caption": "Zeile 1, Spalte 2: eine kurze Bildunterschrift unter dem Titel."
+            },
+            "c3": {
+              "title": "Zelle drei",
+              "caption": "Zeile 1, Spalte 3: eine kurze Bildunterschrift unter dem Titel."
+            },
+            "c4": {
+              "title": "Zelle vier",
+              "caption": "Zeile 2, Spalte 1: eine kurze Bildunterschrift unter dem Titel."
+            },
+            "c5": {
+              "title": "Zelle fünf",
+              "caption": "Zeile 2, Spalte 2: eine kurze Bildunterschrift unter dem Titel."
+            },
+            "c6": {
+              "title": "Zelle sechs",
+              "caption": "Zeile 2, Spalte 3: eine kurze Bildunterschrift unter dem Titel."
+            },
+            "c7": {
+              "title": "Zelle sieben",
+              "caption": "Zeile 3, Spalte 1: eine kurze Bildunterschrift unter dem Titel."
+            },
+            "c8": {
+              "title": "Zelle acht",
+              "caption": "Zeile 3, Spalte 2: eine kurze Bildunterschrift unter dem Titel."
+            },
+            "c9": {
+              "title": "Zelle neun",
+              "caption": "Zeile 3, Spalte 3: eine kurze Bildunterschrift unter dem Titel."
+            }
+          },
+          "notes": {
+            "layout": {
+              "header": "So fließt das Raster",
+              "description": "Platzhalter-Zellen: Jede Zelle behält Titel und Bildunterschrift; beides ersetzen."
+            }
+          },
+          "voiceScript": {
+            "segments": {
+              "walkthrough": {
+                "title": "Rundgang",
+                "keywords": "Raster 3 × 3, Layout, Platzhalter",
+                "script": "Das ist das Layout Raster 3 × 3. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+              }
+            }
+          }
+        },
+        "grid-bento": {
+          "title": "Bento-Raster",
+          "caption": "Kacheln verschiedener Größe auf einem Raster: eine Hauptkachel, fünf stützende.",
+          "cells": {
+            "c1": {
+              "title": "Die Hauptzelle",
+              "caption": "Die größte Kachel trägt die Hauptidee; die anderen stützen sie."
+            },
+            "c2": {
+              "title": "Zelle zwei",
+              "caption": "Eine stützende Kachel mit kurzer Bildunterschrift."
+            },
+            "c3": {
+              "title": "Zelle drei",
+              "caption": "Eine stützende Kachel mit kurzer Bildunterschrift."
+            },
+            "c4": {
+              "title": "Zelle vier",
+              "caption": "Eine stützende Kachel mit kurzer Bildunterschrift."
+            },
+            "c5": {
+              "title": "Zelle fünf",
+              "caption": "Eine stützende Kachel mit kurzer Bildunterschrift."
+            },
+            "c6": {
+              "title": "Zelle sechs",
+              "caption": "Eine stützende Kachel mit kurzer Bildunterschrift."
+            }
+          },
+          "notes": {
+            "layout": {
+              "header": "So fließt das Raster",
+              "description": "Platzhalter-Zellen: Jede Zelle behält Titel und Bildunterschrift; beides ersetzen."
+            }
+          },
+          "voiceScript": {
+            "segments": {
+              "walkthrough": {
+                "title": "Rundgang",
+                "keywords": "Bento-Raster, Layout, Platzhalter",
+                "script": "Das ist das Layout Bento-Raster. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+              }
             }
           }
         }

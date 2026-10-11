@@ -1,0 +1,34 @@
+/*
+ * Bento grid: the lead tile's drifting gradient. An oversized layer of three accent blooms turns slowly behind the
+ * lead tile's text; `GridBentoLoop` sets its play state from the Slide zone. Under reduced motion the layer rests.
+ */
+
+[data-episode='slide-master'] .bloom {
+  position: absolute;
+  inset: -40%;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(32% 36% at 30% 32%, color-mix(in oklab, var(--machine) 45%, transparent), transparent 70%),
+    radial-gradient(30% 34% at 70% 40%, color-mix(in oklab, var(--human) 38%, transparent), transparent 70%),
+    radial-gradient(28% 30% at 48% 72%, color-mix(in oklab, var(--ai) 34%, transparent), transparent 70%);
+  filter: blur(24px);
+  animation: bento-drift 24s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+@keyframes bento-drift {
+  0%,
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.12);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-episode='slide-master'] .bloom {
+    animation: none;
+  }
+}

@@ -1,7 +1,6 @@
+import { EPISODE_PORTAL_ROOT_ID } from '@/lib/episode-portal.pure';
 import { cn } from '@/lib/utils';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
-
-export const EPISODE_PORTAL_ROOT_ID = 'episode-portal-root';
 
 export interface ContentAreaProps extends ComponentPropsWithoutRef<'main'> {
   children?: ReactNode;
