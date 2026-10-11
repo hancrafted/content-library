@@ -1,4 +1,4 @@
-import { selfContainedEpisode } from '@/components/slide-master/slide';
+import { episode } from '@/components/slide-master/slide';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { cliVsWebToolObscurity } from './slides/cli-vs-web-tool-obscurity/slide';
@@ -17,7 +17,7 @@ import { theLostMiddle } from './slides/the-lost-middle/slide';
 import { toolsAndTips } from './slides/tools-and-tips/slide';
 import { whatIsAToken } from './slides/what-is-a-token/slide';
 
-export const aiTokenEconomy = selfContainedEpisode({
+export const aiTokenEconomy = episode({
   slug: 'ai-token-economy',
   messages: { en, de },
   youtube: { en: 'S0Nx4faEebY', de: 'S0Nx4faEebY' },

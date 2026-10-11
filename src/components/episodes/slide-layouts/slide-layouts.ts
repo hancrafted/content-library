@@ -1,4 +1,4 @@
-import { selfContainedEpisode } from '@/components/slide-master/slide';
+import { episode } from '@/components/slide-master/slide';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { basicPage } from './slides/basic-page/slide';
@@ -11,7 +11,7 @@ import { threeColumn } from './slides/three-column/slide';
  * from neither the landing page nor the header. Add a Slide here when a layout
  * is added to `slide-master/`.
  */
-export const slideLayouts = selfContainedEpisode({
+export const slideLayouts = episode({
   slug: 'slide-layouts',
   messages: { en, de },
   sections: [[sectionSlide, basicPage, threeColumn]],

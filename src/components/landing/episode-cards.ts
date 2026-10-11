@@ -1,9 +1,6 @@
-import { episodeMessagesOf } from '@/components/episode-page/episode-messages';
 import { slideMinutes } from '@/components/episode-page/slide-context.pure';
 import { listEpisodes } from '@/components/episodes/episode-repository';
 import { findEpisode } from '@/components/episodes/registry';
-import type { Slide } from '@/components/slide-master/episode-record';
-import { isSelfContainedSlide, type SelfContainedSlide } from '@/components/slide-master/slide';
 import { ownTranslator } from '@/components/slide-master/slide-kit';
 import { overviewOrder, type EpisodeMetadata } from '@/lib/episode-metadata.pure';
 import { FEATURED } from '@/lib/episode-overview';
@@ -17,16 +14,12 @@ import { episodeCard, type CardContext, type EpisodeCard, type ReadKey } from '.
  * spoken minutes, listed or not, rounded as the table of contents rounds them,
  * so a card never quotes a number the page disagrees with. None without a Voice script.
  */
-function minutesOf(entry: EpisodeMetadata, locale: Locale, read: ReadKey): number | undefined {
+function minutesOf(entry: EpisodeMetadata, locale: Locale): number | undefined {
   if (entry.status !== 'published') return undefined;
   const record = findEpisode(entry.slug);
-  const slides: readonly (Slide | SelfContainedSlide)[] = record.sections.flat();
-  const total = slides
-    .map((slide) => {
-      if (isSelfContainedSlide(slide))
-        return slideMinutes(ownTranslator(slide.messages[locale], locale), slide, locale);
-      return slideMinutes((key) => read(`episodes.${record.slug}.slides.${slide.slug}.${key}`), slide, locale);
-    })
+  const total = record.sections
+    .flat()
+    .map((slide) => slideMinutes(ownTranslator(slide.messages[locale], locale), slide, locale))
     .reduce((sum, minutes) => sum + minutes, 0);
   return hasReadingTime(total) ? wholeMinutes(total) : undefined;
 }
@@ -34,7 +27,7 @@ function minutesOf(entry: EpisodeMetadata, locale: Locale, read: ReadKey): numbe
 /** A published Episode's title and caption, read through the registry; an upcoming one has no record. */
 function copyOf(entry: EpisodeMetadata, locale: Locale): Pick<CardContext, 'copy'> {
   if (entry.status !== 'published') return {};
-  const { title, caption } = episodeMessagesOf(findEpisode(entry.slug), locale);
+  const { title, caption } = findEpisode(entry.slug).messages[locale];
   return { copy: { title, caption } };
 }
 
@@ -56,7 +49,7 @@ export async function episodeCards(locale: Locale): Promise<EpisodeCard[]> {
     episodeCard(entry, {
       locale,
       read,
-      minutes: minutesOf(entry, locale, read),
+      minutes: minutesOf(entry, locale),
       ...copyOf(entry, locale),
       ...featuredRankOf(entry.slug),
     }),

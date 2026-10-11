@@ -17,13 +17,10 @@ const OPTIONAL_CLIENT = '+([a-z0-9-])?(.client)';
 // come only from the container and the Slide layouts. A one-off slide may still
 // write `<SlideTitle as="h3">`; h4 and below are free.
 const EPISODE_FILES = 'src/components/episodes/**/*.{ts,tsx}';
-// A one-Episode widget under `episodes/<ep>/client/`, or a `*.client.tsx` inside a
-// Slide folder `episodes/<ep>/slides/<slide>/`, is the only place an Episode may
-// carry 'use client'; it keeps the spine rule but not the directive ban.
-const EPISODE_CLIENT_FILES = [
-  'src/components/episodes/*/client/**/*.client.tsx',
-  'src/components/episodes/*/slides/*/**/*.client.tsx',
-];
+// A `*.client.tsx` inside a Slide folder `episodes/<ep>/slides/<slide>/` is the
+// only place an Episode may carry 'use client'; it keeps the spine rule but not
+// the directive ban.
+const EPISODE_CLIENT_FILES = ['src/components/episodes/*/slides/*/**/*.client.tsx'];
 const SPINE_HEADINGS = [
   {
     selector: 'JSXOpeningElement[name.name=/^h[1-3]$/]',
@@ -216,9 +213,9 @@ export default tseslint.config(
   {
     // FE-002: a Slide's Scene is free-form markup, so its server files drop the
     // per-function line cap; complexity and the file cap still hold. Caps follow
-    // file kind: `client/`, a Slide folder's `*.client.tsx` and its `*.pure.ts`
-    // logic keep every cap.
-    files: ['src/components/episodes/*/{slides,parts}/**/*.{ts,tsx}'],
+    // file kind: a Slide folder's `*.client.tsx` and its `*.pure.ts` logic keep
+    // every cap.
+    files: ['src/components/episodes/*/slides/**/*.{ts,tsx}'],
     ignores: ['src/components/episodes/*/slides/**/*.client.tsx', 'src/components/episodes/*/slides/**/*.pure.ts'],
     rules: { 'max-lines-per-function': 'off' },
   },

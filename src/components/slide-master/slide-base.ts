@@ -3,10 +3,9 @@ import type { Locale } from '@/lib/locale.pure';
 import type { ReactElement, ReactNode } from 'react';
 
 /*
- * What every Slide shape shares (FE-002): the facts a Slide declares beside its
- * Scene, and the kit the container builds by runtime key. Both Slide
- * factories, `slidesFor` (`episode-record.ts`) and `slide` (`slide.ts`), type
- * their kits against these.
+ * What every Slide declares (FE-002): the facts a Slide declares beside its
+ * Scene, and the kit the container builds by runtime key. `slide` (`slide.ts`)
+ * types its kit against these.
  */
 
 /** One value per locale, so a missing German value fails `tsc`. */

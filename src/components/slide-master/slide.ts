@@ -7,7 +7,7 @@ import type { ReactNode } from 'react';
 import type { NoteSpec, PerLocale, RichTag, RuntimeKit, SegmentSpec, TitleComponent } from './slide-base';
 
 /*
- * The self-contained Slide (FE-002, `docs/adr/0003-self-contained-slides.md`): one folder
+ * The Slide (FE-002, `docs/adr/0003-self-contained-slides.md`): one folder
  * `slides/<slide>/` holding its server entry, client widgets, CSS and its own
  * Translation files, `i18n/en.json` and `i18n/de.json`. The Slide hands the
  * container its text with its slug, notes, segments and Scene, so it is typed
@@ -34,7 +34,7 @@ export type OwnTemplateKey<M> = MessageKeys<M, NestedKeyOf<M>>;
 export type OwnTranslator<M extends SlideMessages> = ReturnType<typeof createTranslator<M>>;
 
 /**
- * The kit a self-contained Slide's `content` receives: `t` and `template` read
+ * The kit a Slide's `content` receives: `t` and `template` read
  * only its own file; `ref` and `target` take only the notes it declares.
  * `slideHref` takes any slug: the container fails the build for one that is not
  * a Slide of the same Episode, since the Slide cannot know which Episode it is in.
@@ -55,11 +55,11 @@ export interface OwnSlideKit<M extends SlideMessages, N extends NoteSpec> {
 }
 
 /**
- * A self-contained Slide, as the Episode record holds it. Static data: its
+ * A Slide, as the Episode record holds it. Static data: its
  * Scene renders only when the container calls `content`, with a translator it
  * builds from `messages` for the page's locale.
  */
-export interface SelfContainedSlide<S extends string = string, M extends SlideMessages = SlideMessages> {
+export interface Slide<S extends string = string, M extends SlideMessages = SlideMessages> {
   readonly slug: S;
   readonly messages: PerLocale<M>;
   readonly notes: readonly NoteSpec[];
@@ -67,13 +67,8 @@ export interface SelfContainedSlide<S extends string = string, M extends SlideMe
   readonly content: (kit: RuntimeKit) => ReactNode;
 }
 
-/** True for a self-contained Slide, which carries its own messages; false for a `slidesFor` Slide. */
-export function isSelfContainedSlide(slide: { readonly slug: string }): slide is SelfContainedSlide {
-  return 'messages' in slide;
-}
-
-/** A self-contained Slide whose own file holds a `title`: the only kind that may open a Section. */
-export type TitledSelfContainedSlide = SelfContainedSlide<string, { readonly title: string }>;
+/** A Slide whose own file holds a `title`: the only kind that may open a Section. */
+export type TitledSlide = Slide<string, { readonly title: string }>;
 
 /**
  * What a Slide's server entry declares. `messages.de` must have the shape of
@@ -88,25 +83,24 @@ export interface OwnSlideSpec<S extends string, M extends SlideMessages, N exten
   readonly content: (kit: OwnSlideKit<M, N>) => ReactNode;
 }
 
-/** Declares a self-contained Slide; its own Translation files type `t`, `template`, notes and segments. */
+/** Declares a Slide; its own Translation files type `t`, `template`, notes and segments. */
 export function slide<
   const S extends string,
   M extends SlideMessages,
   const N extends NoteSpec<OwnNoteSlug<M>> = never,
->(spec: OwnSlideSpec<S, M, N>): SelfContainedSlide<S, M> {
+>(spec: OwnSlideSpec<S, M, N>): Slide<S, M> {
   return {
     slug: spec.slug,
     messages: spec.messages,
     notes: spec.notes ?? [],
     segments: spec.segments ?? [],
     // The runtime kit is assignable to every concrete `OwnSlideKit` (proved in the test); generics hide that here.
-    content: spec.content as unknown as SelfContainedSlide['content'],
+    content: spec.content as unknown as Slide['content'],
   };
 }
 
-/** A Section of self-contained Slides: its section slide, which names it, then its page Slides. */
-export type SelfContainedSection = SectionList<SelfContainedSlide> &
-  readonly [TitledSelfContainedSlide, ...SelfContainedSlide[]];
+/** A Section of Slides: its section slide, which names it, then its page Slides. */
+export type Section = SectionList<Slide> & readonly [TitledSlide, ...Slide[]];
 
 /** An Episode's own text, from `i18n/<locale>.json` in its folder: the Title slide's and the page metadata's. */
 export interface EpisodeMessages {
@@ -116,20 +110,18 @@ export interface EpisodeMessages {
 }
 
 /**
- * An Episode record of self-contained Slides: static data. It carries its own
+ * An Episode record of Slides: static data. It carries its own
  * text, so the site-wide Translation files hold nothing of it.
  */
-export interface SelfContainedEpisodeRecord<Ep extends EpisodeSlug = EpisodeSlug> {
+export interface EpisodeRecord<Ep extends EpisodeSlug = EpisodeSlug> {
   readonly slug: Ep;
   /** One recording per locale, shown on the Title slide; optional until recorded. */
   readonly youtube?: PerLocale<string>;
   readonly messages: PerLocale<EpisodeMessages>;
-  readonly sections: readonly SelfContainedSection[];
+  readonly sections: readonly Section[];
 }
 
 /** An Episode record from its own text and its Sections; each Section's first Slide names it. */
-export function selfContainedEpisode<Ep extends EpisodeSlug>(
-  record: SelfContainedEpisodeRecord<Ep>,
-): SelfContainedEpisodeRecord<Ep> {
+export function episode<Ep extends EpisodeSlug>(record: EpisodeRecord<Ep>): EpisodeRecord<Ep> {
   return record;
 }

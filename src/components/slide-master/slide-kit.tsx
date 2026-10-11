@@ -41,7 +41,7 @@ function withDefaultTags(t: RuntimeTranslator): RuntimeTranslator {
 }
 
 /**
- * A self-contained Slide's translator: next-intl's `createTranslator` over the
+ * A Slide's translator: next-intl's `createTranslator` over the
  * Slide's own messages for the page's locale. Like the site-wide config
  * (`src/i18n/request.ts`), any missing message or formatting error throws, so
  * untranslated text fails the build instead of shipping. The kit adds the

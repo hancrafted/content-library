@@ -4,6 +4,8 @@ Read this before a voice grilling session about the content library. You have no
 
 State as of 11 October 2026.
 
+Since then, epic [#51 Self-contained Slides](https://github.com/hancrafted/content-library/issues/51) changed the Slide shape: every Slide is one folder carrying its own text, and the site-wide Translation files hold no Episode text. Where this file describes Slides otherwise, #51 wins.
+
 ## What the project is
 
 - A localized Next.js site, exported as static pages to GitHub Pages.

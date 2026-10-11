@@ -9,6 +9,8 @@ Read before turning a prototype (for example an HTML tower page) into an Episode
 
 Each step ends on a completion criterion. Stop at a step only when its criterion holds. Work in a worktree; commit through `/commit`.
 
+**Splitting the work across agents.** The orchestrator does steps 1–3 and 7–10. Each sub-agent owns whole Slide folders, steps 4–6: Scene, widgets, CSS module and its `i18n/` text, and touches no file outside them. The orchestrator then adds only one import and one list entry per Slide to the Episode file. No two agents write the same file.
+
 ## 1. Read the source
 
 List the source's Sections and Slides, in order.
@@ -74,6 +76,7 @@ export const theLostMiddle = slide({
   - `locale`: for `Intl` number or date formatting.
   - `ref`, `target`, `Title`: notes and heading, below.
 - A Slide folder imports only its own files and the global shared locations: `src/components/slide-master/`, `src/components/slide-shared/`, `src/components/ui/`, `src/hooks/`, `src/lib/`. A server part only this Slide uses sits in its folder (see `page-template/slides/what-comes-next/statement.tsx`); a part two Slides share goes in `src/components/slide-shared/`, plain props, no kit. Colour tokens: [FE-002 §7](../../.archgate/adrs/FE-002-episode-page.md#7-episode-styling-stays-in-the-episode).
+- A Slide's own CSS is a CSS module in its folder, combined with Tailwind via `cn()` (see `ai-token-economy/slides/motivation/freelancer-cards.module.css`). Only a token remap that the chrome reads too (the Title slide glow, `<em>`, the talk player) goes in one Episode stylesheet beside the Episode file, every selector under `[data-episode='<ep>']` (see `maintaining-markdown-for-ai/palette.css`). Never style one Slide from it.
 - A `slide-shared` part reaches only other slide-shared parts, the UI kit and `src/lib` (dependency-cruiser rule `slide-shared-reaches-only-ui-and-lib`, [FE-007 §5](../../.archgate/adrs/FE-007-module-layering.md#5-a-slide-folder-imports-only-global-shared-code)). A popover uses the shared `usePopoverPlacement` hook; see [Episode chrome](episode-chrome.md).
 
 Done when: every Slide of step 1 has a folder and `npm run typecheck` passes.
@@ -99,7 +102,7 @@ Done when: each widget's pure logic has a passing test.
 
 ## 7. Compose, register, snapshot
 
-- `episodes/<ep>/<ep>.ts`: `selfContainedEpisode({ slug, youtube, messages: { en, de }, sections: [[sectionSlide, ...pages], ...] })`, `en` and `de` imported from `./i18n/`. Copying a Slide in from another Episode is `cp -r` of its folder plus one import and one entry here.
+- `episodes/<ep>/<ep>.ts`: `episode({ slug, youtube, messages: { en, de }, sections: [[sectionSlide, ...pages], ...] })` from `@/components/slide-master/slide`, `en` and `de` imported from `./i18n/`. Copying a Slide in from another Episode is `cp -r` of its folder plus one import and one entry here.
 - Add the slug to `EPISODE_SLUGS` in `src/lib/routes.ts`, and the record to `EPISODES` in `src/components/episodes/registry.ts`.
 - `episodes/<ep>/episode-metadata.ts`: `status: 'published'`, its primary Topic, any extra Topics, its Format, its Tags and `publishedOn`; add it to `PUBLISHED` in `src/components/episodes/episode-repository.ts`. If the Episode was an Upcoming Episode, flip its existing file, move it out of `UPCOMING` and move its copy from `landing.episodeOverview.upcoming.<ep>` into `episodes/<ep>/i18n/` ([Episode overview entries](episode-translation-keys.md#episode-overview-entries)). To feature it, edit the three slugs in `FEATURED` in `src/lib/episode-overview.ts`.
 - Run `npx vitest run src/components/episodes/published-anchors.test.ts`. It fails for the new Episode and prints the file path and its JSON; create `episodes/<ep>/published-anchors.json` with exactly that content.

@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { selfContainedEpisode, slide, type OwnSlideKit, type SelfContainedSection } from './slide';
+import { episode, slide, type OwnSlideKit, type Section } from './slide';
 import type { RuntimeKit } from './slide-base';
 
 /*
- * The self-contained Slide's typing is its contract: each `@ts-expect-error`
+ * The Slide's typing is its contract: each `@ts-expect-error`
  * below is a proof `npm run typecheck` holds — if the line stopped failing, tsc
  * reports the unused directive. The messages stand in for a Slide's own
  * `i18n/en.json` and `i18n/de.json`, typed as a JSON import types them.
@@ -87,13 +87,13 @@ describe('success cases', () => {
     // ARRANGE
     const head = slide({ slug: 'foundations', messages: { en: EN, de: DE }, content: ({ t }) => t('title') });
     const tail = slide({ slug: 'what-comes-next', messages: UNTITLED, content: ({ t }) => t('statement') });
-    const sections: SelfContainedSection[] = [[head, tail]];
+    const sections: Section[] = [[head, tail]];
     const messages = {
       en: { title: 'Page template', caption: 'The smallest Episode.', description: 'Copy it.' },
       de: { title: 'Seitenvorlage', caption: 'Die kleinste Episode.', description: 'Kopieren.' },
     };
     // ACT
-    const record = selfContainedEpisode({ slug: 'page-template', messages, sections });
+    const record = episode({ slug: 'page-template', messages, sections });
     // ASSERT
     expect(record.sections).toBe(sections);
     expect(record.messages).toBe(messages);
@@ -152,7 +152,7 @@ describe('failure cases', () => {
     // ARRANGE
     const untitled = slide({ slug: 'what-comes-next', messages: UNTITLED, content: () => null });
     // @ts-expect-error -- an untitled Slide cannot name a Section
-    const sections: SelfContainedSection[] = [[untitled]];
+    const sections: Section[] = [[untitled]];
     // ACT
     const opener = sections[0][0].slug;
     // ASSERT

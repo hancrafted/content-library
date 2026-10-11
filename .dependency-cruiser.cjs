@@ -5,8 +5,8 @@
 // cruise a thinner graph while still reporting success.
 
 // What an Episode file may reach: the Slide master (which holds the Episode
-// record, `slide-master/episode-record.ts`), slide-shared (server parts
-// several Slides of any Episode share), its own Episode folder and src/lib.
+// record, `slide-master/slide.ts`), slide-shared (server parts several Slides
+// of any Episode share), the Episode folders and src/lib.
 const EPISODE_REACH = ['^src/components/(slide-master|slide-shared|episodes)/', '^src/lib/'];
 
 // A self-contained Slide is one folder, `episodes/<ep>/slides/<slide>/` (FE-002, FE-007 §5). The two capture
@@ -92,7 +92,7 @@ module.exports = {
         'An Episode page file composes the Slide master, Slide layouts and the Episode record, plus src/lib helpers — never the table of contents, page shells or routes (FE-002).',
       from: {
         path: '^src/components/episodes/',
-        pathNot: ['\\.test\\.ts$', '^src/components/episodes/[^/]+/client/', SLIDE_FOLDER],
+        pathNot: ['\\.test\\.ts$', SLIDE_FOLDER],
       },
       to: { pathNot: [...EPISODE_REACH, 'node_modules'] },
     },
@@ -112,23 +112,6 @@ module.exports = {
       from: { path: `${SLIDE_FOLDER}.+\\.client\\.tsx$` },
       to: { pathNot: [OWN_SLIDE_FOLDER, '^src/(hooks|lib)/', 'node_modules'] },
     },
-    {
-      name: 'episode-client-reach-only-hooks-and-lib',
-      severity: 'error',
-      comment:
-        'A one-Episode widget under episodes/<ep>/client/ is the only place an Episode runs in the browser. It reaches its own client/ folder, src/lib helpers and src/hooks — never the Slide master, page shells or other components (FE-002, FE-006).',
-      from: { path: '^src/components/episodes/[^/]+/client/', pathNot: '\\.test\\.ts$' },
-      to: { pathNot: ['^src/components/episodes/[^/]+/client/', '^src/(lib|hooks)/', 'node_modules'] },
-    },
-    {
-      name: 'episode-parts-never-imports-slides',
-      severity: 'error',
-      comment:
-        "An Episode's parts/ holds server parts several Slides share; a part takes plain props and never imports a Slide, so the dependency runs Slide → parts only (FE-002).",
-      from: { path: '^src/components/episodes/([^/]+)/parts/' },
-      to: { path: '^src/components/episodes/[^/]+/slides/' },
-    },
-
     {
       name: 'slide-shared-reaches-only-ui-and-lib',
       severity: 'error',

@@ -28,8 +28,6 @@ folder slides/the-lost-middle/, second Slide of Section 'attention'
   → heading h3
 ```
 
-**Two shapes, for one migration.** Until every Episode has moved, one not yet moved keeps the old shape (`slidesFor`, Slide files, site-wide keys, `client/`, `parts/`). A rule marked "(old shape)" holds only for it, and goes when the last Episode moves.
-
 **Reading time is counted, not written.** A hand-written minute count beside a Voice script drifted from it, per locale. Counting the script's words (German reads slower) keeps one source; a Slide without a script shows no time rather than a guess.
 
 **How it fits.**
@@ -63,53 +61,50 @@ flowchart LR
 
 ### 1. One container renders every Episode
 
-1. Only `EpisodePageContainer` MAY emit an Episode's slots, Title slide, Sections, anchors, table of contents, drawer input.
+1. Only `EpisodePageContainer` MAY emit an Episode's slots: Title slide, Sections, anchors, contents, drawer.
 
 ### 2. The Slide is the unit
 
-1. Each Slide MUST be one folder `slides/<slide>/`, named after its slug, flat: server entry `slide.tsx` (slug, notes, segments, Scene, messages), `*.client.tsx` widgets, `*.pure.ts` logic and tests, optional CSS module, `i18n/{en,de}.json`. The Episode file only composes. (Old shape: one file `slides/<slide>.tsx`.)
-2. A Section MUST be a list of Slides, the first naming it. Anchors by position: `<section>--<slide>`; slugs kebab-case, unique, never `top`.
-3. An untitled Slide renders unlisted, still timed; only a titled one opens a Section.
-4. Reading time MUST be counted from Voice script words per locale; nothing declares minutes. 0 shows none.
+1. Each Slide MUST be one flat folder `slides/<slide>/`, named after its slug: `slide.tsx`, `*.client.tsx`, `*.pure.ts`, CSS module, `i18n/{en,de}.json`. The Episode file only composes.
+2. A Section MUST be a list of Slides, the first, titled, naming it. Anchor `<section>--<slide>`; slugs kebab-case, unique, not `top`; untitled Slides render unlisted.
+3. Reading time MUST be counted from Voice script words per locale.
 
 ### 3. Scene is free
 
-1. A Scene MUST be free JSX (FE-009 §7); no slide-type union.
-2. The Scene MUST reach the record only via its typed kit. Never cast.
-3. Browser code MUST live in its Slide's folder as `*.client.tsx`; the server entry stays server. (Old shape: `episodes/<ep>/client/`.)
-4. A Slide folder MUST import only its own files and the global shared locations: Slide master, `slide-shared`, UI kit, hooks, lib. A part several Slides share MUST live in `slide-shared`: plain props, no kit, no Slide import. (Old shape: `episodes/<ep>/parts/`.)
+1. A Scene MUST be free JSX, no slide-type union, reaching the record only via its typed kit.
+2. Browser code MUST live in its Slide's folder as `*.client.tsx`.
+3. A Slide folder MUST import only its own files, Slide master, `slide-shared`, UI kit, hooks, lib. A part two Slides share lives in `slide-shared`: plain props.
 
 ### 4. Headings mirror the manuscript
 
-1. One `h1` MUST exist: the Episode title. Position sets `h2` section slide, `h3` page slide via the kit's `Title`.
-2. No Episode file MAY write `h1`–`h3`.
+1. One `h1`: the Episode title. Position sets `h2`/`h3` via the kit's `Title`; no Episode file MAY write `h1`–`h3`.
 
 ### 5. Strings and anchors keyed by Slide slug
 
-1. A Slide's text MUST live in its own `i18n/<locale>.json`, by role, no Section level — `title`, not `sections.0.title`; its types derive from the English file, and German MUST match its shape. An Episode's own text MUST live in `<episode>/i18n/`, carried by its record; site-wide files hold only site-wide text. (Old shape: `episodes.x.slides.intro.title`.)
-2. Published anchors MUST stay, snapshotted in `published-anchors.json`; remove one only deliberately.
-3. `slideHref` MUST name a Slide of the same Episode; else the build fails.
+1. A Slide's text MUST live in its own `i18n/<locale>.json`, by role — `title`, not `sections.0.title`; German matches the English shape. Episode text: `<episode>/i18n/`.
+2. Published anchors MUST stay (`published-anchors.json`); `slideHref` MUST name a Slide of the same Episode.
 
 ### 6. Table of contents and Context drawer read the record
 
-1. Both MUST take Slide data from the record, the active Slide from `useActiveSlide()`, never the DOM.
+1. Both MUST read Slide data from the record and the active Slide from `useActiveSlide()`, never the DOM.
 
 ### 7. Episode styling stays in the Episode
 
-1. `globals.css` MUST change only for a token two Episodes share.
-2. A Slide's CSS MUST sit in a CSS module in its folder, scoped by the module. (Old shape: in `parts/`, every selector under `[data-episode='<slug>']`.)
-3. Shared meanings (machine, human, AI, primary, secondary) MUST use site tokens; any other colour needs a light and a dark value.
+1. `globals.css` MUST hold only tokens Episodes share.
+2. A Slide's CSS MUST sit in a CSS module in its folder.
+3. An Episode MAY keep one stylesheet beside its record, under `[data-episode='<slug>']`, only to remap tokens its chrome reads — `palette.css`.
+4. Shared meanings MUST use site tokens; other colours need a dark value.
 
 ## Do's and Don'ts
 
 ### Do's
 
-1. **DO** start an Episode by copying `page-template/`, in this order: rename the slug; register it in `EPISODE_SLUGS` and the registry; write its `i18n/`; then each Slide folder, text with its `slide.tsx`; then `published-anchors.json`. (Decision 2, Decision 5)
+1. **DO** start an Episode by copying `page-template/`: rename the slug; register it in `EPISODE_SLUGS` and the registry; write its `i18n/`; then each Slide as a whole folder, text included, the Episode file adding only its import and list entry; then `published-anchors.json`. (Decision 2, Decision 5)
 2. **DO** write a Voice script for every Slide the speaker talks over; its words are the reading time. (Decision 2)
 3. **DO** leave `title` off a purely visual Slide. (Decision 2)
 4. **DO** build a one-off Scene from `SlideFrame` and the kit's `<Title>`. (Decision 3, Decision 4)
 5. **DO** mark the element a note explains with `{...target('chart')}`. (Decision 3)
-6. **DO** link another Slide with `slideHref('the-lost-middle')`, and pass a part its strings — `<Statement>{t('statement')}</Statement>`. (Decision 3)
+6. **DO** link with `slideHref('the-lost-middle')`; pass a part its strings — `<Statement>{t('statement')}</Statement>`. (Decision 3)
 7. **DO** colour a machine/human/AI meaning with `text-machine`, `text-human`, `text-ai`; check every Slide in both themes. (Decision 7)
 8. **DO** copy a Slide with `cp -r` of its folder, one import, one list entry. (Decision 2)
 
@@ -122,8 +117,9 @@ flowchart LR
 5. **DON'T** rename or drop a published slug — it is a shared link. (Decision 2, Decision 5)
 6. **DON'T** read a Slide's title, reading time or id from the DOM. (Decision 6)
 7. **DON'T** write minutes or segment times by hand — `minutes: { en: 2, de: 2 }`, `from: 0, to: 2`. (Decision 2)
-8. **DON'T** hand the kit to a part, import another Slide or the Episode file from a Slide folder, or import a Slide from `slide-shared`. (Decision 3)
+8. **DON'T** hand the kit to a part, or import another Slide or the Episode file from a Slide folder. (Decision 3)
 9. **DON'T** add an Episode selector to `globals.css` or a colour with no dark value. (Decision 7)
+10. **DON'T** style one Slide from the Episode stylesheet — `.gantt-bar` belongs in its CSS module. (Decision 7)
 
 ## Consequences
 
@@ -145,17 +141,17 @@ flowchart LR
 
 1. **Structure breaks only visible after build** (duplicate ids, heading order). **Mitigation:** post-build test over every exported Episode, run in CI on every pull request.
 2. **A published anchor lost by a rename.** **Mitigation:** the snapshot test names it.
-3. **Episode CSS leaking into another page.** **Mitigation:** Slide CSS is a module; old-shape selectors under `[data-episode]`; reviewer duty.
+3. **Episode CSS leaking into another page.** **Mitigation:** Slide CSS is a module; the one Episode stylesheet sits under `[data-episode]`; a unit test keeps `[data-episode` out of `globals.css`; reviewer duty.
 4. **A copied Slide collides or links outside its Episode.** **Mitigation:** the container throws on both.
 
 ## Compliance and Enforcement
 
 1. **Types:** record, registry, kit and Translation files typed; a missing locale, a German Slide file missing an English key, unregistered slug, foreign key, undeclared note or untitled Section opener fails `tsc`.
 2. **Unit tests:** anchor derivation — `top` reserved, duplicate slugs rejected, untitled Slides counted but unlisted; `slideHref` to a slug outside the Episode rejected; every Slide folder named after its slug; reading time from words, 0 hidden; published anchors still produced, and a missing snapshot prints the file to paste.
-3. **Lint and dependency rules:** Episode files can't write `h1`–`h3`, carry `'use client'` outside a Slide's `*.client.tsx` (old shape: `client/`), render the table of contents or import the container; a Slide folder reaches only its own files and shared locations; `parts/` never imports a Slide; the per-function line cap is off only for Slide server files (complexity and file caps hold; `*.client.tsx`, `*.pure.ts`, `client/` keep every cap).
+3. **Lint and dependency rules:** Episode files can't write `h1`–`h3`, carry `'use client'` outside a Slide's `*.client.tsx`, render the table of contents or import the container; a Slide folder reaches only its own files and shared locations; no Episode keeps a `parts/` or `client/` folder; the per-function line cap is off only for Slide server files (complexity and file caps hold; `*.client.tsx` and `*.pure.ts` keep every cap).
 4. **Post-build test:** every Episode in every locale — slot order, one `h1`, heading level by position, note targets resolve, no duplicate ids, anchors equal the snapshot, no raw key, reader text equals its capture.
 
-**Manual review duties:** no part reads Slide data from the DOM; a Slide declares only its own names; a part takes plain props; Slide CSS is scoped; every Slide looks right in light and dark (screenshots, then a browser).
+**Manual review duties:** no part reads Slide data from the DOM; a Slide declares only its own names; a part takes plain props; Slide CSS is scoped, the Episode stylesheet only remaps tokens; every Slide looks right in light and dark (screenshots, then a browser).
 
 **Exceptions:** raise a separate ADR; human approval required.
 
