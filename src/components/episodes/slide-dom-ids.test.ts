@@ -1,5 +1,6 @@
 import { type Slide } from '@/components/slide-master/slide';
-import { ownTranslator, slideKit } from '@/components/slide-master/slide-kit';
+import { slideKit } from '@/components/slide-master/slide-kit';
+import { ownTranslator } from '@/components/slide-master/slide-translator';
 import { EPISODE_SLUGS, type EpisodeSlug } from '@/lib/routes';
 import { createElement, Fragment } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';

@@ -1,6 +1,6 @@
 ---
 type: design-adr
-status: accepted
+status: proposed
 ---
 
 # Self-contained Slides

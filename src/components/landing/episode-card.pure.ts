@@ -1,4 +1,9 @@
-import { topicsOf, type EpisodeMetadata, type EpisodeStatus } from '@/lib/episode-metadata.pure';
+import {
+  topicsOf,
+  type EpisodeStatus,
+  type PublishedEpisodeMetadata,
+  type UpcomingEpisodeMetadata,
+} from '@/lib/episode-metadata.pure';
 import { TOPICS, type Accent, type FormatId, type TopicIcon, type TopicId } from '@/lib/episode-overview';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { episodeRoute } from '@/lib/routes';
@@ -48,11 +53,16 @@ export type ReadKey = (key: string) => string;
 /** A published Episode's own title and caption, read through the registry from its record. */
 export type EpisodeCopy = Pick<EpisodeCard, 'title' | 'caption'>;
 
+/**
+ * The Episode a card draws, keyed on its status: a published one carries its
+ * copy from the registry, so `tsc` refuses one without it; an upcoming one
+ * reads its own from the landing Translation keys.
+ */
+export type CardEntry = (PublishedEpisodeMetadata & { readonly copy: EpisodeCopy }) | UpcomingEpisodeMetadata;
+
 export interface CardContext {
   readonly locale: Locale;
   readonly read: ReadKey;
-  /** A published Episode's copy; an upcoming one reads its own from the landing Translation keys. */
-  readonly copy?: EpisodeCopy;
   readonly minutes?: number;
   /** The Episode's Featured slot, 1 first; left off when it is not Featured. */
   readonly featuredRank?: number;
@@ -60,16 +70,13 @@ export interface CardContext {
 
 const OVERVIEW_KEYS = 'landing.episodeOverview';
 
-function copyOf(entry: EpisodeMetadata, ctx: CardContext): EpisodeCopy {
-  if (entry.status === 'published') {
-    if (ctx.copy === undefined) throw new Error(`Published Episode "${entry.slug}" needs its copy from the registry.`);
-    return { title: ctx.copy.title, caption: ctx.copy.caption };
-  }
+function copyOf(entry: CardEntry, ctx: CardContext): EpisodeCopy {
+  if (entry.status === 'published') return { title: entry.copy.title, caption: entry.copy.caption };
   const base = `${OVERVIEW_KEYS}.upcoming.${entry.slug}`;
   return { title: ctx.read(`${base}.title`), caption: ctx.read(`${base}.caption`) };
 }
 
-function publishedFields(entry: EpisodeMetadata, ctx: CardContext): Partial<EpisodeCard> {
+function publishedFields(entry: CardEntry, ctx: CardContext): Partial<EpisodeCard> {
   if (entry.status !== 'published') return {};
   const minutes = ctx.minutes === undefined ? {} : { minutes: ctx.minutes };
   const route = episodeRoute(entry.slug);
@@ -83,7 +90,7 @@ function publishedFields(entry: EpisodeMetadata, ctx: CardContext): Partial<Epis
 }
 
 /** Assembles one card; throws when a string it needs is missing, so the build fails rather than ships a blank. */
-export function episodeCard(entry: EpisodeMetadata, ctx: CardContext): EpisodeCard {
+export function episodeCard(entry: CardEntry, ctx: CardContext): EpisodeCard {
   const { read } = ctx;
   const copy = copyOf(entry, ctx);
   const topics = topicsOf(entry).map((id) => ({ id, label: read(`${OVERVIEW_KEYS}.topics.${id}`) }));

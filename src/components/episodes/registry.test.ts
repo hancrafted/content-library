@@ -1,7 +1,7 @@
 import { pageMetadata } from '@/lib/page-metadata.pure';
 import { EPISODE_SLUGS, isEpisodeSlug } from '@/lib/routes';
 import { describe, expect, it } from 'vitest';
-import { findEpisode } from './registry';
+import { episodeCopy, findEpisode } from './registry';
 
 /*
  * What every registered Episode shares (FE-002): a record under its own slug,
@@ -85,6 +85,17 @@ describe('success cases', () => {
     expect(title).toBe(expected);
   });
 
+  it('hands the page metadata and the landing card one Episode text in the locale asked for', () => {
+    // ARRANGE
+    const expectedTitle = 'Seitenvorlage';
+    const expectedKeys = ['caption', 'description', 'title'];
+    // ACT
+    const copy = episodeCopy('page-template', 'de');
+    // ASSERT
+    expect(copy.title).toBe(expectedTitle);
+    expect(Object.keys(copy).sort()).toEqual(expectedKeys);
+  });
+
   it.each(COMPOSITION)('composes $slug in manuscript order, each Section opened by the Slide that names it', (c) => {
     // ARRANGE
     const expectedSections = c.sections;
@@ -117,6 +128,15 @@ describe('failure cases', () => {
     // ASSERT
     expect(valid).toBe(false);
     expect(lookup).toThrow();
+  });
+
+  it('finds no Episode text for an unlisted slug', () => {
+    // ARRANGE
+    const unlisted = 'non-existent-episode';
+    // ACT
+    const read = () => episodeCopy(unlisted, 'en');
+    // ASSERT
+    expect(read).toThrow();
   });
 });
 

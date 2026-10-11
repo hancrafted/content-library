@@ -1,6 +1,7 @@
 import type { EpisodeRecord, Slide } from '@/components/slide-master/slide';
 import type { RuntimeTranslator } from '@/components/slide-master/slide-base';
-import { ownTranslator, slideKit, type EpisodeKitInput } from '@/components/slide-master/slide-kit';
+import { slideKit, type EpisodeKitInput } from '@/components/slide-master/slide-kit';
+import { ownTranslator } from '@/components/slide-master/slide-translator';
 import { placeSections, type PlacedListSlide, type PlacedSlide } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
 import type { EpisodeContent, EpisodeSlide, PlacedEpisodeSection } from './episode-page-container.pure';

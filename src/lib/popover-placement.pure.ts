@@ -74,3 +74,13 @@ export function placePopover(request: PopoverRequest): PopoverPlacement {
     ? { side: placed, bottom: viewport.height - anchor.top + gap, left, width, arrowX }
     : { side: placed, top: anchor.top + anchor.height + gap, left, width, arrowX };
 }
+
+/** The fixed CSS box for a placement: `bottom` above the anchor so it grows upward, `top` below it. */
+export type PopoverBox =
+  | { readonly bottom: number; readonly left: number; readonly width: number }
+  | { readonly top: number; readonly left: number; readonly width: number };
+
+export function popoverBox(placement: PopoverPlacement): PopoverBox {
+  const { left, width } = placement;
+  return placement.side === 'above' ? { bottom: placement.bottom, left, width } : { top: placement.top, left, width };
+}

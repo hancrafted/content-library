@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { placePopover } from './popover-placement.pure';
+import { placePopover, popoverBox } from './popover-placement.pure';
 
 const DESKTOP = { width: 1440, height: 900 };
 const RULES = { maxWidth: 256, gap: 12, minRoom: 120 };
@@ -34,6 +34,26 @@ describe('success cases', () => {
     const placement = placePopover({ anchor, viewport: DESKTOP, side: 'below', ...metroLike });
     // ASSERT
     expect(placement).toEqual(expected);
+  });
+
+  it('boxes an above placement by its bottom edge, so it grows upward', () => {
+    // ARRANGE
+    const placement = { side: 'above', bottom: 512, left: 532, width: 256, arrowX: 128 } as const;
+    const expected = { bottom: 512, left: 532, width: 256 };
+    // ACT
+    const box = popoverBox(placement);
+    // ASSERT
+    expect(box).toEqual(expected);
+  });
+
+  it('boxes a below placement by its top edge', () => {
+    // ARRANGE
+    const placement = { side: 'below', top: 472, left: 532, width: 256, arrowX: 128 } as const;
+    const expected = { top: 472, left: 532, width: 256 };
+    // ACT
+    const box = popoverBox(placement);
+    // ASSERT
+    expect(box).toEqual(expected);
   });
 });
 
@@ -111,5 +131,15 @@ describe('edge cases', () => {
     const placement = placePopover({ anchor, viewport: slim, side: 'below', ...RULES });
     // ASSERT
     expect(placement).toMatchObject(expected);
+  });
+
+  it('leaves the side and arrow out of the box, so no stray style reaches the popover', () => {
+    // ARRANGE
+    const placement = { side: 'below', top: 0, left: 16, width: 208, arrowX: 0 } as const;
+    const expected = ['left', 'top', 'width'];
+    // ACT
+    const keys = Object.keys(popoverBox(placement)).sort();
+    // ASSERT
+    expect(keys).toEqual(expected);
   });
 });

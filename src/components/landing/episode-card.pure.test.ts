@@ -1,4 +1,4 @@
-import type { EpisodeMetadata } from '@/lib/episode-metadata.pure';
+import type { PublishedEpisodeMetadata, UpcomingEpisodeMetadata } from '@/lib/episode-metadata.pure';
 import { describe, expect, it } from 'vitest';
 import { episodeCard } from './episode-card.pure';
 
@@ -8,7 +8,7 @@ const read = (key: string) => `[${key}]`;
 /** A published Episode's copy, as the registry reads it from the Episode's record. */
 const COPY = { title: 'Your AI token economy', caption: 'Hidden managing responsibilities.' };
 
-const PUBLISHED: EpisodeMetadata = {
+const PUBLISHED_METADATA: PublishedEpisodeMetadata = {
   slug: 'ai-token-economy',
   status: 'published',
   topic: 'economics',
@@ -17,7 +17,10 @@ const PUBLISHED: EpisodeMetadata = {
   publishedOn: '2026-10-09',
 };
 
-const UPCOMING: EpisodeMetadata = {
+/** The published Episode as the card reads it: its metadata with its copy from the registry. */
+const PUBLISHED = { ...PUBLISHED_METADATA, copy: COPY };
+
+const UPCOMING: UpcomingEpisodeMetadata = {
   slug: 'choosing-the-right-model',
   status: 'upcoming',
   topic: 'economics',
@@ -46,7 +49,7 @@ describe('success cases', () => {
       icon: 'coins',
     };
     // ACT
-    const card = episodeCard(PUBLISHED, { locale: 'en', read, copy: COPY, minutes: 42, featuredRank: 3 });
+    const card = episodeCard(PUBLISHED, { locale: 'en', read, minutes: 42, featuredRank: 3 });
     // ASSERT
     expect(card).toEqual(expected);
   });
@@ -55,7 +58,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = { route: '/episode/ai-token-economy', href: '/de/episode/ai-token-economy' };
     // ACT
-    const { route, href } = episodeCard(PUBLISHED, { locale: 'de', read, copy: COPY, minutes: 42 });
+    const { route, href } = episodeCard(PUBLISHED, { locale: 'de', read, minutes: 42 });
     // ASSERT
     expect({ route, href }).toEqual(expected);
   });
@@ -99,13 +102,14 @@ describe('failure cases', () => {
     expect(build).toThrow(message);
   });
 
-  it('refuses a published card without the copy its record holds, so it never reads a stale key', () => {
+  it('rejects at compile time a published card without the copy its record holds, so it never reads a stale key', () => {
     // ARRANGE
-    const expected = 'ai-token-economy';
+    // @ts-expect-error -- a published Episode's card needs its copy from the registry
+    const build = () => episodeCard(PUBLISHED_METADATA, { locale: 'en', read, minutes: 42 });
     // ACT
-    const build = () => episodeCard(PUBLISHED, { locale: 'en', read, minutes: 42 });
+    const built = typeof build;
     // ASSERT
-    expect(build).toThrow(expected);
+    expect(built).toBe('function');
   });
 
   it('never ranks an upcoming card as Featured', () => {
@@ -124,7 +128,7 @@ describe('edge cases', () => {
     const expectedKeys = ['accent', 'caption', 'featuredRank', 'format', 'href', 'icon'];
     const absent = 'minutes';
     // ACT
-    const card = episodeCard(PUBLISHED, { locale: 'en', read, copy: COPY });
+    const card = episodeCard(PUBLISHED, { locale: 'en', read });
     const keys = Object.keys(card);
     // ASSERT
     expect(keys).toEqual(expect.arrayContaining(expectedKeys));
