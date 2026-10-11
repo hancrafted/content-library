@@ -15,7 +15,7 @@ description: 'The architecture map read first: tiers and import direction, the m
 
 ## Context
 
-An agent opening this repo meets five Episode-shaped records, each deep on one concern. None says which module is which or how the parts meet, so an agent guesses, and guesses grow a shared Slide type, a second container or an Episode-local `parts/` folder. This record is the map: shape and ownership only. Each detailed rule lives in the record named under References; on conflict, that record wins.
+An agent opening this repo meets five Episode-shaped records, each deep on one concern. None says which module is which or how the parts meet, so an agent guesses, and guesses grow a shared Slide type, a second container or an Episode-local `parts/` folder. This record is the map: shape and ownership only. Each detailed rule lives with the record that owns its area — the Episode page rules (`episodes/`, `slide-master/`, `slide-shared/`), the import boundary (all of `src/`), the server/client boundary (`*.client.tsx`, hooks), the Slide wrapper rules (`episode-page/`, `slide-master/`) and the Context drawer rules (`context-drawer/`); on conflict, that owner wins.
 
 **Tiers.** Folders are tiers; imports only point down.
 
@@ -54,7 +54,7 @@ flowchart LR
   C --> CH["chrome: contents, drawer, player"]
 ```
 
-**Inside one Slide.** The wrapper owns the mechanics and holds the Scene, which owns the creative content in two layers; the rules are in [Slide Wrapper and Scene](./FE-009-slide-wrapper-and-scene.md).
+**Inside one Slide.** The wrapper owns the mechanics and holds the Scene, which owns the creative content in two layers; the Slide wrapper rules, governing `episode-page/` and `slide-master/`, hold the detail.
 
 ```mermaid
 flowchart LR
@@ -83,7 +83,7 @@ For this project the map matters because handoffs run on agents with no session 
 
 ### 1. This record is the map
 
-1. Read this record before touching an Episode; it names modules and flows, never mechanism. Rules live in the records under References.
+1. Read this record before touching an Episode; it names modules and flows, never mechanism. Rules live with the owner of each area: Episode page, import boundary, server/client boundary, Slide wrapper, Context drawer.
 
 ### 2. Four tiers, one direction
 
@@ -162,11 +162,6 @@ For this project the map matters because handoffs run on agents with no session 
 
 ## References
 
-- [Episode Page](./FE-002-episode-page.md) — record, Slide folder, headings, strings, Episode styling.
-- [Server/Client Boundary](./FE-006-server-client-boundary.md) — `.client` classifier, props across the boundary.
-- [Module Layering](./FE-007-module-layering.md) — tiers, thin routes, Slide-folder imports.
-- [Slide Wrapper and Scene](./FE-009-slide-wrapper-and-scene.md) — wrapper, mount, observer, Backdrop, stacking.
-- [Context Drawer](./FE-010-context-drawer.md) — notes, Voice script, targets.
 - [`GLOSSARY.md`](../../GLOSSARY.md) — Episode, Slide, Scene, chrome.
 - [`docs/adr/0001-the-slide-is-a-self-contained-folder.md`](../../docs/adr/0001-the-slide-is-a-self-contained-folder.md) — why a Slide is a folder.
 - [`docs/features/episode-migration.md`](../../docs/features/episode-migration.md) — building an Episode step by step.

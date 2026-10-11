@@ -157,7 +157,6 @@ flowchart LR
 
 ## References
 
-- [Slide Architecture](./FE-004-slide-architecture.md) — the architecture map: tiers, modules, page flow.
 - [`GLOSSARY.md`](../../GLOSSARY.md#episode-structure) — Episode structure: Section, Slide, Scene, Voice script.
 - [`docs/features/episode-translation-keys.md`](../../docs/features/episode-translation-keys.md) — key roles, worked examples.
 - [`docs/features/episode-migration.md`](../../docs/features/episode-migration.md) — converting a prototype into an Episode, step by step.
