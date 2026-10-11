@@ -145,13 +145,6 @@
   }
 }
 
-/* Episode scoped tokens: maintaining-markdown-for-ai tripartite palette */
-[data-episode='maintaining-markdown-for-ai'] {
-  --primary: var(--machine);
-  --secondary: var(--human);
-  --accent: var(--ai);
-}
-
 /* Keyframes */
 @keyframes hero-drift {
   0%,

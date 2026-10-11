@@ -1,0 +1,24 @@
+{
+  "title": "What AI accelerates",
+  "caption": "Cross-referencing prose against source handbooks to flag discrepancies for human review.",
+  "prose": "The answer comes back rapid, insightful, and itself in need of checking.",
+  "notes": {
+    "cross-referencing": {
+      "header": "Cross-referencing prose",
+      "description": "AI can follow references across files and flag contradictions for human review."
+    },
+    "signals-not-resolutions": {
+      "header": "Signals, not truth",
+      "description": "The AI recommendation is rapid and insightful, but remains an unverified claim itself."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "signals-and-contradictions": {
+        "title": "What AI accelerates",
+        "keywords": "contradictions, cross-references, tickets, signals",
+        "script": "So what does AI add? It can follow that reference. Read the document on the other end. And notice that this one says five days and that one says seven. That's a contradiction it found on its own — and what it does with it matters more than finding it. It can flag that one section and raise a ticket, so a human resolves a single line instead of re-reading the document. Those are signals. Every signal narrows what a human actually has to look at. But can it make the call? It can produce one. It's like stopping someone in the street, handing them both documents, and asking which is right. You'll get an answer. If you own this process — would you trust that person?"
+      }
+    }
+  }
+}

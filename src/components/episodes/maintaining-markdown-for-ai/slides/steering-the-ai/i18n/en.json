@@ -1,0 +1,24 @@
+{
+  "title": "Steering the AI",
+  "caption": "markdown-harness steers the machine half",
+  "prose": "A document can tell you how much of itself to believe. Not full trust — a floor that holds, and a reliable signal when a human needs to act.",
+  "notes": {
+    "raising-the-floor": {
+      "header": "Raising the floor",
+      "description": "A document can declare how much of itself to believe; reliable signals warn when humans must step in."
+    },
+    "tool-boundary": {
+      "header": "Stopping before judgment",
+      "description": "markdown-harness steers the machine layer and prepares signals without claiming human judgment."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "raising-the-floor": {
+        "title": "Steering the AI",
+        "keywords": "markdown-harness, raise floor, steer arrow, human boundary",
+        "script": "So the goal is to make the machine's half do more. And this is what I've been building over the past couple of weeks: markdown-harness. The idea is one sentence: a document can tell you how much of itself to believe. It's not about generating trust. Trust is semantic — a machine can never produce it. What it can do is raise the floor. Reliable signals that tell an agent or a human that something needs attention. You've seen these three circles before: deterministic, cheap, fast signals handed to the AI while it's working. The machine column reaching into the AI column. That's the arrow. And the human side is greyed out on purpose: this tool stops before it. That part was always yours."
+      }
+    }
+  }
+}

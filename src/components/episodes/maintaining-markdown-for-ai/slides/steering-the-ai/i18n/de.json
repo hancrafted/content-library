@@ -1,0 +1,24 @@
+{
+  "title": "Die KI steuern",
+  "caption": "markdown-harness steuert den maschinellen Teil",
+  "prose": "Ein Dokument kann angeben, wie viel man ihm glauben darf. Kein blindes Vertrauen — ein verlässliches Fundament und ein klares Signal, wann ein Mensch eingreifen muss.",
+  "notes": {
+    "raising-the-floor": {
+      "header": "Das Fundament heben",
+      "description": "Ein Dokument kann deklarieren, wie weit es belastbar ist; verlässliche Signale warnen vor Handlungsbedarf."
+    },
+    "tool-boundary": {
+      "header": "Halt vor dem Urteil",
+      "description": "markdown-harness steuert die Maschinenebene und bereitet Signale vor, ohne menschliches Urteil zu beanspruchen."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "raising-the-floor": {
+        "title": "Die Basis anheben",
+        "keywords": "markdown-harness, Mindeststandard, Lenkung, Grenze zum Menschen",
+        "script": "Dafür baue ich markdown-harness. Der Leitgedanke: Ein Dokument verrät selbst, wie sehr man ihm vertrauen darf. Es erzeugt kein künstliches Vertrauen, sondern hebt den Mindeststandard mit deterministischen Signalen an. Die Maschine lenkt die KI. Die menschliche Seite bleibt bewusst unberührt: Diese Verantwortung gehört dem Menschen."
+      }
+    }
+  }
+}
