@@ -1,0 +1,24 @@
+{
+  "title": "What the machine verifies",
+  "caption": "Syntactic and structural checks that run deterministically in milliseconds without an LLM.",
+  "prose": "Syntax parses, URI format is validated, and ISO dates validate.",
+  "notes": {
+    "deterministic-checks": {
+      "header": "Deterministic checks",
+      "description": "Syntax, schemas, dates, and URIs validate deterministically in milliseconds without an LLM."
+    },
+    "mechanical-ceiling": {
+      "header": "Mechanical ceiling",
+      "description": "A clean pass proves structural integrity, never that the underlying statement is true."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "mechanical-ceiling": {
+        "title": "What the machine verifies",
+        "keywords": "frontmatter, metadata shape, link checker, ceiling",
+        "script": "Start with the low-hanging fruit. What can a machine check, every time, for free? Here's a markdown file — an onboarding process. At the top, the frontmatter: key-value pairs in YAML that carry metadata, mostly for the machine and the agent. Underneath, the body. A machine can check the shape of that metadata. Is the type declared. Is the date a real date. Is the link well-formed — and it can even follow it and see if it's still there. And that's the ceiling. It can tell you the field exists. It can't tell you whether what's written in it is true."
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "title": "Lead One, Upskill Many",
+  "caption": "It's an LLM — but if it were a human, how would you manage it?",
+  "prose": "Directing an AI agent requires the same delegation and review rigor as onboarding an external specialist.",
+  "notes": {
+    "upskill-vs-replace": {
+      "header": "Upskill many vs replace",
+      "description": "The objective is not replacing workers but elevating human operators into effective directors of synthetic labor."
+    }
+  }
+}

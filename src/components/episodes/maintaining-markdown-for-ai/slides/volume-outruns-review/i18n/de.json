@@ -1,0 +1,30 @@
+{
+  "title": "Volumen überholt die Prüfung",
+  "caption": "Bei einem einzelnen Dokument nimmt der Pflegeaufwand ab, während die Drift zunimmt — an dieser Schnittstelle hat sich die Arbeit verlagert.",
+  "prose": "Zwei unterschiedliche Dinge werden schwieriger: Bei einem einzelnen Dokument sinkt der Pflegeaufwand, während inhaltliche Drift steigt. Über einen Korpus hinweg wächst die Pflegefläche schneller als die Dateianzahl.",
+  "notes": {
+    "decay-vs-drift": {
+      "header": "Verfall und Drift",
+      "description": "Bei einem Dokument fällt der Pflegeaufwand ab, während Drift ansteigt — an diesem Schnittpunkt verlagert sich die Arbeit."
+    },
+    "corpus-compounding": {
+      "header": "Wachsende Angriffsfläche",
+      "description": "Über einen Korpus hinweg vervielfacht sich die Verifikationsfläche schneller als die bloße Dateianzahl."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "effort-decay": {
+        "title": "Aufwandsverfall und Drift",
+        "keywords": "Verfallskurve, sinkender Aufwand, steigende Drift",
+        "script": "Wissensmanagement war in Unternehmen schon immer schwer – lange vor KI. Und zwar wegen dieser Dynamik. Ein Dokument im Zeitverlauf: Die blaue Linie zeigt den Aufwand. Anfangs gibt es eine Spitze bei der Erstellung. Danach fällt der Aufwand rapide ab, weil niemand ein Budget für Pflege vorsieht. Und während der Aufwand sinkt, wächst die Drift: Das Dokument existiert weiter, ist aber unbemerkt nicht mehr wahr."
+      },
+      "corpus-compounding": {
+        "title": "Exponentieller Prüfaufwand",
+        "keywords": "Bestand wächst, Verweise untereinander, Bremse weg",
+        "script": "Dokumente häufen sich kontinuierlich an. Man prüft nicht nur jede einzelne Datei, sondern jeden Querverweis auf andere Dateien. Das potenziert sich. Früher war das Schreiben die Bremse: Der Mensch war der Flaschenhals, der die Menge begrenzte. Diese Bremse existiert nicht mehr.",
+        "bridge": "Die Bremse ist weg. Was bedeutet das für die Prüfung eines Dokuments?"
+      }
+    }
+  }
+}

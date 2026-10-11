@@ -1,0 +1,11 @@
+{
+  "title": "The Four Eras of AI",
+  "caption": "New technology gives rise to new disciplines for humans to cope.",
+  "prose": "From Prompt Engineering in 2023 to Context Engineering in 2024, Harness Engineering in 2025, and Token Economics today.",
+  "notes": {
+    "emerging-disciplines": {
+      "header": "Emerging disciplines",
+      "description": "As model capabilities advance, operational focus shifts from prompt words to managing context, harnesses, and token budgets."
+    }
+  }
+}

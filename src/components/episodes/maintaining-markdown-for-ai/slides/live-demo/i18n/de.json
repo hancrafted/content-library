@@ -1,0 +1,24 @@
+{
+  "title": "Live-Demo",
+  "caption": "Die Prüfung live ausgeführt.",
+  "prose": "Testdatei: docs/handbook/onboarding.md. An den Agenten gestellte Frage: Was sind die Onboarding-Schritte in der ersten Woche für neue Mitarbeiter?",
+  "notes": {
+    "demo-contrast": {
+      "header": "Vergleichende Auswertung",
+      "description": "Drei Agenten erhalten dieselbe veraltete Datei; nur gesteuerte Agenten werden an Halluzinationen gehindert."
+    },
+    "holding-slide": {
+      "header": "Live-Terminal-Lauf",
+      "description": "Der Vortrag wechselt hier ins Terminal; die Folie bildet den Rahmen für den Testlauf."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "demo-walkthrough": {
+        "title": "Die Live-Prüfung",
+        "keywords": "drei Terminals, ohne Hook, Piraten-Injektion, Zugriff verweigert",
+        "script": "Drei Terminals, dieselbe Frage, dasselbe Dokument. Ohne Hook antwortet der Agent gutgläubig auf veraltete Daten. Mit Hook beweist die Piraten-Antwort, dass die Instruktion gegriffen hat. Im dritten Fall wird der Zugriff verweigert. Das Protokoll erfasst das Verfallsdatum deterministisch – unabhängig vom Modell."
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "title": "Kontextverwaltung",
+  "caption": "Das Kontextfenster ist die Aufmerksamkeitsspanne des Modells.",
+  "prose": "Token sammeln sich im Kontextfenster. Füllt es sich, lässt die Aufmerksamkeit nach und entscheidende Instruktionen gehen verloren.",
+  "notes": {
+    "cognitive-stamina": {
+      "header": "Kognitive Ausdauer",
+      "description": "Kontextfenster verhalten sich wie menschliche Konzentration an einem langen Arbeitstag: anfangs scharf, später zunehmend abgelenkt."
+    }
+  }
+}

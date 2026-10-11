@@ -1,0 +1,11 @@
+{
+  "title": "What Is a Token",
+  "caption": "Tokens are the basic unit of data for LLMs — every one is billed.",
+  "prose": "LLMs calculate statistical probabilities over numerical tokens. Every word, character, and prompt translates to billable units.",
+  "notes": {
+    "probabilistic-units": {
+      "header": "Probabilistic units",
+      "description": "LLMs process numerical token IDs, not human prose. Understanding token granularity reveals where costs accumulate."
+    }
+  }
+}

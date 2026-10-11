@@ -1,0 +1,11 @@
+{
+  "title": "Kosten von agentischer KI",
+  "caption": "Eine kleine Fehlerbehebung summiert sich auf ~73.000 Token Kontext.",
+  "prose": "Agenten-Schleifen senden bei jedem Tool-Aufruf und Denkschritt den gesamten bisherigen Verlauf erneut.",
+  "notes": {
+    "agentic-compounding": {
+      "header": "Agentische Kumulierung",
+      "description": "Jeder Tool-Aufruf fügt vollständige Dateiinhalte zum Verlauf hinzu und lässt die Input-Token-Zahlen exponentiell steigen."
+    }
+  }
+}

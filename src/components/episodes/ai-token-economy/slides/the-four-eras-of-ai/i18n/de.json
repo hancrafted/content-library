@@ -1,0 +1,11 @@
+{
+  "title": "Die vier Epochen der KI",
+  "caption": "Neue Technologie bringt neue Disziplinen hervor, damit Menschen Schritt halten können.",
+  "prose": "Vom Prompt Engineering 2023 über Context Engineering 2024 und Harness Engineering 2025 zur Token-Ökonomie von heute.",
+  "notes": {
+    "emerging-disciplines": {
+      "header": "Entstehende Disziplinen",
+      "description": "Mit wachsender Modellfähigkeit verschiebt sich der Fokus vom Prompt-Text zur Steuerung von Kontext, Testumgebungen und Token-Budgets."
+    }
+  }
+}

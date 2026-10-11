@@ -1,18 +1,15 @@
 import type { Messages } from '@/i18n/translations';
-import type { TargetProps } from '@/lib/context-link.pure';
 import type { SectionList } from '@/lib/episode.pure';
-import type { Locale } from '@/lib/locale.pure';
 import type { EpisodeSlug } from '@/lib/routes';
-import type { createTranslator, MessageKeys, NamespaceKeys, NestedKeyOf } from 'next-intl';
 import type { ReactNode } from 'react';
 import type { SelfContainedEpisodeRecord } from './slide';
-import type { NoteSpec, PerLocale, RichTag, RuntimeKit, SegmentSpec, TitleComponent } from './slide-base';
+import type { NoteSpec, PerLocale, RuntimeKit, SegmentSpec } from './slide-base';
 
 /*
  * The Episode record (FE-002): an Episode is static data that composes Slides;
  * each Slide declares its slug, notes and segments and renders its Scene
  * from a kit; its minutes are counted from its Voice script's words. Types
- * and factories only. The walk lives in `src/lib/episode.pure.ts`; the kit
+ * only; no Episode uses this old shape any more, and #58 deletes it. The walk lives in `src/lib/episode.pure.ts`; the kit
  * is built in `slide-kit.tsx`, by the container. Every string a Slide shows lives under its own Translation key,
  * `episodes.<ep>.slides.<slide>.*`, so the slug is written once and `t`, `ref`
  * and `target` are typed from it.
@@ -40,52 +37,6 @@ export type SlideSlug<Ep extends RecordEpisodeSlug> = KeysOf<SlidesMessages<Ep>>
 export type TitledSlideSlug<Ep extends RecordEpisodeSlug> = {
   [S in SlideSlug<Ep>]: SlideMessages<Ep, S> extends { readonly title: string } ? S : never;
 }[SlideSlug<Ep>];
-/** The note slugs a Slide's subtree translates: `…slides.<slide>.notes.<note>`. */
-export type NoteSlug<Ep extends RecordEpisodeSlug, S> =
-  SlideMessages<Ep, S> extends { readonly notes: infer N } ? KeysOf<N> : never;
-/** The segment slugs a Slide's subtree translates: `…slides.<slide>.voiceScript.segments.<segment>`. */
-export type SegmentSlug<Ep extends RecordEpisodeSlug, S> =
-  SlideMessages<Ep, S> extends { readonly voiceScript: { readonly segments: infer G } } ? KeysOf<G> : never;
-
-/** A dotted key to a string leaf of a Slide's subtree: what `template` reads. */
-export type TemplateKey<Ep extends RecordEpisodeSlug, S> = MessageKeys<
-  SlideMessages<Ep, S>,
-  NestedKeyOf<SlideMessages<Ep, S>>
->;
-
-type Namespace = NamespaceKeys<Messages, NestedKeyOf<Messages>>;
-
-/**
- * next-intl's translator, namespaced to one Slide: a key outside its subtree
- * fails `tsc`. Its `t.rich` already knows the default `em`, `b` and `code`
- * tags (`rich-tags.tsx`); a Slide passes only `ref` and tags of its own.
- */
-export type SlideTranslator<Ep extends RecordEpisodeSlug, S> = `episodes.${Ep}.slides.${S & string}` extends infer N
-  ? N extends Namespace
-    ? ReturnType<typeof createTranslator<Messages, N>>
-    : never
-  : never;
-
-/**
- * The kit a Slide's `content` receives. `t` and `template` read only this
- * Slide's Translation keys; `ref` and `target` take only the notes and
- * targets the Slide declares; `slideHref` only this Episode's Slides.
- */
-export interface SlideKit<Ep extends RecordEpisodeSlug, S, N extends NoteSpec> {
-  readonly t: SlideTranslator<Ep, S>;
-  /** The page's locale, for formatting a number or date the Translation file does not hold. */
-  readonly locale: Locale;
-  /** The localized `href` of another Slide of this Episode: its page path and the anchor its position gives it. */
-  readonly slideHref: (slug: SlideSlug<Ep>) => string;
-  /** A string leaf as written, `{name}` placeholders unfilled, for a client component to fill with `fillTemplate`. */
-  readonly template: (key: TemplateKey<Ep, S>) => string;
-  /** The `t.rich` tag for a Context reference to one of this Slide's notes. */
-  readonly ref: (note: N['slug']) => RichTag;
-  /** Marks the element one of this Slide's notes explains. */
-  readonly target: (name: N['target']) => TargetProps;
-  readonly Title: TitleComponent;
-}
-
 /** One Slide of an Episode record. Static data: its Scene renders only when the container calls `content`. */
 export interface Slide<Ep extends RecordEpisodeSlug = RecordEpisodeSlug, S extends string = string> {
   readonly episode: Ep;
@@ -117,35 +68,3 @@ export interface EpisodeRecord<Ep extends RecordEpisodeSlug = RecordEpisodeSlug>
  */
 export type AnyEpisodeRecord =
   { [E in RecordEpisodeSlug]: EpisodeRecord<E> }[RecordEpisodeSlug] | SelfContainedEpisodeRecord;
-
-/** What a Slide file declares; `slug` is const-inferred and types the rest. */
-export interface SlideSpec<Ep extends RecordEpisodeSlug, S extends SlideSlug<Ep>, N extends NoteSpec> {
-  readonly slug: S;
-  readonly notes?: readonly N[];
-  readonly segments?: readonly SegmentSpec<SegmentSlug<Ep, S>>[];
-  readonly content: (kit: SlideKit<Ep, S, N>) => ReactNode;
-}
-
-/**
- * Binds the Slide factory to one Episode, so `t` is typed to that Episode's
- * Slides: `const slide = slidesFor('page-template')`.
- */
-export function slidesFor<Ep extends RecordEpisodeSlug>(episode: Ep) {
-  return function slide<const S extends SlideSlug<Ep>, const N extends NoteSpec<NoteSlug<Ep, S>> = never>(
-    spec: SlideSpec<Ep, S, N>,
-  ): Slide<Ep, S> {
-    return {
-      episode,
-      slug: spec.slug,
-      notes: spec.notes ?? [],
-      segments: spec.segments ?? [],
-      // The runtime kit is assignable to every concrete `SlideKit` (proved in the test); generics hide that here.
-      content: spec.content as unknown as Slide['content'],
-    };
-  };
-}
-
-/** An Episode record from its Sections; each Section's first Slide names it. */
-export function episode<Ep extends RecordEpisodeSlug>(record: EpisodeRecord<Ep>): EpisodeRecord<Ep> {
-  return record;
-}

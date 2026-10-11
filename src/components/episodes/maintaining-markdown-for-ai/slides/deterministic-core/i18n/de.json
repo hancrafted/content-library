@@ -1,0 +1,25 @@
+{
+  "title": "Läuft auf einem 100% deterministischen Kern",
+  "caption": "Ein Mechanismus, drei Auslöser, ein deterministischer Kern.",
+  "prose": "Drei Wege hinein, drei Wege hinaus. Was dazwischen geschieht, ist jedes Mal identisch.",
+  "notes": {
+    "three-triggers": {
+      "header": "Drei Auslöser, ein Kern",
+      "description": "Agenten-Pre-Read-Hook, Pre-Commit-Gate oder manuelle Prüfung führen denselben Kern aus."
+    },
+    "predictable-eval": {
+      "header": "Deterministische Auswertung",
+      "description": "Konfiguration und Dateieingaben liefern bei jedem Lauf exakt dasselbe Ergebnis."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "three-triggers": {
+        "title": "Ein deterministischer Kern",
+        "keywords": "drei Auslöser, Laufzeit, Commit-Gate, nächtlicher Lauf",
+        "script": "Drei Wege rein, drei Wege raus – und in der Mitte dieselbe Logik: Konfiguration lesen, Regeln deterministisch anwenden. Zur Laufzeit warnt das Tool den Agenten vor veralteten Dateien. Beim Commit fungiert es als Qualitäts-Gate. Im nächtlichen Lauf regeneriert es Indizes und meldet Handlungsbedarf.",
+        "bridge": "Sehen wir uns die Laufzeit live an."
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "title": "The Fullness Gauge & Levers",
+  "caption": "Past ~half full, the model starts losing the plot.",
+  "prose": "Below 50% is the smart zone. Above 50%, accuracy degrades. Above 75%, hallucination risk spikes. Three levers: Monitor, Compact, Hand off.",
+  "notes": {
+    "smart-zone-discipline": {
+      "header": "Smart zone discipline",
+      "description": "Keeping context windows under 50% capacity guarantees high accuracy and prevents silent prompt drift."
+    }
+  }
+}

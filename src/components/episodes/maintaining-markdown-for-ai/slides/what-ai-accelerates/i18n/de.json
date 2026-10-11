@@ -1,0 +1,24 @@
+{
+  "title": "Was KI beschleunigt",
+  "caption": "Gegenprüfung von Texten gegen Handbücher, um Widersprüche für menschliche Reviews zu markieren.",
+  "prose": "Die Antwort kommt schnell, aufschlussreich und selbst prüfbedürftig zurück.",
+  "notes": {
+    "cross-referencing": {
+      "header": "Querverweise prüfen",
+      "description": "KI kann Referenzen dateiübergreifend verfolgen und Widersprüche für menschliche Reviews aufzeigen."
+    },
+    "signals-not-resolutions": {
+      "header": "Signale, keine Wahrheiten",
+      "description": "Die KI-Empfehlung ist schnell und einsichtsreich, bleibt jedoch selbst eine ungeprüfte Behauptung."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "signals-and-contradictions": {
+        "title": "Was KI beschleunigt",
+        "keywords": "Widersprüche, Querverweise, Tickets, Signale",
+        "script": "Was leistet KI? Sie folgt Querverweisen und erkennt, wenn Dokument A fünf Tage nennt und Dokument B sieben. Sie deckt Widersprüche auf und erstellt ein Ticket, sodass ein Mensch gezielt eine Zeile prüft statt alles neu zu lesen. Das sind Signale, die den Prüfaufwand eingrenzen. Doch die finale Entscheidung kann man ihr nicht anvertrauen."
+      }
+    }
+  }
+}

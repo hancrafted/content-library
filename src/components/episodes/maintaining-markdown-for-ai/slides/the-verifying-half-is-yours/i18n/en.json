@@ -1,0 +1,24 @@
+{
+  "title": "The verifying half is yours",
+  "caption": "Back to the Venn, with the human region lit and the rest dimmed. Nothing new to read.",
+  "prose": "The work moved. It moved to you.",
+  "notes": {
+    "the-work-moved": {
+      "header": "The work moved",
+      "description": "Writing docs is automated; verifying them is the real work, and it belongs to you."
+    },
+    "closing-thesis": {
+      "header": "Summary thesis",
+      "description": "Machines verify structure, AI accelerates cross-references, and human judgment owns accountability."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "closing-thesis": {
+        "title": "The verifying half is yours",
+        "keywords": "third time, lit human region, work moved, always yours",
+        "script": "This is the third time you've seen this picture. First as what verification costs. Then as what the tool does — reaching into the middle, and stopping at the edge of the human. Same three circles. All that's changed is which one is dark. Machines check structure. AI accelerates drafting. And the work moved — to the part that was always yours. One thing I want to be straight about: the middle region is my hypothesis. How much an agent can be trusted with is not settled — an open problem. The tool's here if you want it. It's early. Thank you."
+      }
+    }
+  }
+}
