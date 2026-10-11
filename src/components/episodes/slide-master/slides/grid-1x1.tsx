@@ -5,7 +5,7 @@ import { SlideCaption, SlideFrame } from '@/components/slide-master/slide-master
 const slide = slidesFor('slide-master');
 
 // One feature cell across the whole Foreground: a tall poster tile, title and caption set bottom-left over a drifting
-// gradient. Hover and keyboard focus lift it one elevation step; the motion is CSS only, so no client widget.
+// gradient. Hover lifts it one elevation step; the motion is CSS only, so no client widget.
 export const grid1x1 = slide({
   slug: 'grid-1x1',
   notes: [{ slug: 'layout', target: 'grid' }],
@@ -16,7 +16,6 @@ export const grid1x1 = slide({
       <SlideCaption>{t('caption')}</SlideCaption>
       <div {...target('grid')} className="mt-10">
         <article
-          tabIndex={0}
           aria-labelledby="grid-1x1-c1"
           className={`${styles.surface} group relative isolate flex min-h-[26rem] flex-col justify-between overflow-hidden rounded-xl border border-border p-4 shadow-sm transition-[translate,box-shadow] duration-300 ease-out outline-none hover:-translate-y-0.5 hover:shadow-lg focus-visible:-translate-y-0.5 focus-visible:shadow-lg focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none sm:p-6 md:min-h-[32rem] md:p-10`}
         >
