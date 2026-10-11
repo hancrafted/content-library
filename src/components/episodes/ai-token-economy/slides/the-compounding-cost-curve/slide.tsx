@@ -10,12 +10,12 @@ function PricingBars(): ReactElement {
   return (
     <div className="space-y-3">
       {MODEL_PRICINGS.map((m) => (
-        <div key={m.name} className="rounded-box border border-base-300 bg-base-100 p-4 shadow-xs">
+        <div key={m.name} className="rounded-xl border border-border bg-card p-4 shadow-xs">
           <div className="flex items-center justify-between">
             <span className="font-semibold">{m.name}</span>
             <span className="font-mono text-lg font-bold">${m.costPerFix.toFixed(2)}</span>
           </div>
-          <div className="mt-2 h-3 overflow-hidden rounded-full bg-base-200">
+          <div className="mt-2 h-3 overflow-hidden rounded-full bg-muted">
             <div
               className="h-full rounded-full bg-primary"
               style={{ width: `${Math.min(100, (m.costPerFix / 1.54) * 100)}%` }}

@@ -4,16 +4,17 @@ import { SlideProse } from '@/components/slide-master/slide-master';
 import type { ReactElement } from 'react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
+import styles from './status.module.css';
 
 function ChatLane(): ReactElement {
   return (
     <div className="space-y-2">
       <div className="flex justify-between text-sm">
         <span className="font-semibold">Plain chat</span>
-        <span className="font-mono text-success font-bold">25% · fresh</span>
+        <span className="font-mono text-(--success) font-bold">25% · fresh</span>
       </div>
-      <div className="flex h-10 w-full overflow-hidden rounded-box border border-base-content/10 bg-base-300">
-        <div className="flex w-1/4 items-center justify-center bg-neutral text-neutral-content font-mono text-[0.65rem]">
+      <div className="flex h-10 w-full overflow-hidden rounded-xl border border-border bg-muted">
+        <div className="flex w-1/4 items-center justify-center bg-foreground text-background font-mono text-[0.65rem]">
           Boot-up
         </div>
         <div className="w-[15%] bg-primary" />
@@ -28,15 +29,15 @@ function AgentLane(): ReactElement {
     <div className="space-y-2">
       <div className="flex justify-between text-sm">
         <span className="font-semibold">Agentic coding</span>
-        <span className="font-mono text-error font-bold">85% · full</span>
+        <span className="font-mono text-destructive font-bold">85% · full</span>
       </div>
-      <div className="flex h-10 w-full overflow-hidden rounded-box border border-base-content/10 bg-base-300">
-        <div className="flex w-1/4 items-center justify-center bg-neutral text-neutral-content font-mono text-[0.65rem]">
+      <div className="flex h-10 w-full overflow-hidden rounded-xl border border-border bg-muted">
+        <div className="flex w-1/4 items-center justify-center bg-foreground text-background font-mono text-[0.65rem]">
           Boot-up
         </div>
         <div className="w-[15%] bg-primary" />
-        <div className="w-[25%] bg-warning" />
-        <div className="w-[20%] bg-warning/80" />
+        <div className="w-[25%] bg-(--warning)" />
+        <div className="w-[20%] bg-(--warning)/80" />
       </div>
     </div>
   );
@@ -44,10 +45,10 @@ function AgentLane(): ReactElement {
 
 function AttentionLanes(): ReactElement {
   return (
-    <div className="mt-8 space-y-6">
+    <div className={`${styles.scene} mt-8 space-y-6`}>
       <ChatLane />
       <AgentLane />
-      <div className="flex justify-between font-mono text-xs text-base-content/60">
+      <div className="flex justify-between font-mono text-xs text-muted-foreground">
         <span>9 AM · fresh</span>
         <span>12 PM</span>
         <span>3 PM</span>
