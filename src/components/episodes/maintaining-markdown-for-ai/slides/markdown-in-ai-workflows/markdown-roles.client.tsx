@@ -39,7 +39,7 @@ function RoleCardTop({ role, onOpen }: { role: RoleDetail; onOpen: (modal: Modal
           e.stopPropagation();
           onOpen(role.key);
         }}
-        className="cursor-pointer rounded-lg border border-border bg-card px-2 py-1 font-mono text-[11px] text-muted-foreground shadow-2xs hover:border-secondary hover:text-secondary"
+        className="cursor-pointer rounded-lg border border-border bg-card px-2 py-1 font-mono text-[11px] text-muted-foreground shadow-2xs hover:border-human hover:text-human"
       >
         Show details
       </button>
@@ -55,7 +55,7 @@ function RoleCardFooter({ source, url }: { source: string; url: string }) {
         target="_blank"
         rel="noopener noreferrer"
         onClick={(e) => e.stopPropagation()}
-        className="font-mono text-xs font-semibold text-primary hover:underline"
+        className="font-mono text-xs font-semibold text-machine hover:underline"
       >
         {source}
       </a>
@@ -83,7 +83,7 @@ function RoleCard({
       onClick={onSelect}
       className={cn(
         'cursor-pointer rounded-2xl border bg-card/90 p-4 shadow-xs transition-all hover:border-foreground/30',
-        isActive ? 'ring-2 ring-primary border-primary' : 'border-border',
+        isActive ? 'ring-2 ring-machine border-machine' : 'border-border',
       )}
     >
       <RoleCardTop role={role} onOpen={onOpen} />
@@ -103,10 +103,10 @@ function SvgConnectors({ paths, activeRole }: { paths: Record<RoleKey, string>; 
         const isActive = activeRole === key;
         const color =
           key === 'knowledge'
-            ? 'var(--color-accent)'
+            ? 'var(--color-ai)'
             : key === 'instruction'
-              ? 'var(--color-secondary)'
-              : 'var(--color-primary)';
+              ? 'var(--color-human)'
+              : 'var(--color-machine)';
         return (
           <g key={key} className={cn('s2-arrow-group', isActive ? 'is-active opacity-100' : 'is-inactive opacity-30')}>
             {d && <path d={d} stroke={color} strokeWidth="2" fill="none" opacity="0.6" />}

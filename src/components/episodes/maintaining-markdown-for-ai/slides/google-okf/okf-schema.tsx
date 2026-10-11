@@ -43,7 +43,7 @@ function OkfTable() {
               <td
                 className={cn(
                   'py-1.5 pr-6 whitespace-pre font-medium',
-                  row.isHeader ? 'text-primary font-bold pt-3 pb-1' : 'text-foreground/90',
+                  row.isHeader ? 'text-machine font-bold pt-3 pb-1' : 'text-foreground/90',
                 )}
               >
                 {row.field}
@@ -59,9 +59,9 @@ function OkfTable() {
 
 function OkfSpecLink() {
   return (
-    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-xl border border-primary/20 bg-primary/5 p-4 shadow-xs">
+    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-xl border border-machine/20 bg-machine/5 p-4 shadow-xs">
       <div className="flex items-center gap-3">
-        <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary font-mono text-xs font-bold text-primary-foreground">
+        <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-machine font-mono text-xs font-bold text-primary-foreground">
           OKF
         </div>
         <div>
@@ -75,7 +75,7 @@ function OkfSpecLink() {
         href="https://github.com/GoogleCloudPlatform/open-knowledge-format"
         target="_blank"
         rel="noopener noreferrer"
-        className="shrink-0 rounded-lg border border-primary/40 bg-primary/10 px-3 py-1.5 font-mono text-xs font-medium text-primary hover:bg-primary/20 transition-colors"
+        className="shrink-0 rounded-lg border border-machine/40 bg-machine/10 px-3 py-1.5 font-mono text-xs font-medium text-machine hover:bg-machine/20 transition-colors"
       >
         Read SPEC.md on GitHub ↗
       </a>

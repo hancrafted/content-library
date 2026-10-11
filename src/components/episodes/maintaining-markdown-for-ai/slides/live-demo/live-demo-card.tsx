@@ -10,7 +10,7 @@ export function LiveDemoCard(target: TargetProps) {
         <p className="mt-2 font-mono text-xl font-bold text-foreground">docs/handbook/onboarding.md</p>
       </div>
 
-      <div className="rounded-xl border-l-4 border-primary bg-primary/5 p-5 shadow-xs">
+      <div className="rounded-xl border-l-4 border-machine bg-machine/5 p-5 shadow-xs">
         <p className="font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
           Asked of the agent
         </p>

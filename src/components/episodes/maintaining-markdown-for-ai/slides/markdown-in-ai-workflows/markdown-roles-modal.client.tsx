@@ -19,8 +19,8 @@ function CodePanel({ filename, code }: { filename: string; code: string }) {
   return (
     <figure className="overflow-hidden rounded-xl border border-border bg-muted/40">
       <figcaption className="flex items-center gap-2 border-b border-border bg-muted/70 px-3 py-2">
-        <span className="size-2 rounded-full bg-primary/60" />
-        <span className="size-2 rounded-full bg-accent/60" />
+        <span className="size-2 rounded-full bg-machine/60" />
+        <span className="size-2 rounded-full bg-ai/60" />
         <span className="font-mono text-xs font-semibold text-muted-foreground">{filename}</span>
       </figcaption>
       <pre className="overflow-x-auto p-4 font-mono text-xs leading-relaxed text-foreground/90">
@@ -108,7 +108,7 @@ function ModalContentBody({ modal, data }: { modal: ModalKey; data: ModalContent
             href={externalHref(data.linkUrl)}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-mono text-xs font-semibold text-primary hover:underline"
+            className="font-mono text-xs font-semibold text-machine hover:underline"
           >
             {data.linkText ?? data.linkUrl}
           </a>
