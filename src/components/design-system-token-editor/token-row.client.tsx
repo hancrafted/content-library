@@ -1,7 +1,7 @@
 'use client';
 
+import { classifyToken, type Theme, type Token } from '@/lib/token-discovery.pure';
 import { cn } from '@/lib/utils';
-import { classifyToken, type Theme, type Token } from './token-discovery.pure';
 
 function Swatch({ value }: { value: string }) {
   return <span aria-hidden className="border-border size-5 shrink-0 rounded-sm border" style={{ background: value }} />;

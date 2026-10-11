@@ -11,23 +11,25 @@ describe('success cases', () => {
     // ARRANGE
     const dark = setEdit({}, { scope: global, theme: 'dark', token: primary }, 'grey');
     const edits = setEdit(dark, { scope: global, theme: 'light', token: body }, '1.1rem');
+    const expected = [
+      { scope: global, theme: 'light', name: '--size-body', from: '1rem', to: '1.1rem' },
+      { scope: global, theme: 'dark', name: '--primary', from: 'white', to: 'grey' },
+    ];
     // ACT
     const changes = diffTokens(global, [primary, body], edits);
     // ASSERT
-    expect(changes).toEqual([
-      { scope: global, theme: 'light', name: '--size-body', from: '1rem', to: '1.1rem' },
-      { scope: global, theme: 'dark', name: '--primary', from: 'white', to: 'grey' },
-    ]);
+    expect(changes).toEqual(expected);
   });
 
   it('keeps scopes apart', () => {
     // ARRANGE
     const edits = setEdit({}, { scope: slide, theme: 'light', token: primary }, 'red');
+    const expectedCounts = { global: 0, slide: 1 };
     // ACT
     const globalChanges = diffTokens(global, [primary], edits);
     const slideChanges = diffTokens(slide, [primary], edits);
     // ASSERT
-    expect([globalChanges.length, slideChanges.length]).toEqual([0, 1]);
+    expect({ global: globalChanges.length, slide: slideChanges.length }).toEqual(expectedCounts);
   });
 
   it('edits and reports each selector separately', () => {
@@ -35,12 +37,11 @@ describe('success cases', () => {
     const a = { name: '--lane', light: 'red', dark: 'red', target: '.a' };
     const b = { name: '--lane', light: 'blue', dark: 'blue', target: '.b' };
     const edits = setEdit({}, { scope: slide, theme: 'light', token: b }, 'green');
+    const expected = [{ scope: slide, theme: 'light', name: '--lane', target: '.b', from: 'blue', to: 'green' }];
     // ACT
     const changes = diffTokens(slide, [a, b], edits);
     // ASSERT
-    expect(changes).toEqual([
-      { scope: slide, theme: 'light', name: '--lane', target: '.b', from: 'blue', to: 'green' },
-    ]);
+    expect(changes).toEqual(expected);
   });
 });
 
@@ -59,9 +60,10 @@ describe('edge cases', () => {
   it('drops an edit typed back to the original value', () => {
     // ARRANGE
     const edited = setEdit({}, { scope: global, theme: 'light', token: primary }, 'red');
+    const expected = { edits: {}, changes: [] };
     // ACT
     const edits = setEdit(edited, { scope: global, theme: 'light', token: primary }, 'black');
     // ASSERT
-    expect([edits, diffTokens(global, [primary], edits)]).toEqual([{}, []]);
+    expect({ edits, changes: diffTokens(global, [primary], edits) }).toEqual(expected);
   });
 });

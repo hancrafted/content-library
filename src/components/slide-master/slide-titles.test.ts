@@ -11,11 +11,13 @@ describe('success cases', () => {
   it('renders HeroTitle as an h1 in the hero role', () => {
     // ARRANGE
     const heroRole = 'text-hero';
+    const openingTag = '<h1 ';
     const title = createElement(HeroTitle, null, 'Hello');
     // ACT
     const html = renderToStaticMarkup(title);
+    const opening = html.slice(0, openingTag.length);
     // ASSERT
-    expect(html).toMatch(/^<h1 /);
+    expect(opening).toBe(openingTag);
     expect(classesOf(html)).toContain(heroRole);
   });
 
@@ -26,12 +28,14 @@ describe('success cases', () => {
   ] as const)('sizes a %s title by the %s role', (level, role) => {
     // ARRANGE
     const weight = 'font-semibold';
+    const openingTag = `<${level} `;
     const title = createElement(SlideTitle, { as: level, children: 'Hello' });
     // ACT
     const html = renderToStaticMarkup(title);
     const classes = classesOf(html);
+    const opening = html.slice(0, openingTag.length);
     // ASSERT
-    expect(html.startsWith(`<${level} `)).toBe(true);
+    expect(opening).toBe(openingTag);
     expect(classes).toContain(role);
     expect(classes).toContain(weight);
   });
@@ -85,6 +89,8 @@ describe('edge cases', () => {
     const testId = 'page-title';
     const extra = 'extra';
     const accent = '<em>accent</em>';
+    const idAttribute = `id="${id}"`;
+    const testIdAttribute = `data-testid="${testId}"`;
     const title = createElement(
       HeroTitle,
       { id, className: extra, 'data-testid': testId } as object,
@@ -94,8 +100,8 @@ describe('edge cases', () => {
     // ACT
     const html = renderToStaticMarkup(title);
     // ASSERT
-    expect(html).toContain(`id="${id}"`);
-    expect(html).toContain(`data-testid="${testId}"`);
+    expect(html).toContain(idAttribute);
+    expect(html).toContain(testIdAttribute);
     expect(html).toContain(accent);
     expect(classesOf(html)).toContain(extra);
   });

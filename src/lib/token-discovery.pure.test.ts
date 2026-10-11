@@ -8,13 +8,14 @@ describe('success cases', () => {
       { selector: ':root', declarations: { '--primary': 'black', '--size-body': '1rem' } },
       { selector: '.dark', declarations: { '--primary': 'white' } },
     ];
+    const expected = [
+      { name: '--primary', light: 'black', dark: 'white' },
+      { name: '--size-body', light: '1rem', dark: '1rem' },
+    ];
     // ACT
     const tokens = discoverGlobalTokens(rules);
     // ASSERT
-    expect(tokens).toEqual([
-      { name: '--primary', light: 'black', dark: 'white' },
-      { name: '--size-body', light: '1rem', dark: '1rem' },
-    ]);
+    expect(tokens).toEqual(expected);
   });
 
   it('collects Slide tokens from rules applying inside the Slide, the dark value from the .dark prefix', () => {
@@ -25,10 +26,12 @@ describe('success cases', () => {
       { selector: '.other', declarations: { '--other': '1' } },
       { selector: ':root', declarations: { '--primary': 'black' } },
     ];
+    const insideSlide = '.hero';
+    const expected = [{ name: '--hero-sun', light: '#f5b14a', dark: '#aa8800', target: insideSlide }];
     // ACT
-    const tokens = discoverSlideTokens(rules, (selector) => selector === '.hero');
+    const tokens = discoverSlideTokens(rules, (selector) => selector === insideSlide);
     // ASSERT
-    expect(tokens).toEqual([{ name: '--hero-sun', light: '#f5b14a', dark: '#aa8800', target: '.hero' }]);
+    expect(tokens).toEqual(expected);
   });
 
   it('keeps one row per selector when a Slide token name is declared by several rules', () => {
@@ -38,13 +41,14 @@ describe('success cases', () => {
       { selector: '.dark .laneA', declarations: { '--lane-light': 'darkred' } },
       { selector: '.laneB', declarations: { '--lane-light': 'blue' } },
     ];
+    const expected = [
+      { name: '--lane-light', light: 'red', dark: 'darkred', target: '.laneA' },
+      { name: '--lane-light', light: 'blue', dark: 'blue', target: '.laneB' },
+    ];
     // ACT
     const tokens = discoverSlideTokens(rules, () => true);
     // ASSERT
-    expect(tokens).toEqual([
-      { name: '--lane-light', light: 'red', dark: 'darkred', target: '.laneA' },
-      { name: '--lane-light', light: 'blue', dark: 'blue', target: '.laneB' },
-    ]);
+    expect(tokens).toEqual(expected);
   });
 
   it.each([
@@ -92,18 +96,20 @@ describe('edge cases', () => {
   it('gives a dark-only token the same value in light', () => {
     // ARRANGE
     const rules: RuleSnapshot[] = [{ selector: '.dark', declarations: { '--glow': 'red' } }];
+    const expected = [{ name: '--glow', light: 'red', dark: 'red' }];
     // ACT
     const tokens = discoverGlobalTokens(rules);
     // ASSERT
-    expect(tokens).toEqual([{ name: '--glow', light: 'red', dark: 'red' }]);
+    expect(tokens).toEqual(expected);
   });
 
   it('classifies an unrecognised value as other', () => {
     // ARRANGE
     const name = '--thing';
+    const expectedKind = 'other';
     // ACT
     const kind = classifyToken(name, 'whatever');
     // ASSERT
-    expect(kind).toBe('other');
+    expect(kind).toBe(expectedKind);
   });
 });

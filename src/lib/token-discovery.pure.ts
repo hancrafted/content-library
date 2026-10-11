@@ -1,5 +1,5 @@
 // Finds design tokens in a plain snapshot of the loaded stylesheets. The DOM
-// adapter (read-stylesheets.ts) builds the snapshot; nothing here touches it.
+// adapter (page-tokens.ts) builds the snapshot; nothing here touches it.
 
 export type Theme = 'light' | 'dark';
 

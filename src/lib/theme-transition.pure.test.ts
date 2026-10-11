@@ -5,31 +5,37 @@ describe('success cases', () => {
   it('opens in the inverse of the site theme: the foreground token as background', () => {
     // ARRANGE
     const progress = 0.5;
+    const expectedBg = 'color-mix(in oklab, var(--background) 0.0%, var(--foreground))';
+    const expectedFg = 'color-mix(in oklab, var(--foreground) 0.0%, var(--background))';
     // ACT
     const colors = computeThemeColors(progress);
     // ASSERT
-    expect(colors.bg).toBe('color-mix(in oklab, var(--background) 0.0%, var(--foreground))');
-    expect(colors.fg).toBe('color-mix(in oklab, var(--foreground) 0.0%, var(--background))');
+    expect(colors.bg).toBe(expectedBg);
+    expect(colors.fg).toBe(expectedFg);
   });
 
   it('hands back to the site theme at the end of the rail', () => {
     // ARRANGE
     const progress = 1.0;
+    const expectedBg = 'color-mix(in oklab, var(--background) 100.0%, var(--foreground))';
+    const expectedFg = 'color-mix(in oklab, var(--foreground) 100.0%, var(--background))';
+    const expectedBorder = 'var(--border) 100.0%';
     // ACT
     const colors = computeThemeColors(progress);
     // ASSERT
-    expect(colors.bg).toBe('color-mix(in oklab, var(--background) 100.0%, var(--foreground))');
-    expect(colors.fg).toBe('color-mix(in oklab, var(--foreground) 100.0%, var(--background))');
-    expect(colors.border).toContain('var(--border) 100.0%');
+    expect(colors.bg).toBe(expectedBg);
+    expect(colors.fg).toBe(expectedFg);
+    expect(colors.border).toContain(expectedBorder);
   });
 
   it('mixes part of the way through the hand-back', () => {
     // ARRANGE
     const midway = 0.75 + 0.11;
+    const expectedBg = 'color-mix(in oklab, var(--background) 50.0%, var(--foreground))';
     // ACT
     const colors = computeThemeColors(midway);
     // ASSERT
-    expect(colors.bg).toBe('color-mix(in oklab, var(--background) 50.0%, var(--foreground))');
+    expect(colors.bg).toBe(expectedBg);
   });
 
   it('maps progress to active step numbers across the rail', () => {
@@ -46,8 +52,9 @@ describe('success cases', () => {
     const raw = /#[0-9a-f]{3,8}\b|rgba?\(/i;
     // ACT
     const colors = computeThemeColors(0.9);
+    const rawValues = Object.values(colors).filter((value) => raw.test(value));
     // ASSERT
-    expect(Object.values(colors).some((value) => raw.test(value))).toBe(false);
+    expect(rawValues).toEqual([]);
   });
 });
 
