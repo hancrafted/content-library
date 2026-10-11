@@ -1,0 +1,64 @@
+{
+  "title": "Why every session starts from a blank slate",
+  "caption": "“Amnesiac” is our metaphor, not a vendor term, but the mechanism is documented.",
+  "demo": {
+    "caption": "Each session fills up, then starts over blank."
+  },
+  "prose": "The model <ref>keeps nothing between requests</ref>: a chat only feels continuous because the history is sent again every turn. Claude Code says each session begins with a fresh context window. Anthropic itself pictures engineers working in shifts, each arriving with no memory of the previous shift.",
+  "notes": {
+    "stateless-by-design": {
+      "header": "Stateless by design",
+      "description": "The model keeps nothing between requests.[2] A chat feels continuous because the whole history is sent again each turn.[1]",
+      "sources": {
+        "openai-conversation-state": {
+          "title": "OpenAI: Conversation state"
+        },
+        "claude-context-windows": {
+          "title": "Claude API: Context windows"
+        }
+      }
+    },
+    "fresh-window-per-session": {
+      "header": "Fresh window per session",
+      "description": "Claude Code says each session begins with a fresh context window.[1] Only CLAUDE.md files and auto memory carry knowledge across.",
+      "sources": {
+        "claude-code-memory": {
+          "title": "Claude Code: Memory"
+        }
+      }
+    },
+    "shift-workers-per-anthropic": {
+      "header": "Shift workers, per Anthropic",
+      "description": "Anthropic pictures engineers in shifts, each arriving with no memory of the previous shift.[1] Their fix is written artefacts the next session reads first.",
+      "sources": {
+        "anthropic-long-running-harnesses": {
+          "title": "Anthropic: Effective harnesses for long-running agents"
+        }
+      }
+    },
+    "our-word-not-theirs": {
+      "header": "Our word, not theirs",
+      "description": "\"Amnesiac\" is our metaphor. Say so out loud; do not attribute it to Anthropic."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "blank-slate": {
+        "title": "Blank slate",
+        "keywords": "stateless, history re-sent, every turn",
+        "script": "Start with the uncomfortable fact. The model keeps nothing between requests. When a chat feels like a conversation, that is because the whole history is sent again with every turn. Nothing was remembered; it was re-read."
+      },
+      "new-session-new-window": {
+        "title": "New session, new window",
+        "keywords": "fresh context window, CLAUDE.md, auto memory",
+        "script": "Claude Code's own documentation says each session begins with a fresh context window. Only two things cross the gap: instruction files like CLAUDE.md, and notes the agent wrote down. Both are just text loaded at the start."
+      },
+      "shifts": {
+        "title": "Shifts",
+        "keywords": "engineers in shifts, no memory, written artefacts",
+        "script": "Anthropic describes it as engineers working in shifts, each new one arriving with no memory of the last. I call it an amnesiac freelancer. That word is mine, not theirs, but the mechanism is theirs. And their answer is the same as ours: write it down.",
+        "bridge": "So if the agent knows nothing about us, where does what it does know come from?"
+      }
+    }
+  }
+}

@@ -1,7 +1,7 @@
 import { BasicPageSlide } from '@/components/slide-master/basic-page-slide';
-import { slidesFor } from '@/components/slide-master/episode-record';
-
-const slide = slidesFor('amnesiac-freelancer');
+import { slide } from '@/components/slide-master/slide';
+import de from './i18n/de.json';
+import en from './i18n/en.json';
 
 const NYGARD = {
   slug: 'nygard-architecture-decisions',
@@ -10,6 +10,7 @@ const NYGARD = {
 
 export const decisionsInWriting = slide({
   slug: 'decisions-in-writing',
+  messages: { en, de },
   notes: [
     { slug: 'a-conversation-with-a-future-developer', target: 'caption', sources: [NYGARD] },
     { slug: 'superseded-not-deleted', target: 'prose', sources: [NYGARD] },

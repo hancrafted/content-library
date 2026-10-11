@@ -1,10 +1,11 @@
-import { slidesFor } from '@/components/slide-master/episode-record';
+import { slide } from '@/components/slide-master/slide';
 import { ThreeColumnSlide } from '@/components/slide-master/three-column-slide';
-
-const slide = slidesFor('amnesiac-freelancer');
+import de from './i18n/de.json';
+import en from './i18n/en.json';
 
 export const whereKnowledgeLives = slide({
   slug: 'where-knowledge-lives',
+  messages: { en, de },
   notes: [
     {
       slug: 'training',

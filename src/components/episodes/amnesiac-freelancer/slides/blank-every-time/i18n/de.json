@@ -1,0 +1,64 @@
+{
+  "title": "Warum jede Sitzung bei null beginnt",
+  "caption": "„Gedächtnisverlust“ ist unser Bild, kein Begriff der Hersteller, doch der Mechanismus ist dokumentiert.",
+  "demo": {
+    "caption": "Jede Sitzung füllt sich und beginnt dann wieder bei null."
+  },
+  "prose": "Das Modell <ref>behält zwischen zwei Anfragen nichts</ref>. Ein Chat wirkt nur zusammenhängend, weil der Verlauf bei jedem Zug erneut mitgeschickt wird. Laut Claude-Code-Dokumentation beginnt jede Sitzung mit einem frischen Kontextfenster. Anthropic selbst beschreibt Entwickler im Schichtbetrieb, die jeweils ohne Erinnerung an die vorherige Schicht antreten.",
+  "notes": {
+    "stateless-by-design": {
+      "header": "Zustandslos von Haus aus",
+      "description": "Das Modell behält zwischen Anfragen nichts.[2] Ein Chat wirkt nur zusammenhängend, weil bei jedem Zug der gesamte Verlauf erneut mitgeschickt wird.[1]",
+      "sources": {
+        "openai-conversation-state": {
+          "title": "OpenAI: Gesprächszustand (Conversation state)"
+        },
+        "claude-context-windows": {
+          "title": "Claude API: Kontextfenster"
+        }
+      }
+    },
+    "fresh-window-per-session": {
+      "header": "Jede Sitzung beginnt frisch",
+      "description": "Laut Claude Code startet jede Sitzung mit einem frischen Kontextfenster.[1] Nur CLAUDE.md-Dateien und der Auto-Speicher tragen Wissen von einer Sitzung in die nächste.",
+      "sources": {
+        "claude-code-memory": {
+          "title": "Claude Code: Speicher (Memory)"
+        }
+      }
+    },
+    "shift-workers-per-anthropic": {
+      "header": "Schichtarbeit, so Anthropic",
+      "description": "Anthropic stellt sich Entwickler im Schichtbetrieb vor: Jede neue Schicht kommt ohne Erinnerung an die vorige.[1] Die Lösung sind schriftliche Artefakte, die die nächste Sitzung zuerst liest.",
+      "sources": {
+        "anthropic-long-running-harnesses": {
+          "title": "Anthropic: Wirksame Harnesses für lang laufende Agenten"
+        }
+      }
+    },
+    "our-word-not-theirs": {
+      "header": "Unser Wort, nicht ihres",
+      "description": "„Amnesie“ ist unsere Metapher. Das ausdrücklich sagen und sie nicht Anthropic zuschreiben."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "blank-slate": {
+        "title": "Leeres Blatt",
+        "keywords": "zustandslos, Verlauf neu gesendet, jeder Zug",
+        "script": "Beginnen Sie mit der unbequemen Tatsache: Das Modell behält zwischen Anfragen nichts. Wenn sich ein Chat wie ein Gespräch anfühlt, dann nur, weil bei jedem Zug der gesamte Verlauf erneut gesendet wird. Nichts wurde erinnert; es wurde neu gelesen."
+      },
+      "new-session-new-window": {
+        "title": "Neue Sitzung, neues Fenster",
+        "keywords": "frisches Kontextfenster, CLAUDE.md, Auto-Speicher",
+        "script": "In der Dokumentation von Claude Code steht: Jede Sitzung beginnt mit einem frischen Kontextfenster. Nur zwei Dinge überbrücken die Lücke: Anweisungsdateien wie CLAUDE.md und Notizen, die der Agent selbst aufgeschrieben hat. Beides ist nur Text, der am Anfang geladen wird."
+      },
+      "shifts": {
+        "title": "Schichten",
+        "keywords": "Ingenieure in Schichten, keine Erinnerung, schriftliche Artefakte",
+        "script": "Anthropic beschreibt es so: Ingenieure arbeiten in Schichten, und jede neue kommt ohne Erinnerung an die letzte an. Ich nenne das den vergesslichen Freelancer. Das Wort ist meins, nicht ihres, aber der Mechanismus ist ihrer. Und ihre Antwort ist dieselbe wie unsere: aufschreiben.",
+        "bridge": "Wenn der Agent nichts über uns weiß, woher kommt dann das, was er doch weiß?"
+      }
+    }
+  }
+}
