@@ -54,7 +54,7 @@ flowchart LR
   C --> CH["chrome: contents, drawer, player"]
 ```
 
-**Inside one Slide.** The wrapper owns the mechanics and holds the Scene, which owns the creative content in two layers; the rules are in [Slide Frame](./FE-009-slide-frame.md).
+**Inside one Slide.** The wrapper owns the mechanics and holds the Scene, which owns the creative content in two layers; the rules are in [Slide Wrapper and Scene](./FE-009-slide-wrapper-and-scene.md).
 
 ```mermaid
 flowchart LR
@@ -165,7 +165,7 @@ For this project the map matters because handoffs run on agents with no session 
 - [Episode Page](./FE-002-episode-page.md) — record, Slide folder, headings, strings, Episode styling.
 - [Server/Client Boundary](./FE-006-server-client-boundary.md) — `.client` classifier, props across the boundary.
 - [Module Layering](./FE-007-module-layering.md) — tiers, thin routes, Slide-folder imports.
-- [Slide Frame](./FE-009-slide-frame.md) — wrapper, mount, observer, Backdrop, stacking.
+- [Slide Wrapper and Scene](./FE-009-slide-wrapper-and-scene.md) — wrapper, mount, observer, Backdrop, stacking.
 - [Context Drawer](./FE-010-context-drawer.md) — notes, Voice script, targets.
 - [`GLOSSARY.md`](../../GLOSSARY.md) — Episode, Slide, Scene, chrome.
 - [`docs/adr/0001-the-slide-is-a-self-contained-folder.md`](../../docs/adr/0001-the-slide-is-a-self-contained-folder.md) — why a Slide is a folder.
