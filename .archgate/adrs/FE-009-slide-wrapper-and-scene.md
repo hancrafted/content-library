@@ -53,7 +53,7 @@ A new layer picks a rung here. The `isolate` wrapper would trap a popover under 
 ### 1. The split
 
 1. The Slide wrapper MUST own a Slide's mechanics: anchor, width, min-height, mount boundary, stacking, zone.
-2. The Scene MUST stay ungoverned beyond §7.
+2. The Scene MUST stay ungoverned beyond §7 and FE-011.
 
 ### 2. Content area
 
@@ -109,7 +109,7 @@ A new layer picks a rung here. The `isolate` wrapper would trap a popover under 
 3. **DON'T** create another `IntersectionObserver`, or use the reveal hook inside an Episode. (Decision 5)
 4. **DON'T** flatten the Content area to flow layout. (Decision 2)
 5. **DON'T** let a looping animation run in `near` or `far`. (Decision 6)
-6. **DON'T** add a rule that reaches inside the Scene. (Decision 1)
+6. **DON'T** add a rule that reaches inside the Scene; FE-011 is the one, for colour, size and weight only. (Decision 1)
 7. **DON'T** pad, transition or margin a wrapper for the insets; set `--inset-l` and `--inset-r` and let the Content area apply them. (Decision 2)
 8. **DON'T** put reader-needed content, links or text in a Backdrop. (Decision 7)
 9. **DON'T** render a popover inside a Scene's own subtree. (Decision 8)
@@ -149,7 +149,7 @@ A new layer picks a rung here. The `isolate` wrapper would trap a popover under 
 
 **Exception (§5.1):** the reveal hook observes once to stagger in the landing page's About cards, then disconnects. It reports to no page service and writes no zone, so it can't compete for `active`.
 
-**Manual review duties:** looping islands pause outside `active` (§6); the reveal hook isn't imported under an Episode (§5.1); no `overflow` on wrappers; the Scene stays ungoverned apart from §7; z-index values match §8; looping Backdrop content pauses while hidden (§6). **Browser check:** far content absent with no scroll-height jump; a looping demo pauses and resumes.
+**Manual review duties:** looping islands pause outside `active` (§6); the reveal hook isn't imported under an Episode (§5.1); no `overflow` on wrappers; the Scene stays ungoverned apart from §7 and FE-011's token values; z-index values match §8; looping Backdrop content pauses while hidden (§6). **Browser check:** far content absent with no scroll-height jump; a looping demo pauses and resumes.
 
 **Exceptions:** raise a separate ADR; human approval required.
 

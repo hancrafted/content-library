@@ -91,9 +91,9 @@ flowchart LR
 ### 7. Episode styling stays in the Episode
 
 1. `globals.css` MUST hold only tokens Episodes share.
-2. A Slide's CSS MUST sit in a CSS module in its folder.
+2. A Slide's CSS MUST be its own CSS module in its folder (its token file).
 3. An Episode MAY keep one stylesheet beside its record, under `[data-episode='<slug>']`, only to remap tokens its chrome reads — `palette.css`.
-4. Shared meanings MUST use site tokens; other colours need a dark value.
+4. Colour, size and weight MUST follow FE-011.
 
 ## Do's and Don'ts
 
@@ -135,7 +135,6 @@ flowchart LR
 1. **Reading time is only as good as the Voice script:** a short or missing script understates it; a fixed words-per-minute rate ignores pauses and demos.
 2. **Many small files:** an Episode is a folder of Slide folders, not one page file.
 3. **German checked by shape only:** an empty German string compiles; review catches it.
-4. **No colour lint:** a raw colour without a dark value is caught only by looking at both themes.
 
 **Risks:**
 
