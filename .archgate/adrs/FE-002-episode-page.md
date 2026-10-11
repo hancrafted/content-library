@@ -160,7 +160,7 @@ flowchart LR
 - [`GLOSSARY.md`](../../GLOSSARY.md#episode-structure) — Episode structure: Section, Slide, Scene, Voice script.
 - [`docs/features/episode-translation-keys.md`](../../docs/features/episode-translation-keys.md) — key roles, worked examples.
 - [`docs/features/episode-migration.md`](../../docs/features/episode-migration.md) — converting a prototype into an Episode, step by step.
-- [`docs/adr/0003-self-contained-slides.md`](../../docs/adr/0003-self-contained-slides.md) — why a Slide is a folder.
+- [`docs/adr/0001-the-slide-is-a-self-contained-folder.md`](../../docs/adr/0001-the-slide-is-a-self-contained-folder.md) — why a Slide is a folder.
 - [`docs/features/episode-chrome.md`](../../docs/features/episode-chrome.md) — table of contents placement, corner allocation, reserved places.
 
 ### Terms
