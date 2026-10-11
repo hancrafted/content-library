@@ -1,0 +1,24 @@
+{
+  "title": "Live demo",
+  "caption": "The check, run live.",
+  "prose": "File under test: docs/handbook/onboarding.md. Asked of the agent: What are the first-week onboarding steps for a new hire?",
+  "notes": {
+    "demo-contrast": {
+      "header": "Comparative evaluation",
+      "description": "Three agents receive the same stale document; only the hooked agents are prevented from hallucinating outdated facts."
+    },
+    "holding-slide": {
+      "header": "Live terminal run",
+      "description": "Talk switches to terminal here; the slide acts as the anchor framing the test."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "demo-walkthrough": {
+        "title": "The check run live",
+        "keywords": "three terminals, un-hooked, pirate injection, deny read",
+        "script": "Three panels: same question, same document. The only difference is what each one is allowed to know. Before the run: watch the un-hooked panel answering confidently from a document that went out of date. If it noticed the date, that detection was luck — dependent on the model. The injected panel: the pirate response proves the harness governed what the agent was allowed to know. The deny panel: read was refused explicitly. And deterministic detection was recorded in the log, independent of what any model chose to say."
+      }
+    }
+  }
+}

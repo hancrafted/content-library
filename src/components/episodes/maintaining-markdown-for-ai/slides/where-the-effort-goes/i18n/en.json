@@ -1,0 +1,25 @@
+{
+  "title": "Where the effort goes",
+  "caption": "What a machine can check, what AI can help with, and what only a human can check.",
+  "prose": "Three boundaries: what a machine automates, what AI accelerates, and what only a human can decide.",
+  "notes": {
+    "three-boundaries": {
+      "header": "Three boundaries",
+      "description": "Document verification is three distinct jobs: deterministic machine checks, AI acceleration, and human judgment."
+    },
+    "division-of-labour": {
+      "header": "Division of labour",
+      "description": "Push mechanics to the machine and discovery to AI so humans only handle genuine judgment calls."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "three-boundaries": {
+        "title": "Three non-interchangeable tiers",
+        "keywords": "machine, human, AI, deterministic to semantic",
+        "script": "It's not one job. It's three, and they're not interchangeable. On the left, the machine: deterministic — same input, same answer, every time. Binary: it passes or it fails. Cheap, and fast. This is the part you want doing as much as possible. On the right, the human: not deterministic, slow, expensive. This is where the semantic work happens — is this actually true, is it still useful. And it's still where almost all trust comes from. And in the middle, AI: it works in natural language, so it sits on the human side of that line — not deterministic. It costs tokens. What it can and can't be trusted with is genuinely unsettled.",
+        "bridge": "Left to right. Cheap and certain, to expensive and human. Let's take them in order."
+      }
+    }
+  }
+}
