@@ -1,5 +1,6 @@
 'use client';
 
+import { HeroTitle } from '@/components/slide-master/slide-master';
 import { usePromotionAnimation } from '@/hooks/use-promotion-animation';
 import { INK_DROPLETS } from '@/lib/ink-magnet.pure';
 import { localizePath, type Locale } from '@/lib/locale.pure';
@@ -135,9 +136,9 @@ function HeroCopy({ copy }: { copy: PromotionHeroProps }) {
           <li key={offer}>{offer}</li>
         ))}
       </ul>
-      <h1 id="hero-title" data-testid="page-title" className={styles.headline}>
+      <HeroTitle id="hero-title" data-testid="page-title" className={styles.headline}>
         {copy.headline}
-      </h1>
+      </HeroTitle>
       <p data-hero-caption className={styles.caption}>
         {copy.caption}
       </p>

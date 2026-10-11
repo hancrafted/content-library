@@ -31,17 +31,17 @@ function ErasGrid(): ReactElement {
     <>
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {ERAS.map((e) => (
-          <div key={e.title} className="rounded-box border border-base-300 bg-base-100 p-4 shadow-xs">
-            <span className="font-mono text-xs tabular-nums text-base-content/50">{e.era}</span>
+          <div key={e.title} className="rounded-xl border border-border bg-card p-4 shadow-xs">
+            <span className="font-mono text-xs tabular-nums text-muted-foreground">{e.era}</span>
             <p className="mt-2 font-mono text-[0.6rem] uppercase tracking-wider text-primary">{e.kind}</p>
             <h4 className="mt-1 font-display text-base font-bold">{e.title}</h4>
-            <p className="mt-1 text-xs text-base-content/70">{e.desc}</p>
+            <p className="mt-1 text-xs text-muted-foreground">{e.desc}</p>
           </div>
         ))}
       </div>
-      <div className="mt-4 rounded-box border border-primary/30 bg-primary/5 p-4 text-center">
+      <div className="mt-4 rounded-xl border border-primary/30 bg-primary/5 p-4 text-center">
         <span className="font-mono text-[0.65rem] uppercase tracking-widest text-primary">Foundation</span>
-        <p className="font-display text-base font-bold text-base-content">Token Economy — the currency of every era</p>
+        <p className="font-display text-base font-bold text-foreground">Token Economy — the currency of every era</p>
       </div>
     </>
   );

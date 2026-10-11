@@ -7,11 +7,11 @@ import { OutcomePerEuroClient } from './outcome-per-euro.client';
 
 function SubsidyCallout(): ReactElement {
   return (
-    <div className="mt-6 flex items-start gap-3 rounded-box border border-base-300 bg-base-200/50 p-4">
+    <div className="mt-6 flex items-start gap-3 rounded-xl border border-border bg-muted/50 p-4">
       <span className="shrink-0 rounded-md bg-primary/15 px-2 py-1 font-mono text-sm font-semibold text-primary">
         2–10×
       </span>
-      <p className="text-sm text-base-content/70">
+      <p className="text-sm text-muted-foreground">
         Today&rsquo;s prices are subsidized — vendors sell intelligence below cost to build adoption. When subsidies
         expire, outcome per euro decides who survives.
       </p>

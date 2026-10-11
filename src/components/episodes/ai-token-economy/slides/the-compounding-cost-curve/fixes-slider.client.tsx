@@ -11,7 +11,7 @@ function FixesRangeInput({ fixes, onChange }: { fixes: number; onChange: (val: n
     <div className="mt-4 flex items-center gap-3">
       <label
         htmlFor={inputId}
-        className="shrink-0 font-mono text-[0.65rem] uppercase tracking-wider text-base-content/50"
+        className="shrink-0 font-mono text-[0.65rem] uppercase tracking-wider text-muted-foreground"
       >
         fixes / day
       </label>
@@ -23,7 +23,7 @@ function FixesRangeInput({ fixes, onChange }: { fixes: number; onChange: (val: n
         value={fixes}
         step="5"
         onChange={(e) => onChange(Number(e.target.value))}
-        className="range range-primary range-sm flex-1"
+        className="accent-primary flex-1"
         aria-label="Bug fixes per day"
       />
       <span className="w-12 text-right font-mono text-sm font-bold tabular-nums">{fixes}</span>
@@ -37,8 +37,8 @@ export function FixesSliderClient(): ReactElement {
   const highCost = Math.round(fixes * COST_HIGH);
 
   return (
-    <div className="rounded-box border-l-4 border-primary bg-base-200 p-6">
-      <p className="text-base leading-relaxed text-base-content/90 md:text-lg">
+    <div className="rounded-xl border-l-4 border-primary bg-muted p-6">
+      <p className="text-base leading-relaxed text-foreground md:text-lg">
         <span className="font-bold text-primary">~14× spread</span> for identical output. At{' '}
         <span className="font-mono font-semibold tabular-nums">{fixes}</span> fixes a day, that is roughly{' '}
         <span className="font-mono font-semibold tabular-nums">${lowCost}</span> vs{' '}
