@@ -5,7 +5,7 @@ import type { EpisodeSlug } from '@/lib/routes';
 import { segmentSpans, type SpokenSegment } from '@/lib/speaking-time.pure';
 import { createTranslator } from 'next-intl';
 import type { ReactNode } from 'react';
-import type { Slide } from './slide';
+import type { EpisodeRecord, Slide } from './slide';
 import type { NoteSpec, RuntimeTranslator, SegmentSpec, SourceSpec } from './slide-base';
 import { slideKit } from './slide-kit';
 
@@ -13,14 +13,15 @@ import { slideKit } from './slide-kit';
  * The Localized Slide: one Slide in one locale, as the page renders it
  * (docs/adr/0001-the-slide-is-a-self-contained-folder.md). It hides the Slide's translator over its
  * own messages, its kit and the reading of its title, Speaker notes and Voice
- * script, so the container, a landing card and an Episode test all ask one
- * interface. Translation keys follow FE-010 §6; each segment's span is counted
- * from its translated words (docs/adr/0002), so a locale's times follow its
- * own Voice script.
+ * script, so the container and an Episode test ask one interface, and it
+ * totals an Episode's reading time for the landing card and the table of
+ * contents alike. Translation keys follow FE-010 §6; each segment's span is
+ * counted from its translated words (docs/adr/0002), so a locale's times
+ * follow its own Voice script.
  */
 
-/** A Slide's text in one locale, without an Episode around it: what a landing card reads. */
-export interface SlideText {
+/** A Slide's text in one locale, before an Episode places it. */
+interface SlideText {
   readonly slug: string;
   /** Plain text for the table of contents; a purely visual Slide has none and is not listed (FE-002). */
   readonly title?: string;
@@ -130,9 +131,15 @@ function textOf(slide: Slide, t: RuntimeTranslator, locale: Locale): SlideText {
   };
 }
 
-/** A Slide's title, minutes, Speaker notes and Voice script in `locale`; its Scene is not rendered. */
-export function slideText(slide: Slide, locale: Locale): SlideText {
-  return textOf(slide, ownTranslator(slide, locale), locale);
+/**
+ * An Episode's reading time in `locale`: every Slide's minutes, listed in the
+ * table of contents or not (docs/adr/0002). The landing card and the table of
+ * contents both quote this one sum. Renders no Scene.
+ */
+export function episodeMinutes(record: EpisodeRecord, locale: Locale): number {
+  return record.sections
+    .flat()
+    .reduce((sum, slide) => sum + textOf(slide, ownTranslator(slide, locale), locale).minutes, 0);
 }
 
 /**

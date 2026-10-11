@@ -1,6 +1,6 @@
 import { listEpisodes } from '@/components/episodes/episode-repository';
 import { episodeCopy, findEpisode } from '@/components/episodes/registry';
-import { slideText } from '@/components/slide-master/localized-slide';
+import { episodeMinutes } from '@/components/slide-master/localized-slide';
 import { overviewOrder, type EpisodeMetadata } from '@/lib/episode-metadata.pure';
 import { FEATURED } from '@/lib/episode-overview';
 import type { Locale } from '@/lib/locale.pure';
@@ -8,18 +8,10 @@ import { hasReadingTime, wholeMinutes } from '@/lib/speaking-time.pure';
 import { getTranslations } from 'next-intl/server';
 import { episodeCard, type CardEntry, type EpisodeCard, type ReadKey } from './episode-card.pure';
 
-/**
- * What the table of contents totals for a published Episode: every Slide's
- * spoken minutes, listed or not, rounded as the table of contents rounds them,
- * so a card never quotes a number the page disagrees with. None without a Voice script.
- */
+/** A published Episode's whole reading time; none without a Voice script. */
 function minutesOf(entry: EpisodeMetadata, locale: Locale): number | undefined {
   if (entry.status !== 'published') return undefined;
-  const record = findEpisode(entry.slug);
-  const total = record.sections
-    .flat()
-    .map((slide) => slideText(slide, locale).minutes)
-    .reduce((sum, minutes) => sum + minutes, 0);
+  const total = episodeMinutes(findEpisode(entry.slug), locale);
   return hasReadingTime(total) ? wholeMinutes(total) : undefined;
 }
 
