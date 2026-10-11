@@ -1,1 +1,0 @@
-../../.archgate/adrs/FE-009-slide-frame.md
