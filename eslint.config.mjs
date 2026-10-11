@@ -95,7 +95,7 @@ const COLOUR_UTILS =
   'text|bg|border|ring|ring-offset|outline|fill|stroke|from|via|to|shadow|divide|accent|caret|decoration|placeholder';
 // A `color-mix()` over a `var(--token)` is a token reference, so it stays allowed.
 const COLOUR_FN = '#|rgba?\\(|hsla?\\(|oklch\\(|oklab\\(|lab\\(|lch\\(|hwb\\(|color-mix\\((?![^\\]]*var\\()';
-const ROLES = 'hero|heading|subheading|body';
+const ROLES = 'hero|heading|subheading|body|caption';
 const E3_MESSAGE = 'text-hero is for HeroTitle only: render <HeroTitle> instead (FE-011).';
 const E3 = { pattern: `${UTIL}text-hero$`, message: E3_MESSAGE };
 /** E2: the token-only vocabulary; `allowedSize` is a lookahead for the one relative size a file may spell. */
@@ -110,11 +110,11 @@ const tokenRestrictions = (allowedSize = '') => [
   },
   {
     pattern: `${UTIL}text-(?:xs|sm|base|lg|[2-9]xl)$`,
-    message: 'Size outside the roles: use text-heading, text-subheading or text-body (FE-011).',
+    message: 'Size outside the roles: use text-heading, text-subheading, text-body or text-caption (FE-011).',
   },
   {
     pattern: `${UTIL}text-\\[${allowedSize}[\\d.]+(?:px|rem|em|vw|vh|%|ch|pt)\\]`,
-    message: 'Arbitrary size: use a role (text-heading, text-subheading, text-body) (FE-011).',
+    message: 'Arbitrary size: use a role (text-heading, text-subheading, text-body, text-caption) (FE-011).',
   },
   {
     pattern: `(?:^|:)(?:sm|md|lg|xl|2xl|min-[^:]+|max-[^:]+|@[^:]+):(?:[^:]+:)*!?text-(?:${ROLES})$`,

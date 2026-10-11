@@ -44,10 +44,12 @@
   --size-heading: clamp(2.25rem, 4.2vw, 3.75rem);
   --size-subheading: clamp(1.875rem, 3.4vw, 3rem);
   --size-body: 1rem;
+  --size-caption: 0.875rem;
   --leading-hero: 1.05;
   --leading-heading: 1.1;
   --leading-subheading: 1.15;
   --leading-body: 1.6;
+  --leading-caption: 1.5;
   --tracking-heading: -0.02em;
   --weight-normal: 400;
   --weight-medium: 500;
@@ -126,6 +128,8 @@
   --text-subheading--letter-spacing: var(--tracking-heading);
   --text-body: var(--size-body);
   --text-body--line-height: var(--leading-body);
+  --text-caption: var(--size-caption);
+  --text-caption--line-height: var(--leading-caption);
   --font-weight-normal: var(--weight-normal);
   --font-weight-medium: var(--weight-medium);
   --font-weight-semibold: var(--weight-semibold);

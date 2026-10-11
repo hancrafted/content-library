@@ -68,9 +68,9 @@ export function ownerOf(sections: readonly TocSection[], active: string | null):
   return sections.find((section) => section.id === active || section.items.some((item) => item.id === active))?.id;
 }
 
-/** `01`, `02`, … — numbering lives in the table of contents only. */
+/** `1`, `2`, … — numbering lives in the table of contents only. */
 export function sectionNumber(index: number): string {
-  return String(index + 1).padStart(2, '0');
+  return String(index + 1);
 }
 
 /**
