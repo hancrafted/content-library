@@ -70,7 +70,7 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('still reads an Episode not yet moved from the site-wide Translation file', () => {
+  it("reads an unlisted Episode's text from its own folder too", () => {
     // ARRANGE
     const expected = 'Slide layouts';
     // ACT

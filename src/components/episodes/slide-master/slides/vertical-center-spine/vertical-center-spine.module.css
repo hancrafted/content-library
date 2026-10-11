@@ -1,0 +1,97 @@
+/*
+ * Centre spine: the scroll-driven motion only. Layout and hover live in the Slide's Tailwind classes.
+ * Without scroll-driven animation support, or under reduced motion, none of this applies and the Scene rests in its
+ * final state: spine filled, every node lit, every card in place.
+ */
+
+.track {
+  view-timeline: --centre-spine block;
+}
+
+/* How far a card travels in from its own side. Below `md` it stays within the 1rem right inset, so an entering card
+   never widens the page; from `md` the 3rem inset leaves room. */
+.card {
+  --enter-from: 1rem;
+}
+
+@media (min-width: 48rem) {
+  .card {
+    --enter-from: 2.5rem;
+  }
+
+  .card[data-side='left'] {
+    --enter-from: -2.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    /* The fill's tip follows the middle of the viewport: it starts as the list's top reaches the middle and ends as
+       its bottom does. */
+    .fill {
+      animation: spine-fill linear both;
+      animation-timeline: --centre-spine;
+      animation-range: cover 50vh cover calc(100% - 50vh);
+    }
+
+    /* A node and its date light as their centre crosses the middle of the viewport, just as the fill's tip arrives. */
+    .node {
+      animation: node-light linear both;
+      animation-timeline: view();
+      animation-range: cover 44% cover 50%;
+    }
+
+    .date {
+      animation: date-light linear both;
+      animation-timeline: view();
+      animation-range: cover 40% cover 50%;
+    }
+
+    /* A card slides in from its own side of the spine. */
+    .card {
+      animation: card-enter ease-out both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 40%;
+    }
+  }
+}
+
+@keyframes spine-fill {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes node-light {
+  from {
+    background-color: var(--background);
+    border-color: var(--border);
+  }
+  to {
+    background-color: var(--brand-accent);
+    border-color: var(--brand-accent);
+  }
+}
+
+@keyframes date-light {
+  from {
+    color: var(--muted-foreground);
+  }
+  to {
+    color: var(--foreground);
+  }
+}
+
+@keyframes card-enter {
+  from {
+    opacity: 0;
+    translate: var(--enter-from) 0;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}

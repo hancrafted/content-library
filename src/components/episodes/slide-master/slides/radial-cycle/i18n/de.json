@@ -1,0 +1,51 @@
+{
+  "title": "Zyklus",
+  "caption": "Eine Zeitleiste, die zu ihrem Anfang zurückkehrt: sechs Phasen auf einem Zifferblatt.",
+  "items": {
+    "a": {
+      "date": "Jan–Feb",
+      "title": "Auftakt",
+      "caption": "Ziel und Beteiligte benennen."
+    },
+    "b": {
+      "date": "Mär–Apr",
+      "title": "Recherche",
+      "caption": "Sammeln, was schon bekannt ist."
+    },
+    "c": {
+      "date": "Mai–Jun",
+      "title": "Prototyp",
+      "caption": "Das Kleinste bauen, das eine Frage beantwortet."
+    },
+    "d": {
+      "date": "Jul–Aug",
+      "title": "Pilot",
+      "caption": "Mit wenigen echten Nutzern ausprobieren."
+    },
+    "e": {
+      "date": "Sep–Okt",
+      "title": "Start",
+      "caption": "Für alle öffnen."
+    },
+    "f": {
+      "date": "Nov–Dez",
+      "title": "Rückblick",
+      "caption": "Messen, lernen und das Nächste entscheiden."
+    }
+  },
+  "notes": {
+    "layout": {
+      "header": "So liest man die Zeitleiste",
+      "description": "Platzhalter-Meilensteine: Daten, Titel und Bildunterschriften durch die echte Geschichte ersetzen."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "walkthrough": {
+        "title": "Rundgang",
+        "keywords": "Zyklus, Layout, Platzhalter",
+        "script": "Das ist das Layout Zyklus. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+      }
+    }
+  }
+}

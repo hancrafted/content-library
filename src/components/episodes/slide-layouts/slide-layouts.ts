@@ -1,7 +1,9 @@
-import { episode } from '@/components/slide-master/episode-record';
-import { basicPage } from './slides/basic-page';
-import { sectionSlide } from './slides/section-slide';
-import { threeColumn } from './slides/three-column';
+import { selfContainedEpisode } from '@/components/slide-master/slide';
+import de from './i18n/de.json';
+import en from './i18n/en.json';
+import { basicPage } from './slides/basic-page/slide';
+import { sectionSlide } from './slides/section-slide/slide';
+import { threeColumn } from './slides/three-column/slide';
 
 /*
  * A gallery, not a talk: one Slide per Slide layout, so a reader can see each
@@ -9,7 +11,8 @@ import { threeColumn } from './slides/three-column';
  * from neither the landing page nor the header. Add a Slide here when a layout
  * is added to `slide-master/`.
  */
-export const slideLayouts = episode({
+export const slideLayouts = selfContainedEpisode({
   slug: 'slide-layouts',
+  messages: { en, de },
   sections: [[sectionSlide, basicPage, threeColumn]],
 });

@@ -1,0 +1,29 @@
+{
+  "title": "Grid 2 × 1",
+  "caption": "2 rows by 1 column.",
+  "cells": {
+    "c1": {
+      "title": "Cell one",
+      "caption": "Row 1, column 1: a short caption under the title."
+    },
+    "c2": {
+      "title": "Cell two",
+      "caption": "Row 2, column 1: a short caption under the title."
+    }
+  },
+  "notes": {
+    "layout": {
+      "header": "How the grid flows",
+      "description": "Placeholder cells: every cell keeps a title and a caption; replace both."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "walkthrough": {
+        "title": "Walkthrough",
+        "keywords": "Grid 2 × 1, layout, placeholder",
+        "script": "This is the Grid 2 × 1 layout. Point at each part as you name it, then replace the placeholder words with the real content."
+      }
+    }
+  }
+}

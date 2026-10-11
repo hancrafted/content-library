@@ -1,0 +1,11 @@
+{
+  "title": "Basic page",
+  "caption": "Title and caption up top, one block of prose below.",
+  "prose": "The prose is a target a Speaker note can name, like the title and the caption.",
+  "notes": {
+    "layout-target": {
+      "header": "The prose target",
+      "description": "Layouts offer targets for free: title, caption and prose. Name one in a note's target and the drawer highlights it."
+    }
+  }
+}

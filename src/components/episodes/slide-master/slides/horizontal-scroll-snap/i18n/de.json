@@ -1,0 +1,55 @@
+{
+  "title": "Scroll-Leiste",
+  "caption": "Eine Kartenreihe breiter als die Folie: scrollen oder wischen, jede Karte rastet ein.",
+  "items": {
+    "a": {
+      "date": "Jan",
+      "title": "Auftakt",
+      "caption": "Ziel und Beteiligte benennen."
+    },
+    "b": {
+      "date": "Mar",
+      "title": "Recherche",
+      "caption": "Sammeln, was schon bekannt ist."
+    },
+    "c": {
+      "date": "May",
+      "title": "Prototyp",
+      "caption": "Das Kleinste bauen, das eine Frage beantwortet."
+    },
+    "d": {
+      "date": "Jul",
+      "title": "Pilot",
+      "caption": "Mit wenigen echten Nutzern ausprobieren."
+    },
+    "e": {
+      "date": "Sep",
+      "title": "Start",
+      "caption": "Für alle öffnen."
+    },
+    "f": {
+      "date": "Nov",
+      "title": "Rückblick",
+      "caption": "Messen, lernen und das Nächste entscheiden."
+    }
+  },
+  "controls": {
+    "previous": "Vorherige Karte",
+    "next": "Nächste Karte"
+  },
+  "notes": {
+    "layout": {
+      "header": "So liest man die Zeitleiste",
+      "description": "Platzhalter-Meilensteine: Daten, Titel und Bildunterschriften durch die echte Geschichte ersetzen."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "walkthrough": {
+        "title": "Rundgang",
+        "keywords": "Scroll-Leiste, Layout, Platzhalter",
+        "script": "Das ist das Layout Scroll-Leiste. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+      }
+    }
+  }
+}

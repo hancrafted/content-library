@@ -1,0 +1,56 @@
+{
+  "title": "Stepper",
+  "caption": "A numbered process: open a step to read its detail.",
+  "items": {
+    "a": {
+      "date": "Step 1",
+      "title": "Kickoff",
+      "caption": "Name the goal and the people."
+    },
+    "b": {
+      "date": "Step 2",
+      "title": "Research",
+      "caption": "Collect what is already known."
+    },
+    "c": {
+      "date": "Step 3",
+      "title": "Prototype",
+      "caption": "Build the smallest thing that answers a question."
+    },
+    "d": {
+      "date": "Step 4",
+      "title": "Pilot",
+      "caption": "Try it with a few real users."
+    },
+    "e": {
+      "date": "Step 5",
+      "title": "Launch",
+      "caption": "Open it to everyone."
+    },
+    "f": {
+      "date": "Step 6",
+      "title": "Review",
+      "caption": "Measure, learn and decide what is next."
+    }
+  },
+  "states": {
+    "done": "done",
+    "current": "current",
+    "upcoming": "upcoming"
+  },
+  "notes": {
+    "layout": {
+      "header": "How to read the timeline",
+      "description": "Placeholder milestones: replace the dates, titles and captions with the real story."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "walkthrough": {
+        "title": "Walkthrough",
+        "keywords": "Stepper, layout, placeholder",
+        "script": "This is the Stepper layout. Point at each part as you name it, then replace the placeholder words with the real content."
+      }
+    }
+  }
+}
