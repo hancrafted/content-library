@@ -52,7 +52,8 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 
 1. A Slide folder, `src/components/episodes/<ep>/slides/<slide>/`, MUST import only its own files and the global shared locations: `src/components/slide-master/`, `src/components/slide-shared/`, `src/components/ui/`, `src/hooks/`, `src/lib/`.
 2. It MUST NOT import another Slide, its Episode file, or anything else Episode-local; a part two Slides share moves to `src/components/slide-shared/`.
-3. Why: a Slide copied into another Episode with `cp -r`, one import and one list entry must need nothing it left behind. §4 still holds inside the folder: the boundary fences what a Slide reaches, not how it renders.
+3. A `slide-shared` part MUST import only other `slide-shared` parts, `src/components/ui/` and `src/lib/` — never a Slide, an Episode, the Slide master or its kit — so a Slide copied into another Episode finds it unchanged.
+4. Why: a Slide copied into another Episode with `cp -r`, one import and one list entry must need nothing it left behind. §4 still holds inside the folder: the boundary fences what a Slide reaches, not how it renders.
 
 ## Do's and Don'ts
 

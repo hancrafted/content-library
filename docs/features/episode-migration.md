@@ -74,6 +74,7 @@ export const theLostMiddle = slide({
   - `locale`: for `Intl` number or date formatting.
   - `ref`, `target`, `Title`: notes and heading, below.
 - A Slide folder imports only its own files and the global shared locations: `src/components/slide-master/`, `src/components/slide-shared/`, `src/components/ui/`, `src/hooks/`, `src/lib/`. A server part only this Slide uses sits in its folder (see `page-template/slides/what-comes-next/statement.tsx`); a part two Slides share goes in `src/components/slide-shared/`, plain props, no kit. Colour tokens: [FE-002 §7](../../.archgate/adrs/FE-002-episode-page.md#7-episode-styling-stays-in-the-episode).
+- A `slide-shared` part reaches only other slide-shared parts, the UI kit and `src/lib` (dependency-cruiser rule `slide-shared-reaches-only-ui-and-lib`, [FE-007 §5](../../.archgate/adrs/FE-007-module-layering.md#5-a-slide-folder-imports-only-global-shared-code)). A popover uses the shared `usePopoverPlacement` hook; see [Episode chrome](episode-chrome.md).
 
 Done when: every Slide of step 1 has a folder and `npm run typecheck` passes.
 
