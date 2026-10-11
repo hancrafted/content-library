@@ -6,16 +6,16 @@ import styles from './freelancer-cards.module.css';
 
 function FastCard(): ReactElement {
   return (
-    <div className={cn(styles.card, 'rounded-box border border-success/30 bg-success/5 p-5')}>
-      <span className="w-fit rounded-md bg-success/10 px-2 py-1 font-mono text-[0.6rem] uppercase tracking-widest text-success">
+    <div className={cn(styles.card, 'rounded-xl border border-(--success)/30 bg-(--success)/5 p-5')}>
+      <span className="w-fit rounded-md bg-(--success)/10 px-2 py-1 font-mono text-[0.6rem] uppercase tracking-widest text-(--success)">
         strength (?)
       </span>
       <h4 className="mt-2 font-display text-lg font-semibold">Fast &amp; well-read</h4>
-      <p className="text-sm leading-relaxed text-base-content/60">
+      <p className="text-sm leading-relaxed text-muted-foreground">
         Knows about everything you ask them, and can produce results fast without breaks.
       </p>
-      <span aria-hidden="true" className={cn(styles.shimmer, 'text-success')} />
-      <span aria-hidden="true" className={cn(styles.motif, styles.motifZip, 'text-success')}>
+      <span aria-hidden="true" className={cn(styles.shimmer, 'text-(--success)')} />
+      <span aria-hidden="true" className={cn(styles.motif, styles.motifZip, 'text-(--success)')}>
         <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
           <path d="M13 2 3 14h7l-1 8 11-12h-7z" />
         </svg>
@@ -26,15 +26,15 @@ function FastCard(): ReactElement {
 
 function AcceptsCard(): ReactElement {
   return (
-    <div className={cn(styles.card, 'rounded-box border border-success/30 bg-success/5 p-5')}>
-      <span className="w-fit rounded-md bg-success/10 px-2 py-1 font-mono text-[0.6rem] uppercase tracking-widest text-success">
+    <div className={cn(styles.card, 'rounded-xl border border-(--success)/30 bg-(--success)/5 p-5')}>
+      <span className="w-fit rounded-md bg-(--success)/10 px-2 py-1 font-mono text-[0.6rem] uppercase tracking-widest text-(--success)">
         strength (?)
       </span>
       <h4 className="mt-2 font-display text-lg font-semibold">Accepts any task</h4>
-      <p className="text-sm leading-relaxed text-base-content/60">
+      <p className="text-sm leading-relaxed text-muted-foreground">
         No task too big or too niche — it will take a swing at whatever you hand it.
       </p>
-      <span aria-hidden="true" className={cn(styles.motif, styles.motifCheck, 'text-success')}>
+      <span aria-hidden="true" className={cn(styles.motif, styles.motifCheck, 'text-(--success)')}>
         <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
           <rect x="3" y="3" width="18" height="18" rx="4" stroke="currentColor" strokeWidth="2" />
           <path
@@ -52,13 +52,15 @@ function AcceptsCard(): ReactElement {
 
 function TirelessCard(): ReactElement {
   return (
-    <div className={cn(styles.card, 'rounded-box border border-success/30 bg-success/5 p-5')}>
-      <span className="w-fit rounded-md bg-success/10 px-2 py-1 font-mono text-[0.6rem] uppercase tracking-widest text-success">
+    <div className={cn(styles.card, 'rounded-xl border border-(--success)/30 bg-(--success)/5 p-5')}>
+      <span className="w-fit rounded-md bg-(--success)/10 px-2 py-1 font-mono text-[0.6rem] uppercase tracking-widest text-(--success)">
         strength (?)
       </span>
       <h4 className="mt-2 font-display text-lg font-semibold">Tireless</h4>
-      <p className="text-sm leading-relaxed text-base-content/60">Never stops, never sleeps, unless you stop paying.</p>
-      <span aria-hidden="true" className={cn(styles.motif, styles.motifLoop, 'text-success')}>
+      <p className="text-sm leading-relaxed text-muted-foreground">
+        Never stops, never sleeps, unless you stop paying.
+      </p>
+      <span aria-hidden="true" className={cn(styles.motif, styles.motifLoop, 'text-(--success)')}>
         <svg viewBox="0 0 24 12" fill="none" className="h-4 w-7">
           <path
             className={styles.inf}
@@ -95,15 +97,15 @@ function BillSvg(): ReactElement {
 
 function NoqCard(): ReactElement {
   return (
-    <div className={cn(styles.card, 'rounded-box border border-error/30 bg-error/5 p-5')}>
-      <span className="w-fit rounded-md bg-error/10 px-2 py-1 font-mono text-[0.6rem] uppercase tracking-widest text-error">
+    <div className={cn(styles.card, 'rounded-xl border border-destructive/30 bg-destructive/5 p-5')}>
+      <span className="w-fit rounded-md bg-destructive/10 px-2 py-1 font-mono text-[0.6rem] uppercase tracking-widest text-destructive">
         flaw
       </span>
       <h4 className="mt-2 font-display text-lg font-semibold">Never asks questions</h4>
-      <p className="text-sm leading-relaxed text-base-content/60">
+      <p className="text-sm leading-relaxed text-muted-foreground">
         Takes tasks literally, fills gaps with assumptions, never pushes back.
       </p>
-      <span aria-hidden="true" className={cn(styles.motif, styles.motifNoq, 'font-mono text-xl text-error')}>
+      <span aria-hidden="true" className={cn(styles.motif, styles.motifNoq, 'font-mono text-xl text-destructive')}>
         ?<span className={styles.slash} />
       </span>
     </div>
@@ -112,15 +114,15 @@ function NoqCard(): ReactElement {
 
 function BillsCard(): ReactElement {
   return (
-    <div className={cn(styles.card, 'rounded-box border border-error/30 bg-error/5 p-5')}>
-      <span className="w-fit rounded-md bg-error/10 px-2 py-1 font-mono text-[0.6rem] uppercase tracking-widest text-error">
+    <div className={cn(styles.card, 'rounded-xl border border-destructive/30 bg-destructive/5 p-5')}>
+      <span className="w-fit rounded-md bg-destructive/10 px-2 py-1 font-mono text-[0.6rem] uppercase tracking-widest text-destructive">
         flaw
       </span>
       <h4 className="mt-2 font-display text-lg font-semibold">Bills by the word</h4>
-      <p className="text-sm leading-relaxed text-base-content/60">
+      <p className="text-sm leading-relaxed text-muted-foreground">
         No flat day rate. Every prompt, tool call, and correction adds to the tab.
       </p>
-      <span aria-hidden="true" className={cn(styles.bills, 'text-error')}>
+      <span aria-hidden="true" className={cn(styles.bills, 'text-destructive')}>
         {[1, 2, 3, 4, 5, 6].map((i) => (
           <span key={i} className={styles.bill}>
             <BillSvg />
@@ -133,15 +135,18 @@ function BillsCard(): ReactElement {
 
 function MemCard(): ReactElement {
   return (
-    <div className={cn(styles.card, 'rounded-box border border-error/30 bg-error/5 p-5')}>
-      <span className="w-fit rounded-md bg-error/10 px-2 py-1 font-mono text-[0.6rem] uppercase tracking-widest text-error">
+    <div className={cn(styles.card, 'rounded-xl border border-destructive/30 bg-destructive/5 p-5')}>
+      <span className="w-fit rounded-md bg-destructive/10 px-2 py-1 font-mono text-[0.6rem] uppercase tracking-widest text-destructive">
         flaw
       </span>
       <h4 className="mt-2 font-display text-lg font-semibold">It remembers nothing.</h4>
-      <p className="text-sm leading-relaxed text-base-content/60">
+      <p className="text-sm leading-relaxed text-muted-foreground">
         Every new conversation starts from zero. Yesterday&rsquo;s work never happened.
       </p>
-      <span aria-hidden="true" className={cn(styles.motif, styles.motifMem, 'font-mono text-xl font-bold text-error')}>
+      <span
+        aria-hidden="true"
+        className={cn(styles.motif, styles.motifMem, 'font-mono text-xl font-bold text-destructive')}
+      >
         0
       </span>
     </div>
@@ -160,7 +165,7 @@ function FlawCards(): ReactElement {
 
 export function FreelancerCards(target: TargetProps): ReactElement {
   return (
-    <div {...target} className="mt-12 grid items-center gap-6 lg:grid-cols-[1fr_13rem_1fr]">
+    <div {...target} className={cn(styles.scene, 'mt-12 grid items-center gap-6 lg:grid-cols-[1fr_13rem_1fr]')}>
       <StrengthCards />
       <div className="flex justify-center self-stretch">
         <Image
