@@ -1,0 +1,30 @@
+{
+  "title": "Volume outruns review",
+  "caption": "On one document, maintenance effort decays while drift climbs — that crossing is where the work moved. Across a corpus, the maintenance surface grows faster than the file count.",
+  "prose": "Two different things get harder. On a single document, maintenance effort decays while drift keeps climbing. Across a corpus, the maintenance surface grows faster than the file count.",
+  "notes": {
+    "decay-vs-drift": {
+      "header": "Decay and drift crossing",
+      "description": "On a single document, maintenance effort decays while drift climbs — that crossing is where the work moved."
+    },
+    "corpus-compounding": {
+      "header": "Compounding surface",
+      "description": "Across a corpus, the verification surface multiplies faster than the raw file count."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "effort-decay": {
+        "title": "Effort decay and drift",
+        "keywords": "decay curve, effort drops, drift climbs, maintenance budget",
+        "script": "And that's one document. There's a reason knowledge management was always hard in enterprise — long before any of this. And it's this shape. One document, over time: the blue line is effort. There's a spike at the start, when someone writes it. At least, that's how it used to be — with AI, creating a document now costs almost nothing. After that, effort drops. Because nobody budgets for maintenance. It's never in the plan. And as effort drops, drift climbs. The document is still sitting there. It's just quietly stopped being true."
+      },
+      "corpus-compounding": {
+        "title": "Corpus compounding",
+        "keywords": "accumulate steadily, claims and references, brake is gone",
+        "script": "Now scale that. Your documents don't arrive one at a time — they accumulate, steadily. And you're not just verifying each file. You're verifying every claim each file makes about the others. Every reference. That compounds. So here's what changed: writing was the brake. The human was the bottleneck — you could only produce documentation as fast as someone could write it, and that held the whole thing in check. That brake is gone.",
+        "bridge": "So the brake is gone. Which raises the obvious question: what does it actually take to check a document?"
+      }
+    }
+  }
+}

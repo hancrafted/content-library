@@ -1,0 +1,24 @@
+{
+  "title": "Was die Maschine verifiziert",
+  "caption": "Syntaktische und strukturelle Prüfungen, die deterministisch in Millisekunden ohne LLM laufen.",
+  "prose": "Syntax parst, URI-Formate werden validiert und ISO-Daten stimmen.",
+  "notes": {
+    "deterministic-checks": {
+      "header": "Deterministische Prüfungen",
+      "description": "Syntax, Schemata, Daten und URIs validieren deterministisch in Millisekunden ohne LLM."
+    },
+    "mechanical-ceiling": {
+      "header": "Mechanische Obergrenze",
+      "description": "Ein fehlerfreier Durchlauf beweist strukturelle Integrität, niemals aber die inhaltliche Richtigkeit."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "mechanical-ceiling": {
+        "title": "Was die Maschine prüft",
+        "keywords": "Frontmatter, Metadaten-Struktur, Linkprüfung, Grenze",
+        "script": "Was kann eine Maschine kostenlos prüfen? Im Frontmatter einer Markdown-Datei liegen Metadaten. Die Maschine prüft die Struktur: Ist der Typ angegeben? Ist das Datum valide? Sind Links erreichbar? Das ist die Grenze: Sie bestätigt die Existenz eines Feldes, nicht aber den Wahrheitsgehalt des Inhalts."
+      }
+    }
+  }
+}

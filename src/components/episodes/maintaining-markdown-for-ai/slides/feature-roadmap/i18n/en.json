@@ -1,0 +1,15 @@
+{
+  "title": "Feature Roadmap",
+  "caption": "Three shipped, three planned.",
+  "prose": "v0.0.4 Shipped: frontmatter linting, staleness checking, markdown harness skill.",
+  "notes": {
+    "v0-0-4-scope": {
+      "header": "Current release (v0.0.4)",
+      "description": "Shipped: frontmatter linting, staleness checks, and markdown-harness skill."
+    },
+    "future-checks": {
+      "header": "Planned capabilities",
+      "description": "Future: drift detection and corpus validation; do not promise them as shipping today."
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "title": "Feature-Roadmap",
+  "caption": "Drei veröffentlicht, drei geplant.",
+  "prose": "v0.0.4 Veröffentlicht: Frontmatter-Linting, Frischeprüfung, Markdown-Harness-Skill.",
+  "notes": {
+    "v0-0-4-scope": {
+      "header": "Aktuelle Version (v0.0.4)",
+      "description": "Veröffentlicht: Frontmatter-Linting, Frischeprüfung und Markdown-Harness-Skill."
+    },
+    "future-checks": {
+      "header": "Geplante Fähigkeiten",
+      "description": "Geplant: Drift-Erkennung und Korpus-Validierung; noch nicht im aktuellen Release."
+    }
+  }
+}
