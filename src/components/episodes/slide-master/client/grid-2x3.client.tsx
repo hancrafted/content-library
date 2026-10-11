@@ -73,7 +73,7 @@ export function Grid2x3({ copy }: { copy: Grid2x3Copy }) {
           key={cell}
           style={{ transitionDelay: `${staggerDelayMs(index)}ms` }}
           className={cn(
-            'motion-safe:transition-[opacity,translate] motion-safe:duration-500 motion-safe:ease-out',
+            'motion-safe:transition-[opacity,translate] motion-safe:duration-500 motion-safe:ease-out print:translate-y-0! print:opacity-100!',
             !revealed && 'motion-safe:translate-y-4 motion-safe:opacity-0',
           )}
         >

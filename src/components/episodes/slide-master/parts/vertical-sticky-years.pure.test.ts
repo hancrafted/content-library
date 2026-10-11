@@ -33,10 +33,11 @@ describe('failure cases', () => {
   it('rejects an entry with a blank date instead of pinning an empty year', () => {
     // ARRANGE
     const entries = [entry('2022', 'Kickoff'), entry('  ', 'Research')];
+    const blankEntry = 'Research';
     // ACT
     const group = () => groupByYear(entries);
     // ASSERT
-    expect(group).toThrow('Research');
+    expect(group).toThrow(blankEntry);
   });
 });
 

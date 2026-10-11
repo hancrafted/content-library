@@ -145,10 +145,11 @@ describe('failure cases', () => {
   it('refuses a route with no points', () => {
     // ARRANGE
     const empty: { x: number; y: number }[] = [];
+    const reason = 'no points';
     // ACT
     const path = () => metroPath(empty, 10);
     // ASSERT
-    expect(path).toThrow('no points');
+    expect(path).toThrow(reason);
   });
 });
 

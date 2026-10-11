@@ -27,10 +27,11 @@ describe('failure cases', () => {
   it('rejects a track with no cards instead of reporting card 0 as active', () => {
     // ARRANGE
     const geometry = { scrollLeft: 0, maxScroll: 0, offsets: [] };
+    const reason = 'no cards';
     // ACT
     const read = () => readTrack(geometry);
     // ASSERT
-    expect(read).toThrow('no cards');
+    expect(read).toThrow(reason);
   });
 });
 
