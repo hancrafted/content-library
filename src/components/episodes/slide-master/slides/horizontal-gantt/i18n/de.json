@@ -1,0 +1,56 @@
+{
+  "title": "Phasenbalken",
+  "caption": "Phasen als Balken auf einer gemeinsamen Zeitachse, Überlappungen sind sofort sichtbar.",
+  "items": {
+    "a": {
+      "date": "Q1",
+      "title": "Auftakt",
+      "caption": "Ziel und Beteiligte benennen."
+    },
+    "b": {
+      "date": "Q1–Q2",
+      "title": "Recherche",
+      "caption": "Sammeln, was schon bekannt ist."
+    },
+    "c": {
+      "date": "Q2–Q3",
+      "title": "Prototyp",
+      "caption": "Das Kleinste bauen, das eine Frage beantwortet."
+    },
+    "d": {
+      "date": "Q3",
+      "title": "Pilot",
+      "caption": "Mit wenigen echten Nutzern ausprobieren."
+    },
+    "e": {
+      "date": "Q3–Q4",
+      "title": "Start",
+      "caption": "Für alle öffnen."
+    },
+    "f": {
+      "date": "Q4",
+      "title": "Rückblick",
+      "caption": "Messen, lernen und das Nächste entscheiden."
+    }
+  },
+  "lanes": {
+    "a": "Produkt",
+    "b": "Forschung",
+    "c": "Betrieb"
+  },
+  "notes": {
+    "layout": {
+      "header": "So liest man die Zeitleiste",
+      "description": "Platzhalter-Meilensteine: Daten, Titel und Bildunterschriften durch die echte Geschichte ersetzen."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "walkthrough": {
+        "title": "Rundgang",
+        "keywords": "Phasenbalken, Layout, Platzhalter",
+        "script": "Das ist das Layout Phasenbalken. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+      }
+    }
+  }
+}

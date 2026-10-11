@@ -1,0 +1,29 @@
+{
+  "title": "Raster 1 × 2",
+  "caption": "1 Zeile mal 2 Spalten.",
+  "cells": {
+    "c1": {
+      "title": "Zelle eins",
+      "caption": "Zeile 1, Spalte 1: eine kurze Bildunterschrift unter dem Titel."
+    },
+    "c2": {
+      "title": "Zelle zwei",
+      "caption": "Zeile 1, Spalte 2: eine kurze Bildunterschrift unter dem Titel."
+    }
+  },
+  "notes": {
+    "layout": {
+      "header": "So fließt das Raster",
+      "description": "Platzhalter-Zellen: Jede Zelle behält Titel und Bildunterschrift; beides ersetzen."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "walkthrough": {
+        "title": "Rundgang",
+        "keywords": "Raster 1 × 2, Layout, Platzhalter",
+        "script": "Das ist das Layout Raster 1 × 2. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "title": "Drei Spalten",
+  "caption": "Oben Titel und Untertitel, darunter genau drei Spalten mit eigenem Schlüssel.",
+  "columns": {
+    "first": {
+      "title": "Erste Spalte",
+      "prose": "Jede Spalte hat einen Slug, und dieser Slug ist das Ziel, unter dem eine Notiz sie benennt."
+    },
+    "second": {
+      "title": "Zweite Spalte",
+      "prose": "Spalten tragen einen Titel und Fließtext, nie eine Position."
+    },
+    "third": {
+      "title": "Dritte Spalte",
+      "prose": "Eine vierte Spalte wäre ein anderes Layout."
+    }
+  },
+  "notes": {
+    "column-target": {
+      "header": "Eine Spalte ist ein Ziel",
+      "description": "Der Slug jeder Spalte ist zugleich ihr Ziel, sodass eine Notiz auf eine Spalte zeigen kann."
+    }
+  }
+}

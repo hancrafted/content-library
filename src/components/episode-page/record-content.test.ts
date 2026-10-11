@@ -1,4 +1,3 @@
-import { slidesFor, type EpisodeRecord } from '@/components/slide-master/episode-record';
 import { selfContainedEpisode, slide, type SelfContainedEpisodeRecord } from '@/components/slide-master/slide';
 import type { RuntimeKit, RuntimeTranslator } from '@/components/slide-master/slide-base';
 import { TRANSLATIONS } from '@/i18n/translations';
@@ -220,27 +219,6 @@ describe('success cases', () => {
     const { sections } = await recordContent(record, 'de', translatorOf('de'));
     // ASSERT
     expect(sections[1].slide.content).toBe(expected);
-  });
-
-  it('still renders an Episode of `slidesFor` Slides from the site-wide Translation file', async () => {
-    // ARRANGE
-    const old = slidesFor('slide-layouts');
-    const sectionSlide = old({ slug: 'section-slide', content: (kit) => probe(kit as unknown as RuntimeKit, []) });
-    const basicPage = old({
-      slug: 'basic-page',
-      notes: [{ slug: 'layout-target', target: 'prose' }],
-      content: (kit) => probe(kit as unknown as RuntimeKit, ['prose']),
-    });
-    const record: EpisodeRecord<'slide-layouts'> = { slug: 'slide-layouts', sections: [[sectionSlide, basicPage]] };
-    const expected = { title: 'Slide layouts', section: 'Section slide', note: 'The prose target' };
-    // ACT
-    const content = await recordContent(record, 'en', translatorOf('en'));
-    // ASSERT
-    expect({
-      title: content.title,
-      section: content.sections[0].slide.title,
-      note: content.sections[0].slides[0].slide.notes?.[0].header,
-    }).toEqual(expected);
   });
 });
 

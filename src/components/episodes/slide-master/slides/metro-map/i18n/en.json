@@ -1,0 +1,56 @@
+{
+  "title": "Metro map",
+  "caption": "Parallel lanes that branch and merge, read like a subway map.",
+  "items": {
+    "a": {
+      "date": "2019",
+      "title": "Kickoff",
+      "caption": "Name the goal and the people."
+    },
+    "b": {
+      "date": "2020",
+      "title": "Research",
+      "caption": "Collect what is already known."
+    },
+    "c": {
+      "date": "2021",
+      "title": "Prototype",
+      "caption": "Build the smallest thing that answers a question."
+    },
+    "d": {
+      "date": "2022",
+      "title": "Pilot",
+      "caption": "Try it with a few real users."
+    },
+    "e": {
+      "date": "2023",
+      "title": "Launch",
+      "caption": "Open it to everyone."
+    },
+    "f": {
+      "date": "2024",
+      "title": "Review",
+      "caption": "Measure, learn and decide what is next."
+    }
+  },
+  "lanes": {
+    "a": "Product",
+    "b": "Research",
+    "c": "Operations"
+  },
+  "notes": {
+    "layout": {
+      "header": "How to read the timeline",
+      "description": "Placeholder milestones: replace the dates, titles and captions with the real story."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "walkthrough": {
+        "title": "Walkthrough",
+        "keywords": "Metro map, layout, placeholder",
+        "script": "This is the Metro map layout. Point at each part as you name it, then replace the placeholder words with the real content."
+      }
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "title": "Haftende Jahre",
+  "caption": "Das Jahr bleibt links stehen, während seine Einträge vorbeiziehen.",
+  "items": {
+    "a": {
+      "date": "2022",
+      "title": "Auftakt",
+      "caption": "Ziel und Beteiligte benennen."
+    },
+    "b": {
+      "date": "2022",
+      "title": "Recherche",
+      "caption": "Sammeln, was schon bekannt ist."
+    },
+    "c": {
+      "date": "2023",
+      "title": "Prototyp",
+      "caption": "Das Kleinste bauen, das eine Frage beantwortet."
+    },
+    "d": {
+      "date": "2023",
+      "title": "Pilot",
+      "caption": "Mit wenigen echten Nutzern ausprobieren."
+    },
+    "e": {
+      "date": "2024",
+      "title": "Start",
+      "caption": "Für alle öffnen."
+    },
+    "f": {
+      "date": "2024",
+      "title": "Rückblick",
+      "caption": "Messen, lernen und das Nächste entscheiden."
+    }
+  },
+  "notes": {
+    "layout": {
+      "header": "So liest man die Zeitleiste",
+      "description": "Platzhalter-Meilensteine: Daten, Titel und Bildunterschriften durch die echte Geschichte ersetzen."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "walkthrough": {
+        "title": "Rundgang",
+        "keywords": "Haftende Jahre, Layout, Platzhalter",
+        "script": "Das ist das Layout Haftende Jahre. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+      }
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "title": "Sticky years",
+  "caption": "The year stays pinned on the left while its entries scroll past.",
+  "items": {
+    "a": {
+      "date": "2022",
+      "title": "Kickoff",
+      "caption": "Name the goal and the people."
+    },
+    "b": {
+      "date": "2022",
+      "title": "Research",
+      "caption": "Collect what is already known."
+    },
+    "c": {
+      "date": "2023",
+      "title": "Prototype",
+      "caption": "Build the smallest thing that answers a question."
+    },
+    "d": {
+      "date": "2023",
+      "title": "Pilot",
+      "caption": "Try it with a few real users."
+    },
+    "e": {
+      "date": "2024",
+      "title": "Launch",
+      "caption": "Open it to everyone."
+    },
+    "f": {
+      "date": "2024",
+      "title": "Review",
+      "caption": "Measure, learn and decide what is next."
+    }
+  },
+  "notes": {
+    "layout": {
+      "header": "How to read the timeline",
+      "description": "Placeholder milestones: replace the dates, titles and captions with the real story."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "walkthrough": {
+        "title": "Walkthrough",
+        "keywords": "Sticky years, layout, placeholder",
+        "script": "This is the Sticky years layout. Point at each part as you name it, then replace the placeholder words with the real content."
+      }
+    }
+  }
+}

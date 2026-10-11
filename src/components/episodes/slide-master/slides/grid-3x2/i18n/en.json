@@ -1,0 +1,45 @@
+{
+  "title": "Grid 3 × 2",
+  "caption": "3 rows by 2 columns.",
+  "cells": {
+    "c1": {
+      "title": "Cell one",
+      "caption": "Row 1, column 1: a short caption under the title."
+    },
+    "c2": {
+      "title": "Cell two",
+      "caption": "Row 1, column 2: a short caption under the title."
+    },
+    "c3": {
+      "title": "Cell three",
+      "caption": "Row 2, column 1: a short caption under the title."
+    },
+    "c4": {
+      "title": "Cell four",
+      "caption": "Row 2, column 2: a short caption under the title."
+    },
+    "c5": {
+      "title": "Cell five",
+      "caption": "Row 3, column 1: a short caption under the title."
+    },
+    "c6": {
+      "title": "Cell six",
+      "caption": "Row 3, column 2: a short caption under the title."
+    }
+  },
+  "notes": {
+    "layout": {
+      "header": "How the grid flows",
+      "description": "Placeholder cells: every cell keeps a title and a caption; replace both."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "walkthrough": {
+        "title": "Walkthrough",
+        "keywords": "Grid 3 × 2, layout, placeholder",
+        "script": "This is the Grid 3 × 2 layout. Point at each part as you name it, then replace the placeholder words with the real content."
+      }
+    }
+  }
+}
