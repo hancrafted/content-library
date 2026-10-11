@@ -32,7 +32,7 @@ type Drawer = ReturnType<typeof useContextDrawer>;
  * header's 50). Its width is the one `--drawer-width` the right inset reads.
  */
 const CARD = cn(
-  'fixed top-24 right-4 bottom-4 z-40 flex w-[min(var(--drawer-width),calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border bg-background text-sm shadow-header',
+  'fixed top-24 right-4 bottom-4 z-40 flex w-[min(var(--drawer-width),calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border bg-background text-body shadow-header',
   'max-md:top-32 max-md:z-[70] md:w-(--drawer-width) motion-reduce:[transition:none]',
 );
 // Only `transform` animates, never width or position. `visibility` flips to
@@ -56,7 +56,7 @@ function Entries({
     <div key={entry.id} {...{ [CONTEXT_ITEM_ATTR]: entry.id }} className={cn(entry.id !== current && 'hidden')}>
       {/* The head names the current item on screen; print has no head, so each entry names itself. */}
       {entry.title && (
-        <h5 className="mb-2 hidden text-sm font-medium text-muted-foreground print:block">{entry.title}</h5>
+        <h5 className="mb-2 hidden text-body font-medium text-muted-foreground print:block">{entry.title}</h5>
       )}
       {entry[kind]}
     </div>
@@ -72,7 +72,7 @@ function Panel(props: { tab: DrawerTab; selected: DrawerTab; heading: string; ch
       aria-labelledby={drawerIds(props.tab).tab}
       className={cn('flex flex-col gap-3 rounded-md focus-visible:outline-2', props.tab !== props.selected && 'hidden')}
     >
-      <h4 className="hidden text-lg font-semibold print:block">{props.heading}</h4>
+      <h4 className="hidden text-body font-semibold print:block">{props.heading}</h4>
       {props.children}
     </div>
   );
@@ -104,7 +104,7 @@ function PanelHead(props: { labels: DrawerStrings; drawer: Drawer; title: string
           </button>
         </div>
       </div>
-      <h4 className="px-1 text-lg leading-snug font-semibold text-balance break-words">{props.title}</h4>
+      <h4 className="px-1 text-body leading-snug font-semibold text-balance break-words">{props.title}</h4>
     </div>
   );
 }
@@ -164,7 +164,7 @@ function Scrim({ open, onClose }: { open: boolean; onClose: () => void }) {
       data-slot="context-scrim"
       onClick={onClose}
       className={cn(
-        'fixed inset-0 z-[60] bg-black/40 backdrop-blur-sm motion-reduce:[transition:none] md:hidden print:hidden',
+        'fixed inset-0 z-[60] bg-overlay/40 backdrop-blur-sm motion-reduce:[transition:none] md:hidden print:hidden',
         open
           ? '[transition:opacity_250ms_ease-out,visibility_0s]'
           : 'pointer-events-none invisible opacity-0 [transition:opacity_200ms_ease-in,visibility_0s_linear_200ms]',

@@ -7,7 +7,7 @@ function Keywords({ keywords, label }: { keywords: readonly string[]; label: str
   return (
     <ul aria-label={label} className="flex flex-wrap gap-1">
       {keywords.map((keyword) => (
-        <li key={keyword} className="rounded-full border px-2 py-0.5 text-xs text-muted-foreground">
+        <li key={keyword} className="rounded-full border px-2 py-0.5 text-body text-muted-foreground">
           {keyword}
         </li>
       ))}
@@ -19,16 +19,16 @@ function Segment({ segment, labels }: { segment: VoiceScriptSegment; labels: Con
   return (
     <li data-segment={segment.slug} className={FLAT_ITEM}>
       <div className="flex items-baseline gap-2">
-        <span className="shrink-0 rounded-md bg-muted px-1.5 py-0.5 font-mono text-xs tabular-nums">
+        <span className="shrink-0 rounded-md bg-muted px-1.5 py-0.5 font-mono text-body tabular-nums">
           {formatMark(segment.from)}–{formatMark(segment.to)}
         </span>
-        <h6 className="text-base leading-snug font-semibold text-pretty">{segment.title}</h6>
+        <h6 className="text-body leading-snug font-semibold text-pretty">{segment.title}</h6>
       </div>
       <Keywords keywords={segment.keywords} label={labels.strings.keywords} />
-      <p className="text-sm leading-relaxed">{segment.script}</p>
+      <p className="text-body leading-relaxed">{segment.script}</p>
       {segment.bridge && (
-        <p className="border-l-2 border-foreground/30 pl-3 text-sm leading-relaxed italic">
-          <span className="block text-xs font-medium tracking-wide text-muted-foreground uppercase not-italic">
+        <p className="border-l-2 border-foreground/30 pl-3 text-body leading-relaxed italic">
+          <span className="block text-body font-medium tracking-wide text-muted-foreground uppercase not-italic">
             {labels.strings.bridge}
           </span>
           {segment.bridge}
@@ -49,7 +49,7 @@ export function SlideScript({
   explainer?: string;
 }) {
   if (explainer !== undefined) return <DrawerExplainer text={explainer} />;
-  if (segments.length === 0) return <p className="text-sm text-muted-foreground">{labels.strings.empty.script}</p>;
+  if (segments.length === 0) return <p className="text-body text-muted-foreground">{labels.strings.empty.script}</p>;
   return (
     <ol className={FLAT_LIST}>
       {segments.map((segment) => (
