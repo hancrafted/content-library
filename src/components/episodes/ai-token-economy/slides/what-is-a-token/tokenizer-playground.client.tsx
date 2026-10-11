@@ -7,7 +7,7 @@ import { calcSessionCost, tokenizeText } from './tokenizer.pure';
 const CHIP_STYLES = [
   'bg-primary/15 border-primary/40 text-primary',
   'bg-(--info)/15 border-(--info)/40 text-(--info)',
-  'bg-accent/15 border-accent/40 text-accent',
+  'bg-human/15 border-human/40 text-foreground',
   'bg-(--success)/15 border-(--success)/40 text-(--success)',
   'bg-(--warning)/15 border-(--warning)/40 text-(--warning)',
 ] as const;

@@ -15,8 +15,8 @@ function LostMiddleDiagram(): ReactElement {
         <div className="flex-1 rounded bg-muted p-3 opacity-40 blur-[1px]">[msg 12: read utils.js]</div>
         <div className="hidden md:block flex-1 rounded bg-muted p-3 opacity-40 blur-[1px]">[msg 13: modify api.js]</div>
         <div className="flex-1 rounded bg-muted p-3 opacity-40 blur-[1px]">[msg 14: read config.json]</div>
-        <div className="flex-1 rounded border-l-4 border-accent bg-muted p-3">
-          <span className="block font-bold text-accent">Latest request (Recency)</span>
+        <div className="flex-1 rounded border-l-4 border-human bg-muted p-3">
+          <span className="block font-bold text-human">Latest request (Recency)</span>
           &ldquo;Why is the build failing?&rdquo;
         </div>
       </div>

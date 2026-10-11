@@ -9,7 +9,7 @@ import { TokenizerPlaygroundClient } from './tokenizer-playground.client';
 
 const DIMENSIONS = [
   { label: 'input', desc: 'every word you send — and re-send on every turn', color: 'text-primary' },
-  { label: 'output', desc: 'every word generated in return and reasoning traces', color: 'text-accent' },
+  { label: 'output', desc: 'every word generated in return and reasoning traces', color: 'text-human' },
   { label: 'cache write', desc: 'storing recurring context blocks for reuse', color: 'text-(--info)' },
   { label: 'cache read', desc: 'reusing cached blocks — ~10% of base input rate', color: 'text-(--success)' },
 ] as const;

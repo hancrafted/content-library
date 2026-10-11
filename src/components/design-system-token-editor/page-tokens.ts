@@ -85,7 +85,7 @@ function carriers(scope: Scope, token: Token): HTMLElement[] {
 /** Applies the active theme's edits as inline custom properties and clears the rest, so a theme switch shows the right values. */
 export function applyEdits({ scope, tokens }: TokenSet, edits: Edits, theme: Theme) {
   for (const token of tokens) {
-    const value = edits[editKey(scope, theme, token.name)];
+    const value = edits[editKey(scope, theme, token)];
     for (const element of carriers(scope, token)) {
       if (value === undefined) element.style.removeProperty(token.name);
       else element.style.setProperty(token.name, value);

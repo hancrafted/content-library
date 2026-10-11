@@ -58,7 +58,7 @@ function AutomatedCard(): ReactElement {
 function SteeringCard(): ReactElement {
   return (
     <div className="rounded-xl border border-border bg-card p-5 shadow-xs">
-      <h4 className="text-lg font-bold text-accent">Agent Steering</h4>
+      <h4 className="text-lg font-bold text-human">Agent Steering</h4>
       <ul className="mt-4 space-y-3 text-sm text-foreground">
         <li>
           <span className="font-mono font-semibold">Memory Files</span>: Persist durable rules via AGENTS.md, CLAUDE.md,
