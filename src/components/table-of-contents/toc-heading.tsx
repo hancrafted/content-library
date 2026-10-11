@@ -43,7 +43,7 @@ export function TocHeading(props: {
 }) {
   const { labels } = props;
   return (
-    <div className="flex items-baseline justify-between gap-3 px-2 text-body whitespace-nowrap text-muted-foreground">
+    <div className="flex items-baseline justify-between gap-3 px-2 text-caption whitespace-nowrap text-muted-foreground">
       <Link
         href={localizePath(props.route, props.locale, props.topId)}
         replace

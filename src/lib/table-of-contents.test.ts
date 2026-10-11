@@ -30,16 +30,16 @@ const owners = { 'a--visual': 'a--why' };
 describe('success cases', () => {
   it('tells the pill which numbered Section the reader is in, from a page Slide too', () => {
     // ARRANGE
-    const expected = { number: '03', title: 'Outro' };
+    const expected = { number: '3', title: 'Outro' };
     // ACT
     const where = whereAt(SECTIONS, 'outro--next');
     // ASSERT
     expect(where).toEqual(expected);
   });
 
-  it('numbers Sections from 01, two digits', () => {
+  it('numbers Sections from 1, without a leading zero', () => {
     // ARRANGE
-    const expected = ['01', '10'];
+    const expected = ['1', '10'];
     // ACT
     const numbers = [sectionNumber(0), sectionNumber(9)];
     // ASSERT
