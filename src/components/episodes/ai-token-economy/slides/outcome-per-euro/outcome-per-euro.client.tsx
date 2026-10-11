@@ -29,7 +29,7 @@ function PremiumModelCard({ threshold }: { threshold: number }): ReactElement {
   return (
     <div className="rounded-xl border border-border bg-card p-5 shadow-xs">
       <div className="flex items-center justify-between">
-        <h4 className="font-display text-xl font-bold">Premium model</h4>
+        <h4 className="text-xl font-bold">Premium model</h4>
         <span className="inline-flex items-center rounded-full px-2 py-0.5 border border-border text-foreground font-mono text-[0.65rem]">
           5× the price
         </span>
@@ -80,7 +80,7 @@ function CheaperModelCard({ threshold }: { threshold: number }): ReactElement {
         </span>
       )}
       <div className="flex items-center justify-between">
-        <h4 className="font-display text-xl font-bold">Cheaper model</h4>
+        <h4 className="text-xl font-bold">Cheaper model</h4>
         <span className="inline-flex items-center rounded-full px-2 py-0.5 border border-primary text-primary font-mono text-[0.65rem]">
           1× the price
         </span>

@@ -86,7 +86,7 @@ function BarFace({ item, title, grown }: { item: GanttItem; title: string; grown
         className="absolute inset-y-0 left-0 bg-[color-mix(in_oklch,var(--lane)_38%,transparent)]"
       />
       <span aria-hidden="true" className="relative ml-1.5 size-6 shrink-0 rounded-full bg-(--lane)" />
-      <span className="relative truncate px-2.5 text-sm font-semibold text-foreground group-hover:underline">
+      <span className="relative truncate px-2.5 text-body font-semibold text-foreground group-hover:underline">
         {title}
       </span>
     </span>

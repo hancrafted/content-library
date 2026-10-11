@@ -35,7 +35,7 @@ const AUTOMATED_TOOLS: readonly AutomatedTool[] = [
 function AutomatedCard(): ReactElement {
   return (
     <div className="rounded-xl border border-border bg-card p-5 shadow-xs">
-      <h4 className="font-display text-lg font-bold text-primary">Automated</h4>
+      <h4 className="text-lg font-bold text-primary">Automated</h4>
       <ul className="mt-4 space-y-3 text-sm text-foreground">
         {AUTOMATED_TOOLS.map((tool) => (
           <li key={tool.name}>
@@ -58,7 +58,7 @@ function AutomatedCard(): ReactElement {
 function SteeringCard(): ReactElement {
   return (
     <div className="rounded-xl border border-border bg-card p-5 shadow-xs">
-      <h4 className="font-display text-lg font-bold text-accent">Agent Steering</h4>
+      <h4 className="text-lg font-bold text-accent">Agent Steering</h4>
       <ul className="mt-4 space-y-3 text-sm text-foreground">
         <li>
           <span className="font-mono font-semibold">Memory Files</span>: Persist durable rules via AGENTS.md, CLAUDE.md,
@@ -76,7 +76,7 @@ function SteeringCard(): ReactElement {
 function HabitsCard(): ReactElement {
   return (
     <div className="rounded-xl border border-border bg-card p-5 shadow-xs">
-      <h4 className="font-display text-lg font-bold text-secondary">Team Habits</h4>
+      <h4 className="text-lg font-bold text-secondary">Team Habits</h4>
       <ul className="mt-4 space-y-3 text-sm text-foreground">
         <li>
           <span className="font-semibold">Edit, Don&rsquo;t Append</span>: Fix prompt mistakes at the root rather than

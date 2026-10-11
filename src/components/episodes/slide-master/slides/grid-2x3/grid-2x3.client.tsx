@@ -47,10 +47,10 @@ function Card({ cell, title, caption }: { cell: Grid2x3Cell; title: string; capt
         <Icon className="size-5" strokeWidth={2.25} />
       </span>
       <div className="mt-auto">
-        <h4 id={id} className="text-lg font-semibold tracking-tight text-balance text-foreground">
+        <h4 id={id} className="text-body font-semibold tracking-tight text-balance text-foreground">
           {title}
         </h4>
-        <p className="mt-1.5 text-sm text-pretty text-muted-foreground">{caption}</p>
+        <p className="mt-1.5 text-body text-pretty text-muted-foreground">{caption}</p>
       </div>
     </article>
   );

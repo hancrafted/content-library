@@ -26,7 +26,7 @@ function RoleCardTop({ role, onOpen }: { role: RoleDetail; onOpen: (modal: Modal
     <div className="flex items-start justify-between">
       <div>
         <div className="flex items-center gap-2">
-          <span className="font-display text-sm font-bold text-foreground">{role.title}</span>
+          <span className="text-sm font-bold text-foreground">{role.title}</span>
           <span className={cn('rounded-full border px-2 py-0.5 font-mono text-[10px]', role.badgeClass)}>
             {role.badge}
           </span>
@@ -108,7 +108,7 @@ function SvgConnectors({ paths, activeRole }: { paths: Record<RoleKey, string>; 
               ? 'var(--color-human)'
               : 'var(--color-machine)';
         return (
-          <g key={key} className={cn('s2-arrow-group', isActive ? 'is-active opacity-100' : 'is-inactive opacity-30')}>
+          <g key={key} className={cn('s2-arrow-group', isActive ? 'is-active opacity-100' : 'opacity-30')}>
             {d && <path d={d} stroke={color} strokeWidth="2" fill="none" opacity="0.6" />}
             {d && <path d={d} stroke={color} fill="none" className="s2-flow-dash" />}
           </g>

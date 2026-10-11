@@ -15,7 +15,7 @@ export function SpineStepper({ labels, button }: { labels: Record<SpineLevel, st
             key={each}
             aria-current={each === level}
             className={cn(
-              'rounded-md border px-3 py-1.5 text-sm',
+              'rounded-md border px-3 py-1.5 text-body',
               each === level ? 'border-primary bg-primary text-primary-foreground' : 'text-muted-foreground',
             )}
           >
@@ -26,7 +26,7 @@ export function SpineStepper({ labels, button }: { labels: Record<SpineLevel, st
       <button
         type="button"
         onClick={() => setLevel(nextSpineLevel)}
-        className="rounded-md border px-3 py-1.5 text-sm hover:bg-muted"
+        className="rounded-md border px-3 py-1.5 text-body hover:bg-muted"
       >
         {button}
       </button>

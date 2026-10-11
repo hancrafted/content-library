@@ -139,7 +139,7 @@ function StepMarker({ index, status }: { index: number; status: StepStatus }) {
     <span
       aria-hidden="true"
       className={cn(
-        'relative grid size-14 place-items-center rounded-full border-2 text-xl font-semibold tabular-nums md:size-[4.5rem] md:text-3xl',
+        'relative grid size-14 place-items-center rounded-full border-2 text-subheading font-semibold tabular-nums md:size-[4.5rem]',
         'motion-safe:transition-[background-color,border-color,color,box-shadow] motion-safe:duration-300',
         MARKER[status],
       )}
@@ -152,10 +152,10 @@ function StepMarker({ index, status }: { index: number; status: StepStatus }) {
 function StepHeading({ copy, status, open }: { copy: StepCopy; status: StepStatus; open: boolean }) {
   return (
     <span className="flex min-w-0 flex-col gap-0.5 py-2">
-      <span className="text-sm text-muted-foreground tabular-nums">{copy.date}</span>
+      <span className="text-body text-muted-foreground tabular-nums">{copy.date}</span>
       <span
         className={cn(
-          'text-xl font-semibold tracking-tight underline-offset-4 group-hover:underline md:text-2xl',
+          'text-subheading font-semibold tracking-tight underline-offset-4 group-hover:underline',
           status === 'upcoming' && !open && 'text-muted-foreground',
         )}
       >
@@ -179,7 +179,7 @@ function StepPanel({ id, open, caption }: { id: string; open: boolean; caption: 
       )}
     >
       <div className="min-h-0 overflow-hidden">
-        <p className="max-w-prose pt-1 pb-8 text-base text-pretty text-muted-foreground md:text-lg">{caption}</p>
+        <p className="max-w-prose pt-1 pb-8 text-body text-pretty text-muted-foreground">{caption}</p>
       </div>
     </div>
   );

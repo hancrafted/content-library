@@ -35,7 +35,7 @@ function CompoundingTable(): ReactElement {
         </div>
       ))}
       <div className="flex items-center justify-between rounded-xl border border-(--info)/50 bg-(--info)/10 p-4">
-        <span className="font-display font-bold">Total context hauler</span>
+        <span className="font-bold">Total context hauler</span>
         <span className="font-mono text-2xl font-bold text-(--info)">~73,450 tokens</span>
       </div>
     </div>

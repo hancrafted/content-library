@@ -28,7 +28,7 @@ export function SessionLoop({ caption }: { caption: string }) {
           <span key={cell} className={cell < filled ? 'size-6 rounded bg-primary' : 'size-6 rounded bg-muted'} />
         ))}
       </div>
-      <figcaption className="mt-3 text-sm text-muted-foreground">{caption}</figcaption>
+      <figcaption className="mt-3 text-body text-muted-foreground">{caption}</figcaption>
     </figure>
   );
 }

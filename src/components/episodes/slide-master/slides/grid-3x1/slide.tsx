@@ -20,17 +20,14 @@ function AgendaRow({ index, hover, title, caption }: AgendaRowProps) {
       <div className="grid grid-cols-[3.5rem_minmax(0,1fr)] items-baseline gap-x-4 gap-y-2 py-7 transition-[padding] duration-300 ease-[cubic-bezier(0.2,0,0,1)] group-hover:pl-3 motion-reduce:transition-none sm:grid-cols-[5rem_minmax(0,1fr)] md:grid-cols-[7rem_minmax(0,1fr)_minmax(0,1.1fr)] md:gap-x-8 md:py-9 md:group-hover:pl-6">
         <span
           aria-hidden
-          className={`${hover} font-serif text-5xl leading-none text-muted-foreground/45 italic tabular-nums transition-colors duration-300 motion-reduce:transition-none md:text-7xl`}
+          className={`${hover} font-serif text-heading leading-none text-muted-foreground/45 italic tabular-nums transition-colors duration-300 motion-reduce:transition-none`}
         >
           {index}
         </span>
-        <h4
-          id={id}
-          className="text-2xl leading-tight font-semibold tracking-tight text-balance text-foreground md:text-3xl"
-        >
+        <h4 id={id} className="text-subheading leading-tight font-semibold tracking-tight text-balance text-foreground">
           {title}
         </h4>
-        <p className="col-start-2 text-base text-pretty text-muted-foreground md:col-start-3">{caption}</p>
+        <p className="col-start-2 text-body text-pretty text-muted-foreground md:col-start-3">{caption}</p>
       </div>
     </li>
   );
