@@ -1,0 +1,128 @@
+{
+  "title": "Treat AI like an amnesiac freelancer you have to onboard · hancrafted",
+  "description": "An AI coding agent keeps nothing between sessions. Treat it like a skilled freelancer who forgets: brief it in files, keep the brief short, and verify the work.",
+  "toc": "Contents Loading 7 min left 01 The freelancer who forgets Why every session starts from a blank slate Where an agent’s knowledge lives, and where it stops 02 Onboarding the newcomer What a good onboarding package contains Why a short brief beats a thorough handbook Why decisions belong in writing 03 Where the metaphor breaks Three ways an agent is not a freelancer Why checks matter more than good intentions Open contents : Contents · Loading Contents 7 min left 01 The freelancer who forgets Why every session starts from a blank slate Where an agent’s knowledge lives, and where it stops 02 Onboarding the newcomer What a good onboarding package contains Why a short brief beats a thorough handbook Why decisions belong in writing 03 Where the metaphor breaks Three ways an agent is not a freelancer Why checks matter more than good intentions",
+  "slides": [
+    {
+      "id": "top",
+      "text": "Treat AI like an amnesiac freelancer you have to onboard Why an AI coding agent starts every session blank, and how to brief it so the work still lands."
+    },
+    {
+      "id": "blank-slate",
+      "text": "The freelancer who forgets Why the agent arrives with no memory of your project, and where its knowledge does and does not live."
+    },
+    {
+      "id": "blank-slate--blank-every-time",
+      "text": "Why every session starts from a blank slate “Amnesiac” is our metaphor, not a vendor term, but the mechanism is documented. The model keeps nothing between requests ( opens speaker note ) : a chat only feels continuous because the history is sent again every turn. Claude Code says each session begins with a fresh context window. Anthropic itself pictures engineers working in shifts, each arriving with no memory of the previous shift. Each session fills up, then starts over blank."
+    },
+    {
+      "id": "blank-slate--where-knowledge-lives",
+      "text": "Where an agent’s knowledge lives, and where it stops Three places, and only one of them is yours to shape. Training General knowledge up to a cutoff date. Your repo, your conventions and last Tuesday’s decision were never part of it. That is our framing; vendors point to files for exactly this reason. The session The context window is its working memory. Recall degrades as it fills, and information buried in the middle of a long input is used worst. Files CLAUDE.md and AGENTS.md are loaded as text at the start. A project-root CLAUDE.md is re-read from disk after compaction; an instruction given only in chat can be lost."
+    },
+    {
+      "id": "onboarding",
+      "text": "Onboarding the newcomer 3 slides on briefing an agent the way you would brief a skilled contractor."
+    },
+    {
+      "id": "onboarding--brief-and-rules",
+      "text": "What a good onboarding package contains Each human artefact has an agent counterpart. The brief Anthropic: think of Claude as a brilliant but new employee who lacks context on your norms and workflows. State the task, constraints and format explicitly. House rules A file read at the start of every conversation: build and test commands, code style, workflow rules. AGENTS.md calls it a README for agents. Definition of done Tests, builds or scripts the agent can run itself. Anthropic: give Claude a way to verify its work."
+    },
+    {
+      "id": "onboarding--keep-it-short",
+      "text": "Why a short brief beats a thorough handbook Attention is finite, for agents and humans alike. Anthropic warns that bloated CLAUDE.md files cause Claude to ignore your actual instructions ( opens speaker note ) , and suggests under 200 lines per file. GitHub caps its own template at two pages. Point to detail the agent can load on demand instead of pasting it all in."
+    },
+    {
+      "id": "onboarding--decisions-in-writing",
+      "text": "Why decisions belong in writing Write each one as a conversation with a future developer. Michael Nygard’s decision records keep the why for whoever arrives later, in one or two pages, and mark a reversed decision as superseded instead of deleting it ( opens speaker note ) . For an agent that arrives later every time, the record is the memory it can read."
+    },
+    {
+      "id": "where-it-breaks",
+      "text": "Where the metaphor breaks Three differences between a freelancer and an agent, and what follows from them."
+    },
+    {
+      "id": "where-it-breaks--metaphor-breaks",
+      "text": "Three ways an agent is not a freelancer Each difference changes how you onboard. No learning A freelancer improves by week three unprompted. A fresh session starts from the files alone, so anything not written down is gone. Not enforced Claude treats CLAUDE.md as context, not enforced configuration. Rules that must hold belong in checks or hooks, not prose. Reading costs Every line is paid for at the start of every session, and quality drops as context fills. Prune the brief."
+    },
+    {
+      "id": "where-it-breaks--enforce-and-verify",
+      "text": "Why checks matter more than good intentions Let something other than the author grade the work. Give the agent commands that prove the work, and add a fresh-context reviewer, so the agent doing the work is not the one grading it. That is the one part that does not depend on the agent reading and obeying prose."
+    },
+    { "id": "where-it-breaks--one-line", "text": "Write it down, or the next session never knew it." }
+  ],
+  "notes": [
+    {
+      "id": "top",
+      "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
+    },
+    { "id": "blank-slate", "text": "The freelancer who forgets No speaker notes for this Slide." },
+    {
+      "id": "blank-slate--blank-every-time",
+      "text": "Why every session starts from a blank slate Stateless by design The model keeps nothing between requests. 2 A chat feels continuous because the whole history is sent again each turn. 1 Sources (2) OpenAI: Conversation state ( opens in a new tab ) platform.openai.com Claude API: Context windows ( opens in a new tab ) platform.claude.com Fresh window per session Claude Code says each session begins with a fresh context window. 1 Only CLAUDE.md files and auto memory carry knowledge across. Sources (1) Claude Code: Memory ( opens in a new tab ) code.claude.com Shift workers, per Anthropic Anthropic pictures engineers in shifts, each arriving with no memory of the previous shift. 1 Their fix is written artefacts the next session reads first. Sources (1) Anthropic: Effective harnesses for long-running agents ( opens in a new tab ) anthropic.com Our word, not theirs \"Amnesiac\" is our metaphor. Say so out loud; do not attribute it to Anthropic."
+    },
+    {
+      "id": "blank-slate--where-knowledge-lives",
+      "text": "Where an agent’s knowledge lives, and where it stops Training General knowledge up to a cutoff. Your repo, conventions and last Tuesday's decision were never in it. That is our inference; no vendor states it as a sentence, but vendor guidance points to files for exactly this reason. 1 2 Sources (2) Claude Code: Memory ( opens in a new tab ) code.claude.com OpenAI Codex: Memories ( opens in a new tab ) developers.openai.com The session The context window is working memory. Recall degrades as it fills (Anthropic, Chroma). 1 3 Information in the middle of a long input is used worst (Liu et al., 2023-era models; state the direction, not numbers). 2 Sources (3) Chroma: Context Rot ( opens in a new tab ) research.trychroma.com Liu et al.: Lost in the Middle ( opens in a new tab ) arxiv.org Anthropic: Effective context engineering for AI agents ( opens in a new tab ) anthropic.com Files CLAUDE.md and AGENTS.md are loaded as text at the start. 1 A project-root CLAUDE.md is re-read from disk after /compact; instructions given only in chat can be lost. 2 Sources (2) Claude Code: How Claude Code works ( opens in a new tab ) code.claude.com Claude Code: Memory ( opens in a new tab ) code.claude.com Compaction is lossy Anthropic warns aggressive compaction can drop subtle but critical context. 1 The research did not quantify the loss. Sources (1) Anthropic: Effective context engineering for AI agents ( opens in a new tab ) anthropic.com"
+    },
+    { "id": "onboarding", "text": "Onboarding the newcomer No speaker notes for this Slide." },
+    {
+      "id": "onboarding--brief-and-rules",
+      "text": "What a good onboarding package contains The brief Anthropic: \"Think of Claude as a brilliant but new employee who lacks context on your norms and workflows.\" 1 Be explicit; \"above and beyond\" must be requested, not inferred. Sources (1) Claude docs: Be clear and direct ( opens in a new tab ) docs.claude.com House rules A file read at the start of every conversation: commands, code style, workflow rules. 1 agents.md calls it a \"README for agents\"; the nearest file wins. 2 Sources (2) Claude Code: Best practices ( opens in a new tab ) code.claude.com AGENTS.md ( opens in a new tab ) agents.md Definition of done Give the agent a way to verify its work: tests, scripts, screenshots. 1 Also GitHub: say how to build and validate so the agent need not search each time. 2 Sources (2) Claude Code: Best practices ( opens in a new tab ) code.claude.com GitHub Docs: Adding repository custom instructions for Copilot ( opens in a new tab ) docs.github.com Colleague test Show your prompt to a colleague with minimal context; if they would be confused, Claude will be too. 1 Sources (1) Claude docs: Be clear and direct ( opens in a new tab ) docs.claude.com"
+    },
+    {
+      "id": "onboarding--keep-it-short",
+      "text": "Why a short brief beats a thorough handbook Bloat gets ignored Anthropic: \"Bloated CLAUDE.md files cause Claude to ignore your actual instructions.\" 1 Pruning test: would removing this line cause mistakes? Sources (1) Claude Code: Best practices ( opens in a new tab ) code.claude.com Numbers to cite Under 200 lines per CLAUDE.md file (Anthropic). 1 GitHub's template caps instructions at 2 pages. 2 Sources (2) Claude Code: Memory ( opens in a new tab ) code.claude.com GitHub Docs: Adding repository custom instructions for Copilot ( opens in a new tab ) docs.github.com Minimal is not short \"Minimal does not necessarily mean short\": the smallest set that fully outlines the behaviour. 1 Prefer pointers loaded on demand over pastes. Imports do not save context. 2 Sources (2) Anthropic: Effective context engineering for AI agents ( opens in a new tab ) anthropic.com Claude Code: Memory ( opens in a new tab ) code.claude.com"
+    },
+    {
+      "id": "onboarding--decisions-in-writing",
+      "text": "Why decisions belong in writing A conversation with a future developer Nygard's rule for decision records. 1 Short prose, one or two pages. Sources (1) Michael Nygard: Documenting architecture decisions ( opens in a new tab ) cognitect.com Superseded, not deleted A reversed decision is kept and marked superseded. 1 Sources (1) Michael Nygard: Documenting architecture decisions ( opens in a new tab ) cognitect.com The newcomer's two bad options Without the record, the newcomer must blindly accept or blindly change a decision. 1 Sources (1) Michael Nygard: Documenting architecture decisions ( opens in a new tab ) cognitect.com Mapping, not a sourced claim That an agent reads the same record is our mapping. No vendor page quoted says so."
+    },
+    { "id": "where-it-breaks", "text": "Where the metaphor breaks No speaker notes for this Slide." },
+    {
+      "id": "where-it-breaks--metaphor-breaks",
+      "text": "Three ways an agent is not a freelancer No learning A freelancer improves by week three unprompted. 1 A fresh session starts from files alone. Auto memory narrows the gap but it is saved notes loaded at start, not learning. Sources (1) Claude Code: Memory ( opens in a new tab ) code.claude.com Context, not enforcement \"Claude treats them as context, not enforced configuration.\" 1 Hard rules need hooks, permissions or checks. Sources (1) Claude Code: Memory ( opens in a new tab ) code.claude.com Reading costs The agent pays for every line at every session start, and \"performance degrades as it fills\". 1 Curate and prune. Sources (1) Claude Code: Best practices ( opens in a new tab ) code.claude.com Beyond the sources Silent conflicts between rules (nearest file wins, root-down concatenation) are mechanical, not negotiated. 1 2 Over-compliance is our inference, not a vendor claim. Sources (2) AGENTS.md ( opens in a new tab ) agents.md OpenAI Codex: AGENTS.md guide ( opens in a new tab ) developers.openai.com"
+    },
+    {
+      "id": "where-it-breaks--enforce-and-verify",
+      "text": "Why checks matter more than good intentions Verification you can run \"If you can't verify it, don't ship it.\" 1 Tests, scripts, screenshots. Sources (1) Claude Code: Best practices ( opens in a new tab ) code.claude.com A different grader A fresh-context reviewer, \"so the agent doing the work isn't the one grading it\". 1 The source supports the practice, not any claim about the agent's psychology. Sources (1) Claude Code: Best practices ( opens in a new tab ) code.claude.com Independent of prose Checks are the one part that does not depend on the agent reading and obeying text. Close Write it down, keep it short, make it checkable."
+    },
+    { "id": "where-it-breaks--one-line", "text": "No speaker notes for this Slide." }
+  ],
+  "script": [
+    {
+      "id": "top",
+      "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
+    },
+    { "id": "blank-slate", "text": "The freelancer who forgets No voice script for this Slide." },
+    {
+      "id": "blank-slate--blank-every-time",
+      "text": "Why every session starts from a blank slate 0:00 – 0:15 Blank slate stateless history re-sent every turn Start with the uncomfortable fact. The model keeps nothing between requests. When a chat feels like a conversation, that is because the whole history is sent again with every turn. Nothing was remembered; it was re-read. 0:15 – 0:31 New session, new window fresh context window CLAUDE.md auto memory Claude Code's own documentation says each session begins with a fresh context window. Only two things cross the gap: instruction files like CLAUDE.md, and notes the agent wrote down. Both are just text loaded at the start. 0:31 – 0:58 Shifts engineers in shifts no memory written artefacts Anthropic describes it as engineers working in shifts, each new one arriving with no memory of the last. I call it an amnesiac freelancer. That word is mine, not theirs, but the mechanism is theirs. And their answer is the same as ours: write it down. Bridge So if the agent knows nothing about us, where does what it does know come from?"
+    },
+    {
+      "id": "blank-slate--where-knowledge-lives",
+      "text": "Where an agent’s knowledge lives, and where it stops 0:00 – 0:24 Training cutoff never saw your repo First place: training. It is broad and it stops at a cutoff date. It never saw your repository, your naming rules, or the decision you made last Tuesday. To be fair, that is my framing rather than a vendor quote, but every vendor tells you to put project context in files, and that is why. 0:24 – 0:50 The session working memory context rot middle Second place: the session. The context window is the agent's working memory. Anthropic and an independent report from Chroma both find that recall gets worse as it fills. And the Lost in the Middle paper found that what sits in the middle of a long input is used worst. That study used older models, so take the direction, not the numbers. 0:50 – 1:14 Files CLAUDE.md AGENTS.md compaction re-read from disk Third place: files. This is the only one you control. CLAUDE.md and AGENTS.md are loaded as text at the start. After a compaction, the project-root CLAUDE.md is read from disk again, while something you only said in chat may be gone. Bridge So files are the lever. Next: what goes in them. Think of it as onboarding."
+    },
+    { "id": "onboarding", "text": "Onboarding the newcomer No voice script for this Slide." },
+    {
+      "id": "onboarding--brief-and-rules",
+      "text": "What a good onboarding package contains 0:00 – 0:21 The brief brilliant new employee explicit colleague test Anthropic itself uses this frame: a brilliant but new employee who lacks context on your norms and workflows. So write the brief like that. Task, constraints, format. And try the colleague test: hand it to someone with no context. If they would be confused, so will the agent. 0:21 – 0:42 House rules README for agents every conversation commands House rules live in a file the agent reads at the start of every conversation. Build and test commands, code style, workflow rules. The agents.md site calls it a README for agents. And the closest file to the code wins, like asking the old hand in that corner of the codebase. 0:42 – 1:02 Definition of done verify its work tests scripts The third item matters most. Give the agent a way to verify its work. A test it can run, a command that must pass. Without that it cannot tell whether it is done, and neither can you. Bridge Now the temptation: put everything in. Why that backfires."
+    },
+    {
+      "id": "onboarding--keep-it-short",
+      "text": "Why a short brief beats a thorough handbook 0:00 – 0:17 More is worse bloated ignore 200 lines The instinct is to write the complete handbook. Anthropic's advice is the opposite: bloated CLAUDE.md files cause Claude to ignore your actual instructions. Their guideline is under 200 lines per file, and GitHub caps its own template at two pages. 0:17 – 0:32 Prune would removing this cause mistakes pointers Use the pruning question: would removing this line cause a mistake? If not, cut it. And point instead of paste: a path the agent can open when it needs it costs nothing until then. 0:32 – 0:47 Minimal is not short minimal set sufficient One caution from Anthropic. Minimal does not mean short. It means the smallest set that fully outlines what you expect. Enough, not everything. Bridge One kind of content always earns its place: the why behind decisions."
+    },
+    {
+      "id": "onboarding--decisions-in-writing",
+      "text": "Why decisions belong in writing 0:00 – 0:15 Why it was done Nygard future developer Michael Nygard wrote decision records for exactly this person: someone who arrives later. His rule: write each one as if it is a conversation with a future developer. One or two pages, plain prose. 0:15 – 0:27 Superseded keep the old one mark superseded When you reverse a decision, keep the old record and mark it superseded. Without any record, the newcomer has two bad options: accept the decision blindly, or change it blindly. 0:27 – 0:48 Our agent arrives later, every time record is the memory Our freelancer is always the newcomer. That is my mapping, not a vendor claim, but it follows: for someone who arrives later every single time, the written record is the only memory they can read. Bridge We have a decent onboarding package. Now where the freelancer picture misleads us."
+    },
+    { "id": "where-it-breaks", "text": "Where the metaphor breaks No voice script for this Slide." },
+    {
+      "id": "where-it-breaks--metaphor-breaks",
+      "text": "Three ways an agent is not a freelancer 0:00 – 0:15 No learning week three saved notes First break: a freelancer gets better by week three without being told. The agent does not. Auto memory helps, but it is saved notes loaded at the start, not learning. Anything unwritten is gone. 0:15 – 0:26 Not enforced context hooks checks Second: instructions are context, not enforced configuration. That is Anthropic's wording. Prose is a request. Anything that must always hold belongs in a check or a hook. 0:26 – 0:45 Reading costs every line every session Third: reading is not free. A human skims the handbook once. The agent pays for every line at the start of every session, and quality falls as the window fills. So prune. Bridge That second point has a practical consequence: who checks the work."
+    },
+    {
+      "id": "where-it-breaks--enforce-and-verify",
+      "text": "Why checks matter more than good intentions 0:00 – 0:08 Prove it verify tests don't ship Give the agent commands that prove the work. Anthropic is blunt: if you can't verify it, don't ship it. 0:08 – 0:24 Another pair of eyes fresh-context reviewer And bring in a reviewer with fresh context, so the agent doing the work isn't the one grading it. I would not claim to know why an agent over-trusts itself; the practice is what the source supports. 0:24 – 0:42 Wrap up write down short checkable Three things to take away. Write it down, because nothing carries over otherwise. Keep it short, because attention is finite. Make it checkable, because prose is only a request. Bridge End of Episode. Invite the viewer to try this on one repository this week."
+    },
+    { "id": "where-it-breaks--one-line", "text": "No voice script for this Slide." }
+  ]
+}

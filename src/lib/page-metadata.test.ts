@@ -1,12 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import { pageMetadata, resolveSiteUrl, siteMetadata } from './page-metadata.pure';
 
+/** An Episode's copy as its record hands it to the route. */
+const COPY = { title: 'Seitenvorlage', description: 'Diese Episode kopieren.' };
+
 describe('success cases', () => {
   it('points the canonical at the page in its own locale', () => {
     // ARRANGE
     const expected = '/de/episode/page-template';
     // ACT
-    const metadata = pageMetadata({ episode: 'page-template' }, 'de');
+    const metadata = pageMetadata({ episode: 'page-template' }, 'de', COPY);
     // ASSERT
     expect(metadata.alternates?.canonical).toBe(expected);
   });
@@ -19,18 +22,27 @@ describe('success cases', () => {
       'x-default': '/episode/page-template',
     };
     // ACT
-    const fromEnglish = pageMetadata({ episode: 'page-template' }, 'en').alternates?.languages;
-    const fromGerman = pageMetadata({ episode: 'page-template' }, 'de').alternates?.languages;
+    const fromEnglish = pageMetadata({ episode: 'page-template' }, 'en', COPY).alternates?.languages;
+    const fromGerman = pageMetadata({ episode: 'page-template' }, 'de', COPY).alternates?.languages;
     // ASSERT
     expect(fromEnglish).toEqual(expected);
     expect(fromGerman).toEqual(expected);
   });
 
-  it('takes title and description from the locale Translation file', () => {
+  it("takes an Episode's title and description from the copy its record hands in", () => {
     // ARRANGE
-    const expectedTitle = 'Seitenvorlage';
+    const expected = { title: 'Seitenvorlage', description: 'Diese Episode kopieren.' };
     // ACT
-    const metadata = pageMetadata({ episode: 'page-template' }, 'de');
+    const metadata = pageMetadata({ episode: 'page-template' }, 'de', COPY);
+    // ASSERT
+    expect({ title: metadata.title, description: metadata.description }).toEqual(expected);
+  });
+
+  it("takes the landing page's title and description from the locale Translation file", () => {
+    // ARRANGE
+    const expectedTitle = 'Visualised theory · hancrafted';
+    // ACT
+    const metadata = pageMetadata('home', 'en');
     // ASSERT
     expect(metadata.title).toBe(expectedTitle);
     expect(metadata.description).toEqual(expect.any(String));

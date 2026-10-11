@@ -1,18 +1,22 @@
-import { episode } from '@/components/slide-master/episode-record';
-import { foundations } from './slides/foundations';
-import { nextSteps } from './slides/next-steps';
-import { whatComesNext } from './slides/what-comes-next';
-import { whyATemplate } from './slides/why-a-template';
+import { selfContainedEpisode } from '@/components/slide-master/slide';
+import de from './i18n/de.json';
+import en from './i18n/en.json';
+import { foundations } from './slides/foundations/slide';
+import { nextSteps } from './slides/next-steps/slide';
+import { whatComesNext } from './slides/what-comes-next/slide';
+import { whyATemplate } from './slides/why-a-template/slide';
 
 /*
  * The copy source for a new Episode (FE-002): two Sections of Slides. Each
- * Slide, in `slides/`, declares its slug, notes and segments and renders its
- * Scene; strings live under `episodes.page-template.slides.<slide>` in both
- * Translation files, the Episode's own under `episodes.page-template`. Every
- * Slide layout is shown in the `slide-layouts` Episode.
+ * Slide is one folder under `slides/`, named after its slug, holding its server
+ * entry, client widgets, CSS and its own Translation files. The Episode's own
+ * title, caption and description sit in `i18n/`. Copying a Slide in from
+ * another Episode is one import and one list entry. Every Slide layout is
+ * shown in the `slide-layouts` Episode.
  */
-export const pageTemplate = episode({
+export const pageTemplate = selfContainedEpisode({
   slug: 'page-template',
+  messages: { en, de },
   sections: [
     [foundations, whyATemplate],
     [nextSteps, whatComesNext],

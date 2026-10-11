@@ -1,11 +1,10 @@
-import { pageMetadata } from '@/lib/page-metadata.pure';
 import { EPISODE_SLUGS, isEpisodeSlug } from '@/lib/routes';
 import { describe, expect, it } from 'vitest';
 import { findEpisode } from './registry';
 
 /*
- * What every registered Episode shares (FE-002): a record under its own slug,
- * page metadata in both locales, and the Section list its manuscript fixes.
+ * What every registered Episode shares (FE-002): a record under its own slug
+ * and the Section list its manuscript fixes.
  * Per-Episode facts sit in the tables below, written out by hand.
  */
 
@@ -51,22 +50,6 @@ describe('success cases', () => {
     // ASSERT
     expect(valid).toBe(true);
     expect(episode.slug).toBe(expectedSlug);
-  });
-
-  it.each(EPISODE_SLUGS)('produces page metadata for %s in en and de, canonical per locale', (slug) => {
-    // ARRANGE
-    const expectedCanonicalEn = `/episode/${slug}`;
-    const expectedCanonicalDe = `/de/episode/${slug}`;
-    // ACT
-    const metaEn = pageMetadata({ episode: slug }, 'en');
-    const metaDe = pageMetadata({ episode: slug }, 'de');
-    // ASSERT
-    expect(metaEn.title).toBeTruthy();
-    expect(metaEn.description).toBeTruthy();
-    expect(metaDe.title).toBeTruthy();
-    expect(metaDe.description).toBeTruthy();
-    expect(metaEn.alternates?.canonical).toBe(expectedCanonicalEn);
-    expect(metaDe.alternates?.canonical).toBe(expectedCanonicalDe);
   });
 
   it.each(COMPOSITION)('composes $slug in manuscript order, each Section opened by the Slide that names it', (c) => {

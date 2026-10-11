@@ -1,0 +1,47 @@
+{
+  "title": "Seitenvorlage · hancrafted",
+  "description": "Diese Episode kopieren, um eine neue zu beginnen: Abschnitte aus Folien, untereinander auf einer Seite.",
+  "toc": "Inhalt Wird geladen noch 1 Min. 01 Grundlagen Warum jede Episode als Kopie beginnt 02 Nächste Schritte Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 1 Min. 01 Grundlagen Warum jede Episode als Kopie beginnt 02 Nächste Schritte",
+  "slides": [
+    {
+      "id": "top",
+      "text": "Seitenvorlage Die kleinste Episode, die sich zu kopieren lohnt: zwei Abschnitte, eine Folie mit Notizen und Sprechtext, eine nur mit Bild."
+    },
+    {
+      "id": "foundations",
+      "text": "Grundlagen Ein Abschnitt beginnt mit einer eigenen Folie; ihr Titel benennt den Abschnitt."
+    },
+    {
+      "id": "foundations--why-a-template",
+      "text": "Warum jede Episode als Kopie beginnt Ein Rückgrat: Episode, Abschnitt, Folie. Episode Abschnitt Folie Nächste Ebene Diesen Ordner kopieren, dann die Wörter ersetzen. Eine Referenz-Episode ( öffnet Sprechernotiz ) hält jede Episode in derselben Form."
+    },
+    { "id": "next-steps", "text": "Nächste Schritte Ein zweiter Abschnitt, der zeigt, wie Abschnitte sich stapeln." },
+    { "id": "next-steps--what-comes-next", "text": "Jetzt die Wörter ersetzen." }
+  ],
+  "notes": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    { "id": "foundations", "text": "Grundlagen Keine Sprechernotizen für diese Folie." },
+    {
+      "id": "foundations--why-a-template",
+      "text": "Warum jede Episode als Kopie beginnt Warum eine Referenz-Episode Die Vorlage sorgt dafür, dass jede Episode gleich aufgebaut ist. Zeigen Sie dabei auf den Fließtext. Drei Ebenen, eine Seite Eine Episode enthält Abschnitte, ein Abschnitt enthält Folien. Mit dem Knopf gehen Sie das Rückgrat hinab."
+    },
+    { "id": "next-steps", "text": "Nächste Schritte Keine Sprechernotizen für diese Folie." },
+    { "id": "next-steps--what-comes-next", "text": "Keine Sprechernotizen für diese Folie." }
+  ],
+  "script": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    { "id": "foundations", "text": "Grundlagen Kein Sprechtext für diese Folie." },
+    {
+      "id": "foundations--why-a-template",
+      "text": "Warum jede Episode als Kopie beginnt 0:00 – 0:10 Die Vorlage in einem Atemzug Vorlage gleiche Form jede Episode Eine Referenz-Episode zeigt die Form einmal, damit die nächste Episode ein funktionierendes Beispiel kopiert, statt eine neue zu erfinden. 0:10 – 0:22 Das Rückgrat Episode Abschnitt Folie Gehen Sie die drei Ebenen hinab: die Episode, ihre Abschnitte und die Folien in jedem. Überleitung Als Nächstes eine Folie, die nur ein Bild ist."
+    },
+    { "id": "next-steps", "text": "Nächste Schritte Kein Sprechtext für diese Folie." },
+    { "id": "next-steps--what-comes-next", "text": "Kein Sprechtext für diese Folie." }
+  ]
+}

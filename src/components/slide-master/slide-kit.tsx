@@ -1,10 +1,12 @@
 import type { SlideLevel } from '@/lib/episode.pure';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { episodeRoute, type EpisodeSlug } from '@/lib/routes';
+import { createTranslator } from 'next-intl';
 import type { ReactNode } from 'react';
 import { ContextRef } from './context-ref';
-import type { RuntimeKit, RuntimeTranslator } from './episode-record';
 import { DEFAULT_RICH_TAGS } from './rich-tags';
+import type { SlideMessages } from './slide';
+import type { RuntimeKit, RuntimeTranslator } from './slide-base';
 import { SlideTitle } from './slide-master';
 
 /** What the container knows about the whole Episode when it builds a kit: the same for every Slide. */
@@ -36,6 +38,24 @@ function withDefaultTags(t: RuntimeTranslator): RuntimeTranslator {
   const rich = (key: string, values?: object, ...rest: unknown[]) =>
     t.rich(key, { ...DEFAULT_RICH_TAGS, ...values }, ...rest);
   return Object.assign((key: string, ...args: unknown[]) => t(key, ...args), t, { rich });
+}
+
+/**
+ * A self-contained Slide's translator: next-intl's `createTranslator` over the
+ * Slide's own messages for the page's locale. Like the site-wide config
+ * (`src/i18n/request.ts`), any missing message or formatting error throws, so
+ * untranslated text fails the build instead of shipping. The kit adds the
+ * default rich tags, as for every Slide.
+ */
+export function ownTranslator(messages: SlideMessages, locale: Locale): RuntimeTranslator {
+  const t = createTranslator({
+    locale,
+    messages,
+    onError(error) {
+      throw error;
+    },
+  });
+  return t as unknown as RuntimeTranslator;
 }
 
 /** `slideHref`: the localized link to a Slide of this Episode, by the anchor the walk placed it at. */

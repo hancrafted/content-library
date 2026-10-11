@@ -1,0 +1,173 @@
+{
+  "title": "Die KI-Token-Ökonomie · hancrafted",
+  "description": "Ein Leitfaden zur Token-Ökonomie: Was KI tatsächlich kostet, warum der Zähler unsichtbar bleibt und wie Sie Kontext und Modelle effizient steuern.",
+  "toc": "Inhalt Wird geladen 01 Motivation Einen führen, viele befähigen Die vier Epochen der KI Die unsichtbare Rechnung Ergebnis pro Euro 02 Was ist ein Token Kontext-Aufschlüsselung Verschleierung in Web-Tools 03 Kontextverwaltung Verloren in der Mitte Auslastungsanzeige & Hebel 04 Kosten von agentischer KI Die kumulierte Kostenkurve 05 Modellstufen 06 Werkzeuge & Tipps Inhalt öffnen : Inhalt Inhalt 01 Motivation Einen führen, viele befähigen Die vier Epochen der KI Die unsichtbare Rechnung Ergebnis pro Euro 02 Was ist ein Token Kontext-Aufschlüsselung Verschleierung in Web-Tools 03 Kontextverwaltung Verloren in der Mitte Auslastungsanzeige & Hebel 04 Kosten von agentischer KI Die kumulierte Kostenkurve 05 Modellstufen 06 Werkzeuge & Tipps",
+  "slides": [
+    {
+      "id": "top",
+      "text": "Die KI-Token-Ökonomie KI kann Ihnen und Ihrem Team Superkräfte verleihen, bringt jedoch versteckte Managementverantwortung mit sich. Vortrag ansehen Ihre KI liest jedes Mal veraltete Dokumente · 22 Min."
+    },
+    {
+      "id": "motivation",
+      "text": "Motivation Gedankenexperiment: Stellen Sie sich vor, Ihnen wird ein Freelancer mit diesen seltsamen Eigenschaften zugewiesen. Auf dem Papier glänzt dieser Mitarbeiter mit enzyklopädischem Wissen, arbeitet blitzschnell und übernimmt jede Aufgabe. Doch er birgt drei gravierende Schwächen. strength (?) Fast & well-read Knows about everything you ask them, and can produce results fast without breaks. strength (?) Accepts any task No task too big or too niche — it will take a swing at whatever you hand it. strength (?) Tireless Never stops, never sleeps, unless you stop paying. flaw Never asks questions Takes tasks literally, fills gaps with assumptions, never pushes back. ? flaw Bills by the word No flat day rate. Every prompt, tool call, and correction adds to the tab. flaw It remembers nothing. Every new conversation starts from zero. Yesterday’s work never happened. 0"
+    },
+    {
+      "id": "motivation--lead-one-upskill-many",
+      "text": "Einen führen, viele befähigen Es ist ein LLM — aber wie würden Sie es führen, wenn es ein Mensch wäre? Das Anleiten eines KI-Agenten verlangt dieselbe Delegations- und Review-Disziplin wie das Einarbeiten externer Spezialisten. You can opt out of managing it. The people who don’t will simply out-produce you. door 1 · the individual Human with AI 5–20× individual throughput by directing synthetic labor. door 2 · the organization Leader of humans with AI Upskilling whole teams into fluent directors of automated systems."
+    },
+    {
+      "id": "motivation--the-four-eras-of-ai",
+      "text": "Die vier Epochen der KI Neue Technologie bringt neue Disziplinen hervor, damit Menschen Schritt halten können. Vom Prompt Engineering 2023 über Context Engineering 2024 und Harness Engineering 2025 zur Token-Ökonomie von heute. 2022–23 chat workflow Prompt Engineering Phrasing, few-shot examples, and asking clearly. 2024–25 agentic workflow Context Engineering AGENTS.md, skills, and compact structured memory. 2025–26 autonomous workflow Harness Engineering Tools, deterministic tests, and guardrail verification. 2026 → emerging Loop Engineering? Self-improving autonomous feedback cycles. Foundation Token Economy — the currency of every era"
+    },
+    {
+      "id": "motivation--the-invisible-invoice",
+      "text": "Die unsichtbare Rechnung Für einen echten Freelancer brauchen Sie einen Business Case. KI stellt einfach Rechnungen. Eine Beraterrechnung über 3.200 € erfordert Bestellungen und Freigaben. KI häuft dieselben Kosten still über tausende Mikro-Prompts an. Invoice #0042 approved Slide design €1,800 Alignment €900 Revisions €500 Total €3,200 AI · No Invoice never quoted +€0.80 +€1.20 +€0.60 +€2.10 +€0.90 + thousands more… Cumulative Total €3,200"
+    },
+    {
+      "id": "motivation--outcome-per-euro",
+      "text": "Ergebnis pro Euro Sie verantworten nun ein Budget, für das Sie sich nie gemeldet haben. Für Routineaufgaben stets Spitzenmodelle einzusetzen, verbrennt Kapital. Wirtschaftlich gewinnt, wer das Ergebnis pro Euro optimiert. Premium model 5× the price Quality delivered 99% Outcome per euro financial winner Cheaper model 1× the price Quality delivered 95% Outcome per euro ≈5× Drag: what quality does your customer actually need? 93 % At 93%, both models clear the bar — the cheaper one wins ≈5× outcome per euro. 2–10× Today’s prices are subsidized — vendors sell intelligence below cost to build adoption. When subsidies expire, outcome per euro decides who survives."
+    },
+    {
+      "id": "what-is-a-token",
+      "text": "Was ist ein Token Token sind die Basiseinheit für LLMs — jedes einzelne wird abgerechnet. LLMs berechnen statistische Wahrscheinlichkeiten über numerische Token. Jedes Wort und jedes Zeichen schlägt als abrechenbare Einheit zu Buche. Try it — type anything Insa nity is doin g the same thin g over and over agai n and expe ctin g diff eren t resu lts . ≈ 24 tokens (approximate — every model splits differently) re-sent across a 50-turn agent session ≈ $ 0.0060 at Opus 4.8 input rates Every token is billed 4 ways input every word you send — and re-send on every turn output every word generated in return and reasoning traces cache write storing recurring context blocks for reuse cache read reusing cached blocks — ~10% of base input rate"
+    },
+    {
+      "id": "what-is-a-token--live-context-breakdown",
+      "text": "Kontext-Aufschlüsselung Die meisten Tools verbergen den Zähler — so sieht er tatsächlich aus. Typische Zusammensetzung einer 200k-Sitzung: System-Prompts, Gesprächsverlauf, Tool-Aufrufe und abgerufene Dokumentation. claude-code — /context $ /context ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛀ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ Sonnet 5 claude-sonnet-5 79.5k /200k tokens ( 40 %) Estimated usage by category ⛁ System prompt 9.4k · 4.7% ⛁ System tools 42.9k · 21.5% ⛁ MCP tools 3.9k · 2.0% ⛁ Custom agents 703 · 0.4% ⛁ Memory files 407 · 0.2% ⛁ Skills 2.2k · 1.1% ⛁ Messages 20.0k · 10.0% ⛶ Free space 87.5k · 43.7% ⛝ Autocompact buffer 33k · 16.5%"
+    },
+    {
+      "id": "what-is-a-token--cli-vs-web-tool-obscurity",
+      "text": "Verschleierung in Web-Tools Der Zähler wird mit Absicht versteckt. Undurchsichtigkeit ist ein Produktmuster: reibungsloser Einstieg, gewohnte Abläufe und überraschend hohe Monatsrechnungen. 01 The initiation Unlimited on the house. The intelligence feels like magic and the bill is invisible — so you build the habit. 02 The hook Now you are fluent — and the meter is gone. Out of credits? Just top up. The real rate never shows."
+    },
+    {
+      "id": "managing-context",
+      "text": "Kontextverwaltung Das Kontextfenster ist die Aufmerksamkeitsspanne des Modells. Token sammeln sich im Kontextfenster. Füllt es sich, lässt die Aufmerksamkeit nach und entscheidende Instruktionen gehen verloren. Plain chat 25% · fresh Boot-up Agentic coding 85% · full Boot-up 9 AM · fresh 12 PM 3 PM 5 PM · running on fumes"
+    },
+    {
+      "id": "managing-context--the-lost-middle",
+      "text": "Verloren in der Mitte Wie wichtige Instruktionen in der Mitte untergehen. Modelle erfassen Anfang und Ende eines Kontexts präzise, doch die Mitte versinkt in einem Tal nachlassender Aufmerksamkeit. System prompt (Primacy) “You are an expert coder…” [msg 12: read utils.js] [msg 13: modify api.js] [msg 14: read config.json] Latest request (Recency) “Why is the build failing?” Serial-position effect: Models recall the first and last exchanges sharply, while the middle blurs into an attention valley."
+    },
+    {
+      "id": "managing-context--the-fullness-gauge-and-levers",
+      "text": "Auslastungsanzeige & Hebel Ab etwa halber Fülle verliert das Modell den Faden. Unter 50 % liegt die Smart Zone. Darüber sinkt die Präzision, ab 75 % drohen Halluzinationen. Drei Hebel: Beobachten, Komprimieren, Übergeben. ~50% · hallucination onset Smart zone · grounded Danger zone · hallucinates drag the fill 85 % Danger zone · Running on fumes past ~50% what “losing the plot” looks like · misremembers the middle · contradicts earlier steps · invents files & APIs that don’t exist ~illustrative threshold, not an exact number — but degradation well before the limit is measured across frontier models Monitor · /context Watch the gauge before it degrades — catch it while it is still grounded. Compact · handoff Summarize where you are into a clean handoff, then start fresh from it."
+    },
+    {
+      "id": "cost-of-agentic-ai",
+      "text": "Kosten von agentischer KI Eine kleine Fehlerbehebung summiert sich auf ~73.000 Token Kontext. Agenten-Schleifen senden bei jedem Tool-Aufruf und Denkschritt den gesamten bisherigen Verlauf erneut. System prompt · rules, tools, memory +35,000 35,000 User query · the bug report +1,000 36,000 Thought #1 & Tool call · read file #1 +4,200 40,200 File #1 contents · entire 400-line file +12,000 52,200 Thought #2 & Tool call · read helper module +4,200 56,400 File #2 contents · second full file +9,000 65,400 Thought #3 & Patch apply · write and verify patch +8,050 73,450 Total context hauler ~73,450 tokens"
+    },
+    {
+      "id": "cost-of-agentic-ai--the-compounding-cost-curve",
+      "text": "Die kumulierte Kostenkurve Dieselbe Fehlerbehebung, verglichen über Modelle. Abrechnung erfolgt pro verarbeitetem Token in jedem Schritt. Eine Routineaufgabe führt zu einer 14-fachen Preisspanne zwischen Modellen. DeepSeek V4 Pro $ 0.11 Claude Sonnet 5 $ 0.62 Claude Opus 4.8 $ 1.54 ~14× spread for identical output. At 50 fixes a day, that is roughly $ 6 vs $ 77 per developer per day — before anyone has shipped a single feature. This is why model routing matters. fixes / day 50"
+    },
+    {
+      "id": "model-tiers",
+      "text": "Modellstufen Mein Modell-Stack: Ein Workflow, viele Modelle. Jede Phase nutzt das wirtschaftlichste Modell: Pauschal-Chats für Ideen, Spitzenmodelle für Architektur, schnelle Modelle für Code. Phase 1 Ideation & Refinement Web chat · flat-rate · Simple research → Gemini Flash · Brainstorms → Gemini Flash / Pro · Voice notes → DeepSeek V4 Pro Phase 2 Specs & Planning Claude Code CLI · Desktop · PRD & Architecture → Opus 4.8 · Deep research → Sonnet 5 → Opus · Type checks → Sonnet 5 Phase 3 Execution All CLI · Commits → Gemini Flash · Implementation → Sonnet 5 · Exploration → Haiku 4.5"
+    },
+    {
+      "id": "tools-and-tips",
+      "text": "Werkzeuge & Tipps Drei Hebel zur Optimierung Ihrer Token-Ökonomie Kombinieren Sie automatisierte Werkzeuge (rtk, Kompression) mit strukturierter Kontextsteuerung und disziplinierten Teamgewohnheiten. Automated Headroom : Compresses agent transcripts before they hit the LLM. rtk : Compresses CLI command outputs with low overhead. Model Routers : Route dynamically to the most economical capable tier. caveman : Enforces concise output saving up to 75% on generation. Agent Steering Memory Files : Persist durable rules via AGENTS.md, CLAUDE.md, and profiles. Specialized Skills : Separate operational workflow guides from base instructions. Team Habits Edit, Don’t Append : Fix prompt mistakes at the root rather than stacking corrective turns. Session Hygiene : Clear finished context rather than paying stale cache re-reads."
+    }
+  ],
+  "notes": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    {
+      "id": "motivation",
+      "text": "Motivation Die Freelancer-Metapher Überträgt abstrakte LLM-Mechanismen in intuitive menschliche Führungsbegriffe: extremes Wissen, sofortige Ausführung, aber blinde Flecken. Führung als Notwendigkeit Wer ein LLM als Teammitglied begreift, muss dessen Fehlermuster erkennen, statt es als allwissendes Orakel zu behandeln."
+    },
+    {
+      "id": "motivation--lead-one-upskill-many",
+      "text": "Einen führen, viele befähigen Befähigen statt ersetzen Ziel ist nicht das Ersetzen von Fachkräften, sondern das Befähigen von Menschen zur wirksamen Steuerung synthetischer Arbeit."
+    },
+    {
+      "id": "motivation--the-four-eras-of-ai",
+      "text": "Die vier Epochen der KI Entstehende Disziplinen Mit wachsender Modellfähigkeit verschiebt sich der Fokus vom Prompt-Text zur Steuerung von Kontext, Testumgebungen und Token-Budgets."
+    },
+    {
+      "id": "motivation--the-invisible-invoice",
+      "text": "Die unsichtbare Rechnung Governance-Asymmetrie Finanzabteilungen verlangen Freigaben für Dienstleister, während KI vergleichbare Budgets ohne Einkaufsprüfungen abrechnet."
+    },
+    {
+      "id": "motivation--outcome-per-euro",
+      "text": "Ergebnis pro Euro Budgetverantwortung Die gezielte Modellwahl für jede Teilaufgabe ist das Fundament moderner technischer Führung."
+    },
+    {
+      "id": "what-is-a-token",
+      "text": "Was ist ein Token Probabilistische Einheiten LLMs verarbeiten numerische Token-IDs statt menschlicher Sprache. Die Zerlegung zeigt, wo Kosten entstehen."
+    },
+    {
+      "id": "what-is-a-token--live-context-breakdown",
+      "text": "Kontext-Aufschlüsselung Synthetische Abstraktionen Kommerzielle Oberflächen verschleiern den echten Token-Verbrauch hinter Credits. Direkte Transparenz ist entscheidend für Optimierung."
+    },
+    {
+      "id": "what-is-a-token--cli-vs-web-tool-obscurity",
+      "text": "Verschleierung in Web-Tools Das Muster der Verschleierung Das Verbergen von Nutzungsdaten schafft Abhängigkeiten, bevor Organisationen die exponentiellen Kosten ungesteuerter Agenten-Schleifen erkennen."
+    },
+    {
+      "id": "managing-context",
+      "text": "Kontextverwaltung Kognitive Ausdauer Kontextfenster verhalten sich wie menschliche Konzentration an einem langen Arbeitstag: anfangs scharf, später zunehmend abgelenkt."
+    },
+    {
+      "id": "managing-context--the-lost-middle",
+      "text": "Verloren in der Mitte Das Aufmerksamkeitstal Studien belegen den U-förmigen Abrufverlauf: Informationen in der Mitte langer Kontexte leiden unter drastischen Erinnerungsverlusten."
+    },
+    {
+      "id": "managing-context--the-fullness-gauge-and-levers",
+      "text": "Auslastungsanzeige & Hebel Disziplin in der Smart Zone Kontexte unter 50 % Kapazität zu halten, sichert hohe Genauigkeit und verhindert unbemerktes Abdriften."
+    },
+    {
+      "id": "cost-of-agentic-ai",
+      "text": "Kosten von agentischer KI Agentische Kumulierung Jeder Tool-Aufruf fügt vollständige Dateiinhalte zum Verlauf hinzu und lässt die Input-Token-Zahlen exponentiell steigen."
+    },
+    {
+      "id": "cost-of-agentic-ai--the-compounding-cost-curve",
+      "text": "Die kumulierte Kostenkurve Die 14-fache Preisspanne Über Organisationen hinweg führt die Modellwahl bei identischen Schleifen monatlich zu Tausenden Euro Differenz."
+    },
+    {
+      "id": "model-tiers",
+      "text": "Modellstufen Gestaffelte Modellarchitektur Wirtschaftliche Kompetenz bedeutet, Modellkosten an Projektrisiken anzupassen und Modelle flexibel zu wechseln. Kostenneutrale Erkundung Verbraucher-Abonnements eignen sich für explorative Diskussionen; verbrauchsbasierte Spitzenmodelle gehören an Hebelpunkte."
+    },
+    {
+      "id": "tools-and-tips",
+      "text": "Werkzeuge & Tipps Werkzeuge und Steuerung Filter kürzen Tool-Payloads vor dem Modellkontakt, während strukturierte Regeln die Ausführung deterministisch leiten. Praktische Gewohnheiten Prompts bearbeiten statt Korrekturen anzuhängen, inaktive Sitzungen vor dem Cache-Ablauf bereinigen und Terminal-Transparenz nutzen."
+    }
+  ],
+  "script": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    { "id": "motivation", "text": "Motivation Kein Sprechtext für diese Folie." },
+    {
+      "id": "motivation--lead-one-upskill-many",
+      "text": "Einen führen, viele befähigen Kein Sprechtext für diese Folie."
+    },
+    { "id": "motivation--the-four-eras-of-ai", "text": "Die vier Epochen der KI Kein Sprechtext für diese Folie." },
+    { "id": "motivation--the-invisible-invoice", "text": "Die unsichtbare Rechnung Kein Sprechtext für diese Folie." },
+    { "id": "motivation--outcome-per-euro", "text": "Ergebnis pro Euro Kein Sprechtext für diese Folie." },
+    { "id": "what-is-a-token", "text": "Was ist ein Token Kein Sprechtext für diese Folie." },
+    {
+      "id": "what-is-a-token--live-context-breakdown",
+      "text": "Kontext-Aufschlüsselung Kein Sprechtext für diese Folie."
+    },
+    {
+      "id": "what-is-a-token--cli-vs-web-tool-obscurity",
+      "text": "Verschleierung in Web-Tools Kein Sprechtext für diese Folie."
+    },
+    { "id": "managing-context", "text": "Kontextverwaltung Kein Sprechtext für diese Folie." },
+    { "id": "managing-context--the-lost-middle", "text": "Verloren in der Mitte Kein Sprechtext für diese Folie." },
+    {
+      "id": "managing-context--the-fullness-gauge-and-levers",
+      "text": "Auslastungsanzeige & Hebel Kein Sprechtext für diese Folie."
+    },
+    { "id": "cost-of-agentic-ai", "text": "Kosten von agentischer KI Kein Sprechtext für diese Folie." },
+    {
+      "id": "cost-of-agentic-ai--the-compounding-cost-curve",
+      "text": "Die kumulierte Kostenkurve Kein Sprechtext für diese Folie."
+    },
+    { "id": "model-tiers", "text": "Modellstufen Kein Sprechtext für diese Folie." },
+    { "id": "tools-and-tips", "text": "Werkzeuge & Tipps Kein Sprechtext für diese Folie." }
+  ]
+}

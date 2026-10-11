@@ -1,15 +1,18 @@
-import { SpineStepper } from '@/components/episodes/page-template/client/spine-stepper.client';
-import { slidesFor } from '@/components/slide-master/episode-record';
+import { slide } from '@/components/slide-master/slide';
 import { SlideCaption, SlideFrame, SlideProse } from '@/components/slide-master/slide-master';
+import de from './i18n/de.json';
+import en from './i18n/en.json';
+import { SpineStepper } from './spine-stepper.client';
 
-const slide = slidesFor('page-template');
-
+// A Slide is one folder named after its slug: this server entry, its client widgets and their `.pure.ts` logic, an
+// optional CSS module, and its own Translation files. It imports only its own files and global shared code.
 // Notes: `target` is the Scene element a note explains. Mark it with the kit's `{...target('name')}`, as the spine and
 // the prose below do; the kit's `<Title>` marks `title`, and a Slide layout such as BasicPageSlide marks its own.
 // Add `sources: [{ slug, url }]` to cite; its title goes under `notes.<note>.sources.<slug>.title`.
 // Reading time is counted from the Voice script's words (`speaking-time.pure.ts`): no minutes or spans to set.
 export const whyATemplate = slide({
   slug: 'why-a-template',
+  messages: { en, de },
   notes: [
     { slug: 'reference-episode', target: 'prose' },
     { slug: 'spine', target: 'spine' },

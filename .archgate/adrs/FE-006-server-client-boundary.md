@@ -21,7 +21,7 @@ A glob cannot see inside a file. With the directive alone, "which files are clie
 
 Repo state at adoption: four files carried the directive. Three are leaf components, renamed here — `src/components/locale-toggle.client.tsx`, `nav-link.client.tsx`, `theme-toggle.client.tsx`. The fourth, `src/hooks/use-theme.ts`, dropped its directive: a hook is not a boundary — it is imported only by client leaves and joins the bundle through them; the import-graph rule below holds that instead.
 
-Rejected alternatives: the directive alone (not addressable); a `client/` folder as the classifier (position cannot carry it — leaves sit beside the server components that render them; inside one Episode it is a second fence, §5); the third-party `server-only` / `client-only` marker packages (they fail the build on a wrong import but address nothing by glob, and pass the dependency admission bar for no gain today).
+Rejected alternatives: the directive alone (not addressable); a `client/` folder as the classifier (position cannot carry it — leaves sit beside the server components that render them; inside one Episode the Slide folder is the fence, §5); the third-party `server-only` / `client-only` marker packages (they fail the build on a wrong import but address nothing by glob, and pass the dependency admission bar for no gain today).
 
 ## Decision
 
@@ -50,8 +50,9 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 
 ### 5. Episode client files
 
-1. An Episode's `*.client.tsx` files MUST live in `episodes/<ep>/client/` — `'use client'` is allowed nowhere else in an Episode; its Slide files stay Server Components.
-2. An Episode's `parts/` MUST stay server-only; a part needing the browser moves to `client/`.
+1. An Episode's `*.client.tsx` files MUST live in a Slide folder `episodes/<ep>/slides/<slide>/` — nowhere else in an Episode; the Slide's entry stays server. (Old shape, until every Episode moves: `episodes/<ep>/client/`.)
+2. A Slide's client widget MUST reach only its own folder, hooks and lib.
+3. An Episode's `parts/` (old shape) MUST stay server-only.
 
 ## Do's and Don'ts
 
@@ -64,7 +65,7 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 5. **DO** keep hooks in `src/hooks/**` without the directive, imported from client leaves. (Decision 3)
 6. **DO** reach `readPrefs` / `writePrefs` through a hook or a `*.client.tsx` leaf, as `use-theme.ts` and `locale-toggle.client.tsx` do. (Decision 3)
 7. **DO** pass serializable data from server to client: strings, numbers, plain objects, Translation file slices. (Decision 4)
-8. **DO** put an Episode's interactive visualisation in `episodes/<ep>/client/`, its logic in a `.pure.ts` beside it. (Decision 5)
+8. **DO** put an Episode's interactive visualisation in its Slide folder as `<name>.client.tsx`, its logic in a `.pure.ts` beside it. (Decision 5)
 
 ### Don'ts
 
@@ -73,7 +74,8 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 3. **DON'T** name a `.ts` file `*.client.ts` or stack the suffix (`x.client.pure.tsx`). (Decision 2)
 4. **DON'T** import a hook or `src/lib/prefs-storage.ts` from a Server Component, or import `src/app/**` from a client leaf. (Decision 3)
 5. **DON'T** pass a function, class instance or unregistered symbol as a prop to a `*.client.tsx` component. (Decision 4)
-6. **DON'T** put `'use client'` in a Slide file, a `parts/` part or an Episode file. (Decision 5)
+6. **DON'T** put `'use client'` in a Slide's server entry, a part or an Episode file. (Decision 5)
+7. **DON'T** import the Slide master from a Slide's client widget. (Decision 5)
 
 ## Consequences
 
@@ -102,7 +104,7 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 - §2.1: ESLint core `no-restricted-syntax`, selector `Program > ExpressionStatement[directive='use client']`, over `src/**/*.{ts,tsx}` ignoring `src/**/*.client.tsx`.
 - §2.2: ESLint core `no-restricted-syntax`, selector `Program:not(:has(> ExpressionStatement[directive='use client']))`, over `src/**/*.client.tsx`.
 - §2.3, §2.4 and so §1.3: `check-file/filename-naming-convention` in `eslint.config.mjs` — `src/app/**/*.{ts,tsx}` is `KEBAB_CASE`, `src/{components,hooks}/**/*.tsx` is `+([a-z0-9-])?(.client)`, `src/**/*.ts` is `!(*.client)`. §1.3 needs no own check: an app file cannot carry the suffix (§2.4), and an unsuffixed file cannot carry the directive (§2.1).
-- §5: `eslint.config.mjs` forbids the directive in Episode files except under `episodes/*/client/`, so `parts/` included; `.dependency-cruiser.cjs` rule `episode-client-reach-only-hooks-and-lib` limits what a client widget reaches.
+- §5: ESLint forbids the directive in Episode files except a Slide folder's `*.client.tsx` (old shape: `episodes/*/client/`); dependency rules `slide-client-reaches-only-hooks-and-lib` and `episode-client-reach-only-hooks-and-lib` limit a widget's reach.
 - §3: `.dependency-cruiser.cjs` rules `hooks-reached-only-from-client`, `client-never-imports-app` and `prefs-storage-reached-only-from-client`, `error` severity, run by `npm run lint:boundaries` (`depcruise src`) inside `npm run lint`, which `npm run verify` and CI run.
 
 **Measured on introduction** (probe files under `src/`, removed after): a directive in `probe-a.tsx`, a directiveless `probe-b.client.tsx`, a `src/app/probe/probe-c.client.tsx` and a `src/hooks/probe-d.client.ts` gave 5 errors, one per breach plus §2.1 on `probe-d`; a correct `probe-e.client.tsx` gave 0. Repo: 0 errors. dependency-cruiser with `tsPreCompilationDeps: true`: **77 dependencies cruised, 54 local, 12 type-only**; with `false`: 80 cruised, 49 local, 0 type-only, 15 injected `react/jsx-runtime`. A falling local count with a rising total is the failure signature.

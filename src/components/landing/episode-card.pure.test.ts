@@ -5,6 +5,9 @@ import { episodeCard } from './episode-card.pure';
 /** A stand-in for next-intl's `t`: answers each full key with a fixed sentence naming the key. */
 const read = (key: string) => `[${key}]`;
 
+/** A published Episode's copy, as the registry reads it from the Episode's record. */
+const COPY = { title: 'Your AI token economy', caption: 'Hidden managing responsibilities.' };
+
 const PUBLISHED: EpisodeMetadata = {
   slug: 'ai-token-economy',
   status: 'published',
@@ -24,15 +27,15 @@ const UPCOMING: EpisodeMetadata = {
 };
 
 describe('success cases', () => {
-  it('builds a published card that links to its Episode, reads its copy from its own Translation keys and takes its Topic look', () => {
+  it('builds a published card that links to its Episode, takes its copy from its record and its Topic look', () => {
     // ARRANGE
     const expected = {
       slug: 'ai-token-economy',
       route: '/episode/ai-token-economy',
       href: '/episode/ai-token-economy',
       status: 'published',
-      title: '[episodes.ai-token-economy.title]',
-      caption: '[episodes.ai-token-economy.caption]',
+      title: 'Your AI token economy',
+      caption: 'Hidden managing responsibilities.',
       topic: { id: 'economics', label: '[landing.episodeOverview.topics.economics]' },
       topics: [{ id: 'economics', label: '[landing.episodeOverview.topics.economics]' }],
       format: { id: 'foundations', label: '[landing.episodeOverview.formats.foundations]' },
@@ -43,7 +46,7 @@ describe('success cases', () => {
       icon: 'coins',
     };
     // ACT
-    const card = episodeCard(PUBLISHED, { locale: 'en', read, minutes: 42, featuredRank: 3 });
+    const card = episodeCard(PUBLISHED, { locale: 'en', read, copy: COPY, minutes: 42, featuredRank: 3 });
     // ASSERT
     expect(card).toEqual(expected);
   });
@@ -52,7 +55,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = { route: '/episode/ai-token-economy', href: '/de/episode/ai-token-economy' };
     // ACT
-    const { route, href } = episodeCard(PUBLISHED, { locale: 'de', read, minutes: 42 });
+    const { route, href } = episodeCard(PUBLISHED, { locale: 'de', read, copy: COPY, minutes: 42 });
     // ASSERT
     expect({ route, href }).toEqual(expected);
   });
@@ -89,11 +92,20 @@ describe('failure cases', () => {
     const strict = (key: string): string => {
       throw new Error(`MISSING_MESSAGE: ${key}`);
     };
-    const message = 'MISSING_MESSAGE: episodes.ai-token-economy.title';
+    const message = 'MISSING_MESSAGE: landing.episodeOverview.upcoming.choosing-the-right-model.title';
     // ACT
-    const build = () => episodeCard(PUBLISHED, { locale: 'en', read: strict, minutes: 42 });
+    const build = () => episodeCard(UPCOMING, { locale: 'en', read: strict });
     // ASSERT
     expect(build).toThrow(message);
+  });
+
+  it('refuses a published card without the copy its record holds, so it never reads a stale key', () => {
+    // ARRANGE
+    const expected = 'ai-token-economy';
+    // ACT
+    const build = () => episodeCard(PUBLISHED, { locale: 'en', read, minutes: 42 });
+    // ASSERT
+    expect(build).toThrow(expected);
   });
 
   it('never ranks an upcoming card as Featured', () => {
@@ -112,7 +124,7 @@ describe('edge cases', () => {
     const expectedKeys = ['accent', 'caption', 'featuredRank', 'format', 'href', 'icon'];
     const absent = 'minutes';
     // ACT
-    const card = episodeCard(PUBLISHED, { locale: 'en', read });
+    const card = episodeCard(PUBLISHED, { locale: 'en', read, copy: COPY });
     const keys = Object.keys(card);
     // ASSERT
     expect(keys).toEqual(expect.arrayContaining(expectedKeys));

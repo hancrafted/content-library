@@ -241,60 +241,6 @@
     "close": "Inhalt schließen"
   },
   "episodes": {
-    "page-template": {
-      "title": "Seitenvorlage",
-      "caption": "Die kleinste Episode, die sich zu kopieren lohnt: zwei Abschnitte, eine Folie mit Notizen und Sprechtext, eine nur mit Bild.",
-      "description": "Diese Episode kopieren, um eine neue zu beginnen: Abschnitte aus Folien, untereinander auf einer Seite.",
-      "slides": {
-        "foundations": {
-          "title": "Grundlagen",
-          "caption": "Ein Abschnitt beginnt mit einer eigenen Folie; ihr Titel benennt den Abschnitt."
-        },
-        "why-a-template": {
-          "title": "Warum jede Episode als Kopie beginnt",
-          "caption": "Ein Rückgrat: Episode, Abschnitt, Folie.",
-          "prose": "Diesen Ordner kopieren, dann die Wörter ersetzen. Eine <ref>Referenz-Episode</ref> hält jede Episode in derselben Form.",
-          "spine": {
-            "episode": "Episode",
-            "section": "Abschnitt",
-            "slide": "Folie",
-            "next": "Nächste Ebene"
-          },
-          "notes": {
-            "reference-episode": {
-              "header": "Warum eine Referenz-Episode",
-              "description": "Die Vorlage sorgt dafür, dass jede Episode gleich aufgebaut ist. Zeigen Sie dabei auf den Fließtext."
-            },
-            "spine": {
-              "header": "Drei Ebenen, eine Seite",
-              "description": "Eine Episode enthält Abschnitte, ein Abschnitt enthält Folien. Mit dem Knopf gehen Sie das Rückgrat hinab."
-            }
-          },
-          "voiceScript": {
-            "segments": {
-              "one-breath": {
-                "title": "Die Vorlage in einem Atemzug",
-                "keywords": "Vorlage, gleiche Form, jede Episode",
-                "script": "Eine Referenz-Episode zeigt die Form einmal, damit die nächste Episode ein funktionierendes Beispiel kopiert, statt eine neue zu erfinden."
-              },
-              "the-spine": {
-                "title": "Das Rückgrat",
-                "keywords": "Episode, Abschnitt, Folie",
-                "script": "Gehen Sie die drei Ebenen hinab: die Episode, ihre Abschnitte und die Folien in jedem.",
-                "bridge": "Als Nächstes eine Folie, die nur ein Bild ist."
-              }
-            }
-          }
-        },
-        "next-steps": {
-          "title": "Nächste Schritte",
-          "caption": "Ein zweiter Abschnitt, der zeigt, wie Abschnitte sich stapeln."
-        },
-        "what-comes-next": {
-          "statement": "Jetzt die Wörter ersetzen."
-        }
-      }
-    },
     "amnesiac-freelancer": {
       "title": "Die KI wie einen Freelancer mit Gedächtnisverlust einarbeiten",
       "caption": "Warum ein KI-Coding-Agent jede Sitzung bei null beginnt und wie die Einarbeitung trotzdem gelingt.",

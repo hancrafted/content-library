@@ -1,4 +1,6 @@
+import { episodeMessagesOf } from '@/components/episode-page/episode-messages';
 import { listEpisodes } from '@/components/episodes/episode-repository';
+import { findEpisode } from '@/components/episodes/registry';
 import { topicsOf } from '@/lib/episode-metadata.pure';
 import { FEATURED, FORMATS, TOPIC_IDS, TOPICS } from '@/lib/episode-overview';
 import de from '@/messages/de.json';
@@ -51,14 +53,13 @@ describe('failure cases', () => {
     // ARRANGE
     const { episodeOverview } = TRANSLATIONS[locale].landing;
     const upcomingCopy = episodeOverview.upcoming as Record<string, { title?: string; caption?: string } | undefined>;
-    const episodes = TRANSLATIONS[locale].episodes as Record<string, { title?: string; caption?: string } | undefined>;
     const expected: string[] = [];
     // ACT
     const missing = [
       ...TOPIC_IDS.filter((id) => !episodeOverview.topics[id]).map((id) => `topics.${id}`),
       ...FORMATS.filter((id) => !episodeOverview.formats[id]).map((id) => `formats.${id}`),
       ...listEpisodes().flatMap(({ slug, status }) => {
-        const copy = status === 'published' ? episodes[slug] : upcomingCopy[slug];
+        const copy = status === 'published' ? episodeMessagesOf(findEpisode(slug), locale) : upcomingCopy[slug];
         return copy?.title && copy.caption ? [] : [`${status}.${slug}`];
       }),
     ];

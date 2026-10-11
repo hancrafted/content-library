@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
-// `parts/` holds the server parts and data several of an Episode's Slides share. A part takes plain props,
-// never the kit: the Slide reads its strings with `t` and passes them in.
+// A server part of this Slide: it takes plain props, never the kit; the Slide reads its strings with `t` and passes
+// them in. A part two Slides share moves to `src/components/slide-shared/`.
 export function Statement({ children }: { children: ReactNode }) {
   return <p className="max-w-3xl text-4xl font-semibold tracking-tight text-balance md:text-6xl">{children}</p>;
 }

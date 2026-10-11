@@ -5,11 +5,18 @@ stale_after: 2027-01-11T00:00:00Z
 
 # Episode translation keys
 
-Read before adding or changing an Episode, a Slide, or any string in `src/messages/<locale>.json`. The binding rules live in [FE-002 §5](../../.archgate/adrs/FE-002-episode-page.md#5-strings-and-anchors-keyed-by-slide-slug). This guide holds the role vocabulary and a worked example.
+Read before adding or changing an Episode, a Slide, or any Translation file. The binding rules live in [FE-002 §5](../../.archgate/adrs/FE-002-episode-page.md#5-strings-and-anchors-keyed-by-slide-slug). This guide holds the role vocabulary and a worked example.
 
 ## Key shape
 
-An Episode's strings sit under `episodes.<episode>`. A Slide's strings sit one level down, flat by Slide slug, with no Section level in between:
+A self-contained Slide (page-template; every Episode once #51 lands) keeps its strings in its own folder, `slides/<slide>/i18n/en.json` and `de.json`, and its Episode's own text sits in `<episode>/i18n/`. The roles below are the same, one level shorter:
+
+```text
+<episode>/i18n/<locale>.json                  title, caption, description of the Episode
+<episode>/slides/<slide>/i18n/<locale>.json   <role>: one string of one Slide
+```
+
+The German file must have the English file's shape: a missing key fails `tsc` inside the Slide. Not moved yet, an Episode keeps the site-wide shape: its strings sit under `episodes.<episode>`. A Slide's strings sit one level down, flat by Slide slug, with no Section level in between:
 
 ```text
 episodes.<episode>.title                      Title slide h1, <title>
@@ -43,44 +50,42 @@ The record, not the Translation file, holds what is not a string: a note's `slug
 
 ## Worked example: page-template
 
-`src/components/episodes/page-template/slides/why-a-template.tsx` declares slug `why-a-template`, notes `reference-episode` and `spine`, and segments `one-breath` and `the-spine` (the second with `bridge: true`). Every key it reads, in `src/messages/en.json`:
+`src/components/episodes/page-template/slides/why-a-template/slide.tsx` declares slug `why-a-template`, its messages `{ en, de }` imported from `./i18n/`, notes `reference-episode` and `spine`, and segments `one-breath` and `the-spine` (the second with `bridge: true`). Every key it reads, in its own `i18n/en.json`:
 
 ```text
-episodes.page-template.title
-episodes.page-template.caption
-episodes.page-template.description
-episodes.page-template.slides.why-a-template.title
-episodes.page-template.slides.why-a-template.caption
-episodes.page-template.slides.why-a-template.prose                       holds <ref>reference Episode</ref>
-episodes.page-template.slides.why-a-template.spine.episode               spine.* are leaves of the Slide's own visualisation
-episodes.page-template.slides.why-a-template.spine.section
-episodes.page-template.slides.why-a-template.spine.slide
-episodes.page-template.slides.why-a-template.spine.next
-episodes.page-template.slides.why-a-template.notes.reference-episode.header
-episodes.page-template.slides.why-a-template.notes.reference-episode.description
-episodes.page-template.slides.why-a-template.notes.spine.header
-episodes.page-template.slides.why-a-template.notes.spine.description
-episodes.page-template.slides.why-a-template.voiceScript.segments.one-breath.title
-episodes.page-template.slides.why-a-template.voiceScript.segments.one-breath.keywords
-episodes.page-template.slides.why-a-template.voiceScript.segments.one-breath.script
-episodes.page-template.slides.why-a-template.voiceScript.segments.the-spine.title
-episodes.page-template.slides.why-a-template.voiceScript.segments.the-spine.keywords
-episodes.page-template.slides.why-a-template.voiceScript.segments.the-spine.script
-episodes.page-template.slides.why-a-template.voiceScript.segments.the-spine.bridge
+title
+caption
+prose                                   holds <ref>reference Episode</ref>
+spine.episode                           spine.* are leaves of the Slide's own visualisation
+spine.section
+spine.slide
+spine.next
+notes.reference-episode.header
+notes.reference-episode.description
+notes.spine.header
+notes.spine.description
+voiceScript.segments.one-breath.title
+voiceScript.segments.one-breath.keywords
+voiceScript.segments.one-breath.script
+voiceScript.segments.the-spine.title
+voiceScript.segments.the-spine.keywords
+voiceScript.segments.the-spine.script
+voiceScript.segments.the-spine.bridge
 ```
 
-Two more Slides of the same Episode, as excerpts:
+Two more Slides of the same Episode, as excerpts, and the Episode's own file:
 
 ```text
-episodes.page-template.slides.foundations.title                          section slide: names the first Section
-episodes.page-template.slides.what-comes-next.statement                  untitled Slide: no `title`, so no table-of-contents entry
+slides/foundations/i18n/en.json         title: section slide, names the first Section
+slides/what-comes-next/i18n/en.json     statement: untitled Slide, no `title`, so no table-of-contents entry
+page-template/i18n/en.json              title, caption, description
 ```
 
 ## Worked notes
 
 - Counts and names go through ICU arguments: `"{count, plural, one {# slide} other {# slides}}"`, passed as `t('caption', { count })` inside `content`.
 - Rich text: `t.rich` already renders `<em>`, `<b>` and `<code>` in site styles, so a string may write `Keep it <em>short</em>` and the Slide passes only its own tags (`ref`, or a same-named tag to restyle one).
-- Template: a string a `client/` widget completes after the reader acts keeps a plain `{name}` placeholder (`"showAll": "Show all {count}"`, no ICU plural; keys are camelCase, never `show-all`). The Slide reads it with `template('showAll')` and passes it as a prop; the widget renders `fillTemplate(label, { count })`. `template` accepts only a string leaf of the Slide's own subtree.
+- Template: a string a client widget completes after the reader acts keeps a plain `{name}` placeholder (`"showAll": "Show all {count}"`, no ICU plural; keys are camelCase, never `show-all`). The Slide reads it with `template('showAll')` and passes it as a prop; the widget renders `fillTemplate(label, { count })`. `template` accepts only a string leaf of the Slide's own file (or subtree).
 - A Section of one Slide needs no extra key: its section slide holds `title` and `caption` like any other Slide.
 - A `tsc` error from `t`, `ref` or `target` means the Translation file or the declaration is wrong; fix it, never cast ([FE-002 §3](../../.archgate/adrs/FE-002-episode-page.md#3-scene-is-free)).
 - `src/components/episodes/page-template/` is the copy source for a new Episode; `src/components/episodes/slide-layouts/` shows each Slide layout.
@@ -95,8 +100,8 @@ Each Episode declares its own overview metadata in `episodes/<slug>/episode-meta
 
 An entry reads its text from:
 
-- A published Episode: `episodes.<slug>.title` and `episodes.<slug>.caption`, the keys its own page already uses.
-- An Upcoming Episode: `landing.episodeOverview.upcoming.<slug>.title` and `.caption`. Move them to `episodes.<slug>.*` when it is published.
+- A published Episode: its title and caption, read through the registry (`episodeMessagesOf`): its own `i18n/` once self-contained, else `episodes.<slug>.*`.
+- An Upcoming Episode: `landing.episodeOverview.upcoming.<slug>.title` and `.caption`. It has no record, so this is landing text and stays site-wide; move it into the Episode folder's `i18n/` when the Episode is published.
 - Every Episode: `landing.episodeOverview.topics.<topic>` and `landing.episodeOverview.formats.<format>`, one per id in `TOPICS` and `FORMATS`.
 - Entry chrome: `landing.episodeOverview.open` and `landing.episodeOverview.comingSoon`.
 

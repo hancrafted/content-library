@@ -1,6 +1,6 @@
 import { isValidElement, type ReactNode } from 'react';
 import { describe, expect, it } from 'vitest';
-import type { RuntimeTranslator } from './episode-record';
+import type { RuntimeTranslator } from './slide-base';
 import { slideKit, type EpisodeKitInput, type SlideKitInput } from './slide-kit';
 
 /*
