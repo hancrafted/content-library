@@ -2,8 +2,8 @@ import { placeSections } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { isValidElement, type ReactElement, type ReactNode } from 'react';
 import { describe, expect, it } from 'vitest';
-import { localizeSlide, slideText, type EpisodeContext, type LocalizedSlide } from './localized-slide';
-import { slide, type Slide } from './slide';
+import { episodeMinutes, localizeSlide, type EpisodeContext, type LocalizedSlide } from './localized-slide';
+import { episode, slide, type Slide } from './slide';
 import type { RuntimeKit } from './slide-base';
 
 /*
@@ -94,7 +94,10 @@ function episodeOf(locale: Locale, sections: readonly (readonly [Slide, ...Slide
 }
 
 /** Every Slide of the Episode, localized in page order. */
-function localized(locale: Locale, sections = [[foundations, whyATemplate, visual]] as const): LocalizedSlide[] {
+function localized(
+  locale: Locale,
+  sections: readonly (readonly [Slide, ...Slide[]])[] = [[foundations, whyATemplate, visual]],
+): LocalizedSlide[] {
   const episode = episodeOf(locale, sections);
   return episode.placed.map((placed) => localizeSlide(placed as never, episode));
 }
@@ -212,13 +215,28 @@ describe('success cases', () => {
     expect(minutes).toEqual(expected);
   });
 
-  it('gives a landing card the same text and minutes without an Episode to place the Slide in', () => {
+  it("totals an Episode's reading time per locale from every Slide's Voice script, listed or not", () => {
     // ARRANGE
-    const expected = { slug: 'why-a-template', title: 'Warum jede Episode als Kopie beginnt', minutes: 11 / 120 };
+    const again = slide({
+      slug: 'again',
+      messages: WHY,
+      segments: [{ slug: 'one-breath', bridge: true }],
+      content: () => null,
+    });
+    const messages = { title: 'Page template', caption: 'The smallest Episode.', description: 'A test.' };
+    const record = episode({
+      slug: 'page-template',
+      messages: { en: messages, de: messages },
+      sections: [
+        [foundations, whyATemplate],
+        [again, visual],
+      ],
+    });
+    const expected = { en: 26 / 140, de: 22 / 120 };
     // ACT
-    const { slug, title, minutes } = slideText(whyATemplate, 'de');
+    const minutes = { en: episodeMinutes(record, 'en'), de: episodeMinutes(record, 'de') };
     // ASSERT
-    expect({ slug, title, minutes }).toEqual(expected);
+    expect(minutes).toEqual(expected);
   });
 });
 
@@ -319,7 +337,7 @@ describe('edge cases', () => {
     });
     const absent = ['sources', 'image', 'bridge'];
     // ACT
-    const { notes, voiceScript } = slideText(bare, 'en');
+    const { notes, voiceScript } = localized('en', [[foundations, bare]])[1];
     const present = absent.filter((key) => key in notes[0] || key in voiceScript[0]);
     // ASSERT
     expect(present).toEqual([]);

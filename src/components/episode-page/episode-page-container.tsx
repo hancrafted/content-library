@@ -75,6 +75,7 @@ function EpisodeToc(props: {
   locale: Locale;
   slug: EpisodeSlug;
   slides: readonly LocalizedSlide[];
+  minutes: number;
   labels: TocLabels;
 }) {
   return (
@@ -83,6 +84,7 @@ function EpisodeToc(props: {
         locale={props.locale}
         route={episodeRoute(props.slug)}
         sections={tocSectionsOf(props.slides)}
+        total={props.minutes}
         targetAttribute="data-slide"
         topId={TITLE_ANCHOR}
         labels={props.labels}
@@ -116,7 +118,7 @@ function translatorOf(locale: Locale): TranslatorOf {
  * provides the page's one URL-state service (FE-001 §2).
  */
 export async function EpisodePageContainer({ locale, episode }: { locale: Locale; episode: EpisodeRecord }) {
-  const { title, caption, slides } = await recordContent(episode, locale, translatorOf(locale));
+  const { title, caption, minutes, slides } = await recordContent(episode, locale, translatorOf(locale));
   const ids = [TITLE_ANCHOR, ...slides.map(({ id }) => id)];
   const youtubeId = episode.youtube?.[locale];
   const talkLabels = youtubeId ? await readTranslationStrings(locale, 'talkPlayer') : undefined;
@@ -129,7 +131,7 @@ export async function EpisodePageContainer({ locale, episode }: { locale: Locale
         data-episode={episode.slug}
         className={cn('mt-6', INSET_CLASSES, TOC_RESERVE_CLASS)}
       >
-        <EpisodeToc locale={locale} slug={episode.slug} slides={slides} labels={tocLabels} />
+        <EpisodeToc locale={locale} slug={episode.slug} slides={slides} minutes={minutes} labels={tocLabels} />
         <SlideColumn
           ids={ids}
           title={title}

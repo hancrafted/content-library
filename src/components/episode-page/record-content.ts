@@ -1,4 +1,9 @@
-import { localizeSlide, type EpisodeContext, type LocalizedSlide } from '@/components/slide-master/localized-slide';
+import {
+  episodeMinutes,
+  localizeSlide,
+  type EpisodeContext,
+  type LocalizedSlide,
+} from '@/components/slide-master/localized-slide';
 import type { EpisodeRecord, Slide } from '@/components/slide-master/slide';
 import type { RuntimeTranslator } from '@/components/slide-master/slide-base';
 import { placeSections } from '@/lib/episode.pure';
@@ -18,6 +23,8 @@ export type TranslatorOf = (namespace: string) => Promise<RuntimeTranslator>;
 export interface EpisodeContent {
   readonly title: string;
   readonly caption?: string;
+  /** The whole reading time in minutes (`episodeMinutes`): the total the table of contents counts down from. */
+  readonly minutes: number;
   readonly slides: readonly LocalizedSlide[];
 }
 
@@ -39,5 +46,10 @@ export async function recordContent(
     refLabel: (await translatorOf('contextDrawer'))('refNote'),
   };
   const { title, caption } = record.messages[locale];
-  return { title, caption, slides: episode.placed.map((placed) => localizeSlide(placed, episode)) };
+  return {
+    title,
+    caption,
+    minutes: episodeMinutes(record, locale),
+    slides: episode.placed.map((placed) => localizeSlide(placed, episode)),
+  };
 }
