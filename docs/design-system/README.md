@@ -107,6 +107,8 @@ The Global tab lists the global tokens in designer order, each in a group under 
 
 The header is outside the Episode page and its URL-state service, so the active Slide reaches the editor through a dev-only relay: `DevSlideReporter` inside the page reads `useActiveSlide()` and hands the id to `src/hooks/use-dev-slide.ts`. The editor's hook is `src/hooks/use-page-tokens.ts`; its stylesheet and DOM logic are in `src/lib/page-tokens.ts`.
 
+Each row has an experimental **Find usage** button that lists the elements in view using the token; it lives in one folder, `design-system-token-editor/token-usage/`, behind one `rowAddon` prop, and its limits are in `docs/adr/0003-token-usage-lookup-is-experimental.md`.
+
 Edits are not saved. **Copy changed** exports only the tokens you changed, as a prompt to paste to an agent, which then adopts them into source. Saving edits as a user preference is a later feature.
 
 ## Legacy
