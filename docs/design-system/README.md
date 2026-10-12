@@ -66,18 +66,18 @@ After the three workshop Episodes, review every Slide token file. A colour that 
 
 Heading level and visual size are separate. The h1/h2/h3 elements follow the manuscript (Episode, Section, Slide). Size comes from a **role**.
 
-| Role       | Utility           | Value                            | Line height | Used for                                                              |
-| ---------- | ----------------- | -------------------------------- | ----------- | --------------------------------------------------------------------- |
-| hero       | `text-hero`       | `clamp(2.5rem, 5.2vw, 4.5rem)`   | 1.05        | landing hero and Title slide, through `HeroTitle` only                |
-| heading    | `text-heading`    | `clamp(2.25rem, 4.2vw, 3.75rem)` | 1.1         | section slide titles                                                  |
-| subheading | `text-subheading` | `clamp(1.875rem, 3.4vw, 3rem)`   | 1.15        | page slide titles                                                     |
-| body       | `text-body`       | `1rem`                           | 1.6         | everything else: prose, Chrome, Context drawer, cards, buttons, links |
-| caption    | `text-caption`    | `0.875rem`                       | 1.5         | secondary text: table contents, labels, captions in Scenes            |
+| Role       | Utility           | Value                            | Line height | Used for                                                                   |
+| ---------- | ----------------- | -------------------------------- | ----------- | -------------------------------------------------------------------------- |
+| hero       | `text-hero`       | `clamp(2.5rem, 5.2vw, 4.5rem)`   | 1.05        | landing hero and Title slide, through `HeroTitle` only                     |
+| heading    | `text-heading`    | `clamp(2.25rem, 4.2vw, 3.75rem)` | 1.1         | section slide titles                                                       |
+| subheading | `text-subheading` | `clamp(1.875rem, 3.4vw, 3rem)`   | 1.15        | page slide titles                                                          |
+| body       | `text-body`       | `1rem`                           | 1.6         | everything else: prose, Chrome, Context drawer, cards, buttons, links      |
+| caption    | `text-caption`    | `0.875rem`                       | 1.5         | secondary text: Slide captions, table contents, labels, captions in Scenes |
 
 - **Four sizes, plus hero as the one exception.** `caption` is allowed everywhere, Scenes included. A Scene has no fifth size. Hierarchy inside a Scene comes from weight first, then colour.
 - **One value per role.** Each size scales fluidly with `clamp()`, so no breakpoint prefix (`md:text-…`) ever appears on a size.
 - **Weights:** 400, 500, 600 (normal, medium, semibold). A card title inside a Scene is `text-body font-semibold`.
-- **Text strengths:** full (`text-foreground`) and muted (`text-muted-foreground`). A Slide caption is `body` + muted; `caption` is the smaller secondary size.
+- **Text strengths:** full (`text-foreground`) and muted (`text-muted-foreground`). A Slide caption (`SlideCaption`) is `caption` + muted.
 - **Fonts:** `--font-sans` (the system sans) and `--font-mono`, declared once in `globals.css`. Both stacks are Tailwind's defaults. Changing the typeface is a one-line edit.
 - **Heading tracking:** `--tracking-heading` is `-0.02em`, applied to hero, heading and subheading.
 - **Two relative sizes are allowed, one file each:** the citation marker `<sup>` at `0.7em` and inline `code` at `0.9em`. They scale with the text around them.

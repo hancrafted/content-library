@@ -40,9 +40,9 @@ describe('success cases', () => {
     expect(classes).toContain(weight);
   });
 
-  it('sets caption and prose in the body role, the caption muted', () => {
+  it('sets the caption in the caption role, muted, and prose in the body role', () => {
     // ARRANGE
-    const expectedCaption = ['text-body', 'text-muted-foreground'];
+    const expectedCaption = ['text-caption', 'text-muted-foreground'];
     const expectedProse = 'text-body';
     const caption = createElement(SlideCaption, null, 'c');
     const prose = createElement(SlideProse, null, 'p');

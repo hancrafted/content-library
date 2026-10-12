@@ -76,7 +76,7 @@ export function HeroTitle({ className, children, ...props }: ComponentPropsWitho
 
 export function SlideCaption({ children, ...props }: PartProps) {
   return (
-    <p {...props} className="mt-4 max-w-prose text-body text-balance text-muted-foreground">
+    <p {...props} className="mt-4 max-w-prose text-caption text-balance text-muted-foreground">
       {children}
     </p>
   );
