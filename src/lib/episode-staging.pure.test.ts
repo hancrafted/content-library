@@ -4,7 +4,7 @@ import {
   checkRunsCsv,
   checkStagingFolder,
   unsettledBriefSections,
-  type Catalog,
+  type KnownVisuals,
 } from './episode-staging.pure';
 
 /*
@@ -12,7 +12,7 @@ import {
  * it, then one change per test that breaks exactly one cross-file rule.
  */
 
-const CATALOG: Catalog = { masters: ['basic-page', 'grid-2x2'], motions: ['liquid-ink-transition'] };
+const KNOWN_VISUALS: KnownVisuals = { masters: ['basic-page', 'grid-2x2'], motions: ['liquid-ink-transition'] };
 
 const MANUSCRIPT = `---
 type: manuscript
@@ -125,7 +125,7 @@ describe('success cases', () => {
     // ARRANGE
     const files = folder({});
     // ACT
-    const findings = checkStagingFolder(files, CATALOG);
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
     // ASSERT
     expect(findings).toEqual([]);
   });
@@ -139,7 +139,7 @@ describe('success cases', () => {
       ]),
     });
     // ACT
-    const findings = checkStagingFolder(files, CATALOG);
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
     // ASSERT
     expect(findings).toEqual([]);
   });
@@ -186,7 +186,7 @@ describe('failure cases', () => {
     const expectedKinds = ['spine'];
     const expectedSlug = 'spent';
     // ACT
-    const findings = checkStagingFolder(files, CATALOG);
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
     // ASSERT
     expect(kinds(findings)).toEqual(expectedKinds);
     expect(findings[0].message).toContain(expectedSlug);
@@ -198,7 +198,7 @@ describe('failure cases', () => {
     const expectedKinds = ['spine'];
     const expectedSlug = 'why';
     // ACT
-    const findings = checkStagingFolder(files, CATALOG);
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
     // ASSERT
     expect(kinds(findings)).toEqual(expectedKinds);
     expect(findings[0].message).toContain(expectedSlug);
@@ -210,19 +210,19 @@ describe('failure cases', () => {
     const expectedKinds = ['spine'];
     const expectedSlug = '{#Left_Out}';
     // ACT
-    const findings = checkStagingFolder(files, CATALOG);
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
     // ASSERT
     expect(kinds(findings)).toEqual(expectedKinds);
     expect(findings[0].message).toContain(expectedSlug);
   });
 
-  it('names a Visual master that is neither a frame component nor a catalog Slide', () => {
+  it('names a Visual master that is neither a frame component nor a slide-master Slide', () => {
     // ARRANGE
     const files = folder({ 'dossier.md': DOSSIER.replace('master: basic-page', 'master: four-column') });
     const expectedKinds = ['visual'];
     const expectedName = 'four-column';
     // ACT
-    const findings = checkStagingFolder(files, CATALOG);
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
     // ASSERT
     expect(kinds(findings)).toEqual(expectedKinds);
     expect(findings[0].message).toContain(expectedName);
@@ -234,7 +234,7 @@ describe('failure cases', () => {
     const expectedKinds = ['visual'];
     const expectedName = 'fade';
     // ACT
-    const findings = checkStagingFolder(files, CATALOG);
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
     // ASSERT
     expect(kinds(findings)).toEqual(expectedKinds);
     expect(findings[0].message).toContain(expectedName);
@@ -248,7 +248,7 @@ describe('failure cases', () => {
     const expectedKinds = ['visual'];
     const expectedForm = 'master: <name> · motion: <effect>';
     // ACT
-    const findings = checkStagingFolder(files, CATALOG);
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
     // ASSERT
     expect(kinds(findings)).toEqual(expectedKinds);
     expect(findings[0].message).toContain(expectedForm);
@@ -262,7 +262,7 @@ describe('failure cases', () => {
     const expectedKinds = ['speaker-note'];
     const expectedForm = '**header** — description';
     // ACT
-    const findings = checkStagingFolder(files, CATALOG);
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
     // ASSERT
     expect(kinds(findings)).toEqual(expectedKinds);
     expect(findings[0].message).toContain(expectedForm);
@@ -276,7 +276,7 @@ describe('failure cases', () => {
     const expectedKinds = ['speaker-note'];
     const expectedCitation = '[2]';
     // ACT
-    const findings = checkStagingFolder(files, CATALOG);
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
     // ASSERT
     expect(kinds(findings)).toEqual(expectedKinds);
     expect(findings[0].message).toContain(expectedCitation);
@@ -293,7 +293,7 @@ describe('failure cases', () => {
     const expectedKinds = ['speaker-note'];
     const expectedKey = 'sources:';
     // ACT
-    const findings = checkStagingFolder(files, CATALOG);
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
     // ASSERT
     expect(kinds(findings)).toEqual(expectedKinds);
     expect(findings[0].message).toContain(expectedKey);
@@ -305,7 +305,7 @@ describe('failure cases', () => {
     const expectedKinds = ['speaker-note'];
     const expectedLine = 'note: the bar';
     // ACT
-    const findings = checkStagingFolder(files, CATALOG);
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
     // ASSERT
     expect(kinds(findings)).toEqual(expectedKinds);
     expect(findings[0].message).toContain(expectedLine);
@@ -317,7 +317,7 @@ describe('failure cases', () => {
     const expectedKinds = ['segments'];
     const expectedCounts = ['1 Segments', '2 paragraphs'];
     // ACT
-    const findings = checkStagingFolder(files, CATALOG);
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
     // ASSERT
     expect(kinds(findings)).toEqual(expectedKinds);
     expect(findings[0].message).toContain(expectedCounts[0]);
@@ -330,7 +330,7 @@ describe('failure cases', () => {
     const expected = [{ kind: 'feedback', file: FEEDBACK_PATH }];
     const expectedForm = '`<section>--<slide>` · content|implementation — text';
     // ACT
-    const findings = checkStagingFolder(files, CATALOG);
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
     // ASSERT
     expect(findings).toMatchObject(expected);
     expect(findings[0].message).toContain(expectedForm);
@@ -342,7 +342,7 @@ describe('failure cases', () => {
     const expectedKinds = ['feedback'];
     const expectedAnchor = 'why--gone';
     // ACT
-    const findings = checkStagingFolder(files, CATALOG);
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
     // ASSERT
     expect(kinds(findings)).toEqual(expectedKinds);
     expect(findings[0].message).toContain(expectedAnchor);
@@ -354,7 +354,7 @@ describe('failure cases', () => {
     const expectedKinds = ['feedback'];
     const expectedTag = 'practice';
     // ACT
-    const findings = checkStagingFolder(files, CATALOG);
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
     // ASSERT
     expect(kinds(findings)).toEqual(expectedKinds);
     expect(findings[0].message).toContain(expectedTag);
@@ -427,7 +427,7 @@ describe('edge cases', () => {
       'dossier.md': DOSSIER.replace('## Why it forgets {#why}', '## Aside\n\nNote.\n\n## Why it forgets {#why}'),
     });
     // ACT
-    const findings = checkStagingFolder(files, CATALOG);
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
     // ASSERT
     expect(findings).toEqual([]);
   });
@@ -436,16 +436,16 @@ describe('edge cases', () => {
     // ARRANGE
     const files = folder({ 'dossier.md': DOSSIER.replace('Extra.', '```markdown\n## Example {#example}\n```') });
     // ACT
-    const findings = checkStagingFolder(files, CATALOG);
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
     // ASSERT
     expect(findings).toEqual([]);
   });
 
-  it('accepts a slide-master catalog Slide as the Visual master', () => {
+  it('accepts a slide-master Slide as the Visual master', () => {
     // ARRANGE
     const files = folder({ 'dossier.md': DOSSIER.replace('master: basic-page', 'master: grid-2x2') });
     // ACT
-    const findings = checkStagingFolder(files, CATALOG);
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
     // ASSERT
     expect(findings).toEqual([]);
   });
@@ -459,7 +459,7 @@ describe('edge cases', () => {
       ),
     });
     // ACT
-    const findings = checkStagingFolder(files, CATALOG);
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
     // ASSERT
     expect(findings).toEqual([]);
   });
@@ -470,7 +470,7 @@ describe('edge cases', () => {
       'manuscript.md': MANUSCRIPT.replace('First paragraph.', 'First half of a paragraph,\nwrapped.'),
     });
     // ACT
-    const findings = checkStagingFolder(files, CATALOG);
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
     // ASSERT
     expect(findings).toEqual([]);
   });
@@ -479,7 +479,7 @@ describe('edge cases', () => {
     // ARRANGE
     const files = folder({ [FEEDBACK_PATH]: feedback('practice', ['- `why--spent` · practice — Slow down here.']) });
     // ACT
-    const findings = checkStagingFolder(files, CATALOG);
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
     // ASSERT
     expect(findings).toEqual([]);
   });

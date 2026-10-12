@@ -8,7 +8,7 @@
 #     needs     job ids this job waits for
 #     foreach   optional; `<file>#<heading>` fans the job out once per list item
 #     outputs   staging paths the job writes; a job reading one must need its writer
-#     checks    cheapest first: mh, vitest, verify, build, test:build, visual-check
+#     checks    cheapest first; names and commands in SKILL.md's job-loop check table
 #     retries   reviewer failures sent back before this branch of the pipeline stops
 #     gate      optional; `human` stops the run until Han approves the output
 #     agents    run in order; a reviewer is a fresh subagent that did not write the output

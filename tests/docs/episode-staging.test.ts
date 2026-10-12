@@ -4,7 +4,7 @@ import {
   checkRunsCsv,
   checkStagingFolder,
   unsettledBriefSections,
-  type Catalog,
+  type KnownVisuals,
 } from '@/lib/episode-staging.pure';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -60,17 +60,17 @@ function namesEndingIn(folder: string, suffix: string): string[] {
 
 /**
  * What a Dossier `Visual` may name: the frame components in the Slide master
- * (`basic-page-slide.tsx` is `basic-page`), the slide-master catalog's Slide
+ * (`basic-page-slide.tsx` is `basic-page`), the slide master's Slide
  * folders, and the motion effects in `animations/` (`liquid-ink-transition`).
  */
-function catalog(): Catalog {
-  const catalogSlides = readdirSync(path.join(ROOT, 'src/components/episodes/slide-master/slides'), {
+function knownVisuals(): KnownVisuals {
+  const masterSlides = readdirSync(path.join(ROOT, 'src/components/episodes/slide-master/slides'), {
     withFileTypes: true,
   })
     .filter((entry) => entry.isDirectory())
     .map(({ name }) => name);
   return {
-    masters: [...namesEndingIn(path.join(ROOT, 'src/components/slide-master'), '-slide.tsx'), ...catalogSlides],
+    masters: [...namesEndingIn(path.join(ROOT, 'src/components/slide-master'), '-slide.tsx'), ...masterSlides],
     motions: namesEndingIn(path.join(ROOT, 'src/components/animations'), '.client.tsx'),
   };
 }
@@ -150,7 +150,7 @@ function rubricsWithoutHeading(yaml: string): string[] {
 describe('success cases', () => {
   it('finds no disagreement between the files of any staging folder or the sample Episode', () => {
     // ARRANGE
-    const names = catalog();
+    const names = knownVisuals();
     const folders = Object.entries(stagingFolders());
     // ACT
     const findings = folders.flatMap(([where, folder]) =>
@@ -241,13 +241,13 @@ describe('failure cases', () => {
     expect(messages).toEqual(expected);
   });
 
-  it('rejects a Visual master that is neither a frame component nor a catalog Slide in the real catalog', () => {
+  it('rejects a Visual master that is neither a frame component nor a slide-master Slide in the repo', () => {
     // ARRANGE
     const sample = readFolder(SAMPLE);
     const dossier = sample['dossier.md'].replace('master: three-column', 'master: four-column');
     const expectedKinds = ['visual'];
     // ACT
-    const findings = checkStagingFolder({ ...sample, 'dossier.md': dossier }, catalog());
+    const findings = checkStagingFolder({ ...sample, 'dossier.md': dossier }, knownVisuals());
     // ASSERT
     expect(findings.map(({ kind }) => kind)).toEqual(expectedKinds);
   });
@@ -263,13 +263,13 @@ describe('edge cases', () => {
     expect(landed).toEqual([]);
   });
 
-  it('walks the sample Episode and reads a frame component, a catalog Slide and a motion effect', () => {
+  it('walks the sample Episode and reads a frame component, a slide-master Slide and a motion effect', () => {
     // ARRANGE
     const sample = path.relative(ROOT, SAMPLE);
     const expected = { masters: ['basic-page', 'grid-2x2'], motions: ['liquid-ink-transition'] };
     // ACT
     const walked = Object.keys(stagingFolders());
-    const names = catalog();
+    const names = knownVisuals();
     // ASSERT
     expect(walked).toContain(sample);
     expect(names.masters).toEqual(expect.arrayContaining(expected.masters));

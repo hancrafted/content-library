@@ -57,10 +57,10 @@ _Done when_ Han has the Episode's local link and the draft PR's URL.
 
 ## The job loop
 
-Each job runs its `agents` in order. The **implementor** writes the job's `outputs`; the **reviewer** judges them. Read the job's reference first: it holds the implementor's prompt, the job's done-checks and, for a reviewer job, its `## Rubric`.
+Each job runs its `agents` in order. The **implementor** writes the job's `outputs`; the **reviewer** judges them. Read the job's reference first: it holds the implementor's prompt, what the job is done when and, for a reviewer job, its `## Rubric`.
 
 1. **Implementor.** Spawn a subagent (the `implement` job runs in this session instead; see its reference). Its prompt opens with the Brief's `Learning goal` and `Actionables`, quoted, because every artifact is written backwards from them. Then point it at the job's reference, every path in `references` and `skills`, the staging folder, and on a retry the failed lines, quoted verbatim. Point, never paste: the agent reads the files.
-2. **Checks.** Run the job's `checks` in order, cheapest first:
+2. **Checks.** Run the job's `checks` in order, cheapest first. This table is the one list of check names and their commands; `src/lib/episode-pipeline.pure.ts` refuses any other name:
 
    | check | command |
    | --- | --- |
@@ -69,7 +69,7 @@ Each job runs its `agents` in order. The **implementor** writes the job's `outpu
    | `verify` | `npm run verify` |
    | `build` | `npm run build` |
    | `test:build` | `npm run test:build` |
-   | `visual-check` | DOM numbers per Section in both themes, by `references/implement.md` |
+   | `visual-check` | DOM numbers per Slide in both themes, by [`references/implement.md`](references/implement.md#visual-check) |
 
    A failure counts as a failed attempt; its output lines are the failed lines.
 3. **Reviewer.** Spawn a **fresh** subagent, never one that wrote the output. Its baseline is the markdown-harness intent of every rule, field and heading that governs the output: `npx mh query <file>` prints them. On top of that baseline come the lines under the job's `rubric`. It answers one line per intent and per rubric line, `pass` or `fail — <the line, verbatim> — <evidence>`, and marks anything only Han can judge `needs human — <what>`.

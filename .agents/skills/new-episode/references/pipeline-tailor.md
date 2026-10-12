@@ -13,9 +13,10 @@ Copy [`assets/pipeline.yml`](../assets/pipeline.yml) to `docs/episodes/<slug>/pi
 
 A per-run pipeline tolerates no missing file, unlike the template. When a file the template reads does not exist yet (the llm-wiki index, a human-profile guide), remove that reference and name it in the run-log entry's Notes and to Han.
 
-## Done-checks
+## Done when
 
-1. `npx vitest run tests/docs/episode-staging.test.ts` passes: it checks the per-run pipeline's keys, `needs` graph, skills, paths and rubric headings.
-2. The draft is committed through the `commit` skill with `Gate: draft pipeline`.
+The job's `checks:` in `assets/pipeline.yml` run by the check table in [SKILL.md](../SKILL.md#the-job-loop). Its `vitest` check holds the per-run pipeline's keys, `needs` graph, skills, paths and rubric headings. Beyond them:
+
+1. The draft is committed through the `commit` skill with `Gate: draft pipeline`.
 
 Then append the run-log entry, whose Notes list every change from the template with its reason, and stop: the gate opens when Han commits `status: approved` with `Gate: approved pipeline`.

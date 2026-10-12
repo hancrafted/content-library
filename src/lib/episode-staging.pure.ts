@@ -5,6 +5,7 @@
  * is the caller's job, so every rule tests against an in-memory folder.
  */
 
+import { unless, type Finding } from './finding.pure';
 import {
   blocksOf,
   bodyLines,
@@ -18,19 +19,8 @@ import {
   type ListItem,
 } from './staging-markdown.pure';
 
-/** What a check found wrong, keyed by the rule it broke. */
-export type FindingKind =
-  'spine' | 'visual' | 'speaker-note' | 'segments' | 'feedback' | 'research-index' | 'runs-header' | 'pipeline';
-
-export interface Finding {
-  kind: FindingKind;
-  /** The file the finding is about, relative to the folder checked. */
-  file: string;
-  message: string;
-}
-
-/** The names a Dossier `Visual` may use: frame components and slide-master catalog Slides, and motion effects. */
-export interface Catalog {
+/** The names a Dossier `Visual` may use: frame components and slide-master Slides, and motion effects. */
+export interface KnownVisuals {
   masters: readonly string[];
   motions: readonly string[];
 }
@@ -63,14 +53,9 @@ function checkSpine(manuscript: readonly Heading[], dossier: readonly Heading[])
   return [...malformed, departure];
 }
 
-/** The finding, unless the rule holds. */
-function unless<T>(holds: boolean, finding: T): T[] {
-  return holds ? [] : [finding];
-}
-
 const VISUAL_LINE = /^master: (\S+) · motion: (\S+)$/;
 
-function checkVisuals(blocks: readonly Block[], catalog: Catalog): Finding[] {
+function checkVisuals(blocks: readonly Block[], known: KnownVisuals): Finding[] {
   return h4s(blocks, 'Visual').flatMap(({ owner, body }) => {
     const first = body.find((line) => line.trim() !== '') ?? '';
     const where = `The Visual of {#${owner}}`;
@@ -79,24 +64,25 @@ function checkVisuals(blocks: readonly Block[], catalog: Catalog): Finding[] {
     if (match === null)
       return [finding(`${where} must open with "master: <name> · motion: <effect>", but opens with "${first}".`)];
     const [, master, motion] = match;
-    const masterNote = `${where} names master "${master}", which is neither a frame component nor a slide-master catalog Slide.`;
+    const masterNote = `${where} names master "${master}", which is neither a frame component nor a slide-master Slide.`;
     return [
-      ...unless(catalog.masters.includes(master), finding(masterNote)),
+      ...unless(known.masters.includes(master), finding(masterNote)),
       ...unless(
-        catalog.motions.includes(motion),
+        known.motions.includes(motion),
         finding(`${where} names motion "${motion}", which is no motion effect.`),
       ),
     ];
   });
 }
 
-const NOTE = /^\*\*[^*]+\*\* — \S.*$/;
+const SPEAKER_NOTE_ITEM = /^\*\*[^*]+\*\* — \S.*$/;
 const SOURCE = /^sources: \[(\d+)\] \S.* — \S+$/;
 const TARGET = /^target: \S.*$/;
 const CITATION = /\[(\d+)\]/g;
 
 function checkSpeakerNote(where: string, { text, nested }: ListItem): string[] {
-  if (!NOTE.test(text)) return [`${where} has an item not of the form "**header** — description [n]": "${text}".`];
+  if (!SPEAKER_NOTE_ITEM.test(text))
+    return [`${where} has an item not of the form "**header** — description [n]": "${text}".`];
   const sources = nested.flatMap((line) => SOURCE.exec(line)?.[1] ?? []);
   const unknown = nested.filter((line) => !SOURCE.test(line) && !TARGET.test(line));
   const targets = nested.filter((line) => TARGET.test(line));
@@ -104,12 +90,12 @@ function checkSpeakerNote(where: string, { text, nested }: ListItem): string[] {
     .map(([citation, n]) => ({ citation, n }))
     .filter(({ n }) => !sources.includes(n));
   return [
-    ...(sources.length === 0 ? [`${where}: "${text}" has no nested "sources: [n] title — URL" line.`] : []),
+    ...unless(sources.length > 0, `${where}: "${text}" has no nested "sources: [n] title — URL" line.`),
     ...unknown.map(
       (line) =>
         `${where}: "${text}" has a nested line that is neither "sources: [n] title — URL" nor "target:": "${line}".`,
     ),
-    ...(targets.length > 1 ? [`${where}: "${text}" has more than one "target:" line.`] : []),
+    ...unless(targets.length <= 1, `${where}: "${text}" has more than one "target:" line.`),
     ...unresolved.map(({ citation }) => `${where}: "${text}" cites ${citation}, which resolves to no nested source.`),
   ];
 }
@@ -152,10 +138,11 @@ function checkFeedbackFile(file: string, markdown: string, anchors: readonly str
     }
     const [, anchor, tag] = item;
     return [
-      ...(tag === 'practice' && !practice
-        ? [`Feedback item "${line}" is tagged practice, which only a file with "via: practice" may use.`]
-        : []),
-      ...(anchors.includes(anchor) ? [] : [`Feedback anchor "${anchor}" is no page slide in the Manuscript.`]),
+      ...unless(
+        tag !== 'practice' || practice,
+        `Feedback item "${line}" is tagged practice, which only a file with "via: practice" may use.`,
+      ),
+      ...unless(anchors.includes(anchor), `Feedback anchor "${anchor}" is no page slide in the Manuscript.`),
     ];
   });
   return messages.map((message): Finding => ({ kind: 'feedback', file, message }));
@@ -172,7 +159,7 @@ function checkFeedback(files: Readonly<Record<string, string>>, manuscript: read
  * Checks one staging folder's files against each other. `files` maps a path
  * relative to the folder (`dossier.md`, `feedback/01/feedback.md`) to its text.
  */
-export function checkStagingFolder(files: Readonly<Record<string, string>>, catalog: Catalog): Finding[] {
+export function checkStagingFolder(files: Readonly<Record<string, string>>, known: KnownVisuals): Finding[] {
   const manuscript = files['manuscript.md'];
   const dossier = files['dossier.md'];
   if (manuscript === undefined || dossier === undefined) return [];
@@ -183,7 +170,7 @@ export function checkStagingFolder(files: Readonly<Record<string, string>>, cata
       manuscriptBlocks.map(({ heading }) => heading),
       dossierBlocks.map(({ heading }) => heading),
     ),
-    ...checkVisuals(dossierBlocks, catalog),
+    ...checkVisuals(dossierBlocks, known),
     ...checkSpeakerNotes(dossierBlocks),
     ...checkSegments(manuscriptBlocks, dossierBlocks),
     ...checkFeedback(files, manuscriptBlocks),

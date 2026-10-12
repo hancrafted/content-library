@@ -14,9 +14,9 @@ Write the story the Dossier plans. The Dossier owns the spine: copy its slugged 
 
 The shape is the `staging-manuscript` rules': `npx mh query` on [the sample Manuscript](../assets/sample-episode/manuscript.md) prints every intent.
 
-## Done-checks
+## Done when
 
-`npm run check:docs` is clean, then `npx vitest run tests/docs/episode-staging.test.ts` passes: it checks the spine against the Dossier and the paragraph count against the Segments.
+The job's `checks:` in `assets/pipeline.yml` run by the check table in [SKILL.md](../SKILL.md#the-job-loop). Its `vitest` check holds the spine against the Dossier and the paragraph count against the Segments.
 
 ## Rubric
 

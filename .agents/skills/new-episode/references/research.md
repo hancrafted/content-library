@@ -15,9 +15,9 @@ Answer one research question from the Brief with the `research` skill. Its metho
 - `stale_after` is a year after `researched_on`, six months for anything about a tool, model or price.
 - For an `extend` outcome from research-match, cite the earlier file as a Source and leave it unchanged.
 
-## Done-checks
+## Done when
 
-`npm run check:docs` is clean, then `npx vitest run tests/docs/episode-staging.test.ts` passes.
+The job's `checks:` in `assets/pipeline.yml` run by the check table in [SKILL.md](../SKILL.md#the-job-loop).
 
 ## Rubric
 

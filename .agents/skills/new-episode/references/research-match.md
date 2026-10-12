@@ -17,9 +17,9 @@ For each item under the Brief's `Research questions`:
 
 When `docs/llm-wiki/index.md` does not exist yet, every question is `new`; say so in Notes.
 
-## Done-checks
+## Done when
 
-The run-log entry's `Output` lists every research question by number with its outcome, and its Notes give the reason for each `reuse` and `extend`. `npm run check:docs` is clean.
+The job's `checks:` in `assets/pipeline.yml` run by the check table in [SKILL.md](../SKILL.md#the-job-loop). Beyond them, the run-log entry's `Output` lists every research question by number with its outcome, and its Notes give the reason for each `reuse` and `extend`.
 
 ## After the job
 

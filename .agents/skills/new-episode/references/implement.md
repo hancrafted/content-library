@@ -10,13 +10,13 @@ The implementor is this session: `implement-spec` dispatches subagents of its ow
 - No PR opens and none is marked ready here: `serve-and-pr` opens the one draft PR, and it stays a draft until Promotion.
 - On a retry, the failed lines go to a new implementer subagent, quoted verbatim, as fix work on the integration branch.
 
-## Done-checks
+## Done when
 
-Run in order; the first failure is the failed attempt.
+The job's `checks:` in `assets/pipeline.yml` run by the check table in [SKILL.md](../SKILL.md#the-job-loop). The first failure is the failed attempt.
 
-1. `npm run verify`.
-2. `npm run build`, then `npm run test:build`.
-3. **Visual check, both themes.** By the `visual-check` skill: serve `out/` with `npm run preview` in the background, then probe every Slide by its anchor in each theme:
+## Visual check
+
+The `visual-check` check, in both themes. By the `visual-check` skill: serve `out/` with `npm run preview` in the background, then probe every Slide by its anchor in each theme:
 
    ```sh
    npm run shot -- --url http://localhost:4300/<episode path> --theme light --height 800 \

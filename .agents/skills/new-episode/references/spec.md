@@ -11,7 +11,7 @@ Turn the checked Dossier and Manuscript into a spec with the `to-spec` skill, th
 - Each ticket names, per Slide: the Manuscript paragraphs as its Voice script segments, verbatim; the Dossier's Visual master and motion; its Speaker notes, as the Slide's note keys.
 - A Visual flagged as a catalog miss in the run log becomes its ticket's design question, never an invented layout.
 
-## Done-checks
+## Done when
 
 The spec issue and every sub-issue exist with the `ready-for-agent` label, each sub-issue linked to the spec.
 

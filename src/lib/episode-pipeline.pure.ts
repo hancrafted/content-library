@@ -8,7 +8,7 @@
 
 import { parse } from 'yaml';
 import { ancestors, findCycle, type Job } from './episode-pipeline-graph.pure';
-import type { Finding } from './episode-staging.pure';
+import { unless, type Finding } from './finding.pure';
 
 /** What exists around a pipeline: its skill's folder, the skill names, and a repo-path lookup. */
 export interface PipelineContext {
@@ -62,8 +62,13 @@ function field(key: string, valid: (value: unknown) => boolean, rule: string): F
   return { key, required: true, valid, rule };
 }
 
-function optional(fieldOf: Field, when = true): Field {
-  return { ...fieldOf, required: !when };
+function optional(fieldOf: Field): Field {
+  return { ...fieldOf, required: false };
+}
+
+/** The field, required only when the condition holds and optional otherwise. */
+function requiredWhen(condition: boolean, fieldOf: Field): Field {
+  return { ...fieldOf, required: condition };
 }
 
 const LIST = 'it must be a list of strings';
@@ -90,7 +95,7 @@ function agentFields(reviewer: boolean): Field[] {
     field('type', (value) => AGENT_TYPES.includes(value as string), 'it must be implementor or reviewer'),
     field('skills', isStringList, LIST),
     field('references', isStringList, LIST),
-    optional(field('rubric', isString, 'it must be a path'), !reviewer),
+    requiredWhen(reviewer, field('rubric', isString, 'it must be a path')),
     field('profile', (value) => value === null, 'it stays empty (~) for now'),
   ];
 }
@@ -150,7 +155,7 @@ function checkAgent(reader: Reader, agent: unknown): string[] {
   const rubric = reviewer && isString(agent.rubric) ? [agent.rubric] : [];
   return [
     ...checkMapping(where, agent, agentFields(reviewer)),
-    ...(strayRubric ? [`${where} is an implementor and has a rubric; only a reviewer has one.`] : []),
+    ...unless(!strayRubric, `${where} is an implementor and has a rubric; only a reviewer has one.`),
     ...stringsOf(agent.skills)
       .filter((skill) => !context.skills.includes(skill))
       .map((skill) => `${where} names the skill "${skill}", which does not exist.`),
@@ -186,7 +191,7 @@ function checkJobs(raw: readonly unknown[], context: PipelineContext): string[] 
   const ids = jobs.map(({ id }) => id);
   const cycle = findCycle(jobs, byId);
   return [
-    ...raw.flatMap((job, index) => (isMapping(job) ? [] : [`Job ${index + 1} must be a mapping.`])),
+    ...raw.flatMap((job, index) => unless(isMapping(job), `Job ${index + 1} must be a mapping.`)),
     ...mappings.flatMap((job, index) =>
       checkJob({ job: ids[index], where: `Job "${ids[index]}"`, byId, jobs, context }, job),
     ),

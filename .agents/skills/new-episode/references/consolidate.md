@@ -16,9 +16,9 @@ The shape is the `staging-dossier` rules': `npx mh query` on [the sample Dossier
 - **Speaker notes.** One ordered-list item per note, `**<header>** — <description> [n]`, nested `sources: [n] <title> — <URL>` and an optional `target:`. Every source comes from a research file.
 - **Segments.** One ordered-list item per spoken paragraph, `<title> — <keywords>`. The Manuscript writes exactly one paragraph per Segment, so this list sets the Slide's beat.
 
-## Done-checks
+## Done when
 
-`npm run check:docs` is clean, then `npx vitest run tests/docs/episode-staging.test.ts` passes. The cross-file checks need both the Dossier and the Manuscript, so until `distill` runs, the reviewer checks the Visual names against the folders above.
+The job's `checks:` in `assets/pipeline.yml` run by the check table in [SKILL.md](../SKILL.md#the-job-loop). The cross-file checks need both the Dossier and the Manuscript, so until `distill` runs, the reviewer checks the Visual names against the folders above.
 
 ## Rubric
 
