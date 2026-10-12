@@ -36,6 +36,7 @@ jobs:
       - { type: implementor, skills: [grilling], references: [docs/agents/grilling-voice.md], model: inherit }
   - id: research
     needs: [brief-grill]
+    isolation: worktree
     foreach: docs/episodes/demo/brief.md#research-questions
     before: [mh-query]
     outputs: [docs/episodes/demo/research/*/research.md]
@@ -47,6 +48,9 @@ jobs:
 `;
 
 const FILE = 'pipeline.yml';
+
+/** A template commit, as a per-run pipeline's `template` names it. */
+const SHA = '6426e9c5b0c0f0e1d2a3b4c5d6e7f8091a2b3c4d';
 
 function check(yaml: string, context: PipelineContext = CONTEXT): string[] {
   return checkPipeline(FILE, yaml, context).map(({ message }) => message);
@@ -80,11 +84,11 @@ describe('failure cases', () => {
       .replace('    retries: 2', '    retry: 2')
       .replace('skills: [grilling],', 'skill: [grilling],');
     const expected = [
-      'The pipeline has an unknown key "owner"; the keys are status, jobs.',
+      'The pipeline has an unknown key "owner"; the keys are status, jobs, template.',
       'Job "brief-grill", agent 1 lacks the key "skills".',
       'Job "brief-grill", agent 1 has an unknown key "skill"; the keys are type, skills, references, rubric, agent, model, session.',
       'Job "research" lacks the key "retries".',
-      'Job "research" has an unknown key "retry"; the keys are id, intent, needs, foreach, before, outputs, checks, retries, gate, agents.',
+      'Job "research" has an unknown key "retry"; the keys are id, intent, needs, wants, isolation, foreach, before, outputs, checks, retries, gate, agents.',
     ];
     // ACT
     const messages = check(yaml);
@@ -95,7 +99,7 @@ describe('failure cases', () => {
   it('rejects a needs that names no job', () => {
     // ARRANGE
     const yaml = PIPELINE.replace('needs: [brief-grill]', 'needs: [brief-gril]');
-    const unreachable = 'which job "brief-grill" writes, but "research" does not need it.';
+    const unreachable = 'which job "brief-grill" writes, but "research" neither needs nor wants it.';
     const expected = [
       'Job "research" needs "brief-gril", which is no job in the pipeline.',
       `Job "research" foreach reads "docs/episodes/demo/brief.md#research-questions", ${unreachable}`,
@@ -157,10 +161,11 @@ describe('failure cases', () => {
   it('rejects a staging file read before the job that writes it', () => {
     // ARRANGE
     const yaml = PIPELINE.replace('needs: [brief-grill]', 'needs: []');
-    const unreachable = 'which job "brief-grill" writes, but "research" does not need it.';
+    const unreachable = 'which job "brief-grill" writes, but "research" neither needs nor wants it.';
     const expected = [
       `Job "research" foreach reads "docs/episodes/demo/brief.md#research-questions", ${unreachable}`,
       `Job "research", agent 1 reads "docs/episodes/demo/brief.md", ${unreachable}`,
+      'Job "brief-grill" may run beside another job but lacks isolation: worktree; each parallel job checks and merges from its own worktree.',
     ];
     // ACT
     const messages = check(yaml);
@@ -309,7 +314,7 @@ describe('failure cases', () => {
 
   it('rejects a foreach and a glob output in a per-run pipeline, whose jobs name one file each', () => {
     // ARRANGE
-    const yaml = PIPELINE;
+    const yaml = PIPELINE.replace('status: draft', `status: draft\ntemplate: ${SHA}`);
     const expected = [
       'Job "research" has foreach; a per-run pipeline names one job per item, which customize-pipeline expands.',
       'Job "research" writes "docs/episodes/demo/research/*/research.md", a glob; a per-run pipeline names each file.',
@@ -331,13 +336,53 @@ describe('failure cases', () => {
     // ASSERT
     expect(messages).toEqual(expected);
   });
+
+  it('rejects a wants that names no job, a cycle through wants, and an isolation other than worktree', () => {
+    // ARRANGE
+    const yaml = PIPELINE.replace('    needs: []', '    needs: []\n    wants: [research]')
+      .replace('    needs: [brief-grill]', '    needs: [brief-grill]\n    wants: [retrieval]')
+      .replace('isolation: worktree', 'isolation: container');
+    const expected = [
+      'Job "research" has isolation "container"; it must be worktree.',
+      'Job "research" wants "retrieval", which is no job in the pipeline.',
+      'The needs graph has a cycle: brief-grill → research → brief-grill.',
+    ];
+    // ACT
+    const messages = check(yaml);
+    // ASSERT
+    expect(messages).toEqual(expected);
+  });
+
+  it('rejects a per-run pipeline without the template commit it was tailored from, and a template that names one', () => {
+    // ARRANGE
+    const perRun = PIPELINE.replace('    foreach: docs/episodes/demo/brief.md#research-questions\n', '').replace(
+      'research/*/research.md',
+      'research/AIE-0001__why-recall-degrades/research.md',
+    );
+    const template = PIPELINE.replace('status: draft', `status: draft\ntemplate: ${SHA}`);
+    const badSha = perRun.replace('status: draft', 'status: draft\ntemplate: main');
+    const missing = ['The pipeline lacks template; a per-run pipeline names the template commit it was tailored from.'];
+    const stray = [
+      'The pipeline has template; only a per-run pipeline names the template commit it was tailored from.',
+    ];
+    const notSha = ['The pipeline has template "main"; it must be a commit sha.'];
+    // ACT
+    const governs = (): boolean => true;
+    const perRunMessages = check(perRun, { ...CONTEXT, perRun: true, governs });
+    const templateMessages = check(template);
+    const badShaMessages = check(badSha, { ...CONTEXT, perRun: true, governs });
+    // ASSERT
+    expect(perRunMessages).toEqual(missing);
+    expect(templateMessages).toEqual(stray);
+    expect(badShaMessages).toEqual(notSha);
+  });
 });
 
 describe('edge cases', () => {
   it('accepts a needs graph with a diamond, which is no cycle', () => {
     // ARRANGE
     const job = (id: string, needs: string): string =>
-      `  - { id: ${id}, needs: [${needs}], outputs: [], checks: [], retries: 0, agents: [{ type: implementor, skills: [], references: [], model: inherit }] }`;
+      `  - { id: ${id}, needs: [${needs}], isolation: worktree, outputs: [], checks: [], retries: 0, agents: [{ type: implementor, skills: [], references: [], model: inherit }] }`;
     const yaml = ['status: approved', 'jobs:', job('a', ''), job('b', 'a'), job('c', 'a'), job('d', 'b, c'), ''].join(
       '\n',
     );
@@ -353,6 +398,7 @@ describe('edge cases', () => {
       [
         '  - id: consolidate',
         '    needs: [research]',
+        '    isolation: worktree',
         '    foreach: docs/episodes/demo/brief.md#research-questions',
         '    before: [mh-query]',
         '    outputs: [docs/episodes/demo/dossier.md]',
@@ -414,5 +460,26 @@ describe('edge cases', () => {
     const findings = checkPipeline(FILE, yaml, CONTEXT);
     // ASSERT
     expect(findings.map(({ kind }) => kind)).toEqual(expectedKinds);
+  });
+  it('resolves a staging file the job reads through a wants edge, as through a needs edge', () => {
+    // ARRANGE
+    const yaml = PIPELINE.concat(
+      [
+        '  - id: write-dossier',
+        '    needs: [brief-grill]',
+        '    wants: [research]',
+        '    before: [mh-query]',
+        '    outputs: [docs/episodes/demo/dossier.md]',
+        '    checks: []',
+        '    retries: 1',
+        '    agents:',
+        '      - { type: implementor, skills: [], references: [docs/episodes/demo/research/*/research.md], model: inherit }',
+        '',
+      ].join('\n'),
+    );
+    // ACT
+    const findings = checkPipeline(FILE, yaml, CONTEXT);
+    // ASSERT
+    expect(findings).toEqual([]);
   });
 });

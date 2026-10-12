@@ -4,15 +4,24 @@
 #
 # Schema (checked by src/lib/episode-pipeline.pure.ts in `npm run verify`):
 #   status    draft | approved
+#   template  per-run only: the feat/89-new-episode commit the pipeline was tailored
+#             from; the template is not merged into the Episode branch again until
+#             open-pr is done
 #   jobs      run once every job in `needs` is done; independent jobs may run in parallel
 #     intent    optional; the job's task as a prompt, for a job no reference describes
-#     needs     job ids this job waits for
+#     needs     job ids this job waits for; a blocked one blocks this job too
+#     wants     optional; job ids this job waits for, passed or blocked: a blocked
+#               one does not block it, and its implementor learns which blocked
+#     isolation optional; `worktree`: the job's agents and checks work in their own
+#               worktree on episode/<slug>--<job id>, merged back only on a pass.
+#               Required on a job that may run beside another or has foreach,
+#               unless all its agents run in the orchestrator session
 #     foreach   template only; `<file>#<heading>`: customize-pipeline writes one job per list item
 #     before    what runs before the implementor writes: `mh-query`, required when a job
 #               writes markdown, has the implementor run `npx mh query <path>` on every
 #               .md output and follow its intents; the reviewer runs it as its baseline
 #     outputs   full repo paths in the staging folder docs/episodes/<slug>/; a job reading
-#               one must need its writer; a rule must govern every .md one
+#               one must need or want its writer; a rule must govern every .md one
 #     checks    cheapest first; names and commands in SKILL.md's job-loop check table
 #     retries   reviewer failures sent back before this branch of the pipeline stops
 #     gate      optional; `human` stops the run until Han approves the output
@@ -92,6 +101,7 @@ jobs:
 
   - id: write-research
     needs: [retrieval]
+    isolation: worktree
     foreach: docs/episodes/<slug>/brief.md#research-questions
     before: [mh-query]
     outputs: [docs/episodes/<slug>/research/*/research.md]
@@ -108,8 +118,11 @@ jobs:
         rubric: references/write-research.md#rubric
         model: opus
 
+  # Wants the research rather than needing it: a blocked question leaves a
+  # gap the Dossier works around, instead of blocking the Episode.
   - id: write-dossier
-    needs: [write-research]
+    needs: [retrieval]
+    wants: [write-research]
     before: [mh-query]
     outputs: [docs/episodes/<slug>/dossier.md]
     checks: [mh, vitest]

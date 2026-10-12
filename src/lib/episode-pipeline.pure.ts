@@ -15,7 +15,7 @@ import {
   SPAWNING_SKILLS,
   TOP_FIELDS,
 } from './episode-pipeline-fields.pure';
-import { ancestors, findCycle, type Job } from './episode-pipeline-graph.pure';
+import { ancestors, concurrentJobs, findCycle, waitsFor, type Job } from './episode-pipeline-graph.pure';
 import { unless, type Finding } from './finding.pure';
 import { checkMapping, isMapping, isString, stringsOf, type Mapping } from './mapping-fields.pure';
 
@@ -67,7 +67,9 @@ function checkRead({ job, where, byId, jobs, context }: Reader, reference: strin
   if (writers.length > 0) {
     const upstream = ancestors(job, byId);
     if (writers.some((writer) => writer === job || upstream.has(writer))) return [];
-    return [`${where} reads "${reference}", which job "${writers[0]}" writes, but "${job}" does not need it.`];
+    return [
+      `${where} reads "${reference}", which job "${writers[0]}" writes, but "${job}" neither needs nor wants it.`,
+    ];
   }
   const resolved = SKILL_PREFIXES.some((prefix) => target.startsWith(prefix))
     ? `${context.skillFolder}/${target}`
@@ -146,12 +148,36 @@ function checkJob(reader: Reader, job: Mapping): string[] {
         (output) =>
           `${where} writes "${output}", which no markdown-harness rule governs; its implementor would query no intents.`,
       ),
-    ...stringsOf(job.needs)
-      .filter((need) => !byId.has(need))
-      .map((need) => `${where} needs "${need}", which is no job in the pipeline.`),
+    ...(['needs', 'wants'] as const).flatMap((edge) =>
+      stringsOf(job[edge])
+        .filter((other) => !byId.has(other))
+        .map((other) => `${where} ${edge} "${other}", which is no job in the pipeline.`),
+    ),
     ...foreach.flatMap((path) => checkRead({ ...reader, where: `${where} foreach` }, path)),
     ...agents.flatMap((agent, at) => checkAgent({ ...reader, where: `${where}, agent ${at + 1}` }, agent)),
   ];
+}
+
+/** Whether every agent of a job runs in the orchestrator's session, on the integration branch. */
+function inOrchestrator(job: Mapping): boolean {
+  const agents = Array.isArray(job.agents) ? (job.agents as unknown[]) : [];
+  return agents.length > 0 && agents.every((agent) => isMapping(agent) && agent.session === 'orchestrator');
+}
+
+/**
+ * A job that may run beside another, or fans out by `foreach`, works in its own worktree, so parallel jobs never
+ * fail each other's repo-wide checks; one run wholly in the orchestrator's session stays on the integration branch.
+ * `mappings` and `jobs` are the same jobs in the same order: the raw mapping and its graph view.
+ */
+function checkIsolation(mappings: readonly Mapping[], jobs: readonly Job[], byId: ReadonlyMap<string, Job>): string[] {
+  const concurrent = concurrentJobs(jobs, byId);
+  return mappings
+    .filter((job, at) => concurrent.has(jobs[at].id) || Object.hasOwn(job, 'foreach'))
+    .filter((job) => job.isolation !== 'worktree' && !inOrchestrator(job))
+    .map(
+      (job) =>
+        `Job "${String(job.id)}" may run beside another job but lacks isolation: worktree; each parallel job checks and merges from its own worktree.`,
+    );
 }
 
 function checkJobs(raw: readonly unknown[], context: PipelineContext): string[] {
@@ -159,11 +185,13 @@ function checkJobs(raw: readonly unknown[], context: PipelineContext): string[] 
   const jobs = mappings.map((job): Job => ({
     id: String(job.id),
     needs: stringsOf(job.needs),
+    wants: stringsOf(job.wants),
     outputs: stringsOf(job.outputs),
   }));
   const byId = new Map(jobs.map((job) => [job.id, job]));
   const ids = jobs.map(({ id }) => id);
   const cycle = findCycle(jobs, byId);
+  const brokenEdge = jobs.some(({ id }) => waitsFor(id, byId).some((other) => !byId.has(other)));
   return [
     ...raw.flatMap((job, index) => unless(isMapping(job), `Job ${index + 1} must be a mapping.`)),
     ...mappings.flatMap((job, index) =>
@@ -173,6 +201,22 @@ function checkJobs(raw: readonly unknown[], context: PipelineContext): string[] 
       (id) => `The job id "${id}" appears twice; job ids are unique.`,
     ),
     ...(cycle === null ? [] : [`The needs graph has a cycle: ${cycle.join(' → ')}.`]),
+    ...(cycle === null && !brokenEdge ? checkIsolation(mappings, jobs, byId) : []),
+  ];
+}
+
+/** A per-run pipeline names the template commit it was tailored from; the template names none. */
+function checkTemplate(document: Mapping, context: PipelineContext): string[] {
+  const named = Object.hasOwn(document, 'template');
+  return [
+    ...unless(
+      named || !context.perRun,
+      'The pipeline lacks template; a per-run pipeline names the template commit it was tailored from.',
+    ),
+    ...unless(
+      !named || context.perRun,
+      'The pipeline has template; only a per-run pipeline names the template commit it was tailored from.',
+    ),
   ];
 }
 
@@ -199,6 +243,7 @@ export function checkPipeline(file: string, yaml: string, context: PipelineConte
         ? ['The pipeline must be a mapping with status and jobs.']
         : [
             ...checkMapping('The pipeline', document, TOP_FIELDS),
+            ...checkTemplate(document, context),
             ...(Array.isArray(document.jobs) ? checkJobs(document.jobs, context) : []),
           ];
   return messages.map((message): Finding => ({ kind: 'pipeline', file, message }));

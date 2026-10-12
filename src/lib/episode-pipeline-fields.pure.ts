@@ -15,6 +15,8 @@ const SESSIONS: readonly string[] = ['subagent', 'orchestrator'];
 export const SPAWNING_SKILLS = ['implement-spec', 'code-review'];
 /** What a job's `before` may run ahead of its implementor. */
 const BEFORE_STEPS: readonly string[] = ['mh-query'];
+/** Where a job's agents work: `worktree` gives the job its own worktree, merged back on a pass. */
+const ISOLATIONS: readonly string[] = ['worktree'];
 /** The done-checks a job may name, cheapest first. */
 export const CHECKS = ['mh', 'vitest', 'verify', 'build', 'test:build', 'visual-check'];
 /** Path prefixes that resolve inside the new-episode skill's folder rather than the repo root. */
@@ -30,12 +32,23 @@ function oneOf(values: readonly string[]): string {
 export const TOP_FIELDS = [
   field('status', (value) => value === 'draft' || value === 'approved', 'it must be draft or approved'),
   field('jobs', Array.isArray, 'it must be a list of jobs'),
+  optional(
+    field(
+      'template',
+      (value) => typeof value === 'string' && /^[0-9a-f]{7,40}$/.test(value),
+      'it must be a commit sha',
+    ),
+  ),
 ];
 
 export const JOB_FIELDS = [
   field('id', isString, 'it must be a name'),
   optional(field('intent', isString, 'it must be the task, written as a prompt')),
   field('needs', isStringList, LIST),
+  optional(field('wants', isStringList, LIST)),
+  optional(
+    field('isolation', (value) => ISOLATIONS.includes(value as string), `it must be ${ISOLATIONS.join(' or ')}`),
+  ),
   optional(field('foreach', isString, 'it must be a path')),
   optional(
     field(

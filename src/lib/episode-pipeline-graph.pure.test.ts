@@ -1,8 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { ancestors, findCycle, type Job } from './episode-pipeline-graph.pure';
+import { ancestors, concurrentJobs, findCycle, type Job } from './episode-pipeline-graph.pure';
 
-function graph(edges: Record<string, string[]>): { jobs: Job[]; byId: Map<string, Job> } {
-  const jobs = Object.entries(edges).map(([id, needs]): Job => ({ id, needs, outputs: [] }));
+function graph(
+  edges: Record<string, string[]>,
+  wanted: Record<string, string[]> = {},
+): { jobs: Job[]; byId: Map<string, Job> } {
+  const jobs = Object.entries(edges).map(([id, needs]): Job => ({ id, needs, wants: wanted[id] ?? [], outputs: [] }));
   return { jobs, byId: new Map(jobs.map((job) => [job.id, job])) };
 }
 
@@ -15,6 +18,30 @@ describe('success cases', () => {
     const upstream = [...ancestors('c', byId)].sort();
     // ASSERT
     expect(upstream).toEqual(expected);
+  });
+
+  it('waits for a wanted job as for a needed one, and finds the jobs that may run at the same time', () => {
+    // ARRANGE
+    const { jobs, byId } = graph(
+      {
+        brief: [],
+        retrieval: ['brief'],
+        q1: ['retrieval'],
+        q2: ['retrieval'],
+        retire: ['q1'],
+        dossier: ['retrieval'],
+        pr: ['dossier', 'retire'],
+      },
+      { dossier: ['q1', 'q2'] },
+    );
+    const expectedUpstream = ['brief', 'q1', 'q2', 'retrieval'];
+    const expectedConcurrent = ['dossier', 'q1', 'q2', 'retire'];
+    // ACT
+    const upstream = [...ancestors('dossier', byId)].sort();
+    const concurrent = [...concurrentJobs(jobs, byId)].sort();
+    // ASSERT
+    expect(upstream).toEqual(expectedUpstream);
+    expect(concurrent).toEqual(expectedConcurrent);
   });
 });
 

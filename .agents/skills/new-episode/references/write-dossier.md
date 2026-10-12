@@ -6,7 +6,7 @@ Output: `docs/episodes/<slug>/dossier.md`, the Dossier. It fixes the Episode's s
 
 Chain backwards from the Brief. Start at the `Learning goal` and the `Actionables`: for each actionable, decide which Slides a viewer needs to be able to take it, then order those Slides along the `Red thread` into Sections, with the `Hook` opening the first. When the Brief has Threads, alternate A and B thread Slides. Material that serves no actionable stays out, or goes under an extra heading without a slug.
 
-Read the research the run produced and any file retrieval reused. Write in Han's voice by the human-profile guides in your references; a guide that does not exist yet is skipped.
+Read the research the run produced and any file retrieval reused. The orchestrator names each research job that blocked: write no Slide that rests on its question, and add `Research gap: <job id> — <what the Episode leaves out>` to the run-log entry's Notes. Write in Han's voice by the human-profile guides in your references; a guide that does not exist yet is skipped.
 
 The shape is the `staging-dossier` rules': `npx mh query` on [the sample Dossier](../assets/sample-episode/dossier.md) prints every intent, and the sample shows them met.
 
@@ -23,3 +23,4 @@ The job's `checks:` in `assets/pipeline.yml` run by the check table in [SKILL.md
 ## Rubric
 
 1. Every Brief actionable is backed by at least one Slide, named by its slug.
+2. Every instruction the Brief gives about how to tell the story is followed.
