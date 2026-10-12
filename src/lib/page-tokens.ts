@@ -73,7 +73,8 @@ export interface TokenSet {
   tokens: readonly Token[];
 }
 
-function carriers(scope: Scope, token: Token): HTMLElement[] {
+/** The elements that declare the token inline: the root for a global token, the matching elements of the Slide otherwise. */
+export function carriers(scope: Scope, token: Token): HTMLElement[] {
   if (scope.kind === 'global') return [document.documentElement];
   const slide = slideElement(scope.id);
   if (!slide || !token.target) return [];

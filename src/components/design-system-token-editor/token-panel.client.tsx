@@ -35,6 +35,7 @@ function GroupSection({ group, scope, theme, edits, onEdit }: ListProps & { grou
           return (
             <TokenRow
               key={key}
+              scope={scope}
               token={token}
               theme={theme}
               value={edits[key] ?? token[theme]}
