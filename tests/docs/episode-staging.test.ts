@@ -7,6 +7,7 @@ import {
   unsettledBriefSections,
   type KnownVisuals,
 } from '@/lib/episode-staging.pure';
+import { checkResearchFolders, researchCategories } from '@/lib/research-folder.pure';
 import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -96,6 +97,25 @@ function llmWikiResearch(): Record<string, string> {
       .filter(([file]) => file.endsWith('/research.md'))
       .map(([file, text]) => [`research/${file}`, text]),
   );
+}
+
+/**
+ * Every research folder in the repo, as a repo path: those on disk in each
+ * staging folder and in the llm-wiki, and those a per-run pipeline will write.
+ */
+function researchFolders(): string[] {
+  const research = [...Object.values(stagingFolders()), LLM_WIKI].map((folder) => path.join(folder, 'research'));
+  const onDisk = research
+    .filter((folder) => existsSync(folder))
+    .flatMap((folder) =>
+      readdirSync(folder, { withFileTypes: true })
+        .filter((entry) => entry.isDirectory())
+        .map(({ name }) => path.relative(ROOT, path.join(folder, name))),
+    );
+  const planned = Object.values(perRunPipelines()).flatMap((yaml) =>
+    [...yaml.matchAll(/^\s+outputs: \[(\S+)\/research\.md\]$/gm)].map((match) => match[1]),
+  );
+  return [...onDisk, ...planned];
 }
 
 /** The template's staging folder: `<slug>` stands for the Episode a tailored copy names. */
@@ -260,6 +280,16 @@ describe('success cases', () => {
     // ASSERT
     expect(briefs.length).toBeGreaterThan(0);
     expect(unsettled).toEqual([]);
+  });
+
+  it('finds every research folder named by its category, number and question, each ID used once', () => {
+    // ARRANGE
+    const categories = researchCategories(readFileSync(path.join(ROOT, 'GLOSSARY.md'), 'utf8'));
+    // ACT
+    const findings = checkResearchFolders(researchFolders(), categories);
+    // ASSERT
+    expect(categories.length).toBeGreaterThan(0);
+    expect(findings).toEqual([]);
   });
 
   it('finds the runs CSV header exact', () => {

@@ -31,7 +31,7 @@ Han reworded the Red thread at the gate; the agent's candidate framed the window
 
 ### Output
 
-- `research/instruction-recall-by-position/research.md`, `status` not applicable.
+- `research/AIE-0000__why-recall-degrades-with-position/research.md`, `status` not applicable.
 
 ### Checks
 

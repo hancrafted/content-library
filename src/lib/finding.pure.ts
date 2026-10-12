@@ -5,7 +5,15 @@
 
 /** What a check found wrong, keyed by the rule it broke. */
 export type FindingKind =
-  'spine' | 'visual' | 'speaker-note' | 'segments' | 'feedback' | 'research-index' | 'runs-header' | 'pipeline';
+  | 'spine'
+  | 'visual'
+  | 'speaker-note'
+  | 'segments'
+  | 'feedback'
+  | 'research-index'
+  | 'runs-header'
+  | 'pipeline'
+  | 'research-folder';
 
 export interface Finding {
   kind: FindingKind;

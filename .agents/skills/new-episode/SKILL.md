@@ -26,13 +26,19 @@ Run the `brief-grill` job by [`references/brief-grill.md`](references/brief-gril
 
 _Done when_ `docs/episodes/<slug>/brief.md` has `status: approved`, committed by Han with `Gate: approved brief`.
 
-### 3. Tailor the pipeline
+### 3. Categorize the research
 
-Run the `customize-pipeline` job by [`references/customize-pipeline.md`](references/customize-pipeline.md). It is a human gate: stop after the `Gate: draft pipeline` commit.
+Run the template's `categorize-research` job by [the job loop](#the-job-loop): its `intent` is the implementor's prompt. It returns one research folder name per research question and adds any new category to `GLOSSARY.md`. Keep the names for the next step; save them to `.scratch/<slug>/research-folders.md` when the session may end before it. No gate: Han sees the names and the glossary diff at the pipeline gate.
+
+_Done when_ every research question has a folder name and `npm run check:docs` is clean.
+
+### 4. Tailor the pipeline
+
+Run the `customize-pipeline` job by [`references/customize-pipeline.md`](references/customize-pipeline.md), passing it the folder names from step 3. It is a human gate: stop after the `Gate: draft pipeline` commit.
 
 _Done when_ `docs/episodes/<slug>/pipeline.yml` has `status: approved`, committed by Han with `Gate: approved pipeline`.
 
-### 4. Refuse or start
+### 5. Refuse or start
 
 Start only when all of these hold; otherwise name each one that fails to Han and stop:
 
@@ -45,13 +51,13 @@ Then write the todo list: one todo per job of `pipeline.yml` after `customize-pi
 
 _Done when_ the todo list holds every remaining job.
 
-### 5. Run the jobs
+### 6. Run the jobs
 
 Take every todo whose `needs` are all done and run it by [the job loop](#the-job-loop); independent todos run in parallel as background subagents. A blocked job blocks every job that `needs` it, directly or through another job; every other job carries on.
 
 _Done when_ every todo is done or blocked, and each one has its run-log entry.
 
-### 6. Serve and open the PR
+### 7. Serve and open the PR
 
 Run the `open-pr` job by [`references/open-pr.md`](references/open-pr.md), even when a branch blocked: the PR checklist is where Han learns about it.
 

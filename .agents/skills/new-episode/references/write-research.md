@@ -1,12 +1,11 @@
 # write-research
 
-Output: `docs/episodes/<slug>/research/<question-slug>/research.md`, one per research question, each written by its own implementor. Reusable by any later Episode, so it stands on its own.
+Output: `docs/episodes/<slug>/research/<category>-<####>__<question-slug>/research.md`, the folder named by `categorize-research`, one per research question, each written by its own implementor. Reusable by any later Episode, so it stands on its own.
 
 ## Prompt
 
-Answer one research question from the Brief with the `research` skill. Its method holds; the file's location and shape are the `research` rule's: `npx mh query` on [the sample](../assets/sample-episode/research/instruction-recall-by-position/research.md) prints the intent of every field and heading.
+Answer one research question from the Brief with the `research` skill. Its method holds; the file's location and shape are the `research` rule's: `npx mh query` on [the sample](../assets/sample-episode/research/AIE-0000__why-recall-degrades-with-position/research.md) prints the intent of every field and heading.
 
-- `<question-slug>` names the subject in kebab case, not the Episode.
 - The h1 is the research question as a _why_ question scoped to a subject matter; the frontmatter `question` keeps the Brief's wording.
 - `Context` says what kind of claim the answer supports, naming no Episode: the next Episode that reuses this file has a different title.
 - `Answer` is 2–5 sentences a script could quote.
