@@ -255,3 +255,45 @@ Each research job and its output now carry the categorize-research name: the job
 ### Notes
 
 `template: 5b77640` records the template commit; it is the run's last template merge, and the template stays frozen until open-pr is done. The six research jobs and retire-prior-research carry `isolation: worktree`, because they may run at the same time. write-dossier now needs only retrieval and wants the six research jobs, so a blocked question becomes a `Research gap:` instead of blocking the Episode. It also wants retire-prior-research: that job repoints `amnesiac-freelancer.ts` and the amnesiac-freelancer script, which the Dossier reads, and the want orders it first without letting its block stop the Dossier. With that order no later job runs beside it, so none of them needs a worktree. Every other tailoring is unchanged.
+
+## retrieval · 2026-10-12T21:49:04Z
+
+### Inputs
+
+- `.agents/skills/new-episode/references/retrieval.md`: the job's prompt and its outcomes `reuse`, `extend` and `new`.
+- `brief.md`: Research questions 1 to 6.
+- `pipeline.yml`: the `write-research-*` job of each question and its references.
+- `docs/research/ai-onboarding-freelancer.md` and `docs/research/ai-amnesia-mechanics.md`, read in full. Both were researched 2026-10-08 and have no `stale_after`.
+- `docs/llm-wiki/index.md`: does not exist.
+
+### Output
+
+- Question 1 (others frame AI as onboarding a colleague): `extend docs/research/ai-onboarding-freelancer.md`, for `write-research-ai-as-onboarding-a-colleague`.
+- Question 2 (individuals miss the productivity boost): `new`, for `write-research-individual-ai-productivity-gap`.
+- Question 3 (organizations miss the productivity boost): `new`, for `write-research-organizational-ai-productivity-gap`.
+- Question 4 (richer context and a clearer brief improve output): `extend docs/research/ai-onboarding-freelancer.md` and `extend docs/research/ai-amnesia-mechanics.md`, for `write-research-context-and-brief-improve-ai-output`.
+- Question 5 (unchecked AI work carries risk): `extend docs/research/ai-onboarding-freelancer.md`, for `write-research-risks-of-unchecked-ai-output`.
+- Question 6 (delegation as a management discipline, versus the novice boost): `new`, for `write-research-ai-delegation-as-management-skill`.
+- No file is written, and no question is `reuse`, so all six research jobs run.
+
+### Checks
+
+- `mh check`: fail on the orchestrator's first write of this entry, because `Output` held prose beside its list; pass once the prose became list items. The implementor's decisions were unchanged.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 29 s · 55931 tokens
+
+### Notes
+
+The llm-wiki index does not exist yet, so the job judged each question against the two `docs/research/` files, as the customize-pipeline entry set. Neither file has `stale_after`, so neither can be fresh and none can be `reuse`.
+
+Question 1 is `extend`: `ai-onboarding-freelancer.md` Finding 1 sources the new-employee frame to Anthropic's prompting guidance, but the question asks for more voices proposing the lens, Matt Pocock and the consultant's workshop among them. Point the implementor at Finding 1, Finding 8 (Nygard's ADRs written for the later newcomer), "Where the metaphor breaks" items 1 to 5 and the Mapping table; `ai-amnesia-mechanics.md` 1.8 (Anthropic's shift-work framing) is an extra source.
+
+Question 4 is `extend` on both files: `ai-onboarding-freelancer.md` argues from vendor guidance with no measured effect on output; `ai-amnesia-mechanics.md` measures recall degrading as input grows, not a richer brief improving output. The new file adds evidence of that improvement. Point it at `ai-onboarding-freelancer.md` Findings 1 to 5, and `ai-amnesia-mechanics.md` 1.2, 2.1, 2.2, 2.3, 2.5, 3.1, 3.2 and 4.3.
+
+Question 5 is `extend`: Findings 5 and 7b and "Where the metaphor breaks" item 4 say the model can declare victory without checking, and a way to verify is the one artefact that does not rest on prose. That is vendor guidance, not evidence of real harm, which the new file adds. Point it also at the Mapping table rows "Definition of done", "Checklist before handoff" and "Second pair of eyes review".
+
+Questions 2, 3 and 6 are `new`: neither file covers the productivity gap, the novice-versus-senior evidence or delegation as management.
+
+retire-prior-research deletes both old files after the three extending jobs pass, so each new file carries the old Findings it builds on, not only a citation. `ai-onboarding-freelancer.md` marks Finding 9 (Gawande's checklists) UNVERIFIED behind a paywall, calls "freelance practice" a convention with no verified source, and flags its "amnesia" wording as absent from the Anthropic page: the Question 5 implementor verifies the first two before relying on them and does not quote the third.
