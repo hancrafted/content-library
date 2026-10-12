@@ -5,9 +5,11 @@
 # Schema (checked by src/lib/episode-pipeline.pure.ts in `npm run verify`):
 #   status    draft | approved
 #   jobs      run once every job in `needs` is done; independent jobs may run in parallel
+#     intent    optional; the job's task as a prompt, for a job no reference describes
 #     needs     job ids this job waits for
 #     foreach   optional; `<file>#<heading>` fans the job out once per list item
-#     outputs   staging paths the job writes; a job reading one must need its writer
+#     outputs   staging paths the job writes; a job reading one must need its writer;
+#               a rule must govern every .md one, whose intents the implementor queries
 #     checks    cheapest first; names and commands in SKILL.md's job-loop check table
 #     retries   reviewer failures sent back before this branch of the pipeline stops
 #     gate      optional; `human` stops the run until Han approves the output
@@ -18,7 +20,11 @@
 #                   skill's folder, a job output in the staging folder, anything
 #                   else at the repo root
 #       rubric      reviewers only: `<file>#<heading>` holding the pass/fail lines
-#       profile     ~ for now; later names an agent profile (model, tools, persona)
+#       agent       optional; the Claude Code agent type to spawn, general-purpose when omitted
+#       model       opus | sonnet | haiku | inherit (the orchestrator's model); for an
+#                   orchestrator agent, the model of the subagents its skill spawns
+#       session     optional; subagent (default) | orchestrator, required for a skill that
+#                   spawns subagents (implement-spec, code-review) or a job that talks to Han
 status: draft
 jobs:
   - id: brief-grill
@@ -31,7 +37,8 @@ jobs:
       - type: implementor
         skills: [brief-grill, grilling, handoff]
         references: [references/brief-grill.md]
-        profile: ~
+        model: inherit
+        session: orchestrator
 
   - id: pipeline-tailor
     needs: [brief-grill]
@@ -43,7 +50,8 @@ jobs:
       - type: implementor
         skills: []
         references: [references/pipeline-tailor.md, assets/pipeline.yml, brief.md]
-        profile: ~
+        model: inherit
+        session: orchestrator
 
   # Matches each research question against the llm-wiki index and records in
   # the run log which questions remain unanswered.
@@ -56,7 +64,7 @@ jobs:
       - type: implementor
         skills: []
         references: [references/research-match.md, brief.md, docs/llm-wiki/index.md]
-        profile: ~
+        model: inherit
 
   - id: research
     needs: [research-match]
@@ -68,12 +76,12 @@ jobs:
       - type: implementor
         skills: [research]
         references: [references/research.md, brief.md, run-log.md]
-        profile: ~
+        model: sonnet
       - type: reviewer
         skills: []
         references: [references/research.md]
         rubric: references/research.md#rubric
-        profile: ~
+        model: opus
 
   - id: consolidate
     needs: [research]
@@ -90,12 +98,12 @@ jobs:
           - docs/profile/han/storytelling-guide.md
           - docs/profile/han/tone-guide.md
           - docs/profile/han/mental-model-guide.md
-        profile: ~
+        model: inherit
       - type: reviewer
         skills: []
         references: [references/consolidate.md, brief.md]
         rubric: references/consolidate.md#rubric
-        profile: ~
+        model: opus
 
   - id: distill
     needs: [consolidate]
@@ -112,12 +120,12 @@ jobs:
           - docs/profile/han/storytelling-guide.md
           - docs/profile/han/tone-guide.md
           - docs/profile/han/mental-model-guide.md
-        profile: ~
+        model: inherit
       - type: reviewer
         skills: []
         references: [references/distill.md, brief.md, docs/profile/han/tone-guide.md]
         rubric: references/distill.md#rubric
-        profile: ~
+        model: opus
 
   # Writes no staging file: its output is a spec issue with one sub-issue per Section.
   - id: spec
@@ -129,12 +137,12 @@ jobs:
       - type: implementor
         skills: [to-spec, to-tickets]
         references: [references/spec.md, brief.md, dossier.md, manuscript.md]
-        profile: ~
+        model: inherit
       - type: reviewer
         skills: []
         references: [references/spec.md, dossier.md, manuscript.md]
         rubric: references/spec.md#rubric
-        profile: ~
+        model: opus
 
   # Writes the Episode under src/, outside the staging folder.
   - id: implement
@@ -144,14 +152,16 @@ jobs:
     retries: 2
     agents:
       - type: implementor
-        skills: [implement-spec, visual-check]
+        skills: [implement-spec]
         references: [references/implement.md, dossier.md, manuscript.md]
-        profile: ~
+        model: opus
+        session: orchestrator
       - type: reviewer
-        skills: [visual-check]
+        skills: [code-review]
         references: [references/implement.md, dossier.md, manuscript.md]
         rubric: references/implement.md#rubric
-        profile: ~
+        model: opus
+        session: orchestrator
 
   - id: serve-and-pr
     needs: [implement]
@@ -162,4 +172,4 @@ jobs:
       - type: implementor
         skills: [pr]
         references: [references/serve-and-pr.md, run-log.md]
-        profile: ~
+        model: sonnet

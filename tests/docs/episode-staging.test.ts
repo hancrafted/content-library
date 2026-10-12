@@ -6,6 +6,7 @@ import {
   unsettledBriefSections,
   type KnownVisuals,
 } from '@/lib/episode-staging.pure';
+import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -96,13 +97,29 @@ function llmWikiResearch(): Record<string, string> {
   );
 }
 
-/** What a pipeline may name: the skills under `.agents/skills/` and the files in the repo. */
-function pipelineContext(pending: readonly string[]): PipelineContext {
+/** A staging folder for the template, whose outputs belong to no Episode yet. */
+const TEMPLATE_STAGING = 'docs/episodes/any-episode';
+
+/** Whether a markdown-harness rule governs a repo path, by `mh query`, which also resolves a path not written yet. */
+function governed(file: string): boolean {
+  const output = execFileSync(path.join(ROOT, 'node_modules/.bin/mh'), ['query', file], {
+    cwd: ROOT,
+    encoding: 'utf8',
+  });
+  return (JSON.parse(output) as { result: { governance: string } }).result.governance === 'governed';
+}
+
+/**
+ * What a pipeline may name: the skills under `.agents/skills/`, the files in
+ * the repo, and the outputs a rule governs inside its staging folder.
+ */
+function pipelineContext(pending: readonly string[], staging: string): PipelineContext {
   const skills = readdirSync(SKILLS, { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
     .map(({ name }) => name);
   const exists = (file: string): boolean => existsSync(path.join(ROOT, file));
-  return { skillFolder: SKILL_FOLDER, skills, exists, pending };
+  const governs = (output: string): boolean => governed(`${staging}/${output}`);
+  return { skillFolder: SKILL_FOLDER, skills, exists, governs, pending };
 }
 
 /** Every per-run pipeline, by the path a failure names. */
@@ -178,7 +195,7 @@ describe('success cases', () => {
     const file = path.relative(ROOT, TEMPLATE);
     const yaml = readFileSync(TEMPLATE, 'utf8');
     // ACT
-    const findings = checkPipeline(file, yaml, pipelineContext(PENDING));
+    const findings = checkPipeline(file, yaml, pipelineContext(PENDING, TEMPLATE_STAGING));
     // ASSERT
     expect(findings).toEqual([]);
   });
@@ -187,7 +204,9 @@ describe('success cases', () => {
     // ARRANGE
     const pipelines = Object.entries(perRunPipelines());
     // ACT
-    const findings = pipelines.flatMap(([file, yaml]) => checkPipeline(file, yaml, pipelineContext([])));
+    const findings = pipelines.flatMap(([file, yaml]) =>
+      checkPipeline(file, yaml, pipelineContext([], path.dirname(file))),
+    );
     // ASSERT
     expect(findings).toEqual([]);
   });
@@ -228,6 +247,20 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('checks the template against the real markdown-harness rules, so an ungoverned markdown output fails', () => {
+    // ARRANGE
+    const yaml = readFileSync(TEMPLATE, 'utf8').replace('outputs: [dossier.md]', 'outputs: [dosier.md]');
+    const expected = [
+      'Job "consolidate" writes "dosier.md", which no markdown-harness rule governs; its implementor would query no intents.',
+    ];
+    // ACT
+    const messages = checkPipeline('pipeline.yml', yaml, pipelineContext(PENDING, TEMPLATE_STAGING)).map(
+      ({ message }) => message,
+    );
+    // ASSERT
+    expect(messages).toEqual(expect.arrayContaining(expected));
+  });
+
   it('checks the template against the real skills, so a misspelled skill fails', () => {
     // ARRANGE
     const yaml = readFileSync(TEMPLATE, 'utf8').replace(
@@ -236,7 +269,9 @@ describe('failure cases', () => {
     );
     const expected = ['Job "spec", agent 1 names the skill "to-ticket", which does not exist.'];
     // ACT
-    const messages = checkPipeline('pipeline.yml', yaml, pipelineContext(PENDING)).map(({ message }) => message);
+    const messages = checkPipeline('pipeline.yml', yaml, pipelineContext(PENDING, TEMPLATE_STAGING)).map(
+      ({ message }) => message,
+    );
     // ASSERT
     expect(messages).toEqual(expected);
   });

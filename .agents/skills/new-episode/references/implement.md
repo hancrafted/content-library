@@ -4,11 +4,16 @@ Output: the Episode in `src/`, on the integration branch `episode/<slug>`. The h
 
 ## Prompt
 
-The implementor is this session: `implement-spec` dispatches subagents of its own, which a subagent cannot. Call the Skill tool with `implement-spec` on the spec issue, with these changes to its steps:
+Both agents run with `session: orchestrator`: `implement-spec` and `code-review` dispatch subagents of their own, which a subagent cannot. Call the Skill tool with `implement-spec` on the spec issue, its implementer and merger subagents on the agent's `model`, with these changes to its steps:
 
 - The integration branch already exists: it is `episode/<slug>`, the worktree from step 1.
 - No PR opens and none is marked ready here: `serve-and-pr` opens the one draft PR, and it stays a draft until Promotion.
+- Skip its `code-review` step: the job's reviewer runs it, so the verdict, the retry and the metrics stay with the job loop.
 - On a retry, the failed lines go to a new implementer subagent, quoted verbatim, as fix work on the integration branch.
+
+## Review
+
+The reviewer calls the Skill tool with `code-review`, the fixed point the merge-base with `main`, its subagents on the agent's `model`. Pass the spec issue to its Spec subagent with the lines under `## Rubric` beside it, so one review judges both the tickets and the Episode. Each finding the Spec or Standards report marks hard is a failed line, quoted verbatim; a judgement call goes into Notes.
 
 ## Done when
 

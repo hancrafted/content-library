@@ -11,8 +11,9 @@ const SKILL_FOLDER = '.agents/skills/new-episode';
 
 const CONTEXT: PipelineContext = {
   skillFolder: SKILL_FOLDER,
-  skills: ['grilling', 'research'],
+  skills: ['grilling', 'research', 'implement-spec', 'code-review'],
   exists: (path) => [`${SKILL_FOLDER}/references/research.md`, 'docs/agents/grilling-voice.md'].includes(path),
+  governs: (output) => ['brief.md', 'research/*/research.md', 'dossier.md'].includes(output),
 };
 
 const PIPELINE = `status: draft
@@ -24,7 +25,7 @@ jobs:
     retries: 0
     gate: human
     agents:
-      - { type: implementor, skills: [grilling], references: [docs/agents/grilling-voice.md], profile: ~ }
+      - { type: implementor, skills: [grilling], references: [docs/agents/grilling-voice.md], model: inherit }
   - id: research
     needs: [brief-grill]
     foreach: brief.md#research-questions
@@ -32,8 +33,8 @@ jobs:
     checks: [mh, vitest]
     retries: 2
     agents:
-      - { type: implementor, skills: [research], references: [references/research.md, brief.md], profile: ~ }
-      - { type: reviewer, skills: [], references: [references/research.md], rubric: references/research.md#rubric, profile: ~ }
+      - { type: implementor, skills: [research], references: [references/research.md, brief.md], model: inherit }
+      - { type: reviewer, skills: [], references: [references/research.md], rubric: references/research.md#rubric, model: inherit }
 `;
 
 const FILE = 'pipeline.yml';
@@ -72,9 +73,9 @@ describe('failure cases', () => {
     const expected = [
       'The pipeline has an unknown key "owner"; the keys are status, jobs.',
       'Job "brief-grill", agent 1 lacks the key "skills".',
-      'Job "brief-grill", agent 1 has an unknown key "skill"; the keys are type, skills, references, rubric, profile.',
+      'Job "brief-grill", agent 1 has an unknown key "skill"; the keys are type, skills, references, rubric, agent, model, session.',
       'Job "research" lacks the key "retries".',
-      'Job "research" has an unknown key "retry"; the keys are id, needs, foreach, outputs, checks, retries, gate, agents.',
+      'Job "research" has an unknown key "retry"; the keys are id, intent, needs, foreach, outputs, checks, retries, gate, agents.',
     ];
     // ACT
     const messages = check(yaml);
@@ -161,8 +162,8 @@ describe('failure cases', () => {
   it('rejects a reviewer without a rubric and an implementor with one', () => {
     // ARRANGE
     const yaml = PIPELINE.replace(', rubric: references/research.md#rubric', '').replace(
-      'references: [references/research.md, brief.md], profile: ~',
-      'references: [references/research.md, brief.md], rubric: references/research.md#rubric, profile: ~',
+      'references: [references/research.md, brief.md], model: inherit',
+      'references: [references/research.md, brief.md], rubric: references/research.md#rubric, model: inherit',
     );
     const expected = [
       'Job "research", agent 1 is an implementor and has a rubric; only a reviewer has one.',
@@ -174,18 +175,18 @@ describe('failure cases', () => {
     expect(messages).toEqual(expected);
   });
 
-  it('rejects a bad value type, gate, agent type, profile and a duplicate job id', () => {
+  it('rejects a bad value type, gate, agent type, model and a duplicate job id', () => {
     // ARRANGE
     const yaml = PIPELINE.replace('retries: 0', 'retries: -1')
       .replace('gate: human', 'gate: auto')
       .replace('{ type: reviewer', '{ type: critic')
-      .replace('[docs/agents/grilling-voice.md], profile: ~', '[docs/agents/grilling-voice.md], profile: opus')
+      .replace('[docs/agents/grilling-voice.md], model: inherit', '[docs/agents/grilling-voice.md], model: gpt')
       .replace('id: research', 'id: brief-grill')
       .replace('needs: [brief-grill]', 'needs: []');
     const expected = [
       'Job "brief-grill" has retries -1; it must be a whole number of 0 or more.',
       'Job "brief-grill" has gate "auto"; the only gate is human.',
-      'Job "brief-grill", agent 1 has profile "opus"; it stays empty (~) for now.',
+      'Job "brief-grill", agent 1 has model "gpt"; it must be opus, sonnet, haiku or inherit.',
       'The job id "brief-grill" appears twice; job ids are unique.',
       'Job "brief-grill", agent 2 has type "critic"; it must be implementor or reviewer.',
     ];
@@ -193,6 +194,66 @@ describe('failure cases', () => {
     const messages = check(yaml);
     // ASSERT
     expect(messages).toEqual(expect.arrayContaining(expected));
+  });
+
+  it('rejects an agent without a model, a session other than subagent or orchestrator, and an agent type that is no name', () => {
+    // ARRANGE
+    const yaml = PIPELINE.replace('[docs/agents/grilling-voice.md], model: inherit', '[docs/agents/grilling-voice.md]')
+      .replace(
+        '[references/research.md, brief.md], model: inherit',
+        '[references/research.md, brief.md], model: inherit, session: main',
+      )
+      .replace(
+        'rubric: references/research.md#rubric, model: inherit',
+        'rubric: references/research.md#rubric, model: inherit, agent: 3',
+      );
+    const expected = [
+      'Job "brief-grill", agent 1 lacks the key "model".',
+      'Job "research", agent 1 has session "main"; it must be subagent or orchestrator.',
+      'Job "research", agent 2 has agent 3; it must be a Claude Code agent type.',
+    ];
+    // ACT
+    const messages = check(yaml);
+    // ASSERT
+    expect(messages).toEqual(expected);
+  });
+
+  it('rejects a skill that spawns subagents in an agent that runs as a subagent', () => {
+    // ARRANGE
+    const yaml = PIPELINE.replace('skills: [research]', 'skills: [research, implement-spec]').replace(
+      '{ type: reviewer, skills: []',
+      '{ type: reviewer, skills: [code-review], session: subagent',
+    );
+    const expected = [
+      'Job "research", agent 1 names the skill "implement-spec", which spawns subagents; the agent needs session: orchestrator.',
+      'Job "research", agent 2 names the skill "code-review", which spawns subagents; the agent needs session: orchestrator.',
+    ];
+    // ACT
+    const messages = check(yaml);
+    // ASSERT
+    expect(messages).toEqual(expected);
+  });
+
+  it('rejects an intent that is no text', () => {
+    // ARRANGE
+    const yaml = PIPELINE.replace('  - id: research\n', '  - id: research\n    intent: [research]\n');
+    const expected = ['Job "research" has intent ["research"]; it must be the task, written as a prompt.'];
+    // ACT
+    const messages = check(yaml);
+    // ASSERT
+    expect(messages).toEqual(expected);
+  });
+
+  it('rejects a markdown output that no markdown-harness rule governs', () => {
+    // ARRANGE
+    const yaml = PIPELINE.replace('outputs: [brief.md]', 'outputs: [brief.md, notes.md, pipeline.yml]');
+    const expected = [
+      'Job "brief-grill" writes "notes.md", which no markdown-harness rule governs; its implementor would query no intents.',
+    ];
+    // ACT
+    const messages = check(yaml);
+    // ASSERT
+    expect(messages).toEqual(expected);
   });
 
   it('rejects a check that is not one of the named kinds', () => {
@@ -212,7 +273,7 @@ describe('edge cases', () => {
   it('accepts a needs graph with a diamond, which is no cycle', () => {
     // ARRANGE
     const job = (id: string, needs: string): string =>
-      `  - { id: ${id}, needs: [${needs}], outputs: [], checks: [], retries: 0, agents: [{ type: implementor, skills: [], references: [], profile: ~ }] }`;
+      `  - { id: ${id}, needs: [${needs}], outputs: [], checks: [], retries: 0, agents: [{ type: implementor, skills: [], references: [], model: inherit }] }`;
     const yaml = ['status: approved', 'jobs:', job('a', ''), job('b', 'a'), job('c', 'a'), job('d', 'b, c'), ''].join(
       '\n',
     );
@@ -233,9 +294,33 @@ describe('edge cases', () => {
         '    checks: []',
         '    retries: 1',
         '    agents:',
-        '      - { type: implementor, skills: [], references: [brief.md, research/*/research.md], profile: ~ }',
+        '      - { type: implementor, skills: [], references: [brief.md, research/*/research.md], model: inherit }',
         '',
       ].join('\n'),
+    );
+    // ACT
+    const findings = checkPipeline(FILE, yaml, CONTEXT);
+    // ASSERT
+    expect(findings).toEqual([]);
+  });
+
+  it('accepts a skill that spawns subagents in an agent that runs in the orchestrator session', () => {
+    // ARRANGE
+    const yaml = PIPELINE.replace(
+      '{ type: reviewer, skills: []',
+      '{ type: reviewer, skills: [code-review], session: orchestrator',
+    );
+    // ACT
+    const findings = checkPipeline(FILE, yaml, CONTEXT);
+    // ASSERT
+    expect(findings).toEqual([]);
+  });
+
+  it('accepts a job that states its task as an intent', () => {
+    // ARRANGE
+    const yaml = PIPELINE.replace(
+      '  - id: research\n',
+      '  - id: research\n    intent: Answer one research question.\n',
     );
     // ACT
     const findings = checkPipeline(FILE, yaml, CONTEXT);

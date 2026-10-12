@@ -16,7 +16,9 @@ Paths below are relative to the repo root, except `references/` and `assets/`, w
 
 Settle the `<slug>` (the working title in kebab case) with Han, then run `npm run wt:new -- episode/<slug>` and work in that worktree. This branch is the Episode's **integration branch** for the whole run and carries its one draft PR until Promotion.
 
-_Done when_ the worktree exists and `git branch --show-current` prints `episode/<slug>`.
+Note the **run id**: the ISO 8601 timestamp of this step. Every runs CSV row of the run carries it, the gate jobs' rows included.
+
+_Done when_ the worktree exists, `git branch --show-current` prints `episode/<slug>`, and you hold the run id.
 
 ### 2. Brief
 
@@ -39,7 +41,7 @@ Start only when all of these hold; otherwise name each one that fails to Han and
 3. `npm run check:docs` is clean.
 4. `npx vitest run tests/docs/episode-staging.test.ts` passes. It checks the per-run pipeline's schema and that no approved Brief keeps a `Not settled.` section.
 
-Then write the todo list: one todo per job of `pipeline.yml` after `pipeline-tailor`, in `needs` order. A job with `foreach` gets one todo per item of the list it names (`brief.md#research-questions` gives one todo per research question). Note the run id: the ISO 8601 timestamp of this step, used in every runs CSV row.
+Then write the todo list: one todo per job of `pipeline.yml` after `pipeline-tailor`, in `needs` order. A job with `foreach` gets one todo per item of the list it names (`brief.md#research-questions` gives one todo per research question).
 
 _Done when_ the todo list holds every remaining job, expanded per `foreach` item.
 
@@ -57,9 +59,11 @@ _Done when_ Han has the Episode's local link and the draft PR's URL.
 
 ## The job loop
 
-Each job runs its `agents` in order. The **implementor** writes the job's `outputs`; the **reviewer** judges them. Read the job's reference first: it holds the implementor's prompt, what the job is done when and, for a reviewer job, its `## Rubric`.
+Each job runs its `agents` in order. The **implementor** writes the job's `outputs`; the **reviewer** judges them. Read the job's reference first: it holds the implementor's prompt, what the job is done when and, for a reviewer job, its `## Rubric`. A job with an `intent` states its task there instead, and its prompt is the `intent`.
 
-1. **Implementor.** Spawn a subagent (the `implement` job runs in this session instead; see its reference). Its prompt opens with the Brief's `Learning goal` and `Actionables`, quoted, because every artifact is written backwards from them. Then point it at the job's reference, every path in `references` and `skills`, the staging folder, and on a retry the failed lines, quoted verbatim. Point, never paste: the agent reads the files.
+Every agent runs where its `session` says. `subagent`, the default, is spawned with the Agent tool, its `subagent_type` the agent's `agent` (general-purpose when omitted) and its `model` the agent's `model`, left out for `inherit`. `orchestrator` runs in this session: a subagent has no Agent tool, so a skill that spawns subagents (`implement-spec`, `code-review`) or a job that talks to Han runs here, and its `model` goes to the subagents the skill spawns.
+
+1. **Implementor.** Its prompt opens with the Brief's `Learning goal` and `Actionables`, quoted, because every artifact is written backwards from them. Then point it at the job's reference or `intent`, every path in `references` and `skills`, the staging folder, and on a retry the failed lines, quoted verbatim. Point, never paste: the agent reads the files. Tell it: before writing each markdown output, run `npx mh query <full repo path>` on that path, a `*` left as written, and follow every intent it prints as an instruction.
 2. **Checks.** Run the job's `checks` in order, cheapest first. This table is the one list of check names and their commands; `src/lib/episode-pipeline.pure.ts` refuses any other name:
 
    | check | command |
@@ -72,7 +76,7 @@ Each job runs its `agents` in order. The **implementor** writes the job's `outpu
    | `visual-check` | DOM numbers per Slide in both themes, by [`references/implement.md`](references/implement.md#visual-check) |
 
    A failure counts as a failed attempt; its output lines are the failed lines.
-3. **Reviewer.** Spawn a **fresh** subagent, never one that wrote the output. Its baseline is the markdown-harness intent of every rule, field and heading that governs the output: `npx mh query <file>` prints them. On top of that baseline come the lines under the job's `rubric`. It answers one line per intent and per rubric line, `pass` or `fail — <the line, verbatim> — <evidence>`, and marks anything only Han can judge `needs human — <what>`.
+3. **Reviewer.** A **fresh** agent, never one that wrote the output. Its baseline is the markdown-harness intent of every rule, field and heading that governs the output: it runs `npx mh query <full repo path>` on each output itself. On top of that baseline come the lines under the job's `rubric`. It answers one line per intent and per rubric line, `pass` or `fail — <the line, verbatim> — <evidence>`, and marks anything only Han can judge `needs human — <what>`.
 4. **Retry.** On any failed line, run the implementor again with every failed line quoted verbatim, then the checks and a fresh reviewer again. A job gets `1 + retries` attempts.
 5. **Retries run out.** Mark the todo and every todo downstream of it blocked. The run-log entry's Notes start `Blocked:` and quote the last failed lines; they go on the PR checklist.
 6. **Pass.** Set each staging output's `status: checked` (research files carry no status), and commit through the `commit` skill with `Source: docs/episodes/<slug>/brief.md`.
@@ -82,7 +86,7 @@ _Done when_ the job passed or is blocked, its outputs are committed, and its run
 
 ## Run log and runs CSV
 
-Every job run appends one entry to `docs/episodes/<slug>/run-log.md`, never editing an earlier one: `## <job id> · <ISO 8601 timestamp>`, then the h3s `Inputs`, `Output`, `Checks`, `Metrics` and `Notes`. The `run-log-body` rule holds each part's intent (`npx mh query docs/episodes/<slug>/run-log.md`), and `assets/sample-episode/run-log.md` shows two entries. A foreach job writes one entry per item. Write it for an agent reading the run cold, by `writing-for-agents`.
+Every job run appends one entry to `docs/episodes/<slug>/run-log.md`, never editing an earlier one: `## <job id> · <ISO 8601 timestamp>`, then the h3s `Inputs`, `Output`, `Checks`, `Metrics` and `Notes`. Before your first entry, run `npx mh query docs/episodes/<slug>/run-log.md` and follow every intent it prints, as an implementor does; the `run-log-body` rule holds each part's intent, and `assets/sample-episode/run-log.md` shows two entries. A foreach job writes one entry per item. Write it for an agent reading the run cold, by `writing-for-agents`.
 
 Every agent run, each attempt counted, appends one row to `docs/episodes/runs.csv`, which outlives Promotion:
 
@@ -91,7 +95,7 @@ run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at
 2026-10-12T09:00:00Z,context-window-budget,research,implementor,1,fail,"Every Finding cites a Source.",240,18000,2026-10-12T10:15:00Z
 ```
 
-- `run` is the run id from step 4; `episode` the slug; `agent` the agent's `type`.
+- `run` is the run id from step 1; `episode` the slug; `agent` the agent's `type`.
 - `result` is `pass` or `fail`; `failed_rubric` the first failed line, quoted, empty on a pass.
 - `duration_s` and `tokens` come from the Agent tool's result. For an agent run in this session, write the wall-clock seconds and leave `tokens` empty.
 - `at` is when the agent finished.

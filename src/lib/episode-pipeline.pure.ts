@@ -9,6 +9,18 @@
 import { parse } from 'yaml';
 import { ancestors, findCycle, type Job } from './episode-pipeline-graph.pure';
 import { unless, type Finding } from './finding.pure';
+import {
+  checkMapping,
+  field,
+  isMapping,
+  isString,
+  isStringList,
+  optional,
+  requiredWhen,
+  stringsOf,
+  type Field,
+  type Mapping,
+} from './mapping-fields.pure';
 
 /** What exists around a pipeline: its skill's folder, the skill names, and a repo-path lookup. */
 export interface PipelineContext {
@@ -18,6 +30,12 @@ export interface PipelineContext {
   /** Whether a repo-relative path names an existing file. */
   exists: (path: string) => boolean;
   /**
+   * Whether a markdown-harness rule governs a job output, given relative to
+   * the staging folder. An implementor queries its outputs' intents before
+   * writing them, so an ungoverned markdown output has none to query.
+   */
+  governs: (output: string) => boolean;
+  /**
    * Repo paths a later ticket creates. A read of one is no finding while it is
    * missing; the caller keeps this list for the template only.
    */
@@ -25,51 +43,16 @@ export interface PipelineContext {
 }
 
 const AGENT_TYPES = ['implementor', 'reviewer'];
+/** The models an agent may run on; `inherit` runs it on the orchestrator's model. */
+const MODELS = ['opus', 'sonnet', 'haiku', 'inherit'];
+/** Where an agent runs: a spawned subagent, or the orchestrator's own session. */
+const SESSIONS = ['subagent', 'orchestrator'];
+/** Skills that spawn subagents themselves; a subagent cannot spawn one, so only the orchestrator runs them. */
+const SPAWNING_SKILLS = ['implement-spec', 'code-review'];
 /** The done-checks a job may name, cheapest first. */
 const CHECKS = ['mh', 'vitest', 'verify', 'build', 'test:build', 'visual-check'];
 /** Path prefixes that resolve inside the new-episode skill's folder rather than the repo root. */
 const SKILL_PREFIXES = ['references/', 'assets/'];
-
-type Mapping = Record<string, unknown>;
-
-function isMapping(value: unknown): value is Mapping {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
-}
-
-function isString(value: unknown): value is string {
-  return typeof value === 'string';
-}
-
-function isStringList(value: unknown): value is string[] {
-  return Array.isArray(value) && value.every(isString);
-}
-
-/** The strings of a list, or none when the value is no list of strings (its own finding). */
-function stringsOf(value: unknown): string[] {
-  return isStringList(value) ? value : [];
-}
-
-/** One key of a mapping: whether it must be present, and what its value must be. */
-interface Field {
-  key: string;
-  required: boolean;
-  valid: (value: unknown) => boolean;
-  /** Completes "<where> has <key> <value>; …" when the value is not valid. */
-  rule: string;
-}
-
-function field(key: string, valid: (value: unknown) => boolean, rule: string): Field {
-  return { key, required: true, valid, rule };
-}
-
-function optional(fieldOf: Field): Field {
-  return { ...fieldOf, required: false };
-}
-
-/** The field, required only when the condition holds and optional otherwise. */
-function requiredWhen(condition: boolean, fieldOf: Field): Field {
-  return { ...fieldOf, required: condition };
-}
 
 const LIST = 'it must be a list of strings';
 
@@ -80,6 +63,7 @@ const TOP_FIELDS = [
 
 const JOB_FIELDS = [
   field('id', isString, 'it must be a name'),
+  optional(field('intent', isString, 'it must be the task, written as a prompt')),
   field('needs', isStringList, LIST),
   optional(field('foreach', isString, 'it must be a path')),
   field('outputs', isStringList, LIST),
@@ -96,23 +80,9 @@ function agentFields(reviewer: boolean): Field[] {
     field('skills', isStringList, LIST),
     field('references', isStringList, LIST),
     requiredWhen(reviewer, field('rubric', isString, 'it must be a path')),
-    field('profile', (value) => value === null, 'it stays empty (~) for now'),
-  ];
-}
-
-/** Missing required keys, then unknown keys, then invalid values, each as a message after `where`. */
-function checkMapping(where: string, mapping: Mapping, fields: readonly Field[]): string[] {
-  const keys = fields.map(({ key }) => key);
-  return [
-    ...fields
-      .filter(({ key, required }) => required && !Object.hasOwn(mapping, key))
-      .map(({ key }) => `${where} lacks the key "${key}".`),
-    ...Object.keys(mapping)
-      .filter((key) => !keys.includes(key))
-      .map((key) => `${where} has an unknown key "${key}"; the keys are ${keys.join(', ')}.`),
-    ...fields
-      .filter(({ key, valid }) => Object.hasOwn(mapping, key) && !valid(mapping[key]))
-      .map(({ key, rule }) => `${where} has ${key} ${JSON.stringify(mapping[key])}; ${rule}.`),
+    optional(field('agent', isString, 'it must be a Claude Code agent type')),
+    field('model', (value) => MODELS.includes(value as string), 'it must be opus, sonnet, haiku or inherit'),
+    optional(field('session', (value) => SESSIONS.includes(value as string), 'it must be subagent or orchestrator')),
   ];
 }
 
@@ -159,12 +129,18 @@ function checkAgent(reader: Reader, agent: unknown): string[] {
     ...stringsOf(agent.skills)
       .filter((skill) => !context.skills.includes(skill))
       .map((skill) => `${where} names the skill "${skill}", which does not exist.`),
+    ...stringsOf(agent.skills)
+      .filter((skill) => SPAWNING_SKILLS.includes(skill) && agent.session !== 'orchestrator')
+      .map(
+        (skill) =>
+          `${where} names the skill "${skill}", which spawns subagents; the agent needs session: orchestrator.`,
+      ),
     ...[...stringsOf(agent.references), ...rubric].flatMap((reference) => checkRead(reader, reference)),
   ];
 }
 
 function checkJob(reader: Reader, job: Mapping): string[] {
-  const { where, byId } = reader;
+  const { where, byId, context } = reader;
   const foreach = isString(job.foreach) ? [job.foreach] : [];
   const agents = Array.isArray(job.agents) ? (job.agents as unknown[]) : [];
   return [
@@ -172,6 +148,12 @@ function checkJob(reader: Reader, job: Mapping): string[] {
     ...stringsOf(job.checks)
       .filter((check) => !CHECKS.includes(check))
       .map((check) => `${where} has the check "${check}"; the checks are ${CHECKS.join(', ')}.`),
+    ...stringsOf(job.outputs)
+      .filter((output) => output.endsWith('.md') && !context.governs(output))
+      .map(
+        (output) =>
+          `${where} writes "${output}", which no markdown-harness rule governs; its implementor would query no intents.`,
+      ),
     ...stringsOf(job.needs)
       .filter((need) => !byId.has(need))
       .map((need) => `${where} needs "${need}", which is no job in the pipeline.`),
