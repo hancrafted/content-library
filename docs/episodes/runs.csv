@@ -37,3 +37,7 @@ run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at
 2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-dossier,reviewer,1,fail,"The master slide and motion that show this Slide's point, then prose on what the viewer sees, required when the master alone does not say it.",124,88510,2026-10-12T22:06:19Z
 2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-dossier,implementor,2,pass,,26,59320,2026-10-12T22:07:02Z
 2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-dossier,reviewer,2,pass,,23,48493,2026-10-12T22:07:40Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-manuscript,implementor,1,pass,,74,60530,2026-10-12T22:09:48Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-manuscript,reviewer,1,fail,"no claim the Dossier's notes hedge may be spoken as settled",49,53663,2026-10-12T22:10:46Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-manuscript,implementor,2,pass,,17,46063,2026-10-12T22:11:17Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-manuscript,reviewer,2,pass,,13,41846,2026-10-12T22:11:54Z

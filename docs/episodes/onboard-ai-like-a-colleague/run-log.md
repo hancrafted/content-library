@@ -553,3 +553,38 @@ Needs human: Segments 2 to 4 of #what-you-would-say-first follow context, tools 
 Needs human: its keywords (budget, headcount, booking, calendar) preview the four disciplines before the teaser; decide whether to keep them vaguer.
 Needs human: the Dossier carries the literal `No catalog match:` label inside five Visual prose blocks, beside these run-log lines.
 Needs human: every Slide uses liquid-ink-transition, the only motion in src/components/animations/.
+
+## write-manuscript · 2026-10-12T22:11:54Z
+
+### Inputs
+
+- `brief.md`, `dossier.md` (`status: checked`) and the `write-dossier` entry's `Needs human:` lines.
+- `src/components/episodes/amnesiac-freelancer/amnesiac-freelancer.ts` and `docs/research/amnesiac-freelancer-script.md`, the earlier Episode.
+- `.agents/skills/new-episode/references/write-manuscript.md`. `docs/profile/han/` does not exist, so no voice guide applied.
+
+### Output
+
+- `docs/episodes/onboard-ai-like-a-colleague/manuscript.md`, `status: checked`: the Dossier's spine verbatim, one paragraph per Segment, about 1,145 words.
+
+### Checks
+
+- `mh check`: pass on both attempts.
+- `vitest` (`tests/docs/episode-staging.test.ts`): pass on both attempts; it holds the spine against the Dossier and the paragraph count against the Segments.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 74 s · 60530 tokens
+- reviewer · attempt 1 · fail · 49 s · 53663 tokens
+- implementor · attempt 2 · pass · 17 s · 46063 tokens
+- reviewer · attempt 2 · pass · 13 s · 41846 tokens
+
+### Notes
+
+Attempt 1 failed two reviewer lines: `fail — no claim the Dossier's notes hedge may be spoken as settled — "same-wall-one-level-up" says "Studies of companies keep finding the same picture. Most have adopted AI. Far fewer see it in their output."` and `fail — Red thread: "AI underdelivers because you prompt it like a tool, when the task is to onboard it like a colleague, and onboarding requires management skills, not execution skills." — the "prompt it like a tool" half is never spoken.` Attempt 2 credited the claim to one survey of about six thousand executives and spoke the dispute, and closed the Hook's "why" in `you-managed-it` with "You prompted it like a tool, when it needed onboarding like a colleague." The attempt-2 reviewer passed both lines.
+This job is a human gate: committed with `Gate: draft manuscript`, waiting for Han's edit and `status: approved`.
+Needs human: about 1,145 words, roughly 8 minutes at 140 words a minute, under the Brief's "closer to 10 minutes".
+Needs human: "Leaders asked about it themselves sound more upbeat" follows a survey of executives, so a listener cannot tell who the upbeat group is; it means the Wharton survey of about 800 leaders.
+Needs human: "the way of working stayed exactly as it was" is backed only loosely by the Dossier; "exactly" may overstate it.
+Needs human: "only been around since the middle of this year" dates a piece the Brief wants reusable across talks.
+Needs human: whether "Hold it up against your own screen" and "Let it sit in the room" suit both a recorded take and a live room.
+Needs human: the experiment's ordinary words (budget, a hundred people, culture, booking system, caterers, calendar) preview the disciplines without naming them; no statistic is spoken anywhere.
