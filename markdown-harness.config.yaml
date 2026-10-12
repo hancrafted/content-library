@@ -94,6 +94,63 @@ frontmatter:
         status: *staging-status
         locale: *staging-locale
         brief: *staging-brief-link
+    # A rule selects by literal file name, never by folder: folders do not recurse and every staging
+    # folder is `docs/episodes/<slug>/`. So the identifier lives in a folder and the kind is the file
+    # name: `research/<question-slug>/research.md` and `feedback/<NN>/feedback.md`. The same name
+    # governs research after Promotion moves it to `docs/llm-wiki/research/<question-slug>/`.
+    - ruleId: research
+      fileNames: [research.md]
+      intent: 'A research file answers one question on its own and may be reused by any later Episode, so it says what it answers, when it was researched and when to re-check it, wherever it sits: `research/<question-slug>/research.md` in staging, `docs/llm-wiki/research/<question-slug>/research.md` after Promotion'
+      unknownKeys: forbidden
+      assess:
+        stale: 'Re-run the research question against current primary sources before citing this, then update the Findings and move stale_after.'
+      fields:
+        type:
+          presence: required
+          allowed:
+            - {
+                value: research,
+                intent: 'The answer to one research question, with cited Findings and primary Sources, reusable across Episodes.',
+              }
+        description:
+          presence: required
+          maxLength: 200
+          intent: 'One sentence stating the answer, copied verbatim into the llm-wiki index; research-match reads it to decide whether this file answers a new question.'
+        question:
+          presence: required
+          intent: 'The research question as the Brief asked it, verbatim; the h1 restates it as a scoped academic question.'
+        researched_on:
+          presence: required
+          format: datetime
+          intent: 'When the Sources were read, as an RFC 3339 instant.'
+        stale_after:
+          presence: required
+          format: datetime
+          intent: 'When the Findings must be re-checked; research-match redoes the research past this instant.'
+    - ruleId: feedback
+      fileNames: [feedback.md]
+      intent: "A feedback file holds one round of Han's feedback on the served Episode, at `feedback/<NN>/feedback.md`, so every item reaches the right source of truth and the harvest can read every round"
+      unknownKeys: forbidden
+      fields:
+        type:
+          presence: required
+          allowed:
+            - {
+                value: feedback,
+                intent: 'One round of feedback items, each keyed by Slide anchor and tagged content or implementation.',
+              }
+        round:
+          presence: required
+          intent: 'The round number as an integer, counting from 1 and matching the `<NN>` folder; a later round never rewrites an earlier one.'
+        via:
+          presence: required
+          allowed:
+            - { value: app, intent: 'Typed or dictated in the app while reviewing the served Episode.' }
+            - { value: voice, intent: 'From a Claude Desktop voice session, pasted into Claude Code as a handoff.' }
+            - {
+                value: practice,
+                intent: 'Changes Han made while rehearsing the recording, captured in the same format.',
+              }
 
 body-structure:
   rules:
@@ -301,3 +358,135 @@ body-structure:
                       },
                     ]
                   mayHold: [ordered-list]
+    - ruleId: research-body
+      fileNames: [research.md]
+      intent: 'A research file stands on its own: a scoped question, why it was asked, a quotable answer, cited findings and their sources, so a later Episode can reuse it without the one that asked'
+      undefinedHeadings: forbid
+      headings:
+        - purpose: heading
+          level: 1
+          pattern: '^Why .+\?$'
+          intent: 'The academic research question, starting with _why_, clearly scoped to a subject matter.'
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Context,
+                  intent: 'Why the question was asked and for what kind of claim, naming no Episode, so the file can be reused by any.',
+                },
+              ],
+            mayHold: [prose],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Answer,
+                  intent: 'The answer to the h1 in 2–5 quotable sentences; the description in the frontmatter condenses it.',
+                },
+              ],
+            mayHold: [prose],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed: [{ title: Findings, intent: 'One finding per item, each citing at least one Source as `[n]`.' }],
+            mayHold: [ordered-list],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Sources,
+                  intent: 'Primary sources, numbered as the Findings cite them: `<author>, <title> — <URL> — accessed <date>`.',
+                },
+              ],
+            mayHold: [ordered-list],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            presence: optional,
+            allowed:
+              [
+                {
+                  title: Caveats,
+                  intent: 'Limits of the Findings: what the Sources do not show, and any inference the Answer makes beyond them.',
+                },
+              ],
+          }
+    - ruleId: feedback-body
+      fileNames: [feedback.md]
+      intent: 'A feedback body is one unordered list of `` `<section>--<slide>` · content|implementation — <text> `` items and no headings, so each item routes to the Manuscript or Dossier, or to the implementation, without guessing'
+      undefinedHeadings: forbid
+    - ruleId: run-log-body
+      fileNames: [run-log.md]
+      intent: 'The run log is append-only: one entry per job run, each with the same five parts, so a run can be read afterwards and its failures traced without the session that ran it'
+      undefinedHeadings: forbid
+      headings:
+        - {
+            purpose: heading,
+            level: 1,
+            allowed: [{ title: Run log, intent: 'The file is the run log of this Episode.' }],
+          }
+        - purpose: enumeration
+          level: 2
+          minCount: 1
+          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)* · \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$'
+          intent: 'One entry per job run, `<job id> · <ISO 8601 timestamp>`, appended at the end in the order the jobs finished; an earlier entry is never edited.'
+          headings:
+            - {
+                purpose: heading,
+                level: 3,
+                allowed: [{ title: Inputs, intent: 'Every file, question or handoff the job read, one per item.' }],
+                mayHold: [unordered-list],
+              }
+            - {
+                purpose: heading,
+                level: 3,
+                allowed:
+                  [{ title: Output, intent: 'Every file the job wrote, with the status it left, one per item.' }],
+                mayHold: [unordered-list],
+              }
+            - {
+                purpose: heading,
+                level: 3,
+                allowed:
+                  [
+                    {
+                      title: Checks,
+                      intent: 'Each check the job ran (markdown-harness, vitest, reviewer) and its result, one per item.',
+                    },
+                  ],
+                mayHold: [unordered-list],
+              }
+            - {
+                purpose: heading,
+                level: 3,
+                allowed:
+                  [
+                    {
+                      title: Metrics,
+                      intent: 'One item per agent run, matching its row in `docs/episodes/runs.csv`: `<agent> · attempt <n> · pass|fail[ · rubric "<line>"] · <duration> s · <tokens> tokens`.',
+                    },
+                  ],
+                mayHold: [unordered-list],
+              }
+            - {
+                purpose: heading,
+                level: 3,
+                allowed:
+                  [
+                    {
+                      title: Notes,
+                      intent: 'What a reader of the run needs that the other parts do not say: a retry and why, a gate edit, a blocked branch.',
+                    },
+                  ],
+                mayHold: [prose, unordered-list],
+              }
