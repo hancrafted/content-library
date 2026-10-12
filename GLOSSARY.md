@@ -68,13 +68,33 @@ _Avoid_: Footnote, tooltip, annotation
 _Avoid_: Footnote, reference
 
 **Voice script**: a Slide's teleprompter text, a list of Voice script segments.
-_Avoid_: Transcript, manuscript
+_Avoid_: Transcript
 
 **Voice script segment**: one timed passage of a Voice script: a title, keywords, the spoken text and, optionally, a Bridge. Its time span is never written; the spans add up to the Slide's reading time.
 _Avoid_: Paragraph, line, cue card
 
 **Bridge**: the closing line of a Voice script segment that hands the speaker over to the next Section.
 _Avoid_: Transition, segue
+
+## Episode production
+
+**Brief**: the goals an Episode is written towards, fixed before any research: its audience, learning goal, actionables, hook and Threads. The structured result of a grilling session; just enough to start, and not kept in step once the draft exists.
+_Avoid_: Outline, pitch, plan
+
+**Manuscript**: the story an Episode tells, written as prose that works without visuals; its h2s are the Sections and its h3s the Slides, and each Slide's Voice script comes from it.
+_Avoid_: Script, draft
+
+**Dossier**: the companion to an Episode's Manuscript: the research summary, citations, Speaker notes material and the choice of master slide and animation for each Slide. It shares the Manuscript's Sections and Slides and may add its own.
+_Avoid_: Episode file, companion, notes
+
+**Thread**: one of two parallel storylines in a longer Episode, the A thread and the B thread, told in turns so the audience never follows one story too long, each strengthening the other.
+_Avoid_: Plot, subplot, storyline
+
+**Staging**: where an Episode's text lives while it is being made, before it is final: its Brief, research, Dossier and Manuscript, outside the code.
+_Avoid_: Drafts, workspace
+
+**Promotion**: the step that moves a final Episode's text out of Staging and into its code folder, one text file per Slide, after which Staging is deleted.
+_Avoid_: Publish, migration, release
 
 ## Localization
 
