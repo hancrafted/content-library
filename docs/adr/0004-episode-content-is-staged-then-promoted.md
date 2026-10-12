@@ -17,12 +17,11 @@ The Slide's `i18n/*.json` holds strings, not a story. Freezing the markdown at i
 
 ## Decisions
 
-1. **Staging holds the work in progress.** `docs/episodes/<slug>/` holds `brief.md`, `research/<question-slug>/research.md`, `dossier.md`, `manuscript.md`, `run-log.md` and `feedback/<NN>/feedback.md`. Content changes from the feedback loop land in the Manuscript or Dossier first, then in the implementation.
-   - The file name names the kind and a folder holds the identifier, because markdown-harness selects a rule by literal file name and a folder selector does not recurse into `docs/episodes/<slug>/`.
+1. **Staging holds the work in progress.** `docs/episodes/<slug>/` holds `brief.md`, `research/*.md`, `dossier.md`, `manuscript.md`, `run-log.md` and `feedback/NN.md`. Content changes from the feedback loop land in the Manuscript or Dossier first, then in the implementation.
 2. **Promotion happens when the Episode is final**, after practice and before German translation.
    - `brief.md` and `dossier.md` move to `src/components/episodes/<ep>/`.
    - Each Manuscript h3 and its Dossier block become `slides/<slug>/slide.md`.
-   - Research files the Dossier still cites move, folder and all, to `docs/llm-wiki/research/<question-slug>/research.md` and are listed in `docs/llm-wiki/index.md`. The rest are deleted.
+   - Research files the Dossier still cites move to `docs/llm-wiki/research/` and are listed in `docs/llm-wiki/index.md`. The rest are deleted.
    - The staging folder is deleted after the style harvest has read it. git history keeps it.
 3. **After promotion, each file has one owner.** `slide.md` owns a Slide's text, and a test checks `i18n/en.json` against it. `<ep>.ts` owns Slide order, and a test checks the Dossier's heading order against it. A reading copy of the whole Manuscript is generated on demand and never committed.
 4. **German comes after promotion** as a translation task: `slide.de.md` per Slide, with `de.json` checked against it.
