@@ -6,12 +6,16 @@ Output: `docs/episodes/<slug>/pipeline.yml`, ending at a human gate. No reviewer
 
 Copy [`assets/pipeline.yml`](../assets/pipeline.yml) to `docs/episodes/<slug>/pipeline.yml` with `status: draft`, then replace every `<slug>` with this Episode's slug, so each path names the file the job reads or writes, and fit it to this Brief. The comment at the top of the template is the schema. Anything may change; tailor where the Brief gives a reason:
 
-- **Research.** Keep the `write-research` job's `foreach` on the Brief's `#research-questions`. With no research questions, drop `retrieval` and `write-research`, and let `write-dossier` need `customize-pipeline`.
+- **Research.** Expand the template's `write-research` job into one job per research question, in the Brief's order. Name each by the question's subject in kebab case, `write-research-<question-slug>`, writing `research/<question-slug>/research.md`; the `<question-slug>` rules are [write-research](write-research.md)'s. Give each job an `intent` quoting its question, and its own references where only that question needs a file. Every job that read the research files (`write-dossier`, a one-off job) needs each research job and names each file. With no research questions, drop `retrieval` and `write-research`, and let `write-dossier` need `customize-pipeline`.
 - **Retries.** Raise a job's `retries` where the Brief makes it hard (a Teardown of a disputed claim), lower it where it is routine.
 - **Gates.** `gate: human` on a job stops the run at its output for Han. Add it after `write-manuscript` when Han wants to read the Manuscript before the spec is written.
 - **References and skills.** Add a file an agent should read for this Episode (an earlier Episode it builds on, an ADR it touches).
 - **Models.** Each agent's `model` defaults to the template's; change it where the Episode gives a reason, and name the reason.
 - **One-off jobs.** A task only this Episode needs becomes its own job with an `intent`, the task as a prompt, instead of a note in the run log.
+
+### Why the template keeps `foreach` and a per-run pipeline does not
+
+The template cannot know the Brief, so `foreach` stands for "one job per item" there. A per-run pipeline names every file it writes, so Han approves each path at the gate and the run log and runs CSV name each job. A job whose output is one named file (`pipeline.yml`) needs no expansion; a fan-out like research does, because its items' files only get names here. The pipeline check refuses `foreach` and glob outputs in a per-run pipeline, and the staging test counts one `write-research-*` job per research question.
 
 A per-run pipeline tolerates no missing file, unlike the template. When a file the template reads does not exist yet (the llm-wiki index, a human-profile guide), remove that reference and name it in the run-log entry's Notes and to Han.
 

@@ -14,6 +14,7 @@ const CONTEXT: PipelineContext = {
   skills: ['grilling', 'research', 'implement-spec', 'code-review'],
   exists: (path) => [`${SKILL_FOLDER}/references/research.md`, 'docs/agents/grilling-voice.md'].includes(path),
   staging: 'docs/episodes/demo',
+  perRun: false,
   governs: (output) =>
     [
       'docs/episodes/demo/brief.md',
@@ -304,6 +305,19 @@ describe('failure cases', () => {
     const messages = check(yaml);
     // ASSERT
     expect(messages).toContain(expected);
+  });
+
+  it('rejects a foreach and a glob output in a per-run pipeline, whose jobs name one file each', () => {
+    // ARRANGE
+    const yaml = PIPELINE;
+    const expected = [
+      'Job "research" has foreach; a per-run pipeline names one job per item, which customize-pipeline expands.',
+      'Job "research" writes "docs/episodes/demo/research/*/research.md", a glob; a per-run pipeline names each file.',
+    ];
+    // ACT
+    const messages = check(yaml, { ...CONTEXT, perRun: true });
+    // ASSERT
+    expect(messages).toEqual(expected);
   });
 
   it('rejects a check that is not one of the named kinds', () => {

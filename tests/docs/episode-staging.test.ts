@@ -1,4 +1,5 @@
 import { checkPipeline, type PipelineContext } from '@/lib/episode-pipeline.pure';
+import { checkResearchJobs } from '@/lib/episode-research-jobs.pure';
 import {
   checkResearchIndex,
   checkRunsCsv,
@@ -125,7 +126,15 @@ function pipelineContext(pending: readonly string[], staging: string): PipelineC
     .filter((entry) => entry.isDirectory())
     .map(({ name }) => name);
   const exists = (file: string): boolean => existsSync(path.join(ROOT, file));
-  return { skillFolder: SKILL_FOLDER, skills, exists, staging, governs: governed, pending };
+  return {
+    skillFolder: SKILL_FOLDER,
+    skills,
+    exists,
+    staging,
+    perRun: staging !== TEMPLATE_STAGING,
+    governs: governed,
+    pending,
+  };
 }
 
 /** Every per-run pipeline, by the path a failure names. */
@@ -213,6 +222,17 @@ describe('success cases', () => {
     const findings = pipelines.flatMap(([file, yaml]) =>
       checkPipeline(file, yaml, pipelineContext([], path.dirname(file))),
     );
+    // ASSERT
+    expect(findings).toEqual([]);
+  });
+
+  it('finds one write-research job per research question of the Brief, in every per-run pipeline', () => {
+    // ARRANGE
+    const pairs = Object.entries(perRunPipelines()).map(
+      ([file, yaml]) => [file, yaml, readFileSync(path.join(ROOT, path.dirname(file), 'brief.md'), 'utf8')] as const,
+    );
+    // ACT
+    const findings = pairs.flatMap(([file, yaml, brief]) => checkResearchJobs(file, yaml, brief));
     // ASSERT
     expect(findings).toEqual([]);
   });

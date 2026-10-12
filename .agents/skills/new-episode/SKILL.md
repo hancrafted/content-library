@@ -39,11 +39,11 @@ Start only when all of these hold; otherwise name each one that fails to Han and
 1. `brief.md` frontmatter has `status: approved`.
 2. `pipeline.yml` has the top-level `status: approved`.
 3. `npm run check:docs` is clean.
-4. `npx vitest run tests/docs/episode-staging.test.ts` passes. It checks the per-run pipeline's schema and that no approved Brief keeps a `Not settled.` section.
+4. `npx vitest run tests/docs/episode-staging.test.ts` passes. It checks the per-run pipeline's schema, one research job per research question, and that no approved Brief keeps a `Not settled.` section.
 
-Then write the todo list: one todo per job of `pipeline.yml` after `customize-pipeline`, in `needs` order. A job with `foreach` gets one todo per item of the list it names (`docs/episodes/<slug>/brief.md#research-questions` gives one todo per research question).
+Then write the todo list: one todo per job of `pipeline.yml` after `customize-pipeline`, in `needs` order. A per-run pipeline has no `foreach`: customize-pipeline expanded it into one job per research question.
 
-_Done when_ the todo list holds every remaining job, expanded per `foreach` item.
+_Done when_ the todo list holds every remaining job.
 
 ### 5. Run the jobs
 
@@ -86,7 +86,7 @@ _Done when_ the job passed or is blocked, its outputs are committed, and its run
 
 ## Run log and runs CSV
 
-Every job run appends one entry to `docs/episodes/<slug>/run-log.md`, never editing an earlier one: `## <job id> · <ISO 8601 timestamp>`, then the h3s `Inputs`, `Output`, `Checks`, `Metrics` and `Notes`. Before your first entry, run `npx mh query docs/episodes/<slug>/run-log.md` and follow every intent it prints, as an implementor does; the `run-log-body` rule holds each part's intent, and `assets/sample-episode/run-log.md` shows two entries. A foreach job writes one entry per item. Write it for an agent reading the run cold, by `writing-for-agents`.
+Every job run appends one entry to `docs/episodes/<slug>/run-log.md`, never editing an earlier one: `## <job id> · <ISO 8601 timestamp>`, then the h3s `Inputs`, `Output`, `Checks`, `Metrics` and `Notes`. Before your first entry, run `npx mh query docs/episodes/<slug>/run-log.md` and follow every intent it prints, as an implementor does; the `run-log-body` rule holds each part's intent, and `assets/sample-episode/run-log.md` shows two entries. Write it for an agent reading the run cold, by `writing-for-agents`.
 
 Every agent run, each attempt counted, appends one row to `docs/episodes/runs.csv`, which outlives Promotion:
 

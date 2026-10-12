@@ -7,7 +7,7 @@
 #   jobs      run once every job in `needs` is done; independent jobs may run in parallel
 #     intent    optional; the job's task as a prompt, for a job no reference describes
 #     needs     job ids this job waits for
-#     foreach   optional; `<file>#<heading>` fans the job out once per list item
+#     foreach   template only; `<file>#<heading>`: customize-pipeline writes one job per list item
 #     before    what runs before the implementor writes: `mh-query`, required when a job
 #               writes markdown, has the implementor run `npx mh query <path>` on every
 #               .md output and follow its intents; the reviewer runs it as its baseline

@@ -29,6 +29,11 @@ export interface PipelineContext {
   /** The Episode's staging folder, repo-relative: every output sits in it. */
   staging: string;
   /**
+   * A per-run pipeline, not the template: customize-pipeline has expanded
+   * every `foreach` into one job per item, so each output names one file.
+   */
+  perRun: boolean;
+  /**
    * Whether a markdown-harness rule governs a job output, a repo path. An implementor queries its outputs' intents before
    * writing them, so an ungoverned markdown output has none to query.
    */
@@ -94,7 +99,8 @@ function checkAgent(reader: Reader, agent: unknown): string[] {
 }
 
 /**
- * Every output sits in the staging folder, and a job writing markdown runs
+ * A per-run pipeline has no `foreach` and no glob output. Every output sits
+ * in the staging folder, and a job writing markdown runs
  * `mh-query` before its implementor, so the implementor follows the rules'
  * intents; a job writing none has nothing to query.
  */
@@ -103,6 +109,13 @@ function checkOutputs(where: string, job: Mapping, context: PipelineContext): st
   const markdown = outputs.some((output) => output.endsWith('.md'));
   const queries = stringsOf(job.before).includes('mh-query');
   return [
+    ...unless(
+      !context.perRun || !Object.hasOwn(job, 'foreach'),
+      `${where} has foreach; a per-run pipeline names one job per item, which customize-pipeline expands.`,
+    ),
+    ...outputs
+      .filter((output) => context.perRun && output.includes('*'))
+      .map((output) => `${where} writes "${output}", a glob; a per-run pipeline names each file.`),
     ...outputs
       .filter((output) => !output.startsWith(`${context.staging}/`))
       .map((output) => `${where} writes "${output}", outside its staging folder ${context.staging}.`),

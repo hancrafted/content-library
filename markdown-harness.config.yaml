@@ -28,7 +28,7 @@ frontmatter:
         stale_after: { presence: required, format: datetime }
     - ruleId: staging-brief
       fileNames: [brief.md]
-      intent: 'A Brief is written before any research and stays the yardstick every later artifact is judged against. Fail if a goal is too vague to judge a Manuscript against, or if it states as settled what only the research questions can answer.'
+      intent: 'A Brief is written before any research and is the yardstick every later artifact is judged against, so each goal is concrete enough to judge a Manuscript by. Fail if a goal is too vague to judge a Manuscript against.'
       unknownKeys: forbidden
       fields:
         type:
@@ -36,27 +36,24 @@ frontmatter:
           allowed:
             - {
                 value: brief,
-                intent: 'Goals, not story: what the Episode must achieve, never the Episode itself. Fail if the body drafts spoken prose or Slides instead of stating what they must achieve.',
+                intent: 'Goals: what the Episode must achieve, stated before it is written. Fail if the body drafts Slides or Sections.',
               }
         status:
           presence: required
           allowed:
             - {
                 value: draft,
-                intent: 'An agent wrote or changed the Brief and its checks have not passed on this version. Fail if anything in the file claims a review that has not happened.',
+                intent: 'When status is draft: an agent wrote or changed the Brief and its checks have not yet passed on it.',
               }
-            - {
-                value: checked,
-                intent: 'Passed markdown-harness, the cross-file tests and its reviewer on this exact version, and waits for Han. Fail if the Brief changed after that review.',
-              }
+            - { value: checked, intent: 'When status is checked: the Brief passed its checks and waits for Han.' }
             - {
                 value: approved,
-                intent: 'Han accepted the Brief at its gate; no later job starts without it. Fail if anyone but Han set it, or the Brief changed after he did.',
+                intent: 'When status is approved: Han accepted the Brief at its gate, and later jobs start from it.',
               }
 
     - ruleId: staging-manuscript
       fileNames: [manuscript.md]
-      intent: 'The Manuscript is the story the Episode tells, written backwards from its Brief: every Section moves the Red thread towards the learning goal. Fail if a Section does not advance the Red thread, or an actionable is never spoken.'
+      intent: 'The Manuscript is the story the Episode tells, written backwards from its Brief so that every actionable is spoken. Fail if an actionable of the Brief is never spoken.'
       unknownKeys: forbidden
       fields:
         type:
@@ -64,36 +61,36 @@ frontmatter:
           allowed:
             - {
                 value: manuscript,
-                intent: 'The spoken story and nothing else. Fail if it carries implementation detail (CSS, components, layout) or material that belongs in the Dossier, such as sources and Speaker notes.',
+                intent: 'The spoken story only; sources, Speaker notes and the choice of Visual live in the Dossier. Fail if it carries material beyond what the speaker says.',
               }
         status: &staging-status
           presence: required
           allowed:
             - {
                 value: draft,
-                intent: 'An agent wrote or changed the file and its checks have not passed on this version. Fail if anything in the file claims a review that has not happened.',
+                intent: 'When status is draft: an agent wrote or changed the file and its checks have not yet passed on it.',
               }
             - {
                 value: checked,
-                intent: 'Passed markdown-harness, the cross-file tests and its reviewer on this exact version. Fail if the file changed after that review.',
+                intent: 'When status is checked: the file passed markdown-harness, the cross-file tests and its reviewer.',
               }
         locale: &staging-locale
           presence: required
           allowed:
             - {
                 value: en,
-                intent: 'English, the canonical text every translation starts from. Fail if any title, prose or note is in another language.',
+                intent: 'English, the canonical text every translation starts from. Fail if authored text is in another language.',
               }
         brief: &staging-brief-link
           presence: required
           allowed:
             - {
                 value: ./brief.md,
-                intent: 'The Brief in the same folder, whose goals this file is judged against. Fail if the file serves a goal the Brief does not state, or drops one it does.',
+                intent: 'The Brief in the same folder, whose goals this file is written towards. Fail if slugged material serves no goal the Brief states.',
               }
     - ruleId: staging-dossier
       fileNames: [dossier.md]
-      intent: "The Dossier holds what the Manuscript leaves unsaid for each Slide: what is shown, what is cited, and how the speech splits into Voice script segments, so the implementation is built without inventing material. Fail if a page slide's material would leave an implementer guessing."
+      intent: "The Dossier holds what the Manuscript leaves unsaid for each Slide: what is shown, what is cited, and how the speech splits into Voice script segments, so the implementation is built from it without inventing material. Fail if a page slide's material would leave an implementer guessing."
       unknownKeys: forbidden
       fields:
         type:
@@ -101,7 +98,7 @@ frontmatter:
           allowed:
             - {
                 value: dossier,
-                intent: 'Material, not story. Fail if it carries prose meant to be spoken, which belongs in the Manuscript, or implementation detail such as CSS.',
+                intent: 'Material for building the Slides, described as what the viewer sees; spoken prose lives in the Manuscript. Fail if it holds spoken prose or specifies styling or code.',
               }
         status: *staging-status
         locale: *staging-locale
@@ -120,17 +117,14 @@ frontmatter:
         type:
           presence: required
           allowed:
-            - {
-                value: research,
-                intent: 'Evidence, not argument. Fail if it argues for a point an Episode wants to make instead of reporting what the Sources show.',
-              }
+            - { value: research, intent: 'Evidence: what the Sources show, reported for any reader.' }
         description:
           presence: required
           maxLength: 200
-          intent: 'One sentence stating the Answer, which research-match reads to decide whether this file answers a new question. Fail if it names the topic without stating the answer.'
+          intent: 'One sentence stating the Answer, which the retrieval job reads to decide whether this file answers a new question. Fail if it names the topic without stating the answer.'
         question:
           presence: required
-          intent: 'The research question as it was first asked, so research-match can compare it with a new one. Fail if it is reworded or merged with another question.'
+          intent: 'The research question in the words that first asked it, so retrieval can compare it with a new one. Fail if it holds more than one question, or differs from the Brief that asked it when that Brief is at hand.'
         researched_on:
           presence: required
           format: datetime
@@ -138,37 +132,28 @@ frontmatter:
         stale_after:
           presence: required
           format: datetime
-          intent: 'When the Findings stop being trustworthy; past it, the research is redone before anyone cites it. Fail if the interval does not fit how fast the subject changes: years for a fast-moving field, or weeks for a settled one.'
+          intent: 'When the Findings stop being trustworthy: a year after researched_on, or six months when they concern a specific tool, model or price. Fail if it is later than that.'
     - ruleId: feedback
       fileNames: [feedback.md]
-      intent: "One round of Han's feedback, kept so every item reaches the file it changes and the harvest can learn from every round. Fail if an item holds more than one change, or cannot be acted on without asking Han."
+      intent: "One round of Han's feedback, kept so every item reaches the file it changes and the style harvest can learn from every round. Fail if an item cannot be acted on without asking Han."
       unknownKeys: forbidden
       fields:
         type:
           presence: required
           allowed:
-            - {
-                value: feedback,
-                intent: "Han's words as he gave them. Fail if an agent has rephrased, merged or judged the items.",
-              }
+            - { value: feedback, intent: "Han's feedback for one round, in his words." }
         round:
           presence: required
-          intent: 'Which pass of the feedback loop this is, counting from 1; an earlier round is never rewritten. Fail if it reuses the number of an existing round.'
+          intent: "Which pass of the feedback loop this is, counting from 1, one file per round. Fail if it differs from the number of its folder, or another round's file uses it."
         via:
           presence: required
           allowed:
-            - {
-                value: app,
-                intent: 'Typed or dictated while reviewing the served Episode. Fail if the items read as a voice handoff or come from rehearsal.',
-              }
+            - { value: app, intent: 'When via is app: typed or dictated while reviewing the served Episode.' }
             - {
                 value: voice,
-                intent: "Distilled from a Claude Desktop voice session's handoff. Fail if an item keeps the conversation around a change instead of the change itself.",
+                intent: "When via is voice: distilled from a Claude Desktop voice session's handoff, keeping each change without the conversation around it. Fail if an item keeps that conversation.",
               }
-            - {
-                value: practice,
-                intent: 'Changes Han found while rehearsing the recording. Fail if the items describe reviewing the app instead of rehearsing.',
-              }
+            - { value: practice, intent: 'When via is practice: changes Han found while rehearsing the recording.' }
 
 body-structure:
   rules:
@@ -261,7 +246,7 @@ body-structure:
             [
               {
                 title: Threads,
-                intent: 'Only for a longer Episode: two Threads told in turns so the audience never follows one too long. Fail if the Format is a Short, or the two Threads do not strengthen each other.',
+                intent: 'Only for a longer Episode: two Threads told in turns so the audience never follows one too long.',
               },
             ]
           headings:
@@ -321,52 +306,52 @@ body-structure:
               [
                 {
                   title: Open ideas,
-                  intent: 'Ideas the grill did not settle, kept for the feedback loop; nothing here binds the run. Fail if an item is phrased as a decision.',
+                  intent: 'Ideas the grill did not settle, kept for the feedback loop; nothing here binds the run. Fail if an item restates or overrides a settled section.',
                 },
               ],
           }
     - ruleId: staging-manuscript-body
       fileNames: [manuscript.md]
-      intent: "Headings are the Episode's Slides and paragraphs are its Voice script segments, so the prose is what the speaker says, in order. Fail if a paragraph would not stand as one spoken passage, or the text only makes sense while seeing a Slide."
+      intent: "Headings are the Episode's Slides, their titles copied verbatim into the Episode and their slugs keeping them addressable when a title changes; paragraphs are the Voice script segments, so the prose is what the speaker says, in order. Fail if a paragraph would not stand as one spoken passage, or the text only makes sense while seeing a Slide."
       undefinedHeadings: forbid
       headings:
         - purpose: heading
           level: 1
           pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
-          intent: "The Title slide: a catchy, short title copied verbatim into the Episode; the slug keeps it addressable when the title changes. Its prose opens with the Brief's Hook. Fail if the title is generic, or the prose opens with anything but the Hook."
+          intent: "The Title slide: a catchy, short title, and prose that opens with the Brief's Hook. Fail if the title is generic, or the prose opens with anything but the Hook."
           mayHold: [prose]
         - purpose: enumeration
           level: 2
           minCount: 1
           pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
-          intent: 'A section slide naming one Section, one step of the Red thread, with a catchy, short title copied verbatim into the Episode. Fail if the Section does not advance the Red thread, or its title only labels a topic.'
+          intent: 'A section slide naming one Section, one step of the Red thread. Fail if the Section does not advance the Red thread.'
           mayHold: [prose]
           headings:
             - purpose: enumeration
               level: 3
               minCount: 1
               pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
-              intent: 'A page slide: one point the speaker makes, under a catchy, short title copied verbatim into the Episode. Fail if it makes more than one point, or its title does not preview that point.'
+              intent: 'A page slide: one point the speaker makes, under a catchy, short title that previews it. Fail if it makes more than one point, or its title does not preview that point.'
               mayHold: [prose]
     - ruleId: staging-dossier-body
       fileNames: [dossier.md]
-      intent: "The Dossier follows the Manuscript's Slides, and headings without a slug add material anywhere. Fail if any material contradicts the Manuscript prose it sits beside."
+      intent: "The Dossier follows the Manuscript's Slides; a heading without a slug adds material and may sit anywhere. Fail if any material contradicts the Manuscript prose it sits beside."
       headings:
         - purpose: heading
           level: 1
           pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
-          intent: 'The Title slide; material here serves the opening. Fail if it carries material for a later Slide.'
+          intent: 'The Title slide; material here serves the opening or the Episode as a whole. Fail if material here serves only one later Slide.'
         - purpose: enumeration
           level: 2
           minCount: 1
           pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
-          intent: 'A Section; material here serves the whole Section. An h2 without a slug adds material and may sit anywhere. Fail if material here belongs to a single Slide.'
+          intent: 'A Section; material here serves the whole Section. Fail if material here serves only one of its Slides.'
           headings:
             - purpose: enumeration
               level: 3
               minCount: 1
               pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
-              intent: 'A page slide, whose Visual, Speaker notes and Segments serve the matching Manuscript prose. An h3 without a slug adds material and may sit anywhere. Fail if anything here argues a point that prose does not make.'
+              intent: 'A page slide, whose Visual, Speaker notes and Segments serve the matching Manuscript prose.'
               headings:
                 - purpose: heading
                   level: 4
@@ -374,7 +359,7 @@ body-structure:
                     [
                       {
                         title: Visual,
-                        intent: "The master slide and motion that show this Slide's point, then optional prose on what the viewer sees. Fail if the choice does not show the point the prose makes, or the prose specifies CSS or code.",
+                        intent: "The master slide and motion that show this Slide's point, then prose on what the viewer sees, required when the master alone does not say it. Fail if the choice does not show the point the prose makes.",
                       },
                     ]
                   mayHold: [prose]
@@ -384,7 +369,7 @@ body-structure:
                     [
                       {
                         title: Speaker notes,
-                        intent: 'Talking points a viewer opens beside the Slide, each explaining an element the speaker does not say aloud, with a source behind it. Fail if a note repeats the spoken prose, or its source does not support its claim.',
+                        intent: 'Talking points a viewer opens beside the Slide, each adding what the speaker leaves out: a source, a number, a detail. Fail if a note adds nothing the prose leaves out, or its source does not support its claim.',
                       },
                     ]
                   mayHold: [ordered-list]
@@ -400,7 +385,7 @@ body-structure:
                   mayHold: [ordered-list]
     - ruleId: research-body
       fileNames: [research.md]
-      intent: 'Question, reason, answer, evidence and its limits, in that order, so a reader trusts the Answer only as far as the Findings carry it. Fail if the Answer claims more than the Findings support.'
+      intent: 'Question, reason, answer, evidence and its limits, in that order, so a reader trusts the Answer as far as the Findings and Caveats carry it.'
       undefinedHeadings: forbid
       headings:
         - purpose: heading
@@ -410,13 +395,7 @@ body-structure:
         - {
             purpose: heading,
             level: 2,
-            allowed:
-              [
-                {
-                  title: Context,
-                  intent: 'Why the question was asked and what kind of claim it supports, naming no Episode, so any Episode can reuse the file. Fail if it names an Episode or needs one to make sense.',
-                },
-              ],
+            allowed: [{ title: Context, intent: 'Why the question was asked and what kind of claim it supports.' }],
             mayHold: [prose],
           }
         - {
@@ -426,7 +405,7 @@ body-structure:
               [
                 {
                   title: Answer,
-                  intent: 'The answer to the h1 in 2–5 quotable sentences. Fail if it hedges without saying what is known, or states something no Finding supports.',
+                  intent: 'The answer to the h1 in 2–5 quotable sentences. Fail if it hedges without saying what is known, or states something no Finding supports and the Caveats do not flag as inference.',
                 },
               ],
             mayHold: [prose],
@@ -438,7 +417,7 @@ body-structure:
               [
                 {
                   title: Findings,
-                  intent: 'The evidence behind the Answer, one finding per item, each citing its Source as `[n]`. Fail if a finding gives an opinion instead of what a Source shows.',
+                  intent: 'The evidence behind the Answer, one finding per item, each citing its Source as `[n]`. Fail if a finding cites no Source, or gives an opinion instead of what a Source shows.',
                 },
               ],
             mayHold: [ordered-list],
@@ -450,7 +429,7 @@ body-structure:
               [
                 {
                   title: Sources,
-                  intent: 'Primary sources, numbered as the Findings cite them: `<author>, <title> — <URL> — accessed <date>`. Fail if a source is secondary where a primary one exists, or no Finding cites it.',
+                  intent: 'Primary sources, numbered as the Findings cite them: `<author>, <title> — <URL> — accessed <date>`. Fail if a source reports on a work instead of being it, unless it is an earlier research file this one extends, or if no Finding cites it.',
                 },
               ],
             mayHold: [ordered-list],
@@ -463,13 +442,13 @@ body-structure:
               [
                 {
                   title: Caveats,
-                  intent: 'Limits of the Findings: what the Sources do not show, and any inference the Answer makes beyond them. Fail if the Answer goes beyond the Findings and nothing here says so.',
+                  intent: 'Limits of the Findings: what the Sources do not show, and any inference the Answer makes beyond them.',
                 },
               ],
           }
     - ruleId: feedback-body
       fileNames: [feedback.md]
-      intent: 'One list of items, each a single change keyed to its Slide and tagged with where it lands, so it routes to the Manuscript or Dossier, or to the implementation. Fail if an item tagged content asks for a code change, or one tagged implementation asks for new wording.'
+      intent: 'One list of items, each a single change keyed to its Slide and tagged with where it lands, so it routes to the Manuscript or Dossier, or to the implementation. Fail if an item holds more than one change, or its tag sends it to the wrong place.'
       undefinedHeadings: forbid
     - ruleId: run-log-body
       fileNames: [run-log.md]
@@ -500,7 +479,7 @@ body-structure:
                   [
                     {
                       title: Inputs,
-                      intent: 'Every file, question or handoff the job read, one per item, so a failure can be traced to its input. Fail if the Output depends on something not listed.',
+                      intent: 'Every file, question or handoff the job read, one per item, so a failure can be traced to its input. Fail if Output or Notes name an input not listed.',
                     },
                   ],
                 mayHold: [unordered-list],
@@ -512,7 +491,7 @@ body-structure:
                   [
                     {
                       title: Output,
-                      intent: "Every file the job wrote and the status it left, one per item. Fail if a status here differs from that file's frontmatter.",
+                      intent: "Every file the job wrote and the status it left then, one per item. Fail if the newest entry naming a file disagrees with that file's frontmatter.",
                     },
                   ],
                 mayHold: [unordered-list],
@@ -524,7 +503,7 @@ body-structure:
                   [
                     {
                       title: Checks,
-                      intent: 'Each check the job ran and its result, cheapest first: markdown-harness, vitest, reviewer. Fail if a failed check is missing, or a pass is claimed for a check that did not run.',
+                      intent: "Each check of the job's final attempt and its result, cheapest first: markdown-harness, vitest, reviewer. Fail if it disagrees with Metrics.",
                     },
                   ],
                 mayHold: [unordered-list],
@@ -536,7 +515,7 @@ body-structure:
                   [
                     {
                       title: Metrics,
-                      intent: 'One item per agent run, matching its row in the runs CSV: `<agent> · attempt <n> · pass|fail[ · rubric "<line>"] · <duration> s · <tokens> tokens`. Fail if a fail names no rubric line.',
+                      intent: 'One item per agent run, matching its row in the runs CSV: `<agent> · attempt <n> · pass|fail[ · rubric "<line>"] · <duration> s · <tokens> tokens`, where `<line>` quotes the failed reviewer line, intent or rubric. Fail if a fail quotes no line.',
                     },
                   ],
                 mayHold: [unordered-list],
