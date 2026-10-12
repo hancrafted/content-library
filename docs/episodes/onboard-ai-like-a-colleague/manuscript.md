@@ -1,6 +1,6 @@
 ---
 type: manuscript
-status: checked
+status: approved
 locale: en
 brief: ./brief.md
 ---
