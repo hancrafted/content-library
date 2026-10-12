@@ -112,9 +112,11 @@ function researchFolders(): string[] {
         .filter((entry) => entry.isDirectory())
         .map(({ name }) => path.relative(ROOT, path.join(folder, name))),
     );
-  const planned = Object.values(perRunPipelines()).flatMap((yaml) =>
-    [...yaml.matchAll(/^\s+outputs: \[(\S+)\/research\.md\]$/gm)].map((match) => match[1]),
-  );
+  const planned = Object.values(perRunPipelines())
+    .flatMap((yaml) => (parse(yaml) as { jobs: { outputs?: string[] }[] }).jobs)
+    .flatMap(({ outputs }) => outputs ?? [])
+    .filter((output) => output.endsWith('/research.md'))
+    .map((output) => path.dirname(output));
   return [...onDisk, ...planned];
 }
 
