@@ -8,8 +8,11 @@
 #     intent    optional; the job's task as a prompt, for a job no reference describes
 #     needs     job ids this job waits for
 #     foreach   optional; `<file>#<heading>` fans the job out once per list item
-#     outputs   staging paths the job writes; a job reading one must need its writer;
-#               a rule must govern every .md one, whose intents the implementor queries
+#     before    what runs before the implementor writes: `mh-query`, required when a job
+#               writes markdown, has the implementor run `npx mh query <path>` on every
+#               .md output and follow its intents; the reviewer runs it as its baseline
+#     outputs   full repo paths in the staging folder docs/episodes/<slug>/; a job reading
+#               one must need its writer; a rule must govern every .md one
 #     checks    cheapest first; names and commands in SKILL.md's job-loop check table
 #     retries   reviewer failures sent back before this branch of the pipeline stops
 #     gate      optional; `human` stops the run until Han approves the output
@@ -17,8 +20,7 @@
 #       type        implementor | reviewer
 #       skills      skill names under .agents/skills/
 #       references  files the agent reads: `references/` and `assets/` sit in this
-#                   skill's folder, a job output in the staging folder, anything
-#                   else at the repo root
+#                   skill's folder, anything else is a repo path
 #       rubric      reviewers only: `<file>#<heading>` holding the pass/fail lines
 #       agent       optional; the Claude Code agent type to spawn, general-purpose when omitted
 #       model       the model it runs on, or inherit; SKILL.md's job loop says where it applies
@@ -27,7 +29,8 @@ status: draft
 jobs:
   - id: brief-grill
     needs: []
-    outputs: [brief.md]
+    before: [mh-query]
+    outputs: [docs/episodes/onboard-ai-like-a-colleague/brief.md]
     checks: [mh, vitest]
     retries: 0
     gate: human
@@ -40,14 +43,15 @@ jobs:
 
   - id: customize-pipeline
     needs: [brief-grill]
-    outputs: [pipeline.yml]
+    outputs: [docs/episodes/onboard-ai-like-a-colleague/pipeline.yml]
     checks: [vitest]
     retries: 0
     gate: human
     agents:
       - type: implementor
         skills: []
-        references: [references/customize-pipeline.md, assets/pipeline.yml, brief.md]
+        references:
+          [references/customize-pipeline.md, assets/pipeline.yml, docs/episodes/onboard-ai-like-a-colleague/brief.md]
         model: inherit
         session: orchestrator
 
@@ -55,7 +59,8 @@ jobs:
   # the run log which questions remain unanswered.
   - id: retrieval
     needs: [customize-pipeline]
-    outputs: [run-log.md]
+    before: [mh-query]
+    outputs: [docs/episodes/onboard-ai-like-a-colleague/run-log.md]
     checks: [mh]
     retries: 1
     agents:
@@ -63,15 +68,16 @@ jobs:
         skills: []
         references:
           - references/retrieval.md
-          - brief.md
+          - docs/episodes/onboard-ai-like-a-colleague/brief.md
           - docs/research/ai-onboarding-freelancer.md
           - docs/research/ai-amnesia-mechanics.md
         model: inherit
 
   - id: write-research
     needs: [retrieval]
-    foreach: brief.md#research-questions
-    outputs: [research/*/research.md]
+    foreach: docs/episodes/onboard-ai-like-a-colleague/brief.md#research-questions
+    before: [mh-query]
+    outputs: [docs/episodes/onboard-ai-like-a-colleague/research/*/research.md]
     checks: [mh, vitest]
     retries: 1
     agents:
@@ -79,8 +85,8 @@ jobs:
         skills: [research]
         references:
           - references/write-research.md
-          - brief.md
-          - run-log.md
+          - docs/episodes/onboard-ai-like-a-colleague/brief.md
+          - docs/episodes/onboard-ai-like-a-colleague/run-log.md
           - docs/research/ai-onboarding-freelancer.md
           - docs/research/ai-amnesia-mechanics.md
         model: sonnet
@@ -115,12 +121,13 @@ jobs:
           - docs/research/ai-amnesia-mechanics.md
           - docs/research/amnesiac-freelancer-script.md
           - src/components/episodes/amnesiac-freelancer/amnesiac-freelancer.ts
-          - research/*/research.md
+          - docs/episodes/onboard-ai-like-a-colleague/research/*/research.md
         model: sonnet
 
   - id: write-dossier
     needs: [write-research]
-    outputs: [dossier.md]
+    before: [mh-query]
+    outputs: [docs/episodes/onboard-ai-like-a-colleague/dossier.md]
     checks: [mh, vitest]
     retries: 1
     agents:
@@ -128,20 +135,21 @@ jobs:
         skills: []
         references:
           - references/write-dossier.md
-          - brief.md
-          - research/*/research.md
+          - docs/episodes/onboard-ai-like-a-colleague/brief.md
+          - docs/episodes/onboard-ai-like-a-colleague/research/*/research.md
           - src/components/episodes/amnesiac-freelancer/amnesiac-freelancer.ts
           - docs/research/amnesiac-freelancer-script.md
         model: inherit
       - type: reviewer
         skills: []
-        references: [references/write-dossier.md, brief.md]
+        references: [references/write-dossier.md, docs/episodes/onboard-ai-like-a-colleague/brief.md]
         rubric: references/write-dossier.md#rubric
         model: opus
 
   - id: write-manuscript
     needs: [write-dossier]
-    outputs: [manuscript.md]
+    before: [mh-query]
+    outputs: [docs/episodes/onboard-ai-like-a-colleague/manuscript.md]
     checks: [mh, vitest]
     retries: 1
     gate: human
@@ -150,14 +158,14 @@ jobs:
         skills: []
         references:
           - references/write-manuscript.md
-          - brief.md
-          - dossier.md
+          - docs/episodes/onboard-ai-like-a-colleague/brief.md
+          - docs/episodes/onboard-ai-like-a-colleague/dossier.md
           - src/components/episodes/amnesiac-freelancer/amnesiac-freelancer.ts
           - docs/research/amnesiac-freelancer-script.md
         model: inherit
       - type: reviewer
         skills: []
-        references: [references/write-manuscript.md, brief.md]
+        references: [references/write-manuscript.md, docs/episodes/onboard-ai-like-a-colleague/brief.md]
         rubric: references/write-manuscript.md#rubric
         model: opus
 
@@ -170,11 +178,22 @@ jobs:
     agents:
       - type: implementor
         skills: [to-spec, to-tickets]
-        references: [references/write-spec.md, brief.md, dossier.md, manuscript.md]
+        references:
+          [
+            references/write-spec.md,
+            docs/episodes/onboard-ai-like-a-colleague/brief.md,
+            docs/episodes/onboard-ai-like-a-colleague/dossier.md,
+            docs/episodes/onboard-ai-like-a-colleague/manuscript.md,
+          ]
         model: inherit
       - type: reviewer
         skills: []
-        references: [references/write-spec.md, dossier.md, manuscript.md]
+        references:
+          [
+            references/write-spec.md,
+            docs/episodes/onboard-ai-like-a-colleague/dossier.md,
+            docs/episodes/onboard-ai-like-a-colleague/manuscript.md,
+          ]
         rubric: references/write-spec.md#rubric
         model: opus
 
@@ -187,12 +206,22 @@ jobs:
     agents:
       - type: implementor
         skills: [implement-spec, visual-check]
-        references: [references/implement-episode.md, dossier.md, manuscript.md]
+        references:
+          [
+            references/implement-episode.md,
+            docs/episodes/onboard-ai-like-a-colleague/dossier.md,
+            docs/episodes/onboard-ai-like-a-colleague/manuscript.md,
+          ]
         model: opus
         session: orchestrator
       - type: reviewer
         skills: [code-review, visual-check]
-        references: [references/implement-episode.md, dossier.md, manuscript.md]
+        references:
+          [
+            references/implement-episode.md,
+            docs/episodes/onboard-ai-like-a-colleague/dossier.md,
+            docs/episodes/onboard-ai-like-a-colleague/manuscript.md,
+          ]
         rubric: references/implement-episode.md#rubric
         model: opus
         session: orchestrator
@@ -205,5 +234,5 @@ jobs:
     agents:
       - type: implementor
         skills: [pr]
-        references: [references/open-pr.md, run-log.md]
+        references: [references/open-pr.md, docs/episodes/onboard-ai-like-a-colleague/run-log.md]
         model: sonnet

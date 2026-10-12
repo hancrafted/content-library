@@ -130,3 +130,27 @@ The run id is 2026-10-12T19:22:40Z, when the Episode branch was created. The ear
 ### Notes
 
 Han renamed the jobs by what they do: pipeline-tailor is now customize-pipeline, research-match retrieval, research write-research, consolidate write-dossier, distill write-manuscript, spec write-spec, implement implement-episode, and serve-and-pr open-pr. brief-grill keeps its skill's name. The earlier entries and runs CSV rows keep the names they were written with, since both logs are append-only: the job called pipeline-tailor there is customize-pipeline here.
+
+## customize-pipeline · 2026-10-12T20:58:36Z
+
+### Inputs
+
+- `pipeline.yml` as of 20969ab.
+- The template change from `feat/89-new-episode` (249dd87), merged in: full output paths and the job field `before`.
+
+### Output
+
+- `pipeline.yml`, still `status: draft`, its tailoring unchanged.
+
+### Checks
+
+- `vitest` (`tests/docs/episode-staging.test.ts`): pass.
+- `mh check`: pass.
+
+### Metrics
+
+- implementor · attempt 1 · pass · run in the orchestrator's session, duration not measured · no token count
+
+### Notes
+
+Every output, `foreach` and staging reference now names its full path under `docs/episodes/onboard-ai-like-a-colleague/`, and each job writing markdown (brief-grill, retrieval, write-research, write-dossier, write-manuscript) lists `before: [mh-query]`, so its implementor queries each output's rules before writing it. The schema comment is the template's, with `<slug>` left in as the placeholder it describes.
