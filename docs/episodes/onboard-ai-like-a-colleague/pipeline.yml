@@ -51,7 +51,7 @@ jobs:
     needs: [pipeline-tailor]
     outputs: [run-log.md]
     checks: [mh]
-    retries: 0
+    retries: 1
     agents:
       - type: implementor
         skills: []
@@ -67,7 +67,7 @@ jobs:
     foreach: brief.md#research-questions
     outputs: [research/*/research.md]
     checks: [mh, vitest]
-    retries: 3
+    retries: 1
     agents:
       - type: implementor
         skills: [research]
@@ -88,7 +88,7 @@ jobs:
     needs: [research]
     outputs: [dossier.md]
     checks: [mh, vitest]
-    retries: 2
+    retries: 1
     agents:
       - type: implementor
         skills: []
@@ -109,7 +109,7 @@ jobs:
     needs: [consolidate]
     outputs: [manuscript.md]
     checks: [mh, vitest]
-    retries: 2
+    retries: 1
     gate: human
     agents:
       - type: implementor
@@ -132,7 +132,7 @@ jobs:
     needs: [distill]
     outputs: []
     checks: []
-    retries: 2
+    retries: 1
     agents:
       - type: implementor
         skills: [to-spec, to-tickets]
@@ -149,7 +149,7 @@ jobs:
     needs: [spec]
     outputs: []
     checks: [verify, build, test:build, visual-check]
-    retries: 2
+    retries: 1
     agents:
       - type: implementor
         skills: [implement-spec, visual-check]
@@ -165,7 +165,7 @@ jobs:
     needs: [implement]
     outputs: []
     checks: []
-    retries: 0
+    retries: 1
     agents:
       - type: implementor
         skills: [pr]

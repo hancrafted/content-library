@@ -54,3 +54,25 @@ The `distill` reviewer no longer reads the missing tone guide.
 `distill` gets `gate: human`: Han presents this talk live next week and reads the Manuscript before the spec is written.
 
 Pending outside the schema: once every `research` job has passed, the orchestrator deletes `docs/research/ai-onboarding-freelancer.md` and `docs/research/ai-amnesia-mechanics.md`, and repoints the two files that cite them (`src/components/episodes/amnesiac-freelancer/amnesiac-freelancer.ts` line 20 and `docs/research/amnesiac-freelancer-script.md` line 3) to the new research files.
+
+## pipeline-tailor · 2026-10-12T20:10:00Z
+
+### Inputs
+
+- `pipeline.yml` as drafted in 3633eee, and Han's instruction to set every retry to 1 for this run.
+
+### Output
+
+- `pipeline.yml`, still `status: draft`.
+
+### Checks
+
+- `vitest` (`tests/docs/episode-staging.test.ts`): pass.
+
+### Metrics
+
+- implementor · attempt 1 · pass · run in the orchestrator's session, no token count
+
+### Notes
+
+Every job after `pipeline-tailor` now has `retries: 1`, so each job gets two attempts. Han wants to see how often a first attempt fails. This replaces the earlier raise of `research` to 3. `brief-grill` and `pipeline-tailor` keep 0: they are done, and Han is their reviewer.
