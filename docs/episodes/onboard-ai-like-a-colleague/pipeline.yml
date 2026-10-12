@@ -1,0 +1,173 @@
+# The per-run pipeline of onboard-ai-like-a-colleague, tailored from the
+# new-episode template. Every change from the template and its reason is in
+# run-log.md under pipeline-tailor.
+#
+# Schema (checked by src/lib/episode-pipeline.pure.ts in `npm run verify`):
+#   status    draft | approved
+#   jobs      run once every job in `needs` is done; independent jobs may run in parallel
+#     needs     job ids this job waits for
+#     foreach   optional; `<file>#<heading>` fans the job out once per list item
+#     outputs   staging paths the job writes; a job reading one must need its writer
+#     checks    cheapest first; names and commands in SKILL.md's job-loop check table
+#     retries   reviewer failures sent back before this branch of the pipeline stops
+#     gate      optional; `human` stops the run until Han approves the output
+#     agents    run in order; a reviewer is a fresh subagent that did not write the output
+#       type        implementor | reviewer
+#       skills      skill names under .agents/skills/
+#       references  files the agent reads: `references/` and `assets/` sit in this
+#                   skill's folder, a job output in the staging folder, anything
+#                   else at the repo root
+#       rubric      reviewers only: `<file>#<heading>` holding the pass/fail lines
+#       profile     ~ for now; later names an agent profile (model, tools, persona)
+status: draft
+jobs:
+  - id: brief-grill
+    needs: []
+    outputs: [brief.md]
+    checks: [mh, vitest]
+    retries: 0
+    gate: human
+    agents:
+      - type: implementor
+        skills: [brief-grill, grilling, handoff]
+        references: [references/brief-grill.md]
+        profile: ~
+
+  - id: pipeline-tailor
+    needs: [brief-grill]
+    outputs: [pipeline.yml]
+    checks: [vitest]
+    retries: 0
+    gate: human
+    agents:
+      - type: implementor
+        skills: []
+        references: [references/pipeline-tailor.md, assets/pipeline.yml, brief.md]
+        profile: ~
+
+  # Matches each research question against the llm-wiki index and records in
+  # the run log which questions remain unanswered.
+  - id: research-match
+    needs: [pipeline-tailor]
+    outputs: [run-log.md]
+    checks: [mh]
+    retries: 0
+    agents:
+      - type: implementor
+        skills: []
+        references:
+          - references/research-match.md
+          - brief.md
+          - docs/research/ai-onboarding-freelancer.md
+          - docs/research/ai-amnesia-mechanics.md
+        profile: ~
+
+  - id: research
+    needs: [research-match]
+    foreach: brief.md#research-questions
+    outputs: [research/*/research.md]
+    checks: [mh, vitest]
+    retries: 3
+    agents:
+      - type: implementor
+        skills: [research]
+        references:
+          - references/research.md
+          - brief.md
+          - run-log.md
+          - docs/research/ai-onboarding-freelancer.md
+          - docs/research/ai-amnesia-mechanics.md
+        profile: ~
+      - type: reviewer
+        skills: []
+        references: [references/research.md]
+        rubric: references/research.md#rubric
+        profile: ~
+
+  - id: consolidate
+    needs: [research]
+    outputs: [dossier.md]
+    checks: [mh, vitest]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: []
+        references:
+          - references/consolidate.md
+          - brief.md
+          - research/*/research.md
+          - src/components/episodes/amnesiac-freelancer/amnesiac-freelancer.ts
+          - docs/research/amnesiac-freelancer-script.md
+        profile: ~
+      - type: reviewer
+        skills: []
+        references: [references/consolidate.md, brief.md]
+        rubric: references/consolidate.md#rubric
+        profile: ~
+
+  - id: distill
+    needs: [consolidate]
+    outputs: [manuscript.md]
+    checks: [mh, vitest]
+    retries: 2
+    gate: human
+    agents:
+      - type: implementor
+        skills: []
+        references:
+          - references/distill.md
+          - brief.md
+          - dossier.md
+          - src/components/episodes/amnesiac-freelancer/amnesiac-freelancer.ts
+          - docs/research/amnesiac-freelancer-script.md
+        profile: ~
+      - type: reviewer
+        skills: []
+        references: [references/distill.md, brief.md]
+        rubric: references/distill.md#rubric
+        profile: ~
+
+  # Writes no staging file: its output is a spec issue with one sub-issue per Section.
+  - id: spec
+    needs: [distill]
+    outputs: []
+    checks: []
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [to-spec, to-tickets]
+        references: [references/spec.md, brief.md, dossier.md, manuscript.md]
+        profile: ~
+      - type: reviewer
+        skills: []
+        references: [references/spec.md, dossier.md, manuscript.md]
+        rubric: references/spec.md#rubric
+        profile: ~
+
+  # Writes the Episode under src/, outside the staging folder.
+  - id: implement
+    needs: [spec]
+    outputs: []
+    checks: [verify, build, test:build, visual-check]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [implement-spec, visual-check]
+        references: [references/implement.md, dossier.md, manuscript.md]
+        profile: ~
+      - type: reviewer
+        skills: [visual-check]
+        references: [references/implement.md, dossier.md, manuscript.md]
+        rubric: references/implement.md#rubric
+        profile: ~
+
+  - id: serve-and-pr
+    needs: [implement]
+    outputs: []
+    checks: []
+    retries: 0
+    agents:
+      - type: implementor
+        skills: [pr]
+        references: [references/serve-and-pr.md, run-log.md]
+        profile: ~
