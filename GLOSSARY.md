@@ -87,6 +87,9 @@ _Avoid_: Script, draft
 **Dossier**: the companion to an Episode's Manuscript: the research summary, citations, Speaker notes material and the choice of master slide and animation for each Slide. It shares the Manuscript's Sections and Slides and may add its own.
 _Avoid_: Episode file, companion, notes
 
+**Red thread**: the single line of argument that runs from an Episode's hook to its learning goal, which every Section advances.
+_Avoid_: Through-line, redline, golden thread
+
 **Thread**: one of two parallel storylines in a longer Episode, the A thread and the B thread, told in turns so the audience never follows one story too long, each strengthening the other.
 _Avoid_: Plot, subplot, storyline
 
