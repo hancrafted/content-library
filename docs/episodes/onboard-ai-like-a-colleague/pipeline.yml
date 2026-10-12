@@ -41,8 +41,30 @@ jobs:
         model: inherit
         session: orchestrator
 
-  - id: customize-pipeline
+  # An information architect's call, before the pipeline names any research file.
+  - id: categorize-research
+    intent: >-
+      Name one research folder per research question of the Brief, in its
+      order, as `<category>-<####>__<question-slug>` by GLOSSARY.md's Research
+      categories: pick the category each question belongs to, or, when none
+      fits, add a new category there with its meaning. Number each folder with
+      the next free number of its category, counting every research folder in
+      docs/episodes/*/research/ and docs/llm-wiki/research/. Write the
+      question's subject, not the Episode, in 20-40 characters of kebab case.
+      Return the names, each beside its question, and any category you added
+      with why no existing one fits.
     needs: [brief-grill]
+    outputs: []
+    checks: [mh]
+    retries: 1
+    agents:
+      - type: implementor
+        skills: [domain-modeling]
+        references: [GLOSSARY.md, docs/episodes/onboard-ai-like-a-colleague/brief.md]
+        model: opus
+
+  - id: customize-pipeline
+    needs: [categorize-research]
     outputs: [docs/episodes/onboard-ai-like-a-colleague/pipeline.yml]
     checks: [vitest]
     retries: 0
@@ -73,7 +95,7 @@ jobs:
           - docs/research/ai-amnesia-mechanics.md
         model: inherit
 
-  - id: write-research-onboarding-lens
+  - id: write-research-ai-as-onboarding-a-colleague
     intent: >-
       Answer research question 1 of the Brief: Why do others frame working with AI
       as onboarding a colleague? Collect sources proposing a similar model (Matt
@@ -81,7 +103,7 @@ jobs:
       it's an established lens.
     needs: [retrieval]
     before: [mh-query]
-    outputs: [docs/episodes/onboard-ai-like-a-colleague/research/onboarding-lens/research.md]
+    outputs: [docs/episodes/onboard-ai-like-a-colleague/research/AIE-0001__ai-as-onboarding-a-colleague/research.md]
     checks: [mh, vitest]
     retries: 1
     agents:
@@ -99,13 +121,13 @@ jobs:
         rubric: references/write-research.md#rubric
         model: opus
 
-  - id: write-research-individual-gap
+  - id: write-research-individual-ai-productivity-gap
     intent: >-
       Answer research question 2 of the Brief: Why do individuals fail to reach
       the promised AI productivity boost?
     needs: [retrieval]
     before: [mh-query]
-    outputs: [docs/episodes/onboard-ai-like-a-colleague/research/individual-gap/research.md]
+    outputs: [docs/episodes/onboard-ai-like-a-colleague/research/AIE-0002__individual-ai-productivity-gap/research.md]
     checks: [mh, vitest]
     retries: 1
     agents:
@@ -122,13 +144,14 @@ jobs:
         rubric: references/write-research.md#rubric
         model: opus
 
-  - id: write-research-org-gap
+  - id: write-research-organizational-ai-productivity-gap
     intent: >-
       Answer research question 3 of the Brief: Why do organizations fail to reach
       the promised AI productivity boost?
     needs: [retrieval]
     before: [mh-query]
-    outputs: [docs/episodes/onboard-ai-like-a-colleague/research/org-gap/research.md]
+    outputs:
+      [docs/episodes/onboard-ai-like-a-colleague/research/AIE-0003__organizational-ai-productivity-gap/research.md]
     checks: [mh, vitest]
     retries: 1
     agents:
@@ -145,13 +168,14 @@ jobs:
         rubric: references/write-research.md#rubric
         model: opus
 
-  - id: write-research-context-quality
+  - id: write-research-context-and-brief-improve-ai-output
     intent: >-
       Answer research question 4 of the Brief: Why does richer context and a
       clearer brief measurably improve AI output?
     needs: [retrieval]
     before: [mh-query]
-    outputs: [docs/episodes/onboard-ai-like-a-colleague/research/context-quality/research.md]
+    outputs:
+      [docs/episodes/onboard-ai-like-a-colleague/research/AIE-0004__context-and-brief-improve-ai-output/research.md]
     checks: [mh, vitest]
     retries: 1
     agents:
@@ -170,13 +194,13 @@ jobs:
         rubric: references/write-research.md#rubric
         model: opus
 
-  - id: write-research-unchecked-risk
+  - id: write-research-risks-of-unchecked-ai-output
     intent: >-
       Answer research question 5 of the Brief: Why does unchecked AI work carry
       real risk?
     needs: [retrieval]
     before: [mh-query]
-    outputs: [docs/episodes/onboard-ai-like-a-colleague/research/unchecked-risk/research.md]
+    outputs: [docs/episodes/onboard-ai-like-a-colleague/research/AIE-0005__risks-of-unchecked-ai-output/research.md]
     checks: [mh, vitest]
     retries: 1
     agents:
@@ -194,7 +218,7 @@ jobs:
         rubric: references/write-research.md#rubric
         model: opus
 
-  - id: write-research-delegation-skill
+  - id: write-research-ai-delegation-as-management-skill
     intent: >-
       Answer research question 6 of the Brief: Why is effective AI delegation a
       staff-level management discipline, and how does that reconcile with findings
@@ -203,7 +227,8 @@ jobs:
       correlates with experience.
     needs: [retrieval]
     before: [mh-query]
-    outputs: [docs/episodes/onboard-ai-like-a-colleague/research/delegation-skill/research.md]
+    outputs:
+      [docs/episodes/onboard-ai-like-a-colleague/research/AIE-0006__ai-delegation-as-management-skill/research.md]
     checks: [mh, vitest]
     retries: 1
     agents:
@@ -233,7 +258,12 @@ jobs:
       this run that now hold those Findings. Remove both paths from every
       references list in this pipeline.yml, this job's included, so the
       pipeline check still finds every file it names.
-    needs: [write-research-onboarding-lens, write-research-context-quality, write-research-unchecked-risk]
+    needs:
+      [
+        write-research-ai-as-onboarding-a-colleague,
+        write-research-context-and-brief-improve-ai-output,
+        write-research-risks-of-unchecked-ai-output,
+      ]
     outputs: []
     checks: [mh, verify]
     retries: 1
@@ -245,20 +275,20 @@ jobs:
           - docs/research/ai-amnesia-mechanics.md
           - docs/research/amnesiac-freelancer-script.md
           - src/components/episodes/amnesiac-freelancer/amnesiac-freelancer.ts
-          - docs/episodes/onboard-ai-like-a-colleague/research/onboarding-lens/research.md
-          - docs/episodes/onboard-ai-like-a-colleague/research/context-quality/research.md
-          - docs/episodes/onboard-ai-like-a-colleague/research/unchecked-risk/research.md
+          - docs/episodes/onboard-ai-like-a-colleague/research/AIE-0001__ai-as-onboarding-a-colleague/research.md
+          - docs/episodes/onboard-ai-like-a-colleague/research/AIE-0004__context-and-brief-improve-ai-output/research.md
+          - docs/episodes/onboard-ai-like-a-colleague/research/AIE-0005__risks-of-unchecked-ai-output/research.md
         model: sonnet
 
   - id: write-dossier
     needs:
       [
-        write-research-onboarding-lens,
-        write-research-individual-gap,
-        write-research-org-gap,
-        write-research-context-quality,
-        write-research-unchecked-risk,
-        write-research-delegation-skill,
+        write-research-ai-as-onboarding-a-colleague,
+        write-research-individual-ai-productivity-gap,
+        write-research-organizational-ai-productivity-gap,
+        write-research-context-and-brief-improve-ai-output,
+        write-research-risks-of-unchecked-ai-output,
+        write-research-ai-delegation-as-management-skill,
       ]
     before: [mh-query]
     outputs: [docs/episodes/onboard-ai-like-a-colleague/dossier.md]
@@ -270,12 +300,12 @@ jobs:
         references:
           - references/write-dossier.md
           - docs/episodes/onboard-ai-like-a-colleague/brief.md
-          - docs/episodes/onboard-ai-like-a-colleague/research/onboarding-lens/research.md
-          - docs/episodes/onboard-ai-like-a-colleague/research/individual-gap/research.md
-          - docs/episodes/onboard-ai-like-a-colleague/research/org-gap/research.md
-          - docs/episodes/onboard-ai-like-a-colleague/research/context-quality/research.md
-          - docs/episodes/onboard-ai-like-a-colleague/research/unchecked-risk/research.md
-          - docs/episodes/onboard-ai-like-a-colleague/research/delegation-skill/research.md
+          - docs/episodes/onboard-ai-like-a-colleague/research/AIE-0001__ai-as-onboarding-a-colleague/research.md
+          - docs/episodes/onboard-ai-like-a-colleague/research/AIE-0002__individual-ai-productivity-gap/research.md
+          - docs/episodes/onboard-ai-like-a-colleague/research/AIE-0003__organizational-ai-productivity-gap/research.md
+          - docs/episodes/onboard-ai-like-a-colleague/research/AIE-0004__context-and-brief-improve-ai-output/research.md
+          - docs/episodes/onboard-ai-like-a-colleague/research/AIE-0005__risks-of-unchecked-ai-output/research.md
+          - docs/episodes/onboard-ai-like-a-colleague/research/AIE-0006__ai-delegation-as-management-skill/research.md
           - src/components/episodes/amnesiac-freelancer/amnesiac-freelancer.ts
           - docs/research/amnesiac-freelancer-script.md
         model: inherit

@@ -181,3 +181,53 @@ Every output, `foreach` and staging reference now names its full path under `doc
 The one `write-research` job became six, each with an `intent` quoting its question and its own output: `onboarding-lens` (question 1), `individual-gap` (2), `org-gap` (3), `context-quality` (4), `unchecked-risk` (5) and `delegation-skill` (6), each writing `research/<name>/research.md`. Han chose these topic names over question numbers, because a research file outlives the Episode.
 
 The earlier Episode's research now goes only to the questions it bears on, an agent's reading of the two files for Han to check at the gate: `ai-onboarding-freelancer.md` to onboarding-lens, context-quality and unchecked-risk; `ai-amnesia-mechanics.md` to context-quality. Before, every research job read both. retire-prior-research now needs those three jobs instead of all research, and write-dossier needs all six and names each file.
+
+## categorize-research · 2026-10-12T21:22:53Z
+
+### Inputs
+
+- `brief.md#research-questions`, six questions.
+- `GLOSSARY.md`, Research categories: AIE and SALES.
+- No research folder in any staging folder or the llm-wiki yet, so each category's count starts at 0001.
+
+### Output
+
+- Six research folder names, returned to the orchestrator and written into `pipeline.yml` by customize-pipeline: `AIE-0001__ai-as-onboarding-a-colleague`, `AIE-0002__individual-ai-productivity-gap`, `AIE-0003__organizational-ai-productivity-gap`, `AIE-0004__context-and-brief-improve-ai-output`, `AIE-0005__risks-of-unchecked-ai-output`, `AIE-0006__ai-delegation-as-management-skill`.
+- `GLOSSARY.md` unchanged: no new category.
+
+### Checks
+
+- `mh check`: pass.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 9 s · 38318 tokens
+
+### Notes
+
+All six questions concern how people and organizations work with AI, so all are AIE. This job runs before the per-run pipeline exists, from the template, so it is added to this pipeline afterwards as its record.
+
+## customize-pipeline · 2026-10-12T21:22:53Z
+
+### Inputs
+
+- `pipeline.yml` as of 30e6221.
+- The template change from `feat/89-new-episode` (2c5a5ce, 579752d), merged in: research folders named `<category>-<####>__<question-slug>`, and the job categorize-research.
+- The six folder names from categorize-research.
+
+### Output
+
+- `pipeline.yml`, still `status: draft`.
+
+### Checks
+
+- `vitest` (`tests/docs/episode-staging.test.ts`): pass, including every planned research folder's name.
+- `mh check`: pass.
+
+### Metrics
+
+- implementor · attempt 1 · pass · run in the orchestrator's session, duration not measured · no token count
+
+### Notes
+
+Each research job and its output now carry the categorize-research name: the job id takes the slug (`write-research-ai-as-onboarding-a-colleague`), the folder the full name (`research/AIE-0001__ai-as-onboarding-a-colleague/`). write-dossier and retire-prior-research name the same paths. The categorize-research job is added between brief-grill and customize-pipeline, as in the template.
