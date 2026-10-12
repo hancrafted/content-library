@@ -28,24 +28,24 @@ frontmatter:
         stale_after: { presence: required, format: datetime }
     - ruleId: staging-brief
       fileNames: [brief.md]
-      intent: 'A Brief is written before any research and is the yardstick every later artifact is judged against, so each goal is concrete enough to judge a Manuscript by. Fail if a goal is too vague to judge a Manuscript against.'
+      intent: 'A Brief is written before any research and is the yardstick every later artifact is judged against, so each goal is concrete enough to judge a Manuscript by. Fail if a goal is too vague to judge a Manuscript against, or the body drafts Slides or Sections.'
       unknownKeys: forbidden
       fields:
         type:
           presence: required
           allowed:
-            - {
-                value: brief,
-                intent: 'Goals: what the Episode must achieve, stated before it is written. Fail if the body drafts Slides or Sections.',
-              }
+            - { value: brief, intent: 'Goals: what the Episode must achieve, stated before it is written.' }
         status:
           presence: required
           allowed:
             - {
                 value: draft,
-                intent: 'When status is draft: an agent wrote or changed the Brief, and it waits for Han.',
+                intent: 'When status is draft: an agent wrote or changed the Brief and its checks have not yet passed on it.',
               }
-            - { value: checked, intent: 'When status is checked: the Brief passed its checks and waits for Han.' }
+            - {
+                value: checked,
+                intent: 'When status is checked: the Brief passed markdown-harness and the cross-file tests, and waits for Han.',
+              }
             - {
                 value: approved,
                 intent: 'When status is approved: Han accepted the Brief at its gate, and later jobs start from it.',
@@ -53,7 +53,7 @@ frontmatter:
 
     - ruleId: staging-manuscript
       fileNames: [manuscript.md]
-      intent: 'The Manuscript is the story the Episode tells, written backwards from its Brief so that every actionable is spoken. Fail if an actionable of the Brief is never spoken.'
+      intent: 'The Manuscript is the story the Episode tells, written backwards from its Brief so that every actionable is spoken. Fail if an actionable of the Brief is never spoken, or the file carries material beyond what the speaker says.'
       unknownKeys: forbidden
       fields:
         type:
@@ -61,7 +61,7 @@ frontmatter:
           allowed:
             - {
                 value: manuscript,
-                intent: 'The spoken story only; sources, Speaker notes and the choice of Visual live in the Dossier. Fail if it carries material beyond what the speaker says.',
+                intent: 'The spoken story only; sources, Speaker notes and the choice of Visual live in the Dossier.',
               }
         status: &staging-status
           presence: required
@@ -74,6 +74,7 @@ frontmatter:
                 value: checked,
                 intent: 'When status is checked: the file passed markdown-harness, the cross-file tests and its reviewer.',
               }
+            - { value: approved, intent: 'When status is approved: Promotion moved the file next to its Slides.' }
         locale: &staging-locale
           presence: required
           allowed:
@@ -86,11 +87,11 @@ frontmatter:
           allowed:
             - {
                 value: ./brief.md,
-                intent: 'The Brief in the same folder, whose goals this file is written towards. Fail if slugged material serves no goal the Brief states.',
+                intent: 'The Brief in the same folder, whose goals this file is written towards. Fail if slugged material serves no Learning goal, Actionable or Red thread step the Brief states.',
               }
     - ruleId: staging-dossier
       fileNames: [dossier.md]
-      intent: "The Dossier holds what the Manuscript leaves unsaid for each Slide: what is shown, what is cited, and how the speech splits into Voice script segments, so the implementation is built from it without inventing material. Fail if a page slide's material would leave an implementer guessing."
+      intent: "The Dossier holds what the Manuscript leaves unsaid for each Slide: what is shown, what is cited, and how the speech splits into Voice script segments, so the implementation is built from it without inventing material. Fail if a page slide's material would leave an implementer guessing, or the file holds spoken prose or specifies styling or code."
       unknownKeys: forbidden
       fields:
         type:
@@ -98,7 +99,7 @@ frontmatter:
           allowed:
             - {
                 value: dossier,
-                intent: 'Material for building the Slides, described as what the viewer sees; spoken prose lives in the Manuscript. Fail if it holds spoken prose or specifies styling or code.',
+                intent: 'Material for building the Slides, described as what the viewer sees; spoken prose lives in the Manuscript.',
               }
         status: *staging-status
         locale: *staging-locale
@@ -128,7 +129,7 @@ frontmatter:
         researched_on:
           presence: required
           format: datetime
-          intent: 'When the Sources were read, so a reader can weigh their age. Fail if it is earlier than an accessed date under Sources.'
+          intent: 'When the Sources were read, so a reader can weigh their age.'
         stale_after:
           presence: required
           format: datetime
@@ -144,7 +145,7 @@ frontmatter:
             - { value: feedback, intent: "Han's feedback for one round, each change as he asked for it." }
         round:
           presence: required
-          intent: "Which pass of the feedback loop this is, counting from 1, one file per round. Fail if it differs from the number of its folder, or another round's file uses it."
+          intent: 'Which pass of the feedback loop this is, counting from 1, one file per round.'
         via:
           presence: required
           allowed:
@@ -222,7 +223,7 @@ body-structure:
               [
                 {
                   title: Hook,
-                  intent: 'The opening that earns the first thirty seconds; the Manuscript opens with it. Fail if it only announces the topic instead of giving the viewer a reason to stay.',
+                  intent: 'The opening that earns the first thirty seconds. Fail if it only announces the topic instead of giving the viewer a reason to stay.',
                 },
               ],
             mayHold: [prose],
@@ -246,7 +247,7 @@ body-structure:
             [
               {
                 title: Threads,
-                intent: 'Only for a longer Episode: two Threads told in turns so the audience never follows one too long.',
+                intent: 'Two Threads told in turns so the audience never follows one too long, chosen in the grill by planned duration in any Format.',
               },
             ]
           headings:
@@ -476,7 +477,7 @@ body-structure:
           level: 2
           minCount: 1
           pattern: '^[a-z0-9]+(?:-[a-z0-9]+)* · \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$'
-          intent: 'One job run, headed by the time it finished and appended in that order; an earlier entry is never edited. Fail if the timestamps run out of order.'
+          intent: 'One job run, headed by the time it finished and appended in that order; an earlier entry is never edited.'
           headings:
             - {
                 purpose: heading,
