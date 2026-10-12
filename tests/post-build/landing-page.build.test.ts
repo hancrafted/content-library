@@ -3,6 +3,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
 import nextConfig from '../../next.config';
+import { FEATURED } from '../../src/lib/episode-overview';
 import { LOCALES, localizePath } from '../../src/lib/locale.pure';
 import { ROUTES } from '../../src/lib/routes';
 import { exportedFile, OUT_DIR } from './exported-pages';
@@ -178,6 +179,7 @@ describe('landing page post-build structure', () => {
     expected.evidence.forEach((fact) => expect(detailText).toContain(fact));
   });
 
+  /** Every published Episode, in the order `PUBLISHED` in `episode-repository.ts` lists them. */
   const PUBLISHED_SLUGS = ['amnesiac-freelancer', 'maintaining-markdown-for-ai', 'ai-token-economy'];
 
   function episodeHref(slug: string, locale: string): string {
@@ -191,10 +193,10 @@ describe('landing page post-build structure', () => {
   }
 
   it.each(LANDING_PAGES)(
-    'spotlights the published Episodes by featured rank, and never an upcoming one, for locale $locale',
+    'spotlights the Featured Episodes by rank, and never an upcoming one, for locale $locale',
     ({ url, locale }) => {
       const $ = getPage(url);
-      const expected = PUBLISHED_SLUGS.map((slug) => episodeHref(slug, locale));
+      const expected = FEATURED.map((slug) => episodeHref(slug, locale));
 
       expect(hrefsIn($, '#episodes [data-episode-spotlight]')).toEqual(expected);
       expect($('#episodes [data-episode-spotlight] [data-spotlight="lead"]').length).toBe(1);
