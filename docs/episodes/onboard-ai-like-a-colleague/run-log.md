@@ -297,3 +297,126 @@ Question 5 is `extend`: Findings 5 and 7b and "Where the metaphor breaks" item 4
 Questions 2, 3 and 6 are `new`: neither file covers the productivity gap, the novice-versus-senior evidence or delegation as management.
 
 retire-prior-research deletes both old files after the three extending jobs pass, so each new file carries the old Findings it builds on, not only a citation. `ai-onboarding-freelancer.md` marks Finding 9 (Gawande's checklists) UNVERIFIED behind a paywall, calls "freelance practice" a convention with no verified source, and flags its "amnesia" wording as absent from the Anthropic page: the Question 5 implementor verifies the first two before relying on them and does not quote the third.
+
+## write-research-ai-as-onboarding-a-colleague · 2026-10-12T21:57:37Z
+
+### Inputs
+
+- Brief research question 1, and the retrieval outcome: `extend docs/research/ai-onboarding-freelancer.md` from retrieval, plus `docs/research/ai-amnesia-mechanics.md` 1.8.
+- `.agents/skills/new-episode/references/write-research.md` and the `research` skill.
+- Job worktree `episode/onboard-ai-like-a-colleague--write-research-ai-as-onboarding-a-colleague`, branched from `episode/onboard-ai-like-a-colleague` at 8e76319.
+
+### Output
+
+- `docs/episodes/onboard-ai-like-a-colleague/research/AIE-0001__ai-as-onboarding-a-colleague/research.md`, committed in 1c1c74b on the job branch and merged into `episode/onboard-ai-like-a-colleague`. Research files carry no status.
+
+### Checks
+
+- `mh check`: pass in the job worktree on every attempt, and again on `episode/onboard-ai-like-a-colleague` after the merge.
+- `vitest` (`tests/docs/episode-staging.test.ts`): pass in the job worktree on every attempt, and again after the merge.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 101 s · 68437 tokens
+- reviewer · attempt 1 · fail · 54 s · 53632 tokens
+- implementor · attempt 2 · pass · 11 s · 43532 tokens
+- reviewer · attempt 2 · pass · 12 s · 42975 tokens
+
+### Notes
+
+Attempt 1 failed two reviewer lines: `fail — Answer: "Fail if it hedges without saying what is known, or states something no Finding supports and the Caveats do not flag as inference" — The Answer says the frame stops fitting because the agent "does not push back". No Finding in this file supports that.` and `fail — Findings: "Fail if a finding cites no Source, or gives an opinion instead of what a Source shows" — Finding 12 (the consultant's workshop) cites no Source`. Attempt 2 removed the push-back claim and moved the workshop into the Caveats; the attempt-2 reviewer passed both lines.
+Needs human: whether the workshop consultant should be named or cited; there is no public source.
+Needs human: Karpathy's X post was read through a syndication excerpt; check its wording before it goes on a Slide.
+Needs human: Finding 11's not-learning point cites only the earlier research file [9], which retire-prior-research deletes; it could also cite [3], [4] or [6].
+Needs human: Mollick dropped the "intern" form of the frame in 2024 and kept "new coworker who forgets everything", which argues for "colleague" over "intern" wording.
+
+## write-research-individual-ai-productivity-gap · 2026-10-12T21:57:37Z
+
+### Inputs
+
+- Brief research question 2, and the retrieval outcome: `new` from retrieval.
+- `.agents/skills/new-episode/references/write-research.md` and the `research` skill.
+- Job worktree `episode/onboard-ai-like-a-colleague--write-research-individual-ai-productivity-gap`, branched from `episode/onboard-ai-like-a-colleague` at 8e76319.
+
+### Output
+
+- `docs/episodes/onboard-ai-like-a-colleague/research/AIE-0002__individual-ai-productivity-gap/research.md`, committed in bafe74d on the job branch and merged into `episode/onboard-ai-like-a-colleague`. Research files carry no status.
+
+### Checks
+
+- `mh check`: pass in the job worktree on every attempt, and again on `episode/onboard-ai-like-a-colleague` after the merge.
+- `vitest` (`tests/docs/episode-staging.test.ts`): pass in the job worktree on every attempt, and again after the merge.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 94 s · 62020 tokens
+- reviewer · attempt 1 · fail · 61 s · 48163 tokens
+- implementor · attempt 2 · pass · 21 s · 44238 tokens
+- reviewer · attempt 2 · pass · 27 s · 43556 tokens
+
+### Notes
+
+Attempt 1 failed two reviewer lines: `fail — "The answer to the h1 in 2–5 quotable sentences. Fail if it hedges without saying what is known, or states something no Finding supports and the Caveats do not flag as inference." — The Answer says "on tasks outside the model's competence, AI users do worse while feeling better."` and `fail — "The evidence behind the Answer, one finding per item, each citing its Source as [n]. Fail if a finding cites no Source, or gives an opinion instead of what a Source shows." — Finding 6 misreports [4].` Attempt 2 reworded the Answer to "do worse, with wrong answers that still look convincing" and gave METR's 2026 figures as less time per task with their intervals; the attempt-2 reviewer passed both lines.
+Needs human: Finding 6 says METR "states the old result no longer reflects current impact"; the reviewer found only softer wording ("likely that developers are more sped up … now"). Check the post before quoting it.
+Needs human: whether the Hook may rest on METR's 19% slowdown, which its authors now call out of date.
+Needs human: the BCG "+40% quality" and 60.0% vs 84.5% figures were not checked against the paper.
+
+## write-research-organizational-ai-productivity-gap · 2026-10-12T21:57:37Z
+
+### Inputs
+
+- Brief research question 3, and the retrieval outcome: `new` from retrieval.
+- `.agents/skills/new-episode/references/write-research.md` and the `research` skill.
+- Job worktree `episode/onboard-ai-like-a-colleague--write-research-organizational-ai-productivity-gap`, branched from `episode/onboard-ai-like-a-colleague` at 8e76319.
+
+### Output
+
+- `docs/episodes/onboard-ai-like-a-colleague/research/AIE-0003__organizational-ai-productivity-gap/research.md`, committed in 9134c1c on the job branch and merged into `episode/onboard-ai-like-a-colleague`. Research files carry no status.
+
+### Checks
+
+- `mh check`: pass in the job worktree on every attempt, and again on `episode/onboard-ai-like-a-colleague` after the merge.
+- `vitest` (`tests/docs/episode-staging.test.ts`): pass in the job worktree on every attempt, and again after the merge.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 98 s · 65092 tokens
+- reviewer · attempt 1 · pass · 54 s · 51933 tokens
+
+### Notes
+
+Passed on attempt 1. The reviewer spot-checked NBER w34836, the NANDA PDF and the Wharton report against the file.
+Needs human: Source 3 (NBER w33777) carries the paper's old title; NBER now lists it as "Still Waters, Rapid Currents: Early Labor Market Transformation under Generative AI".
+Needs human: the MIT NANDA report was read from a third-party copy (mlq.ai); no MIT-hosted original was found.
+Needs human: whether to lead with the disputed "95%" figure, and whether a survey where leaders grade their own ROI fits the audience.
+
+## write-research-context-and-brief-improve-ai-output · 2026-10-12T21:57:37Z
+
+### Inputs
+
+- Brief research question 4, and the retrieval outcome: `extend` both `docs/research/ai-onboarding-freelancer.md` and `docs/research/ai-amnesia-mechanics.md` from retrieval.
+- `.agents/skills/new-episode/references/write-research.md` and the `research` skill.
+- Job worktree `episode/onboard-ai-like-a-colleague--write-research-context-and-brief-improve-ai-output`, branched from `episode/onboard-ai-like-a-colleague` at 8e76319.
+
+### Output
+
+- `docs/episodes/onboard-ai-like-a-colleague/research/AIE-0004__context-and-brief-improve-ai-output/research.md`, committed in 00aaf5d on the job branch and merged into `episode/onboard-ai-like-a-colleague`. Research files carry no status.
+
+### Checks
+
+- `mh check`: pass in the job worktree on every attempt, and again on `episode/onboard-ai-like-a-colleague` after the merge.
+- `vitest` (`tests/docs/episode-staging.test.ts`): pass in the job worktree on every attempt, and again after the merge.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 117 s · 74021 tokens
+- reviewer · attempt 1 · fail · 57 s · 51574 tokens
+- implementor · attempt 2 · pass · 50 s · 66696 tokens
+- reviewer · attempt 2 · pass · 15 s · 42754 tokens
+
+### Notes
+
+Attempt 1 failed two reviewer lines: `fail — Sources: "Primary sources, numbered as the Findings cite them: <author>, <title> — <URL> — accessed <date>. Fail if no Finding cites a source." — No Finding cites Source [2] … Source [1] bundles three Anthropic pages under one URL` and `fail — Rubric 2: "A claim the Answer takes from a disputed study names the dispute and the strongest counter-evidence." — The Answer states flatly that context files "did not generally improve success and raised cost by more than 20% [8]"`. Attempt 2 merged the duplicate Source, split the Anthropic pages into their own Sources, and named the preprint dispute and Lulla et al. as counter-evidence in the Answer; the attempt-2 reviewer passed both lines.
+Needs human: Sources 12 and 13 cite the two earlier research files, which retire-prior-research deletes; Findings 12 and 13 carry their content.
+Needs human: a Caveat hints at planning an event, the Episode's example, in a file meant to stand on its own.
+Needs human: the 56% to 88% Liu et al. figure is a 2023 retrieval result; it suits direction, not size.
