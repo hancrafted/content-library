@@ -47,13 +47,13 @@ Start only when all of these hold; otherwise name each one that fails to Han and
 3. `npm run check:docs` is clean.
 4. `npx vitest run tests/docs/episode-staging.test.ts` passes. It checks the per-run pipeline's schema, one research job per research question, and that no approved Brief keeps a `Not settled.` section.
 
-Then write the todo list: one todo per job of `pipeline.yml` after `customize-pipeline`, in `needs` order. A per-run pipeline has no `foreach`: customize-pipeline expanded it into one job per research question.
+Then run `npm run episode:status -- <slug>` and write the todo list from its output: one todo per job that is not `done`, in its order. It reads each job's state from `pipeline.yml` and the latest `run-log.md` entry per job id, so the list never rests on memory. A per-run pipeline has no `foreach`: customize-pipeline expanded it into one job per research question.
 
-_Done when_ the todo list holds every remaining job.
+_Done when_ the todo list holds every job the script does not print as `done`.
 
 ### 6. Run the jobs
 
-Take every todo whose `needs` are all done and run it by [the job loop](#the-job-loop); independent todos run in parallel as background subagents. A blocked job blocks every job that `needs` it, directly or through another job; every other job carries on.
+Run every job the status script prints as `ready` by [the job loop](#the-job-loop); jobs that are ready together run in parallel as background subagents, each job with `isolation: worktree` in its own worktree. The script reads the run log alone, so a gate job reads `done` once its draft is logged: the gates are step 5's checks. After each job's run-log entry, run the script again for the next ready jobs. A blocked job blocks every job that `needs` it, directly or through another job. A job that `wants` it waits for it, then runs anyway: tell its implementor which wanted jobs blocked.
 
 _Done when_ every todo is done or blocked, and each one has its run-log entry.
 
@@ -67,9 +67,18 @@ _Done when_ Han has the Episode's local link and the draft PR's URL.
 
 Each job runs its `agents` in order. The **implementor** writes the job's `outputs`; the **reviewer** judges them. Read the job's reference first: it holds the implementor's prompt, what the job is done when and, for a reviewer job, its `## Rubric`. A job with an `intent` states its task there instead, and its prompt is the `intent`.
 
+A job with `isolation: worktree` works in a worktree of its own, so jobs running in parallel never fail each other's repo-wide checks (`mh check` and the staging test scan the whole repo):
+
+1. Before its implementor, run `npm run wt:new -- episode/<slug>--<job id> --base episode/<slug>` from the Episode's worktree. The `--` in the branch name is needed: git cannot create `episode/<slug>/<job id>` beside the branch `episode/<slug>`. Each worktree runs its own `npm ci`.
+2. Its implementor and reviewer work only in that worktree, its checks run there, and its pass commit is made there.
+3. On a pass, merge the job branch into `episode/<slug>` and run `mh` and `vitest` again there: a file can pass alone and fail beside its siblings, through a duplicate research ID or a cross-file check. A failure after the merge counts as a failed attempt of that job.
+4. After the merge, or when the job is blocked, run `npm run wt:done -- episode/<slug>--<job id> --base episode/<slug>` from the Episode's worktree. It deletes a merged branch and keeps a blocked job's branch; the `Blocked:` note names that branch for Han.
+
+A subagent never writes `run-log.md` or `docs/episodes/runs.csv`: it returns the parts of its run-log entry and its metrics, and you append them on `episode/<slug>` after the merge. Parallel branches that each appended to those two files would conflict at every merge.
+
 Every agent runs where its `session` says. `subagent`, the default, is spawned with the Agent tool, its `subagent_type` the agent's `agent` (general-purpose when omitted) and its `model` the agent's `model`, left out for `inherit`. `orchestrator` runs in this session, because a subagent has no Agent tool: a skill that spawns subagents needs it, and so does a job that talks to Han. Its `model` goes to the subagents the skill spawns.
 
-1. **Implementor.** Its prompt opens with the Brief's `Learning goal` and `Actionables`, quoted, because every artifact is written backwards from them. Then point it at the job's reference or `intent`, every path in `references` and `skills`, the staging folder, and on a retry the failed lines, quoted verbatim. Point, never paste: the agent reads the files. When the job's `before` lists `mh-query`, tell it: before writing each markdown path in `outputs`, run `npx mh query <path>` on it as written, a `*` included, and follow every intent it prints as an instruction. The query's answer is read, never saved.
+1. **Implementor.** Its prompt opens with the Brief's `Learning goal` and `Actionables`, quoted, because every artifact is written backwards from them. Then point it at the job's reference or `intent`, every path in `references` and `skills`, the staging folder, its worktree when the job has one, each job it `wants` that blocked, and on a retry the failed lines, quoted verbatim. Point, never paste: the agent reads the files. When the job's `before` lists `mh-query`, tell it: before writing each markdown path in `outputs`, run `npx mh query <path>` on it as written, a `*` included, and follow every intent it prints as an instruction. The query's answer is read, never saved.
 2. **Checks.** Run the job's `checks` in order, cheapest first. This table is the one list of check names and their commands; `src/lib/episode-pipeline.pure.ts` refuses any other name:
 
    | check | command |
@@ -82,11 +91,11 @@ Every agent runs where its `session` says. `subagent`, the default, is spawned w
    | `visual-check` | DOM numbers per Slide in both themes, by [`references/implement-episode.md`](references/implement-episode.md#visual-check) |
 
    A failure counts as a failed attempt; its output lines are the failed lines.
-3. **Reviewer.** A **fresh** agent, never one that wrote the output. A reviewer with `session: orchestrator` runs in the session that implemented, so its skill supplies the fresh eyes: `code-review` judges through subagents that saw none of the writing. Its baseline is the markdown-harness intent of every rule, field and heading that governs the output: it runs `npx mh query <path>` on each markdown output itself. On top of that baseline come the lines under the job's `rubric`. It answers one line per intent and per rubric line, `pass` or `fail — <the line, verbatim> — <evidence>`, and marks anything only Han can judge `needs human — <what>`.
-4. **Retry.** On any failed line, run the implementor again with every failed line quoted verbatim, then the checks and a fresh reviewer again. A job gets `1 + retries` attempts.
+3. **Reviewer.** A **fresh** agent, never one that wrote the output. A reviewer with `session: orchestrator` runs in the session that implemented, so its skill supplies the fresh eyes: `code-review` judges through subagents that saw none of the writing. Its baseline is the markdown-harness intent of every rule, field and heading that governs the output: it runs `npx mh query <path>` on each markdown output itself. On top of that baseline come the lines under the job's `rubric`. It answers one line per intent and per rubric line, `pass` or `fail — <the line, verbatim> — <evidence>`, and marks anything only Han can judge `needs human — <what>`. On attempt 2 and later, the fresh reviewer judges only the previous attempt's failed lines, beside the checks: a new concern goes into Notes as `Needs human: <what>`, never as a fail, so a retry is never judged against moved goalposts.
+4. **Retry.** On any failed line, run the implementor again with every failed line quoted verbatim, then the checks and a fresh reviewer again. A job gets `1 + retries` attempts. A job whose output lives outside git (an issue, a PR) is retried by updating what its earlier attempt made, never by creating a second one; its reference says how it finds that output.
 5. **Retries run out.** Mark the todo and every todo downstream of it blocked. The run-log entry's Notes start `Blocked:` and quote the last failed lines; they go on the PR checklist.
-6. **Pass.** Set each staging output's `status: checked` (research files carry no status), and commit through the `commit` skill with `Source: docs/episodes/<slug>/brief.md`.
-7. **Log.** Append the [run-log entry](#run-log-and-runs-csv), then the runs CSV rows. A `needs human` reviewer line goes into Notes as `Needs human: <what>`.
+6. **Pass.** Set each staging output's `status: checked` (research files carry no status), and commit through the `commit` skill with `Source: docs/episodes/<slug>/brief.md`, in the job's worktree when it has one, then merge it as above.
+7. **Log.** On `episode/<slug>`, append the [run-log entry](#run-log-and-runs-csv), then the runs CSV rows. A `needs human` reviewer line goes into Notes as `Needs human: <what>`.
 
 _Done when_ the job passed or is blocked, its outputs are committed, and its run-log entry and CSV rows are appended.
 
@@ -108,10 +117,16 @@ run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at
 
 Each row matches one item under that entry's `Metrics`.
 
+## Resuming a run
+
+In a new session, or after a compaction, never trust memory of the run: run `npm run episode:status -- <slug>` again and rebuild the todo list from its output. A worktree `episode/<slug>--<job id>` whose job has no run-log entry is a crashed attempt: remove it with `wt:done` and its `--base`, delete its branch, and run the job again as its next attempt, numbered after the attempts its runs CSV rows show.
+
 ## Gate commits
 
 Every commit goes through the `commit` skill. A gate commit adds a `Gate:` trailer beside `Source:` (`Gate: draft brief`, `Gate: approved pipeline`, `Gate: draft feedback-01`). The agent's draft is committed before Han edits it, so the pair of gate commits shows his edit as a diff: that diff is what later teaches agents his style. Only Han sets `approved`.
 
+After `Gate: approved pipeline`, the template is frozen for the run: `feat/89-new-episode` is not merged into the Episode branch again until `open-pr` is done. The pipeline's `template` field names the commit it was tailored from. A template change found during the run goes into `LEARNINGS.md` Lessons and is applied after the run.
+
 ## After the run
 
-Han's feedback, typed or dictated, arrives as `feedback/<NN>/feedback.md` and lands in the Manuscript or Dossier before the implementation. The loop ends when Han starts Promotion. Distil what this run taught into [`LEARNINGS.md`](LEARNINGS.md).
+Han's feedback, typed or dictated, arrives as `feedback/<NN>/feedback.md` and lands in the Manuscript or Dossier before the implementation. The loop ends when Han starts Promotion. Distil what this run taught into [`LEARNINGS.md`](LEARNINGS.md). Diff each pair of gate commits, the draft against Han's approval: every correction Han made twice becomes a proposed rubric line under `LEARNINGS.md` Lessons.

@@ -4,6 +4,8 @@ Output: a spec issue for implementing the Episode, with one sub-issue per Sectio
 
 ## Prompt
 
+First look up this Episode's spec issue by its label `episode:<slug>` (`gh issue list --label episode:<slug> --state all`). When one exists, an earlier attempt made it: edit it and its sub-issues in place, by the failed lines, and create none. Otherwise create the label if it is missing, then the spec, with the label on the spec issue alone.
+
 Turn the checked Dossier and Manuscript into a spec with the `to-spec` skill, then into tickets with `to-tickets`. Han is away during the run, so where `to-spec` asks him to confirm the seams, use the existing Episode seams from `.archgate/adrs/FE-004-slide-architecture.md` and record that choice in the spec.
 
 - The staging files are the content spec: the tickets point to them by heading anchor and never paste their text, so the Dossier and Manuscript stay the single source of truth.
@@ -13,7 +15,7 @@ Turn the checked Dossier and Manuscript into a spec with the `to-spec` skill, th
 
 ## Done when
 
-The spec issue and every sub-issue exist with the `ready-for-agent` label, each sub-issue linked to the spec.
+The spec issue and every sub-issue exist with the `ready-for-agent` label, each sub-issue linked to the spec, and exactly one issue carries the label `episode:<slug>`.
 
 ## Rubric
 

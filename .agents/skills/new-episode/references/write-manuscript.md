@@ -22,3 +22,4 @@ The job's `checks:` in `assets/pipeline.yml` run by the check table in [SKILL.md
 
 1. The Threads alternate, if the Brief has them.
 2. It matches `docs/profile/han/tone-guide.md`, when that guide exists.
+3. Every instruction the Brief gives about how to tell the story is followed.

@@ -1,7 +1,9 @@
 // The worktree lifecycle: `new <branch>` makes a checkout that passes preflight,
-// `done <branch>` removes it and fast-forwards local main. See ../SKILL.md.
+// `done <branch>` removes it and fast-forwards local main. With `--base <branch>`
+// both work against that branch instead of main. See ../SKILL.md.
 import { execFileSync, spawnSync } from 'node:child_process';
 import path from 'node:path';
+import { parseArgs } from './worktree-args.pure.ts';
 
 /** Runs a command and returns its output. */
 const capture = (cmd: string, args: string[], cwd?: string): string =>
@@ -23,10 +25,11 @@ function worktreePath(branch: string): string {
   return path.join(mainRoot(), '.worktrees', branch.replaceAll('/', '-'));
 }
 
-function create(branch: string): void {
+function create(branch: string, base: string | null): void {
   const target = worktreePath(branch);
-  stream('git', ['fetch', 'origin']);
-  stream('git', ['worktree', 'add', target, '-b', branch, 'origin/main']);
+  // A local base (an Episode's integration branch) may not be pushed yet, so only main is fetched.
+  if (base === null) stream('git', ['fetch', 'origin']);
+  stream('git', ['worktree', 'add', target, '-b', branch, base ?? 'origin/main']);
   // A real install, never a symlink: Turbopack, mh check and husky all need it.
   stream('npm', ['ci'], target);
   stream('npx', ['husky'], target);
@@ -78,18 +81,32 @@ function syncMain(root: string): void {
   console.log('✔ local main fast-forwarded to origin/main');
 }
 
-function finish(branch: string): void {
+/** A branch merged into its base goes; an unmerged one (a blocked job) stays for a human to inspect. */
+function deleteIfMerged(branch: string, base: string): void {
+  const merged = spawnSync('git', ['merge-base', '--is-ancestor', branch, base]).status === 0;
+  if (!merged) {
+    console.warn(`! kept branch ${branch}: it is not merged into ${base}.`);
+    return;
+  }
+  capture('git', ['branch', '-D', branch]);
+  console.log(`✔ deleted branch ${branch}, merged into ${base}`);
+}
+
+function finish(branch: string, base: string | null): void {
   const target = worktreePath(branch);
   refuseWhileBusy(target);
-  refuseUnpushedMain();
+  if (base === null) refuseUnpushedMain();
   stream('git', ['worktree', 'remove', target]);
   console.log(`✔ removed ${target}`);
+  if (base !== null) {
+    deleteIfMerged(branch, base);
+    return;
+  }
   deleteBranch(branch);
   syncMain(mainRoot());
 }
 
-const [command, branch] = process.argv.slice(2);
-if (!branch) fail('usage: npm run wt:new -- <branch>  |  npm run wt:done -- <branch>');
-if (command === 'new') create(branch);
-else if (command === 'done') finish(branch);
-else fail(`unknown command '${command}'; expected new or done`);
+const args = parseArgs(process.argv.slice(2));
+if ('error' in args) fail(args.error);
+else if (args.command === 'new') create(args.branch, args.base);
+else finish(args.branch, args.base);

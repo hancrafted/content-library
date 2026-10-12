@@ -534,7 +534,7 @@ body-structure:
                   [
                     {
                       title: Notes,
-                      intent: 'What a reader needs that the other parts do not say: a retry and why, a gate edit. Each blocked branch, call for human judgement or missing catalog match gets its own line, starting `Blocked:`, `Needs human:` or `No catalog match:`. Fail if a retry or blocked branch shown under Metrics or Checks goes unexplained, or such a line lacks its prefix.',
+                      intent: 'What a reader needs that the other parts do not say: a retry and why, a gate edit. Each blocked branch, call for human judgement, missing catalog match or research gap gets its own line, starting `Blocked:`, `Needs human:`, `No catalog match:` or `Research gap:`. Fail if a retry or blocked branch shown under Metrics or Checks goes unexplained, or such a line lacks its prefix.',
                     },
                   ],
                 mayHold: [prose, unordered-list],

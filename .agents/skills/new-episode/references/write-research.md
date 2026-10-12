@@ -15,3 +15,4 @@ The job's `checks:` in `assets/pipeline.yml` run by the check table in [SKILL.md
 ## Rubric
 
 1. The Answer answers the h1 question.
+2. A claim the Answer takes from a disputed study names the dispute and the strongest counter-evidence.
