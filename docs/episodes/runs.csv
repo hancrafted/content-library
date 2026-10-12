@@ -24,3 +24,11 @@ run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at
 2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-context-and-brief-improve-ai-output,reviewer,1,fail,"Sources: Fail if no Finding cites a source.",57,51574,2026-10-12T21:53:50Z
 2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-context-and-brief-improve-ai-output,implementor,2,pass,,50,66696,2026-10-12T21:55:36Z
 2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-context-and-brief-improve-ai-output,reviewer,2,pass,,15,42754,2026-10-12T21:55:57Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-risks-of-unchecked-ai-output,implementor,1,pass,,110,79974,2026-10-12T21:52:04Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-risks-of-unchecked-ai-output,reviewer,1,fail,"A claim the Answer takes from a disputed study names the dispute and the strongest counter-evidence.",105,65417,2026-10-12T21:56:18Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-risks-of-unchecked-ai-output,implementor,2,pass,,26,45199,2026-10-12T21:57:07Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-risks-of-unchecked-ai-output,reviewer,2,pass,,20,42774,2026-10-12T21:57:53Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-ai-delegation-as-management-skill,implementor,1,pass,,133,75765,2026-10-12T21:54:54Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-ai-delegation-as-management-skill,reviewer,1,fail,"Findings: Fail if a finding cites no Source, or gives an opinion instead of what a Source shows.",87,54005,2026-10-12T21:56:40Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-ai-delegation-as-management-skill,implementor,2,pass,,31,46963,2026-10-12T21:57:53Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-ai-delegation-as-management-skill,reviewer,2,pass,,34,45237,2026-10-12T21:58:32Z

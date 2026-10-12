@@ -420,3 +420,66 @@ Attempt 1 failed two reviewer lines: `fail — Sources: "Primary sources, number
 Needs human: Sources 12 and 13 cite the two earlier research files, which retire-prior-research deletes; Findings 12 and 13 carry their content.
 Needs human: a Caveat hints at planning an event, the Episode's example, in a file meant to stand on its own.
 Needs human: the 56% to 88% Liu et al. figure is a 2023 retrieval result; it suits direction, not size.
+
+## write-research-risks-of-unchecked-ai-output · 2026-10-12T21:59:10Z
+
+### Inputs
+
+- Brief research question 5, and the retrieval outcome: `extend docs/research/ai-onboarding-freelancer.md` from retrieval.
+- `.agents/skills/new-episode/references/write-research.md` and the `research` skill.
+- Job worktree `episode/onboard-ai-like-a-colleague--write-research-risks-of-unchecked-ai-output`, branched from `episode/onboard-ai-like-a-colleague` at 8e76319.
+
+### Output
+
+- `docs/episodes/onboard-ai-like-a-colleague/research/AIE-0005__risks-of-unchecked-ai-output/research.md`, committed in 738855e on the job branch and merged into `episode/onboard-ai-like-a-colleague`. Research files carry no status.
+
+### Checks
+
+- `mh check`: pass in the job worktree on every attempt, and again on `episode/onboard-ai-like-a-colleague` after the merge.
+- `vitest` (`tests/docs/episode-staging.test.ts`): pass in the job worktree on every attempt, and again after the merge.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 110 s · 79974 tokens
+- reviewer · attempt 1 · fail · 105 s · 65417 tokens
+- implementor · attempt 2 · pass · 26 s · 45199 tokens
+- reviewer · attempt 2 · pass · 20 s · 42774 tokens
+
+### Notes
+
+Attempt 1 failed one reviewer line: `fail — 2. A claim the Answer takes from a disputed study names the dispute and the strongest counter-evidence. — The Answer takes Perry et al. [2]'s result that AI-assisted users write less secure code and feel more sure of it. The only counter-evidence it gives is Asare et al. [4], which measures what Copilot suggests, not what people write.` Attempt 2 added Sandoval, Pearce et al., "Lost at C" (58 participants, critical bugs "no greater than 10% more than the control") as Source 8 and Finding 9, and named the dispute in the Answer; the attempt-2 reviewer passed the line.
+Needs human: the Answer quotes "Lost at C" without saying it studied student programmers on one C task, and leaves out the abstract's stronger "not introduce new security risks".
+Needs human: Gawande's New Yorker piece stays unverified behind a paywall; the file uses the 2009 NEJM surgical-checklist study instead. Whether surgical evidence belongs in an AI Episode is Han's call.
+Needs human: the Anthropic guidance [5] is quoted from the earlier file's 2026-10-08 fetch, not re-fetched.
+Needs human: the code-security studies use 2021–22 models and mostly student participants; do not quote their rates as current. Air Canada (Moffatt) is left out: only secondary write-ups could be reached.
+
+## write-research-ai-delegation-as-management-skill · 2026-10-12T21:59:10Z
+
+### Inputs
+
+- Brief research question 6, and the retrieval outcome: `new` from retrieval.
+- `.agents/skills/new-episode/references/write-research.md` and the `research` skill.
+- Job worktree `episode/onboard-ai-like-a-colleague--write-research-ai-delegation-as-management-skill`, branched from `episode/onboard-ai-like-a-colleague` at 8e76319.
+
+### Output
+
+- `docs/episodes/onboard-ai-like-a-colleague/research/AIE-0006__ai-delegation-as-management-skill/research.md`, committed in 4a050a1 on the job branch and merged into `episode/onboard-ai-like-a-colleague`. Research files carry no status.
+
+### Checks
+
+- `mh check`: pass in the job worktree on every attempt, and again on `episode/onboard-ai-like-a-colleague` after the merge.
+- `vitest` (`tests/docs/episode-staging.test.ts`): pass in the job worktree on every attempt, and again after the merge.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 133 s · 75765 tokens
+- reviewer · attempt 1 · fail · 87 s · 54005 tokens
+- implementor · attempt 2 · pass · 31 s · 46963 tokens
+- reviewer · attempt 2 · pass · 34 s · 45237 tokens
+
+### Notes
+
+Attempt 1 failed two reviewer lines: `fail — Findings: "Fail if a finding cites no Source, or gives an opinion instead of what a Source shows." — Finding 5 sentence 2, "Delegation to a capable newcomer fails or succeeds on context, brief and review, which is the management layer.", is the author's opinion and cites nothing` and `fail — Rubric 2: "A claim the Answer takes from a disputed study names the dispute and the strongest counter-evidence." — The Answer rests its "mature context … AI use stalls or backfires" clause on METR [6], but the file never names METR's own follow-up`. Attempt 2 removed the uncited editorial from Findings 1, 4 and 5, moved the interpretation into the Caveats, and added METR's 2026-02-24 follow-up as Source 9 and Finding 6, named in the Answer; the attempt-2 reviewer passed both lines.
+Needs human: the file's central claim, that delegation demands management discipline, is inference; no cited study tests management skill directly. The Caveats say so.
+Needs human: Dell'Acqua's 43% and 17% figures and the "adopt blindly" passages come from the 2023 HBS working paper, while Source 3 points at the 2026 published text; Otis et al. (SSRN 403) was not verified.
+Needs human: Finding 6 labels METR's intervals "95% CI", a level the post does not state, and paraphrases "unreliable signal" as "unreliable".
