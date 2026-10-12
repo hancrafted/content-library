@@ -5,6 +5,7 @@
  * is the caller's job, so every rule tests against an in-memory folder.
  */
 
+import { checkStagingOrder } from './episode-staging-order.pure';
 import { unless, type Finding } from './finding.pure';
 import {
   blocksOf,
@@ -160,6 +161,11 @@ function checkFeedback(files: Readonly<Record<string, string>>, manuscript: read
  * relative to the folder (`dossier.md`, `feedback/01/feedback.md`) to its text.
  */
 export function checkStagingFolder(files: Readonly<Record<string, string>>, known: KnownVisuals): Finding[] {
+  return [...checkStagingOrder(files), ...checkManuscriptAndDossier(files, known)];
+}
+
+/** The checks that read the Manuscript and the Dossier together; none until both exist. */
+function checkManuscriptAndDossier(files: Readonly<Record<string, string>>, known: KnownVisuals): Finding[] {
   const manuscript = files['manuscript.md'];
   const dossier = files['dossier.md'];
   if (manuscript === undefined || dossier === undefined) return [];

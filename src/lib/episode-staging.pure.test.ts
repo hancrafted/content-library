@@ -88,6 +88,25 @@ function research(description: string): string {
 }
 
 const RECALL = 'research/recall/research.md';
+
+function researchOn(researchedOn: string, accessed: readonly string[]): string {
+  return [
+    '---',
+    'type: research',
+    `researched_on: ${researchedOn}`,
+    '---',
+    '',
+    '# Why?',
+    '',
+    '## Sources',
+    '',
+    ...accessed.map(
+      (date, index) =>
+        `${index + 1}. Liu et al., Lost in the Middle — https://arxiv.org/abs/2307.03172 — accessed ${date}`,
+    ),
+    '',
+  ].join('\n');
+}
 const RECALL_ENTRY = '- [Why recall drops](research/recall/research.md) — Recall is U-shaped.';
 
 const BRIEF = `---
@@ -111,6 +130,12 @@ Not settled.
 
 Not settled.
 `;
+
+function runLog(entries: readonly string[]): string {
+  return ['# Run log', '', ...entries.flatMap((entry) => [`## ${entry}`, '', '### Notes', '', 'Done.', '']), ''].join(
+    '\n',
+  );
+}
 
 function folder(files: Record<string, string>): Record<string, string> {
   return { 'manuscript.md': MANUSCRIPT, 'dossier.md': DOSSIER, ...files };
@@ -482,6 +507,19 @@ describe('edge cases', () => {
     const findings = checkStagingFolder(files, KNOWN_VISUALS);
     // ASSERT
     expect(findings).toEqual([]);
+  });
+
+  it('checks the run log and research of a folder that has no Manuscript or Dossier yet', () => {
+    // ARRANGE
+    const files = {
+      'run-log.md': runLog(['research · 2026-10-12T10:15:00Z', 'brief-grill · 2026-10-12T09:00:00Z']),
+      [RECALL]: researchOn('2026-10-11T00:00:00Z', ['2026-10-12']),
+    };
+    const expectedKinds = ['research-date', 'run-log-order'];
+    // ACT
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
+    // ASSERT
+    expect(kinds(findings)).toEqual(expectedKinds);
   });
 
   it('skips the index check while the index does not exist', () => {
