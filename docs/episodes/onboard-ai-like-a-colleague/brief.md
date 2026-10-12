@@ -1,6 +1,6 @@
 ---
 type: brief
-status: draft
+status: approved
 ---
 
 # Why you must onboard AI like a new colleague
