@@ -1,7 +1,6 @@
 'use client';
 
 import { useId, useState, type ReactElement } from 'react';
-import styles from './status.module.css';
 import { calcSessionCost, tokenizeText } from './tokenizer.pure';
 
 const CHIP_STYLES = [
@@ -60,7 +59,7 @@ export function TokenizerPlaygroundClient(): ReactElement {
   const tokens = tokenizeText(text);
 
   return (
-    <div className={`${styles.scene} rounded-xl border border-border bg-card p-5`}>
+    <div className="rounded-xl border border-border bg-card p-5">
       <label htmlFor={inputId} className="font-mono text-[0.65rem] uppercase tracking-[0.25em] text-muted-foreground">
         Try it — type anything
       </label>

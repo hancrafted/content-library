@@ -43,6 +43,19 @@ Everywhere else a colour is a reference: a Tailwind token utility (`bg-primary`,
 }
 ```
 
+### Status colours
+
+Four global status colours, each with a `-foreground` pair: `--destructive` (danger), `--success`, `--warning` and `--info`. Utilities: `bg-success`, `text-warning`, `text-info-foreground`, and so on. They are promoted from the `ai-token-economy` Slide token files, where three Slides each declared their own. Every one is 4.5:1 as text on the page and card surfaces, and its `-foreground` is 4.5:1 as text on a fill of it, in light and dark:
+
+| Token           | Light                       | Dark                        | On page (light / dark) | Foreground on fill (light / dark) |
+| --------------- | --------------------------- | --------------------------- | ---------------------- | --------------------------------- |
+| `--destructive` | `oklch(0.577 0.245 27.325)` | `oklch(0.704 0.191 22.216)` | 4.56 / 6.84            | 4.56 / 6.84                       |
+| `--success`     | `oklch(0.5 0.13 150)`       | `oklch(0.78 0.16 150)`      | 5.41 / 10.51           | 5.41 / 10.51                      |
+| `--warning`     | `oklch(0.52 0.12 65)`       | `oklch(0.82 0.15 80)`       | 5.5 / 11.17            | 5.5 / 11.17                       |
+| `--info`        | `oklch(0.5 0.15 245)`       | `oklch(0.78 0.12 240)`      | 5.58 / 10.04           | 5.58 / 10.04                      |
+
+The foregrounds are `oklch(0.985 0 0)` in light and `oklch(0.145 0 0)` in dark. A Slide whose surface is inverted (the `/context` terminal) keeps its own tuned names (`--term-success`).
+
 There is deliberately no global chart palette and no colour scales (`--teal-500`). The Scene palette is unknown until three real Episodes show it; scales chosen now would be guesses.
 
 ### Promotion path
@@ -88,7 +101,7 @@ Tailwind's default palette and size scale are not reset, because legacy files st
 
 ## Design-system token editor
 
-`src/components/design-system-token-editor/` is a dev-only popover (it renders only under `next dev`, so it is absent from `out/`). Its trigger is an icon button in the site header, beside the theme and locale toggles, and the panel drops down from it on every page. The panel is always dark, so it reads the same whichever theme's values you edit.
+`src/components/design-system-token-editor/` is a dev-only popover (it renders only under `next dev`, so it is absent from `out/`). Its trigger is an icon button in the site header, beside the theme and locale toggles, and the panel drops down from it on every page. The panel keeps its own fixed palette (`token-panel.module.css`, the one token file outside a Slide that FE-011 allows raw colours in), so it keeps its look while the site's tokens are being edited.
 
 The Global tab lists the global tokens in designer order, each in a group under a sticky header (Brand, Surface & text, Feedback, Lines & focus, Domain, Chrome, Typography, Shape, Layout, Other), a colour beside its `-foreground` pair, each with a one-line description. The order and the descriptions live in `src/lib/token-groups.pure.ts`; a token missing from its table shows no description and lands under Other. The Slide tab lists the active Slide's own tokens, one group per selector that declares them, colours first; it is disabled off an Episode page. Clicking a colour's swatch opens a picker (`react-colorful`) that writes the pick back in the token's own format: `oklch(L C H)` stays oklch, a hex token stays hex (`src/lib/colour-convert.pure.ts`).
 

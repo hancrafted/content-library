@@ -4,11 +4,10 @@ import Image from 'next/image';
 import type { ReactElement } from 'react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
-import styles from './status.module.css';
 
 function ObscurityCards(): ReactElement {
   return (
-    <div className={`${styles.scene} grid gap-6 md:grid-cols-2`}>
+    <div className="grid gap-6 md:grid-cols-2">
       <div className="rounded-xl border border-border bg-muted p-5 shadow-xs">
         <h4 className="text-lg font-bold">
           <span className="font-mono text-sm text-(--success)">01</span> The initiation

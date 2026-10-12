@@ -2,7 +2,6 @@
 
 import { useId, useState, type ReactElement } from 'react';
 import { evaluateContextGauge } from './context-gauge.pure';
-import styles from './status.module.css';
 
 function GaugeBar({ percent }: { percent: number }): ReactElement {
   return (
@@ -104,7 +103,7 @@ export function ContextGaugeSliderClient(): ReactElement {
   const gaugeState = evaluateContextGauge(percent);
 
   return (
-    <div className={`${styles.scene} space-y-6`}>
+    <div className="space-y-6">
       <GaugeBar percent={percent} />
       <GaugeSliderControl percent={percent} onChange={setPercent} />
       <div className="flex items-center gap-2">

@@ -1,5 +1,4 @@
 import type { ReactElement } from 'react';
-import styles from './status.module.css';
 
 function FreelancerInvoiceCard(): ReactElement {
   return (
@@ -60,7 +59,7 @@ function AiInvoiceCard(): ReactElement {
 
 export function InvoiceComparison(): ReactElement {
   return (
-    <div className={`${styles.scene} mt-8 grid gap-6 md:grid-cols-2`}>
+    <div className="mt-8 grid gap-6 md:grid-cols-2">
       <FreelancerInvoiceCard />
       <AiInvoiceCard />
     </div>

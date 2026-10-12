@@ -4,7 +4,6 @@ import { SlideProse } from '@/components/slide-master/slide-master';
 import type { ReactElement } from 'react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
-import styles from './status.module.css';
 
 const COST_STEPS = [
   { title: 'System prompt', sub: 'rules, tools, memory', cost: '+35,000', cum: '35,000' },
@@ -18,7 +17,7 @@ const COST_STEPS = [
 
 function CompoundingTable(): ReactElement {
   return (
-    <div className={`${styles.scene} mt-8 space-y-3`}>
+    <div className="mt-8 space-y-3">
       {COST_STEPS.map((step) => (
         <div
           key={step.title}

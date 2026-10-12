@@ -4,7 +4,6 @@ import { SlideProse } from '@/components/slide-master/slide-master';
 import type { ReactElement } from 'react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
-import styles from './status.module.css';
 import { TokenizerPlaygroundClient } from './tokenizer-playground.client';
 
 const DIMENSIONS = [
@@ -16,7 +15,7 @@ const DIMENSIONS = [
 
 function BillingDimensions(): ReactElement {
   return (
-    <div className={`${styles.scene} rounded-xl border border-border bg-muted/50 p-5`}>
+    <div className="rounded-xl border border-border bg-muted/50 p-5">
       <p className="font-mono text-[0.65rem] uppercase tracking-[0.25em] text-muted-foreground">
         Every token is billed 4 ways
       </p>

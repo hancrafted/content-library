@@ -4,7 +4,6 @@ import { SlideProse } from '@/components/slide-master/slide-master';
 import type { ReactElement } from 'react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
-import styles from './status.module.css';
 
 function ChatLane(): ReactElement {
   return (
@@ -45,7 +44,7 @@ function AgentLane(): ReactElement {
 
 function AttentionLanes(): ReactElement {
   return (
-    <div className={`${styles.scene} mt-8 space-y-6`}>
+    <div className="mt-8 space-y-6">
       <ChatLane />
       <AgentLane />
       <div className="flex justify-between font-mono text-xs text-muted-foreground">
