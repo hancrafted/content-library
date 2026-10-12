@@ -483,3 +483,34 @@ Attempt 1 failed two reviewer lines: `fail — Findings: "Fail if a finding cite
 Needs human: the file's central claim, that delegation demands management discipline, is inference; no cited study tests management skill directly. The Caveats say so.
 Needs human: Dell'Acqua's 43% and 17% figures and the "adopt blindly" passages come from the 2023 HBS working paper, while Source 3 points at the 2026 published text; Otis et al. (SSRN 403) was not verified.
 Needs human: Finding 6 labels METR's intervals "95% CI", a level the post does not state, and paraphrases "unreliable signal" as "unreliable".
+
+## retire-prior-research · 2026-10-12T22:01:51Z
+
+### Inputs
+
+- The job's intent in `pipeline.yml`, after the six research jobs passed.
+- `docs/research/ai-onboarding-freelancer.md` and `docs/research/ai-amnesia-mechanics.md`, and the two files citing them.
+- The research files AIE-0001, AIE-0004 and AIE-0005, which extend them.
+- Job worktree `episode/onboard-ai-like-a-colleague--retire-prior-research`, branched from `episode/onboard-ai-like-a-colleague` at 9d16480.
+
+### Output
+
+- `docs/research/ai-onboarding-freelancer.md` and `docs/research/ai-amnesia-mechanics.md`: deleted, in da85851, merged into `episode/onboard-ai-like-a-colleague`.
+- `src/components/episodes/amnesiac-freelancer/amnesiac-freelancer.ts` line 20 and `docs/research/amnesiac-freelancer-script.md` line 3: cite AIE-0001, AIE-0004 and AIE-0005 as a group, since no single file holds every claim.
+- `pipeline.yml`: both paths removed from every `references` list, 8 lines; the intent prose still names them.
+
+### Checks
+
+- `mh check`: pass in the job worktree, and again on `episode/onboard-ai-like-a-colleague` after the merge.
+- `verify`: pass in the job worktree.
+- `vitest` (`tests/docs/episode-staging.test.ts`): pass after the merge.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 50 s · 62924 tokens
+
+### Notes
+
+The job has no reviewer, so its checks decided the pass.
+Needs human: the repointed lines say every claim of the amnesiac-freelancer Episode traces to AIE-0001, AIE-0004 or AIE-0005, but its script's speaker notes cite points none of them hold: statelessness and the history re-sent each turn (AIE-0004 Finding 12 covers it only in part), Claude Code's 200-line CLAUDE.md guideline, "nearest file wins" and the root-down concatenation of instruction files, auto memory, over-compliance, Chroma's context-rot numbers beyond AIE-0004 Finding 8, and compaction dropping detail. The implementor kept the closest file and invented no Finding.
+Needs human: the Sources of AIE-0001 (line 43), AIE-0004 (lines 48 and 49) and AIE-0005 (line 40) still cite the deleted files; the job left the reviewed research files untouched. Decide whether they stay as a record of the prior research or are repointed. AIE-0001 Finding 11's not-learning point cites only that deleted file.
