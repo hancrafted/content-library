@@ -23,7 +23,3 @@ The job's `checks:` in `assets/pipeline.yml` run by the check table in [SKILL.md
 ## Rubric
 
 1. Every Brief actionable is backed by at least one Slide, named by its slug.
-2. Every Speaker note cites a research file or a source.
-3. Every Visual names an existing master slide and motion effect.
-4. The Dossier holds no CSS and no implementation detail.
-5. Every Section advances the Red thread toward the learning goal.

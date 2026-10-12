@@ -55,8 +55,8 @@ _Done when_ every required heading holds Han's choice. If time runs out first, w
 ## Writing the Brief (Claude Code)
 
 1. Write the Brief to `docs/episodes/<slug>/brief.md`, where `<slug>` is the working title in kebab case, filled from the _Brief template_ with `status: draft`. Under `/new-episode`, write it in the Episode's worktree.
-2. Run `npm run check:docs` until it is clean. `npx mh query docs/episodes/<slug>/brief.md` prints the intent of every field and heading.
-3. Commit the draft through the `commit` skill with the trailer `Gate: draft brief`, before Han edits it, so his edits stay visible as a diff.
+2. Run `npm run check:docs` and `npx vitest run tests/docs/episode-staging.test.ts` until both are clean, then set `status: checked`. `npx mh query docs/episodes/<slug>/brief.md` prints the intent of every field and heading.
+3. Commit the checked Brief through the `commit` skill with the trailer `Gate: draft brief`, before Han edits it, so his edits stay visible as a diff.
 4. Hand the Brief to Han. Only Han sets `status: approved`; that commit carries `Gate: approved brief`.
 
 ## Voice sessions

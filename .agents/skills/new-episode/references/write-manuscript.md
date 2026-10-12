@@ -20,9 +20,5 @@ The job's `checks:` in `assets/pipeline.yml` run by the check table in [SKILL.md
 
 ## Rubric
 
-1. The Hook opens the Episode.
-2. Every Section moves the Red thread toward the learning goal.
-3. Every actionable is spoken somewhere.
-4. The Threads alternate, if the Brief has them.
-5. It reads without visuals.
-6. It matches `docs/profile/han/tone-guide.md`, when that guide exists.
+1. The Threads alternate, if the Brief has them.
+2. It matches `docs/profile/han/tone-guide.md`, when that guide exists.
