@@ -5,21 +5,21 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 /*
- * The Brief grill guide carries the Brief template that Claude Code and a
- * Claude Desktop voice session both fill in. The template lives in the guide,
+ * The brief-grill skill carries the Brief template that Claude Code and a
+ * Claude Desktop voice session both fill in. The template lives in the skill,
  * where `mh check` never looks, so this test lifts it out and runs it against
  * the Brief rule: a template that drifts from the rule fails here, not in the
  * first real Brief.
  */
 
 const ROOT = path.join(__dirname, '../..');
-const GUIDE = path.join(ROOT, 'docs/agents/episode-brief-grill.md');
+const GUIDE = path.join(ROOT, '.agents/skills/brief-grill/SKILL.md');
 const MH = path.join(ROOT, 'node_modules/@hancrafted/markdown-harness/dist/packages/cli/cli.js');
 const TEMPLATE_BLOCK = /^## Brief template\n[\s\S]*?^```markdown\n([\s\S]*?)^```$/m;
 
 function briefTemplate(): string {
   const match = TEMPLATE_BLOCK.exec(readFileSync(GUIDE, 'utf8'));
-  if (match === null) throw new Error('no ```markdown block under "## Brief template" in the guide');
+  if (match === null) throw new Error('no ```markdown block under "## Brief template" in the brief-grill skill');
   return match[1];
 }
 
@@ -48,7 +48,7 @@ function checkAsBrief(markdown: string): unknown {
   }
 }
 
-describe('the Brief template in the Brief grill guide', () => {
+describe('the Brief template in the brief-grill skill', () => {
   describe('success cases', () => {
     it('passes the Brief rule in mh check', () => {
       // ARRANGE

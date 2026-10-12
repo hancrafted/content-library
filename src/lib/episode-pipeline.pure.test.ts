@@ -12,7 +12,7 @@ const SKILL_FOLDER = '.agents/skills/new-episode';
 const CONTEXT: PipelineContext = {
   skillFolder: SKILL_FOLDER,
   skills: ['grilling', 'research'],
-  exists: (path) => [`${SKILL_FOLDER}/references/research.md`, 'docs/agents/episode-brief-grill.md'].includes(path),
+  exists: (path) => [`${SKILL_FOLDER}/references/research.md`, 'docs/agents/grilling-voice.md'].includes(path),
 };
 
 const PIPELINE = `status: draft
@@ -24,7 +24,7 @@ jobs:
     retries: 0
     gate: human
     agents:
-      - { type: implementor, skills: [grilling], references: [docs/agents/episode-brief-grill.md], profile: ~ }
+      - { type: implementor, skills: [grilling], references: [docs/agents/grilling-voice.md], profile: ~ }
   - id: research
     needs: [brief-grill]
     foreach: brief.md#research-questions
@@ -179,10 +179,7 @@ describe('failure cases', () => {
     const yaml = PIPELINE.replace('retries: 0', 'retries: -1')
       .replace('gate: human', 'gate: auto')
       .replace('{ type: reviewer', '{ type: critic')
-      .replace(
-        '[docs/agents/episode-brief-grill.md], profile: ~',
-        '[docs/agents/episode-brief-grill.md], profile: opus',
-      )
+      .replace('[docs/agents/grilling-voice.md], profile: ~', '[docs/agents/grilling-voice.md], profile: opus')
       .replace('id: research', 'id: brief-grill')
       .replace('needs: [brief-grill]', 'needs: []');
     const expected = [

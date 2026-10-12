@@ -15,6 +15,16 @@ describe('planLinks', () => {
     ]);
   });
 
+  it('names a skill file after its skill folder, so every uploaded skill is told apart', () => {
+    expect(planLinks(['.agents/skills/brief-grill/SKILL.md'], 'docs/claude-project-context')).toEqual([
+      { name: 'brief-grill.md', target: '../../.agents/skills/brief-grill/SKILL.md' },
+    ]);
+  });
+
+  it('fails when a skill and a doc flatten to one name', () => {
+    expect(() => planLinks(['.agents/skills/domain/SKILL.md', 'docs/agents/domain.md'], 'out')).toThrow(/domain\.md/);
+  });
+
   it('fails when two files flatten to one name', () => {
     expect(() => planLinks(['docs/agents/domain.md', 'docs/features/domain.md'], 'out')).toThrow(/domain\.md/);
   });

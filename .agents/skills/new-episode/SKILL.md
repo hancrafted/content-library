@@ -20,7 +20,7 @@ _Done when_ the worktree exists and `git branch --show-current` prints `episode/
 
 ### 2. Brief
 
-Run the `brief-grill` job by [`references/brief-grill.md`](references/brief-grill.md). It is a human gate: stop the session after the `Gate: draft brief` commit and tell Han the Brief is his to edit and approve.
+Run the `brief-grill` job by [`references/brief-grill.md`](references/brief-grill.md). When Han brings a Brief, accept it: validate it with the job's checks and grill him only on what is missing or reads `Not settled.`. Otherwise invoke the `brief-grill` skill. It is a human gate: stop the session after the `Gate: draft brief` commit and tell Han the Brief is his to edit and approve.
 
 _Done when_ `docs/episodes/<slug>/brief.md` has `status: approved`, committed by Han with `Gate: approved brief`.
 

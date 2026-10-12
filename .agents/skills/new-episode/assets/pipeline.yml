@@ -29,8 +29,8 @@ jobs:
     gate: human
     agents:
       - type: implementor
-        skills: [grilling, handoff]
-        references: [references/brief-grill.md, docs/agents/episode-brief-grill.md]
+        skills: [brief-grill, grilling, handoff]
+        references: [references/brief-grill.md]
         profile: ~
 
   - id: pipeline-tailor
