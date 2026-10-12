@@ -21,10 +21,10 @@ A window drawn as a bar that fills with blocks, one per message, while the share
 
 #### Speaker notes
 
-1. **Attention is shared** — every token in the window competes for the attention the next token gets [1].
+1. **Attention sums to one** — a softmax normalises each token's attention weights over the window, so every token added dilutes the share of the rest [1].
    - sources: [1] Attention Is All You Need — https://arxiv.org/abs/1706.03762
-2. **The window is fixed** — a model's context length is a hard limit set at training time [2].
-   - sources: [2] Lost in the Middle — https://arxiv.org/abs/2307.03172
+2. **The window has a size** — a model's context window is a fixed maximum number of tokens it can reference at once [2].
+   - sources: [2] Context windows — https://docs.claude.com/en/docs/build-with-claude/context-windows
    - target: the bar in the visual
 
 #### Segments
@@ -40,7 +40,7 @@ master: three-column · motion: liquid-ink-transition
 
 #### Speaker notes
 
-1. **Recall is U-shaped** — models answer best from the start and the end of a long context and worst from the middle [1].
+1. **A longer window does not help** — extended-context models show the same drop in the middle; size alone does not make it reliable [1].
    - sources: [1] Lost in the Middle — https://arxiv.org/abs/2307.03172
 
 #### Segments
@@ -57,8 +57,8 @@ master: basic-page · motion: liquid-ink-transition
 
 #### Speaker notes
 
-1. **A fresh session resets the budget** — nothing from the old task competes for attention in the new one [1].
-   - sources: [1] Lost in the Middle — https://arxiv.org/abs/2307.03172
+1. **The start is weighted most** — attention carries a built-in bias toward the start of the input, so a fresh session puts the new task where it counts most [1].
+   - sources: [1] Found in the Middle — https://arxiv.org/abs/2406.16008
 
 #### Segments
 
@@ -72,7 +72,7 @@ master: basic-page · motion: liquid-ink-transition
 
 #### Speaker notes
 
-1. **Standing instructions belong in a file** — a file read at start sits at the top of the window, where recall is strongest [1].
+1. **Why the file works** — text read at the start of a session sits where recall is strongest, so standing instructions there survive a long session [1].
    - sources: [1] Lost in the Middle — https://arxiv.org/abs/2307.03172
 
 #### Segments

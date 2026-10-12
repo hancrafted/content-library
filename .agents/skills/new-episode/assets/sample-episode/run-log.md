@@ -8,11 +8,12 @@
 
 ### Output
 
-- `brief.md`, `status: approved` by Han at the Brief gate.
+- `brief.md`, `status: checked`, committed with `Gate: draft brief` for Han to approve.
 
 ### Checks
 
 - `mh check`: pass.
+- `vitest` staging test: pass.
 
 ### Metrics
 
@@ -20,9 +21,9 @@
 
 ### Notes
 
-Han reworded the Red thread at the gate; the agent's candidate framed the window as memory, not budget.
+Han reworded the Red thread in Settle; the agent's candidate framed the window as memory, not budget.
 
-## research · 2026-10-12T10:15:00Z
+## write-research · 2026-10-12T10:15:00Z
 
 ### Inputs
 
@@ -40,7 +41,7 @@ Han reworded the Red thread at the gate; the agent's candidate framed the window
 
 ### Metrics
 
-- implementor · attempt 1 · fail · rubric "Every Finding cites a Source" · 240 s · 18000 tokens
+- implementor · attempt 1 · fail · rubric "Fail if a finding cites no Source" · 240 s · 18000 tokens
 - implementor · attempt 2 · pass · 120 s · 9000 tokens
 - reviewer · attempt 2 · pass · 60 s · 6000 tokens
 
