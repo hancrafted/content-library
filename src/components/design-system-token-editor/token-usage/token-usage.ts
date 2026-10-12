@@ -1,9 +1,9 @@
 // The DOM side of token usage: sets a token to a sentinel, samples computed style
 // before and after, and hands the plain samples to the pure diff. Also the
 // outline and scroll the usage list drives. Reads and restores the page; adds nothing to it.
-import { carriers } from './page-tokens';
-import type { Scope } from './token-changes.pure';
-import { classifyToken, type Theme, type Token } from './token-discovery.pure';
+import { carriers } from '@/lib/page-tokens';
+import type { Scope } from '@/lib/token-changes.pure';
+import { classifyToken, type Theme, type Token } from '@/lib/token-discovery.pure';
 import {
   diffUsage,
   sentinelsFor,

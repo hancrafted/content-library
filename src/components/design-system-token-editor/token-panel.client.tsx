@@ -12,7 +12,7 @@ import { cn } from '@/lib/utils';
 import { Moon, Sun } from 'lucide-react';
 import { useState } from 'react';
 import styles from './token-panel.module.css';
-import { TokenRow } from './token-row.client';
+import { TokenRow, type RowAddon } from './token-row.client';
 
 type Tab = 'global' | 'slide';
 
@@ -21,9 +21,10 @@ interface ListProps {
   theme: Theme;
   edits: Edits;
   onEdit: (next: Edits) => void;
+  rowAddon?: RowAddon;
 }
 
-function GroupSection({ group, scope, theme, edits, onEdit }: ListProps & { group: TokenGroup }) {
+function GroupSection({ group, scope, theme, edits, onEdit, rowAddon }: ListProps & { group: TokenGroup }) {
   return (
     <section aria-label={group.label} data-token-group={group.id}>
       <h3 className="bg-card text-muted-foreground border-border sticky top-0 z-10 -mx-3 border-b px-3 py-1.5 text-caption font-semibold">
@@ -40,6 +41,7 @@ function GroupSection({ group, scope, theme, edits, onEdit }: ListProps & { grou
               theme={theme}
               value={edits[key] ?? token[theme]}
               changed={key in edits}
+              rowAddon={rowAddon}
               onChange={(value) => onEdit(setEdit(edits, { scope, theme, token }, value))}
             />
           );
@@ -114,6 +116,8 @@ export interface PanelProps {
   changes: Change[];
   onEdits: (next: Edits) => void;
   top: number;
+  /** Extra UI under each token row, supplied by the editor's root. */
+  rowAddon?: RowAddon;
 }
 
 function ScopeContents({ tokens, ...list }: ListScope & { tokens: PageTokens }) {
@@ -137,9 +141,17 @@ function ScopeContents({ tokens, ...list }: ListScope & { tokens: PageTokens }) 
 }
 
 /** The scope tabs and what each shows. The Slide tab exists only while an Episode page reports a Slide. */
-function ScopeTabs({ tab, onTab, theme, tokens, edits, onEdits }: Omit<PanelProps, 'changes' | 'top'> & TabState) {
+function ScopeTabs({
+  tab,
+  onTab,
+  theme,
+  tokens,
+  edits,
+  onEdits,
+  rowAddon,
+}: Omit<PanelProps, 'changes' | 'top'> & TabState) {
   const slideId = tokens.currentSlide;
-  const list = { theme, edits, onEdit: onEdits };
+  const list = { theme, edits, onEdit: onEdits, rowAddon };
   return (
     <Tabs value={tab} onValueChange={(next) => onTab(next as Tab)} className="min-h-0 flex-1 gap-3">
       <TabsList aria-label="Token scope" className="self-start">
@@ -169,7 +181,7 @@ interface TabState {
  * follows the site's light or dark theme with a palette of its own (see the CSS
  * module), so it keeps its look while the site's tokens are edited.
  */
-export function TokenPanel({ theme, tokens, edits, changes, onEdits, top }: PanelProps) {
+export function TokenPanel({ theme, tokens, edits, changes, onEdits, top, rowAddon }: PanelProps) {
   const [tab, setTab] = useState<Tab>('global');
   const shown: Tab = tab === 'slide' && tokens.currentSlide ? 'slide' : 'global';
   return (
@@ -183,7 +195,15 @@ export function TokenPanel({ theme, tokens, edits, changes, onEdits, top }: Pane
         'bg-card text-card-foreground border-border shadow-header fixed right-4 z-60 flex w-[min(28rem,calc(100vw-2rem))] flex-col gap-3 rounded-xl border p-3 text-caption max-sm:left-4',
       )}
     >
-      <ScopeTabs tab={shown} onTab={setTab} theme={theme} tokens={tokens} edits={edits} onEdits={onEdits} />
+      <ScopeTabs
+        tab={shown}
+        onTab={setTab}
+        theme={theme}
+        tokens={tokens}
+        edits={edits}
+        onEdits={onEdits}
+        rowAddon={rowAddon}
+      />
       <Actions changes={changes} onReset={() => onEdits({})} />
     </div>
   );

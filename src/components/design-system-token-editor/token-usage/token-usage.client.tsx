@@ -2,9 +2,9 @@
 
 import type { Scope } from '@/lib/token-changes.pure';
 import type { Theme, Token } from '@/lib/token-discovery.pure';
-import { findTokenUsage, outlineElement, scrollToElement, type UsageHit } from '@/lib/token-usage';
 import { ChevronDown, ChevronRight, Search } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { findTokenUsage, outlineElement, scrollToElement, type UsageHit } from './token-usage';
 
 type Usage = { state: 'idle' } | { state: 'running' } | { state: 'done'; hits: UsageHit[] };
 

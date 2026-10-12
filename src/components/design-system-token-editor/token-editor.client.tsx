@@ -8,6 +8,7 @@ import { SlidersHorizontal } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { TokenPanel } from './token-panel.client';
+import { usageRowAddon } from './token-usage/index.client';
 
 const GAP_PX = 8;
 
@@ -91,7 +92,15 @@ export default function TokenEditor() {
   useLiveEdits(tokens, edits, theme);
   const changes = useMemo(() => changedTokens(tokens, edits), [tokens, edits]);
   const panel = (
-    <TokenPanel theme={theme} tokens={tokens} edits={edits} changes={changes} onEdits={setEdits} top={top} />
+    <TokenPanel
+      theme={theme}
+      tokens={tokens}
+      edits={edits}
+      changes={changes}
+      onEdits={setEdits}
+      top={top}
+      rowAddon={usageRowAddon}
+    />
   );
   return (
     <>

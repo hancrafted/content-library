@@ -1,7 +1,7 @@
 // Finds where a token lands on a page from two plain snapshots of computed style,
 // taken before and after the token was set to a sentinel. The DOM adapter
 // (page-tokens.ts) takes the snapshots; nothing here touches the document.
-import type { TokenKind } from './token-discovery.pure';
+import type { TokenKind } from '@/lib/token-discovery.pure';
 
 /** The computed properties a token can reach. Layout-resolved ones (width, height, offsets) are left out: a font or spacing sentinel moves them everywhere. */
 export const USAGE_PROPERTIES: readonly string[] = [

@@ -5,9 +5,8 @@ import type { Scope } from '@/lib/token-changes.pure';
 import { classifyToken, type Theme, type Token } from '@/lib/token-discovery.pure';
 import { describeToken } from '@/lib/token-groups.pure';
 import { cn } from '@/lib/utils';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type ReactNode } from 'react';
 import { TokenColourPicker } from './token-colour-picker.client';
-import { TokenUsage } from './token-usage.client';
 
 function Swatch({
   value,
@@ -68,17 +67,25 @@ function RowText({
   );
 }
 
-interface RowProps {
+/** What a row addon is told about its row. */
+export interface RowContext {
   scope: Scope;
   token: Token;
   theme: Theme;
+}
+
+/** A render prop that puts extra UI under a token row; the editor knows nothing of what it shows. */
+export type RowAddon = (row: RowContext) => ReactNode;
+
+interface RowProps extends RowContext {
+  rowAddon?: RowAddon;
   value: string;
   changed: boolean;
   onChange: (value: string) => void;
 }
 
 /** One token: a swatch that opens a picker for a colour, and its name, description and text field for the active theme. */
-export function TokenRow({ scope, token, theme, value, changed, onChange }: RowProps) {
+export function TokenRow({ scope, token, theme, value, changed, onChange, rowAddon }: RowProps) {
   const [picking, setPicking] = useState(false);
   const isColour = classifyToken(token.name, token[theme]) === 'colour';
   const pickable = useMemo(() => isColour && pickerHexOf(token[theme]) !== null, [isColour, token, theme]);
@@ -89,7 +96,7 @@ export function TokenRow({ scope, token, theme, value, changed, onChange }: RowP
         <RowText name={token.name} value={value} changed={changed} onChange={onChange} />
       </div>
       {picking && pickable && <TokenColourPicker value={value} original={token[theme]} onChange={onChange} />}
-      <TokenUsage scope={scope} token={token} theme={theme} />
+      {rowAddon?.({ scope, token, theme })}
     </li>
   );
 }
