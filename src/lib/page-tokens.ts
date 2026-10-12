@@ -1,6 +1,6 @@
 // The DOM side of the token editor: reads the loaded stylesheets into the plain
 // snapshot token discovery works on, finds a Slide by id, and applies edits.
-import { toPickerHex } from './colour-convert.pure';
+import { normaliseColour, toPickerHex } from './colour-convert.pure';
 import type { Edits, Scope } from './token-changes.pure';
 import { editKey } from './token-changes.pure';
 import {
@@ -14,7 +14,7 @@ import {
 function snapshotRule(rule: CSSStyleRule, layer: string | undefined): RuleSnapshot | null {
   const declarations: Record<string, string> = {};
   for (const name of Array.from(rule.style)) {
-    if (name.startsWith('--')) declarations[name] = rule.style.getPropertyValue(name).trim();
+    if (name.startsWith('--')) declarations[name] = normaliseColour(rule.style.getPropertyValue(name).trim());
   }
   return Object.keys(declarations).length > 0 ? { selector: rule.selectorText, declarations, layer } : null;
 }

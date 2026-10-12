@@ -4,7 +4,7 @@ import { pickerHexOf } from '@/lib/page-tokens';
 import { classifyToken, type Theme, type Token } from '@/lib/token-discovery.pure';
 import { describeToken } from '@/lib/token-groups.pure';
 import { cn } from '@/lib/utils';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { TokenColourPicker } from './token-colour-picker.client';
 
 function Swatch({
@@ -78,7 +78,7 @@ interface RowProps {
 export function TokenRow({ token, theme, value, changed, onChange }: RowProps) {
   const [picking, setPicking] = useState(false);
   const isColour = classifyToken(token.name, token[theme]) === 'colour';
-  const pickable = isColour && pickerHexOf(token[theme]) !== null;
+  const pickable = useMemo(() => isColour && pickerHexOf(token[theme]) !== null, [isColour, token, theme]);
   return (
     <li className="flex flex-col gap-2 py-2" data-token={token.name} data-changed={changed}>
       <div className="flex items-start gap-3">

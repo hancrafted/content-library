@@ -63,6 +63,7 @@ const HSL = new RegExp(
   'i',
 );
 const RGB = new RegExp(String.raw`^rgba?\(\s*(${NUMBER})[\s,]+(${NUMBER})[\s,]+(${NUMBER})${ALPHA}\s*\)$`, 'i');
+const LAB = new RegExp(String.raw`^lab\(\s*(${NUMBER})(%?)\s+(${NUMBER})\s+(${NUMBER})${ALPHA}\s*\)$`, 'i');
 const HEX = /^#([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i;
 
 function parseHex(digits: string): Rgba {
@@ -71,8 +72,39 @@ function parseHex(digits: string): Rgba {
   return { r: byte(0), g: byte(2), b: byte(4), a: full.length === 8 ? byte(6) : 1 };
 }
 
+// CIE Lab (D50) to Oklab, through XYZ: the form a browser serves an oklch colour in once a build has rewritten it.
+function labToOklch(lab: number, a: number, b: number) {
+  const fy = (lab + 16) / 116;
+  const [fx, fz] = [fy + a / 500, fy - b / 200];
+  const inverse = (t: number) => (t ** 3 > 216 / 24389 ? t ** 3 : (116 * t - 16) / (24389 / 27));
+  const x50 = 0.96422 * inverse(fx);
+  const y50 = lab > 8 ? fy ** 3 : lab / (24389 / 27);
+  const z50 = 0.82521 * inverse(fz);
+  const x = 0.9554734527 * x50 - 0.0230985369 * y50 + 0.0632593087 * z50;
+  const y = -0.028369707 * x50 + 1.009995458 * y50 + 0.021041399 * z50;
+  const z = 0.0123140017 * x50 - 0.0205076964 * y50 + 1.3303659366 * z50;
+  const l_ = Math.cbrt(0.8189330101 * x + 0.3618667424 * y - 0.1288597137 * z);
+  const m_ = Math.cbrt(0.0329845436 * x + 0.9293118715 * y + 0.0361456387 * z);
+  const s_ = Math.cbrt(0.0482003018 * x + 0.2643662691 * y + 0.633851707 * z);
+  const ok = {
+    l: 0.2104542553 * l_ + 0.793617785 * m_ - 0.0040720468 * s_,
+    a: 1.9779984951 * l_ - 2.428592205 * m_ + 0.4505937099 * s_,
+    b: 0.0259040371 * l_ + 0.7827717662 * m_ - 0.808675766 * s_,
+  };
+  return { l: ok.l, c: Math.hypot(ok.a, ok.b), h: ((Math.atan2(ok.b, ok.a) * 180) / Math.PI + 360) % 360 };
+}
+
+function parseLab(text: string): { l: number; c: number; h: number; a: number } | null {
+  const lab = LAB.exec(text);
+  if (!lab) return null;
+  const lightness = parseFloat(lab[1]);
+  return { ...labToOklch(lightness, parseFloat(lab[3]), parseFloat(lab[4])), a: parseAlpha(lab[5]) };
+}
+
 function parseColour(value: string): Rgba | null {
   const text = value.trim();
+  const lab = parseLab(text);
+  if (lab) return { ...oklchToRgb(lab.l, lab.c, lab.h), a: lab.a };
   const hex = HEX.exec(text);
   if (hex) return parseHex(hex[1]);
   const oklch = OKLCH.exec(text);
@@ -111,11 +143,23 @@ export function toPickerHex(value: string): string | null {
 const trim = (n: number, places: number) => String(parseFloat(n.toFixed(places)));
 
 function oklchText({ r, g, b, a }: Rgba): string {
-  const { l, c, h } = rgbToOklch({ r, g, b });
+  return oklchString({ ...rgbToOklch({ r, g, b }), a });
+}
+
+function oklchString({ l, c, h, a }: { l: number; c: number; h: number; a: number }): string {
   const chroma = parseFloat(c.toFixed(3));
   const hue = chroma === 0 ? 0 : parseFloat(h.toFixed(1)) % 360;
   const alpha = a < 1 ? ` / ${Math.round(a * 100)}%` : '';
   return `oklch(${trim(l, 3)} ${trim(chroma, 3)} ${hue}${alpha})`;
+}
+
+/**
+ * A colour the browser served in a form the author did not write (`lab()`, from a
+ * build that rewrote `oklch()`) as `oklch()` again; anything else comes back as it was.
+ */
+export function normaliseColour(value: string): string {
+  const lab = parseLab(value.trim());
+  return lab ? oklchString(lab) : value;
 }
 
 /**

@@ -1,14 +1,17 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { PageTokens } from '@/hooks/use-page-tokens';
 import { formatChangePrompt } from '@/lib/change-prompt.pure';
 import type { TokenSet } from '@/lib/page-tokens';
 import { editKey, setEdit, type Change, type Edits } from '@/lib/token-changes.pure';
 import type { Theme } from '@/lib/token-discovery.pure';
 import { groupGlobalTokens, groupSlideTokens, type TokenGroup } from '@/lib/token-groups.pure';
+import { cn } from '@/lib/utils';
 import { Moon, Sun } from 'lucide-react';
 import { useState } from 'react';
+import styles from './token-panel.module.css';
 import { TokenRow } from './token-row.client';
 
 type Tab = 'global' | 'slide';
@@ -70,57 +73,34 @@ function Actions({ changes, onReset }: { changes: Change[]; onReset: () => void 
   );
 }
 
-function TabButton({
-  active,
-  disabled,
-  onClick,
-  children,
-}: {
-  active: boolean;
-  disabled?: boolean;
-  onClick: () => void;
-  children: string;
-}) {
+/** The second row: which theme's values an edit changes, as the site's sun or moon. */
+function ThemeRow({ theme }: { theme: Theme }) {
+  const ThemeIcon = theme === 'dark' ? Moon : Sun;
   return (
-    <Button
-      size="sm"
-      variant={active ? 'default' : 'outline'}
-      role="tab"
-      aria-selected={active}
-      disabled={disabled}
-      onClick={onClick}
+    <p
+      className="text-muted-foreground flex items-center gap-1.5 text-caption"
+      title="Edits change this theme's values"
+      data-testid="token-theme-row"
     >
-      {children}
-    </Button>
+      <ThemeIcon aria-hidden className="size-4" />
+      Editing {theme} values
+    </p>
   );
 }
 
-function PanelHeader({
-  shown,
-  slideId,
-  theme,
-  onTab,
-}: {
-  shown: Tab;
-  slideId: string | null;
-  theme: Theme;
-  onTab: (tab: Tab) => void;
-}) {
-  const ThemeIcon = theme === 'dark' ? Moon : Sun;
+function Scope({ slideId, children }: { slideId?: string; children: React.ReactNode }) {
   return (
-    <div className="flex items-center justify-between gap-2">
-      <div role="tablist" aria-label="Token scope" className="flex items-center gap-2">
-        <TabButton active={shown === 'global'} onClick={() => onTab('global')}>
-          Global
-        </TabButton>
-        <TabButton active={shown === 'slide'} disabled={!slideId} onClick={() => onTab('slide')}>
-          {slideId ? `Slide: ${slideId}` : 'Slide'}
-        </TabButton>
-      </div>
-      <span className="text-muted-foreground flex items-center gap-1.5" title="Edits change this theme's values">
-        <ThemeIcon aria-hidden className="size-4" />
-        {theme} values
-      </span>
+    <div className="flex flex-col gap-3">
+      {slideId && (
+        <p
+          className="text-muted-foreground truncate text-caption font-medium"
+          title={slideId}
+          data-testid="token-slide-title"
+        >
+          {slideId}
+        </p>
+      )}
+      {children}
     </div>
   );
 }
@@ -135,35 +115,74 @@ export interface PanelProps {
   top: number;
 }
 
+function ScopeContents({ tokens, ...list }: ListScope & { tokens: PageTokens }) {
+  const slideId = tokens.currentSlide;
+  return (
+    <div className="-mx-3 flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-3" data-testid="token-scroll">
+      <TabsContent value="global">
+        <Scope>
+          <TokenGroups set={tokens.globals} tab="global" {...list} />
+        </Scope>
+      </TabsContent>
+      {slideId && (
+        <TabsContent value="slide">
+          <Scope slideId={slideId}>
+            <TokenGroups set={tokens.slides[slideId]} tab="slide" {...list} />
+          </Scope>
+        </TabsContent>
+      )}
+    </div>
+  );
+}
+
+/** The scope tabs and what each shows. The Slide tab exists only while an Episode page reports a Slide. */
+function ScopeTabs({ tab, onTab, theme, tokens, edits, onEdits }: Omit<PanelProps, 'changes' | 'top'> & TabState) {
+  const slideId = tokens.currentSlide;
+  const list = { theme, edits, onEdit: onEdits };
+  return (
+    <Tabs value={tab} onValueChange={(next) => onTab(next as Tab)} className="min-h-0 flex-1 gap-3">
+      <TabsList aria-label="Token scope" className="self-start">
+        <TabsTrigger value="global">Global</TabsTrigger>
+        {slideId && (
+          <TabsTrigger value="slide" className={styles.slideTab}>
+            Slide
+          </TabsTrigger>
+        )}
+      </TabsList>
+      <ThemeRow theme={theme} />
+      <ScopeContents tokens={tokens} {...list} />
+    </Tabs>
+  );
+}
+
+type ListScope = Omit<ListProps, 'scope'>;
+
+interface TabState {
+  tab: Tab;
+  onTab: (tab: Tab) => void;
+}
+
 /**
- * The popover body: scope tabs, the grouped token list for the active theme, and
- * the copy and reset actions. Always dark (the `dark` class), whatever the site's
- * theme, so it reads the same while a theme's tokens are being edited.
+ * The popover body: scope tabs (Slide only on an Episode page), the theme row, the
+ * grouped token list for the active theme, and the copy and reset actions. It
+ * follows the site's light or dark theme with a palette of its own (see the CSS
+ * module), so it keeps its look while the site's tokens are edited.
  */
 export function TokenPanel({ theme, tokens, edits, changes, onEdits, top }: PanelProps) {
   const [tab, setTab] = useState<Tab>('global');
-  const slideId = tokens.currentSlide;
-  const shown: Tab = tab === 'slide' && slideId ? 'slide' : 'global';
+  const shown: Tab = tab === 'slide' && tokens.currentSlide ? 'slide' : 'global';
   return (
     <div
       role="dialog"
       aria-label="Design-system token editor"
       data-testid="design-system-token-panel"
       style={{ top, maxHeight: `calc(100svh - ${top}px - 1rem)` }}
-      className={
-        'dark bg-card text-card-foreground border-border fixed z-60 flex w-[min(28rem,calc(100vw-2rem))] flex-col gap-3 rounded-xl border p-3 text-caption shadow-header right-4 max-sm:left-4'
-      }
+      className={cn(
+        styles.panel,
+        'bg-card text-card-foreground border-border shadow-header fixed right-4 z-60 flex w-[min(28rem,calc(100vw-2rem))] flex-col gap-3 rounded-xl border p-3 text-caption max-sm:left-4',
+      )}
     >
-      <PanelHeader shown={shown} slideId={slideId} theme={theme} onTab={setTab} />
-      <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-3 -mx-3" data-testid="token-scroll">
-        <TokenGroups
-          set={shown === 'global' ? tokens.globals : slideId ? tokens.slides[slideId] : undefined}
-          tab={shown}
-          theme={theme}
-          edits={edits}
-          onEdit={onEdits}
-        />
-      </div>
+      <ScopeTabs tab={shown} onTab={setTab} theme={theme} tokens={tokens} edits={edits} onEdits={onEdits} />
       <Actions changes={changes} onReset={() => onEdits({})} />
     </div>
   );

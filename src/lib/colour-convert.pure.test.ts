@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatLike, toPickerHex } from './colour-convert.pure';
+import { formatLike, normaliseColour, toPickerHex } from './colour-convert.pure';
 
 describe('success cases', () => {
   it.each([
@@ -58,6 +58,27 @@ describe('success cases', () => {
     // ASSERT
     expect(written).toBe(expected);
   });
+
+  it.each([
+    ['lab(98.26% 0 0)', 'oklch(0.985 0 0)'],
+    ['lab(45.0488% 34.6836 -60.2039)', 'oklch(0.55 0.18 290)'],
+  ])('re-serialises the served %s as the authored %s', (served, authored) => {
+    // ARRANGE
+    const value = served;
+    // ACT
+    const text = normaliseColour(value);
+    // ASSERT
+    expect(text).toBe(authored);
+  });
+
+  it('reads a lab colour as the picker hex without a canvas', () => {
+    // ARRANGE
+    const expected = '#fafafa';
+    // ACT
+    const hex = toPickerHex('lab(98.26% 0 0)');
+    // ASSERT
+    expect(hex).toBe(expected);
+  });
 });
 
 describe('failure cases', () => {
@@ -87,9 +108,45 @@ describe('failure cases', () => {
     // ASSERT
     expect(written).toBe(original);
   });
+
+  it('leaves a value that is not a colour as it was', () => {
+    // ARRANGE
+    const value = '0.625rem';
+    // ACT
+    const text = normaliseColour(value);
+    // ASSERT
+    expect(text).toBe(value);
+  });
 });
 
 describe('edge cases', () => {
+  it('keeps alpha when it re-serialises a lab colour', () => {
+    // ARRANGE
+    const expected = 'oklch(0.985 0 0 / 10%)';
+    // ACT
+    const text = normaliseColour('lab(98.26% 0 0 / 0.1)');
+    // ASSERT
+    expect(text).toBe(expected);
+  });
+
+  it('leaves an oklch colour as authored', () => {
+    // ARRANGE
+    const value = 'oklch(0.55 0.18 290)';
+    // ACT
+    const text = normaliseColour(value);
+    // ASSERT
+    expect(text).toBe(value);
+  });
+
+  it('writes a plain colour with an alpha slider value as oklch with alpha', () => {
+    // ARRANGE
+    const expected = 'oklch(1 0 0 / 40%)';
+    // ACT
+    const written = formatLike('oklch(1 0 0)', '#ffffff66');
+    // ASSERT
+    expect(written).toBe(expected);
+  });
+
   it('keeps alpha as two trailing hex digits', () => {
     // ARRANGE
     const expected = '#ffffff1a';

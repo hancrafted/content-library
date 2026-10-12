@@ -12,7 +12,7 @@
   --primary-foreground: oklch(0.985 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
-  --header: hsl(210 20% 98%);
+  --header: oklch(0.985 0.002 247.8);
   --destructive: oklch(0.577 0.245 27.325);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
@@ -24,7 +24,7 @@
   --human: oklch(0.55 0.18 290);
   --ai: oklch(0.6 0.14 62);
   /* The brand accent: the hero's 'promotion', About emphasis, method deliverables. `--accent` is shadcn's neutral hover surface. */
-  --brand-accent: #dd5f27;
+  --brand-accent: oklch(0.636 0.171 41.8);
   /* The selected or active item (drawer tab, current nav link, active table-of-contents entry): 3:1 against the surface, text 4.5:1 (docs/features/episode-chrome.md). */
   --selected: oklch(0.4 0 0);
   --selected-foreground: oklch(0.985 0 0);
@@ -77,7 +77,7 @@
   --machine: oklch(0.72 0.14 235);
   --human: oklch(0.68 0.16 280);
   --ai: oklch(0.72 0.14 62);
-  --brand-accent: #f08a4b;
+  --brand-accent: oklch(0.732 0.146 50.4);
   --selected: oklch(0.8 0 0);
   --selected-foreground: oklch(0.2 0 0);
   --border: oklch(1 0 0 / 10%);

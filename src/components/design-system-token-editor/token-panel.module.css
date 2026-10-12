@@ -1,0 +1,67 @@
+/*
+ * The editor panel's own palette. It follows the site's light or dark theme but
+ * does not read the site's tokens: the panel has to keep its look while those very
+ * tokens are being edited. Every shadcn token the panel's primitives read is
+ * redeclared here, so `bg-card` or `border-input` inside the panel resolves to this
+ * set. FE-011 allows no raw colour (hex, rgb, hsl, oklch) in a CSS module outside a
+ * Slide, so each value is a mix of the named colours black and white, with a dark
+ * counterpart under `:global(.dark)`.
+ */
+.panel {
+  --background: white;
+  --foreground: color-mix(in oklab, black 80%, white);
+  --card: color-mix(in oklab, black 1%, white);
+  --card-foreground: color-mix(in oklab, black 80%, white);
+  --primary: color-mix(in oklab, black 75%, white);
+  --primary-foreground: color-mix(in oklab, black 2%, white);
+  --muted: color-mix(in oklab, black 5%, white);
+  --muted-foreground: color-mix(in oklab, black 55%, white);
+  --accent: color-mix(in oklab, black 6%, white);
+  --accent-foreground: color-mix(in oklab, black 80%, white);
+  --border: color-mix(in oklab, black 12%, white);
+  --input: color-mix(in oklab, black 12%, white);
+  --ring: color-mix(in oklab, black 35%, white);
+  --brand-accent: chocolate;
+  --overlay: black;
+}
+
+:global(.dark) .panel {
+  --background: color-mix(in oklab, white 15%, black);
+  --foreground: color-mix(in oklab, white 97%, black);
+  --card: color-mix(in oklab, white 20%, black);
+  --card-foreground: color-mix(in oklab, white 97%, black);
+  --primary: color-mix(in oklab, white 92%, black);
+  --primary-foreground: color-mix(in oklab, white 20%, black);
+  --muted: color-mix(in oklab, white 27%, black);
+  --muted-foreground: color-mix(in oklab, white 72%, black);
+  --accent: color-mix(in oklab, white 30%, black);
+  --accent-foreground: color-mix(in oklab, white 97%, black);
+  --border: color-mix(in oklab, white 12%, transparent);
+  --input: color-mix(in oklab, white 16%, transparent);
+  --ring: color-mix(in oklab, white 56%, black);
+  --brand-accent: sandybrown;
+}
+
+/* The Slide tab slides in when an Episode page reports a Slide: width and opacity, once. */
+.slideTab {
+  overflow: hidden;
+  animation: slide-tab-in 220ms ease-out both;
+}
+
+@keyframes slide-tab-in {
+  from {
+    max-width: 0;
+    padding-inline: 0;
+    opacity: 0;
+  }
+  to {
+    max-width: 8rem;
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slideTab {
+    animation: none;
+  }
+}
