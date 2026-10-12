@@ -101,8 +101,6 @@ jobs:
         references:
           - references/retrieval.md
           - docs/episodes/onboard-ai-like-a-colleague/brief.md
-          - docs/research/ai-onboarding-freelancer.md
-          - docs/research/ai-amnesia-mechanics.md
         model: inherit
 
   - id: write-research-ai-as-onboarding-a-colleague
@@ -124,7 +122,6 @@ jobs:
           - references/write-research.md
           - docs/episodes/onboard-ai-like-a-colleague/brief.md
           - docs/episodes/onboard-ai-like-a-colleague/run-log.md
-          - docs/research/ai-onboarding-freelancer.md
         model: sonnet
       - type: reviewer
         skills: []
@@ -199,8 +196,6 @@ jobs:
           - references/write-research.md
           - docs/episodes/onboard-ai-like-a-colleague/brief.md
           - docs/episodes/onboard-ai-like-a-colleague/run-log.md
-          - docs/research/ai-onboarding-freelancer.md
-          - docs/research/ai-amnesia-mechanics.md
         model: sonnet
       - type: reviewer
         skills: []
@@ -225,7 +220,6 @@ jobs:
           - references/write-research.md
           - docs/episodes/onboard-ai-like-a-colleague/brief.md
           - docs/episodes/onboard-ai-like-a-colleague/run-log.md
-          - docs/research/ai-onboarding-freelancer.md
         model: sonnet
       - type: reviewer
         skills: []
@@ -288,8 +282,6 @@ jobs:
       - type: implementor
         skills: []
         references:
-          - docs/research/ai-onboarding-freelancer.md
-          - docs/research/ai-amnesia-mechanics.md
           - docs/research/amnesiac-freelancer-script.md
           - src/components/episodes/amnesiac-freelancer/amnesiac-freelancer.ts
           - docs/episodes/onboard-ai-like-a-colleague/research/AIE-0001__ai-as-onboarding-a-colleague/research.md

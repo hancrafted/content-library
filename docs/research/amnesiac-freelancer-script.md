@@ -1,6 +1,6 @@
 # Amnesiac freelancer: speaker notes and voice script
 
-Draft, English only. Companion to `src/components/episodes/amnesiac-freelancer/amnesiac-freelancer.tsx`. Feeds the context drawer: no drawer exists yet, so this file is the data it will read. Every claim traces to `docs/research/ai-amnesia-mechanics.md` or `docs/research/ai-onboarding-freelancer.md`. "Amnesiac" is our metaphor, not Anthropic's; the string "amnesia" does not appear on the Anthropic page. Gawande and freelancer-practice claims are unverified and are deliberately left out.
+Draft, English only. Companion to `src/components/episodes/amnesiac-freelancer/amnesiac-freelancer.tsx`. Feeds the context drawer: no drawer exists yet, so this file is the data it will read. Every claim traces to a research file of the onboard-ai-like-a-colleague run: `docs/episodes/onboard-ai-like-a-colleague/research/AIE-0001__ai-as-onboarding-a-colleague/research.md`, `AIE-0004__context-and-brief-improve-ai-output/research.md` or `AIE-0005__risks-of-unchecked-ai-output/research.md`. "Amnesiac" is our metaphor, not Anthropic's; the string "amnesia" does not appear on the Anthropic page. Gawande and freelancer-practice claims are unverified and are deliberately left out.
 
 Each Slide has two parts. Speaker notes are a short list of talking points, each with a header and description, pointing at the Slide element it explains (`target`, a proposed kebab-case `id` for that element). Voice script is the teleprompter text: time marks, keywords, spoken text, and a bridge to the next Slide.
 

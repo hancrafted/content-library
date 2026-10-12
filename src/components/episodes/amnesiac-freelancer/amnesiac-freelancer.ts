@@ -17,7 +17,8 @@ import { whereKnowledgeLives } from './slides/where-knowledge-lives/slide';
  * The dogfood Episode: "Treat AI like an amnesiac freelancer you have to
  * onboard". Three Sections holding 2, 3 and 3 Slides after their section
  * slide, modelled on the reference Episode (page-template). Every claim traces
- * to docs/research/ai-amnesia-mechanics.md and ai-onboarding-freelancer.md;
+ * to the research files under docs/episodes/onboard-ai-like-a-colleague/
+ * research/: AIE-0001, AIE-0004 and AIE-0005;
  * "amnesiac" is our metaphor, not a vendor term. Each Slide is one folder under
  * `slides/` holding its own Translation files; the Episode's title, caption
  * and description sit in `i18n/`.
