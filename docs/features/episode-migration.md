@@ -5,7 +5,7 @@ stale_after: 2027-01-11T00:00:00Z
 
 # Episode migration
 
-Read before turning a prototype (for example an HTML tower page) into an Episode, or before adding any Episode. Binding rules: [FE-002 Episode Page](../../.archgate/adrs/FE-002-episode-page.md). Key roles: [episode-translation-keys.md](episode-translation-keys.md). Copy source: `src/components/episodes/page-template/`. Every Slide layout rendered: `src/components/episodes/slide-layouts/`.
+Read before turning a prototype (for example an HTML tower page) into an Episode, or before adding any Episode. Binding rules: [FE-002 Episode Page](../../.archgate/adrs/FE-002-episode-page.md); colour and type: [FE-011 Design Tokens](../../.archgate/adrs/FE-011-design-tokens.md). Key roles: [episode-translation-keys.md](episode-translation-keys.md). Copy source: `src/components/episodes/page-template/`. Every Slide layout rendered: `src/components/episodes/slide-layouts/`.
 
 Each step ends on a completion criterion. Stop at a step only when its criterion holds. Work in a worktree; commit through `/commit`.
 
@@ -33,11 +33,17 @@ Kebab-case, from the titles: `the-lost-middle`.
 
 Done when: no two slugs match and each Section's first slug names the Section.
 
-## 3. Copy the template and write the Episode's text
+## 3. Copy the template, register the Episode, write its text
 
-Copy `page-template/` to `episodes/<ep>/`, rename its slug, delete its Slide folders. Write the Episode's own text in `episodes/<ep>/i18n/en.json` and `de.json`: `title`, `caption`, `description`. English goes in verbatim from the source; German is written fresh from the same facts, not translated.
+Copy `page-template/` to `episodes/<ep>/`, then:
 
-Done when: both files hold the three keys.
+- Delete its Slide folders and its `published-anchors.json`; step 7 captures a fresh one.
+- Rename `page-template.ts` to `<ep>.ts` and its export to the camelCase slug. Set `slug: '<ep>'` and `sections: []` until step 7; add `youtube: { en, de }` once the video ids exist.
+- Register it now, all three together, since `tsc` refuses any one alone: the slug in `EPISODE_SLUGS` (`src/lib/routes.ts`), the record in `EPISODES` (`src/components/episodes/registry.ts`), and `episodes/<ep>/episode-metadata.ts` in `PUBLISHED` (`src/components/episodes/episode-repository.ts`). The metadata holds `status: 'published'`, its primary Topic, any extra Topics, its Format, its Tags and `publishedOn`, as in `ai-token-economy/episode-metadata.ts`.
+- If `episodes/<ep>/` already exists as an Upcoming Episode, copy into it and flip its metadata: move it out of `UPCOMING`, and move its copy from `landing.episodeOverview.upcoming.<ep>` into `episodes/<ep>/i18n/` ([Episode overview entries](episode-translation-keys.md#episode-overview-entries)).
+- Write the Episode's own text in `i18n/en.json` and `de.json`: `title`, `caption`, `description`. English goes in verbatim from the source; German is written fresh from the same facts, not translated.
+
+Done when: both files hold the three keys and `npm run typecheck` passes.
 
 ## 4. Write each Slide as one folder
 
@@ -75,7 +81,8 @@ export const theLostMiddle = slide({
   - `slideHref('the-lost-middle')`: the localized link to another Slide of this Episode; a slug not in the Episode fails the build.
   - `locale`: for `Intl` number or date formatting.
   - `ref`, `target`, `Title`: notes and heading, below.
-- A Slide folder imports only its own files and the global shared locations: `src/components/slide-master/`, `src/components/slide-shared/`, `src/components/ui/`, `src/hooks/`, `src/lib/`. A server part only this Slide uses sits in its folder (see `page-template/slides/what-comes-next/statement.tsx`); a part two Slides share goes in `src/components/slide-shared/`, plain props, no kit. Colour tokens: [FE-002 §7](../../.archgate/adrs/FE-002-episode-page.md#7-episode-styling-stays-in-the-episode).
+- A Slide folder imports only its own files and the global shared locations: `src/components/slide-master/`, `src/components/slide-shared/`, `src/components/ui/`, `src/hooks/`, `src/lib/`; its `*.client.tsx` widgets reach only their own folder, `src/hooks/` and `src/lib/` (step 6). A server part only this Slide uses sits in its folder (see `page-template/slides/what-comes-next/statement.tsx`); a part two Slides share goes in `src/components/slide-shared/`, plain props, no kit.
+- Colour, size and weight come from tokens only ([FE-011](../../.archgate/adrs/FE-011-design-tokens.md#dos-and-donts), reference in [the design system](../design-system/README.md)): `text-foreground`, `text-machine`, `var(--…)`; text sizes `text-body`, `text-caption`, `text-subheading`, `text-heading`. Never `bg-amber-500`, `text-xs`, `text-[13px]`, `font-bold` or a hex value; a Slide's own colour is a token in its CSS module with a `:global(.dark)` value. Lint and `archgate check` refuse the rest.
 - A Slide's own CSS is a CSS module in its folder, combined with Tailwind via `cn()` (see `ai-token-economy/slides/motivation/freelancer-cards.module.css`). Only a token remap that the chrome reads too (the Title slide glow, `<em>`, the talk player) goes in one Episode stylesheet beside the Episode file, every selector under `[data-episode='<ep>']` (see `maintaining-markdown-for-ai/palette.css`). Never style one Slide from it.
 - A `slide-shared` part reaches only other slide-shared parts, the UI kit and `src/lib` (dependency-cruiser rule `slide-shared-reaches-only-ui-and-lib`, [FE-007 §5](../../.archgate/adrs/FE-007-module-layering.md#5-a-slide-folder-imports-only-global-shared-code)). A popover uses the shared `usePopoverPlacement` hook; see [Episode chrome](episode-chrome.md).
 
@@ -100,11 +107,10 @@ Done when: every note target resolves to one element of its Slide, and every sou
 
 Done when: each widget's pure logic has a passing test.
 
-## 7. Compose, register, snapshot
+## 7. Compose and snapshot
 
-- `episodes/<ep>/<ep>.ts`: `episode({ slug, youtube, messages: { en, de }, sections: [[sectionSlide, ...pages], ...] })` from `@/components/slide-master/slide`, `en` and `de` imported from `./i18n/`. Copying a Slide in from another Episode is `cp -r` of its folder plus one import and one entry here.
-- Add the slug to `EPISODE_SLUGS` in `src/lib/routes.ts`, and the record to `EPISODES` in `src/components/episodes/registry.ts`.
-- `episodes/<ep>/episode-metadata.ts`: `status: 'published'`, its primary Topic, any extra Topics, its Format, its Tags and `publishedOn`; add it to `PUBLISHED` in `src/components/episodes/episode-repository.ts`. If the Episode was an Upcoming Episode, flip its existing file, move it out of `UPCOMING` and move its copy from `landing.episodeOverview.upcoming.<ep>` into `episodes/<ep>/i18n/` ([Episode overview entries](episode-translation-keys.md#episode-overview-entries)). To feature it, edit the three slugs in `FEATURED` in `src/lib/episode-overview.ts`.
+- `episodes/<ep>/<ep>.ts`: fill `sections: [[sectionSlide, ...pages], ...]` in `episode({ slug, youtube, messages: { en, de }, sections })`. Copying a Slide in from another Episode is `cp -r` of its folder plus one import and one entry here.
+- To feature it, edit the three slugs in `FEATURED` in `src/lib/episode-overview.ts`.
 - Run `npx vitest run src/components/episodes/published-anchors.test.ts`. It fails for the new Episode and prints the file path and its JSON; create `episodes/<ep>/published-anchors.json` with exactly that content.
 
 Done when: the same test run is green.
@@ -112,9 +118,15 @@ Done when: the same test run is green.
 ## 8. Verify
 
 ```sh
-npm run verify          # mh check fails in a worktree; read everything before it
+npm run verify
 npm run build && npm run test:build
 ```
+
+`test:build` holds three hand-kept expectations a new Episode touches:
+
+- **Captured text:** the first run writes `tests/post-build/episode-text/<ep>.{en,de}.json` and fails on purpose. Review both files, commit them, run again. A later wording change fails against the capture: delete the two files, rerun, review the new capture.
+- **Untitled Slides:** each Slide left without a `title` gets its anchor in `UNTITLED` in `tests/post-build/episode-structure.build.test.ts`.
+- **Published list:** the slug joins `PUBLISHED_SLUGS` in `tests/post-build/landing-page.build.test.ts`, in the order of `PUBLISHED` in `episode-repository.ts`.
 
 Done when: both pass, the build lists `/episode/<ep>` and `/de/episode/<ep>`, and the post-build tests cover it.
 

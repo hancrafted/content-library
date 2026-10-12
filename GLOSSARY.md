@@ -78,8 +78,8 @@ _Avoid_: Transition, segue
 
 ## Localization
 
-**Translation file**: one locale's strings for the whole site, nested by namespace; English is the source every other locale is checked against. Localization libraries call it a catalog; that jargon stays out of this project.
+**Translation file**: one locale's strings for one owner: the site's chrome and landing (`src/messages/`), one Episode, or one Slide (its folder's `i18n/`); English is the source every other locale is checked against. Localization libraries call it a catalog; that jargon stays out of this project.
 _Avoid_: Catalog, messages file, dictionary
 
-**Translation key**: the dotted path naming one string in a Translation file, e.g. `episodes.ai-token-economy.slides.the-lost-middle.title`.
+**Translation key**: the dotted path naming one string in a Translation file, e.g. `tableOfContents.title` site-wide, or `notes.attention-valley.header` in a Slide's own file.
 _Avoid_: Catalog key, catalog path, message id

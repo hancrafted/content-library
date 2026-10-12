@@ -44,14 +44,14 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 
 ### 4. The ungoverned zone: Slide internals
 
-1. What renders inside one Slide — markup, props, layout — is explicitly **not** governed: no mandated component shape, prop interface or layout rule. Values, not shape: tokens (FE-011) govern colour, size and weight inside a Scene, nothing else.
-2. Why: a prototype's per-slide type interface forced bespoke markup through it and degraded every visualisation. Governance binds boundaries, never a Slide's inside; written down because silence gets filled with structure.
+1. What renders inside one Slide — markup, props, layout — is explicitly **not** governed: no mandated component shape, prop interface or layout rule. Values, not shape: design tokens govern colour, size and weight inside a Scene; the Slide wrapper rules add only Backdrop, looping and stacking.
+2. Why: a prototype's per-slide type interface degraded every visualisation. Governance binds boundaries, never a Slide's inside; written down because silence gets filled with structure.
 
 ### 5. A Slide folder imports only global shared code
 
-1. A Slide folder, `episodes/<ep>/slides/<slide>/`, MUST import only its own files and `slide-master/`, `slide-shared/`, `ui/`, `src/hooks/`, `src/lib/` — never another Slide or its Episode file.
+1. A Slide folder, `episodes/<ep>/slides/<slide>/`, MUST import only its own files and `slide-master/`, `slide-shared/`, `ui/`, `src/hooks/`, `src/lib/` — never another Slide or its Episode file; its `*.client.tsx` only own files, hooks, lib.
 2. A `slide-shared` part MUST import only `slide-shared/`, `ui/` and `src/lib/` — never a Slide, an Episode or the Slide master.
-3. Why: a Slide copied with `cp -r`, one import and one list entry needs nothing it left behind. §4 holds inside the folder.
+3. Why: a Slide copied with `cp -r`, one import and one list entry needs nothing it left behind. §4 holds inside.
 
 ## Do's and Don'ts
 

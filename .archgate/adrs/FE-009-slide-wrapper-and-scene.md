@@ -27,7 +27,7 @@ An Episode stacks many Slides, some heavy (charts, looping demos). Navigation ne
 
 **Unmount discards state, by choice:** a played animation replays on return; persisting it is a Scene concern.
 
-**Insets.** The container sets `--inset-l` and `--inset-r`. Below `md`: `1rem` and `1rem`. From `md`, left is the table of contents' width plus its gap (`21rem`); right is `3rem`, or `--drawer-width` plus `4rem` when the drawer is beside and open (beside applies from `xl`; below it the drawer overlays). Insets never transition (FE-010 §7).
+**Insets.** The container sets `--inset-l` and `--inset-r`. Below `md`: `1rem` and `1rem`. From `md`, left is the table of contents' width plus its gap (`21rem`); right is `3rem`, or `--drawer-width` plus `4rem` when the drawer is beside and open (beside applies from `xl`; below it the drawer overlays). Insets never transition.
 
 **Backdrop contract.** `SlideBackdrop` covers the wrapper's padding box at `-z-10`, with `overflow: hidden`, `pointer-events: none` and `aria-hidden`. It is hidden below `md` unless `mobile`, hidden in print, and sits inside the mount, so far content drops it. Parallax shows its resting state under reduced motion. A Foreground element MAY break out to the full width with negative inset margins, explicitly.
 
@@ -53,12 +53,12 @@ A new layer picks a rung here. The `isolate` wrapper would trap a popover under 
 ### 1. The split
 
 1. The Slide wrapper MUST own a Slide's mechanics: anchor, width, min-height, mount boundary, stacking, zone.
-2. The Scene MUST stay ungoverned beyond §7 and FE-011.
+2. The Scene's shape MUST stay ungoverned; only token values and §6–§8 reach in.
 
 ### 2. Content area
 
 1. Slides MUST render inside one Content area: a full-width single-column grid, one cell per Slide wrapper.
-2. It MUST own vertical rhythm and the insets (`--inset-l` and `--inset-r` as one-step wrapper padding; see Context); a wrapper MUST NOT declare margins, gaps or padding.
+2. It MUST own vertical rhythm and the insets, as one-step wrapper padding; a wrapper MUST NOT declare margins, gaps or padding.
 3. Grouping elements between Content area and wrapper (the Section `<section>`) MUST use `display: contents`.
 4. It MUST host the Episode portal root.
 
@@ -109,7 +109,7 @@ A new layer picks a rung here. The `isolate` wrapper would trap a popover under 
 3. **DON'T** create another `IntersectionObserver`, or use the reveal hook inside an Episode. (Decision 5)
 4. **DON'T** flatten the Content area to flow layout. (Decision 2)
 5. **DON'T** let a looping animation run in `near` or `far`. (Decision 6)
-6. **DON'T** add a rule that reaches inside the Scene; FE-011 is the one, for colour, size and weight only. (Decision 1)
+6. **DON'T** add a rule that shapes a Scene's markup, props or layout; only token values and §6–§8 reach in. (Decision 1)
 7. **DON'T** pad, transition or margin a wrapper for the insets; set `--inset-l` and `--inset-r` and let the Content area apply them. (Decision 2)
 8. **DON'T** put reader-needed content, links or text in a Backdrop. (Decision 7)
 9. **DON'T** render a popover inside a Scene's own subtree. (Decision 8)
@@ -128,7 +128,7 @@ A new layer picks a rung here. The `isolate` wrapper would trap a popover under 
 
 1. **State resets on return:** interactive Scene state is lost when a Slide goes `far`.
 2. **Two margins to tune** across breakpoints, now as two inset variables.
-3. **Beside reflows the Foreground:** the right inset widens once per open and close (FE-010 Negative 3).
+3. **Beside reflows the Foreground:** the right inset widens once per open and close.
 4. **Pausing is a duty, not a mechanism:** the wrapper can't see inside the Scene.
 5. **Hydration mounts everything once:** an unreported Slide reads `near`; the first observer callback only removes content.
 
@@ -143,13 +143,12 @@ A new layer picks a rung here. The `isolate` wrapper would trap a popover under 
 
 1. **Unit tests:** zone derivation; wrapper and mount contracts.
 2. **Lint:** `new IntersectionObserver` refused outside the Slide observer and the reveal hook (§5.1).
-3. **Dependency rules:** `SlideMount` and the observer are client leaves reached from the container (§4, §5).
-4. **Post-build test:** Content area grid, portal root, wrappers as grid children carrying `isolate`, Backdrops `aria-hidden` inside their wrapper and hidden in print, the old three-column grid class absent, anchors in static HTML (§2, §3, §7).
-5. **Browser check:** `visual-check` DOM numbers at 375, 1100 and 1440px with the drawer beside, over and closed: the Backdrop is as wide as the viewport; the Foreground is clear of the chrome (§2, §7).
+3. **Post-build test:** Content area grid, portal root, wrappers as grid children carrying `isolate`, Backdrops `aria-hidden` inside their wrapper and hidden in print, the old three-column grid class absent, anchors in static HTML (§2, §3, §7).
+4. **Browser check:** `visual-check` DOM numbers at 375, 1100 and 1440px with the drawer beside, over and closed: the Backdrop is as wide as the viewport; the Foreground is clear of the chrome (§2, §7).
 
 **Exception (§5.1):** the reveal hook observes once to stagger in the landing page's About cards, then disconnects. It reports to no page service and writes no zone, so it can't compete for `active`.
 
-**Manual review duties:** looping islands pause outside `active` (§6); the reveal hook isn't imported under an Episode (§5.1); no `overflow` on wrappers; the Scene stays ungoverned apart from §7 and FE-011's token values; z-index values match §8; looping Backdrop content pauses while hidden (§6). **Browser check:** far content absent with no scroll-height jump; a looping demo pauses and resumes.
+**Manual review duties:** looping islands pause outside `active` (§6); the reveal hook isn't imported under an Episode (§5.1); no `overflow` on wrappers; `SlideMount` and the observer are reached only from the container (§4, §5); the Scene stays ungoverned apart from token values and §6–§8; z-index values match §8; looping Backdrop content pauses while hidden (§6). **Browser check:** far content absent with no scroll-height jump; a looping demo pauses and resumes.
 
 **Exceptions:** raise a separate ADR; human approval required.
 

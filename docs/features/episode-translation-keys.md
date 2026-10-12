@@ -9,7 +9,7 @@ Read before adding or changing an Episode, a Slide, or any Translation file. The
 
 ## Key shape
 
-A Slide keeps its strings in its own folder, `slides/<slide>/i18n/en.json` and `de.json`; its Episode's own text sits in `<episode>/i18n/`. The site-wide Translation files hold no Episode text:
+A Slide keeps its strings in its own folder, `slides/<slide>/i18n/en.json` and `de.json`; its Episode's own text sits in `<episode>/i18n/`. The site-wide Translation files (`src/messages/`) hold no published Episode's text; an Upcoming Episode's card copy is landing text ([Episode overview entries](#episode-overview-entries)):
 
 ```text
 <episode>/i18n/<locale>.json                  title, caption, description of the Episode
@@ -39,7 +39,7 @@ A Section's own slide is a Slide like any other: its `title` names the Section a
 
 `<note>`, `<seg>`, `<column>` and `<source>` are kebab-case slugs. A Slide may add a leaf no role describes (the untitled Slide in page-template keeps its sentence under `statement`); add a role to the table in the same change when a new Slide layout needs one.
 
-The record, not the Translation file, holds what is not a string: a note's `slug` and `target`, a source's `slug` and `url`, an image's `src`, a segment's `slug` and `bridge` flag. Neither holds a time: a Slide's minutes and each segment's span are counted from the `script` and `bridge` words. Slide text wraps one phrase in `<ref>…</ref>`, read with `t.rich('prose', { ref: ref('<note>') })`, to make a Context reference to a note of the same Slide. Chrome shared by every Episode (for example `tableOfContents.title`) sits outside `episodes.*` and is not bound by this table.
+The record, not the Translation file, holds what is not a string: a note's `slug` and `target`, a source's `slug` and `url`, an image's `src`, a segment's `slug` and `bridge` flag. Neither holds a time: a Slide's minutes and each segment's span are counted from the `script` and `bridge` words. Slide text wraps one phrase in `<ref>…</ref>`, read with `t.rich('prose', { ref: ref('<note>') })`, to make a Context reference to a note of the same Slide. Chrome shared by every Episode (for example `tableOfContents.title`) sits in the site-wide files and is not bound by this table.
 
 ## Worked example: page-template
 
@@ -100,4 +100,4 @@ An entry reads its text from:
 
 To announce an Upcoming Episode, create `episodes/<slug>/` holding only `episode-metadata.ts` with `status: 'upcoming'`, add it to `UPCOMING` in the repository, and write its two `upcoming` keys in en and de.
 
-`page-template` is the layout reference, not content: it is not in the Episode overview, and the landing page links to it separately.
+`page-template`, `slide-layouts` and `slide-master` are layout references (`LAYOUT_REFERENCES`), not content: they are not in the Episode overview and need no metadata.

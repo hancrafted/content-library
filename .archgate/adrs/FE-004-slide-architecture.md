@@ -83,7 +83,7 @@ For this project the map matters because handoffs run on agents with no session 
 
 ### 1. This record is the map
 
-1. Read this record before touching an Episode; it names modules and flows, never mechanism. Rules live with the owner of each area: Episode page, import boundary, server/client boundary, Slide wrapper, Context drawer.
+1. Read this record before touching an Episode: modules and flows, never mechanism. Rules live with the owner of each area: Episode page, import boundary, server/client boundary, Slide wrapper, Context drawer.
 
 ### 2. Four tiers, one direction
 
@@ -102,7 +102,7 @@ For this project the map matters because handoffs run on agents with no session 
 
 ### 5. Text, styling and client code each have fixed homes
 
-1. Text: site-wide Translation files for site chrome and landing; an Episode's folder for its title, caption, description; a Slide's folder for its strings.
+1. Text: site-wide Translation files for site chrome, landing and Upcoming Episode cards; an Episode's folder for its title, caption, description; a Slide's folder for its strings.
 2. Styling: site tokens in `globals.css`; an Episode token remap under its own scope; a Slide's look in its own CSS module.
 3. Client code: `*.client.tsx` leaves only — in a Slide folder, the container's mechanics or the chrome; hooks hold browser state.
 
@@ -127,7 +127,7 @@ For this project the map matters because handoffs run on agents with no session 
 1. **DON'T** import upward, or from one Slide folder into another. (Decision 2, Decision 3)
 2. **DON'T** add an Episode-local `parts/` or `client/` folder. (Decision 3)
 3. **DON'T** render chrome, anchors or headings outside the container. (Decision 4)
-4. **DON'T** put Episode text in the site-wide Translation files. (Decision 5)
+4. **DON'T** put a published Episode's text in the site-wide Translation files. (Decision 5)
 5. **DON'T** style a Slide from `globals.css` or the Episode stylesheet. (Decision 5)
 6. **DON'T** add a tier, module or Slide schema without a new ADR. (Decision 6)
 

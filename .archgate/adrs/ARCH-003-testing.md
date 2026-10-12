@@ -20,7 +20,7 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 ### 1. Determinism and Real Execution
 
 1. **Tests MUST be fully deterministic**: all time, randomness, and inputs MUST be supplied explicitly with zero dependence on ambient state or network.
-2. **Tests MUST provide real assertion value**: tests MUST execute real code against explicit expected values—mock frameworks (`vi.mock`/`vi.spyOn`), snapshots, skipped tests (`.skip`), and assertion-free bodies are forbidden.
+2. **Tests MUST provide real assertion value**: tests MUST execute real code against explicit expected values—mock frameworks (`vi.mock`/`vi.spyOn`), snapshot matchers, skipped tests (`.skip`), and assertion-free bodies are forbidden. A reviewed contract file — `published-anchors.json` — is an expected value.
 
 ### 2. Suite structure
 
