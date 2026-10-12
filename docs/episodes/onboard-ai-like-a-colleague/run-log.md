@@ -588,3 +588,38 @@ Needs human: "the way of working stayed exactly as it was" is backed only loosel
 Needs human: "only been around since the middle of this year" dates a piece the Brief wants reusable across talks.
 Needs human: whether "Hold it up against your own screen" and "Let it sit in the room" suit both a recorded take and a live room.
 Needs human: the experiment's ordinary words (budget, a hundred people, culture, booking system, caterers, calendar) preview the disciplines without naming them; no statistic is spoken anywhere.
+
+## write-spec · 2026-10-12T22:18:47Z
+
+### Inputs
+
+- `brief.md`, `dossier.md` (checked), `manuscript.md` (approved), and the five `No catalog match:` lines of the write-dossier entry.
+- `.agents/skills/new-episode/references/write-spec.md`, the `to-spec` and `to-tickets` skills, and FE-004 for the Episode seams.
+- Branch `episode/onboard-ai-like-a-colleague`, pushed to origin, with draft PR #98.
+
+### Output
+
+- Spec issue https://github.com/hancrafted/content-library/issues/99, labelled `ready-for-agent` and `episode:onboard-ai-like-a-colleague`.
+- Sub-issue https://github.com/hancrafted/content-library/issues/100: the Title slide, the Episode wiring and Section the-gap; it blocks the other three.
+- Sub-issue https://github.com/hancrafted/content-library/issues/101: Section thought-experiment, blocked by #100.
+- Sub-issue https://github.com/hancrafted/content-library/issues/102: Section from-doing-to-managing, blocked by #100.
+- Sub-issue https://github.com/hancrafted/content-library/issues/103: Section your-move, blocked by #100.
+
+### Checks
+
+- The job has no `checks:`; its Done when was confirmed by `gh`: one issue carries the `episode:` label, all five carry `ready-for-agent`, and `issues/99/sub_issues` lists #100 to #103.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 120 s · 74195 tokens
+- reviewer · attempt 1 · pass · 50 s · 64828 tokens
+
+### Notes
+
+Passed on attempt 1. The spec records that Han was away, so the seams are FE-004's Episode seams. No `episode:onboard-ai-like-a-colleague` issue existed before, so the label and every issue were created; the label sits on #99 alone.
+The implementor first created the four tickets with titles shifted by one; it corrected them with `gh issue edit` before the review. Bodies and blocking edges were never wrong.
+Each of the five `No catalog match:` lines of the write-dossier entry is a design question in its ticket: stop and comment rather than invent a layout.
+Needs human: the tickets link `{#slug}` anchors on the pushed branch; GitHub may build its own anchors from heading text, so a link may open the file at the top. Each ticket also names the slug.
+Needs human: write-spec.md asks for the Voice script segments "verbatim" and also never to paste staging text. The orchestrator told the implementor to reference paragraphs by number; the reviewer read "verbatim" as a rule for the built Voice script, which the spec states.
+Needs human: the Dossier names no master or motion for the Title slide and the section slides; #100 uses the kit's title and section layouts and gives the Title slide liquid-ink-transition.
+Needs human: #101 to #103 each add entries to the one Episode record file, so they merge one at a time; the spec says so.
