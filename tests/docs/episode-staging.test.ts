@@ -1,8 +1,15 @@
 import { checkPipeline, type PipelineContext } from '@/lib/episode-pipeline.pure';
-import { checkResearchIndex, checkRunsCsv, checkStagingFolder, type Catalog } from '@/lib/episode-staging.pure';
+import {
+  checkResearchIndex,
+  checkRunsCsv,
+  checkStagingFolder,
+  unsettledBriefSections,
+  type Catalog,
+} from '@/lib/episode-staging.pure';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { parse } from 'yaml';
 
 /*
  * The cross-file checks (design-ADR 0004) applied to the real corpus: every
@@ -23,24 +30,12 @@ const SKILL_FOLDER = '.agents/skills/new-episode';
 const TEMPLATE = path.join(ROOT, SKILL_FOLDER, 'assets/pipeline.yml');
 
 /*
- * Files the template reads that later tickets create: #95 the per-job
- * references, #86 the llm-wiki index, #88 the human-profile guides. The
- * template alone tolerates them while they are missing; a per-run pipeline
- * never does. Delete an entry when its file lands: a test fails until you do.
+ * Files the template reads that later tickets create: #86 the llm-wiki index,
+ * #88 the human-profile guides. The template alone tolerates them while they
+ * are missing; a per-run pipeline never does. Delete an entry when its file
+ * lands: a test fails until you do.
  */
-const TEMPLATE_JOBS = [
-  'brief-grill',
-  'pipeline-tailor',
-  'research-match',
-  'research',
-  'consolidate',
-  'distill',
-  'spec',
-  'implement',
-  'serve-and-pr',
-];
 const PENDING = [
-  ...TEMPLATE_JOBS.map((job) => `${SKILL_FOLDER}/references/${job}.md`),
   'docs/llm-wiki/index.md',
   ...['storytelling', 'tone', 'mental-model'].map((guide) => `docs/profile/han/${guide}-guide.md`),
 ];
@@ -120,6 +115,38 @@ function perRunPipelines(): Record<string, string> {
   );
 }
 
+/** A heading's anchor as GitHub renders it: `## Rubric` is `rubric`. */
+function anchorOf(heading: string): string {
+  return heading
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9 -]/g, '')
+    .replace(/ /g, '-');
+}
+
+/**
+ * Every reviewer `rubric: <file>#<heading>` in a pipeline whose file has no
+ * such heading, as `<job>: <rubric>`. The schema check already proves the file
+ * exists; this proves the reviewer finds its pass/fail lines in it.
+ */
+function rubricsWithoutHeading(yaml: string): string[] {
+  const { jobs } = parse(yaml) as { jobs: { id: string; agents: { rubric?: string }[] }[] };
+  return jobs.flatMap(({ id, agents }) =>
+    agents
+      .flatMap(({ rubric }) => (rubric === undefined ? [] : [rubric]))
+      .filter((rubric) => {
+        const [file, anchor] = rubric.split('#');
+        const resolved = path.join(ROOT, SKILL_FOLDER, file);
+        if (!existsSync(resolved)) return true;
+        const anchors = [...readFileSync(resolved, 'utf8').matchAll(/^#{1,6} (.+)$/gm)].map(([, title]) =>
+          anchorOf(title),
+        );
+        return !anchors.includes(anchor);
+      })
+      .map((rubric) => `${id}: ${rubric}`),
+  );
+}
+
 describe('success cases', () => {
   it('finds no disagreement between the files of any staging folder or the sample Episode', () => {
     // ARRANGE
@@ -163,6 +190,31 @@ describe('success cases', () => {
     const findings = pipelines.flatMap(([file, yaml]) => checkPipeline(file, yaml, pipelineContext([])));
     // ASSERT
     expect(findings).toEqual([]);
+  });
+
+  it('finds the rubric heading every reviewer names, in the template and every per-run pipeline', () => {
+    // ARRANGE
+    const pipelines = [readFileSync(TEMPLATE, 'utf8'), ...Object.values(perRunPipelines())];
+    // ACT
+    const missing = pipelines.flatMap(rubricsWithoutHeading);
+    // ASSERT
+    expect(missing).toEqual([]);
+  });
+
+  it('finds no approved Brief that keeps a Not settled section, so the orchestrator never starts on one', () => {
+    // ARRANGE
+    const briefs = Object.entries(stagingFolders())
+      .map(([where, folder]) => [`${where}/brief.md`, path.join(folder, 'brief.md')])
+      .filter(([, file]) => existsSync(file))
+      .map(([where, file]) => [where, readFileSync(file, 'utf8')] as const)
+      .filter(([, text]) => /^status: approved$/m.test(text));
+    // ACT
+    const unsettled = briefs.flatMap(([where, text]) =>
+      unsettledBriefSections(text).map((heading) => `${where}: ${heading}`),
+    );
+    // ASSERT
+    expect(briefs.length).toBeGreaterThan(0);
+    expect(unsettled).toEqual([]);
   });
 
   it('finds the runs CSV header exact', () => {
