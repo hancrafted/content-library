@@ -231,3 +231,27 @@ All six questions concern how people and organizations work with AI, so all are 
 ### Notes
 
 Each research job and its output now carry the categorize-research name: the job id takes the slug (`write-research-ai-as-onboarding-a-colleague`), the folder the full name (`research/AIE-0001__ai-as-onboarding-a-colleague/`). write-dossier and retire-prior-research name the same paths. The categorize-research job is added between brief-grill and customize-pipeline, as in the template.
+
+## customize-pipeline · 2026-10-12T21:44:27Z
+
+### Inputs
+
+- `pipeline.yml` as of 9b960e5.
+- The template from `feat/89-new-episode` at 5b77640, merged in as 8f7e426: the job fields `wants` and `isolation`, the top-level `template`, and the check that every job able to run beside another has `isolation: worktree`.
+- `.scratch/pipeline-hardening/handoff.md`, and Han's instruction that every parallel job runs, checks and merges from its own worktree.
+
+### Output
+
+- `pipeline.yml`, still `status: draft`.
+
+### Checks
+
+- `vitest` (`tests/docs/episode-staging.test.ts`): pass.
+
+### Metrics
+
+- implementor · attempt 1 · pass · run in the orchestrator's session, duration not measured · no token count
+
+### Notes
+
+`template: 5b77640` records the template commit; it is the run's last template merge, and the template stays frozen until open-pr is done. The six research jobs and retire-prior-research carry `isolation: worktree`, because they may run at the same time. write-dossier now needs only retrieval and wants the six research jobs, so a blocked question becomes a `Research gap:` instead of blocking the Episode. It also wants retire-prior-research: that job repoints `amnesiac-freelancer.ts` and the amnesiac-freelancer script, which the Dossier reads, and the want orders it first without letting its block stop the Dossier. With that order no later job runs beside it, so none of them needs a worktree. Every other tailoring is unchanged.

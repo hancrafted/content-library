@@ -4,15 +4,24 @@
 #
 # Schema (checked by src/lib/episode-pipeline.pure.ts in `npm run verify`):
 #   status    draft | approved
+#   template  per-run only: the feat/89-new-episode commit the pipeline was tailored
+#             from; the template is not merged into the Episode branch again until
+#             open-pr is done
 #   jobs      run once every job in `needs` is done; independent jobs may run in parallel
 #     intent    optional; the job's task as a prompt, for a job no reference describes
-#     needs     job ids this job waits for
-#     foreach   optional; `<file>#<heading>` fans the job out once per list item
+#     needs     job ids this job waits for; a blocked one blocks this job too
+#     wants     optional; job ids this job waits for, passed or blocked: a blocked
+#               one does not block it, and its implementor learns which blocked
+#     isolation optional; `worktree`: the job's agents and checks work in their own
+#               worktree on episode/<slug>--<job id>, merged back only on a pass.
+#               Required on a job that may run beside another or has foreach,
+#               unless all its agents run in the orchestrator session
+#     foreach   template only; `<file>#<heading>`: customize-pipeline writes one job per list item
 #     before    what runs before the implementor writes: `mh-query`, required when a job
 #               writes markdown, has the implementor run `npx mh query <path>` on every
 #               .md output and follow its intents; the reviewer runs it as its baseline
 #     outputs   full repo paths in the staging folder docs/episodes/<slug>/; a job reading
-#               one must need its writer; a rule must govern every .md one
+#               one must need or want its writer; a rule must govern every .md one
 #     checks    cheapest first; names and commands in SKILL.md's job-loop check table
 #     retries   reviewer failures sent back before this branch of the pipeline stops
 #     gate      optional; `human` stops the run until Han approves the output
@@ -26,6 +35,7 @@
 #       model       the model it runs on, or inherit; SKILL.md's job loop says where it applies
 #       session     optional; subagent (default) or orchestrator, by SKILL.md's job loop
 status: draft
+template: 5b77640
 jobs:
   - id: brief-grill
     needs: []
@@ -102,6 +112,7 @@ jobs:
       Pocock confirmed; a consultant said the same in a company workshop), to show
       it's an established lens.
     needs: [retrieval]
+    isolation: worktree
     before: [mh-query]
     outputs: [docs/episodes/onboard-ai-like-a-colleague/research/AIE-0001__ai-as-onboarding-a-colleague/research.md]
     checks: [mh, vitest]
@@ -126,6 +137,7 @@ jobs:
       Answer research question 2 of the Brief: Why do individuals fail to reach
       the promised AI productivity boost?
     needs: [retrieval]
+    isolation: worktree
     before: [mh-query]
     outputs: [docs/episodes/onboard-ai-like-a-colleague/research/AIE-0002__individual-ai-productivity-gap/research.md]
     checks: [mh, vitest]
@@ -149,6 +161,7 @@ jobs:
       Answer research question 3 of the Brief: Why do organizations fail to reach
       the promised AI productivity boost?
     needs: [retrieval]
+    isolation: worktree
     before: [mh-query]
     outputs:
       [docs/episodes/onboard-ai-like-a-colleague/research/AIE-0003__organizational-ai-productivity-gap/research.md]
@@ -173,6 +186,7 @@ jobs:
       Answer research question 4 of the Brief: Why does richer context and a
       clearer brief measurably improve AI output?
     needs: [retrieval]
+    isolation: worktree
     before: [mh-query]
     outputs:
       [docs/episodes/onboard-ai-like-a-colleague/research/AIE-0004__context-and-brief-improve-ai-output/research.md]
@@ -199,6 +213,7 @@ jobs:
       Answer research question 5 of the Brief: Why does unchecked AI work carry
       real risk?
     needs: [retrieval]
+    isolation: worktree
     before: [mh-query]
     outputs: [docs/episodes/onboard-ai-like-a-colleague/research/AIE-0005__risks-of-unchecked-ai-output/research.md]
     checks: [mh, vitest]
@@ -226,6 +241,7 @@ jobs:
       have these skills; the task demands management discipline, which merely
       correlates with experience.
     needs: [retrieval]
+    isolation: worktree
     before: [mh-query]
     outputs:
       [docs/episodes/onboard-ai-like-a-colleague/research/AIE-0006__ai-delegation-as-management-skill/research.md]
@@ -258,6 +274,7 @@ jobs:
       this run that now hold those Findings. Remove both paths from every
       references list in this pipeline.yml, this job's included, so the
       pipeline check still finds every file it names.
+    isolation: worktree
     needs:
       [
         write-research-ai-as-onboarding-a-colleague,
@@ -280,8 +297,12 @@ jobs:
           - docs/episodes/onboard-ai-like-a-colleague/research/AIE-0005__risks-of-unchecked-ai-output/research.md
         model: sonnet
 
+  # Wants the research rather than needing it: a blocked question leaves a
+  # gap the Dossier works around. Wants retire-prior-research too, so the
+  # files it repoints are settled before the Dossier reads them.
   - id: write-dossier
-    needs:
+    needs: [retrieval]
+    wants:
       [
         write-research-ai-as-onboarding-a-colleague,
         write-research-individual-ai-productivity-gap,
@@ -289,6 +310,7 @@ jobs:
         write-research-context-and-brief-improve-ai-output,
         write-research-risks-of-unchecked-ai-output,
         write-research-ai-delegation-as-management-skill,
+        retire-prior-research,
       ]
     before: [mh-query]
     outputs: [docs/episodes/onboard-ai-like-a-colleague/dossier.md]
