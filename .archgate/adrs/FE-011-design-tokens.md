@@ -35,7 +35,7 @@ Reasons, values and the token reference: [`docs/design-system/README.md`](../../
 1. A raw colour (hex, `rgb()`, `hsl()`, `oklch()`, named) MAY appear only in `globals.css` `:root` / `.dark`, a Slide token file, `token-panel.module.css`. (📜 Rule: `no-raw-colour-in-css`)
 2. A Slide token file (a CSS module in the Slide's folder) MUST NOT declare a global token name (`--primary`). (📜 Rule: `slide-token-no-global-name`)
 3. Every raw colour in a Slide token file MUST have a dark counterpart under `:global(.dark)`. (📜 Rule: `slide-token-dark-counterpart`)
-4. Slide-local token names are free and unprefixed.
+4. Slide-local token names are free.
 
 ### 3. Type
 
@@ -58,7 +58,7 @@ Reasons, values and the token reference: [`docs/design-system/README.md`](../../
 
 ### 6. Legacy list
 
-1. Files predating these rules sit in `src/design-system/legacy.json`, exempt from §2–§4 except §4.4.
+1. Files predating these rules sit in `src/design-system/legacy.json`, exempt from §2–§4 except §3.2 and §4.4.
 2. Entries are only removed, never added; a dead entry MUST go. (📜 Rule: `no-dead-legacy-entry`)
 
 ## Do's and Don'ts
