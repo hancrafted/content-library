@@ -8,6 +8,10 @@
 const LEGACY_FILE = 'src/design-system/legacy.json';
 const GLOBALS = 'src/app/globals.css';
 const SLIDE_MODULE_GLOB = 'src/components/episodes/*/slides/**/*.module.css';
+// The one token file outside a Slide folder: the token editor's panel keeps a fixed palette so it survives edits to the
+// site tokens it edits. It may hold raw colours (A1) and must pair them with :global(.dark) values (A4); unlike a Slide
+// token file it redeclares global names on purpose (so A3 does not apply). Adding a file here needs an ADR amendment.
+const EDITOR_PANEL_MODULE = 'src/components/design-system-token-editor/token-panel.module.css';
 const CODE_GLOBS = ['src/**/*.ts', 'src/**/*.tsx'];
 const CSS_GLOB = 'src/**/*.css';
 
@@ -24,18 +28,183 @@ const RELATIVE_SIZE_ALLOWED: Record<string, string> = {
 // colour sits (alone in a string, in a function or list argument, or after a colour-ish property) — see CODE_COLOUR_RE.
 const HEX = '#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{4}|[0-9a-fA-F]{3})(?![0-9a-zA-Z_-])';
 const COLOUR_FN = String.raw`\b(?:rgba?|hsla?|oklch|oklab|lab|lch|hwb)\(\s*[-+.\d]`;
-const NAMED = 'red|blue|green|white|black|yellow|orange|purple|pink|gray|grey|cyan|magenta|teal|navy|brown|gold|silver';
+// The full CSS named-colour list (`transparent`, `currentColor` and `inherit` are not colours and stay allowed).
+const NAMED_COLOURS = [
+  'aliceblue',
+  'antiquewhite',
+  'aqua',
+  'aquamarine',
+  'azure',
+  'beige',
+  'bisque',
+  'black',
+  'blanchedalmond',
+  'blue',
+  'blueviolet',
+  'brown',
+  'burlywood',
+  'cadetblue',
+  'chartreuse',
+  'chocolate',
+  'coral',
+  'cornflowerblue',
+  'cornsilk',
+  'crimson',
+  'cyan',
+  'darkblue',
+  'darkcyan',
+  'darkgoldenrod',
+  'darkgray',
+  'darkgreen',
+  'darkgrey',
+  'darkkhaki',
+  'darkmagenta',
+  'darkolivegreen',
+  'darkorange',
+  'darkorchid',
+  'darkred',
+  'darksalmon',
+  'darkseagreen',
+  'darkslateblue',
+  'darkslategray',
+  'darkslategrey',
+  'darkturquoise',
+  'darkviolet',
+  'deeppink',
+  'deepskyblue',
+  'dimgray',
+  'dimgrey',
+  'dodgerblue',
+  'firebrick',
+  'floralwhite',
+  'forestgreen',
+  'fuchsia',
+  'gainsboro',
+  'ghostwhite',
+  'gold',
+  'goldenrod',
+  'gray',
+  'green',
+  'greenyellow',
+  'grey',
+  'honeydew',
+  'hotpink',
+  'indianred',
+  'indigo',
+  'ivory',
+  'khaki',
+  'lavender',
+  'lavenderblush',
+  'lawngreen',
+  'lemonchiffon',
+  'lightblue',
+  'lightcoral',
+  'lightcyan',
+  'lightgoldenrodyellow',
+  'lightgray',
+  'lightgreen',
+  'lightgrey',
+  'lightpink',
+  'lightsalmon',
+  'lightseagreen',
+  'lightskyblue',
+  'lightslategray',
+  'lightslategrey',
+  'lightsteelblue',
+  'lightyellow',
+  'lime',
+  'limegreen',
+  'linen',
+  'magenta',
+  'maroon',
+  'mediumaquamarine',
+  'mediumblue',
+  'mediumorchid',
+  'mediumpurple',
+  'mediumseagreen',
+  'mediumslateblue',
+  'mediumspringgreen',
+  'mediumturquoise',
+  'mediumvioletred',
+  'midnightblue',
+  'mintcream',
+  'mistyrose',
+  'moccasin',
+  'navajowhite',
+  'navy',
+  'oldlace',
+  'olive',
+  'olivedrab',
+  'orange',
+  'orangered',
+  'orchid',
+  'palegoldenrod',
+  'palegreen',
+  'paleturquoise',
+  'palevioletred',
+  'papayawhip',
+  'peachpuff',
+  'peru',
+  'pink',
+  'plum',
+  'powderblue',
+  'purple',
+  'rebeccapurple',
+  'red',
+  'rosybrown',
+  'royalblue',
+  'saddlebrown',
+  'salmon',
+  'sandybrown',
+  'seagreen',
+  'seashell',
+  'sienna',
+  'silver',
+  'skyblue',
+  'slateblue',
+  'slategray',
+  'slategrey',
+  'snow',
+  'springgreen',
+  'steelblue',
+  'tan',
+  'teal',
+  'thistle',
+  'tomato',
+  'turquoise',
+  'violet',
+  'wheat',
+  'white',
+  'whitesmoke',
+  'yellow',
+  'yellowgreen',
+];
+const NAMED = NAMED_COLOURS.join('|');
 const COLOUR_PROP = String.raw`(?:color|fill|stroke|background(?:Color)?|floodColor|stopColor|border(?:Color)?|outline(?:Color)?|boxShadow|textShadow)`;
 
 // In a CSS value, a `#` can only be a colour, so the bare hex is enough there.
 const CSS_COLOUR_RE = new RegExp(`${HEX}|${COLOUR_FN}`);
+// A named colour is a value token: not part of an identifier (`red-pulse`, `.white`, `--black`), not a function name
+// (`tan(`), not inside a string or `url()`. Custom-property names after `var(` are blanked first.
+const NAMED_RE = new RegExp(String.raw`(?<![\w#.-])(?:${NAMED})(?![\w-]|\s*\()`, 'i');
+
+/** True when a CSS value holds a raw colour: hex, colour function, or a CSS named colour at any depth (color-mix too). */
+function cssValueHasColour(value: string): boolean {
+  if (CSS_COLOUR_RE.test(value)) return true;
+  const bare = value
+    .replace(/(['"])(?:(?!\1).)*\1/g, '""')
+    .replace(/url\([^)]*\)/gi, 'url()')
+    .replace(/var\(\s*--[\w-]+/gi, 'var(');
+  return NAMED_RE.test(bare);
+}
 const CODE_COLOUR_RES = [
   new RegExp(`(['"\`])${HEX}\\1`), // fill="#0af"
   new RegExp(String.raw`[(,]\s*${HEX}`), // linear-gradient(#fff, #000)
   new RegExp(String.raw`\[${HEX}\]`), // text-[#ff0000]
   new RegExp(COLOUR_FN), // rgba(10, 14, 26, 0.12)
   new RegExp(String.raw`\b${COLOUR_PROP}['"]?\s*[:=]\s*\{?\s*['"\`][^'"\`]*${HEX}`), // color: 'x #fff'
-  new RegExp(String.raw`\b${COLOUR_PROP}['"]?\s*[:=]\s*\{?\s*['"](?:${NAMED})['"]`), // color: 'red'
+  new RegExp(String.raw`\b${COLOUR_PROP}['"]?\s*[:=]\s*\{?\s*['"](?:${NAMED})['"]`, 'i'), // color: 'red', fill="white"
+  new RegExp(String.raw`\b(?:color-mix|[a-z-]*gradient)\([^)]*(?<![\w#.-])(?:${NAMED})(?![\w-])`, 'i'), // 'color-mix(in oklab, black 80%, white)'
 ];
 const CODE_FONT_RE = /\b(?:fontSize|fontWeight|fontFamily)\s*[:=]|\bfont-(?:size|weight|family)\s*:/;
 const CSS_FONT_RE = /(?:^|[;{\s])font-(?:size|weight|family)\s*:/;
@@ -92,9 +261,11 @@ async function governed(ctx: RuleContext, globs: string[]): Promise<string[]> {
   return all.filter((file) => !legacy.has(file) && !TEST_FILE_RE.test(file));
 }
 
-async function slideModules(ctx: RuleContext): Promise<string[]> {
+async function slideModules(ctx: RuleContext, extra: string[] = []): Promise<string[]> {
   const legacy = await legacyFiles(ctx);
-  return (await ctx.glob(SLIDE_MODULE_GLOB)).filter((file) => !legacy.has(file));
+  const present = new Set(await ctx.glob('src/**/*.module.css'));
+  const files = [...(await ctx.glob(SLIDE_MODULE_GLOB)), ...extra.filter((file) => present.has(file))];
+  return files.filter((file) => !legacy.has(file));
 }
 
 /** Names declared on the global palette and theme: `--primary`, `--color-primary`, … */
@@ -117,16 +288,16 @@ export default {
     // A1 — §2.1. A raw colour belongs in the global :root/.dark blocks or a Slide token file, nowhere else.
     'no-raw-colour-in-css': {
       description:
-        'A raw colour (hex, rgb(), hsl(), oklch()) in CSS appears only under :root / .dark in globals.css and in a Slide token file (a CSS module in an Episode Slide folder). Legacy files are exempt.',
+        'A raw colour (hex, rgb(), hsl(), oklch()) in CSS appears only under :root / .dark in globals.css and in a Slide token file (a CSS module in an Episode Slide folder), plus the token editor panel module. Named colours (black, chocolate, …) count; transparent, currentColor and inherit do not. Legacy files are exempt.',
       severity: 'error',
       async check(ctx) {
-        const slides = new Set(await ctx.glob(SLIDE_MODULE_GLOB));
+        const slides = new Set([...(await ctx.glob(SLIDE_MODULE_GLOB)), EDITOR_PANEL_MODULE]);
         for (const file of await governed(ctx, [CSS_GLOB])) {
           if (slides.has(file)) continue;
           const css = stripComments(await ctx.readFile(file), 'css');
           for (const decl of declarations(css)) {
             if (file === GLOBALS && isRootOrDark(decl.selector)) continue;
-            if (!CSS_COLOUR_RE.test(decl.value)) continue;
+            if (!cssValueHasColour(decl.value)) continue;
             ctx.report.violation({
               message: `Raw colour \`${decl.value}\` in \`${decl.selector}\` — use a token utility or var(--…); raw colours live in globals.css :root/.dark or a Slide token file (FE-011 [no-raw-colour-in-css]).`,
               file,
@@ -194,16 +365,16 @@ export default {
     // A4 — §2.3. Every raw colour in a Slide token file has a value under :global(.dark) for the same selector and property.
     'slide-token-dark-counterpart': {
       description:
-        'Every raw colour a Slide token file declares MUST have a dark counterpart: the same property on the same selector under :global(.dark). Legacy files are exempt.',
+        'Every raw colour a Slide token file (or the token editor panel module) declares MUST have a dark counterpart: the same property on the same selector under :global(.dark). Legacy files are exempt.',
       severity: 'error',
       async check(ctx) {
-        for (const file of await slideModules(ctx)) {
+        for (const file of await slideModules(ctx, [EDITOR_PANEL_MODULE])) {
           const decls = declarations(stripComments(await ctx.readFile(file), 'css'));
           const dark = new Set(
             decls.filter((d) => isDarkSelector(d.selector)).map((d) => `${lightForm(d.selector)}|${d.property}`),
           );
           for (const decl of decls) {
-            if (isDarkSelector(decl.selector) || !CSS_COLOUR_RE.test(decl.value)) continue;
+            if (isDarkSelector(decl.selector) || !cssValueHasColour(decl.value)) continue;
             if (dark.has(`${lightForm(decl.selector)}|${decl.property}`)) continue;
             ctx.report.violation({
               message: `Raw colour \`${decl.value}\` on \`${decl.selector}\` has no dark value — add \`:global(.dark) ${decl.selector} { ${decl.property}: … }\` (FE-011 [slide-token-dark-counterpart]).`,

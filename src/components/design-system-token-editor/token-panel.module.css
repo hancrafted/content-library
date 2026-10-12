@@ -3,46 +3,46 @@
  * does not read the site's tokens: the panel has to keep its look while those very
  * tokens are being edited. Every shadcn token the panel's primitives read is
  * redeclared here, so `bg-card` or `border-input` inside the panel resolves to this
- * set. FE-011 allows no raw colour (hex, rgb, hsl, oklch) in a CSS module outside a
- * Slide, so each value is a mix of the named colours black and white, with a dark
- * counterpart under `:global(.dark)`.
+ * set. This is the one token file outside a Slide folder (FE-011 rule exception,
+ * named in the rules file): raw oklch values, each with a counterpart under
+ * `:global(.dark)`.
  */
 .panel {
-  --background: white;
-  --foreground: color-mix(in oklab, black 80%, white);
-  --card: color-mix(in oklab, black 1%, white);
-  --card-foreground: color-mix(in oklab, black 80%, white);
-  --primary: color-mix(in oklab, black 75%, white);
-  --primary-foreground: color-mix(in oklab, black 2%, white);
-  --muted: color-mix(in oklab, black 5%, white);
-  --muted-foreground: color-mix(in oklab, black 55%, white);
-  --accent: color-mix(in oklab, black 6%, white);
-  --accent-foreground: color-mix(in oklab, black 80%, white);
-  --border: color-mix(in oklab, black 12%, white);
-  --input: color-mix(in oklab, black 12%, white);
-  --ring: color-mix(in oklab, black 35%, white);
-  --brand-accent: chocolate;
-  --overlay: black;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.2 0 0);
+  --card: oklch(0.99 0 0);
+  --card-foreground: oklch(0.2 0 0);
+  --primary: oklch(0.25 0 0);
+  --primary-foreground: oklch(0.98 0 0);
+  --muted: oklch(0.95 0 0);
+  --muted-foreground: oklch(0.45 0 0);
+  --accent: oklch(0.94 0 0);
+  --accent-foreground: oklch(0.2 0 0);
+  --border: oklch(0.88 0 0);
+  --input: oklch(0.88 0 0);
+  --ring: oklch(0.65 0 0);
+  --brand-accent: oklch(0.634 0.155 50);
+  --overlay: oklch(0 0 0);
 }
 
 :global(.dark) .panel {
-  --background: color-mix(in oklab, white 15%, black);
-  --foreground: color-mix(in oklab, white 97%, black);
-  --card: color-mix(in oklab, white 20%, black);
-  --card-foreground: color-mix(in oklab, white 97%, black);
-  --primary: color-mix(in oklab, white 92%, black);
-  --primary-foreground: color-mix(in oklab, white 20%, black);
-  --muted: color-mix(in oklab, white 27%, black);
-  --muted-foreground: color-mix(in oklab, white 72%, black);
-  --accent: color-mix(in oklab, white 30%, black);
-  --accent-foreground: color-mix(in oklab, white 97%, black);
-  --border: color-mix(in oklab, white 12%, transparent);
-  --input: color-mix(in oklab, white 16%, transparent);
-  --ring: color-mix(in oklab, white 56%, black);
-  --brand-accent: sandybrown;
+  --background: oklch(0.15 0 0);
+  --foreground: oklch(0.97 0 0);
+  --card: oklch(0.2 0 0);
+  --card-foreground: oklch(0.97 0 0);
+  --primary: oklch(0.92 0 0);
+  --primary-foreground: oklch(0.2 0 0);
+  --muted: oklch(0.27 0 0);
+  --muted-foreground: oklch(0.72 0 0);
+  --accent: oklch(0.3 0 0);
+  --accent-foreground: oklch(0.97 0 0);
+  --border: oklch(1 0 0 / 0.12);
+  --input: oklch(1 0 0 / 0.16);
+  --ring: oklch(0.56 0 0);
+  --brand-accent: oklch(0.784 0.127 60);
+  --overlay: oklch(0 0 0);
 }
 
-/* The Slide tab slides in when an Episode page reports a Slide: width and opacity, once. */
 .slideTab {
   overflow: hidden;
   animation: slide-tab-in 220ms ease-out both;

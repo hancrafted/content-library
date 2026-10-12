@@ -37,6 +37,7 @@ const LEGACY_PATH = 'src/design-system/legacy.json';
 const GLOBALS_PATH = 'src/app/globals.css';
 const GLOBALS =
   ':root {\n  --primary: oklch(0.2 0 0);\n  --machine: oklch(0.6 0.1 240);\n}\n.dark {\n  --primary: #eee;\n}\n';
+const PANEL_CSS = 'src/components/design-system-token-editor/token-panel.module.css';
 const SLIDE_CSS = 'src/components/episodes/demo/slides/loop/loop.module.css';
 
 function makeCtx(files: Record<string, string>, legacyGlobs: string[] = []) {
@@ -99,6 +100,58 @@ describe('no-raw-colour-in-css (A1)', () => {
     expect(violations.map((v) => v.line)).toEqual([10]);
   });
 
+  it.each([
+    ['a named colour', '.panel {\n  background: white;\n}\n'],
+    ['a rarer named colour', '.panel {\n  --brand: chocolate;\n}\n'],
+    ['a named colour in any case', '.panel {\n  color: DarkSlateGray;\n}\n'],
+    ['named colours inside color-mix()', '.panel {\n  --x: color-mix(in oklab, black 80%, white);\n}\n'],
+    ['a named colour in a gradient', '.panel {\n  background: linear-gradient(to right, red, transparent);\n}\n'],
+    ['a named colour in a shadow', '.panel {\n  box-shadow: 0 1px 2px black;\n}\n'],
+  ])('fails %s in a stylesheet that is neither globals nor a Slide token file', async (_name, css) => {
+    // ARRANGE
+    const files = { 'src/components/slide-master/panel.module.css': css };
+    // ACT
+    const violations = await run('no-raw-colour-in-css', files);
+    // ASSERT
+    expect(violations).toHaveLength(1);
+    expect(violations[0].line).toBe(2);
+  });
+
+  it('passes transparent, currentColor, inherit, var() names, identifiers, urls and strings that spell a colour', async () => {
+    // ARRANGE
+    const css = [
+      '.panel {',
+      '  color: currentColor;',
+      '  background: transparent;',
+      '  border-color: inherit;',
+      '  --x: var(--black);',
+      '  --y: var(--color-white);',
+      '  animation: red-pulse 1s;',
+      '  background-image: url(/img/black.png);',
+      '  content: "white";',
+      '  rotate: tan(45deg);',
+      '  --z: color-mix(in oklab, var(--primary) 50%, transparent);',
+      '}',
+      '.white .black-box {',
+      '  margin: 0;',
+      '}',
+      '',
+    ].join('\n');
+    // ACT
+    const violations = await run('no-raw-colour-in-css', { 'src/components/slide-master/panel.module.css': css });
+    // ASSERT
+    expect(violations).toEqual([]);
+  });
+
+  it('exempts the token editor panel, the one named non-Slide token file', async () => {
+    // ARRANGE
+    const css = '.panel {\n  --background: white;\n}\n:global(.dark) .panel {\n  --background: black;\n}\n';
+    // ACT
+    const violations = await run('no-raw-colour-in-css', { [PANEL_CSS]: css });
+    // ASSERT
+    expect(violations).toEqual([]);
+  });
+
   it('passes raw colours under :root and .dark, in a Slide token file, and in a legacy file', async () => {
     // ARRANGE
     const files = {
@@ -118,6 +171,10 @@ describe('no-raw-value-in-code (A2)', () => {
     ['an SVG fill', '<rect fill="#0af" />'],
     ['an rgba table entry', "const border = 'rgba(10, 14, 26, 0.12)';"],
     ['a named colour', "const s = { backgroundColor: 'red' };"],
+    ['a rarer named colour', "const s = { color: 'chocolate' };"],
+    ['a named colour in any case', 'const s = { fill: "Black" };'],
+    ['an SVG attribute named colour', '<rect fill="white" />'],
+    ['named colours inside color-mix()', "const s = { background: 'color-mix(in oklab, black 80%, white)' };"],
     ['a font size', 'const s = { fontSize: 14 };'],
     ['a font weight', "const s = { fontWeight: 'bold' };"],
     ['a font family', 'const s = { fontFamily: "Inter" };'],
@@ -145,6 +202,24 @@ describe('no-raw-value-in-code (A2)', () => {
     // ARRANGE
     const files = {
       'src/components/slide-master/invoice.tsx': 'const label = "Invoice #0042";\nconst id = `Order #abcd`;\n',
+    };
+    // ACT
+    const violations = await run('no-raw-value-in-code', files);
+    // ASSERT
+    expect(violations).toEqual([]);
+  });
+
+  it('passes transparent, currentColor, inherit and identifiers that spell a colour', async () => {
+    // ARRANGE
+    const files = {
+      'src/components/slide-master/ok.tsx': [
+        "const s = { color: 'currentColor', background: 'transparent', fill: 'inherit' };",
+        'const black = 1;',
+        'const next = white + red;',
+        "const label = { variant: 'red' };",
+        "const mix = 'color-mix(in oklab, var(--primary) 50%, transparent)';",
+        '',
+      ].join('\n'),
     };
     // ACT
     const violations = await run('no-raw-value-in-code', files);
@@ -224,6 +299,24 @@ describe('slide-token-dark-counterpart (A4)', () => {
     const violations = await run('slide-token-dark-counterpart', { [SLIDE_CSS]: css });
     // ASSERT
     expect(violations).toEqual([]);
+  });
+
+  it('holds the token editor panel to the dark-counterpart rule too, named colours included', async () => {
+    // ARRANGE
+    const css = '.panel {\n  --a: white;\n  --b: black;\n}\n:global(.dark) .panel {\n  --a: black;\n}\n';
+    // ACT
+    const violations = await run('slide-token-dark-counterpart', { [PANEL_CSS]: css });
+    // ASSERT
+    expect(violations.map((v) => v.line)).toEqual([3]);
+  });
+
+  it('fails a named colour with no dark value in a Slide token file', async () => {
+    // ARRANGE
+    const css = '.a {\n  --edge: chocolate;\n}\n';
+    // ACT
+    const violations = await run('slide-token-dark-counterpart', { [SLIDE_CSS]: css });
+    // ASSERT
+    expect(violations.map((v) => v.line)).toEqual([2]);
   });
 
   it('exempts a legacy Slide file', async () => {
