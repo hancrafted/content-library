@@ -13,14 +13,21 @@ const CONTEXT: PipelineContext = {
   skillFolder: SKILL_FOLDER,
   skills: ['grilling', 'research', 'implement-spec', 'code-review'],
   exists: (path) => [`${SKILL_FOLDER}/references/research.md`, 'docs/agents/grilling-voice.md'].includes(path),
-  governs: (output) => ['brief.md', 'research/*/research.md', 'dossier.md'].includes(output),
+  staging: 'docs/episodes/demo',
+  governs: (output) =>
+    [
+      'docs/episodes/demo/brief.md',
+      'docs/episodes/demo/research/*/research.md',
+      'docs/episodes/demo/dossier.md',
+    ].includes(output),
 };
 
 const PIPELINE = `status: draft
 jobs:
   - id: brief-grill
     needs: []
-    outputs: [brief.md]
+    before: [mh-query]
+    outputs: [docs/episodes/demo/brief.md]
     checks: [mh]
     retries: 0
     gate: human
@@ -28,12 +35,13 @@ jobs:
       - { type: implementor, skills: [grilling], references: [docs/agents/grilling-voice.md], model: inherit }
   - id: research
     needs: [brief-grill]
-    foreach: brief.md#research-questions
-    outputs: [research/*/research.md]
+    foreach: docs/episodes/demo/brief.md#research-questions
+    before: [mh-query]
+    outputs: [docs/episodes/demo/research/*/research.md]
     checks: [mh, vitest]
     retries: 2
     agents:
-      - { type: implementor, skills: [research], references: [references/research.md, brief.md], model: inherit }
+      - { type: implementor, skills: [research], references: [references/research.md, docs/episodes/demo/brief.md], model: inherit }
       - { type: reviewer, skills: [], references: [references/research.md], rubric: references/research.md#rubric, model: inherit }
 `;
 
@@ -75,7 +83,7 @@ describe('failure cases', () => {
       'Job "brief-grill", agent 1 lacks the key "skills".',
       'Job "brief-grill", agent 1 has an unknown key "skill"; the keys are type, skills, references, rubric, agent, model, session.',
       'Job "research" lacks the key "retries".',
-      'Job "research" has an unknown key "retry"; the keys are id, intent, needs, foreach, outputs, checks, retries, gate, agents.',
+      'Job "research" has an unknown key "retry"; the keys are id, intent, needs, foreach, before, outputs, checks, retries, gate, agents.',
     ];
     // ACT
     const messages = check(yaml);
@@ -89,8 +97,8 @@ describe('failure cases', () => {
     const unreachable = 'which job "brief-grill" writes, but "research" does not need it.';
     const expected = [
       'Job "research" needs "brief-gril", which is no job in the pipeline.',
-      `Job "research" foreach reads "brief.md#research-questions", ${unreachable}`,
-      `Job "research", agent 1 reads "brief.md", ${unreachable}`,
+      `Job "research" foreach reads "docs/episodes/demo/brief.md#research-questions", ${unreachable}`,
+      `Job "research", agent 1 reads "docs/episodes/demo/brief.md", ${unreachable}`,
     ];
     // ACT
     const messages = check(yaml);
@@ -111,8 +119,8 @@ describe('failure cases', () => {
   it('rejects a reference file that does not exist', () => {
     // ARRANGE
     const yaml = PIPELINE.replace(
-      'references: [references/research.md, brief.md]',
-      'references: [references/reserch.md, brief.md]',
+      'references: [references/research.md, docs/episodes/demo/brief.md]',
+      'references: [references/reserch.md, docs/episodes/demo/brief.md]',
     );
     const expected = [
       `Job "research", agent 1 reads "references/reserch.md", which resolves to ${SKILL_FOLDER}/references/reserch.md, no existing file.`,
@@ -150,8 +158,8 @@ describe('failure cases', () => {
     const yaml = PIPELINE.replace('needs: [brief-grill]', 'needs: []');
     const unreachable = 'which job "brief-grill" writes, but "research" does not need it.';
     const expected = [
-      `Job "research" foreach reads "brief.md#research-questions", ${unreachable}`,
-      `Job "research", agent 1 reads "brief.md", ${unreachable}`,
+      `Job "research" foreach reads "docs/episodes/demo/brief.md#research-questions", ${unreachable}`,
+      `Job "research", agent 1 reads "docs/episodes/demo/brief.md", ${unreachable}`,
     ];
     // ACT
     const messages = check(yaml);
@@ -162,8 +170,8 @@ describe('failure cases', () => {
   it('rejects a reviewer without a rubric and an implementor with one', () => {
     // ARRANGE
     const yaml = PIPELINE.replace(', rubric: references/research.md#rubric', '').replace(
-      'references: [references/research.md, brief.md], model: inherit',
-      'references: [references/research.md, brief.md], rubric: references/research.md#rubric, model: inherit',
+      'references: [references/research.md, docs/episodes/demo/brief.md], model: inherit',
+      'references: [references/research.md, docs/episodes/demo/brief.md], rubric: references/research.md#rubric, model: inherit',
     );
     const expected = [
       'Job "research", agent 1 is an implementor and has a rubric; only a reviewer has one.',
@@ -200,8 +208,8 @@ describe('failure cases', () => {
     // ARRANGE
     const yaml = PIPELINE.replace('[docs/agents/grilling-voice.md], model: inherit', '[docs/agents/grilling-voice.md]')
       .replace(
-        '[references/research.md, brief.md], model: inherit',
-        '[references/research.md, brief.md], model: inherit, session: main',
+        '[references/research.md, docs/episodes/demo/brief.md], model: inherit',
+        '[references/research.md, docs/episodes/demo/brief.md], model: inherit, session: main',
       )
       .replace(
         'rubric: references/research.md#rubric, model: inherit',
@@ -246,14 +254,56 @@ describe('failure cases', () => {
 
   it('rejects a markdown output that no markdown-harness rule governs', () => {
     // ARRANGE
-    const yaml = PIPELINE.replace('outputs: [brief.md]', 'outputs: [brief.md, notes.md, pipeline.yml]');
+    const yaml = PIPELINE.replace(
+      'outputs: [docs/episodes/demo/brief.md]',
+      'outputs: [docs/episodes/demo/brief.md, docs/episodes/demo/notes.md, docs/episodes/demo/pipeline.yml]',
+    );
     const expected = [
-      'Job "brief-grill" writes "notes.md", which no markdown-harness rule governs; its implementor would query no intents.',
+      'Job "brief-grill" writes "docs/episodes/demo/notes.md", which no markdown-harness rule governs; its implementor would query no intents.',
     ];
     // ACT
     const messages = check(yaml);
     // ASSERT
     expect(messages).toEqual(expected);
+  });
+
+  it('rejects a job that writes markdown without querying its intents first', () => {
+    // ARRANGE
+    const yaml = PIPELINE.replace('    before: [mh-query]\n', '');
+    const expected = [
+      'Job "brief-grill" writes markdown but lacks before: [mh-query]; its implementor queries each output\'s intents before writing it.',
+    ];
+    // ACT
+    const messages = check(yaml);
+    // ASSERT
+    expect(messages).toEqual(expected);
+  });
+
+  it('rejects a before step that is no known step, and mh-query on a job that writes no markdown', () => {
+    // ARRANGE
+    const yaml = PIPELINE.replace('    before: [mh-query]\n', '    before: [lint]\n').replace(
+      'outputs: [docs/episodes/demo/research/*/research.md]',
+      'outputs: [docs/episodes/demo/research/*/research.json]',
+    );
+    const expected = [
+      'Job "brief-grill" has before ["lint"]; the steps are mh-query.',
+      'Job "research" has before: [mh-query] but writes no markdown, so it has nothing to query.',
+    ];
+    // ACT
+    const messages = check(yaml);
+    // ASSERT
+    expect(messages).toEqual(expect.arrayContaining(expected));
+  });
+
+  it("rejects an output outside the pipeline's staging folder", () => {
+    // ARRANGE
+    const yaml = PIPELINE.replace('outputs: [docs/episodes/demo/brief.md]', 'outputs: [docs/episodes/dmeo/brief.md]');
+    const expected =
+      'Job "brief-grill" writes "docs/episodes/dmeo/brief.md", outside its staging folder docs/episodes/demo.';
+    // ACT
+    const messages = check(yaml);
+    // ASSERT
+    expect(messages).toContain(expected);
   });
 
   it('rejects a check that is not one of the named kinds', () => {
@@ -289,12 +339,13 @@ describe('edge cases', () => {
       [
         '  - id: consolidate',
         '    needs: [research]',
-        '    foreach: brief.md#research-questions',
-        '    outputs: [dossier.md]',
+        '    foreach: docs/episodes/demo/brief.md#research-questions',
+        '    before: [mh-query]',
+        '    outputs: [docs/episodes/demo/dossier.md]',
         '    checks: []',
         '    retries: 1',
         '    agents:',
-        '      - { type: implementor, skills: [], references: [brief.md, research/*/research.md], model: inherit }',
+        '      - { type: implementor, skills: [], references: [docs/episodes/demo/brief.md, docs/episodes/demo/research/*/research.md], model: inherit }',
         '',
       ].join('\n'),
     );
@@ -332,8 +383,8 @@ describe('edge cases', () => {
     // ARRANGE
     const pending = [`${SKILL_FOLDER}/references/reserch.md`];
     const yaml = PIPELINE.replace(
-      'references: [references/research.md, brief.md]',
-      'references: [references/reserch.md, brief.md]',
+      'references: [references/research.md, docs/episodes/demo/brief.md]',
+      'references: [references/reserch.md, docs/episodes/demo/brief.md]',
     );
     // ACT
     const findings = checkPipeline(FILE, yaml, { ...CONTEXT, pending });

@@ -4,9 +4,9 @@ Output: `docs/episodes/<slug>/pipeline.yml`, ending at a human gate. No reviewer
 
 ## Prompt
 
-Copy [`assets/pipeline.yml`](../assets/pipeline.yml) to `docs/episodes/<slug>/pipeline.yml` with `status: draft`, then fit it to this Brief. The comment at the top of the template is the schema. Anything may change; tailor where the Brief gives a reason:
+Copy [`assets/pipeline.yml`](../assets/pipeline.yml) to `docs/episodes/<slug>/pipeline.yml` with `status: draft`, then replace every `<slug>` with this Episode's slug, so each path names the file the job reads or writes, and fit it to this Brief. The comment at the top of the template is the schema. Anything may change; tailor where the Brief gives a reason:
 
-- **Research.** Keep the `write-research` job's `foreach` on `brief.md#research-questions`. With no research questions, drop `retrieval` and `research`, and let `write-dossier` need `customize-pipeline`.
+- **Research.** Keep the `write-research` job's `foreach` on the Brief's `#research-questions`. With no research questions, drop `retrieval` and `write-research`, and let `write-dossier` need `customize-pipeline`.
 - **Retries.** Raise a job's `retries` where the Brief makes it hard (a Teardown of a disputed claim), lower it where it is routine.
 - **Gates.** `gate: human` on a job stops the run at its output for Han. Add it after `write-manuscript` when Han wants to read the Manuscript before the spec is written.
 - **References and skills.** Add a file an agent should read for this Episode (an earlier Episode it builds on, an ADR it touches).

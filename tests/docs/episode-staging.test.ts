@@ -97,8 +97,8 @@ function llmWikiResearch(): Record<string, string> {
   );
 }
 
-/** A staging folder for the template, whose outputs belong to no Episode yet. */
-const TEMPLATE_STAGING = 'docs/episodes/any-episode';
+/** The template's staging folder: `<slug>` stands for the Episode a tailored copy names. */
+const TEMPLATE_STAGING = 'docs/episodes/<slug>';
 
 /** `mh query` answers per path, once each: the template and every pipeline share most outputs' rules. */
 const governance = new Map<string, boolean>();
@@ -118,15 +118,14 @@ function governed(file: string): boolean {
 
 /**
  * What a pipeline may name: the skills under `.agents/skills/`, the files in
- * the repo, and the outputs a rule governs inside its staging folder.
+ * the repo, the staging folder its outputs sit in, and the outputs a rule governs.
  */
 function pipelineContext(pending: readonly string[], staging: string): PipelineContext {
   const skills = readdirSync(SKILLS, { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
     .map(({ name }) => name);
   const exists = (file: string): boolean => existsSync(path.join(ROOT, file));
-  const governs = (output: string): boolean => governed(`${staging}/${output}`);
-  return { skillFolder: SKILL_FOLDER, skills, exists, governs, pending };
+  return { skillFolder: SKILL_FOLDER, skills, exists, staging, governs: governed, pending };
 }
 
 /** Every per-run pipeline, by the path a failure names. */
@@ -256,9 +255,12 @@ describe('success cases', () => {
 describe('failure cases', () => {
   it('checks the template against the real markdown-harness rules, so an ungoverned markdown output fails', () => {
     // ARRANGE
-    const yaml = readFileSync(TEMPLATE, 'utf8').replace('outputs: [dossier.md]', 'outputs: [dosier.md]');
+    const yaml = readFileSync(TEMPLATE, 'utf8').replace(
+      'outputs: [docs/episodes/<slug>/dossier.md]',
+      'outputs: [docs/episodes/<slug>/dosier.md]',
+    );
     const expected = [
-      'Job "write-dossier" writes "dosier.md", which no markdown-harness rule governs; its implementor would query no intents.',
+      'Job "write-dossier" writes "docs/episodes/<slug>/dosier.md", which no markdown-harness rule governs; its implementor would query no intents.',
     ];
     // ACT
     const messages = checkPipeline('pipeline.yml', yaml, pipelineContext(PENDING, TEMPLATE_STAGING)).map(

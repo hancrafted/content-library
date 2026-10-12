@@ -7,20 +7,17 @@
  */
 
 import { parse } from 'yaml';
+import {
+  agentFields,
+  CHECKS,
+  JOB_FIELDS,
+  SKILL_PREFIXES,
+  SPAWNING_SKILLS,
+  TOP_FIELDS,
+} from './episode-pipeline-fields.pure';
 import { ancestors, findCycle, type Job } from './episode-pipeline-graph.pure';
 import { unless, type Finding } from './finding.pure';
-import {
-  checkMapping,
-  field,
-  isMapping,
-  isString,
-  isStringList,
-  optional,
-  requiredWhen,
-  stringsOf,
-  type Field,
-  type Mapping,
-} from './mapping-fields.pure';
+import { checkMapping, isMapping, isString, stringsOf, type Mapping } from './mapping-fields.pure';
 
 /** What exists around a pipeline: its skill's folder, the skill names, and a repo-path lookup. */
 export interface PipelineContext {
@@ -29,9 +26,10 @@ export interface PipelineContext {
   skills: readonly string[];
   /** Whether a repo-relative path names an existing file. */
   exists: (path: string) => boolean;
+  /** The Episode's staging folder, repo-relative: every output sits in it. */
+  staging: string;
   /**
-   * Whether a markdown-harness rule governs a job output, given relative to
-   * the staging folder. An implementor queries its outputs' intents before
+   * Whether a markdown-harness rule governs a job output, a repo path. An implementor queries its outputs' intents before
    * writing them, so an ungoverned markdown output has none to query.
    */
   governs: (output: string) => boolean;
@@ -40,55 +38,6 @@ export interface PipelineContext {
    * missing; the caller keeps this list for the template only.
    */
   pending?: readonly string[];
-}
-
-const AGENT_TYPES = ['implementor', 'reviewer'];
-/** The models an agent may run on; `inherit` runs it on the orchestrator's model. */
-const MODELS: readonly string[] = ['opus', 'sonnet', 'haiku', 'inherit'];
-/** Where an agent runs: a spawned subagent, or the orchestrator's own session. */
-const SESSIONS: readonly string[] = ['subagent', 'orchestrator'];
-/** Skills that spawn subagents themselves; a subagent cannot spawn one, so only the orchestrator runs them. */
-const SPAWNING_SKILLS = ['implement-spec', 'code-review'];
-/** The done-checks a job may name, cheapest first. */
-const CHECKS = ['mh', 'vitest', 'verify', 'build', 'test:build', 'visual-check'];
-/** Path prefixes that resolve inside the new-episode skill's folder rather than the repo root. */
-const SKILL_PREFIXES = ['references/', 'assets/'];
-
-const LIST = 'it must be a list of strings';
-
-/** "a, b or c": the allowed values a finding names. */
-function oneOf(values: readonly string[]): string {
-  return `${values.slice(0, -1).join(', ')} or ${values.at(-1)}`;
-}
-
-const TOP_FIELDS = [
-  field('status', (value) => value === 'draft' || value === 'approved', 'it must be draft or approved'),
-  field('jobs', Array.isArray, 'it must be a list of jobs'),
-];
-
-const JOB_FIELDS = [
-  field('id', isString, 'it must be a name'),
-  optional(field('intent', isString, 'it must be the task, written as a prompt')),
-  field('needs', isStringList, LIST),
-  optional(field('foreach', isString, 'it must be a path')),
-  field('outputs', isStringList, LIST),
-  field('checks', isStringList, LIST),
-  field('retries', (value) => Number.isInteger(value) && Number(value) >= 0, 'it must be a whole number of 0 or more'),
-  optional(field('gate', (value) => value === 'human', 'the only gate is human')),
-  field('agents', (value) => Array.isArray(value) && value.length > 0, 'it must be a non-empty list of agents'),
-];
-
-/** An agent's fields; only a reviewer must carry a rubric. */
-function agentFields(reviewer: boolean): Field[] {
-  return [
-    field('type', (value) => AGENT_TYPES.includes(value as string), 'it must be implementor or reviewer'),
-    field('skills', isStringList, LIST),
-    field('references', isStringList, LIST),
-    requiredWhen(reviewer, field('rubric', isString, 'it must be a path')),
-    optional(field('agent', isString, 'it must be a Claude Code agent type')),
-    field('model', (value) => MODELS.includes(value as string), `it must be ${oneOf(MODELS)}`),
-    optional(field('session', (value) => SESSIONS.includes(value as string), `it must be ${oneOf(SESSIONS)}`)),
-  ];
 }
 
 /** A job reading a path: who reads it, how a finding names the reader, and the pipeline around it. */
@@ -144,6 +93,30 @@ function checkAgent(reader: Reader, agent: unknown): string[] {
   ];
 }
 
+/**
+ * Every output sits in the staging folder, and a job writing markdown runs
+ * `mh-query` before its implementor, so the implementor follows the rules'
+ * intents; a job writing none has nothing to query.
+ */
+function checkOutputs(where: string, job: Mapping, context: PipelineContext): string[] {
+  const outputs = stringsOf(job.outputs);
+  const markdown = outputs.some((output) => output.endsWith('.md'));
+  const queries = stringsOf(job.before).includes('mh-query');
+  return [
+    ...outputs
+      .filter((output) => !output.startsWith(`${context.staging}/`))
+      .map((output) => `${where} writes "${output}", outside its staging folder ${context.staging}.`),
+    ...unless(
+      !markdown || queries,
+      `${where} writes markdown but lacks before: [mh-query]; its implementor queries each output's intents before writing it.`,
+    ),
+    ...unless(
+      markdown || !queries,
+      `${where} has before: [mh-query] but writes no markdown, so it has nothing to query.`,
+    ),
+  ];
+}
+
 function checkJob(reader: Reader, job: Mapping): string[] {
   const { where, byId, context } = reader;
   const foreach = isString(job.foreach) ? [job.foreach] : [];
@@ -153,6 +126,7 @@ function checkJob(reader: Reader, job: Mapping): string[] {
     ...stringsOf(job.checks)
       .filter((check) => !CHECKS.includes(check))
       .map((check) => `${where} has the check "${check}"; the checks are ${CHECKS.join(', ')}.`),
+    ...checkOutputs(where, job, context),
     ...stringsOf(job.outputs)
       .filter((output) => output.endsWith('.md') && !context.governs(output))
       .map(

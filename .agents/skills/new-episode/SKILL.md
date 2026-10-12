@@ -41,7 +41,7 @@ Start only when all of these hold; otherwise name each one that fails to Han and
 3. `npm run check:docs` is clean.
 4. `npx vitest run tests/docs/episode-staging.test.ts` passes. It checks the per-run pipeline's schema and that no approved Brief keeps a `Not settled.` section.
 
-Then write the todo list: one todo per job of `pipeline.yml` after `customize-pipeline`, in `needs` order. A job with `foreach` gets one todo per item of the list it names (`brief.md#research-questions` gives one todo per research question).
+Then write the todo list: one todo per job of `pipeline.yml` after `customize-pipeline`, in `needs` order. A job with `foreach` gets one todo per item of the list it names (`docs/episodes/<slug>/brief.md#research-questions` gives one todo per research question).
 
 _Done when_ the todo list holds every remaining job, expanded per `foreach` item.
 
@@ -63,7 +63,7 @@ Each job runs its `agents` in order. The **implementor** writes the job's `outpu
 
 Every agent runs where its `session` says. `subagent`, the default, is spawned with the Agent tool, its `subagent_type` the agent's `agent` (general-purpose when omitted) and its `model` the agent's `model`, left out for `inherit`. `orchestrator` runs in this session, because a subagent has no Agent tool: a skill that spawns subagents needs it, and so does a job that talks to Han. Its `model` goes to the subagents the skill spawns.
 
-1. **Implementor.** Its prompt opens with the Brief's `Learning goal` and `Actionables`, quoted, because every artifact is written backwards from them. Then point it at the job's reference or `intent`, every path in `references` and `skills`, the staging folder, and on a retry the failed lines, quoted verbatim. Point, never paste: the agent reads the files. Tell it: before writing each markdown output, run `npx mh query <full repo path>` on that path, a `*` left as written, and follow every intent it prints as an instruction. The query's answer is read, never saved.
+1. **Implementor.** Its prompt opens with the Brief's `Learning goal` and `Actionables`, quoted, because every artifact is written backwards from them. Then point it at the job's reference or `intent`, every path in `references` and `skills`, the staging folder, and on a retry the failed lines, quoted verbatim. Point, never paste: the agent reads the files. When the job's `before` lists `mh-query`, tell it: before writing each markdown path in `outputs`, run `npx mh query <path>` on it as written, a `*` included, and follow every intent it prints as an instruction. The query's answer is read, never saved.
 2. **Checks.** Run the job's `checks` in order, cheapest first. This table is the one list of check names and their commands; `src/lib/episode-pipeline.pure.ts` refuses any other name:
 
    | check | command |
@@ -76,7 +76,7 @@ Every agent runs where its `session` says. `subagent`, the default, is spawned w
    | `visual-check` | DOM numbers per Slide in both themes, by [`references/implement-episode.md`](references/implement-episode.md#visual-check) |
 
    A failure counts as a failed attempt; its output lines are the failed lines.
-3. **Reviewer.** A **fresh** agent, never one that wrote the output. A reviewer with `session: orchestrator` runs in the session that implemented, so its skill supplies the fresh eyes: `code-review` judges through subagents that saw none of the writing. Its baseline is the markdown-harness intent of every rule, field and heading that governs the output: it runs `npx mh query <full repo path>` on each output itself. On top of that baseline come the lines under the job's `rubric`. It answers one line per intent and per rubric line, `pass` or `fail — <the line, verbatim> — <evidence>`, and marks anything only Han can judge `needs human — <what>`.
+3. **Reviewer.** A **fresh** agent, never one that wrote the output. A reviewer with `session: orchestrator` runs in the session that implemented, so its skill supplies the fresh eyes: `code-review` judges through subagents that saw none of the writing. Its baseline is the markdown-harness intent of every rule, field and heading that governs the output: it runs `npx mh query <path>` on each markdown output itself. On top of that baseline come the lines under the job's `rubric`. It answers one line per intent and per rubric line, `pass` or `fail — <the line, verbatim> — <evidence>`, and marks anything only Han can judge `needs human — <what>`.
 4. **Retry.** On any failed line, run the implementor again with every failed line quoted verbatim, then the checks and a fresh reviewer again. A job gets `1 + retries` attempts.
 5. **Retries run out.** Mark the todo and every todo downstream of it blocked. The run-log entry's Notes start `Blocked:` and quote the last failed lines; they go on the PR checklist.
 6. **Pass.** Set each staging output's `status: checked` (research files carry no status), and commit through the `commit` skill with `Source: docs/episodes/<slug>/brief.md`.
