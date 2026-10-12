@@ -65,7 +65,7 @@ flowchart LR
 
 ### 2. The Slide is the unit
 
-1. Each Slide MUST be one flat folder `slides/<slide>/`, named after its slug: `slide.tsx`, `*.client.tsx`, `*.pure.ts`, CSS module, `i18n/{en,de}.json`. The Episode file only composes.
+1. Each Slide MUST be one flat folder `slides/<slide>/`, named after its slug: `slide.tsx`, `*.client.tsx`, `*.pure.ts`, CSS module, `i18n/`. The Episode file only composes.
 2. A Section MUST be a list of Slides, the first, titled, naming it. Anchor `<section>--<slide>`; slugs kebab-case, unique, not `top`; untitled Slides render unlisted.
 3. Reading time MUST be counted from Voice script words per locale.
 
@@ -73,7 +73,7 @@ flowchart LR
 
 1. A Scene MUST be free JSX, no slide-type union, reaching the record only via its typed kit.
 2. Browser code MUST live in its Slide's folder as `*.client.tsx`.
-3. A Slide folder MUST import only its own files, Slide master, `slide-shared`, UI kit, hooks, lib. A part two Slides share lives in `slide-shared`: plain props.
+3. A Slide folder MUST import only its own files, Slide master, `slide-shared`, UI kit, hooks, lib; its `*.client.tsx` only own files, hooks, lib. Shared parts live in `slide-shared`: plain props.
 
 ### 4. Headings mirror the manuscript
 
@@ -82,7 +82,7 @@ flowchart LR
 ### 5. Strings and anchors keyed by Slide slug
 
 1. A Slide's text MUST live in its own `i18n/<locale>.json`, by role — `title`, not `sections.0.title`; German matches the English shape. Episode text: `<episode>/i18n/`.
-2. Published anchors MUST stay (`published-anchors.json`); `slideHref` MUST name a Slide of the same Episode.
+2. Published anchors MUST stay (`published-anchors.json`); `slideHref` MUST name a Slide of its Episode.
 
 ### 6. Table of contents and Context drawer read the record
 
@@ -91,15 +91,15 @@ flowchart LR
 ### 7. Episode styling stays in the Episode
 
 1. `globals.css` MUST hold only tokens Episodes share.
-2. A Slide's CSS MUST be its own CSS module in its folder (its token file).
+2. A Slide's CSS MUST be a CSS module in its folder (its token file).
 3. An Episode MAY keep one stylesheet beside its record, under `[data-episode='<slug>']`, only to remap tokens its chrome reads — `palette.css`.
-4. Colour, size and weight MUST follow FE-011.
+4. Colour, size and weight MUST use design tokens.
 
 ## Do's and Don'ts
 
 ### Do's
 
-1. **DO** start an Episode by copying `page-template/`: rename the slug; register it in `EPISODE_SLUGS` and the registry; write its `i18n/`; then each Slide as a whole folder, text included, the Episode file adding only its import and list entry; then `published-anchors.json`. (Decision 2, Decision 5)
+1. **DO** start an Episode by copying `page-template/`: rename the slug; register slug, record and metadata together; write its `i18n/`; then each Slide as a whole folder, text included, the Episode file adding only its import and list entry; then `published-anchors.json`. (Decision 2, Decision 5)
 2. **DO** write a Voice script for every Slide the speaker talks over; its words are the reading time. (Decision 2)
 3. **DO** leave `title` off a purely visual Slide. (Decision 2)
 4. **DO** build a one-off Scene from `SlideFrame` and the kit's `<Title>`. (Decision 3, Decision 4)

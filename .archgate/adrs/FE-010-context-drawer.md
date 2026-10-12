@@ -69,7 +69,7 @@ Card, head, menu and selected-state detail: [`docs/features/episode-chrome.md`](
 
 ### 7. Card and modes
 
-1. Fixed card; only `transform` animates. Beside (`xl`+) widens the right inset at once (FE-009 §2); over covers it.
+1. Fixed card; only `transform` animates. Beside (`xl`+) widens the right inset at once; over covers it.
 2. Layout MUST be the `drawerMode` preference; open state and tab stay in memory.
 
 ### 8. Input only
