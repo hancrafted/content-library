@@ -5,20 +5,24 @@
 # Schema (checked by src/lib/episode-pipeline.pure.ts in `npm run verify`):
 #   status    draft | approved
 #   jobs      run once every job in `needs` is done; independent jobs may run in parallel
+#     intent    optional; the job's task as a prompt, for a job no reference describes
 #     needs     job ids this job waits for
 #     foreach   optional; `<file>#<heading>` fans the job out once per list item
-#     outputs   staging paths the job writes; a job reading one must need its writer
+#     outputs   staging paths the job writes; a job reading one must need its writer;
+#               a rule must govern every .md one, whose intents the implementor queries
 #     checks    cheapest first; names and commands in SKILL.md's job-loop check table
 #     retries   reviewer failures sent back before this branch of the pipeline stops
 #     gate      optional; `human` stops the run until Han approves the output
-#     agents    run in order; a reviewer is a fresh subagent that did not write the output
+#     agents    run in order; a reviewer is fresh: it did not write the output
 #       type        implementor | reviewer
 #       skills      skill names under .agents/skills/
 #       references  files the agent reads: `references/` and `assets/` sit in this
 #                   skill's folder, a job output in the staging folder, anything
 #                   else at the repo root
 #       rubric      reviewers only: `<file>#<heading>` holding the pass/fail lines
-#       profile     ~ for now; later names an agent profile (model, tools, persona)
+#       agent       optional; the Claude Code agent type to spawn, general-purpose when omitted
+#       model       the model it runs on, or inherit; SKILL.md's job loop says where it applies
+#       session     optional; subagent (default) or orchestrator, by SKILL.md's job loop
 status: draft
 jobs:
   - id: brief-grill
@@ -31,7 +35,8 @@ jobs:
       - type: implementor
         skills: [brief-grill, grilling, handoff]
         references: [references/brief-grill.md]
-        profile: ~
+        model: inherit
+        session: orchestrator
 
   - id: pipeline-tailor
     needs: [brief-grill]
@@ -43,7 +48,8 @@ jobs:
       - type: implementor
         skills: []
         references: [references/pipeline-tailor.md, assets/pipeline.yml, brief.md]
-        profile: ~
+        model: inherit
+        session: orchestrator
 
   # Matches each research question against the llm-wiki index and records in
   # the run log which questions remain unanswered.
@@ -60,7 +66,7 @@ jobs:
           - brief.md
           - docs/research/ai-onboarding-freelancer.md
           - docs/research/ai-amnesia-mechanics.md
-        profile: ~
+        model: inherit
 
   - id: research
     needs: [research-match]
@@ -77,12 +83,40 @@ jobs:
           - run-log.md
           - docs/research/ai-onboarding-freelancer.md
           - docs/research/ai-amnesia-mechanics.md
-        profile: ~
+        model: sonnet
       - type: reviewer
         skills: []
         references: [references/research.md]
         rubric: references/research.md#rubric
-        profile: ~
+        model: opus
+
+  # Folds the earlier Episode's research into this run's: once every research
+  # job has passed, the two files it replaces go.
+  - id: retire-prior-research
+    intent: >-
+      Every research job of this run has passed, and its research files carry
+      the Findings of docs/research/ai-onboarding-freelancer.md and
+      docs/research/ai-amnesia-mechanics.md that this Episode needs. Delete
+      both files. Repoint the two files that cite them,
+      src/components/episodes/amnesiac-freelancer/amnesiac-freelancer.ts and
+      docs/research/amnesiac-freelancer-script.md, to the research files of
+      this run that now hold those Findings. Remove both paths from every
+      references list in this pipeline.yml, this job's included, so the
+      pipeline check still finds every file it names.
+    needs: [research]
+    outputs: []
+    checks: [mh, verify]
+    retries: 1
+    agents:
+      - type: implementor
+        skills: []
+        references:
+          - docs/research/ai-onboarding-freelancer.md
+          - docs/research/ai-amnesia-mechanics.md
+          - docs/research/amnesiac-freelancer-script.md
+          - src/components/episodes/amnesiac-freelancer/amnesiac-freelancer.ts
+          - research/*/research.md
+        model: sonnet
 
   - id: consolidate
     needs: [research]
@@ -98,12 +132,12 @@ jobs:
           - research/*/research.md
           - src/components/episodes/amnesiac-freelancer/amnesiac-freelancer.ts
           - docs/research/amnesiac-freelancer-script.md
-        profile: ~
+        model: inherit
       - type: reviewer
         skills: []
         references: [references/consolidate.md, brief.md]
         rubric: references/consolidate.md#rubric
-        profile: ~
+        model: opus
 
   - id: distill
     needs: [consolidate]
@@ -120,12 +154,12 @@ jobs:
           - dossier.md
           - src/components/episodes/amnesiac-freelancer/amnesiac-freelancer.ts
           - docs/research/amnesiac-freelancer-script.md
-        profile: ~
+        model: inherit
       - type: reviewer
         skills: []
         references: [references/distill.md, brief.md]
         rubric: references/distill.md#rubric
-        profile: ~
+        model: opus
 
   # Writes no staging file: its output is a spec issue with one sub-issue per Section.
   - id: spec
@@ -137,12 +171,12 @@ jobs:
       - type: implementor
         skills: [to-spec, to-tickets]
         references: [references/spec.md, brief.md, dossier.md, manuscript.md]
-        profile: ~
+        model: inherit
       - type: reviewer
         skills: []
         references: [references/spec.md, dossier.md, manuscript.md]
         rubric: references/spec.md#rubric
-        profile: ~
+        model: opus
 
   # Writes the Episode under src/, outside the staging folder.
   - id: implement
@@ -154,12 +188,14 @@ jobs:
       - type: implementor
         skills: [implement-spec, visual-check]
         references: [references/implement.md, dossier.md, manuscript.md]
-        profile: ~
+        model: opus
+        session: orchestrator
       - type: reviewer
-        skills: [visual-check]
+        skills: [code-review, visual-check]
         references: [references/implement.md, dossier.md, manuscript.md]
         rubric: references/implement.md#rubric
-        profile: ~
+        model: opus
+        session: orchestrator
 
   - id: serve-and-pr
     needs: [implement]
@@ -170,4 +206,4 @@ jobs:
       - type: implementor
         skills: [pr]
         references: [references/serve-and-pr.md, run-log.md]
-        profile: ~
+        model: sonnet

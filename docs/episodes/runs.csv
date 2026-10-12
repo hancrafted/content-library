@@ -1,1 +1,5 @@
 run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,brief-grill,implementor,1,pass,,1043,,2026-10-12T19:40:03Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,pipeline-tailor,implementor,1,pass,,139,,2026-10-12T19:45:21Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,pipeline-tailor,implementor,1,pass,,,,2026-10-12T19:54:22Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,pipeline-tailor,implementor,1,pass,,,,2026-10-12T20:26:49Z

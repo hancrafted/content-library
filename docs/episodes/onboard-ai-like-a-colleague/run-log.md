@@ -76,3 +76,33 @@ Pending outside the schema: once every `research` job has passed, the orchestrat
 ### Notes
 
 Every job after `pipeline-tailor` now has `retries: 1`, so each job gets two attempts. Han wants to see how often a first attempt fails. This replaces the earlier raise of `research` to 3. `brief-grill` and `pipeline-tailor` keep 0: they are done, and Han is their reviewer.
+
+## pipeline-tailor · 2026-10-12T20:26:49Z
+
+### Inputs
+
+- `pipeline.yml` as of d3c7ec5.
+- The new template from `feat/89-new-episode` (61fc793, 0daa23c), merged in: agent fields `agent`, `model` and `session` in place of `profile`, a job `intent`, and implement run by `implement-spec` and reviewed by `code-review`.
+- Han's grill decisions on the pipeline definition, settled in session.
+
+### Output
+
+- `pipeline.yml`, still `status: draft`, rebuilt from the new template with this Episode's tailoring.
+- `docs/episodes/runs.csv`, rows for the three earlier gate-job runs and this one.
+
+### Checks
+
+- `vitest` (`tests/docs/episode-staging.test.ts`): pass.
+- `mh check`: pass.
+
+### Metrics
+
+- implementor · attempt 1 · pass · run in the orchestrator's session, duration not measured · no token count
+
+### Notes
+
+This entry supersedes the Notes of the two earlier pipeline-tailor entries where they differ. Every model comes from the template: Sonnet for the research implementors and serve-and-pr, Opus for the implement implementor and every reviewer, inherit for the rest, and Sonnet for retire-prior-research, a minor task. Every retry after pipeline-tailor stays at 1, and distill keeps its human gate.
+
+The earlier note's step outside the schema is now the job retire-prior-research, which needs research and states its task as an `intent`: delete `docs/research/ai-onboarding-freelancer.md` and `docs/research/ai-amnesia-mechanics.md`, repoint the two files that cite them, and remove both paths from every references list here, so the pipeline check still finds every file it names. That last step edits the approved pipeline mid-run; it is the one edit of this file after the gate.
+
+The run id is 2026-10-12T19:22:40Z, when the Episode branch was created. The earlier entries' note of no CSV row is resolved: the run id now starts at step 1, and the rows are added. The brief-grill row's duration runs from the branch's creation to the draft commit; the second pipeline-tailor run's duration was not measured.
