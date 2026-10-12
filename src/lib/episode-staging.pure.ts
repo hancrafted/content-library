@@ -20,7 +20,7 @@ import {
 
 /** What a check found wrong, keyed by the rule it broke. */
 export type FindingKind =
-  'spine' | 'visual' | 'speaker-note' | 'segments' | 'feedback' | 'research-index' | 'runs-header';
+  'spine' | 'visual' | 'speaker-note' | 'segments' | 'feedback' | 'research-index' | 'runs-header' | 'pipeline';
 
 export interface Finding {
   kind: FindingKind;
