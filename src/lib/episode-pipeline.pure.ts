@@ -44,9 +44,9 @@ export interface PipelineContext {
 
 const AGENT_TYPES = ['implementor', 'reviewer'];
 /** The models an agent may run on; `inherit` runs it on the orchestrator's model. */
-const MODELS = ['opus', 'sonnet', 'haiku', 'inherit'];
+const MODELS: readonly string[] = ['opus', 'sonnet', 'haiku', 'inherit'];
 /** Where an agent runs: a spawned subagent, or the orchestrator's own session. */
-const SESSIONS = ['subagent', 'orchestrator'];
+const SESSIONS: readonly string[] = ['subagent', 'orchestrator'];
 /** Skills that spawn subagents themselves; a subagent cannot spawn one, so only the orchestrator runs them. */
 const SPAWNING_SKILLS = ['implement-spec', 'code-review'];
 /** The done-checks a job may name, cheapest first. */
@@ -55,6 +55,11 @@ const CHECKS = ['mh', 'vitest', 'verify', 'build', 'test:build', 'visual-check']
 const SKILL_PREFIXES = ['references/', 'assets/'];
 
 const LIST = 'it must be a list of strings';
+
+/** "a, b or c": the allowed values a finding names. */
+function oneOf(values: readonly string[]): string {
+  return `${values.slice(0, -1).join(', ')} or ${values.at(-1)}`;
+}
 
 const TOP_FIELDS = [
   field('status', (value) => value === 'draft' || value === 'approved', 'it must be draft or approved'),
@@ -81,8 +86,8 @@ function agentFields(reviewer: boolean): Field[] {
     field('references', isStringList, LIST),
     requiredWhen(reviewer, field('rubric', isString, 'it must be a path')),
     optional(field('agent', isString, 'it must be a Claude Code agent type')),
-    field('model', (value) => MODELS.includes(value as string), 'it must be opus, sonnet, haiku or inherit'),
-    optional(field('session', (value) => SESSIONS.includes(value as string), 'it must be subagent or orchestrator')),
+    field('model', (value) => MODELS.includes(value as string), `it must be ${oneOf(MODELS)}`),
+    optional(field('session', (value) => SESSIONS.includes(value as string), `it must be ${oneOf(SESSIONS)}`)),
   ];
 }
 

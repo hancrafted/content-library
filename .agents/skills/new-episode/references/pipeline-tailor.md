@@ -11,7 +11,7 @@ Copy [`assets/pipeline.yml`](../assets/pipeline.yml) to `docs/episodes/<slug>/pi
 - **Gates.** `gate: human` on a job stops the run at its output for Han. Add it after `distill` when Han wants to read the Manuscript before the spec is written.
 - **References and skills.** Add a file an agent should read for this Episode (an earlier Episode it builds on, an ADR it touches).
 - **Models.** Each agent's `model` defaults to the template's; change it where the Episode gives a reason, and name the reason.
-- **One-off jobs.** A task only this Episode needs (retiring files the research replaces) becomes its own job with an `intent`, the task as a prompt, instead of a note in the run log.
+- **One-off jobs.** A task only this Episode needs becomes its own job with an `intent`, the task as a prompt, instead of a note in the run log.
 
 A per-run pipeline tolerates no missing file, unlike the template. When a file the template reads does not exist yet (the llm-wiki index, a human-profile guide), remove that reference and name it in the run-log entry's Notes and to Han.
 
@@ -21,4 +21,4 @@ The job's `checks:` in `assets/pipeline.yml` run by the check table in [SKILL.md
 
 1. The draft is committed through the `commit` skill with `Gate: draft pipeline`.
 
-Then append the run-log entry, whose Notes list every change from the template with its reason, and stop: the gate opens when Han commits `status: approved` with `Gate: approved pipeline`.
+Then append the run-log entry, whose Notes list every change from the template with its reason, and its runs CSV row, then stop: the gate opens when Han commits `status: approved` with `Gate: approved pipeline`.

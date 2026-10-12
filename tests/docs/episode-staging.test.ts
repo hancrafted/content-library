@@ -100,13 +100,20 @@ function llmWikiResearch(): Record<string, string> {
 /** A staging folder for the template, whose outputs belong to no Episode yet. */
 const TEMPLATE_STAGING = 'docs/episodes/any-episode';
 
+/** `mh query` answers per path, once each: the template and every pipeline share most outputs' rules. */
+const governance = new Map<string, boolean>();
+
 /** Whether a markdown-harness rule governs a repo path, by `mh query`, which also resolves a path not written yet. */
 function governed(file: string): boolean {
+  const known = governance.get(file);
+  if (known !== undefined) return known;
   const output = execFileSync(path.join(ROOT, 'node_modules/.bin/mh'), ['query', file], {
     cwd: ROOT,
     encoding: 'utf8',
   });
-  return (JSON.parse(output) as { result: { governance: string } }).result.governance === 'governed';
+  const answer = (JSON.parse(output) as { result: { governance: string } }).result.governance === 'governed';
+  governance.set(file, answer);
+  return answer;
 }
 
 /**

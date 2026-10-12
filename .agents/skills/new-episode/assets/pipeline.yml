@@ -13,7 +13,7 @@
 #     checks    cheapest first; names and commands in SKILL.md's job-loop check table
 #     retries   reviewer failures sent back before this branch of the pipeline stops
 #     gate      optional; `human` stops the run until Han approves the output
-#     agents    run in order; a reviewer is a fresh subagent that did not write the output
+#     agents    run in order; a reviewer is fresh: it did not write the output
 #       type        implementor | reviewer
 #       skills      skill names under .agents/skills/
 #       references  files the agent reads: `references/` and `assets/` sit in this
@@ -21,10 +21,8 @@
 #                   else at the repo root
 #       rubric      reviewers only: `<file>#<heading>` holding the pass/fail lines
 #       agent       optional; the Claude Code agent type to spawn, general-purpose when omitted
-#       model       opus | sonnet | haiku | inherit (the orchestrator's model); for an
-#                   orchestrator agent, the model of the subagents its skill spawns
-#       session     optional; subagent (default) | orchestrator, required for a skill that
-#                   spawns subagents (implement-spec, code-review) or a job that talks to Han
+#       model       the model it runs on, or inherit; SKILL.md's job loop says where it applies
+#       session     optional; subagent (default) or orchestrator, by SKILL.md's job loop
 status: draft
 jobs:
   - id: brief-grill
@@ -152,12 +150,12 @@ jobs:
     retries: 2
     agents:
       - type: implementor
-        skills: [implement-spec]
+        skills: [implement-spec, visual-check]
         references: [references/implement.md, dossier.md, manuscript.md]
         model: opus
         session: orchestrator
       - type: reviewer
-        skills: [code-review]
+        skills: [code-review, visual-check]
         references: [references/implement.md, dossier.md, manuscript.md]
         rubric: references/implement.md#rubric
         model: opus

@@ -4,7 +4,7 @@ Output: the Episode in `src/`, on the integration branch `episode/<slug>`. The h
 
 ## Prompt
 
-Both agents run with `session: orchestrator`: `implement-spec` and `code-review` dispatch subagents of their own, which a subagent cannot. Call the Skill tool with `implement-spec` on the spec issue, its implementer and merger subagents on the agent's `model`, with these changes to its steps:
+Both agents run with `session: orchestrator`. Call the Skill tool with `implement-spec` on the spec issue, its implementer and merger subagents on the agent's `model`, with these changes to its steps:
 
 - The integration branch already exists: it is `episode/<slug>`, the worktree from step 1.
 - No PR opens and none is marked ready here: `serve-and-pr` opens the one draft PR, and it stays a draft until Promotion.
