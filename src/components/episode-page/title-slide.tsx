@@ -1,4 +1,4 @@
-import { SlideBackdrop, SlideCaption, SlideFrame, SlideTitle } from '@/components/slide-master/slide-master';
+import { HeroTitle, SlideBackdrop, SlideCaption, SlideFrame } from '@/components/slide-master/slide-master';
 import { TITLE_ANCHOR } from '@/lib/episode.pure';
 import { SlideWrapper } from './slide-wrapper';
 import { TalkLauncher, type TalkPlayerLabels } from './talk-player.client';
@@ -27,7 +27,7 @@ export function TitleSlide({
         <div className="hero-glow hero-glow--accent absolute inset-0 text-accent" />
       </SlideBackdrop>
       <SlideFrame className="justify-center">
-        <SlideTitle as="h1">{title}</SlideTitle>
+        <HeroTitle>{title}</HeroTitle>
         {caption && <SlideCaption>{caption}</SlideCaption>}
         {youtubeId && talkLabels && <TalkLauncher youtubeId={youtubeId} labels={talkLabels} />}
       </SlideFrame>

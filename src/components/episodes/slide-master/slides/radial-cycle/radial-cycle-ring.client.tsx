@@ -122,7 +122,7 @@ function PhaseLabel({ at, turnDeg, index, shown, drawn, children }: PhaseLabelPr
       transform={`rotate(${turnDeg} ${at.x} ${at.y})`}
       style={{ transitionDelay: drawn ? `${drawDelayMs(index, CYCLE_ITEMS.length) + 200}ms` : undefined }}
       className={cn(
-        'pointer-events-none font-mono text-[13px] font-semibold tracking-[0.12em] uppercase transition-[fill,opacity] duration-500',
+        'pointer-events-none font-mono text-body font-semibold tracking-[0.12em] uppercase transition-[fill,opacity] duration-500',
         shown ? 'fill-foreground dark:fill-background' : 'fill-foreground',
         !drawn && 'opacity-0',
         'motion-reduce:opacity-100! print:opacity-100!',

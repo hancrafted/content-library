@@ -28,15 +28,15 @@ function Tile({ row, col, title, caption }: TileProps) {
       aria-labelledby={id}
       className={`${tone} relative flex aspect-[4/3] flex-col justify-between p-4 transition-[scale,background-color,box-shadow] duration-200 ease-out hover:z-10 hover:scale-[1.03] hover:bg-background hover:shadow-lg hover:ring-1 hover:ring-machine/50 motion-reduce:transition-none motion-reduce:hover:scale-100 md:p-5`}
     >
-      <span aria-hidden className="font-mono text-[0.6875rem] tracking-[0.2em] text-muted-foreground tabular-nums">
+      <span aria-hidden className="font-mono text-body tracking-[0.2em] text-muted-foreground tabular-nums">
         <span className={`${columnTick[col - 1]} mr-2 inline-block h-2.5 w-0.5 align-[-1px]`} />
         {`R${row}·C${col}`}
       </span>
       <div>
-        <h4 id={id} className="text-sm font-semibold tracking-tight text-foreground md:text-base">
+        <h4 id={id} className="text-body font-semibold tracking-tight text-foreground">
           {title}
         </h4>
-        <p className="mt-1 line-clamp-2 text-sm text-pretty text-muted-foreground">{caption}</p>
+        <p className="mt-1 line-clamp-2 text-body text-pretty text-muted-foreground">{caption}</p>
       </div>
     </article>
   );

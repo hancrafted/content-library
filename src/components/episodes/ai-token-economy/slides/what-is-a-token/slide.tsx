@@ -8,18 +8,18 @@ import { TokenizerPlaygroundClient } from './tokenizer-playground.client';
 
 const DIMENSIONS = [
   { label: 'input', desc: 'every word you send — and re-send on every turn', color: 'text-primary' },
-  { label: 'output', desc: 'every word generated in return and reasoning traces', color: 'text-accent' },
-  { label: 'cache write', desc: 'storing recurring context blocks for reuse', color: 'text-info' },
-  { label: 'cache read', desc: 'reusing cached blocks — ~10% of base input rate', color: 'text-success' },
+  { label: 'output', desc: 'every word generated in return and reasoning traces', color: 'text-human' },
+  { label: 'cache write', desc: 'storing recurring context blocks for reuse', color: 'text-(--info)' },
+  { label: 'cache read', desc: 'reusing cached blocks — ~10% of base input rate', color: 'text-(--success)' },
 ] as const;
 
 function BillingDimensions(): ReactElement {
   return (
-    <div className="rounded-box border border-base-300 bg-base-200/50 p-5">
-      <p className="font-mono text-[0.65rem] uppercase tracking-[0.25em] text-base-content/50">
+    <div className="rounded-xl border border-border bg-muted/50 p-5">
+      <p className="font-mono text-[0.65rem] uppercase tracking-[0.25em] text-muted-foreground">
         Every token is billed 4 ways
       </p>
-      <ul className="mt-3 grid gap-2 text-sm text-base-content/70">
+      <ul className="mt-3 grid gap-2 text-sm text-muted-foreground">
         {DIMENSIONS.map((d) => (
           <li key={d.label} className="flex items-baseline gap-2">
             <span className={`font-mono text-xs font-semibold ${d.color}`}>{d.label}</span>

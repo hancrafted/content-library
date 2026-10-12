@@ -41,7 +41,7 @@ A floating card in the table of contents' chrome (corners, border, shadow), opaq
 
 - **From `xl` (1280px):** a "more" menu in the head picks **beside** (default) or **over**. Beside widens the Foreground's right inset to clear the card at once, through `data-drawer-beside` on the Episode page, so the Slides reflow once while Backdrops keep the full width. The mode is the `drawerMode` user preference, read and written only through `readPrefs`/`writePrefs` (FE-001).
 - **Below `xl`:** the card is always an overlay and the menu is hidden. The stored mode is kept, not reset, so widening the window restores it. CSS alone decides: the menu hides through `max-xl:hidden`, and only the beside inset uses `xl:` classes.
-- **Below `md`:** a dimmed scrim (`bg-black/40`, backdrop blur) covers the page; tapping it closes the drawer. It is pointer-only: Escape and the close button still work.
+- **Below `md`:** a dimmed scrim (`bg-overlay/40`, backdrop blur) covers the page; tapping it closes the drawer. It is pointer-only: Escape and the close button still work.
 
 ## Head
 

@@ -30,17 +30,17 @@ function MachineCircle({ isMachine, isHuman }: { isMachine: boolean; isHuman: bo
         x="248"
         y="215"
         textAnchor="middle"
-        className="fill-primary font-mono text-[24px] font-bold uppercase tracking-[0.12em]"
+        className="fill-primary font-mono text-subheading font-semibold uppercase tracking-[0.12em]"
       >
         machine
       </text>
-      <text x="248" y="246" textAnchor="middle" className="fill-foreground/80 text-[14px]">
+      <text x="248" y="246" textAnchor="middle" className="fill-foreground/80 text-body">
         deterministic
       </text>
-      <text x="248" y="272" textAnchor="middle" className="fill-muted-foreground text-[13px]">
+      <text x="248" y="272" textAnchor="middle" className="fill-muted-foreground text-body">
         cheap
       </text>
-      <text x="248" y="296" textAnchor="middle" className="fill-muted-foreground text-[13px]">
+      <text x="248" y="296" textAnchor="middle" className="fill-muted-foreground text-body">
         fast
       </text>
     </g>
@@ -54,17 +54,17 @@ function HumanCircleText() {
         x="635"
         y="215"
         textAnchor="middle"
-        className="fill-secondary font-mono text-[24px] font-bold uppercase tracking-[0.12em]"
+        className="fill-secondary font-mono text-subheading font-semibold uppercase tracking-[0.12em]"
       >
         human
       </text>
-      <text x="635" y="246" textAnchor="middle" className="fill-foreground/80 text-[14px]">
+      <text x="635" y="246" textAnchor="middle" className="fill-foreground/80 text-body">
         non-deterministic
       </text>
-      <text x="635" y="272" textAnchor="middle" className="fill-muted-foreground text-[13px]">
+      <text x="635" y="272" textAnchor="middle" className="fill-muted-foreground text-body">
         time consuming
       </text>
-      <text x="635" y="296" textAnchor="middle" className="fill-muted-foreground text-[13px]">
+      <text x="635" y="296" textAnchor="middle" className="fill-muted-foreground text-body">
         trust
       </text>
     </>
@@ -103,17 +103,17 @@ function AiLens({ isHuman, isMachine, hatchId }: { isHuman: boolean; isMachine: 
         x="425"
         y="215"
         textAnchor="middle"
-        className="fill-accent font-mono text-[24px] font-extrabold uppercase tracking-[0.12em]"
+        className="fill-accent font-mono text-subheading font-semibold uppercase tracking-[0.12em]"
       >
         AI
       </text>
-      <text x="425" y="244" textAnchor="middle" className="fill-foreground/80 text-[12px]">
+      <text x="425" y="244" textAnchor="middle" className="fill-foreground/80 text-body">
         non-deterministic
       </text>
-      <text x="425" y="268" textAnchor="middle" className="fill-muted-foreground text-[11px]">
+      <text x="425" y="268" textAnchor="middle" className="fill-muted-foreground text-body">
         AI judging
       </text>
-      <text x="425" y="290" textAnchor="middle" className="fill-muted-foreground text-[11px]">
+      <text x="425" y="290" textAnchor="middle" className="fill-muted-foreground text-body">
         token cost
       </text>
     </g>
@@ -135,12 +135,12 @@ function SteerArrow() {
         x="318"
         y="308"
         textAnchor="middle"
-        className="fill-primary font-mono text-[14px] font-semibold uppercase tracking-[0.12em]"
+        className="fill-primary font-mono text-body font-semibold uppercase tracking-[0.12em]"
       >
         steer
       </text>
       <circle cx="372" cy="76" r="5" className="fill-accent animate-pulse" />
-      <text x="386" y="82" className="fill-accent font-mono text-[14px] font-semibold uppercase tracking-[0.12em]">
+      <text x="386" y="82" className="fill-accent font-mono text-body font-semibold uppercase tracking-[0.12em]">
         running
       </text>
       <path d="M 414 90 L 414 101" fill="none" strokeWidth="1.5" strokeDasharray="3 4" className="stroke-accent/60" />
@@ -156,7 +156,7 @@ function HypothesisFootnote() {
         x="414"
         y="516"
         textAnchor="middle"
-        className="fill-accent font-mono text-[14px] font-semibold tracking-[0.02em]"
+        className="fill-accent font-mono text-body font-semibold tracking-[0.02em]"
       >
         the AI region is my hypothesis — still unsettled
       </text>

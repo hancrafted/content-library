@@ -13,7 +13,7 @@ export const oneLine = slide({
   messages: { en, de },
   content: ({ t }) => (
     <SlideFrame className="justify-center">
-      <p className="max-w-3xl text-4xl font-semibold tracking-tight text-balance md:text-6xl">{t('statement')}</p>
+      <p className="max-w-3xl text-heading font-semibold tracking-tight text-balance">{t('statement')}</p>
     </SlideFrame>
   ),
 });

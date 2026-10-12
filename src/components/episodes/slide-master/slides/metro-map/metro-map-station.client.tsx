@@ -2,7 +2,7 @@
 
 import { cn } from '@/lib/utils';
 import type { CSSProperties, FocusEvent, MouseEvent } from 'react';
-import { laneStyle } from './metro-map-lines.client';
+import { laneClass } from './metro-map-lines.client';
 import {
   canvasShare,
   isInterchange,
@@ -70,10 +70,11 @@ function StationRing({ station, drawn, expanded }: { station: Station; drawn: bo
       data-interchange={interchange}
       style={ringStyle(station, drawn)}
       className={cn(
+        !interchange && laneClass(stationLanes(station)[0]),
         'block rounded-full transition-[scale,opacity] duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-115',
         interchange
-          ? 'w-6 border-[3px] border-neutral-900 bg-white dark:border-neutral-950 dark:bg-neutral-50'
-          : 'size-6 border-[5px] border-(--lane-light) bg-background dark:border-(--lane-dark)',
+          ? 'w-6 border-[3px] border-foreground bg-background dark:border-background dark:bg-foreground'
+          : 'size-6 border-[5px] border-(--lane) bg-background',
         expanded && 'scale-125 ring-4 ring-brand-accent/40',
         !drawn && 'scale-0 opacity-0',
         'motion-reduce:scale-100! motion-reduce:opacity-100! print:scale-100! print:opacity-100!',
@@ -86,9 +87,7 @@ function StationRing({ station, drawn, expanded }: { station: Station; drawn: bo
 function ringStyle(station: Station, drawn: boolean): CSSProperties {
   const lanes = stationLanes(station);
   const delay = { transitionDelay: drawn ? `${stationDelayMs(station)}ms` : undefined };
-  return isInterchange(station)
-    ? { ...delay, height: `${0.5 + lanes.length * 0.75}rem` }
-    : { ...delay, ...laneStyle(lanes[0]) };
+  return isInterchange(station) ? { ...delay, height: `${0.5 + lanes.length * 0.75}rem` } : delay;
 }
 
 function StationLabel({ station, copy, expanded }: { station: Station; copy: StationCopy; expanded: boolean }) {
@@ -102,13 +101,13 @@ function StationLabel({ station, copy, expanded }: { station: Station; copy: Sta
     >
       <span
         className={cn(
-          'font-mono text-xs tracking-widest tabular-nums text-muted-foreground',
+          'font-mono text-body tracking-widest tabular-nums text-muted-foreground',
           expanded && 'text-brand-accent',
         )}
       >
         {copy.date}
       </span>
-      <span className="text-sm font-semibold tracking-tight">{copy.title}</span>
+      <span className="text-body font-semibold tracking-tight">{copy.title}</span>
     </span>
   );
 }

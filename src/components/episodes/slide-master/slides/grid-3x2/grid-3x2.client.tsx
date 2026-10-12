@@ -41,14 +41,14 @@ function Card({ index, title, caption }: { index: number; title: string; caption
       className="group relative flex h-full flex-col gap-6 rounded-xl border border-border bg-background p-5 shadow-xs [--grid-3x2-x:50%] [--grid-3x2-y:0%] md:p-6"
     >
       <Spotlight />
-      <span aria-hidden className="font-mono text-xs tracking-widest text-muted-foreground tabular-nums">
+      <span aria-hidden className="font-mono text-body tracking-widest text-muted-foreground tabular-nums">
         {cellNumber(index)}
       </span>
       <div className="relative mt-auto">
-        <h4 id={id} className="text-base font-semibold tracking-tight text-balance text-foreground">
+        <h4 id={id} className="text-body font-semibold tracking-tight text-balance text-foreground">
           {title}
         </h4>
-        <p className="mt-1 text-sm text-pretty text-muted-foreground">{caption}</p>
+        <p className="mt-1 text-body text-pretty text-muted-foreground">{caption}</p>
       </div>
     </article>
   );

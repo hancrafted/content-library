@@ -1,0 +1,67 @@
+/*
+ * The editor panel's own palette. It follows the site's light or dark theme but
+ * does not read the site's tokens: the panel has to keep its look while those very
+ * tokens are being edited. Every shadcn token the panel's primitives read is
+ * redeclared here, so `bg-card` or `border-input` inside the panel resolves to this
+ * set. This is the one token file outside a Slide folder (FE-011 rule exception,
+ * named in the rules file): raw oklch values, each with a counterpart under
+ * `:global(.dark)`.
+ */
+.panel {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.2 0 0);
+  --card: oklch(0.99 0 0);
+  --card-foreground: oklch(0.2 0 0);
+  --primary: oklch(0.25 0 0);
+  --primary-foreground: oklch(0.98 0 0);
+  --muted: oklch(0.95 0 0);
+  --muted-foreground: oklch(0.45 0 0);
+  --accent: oklch(0.94 0 0);
+  --accent-foreground: oklch(0.2 0 0);
+  --border: oklch(0.88 0 0);
+  --input: oklch(0.88 0 0);
+  --ring: oklch(0.65 0 0);
+  --brand-accent: oklch(0.634 0.155 50);
+  --overlay: oklch(0 0 0);
+}
+
+:global(.dark) .panel {
+  --background: oklch(0.15 0 0);
+  --foreground: oklch(0.97 0 0);
+  --card: oklch(0.2 0 0);
+  --card-foreground: oklch(0.97 0 0);
+  --primary: oklch(0.92 0 0);
+  --primary-foreground: oklch(0.2 0 0);
+  --muted: oklch(0.27 0 0);
+  --muted-foreground: oklch(0.72 0 0);
+  --accent: oklch(0.3 0 0);
+  --accent-foreground: oklch(0.97 0 0);
+  --border: oklch(1 0 0 / 0.12);
+  --input: oklch(1 0 0 / 0.16);
+  --ring: oklch(0.56 0 0);
+  --brand-accent: oklch(0.784 0.127 60);
+  --overlay: oklch(0 0 0);
+}
+
+.slideTab {
+  overflow: hidden;
+  animation: slide-tab-in 220ms ease-out both;
+}
+
+@keyframes slide-tab-in {
+  from {
+    max-width: 0;
+    padding-inline: 0;
+    opacity: 0;
+  }
+  to {
+    max-width: 8rem;
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slideTab {
+    animation: none;
+  }
+}

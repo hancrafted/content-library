@@ -7,3 +7,4 @@ Documents the Claude Desktop project holds. One path or glob per line, relative 
 - `docs/agents/*.md`
 - `docs/features/*.md`
 - `docs/adr/*.md`
+- `docs/design-system/*.md`

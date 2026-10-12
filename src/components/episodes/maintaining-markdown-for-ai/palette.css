@@ -1,11 +1,11 @@
 /*
- * The Episode's tripartite palette (FE-002 §7): primary, secondary and accent
- * mean machine, human and AI across this Episode's whole page, chrome
- * included, so it is scoped by the page's `data-episode` wrapper rather than
- * a Slide's CSS module.
+ * The Episode's tripartite palette (FE-002 §7): machine, human and AI. The
+ * Episode references the global `machine`, `human` and `ai` tokens directly
+ * (`text-machine`), so this file re-declares no global token name; the
+ * Episode's own names live here, scoped by the page's `data-episode` wrapper.
  */
 [data-episode='maintaining-markdown-for-ai'] {
-  --primary: var(--machine);
-  --secondary: var(--human);
-  --accent: var(--ai);
+  --palette-machine: var(--machine);
+  --palette-human: var(--human);
+  --palette-ai: var(--ai);
 }

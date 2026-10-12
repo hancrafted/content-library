@@ -6,7 +6,7 @@ domain: frontend
 rules: false
 files: ['src/**/*.{ts,tsx}']
 paths: ['src/**/*.{ts,tsx}']
-description: 'Two zones under different laws — src/app governed by content, the authored zone by position — one import direction app → components → hooks → lib with no cycles and no React in lib, a Slide folder importing only global shared code, and Slide internals left explicitly ungoverned.'
+description: 'Two zones under different laws — src/app governed by content, the authored zone by position — one import direction app → components → hooks → lib with no cycles and no React in lib, a Slide folder importing only global shared code, and Slide internals ungoverned in shape — values, not shape: only colour, size and weight follow tokens.'
 ---
 
 # Module Layering
@@ -44,7 +44,7 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 
 ### 4. The ungoverned zone: Slide internals
 
-1. What renders inside one Slide — markup, props, layout — is explicitly **not** governed: no mandated component shape, prop interface or layout rule.
+1. What renders inside one Slide — markup, props, layout — is explicitly **not** governed: no mandated component shape, prop interface or layout rule. Values, not shape: tokens (FE-011) govern colour, size and weight inside a Scene, nothing else.
 2. Why: a prototype's per-slide type interface forced bespoke markup through it and degraded every visualisation. Governance binds boundaries, never a Slide's inside; written down because silence gets filled with structure.
 
 ### 5. A Slide folder imports only global shared code
@@ -62,7 +62,7 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 3. **DO** move logic a route needs into `src/lib/**` and call it from the page component. (Decision 1)
 4. **DO** import downward or skip tiers downward: components → lib, hooks → lib, app → lib. (Decision 2)
 5. **DO** keep `src/lib/**` to `.ts` files that test without a DOM. (Decision 3)
-6. **DO** leave a Slide's internal markup to the visualization it serves. (Decision 4)
+6. **DO** leave a Slide's internal markup to the visualization it serves; take its colour, size and weight from tokens. (Decision 4)
 7. **DO** move a part two Slides need into `src/components/slide-shared/` and import it from there. (Decision 5)
 
 ### Don'ts

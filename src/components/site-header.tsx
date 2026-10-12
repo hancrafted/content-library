@@ -1,3 +1,4 @@
+import { DevTokenEditor } from '@/components/design-system-token-editor/dev-token-editor';
 import { LocaleToggle } from '@/components/locale-toggle.client';
 import { NavLink } from '@/components/nav-link.client';
 import { SiteBrand } from '@/components/site-brand';
@@ -61,6 +62,7 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
       <div className="flex items-center gap-3 max-sm:order-2 max-sm:ml-auto">
         <ThemeToggle labels={themeLabels(t)} />
         <LocaleToggle locale={locale} label={t('locale.label')} />
+        <DevTokenEditor />
       </div>
       <ContactButton label={t('nav.contact')} newTab={t('nav.newTab')} />
     </header>

@@ -8,19 +8,19 @@ import en from './i18n/en.json';
 function ObscurityCards(): ReactElement {
   return (
     <div className="grid gap-6 md:grid-cols-2">
-      <div className="card border border-base-content/10 bg-base-200 p-5 shadow-xs">
-        <h4 className="font-display text-lg font-bold">
-          <span className="font-mono text-sm text-success">01</span> The initiation
+      <div className="rounded-xl border border-border bg-muted p-5 shadow-xs">
+        <h4 className="text-lg font-bold">
+          <span className="font-mono text-sm text-(--success)">01</span> The initiation
         </h4>
-        <p className="mt-2 text-sm text-base-content/70">
+        <p className="mt-2 text-sm text-muted-foreground">
           Unlimited on the house. The intelligence feels like magic and the bill is invisible — so you build the habit.
         </p>
       </div>
-      <div className="card border border-error/30 bg-error/5 p-5 shadow-xs">
-        <h4 className="font-display text-lg font-bold">
-          <span className="font-mono text-sm text-error">02</span> The hook
+      <div className="rounded-xl border border-destructive/30 bg-destructive/5 p-5 shadow-xs">
+        <h4 className="text-lg font-bold">
+          <span className="font-mono text-sm text-destructive">02</span> The hook
         </h4>
-        <p className="mt-2 text-sm text-base-content/70">
+        <p className="mt-2 text-sm text-muted-foreground">
           Now you are fluent — and the meter is gone. Out of credits? Just top up. The real rate never shows.
         </p>
       </div>
@@ -30,7 +30,7 @@ function ObscurityCards(): ReactElement {
 
 function ObscurityFigure(): ReactElement {
   return (
-    <figure className="mx-auto max-w-3xl overflow-hidden rounded-box border border-base-300 shadow-lg">
+    <figure className="mx-auto max-w-3xl overflow-hidden rounded-xl border border-border shadow-lg">
       <Image
         src="/images/episodes/ai-token-economy/token-addiction.webp"
         alt="Two-panel illustration: The Initiation vs The Hook"

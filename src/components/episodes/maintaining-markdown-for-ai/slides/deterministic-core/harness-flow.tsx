@@ -22,17 +22,17 @@ function HarnessTriggers() {
 
 function HarnessHub() {
   return (
-    <div className="flex flex-col justify-center rounded-2xl border-2 border-dashed border-primary/40 bg-primary/5 p-5 shadow-xs">
-      <p className="text-center font-mono text-[11px] font-semibold uppercase tracking-wider text-primary">
+    <div className="flex flex-col justify-center rounded-2xl border-2 border-dashed border-machine/40 bg-machine/5 p-5 shadow-xs">
+      <p className="text-center font-mono text-[11px] font-semibold uppercase tracking-wider text-machine">
         the same core, every time
       </p>
       <div className="mt-4 space-y-2">
-        <div className="rounded-lg border border-primary/40 bg-card p-3 text-center">
+        <div className="rounded-lg border border-machine/40 bg-card p-3 text-center">
           <span className="block text-xs font-semibold text-foreground">Retrieve configuration</span>
-          <span className="block font-mono text-[11px] text-primary">config.yaml ↗</span>
+          <span className="block font-mono text-[11px] text-machine">config.yaml ↗</span>
         </div>
         <p className="text-center font-mono text-xs text-muted-foreground">↓</p>
-        <div className="rounded-lg border border-primary/40 bg-card p-3 text-center">
+        <div className="rounded-lg border border-machine/40 bg-card p-3 text-center">
           <span className="block text-xs font-semibold text-foreground">Deterministic validation</span>
           <span className="block font-mono text-[11px] text-muted-foreground">pure function</span>
         </div>
@@ -48,15 +48,15 @@ function HarnessOutcomes() {
         3 Corresponding Outcomes
       </p>
       <div className="rounded-xl border border-border bg-card p-4 shadow-xs">
-        <p className="font-mono text-xs font-bold text-accent">Steer or block</p>
+        <p className="font-mono text-xs font-bold text-ai">Steer or block</p>
         <p className="mt-1 text-xs text-muted-foreground">Injects freshness warning or denies stale knowledge.</p>
       </div>
       <div className="rounded-xl border border-border bg-card p-4 shadow-xs">
-        <p className="font-mono text-xs font-bold text-secondary">Prevent drift</p>
+        <p className="font-mono text-xs font-bold text-human">Prevent drift</p>
         <p className="mt-1 text-xs text-muted-foreground">Rejects commits lacking mandatory metadata fields.</p>
       </div>
       <div className="rounded-xl border border-border bg-card p-4 shadow-xs">
-        <p className="font-mono text-xs font-bold text-primary">Report corpus health</p>
+        <p className="font-mono text-xs font-bold text-machine">Report corpus health</p>
         <p className="mt-1 text-xs text-muted-foreground">Outputs JSON violation summary for build pipelines.</p>
       </div>
     </div>

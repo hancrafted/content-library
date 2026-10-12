@@ -2,82 +2,84 @@ import { describe, expect, it } from 'vitest';
 import { computeActiveStep, computeThemeColors } from './theme-transition.pure';
 
 describe('success cases', () => {
-  it('returns dark background and light foreground for initial progress in light mode', () => {
+  it('opens in the inverse of the site theme: the foreground token as background', () => {
     // ARRANGE
-    const expectedBg = '#0A0E1A';
-    const expectedFg = '#F8FAFC';
+    const progress = 0.5;
+    const expectedBg = 'color-mix(in oklab, var(--background) 0.0%, var(--foreground))';
+    const expectedFg = 'color-mix(in oklab, var(--foreground) 0.0%, var(--background))';
     // ACT
-    const colors = computeThemeColors(0.5, false);
+    const colors = computeThemeColors(progress);
     // ASSERT
     expect(colors.bg).toBe(expectedBg);
     expect(colors.fg).toBe(expectedFg);
   });
 
-  it('transitions to white background and dark foreground at the end in light mode', () => {
+  it('hands back to the site theme at the end of the rail', () => {
     // ARRANGE
-    const expectedBg = '#FAF9F6';
-    const expectedFg = '#0A0E1A';
+    const progress = 1.0;
+    const expectedBg = 'color-mix(in oklab, var(--background) 100.0%, var(--foreground))';
+    const expectedFg = 'color-mix(in oklab, var(--foreground) 100.0%, var(--background))';
+    const expectedBorder = 'var(--border) 100.0%';
     // ACT
-    const colors = computeThemeColors(1.0, false);
+    const colors = computeThemeColors(progress);
     // ASSERT
     expect(colors.bg).toBe(expectedBg);
     expect(colors.fg).toBe(expectedFg);
+    expect(colors.border).toContain(expectedBorder);
+  });
+
+  it('mixes part of the way through the hand-back', () => {
+    // ARRANGE
+    const midway = 0.75 + 0.11;
+    const expectedBg = 'color-mix(in oklab, var(--background) 50.0%, var(--foreground))';
+    // ACT
+    const colors = computeThemeColors(midway);
+    // ASSERT
+    expect(colors.bg).toBe(expectedBg);
   });
 
   it('maps progress to active step numbers across the rail', () => {
     // ARRANGE
-    const stepOne = 1;
-    const stepTwo = 2;
-    const stepThree = 3;
-    const stepFour = 4;
-    const stepFive = 5;
+    const expected = [1, 2, 3, 4, 5];
     // ACT
-    const s1 = computeActiveStep(0.1);
-    const s2 = computeActiveStep(0.3);
-    const s3 = computeActiveStep(0.6);
-    const s4 = computeActiveStep(0.8);
-    const s5 = computeActiveStep(0.98);
+    const steps = [0.1, 0.3, 0.6, 0.8, 0.98].map(computeActiveStep);
     // ASSERT
-    expect([s1, s2, s3, s4, s5]).toEqual([stepOne, stepTwo, stepThree, stepFour, stepFive]);
+    expect(steps).toEqual(expected);
+  });
+
+  it('uses only theme tokens, no raw colour', () => {
+    // ARRANGE
+    const raw = /#[0-9a-f]{3,8}\b|rgba?\(/i;
+    // ACT
+    const colors = computeThemeColors(0.9);
+    const rawValues = Object.values(colors).filter((value) => raw.test(value));
+    // ASSERT
+    expect(rawValues).toEqual([]);
   });
 });
 
 describe('failure cases', () => {
-  it('handles negative progress by clamping to step 1 and initial colors', () => {
+  it('clamps negative progress to step 1 and the opening colours', () => {
     // ARRANGE
-    const expectedBg = '#0A0E1A';
     const expectedStep = 1;
     // ACT
-    const colors = computeThemeColors(-0.5, false);
+    const colors = computeThemeColors(-0.5);
     const step = computeActiveStep(-0.5);
     // ASSERT
-    expect(colors.bg).toBe(expectedBg);
+    expect(colors.bg).toBe(computeThemeColors(0).bg);
     expect(step).toBe(expectedStep);
   });
 });
 
 describe('edge cases', () => {
-  it('handles progress exceeding 1.0 by clamping to step 5 and final colors', () => {
+  it('clamps progress beyond 1.0 to step 5 and the closing colours', () => {
     // ARRANGE
-    const expectedBg = '#FAF9F6';
     const expectedStep = 5;
     // ACT
-    const colors = computeThemeColors(1.5, false);
+    const colors = computeThemeColors(1.5);
     const step = computeActiveStep(1.5);
     // ASSERT
-    expect(colors.bg).toBe(expectedBg);
+    expect(colors.bg).toBe(computeThemeColors(1).bg);
     expect(step).toBe(expectedStep);
-  });
-
-  it('handles dark site theme by interpolating towards dark theme background', () => {
-    // ARRANGE
-    const initialBg = '#FAF9F6';
-    const finalBg = '#0B0F17';
-    // ACT
-    const startColors = computeThemeColors(0, true);
-    const endColors = computeThemeColors(1.0, true);
-    // ASSERT
-    expect(startColors.bg).toBe(initialBg);
-    expect(endColors.bg).toBe(finalBg);
   });
 });

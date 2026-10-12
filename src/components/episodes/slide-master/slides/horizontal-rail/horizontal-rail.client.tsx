@@ -194,19 +194,19 @@ function RailLabel({ index, copy, above, expanded }: LabelProps) {
           : 'md:row-start-3 md:justify-start md:pt-6 md:before:top-0',
       )}
     >
-      <span aria-hidden="true" className="font-mono text-[0.65rem] tracking-[0.3em] text-muted-foreground">
+      <span aria-hidden="true" className="font-mono text-body tracking-[0.3em] text-muted-foreground">
         {String(index + 1).padStart(2, '0')}
       </span>
       <time
         dateTime={copy.date}
         className={cn(
-          'font-mono text-3xl font-light tracking-tight tabular-nums transition-colors md:text-4xl',
+          'font-mono text-heading font-normal tracking-tight tabular-nums transition-colors',
           expanded && 'text-brand-accent',
         )}
       >
         {copy.date}
       </time>
-      <span className="text-sm font-medium tracking-wide text-muted-foreground uppercase">{copy.title}</span>
+      <span className="text-body font-medium tracking-wide text-muted-foreground uppercase">{copy.title}</span>
     </div>
   );
 }

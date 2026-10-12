@@ -203,9 +203,9 @@ export function TocPanel(props: {
       aria-busy={!revealed}
       data-testid={props.testId}
       className={cn(
-        'flex flex-col border bg-background/70 p-3 text-sm shadow-header backdrop-blur-xl backdrop-saturate-150 [interpolate-size:allow-keywords]',
+        'flex flex-col border bg-background/70 p-3 text-caption shadow-header backdrop-blur-xl backdrop-saturate-150 [interpolate-size:allow-keywords]',
         `transition-[width,border-radius] ${WIDEN}`,
-        revealed ? 'w-full rounded-2xl' : 'w-44 rounded-[1.375rem] noscript:w-full noscript:rounded-2xl',
+        revealed ? 'w-full rounded-2xl' : 'w-max rounded-[1.375rem] noscript:w-full noscript:rounded-2xl',
         props.className,
       )}
     >

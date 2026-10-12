@@ -28,18 +28,15 @@ function Quadrant({ quadrant }: { quadrant: QuadrantCopy }) {
     >
       <span
         aria-hidden
-        className={`${quadrant.indexPlace} absolute top-4 right-5 font-mono text-xs tracking-[0.3em] text-muted-foreground tabular-nums`}
+        className={`${quadrant.indexPlace} absolute top-4 right-5 font-mono text-body tracking-[0.3em] text-muted-foreground tabular-nums`}
       >
         <span className={`${quadrant.dot} mr-2 inline-block size-1.5 rounded-full align-middle`} />
         {quadrant.index}
       </span>
-      <h4
-        id={id}
-        className="max-w-[16ch] text-xl font-semibold tracking-tight text-balance text-foreground md:text-2xl"
-      >
+      <h4 id={id} className="max-w-[16ch] text-subheading font-semibold tracking-tight text-balance text-foreground">
         {quadrant.title}
       </h4>
-      <p className="mt-2 max-w-xs text-base text-pretty text-muted-foreground">{quadrant.caption}</p>
+      <p className="mt-2 max-w-xs text-body text-pretty text-muted-foreground">{quadrant.caption}</p>
     </article>
   );
 }

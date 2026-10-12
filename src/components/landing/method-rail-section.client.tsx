@@ -9,15 +9,15 @@ import { computeActiveStep, computeThemeColors } from '@/lib/theme-transition.pu
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 function prefersReducedMotion(): boolean {
   if (typeof window === 'undefined') return false;
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
-function applyThemeToContainer(container: HTMLElement, p: number, isDarkSiteTheme: boolean) {
-  const { bg, fg, border } = computeThemeColors(p, isDarkSiteTheme);
+function applyThemeToContainer(container: HTMLElement, p: number) {
+  const { bg, fg, border } = computeThemeColors(p);
   container.style.setProperty('--method-bg', bg);
   container.style.setProperty('--method-fg', fg);
   container.style.setProperty('--method-border', border);
@@ -42,13 +42,12 @@ interface ScrubOptions {
   containerRef: React.RefObject<HTMLDivElement | null>;
   trackRef: React.RefObject<HTMLDivElement | null>;
   onProgress: (p: number) => void;
-  isDarkRef: React.RefObject<boolean>;
   progressRef: React.RefObject<number>;
 }
 
 function buildRailTimeline(container: HTMLElement, track: HTMLElement, options: ScrubOptions) {
   const { startX, endX } = getRailBounds(track);
-  applyThemeToContainer(container, options.progressRef.current, options.isDarkRef.current);
+  applyThemeToContainer(container, options.progressRef.current);
 
   const tl = gsap.timeline({
     scrollTrigger: {
@@ -61,7 +60,7 @@ function buildRailTimeline(container: HTMLElement, track: HTMLElement, options: 
       invalidateOnRefresh: true,
       onUpdate: (self) => {
         options.progressRef.current = self.progress;
-        applyThemeToContainer(container, self.progress, options.isDarkRef.current);
+        applyThemeToContainer(container, self.progress);
         options.onProgress(self.progress);
       },
     },
@@ -109,23 +108,9 @@ function RailTrack({ locale, trackRef }: { locale: Locale; trackRef: React.RefOb
   );
 }
 
-function useDarkSync(
-  containerRef: React.RefObject<HTMLDivElement | null>,
-  progressRef: React.RefObject<number>,
-  isDark: boolean,
-) {
-  useEffect(() => {
-    if (containerRef.current) {
-      applyThemeToContainer(containerRef.current, progressRef.current, isDark);
-    }
-  }, [containerRef, progressRef, isDark]);
-}
-
-function useRailState(isDark: boolean) {
+function useRailState() {
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-  const isDarkRef = useRef(isDark);
-  isDarkRef.current = isDark;
   const progressRef = useRef(0);
   const [step, setStep] = useState(1);
   const [progressPercent, setProgressPercent] = useState(0);
@@ -137,17 +122,14 @@ function useRailState(isDark: boolean) {
       setProgressPercent(p * 100);
       setStep(computeActiveStep(p));
     },
-    isDarkRef,
     progressRef,
   });
-
-  useDarkSync(containerRef, progressRef, isDark);
 
   return { containerRef, trackRef, step, progressPercent };
 }
 
-function DesktopRail({ locale, isDark }: { locale: Locale; isDark: boolean }) {
-  const { containerRef, trackRef, step, progressPercent } = useRailState(isDark);
+function DesktopRail({ locale }: { locale: Locale }) {
+  const { containerRef, trackRef, step, progressPercent } = useRailState();
 
   return (
     <div
@@ -190,7 +172,7 @@ export function MethodRailSection({ locale }: { locale: Locale }) {
 
   return (
     <section className="relative" id="services">
-      <DesktopRail locale={locale} isDark={isDark} />
+      <DesktopRail locale={locale} />
       <MobileStack locale={locale} isDark={isDark} />
     </section>
   );

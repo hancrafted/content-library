@@ -15,19 +15,16 @@ function Poster({ title, caption }: { title: string; caption: string }) {
     >
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 transition-colors duration-300 dark:group-hover:bg-white/[0.06] motion-reduce:transition-none"
+        className="pointer-events-none absolute inset-0 -z-10 transition-colors duration-300 dark:group-hover:bg-foreground/6 motion-reduce:transition-none"
       />
-      <span aria-hidden className="font-mono text-xs tracking-[0.3em] text-muted-foreground tabular-nums">
+      <span aria-hidden className="font-mono text-body tracking-[0.3em] text-muted-foreground tabular-nums">
         01 / 01
       </span>
       <div className="max-w-2xl">
-        <h4
-          id={id}
-          className="text-4xl leading-[0.95] font-semibold tracking-tight text-balance text-foreground sm:text-6xl md:text-7xl"
-        >
+        <h4 id={id} className="text-heading leading-[0.95] font-semibold tracking-tight text-balance text-foreground">
           {title}
         </h4>
-        <p className="mt-4 max-w-md text-base text-pretty text-muted-foreground md:text-lg">{caption}</p>
+        <p className="mt-4 max-w-md text-body text-pretty text-muted-foreground">{caption}</p>
       </div>
     </article>
   );

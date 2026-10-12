@@ -60,8 +60,8 @@ function SpineDate({ date, side }: { date: string; side: Side }) {
     <p
       className={cn(
         styles.date,
-        'col-start-2 row-start-1 font-mono text-sm text-foreground tabular-nums',
-        'md:row-start-1 md:pt-0.5 md:font-sans md:text-6xl md:leading-none md:font-black md:tracking-tighter',
+        'col-start-2 row-start-1 font-mono text-body text-foreground tabular-nums',
+        'md:row-start-1 md:pt-0.5 md:font-sans text-heading md:leading-none md:tracking-tighter',
         side === 'left' ? 'md:col-start-3 md:pl-6 md:text-left' : 'md:col-start-1 md:pr-6 md:text-right',
       )}
     >
@@ -106,11 +106,11 @@ function SpineCard({ entry, index, count, side }: { entry: SpineEntry; index: nu
         side === 'left' ? 'md:col-start-1' : 'md:col-start-3',
       )}
     >
-      <p aria-hidden="true" className="font-mono text-xs leading-4 tracking-widest text-muted-foreground">
+      <p aria-hidden="true" className="font-mono text-body leading-4 tracking-widest text-muted-foreground">
         {pad(index + 1)} / {pad(count)}
       </p>
       <h4 className="mt-3 text-xl font-semibold tracking-tight">{entry.title}</h4>
-      <p className="mt-1.5 text-sm text-muted-foreground md:text-base">{entry.caption}</p>
+      <p className="mt-1.5 text-body text-muted-foreground">{entry.caption}</p>
     </div>
   );
 }

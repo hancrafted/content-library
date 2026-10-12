@@ -3,7 +3,7 @@
 import { usePopoverPlacement } from '@/hooks/use-popover-placement';
 import { popoverBox } from '@/lib/popover-placement.pure';
 import { createPortal } from 'react-dom';
-import { laneStyle } from './metro-map-lines.client';
+import { laneClass } from './metro-map-lines.client';
 import type { StationCopy } from './metro-map-station.client';
 import { POPOVER_RULES, type Lane } from './metro-map.pure';
 
@@ -12,10 +12,10 @@ const SLOT = 'metro-popover';
 /** The lanes stopping here, as coloured ticks with their names: the popover says which lines change here. */
 function LaneTicks({ lanes, names }: { lanes: readonly Lane[]; names: Record<Lane, string> }) {
   return (
-    <ul className="mt-3 flex flex-wrap gap-x-3 gap-y-1 border-t border-border pt-3 text-xs text-muted-foreground">
+    <ul className="mt-3 flex flex-wrap gap-x-3 gap-y-1 border-t border-border pt-3 text-body text-muted-foreground">
       {lanes.map((lane) => (
-        <li key={lane} style={laneStyle(lane)} className="flex items-center gap-1.5">
-          <span aria-hidden="true" className="h-1.5 w-4 rounded-full bg-(--lane-light) dark:bg-(--lane-dark)" />
+        <li key={lane} className={`${laneClass(lane)} flex items-center gap-1.5`}>
+          <span aria-hidden="true" className="h-1.5 w-4 rounded-full bg-(--lane)" />
           {names[lane]}
         </li>
       ))}
@@ -47,9 +47,9 @@ export function MetroPopover({ id, anchor, copy, lanes, laneNames, onClose }: Po
       style={popoverBox(placement)}
       className="pointer-events-auto fixed rounded-xl border border-border bg-background p-4 text-foreground shadow-xl"
     >
-      <p className="font-mono text-xs tracking-widest text-muted-foreground tabular-nums">{copy.date}</p>
+      <p className="font-mono text-body tracking-widest text-muted-foreground tabular-nums">{copy.date}</p>
       <p className="mt-1 font-semibold">{copy.title}</p>
-      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{copy.caption}</p>
+      <p className="mt-2 text-body leading-relaxed text-muted-foreground">{copy.caption}</p>
       <LaneTicks lanes={lanes} names={laneNames} />
     </div>,
     root,

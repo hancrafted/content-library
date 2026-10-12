@@ -1,7 +1,6 @@
 'use client';
 
 import { InkFilterDefinition, type TransitionStyle } from '@/components/animations/transition-filters';
-import { useResolvedTheme } from '@/hooks/use-resolved-theme';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -121,8 +120,7 @@ interface LiquidInkProps {
 }
 
 export function LiquidInkTransition({ targetId, color, variant }: LiquidInkProps) {
-  const resolvedTheme = useResolvedTheme();
-  const activeColor = color ?? (resolvedTheme === 'dark' ? '#FAF9F6' : '#0A0E1A');
+  const activeColor = color ?? 'var(--foreground)';
   const containerRef = useRef<HTMLDivElement>(null);
   const inkScaleRef = useRef<HTMLDivElement>(null);
   const activeStyle = resolveStyle(variant);
