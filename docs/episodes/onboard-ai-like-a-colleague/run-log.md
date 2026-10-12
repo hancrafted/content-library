@@ -106,3 +106,27 @@ This entry supersedes the Notes of the two earlier pipeline-tailor entries where
 The earlier note's step outside the schema is now the job retire-prior-research, which needs research and states its task as an `intent`: delete `docs/research/ai-onboarding-freelancer.md` and `docs/research/ai-amnesia-mechanics.md`, repoint the two files that cite them, and remove both paths from every references list here, so the pipeline check still finds every file it names. That last step edits the approved pipeline mid-run; it is the one edit of this file after the gate.
 
 The run id is 2026-10-12T19:22:40Z, when the Episode branch was created. The earlier entries' note of no CSV row is resolved: the run id now starts at step 1, and the rows are added. The brief-grill row's duration runs from the branch's creation to the draft commit; the second pipeline-tailor run's duration was not measured.
+
+## customize-pipeline · 2026-10-12T20:49:52Z
+
+### Inputs
+
+- `pipeline.yml` as of 509618c.
+- The job renames from `feat/89-new-episode` (4919216), merged in.
+
+### Output
+
+- `pipeline.yml`, still `status: draft`, with every job renamed and its tailoring unchanged.
+
+### Checks
+
+- `vitest` (`tests/docs/episode-staging.test.ts`): pass.
+- `mh check`: pass.
+
+### Metrics
+
+- implementor · attempt 1 · pass · run in the orchestrator's session, duration not measured · no token count
+
+### Notes
+
+Han renamed the jobs by what they do: pipeline-tailor is now customize-pipeline, research-match retrieval, research write-research, consolidate write-dossier, distill write-manuscript, spec write-spec, implement implement-episode, and serve-and-pr open-pr. brief-grill keeps its skill's name. The earlier entries and runs CSV rows keep the names they were written with, since both logs are append-only: the job called pipeline-tailor there is customize-pipeline here.

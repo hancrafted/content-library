@@ -1,6 +1,6 @@
 # The per-run pipeline of onboard-ai-like-a-colleague, tailored from the
 # new-episode template. Every change from the template and its reason is in
-# run-log.md under pipeline-tailor.
+# run-log.md under customize-pipeline.
 #
 # Schema (checked by src/lib/episode-pipeline.pure.ts in `npm run verify`):
 #   status    draft | approved
@@ -38,7 +38,7 @@ jobs:
         model: inherit
         session: orchestrator
 
-  - id: pipeline-tailor
+  - id: customize-pipeline
     needs: [brief-grill]
     outputs: [pipeline.yml]
     checks: [vitest]
@@ -47,14 +47,14 @@ jobs:
     agents:
       - type: implementor
         skills: []
-        references: [references/pipeline-tailor.md, assets/pipeline.yml, brief.md]
+        references: [references/customize-pipeline.md, assets/pipeline.yml, brief.md]
         model: inherit
         session: orchestrator
 
   # Matches each research question against the llm-wiki index and records in
   # the run log which questions remain unanswered.
-  - id: research-match
-    needs: [pipeline-tailor]
+  - id: retrieval
+    needs: [customize-pipeline]
     outputs: [run-log.md]
     checks: [mh]
     retries: 1
@@ -62,14 +62,14 @@ jobs:
       - type: implementor
         skills: []
         references:
-          - references/research-match.md
+          - references/retrieval.md
           - brief.md
           - docs/research/ai-onboarding-freelancer.md
           - docs/research/ai-amnesia-mechanics.md
         model: inherit
 
-  - id: research
-    needs: [research-match]
+  - id: write-research
+    needs: [retrieval]
     foreach: brief.md#research-questions
     outputs: [research/*/research.md]
     checks: [mh, vitest]
@@ -78,7 +78,7 @@ jobs:
       - type: implementor
         skills: [research]
         references:
-          - references/research.md
+          - references/write-research.md
           - brief.md
           - run-log.md
           - docs/research/ai-onboarding-freelancer.md
@@ -86,15 +86,15 @@ jobs:
         model: sonnet
       - type: reviewer
         skills: []
-        references: [references/research.md]
-        rubric: references/research.md#rubric
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
         model: opus
 
   # Folds the earlier Episode's research into this run's: once every research
   # job has passed, the two files it replaces go.
   - id: retire-prior-research
     intent: >-
-      Every research job of this run has passed, and its research files carry
+      Every write-research job of this run has passed, and its research files carry
       the Findings of docs/research/ai-onboarding-freelancer.md and
       docs/research/ai-amnesia-mechanics.md that this Episode needs. Delete
       both files. Repoint the two files that cite them,
@@ -103,7 +103,7 @@ jobs:
       this run that now hold those Findings. Remove both paths from every
       references list in this pipeline.yml, this job's included, so the
       pipeline check still finds every file it names.
-    needs: [research]
+    needs: [write-research]
     outputs: []
     checks: [mh, verify]
     retries: 1
@@ -118,8 +118,8 @@ jobs:
           - research/*/research.md
         model: sonnet
 
-  - id: consolidate
-    needs: [research]
+  - id: write-dossier
+    needs: [write-research]
     outputs: [dossier.md]
     checks: [mh, vitest]
     retries: 1
@@ -127,7 +127,7 @@ jobs:
       - type: implementor
         skills: []
         references:
-          - references/consolidate.md
+          - references/write-dossier.md
           - brief.md
           - research/*/research.md
           - src/components/episodes/amnesiac-freelancer/amnesiac-freelancer.ts
@@ -135,12 +135,12 @@ jobs:
         model: inherit
       - type: reviewer
         skills: []
-        references: [references/consolidate.md, brief.md]
-        rubric: references/consolidate.md#rubric
+        references: [references/write-dossier.md, brief.md]
+        rubric: references/write-dossier.md#rubric
         model: opus
 
-  - id: distill
-    needs: [consolidate]
+  - id: write-manuscript
+    needs: [write-dossier]
     outputs: [manuscript.md]
     checks: [mh, vitest]
     retries: 1
@@ -149,7 +149,7 @@ jobs:
       - type: implementor
         skills: []
         references:
-          - references/distill.md
+          - references/write-manuscript.md
           - brief.md
           - dossier.md
           - src/components/episodes/amnesiac-freelancer/amnesiac-freelancer.ts
@@ -157,53 +157,53 @@ jobs:
         model: inherit
       - type: reviewer
         skills: []
-        references: [references/distill.md, brief.md]
-        rubric: references/distill.md#rubric
+        references: [references/write-manuscript.md, brief.md]
+        rubric: references/write-manuscript.md#rubric
         model: opus
 
   # Writes no staging file: its output is a spec issue with one sub-issue per Section.
-  - id: spec
-    needs: [distill]
+  - id: write-spec
+    needs: [write-manuscript]
     outputs: []
     checks: []
     retries: 1
     agents:
       - type: implementor
         skills: [to-spec, to-tickets]
-        references: [references/spec.md, brief.md, dossier.md, manuscript.md]
+        references: [references/write-spec.md, brief.md, dossier.md, manuscript.md]
         model: inherit
       - type: reviewer
         skills: []
-        references: [references/spec.md, dossier.md, manuscript.md]
-        rubric: references/spec.md#rubric
+        references: [references/write-spec.md, dossier.md, manuscript.md]
+        rubric: references/write-spec.md#rubric
         model: opus
 
   # Writes the Episode under src/, outside the staging folder.
-  - id: implement
-    needs: [spec]
+  - id: implement-episode
+    needs: [write-spec]
     outputs: []
     checks: [verify, build, test:build, visual-check]
     retries: 1
     agents:
       - type: implementor
         skills: [implement-spec, visual-check]
-        references: [references/implement.md, dossier.md, manuscript.md]
+        references: [references/implement-episode.md, dossier.md, manuscript.md]
         model: opus
         session: orchestrator
       - type: reviewer
         skills: [code-review, visual-check]
-        references: [references/implement.md, dossier.md, manuscript.md]
-        rubric: references/implement.md#rubric
+        references: [references/implement-episode.md, dossier.md, manuscript.md]
+        rubric: references/implement-episode.md#rubric
         model: opus
         session: orchestrator
 
-  - id: serve-and-pr
-    needs: [implement]
+  - id: open-pr
+    needs: [implement-episode]
     outputs: []
     checks: []
     retries: 1
     agents:
       - type: implementor
         skills: [pr]
-        references: [references/serve-and-pr.md, run-log.md]
+        references: [references/open-pr.md, run-log.md]
         model: sonnet
