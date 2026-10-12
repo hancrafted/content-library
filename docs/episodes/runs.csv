@@ -33,3 +33,7 @@ run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at
 2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-ai-delegation-as-management-skill,implementor,2,pass,,31,46963,2026-10-12T21:57:53Z
 2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-ai-delegation-as-management-skill,reviewer,2,pass,,34,45237,2026-10-12T21:58:32Z
 2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,retire-prior-research,implementor,1,pass,,50,62924,2026-10-12T22:01:51Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-dossier,implementor,1,pass,,103,82431,2026-10-12T22:04:05Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-dossier,reviewer,1,fail,"The master slide and motion that show this Slide's point, then prose on what the viewer sees, required when the master alone does not say it.",124,88510,2026-10-12T22:06:19Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-dossier,implementor,2,pass,,26,59320,2026-10-12T22:07:02Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-dossier,reviewer,2,pass,,23,48493,2026-10-12T22:07:40Z

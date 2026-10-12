@@ -514,3 +514,42 @@ Needs human: Finding 6 labels METR's intervals "95% CI", a level the post does n
 The job has no reviewer, so its checks decided the pass.
 Needs human: the repointed lines say every claim of the amnesiac-freelancer Episode traces to AIE-0001, AIE-0004 or AIE-0005, but its script's speaker notes cite points none of them hold: statelessness and the history re-sent each turn (AIE-0004 Finding 12 covers it only in part), Claude Code's 200-line CLAUDE.md guideline, "nearest file wins" and the root-down concatenation of instruction files, auto memory, over-compliance, Chroma's context-rot numbers beyond AIE-0004 Finding 8, and compaction dropping detail. The implementor kept the closest file and invented no Finding.
 Needs human: the Sources of AIE-0001 (line 43), AIE-0004 (lines 48 and 49) and AIE-0005 (line 40) still cite the deleted files; the job left the reviewed research files untouched. Decide whether they stay as a record of the prior research or are repointed. AIE-0001 Finding 11's not-learning point cites only that deleted file.
+
+## write-dossier · 2026-10-12T22:07:56Z
+
+### Inputs
+
+- `brief.md`, the six research files AIE-0001 to AIE-0006, and the `Needs human:` lines of their run-log entries.
+- `src/components/episodes/amnesiac-freelancer/amnesiac-freelancer.ts` and `docs/research/amnesiac-freelancer-script.md`, the earlier Episode.
+- `.agents/skills/new-episode/references/write-dossier.md`. No wanted job blocked, so there is no Research gap.
+
+### Output
+
+- `docs/episodes/onboard-ai-like-a-colleague/dossier.md`, `status: checked`: nine Slides in four Sections (the gap, the thought experiment, from doing to managing, your move); `#write-the-day-one-note` backs the actionable.
+
+### Checks
+
+- `mh check`: pass on both attempts.
+- `vitest` (`tests/docs/episode-staging.test.ts`): pass on both attempts.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 103 s · 82431 tokens
+- reviewer · attempt 1 · fail · 124 s · 88510 tokens
+- implementor · attempt 2 · pass · 26 s · 59320 tokens
+- reviewer · attempt 2 · pass · 23 s · 48493 tokens
+
+### Notes
+
+Attempt 1 failed three reviewer lines: `fail — "The master slide and motion that show this Slide's point, then prose on what the viewer sees, required when the master alone does not say it. Fail if the choice does not show the prose's point, or the master alone leaves that unsaid and no prose follows." — Three Slides ask for more than their master can show`, `fail — "Talking points a viewer opens beside the Slide, each adding a fact the speaker leaves out, with its source. Fail if a note's claim is already spoken in the prose beside it, or its source does not support it." — Two notes have no source` and `fail — Weak claims are not stated as settled — Two cases: #what-you-would-say-first notes 3 and 4 … read as general rules`. Attempt 2 named basic-page as the nearest frame for five Slides with the wanted layout in prose, dropped the two unsourced notes, and hedged the benchmark notes to what AIE-0004 supports; the attempt-2 reviewer passed all three.
+No catalog match: the-gap--twenty-x-versus-your-screen — a quoted "20x" claim with a small plain prompt box holding a mediocre answer beneath it, and a hanging question mark.
+No catalog match: thought-experiment--what-you-would-say-first — the new colleague at an empty desk with the speaker's sentences appearing one after another as unlabelled speech lines.
+No catalog match: thought-experiment--four-oclock-the-plan-comes-back — a polished plan on screen with one line quietly off and a hand with a pen hovering over it.
+No catalog match: from-doing-to-managing--you-managed-it — one sentence with a small arrow from a pen to a clipboard.
+No catalog match: your-move--write-the-day-one-note — a blank note with a cursor titled "Day one, before you type", holding four plain fill-in lines (context, tools, brief, check).
+Needs human: two cautions left the Speaker notes for lack of a source. The "20x" line is marketing with no measurement in the research files. Graph engineering has no definition or source in them; say it as new and unsettled.
+Needs human: the h1 title is "Stop prompting AI, start onboarding it", the one-liner the Brief keeps under Open ideas, not the Brief's title "Why you must onboard AI like a new colleague".
+Needs human: Segments 2 to 4 of #what-you-would-say-first follow context, tools and brief in order; decide whether that reads as the labelled buckets the Brief's Analogy forbids during the experiment.
+Needs human: its keywords (budget, headcount, booking, calendar) preview the four disciplines before the teaser; decide whether to keep them vaguer.
+Needs human: the Dossier carries the literal `No catalog match:` label inside five Visual prose blocks, beside these run-log lines.
+Needs human: every Slide uses liquid-ink-transition, the only motion in src/components/animations/.
