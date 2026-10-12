@@ -154,3 +154,30 @@ Han renamed the jobs by what they do: pipeline-tailor is now customize-pipeline,
 ### Notes
 
 Every output, `foreach` and staging reference now names its full path under `docs/episodes/onboard-ai-like-a-colleague/`, and each job writing markdown (brief-grill, retrieval, write-research, write-dossier, write-manuscript) lists `before: [mh-query]`, so its implementor queries each output's rules before writing it. The schema comment is the template's, with `<slug>` left in as the placeholder it describes.
+
+## customize-pipeline · 2026-10-12T21:05:26Z
+
+### Inputs
+
+- `pipeline.yml` as of e10caa9.
+- The template change from `feat/89-new-episode` (78fb778), merged in: a per-run pipeline names one research job per question, with no `foreach` and no glob output.
+- `brief.md#research-questions`, six questions.
+
+### Output
+
+- `pipeline.yml`, still `status: draft`, its research expanded into six jobs.
+
+### Checks
+
+- `vitest` (`tests/docs/episode-staging.test.ts`): pass, including one write-research job per research question.
+- `mh check`: pass.
+
+### Metrics
+
+- implementor · attempt 1 · pass · run in the orchestrator's session, duration not measured · no token count
+
+### Notes
+
+The one `write-research` job became six, each with an `intent` quoting its question and its own output: `onboarding-lens` (question 1), `individual-gap` (2), `org-gap` (3), `context-quality` (4), `unchecked-risk` (5) and `delegation-skill` (6), each writing `research/<name>/research.md`. Han chose these topic names over question numbers, because a research file outlives the Episode.
+
+The earlier Episode's research now goes only to the questions it bears on, an agent's reading of the two files for Han to check at the gate: `ai-onboarding-freelancer.md` to onboarding-lens, context-quality and unchecked-risk; `ai-amnesia-mechanics.md` to context-quality. Before, every research job read both. retire-prior-research now needs those three jobs instead of all research, and write-dossier needs all six and names each file.

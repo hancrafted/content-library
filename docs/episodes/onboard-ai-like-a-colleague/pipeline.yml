@@ -73,11 +73,85 @@ jobs:
           - docs/research/ai-amnesia-mechanics.md
         model: inherit
 
-  - id: write-research
+  - id: write-research-onboarding-lens
+    intent: >-
+      Answer research question 1 of the Brief: Why do others frame working with AI
+      as onboarding a colleague? Collect sources proposing a similar model (Matt
+      Pocock confirmed; a consultant said the same in a company workshop), to show
+      it's an established lens.
     needs: [retrieval]
-    foreach: docs/episodes/onboard-ai-like-a-colleague/brief.md#research-questions
     before: [mh-query]
-    outputs: [docs/episodes/onboard-ai-like-a-colleague/research/*/research.md]
+    outputs: [docs/episodes/onboard-ai-like-a-colleague/research/onboarding-lens/research.md]
+    checks: [mh, vitest]
+    retries: 1
+    agents:
+      - type: implementor
+        skills: [research]
+        references:
+          - references/write-research.md
+          - docs/episodes/onboard-ai-like-a-colleague/brief.md
+          - docs/episodes/onboard-ai-like-a-colleague/run-log.md
+          - docs/research/ai-onboarding-freelancer.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-individual-gap
+    intent: >-
+      Answer research question 2 of the Brief: Why do individuals fail to reach
+      the promised AI productivity boost?
+    needs: [retrieval]
+    before: [mh-query]
+    outputs: [docs/episodes/onboard-ai-like-a-colleague/research/individual-gap/research.md]
+    checks: [mh, vitest]
+    retries: 1
+    agents:
+      - type: implementor
+        skills: [research]
+        references:
+          - references/write-research.md
+          - docs/episodes/onboard-ai-like-a-colleague/brief.md
+          - docs/episodes/onboard-ai-like-a-colleague/run-log.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-org-gap
+    intent: >-
+      Answer research question 3 of the Brief: Why do organizations fail to reach
+      the promised AI productivity boost?
+    needs: [retrieval]
+    before: [mh-query]
+    outputs: [docs/episodes/onboard-ai-like-a-colleague/research/org-gap/research.md]
+    checks: [mh, vitest]
+    retries: 1
+    agents:
+      - type: implementor
+        skills: [research]
+        references:
+          - references/write-research.md
+          - docs/episodes/onboard-ai-like-a-colleague/brief.md
+          - docs/episodes/onboard-ai-like-a-colleague/run-log.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-context-quality
+    intent: >-
+      Answer research question 4 of the Brief: Why does richer context and a
+      clearer brief measurably improve AI output?
+    needs: [retrieval]
+    before: [mh-query]
+    outputs: [docs/episodes/onboard-ai-like-a-colleague/research/context-quality/research.md]
     checks: [mh, vitest]
     retries: 1
     agents:
@@ -96,11 +170,61 @@ jobs:
         rubric: references/write-research.md#rubric
         model: opus
 
-  # Folds the earlier Episode's research into this run's: once every research
-  # job has passed, the two files it replaces go.
+  - id: write-research-unchecked-risk
+    intent: >-
+      Answer research question 5 of the Brief: Why does unchecked AI work carry
+      real risk?
+    needs: [retrieval]
+    before: [mh-query]
+    outputs: [docs/episodes/onboard-ai-like-a-colleague/research/unchecked-risk/research.md]
+    checks: [mh, vitest]
+    retries: 1
+    agents:
+      - type: implementor
+        skills: [research]
+        references:
+          - references/write-research.md
+          - docs/episodes/onboard-ai-like-a-colleague/brief.md
+          - docs/episodes/onboard-ai-like-a-colleague/run-log.md
+          - docs/research/ai-onboarding-freelancer.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-delegation-skill
+    intent: >-
+      Answer research question 6 of the Brief: Why is effective AI delegation a
+      staff-level management discipline, and how does that reconcile with findings
+      that AI boosts novices more on simple tasks? The claim is not that seniors
+      have these skills; the task demands management discipline, which merely
+      correlates with experience.
+    needs: [retrieval]
+    before: [mh-query]
+    outputs: [docs/episodes/onboard-ai-like-a-colleague/research/delegation-skill/research.md]
+    checks: [mh, vitest]
+    retries: 1
+    agents:
+      - type: implementor
+        skills: [research]
+        references:
+          - references/write-research.md
+          - docs/episodes/onboard-ai-like-a-colleague/brief.md
+          - docs/episodes/onboard-ai-like-a-colleague/run-log.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  # Folds the earlier Episode's research into this run's: once the three
+  # research jobs that read it have passed, the two files it replaces go.
   - id: retire-prior-research
     intent: >-
-      Every write-research job of this run has passed, and its research files carry
+      The research jobs it needs have passed, and their research files carry
       the Findings of docs/research/ai-onboarding-freelancer.md and
       docs/research/ai-amnesia-mechanics.md that this Episode needs. Delete
       both files. Repoint the two files that cite them,
@@ -109,7 +233,7 @@ jobs:
       this run that now hold those Findings. Remove both paths from every
       references list in this pipeline.yml, this job's included, so the
       pipeline check still finds every file it names.
-    needs: [write-research]
+    needs: [write-research-onboarding-lens, write-research-context-quality, write-research-unchecked-risk]
     outputs: []
     checks: [mh, verify]
     retries: 1
@@ -121,11 +245,21 @@ jobs:
           - docs/research/ai-amnesia-mechanics.md
           - docs/research/amnesiac-freelancer-script.md
           - src/components/episodes/amnesiac-freelancer/amnesiac-freelancer.ts
-          - docs/episodes/onboard-ai-like-a-colleague/research/*/research.md
+          - docs/episodes/onboard-ai-like-a-colleague/research/onboarding-lens/research.md
+          - docs/episodes/onboard-ai-like-a-colleague/research/context-quality/research.md
+          - docs/episodes/onboard-ai-like-a-colleague/research/unchecked-risk/research.md
         model: sonnet
 
   - id: write-dossier
-    needs: [write-research]
+    needs:
+      [
+        write-research-onboarding-lens,
+        write-research-individual-gap,
+        write-research-org-gap,
+        write-research-context-quality,
+        write-research-unchecked-risk,
+        write-research-delegation-skill,
+      ]
     before: [mh-query]
     outputs: [docs/episodes/onboard-ai-like-a-colleague/dossier.md]
     checks: [mh, vitest]
@@ -136,7 +270,12 @@ jobs:
         references:
           - references/write-dossier.md
           - docs/episodes/onboard-ai-like-a-colleague/brief.md
-          - docs/episodes/onboard-ai-like-a-colleague/research/*/research.md
+          - docs/episodes/onboard-ai-like-a-colleague/research/onboarding-lens/research.md
+          - docs/episodes/onboard-ai-like-a-colleague/research/individual-gap/research.md
+          - docs/episodes/onboard-ai-like-a-colleague/research/org-gap/research.md
+          - docs/episodes/onboard-ai-like-a-colleague/research/context-quality/research.md
+          - docs/episodes/onboard-ai-like-a-colleague/research/unchecked-risk/research.md
+          - docs/episodes/onboard-ai-like-a-colleague/research/delegation-skill/research.md
           - src/components/episodes/amnesiac-freelancer/amnesiac-freelancer.ts
           - docs/research/amnesiac-freelancer-script.md
         model: inherit
