@@ -26,3 +26,278 @@ frontmatter:
         stale: Check each term against the code and ADRs before relying on it, then move stale_after.
       fields:
         stale_after: { presence: required, format: datetime }
+    - ruleId: staging-brief
+      fileNames: [brief.md]
+      intent: 'A Brief fixes the goals an Episode is written towards before any research, and the orchestrator refuses to start until Han has approved it'
+      unknownKeys: forbidden
+      fields:
+        type:
+          presence: required
+          allowed:
+            - {
+                value: brief,
+                intent: 'The goals an Episode is written towards: audience, learning goal, actionables, hook, Red thread and research questions.',
+              }
+        status:
+          presence: required
+          allowed:
+            - { value: draft, intent: 'Written by the Brief grill and not yet checked.' }
+            - {
+                value: checked,
+                intent: 'Passed markdown-harness, the cross-file tests and its reviewer, and waits for Han.',
+              }
+            - {
+                value: approved,
+                intent: 'Only Han sets this, at the Brief gate. The Brief is the one staging file that reaches approved, and the orchestrator does not start the run without it.',
+              }
+
+    - ruleId: staging-manuscript
+      fileNames: [manuscript.md]
+      intent: 'A Manuscript is the story an Episode tells, written towards its Brief, and stays a draft until its checks pass because only the Brief is approved in staging'
+      unknownKeys: forbidden
+      fields:
+        type:
+          presence: required
+          allowed:
+            - {
+                value: manuscript,
+                intent: "The story as prose that works without visuals; its headings are the Episode's Slides.",
+              }
+        status: &staging-status
+          presence: required
+          allowed:
+            - { value: draft, intent: 'Written or changed by an agent and not yet checked.' }
+            - {
+                value: checked,
+                intent: 'Passed markdown-harness, the cross-file tests and its reviewer. Only Promotion sets approved, so staging stops here.',
+              }
+        locale: &staging-locale
+          presence: required
+          allowed:
+            - { value: en, intent: 'Staging is written in English; German comes after Promotion as a translation.' }
+        brief: &staging-brief-link
+          presence: required
+          allowed:
+            - { value: ./brief.md, intent: 'The Brief this file is written towards, in the same staging folder.' }
+    - ruleId: staging-dossier
+      fileNames: [dossier.md]
+      intent: 'A Dossier is the companion to the Manuscript that holds what each Slide shows and cites, written towards the same Brief, and stays a draft until its checks pass because only the Brief is approved in staging'
+      unknownKeys: forbidden
+      fields:
+        type:
+          presence: required
+          allowed:
+            - {
+                value: dossier,
+                intent: 'Per Slide: the master slide and motion, the Speaker notes with sources, and the Segment keywords.',
+              }
+        status: *staging-status
+        locale: *staging-locale
+        brief: *staging-brief-link
+
+body-structure:
+  rules:
+    - ruleId: staging-brief-body
+      fileNames: [brief.md]
+      intent: 'A Brief has a fixed set of sections in a fixed order, so the Brief grill fills each one and the orchestrator reads the research questions without guessing'
+      undefinedHeadings: forbid
+      headings:
+        - { purpose: heading, level: 1, intent: 'The working title of the Episode.' }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed: [{ title: Format, intent: 'Foundations, Teardown or Short, and the planned length.' }],
+            mayHold: [prose],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed: [{ title: Audience, intent: 'Who watches, and what they already know and want.' }],
+            mayHold: [prose],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Learning goal,
+                  intent: 'What the viewer can do or explain after the Episode, in one or two sentences.',
+                },
+              ],
+            mayHold: [prose],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Actionables,
+                  intent: 'The concrete steps a viewer takes afterwards, one per item; each is backed by at least one Slide.',
+                },
+              ],
+            mayHold: [ordered-list],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Hook,
+                  intent: 'The opening that earns the first thirty seconds; the Manuscript opens with it.',
+                },
+              ],
+            mayHold: [prose],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Red thread,
+                  intent: 'The single line of argument from the hook to the learning goal, which every Section advances.',
+                },
+              ],
+            mayHold: [prose],
+          }
+        - purpose: heading
+          level: 2
+          presence: optional
+          allowed:
+            [
+              {
+                title: Threads,
+                intent: 'Only for a longer Episode: two storylines told in turns so the audience never follows one too long.',
+              },
+            ]
+          headings:
+            - {
+                purpose: heading,
+                level: 3,
+                allowed: [{ title: A thread, intent: 'The first storyline, usually the mechanism or argument.' }],
+                mayHold: [prose],
+              }
+            - {
+                purpose: heading,
+                level: 3,
+                allowed:
+                  [
+                    {
+                      title: B thread,
+                      intent: 'The second storyline, told in turns with the A thread and strengthening it.',
+                    },
+                  ],
+                mayHold: [prose],
+              }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Analogy,
+                  intent: 'One everyday picture the Episode returns to, so the abstract idea has a handle.',
+                },
+              ],
+            mayHold: [prose],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Research questions,
+                  intent: 'One question per item, each run as its own research job; phrase it as a why question scoped to a subject matter.',
+                },
+              ],
+            mayHold: [ordered-list],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            presence: optional,
+            allowed:
+              [
+                {
+                  title: Open ideas,
+                  intent: 'Ideas the grill did not settle, kept for the feedback loop; nothing here binds the run.',
+                },
+              ],
+          }
+    - ruleId: staging-manuscript-body
+      fileNames: [manuscript.md]
+      intent: "A Manuscript's headings are the Episode's Slides and its paragraphs are the Voice script, so every heading is a short slugged title and every section is prose that reads without visuals"
+      undefinedHeadings: forbid
+      headings:
+        - purpose: heading
+          level: 1
+          pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
+          intent: 'The Title slide: a catchy, short title of at most 60 characters, then its {#slug}. The title is copied verbatim into the Episode, and the slug stays the same when the title changes. Its prose opens the Episode with the hook; paragraph n is Voice script segment n.'
+          mayHold: [prose]
+        - purpose: enumeration
+          level: 2
+          minCount: 1
+          pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
+          intent: 'One section slide per Section: a catchy, short title of at most 60 characters, then its {#slug}. The title is copied verbatim into the Episode, and the slug stays the same when the title changes. Paragraph n is Voice script segment n.'
+          mayHold: [prose]
+          headings:
+            - purpose: enumeration
+              level: 3
+              minCount: 1
+              pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
+              intent: 'One page slide: a catchy, short title of at most 60 characters, then its {#slug}. The title is copied verbatim into the Episode, and the slug stays the same when the title changes. Paragraph n is Voice script segment n.'
+              mayHold: [prose]
+    - ruleId: staging-dossier-body
+      fileNames: [dossier.md]
+      intent: "A Dossier shares the Manuscript's slugged headings as its spine and gives every page slide a Visual, Speaker notes and Segments, while unslugged headings add material anywhere"
+      headings:
+        - purpose: heading
+          level: 1
+          pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
+          intent: "The Title slide, with the same title and {#slug} as the Manuscript's h1."
+        - purpose: enumeration
+          level: 2
+          minCount: 1
+          pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
+          intent: 'A Section of the spine, with the same title and {#slug} as its Manuscript h2. An h2 without a slug is extra material and may sit anywhere.'
+          headings:
+            - purpose: enumeration
+              level: 3
+              minCount: 1
+              pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
+              intent: 'A page slide of the spine, with the same title and {#slug} as its Manuscript h3. An h3 without a slug is extra material and may sit anywhere.'
+              headings:
+                - purpose: heading
+                  level: 4
+                  allowed:
+                    [
+                      {
+                        title: Visual,
+                        intent: 'First line `master: <frame component | catalog slug> · motion: <effect>`, then optional prose on what the Slide shows. Name a master slide, never CSS.',
+                      },
+                    ]
+                  mayHold: [prose]
+                - purpose: heading
+                  level: 4
+                  allowed:
+                    [
+                      {
+                        title: Speaker notes,
+                        intent: 'One item per note: `**<header>** — <description> [n]`, with nested `sources: [n] <title> — <URL>` and an optional `target:`.',
+                      },
+                    ]
+                  mayHold: [ordered-list]
+                - purpose: heading
+                  level: 4
+                  allowed:
+                    [
+                      {
+                        title: Segments,
+                        intent: 'One item per Manuscript paragraph under this heading, in order: `<title> — <keywords>`.',
+                      },
+                    ]
+                  mayHold: [ordered-list]
