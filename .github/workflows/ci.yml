@@ -34,6 +34,13 @@ jobs:
       - run: npm test
       - run: npm run knip
       - run: npx mh check
+      # Build as the Pages deploy does, under its project-site base path, so a base-path bug fails here, not at deploy.
       - run: npm run build
+        env:
+          NEXT_PUBLIC_BASE_PATH: /content-library
+          SITE_URL: https://hancrafted.github.io/content-library
       # FE-005: every page URL the app derives landed in out/. Needs the build above.
       - run: npm run test:build
+        env:
+          NEXT_PUBLIC_BASE_PATH: /content-library
+          SITE_URL: https://hancrafted.github.io/content-library
