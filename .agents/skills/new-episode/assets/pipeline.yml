@@ -38,7 +38,7 @@ jobs:
         model: inherit
         session: orchestrator
 
-  - id: pipeline-tailor
+  - id: customize-pipeline
     needs: [brief-grill]
     outputs: [pipeline.yml]
     checks: [vitest]
@@ -47,25 +47,25 @@ jobs:
     agents:
       - type: implementor
         skills: []
-        references: [references/pipeline-tailor.md, assets/pipeline.yml, brief.md]
+        references: [references/customize-pipeline.md, assets/pipeline.yml, brief.md]
         model: inherit
         session: orchestrator
 
   # Matches each research question against the llm-wiki index and records in
   # the run log which questions remain unanswered.
-  - id: research-match
-    needs: [pipeline-tailor]
+  - id: retrieval
+    needs: [customize-pipeline]
     outputs: [run-log.md]
     checks: [mh]
     retries: 0
     agents:
       - type: implementor
         skills: []
-        references: [references/research-match.md, brief.md, docs/llm-wiki/index.md]
+        references: [references/retrieval.md, brief.md, docs/llm-wiki/index.md]
         model: inherit
 
-  - id: research
-    needs: [research-match]
+  - id: write-research
+    needs: [retrieval]
     foreach: brief.md#research-questions
     outputs: [research/*/research.md]
     checks: [mh, vitest]
@@ -73,16 +73,16 @@ jobs:
     agents:
       - type: implementor
         skills: [research]
-        references: [references/research.md, brief.md, run-log.md]
+        references: [references/write-research.md, brief.md, run-log.md]
         model: sonnet
       - type: reviewer
         skills: []
-        references: [references/research.md]
-        rubric: references/research.md#rubric
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
         model: opus
 
-  - id: consolidate
-    needs: [research]
+  - id: write-dossier
+    needs: [write-research]
     outputs: [dossier.md]
     checks: [mh, vitest]
     retries: 2
@@ -90,7 +90,7 @@ jobs:
       - type: implementor
         skills: []
         references:
-          - references/consolidate.md
+          - references/write-dossier.md
           - brief.md
           - research/*/research.md
           - docs/profile/han/storytelling-guide.md
@@ -99,12 +99,12 @@ jobs:
         model: inherit
       - type: reviewer
         skills: []
-        references: [references/consolidate.md, brief.md]
-        rubric: references/consolidate.md#rubric
+        references: [references/write-dossier.md, brief.md]
+        rubric: references/write-dossier.md#rubric
         model: opus
 
-  - id: distill
-    needs: [consolidate]
+  - id: write-manuscript
+    needs: [write-dossier]
     outputs: [manuscript.md]
     checks: [mh, vitest]
     retries: 2
@@ -112,7 +112,7 @@ jobs:
       - type: implementor
         skills: []
         references:
-          - references/distill.md
+          - references/write-manuscript.md
           - brief.md
           - dossier.md
           - docs/profile/han/storytelling-guide.md
@@ -121,53 +121,53 @@ jobs:
         model: inherit
       - type: reviewer
         skills: []
-        references: [references/distill.md, brief.md, docs/profile/han/tone-guide.md]
-        rubric: references/distill.md#rubric
+        references: [references/write-manuscript.md, brief.md, docs/profile/han/tone-guide.md]
+        rubric: references/write-manuscript.md#rubric
         model: opus
 
   # Writes no staging file: its output is a spec issue with one sub-issue per Section.
-  - id: spec
-    needs: [distill]
+  - id: write-spec
+    needs: [write-manuscript]
     outputs: []
     checks: []
     retries: 2
     agents:
       - type: implementor
         skills: [to-spec, to-tickets]
-        references: [references/spec.md, brief.md, dossier.md, manuscript.md]
+        references: [references/write-spec.md, brief.md, dossier.md, manuscript.md]
         model: inherit
       - type: reviewer
         skills: []
-        references: [references/spec.md, dossier.md, manuscript.md]
-        rubric: references/spec.md#rubric
+        references: [references/write-spec.md, dossier.md, manuscript.md]
+        rubric: references/write-spec.md#rubric
         model: opus
 
   # Writes the Episode under src/, outside the staging folder.
-  - id: implement
-    needs: [spec]
+  - id: implement-episode
+    needs: [write-spec]
     outputs: []
     checks: [verify, build, test:build, visual-check]
     retries: 2
     agents:
       - type: implementor
         skills: [implement-spec, visual-check]
-        references: [references/implement.md, dossier.md, manuscript.md]
+        references: [references/implement-episode.md, dossier.md, manuscript.md]
         model: opus
         session: orchestrator
       - type: reviewer
         skills: [code-review, visual-check]
-        references: [references/implement.md, dossier.md, manuscript.md]
-        rubric: references/implement.md#rubric
+        references: [references/implement-episode.md, dossier.md, manuscript.md]
+        rubric: references/implement-episode.md#rubric
         model: opus
         session: orchestrator
 
-  - id: serve-and-pr
-    needs: [implement]
+  - id: open-pr
+    needs: [implement-episode]
     outputs: []
     checks: []
     retries: 0
     agents:
       - type: implementor
         skills: [pr]
-        references: [references/serve-and-pr.md, run-log.md]
+        references: [references/open-pr.md, run-log.md]
         model: sonnet

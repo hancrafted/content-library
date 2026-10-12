@@ -1,4 +1,4 @@
-# pipeline-tailor
+# customize-pipeline
 
 Output: `docs/episodes/<slug>/pipeline.yml`, ending at a human gate. No reviewer: Han approves what will run before it runs.
 
@@ -6,9 +6,9 @@ Output: `docs/episodes/<slug>/pipeline.yml`, ending at a human gate. No reviewer
 
 Copy [`assets/pipeline.yml`](../assets/pipeline.yml) to `docs/episodes/<slug>/pipeline.yml` with `status: draft`, then fit it to this Brief. The comment at the top of the template is the schema. Anything may change; tailor where the Brief gives a reason:
 
-- **Research.** Keep the `research` job's `foreach` on `brief.md#research-questions`. With no research questions, drop `research-match` and `research`, and let `consolidate` need `pipeline-tailor`.
+- **Research.** Keep the `write-research` job's `foreach` on `brief.md#research-questions`. With no research questions, drop `retrieval` and `research`, and let `write-dossier` need `customize-pipeline`.
 - **Retries.** Raise a job's `retries` where the Brief makes it hard (a Teardown of a disputed claim), lower it where it is routine.
-- **Gates.** `gate: human` on a job stops the run at its output for Han. Add it after `distill` when Han wants to read the Manuscript before the spec is written.
+- **Gates.** `gate: human` on a job stops the run at its output for Han. Add it after `write-manuscript` when Han wants to read the Manuscript before the spec is written.
 - **References and skills.** Add a file an agent should read for this Episode (an earlier Episode it builds on, an ADR it touches).
 - **Models.** Each agent's `model` defaults to the template's; change it where the Episode gives a reason, and name the reason.
 - **One-off jobs.** A task only this Episode needs becomes its own job with an `intent`, the task as a prompt, instead of a note in the run log.

@@ -1,4 +1,4 @@
-# implement
+# implement-episode
 
 Output: the Episode in `src/`, on the integration branch `episode/<slug>`. The heaviest job: every check from the fast suite to rendered pixels.
 
@@ -7,7 +7,7 @@ Output: the Episode in `src/`, on the integration branch `episode/<slug>`. The h
 Both agents run with `session: orchestrator`. Call the Skill tool with `implement-spec` on the spec issue, its implementer and merger subagents on the agent's `model`, with these changes to its steps:
 
 - The integration branch already exists: it is `episode/<slug>`, the worktree from step 1.
-- No PR opens and none is marked ready here: `serve-and-pr` opens the one draft PR, and it stays a draft until Promotion.
+- No PR opens and none is marked ready here: `open-pr` opens the one draft PR, and it stays a draft until Promotion.
 - Skip its `code-review` step: the job's reviewer runs it, so the verdict, the retry and the metrics stay with the job loop.
 - On a retry, the failed lines go to a new implementer subagent, quoted verbatim, as fix work on the integration branch.
 

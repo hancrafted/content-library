@@ -1,4 +1,4 @@
-# research
+# write-research
 
 Output: `docs/episodes/<slug>/research/<question-slug>/research.md`, one per research question, each written by its own implementor. Reusable by any later Episode, so it stands on its own.
 
@@ -13,7 +13,7 @@ Answer one research question from the Brief with the `research` skill. Its metho
 - Every Finding cites a Source as `[n]`; Sources are primary (the paper, the official docs, the dataset) and carry title, URL and accessed date.
 - `description` is one sentence stating the answer, because the llm-wiki index copies it byte for byte.
 - `stale_after` is a year after `researched_on`, six months for anything about a tool, model or price.
-- For an `extend` outcome from research-match, cite the earlier file as a Source and leave it unchanged.
+- For an `extend` outcome from retrieval, cite the earlier file as a Source and leave it unchanged.
 
 ## Done when
 

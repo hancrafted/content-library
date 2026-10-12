@@ -1,4 +1,4 @@
-# serve-and-pr
+# open-pr
 
 Output: the app served locally, its Episode link printed, and one draft PR whose description is the list of everything that needs Han. No reviewer.
 

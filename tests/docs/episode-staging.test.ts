@@ -258,7 +258,7 @@ describe('failure cases', () => {
     // ARRANGE
     const yaml = readFileSync(TEMPLATE, 'utf8').replace('outputs: [dossier.md]', 'outputs: [dosier.md]');
     const expected = [
-      'Job "consolidate" writes "dosier.md", which no markdown-harness rule governs; its implementor would query no intents.',
+      'Job "write-dossier" writes "dosier.md", which no markdown-harness rule governs; its implementor would query no intents.',
     ];
     // ACT
     const messages = checkPipeline('pipeline.yml', yaml, pipelineContext(PENDING, TEMPLATE_STAGING)).map(
@@ -274,7 +274,7 @@ describe('failure cases', () => {
       'skills: [to-spec, to-tickets]',
       'skills: [to-spec, to-ticket]',
     );
-    const expected = ['Job "spec", agent 1 names the skill "to-ticket", which does not exist.'];
+    const expected = ['Job "write-spec", agent 1 names the skill "to-ticket", which does not exist.'];
     // ACT
     const messages = checkPipeline('pipeline.yml', yaml, pipelineContext(PENDING, TEMPLATE_STAGING)).map(
       ({ message }) => message,

@@ -1,4 +1,4 @@
-# spec
+# write-spec
 
 Output: a spec issue for implementing the Episode, with one sub-issue per Section, on GitHub Issues. No staging file: the run-log entry's Output lists the issue URLs.
 

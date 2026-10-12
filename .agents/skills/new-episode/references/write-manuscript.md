@@ -1,4 +1,4 @@
-# distill
+# write-manuscript
 
 Output: `docs/episodes/<slug>/manuscript.md`, the Manuscript: the story the Episode tells, as prose that works without visuals. Han records from it, and each paragraph becomes one Voice script segment.
 

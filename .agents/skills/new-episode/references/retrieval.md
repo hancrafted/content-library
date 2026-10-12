@@ -1,4 +1,4 @@
-# research-match
+# retrieval
 
 Output: one run-log entry that decides, per research question, whether research is reused or written. No reviewer.
 
@@ -23,4 +23,4 @@ The job's `checks:` in `assets/pipeline.yml` run by the check table in [SKILL.md
 
 ## After the job
 
-The orchestrator marks the `research` todo of each `reuse` question done, and passes each reused or extended path to the `research` and `consolidate` implementors: the Dossier cites a reused file at its llm-wiki path.
+The orchestrator marks the `write-research` todo of each `reuse` question done, and passes each reused or extended path to the `write-research` and `write-dossier` implementors: the Dossier cites a reused file at its llm-wiki path.

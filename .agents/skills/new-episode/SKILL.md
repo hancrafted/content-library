@@ -28,7 +28,7 @@ _Done when_ `docs/episodes/<slug>/brief.md` has `status: approved`, committed by
 
 ### 3. Tailor the pipeline
 
-Run the `pipeline-tailor` job by [`references/pipeline-tailor.md`](references/pipeline-tailor.md). It is a human gate: stop after the `Gate: draft pipeline` commit.
+Run the `customize-pipeline` job by [`references/customize-pipeline.md`](references/customize-pipeline.md). It is a human gate: stop after the `Gate: draft pipeline` commit.
 
 _Done when_ `docs/episodes/<slug>/pipeline.yml` has `status: approved`, committed by Han with `Gate: approved pipeline`.
 
@@ -41,7 +41,7 @@ Start only when all of these hold; otherwise name each one that fails to Han and
 3. `npm run check:docs` is clean.
 4. `npx vitest run tests/docs/episode-staging.test.ts` passes. It checks the per-run pipeline's schema and that no approved Brief keeps a `Not settled.` section.
 
-Then write the todo list: one todo per job of `pipeline.yml` after `pipeline-tailor`, in `needs` order. A job with `foreach` gets one todo per item of the list it names (`brief.md#research-questions` gives one todo per research question).
+Then write the todo list: one todo per job of `pipeline.yml` after `customize-pipeline`, in `needs` order. A job with `foreach` gets one todo per item of the list it names (`brief.md#research-questions` gives one todo per research question).
 
 _Done when_ the todo list holds every remaining job, expanded per `foreach` item.
 
@@ -53,7 +53,7 @@ _Done when_ every todo is done or blocked, and each one has its run-log entry.
 
 ### 6. Serve and open the PR
 
-Run the `serve-and-pr` job by [`references/serve-and-pr.md`](references/serve-and-pr.md), even when a branch blocked: the PR checklist is where Han learns about it.
+Run the `open-pr` job by [`references/open-pr.md`](references/open-pr.md), even when a branch blocked: the PR checklist is where Han learns about it.
 
 _Done when_ Han has the Episode's local link and the draft PR's URL.
 
@@ -73,7 +73,7 @@ Every agent runs where its `session` says. `subagent`, the default, is spawned w
    | `verify` | `npm run verify` |
    | `build` | `npm run build` |
    | `test:build` | `npm run test:build` |
-   | `visual-check` | DOM numbers per Slide in both themes, by [`references/implement.md`](references/implement.md#visual-check) |
+   | `visual-check` | DOM numbers per Slide in both themes, by [`references/implement-episode.md`](references/implement-episode.md#visual-check) |
 
    A failure counts as a failed attempt; its output lines are the failed lines.
 3. **Reviewer.** A **fresh** agent, never one that wrote the output. A reviewer with `session: orchestrator` runs in the session that implemented, so its skill supplies the fresh eyes: `code-review` judges through subagents that saw none of the writing. Its baseline is the markdown-harness intent of every rule, field and heading that governs the output: it runs `npx mh query <full repo path>` on each output itself. On top of that baseline come the lines under the job's `rubric`. It answers one line per intent and per rubric line, `pass` or `fail — <the line, verbatim> — <evidence>`, and marks anything only Han can judge `needs human — <what>`.
