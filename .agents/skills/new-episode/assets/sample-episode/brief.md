@@ -13,6 +13,10 @@ Short, about eight minutes: two Sections of two Slides each, recorded in one tak
 
 Developers who use a coding agent every day and have watched it forget an instruction halfway through a long session.
 
+## Style
+
+Editorial: developers read code-heavy Slides fast, and sober, self-explanatory ones keep their attention on the one idea.
+
 ## Learning goal
 
 The viewer can explain why an agent forgets in a long session and decide what to put into its context and what to leave out.
