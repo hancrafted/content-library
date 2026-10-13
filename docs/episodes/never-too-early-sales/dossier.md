@@ -4,12 +4,14 @@ title: Start selling before you need the money
 status: draft
 generated:
   by: claude-code/opus-5.5
-  at: 2026-10-13T23:32:01Z
+  at: 2026-10-13T23:44:08Z
 locale: en
 brief: ./brief.md
 verified:
   - by: process:markdown-harness
     at: 2026-10-13T23:32:53Z
+  - by: process:markdown-harness
+    at: 2026-10-13T23:46:18Z
 ---
 
 # Start selling before you need the money {#start-selling-early}
@@ -18,8 +20,8 @@ verified:
 
 #### Voice script
 
-1. **Opening promise** — a company can be fine on paper and bankrupt in March; today: why sales starts early, and four first steps.
-2. **Who this is for** — founders and founding-team members, business or technical, who know they should sell but treat it as later.
+1. **Opening promise** — Picture a company that looks healthy on paper. It has a product, a big deal on the way, and a team that works hard. And in March it is bankrupt. Not because the business was bad, but because the money arrived one month too late. Nobody had drawn the simple board that showed it coming. Today I will show you why sales has to start long before you need the revenue, and four first steps you can take.
+2. **Who this is for** — This is for founders and founding-team members. Maybe you are the business person, maybe you are the engineer. Either way you know you should sell. You just think it is something for later, once the product is ready. By the end I want you to see why later is the expensive answer.
 
 ### Watch your cashflow {#watch-your-cashflow}
 
@@ -40,15 +42,15 @@ No library match: a planning board of sticky notes, one column per month from Ja
 
 #### Voice script
 
-1. **The board** — sticky notes, Jan to April, cash, cost, revenue; costs every month.
-2. **Big deal lands in April** — the one big revenue note too late; cash hits zero in March; bankrupt.
-3. **Find your zero-cash month** — first action: build this month-by-month view for your own company, find the month cash reaches zero.
+1. **The board** — Here is a board of sticky notes. One column for each month, January to April. Three rows: cash, cost and revenue. Start with the cost row. A cost note sits in every single column. Salaries, tools, rent. They do not wait for you. People still need paying on the last day of the month, whether or not a customer said yes.
+2. **Big deal lands in April** — Now the revenue row. There is one big note, and it sits in April. It is a good deal, a real one. But watch the cash row. Month by month the cash note gets smaller. In March it falls to zero dollars, and a stamp lands on it. Bankrupt. One month before the money would have arrived. A deal that is nearly done is not cash. A verbal yes is not cash either. Until the money is on the account, it does not count.
+3. **Find your zero-cash month** — So here is your first action. Build this board for your own company. Month by month: cash, cost and revenue, as simple as sticky notes. Then walk along the cash row and find the month where it reaches zero. That is your zero-cash month, and everything else today is measured against it. Pen and paper is enough, and twelve months is plenty. Be honest about the costs. Be careful with the revenue, and write only the revenue you would bet your own salary on. Write that date down. It is the deadline for your sales results, not for your product. Count back from it, and you know how much time you really have to start.
 
 ## Why sales is more than just selling {#why-sales-is-more-than-just-selling}
 
 #### Voice script
 
-1. **Second reason** — cash is the first reason to start; selling early pays back before any revenue does.
+1. **Second reason** — Cash is the first reason to start early. There is a second one, and it pays you back before a single dollar of revenue shows up. Selling early is not only about the money it brings in. It gives you three things: insight, a process, and trust.
 
 ### Sales is more than selling {#sales-is-more-than-selling}
 
@@ -74,16 +76,16 @@ Three columns, one per thing early selling gives you: market insight, a repeatab
 
 #### Voice script
 
-1. **Insight** — what you learn from real prospects replaces what you assumed.
-2. **Process** — early deals closed by you show who buys, why, how long; that becomes the process.
-3. **Trust** — early results such as a letter of intent or a filled pipeline show you can win buyers.
-4. **All three build trust** — insight, process and results together give buyers and investors a reason to trust you, before a euro of revenue.
+1. **Insight** — The first is insight. Every call replaces one assumption with something you actually heard. Maybe the first real conversation changes a feature, or kills one. That is cheaper than building the wrong thing for another three months. So treat the first calls as research. Write down every surprise.
+2. **Process** — The second is process. When you close early deals yourself, you see who buys, why they buy, and how long it takes. Write that down and repeat it. That is the beginning of a sales process. At first every deal is a surprise. After ten deals you may start to see a pattern: the same questions, the same worries, the same step where people go quiet. You do not need software for this. A page with the questions you asked and the answers you got is enough.
+3. **Trust** — The third is trust. Early results such as a letter of intent, or a pipeline with real names in it, show that you can win buyers. A buyer who sees that others are talking to you feels safer talking to you as well.
+4. **All three build trust** — Put the three together. Insight, process and results all point to the same place. Buyers and investors get a reason to trust you. You can build that before your first dollar of revenue. It costs time and a bit of courage. That is why starting early is such a good trade.
 
 ## How to start doing sales {#how-to-start-doing-sales}
 
 #### Voice script
 
-1. **From idea to practice** — three things to see: stages, a real board, where marketing fits; then the board once more with revenue pulled in.
+1. **From idea to practice** — So how do you actually start? Three things. The stages a sale goes through, what a real deal board looks like, and where marketing fits in. After that we come back to our sticky-note board, with the revenue pulled forward.
 
 ### Stages of sale {#stages-of-sale}
 
@@ -104,11 +106,11 @@ No library match: three boxes in a left-to-right flow, "Leads", "Opportunities",
 
 #### Voice script
 
-1. **Three stages** — leads, opportunities, closing; left to right.
-2. **Leads** — research and keep a list of potential customers; start the list now.
-3. **First contact** — cold call, inbound, network; open opportunities.
-4. **Opportunities** — real work lives here; conversations, proposals.
-5. **After closing** — delivery, more lag before cash; revenue is later than the signature.
+1. **Three stages** — A sale has three stages, from left to right. Leads, opportunities, and closing. Each one is a different kind of work. Someone is a stranger, then a name on your list, then a conversation, then a customer. The stages are only names for where a person is on that way. Keep these three words, because the rest of this part uses them.
+2. **Leads** — Start with leads. A lead is simply the name of someone who might buy. Research them and keep a list. This is your second action, and you can do it today. Open a spreadsheet, add ten names, and keep adding them every week. Do not make the list perfect. Write down the company, the person, and why you think they might care. If you do not know yet, write down a guess, and fix it after the first call. The only wrong list is the empty one.
+3. **First contact** — Then comes first contact. You can cold call, you can answer someone who came to you, or you can ask your network. Pick the one you are least afraid of and begin. This is your third action. Each conversation that goes somewhere turns a lead into an opportunity. Many people fear that they are bothering others. A short, honest message is a fair thing to send. And if they say no, you have learned something for free.
+4. **Opportunities** — Opportunities are where the real work lives. Conversations, questions, a proposal. If you spend all your time on lead research, you are researching, not selling. At some point a name has to become a conversation, and a conversation has to become a proposal. Put most of your week into the opportunities you already have. Keep a small, steady part for adding new names to the lead stage.
+5. **After closing** — Closing is not the end of the story for your cash. After the signature comes the delivery, and delivery is more waiting. Your revenue lands later than your signature, so count that gap into your board. How long does delivery take in your business? A week? A quarter? Add it to the board as a note after the signature, and you will find your zero-cash month a little earlier than you thought.
 
 ### Pipeline tools in practice {#pipeline-tools-in-practice}
 
@@ -126,9 +128,9 @@ No library match: our own illustrated deal board in columns "New", "Meeting", "P
 
 #### Voice script
 
-1. **Simple board** — columns by stage, one card per deal, count and value on top.
-2. **Track every deal** — a card moves one step at a time; nothing lives in your head.
-3. **Start simple** — spreadsheet or sticky notes first; the tool matters less than the habit.
+1. **Simple board** — A deal board is simple. One column for each stage: New, Meeting, Proposal and Won. Each deal is one card. On top of each column you see how many deals sit there and what they are worth together. Imagine a Monday morning with this board in front of you. Two deals are in Proposal and one is stuck in Meeting. You know exactly who to call, and in which order.
+2. **Track every deal** — Then you track every deal. A card moves one step at a time, from one column to the next. Nothing lives only in your head, and nothing gets forgotten. This is also how you find problems. A column that fills up and never empties tells you where deals get stuck. A column that stays empty tells you where you have no flow. You cannot see either from your inbox. When something is stuck, you see it in a minute instead of finding out in a quarter.
+3. **Start simple** — Do not wait for the perfect tool. A spreadsheet works. Sticky notes on a wall work. The tool matters much less than the habit of updating it every week. Pick a weekly slot, fifteen minutes. Move the cards, add the new ones, remove the dead ones. Small and regular beats big and rare.
 
 ### How marketing feeds the pipeline {#how-marketing-feeds-the-pipeline}
 
@@ -146,9 +148,9 @@ No library match: our own drawn funnel at the left whose narrow end pours into t
 
 #### Voice script
 
-1. **Marketing adds volume** — marketing fills one defined stage of the pipeline.
-2. **Defined entry point** — decide which stage marketing feeds, otherwise volume is invisible.
-3. **Not a substitute** — first contact by you still opens opportunities early on.
+1. **Marketing adds volume** — Marketing has a clear job in this picture. It adds volume. It brings more leads into one stage of your pipeline, the first column of the board. A bigger flow of leads helps only if that stage exists and you know where it sits.
+2. **Defined entry point** — That only works if you decide which stage marketing feeds. If you do not, the volume goes in somewhere, but nobody can see where it goes or what it turns into. Give it a defined entry point, and then you can measure it. For example, a webinar or a post might bring in forty new names. If they all land in one column, you can see in a month how many of them became meetings. If they land nowhere, you have forty names and no idea. Marketing and your own outreach can then be compared on the same board.
+3. **Not a substitute** — But do not wait for marketing to do your first sales for you. Early on, your own first contact is what opens the first opportunities. Marketing helps it grow. So do both. Make the first calls yourself, learn what works, and then let marketing carry that message to many more people.
 
 ### Watch your cashflow, revenue pulled in {#watch-your-cashflow-revenue-pulled-in}
 
@@ -166,15 +168,15 @@ No library match: the same cashflow board as the first board slide, with the Apr
 
 #### Voice script
 
-1. **Same board** — same costs, same months; one change.
-2. **Revenue earlier** — April note moves to February; cash never reaches zero.
-3. **How it moves** — only by starting the pipeline earlier, not by hoping.
+1. **Same board** — Here is the board again, with the same costs and the same four months. Only one note is different. That one note is what this whole talk is about.
+2. **Revenue earlier** — The April revenue note has moved. It now sits in February. Follow the cash row. It dips, but it never reaches zero. The stamp is gone, and the company lives on into the summer. In the first board you were out of money while waiting for a good deal. Here the same deal came earlier. That is how much timing matters.
+3. **How it moves** — How did the note move? Not by hoping, and not by a nicer spreadsheet. The only way is to start the pipeline earlier, so that the deal is signed and the money has arrived by the time the cost notes pile up.
 
 ## Why building an effective sales pipeline takes time {#why-building-an-effective-sales-pipeline-takes-time}
 
 #### Voice script
 
-1. **Why not start later** — a pipeline is not a switch; three slides on what it measures, an example, and why ramp-up takes months.
+1. **Why not start later** — You may think you can start later, when you need the money. Maybe you plan to start once the product is better, or once you have a salesperson, or once the funding is in. Each of those sounds sensible. But each of them only makes the lag longer. A pipeline has its own ramp-up time, and it does not shrink because you are in a hurry.
 
 ### What is a sales pipeline {#what-is-a-sales-pipeline}
 
@@ -192,10 +194,10 @@ Three columns: "Sales funnel" tells you about your volume, "Conversion rate" abo
 
 #### Voice script
 
-1. **Funnel** — leads, opportunities, deals; how many enter; says volume.
-2. **Conversion rate** — share that moves to next stage; says whether the offering fits.
-3. **Sales cycle** — time from first contact to deal; says efficiency.
-4. **Measure both** — fourth action: track deals, measure conversion rate and cycle.
+1. **Funnel** — First, the funnel. It counts leads, opportunities and deals. How many come in at the top? That tells you about your volume. Count them every week, and you will see whether enough people are entering your pipeline.
+2. **Conversion rate** — Second, the conversion rate. This is the share that moves on to the next stage. It tells you whether your offering fits what people want to buy. A low rate is a signal about the offer, and you can act on it. Maybe the price, maybe the promise, maybe the person you talk to. Judge it stage by stage, because each stage has its own number.
+3. **Sales cycle** — Third, the sales cycle. That is the time from first contact until the deal. It tells you how efficient you are, and how far ahead you have to start. Count back from your zero-cash month by that many months.
+4. **Measure both** — And this is your fourth action. Track your deals in a pipeline and measure the conversion rate and the cycle. Without those two numbers you are guessing when your revenue will land. It is not complicated. A spreadsheet with a column for the stage, a column for the date you first spoke, and a column for the date you closed. That is all you need to get started.
 
 ### Pipeline by the numbers {#pipeline-by-the-numbers}
 
@@ -218,10 +220,10 @@ No library match: a horizontal funnel of three stages, lead, opportunity and dea
 
 #### Voice script
 
-1. **Walk the funnel** — lead to opportunity 3 to 1; opportunity to deal 9 to 1; 27 to 1 overall.
-2. **Fill it with many** — many more leads than deals; plan the list size backwards from the deals you need.
-3. **Time adds up** — cycle about nine and a half months in this example; long cycles push revenue out.
-4. **Illustration only** — your numbers will differ; measure your own conversion rate and cycle.
+1. **Walk the funnel** — Let me walk through an example. These numbers are made up to show the mechanics. Say three leads give you one opportunity, and that takes about two weeks. Nine opportunities give you one deal, and that takes about six months. Multiply it out and you get twenty-seven leads for every deal. Read the example as a chain. The first step is quick, the second is slow, and the last one adds more waiting. The total is what matters for your board, because the total tells you how early the first lead had to be contacted.
+2. **Fill it with many** — That means you need far more names than deals. Plan backwards. In this example, four deals this year would need roughly a hundred leads on your list. Do the multiplication before you start, not after. The same calculation works with your own numbers later. Take the deals you want, multiply by your own ratio, and you know how long your list has to be.
+3. **Time adds up** — Now add up the time in the example. Two weeks, six months, and then three more months on the deal itself. That is about nine and a half months from the first name on your list to money in the bank. That pushes your revenue far out to the right on the board. Say your costs are thirty thousand dollars a month. Then nine and a half months of waiting adds up to about two hundred eighty-five thousand dollars. This is why the sticky notes matter.
+4. **Illustration only** — Remember that this is an illustration, not a benchmark. Your numbers will be different, and that is the point. Measure your own conversion rate and your own cycle, then replace mine. If they turn out worse, you have a reason to start sooner, and a place to look for what to fix.
 
 ### Why it takes time to ramp up {#why-it-takes-time-to-ramp-up}
 
@@ -245,16 +247,16 @@ Three rows in reading order: "Preparation", "Unknown market", "Unknown metrics",
 
 #### Voice script
 
-1. **Preparation** — write down a process before you can repeat it.
-2. **Unknown market** — who buys, why, what price; only learned in conversations.
-3. **Unknown metrics** — you do not yet know your own conversion rate or cycle length; the first numbers are guesses.
-4. **So start early** — every month of delay is a month of learning lost.
+1. **Preparation** — Why does a pipeline need months to ramp up? The first reason is preparation. Before anyone can repeat a process, you have to write it down. Who you call, what you say, what happens after a yes. That work happens before the first deal can, and it pushes everything later. The sooner you begin writing it down, the sooner your first real call can happen.
+2. **Unknown market** — The second reason is the unknown market. Who buys, why they buy, and what they will pay. You only learn that in real conversations, and each one takes time to arrange. You do not know yet whether your buyers are in the finance team or in operations. You do not know if they buy in spring or at year end. You find out by asking, and by being wrong a few times. Each wrong guess costs a conversation, and conversations are the scarce part, so you want to start having them early.
+3. **Unknown metrics** — The third is unknown metrics. You do not know your own conversion rate or your cycle length yet. Your first numbers will be guesses. Nobody can tell you the true numbers in advance. You can only collect them, and a good guess is fine as long as you call it a guess.
+4. **So start early** — So start early. Every month you delay is a month of learning that you never get back. The early months feel slow, and that is normal. Nothing here goes faster by waiting.
 
 ## Start before you need the money {#start-before-you-need-the-money}
 
 #### Voice script
 
-1. **Landing it** — one board left, and one question: when do you start.
+1. **Landing it** — We are almost there. One board is left, and it asks one question. When do you start? Everything so far was one idea, told on one board: the money you need later is decided by what you start now.
 
 ### Watch your cashflow, "Start when?" {#watch-your-cashflow-start-when}
 
@@ -272,7 +274,7 @@ No library match: the cashflow board one last time, with a large arrow that poin
 
 #### Voice script
 
-1. **Revenue lags costs** — costs first, revenue months later; by the time you feel the need it is too late.
-2. **Start now** — start the pipeline before you need the money.
-3. **Four steps** — cashflow view and zero-cash month; lead list; first contact; deal board with conversion and cycle.
-4. **This week** — pick the first step and do it this week.
+1. **Revenue lags costs** — Remember what the board told us. Costs come first. Revenue comes months later. And by the time you feel that you need sales, it is already too late. The first time you saw the problem. The second time you saw what changes if revenue comes sooner. This time you see what you do about it.
+2. **Start now** — So start now. Start the pipeline before you need the money, so that the revenue lands before the cash runs out. The board points back to the first quarter and asks, start when? None of this needs a big budget or a new hire. It needs a few hours of your attention each week, starting now.
+3. **Four steps** — Here are the four steps once more. First, build your cashflow view and find your zero-cash month. Second, start a list of potential customers. Third, make first contact. Fourth, put your deals on a board and measure your conversion rate and cycle. None of them needs permission from anyone.
+4. **This week** — Do not try to do all four at once. Pick one step, the one that scares you least, and start it this week. Put it in your calendar now, with a time and a place. When you meet your cashflow board next month, you will be glad you did. Do the small version first. Ten minutes on the board is better than a perfect plan that starts next quarter.
