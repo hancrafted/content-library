@@ -40,7 +40,7 @@ _Avoid_: Chapter, part
 **Slide**: one full-height frame in an Episode, stacked under the one before it; one folder named after its slug, carrying its own Scene, Speaker notes, Voice script and text, so an Episode is a composition of Slides and a Slide copies into another Episode with one import and one list entry. A Section's own slide is a **section slide**; the slides it holds are **page slides**.
 _Avoid_: Card, panel; page, which means the Next.js route the whole Episode renders as; "self-contained Slide", since every Slide is one
 
-**Title slide**: an Episode's opening Slide: its title, caption and, once recorded, its video. Not listed in the table of contents.
+**Title slide**: an Episode's opening Slide: its title, caption, optional Voice script and Speaker notes and, once recorded, its video. Not listed in the table of contents.
 _Avoid_: Hero, cover
 
 **Scene**: the free interior of a Slide, where its visualisation and layout live, ungoverned by the mechanics of the box around it. It has two layers: a **Backdrop** and a **Foreground**.
@@ -81,11 +81,8 @@ _Avoid_: Transition, segue
 **Brief**: the goals an Episode is written towards, fixed before any research: its audience, learning goal, actionables, hook and Threads. The structured result of a grilling session; just enough to start, and not kept in step once the draft exists.
 _Avoid_: Outline, pitch, plan
 
-**Manuscript**: the story an Episode tells, written as prose that works without visuals; its h2s are the Sections and its h3s the Slides, and each Slide's Voice script comes from it.
-_Avoid_: Script, draft
-
-**Dossier**: the companion to an Episode's Manuscript: the research summary, citations, Speaker notes material and the choice of master slide and animation for each Slide. It shares the Manuscript's Sections and Slides and may add its own.
-_Avoid_: Episode file, companion, notes
+**Dossier**: the one text an Episode is built and recorded from: its h1 is the Title slide, its h2s the Sections and its h3s the Slides, and each Slide carries its Visual, Speaker notes with citations and Voice script.
+_Avoid_: Manuscript, script, Episode file, companion, notes
 
 **Red thread**: the single line of argument that runs from an Episode's hook to its learning goal, which every Section advances.
 _Avoid_: Through-line, redline, golden thread
@@ -93,7 +90,7 @@ _Avoid_: Through-line, redline, golden thread
 **Thread**: one of two parallel storylines in a longer Episode, the A thread and the B thread, told in turns so the audience never follows one story too long, each strengthening the other.
 _Avoid_: Plot, subplot, storyline
 
-**Staging**: where an Episode's text lives while it is being made, before it is final: its Brief, research, Dossier and Manuscript, outside the code.
+**Staging**: where an Episode's text lives while it is being made, before it is final: its Brief, research and Dossier, outside the code.
 _Avoid_: Drafts, workspace
 
 **Promotion**: the step that moves a final Episode's text out of Staging and into its code folder, one text file per Slide, after which Staging is deleted.

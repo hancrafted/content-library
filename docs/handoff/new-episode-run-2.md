@@ -31,21 +31,13 @@ For Han and any agent picking up the `new-episode` pipeline after its first real
 
 In order. Each step says what it needs, what it produces, and who does it.
 
-### 1. Han writes the Dossier and the Manuscript to about 90 %
+### 1. The template change for one Dossier, and Han's in-depth gate
 
-The highest-leverage step: both files are the spec for everything downstream.
+The Dossier and the Manuscript merge into one staging file (D3), and Han reviews it in depth at its gate instead of writing it beforehand (D2).
 
-- **Input:**
-  - the approved `brief.md`;
-  - the six research files;
-  - the run-1 `dossier.md` and `manuscript.md` as a draft to cut from;
-  - the research and write-dossier/write-manuscript `Needs human:` items in PR #98, as a checklist of claims to keep, soften or drop.
-- **Output:** `dossier.md` and `manuscript.md` with `status: approved`, committed with `Gate:` trailers so the diff against run 1 shows Han's edits. That diff is what teaches the agents his style (SKILL.md, _After the run_).
-- **Template change it needs (agent work):** the pipeline must accept a Han-authored Dossier and Manuscript, as step 2 already accepts a Han-authored Brief.
-  - Proposal: `write-dossier` and `write-manuscript` validate and fill gaps rather than rewrite.
-  - Their reviewers judge against the rubric.
-  - An approved file is never overwritten.
-- **Who:** Han writes, in the voice-grill format if useful. An agent builds the template change.
+- **Template change (agent work, before run 2):** the Dossier merge and `write-voice-script` (#106), with the other blocking issues under _Settled decisions_.
+- **Han's part in run 2:** read the drafted Dossier in depth (spine, Visuals, Speaker notes with citations, Voice script) and edit it before approving. The `Gate:` pair of commits then shows his edits, which is what teaches the agents his style (SKILL.md, _After the run_).
+- **Input for that review:** the Brief, the corrected research (#112), and the run-1 `dossier.md` and `manuscript.md` at the tag as examples of "not this".
 
 ### 2. Han provides general Slide authoring context
 
@@ -62,6 +54,7 @@ The design spec in step 3 has nothing to stand on without it.
   - Taste goes in `docs/design/design-guide.md`: how quiet a Slide is, what is good or bad, the run-1 Slides as "not this". `harvest-run` adds Han's design-gate edits to it later.
   - Add either to the Claude Desktop project list if the voice sessions need it.
 - **Absorbs:**
+  - D11: what the meaning colours `machine`, `human` and `ai` may colour (from the run-1 harness assessment; `four-disciplines` used them for disciplines that carry none of those meanings, FE-002 Do 7);
   - LEARNINGS 2 (no design owner), now step 3;
   - LEARNINGS 3 (importable motion);
   - LEARNINGS 4: "catalog" is replaced by **Slide library** and **Master slide** in `GLOSSARY.md`.
@@ -86,7 +79,7 @@ Agent work, parallel to steps 1–3. These are LEARNINGS items that need no deci
 - LEARNINGS 1: Let the orchestrator run `implement-spec`: drop `disable-model-invocation`, or make the reference ask Han.
 - LEARNINGS 5: Make the visual check load each Slide by its `#anchor`, so its content mounts, and record the mounted descendant count.
 - LEARNINGS 6: Assign post-build step 8 (episode-text capture and `PUBLISHED_SLUGS`) to the wiring ticket.
-- LEARNINGS 7: Give Manuscript h1 P1 to the first section slide's first segment.
+- ~~LEARNINGS 7~~: superseded by D9, the Title slide's own optional Voice script (#111).
 - LEARNINGS 8: Make the review fixed point the last commit before `implement-episode`.
 - LEARNINGS 9: Make `open-pr` keep an existing PR's base.
 - LEARNINGS 10: Have the status script show a `gate: human` job as `gate` until its output is approved.
@@ -97,47 +90,46 @@ Through `tdd`, `code-review` and `commit`, on a branch from `main` (`npm run wt:
 
 ### 5. Run 2 and compare against the baseline
 
-- **Start:**
-  - Branch the Episode from `main`, which carries the template with steps 1, 3 and 4 merged (decision D1 below). Bring over what stays valid from the tag.
-  - Re-tailor `pipeline.yml` with the new jobs.
-  - Note the new run id.
-- **Skip what stays valid:** the Brief and research stay unless Han's Dossier asks for new research.
+- **Start (D1):**
+  - Branch `episode/onboard-ai-like-a-colleague-run-2` from `main`, which carries the template with steps 1, 3 and 4 merged.
+  - New slug `onboard-ai-like-a-colleague-run-2`; check out only `brief.md` from the tag (`git show baseline/onboard-ai-like-a-colleague/run-1:docs/episodes/onboard-ai-like-a-colleague/brief.md`). The slug is renamed back before production.
+  - Correct the six run-1 research files and move them into `docs/llm-wiki/research/` with index lines (#112), so `retrieval` is tested. Expect `reuse` for all six; then no `write-research` runs.
+  - Run `/new-episode` on the approved Brief and note the new run id.
 - **Compare:**
   - Diff the built Episode against `baseline/onboard-ai-like-a-colleague/run-1`.
-  - Compare the `runs.csv` rows per job: attempts, failed rubric lines, tokens.
-  - Compare the length of the `Needs Han` checklist.
+  - Compare the `runs.csv` rows per job: attempts, failed rubric lines, tokens. The research row is not comparable when retrieval reuses everything.
+  - Compare the length of the `Needs Han` checklist; run 1's 53 items stay with the baseline (D4).
 
 ## Dependencies
 
 ```text
-1 Han: Dossier + Manuscript ──────────────┐
+1 agent: one Dossier (#106) ──────────────┐
 2 Han: Slide authoring context ─► 3 write-design-spec job ─┤
 4 agent: mechanical lessons ──────────────┴─► 5 run 2
 ```
 
 Steps 1, 2 and 4 can run at the same time. Step 3 waits on step 2, and run 2 waits on all four.
 
-## Decisions for Han
+## Settled decisions
 
-- **D1. Run 2's branch.**
-  - Option A: continue on `episode/onboard-ai-like-a-colleague`, merging `main` into it once, with a new draft PR to `main`. The run log appends to run 1's.
-  - Option B: start a fresh `episode/onboard-ai-like-a-colleague-run-2` from `main`, and check out `brief.md` and `research/` from the tag (`git checkout baseline/onboard-ai-like-a-colleague/run-1 -- docs/episodes/onboard-ai-like-a-colleague/brief.md docs/episodes/onboard-ai-like-a-colleague/research`).
-  - Recommendation: B. #98 is closed, and run 1's branch is based on `feat/89-new-episode`, not `main`, and carries run 1's built Episode. A fresh branch from `main` builds the Episode from scratch, so the diff against the tag shows what run 2 changed.
-- **D2. Han-authored staging.** Should `write-dossier` and `write-manuscript` only validate an approved file, or also fill gaps marked `Not settled.` as `brief-grill` does?
-- **D3. Gate placement.** The design-spec gate comes after `write-spec`. Is there also a Dossier gate (Han approves the Dossier before the Manuscript), now that he authors both?
-- **D4. The 53 PR items.** Read them as inputs to step 1 and drop the rest with the baseline, or triage them separately?
+Settled with Han on 2026-10-13 in the run-2 decisions grill. D9–D12 came from the run-1 harness assessment. Promotion-only questions (the `slide.md` rule, parity tests, German ownership, _du_ or _Sie_) and the Slide authoring context get their own grills.
 
-The Promotion dry run (`docs/handoff/promotion-dry-run.md`) found four more questions about files run 2 writes. Settle them before run 2, because each one is cheaper now than at Promotion:
+- **D1. Run 2's branch: a fresh branch and a new slug.** `episode/onboard-ai-like-a-colleague-run-2` from `main`, slug `onboard-ai-like-a-colleague-run-2`, only `brief.md` from the tag; renamed back before production. The run-1 research moves into the llm-wiki, corrected, so `retrieval` is tested (#112). _Why:_ #98 is closed and run 1's branch sits on `feat/89-new-episode` with the built Episode; a new slug keeps the two runs apart until the end.
+- **D2. Han-authored staging: moot.** Run 2 runs `/new-episode` fresh from the approved Brief; the jobs always write, and Han reviews the Dossier in depth at its gate. _Why:_ Han does not yet trust agent text as his voice, so his time goes into the review, which the gate diff records.
+- **D3. Gate placement: one Dossier, one gate.** The Manuscript merges into the Dossier (`dossier.md`; Manuscript is an _Avoid_ word). `write-dossier` writes the spine, Visuals, Speaker notes with citations and one beat per Voice script segment; `write-voice-script` turns each beat into spoken text and changes nothing else, enforced by a staging test, not a schema key. `gate: human` after `write-voice-script`. No reading-copy script for now. Design-ADR 0004 and `GLOSSARY.md` are amended (#106). _Why:_ the Manuscript was a rendering of the Dossier kept in step by a test, Promotion merges the two anyway, and one file means one review and one diff. Two jobs keep two crafts apart, so a failed tone line reruns only the voice.
+- **D4. The 53 PR items: three kept, the rest stay with the baseline.** The 17 factual research errors are fixed before the research is reused (#112); two template gaps get issues: the Title and section slides' Visual (#113), and draft metadata (#114). Six are already covered (LEARNINGS 11, D7, D9, D11, D12, #85); 28 concern run 1's own text. _Why:_ retrieval judges freshness and fit, not accuracy, so uncorrected files would carry run 1's caveats into run 2's checklist.
+- **D5. Mark agent edits: three marks.** An `Agent: <job>` trailer on agent commits, an `Edited-by: <job>` footer on agent ticket edits, and a run-log line per agent ticket edit (#107). _Why:_ Han preferred the trailer he knows over a new mechanism (an author-field variant was offered); without marks the gate diffs and edit history teach nothing.
+- **D6. Manuscript heading or on-screen title: the h3, with an optional override.** The Dossier h3 is the table-of-contents title and anchor; an optional `title:` line in the Visual names a different on-screen title (#110). _Why:_ some run-1 retitles were better on screen; this keeps them, but written down instead of made silently in write-spec or the design answer.
+- **D7. Accept `motion: none`: yes.** It means the Slide carries no motion; step 2 settles when to use it (#108). _Why:_ the Slide library holds no Slide motion today, so without `none` every run-2 Visual would fail the check or name a motion that cannot be built, as in run 1.
+- **D8. `approved` in staging: Han accepted the file at its gate.** Promotion is marked by the file's location, not its status (#109). _Why:_ one meaning everywhere; the Brief and pipeline already use it that way.
+- **D9. Title slide Voice script: an optional slot, built now.** No prose under the Dossier h1 except an optional `#### Speaker notes` and `#### Voice script`, which the writing jobs leave out and a feedback round adds. The Title slide gets the slot (amends `FE-004-slide-architecture` §6); at Promotion the h1 block moves to the Episode folder's own text file (#111). _Why:_ Han will add a Title-slide voice in the feedback loop; building the slot first keeps the Dossier, the code and Promotion in agreement. Run 1's remap of the h1 paragraph onto `the-gap` (LEARNINGS 7) is replaced.
+- **D10. Reusing a Slide library layout: already settled.** A Master slide is copied with `cp -r`; a part moves to `slide-shared/` once a second Slide needs it (`write-design-spec-decisions.md` items 5 and 14).
+- **D11. What the meaning colours may colour: moved to step 2**, the Slide authoring context.
+- **D12. Visual-check widths: already settled.** 375, 1100 and 1440 px with the drawer beside, over and closed (`write-design-spec-decisions.md` item 18).
 
-- **D5. Mark agent edits.** Agent commits and ticket edits run under Han's identity: in run 1 the design subagents edited #100–#103 as `hancrafted`. Run 2's design gate and the gate diffs can only teach Han's style if each agent edit is marked as an agent's.
-  - Recommendation: add an `Agent: <job>` trailer to agent commits, an `Edited-by: <job>` footer to agent ticket edits, and log each agent ticket edit in the run log.
-- **D6. Manuscript heading or on-screen title.** In run 1, 6 of 9 page Slides show a different title than their Manuscript h3, and the table of contents shows the on-screen one.
-  - Recommendation: the h3 is the table-of-contents title. The Dossier Visual names any different on-screen title, so write-spec and the design answers never rename a Slide silently.
-- **D7. Accept the "no motion" value.** If step 2 settles that a Slide carries no motion, `motion: none` must pass the Visual check. Today `src/lib/episode-staging.pure.ts:57` rejects it.
-- **D8. `approved` in staging.** Step 1 approves `dossier.md` and `manuscript.md` while they are still in staging. The `approved` intent says "Promotion moved the file" (`markdown-harness.config.yaml:77`), and the #89 contract allows `approved` in staging only for the Brief and the pipeline.
-  - Recommendation: reword the intent to "Han accepted the file at its gate". Mark Promotion by the file's location instead of its status.
+**Deferred until after run 2:** the harness fixes from the run-1 assessment, filed as #115, so they do not mix into the comparison with the baseline.
 
-Optional while Han writes the Dossier: cite research by ID (`AIE-000n`) beside each Speaker note, so Promotion can look up which research the Dossier still cites.
+Optional while Han reviews the Dossier: Speaker notes cite research by ID (`AIE-000n`), so Promotion can look up which research the Dossier still cites.
 
 ## Not now
 
