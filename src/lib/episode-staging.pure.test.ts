@@ -302,6 +302,23 @@ describe('failure cases', () => {
     expect(findings[0].message).toContain(expectedForm);
   });
 
+  it('reports a title line that is not directly after the master line, instead of reading it as prose', () => {
+    // ARRANGE
+    const files = folder({
+      'dossier.md': DOSSIER.replace(
+        'motion: liquid-ink-transition',
+        'motion: none\n\nA bar that fills.\ntitle: Where the budget goes',
+      ),
+    });
+    const expectedKinds = ['visual'];
+    const expectedMention = 'directly after the master line';
+    // ACT
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
+    // ASSERT
+    expect(kinds(findings)).toEqual(expectedKinds);
+    expect(findings[0].message).toContain(expectedMention);
+  });
+
   it('reports a Visual on the Title slide or a section slide, which use the kit layouts with motion none', () => {
     // ARRANGE
     const visual = '#### Visual\n\nmaster: basic-page · motion: none\n\n';

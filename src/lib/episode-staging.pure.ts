@@ -44,7 +44,7 @@ const TITLE_LINE = /^title: \S.*$/;
 const NO_MOTION = 'none';
 
 function checkVisualLines(where: string, lines: readonly string[], known: KnownVisuals): string[] {
-  const [first = '', second = ''] = lines;
+  const [first = '', second = '', ...rest] = lines;
   const match = VISUAL_LINE.exec(first);
   if (match === null)
     return [`${where} must open with "master: <name> · motion: <effect>", but opens with "${first}".`];
@@ -62,6 +62,9 @@ function checkVisualLines(where: string, lines: readonly string[], known: KnownV
       !second.startsWith('title:') || TITLE_LINE.test(second),
       `${where} has a title line not of the form "title: <on-screen title>": "${second}".`,
     ),
+    ...rest
+      .filter((line) => line.startsWith('title:'))
+      .map((line) => `${where} has a title line "${line}" that is not directly after the master line.`),
   ];
 }
 
