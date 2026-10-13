@@ -56,3 +56,29 @@ run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at
 2026-10-13T22:43:23Z,never-too-early-sales,brief-grill,reviewer,3,pass,,35,46963,2026-10-13T22:59:25Z
 2026-10-13T22:43:23Z,never-too-early-sales,categorize-research,implementor,1,pass,,52,47332,2026-10-13T23:05:50Z
 2026-10-13T22:43:23Z,never-too-early-sales,customize-pipeline,implementor,1,pass,,90,,2026-10-13T23:07:30Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-revenue-lags-costs-in-startups,implementor,1,pass,,51,50175,2026-10-13T23:16:40Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-revenue-lags-costs-in-startups,reviewer,1,pass,,60,48272,2026-10-13T23:19:40Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-b2b-sales-cycle-length,implementor,1,pass,,172,84633,2026-10-13T23:18:40Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-b2b-sales-cycle-length,reviewer,1,fail,"Fail if it hedges without saying what is known, or states something no Finding supports and the Caveats do not flag as inference.",92,55293,2026-10-13T23:21:00Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-b2b-sales-cycle-length,implementor,2,pass,,21,40561,2026-10-13T23:21:35Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-b2b-sales-cycle-length,reviewer,2,pass,,10,39723,2026-10-13T23:22:30Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-b2b-pipeline-conversion-rates,implementor,1,pass,,140,117734,2026-10-13T23:18:10Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-b2b-pipeline-conversion-rates,reviewer,1,fail,"Fail if it hedges without saying what is known, or states something no Finding supports and the Caveats do not flag as inference.",123,61637,2026-10-13T23:21:00Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-b2b-pipeline-conversion-rates,implementor,2,pass,,21,45619,2026-10-13T23:21:35Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-b2b-pipeline-conversion-rates,reviewer,2,pass,,13,40371,2026-10-13T23:22:40Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-early-selling-market-insight,implementor,1,pass,,75,53462,2026-10-13T23:17:05Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-early-selling-market-insight,reviewer,1,fail,"Fail if it hedges without saying what is known, or states something no Finding supports and the Caveats do not flag as inference.",81,48684,2026-10-13T23:19:30Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-early-selling-market-insight,implementor,2,pass,,12,40684,2026-10-13T23:20:03Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-early-selling-market-insight,reviewer,2,pass,,9,38767,2026-10-13T23:20:20Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-early-sales-results-build-trust,implementor,1,pass,,132,63893,2026-10-13T23:18:00Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-early-sales-results-build-trust,reviewer,1,fail,"Fail if it holds more than one question, or differs from the Brief that asked it when that Brief is at hand.",107,57244,2026-10-13T23:20:30Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-early-sales-results-build-trust,implementor,2,pass,,24,44903,2026-10-13T23:21:01Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-early-sales-results-build-trust,reviewer,2,pass,,27,43056,2026-10-13T23:22:20Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-early-selling-repeatable-process,implementor,1,pass,,92,56368,2026-10-13T23:17:20Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-early-selling-repeatable-process,reviewer,1,fail,"Fail if it hedges without saying what is known, or states something no Finding supports and the Caveats do not flag as inference.",73,52260,2026-10-13T23:20:15Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-early-selling-repeatable-process,implementor,2,pass,,16,43206,2026-10-13T23:20:57Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-early-selling-repeatable-process,reviewer,2,pass,,24,40514,2026-10-13T23:22:00Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-sales-pipeline-ramp-up-time,implementor,1,pass,,121,70303,2026-10-13T23:19:10Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-sales-pipeline-ramp-up-time,reviewer,1,fail,"A research file answers one question on its own, so any later Episode can cite it without the one that asked. Fail if understanding it needs the Brief or Episode that prompted it.",83,53508,2026-10-13T23:22:45Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-sales-pipeline-ramp-up-time,implementor,2,pass,,21,42381,2026-10-13T23:23:42Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-sales-pipeline-ramp-up-time,reviewer,2,pass,,17,40470,2026-10-13T23:24:30Z
