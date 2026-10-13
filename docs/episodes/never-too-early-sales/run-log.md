@@ -466,3 +466,59 @@
 - There is no measured pipeline-from-zero duration. Buyer pacing, seller learning and pipeline construction are distinct mechanisms, not durations to sum.
 - Needs human: the paywalled abstract could not be checked in the retry; the description has a minor grammatical omission that must not be carried into spoken prose.
 - All eight research jobs passed and were integrated; no research branch blocked.
+
+## write-dossier · 2026-10-13T23:54:26Z
+
+### Inputs
+
+- `brief.md` and approved `pipeline.yml`: goals, eleven-Slide spine, Editorial style, 20-30 minutes, no Threads.
+- All eight `research/*/research.md` files named by the pipeline and this run's preceding research entries.
+- `.agents/skills/new-episode/references/write-dossier.md` and its sample Dossier.
+- `docs/design/slide-library.md`: valid masters and motions.
+- Local session artifact `reference-deck-summary.md`: paraphrase of Han's supplied image-only reference deck, composition reference only.
+- Fresh reviewer read the Dossier and research caveats; no human-profile guides exist in this checkout.
+
+### Output
+
+- `dossier.md`: draft, machine-verified, four Sections, eleven page Slides and 71 keyword beats; the Voice script job expands those beats next.
+- Actionable 1: `watch-your-cashflow`, `cashflow-start-when`.
+- Actionables 2 and 3: `stages-of-sale`, with prospect-list practice also on `pipeline-tools-in-practice`.
+- Actionable 4: `what-is-a-sales-pipeline`, `pipeline-tools-in-practice`.
+- Spine decision: every approved Section and Slide title remains verbatim and in order; no spine changes.
+
+### Checks
+
+- `npm run check:docs`: pass, zero violations.
+- Staging vitest: 15 tests pass.
+- `git diff --check`: pass.
+- Source titles and URLs: all 23 citations match research frontmatter.
+- Fresh reviewer: every governing intent and all four rubric lines pass.
+- `approve.ts --by process:markdown-harness`: machine verification appended.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 218 s
+- reviewer · attempt 1 · pass · 139 s
+
+### Notes
+
+- The fictional board has $100k starting cash and $50k monthly costs: February closes at zero, March is unfunded, April's receipt is too late. A separately labeled funded continuation and an earlier-receipt case preserve the arithmetic.
+- 27:1 and about 9.5 months are explicitly illustrative, not measured benchmarks.
+- Original fictional board/funnel visuals replace third-party screenshots; meaning remains visible at rest.
+- No library match: why-cashflow-matters--watch-your-cashflow — monthly cashflow board; nearest basic-page.
+- No library match: sales-beyond-selling--sales-is-more-than-selling — qualified converging benefit notes; nearest three-column.
+- No library match: how-to-start-sales--stages-of-sale — connected sales flow with prospect/contact checklists; nearest three-column.
+- No library match: how-to-start-sales--stages-of-after-sale — after-sale flow with conditional return; nearest three-column.
+- No library match: how-to-start-sales--cashflow-receipt-pulled-in — recurring receipt-shift board; nearest basic-page.
+- No library match: why-pipeline-takes-time--what-is-a-sales-pipeline — metrics boxes plus pipeline/funnel distinction; nearest three-column.
+- No library match: why-pipeline-takes-time--pipeline-by-the-numbers — fictional funnel and separate time rail; nearest basic-page.
+- No library match: why-pipeline-takes-time--pipeline-tools-in-practice — fictional kanban; nearest basic-page.
+- No library match: why-pipeline-takes-time--marketing-feeds-the-pipeline — original qualification/handoff flow; nearest basic-page.
+- No library match: why-pipeline-takes-time--why-ramp-up-takes-time — preparation boxes with mechanism band; nearest three-column.
+- No library match: why-pipeline-takes-time--cashflow-start-when — recurring board and backwards planning arrow; nearest basic-page.
+- Needs human: the Slide 10 note's abstract-access wording merits checking against source-specific access, not a blanket statement about every ramp-up source.
+- Needs human: vendor default-setting notes can date; keep them as sourced examples rather than timeless spoken benchmarks.
+- Needs human: the opportunities portion of Slide 3 must carry its "real work" emphasis even though several beats cover lead generation.
+- Needs human: repeat revenue on Slide 4 remains conditional, not a promise.
+- Needs human: the Voice script writer must introduce the fictional Alder and Birch cards before referring to them, so the audio stands alone.
+- All remaining gates are pre-approved by Han; independent reviews and checks continue.
