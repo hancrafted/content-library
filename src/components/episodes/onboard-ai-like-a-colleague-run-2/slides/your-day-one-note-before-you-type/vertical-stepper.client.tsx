@@ -147,11 +147,11 @@ function StepMarker({ index, status }: { index: number; status: StepStatus }) {
   return (
     <span
       aria-hidden="true"
-      className={cn(
-        'relative grid size-10 place-items-center rounded-full border-2 text-body font-semibold tabular-nums md:size-12',
+      className={`text-body font-semibold ${cn(
+        'relative grid size-10 place-items-center rounded-full border-2 tabular-nums md:size-12',
         'motion-safe:transition-[background-color,border-color,color,box-shadow] motion-safe:duration-300',
         MARKER[status],
-      )}
+      )}`}
     >
       {status === 'done' ? <Check className="size-5 md:size-6" strokeWidth={2.5} /> : index + 1}
     </span>

@@ -45,10 +45,7 @@ function RingFigure({ task, figureLabel, rings }: DisciplineRingsProps) {
       ))}
       <div
         style={{ inset: '41%', '--i': 0 } as CSSProperties}
-        className={cn(
-          'absolute grid place-items-center rounded-full bg-primary text-center text-caption font-semibold text-primary-foreground',
-          styles.ring,
-        )}
+        className={`text-caption font-semibold ${cn('absolute grid place-items-center rounded-full bg-primary text-center text-primary-foreground', styles.ring)}`}
       >
         {task}
       </div>
