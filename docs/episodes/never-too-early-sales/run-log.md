@@ -90,3 +90,36 @@
 - No library match: `docs/llm-wiki/index.md` does not exist in this checkout. Retrieval must explicitly mark every question new.
 - The agent reported approximately 30 seconds of tool time, not a complete wall-clock duration; token counts were not supplied.
 - No research content was written. The pipeline approval gate remains ahead.
+
+## categorize-research · 2026-10-13T23:18:53Z
+
+### Inputs
+
+- `docs/episodes/never-too-early-sales/brief.md`: approved research questions, unchanged.
+- `GLOSSARY.md` and `.scratch/never-too-early-sales/research-folders.md`: initial category IDs.
+- `docs/episodes/never-too-early-sales/pipeline.yml`: candidate outputs expose the reserved folder names to the staging check.
+- `tests/docs/episode-staging.test.ts` and `src/lib/research-folder.pure.ts`: folder-name check and uppercase-letter category grammar.
+- Failed check: each of the seven `B2B-...` paths "is no research folder name: <category>-<####>__<question-slug, 20-40 chars kebab-case>."
+
+### Output
+
+- `GLOSSARY.md`: corrected B2B's category ID to BIZ without changing its meaning; FIN unchanged.
+- `.scratch/never-too-early-sales/research-folders.md`: questions 2-8 now use `BIZ-0001` through `BIZ-0007` with unchanged subject slugs.
+- Naming decision: pipeline research outputs and Dossier references use the corrected BIZ IDs.
+
+### Checks
+
+- `npm run check:docs`: pass.
+- `npx vitest run tests/docs/episode-staging.test.ts`: 15 tests pass after correcting category IDs.
+
+### Metrics
+
+- implementor · attempt 1 · fail · rubric "B2B-0001__b2b-sales-cycle-length is no research folder name: <category>-<####>__<question-slug, 20-40 chars kebab-case>." · 0 s
+- implementor · attempt 2 · pass · 67 s
+
+### Notes
+
+- The initial categorization passed its prescribed markdown check, but the pipeline's staging check found its invalid category IDs. This entry records that later failure against the originating categorization attempt rather than overwriting its earlier entry.
+- The first failure's duration is zero because no additional implementor run occurred; attempt 2 covers the observed correction/check interval.
+- Category IDs permit uppercase letters only. Correcting the names avoids changing shared code to accommodate this Episode.
+- The corrected names remain reserved in the pipeline; no research content has started.
