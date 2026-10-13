@@ -6,8 +6,8 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 
 const cellIds = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9'] as const;
-// Each column carries one accent on its coordinate tick, so a column still reads as one after the wall reflows.
-const columnTick = ['bg-machine', 'bg-human', 'bg-ai'] as const;
+// Each column carries one decorative tick (primary or foreground; no meaning colour), so a column still reads as one after the wall reflows.
+const columnTick = ['bg-primary', 'bg-foreground', 'bg-primary'] as const;
 
 interface TileProps {
   row: number;
@@ -26,7 +26,7 @@ function Tile({ row, col, title, caption }: TileProps) {
       data-row={row}
       data-col={col}
       aria-labelledby={id}
-      className={`${tone} relative flex aspect-[4/3] flex-col justify-between p-4 transition-[scale,background-color,box-shadow] duration-200 ease-out hover:z-10 hover:scale-[1.03] hover:bg-background hover:shadow-lg hover:ring-1 hover:ring-machine/50 motion-reduce:transition-none motion-reduce:hover:scale-100 md:p-5`}
+      className={`${tone} relative flex aspect-[4/3] flex-col justify-between p-4 transition-[scale,background-color,box-shadow] duration-200 ease-out hover:z-10 hover:scale-[1.03] hover:bg-background hover:shadow-lg hover:ring-1 hover:ring-primary/50 motion-reduce:transition-none motion-reduce:hover:scale-100 md:p-5`}
     >
       <span aria-hidden className="font-mono text-body tracking-[0.2em] text-muted-foreground tabular-nums">
         <span className={`${columnTick[col - 1]} mr-2 inline-block h-2.5 w-0.5 align-[-1px]`} />

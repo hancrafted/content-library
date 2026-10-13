@@ -9,9 +9,9 @@
   z-index: -1;
   pointer-events: none;
   background-image:
-    radial-gradient(32% 36% at 30% 32%, color-mix(in oklab, var(--machine) 45%, transparent), transparent 70%),
-    radial-gradient(30% 34% at 70% 40%, color-mix(in oklab, var(--human) 38%, transparent), transparent 70%),
-    radial-gradient(28% 30% at 48% 72%, color-mix(in oklab, var(--ai) 34%, transparent), transparent 70%);
+    radial-gradient(32% 36% at 30% 32%, color-mix(in oklab, var(--primary) 45%, transparent), transparent 70%),
+    radial-gradient(30% 34% at 70% 40%, color-mix(in oklab, var(--foreground) 38%, transparent), transparent 70%),
+    radial-gradient(28% 30% at 48% 72%, color-mix(in oklab, var(--primary) 34%, transparent), transparent 70%);
   filter: blur(24px);
   animation: bento-drift 24s ease-in-out infinite;
   animation-play-state: paused;

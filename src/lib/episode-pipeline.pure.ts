@@ -5,12 +5,12 @@
  * a typo or a missing file fails `npm run verify` instead of a run. Reading
  * the disk is the caller's job: the context says which skills and paths exist.
  */
-
 import { parse } from 'yaml';
 import {
   agentFields,
   CHECKS,
   JOB_FIELDS,
+  PLUGIN_SKILLS,
   SKILL_PREFIXES,
   SPAWNING_SKILLS,
   TOP_FIELDS,
@@ -88,7 +88,7 @@ function checkAgent(reader: Reader, agent: unknown): string[] {
     ...checkMapping(where, agent, agentFields(reviewer)),
     ...unless(!strayRubric, `${where} is an implementor and has a rubric; only a reviewer has one.`),
     ...stringsOf(agent.skills)
-      .filter((skill) => !context.skills.includes(skill))
+      .filter((skill) => !context.skills.includes(skill) && !PLUGIN_SKILLS.includes(skill))
       .map((skill) => `${where} names the skill "${skill}", which does not exist.`),
     ...stringsOf(agent.skills)
       .filter((skill) => SPAWNING_SKILLS.includes(skill) && agent.session !== 'orchestrator')

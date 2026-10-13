@@ -60,4 +60,15 @@ describe('the Brief template in the brief-grill skill', () => {
       expect(result).toEqual(clean);
     });
   });
+
+  describe('failure cases', () => {
+    it('fails the Brief rule when the Style section is missing', () => {
+      // ARRANGE
+      const withoutStyle = briefTemplate().replace(/^## Style\n[\s\S]*?(?=^## )/m, '');
+      // ACT
+      const result = checkAsBrief(withoutStyle) as { summary: { totalViolations: number } };
+      // ASSERT
+      expect(result.summary.totalViolations).toBeGreaterThan(0);
+    });
+  });
 });

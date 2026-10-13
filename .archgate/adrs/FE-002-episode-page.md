@@ -105,7 +105,7 @@ flowchart LR
 4. **DO** build a one-off Scene from `SlideFrame` and the kit's `<Title>`. (Decision 3, Decision 4)
 5. **DO** mark the element a note explains with `{...target('chart')}`. (Decision 3)
 6. **DO** link with `slideHref('the-lost-middle')`; pass a part its strings — `<Statement>{t('statement')}</Statement>`. (Decision 3)
-7. **DO** colour a machine/human/AI meaning with `text-machine`, `text-human`, `text-ai`; check every Slide in both themes. (Decision 7)
+7. **DO** colour _only_ a machine/human/AI meaning with `text-machine`, `text-human`, `text-ai`; check every Slide in both themes. (Decision 7)
 8. **DO** copy a Slide with `cp -r` of its folder, one import, one list entry. (Decision 2)
 
 ### Don'ts
@@ -150,7 +150,7 @@ flowchart LR
 3. **Lint and dependency rules:** Episode files can't write `h1`–`h3`, carry `'use client'` outside a Slide's `*.client.tsx`, render the table of contents or import the container; a Slide folder reaches only its own files and shared locations; no Episode keeps a `parts/` or `client/` folder; the per-function line cap is off only for Slide server files (complexity and file caps hold; `*.client.tsx` and `*.pure.ts` keep every cap).
 4. **Post-build test:** every Episode in every locale — slot order, one `h1`, heading level by position, note targets resolve, no duplicate ids, anchors equal the snapshot, no raw key, reader text equals its capture.
 
-**Manual review duties:** no part reads Slide data from the DOM; a Slide declares only its own names; a part takes plain props; Slide CSS is scoped, the Episode stylesheet only remaps tokens; every Slide looks right in light and dark (screenshots, then a browser).
+**Manual review duties:** no part reads Slide data from the DOM; a Slide declares only its own names; a part takes plain props; Slide CSS is scoped, the Episode stylesheet only remaps tokens; every Slide looks right in light and dark (screenshots, then a browser); `machine`, `human` and `ai` colour only a machine, human or AI meaning, never a decorative accent.
 
 **Exceptions:** raise a separate ADR; human approval required.
 
