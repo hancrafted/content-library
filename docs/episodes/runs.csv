@@ -48,3 +48,7 @@ run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at
 2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,implement-episode,implementor,2,pass,,153,85358,2026-10-13T06:04:50Z
 2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,implement-episode,reviewer,2,pass,,25,,2026-10-13T06:06:58Z
 2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,open-pr,implementor,1,pass,,49,58068,2026-10-13T06:09:26Z
+2026-10-13T22:50:35Z,never-too-early-sales,brief-grill,implementor,1,pass,,292,,2026-10-13T22:55:27Z
+2026-10-13T22:50:35Z,never-too-early-sales,brief-grill,reviewer,1,fail,"Fail if a section holds what belongs in a different one.",180,,2026-10-13T22:58:27Z
+2026-10-13T22:50:35Z,never-too-early-sales,brief-grill,implementor,2,pass,,805,,2026-10-13T23:11:53Z
+2026-10-13T22:50:35Z,never-too-early-sales,brief-grill,reviewer,2,pass,,42,,2026-10-13T23:12:35Z
