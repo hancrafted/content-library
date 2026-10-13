@@ -57,30 +57,30 @@ A new layer picks a rung here. The `isolate` wrapper would trap a popover under 
 
 ### 2. Content area
 
-1. Slides MUST render inside one Content area: a full-width single-column grid, one cell per Slide wrapper.
-2. It MUST own vertical rhythm and the insets, as one-step wrapper padding; a wrapper MUST NOT declare margins, gaps or padding.
-3. Elements between Content area and wrapper (the Section `<section>`) MUST use `display: contents`.
+1. Slides MUST render inside one Content area: a full-width single-column grid, one cell per wrapper.
+2. It MUST own vertical rhythm and the insets; a wrapper MUST NOT declare margins, gaps or padding.
+3. Elements between Content area and wrapper MUST use `display: contents`.
 4. It MUST host the Episode portal root.
 
 ### 3. Slide wrapper
 
-1. `SlideWrapper` MUST be a server component rendered by the container from one record entry, taking its id from its position.
-2. It MUST be full width, at least viewport height, grow with its content, never clip — no `overflow: hidden | auto | scroll` — and be `isolate`.
+1. `SlideWrapper` MUST be a server component, so anchors reach static HTML.
+2. It MUST be full width, at least viewport height, grow with its content, never clip, and be `isolate`.
 
 ### 4. SlideMount
 
-1. `SlideMount` MUST be a client leaf inside the wrapper rendering its children only outside `far`, keeping the wrapper's height.
-2. It MUST provide its Slide id to its subtree for `useSlideZone()`.
+1. `SlideMount` MUST be a client leaf inside the wrapper, rendering children only outside `far` and keeping the wrapper's height.
+2. It MUST provide its Slide id for `useSlideZone()`.
 
 ### 5. One observer
 
-1. The Slide observer MUST be the only `src/` code creating an `IntersectionObserver`, besides the one-shot reveal hook; the Title slide's id (`top`) leads its ids.
-2. Its reading-line threshold decides `active` and reports the reading Slide to the page service; its approach threshold decides `near` only.
-3. It MUST write zones to one page-level zone store, so a new Episode starts fresh.
+1. The Slide observer MUST be the only `src/` code creating an `IntersectionObserver`, besides the one-shot reveal hook.
+2. The reading line alone decides `active`; a wider approach margin decides `near` only.
+3. Zones MUST live in one page-level store, so a new Episode starts fresh.
 
 ### 6. Good citizen
 
-1. A looping island MUST pause outside `active` (via `useSlideZone()`), and in a Backdrop also while hidden or under reduced motion. One-shot entrance animations are exempt.
+1. A looping island MUST pause outside `active`, and in a Backdrop also while hidden or under reduced motion. One-shot entrances are exempt.
 2. `SlideMount`'s `data-zone` and its values MUST stay a stable CSS hook for entrance motion.
 
 ### 7. Backdrop
