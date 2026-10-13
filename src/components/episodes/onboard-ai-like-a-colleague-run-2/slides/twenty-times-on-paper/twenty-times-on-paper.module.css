@@ -1,0 +1,44 @@
+/*
+ * Twenty times on paper: motion only, no colour, size or weight (FE-011). One entrance when the Slide becomes active
+ * (FE-009 §6.2): the "20x" rises once, the promise's tally fills in reading order, then the right half fades in and
+ * stays still, so the gap is the last thing on screen. The base rules are the finished picture, so at rest and under
+ * reduced motion both halves show complete.
+ */
+
+.mark {
+  transform-origin: bottom;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .rise {
+    animation: rise 600ms cubic-bezier(0.2, 0, 0, 1) both;
+  }
+
+  :global([data-zone='active']) .filling .mark {
+    animation: grow 600ms cubic-bezier(0.2, 0, 0, 1) both;
+    animation-delay: calc(var(--i) * 25ms);
+  }
+
+  :global([data-zone='active']) .later {
+    animation: fade 500ms cubic-bezier(0.2, 0, 0, 1) 900ms both;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.5em);
+  }
+}
+
+@keyframes grow {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}

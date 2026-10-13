@@ -1,0 +1,64 @@
+{
+  "title": "Zwanzigmal auf dem Papier",
+  "heading": "Versprochen gegen geliefert",
+  "caption": "Das Versprechen ist eine Zahl. Dein eigenes Ergebnis ist eine Frage.",
+  "promise": {
+    "label": "Das Versprechen",
+    "figure": "20x"
+  },
+  "delivered": {
+    "label": "Dein letzter echter Versuch",
+    "figure": "?"
+  },
+  "notes": {
+    "measured-gains": {
+      "header": "Die gemessenen Gewinne sind echt, aber ungleich",
+      "description": "Drei Feldexperimente mit 4.867 Entwicklerinnen und Entwicklern fanden mit einem Coding-Assistenten 26 % mehr erledigte Aufgaben. Das ist weit unter „20x“, und jedes einzelne Experiment für sich war verrauscht.[1]",
+      "sources": {
+        "three-field-experiments": {
+          "title": "The Effects of Generative AI on High-Skilled Work: Evidence from Three Field Experiments with Software Developers"
+        }
+      }
+    },
+    "misjudged-gain": {
+      "header": "Den eigenen Gewinn schätzen wir falsch ein",
+      "description": "In einer Studie mit 16 erfahrenen Entwicklern erwarteten diese vorab 24 % Beschleunigung und glaubten hinterher, die KI habe ihnen 20 % Zeit gespart, während die gemessene Zeit um 19 % stieg. METR nennt das Ergebnis inzwischen überholt und sagt, es zeige nicht, dass KI die meisten Entwickler nicht beschleunigt. Es geht also darum, wie unzuverlässig die Selbsteinschätzung ist, nicht darum, dass KI bremst.[1][2]",
+      "sources": {
+        "early-2025-study": {
+          "title": "Becker, Rush, Barnes, Rein, Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity"
+        },
+        "metr-announcement": {
+          "title": "METR, Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity (study announcement with limitations)"
+        }
+      }
+    },
+    "population-effects": {
+      "header": "In der Breite sind die Effekte bisher klein",
+      "description": "Umfragen unter 25.000 dänischen Beschäftigten, verknüpft mit Verwaltungsdaten, fanden präzise Nulleffekte auf Einkommen und erfasste Arbeitsstunden. Effekte über 2 % schließen sie zwei Jahre nach dem Start von ChatGPT aus.[1]",
+      "sources": {
+        "small-labor-market-effects": {
+          "title": "Humlum, Vestergaard, Large Language Models, Small Labor Market Effects (NBER Working Paper 33777)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-number": {
+        "title": "Die Zahl",
+        "keywords": "zwanzigmal, das Versprechen, ein ganzes Team",
+        "script": "Zwanzigmal. Das ist das Versprechen. Nicht zwanzig Prozent, zwanzigmal. Eine Person, die die Arbeit eines ganzen Teams macht. Nehmen wir das einen Moment lang einfach beim Wort."
+      },
+      "your-number": {
+        "title": "Deine Zahl",
+        "keywords": "Dein letzter Versuch, etwas Echtes, sei ehrlich",
+        "script": "Und jetzt denk an Deinen eigenen letzten ernsthaften Versuch. Etwas Echtes, kein Spielzeug. Du hast etwas Brauchbares zurückbekommen, vielleicht sogar etwas Nützliches. Aber bahnbrechend? Sei ehrlich. Nicht zwanzigmal. Nicht einmal annähernd."
+      },
+      "why-left-open": {
+        "title": "Das Warum, offen gelassen",
+        "keywords": "die Lücke, Dienstagnachmittag, festhalten",
+        "script": "Es gibt also eine Lücke zwischen dem Versprechen und Deinem Dienstagnachmittag. Warum gibt es sie? Diese Frage lasse ich erst einmal im Raum stehen. Halte sie fest, denn ich komme darauf zurück."
+      }
+    }
+  }
+}

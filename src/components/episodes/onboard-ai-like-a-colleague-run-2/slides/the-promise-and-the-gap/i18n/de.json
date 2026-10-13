@@ -1,0 +1,17 @@
+{
+  "title": "Das Versprechen und die Lücke",
+  "voiceScript": {
+    "segments": {
+      "open-on-the-hype": {
+        "title": "Einstieg mit dem Hype",
+        "keywords": "zwanzigmal, jeder Feed, Keynote, Anbieterfolien",
+        "script": "Du kennst den Satz. Werde mit KI zwanzigmal produktiver. Er steht in jedem Feed, in jeder Keynote, auf jeder Folie der Anbieter. Vielleicht hast Du ihn sogar ein, zwei Tage lang geglaubt."
+      },
+      "bridge-to-the-room": {
+        "title": "Brücke in den Raum",
+        "keywords": "selbst ausprobiert, warum, heute",
+        "script": "Dann hast Du Dich hingesetzt und es selbst ausprobiert, und Du weißt, wie das lief. Also warum? Genau das will ich mir heute mit Dir ansehen."
+      }
+    }
+  }
+}

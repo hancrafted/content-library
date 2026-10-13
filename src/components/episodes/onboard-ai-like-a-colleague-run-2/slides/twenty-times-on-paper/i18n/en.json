@@ -1,0 +1,64 @@
+{
+  "title": "Twenty times on paper",
+  "heading": "Promised against delivered",
+  "caption": "The promise is a number. Your own result is a question.",
+  "promise": {
+    "label": "The promise",
+    "figure": "20x"
+  },
+  "delivered": {
+    "label": "Your last real attempt",
+    "figure": "?"
+  },
+  "notes": {
+    "measured-gains": {
+      "header": "Measured gains are real but uneven",
+      "description": "Three field experiments with 4,867 developers found a 26% increase in completed tasks for those given a coding assistant, far below “20x”, and each single experiment was noisy.[1]",
+      "sources": {
+        "three-field-experiments": {
+          "title": "The Effects of Generative AI on High-Skilled Work: Evidence from Three Field Experiments with Software Developers"
+        }
+      }
+    },
+    "misjudged-gain": {
+      "header": "People misjudge their own gain",
+      "description": "In a trial with 16 experienced developers, they forecast a 24% speedup and afterwards believed AI had saved them 20%, while measured time rose 19%. METR marks that result out of date and says it does not show AI fails to speed up most developers, so the point is how unreliable self-perception is, not that AI slows people down.[1][2]",
+      "sources": {
+        "early-2025-study": {
+          "title": "Becker, Rush, Barnes, Rein, Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity"
+        },
+        "metr-announcement": {
+          "title": "METR, Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity (study announcement with limitations)"
+        }
+      }
+    },
+    "population-effects": {
+      "header": "Population-level effects are small so far",
+      "description": "Linking surveys of 25,000 Danish workers to administrative records found precise null effects on earnings and recorded hours, ruling out effects larger than 2% two years after ChatGPT’s launch.[1]",
+      "sources": {
+        "small-labor-market-effects": {
+          "title": "Humlum, Vestergaard, Large Language Models, Small Labor Market Effects (NBER Working Paper 33777)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-number": {
+        "title": "The number",
+        "keywords": "twenty times, the promise, a whole team",
+        "script": "Twenty times. That is the promise. Not twenty percent, twenty times. One person doing the work of a whole team. Let us take that at face value, just for a moment."
+      },
+      "your-number": {
+        "title": "Your number",
+        "keywords": "your last attempt, something real, be honest",
+        "script": "Now think of your own last serious attempt. Something real, not a toy. You got something usable back, maybe even useful. But transformative? Be honest. Not twenty times. Not even close."
+      },
+      "why-left-open": {
+        "title": "Why, left open",
+        "keywords": "the gap, Tuesday afternoon, hold on to it",
+        "script": "So there is a gap between the promise and your Tuesday afternoon. Why does it exist? I am going to leave that question hanging. Hold on to it, because I will come back to it."
+      }
+    }
+  }
+}
