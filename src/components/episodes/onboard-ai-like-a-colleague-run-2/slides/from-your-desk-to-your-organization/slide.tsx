@@ -38,7 +38,7 @@ function Half({ kind, title, items, side, tone, ...rest }: HalfProps) {
       aria-labelledby={id}
       className={cn('flex flex-col md:row-span-6 md:grid md:grid-rows-subgrid', facing, later)}
     >
-      <span className={cn('flex items-center gap-3 text-caption font-medium text-muted-foreground', kindRow)}>
+      <span className={`text-caption font-medium ${cn('flex items-center gap-3 text-muted-foreground', kindRow)}`}>
         <span aria-hidden className={cn('size-2 rounded-full', TONE[tone].dot)} />
         {kind}
       </span>
