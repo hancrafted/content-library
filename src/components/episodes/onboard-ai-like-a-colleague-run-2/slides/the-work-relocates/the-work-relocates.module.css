@@ -1,0 +1,51 @@
+/*
+ * The work relocates: motion only, no colour, size or weight (FE-011). The base rules are the finished picture, the
+ * hidden typing segment at flex-grow 0 and the others at their weights (inline), so at rest and under reduced motion
+ * bar 2 shows the effort already moved. Only flex-grow animates, inside one fixed-width row, so the total never
+ * changes. The motion is progress, so it is scroll-driven and done before the Slide reaches the reading line; without
+ * scroll-driven animation it runs once as the Slide's entrance and replays on return.
+ */
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .shrink,
+    .grow {
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 40%;
+    }
+
+    .shrink {
+      animation-name: shrink;
+    }
+
+    .grow {
+      animation-name: grow;
+    }
+  }
+
+  @supports not (animation-timeline: view()) {
+    :global([data-zone='active']) .shrink {
+      animation: shrink 1200ms cubic-bezier(0.2, 0, 0, 1) both;
+    }
+
+    :global([data-zone='active']) .grow {
+      animation: grow 1200ms cubic-bezier(0.2, 0, 0, 1) both;
+    }
+  }
+}
+
+/* The typing segment starts where bar 1 has it, the whole task, and gives its place away. */
+@keyframes shrink {
+  from {
+    flex-grow: 9;
+  }
+}
+
+/* Briefing, context, tools, checking and the AI grow from nothing to their own weight. */
+@keyframes grow {
+  from {
+    flex-grow: 0;
+  }
+}

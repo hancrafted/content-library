@@ -1,0 +1,75 @@
+{
+  "title": "Confident is not correct",
+  "caption": "Polished and sure, with one line wrong. You check it, as with any new hire.",
+  "plan": {
+    "label": "Sommerfest plan · from the newcomer",
+    "rows": {
+      "date": {
+        "term": "Date",
+        "text": "Friday 11 July, from 4 pm"
+      },
+      "venue": {
+        "term": "Venue",
+        "text": "Gutshaus am See, 120 seats"
+      },
+      "catering": {
+        "term": "Catering",
+        "text": "Confirmed for 100 guests"
+      },
+      "budget": {
+        "term": "Budget",
+        "text": "€45 per head, within budget"
+      },
+      "programme": {
+        "term": "Programme",
+        "text": "Welcome, games, dinner, band"
+      }
+    },
+    "checked": "checked",
+    "flagged": "not verified",
+    "flagCaption": "sounded just as sure"
+  },
+  "notes": {
+    "invented-sources-defended": {
+      "header": "Invented sources, defended",
+      "description": "In a New York federal case, lawyers filed a brief citing six cases ChatGPT had invented, defended them when challenged and were fined; the court held that the rules “impose a gatekeeping role on attorneys to ensure the accuracy of their filings”.[1]",
+      "sources": {
+        "mata-v-avianca": {
+          "title": "Judge P. Kevin Castel, Mata v. Avianca, Inc., Opinion and Order, No. 22-cv-1461 (PKC) (S.D.N.Y. June 22, 2023), ECF 54"
+        }
+      }
+    },
+    "wrong-answers-read-as-coherent": {
+      "header": "Wrong answers read as coherent",
+      "description": "On the BCG task outside the model’s frontier, AI users’ wrong answers read as coherent, which made errors harder to catch.[1]",
+      "sources": {
+        "jagged-technological-frontier": {
+          "title": "Dell’Acqua, McFowland, Mollick, Lifshitz-Assaf, Kellogg, Rajendran, Krayer, Candelon, Lakhani, Navigating the Jagged Technological Frontier"
+        }
+      }
+    },
+    "a-check-can-be-cheap": {
+      "header": "A check can be cheap",
+      "description": "A 19-item surgical checklist was associated with inpatient death falling from 1.5% to 0.8% across eight hospitals. A before-and-after study, and not AI evidence; it shows a simple check can work.[1]",
+      "sources": {
+        "surgical-safety-checklist": {
+          "title": "Haynes et al., A Surgical Safety Checklist to Reduce Morbidity and Mortality in a Global Population, New England Journal of Medicine 360(5), 2009"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-profile-again": {
+        "title": "The profile again",
+        "keywords": "knowledgeable, confident, eager to please, polished work that may be wrong",
+        "script": "Go back to the profile for a second. Knowledgeable, confident, eager to please. That is a wonderful combination, and a dangerous one. It hands you polished work that may be wrong, and it hands it over with a smile."
+      },
+      "you-check-as-with-any-new-hire": {
+        "title": "You check, as with any new hire",
+        "keywords": "spot-check the first drafts, where a number came from, you are responsible",
+        "script": "So you check it, exactly as you would with any new hire. Spot-check the first drafts. Ask where a number came from. Because whatever goes to the CEO, you are the one responsible. Not the newcomer."
+      }
+    }
+  }
+}

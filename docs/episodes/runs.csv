@@ -48,3 +48,45 @@ run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at
 2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,implement-episode,implementor,2,pass,,153,85358,2026-10-13T06:04:50Z
 2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,implement-episode,reviewer,2,pass,,25,,2026-10-13T06:06:58Z
 2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,open-pr,implementor,1,pass,,49,58068,2026-10-13T06:09:26Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,brief-grill,implementor,1,pass,,60,,2026-10-13T14:12:40Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,categorize-research,implementor,1,pass,,25,41244,2026-10-13T14:16:30Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,customize-pipeline,implementor,1,pass,,180,,2026-10-13T14:19:30Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,retrieval,implementor,1,pass,,37,77338,2026-10-13T14:24:30Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-dossier,implementor,1,pass,,189,93909,2026-10-13T14:23:19Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-dossier,reviewer,1,fail,"Fail if … the file specifies styling or code.",113,96535,2026-10-13T14:26:08Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-dossier,implementor,2,pass,,16,96769,2026-10-13T14:26:25Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-dossier,reviewer,2,pass,,39,55196,2026-10-13T14:29:51Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-voice-script,implementor,1,pass,,44,55639,2026-10-13T14:30:54Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-voice-script,reviewer,1,fail,"Fail if … material here serves only one of its Slides",141,76789,2026-10-13T14:33:32Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-voice-script,implementor,2,pass,,12,57385,2026-10-13T14:33:46Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-voice-script,reviewer,2,pass,,30,54072,2026-10-13T14:34:48Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-spec,implementor,1,pass,,158,75663,2026-10-13T15:03:30Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-spec,reviewer,1,pass,,99,72606,2026-10-13T15:05:34Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,implementor,1,pass,,120,,2026-10-13T15:05:57Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,implementor,1,pass,,179,98479,2026-10-13T15:09:03Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,implementor,1,pass,,504,127198,2026-10-13T15:14:25Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,implementor,1,pass,,262,103041,2026-10-13T15:10:26Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,implementor,1,pass,,396,103103,2026-10-13T15:12:38Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,implementor,1,pass,,237,103677,2026-10-13T15:10:04Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,implementor,1,pass,,263,115921,2026-10-13T15:13:23Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,reviewer,1,fail,"The design follows the spec issue's visual language.",311,132109,2026-10-13T15:20:10Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,implementor,2,pass,,17,101398,2026-10-13T15:20:35Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,implementor,2,pass,,59,137881,2026-10-13T15:21:07Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,implementor,2,pass,,27,106604,2026-10-13T15:20:46Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,implementor,2,pass,,30,107399,2026-10-13T15:20:50Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,implementor,2,pass,,47,114557,2026-10-13T15:21:01Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,reviewer,2,fail,"every domain concept named by its GLOSSARY.md term, never an _Avoid_ word",77,78013,2026-10-13T15:22:40Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,implementor,3,pass,,16,115886,2026-10-13T15:22:59Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,reviewer,3,pass,,13,46044,2026-10-13T15:24:00Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,implementor,3,pass,,198,106223,2026-10-13T16:15:31Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,orchestrator,3,pass,,5,,2026-10-13T16:27:33Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,implement-episode,implementor,1,pass,,409,145962,2026-10-13T16:37:00Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,implement-episode,implementor,1,pass,,783,201855,2026-10-13T17:00:00Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,implement-episode,implementor,1,pass,,527,157213,2026-10-13T19:31:00Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,implement-episode,implementor,1,pass,,465,138596,2026-10-13T19:28:00Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,implement-episode,implementor,1,pass,,374,118341,2026-10-13T19:39:00Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,implement-episode,implementor,1,pass,,227,76859,2026-10-13T19:26:40Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,implement-episode,implementor,1,pass,,534,90472,2026-10-13T19:49:00Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,implement-episode,reviewer,1,fail,"`cn()` drops the text-size role (FE-011 §3.1, ""size comes from a role"").",166,269836,2026-10-13T19:52:30Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,implement-episode,implementor,2,pass,,178,83288,2026-10-13T19:56:00Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,implement-episode,reviewer,2,pass,,45,50894,2026-10-13T20:03:44Z

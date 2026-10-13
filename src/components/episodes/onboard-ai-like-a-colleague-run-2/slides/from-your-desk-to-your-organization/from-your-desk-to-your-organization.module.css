@@ -1,0 +1,39 @@
+/*
+ * From your desk to your organization: motion only, no colour, size or weight (FE-011). One entrance when the Slide
+ * becomes active (FE-009 §6.2), in reading order: the left half's hairline draws, its rows fade up in turn, then the
+ * right half's hairline and rows follow. The base rules are the finished picture, so at rest and under reduced motion
+ * both halves show complete.
+ */
+
+.rule {
+  transform-origin: left;
+}
+
+/* The right half starts after the left one. */
+.later {
+  --half: 600ms;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .rule {
+    animation: draw 500ms cubic-bezier(0.2, 0, 0, 1) var(--half, 0ms) both;
+  }
+
+  :global([data-zone='active']) .row {
+    animation: rise 500ms cubic-bezier(0.2, 0, 0, 1) both;
+    animation-delay: calc(var(--half, 0ms) + 300ms + var(--i) * 90ms);
+  }
+}
+
+@keyframes draw {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}

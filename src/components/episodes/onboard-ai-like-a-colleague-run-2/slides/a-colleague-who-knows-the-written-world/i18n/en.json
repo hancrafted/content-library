@@ -1,0 +1,71 @@
+{
+  "title": "A colleague who knows the written world",
+  "heading": "Your new colleague",
+  "caption": "They know nothing about your company.",
+  "traits": {
+    "written-world": {
+      "title": "Knows the written world",
+      "caption": "They have read essentially everything that was ever written down."
+    },
+    "confident": {
+      "title": "Completely confident",
+      "caption": "They never hesitate."
+    },
+    "eager": {
+      "title": "Eager to please",
+      "caption": "They will say yes to anything, and they will almost never say, I don't know."
+    }
+  },
+  "gap": {
+    "label": "Your company",
+    "rows": {
+      "people": "your people",
+      "budget": "your budget",
+      "last-year": "last year"
+    },
+    "empty": "not known yet"
+  },
+  "notes": {
+    "vendors-brief-it": {
+      "header": "Vendors brief it as a capable newcomer",
+      "description": "Anthropic’s prompting guidance says to think of the model as “a brilliant but new employee who lacks context on your norms and workflows”, and to test a prompt by showing it to a colleague with minimal context.[1]",
+      "sources": {
+        "be-clear-and-direct": {
+          "title": "Anthropic, Be clear and direct (prompting guidance)"
+        }
+      }
+    },
+    "the-lens-has-a-lineage": {
+      "header": "The lens has a lineage",
+      "description": "Ethan Mollick first called AI an intern, then in November 2024 dropped “intern” as too constraining and proposed an “infinitely patient new coworker who forgets everything you tell them each new conversation”.[1]",
+      "sources": {
+        "good-enough-prompting": {
+          "title": "Ethan Mollick, Getting started with AI: Good enough prompting, One Useful Thing (24 Nov 2024)"
+        }
+      }
+    },
+    "developers-use-the-same-picture": {
+      "header": "Developers use the same picture",
+      "description": "Matt Pocock frames the agent as a colleague “who wakes up every morning and cannot remember who they are”, and says the codebase must be optimized for new starters because an agent starts afresh every session. This rests on the podcast’s published notes, not the full audio.[1]",
+      "sources": {
+        "ai-skills-podcast": {
+          "title": "Gergely Orosz, AI Skills with Matt Pocock, The Pragmatic Engineer (17 Sep 2026; podcast notes quoting Pocock)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "profile": {
+        "title": "Profile",
+        "keywords": "read everything, knowledgeable, completely confident, never hesitate",
+        "script": "Here is what you know about them. They have read essentially everything that was ever written down. Extremely knowledgeable, about almost any topic you can name. And they are completely confident. They never hesitate."
+      },
+      "eager": {
+        "title": "Eager",
+        "keywords": "eager to please, yes to anything, I don't know, nothing about your company",
+        "script": "They are also eager to please. They will say yes to anything, and they will almost never say, I don't know. And one more thing. They know nothing about your company. Not your people, not your budget, not what you did last year."
+      }
+    }
+  }
+}

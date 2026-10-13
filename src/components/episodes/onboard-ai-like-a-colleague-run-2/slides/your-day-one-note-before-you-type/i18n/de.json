@@ -1,0 +1,68 @@
+{
+  "title": "Deine Notiz für Tag eins, bevor Du tippst",
+  "heading": "Bevor Du ein Wort tippst",
+  "caption": "Vier Zeilen an einen neuen Kollegen. Dreißig Sekunden. Dann tippen.",
+  "dayOneLabel": "Notiz für Tag eins",
+  "then": "Dann tippen.",
+  "items": {
+    "context": {
+      "title": "Kontext",
+      "question": "Was würdest Du ihm über Deine Lage erzählen?",
+      "caption": "Budget, Personenzahl, Kultur, was letztes Jahr passiert ist."
+    },
+    "tools": {
+      "title": "Werkzeuge",
+      "question": "Worauf bräuchte er Zugriff?",
+      "caption": "Das Buchungssystem, die Caterer, denen Du vertraust, der Kalender."
+    },
+    "brief": {
+      "title": "Auftrag",
+      "question": "Worum genau bittest Du?",
+      "caption": "Ein strukturierter Plan, fällig bis Feierabend."
+    },
+    "check": {
+      "title": "Prüfung",
+      "question": "Wie wirst Du seine Arbeit prüfen?",
+      "caption": "Lies ihn so, wie Deine Teamleitung ihn lesen wird, bevor er Deinen Schreibtisch verlässt."
+    }
+  },
+  "states": {
+    "done": "erledigt",
+    "current": "aktuell",
+    "upcoming": "ausstehend"
+  },
+  "notes": {
+    "write-it-down": {
+      "header": "Schreib es auf, sonst ist es weg",
+      "description": "Anweisungen, die nur im Chat stehen, überstehen eine Komprimierung nicht zuverlässig; Anthropic rät, dauerhafte Regeln in eine Datei zu schreiben, die der Agent zu Beginn liest.[1]",
+      "sources": {
+        "claude-code-memory": {
+          "title": "Anthropic, How Claude remembers your project (Claude Code memory)"
+        }
+      }
+    },
+    "short-beats-long": {
+      "header": "Kurz und relevant schlägt lang",
+      "description": "Chroma hat 18 Modelle getestet und festgestellt, dass die Leistung mit wachsender Eingabelänge immer unzuverlässiger wird, selbst bei einfachen Aufgaben.[1]",
+      "sources": {
+        "context-rot": {
+          "title": "Hong, Troynikov, Huber, Context Rot: How Increasing Input Tokens Impacts LLM Performance"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-habit": {
+        "title": "Die Gewohnheit",
+        "keywords": "die Gewohnheit, bevor Du ein Wort tippst, dreißig Sekunden, neuer Kollege am ersten Tag",
+        "script": "Hier ist also die Gewohnheit, und sie ist klein. Wenn Du das nächste Mal für etwas Echtes zur KI greifst, dann halte inne, bevor Du ein Wort tippst. Nimm Dir dreißig Sekunden. Notiere, was Du einem brandneuen Kollegen an seinem ersten Tag erzählen würdest."
+      },
+      "four-lines": {
+        "title": "Vier Zeilen",
+        "keywords": "vier Zeilen, Kontext, Werkzeuge, Auftrag, seine Arbeit prüfen, dann tippen",
+        "script": "Vier Zeilen reichen. Der Kontext, also was er über Deine Lage wissen muss. Die Werkzeuge, die er bräuchte. Der Auftrag, also worum genau Du bittest. Und wie Du seine Arbeit prüfen wirst. Dann tippen."
+      }
+    }
+  }
+}

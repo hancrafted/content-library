@@ -35,15 +35,12 @@ const SKILL_FOLDER = '.agents/skills/new-episode';
 const TEMPLATE = path.join(ROOT, SKILL_FOLDER, 'assets/pipeline.yml');
 
 /*
- * Files the template reads that later tickets create: #86 the llm-wiki index,
- * #88 the human-profile guides. The template alone tolerates them while they
+ * Files the template reads that later tickets create: #88 the human-profile
+ * guides. The template alone tolerates them while they
  * are missing; a per-run pipeline never does. Delete an entry when its file
  * lands: a test fails until you do.
  */
-const PENDING = [
-  'docs/llm-wiki/index.md',
-  ...['storytelling', 'tone', 'mental-model'].map((guide) => `docs/profile/han/${guide}-guide.md`),
-];
+const PENDING = [...['storytelling', 'tone', 'mental-model'].map((guide) => `docs/profile/han/${guide}-guide.md`)];
 
 /** Every file under `folder`, keyed by its path relative to it with `/` separators. */
 function readFolder(folder: string): Record<string, string> {

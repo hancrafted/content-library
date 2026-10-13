@@ -1,0 +1,85 @@
+{
+  "title": "Prompten wie ein Werkzeug, briefen wie einen Kollegen",
+  "heading": "Eine Zeile gegen einen ersten Tag",
+  "caption": "Einen Menschen würdest Du nie in einer Zeile briefen.",
+  "halves": {
+    "tool": {
+      "title": "Wie ein Werkzeug"
+    },
+    "colleague": {
+      "title": "Wie ein Kollege"
+    }
+  },
+  "prompt": "Plane unser Sommerfest.",
+  "note": {
+    "label": "Erster Tag · Sommerfest",
+    "rows": {
+      "last-year": {
+        "term": "Letztes Jahr",
+        "text": "Was funktioniert hat und was nicht."
+      },
+      "budget": {
+        "term": "Budget & Teilnehmer",
+        "text": "Etwa 100 Leute, ein festes Budget."
+      },
+      "access": {
+        "term": "Zugänge",
+        "text": "Buchungssystem, Catering-Kontakte, der Kalender."
+      },
+      "ask": {
+        "term": "Der Auftrag",
+        "text": "Ein strukturierter Plan für den CEO, bis Feierabend."
+      },
+      "check": {
+        "term": "Prüfung",
+        "text": "Ich prüfe den Entwurf um drei. Jede Zahl bekommt eine Quelle."
+      }
+    }
+  },
+  "notes": {
+    "unstated-requirements-are-guessed": {
+      "header": "Unausgesprochene Anforderungen werden geraten",
+      "description": "Modelle erschließen eine fehlende Anforderung nur in etwa 41 % der Fälle richtig, und unterspezifizierte Prompts verschlechtern sich doppelt so oft, wenn sich das Modell oder der Prompt ändert.[1]",
+      "sources": {
+        "what-prompts-dont-say": {
+          "title": "Yang, Shi, Ma, Liu, Kästner, Wu, What Prompts Don’t Say: Understanding and Managing Underspecification in LLM Prompts"
+        }
+      }
+    },
+    "say-it-up-front": {
+      "header": "Sag es gleich zu Beginn",
+      "description": "In mehr als 200.000 simulierten Gesprächen schnitt jedes getestete Modell schlechter ab, wenn eine Aufgabe unterspezifiziert über mehrere Runden kam, als wenn sie auf einmal vollständig beschrieben war, im Schnitt um 39 %.[1]",
+      "sources": {
+        "lost-in-multi-turn": {
+          "title": "Laban, Hayashi, Zhou, Neville, LLMs Get Lost In Multi-Turn Conversation"
+        }
+      }
+    },
+    "relevant-specific-context": {
+      "header": "Relevanter, konkreter Kontext statt Menge",
+      "description": "Gab man einem Modell das eine relevante Dokument, stieg die Antwortgenauigkeit von GPT-3.5-Turbo von 56,1 % auf 88,3 %, ein Retrieval-Ergebnis von 2023, dessen Richtung sich überträgt, dessen Größe nicht. Mit 20 oder 30 Dokumenten konnte sie unter den Wert ohne Dokument fallen.[1] Anthropic: „minimal heißt nicht unbedingt kurz“.[2] Gemessene Belege für ein von Menschen geschriebenes Briefing in Wissensarbeit außerhalb des Programmierens sind dünn.",
+      "sources": {
+        "lost-in-the-middle": {
+          "title": "Liu et al., Lost in the Middle: How Language Models Use Long Contexts, TACL 2024, Table 1 and section 2.3"
+        },
+        "effective-context-engineering": {
+          "title": "Anthropic, Effective context engineering for AI agents"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "back-to-the-hook": {
+        "title": "Zurück zum Aufhänger",
+        "keywords": "die Lücke, die offene Frage, eine Zeile, Plane unser Sommerfest",
+        "script": "Jetzt zurück zum Aufhänger. Erinnerst Du Dich an die Lücke und an die Frage, die ich offen gelassen habe? Denk an das Letzte, was Du in eine KI getippt hast. Wahrscheinlich war es eine Zeile. Plane unser Sommerfest. So würdest Du nie einen Menschen briefen."
+      },
+      "the-answer-to-the-hanging-why": {
+        "title": "Die Antwort auf das offene Warum",
+        "keywords": "wie ein Werkzeug prompten, wie einen Kollegen onboarden, eine Management-Aufgabe, andere Fähigkeiten",
+        "script": "Hier ist also meine Antwort. KI bleibt hinter den Erwartungen zurück, wenn Du sie wie ein Werkzeug promptest, und die eigentliche Aufgabe ist, sie wie einen Kollegen zu onboarden. Und Onboarding ist eine Management-Aufgabe, keine ausführende. Es braucht andere Fähigkeiten als das Tippen."
+      }
+    }
+  }
+}

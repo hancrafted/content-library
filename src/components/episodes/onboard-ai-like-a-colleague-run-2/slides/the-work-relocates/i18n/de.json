@@ -1,0 +1,64 @@
+{
+  "title": "Die Arbeit verlagert sich",
+  "heading": "Der Aufwand wandert",
+  "caption": "Der Aufwand ist nicht verschwunden. Er hat sich verlagert.",
+  "bars": {
+    "before": {
+      "typing": "selbst tippen"
+    },
+    "after": {
+      "briefing": "Briefing",
+      "context": "Kontext",
+      "tools": "Werkzeuge",
+      "checking": "Prüfen",
+      "ai": "KI"
+    }
+  },
+  "moves": "Die Arbeit wandert",
+  "total": "Die Summe schrumpft nicht",
+  "schematic": "Schematisch, keine Messung.",
+  "figure": "Zwei Balken für den Aufwand einer Aufgabe, gleich breit: Im ersten füllt das Selbsttippen alles aus; im zweiten liegt der Aufwand im Briefing, im Kontext, in den Werkzeugen, im Prüfen und in einem kleinen KI-Abschnitt.",
+  "notes": {
+    "individual-time": {
+      "header": "Wohin die Zeit des Einzelnen geht",
+      "description": "In der METR-Studie übernahmen die Entwickler weniger als 44 % der Vorschläge und verbrachten etwa 9 % ihrer Zeit damit, KI-Ausgaben zu prüfen und zu bereinigen; sie beschrieben die KI als neuen Mitwirkenden, dem das stillschweigende Wissen über das Repository fehlt.[1] Dass sich der Aufwand verlagert, ist eine Schlussfolgerung; keine Quelle prüft das direkt.",
+      "sources": {
+        "early-2025-study": {
+          "title": "Becker, Rush, Barnes, Rein, Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity"
+        }
+      }
+    },
+    "employers-restructured": {
+      "header": "Arbeitgeber haben die Arbeit umgebaut",
+      "description": "In den dänischen Daten haben Arbeitgeber Chatbots über eine Neuordnung von Aufgaben aufgenommen, die neue Arbeit geschaffen hat: in der Erstellung von Inhalten, in der Aufsicht über KI und in der Integration von KI.[1]",
+      "sources": {
+        "still-waters-rapid-currents": {
+          "title": "Humlum, Vestergaard, Still Waters, Rapid Currents: Early Labor Market Transformation under Generative AI, formerly Large Language Models, Small Labor Market Effects (NBER Working Paper 33777, revised March 2026)"
+        }
+      }
+    },
+    "value-with-complements": {
+      "header": "Wert kommt mit Ergänzungen",
+      "description": "Basistechnologien „ermöglichen und erfordern erhebliche ergänzende Investitionen“ in Prozesse, Geschäftsmodelle und Humankapital, oft immateriell und schlecht gemessen, weshalb die Produktivität anfangs unterschätzt wird (die Produktivitäts-J-Kurve).[1]",
+      "sources": {
+        "productivity-j-curve": {
+          "title": "Brynjolfsson, Rock, Syverson, The Productivity J-Curve: How Intangibles Complement General Purpose Technologies (NBER Working Paper 25148; AEJ Macroeconomics 13(1), 2021)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "relocated-not-removed": {
+        "title": "Verlagert, nicht beseitigt",
+        "keywords": "nicht verschwunden, Briefing, Kontext, Werkzeuge, Prüfen, die Summe schrumpft nicht",
+        "script": "Der Aufwand ist nicht verschwunden. Er hat sich verlagert. Er hat das Tippen verlassen und ist gelandet im Briefing, in der Übergabe von Kontext, im Einrichten von Werkzeugen und im Prüfen. Die Summe schrumpft nicht. Sie wandert woandershin."
+      },
+      "why-the-shortfall": {
+        "title": "Woher die Lücke kommt",
+        "keywords": "die Neuinvestition auslassen, die Kosten behalten, den Gewinn verpassen, die Arbeit neu machen",
+        "script": "Das ist die Lücke. Lass die Neuinvestition aus, und Du behältst die Kosten, während Dir der Gewinn entgeht. Du bezahlst das Werkzeug, Du wartest auf die Antwort, und dann machst Du die Arbeit noch einmal, weil niemand dem Werkzeug gesagt hat, worin die Arbeit besteht."
+      }
+    }
+  }
+}

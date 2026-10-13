@@ -1,0 +1,24 @@
+/*
+ * Confident is not correct: motion only, no colour, size or weight (FE-011). One entrance when the Slide becomes
+ * active (FE-009 §6.2): a check lands beside each verified claim in reading order (`--i` comes from the day-one note's
+ * row), then the flag lands last. It replays on return. The base rules are the finished picture, so at rest and under
+ * reduced motion every mark and the flag show.
+ */
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .mark {
+    animation: verify 260ms cubic-bezier(0.2, 0, 0, 1) both;
+    animation-delay: calc(var(--i) * 380ms + 300ms);
+  }
+
+  :global([data-zone='active']) .flag {
+    animation: verify 260ms cubic-bezier(0.2, 0, 0, 1) 2200ms both;
+  }
+}
+
+@keyframes verify {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}

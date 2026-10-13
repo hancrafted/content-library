@@ -1,0 +1,420 @@
+# The new-episode pipeline template. After Han approves the Brief, the
+# orchestrator copies this file to docs/episodes/onboard-ai-like-a-colleague-run-2/pipeline.yml, tailors
+# it for that Episode, and Han approves it by setting `status: approved`.
+#
+# Schema (checked by src/lib/episode-pipeline.pure.ts in `npm run verify`):
+#   status    draft | approved
+#   template  per-run only: the feat/89-new-episode commit the pipeline was tailored
+#             from; the template is not merged into the Episode branch again until
+#             open-pr is done
+#   jobs      run once every job in `needs` is done; independent jobs may run in parallel
+#     intent    optional; the job's task as a prompt, for a job no reference describes
+#     needs     job ids this job waits for; a blocked one blocks this job too
+#     wants     optional; job ids this job waits for, passed or blocked: a blocked
+#               one does not block it, and its implementor learns which blocked
+#     isolation optional; `worktree`: the job's agents and checks work in their own
+#               worktree on episode/onboard-ai-like-a-colleague-run-2--<job id>, merged back only on a pass.
+#               Required on a job that may run beside another or has foreach,
+#               unless all its agents run in the orchestrator session
+#     foreach   template only; `<file>#<heading>`: customize-pipeline writes one job per list item
+#     before    what runs before the implementor writes: `mh-query`, required when a job
+#               writes markdown, has the implementor run `npx mh query <path>` on every
+#               .md output and follow its intents; the reviewer runs it as its baseline
+#     outputs   full repo paths in the staging folder docs/episodes/onboard-ai-like-a-colleague-run-2/; a job reading
+#               one must need or want its writer; a rule must govern every .md one
+#     checks    cheapest first; names and commands in SKILL.md's job-loop check table
+#     retries   reviewer failures sent back before this branch of the pipeline stops
+#     gate      optional; `human` stops the run until Han approves the output; a job
+#               with no staging output is approved by its tickets' labels instead
+#     agents    run in order; a reviewer is fresh: it did not write the output
+#       type        implementor | reviewer
+#       skills      skill names under .agents/skills/
+#       references  files the agent reads: `references/` and `assets/` sit in this
+#                   skill's folder, anything else is a repo path
+#       rubric      reviewers only: `<file>#<heading>` holding the pass/fail lines
+#       agent       optional; the Claude Code agent type to spawn, general-purpose when omitted
+#       model       the model it runs on, or inherit; SKILL.md's job loop says where it applies
+#       session     optional; subagent (default) or orchestrator, by SKILL.md's job loop
+status: approved
+template: 7ac7829
+jobs:
+  - id: brief-grill
+    needs: []
+    before: [mh-query]
+    outputs: [docs/episodes/onboard-ai-like-a-colleague-run-2/brief.md]
+    checks: [mh, vitest]
+    retries: 0
+    gate: human
+    agents:
+      - type: implementor
+        skills: [brief-grill, grilling, handoff]
+        references: [references/brief-grill.md]
+        model: inherit
+        session: orchestrator
+
+  # An information architect's call, before the pipeline names any research file.
+  - id: categorize-research
+    intent: >-
+      Name one research folder per research question of the Brief, in its
+      order, as `<category>-<####>__<question-slug>` by GLOSSARY.md's Research
+      categories: pick the category each question belongs to, or, when none
+      fits, add a new category there with its meaning. Number each folder with
+      the next free number of its category, counting every research folder in
+      docs/episodes/*/research/ and docs/llm-wiki/research/. Write the
+      question's subject, not the Episode, in 20-40 characters of kebab case.
+      Return the names, each beside its question, and any category you added
+      with why no existing one fits.
+    needs: [brief-grill]
+    outputs: []
+    checks: [mh]
+    retries: 1
+    agents:
+      - type: implementor
+        skills: [domain-modeling]
+        references: [GLOSSARY.md, docs/episodes/onboard-ai-like-a-colleague-run-2/brief.md, docs/llm-wiki/index.md]
+        model: opus
+
+  - id: customize-pipeline
+    needs: [categorize-research]
+    outputs: [docs/episodes/onboard-ai-like-a-colleague-run-2/pipeline.yml]
+    checks: [vitest]
+    retries: 0
+    gate: human
+    agents:
+      - type: implementor
+        skills: []
+        references:
+          [
+            references/customize-pipeline.md,
+            assets/pipeline.yml,
+            docs/episodes/onboard-ai-like-a-colleague-run-2/brief.md,
+          ]
+        model: inherit
+        session: orchestrator
+
+  # Matches each research question against the llm-wiki index and records in
+  # the run log which questions remain unanswered.
+  - id: retrieval
+    needs: [customize-pipeline]
+    before: [mh-query]
+    outputs: [docs/episodes/onboard-ai-like-a-colleague-run-2/run-log.md]
+    checks: [mh]
+    retries: 0
+    agents:
+      - type: implementor
+        skills: []
+        references:
+          [references/retrieval.md, docs/episodes/onboard-ai-like-a-colleague-run-2/brief.md, docs/llm-wiki/index.md]
+        model: inherit
+
+  # One job per research question, from categorize-research. retrieval marks a
+  # job done when it reuses an llm-wiki file for its question.
+  - id: write-research-ai-as-onboarding-a-colleague
+    intent: >-
+      Why do others frame working with AI as onboarding a colleague? Collect sources proposing a similar model (Matt Pocock confirmed; a consultant said the same in a company workshop), to show it's an established lens.
+    needs: [retrieval]
+    isolation: worktree
+    before: [mh-query]
+    outputs:
+      [docs/episodes/onboard-ai-like-a-colleague-run-2/research/AIE-0007__ai-as-onboarding-a-colleague/research.md]
+    checks: [mh, vitest]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research]
+        references:
+          [
+            references/write-research.md,
+            docs/episodes/onboard-ai-like-a-colleague-run-2/brief.md,
+            docs/episodes/onboard-ai-like-a-colleague-run-2/run-log.md,
+          ]
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-individual-ai-productivity-gap
+    intent: >-
+      Why do individuals fail to reach the promised AI productivity boost?
+    needs: [retrieval]
+    isolation: worktree
+    before: [mh-query]
+    outputs:
+      [docs/episodes/onboard-ai-like-a-colleague-run-2/research/AIE-0008__individual-ai-productivity-gap/research.md]
+    checks: [mh, vitest]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research]
+        references:
+          [
+            references/write-research.md,
+            docs/episodes/onboard-ai-like-a-colleague-run-2/brief.md,
+            docs/episodes/onboard-ai-like-a-colleague-run-2/run-log.md,
+          ]
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-organizational-ai-productivity-gap
+    intent: >-
+      Why do organizations fail to reach the promised AI productivity boost?
+    needs: [retrieval]
+    isolation: worktree
+    before: [mh-query]
+    outputs:
+      [
+        docs/episodes/onboard-ai-like-a-colleague-run-2/research/AIE-0009__organizational-ai-productivity-gap/research.md,
+      ]
+    checks: [mh, vitest]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research]
+        references:
+          [
+            references/write-research.md,
+            docs/episodes/onboard-ai-like-a-colleague-run-2/brief.md,
+            docs/episodes/onboard-ai-like-a-colleague-run-2/run-log.md,
+          ]
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-context-and-brief-improve-ai-output
+    intent: >-
+      Why does richer context and a clearer brief measurably improve AI output?
+    needs: [retrieval]
+    isolation: worktree
+    before: [mh-query]
+    outputs:
+      [
+        docs/episodes/onboard-ai-like-a-colleague-run-2/research/AIE-0010__context-and-brief-improve-ai-output/research.md,
+      ]
+    checks: [mh, vitest]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research]
+        references:
+          [
+            references/write-research.md,
+            docs/episodes/onboard-ai-like-a-colleague-run-2/brief.md,
+            docs/episodes/onboard-ai-like-a-colleague-run-2/run-log.md,
+          ]
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-risks-of-unchecked-ai-output
+    intent: >-
+      Why does unchecked AI work carry real risk?
+    needs: [retrieval]
+    isolation: worktree
+    before: [mh-query]
+    outputs:
+      [docs/episodes/onboard-ai-like-a-colleague-run-2/research/AIE-0011__risks-of-unchecked-ai-output/research.md]
+    checks: [mh, vitest]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research]
+        references:
+          [
+            references/write-research.md,
+            docs/episodes/onboard-ai-like-a-colleague-run-2/brief.md,
+            docs/episodes/onboard-ai-like-a-colleague-run-2/run-log.md,
+          ]
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-ai-delegation-as-management-discipline
+    intent: >-
+      Why is effective AI delegation a staff-level management discipline, and how does that reconcile with findings that AI boosts novices more on simple tasks? The claim is not that seniors have these skills; the task demands management discipline, which merely correlates with experience.
+    needs: [retrieval]
+    isolation: worktree
+    before: [mh-query]
+    outputs:
+      [
+        docs/episodes/onboard-ai-like-a-colleague-run-2/research/AIE-0012__ai-delegation-as-management-discipline/research.md,
+      ]
+    checks: [mh, vitest]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research]
+        references:
+          [
+            references/write-research.md,
+            docs/episodes/onboard-ai-like-a-colleague-run-2/brief.md,
+            docs/episodes/onboard-ai-like-a-colleague-run-2/run-log.md,
+          ]
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  # Wants the research rather than needing it: a blocked question leaves a
+  # gap the Dossier works around, instead of blocking the Episode.
+  - id: write-dossier
+    needs: [retrieval]
+    wants:
+      - write-research-ai-as-onboarding-a-colleague
+      - write-research-individual-ai-productivity-gap
+      - write-research-organizational-ai-productivity-gap
+      - write-research-context-and-brief-improve-ai-output
+      - write-research-risks-of-unchecked-ai-output
+      - write-research-ai-delegation-as-management-discipline
+    before: [mh-query]
+    outputs: [docs/episodes/onboard-ai-like-a-colleague-run-2/dossier.md]
+    checks: [mh, vitest]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: []
+        references:
+          - references/write-dossier.md
+          - docs/episodes/onboard-ai-like-a-colleague-run-2/brief.md
+          - docs/episodes/onboard-ai-like-a-colleague-run-2/research/AIE-0007__ai-as-onboarding-a-colleague/research.md
+          - docs/episodes/onboard-ai-like-a-colleague-run-2/research/AIE-0008__individual-ai-productivity-gap/research.md
+          - docs/episodes/onboard-ai-like-a-colleague-run-2/research/AIE-0009__organizational-ai-productivity-gap/research.md
+          - docs/episodes/onboard-ai-like-a-colleague-run-2/research/AIE-0010__context-and-brief-improve-ai-output/research.md
+          - docs/episodes/onboard-ai-like-a-colleague-run-2/research/AIE-0011__risks-of-unchecked-ai-output/research.md
+          - docs/episodes/onboard-ai-like-a-colleague-run-2/research/AIE-0012__ai-delegation-as-management-discipline/research.md
+          - docs/llm-wiki/index.md
+        model: inherit
+      - type: reviewer
+        skills: []
+        references: [references/write-dossier.md, docs/episodes/onboard-ai-like-a-colleague-run-2/brief.md]
+        rubric: references/write-dossier.md#rubric
+        model: opus
+
+  # Rewrites the Voice script lines of dossier.md and nothing else; the staging
+  # test checks that against write-dossier's commit, so no schema key says it.
+  # Han reads and edits the whole Dossier at this gate.
+  - id: write-voice-script
+    needs: [write-dossier]
+    before: [mh-query]
+    outputs: [docs/episodes/onboard-ai-like-a-colleague-run-2/dossier.md]
+    checks: [mh, vitest]
+    retries: 2
+    gate: human
+    agents:
+      - type: implementor
+        skills: []
+        references:
+          - references/write-voice-script.md
+          - docs/episodes/onboard-ai-like-a-colleague-run-2/brief.md
+          - docs/episodes/onboard-ai-like-a-colleague-run-2/dossier.md
+        model: inherit
+      - type: reviewer
+        skills: []
+        references:
+          - references/write-voice-script.md
+          - docs/episodes/onboard-ai-like-a-colleague-run-2/brief.md
+        rubric: references/write-voice-script.md#rubric
+        model: opus
+
+  # Writes no staging file: its output is a spec issue with one sub-issue per Section.
+  - id: write-spec
+    needs: [write-voice-script]
+    outputs: []
+    checks: []
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [to-spec, to-tickets]
+        references:
+          [
+            references/write-spec.md,
+            docs/episodes/onboard-ai-like-a-colleague-run-2/brief.md,
+            docs/episodes/onboard-ai-like-a-colleague-run-2/dossier.md,
+          ]
+        model: inherit
+      - type: reviewer
+        skills: []
+        references: [references/write-spec.md, docs/episodes/onboard-ai-like-a-colleague-run-2/dossier.md]
+        rubric: references/write-spec.md#rubric
+        model: opus
+
+  # Writes no staging file: its output is the spec issue's visual language and a
+  # design answer in every ticket body. The implementor runs in the orchestrator's
+  # session, because it spawns the designers (ui-ux-pro-max:slides). The gate is a label, not a
+  # status: Han relabels each ticket from needs-triage to ready-for-agent.
+  - id: write-design-spec
+    needs: [write-spec]
+    outputs: []
+    checks: []
+    retries: 2
+    gate: human
+    agents:
+      - type: implementor
+        skills: [ui-ux-pro-max:slides]
+        references:
+          - references/write-design-spec.md
+          - GLOSSARY.md
+          - docs/episodes/onboard-ai-like-a-colleague-run-2/brief.md
+          - docs/episodes/onboard-ai-like-a-colleague-run-2/dossier.md
+          - docs/design/slide-library.md
+          - docs/design/design-guide.md
+          - docs/design/design-system.md
+        model: opus
+        session: orchestrator
+      - type: reviewer
+        skills: []
+        references:
+          - references/write-design-spec.md
+          - GLOSSARY.md
+          - docs/episodes/onboard-ai-like-a-colleague-run-2/brief.md
+          - docs/episodes/onboard-ai-like-a-colleague-run-2/dossier.md
+          - docs/design/slide-library.md
+          - docs/design/design-guide.md
+        rubric: references/write-design-spec.md#rubric
+        model: opus
+
+  # Writes the Episode under src/, outside the staging folder.
+  - id: implement-episode
+    needs: [write-design-spec]
+    outputs: []
+    checks: [verify, build, test:build, visual-check]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [implement-spec, visual-check]
+        references: [references/implement-episode.md, docs/episodes/onboard-ai-like-a-colleague-run-2/dossier.md]
+        model: opus
+        session: orchestrator
+      - type: reviewer
+        skills: [code-review, visual-check]
+        references: [references/implement-episode.md, docs/episodes/onboard-ai-like-a-colleague-run-2/dossier.md]
+        rubric: references/implement-episode.md#rubric
+        model: opus
+        session: orchestrator
+
+  - id: open-pr
+    needs: [implement-episode]
+    outputs: []
+    checks: []
+    retries: 0
+    agents:
+      - type: implementor
+        skills: [pr]
+        references: [references/open-pr.md, docs/episodes/onboard-ai-like-a-colleague-run-2/run-log.md]
+        model: sonnet

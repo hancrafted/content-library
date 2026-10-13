@@ -1,0 +1,17 @@
+{
+  "title": "The promise and the gap",
+  "voiceScript": {
+    "segments": {
+      "open-on-the-hype": {
+        "title": "Open on the hype",
+        "keywords": "twenty times, every feed, keynote, vendor deck",
+        "script": "You have seen the line. Become twenty times more productive with AI. It is on every feed, in every keynote, in every vendor deck. Maybe you even believed it for a day or two."
+      },
+      "bridge-to-the-room": {
+        "title": "Bridge to the room",
+        "keywords": "tried it yourself, why, today",
+        "script": "Then you sat down and tried it yourself, and you know how that went. So why? Today I want to look at exactly that."
+      }
+    }
+  }
+}

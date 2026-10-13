@@ -1,0 +1,69 @@
+{
+  "title": "Four ways to onboard AI",
+  "heading": "Four disciplines",
+  "caption": "Each ring is something you hand over before the task can start.",
+  "task": "the task",
+  "figure": "Four rings around the task: prompt, context, harness and graph engineering, the outermost dashed.",
+  "rings": {
+    "prompt": {
+      "short": "Prompt",
+      "name": "Prompt engineering",
+      "line": "Phrasing the ask as a clear, unambiguous brief."
+    },
+    "context": {
+      "short": "Context",
+      "name": "Context engineering",
+      "line": "The background you hand over: budget, headcount, culture, past events."
+    },
+    "harness": {
+      "short": "Harness",
+      "name": "Harness engineering",
+      "line": "The tools and environment: booking system, catering contacts, calendar."
+    },
+    "graph": {
+      "short": "Graph",
+      "name": "Graph engineering",
+      "line": "The workflow across several agents: project management for AI.",
+      "tag": "newest · since mid-2026 · still loosely defined"
+    }
+  },
+  "notes": {
+    "context-is-finite": {
+      "header": "Context is a finite resource",
+      "description": "Anthropic: context is “a finite resource with diminishing marginal returns” and the target is “the minimal set of information that fully outlines your expected behavior”.[1]",
+      "sources": {
+        "effective-context-engineering": {
+          "title": "Anthropic, Effective context engineering for AI agents"
+        }
+      }
+    },
+    "handover-as-harness": {
+      "header": "Hand-over artifacts as harness",
+      "description": "Anthropic’s remedy for agents arriving with no memory is a written hand-over that each new session reads first, as a shift change would require.[1]",
+      "sources": {
+        "effective-harnesses": {
+          "title": "Anthropic Engineering, Effective harnesses for long-running agents (published 26 Nov 2025)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "prompt-and-context": {
+        "title": "Prompt and context",
+        "keywords": "prompt engineering, clear brief, context engineering, budget, headcount, culture, past events",
+        "script": "Prompt engineering is phrasing the ask as a clear, unambiguous brief. That is the what. Context engineering is the background you hand over. The budget, the headcount, the culture, the past events."
+      },
+      "harness": {
+        "title": "Harness",
+        "keywords": "harness engineering, tools, environment, booking system, catering contacts, calendar",
+        "script": "Harness engineering is the tools and the environment you give access to. The booking system, the catering contacts, the calendar. The things that let a capable newcomer actually get something done."
+      },
+      "graph-newest": {
+        "title": "Graph, the newest",
+        "keywords": "graph engineering, newest term, several agents, project management for AI, mid-2026, loosely defined",
+        "script": "And the fourth, graph engineering, is the newest term. It is about managing the workflow across several agents. Project management, for AI. It has only emerged since mid-2026, and it is still loosely defined. So hold it loosely."
+      }
+    }
+  }
+}

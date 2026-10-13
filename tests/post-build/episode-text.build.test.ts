@@ -1,6 +1,7 @@
 // #51 post-build check: every exported Episode page, in every locale, shows the
 // reader exactly the text it showed before the Self-contained Slides move, under
-// the anchors `published-anchors.json` lists, with no Translation key left raw.
+// the anchors `published-anchors.json` lists (none yet for an upcoming, `noindex`
+// Episode), with no Translation key left raw.
 // The expected text is a fixture file per page under `episode-text/`, captured
 // once from the build before anything moved; a page without one gets it written
 // and fails, so the capture is reviewed and committed, never silently accepted.
@@ -27,6 +28,12 @@ const RAW_KEY = /\b(?:episodes|landing|contextDrawer|tableOfContents|talkPlayer)
 
 function builtText(url: string): EpisodeText {
   return episodeText(load(readFileSync(join(OUT_DIR, exportedFile(url)), 'utf8')));
+}
+
+/** Whether the exported page asks search engines not to index it: an upcoming Episode's page does. */
+function isNoindex(url: string): boolean {
+  const page = load(readFileSync(join(OUT_DIR, exportedFile(url)), 'utf8'));
+  return (page('meta[name="robots"]').attr('content') ?? '').includes('noindex');
 }
 
 /** The captured text of one page; writes a missing capture and throws so it is reviewed before it counts. */
@@ -58,9 +65,15 @@ describe.each(PAGES)('$url', ({ slug, locale, url }) => {
     expect(actual).toEqual(expected);
   });
 
-  it('renders its Slides under exactly the published anchors', () => {
+  it('renders its Slides under exactly the published anchors, or binds none while upcoming', () => {
     // ARRANGE
-    const published = JSON.parse(readFileSync(join(EPISODES_DIR, slug, 'published-anchors.json'), 'utf8')) as string[];
+    const file = join(EPISODES_DIR, slug, 'published-anchors.json');
+    // An upcoming Episode's page is built `noindex` and its anchors bind at publication (docs/features/episode-publishing.md).
+    if (isNoindex(url)) {
+      expect(existsSync(file)).toBe(false);
+      return;
+    }
+    const published = JSON.parse(readFileSync(file, 'utf8')) as string[];
     const expected = [...published].sort();
     // ACT
     const anchors = builtText(url)

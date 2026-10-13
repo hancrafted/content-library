@@ -1,0 +1,12 @@
+{
+  "title": "Das fühlt sich nach viel an",
+  "voiceScript": {
+    "segments": {
+      "it-feels-like-a-lot": {
+        "title": "Das fühlt sich nach viel an",
+        "keywords": "vier Disziplinen, jedes Mal eine Notiz für Tag eins, die Arbeit, die gewandert ist",
+        "script": "Ich weiß. Das klingt nach viel. Vier Disziplinen, jedes einzelne Mal eine Notiz für Tag eins. Ich werde nicht so tun, als wäre das keine Arbeit. Es ist Arbeit. Es ist die Arbeit, die gewandert ist."
+      }
+    }
+  }
+}

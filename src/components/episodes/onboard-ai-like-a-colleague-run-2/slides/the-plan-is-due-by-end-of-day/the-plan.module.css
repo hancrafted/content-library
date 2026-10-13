@@ -1,0 +1,27 @@
+/*
+ * The plan is due by end of day: motion only, no colour, size or weight (FE-011). One entrance when the Slide becomes
+ * active (FE-009 §6.2): the working day fills from 09:00 to 17:00, then the deadline dot pops in as the fill arrives.
+ * It replays on return. The base rules are the finished picture, so at rest and under reduced motion the day is full.
+ */
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .fill {
+    animation: fill 1600ms cubic-bezier(0.4, 0, 0.2, 1) 300ms both;
+  }
+
+  :global([data-zone='active']) .due {
+    animation: pop 250ms cubic-bezier(0.2, 0, 0, 1) 1900ms both;
+  }
+}
+
+@keyframes fill {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes pop {
+  from {
+    scale: 0;
+  }
+}

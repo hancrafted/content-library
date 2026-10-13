@@ -1,0 +1,65 @@
+{
+  "title": "Du hast die Aufgabe gemanagt",
+  "heading": "Du hast es gemanagt, nicht selbst gemacht",
+  "caption": "Du hast die Bühne bereitet: Kontext, Zugänge, der Auftrag und eine Prüfung. Das war die Arbeit.",
+  "statement": "Aus Tun wurde Managen",
+  "line": {
+    "from": "Tun",
+    "to": "Managen"
+  },
+  "notes": {
+    "a-management-reading": {
+      "header": "Eine Management-Lesart, keine Werkzeug-Lesart",
+      "description": "Joseph Fuller von der Harvard Business School argumentiert, dass Firmen den Wert von KI verfehlen, weil sie nicht verändert haben, wie die Arbeit um sie herum organisiert ist, und dass es bei agentischer KI „vor allem darum geht, Arbeit zu managen“. Gelesen wurde nur die Zusammenfassung der HBR.[1]",
+      "sources": {
+        "onboarding-plan-for-ai-agents": {
+          "title": "Joseph Fuller, Create an Onboarding Plan for AI Agents, Harvard Business Review (25 Mar 2026)"
+        }
+      }
+    },
+    "the-task-not-the-rank": {
+      "header": "Die Aufgabe verlangt es, nicht der Rang",
+      "description": "Der Schub für Neulinge wurde an begrenzten Aufgaben innerhalb der Fähigkeiten des Modells gemessen: 34 % mehr gelöste Anfragen pro Stunde für neue Support-Mitarbeitende, gegenüber kaum einem Effekt für erfahrene.[1] Bei einer Aufgabe, die bewusst außerhalb dieser Grenze lag, lagen Berater mit KI um 19 Prozentpunkte seltener richtig.[2] Dass die Aufgabe Management-Disziplin verlangt und diese nur mit Erfahrung einhergeht, ist eine Schlussfolgerung dieser Episode; keine Quelle prüft das direkt.",
+      "sources": {
+        "generative-ai-at-work": {
+          "title": "Brynjolfsson, Li, Raymond, Generative AI at Work (NBER Working Paper 31161)"
+        },
+        "jagged-technological-frontier": {
+          "title": "Dell’Acqua, McFowland, Mollick, Lifshitz-Assaf, Kellogg, Rajendran, Krayer, Candelon, Lakhani, Navigating the Jagged Technological Frontier"
+        }
+      }
+    },
+    "experience-with-the-tool": {
+      "header": "Erfahrung mit dem Werkzeug sagt Ergebnisse voraus",
+      "description": "In Anthropics Nutzungsdaten haben Nutzer mit sechs Monaten oder mehr Erfahrung innerhalb desselben Aufgabenclusters eine um 3 bis 5 Punkte höhere Erfolgsquote, delegieren seltener per Anweisung und iterieren mehr. Erfolg ist hier Claudes eigene Einschätzung, und Selbstselektion ist nicht ausgeschlossen.[1]",
+      "sources": {
+        "learning-curves": {
+          "title": "Anthropic, Anthropic Economic Index report: Learning Curves (March 2026)"
+        }
+      }
+    },
+    "where-the-analogy-stops": {
+      "header": "Wo die Analogie endet",
+      "description": "Ein menschlicher Neuling lernt im Job, ein Agent nicht: Anthropic beschreibt jede neue Sitzung als einen Ingenieur, der „ohne Erinnerung an das, was in der vorigen Schicht passiert ist“, ankommt, also ist alles Ungeschriebene verloren.[1]",
+      "sources": {
+        "long-running-agents": {
+          "title": "Anthropic Engineering, Effective harnesses for long-running agents (published 26 Nov 2025)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "you-did-not-plan-the-party": {
+        "title": "Du hast das Fest nicht geplant",
+        "keywords": "nie eine Tabelle geöffnet, die Bühne bereitet, Zugang gegeben, jemand hat geprüft",
+        "script": "Du hast das Fest nicht geplant. Du hast nie eine Tabelle geöffnet oder einen Caterer angerufen. Du hast die Bühne bereitet. Du hast weitergegeben, was Du weißt, Du hast Zugänge gegeben, Du hast gesagt, was Du willst, und Du hast dafür gesorgt, dass jemand prüft. Das war die Arbeit."
+      },
+      "doing-became-managing": {
+        "title": "Aus Tun wurde Managen",
+        "keywords": "aus Tun wurde Managen, der Wechsel, kein Rezept, eine Sichtweise",
+        "script": "Aus Tun wurde Managen. Das ist der Wechsel. Lies es nicht als Rezept und nicht als Eins-zu-eins-Entsprechung zu irgendetwas. Es ist eine Sichtweise. Und genau dieser Wechsel vom Tun zum Managen ist das, was die Arbeit mit KI von Dir verlangt."
+      }
+    }
+  }
+}
