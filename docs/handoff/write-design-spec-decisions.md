@@ -10,7 +10,7 @@ Settled with Han, 2026-10-13, in session 5909c675 (this file's grill), prompted 
 4. Q4: Every Slide is designed, not only the misses.
 5. Q8: A new part or motion lives in the Slide's own folder (a server part, or its own `*.client.tsx`); it moves to `slide-shared/` once a second Slide needs it (FE-007 Do 7).
 6. Q11 and Han's Q10 note: The answer names parts, tokens, props and i18n keys, plus a low-fidelity text wireframe (ASCII in a code block) for every Slide that is not a Slide library entry used as is. No rendered prototype: the rendered check stays in `implement-episode`.
-7. References: Brief, Dossier, Manuscript, FE-002, FE-007, FE-009, FE-011, the Slide library, `docs/design/README.md` and `docs/design/design-guide.md`.
+7. References: Brief, Dossier, Manuscript, FE-002, FE-007, FE-009, FE-011, the Slide library (`docs/design/slide-library.md`) and `docs/design/design-guide.md`.
 8. Q17 rubric:
    1. Every Slide of the ticket has a design answer.
    2. Every Slide that is not a Slide library entry used as is has a text wireframe.
@@ -30,7 +30,7 @@ Settled with Han, 2026-10-13, in session 5909c675 (this file's grill), prompted 
 ## Around the job
 
 14. Q6, Q13, Q20, glossary: **Slide library**: every Master slide a Slide copies from the Slide master Episode (`src/components/episodes/slide-master/slides/`, `cp -r`), and every frame component, shared part and shared motion it imports (`src/components/slide-master/`, `src/components/slide-shared/`). _Avoid_: catalog. **Master slide**: one entry of the Slide library. The Dossier's `master:` key stays. "Catalog" leaves the pipeline; the run log's `No catalog match:` becomes `No library match:`.
-15. Q14/Q5: `write-dossier` proposes only a Slide library motion; the staging vitest resolves `motion:` there. When none fits, the Visual describes the wanted motion in viewer terms. `write-design-spec` may overrule it, as the specialist.
+15. Q14/Q5: `write-dossier` proposes only a Slide library motion; the staging vitest resolves `motion:` there. When none fits, the Visual describes the wanted motion in viewer terms. `write-design-spec` may overrule it, as the specialist. Superseded by decision 10 of `slide-authoring-context-decisions.md`: a Visual's `motion:` is `none`, `local` or a library motion.
 16. Q7: Every reviewer judges one baseline line: each domain concept is named by its `GLOSSARY.md` term, never an _Avoid_ word. Implementor prompts point at `GLOSSARY.md`.
 17. `write-spec` writes no design questions: its rubric lines 4–5 and the tickets' "exact master … stop and comment" criterion become "build to the ticket's design answer". `No library match:` leaves the PR checklist; it is input for the designer.
 18. Q18: The visual check follows FE-009's browser check: 375, 1100 and 1440 px, drawer beside, over and closed; each Slide wrapper at least viewport height, no horizontal overflow, Foreground clear of the chrome. "No taller than the viewport" in `references/implement-episode.md` goes.

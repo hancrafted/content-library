@@ -15,9 +15,9 @@ import {
 
 /** Each lane's colour, set as `--lane` so the bar, its swatch and its tooltip share it; the tokens carry dark values. */
 export const LANE_CLASS: Record<GanttLane, string> = {
-  a: '[--lane:var(--machine)]',
-  b: '[--lane:var(--human)]',
-  c: '[--lane:var(--ai)]',
+  a: '[--lane:var(--primary)]',
+  b: '[--lane:var(--foreground)]',
+  c: '[--lane:var(--muted-foreground)]',
 };
 
 /** The bar's still-planned part: a hatch in its lane colour, so progress reads by texture as well as tint. */

@@ -5,16 +5,16 @@ export const GRID_2X3_CELLS = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6'] as const;
 
 export type Grid2x3Cell = (typeof GRID_2X3_CELLS)[number];
 
-/** The accent each cell is tinted with; the rows rotate so no column repeats a tone. */
-export type Grid2x3Tone = 'machine' | 'human' | 'ai';
+/** The decorative accent each cell is tinted with (primary or foreground, never a meaning colour); the tones alternate. */
+export type Grid2x3Tone = 'primary' | 'foreground';
 
 export const GRID_2X3_TONES: Record<Grid2x3Cell, Grid2x3Tone> = {
-  c1: 'machine',
-  c2: 'human',
-  c3: 'ai',
-  c4: 'ai',
-  c5: 'machine',
-  c6: 'human',
+  c1: 'primary',
+  c2: 'foreground',
+  c3: 'primary',
+  c4: 'foreground',
+  c5: 'primary',
+  c6: 'foreground',
 };
 
 /** Milliseconds between one cell starting to fade in and the next. */

@@ -187,6 +187,18 @@ body-structure:
             allowed:
               [
                 {
+                  title: Style,
+                  intent: 'One line naming a style from docs/design/design-guide.md and the audience reason for it; the designers keep that style for the whole Episode. Fail if it names no style, names none the design guide lists, or gives no audience reason.',
+                },
+              ],
+            mayHold: [prose],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
                   title: Learning goal,
                   intent: 'What the viewer can do or explain afterwards, in one or two sentences, the end every Section moves towards. Fail if it names a topic to cover instead of a change in the viewer.',
                 },
@@ -488,7 +500,7 @@ body-structure:
                   [
                     {
                       title: Metrics,
-                      intent: 'One item per agent run, matching its row in the runs CSV: `<agent> · attempt <n> · pass|fail[ · rubric "<line>"] · <duration> s[ · <tokens> tokens]`, where `<line>` quotes the failed reviewer line, intent or rubric, and tokens are left out when the session reports none. Fail if a fail quotes no line.',
+                      intent: 'One item per agent run, matching its row in the runs CSV: `<agent> · attempt <n> · pass|fail[ · rubric "<line>"] · <duration> s[ · <tokens> tokens]`, where `<line>` quotes the failed reviewer line, intent or rubric, and tokens are left out when the session reports none. The `write-design-spec` entry adds one item per ticket, `#<issue> · approved as drafted|edited`, which has no CSV row. Fail if a fail quotes no line.',
                     },
                   ],
                 mayHold: [unordered-list],
@@ -500,7 +512,7 @@ body-structure:
                   [
                     {
                       title: Notes,
-                      intent: 'What a reader needs that the other parts do not say: a retry and why, a gate edit. Each blocked branch, call for human judgement, missing catalog match or research gap gets its own line, starting `Blocked:`, `Needs human:`, `No catalog match:` or `Research gap:`. Fail if a retry or blocked branch shown under Metrics or Checks goes unexplained, or such a line lacks its prefix.',
+                      intent: 'What a reader needs that the other parts do not say: a retry and why, a gate edit. Each blocked branch, call for human judgement, missing library match or research gap gets its own line, starting `Blocked:`, `Needs human:`, `No library match:` or `Research gap:`. Fail if a retry or blocked branch shown under Metrics or Checks goes unexplained, or such a line lacks its prefix.',
                     },
                   ],
                 mayHold: [prose, unordered-list],

@@ -21,11 +21,11 @@ const SPAN: Record<GridBentoCell, string> = {
 // A small accent mark per supporting tile; the lead carries the gradient instead.
 const MARK: Record<GridBentoCell, string> = {
   c1: '',
-  c2: 'bg-machine',
-  c3: 'bg-human',
-  c4: 'bg-ai',
+  c2: 'bg-primary',
+  c3: 'bg-foreground',
+  c4: 'bg-primary',
   c5: 'bg-foreground',
-  c6: 'bg-machine',
+  c6: 'bg-primary',
 };
 
 // Hovering a tile lifts it and dims its siblings; the motion is CSS only. Reduced motion keeps the dim, drops the lift.

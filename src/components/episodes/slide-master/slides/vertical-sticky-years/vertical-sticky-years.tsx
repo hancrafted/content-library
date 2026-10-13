@@ -9,9 +9,9 @@ import {
 } from './vertical-sticky-years.pure';
 
 const TONE: Record<ChipTone, string> = {
-  machine: 'text-machine bg-machine/10 ring-machine/25',
-  human: 'text-human bg-human/10 ring-human/25',
-  ai: 'text-ai bg-ai/10 ring-ai/25',
+  primary: 'text-primary bg-primary/10 ring-primary/25',
+  foreground: 'text-foreground bg-foreground/10 ring-foreground/25',
+  'muted-foreground': 'text-muted-foreground bg-muted-foreground/10 ring-muted-foreground/25',
 };
 
 const pad = (n: number) => String(n).padStart(2, '0');

@@ -8,7 +8,6 @@ Output: the app served locally, its Episode link printed, and one draft PR whose
 2. **Open the draft PR** from `episode/<slug>` to `main`. First run `gh pr view episode/<slug>`: when a PR exists, an earlier attempt opened it (or Han retargeted it), so edit its body with `gh pr edit`, keep its base as it is and open none. Otherwise open it with `gh pr create --draft`, its body written by the `pr` skill, plus a `## Needs Han` checklist built from the run log. Every one of these becomes one `- [ ]` item, quoted with its job:
    - each Notes line starting `Blocked:`, a reviewer failure that ran out of retries;
    - each Notes line starting `Needs human:`;
-   - each Notes line starting `No catalog match:`;
    - each Notes line starting `Research gap:`, a research question the Episode went without;
    - the route deviation, when the Episode answered only on `/episode/<slug>`: `- [ ] Served at /episode/<slug>, not /episodes/<slug>, until #85 lands`.
 

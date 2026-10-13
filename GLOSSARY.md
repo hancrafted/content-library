@@ -26,6 +26,12 @@ _Avoid_: Label, keyword
 **Format**: the shape an Episode is written in, one per Episode: Foundations, Teardown or Short.
 _Avoid_: Type, kind, length
 
+**Slide library**: every Master slide a Slide copies from the Slide master Episode (`src/components/episodes/slide-master/slides/`, `cp -r`), and every frame component, shared part and shared motion it imports (`src/components/slide-master/`, `src/components/slide-shared/`). Listed in `docs/design/slide-library.md`.
+_Avoid_: Catalog
+
+**Master slide**: one entry of the Slide library. The Dossier's `master:` key stays.
+_Avoid_: Catalog entry, template
+
 **Context drawer**: the floating card beside or over an Episode's Slides that shows the current Slide's Speaker notes and Voice script; a view onto text already in the page.
 _Avoid_: Sidebar, notes panel, teleprompter
 

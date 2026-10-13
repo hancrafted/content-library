@@ -84,6 +84,7 @@ Through `tdd`, `code-review` and `commit`, on a branch from `main` (`npm run wt:
 - **Start (D1):**
   - Branch `episode/onboard-ai-like-a-colleague-run-2` from `main`, which carries the template with steps 1, 3 and 4 merged.
   - New slug `onboard-ai-like-a-colleague-run-2`; check out only `brief.md` from the tag (`git show baseline/onboard-ai-like-a-colleague/run-1:docs/episodes/onboard-ai-like-a-colleague/brief.md`). The slug is renamed back before production.
+  - Add the `## Style` section to that `brief.md` at run-2 start, with the text of decision 14 in `slide-authoring-context-decisions.md` (editorial, with its audience reason), placed after `## Audience`; the Brief check (#130) requires it.
   - Correct the six run-1 research files and move them into `docs/llm-wiki/research/` with index lines (#112), so `retrieval` is tested. Expect `reuse` for all six; then no `write-research` runs.
   - Run `/new-episode` on the approved Brief and note the new run id.
 - **Compare:**

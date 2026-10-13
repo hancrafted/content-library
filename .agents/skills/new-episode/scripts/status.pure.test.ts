@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { frontmatterStatus, runStatus } from './status.pure.ts';
+import { frontmatterStatus, runStatus, subIssuesApproved } from './status.pure.ts';
 
 /*
  * A run's state read back from disk: a small per-run pipeline and run logs
@@ -78,10 +78,31 @@ describe('gate jobs', () => {
     const draft = () => 'draft';
     const approved = () => 'approved';
     // ACT
-    const whileDraft = runStatus(GATED, runLog, draft).map(({ state }) => state);
-    const afterApproval = runStatus(GATED, runLog, approved).map(({ state }) => state);
+    const whileDraft = runStatus(GATED, runLog, { outputStatus: draft }).map(({ state }) => state);
+    const afterApproval = runStatus(GATED, runLog, { outputStatus: approved }).map(({ state }) => state);
     // ASSERT
     expect(whileDraft).toEqual(['gate', 'waiting']);
+    expect(afterApproval).toEqual(['done', 'ready']);
+  });
+});
+
+describe('gate jobs without a staging output', () => {
+  const gated = `jobs:
+  - { id: write-design-spec, needs: [], gate: human, outputs: [] }
+  - { id: implement-episode, needs: [write-design-spec] }
+`;
+  const runLog = ['# Run log\n', entry('write-design-spec · 2026-10-12T09:00:00Z', [PASS])].join('\n');
+
+  it('prints gate for a logged label-gated job until its tickets are approved, and holds back what needs it', () => {
+    // ARRANGE
+    const approvedByLabel = () => true;
+    // ACT
+    const whileTriage = runStatus(gated, runLog, { labelApproved: () => false }).map(({ state }) => state);
+    const withoutReader = runStatus(gated, runLog).map(({ state }) => state);
+    const afterApproval = runStatus(gated, runLog, { labelApproved: approvedByLabel }).map(({ state }) => state);
+    // ASSERT
+    expect(whileTriage).toEqual(['gate', 'waiting']);
+    expect(withoutReader).toEqual(['gate', 'waiting']);
     expect(afterApproval).toEqual(['done', 'ready']);
   });
 });
@@ -113,5 +134,25 @@ describe('frontmatterStatus', () => {
 
   it('is null without a status line', () => {
     expect(frontmatterStatus('# Title\n')).toBeNull();
+  });
+});
+
+describe('subIssuesApproved', () => {
+  const ticket = (state: string, ...labels: string[]) => ({ state, labels: labels.map((name) => ({ name })) });
+
+  it('is approved when every open sub-issue has left needs-triage', () => {
+    expect(subIssuesApproved([ticket('open', 'ready-for-agent'), ticket('open')])).toBe(true);
+  });
+
+  it('is not approved while an open sub-issue still carries needs-triage', () => {
+    expect(subIssuesApproved([ticket('open', 'ready-for-agent'), ticket('open', 'needs-triage')])).toBe(false);
+  });
+
+  it('ignores closed sub-issues, even one still labelled needs-triage', () => {
+    expect(subIssuesApproved([ticket('closed', 'needs-triage'), ticket('open')])).toBe(true);
+  });
+
+  it('is not approved when there are no sub-issues', () => {
+    expect(subIssuesApproved([])).toBe(false);
   });
 });
