@@ -21,6 +21,18 @@ export function frontmatterStatus(text: string): string | null {
   return /^status:[ \t]*["']?([^\s"']+)["']?[ \t]*$/m.exec(text)?.[1] ?? null;
 }
 
+/** A sub-issue as `gh api .../sub_issues` returns it, reduced to what the gate reads. */
+export interface SubIssue {
+  state: string;
+  labels: { name: string }[];
+}
+
+/** The design gate's rule: the spec issue has sub-issues, and none still open carries `needs-triage`. */
+export function subIssuesApproved(tickets: readonly SubIssue[]): boolean {
+  const open = tickets.filter((ticket) => ticket.state === 'open');
+  return tickets.length > 0 && open.every((ticket) => !ticket.labels.some((label) => label.name === 'needs-triage'));
+}
+
 const ENTRY = /^## (\S+) · \S+$/;
 const METRIC = /^- \S+ · attempt (\d+) · (pass|fail)\b/;
 

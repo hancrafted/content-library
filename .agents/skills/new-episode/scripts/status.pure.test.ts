@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { frontmatterStatus, runStatus } from './status.pure.ts';
+import { frontmatterStatus, runStatus, subIssuesApproved } from './status.pure.ts';
 
 /*
  * A run's state read back from disk: a small per-run pipeline and run logs
@@ -134,5 +134,25 @@ describe('frontmatterStatus', () => {
 
   it('is null without a status line', () => {
     expect(frontmatterStatus('# Title\n')).toBeNull();
+  });
+});
+
+describe('subIssuesApproved', () => {
+  const ticket = (state: string, ...labels: string[]) => ({ state, labels: labels.map((name) => ({ name })) });
+
+  it('is approved when every open sub-issue has left needs-triage', () => {
+    expect(subIssuesApproved([ticket('open', 'ready-for-agent'), ticket('open')])).toBe(true);
+  });
+
+  it('is not approved while an open sub-issue still carries needs-triage', () => {
+    expect(subIssuesApproved([ticket('open', 'ready-for-agent'), ticket('open', 'needs-triage')])).toBe(false);
+  });
+
+  it('ignores closed sub-issues, even one still labelled needs-triage', () => {
+    expect(subIssuesApproved([ticket('closed', 'needs-triage'), ticket('open')])).toBe(true);
+  });
+
+  it('is not approved when there are no sub-issues', () => {
+    expect(subIssuesApproved([])).toBe(false);
   });
 });

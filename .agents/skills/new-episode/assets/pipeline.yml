@@ -208,6 +208,7 @@ jobs:
         skills: [ui-ux-pro-max:slides]
         references:
           - references/write-design-spec.md
+          - GLOSSARY.md
           - docs/episodes/<slug>/brief.md
           - docs/episodes/<slug>/dossier.md
           - docs/design/slide-library.md
@@ -219,8 +220,11 @@ jobs:
         skills: []
         references:
           - references/write-design-spec.md
+          - GLOSSARY.md
           - docs/episodes/<slug>/brief.md
           - docs/episodes/<slug>/dossier.md
+          - docs/design/slide-library.md
+          - docs/design/design-guide.md
         rubric: references/write-design-spec.md#rubric
         model: opus
 
