@@ -7,6 +7,7 @@ import {
   unsettledBriefSections,
   type KnownVisuals,
 } from '@/lib/episode-staging.pure';
+import { checkVoiceScriptDiff } from '@/lib/episode-voice-script.pure';
 import { checkResearchFolders, researchCategories } from '@/lib/research-folder.pure';
 import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
@@ -64,7 +65,8 @@ function namesEndingIn(folder: string, suffix: string): string[] {
 /**
  * What a Dossier `Visual` may name: the frame components in the Slide master
  * (`basic-page-slide.tsx` is `basic-page`), the slide master's Slide
- * folders, and the motion effects in `animations/` (`liquid-ink-transition`).
+ * folders. A motion is `none` or one a Slide may import; FE-007 bars Slide
+ * files from `animations/`, so today there is none, and `motions` stays empty.
  */
 function knownVisuals(): KnownVisuals {
   const masterSlides = readdirSync(path.join(ROOT, 'src/components/episodes/slide-master/slides'), {
@@ -74,7 +76,7 @@ function knownVisuals(): KnownVisuals {
     .map(({ name }) => name);
   return {
     masters: [...namesEndingIn(path.join(ROOT, 'src/components/slide-master'), '-slide.tsx'), ...masterSlides],
-    motions: namesEndingIn(path.join(ROOT, 'src/components/animations'), '.client.tsx'),
+    motions: [],
   };
 }
 
@@ -201,7 +203,38 @@ function rubricsWithoutHeading(yaml: string): string[] {
   );
 }
 
+/**
+ * A staging folder's Dossier as write-dossier and then write-voice-script
+ * committed it, found by the `Agent: <job>` trailer of their commits. The
+ * trailer exists since #107, but this test stays inert (undefined, nothing to
+ * compare) until a run commits both `Agent: write-dossier` and
+ * `Agent: write-voice-script` for one Dossier.
+ */
+function dossierBeforeAndAfterVoice(folder: string): { draft: string; voiced: string } | undefined {
+  const file = `${folder}/dossier.md`;
+  const at = (job: string): string | undefined => {
+    const hash = execFileSync('git', ['log', '-1', '--format=%H', '-E', `--grep=^Agent: ${job}$`, '--', file], {
+      cwd: ROOT,
+      encoding: 'utf8',
+    }).trim();
+    return hash === '' ? undefined : execFileSync('git', ['show', `${hash}:${file}`], { cwd: ROOT, encoding: 'utf8' });
+  };
+  const [draft, voiced] = [at('write-dossier'), at('write-voice-script')];
+  return draft === undefined || voiced === undefined ? undefined : { draft, voiced };
+}
+
 describe('success cases', () => {
+  it('finds that write-voice-script changed only Voice script lines of what write-dossier committed', () => {
+    // ARRANGE
+    const pairs = Object.keys(stagingFolders())
+      .filter((folder) => folder.startsWith('docs/'))
+      .flatMap((folder) => dossierBeforeAndAfterVoice(folder) ?? []);
+    // ACT
+    const findings = pairs.flatMap(({ draft, voiced }) => checkVoiceScriptDiff(draft, voiced));
+    // ASSERT
+    expect(findings).toEqual([]);
+  });
+
   it('finds no disagreement between the files of any staging folder or the sample Episode', () => {
     // ARRANGE
     const names = knownVisuals();
@@ -359,16 +392,16 @@ describe('edge cases', () => {
     expect(landed).toEqual([]);
   });
 
-  it('walks the sample Episode and reads a frame component, a slide-master Slide and a motion effect', () => {
+  it('walks the sample Episode and reads a frame component and a slide-master Slide, and knows no motion a Slide may import', () => {
     // ARRANGE
     const sample = path.relative(ROOT, SAMPLE);
-    const expected = { masters: ['basic-page', 'grid-2x2'], motions: ['liquid-ink-transition'] };
+    const expected = { masters: ['basic-page', 'grid-2x2'] };
     // ACT
     const walked = Object.keys(stagingFolders());
     const names = knownVisuals();
     // ASSERT
     expect(walked).toContain(sample);
     expect(names.masters).toEqual(expect.arrayContaining(expected.masters));
-    expect(names.motions).toEqual(expect.arrayContaining(expected.motions));
+    expect(names.motions).toEqual([]);
   });
 });

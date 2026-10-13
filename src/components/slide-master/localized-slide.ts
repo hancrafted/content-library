@@ -5,7 +5,7 @@ import type { EpisodeSlug } from '@/lib/routes';
 import { segmentSpans, type SpokenSegment } from '@/lib/speaking-time.pure';
 import { createTranslator } from 'next-intl';
 import type { ReactNode } from 'react';
-import type { EpisodeRecord, Slide } from './slide';
+import type { EpisodeRecord, Slide, SlideMessages } from './slide';
 import type { NoteSpec, RuntimeTranslator, SegmentSpec, SourceSpec } from './slide-base';
 import { slideKit } from './slide-kit';
 
@@ -31,6 +31,9 @@ interface SlideText {
   readonly notes: readonly SpeakerNoteItem[];
   readonly voiceScript: readonly VoiceScriptSegment[];
 }
+
+/** The Speaker notes and Voice script a Slide, or the Title slide, carries: what the Context drawer reads. */
+export type SlideContext = Pick<LocalizedSlide, 'notes' | 'voiceScript'>;
 
 /** Where the walk put a Slide: its wrapper id and its Section's slug. */
 interface Placement {
@@ -64,10 +67,10 @@ export interface EpisodeContext {
  * site-wide config (`src/i18n/request.ts`), any missing message or formatting
  * error throws, so untranslated text fails the build instead of shipping.
  */
-function ownTranslator(slide: Slide, locale: Locale): RuntimeTranslator {
+function ownTranslator(messages: SlideMessages, locale: Locale): RuntimeTranslator {
   const t = createTranslator({
     locale,
-    messages: slide.messages[locale],
+    messages,
     onError(error) {
       throw error;
     },
@@ -120,15 +123,39 @@ function voiceScriptOf(read: Read, specs: readonly SegmentSpec[], locale: Locale
   return segments.map((segment, index) => ({ ...segment, ...spans[index] }));
 }
 
+/** The Speaker notes, Voice script and reading time a Slide, or the Title slide, declares over its own messages. */
+function contextOf(
+  specs: { readonly notes: readonly NoteSpec[]; readonly segments: readonly SegmentSpec[] },
+  t: RuntimeTranslator,
+  locale: Locale,
+): Pick<SlideText, 'notes' | 'voiceScript' | 'minutes'> {
+  const voiceScript = voiceScriptOf(t, specs.segments, locale);
+  return {
+    minutes: voiceScript.at(-1)?.to ?? 0,
+    notes: specs.notes.map((note) => noteOf(t, note)),
+    voiceScript,
+  };
+}
+
 function textOf(slide: Slide, t: RuntimeTranslator, locale: Locale): SlideText {
-  const voiceScript = voiceScriptOf(t, slide.segments, locale);
   return {
     slug: slide.slug,
     ...(t.has('title') && { title: t('title') }),
-    minutes: voiceScript.at(-1)?.to ?? 0,
-    notes: slide.notes.map((note) => noteOf(t, note)),
-    voiceScript,
+    ...contextOf(slide, t, locale),
   };
+}
+
+/**
+ * The Title slide's own Speaker notes and Voice script, read from the
+ * Episode's text like a Slide's from its own (FE-004 §6). Both are empty for
+ * an Episode that declares none, and then the drawer shows its explainer.
+ */
+export function titleContext(
+  record: EpisodeRecord,
+  locale: Locale,
+): Pick<SlideText, 'notes' | 'voiceScript' | 'minutes'> {
+  const specs = { notes: record.notes ?? [], segments: record.segments ?? [] };
+  return contextOf(specs, ownTranslator({ ...record.messages[locale] }, locale), locale);
 }
 
 /**
@@ -139,7 +166,10 @@ function textOf(slide: Slide, t: RuntimeTranslator, locale: Locale): SlideText {
 export function episodeMinutes(record: EpisodeRecord, locale: Locale): number {
   return record.sections
     .flat()
-    .reduce((sum, slide) => sum + textOf(slide, ownTranslator(slide, locale), locale).minutes, 0);
+    .reduce(
+      (sum, slide) => sum + textOf(slide, ownTranslator(slide.messages[locale], locale), locale).minutes,
+      titleContext(record, locale).minutes,
+    );
 }
 
 /**
@@ -153,7 +183,7 @@ export function localizeSlide(
   episode: EpisodeContext,
 ): LocalizedSlide {
   const { locale } = episode;
-  const t = ownTranslator(slide, locale);
+  const t = ownTranslator(slide.messages[locale], locale);
   const text = textOf(slide, t, locale);
   const kit = slideKit(
     { ...episode, anchors: new Map(episode.placed.map((placed) => [placed.slide.slug, placed.id])) },

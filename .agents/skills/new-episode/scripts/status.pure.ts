@@ -6,12 +6,19 @@
 
 import { parse } from 'yaml';
 
-export type JobState = 'done' | 'blocked' | 'ready' | 'waiting';
+export type JobState = 'done' | 'gate' | 'blocked' | 'ready' | 'waiting';
 
 interface PipelineJob {
   id: string;
   needs: string[];
   wants: string[];
+  gate: boolean;
+  outputs: string[];
+}
+
+/** The `status:` value of a staging file, tolerant of quotes and trailing space; null when there is none. */
+export function frontmatterStatus(text: string): string | null {
+  return /^status:[ \t]*["']?([^\s"']+)["']?[ \t]*$/m.exec(text)?.[1] ?? null;
 }
 
 const ENTRY = /^## (\S+) · \S+$/;
@@ -24,8 +31,8 @@ function strings(value: unknown): string[] {
 function jobsOf(yaml: string): PipelineJob[] {
   const jobs = (parse(yaml) as { jobs?: unknown[] } | null)?.jobs ?? [];
   return jobs.map((job) => {
-    const { id, needs, wants } = job as Record<string, unknown>;
-    return { id: String(id), needs: strings(needs), wants: strings(wants) };
+    const { id, needs, wants, gate, outputs } = job as Record<string, unknown>;
+    return { id: String(id), needs: strings(needs), wants: strings(wants), gate: gate === 'human', outputs: strings(outputs) };
   });
 }
 
@@ -68,8 +75,15 @@ function logged(lines: readonly string[]): JobState | null {
  * Each job's state, in pipeline order. A job with no finished entry is
  * blocked when a job it needs is blocked, ready when every job it needs is
  * done and every job it wants is done or blocked, and waiting otherwise.
+ * A `gate: human` job that is logged done reads `gate` until every output
+ * it names has `status: approved`; `outputStatus` reads one output's status
+ * (an output path with `<slug>` as written in pipeline.yml), null when unreadable.
  */
-export function runStatus(pipelineYaml: string, runLog: string): { id: string; state: JobState }[] {
+export function runStatus(
+  pipelineYaml: string,
+  runLog: string,
+  outputStatus: (output: string) => string | null = () => null,
+): { id: string; state: JobState }[] {
   const jobs = jobsOf(pipelineYaml);
   const entries = latestEntries(runLog);
   const states = new Map<string, JobState>();
@@ -80,11 +94,21 @@ export function runStatus(pipelineYaml: string, runLog: string): { id: string; s
     states.set(id, 'waiting');
     const job = jobs.find((candidate) => candidate.id === id);
     const fromLog = entries.has(id) ? logged(entries.get(id) ?? []) : null;
-    const state = fromLog ?? (job === undefined ? 'waiting' : pending(job, stateOf));
+    const state =
+      job === undefined ? (fromLog ?? 'waiting') : (stateFor(job, fromLog, outputStatus) ?? pending(job, stateOf));
     states.set(id, state);
     return state;
   };
   return jobs.map(({ id }) => ({ id, state: stateOf(id) }));
+}
+
+function stateFor(job: PipelineJob, fromLog: JobState | null, outputStatus: (output: string) => string | null): JobState | null {
+  if (fromLog === 'done' && job.gate && !approved(job, outputStatus)) return 'gate';
+  return fromLog;
+}
+
+function approved(job: PipelineJob, outputStatus: (output: string) => string | null): boolean {
+  return job.outputs.length > 0 && job.outputs.every((output) => outputStatus(output) === 'approved');
 }
 
 function pending(job: PipelineJob, stateOf: (id: string) => JobState): JobState {

@@ -5,6 +5,7 @@ import type { EpisodeRecord } from '@/components/slide-master/slide';
 import type { RuntimeTranslator } from '@/components/slide-master/slide-base';
 import { TableOfContents, type TocLabels } from '@/components/table-of-contents/table-of-contents.client';
 import { readTranslationStrings } from '@/i18n/translation-strings';
+import type { SpeakerNoteItem } from '@/lib/context-drawer.pure';
 import { TITLE_ANCHOR } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { episodeRoute, type EpisodeSlug } from '@/lib/routes';
@@ -19,7 +20,7 @@ import { SlideObserver } from './slide-observer.client';
 import { SlideWrapper } from './slide-wrapper';
 import { SlideZones } from './slide-zones.client';
 import { TalkPlayer, type TalkPlayerLabels } from './talk-player.client';
-import { TitleSlide } from './title-slide';
+import { isTitleTarget, TitleSlide } from './title-slide';
 import { UrlStateProvider } from './url-state-provider.client';
 
 /** The Slides grouped by the Section the walk placed each in, in page order. */
@@ -46,23 +47,25 @@ function SectionSlides({ slides }: { slides: readonly LocalizedSlide[] }) {
 }
 
 function SlideColumn(props: {
-  ids: readonly string[];
   title: string;
   caption?: string;
   slides: readonly LocalizedSlide[];
   youtubeId?: string;
   talkLabels?: TalkPlayerLabels;
+  titleNotes: readonly SpeakerNoteItem[];
 }) {
+  const ids = [TITLE_ANCHOR, ...props.slides.map(({ id }) => id)];
   return (
     <SlideZones>
-      <SlideObserver ids={props.ids} />
-      <SlideKeys ids={props.ids} />
+      <SlideObserver ids={ids} />
+      <SlideKeys ids={ids} />
       <ContentArea>
         <TitleSlide
           title={props.title}
           caption={props.caption}
           youtubeId={props.youtubeId}
           talkLabels={props.talkLabels}
+          targets={props.titleNotes.map(({ target }) => target).filter(isTitleTarget)}
         />
         {bySection(props.slides).map((section) => (
           <SectionSlides key={section[0].id} slides={section} />
@@ -119,12 +122,11 @@ function translatorOf(locale: Locale): TranslatorOf {
  * provides the page's one URL-state service (FE-001 §2).
  */
 export async function EpisodePageContainer({ locale, episode }: { locale: Locale; episode: EpisodeRecord }) {
-  const { title, caption, minutes, slides } = await recordContent(episode, locale, translatorOf(locale));
-  const ids = [TITLE_ANCHOR, ...slides.map(({ id }) => id)];
+  const { title, caption, minutes, slides, titleContext } = await recordContent(episode, locale, translatorOf(locale));
   const youtubeId = episode.youtube?.[locale];
   const talkLabels = youtubeId ? await readTranslationStrings(locale, 'talkPlayer') : undefined;
   const tocLabels = await tocLabelsOf(locale);
-  const drawer = await contextDrawerInput(locale, slides);
+  const drawer = await contextDrawerInput(locale, slides, titleContext);
   return (
     <UrlStateProvider key={`${locale}/${episode.slug}`}>
       <div
@@ -134,12 +136,12 @@ export async function EpisodePageContainer({ locale, episode }: { locale: Locale
       >
         <EpisodeToc locale={locale} slug={episode.slug} slides={slides} minutes={minutes} labels={tocLabels} />
         <SlideColumn
-          ids={ids}
           title={title}
           caption={caption}
           slides={slides}
           youtubeId={youtubeId}
           talkLabels={talkLabels}
+          titleNotes={titleContext.notes}
         />
         <ContextDrawerSlot input={drawer} />
         {youtubeId && talkLabels && <TalkPlayer youtubeId={youtubeId} labels={talkLabels} />}

@@ -8,33 +8,11 @@ import {
 } from './episode-staging.pure';
 
 /*
- * In-memory staging folders: a small Manuscript and a Dossier that agrees with
- * it, then one change per test that breaks exactly one cross-file rule.
+ * In-memory staging folders: a small Dossier, then one change per test that
+ * breaks exactly one rule.
  */
 
 const KNOWN_VISUALS: KnownVisuals = { masters: ['basic-page', 'grid-2x2'], motions: ['liquid-ink-transition'] };
-
-const MANUSCRIPT = `---
-type: manuscript
-status: draft
-locale: en
-brief: ./brief.md
----
-
-# Budget {#budget}
-
-Title prose.
-
-## Why it forgets {#why}
-
-Section prose.
-
-### Spent attention {#spent}
-
-First paragraph.
-
-Second paragraph.
-`;
 
 const SLIDE_BLOCK = `#### Visual
 
@@ -48,10 +26,10 @@ A bar that fills.
    - sources: [1] Attention Is All You Need — https://arxiv.org/abs/1706.03762
    - target: the bar
 
-#### Segments
+#### Voice script
 
-1. Whole window — read, share
-2. Not seen — attention left
+1. **Whole window** — read, share
+2. **Not seen** — attention left
 `;
 
 const DOSSIER = `---
@@ -63,9 +41,11 @@ brief: ./brief.md
 
 # Budget {#budget}
 
-Argument.
-
 ## Why it forgets {#why}
+
+#### Voice script
+
+1. **Forgetting** — budget, spending
 
 ### Spent attention {#spent}
 
@@ -138,7 +118,7 @@ function runLog(entries: readonly string[]): string {
 }
 
 function folder(files: Record<string, string>): Record<string, string> {
-  return { 'manuscript.md': MANUSCRIPT, 'dossier.md': DOSSIER, ...files };
+  return { 'dossier.md': DOSSIER, ...files };
 }
 
 function kinds(findings: readonly { kind: string }[]): string[] {
@@ -146,7 +126,7 @@ function kinds(findings: readonly { kind: string }[]): string[] {
 }
 
 describe('success cases', () => {
-  it('finds nothing in a folder whose Manuscript and Dossier agree', () => {
+  it('finds nothing in a folder whose Dossier is well formed', () => {
     // ARRANGE
     const files = folder({});
     // ACT
@@ -202,31 +182,52 @@ describe('success cases', () => {
   });
 });
 
+const TITLE_BLOCKS = `#### Speaker notes
+
+1. **A budget** — attention is finite [1].
+   - sources: [1] Attention Is All You Need — https://arxiv.org/abs/1706.03762
+
+#### Voice script
+
+1. **Opening** — budget, spending
+`;
+
 describe('failure cases', () => {
-  it('names the first spine heading where the Dossier departs from the Manuscript', () => {
+  it('reports prose under the Dossier h1, where only the two optional blocks may sit', () => {
     // ARRANGE
     const files = folder({
-      'dossier.md': DOSSIER.replace('### Spent attention {#spent}', '## Spent attention {#spent}'),
+      'dossier.md': DOSSIER.replace('# Budget {#budget}\n', '# Budget {#budget}\n\nArgument.\n'),
     });
-    const expectedKinds = ['spine'];
-    const expectedSlug = 'spent';
+    const expectedKinds = ['title-slide'];
     // ACT
     const findings = checkStagingFolder(files, KNOWN_VISUALS);
     // ASSERT
     expect(kinds(findings)).toEqual(expectedKinds);
-    expect(findings[0].message).toContain(expectedSlug);
+    expect(findings[0].message).toContain('Argument.');
   });
 
-  it('names a spine slug that is missing from the Dossier', () => {
+  it('reports an h4 other than Speaker notes and Voice script under the h1', () => {
     // ARRANGE
-    const files = folder({ 'dossier.md': DOSSIER.replace('## Why it forgets {#why}\n', '') });
-    const expectedKinds = ['spine'];
-    const expectedSlug = 'why';
+    const files = folder({
+      'dossier.md': DOSSIER.replace('# Budget {#budget}\n', '# Budget {#budget}\n\n#### Sources\n\n1. A book.\n'),
+    });
+    const expectedKinds = ['title-slide'];
     // ACT
     const findings = checkStagingFolder(files, KNOWN_VISUALS);
     // ASSERT
     expect(kinds(findings)).toEqual(expectedKinds);
-    expect(findings[0].message).toContain(expectedSlug);
+    expect(findings[0].message).toContain('Sources');
+  });
+
+  it("checks the Speaker notes under the h1 like any Slide's", () => {
+    // ARRANGE
+    const broken = TITLE_BLOCKS.replace('[1] Attention', '[2] Attention');
+    const files = folder({ 'dossier.md': DOSSIER.replace('# Budget {#budget}\n', `# Budget {#budget}\n\n${broken}`) });
+    const expectedKinds = ['speaker-note'];
+    // ACT
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
+    // ASSERT
+    expect(kinds(findings)).toEqual(expectedKinds);
   });
 
   it('reports a Dossier heading whose slug is malformed instead of ignoring it as an extra', () => {
@@ -263,6 +264,80 @@ describe('failure cases', () => {
     // ASSERT
     expect(kinds(findings)).toEqual(expectedKinds);
     expect(findings[0].message).toContain(expectedName);
+  });
+
+  it('accepts motion none as a Visual motion: the Slide carries no motion', () => {
+    // ARRANGE
+    const files = folder({ 'dossier.md': DOSSIER.replace('motion: liquid-ink-transition', 'motion: none') });
+    const expectedFindings: string[] = [];
+    // ACT
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
+    // ASSERT
+    expect(kinds(findings)).toEqual(expectedFindings);
+  });
+
+  it('accepts a title line after the master line as the on-screen title', () => {
+    // ARRANGE
+    const files = folder({
+      'dossier.md': DOSSIER.replace('motion: liquid-ink-transition', 'motion: none\ntitle: Where the budget goes'),
+    });
+    const expectedFindings: string[] = [];
+    // ACT
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
+    // ASSERT
+    expect(kinds(findings)).toEqual(expectedFindings);
+  });
+
+  it('reports a title line that names no title', () => {
+    // ARRANGE
+    const files = folder({
+      'dossier.md': DOSSIER.replace('motion: liquid-ink-transition', 'motion: none\ntitle:'),
+    });
+    const expectedKinds = ['visual'];
+    const expectedForm = 'title: <on-screen title>';
+    // ACT
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
+    // ASSERT
+    expect(kinds(findings)).toEqual(expectedKinds);
+    expect(findings[0].message).toContain(expectedForm);
+  });
+
+  it('reports a title line that is not directly after the master line, instead of reading it as prose', () => {
+    // ARRANGE
+    const files = folder({
+      'dossier.md': DOSSIER.replace(
+        'motion: liquid-ink-transition',
+        'motion: none\n\nA bar that fills.\ntitle: Where the budget goes',
+      ),
+    });
+    const expectedKinds = ['visual'];
+    const expectedMention = 'directly after the master line';
+    // ACT
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
+    // ASSERT
+    expect(kinds(findings)).toEqual(expectedKinds);
+    expect(findings[0].message).toContain(expectedMention);
+  });
+
+  it('reports a Visual on the Title slide or a section slide, which use the kit layouts with motion none', () => {
+    // ARRANGE
+    const visual = '#### Visual\n\nmaster: basic-page · motion: none\n\n';
+    const files = folder({
+      'dossier.md': DOSSIER.replace('# Budget {#budget}\n\n', `# Budget {#budget}\n\n${visual}`).replace(
+        '## Why it forgets {#why}\n\n',
+        `## Why it forgets {#why}\n\n${visual}`,
+      ),
+    });
+    const expectedKinds = ['visual', 'visual'];
+    const expectedSlugs = ['budget', 'why'];
+    // ACT
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
+    // ASSERT
+    expect(kinds(findings)).toEqual(expectedKinds);
+    expect(findings.map(({ message }) => expectedSlugs.some((slug) => message.includes(`{#${slug}}`)))).toEqual([
+      true,
+      true,
+    ]);
   });
 
   it('reports a Visual that does not open with the master and motion line', () => {
@@ -336,19 +411,6 @@ describe('failure cases', () => {
     expect(findings[0].message).toContain(expectedLine);
   });
 
-  it('names a Slide whose Segments count differs from its Manuscript paragraphs', () => {
-    // ARRANGE
-    const files = folder({ 'dossier.md': DOSSIER.replace('2. Not seen — attention left\n', '') });
-    const expectedKinds = ['segments'];
-    const expectedCounts = ['1 Segments', '2 paragraphs'];
-    // ACT
-    const findings = checkStagingFolder(files, KNOWN_VISUALS);
-    // ASSERT
-    expect(kinds(findings)).toEqual(expectedKinds);
-    expect(findings[0].message).toContain(expectedCounts[0]);
-    expect(findings[0].message).toContain(expectedCounts[1]);
-  });
-
   it('reports a feedback item not of the anchor · tag — text form', () => {
     // ARRANGE
     const files = folder({ [FEEDBACK_PATH]: feedback('app', ['- why--spent: open with the budget.']) });
@@ -361,7 +423,7 @@ describe('failure cases', () => {
     expect(findings[0].message).toContain(expectedForm);
   });
 
-  it('names a feedback anchor that is no Slide in the Manuscript', () => {
+  it('names a feedback anchor that is no Slide in the Dossier', () => {
     // ARRANGE
     const files = folder({ [FEEDBACK_PATH]: feedback('voice', ['- `why--gone` · content — Cut it.']) });
     const expectedKinds = ['feedback'];
@@ -446,6 +508,17 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('accepts a Speaker notes and a Voice script block under the h1', () => {
+    // ARRANGE
+    const files = folder({
+      'dossier.md': DOSSIER.replace('# Budget {#budget}\n', `# Budget {#budget}\n\n${TITLE_BLOCKS}`),
+    });
+    // ACT
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
+    // ASSERT
+    expect(findings).toEqual([]);
+  });
+
   it('ignores unslugged Dossier headings anywhere in the spine', () => {
     // ARRANGE
     const files = folder({
@@ -489,17 +562,6 @@ describe('edge cases', () => {
     expect(findings).toEqual([]);
   });
 
-  it('counts a Manuscript paragraph wrapped over two lines as one segment', () => {
-    // ARRANGE
-    const files = folder({
-      'manuscript.md': MANUSCRIPT.replace('First paragraph.', 'First half of a paragraph,\nwrapped.'),
-    });
-    // ACT
-    const findings = checkStagingFolder(files, KNOWN_VISUALS);
-    // ASSERT
-    expect(findings).toEqual([]);
-  });
-
   it('accepts a practice tag in a practice file', () => {
     // ARRANGE
     const files = folder({ [FEEDBACK_PATH]: feedback('practice', ['- `why--spent` · practice — Slow down here.']) });
@@ -509,7 +571,7 @@ describe('edge cases', () => {
     expect(findings).toEqual([]);
   });
 
-  it('checks the run log and research of a folder that has no Manuscript or Dossier yet', () => {
+  it('checks the run log and research of a folder that has no Dossier yet', () => {
     // ARRANGE
     const files = {
       'run-log.md': runLog(['research · 2026-10-12T10:15:00Z', 'brief-grill · 2026-10-12T09:00:00Z']),

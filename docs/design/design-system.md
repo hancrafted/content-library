@@ -64,7 +64,7 @@ After the three workshop Episodes, review every Slide token file. A colour that 
 
 ## Type
 
-Heading level and visual size are separate. The h1/h2/h3 elements follow the manuscript (Episode, Section, Slide). Size comes from a **role**.
+Heading level and visual size are separate. The h1/h2/h3 elements follow the Episode's spine (Episode, Section, Slide). Size comes from a **role**.
 
 | Role       | Utility           | Value                            | Line height | Used for                                                                   |
 | ---------- | ----------------- | -------------------------------- | ----------- | -------------------------------------------------------------------------- |

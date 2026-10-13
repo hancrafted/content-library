@@ -28,7 +28,7 @@ frontmatter:
         stale_after: { presence: required, format: datetime }
     - ruleId: staging-brief
       fileNames: [brief.md]
-      intent: 'A Brief is written before any research and is the yardstick every later artifact is judged against, so each goal is concrete enough to judge a Manuscript by. Fail if a goal is too vague to judge a Manuscript against, or the body drafts Slides or Sections.'
+      intent: 'A Brief is written before any research and is the yardstick every later artifact is judged against, so each goal is concrete enough to judge a Dossier by. Fail if a goal is too vague to judge a Dossier against, or the body drafts Slides or Sections.'
       unknownKeys: forbidden
       fields:
         type:
@@ -51,17 +51,17 @@ frontmatter:
                 intent: 'When status is approved: Han accepted the Brief at its gate, and later jobs start from it.',
               }
 
-    - ruleId: staging-manuscript
-      fileNames: [manuscript.md]
-      intent: 'The Manuscript is the story the Episode tells, written backwards from its Brief so that every actionable is spoken. Fail if an actionable of the Brief is never spoken, or the file carries material beyond what the speaker says.'
+    - ruleId: staging-dossier
+      fileNames: [dossier.md]
+      intent: "The Dossier is the Episode's one staging file: the spine, and per Slide what is shown, what is cited and what is said, written backwards from its Brief so that every actionable is spoken. The implementation is built from it without inventing material. Fail if an actionable of the Brief is never spoken, a page slide's material would leave an implementer guessing, or the file specifies styling or code."
       unknownKeys: forbidden
       fields:
         type:
           presence: required
           allowed:
             - {
-                value: manuscript,
-                intent: 'The spoken story only; sources, Speaker notes and the choice of Visual live in the Dossier.',
+                value: dossier,
+                intent: 'The Episode in one file: what the viewer sees, the cited talking points, and what the speaker says, per Slide.',
               }
         status: &staging-status
           presence: required
@@ -74,7 +74,7 @@ frontmatter:
                 value: checked,
                 intent: 'When status is checked: the file passed markdown-harness, the cross-file tests and its reviewer.',
               }
-            - { value: approved, intent: 'When status is approved: Promotion moved the file next to its Slides.' }
+            - { value: approved, intent: 'When status is approved: Han accepted the file at its gate.' }
         locale: &staging-locale
           presence: required
           allowed:
@@ -89,21 +89,6 @@ frontmatter:
                 value: ./brief.md,
                 intent: 'The Brief in the same folder, whose goals this file is written towards. Fail if slugged material serves no Learning goal, Actionable or Red thread step the Brief states.',
               }
-    - ruleId: staging-dossier
-      fileNames: [dossier.md]
-      intent: "The Dossier holds what the Manuscript leaves unsaid for each Slide: what is shown, what is cited, and how the speech splits into Voice script segments, so the implementation is built from it without inventing material. Fail if a page slide's material would leave an implementer guessing, or the file holds spoken prose or specifies styling or code."
-      unknownKeys: forbidden
-      fields:
-        type:
-          presence: required
-          allowed:
-            - {
-                value: dossier,
-                intent: 'Material for building the Slides, described as what the viewer sees; spoken prose lives in the Manuscript.',
-              }
-        status: *staging-status
-        locale: *staging-locale
-        brief: *staging-brief-link
     # A rule selects by literal file name, never by folder: folders do not recurse and every staging
     # folder is `docs/episodes/<slug>/`. So the identifier lives in a folder and the kind is the file
     # name: `research/<question-slug>/research.md` and `feedback/<NN>/feedback.md`. The same name
@@ -311,48 +296,25 @@ body-structure:
                 },
               ],
           }
-    - ruleId: staging-manuscript-body
-      fileNames: [manuscript.md]
-      intent: "Headings are the Episode's Slides, their titles copied verbatim into the Episode and their slugs keeping them addressable when a title changes; paragraphs are the Voice script segments, so the prose is what the speaker says, in order. Fail if a paragraph would not stand as one spoken passage, or the text only makes sense while seeing a Slide."
-      undefinedHeadings: forbid
+    - ruleId: staging-dossier-body
+      fileNames: [dossier.md]
+      intent: "Headings are the Episode's Slides, their titles copied verbatim into the Episode and their slugs keeping them addressable when a title changes; a heading without a slug adds material and may sit anywhere. Fail if any material contradicts the Voice script it sits beside."
       headings:
         - purpose: heading
           level: 1
           pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
-          intent: "The Title slide: a catchy, short title, and prose that opens with the Brief's Hook. Fail if the title is generic, or the prose opens with anything but the Hook."
-          mayHold: [prose]
+          intent: "The Title slide: a catchy, short title. Fail if the title is generic. No prose and no Visual sit under it: the Title slide uses the kit's title layout with motion none. Only the optional `#### Speaker notes` and `#### Voice script` blocks may, which the writing jobs leave out and a feedback round adds (the staging test checks them, as it does each Slide's). Fail if a Speaker note's claim is already spoken in the Voice script beside it, or an item would not stand as one spoken passage."
         - purpose: enumeration
           level: 2
           minCount: 1
           pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
-          intent: 'A section slide naming one Section, one step of the Red thread, under a short title that names the step. Fail if the Section does not advance the Red thread.'
-          mayHold: [prose]
+          intent: "A section slide naming one Section, one step of the Red thread, under a short title that names the step. It carries no Visual: it uses the kit's section layout with motion none. Its own `#### Voice script` block, directly under the heading, holds what the speaker says on the section slide, one `**<beat>** — <text>` item per spoken paragraph, as a page slide's does. Fail if the Section does not advance the Red thread, material here serves only one of its Slides, or a Voice script item would not stand as one spoken passage."
           headings:
             - purpose: enumeration
               level: 3
               minCount: 1
               pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
               intent: 'A page slide: one point the speaker makes, under a catchy, short title that previews it. Fail if it makes more than one point, or its title does not preview that point.'
-              mayHold: [prose]
-    - ruleId: staging-dossier-body
-      fileNames: [dossier.md]
-      intent: "The Dossier follows the Manuscript's Slides; a heading without a slug adds material and may sit anywhere. Fail if any material contradicts the Manuscript prose it sits beside."
-      headings:
-        - purpose: heading
-          level: 1
-          pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
-          intent: 'The Title slide; material here serves the opening or the Episode as a whole. Fail if material here serves only one later Slide.'
-        - purpose: enumeration
-          level: 2
-          minCount: 1
-          pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
-          intent: 'A Section; material here serves the whole Section. Fail if material here serves only one of its Slides.'
-          headings:
-            - purpose: enumeration
-              level: 3
-              minCount: 1
-              pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
-              intent: 'A page slide, whose Visual, Speaker notes and Segments serve the matching Manuscript prose.'
               headings:
                 - purpose: heading
                   level: 4
@@ -360,7 +322,7 @@ body-structure:
                     [
                       {
                         title: Visual,
-                        intent: "The master slide and motion that show this Slide's point, then prose on what the viewer sees, required when the master alone does not say it. Fail if the choice does not show the prose's point, or the master alone leaves that unsaid and no prose follows.",
+                        intent: "The master slide and motion (`none` for no motion) that show this Slide's point, an optional `title:` line naming a different on-screen title than the heading, then prose on what the viewer sees, required when the master alone does not say it. Fail if the choice does not show the prose's point, or the master alone leaves that unsaid and no prose follows.",
                       },
                     ]
                   mayHold: [prose]
@@ -379,8 +341,8 @@ body-structure:
                   allowed:
                     [
                       {
-                        title: Segments,
-                        intent: 'A title and keywords for each Manuscript paragraph, in order, so the speaker recalls each Voice script segment at a glance. Fail if the keywords are not drawn from their paragraph.',
+                        title: Voice script,
+                        intent: 'One item per spoken paragraph, `**<beat>** — <text>`: first the beat and its keywords, which the speaker recalls at a glance, then the spoken paragraph in the same item, in order. Fail if an item would not stand as one spoken passage, or the text only makes sense while seeing a Slide.',
                       },
                     ]
                   mayHold: [ordered-list]
@@ -455,7 +417,7 @@ body-structure:
           }
     - ruleId: feedback-body
       fileNames: [feedback.md]
-      intent: 'One list of items, each a single change keyed to its Slide and tagged with where it lands, so it routes to the Manuscript or Dossier, the implementation, or the recording. Fail if an item holds more than one change, its tag sends it to the wrong place, or it cannot be acted on without asking Han.'
+      intent: 'One list of items, each a single change keyed to its Slide and tagged with where it lands, so it routes to the Dossier, the implementation, or the recording. Fail if an item holds more than one change, its tag sends it to the wrong place, or it cannot be acted on without asking Han.'
       undefinedHeadings: forbid
     - ruleId: run-log-body
       fileNames: [run-log.md]
