@@ -7,6 +7,7 @@
 export type FindingKind =
   | 'spine'
   | 'visual'
+  | 'title-slide'
   | 'speaker-note'
   | 'voice-script'
   | 'feedback'

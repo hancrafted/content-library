@@ -1,6 +1,7 @@
 import {
   episodeMinutes,
   localizeSlide,
+  titleContext,
   type EpisodeContext,
   type LocalizedSlide,
 } from '@/components/slide-master/localized-slide';
@@ -26,6 +27,8 @@ export interface EpisodeContent {
   /** The whole reading time in minutes (`episodeMinutes`): the total the table of contents counts down from. */
   readonly minutes: number;
   readonly slides: readonly LocalizedSlide[];
+  /** The Title slide's own Speaker notes and Voice script; both empty for an Episode that gives it none. */
+  readonly titleContext: Pick<LocalizedSlide, 'notes' | 'voiceScript'>;
 }
 
 /**
@@ -50,6 +53,7 @@ export async function recordContent(
     title,
     caption,
     minutes: episodeMinutes(record, locale),
+    titleContext: titleContext(record, locale),
     slides: episode.placed.map((placed) => localizeSlide(placed, episode)),
   };
 }

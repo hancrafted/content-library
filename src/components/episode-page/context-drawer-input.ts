@@ -21,11 +21,12 @@ const NOT_DRAWER_STRINGS = ['explainer', 'sourcesCount', 'citation', 'refNote'] 
 export async function contextDrawerInput(
   locale: Locale,
   slides: readonly LocalizedSlide[],
+  title?: Pick<LocalizedSlide, 'notes' | 'voiceScript'>,
 ): Promise<ContextDrawerInput> {
   const t = await getTranslations({ locale, namespace: 'contextDrawer' });
   const explainer = t('explainer', { shortcut: SHORTCUT_LABEL });
   return {
-    items: contextItemsOf(slides, explainer),
+    items: contextItemsOf(slides, explainer, title),
     labels: {
       strings: await readTranslationStrings(locale, 'contextDrawer', NOT_DRAWER_STRINGS),
       sources: (count) => t('sourcesCount', { count }),

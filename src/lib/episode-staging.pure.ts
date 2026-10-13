@@ -6,6 +6,7 @@
  */
 
 import { checkStagingOrder } from './episode-staging-order.pure';
+import { checkTitleSlide } from './episode-staging-title.pure';
 import { unless, type Finding } from './finding.pure';
 import {
   blocksOf,
@@ -166,6 +167,7 @@ function checkDossier(files: Readonly<Record<string, string>>, known: KnownVisua
   const dossierBlocks = blocksOf(bodyLines(dossier));
   return [
     ...checkSlugs(dossierBlocks.map(({ heading }) => heading)),
+    ...checkTitleSlide(dossierBlocks),
     ...checkVisuals(dossierBlocks, known),
     ...checkSpeakerNotes(dossierBlocks),
     ...checkFeedback(files, dossierBlocks),

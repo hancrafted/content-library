@@ -107,6 +107,9 @@ export interface EpisodeMessages {
   readonly title: string;
   readonly caption: string;
   readonly description: string;
+  /** The Title slide's optional Speaker notes and Voice script, laid out as in a Slide's own file (`notes.<note>`, `voiceScript.segments.<segment>`). */
+  readonly notes?: Readonly<Record<string, unknown>>;
+  readonly voiceScript?: Readonly<Record<string, unknown>>;
 }
 
 /**
@@ -118,6 +121,9 @@ export interface EpisodeRecord<Ep extends EpisodeSlug = EpisodeSlug> {
   /** One recording per locale, shown on the Title slide; optional until recorded. */
   readonly youtube?: PerLocale<string>;
   readonly messages: PerLocale<EpisodeMessages>;
+  /** The Title slide's Speaker notes and Voice script segments, when its text holds them. */
+  readonly notes?: readonly NoteSpec[];
+  readonly segments?: readonly SegmentSpec[];
   readonly sections: readonly Section[];
 }
 
