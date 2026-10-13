@@ -55,10 +55,10 @@ _Done when_ every required heading holds Han's choice. If time runs out first, w
 
 ## Writing the Brief (Claude Code)
 
-1. Write the Brief to `docs/episodes/<slug>/brief.md`, where `<slug>` is the working title in kebab case, filled from the _Brief template_ with `status: draft`. Under `/new-episode`, write it in the Episode's worktree.
-2. Run `npm run check:docs` and `npx vitest run tests/docs/episode-staging.test.ts` until both are clean, then set `status: checked`. `npx mh query docs/episodes/<slug>/brief.md` prints the intent of every field and heading.
+1. Write the Brief to `docs/episodes/<slug>/brief.md`, where `<slug>` is the working title in kebab case, filled from the _Brief template_ (`status: draft`, and `generated` naming you and the current UTC time). Under `/new-episode`, write it in the Episode's worktree.
+2. Run `npm run check:docs` and `npx vitest run tests/docs/episode-staging.test.ts` until both are clean, then append the machine entry `{ by: process:markdown-harness, at: <now UTC> }` to `verified` (a list; create it when the Brief has none). Rewriting the Brief later moves `generated.at` forward and re-opens the gate. `npx mh query docs/episodes/<slug>/brief.md` prints the intent of every field and heading.
 3. Commit the checked Brief through the `commit` skill with the trailer `Gate: draft brief`, before Han edits it, so his edits stay visible as a diff.
-4. Hand the Brief to Han. Only Han sets `status: approved`; that commit carries `Gate: approved brief`.
+4. Hand the Brief to Han. Only Han approves, by running `npm run episode:approve -- docs/episodes/<slug>/brief.md`, which appends his `verified` entry; that commit carries `Gate: approved brief`.
 
 ## Voice sessions
 
@@ -79,6 +79,9 @@ Every heading, Style included, is required and stays in this order, except Threa
 type: brief
 title: The working title of the Episode
 status: draft
+generated:
+  by: claude-code/opus-5.5
+  at: 2026-10-13T09:00:00Z
 ---
 
 # The working title of the Episode

@@ -60,21 +60,23 @@ frontmatter:
           allowed:
             - { value: brief, intent: 'Goals: what the Episode must achieve, stated before it is written.' }
         title: *title
-        status:
+        status: &staging-status
           presence: required
           allowed:
             - {
                 value: draft,
-                intent: 'When status is draft: an agent wrote or changed the Brief and its checks have not yet passed on it.',
+                intent: 'OKF lifecycle: a staging file stays draft until Promotion removes the line. The gate is not read from status but from `verified` (a machine entry once the checks pass, the entry of Han once he approves).',
               }
-            - {
-                value: checked,
-                intent: 'When status is checked: the Brief passed markdown-harness and the cross-file tests, and waits for Han.',
-              }
-            - {
-                value: approved,
-                intent: 'When status is approved: Han accepted the Brief at its gate, and later jobs start from it.',
-              }
+        generated.by: &generated-by
+          presence: required
+          format: actor
+          intent: 'Who wrote or last rewrote the file, as an OKF actor: `<producer>/<version>` for an agent (`claude-code/opus-5.5`), `human:<id>` for a person (`human:han`). Fail if an agent-written file names a person, or a file Han edited names an agent.'
+        generated.at: &generated-at
+          presence: required
+          format: datetime
+          intent: 'When the file last changed in substance, with an explicit UTC offset. A `verified` entry counts only while its `at` is at or after this, so an edit re-opens the gate.'
+        verified: &verified
+          intent: 'OKF §5.2 trust: who confirmed the file and when, as a list of `{ by, at }` or one bare mapping (OKF reads a bare mapping as a one-element list). `process:markdown-harness` once the checks pass, `human:han` once Han approves at the gate; an entry counts only while its `at` is at or after generated.at. The shape, actor and datetime are checked in tests/docs/episode-staging.test.ts, because one address cannot govern both the list and the bare mapping.'
 
     - ruleId: staging-dossier
       fileNames: [dossier.md]
@@ -89,18 +91,10 @@ frontmatter:
                 intent: 'The Episode in one file: what the viewer sees, the cited talking points, and what the speaker says, per Slide.',
               }
         title: *title
-        status: &staging-status
-          presence: required
-          allowed:
-            - {
-                value: draft,
-                intent: 'When status is draft: an agent wrote or changed the file and its checks have not yet passed on it.',
-              }
-            - {
-                value: checked,
-                intent: 'When status is checked: the file passed markdown-harness, the cross-file tests and its reviewer.',
-              }
-            - { value: approved, intent: 'When status is approved: Han accepted the file at its gate.' }
+        status: *staging-status
+        generated.by: *generated-by
+        generated.at: *generated-at
+        verified: *verified
         locale: &staging-locale
           presence: required
           allowed:
@@ -174,6 +168,8 @@ frontmatter:
           allowed:
             - { value: feedback, intent: "Han's feedback for one round, each change as he asked for it." }
         title: *title
+        generated.by: *generated-by
+        generated.at: *generated-at
         round:
           presence: required
           intent: 'Which pass of the feedback loop this is, counting from 1, one file per round.'
