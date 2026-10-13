@@ -74,7 +74,7 @@ describe('success cases', () => {
 
   it.each(['en', 'de'] as const)('keeps an upcoming Episode page out of search in %s', (locale) => {
     // ARRANGE
-    const expected = { index: false, follow: false };
+    const expected = { index: false };
     // ACT
     const metadata = pageMetadata({ episode: 'page-template' }, locale, { ...COPY, status: 'upcoming' });
     // ASSERT

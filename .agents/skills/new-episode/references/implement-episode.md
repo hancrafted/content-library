@@ -17,7 +17,7 @@ The Episode is a draft: it has no video and no Promotion. This overrides the met
 
 - Write `episode-metadata.ts` with `status: 'upcoming'` (the existing non-published value, `UpcomingEpisodeMetadata`) and no `publishedOn`; the type refuses one. Publishing flips both and is Han's separate step ([episode-publishing](../../../../docs/features/episode-publishing.md)), never this job's or Promotion's.
 - Topic, extra Topics and Tags come from the Brief. `topic`, `format` and `tags` are required in `SharedMetadata` (`src/lib/episode-metadata.pure.ts`), so a required field the Brief does not name gets a `Needs human:` line in the run-log entry plus the closest honest value (the nearest existing Topic or Format, an empty `tags` list), never an invented one. `extraTopics` is optional: when the Brief names none, leave it out.
-- Register the metadata in the `PUBLISHED` map in `episode-repository.ts`: it holds every registered slug whatever its `status`, so an upcoming Episode with a page type-checks. The page is built `noindex` and its card stays unlinked until publishing ([episode-publishing](../../../../docs/features/episode-publishing.md)); write no `published-anchors.json` here.
+- Register the metadata in the `REGISTERED` map in `episode-repository.ts`: it holds every registered slug whatever its `status`, so an upcoming Episode with a page type-checks. The page is built `noindex` and its card stays unlinked until publishing ([episode-publishing](../../../../docs/features/episode-publishing.md)); write no `published-anchors.json` here.
 
 ## Review
 

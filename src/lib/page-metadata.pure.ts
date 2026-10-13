@@ -56,6 +56,6 @@ export function pageMetadata(page: PageRef, locale: Locale, copy?: PageCopy): Me
       canonical: localizePath(route, locale),
       languages: { ...languages, 'x-default': localizePath(route, DEFAULT_LOCALE) },
     },
-    ...(copy?.status === 'upcoming' ? { robots: { index: false, follow: false } } : {}),
+    ...(copy?.status === 'upcoming' ? { robots: { index: false } } : {}),
   };
 }

@@ -3,7 +3,7 @@ import { EPISODE_SLUGS } from '@/lib/routes';
 import { existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { listEpisodes } from './episode-repository';
+import { episodeStatus, hasPage, listEpisodes } from './episode-repository';
 
 /*
  * The read API the Episode overview depends on (#40): one metadata entry per
@@ -46,7 +46,7 @@ describe('success cases', () => {
     const expected = EPISODE_SLUGS.filter((slug) => !(LAYOUT_REFERENCES as readonly string[]).includes(slug)).sort();
     // ACT
     const withPage = listEpisodes()
-      .filter(({ slug }) => (EPISODE_SLUGS as readonly string[]).includes(slug))
+      .filter(({ slug }) => hasPage(slug))
       .map(({ slug }) => slug)
       .sort();
     // ASSERT
@@ -61,6 +61,27 @@ describe('success cases', () => {
     // ASSERT
     expect(files).toContain(METADATA_FILE);
   });
+
+  it.each(LAYOUT_REFERENCES)('counts the layout reference %s as published, so it stays indexable', (slug) => {
+    // ARRANGE
+    const expected = 'published';
+    // ACT
+    const status = episodeStatus(slug);
+    // ASSERT
+    expect(status).toBe(expected);
+  });
+
+  it.each(listEpisodes().filter(({ slug }) => hasPage(slug)))(
+    'reads the status of $slug from its metadata',
+    (episode) => {
+      // ARRANGE
+      const expected = episode.status;
+      // ACT
+      const status = episodeStatus(episode.slug as Parameters<typeof episodeStatus>[0]);
+      // ASSERT
+      expect(status).toBe(expected);
+    },
+  );
 });
 
 describe('failure cases', () => {
@@ -96,6 +117,15 @@ describe('failure cases', () => {
     const contents = expected.map(([slug]) => [slug, readdirSync(path.join(EPISODES_DIR, slug as string))]);
     // ASSERT
     expect(contents).toEqual(expected);
+  });
+
+  it('fails loudly for a registered slug no metadata lists, never defaulting to published', () => {
+    // ARRANGE
+    const unlisted = 'not-an-episode' as Parameters<typeof episodeStatus>[0];
+    // ACT
+    const read = () => episodeStatus(unlisted);
+    // ASSERT
+    expect(read).toThrow(/not-an-episode/);
   });
 });
 
