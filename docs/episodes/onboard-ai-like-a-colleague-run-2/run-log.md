@@ -356,3 +356,61 @@ Han was away for `to-spec`'s seam confirmation; the spec records that the FE-004
 
 - Needs human: every `dossier.md#…` link in #137–#143 404s until `episode/onboard-ai-like-a-colleague-run-2` is pushed, and GitHub does not render the Dossier's `{#id}` anchors, so a link opens the file without jumping to its heading.
 - Needs human: spec issue #137 carries `ready-for-agent`, which `to-spec` applies; an agent picking issues by that label could take the parent before the designs are approved.
+
+## write-design-spec · 2026-10-13T15:24:00Z
+
+### Inputs
+
+- Spec issue #137 and tickets #138–#143 from `write-spec`; `brief.md` `## Style` (Editorial); `dossier.md`; `docs/design/`; FE-002, FE-007, FE-009, FE-011; run-1 tickets #100–#103 as "not this".
+- Attempt 2: the reviewer's failed lines, each sent only to its ticket's designer (#138–#142). Attempt 3: one failed line, to #142's designer.
+
+### Output
+
+- `## Visual language` in https://github.com/hancrafted/content-library/issues/137: Editorial; the day-one note as recurring object; one CSS entrance per Slide; `primary` once, meaning colours only for their meanings.
+- A design answer for every Slide in #138–#143; every ticket still `needs-triage` for Han.
+- Edited #137 · 2026-10-13T15:05:57Z
+- Edited #138 · 2026-10-13T15:20:35Z
+- Edited #139 · 2026-10-13T15:21:07Z
+- Edited #140 · 2026-10-13T15:20:46Z
+- Edited #141 · 2026-10-13T15:20:50Z
+- Edited #142 · 2026-10-13T15:22:59Z
+- Edited #143 · 2026-10-13T15:13:23Z
+
+### Checks
+
+- None in the pipeline.
+- Reviewer: fail on attempts 1 and 2, pass on attempt 3.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 120 s
+- implementor · attempt 1 · pass · 179 s · 98479 tokens
+- implementor · attempt 1 · pass · 504 s · 127198 tokens
+- implementor · attempt 1 · pass · 262 s · 103041 tokens
+- implementor · attempt 1 · pass · 396 s · 103103 tokens
+- implementor · attempt 1 · pass · 237 s · 103677 tokens
+- implementor · attempt 1 · pass · 263 s · 115921 tokens
+- reviewer · attempt 1 · fail · rubric "The design follows the spec issue's visual language." · 311 s · 132109 tokens
+- implementor · attempt 2 · pass · 17 s · 101398 tokens
+- implementor · attempt 2 · pass · 59 s · 137881 tokens
+- implementor · attempt 2 · pass · 27 s · 106604 tokens
+- implementor · attempt 2 · pass · 30 s · 107399 tokens
+- implementor · attempt 2 · pass · 47 s · 114557 tokens
+- reviewer · attempt 2 · fail · rubric "every domain concept named by its GLOSSARY.md term, never an _Avoid_ word" · 77 s · 78013 tokens
+- implementor · attempt 3 · pass · 16 s · 115886 tokens
+- reviewer · attempt 3 · pass · 13 s · 46044 tokens
+
+### Notes
+
+The first implementor line is the orchestrator writing `## Visual language`; the six attempt-1 implementor lines are the designers of #138, #139, #140, #141, #142 and #143 in that order (#143 started late: the session allows five subagents at once). Attempt 2's lines are #138, #139, #140, #141, #142; attempt 3's is #142. The `#<issue> · approved as drafted|edited` lines follow once Han has relabelled the tickets.
+
+Attempt 1 failed #139 and #142 on rubric 3: designed in parallel, they drew the day-one note themselves instead of using #140's shared `src/components/slide-shared/day-one-note.tsx`; and #138, #140, #141, #142 named Speaker note items "note", an _Avoid_ word. Attempt 2 fixed all but #142, whose "Speaker note 1" came from the orchestrator's own retry wording; attempt 3 wrote "Speaker note item".
+
+- Needs human: German form of address is mixed: #138 uses Sie ("Ihr eigenes Ergebnis"), #140–#143 use du; #140 and #142 write "Kollegin".
+- Needs human: #142 needs `DayOneNote` to gain an optional `children` slot ("Requires #140"); #139 needs it built once by whichever ticket lands first.
+- Needs human: #139 draws the Sommerfest task as a poster tile, not as the day-one note, though the Visual language lists "the brief" among the note's forms.
+- Needs human: #143 sets no `heading` key; its on-screen title comes from rich `statement` children, an exception to `implement-episode.md`'s separate `heading` key.
+- Needs human: #143's section slide and "The twist" both read "AI can help you onboard AI", one scroll apart; keep both or retitle the h2 (which changes its anchor).
+- Needs human: #141 changes "The work relocates" to scroll-driven motion and asks for the Dossier's "on entry … once" prose to be updated; its one `primary` is on "The total does not shrink", the line flagged at the Dossier gate.
+- Needs human: Open for Han copy, each with a draft in its ticket: captions on #138 "Twenty times on paper", #140 three Slides, #142 two Slides; #140's day-one note and plan rows; #142's four step texts; #143's grill-me pointer line.
+- Needs human: #137's Visual language says the day-one note "returns in the thought experiment"; after attempt 2 it appears in #139 "A colleague who knows the written world", #140 and #142.

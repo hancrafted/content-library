@@ -62,3 +62,19 @@ run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at
 2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-voice-script,reviewer,2,pass,,30,54072,2026-10-13T14:34:48Z
 2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-spec,implementor,1,pass,,158,75663,2026-10-13T15:03:30Z
 2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-spec,reviewer,1,pass,,99,72606,2026-10-13T15:05:34Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,implementor,1,pass,,120,,2026-10-13T15:05:57Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,implementor,1,pass,,179,98479,2026-10-13T15:09:03Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,implementor,1,pass,,504,127198,2026-10-13T15:14:25Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,implementor,1,pass,,262,103041,2026-10-13T15:10:26Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,implementor,1,pass,,396,103103,2026-10-13T15:12:38Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,implementor,1,pass,,237,103677,2026-10-13T15:10:04Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,implementor,1,pass,,263,115921,2026-10-13T15:13:23Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,reviewer,1,fail,"The design follows the spec issue's visual language.",311,132109,2026-10-13T15:20:10Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,implementor,2,pass,,17,101398,2026-10-13T15:20:35Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,implementor,2,pass,,59,137881,2026-10-13T15:21:07Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,implementor,2,pass,,27,106604,2026-10-13T15:20:46Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,implementor,2,pass,,30,107399,2026-10-13T15:20:50Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,implementor,2,pass,,47,114557,2026-10-13T15:21:01Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,reviewer,2,fail,"every domain concept named by its GLOSSARY.md term, never an _Avoid_ word",77,78013,2026-10-13T15:22:40Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,implementor,3,pass,,16,115886,2026-10-13T15:22:59Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,reviewer,3,pass,,13,46044,2026-10-13T15:24:00Z
