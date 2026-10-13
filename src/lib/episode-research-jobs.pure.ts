@@ -6,7 +6,7 @@
  * equal.
  */
 
-import { parse } from 'yaml';
+import { readPipeline } from './episode-pipeline-jobs.pure';
 import type { Finding } from './finding.pure';
 
 const RESEARCH_JOB = 'write-research-';
@@ -20,25 +20,14 @@ function researchQuestions(brief: string): number {
   return lines.slice(start + 1, end === -1 ? undefined : end).filter((line) => /^\d+\. /.test(line)).length;
 }
 
-/** The ids of the pipeline's jobs, or null when it does not parse into a job list. */
-function jobIds(yaml: string): string[] | null {
-  try {
-    const jobs = (parse(yaml) as { jobs?: unknown } | null)?.jobs;
-    if (!Array.isArray(jobs)) return null;
-    return jobs.map((job) => String((job as { id?: unknown } | null)?.id));
-  } catch {
-    return null;
-  }
-}
-
 /**
  * Checks one per-run pipeline against its Brief. A pipeline that does not
  * parse is the schema check's finding, not this one's.
  */
 export function checkResearchJobs(file: string, yaml: string, brief: string): Finding[] {
-  const ids = jobIds(yaml);
-  if (ids === null) return [];
-  const jobs = ids.filter((id) => id.startsWith(RESEARCH_JOB)).length;
+  const pipeline = readPipeline(yaml);
+  if (pipeline === null) return [];
+  const jobs = pipeline.jobs.filter(({ id }) => id.startsWith(RESEARCH_JOB)).length;
   const questions = researchQuestions(brief);
   if (jobs === questions) return [];
   const noun = jobs === 1 ? 'job' : 'jobs';

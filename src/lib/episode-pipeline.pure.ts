@@ -15,7 +15,8 @@ import {
   SPAWNING_SKILLS,
   TOP_FIELDS,
 } from './episode-pipeline-fields.pure';
-import { ancestors, concurrentJobs, findCycle, waitsFor, type Job } from './episode-pipeline-graph.pure';
+import { ancestors, concurrentJobs, findCycle, waitsFor } from './episode-pipeline-graph.pure';
+import { jobOf, type Job } from './episode-pipeline-jobs.pure';
 import { unless, type Finding } from './finding.pure';
 import { checkMapping, isMapping, isString, stringsOf, type Mapping } from './mapping-fields.pure';
 
@@ -182,12 +183,7 @@ function checkIsolation(mappings: readonly Mapping[], jobs: readonly Job[], byId
 
 function checkJobs(raw: readonly unknown[], context: PipelineContext): string[] {
   const mappings = raw.filter(isMapping);
-  const jobs = mappings.map((job): Job => ({
-    id: String(job.id),
-    needs: stringsOf(job.needs),
-    wants: stringsOf(job.wants),
-    outputs: stringsOf(job.outputs),
-  }));
+  const jobs = mappings.map(jobOf);
   const byId = new Map(jobs.map((job) => [job.id, job]));
   const ids = jobs.map(({ id }) => id);
   const cycle = findCycle(jobs, byId);

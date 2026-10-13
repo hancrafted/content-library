@@ -24,6 +24,7 @@
     "tests",
     "*.ts",
     "*.mts",
+    ".agents/skills/new-episode/scripts",
     ".agents/skills/worktree",
     ".agents/skills/visual-check",
     ".next/types/**/*.ts",

@@ -1,11 +1,18 @@
 import { describe, expect, it } from 'vitest';
-import { ancestors, concurrentJobs, findCycle, type Job } from './episode-pipeline-graph.pure';
+import { ancestors, concurrentJobs, findCycle } from './episode-pipeline-graph.pure';
+import type { Job } from './episode-pipeline-jobs.pure';
 
 function graph(
   edges: Record<string, string[]>,
   wanted: Record<string, string[]> = {},
 ): { jobs: Job[]; byId: Map<string, Job> } {
-  const jobs = Object.entries(edges).map(([id, needs]): Job => ({ id, needs, wants: wanted[id] ?? [], outputs: [] }));
+  const jobs = Object.entries(edges).map(([id, needs]): Job => ({
+    id,
+    needs,
+    wants: wanted[id] ?? [],
+    outputs: [],
+    gate: false,
+  }));
   return { jobs, byId: new Map(jobs.map((job) => [job.id, job])) };
 }
 
