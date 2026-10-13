@@ -11,6 +11,14 @@ Both agents run with `session: orchestrator`. Call the Skill tool with `implemen
 - Skip its `code-review` step: the job's reviewer runs it, so the verdict, the retry and the metrics stay with the job loop.
 - On a retry, the failed lines go to a new implementer subagent, quoted verbatim, as fix work on the integration branch.
 
+## Metadata
+
+The Episode is a draft: it has no video and no Promotion. This overrides the metadata line in step 3 of [episode-migration](../../../../docs/features/episode-migration.md).
+
+- Write `episode-metadata.ts` with `status: 'upcoming'` (the existing non-published value, `UpcomingEpisodeMetadata`) and no `publishedOn`; the type refuses one. Publishing flips both, and it is Promotion's or Han's step, never this job's.
+- Topic, extra Topics and Tags come from the Brief. What the Brief does not name is not invented: leave the field out where the type allows it, and list it as a `Needs human:` line in the run-log entry.
+- If `tsc` refuses the registration because the `PUBLISHED` map in `episode-repository.ts` types every registered slug as published, do not set `published` to satisfy it: list that as a `Needs human:` line.
+
 ## Review
 
 The reviewer calls the Skill tool with `code-review`, the fixed point the merge-base with `main`, its subagents on the agent's `model`. Pass the spec issue to its Spec subagent with the lines under `## Rubric` beside it, so one review judges both the tickets and the Episode. Each finding the Spec or Standards report marks hard is a failed line, quoted verbatim; a judgement call goes into Notes.
