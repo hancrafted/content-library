@@ -47,7 +47,7 @@
   --overlay: oklch(0 0 0);
   /* The Context drawer card's width, shared by the card and the right inset that makes room for it beside the Slides (FE-010 §7). */
   --drawer-width: 26rem;
-  /* Type roles (docs/design-system/README.md): one fluid size and line height per role, so no breakpoint prefix ever appears on a size. */
+  /* Type roles (docs/design/design-system.md): one fluid size and line height per role, so no breakpoint prefix ever appears on a size. */
   --size-hero: clamp(2.5rem, 5.2vw, 4.5rem);
   --size-heading: clamp(2.25rem, 4.2vw, 3.75rem);
   --size-subheading: clamp(1.875rem, 3.4vw, 3rem);

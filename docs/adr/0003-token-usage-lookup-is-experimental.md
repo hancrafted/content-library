@@ -39,4 +39,4 @@ The lookup stops being experimental when hardening points 1 to 4 are done and it
 ## Related
 
 - `FE-011` (design tokens): the tokens the lookup searches for.
-- `docs/design-system/README.md`, "Design-system token editor".
+- `docs/design/design-system.md`, "Design-system token editor".

@@ -5,7 +5,7 @@ stale_after: 2027-01-11T00:00:00Z
 
 # Design system
 
-Why the site's colours and type work the way they do, and which tokens exist. The binding rules live in [FE-011 Design Tokens](../../.archgate/adrs/FE-011-design-tokens.md); this guide holds the reasons and the reference. Taste (what looks good) has its own guide, not this one.
+Why the site's colours and type work the way they do, and which tokens exist. The binding rules live in [FE-011 Design Tokens](../../.archgate/adrs/FE-011-design-tokens.md); this guide holds the reasons and the reference. Taste (what looks good) has its own guide, [the design guide](design-guide.md).
 
 ## Two layers
 
