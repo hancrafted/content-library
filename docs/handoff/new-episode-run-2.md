@@ -127,6 +127,18 @@ Steps 1, 2 and 4 can run at the same time. Step 3 waits on step 2, and run 2 wai
 - **D3. Gate placement.** The design-spec gate comes after `write-spec`. Is there also a Dossier gate (Han approves the Dossier before the Manuscript), now that he authors both?
 - **D4. The 53 PR items.** Read them as inputs to step 1 and drop the rest with the baseline, or triage them separately?
 
+The Promotion dry run (`docs/handoff/promotion-dry-run.md`) found four more questions about files run 2 writes. Settle them before run 2, because each one is cheaper now than at Promotion:
+
+- **D5. Mark agent edits.** Agent commits and ticket edits run under Han's identity: in run 1 the design subagents edited #100–#103 as `hancrafted`. Run 2's design gate and the gate diffs can only teach Han's style if each agent edit is marked as an agent's.
+  - Recommendation: add an `Agent: <job>` trailer to agent commits, an `Edited-by: <job>` footer to agent ticket edits, and log each agent ticket edit in the run log.
+- **D6. Manuscript heading or on-screen title.** In run 1, 6 of 9 page Slides show a different title than their Manuscript h3, and the table of contents shows the on-screen one.
+  - Recommendation: the h3 is the table-of-contents title. The Dossier Visual names any different on-screen title, so write-spec and the design answers never rename a Slide silently.
+- **D7. Accept the "no motion" value.** If step 2 settles that a Slide carries no motion, `motion: none` must pass the Visual check. Today `src/lib/episode-staging.pure.ts:57` rejects it.
+- **D8. `approved` in staging.** Step 1 approves `dossier.md` and `manuscript.md` while they are still in staging. The `approved` intent says "Promotion moved the file" (`markdown-harness.config.yaml:77`), and the #89 contract allows `approved` in staging only for the Brief and the pipeline.
+  - Recommendation: reword the intent to "Han accepted the file at its gate". Mark Promotion by the file's location instead of its status.
+
+Optional while Han writes the Dossier: cite research by ID (`AIE-000n`) beside each Speaker note, so Promotion can look up which research the Dossier still cites.
+
 ## Not now
 
 These stay planned in `LEARNINGS.md` → _Next steps_:
