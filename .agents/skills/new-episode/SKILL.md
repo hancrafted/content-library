@@ -131,7 +131,7 @@ In a new session, or after a compaction, never trust memory of the run: run `npm
 
 ## Gate commits
 
-Every commit goes through the `commit` skill. A gate commit adds a `Gate:` trailer beside `Source:` (`Gate: draft brief`, `Gate: approved pipeline`, `Gate: draft feedback-01`). The agent's draft is committed before Han edits it, so the pair of gate commits shows his edit as a diff: that diff is what later teaches agents his style. Only Han sets `approved`.
+Every commit goes through the `commit` skill. A gate commit adds a `Gate:` trailer beside `Source:` (`Gate: draft brief`, `Gate: approved pipeline`, `Gate: draft feedback-01`). The agent's draft is committed before Han edits it, so the pair of gate commits shows his edit as a diff: that diff is what later teaches agents his style. Only Han sets `approved`. Who commits sets the mark: the orchestrator's `Gate: draft <name>` commit carries `Agent: <job id>` beside `Gate:` and `Source:`, like every agent commit (see [agent marks](#agent-marks)); Han's approval commit carries no `Agent:` trailer, which is how a gate diff is told to be his. An approval commit the orchestrator makes at Han's word is still an agent commit and carries `Agent: <job id>`, while the `approved` status stays his edit.
 
 After `Gate: approved pipeline`, the template is frozen for the run: `feat/89-new-episode` is not merged into the Episode branch again until `open-pr` is done. The pipeline's `template` field names the commit it was tailored from. A template change found during the run goes into `LEARNINGS.md` Lessons and is applied after the run.
 
