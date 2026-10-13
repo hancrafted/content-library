@@ -11,7 +11,7 @@ Each entry has three lines.
 
 - _Shows_: a fact taken from the code.
 - _When_: when to use it. <!-- draft: Han edits --> The _When_ lines are drafts from the code and from how earlier Episodes used each Master slide.
-- _Motion_: the motion the Master slide has today, read from its CSS and client parts. "None" means none. Every motion here is a CSS transition, keyframe or scroll-driven animation; a client part only flips a state or a play state, as FE-009 describes.
+- _Motion_: the motion the Master slide has today, read from its CSS and client parts. "None" means none. Every motion here is a CSS transition, keyframe or scroll-driven animation, except the `radial-cycle` hand, which a client part turns with the Web Animations API (`element.animate`). Elsewhere a client part only flips a state or a play state, as FE-009 describes.
 
 Motion rules and the reasons behind them live in [the design system](design-system.md).
 

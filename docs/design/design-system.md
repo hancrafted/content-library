@@ -115,6 +115,6 @@ Edits are not saved. **Copy changed** exports only the tokens you changed, as a 
 
 The landing page, `ai-token-economy` and `maintaining-markdown-for-ai` predate these rules and sit on a legacy list, `src/design-system/legacy.json`, which ESLint and Archgate both read. Legacy files are exempt from E2 and the raw-value rules, not from E1 and E3. The list only shrinks: touching one of these files is the moment to migrate it.
 
-## Out of scope
+## Motion
 
-Motion is not covered yet. [FE-009](../../.archgate/adrs/FE-009-slide-wrapper-and-scene.md) §6 already covers its one mechanical duty: looping animation pauses outside `active`.
+The motions the Slide library holds, Master slide by Master slide, are listed in [the Slide library](slide-library.md). [FE-009](../../.archgate/adrs/FE-009-slide-wrapper-and-scene.md) §6 covers the one mechanical duty: looping animation pauses outside `active`. The motion rules and their reasons (CSS only, what starts a motion, Slide library motions) come with the CSS motion ticket (#129), which owns that content.

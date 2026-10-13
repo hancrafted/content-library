@@ -52,4 +52,11 @@ describe('docs/design/slide-library.md', () => {
     const mentionsEmpty = /is empty today/.test(readFileSync(LIBRARY_DOC, 'utf8'));
     expect(mentionsEmpty).toBe(files.length === 0);
   });
+
+  it('has the design system point its Motion section at the library', () => {
+    const system = readFileSync(path.join(ROOT, 'docs/design/design-system.md'), 'utf8');
+    expect(system).toMatch(/^## Motion$/m);
+    expect(system).not.toMatch(/^## Out of scope$/m);
+    expect(system).toContain('slide-library.md');
+  });
 });
