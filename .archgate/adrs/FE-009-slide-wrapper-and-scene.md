@@ -81,6 +81,7 @@ A new layer picks a rung here. The `isolate` wrapper would trap a popover under 
 ### 6. Good citizen
 
 1. A looping island MUST pause outside `active`, reading `useSlideZone()`, and in a Backdrop also while hidden or under reduced motion. One-shot entrance animations are exempt.
+2. `SlideMount`'s `data-zone` (`far`, `near`, `active`) MUST stay a stable CSS hook for entrance motion; renaming it or its values is breaking.
 
 ### 7. Backdrop
 
@@ -101,6 +102,7 @@ A new layer picks a rung here. The `isolate` wrapper would trap a popover under 
 5. **DO** put full-bleed decoration in `SlideBackdrop`, and opt a cheap one into phones with `mobile`. (Decision 7)
 6. **DO** take z-index values from the ladder. (Decision 8)
 7. **DO** put zone and threshold maths beside the reading-line rule in a `.pure.ts`. (Decision 5)
+8. **DO** key a Slide's CSS entrance motion on `[data-zone='active']`. (Decision 6)
 
 ### Don'ts
 

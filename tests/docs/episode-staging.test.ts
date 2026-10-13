@@ -65,8 +65,9 @@ function namesEndingIn(folder: string, suffix: string): string[] {
 /**
  * What a Dossier `Visual` may name: the frame components in the Slide master
  * (`basic-page-slide.tsx` is `basic-page`), the slide master's Slide
- * folders. A motion is `none` or one a Slide may import; FE-007 bars Slide
- * files from `animations/`, so today there is none, and `motions` stays empty.
+ * folders. A library motion is a CSS module in `slide-shared/motions/`, which
+ * a Slide's CSS module may `composes:` from; its name is the file name without
+ * `.module.css`. The folder is empty today, so `motions` is too.
  */
 function knownVisuals(): KnownVisuals {
   const masterSlides = readdirSync(path.join(ROOT, 'src/components/episodes/slide-master/slides'), {
@@ -76,7 +77,7 @@ function knownVisuals(): KnownVisuals {
     .map(({ name }) => name);
   return {
     masters: [...namesEndingIn(path.join(ROOT, 'src/components/slide-master'), '-slide.tsx'), ...masterSlides],
-    motions: [],
+    motions: namesEndingIn(path.join(ROOT, 'src/components/slide-shared/motions'), '.module.css'),
   };
 }
 
@@ -392,7 +393,7 @@ describe('edge cases', () => {
     expect(landed).toEqual([]);
   });
 
-  it('walks the sample Episode and reads a frame component and a slide-master Slide, and knows no motion a Slide may import', () => {
+  it('walks the sample Episode and reads a frame component and a slide-master Slide, and reads the library motions folder', () => {
     // ARRANGE
     const sample = path.relative(ROOT, SAMPLE);
     const expected = { masters: ['basic-page', 'grid-2x2'] };
