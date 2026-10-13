@@ -2,8 +2,8 @@
 type: research
 description: 'Vendors and practitioners call AI a new colleague because it has broad ability but no knowledge of your work, so you must supply context, a brief and checks.'
 question: 'Why do others frame working with AI as onboarding a colleague?'
-researched_on: 2026-10-12T00:00:00Z
-stale_after: 2027-04-12T00:00:00Z
+researched_on: 2026-10-13T00:00:00Z
+stale_after: 2027-04-13T00:00:00Z
 ---
 
 # Why do others frame working with AI as onboarding a colleague?
@@ -37,8 +37,8 @@ Several independent voices, from a model vendor to a well-known AI educator and 
 3. Anthropic Engineering, Effective harnesses for long-running agents (published 26 Nov 2025) — https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents — accessed 2026-10-12
 4. Gergely Orosz, AI Skills with Matt Pocock, The Pragmatic Engineer (17 Sep 2026; podcast notes quoting Pocock) — https://newsletter.pragmaticengineer.com/p/ai-skills-with-matt-pocock — accessed 2026-10-12
 5. Ethan Mollick, On-boarding your AI Intern, One Useful Thing (20 May 2023) — https://www.oneusefulthing.org/p/on-boarding-your-ai-intern — accessed 2026-10-12
-6. Ethan Mollick, Getting started with AI: Good enough prompting, One Useful Thing (24 Nov 2024) — https://www.oneusefulthing.org/p/getting-started-with-ai-good-enough — accessed 2026-10-12
-7. Andrej Karpathy, post on X (14 Dec 2024) — https://x.com/karpathy/status/1868061331355840704 — accessed 2026-10-12 (via X's syndication endpoint; page itself returned HTTP 402)
+6. Ethan Mollick, Getting started with AI: Good enough prompting, One Useful Thing (24 Nov 2024) — https://www.oneusefulthing.org/p/getting-started-with-ai-good-enough — accessed 2026-10-13
+7. Andrej Karpathy, post on X (14 Dec 2024) — https://x.com/karpathy/status/1868061331355840704 — accessed 2026-10-13 (via X's syndication endpoint; page itself returned HTTP 402)
 8. Joseph Fuller, Create an Onboarding Plan for AI Agents, Harvard Business Review (25 Mar 2026) — https://hbr.org/2026/03/create-an-onboarding-plan-for-ai-agents — accessed 2026-10-12 (summary only, paywalled)
 9. Record only, no longer in the repository: Onboarding an AI agent like an amnesiac freelancer — docs/research/ai-onboarding-freelancer.md (researched 2026-10-08), removed by commit da85851 on 2026-10-13 after its Findings moved into AIE-0001, AIE-0004 and AIE-0005; recover with `git show da85851^:docs/research/ai-onboarding-freelancer.md`. Findings 8 to 10 and the quotes of sources [1], [2], [10] to [13] are carried from it and not re-fetched here
 10. Michael Nygard, Documenting Architecture Decisions — https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions — accessed 2026-10-08 via [9]

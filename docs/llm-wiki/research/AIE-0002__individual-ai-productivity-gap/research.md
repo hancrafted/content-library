@@ -2,8 +2,8 @@
 type: research
 description: 'Individuals miss the promised AI boost because gains depend on task fit, context and checking: measured effects are mixed and smaller than the hype, and self-reports overstate them.'
 question: 'Why do individuals fail to reach the promised AI productivity boost?'
-researched_on: 2026-10-12T00:00:00Z
-stale_after: 2027-04-12T00:00:00Z
+researched_on: 2026-10-13T00:00:00Z
+stale_after: 2027-04-13T00:00:00Z
 ---
 
 # Why do individuals fail to reach the promised AI productivity boost?
@@ -31,10 +31,10 @@ Controlled studies show gains that are real but uneven and far below "20x": abou
 ## Sources
 
 1. Becker, Rush, Barnes, Rein, Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity — https://arxiv.org/abs/2507.09089 — accessed 2026-10-12
-2. METR, Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity (study announcement with limitations) — https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/ — accessed 2026-10-12
+2. METR, Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity (study announcement with limitations) — https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/ — accessed 2026-10-13
 3. Cui, Demirer, Jaffe, Musolff, Peng, Salz, The Effects of Generative AI on High-Skilled Work: Evidence from Three Field Experiments with Software Developers — https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4945566 — accessed 2026-10-12
-4. METR, update on its AI developer productivity study (February 2026) — https://metr.org/blog/2026-02-24-uplift-update/ — accessed 2026-10-12
-5. Dell'Acqua, McFowland, Mollick, Lifshitz-Assaf, Kellogg, Rajendran, Krayer, Candelon, Lakhani, Navigating the Jagged Technological Frontier — https://mitsloan.mit.edu/sites/default/files/2023-10/SSRN-id4573321.pdf — accessed 2026-10-12
+4. METR, update on its AI developer productivity study (February 2026) — https://metr.org/blog/2026-02-24-uplift-update/ — accessed 2026-10-13
+5. Dell'Acqua, McFowland, Mollick, Lifshitz-Assaf, Kellogg, Rajendran, Krayer, Candelon, Lakhani, Navigating the Jagged Technological Frontier — https://mitsloan.mit.edu/sites/default/files/2023-10/SSRN-id4573321.pdf — accessed 2026-10-13
 6. Humlum, Vestergaard, Large Language Models, Small Labor Market Effects (NBER Working Paper 33777) — https://www.nber.org/papers/w33777 — accessed 2026-10-12
 
 ## Caveats
