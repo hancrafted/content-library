@@ -57,3 +57,35 @@ run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at
 2026-10-13T22:50:35Z,never-too-early-sales,categorize-research,implementor,2,pass,,67,,2026-10-13T23:18:53Z
 2026-10-13T22:50:35Z,never-too-early-sales,customize-pipeline,implementor,1,pass,,175,,2026-10-13T23:19:42Z
 2026-10-13T22:50:35Z,never-too-early-sales,retrieval,implementor,1,pass,,16.976,,2026-10-13T23:26:08.789Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-revenue-lags-costs-early-stage,implementor,1,pass,,72,,2026-10-13T23:30:56Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-revenue-lags-costs-early-stage,reviewer,1,fail,"One sentence stating the Answer…",50,,2026-10-13T23:33:08Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-revenue-lags-costs-early-stage,implementor,2,pass,,18,,2026-10-13T23:34:52Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-revenue-lags-costs-early-stage,reviewer,2,pass,,10,,2026-10-13T23:36:17Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-b2b-sales-cycle-length,implementor,1,pass,,138,,2026-10-13T23:32:02Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-b2b-sales-cycle-length,reviewer,1,fail,"Fail if a finding cites no source, or gives an opinion instead of what a source shows.",27,,2026-10-13T23:33:57Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-b2b-sales-cycle-length,implementor,2,pass,,30,,2026-10-13T23:36:37Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-b2b-sales-cycle-length,reviewer,2,pass,,15,,2026-10-13T23:37:53Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-b2b-stage-conversion-rates,implementor,1,pass,,122,,2026-10-13T23:31:46Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-b2b-stage-conversion-rates,reviewer,1,fail,"The Answer answers the h1 question.",50,,2026-10-13T23:34:20Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-b2b-stage-conversion-rates,implementor,2,pass,,24,,2026-10-13T23:36:31Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-b2b-stage-conversion-rates,reviewer,2,pass,,27,,2026-10-13T23:38:06Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-early-selling-market-insight,implementor,1,pass,,231,,2026-10-13T23:33:35Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-early-selling-market-insight,reviewer,1,fail,"Fail if it hedges without saying what is known, or states something no Finding supports and the Caveats do not flag as inference.",87,,2026-10-13T23:36:02Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-early-selling-market-insight,implementor,2,pass,,103,,2026-10-13T23:38:43Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-early-selling-market-insight,reviewer,2,pass,,11,,2026-10-13T23:40:01Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-early-selling-customer-trust,implementor,1,pass,,94,,2026-10-13T23:31:17Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-early-selling-customer-trust,reviewer,1,fail,"A claim the Answer takes from a disputed study names the dispute and the strongest counter-evidence.",62,,2026-10-13T23:33:20Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-early-selling-customer-trust,implementor,2,pass,,35,,2026-10-13T23:35:10Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-early-selling-customer-trust,reviewer,2,pass,,16,,2026-10-13T23:37:17Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-early-selling-internal-insight,implementor,1,pass,,101,,2026-10-13T23:31:25Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-early-selling-internal-insight,reviewer,1,fail,"Fail if it hedges without saying what is known, or states something no Finding supports and the Caveats do not flag as inference.",147,,2026-10-13T23:34:45Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-early-selling-internal-insight,implementor,2,pass,,30,,2026-10-13T23:36:36Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-early-selling-internal-insight,reviewer,2,pass,,29,,2026-10-13T23:38:08Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-marketing-feeds-pipeline-stages,implementor,1,pass,,54,,2026-10-13T23:30:38Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-marketing-feeds-pipeline-stages,reviewer,1,fail,"One sentence stating the Answer…",32,,2026-10-13T23:32:50Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-marketing-feeds-pipeline-stages,implementor,2,pass,,12,,2026-10-13T23:34:47Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-marketing-feeds-pipeline-stages,reviewer,2,pass,,2,,2026-10-13T23:36:09Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-sales-pipeline-ramp-up-time,implementor,1,pass,,141,,2026-10-13T23:32:05Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-sales-pipeline-ramp-up-time,reviewer,1,fail,"Limits of the Findings: what the Sources do not show, and any inference the Answer makes beyond them.",77,,2026-10-13T23:34:47Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-sales-pipeline-ramp-up-time,implementor,2,pass,,16,,2026-10-13T23:36:24Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-research-sales-pipeline-ramp-up-time,reviewer,2,pass,,9,,2026-10-13T23:37:47Z

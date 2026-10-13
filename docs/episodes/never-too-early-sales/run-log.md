@@ -203,3 +203,266 @@
 - No reuse or extend outcomes; all eight research jobs must run.
 - The agent inspected only this run's worktree, wrote no files and returned this entry for the orchestrator to append.
 - Token count was not reported.
+
+## write-research-revenue-lags-costs-early-stage · 2026-10-13T23:43:25Z
+
+### Inputs
+
+- `brief.md`, question 1, and the approved `pipeline.yml` job intent.
+- `run-log.md#retrieval`: new research required.
+- `.agents/skills/new-episode/references/write-research.md`, its sample research file and `.agents/skills/research/SKILL.md`.
+- Research draft and its linked primary sources, checked by fresh reviewers.
+
+### Output
+
+- `research/FIN-0001__revenue-lags-costs-early-stage/research.md`: research, no lifecycle status; committed as `7133cdc` and fast-forwarded into this integration branch.
+
+### Checks
+
+- `npm run check:docs`: pass in the job and after integration.
+- `npx vitest run tests/docs/episode-staging.test.ts`: 15 tests pass in both trees.
+- Fresh reviewer, attempt 2: all prior failed lines pass.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 72 s
+- reviewer · attempt 1 · fail · rubric "One sentence stating the Answer…" · 50 s
+- implementor · attempt 2 · pass · 18 s
+- reviewer · attempt 2 · pass · 10 s
+
+### Notes
+
+- Attempt 1 confused the description's revenue/cash timing, assumed supplier outflows as costs arose, compared cash balances with booked revenue and left those assumptions uncaveated. Attempt 2 separates recognition and receipts and makes timing assumptions explicit.
+- Findings use IFRS, IRS and EU payment rules, not a measured startup lag. Jurisdiction and prepayment exceptions remain explicit.
+- Needs human: the description omits the prepayment exception; the cashflow-cover conclusion is part of the conceptual inference.
+- Han authorized all subsequent gates in this session: "i approve all subsequent gates, run until episode is implemented". Record human approval when later gate artifacts are ready; checks and fresh reviews remain required.
+- Agent timings are observed tool intervals; token counts were not reported.
+
+## write-research-b2b-sales-cycle-length · 2026-10-13T23:43:25Z
+
+### Inputs
+
+- `brief.md`, question 2, and approved `pipeline.yml` intent.
+- `run-log.md#retrieval`: new.
+- `.agents/skills/new-episode/references/write-research.md`, its sample and `.agents/skills/research/SKILL.md`.
+- Research draft and its linked survey, academic and procurement sources.
+
+### Output
+
+- `research/BIZ-0001__b2b-sales-cycle-length/research.md`: research, no lifecycle status; committed as `3422fdb`, merged in `1aa0236`.
+
+### Checks
+
+- `npm run check:docs`: pass in the job and after integration.
+- Staging vitest: 15 tests pass in both trees.
+- Fresh reviewer, attempt 2: pass.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 138 s
+- reviewer · attempt 1 · fail · rubric "Fail if a finding cites no source, or gives an opinion instead of what a source shows." · 27 s
+- implementor · attempt 2 · pass · 30 s
+- reviewer · attempt 2 · pass · 15 s
+
+### Notes
+
+- Attempt 1 incorrectly made the prior-information-notice route the only EU shortening exception. Attempt 2 adds urgency and electronic submission exceptions and corrects FAR notice-versus-solicitation reference events.
+- The illustrative 9.5 months is not an industry benchmark. Buyer-group evidence, public-sector rules and private-company inference remain distinct.
+- Needs human: the qualifying prior-notice route has additional source conditions not reproduced in the short Finding.
+
+## write-research-b2b-stage-conversion-rates · 2026-10-13T23:43:25Z
+
+### Inputs
+
+- `brief.md`, question 3, and approved `pipeline.yml` intent.
+- `run-log.md#retrieval`: new.
+- `.agents/skills/new-episode/references/write-research.md`, its sample and `.agents/skills/research/SKILL.md`.
+- Research draft and its primary CRM documentation sources.
+
+### Output
+
+- `research/BIZ-0002__b2b-stage-conversion-rates/research.md`: research, no lifecycle status; committed as `592294d`, merged in `022f5b0`.
+
+### Checks
+
+- `npm run check:docs`: pass in the job and after integration.
+- Staging vitest: 15 tests pass in both trees.
+- Fresh reviewer, attempt 2: pass.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 122 s
+- reviewer · attempt 1 · fail · rubric "The Answer answers the h1 question." · 50 s
+- implementor · attempt 2 · pass · 24 s
+- reviewer · attempt 2 · pass · 27 s
+
+### Notes
+
+- Attempt 1's mechanism was circular and leaned on configured probabilities; its conditional-rate product ignored skipped stages. Attempt 2 adds qualification evidence and explicit same-cohort, mandatory-stage assumptions.
+- No measured 27:1 benchmark is claimed. Lead qualification, deal-stage conversion and configured closing probabilities are separate quantities.
+- Needs human: lead-versus-deal scope in the Answer, optional stages versus default behavior, and cumulative-reached-count conventions need careful treatment in the Dossier.
+- Needs human: vendor documentation establishes stage models, not measured loss causes or universal B2B benchmarks.
+
+## write-research-early-selling-market-insight · 2026-10-13T23:43:25Z
+
+### Inputs
+
+- `brief.md`, question 4, and approved `pipeline.yml` intent.
+- `run-log.md#retrieval`: new.
+- `.agents/skills/new-episode/references/write-research.md`, its sample and `.agents/skills/research/SKILL.md`.
+- Research draft, founder essay and academic abstracts cited by its Findings.
+
+### Output
+
+- `research/BIZ-0003__early-selling-market-insight/research.md`: research, no lifecycle status; committed as `e5324bd`, merged in `0ae897d`.
+
+### Checks
+
+- `npm run check:docs`: pass in the job and after integration.
+- Staging vitest: 15 tests pass in both trees.
+- Fresh reviewer, attempt 2: pass.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 231 s
+- reviewer · attempt 1 · fail · rubric "Fail if it hedges without saying what is known, or states something no Finding supports and the Caveats do not flag as inference." · 87 s
+- implementor · attempt 2 · pass · 103 s
+- reviewer · attempt 2 · pass · 11 s
+
+### Notes
+
+- Attempt 1 conflated hypothetical willingness-to-pay overstatement with the direction of purchase-intention prediction errors. Attempt 2 separates the two and updates the description and actual-clock metadata.
+- Consumer-study scope, practitioner testimony and small/self-selected early samples remain caveated; no numeric correction factor is applied to a prospect.
+- Needs human: "the studies" should not blur the two different results, and the new-product comparison does not establish a universal superlative.
+
+## write-research-early-selling-customer-trust · 2026-10-13T23:43:25Z
+
+### Inputs
+
+- `brief.md`, question 5, and approved `pipeline.yml` intent.
+- `run-log.md#retrieval`: new.
+- `.agents/skills/new-episode/references/write-research.md`, its sample and `.agents/skills/research/SKILL.md`.
+- Research draft and linked original academic abstracts, including the continuity counter-study.
+
+### Output
+
+- `research/BIZ-0004__early-selling-customer-trust/research.md`: research, no lifecycle status; committed as `23147b7`, merged in `907a0ce`.
+
+### Checks
+
+- `npm run check:docs`: pass in the job and after integration.
+- Staging vitest: 15 tests pass in both trees.
+- Fresh reviewer, attempt 2: pass.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 94 s
+- reviewer · attempt 1 · fail · rubric "A claim the Answer takes from a disputed study names the dispute and the strongest counter-evidence." · 62 s
+- implementor · attempt 2 · pass · 35 s
+- reviewer · attempt 2 · pass · 16 s
+
+### Notes
+
+- Attempt 1 omitted the prior-history dispute and conflated trust with commitment and relationship marketing. Attempt 2 adds Poppo, Zhou and Ryu's continuity counter-evidence and narrows the Answer.
+- Source access is abstracts only; association, startup extrapolation and indirect salesperson-to-firm trust effects remain explicit.
+- The author removed a duplicated Caveats heading before final checks passed.
+- Needs human: anticipated future interaction is not identical to purchase intention; interpretation in the Findings and asset-specific commitment wording must not become stronger spoken claims.
+
+## write-research-early-selling-internal-insight · 2026-10-13T23:43:25Z
+
+### Inputs
+
+- `brief.md`, question 6, and approved `pipeline.yml` intent.
+- `run-log.md#retrieval`: new.
+- `.agents/skills/new-episode/references/write-research.md`, its sample and `.agents/skills/research/SKILL.md`.
+- Research draft, founder essay and the original randomized-trial paper.
+
+### Output
+
+- `research/BIZ-0005__early-selling-internal-insight/research.md`: research, no lifecycle status; committed as `8170877`, merged in `5256f7e`.
+
+### Checks
+
+- `npm run check:docs`: pass in the job and after integration.
+- Staging vitest: 15 tests pass in both trees.
+- Fresh reviewer, attempt 2: pass.
+- Commit hooks: pass on unchanged retry after one staging-schema test timed out under concurrent hooks.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 101 s
+- reviewer · attempt 1 · fail · rubric "Fail if it hedges without saying what is known, or states something no Finding supports and the Caveats do not flag as inference." · 147 s
+- implementor · attempt 2 · pass · 30 s
+- reviewer · attempt 2 · pass · 29 s
+
+### Notes
+
+- Attempt 1 misdescribed the trial contrast, put an unsupported capacity inference in Findings and omitted unpaid-user versus paying-buyer extrapolation. Attempt 2 corrects the trial and moves inference into the Caveats.
+- Overlong descriptions were shortened before final shape checks passed.
+- The commit-hook timeout was environmental: the same draft and content passed after the concurrent hook batch completed, without changing test timeouts or bypassing a hook.
+- Needs human: the description's plural founder wording summarizes one adviser's testimony; do not treat it as multiple measured accounts.
+
+## write-research-marketing-feeds-pipeline-stages · 2026-10-13T23:43:25Z
+
+### Inputs
+
+- `brief.md`, question 7, and approved `pipeline.yml` intent.
+- `run-log.md#retrieval`: new.
+- `.agents/skills/new-episode/references/write-research.md`, its sample and `.agents/skills/research/SKILL.md`.
+- Research draft and linked primary HubSpot/Microsoft documentation.
+
+### Output
+
+- `research/BIZ-0006__marketing-feeds-pipeline-stages/research.md`: research, no lifecycle status; committed as `6b4ae2b`, merged in `7b82aaf`.
+
+### Checks
+
+- `npm run check:docs`: pass in the job and after integration.
+- Staging vitest: 15 tests pass in both trees.
+- Fresh reviewer, attempt 2: pass.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 54 s
+- reviewer · attempt 1 · fail · rubric "One sentence stating the Answer…" · 32 s
+- implementor · attempt 2 · pass · 12 s
+- reviewer · attempt 2 · pass · 2 s
+
+### Notes
+
+- Attempt 1's description implied more leads do not yield more deals. Attempt 2 narrows it to more volume not guaranteeing closed deals.
+- Vendor documents show definitions and handoffs, not measured marketing causal effects. Filtering and volume implications remain identified as inference.
+- Needs human: the short description omits the Answer's dropout nuance; stage-time features may require specific vendor plans.
+
+## write-research-sales-pipeline-ramp-up-time · 2026-10-13T23:43:25Z
+
+### Inputs
+
+- `brief.md`, question 8, and approved `pipeline.yml` intent.
+- `run-log.md#retrieval`: new.
+- `.agents/skills/new-episode/references/write-research.md`, its sample and `.agents/skills/research/SKILL.md`.
+- Research draft and linked original papers, abstracts and authors' summary.
+
+### Output
+
+- `research/BIZ-0007__sales-pipeline-ramp-up-time/research.md`: research, no lifecycle status; committed as `07af572`, merged in `46bb110`.
+
+### Checks
+
+- `npm run check:docs`: pass in the job and after integration.
+- Staging vitest: 15 tests pass in both trees.
+- Fresh reviewer, attempt 2: pass.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 141 s
+- reviewer · attempt 1 · fail · rubric "Limits of the Findings: what the Sources do not show, and any inference the Answer makes beyond them." · 77 s
+- implementor · attempt 2 · pass · 16 s
+- reviewer · attempt 2 · pass · 9 s
+
+### Notes
+
+- Attempt 1 treated respondent tenure as a measured ramp period and asserted overlapping lags without evidence. Attempt 2 separates sample tenure, authors' framing and conceptual inference.
+- There is no measured pipeline-from-zero duration. Buyer pacing, seller learning and pipeline construction are distinct mechanisms, not durations to sum.
+- Needs human: the paywalled abstract could not be checked in the retry; the description has a minor grammatical omission that must not be carried into spoken prose.
+- All eight research jobs passed and were integrated; no research branch blocked.
