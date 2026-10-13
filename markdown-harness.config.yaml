@@ -74,7 +74,7 @@ frontmatter:
                 value: checked,
                 intent: 'When status is checked: the file passed markdown-harness, the cross-file tests and its reviewer.',
               }
-            - { value: approved, intent: 'When status is approved: Promotion moved the file next to its Slides.' }
+            - { value: approved, intent: 'When status is approved: Han accepted the file at its gate.' }
         locale: &staging-locale
           presence: required
           allowed:

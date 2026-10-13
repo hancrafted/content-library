@@ -94,10 +94,18 @@ Every agent runs where its `session` says. `subagent`, the default, is spawned w
 3. **Reviewer.** A **fresh** agent, never one that wrote the output. A reviewer with `session: orchestrator` runs in the session that implemented, so its skill supplies the fresh eyes: `code-review` judges through subagents that saw none of the writing. Its baseline is the markdown-harness intent of every rule, field and heading that governs the output: it runs `npx mh query <path>` on each markdown output itself. On top of that baseline come the lines under the job's `rubric`. It answers one line per intent and per rubric line, `pass` or `fail — <the line, verbatim> — <evidence>`, and marks anything only Han can judge `needs human — <what>`. On attempt 2 and later, the fresh reviewer judges only the previous attempt's failed lines, beside the checks: a new concern goes into Notes as `Needs human: <what>`, never as a fail, so a retry is never judged against moved goalposts.
 4. **Retry.** On any failed line, run the implementor again with every failed line quoted verbatim, then the checks and a fresh reviewer again. A job gets `1 + retries` attempts. A job whose output lives outside git (an issue, a PR) is retried by updating what its earlier attempt made, never by creating a second one; its reference says how it finds that output.
 5. **Retries run out.** Mark the todo and every todo downstream of it blocked. The run-log entry's Notes start `Blocked:` and quote the last failed lines; they go on the PR checklist.
-6. **Pass.** Set each staging output's `status: checked` (research files carry no status), and commit through the `commit` skill with `Source: docs/episodes/<slug>/brief.md`, in the job's worktree when it has one, then merge it as above.
-7. **Log.** On `episode/<slug>`, append the [run-log entry](#run-log-and-runs-csv), then the runs CSV rows. A `needs human` reviewer line goes into Notes as `Needs human: <what>`.
+6. **Pass.** Set each staging output's `status: checked` (research files carry no status), and commit through the `commit` skill with `Source: docs/episodes/<slug>/brief.md` and `Agent: <job id>` (see [agent marks](#agent-marks)), in the job's worktree when it has one, then merge it as above.
+7. **Log.** On `episode/<slug>`, append the [run-log entry](#run-log-and-runs-csv), listing each ticket the job edited (see [agent marks](#agent-marks)), then the runs CSV rows. A `needs human` reviewer line goes into Notes as `Needs human: <what>`.
 
 _Done when_ the job passed or is blocked, its outputs are committed, and its run-log entry and CSV rows are appended.
+
+## Agent marks
+
+Every agent write is marked, so gate diffs and ticket edit history teach Han's style and nothing else. An unmarked commit or ticket edit is Han's; `agentOf` in `scripts/marks.pure.ts` reads the marks.
+
+- **Commits:** an `Agent: <job id>` trailer on every commit an agent makes in the run, beside `Source:` (and `Gate:` on a gate commit). Han's own commits carry none.
+- **Ticket edits:** an `Edited-by: <job id>` line at the end of every issue body an agent writes or edits with `gh issue edit`. Keep one line at the end of the body; replace it when another job edits.
+- **Run log:** each agent ticket edit is a line in the job's entry under `Output`: `Edited #<issue> · <ISO 8601 timestamp>`.
 
 ## Run log and runs CSV
 
