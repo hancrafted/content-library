@@ -8,7 +8,7 @@
 
 ### Output
 
-- `brief.md`, `status: checked`, committed with `Gate: draft brief` for Han to approve.
+- `brief.md`, with a `process:markdown-harness` `verified` entry, committed with `Gate: draft brief` for Han to approve.
 
 ### Checks
 

@@ -1,7 +1,15 @@
 ---
 type: brief
 title: The context window is a budget
-status: approved
+status: draft
+generated:
+  by: claude-code/opus-5.5
+  at: 2026-10-12T09:00:00Z
+verified:
+  - by: process:markdown-harness
+    at: 2026-10-12T09:05:00Z
+  - by: human:han
+    at: 2026-10-12T09:30:00Z
 ---
 
 # The context window is a budget

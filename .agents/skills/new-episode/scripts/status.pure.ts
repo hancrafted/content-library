@@ -5,6 +5,7 @@
 // extensionless imports of src/lib, so it shares no code with the pipeline check.
 
 import { parse } from 'yaml';
+import { gateTier } from './verified.pure.ts';
 
 export type JobState = 'done' | 'gate' | 'blocked' | 'ready' | 'waiting';
 
@@ -16,7 +17,16 @@ interface PipelineJob {
   outputs: string[];
 }
 
-/** The `status:` value of a staging file, tolerant of quotes and trailing space; null when there is none. */
+/**
+ * What a gate reads from one output: a markdown staging file's trust tier (`gateTier`: unverified, checked or
+ * approved, from `verified` and `generated.at`), and for any other file, pipeline.yml, its `status:` (design-ADR
+ * 0005 keeps `status: approved` there because it is config, not markdown).
+ */
+export function outputGate(file: string, text: string): string | null {
+  return file.endsWith('.md') ? gateTier(text) : frontmatterStatus(text);
+}
+
+/** The `status:` value of a file, tolerant of quotes and trailing space; null when there is none. */
 export function frontmatterStatus(text: string): string | null {
   return /^status:[ \t]*["']?([^\s"']+)["']?[ \t]*$/m.exec(text)?.[1] ?? null;
 }
@@ -83,7 +93,7 @@ function logged(lines: readonly string[]): JobState | null {
   return final.every(({ pass }) => pass) ? 'done' : null;
 }
 
-/** How a gate is read: a staging output's `status:`, or, for a job with no output, its tickets' labels. */
+/** How a gate is read: a staging output's gate state (`outputGate`), or, for a job with no output, its tickets' labels. */
 export interface GateReaders {
   outputStatus?: (output: string) => string | null;
   labelApproved?: (jobId: string) => boolean;
@@ -94,7 +104,7 @@ export interface GateReaders {
  * blocked when a job it needs is blocked, ready when every job it needs is
  * done and every job it wants is done or blocked, and waiting otherwise.
  * A `gate: human` job that is logged done reads `gate` until every output
- * it names has `status: approved`; `readers.outputStatus` reads one output's status (an output path with
+ * it names reads `approved` (`outputGate`); `readers.outputStatus` reads one output's gate state (an output path with
  * `<slug>` as written in pipeline.yml), null when unreadable. A gate job that names no output has no
  * status to read: it reads `gate` until `readers.labelApproved(jobId)` says its tickets are approved, and
  * stays `gate` when none is given, so an unreadable label never opens the gate.
