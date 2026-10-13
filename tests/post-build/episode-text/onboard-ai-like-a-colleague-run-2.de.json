@@ -1,7 +1,7 @@
 {
   "title": "Hör auf, KI zu prompten, arbeite sie ein · hancrafted",
   "description": "Warum KI enttäuscht, wenn Du sie wie ein Werkzeug promptest, und warum ihre Einarbeitung wie bei einem fähigen neuen Kollegen Führungsarbeit ist, keine Ausführungsarbeit: Kontext, Werkzeuge, ein klares Briefing und die Prüfung des Ergebnisses.",
-  "toc": "Inhalt Wird geladen noch 10 Min. 1 Das Versprechen und die Lücke Zwanzigmal auf dem Papier 2 Tag eins mit einem fähigen Fremden Ein Kollege, der die geschriebene Welt kennt Der Plan muss bis Feierabend stehen Was würdest Du ihm zuerst sagen 3 Du hast es gemanagt, nicht selbst gemacht Du hast die Aufgabe gemanagt Prompten wie ein Werkzeug, briefen wie einen Kollegen Selbstsicher ist nicht richtig 4 Der Aufwand wandert, er verschwindet nicht Die Arbeit verlagert sich Vom Schreibtisch in die Organisation 5 Das fühlt sich nach viel an Die Wendung Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 10 Min. 1 Das Versprechen und die Lücke Zwanzigmal auf dem Papier 2 Tag eins mit einem fähigen Fremden Ein Kollege, der die geschriebene Welt kennt Der Plan muss bis Feierabend stehen Was würdest Du ihm zuerst sagen 3 Du hast es gemanagt, nicht selbst gemacht Du hast die Aufgabe gemanagt Prompten wie ein Werkzeug, briefen wie einen Kollegen Selbstsicher ist nicht richtig 4 Der Aufwand wandert, er verschwindet nicht Die Arbeit verlagert sich Vom Schreibtisch in die Organisation 5 Das fühlt sich nach viel an Die Wendung",
+  "toc": "Inhalt Wird geladen noch 12 Min. 1 Das Versprechen und die Lücke Zwanzigmal auf dem Papier 2 Tag eins mit einem fähigen Fremden Ein Kollege, der die geschriebene Welt kennt Der Plan muss bis Feierabend stehen Was würdest Du ihm zuerst sagen 3 Du hast es gemanagt, nicht selbst gemacht Du hast die Aufgabe gemanagt Prompten wie ein Werkzeug, briefen wie einen Kollegen Selbstsicher ist nicht richtig 4 Der Aufwand wandert, er verschwindet nicht Die Arbeit verlagert sich Vom Schreibtisch in die Organisation 5 Vier Disziplinen, je eine Zeile Vier Wege, KI einzuarbeiten Deine Notiz für Tag eins, bevor Du tippst 6 Das fühlt sich nach viel an Die Wendung Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 12 Min. 1 Das Versprechen und die Lücke Zwanzigmal auf dem Papier 2 Tag eins mit einem fähigen Fremden Ein Kollege, der die geschriebene Welt kennt Der Plan muss bis Feierabend stehen Was würdest Du ihm zuerst sagen 3 Du hast es gemanagt, nicht selbst gemacht Du hast die Aufgabe gemanagt Prompten wie ein Werkzeug, briefen wie einen Kollegen Selbstsicher ist nicht richtig 4 Der Aufwand wandert, er verschwindet nicht Die Arbeit verlagert sich Vom Schreibtisch in die Organisation 5 Vier Disziplinen, je eine Zeile Vier Wege, KI einzuarbeiten Deine Notiz für Tag eins, bevor Du tippst 6 Das fühlt sich nach viel an Die Wendung",
   "slides": [
     {
       "id": "top",
@@ -46,6 +46,15 @@
     {
       "id": "the-effort-moves-it-does-not-vanish--from-your-desk-to-your-organization",
       "text": "Fähigkeiten für Dich, Disziplinen für die Firma Das sind Disziplinen, keine Werkzeuge. Fähigkeiten Für Dich Briefing Kontext übergeben Prüfen Disziplinen In Deiner ganzen Organisation Wie Arbeit rund um KI organisiert ist Wer den Kontext aufschreibt Wem die Prüfungen gehören"
+    },
+    { "id": "four-disciplines-one-line-each", "text": "Vier Disziplinen, je eine Zeile" },
+    {
+      "id": "four-disciplines-one-line-each--four-ways-to-onboard-ai",
+      "text": "Vier Disziplinen Jeder Ring ist etwas, das Du übergibst, bevor die Aufgabe beginnen kann. Prompt Context Harness Graph die Aufgabe 1 Prompt Engineering Die Bitte als klaren, eindeutigen Auftrag formulieren. 2 Context Engineering Der Hintergrund, den Du übergibst: Budget, Personenzahl, Kultur, frühere Ereignisse. 3 Harness Engineering Die Werkzeuge und die Umgebung: Buchungssystem, Catering-Kontakte, Kalender. 4 Graph Engineering Der Arbeitsablauf über mehrere Agenten: Projektmanagement für KI. am neuesten · seit Mitte 2026 · noch lose definiert"
+    },
+    {
+      "id": "four-disciplines-one-line-each--your-day-one-note-before-you-type",
+      "text": "Bevor Du ein Wort tippst Vier Zeilen an einen neuen Kollegen. Dreißig Sekunden. Dann tippen. Notiz für Tag eins 1 Kontext Was würdest Du ihm über Deine Lage erzählen? , aktuell Budget, Personenzahl, Kultur, was letztes Jahr passiert ist. 2 Werkzeuge Worauf bräuchte er Zugriff? , ausstehend Das Buchungssystem, die Caterer, denen Du vertraust, der Kalender. 3 Auftrag Worum genau bittest Du? , ausstehend Ein strukturierter Plan, fällig bis Feierabend. 4 Prüfung Wie wirst Du seine Arbeit prüfen? , ausstehend Lies ihn so, wie Deine Teamleitung ihn lesen wird, bevor er Deinen Schreibtisch verlässt. Dann tippen."
     },
     { "id": "it-feels-like-a-lot", "text": "Das fühlt sich nach viel an" },
     {
@@ -106,6 +115,18 @@
     {
       "id": "the-effort-moves-it-does-not-vanish--from-your-desk-to-your-organization",
       "text": "Vom Schreibtisch in die Organisation Eingeführt, aber ohne Wirkung In einer Umfrage unter fast 6.000 Führungskräften setzen rund 69 % der Firmen KI aktiv ein, doch etwa 90 % der Führungskräfte berichten für die letzten drei Jahre keine Wirkung auf Produktivität oder Beschäftigung. 1 Quellen (1) Yotzov, Barrero, Bloom, Davis et al., Firm Data on AI (NBER Working Paper 34836, revised March 2026) ( öffnet in neuem Tab ) nber.org Die Qualifikationslücke ist bekannt In einer Umfrage unter etwa 800 Entscheidern großer US-Unternehmen berichtet fast die Hälfte von technischen Qualifikationslücken, während die Investitionen in Weiterbildung um 8 Punkte gesunken sind; 43 % der Führungskräfte warnen vor schwindenden Fähigkeiten ohne bewusst gestaltete Rollen und Coaching. Selbstauskunft. 1 Quellen (1) Wharton Human-AI Research and GBK Collective, Accountable Acceleration: Gen AI Fast-Tracks Into the Enterprise, Executive Summary ( öffnet in neuem Tab ) ai.wharton.upenn.edu Einzelne gehen voran Der vorläufige Bericht von MIT NANDA findet Beschäftigte in über 90 % der befragten Unternehmen, die private KI-Werkzeuge nutzen, während offizielle Initiativen stocken. Die Zahlen beruhen auf Interviews und Umfragen unter Führungskräften, selbst bewertet, und sind daher nur als Hinweis zu lesen. 1 Quellen (1) Challapally et al., The GenAI Divide: State of AI in Business 2025 (MIT Project NANDA, preliminary findings, July 2025) ( öffnet in neuem Tab ) static1.squarespace.com"
+    },
+    {
+      "id": "four-disciplines-one-line-each",
+      "text": "Vier Disziplinen, je eine Zeile Keine Sprechernotizen für diese Folie."
+    },
+    {
+      "id": "four-disciplines-one-line-each--four-ways-to-onboard-ai",
+      "text": "Vier Wege, KI einzuarbeiten Kontext ist eine begrenzte Ressource Anthropic: Kontext ist „eine begrenzte Ressource mit abnehmendem Grenznutzen“, und das Ziel ist „die minimale Menge an Informationen, die das erwartete Verhalten vollständig umreißt“. 1 Quellen (1) Anthropic, Effective context engineering for AI agents ( öffnet in neuem Tab ) anthropic.com Übergabedokumente als Harness Anthropics Mittel gegen Agenten, die ohne Gedächtnis ankommen, ist eine schriftliche Übergabe, die jede neue Sitzung zuerst liest, wie es ein Schichtwechsel verlangen würde. 1 Quellen (1) Anthropic Engineering, Effective harnesses for long-running agents (veröffentlicht am 26. Nov. 2025) ( öffnet in neuem Tab ) anthropic.com"
+    },
+    {
+      "id": "four-disciplines-one-line-each--your-day-one-note-before-you-type",
+      "text": "Deine Notiz für Tag eins, bevor Du tippst Schreib es auf, sonst ist es weg Anweisungen, die nur im Chat stehen, überstehen eine Komprimierung nicht zuverlässig; Anthropic rät, dauerhafte Regeln in eine Datei zu schreiben, die der Agent zu Beginn liest. 1 Quellen (1) Anthropic, How Claude remembers your project (Claude Code memory) ( öffnet in neuem Tab ) code.claude.com Kurz und relevant schlägt lang Chroma hat 18 Modelle getestet und festgestellt, dass die Leistung mit wachsender Eingabelänge immer unzuverlässiger wird, selbst bei einfachen Aufgaben. 1 Quellen (1) Hong, Troynikov, Huber, Context Rot: How Increasing Input Tokens Impacts LLM Performance ( öffnet in neuem Tab ) research.trychroma.com"
     },
     { "id": "it-feels-like-a-lot", "text": "Das fühlt sich nach viel an Keine Sprechernotizen für diese Folie." },
     {
@@ -169,6 +190,18 @@
     {
       "id": "the-effort-moves-it-does-not-vanish--from-your-desk-to-your-organization",
       "text": "Vom Schreibtisch in die Organisation 0:00 – 0:18 Für Dich selbst neue Fähigkeiten Briefing Kontext übergeben Prüfen eine Gewohnheit Zuerst für Dich selbst. Das sind neue Fähigkeiten. Briefing, Kontext übergeben, Prüfen. Am Anfang fühlen sie sich ungewohnt an, und dann werden sie zur Gewohnheit, so wie eine gute Notiz zum ersten Tag für einen Menschen. 0:18 – 0:38 Für Deine Organisation größerer Maßstab wer den Kontext aufschreibt wem die Prüfungen gehören Disziplinen keine Werkzeuge Und dann für Deine Organisation. Dasselbe in größerem Maßstab. Wer schreibt den Kontext auf, damit die nächste Person nicht bei null anfängt? Wem gehören die Prüfungen? Wie ist die Arbeit rund um KI organisiert? Das sind Disziplinen, keine Werkzeuge."
+    },
+    {
+      "id": "four-disciplines-one-line-each",
+      "text": "Vier Disziplinen, je eine Zeile 0:00 – 0:24 Namen, keine Landkarte diese Arbeit hat Namen vier davon je eine Zeile Etiketten eine kleine Gewohnheit Diese Arbeit hat inzwischen Namen. Es sind vier, und ich gebe Dir zu jedem eine Zeile. Sie sind keine Landkarte der Feier, nur Etiketten für Dinge, die Du schon getan hast. Dann machen wir daraus eine kleine Gewohnheit, mit der Du bei Deiner nächsten echten Aufgabe anfangen kannst."
+    },
+    {
+      "id": "four-disciplines-one-line-each--four-ways-to-onboard-ai",
+      "text": "Vier Wege, KI einzuarbeiten 0:00 – 0:16 Prompt und Kontext Prompt Engineering klarer Auftrag Context Engineering Budget Personenzahl Kultur frühere Ereignisse Prompt Engineering heißt, die Bitte als klaren, eindeutigen Auftrag zu formulieren. Das ist das Was. Context Engineering ist der Hintergrund, den Du übergibst. Das Budget, die Personenzahl, die Kultur, die früheren Ereignisse. 0:16 – 0:31 Harness Harness Engineering Werkzeuge Umgebung Buchungssystem Catering-Kontakte Kalender Harness Engineering sind die Werkzeuge und die Umgebung, auf die Du Zugriff gibst. Das Buchungssystem, die Catering-Kontakte, der Kalender. Die Dinge, mit denen ein fähiger Neuling tatsächlich etwas erledigen kann. 0:31 – 0:50 Graph, der neueste Graph Engineering neuester Begriff mehrere Agenten Projektmanagement für KI Mitte 2026 lose definiert Und der vierte, Graph Engineering, ist der neueste Begriff. Es geht darum, den Arbeitsablauf über mehrere Agenten zu steuern. Projektmanagement, für KI. Er ist erst seit Mitte 2026 aufgekommen und noch lose definiert. Also halte ihn locker."
+    },
+    {
+      "id": "four-disciplines-one-line-each--your-day-one-note-before-you-type",
+      "text": "Deine Notiz für Tag eins, bevor Du tippst 0:00 – 0:22 Die Gewohnheit die Gewohnheit bevor Du ein Wort tippst dreißig Sekunden neuer Kollege am ersten Tag Hier ist also die Gewohnheit, und sie ist klein. Wenn Du das nächste Mal für etwas Echtes zur KI greifst, dann halte inne, bevor Du ein Wort tippst. Nimm Dir dreißig Sekunden. Notiere, was Du einem brandneuen Kollegen an seinem ersten Tag erzählen würdest. 0:22 – 0:39 Vier Zeilen vier Zeilen Kontext Werkzeuge Auftrag seine Arbeit prüfen dann tippen Vier Zeilen reichen. Der Kontext, also was er über Deine Lage wissen muss. Die Werkzeuge, die er bräuchte. Der Auftrag, also worum genau Du bittest. Und wie Du seine Arbeit prüfen wirst. Dann tippen."
     },
     {
       "id": "it-feels-like-a-lot",

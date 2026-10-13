@@ -1,0 +1,25 @@
+/*
+ * Your day-one note before you type: motion only, no colour, size or weight (FE-011). One entrance when the Slide
+ * becomes active (FE-009 §6.2): the day-one note writes itself line by line, in reading order (`--i` comes from each
+ * step), then "Then type." follows at `--i: 4`. It replays on return. The base rules are the finished picture, so at
+ * rest and under reduced motion every line shows.
+ */
+
+.then {
+  --i: 4;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .step,
+  :global([data-zone='active']) .then {
+    animation: step-in 420ms cubic-bezier(0.2, 0, 0, 1) both;
+    animation-delay: calc(var(--i) * 120ms);
+  }
+}
+
+@keyframes step-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}

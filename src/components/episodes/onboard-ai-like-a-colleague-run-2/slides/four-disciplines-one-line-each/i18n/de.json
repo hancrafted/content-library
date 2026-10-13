@@ -1,0 +1,12 @@
+{
+  "title": "Vier Disziplinen, je eine Zeile",
+  "voiceScript": {
+    "segments": {
+      "names-not-a-map": {
+        "title": "Namen, keine Landkarte",
+        "keywords": "diese Arbeit hat Namen, vier davon, je eine Zeile, Etiketten, eine kleine Gewohnheit",
+        "script": "Diese Arbeit hat inzwischen Namen. Es sind vier, und ich gebe Dir zu jedem eine Zeile. Sie sind keine Landkarte der Feier, nur Etiketten für Dinge, die Du schon getan hast. Dann machen wir daraus eine kleine Gewohnheit, mit der Du bei Deiner nächsten echten Aufgabe anfangen kannst."
+      }
+    }
+  }
+}

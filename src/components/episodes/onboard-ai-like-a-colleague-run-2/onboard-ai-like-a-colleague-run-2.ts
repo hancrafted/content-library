@@ -4,6 +4,8 @@ import en from './i18n/en.json';
 import { aColleagueWhoKnowsTheWrittenWorld } from './slides/a-colleague-who-knows-the-written-world/slide';
 import { confidentIsNotCorrect } from './slides/confident-is-not-correct/slide';
 import { dayOneWithACapableStranger } from './slides/day-one-with-a-capable-stranger/slide';
+import { fourDisciplinesOneLineEach } from './slides/four-disciplines-one-line-each/slide';
+import { fourWaysToOnboardAi } from './slides/four-ways-to-onboard-ai/slide';
 import { fromYourDeskToYourOrganization } from './slides/from-your-desk-to-your-organization/slide';
 import { itFeelsLikeALot } from './slides/it-feels-like-a-lot/slide';
 import { promptingLikeATool } from './slides/prompting-like-a-tool/slide';
@@ -16,6 +18,7 @@ import { twentyTimesOnPaper } from './slides/twenty-times-on-paper/slide';
 import { whatWouldYouTellThemFirst } from './slides/what-would-you-tell-them-first/slide';
 import { youManagedItYouDidNotDoIt } from './slides/you-managed-it-you-did-not-do-it/slide';
 import { youManagedTheTask } from './slides/you-managed-the-task/slide';
+import { yourDayOneNoteBeforeYouType } from './slides/your-day-one-note-before-you-type/slide';
 
 /*
  * "Stop prompting AI, start onboarding it": AI relocates the work rather than removing it, so brief it like a
@@ -30,6 +33,7 @@ export const onboardAiLikeAColleagueRun2 = episode({
     [dayOneWithACapableStranger, aColleagueWhoKnowsTheWrittenWorld, thePlanIsDueByEndOfDay, whatWouldYouTellThemFirst],
     [youManagedItYouDidNotDoIt, youManagedTheTask, promptingLikeATool, confidentIsNotCorrect],
     [theEffortMovesItDoesNotVanish, theWorkRelocates, fromYourDeskToYourOrganization],
+    [fourDisciplinesOneLineEach, fourWaysToOnboardAi, yourDayOneNoteBeforeYouType],
     [itFeelsLikeALot, theTwist],
   ],
 });

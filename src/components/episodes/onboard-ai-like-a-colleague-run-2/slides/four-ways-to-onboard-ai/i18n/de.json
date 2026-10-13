@@ -1,0 +1,69 @@
+{
+  "title": "Vier Wege, KI einzuarbeiten",
+  "heading": "Vier Disziplinen",
+  "caption": "Jeder Ring ist etwas, das Du übergibst, bevor die Aufgabe beginnen kann.",
+  "task": "die Aufgabe",
+  "figure": "Vier Ringe um die Aufgabe: Prompt, Context, Harness und Graph Engineering, der äußerste gestrichelt.",
+  "rings": {
+    "prompt": {
+      "short": "Prompt",
+      "name": "Prompt Engineering",
+      "line": "Die Bitte als klaren, eindeutigen Auftrag formulieren."
+    },
+    "context": {
+      "short": "Context",
+      "name": "Context Engineering",
+      "line": "Der Hintergrund, den Du übergibst: Budget, Personenzahl, Kultur, frühere Ereignisse."
+    },
+    "harness": {
+      "short": "Harness",
+      "name": "Harness Engineering",
+      "line": "Die Werkzeuge und die Umgebung: Buchungssystem, Catering-Kontakte, Kalender."
+    },
+    "graph": {
+      "short": "Graph",
+      "name": "Graph Engineering",
+      "line": "Der Arbeitsablauf über mehrere Agenten: Projektmanagement für KI.",
+      "tag": "am neuesten · seit Mitte 2026 · noch lose definiert"
+    }
+  },
+  "notes": {
+    "context-is-finite": {
+      "header": "Kontext ist eine begrenzte Ressource",
+      "description": "Anthropic: Kontext ist „eine begrenzte Ressource mit abnehmendem Grenznutzen“, und das Ziel ist „die minimale Menge an Informationen, die das erwartete Verhalten vollständig umreißt“.[1]",
+      "sources": {
+        "effective-context-engineering": {
+          "title": "Anthropic, Effective context engineering for AI agents"
+        }
+      }
+    },
+    "handover-as-harness": {
+      "header": "Übergabedokumente als Harness",
+      "description": "Anthropics Mittel gegen Agenten, die ohne Gedächtnis ankommen, ist eine schriftliche Übergabe, die jede neue Sitzung zuerst liest, wie es ein Schichtwechsel verlangen würde.[1]",
+      "sources": {
+        "effective-harnesses": {
+          "title": "Anthropic Engineering, Effective harnesses for long-running agents (veröffentlicht am 26. Nov. 2025)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "prompt-and-context": {
+        "title": "Prompt und Kontext",
+        "keywords": "Prompt Engineering, klarer Auftrag, Context Engineering, Budget, Personenzahl, Kultur, frühere Ereignisse",
+        "script": "Prompt Engineering heißt, die Bitte als klaren, eindeutigen Auftrag zu formulieren. Das ist das Was. Context Engineering ist der Hintergrund, den Du übergibst. Das Budget, die Personenzahl, die Kultur, die früheren Ereignisse."
+      },
+      "harness": {
+        "title": "Harness",
+        "keywords": "Harness Engineering, Werkzeuge, Umgebung, Buchungssystem, Catering-Kontakte, Kalender",
+        "script": "Harness Engineering sind die Werkzeuge und die Umgebung, auf die Du Zugriff gibst. Das Buchungssystem, die Catering-Kontakte, der Kalender. Die Dinge, mit denen ein fähiger Neuling tatsächlich etwas erledigen kann."
+      },
+      "graph-newest": {
+        "title": "Graph, der neueste",
+        "keywords": "Graph Engineering, neuester Begriff, mehrere Agenten, Projektmanagement für KI, Mitte 2026, lose definiert",
+        "script": "Und der vierte, Graph Engineering, ist der neueste Begriff. Es geht darum, den Arbeitsablauf über mehrere Agenten zu steuern. Projektmanagement, für KI. Er ist erst seit Mitte 2026 aufgekommen und noch lose definiert. Also halte ihn locker."
+      }
+    }
+  }
+}

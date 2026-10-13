@@ -1,0 +1,32 @@
+/*
+ * Four ways to onboard AI: motion only, no colour, size or weight (FE-011). One entrance when the Slide becomes
+ * active (FE-009 §6.2): the rings draw from the task outwards (`--i` 0 for the task to 4 for graph), once, and hold;
+ * each key item builds in step with its ring. It replays on return. The base rules are the finished picture, so at
+ * rest and under reduced motion every ring shows.
+ */
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .ring {
+    animation: ring-in 520ms cubic-bezier(0.2, 0, 0, 1) both;
+    animation-delay: calc(var(--i) * 160ms);
+  }
+
+  :global([data-zone='active']) .key {
+    animation: key-in 520ms cubic-bezier(0.2, 0, 0, 1) both;
+    animation-delay: calc(var(--i) * 160ms);
+  }
+}
+
+@keyframes ring-in {
+  from {
+    opacity: 0;
+    transform: scale(0.82);
+  }
+}
+
+@keyframes key-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}

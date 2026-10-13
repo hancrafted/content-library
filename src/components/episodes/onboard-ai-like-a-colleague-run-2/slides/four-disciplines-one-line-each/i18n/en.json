@@ -1,0 +1,12 @@
+{
+  "title": "Four disciplines, one line each",
+  "voiceScript": {
+    "segments": {
+      "names-not-a-map": {
+        "title": "Names, not a map",
+        "keywords": "this work has names, four of them, one line each, labels, one small habit",
+        "script": "This work has names now. There are four of them, and I will give you one line each. They are not a map of the party, just labels for things you already did. Then we will turn them into one small habit you can start with your next real task."
+      }
+    }
+  }
+}
