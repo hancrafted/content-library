@@ -623,3 +623,56 @@ Needs human: the tickets link `{#slug}` anchors on the pushed branch; GitHub may
 Needs human: write-spec.md asks for the Voice script segments "verbatim" and also never to paste staging text. The orchestrator told the implementor to reference paragraphs by number; the reviewer read "verbatim" as a rule for the built Voice script, which the spec states.
 Needs human: the Dossier names no master or motion for the Title slide and the section slides; #100 uses the kit's title and section layouts and gives the Title slide liquid-ink-transition.
 Needs human: #101 to #103 each add entries to the one Episode record file, so they merge one at a time; the spec says so.
+
+## implement-episode · 2026-10-13T06:07:09Z
+
+### Inputs
+
+- Spec issue https://github.com/hancrafted/content-library/issues/99 and sub-issues #100 to #103, with the ticket bodies as edited by the design subagents below.
+- `brief.md`, `dossier.md` (checked), `manuscript.md` (approved).
+- `.agents/skills/new-episode/references/implement-episode.md`, the `implement-spec`, `tdd`, `visual-check`, `code-review`, `commit` and `ui-ux-pro-max:slides` skills.
+- FE-004, FE-002, FE-007, FE-011 and `docs/features/episode-migration.md`.
+- Han's answers in the session: build without motion; answer each `No catalog match` design question with one `ui-ux-pro-max:slides` subagent per ticket, which updates the ticket, then implement.
+
+### Output
+
+- Episode `src/components/episodes/onboard-ai-like-a-colleague/` on `episode/onboard-ai-like-a-colleague`: four Sections, nine page Slides and four section slides, English and German, registered in `src/lib/routes.ts`, `registry.ts` and `episode-repository.ts`.
+- Commit 885c743, #100: Episode wiring, the Title slide and Section the-gap.
+- Commit 8758a25, #103: Section your-move.
+- Commits c5ffcbf and 61e2203, #102: Section from-doing-to-managing and its merge of the integration tip.
+- Commits fdaa24e and 521cf42, #101: Section thought-experiment and its merge.
+- Commit d5643eb, attempt 2: `four-disciplines` fits 800 px; Manuscript h1 P1 voiced as the first segment `hold-it-up` of section slide the-gap; `tests/post-build/episode-text/onboard-ai-like-a-colleague.{en,de}.json` captured; slug added to `PUBLISHED_SLUGS`.
+- Decision: issues #99 to #103 stay open and no PR is opened here; open-pr updates draft PR #98.
+
+### Checks
+
+- Attempt 1: `verify` pass, `build` pass, `test:build` fail: "FAIL tests/post-build/episode-text.build.test.ts > /episode/onboard-ai-like-a-colleague > shows the reader the same text it showed before the move" (and /de/), and "FAIL tests/post-build/landing-page.build.test.ts > landing page post-build structure > lists every Episode in the browse grid, linking the published ones and no upcoming card, for locale en" (and de).
+- Attempt 1 visual-check fail, 1280×800, both themes: all 13 anchors count 1; `from-doing-to-managing--four-disciplines` box 962 px, the other 12 at 800 px. These probes did not scroll, so unmounted Slides measured empty.
+- Attempt 2: `verify` pass, `build` pass, `test:build` pass (544 of 544).
+- Attempt 2 visual-check pass: each Slide loaded by its `#anchor` so its content mounted. Light: all 13 count 1, box 800 px, 4 to 31 mounted descendants. Dark: the same 13 at count 1, box 800 px, the same descendant counts.
+
+### Metrics
+
+- implementor · attempt 1 · fail · 27160 s
+- reviewer · attempt 1 · fail · 150 s
+- implementor · attempt 2 · pass · 153 s · 85358 tokens
+- reviewer · attempt 2 · pass · 25 s
+
+### Notes
+
+Passed on attempt 2. The implementor ran in this session, as the job's `session: orchestrator` says. The Skill tool refused `implement-spec` because of its `disable-model-invocation: true`, so Han ran `/implement-spec` himself. The implementor's 27160 s includes a pause for a re-login.
+Attempt 1 failed three lines, each fixed in d5643eb: the missing post-build expectations (`test:build` and the Standards review, docs/features/episode-migration.md step 8); `four-disciplines` at 962 px (Rubric 4); and Manuscript h1 P1 missing from the Voice script (Spec review, #100). The attempt-2 reviewer judged only those three lines.
+Rubric lines 1 to 3 passed on attempt 1: all 35 h2 and h3 paragraphs match their segments character for character; masters match the Dossier, with Scenes for the design-answer Slides; note counts 3, 3, 4, 3, 3, 3, 4, 3 and 1 match the Dossier with their sources.
+Motion: `liquid-ink-transition` cannot be imported by a Slide or Episode file (FE-007, `.dependency-cruiser.cjs`), and it is a full-viewport scroll overlay. Han decided to build without it; the decision is commented on #99.
+Design: the five `No catalog match` Slides were designed by one `ui-ux-pro-max:slides` subagent per ticket, which rewrote each design question as a `Design answer` in the ticket body. twenty-x-versus-your-screen, what-you-would-say-first, four-oclock-the-plan-comes-back and write-the-day-one-note are Scenes (SlideFrame plus a Slide-local part). you-managed-it uses BasicPageSlide with lucide icons.
+Needs human: the Scenes depart from the tickets' "uses exactly the master the Dossier names" and "do not invent"; confirm them (comments on #100, #101 and #103).
+Needs human: the "reinvest" arrow on same-wall-one-level-up is dropped; the word sits in the caption. The orchestrator kept ThreeColumnSlide unchanged rather than duplicate its markup or add a slot to it (comment on #102).
+Needs human: Manuscript h1 P1 is voiced over section slide the-gap, because the Title slide has no Voice script slot (comment on #100).
+Needs human: captions, sample plan values, prompt and answer copy, the speech lines and the ai-can-help caption and prose were written by the subagents; the Dossier gives none. In German the colleague is "die neue Kollegin".
+Needs human: what-you-would-say-first lists four speech lines in context, tools, brief order; check they do not read as the labelled buckets the Brief's Analogy forbids.
+Needs human: four-oclock-the-plan-comes-back marks the budget, not the venue, and a PenLine icon stands in for a hand with a pen.
+Needs human: `episode-metadata.ts` sets `status: 'published'` and `publishedOn: '2026-10-13'`, and its topics and tags were chosen by the implementor, while the video is out of scope.
+Needs human: four-disciplines keeps the grid-2x2 indexes, colour dots, hover tints and a CSS colour transition; the `bg-machine`, `bg-human` and `bg-ai` tints label disciplines that carry no machine, human or AI meaning (FE-002 Do 7).
+Needs human: the visual check ran only at 1280×800; the shorter four-disciplines tiles were not measured at other widths.
+Judgement calls from the Standards review: polished-plan.tsx props `offRow`, `offTarget` and `penTarget` travel together; `quote: {open, close}` is written inline twice in first-day-desk.tsx; three parts pass note targets in three different shapes; the Scenes write `data-target="caption"` by hand; nine Slide headers repeat a "built without motion" comment; `PlanRow` and `SpeechLine` are exported but unused elsewhere.
+Running `next dev` rewrites `AGENTS.md`; each subagent reverted it, and no commit carries it.

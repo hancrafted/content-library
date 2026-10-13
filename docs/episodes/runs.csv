@@ -43,3 +43,7 @@ run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at
 2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-manuscript,reviewer,2,pass,,13,41846,2026-10-12T22:11:54Z
 2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-spec,implementor,1,pass,,120,74195,2026-10-12T22:17:36Z
 2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-spec,reviewer,1,pass,,50,64828,2026-10-12T22:18:47Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,implement-episode,implementor,1,fail,"FAIL tests/post-build/episode-text.build.test.ts > /episode/onboard-ai-like-a-colleague > shows the reader the same text it showed before the move",27160,,2026-10-13T05:58:48Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,implement-episode,reviewer,1,fail,"The visual check ran in both themes, and its numbers show no overflow.",150,,2026-10-13T06:02:13Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,implement-episode,implementor,2,pass,,153,85358,2026-10-13T06:04:50Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,implement-episode,reviewer,2,pass,,25,,2026-10-13T06:06:58Z
