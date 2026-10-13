@@ -1,0 +1,66 @@
+{
+  "title": "Day one, before you type",
+  "caption": "Four short lines. Two minutes. Then type.",
+  "note": {
+    "label": "A blank day-one note",
+    "lines": {
+      "context": "The context",
+      "tools": "The tools they'd need",
+      "brief": "The brief",
+      "check": "How you'll check their work"
+    }
+  },
+  "notes": {
+    "why-check-is-on-the-list": {
+      "header": "Why check is on the list",
+      "description": "Anthropic's guidance for its coding agent is to give it a way to verify its work and, if you cannot verify it, not to ship it. The page was quoted from an earlier fetch, not re-fetched.[1]",
+      "sources": {
+        "claude-code-best-practices": {
+          "title": "Best practices for Claude Code"
+        }
+      }
+    },
+    "a-short-checklist-can-cut-errors": {
+      "header": "A short checklist can cut errors in skilled work",
+      "description": "A 19-item surgical checklist was associated with inpatient death falling from 1.5% to 0.8%. This is surgery, not AI; it shows only that a simple step helps experts.[1]",
+      "sources": {
+        "surgical-safety-checklist": {
+          "title": "A Surgical Safety Checklist to Reduce Morbidity and Mortality in a Global Population"
+        }
+      }
+    },
+    "keep-the-note-short": {
+      "header": "Keep the note short",
+      "description": "A line stays only if removing it would cause mistakes; bloated instruction files lead the model to ignore the actual instructions.[1]",
+      "sources": {
+        "claude-code-best-practices": {
+          "title": "Best practices for Claude Code"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "next-time": {
+        "title": "Next time",
+        "keywords": "something real, before a word",
+        "script": "So here is your move. Next time you reach for AI on something real, stop. Before you type a single word."
+      },
+      "jot-it-down": {
+        "title": "Jot it down",
+        "keywords": "day one, a new colleague",
+        "script": "Take a piece of paper, or an empty note. And write down what you would tell a brand-new colleague on their first day."
+      },
+      "four-lines": {
+        "title": "Four lines",
+        "keywords": "context, tools, brief, check",
+        "script": "Four short lines. The context. The tools they would need. The brief. And how you will check their work."
+      },
+      "two-minutes": {
+        "title": "Two minutes",
+        "keywords": "small, then type",
+        "script": "It takes two minutes. Keep it small. Then, and only then, type."
+      }
+    }
+  }
+}

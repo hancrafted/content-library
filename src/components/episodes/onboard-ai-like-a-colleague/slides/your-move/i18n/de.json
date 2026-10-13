@@ -1,0 +1,13 @@
+{
+  "title": "Dein Zug",
+  "caption": "Eine kleine Gewohnheit und eine Wendung.",
+  "voiceScript": {
+    "segments": {
+      "habit-and-twist": {
+        "title": "Eine Gewohnheit und eine Wendung",
+        "keywords": "eine kleine Gewohnheit, eine Wendung",
+        "script": "Eine kleine Gewohnheit, und eine Wendung."
+      }
+    }
+  }
+}

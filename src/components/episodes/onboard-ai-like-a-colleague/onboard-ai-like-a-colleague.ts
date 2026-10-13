@@ -1,8 +1,11 @@
 import { episode } from '@/components/slide-master/slide';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
+import { aiCanHelpYouOnboardAi } from './slides/ai-can-help-you-onboard-ai/slide';
 import { theGap } from './slides/the-gap/slide';
 import { twentyXVersusYourScreen } from './slides/twenty-x-versus-your-screen/slide';
+import { writeTheDayOneNote } from './slides/write-the-day-one-note/slide';
+import { yourMove } from './slides/your-move/slide';
 
 /*
  * "Stop prompting AI, start onboarding it": from the gap between the 20x
@@ -14,5 +17,8 @@ import { twentyXVersusYourScreen } from './slides/twenty-x-versus-your-screen/sl
 export const onboardAiLikeAColleague = episode({
   slug: 'onboard-ai-like-a-colleague',
   messages: { en, de },
-  sections: [[theGap, twentyXVersusYourScreen]],
+  sections: [
+    [theGap, twentyXVersusYourScreen],
+    [yourMove, writeTheDayOneNote, aiCanHelpYouOnboardAi],
+  ],
 });

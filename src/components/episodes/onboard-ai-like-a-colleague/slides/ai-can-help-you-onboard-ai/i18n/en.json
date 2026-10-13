@@ -1,0 +1,35 @@
+{
+  "title": "AI can help you onboard AI.",
+  "caption": "Let it interview you.",
+  "prose": "The grill-me approach: it asks the questions, one at a time, until your day-one note is complete.",
+  "notes": {
+    "why-the-effort-pays-back": {
+      "header": "Why the effort pays back",
+      "description": "The shift from doing to managing is a skill you can practise, and it is the same one organizations must build. Anthropic's usage data links six months or more of experience with a 3 to 5 point higher success rate; the data is observational and model-graded.[1]",
+      "sources": {
+        "economic-index-learning-curves": {
+          "title": "Anthropic Economic Index report: Learning Curves"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "it-feels-like-a-lot": {
+        "title": "It feels like a lot",
+        "keywords": "the weight, honest",
+        "script": "I know. It feels like a lot of work. Context, tools, briefs, checks, and you have not even started."
+      },
+      "the-twist": {
+        "title": "The twist",
+        "keywords": "AI helps you onboard AI",
+        "script": "But here is the twist. AI can help you onboard AI."
+      },
+      "grill-me-lightly": {
+        "title": "Grill-me, lightly",
+        "keywords": "it asks, you answer, done",
+        "script": "Let it interview you. Ask it to put the questions to you, one at a time, until your day-one note is complete. That is the grill-me approach. You answer, it asks, and then you are done."
+      }
+    }
+  }
+}
