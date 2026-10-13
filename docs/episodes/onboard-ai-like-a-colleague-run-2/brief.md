@@ -8,6 +8,8 @@ generated:
 verified:
   - by: process:markdown-harness
     at: 2026-10-13T14:12:30Z
+  - by: human:han
+    at: 2026-10-13T14:14:07Z
 ---
 
 # Why you must onboard AI like a new colleague
