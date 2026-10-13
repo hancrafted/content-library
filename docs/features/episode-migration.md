@@ -37,10 +37,10 @@ Done when: no two slugs match and each Section's first slug names the Section.
 
 Copy `page-template/` to `episodes/<ep>/`, then:
 
-- Delete its Slide folders and its `published-anchors.json`; step 7 captures a fresh one.
+- Delete its Slide folders and its `published-anchors.json`; the anchors bind at publication ([Episode publishing](episode-publishing.md)), not here.
 - Rename `page-template.ts` to `<ep>.ts` and its export to the camelCase slug. Set `slug: '<ep>'` and `sections: []` until step 7; add `youtube: { en, de }` once the video ids exist.
-- Register it now, all three together, since `tsc` refuses any one alone: the slug in `EPISODE_SLUGS` (`src/lib/routes.ts`), the record in `EPISODES` (`src/components/episodes/registry.ts`), and `episodes/<ep>/episode-metadata.ts` in `PUBLISHED` (`src/components/episodes/episode-repository.ts`). The metadata holds `status: 'published'`, its primary Topic, any extra Topics, its Format, its Tags and `publishedOn`, as in `ai-token-economy/episode-metadata.ts`.
-- If `episodes/<ep>/` already exists as an Upcoming Episode, copy into it and flip its metadata: move it out of `UPCOMING`, and move its copy from `landing.episodeOverview.upcoming.<ep>` into `episodes/<ep>/i18n/` ([Episode overview entries](episode-translation-keys.md#episode-overview-entries)).
+- Register it now, all three together, since `tsc` refuses any one alone: the slug in `EPISODE_SLUGS` (`src/lib/routes.ts`), the record in `EPISODES` (`src/components/episodes/registry.ts`), and `episodes/<ep>/episode-metadata.ts` in `REGISTERED` (`src/components/episodes/episode-repository.ts`; its `status` decides published or upcoming). The metadata holds `status: 'upcoming'`, its primary Topic, any extra Topics, its Format and its Tags, as in `specs-an-agent-can-follow/episode-metadata.ts`, and no `publishedOn`: publishing adds `status: 'published'` and `publishedOn` later. The page is built and served at `/episode/<ep>`, `noindex`, its overview card Upcoming and unlinked.
+- If `episodes/<ep>/` already exists as an Upcoming Episode, copy into it, keep `status: 'upcoming'`, move it out of `UPCOMING` into `REGISTERED`, and move its copy from `landing.episodeOverview.upcoming.<ep>` into `episodes/<ep>/i18n/` ([Episode overview entries](episode-translation-keys.md#episode-overview-entries)).
 - Write the Episode's own text in `i18n/en.json` and `de.json`: `title`, `caption`, `description`. English goes in verbatim from the source; German is written fresh from the same facts, not translated.
 
 Done when: both files hold the three keys and `npm run typecheck` passes.
@@ -111,9 +111,9 @@ Done when: each widget's pure logic has a passing test.
 
 - `episodes/<ep>/<ep>.ts`: fill `sections: [[sectionSlide, ...pages], ...]` in `episode({ slug, youtube, messages: { en, de }, sections })`. Copying a Slide in from another Episode is `cp -r` of its folder plus one import and one entry here.
 - To feature it, edit the three slugs in `FEATURED` in `src/lib/episode-overview.ts`.
-- Run `npx vitest run src/components/episodes/published-anchors.test.ts`. It fails for the new Episode and prints the file path and its JSON; create `episodes/<ep>/published-anchors.json` with exactly that content.
+- Do not write `published-anchors.json`: `published-anchors.test.ts` skips an upcoming Episode, and the publish step writes the file ([Episode publishing](episode-publishing.md)).
 
-Done when: the same test run is green.
+Done when: `npx vitest run src/components/episodes/published-anchors.test.ts` is green.
 
 ## 8. Verify
 
@@ -126,7 +126,7 @@ npm run build && npm run test:build
 
 - **Captured text:** the first run writes `tests/post-build/episode-text/<ep>.{en,de}.json` and fails on purpose. Review both files, commit them, run again. A later wording change fails against the capture: delete the two files, rerun, review the new capture.
 - **Untitled Slides:** each Slide left without a `title` gets its anchor in `UNTITLED` in `tests/post-build/episode-structure.build.test.ts`.
-- **Published list:** the slug joins `PUBLISHED_SLUGS` in `tests/post-build/landing-page.build.test.ts`, in the order of `PUBLISHED` in `episode-repository.ts`.
+- **Published list:** an upcoming Episode stays out of `PUBLISHED_SLUGS` in `tests/post-build/landing-page.build.test.ts`; it joins at publication ([Episode publishing](episode-publishing.md)).
 
 Done when: both pass, the build lists `/episode/<ep>` and `/de/episode/<ep>`, and the post-build tests cover it.
 

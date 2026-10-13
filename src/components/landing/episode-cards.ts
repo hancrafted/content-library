@@ -1,8 +1,7 @@
-import { listEpisodes } from '@/components/episodes/episode-repository';
+import { featuredSlugs, hasPage, listEpisodes } from '@/components/episodes/episode-repository';
 import { episodeCopy, findEpisode } from '@/components/episodes/registry';
 import { episodeMinutes } from '@/components/slide-master/localized-slide';
 import { overviewOrder, type EpisodeMetadata } from '@/lib/episode-metadata.pure';
-import { FEATURED } from '@/lib/episode-overview';
 import type { Locale } from '@/lib/locale.pure';
 import { hasReadingTime, wholeMinutes } from '@/lib/speaking-time.pure';
 import { getTranslations } from 'next-intl/server';
@@ -15,16 +14,16 @@ function minutesOf(entry: EpisodeMetadata, locale: Locale): number | undefined {
   return hasReadingTime(total) ? wholeMinutes(total) : undefined;
 }
 
-/** A published Episode with its title and caption from the registry; an upcoming one has no record. */
+/** An Episode with a page (published, or upcoming with its slug registered) with its title and caption from the registry; a page-less upcoming one has no record. */
 function withCopy(entry: EpisodeMetadata, locale: Locale): CardEntry {
-  if (entry.status !== 'published') return entry;
+  if (entry.status !== 'published' && !hasPage(entry.slug)) return entry;
   const { title, caption } = episodeCopy(entry.slug, locale);
   return { ...entry, copy: { title, caption } };
 }
 
 /** The Episode's Featured slot, 1 first; none when it holds no slot. */
 function featuredRankOf(slug: string): { featuredRank?: number } {
-  const slot = (FEATURED as readonly string[]).indexOf(slug);
+  const slot = (featuredSlugs() as readonly string[]).indexOf(slug);
   return slot === -1 ? {} : { featuredRank: slot + 1 };
 }
 
@@ -36,7 +35,7 @@ function featuredRankOf(slug: string): { featuredRank?: number } {
 export async function episodeCards(locale: Locale): Promise<EpisodeCard[]> {
   const t = await getTranslations({ locale });
   const read = t as unknown as ReadKey;
-  return overviewOrder(listEpisodes(), FEATURED).map((entry) =>
+  return overviewOrder(listEpisodes(), featuredSlugs()).map((entry) =>
     episodeCard(withCopy(entry, locale), {
       locale,
       read,
