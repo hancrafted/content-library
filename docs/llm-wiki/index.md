@@ -1,3 +1,7 @@
+---
+okf_version: '0.2'
+---
+
 # LLM wiki
 
 Research any Episode can cite, one file per question. The retrieval job reads each description to decide whether a file answers a new question.

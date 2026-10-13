@@ -1,6 +1,10 @@
 ---
 type: brief
-status: approved
+title: Why you must onboard AI like a new colleague
+status: draft
+generated:
+  by: claude-code/opus-5.5
+  at: 2026-10-13T14:08:20Z
 ---
 
 # Why you must onboard AI like a new colleague

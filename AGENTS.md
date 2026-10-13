@@ -11,6 +11,7 @@ This project is a localized Next.js application which serves to visualize theory
 - Use `npm run verify` frequently to verify that the changes are correct.
 - Binding decisions live in Archgate ADRs under `.archgate/adrs/`.
 - Start with `.archgate/adrs/FE-004-slide-architecture.md` for the architecture map.
+- `docs/llm-wiki/` is an OKF v0.2 bundle: every file there carries OKF frontmatter (design-ADR _Frontmatter follows Google's Open Knowledge Format_).
 - `docs/agents/` holds method and procedure, product-agnostic. Feature reference (Episodes, Context drawer, Translation keys) lives in `docs/features/`.
 - An ADR's `files:`/`paths:` name where authors of governed code work, two or three globs, and cover every file its checks fire in. Compliance names kinds of enforcer (types, lint, tests), not config files.
 - For any /grill-with-docs and /wayfinder, using the /grilling skill read the `docs/agents/grilling-format.md`, which overwrites the grill format. Analog for voice sessions read `docs/agents/grilling-voice.md`.
