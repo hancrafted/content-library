@@ -1,0 +1,59 @@
+{
+  "title": "“Become 20x more productive with AI”",
+  "caption": "Every feed. Every course title.",
+  "exchange": {
+    "promptLabel": "You",
+    "prompt": "Write a project update for my team.",
+    "answerLabel": "AI",
+    "answer": "Here is an update: the team made great progress this week and is on track for the upcoming milestones."
+  },
+  "question": "?",
+  "notes": {
+    "measured-gains-small": {
+      "header": "The measured gains are real but small",
+      "description": "Three field experiments with 4,867 developers found about 26% more completed tasks with an AI assistant, far from 20x, and each single experiment was noisy.[1]",
+      "sources": {
+        "three-field-experiments": {
+          "title": "The Effects of Generative AI on High-Skilled Work: Evidence from Three Field Experiments with Software Developers"
+        }
+      }
+    },
+    "slowdown-out-of-date": {
+      "header": "A famous slowdown, now out of date",
+      "description": "METR measured 19% longer tasks for 16 experienced developers on their own repositories in early 2025; its authors now say the old result no longer reflects current impact. Do not present it as a current fact.[1]",
+      "sources": {
+        "metr-uplift-update": {
+          "title": "METR, update on its AI developer productivity study (February 2026)"
+        }
+      }
+    },
+    "we-misjudge-our-gains": {
+      "header": "We misjudge our own gains",
+      "description": "The same developers forecast a 24% speedup and afterwards believed AI had saved them 20%, in the wrong direction.[1]",
+      "sources": {
+        "metr-early-2025-study": {
+          "title": "Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-promise": {
+        "title": "The promise",
+        "keywords": "20x, productivity, every feed",
+        "script": "Twenty times. It is in every feed. It is in the title of every course. Your week, they say, shrinks to a single afternoon."
+      },
+      "your-own-attempt": {
+        "title": "Your own attempt",
+        "keywords": "your prompt, flat answer, shrug",
+        "script": "Now think of your own attempt. You opened the chat. You typed a prompt, a good one, you thought. The answer came back flat. Generic. Fine, but not what you needed. You fixed it by hand, and you shrugged."
+      },
+      "leave-it-open": {
+        "title": "Leave it open",
+        "keywords": "why, hang in the room",
+        "script": "So where are the twenty times? Why does it work on the poster and not for you? Hold that question. Do not answer it yet. Let it sit in the room for a moment, because we will come at it through a different door."
+      }
+    }
+  }
+}

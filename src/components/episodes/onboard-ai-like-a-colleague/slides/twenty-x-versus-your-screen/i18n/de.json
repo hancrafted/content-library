@@ -1,0 +1,59 @@
+{
+  "title": "„Mit KI 20x produktiver werden“",
+  "caption": "In jedem Feed. In jedem Kurstitel.",
+  "exchange": {
+    "promptLabel": "Du",
+    "prompt": "Schreib ein Projekt-Update für mein Team.",
+    "answerLabel": "KI",
+    "answer": "Hier ist ein Update: Das Team hat diese Woche große Fortschritte gemacht und liegt bei den nächsten Meilensteinen im Plan."
+  },
+  "question": "?",
+  "notes": {
+    "measured-gains-small": {
+      "header": "Die gemessenen Gewinne sind echt, aber klein",
+      "description": "Drei Feldexperimente mit 4.867 Entwicklerinnen und Entwicklern zeigen mit KI-Assistent rund 26 % mehr erledigte Aufgaben. Das ist weit weg von 20x, und jedes einzelne Experiment für sich war verrauscht.[1]",
+      "sources": {
+        "three-field-experiments": {
+          "title": "The Effects of Generative AI on High-Skilled Work: Evidence from Three Field Experiments with Software Developers"
+        }
+      }
+    },
+    "slowdown-out-of-date": {
+      "header": "Eine bekannte Verlangsamung, inzwischen überholt",
+      "description": "METR maß Anfang 2025 bei 16 erfahrenen Entwicklern in ihren eigenen Repositories 19 % längere Bearbeitungszeiten. Die Autoren sagen inzwischen selbst, dass dieses Ergebnis die heutige Wirkung nicht mehr abbildet. Nicht als aktuellen Befund darstellen.[1]",
+      "sources": {
+        "metr-uplift-update": {
+          "title": "METR, update on its AI developer productivity study (February 2026)"
+        }
+      }
+    },
+    "we-misjudge-our-gains": {
+      "header": "Wir schätzen unseren eigenen Gewinn falsch ein",
+      "description": "Dieselben Entwickler erwarteten vorab 24 % Beschleunigung und glaubten hinterher, die KI habe ihnen 20 % Zeit gespart, obwohl die Messung in die andere Richtung ging.[1]",
+      "sources": {
+        "metr-early-2025-study": {
+          "title": "Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-promise": {
+        "title": "Das Versprechen",
+        "keywords": "20x, Produktivität, jeder Feed",
+        "script": "Zwanzigmal. Das steht in jedem Feed. Das steht im Titel jedes Kurses. Deine Woche, heißt es, schrumpft auf einen einzigen Nachmittag."
+      },
+      "your-own-attempt": {
+        "title": "Dein eigener Versuch",
+        "keywords": "dein Prompt, flache Antwort, Achselzucken",
+        "script": "Und jetzt denk an deinen eigenen Versuch. Du hast den Chat geöffnet. Du hast einen Prompt getippt, einen guten, dachtest du. Die Antwort kam flach zurück. Allgemein. Nicht falsch, aber nicht das, was du gebraucht hast. Du hast sie von Hand nachgebessert und mit den Schultern gezuckt."
+      },
+      "leave-it-open": {
+        "title": "Offen lassen",
+        "keywords": "warum, im Raum stehen lassen",
+        "script": "Wo sind also die zwanzigmal? Warum klappt es auf dem Plakat und nicht bei dir? Behalte diese Frage. Beantworte sie noch nicht. Lass sie einen Moment im Raum stehen, denn wir nähern uns ihr durch eine andere Tür."
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "title": "Die Lücke",
+  "caption": "Der Abstand zwischen dem Versprechen und deinem Arbeitsalltag.",
+  "voiceScript": {
+    "segments": {
+      "promise-and-your-day": {
+        "title": "Das Versprechen und dein Alltag",
+        "keywords": "Abstand, Versprechen, dein Alltag",
+        "script": "Zuerst der Abstand zwischen dem Versprechen und deinem Alltag."
+      }
+    }
+  }
+}

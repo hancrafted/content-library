@@ -1,0 +1,13 @@
+{
+  "title": "The gap",
+  "caption": "The distance between the promise and your day.",
+  "voiceScript": {
+    "segments": {
+      "promise-and-your-day": {
+        "title": "The promise and your day",
+        "keywords": "distance, promise, your day",
+        "script": "First, the distance between the promise and your day."
+      }
+    }
+  }
+}
