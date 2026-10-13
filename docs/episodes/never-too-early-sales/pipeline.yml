@@ -1,7 +1,7 @@
 # Isolated Sol run: integration branch sales-pipeline-episode-sol.
 # Research worktrees must use that branch as --base, not episode/never-too-early-sales.
 # Missing library index and human-profile guides are recorded in run-log.md.
-status: draft
+status: approved
 template: 7ac7829
 jobs:
   - id: brief-grill
