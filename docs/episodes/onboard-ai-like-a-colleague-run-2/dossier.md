@@ -12,6 +12,8 @@ verified:
     at: 2026-10-13T14:29:51Z
   - by: process:markdown-harness
     at: 2026-10-13T14:34:48Z
+  - by: human:han
+    at: 2026-10-13T15:00:24Z
 ---
 
 # Stop prompting AI, start onboarding it {#stop-prompting-start-onboarding}
