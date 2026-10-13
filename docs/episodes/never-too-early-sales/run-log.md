@@ -385,3 +385,47 @@ Needs human: about 40 Voice script beats for a 20-30 minute slot; check the fit 
 Needs human: `sales-is-more-than-selling` note 4 rests on Spence, read from its abstract and a review only.
 
 Needs human: Slide `sales-is-more-than-selling` says "before a euro of revenue" while the cashflow board counts in dollars.
+
+## write-voice-script · 2026-10-13T23:46:35Z
+
+### Inputs
+
+- `dossier.md` at the write-dossier commit 5900471.
+- `brief.md`: Hook, Red thread, Analogy, Audience, Format and Constraints.
+- Skipped: `docs/profile/han/storytelling-guide.md` and `tone-guide.md` do not exist yet.
+
+### Output
+
+- `dossier.md`, `status: draft`, Voice script written (43 items, about 2,900 words, about 20 minutes), committed with `Gate: draft dossier`.
+- Han's approval: a `human:han` verified entry appended at his word ("i approve all subsequent gates, run until episode is implemented"), committed with `Gate: approved dossier`. No edit of his own, so the gate diff is empty.
+
+### Checks
+
+- `mh check`: pass.
+- `vitest` staging test: pass; only Voice script lines and `generated` changed against 5900471.
+- Reviewer: pass on attempt 3.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 106 s · 69700 tokens
+- reviewer · attempt 1 · fail · rubric "Fail if any material contradicts the Voice script it sits beside." · 226 s · 72514 tokens
+- implementor · attempt 2 · pass · 87 s · 62560 tokens
+- reviewer · attempt 2 · fail · rubric "Fail if any material contradicts the Voice script it sits beside." · 112 s · 60548 tokens
+- implementor · attempt 3 · pass · 52 s · 58913 tokens
+- reviewer · attempt 3 · pass · 97 s · 64776 tokens
+
+### Notes
+
+Attempt 1 padded the beats to reach 20 minutes and failed seven lines: an example ratio spoken as normal against its "Illustration, not a benchmark" caption, bolted-on sentences, lines that needed the Slide, five repeats of Speaker notes, a video-only phrase, competing images beside the cashflow board, and three claims beyond the research. It also invented first-person coaching experience.
+
+Attempt 2 fixed most of them but moved the example problem to the 9:1 ratio and kept some bolted-on sentences, note repeats and images. Attempt 3 cut rather than added and passed.
+
+Needs human: the Voice script is not checked against Han's tone, since no tone or storytelling guide exists; this is the first draft he reads in his own voice.
+
+Needs human: "Preparation" (why-it-takes-time-to-ramp-up) says to write the process down before the first call, while a note on sales-is-more-than-selling says the process is found by selling, not designed in advance.
+
+Needs human: "Revenue earlier" says the company lives on into the summer, while its board shows January to April only.
+
+Needs human: "Simple board" says one card is stuck in Meeting, while the Visual animates a card moving from Meeting to Proposal.
+
+Needs human: "This week" ends on ten minutes on the board after telling the listener to pick any step.

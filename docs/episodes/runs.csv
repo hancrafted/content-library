@@ -86,3 +86,9 @@ run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at
 2026-10-13T22:43:23Z,never-too-early-sales,write-dossier,reviewer,1,fail,"a page slide's material would leave an implementer guessing",125,108230,2026-10-13T23:31:00Z
 2026-10-13T22:43:23Z,never-too-early-sales,write-dossier,implementor,2,pass,,24,47752,2026-10-13T23:32:05Z
 2026-10-13T22:43:23Z,never-too-early-sales,write-dossier,reviewer,2,pass,,23,50008,2026-10-13T23:32:40Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-voice-script,implementor,1,pass,,106,69700,2026-10-13T23:35:06Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-voice-script,reviewer,1,fail,"Fail if any material contradicts the Voice script it sits beside.",226,72514,2026-10-13T23:39:00Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-voice-script,implementor,2,pass,,87,62560,2026-10-13T23:40:50Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-voice-script,reviewer,2,fail,"Fail if any material contradicts the Voice script it sits beside.",112,60548,2026-10-13T23:42:50Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-voice-script,implementor,3,pass,,52,58913,2026-10-13T23:44:13Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-voice-script,reviewer,3,pass,,97,64776,2026-10-13T23:46:00Z
