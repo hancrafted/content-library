@@ -21,6 +21,19 @@ From the first run, `onboard-ai-like-a-colleague` (run id `2026-10-12T19:22:40Z`
 
 Gate diffs: Han changed only `status:` in the Brief and Manuscript gate pairs, and the pipeline pair mixes his approval with the template merge. No correction recurs, so no rubric line comes from them yet.
 
+### Run 2
+
+From the second run, `onboard-ai-like-a-colleague-run-2` (run id `2026-10-13T14:12:21Z`, template `7ac7829`). Han's points come from his Dossier gate; the rest are findings from the run log. None is applied yet.
+
+1. **The Voice script needs a storytelling guide.** At the Dossier gate Han found the Voice script too short for his storytelling style. It was acceptable for this run, which had no profile context. `docs/profile/han/storytelling-guide.md` and `tone-guide.md` do not exist, so the writer skipped them and the reviewer judged rubric lines 2 and 3 n/a. Proposed fix: Han writes both guides, for example through a grill, before the next run.
+2. **Plain Visual proposals work for now.** Han liked the Dossier's Visual proposals as simple enough, and wants to see how `write-design-spec` reworks them. Proposed fix: keep `write-dossier`'s Visual as it is; compare its proposals with the design answers once `write-design-spec` has run.
+3. **Speaker notes go first.** Han reads a Slide's Speaker notes before anything else, so he wants them at the top of each Section and Slide in the Dossier. Proposed fix: the `staging-dossier-body` rule and the sample Dossier put `#### Speaker notes` before `#### Visual` and `#### Voice script`.
+4. **The handoff named an approval that did not exist.** It said the Brief carried Han's `verified` entry with `Gate: approved brief`; the branch had neither, so the run stopped at the Brief gate first. Proposed fix: a run handoff states gate state only from `git log` trailers and the file's `verified` list.
+5. **A reused research job has no defined way to be marked done.** `references/retrieval.md` says the orchestrator marks each `reuse` question's job done, but the status script reads done only from a passing Metrics item. This run logged each reused job with `orchestrator · attempt 1 · pass · 0 s` and no CSV row. Proposed fix: the status script reads a `reuse` outcome in the retrieval entry as done, or `customize-pipeline` drops the jobs of questions that retrieval reuses, after retrieval runs.
+6. **`categorize-research` numbers past answered questions.** It reserved AIE-0007..0012 although AIE-0001..0006 answer the same questions. Proposed fix: run `retrieval` before `categorize-research`, and name folders only for `new` and `extend` questions.
+7. **The subagent model is not the orchestrator's.** Agents with `model: inherit` were spawned without a model; the Dossier's `generated.by` reads `claude-code/sonnet-5.5`. Proposed fix: the orchestrator passes the session's model explicitly for `inherit`.
+8. **Run-log timestamps must come from the clock.** The orchestrator estimated four entries' timestamps, 1–4 minutes off their commits. Proposed fix: SKILL.md says to read every timestamp with `date -u`.
+
 ## Next steps
 
 Planned, not yet built, in the order they pay off:
