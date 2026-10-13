@@ -1,0 +1,155 @@
+{
+  "title": "Hör auf, KI zu prompten. Arbeite sie ein. · hancrafted",
+  "description": "Warum KI enttäuscht, wenn man sie wie ein Werkzeug promptet, und warum ihre Einarbeitung wie bei einer fähigen neuen Kollegin Führungsarbeit ist: Kontext, Werkzeuge, ein klares Briefing und die Prüfung des Ergebnisses.",
+  "toc": "Inhalt Wird geladen noch 9 Min. 1 Die Lücke „Mit KI 20x produktiver werden“ 2 Das Gedankenexperiment Sommerfest, fällig um fünf Was du als Erstes sagen würdest Vier Uhr, der Plan kommt zurück 3 Vom Erledigen zum Managen Du hast die Aufgabe nicht erledigt. Vier Disziplinen Dieselbe Wand, eine Ebene höher 4 Dein Zug Tag eins, bevor du tippst KI kann dir helfen, KI einzuarbeiten. Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 9 Min. 1 Die Lücke „Mit KI 20x produktiver werden“ 2 Das Gedankenexperiment Sommerfest, fällig um fünf Was du als Erstes sagen würdest Vier Uhr, der Plan kommt zurück 3 Vom Erledigen zum Managen Du hast die Aufgabe nicht erledigt. Vier Disziplinen Dieselbe Wand, eine Ebene höher 4 Dein Zug Tag eins, bevor du tippst KI kann dir helfen, KI einzuarbeiten.",
+  "slides": [
+    {
+      "id": "top",
+      "text": "Hör auf, KI zu prompten. Arbeite sie ein. KI nimmt dir die Arbeit nicht ab, sie verlagert sie: Behandle sie wie eine neue Kollegin am ersten Tag und schreib das Briefing, bevor du tippst."
+    },
+    { "id": "the-gap", "text": "Die Lücke Der Abstand zwischen dem Versprechen und deinem Arbeitsalltag." },
+    {
+      "id": "the-gap--twenty-x-versus-your-screen",
+      "text": "„Mit KI 20x produktiver werden“ In jedem Feed. In jedem Kurstitel. Du Schreib ein Projekt-Update für mein Team. KI Hier ist ein Update: Das Team hat diese Woche große Fortschritte gemacht und liegt bei den nächsten Meilensteinen im Plan. ?"
+    },
+    { "id": "thought-experiment", "text": "Das Gedankenexperiment Ein kleines Experiment. Du bist die Hauptperson." },
+    {
+      "id": "thought-experiment--sommerfest-due-by-five",
+      "text": "Sommerfest, fällig um fünf Montagmorgen. Eine Aufgabe, eine Frist und Hilfe an ihrem ersten Tag. Die Aufgabe Das Sommerfest der Firma, oder die Weihnachtsfeier. Rund hundert Leute. Ein durchdachter Plan auf dem Tisch deiner Teamleitung oder der Geschäftsführung. Die Uhr Fällig bis Feierabend. Der allererste Arbeitstag der neuen Kollegin. Die neue Kollegin Kennt praktisch alles, was je geschrieben wurde. Äußerst selbstsicher. Will unbedingt gefallen."
+    },
+    {
+      "id": "thought-experiment--what-you-would-say-first",
+      "text": "Was du als Erstes sagen würdest Erster Tag. Vor jeder Aufgabe redest du. „ Letztes Jahr sind viele früh gegangen. Dieses Jahr wollen wir uns wieder als Team fühlen. “ „ Kleines Budget, hundert Leute, keine Reden, keine Krawatten. Und letztes Jahr hat es geregnet. “ „ Hier ist das Buchungssystem mit deinem Login, die Caterer, denen wir vertrauen, der gemeinsame Kalender. “ „ Ein strukturierter Plan, bis fünf auf meinem Tisch. “"
+    },
+    {
+      "id": "thought-experiment--four-oclock-the-plan-comes-back",
+      "text": "Vier Uhr, der Plan kommt zurück Früh, poliert und felsenfest überzeugt. Sommerfest · Plan Datum Freitag, 10. Juli, ab 16 Uhr Location Gutshaus am See Essen Grillbuffet und vegetarisch, Regenzelt Budget 45.000 € (450 € pro Kopf) Ablauf Begrüßung · Spiele · Essen · Band Playlist Sommerhits"
+    },
+    { "id": "from-doing-to-managing", "text": "Vom Erledigen zum Managen Was die Arbeit mit KI von dir verlangt." },
+    {
+      "id": "from-doing-to-managing--you-managed-it",
+      "text": "Du hast die Aufgabe nicht erledigt. Du hast sie gemanagt."
+    },
+    {
+      "id": "from-doing-to-managing--four-disciplines",
+      "text": "Vier Disziplinen Die Fähigkeit hat inzwischen Namen. 01 Prompt Engineering Die Bitte, als klares Briefing, das niemand missverstehen kann. 02 Context Engineering Der Hintergrund: Budget, Gästezahl, Kultur, frühere Feste. 03 Harness Engineering Die Werkzeuge: Buchungssystem, Caterer-Kontakte, Kalender. 04 Graph Engineering neu, noch locker definiert Der Ablauf über mehrere Agenten: Projektmanagement für KI."
+    },
+    {
+      "id": "from-doing-to-managing--same-wall-one-level-up",
+      "text": "Dieselbe Wand, eine Ebene höher Dieselbe neue Kollegin, dieselbe Wand. Der Wert kommt, wenn du reinvestierst. Du Die Notiz für den ersten Tag. Dein Team Die gemeinsame Einrichtung. Deine Organisation Schulung und neu gestaltete Abläufe."
+    },
+    { "id": "your-move", "text": "Dein Zug Eine kleine Gewohnheit und eine Wendung." },
+    {
+      "id": "your-move--write-the-day-one-note",
+      "text": "Tag eins, bevor du tippst Vier kurze Zeilen. Zwei Minuten. Dann tippen. Der Kontext Die Werkzeuge, die sie brauchen Das Briefing Wie du ihre Arbeit prüfst"
+    },
+    {
+      "id": "your-move--ai-can-help-you-onboard-ai",
+      "text": "KI kann dir helfen, KI einzuarbeiten. Lass dich von ihr befragen. Der Grill-me-Ansatz: Sie stellt dir die Fragen, eine nach der anderen, bis deine Notiz für Tag eins vollständig ist."
+    }
+  ],
+  "notes": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    { "id": "the-gap", "text": "Die Lücke Keine Sprechernotizen für diese Folie." },
+    {
+      "id": "the-gap--twenty-x-versus-your-screen",
+      "text": "„Mit KI 20x produktiver werden“ Die gemessenen Gewinne sind echt, aber klein Drei Feldexperimente mit 4.867 Entwicklerinnen und Entwicklern zeigen mit KI-Assistent rund 26 % mehr erledigte Aufgaben. Das ist weit weg von 20x, und jedes einzelne Experiment für sich war verrauscht. 1 Quellen (1) The Effects of Generative AI on High-Skilled Work: Evidence from Three Field Experiments with Software Developers ( öffnet in neuem Tab ) papers.ssrn.com Eine bekannte Verlangsamung, inzwischen überholt METR maß Anfang 2025 bei 16 erfahrenen Entwicklern in ihren eigenen Repositories 19 % längere Bearbeitungszeiten. Die Autoren sagen inzwischen selbst, dass dieses Ergebnis die heutige Wirkung nicht mehr abbildet. Nicht als aktuellen Befund darstellen. 1 Quellen (1) METR, update on its AI developer productivity study (February 2026) ( öffnet in neuem Tab ) metr.org Wir schätzen unseren eigenen Gewinn falsch ein Dieselben Entwickler erwarteten vorab 24 % Beschleunigung und glaubten hinterher, die KI habe ihnen 20 % Zeit gespart, obwohl die Messung in die andere Richtung ging. 1 Quellen (1) Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity ( öffnet in neuem Tab ) arxiv.org"
+    },
+    { "id": "thought-experiment", "text": "Das Gedankenexperiment Keine Sprechernotizen für diese Folie." },
+    {
+      "id": "thought-experiment--sommerfest-due-by-five",
+      "text": "Sommerfest, fällig um fünf Warum eine Kollegin und kein Werkzeug Anbieter und Praktiker beschreiben das Modell unabhängig voneinander als brillante Neue, der der Kontext zu euren Gepflogenheiten fehlt. Deshalb funktioniert der Test auch für Menschen, die nicht programmieren. 1 Quellen (1) Anthropic, Be clear and direct ( öffnet in neuem Tab ) docs.claude.com Andere nutzen dieselbe Brille Matt Pocock beschreibt einen Agenten als Kollegen, der jede Sitzung von vorn beginnt. Mollick spricht heute von einem „unendlich geduldigen neuen Kollegen, der alles vergisst“. 1 2 Quellen (2) AI Skills with Matt Pocock, The Pragmatic Engineer ( öffnet in neuem Tab ) newsletter.pragmaticengineer.com Getting started with AI: Good enough prompting ( öffnet in neuem Tab ) oneusefulthing.org „Praktikant“ ist der falsche Rang Mollick hat das Bild vom Praktikanten 2024 aufgegeben, weil es Menschen dazu bringt, KI zu eng einzusetzen. „Kollege“ ist die Form, die er heute vertritt. 1 Quellen (1) Getting started with AI: Good enough prompting ( öffnet in neuem Tab ) oneusefulthing.org"
+    },
+    {
+      "id": "thought-experiment--what-you-would-say-first",
+      "text": "Was du als Erstes sagen würdest Anthropics eigener Test Zeig den Prompt einer Kollegin, die kaum Kontext hat, und prüfe, ob sie verwirrt wäre. 1 Quellen (1) Anthropic, Be clear and direct ( öffnet in neuem Tab ) docs.claude.com Was du weißt, weiß das Modell nicht Bekam GPT-3.5-Turbo genau das eine passende Dokument, stieg die Trefferquote beim Beantworten von Fragen von 56,1 % auf 88,3 %. Für dieses Publikum ein schwacher Beleg: ein Retrieval-Ergebnis von 2023. Es zeigt die Richtung, nicht die Größe. 1 Quellen (1) Lost in the Middle: How Language Models Use Long Contexts ( öffnet in neuem Tab ) arxiv.org Unausgesprochene Anforderungen: ein Benchmark-Ergebnis In einer Benchmark-Studie errieten Modelle eine fehlende Anforderung nur in rund 41 % der Fälle richtig. Das ist ein Benchmark-Ergebnis, keine Regel, und es misst nicht, wie ein Mensch ein Briefing schreibt. 1 Quellen (1) What Prompts Don’t Say ( öffnet in neuem Tab ) arxiv.org Alles auf einmal oder Stück für Stück: ein Benchmark-Ergebnis In einem Benchmark mit simulierten Nutzern verloren Aufgaben, die über mehrere Runden nachgereicht wurden, im Schnitt 39 % Leistung gegenüber einer vollständig formulierten einzelnen Anfrage. Es misst nicht, wie ein Mensch ein Briefing schreibt, also nur als Richtung lesen. 1 Quellen (1) LLMs Get Lost In Multi-Turn Conversation ( öffnet in neuem Tab ) arxiv.org"
+    },
+    {
+      "id": "thought-experiment--four-oclock-the-plan-comes-back",
+      "text": "Vier Uhr, der Plan kommt zurück Selbstsicher und falsch sieht gleich aus In der BCG-Studie lag eine Aufgabe bewusst außerhalb dessen, was das Modell kann. Wer KI nutzte, lag dort mit 19 Prozentpunkten geringerer Wahrscheinlichkeit richtig, und die falschen Antworten lasen sich schlüssig. Die Aufgabe war darauf angelegt zu scheitern: Das zeigt einen Mechanismus, keine typische Quote. 1 Quellen (1) Navigating the Jagged Technological Frontier ( öffnet in neuem Tab ) mitsloan.mit.edu Wer delegiert, wird sicherer In einer Studie mit 47 Personen schrieben Programmierende mit KI-Assistent unsichereren Code und hielten ihn eher für sicher. 1 Umstritten: Eine Studie mit 58 Personen fand einen Unterschied von höchstens rund 10 %, und beide nutzten Modelle von 2021 bis 2022. 2 Quellen (2) Do Users Write More Insecure Code with AI Assistants? ( öffnet in neuem Tab ) arxiv.org Lost at C: A User Study on the Security Implications of Large Language Model Code Assistants ( öffnet in neuem Tab ) arxiv.org Jemand muss Torwächter bleiben Ein New Yorker Gericht verhängte 5.000 $ Strafe gegen Anwälte, die sechs von ChatGPT erfundene Fälle eingereicht hatten. KI zu nutzen sei nicht unzulässig, schrieb das Gericht, aber die Regeln „impose a gatekeeping role on attorneys“. 1 Quellen (1) Mata v. Avianca, Inc., Opinion and Order ( öffnet in neuem Tab ) storage.courtlistener.com"
+    },
+    { "id": "from-doing-to-managing", "text": "Vom Erledigen zum Managen Keine Sprechernotizen für diese Folie." },
+    {
+      "id": "from-doing-to-managing--you-managed-it",
+      "text": "Du hast die Aufgabe nicht erledigt. Die Arbeit verschiebt sich, sie verschwindet nicht Die Entwickler in der METR-Studie verbrachten rund 9 % ihrer Zeit damit, KI-Ergebnisse zu prüfen und aufzuräumen. Sie beschrieben die KI wie einen neuen Mitwirkenden, dem das stille Wissen über das Repository fehlt. Werkzeuge von Anfang 2025 und 16 Personen: als Mechanismus lesen, nicht als Maß. 1 Quellen (1) Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity ( öffnet in neuem Tab ) arxiv.org Arbeitgeber haben Aufsichtsarbeit hinzugefügt In dänischen Registerdaten änderten Chatbots Verdienst und Arbeitsstunden kaum. Gleichzeitig kamen neue Aufgaben hinzu: Inhalte erzeugen, KI beaufsichtigen, KI einbinden. 1 Quellen (1) Large Language Models, Small Labor Market Effects (NBER w33777; inzwischen umbenannt in „Still Waters, Rapid Currents“) ( öffnet in neuem Tab ) nber.org Warum Neulinge trotzdem profitieren In den Studien, in denen KI Neulingen am meisten hilft, liegen die Aufgaben klar abgegrenzt in Reichweite des Modells. Die These hier lautet: Die Aufgabe verlangt Disziplin im Delegieren, und Erfahrung hängt damit nur zusammen. Das ist eine Schlussfolgerung; keine Studie misst Führungskompetenz direkt. 1 2 Quellen (2) Generative AI at Work ( öffnet in neuem Tab ) nber.org Navigating the Jagged Technological Frontier ( öffnet in neuem Tab ) hbs.edu"
+    },
+    {
+      "id": "from-doing-to-managing--four-disciplines",
+      "text": "Vier Disziplinen Prompt Engineering Unterspezifizierte Prompts verschlechtern sich bei einem Wechsel von Modell oder Prompt etwa doppelt so oft. 1 Quellen (1) What Prompts Don't Say ( öffnet in neuem Tab ) arxiv.org Context Engineering Anthropic behandelt Kontext als knappe Ressource mit abnehmendem Nutzen und sucht die kleinste Menge an Information, die das erwartete Verhalten vollständig beschreibt. Klein heißt dabei nicht unbedingt kurz. In Studien zu Coding-Agenten halfen Überblicke über das Repository nicht; dass gerade unübliche Besonderheiten helfen, ist plausibel und von einer Quelle berichtet, aber nicht belegt. 1 2 Quellen (2) Effective context engineering for AI agents ( öffnet in neuem Tab ) anthropic.com Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents? ( öffnet in neuem Tab ) arxiv.org Harness Engineering Anthropics Mittel gegen Agenten, die zwischen zwei Schichten alles vergessen, sind schriftliche Übergaben, die jede neue Sitzung als Erstes liest. 1 Quellen (1) Effective harnesses for long-running agents ( öffnet in neuem Tab ) anthropic.com"
+    },
+    {
+      "id": "from-doing-to-managing--same-wall-one-level-up",
+      "text": "Dieselbe Wand, eine Ebene höher Wert braucht ergänzende Investitionen Allzwecktechnologien ermöglichen und verlangen erhebliche ergänzende Investitionen in Prozesse und Fähigkeiten der Menschen, oft immateriell. Deshalb zeigen sich die Gewinne erst spät. 1 Quellen (1) The Productivity J-Curve ( öffnet in neuem Tab ) nber.org Eingeführt, aber ohne Wirkung In einer Befragung von rund 6.000 Führungskräften nutzen etwa 69 % der Unternehmen KI, während rund 90 % über drei Jahre keine Wirkung auf Produktivität oder Beschäftigung melden. 1 Quellen (1) Firm Data on AI (NBER w34836) ( öffnet in neuem Tab ) nber.org Eine umstrittene Schlagzeile Die Zahl „95 % der Pilotprojekte scheitern“ ist die eigene, richtungsweisende und auf Interviews gestützte Zahl des MIT-NANDA-Berichts, hier aus einer Kopie von Dritten gelesen. Eine Wharton-Befragung von rund 800 Führungskräften fand dagegen, dass fast drei von vier einen positiven ROI sehen, ebenfalls selbst berichtet. Keine der beiden klärt den wahren Anteil, also nicht mit 95 % einsteigen. 1 2 Quellen (2) The GenAI Divide: State of AI in Business 2025 (Kopie des PDF) ( öffnet in neuem Tab ) mlq.ai Accountable Acceleration: Gen AI Fast-Tracks Into the Enterprise ( öffnet in neuem Tab ) ai.wharton.upenn.edu Die Fähigkeiten hinken der Nutzung hinterher Fast die Hälfte der Organisationen meldet Lücken bei technischen Fähigkeiten, während die Investitionen in Schulung nachgelassen haben. 1 Quellen (1) Accountable Acceleration: Gen AI Fast-Tracks Into the Enterprise ( öffnet in neuem Tab ) ai.wharton.upenn.edu"
+    },
+    { "id": "your-move", "text": "Dein Zug Keine Sprechernotizen für diese Folie." },
+    {
+      "id": "your-move--write-the-day-one-note",
+      "text": "Tag eins, bevor du tippst Warum die Prüfung auf der Liste steht Anthropic rät für seinen Coding-Agenten: Gib ihm eine Möglichkeit, seine Arbeit zu überprüfen, und was du nicht überprüfen kannst, liefere nicht aus. Die Seite wurde aus einem früheren Abruf zitiert und nicht erneut abgerufen. 1 Quellen (1) Best practices for Claude Code ( öffnet in neuem Tab ) code.claude.com Eine kurze Checkliste kann Fehler bei Fachleuten senken Mit einer chirurgischen Checkliste aus 19 Punkten ging die Sterblichkeit im Krankenhaus von 1,5 % auf 0,8 % zurück; gemessen wurde ein Zusammenhang. Das ist Chirurgie, nicht KI, und zeigt nur, dass ein einfacher Schritt auch Expertinnen und Experten hilft. 1 Quellen (1) A Surgical Safety Checklist to Reduce Morbidity and Mortality in a Global Population ( öffnet in neuem Tab ) pubmed.ncbi.nlm.nih.gov Halte die Notiz kurz Eine Zeile bleibt nur, wenn ihr Fehlen zu Fehlern führen würde. Aufgeblähte Anweisungsdateien führen dazu, dass das Modell die eigentlichen Anweisungen übergeht. 1 Quellen (1) Best practices for Claude Code ( öffnet in neuem Tab ) code.claude.com"
+    },
+    {
+      "id": "your-move--ai-can-help-you-onboard-ai",
+      "text": "KI kann dir helfen, KI einzuarbeiten. Warum sich die Mühe auszahlt Der Wechsel vom Selbermachen zum Anleiten ist eine Fähigkeit, die man üben kann, und es ist dieselbe, die Organisationen aufbauen müssen. Anthropics Nutzungsdaten verbinden sechs Monate Erfahrung oder mehr mit einer um 3 bis 5 Punkte höheren Erfolgsquote; die Daten sind beobachtend und von einem Modell bewertet. 1 Quellen (1) Anthropic Economic Index report: Learning Curves ( öffnet in neuem Tab ) anthropic.com"
+    }
+  ],
+  "script": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    {
+      "id": "the-gap",
+      "text": "Die Lücke 0:00 – 0:08 Halte ihn gegen deinen Bildschirm zwanzigmal dieser Satz dein eigener Bildschirm Werde mit KI zwanzigmal produktiver. Diesen Satz hast du gelesen. Halte ihn gegen deinen eigenen Bildschirm. 0:08 – 0:12 Das Versprechen und dein Alltag Abstand Versprechen dein Alltag Zuerst der Abstand zwischen dem Versprechen und deinem Alltag."
+    },
+    {
+      "id": "the-gap--twenty-x-versus-your-screen",
+      "text": "„Mit KI 20x produktiver werden“ 0:00 – 0:11 Das Versprechen 20x Produktivität jeder Feed Zwanzigmal. Das steht in jedem Feed. Das steht im Titel jedes Kurses. Deine Woche, heißt es, schrumpft auf einen einzigen Nachmittag. 0:11 – 0:34 Dein eigener Versuch dein Prompt flache Antwort Achselzucken Und jetzt denk an deinen eigenen Versuch. Du hast den Chat geöffnet. Du hast einen Prompt getippt, einen guten, dachtest du. Die Antwort kam flach zurück. Allgemein. Nicht falsch, aber nicht das, was du gebraucht hast. Du hast sie von Hand nachgebessert und mit den Schultern gezuckt. 0:34 – 0:53 Offen lassen warum im Raum stehen lassen Wo sind also die zwanzigmal? Warum klappt es auf dem Plakat und nicht bei dir? Behalte diese Frage. Beantworte sie noch nicht. Lass sie einen Moment im Raum stehen, denn wir nähern uns ihr durch eine andere Tür."
+    },
+    {
+      "id": "thought-experiment",
+      "text": "Das Gedankenexperiment 0:00 – 0:04 Du bist mittendrin kleines Experiment du Ein kleines Experiment. Und du bist die Hauptperson."
+    },
+    {
+      "id": "thought-experiment--sommerfest-due-by-five",
+      "text": "Sommerfest, fällig um fünf 0:00 – 0:19 Die Aufgabe Sommerfest 100 Leute Feierabend Es ist Montagmorgen. Du sollst das Sommerfest der Firma planen. Oder die Weihnachtsfeier, such dir die Jahreszeit aus. Rund hundert Leute. Bis Feierabend muss ein durchdachter, strukturierter Plan auf dem Tisch deiner Teamleitung liegen, oder bei der Geschäftsführung. 0:19 – 0:39 Wer hereinkommt weiß alles selbstsicher eifrig Und es kommt Hilfe. Eine neue Kollegin, an ihrem allerersten Tag. Sie kennt praktisch alles, was je geschrieben wurde. Jedes Buch über Eventplanung, jede Bewertung jeder Location. Sie ist äußerst selbstsicher. Und will unbedingt gefallen. Sie sagt zu allem Ja. 0:39 – 0:47 Nimm dir einen Moment der Raum du bist dran Nimm dir einen Moment. Wirklich. Die Uhr läuft, und sie steht an deinem Schreibtisch. Was sagst du?"
+    },
+    {
+      "id": "thought-experiment--what-you-would-say-first",
+      "text": "Was du als Erstes sagen würdest 0:00 – 0:18 Wo fange ich an zuerst eine Geschichte warum dieses Fest Wahrscheinlich fängst du nicht mit einer Aufgabe an. Du fängst mit einer Geschichte an. Warum feiern wir überhaupt? Letztes Jahr sind viele früh gegangen, und dieses Jahr soll sich das Team wieder wie ein Team anfühlen. 0:18 – 0:41 Was sie wissen muss Budget Anzahl unsere Kultur letztes Jahr Dann erzählst du ihr, was sie unmöglich wissen kann. Unser Budget ist bescheiden, das schicke Hotel wird es also nicht. Wir sind hundert Leute, nicht hundertfünfzig. Wir sind eine lockere Firma, niemand will Reden und Krawatte. Und letztes Jahr gab es Grillen, und es hat geregnet. 0:41 – 0:59 Worauf sie zugreifen kann Buchung Caterer Kalender Dann öffnest du ein paar Türen. Hier ist das Buchungssystem, hier dein Login. Das sind die Caterer, denen wir vertrauen, hier ihre Nummern. Und hier der gemeinsame Kalender, damit du siehst, wer im Urlaub ist. 0:59 – 1:10 Was ich zurück will ein strukturierter Plan bis fünf Und du sagst, was du zurückhaben willst. Einen strukturierten Plan, bis fünf auf meinem Tisch. Datum, Location, Essen, Geld, der Ablauf des Abends. 1:10 – 1:27 Bevor sie losläuft dich selbst hören deine eigenen Worte Bevor sie losläuft, hältst du inne. Und du hörst dich selbst. Niemand hat dir gesagt, dass du das alles sagen sollst. Es kam einfach heraus, in deinen eigenen Worten. Halt diese Worte fest."
+    },
+    {
+      "id": "thought-experiment--four-oclock-the-plan-comes-back",
+      "text": "Vier Uhr, der Plan kommt zurück 0:00 – 0:14 Der Plan kommt an poliert schnell selbstsicher Es ist vier Uhr. Der Plan kommt zurück, sogar früher als gedacht. Er ist poliert. Location, Menü, Zeitplan, sogar eine Playlist. Und alles ist mit voller Überzeugung geschrieben. 0:14 – 0:35 Eine Zeile stimmt nicht die Location das Budget Du fängst an zu lesen. Und eine Zeile stimmt nicht. Die gewählte Location ist an dem Wochenende längst ausgebucht. Oder das Budget hat eine Null zu viel. Da steht kein Vielleicht. Es steht da im selben ruhigen Ton wie alles andere. 0:35 – 1:00 Du bemerkst es, oder nicht dein Blick ihre Selbstsicherheit Jetzt liegt es also bei dir. Liest du mit dem Stift in der Hand, fällt es dir auf. Überfliegst du nur, weil alles so überzeugt klingt, landet es direkt bei der Geschäftsführung. Die Überzeugung klingt gleich, ob die Zeile stimmt oder nicht. Nur dein Blick kann das eine vom anderen unterscheiden."
+    },
+    {
+      "id": "from-doing-to-managing",
+      "text": "Vom Erledigen zum Managen 0:00 – 0:05 Schau, was du getan hast zurückschauen was du gerade getan hast Schau dir jetzt an, was du gerade getan hast."
+    },
+    {
+      "id": "from-doing-to-managing--you-managed-it",
+      "text": "Du hast die Aufgabe nicht erledigt. 0:00 – 0:19 Was du wirklich getan hast nicht der Plan das Briefing Schau auf deinen Nachmittag zurück. Hast du das Fest geplant? Nein. Du hast keinen Ort gebucht. Du hast keinen Caterer angerufen. Du hast jemanden in die Lage versetzt, es zu tun, und dann hast du die Arbeit gelesen. 0:19 – 0:54 Vom Erledigen zum Managen der Wechsel eine eigene Fähigkeit Du hast die Aufgabe nicht erledigt. Du hast sie gemanagt. Genau dieser Wechsel, vom Erledigen zum Managen, ist das, was die Arbeit mit KI von dir verlangt. Das ist eine eigene Fähigkeit, und es ist nicht die, die dich in der Aufgabe selbst gut macht. Und sie erklärt dein flaches Ergebnis vom Anfang. Du hast die KI wie ein Werkzeug gepromptet, dabei brauchte sie ein Onboarding wie eine Kollegin. 0:54 – 1:10 Keine Frage des Rangs die Aufgabe verlangt es Erfahrung hilft Das ist keine Frage des Rangs. Du brauchst keinen Titel dafür. Die Aufgabe verlangt es. Erfahrung hilft meistens, weil Ältere schon einmal geführt haben. Aber die Aufgabe wartet auf alle, vom allerersten Prompt an."
+    },
+    {
+      "id": "from-doing-to-managing--four-disciplines",
+      "text": "Vier Disziplinen 0:00 – 0:08 Vier Namen Prompt Kontext Harness Graph Diese Fähigkeit hat inzwischen Namen. Vier davon. Prompt Engineering. Context Engineering. Harness Engineering. Graph Engineering. 0:08 – 0:25 Prompt und Kontext die Bitte der Hintergrund Prompt Engineering ist, wie du die Bitte formulierst: als klares Briefing, das niemand missverstehen kann. Context Engineering ist der Hintergrund, den du mitgibst: das Budget, die Gästezahl, die Kultur, die Feste der letzten Jahre. 0:25 – 0:42 Harness und Graph die Werkzeuge der Ablauf über mehrere Agenten Harness Engineering sind die Werkzeuge und die Umgebung, auf die du Zugriff gibst: das Buchungssystem, die Kontakte zum Caterer, der Kalender. Graph Engineering heißt, den Ablauf über mehrere Agenten hinweg zu steuern. Projektmanagement, für KI. 0:42 – 0:59 Der jüngste Begriff Mitte 2026 noch locker definiert Graph Engineering ist der jüngste der vier Begriffe. Es gibt ihn erst seit Mitte dieses Jahres, und man streitet noch darüber, was genau er umfasst. Nimm ihn als neu und noch nicht gefestigt."
+    },
+    {
+      "id": "from-doing-to-managing--same-wall-one-level-up",
+      "text": "Dieselbe Wand, eine Ebene höher 0:00 – 0:16 Nicht nur du Teams Unternehmen dieselbe Wand Und es geht nicht nur dir so. Ein Team läuft gegen dieselbe Wand. Ein ganzes Unternehmen auch. Alle bekommen dieselbe neue Kollegin, und niemand gibt ihr eine Notiz für den ersten Tag. 0:16 – 0:41 Eingeführt, nicht verankert Werkzeuge rein Abläufe unverändert Eine große Befragung von rund sechstausend Führungskräften ergab: Die meisten Unternehmen nutzen KI, doch die meisten sehen bisher keine Wirkung auf ihre Leistung. Wer Führungskräfte selbst fragt, hört Zuversichtlicheres. Den wahren Anteil kennt niemand. Die Werkzeuge kamen ins Haus, und die Art zu arbeiten blieb genau, wie sie war. 0:41 – 1:03 Reinvestieren neue Fähigkeiten neue Disziplinen in der ganzen Organisation Der Wert kommt also nicht von allein. Er kommt, wenn du reinvestierst. Die Mühe, die dir KI erspart, fließt zurück, als neue Fähigkeiten und neue Disziplinen. Für dich. Für dein Team. In der ganzen Organisation. KI nimmt dir die Arbeit nicht ab. Sie verlagert sie."
+    },
+    {
+      "id": "your-move",
+      "text": "Dein Zug 0:00 – 0:03 Eine Gewohnheit und eine Wendung eine kleine Gewohnheit eine Wendung Eine kleine Gewohnheit, und eine Wendung."
+    },
+    {
+      "id": "your-move--write-the-day-one-note",
+      "text": "Tag eins, bevor du tippst 0:00 – 0:13 Beim nächsten Mal etwas Echtes vor dem ersten Wort Das ist also dein Zug. Wenn du das nächste Mal für etwas Echtes zur KI greifst: halt an. Bevor du auch nur ein Wort tippst. 0:13 – 0:24 Schreib es auf Tag eins eine neue Kollegin Nimm ein Blatt Papier oder eine leere Notiz. Und schreib auf, was du einer ganz neuen Kollegin an ihrem ersten Tag sagen würdest. 0:24 – 0:33 Vier Zeilen Kontext Werkzeuge Briefing Prüfung Vier kurze Zeilen. Der Kontext. Die Werkzeuge, die sie braucht. Das Briefing. Und wie du ihre Arbeit prüfst. 0:33 – 0:41 Zwei Minuten klein dann tippen Das dauert zwei Minuten. Halte es klein. Erst dann, und wirklich erst dann, tippst du."
+    },
+    {
+      "id": "your-move--ai-can-help-you-onboard-ai",
+      "text": "KI kann dir helfen, KI einzuarbeiten. 0:00 – 0:10 Es fühlt sich nach viel an das Gewicht ehrlich Ich weiß. Das fühlt sich nach viel Arbeit an. Kontext, Werkzeuge, Briefings, Prüfungen, und du hast noch nicht einmal angefangen. 0:10 – 0:15 Die Wendung KI hilft dir KI einzuarbeiten Aber jetzt kommt die Wendung. KI kann dir helfen, KI einzuarbeiten. 0:15 – 0:34 Grill-me, ganz leicht sie fragt du antwortest fertig Lass dich von ihr befragen. Bitte sie, dir die Fragen zu stellen, eine nach der anderen, bis deine Notiz für Tag eins vollständig ist. Das ist der Grill-me-Ansatz. Du antwortest, sie fragt, und dann bist du fertig."
+    }
+  ]
+}

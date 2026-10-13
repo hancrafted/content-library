@@ -180,7 +180,12 @@ describe('landing page post-build structure', () => {
   });
 
   /** Every published Episode, in the order `PUBLISHED` in `episode-repository.ts` lists them. */
-  const PUBLISHED_SLUGS = ['amnesiac-freelancer', 'maintaining-markdown-for-ai', 'ai-token-economy'];
+  const PUBLISHED_SLUGS = [
+    'amnesiac-freelancer',
+    'maintaining-markdown-for-ai',
+    'ai-token-economy',
+    'onboard-ai-like-a-colleague',
+  ];
 
   function episodeHref(slug: string, locale: string): string {
     return `${basePath}${locale === 'de' ? `/de/episode/${slug}/` : `/episode/${slug}/`}`;

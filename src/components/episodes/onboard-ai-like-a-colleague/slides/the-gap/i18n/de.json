@@ -3,6 +3,11 @@
   "caption": "Der Abstand zwischen dem Versprechen und deinem Arbeitsalltag.",
   "voiceScript": {
     "segments": {
+      "hold-it-up": {
+        "title": "Halte ihn gegen deinen Bildschirm",
+        "keywords": "zwanzigmal, dieser Satz, dein eigener Bildschirm",
+        "script": "Werde mit KI zwanzigmal produktiver. Diesen Satz hast du gelesen. Halte ihn gegen deinen eigenen Bildschirm."
+      },
       "promise-and-your-day": {
         "title": "Das Versprechen und dein Alltag",
         "keywords": "Abstand, Versprechen, dein Alltag",

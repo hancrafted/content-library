@@ -3,6 +3,11 @@
   "caption": "The distance between the promise and your day.",
   "voiceScript": {
     "segments": {
+      "hold-it-up": {
+        "title": "Hold it up against your screen",
+        "keywords": "twenty times, that line, your own screen",
+        "script": "Become twenty times more productive with AI. You have read that line. Hold it up against your own screen."
+      },
       "promise-and-your-day": {
         "title": "The promise and your day",
         "keywords": "distance, promise, your day",

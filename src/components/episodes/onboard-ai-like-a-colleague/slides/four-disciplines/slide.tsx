@@ -30,7 +30,7 @@ function Quadrant({ quadrant }: { quadrant: QuadrantCopy }) {
       {...quadrant.target}
       data-quadrant={quadrant.id}
       aria-labelledby={id}
-      className={`${quadrant.place} ${quadrant.tint} relative flex flex-col rounded-xl border border-border p-5 sm:border-transparent transition-colors duration-300 motion-reduce:transition-none sm:min-h-60 sm:p-6 md:min-h-72 md:p-8`}
+      className={`${quadrant.place} ${quadrant.tint} relative flex flex-col rounded-xl border border-border p-5 sm:border-transparent transition-colors duration-300 motion-reduce:transition-none sm:min-h-36 sm:p-6`}
     >
       <span
         aria-hidden
@@ -146,7 +146,7 @@ export const fourDisciplines = slide({
       <SlideFrame>
         <Title>{t('title')}</Title>
         <SlideCaption>{t('caption')}</SlideCaption>
-        <div className="group/matrix relative mt-10 grid grid-cols-1 gap-3 rounded-2xl border border-border bg-background p-3 sm:auto-rows-fr sm:grid-cols-2 sm:gap-8 sm:p-4">
+        <div className="group/matrix relative mt-6 grid grid-cols-1 gap-3 rounded-2xl border border-border bg-background p-3 sm:auto-rows-fr sm:grid-cols-2 sm:gap-4 sm:p-4">
           <span
             aria-hidden
             className={`${arm} top-0 left-1/2 h-1/2 w-px -translate-x-1/2 group-has-[[data-quadrant=c1]:hover]/matrix:bg-machine group-has-[[data-quadrant=c2]:hover]/matrix:bg-human`}

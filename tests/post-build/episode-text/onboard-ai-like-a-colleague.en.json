@@ -1,0 +1,152 @@
+{
+  "title": "Stop prompting AI, start onboarding it · hancrafted",
+  "description": "Why AI underdelivers when you prompt it like a tool, and why onboarding it like a capable new colleague takes management skills: context, tools, a clear brief and checking the work.",
+  "toc": "Contents Loading 8 min left 1 The gap “Become 20x more productive with AI” 2 The thought experiment Sommerfest, due by five What you would say first Four o’clock, the plan comes back 3 From doing to managing You did not do the task. Four disciplines The same wall, one level up 4 Your move Day one, before you type AI can help you onboard AI. Open contents : Contents · Loading Contents 8 min left 1 The gap “Become 20x more productive with AI” 2 The thought experiment Sommerfest, due by five What you would say first Four o’clock, the plan comes back 3 From doing to managing You did not do the task. Four disciplines The same wall, one level up 4 Your move Day one, before you type AI can help you onboard AI.",
+  "slides": [
+    {
+      "id": "top",
+      "text": "Stop prompting AI, start onboarding it AI does not remove the work, it relocates it: treat it like a brand-new colleague on day one, and write the brief before you type."
+    },
+    { "id": "the-gap", "text": "The gap The distance between the promise and your day." },
+    {
+      "id": "the-gap--twenty-x-versus-your-screen",
+      "text": "“Become 20x more productive with AI” Every feed. Every course title. You Write a project update for my team. AI Here is an update: the team made great progress this week and is on track for the upcoming milestones. ?"
+    },
+    { "id": "thought-experiment", "text": "The thought experiment A small experiment. You are the one in it." },
+    {
+      "id": "thought-experiment--sommerfest-due-by-five",
+      "text": "Sommerfest, due by five Monday morning. A job, a deadline, and help on its first day. The job The company Sommerfest, or the Christmas party. About a hundred people. A fully structured plan on your team lead’s or the CEO’s desk. The clock Due by end of day. Your new colleague’s very first day. The new colleague Knows essentially the entire written world. Extremely confident. Eager to please."
+    },
+    {
+      "id": "thought-experiment--what-you-would-say-first",
+      "text": "What you would say first Day one. Before any task, you talk. “ Last year people left early. This year we need to feel like a team again. ” “ Modest budget, a hundred people, no speeches, no ties. And last year it rained. ” “ Here’s the booking system and your login, the caterers we trust, the shared calendar. ” “ One structured plan, on my desk by five. ”"
+    },
+    {
+      "id": "thought-experiment--four-oclock-the-plan-comes-back",
+      "text": "Four o’clock, the plan comes back Early, polished, and completely sure. Sommerfest · Plan Date Friday 10 July, from 4 pm Venue Gutshaus am See Food Barbecue and vegetarian, rain tent Budget €45,000 (€450 per head) Evening Welcome · Games · Dinner · Band Playlist Summer hits"
+    },
+    { "id": "from-doing-to-managing", "text": "From doing to managing What working with AI asks of you." },
+    { "id": "from-doing-to-managing--you-managed-it", "text": "You did not do the task. You managed it." },
+    {
+      "id": "from-doing-to-managing--four-disciplines",
+      "text": "Four disciplines The skill has names now. 01 Prompt engineering The ask, as a clear brief nobody could misread. 02 Context engineering The background: budget, headcount, culture, past events. 03 Harness engineering The tools: booking system, caterer contacts, calendar. 04 Graph engineering new, still loosely defined The workflow across agents: project management, for AI."
+    },
+    {
+      "id": "from-doing-to-managing--same-wall-one-level-up",
+      "text": "The same wall, one level up Same new colleague, same wall. The value arrives when you reinvest. You The day-one note. Your team The shared setup. Your organization The training and workflow redesign."
+    },
+    { "id": "your-move", "text": "Your move One small habit, and one twist." },
+    {
+      "id": "your-move--write-the-day-one-note",
+      "text": "Day one, before you type Four short lines. Two minutes. Then type. The context The tools they'd need The brief How you'll check their work"
+    },
+    {
+      "id": "your-move--ai-can-help-you-onboard-ai",
+      "text": "AI can help you onboard AI. Let it interview you. The grill-me approach: it asks the questions, one at a time, until your day-one note is complete."
+    }
+  ],
+  "notes": [
+    {
+      "id": "top",
+      "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
+    },
+    { "id": "the-gap", "text": "The gap No speaker notes for this Slide." },
+    {
+      "id": "the-gap--twenty-x-versus-your-screen",
+      "text": "“Become 20x more productive with AI” The measured gains are real but small Three field experiments with 4,867 developers found about 26% more completed tasks with an AI assistant, far from 20x, and each single experiment was noisy. 1 Sources (1) The Effects of Generative AI on High-Skilled Work: Evidence from Three Field Experiments with Software Developers ( opens in a new tab ) papers.ssrn.com A famous slowdown, now out of date METR measured 19% longer tasks for 16 experienced developers on their own repositories in early 2025; its authors now say the old result no longer reflects current impact. Do not present it as a current fact. 1 Sources (1) METR, update on its AI developer productivity study (February 2026) ( opens in a new tab ) metr.org We misjudge our own gains The same developers forecast a 24% speedup and afterwards believed AI had saved them 20%, in the wrong direction. 1 Sources (1) Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity ( opens in a new tab ) arxiv.org"
+    },
+    { "id": "thought-experiment", "text": "The thought experiment No speaker notes for this Slide." },
+    {
+      "id": "thought-experiment--sommerfest-due-by-five",
+      "text": "Sommerfest, due by five Why a colleague and not a tool Vendors and practitioners independently frame the model as a brilliant newcomer who lacks context on your norms, which is why the test works for non-coders too. 1 Sources (1) Anthropic, Be clear and direct ( opens in a new tab ) docs.claude.com Others use the same lens Matt Pocock describes an agent as a colleague who starts afresh every session, and Mollick’s current form is an “infinitely patient new coworker who forgets everything”. 1 2 Sources (2) AI Skills with Matt Pocock, The Pragmatic Engineer ( opens in a new tab ) newsletter.pragmaticengineer.com Getting started with AI: Good enough prompting ( opens in a new tab ) oneusefulthing.org “Intern” is the wrong rank Mollick dropped the intern wording in 2024 because it makes people use AI in constrained ways; “colleague” is the supported form. 1 Sources (1) Getting started with AI: Good enough prompting ( opens in a new tab ) oneusefulthing.org"
+    },
+    {
+      "id": "thought-experiment--what-you-would-say-first",
+      "text": "What you would say first Anthropic’s own test Show the prompt to a colleague with minimal context and see whether they would be confused. 1 Sources (1) Anthropic, Be clear and direct ( opens in a new tab ) docs.claude.com Facts you hold, it does not Handing a model the one relevant document lifted question-answering accuracy from 56.1% to 88.3% for GPT-3.5-Turbo. Weak for this audience: a 2023 retrieval result, so it shows direction, not size. 1 Sources (1) Lost in the Middle: How Language Models Use Long Contexts ( opens in a new tab ) arxiv.org Unstated requirements: one benchmark result In one benchmark study, models guessed a missing requirement right about 41% of the time. It is a benchmark result, not a rule, and it does not measure a human writing a brief. 1 Sources (1) What Prompts Don’t Say ( opens in a new tab ) arxiv.org All at once versus piece by piece: one benchmark result In one benchmark with simulated users, tasks fed over several turns lost 39% of performance on average against a fully specified single turn. It does not measure a human writing a brief, so read it as direction only. 1 Sources (1) LLMs Get Lost In Multi-Turn Conversation ( opens in a new tab ) arxiv.org"
+    },
+    {
+      "id": "thought-experiment--four-oclock-the-plan-comes-back",
+      "text": "Four o’clock, the plan comes back Confident and wrong looks the same In the BCG study, on a task built to lie outside the model’s ability, AI users were 19 points less likely to be correct, and their wrong answers read as coherent. The task was designed to fail, so this shows a mechanism, not a typical rate. 1 Sources (1) Navigating the Jagged Technological Frontier ( opens in a new tab ) mitsloan.mit.edu Delegating raises confidence In a 47-person study, programmers with an AI assistant wrote less secure code and were more likely to believe it secure. 1 Disputed: a 58-person study found a gap of at most about 10%, and both used 2021 to 2022 models. 2 Sources (2) Do Users Write More Insecure Code with AI Assistants? ( opens in a new tab ) arxiv.org Lost at C: A User Study on the Security Implications of Large Language Model Code Assistants ( opens in a new tab ) arxiv.org Someone must stay the gatekeeper A New York court fined lawyers $5,000 for filing six cases ChatGPT invented, and wrote that using AI is not improper but rules “impose a gatekeeping role on attorneys”. 1 Sources (1) Mata v. Avianca, Inc., Opinion and Order ( opens in a new tab ) storage.courtlistener.com"
+    },
+    { "id": "from-doing-to-managing", "text": "From doing to managing No speaker notes for this Slide." },
+    {
+      "id": "from-doing-to-managing--you-managed-it",
+      "text": "You did not do the task. The work moves, it does not vanish METR's developers spent about 9% of their time reviewing and cleaning AI output, and said the AI acted like a new contributor lacking the repository's tacit knowledge. Early-2025 tools and 16 people, so read it as a mechanism. 1 Sources (1) Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity ( opens in a new tab ) arxiv.org Employers added oversight work In Danish records, chatbots left earnings and hours nearly unchanged while employers added new tasks in content generation, AI oversight and AI integration. 1 Sources (1) Large Language Models, Small Labor Market Effects (NBER w33777; now retitled \"Still Waters, Rapid Currents\") ( opens in a new tab ) nber.org Why novices still gain Studies where AI helps novices most give bounded tasks inside the model's reach. The claim here is that the task demands delegation discipline, which experience only correlates with. This is an inference; no study tests management skill directly. 1 2 Sources (2) Generative AI at Work ( opens in a new tab ) nber.org Navigating the Jagged Technological Frontier ( opens in a new tab ) hbs.edu"
+    },
+    {
+      "id": "from-doing-to-managing--four-disciplines",
+      "text": "Four disciplines Prompt engineering Underspecified prompts are about twice as likely to regress across model or prompt changes. 1 Sources (1) What Prompts Don't Say ( opens in a new tab ) arxiv.org Context engineering Anthropic treats context as a finite resource with diminishing returns and aims for the minimal set of information that fully outlines the expected behavior, which is not necessarily short. In coding-agent studies, repository overviews did not help; that non-standard specifics help is plausible and reported by one source, not established. 1 2 Sources (2) Effective context engineering for AI agents ( opens in a new tab ) anthropic.com Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents? ( opens in a new tab ) arxiv.org Harness engineering Anthropic's remedy for agents that forget between shifts is written hand-over artefacts each new session reads first. 1 Sources (1) Effective harnesses for long-running agents ( opens in a new tab ) anthropic.com"
+    },
+    {
+      "id": "from-doing-to-managing--same-wall-one-level-up",
+      "text": "The same wall, one level up Value needs complementary investment General-purpose technologies \"enable and require significant complementary investments\" in processes and human capital, often intangible, so gains show up late. 1 Sources (1) The Productivity J-Curve ( opens in a new tab ) nber.org Adoption without impact In a survey of about 6,000 executives, about 69% of firms use AI while roughly 90% report no effect on productivity or employment over three years. 1 Sources (1) Firm Data on AI (NBER w34836) ( opens in a new tab ) nber.org A disputed headline The \"95% of pilots fail\" figure is the MIT NANDA report's own directional, interview-based number, read here from a third-party copy; a Wharton survey of about 800 leaders found nearly three in four see positive ROI, also self-reported. Neither settles the true share, so do not lead with 95%. 1 2 Sources (2) The GenAI Divide: State of AI in Business 2025 (copy of the PDF) ( opens in a new tab ) mlq.ai Accountable Acceleration: Gen AI Fast-Tracks Into the Enterprise ( opens in a new tab ) ai.wharton.upenn.edu Skills lag usage Nearly half of organizations report technical skill gaps while training investment softened. 1 Sources (1) Accountable Acceleration: Gen AI Fast-Tracks Into the Enterprise ( opens in a new tab ) ai.wharton.upenn.edu"
+    },
+    { "id": "your-move", "text": "Your move No speaker notes for this Slide." },
+    {
+      "id": "your-move--write-the-day-one-note",
+      "text": "Day one, before you type Why check is on the list Anthropic's guidance for its coding agent is to give it a way to verify its work and, if you cannot verify it, not to ship it. The page was quoted from an earlier fetch, not re-fetched. 1 Sources (1) Best practices for Claude Code ( opens in a new tab ) code.claude.com A short checklist can cut errors in skilled work A 19-item surgical checklist was associated with inpatient death falling from 1.5% to 0.8%. This is surgery, not AI; it shows only that a simple step helps experts. 1 Sources (1) A Surgical Safety Checklist to Reduce Morbidity and Mortality in a Global Population ( opens in a new tab ) pubmed.ncbi.nlm.nih.gov Keep the note short A line stays only if removing it would cause mistakes; bloated instruction files lead the model to ignore the actual instructions. 1 Sources (1) Best practices for Claude Code ( opens in a new tab ) code.claude.com"
+    },
+    {
+      "id": "your-move--ai-can-help-you-onboard-ai",
+      "text": "AI can help you onboard AI. Why the effort pays back The shift from doing to managing is a skill you can practise, and it is the same one organizations must build. Anthropic's usage data links six months or more of experience with a 3 to 5 point higher success rate; the data is observational and model-graded. 1 Sources (1) Anthropic Economic Index report: Learning Curves ( opens in a new tab ) anthropic.com"
+    }
+  ],
+  "script": [
+    {
+      "id": "top",
+      "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
+    },
+    {
+      "id": "the-gap",
+      "text": "The gap 0:00 – 0:08 Hold it up against your screen twenty times that line your own screen Become twenty times more productive with AI. You have read that line. Hold it up against your own screen. 0:08 – 0:12 The promise and your day distance promise your day First, the distance between the promise and your day."
+    },
+    {
+      "id": "the-gap--twenty-x-versus-your-screen",
+      "text": "“Become 20x more productive with AI” 0:00 – 0:10 The promise 20x productivity every feed Twenty times. It is in every feed. It is in the title of every course. Your week, they say, shrinks to a single afternoon. 0:10 – 0:27 Your own attempt your prompt flat answer shrug Now think of your own attempt. You opened the chat. You typed a prompt, a good one, you thought. The answer came back flat. Generic. Fine, but not what you needed. You fixed it by hand, and you shrugged. 0:27 – 0:46 Leave it open why hang in the room So where are the twenty times? Why does it work on the poster and not for you? Hold that question. Do not answer it yet. Let it sit in the room for a moment, because we will come at it through a different door."
+    },
+    {
+      "id": "thought-experiment",
+      "text": "The thought experiment 0:00 – 0:04 You are in it small experiment you A small experiment. You are the one in it."
+    },
+    {
+      "id": "thought-experiment--sommerfest-due-by-five",
+      "text": "Sommerfest, due by five 0:00 – 0:17 The job Sommerfest 100 people end of day It is Monday morning. You must plan the company Sommerfest. Or the Christmas party, pick your season. About a hundred people. A fully structured plan has to be on your team lead's desk, or the CEO's, by end of day. 0:17 – 0:36 Who walks in knows everything confident eager And help has arrived. A new colleague, on their very first day. They know essentially the entire written world. Every book on event planning, every review of every venue. They are extremely confident. And eager to please. They will say yes to anything. 0:36 – 0:44 Take a second the room your move Take a second. Really. The clock is running, and they are standing at your desk. What do you say?"
+    },
+    {
+      "id": "thought-experiment--what-you-would-say-first",
+      "text": "What you would say first 0:00 – 0:16 Where do I start a story first why this party You probably do not start with a task. You start with a story. Why are we throwing this party at all? Last year people left early, and this year the team needs to feel like a team again. 0:16 – 0:39 What they need to know budget headcount our culture last year Then you tell them what they cannot possibly know. We have a modest budget, so it will not be the fancy hotel. We are a hundred people, not a hundred and fifty. We are a casual company, nobody wants a speech and a tie. And last year was a barbecue, and it rained. 0:39 – 0:55 What they can touch booking caterers calendar Then you open some doors. Here is the booking system, here is your login. These are the caterers we trust, here are their numbers. And here is the shared calendar, so you can see who is away. 0:55 – 1:05 What I want back one structured plan by five And you say what you want back. One structured plan, on my desk by five. Date, venue, food, money, the order of the evening. 1:05 – 1:18 Before they run hear yourself your own words Before they run off, you stop. And you hear yourself. Nobody told you to say any of that. It just came out, in your own words. Hold on to those words."
+    },
+    {
+      "id": "thought-experiment--four-oclock-the-plan-comes-back",
+      "text": "Four o’clock, the plan comes back 0:00 – 0:11 The plan lands polished fast sure of itself It is four o'clock. The plan comes back, early. It is polished. Venue, menu, timeline, even a playlist. And it is written with total confidence. 0:11 – 0:28 One line is off the venue the budget You start reading. And one line is off. The venue it picked is already booked that weekend. Or the budget has one zero too many. It does not say maybe. It says it in the same calm voice as everything else. 0:28 – 0:52 You catch it, or you do not your eye their confidence So now it is on you. If you read with a pen in your hand, you catch it. If you skim, because it all looks so sure of itself, it goes straight to the CEO. The confidence sounds the same whether the line is right or wrong. Only your eye can tell the two apart."
+    },
+    {
+      "id": "from-doing-to-managing",
+      "text": "From doing to managing 0:00 – 0:03 Look at what you did look back what you just did Now look at what you just did."
+    },
+    {
+      "id": "from-doing-to-managing--you-managed-it",
+      "text": "You did not do the task. 0:00 – 0:15 What you actually did not the plan the briefing Look back at your afternoon. Did you plan the party? No. You never booked a venue. You never called a caterer. You set someone up to do it, and then you read their work. 0:15 – 0:43 Doing to managing the shift a skill of its own You did not do the task. You managed it. That shift, from doing to managing, is what working with AI asks of you. It is a skill of its own, and it is not the skill that makes you good at the task itself. And it answers your flat result from the start. You prompted it like a tool, when it needed onboarding like a colleague. 0:43 – 1:00 Not about rank the task asks experience helps This is not about rank. You do not need a title for it. The task asks for it. Experience tends to help, because older hands have managed before. But the job is waiting for everyone, from the very first prompt."
+    },
+    {
+      "id": "from-doing-to-managing--four-disciplines",
+      "text": "Four disciplines 0:00 – 0:07 Four names prompt context harness graph That skill has names now. Four of them. Prompt engineering. Context engineering. Harness engineering. Graph engineering. 0:07 – 0:21 Prompt and context the ask the background Prompt engineering is how you phrase the ask, as a clear brief nobody could misread. Context engineering is the background you hand over: the budget, the headcount, the culture, the past events. 0:21 – 0:35 Harness and graph the tools the workflow across agents Harness engineering is the tools and the environment you give access to: the booking system, the caterer contacts, the calendar. Graph engineering is managing the workflow across several agents. Project management, for AI. 0:35 – 0:50 Newest term mid-2026 still loosely defined Graph engineering is the newest of the four. The term has only been around since the middle of this year, and people still argue about exactly what it covers. Treat it as new, and unsettled."
+    },
+    {
+      "id": "from-doing-to-managing--same-wall-one-level-up",
+      "text": "The same wall, one level up 0:00 – 0:13 Not only you teams companies same wall And it is not only you. A team hits the same wall. So does a whole company. Everyone gets the same new colleague, and nobody hands them a day-one note. 0:13 – 0:35 Adopted, not absorbed tools in workflows unchanged One large survey of about six thousand executives found that most firms use AI, yet most see no effect on their output so far. Leaders asked about it themselves sound more upbeat. Nobody knows the true share. The tools came in, and the way of working stayed exactly as it was. 0:35 – 0:54 Reinvest new skills new disciplines across the organization So the value does not arrive by itself. It arrives when you reinvest. The effort AI saves you goes back in, as new skills and new disciplines. For you. For your team. Across the whole organization. AI does not remove the work. It moves it."
+    },
+    {
+      "id": "your-move",
+      "text": "Your move 0:00 – 0:03 A habit and a twist one small habit one twist One small habit, and one twist."
+    },
+    {
+      "id": "your-move--write-the-day-one-note",
+      "text": "Day one, before you type 0:00 – 0:09 Next time something real before a word So here is your move. Next time you reach for AI on something real, stop. Before you type a single word. 0:09 – 0:19 Jot it down day one a new colleague Take a piece of paper, or an empty note. And write down what you would tell a brand-new colleague on their first day. 0:19 – 0:27 Four lines context tools brief check Four short lines. The context. The tools they would need. The brief. And how you will check their work. 0:27 – 0:32 Two minutes small then type It takes two minutes. Keep it small. Then, and only then, type."
+    },
+    {
+      "id": "your-move--ai-can-help-you-onboard-ai",
+      "text": "AI can help you onboard AI. 0:00 – 0:08 It feels like a lot the weight honest I know. It feels like a lot of work. Context, tools, briefs, checks, and you have not even started. 0:08 – 0:13 The twist AI helps you onboard AI But here is the twist. AI can help you onboard AI. 0:13 – 0:28 Grill-me, lightly it asks you answer done Let it interview you. Ask it to put the questions to you, one at a time, until your day-one note is complete. That is the grill-me approach. You answer, it asks, and then you are done."
+    }
+  ]
+}
