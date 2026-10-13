@@ -21,11 +21,11 @@ function Spotlight() {
     <>
       <span
         aria-hidden
-        className="pointer-events-none absolute -inset-px rounded-[inherit] border border-transparent bg-[radial-gradient(14rem_circle_at_var(--grid-3x2-x)_var(--grid-3x2-y),var(--color-machine),transparent_70%)] opacity-0 transition-opacity duration-300 motion-reduce:transition-none [mask:linear-gradient(#000_0_0)_padding-box_exclude,linear-gradient(#000_0_0)_border-box] group-hover:opacity-100"
+        className="pointer-events-none absolute -inset-px rounded-[inherit] border border-transparent bg-[radial-gradient(14rem_circle_at_var(--grid-3x2-x)_var(--grid-3x2-y),var(--color-primary),transparent_70%)] opacity-0 transition-opacity duration-300 motion-reduce:transition-none [mask:linear-gradient(#000_0_0)_padding-box_exclude,linear-gradient(#000_0_0)_border-box] group-hover:opacity-100"
       />
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-[inherit] bg-[radial-gradient(18rem_circle_at_var(--grid-3x2-x)_var(--grid-3x2-y),color-mix(in_oklch,var(--color-machine)_8%,transparent),transparent_70%)] opacity-0 transition-opacity duration-300 motion-reduce:transition-none group-hover:opacity-100"
+        className="pointer-events-none absolute inset-0 rounded-[inherit] bg-[radial-gradient(18rem_circle_at_var(--grid-3x2-x)_var(--grid-3x2-y),color-mix(in_oklch,var(--color-primary)_8%,transparent),transparent_70%)] opacity-0 transition-opacity duration-300 motion-reduce:transition-none group-hover:opacity-100"
       />
     </>
   );

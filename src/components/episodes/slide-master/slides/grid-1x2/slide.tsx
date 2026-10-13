@@ -16,7 +16,7 @@ interface HalfProps {
 function Half({ index, title, caption, side }: HalfProps) {
   const id = `grid-1x2-${useId()}`;
   const facing = side === 'start' ? 'md:items-end md:text-right md:pr-10' : 'md:items-start md:text-left md:pl-10';
-  const accent = side === 'start' ? 'bg-human' : 'bg-machine';
+  const accent = side === 'start' ? 'bg-foreground' : 'bg-primary';
   return (
     <article
       aria-labelledby={id}

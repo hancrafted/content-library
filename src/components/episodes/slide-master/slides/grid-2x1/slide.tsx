@@ -19,11 +19,11 @@ function Banner({ index, title, caption }: BannerProps) {
   return (
     <article
       aria-labelledby={id}
-      className="group relative grid grid-cols-1 items-end gap-4 overflow-hidden rounded-2xl bg-background px-5 py-8 ring-1 ring-border transition-colors duration-300 ease-out hover:bg-ai/10 motion-reduce:transition-none sm:px-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] md:gap-10 md:px-10 md:py-12"
+      className="group relative grid grid-cols-1 items-end gap-4 overflow-hidden rounded-2xl bg-background px-5 py-8 ring-1 ring-border transition-colors duration-300 ease-out hover:bg-primary/10 motion-reduce:transition-none sm:px-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] md:gap-10 md:px-10 md:py-12"
     >
       <span
         aria-hidden
-        className="absolute inset-y-0 left-0 w-1 origin-left bg-ai transition-[width] duration-300 ease-out group-hover:w-2 motion-reduce:transition-none"
+        className="absolute inset-y-0 left-0 w-1 origin-left bg-primary transition-[width] duration-300 ease-out group-hover:w-2 motion-reduce:transition-none"
       />
       <div className="flex items-baseline gap-5">
         <span aria-hidden className="font-mono text-body tracking-[0.3em] text-muted-foreground tabular-nums">
@@ -38,7 +38,7 @@ function Banner({ index, title, caption }: BannerProps) {
       </p>
       <ArrowRight
         aria-hidden
-        className="hidden size-8 -translate-x-4 text-ai opacity-0 transition-[translate,opacity] duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100 motion-reduce:transition-none md:block"
+        className="hidden size-8 -translate-x-4 text-primary opacity-0 transition-[translate,opacity] duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100 motion-reduce:transition-none md:block"
       />
     </article>
   );
