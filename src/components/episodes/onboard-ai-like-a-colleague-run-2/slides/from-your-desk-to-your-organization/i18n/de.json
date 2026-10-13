@@ -1,0 +1,68 @@
+{
+  "title": "Vom Schreibtisch in die Organisation",
+  "heading": "Fähigkeiten für Dich, Disziplinen für die Firma",
+  "caption": "Das sind Disziplinen, keine Werkzeuge.",
+  "halves": {
+    "you": {
+      "kind": "Fähigkeiten",
+      "title": "Für Dich",
+      "items": {
+        "briefing": "Briefing",
+        "context": "Kontext übergeben",
+        "checking": "Prüfen"
+      }
+    },
+    "organization": {
+      "kind": "Disziplinen",
+      "title": "In Deiner ganzen Organisation",
+      "items": {
+        "workflow": "Wie Arbeit rund um KI organisiert ist",
+        "context": "Wer den Kontext aufschreibt",
+        "checks": "Wem die Prüfungen gehören"
+      }
+    }
+  },
+  "notes": {
+    "adoption-without-impact": {
+      "header": "Eingeführt, aber ohne Wirkung",
+      "description": "In einer Umfrage unter fast 6.000 Führungskräften setzen rund 69 % der Firmen KI aktiv ein, doch etwa 90 % der Führungskräfte berichten für die letzten drei Jahre keine Wirkung auf Produktivität oder Beschäftigung.[1]",
+      "sources": {
+        "firm-data-on-ai": {
+          "title": "Yotzov, Barrero, Bloom, Davis et al., Firm Data on AI (NBER Working Paper 34836, revised March 2026)"
+        }
+      }
+    },
+    "skill-gap": {
+      "header": "Die Qualifikationslücke ist bekannt",
+      "description": "In einer Umfrage unter etwa 800 Entscheidern großer US-Unternehmen berichtet fast die Hälfte von technischen Qualifikationslücken, während die Investitionen in Weiterbildung um 8 Punkte gesunken sind; 43 % der Führungskräfte warnen vor schwindenden Fähigkeiten ohne bewusst gestaltete Rollen und Coaching. Selbstauskunft.[1]",
+      "sources": {
+        "accountable-acceleration": {
+          "title": "Wharton Human-AI Research and GBK Collective, Accountable Acceleration: Gen AI Fast-Tracks Into the Enterprise, Executive Summary"
+        }
+      }
+    },
+    "individuals-move-first": {
+      "header": "Einzelne gehen voran",
+      "description": "Der vorläufige Bericht von MIT NANDA findet Beschäftigte in über 90 % der befragten Unternehmen, die private KI-Werkzeuge nutzen, während offizielle Initiativen stocken. Die Zahlen beruhen auf Interviews und Umfragen unter Führungskräften, selbst bewertet, und sind daher nur als Hinweis zu lesen.[1]",
+      "sources": {
+        "genai-divide": {
+          "title": "Challapally et al., The GenAI Divide: State of AI in Business 2025 (MIT Project NANDA, preliminary findings, July 2025)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "for-yourself": {
+        "title": "Für Dich selbst",
+        "keywords": "neue Fähigkeiten, Briefing, Kontext übergeben, Prüfen, eine Gewohnheit",
+        "script": "Zuerst für Dich selbst. Das sind neue Fähigkeiten. Briefing, Kontext übergeben, Prüfen. Am Anfang fühlen sie sich ungewohnt an, und dann werden sie zur Gewohnheit, so wie eine gute Notiz zum ersten Tag für einen Menschen."
+      },
+      "for-your-organization": {
+        "title": "Für Deine Organisation",
+        "keywords": "größerer Maßstab, wer den Kontext aufschreibt, wem die Prüfungen gehören, Disziplinen, keine Werkzeuge",
+        "script": "Und dann für Deine Organisation. Dasselbe in größerem Maßstab. Wer schreibt den Kontext auf, damit die nächste Person nicht bei null anfängt? Wem gehören die Prüfungen? Wie ist die Arbeit rund um KI organisiert? Das sind Disziplinen, keine Werkzeuge."
+      }
+    }
+  }
+}

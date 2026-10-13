@@ -1,0 +1,68 @@
+{
+  "title": "From your desk to your organization",
+  "heading": "Skills for you, disciplines for the firm",
+  "caption": "Those are disciplines, not tools.",
+  "halves": {
+    "you": {
+      "kind": "Skills",
+      "title": "For you",
+      "items": {
+        "briefing": "Briefing",
+        "context": "Handing over context",
+        "checking": "Checking"
+      }
+    },
+    "organization": {
+      "kind": "Disciplines",
+      "title": "Across your organization",
+      "items": {
+        "workflow": "How work is organized around AI",
+        "context": "Who writes the context down",
+        "checks": "Who owns the checks"
+      }
+    }
+  },
+  "notes": {
+    "adoption-without-impact": {
+      "header": "Adoption without impact",
+      "description": "In a survey of close to 6,000 executives, about 69% of firms actively use AI yet roughly 90% of executives report no impact on productivity or employment over the last three years.[1]",
+      "sources": {
+        "firm-data-on-ai": {
+          "title": "Yotzov, Barrero, Bloom, Davis et al., Firm Data on AI (NBER Working Paper 34836, revised March 2026)"
+        }
+      }
+    },
+    "skill-gap": {
+      "header": "The skill gap is acknowledged",
+      "description": "In a survey of about 800 US enterprise decision-makers, nearly half report technical skill gaps while training investment is down 8 points, and 43% of leaders warn of skill atrophy without deliberate role design and coaching. Self-reported.[1]",
+      "sources": {
+        "accountable-acceleration": {
+          "title": "Wharton Human-AI Research and GBK Collective, Accountable Acceleration: Gen AI Fast-Tracks Into the Enterprise, Executive Summary"
+        }
+      }
+    },
+    "individuals-move-first": {
+      "header": "Individuals move first",
+      "description": "The MIT NANDA preliminary report finds workers at over 90% of surveyed companies using personal AI tools while official initiatives stall. Its figures rest on interviews and leader surveys, self-graded, so read as indicative only.[1]",
+      "sources": {
+        "genai-divide": {
+          "title": "Challapally et al., The GenAI Divide: State of AI in Business 2025 (MIT Project NANDA, preliminary findings, July 2025)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "for-yourself": {
+        "title": "For yourself",
+        "keywords": "new skills, briefing, handing over context, checking, a habit",
+        "script": "First, for yourself. This is new skills. Briefing, handing over context, checking. They feel awkward at first, and then they turn into a habit, like writing a good day-one note for a person."
+      },
+      "for-your-organization": {
+        "title": "For your organization",
+        "keywords": "larger scale, who writes the context down, who owns the checks, disciplines, not tools",
+        "script": "And then for your organization. The same thing at a larger scale. Who writes the context down so the next person does not start from zero? Who owns the checks? How is the work arranged around AI? Those are disciplines, not tools."
+      }
+    }
+  }
+}

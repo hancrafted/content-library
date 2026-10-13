@@ -1,0 +1,64 @@
+{
+  "title": "The work relocates",
+  "heading": "The effort moves",
+  "caption": "The effort did not vanish. It relocated.",
+  "bars": {
+    "before": {
+      "typing": "typing it yourself"
+    },
+    "after": {
+      "briefing": "briefing",
+      "context": "context",
+      "tools": "tools",
+      "checking": "checking",
+      "ai": "AI"
+    }
+  },
+  "moves": "The work moves",
+  "total": "The total does not shrink",
+  "schematic": "Schematic, not a measurement.",
+  "figure": "Two bars of one task's effort at the same width: typing it yourself fills the first; in the second the effort sits in briefing, context, tools, checking and a small AI segment.",
+  "notes": {
+    "individual-time": {
+      "header": "Where the individual's time goes",
+      "description": "In the METR trial developers accepted fewer than 44% of generations and spent about 9% of their time reviewing and cleaning AI output; they described the AI as a new contributor lacking the repository's tacit context.[1] The reading that effort relocates is an inference; no source tests it directly.",
+      "sources": {
+        "early-2025-study": {
+          "title": "Becker, Rush, Barnes, Rein, Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity"
+        }
+      }
+    },
+    "employers-restructured": {
+      "header": "Employers restructured work",
+      "description": "In the Danish data employers absorbed chatbots through task reorganization that created new work in content generation, AI oversight and AI integration.[1]",
+      "sources": {
+        "still-waters-rapid-currents": {
+          "title": "Humlum, Vestergaard, Still Waters, Rapid Currents: Early Labor Market Transformation under Generative AI, formerly Large Language Models, Small Labor Market Effects (NBER Working Paper 33777, revised March 2026)"
+        }
+      }
+    },
+    "value-with-complements": {
+      "header": "Value arrives with complements",
+      "description": "General purpose technologies “enable and require significant complementary investments” in processes, business models and human capital, often intangible and poorly measured, so productivity is understated early (the Productivity J-Curve).[1]",
+      "sources": {
+        "productivity-j-curve": {
+          "title": "Brynjolfsson, Rock, Syverson, The Productivity J-Curve: How Intangibles Complement General Purpose Technologies (NBER Working Paper 25148; AEJ Macroeconomics 13(1), 2021)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "relocated-not-removed": {
+        "title": "Relocated, not removed",
+        "keywords": "did not vanish, briefing, context, tools, checking, the total does not shrink",
+        "script": "The effort did not vanish. It relocated. It left the typing, and it landed in briefing, in handing over context, in setting up tools, and in checking. The total does not shrink. It moves somewhere else."
+      },
+      "why-the-shortfall": {
+        "title": "Why the shortfall",
+        "keywords": "skip the reinvestment, keep the cost, miss the gain, redo the work",
+        "script": "That is the shortfall. Skip the reinvestment, and you keep the cost while you miss the gain. You pay for the tool, you wait for the answer, and then you redo the work, because nobody told the tool what the work was."
+      }
+    }
+  }
+}
