@@ -78,8 +78,8 @@ describe('gate jobs', () => {
     const draft = () => 'draft';
     const approved = () => 'approved';
     // ACT
-    const whileDraft = runStatus(GATED, runLog, draft).map(({ state }) => state);
-    const afterApproval = runStatus(GATED, runLog, approved).map(({ state }) => state);
+    const whileDraft = runStatus(GATED, runLog, { outputStatus: draft }).map(({ state }) => state);
+    const afterApproval = runStatus(GATED, runLog, { outputStatus: approved }).map(({ state }) => state);
     // ASSERT
     expect(whileDraft).toEqual(['gate', 'waiting']);
     expect(afterApproval).toEqual(['done', 'ready']);
@@ -87,17 +87,23 @@ describe('gate jobs', () => {
 });
 
 describe('gate jobs without a staging output', () => {
-  it('prints done for a logged gate job that writes no file, because its approval is an issue label the script cannot read', () => {
-    // ARRANGE
-    const gated = `jobs:
+  const gated = `jobs:
   - { id: write-design-spec, needs: [], gate: human, outputs: [] }
   - { id: implement-episode, needs: [write-design-spec] }
 `;
-    const runLog = ['# Run log\n', entry('write-design-spec · 2026-10-12T09:00:00Z', [PASS])].join('\n');
+  const runLog = ['# Run log\n', entry('write-design-spec · 2026-10-12T09:00:00Z', [PASS])].join('\n');
+
+  it('prints gate for a logged label-gated job until its tickets are approved, and holds back what needs it', () => {
+    // ARRANGE
+    const approvedByLabel = () => true;
     // ACT
-    const states = runStatus(gated, runLog, () => 'draft').map(({ state }) => state);
+    const whileTriage = runStatus(gated, runLog, { labelApproved: () => false }).map(({ state }) => state);
+    const withoutReader = runStatus(gated, runLog).map(({ state }) => state);
+    const afterApproval = runStatus(gated, runLog, { labelApproved: approvedByLabel }).map(({ state }) => state);
     // ASSERT
-    expect(states).toEqual(['done', 'ready']);
+    expect(whileTriage).toEqual(['gate', 'waiting']);
+    expect(withoutReader).toEqual(['gate', 'waiting']);
+    expect(afterApproval).toEqual(['done', 'ready']);
   });
 });
 

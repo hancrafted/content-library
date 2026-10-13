@@ -42,23 +42,6 @@ The `visual-check` check, in both themes, by FE-009's browser check. By the `vis
 
    Every Slide must have a `count` of 1, a wrapper box at least the viewport tall (the wrapper's "at least viewport height" is FE-009's only height rule, so a taller Slide is fine), no horizontal overflow, and a Foreground clear of the chrome; also probe its mounted descendants (`[id="<section>--<slide>"] *`) and require a `count` above 0. Record the numbers per Slide, width, drawer state and theme in the run-log entry's Checks.
 
-## Rubric` beside it, so one review judges both the tickets and the Episode. Each finding the Spec or Standards report marks hard is a failed line, quoted verbatim; a judgement call goes into Notes.
-
-## Done when
-
-The job's `checks:` in `assets/pipeline.yml` run by the check table in [SKILL.md](../SKILL.md#the-job-loop). The first failure is the failed attempt.
-
-## Visual check
-
-The `visual-check` check, in both themes. By the `visual-check` skill: serve `out/` with `npm run preview` in the background, then probe every Slide by its own `#<section>--<slide>` URL in each theme (an Episode mounts a Slide's content only near the viewport, so one page load measures every off-screen Slide as an empty box):
-
-   ```sh
-   npm run shot -- --url http://localhost:4300/<episode path>#<section>--<slide> --theme light --height 800 \
-     --probe '[id="<section>--<slide>"]' …
-   ```
-
-   One page load per Slide, then repeat with `--theme dark`. Every Slide must have a `count` of 1 and a box no taller than the viewport; also probe its mounted descendants (`[id="<section>--<slide>"] *`) and require a `count` above 0. Record the box and that count per Slide and theme in the run-log entry's Checks.
-
 ## Rubric
 
 1. Every Dossier Voice script item's paragraph appears verbatim as a Voice script segment of its Slide.
