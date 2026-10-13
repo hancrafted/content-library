@@ -71,18 +71,26 @@ function logged(lines: readonly string[]): JobState | null {
   return final.every(({ pass }) => pass) ? 'done' : null;
 }
 
+/** How a gate is read: a staging output's `status:`, or, for a job with no output, its tickets' labels. */
+export interface GateReaders {
+  outputStatus?: (output: string) => string | null;
+  labelApproved?: (jobId: string) => boolean;
+}
+
 /**
  * Each job's state, in pipeline order. A job with no finished entry is
  * blocked when a job it needs is blocked, ready when every job it needs is
  * done and every job it wants is done or blocked, and waiting otherwise.
  * A `gate: human` job that is logged done reads `gate` until every output
- * it names has `status: approved`; `outputStatus` reads one output's status
- * (an output path with `<slug>` as written in pipeline.yml), null when unreadable.
+ * it names has `status: approved`; `readers.outputStatus` reads one output's status (an output path with
+ * `<slug>` as written in pipeline.yml), null when unreadable. A gate job that names no output has no
+ * status to read: it reads `gate` until `readers.labelApproved(jobId)` says its tickets are approved, and
+ * stays `gate` when none is given, so an unreadable label never opens the gate.
  */
 export function runStatus(
   pipelineYaml: string,
   runLog: string,
-  outputStatus: (output: string) => string | null = () => null,
+  readers: GateReaders = {},
 ): { id: string; state: JobState }[] {
   const jobs = jobsOf(pipelineYaml);
   const entries = latestEntries(runLog);
@@ -95,20 +103,21 @@ export function runStatus(
     const job = jobs.find((candidate) => candidate.id === id);
     const fromLog = entries.has(id) ? logged(entries.get(id) ?? []) : null;
     const state =
-      job === undefined ? (fromLog ?? 'waiting') : (stateFor(job, fromLog, outputStatus) ?? pending(job, stateOf));
+      job === undefined ? (fromLog ?? 'waiting') : (stateFor(job, fromLog, readers) ?? pending(job, stateOf));
     states.set(id, state);
     return state;
   };
   return jobs.map(({ id }) => ({ id, state: stateOf(id) }));
 }
 
-function stateFor(job: PipelineJob, fromLog: JobState | null, outputStatus: (output: string) => string | null): JobState | null {
-  if (fromLog === 'done' && job.gate && !approved(job, outputStatus)) return 'gate';
+function stateFor(job: PipelineJob, fromLog: JobState | null, readers: GateReaders): JobState | null {
+  if (fromLog === 'done' && job.gate && !approved(job, readers)) return 'gate';
   return fromLog;
 }
 
-function approved(job: PipelineJob, outputStatus: (output: string) => string | null): boolean {
-  return job.outputs.length > 0 && job.outputs.every((output) => outputStatus(output) === 'approved');
+function approved(job: PipelineJob, { outputStatus = () => null, labelApproved = () => false }: GateReaders): boolean {
+  if (job.outputs.length === 0) return labelApproved(job.id);
+  return job.outputs.every((output) => outputStatus(output) === 'approved');
 }
 
 function pending(job: PipelineJob, stateOf: (id: string) => JobState): JobState {

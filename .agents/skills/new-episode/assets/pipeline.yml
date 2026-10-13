@@ -24,7 +24,8 @@
 #               one must need or want its writer; a rule must govern every .md one
 #     checks    cheapest first; names and commands in SKILL.md's job-loop check table
 #     retries   reviewer failures sent back before this branch of the pipeline stops
-#     gate      optional; `human` stops the run until Han approves the output
+#     gate      optional; `human` stops the run until Han approves the output; a job
+#               with no staging output is approved by its tickets' labels instead
 #     agents    run in order; a reviewer is fresh: it did not write the output
 #       type        implementor | reviewer
 #       skills      skill names under .agents/skills/
@@ -192,9 +193,40 @@ jobs:
         rubric: references/write-spec.md#rubric
         model: opus
 
+  # Writes no staging file: its output is the spec issue's visual language and a
+  # design answer in every ticket body. The implementor runs in the orchestrator's
+  # session, because it spawns the designers (ui-ux-pro-max:slides). The gate is a label, not a
+  # status: Han relabels each ticket from needs-triage to ready-for-agent.
+  - id: write-design-spec
+    needs: [write-spec]
+    outputs: []
+    checks: []
+    retries: 2
+    gate: human
+    agents:
+      - type: implementor
+        skills: [ui-ux-pro-max:slides]
+        references:
+          - references/write-design-spec.md
+          - docs/episodes/<slug>/brief.md
+          - docs/episodes/<slug>/dossier.md
+          - docs/design/slide-library.md
+          - docs/design/design-guide.md
+          - docs/design/design-system.md
+        model: opus
+        session: orchestrator
+      - type: reviewer
+        skills: []
+        references:
+          - references/write-design-spec.md
+          - docs/episodes/<slug>/brief.md
+          - docs/episodes/<slug>/dossier.md
+        rubric: references/write-design-spec.md#rubric
+        model: opus
+
   # Writes the Episode under src/, outside the staging folder.
   - id: implement-episode
-    needs: [write-spec]
+    needs: [write-design-spec]
     outputs: []
     checks: [verify, build, test:build, visual-check]
     retries: 2
