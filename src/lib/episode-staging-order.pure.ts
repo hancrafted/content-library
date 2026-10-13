@@ -35,7 +35,10 @@ const RESEARCH_FILE = /^research\/[^/]+\/research\.md$/;
 const DAY = /^(\d{4}-\d{2}-\d{2})/;
 const ACCESSED = / — accessed (\d{4}-\d{2}-\d{2})$/;
 
-/** A research file's `generated.at` day is on or after every Source's `accessed` day. */
+/**
+ * A research file's `generated.at` day is on or after every Source's `accessed` day. A file whose `generated.at` is
+ * missing or unreadable yields no finding here: markdown-harness requires the key and already reports it.
+ */
 function checkResearchDate(file: string, markdown: string): Finding[] {
   const generatedAt = DAY.exec(frontmatterField(markdown, 'generated.at') ?? '')?.[1];
   if (generatedAt === undefined) return [];

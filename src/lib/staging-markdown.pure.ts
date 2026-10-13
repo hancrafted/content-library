@@ -5,6 +5,8 @@
  * staging files' markdown-harness rules already guarantee.
  */
 
+import { parse } from 'yaml';
+
 export interface Heading {
   level: number;
   text: string;
@@ -82,37 +84,26 @@ export function orderedList(body: readonly string[]): { items: ListItem[]; stray
   return { items, strays };
 }
 
-/** A one-line YAML scalar's value: single quotes undoubled, double-quote escapes resolved, plain text as is. */
-function yamlScalar(raw: string): string {
-  const value = raw.trim();
-  if (value.startsWith("'") && value.endsWith("'")) return value.slice(1, -1).replaceAll("''", "'");
-  if (value.startsWith('"') && value.endsWith('"')) return JSON.parse(value) as string;
-  return value;
-}
-
 /**
- * A one-line frontmatter field's value as YAML reads it, or null when the frontmatter has no such field.
- * A dotted key (`generated.at`) reads one level into a nested mapping written as an indented block.
+ * A frontmatter field's value as YAML reads it, as text, or null when the frontmatter has no such field, the
+ * field is not a scalar, or the frontmatter is not valid YAML. A dotted key (`generated.at`) reads through nested
+ * mappings, written in block or flow form, to any depth; a key that itself contains a dot cannot be addressed.
  */
 export function frontmatterField(markdown: string, key: string): string | null {
-  const lines = (FRONTMATTER.exec(markdown)?.[0] ?? '').split('\n');
-  const [parent, child] = key.split('.');
-  return child === undefined ? scalarIn(lines, key) : scalarIn(nestedLines(lines, parent), child);
+  const block = FRONTMATTER.exec(markdown)?.[0];
+  if (block === undefined) return null;
+  let value: unknown;
+  try {
+    value = parse(block.replace(/^---\n/, '').replace(/\n---\n$/, ''));
+  } catch {
+    return null;
+  }
+  const found = key.split('.').reduce<unknown>((node, part) => (isMapping(node) ? node[part] : undefined), value);
+  return typeof found === 'string' || typeof found === 'number' || typeof found === 'boolean' ? String(found) : null;
 }
 
-/** The value of the `key: value` line among `lines`, or null. */
-function scalarIn(lines: readonly string[], key: string): string | null {
-  const line = lines.find((candidate) => candidate.startsWith(`${key}: `));
-  return line === undefined ? null : yamlScalar(line.slice(key.length + 2));
-}
-
-/** The trimmed lines of the indented block under a top-level `parent:` line. */
-function nestedLines(lines: readonly string[], parent: string): string[] {
-  const start = lines.indexOf(`${parent}:`);
-  if (start === -1) return [];
-  const block = lines.slice(start + 1).filter((line) => line !== '---');
-  const end = block.findIndex((line) => !/^\s/.test(line));
-  return (end === -1 ? block : block.slice(0, end)).map((line) => line.trim());
+function isMapping(node: unknown): node is Record<string, unknown> {
+  return typeof node === 'object' && node !== null && !Array.isArray(node);
 }
 
 /** Every page slide's anchor, `<section slug>--<slide slug>`, from the Dossier's h2 and h3 headings. */

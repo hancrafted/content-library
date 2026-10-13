@@ -90,6 +90,36 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('reads a nested mapping in flow form, as OKF writes it', () => {
+    // ARRANGE
+    const flow = '---\ngenerated: { by: claude-code/opus-5.5, at: 2026-10-12T00:00:00Z }\n---\n';
+    const expected = ['claude-code/opus-5.5', '2026-10-12T00:00:00Z'];
+    // ACT
+    const values = ['generated.by', 'generated.at'].map((key) => frontmatterField(flow, key));
+    // ASSERT
+    expect(values).toEqual(expected);
+  });
+
+  it('keeps a comment line inside a nested block from ending it', () => {
+    // ARRANGE
+    const commented = '---\ngenerated:\n  by: human:han\n# who wrote it\n  at: 2026-10-12T00:00:00Z\n---\n';
+    const expected = '2026-10-12T00:00:00Z';
+    // ACT
+    const value = frontmatterField(commented, 'generated.at');
+    // ASSERT
+    expect(value).toBe(expected);
+  });
+
+  it('reads a key at any depth and a number as its text', () => {
+    // ARRANGE
+    const deep = '---\na:\n  b:\n    c: 7\n---\n';
+    const expected = '7';
+    // ACT
+    const value = frontmatterField(deep, 'a.b.c');
+    // ASSERT
+    expect(value).toBe(expected);
+  });
+
   it('reads a dotted key one level into a nested mapping and stops at the next top-level key', () => {
     // ARRANGE
     const expected = ['claude-code/opus-5.5', '2026-10-12T00:00:00Z', null];
@@ -114,9 +144,13 @@ describe('failure cases', () => {
     const bare = '# Budget\n\ntype: dossier\n';
     // ACT
     const missing = frontmatterField(DOSSIER, 'status');
+    const throughScalar = frontmatterField(DOSSIER, 'type.x');
+    const mapping = frontmatterField(DOSSIER, 'generated');
     const unfronted = frontmatterField(bare, 'type');
     // ASSERT
     expect(missing).toBeNull();
+    expect(throughScalar).toBeNull();
+    expect(mapping).toBeNull();
     expect(unfronted).toBeNull();
   });
 });
