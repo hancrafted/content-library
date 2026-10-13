@@ -1,0 +1,35 @@
+{
+  "title": "KI kann dir helfen, KI einzuarbeiten.",
+  "caption": "Lass dich von ihr befragen.",
+  "prose": "Der Grill-me-Ansatz: Sie stellt dir die Fragen, eine nach der anderen, bis deine Notiz für Tag eins vollständig ist.",
+  "notes": {
+    "why-the-effort-pays-back": {
+      "header": "Warum sich die Mühe auszahlt",
+      "description": "Der Wechsel vom Selbermachen zum Anleiten ist eine Fähigkeit, die man üben kann, und es ist dieselbe, die Organisationen aufbauen müssen. Anthropics Nutzungsdaten verbinden sechs Monate Erfahrung oder mehr mit einer um 3 bis 5 Punkte höheren Erfolgsquote; die Daten sind beobachtend und von einem Modell bewertet.[1]",
+      "sources": {
+        "economic-index-learning-curves": {
+          "title": "Anthropic Economic Index report: Learning Curves"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "it-feels-like-a-lot": {
+        "title": "Es fühlt sich nach viel an",
+        "keywords": "das Gewicht, ehrlich",
+        "script": "Ich weiß. Das fühlt sich nach viel Arbeit an. Kontext, Werkzeuge, Briefings, Prüfungen, und du hast noch nicht einmal angefangen."
+      },
+      "the-twist": {
+        "title": "Die Wendung",
+        "keywords": "KI hilft dir, KI einzuarbeiten",
+        "script": "Aber jetzt kommt die Wendung. KI kann dir helfen, KI einzuarbeiten."
+      },
+      "grill-me-lightly": {
+        "title": "Grill-me, ganz leicht",
+        "keywords": "sie fragt, du antwortest, fertig",
+        "script": "Lass dich von ihr befragen. Bitte sie, dir die Fragen zu stellen, eine nach der anderen, bis deine Notiz für Tag eins vollständig ist. Das ist der Grill-me-Ansatz. Du antwortest, sie fragt, und dann bist du fertig."
+      }
+    }
+  }
+}
