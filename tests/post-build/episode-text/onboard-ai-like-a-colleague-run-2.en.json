@@ -1,7 +1,7 @@
 {
   "title": "Stop prompting AI, start onboarding it · hancrafted",
   "description": "Why AI underdelivers when you prompt it like a tool, and why onboarding it like a capable new colleague takes management skills, not execution skills: context, tools, a clear brief and checking the work.",
-  "toc": "Contents Loading 4 min left 1 The promise and the gap Twenty times on paper 2 Day one with a capable stranger A colleague who knows the written world The plan is due by end of day What would you tell them first Open contents : Contents · Loading Contents 4 min left 1 The promise and the gap Twenty times on paper 2 Day one with a capable stranger A colleague who knows the written world The plan is due by end of day What would you tell them first",
+  "toc": "Contents Loading 6 min left 1 The promise and the gap Twenty times on paper 2 Day one with a capable stranger A colleague who knows the written world The plan is due by end of day What would you tell them first 3 You managed it, you did not do it You managed the task Prompting like a tool, briefing like a colleague Confident is not correct Open contents : Contents · Loading Contents 6 min left 1 The promise and the gap Twenty times on paper 2 Day one with a capable stranger A colleague who knows the written world The plan is due by end of day What would you tell them first 3 You managed it, you did not do it You managed the task Prompting like a tool, briefing like a colleague Confident is not correct",
   "slides": [
     {
       "id": "top",
@@ -24,6 +24,19 @@
     {
       "id": "day-one-with-a-capable-stranger--what-would-you-tell-them-first",
       "text": "Your first day together Just notice what you would do first. 09:00 Walk them through last year's party 09:30 Tell them the budget and the headcount 10:00 Hand over the booking login and the caterer's number 10:30 Say what the plan must look like and who reads it 13:00 Look at the first draft 16:00 Check it before it goes up"
+    },
+    { "id": "you-managed-it-you-did-not-do-it", "text": "You managed it, you did not do it" },
+    {
+      "id": "you-managed-it-you-did-not-do-it--you-managed-the-task",
+      "text": "You managed it, you did not do it You set the stage: context, access, the ask and a check. That was the work. Doing became managing doing managing"
+    },
+    {
+      "id": "you-managed-it-you-did-not-do-it--prompting-like-a-tool",
+      "text": "One line against a first day You would never brief a person in one line. Like a tool Plan our Sommerfest. Like a colleague Day one · Sommerfest Last year What worked, and what did not. Budget & headcount About 100 people, a fixed budget. Access Booking system, catering contacts, the calendar. The ask One structured plan for the CEO, by end of day. Check I review the draft at three. Every number gets a source."
+    },
+    {
+      "id": "you-managed-it-you-did-not-do-it--confident-is-not-correct",
+      "text": "Confident is not correct Polished and sure, with one line wrong. You check it, as with any new hire. Sommerfest plan · from the newcomer Date Friday 11 July, from 4 pm Venue Gutshaus am See, 120 seats Catering Confirmed for 100 guests sounded just as sure Budget €45 per head, within budget Programme Welcome, games, dinner, band"
     }
   ],
   "notes": [
@@ -51,6 +64,22 @@
     {
       "id": "day-one-with-a-capable-stranger--what-would-you-tell-them-first",
       "text": "What would you tell them first Write for the newcomer Michael Nygard wrote decision records “as if it is a conversation with a future developer”, so a newcomer need not blindly accept or blindly change a decision. Carried from an earlier research file, not re-fetched. 1 Sources (1) Michael Nygard, Documenting Architecture Decisions ( opens in a new tab ) cognitect.com Checking is part of the frame Anthropic’s best-practices page says to “Give Claude a way to verify its work” and “If you can’t verify it, don’t ship it”. Carried from an earlier research file, not re-fetched. 1 Sources (1) Anthropic, Claude Code best practices ( opens in a new tab ) code.claude.com"
+    },
+    {
+      "id": "you-managed-it-you-did-not-do-it",
+      "text": "You managed it, you did not do it No speaker notes for this Slide."
+    },
+    {
+      "id": "you-managed-it-you-did-not-do-it--you-managed-the-task",
+      "text": "You managed the task A management reading, not a tool reading Harvard Business School’s Joseph Fuller argues companies miss AI’s value because they have not changed how work is organized around it, and that agentic AI is “primarily about managing work”. Only HBR’s summary was read. 1 Sources (1) Joseph Fuller, Create an Onboarding Plan for AI Agents, Harvard Business Review (25 Mar 2026) ( opens in a new tab ) hbr.org The task, not the rank, asks for it The novice boost was measured on bounded tasks inside the model’s competence: 34% more issues resolved per hour for novice support agents against minimal effect for experienced ones. 1 On a task built to lie outside the frontier, consultants using AI were 19 percentage points less likely to be correct. 2 That the task demands management discipline, merely correlating with experience, is this Episode’s inference; no source tests it directly. Sources (2) Brynjolfsson, Li, Raymond, Generative AI at Work (NBER Working Paper 31161) ( opens in a new tab ) nber.org Dell’Acqua, McFowland, Mollick, Lifshitz-Assaf, Kellogg, Rajendran, Krayer, Candelon, Lakhani, Navigating the Jagged Technological Frontier ( opens in a new tab ) mitsloan.mit.edu Experience with the tool predicts results In Anthropic’s usage data, users with six months or more of tenure show a success rate 3 to 5 points higher within the same task cluster, delegate less by directive and iterate more. Success is Claude’s own assessment and self-selection is not ruled out. 1 Sources (1) Anthropic, Anthropic Economic Index report: Learning Curves (March 2026) ( opens in a new tab ) anthropic.com Where the analogy stops A human newcomer learns on the job, an agent does not: Anthropic describes each new session as an engineer arriving “with no memory of what happened on the previous shift”, so anything unwritten is gone. 1 Sources (1) Anthropic Engineering, Effective harnesses for long-running agents (published 26 Nov 2025) ( opens in a new tab ) anthropic.com"
+    },
+    {
+      "id": "you-managed-it-you-did-not-do-it--prompting-like-a-tool",
+      "text": "Prompting like a tool, briefing like a colleague Unstated requirements are guessed Models infer a missing requirement correctly only about 41% of the time, and underspecified prompts are twice as likely to regress when the model or prompt changes. 1 Sources (1) Yang, Shi, Ma, Liu, Kästner, Wu, What Prompts Don’t Say: Understanding and Managing Underspecification in LLM Prompts ( opens in a new tab ) arxiv.org Say it up front Across more than 200,000 simulated conversations, every tested model did worse when a task arrived underspecified over several turns than when fully specified at once, by 39% on average. 1 Sources (1) Laban, Hayashi, Zhou, Neville, LLMs Get Lost In Multi-Turn Conversation ( opens in a new tab ) arxiv.org Relevant, specific context, not volume Handing a model the one relevant document lifted question-answering accuracy for GPT-3.5-Turbo from 56.1% to 88.3%, a 2023 retrieval result whose direction transfers and whose size does not. With 20 or 30 documents it could fall below having none. 1 Anthropic: “minimal does not necessarily mean short”. 2 Measured evidence for a human-written brief in non-coding knowledge work is thin. Sources (2) Liu et al., Lost in the Middle: How Language Models Use Long Contexts, TACL 2024, Table 1 and section 2.3 ( opens in a new tab ) arxiv.org Anthropic, Effective context engineering for AI agents ( opens in a new tab ) anthropic.com"
+    },
+    {
+      "id": "you-managed-it-you-did-not-do-it--confident-is-not-correct",
+      "text": "Confident is not correct Invented sources, defended In a New York federal case, lawyers filed a brief citing six cases ChatGPT had invented, defended them when challenged and were fined; the court held that the rules “impose a gatekeeping role on attorneys to ensure the accuracy of their filings”. 1 Sources (1) Judge P. Kevin Castel, Mata v. Avianca, Inc., Opinion and Order, No. 22-cv-1461 (PKC) (S.D.N.Y. June 22, 2023), ECF 54 ( opens in a new tab ) storage.courtlistener.com Wrong answers read as coherent On the BCG task outside the model’s frontier, AI users’ wrong answers read as coherent, which made errors harder to catch. 1 Sources (1) Dell’Acqua, McFowland, Mollick, Lifshitz-Assaf, Kellogg, Rajendran, Krayer, Candelon, Lakhani, Navigating the Jagged Technological Frontier ( opens in a new tab ) mitsloan.mit.edu A check can be cheap A 19-item surgical checklist was associated with inpatient death falling from 1.5% to 0.8% across eight hospitals. A before-and-after study, and not AI evidence; it shows a simple check can work. 1 Sources (1) Haynes et al., A Surgical Safety Checklist to Reduce Morbidity and Mortality in a Global Population, New England Journal of Medicine 360(5), 2009 ( opens in a new tab ) pubmed.ncbi.nlm.nih.gov"
     }
   ],
   "script": [
@@ -81,6 +110,22 @@
     {
       "id": "day-one-with-a-capable-stranger--what-would-you-tell-them-first",
       "text": "What would you tell them first 0:00 – 0:11 Take a second take a second how would you onboard notice what you do first So take a second. Really. How would you onboard this person? Do not think about the right answer. Just notice what you would do first. 0:11 – 0:32 Walk the morning last year's party the budget how many people what our company is like I guess you would start with the morning. You would walk them through last year's party. What worked, what flopped, what the CEO hated. You would tell them the budget. You would tell them how many people are coming, and what our company is like. Formal, casual, loud, quiet. 0:32 – 0:52 Tools and the ask the keys booking login caterer shared calendar what you expect Then you would give them the keys. The login for the booking system. The number of the caterer you trust. Access to the shared calendar so they stop proposing dates that clash. And you would say what you expect. A plan of what shape, for whom, how long. 0:52 – 1:11 Look at the draft not wait until five first draft over lunch check once more your name on it And you would not wait until five o'clock. You would look at the first draft over lunch. Is this going in the right direction? Then you would check it once more before it goes upstairs. Because it is your name on it too."
+    },
+    {
+      "id": "you-managed-it-you-did-not-do-it",
+      "text": "You managed it, you did not do it 0:00 – 0:13 Pause on the shift what just happened the experiment is over it has a name Now look at what just happened. The experiment is over. Take a breath, because what you just did has a name, and it is not the name you might expect."
+    },
+    {
+      "id": "you-managed-it-you-did-not-do-it--you-managed-the-task",
+      "text": "You managed the task 0:00 – 0:18 You did not plan the party never opened a spreadsheet set the stage gave access someone checked You did not plan the party. You never opened a spreadsheet or called a caterer. You set the stage. You handed over what you know, you gave access, you said what you wanted, and you made sure someone checked. That was the work. 0:18 – 0:37 Doing became managing doing became managing the shift not a recipe a lens Doing became managing. That is the shift. Do not read it as a recipe, or as a one to one match with anything. It is a lens. And that shift from doing to managing is exactly what working with AI demands of you."
+    },
+    {
+      "id": "you-managed-it-you-did-not-do-it--prompting-like-a-tool",
+      "text": "Prompting like a tool, briefing like a colleague 0:00 – 0:17 Back to the hook the gap the question left hanging one line Plan our Sommerfest Now back to the hook. Remember the gap, and the question I left hanging? Think about the last thing you typed into an AI. It was probably one line. Plan our Sommerfest. You would never brief a person like that. 0:17 – 0:35 The answer to the hanging why prompt it like a tool onboard it like a colleague a management task different skills So here is my answer. AI underdelivers when you prompt it like a tool, and the real job is to onboard it like a colleague. And onboarding is a management task, not an execution one. It needs different skills than typing does."
+    },
+    {
+      "id": "you-managed-it-you-did-not-do-it--confident-is-not-correct",
+      "text": "Confident is not correct 0:00 – 0:17 The profile again knowledgeable confident eager to please polished work that may be wrong Go back to the profile for a second. Knowledgeable, confident, eager to please. That is a wonderful combination, and a dangerous one. It hands you polished work that may be wrong, and it hands it over with a smile. 0:17 – 0:32 You check, as with any new hire spot-check the first drafts where a number came from you are responsible So you check it, exactly as you would with any new hire. Spot-check the first drafts. Ask where a number came from. Because whatever goes to the CEO, you are the one responsible. Not the newcomer."
     }
   ]
 }

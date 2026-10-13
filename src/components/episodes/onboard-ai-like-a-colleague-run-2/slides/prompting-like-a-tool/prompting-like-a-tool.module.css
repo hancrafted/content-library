@@ -1,0 +1,20 @@
+/*
+ * Prompting like a tool, briefing like a colleague: motion only, no colour, size or weight (FE-011). One entrance when
+ * the Slide becomes active (FE-009 §6.2): the day-one note's rows fill top to bottom (`--i` comes from DayOneNote);
+ * the left half never moves. It replays on return. The base rules are the finished picture, so at rest and under
+ * reduced motion every row shows.
+ */
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .row {
+    animation: fill 420ms cubic-bezier(0.2, 0, 0, 1) both;
+    animation-delay: calc(var(--i) * 220ms + 250ms);
+  }
+}
+
+@keyframes fill {
+  from {
+    opacity: 0;
+    transform: translateY(0.375rem);
+  }
+}

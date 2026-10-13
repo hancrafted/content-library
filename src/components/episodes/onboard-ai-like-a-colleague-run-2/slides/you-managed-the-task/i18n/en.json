@@ -1,0 +1,65 @@
+{
+  "title": "You managed the task",
+  "heading": "You managed it, you did not do it",
+  "caption": "You set the stage: context, access, the ask and a check. That was the work.",
+  "statement": "Doing became managing",
+  "line": {
+    "from": "doing",
+    "to": "managing"
+  },
+  "notes": {
+    "a-management-reading": {
+      "header": "A management reading, not a tool reading",
+      "description": "Harvard Business School’s Joseph Fuller argues companies miss AI’s value because they have not changed how work is organized around it, and that agentic AI is “primarily about managing work”. Only HBR’s summary was read.[1]",
+      "sources": {
+        "onboarding-plan-for-ai-agents": {
+          "title": "Joseph Fuller, Create an Onboarding Plan for AI Agents, Harvard Business Review (25 Mar 2026)"
+        }
+      }
+    },
+    "the-task-not-the-rank": {
+      "header": "The task, not the rank, asks for it",
+      "description": "The novice boost was measured on bounded tasks inside the model’s competence: 34% more issues resolved per hour for novice support agents against minimal effect for experienced ones.[1] On a task built to lie outside the frontier, consultants using AI were 19 percentage points less likely to be correct.[2] That the task demands management discipline, merely correlating with experience, is this Episode’s inference; no source tests it directly.",
+      "sources": {
+        "generative-ai-at-work": {
+          "title": "Brynjolfsson, Li, Raymond, Generative AI at Work (NBER Working Paper 31161)"
+        },
+        "jagged-technological-frontier": {
+          "title": "Dell’Acqua, McFowland, Mollick, Lifshitz-Assaf, Kellogg, Rajendran, Krayer, Candelon, Lakhani, Navigating the Jagged Technological Frontier"
+        }
+      }
+    },
+    "experience-with-the-tool": {
+      "header": "Experience with the tool predicts results",
+      "description": "In Anthropic’s usage data, users with six months or more of tenure show a success rate 3 to 5 points higher within the same task cluster, delegate less by directive and iterate more. Success is Claude’s own assessment and self-selection is not ruled out.[1]",
+      "sources": {
+        "learning-curves": {
+          "title": "Anthropic, Anthropic Economic Index report: Learning Curves (March 2026)"
+        }
+      }
+    },
+    "where-the-analogy-stops": {
+      "header": "Where the analogy stops",
+      "description": "A human newcomer learns on the job, an agent does not: Anthropic describes each new session as an engineer arriving “with no memory of what happened on the previous shift”, so anything unwritten is gone.[1]",
+      "sources": {
+        "long-running-agents": {
+          "title": "Anthropic Engineering, Effective harnesses for long-running agents (published 26 Nov 2025)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "you-did-not-plan-the-party": {
+        "title": "You did not plan the party",
+        "keywords": "never opened a spreadsheet, set the stage, gave access, someone checked",
+        "script": "You did not plan the party. You never opened a spreadsheet or called a caterer. You set the stage. You handed over what you know, you gave access, you said what you wanted, and you made sure someone checked. That was the work."
+      },
+      "doing-became-managing": {
+        "title": "Doing became managing",
+        "keywords": "doing became managing, the shift, not a recipe, a lens",
+        "script": "Doing became managing. That is the shift. Do not read it as a recipe, or as a one to one match with anything. It is a lens. And that shift from doing to managing is exactly what working with AI demands of you."
+      }
+    }
+  }
+}

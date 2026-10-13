@@ -1,0 +1,12 @@
+{
+  "title": "Du hast es gemanagt, nicht selbst gemacht",
+  "voiceScript": {
+    "segments": {
+      "pause-on-the-shift": {
+        "title": "Innehalten beim Wechsel",
+        "keywords": "was gerade passiert ist, das Experiment ist vorbei, es hat einen Namen",
+        "script": "Schau Dir jetzt an, was gerade passiert ist. Das Experiment ist vorbei. Atme kurz durch, denn was Du gerade getan hast, hat einen Namen, und es ist nicht der Name, den Du vielleicht erwartest."
+      }
+    }
+  }
+}
