@@ -676,3 +676,33 @@ Needs human: four-disciplines keeps the grid-2x2 indexes, colour dots, hover tin
 Needs human: the visual check ran only at 1280×800; the shorter four-disciplines tiles were not measured at other widths.
 Judgement calls from the Standards review: polished-plan.tsx props `offRow`, `offTarget` and `penTarget` travel together; `quote: {open, close}` is written inline twice in first-day-desk.tsx; three parts pass note targets in three different shapes; the Scenes write `data-target="caption"` by hand; nine Slide headers repeat a "built without motion" comment; `PlanRow` and `SpeechLine` are exported but unused elsewhere.
 Running `next dev` rewrites `AGENTS.md`; each subagent reverted it, and no commit carries it.
+
+## open-pr · 2026-10-13T06:09:26Z
+
+### Inputs
+
+- `.agents/skills/new-episode/references/open-pr.md` and the `pr` skill.
+- `run-log.md`, every entry's Notes.
+- Draft PR https://github.com/hancrafted/content-library/pull/98 with its stale body, and Han's instruction to keep its base `feat/89-new-episode`.
+
+### Output
+
+- PR https://github.com/hancrafted/content-library/pull/98: body rewritten in place, still a draft, base `feat/89-new-episode`; no new PR opened.
+- Served link http://localhost:3000/episode/onboard-ai-like-a-colleague from a detached `npm run dev` (log `/tmp/episode-dev.log`).
+- Decision: the `## Needs Han` checklist holds 53 items: 47 `Needs human:`, 5 `No catalog match:` marked answered by the Design answers in #100 to #103, and the route deviation. None `Blocked:` or `Research gap:`.
+
+### Checks
+
+- The job has no `checks:`. With redirects followed: `/episode/onboard-ai-like-a-colleague` 200, `/de/episode/onboard-ai-like-a-colleague` 200, `/episodes/onboard-ai-like-a-colleague` 404, `/de/episodes/onboard-ai-like-a-colleague` 404.
+- `gh pr view 98 --json isDraft,url,baseRefName`: isDraft true, base `feat/89-new-episode`.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 49 s · 58068 tokens
+
+### Notes
+
+Passed on attempt 1; the job has no reviewer. Base stays `feat/89-new-episode`, as Han asked, not `main` as open-pr.md says.
+Route deviation: the Episode answers only on `/episode/<slug>` until #85 lands; it is on the checklist.
+`next dev` rewrites `AGENTS.md` while it runs; restore it with `git checkout -- AGENTS.md` before a commit.
+Needs human: the 47 `Needs human:` items overlap in places (research caveats, citations of the retired files) and may want triage.
