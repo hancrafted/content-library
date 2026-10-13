@@ -45,7 +45,7 @@ _Done when_ the time-box reaches its switch point or Han says "settle".
 Work through the Brief's headings in template order, filling each from the candidates log first:
 
 - **Format** and **Audience**: read back what Frame settled.
-- **Style**: one line naming a style from `docs/design/design-guide.md` and the audience reason for it. Offer 2–3 of the named styles with the audience each suits, and recommend one. A style may differ by audience but stays the same within the Episode, and the designers write the Slides within it. If the Episode needs a style the guide does not list, name it as new and flag it as open.
+- **Style**: one line naming a style from `docs/design/design-guide.md` and the audience reason for it. Offer 2–3 of the named styles with the audience each suits, and recommend one. A style may differ by audience but stays the same within the Episode, and the designers write the Slides within it. A style the guide does not list is a design-guide change: flag it as open, and the Brief fails the staging check until `docs/design/design-guide.md` lists it.
 - **Creative elements** (Learning goal, Actionables, Hook, Red thread, Threads, Analogy): offer 2–3 candidates, each in one sentence, and recommend one with its reason. Draw them from the log; generate new ones only where the log has fewer than two. Han chooses or rewords; write down his wording verbatim, because his edits are what later teach agents his style.
 - **Threads**: offer "no Threads" as one candidate for a Short. A longer Episode gets an A thread (the mechanism or argument) and a B thread (a story told in turns with it).
 - **Research questions**: propose the list, each a _why_ question scoped to a subject matter, one research job per item. Han adds, cuts or rewords.
