@@ -25,7 +25,7 @@ Settled with Han, 2026-10-13, in session 5909c675 (this file's grill), prompted 
 10. Q10: `gate: human`. Han's design edits are what later steer the designer.
 11. Q15: Triage labels. `write-spec` files tickets `needs-triage`; Han relabels each `ready-for-agent` to approve its design; `implement-episode` refuses to start while any ticket is `needs-triage`. Han's vision: AI takes over this review; the first step is context engineering (Q21, Q22).
 12. Q16: After the gate, the orchestrator rewrites every overruled `master:` and `motion:` into the Dossier, in one commit with `Source: #<ticket>`; the parallel designers never edit the Dossier.
-13. Q22: The `write-design-spec` run-log Metrics carry one line per ticket, `approved as drafted` or `edited`, read from the issue's edit history. When most tickets pass unedited across runs, `gate: human` is removed.
+13. Q22: The `write-design-spec` run-log Metrics carry one line per ticket, `approved as drafted` or `edited`, read from the issue's edit history: a ticket edit whose body ends `Edited-by: <job id>` is an agent's, so only an unmarked edit counts as `edited` (Han's; `agentOf` in `.agents/skills/new-episode/scripts/marks.pure.ts`). The job's reference carries the `Edited-by: write-design-spec` footer rule (#118 creates `references/write-design-spec.md`). When most tickets pass unedited across runs, `gate: human` is removed.
 
 ## Around the job
 

@@ -33,6 +33,7 @@ Han reworded the Red thread in Settle; the agent's candidate framed the window a
 ### Output
 
 - `research/AIE-0000__why-recall-degrades-with-position/research.md`, `status` not applicable.
+- Edited #101 · 2026-10-12T10:14:00Z, body ends `Edited-by: write-research`.
 
 ### Checks
 
