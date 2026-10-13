@@ -137,4 +137,4 @@ After `Gate: approved pipeline`, the template is frozen for the run: `feat/89-ne
 
 ## After the run
 
-Han's feedback, typed or dictated, arrives as `feedback/<NN>/feedback.md` and lands in the Manuscript or Dossier before the implementation. The loop ends when Han starts Promotion. Distil what this run taught into [`LEARNINGS.md`](LEARNINGS.md). Diff each pair of gate commits, the draft against Han's approval: every correction Han made twice becomes a proposed rubric line under `LEARNINGS.md` Lessons.
+Han's feedback, typed or dictated, arrives as `feedback/<NN>/feedback.md` and lands in the Dossier before the implementation. The loop ends when Han starts Promotion. Distil what this run taught into [`LEARNINGS.md`](LEARNINGS.md). Diff each pair of gate commits, the draft against Han's approval: every correction Han made twice becomes a proposed rubric line under `LEARNINGS.md` Lessons.

@@ -6,7 +6,6 @@ import {
   h4s,
   headingsOf,
   orderedList,
-  paragraphCount,
   slideAnchors,
 } from './staging-markdown.pure';
 
@@ -74,16 +73,6 @@ describe('success cases', () => {
     const list = orderedList(body);
     // ASSERT
     expect(list).toEqual(expected);
-  });
-
-  it('counts paragraphs as runs of non-blank lines', () => {
-    // ARRANGE
-    const body = ['', 'First line', 'still first.', '', '', 'Second.', '', 'Third.'];
-    const expected = 3;
-    // ACT
-    const count = paragraphCount(body);
-    // ASSERT
-    expect(count).toBe(expected);
   });
 
   it('reads a frontmatter field as YAML does, plain, single-quoted or double-quoted', () => {
