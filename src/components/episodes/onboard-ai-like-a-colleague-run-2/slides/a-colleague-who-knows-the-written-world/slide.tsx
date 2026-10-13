@@ -1,8 +1,8 @@
 import { slide } from '@/components/slide-master/slide';
 import { SlideCaption, SlideFrame } from '@/components/slide-master/slide-master';
+import { DayOneNote } from '@/components/slide-shared/day-one-note';
 import { useId } from 'react';
 import styles from './colleague.module.css';
-import { DayOneNote } from './day-one-note';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 

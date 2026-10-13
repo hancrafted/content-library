@@ -39,7 +39,7 @@ function NoteRow({ row, index, className }: { row: DayOneNoteRow; index: number;
  * The day-one note: a plain written page, a label over rows of a term and its text, with an optional marker beside a
  * row. The Episode's recurring object (the brief, the plan, the note before you type), drawn the same on every Slide.
  * Each row carries its index as `--i` for a Slide's own stagger; the note itself has no motion.
- * Local to this Slide until #140 moves it to `slide-shared/` for the second Slide that needs it.
+ * Shared by every Slide of an Episode that shows the note (FE-007: promoted once a second Slide needed it).
  */
 export function DayOneNote({ label, rows, rowClassName, className, 'data-target': dataTarget }: DayOneNoteProps) {
   return (
