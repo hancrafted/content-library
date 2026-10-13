@@ -13,6 +13,11 @@ Foundations. First theory block of the "Intro to Agentic Workflows" workshop, pr
 
 Deliberately mixed and reusable. Primary: first-time founders, students and postdocs at an energy-sector startup accelerator (next week). Also: SME coaching and consulting prospects at the Academy workshop the week after: tech, non-tech and tech-adjacent workers, including people with zero coding experience who only use ChatGPT. The analogy must land for all of them.
 
+## Style
+
+Editorial: a mixed audience, from founders to people who only use ChatGPT, and consulting prospects;
+sober, self-explanatory Slides serve all of them and read as a consultant's work.
+
 ## Learning goal
 
 The viewer realizes that capturing AI's value means reinvesting effort as new skills and disciplines, for themselves and across their organization, because AI relocates the work rather than removing it.
