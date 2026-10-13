@@ -1,0 +1,31 @@
+/*
+ * You managed the task: motion only, no colour, size or weight (FE-011). One entrance when the Slide becomes active
+ * (FE-009 §6.2): the line draws from "doing" to "managing", then the end dot and the "managing" label arrive. It
+ * replays on return. The base rules are the finished picture, so at rest and under reduced motion the full line shows.
+ */
+
+.track {
+  transform-origin: left;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .track {
+    animation: draw 900ms cubic-bezier(0.2, 0, 0, 1) 200ms both;
+  }
+
+  :global([data-zone='active']) .toEnd {
+    animation: arrive 300ms ease-out 1000ms both;
+  }
+}
+
+@keyframes draw {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes arrive {
+  from {
+    opacity: 0;
+  }
+}

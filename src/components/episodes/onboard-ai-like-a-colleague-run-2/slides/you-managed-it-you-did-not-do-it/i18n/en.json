@@ -1,0 +1,12 @@
+{
+  "title": "You managed it, you did not do it",
+  "voiceScript": {
+    "segments": {
+      "pause-on-the-shift": {
+        "title": "Pause on the shift",
+        "keywords": "what just happened, the experiment is over, it has a name",
+        "script": "Now look at what just happened. The experiment is over. Take a breath, because what you just did has a name, and it is not the name you might expect."
+      }
+    }
+  }
+}

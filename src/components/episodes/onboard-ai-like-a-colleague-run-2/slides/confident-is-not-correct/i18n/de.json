@@ -1,0 +1,75 @@
+{
+  "title": "Selbstsicher ist nicht richtig",
+  "caption": "Ausgefeilt und sicher, mit einer falschen Zeile. Du prüfst es, wie bei jedem neuen Kollegen.",
+  "plan": {
+    "label": "Plan fürs Sommerfest · vom Neuling",
+    "rows": {
+      "date": {
+        "term": "Datum",
+        "text": "Freitag, 11. Juli, ab 16 Uhr"
+      },
+      "venue": {
+        "term": "Ort",
+        "text": "Gutshaus am See, 120 Plätze"
+      },
+      "catering": {
+        "term": "Catering",
+        "text": "Für 100 Gäste bestätigt"
+      },
+      "budget": {
+        "term": "Budget",
+        "text": "45 € pro Kopf, im Budget"
+      },
+      "programme": {
+        "term": "Programm",
+        "text": "Begrüßung, Spiele, Abendessen, Band"
+      }
+    },
+    "checked": "geprüft",
+    "flagged": "nicht geprüft",
+    "flagCaption": "klang genauso sicher"
+  },
+  "notes": {
+    "invented-sources-defended": {
+      "header": "Erfundene Quellen, verteidigt",
+      "description": "In einem New Yorker Bundesverfahren reichten Anwälte einen Schriftsatz ein, der sechs von ChatGPT erfundene Fälle zitierte, verteidigten sie auf Nachfrage und wurden mit einer Geldstrafe belegt; das Gericht hielt fest, die Regeln „weisen Anwälten eine Torwächterrolle zu, um die Richtigkeit ihrer Eingaben sicherzustellen“.[1]",
+      "sources": {
+        "mata-v-avianca": {
+          "title": "Judge P. Kevin Castel, Mata v. Avianca, Inc., Opinion and Order, No. 22-cv-1461 (PKC) (S.D.N.Y. June 22, 2023), ECF 54"
+        }
+      }
+    },
+    "wrong-answers-read-as-coherent": {
+      "header": "Falsche Antworten wirken schlüssig",
+      "description": "Bei der BCG-Aufgabe außerhalb der Grenze des Modells wirkten die falschen Antworten der KI-Nutzer schlüssig, was Fehler schwerer erkennbar machte.[1]",
+      "sources": {
+        "jagged-technological-frontier": {
+          "title": "Dell’Acqua, McFowland, Mollick, Lifshitz-Assaf, Kellogg, Rajendran, Krayer, Candelon, Lakhani, Navigating the Jagged Technological Frontier"
+        }
+      }
+    },
+    "a-check-can-be-cheap": {
+      "header": "Eine Prüfung kann billig sein",
+      "description": "Eine chirurgische Checkliste mit 19 Punkten ging in acht Krankenhäusern mit einem Rückgang der Krankenhaussterblichkeit von 1,5 % auf 0,8 % einher. Eine Vorher-nachher-Studie und kein Beleg über KI; sie zeigt, dass eine einfache Prüfung wirken kann.[1]",
+      "sources": {
+        "surgical-safety-checklist": {
+          "title": "Haynes et al., A Surgical Safety Checklist to Reduce Morbidity and Mortality in a Global Population, New England Journal of Medicine 360(5), 2009"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-profile-again": {
+        "title": "Noch einmal das Profil",
+        "keywords": "kenntnisreich, selbstsicher, will es recht machen, ausgefeilte Arbeit, die falsch sein kann",
+        "script": "Geh noch einmal kurz zurück zum Profil. Kenntnisreich, selbstsicher, will es Dir recht machen. Das ist eine wunderbare Kombination, und eine gefährliche. Sie gibt Dir ausgefeilte Arbeit, die falsch sein kann, und sie übergibt sie Dir mit einem Lächeln."
+      },
+      "you-check-as-with-any-new-hire": {
+        "title": "Du prüfst, wie bei jedem neuen Kollegen",
+        "keywords": "die ersten Entwürfe stichprobenartig prüfen, woher eine Zahl kommt, Du trägst die Verantwortung",
+        "script": "Also prüfst Du es, genau wie bei jedem neuen Kollegen. Prüf die ersten Entwürfe stichprobenartig. Frag, woher eine Zahl kommt. Denn was auch immer beim CEO landet, Du trägst die Verantwortung. Nicht der Neuling."
+      }
+    }
+  }
+}

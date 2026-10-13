@@ -1,0 +1,85 @@
+{
+  "title": "Prompting like a tool, briefing like a colleague",
+  "heading": "One line against a first day",
+  "caption": "You would never brief a person in one line.",
+  "halves": {
+    "tool": {
+      "title": "Like a tool"
+    },
+    "colleague": {
+      "title": "Like a colleague"
+    }
+  },
+  "prompt": "Plan our Sommerfest.",
+  "note": {
+    "label": "Day one · Sommerfest",
+    "rows": {
+      "last-year": {
+        "term": "Last year",
+        "text": "What worked, and what did not."
+      },
+      "budget": {
+        "term": "Budget & headcount",
+        "text": "About 100 people, a fixed budget."
+      },
+      "access": {
+        "term": "Access",
+        "text": "Booking system, catering contacts, the calendar."
+      },
+      "ask": {
+        "term": "The ask",
+        "text": "One structured plan for the CEO, by end of day."
+      },
+      "check": {
+        "term": "Check",
+        "text": "I review the draft at three. Every number gets a source."
+      }
+    }
+  },
+  "notes": {
+    "unstated-requirements-are-guessed": {
+      "header": "Unstated requirements are guessed",
+      "description": "Models infer a missing requirement correctly only about 41% of the time, and underspecified prompts are twice as likely to regress when the model or prompt changes.[1]",
+      "sources": {
+        "what-prompts-dont-say": {
+          "title": "Yang, Shi, Ma, Liu, Kästner, Wu, What Prompts Don’t Say: Understanding and Managing Underspecification in LLM Prompts"
+        }
+      }
+    },
+    "say-it-up-front": {
+      "header": "Say it up front",
+      "description": "Across more than 200,000 simulated conversations, every tested model did worse when a task arrived underspecified over several turns than when fully specified at once, by 39% on average.[1]",
+      "sources": {
+        "lost-in-multi-turn": {
+          "title": "Laban, Hayashi, Zhou, Neville, LLMs Get Lost In Multi-Turn Conversation"
+        }
+      }
+    },
+    "relevant-specific-context": {
+      "header": "Relevant, specific context, not volume",
+      "description": "Handing a model the one relevant document lifted question-answering accuracy for GPT-3.5-Turbo from 56.1% to 88.3%, a 2023 retrieval result whose direction transfers and whose size does not. With 20 or 30 documents it could fall below having none.[1] Anthropic: “minimal does not necessarily mean short”.[2] Measured evidence for a human-written brief in non-coding knowledge work is thin.",
+      "sources": {
+        "lost-in-the-middle": {
+          "title": "Liu et al., Lost in the Middle: How Language Models Use Long Contexts, TACL 2024, Table 1 and section 2.3"
+        },
+        "effective-context-engineering": {
+          "title": "Anthropic, Effective context engineering for AI agents"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "back-to-the-hook": {
+        "title": "Back to the hook",
+        "keywords": "the gap, the question left hanging, one line, Plan our Sommerfest",
+        "script": "Now back to the hook. Remember the gap, and the question I left hanging? Think about the last thing you typed into an AI. It was probably one line. Plan our Sommerfest. You would never brief a person like that."
+      },
+      "the-answer-to-the-hanging-why": {
+        "title": "The answer to the hanging why",
+        "keywords": "prompt it like a tool, onboard it like a colleague, a management task, different skills",
+        "script": "So here is my answer. AI underdelivers when you prompt it like a tool, and the real job is to onboard it like a colleague. And onboarding is a management task, not an execution one. It needs different skills than typing does."
+      }
+    }
+  }
+}
