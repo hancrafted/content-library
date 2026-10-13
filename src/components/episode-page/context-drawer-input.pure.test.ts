@@ -61,7 +61,53 @@ function segmentOf(slug: string): VoiceScriptSegment {
   return { slug, from: 0, to: 1, title: 't', keywords: [], script: 's' };
 }
 
+const TITLE_TEXT = {
+  notes: { n: { header: 'H', description: 'D' } },
+  voiceScript: { segments: { s: { title: 'T', keywords: 'k, j', script: 'S' } } },
+};
+
+async function titleOf(withText: boolean) {
+  const messages = withText ? { ...EPISODE.en, ...TITLE_TEXT } : EPISODE.en;
+  const record = episode({
+    slug: 'page-template',
+    messages: { en: messages, de: messages },
+    ...(withText && { notes: [{ slug: 'n', target: 'title' }], segments: [{ slug: 's' }] }),
+    sections: [[foundations]],
+  });
+  const content = await recordContent(record, 'en', translatorOf);
+  return contextItemsOf(content.slides, EXPLAINER, content.titleContext)[0];
+}
+
 describe('success cases', () => {
+  it("gives the Title slide's item its own notes and script, in place of the explainer", async () => {
+    // ARRANGE
+    const expected = {
+      id: 'top',
+      notes: [{ slug: 'n', header: 'H', description: 'D', target: 'title' }],
+      script: [{ slug: 's', title: 'T', keywords: ['k', 'j'], script: 'S', from: 0, to: 1 / 140 }],
+    };
+    // ACT
+    const item = await titleOf(true);
+    // ASSERT
+    expect(item).toEqual(expected);
+  });
+
+  it("counts the Title slide's Voice script in the Episode's reading time", async () => {
+    // ARRANGE
+    const messages = { ...EPISODE.en, ...TITLE_TEXT };
+    const record = episode({
+      slug: 'page-template',
+      messages: { en: messages, de: messages },
+      segments: [{ slug: 's' }],
+      sections: [[foundations]],
+    });
+    const expected = 1 / 140;
+    // ACT
+    const { minutes } = await recordContent(record, 'en', translatorOf);
+    // ASSERT
+    expect(minutes).toBeCloseTo(expected);
+  });
+
   it("gives each Slide an item under its id, with notes, script and each note's short target", async () => {
     // ARRANGE
     const note = { slug: 'n', header: 'H', description: 'D' };
@@ -187,6 +233,15 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('keeps the explainer on the Title slide of an Episode that gives it no text', async () => {
+    // ARRANGE
+    const expected = titleItem;
+    // ACT
+    const item = await titleOf(false);
+    // ASSERT
+    expect(item).toEqual(expected);
+  });
+
   it('still gives the Title slide its item, the only one with an explainer, for an Episode with no Sections', async () => {
     // ARRANGE
     const expected = [titleItem];

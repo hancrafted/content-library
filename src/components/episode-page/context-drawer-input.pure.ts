@@ -67,11 +67,16 @@ function itemOf({ id, title, notes, voiceScript }: LocalizedSlide): ContextItem 
 }
 
 /**
- * The Title slide's item: no notes, no script, and the explainer of how the
- * drawer works, which the drawer shows on both tabs (FE-010).
+ * The Title slide's item: its own notes and script when its text holds any
+ * (FE-004 §6); otherwise none, and the explainer of how the drawer works,
+ * which the drawer shows on both tabs (FE-010).
  */
-function titleItem(explainer: string): ContextItem {
-  return { id: TITLE_ANCHOR, notes: [], script: [], explainer };
+function titleItem(explainer: string, context: Pick<LocalizedSlide, 'notes' | 'voiceScript'> | undefined): ContextItem {
+  const notes = context?.notes ?? [];
+  const script = context?.voiceScript ?? [];
+  if (notes.length === 0 && script.length === 0) return { id: TITLE_ANCHOR, notes: [], script: [], explainer };
+  checkContext(TITLE_ANCHOR, notes, script);
+  return { id: TITLE_ANCHOR, notes, script };
 }
 
 /**
@@ -79,6 +84,10 @@ function titleItem(explainer: string): ContextItem {
  * the table of contents lists). Throws on a malformed Slide, so a broken
  * Episode fails `next dev` and the static build alike.
  */
-export function contextItemsOf(slides: readonly LocalizedSlide[], explainer: string): ContextItem[] {
-  return [titleItem(explainer), ...slides.map(itemOf)];
+export function contextItemsOf(
+  slides: readonly LocalizedSlide[],
+  explainer: string,
+  title?: Pick<LocalizedSlide, 'notes' | 'voiceScript'>,
+): ContextItem[] {
+  return [titleItem(explainer, title), ...slides.map(itemOf)];
 }

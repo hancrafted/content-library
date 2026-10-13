@@ -37,6 +37,34 @@ function checkSlugs(dossier: readonly Heading[]): Finding[] {
     }));
 }
 
+const TITLE_BLOCKS = ['Speaker notes', 'Voice script'];
+
+/**
+ * The Title slide's block (the h1 and its h4s): no prose, and only the optional
+ * Speaker notes and Voice script, which the writing jobs leave out and a
+ * feedback round adds (FE-004 §6). Each is checked like any Slide's.
+ */
+function checkTitleSlide(blocks: readonly Block[]): Finding[] {
+  const finding = (message: string): Finding => ({ kind: 'title-slide', file: 'dossier.md', message });
+  const end = blocks.findIndex(({ heading }, index) => index > 0 && heading.level <= 3);
+  const title = blocks.slice(0, end === -1 ? blocks.length : end);
+  if (title[0]?.heading.level !== 1) return [];
+  const stray = title
+    .slice(1)
+    .filter(({ heading }) => heading.level !== 4 || !TITLE_BLOCKS.includes(heading.text))
+    .map(({ heading }) =>
+      finding(`The Title slide holds "${heading.text}"; only Speaker notes and Voice script may sit under the h1.`),
+    );
+  const proseFindings = title[0].body
+    .filter((line) => line.trim() !== '')
+    .map((line) =>
+      finding(
+        `The Title slide's h1 holds prose "${line}"; the spoken opening goes under the first h2, or in a Voice script block.`,
+      ),
+    );
+  return [...proseFindings, ...stray];
+}
+
 const VISUAL_LINE = /^master: (\S+) · motion: (\S+)$/;
 
 function checkVisuals(blocks: readonly Block[], known: KnownVisuals): Finding[] {
@@ -142,6 +170,7 @@ function checkDossier(files: Readonly<Record<string, string>>, known: KnownVisua
   const dossierBlocks = blocksOf(bodyLines(dossier));
   return [
     ...checkSlugs(dossierBlocks.map(({ heading }) => heading)),
+    ...checkTitleSlide(dossierBlocks),
     ...checkVisuals(dossierBlocks, known),
     ...checkSpeakerNotes(dossierBlocks),
     ...checkFeedback(files, dossierBlocks),

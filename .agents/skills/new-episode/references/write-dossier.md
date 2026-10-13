@@ -10,7 +10,7 @@ Read the research the run produced and any file retrieval reused. The orchestrat
 
 The shape is the `staging-dossier` rules': `npx mh query` on [the sample Dossier](../assets/sample-episode/dossier.md) prints every intent, and the sample shows them met.
 
-- **Spine.** Every spine heading is `<title, at most 60 characters> {#slug}`: the h1 is the Title slide, an h2 a Section, an h3 a Slide. No prose sits under the h1.
+- **Spine.** Every spine heading is `<title, at most 60 characters> {#slug}`: the h1 is the Title slide, an h2 a Section, an h3 a Slide. No prose sits under the h1; leave out its optional `#### Speaker notes` and `#### Voice script` too, which a feedback round adds. The Episode's spoken opening goes under the first h2.
 - **Visual.** `master: <name> · motion: <effect>`. A master is a slide-master catalog Slide (a folder in `src/components/episodes/slide-master/slides/`) or a frame component (`src/components/slide-master/<name>-slide.tsx`); a motion is `src/components/animations/<effect>.client.tsx`. Prose under it describes what the Slide shows, in viewer terms; CSS and component code belong to the implementation.
 - **No catalog match.** When no catalog Slide fits, name the nearest frame component, describe the wanted layout in the Visual prose, and add `No catalog match: <section>--<slide> — <what was wanted>` to the run-log entry's Notes. It goes on the PR checklist.
 - **Speaker notes.** One ordered-list item per note, `**<header>** — <description> [n]`, nested `sources: [n] <title> — <URL>` and an optional `target:`. Every source comes from a research file.

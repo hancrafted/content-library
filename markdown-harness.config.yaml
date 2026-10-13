@@ -303,7 +303,7 @@ body-structure:
         - purpose: heading
           level: 1
           pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
-          intent: "The Title slide: a catchy, short title. Fail if the title is generic. No prose sits under it; the Title slide's optional blocks are a separate issue."
+          intent: "The Title slide: a catchy, short title. Fail if the title is generic. No prose sits under it; only the optional `#### Speaker notes` and `#### Voice script` blocks may, which the writing jobs leave out and a feedback round adds (the staging test checks them, as it does each Slide's). Fail if a Speaker note's claim is already spoken in the Voice script beside it, or an item would not stand as one spoken passage."
         - purpose: enumeration
           level: 2
           minCount: 1

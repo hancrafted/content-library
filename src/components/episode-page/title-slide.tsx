@@ -14,12 +14,16 @@ export function TitleSlide({
   caption,
   youtubeId,
   talkLabels,
+  targets = [],
 }: {
   title: string;
   caption?: string;
   youtubeId?: string;
   talkLabels?: TalkPlayerLabels;
+  /** The short names the Title slide's Speaker notes target (`title`, `caption`); only these elements carry a `data-target`. */
+  targets?: readonly string[];
 }) {
+  const targetOf = (name: string) => (targets.includes(name) ? { 'data-target': name } : {});
   return (
     <SlideWrapper id={TITLE_ANCHOR} data-slot="title-slide">
       <SlideBackdrop mobile>
@@ -27,8 +31,8 @@ export function TitleSlide({
         <div className="hero-glow hero-glow--accent absolute inset-0 text-accent" />
       </SlideBackdrop>
       <SlideFrame className="justify-center">
-        <HeroTitle>{title}</HeroTitle>
-        {caption && <SlideCaption>{caption}</SlideCaption>}
+        <HeroTitle {...targetOf('title')}>{title}</HeroTitle>
+        {caption && <SlideCaption {...targetOf('caption')}>{caption}</SlideCaption>}
         {youtubeId && talkLabels && <TalkLauncher youtubeId={youtubeId} labels={talkLabels} />}
       </SlideFrame>
     </SlideWrapper>
