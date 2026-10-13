@@ -20,7 +20,7 @@ import { SlideObserver } from './slide-observer.client';
 import { SlideWrapper } from './slide-wrapper';
 import { SlideZones } from './slide-zones.client';
 import { TalkPlayer, type TalkPlayerLabels } from './talk-player.client';
-import { TitleSlide } from './title-slide';
+import { isTitleTarget, TitleSlide } from './title-slide';
 import { UrlStateProvider } from './url-state-provider.client';
 
 /** The Slides grouped by the Section the walk placed each in, in page order. */
@@ -65,7 +65,7 @@ function SlideColumn(props: {
           caption={props.caption}
           youtubeId={props.youtubeId}
           talkLabels={props.talkLabels}
-          targets={props.titleNotes.map(({ target }) => target)}
+          targets={props.titleNotes.map(({ target }) => target).filter(isTitleTarget)}
         />
         {bySection(props.slides).map((section) => (
           <SectionSlides key={section[0].id} slides={section} />

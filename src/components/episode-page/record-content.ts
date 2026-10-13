@@ -4,6 +4,7 @@ import {
   titleContext,
   type EpisodeContext,
   type LocalizedSlide,
+  type SlideContext,
 } from '@/components/slide-master/localized-slide';
 import type { EpisodeRecord, Slide } from '@/components/slide-master/slide';
 import type { RuntimeTranslator } from '@/components/slide-master/slide-base';
@@ -28,7 +29,7 @@ export interface EpisodeContent {
   readonly minutes: number;
   readonly slides: readonly LocalizedSlide[];
   /** The Title slide's own Speaker notes and Voice script; both empty for an Episode that gives it none. */
-  readonly titleContext: Pick<LocalizedSlide, 'notes' | 'voiceScript'>;
+  readonly titleContext: SlideContext;
 }
 
 /**

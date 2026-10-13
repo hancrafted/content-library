@@ -32,6 +32,9 @@ interface SlideText {
   readonly voiceScript: readonly VoiceScriptSegment[];
 }
 
+/** The Speaker notes and Voice script a Slide, or the Title slide, carries: what the Context drawer reads. */
+export type SlideContext = Pick<LocalizedSlide, 'notes' | 'voiceScript'>;
+
 /** Where the walk put a Slide: its wrapper id and its Section's slug. */
 interface Placement {
   readonly id: string;
