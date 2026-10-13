@@ -57,22 +57,27 @@ The design spec in step 3 has nothing to stand on without it.
   - how quiet a Slide should be;
   - what makes an Episode Slide good or bad. The run-1 Slides are a ready set of examples of "not this".
   - It also settles the motion story: which motion, if any, a Slide may carry, since none is importable today.
-- **Where:** `docs/design-system/`, which markdown-harness governs as product reference. Add it to the Claude Desktop project list if the voice sessions need it.
+- **Where, split by kind:**
+  - Facts and rules go in `docs/design/`, which markdown-harness governs as product reference: which Master slides the Slide library holds, which motions a Slide may import.
+  - Taste goes in `docs/design/design-guide.md`: how quiet a Slide is, what is good or bad, the run-1 Slides as "not this". `harvest-run` adds Han's design-gate edits to it later.
+  - Add either to the Claude Desktop project list if the voice sessions need it.
 - **Absorbs:**
-  - LEARNINGS 2 (no design owner);
+  - LEARNINGS 2 (no design owner), now step 3;
   - LEARNINGS 3 (importable motion);
-  - LEARNINGS 4 (define "catalog" in `GLOSSARY.md`, or replace it).
+  - LEARNINGS 4: "catalog" is replaced by **Slide library** and **Master slide** in `GLOSSARY.md`.
 - **Who:** Han, likely through a grill.
 
 ### 3. The `write-design-spec` job and its gate
 
-Grilling in progress in another session.
+Settled in a grill (session 5909c675); the decisions are in `docs/handoff/write-design-spec-decisions.md`, the spec for this step.
 
-- **Shape so far:** after `write-spec`; it writes one design spec per Slide that the existing layouts don't cover. Han reviews the design specs before `implement-episode`.
+- **Shape:** after `write-spec`, in the orchestrator session. It writes the Episode's visual language into the spec issue, then one `ui-ux-pro-max:slides` designer per ticket designs every Slide into the ticket body, with a text wireframe for each new design.
+- **Gate:** tickets are filed `needs-triage`; Han approves a design by relabelling its ticket `ready-for-agent`. The run log records each ticket as approved as drafted or edited, so the gate can become an AI review on evidence.
 - **Needs:** step 2's authoring context as its reference, and the run-1 ticket `Design answer` bullets as worked examples of what not to stop at.
 - **Then:**
   - `write-spec` stops turning `No catalog match` lines into "stop and comment" questions;
-  - `implement-episode` builds from the approved design specs.
+  - the orchestrator rewrites overruled `master:` and `motion:` into the Dossier;
+  - `implement-episode` builds from the approved design answers.
 
 ### 4. Apply the mechanical lessons
 
