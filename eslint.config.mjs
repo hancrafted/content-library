@@ -32,7 +32,7 @@ const USE_CLIENT = "Program > ExpressionStatement[directive='use client']";
 // so the pattern reads `*.client`, never `*.client.tsx`. `+([a-z0-9-])` excludes
 // `.`, which refuses a stacked suffix.
 const OPTIONAL_CLIENT = '+([a-z0-9-])?(.client)';
-// FE-002: inside an Episode, headings h1–h3 mirror the manuscript's spine and
+// FE-002: inside an Episode, headings h1–h3 mirror the Episode's spine and
 // come only from the container and the Slide layouts. A one-off slide may still
 // write `<SlideTitle as="h3">`; h4 and below are free.
 const EPISODE_FILES = 'src/components/episodes/**/*.{ts,tsx}';

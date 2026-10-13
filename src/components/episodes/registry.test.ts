@@ -6,11 +6,11 @@ import { episodeCopy, findEpisode } from './registry';
 /*
  * What every registered Episode shares (FE-002): a record under its own slug,
  * its own text from its folder's `i18n/` (what the Title slide, the page
- * metadata and the landing card read) and the Section list its manuscript fixes.
+ * metadata and the landing card read) and the Section list its Dossier fixes.
  * Per-Episode facts sit in the tables below, written out by hand.
  */
 
-/** The Section openers and page-Slide counts each Episode composes, in manuscript order. */
+/** The Section openers and page-Slide counts each Episode composes, in Dossier order. */
 const COMPOSITION = [
   {
     slug: 'ai-token-economy',
@@ -96,7 +96,7 @@ describe('success cases', () => {
     expect(Object.keys(copy).sort()).toEqual(expectedKeys);
   });
 
-  it.each(COMPOSITION)('composes $slug in manuscript order, each Section opened by the Slide that names it', (c) => {
+  it.each(COMPOSITION)('composes $slug in Dossier order, each Section opened by the Slide that names it', (c) => {
     // ARRANGE
     const expectedSections = c.sections;
     // ACT
