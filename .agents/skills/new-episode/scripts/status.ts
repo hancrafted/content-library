@@ -2,7 +2,7 @@
 // per-run pipeline with its state, derived from pipeline.yml and run-log.md.
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
-import { runStatus } from './status.pure.ts';
+import { frontmatterStatus, runStatus } from './status.pure.ts';
 
 const slug = process.argv[2];
 if (!slug) {
@@ -21,6 +21,6 @@ const runLog = existsSync(runLogFile) ? readFileSync(runLogFile, 'utf8') : '';
 function outputStatus(output: string): string | null {
   const file = output.replace('<slug>', slug as string);
   if (!existsSync(file)) return null;
-  return /^status: (\S+)$/m.exec(readFileSync(file, 'utf8'))?.[1] ?? null;
+  return frontmatterStatus(readFileSync(file, 'utf8'));
 }
 for (const { id, state } of runStatus(readFileSync(pipeline, 'utf8'), runLog, outputStatus)) console.log(`${state.padEnd(8)}${id}`);
