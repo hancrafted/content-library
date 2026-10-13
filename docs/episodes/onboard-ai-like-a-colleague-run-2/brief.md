@@ -5,6 +5,9 @@ status: draft
 generated:
   by: claude-code/opus-5.5
   at: 2026-10-13T14:08:20Z
+verified:
+  - by: process:markdown-harness
+    at: 2026-10-13T14:12:30Z
 ---
 
 # Why you must onboard AI like a new colleague

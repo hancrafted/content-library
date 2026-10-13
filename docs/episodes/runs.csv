@@ -48,3 +48,4 @@ run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at
 2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,implement-episode,implementor,2,pass,,153,85358,2026-10-13T06:04:50Z
 2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,implement-episode,reviewer,2,pass,,25,,2026-10-13T06:06:58Z
 2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,open-pr,implementor,1,pass,,49,58068,2026-10-13T06:09:26Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,brief-grill,implementor,1,pass,,60,,2026-10-13T14:12:40Z
