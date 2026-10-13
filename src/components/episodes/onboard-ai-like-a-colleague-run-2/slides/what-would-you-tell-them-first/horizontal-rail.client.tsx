@@ -176,7 +176,7 @@ function RailSegment({ index }: { index: number }) {
             key={at}
             aria-hidden="true"
             style={timing(gapFadeDelayMs(RAIL_ITEMS.length))}
-            className={`absolute left-1/2 w-0 border-l border-dashed border-border @5xl:top-1/2 @5xl:bottom-auto @5xl:h-0 @5xl:w-auto @5xl:border-t @5xl:border-l-0 ${HALF[at]} ${styles.gap}`}
+            className={`absolute left-1/2 w-0 border-l border-dashed border-muted-foreground @5xl:top-1/2 @5xl:bottom-auto @5xl:h-0 @5xl:w-auto @5xl:border-t @5xl:border-l-0 ${HALF[at]} ${styles.gap}`}
           />
         ) : (
           <span key={at} aria-hidden="true">
