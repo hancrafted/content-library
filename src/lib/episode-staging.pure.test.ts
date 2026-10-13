@@ -1,11 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import {
-  checkResearchIndex,
-  checkRunsCsv,
-  checkStagingFolder,
-  unsettledBriefSections,
-  type KnownVisuals,
-} from './episode-staging.pure';
+import { checkResearchIndex, checkRunsCsv, checkStagingFolder, type KnownVisuals } from './episode-staging.pure';
 
 /*
  * In-memory staging folders: a small Dossier, then one change per test that
@@ -73,28 +67,6 @@ const RECALL = 'research/recall/research.md';
 
 const RECALL_ENTRY = '- [Why recall drops](research/recall/research.md) — Recall is U-shaped.';
 
-const BRIEF = `---
-type: brief
-status: draft
----
-
-# Budget
-
-## Format
-
-Short.
-
-## Hook
-
-Not settled.
-
-## Threads
-
-### A thread
-
-Not settled.
-`;
-
 function runLog(entries: readonly string[]): string {
   return ['# Run log', '', ...entries.flatMap((entry) => [`## ${entry}`, '', '### Notes', '', 'Done.', '']), ''].join(
     '\n',
@@ -154,15 +126,6 @@ describe('success cases', () => {
     const findings = checkRunsCsv(csv);
     // ASSERT
     expect(findings).toEqual([]);
-  });
-
-  it('finds no unsettled section in a Brief where every heading holds a choice', () => {
-    // ARRANGE
-    const brief = BRIEF.replaceAll('Not settled.', 'Settled.');
-    // ACT
-    const unsettled = unsettledBriefSections(brief);
-    // ASSERT
-    expect(unsettled).toEqual([]);
   });
 });
 
@@ -509,15 +472,6 @@ describe('failure cases', () => {
     expect(findings).toMatchObject(expected);
     expect(findings[0].message).toContain(expectedHeader);
   });
-
-  it('names every Brief heading that still reads Not settled.', () => {
-    // ARRANGE
-    const expected = ['Hook', 'A thread'];
-    // ACT
-    const unsettled = unsettledBriefSections(BRIEF);
-    // ASSERT
-    expect(unsettled).toEqual(expected);
-  });
 });
 
 describe('edge cases', () => {
@@ -637,14 +591,5 @@ describe('edge cases', () => {
     const found = csvs.map((csv) => kinds(checkRunsCsv(csv)));
     // ASSERT
     expect(found).toEqual(expectedKinds);
-  });
-
-  it('does not take "Not settled." inside a longer paragraph as the marker', () => {
-    // ARRANGE
-    const brief = BRIEF.replaceAll('Not settled.', 'Not settled. We chose the budget framing instead.');
-    // ACT
-    const unsettled = unsettledBriefSections(brief);
-    // ASSERT
-    expect(unsettled).toEqual([]);
   });
 });

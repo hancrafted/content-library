@@ -42,7 +42,7 @@ jobs:
     before: [mh-query]
     outputs: [docs/episodes/<slug>/brief.md]
     checks: [mh, vitest]
-    retries: 0
+    retries: 2
     gate: human
     agents:
       - type: implementor
@@ -50,6 +50,11 @@ jobs:
         references: [references/brief-grill.md]
         model: inherit
         session: orchestrator
+      - type: reviewer
+        skills: []
+        references: [references/brief-grill.md]
+        rubric: references/brief-grill.md#rubric
+        model: opus
 
   # An information architect's call, before the pipeline names any research file.
   - id: categorize-research

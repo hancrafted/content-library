@@ -70,5 +70,23 @@ describe('the Brief template in the brief-grill skill', () => {
       // ASSERT
       expect(result.summary.totalViolations).toBeGreaterThan(0);
     });
+
+    it('fails the Brief rule when the Slides section is missing', () => {
+      // ARRANGE
+      const withoutSlides = briefTemplate().replace(/^## Slides\n[\s\S]*?(?=^## )/m, '');
+      // ACT
+      const result = checkAsBrief(withoutSlides) as { summary: { totalViolations: number } };
+      // ASSERT
+      expect(result.summary.totalViolations).toBeGreaterThan(0);
+    });
+
+    it('fails the Brief rule when a Slides section holds no Section heading', () => {
+      // ARRANGE
+      const withoutSection = briefTemplate().replace(/^### The (first|second) Section\n/gm, '');
+      // ACT
+      const result = checkAsBrief(withoutSection) as { summary: { totalViolations: number } };
+      // ASSERT
+      expect(result.summary.totalViolations).toBeGreaterThan(0);
+    });
   });
 });

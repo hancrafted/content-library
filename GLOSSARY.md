@@ -86,7 +86,9 @@ _Avoid_: Transition, segue
 
 ## Episode production
 
-**Brief**: the goals an Episode is written towards, fixed before any research: its audience, learning goal, actionables, hook and Threads. The structured result of a grilling session; just enough to start, and not kept in step once the draft exists.
+**Brief**: the goals an Episode is written towards, fixed before any research: its audience, learning goal, actionables, hook and Threads, and the Spine that carries them out. The structured result of a grilling session; just enough to start. Its goals stay as settled once the draft exists; its Spine is kept in step with the Dossier.
+
+**Spine**: the Brief's ordered Sections, each listing its **Brief Slides**: a planned page Slide's title, purpose and visual idea. The Red thread made concrete. write-dossier keeps it title for title, and names every change in a `Spine change:` line of its run-log entry.
 _Avoid_: Outline, pitch, plan
 
 **Dossier**: the one text an Episode is built and recorded from: its h1 is the Title slide, its h2s the Sections and its h3s the Slides, and each Slide carries its Visual, Speaker notes with citations and Voice script.

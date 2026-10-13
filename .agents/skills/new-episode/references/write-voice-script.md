@@ -18,7 +18,7 @@ The shape is the `staging-dossier` and `staging-dossier-body` rules': `npx mh qu
 
 ## Done when
 
-The job's `checks:` in `assets/pipeline.yml` run by the check table in [SKILL.md](../SKILL.md#the-job-loop). Its `vitest` check holds that only Voice script lines changed against `write-dossier`'s commit. Then the orchestrator commits with `Gate: draft dossier` and stops: Han reads the whole Dossier and edits it before approving.
+The job's `checks:` in `assets/pipeline.yml` run by the check table in [SKILL.md](../SKILL.md#the-job-loop). Its `vitest` check holds that only Voice script lines changed against `write-dossier`'s commit. Then the orchestrator commits with `Gate: draft dossier` and stops: Han reads the whole Dossier and edits it before approving. In the stop message, quote every `Spine change:` line of the `write-dossier` entry, so Han judges each change to his spine first.
 
 ## Rubric
 

@@ -5,6 +5,7 @@
  * is the caller's job, so every rule tests against an in-memory folder.
  */
 
+import { checkBrief } from './episode-staging-brief.pure';
 import { checkStagingOrder } from './episode-staging-order.pure';
 import { checkTexts } from './episode-staging-texts.pure';
 import { checkTitleSlide } from './episode-staging-title.pure';
@@ -175,7 +176,7 @@ function checkFeedback(files: Readonly<Record<string, string>>, dossier: readonl
  * relative to the folder (`dossier.md`, `feedback/01/feedback.md`) to its text.
  */
 export function checkStagingFolder(files: Readonly<Record<string, string>>, known: KnownVisuals): Finding[] {
-  return [...checkStagingOrder(files), ...checkTexts(files), ...checkDossier(files, known)];
+  return [...checkStagingOrder(files), ...checkTexts(files), ...checkBrief(files), ...checkDossier(files, known)];
 }
 
 /** The checks that read the Dossier; none until it exists. */
@@ -232,19 +233,4 @@ export function checkRunsCsv(csv: string): Finding[] {
   if (header === RUNS_CSV_HEADER) return [];
   const message = `The runs CSV header is ${JSON.stringify(header)}; it must be exactly "${RUNS_CSV_HEADER}".`;
   return [{ kind: 'runs-header', file: 'runs.csv', message }];
-}
-
-const NOT_SETTLED = 'Not settled.';
-/**
- * The Brief headings whose body is only `Not settled.`, the marker the Brief
- * grill writes when time runs out. markdown-harness accepts it as prose, so
- * the orchestrator asks this before it starts on a Brief.
- */
-export function unsettledBriefSections(brief: string): string[] {
-  return blocksOf(bodyLines(brief))
-    .filter(({ body }) => {
-      const text = body.filter((line) => line.trim() !== '');
-      return text.length === 1 && text[0].trim() === NOT_SETTLED;
-    })
-    .map(({ heading }) => heading.text);
 }
