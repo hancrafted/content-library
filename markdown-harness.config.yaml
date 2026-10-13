@@ -111,14 +111,18 @@ frontmatter:
         question:
           presence: required
           intent: 'The research question in the words that first asked it, so retrieval can compare it with a new one. Fail if it holds more than one question, or differs from the Brief that asked it when that Brief is at hand.'
-        researched_on:
+        generated.by:
+          presence: required
+          format: actor
+          intent: 'Who wrote the research, as an OKF actor: `<producer>/<version>` for an agent (`claude-code/opus-5.5`), `human:<id>` for a person (`human:han`). Fail if an agent-written file names a person, or a file Han edited names an agent.'
+        generated.at:
           presence: required
           format: datetime
-          intent: 'When the Sources were read, so a reader can weigh their age.'
+          intent: 'When the Sources were read and the Findings last changed in substance, with an explicit UTC offset, so a reader can weigh their age.'
         stale_after:
           presence: required
           format: datetime
-          intent: 'When the Findings stop being trustworthy: a year after researched_on, or six months when they concern a named product or version, or a price. Fail if it is later than that.'
+          intent: 'When the Findings stop being trustworthy: a year after generated.at, or six months when they concern a named product or version, or a price. Fail if it is later than that.'
     - ruleId: feedback
       fileNames: [feedback.md]
       intent: "One round of Han's feedback, kept so every item reaches the file it changes and the style harvest can learn from every round."

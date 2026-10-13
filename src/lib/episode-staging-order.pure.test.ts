@@ -22,11 +22,13 @@ function feedback(round: number): string {
   ].join('\n');
 }
 
-function researchOn(researchedOn: string, accessed: readonly string[]): string {
+function researchOn(generatedAt: string, accessed: readonly string[]): string {
   return [
     '---',
     'type: research',
-    `researched_on: ${researchedOn}`,
+    'generated:',
+    '  by: claude-code/opus-5.5',
+    `  at: ${generatedAt}`,
     '---',
     '',
     '# Why?',
@@ -89,16 +91,18 @@ describe('failure cases', () => {
     expect(findings[0].message).toContain(expectedFirst);
   });
 
-  it('names a Source accessed after the research file says it was researched', () => {
+  it('names a Source accessed after generated.at, the instant the research file says it was made', () => {
     // ARRANGE
     const files = { [RECALL]: researchOn('2026-10-11T23:00:00Z', ['2026-10-10', '2026-10-12']) };
     const expected = [{ kind: 'research-date', file: RECALL }];
     const expectedDate = '2026-10-12';
+    const expectedKey = 'generated.at';
     // ACT
     const findings = checkStagingOrder(files);
     // ASSERT
     expect(findings).toMatchObject(expected);
     expect(findings[0].message).toContain(expectedDate);
+    expect(findings[0].message).toContain(expectedKey);
   });
 
   it('names a run-log entry stamped earlier than the entry above it', () => {

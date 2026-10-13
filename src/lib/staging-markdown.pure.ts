@@ -5,6 +5,8 @@
  * staging files' markdown-harness rules already guarantee.
  */
 
+import { parse } from 'yaml';
+
 export interface Heading {
   level: number;
   text: string;
@@ -82,19 +84,26 @@ export function orderedList(body: readonly string[]): { items: ListItem[]; stray
   return { items, strays };
 }
 
-/** A one-line YAML scalar's value: single quotes undoubled, double-quote escapes resolved, plain text as is. */
-function yamlScalar(raw: string): string {
-  const value = raw.trim();
-  if (value.startsWith("'") && value.endsWith("'")) return value.slice(1, -1).replaceAll("''", "'");
-  if (value.startsWith('"') && value.endsWith('"')) return JSON.parse(value) as string;
-  return value;
+/**
+ * A frontmatter field's value as YAML reads it, as text, or null when the frontmatter has no such field, the
+ * field is not a scalar, or the frontmatter is not valid YAML. A dotted key (`generated.at`) reads through nested
+ * mappings, written in block or flow form, to any depth; a key that itself contains a dot cannot be addressed.
+ */
+export function frontmatterField(markdown: string, key: string): string | null {
+  const block = FRONTMATTER.exec(markdown)?.[0];
+  if (block === undefined) return null;
+  let value: unknown;
+  try {
+    value = parse(block.replace(/^---\n/, '').replace(/\n---\n$/, ''));
+  } catch {
+    return null;
+  }
+  const found = key.split('.').reduce<unknown>((node, part) => (isMapping(node) ? node[part] : undefined), value);
+  return typeof found === 'string' || typeof found === 'number' || typeof found === 'boolean' ? String(found) : null;
 }
 
-/** A one-line frontmatter field's value as YAML reads it, or null when the frontmatter has no such field. */
-export function frontmatterField(markdown: string, key: string): string | null {
-  const frontmatter = FRONTMATTER.exec(markdown)?.[0] ?? '';
-  const line = frontmatter.split('\n').find((candidate) => candidate.startsWith(`${key}: `));
-  return line === undefined ? null : yamlScalar(line.slice(key.length + 2));
+function isMapping(node: unknown): node is Record<string, unknown> {
+  return typeof node === 'object' && node !== null && !Array.isArray(node);
 }
 
 /** Every page slide's anchor, `<section slug>--<slide slug>`, from the Dossier's h2 and h3 headings. */
