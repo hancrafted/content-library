@@ -6,6 +6,7 @@
  */
 
 import { checkStagingOrder } from './episode-staging-order.pure';
+import { checkTitleSlide } from './episode-staging-title.pure';
 import { unless, type Finding } from './finding.pure';
 import {
   blocksOf,
@@ -37,53 +38,49 @@ function checkSlugs(dossier: readonly Heading[]): Finding[] {
     }));
 }
 
-const TITLE_BLOCKS = ['Speaker notes', 'Voice script'];
+const VISUAL_LINE = /^master: (\S+) · motion: (\S+)$/;
+const TITLE_LINE = /^title: \S.*$/;
+/** The motion value that says the Slide carries no motion; every other value must be a motion effect. */
+const NO_MOTION = 'none';
 
-/**
- * The Title slide's block (the h1 and its h4s): no prose, and only the optional
- * Speaker notes and Voice script, which the writing jobs leave out and a
- * feedback round adds (FE-004 §6). Each is checked like any Slide's.
- */
-function checkTitleSlide(blocks: readonly Block[]): Finding[] {
-  const finding = (message: string): Finding => ({ kind: 'title-slide', file: 'dossier.md', message });
-  const end = blocks.findIndex(({ heading }, index) => index > 0 && heading.level <= 3);
-  const title = blocks.slice(0, end === -1 ? blocks.length : end);
-  if (title[0]?.heading.level !== 1) return [];
-  const stray = title
-    .slice(1)
-    .filter(({ heading }) => heading.level !== 4 || !TITLE_BLOCKS.includes(heading.text))
-    .map(({ heading }) =>
-      finding(`The Title slide holds "${heading.text}"; only Speaker notes and Voice script may sit under the h1.`),
-    );
-  const proseFindings = title[0].body
-    .filter((line) => line.trim() !== '')
-    .map((line) =>
-      finding(
-        `The Title slide's h1 holds prose "${line}"; the spoken opening goes under the first h2, or in a Voice script block.`,
-      ),
-    );
-  return [...proseFindings, ...stray];
+function checkVisualLines(where: string, lines: readonly string[], known: KnownVisuals): string[] {
+  const [first = '', second = ''] = lines;
+  const match = VISUAL_LINE.exec(first);
+  if (match === null)
+    return [`${where} must open with "master: <name> · motion: <effect>", but opens with "${first}".`];
+  const [, master, motion] = match;
+  return [
+    ...unless(
+      known.masters.includes(master),
+      `${where} names master "${master}", which is neither a frame component nor a slide-master Slide.`,
+    ),
+    ...unless(
+      motion === NO_MOTION || known.motions.includes(motion),
+      `${where} names motion "${motion}", which is neither "${NO_MOTION}" nor a motion effect.`,
+    ),
+    ...unless(
+      !second.startsWith('title:') || TITLE_LINE.test(second),
+      `${where} has a title line not of the form "title: <on-screen title>": "${second}".`,
+    ),
+  ];
 }
 
-const VISUAL_LINE = /^master: (\S+) · motion: (\S+)$/;
-
 function checkVisuals(blocks: readonly Block[], known: KnownVisuals): Finding[] {
+  const pageSlides = new Set(
+    blocks.filter(({ heading }) => heading.level === 3 && heading.slug !== null).map(({ heading }) => heading.slug),
+  );
   return h4s(blocks, 'Visual').flatMap(({ owner, body }) => {
-    const first = body.find((line) => line.trim() !== '') ?? '';
     const where = `The Visual of {#${owner}}`;
-    const finding = (message: string): Finding => ({ kind: 'visual', file: 'dossier.md', message });
-    const match = VISUAL_LINE.exec(first);
-    if (match === null)
-      return [finding(`${where} must open with "master: <name> · motion: <effect>", but opens with "${first}".`)];
-    const [, master, motion] = match;
-    const masterNote = `${where} names master "${master}", which is neither a frame component nor a slide-master Slide.`;
-    return [
-      ...unless(known.masters.includes(master), finding(masterNote)),
-      ...unless(
-        known.motions.includes(motion),
-        finding(`${where} names motion "${motion}", which is no motion effect.`),
-      ),
-    ];
+    const messages = pageSlides.has(owner)
+      ? checkVisualLines(
+          where,
+          body.filter((line) => line.trim() !== ''),
+          known,
+        )
+      : [
+          `${where} does not belong: the Title slide and section slides carry no Visual, they use the kit's title and section layouts with motion: none.`,
+        ];
+    return messages.map((message): Finding => ({ kind: 'visual', file: 'dossier.md', message }));
   });
 }
 

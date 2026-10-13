@@ -17,7 +17,7 @@ brief: ./brief.md
 
 #### Visual
 
-master: basic-page · motion: liquid-ink-transition
+master: basic-page · motion: none
 
 A window drawn as a bar that fills with blocks, one per message, while the share left for the newest answer shrinks.
 

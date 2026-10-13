@@ -209,17 +209,14 @@ describe('failure cases', () => {
   it('reports an h4 other than Speaker notes and Voice script under the h1', () => {
     // ARRANGE
     const files = folder({
-      'dossier.md': DOSSIER.replace(
-        '# Budget {#budget}\n',
-        '# Budget {#budget}\n\n#### Visual\n\nmaster: basic-page · motion: liquid-ink-transition\n',
-      ),
+      'dossier.md': DOSSIER.replace('# Budget {#budget}\n', '# Budget {#budget}\n\n#### Sources\n\n1. A book.\n'),
     });
     const expectedKinds = ['title-slide'];
     // ACT
     const findings = checkStagingFolder(files, KNOWN_VISUALS);
     // ASSERT
     expect(kinds(findings)).toEqual(expectedKinds);
-    expect(findings[0].message).toContain('Visual');
+    expect(findings[0].message).toContain('Sources');
   });
 
   it("checks the Speaker notes under the h1 like any Slide's", () => {
@@ -267,6 +264,63 @@ describe('failure cases', () => {
     // ASSERT
     expect(kinds(findings)).toEqual(expectedKinds);
     expect(findings[0].message).toContain(expectedName);
+  });
+
+  it('accepts motion none as a Visual motion: the Slide carries no motion', () => {
+    // ARRANGE
+    const files = folder({ 'dossier.md': DOSSIER.replace('motion: liquid-ink-transition', 'motion: none') });
+    const expectedFindings: string[] = [];
+    // ACT
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
+    // ASSERT
+    expect(kinds(findings)).toEqual(expectedFindings);
+  });
+
+  it('accepts a title line after the master line as the on-screen title', () => {
+    // ARRANGE
+    const files = folder({
+      'dossier.md': DOSSIER.replace('motion: liquid-ink-transition', 'motion: none\ntitle: Where the budget goes'),
+    });
+    const expectedFindings: string[] = [];
+    // ACT
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
+    // ASSERT
+    expect(kinds(findings)).toEqual(expectedFindings);
+  });
+
+  it('reports a title line that names no title', () => {
+    // ARRANGE
+    const files = folder({
+      'dossier.md': DOSSIER.replace('motion: liquid-ink-transition', 'motion: none\ntitle:'),
+    });
+    const expectedKinds = ['visual'];
+    const expectedForm = 'title: <on-screen title>';
+    // ACT
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
+    // ASSERT
+    expect(kinds(findings)).toEqual(expectedKinds);
+    expect(findings[0].message).toContain(expectedForm);
+  });
+
+  it('reports a Visual on the Title slide or a section slide, which use the kit layouts with motion none', () => {
+    // ARRANGE
+    const visual = '#### Visual\n\nmaster: basic-page · motion: none\n\n';
+    const files = folder({
+      'dossier.md': DOSSIER.replace('# Budget {#budget}\n\n', `# Budget {#budget}\n\n${visual}`).replace(
+        '## Why it forgets {#why}\n\n',
+        `## Why it forgets {#why}\n\n${visual}`,
+      ),
+    });
+    const expectedKinds = ['visual', 'visual'];
+    const expectedSlugs = ['budget', 'why'];
+    // ACT
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
+    // ASSERT
+    expect(kinds(findings)).toEqual(expectedKinds);
+    expect(findings.map(({ message }) => expectedSlugs.some((slug) => message.includes(`{#${slug}}`)))).toEqual([
+      true,
+      true,
+    ]);
   });
 
   it('reports a Visual that does not open with the master and motion line', () => {

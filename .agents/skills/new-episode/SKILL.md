@@ -53,7 +53,7 @@ _Done when_ the todo list holds every job the script does not print as `done`.
 
 ### 6. Run the jobs
 
-Run every job the status script prints as `ready` by [the job loop](#the-job-loop); jobs that are ready together run in parallel as background subagents, each job with `isolation: worktree` in its own worktree. The script reads the run log alone, so a gate job reads `done` once its draft is logged: the gates are step 5's checks. After each job's run-log entry, run the script again for the next ready jobs. A blocked job blocks every job that `needs` it, directly or through another job. A job that `wants` it waits for it, then runs anyway: tell its implementor which wanted jobs blocked.
+Run every job the status script prints as `ready` by [the job loop](#the-job-loop); jobs that are ready together run in parallel as background subagents, each job with `isolation: worktree` in its own worktree. A gate job prints `gate` once its draft is logged, until its output's `status:` is `approved`; step 5's checks cover the Brief and pipeline gates. After each job's run-log entry, run the script again for the next ready jobs. A blocked job blocks every job that `needs` it, directly or through another job. A job that `wants` it waits for it, then runs anyway: tell its implementor which wanted jobs blocked.
 
 _Done when_ every todo is done or blocked, and each one has its run-log entry.
 
