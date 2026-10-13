@@ -1,5 +1,6 @@
 ---
 type: feature-guide
+title: Design system
 stale_after: 2027-01-11T00:00:00Z
 ---
 

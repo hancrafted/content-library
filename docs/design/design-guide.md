@@ -1,5 +1,6 @@
 ---
 type: feature-guide
+title: Design guide
 stale_after: 2027-01-13T00:00:00Z
 ---
 

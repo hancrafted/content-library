@@ -10,6 +10,9 @@ frontmatter:
           presence: required
           allowed:
             - { value: feature-guide, intent: Product reference that must be re-checked against the code. }
+        title: &title
+          presence: required
+          intent: "The file name for a reader, equal to the file's h1 so retrieval can list the file by it; the title-matches-h1 check compares them."
         stale_after: { presence: required, format: datetime }
     - ruleId: agent-guide
       folders: [docs/agents/]
@@ -19,13 +22,34 @@ frontmatter:
           presence: required
           allowed:
             - { value: agent-guide, intent: Method and procedure that does not depend on the product. }
+        title: *title
     - ruleId: glossary
       fileNames: [GLOSSARY.md]
       intent: 'The glossary holds the words spoken in voice sessions, so it carries a review date and an agent past it re-checks the terms'
       assess:
         stale: Check each term against the code and ADRs before relying on it, then move stale_after.
       fields:
+        type:
+          presence: required
+          allowed:
+            - { value: glossary, intent: 'The words spoken in voice sessions, each with the one meaning it has here.' }
+        title: *title
         stale_after: { presence: required, format: datetime }
+    # OKF §8: an index file carries no frontmatter except `okf_version`, which declares the folder an OKF
+    # bundle (design-ADR 0005). Not governed by a `type` or a `title`, so it is its own rule.
+    - ruleId: llm-wiki-index
+      folders: [docs/llm-wiki/]
+      fileNames: [index.md]
+      intent: 'docs/llm-wiki/ is a declared OKF v0.2 bundle, and OKF §8 allows its index.md no frontmatter except the version that declares it'
+      unknownKeys: forbidden
+      fields:
+        okf_version:
+          presence: required
+          allowed:
+            - {
+                value: '0.2',
+                intent: 'The OKF revision every file in docs/llm-wiki/ follows, pinned by design-ADR 0005.',
+              }
     - ruleId: staging-brief
       fileNames: [brief.md]
       intent: 'A Brief is written before any research and is the yardstick every later artifact is judged against, so each goal is concrete enough to judge a Dossier by. Fail if a goal is too vague to judge a Dossier against, or the body drafts Slides or Sections.'
@@ -35,6 +59,7 @@ frontmatter:
           presence: required
           allowed:
             - { value: brief, intent: 'Goals: what the Episode must achieve, stated before it is written.' }
+        title: *title
         status:
           presence: required
           allowed:
@@ -63,6 +88,7 @@ frontmatter:
                 value: dossier,
                 intent: 'The Episode in one file: what the viewer sees, the cited talking points, and what the speaker says, per Slide.',
               }
+        title: *title
         status: &staging-status
           presence: required
           allowed:
@@ -104,6 +130,7 @@ frontmatter:
           presence: required
           allowed:
             - { value: research, intent: 'Evidence: what the Sources show, reported for any reader.' }
+        title: *title
         description:
           presence: required
           maxLength: 200
@@ -119,6 +146,20 @@ frontmatter:
           presence: required
           format: datetime
           intent: 'When the Sources were read and the Findings last changed in substance, with an explicit UTC offset, so a reader can weigh their age.'
+        sources:
+          minItems: 1
+          intent: 'The primary sources the Findings rest on, as OKF §5.1 `sources`, each cited in the body as a `[^id]` footnote. Fail if a source reports on a work instead of being it, unless it is an earlier research file this one extends.'
+        sources[].id:
+          presence: required
+          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          intent: 'The footnote label a Finding cites the source by, `[^id]`, in lowercase words joined by hyphens, unique within the file.'
+        sources[].resource:
+          presence: required
+          format: uri
+          intent: 'The URL or repo path of the source itself, the work and not a page about it.'
+        sources[].title:
+          presence: required
+          intent: 'The source as a reader would name it: `<author>, <title>`.'
         stale_after:
           presence: required
           format: datetime
@@ -132,6 +173,7 @@ frontmatter:
           presence: required
           allowed:
             - { value: feedback, intent: "Han's feedback for one round, each change as he asked for it." }
+        title: *title
         round:
           presence: required
           intent: 'Which pass of the feedback loop this is, counting from 1, one file per round.'
@@ -402,19 +444,7 @@ body-structure:
               [
                 {
                   title: Findings,
-                  intent: 'The evidence behind the Answer, one finding per item, each citing its Source as `[n]`. Fail if a finding cites no Source, or gives an opinion instead of what a Source shows.',
-                },
-              ],
-            mayHold: [ordered-list],
-          }
-        - {
-            purpose: heading,
-            level: 2,
-            allowed:
-              [
-                {
-                  title: Sources,
-                  intent: 'Primary sources, numbered as the Findings cite them: `<author>, <title> — <URL> — accessed <date>`. Fail if no Finding cites a source. Fail if a source reports on a work instead of being it, unless it is an earlier research file this one extends.',
+                  intent: 'The evidence behind the Answer, one finding per item, each citing its source as a `[^id]` footnote of the frontmatter `sources`, whose definitions close the file. Fail if a finding cites no source, or gives an opinion instead of what a source shows.',
                 },
               ],
             mayHold: [ordered-list],
@@ -433,6 +463,13 @@ body-structure:
           }
     - ruleId: feedback-body
       fileNames: [feedback.md]
+      headings:
+        - {
+            purpose: heading,
+            level: 1,
+            pattern: '^Feedback round \d+$',
+            intent: "Names the round, `Feedback round <n>`, the number the file's `round` holds.",
+          }
       intent: 'One list of items, each a single change keyed to its Slide and tagged with where it lands, so it routes to the Dossier, the implementation, or the recording. Fail if an item holds more than one change, its tag sends it to the wrong place, or it cannot be acted on without asking Han.'
       undefinedHeadings: forbid
     - ruleId: run-log-body

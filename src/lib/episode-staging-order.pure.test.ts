@@ -7,7 +7,6 @@ import { checkStagingOrder } from './episode-staging-order.pure';
  */
 
 const FEEDBACK_PATH = 'feedback/01/feedback.md';
-const RECALL = 'research/recall/research.md';
 
 function feedback(round: number): string {
   return [
@@ -17,28 +16,9 @@ function feedback(round: number): string {
     'via: app',
     '---',
     '',
+    `# Feedback round ${round}`,
+    '',
     '- `why--spent` · content — Cut it.',
-    '',
-  ].join('\n');
-}
-
-function researchOn(generatedAt: string, accessed: readonly string[]): string {
-  return [
-    '---',
-    'type: research',
-    'generated:',
-    '  by: claude-code/opus-5.5',
-    `  at: ${generatedAt}`,
-    '---',
-    '',
-    '# Why?',
-    '',
-    '## Sources',
-    '',
-    ...accessed.map(
-      (date, index) =>
-        `${index + 1}. Liu et al., Lost in the Middle — https://arxiv.org/abs/2307.03172 — accessed ${date}`,
-    ),
     '',
   ].join('\n');
 }
@@ -50,12 +30,11 @@ function runLog(entries: readonly string[]): string {
 }
 
 describe('success cases', () => {
-  it('finds nothing when feedback rounds match their folders, research postdates its Sources and the run log runs forward', () => {
+  it('finds nothing when feedback rounds match their folders, and the run log runs forward', () => {
     // ARRANGE
     const files = {
       [FEEDBACK_PATH]: feedback(1),
       'feedback/02/feedback.md': feedback(2),
-      [RECALL]: researchOn('2026-10-12T00:00:00Z', ['2026-10-11']),
       'run-log.md': runLog(['brief-grill · 2026-10-12T09:00:00Z', 'research · 2026-10-12T10:15:00Z']),
     };
     // ACT
@@ -91,20 +70,6 @@ describe('failure cases', () => {
     expect(findings[0].message).toContain(expectedFirst);
   });
 
-  it('names a Source accessed after generated.at, the instant the research file says it was made', () => {
-    // ARRANGE
-    const files = { [RECALL]: researchOn('2026-10-11T23:00:00Z', ['2026-10-10', '2026-10-12']) };
-    const expected = [{ kind: 'research-date', file: RECALL }];
-    const expectedDate = '2026-10-12';
-    const expectedKey = 'generated.at';
-    // ACT
-    const findings = checkStagingOrder(files);
-    // ASSERT
-    expect(findings).toMatchObject(expected);
-    expect(findings[0].message).toContain(expectedDate);
-    expect(findings[0].message).toContain(expectedKey);
-  });
-
   it('names a run-log entry stamped earlier than the entry above it', () => {
     // ARRANGE
     const late = 'write-voice-script · 2026-10-12T10:00:00Z';
@@ -121,15 +86,6 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('accepts a Source accessed on the day the research file was researched, at any time of day', () => {
-    // ARRANGE
-    const files = { [RECALL]: researchOn('2026-10-12T00:00:00Z', ['2026-10-12', '2026-10-01']) };
-    // ACT
-    const findings = checkStagingOrder(files);
-    // ASSERT
-    expect(findings).toEqual([]);
-  });
-
   it('accepts run-log entries stamped at the same instant, compared as instants across offsets', () => {
     // ARRANGE
     const files = {

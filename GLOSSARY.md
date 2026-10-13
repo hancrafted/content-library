@@ -1,4 +1,6 @@
 ---
+type: glossary
+title: Content library
 stale_after: 2027-01-11T00:00:00Z
 ---
 

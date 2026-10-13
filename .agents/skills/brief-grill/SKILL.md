@@ -77,6 +77,7 @@ Every heading, Style included, is required and stays in this order, except Threa
 ```markdown
 ---
 type: brief
+title: The working title of the Episode
 status: draft
 ---
 

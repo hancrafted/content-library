@@ -1,5 +1,6 @@
 ---
 type: brief
+title: The context window is a budget
 status: approved
 ---
 
