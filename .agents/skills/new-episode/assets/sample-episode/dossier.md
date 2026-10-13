@@ -38,7 +38,7 @@ A window drawn as a bar that fills with blocks, one per message, while the share
 
 #### Visual
 
-master: three-column · motion: liquid-ink-transition
+master: three-column · motion: none
 
 #### Speaker notes
 
@@ -59,7 +59,7 @@ master: three-column · motion: liquid-ink-transition
 
 #### Visual
 
-master: basic-page · motion: liquid-ink-transition
+master: basic-page · motion: none
 
 #### Speaker notes
 
@@ -74,7 +74,7 @@ master: basic-page · motion: liquid-ink-transition
 
 #### Visual
 
-master: basic-page · motion: liquid-ink-transition
+master: basic-page · motion: none
 
 #### Speaker notes
 
