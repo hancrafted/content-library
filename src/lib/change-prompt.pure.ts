@@ -29,7 +29,7 @@ export function formatChangePrompt(changes: readonly Change[]): string {
     ].join('\n'),
   );
   return [
-    'Adopt these design-token changes into the source, following docs/design-system/README.md.',
+    'Adopt these design-token changes into the source, following docs/design/design-system.md.',
     'Change only the tokens listed, in the theme named, and keep the other theme as it is.',
     '',
     body.join('\n\n'),

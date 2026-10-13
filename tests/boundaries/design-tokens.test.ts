@@ -3,7 +3,7 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 /*
- * The global token set (FE-011, docs/design-system/README.md): raw values sit
+ * The global token set (FE-011, docs/design/design-system.md): raw values sit
  * on `:root` and `.dark`, `@theme inline` maps each utility to them, so every
  * token stays runtime-editable. Read from the stylesheet text, because
  * Tailwind resolves the utilities only at build time.

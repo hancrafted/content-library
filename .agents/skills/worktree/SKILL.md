@@ -11,11 +11,15 @@ Worktrees live in `.worktrees/<branch with / as ->`, branched from freshly fetch
 
 `npm run wt:new -- <branch>` fetches, adds the worktree, runs `npm ci` and `npx husky` inside it. The checkout is done when the command prints `✔ worktree ready`; `cd` there and work.
 
+`--base <branch>` starts the worktree from that local branch instead of `origin/main`, with no fetch: `npm run wt:new -- episode/<slug>--<job id> --base episode/<slug>` gives an Episode job its own worktree on the integration branch.
+
 A real `node_modules` is the point: a symlinked one breaks Turbopack, `mh check` and the hooks.
 
 ## Finish
 
 Run `npm run wt:done -- <branch>` from the main checkout once the PR merged. It refuses while any process (a dev server) has its cwd inside the worktree and names it; stop that process and rerun. It then removes the worktree, deletes the branch when git sees it merged, and fast-forwards local `main`. When local `main` holds unpushed commits it stops and lists them: push them through a PR or move them to a branch, then rerun.
+
+With `--base <branch>`, run from that branch's worktree, it leaves `main` alone: it removes the worktree, deletes the branch when it is merged into the base, and otherwise keeps it and says so, as for a blocked Episode job.
 
 ## Preflight
 

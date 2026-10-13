@@ -1,8 +1,8 @@
 frontmatter:
   rules:
     - ruleId: feature-guide
-      folders: [docs/features/, docs/design-system/]
-      intent: 'docs/features/ and docs/design-system/ hold product reference that drifts from the code, so every guide declares itself a feature guide and carries a review date'
+      folders: [docs/features/, docs/design/]
+      intent: 'docs/features/ and docs/design/ hold product reference that drifts from the code, so every guide declares itself a feature guide and carries a review date'
       assess:
         stale: 'Check this against src/ and the ADRs before relying on it, then move stale_after.'
       fields:
@@ -26,3 +26,516 @@ frontmatter:
         stale: Check each term against the code and ADRs before relying on it, then move stale_after.
       fields:
         stale_after: { presence: required, format: datetime }
+    - ruleId: staging-brief
+      fileNames: [brief.md]
+      intent: 'A Brief is written before any research and is the yardstick every later artifact is judged against, so each goal is concrete enough to judge a Manuscript by. Fail if a goal is too vague to judge a Manuscript against, or the body drafts Slides or Sections.'
+      unknownKeys: forbidden
+      fields:
+        type:
+          presence: required
+          allowed:
+            - { value: brief, intent: 'Goals: what the Episode must achieve, stated before it is written.' }
+        status:
+          presence: required
+          allowed:
+            - {
+                value: draft,
+                intent: 'When status is draft: an agent wrote or changed the Brief and its checks have not yet passed on it.',
+              }
+            - {
+                value: checked,
+                intent: 'When status is checked: the Brief passed markdown-harness and the cross-file tests, and waits for Han.',
+              }
+            - {
+                value: approved,
+                intent: 'When status is approved: Han accepted the Brief at its gate, and later jobs start from it.',
+              }
+
+    - ruleId: staging-manuscript
+      fileNames: [manuscript.md]
+      intent: 'The Manuscript is the story the Episode tells, written backwards from its Brief so that every actionable is spoken. Fail if an actionable of the Brief is never spoken, or the file carries material beyond what the speaker says.'
+      unknownKeys: forbidden
+      fields:
+        type:
+          presence: required
+          allowed:
+            - {
+                value: manuscript,
+                intent: 'The spoken story only; sources, Speaker notes and the choice of Visual live in the Dossier.',
+              }
+        status: &staging-status
+          presence: required
+          allowed:
+            - {
+                value: draft,
+                intent: 'When status is draft: an agent wrote or changed the file and its checks have not yet passed on it.',
+              }
+            - {
+                value: checked,
+                intent: 'When status is checked: the file passed markdown-harness, the cross-file tests and its reviewer.',
+              }
+            - { value: approved, intent: 'When status is approved: Promotion moved the file next to its Slides.' }
+        locale: &staging-locale
+          presence: required
+          allowed:
+            - {
+                value: en,
+                intent: 'English, the canonical text every translation starts from. Fail if authored text is in another language.',
+              }
+        brief: &staging-brief-link
+          presence: required
+          allowed:
+            - {
+                value: ./brief.md,
+                intent: 'The Brief in the same folder, whose goals this file is written towards. Fail if slugged material serves no Learning goal, Actionable or Red thread step the Brief states.',
+              }
+    - ruleId: staging-dossier
+      fileNames: [dossier.md]
+      intent: "The Dossier holds what the Manuscript leaves unsaid for each Slide: what is shown, what is cited, and how the speech splits into Voice script segments, so the implementation is built from it without inventing material. Fail if a page slide's material would leave an implementer guessing, or the file holds spoken prose or specifies styling or code."
+      unknownKeys: forbidden
+      fields:
+        type:
+          presence: required
+          allowed:
+            - {
+                value: dossier,
+                intent: 'Material for building the Slides, described as what the viewer sees; spoken prose lives in the Manuscript.',
+              }
+        status: *staging-status
+        locale: *staging-locale
+        brief: *staging-brief-link
+    # A rule selects by literal file name, never by folder: folders do not recurse and every staging
+    # folder is `docs/episodes/<slug>/`. So the identifier lives in a folder and the kind is the file
+    # name: `research/<question-slug>/research.md` and `feedback/<NN>/feedback.md`. The same name
+    # governs research after Promotion moves it to `docs/llm-wiki/research/<question-slug>/`.
+    - ruleId: research
+      fileNames: [research.md]
+      intent: 'A research file answers one question on its own, so any later Episode can cite it without the one that asked. Fail if understanding it needs the Brief or Episode that prompted it.'
+      unknownKeys: forbidden
+      assess:
+        stale: 'Re-run the research question against current primary sources before citing this, then update the Findings and move stale_after.'
+      fields:
+        type:
+          presence: required
+          allowed:
+            - { value: research, intent: 'Evidence: what the Sources show, reported for any reader.' }
+        description:
+          presence: required
+          maxLength: 200
+          intent: 'One sentence stating the Answer, which the retrieval job reads to decide whether this file answers a new question. Fail if it names the topic without stating the answer.'
+        question:
+          presence: required
+          intent: 'The research question in the words that first asked it, so retrieval can compare it with a new one. Fail if it holds more than one question, or differs from the Brief that asked it when that Brief is at hand.'
+        researched_on:
+          presence: required
+          format: datetime
+          intent: 'When the Sources were read, so a reader can weigh their age.'
+        stale_after:
+          presence: required
+          format: datetime
+          intent: 'When the Findings stop being trustworthy: a year after researched_on, or six months when they concern a named product or version, or a price. Fail if it is later than that.'
+    - ruleId: feedback
+      fileNames: [feedback.md]
+      intent: "One round of Han's feedback, kept so every item reaches the file it changes and the style harvest can learn from every round."
+      unknownKeys: forbidden
+      fields:
+        type:
+          presence: required
+          allowed:
+            - { value: feedback, intent: "Han's feedback for one round, each change as he asked for it." }
+        round:
+          presence: required
+          intent: 'Which pass of the feedback loop this is, counting from 1, one file per round.'
+        via:
+          presence: required
+          allowed:
+            - { value: app, intent: 'When via is app: typed or dictated while reviewing the served Episode.' }
+            - {
+                value: voice,
+                intent: "When via is voice: distilled from a Claude Desktop voice session's handoff, keeping each change without the conversation around it. Fail if an item keeps that conversation.",
+              }
+            - { value: practice, intent: 'When via is practice: changes Han found while rehearsing the recording.' }
+
+body-structure:
+  rules:
+    - ruleId: staging-brief-body
+      fileNames: [brief.md]
+      intent: 'The sections a Brief must settle, in reading order, so the grill knows what is left and research starts from settled questions. Fail if a section holds what belongs in a different one.'
+      undefinedHeadings: forbid
+      headings:
+        - {
+            purpose: heading,
+            level: 1,
+            intent: 'The working title of the Episode, naming its subject. Fail if it names the Format or a process instead of the subject.',
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Format,
+                  intent: 'Foundations, Teardown or Short, and the planned duration; together they set the scale of everything below. Fail if either is missing.',
+                },
+              ],
+            mayHold: [prose],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Audience,
+                  intent: 'Who watches, what they already know and what they want, so every later choice can be judged against them. Fail if it names a group without saying what they know or want.',
+                },
+              ],
+            mayHold: [prose],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Learning goal,
+                  intent: 'What the viewer can do or explain afterwards, in one or two sentences, the end every Section moves towards. Fail if it names a topic to cover instead of a change in the viewer.',
+                },
+              ],
+            mayHold: [prose],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Actionables,
+                  intent: 'Concrete steps a viewer takes after watching, one per item; each is later backed by at least one Slide. Fail if an item is a belief or a topic instead of a step a viewer could take.',
+                },
+              ],
+            mayHold: [ordered-list],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Hook,
+                  intent: 'The opening that earns the first thirty seconds. Fail if it only announces the topic instead of giving the viewer a reason to stay.',
+                },
+              ],
+            mayHold: [prose],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Red thread,
+                  intent: 'The single line of argument from the hook to the learning goal, which every Section advances. Fail if it lists topics instead of making one argument, or does not end at the learning goal.',
+                },
+              ],
+            mayHold: [prose],
+          }
+        - purpose: heading
+          level: 2
+          presence: optional
+          allowed:
+            [
+              {
+                title: Threads,
+                intent: 'Two Threads told in turns so the audience never follows one too long, chosen in the grill by planned duration in any Format.',
+              },
+            ]
+          headings:
+            - {
+                purpose: heading,
+                level: 3,
+                allowed:
+                  [
+                    {
+                      title: A thread,
+                      intent: 'The first Thread, usually the mechanism or argument. Fail if it does not carry the Red thread.',
+                    },
+                  ],
+                mayHold: [prose],
+              }
+            - {
+                purpose: heading,
+                level: 3,
+                allowed:
+                  [
+                    {
+                      title: B thread,
+                      intent: 'The second Thread, told in turns with the A thread and strengthening it. Fail if cutting it would not weaken the A thread.',
+                    },
+                  ],
+                mayHold: [prose],
+              }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Analogy,
+                  intent: 'One everyday picture the Episode returns to, giving the abstract idea a handle. Fail if picturing it takes expertise, or it offers several pictures.',
+                },
+              ],
+            mayHold: [prose],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Research questions,
+                  intent: "The questions the Episode's claims depend on, one per item, each researched on its own: a why question scoped to a subject matter. Fail if a question names the Episode, bundles two questions or asks what no claim needs, or a claim elsewhere in the Brief needs a question that is missing.",
+                },
+              ],
+            mayHold: [ordered-list],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            presence: optional,
+            allowed:
+              [
+                {
+                  title: Open ideas,
+                  intent: 'Ideas the grill did not settle, kept for the feedback loop; nothing here binds the run. Fail if an item restates or overrides a settled section.',
+                },
+              ],
+          }
+    - ruleId: staging-manuscript-body
+      fileNames: [manuscript.md]
+      intent: "Headings are the Episode's Slides, their titles copied verbatim into the Episode and their slugs keeping them addressable when a title changes; paragraphs are the Voice script segments, so the prose is what the speaker says, in order. Fail if a paragraph would not stand as one spoken passage, or the text only makes sense while seeing a Slide."
+      undefinedHeadings: forbid
+      headings:
+        - purpose: heading
+          level: 1
+          pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
+          intent: "The Title slide: a catchy, short title, and prose that opens with the Brief's Hook. Fail if the title is generic, or the prose opens with anything but the Hook."
+          mayHold: [prose]
+        - purpose: enumeration
+          level: 2
+          minCount: 1
+          pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
+          intent: 'A section slide naming one Section, one step of the Red thread, under a short title that names the step. Fail if the Section does not advance the Red thread.'
+          mayHold: [prose]
+          headings:
+            - purpose: enumeration
+              level: 3
+              minCount: 1
+              pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
+              intent: 'A page slide: one point the speaker makes, under a catchy, short title that previews it. Fail if it makes more than one point, or its title does not preview that point.'
+              mayHold: [prose]
+    - ruleId: staging-dossier-body
+      fileNames: [dossier.md]
+      intent: "The Dossier follows the Manuscript's Slides; a heading without a slug adds material and may sit anywhere. Fail if any material contradicts the Manuscript prose it sits beside."
+      headings:
+        - purpose: heading
+          level: 1
+          pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
+          intent: 'The Title slide; material here serves the opening or the Episode as a whole. Fail if material here serves only one later Slide.'
+        - purpose: enumeration
+          level: 2
+          minCount: 1
+          pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
+          intent: 'A Section; material here serves the whole Section. Fail if material here serves only one of its Slides.'
+          headings:
+            - purpose: enumeration
+              level: 3
+              minCount: 1
+              pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
+              intent: 'A page slide, whose Visual, Speaker notes and Segments serve the matching Manuscript prose.'
+              headings:
+                - purpose: heading
+                  level: 4
+                  allowed:
+                    [
+                      {
+                        title: Visual,
+                        intent: "The master slide and motion that show this Slide's point, then prose on what the viewer sees, required when the master alone does not say it. Fail if the choice does not show the prose's point, or the master alone leaves that unsaid and no prose follows.",
+                      },
+                    ]
+                  mayHold: [prose]
+                - purpose: heading
+                  level: 4
+                  allowed:
+                    [
+                      {
+                        title: Speaker notes,
+                        intent: "Talking points a viewer opens beside the Slide, each adding a fact the speaker leaves out, with its source. Fail if a note's claim is already spoken in the prose beside it, or its source does not support it.",
+                      },
+                    ]
+                  mayHold: [ordered-list]
+                - purpose: heading
+                  level: 4
+                  allowed:
+                    [
+                      {
+                        title: Segments,
+                        intent: 'A title and keywords for each Manuscript paragraph, in order, so the speaker recalls each Voice script segment at a glance. Fail if the keywords are not drawn from their paragraph.',
+                      },
+                    ]
+                  mayHold: [ordered-list]
+    - ruleId: research-body
+      fileNames: [research.md]
+      intent: 'Question, reason, answer, evidence and its limits, in that order, so a reader trusts the Answer as far as the Findings and Caveats carry it.'
+      undefinedHeadings: forbid
+      headings:
+        - purpose: heading
+          level: 1
+          pattern: '^Why .+\?$'
+          intent: 'The academic research question, scoped to one subject matter. Fail if it is so broad that no set of primary sources could answer it.'
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Context,
+                  intent: 'Why the question was asked, stated as the kind of claim it supports rather than the Episode that asked.',
+                },
+              ],
+            mayHold: [prose],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Answer,
+                  intent: 'The answer to the h1 in 2–5 quotable sentences. Fail if it hedges without saying what is known, or states something no Finding supports and the Caveats do not flag as inference.',
+                },
+              ],
+            mayHold: [prose],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Findings,
+                  intent: 'The evidence behind the Answer, one finding per item, each citing its Source as `[n]`. Fail if a finding cites no Source, or gives an opinion instead of what a Source shows.',
+                },
+              ],
+            mayHold: [ordered-list],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Sources,
+                  intent: 'Primary sources, numbered as the Findings cite them: `<author>, <title> — <URL> — accessed <date>`. Fail if no Finding cites a source. Fail if a source reports on a work instead of being it, unless it is an earlier research file this one extends.',
+                },
+              ],
+            mayHold: [ordered-list],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            presence: optional,
+            allowed:
+              [
+                {
+                  title: Caveats,
+                  intent: 'Limits of the Findings: what the Sources do not show, and any inference the Answer makes beyond them.',
+                },
+              ],
+          }
+    - ruleId: feedback-body
+      fileNames: [feedback.md]
+      intent: 'One list of items, each a single change keyed to its Slide and tagged with where it lands, so it routes to the Manuscript or Dossier, the implementation, or the recording. Fail if an item holds more than one change, its tag sends it to the wrong place, or it cannot be acted on without asking Han.'
+      undefinedHeadings: forbid
+    - ruleId: run-log-body
+      fileNames: [run-log.md]
+      intent: 'An append-only record of every job run, so a run can be read and its failures traced without the session that ran it. Fail if an entry cannot explain on its own why its job passed or failed.'
+      undefinedHeadings: forbid
+      headings:
+        - {
+            purpose: heading,
+            level: 1,
+            allowed:
+              [
+                {
+                  title: Run log,
+                  intent: "The record of one Episode's production. Fail if it logs jobs from another Episode.",
+                },
+              ],
+          }
+        - purpose: enumeration
+          level: 2
+          minCount: 1
+          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)* · \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$'
+          intent: 'One job run, headed by the time it finished and appended in that order; an earlier entry is never edited.'
+          headings:
+            - {
+                purpose: heading,
+                level: 3,
+                allowed:
+                  [
+                    {
+                      title: Inputs,
+                      intent: 'Every file, question or handoff the job read, one per item, so a failure can be traced to its input. Fail if Output or Notes name an input not listed.',
+                    },
+                  ],
+                mayHold: [unordered-list],
+              }
+            - {
+                purpose: heading,
+                level: 3,
+                allowed:
+                  [
+                    {
+                      title: Output,
+                      intent: 'What the job produced, one per item: each file it wrote with the status it left, or the decision or URL when it writes no file. Fail if an item names no file, decision or URL.',
+                    },
+                  ],
+                mayHold: [unordered-list],
+              }
+            - {
+                purpose: heading,
+                level: 3,
+                allowed:
+                  [
+                    {
+                      title: Checks,
+                      intent: "Each check of the job's final attempt and its result, cheapest first: markdown-harness, vitest, reviewer. Fail if it disagrees with Metrics.",
+                    },
+                  ],
+                mayHold: [unordered-list],
+              }
+            - {
+                purpose: heading,
+                level: 3,
+                allowed:
+                  [
+                    {
+                      title: Metrics,
+                      intent: 'One item per agent run, matching its row in the runs CSV: `<agent> · attempt <n> · pass|fail[ · rubric "<line>"] · <duration> s[ · <tokens> tokens]`, where `<line>` quotes the failed reviewer line, intent or rubric, and tokens are left out when the session reports none. Fail if a fail quotes no line.',
+                    },
+                  ],
+                mayHold: [unordered-list],
+              }
+            - {
+                purpose: heading,
+                level: 3,
+                allowed:
+                  [
+                    {
+                      title: Notes,
+                      intent: 'What a reader needs that the other parts do not say: a retry and why, a gate edit. Each blocked branch, call for human judgement, missing catalog match or research gap gets its own line, starting `Blocked:`, `Needs human:`, `No catalog match:` or `Research gap:`. Fail if a retry or blocked branch shown under Metrics or Checks goes unexplained, or such a line lacks its prefix.',
+                    },
+                  ],
+                mayHold: [prose, unordered-list],
+              }

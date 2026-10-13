@@ -1,0 +1,215 @@
+# The new-episode pipeline template. After Han approves the Brief, the
+# orchestrator copies this file to docs/episodes/<slug>/pipeline.yml, tailors
+# it for that Episode, and Han approves it by setting `status: approved`.
+#
+# Schema (checked by src/lib/episode-pipeline.pure.ts in `npm run verify`):
+#   status    draft | approved
+#   template  per-run only: the feat/89-new-episode commit the pipeline was tailored
+#             from; the template is not merged into the Episode branch again until
+#             open-pr is done
+#   jobs      run once every job in `needs` is done; independent jobs may run in parallel
+#     intent    optional; the job's task as a prompt, for a job no reference describes
+#     needs     job ids this job waits for; a blocked one blocks this job too
+#     wants     optional; job ids this job waits for, passed or blocked: a blocked
+#               one does not block it, and its implementor learns which blocked
+#     isolation optional; `worktree`: the job's agents and checks work in their own
+#               worktree on episode/<slug>--<job id>, merged back only on a pass.
+#               Required on a job that may run beside another or has foreach,
+#               unless all its agents run in the orchestrator session
+#     foreach   template only; `<file>#<heading>`: customize-pipeline writes one job per list item
+#     before    what runs before the implementor writes: `mh-query`, required when a job
+#               writes markdown, has the implementor run `npx mh query <path>` on every
+#               .md output and follow its intents; the reviewer runs it as its baseline
+#     outputs   full repo paths in the staging folder docs/episodes/<slug>/; a job reading
+#               one must need or want its writer; a rule must govern every .md one
+#     checks    cheapest first; names and commands in SKILL.md's job-loop check table
+#     retries   reviewer failures sent back before this branch of the pipeline stops
+#     gate      optional; `human` stops the run until Han approves the output
+#     agents    run in order; a reviewer is fresh: it did not write the output
+#       type        implementor | reviewer
+#       skills      skill names under .agents/skills/
+#       references  files the agent reads: `references/` and `assets/` sit in this
+#                   skill's folder, anything else is a repo path
+#       rubric      reviewers only: `<file>#<heading>` holding the pass/fail lines
+#       agent       optional; the Claude Code agent type to spawn, general-purpose when omitted
+#       model       the model it runs on, or inherit; SKILL.md's job loop says where it applies
+#       session     optional; subagent (default) or orchestrator, by SKILL.md's job loop
+status: draft
+jobs:
+  - id: brief-grill
+    needs: []
+    before: [mh-query]
+    outputs: [docs/episodes/<slug>/brief.md]
+    checks: [mh, vitest]
+    retries: 0
+    gate: human
+    agents:
+      - type: implementor
+        skills: [brief-grill, grilling, handoff]
+        references: [references/brief-grill.md]
+        model: inherit
+        session: orchestrator
+
+  # An information architect's call, before the pipeline names any research file.
+  - id: categorize-research
+    intent: >-
+      Name one research folder per research question of the Brief, in its
+      order, as `<category>-<####>__<question-slug>` by GLOSSARY.md's Research
+      categories: pick the category each question belongs to, or, when none
+      fits, add a new category there with its meaning. Number each folder with
+      the next free number of its category, counting every research folder in
+      docs/episodes/*/research/ and docs/llm-wiki/research/. Write the
+      question's subject, not the Episode, in 20-40 characters of kebab case.
+      Return the names, each beside its question, and any category you added
+      with why no existing one fits.
+    needs: [brief-grill]
+    outputs: []
+    checks: [mh]
+    retries: 1
+    agents:
+      - type: implementor
+        skills: [domain-modeling]
+        references: [GLOSSARY.md, docs/episodes/<slug>/brief.md, docs/llm-wiki/index.md]
+        model: opus
+
+  - id: customize-pipeline
+    needs: [categorize-research]
+    outputs: [docs/episodes/<slug>/pipeline.yml]
+    checks: [vitest]
+    retries: 0
+    gate: human
+    agents:
+      - type: implementor
+        skills: []
+        references: [references/customize-pipeline.md, assets/pipeline.yml, docs/episodes/<slug>/brief.md]
+        model: inherit
+        session: orchestrator
+
+  # Matches each research question against the llm-wiki index and records in
+  # the run log which questions remain unanswered.
+  - id: retrieval
+    needs: [customize-pipeline]
+    before: [mh-query]
+    outputs: [docs/episodes/<slug>/run-log.md]
+    checks: [mh]
+    retries: 0
+    agents:
+      - type: implementor
+        skills: []
+        references: [references/retrieval.md, docs/episodes/<slug>/brief.md, docs/llm-wiki/index.md]
+        model: inherit
+
+  - id: write-research
+    needs: [retrieval]
+    isolation: worktree
+    foreach: docs/episodes/<slug>/brief.md#research-questions
+    before: [mh-query]
+    outputs: [docs/episodes/<slug>/research/*/research.md]
+    checks: [mh, vitest]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research]
+        references: [references/write-research.md, docs/episodes/<slug>/brief.md, docs/episodes/<slug>/run-log.md]
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  # Wants the research rather than needing it: a blocked question leaves a
+  # gap the Dossier works around, instead of blocking the Episode.
+  - id: write-dossier
+    needs: [retrieval]
+    wants: [write-research]
+    before: [mh-query]
+    outputs: [docs/episodes/<slug>/dossier.md]
+    checks: [mh, vitest]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: []
+        references:
+          - references/write-dossier.md
+          - docs/episodes/<slug>/brief.md
+          - docs/episodes/<slug>/research/*/research.md
+          - docs/profile/han/storytelling-guide.md
+          - docs/profile/han/tone-guide.md
+          - docs/profile/han/mental-model-guide.md
+        model: inherit
+      - type: reviewer
+        skills: []
+        references: [references/write-dossier.md, docs/episodes/<slug>/brief.md]
+        rubric: references/write-dossier.md#rubric
+        model: opus
+
+  - id: write-manuscript
+    needs: [write-dossier]
+    before: [mh-query]
+    outputs: [docs/episodes/<slug>/manuscript.md]
+    checks: [mh, vitest]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: []
+        references:
+          - references/write-manuscript.md
+          - docs/episodes/<slug>/brief.md
+          - docs/episodes/<slug>/dossier.md
+          - docs/profile/han/storytelling-guide.md
+          - docs/profile/han/tone-guide.md
+          - docs/profile/han/mental-model-guide.md
+        model: inherit
+      - type: reviewer
+        skills: []
+        references: [references/write-manuscript.md, docs/episodes/<slug>/brief.md, docs/profile/han/tone-guide.md]
+        rubric: references/write-manuscript.md#rubric
+        model: opus
+
+  # Writes no staging file: its output is a spec issue with one sub-issue per Section.
+  - id: write-spec
+    needs: [write-manuscript]
+    outputs: []
+    checks: []
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [to-spec, to-tickets]
+        references: [references/write-spec.md, docs/episodes/<slug>/brief.md, docs/episodes/<slug>/dossier.md, docs/episodes/<slug>/manuscript.md]
+        model: inherit
+      - type: reviewer
+        skills: []
+        references: [references/write-spec.md, docs/episodes/<slug>/dossier.md, docs/episodes/<slug>/manuscript.md]
+        rubric: references/write-spec.md#rubric
+        model: opus
+
+  # Writes the Episode under src/, outside the staging folder.
+  - id: implement-episode
+    needs: [write-spec]
+    outputs: []
+    checks: [verify, build, test:build, visual-check]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [implement-spec, visual-check]
+        references: [references/implement-episode.md, docs/episodes/<slug>/dossier.md, docs/episodes/<slug>/manuscript.md]
+        model: opus
+        session: orchestrator
+      - type: reviewer
+        skills: [code-review, visual-check]
+        references: [references/implement-episode.md, docs/episodes/<slug>/dossier.md, docs/episodes/<slug>/manuscript.md]
+        rubric: references/implement-episode.md#rubric
+        model: opus
+        session: orchestrator
+
+  - id: open-pr
+    needs: [implement-episode]
+    outputs: []
+    checks: []
+    retries: 0
+    agents:
+      - type: implementor
+        skills: [pr]
+        references: [references/open-pr.md, docs/episodes/<slug>/run-log.md]
+        model: sonnet

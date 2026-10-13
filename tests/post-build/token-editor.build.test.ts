@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { OUT_DIR } from './exported-pages';
 
-// The design-system token editor is dev-only (docs/design-system/README.md): `next build` must not ship it.
+// The design-system token editor is dev-only (docs/design/design-system.md): `next build` must not ship it.
 // These strings occur only in its source, so any hit means its code reached the export.
 const MARKERS = [
   'design-system-token-editor',

@@ -21,7 +21,7 @@ Three Episodes are built by separate agents, one per Slide. Left free on colour 
 
 Rejected: colour scales (`--teal-500`) and a global chart palette: the Scene palette is unknown until real Episodes show it; guesses become debt. Rejected: resetting Tailwind's default palette and sizes: legacy files use them; a check bans them in new code instead.
 
-Reasons, values and the token reference: [`docs/design-system/README.md`](../../docs/design-system/README.md).
+Reasons, values and the token reference: [`docs/design/design-system.md`](../../docs/design/design-system.md).
 
 ## Decision
 
@@ -123,6 +123,6 @@ Reasons, values and the token reference: [`docs/design-system/README.md`](../../
 
 ## References
 
-- [`docs/design-system/README.md`](../../docs/design-system/README.md): reasons, type roles, token reference.
+- [`docs/design/design-system.md`](../../docs/design/design-system.md): reasons, type roles, token reference.
 - [Tailwind CSS v4 theme variables](https://tailwindcss.com/docs/theme): `@theme inline`, `bg-(--x)` shorthand.
 - [`eslint-plugin-better-tailwindcss`](https://github.com/schoero/eslint-plugin-better-tailwindcss): class-string rules.

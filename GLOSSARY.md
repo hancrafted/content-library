@@ -99,6 +99,14 @@ _Avoid_: Drafts, workspace
 **Promotion**: the step that moves a final Episode's text out of Staging and into its code folder, one text file per Slide, after which Staging is deleted.
 _Avoid_: Publish, migration, release
 
+## Research categories
+
+A research folder is named `<category>-<####>__<question-slug>`: the category below, a number counted per category across the repo, and the question's subject in 20-40 characters of kebab case. The `categorize-research` job of `/new-episode` picks the category, or adds a new one here.
+
+**AIE**: AI Enablement: how people and organizations learn to work with AI, and what it changes in their work.
+
+**SALES**: Sales: how a buyer finds, trusts and chooses a coach or consultant.
+
 ## Localization
 
 **Translation file**: one locale's strings for one owner: the site's chrome and landing (`src/messages/`), one Episode, or one Slide (its folder's `i18n/`); English is the source every other locale is checked against. Localization libraries call it a catalog; that jargon stays out of this project.

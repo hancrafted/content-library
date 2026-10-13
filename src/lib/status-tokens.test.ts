@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { toPickerHex } from './colour-convert.pure';
 
-// The global status colours (docs/design-system/README.md, Status colours): text on the page and card surfaces, and the
+// The global status colours (docs/design/design-system.md, Status colours): text on the page and card surfaces, and the
 // -foreground on a fill of the colour, are 4.5:1 or better in both themes.
 
 const css = readFileSync(join(__dirname, '../app/globals.css'), 'utf8');

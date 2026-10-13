@@ -23,16 +23,22 @@ export function expandEntries(entries: string[], match: (entry: string) => strin
   });
 }
 
+// A skill's file is always SKILL.md, so it flattens to its folder's name instead.
+function flatName(file: string): string {
+  const name = path.basename(file);
+  return name === 'SKILL.md' ? `${path.basename(path.dirname(file))}.md` : name;
+}
+
 export function planLinks(files: string[], folder: string): Link[] {
   const owners = new Map<string, string>();
   for (const file of files) {
-    const name = path.basename(file);
+    const name = flatName(file);
     const other = owners.get(name);
     if (other !== undefined) throw new Error(`${other} and ${file} both flatten to ${name}`);
     owners.set(name, file);
   }
   return files.map((file) => ({
-    name: path.basename(file),
+    name: flatName(file),
     target: path.relative(folder, file),
   }));
 }

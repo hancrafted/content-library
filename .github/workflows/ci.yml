@@ -33,7 +33,8 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run knip
-      - run: npx mh check
+      # The new-episode sample sits under a dot-folder, which the default corpus never walks.
+      - run: npm run check:docs
       # Build as the Pages deploy does, under its project-site base path, so a base-path bug fails here, not at deploy.
       - run: npm run build
         env:
