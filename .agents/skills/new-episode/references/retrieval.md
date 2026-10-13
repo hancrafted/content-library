@@ -8,7 +8,7 @@ For each item under the Brief's `Research questions`:
 
 1. Find the entries in `docs/llm-wiki/index.md` whose description could answer it. The index lists one research file per line with its frontmatter `description`.
 2. Read each candidate file in full and judge two things:
-   - **Fresh**: its `stale_after` is later than today.
+   - **Fresh**: its `stale_after` is later than today. Its `generated.at` says when it was written and `generated.by` who wrote it, for weighing its age and trust.
    - **Fits**: its h1 question and `Context` support the kind of claim this Episode makes with the question, not just the same topic.
 3. Decide one outcome:
    - `reuse <path>`: fresh and fits. No research job runs for the question.
