@@ -305,7 +305,7 @@ A numbered process on one spine with four steps, each heading carrying the claim
 1. **The habit** — So here is the habit, and it is small. Next time you reach for AI on something real, before you type a word, stop. Take thirty seconds. Jot down what you would tell a brand-new colleague on day one.
 2. **Four lines** — Four lines are enough. The context, meaning what they need to know about your situation. The tools they would need. The brief, meaning what exactly you are asking for. And how you will check their work. Then type.
 
-## AI can help you onboard AI {#ai-can-help-you-onboard-ai}
+## It feels like a lot {#it-feels-like-a-lot}
 
 #### Voice script
 
@@ -315,7 +315,7 @@ A numbered process on one spine with four steps, each heading carrying the claim
 
 #### Visual
 
-master: grid-1x1 · motion: local
+master: basic-page · motion: local
 title: AI can help you onboard AI
 
 One statement across the whole Foreground, "AI can help you onboard AI", with a small pointer line underneath naming grill-me. On entry the second "AI" slides in once and holds. The Slide reads as a complete ending, with no teaser.
