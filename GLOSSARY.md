@@ -14,7 +14,7 @@ _Avoid_: Post, article, video, tower
 **Episode overview**: the landing page's list of every Episode, published or upcoming, that a visitor browses and filters.
 _Avoid_: Episode index, catalog, episode list, manifest
 
-**Upcoming Episode**: an Episode announced in the Episode overview but not yet written: it has a slug and copy but no page, so its entry links nowhere.
+**Upcoming Episode**: an Episode announced in the Episode overview but not yet published: its video is not out. It may already have a page, reachable by its URL alone; either way its entry links nowhere.
 _Avoid_: Draft, coming-soon episode, stub
 
 **Topic**: a curated playlist of Episodes, mirrored as a YouTube playlist. Each Episode has one primary Topic, which gives it its icon and colour, and may also appear in other Topics.
