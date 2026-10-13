@@ -76,7 +76,8 @@ function logged(lines: readonly string[]): JobState | null {
  * blocked when a job it needs is blocked, ready when every job it needs is
  * done and every job it wants is done or blocked, and waiting otherwise.
  * A `gate: human` job that is logged done reads `gate` until every output
- * it names has `status: approved`; `outputStatus` reads one output's status
+ * it names has `status: approved`; a gate job that names no output has no status to read (its
+ * approval is an issue label the orchestrator checks), so it reads `done`; `outputStatus` reads one output's status
  * (an output path with `<slug>` as written in pipeline.yml), null when unreadable.
  */
 export function runStatus(
@@ -103,12 +104,12 @@ export function runStatus(
 }
 
 function stateFor(job: PipelineJob, fromLog: JobState | null, outputStatus: (output: string) => string | null): JobState | null {
-  if (fromLog === 'done' && job.gate && !approved(job, outputStatus)) return 'gate';
+  if (fromLog === 'done' && job.gate && job.outputs.length > 0 && !approved(job, outputStatus)) return 'gate';
   return fromLog;
 }
 
 function approved(job: PipelineJob, outputStatus: (output: string) => string | null): boolean {
-  return job.outputs.length > 0 && job.outputs.every((output) => outputStatus(output) === 'approved');
+  return job.outputs.every((output) => outputStatus(output) === 'approved');
 }
 
 function pending(job: PipelineJob, stateOf: (id: string) => JobState): JobState {

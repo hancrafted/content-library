@@ -86,6 +86,21 @@ describe('gate jobs', () => {
   });
 });
 
+describe('gate jobs without a staging output', () => {
+  it('prints done for a logged gate job that writes no file, because its approval is an issue label the script cannot read', () => {
+    // ARRANGE
+    const gated = `jobs:
+  - { id: write-design-spec, needs: [], gate: human, outputs: [] }
+  - { id: implement-episode, needs: [write-design-spec] }
+`;
+    const runLog = ['# Run log\n', entry('write-design-spec · 2026-10-12T09:00:00Z', [PASS])].join('\n');
+    // ACT
+    const states = runStatus(gated, runLog, () => 'draft').map(({ state }) => state);
+    // ASSERT
+    expect(states).toEqual(['done', 'ready']);
+  });
+});
+
 describe('edge cases', () => {
   it('reads only the latest entry of a job, and a passed attempt after a failed one as done', () => {
     // ARRANGE

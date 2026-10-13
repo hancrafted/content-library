@@ -55,6 +55,8 @@ _Done when_ the todo list holds every job the script does not print as `done`.
 
 Run every job the status script prints as `ready` by [the job loop](#the-job-loop); jobs that are ready together run in parallel as background subagents, each job with `isolation: worktree` in its own worktree. A gate job prints `gate` once its draft is logged, until its output's `status:` is `approved`; step 5's checks cover the Brief and pipeline gates. After each job's run-log entry, run the script again for the next ready jobs. A blocked job blocks every job that `needs` it, directly or through another job. A job that `wants` it waits for it, then runs anyway: tell its implementor which wanted jobs blocked.
 
+A `gate: human` job that writes no staging file, `write-design-spec`, is approved by labels, not by a `status:`, so the script prints it `done` once it is logged. After its run-log entry, stop the session and tell Han each ticket's design answer is his to edit, and to relabel it `ready-for-agent` to approve it. Before `implement-episode` starts, and on every resume, run `gh issue list --label needs-triage --state open` over the spec's sub-issues: while any ticket is still `needs-triage`, name each one to Han and stop. When none is, rewrite every overruled `master:` and `motion:` into the Dossier by [`references/write-design-spec.md`](references/write-design-spec.md#the-orchestrator-after-the-gate), and write the job's `approved as drafted` or `edited` Metrics line for each ticket.
+
 _Done when_ every todo is done or blocked, and each one has its run-log entry.
 
 ### 7. Serve and open the PR
@@ -105,6 +107,7 @@ Every agent write is marked, so gate diffs and ticket edit history teach Han's s
 
 - **Commits:** an `Agent: <job id>` trailer on every commit an agent makes in the run, beside `Source:` (and `Gate:` on a gate commit). Han's own commits carry none.
 - **Ticket edits:** an `Edited-by: <job id>` line at the end of every issue body an agent writes or edits with `gh issue edit`. Keep one line at the end of the body; replace it when another job edits.
+- **Footer rule:** `write-design-spec` ends every ticket body it edits with `Edited-by: write-design-spec`, and edits only the design answers and, in the spec issue, `## Visual language`. Han's edit at the gate carries no footer, which is how the job's `edited` Metrics line is told from `approved as drafted`.
 - **Run log:** each agent ticket edit is a line in the job's entry under `Output`: `Edited #<issue> · <ISO 8601 timestamp>`.
 
 ## Run log and runs CSV

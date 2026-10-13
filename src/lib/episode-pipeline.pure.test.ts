@@ -65,6 +65,15 @@ describe('success cases', () => {
     // ASSERT
     expect(findings).toEqual([]);
   });
+
+  it('accepts a plugin skill the context does not list', () => {
+    // ARRANGE
+    const yaml = PIPELINE.replace('skills: [research]', 'skills: [research, ui-ux-pro-max:slides]');
+    // ACT
+    const messages = check(yaml);
+    // ASSERT
+    expect(messages).toEqual([]);
+  });
 });
 
 describe('failure cases', () => {
