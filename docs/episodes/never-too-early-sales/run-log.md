@@ -123,3 +123,45 @@
 - The first failure's duration is zero because no additional implementor run occurred; attempt 2 covers the observed correction/check interval.
 - Category IDs permit uppercase letters only. Correcting the names avoids changing shared code to accommodate this Episode.
 - The corrected names remain reserved in the pipeline; no research content has started.
+
+## customize-pipeline · 2026-10-13T23:19:42Z
+
+### Inputs
+
+- `docs/episodes/never-too-early-sales/brief.md`: approved 20-30-minute Foundations Episode, Editorial, no Threads, eleven Slides and eight research questions.
+- `.scratch/never-too-early-sales/research-folders.md`: corrected FIN/BIZ mapping from categorize-research.
+- `.agents/skills/new-episode/assets/pipeline.yml` and `references/customize-pipeline.md` in that skill: template and tailoring procedure.
+- Template ancestor `7ac7829`: merge-base of this integration branch and the template branch; no other worktree was inspected.
+- `.agents/skills/new-episode/references/retrieval.md`: explicit handling when the library index is absent.
+- `.agents/skills/new-episode/references/write-design-spec.md`: visual-language and ticket-design approval gate.
+- Checked optional inputs: `docs/llm-wiki/index.md` and `docs/profile/han/{storytelling-guide,tone-guide,mental-model-guide}.md` are absent.
+
+### Output
+
+- `docs/episodes/never-too-early-sales/pipeline.yml`: draft; awaiting Han's pipeline approval.
+- Pipeline decision: eight isolated research jobs; Dossier wants all eight so blocked research leaves an explicit gap instead of stopping the Episode.
+- Pipeline decision: keep the Dossier/Voice script and design-ticket human gates before implementation.
+
+### Checks
+
+- `npm run check:docs`: pass.
+- `npx vitest run tests/docs/episode-staging.test.ts`: 15 tests pass.
+- Reviewer: not configured for this gate; Han approves the per-run pipeline.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 175 s
+
+### Notes
+
+- Replaced every Episode placeholder and added `template: 7ac7829` to pin the inherited template.
+- Expanded research foreach into eight named jobs, with each question quoted in its intent and every output/reference named explicitly; no glob outputs remain.
+- Research agents share a YAML anchor to preserve identical template settings across the eight jobs.
+- Removed missing library-index references from categorization and retrieval. Retrieval explicitly records all questions new instead of silently substituting a successful lookup.
+- Removed missing storytelling, tone and mental-model guides from Dossier and Voice script references. Needs human: these guides are absent, so the approved Brief and Dossier gate must carry the voice judgement.
+- Added Dossier intent for the approved duration, no Threads, unchanged spine and recurring cashflow board; worked numbers must stay illustrative unless supported as measured claims, with arithmetic checked.
+- Added design intent to resolve the third-party visual questions before reproduction, favoring original fictional board/funnel Scenes; kept Han's design-ticket gate.
+- Retained all template retries, human gates and models: inherit for the orchestrator/writing jobs, sonnet for research implementors and open-pr, opus for categorization, reviewers, design and implementation.
+- Retained isolated research worktrees, with a header documenting Han's explicit integration-branch exception: use `sales-pipeline-episode-sol` as their base and never inspect another run's worktree.
+- The candidate pipeline check exposed categorize-research's invalid B2B IDs. That upstream job used its correction attempt, recorded in the preceding append-only entry; this pipeline uses the corrected BIZ names.
+- Human gate: Han edits the pipeline and approves it with top-level `status: approved`, committed with `Gate: approved pipeline`. No research jobs have started.
