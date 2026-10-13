@@ -56,9 +56,12 @@ export type EpisodeCopy = Pick<EpisodeCard, 'title' | 'caption'>;
 /**
  * The Episode a card draws, keyed on its status: a published one carries its
  * copy from the registry, so `tsc` refuses one without it; an upcoming one
- * reads its own from the landing Translation keys.
+ * reads its own from the landing Translation keys, unless it already has a page
+ * and so its own `i18n/` (`copy`), which it then carries as a published one does.
  */
-export type CardEntry = (PublishedEpisodeMetadata & { readonly copy: EpisodeCopy }) | UpcomingEpisodeMetadata;
+export type CardEntry =
+  | (PublishedEpisodeMetadata & { readonly copy: EpisodeCopy })
+  | (UpcomingEpisodeMetadata & { readonly copy?: EpisodeCopy });
 
 export interface CardContext {
   readonly locale: Locale;
@@ -71,7 +74,7 @@ export interface CardContext {
 const OVERVIEW_KEYS = 'landing.episodeOverview';
 
 function copyOf(entry: CardEntry, ctx: CardContext): EpisodeCopy {
-  if (entry.status === 'published') return { title: entry.copy.title, caption: entry.copy.caption };
+  if (entry.copy) return { title: entry.copy.title, caption: entry.copy.caption };
   const base = `${OVERVIEW_KEYS}.upcoming.${entry.slug}`;
   return { title: ctx.read(`${base}.title`), caption: ctx.read(`${base}.caption`) };
 }

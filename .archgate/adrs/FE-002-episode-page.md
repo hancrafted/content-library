@@ -82,7 +82,7 @@ flowchart LR
 ### 5. Strings and anchors keyed by Slide slug
 
 1. A Slide's text MUST live in its own `i18n/<locale>.json`, by role — `title`, not `sections.0.title`; German matches the English shape. Episode text: `<episode>/i18n/`.
-2. Published anchors MUST stay (`published-anchors.json`); `slideHref` MUST name a Slide of its Episode.
+2. Published anchors MUST stay (`published-anchors.json`, at publication); `slideHref` MUST name a Slide of it.
 
 ### 6. Table of contents and Context drawer read the record
 
@@ -99,7 +99,7 @@ flowchart LR
 
 ### Do's
 
-1. **DO** start an Episode by copying `page-template/`: rename the slug; register slug, record and metadata together; write its `i18n/`; then each Slide as a whole folder, text included, the Episode file adding only its import and list entry; then `published-anchors.json`. (Decision 2, Decision 5)
+1. **DO** start an Episode by copying `page-template/`: rename the slug; register slug, record and metadata together; write its `i18n/`; then each Slide as a whole folder, the Episode file adding only its import and list entry; at publication, `published-anchors.json`. (Decision 2, Decision 5)
 2. **DO** write a Voice script for every Slide the speaker talks over; its words are the reading time. (Decision 2)
 3. **DO** leave `title` off a purely visual Slide. (Decision 2)
 4. **DO** build a one-off Scene from `SlideFrame` and the kit's `<Title>`. (Decision 3, Decision 4)
