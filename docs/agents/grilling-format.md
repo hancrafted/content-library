@@ -1,5 +1,6 @@
 ---
 type: agent-guide
+title: Grilling Format
 ---
 
 # Grilling Format

@@ -1,5 +1,6 @@
 ---
 type: feature-guide
+title: Episode publishing
 stale_after: 2027-01-13T00:00:00Z
 ---
 

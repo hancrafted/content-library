@@ -1,5 +1,6 @@
 ---
 type: dossier
+title: The context window is a budget
 status: draft
 locale: en
 brief: ./brief.md

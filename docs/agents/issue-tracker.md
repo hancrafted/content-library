@@ -1,5 +1,6 @@
 ---
 type: agent-guide
+title: 'Issue tracker: GitHub'
 ---
 
 # Issue tracker: GitHub
