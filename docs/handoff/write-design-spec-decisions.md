@@ -43,4 +43,4 @@ Settled with Han, 2026-10-13, in session 5909c675 (this file's grill), prompted 
 
 ## Authoring context (run-2 step 2)
 
-22. Split by kind. Facts and rules go in `docs/design/`: which Master slides exist, which motions a Slide may import. Taste goes in `docs/design/design-guide.md`: how quiet a Slide is, what is good or bad, the run-1 Slides as "not this".
+22. Split by kind. Facts and rules go in `docs/design/`: which Master slides exist, which motions a Slide may import. Taste goes in `docs/design/design-guide.md`: how quiet a Slide is, what is good or bad, the run-1 Slides as "not this". Settled in detail in `slide-authoring-context-decisions.md`.
