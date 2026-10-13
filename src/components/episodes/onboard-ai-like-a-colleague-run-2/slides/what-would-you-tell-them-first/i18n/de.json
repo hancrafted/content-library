@@ -1,0 +1,81 @@
+{
+  "title": "Was würdest Du ihm zuerst sagen",
+  "heading": "Euer erster gemeinsamer Tag",
+  "caption": "Achte einfach darauf, was Du als Erstes tun würdest.",
+  "items": {
+    "a": {
+      "date": "09:00",
+      "title": "Ihm das Fest vom letzten Jahr erklären",
+      "caption": "Was funktioniert hat, was gefloppt ist, was der CEO gehasst hat."
+    },
+    "b": {
+      "date": "09:30",
+      "title": "Ihm das Budget und die Teilnehmerzahl nennen",
+      "caption": "Förmlich, locker, laut, leise."
+    },
+    "c": {
+      "date": "10:00",
+      "title": "Den Login fürs Buchungssystem und die Nummer des Caterers übergeben",
+      "caption": "Zugriff auf den gemeinsamen Kalender, damit er keine Termine mehr vorschlägt, die kollidieren."
+    },
+    "d": {
+      "date": "10:30",
+      "title": "Sagen, wie der Plan aussehen muss und wer ihn liest",
+      "caption": "Ein Plan in welcher Form, für wen, wie lang."
+    },
+    "e": {
+      "date": "13:00",
+      "title": "Den ersten Entwurf ansehen",
+      "caption": "Geht das in die richtige Richtung?"
+    },
+    "f": {
+      "date": "16:00",
+      "title": "Ihn prüfen, bevor er nach oben geht",
+      "caption": "Weil auch Dein Name draufsteht."
+    }
+  },
+  "notes": {
+    "write-for-the-newcomer": {
+      "header": "Für den Neuen schreiben",
+      "description": "Michael Nygard schrieb Entscheidungsprotokolle, „als wäre es ein Gespräch mit einem zukünftigen Entwickler“, damit ein Neuer eine Entscheidung weder blind hinnehmen noch blind ändern muss. Übernommen aus einer früheren Recherche, nicht neu abgerufen.[1]",
+      "sources": {
+        "documenting-architecture-decisions": {
+          "title": "Michael Nygard, Documenting Architecture Decisions"
+        }
+      }
+    },
+    "checking-is-part-of-the-frame": {
+      "header": "Prüfen gehört zum Rahmen",
+      "description": "Anthropics Seite mit Best Practices sagt: „Gib Claude eine Möglichkeit, seine Arbeit zu überprüfen“ und „Wenn Du es nicht überprüfen kannst, liefere es nicht aus“. Übernommen aus einer früheren Recherche, nicht neu abgerufen.[1]",
+      "sources": {
+        "claude-code-best-practices": {
+          "title": "Anthropic, Claude Code best practices"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "take-a-second": {
+        "title": "Nimm Dir eine Sekunde",
+        "keywords": "eine Sekunde, wie würdest Du einarbeiten, was Du als Erstes tust",
+        "script": "Also nimm Dir eine Sekunde. Wirklich. Wie würdest Du diese Person einarbeiten? Denk nicht an die richtige Antwort. Achte einfach darauf, was Du als Erstes tun würdest."
+      },
+      "walk-the-morning": {
+        "title": "Der Vormittag",
+        "keywords": "Fest vom letzten Jahr, das Budget, wie viele Leute, wie unsere Firma ist",
+        "script": "Ich schätze, Du würdest mit dem Vormittag anfangen. Du würdest ihm das Fest vom letzten Jahr erklären. Was funktioniert hat, was gefloppt ist, was der CEO gehasst hat. Du würdest ihm das Budget nennen. Du würdest ihm sagen, wie viele Leute kommen und wie unsere Firma so ist. Förmlich, locker, laut, leise."
+      },
+      "tools-and-the-ask": {
+        "title": "Werkzeuge und der Auftrag",
+        "keywords": "die Schlüssel, Login fürs Buchungssystem, Caterer, gemeinsamer Kalender, was Du erwartest",
+        "script": "Dann würdest Du ihm die Schlüssel geben. Den Login für das Buchungssystem. Die Nummer des Caterers, dem Du vertraust. Zugriff auf den gemeinsamen Kalender, damit er keine Termine mehr vorschlägt, die kollidieren. Und Du würdest sagen, was Du erwartest. Ein Plan in welcher Form, für wen, wie lang."
+      },
+      "look-at-the-draft": {
+        "title": "Der Blick auf den Entwurf",
+        "keywords": "nicht bis fünf warten, erster Entwurf beim Mittagessen, noch einmal prüfen, Dein Name",
+        "script": "Und Du würdest nicht bis fünf Uhr warten. Du würdest Dir den ersten Entwurf beim Mittagessen ansehen. Geht das in die richtige Richtung? Dann würdest Du ihn noch einmal prüfen, bevor er nach oben geht. Weil auch Dein Name draufsteht."
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "title": "Tag eins mit einem fähigen Fremden",
+  "voiceScript": {
+    "segments": {
+      "switch-to-the-room": {
+        "title": "Wechsel in den Raum",
+        "keywords": "KI vergessen, Montagmorgen, neuer Kollege, Kaffee in der Hand",
+        "script": "Vergiss KI für einen Moment. Stell Dir vor, es ist Montagmorgen, und heute fängt ein neuer Kollege an. Nimm Dir eine Sekunde und stell Dir vor, wie er an Deinem Schreibtisch steht, Kaffee in der Hand, bereit loszulegen."
+      },
+      "a-real-task": {
+        "title": "Eine echte Aufgabe",
+        "keywords": "echte Aufgabe, echte Deadline, wer diese Person ist",
+        "script": "Und Du hast eine echte Aufgabe für ihn. Keinen Vortrag, keine Fallstudie. Eine echte, mit einer echten Deadline. Ich erzähle Dir, wer diese Person ist und was Du von ihr brauchst."
+      }
+    }
+  }
+}

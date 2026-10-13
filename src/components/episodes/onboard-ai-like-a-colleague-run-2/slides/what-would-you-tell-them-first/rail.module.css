@@ -1,0 +1,61 @@
+/*
+ * Your first day together: motion only, no colour, size or weight (FE-011). One entrance each time the Slide becomes
+ * active (FE-009 §6.2), with the master's timing passed per element as `--delay` and `--duration`: the line draws as
+ * one stroke, each dot pops in as the line reaches it, and the dashed gap fades in with the 13:00 dot instead of
+ * drawing. The base rules are the finished picture, so at rest, under reduced motion and in print the rail is drawn.
+ */
+
+.stroke {
+  transform-origin: top;
+}
+
+@container (min-width: 64rem) {
+  .stroke {
+    transform-origin: left;
+  }
+}
+
+@media screen and (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .stroke {
+    animation: draw-down var(--duration) linear var(--delay) both;
+  }
+
+  @container (min-width: 64rem) {
+    :global([data-zone='active']) .stroke {
+      animation-name: draw-across;
+    }
+  }
+
+  :global([data-zone='active']) .dot {
+    animation: pop 300ms cubic-bezier(0.34, 1.56, 0.64, 1) var(--delay) both;
+  }
+
+  :global([data-zone='active']) .gap {
+    animation: fade 300ms ease-out var(--delay) both;
+  }
+}
+
+@keyframes draw-down {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes draw-across {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "title": "Day one with a capable stranger",
+  "voiceScript": {
+    "segments": {
+      "switch-to-the-room": {
+        "title": "Switch to the room",
+        "keywords": "forget AI, Monday morning, new colleague, coffee in hand",
+        "script": "Forget AI for a moment. Imagine it is Monday morning, and a new colleague starts today. Take a second and picture them standing at your desk, coffee in hand, ready to go."
+      },
+      "a-real-task": {
+        "title": "A real task",
+        "keywords": "real task, real deadline, who this person is",
+        "script": "And you have a real task for them. Not a lecture, not a case study. A real one, with a real deadline. Let me tell you who this person is, and what you need from them."
+      }
+    }
+  }
+}

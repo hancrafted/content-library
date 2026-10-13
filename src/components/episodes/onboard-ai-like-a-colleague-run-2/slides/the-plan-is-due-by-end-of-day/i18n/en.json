@@ -1,0 +1,40 @@
+{
+  "title": "The plan is due by end of day",
+  "heading": "Sommerfest for 100, due by 17:00",
+  "caption": "You cannot say it will be ready tomorrow.",
+  "brief": {
+    "task": "Company-wide Sommerfest for about 100 people.",
+    "deliverable": "A fully structured plan.",
+    "deadline": "Due by end of day, for the CEO."
+  },
+  "day": {
+    "label": "The working day, 09:00 to 17:00",
+    "start": "09:00",
+    "due": "17:00"
+  },
+  "notes": {
+    "onboarding-as-the-yardstick": {
+      "header": "Onboarding as the yardstick",
+      "description": "Andrej Karpathy framed the real capability test not as solving PhD-grade problems but as whether you would hire it as a junior intern: “get your slack set up, read these onboarding docs, do this task and let’s check in next week”.[1]",
+      "sources": {
+        "karpathy-post": {
+          "title": "Andrej Karpathy, post on X (14 Dec 2024)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-task": {
+        "title": "The task",
+        "keywords": "Sommerfest, Christmas party, a hundred people, interns to management",
+        "script": "Here is the task. The company wants a Sommerfest, or a Christmas party, whichever season you like. About a hundred people. Everyone from the interns to the management."
+      },
+      "the-clock": {
+        "title": "The clock",
+        "keywords": "first day, urgent, end of day, not tomorrow",
+        "script": "And it is their first day, and it is urgent. A fully structured plan has to be on the desk by end of day. Your team lead wants it. Maybe the CEO wants it. You cannot say it will be ready tomorrow."
+      }
+    }
+  }
+}

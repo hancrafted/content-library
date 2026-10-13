@@ -1,7 +1,7 @@
 {
   "title": "Stop prompting AI, start onboarding it · hancrafted",
   "description": "Why AI underdelivers when you prompt it like a tool, and why onboarding it like a capable new colleague takes management skills, not execution skills: context, tools, a clear brief and checking the work.",
-  "toc": "Contents Loading 2 min left 1 The promise and the gap Twenty times on paper Open contents : Contents · Loading Contents 2 min left 1 The promise and the gap Twenty times on paper",
+  "toc": "Contents Loading 4 min left 1 The promise and the gap Twenty times on paper 2 Day one with a capable stranger A colleague who knows the written world The plan is due by end of day What would you tell them first Open contents : Contents · Loading Contents 4 min left 1 The promise and the gap Twenty times on paper 2 Day one with a capable stranger A colleague who knows the written world The plan is due by end of day What would you tell them first",
   "slides": [
     {
       "id": "top",
@@ -11,6 +11,19 @@
     {
       "id": "the-promise-and-the-gap--twenty-times-on-paper",
       "text": "Promised against delivered The promise is a number. Your own result is a question. 01 The promise 20x 02 Your last real attempt ?"
+    },
+    { "id": "day-one-with-a-capable-stranger", "text": "Day one with a capable stranger" },
+    {
+      "id": "day-one-with-a-capable-stranger--a-colleague-who-knows-the-written-world",
+      "text": "Your new colleague They know nothing about your company. 01 Knows the written world They have read essentially everything that was ever written down. 02 Completely confident They never hesitate. 03 Eager to please They will say yes to anything, and they will almost never say, I don't know. Your company your people not known yet your budget not known yet last year not known yet"
+    },
+    {
+      "id": "day-one-with-a-capable-stranger--the-plan-is-due-by-end-of-day",
+      "text": "Sommerfest for 100, due by 17:00 You cannot say it will be ready tomorrow. Company-wide Sommerfest for about 100 people. A fully structured plan. Due by end of day, for the CEO. 09:00 17:00"
+    },
+    {
+      "id": "day-one-with-a-capable-stranger--what-would-you-tell-them-first",
+      "text": "Your first day together Just notice what you would do first. 09:00 Walk them through last year's party 09:30 Tell them the budget and the headcount 10:00 Hand over the booking login and the caterer's number 10:30 Say what the plan must look like and who reads it 13:00 Look at the first draft 16:00 Check it before it goes up"
     }
   ],
   "notes": [
@@ -22,6 +35,22 @@
     {
       "id": "the-promise-and-the-gap--twenty-times-on-paper",
       "text": "Twenty times on paper Measured gains are real but uneven Three field experiments with 4,867 developers found a 26% increase in completed tasks for those given a coding assistant, far below “20x”, and each single experiment was noisy. 1 Sources (1) The Effects of Generative AI on High-Skilled Work: Evidence from Three Field Experiments with Software Developers ( opens in a new tab ) papers.ssrn.com People misjudge their own gain In a trial with 16 experienced developers, they forecast a 24% speedup and afterwards believed AI had saved them 20%, while measured time rose 19%. METR marks that result out of date and says it does not show AI fails to speed up most developers, so the point is how unreliable self-perception is, not that AI slows people down. 1 2 Sources (2) Becker, Rush, Barnes, Rein, Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity ( opens in a new tab ) arxiv.org METR, Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity (study announcement with limitations) ( opens in a new tab ) metr.org Population-level effects are small so far Linking surveys of 25,000 Danish workers to administrative records found precise null effects on earnings and recorded hours, ruling out effects larger than 2% two years after ChatGPT’s launch. 1 Sources (1) Humlum, Vestergaard, Large Language Models, Small Labor Market Effects (NBER Working Paper 33777) ( opens in a new tab ) nber.org"
+    },
+    {
+      "id": "day-one-with-a-capable-stranger",
+      "text": "Day one with a capable stranger No speaker notes for this Slide."
+    },
+    {
+      "id": "day-one-with-a-capable-stranger--a-colleague-who-knows-the-written-world",
+      "text": "A colleague who knows the written world Vendors brief it as a capable newcomer Anthropic’s prompting guidance says to think of the model as “a brilliant but new employee who lacks context on your norms and workflows”, and to test a prompt by showing it to a colleague with minimal context. 1 Sources (1) Anthropic, Be clear and direct (prompting guidance) ( opens in a new tab ) docs.claude.com The lens has a lineage Ethan Mollick first called AI an intern, then in November 2024 dropped “intern” as too constraining and proposed an “infinitely patient new coworker who forgets everything you tell them each new conversation”. 1 Sources (1) Ethan Mollick, Getting started with AI: Good enough prompting, One Useful Thing (24 Nov 2024) ( opens in a new tab ) oneusefulthing.org Developers use the same picture Matt Pocock frames the agent as a colleague “who wakes up every morning and cannot remember who they are”, and says the codebase must be optimized for new starters because an agent starts afresh every session. This rests on the podcast’s published notes, not the full audio. 1 Sources (1) Gergely Orosz, AI Skills with Matt Pocock, The Pragmatic Engineer (17 Sep 2026; podcast notes quoting Pocock) ( opens in a new tab ) newsletter.pragmaticengineer.com"
+    },
+    {
+      "id": "day-one-with-a-capable-stranger--the-plan-is-due-by-end-of-day",
+      "text": "The plan is due by end of day Onboarding as the yardstick Andrej Karpathy framed the real capability test not as solving PhD-grade problems but as whether you would hire it as a junior intern: “get your slack set up, read these onboarding docs, do this task and let’s check in next week”. 1 Sources (1) Andrej Karpathy, post on X (14 Dec 2024) ( opens in a new tab ) x.com"
+    },
+    {
+      "id": "day-one-with-a-capable-stranger--what-would-you-tell-them-first",
+      "text": "What would you tell them first Write for the newcomer Michael Nygard wrote decision records “as if it is a conversation with a future developer”, so a newcomer need not blindly accept or blindly change a decision. Carried from an earlier research file, not re-fetched. 1 Sources (1) Michael Nygard, Documenting Architecture Decisions ( opens in a new tab ) cognitect.com Checking is part of the frame Anthropic’s best-practices page says to “Give Claude a way to verify its work” and “If you can’t verify it, don’t ship it”. Carried from an earlier research file, not re-fetched. 1 Sources (1) Anthropic, Claude Code best practices ( opens in a new tab ) code.claude.com"
     }
   ],
   "script": [
@@ -36,6 +65,22 @@
     {
       "id": "the-promise-and-the-gap--twenty-times-on-paper",
       "text": "Twenty times on paper 0:00 – 0:13 The number twenty times the promise a whole team Twenty times. That is the promise. Not twenty percent, twenty times. One person doing the work of a whole team. Let us take that at face value, just for a moment. 0:13 – 0:27 Your number your last attempt something real be honest Now think of your own last serious attempt. Something real, not a toy. You got something usable back, maybe even useful. But transformative? Be honest. Not twenty times. Not even close. 0:27 – 0:42 Why, left open the gap Tuesday afternoon hold on to it So there is a gap between the promise and your Tuesday afternoon. Why does it exist? I am going to leave that question hanging. Hold on to it, because I will come back to it."
+    },
+    {
+      "id": "day-one-with-a-capable-stranger",
+      "text": "Day one with a capable stranger 0:00 – 0:14 Switch to the room forget AI Monday morning new colleague coffee in hand Forget AI for a moment. Imagine it is Monday morning, and a new colleague starts today. Take a second and picture them standing at your desk, coffee in hand, ready to go. 0:14 – 0:29 A real task real task real deadline who this person is And you have a real task for them. Not a lecture, not a case study. A real one, with a real deadline. Let me tell you who this person is, and what you need from them."
+    },
+    {
+      "id": "day-one-with-a-capable-stranger--a-colleague-who-knows-the-written-world",
+      "text": "A colleague who knows the written world 0:00 – 0:15 Profile read everything knowledgeable completely confident never hesitate Here is what you know about them. They have read essentially everything that was ever written down. Extremely knowledgeable, about almost any topic you can name. And they are completely confident. They never hesitate. 0:15 – 0:33 Eager eager to please yes to anything I don't know nothing about your company They are also eager to please. They will say yes to anything, and they will almost never say, I don't know. And one more thing. They know nothing about your company. Not your people, not your budget, not what you did last year."
+    },
+    {
+      "id": "day-one-with-a-capable-stranger--the-plan-is-due-by-end-of-day",
+      "text": "The plan is due by end of day 0:00 – 0:12 The task Sommerfest Christmas party a hundred people interns to management Here is the task. The company wants a Sommerfest, or a Christmas party, whichever season you like. About a hundred people. Everyone from the interns to the management. 0:12 – 0:30 The clock first day urgent end of day not tomorrow And it is their first day, and it is urgent. A fully structured plan has to be on the desk by end of day. Your team lead wants it. Maybe the CEO wants it. You cannot say it will be ready tomorrow."
+    },
+    {
+      "id": "day-one-with-a-capable-stranger--what-would-you-tell-them-first",
+      "text": "What would you tell them first 0:00 – 0:11 Take a second take a second how would you onboard notice what you do first So take a second. Really. How would you onboard this person? Do not think about the right answer. Just notice what you would do first. 0:11 – 0:32 Walk the morning last year's party the budget how many people what our company is like I guess you would start with the morning. You would walk them through last year's party. What worked, what flopped, what the CEO hated. You would tell them the budget. You would tell them how many people are coming, and what our company is like. Formal, casual, loud, quiet. 0:32 – 0:52 Tools and the ask the keys booking login caterer shared calendar what you expect Then you would give them the keys. The login for the booking system. The number of the caterer you trust. Access to the shared calendar so they stop proposing dates that clash. And you would say what you expect. A plan of what shape, for whom, how long. 0:52 – 1:11 Look at the draft not wait until five first draft over lunch check once more your name on it And you would not wait until five o'clock. You would look at the first draft over lunch. Is this going in the right direction? Then you would check it once more before it goes upstairs. Because it is your name on it too."
     }
   ]
 }
