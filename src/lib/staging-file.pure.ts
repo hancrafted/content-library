@@ -95,12 +95,13 @@ export function gateTier(text: string): Tier {
 /**
  * The file with `{ by, at }` appended to its `verified` list. Never overwrites an entry, turns a bare
  * mapping into a list, and leaves every other frontmatter key and the body as written. Throws when the
- * file has no frontmatter.
+ * file has no frontmatter, or frontmatter that is not valid YAML.
  */
 export function appendVerified(text: string, entry: VerifiedEntry): string {
   const match = FRONTMATTER.exec(text);
   if (match === null) throw new Error('the file has no frontmatter to append a verified entry to');
   const doc = parseDocument(match[1] as string);
+  if (doc.errors.length > 0) throw new Error('the frontmatter is not valid YAML, so no verified entry can be appended');
   const kept = asEntries(doc.toJS().verified as unknown);
   doc.set('verified', doc.createNode([...kept, entry]));
   const end = match[0].endsWith('\n') ? '\n' : '';

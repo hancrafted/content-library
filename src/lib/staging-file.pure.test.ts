@@ -142,10 +142,11 @@ describe('success cases', () => {
   it('finds no problem in a list, a bare mapping or a file with no verified key', () => {
     // ARRANGE
     const texts = [file(list(MACHINE, HAN)), file(BARE_HAN), file('')];
+    const expected = [[], [], []];
     // ACT
     const problems = texts.map(verifiedProblems);
     // ASSERT
-    expect(problems).toEqual([[], [], []]);
+    expect(problems).toEqual(expected);
   });
 });
 
@@ -153,6 +154,7 @@ describe('failure cases', () => {
   it('answers null for a field the frontmatter lacks, a scalar read through, a mapping, and a file with no frontmatter', () => {
     // ARRANGE
     const bare = '# Budget\n\ntype: dossier\n';
+    const expected = [null, null, null, null];
     // ACT
     const values = [
       frontmatterField(DOSSIER, 'status'),
@@ -161,7 +163,7 @@ describe('failure cases', () => {
       frontmatterField(bare, 'type'),
     ];
     // ASSERT
-    expect(values).toEqual([null, null, null, null]);
+    expect(values).toEqual(expected);
   });
 
   it('reads unverified when there is no verified entry', () => {
@@ -227,6 +229,16 @@ describe('failure cases', () => {
     const expected = 'no frontmatter';
     // ACT
     const act = () => appendVerified(text, NOW);
+    // ASSERT
+    expect(act).toThrow(expected);
+  });
+
+  it('refuses to append to a file whose frontmatter is not valid YAML', () => {
+    // ARRANGE
+    const broken = '---\ntype: [unclosed\n---\n# T\n';
+    const expected = 'not valid YAML';
+    // ACT
+    const act = () => appendVerified(broken, NOW);
     // ASSERT
     expect(act).toThrow(expected);
   });

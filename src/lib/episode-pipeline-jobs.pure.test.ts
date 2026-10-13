@@ -39,10 +39,11 @@ describe('failure cases', () => {
   it('answers null for text that is not YAML, not a mapping, or has no job list', () => {
     // ARRANGE
     const texts = ['jobs: [unclosed', '- just a list', 'status: draft\n'];
+    const expected = [null, null, null];
     // ACT
     const pipelines = texts.map(readPipeline);
     // ASSERT
-    expect(pipelines).toEqual([null, null, null]);
+    expect(pipelines).toEqual(expected);
   });
 });
 
