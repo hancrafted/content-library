@@ -38,7 +38,7 @@ Each design answer is a bullet `**Design answer (ui-ux-pro-max:slides)**` under 
 
 ### The orchestrator after the gate
 
-When no ticket is `needs-triage`, and before `implement-episode`, rewrite every overruled `master:` and `motion:` into the Dossier: one commit on `episode/<slug>` through the `commit` skill, `Source: #<ticket>` and `Agent: write-design-spec`. Do it in this session. The designers never edit the Dossier, because parallel edits to one file would conflict.
+When no ticket is `needs-triage`, and before `implement-episode`, rewrite every overruled `master:` and `motion:` into the Dossier: one commit on `episode/<slug>` through the `commit` skill, a `Source:` trailer per overruling ticket, as its full issue URL (`https://github.com/hancrafted/content-library/issues/<ticket>`, since the `commit` skill rejects `#<ticket>`), and `Agent: write-design-spec`. Do it in this session. The designers never edit the Dossier, because parallel edits to one file would conflict.
 
 ### Metrics
 

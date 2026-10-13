@@ -194,9 +194,8 @@ jobs:
         model: opus
 
   # Writes no staging file: its output is the spec issue's visual language and a
-  # design answer in every ticket body. Both agents run in the orchestrator's
-  # session, because the implementor spawns the designers (ui-ux-pro-max:slides)
-  # and the reviewer's code-review spawns subagents. The gate is a label, not a
+  # design answer in every ticket body. The implementor runs in the orchestrator's
+  # session, because it spawns the designers (ui-ux-pro-max:slides). The gate is a label, not a
   # status: Han relabels each ticket from needs-triage to ready-for-agent.
   - id: write-design-spec
     needs: [write-spec]
@@ -218,7 +217,10 @@ jobs:
         session: orchestrator
       - type: reviewer
         skills: []
-        references: [references/write-design-spec.md, docs/episodes/<slug>/brief.md]
+        references:
+          - references/write-design-spec.md
+          - docs/episodes/<slug>/brief.md
+          - docs/episodes/<slug>/dossier.md
         rubric: references/write-design-spec.md#rubric
         model: opus
 
