@@ -414,3 +414,35 @@ Attempt 1 failed #139 and #142 on rubric 3: designed in parallel, they drew the 
 - Needs human: #141 changes "The work relocates" to scroll-driven motion and asks for the Dossier's "on entry … once" prose to be updated; its one `primary` is on "The total does not shrink", the line flagged at the Dossier gate.
 - Needs human: Open for Han copy, each with a draft in its ticket: captions on #138 "Twenty times on paper", #140 three Slides, #142 two Slides; #140's day-one note and plan rows; #142's four step texts; #143's grill-me pointer line.
 - Needs human: #137's Visual language says the day-one note "returns in the thought experiment"; after attempt 2 it appears in #139 "A colleague who knows the written world", #140 and #142.
+
+## write-design-spec · 2026-10-13T16:21:59Z
+
+### Inputs
+
+- Han's answers in a grill at the design gate, on the open points of the previous `write-design-spec` entry.
+
+### Output
+
+- Decision: German addresses the viewer as "Du", capitalised, in every ticket; "Kollegen" for the colleague.
+- Decision: the day-one note keeps its role as the recurring object, but is not shared up front: #139 builds it locally in "A colleague who knows the written world", `implement-episode` stops after #138 and #139 for Han's look, then #140 moves it to `slide-shared/` and #142 adds an optional `children` slot.
+- Decision: the last Section's h2 becomes "It feels like a lot" `{#it-feels-like-a-lot}`, so the twist lands on "The twist"; written into `dossier.md` in `4ed43af`, with "The twist"'s overruled master (`grid-1x1` to `basic-page`).
+- Decision: "The twist" uses a plain `heading` key and one entrance, no per-word motion and no `ai` colour on the heading.
+- Decision: #141's one `primary` moves to "The work moves"; #139's Sommerfest task stays a poster tile; Open-for-Han draft copy stays as drafted until Han edits it.
+- Edited #138 · 2026-10-13T16:15:19Z
+- Edited #139 · 2026-10-13T16:15:22Z
+- Edited #140 · 2026-10-13T16:15:26Z
+- Edited #141 · 2026-10-13T16:15:28Z
+- Edited #142 · 2026-10-13T16:15:30Z
+- Edited #143 · 2026-10-13T16:16:11Z
+
+### Checks
+
+- `mh check` and `vitest` staging test: pass after the Dossier rewrite.
+
+### Metrics
+
+- implementor · attempt 3 · pass · 198 s · 106223 tokens
+
+### Notes
+
+The edits apply Han's gate decisions, not a reviewer failure, so they count under the job's last attempt and no reviewer ran on them. Every ticket still carries `needs-triage`: Han relabels it to approve. "Confident is not correct" and "Four ways to onboard AI" keep `master: basic-page` in the Dossier: their Scenes are built from SlideFrame and basic-page is still the nearest frame component. The Dossier's Visual prose for "The twist" (the second "AI" sliding in) and for "The work relocates" ("on entry … once") is not rewritten; the design answers govern the build.
