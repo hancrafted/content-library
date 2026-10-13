@@ -23,9 +23,8 @@ const ICONS: Record<Grid2x3Cell, LucideIcon> = {
 };
 
 const TONE_CLASSES: Record<Grid2x3Tone, { card: string; chip: string }> = {
-  machine: { card: 'bg-machine/10 hover:bg-machine/15', chip: 'bg-machine' },
-  human: { card: 'bg-human/10 hover:bg-human/15', chip: 'bg-human' },
-  ai: { card: 'bg-ai/10 hover:bg-ai/15', chip: 'bg-ai' },
+  primary: { card: 'bg-primary/10 hover:bg-primary/15', chip: 'bg-primary' },
+  foreground: { card: 'bg-foreground/10 hover:bg-foreground/15', chip: 'bg-foreground' },
 };
 
 type Grid2x3Copy = Record<Grid2x3Cell, { title: string; caption: string }>;

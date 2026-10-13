@@ -46,17 +46,22 @@ export const grid3x1 = slide({
       <ol {...target('grid')} className="mt-10 divide-y divide-border border-y border-border">
         <AgendaRow
           index="01"
-          hover="group-hover:text-machine"
+          hover="group-hover:text-primary"
           title={t('cells.c1.title')}
           caption={t('cells.c1.caption')}
         />
         <AgendaRow
           index="02"
-          hover="group-hover:text-human"
+          hover="group-hover:text-foreground"
           title={t('cells.c2.title')}
           caption={t('cells.c2.caption')}
         />
-        <AgendaRow index="03" hover="group-hover:text-ai" title={t('cells.c3.title')} caption={t('cells.c3.caption')} />
+        <AgendaRow
+          index="03"
+          hover="group-hover:text-primary"
+          title={t('cells.c3.title')}
+          caption={t('cells.c3.caption')}
+        />
       </ol>
     </SlideFrame>
   ),

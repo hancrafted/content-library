@@ -5,13 +5,13 @@ export interface YearEntry {
   caption: string;
 }
 
-/** The chip tones, each a site token for one shared meaning; a chip cycles through them with its glyph. */
-export type ChipTone = 'machine' | 'human' | 'ai';
+/** The chip tones, decorative neutrals, none a meaning colour; a chip cycles through them with its glyph. */
+export type ChipTone = 'primary' | 'foreground' | 'muted-foreground';
 
 /** Category glyphs a chip carries. Placeholder categories: the timeline has no category keys, so place picks one. */
 export const CHIP_GLYPHS = ['◆', '●', '▲', '■', '✦', '◐'] as const;
 
-const CHIP_TONES: readonly ChipTone[] = ['machine', 'human', 'ai'];
+const CHIP_TONES: readonly ChipTone[] = ['primary', 'foreground', 'muted-foreground'];
 
 /** An entry placed in the whole timeline: its index in page order and the chip that index picks. */
 export interface PlacedEntry extends YearEntry {

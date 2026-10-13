@@ -45,9 +45,9 @@ export const grid1x3 = slide({
   segments: [{ slug: 'walkthrough' }],
   content: ({ t, target, Title }) => {
     const cells = [
-      { id: 'c1', index: '01', accent: 'bg-machine', title: t('cells.c1.title'), caption: t('cells.c1.caption') },
-      { id: 'c2', index: '02', accent: 'bg-human', title: t('cells.c2.title'), caption: t('cells.c2.caption') },
-      { id: 'c3', index: '03', accent: 'bg-ai', title: t('cells.c3.title'), caption: t('cells.c3.caption') },
+      { id: 'c1', index: '01', accent: 'bg-primary', title: t('cells.c1.title'), caption: t('cells.c1.caption') },
+      { id: 'c2', index: '02', accent: 'bg-foreground', title: t('cells.c2.title'), caption: t('cells.c2.caption') },
+      { id: 'c3', index: '03', accent: 'bg-primary', title: t('cells.c3.title'), caption: t('cells.c3.caption') },
     ];
     return (
       <SlideFrame>

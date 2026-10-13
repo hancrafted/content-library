@@ -59,8 +59,8 @@ export const grid2x2 = slide({
         caption: t('cells.c1.caption'),
         place: 'sm:justify-start sm:text-left',
         indexPlace: 'sm:top-auto sm:right-4 sm:bottom-3',
-        tint: 'hover:bg-machine/10 hover:border-machine/40',
-        dot: 'bg-machine',
+        tint: 'hover:bg-primary/10 hover:border-primary/40',
+        dot: 'bg-primary',
       },
       {
         id: 'c2',
@@ -69,8 +69,8 @@ export const grid2x2 = slide({
         caption: t('cells.c2.caption'),
         place: 'sm:items-end sm:justify-start sm:text-right',
         indexPlace: 'sm:top-auto sm:right-auto sm:bottom-3 sm:left-4',
-        tint: 'hover:bg-human/10 hover:border-human/40',
-        dot: 'bg-human',
+        tint: 'hover:bg-foreground/10 hover:border-foreground/40',
+        dot: 'bg-foreground',
       },
       {
         id: 'c3',
@@ -79,8 +79,8 @@ export const grid2x2 = slide({
         caption: t('cells.c3.caption'),
         place: 'sm:justify-end sm:text-left',
         indexPlace: 'sm:top-3 sm:right-4',
-        tint: 'hover:bg-ai/10 hover:border-ai/40',
-        dot: 'bg-ai',
+        tint: 'hover:bg-primary/10 hover:border-primary/40',
+        dot: 'bg-primary',
       },
       {
         id: 'c4',
@@ -106,19 +106,19 @@ export const grid2x2 = slide({
         >
           <span
             aria-hidden
-            className={`${arm} top-0 left-1/2 h-1/2 w-px -translate-x-1/2 group-has-[[data-quadrant=c1]:hover]/matrix:bg-machine group-has-[[data-quadrant=c2]:hover]/matrix:bg-human`}
+            className={`${arm} top-0 left-1/2 h-1/2 w-px -translate-x-1/2 group-has-[[data-quadrant=c1]:hover]/matrix:bg-primary group-has-[[data-quadrant=c2]:hover]/matrix:bg-foreground`}
           />
           <span
             aria-hidden
-            className={`${arm} bottom-0 left-1/2 h-1/2 w-px -translate-x-1/2 group-has-[[data-quadrant=c3]:hover]/matrix:bg-ai group-has-[[data-quadrant=c4]:hover]/matrix:bg-foreground`}
+            className={`${arm} bottom-0 left-1/2 h-1/2 w-px -translate-x-1/2 group-has-[[data-quadrant=c3]:hover]/matrix:bg-primary group-has-[[data-quadrant=c4]:hover]/matrix:bg-foreground`}
           />
           <span
             aria-hidden
-            className={`${arm} top-1/2 left-0 h-px w-1/2 -translate-y-1/2 group-has-[[data-quadrant=c1]:hover]/matrix:bg-machine group-has-[[data-quadrant=c3]:hover]/matrix:bg-ai`}
+            className={`${arm} top-1/2 left-0 h-px w-1/2 -translate-y-1/2 group-has-[[data-quadrant=c1]:hover]/matrix:bg-primary group-has-[[data-quadrant=c3]:hover]/matrix:bg-primary`}
           />
           <span
             aria-hidden
-            className={`${arm} top-1/2 right-0 h-px w-1/2 -translate-y-1/2 group-has-[[data-quadrant=c2]:hover]/matrix:bg-human group-has-[[data-quadrant=c4]:hover]/matrix:bg-foreground`}
+            className={`${arm} top-1/2 right-0 h-px w-1/2 -translate-y-1/2 group-has-[[data-quadrant=c2]:hover]/matrix:bg-foreground group-has-[[data-quadrant=c4]:hover]/matrix:bg-foreground`}
           />
           <span
             aria-hidden
