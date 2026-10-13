@@ -446,3 +446,31 @@ Attempt 1 failed #139 and #142 on rubric 3: designed in parallel, they drew the 
 ### Notes
 
 The edits apply Han's gate decisions, not a reviewer failure, so they count under the job's last attempt and no reviewer ran on them. Every ticket still carries `needs-triage`: Han relabels it to approve. "Confident is not correct" and "Four ways to onboard AI" keep `master: basic-page` in the Dossier: their Scenes are built from SlideFrame and basic-page is still the nearest frame component. The Dossier's Visual prose for "The twist" (the second "AI" sliding in) and for "The work relocates" ("on entry … once") is not rewritten; the design answers govern the build.
+
+## write-design-spec · 2026-10-13T16:27:48Z
+
+### Inputs
+
+- Han's approval in the orchestrator session ("i approve, remove label yourself").
+
+### Output
+
+- #138–#143 relabelled from `needs-triage` to `ready-for-agent` at 2026-10-13T16:27:33Z.
+
+### Checks
+
+- None in the pipeline.
+
+### Metrics
+
+- orchestrator · attempt 3 · pass · 5 s
+- #138 · approved as drafted
+- #139 · approved as drafted
+- #140 · approved as drafted
+- #141 · approved as drafted
+- #142 · approved as drafted
+- #143 · approved as drafted
+
+### Notes
+
+Han approved every design without editing a ticket body, so each ticket's last edit is marked `Edited-by: write-design-spec`. His design decisions came in the gate grill instead, and the previous entry lists them; the orchestrator applied them as agent edits. So "approved as drafted" here does not mean the drafts went through unchanged. The relabel was made by the orchestrator on Han's word, so the label history names the agent's account, not Han's action.
