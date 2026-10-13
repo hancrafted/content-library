@@ -17,7 +17,7 @@ Motion rules and the reasons behind them live in [the design system](design-syst
 
 ## grid-1x1
 
-- _Shows_: One feature cell across the whole Foreground: a tall poster tile with title and caption set bottom-left over a gradient in the three meaning colours.
+- _Shows_: One feature cell across the whole Foreground: a tall poster tile with title and caption set bottom-left over a soft gradient in the primary and foreground colours.
 - _When_: A single idea that earns the whole Slide: an opening claim, a definition, a quote-sized statement. Not for comparing things. <!-- draft: Han edits -->
 - _Motion_: Hover drifts the gradient a few percent (a CSS transition, instant under reduced motion). No entrance.
 
