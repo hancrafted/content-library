@@ -14,16 +14,31 @@ Every markdown file here carries YAML frontmatter that agents read and markdown-
    - the shape, such as the nested `generated: { by, at }`;
    - its value formats: actors as in §7 (`claude-code/opus-5.5`, `human:han`, `process:<id>`), and timestamps as ISO 8601 datetimes with an explicit UTC offset.
 2. **Add a project key only for a meaning OKF lacks**, for example a research file's `question`, or the Episode a feedback file belongs to. OKF lets files carry keys it doesn't define. Name a project key in snake_case, as OKF names its own, and state its meaning in its markdown-harness rule.
-3. **Never reuse an OKF name for another meaning.** When a project key clashes with an OKF key, the file moves to the OKF meaning. The known clash is `status`: ours means draft, checked or approved, and OKF's means draft, stable or deprecated. Han's approval at a gate looks like OKF's `verified: { by: human:han, at }`. Issue #122 lists each clash and the decision it needs.
+3. **Never reuse an OKF name for another meaning.** When a project key clashes with an OKF key, the file moves to the OKF meaning. The clash was `status`: ours meant draft, checked or approved, and OKF's means draft, stable or deprecated. The gate stage moved to `verified` and `status` keeps OKF's lifecycle meaning (see [Mappings](#mappings)).
 4. **Pin the version.** This ADR follows OKF v0.2. When OKF publishes a new version, review the keys in use against it before adopting it.
+
+## Mappings
+
+Settled in #122. Each is the OKF key for a meaning the project records.
+
+1. **Gates are trust tiers.** A staging file that passes its checks gets `verified: { by: process:markdown-harness, at }` (machine-confirmed); Han's approval adds `{ by: human:han, at }` (human-reviewed), written by the new-episode skill's `approve.ts`, never typed. A `verified` entry counts only while its `at` is at or after `generated.at`, so an edit after approval re-opens the gate.
+2. **Staging is `status: draft`.** OKF reads an absent `status` as `stable`; staging files say `draft` until Promotion removes the line.
+3. **Agent-written files carry `generated: { by, at }`.** Required on Brief, Dossier, feedback and research files: `verified.at` is compared against it.
+4. **Research Sources are frontmatter `sources:`** (`id`, `resource`, `title`), cited in the body as `[^id]` footnotes; the body list goes. Access dates are not recorded: a ledger would hold them if ever needed.
+5. **Every governed file has `type` and `title`**, the title equal to its h1, for retrieval. `description` is required only where an `index.md` lists the file, because the index copies it.
+6. **`docs/llm-wiki/` is a declared OKF bundle** (`okf_version` in its `index.md`). The rest of `docs/` follows OKF key by key without the claim.
+7. **Not adopted:** `resource` (our concepts are abstract) and `tags` (no consumer). `pipeline.yml` is YAML config, not a markdown file, and keeps its own `status`.
 
 ## Considered options
 
 - **House keys** (`researched_on`, `status: approved`): they cost nothing now, but every file would need translating before any OKF tool could read it. Rejected.
-- **Full OKF conformance** (a bundle-root `index.md` declaring `okf_version`, and OKF's whole key set): OKF requires only `type`, so nothing forces this. It stays open in #122.
+- **Full OKF conformance** for the whole repo (a bundle-root `index.md` declaring `okf_version`): ADRs and handoffs carry no frontmatter, so the claim would be false. Declared for `docs/llm-wiki/` only.
+- **A project `gate:` key** for Han's approval: one scalar, cheap to read, but invisible to any OKF reader and the same meaning as OKF's `verified`. Rejected.
+- **`last_modified` for a source's access date**: OKF's key means when the source changed, a different meaning (rule 3). Rejected, with the date itself.
 
 ## Consequences
 
 - Code reads frontmatter with a YAML parser, because OKF's `generated` and `verified` are mappings, written in block or flow form (`frontmatterField`, #123).
 - A markdown-harness rule with `unknownKeys: forbidden` has to list each OKF key a file adopts.
 - Moving existing keys to their OKF names (research `generated` in #121, the rest in #122) changes every governed file that carries them, and the checks that read them.
+- Gate code (the new-episode status script, the orchestrator's checks) reads `verified` and `generated.at` instead of `status`.
