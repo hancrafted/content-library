@@ -1,3 +1,4 @@
+import { listEpisodes } from '@/components/episodes/episode-repository';
 import { findEpisode } from '@/components/episodes/registry';
 
 import { placeSections, type SlideOutline } from '@/lib/episode.pure';
@@ -48,6 +49,19 @@ function lostAnchors(walk: { slug: string; published: readonly string[]; produce
     );
 }
 
+/**
+ * The registered Episodes whose anchors are bound: every one but an upcoming
+ * Episode, whose anchors bind when it is published (docs/features/episode-publishing.md).
+ * A layout reference has no metadata and is always bound.
+ */
+function boundSlugs(
+  registered: readonly (typeof EPISODE_SLUGS)[number][],
+  episodes: readonly { slug: string; status: string }[],
+): (typeof EPISODE_SLUGS)[number][] {
+  const upcoming = episodes.filter(({ status }) => status === 'upcoming').map(({ slug }) => slug);
+  return registered.filter((slug) => !upcoming.includes(slug));
+}
+
 /** The anchors the walk produces for one Episode, as the Episode page does: its record's Section lists. */
 function producedAnchors(slug: (typeof EPISODE_SLUGS)[number]): string[] {
   return placeSections<SlideOutline>(findEpisode(slug).sections).flatMap((section) => section.map(({ id }) => id));
@@ -56,7 +70,7 @@ function producedAnchors(slug: (typeof EPISODE_SLUGS)[number]): string[] {
 describe('success cases', () => {
   it('still produces every published anchor of every registered Episode', async () => {
     // ARRANGE
-    const cases = [...EPISODE_SLUGS];
+    const cases = boundSlugs(EPISODE_SLUGS, listEpisodes());
     // ACT
     const lostPerEpisode = await Promise.all(
       cases.map(async (slug) => {
@@ -71,7 +85,9 @@ describe('success cases', () => {
 
   it('keeps each published-anchors.json a sorted array of unique strings', async () => {
     // ARRANGE
-    const snapshots = await Promise.all(EPISODE_SLUGS.map((slug) => publishedAnchorsOf(slug, producedAnchors(slug))));
+    const snapshots = await Promise.all(
+      boundSlugs(EPISODE_SLUGS, listEpisodes()).map((slug) => publishedAnchorsOf(slug, producedAnchors(slug))),
+    );
     // ACT
     const unsorted = snapshots.filter((anchors) => anchors.join() !== [...new Set(anchors)].sort().join());
     // ASSERT
@@ -111,6 +127,19 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('skips an upcoming Episode with a page and binds a published one', () => {
+    // ARRANGE
+    const episodes = [
+      { slug: 'amnesiac-freelancer', status: 'published' },
+      { slug: 'ai-token-economy', status: 'upcoming' },
+    ];
+    const expected = ['page-template', 'amnesiac-freelancer'];
+    // ACT
+    const bound = boundSlugs(['page-template', 'amnesiac-freelancer', 'ai-token-economy'], episodes);
+    // ASSERT
+    expect(bound).toEqual(expected);
+  });
+
   it('allows a new anchor the snapshot does not list', () => {
     // ARRANGE
     const published = ['foundations'];

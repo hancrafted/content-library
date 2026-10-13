@@ -2,6 +2,7 @@ import { listEpisodes } from '@/components/episodes/episode-repository';
 import { findEpisode } from '@/components/episodes/registry';
 import { topicsOf } from '@/lib/episode-metadata.pure';
 import { FEATURED, FORMATS, TOPIC_IDS, TOPICS } from '@/lib/episode-overview';
+import { isEpisodeSlug } from '@/lib/routes';
 import de from '@/messages/de.json';
 import en from '@/messages/en.json';
 import { describe, expect, it } from 'vitest';
@@ -58,7 +59,7 @@ describe('failure cases', () => {
       ...TOPIC_IDS.filter((id) => !episodeOverview.topics[id]).map((id) => `topics.${id}`),
       ...FORMATS.filter((id) => !episodeOverview.formats[id]).map((id) => `formats.${id}`),
       ...listEpisodes().flatMap(({ slug, status }) => {
-        const copy = status === 'published' ? findEpisode(slug).messages[locale] : upcomingCopy[slug];
+        const copy = isEpisodeSlug(slug) ? findEpisode(slug).messages[locale] : upcomingCopy[slug];
         return copy?.title && copy.caption ? [] : [`${status}.${slug}`];
       }),
     ];
@@ -77,10 +78,10 @@ describe('edge cases', () => {
     expect(looks.size).toBe(expected);
   });
 
-  it('keeps upcoming copy only for Episodes still upcoming, so a published one reads its own keys', () => {
+  it('keeps site-wide upcoming copy only for Episodes with no page, so one with a page reads its own i18n', () => {
     // ARRANGE
     const expected = listEpisodes()
-      .filter(({ status }) => status === 'upcoming')
+      .filter(({ slug, status }) => status === 'upcoming' && !isEpisodeSlug(slug))
       .map(({ slug }) => slug)
       .sort();
     // ACT

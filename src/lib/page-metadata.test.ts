@@ -71,6 +71,24 @@ describe('success cases', () => {
     // ASSERT
     expect(url).toBe(expected);
   });
+
+  it.each(['en', 'de'] as const)('keeps an upcoming Episode page out of search in %s', (locale) => {
+    // ARRANGE
+    const expected = { index: false, follow: false };
+    // ACT
+    const metadata = pageMetadata({ episode: 'page-template' }, locale, { ...COPY, status: 'upcoming' });
+    // ASSERT
+    expect(metadata.robots).toEqual(expected);
+  });
+
+  it.each(['published', undefined] as const)('leaves a page with status %s indexable', (status) => {
+    // ARRANGE
+    const expected = undefined;
+    // ACT
+    const metadata = pageMetadata({ episode: 'page-template' }, 'en', { ...COPY, status });
+    // ASSERT
+    expect(metadata.robots).toBe(expected);
+  });
 });
 
 describe('failure cases', () => {
