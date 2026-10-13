@@ -50,3 +50,43 @@
 - Needs human: third-party visual sourcing remains open on Slides 8 and 9.
 - Metrics timing is approximate: the first reviewer reported about three minutes, the second reviewer was measured between observed clock readings, and implementor timing includes Han's settlement dialogue. Token counts were not supplied. CSV completion timestamps use the corresponding recorded check/review checkpoints.
 - Human gate: Han edits and approves the Brief before research categorization or pipeline tailoring starts.
+
+## categorize-research · 2026-10-13T23:15:54Z
+
+### Inputs
+
+- `docs/episodes/never-too-early-sales/brief.md`: eight questions; Han approved at `2026-10-13T23:14:25Z`, committed in `444ce96`.
+- `.agents/skills/new-episode/assets/pipeline.yml#categorize-research`: category, numbering and subject-slug intent.
+- `GLOSSARY.md`: existing research categories.
+- `.agents/skills/domain-modeling/SKILL.md`: domain vocabulary procedure.
+- Research-folder listings under this worktree's `docs/episodes/` and `docs/llm-wiki/`: no existing IDs to reserve.
+
+### Output
+
+- `GLOSSARY.md`: added FIN for startup finance and B2B for business-to-business pipeline sales.
+- `.scratch/never-too-early-sales/research-folders.md`: ordered folder mapping, saved for resumption.
+- Question 1: `FIN-0001__revenue-lags-costs-early-stage`.
+- Question 2: `B2B-0001__b2b-sales-cycle-length`.
+- Question 3: `B2B-0002__b2b-stage-conversion-rates`.
+- Question 4: `B2B-0003__early-selling-market-insight`.
+- Question 5: `B2B-0004__early-selling-customer-trust`.
+- Question 6: `B2B-0005__early-selling-internal-insight`.
+- Question 7: `B2B-0006__marketing-feeds-pipeline-stages`.
+- Question 8: `B2B-0007__sales-pipeline-ramp-up-time`.
+
+### Checks
+
+- `npx mh query GLOSSARY.md`: read before editing.
+- `npm run check:docs`: pass, zero violations.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 30 s
+
+### Notes
+
+- FIN is new because no existing category covers cashflow, cost and revenue timing in startups.
+- B2B is new because SALES governs buyers choosing a coach or consultant, not companies building their sales pipelines.
+- No library match: `docs/llm-wiki/index.md` does not exist in this checkout. Retrieval must explicitly mark every question new.
+- The agent reported approximately 30 seconds of tool time, not a complete wall-clock duration; token counts were not supplied.
+- No research content was written. The pipeline approval gate remains ahead.
