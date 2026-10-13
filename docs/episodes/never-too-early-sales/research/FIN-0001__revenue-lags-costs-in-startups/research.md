@@ -5,8 +5,8 @@ description: 'Revenue lags costs because a startup pays for building, hiring and
 question: 'Why does revenue typically lag the costs that generate it in an early-stage startup?'
 generated:
   by: claude-code/sonnet-5.5
-  at: 2026-10-14T00:00:00Z
-stale_after: 2027-10-14T00:00:00Z
+  at: 2026-10-13T23:16:40Z
+stale_after: 2027-10-13T23:16:40Z
 sources:
   - id: graham-default-alive
     resource: https://paulgraham.com/aord.html
