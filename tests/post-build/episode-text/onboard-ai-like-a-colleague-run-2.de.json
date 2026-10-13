@@ -1,7 +1,7 @@
 {
   "title": "Hör auf, KI zu prompten, arbeite sie ein · hancrafted",
   "description": "Warum KI enttäuscht, wenn Du sie wie ein Werkzeug promptest, und warum ihre Einarbeitung wie bei einem fähigen neuen Kollegen Führungsarbeit ist, keine Ausführungsarbeit: Kontext, Werkzeuge, ein klares Briefing und die Prüfung des Ergebnisses.",
-  "toc": "Inhalt Wird geladen noch 5 Min. 1 Das Versprechen und die Lücke Zwanzigmal auf dem Papier 2 Tag eins mit einem fähigen Fremden Ein Kollege, der die geschriebene Welt kennt Der Plan muss bis Feierabend stehen Was würdest Du ihm zuerst sagen Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 5 Min. 1 Das Versprechen und die Lücke Zwanzigmal auf dem Papier 2 Tag eins mit einem fähigen Fremden Ein Kollege, der die geschriebene Welt kennt Der Plan muss bis Feierabend stehen Was würdest Du ihm zuerst sagen",
+  "toc": "Inhalt Wird geladen noch 7 Min. 1 Das Versprechen und die Lücke Zwanzigmal auf dem Papier 2 Tag eins mit einem fähigen Fremden Ein Kollege, der die geschriebene Welt kennt Der Plan muss bis Feierabend stehen Was würdest Du ihm zuerst sagen 3 Der Aufwand wandert, er verschwindet nicht Die Arbeit verlagert sich Vom Schreibtisch in die Organisation Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 7 Min. 1 Das Versprechen und die Lücke Zwanzigmal auf dem Papier 2 Tag eins mit einem fähigen Fremden Ein Kollege, der die geschriebene Welt kennt Der Plan muss bis Feierabend stehen Was würdest Du ihm zuerst sagen 3 Der Aufwand wandert, er verschwindet nicht Die Arbeit verlagert sich Vom Schreibtisch in die Organisation",
   "slides": [
     {
       "id": "top",
@@ -24,6 +24,15 @@
     {
       "id": "day-one-with-a-capable-stranger--what-would-you-tell-them-first",
       "text": "Euer erster gemeinsamer Tag Achte einfach darauf, was Du als Erstes tun würdest. 09:00 Ihm das Fest vom letzten Jahr erklären 09:30 Ihm das Budget und die Teilnehmerzahl nennen 10:00 Den Login fürs Buchungssystem und die Nummer des Caterers übergeben 10:30 Sagen, wie der Plan aussehen muss und wer ihn liest 13:00 Den ersten Entwurf ansehen 16:00 Ihn prüfen, bevor er nach oben geht"
+    },
+    { "id": "the-effort-moves-it-does-not-vanish", "text": "Der Aufwand wandert, er verschwindet nicht" },
+    {
+      "id": "the-effort-moves-it-does-not-vanish--the-work-relocates",
+      "text": "Der Aufwand wandert Der Aufwand ist nicht verschwunden. Er hat sich verlagert. Zwei Balken für den Aufwand einer Aufgabe, gleich breit: Im ersten füllt das Selbsttippen alles aus; im zweiten liegt der Aufwand im Briefing, im Kontext, in den Werkzeugen, im Prüfen und in einem kleinen KI-Abschnitt. selbst tippen Die Arbeit wandert Briefing Kontext Werkzeuge Prüfen KI Briefing Kontext Werkzeuge Prüfen KI Die Summe schrumpft nicht Schematisch, keine Messung."
+    },
+    {
+      "id": "the-effort-moves-it-does-not-vanish--from-your-desk-to-your-organization",
+      "text": "Fähigkeiten für Dich, Disziplinen für die Firma Das sind Disziplinen, keine Werkzeuge. Fähigkeiten Für Dich Briefing Kontext übergeben Prüfen Disziplinen In Deiner ganzen Organisation Wie Arbeit rund um KI organisiert ist Wer den Kontext aufschreibt Wem die Prüfungen gehören"
     }
   ],
   "notes": [
@@ -51,6 +60,18 @@
     {
       "id": "day-one-with-a-capable-stranger--what-would-you-tell-them-first",
       "text": "Was würdest Du ihm zuerst sagen Für den Neuen schreiben Michael Nygard schrieb Entscheidungsprotokolle, „als wäre es ein Gespräch mit einem zukünftigen Entwickler“, damit ein Neuer eine Entscheidung weder blind hinnehmen noch blind ändern muss. Übernommen aus einer früheren Recherche, nicht neu abgerufen. 1 Quellen (1) Michael Nygard, Documenting Architecture Decisions ( öffnet in neuem Tab ) cognitect.com Prüfen gehört zum Rahmen Anthropics Seite mit Best Practices sagt: „Gib Claude eine Möglichkeit, seine Arbeit zu überprüfen“ und „Wenn Du es nicht überprüfen kannst, liefere es nicht aus“. Übernommen aus einer früheren Recherche, nicht neu abgerufen. 1 Quellen (1) Anthropic, Claude Code best practices ( öffnet in neuem Tab ) code.claude.com"
+    },
+    {
+      "id": "the-effort-moves-it-does-not-vanish",
+      "text": "Der Aufwand wandert, er verschwindet nicht Keine Sprechernotizen für diese Folie."
+    },
+    {
+      "id": "the-effort-moves-it-does-not-vanish--the-work-relocates",
+      "text": "Die Arbeit verlagert sich Wohin die Zeit des Einzelnen geht In der METR-Studie übernahmen die Entwickler weniger als 44 % der Vorschläge und verbrachten etwa 9 % ihrer Zeit damit, KI-Ausgaben zu prüfen und zu bereinigen; sie beschrieben die KI als neuen Mitwirkenden, dem das stillschweigende Wissen über das Repository fehlt. 1 Dass sich der Aufwand verlagert, ist eine Schlussfolgerung; keine Quelle prüft das direkt. Quellen (1) Becker, Rush, Barnes, Rein, Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity ( öffnet in neuem Tab ) arxiv.org Arbeitgeber haben die Arbeit umgebaut In den dänischen Daten haben Arbeitgeber Chatbots über eine Neuordnung von Aufgaben aufgenommen, die neue Arbeit geschaffen hat: in der Erstellung von Inhalten, in der Aufsicht über KI und in der Integration von KI. 1 Quellen (1) Humlum, Vestergaard, Still Waters, Rapid Currents: Early Labor Market Transformation under Generative AI, formerly Large Language Models, Small Labor Market Effects (NBER Working Paper 33777, revised March 2026) ( öffnet in neuem Tab ) nber.org Wert kommt mit Ergänzungen Basistechnologien „ermöglichen und erfordern erhebliche ergänzende Investitionen“ in Prozesse, Geschäftsmodelle und Humankapital, oft immateriell und schlecht gemessen, weshalb die Produktivität anfangs unterschätzt wird (die Produktivitäts-J-Kurve). 1 Quellen (1) Brynjolfsson, Rock, Syverson, The Productivity J-Curve: How Intangibles Complement General Purpose Technologies (NBER Working Paper 25148; AEJ Macroeconomics 13(1), 2021) ( öffnet in neuem Tab ) nber.org"
+    },
+    {
+      "id": "the-effort-moves-it-does-not-vanish--from-your-desk-to-your-organization",
+      "text": "Vom Schreibtisch in die Organisation Eingeführt, aber ohne Wirkung In einer Umfrage unter fast 6.000 Führungskräften setzen rund 69 % der Firmen KI aktiv ein, doch etwa 90 % der Führungskräfte berichten für die letzten drei Jahre keine Wirkung auf Produktivität oder Beschäftigung. 1 Quellen (1) Yotzov, Barrero, Bloom, Davis et al., Firm Data on AI (NBER Working Paper 34836, revised March 2026) ( öffnet in neuem Tab ) nber.org Die Qualifikationslücke ist bekannt In einer Umfrage unter etwa 800 Entscheidern großer US-Unternehmen berichtet fast die Hälfte von technischen Qualifikationslücken, während die Investitionen in Weiterbildung um 8 Punkte gesunken sind; 43 % der Führungskräfte warnen vor schwindenden Fähigkeiten ohne bewusst gestaltete Rollen und Coaching. Selbstauskunft. 1 Quellen (1) Wharton Human-AI Research and GBK Collective, Accountable Acceleration: Gen AI Fast-Tracks Into the Enterprise, Executive Summary ( öffnet in neuem Tab ) ai.wharton.upenn.edu Einzelne gehen voran Der vorläufige Bericht von MIT NANDA findet Beschäftigte in über 90 % der befragten Unternehmen, die private KI-Werkzeuge nutzen, während offizielle Initiativen stocken. Die Zahlen beruhen auf Interviews und Umfragen unter Führungskräften, selbst bewertet, und sind daher nur als Hinweis zu lesen. 1 Quellen (1) Challapally et al., The GenAI Divide: State of AI in Business 2025 (MIT Project NANDA, preliminary findings, July 2025) ( öffnet in neuem Tab ) static1.squarespace.com"
     }
   ],
   "script": [
@@ -81,6 +102,18 @@
     {
       "id": "day-one-with-a-capable-stranger--what-would-you-tell-them-first",
       "text": "Was würdest Du ihm zuerst sagen 0:00 – 0:14 Nimm Dir eine Sekunde eine Sekunde wie würdest Du einarbeiten was Du als Erstes tust Also nimm Dir eine Sekunde. Wirklich. Wie würdest Du diese Person einarbeiten? Denk nicht an die richtige Antwort. Achte einfach darauf, was Du als Erstes tun würdest. 0:14 – 0:40 Der Vormittag Fest vom letzten Jahr das Budget wie viele Leute wie unsere Firma ist Ich schätze, Du würdest mit dem Vormittag anfangen. Du würdest ihm das Fest vom letzten Jahr erklären. Was funktioniert hat, was gefloppt ist, was der CEO gehasst hat. Du würdest ihm das Budget nennen. Du würdest ihm sagen, wie viele Leute kommen und wie unsere Firma so ist. Förmlich, locker, laut, leise. 0:40 – 1:04 Werkzeuge und der Auftrag die Schlüssel Login fürs Buchungssystem Caterer gemeinsamer Kalender was Du erwartest Dann würdest Du ihm die Schlüssel geben. Den Login für das Buchungssystem. Die Nummer des Caterers, dem Du vertraust. Zugriff auf den gemeinsamen Kalender, damit er keine Termine mehr vorschlägt, die kollidieren. Und Du würdest sagen, was Du erwartest. Ein Plan in welcher Form, für wen, wie lang. 1:04 – 1:24 Der Blick auf den Entwurf nicht bis fünf warten erster Entwurf beim Mittagessen noch einmal prüfen Dein Name Und Du würdest nicht bis fünf Uhr warten. Du würdest Dir den ersten Entwurf beim Mittagessen ansehen. Geht das in die richtige Richtung? Dann würdest Du ihn noch einmal prüfen, bevor er nach oben geht. Weil auch Dein Name draufsteht."
+    },
+    {
+      "id": "the-effort-moves-it-does-not-vanish",
+      "text": "Der Aufwand wandert, er verschwindet nicht 0:00 – 0:18 Wo ist die Zeit geblieben wo ist die Zeit geblieben Tippen gespart nicht zwanzigmal schneller Wo ist die Zeit also geblieben? Du hast Dir das ganze Tippen gespart, und trotzdem hast Du Dich nicht zwanzigmal schneller gefühlt. Das ist die Frage, und die Antwort ist das ganze Lernziel in einem Satz."
+    },
+    {
+      "id": "the-effort-moves-it-does-not-vanish--the-work-relocates",
+      "text": "Die Arbeit verlagert sich 0:00 – 0:19 Verlagert, nicht beseitigt nicht verschwunden Briefing Kontext Werkzeuge Prüfen die Summe schrumpft nicht Der Aufwand ist nicht verschwunden. Er hat sich verlagert. Er hat das Tippen verlassen und ist gelandet im Briefing, in der Übergabe von Kontext, im Einrichten von Werkzeugen und im Prüfen. Die Summe schrumpft nicht. Sie wandert woandershin. 0:19 – 0:42 Woher die Lücke kommt die Neuinvestition auslassen die Kosten behalten den Gewinn verpassen die Arbeit neu machen Das ist die Lücke. Lass die Neuinvestition aus, und Du behältst die Kosten, während Dir der Gewinn entgeht. Du bezahlst das Werkzeug, Du wartest auf die Antwort, und dann machst Du die Arbeit noch einmal, weil niemand dem Werkzeug gesagt hat, worin die Arbeit besteht."
+    },
+    {
+      "id": "the-effort-moves-it-does-not-vanish--from-your-desk-to-your-organization",
+      "text": "Vom Schreibtisch in die Organisation 0:00 – 0:18 Für Dich selbst neue Fähigkeiten Briefing Kontext übergeben Prüfen eine Gewohnheit Zuerst für Dich selbst. Das sind neue Fähigkeiten. Briefing, Kontext übergeben, Prüfen. Am Anfang fühlen sie sich ungewohnt an, und dann werden sie zur Gewohnheit, so wie eine gute Notiz zum ersten Tag für einen Menschen. 0:18 – 0:38 Für Deine Organisation größerer Maßstab wer den Kontext aufschreibt wem die Prüfungen gehören Disziplinen keine Werkzeuge Und dann für Deine Organisation. Dasselbe in größerem Maßstab. Wer schreibt den Kontext auf, damit die nächste Person nicht bei null anfängt? Wem gehören die Prüfungen? Wie ist die Arbeit rund um KI organisiert? Das sind Disziplinen, keine Werkzeuge."
     }
   ]
 }
