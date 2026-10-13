@@ -45,6 +45,7 @@ _Done when_ the time-box reaches its switch point or Han says "settle".
 Work through the Brief's headings in template order, filling each from the candidates log first:
 
 - **Format** and **Audience**: read back what Frame settled.
+- **Style**: one line naming a style from `docs/design/design-guide.md` and the audience reason for it. Offer 2–3 of the named styles with the audience each suits, and recommend one. A style may differ by audience but stays the same within the Episode, and the designers write the Slides within it. If the Episode needs a style the guide does not list, name it as new and flag it as open.
 - **Creative elements** (Learning goal, Actionables, Hook, Red thread, Threads, Analogy): offer 2–3 candidates, each in one sentence, and recommend one with its reason. Draw them from the log; generate new ones only where the log has fewer than two. Han chooses or rewords; write down his wording verbatim, because his edits are what later teach agents his style.
 - **Threads**: offer "no Threads" as one candidate for a Short. A longer Episode gets an A thread (the mechanism or argument) and a B thread (a story told in turns with it).
 - **Research questions**: propose the list, each a _why_ question scoped to a subject matter, one research job per item. Han adds, cuts or rewords.
@@ -71,7 +72,7 @@ A voice session ends in a **handoff**, not a file. Han pastes it into Claude Cod
 
 ## Brief template
 
-Every heading is required and stays in this order, except Threads and Open ideas, which are optional: delete either when it is empty. Actionables and Research questions are ordered lists; every other section except Open ideas is prose. The `staging-brief` and `staging-brief-body` rules in `markdown-harness.config.yaml` govern the Brief, and `npm run verify` checks this template against them.
+Every heading, Style included, is required and stays in this order, except Threads and Open ideas, which are optional: delete either when it is empty. Actionables and Research questions are ordered lists; every other section except Open ideas is prose. The `staging-brief` and `staging-brief-body` rules in `markdown-harness.config.yaml` govern the Brief, and `npm run verify` checks this template against them.
 
 ```markdown
 ---
@@ -88,6 +89,10 @@ Foundations, Teardown or Short, and the planned length in minutes.
 ## Audience
 
 Who watches, and what they already know and want.
+
+## Style
+
+One line naming a style from `docs/design/design-guide.md`, and the audience reason for it.
 
 ## Learning goal
 
