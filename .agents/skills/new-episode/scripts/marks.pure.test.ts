@@ -27,4 +27,12 @@ describe('agentOf', () => {
   it('takes the last mark when several edits stacked footers', () => {
     expect(agentOf('Body.\n\nEdited-by: write-spec\nEdited-by: write-design-spec')).toBe('write-design-spec');
   });
+
+  it('ignores a mark that sits above a non-trailer paragraph', () => {
+    expect(agentOf('Subject\n\nAgent: write-spec\n\nA closing paragraph of prose.\n')).toBeNull();
+  });
+
+  it('ignores a mark in a paragraph that holds prose lines', () => {
+    expect(agentOf('Subject\n\nNote: this was quoted\nand continues here.\nAgent: write-spec\n')).toBeNull();
+  });
 });

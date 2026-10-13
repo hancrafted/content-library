@@ -3,6 +3,13 @@ import { TITLE_ANCHOR } from '@/lib/episode.pure';
 import { SlideWrapper } from './slide-wrapper';
 import { TalkLauncher, type TalkPlayerLabels } from './talk-player.client';
 
+/** The elements of the Title slide a Speaker note can target. */
+export type TitleTarget = 'title' | 'caption';
+
+export function isTitleTarget(name: string): name is TitleTarget {
+  return name === 'title' || name === 'caption';
+}
+
 /**
  * The Episode's opening slide and the page's only `h1` (FE-002). Rendered by
  * `EpisodePageContainer`, never by a page file, and not listed in the table
@@ -21,9 +28,9 @@ export function TitleSlide({
   youtubeId?: string;
   talkLabels?: TalkPlayerLabels;
   /** The short names the Title slide's Speaker notes target (`title`, `caption`); only these elements carry a `data-target`. */
-  targets?: readonly string[];
+  targets?: readonly TitleTarget[];
 }) {
-  const targetOf = (name: string) => (targets.includes(name) ? { 'data-target': name } : {});
+  const targetOf = (name: TitleTarget) => (targets.includes(name) ? { 'data-target': name } : {});
   return (
     <SlideWrapper id={TITLE_ANCHOR} data-slot="title-slide">
       <SlideBackdrop mobile>

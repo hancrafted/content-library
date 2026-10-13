@@ -15,9 +15,9 @@ description: 'How an Episode page is built: the Slide is the unit, one folder ca
 
 ## Context
 
-Episode = one page: Title slide, then Sections, each a list of Slides whose first, the section slide, names it, beside a table of contents. Every Episode shares this shape, and the Markdown manuscript shares its H1/H2/H3 spine, so a later pipeline can map one onto the other.
+Episode = one page: Title slide, then Sections, each a list of Slides whose first, the section slide, names it, beside a table of contents. Every Episode shares this shape, and the Markdown Dossier shares its H1/H2/H3 spine, so a later pipeline can map one onto the other.
 
-**Structure is schema, content is not.** A prototype forced each slide through a typed interface; the agent bent visuals to fit and they degraded. Visualisations need freedom no schema anticipates. One level up it flips: title, Sections, anchors, reading time and table of contents are identical for every Episode, and drift there breaks navigation, translation and the manuscript mapping.
+**Structure is schema, content is not.** A prototype forced each slide through a typed interface; the agent bent visuals to fit and they degraded. Visualisations need freedom no schema anticipates. One level up it flips: title, Sections, anchors, reading time and table of contents are identical for every Episode, and drift there breaks navigation, translation and the Dossier mapping.
 
 **The Slide is the unit, and the unit is a folder.** A Slide's identity, then its files, once sat in four places and drifted; typed to its Episode, it could not be copied out. Now a Slide is one folder named after its slug, holding its own text; the rest follows by type or position:
 
@@ -75,7 +75,7 @@ flowchart LR
 2. Browser code MUST live in its Slide's folder as `*.client.tsx`.
 3. A Slide folder MUST import only its own files, Slide master, `slide-shared`, UI kit, hooks, lib; its `*.client.tsx` only own files, hooks, lib. Shared parts live in `slide-shared`: plain props.
 
-### 4. Headings mirror the manuscript
+### 4. Headings mirror the Dossier
 
 1. One `h1`: the Episode title. Position sets `h2`/`h3` via the kit's `Title`; no Episode file MAY write `h1`–`h3`.
 
@@ -128,7 +128,7 @@ flowchart LR
 1. **Structure right while drafting:** most rules hold by construction or fail in the editor.
 2. **Slug written once:** keys, anchor, heading level and kit names follow from it.
 3. **One-place change:** a container change reaches every Episode.
-4. **Manuscript-ready:** fixed spine and stable slugs let a pipeline target the record without touching design.
+4. **Dossier-ready:** fixed spine and stable slugs let a pipeline target the record without touching design.
 
 **Negative:**
 

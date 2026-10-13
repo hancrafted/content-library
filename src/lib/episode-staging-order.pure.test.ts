@@ -103,7 +103,7 @@ describe('failure cases', () => {
 
   it('names a run-log entry stamped earlier than the entry above it', () => {
     // ARRANGE
-    const late = 'write-manuscript · 2026-10-12T10:00:00Z';
+    const late = 'write-voice-script · 2026-10-12T10:00:00Z';
     const files = {
       'run-log.md': runLog(['brief-grill · 2026-10-12T09:00:00Z', 'research · 2026-10-12T10:15:00Z', late]),
     };
@@ -132,7 +132,7 @@ describe('edge cases', () => {
       'run-log.md': runLog([
         'research · 2026-10-12T10:15:00Z',
         'research · 2026-10-12T10:15:00Z',
-        'write-manuscript · 2026-10-12T11:20:00+01:00',
+        'write-spec · 2026-10-12T11:20:00+01:00',
         'write-dossier · 2026-10-12T10:30:00Z',
       ]),
     };

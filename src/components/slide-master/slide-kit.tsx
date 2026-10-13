@@ -7,6 +7,9 @@ import { DEFAULT_RICH_TAGS } from './rich-tags';
 import type { RuntimeKit, RuntimeTranslator } from './slide-base';
 import { SlideTitle } from './slide-master';
 
+/** The optional message key a Slide sets when its on-screen title differs from its table-of-contents `title`. */
+const ON_SCREEN_TITLE_KEY = 'heading';
+
 /** What the container knows about the whole Episode when it builds a kit: the same for every Slide. */
 export interface EpisodeKitInput {
   readonly episode: EpisodeSlug;
@@ -58,7 +61,8 @@ function templateOf(t: RuntimeTranslator, slideId: string): RuntimeKit['template
 
 /**
  * The kit a Slide's `content` receives (FE-002 §3). `Title` is the Slide's
- * heading at the level its position gives it, marked as the `title` target;
+ * heading at the level its position gives it, marked as the `title` target,
+ * showing the optional `heading` message when the Slide has one;
  * `ref` wraps a phrase as a Context reference to one of the Slide's notes;
  * `target` marks the element a note explains; `slideHref` links to another
  * Slide of the Episode; `template` hands a client component a raw string to
@@ -67,9 +71,11 @@ function templateOf(t: RuntimeTranslator, slideId: string): RuntimeKit['template
  */
 export function slideKit(episode: EpisodeKitInput, slide: SlideKitInput): RuntimeKit {
   const { level, notes, slideId } = slide;
+  // An optional `heading` key in the Slide's messages is the on-screen title; the table of contents keeps `title`.
+  const heading = slide.t.has(ON_SCREEN_TITLE_KEY) ? slide.t(ON_SCREEN_TITLE_KEY) : undefined;
   const Title = ({ children }: { children: ReactNode }) => (
     <SlideTitle as={level} data-target="title">
-      {children}
+      {heading ?? children}
     </SlideTitle>
   );
   const ref = (note: string) => {

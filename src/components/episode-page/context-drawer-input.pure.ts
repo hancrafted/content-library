@@ -1,5 +1,5 @@
 import type { ContextItem } from '@/components/context-drawer/context-drawer-input';
-import type { LocalizedSlide } from '@/components/slide-master/localized-slide';
+import type { LocalizedSlide, SlideContext } from '@/components/slide-master/localized-slide';
 import { splitCitations, type SpeakerNoteItem, type VoiceScriptSegment } from '@/lib/context-drawer.pure';
 import { checkedSlug, TITLE_ANCHOR } from '@/lib/episode.pure';
 
@@ -71,7 +71,7 @@ function itemOf({ id, title, notes, voiceScript }: LocalizedSlide): ContextItem 
  * (FE-004 §6); otherwise none, and the explainer of how the drawer works,
  * which the drawer shows on both tabs (FE-010).
  */
-function titleItem(explainer: string, context: Pick<LocalizedSlide, 'notes' | 'voiceScript'> | undefined): ContextItem {
+function titleItem(explainer: string, context: SlideContext | undefined): ContextItem {
   const notes = context?.notes ?? [];
   const script = context?.voiceScript ?? [];
   if (notes.length === 0 && script.length === 0) return { id: TITLE_ANCHOR, notes: [], script: [], explainer };
@@ -87,7 +87,7 @@ function titleItem(explainer: string, context: Pick<LocalizedSlide, 'notes' | 'v
 export function contextItemsOf(
   slides: readonly LocalizedSlide[],
   explainer: string,
-  title?: Pick<LocalizedSlide, 'notes' | 'voiceScript'>,
+  title?: SlideContext,
 ): ContextItem[] {
   return [titleItem(explainer, title), ...slides.map(itemOf)];
 }

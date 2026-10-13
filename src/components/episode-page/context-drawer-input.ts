@@ -1,5 +1,5 @@
 import type { ContextDrawerInput } from '@/components/context-drawer/context-drawer-input';
-import type { LocalizedSlide } from '@/components/slide-master/localized-slide';
+import type { LocalizedSlide, SlideContext } from '@/components/slide-master/localized-slide';
 import { readTranslationStrings } from '@/i18n/translation-strings';
 import { SHORTCUT_LABEL } from '@/lib/context-drawer.pure';
 import type { Locale } from '@/lib/locale.pure';
@@ -21,7 +21,7 @@ const NOT_DRAWER_STRINGS = ['explainer', 'sourcesCount', 'citation', 'refNote'] 
 export async function contextDrawerInput(
   locale: Locale,
   slides: readonly LocalizedSlide[],
-  title?: Pick<LocalizedSlide, 'notes' | 'voiceScript'>,
+  title?: SlideContext,
 ): Promise<ContextDrawerInput> {
   const t = await getTranslations({ locale, namespace: 'contextDrawer' });
   const explainer = t('explainer', { shortcut: SHORTCUT_LABEL });

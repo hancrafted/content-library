@@ -16,6 +16,11 @@ interface PipelineJob {
   outputs: string[];
 }
 
+/** The `status:` value of a staging file, tolerant of quotes and trailing space; null when there is none. */
+export function frontmatterStatus(text: string): string | null {
+  return /^status:[ \t]*["']?([^\s"']+)["']?[ \t]*$/m.exec(text)?.[1] ?? null;
+}
+
 const ENTRY = /^## (\S+) · \S+$/;
 const METRIC = /^- \S+ · attempt (\d+) · (pass|fail)\b/;
 

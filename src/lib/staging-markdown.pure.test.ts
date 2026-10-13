@@ -9,8 +9,8 @@ import {
   slideAnchors,
 } from './staging-markdown.pure';
 
-const MANUSCRIPT = `---
-type: manuscript
+const DOSSIER = `---
+type: dossier
 title: 'Han''s budget'
 quote: "a \\"spent\\" window"
 ---
@@ -35,7 +35,7 @@ master: basic-page · motion: liquid-ink-transition
 describe('success cases', () => {
   it('reads each heading with its level, slug and line, and the spine entry its block belongs to', () => {
     // ARRANGE
-    const lines = bodyLines(MANUSCRIPT);
+    const lines = bodyLines(DOSSIER);
     const expectedFirst = { level: 1, text: 'Budget {#budget}', slug: 'budget', line: 1 };
     const expectedOwners = ['budget', 'why', 'spent', 'spent', 'middle', 'middle', 'orphan'];
     const expectedVisual = ['', 'master: basic-page · motion: liquid-ink-transition', ''];
@@ -51,7 +51,7 @@ describe('success cases', () => {
 
   it('names every page slide by its section and slide slug', () => {
     // ARRANGE
-    const blocks = blocksOf(bodyLines(MANUSCRIPT));
+    const blocks = blocksOf(bodyLines(DOSSIER));
     const expected = ['why--spent', 'why--middle'];
     // ACT
     const anchors = slideAnchors(blocks);
@@ -77,9 +77,9 @@ describe('success cases', () => {
 
   it('reads a frontmatter field as YAML does, plain, single-quoted or double-quoted', () => {
     // ARRANGE
-    const expected = ['manuscript', "Han's budget", 'a "spent" window'];
+    const expected = ['dossier', "Han's budget", 'a "spent" window'];
     // ACT
-    const values = ['type', 'title', 'quote'].map((key) => frontmatterField(MANUSCRIPT, key));
+    const values = ['type', 'title', 'quote'].map((key) => frontmatterField(DOSSIER, key));
     // ASSERT
     expect(values).toEqual(expected);
   });
@@ -98,9 +98,9 @@ describe('failure cases', () => {
 
   it('answers null for a field the frontmatter lacks, and for a file with no frontmatter', () => {
     // ARRANGE
-    const bare = '# Budget\n\ntype: manuscript\n';
+    const bare = '# Budget\n\ntype: dossier\n';
     // ACT
-    const missing = frontmatterField(MANUSCRIPT, 'status');
+    const missing = frontmatterField(DOSSIER, 'status');
     const unfronted = frontmatterField(bare, 'type');
     // ASSERT
     expect(missing).toBeNull();

@@ -49,7 +49,7 @@ const TITLE_ROLE = {
 } as const;
 
 /**
- * H-level follows the manuscript's spine (FE-002): section slide `h2`, page
+ * H-level follows the Episode's spine (FE-002): section slide `h2`, page
  * slide `h3`; `h4` and below are free inside a slide. Size follows the level's
  * role, never a breakpoint. The Title slide's `h1` is `HeroTitle`.
  */

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { runStatus } from './status.pure.ts';
+import { frontmatterStatus, runStatus } from './status.pure.ts';
 
 /*
  * A run's state read back from disk: a small per-run pipeline and run logs
@@ -101,5 +101,17 @@ describe('edge cases', () => {
     // ASSERT
     expect(states.slice(0, 2)).toEqual(['done', 'ready']);
     expect(fresh.slice(0, 2)).toEqual(['ready', 'waiting']);
+  });
+});
+
+describe('frontmatterStatus', () => {
+  it('reads a plain, quoted or trailing-space status', () => {
+    expect(frontmatterStatus('---\nstatus: approved\n---\n')).toBe('approved');
+    expect(frontmatterStatus('---\nstatus: "approved"\n---\n')).toBe('approved');
+    expect(frontmatterStatus("---\nstatus: 'approved' \n---\n")).toBe('approved');
+  });
+
+  it('is null without a status line', () => {
+    expect(frontmatterStatus('# Title\n')).toBeNull();
   });
 });
