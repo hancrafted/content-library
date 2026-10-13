@@ -56,3 +56,7 @@ run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at
 2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-dossier,reviewer,1,fail,"Fail if … the file specifies styling or code.",113,96535,2026-10-13T14:26:08Z
 2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-dossier,implementor,2,pass,,16,96769,2026-10-13T14:26:25Z
 2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-dossier,reviewer,2,pass,,39,55196,2026-10-13T14:29:51Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-voice-script,implementor,1,pass,,44,55639,2026-10-13T14:30:54Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-voice-script,reviewer,1,fail,"Fail if … material here serves only one of its Slides",141,76789,2026-10-13T14:33:32Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-voice-script,implementor,2,pass,,12,57385,2026-10-13T14:33:46Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-voice-script,reviewer,2,pass,,30,54072,2026-10-13T14:34:48Z

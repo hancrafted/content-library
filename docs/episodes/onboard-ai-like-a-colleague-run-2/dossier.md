@@ -4,12 +4,14 @@ title: Stop prompting AI, start onboarding it
 status: draft
 generated:
   by: claude-code/sonnet-5.5
-  at: 2026-10-13T14:26:25Z
+  at: 2026-10-13T14:33:46Z
 locale: en
 brief: ./brief.md
 verified:
   - by: process:markdown-harness
     at: 2026-10-13T14:29:51Z
+  - by: process:markdown-harness
+    at: 2026-10-13T14:34:48Z
 ---
 
 # Stop prompting AI, start onboarding it {#stop-prompting-start-onboarding}
@@ -18,8 +20,8 @@ verified:
 
 #### Voice script
 
-1. **Open on the hype** — "Become 20x more productive with AI"; you have seen it; you have tried it.
-2. **Bridge to the room** — you have heard the promise; now step out of AI for a moment and into a thought experiment.
+1. **Open on the hype** — You have seen the line. Become twenty times more productive with AI. It is on every feed, in every keynote, in every vendor deck. Maybe you even believed it for a day or two.
+2. **Bridge to the room** — Then you sat down and tried it yourself, and you know how that went. So why? Today I want to look at exactly that.
 
 ### Twenty times on paper {#twenty-times-on-paper}
 
@@ -43,16 +45,16 @@ Two facing halves. The left half carries the promise, a large "20x". The right h
 
 #### Voice script
 
-1. **The number** — twenty times; the promise from vendors and feeds; take it at face value for a moment.
-2. **Your number** — your own last serious attempt; usable, not transformative; the gap between the two.
-3. **Why, left open** — why the gap exists; hold the question, do not answer it yet.
+1. **The number** — Twenty times. That is the promise. Not twenty percent, twenty times. One person doing the work of a whole team. Let us take that at face value, just for a moment.
+2. **Your number** — Now think of your own last serious attempt. Something real, not a toy. You got something usable back, maybe even useful. But transformative? Be honest. Not twenty times. Not even close.
+3. **Why, left open** — So there is a gap between the promise and your Tuesday afternoon. Why does it exist? I am going to leave that question hanging. Hold on to it, because I will come back to it.
 
 ## Day one with a capable stranger {#day-one-with-a-capable-stranger}
 
 #### Voice script
 
-1. **Switch to the room** — leave AI aside; a thought experiment; take a second and picture it.
-2. **A real task** — a new colleague starts today; you must brief them; a use case, not a lecture.
+1. **Switch to the room** — Forget AI for a moment. Imagine it is Monday morning, and a new colleague starts today. Take a second and picture them standing at your desk, coffee in hand, ready to go.
+2. **A real task** — And you have a real task for them. Not a lecture, not a case study. A real one, with a real deadline. Let me tell you who this person is, and what you need from them.
 
 ### A colleague who knows the written world {#a-colleague-who-knows-the-written-world}
 
@@ -74,8 +76,8 @@ Three columns on hairlines, each with an oversized numeral: "Knows the written w
 
 #### Voice script
 
-1. **Profile** — knows essentially the whole written world; extremely knowledgeable; extremely confident.
-2. **Eager** — wants to please; will not say "I don't know"; no memory of your company.
+1. **Profile** — Here is what you know about them. They have read essentially everything that was ever written down. Extremely knowledgeable, about almost any topic you can name. And they are completely confident. They never hesitate.
+2. **Eager** — They are also eager to please. They will say yes to anything, and they will almost never say, I don't know. And one more thing. They know nothing about your company. Not your people, not your budget, not what you did last year.
 
 ### The plan is due by end of day {#the-plan-is-due-by-end-of-day}
 
@@ -93,8 +95,8 @@ One feature cell across the whole Foreground: the task as a brief poster, "Compa
 
 #### Voice script
 
-1. **The task** — company-wide event; Sommerfest or Christmas party; about 100 people.
-2. **The clock** — first day; urgent; a structured plan by end of day for your team lead or the CEO.
+1. **The task** — Here is the task. The company wants a Sommerfest, or a Christmas party, whichever season you like. About a hundred people. Everyone from the interns to the management.
+2. **The clock** — And it is their first day, and it is urgent. A fully structured plan has to be on the desk by end of day. Your team lead wants it. Maybe the CEO wants it. You cannot say it will be ready tomorrow.
 
 ### What would you tell them first {#what-would-you-tell-them-first}
 
@@ -115,16 +117,16 @@ Six moments on one horizontal axis, labelled with times and plain actions and no
 
 #### Voice script
 
-1. **Take a second** — ask the room; how would you onboard them; no right answer yet.
-2. **Walk the morning** — last year's party, the budget, how many people, the culture; you hand over what you know.
-3. **Tools and the ask** — the booking system, the catering contacts, the calendar; say what the plan should look like.
-4. **Look at the draft** — you do not wait until 17:00; check at lunch and again before it goes up.
+1. **Take a second** — So take a second. Really. How would you onboard this person? Do not think about the right answer. Just notice what you would do first.
+2. **Walk the morning** — I guess you would start with the morning. You would walk them through last year's party. What worked, what flopped, what the CEO hated. You would tell them the budget. You would tell them how many people are coming, and what our company is like. Formal, casual, loud, quiet.
+3. **Tools and the ask** — Then you would give them the keys. The login for the booking system. The number of the caterer you trust. Access to the shared calendar so they stop proposing dates that clash. And you would say what you expect. A plan of what shape, for whom, how long.
+4. **Look at the draft** — And you would not wait until five o'clock. You would look at the first draft over lunch. Is this going in the right direction? Then you would check it once more before it goes upstairs. Because it is your name on it too.
 
 ## You managed it, you did not do it {#you-managed-it-you-did-not-do-it}
 
 #### Voice script
 
-1. **Pause on the shift** — the experiment is over; what it showed is about to be named.
+1. **Pause on the shift** — Now look at what just happened. The experiment is over. Take a breath, because what you just did has a name, and it is not the name you might expect.
 
 ### You managed the task {#you-managed-the-task}
 
@@ -149,8 +151,8 @@ One statement across the whole Foreground, "Doing became managing", set large. A
 
 #### Voice script
 
-1. **You did not plan the party** — you set the stage; context, access, the ask, the check; that is the work.
-2. **Doing became managing** — the shift AI demands; light, not a 1:1 mapping; the analogy is a lens, not a spec.
+1. **You did not plan the party** — You did not plan the party. You never opened a spreadsheet or called a caterer. You set the stage. You handed over what you know, you gave access, you said what you wanted, and you made sure someone checked. That was the work.
+2. **Doing became managing** — Doing became managing. That is the shift. Do not read it as a recipe, or as a one to one match with anything. It is a lens. And that shift from doing to managing is exactly what working with AI demands of you.
 
 ### Prompting like a tool, briefing like a colleague {#prompting-like-a-tool}
 
@@ -173,8 +175,8 @@ Two facing halves. The left shows a one-line prompt, "Plan our Sommerfest.", alo
 
 #### Voice script
 
-1. **Back to the hook** — your prompt was one line; you would never brief a person that way.
-2. **The answer to the hanging why** — AI underdelivers because you prompt it like a tool; the task is to onboard it like a colleague.
+1. **Back to the hook** — Now back to the hook. Remember the gap, and the question I left hanging? Think about the last thing you typed into an AI. It was probably one line. Plan our Sommerfest. You would never brief a person like that.
+2. **The answer to the hanging why** — So here is my answer. AI underdelivers when you prompt it like a tool, and the real job is to onboard it like a colleague. And onboarding is a management task, not an execution one. It needs different skills than typing does.
 
 ### Confident is not correct {#confident-is-not-correct}
 
@@ -196,14 +198,14 @@ A one-page plan in the middle of the Slide, as a short list of claims in plain t
 
 #### Voice script
 
-1. **The profile again** — knowledgeable, confident, eager; that combination hands in polished work that may be wrong.
-2. **You check, as with any new hire** — spot-check the first drafts; you stay responsible for what goes to the CEO.
+1. **The profile again** — Go back to the profile for a second. Knowledgeable, confident, eager to please. That is a wonderful combination, and a dangerous one. It hands you polished work that may be wrong, and it hands it over with a smile.
+2. **You check, as with any new hire** — So you check it, exactly as you would with any new hire. Spot-check the first drafts. Ask where a number came from. Because whatever goes to the CEO, you are the one responsible. Not the newcomer.
 
 ## The effort moves, it does not vanish {#the-effort-moves-it-does-not-vanish}
 
 #### Voice script
 
-1. **Where did the time go** — the time you saved typing went somewhere; that is the learning goal in one line.
+1. **Where did the time go** — So where did the time go? You saved all that typing, and yet you did not feel twenty times faster. That is the question, and the answer is the whole learning goal in one line.
 
 ### The work relocates {#the-work-relocates}
 
@@ -225,8 +227,8 @@ One horizontal bar of a single task's effort, drawn twice, without numbers. In t
 
 #### Voice script
 
-1. **Relocated, not removed** — the effort left typing and arrived at briefing, context, tools and checking.
-2. **Why the shortfall** — skip that reinvestment and you keep the cost and miss the gain.
+1. **Relocated, not removed** — The effort did not vanish. It relocated. It left the typing, and it landed in briefing, in handing over context, in setting up tools, and in checking. The total does not shrink. It moves somewhere else.
+2. **Why the shortfall** — That is the shortfall. Skip the reinvestment, and you keep the cost while you miss the gain. You pay for the tool, you wait for the answer, and then you redo the work, because nobody told the tool what the work was.
 
 ### From your desk to your organization {#from-your-desk-to-your-organization}
 
@@ -248,14 +250,14 @@ Two facing halves. The left, "For you", names the personal skill: briefing, hand
 
 #### Voice script
 
-1. **For yourself** — new skills; the day-one note becomes a habit.
-2. **For your organization** — the same disciplines at team scale; who writes things down, who checks.
+1. **For yourself** — First, for yourself. This is new skills. Briefing, handing over context, checking. They feel awkward at first, and then they turn into a habit, like writing a good day-one note for a person.
+2. **For your organization** — And then for your organization. The same thing at a larger scale. Who writes the context down so the next person does not start from zero? Who owns the checks? How is the work arranged around AI? Those are disciplines, not tools.
 
 ## Four disciplines, one line each {#four-disciplines-one-line-each}
 
 #### Voice script
 
-1. **Names, not a map** — the work of setting AI up has names; four disciplines, one line each; not a step-for-step match with the party.
+1. **Names, not a map** — This work has names now. There are four of them, and I will give you one line each. They are not a map of the party, just labels for things you already did. Then we will turn them into one small habit you can start with your next real task.
 
 ### Four ways to onboard AI {#four-ways-to-onboard-ai}
 
@@ -275,9 +277,9 @@ Four nested rings around a small centre labelled "the task", widening outwards: 
 
 #### Voice script
 
-1. **Prompt and context** — the ask phrased as a clear brief; the background you hand over.
-2. **Harness** — the tools and environment you give access to.
-3. **Graph, the newest** — managing the workflow across agents; project management for AI; emerging, loosely defined.
+1. **Prompt and context** — Prompt engineering is phrasing the ask as a clear, unambiguous brief. That is the what. Context engineering is the background you hand over. The budget, the headcount, the culture, the past events.
+2. **Harness** — Harness engineering is the tools and the environment you give access to. The booking system, the catering contacts, the calendar. The things that let a capable newcomer actually get something done.
+3. **Graph, the newest** — And the fourth, graph engineering, is the newest term. It is about managing the workflow across several agents. Project management, for AI. It has only emerged since mid-2026, and it is still loosely defined. So hold it loosely.
 
 ### Your day-one note before you type {#your-day-one-note-before-you-type}
 
@@ -298,14 +300,14 @@ A numbered process on one spine with four steps, each heading carrying the claim
 
 #### Voice script
 
-1. **The habit** — next time you reach for AI on something real; before you type a word; jot down your day-one note.
-2. **Four lines** — the context, the tools they would need, the brief, how you will check their work.
+1. **The habit** — So here is the habit, and it is small. Next time you reach for AI on something real, before you type a word, stop. Take thirty seconds. Jot down what you would tell a brand-new colleague on day one.
+2. **Four lines** — Four lines are enough. The context, meaning what they need to know about your situation. The tools they would need. The brief, meaning what exactly you are asking for. And how you will check their work. Then type.
 
 ## AI can help you onboard AI {#ai-can-help-you-onboard-ai}
 
 #### Voice script
 
-1. **It feels like a lot** — four disciplines, a day-one note each time; admit that it is work.
+1. **It feels like a lot** — I know. It sounds like a lot. Four disciplines, a day-one note every single time. I will not pretend it is not work. It is. It is the work that moved.
 
 ### The twist {#the-twist}
 
@@ -323,8 +325,8 @@ One statement across the whole Foreground, "AI can help you onboard AI", with a 
 
 #### Voice script
 
-1. **The twist** — AI can help you onboard AI; it can interview you for the context you forgot.
-2. **A first step** — grill-me as one way to start; worded as an ending, nothing left hanging.
+1. **The twist** — But here is the twist. AI can help you onboard AI. It can interview you for the context you forgot, and ask the questions a good new colleague would ask on their first morning.
+2. **A first step** — If you want a first step, there is a simple one called grill-me, which does exactly that. Try it on your next real task. And that is all you need to start.
 
 ## Material left out
 

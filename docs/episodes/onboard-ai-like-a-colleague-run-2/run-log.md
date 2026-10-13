@@ -288,3 +288,36 @@ Attempt 1 failed three lines: the `#twenty-times-on-paper` Visual named "the pri
 - Needs human: `#four-ways-to-onboard-ai`'s beat "Prompt and context" covers two disciplines in one item, against the Brief's "one line each"; the Visual does give one line per ring.
 - Every agent ran with the inherited model; the implementor's `generated.by` reads `claude-code/sonnet-5.5`, not the session's opus, so the general-purpose subagent default may not be the orchestrator's model.
 - The timestamps of the entries categorize-research, customize-pipeline, retrieval and the six write-research jobs were estimated by the orchestrator, not read from the clock, and run 1–4 minutes late; their commits' times are the truth (7bba1da 14:15:39Z, 021ae02 14:20:33Z). From this entry on, every timestamp is read with `date -u`.
+
+## write-voice-script · 2026-10-13T14:34:48Z
+
+### Inputs
+
+- `dossier.md` as `write-dossier` committed it in `b7d08ca`; `brief.md`.
+- Attempt 2: the three failed reviewer lines of attempt 1, quoted verbatim.
+
+### Output
+
+- `dossier.md`, `status: draft`, its 37 Voice script items written as spoken paragraphs (about 1,330 words, about 10 minutes), with a new `process:markdown-harness` `verified` entry; committed with `Gate: draft dossier` for Han.
+
+### Checks
+
+- `mh check`: pass (both attempts).
+- `vitest` staging test: pass (both attempts); only Voice script items and `generated.at` changed against `b7d08ca`.
+- Reviewer: fail on attempt 1, pass on attempt 2.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 44 s · 55639 tokens
+- reviewer · attempt 1 · fail · rubric "Fail if … material here serves only one of its Slides" · 141 s · 76789 tokens
+- implementor · attempt 2 · pass · 12 s · 57385 tokens
+- reviewer · attempt 2 · pass · 30 s · 54072 tokens
+
+### Notes
+
+Attempt 1 failed three lines: `#four-disciplines-one-line-each` item 1 introduced only its first Slide ("Fail if … material here serves only one of its Slides"); and the Hook announced the thought experiment before leaving the why hanging ("The Hook opens the Episode", and rubric 4 against the Brief's "Leave the 'why' hanging in the room, then switch into the thought experiment"). Attempt 2 reworded both paragraphs; its reviewer judged only those lines. Rubric lines 2 and 3 were judged n/a: `docs/profile/han/tone-guide.md` and `storytelling-guide.md` do not exist.
+
+- Needs human: the why is asked twice, pulling against itself: `#the-promise-and-the-gap` item 2 "So why? Today I want to look at exactly that." then `#twenty-times-on-paper` "Why does it exist?" and "I am going to leave that question hanging".
+- Needs human: `#the-work-relocates` says "The total does not shrink. It moves somewhere else." That is more absolute than the Learning goal's "relocates rather than removes" and sits against the measured gain on `#twenty-times-on-paper`.
+- Needs human: the register uses almost no contractions ("Let us take that at face value", "I am going to", "It is not"). Is that your spoken voice?
+- Needs human: the disciplines teaser promises "one line each", but harness gets three sentences and graph five ("So hold it loosely.").
