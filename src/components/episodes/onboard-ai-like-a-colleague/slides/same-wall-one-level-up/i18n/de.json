@@ -1,0 +1,78 @@
+{
+  "title": "Dieselbe Wand, eine Ebene höher",
+  "caption": "Dieselbe neue Kollegin, dieselbe Wand. Der Wert kommt, wenn du reinvestierst.",
+  "columns": {
+    "you": {
+      "title": "Du",
+      "prose": "Die Notiz für den ersten Tag."
+    },
+    "team": {
+      "title": "Dein Team",
+      "prose": "Die gemeinsame Einrichtung."
+    },
+    "organization": {
+      "title": "Deine Organisation",
+      "prose": "Schulung und neu gestaltete Abläufe."
+    }
+  },
+  "notes": {
+    "complementary-investment": {
+      "header": "Wert braucht ergänzende Investitionen",
+      "description": "Allzwecktechnologien ermöglichen und verlangen erhebliche ergänzende Investitionen in Prozesse und Fähigkeiten der Menschen, oft immateriell. Deshalb zeigen sich die Gewinne erst spät.[1]",
+      "sources": {
+        "productivity-j-curve": {
+          "title": "The Productivity J-Curve"
+        }
+      }
+    },
+    "adoption-without-impact": {
+      "header": "Eingeführt, aber ohne Wirkung",
+      "description": "In einer Befragung von rund 6.000 Führungskräften nutzen etwa 69 % der Unternehmen KI, während rund 90 % über drei Jahre keine Wirkung auf Produktivität oder Beschäftigung melden.[1]",
+      "sources": {
+        "firm-data-on-ai": {
+          "title": "Firm Data on AI (NBER w34836)"
+        }
+      }
+    },
+    "disputed-headline": {
+      "header": "Eine umstrittene Schlagzeile",
+      "description": "Die Zahl „95 % der Pilotprojekte scheitern“ ist die eigene, richtungsweisende und auf Interviews gestützte Zahl des MIT-NANDA-Berichts, hier aus einer Kopie von Dritten gelesen. Eine Wharton-Befragung von rund 800 Führungskräften fand dagegen, dass fast drei von vier einen positiven ROI sehen, ebenfalls selbst berichtet. Keine der beiden klärt den wahren Anteil, also nicht mit 95 % einsteigen.[1][2]",
+      "sources": {
+        "genai-divide": {
+          "title": "The GenAI Divide: State of AI in Business 2025 (Kopie des PDF)"
+        },
+        "accountable-acceleration": {
+          "title": "Accountable Acceleration: Gen AI Fast-Tracks Into the Enterprise"
+        }
+      }
+    },
+    "skills-lag-usage": {
+      "header": "Die Fähigkeiten hinken der Nutzung hinterher",
+      "description": "Fast die Hälfte der Organisationen meldet Lücken bei technischen Fähigkeiten, während die Investitionen in Schulung nachgelassen haben.[1]",
+      "sources": {
+        "accountable-acceleration": {
+          "title": "Accountable Acceleration: Gen AI Fast-Tracks Into the Enterprise"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "not-only-you": {
+        "title": "Nicht nur du",
+        "keywords": "Teams, Unternehmen, dieselbe Wand",
+        "script": "Und es geht nicht nur dir so. Ein Team läuft gegen dieselbe Wand. Ein ganzes Unternehmen auch. Alle bekommen dieselbe neue Kollegin, und niemand gibt ihr eine Notiz für den ersten Tag."
+      },
+      "adopted-not-absorbed": {
+        "title": "Eingeführt, nicht verankert",
+        "keywords": "Werkzeuge rein, Abläufe unverändert",
+        "script": "Eine große Befragung von rund sechstausend Führungskräften ergab: Die meisten Unternehmen nutzen KI, doch die meisten sehen bisher keine Wirkung auf ihre Leistung. Wer Führungskräfte selbst fragt, hört Zuversichtlicheres. Den wahren Anteil kennt niemand. Die Werkzeuge kamen ins Haus, und die Art zu arbeiten blieb genau, wie sie war."
+      },
+      "reinvest": {
+        "title": "Reinvestieren",
+        "keywords": "neue Fähigkeiten, neue Disziplinen, in der ganzen Organisation",
+        "script": "Der Wert kommt also nicht von allein. Er kommt, wenn du reinvestierst. Die Mühe, die dir KI erspart, fließt zurück, als neue Fähigkeiten und neue Disziplinen. Für dich. Für dein Team. In der ganzen Organisation. KI nimmt dir die Arbeit nicht ab. Sie verlagert sie."
+      }
+    }
+  }
+}

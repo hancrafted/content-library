@@ -1,0 +1,56 @@
+{
+  "title": "Du hast die Aufgabe nicht erledigt.",
+  "caption": "Du hast sie gemanagt.",
+  "figure": "Ein Stift, ein Pfeil, ein Klemmbrett: vom Erledigen zum Managen.",
+  "notes": {
+    "work-moves": {
+      "header": "Die Arbeit verschiebt sich, sie verschwindet nicht",
+      "description": "Die Entwickler in der METR-Studie verbrachten rund 9 % ihrer Zeit damit, KI-Ergebnisse zu prüfen und aufzuräumen. Sie beschrieben die KI wie einen neuen Mitwirkenden, dem das stille Wissen über das Repository fehlt. Werkzeuge von Anfang 2025 und 16 Personen: als Mechanismus lesen, nicht als Maß.[1]",
+      "sources": {
+        "metr-early-2025-study": {
+          "title": "Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity"
+        }
+      }
+    },
+    "employers-added-oversight": {
+      "header": "Arbeitgeber haben Aufsichtsarbeit hinzugefügt",
+      "description": "In dänischen Registerdaten änderten Chatbots Verdienst und Arbeitsstunden kaum. Gleichzeitig kamen neue Aufgaben hinzu: Inhalte erzeugen, KI beaufsichtigen, KI einbinden.[1]",
+      "sources": {
+        "small-labor-market-effects": {
+          "title": "Large Language Models, Small Labor Market Effects (NBER w33777; inzwischen umbenannt in „Still Waters, Rapid Currents“)"
+        }
+      }
+    },
+    "why-novices-still-gain": {
+      "header": "Warum Neulinge trotzdem profitieren",
+      "description": "In den Studien, in denen KI Neulingen am meisten hilft, liegen die Aufgaben klar abgegrenzt in Reichweite des Modells. Die These hier lautet: Die Aufgabe verlangt Disziplin im Delegieren, und Erfahrung hängt damit nur zusammen. Das ist eine Schlussfolgerung; keine Studie misst Führungskompetenz direkt.[1][2]",
+      "sources": {
+        "generative-ai-at-work": {
+          "title": "Generative AI at Work"
+        },
+        "jagged-technological-frontier": {
+          "title": "Navigating the Jagged Technological Frontier"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "what-you-did": {
+        "title": "Was du wirklich getan hast",
+        "keywords": "nicht der Plan, das Briefing",
+        "script": "Schau auf deinen Nachmittag zurück. Hast du das Fest geplant? Nein. Du hast keinen Ort gebucht. Du hast keinen Caterer angerufen. Du hast jemanden in die Lage versetzt, es zu tun, und dann hast du die Arbeit gelesen."
+      },
+      "doing-to-managing": {
+        "title": "Vom Erledigen zum Managen",
+        "keywords": "der Wechsel, eine eigene Fähigkeit",
+        "script": "Du hast die Aufgabe nicht erledigt. Du hast sie gemanagt. Genau dieser Wechsel, vom Erledigen zum Managen, ist das, was die Arbeit mit KI von dir verlangt. Das ist eine eigene Fähigkeit, und es ist nicht die, die dich in der Aufgabe selbst gut macht. Und sie erklärt dein flaches Ergebnis vom Anfang. Du hast die KI wie ein Werkzeug gepromptet, dabei brauchte sie ein Onboarding wie eine Kollegin."
+      },
+      "not-about-rank": {
+        "title": "Keine Frage des Rangs",
+        "keywords": "die Aufgabe verlangt es, Erfahrung hilft",
+        "script": "Das ist keine Frage des Rangs. Du brauchst keinen Titel dafür. Die Aufgabe verlangt es. Erfahrung hilft meistens, weil Ältere schon einmal geführt haben. Aber die Aufgabe wartet auf alle, vom allerersten Prompt an."
+      }
+    }
+  }
+}

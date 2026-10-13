@@ -1,0 +1,79 @@
+{
+  "title": "Four disciplines",
+  "caption": "The skill has names now.",
+  "cells": {
+    "c1": {
+      "title": "Prompt engineering",
+      "caption": "The ask, as a clear brief nobody could misread."
+    },
+    "c2": {
+      "title": "Context engineering",
+      "caption": "The background: budget, headcount, culture, past events."
+    },
+    "c3": {
+      "title": "Harness engineering",
+      "caption": "The tools: booking system, caterer contacts, calendar."
+    },
+    "c4": {
+      "title": "Graph engineering",
+      "caption": "The workflow across agents: project management, for AI.",
+      "tag": "new, still loosely defined"
+    }
+  },
+  "notes": {
+    "prompt-engineering": {
+      "header": "Prompt engineering",
+      "description": "Underspecified prompts are about twice as likely to regress across model or prompt changes.[1]",
+      "sources": {
+        "what-prompts-dont-say": {
+          "title": "What Prompts Don't Say"
+        }
+      }
+    },
+    "context-engineering": {
+      "header": "Context engineering",
+      "description": "Anthropic treats context as a finite resource with diminishing returns and aims for the minimal set of information that fully outlines the expected behavior, which is not necessarily short. In coding-agent studies, repository overviews did not help; that non-standard specifics help is plausible and reported by one source, not established.[1][2]",
+      "sources": {
+        "anthropic-context-engineering": {
+          "title": "Effective context engineering for AI agents"
+        },
+        "evaluating-agents-md": {
+          "title": "Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?"
+        }
+      }
+    },
+    "harness-engineering": {
+      "header": "Harness engineering",
+      "description": "Anthropic's remedy for agents that forget between shifts is written hand-over artefacts each new session reads first.[1]",
+      "sources": {
+        "anthropic-long-running-harnesses": {
+          "title": "Effective harnesses for long-running agents"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "four-names": {
+        "title": "Four names",
+        "keywords": "prompt, context, harness, graph",
+        "script": "That skill has names now. Four of them. Prompt engineering. Context engineering. Harness engineering. Graph engineering."
+      },
+      "prompt-and-context": {
+        "title": "Prompt and context",
+        "keywords": "the ask, the background",
+        "script": "Prompt engineering is how you phrase the ask, as a clear brief nobody could misread. Context engineering is the background you hand over: the budget, the headcount, the culture, the past events."
+      },
+      "harness-and-graph": {
+        "title": "Harness and graph",
+        "keywords": "the tools, the workflow across agents",
+        "script": "Harness engineering is the tools and the environment you give access to: the booking system, the caterer contacts, the calendar. Graph engineering is managing the workflow across several agents. Project management, for AI."
+      },
+      "newest-term": {
+        "title": "Newest term",
+        "keywords": "mid-2026, still loosely defined",
+        "script": "Graph engineering is the newest of the four. The term has only been around since the middle of this year, and people still argue about exactly what it covers. Treat it as new, and unsettled."
+      }
+    }
+  }
+}

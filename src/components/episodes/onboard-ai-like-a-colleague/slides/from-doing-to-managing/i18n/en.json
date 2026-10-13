@@ -1,0 +1,13 @@
+{
+  "title": "From doing to managing",
+  "caption": "What working with AI asks of you.",
+  "voiceScript": {
+    "segments": {
+      "look-at-what-you-did": {
+        "title": "Look at what you did",
+        "keywords": "look back, what you just did",
+        "script": "Now look at what you just did."
+      }
+    }
+  }
+}
