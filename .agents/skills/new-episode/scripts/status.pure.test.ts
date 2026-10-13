@@ -66,6 +66,26 @@ describe('success cases', () => {
   });
 });
 
+describe('gate jobs', () => {
+  const GATED = `jobs:
+  - { id: write-voice-script, needs: [], gate: human, outputs: [docs/episodes/<slug>/dossier.md] }
+  - { id: write-spec, needs: [write-voice-script] }
+`;
+  const runLog = ['# Run log\n', entry('write-voice-script · 2026-10-12T09:00:00Z', [PASS])].join('\n');
+
+  it('prints gate for a logged gate job until its output is approved, and holds back what needs it', () => {
+    // ARRANGE
+    const draft = () => 'draft';
+    const approved = () => 'approved';
+    // ACT
+    const whileDraft = runStatus(GATED, runLog, draft).map(({ state }) => state);
+    const afterApproval = runStatus(GATED, runLog, approved).map(({ state }) => state);
+    // ASSERT
+    expect(whileDraft).toEqual(['gate', 'waiting']);
+    expect(afterApproval).toEqual(['done', 'ready']);
+  });
+});
+
 describe('edge cases', () => {
   it('reads only the latest entry of a job, and a passed attempt after a failed one as done', () => {
     // ARRANGE

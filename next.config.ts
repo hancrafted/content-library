@@ -31,6 +31,8 @@ const nextConfig: NextConfig = {
   // `/de/` → `de/index.html`, which GitHub Pages serves without extension guessing.
   trailingSlash: true,
   images: { unoptimized: true },
+  // `next dev` would otherwise rewrite AGENTS.md (a symlink target) when it detects an agent.
+  agentRules: false,
   basePath,
   assetPrefix: basePath || undefined,
   env: {

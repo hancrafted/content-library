@@ -17,4 +17,10 @@ if (!existsSync(pipeline)) {
 }
 const runLogFile = path.join(folder, 'run-log.md');
 const runLog = existsSync(runLogFile) ? readFileSync(runLogFile, 'utf8') : '';
-for (const { id, state } of runStatus(readFileSync(pipeline, 'utf8'), runLog)) console.log(`${state.padEnd(8)}${id}`);
+/** The `status:` of a staging output's frontmatter; null for a file that is missing or has none. */
+function outputStatus(output: string): string | null {
+  const file = output.replace('<slug>', slug as string);
+  if (!existsSync(file)) return null;
+  return /^status: (\S+)$/m.exec(readFileSync(file, 'utf8'))?.[1] ?? null;
+}
+for (const { id, state } of runStatus(readFileSync(pipeline, 'utf8'), runLog, outputStatus)) console.log(`${state.padEnd(8)}${id}`);
