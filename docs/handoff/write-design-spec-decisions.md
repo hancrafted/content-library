@@ -10,7 +10,7 @@ Settled with Han, 2026-10-13, in session 5909c675 (this file's grill), prompted 
 4. Q4: Every Slide is designed, not only the misses.
 5. Q8: A new part or motion lives in the Slide's own folder (a server part, or its own `*.client.tsx`); it moves to `slide-shared/` once a second Slide needs it (FE-007 Do 7).
 6. Q11 and Han's Q10 note: The answer names parts, tokens, props and i18n keys, plus a low-fidelity text wireframe (ASCII in a code block) for every Slide that is not a Slide library entry used as is. No rendered prototype: the rendered check stays in `implement-episode`.
-7. References: Brief, Dossier, Manuscript, FE-002, FE-007, FE-009, FE-011, the Slide library, `docs/design/README.md` and `docs/design/design-guide.md`.
+7. References: Brief, Dossier, Manuscript, FE-002, FE-007, FE-009, FE-011, the Slide library (`docs/design/slide-library.md`) and `docs/design/design-guide.md`.
 8. Q17 rubric:
    1. Every Slide of the ticket has a design answer.
    2. Every Slide that is not a Slide library entry used as is has a text wireframe.
