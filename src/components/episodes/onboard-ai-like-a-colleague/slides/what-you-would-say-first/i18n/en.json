@@ -1,0 +1,81 @@
+{
+  "title": "What you would say first",
+  "caption": "Day one. Before any task, you talk.",
+  "quote": {
+    "open": "“",
+    "close": "”"
+  },
+  "lines": {
+    "story": "Last year people left early. This year we need to feel like a team again.",
+    "know": "Modest budget, a hundred people, no speeches, no ties. And last year it rained.",
+    "doors": "Here’s the booking system and your login, the caterers we trust, the shared calendar.",
+    "back": "One structured plan, on my desk by five."
+  },
+  "notes": {
+    "colleague-test": {
+      "header": "Anthropic’s own test",
+      "description": "Show the prompt to a colleague with minimal context and see whether they would be confused.[1]",
+      "sources": {
+        "anthropic-be-clear-and-direct": {
+          "title": "Anthropic, Be clear and direct"
+        }
+      }
+    },
+    "facts-you-hold": {
+      "header": "Facts you hold, it does not",
+      "description": "Handing a model the one relevant document lifted question-answering accuracy from 56.1% to 88.3% for GPT-3.5-Turbo. Weak for this audience: a 2023 retrieval result, so it shows direction, not size.[1]",
+      "sources": {
+        "lost-in-the-middle": {
+          "title": "Lost in the Middle: How Language Models Use Long Contexts"
+        }
+      }
+    },
+    "unstated-requirements": {
+      "header": "Unstated requirements: one benchmark result",
+      "description": "In one benchmark study, models guessed a missing requirement right about 41% of the time. It is a benchmark result, not a rule, and it does not measure a human writing a brief.[1]",
+      "sources": {
+        "what-prompts-dont-say": {
+          "title": "What Prompts Don’t Say"
+        }
+      }
+    },
+    "all-at-once": {
+      "header": "All at once versus piece by piece: one benchmark result",
+      "description": "In one benchmark with simulated users, tasks fed over several turns lost 39% of performance on average against a fully specified single turn. It does not measure a human writing a brief, so read it as direction only.[1]",
+      "sources": {
+        "lost-in-multi-turn": {
+          "title": "LLMs Get Lost In Multi-Turn Conversation"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "where-do-i-start": {
+        "title": "Where do I start",
+        "keywords": "a story first, why this party",
+        "script": "You probably do not start with a task. You start with a story. Why are we throwing this party at all? Last year people left early, and this year the team needs to feel like a team again."
+      },
+      "what-they-need-to-know": {
+        "title": "What they need to know",
+        "keywords": "budget, headcount, our culture, last year",
+        "script": "Then you tell them what they cannot possibly know. We have a modest budget, so it will not be the fancy hotel. We are a hundred people, not a hundred and fifty. We are a casual company, nobody wants a speech and a tie. And last year was a barbecue, and it rained."
+      },
+      "what-they-can-touch": {
+        "title": "What they can touch",
+        "keywords": "booking, caterers, calendar",
+        "script": "Then you open some doors. Here is the booking system, here is your login. These are the caterers we trust, here are their numbers. And here is the shared calendar, so you can see who is away."
+      },
+      "what-i-want-back": {
+        "title": "What I want back",
+        "keywords": "one structured plan, by five",
+        "script": "And you say what you want back. One structured plan, on my desk by five. Date, venue, food, money, the order of the evening."
+      },
+      "before-they-run": {
+        "title": "Before they run",
+        "keywords": "hear yourself, your own words",
+        "script": "Before they run off, you stop. And you hear yourself. Nobody told you to say any of that. It just came out, in your own words. Hold on to those words."
+      }
+    }
+  }
+}

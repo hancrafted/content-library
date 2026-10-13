@@ -1,0 +1,66 @@
+{
+  "title": "Vier Uhr, der Plan kommt zurück",
+  "caption": "Früh, poliert und felsenfest überzeugt.",
+  "plan": {
+    "heading": "Sommerfest · Plan",
+    "rows": {
+      "date": { "label": "Datum", "value": "Freitag, 10. Juli, ab 16 Uhr" },
+      "venue": { "label": "Location", "value": "Gutshaus am See" },
+      "food": { "label": "Essen", "value": "Grillbuffet und vegetarisch, Regenzelt" },
+      "budget": { "label": "Budget", "value": "45.000 € (450 € pro Kopf)" },
+      "evening": { "label": "Ablauf", "value": "Begrüßung · Spiele · Essen · Band" },
+      "playlist": { "label": "Playlist", "value": "Sommerhits" }
+    }
+  },
+  "notes": {
+    "confident-and-wrong": {
+      "header": "Selbstsicher und falsch sieht gleich aus",
+      "description": "In der BCG-Studie lag eine Aufgabe bewusst außerhalb dessen, was das Modell kann. Wer KI nutzte, lag dort mit 19 Prozentpunkten geringerer Wahrscheinlichkeit richtig, und die falschen Antworten lasen sich schlüssig. Die Aufgabe war darauf angelegt zu scheitern: Das zeigt einen Mechanismus, keine typische Quote.[1]",
+      "sources": {
+        "jagged-frontier": {
+          "title": "Navigating the Jagged Technological Frontier"
+        }
+      }
+    },
+    "delegating-raises-confidence": {
+      "header": "Wer delegiert, wird sicherer",
+      "description": "In einer Studie mit 47 Personen schrieben Programmierende mit KI-Assistent unsichereren Code und hielten ihn eher für sicher.[1] Umstritten: Eine Studie mit 58 Personen fand einen Unterschied von höchstens rund 10 %, und beide nutzten Modelle von 2021 bis 2022.[2]",
+      "sources": {
+        "insecure-code-with-ai-assistants": {
+          "title": "Do Users Write More Insecure Code with AI Assistants?"
+        },
+        "lost-at-c": {
+          "title": "Lost at C: A User Study on the Security Implications of Large Language Model Code Assistants"
+        }
+      }
+    },
+    "gatekeeper": {
+      "header": "Jemand muss Torwächter bleiben",
+      "description": "Ein New Yorker Gericht verhängte 5.000 $ Strafe gegen Anwälte, die sechs von ChatGPT erfundene Fälle eingereicht hatten. KI zu nutzen sei nicht unzulässig, schrieb das Gericht, aber die Regeln „impose a gatekeeping role on attorneys“.[1]",
+      "sources": {
+        "mata-v-avianca": {
+          "title": "Mata v. Avianca, Inc., Opinion and Order"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-plan-lands": {
+        "title": "Der Plan kommt an",
+        "keywords": "poliert, schnell, selbstsicher",
+        "script": "Es ist vier Uhr. Der Plan kommt zurück, sogar früher als gedacht. Er ist poliert. Location, Menü, Zeitplan, sogar eine Playlist. Und alles ist mit voller Überzeugung geschrieben."
+      },
+      "one-line-is-off": {
+        "title": "Eine Zeile stimmt nicht",
+        "keywords": "die Location, das Budget",
+        "script": "Du fängst an zu lesen. Und eine Zeile stimmt nicht. Die gewählte Location ist an dem Wochenende längst ausgebucht. Oder das Budget hat eine Null zu viel. Da steht kein Vielleicht. Es steht da im selben ruhigen Ton wie alles andere."
+      },
+      "you-catch-it-or-not": {
+        "title": "Du bemerkst es, oder nicht",
+        "keywords": "dein Blick, ihre Selbstsicherheit",
+        "script": "Jetzt liegt es also bei dir. Liest du mit dem Stift in der Hand, fällt es dir auf. Überfliegst du nur, weil alles so überzeugt klingt, landet es direkt bei der Geschäftsführung. Die Überzeugung klingt gleich, ob die Zeile stimmt oder nicht. Nur dein Blick kann das eine vom anderen unterscheiden."
+      }
+    }
+  }
+}

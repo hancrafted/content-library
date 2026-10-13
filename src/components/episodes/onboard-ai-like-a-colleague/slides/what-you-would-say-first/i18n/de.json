@@ -1,0 +1,81 @@
+{
+  "title": "Was du als Erstes sagen würdest",
+  "caption": "Erster Tag. Vor jeder Aufgabe redest du.",
+  "quote": {
+    "open": "„",
+    "close": "“"
+  },
+  "lines": {
+    "story": "Letztes Jahr sind viele früh gegangen. Dieses Jahr wollen wir uns wieder als Team fühlen.",
+    "know": "Kleines Budget, hundert Leute, keine Reden, keine Krawatten. Und letztes Jahr hat es geregnet.",
+    "doors": "Hier ist das Buchungssystem mit deinem Login, die Caterer, denen wir vertrauen, der gemeinsame Kalender.",
+    "back": "Ein strukturierter Plan, bis fünf auf meinem Tisch."
+  },
+  "notes": {
+    "colleague-test": {
+      "header": "Anthropics eigener Test",
+      "description": "Zeig den Prompt einer Kollegin, die kaum Kontext hat, und prüfe, ob sie verwirrt wäre.[1]",
+      "sources": {
+        "anthropic-be-clear-and-direct": {
+          "title": "Anthropic, Be clear and direct"
+        }
+      }
+    },
+    "facts-you-hold": {
+      "header": "Was du weißt, weiß das Modell nicht",
+      "description": "Bekam GPT-3.5-Turbo genau das eine passende Dokument, stieg die Trefferquote beim Beantworten von Fragen von 56,1 % auf 88,3 %. Für dieses Publikum ein schwacher Beleg: ein Retrieval-Ergebnis von 2023. Es zeigt die Richtung, nicht die Größe.[1]",
+      "sources": {
+        "lost-in-the-middle": {
+          "title": "Lost in the Middle: How Language Models Use Long Contexts"
+        }
+      }
+    },
+    "unstated-requirements": {
+      "header": "Unausgesprochene Anforderungen: ein Benchmark-Ergebnis",
+      "description": "In einer Benchmark-Studie errieten Modelle eine fehlende Anforderung nur in rund 41 % der Fälle richtig. Das ist ein Benchmark-Ergebnis, keine Regel, und es misst nicht, wie ein Mensch ein Briefing schreibt.[1]",
+      "sources": {
+        "what-prompts-dont-say": {
+          "title": "What Prompts Don’t Say"
+        }
+      }
+    },
+    "all-at-once": {
+      "header": "Alles auf einmal oder Stück für Stück: ein Benchmark-Ergebnis",
+      "description": "In einem Benchmark mit simulierten Nutzern verloren Aufgaben, die über mehrere Runden nachgereicht wurden, im Schnitt 39 % Leistung gegenüber einer vollständig formulierten einzelnen Anfrage. Es misst nicht, wie ein Mensch ein Briefing schreibt, also nur als Richtung lesen.[1]",
+      "sources": {
+        "lost-in-multi-turn": {
+          "title": "LLMs Get Lost In Multi-Turn Conversation"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "where-do-i-start": {
+        "title": "Wo fange ich an",
+        "keywords": "zuerst eine Geschichte, warum dieses Fest",
+        "script": "Wahrscheinlich fängst du nicht mit einer Aufgabe an. Du fängst mit einer Geschichte an. Warum feiern wir überhaupt? Letztes Jahr sind viele früh gegangen, und dieses Jahr soll sich das Team wieder wie ein Team anfühlen."
+      },
+      "what-they-need-to-know": {
+        "title": "Was sie wissen muss",
+        "keywords": "Budget, Anzahl, unsere Kultur, letztes Jahr",
+        "script": "Dann erzählst du ihr, was sie unmöglich wissen kann. Unser Budget ist bescheiden, das schicke Hotel wird es also nicht. Wir sind hundert Leute, nicht hundertfünfzig. Wir sind eine lockere Firma, niemand will Reden und Krawatte. Und letztes Jahr gab es Grillen, und es hat geregnet."
+      },
+      "what-they-can-touch": {
+        "title": "Worauf sie zugreifen kann",
+        "keywords": "Buchung, Caterer, Kalender",
+        "script": "Dann öffnest du ein paar Türen. Hier ist das Buchungssystem, hier dein Login. Das sind die Caterer, denen wir vertrauen, hier ihre Nummern. Und hier der gemeinsame Kalender, damit du siehst, wer im Urlaub ist."
+      },
+      "what-i-want-back": {
+        "title": "Was ich zurück will",
+        "keywords": "ein strukturierter Plan, bis fünf",
+        "script": "Und du sagst, was du zurückhaben willst. Einen strukturierten Plan, bis fünf auf meinem Tisch. Datum, Location, Essen, Geld, der Ablauf des Abends."
+      },
+      "before-they-run": {
+        "title": "Bevor sie losläuft",
+        "keywords": "dich selbst hören, deine eigenen Worte",
+        "script": "Bevor sie losläuft, hältst du inne. Und du hörst dich selbst. Niemand hat dir gesagt, dass du das alles sagen sollst. Es kam einfach heraus, in deinen eigenen Worten. Halt diese Worte fest."
+      }
+    }
+  }
+}

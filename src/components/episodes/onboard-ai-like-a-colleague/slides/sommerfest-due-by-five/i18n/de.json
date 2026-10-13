@@ -1,0 +1,69 @@
+{
+  "title": "Sommerfest, fällig um fünf",
+  "caption": "Montagmorgen. Eine Aufgabe, eine Frist und Hilfe an ihrem ersten Tag.",
+  "columns": {
+    "job": {
+      "title": "Die Aufgabe",
+      "prose": "Das Sommerfest der Firma, oder die Weihnachtsfeier. Rund hundert Leute. Ein durchdachter Plan auf dem Tisch deiner Teamleitung oder der Geschäftsführung."
+    },
+    "clock": {
+      "title": "Die Uhr",
+      "prose": "Fällig bis Feierabend. Der allererste Arbeitstag der neuen Kollegin."
+    },
+    "colleague": {
+      "title": "Die neue Kollegin",
+      "prose": "Kennt praktisch alles, was je geschrieben wurde. Äußerst selbstsicher. Will unbedingt gefallen."
+    }
+  },
+  "notes": {
+    "colleague-not-tool": {
+      "header": "Warum eine Kollegin und kein Werkzeug",
+      "description": "Anbieter und Praktiker beschreiben das Modell unabhängig voneinander als brillante Neue, der der Kontext zu euren Gepflogenheiten fehlt. Deshalb funktioniert der Test auch für Menschen, die nicht programmieren.[1]",
+      "sources": {
+        "anthropic-be-clear-and-direct": {
+          "title": "Anthropic, Be clear and direct"
+        }
+      }
+    },
+    "same-lens": {
+      "header": "Andere nutzen dieselbe Brille",
+      "description": "Matt Pocock beschreibt einen Agenten als Kollegen, der jede Sitzung von vorn beginnt. Mollick spricht heute von einem „unendlich geduldigen neuen Kollegen, der alles vergisst“.[1][2]",
+      "sources": {
+        "pragmatic-engineer-matt-pocock": {
+          "title": "AI Skills with Matt Pocock, The Pragmatic Engineer"
+        },
+        "mollick-good-enough-prompting": {
+          "title": "Getting started with AI: Good enough prompting"
+        }
+      }
+    },
+    "intern-wrong-rank": {
+      "header": "„Praktikant“ ist der falsche Rang",
+      "description": "Mollick hat das Bild vom Praktikanten 2024 aufgegeben, weil es Menschen dazu bringt, KI zu eng einzusetzen. „Kollege“ ist die Form, die er heute vertritt.[1]",
+      "sources": {
+        "mollick-good-enough-prompting": {
+          "title": "Getting started with AI: Good enough prompting"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-job": {
+        "title": "Die Aufgabe",
+        "keywords": "Sommerfest, 100 Leute, Feierabend",
+        "script": "Es ist Montagmorgen. Du sollst das Sommerfest der Firma planen. Oder die Weihnachtsfeier, such dir die Jahreszeit aus. Rund hundert Leute. Bis Feierabend muss ein durchdachter, strukturierter Plan auf dem Tisch deiner Teamleitung liegen, oder bei der Geschäftsführung."
+      },
+      "who-walks-in": {
+        "title": "Wer hereinkommt",
+        "keywords": "weiß alles, selbstsicher, eifrig",
+        "script": "Und es kommt Hilfe. Eine neue Kollegin, an ihrem allerersten Tag. Sie kennt praktisch alles, was je geschrieben wurde. Jedes Buch über Eventplanung, jede Bewertung jeder Location. Sie ist äußerst selbstsicher. Und will unbedingt gefallen. Sie sagt zu allem Ja."
+      },
+      "take-a-second": {
+        "title": "Nimm dir einen Moment",
+        "keywords": "der Raum, du bist dran",
+        "script": "Nimm dir einen Moment. Wirklich. Die Uhr läuft, und sie steht an deinem Schreibtisch. Was sagst du?"
+      }
+    }
+  }
+}

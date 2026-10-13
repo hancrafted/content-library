@@ -1,0 +1,69 @@
+{
+  "title": "Sommerfest, due by five",
+  "caption": "Monday morning. A job, a deadline, and help on its first day.",
+  "columns": {
+    "job": {
+      "title": "The job",
+      "prose": "The company Sommerfest, or the Christmas party. About a hundred people. A fully structured plan on your team lead’s or the CEO’s desk."
+    },
+    "clock": {
+      "title": "The clock",
+      "prose": "Due by end of day. Your new colleague’s very first day."
+    },
+    "colleague": {
+      "title": "The new colleague",
+      "prose": "Knows essentially the entire written world. Extremely confident. Eager to please."
+    }
+  },
+  "notes": {
+    "colleague-not-tool": {
+      "header": "Why a colleague and not a tool",
+      "description": "Vendors and practitioners independently frame the model as a brilliant newcomer who lacks context on your norms, which is why the test works for non-coders too.[1]",
+      "sources": {
+        "anthropic-be-clear-and-direct": {
+          "title": "Anthropic, Be clear and direct"
+        }
+      }
+    },
+    "same-lens": {
+      "header": "Others use the same lens",
+      "description": "Matt Pocock describes an agent as a colleague who starts afresh every session, and Mollick’s current form is an “infinitely patient new coworker who forgets everything”.[1][2]",
+      "sources": {
+        "pragmatic-engineer-matt-pocock": {
+          "title": "AI Skills with Matt Pocock, The Pragmatic Engineer"
+        },
+        "mollick-good-enough-prompting": {
+          "title": "Getting started with AI: Good enough prompting"
+        }
+      }
+    },
+    "intern-wrong-rank": {
+      "header": "“Intern” is the wrong rank",
+      "description": "Mollick dropped the intern wording in 2024 because it makes people use AI in constrained ways; “colleague” is the supported form.[1]",
+      "sources": {
+        "mollick-good-enough-prompting": {
+          "title": "Getting started with AI: Good enough prompting"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-job": {
+        "title": "The job",
+        "keywords": "Sommerfest, 100 people, end of day",
+        "script": "It is Monday morning. You must plan the company Sommerfest. Or the Christmas party, pick your season. About a hundred people. A fully structured plan has to be on your team lead's desk, or the CEO's, by end of day."
+      },
+      "who-walks-in": {
+        "title": "Who walks in",
+        "keywords": "knows everything, confident, eager",
+        "script": "And help has arrived. A new colleague, on their very first day. They know essentially the entire written world. Every book on event planning, every review of every venue. They are extremely confident. And eager to please. They will say yes to anything."
+      },
+      "take-a-second": {
+        "title": "Take a second",
+        "keywords": "the room, your move",
+        "script": "Take a second. Really. The clock is running, and they are standing at your desk. What do you say?"
+      }
+    }
+  }
+}

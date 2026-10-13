@@ -1,0 +1,13 @@
+{
+  "title": "The thought experiment",
+  "caption": "A small experiment. You are the one in it.",
+  "voiceScript": {
+    "segments": {
+      "you-are-in-it": {
+        "title": "You are in it",
+        "keywords": "small experiment, you",
+        "script": "A small experiment. You are the one in it."
+      }
+    }
+  }
+}

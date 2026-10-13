@@ -1,0 +1,66 @@
+{
+  "title": "Four o’clock, the plan comes back",
+  "caption": "Early, polished, and completely sure.",
+  "plan": {
+    "heading": "Sommerfest · Plan",
+    "rows": {
+      "date": { "label": "Date", "value": "Friday 10 July, from 4 pm" },
+      "venue": { "label": "Venue", "value": "Gutshaus am See" },
+      "food": { "label": "Food", "value": "Barbecue and vegetarian, rain tent" },
+      "budget": { "label": "Budget", "value": "€45,000 (€450 per head)" },
+      "evening": { "label": "Evening", "value": "Welcome · Games · Dinner · Band" },
+      "playlist": { "label": "Playlist", "value": "Summer hits" }
+    }
+  },
+  "notes": {
+    "confident-and-wrong": {
+      "header": "Confident and wrong looks the same",
+      "description": "In the BCG study, on a task built to lie outside the model’s ability, AI users were 19 points less likely to be correct, and their wrong answers read as coherent. The task was designed to fail, so this shows a mechanism, not a typical rate.[1]",
+      "sources": {
+        "jagged-frontier": {
+          "title": "Navigating the Jagged Technological Frontier"
+        }
+      }
+    },
+    "delegating-raises-confidence": {
+      "header": "Delegating raises confidence",
+      "description": "In a 47-person study, programmers with an AI assistant wrote less secure code and were more likely to believe it secure.[1] Disputed: a 58-person study found a gap of at most about 10%, and both used 2021 to 2022 models.[2]",
+      "sources": {
+        "insecure-code-with-ai-assistants": {
+          "title": "Do Users Write More Insecure Code with AI Assistants?"
+        },
+        "lost-at-c": {
+          "title": "Lost at C: A User Study on the Security Implications of Large Language Model Code Assistants"
+        }
+      }
+    },
+    "gatekeeper": {
+      "header": "Someone must stay the gatekeeper",
+      "description": "A New York court fined lawyers $5,000 for filing six cases ChatGPT invented, and wrote that using AI is not improper but rules “impose a gatekeeping role on attorneys”.[1]",
+      "sources": {
+        "mata-v-avianca": {
+          "title": "Mata v. Avianca, Inc., Opinion and Order"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-plan-lands": {
+        "title": "The plan lands",
+        "keywords": "polished, fast, sure of itself",
+        "script": "It is four o'clock. The plan comes back, early. It is polished. Venue, menu, timeline, even a playlist. And it is written with total confidence."
+      },
+      "one-line-is-off": {
+        "title": "One line is off",
+        "keywords": "the venue, the budget",
+        "script": "You start reading. And one line is off. The venue it picked is already booked that weekend. Or the budget has one zero too many. It does not say maybe. It says it in the same calm voice as everything else."
+      },
+      "you-catch-it-or-not": {
+        "title": "You catch it, or you do not",
+        "keywords": "your eye, their confidence",
+        "script": "So now it is on you. If you read with a pen in your hand, you catch it. If you skim, because it all looks so sure of itself, it goes straight to the CEO. The confidence sounds the same whether the line is right or wrong. Only your eye can tell the two apart."
+      }
+    }
+  }
+}

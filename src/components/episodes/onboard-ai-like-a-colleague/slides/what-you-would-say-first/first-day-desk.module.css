@@ -1,0 +1,21 @@
+/*
+ * The first-day desk: a quiet line drawing beside the speech lines. The
+ * drawing takes its colour from the text colour the Slide gives it, so light
+ * and dark come from the tokens alone.
+ */
+
+.desk {
+  height: 15rem;
+  width: auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}

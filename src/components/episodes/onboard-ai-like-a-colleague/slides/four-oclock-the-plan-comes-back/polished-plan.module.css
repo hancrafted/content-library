@@ -1,0 +1,47 @@
+/*
+ * The polished plan: a card of label and value rows, and a pen resting just
+ * past its right edge at the height of the one row that is off. Only the
+ * pen's position points at that row; the row itself looks like every other.
+ */
+
+.card {
+  position: relative;
+  border-radius: var(--radius);
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 8rem 1fr;
+  column-gap: 1.5rem;
+  align-items: baseline;
+}
+
+.pen {
+  position: absolute;
+  top: 50%;
+  right: -4.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  transform: translateY(-50%) rotate(-20deg);
+}
+
+/* Narrow screens: the pen rests in the card's right padding, so the page never scrolls sideways. */
+@media (width < 48rem) {
+  .row {
+    grid-template-columns: 6rem 1fr;
+    padding-right: 1rem;
+  }
+
+  .pen {
+    right: -1.25rem;
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+}

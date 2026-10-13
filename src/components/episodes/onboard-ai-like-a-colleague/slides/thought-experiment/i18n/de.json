@@ -1,0 +1,13 @@
+{
+  "title": "Das Gedankenexperiment",
+  "caption": "Ein kleines Experiment. Du bist die Hauptperson.",
+  "voiceScript": {
+    "segments": {
+      "you-are-in-it": {
+        "title": "Du bist mittendrin",
+        "keywords": "kleines Experiment, du",
+        "script": "Ein kleines Experiment. Und du bist die Hauptperson."
+      }
+    }
+  }
+}
