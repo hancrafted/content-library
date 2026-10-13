@@ -1,7 +1,7 @@
 {
   "title": "Hör auf, KI zu prompten, arbeite sie ein · hancrafted",
   "description": "Warum KI enttäuscht, wenn Du sie wie ein Werkzeug promptest, und warum ihre Einarbeitung wie bei einem fähigen neuen Kollegen Führungsarbeit ist, keine Ausführungsarbeit: Kontext, Werkzeuge, ein klares Briefing und die Prüfung des Ergebnisses.",
-  "toc": "Inhalt Wird geladen noch 7 Min. 1 Das Versprechen und die Lücke Zwanzigmal auf dem Papier 2 Tag eins mit einem fähigen Fremden Ein Kollege, der die geschriebene Welt kennt Der Plan muss bis Feierabend stehen Was würdest Du ihm zuerst sagen 3 Der Aufwand wandert, er verschwindet nicht Die Arbeit verlagert sich Vom Schreibtisch in die Organisation Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 7 Min. 1 Das Versprechen und die Lücke Zwanzigmal auf dem Papier 2 Tag eins mit einem fähigen Fremden Ein Kollege, der die geschriebene Welt kennt Der Plan muss bis Feierabend stehen Was würdest Du ihm zuerst sagen 3 Der Aufwand wandert, er verschwindet nicht Die Arbeit verlagert sich Vom Schreibtisch in die Organisation",
+  "toc": "Inhalt Wird geladen noch 7 Min. 1 Das Versprechen und die Lücke Zwanzigmal auf dem Papier 2 Tag eins mit einem fähigen Fremden Ein Kollege, der die geschriebene Welt kennt Der Plan muss bis Feierabend stehen Was würdest Du ihm zuerst sagen 3 Der Aufwand wandert, er verschwindet nicht Die Arbeit verlagert sich Vom Schreibtisch in die Organisation 4 Das fühlt sich nach viel an Die Wendung Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 7 Min. 1 Das Versprechen und die Lücke Zwanzigmal auf dem Papier 2 Tag eins mit einem fähigen Fremden Ein Kollege, der die geschriebene Welt kennt Der Plan muss bis Feierabend stehen Was würdest Du ihm zuerst sagen 3 Der Aufwand wandert, er verschwindet nicht Die Arbeit verlagert sich Vom Schreibtisch in die Organisation 4 Das fühlt sich nach viel an Die Wendung",
   "slides": [
     {
       "id": "top",
@@ -33,6 +33,11 @@
     {
       "id": "the-effort-moves-it-does-not-vanish--from-your-desk-to-your-organization",
       "text": "Fähigkeiten für Dich, Disziplinen für die Firma Das sind Disziplinen, keine Werkzeuge. Fähigkeiten Für Dich Briefing Kontext übergeben Prüfen Disziplinen In Deiner ganzen Organisation Wie Arbeit rund um KI organisiert ist Wer den Kontext aufschreibt Wem die Prüfungen gehören"
+    },
+    { "id": "it-feels-like-a-lot", "text": "Das fühlt sich nach viel an" },
+    {
+      "id": "it-feels-like-a-lot--the-twist",
+      "text": "KI kann Dir helfen, KI einzuarbeiten Ein erster Schritt: grill-me befragt Dich, bevor Du tippst."
     }
   ],
   "notes": [
@@ -72,6 +77,11 @@
     {
       "id": "the-effort-moves-it-does-not-vanish--from-your-desk-to-your-organization",
       "text": "Vom Schreibtisch in die Organisation Eingeführt, aber ohne Wirkung In einer Umfrage unter fast 6.000 Führungskräften setzen rund 69 % der Firmen KI aktiv ein, doch etwa 90 % der Führungskräfte berichten für die letzten drei Jahre keine Wirkung auf Produktivität oder Beschäftigung. 1 Quellen (1) Yotzov, Barrero, Bloom, Davis et al., Firm Data on AI (NBER Working Paper 34836, revised March 2026) ( öffnet in neuem Tab ) nber.org Die Qualifikationslücke ist bekannt In einer Umfrage unter etwa 800 Entscheidern großer US-Unternehmen berichtet fast die Hälfte von technischen Qualifikationslücken, während die Investitionen in Weiterbildung um 8 Punkte gesunken sind; 43 % der Führungskräfte warnen vor schwindenden Fähigkeiten ohne bewusst gestaltete Rollen und Coaching. Selbstauskunft. 1 Quellen (1) Wharton Human-AI Research and GBK Collective, Accountable Acceleration: Gen AI Fast-Tracks Into the Enterprise, Executive Summary ( öffnet in neuem Tab ) ai.wharton.upenn.edu Einzelne gehen voran Der vorläufige Bericht von MIT NANDA findet Beschäftigte in über 90 % der befragten Unternehmen, die private KI-Werkzeuge nutzen, während offizielle Initiativen stocken. Die Zahlen beruhen auf Interviews und Umfragen unter Führungskräften, selbst bewertet, und sind daher nur als Hinweis zu lesen. 1 Quellen (1) Challapally et al., The GenAI Divide: State of AI in Business 2025 (MIT Project NANDA, preliminary findings, July 2025) ( öffnet in neuem Tab ) static1.squarespace.com"
+    },
+    { "id": "it-feels-like-a-lot", "text": "Das fühlt sich nach viel an Keine Sprechernotizen für diese Folie." },
+    {
+      "id": "it-feels-like-a-lot--the-twist",
+      "text": "Die Wendung KI als zweites Paar Augen Anthropic empfiehlt eine zweite Meinung in einem frischen Kontext, „damit der Agent, der die Arbeit macht, nicht derjenige ist, der sie bewertet“. Die Verbindung zu grill-me ist die eigene Rahmung dieser Episode. 1 Quellen (1) Anthropic, Claude Code best practices ( öffnet in neuem Tab ) code.claude.com"
     }
   ],
   "script": [
@@ -114,6 +124,14 @@
     {
       "id": "the-effort-moves-it-does-not-vanish--from-your-desk-to-your-organization",
       "text": "Vom Schreibtisch in die Organisation 0:00 – 0:18 Für Dich selbst neue Fähigkeiten Briefing Kontext übergeben Prüfen eine Gewohnheit Zuerst für Dich selbst. Das sind neue Fähigkeiten. Briefing, Kontext übergeben, Prüfen. Am Anfang fühlen sie sich ungewohnt an, und dann werden sie zur Gewohnheit, so wie eine gute Notiz zum ersten Tag für einen Menschen. 0:18 – 0:38 Für Deine Organisation größerer Maßstab wer den Kontext aufschreibt wem die Prüfungen gehören Disziplinen keine Werkzeuge Und dann für Deine Organisation. Dasselbe in größerem Maßstab. Wer schreibt den Kontext auf, damit die nächste Person nicht bei null anfängt? Wem gehören die Prüfungen? Wie ist die Arbeit rund um KI organisiert? Das sind Disziplinen, keine Werkzeuge."
+    },
+    {
+      "id": "it-feels-like-a-lot",
+      "text": "Das fühlt sich nach viel an 0:00 – 0:18 Das fühlt sich nach viel an vier Disziplinen jedes Mal eine Notiz für Tag eins die Arbeit die gewandert ist Ich weiß. Das klingt nach viel. Vier Disziplinen, jedes einzelne Mal eine Notiz für Tag eins. Ich werde nicht so tun, als wäre das keine Arbeit. Es ist Arbeit. Es ist die Arbeit, die gewandert ist."
+    },
+    {
+      "id": "it-feels-like-a-lot--the-twist",
+      "text": "Die Wendung 0:00 – 0:19 Die Wendung KI kann Dir helfen KI einzuarbeiten der vergessene Kontext erster Morgen Aber jetzt kommt die Wendung. KI kann Dir helfen, KI einzuarbeiten. Sie kann Dich nach dem Kontext befragen, den Du vergessen hast, und die Fragen stellen, die ein guter neuer Kollege an seinem ersten Morgen stellen würde. 0:19 – 0:34 Ein erster Schritt grill-me Deine nächste echte Aufgabe alles was Du zum Start brauchst Wenn Du einen ersten Schritt willst, gibt es einen einfachen namens grill-me, der genau das tut. Probier ihn bei Deiner nächsten echten Aufgabe aus. Und mehr brauchst Du nicht, um anzufangen."
     }
   ]
 }

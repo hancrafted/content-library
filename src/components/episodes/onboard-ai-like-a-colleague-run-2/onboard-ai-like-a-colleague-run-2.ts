@@ -4,9 +4,11 @@ import en from './i18n/en.json';
 import { aColleagueWhoKnowsTheWrittenWorld } from './slides/a-colleague-who-knows-the-written-world/slide';
 import { dayOneWithACapableStranger } from './slides/day-one-with-a-capable-stranger/slide';
 import { fromYourDeskToYourOrganization } from './slides/from-your-desk-to-your-organization/slide';
+import { itFeelsLikeALot } from './slides/it-feels-like-a-lot/slide';
 import { theEffortMovesItDoesNotVanish } from './slides/the-effort-moves-it-does-not-vanish/slide';
 import { thePlanIsDueByEndOfDay } from './slides/the-plan-is-due-by-end-of-day/slide';
 import { thePromiseAndTheGap } from './slides/the-promise-and-the-gap/slide';
+import { theTwist } from './slides/the-twist/slide';
 import { theWorkRelocates } from './slides/the-work-relocates/slide';
 import { twentyTimesOnPaper } from './slides/twenty-times-on-paper/slide';
 import { whatWouldYouTellThemFirst } from './slides/what-would-you-tell-them-first/slide';
@@ -23,5 +25,6 @@ export const onboardAiLikeAColleagueRun2 = episode({
     [thePromiseAndTheGap, twentyTimesOnPaper],
     [dayOneWithACapableStranger, aColleagueWhoKnowsTheWrittenWorld, thePlanIsDueByEndOfDay, whatWouldYouTellThemFirst],
     [theEffortMovesItDoesNotVanish, theWorkRelocates, fromYourDeskToYourOrganization],
+    [itFeelsLikeALot, theTwist],
   ],
 });
