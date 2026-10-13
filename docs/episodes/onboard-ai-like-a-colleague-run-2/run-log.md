@@ -474,3 +474,57 @@ The edits apply Han's gate decisions, not a reviewer failure, so they count unde
 ### Notes
 
 Han approved every design without editing a ticket body, so each ticket's last edit is marked `Edited-by: write-design-spec`. His design decisions came in the gate grill instead, and the previous entry lists them; the orchestrator applied them as agent edits. So "approved as drafted" here does not mean the drafts went through unchanged. The relabel was made by the orchestrator on Han's word, so the label history names the agent's account, not Han's action.
+
+## implement-episode · 2026-10-13T20:03:44Z
+
+### Inputs
+
+- Spec #137 and tickets #138–#143, all `ready-for-agent` with approved design answers; `dossier.md`; `references/implement-episode.md`.
+- `/implement-spec` typed by Han; review fixed point `3865449`.
+- Han's call after #139: the day-one note approved as built; "decide yourself" on the #139 questions.
+- Attempt 2: the one hard review line, quoted verbatim, to a new implementer.
+
+### Output
+
+- The Episode in `src/components/episodes/onboard-ai-like-a-colleague-run-2/`: Title slide, 6 Sections, 12 page Slides; `DayOneNote` in `src/components/slide-shared/day-one-note.tsx` with an optional `children` slot; registered as an Upcoming Episode with a page (`status: 'upcoming'`, noindex, unlinked, no `published-anchors.json`, slug not in `PUBLISHED_SLUGS`).
+- Episode-text captures `tests/post-build/episode-text/onboard-ai-like-a-colleague-run-2.{en,de}.json`.
+- Integration merges: #138 `546dbfc`, #139 `32d6016`, #143 `ff506dd`, #141, #140 `b7dd5c2`, #142 `177fb6c`, attempt-2 fix `61a5709`.
+
+### Checks
+
+- `verify`: pass after every merge, both attempts.
+- `build` and `test:build`: pass, 544 of 544, both attempts.
+- `visual-check`, both attempts, 19 Slides × 375/1100/1440 × drawer beside/over/closed × light/dark: 342 rows, 266 measured, 76 `n/a` (beside cannot exist below 1280 px). Count 1, wrapper ≥ viewport height, mounted descendants > 0 and no horizontal overflow in all 266. Foreground clear of the chrome at 1100 and 1440 closed and beside. It overlaps the site header at 375 px (inset box 343×66, content 343×2 on page Slides) and the drawer in "over" mode at every width; both are site chrome, judged outside this job (see Notes).
+- Reviewer (`code-review`, Standards and Spec): attempt 1 fail on one hard line; attempt 2 pass.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 409 s · 145962 tokens
+- implementor · attempt 1 · pass · 783 s · 201855 tokens
+- implementor · attempt 1 · pass · 527 s · 157213 tokens
+- implementor · attempt 1 · pass · 465 s · 138596 tokens
+- implementor · attempt 1 · pass · 374 s · 118341 tokens
+- implementor · attempt 1 · pass · 227 s · 76859 tokens
+- implementor · attempt 1 · pass · 534 s · 90472 tokens
+- reviewer · attempt 1 · fail · rubric "`cn()` drops the text-size role (FE-011 §3.1, "size comes from a role")." · 166 s · 269836 tokens
+- implementor · attempt 2 · pass · 178 s · 83288 tokens
+- reviewer · attempt 2 · pass · 45 s · 50894 tokens
+
+### Notes
+
+Attempt 1's implementor lines are the tickets #138, #139, #140, #141, #142, #143 in that order, then the visual-check subagent. #138 and #139 ran alone, #139 stopping for Han's look at the day-one note; then #140, #141, #143 ran in parallel and #142 last. The reviewer line sums the Standards and Spec subagents, run in parallel. Attempt 1 failed on the Standards finding that `cn()` (plain tailwind-merge) drops `text-caption`/`text-body` when a text colour follows, on three elements; attempt 2 moved the size role outside the merge and added `size-roles.test.ts`. The orchestrator resolved the #140 merge conflict (Section order, recaptured Episode text).
+
+The visual check's two overlaps are counted as passes for this job, by the orchestrator's judgement: the 375 px overlap comes from `scroll-mt-24` (96 px) against a 162 px two-row header, and "over" mode lays the drawer on the Slide by design. Both are template code, frozen for the run. Rubric 5's "Foreground clear of the chrome" says nothing about either. The runs CSV `at` values of the attempt-1 rows are reconstructed from merge commits and agent durations, not read from the clock at each agent's end.
+
+- Needs human: `topic: 'ai-collaboration'`, `format: 'foundations'`, `tags: []` are the closest honest values; the Brief names no Topic or Tags. `extraTopics: ['adoption']` was left out.
+- Needs human: all German text was written by the implementers, the Dossier being English only: the Episode title "Hör auf, KI zu prompten, arbeite sie ein", captions, Voice script, Speaker notes, step titles.
+- Needs human: the Open-for-Han copy is built from the ticket drafts: captions (#138, #140, #142), the day-one note and plan rows (#140), the four step depth lines (#142), the grill-me pointer (#143).
+- Needs human: #141's German "so wie eine gute Notiz zum ersten Tag für einen Menschen" follows "for a person", not "Kollegen".
+- Needs human: the `checks` Speaker note item targets only the 13:00 check-in on "What would you tell them first" (one element per target); the orchestrator accepted it on Han's "decide yourself". The dashed solo stretch uses `border-muted-foreground`, not the ticket's `border-border`, for visibility.
+- Needs human: the promise half of "Twenty times on paper" has no Speaker note item, so it carries no target.
+- Needs human: at 375 px the site header covers the top of every Slide's Foreground after an anchor jump (`scroll-mt-24` against a 162 px header).
+- Needs human: at 1440 px, opening the drawer beside narrows every Slide and moves 7 linked Slides out of the active zone, so the drawer can show another Slide's notes.
+- Needs human: `cn()` in `src/lib/utils.ts` still drops size roles; `extendTailwindMerge` with the type roles would fix it repo-wide.
+- Needs human: Standards judgement calls: near-identical keyframes (`draw`, `fill`, `rise`, `fade`) repeated across Slides instead of a library motion; `h4`s at heading size; rail keys `items.a`–`f`; note-target plumbing in four shapes; the `Half` split written three times; inconsistent CSS module names.
+- Needs human: changes outside the Episode folder, needed for the first Upcoming Episode with a page: `FEATURED` retyped in `src/lib/episode-overview.ts`, and `episode-text.build.test.ts` skips the anchor check for noindex pages.
+- Needs human: the Dossier's Visual prose for "The twist" (second "AI" sliding in) and "The work relocates" ("on entry … once") no longer matches the build.

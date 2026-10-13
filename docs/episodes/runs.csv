@@ -80,3 +80,13 @@ run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at
 2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,reviewer,3,pass,,13,46044,2026-10-13T15:24:00Z
 2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,implementor,3,pass,,198,106223,2026-10-13T16:15:31Z
 2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-design-spec,orchestrator,3,pass,,5,,2026-10-13T16:27:33Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,implement-episode,implementor,1,pass,,409,145962,2026-10-13T16:37:00Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,implement-episode,implementor,1,pass,,783,201855,2026-10-13T17:00:00Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,implement-episode,implementor,1,pass,,527,157213,2026-10-13T19:31:00Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,implement-episode,implementor,1,pass,,465,138596,2026-10-13T19:28:00Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,implement-episode,implementor,1,pass,,374,118341,2026-10-13T19:39:00Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,implement-episode,implementor,1,pass,,227,76859,2026-10-13T19:26:40Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,implement-episode,implementor,1,pass,,534,90472,2026-10-13T19:49:00Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,implement-episode,reviewer,1,fail,"`cn()` drops the text-size role (FE-011 §3.1, ""size comes from a role"").",166,269836,2026-10-13T19:52:30Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,implement-episode,implementor,2,pass,,178,83288,2026-10-13T19:56:00Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,implement-episode,reviewer,2,pass,,45,50894,2026-10-13T20:03:44Z
