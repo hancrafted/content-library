@@ -56,7 +56,9 @@ Extra.
 `;
 
 function feedback(via: string, items: readonly string[]): string {
-  return ['---', 'type: feedback', 'round: 1', `via: ${via}`, '---', '', ...items, ''].join('\n');
+  return ['---', 'type: feedback', 'round: 1', `via: ${via}`, '---', '', '# Feedback round 1', '', ...items, ''].join(
+    '\n',
+  );
 }
 
 const FEEDBACK_PATH = 'feedback/01/feedback.md';
@@ -69,26 +71,6 @@ function research(description: string): string {
 
 const RECALL = 'research/recall/research.md';
 
-function researchOn(generatedAt: string, accessed: readonly string[]): string {
-  return [
-    '---',
-    'type: research',
-    'generated:',
-    '  by: claude-code/opus-5.5',
-    `  at: ${generatedAt}`,
-    '---',
-    '',
-    '# Why?',
-    '',
-    '## Sources',
-    '',
-    ...accessed.map(
-      (date, index) =>
-        `${index + 1}. Liu et al., Lost in the Middle — https://arxiv.org/abs/2307.03172 — accessed ${date}`,
-    ),
-    '',
-  ].join('\n');
-}
 const RECALL_ENTRY = '- [Why recall drops](research/recall/research.md) — Recall is U-shaped.';
 
 const BRIEF = `---
@@ -602,13 +584,25 @@ describe('edge cases', () => {
     expect(findings).toEqual([]);
   });
 
-  it('checks the run log and research of a folder that has no Dossier yet', () => {
+  it('checks the run log of a folder that has no Dossier yet', () => {
     // ARRANGE
     const files = {
       'run-log.md': runLog(['research · 2026-10-12T10:15:00Z', 'brief-grill · 2026-10-12T09:00:00Z']),
-      [RECALL]: researchOn('2026-10-11T00:00:00Z', ['2026-10-12']),
     };
-    const expectedKinds = ['research-date', 'run-log-order'];
+    const expectedKinds = ['run-log-order'];
+    // ACT
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
+    // ASSERT
+    expect(kinds(findings)).toEqual(expectedKinds);
+  });
+
+  it('checks the title and the sources of the files of a folder that has no Dossier yet', () => {
+    // ARRANGE
+    const files = {
+      'brief.md': '---\ntitle: Budget\n---\n\n# Spend\n',
+      [RECALL]: '---\ntype: research\n---\n\n# Why?\n\nA [^x].\n',
+    };
+    const expectedKinds = ['title', 'research-sources'];
     // ACT
     const findings = checkStagingFolder(files, KNOWN_VISUALS);
     // ASSERT

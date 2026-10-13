@@ -4,7 +4,7 @@ Output: `docs/episodes/<slug>/dossier.md`, the same file `write-dossier` wrote. 
 
 ## Prompt
 
-Write the story the Dossier plans. In every `#### Voice script` block, replace each item's keywords with the spoken paragraph, keep the bold beat, and change nothing else: not a heading, a Visual, a Speaker note, an item's number or the item count. `tests/docs/episode-staging.test.ts` compares the file against the commit `write-dossier` made and fails any other changed line. When a beat cannot become a paragraph, write the rest and report that beat to the orchestrator; never edit the beat or the item list to fit.
+Write the story the Dossier plans. In every `#### Voice script` block, replace each item's keywords with the spoken paragraph, keep the bold beat, and change nothing else but moving `generated.at` to the current UTC time (the file changed, so an earlier approval no longer counts): not a heading, a Visual, a Speaker note, an item's number or the item count. `tests/docs/episode-staging.test.ts` compares the file against the commit `write-dossier` made and fails any other changed line. When a beat cannot become a paragraph, write the rest and report that beat to the orchestrator; never edit the beat or the item list to fit.
 
 - An item is `1. **<beat>** — <the paragraph>`, on one line or wrapped. Prose only: no lists, tables or quotes inside it.
 - Under the h2 is the Section slide's Voice script, under each h3 its page Slide's. The h1 has none; do not add one, since a feedback round adds the Title slide's optional blocks.

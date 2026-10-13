@@ -6,6 +6,7 @@
  */
 
 import { checkStagingOrder } from './episode-staging-order.pure';
+import { checkTexts } from './episode-staging-texts.pure';
 import { checkTitleSlide } from './episode-staging-title.pure';
 import { unless, type Finding } from './finding.pure';
 import {
@@ -13,6 +14,7 @@ import {
   bodyLines,
   frontmatterField,
   h4s,
+  headingsOf,
   orderedList,
   slideAnchors,
   type Block,
@@ -141,8 +143,9 @@ const FEEDBACK_ITEM = /^- `([a-z0-9-]+--[a-z0-9-]+)` · (content|implementation|
 
 function checkFeedbackFile(file: string, markdown: string, anchors: readonly string[]): Finding[] {
   const practice = frontmatterField(markdown, 'via') === 'practice';
-  const messages = bodyLines(markdown).flatMap((line) => {
-    if (line.trim() === '') return [];
+  const h1 = headingsOf(bodyLines(markdown)).find(({ level }) => level === 1)?.line;
+  const messages = bodyLines(markdown).flatMap((line, index) => {
+    if (line.trim() === '' || index === h1) return [];
     const item = FEEDBACK_ITEM.exec(line);
     if (item === null) {
       const tags = practice ? 'content|implementation|practice' : 'content|implementation';
@@ -172,7 +175,7 @@ function checkFeedback(files: Readonly<Record<string, string>>, dossier: readonl
  * relative to the folder (`dossier.md`, `feedback/01/feedback.md`) to its text.
  */
 export function checkStagingFolder(files: Readonly<Record<string, string>>, known: KnownVisuals): Finding[] {
-  return [...checkStagingOrder(files), ...checkDossier(files, known)];
+  return [...checkStagingOrder(files), ...checkTexts(files), ...checkDossier(files, known)];
 }
 
 /** The checks that read the Dossier; none until it exists. */
@@ -232,7 +235,6 @@ export function checkRunsCsv(csv: string): Finding[] {
 }
 
 const NOT_SETTLED = 'Not settled.';
-
 /**
  * The Brief headings whose body is only `Not settled.`, the marker the Brief
  * grill writes when time runs out. markdown-harness accepts it as prose, so

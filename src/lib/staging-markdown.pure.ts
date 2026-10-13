@@ -90,16 +90,21 @@ export function orderedList(body: readonly string[]): { items: ListItem[]; stray
  * mappings, written in block or flow form, to any depth; a key that itself contains a dot cannot be addressed.
  */
 export function frontmatterField(markdown: string, key: string): string | null {
+  const found = frontmatterValue(markdown, key);
+  return typeof found === 'string' || typeof found === 'number' || typeof found === 'boolean' ? String(found) : null;
+}
+
+/** A frontmatter field's parsed YAML value at a dotted key, of any shape, or undefined when absent or unreadable. */
+export function frontmatterValue(markdown: string, key: string): unknown {
   const block = FRONTMATTER.exec(markdown)?.[0];
-  if (block === undefined) return null;
+  if (block === undefined) return undefined;
   let value: unknown;
   try {
     value = parse(block.replace(/^---\n/, '').replace(/\n---\n$/, ''));
   } catch {
-    return null;
+    return undefined;
   }
-  const found = key.split('.').reduce<unknown>((node, part) => (isMapping(node) ? node[part] : undefined), value);
-  return typeof found === 'string' || typeof found === 'number' || typeof found === 'boolean' ? String(found) : null;
+  return key.split('.').reduce<unknown>((node, part) => (isMapping(node) ? node[part] : undefined), value);
 }
 
 function isMapping(node: unknown): node is Record<string, unknown> {

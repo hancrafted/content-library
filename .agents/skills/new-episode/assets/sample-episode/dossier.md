@@ -1,6 +1,10 @@
 ---
 type: dossier
+title: The context window is a budget
 status: draft
+generated:
+  by: claude-code/opus-5.5
+  at: 2026-10-12T11:00:00Z
 locale: en
 brief: ./brief.md
 ---

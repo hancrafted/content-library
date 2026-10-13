@@ -24,7 +24,7 @@ _Done when_ the worktree exists, `git branch --show-current` prints `episode/<sl
 
 Run the `brief-grill` job by [`references/brief-grill.md`](references/brief-grill.md). When Han brings a Brief, accept it: validate it with the job's checks and grill him only on what is missing or reads `Not settled.`. Otherwise invoke the `brief-grill` skill. It is a human gate: stop the session after the `Gate: draft brief` commit and tell Han the Brief is his to edit and approve.
 
-_Done when_ `docs/episodes/<slug>/brief.md` has `status: approved`, committed by Han with `Gate: approved brief`.
+_Done when_ `node .agents/skills/new-episode/scripts/approve.ts docs/episodes/<slug>/brief.md` has appended Han's `verified` entry (`human:han`, at or after `generated.at`), committed by Han with `Gate: approved brief`.
 
 ### 3. Categorize the research
 
@@ -42,7 +42,7 @@ _Done when_ `docs/episodes/<slug>/pipeline.yml` has `status: approved`, committe
 
 Start only when all of these hold; otherwise name each one that fails to Han and stop:
 
-1. `brief.md` frontmatter has `status: approved`.
+1. `brief.md` is approved: its `verified` list holds a `human:han` entry at or after `generated.at` (`npm run episode:status` reads the same rule; an edit after approval re-opens it).
 2. `pipeline.yml` has the top-level `status: approved`.
 3. `npm run check:docs` is clean.
 4. `npx vitest run tests/docs/episode-staging.test.ts` passes. It checks the per-run pipeline's schema, one research job per research question, and that no approved Brief keeps a `Not settled.` section.
@@ -96,7 +96,7 @@ Every agent runs where its `session` says. `subagent`, the default, is spawned w
 3. **Reviewer.** A **fresh** agent, never one that wrote the output. A reviewer with `session: orchestrator` runs in the session that implemented, so its skill supplies the fresh eyes: `code-review` judges through subagents that saw none of the writing. Its baseline is the markdown-harness intent of every rule, field and heading that governs the output: it runs `npx mh query <path>` on each markdown output itself. On top of that baseline come the lines under the job's `rubric`. It answers one line per intent and per rubric line, `pass` or `fail — <the line, verbatim> — <evidence>`, and marks anything only Han can judge `needs human — <what>`. On attempt 2 and later, the fresh reviewer judges only the previous attempt's failed lines, beside the checks: a new concern goes into Notes as `Needs human: <what>`, never as a fail, so a retry is never judged against moved goalposts.
 4. **Retry.** On any failed line, run the implementor again with every failed line quoted verbatim, then the checks and a fresh reviewer again. A job gets `1 + retries` attempts. A job whose output lives outside git (an issue, a PR) is retried by updating what its earlier attempt made, never by creating a second one; its reference says how it finds that output.
 5. **Retries run out.** Mark the todo and every todo downstream of it blocked. The run-log entry's Notes start `Blocked:` and quote the last failed lines; they go on the PR checklist.
-6. **Pass.** Set each staging output's `status: checked` (research files carry no status), and commit through the `commit` skill with `Source: docs/episodes/<slug>/brief.md` and `Agent: <job id>` (see [agent marks](#agent-marks)), in the job's worktree when it has one, then merge it as above.
+6. **Pass.** Run `node .agents/skills/new-episode/scripts/approve.ts <output> --by process:markdown-harness` on each staging output, which appends the machine entry to its `verified` list with the clock's UTC time and never overwrites an entry; never type the entry (research files carry no gate), and commit through the `commit` skill with `Source: docs/episodes/<slug>/brief.md` and `Agent: <job id>` (see [agent marks](#agent-marks)), in the job's worktree when it has one, then merge it as above.
 7. **Log.** On `episode/<slug>`, append the [run-log entry](#run-log-and-runs-csv), listing each ticket the job edited (see [agent marks](#agent-marks)), then the runs CSV rows. A `needs human` reviewer line goes into Notes as `Needs human: <what>`.
 
 _Done when_ the job passed or is blocked, its outputs are committed, and its run-log entry and CSV rows are appended.
@@ -134,10 +134,10 @@ In a new session, or after a compaction, never trust memory of the run: run `npm
 
 ## Gate commits
 
-Every commit goes through the `commit` skill. A gate commit adds a `Gate:` trailer beside `Source:` (`Gate: draft brief`, `Gate: approved pipeline`, `Gate: draft feedback-01`). The agent's draft is committed before Han edits it, so the pair of gate commits shows his edit as a diff: that diff is what later teaches agents his style. Only Han sets `approved`. Who commits sets the mark: the orchestrator's `Gate: draft <name>` commit carries `Agent: <job id>` beside `Gate:` and `Source:`, like every agent commit (see [agent marks](#agent-marks)); Han's approval commit carries no `Agent:` trailer, which is how a gate diff is told to be his. An approval commit the orchestrator makes at Han's word is still an agent commit and carries `Agent: <job id>`, while the `approved` status stays his edit.
+Every commit goes through the `commit` skill. A gate commit adds a `Gate:` trailer beside `Source:` (`Gate: draft brief`, `Gate: approved pipeline`, `Gate: draft feedback-01`). The agent's draft is committed before Han edits it, so the pair of gate commits shows his edit as a diff: that diff is what later teaches agents his style. Only Han approves, with `approve.ts`, which appends his `verified` entry. Who commits sets the mark: the orchestrator's `Gate: draft <name>` commit carries `Agent: <job id>` beside `Gate:` and `Source:`, like every agent commit (see [agent marks](#agent-marks)); Han's approval commit carries no `Agent:` trailer, which is how a gate diff is told to be his. An approval commit the orchestrator makes at Han's word is still an agent commit and carries `Agent: <job id>`, while the approval entry in `verified` stays his.
 
 After `Gate: approved pipeline`, the template is frozen for the run: `feat/89-new-episode` is not merged into the Episode branch again until `open-pr` is done. The pipeline's `template` field names the commit it was tailored from. A template change found during the run goes into `LEARNINGS.md` Lessons and is applied after the run.
 
 ## After the run
 
-Han's feedback, typed or dictated, arrives as `feedback/<NN>/feedback.md` and lands in the Dossier before the implementation. The loop ends when Han starts Promotion. Distil what this run taught into [`LEARNINGS.md`](LEARNINGS.md). Diff each pair of gate commits, the draft against Han's approval: every correction Han made twice becomes a proposed rubric line under `LEARNINGS.md` Lessons.
+Han's feedback, typed or dictated, arrives as `feedback/<NN>/feedback.md` (with a `generated: { by, at }` naming who wrote it) and lands in the Dossier before the implementation. The loop ends when Han starts Promotion. Distil what this run taught into [`LEARNINGS.md`](LEARNINGS.md). Diff each pair of gate commits, the draft against Han's approval: every correction Han made twice becomes a proposed rubric line under `LEARNINGS.md` Lessons.

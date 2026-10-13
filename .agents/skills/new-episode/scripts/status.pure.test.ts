@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { frontmatterStatus, runStatus, subIssuesApproved } from './status.pure.ts';
+import { frontmatterStatus, outputGate, runStatus, subIssuesApproved } from './status.pure.ts';
 
 /*
  * A run's state read back from disk: a small per-run pipeline and run logs
@@ -122,6 +122,36 @@ describe('edge cases', () => {
     // ASSERT
     expect(states.slice(0, 2)).toEqual(['done', 'ready']);
     expect(fresh.slice(0, 2)).toEqual(['ready', 'waiting']);
+  });
+});
+
+describe('outputGate', () => {
+  const brief = (generatedAt: string): string =>
+    `---\ntype: brief\ngenerated:\n  by: claude-code/opus-5.5\n  at: ${generatedAt}\nverified:\n  - by: human:han\n    at: 2026-10-12T09:30:00Z\n---\n`;
+  const GATED = `jobs:
+  - { id: brief-grill, needs: [], gate: human, outputs: [docs/episodes/<slug>/brief.md] }
+`;
+  const runLog = ['# Run log\n', entry('brief-grill · 2026-10-12T09:00:00Z', [PASS])].join('\n');
+
+  it('reads a markdown file by its trust tier and pipeline.yml by its status', () => {
+    // ARRANGE
+    const approved = brief('2026-10-12T09:00:00Z');
+    // ACT
+    const tiers = [outputGate('brief.md', approved), outputGate('pipeline.yml', 'status: approved\njobs: []\n')];
+    // ASSERT
+    expect(tiers).toEqual(['approved', 'approved']);
+  });
+
+  it('opens the gate on Han\'s entry and closes it again when the file is edited after approval', () => {
+    // ARRANGE
+    const fresh = () => outputGate('brief.md', brief('2026-10-12T09:00:00Z'));
+    const edited = () => outputGate('brief.md', brief('2026-10-12T10:00:00Z'));
+    // ACT
+    const open = runStatus(GATED, runLog, { outputStatus: fresh }).map(({ state }) => state);
+    const reopened = runStatus(GATED, runLog, { outputStatus: edited }).map(({ state }) => state);
+    // ASSERT
+    expect(open).toEqual(['done']);
+    expect(reopened).toEqual(['gate']);
   });
 });
 

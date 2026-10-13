@@ -3,7 +3,7 @@
 import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
-import { frontmatterStatus, runStatus, subIssuesApproved, type SubIssue } from './status.pure.ts';
+import { outputGate, runStatus, subIssuesApproved, type SubIssue } from './status.pure.ts';
 
 const slug = process.argv[2];
 if (!slug) {
@@ -18,11 +18,11 @@ if (!existsSync(pipeline)) {
 }
 const runLogFile = path.join(folder, 'run-log.md');
 const runLog = existsSync(runLogFile) ? readFileSync(runLogFile, 'utf8') : '';
-/** The `status:` of a staging output's frontmatter; null for a file that is missing or has none. */
+/** The gate state of a staging output (`outputGate`); null for a file that is missing. */
 function outputStatus(output: string): string | null {
   const file = output.replace('<slug>', slug as string);
   if (!existsSync(file)) return null;
-  return frontmatterStatus(readFileSync(file, 'utf8'));
+  return outputGate(file, readFileSync(file, 'utf8'));
 }
 /**
  * True when the Episode's spec issue (the one labelled `episode:<slug>`) has sub-issues and none open is
