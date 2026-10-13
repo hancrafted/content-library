@@ -1,0 +1,68 @@
+{
+  "title": "Your day-one note before you type",
+  "heading": "Before you type a word",
+  "caption": "Four lines to a brand-new colleague. Thirty seconds. Then type.",
+  "dayOneLabel": "Day-one note",
+  "then": "Then type.",
+  "items": {
+    "context": {
+      "title": "Context",
+      "question": "What would you tell them about your situation?",
+      "caption": "Budget, headcount, culture, what happened last year."
+    },
+    "tools": {
+      "title": "Tools",
+      "question": "What would they need access to?",
+      "caption": "The booking system, the caterers you trust, the calendar."
+    },
+    "brief": {
+      "title": "Brief",
+      "question": "What exactly are you asking for?",
+      "caption": "One structured plan, due by end of day."
+    },
+    "check": {
+      "title": "Check",
+      "question": "How will you review their work?",
+      "caption": "Read it as your team lead will, before it leaves your desk."
+    }
+  },
+  "states": {
+    "done": "done",
+    "current": "current",
+    "upcoming": "upcoming"
+  },
+  "notes": {
+    "write-it-down": {
+      "header": "Write it down, or it is gone",
+      "description": "Instructions given only in chat do not reliably survive compaction; Anthropic advises putting persistent rules in a file the agent reads at the start.[1]",
+      "sources": {
+        "claude-code-memory": {
+          "title": "Anthropic, How Claude remembers your project (Claude Code memory)"
+        }
+      }
+    },
+    "short-beats-long": {
+      "header": "Short and relevant beats long",
+      "description": "Chroma tested 18 models and found performance grows increasingly unreliable as input length grows, even on simple tasks.[1]",
+      "sources": {
+        "context-rot": {
+          "title": "Hong, Troynikov, Huber, Context Rot: How Increasing Input Tokens Impacts LLM Performance"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-habit": {
+        "title": "The habit",
+        "keywords": "the habit, before you type a word, thirty seconds, brand-new colleague on day one",
+        "script": "So here is the habit, and it is small. Next time you reach for AI on something real, before you type a word, stop. Take thirty seconds. Jot down what you would tell a brand-new colleague on day one."
+      },
+      "four-lines": {
+        "title": "Four lines",
+        "keywords": "four lines, context, tools, brief, check their work, then type",
+        "script": "Four lines are enough. The context, meaning what they need to know about your situation. The tools they would need. The brief, meaning what exactly you are asking for. And how you will check their work. Then type."
+      }
+    }
+  }
+}

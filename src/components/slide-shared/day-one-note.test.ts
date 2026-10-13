@@ -74,4 +74,16 @@ describe('edge cases', () => {
     expect(html).toContain('<span aria-label="checked">✓</span>');
     expect(html).toMatch(/class="[^"]*ring-1[^"]*"/);
   });
+
+  it('writes its children inside the figure after the label, and no term list when there are no rows', () => {
+    // ARRANGE
+    const child = createElement('ol', { 'aria-label': 'steps' }, createElement('li', null, 'Context'));
+    const expected =
+      '<figcaption class="text-caption font-medium text-muted-foreground">Your company</figcaption><ol aria-label="steps"><li>Context</li></ol></figure>';
+    // ACT
+    const html = renderToStaticMarkup(createElement(DayOneNote, { label: 'Your company', rows: [] }, child));
+    // ASSERT
+    expect(html).toContain(expected);
+    expect(html).not.toContain('<dl');
+  });
 });
