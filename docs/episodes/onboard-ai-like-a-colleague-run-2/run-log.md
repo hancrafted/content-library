@@ -321,3 +321,38 @@ Attempt 1 failed three lines: `#four-disciplines-one-line-each` item 1 introduce
 - Needs human: `#the-work-relocates` says "The total does not shrink. It moves somewhere else." That is more absolute than the Learning goal's "relocates rather than removes" and sits against the measured gain on `#twenty-times-on-paper`.
 - Needs human: the register uses almost no contractions ("Let us take that at face value", "I am going to", "It is not"). Is that your spoken voice?
 - Needs human: the disciplines teaser promises "one line each", but harness gets three sentences and graph five ("So hold it loosely.").
+
+## write-spec · 2026-10-13T15:05:34Z
+
+### Inputs
+
+- `dossier.md`, approved by Han (`5a594a1`); `brief.md`; `.archgate/adrs/FE-004-slide-architecture.md` for the seams.
+
+### Output
+
+- Spec issue https://github.com/hancrafted/content-library/issues/137, label `episode:onboard-ai-like-a-colleague-run-2`.
+- Sub-issues #138–#143, one per Section, each `needs-triage`; #139–#143 blocked by #138 (Title slide, wiring, post-build step 8).
+- Edited #137 · 2026-10-13T15:03:19Z
+- Edited #138 · 2026-10-13T15:03:06Z
+- Edited #139 · 2026-10-13T15:03:06Z
+- Edited #140 · 2026-10-13T15:03:06Z
+- Edited #141 · 2026-10-13T15:03:06Z
+- Edited #142 · 2026-10-13T15:03:06Z
+- Edited #143 · 2026-10-13T15:03:06Z
+
+### Checks
+
+- None in the pipeline.
+- Reviewer: pass.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 158 s · 75663 tokens
+- reviewer · attempt 1 · pass · 99 s · 72606 tokens
+
+### Notes
+
+Han was away for `to-spec`'s seam confirmation; the spec records that the FE-004 Episode seams were used. The sub-issue edit times are the `date -u` read just before they were created.
+
+- Needs human: every `dossier.md#…` link in #137–#143 404s until `episode/onboard-ai-like-a-colleague-run-2` is pushed, and GitHub does not render the Dossier's `{#id}` anchors, so a link opens the file without jumping to its heading.
+- Needs human: spec issue #137 carries `ready-for-agent`, which `to-spec` applies; an agent picking issues by that label could take the parent before the designs are approved.

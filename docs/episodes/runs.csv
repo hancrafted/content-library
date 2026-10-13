@@ -60,3 +60,5 @@ run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at
 2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-voice-script,reviewer,1,fail,"Fail if … material here serves only one of its Slides",141,76789,2026-10-13T14:33:32Z
 2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-voice-script,implementor,2,pass,,12,57385,2026-10-13T14:33:46Z
 2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-voice-script,reviewer,2,pass,,30,54072,2026-10-13T14:34:48Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-spec,implementor,1,pass,,158,75663,2026-10-13T15:03:30Z
+2026-10-13T14:12:21Z,onboard-ai-like-a-colleague-run-2,write-spec,reviewer,1,pass,,99,72606,2026-10-13T15:05:34Z
