@@ -39,26 +39,17 @@ The Dossier and the Manuscript merge into one staging file (D3), and Han reviews
 - **Han's part in run 2:** read the drafted Dossier in depth (spine, Visuals, Speaker notes with citations, Voice script) and edit it before approving. The `Gate:` pair of commits then shows his edits, which is what teaches the agents his style (SKILL.md, _After the run_).
 - **Input for that review:** the Brief, the corrected research (#112), and the run-1 `dossier.md` and `manuscript.md` at the tag as examples of "not this".
 
-### 2. Han provides general Slide authoring context
+### 2. Han provides general Slide authoring context: settled
 
-The design spec in step 3 has nothing to stand on without it.
+Settled in a grill on 2026-10-13 (session 451b6f31). The decisions are in `docs/handoff/slide-authoring-context-decisions.md`, the spec for this step. It absorbs D11 (meaning colours), LEARNINGS 3 (importable motion) and LEARNINGS 4 (**Slide library** and **Master slide** in `GLOSSARY.md`). LEARNINGS 2 is now step 3.
 
-- **Content:**
-  - the visual language;
-  - when to use which layout;
-  - how quiet a Slide should be;
-  - what makes an Episode Slide good or bad. The run-1 Slides are a ready set of examples of "not this".
-  - It also settles the motion story: which motion, if any, a Slide may carry, since none is importable today.
-- **Where, split by kind:**
-  - Facts and rules go in `docs/design/`, which markdown-harness governs as product reference: which Master slides the Slide library holds, which motions a Slide may import.
-  - Taste goes in `docs/design/design-guide.md`: how quiet a Slide is, what is good or bad, the run-1 Slides as "not this". `harvest-run` adds Han's design-gate edits to it later.
-  - Add either to the Claude Desktop project list if the voice sessions need it.
-- **Absorbs:**
-  - D11: what the meaning colours `machine`, `human` and `ai` may colour (from the run-1 harness assessment; `four-disciplines` used them for disciplines that carry none of those meanings, FE-002 Do 7);
-  - LEARNINGS 2 (no design owner), now step 3;
-  - LEARNINGS 3 (importable motion);
-  - LEARNINGS 4: "catalog" is replaced by **Slide library** and **Master slide** in `GLOSSARY.md`.
-- **Who:** Han, likely through a grill.
+- **Agent work, blocking run 2:**
+  - the design guide and the Slide library (#127);
+  - meaning colours (#128);
+  - CSS motion (#129);
+  - a `## Style` section in the Brief (#130).
+- #127 and #129 also block step 3 (#118).
+- **Needs Han, not blocking:** where a shared popover part lives (#131).
 
 ### 3. The `write-design-spec` job and its gate
 
@@ -103,9 +94,9 @@ Through `tdd`, `code-review` and `commit`, on a branch from `main` (`npm run wt:
 ## Dependencies
 
 ```text
-1 agent: one Dossier (#106) ──────────────┐
-2 Han: Slide authoring context ─► 3 write-design-spec job ─┤
-4 agent: mechanical lessons ──────────────┴─► 5 run 2
+1 agent: one Dossier (#106) ─────────────────────────────────────────────┐
+2 agent: Slide authoring context (#127–#130) ─► 3 write-design-spec job ─┤
+4 agent: mechanical lessons ─────────────────────────────────────────────┴─► 5 run 2
 ```
 
 Steps 1, 2 and 4 can run at the same time. Step 3 waits on step 2, and run 2 waits on all four.
@@ -124,7 +115,7 @@ Settled with Han on 2026-10-13 in the run-2 decisions grill. D9–D12 came from 
 - **D8. `approved` in staging: Han accepted the file at its gate.** Promotion is marked by the file's location, not its status (#109). _Why:_ one meaning everywhere; the Brief and pipeline already use it that way.
 - **D9. Title slide Voice script: an optional slot, built now.** No prose under the Dossier h1 except an optional `#### Speaker notes` and `#### Voice script`, which the writing jobs leave out and a feedback round adds. The Title slide gets the slot (amends `FE-004-slide-architecture` §6); at Promotion the h1 block moves to the Episode folder's own text file (#111). _Why:_ Han will add a Title-slide voice in the feedback loop; building the slot first keeps the Dossier, the code and Promotion in agreement. Run 1's remap of the h1 paragraph onto `the-gap` (LEARNINGS 7) is replaced.
 - **D10. Reusing a Slide library layout: already settled.** A Master slide is copied with `cp -r`; a part moves to `slide-shared/` once a second Slide needs it (`write-design-spec-decisions.md` items 5 and 14).
-- **D11. What the meaning colours may colour: moved to step 2**, the Slide authoring context.
+- **D11. What the meaning colours may colour: moved to step 2**, the Slide authoring context, and settled there: only their meaning (`slide-authoring-context-decisions.md` decision 1, #128).
 - **D12. Visual-check widths: already settled.** 375, 1100 and 1440 px with the drawer beside, over and closed (`write-design-spec-decisions.md` item 18).
 
 **Deferred until after run 2:** the harness fixes from the run-1 assessment, filed as #115, so they do not mix into the comparison with the baseline.
