@@ -81,6 +81,14 @@ const whyATemplate = slide({
   segments: [{ slug: 'one-breath', bridge: true }],
   content: (kit) => seen(kit as never),
 });
+const retitled = slide({
+  slug: 'retitled',
+  messages: {
+    en: { title: 'Contents title', heading: 'On-screen title' },
+    de: { title: 'Inhaltstitel', heading: 'Titel auf dem Bildschirm' },
+  },
+  content: (kit) => seen(kit as never),
+});
 const visual = slide({ slug: 'visual', messages: VISUAL, content: (kit) => seen(kit as never) });
 
 /** The Episode a test localizes into: the walk's real placement of these Sections. */
@@ -103,8 +111,8 @@ function localized(
 }
 
 /** The heading `Title` builds, at the level the Slide's position gives it. */
-function headingOf(kit: RuntimeKit): ReactElement<{ as: string; 'data-target': string }> {
-  return kit.Title({ children: 'x' }) as ReactElement<{ as: string; 'data-target': string }>;
+function headingOf(kit: RuntimeKit): ReactElement<{ as: string; 'data-target': string; children: ReactNode }> {
+  return kit.Title({ children: 'x' }) as ReactElement<{ as: string; 'data-target': string; children: ReactNode }>;
 }
 
 describe('success cases', () => {
@@ -150,6 +158,20 @@ describe('success cases', () => {
       .map((props) => ({ as: props.as, target: props['data-target'] }));
     // ASSERT
     expect(headings).toEqual(expected);
+  });
+
+  it('renders a heading key as the on-screen title while the table of contents keeps the title key', () => {
+    // ARRANGE
+    const expected = { toc: 'Inhaltstitel', heading: 'Titel auf dem Bildschirm', plain: 'x' };
+    // ACT
+    const [, retitledSlide, plainSlide] = localized('de', [[foundations, retitled, whyATemplate]]);
+    const result = {
+      toc: retitledSlide.title,
+      heading: headingOf(kitOf(retitledSlide)).props.children,
+      plain: headingOf(kitOf(plainSlide)).props.children,
+    };
+    // ASSERT
+    expect(result).toEqual(expected);
   });
 
   it('links each Slide slug to the localized anchor the walk placed it at', () => {

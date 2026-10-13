@@ -16,7 +16,7 @@ Both agents run with `session: orchestrator`. `implement-spec` is a vendored ski
 The Episode is a draft: it has no video and no Promotion. This overrides the metadata line in step 3 of [episode-migration](../../../../docs/features/episode-migration.md).
 
 - Write `episode-metadata.ts` with `status: 'upcoming'` (the existing non-published value, `UpcomingEpisodeMetadata`) and no `publishedOn`; the type refuses one. Publishing flips both, and it is Promotion's or Han's step, never this job's.
-- Topic, extra Topics and Tags come from the Brief. What the Brief does not name is not invented: leave the field out where the type allows it, and list it as a `Needs human:` line in the run-log entry.
+- Topic, extra Topics and Tags come from the Brief. `topic`, `format` and `tags` are required in `SharedMetadata` (`src/lib/episode-metadata.pure.ts`), so a required field the Brief does not name gets a `Needs human:` line in the run-log entry plus the closest honest value (the nearest existing Topic or Format, an empty `tags` list), never an invented one. `extraTopics` is optional: when the Brief names none, leave it out.
 - If `tsc` refuses the registration because the `PUBLISHED` map in `episode-repository.ts` types every registered slug as published, do not set `published` to satisfy it: list that as a `Needs human:` line.
 
 ## Review
@@ -41,6 +41,6 @@ The `visual-check` check, in both themes. By the `visual-check` skill: serve `ou
 ## Rubric
 
 1. Every Dossier Voice script item's paragraph appears verbatim as a Voice script segment of its Slide.
-2. Every Slide uses the master and motion its Dossier Visual names (`none` is no motion), shows the Visual's `title:` when it has one and the Dossier h3 otherwise, and the table of contents shows the h3. The Title slide and section slides use the kit's title and section layouts with no motion.
+2. Every Slide uses the master and motion its Dossier Visual names (`none` is no motion), shows the Visual's `title:` when it has one and the Dossier h3 otherwise, and the table of contents shows the h3. Where the Visual's `title:` goes: the h3 is the Slide's `title` key in `i18n/<locale>.json` (the table of contents reads it), and the Visual's `title:` is a separate `heading` key in the same file, which the kit's `Title` renders in place of its children; a Slide without a `title:` has no `heading` key. The Title slide and section slides use the kit's title and section layouts with no motion.
 3. Every Speaker note in the Dossier appears in its Slide's notes.
 4. The visual check ran in both themes, and its numbers show no overflow.
