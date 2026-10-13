@@ -7,6 +7,7 @@ import {
   unsettledBriefSections,
   type KnownVisuals,
 } from '@/lib/episode-staging.pure';
+import { checkVoiceScriptDiff } from '@/lib/episode-voice-script.pure';
 import { checkResearchFolders, researchCategories } from '@/lib/research-folder.pure';
 import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
@@ -201,7 +202,36 @@ function rubricsWithoutHeading(yaml: string): string[] {
   );
 }
 
+/**
+ * A staging folder's Dossier as write-dossier and then write-voice-script
+ * committed it, found by the `Agent: <job>` trailer of their commits (#107
+ * adds the trailer); undefined until both commits exist, so nothing to compare.
+ */
+function dossierBeforeAndAfterVoice(folder: string): { draft: string; voiced: string } | undefined {
+  const file = `${folder}/dossier.md`;
+  const at = (job: string): string | undefined => {
+    const hash = execFileSync('git', ['log', '-1', '--format=%H', '-E', `--grep=^Agent: ${job}$`, '--', file], {
+      cwd: ROOT,
+      encoding: 'utf8',
+    }).trim();
+    return hash === '' ? undefined : execFileSync('git', ['show', `${hash}:${file}`], { cwd: ROOT, encoding: 'utf8' });
+  };
+  const [draft, voiced] = [at('write-dossier'), at('write-voice-script')];
+  return draft === undefined || voiced === undefined ? undefined : { draft, voiced };
+}
+
 describe('success cases', () => {
+  it('finds that write-voice-script changed only Voice script lines of what write-dossier committed', () => {
+    // ARRANGE
+    const pairs = Object.keys(stagingFolders())
+      .filter((folder) => folder.startsWith('docs/'))
+      .flatMap((folder) => dossierBeforeAndAfterVoice(folder) ?? []);
+    // ACT
+    const findings = pairs.flatMap(({ draft, voiced }) => checkVoiceScriptDiff(draft, voiced));
+    // ASSERT
+    expect(findings).toEqual([]);
+  });
+
   it('finds no disagreement between the files of any staging folder or the sample Episode', () => {
     // ARRANGE
     const names = knownVisuals();

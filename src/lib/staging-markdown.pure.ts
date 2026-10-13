@@ -82,11 +82,6 @@ export function orderedList(body: readonly string[]): { items: ListItem[]; stray
   return { items, strays };
 }
 
-/** The number of paragraphs in a block's body: runs of non-blank lines. */
-export function paragraphCount(body: readonly string[]): number {
-  return body.filter((line, index) => line.trim() !== '' && (index === 0 || body[index - 1].trim() === '')).length;
-}
-
 /** A one-line YAML scalar's value: single quotes undoubled, double-quote escapes resolved, plain text as is. */
 function yamlScalar(raw: string): string {
   const value = raw.trim();
@@ -102,10 +97,10 @@ export function frontmatterField(markdown: string, key: string): string | null {
   return line === undefined ? null : yamlScalar(line.slice(key.length + 2));
 }
 
-/** Every page slide's anchor, `<section slug>--<slide slug>`, from the Manuscript's h2 and h3 headings. */
-export function slideAnchors(manuscript: readonly Block[]): string[] {
+/** Every page slide's anchor, `<section slug>--<slide slug>`, from the Dossier's h2 and h3 headings. */
+export function slideAnchors(dossier: readonly Block[]): string[] {
   let section: string | null = null;
-  return manuscript.flatMap(({ heading }) => {
+  return dossier.flatMap(({ heading }) => {
     if (heading.level === 2) section = heading.slug;
     return heading.level === 3 && section !== null && heading.slug !== null ? [`${section}--${heading.slug}`] : [];
   });

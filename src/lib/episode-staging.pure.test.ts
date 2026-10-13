@@ -8,33 +8,11 @@ import {
 } from './episode-staging.pure';
 
 /*
- * In-memory staging folders: a small Manuscript and a Dossier that agrees with
- * it, then one change per test that breaks exactly one cross-file rule.
+ * In-memory staging folders: a small Dossier, then one change per test that
+ * breaks exactly one rule.
  */
 
 const KNOWN_VISUALS: KnownVisuals = { masters: ['basic-page', 'grid-2x2'], motions: ['liquid-ink-transition'] };
-
-const MANUSCRIPT = `---
-type: manuscript
-status: draft
-locale: en
-brief: ./brief.md
----
-
-# Budget {#budget}
-
-Title prose.
-
-## Why it forgets {#why}
-
-Section prose.
-
-### Spent attention {#spent}
-
-First paragraph.
-
-Second paragraph.
-`;
 
 const SLIDE_BLOCK = `#### Visual
 
@@ -48,10 +26,10 @@ A bar that fills.
    - sources: [1] Attention Is All You Need — https://arxiv.org/abs/1706.03762
    - target: the bar
 
-#### Segments
+#### Voice script
 
-1. Whole window — read, share
-2. Not seen — attention left
+1. **Whole window** — read, share
+2. **Not seen** — attention left
 `;
 
 const DOSSIER = `---
@@ -66,6 +44,10 @@ brief: ./brief.md
 Argument.
 
 ## Why it forgets {#why}
+
+#### Voice script
+
+1. **Forgetting** — budget, spending
 
 ### Spent attention {#spent}
 
@@ -138,7 +120,7 @@ function runLog(entries: readonly string[]): string {
 }
 
 function folder(files: Record<string, string>): Record<string, string> {
-  return { 'manuscript.md': MANUSCRIPT, 'dossier.md': DOSSIER, ...files };
+  return { 'dossier.md': DOSSIER, ...files };
 }
 
 function kinds(findings: readonly { kind: string }[]): string[] {
@@ -146,7 +128,7 @@ function kinds(findings: readonly { kind: string }[]): string[] {
 }
 
 describe('success cases', () => {
-  it('finds nothing in a folder whose Manuscript and Dossier agree', () => {
+  it('finds nothing in a folder whose Dossier is well formed', () => {
     // ARRANGE
     const files = folder({});
     // ACT
@@ -203,32 +185,6 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('names the first spine heading where the Dossier departs from the Manuscript', () => {
-    // ARRANGE
-    const files = folder({
-      'dossier.md': DOSSIER.replace('### Spent attention {#spent}', '## Spent attention {#spent}'),
-    });
-    const expectedKinds = ['spine'];
-    const expectedSlug = 'spent';
-    // ACT
-    const findings = checkStagingFolder(files, KNOWN_VISUALS);
-    // ASSERT
-    expect(kinds(findings)).toEqual(expectedKinds);
-    expect(findings[0].message).toContain(expectedSlug);
-  });
-
-  it('names a spine slug that is missing from the Dossier', () => {
-    // ARRANGE
-    const files = folder({ 'dossier.md': DOSSIER.replace('## Why it forgets {#why}\n', '') });
-    const expectedKinds = ['spine'];
-    const expectedSlug = 'why';
-    // ACT
-    const findings = checkStagingFolder(files, KNOWN_VISUALS);
-    // ASSERT
-    expect(kinds(findings)).toEqual(expectedKinds);
-    expect(findings[0].message).toContain(expectedSlug);
-  });
-
   it('reports a Dossier heading whose slug is malformed instead of ignoring it as an extra', () => {
     // ARRANGE
     const files = folder({ 'dossier.md': DOSSIER.replace('## Material left out', '## Material left out {#Left_Out}') });
@@ -336,19 +292,6 @@ describe('failure cases', () => {
     expect(findings[0].message).toContain(expectedLine);
   });
 
-  it('names a Slide whose Segments count differs from its Manuscript paragraphs', () => {
-    // ARRANGE
-    const files = folder({ 'dossier.md': DOSSIER.replace('2. Not seen — attention left\n', '') });
-    const expectedKinds = ['segments'];
-    const expectedCounts = ['1 Segments', '2 paragraphs'];
-    // ACT
-    const findings = checkStagingFolder(files, KNOWN_VISUALS);
-    // ASSERT
-    expect(kinds(findings)).toEqual(expectedKinds);
-    expect(findings[0].message).toContain(expectedCounts[0]);
-    expect(findings[0].message).toContain(expectedCounts[1]);
-  });
-
   it('reports a feedback item not of the anchor · tag — text form', () => {
     // ARRANGE
     const files = folder({ [FEEDBACK_PATH]: feedback('app', ['- why--spent: open with the budget.']) });
@@ -361,7 +304,7 @@ describe('failure cases', () => {
     expect(findings[0].message).toContain(expectedForm);
   });
 
-  it('names a feedback anchor that is no Slide in the Manuscript', () => {
+  it('names a feedback anchor that is no Slide in the Dossier', () => {
     // ARRANGE
     const files = folder({ [FEEDBACK_PATH]: feedback('voice', ['- `why--gone` · content — Cut it.']) });
     const expectedKinds = ['feedback'];
@@ -489,17 +432,6 @@ describe('edge cases', () => {
     expect(findings).toEqual([]);
   });
 
-  it('counts a Manuscript paragraph wrapped over two lines as one segment', () => {
-    // ARRANGE
-    const files = folder({
-      'manuscript.md': MANUSCRIPT.replace('First paragraph.', 'First half of a paragraph,\nwrapped.'),
-    });
-    // ACT
-    const findings = checkStagingFolder(files, KNOWN_VISUALS);
-    // ASSERT
-    expect(findings).toEqual([]);
-  });
-
   it('accepts a practice tag in a practice file', () => {
     // ARRANGE
     const files = folder({ [FEEDBACK_PATH]: feedback('practice', ['- `why--spent` · practice — Slow down here.']) });
@@ -509,7 +441,7 @@ describe('edge cases', () => {
     expect(findings).toEqual([]);
   });
 
-  it('checks the run log and research of a folder that has no Manuscript or Dossier yet', () => {
+  it('checks the run log and research of a folder that has no Dossier yet', () => {
     // ARRANGE
     const files = {
       'run-log.md': runLog(['research · 2026-10-12T10:15:00Z', 'brief-grill · 2026-10-12T09:00:00Z']),

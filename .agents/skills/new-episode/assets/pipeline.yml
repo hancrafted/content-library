@@ -144,17 +144,21 @@ jobs:
         rubric: references/write-dossier.md#rubric
         model: opus
 
-  - id: write-manuscript
+  # Rewrites the Voice script lines of dossier.md and nothing else; the staging
+  # test checks that against write-dossier's commit, so no schema key says it.
+  # Han reads and edits the whole Dossier at this gate.
+  - id: write-voice-script
     needs: [write-dossier]
     before: [mh-query]
-    outputs: [docs/episodes/<slug>/manuscript.md]
+    outputs: [docs/episodes/<slug>/dossier.md]
     checks: [mh, vitest]
     retries: 2
+    gate: human
     agents:
       - type: implementor
         skills: []
         references:
-          - references/write-manuscript.md
+          - references/write-voice-script.md
           - docs/episodes/<slug>/brief.md
           - docs/episodes/<slug>/dossier.md
           - docs/profile/han/storytelling-guide.md
@@ -163,24 +167,28 @@ jobs:
         model: inherit
       - type: reviewer
         skills: []
-        references: [references/write-manuscript.md, docs/episodes/<slug>/brief.md, docs/profile/han/tone-guide.md]
-        rubric: references/write-manuscript.md#rubric
+        references:
+          - references/write-voice-script.md
+          - docs/episodes/<slug>/brief.md
+          - docs/profile/han/storytelling-guide.md
+          - docs/profile/han/tone-guide.md
+        rubric: references/write-voice-script.md#rubric
         model: opus
 
   # Writes no staging file: its output is a spec issue with one sub-issue per Section.
   - id: write-spec
-    needs: [write-manuscript]
+    needs: [write-voice-script]
     outputs: []
     checks: []
     retries: 2
     agents:
       - type: implementor
         skills: [to-spec, to-tickets]
-        references: [references/write-spec.md, docs/episodes/<slug>/brief.md, docs/episodes/<slug>/dossier.md, docs/episodes/<slug>/manuscript.md]
+        references: [references/write-spec.md, docs/episodes/<slug>/brief.md, docs/episodes/<slug>/dossier.md]
         model: inherit
       - type: reviewer
         skills: []
-        references: [references/write-spec.md, docs/episodes/<slug>/dossier.md, docs/episodes/<slug>/manuscript.md]
+        references: [references/write-spec.md, docs/episodes/<slug>/dossier.md]
         rubric: references/write-spec.md#rubric
         model: opus
 
@@ -193,12 +201,12 @@ jobs:
     agents:
       - type: implementor
         skills: [implement-spec, visual-check]
-        references: [references/implement-episode.md, docs/episodes/<slug>/dossier.md, docs/episodes/<slug>/manuscript.md]
+        references: [references/implement-episode.md, docs/episodes/<slug>/dossier.md]
         model: opus
         session: orchestrator
       - type: reviewer
         skills: [code-review, visual-check]
-        references: [references/implement-episode.md, docs/episodes/<slug>/dossier.md, docs/episodes/<slug>/manuscript.md]
+        references: [references/implement-episode.md, docs/episodes/<slug>/dossier.md]
         rubric: references/implement-episode.md#rubric
         model: opus
         session: orchestrator

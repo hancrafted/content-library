@@ -13,7 +13,6 @@ import {
   frontmatterField,
   h4s,
   orderedList,
-  paragraphCount,
   slideAnchors,
   type Block,
   type Heading,
@@ -28,30 +27,14 @@ export interface KnownVisuals {
 
 const SLUG_ATTEMPT = /\{#[^}]*\}\s*$/;
 
-function spineEntry({ level, slug }: Heading): string {
-  return `h${level} {#${slug}}`;
-}
-
-function checkSpine(manuscript: readonly Heading[], dossier: readonly Heading[]): Finding[] {
-  const malformed = dossier
+function checkSlugs(dossier: readonly Heading[]): Finding[] {
+  return dossier
     .filter(({ slug, text }) => slug === null && SLUG_ATTEMPT.test(text))
     .map(({ text }): Finding => ({
       kind: 'spine',
       file: 'dossier.md',
       message: `Dossier heading "${text}" has a malformed slug: a slug is lowercase letters, digits and hyphens, as {#my-slide}.`,
     }));
-  const expected = manuscript.filter(({ slug }) => slug !== null).map(spineEntry);
-  const actual = dossier.filter(({ slug }) => slug !== null).map(spineEntry);
-  const at = expected.findIndex((entry, index) => actual[index] !== entry);
-  const diverges = at !== -1 || actual.length > expected.length;
-  if (!diverges) return malformed;
-  const index = at === -1 ? expected.length : at;
-  const departure: Finding = {
-    kind: 'spine',
-    file: 'dossier.md',
-    message: `The Dossier spine departs from the Manuscript at heading ${index + 1}: the Manuscript has ${expected[index] ?? 'no further heading'}, the Dossier has ${actual[index] ?? 'no further heading'}. Slugged headings must match in slug, order and level.`,
-  };
-  return [...malformed, departure];
 }
 
 const VISUAL_LINE = /^master: (\S+) · motion: (\S+)$/;
@@ -113,18 +96,6 @@ function checkSpeakerNotes(blocks: readonly Block[]): Finding[] {
   });
 }
 
-function checkSegments(manuscript: readonly Block[], dossier: readonly Block[]): Finding[] {
-  return h4s(dossier, 'Segments').flatMap(({ owner, body }) => {
-    const heading = manuscript.find(({ heading }) => heading.slug === owner);
-    if (heading === undefined) return [];
-    const segments = orderedList(body).items.length;
-    const paragraphs = paragraphCount(heading.body);
-    if (segments === paragraphs) return [];
-    const message = `{#${owner}} has ${segments} Segments items but ${paragraphs} paragraphs in the Manuscript: one segment per paragraph.`;
-    return [{ kind: 'segments', file: 'dossier.md', message }];
-  });
-}
-
 const FEEDBACK_FILE = /^feedback\/[^/]+\/feedback\.md$/;
 const FEEDBACK_ITEM = /^- `([a-z0-9-]+--[a-z0-9-]+)` · (content|implementation|practice) — \S.*$/;
 
@@ -143,14 +114,14 @@ function checkFeedbackFile(file: string, markdown: string, anchors: readonly str
         tag !== 'practice' || practice,
         `Feedback item "${line}" is tagged practice, which only a file with "via: practice" may use.`,
       ),
-      ...unless(anchors.includes(anchor), `Feedback anchor "${anchor}" is no page slide in the Manuscript.`),
+      ...unless(anchors.includes(anchor), `Feedback anchor "${anchor}" is no page slide in the Dossier.`),
     ];
   });
   return messages.map((message): Finding => ({ kind: 'feedback', file, message }));
 }
 
-function checkFeedback(files: Readonly<Record<string, string>>, manuscript: readonly Block[]): Finding[] {
-  const anchors = slideAnchors(manuscript);
+function checkFeedback(files: Readonly<Record<string, string>>, dossier: readonly Block[]): Finding[] {
+  const anchors = slideAnchors(dossier);
   return Object.entries(files)
     .filter(([file]) => FEEDBACK_FILE.test(file))
     .flatMap(([file, markdown]) => checkFeedbackFile(file, markdown, anchors));
@@ -161,25 +132,19 @@ function checkFeedback(files: Readonly<Record<string, string>>, manuscript: read
  * relative to the folder (`dossier.md`, `feedback/01/feedback.md`) to its text.
  */
 export function checkStagingFolder(files: Readonly<Record<string, string>>, known: KnownVisuals): Finding[] {
-  return [...checkStagingOrder(files), ...checkManuscriptAndDossier(files, known)];
+  return [...checkStagingOrder(files), ...checkDossier(files, known)];
 }
 
-/** The checks that read the Manuscript and the Dossier together; none until both exist. */
-function checkManuscriptAndDossier(files: Readonly<Record<string, string>>, known: KnownVisuals): Finding[] {
-  const manuscript = files['manuscript.md'];
+/** The checks that read the Dossier; none until it exists. */
+function checkDossier(files: Readonly<Record<string, string>>, known: KnownVisuals): Finding[] {
   const dossier = files['dossier.md'];
-  if (manuscript === undefined || dossier === undefined) return [];
-  const manuscriptBlocks = blocksOf(bodyLines(manuscript));
+  if (dossier === undefined) return [];
   const dossierBlocks = blocksOf(bodyLines(dossier));
   return [
-    ...checkSpine(
-      manuscriptBlocks.map(({ heading }) => heading),
-      dossierBlocks.map(({ heading }) => heading),
-    ),
+    ...checkSlugs(dossierBlocks.map(({ heading }) => heading)),
     ...checkVisuals(dossierBlocks, known),
     ...checkSpeakerNotes(dossierBlocks),
-    ...checkSegments(manuscriptBlocks, dossierBlocks),
-    ...checkFeedback(files, manuscriptBlocks),
+    ...checkFeedback(files, dossierBlocks),
   ];
 }
 

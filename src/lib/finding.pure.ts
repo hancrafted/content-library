@@ -8,7 +8,7 @@ export type FindingKind =
   | 'spine'
   | 'visual'
   | 'speaker-note'
-  | 'segments'
+  | 'voice-script'
   | 'feedback'
   | 'feedback-round'
   | 'research-date'
