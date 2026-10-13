@@ -303,12 +303,12 @@ body-structure:
         - purpose: heading
           level: 1
           pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
-          intent: "The Title slide: a catchy, short title. Fail if the title is generic. No prose sits under it; the Title slide's optional blocks are a separate issue."
+          intent: "The Title slide: a catchy, short title. Fail if the title is generic. No prose and no Visual sit under it: the Title slide uses the kit's title layout with motion none."
         - purpose: enumeration
           level: 2
           minCount: 1
           pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
-          intent: "A section slide naming one Section, one step of the Red thread, under a short title that names the step. Its own `#### Voice script` block, directly under the heading, holds what the speaker says on the section slide, one `**<beat>** — <text>` item per spoken paragraph, as a page slide's does. Fail if the Section does not advance the Red thread, material here serves only one of its Slides, or a Voice script item would not stand as one spoken passage."
+          intent: "A section slide naming one Section, one step of the Red thread, under a short title that names the step. It carries no Visual: it uses the kit's section layout with motion none. Its own `#### Voice script` block, directly under the heading, holds what the speaker says on the section slide, one `**<beat>** — <text>` item per spoken paragraph, as a page slide's does. Fail if the Section does not advance the Red thread, material here serves only one of its Slides, or a Voice script item would not stand as one spoken passage."
           headings:
             - purpose: enumeration
               level: 3
@@ -322,7 +322,7 @@ body-structure:
                     [
                       {
                         title: Visual,
-                        intent: "The master slide and motion that show this Slide's point, then prose on what the viewer sees, required when the master alone does not say it. Fail if the choice does not show the prose's point, or the master alone leaves that unsaid and no prose follows.",
+                        intent: "The master slide and motion (`none` for no motion) that show this Slide's point, an optional `title:` line naming a different on-screen title than the heading, then prose on what the viewer sees, required when the master alone does not say it. Fail if the choice does not show the prose's point, or the master alone leaves that unsaid and no prose follows.",
                       },
                     ]
                   mayHold: [prose]

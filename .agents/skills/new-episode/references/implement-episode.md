@@ -41,6 +41,6 @@ The `visual-check` check, in both themes. By the `visual-check` skill: serve `ou
 ## Rubric
 
 1. Every Dossier Voice script item's paragraph appears verbatim as a Voice script segment of its Slide.
-2. Every Slide uses the master and motion its Dossier Visual names.
+2. Every Slide uses the master and motion its Dossier Visual names (`none` is no motion), shows the Visual's `title:` when it has one and the Dossier h3 otherwise, and the table of contents shows the h3. The Title slide and section slides use the kit's title and section layouts with no motion.
 3. Every Speaker note in the Dossier appears in its Slide's notes.
 4. The visual check ran in both themes, and its numbers show no overflow.
