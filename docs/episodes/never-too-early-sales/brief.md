@@ -4,10 +4,14 @@ title: Why it's never too early to start with sales
 status: draft
 generated:
   by: claude-code/opus-5.5
-  at: 2026-10-13T22:58:41Z
+  at: 2026-10-13T23:04:41Z
 verified:
   - by: process:markdown-harness
     at: 2026-10-13T22:59:30Z
+  - by: process:markdown-harness
+    at: 2026-10-13T23:04:47Z
+  - by: human:han
+    at: 2026-10-13T23:04:47Z
 ---
 
 # Why it's never too early to start with sales
@@ -51,6 +55,7 @@ The monthly cashflow sticky-note board (cash, cost, revenue), returned to three 
 
 - Reusable across talks: no dated claims.
 - Works both as a live talk and a standalone YouTube Episode.
+- Start from the source deck, [`source-deck.pdf`](./source-deck.pdf) beside this Brief; draw our own visuals instead of reusing its third-party images.
 
 ## Slides
 
