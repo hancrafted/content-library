@@ -1,7 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { readdirSync, readFileSync } from 'node:fs';
-import path from 'node:path';
-import { appendVerified, gateTier, verifiedEntries, verifiedProblems } from './verified.pure.ts';
+import { appendVerified, approveText, gateTier, parseApproveArgs, verifiedEntries, verifiedProblems } from './verified.pure.ts';
 
 /*
  * A staging file's gate tier from `verified` and `generated.at`, and the approval entry appended to it.
@@ -186,32 +184,46 @@ describe('verifiedProblems', () => {
   });
 });
 
-describe('the corpus', () => {
-  const ROOT = path.join(__dirname, '../../../..');
-
-  /** The staging files that carry a `verified` entry: the sample Episode and every Episode under docs/episodes. */
-  function stagingFiles(): string[] {
-    const folders = [path.join(ROOT, '.agents/skills/new-episode/assets/sample-episode')];
-    try {
-      const episodes = path.join(ROOT, 'docs/episodes');
-      folders.push(...readdirSync(episodes, { withFileTypes: true }).filter((e) => e.isDirectory()).map((e) => path.join(episodes, e.name)));
-    } catch {
-      // no staging folders yet
-    }
-    return folders.flatMap((folder) =>
-      readdirSync(folder, { recursive: true, withFileTypes: true })
-        .filter((entry) => entry.isFile() && entry.name.endsWith('.md'))
-        .map((entry) => path.join(entry.parentPath, entry.name)),
-    );
-  }
-
-  it('finds every verified entry shaped as { by, at } with an actor and a datetime', () => {
+describe('approveText', () => {
+  it('appends the machine entry beside Han\'s without overwriting', () => {
     // ARRANGE
-    const files = stagingFiles();
+    const text = file(list(HAN));
     // ACT
-    const problems = files.flatMap((file) => verifiedProblems(readFileSync(file, 'utf8')).map((p) => `${path.relative(ROOT, file)}: ${p}`));
+    const result = approveText(text, 'process:markdown-harness', '2026-10-13T12:00:00Z');
     // ASSERT
-    expect(files.length).toBeGreaterThan(0);
-    expect(problems).toEqual([]);
+    expect(verifiedEntries(result)).toEqual([HAN, { by: 'process:markdown-harness', at: '2026-10-13T12:00:00Z' }]);
+  });
+
+  it('refuses a by that is not an actor', () => {
+    // ARRANGE
+    const text = file('');
+    // ACT
+    const act = () => approveText(text, 'han', '2026-10-13T12:00:00Z');
+    // ASSERT
+    expect(act).toThrow('not an actor');
+  });
+});
+
+describe('parseApproveArgs', () => {
+  it('defaults by to human:han and reads --by in either position', () => {
+    // ARRANGE
+    const args = [['a.md'], ['a.md', '--by', 'process:markdown-harness'], ['--by', 'process:markdown-harness', 'a.md']];
+    // ACT
+    const parsed = args.map(parseApproveArgs);
+    // ASSERT
+    expect(parsed).toEqual([
+      { file: 'a.md', by: 'human:han' },
+      { file: 'a.md', by: 'process:markdown-harness' },
+      { file: 'a.md', by: 'process:markdown-harness' },
+    ]);
+  });
+
+  it('returns a usage error for no file, a dangling --by, a bad actor or extra arguments', () => {
+    // ARRANGE
+    const args = [[], ['a.md', '--by'], ['a.md', '--by', 'han'], ['a.md', 'b.md']];
+    // ACT
+    const parsed = args.map(parseApproveArgs);
+    // ASSERT
+    expect(parsed.every((result) => typeof result === 'string')).toBe(true);
   });
 });

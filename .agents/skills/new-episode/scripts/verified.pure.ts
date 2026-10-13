@@ -5,12 +5,12 @@
 
 import { parse, parseDocument } from 'yaml';
 
-export const MACHINE = 'process:markdown-harness';
-export const HUMAN = 'human:han';
+export const HARNESS_ACTOR = 'process:markdown-harness';
+export const HAN_ACTOR = 'human:han';
 
 export type Tier = 'unverified' | 'checked' | 'approved';
 
-export interface Entry {
+export interface VerifiedEntry {
   by: string;
   at: string;
 }
@@ -31,13 +31,17 @@ function instant(value: unknown): number | null {
   return Number.isNaN(at) ? null : at;
 }
 
+/** The items of a `verified` value: a list as is, one bare mapping as a one-element list, nothing as an empty list. */
+function listOrBare(value: unknown): unknown[] {
+  return Array.isArray(value) ? value : value === undefined || value === null ? [] : [value];
+}
+
 function asEntries(value: unknown): { by: unknown; at: unknown }[] {
-  const items = Array.isArray(value) ? value : value === undefined || value === null ? [] : [value];
-  return items.filter((item): item is { by: unknown; at: unknown } => typeof item === 'object' && item !== null && !Array.isArray(item));
+  return listOrBare(value).filter((item): item is { by: unknown; at: unknown } => typeof item === 'object' && item !== null && !Array.isArray(item));
 }
 
 /** The `verified` entries of a file whose `by` is text and whose `at` is a datetime; a bare mapping reads as one entry. */
-export function verifiedEntries(text: string): Entry[] {
+export function verifiedEntries(text: string): VerifiedEntry[] {
   return asEntries(frontmatterOf(text).verified).flatMap(({ by, at }) =>
     typeof by === 'string' && instant(at) !== null ? [{ by, at: at instanceof Date ? at.toISOString() : String(at) }] : [],
   );
@@ -51,9 +55,10 @@ export function gateTier(text: string): Tier {
   const generated = (frontmatterOf(text).generated as { at?: unknown } | null | undefined)?.at;
   const from = instant(generated);
   if (from === null) return 'unverified';
-  const holds = (by: string) => verifiedEntries(text).some((entry) => entry.by === by && (instant(entry.at) ?? -Infinity) >= from);
-  if (holds(HUMAN)) return 'approved';
-  return holds(MACHINE) ? 'checked' : 'unverified';
+  const entries = verifiedEntries(text);
+  const holds = (by: string) => entries.some((entry) => entry.by === by && (instant(entry.at) ?? -Infinity) >= from);
+  if (holds(HAN_ACTOR)) return 'approved';
+  return holds(HARNESS_ACTOR) ? 'checked' : 'unverified';
 }
 
 /**
@@ -61,7 +66,7 @@ export function gateTier(text: string): Tier {
  * mapping into a list, and leaves every other frontmatter key and the body as written. Throws when the
  * file has no frontmatter.
  */
-export function appendVerified(text: string, entry: Entry): string {
+export function appendVerified(text: string, entry: VerifiedEntry): string {
   const match = FRONTMATTER.exec(text);
   if (match === null) throw new Error('the file has no frontmatter to append a verified entry to');
   const doc = parseDocument(match[1] as string);
@@ -73,8 +78,8 @@ export function appendVerified(text: string, entry: Entry): string {
 
 const ACTOR = /^(?:human|process):[a-z0-9-]+$|^[a-z0-9-]+\/[A-Za-z0-9.-]+$/;
 
-function entryProblems(item: unknown, at: number): string[] {
-  const label = `verified entry ${at + 1}`;
+function entryProblems(item: unknown, index: number): string[] {
+  const label = `verified entry ${index + 1}`;
   if (typeof item !== 'object' || item === null || Array.isArray(item)) return [`${label} is not a { by, at } mapping.`];
   const { by, at: when } = item as Record<string, unknown>;
   return [
@@ -87,6 +92,28 @@ function entryProblems(item: unknown, at: number): string[] {
 export function verifiedProblems(text: string): string[] {
   const value = frontmatterOf(text).verified;
   if (value === undefined) return [];
-  const items = Array.isArray(value) ? value : [value];
+  const items = listOrBare(value);
   return items.length === 0 ? ['verified is empty; leave the key out instead.'] : items.flatMap(entryProblems);
+}
+
+/** The file with an entry by `by` at `at` appended; `by` must be a `human:<id>` or `process:<id>` actor. */
+export function approveText(text: string, by: string, at: string): string {
+  if (!ACTOR.test(by)) throw new Error(`\`${by}\` is not an actor (human:<id> or process:<id>)`);
+  return appendVerified(text, { by, at });
+}
+
+/** The command line of approve.ts: `<file> [--by <actor>]`, `by` defaulting to Han; a string is the usage error. */
+export function parseApproveArgs(argv: readonly string[]): { file: string; by: string } | string {
+  const rest = [...argv];
+  let by = HAN_ACTOR;
+  const flag = rest.indexOf('--by');
+  if (flag !== -1) {
+    const value = rest[flag + 1];
+    if (value === undefined) return '✖ --by needs an actor';
+    if (!ACTOR.test(value)) return `✖ --by \`${value}\` is not an actor (human:<id> or process:<id>)`;
+    by = value;
+    rest.splice(flag, 2);
+  }
+  const [file, ...extra] = rest;
+  return file === undefined || extra.length > 0 ? '✖ approve.ts takes one <file>' : { file, by };
 }
