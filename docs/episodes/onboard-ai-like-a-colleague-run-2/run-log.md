@@ -248,3 +248,43 @@ Marked done on retrieval's `reuse`; no agent ran, so the runs CSV has no row for
 ### Notes
 
 Marked done on retrieval's `reuse`; no agent ran, so the runs CSV has no row for this job. The Metrics line exists only because the status script reads a job as done from a passing Metrics item; the template defines no other way to mark a reused question's job done.
+
+## write-dossier · 2026-10-13T14:29:51Z
+
+### Inputs
+
+- `brief.md`; the six reused files `docs/llm-wiki/research/AIE-0001..0006/research.md` and the `retrieval` entry's caveats; `docs/design/` and the Slide library.
+- Attempt 2: the three failed reviewer lines of attempt 1, quoted verbatim.
+
+### Output
+
+- `dossier.md`, `status: draft`, with a `process:markdown-harness` `verified` entry: six Sections, twelve Slides, a slugless `## Material left out`.
+
+### Checks
+
+- `mh check`: pass (both attempts).
+- `vitest` staging test: pass (both attempts).
+- Reviewer: fail on attempt 1, pass on attempt 2.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 189 s · 93909 tokens
+- reviewer · attempt 1 · fail · rubric "Fail if … the file specifies styling or code." · 113 s · 96535 tokens
+- implementor · attempt 2 · pass · 16 s · 96769 tokens
+- reviewer · attempt 2 · pass · 39 s · 55196 tokens
+
+### Notes
+
+Attempt 1 failed three lines: the `#twenty-times-on-paper` Visual named "the primary colour"; the Section scripts of `#the-promise-and-the-gap` and `#you-managed-it-you-did-not-do-it` repeated their Slide's beats ("Fail if … material here serves only one of its Slides"); and `#four-disciplines-one-line-each` mapped day one onto the four disciplines, against the Brief's "Resolution: no 1:1 mapping" (rubric 2). Attempt 2 fixed all three; its reviewer judged only those lines.
+
+- No library match: you-managed-it-you-did-not-do-it--confident-is-not-correct — a one-page plan whose claims get checked off one by one, one claim flagged unverified that sounded just as sure; nearest basic-page; a check-mark motion wanted.
+- No library match: the-effort-moves-it-does-not-vanish--the-work-relocates — one effort bar drawn twice at the same total width, the "typing" segment shrinking while briefing, context, tools and checking grow; nearest basic-page; a segment-reallocation motion wanted.
+- No library match: four-disciplines-one-line-each--four-ways-to-onboard-ai — four concentric rings around "the task" (prompt, context, harness, graph), the graph ring dashed and tagged newest; nearest basic-page; a rings-draw-outward motion wanted.
+- Research gap: write-research-ai-delegation-as-management-discipline — the claim that the task, not rank, demands the discipline is inference in AIE-0006; the Speaker notes mark it so.
+- Research gap: no research covers graph engineering; `#four-ways-to-onboard-ai` states only the Brief's own description.
+- Needs human: the ending's order. The Brief lands the resolution light, "Then a teaser naming the disciplines"; the Dossier puts four research-heavy Slides between them (`#prompting-like-a-tool`, `#confident-is-not-correct`, `#the-work-relocates`, `#from-your-desk-to-your-organization`).
+- Needs human: the Hook's "Open on the hype" beat and `#twenty-times-on-paper`'s "The number" beat both state the 20x promise.
+- Needs human: "Bridge to the room" closing `#the-promise-and-the-gap` and "Switch to the room" opening `#day-one-with-a-capable-stranger` say the same thing back to back.
+- Needs human: `#four-ways-to-onboard-ai`'s beat "Prompt and context" covers two disciplines in one item, against the Brief's "one line each"; the Visual does give one line per ring.
+- Every agent ran with the inherited model; the implementor's `generated.by` reads `claude-code/sonnet-5.5`, not the session's opus, so the general-purpose subagent default may not be the orchestrator's model.
+- The timestamps of the entries categorize-research, customize-pipeline, retrieval and the six write-research jobs were estimated by the orchestrator, not read from the clock, and run 1–4 minutes late; their commits' times are the truth (7bba1da 14:15:39Z, 021ae02 14:20:33Z). From this entry on, every timestamp is read with `date -u`.
