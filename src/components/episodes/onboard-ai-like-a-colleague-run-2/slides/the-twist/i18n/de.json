@@ -1,0 +1,30 @@
+{
+  "title": "Die Wendung",
+  "heading": "KI kann Dir helfen, KI einzuarbeiten",
+  "pointer": "Ein erster Schritt: <tool>grill-me</tool> befragt Dich, bevor Du tippst.",
+  "notes": {
+    "ai-as-a-second-pair-of-eyes": {
+      "header": "KI als zweites Paar Augen",
+      "description": "Anthropic empfiehlt eine zweite Meinung in einem frischen Kontext, „damit der Agent, der die Arbeit macht, nicht derjenige ist, der sie bewertet“. Die Verbindung zu grill-me ist die eigene Rahmung dieser Episode.[1]",
+      "sources": {
+        "claude-code-best-practices": {
+          "title": "Anthropic, Claude Code best practices"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-twist": {
+        "title": "Die Wendung",
+        "keywords": "KI kann Dir helfen, KI einzuarbeiten, der vergessene Kontext, erster Morgen",
+        "script": "Aber jetzt kommt die Wendung. KI kann Dir helfen, KI einzuarbeiten. Sie kann Dich nach dem Kontext befragen, den Du vergessen hast, und die Fragen stellen, die ein guter neuer Kollege an seinem ersten Morgen stellen würde."
+      },
+      "a-first-step": {
+        "title": "Ein erster Schritt",
+        "keywords": "grill-me, Deine nächste echte Aufgabe, alles, was Du zum Start brauchst",
+        "script": "Wenn Du einen ersten Schritt willst, gibt es einen einfachen namens grill-me, der genau das tut. Probier ihn bei Deiner nächsten echten Aufgabe aus. Und mehr brauchst Du nicht, um anzufangen."
+      }
+    }
+  }
+}
