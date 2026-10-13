@@ -14,6 +14,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
+import { gateTier } from '../../.agents/skills/new-episode/scripts/verified.pure';
 
 /*
  * The cross-file checks (design-ADR 0004) applied to the real corpus: every
@@ -305,7 +306,7 @@ describe('success cases', () => {
       .map(([where, folder]) => [`${where}/brief.md`, path.join(folder, 'brief.md')])
       .filter(([, file]) => existsSync(file))
       .map(([where, file]) => [where, readFileSync(file, 'utf8')] as const)
-      .filter(([, text]) => /^status: approved$/m.test(text));
+      .filter(([, text]) => gateTier(text) === 'approved');
     // ACT
     const unsettled = briefs.flatMap(([where, text]) =>
       unsettledBriefSections(text).map((heading) => `${where}: ${heading}`),

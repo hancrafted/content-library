@@ -1,5 +1,6 @@
 ---
 type: agent-guide
+title: Triage Labels
 ---
 
 # Triage Labels

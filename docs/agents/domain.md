@@ -1,5 +1,6 @@
 ---
 type: agent-guide
+title: Domain Docs
 ---
 
 # Domain Docs

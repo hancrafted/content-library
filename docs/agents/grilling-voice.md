@@ -1,5 +1,6 @@
 ---
 type: agent-guide
+title: Voice grilling
 ---
 
 # Voice grilling
