@@ -330,3 +330,58 @@ Attempt 1 failed twice: the Caveats named "three reasons the Answer names" (prep
 Research gap: no primary benchmark for how many months a ramp-up takes; Bridge Group, Gartner and Forrester figures appeared only in vendor blogs.
 
 Needs human: the Answer says "takes months" without a Finding giving a number, and says sales cycle is measured only after a full cycle where Finding 9 supports that for conversion only.
+
+## write-dossier · 2026-10-13T23:33:02Z
+
+### Inputs
+
+- `brief.md`: the Slides spine, Constraints, Style, Analogy and Open ideas.
+- The seven research files under `research/`.
+- `source-deck.pdf`.
+- `docs/design/slide-library.md` and the Master slide and frame folders.
+- Skipped: `docs/profile/han/storytelling-guide.md`, `tone-guide.md` and `mental-model-guide.md` do not exist yet.
+
+### Output
+
+- `dossier.md`, `status: draft`, with a `process:markdown-harness` `verified` entry, committed on `episode/never-too-early-sales`.
+
+### Checks
+
+- `mh check`: pass.
+- `vitest` staging test: pass.
+- Reviewer: pass on attempt 2.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 135 s · 85475 tokens
+- reviewer · attempt 1 · fail · rubric "a page slide's material would leave an implementer guessing" · 125 s · 108230 tokens
+- implementor · attempt 2 · pass · 24 s · 47752 tokens
+- reviewer · attempt 2 · pass · 23 s · 50008 tokens
+
+### Notes
+
+Attempt 1 failed five lines: the `pipeline-by-the-numbers` Visual lacked its per-stage durations, the `how-marketing-feeds-the-pipeline` funnel poured into an unnamed stage, a `sales-is-more-than-selling` Speaker note cited Spence for a letter-of-intent claim the research only infers, a `why-it-takes-time-to-ramp-up` note repeated its Voice script, and one beat only described the picture. The retry fixed all five.
+
+No library match: why-watching-cashflow-is-mission-critical--watch-your-cashflow — a sticky-note cashflow board, months January to April by cash, cost and revenue rows, notes appearing month by month, cash falling to $0 and a "Bankrupt" stamp.
+
+No library match: how-to-start-doing-sales--stages-of-sale — three boxes in a left-to-right flow (leads, opportunities, closing) with a trailing delivery arrow.
+
+No library match: how-to-start-doing-sales--pipeline-tools-in-practice — our own illustrated deal board (New, Meeting, Proposal, Won) with a card moving between stages.
+
+No library match: how-to-start-doing-sales--how-marketing-feeds-the-pipeline — a drawn funnel pouring into the deal board's "New" column.
+
+No library match: how-to-start-doing-sales--watch-your-cashflow-revenue-pulled-in — the same board with the April revenue note dragged back to February.
+
+No library match: why-building-an-effective-sales-pipeline-takes-time--pipeline-by-the-numbers — a horizontal funnel with a ratio and a duration per stage.
+
+No library match: start-before-you-need-the-money--watch-your-cashflow-start-when — the board with an arrow back to Q1 and the four actionables beside it.
+
+Needs human: the 27:1 and 9.5-month worked example has no source; Slide `pipeline-by-the-numbers` captions it "Illustration, not a benchmark" and contrasts it with one vendor dataset (Ebsta: 19 percent win rate, 91-day cycle).
+
+Needs human: Actionable 4 (track deals, measure conversion and cycle) has no Slide of its own; it is a beat on `what-is-a-sales-pipeline` and `pipeline-tools-in-practice`.
+
+Needs human: about 40 Voice script beats for a 20-30 minute slot; check the fit once the Voice script is written.
+
+Needs human: `sales-is-more-than-selling` note 4 rests on Spence, read from its abstract and a review only.
+
+Needs human: Slide `sales-is-more-than-selling` says "before a euro of revenue" while the cashflow board counts in dollars.
