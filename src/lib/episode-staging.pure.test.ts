@@ -278,6 +278,35 @@ describe('failure cases', () => {
     expect(kinds(findings)).toEqual(expectedFindings);
   });
 
+  it.each([
+    ['local', 'motion: local'],
+    ['a library motion beside local', 'motion: liquid-ink-transition, local'],
+    ['two library motions', 'motion: liquid-ink-transition,liquid-ink-transition'],
+  ])('accepts %s as a Visual motion list', (_name, line) => {
+    // ARRANGE
+    const files = folder({ 'dossier.md': DOSSIER.replace('motion: liquid-ink-transition', line) });
+    const expectedFindings: string[] = [];
+    // ACT
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
+    // ASSERT
+    expect(kinds(findings)).toEqual(expectedFindings);
+  });
+
+  it.each([
+    ['none beside local', 'motion: none, local', 'none'],
+    ['an unknown entry in a list', 'motion: local, fade', 'fade'],
+    ['an empty entry', 'motion: local,', 'empty'],
+  ])('reports %s in a Visual motion list', (_name, line, expectedName) => {
+    // ARRANGE
+    const files = folder({ 'dossier.md': DOSSIER.replace('motion: liquid-ink-transition', line) });
+    const expectedKinds = ['visual'];
+    // ACT
+    const findings = checkStagingFolder(files, KNOWN_VISUALS);
+    // ASSERT
+    expect(kinds(findings)).toEqual(expectedKinds);
+    expect(findings[0].message).toContain(expectedName);
+  });
+
   it('accepts a title line after the master line as the on-screen title', () => {
     // ARRANGE
     const files = folder({
@@ -348,7 +377,7 @@ describe('failure cases', () => {
       'dossier.md': DOSSIER.replace('master: basic-page · motion: liquid-ink-transition', 'A bar, styled with CSS.'),
     });
     const expectedKinds = ['visual'];
-    const expectedForm = 'master: <name> · motion: <effect>';
+    const expectedForm = 'master: <name> · motion: <motions>';
     // ACT
     const findings = checkStagingFolder(files, KNOWN_VISUALS);
     // ASSERT
