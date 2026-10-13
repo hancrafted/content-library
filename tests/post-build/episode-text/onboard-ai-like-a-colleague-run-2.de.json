@@ -1,7 +1,7 @@
 {
   "title": "Hör auf, KI zu prompten, arbeite sie ein · hancrafted",
   "description": "Warum KI enttäuscht, wenn Du sie wie ein Werkzeug promptest, und warum ihre Einarbeitung wie bei einem fähigen neuen Kollegen Führungsarbeit ist, keine Ausführungsarbeit: Kontext, Werkzeuge, ein klares Briefing und die Prüfung des Ergebnisses.",
-  "toc": "Inhalt Wird geladen noch 5 Min. 1 Das Versprechen und die Lücke Zwanzigmal auf dem Papier 2 Tag eins mit einem fähigen Fremden Ein Kollege, der die geschriebene Welt kennt Der Plan muss bis Feierabend stehen Was würdest Du ihm zuerst sagen Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 5 Min. 1 Das Versprechen und die Lücke Zwanzigmal auf dem Papier 2 Tag eins mit einem fähigen Fremden Ein Kollege, der die geschriebene Welt kennt Der Plan muss bis Feierabend stehen Was würdest Du ihm zuerst sagen",
+  "toc": "Inhalt Wird geladen noch 6 Min. 1 Das Versprechen und die Lücke Zwanzigmal auf dem Papier 2 Tag eins mit einem fähigen Fremden Ein Kollege, der die geschriebene Welt kennt Der Plan muss bis Feierabend stehen Was würdest Du ihm zuerst sagen 3 Das fühlt sich nach viel an Die Wendung Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 6 Min. 1 Das Versprechen und die Lücke Zwanzigmal auf dem Papier 2 Tag eins mit einem fähigen Fremden Ein Kollege, der die geschriebene Welt kennt Der Plan muss bis Feierabend stehen Was würdest Du ihm zuerst sagen 3 Das fühlt sich nach viel an Die Wendung",
   "slides": [
     {
       "id": "top",
@@ -24,6 +24,11 @@
     {
       "id": "day-one-with-a-capable-stranger--what-would-you-tell-them-first",
       "text": "Euer erster gemeinsamer Tag Achte einfach darauf, was Du als Erstes tun würdest. 09:00 Ihm das Fest vom letzten Jahr erklären 09:30 Ihm das Budget und die Teilnehmerzahl nennen 10:00 Den Login fürs Buchungssystem und die Nummer des Caterers übergeben 10:30 Sagen, wie der Plan aussehen muss und wer ihn liest 13:00 Den ersten Entwurf ansehen 16:00 Ihn prüfen, bevor er nach oben geht"
+    },
+    { "id": "it-feels-like-a-lot", "text": "Das fühlt sich nach viel an" },
+    {
+      "id": "it-feels-like-a-lot--the-twist",
+      "text": "KI kann Dir helfen, KI einzuarbeiten Ein erster Schritt: grill-me befragt Dich, bevor Du tippst."
     }
   ],
   "notes": [
@@ -51,6 +56,11 @@
     {
       "id": "day-one-with-a-capable-stranger--what-would-you-tell-them-first",
       "text": "Was würdest Du ihm zuerst sagen Für den Neuen schreiben Michael Nygard schrieb Entscheidungsprotokolle, „als wäre es ein Gespräch mit einem zukünftigen Entwickler“, damit ein Neuer eine Entscheidung weder blind hinnehmen noch blind ändern muss. Übernommen aus einer früheren Recherche, nicht neu abgerufen. 1 Quellen (1) Michael Nygard, Documenting Architecture Decisions ( öffnet in neuem Tab ) cognitect.com Prüfen gehört zum Rahmen Anthropics Seite mit Best Practices sagt: „Gib Claude eine Möglichkeit, seine Arbeit zu überprüfen“ und „Wenn Du es nicht überprüfen kannst, liefere es nicht aus“. Übernommen aus einer früheren Recherche, nicht neu abgerufen. 1 Quellen (1) Anthropic, Claude Code best practices ( öffnet in neuem Tab ) code.claude.com"
+    },
+    { "id": "it-feels-like-a-lot", "text": "Das fühlt sich nach viel an Keine Sprechernotizen für diese Folie." },
+    {
+      "id": "it-feels-like-a-lot--the-twist",
+      "text": "Die Wendung KI als zweites Paar Augen Anthropic empfiehlt eine zweite Meinung in einem frischen Kontext, „damit der Agent, der die Arbeit macht, nicht derjenige ist, der sie bewertet“. Die Verbindung zu grill-me ist die eigene Rahmung dieser Episode. 1 Quellen (1) Anthropic, Claude Code best practices ( öffnet in neuem Tab ) code.claude.com"
     }
   ],
   "script": [
@@ -81,6 +91,14 @@
     {
       "id": "day-one-with-a-capable-stranger--what-would-you-tell-them-first",
       "text": "Was würdest Du ihm zuerst sagen 0:00 – 0:14 Nimm Dir eine Sekunde eine Sekunde wie würdest Du einarbeiten was Du als Erstes tust Also nimm Dir eine Sekunde. Wirklich. Wie würdest Du diese Person einarbeiten? Denk nicht an die richtige Antwort. Achte einfach darauf, was Du als Erstes tun würdest. 0:14 – 0:40 Der Vormittag Fest vom letzten Jahr das Budget wie viele Leute wie unsere Firma ist Ich schätze, Du würdest mit dem Vormittag anfangen. Du würdest ihm das Fest vom letzten Jahr erklären. Was funktioniert hat, was gefloppt ist, was der CEO gehasst hat. Du würdest ihm das Budget nennen. Du würdest ihm sagen, wie viele Leute kommen und wie unsere Firma so ist. Förmlich, locker, laut, leise. 0:40 – 1:04 Werkzeuge und der Auftrag die Schlüssel Login fürs Buchungssystem Caterer gemeinsamer Kalender was Du erwartest Dann würdest Du ihm die Schlüssel geben. Den Login für das Buchungssystem. Die Nummer des Caterers, dem Du vertraust. Zugriff auf den gemeinsamen Kalender, damit er keine Termine mehr vorschlägt, die kollidieren. Und Du würdest sagen, was Du erwartest. Ein Plan in welcher Form, für wen, wie lang. 1:04 – 1:24 Der Blick auf den Entwurf nicht bis fünf warten erster Entwurf beim Mittagessen noch einmal prüfen Dein Name Und Du würdest nicht bis fünf Uhr warten. Du würdest Dir den ersten Entwurf beim Mittagessen ansehen. Geht das in die richtige Richtung? Dann würdest Du ihn noch einmal prüfen, bevor er nach oben geht. Weil auch Dein Name draufsteht."
+    },
+    {
+      "id": "it-feels-like-a-lot",
+      "text": "Das fühlt sich nach viel an 0:00 – 0:18 Das fühlt sich nach viel an vier Disziplinen jedes Mal eine Notiz für Tag eins die Arbeit die gewandert ist Ich weiß. Das klingt nach viel. Vier Disziplinen, jedes einzelne Mal eine Notiz für Tag eins. Ich werde nicht so tun, als wäre das keine Arbeit. Es ist Arbeit. Es ist die Arbeit, die gewandert ist."
+    },
+    {
+      "id": "it-feels-like-a-lot--the-twist",
+      "text": "Die Wendung 0:00 – 0:19 Die Wendung KI kann Dir helfen KI einzuarbeiten der vergessene Kontext erster Morgen Aber jetzt kommt die Wendung. KI kann Dir helfen, KI einzuarbeiten. Sie kann Dich nach dem Kontext befragen, den Du vergessen hast, und die Fragen stellen, die ein guter neuer Kollege an seinem ersten Morgen stellen würde. 0:19 – 0:34 Ein erster Schritt grill-me Deine nächste echte Aufgabe alles was Du zum Start brauchst Wenn Du einen ersten Schritt willst, gibt es einen einfachen namens grill-me, der genau das tut. Probier ihn bei Deiner nächsten echten Aufgabe aus. Und mehr brauchst Du nicht, um anzufangen."
     }
   ]
 }
