@@ -1,0 +1,41 @@
+{
+  "title": "Stop prompting AI, start onboarding it · hancrafted",
+  "description": "Why AI underdelivers when you prompt it like a tool, and why onboarding it like a capable new colleague takes management skills, not execution skills: context, tools, a clear brief and checking the work.",
+  "toc": "Contents Loading 2 min left 1 The promise and the gap Twenty times on paper Open contents : Contents · Loading Contents 2 min left 1 The promise and the gap Twenty times on paper",
+  "slides": [
+    {
+      "id": "top",
+      "text": "Stop prompting AI, start onboarding it AI does not remove the work, it relocates it: brief it like a brand-new colleague on day one, before you type a word."
+    },
+    { "id": "the-promise-and-the-gap", "text": "The promise and the gap" },
+    {
+      "id": "the-promise-and-the-gap--twenty-times-on-paper",
+      "text": "Promised against delivered The promise is a number. Your own result is a question. 01 The promise 20x 02 Your last real attempt ?"
+    }
+  ],
+  "notes": [
+    {
+      "id": "top",
+      "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
+    },
+    { "id": "the-promise-and-the-gap", "text": "The promise and the gap No speaker notes for this Slide." },
+    {
+      "id": "the-promise-and-the-gap--twenty-times-on-paper",
+      "text": "Twenty times on paper Measured gains are real but uneven Three field experiments with 4,867 developers found a 26% increase in completed tasks for those given a coding assistant, far below “20x”, and each single experiment was noisy. 1 Sources (1) The Effects of Generative AI on High-Skilled Work: Evidence from Three Field Experiments with Software Developers ( opens in a new tab ) papers.ssrn.com People misjudge their own gain In a trial with 16 experienced developers, they forecast a 24% speedup and afterwards believed AI had saved them 20%, while measured time rose 19%. METR marks that result out of date and says it does not show AI fails to speed up most developers, so the point is how unreliable self-perception is, not that AI slows people down. 1 2 Sources (2) Becker, Rush, Barnes, Rein, Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity ( opens in a new tab ) arxiv.org METR, Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity (study announcement with limitations) ( opens in a new tab ) metr.org Population-level effects are small so far Linking surveys of 25,000 Danish workers to administrative records found precise null effects on earnings and recorded hours, ruling out effects larger than 2% two years after ChatGPT’s launch. 1 Sources (1) Humlum, Vestergaard, Large Language Models, Small Labor Market Effects (NBER Working Paper 33777) ( opens in a new tab ) nber.org"
+    }
+  ],
+  "script": [
+    {
+      "id": "top",
+      "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
+    },
+    {
+      "id": "the-promise-and-the-gap",
+      "text": "The promise and the gap 0:00 – 0:15 Open on the hype twenty times every feed keynote vendor deck You have seen the line. Become twenty times more productive with AI. It is on every feed, in every keynote, in every vendor deck. Maybe you even believed it for a day or two. 0:15 – 0:25 Bridge to the room tried it yourself why today Then you sat down and tried it yourself, and you know how that went. So why? Today I want to look at exactly that."
+    },
+    {
+      "id": "the-promise-and-the-gap--twenty-times-on-paper",
+      "text": "Twenty times on paper 0:00 – 0:13 The number twenty times the promise a whole team Twenty times. That is the promise. Not twenty percent, twenty times. One person doing the work of a whole team. Let us take that at face value, just for a moment. 0:13 – 0:27 Your number your last attempt something real be honest Now think of your own last serious attempt. Something real, not a toy. You got something usable back, maybe even useful. But transformative? Be honest. Not twenty times. Not even close. 0:27 – 0:42 Why, left open the gap Tuesday afternoon hold on to it So there is a gap between the promise and your Tuesday afternoon. Why does it exist? I am going to leave that question hanging. Hold on to it, because I will come back to it."
+    }
+  ]
+}

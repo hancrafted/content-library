@@ -1,0 +1,41 @@
+{
+  "title": "Hör auf, KI zu prompten, arbeite sie ein · hancrafted",
+  "description": "Warum KI enttäuscht, wenn Du sie wie ein Werkzeug promptest, und warum ihre Einarbeitung wie bei einem fähigen neuen Kollegen Führungsarbeit ist, keine Ausführungsarbeit: Kontext, Werkzeuge, ein klares Briefing und die Prüfung des Ergebnisses.",
+  "toc": "Inhalt Wird geladen noch 2 Min. 1 Das Versprechen und die Lücke Zwanzigmal auf dem Papier Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 2 Min. 1 Das Versprechen und die Lücke Zwanzigmal auf dem Papier",
+  "slides": [
+    {
+      "id": "top",
+      "text": "Hör auf, KI zu prompten, arbeite sie ein KI nimmt Dir die Arbeit nicht ab, sie verlagert sie: Weise sie ein wie einen neuen Kollegen an seinem ersten Tag, bevor Du ein Wort tippst."
+    },
+    { "id": "the-promise-and-the-gap", "text": "Das Versprechen und die Lücke" },
+    {
+      "id": "the-promise-and-the-gap--twenty-times-on-paper",
+      "text": "Versprochen gegen geliefert Das Versprechen ist eine Zahl. Dein eigenes Ergebnis ist eine Frage. 01 Das Versprechen 20x 02 Dein letzter echter Versuch ?"
+    }
+  ],
+  "notes": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    { "id": "the-promise-and-the-gap", "text": "Das Versprechen und die Lücke Keine Sprechernotizen für diese Folie." },
+    {
+      "id": "the-promise-and-the-gap--twenty-times-on-paper",
+      "text": "Zwanzigmal auf dem Papier Die gemessenen Gewinne sind echt, aber ungleich Drei Feldexperimente mit 4.867 Entwicklerinnen und Entwicklern fanden mit einem Coding-Assistenten 26 % mehr erledigte Aufgaben. Das ist weit unter „20x“, und jedes einzelne Experiment für sich war verrauscht. 1 Quellen (1) The Effects of Generative AI on High-Skilled Work: Evidence from Three Field Experiments with Software Developers ( öffnet in neuem Tab ) papers.ssrn.com Den eigenen Gewinn schätzen wir falsch ein In einer Studie mit 16 erfahrenen Entwicklern erwarteten diese vorab 24 % Beschleunigung und glaubten hinterher, die KI habe ihnen 20 % Zeit gespart, während die gemessene Zeit um 19 % stieg. METR nennt das Ergebnis inzwischen überholt und sagt, es zeige nicht, dass KI die meisten Entwickler nicht beschleunigt. Es geht also darum, wie unzuverlässig die Selbsteinschätzung ist, nicht darum, dass KI bremst. 1 2 Quellen (2) Becker, Rush, Barnes, Rein, Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity ( öffnet in neuem Tab ) arxiv.org METR, Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity (study announcement with limitations) ( öffnet in neuem Tab ) metr.org In der Breite sind die Effekte bisher klein Umfragen unter 25.000 dänischen Beschäftigten, verknüpft mit Verwaltungsdaten, fanden präzise Nulleffekte auf Einkommen und erfasste Arbeitsstunden. Effekte über 2 % schließen sie zwei Jahre nach dem Start von ChatGPT aus. 1 Quellen (1) Humlum, Vestergaard, Large Language Models, Small Labor Market Effects (NBER Working Paper 33777) ( öffnet in neuem Tab ) nber.org"
+    }
+  ],
+  "script": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    {
+      "id": "the-promise-and-the-gap",
+      "text": "Das Versprechen und die Lücke 0:00 – 0:16 Einstieg mit dem Hype zwanzigmal jeder Feed Keynote Anbieterfolien Du kennst den Satz. Werde mit KI zwanzigmal produktiver. Er steht in jedem Feed, in jeder Keynote, auf jeder Folie der Anbieter. Vielleicht hast Du ihn sogar ein, zwei Tage lang geglaubt. 0:16 – 0:29 Brücke in den Raum selbst ausprobiert warum heute Dann hast Du Dich hingesetzt und es selbst ausprobiert, und Du weißt, wie das lief. Also warum? Genau das will ich mir heute mit Dir ansehen."
+    },
+    {
+      "id": "the-promise-and-the-gap--twenty-times-on-paper",
+      "text": "Zwanzigmal auf dem Papier 0:00 – 0:14 Die Zahl zwanzigmal das Versprechen ein ganzes Team Zwanzigmal. Das ist das Versprechen. Nicht zwanzig Prozent, zwanzigmal. Eine Person, die die Arbeit eines ganzen Teams macht. Nehmen wir das einen Moment lang einfach beim Wort. 0:14 – 0:29 Deine Zahl Dein letzter Versuch etwas Echtes sei ehrlich Und jetzt denk an Deinen eigenen letzten ernsthaften Versuch. Etwas Echtes, kein Spielzeug. Du hast etwas Brauchbares zurückbekommen, vielleicht sogar etwas Nützliches. Aber bahnbrechend? Sei ehrlich. Nicht zwanzigmal. Nicht einmal annähernd. 0:29 – 0:45 Das Warum, offen gelassen die Lücke Dienstagnachmittag festhalten Es gibt also eine Lücke zwischen dem Versprechen und Deinem Dienstagnachmittag. Warum gibt es sie? Diese Frage lasse ich erst einmal im Raum stehen. Halte sie fest, denn ich komme darauf zurück."
+    }
+  ]
+}
