@@ -8,6 +8,8 @@ generated:
 verified:
   - by: process:markdown-harness
     at: 2026-10-13T23:12:35Z
+  - by: human:han
+    at: 2026-10-13T23:14:25Z
 ---
 
 # Why it's never too early to start with sales
