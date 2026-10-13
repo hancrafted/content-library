@@ -4,9 +4,11 @@ import en from './i18n/en.json';
 import { aColleagueWhoKnowsTheWrittenWorld } from './slides/a-colleague-who-knows-the-written-world/slide';
 import { confidentIsNotCorrect } from './slides/confident-is-not-correct/slide';
 import { dayOneWithACapableStranger } from './slides/day-one-with-a-capable-stranger/slide';
+import { itFeelsLikeALot } from './slides/it-feels-like-a-lot/slide';
 import { promptingLikeATool } from './slides/prompting-like-a-tool/slide';
 import { thePlanIsDueByEndOfDay } from './slides/the-plan-is-due-by-end-of-day/slide';
 import { thePromiseAndTheGap } from './slides/the-promise-and-the-gap/slide';
+import { theTwist } from './slides/the-twist/slide';
 import { twentyTimesOnPaper } from './slides/twenty-times-on-paper/slide';
 import { whatWouldYouTellThemFirst } from './slides/what-would-you-tell-them-first/slide';
 import { youManagedItYouDidNotDoIt } from './slides/you-managed-it-you-did-not-do-it/slide';
@@ -24,5 +26,6 @@ export const onboardAiLikeAColleagueRun2 = episode({
     [thePromiseAndTheGap, twentyTimesOnPaper],
     [dayOneWithACapableStranger, aColleagueWhoKnowsTheWrittenWorld, thePlanIsDueByEndOfDay, whatWouldYouTellThemFirst],
     [youManagedItYouDidNotDoIt, youManagedTheTask, promptingLikeATool, confidentIsNotCorrect],
+    [itFeelsLikeALot, theTwist],
   ],
 });

@@ -1,0 +1,18 @@
+/*
+ * The twist: motion only, no colour, size or weight (FE-011). One entrance for the whole Slide when it becomes active
+ * (FE-009 §6.2): the statement and the pointer rise into place together and hold. The base rule is the finished
+ * picture, so under reduced motion the Slide rests on it.
+ */
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .scene {
+    animation: twist-in 520ms cubic-bezier(0.2, 0, 0, 1) 200ms both;
+  }
+}
+
+@keyframes twist-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}

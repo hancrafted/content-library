@@ -1,0 +1,30 @@
+{
+  "title": "The twist",
+  "heading": "AI can help you onboard AI",
+  "pointer": "A first step: <tool>grill-me</tool> interviews you before you type.",
+  "notes": {
+    "ai-as-a-second-pair-of-eyes": {
+      "header": "AI as a second pair of eyes",
+      "description": "Anthropic recommends a second opinion in a fresh context, \"so the agent doing the work isn't the one grading it\". The grill-me link is this Episode's own framing.[1]",
+      "sources": {
+        "claude-code-best-practices": {
+          "title": "Anthropic, Claude Code best practices"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-twist": {
+        "title": "The twist",
+        "keywords": "AI can help you onboard AI, the context you forgot, first morning",
+        "script": "But here is the twist. AI can help you onboard AI. It can interview you for the context you forgot, and ask the questions a good new colleague would ask on their first morning."
+      },
+      "a-first-step": {
+        "title": "A first step",
+        "keywords": "grill-me, your next real task, all you need to start",
+        "script": "If you want a first step, there is a simple one called grill-me, which does exactly that. Try it on your next real task. And that is all you need to start."
+      }
+    }
+  }
+}

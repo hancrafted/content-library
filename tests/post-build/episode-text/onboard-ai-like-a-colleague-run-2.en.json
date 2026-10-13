@@ -1,7 +1,7 @@
 {
   "title": "Stop prompting AI, start onboarding it · hancrafted",
   "description": "Why AI underdelivers when you prompt it like a tool, and why onboarding it like a capable new colleague takes management skills, not execution skills: context, tools, a clear brief and checking the work.",
-  "toc": "Contents Loading 6 min left 1 The promise and the gap Twenty times on paper 2 Day one with a capable stranger A colleague who knows the written world The plan is due by end of day What would you tell them first 3 You managed it, you did not do it You managed the task Prompting like a tool, briefing like a colleague Confident is not correct Open contents : Contents · Loading Contents 6 min left 1 The promise and the gap Twenty times on paper 2 Day one with a capable stranger A colleague who knows the written world The plan is due by end of day What would you tell them first 3 You managed it, you did not do it You managed the task Prompting like a tool, briefing like a colleague Confident is not correct",
+  "toc": "Contents Loading 7 min left 1 The promise and the gap Twenty times on paper 2 Day one with a capable stranger A colleague who knows the written world The plan is due by end of day What would you tell them first 3 You managed it, you did not do it You managed the task Prompting like a tool, briefing like a colleague Confident is not correct 4 It feels like a lot The twist Open contents : Contents · Loading Contents 7 min left 1 The promise and the gap Twenty times on paper 2 Day one with a capable stranger A colleague who knows the written world The plan is due by end of day What would you tell them first 3 You managed it, you did not do it You managed the task Prompting like a tool, briefing like a colleague Confident is not correct 4 It feels like a lot The twist",
   "slides": [
     {
       "id": "top",
@@ -37,6 +37,11 @@
     {
       "id": "you-managed-it-you-did-not-do-it--confident-is-not-correct",
       "text": "Confident is not correct Polished and sure, with one line wrong. You check it, as with any new hire. Sommerfest plan · from the newcomer Date Friday 11 July, from 4 pm Venue Gutshaus am See, 120 seats Catering Confirmed for 100 guests sounded just as sure Budget €45 per head, within budget Programme Welcome, games, dinner, band"
+    },
+    { "id": "it-feels-like-a-lot", "text": "It feels like a lot" },
+    {
+      "id": "it-feels-like-a-lot--the-twist",
+      "text": "AI can help you onboard AI A first step: grill-me interviews you before you type."
     }
   ],
   "notes": [
@@ -80,6 +85,11 @@
     {
       "id": "you-managed-it-you-did-not-do-it--confident-is-not-correct",
       "text": "Confident is not correct Invented sources, defended In a New York federal case, lawyers filed a brief citing six cases ChatGPT had invented, defended them when challenged and were fined; the court held that the rules “impose a gatekeeping role on attorneys to ensure the accuracy of their filings”. 1 Sources (1) Judge P. Kevin Castel, Mata v. Avianca, Inc., Opinion and Order, No. 22-cv-1461 (PKC) (S.D.N.Y. June 22, 2023), ECF 54 ( opens in a new tab ) storage.courtlistener.com Wrong answers read as coherent On the BCG task outside the model’s frontier, AI users’ wrong answers read as coherent, which made errors harder to catch. 1 Sources (1) Dell’Acqua, McFowland, Mollick, Lifshitz-Assaf, Kellogg, Rajendran, Krayer, Candelon, Lakhani, Navigating the Jagged Technological Frontier ( opens in a new tab ) mitsloan.mit.edu A check can be cheap A 19-item surgical checklist was associated with inpatient death falling from 1.5% to 0.8% across eight hospitals. A before-and-after study, and not AI evidence; it shows a simple check can work. 1 Sources (1) Haynes et al., A Surgical Safety Checklist to Reduce Morbidity and Mortality in a Global Population, New England Journal of Medicine 360(5), 2009 ( opens in a new tab ) pubmed.ncbi.nlm.nih.gov"
+    },
+    { "id": "it-feels-like-a-lot", "text": "It feels like a lot No speaker notes for this Slide." },
+    {
+      "id": "it-feels-like-a-lot--the-twist",
+      "text": "The twist AI as a second pair of eyes Anthropic recommends a second opinion in a fresh context, \"so the agent doing the work isn't the one grading it\". The grill-me link is this Episode's own framing. 1 Sources (1) Anthropic, Claude Code best practices ( opens in a new tab ) code.claude.com"
     }
   ],
   "script": [
@@ -126,6 +136,14 @@
     {
       "id": "you-managed-it-you-did-not-do-it--confident-is-not-correct",
       "text": "Confident is not correct 0:00 – 0:17 The profile again knowledgeable confident eager to please polished work that may be wrong Go back to the profile for a second. Knowledgeable, confident, eager to please. That is a wonderful combination, and a dangerous one. It hands you polished work that may be wrong, and it hands it over with a smile. 0:17 – 0:32 You check, as with any new hire spot-check the first drafts where a number came from you are responsible So you check it, exactly as you would with any new hire. Spot-check the first drafts. Ask where a number came from. Because whatever goes to the CEO, you are the one responsible. Not the newcomer."
+    },
+    {
+      "id": "it-feels-like-a-lot",
+      "text": "It feels like a lot 0:00 – 0:13 It feels like a lot four disciplines a day-one note every time the work that moved I know. It sounds like a lot. Four disciplines, a day-one note every single time. I will not pretend it is not work. It is. It is the work that moved."
+    },
+    {
+      "id": "it-feels-like-a-lot--the-twist",
+      "text": "The twist 0:00 – 0:15 The twist AI can help you onboard AI the context you forgot first morning But here is the twist. AI can help you onboard AI. It can interview you for the context you forgot, and ask the questions a good new colleague would ask on their first morning. 0:15 – 0:28 A first step grill-me your next real task all you need to start If you want a first step, there is a simple one called grill-me, which does exactly that. Try it on your next real task. And that is all you need to start."
     }
   ]
 }

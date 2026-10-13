@@ -1,7 +1,7 @@
 {
   "title": "Hör auf, KI zu prompten, arbeite sie ein · hancrafted",
   "description": "Warum KI enttäuscht, wenn Du sie wie ein Werkzeug promptest, und warum ihre Einarbeitung wie bei einem fähigen neuen Kollegen Führungsarbeit ist, keine Ausführungsarbeit: Kontext, Werkzeuge, ein klares Briefing und die Prüfung des Ergebnisses.",
-  "toc": "Inhalt Wird geladen noch 7 Min. 1 Das Versprechen und die Lücke Zwanzigmal auf dem Papier 2 Tag eins mit einem fähigen Fremden Ein Kollege, der die geschriebene Welt kennt Der Plan muss bis Feierabend stehen Was würdest Du ihm zuerst sagen 3 Du hast es gemanagt, nicht selbst gemacht Du hast die Aufgabe gemanagt Prompten wie ein Werkzeug, briefen wie einen Kollegen Selbstsicher ist nicht richtig Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 7 Min. 1 Das Versprechen und die Lücke Zwanzigmal auf dem Papier 2 Tag eins mit einem fähigen Fremden Ein Kollege, der die geschriebene Welt kennt Der Plan muss bis Feierabend stehen Was würdest Du ihm zuerst sagen 3 Du hast es gemanagt, nicht selbst gemacht Du hast die Aufgabe gemanagt Prompten wie ein Werkzeug, briefen wie einen Kollegen Selbstsicher ist nicht richtig",
+  "toc": "Inhalt Wird geladen noch 8 Min. 1 Das Versprechen und die Lücke Zwanzigmal auf dem Papier 2 Tag eins mit einem fähigen Fremden Ein Kollege, der die geschriebene Welt kennt Der Plan muss bis Feierabend stehen Was würdest Du ihm zuerst sagen 3 Du hast es gemanagt, nicht selbst gemacht Du hast die Aufgabe gemanagt Prompten wie ein Werkzeug, briefen wie einen Kollegen Selbstsicher ist nicht richtig 4 Das fühlt sich nach viel an Die Wendung Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 8 Min. 1 Das Versprechen und die Lücke Zwanzigmal auf dem Papier 2 Tag eins mit einem fähigen Fremden Ein Kollege, der die geschriebene Welt kennt Der Plan muss bis Feierabend stehen Was würdest Du ihm zuerst sagen 3 Du hast es gemanagt, nicht selbst gemacht Du hast die Aufgabe gemanagt Prompten wie ein Werkzeug, briefen wie einen Kollegen Selbstsicher ist nicht richtig 4 Das fühlt sich nach viel an Die Wendung",
   "slides": [
     {
       "id": "top",
@@ -37,6 +37,11 @@
     {
       "id": "you-managed-it-you-did-not-do-it--confident-is-not-correct",
       "text": "Selbstsicher ist nicht richtig Ausgefeilt und sicher, mit einer falschen Zeile. Du prüfst es, wie bei jedem neuen Kollegen. Plan fürs Sommerfest · vom Neuling Datum Freitag, 11. Juli, ab 16 Uhr Ort Gutshaus am See, 120 Plätze Catering Für 100 Gäste bestätigt klang genauso sicher Budget 45 € pro Kopf, im Budget Programm Begrüßung, Spiele, Abendessen, Band"
+    },
+    { "id": "it-feels-like-a-lot", "text": "Das fühlt sich nach viel an" },
+    {
+      "id": "it-feels-like-a-lot--the-twist",
+      "text": "KI kann Dir helfen, KI einzuarbeiten Ein erster Schritt: grill-me befragt Dich, bevor Du tippst."
     }
   ],
   "notes": [
@@ -80,6 +85,11 @@
     {
       "id": "you-managed-it-you-did-not-do-it--confident-is-not-correct",
       "text": "Selbstsicher ist nicht richtig Erfundene Quellen, verteidigt In einem New Yorker Bundesverfahren reichten Anwälte einen Schriftsatz ein, der sechs von ChatGPT erfundene Fälle zitierte, verteidigten sie auf Nachfrage und wurden mit einer Geldstrafe belegt; das Gericht hielt fest, die Regeln „weisen Anwälten eine Torwächterrolle zu, um die Richtigkeit ihrer Eingaben sicherzustellen“. 1 Quellen (1) Judge P. Kevin Castel, Mata v. Avianca, Inc., Opinion and Order, No. 22-cv-1461 (PKC) (S.D.N.Y. June 22, 2023), ECF 54 ( öffnet in neuem Tab ) storage.courtlistener.com Falsche Antworten wirken schlüssig Bei der BCG-Aufgabe außerhalb der Grenze des Modells wirkten die falschen Antworten der KI-Nutzer schlüssig, was Fehler schwerer erkennbar machte. 1 Quellen (1) Dell’Acqua, McFowland, Mollick, Lifshitz-Assaf, Kellogg, Rajendran, Krayer, Candelon, Lakhani, Navigating the Jagged Technological Frontier ( öffnet in neuem Tab ) mitsloan.mit.edu Eine Prüfung kann billig sein Eine chirurgische Checkliste mit 19 Punkten ging in acht Krankenhäusern mit einem Rückgang der Krankenhaussterblichkeit von 1,5 % auf 0,8 % einher. Eine Vorher-nachher-Studie und kein Beleg über KI; sie zeigt, dass eine einfache Prüfung wirken kann. 1 Quellen (1) Haynes et al., A Surgical Safety Checklist to Reduce Morbidity and Mortality in a Global Population, New England Journal of Medicine 360(5), 2009 ( öffnet in neuem Tab ) pubmed.ncbi.nlm.nih.gov"
+    },
+    { "id": "it-feels-like-a-lot", "text": "Das fühlt sich nach viel an Keine Sprechernotizen für diese Folie." },
+    {
+      "id": "it-feels-like-a-lot--the-twist",
+      "text": "Die Wendung KI als zweites Paar Augen Anthropic empfiehlt eine zweite Meinung in einem frischen Kontext, „damit der Agent, der die Arbeit macht, nicht derjenige ist, der sie bewertet“. Die Verbindung zu grill-me ist die eigene Rahmung dieser Episode. 1 Quellen (1) Anthropic, Claude Code best practices ( öffnet in neuem Tab ) code.claude.com"
     }
   ],
   "script": [
@@ -126,6 +136,14 @@
     {
       "id": "you-managed-it-you-did-not-do-it--confident-is-not-correct",
       "text": "Selbstsicher ist nicht richtig 0:00 – 0:20 Noch einmal das Profil kenntnisreich selbstsicher will es recht machen ausgefeilte Arbeit die falsch sein kann Geh noch einmal kurz zurück zum Profil. Kenntnisreich, selbstsicher, will es Dir recht machen. Das ist eine wunderbare Kombination, und eine gefährliche. Sie gibt Dir ausgefeilte Arbeit, die falsch sein kann, und sie übergibt sie Dir mit einem Lächeln. 0:20 – 0:37 Du prüfst, wie bei jedem neuen Kollegen die ersten Entwürfe stichprobenartig prüfen woher eine Zahl kommt Du trägst die Verantwortung Also prüfst Du es, genau wie bei jedem neuen Kollegen. Prüf die ersten Entwürfe stichprobenartig. Frag, woher eine Zahl kommt. Denn was auch immer beim CEO landet, Du trägst die Verantwortung. Nicht der Neuling."
+    },
+    {
+      "id": "it-feels-like-a-lot",
+      "text": "Das fühlt sich nach viel an 0:00 – 0:18 Das fühlt sich nach viel an vier Disziplinen jedes Mal eine Notiz für Tag eins die Arbeit die gewandert ist Ich weiß. Das klingt nach viel. Vier Disziplinen, jedes einzelne Mal eine Notiz für Tag eins. Ich werde nicht so tun, als wäre das keine Arbeit. Es ist Arbeit. Es ist die Arbeit, die gewandert ist."
+    },
+    {
+      "id": "it-feels-like-a-lot--the-twist",
+      "text": "Die Wendung 0:00 – 0:19 Die Wendung KI kann Dir helfen KI einzuarbeiten der vergessene Kontext erster Morgen Aber jetzt kommt die Wendung. KI kann Dir helfen, KI einzuarbeiten. Sie kann Dich nach dem Kontext befragen, den Du vergessen hast, und die Fragen stellen, die ein guter neuer Kollege an seinem ersten Morgen stellen würde. 0:19 – 0:34 Ein erster Schritt grill-me Deine nächste echte Aufgabe alles was Du zum Start brauchst Wenn Du einen ersten Schritt willst, gibt es einen einfachen namens grill-me, der genau das tut. Probier ihn bei Deiner nächsten echten Aufgabe aus. Und mehr brauchst Du nicht, um anzufangen."
     }
   ]
 }
