@@ -38,26 +38,38 @@ function checkSlugs(dossier: readonly Heading[]): Finding[] {
     }));
 }
 
-const VISUAL_LINE = /^master: (\S+) · motion: (\S+)$/;
+const VISUAL_LINE = /^master: (\S+) · motion: (\S.*)$/;
 const TITLE_LINE = /^title: \S.*$/;
-/** The motion value that says the Slide carries no motion; every other value must be a motion effect. */
+/** Motion entries: `none` stands alone, `local` is motion in the Slide's own folder, any other is a library motion. */
 const NO_MOTION = 'none';
+const LOCAL_MOTION = 'local';
+
+function checkMotions(where: string, motion: string, known: KnownVisuals): string[] {
+  const entries = motion.split(',').map((entry) => entry.trim());
+  return [
+    ...unless(entries.length === 1 || !entries.includes(NO_MOTION), `${where} lists "none" beside another motion.`),
+    ...entries.flatMap((entry) => {
+      const valid = [NO_MOTION, LOCAL_MOTION, ...known.motions].includes(entry);
+      return unless(
+        valid,
+        `${where} names motion "${entry || 'empty'}", not "${NO_MOTION}", "${LOCAL_MOTION}" or a library motion.`,
+      );
+    }),
+  ];
+}
 
 function checkVisualLines(where: string, lines: readonly string[], known: KnownVisuals): string[] {
   const [first = '', second = '', ...rest] = lines;
   const match = VISUAL_LINE.exec(first);
   if (match === null)
-    return [`${where} must open with "master: <name> · motion: <effect>", but opens with "${first}".`];
+    return [`${where} must open with "master: <name> · motion: <motions>", but opens with "${first}".`];
   const [, master, motion] = match;
   return [
     ...unless(
       known.masters.includes(master),
       `${where} names master "${master}", which is neither a frame component nor a slide-master Slide.`,
     ),
-    ...unless(
-      motion === NO_MOTION || known.motions.includes(motion),
-      `${where} names motion "${motion}", which is neither "${NO_MOTION}" nor a motion effect.`,
-    ),
+    ...checkMotions(where, motion, known),
     ...unless(
       !second.startsWith('title:') || TITLE_LINE.test(second),
       `${where} has a title line not of the form "title: <on-screen title>": "${second}".`,

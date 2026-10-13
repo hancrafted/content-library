@@ -115,6 +115,43 @@ Edits are not saved. **Copy changed** exports only the tokens you changed, as a 
 
 The landing page, `ai-token-economy` and `maintaining-markdown-for-ai` predate these rules and sit on a legacy list, `src/design-system/legacy.json`, which ESLint and Archgate both read. Legacy files are exempt from E2 and the raw-value rules, not from E1 and E3. The list only shrinks: touching one of these files is the moment to migrate it.
 
-## Out of scope
+## Motion
 
-Motion is not covered yet. [FE-009](../../.archgate/adrs/FE-009-slide-wrapper-and-scene.md) §6 already covers its one mechanical duty: looping animation pauses outside `active`.
+A Slide's motion is **CSS only**, in the Slide's own CSS module: transitions, keyframes and scroll-driven `animation-timeline`. JavaScript motion (GSAP in a `*.client.tsx`) waits for an Episode that proves it needs it.
+
+What starts a motion:
+
+- **By default, one entrance when the Slide becomes active,** keyed on `[data-zone='active']`. `SlideMount` sets `data-zone` ([`slide-mount.client.tsx`](../../src/components/episode-page/slide-mount.client.tsx)), and [FE-009](../../.archgate/adrs/FE-009-slide-wrapper-and-scene.md) §6 names it a stable CSS hook, so renaming it is a breaking change. The entrance replays when the reader returns, which FE-009 accepts.
+- **Scroll-driven (`animation-timeline`) only when the motion _is_ progress:** a timeline, growth, a sequence. `vertical-sticky-years` is the worked example.
+- **Under reduced motion, every motion rests in its final state.** Wrap the motion in `@media (prefers-reduced-motion: no-preference)`, so the base rule is the finished picture.
+
+```css
+/* slides/<slide>/<slide>.module.css */
+.bar {
+  transform-origin: left;
+}
+@media (prefers-reduced-motion: no-preference) {
+  [data-zone='active'] .bar {
+    animation: grow 600ms cubic-bezier(0.2, 0, 0, 1) both;
+  }
+}
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+```
+
+A Slide stands on its own at rest, so the final state of a motion must carry the claim; motion adds emphasis, never content.
+
+### Library motions
+
+A **Slide library motion** is a CSS module under `src/components/slide-shared/motions/`. The folder is empty today. A motion moves there when a second Slide needs it ([FE-007](../../.archgate/adrs/FE-007-module-layering.md) Do 7). A Slide's CSS module takes it with `composes:`, a relative import that [FE-007](../../.archgate/adrs/FE-007-module-layering.md) §1 and the dependency rules allow, and that builds under Next.js CSS modules (verified with a throwaway module):
+
+```css
+.bar {
+  composes: grow from '../../../../slide-shared/motions/grow.module.css';
+}
+```
+
+The staging check reads the file names in that folder (without `.module.css`) as the motions a Dossier `Visual` may name. A Visual's `motion:` is a comma-separated list: `none` (stands alone), `local` (motion in the Slide's own folder, described in the Visual prose in viewer terms) or a library motion, so `motion: reading-highlight, local` is valid. The library list, with each Master slide's motion, lives in [the Slide library](slide-library.md).

@@ -187,6 +187,18 @@ body-structure:
             allowed:
               [
                 {
+                  title: Style,
+                  intent: 'One line naming a style from docs/design/design-guide.md and the audience reason for it; the designers keep that style for the whole Episode. Fail if it names no style, names none the design guide lists, or gives no audience reason.',
+                },
+              ],
+            mayHold: [prose],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
                   title: Learning goal,
                   intent: 'What the viewer can do or explain afterwards, in one or two sentences, the end every Section moves towards. Fail if it names a topic to cover instead of a change in the viewer.',
                 },
