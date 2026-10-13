@@ -1,5 +1,6 @@
 import { type Finding } from './finding.pure';
-import { bodyLines, frontmatterValue } from './staging-markdown.pure';
+import { frontmatterValue } from './staging-file.pure';
+import { bodyLines } from './staging-markdown.pure';
 
 const FOOTNOTE = /\[\^([^\]\s]+)\](:?)/g;
 const FENCE = /^(```|~~~)/;

@@ -9,10 +9,10 @@ import { checkStagingOrder } from './episode-staging-order.pure';
 import { checkTexts } from './episode-staging-texts.pure';
 import { checkTitleSlide } from './episode-staging-title.pure';
 import { unless, type Finding } from './finding.pure';
+import { frontmatterField } from './staging-file.pure';
 import {
   blocksOf,
   bodyLines,
-  frontmatterField,
   h4s,
   headingsOf,
   orderedList,

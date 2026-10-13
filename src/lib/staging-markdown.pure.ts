@@ -1,11 +1,12 @@
 /*
- * Line-level reading of a staging markdown file for the cross-file checks:
- * frontmatter fields, headings with their `{#slug}`, the block under each
- * heading, and ordered lists. Not a CommonMark parser: it reads the shapes the
- * staging files' markdown-harness rules already guarantee.
+ * Line-level reading of a staging markdown file's body for the cross-file
+ * checks: headings with their `{#slug}`, the block under each heading, and
+ * ordered lists. Not a CommonMark parser: it reads the shapes the staging
+ * files' markdown-harness rules already guarantee. The frontmatter is
+ * staging-file.pure.ts's to read.
  */
 
-import { parse } from 'yaml';
+import { bodyOf } from './staging-file.pure';
 
 export interface Heading {
   level: number;
@@ -18,11 +19,10 @@ export interface Heading {
 
 const HEADING = /^(#{1,6}) (.*)$/;
 const SLUG = /\{#([a-z0-9-]+)\}$/;
-const FRONTMATTER = /^---\n[\s\S]*?\n---\n/;
 
 /** The body's lines, with the frontmatter cut off. */
 export function bodyLines(markdown: string): string[] {
-  return markdown.replace(FRONTMATTER, '').split('\n');
+  return bodyOf(markdown).split('\n');
 }
 
 const FENCE = /^(```|~~~)/;
@@ -82,33 +82,6 @@ export function orderedList(body: readonly string[]): { items: ListItem[]; stray
     else if (line.trim() !== '') strays.push(line);
   }
   return { items, strays };
-}
-
-/**
- * A frontmatter field's value as YAML reads it, as text, or null when the frontmatter has no such field, the
- * field is not a scalar, or the frontmatter is not valid YAML. A dotted key (`generated.at`) reads through nested
- * mappings, written in block or flow form, to any depth; a key that itself contains a dot cannot be addressed.
- */
-export function frontmatterField(markdown: string, key: string): string | null {
-  const found = frontmatterValue(markdown, key);
-  return typeof found === 'string' || typeof found === 'number' || typeof found === 'boolean' ? String(found) : null;
-}
-
-/** A frontmatter field's parsed YAML value at a dotted key, of any shape, or undefined when absent or unreadable. */
-export function frontmatterValue(markdown: string, key: string): unknown {
-  const block = FRONTMATTER.exec(markdown)?.[0];
-  if (block === undefined) return undefined;
-  let value: unknown;
-  try {
-    value = parse(block.replace(/^---\n/, '').replace(/\n---\n$/, ''));
-  } catch {
-    return undefined;
-  }
-  return key.split('.').reduce<unknown>((node, part) => (isMapping(node) ? node[part] : undefined), value);
-}
-
-function isMapping(node: unknown): node is Record<string, unknown> {
-  return typeof node === 'object' && node !== null && !Array.isArray(node);
 }
 
 /** Every page slide's anchor, `<section slug>--<slide slug>`, from the Dossier's h2 and h3 headings. */

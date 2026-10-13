@@ -1,5 +1,6 @@
 import { type Finding } from './finding.pure';
-import { bodyLines, frontmatterField, headingsOf } from './staging-markdown.pure';
+import { frontmatterField } from './staging-file.pure';
+import { bodyLines, headingsOf } from './staging-markdown.pure';
 
 const SLUG_SUFFIX = / \{#[a-z0-9-]+\}$/;
 

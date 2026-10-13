@@ -5,7 +5,7 @@
 // extensionless imports of src/lib, so it shares no code with the pipeline check.
 
 import { parse } from 'yaml';
-import { gateTier } from './verified.pure.ts';
+import { gateTier } from '../../../../src/lib/staging-file.pure.ts';
 
 export type JobState = 'done' | 'gate' | 'blocked' | 'ready' | 'waiting';
 

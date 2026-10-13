@@ -9,12 +9,12 @@ import {
 } from '@/lib/episode-staging.pure';
 import { checkVoiceScriptDiff } from '@/lib/episode-voice-script.pure';
 import { checkResearchFolders, researchCategories } from '@/lib/research-folder.pure';
+import { gateTier } from '@/lib/staging-file.pure';
 import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
-import { gateTier } from '../../.agents/skills/new-episode/scripts/verified.pure';
 
 /*
  * The cross-file checks (design-ADR 0004) applied to the real corpus: every
