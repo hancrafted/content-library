@@ -46,12 +46,12 @@ const LOCAL_MOTION = 'local';
 
 function checkMotions(where: string, motion: string, known: KnownVisuals): string[] {
   const entries = motion.split(',').map((entry) => entry.trim());
+  const allowed = [NO_MOTION, LOCAL_MOTION, ...known.motions];
   return [
     ...unless(entries.length === 1 || !entries.includes(NO_MOTION), `${where} lists "none" beside another motion.`),
     ...entries.flatMap((entry) => {
-      const valid = [NO_MOTION, LOCAL_MOTION, ...known.motions].includes(entry);
       return unless(
-        valid,
+        allowed.includes(entry),
         `${where} names motion "${entry || 'empty'}", not "${NO_MOTION}", "${LOCAL_MOTION}" or a library motion.`,
       );
     }),
