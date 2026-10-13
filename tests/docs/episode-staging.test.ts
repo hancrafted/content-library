@@ -1,12 +1,7 @@
 import { checkPipeline, type PipelineContext } from '@/lib/episode-pipeline.pure';
 import { checkResearchJobs } from '@/lib/episode-research-jobs.pure';
-import {
-  checkResearchIndex,
-  checkRunsCsv,
-  checkStagingFolder,
-  unsettledBriefSections,
-  type KnownVisuals,
-} from '@/lib/episode-staging.pure';
+import { unsettledBriefSections } from '@/lib/episode-staging-brief.pure';
+import { checkResearchIndex, checkRunsCsv, checkStagingFolder, type KnownVisuals } from '@/lib/episode-staging.pure';
 import { checkVoiceScriptDiff } from '@/lib/episode-voice-script.pure';
 import { checkResearchFolders, researchCategories } from '@/lib/research-folder.pure';
 import { gateTier } from '@/lib/staging-file.pure';

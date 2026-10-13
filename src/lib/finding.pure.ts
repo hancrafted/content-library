@@ -6,6 +6,10 @@
 /** What a check found wrong, keyed by the rule it broke. */
 export type FindingKind =
   | 'spine'
+  | 'brief-slide'
+  | 'brief-research'
+  | 'brief-thread'
+  | 'brief-spine'
   | 'visual'
   | 'title-slide'
   | 'speaker-note'

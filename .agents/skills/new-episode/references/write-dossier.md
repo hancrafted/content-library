@@ -4,7 +4,9 @@ Output: `docs/episodes/<slug>/dossier.md`, the Dossier. It is the Episode's one 
 
 ## Prompt
 
-Chain backwards from the Brief. Start at the `Learning goal` and the `Actionables`: for each actionable, decide which Slides a viewer needs to be able to take it, then order those Slides along the `Red thread` into Sections, with the `Hook` opening the first. When the Brief has Threads, alternate A and B thread Slides. Material that serves no actionable stays out, or goes under an extra heading without a slug.
+Keep the Brief's **spine**. Its `## Slides` names every Section and page Slide in order, each with a title, a purpose and a visual idea: each Section becomes an h2 and each Slide an h3 of the same title, in the same order, and the Slide's Visual, Speaker notes and Voice script carry out its purpose. The visual idea is input to the Visual; name the Master slide yourself. Its `_Research:_` numbers say which research files back the Slide's Speaker notes.
+
+Change the spine only where the research or the Brief's Learning goal demands it: add, split, merge, drop, retitle or reorder a Slide, and log each change as its own line in the run-log entry's Notes, `Spine change: <Brief Slide title> — <why>` (for an added Slide, its Dossier title). The staging test fails every difference between the Brief's Slide titles and the Dossier's h3s that no such line names, and Han sees each line at the Dossier gate. Material that serves no Slide stays out, or goes under an extra heading without a slug.
 
 Read the research the run produced and any file retrieval reused. The orchestrator names each research job that blocked: write no Slide that rests on its question, and add `Research gap: <job id> — <what the Episode leaves out>` to the run-log entry's Notes. Write in Han's voice by the human-profile guides in your references; a guide that does not exist yet is skipped.
 
@@ -25,4 +27,6 @@ The job's `checks:` in `assets/pipeline.yml` run by the check table in [SKILL.md
 ## Rubric
 
 1. Every Brief actionable is backed by at least one Slide, named by its slug.
-2. Every instruction the Brief gives about how to tell the story is followed.
+2. Every Slide carries out the purpose its Brief entry states, and every Brief Constraint holds on every Slide.
+3. Every `Spine change:` line names a reason the research or the Learning goal gives.
+4. Every instruction the Brief gives about how to tell the story is followed.

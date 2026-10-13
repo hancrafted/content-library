@@ -9,6 +9,7 @@ Output: the app served locally, its Episode link printed, and one draft PR whose
    - each Notes line starting `Blocked:`, a reviewer failure that ran out of retries;
    - each Notes line starting `Needs human:`;
    - each Notes line starting `Research gap:`, a research question the Episode went without;
+   - each Notes line starting `Spine change:`, a change to the spine Han settled in the Brief;
    - the route deviation, when the Episode answered only on `/episode/<slug>`: `- [ ] Served at /episode/<slug>, not /episodes/<slug>, until #85 lands`.
 
    With none of them, the checklist says so in one line. The PR stays a draft through the feedback loop and practice, and merges at Promotion.

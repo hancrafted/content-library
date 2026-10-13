@@ -58,6 +58,23 @@ The story of one afternoon session that drifts, told in turns with the mechanism
 
 A household budget: rent is the system prompt, groceries are the task, and every pasted log is an impulse buy that leaves less for the rent.
 
+## Constraints
+
+- Every number on a Slide comes from a research file; the afternoon session is told, never measured.
+- No model or product names: the Episode outlives them.
+
+## Slides
+
+### Why the agent forgets
+
+1. (A) **Every token is spent attention** — the window fills and every message takes a share, so the Hook's instruction had less left. _Visual:_ a window as a bar filling with message blocks. _Research:_ 1
+2. (B) **The middle goes quiet first** — the afternoon session's instruction now sits in the middle, where recall drops. _Visual:_ three columns: start, middle, end of the window.
+
+### Spend the budget on purpose
+
+3. (A) **Start fresh when the task changes** — a fresh session spends the whole budget on the work at hand. _Visual:_ an old window beside an empty one. _Research:_ 2
+4. (B) **Cut what you paste** — the afternoon ends with ten lines pasted instead of a full log. _Visual:_ a long log cut down to its ten lines. _Research:_ 1
+
 ## Research questions
 
 1. Why does a language model's recall of an instruction degrade with its position in a long context?

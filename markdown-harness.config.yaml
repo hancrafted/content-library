@@ -52,7 +52,7 @@ frontmatter:
               }
     - ruleId: staging-brief
       fileNames: [brief.md]
-      intent: 'A Brief is written before any research and is the yardstick every later artifact is judged against, so each goal is concrete enough to judge a Dossier by. Fail if a goal is too vague to judge a Dossier against, or the body drafts Slides or Sections.'
+      intent: 'A Brief is written before any research and is the yardstick every later artifact is judged against, so each goal is concrete enough to judge a Dossier by. Its Slides are the spine write-dossier keeps. Fail if a goal is too vague to judge a Dossier against.'
       unknownKeys: forbidden
       fields:
         type:
@@ -321,11 +321,42 @@ body-structure:
               [
                 {
                   title: Analogy,
-                  intent: 'One everyday picture the Episode returns to, giving the abstract idea a handle. Fail if picturing it takes expertise, or it offers several pictures.',
+                  intent: 'One everyday picture the Episode returns to, giving the abstract idea a handle; a list keeps the parts of the picture as Han said them. Fail if picturing it takes expertise, or it offers several pictures.',
                 },
               ],
-            mayHold: [prose],
+            mayHold: [prose, unordered-list],
           }
+        - {
+            purpose: heading,
+            level: 2,
+            presence: optional,
+            allowed:
+              [
+                {
+                  title: Constraints,
+                  intent: "Story rules every Slide obeys, one per item, so a writing job and its reviewer check each Slide against them. Fail if an item governs a single Slide, which belongs in that Slide's purpose.",
+                },
+              ],
+            mayHold: [unordered-list],
+          }
+        - purpose: heading
+          level: 2
+          allowed:
+            [
+              {
+                title: Slides,
+                intent: 'The spine Han settled: one h3 per Section, each an ordered list of its page Slides, numbered on across Sections. Each item is `**<title>** — <purpose>. _Visual:_ <idea>`, with an optional `_Research:_ <n, m>` naming the research questions it rests on, and a leading `(A)` or `(B)` when the Brief has Threads; the staging test checks that shape. write-dossier keeps this spine. Fail if a purpose advances no step of the Red thread, the Slides take its steps out of argument order, the first Slide does not carry the Hook, or the last Section does not land the Learning goal.',
+              },
+            ]
+          headings:
+            - {
+                purpose: enumeration,
+                level: 3,
+                minCount: 1,
+                pattern: '^.{1,60}$',
+                intent: 'A Section, titled as the table of contents names it, holding the page Slides that make one step of the Red thread. Fail if its Slides serve more than one step.',
+                mayHold: [ordered-list],
+              }
         - {
             purpose: heading,
             level: 2,
@@ -545,7 +576,7 @@ body-structure:
                   [
                     {
                       title: Notes,
-                      intent: 'What a reader needs that the other parts do not say: a retry and why, a gate edit. Each blocked branch, call for human judgement, missing library match or research gap gets its own line, starting `Blocked:`, `Needs human:`, `No library match:` or `Research gap:`. Fail if a retry or blocked branch shown under Metrics or Checks goes unexplained, or such a line lacks its prefix.',
+                      intent: "What a reader needs that the other parts do not say: a retry and why, a gate edit. Each blocked branch, call for human judgement, missing library match or research gap gets its own line, starting `Blocked:`, `Needs human:`, `No library match:`, `Research gap:` or `Spine change:` (a write-dossier change to the Brief's spine, naming the Slide title and why). Fail if a retry or blocked branch shown under Metrics or Checks goes unexplained, or such a line lacks its prefix.",
                     },
                   ],
                 mayHold: [prose, unordered-list],
