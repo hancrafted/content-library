@@ -1,6 +1,7 @@
 import { listEpisodes } from '@/components/episodes/episode-repository';
 import { findEpisode } from '@/components/episodes/registry';
 
+import type { EpisodeStatus } from '@/lib/episode-metadata.pure';
 import { placeSections, type SlideOutline } from '@/lib/episode.pure';
 import { EPISODE_SLUGS } from '@/lib/routes';
 import { existsSync, readFileSync } from 'node:fs';
@@ -56,7 +57,7 @@ function lostAnchors(walk: { slug: string; published: readonly string[]; produce
  */
 function boundSlugs(
   registered: readonly (typeof EPISODE_SLUGS)[number][],
-  episodes: readonly { slug: string; status: string }[],
+  episodes: readonly { slug: string; status: EpisodeStatus }[],
 ): (typeof EPISODE_SLUGS)[number][] {
   const upcoming = episodes.filter(({ status }) => status === 'upcoming').map(({ slug }) => slug);
   return registered.filter((slug) => !upcoming.includes(slug));
@@ -129,7 +130,7 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('skips an upcoming Episode with a page and binds a published one', () => {
     // ARRANGE
-    const episodes = [
+    const episodes: { slug: string; status: EpisodeStatus }[] = [
       { slug: 'amnesiac-freelancer', status: 'published' },
       { slug: 'ai-token-economy', status: 'upcoming' },
     ];

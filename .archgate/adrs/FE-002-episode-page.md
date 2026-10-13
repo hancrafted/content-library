@@ -72,7 +72,7 @@ flowchart LR
 ### 3. Scene is free
 
 1. A Scene MUST be free JSX, no slide-type union, reaching the record only via its typed kit.
-2. Browser code MUST live in its Slide's folder, `*.client.tsx`.
+2. Browser code MUST live in its Slide's folder as `*.client.tsx`.
 3. A Slide folder MUST import only its own files, Slide master, `slide-shared`, UI kit, hooks, lib; its `*.client.tsx` only own files, hooks, lib. Shared parts live in `slide-shared`: plain props.
 
 ### 4. Headings mirror the Dossier
@@ -82,7 +82,7 @@ flowchart LR
 ### 5. Strings and anchors keyed by Slide slug
 
 1. A Slide's text MUST live in its own `i18n/<locale>.json`, by role — `title`, not `sections.0.title`; German matches the English shape. Episode text: `<episode>/i18n/`.
-2. Published anchors MUST stay (`published-anchors.json`, bound at publication); `slideHref` MUST name a Slide of it.
+2. Published anchors MUST stay (`published-anchors.json`, at publication); `slideHref` MUST name a Slide of it.
 
 ### 6. Table of contents and Context drawer read the record
 
