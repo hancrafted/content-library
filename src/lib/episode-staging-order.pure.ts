@@ -35,20 +35,20 @@ const RESEARCH_FILE = /^research\/[^/]+\/research\.md$/;
 const DAY = /^(\d{4}-\d{2}-\d{2})/;
 const ACCESSED = / — accessed (\d{4}-\d{2}-\d{2})$/;
 
-/** A research file's `researched_on` day is on or after every Source's `accessed` day. */
+/** A research file's `generated.at` day is on or after every Source's `accessed` day. */
 function checkResearchDate(file: string, markdown: string): Finding[] {
-  const researchedOn = DAY.exec(frontmatterField(markdown, 'researched_on') ?? '')?.[1];
-  if (researchedOn === undefined) return [];
+  const generatedAt = DAY.exec(frontmatterField(markdown, 'generated.at') ?? '')?.[1];
+  if (generatedAt === undefined) return [];
   const sources = blocksOf(bodyLines(markdown)).find(
     ({ heading }) => heading.level === 2 && heading.text === 'Sources',
   );
   const accessed = orderedList(sources?.body ?? []).items.flatMap(({ text }) => ACCESSED.exec(text)?.[1] ?? []);
   return accessed
-    .filter((day) => day > researchedOn)
+    .filter((day) => day > generatedAt)
     .map((day): Finding => ({
       kind: 'research-date',
       file,
-      message: `A Source was accessed ${day}, after researched_on ${researchedOn}: set researched_on to the instant the research finished, on or after the last access.`,
+      message: `A Source was accessed ${day}, after generated.at ${generatedAt}: set generated.at to the instant the research finished, on or after the last access.`,
     }));
 }
 

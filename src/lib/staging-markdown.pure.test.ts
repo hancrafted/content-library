@@ -13,6 +13,10 @@ const DOSSIER = `---
 type: dossier
 title: 'Han''s budget'
 quote: "a \\"spent\\" window"
+generated:
+  by: claude-code/opus-5.5
+  at: 2026-10-12T00:00:00Z
+after: top
 ---
 
 # Budget {#budget}
@@ -86,6 +90,15 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('reads a dotted key one level into a nested mapping and stops at the next top-level key', () => {
+    // ARRANGE
+    const expected = ['claude-code/opus-5.5', '2026-10-12T00:00:00Z', null];
+    // ACT
+    const values = ['generated.by', 'generated.at', 'generated.after'].map((key) => frontmatterField(DOSSIER, key));
+    // ASSERT
+    expect(values).toEqual(expected);
+  });
+
   it('keeps every line outside the ordered list as a stray, a nested line before any item among them', () => {
     // ARRANGE
     const body = ['  - nested before any item', '1. Item', 'A loose sentence.'];

@@ -69,11 +69,13 @@ function research(description: string): string {
 
 const RECALL = 'research/recall/research.md';
 
-function researchOn(researchedOn: string, accessed: readonly string[]): string {
+function researchOn(generatedAt: string, accessed: readonly string[]): string {
   return [
     '---',
     'type: research',
-    `researched_on: ${researchedOn}`,
+    'generated:',
+    '  by: claude-code/opus-5.5',
+    `  at: ${generatedAt}`,
     '---',
     '',
     '# Why?',

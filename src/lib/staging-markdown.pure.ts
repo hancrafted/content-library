@@ -90,11 +90,29 @@ function yamlScalar(raw: string): string {
   return value;
 }
 
-/** A one-line frontmatter field's value as YAML reads it, or null when the frontmatter has no such field. */
+/**
+ * A one-line frontmatter field's value as YAML reads it, or null when the frontmatter has no such field.
+ * A dotted key (`generated.at`) reads one level into a nested mapping written as an indented block.
+ */
 export function frontmatterField(markdown: string, key: string): string | null {
-  const frontmatter = FRONTMATTER.exec(markdown)?.[0] ?? '';
-  const line = frontmatter.split('\n').find((candidate) => candidate.startsWith(`${key}: `));
+  const lines = (FRONTMATTER.exec(markdown)?.[0] ?? '').split('\n');
+  const [parent, child] = key.split('.');
+  return child === undefined ? scalarIn(lines, key) : scalarIn(nestedLines(lines, parent), child);
+}
+
+/** The value of the `key: value` line among `lines`, or null. */
+function scalarIn(lines: readonly string[], key: string): string | null {
+  const line = lines.find((candidate) => candidate.startsWith(`${key}: `));
   return line === undefined ? null : yamlScalar(line.slice(key.length + 2));
+}
+
+/** The trimmed lines of the indented block under a top-level `parent:` line. */
+function nestedLines(lines: readonly string[], parent: string): string[] {
+  const start = lines.indexOf(`${parent}:`);
+  if (start === -1) return [];
+  const block = lines.slice(start + 1).filter((line) => line !== '---');
+  const end = block.findIndex((line) => !/^\s/.test(line));
+  return (end === -1 ? block : block.slice(0, end)).map((line) => line.trim());
 }
 
 /** Every page slide's anchor, `<section slug>--<slide slug>`, from the Dossier's h2 and h3 headings. */
