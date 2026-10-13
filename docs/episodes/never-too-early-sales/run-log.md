@@ -429,3 +429,43 @@ Needs human: "Revenue earlier" says the company lives on into the summer, while 
 Needs human: "Simple board" says one card is stuck in Meeting, while the Visual animates a card moving from Meeting to Proposal.
 
 Needs human: "This week" ends on ten minutes on the board after telling the listener to pick any step.
+
+## write-spec · 2026-10-13T23:51:30Z
+
+### Inputs
+
+- `dossier.md`, approved.
+- `brief.md`.
+- `.agents/skills/to-spec/SKILL.md` and `.agents/skills/to-tickets/SKILL.md`, read as files (the Skill tool refuses them).
+- `.archgate/adrs/FE-004-slide-architecture.md` for the seams.
+- `docs/features/episode-migration.md`.
+
+### Output
+
+- Spec issue https://github.com/hancrafted/content-library/issues/147, labelled `episode:never-too-early-sales`.
+- Sub-issues, each `needs-triage`: https://github.com/hancrafted/content-library/issues/148 (Title slide, wiring, post-build step 8, and `why-watching-cashflow-is-mission-critical`; blocks the others), https://github.com/hancrafted/content-library/issues/149 (`why-sales-is-more-than-just-selling`), https://github.com/hancrafted/content-library/issues/150 (`how-to-start-doing-sales`), https://github.com/hancrafted/content-library/issues/151 (`why-building-an-effective-sales-pipeline-takes-time`), https://github.com/hancrafted/content-library/issues/152 (`start-before-you-need-the-money`).
+- Edited #147 · 2026-10-13T23:49:04Z
+- Edited #148 · 2026-10-13T23:49:06Z
+- Edited #149 · 2026-10-13T23:49:07Z
+- Edited #150 · 2026-10-13T23:49:09Z
+- Edited #151 · 2026-10-13T23:49:10Z
+- Edited #152 · 2026-10-13T23:49:12Z
+
+### Checks
+
+- Reviewer: pass on attempt 1.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 149 s · 86052 tokens
+- reviewer · attempt 1 · pass · 58 s · 70772 tokens
+
+### Notes
+
+Han was away, so the spec uses the FE-004 seams and says so.
+
+Needs human: spec #147 carries `ready-for-agent` (as run 1's #99 did); an agent that picks up `ready-for-agent` issues could start on it before the designs are approved.
+
+Needs human: the issue links to Dossier headings resolve only once `episode/never-too-early-sales` is pushed.
+
+Needs human: sub-issue titles differ from the Dossier h2s (#148 "The cashflow board, first time"; #149 and #151 shortened); the bodies use the right anchors.
