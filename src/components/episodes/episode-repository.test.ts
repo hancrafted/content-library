@@ -1,4 +1,4 @@
-import { LAYOUT_REFERENCES } from '@/lib/episode-overview';
+import { FEATURED, LAYOUT_REFERENCES } from '@/lib/episode-overview';
 import { EPISODE_SLUGS } from '@/lib/routes';
 import { existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
@@ -41,16 +41,16 @@ describe('success cases', () => {
     expect(listed).toEqual(expected);
   });
 
-  it('lists every registered Episode but the layout references as published', () => {
+  it('lists every registered Episode but the layout references, whatever its status', () => {
     // ARRANGE
     const expected = EPISODE_SLUGS.filter((slug) => !(LAYOUT_REFERENCES as readonly string[]).includes(slug)).sort();
     // ACT
-    const published = listEpisodes()
-      .filter(({ status }) => status === 'published')
+    const withPage = listEpisodes()
+      .filter(({ slug }) => (EPISODE_SLUGS as readonly string[]).includes(slug))
       .map(({ slug }) => slug)
       .sort();
     // ASSERT
-    expect(published).toEqual(expected);
+    expect(withPage).toEqual(expected);
   });
 
   it.each(listEpisodes().map(({ slug }) => slug))('keeps the metadata of %s in its own folder', (slug) => {
@@ -64,13 +64,12 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('holds no upcoming Episode whose slug is registered or not kebab-case', () => {
+  it('holds no upcoming Episode whose slug is not kebab-case', () => {
     // ARRANGE
-    const registered: readonly string[] = EPISODE_SLUGS;
     const expected: string[] = [];
     // ACT
     const wrong = listEpisodes()
-      .filter(({ status, slug }) => status === 'upcoming' && (registered.includes(slug) || !KEBAB_CASE.test(slug)))
+      .filter(({ status, slug }) => status === 'upcoming' && !KEBAB_CASE.test(slug))
       .map(({ slug }) => slug);
     // ASSERT
     expect(wrong).toEqual(expected);
@@ -87,10 +86,11 @@ describe('failure cases', () => {
     expect(undated).toEqual(expected);
   });
 
-  it('gives an upcoming Episode a folder holding only its metadata, so it has no page', () => {
+  it('gives an upcoming Episode with no page a folder holding only its metadata', () => {
     // ARRANGE
+    const registered: readonly string[] = EPISODE_SLUGS;
     const expected = listEpisodes()
-      .filter(({ status }) => status === 'upcoming')
+      .filter(({ status, slug }) => status === 'upcoming' && !registered.includes(slug))
       .map(({ slug }) => [slug, [METADATA_FILE]]);
     // ACT
     const contents = expected.map(([slug]) => [slug, readdirSync(path.join(EPISODES_DIR, slug as string))]);
@@ -100,6 +100,24 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('gives a published Episode a publishedOn and an upcoming one none, with or without a page', () => {
+    // ARRANGE
+    const expected: string[] = [];
+    // ACT
+    const wrong = listEpisodes().filter((episode) => 'publishedOn' in episode !== (episode.status === 'published'));
+    // ASSERT
+    expect(wrong.map(({ slug }) => slug)).toEqual(expected);
+  });
+
+  it('features published Episodes only', () => {
+    // ARRANGE
+    const expected = FEATURED.map((slug) => [slug, 'published']);
+    // ACT
+    const featured = FEATURED.map((slug) => [slug, listEpisodes().find((episode) => episode.slug === slug)?.status]);
+    // ASSERT
+    expect(featured).toEqual(expected);
+  });
+
   it('keeps every Tag atomic: kebab-case and once per Episode', () => {
     // ARRANGE
     const expected: string[] = [];

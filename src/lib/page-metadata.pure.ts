@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { TRANSLATIONS } from '../i18n/translations';
+import type { EpisodeStatus } from './episode-metadata.pure';
 import { DEFAULT_LOCALE, LOCALES, localizePath, type Locale } from './locale.pure';
 import { routeOf, type PageRef } from './routes';
 
@@ -31,13 +32,16 @@ export function siteMetadata(locale: Locale, siteUrl: string): Metadata {
 export interface PageCopy {
   readonly title: string;
   readonly description: string;
+  /** An Episode page's status: an upcoming one is `noindex`. Left off for the landing page. */
+  readonly status?: EpisodeStatus;
 }
 
 /**
  * A page's metadata: its copy, its canonical, and reciprocal hreflang
  * alternates. The landing page's copy is `meta.home` of the site-wide
  * Translation file; an Episode's comes from its record, which this tier cannot
- * reach, so the route hands it in.
+ * reach, so the route hands it in, with its status: an upcoming Episode's page
+ * is `noindex`, so the publish flip removes it from search.
  */
 export function pageMetadata(page: 'home', locale: Locale): Metadata;
 export function pageMetadata(page: Exclude<PageRef, 'home'>, locale: Locale, copy: PageCopy): Metadata;
@@ -52,5 +56,6 @@ export function pageMetadata(page: PageRef, locale: Locale, copy?: PageCopy): Me
       canonical: localizePath(route, locale),
       languages: { ...languages, 'x-default': localizePath(route, DEFAULT_LOCALE) },
     },
+    ...(copy?.status === 'upcoming' ? { robots: { index: false, follow: false } } : {}),
   };
 }

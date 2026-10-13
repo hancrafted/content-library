@@ -87,6 +87,16 @@ describe('success cases', () => {
     // ASSERT
     expect(card).toEqual(expected);
   });
+
+  it("draws an unlinked upcoming card from the Episode's own copy, not the landing Translation keys", () => {
+    // ARRANGE
+    const entry = { ...UPCOMING, copy: COPY };
+    const expected = { route: null, href: null, status: 'upcoming', title: COPY.title, caption: COPY.caption };
+    // ACT
+    const { route, href, status, title, caption } = episodeCard(entry, { locale: 'en', read, featuredRank: 1 });
+    // ASSERT
+    expect({ route, href, status, title, caption }).toEqual(expected);
+  });
 });
 
 describe('failure cases', () => {
