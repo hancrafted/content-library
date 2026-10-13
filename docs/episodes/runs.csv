@@ -1,1 +1,50 @@
 run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,brief-grill,implementor,1,pass,,1043,,2026-10-12T19:40:03Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,pipeline-tailor,implementor,1,pass,,139,,2026-10-12T19:45:21Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,pipeline-tailor,implementor,1,pass,,,,2026-10-12T19:54:22Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,pipeline-tailor,implementor,1,pass,,,,2026-10-12T20:26:49Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,customize-pipeline,implementor,1,pass,,,,2026-10-12T20:49:52Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,customize-pipeline,implementor,1,pass,,,,2026-10-12T20:58:36Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,customize-pipeline,implementor,1,pass,,,,2026-10-12T21:05:26Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,categorize-research,implementor,1,pass,,9,38318,2026-10-12T21:22:53Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,customize-pipeline,implementor,1,pass,,,,2026-10-12T21:22:53Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,customize-pipeline,implementor,1,pass,,,,2026-10-12T21:44:27Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,retrieval,implementor,1,pass,,29,55931,2026-10-12T21:49:04Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-ai-as-onboarding-a-colleague,implementor,1,pass,,101,68437,2026-10-12T21:50:40Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-ai-as-onboarding-a-colleague,reviewer,1,fail,"Answer: states something no Finding supports and the Caveats do not flag as inference",54,53632,2026-10-12T21:52:25Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-ai-as-onboarding-a-colleague,implementor,2,pass,,11,43532,2026-10-12T21:53:29Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-ai-as-onboarding-a-colleague,reviewer,2,pass,,12,42975,2026-10-12T21:54:32Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-individual-ai-productivity-gap,implementor,1,pass,,94,62020,2026-10-12T21:51:01Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-individual-ai-productivity-gap,reviewer,1,fail,"Answer: states something no Finding supports and the Caveats do not flag as inference",61,48163,2026-10-12T21:52:47Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-individual-ai-productivity-gap,implementor,2,pass,,21,44238,2026-10-12T21:54:11Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-individual-ai-productivity-gap,reviewer,2,pass,,27,43556,2026-10-12T21:55:15Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-organizational-ai-productivity-gap,implementor,1,pass,,98,65092,2026-10-12T21:51:22Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-organizational-ai-productivity-gap,reviewer,1,pass,,54,51933,2026-10-12T21:53:08Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-context-and-brief-improve-ai-output,implementor,1,pass,,117,74021,2026-10-12T21:51:43Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-context-and-brief-improve-ai-output,reviewer,1,fail,"Sources: Fail if no Finding cites a source.",57,51574,2026-10-12T21:53:50Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-context-and-brief-improve-ai-output,implementor,2,pass,,50,66696,2026-10-12T21:55:36Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-context-and-brief-improve-ai-output,reviewer,2,pass,,15,42754,2026-10-12T21:55:57Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-risks-of-unchecked-ai-output,implementor,1,pass,,110,79974,2026-10-12T21:52:04Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-risks-of-unchecked-ai-output,reviewer,1,fail,"A claim the Answer takes from a disputed study names the dispute and the strongest counter-evidence.",105,65417,2026-10-12T21:56:18Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-risks-of-unchecked-ai-output,implementor,2,pass,,26,45199,2026-10-12T21:57:07Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-risks-of-unchecked-ai-output,reviewer,2,pass,,20,42774,2026-10-12T21:57:53Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-ai-delegation-as-management-skill,implementor,1,pass,,133,75765,2026-10-12T21:54:54Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-ai-delegation-as-management-skill,reviewer,1,fail,"Findings: Fail if a finding cites no Source, or gives an opinion instead of what a Source shows.",87,54005,2026-10-12T21:56:40Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-ai-delegation-as-management-skill,implementor,2,pass,,31,46963,2026-10-12T21:57:53Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-research-ai-delegation-as-management-skill,reviewer,2,pass,,34,45237,2026-10-12T21:58:32Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,retire-prior-research,implementor,1,pass,,50,62924,2026-10-12T22:01:51Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-dossier,implementor,1,pass,,103,82431,2026-10-12T22:04:05Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-dossier,reviewer,1,fail,"The master slide and motion that show this Slide's point, then prose on what the viewer sees, required when the master alone does not say it.",124,88510,2026-10-12T22:06:19Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-dossier,implementor,2,pass,,26,59320,2026-10-12T22:07:02Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-dossier,reviewer,2,pass,,23,48493,2026-10-12T22:07:40Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-manuscript,implementor,1,pass,,74,60530,2026-10-12T22:09:48Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-manuscript,reviewer,1,fail,"no claim the Dossier's notes hedge may be spoken as settled",49,53663,2026-10-12T22:10:46Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-manuscript,implementor,2,pass,,17,46063,2026-10-12T22:11:17Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-manuscript,reviewer,2,pass,,13,41846,2026-10-12T22:11:54Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-spec,implementor,1,pass,,120,74195,2026-10-12T22:17:36Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,write-spec,reviewer,1,pass,,50,64828,2026-10-12T22:18:47Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,implement-episode,implementor,1,fail,"FAIL tests/post-build/episode-text.build.test.ts > /episode/onboard-ai-like-a-colleague > shows the reader the same text it showed before the move",27160,,2026-10-13T05:58:48Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,implement-episode,reviewer,1,fail,"The visual check ran in both themes, and its numbers show no overflow.",150,,2026-10-13T06:02:13Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,implement-episode,implementor,2,pass,,153,85358,2026-10-13T06:04:50Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,implement-episode,reviewer,2,pass,,25,,2026-10-13T06:06:58Z
+2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,open-pr,implementor,1,pass,,49,58068,2026-10-13T06:09:26Z
