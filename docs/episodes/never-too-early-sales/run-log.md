@@ -165,3 +165,41 @@
 - Retained isolated research worktrees, with a header documenting Han's explicit integration-branch exception: use `sales-pipeline-episode-sol` as their base and never inspect another run's worktree.
 - The candidate pipeline check exposed categorize-research's invalid B2B IDs. That upstream job used its correction attempt, recorded in the preceding append-only entry; this pipeline uses the corrected BIZ names.
 - Human gate: Han edits the pipeline and approves it with top-level `status: approved`, committed with `Gate: approved pipeline`. No research jobs have started.
+
+## retrieval · 2026-10-13T23:26:08.789Z
+
+### Inputs
+
+- `.agents/skills/new-episode/references/retrieval.md` and `.agents/skills/new-episode/SKILL.md`: retrieval outcomes and logging procedure.
+- `docs/episodes/never-too-early-sales/pipeline.yml`: Han approved in `7f96400`; all start conditions pass.
+- `docs/episodes/never-too-early-sales/brief.md`: eight questions and current human approval.
+- `docs/llm-wiki/index.md`: checked in this run's worktree; absent.
+- `docs/episodes/never-too-early-sales/run-log.md`: governance queried before returning the entry.
+
+### Output
+
+- Question 1, revenue lagging early-stage costs: `new`.
+- Question 2, B2B sales-cycle length: `new`.
+- Question 3, stage conversion rates: `new`.
+- Question 4, early selling yielding market insight: `new`.
+- Question 5, early selling building customer trust: `new`.
+- Question 6, early selling yielding internal insight: `new`.
+- Question 7, marketing feeding pipeline stages: `new`.
+- Question 8, sales-pipeline ramp-up time: `new`.
+
+### Checks
+
+- `npx mh query docs/episodes/never-too-early-sales/run-log.md`: intents read.
+- `npm run check:docs`: pass, zero violations.
+- Reviewer: not configured.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 16.976 s
+
+### Notes
+
+- No library match: questions 1-8 are new because the library index is absent; no indexed candidate could be assessed for freshness or fit.
+- No reuse or extend outcomes; all eight research jobs must run.
+- The agent inspected only this run's worktree, wrote no files and returned this entry for the orchestrator to append.
+- Token count was not reported.

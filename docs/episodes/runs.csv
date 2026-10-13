@@ -56,3 +56,4 @@ run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at
 2026-10-13T22:50:35Z,never-too-early-sales,categorize-research,implementor,1,fail,"B2B-0001__b2b-sales-cycle-length is no research folder name: <category>-<####>__<question-slug, 20-40 chars kebab-case>.",0,,2026-10-13T23:17:46Z
 2026-10-13T22:50:35Z,never-too-early-sales,categorize-research,implementor,2,pass,,67,,2026-10-13T23:18:53Z
 2026-10-13T22:50:35Z,never-too-early-sales,customize-pipeline,implementor,1,pass,,175,,2026-10-13T23:19:42Z
+2026-10-13T22:50:35Z,never-too-early-sales,retrieval,implementor,1,pass,,16.976,,2026-10-13T23:26:08.789Z
