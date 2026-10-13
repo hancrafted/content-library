@@ -1,34 +1,21 @@
 // A run's state, read from disk alone: each job of a per-run pipeline.yml
 // as done, blocked, ready or waiting, from the latest run-log.md entry per
 // job id. The orchestrator builds its todo list from this, never from memory.
-// It reads the YAML itself: node runs this script without the `@/` alias and
-// extensionless imports of src/lib, so it shares no code with the pipeline check.
+// It reads the pipeline and the gates through the same src/lib modules the
+// pipeline check uses; they import nothing but `yaml`, so bare node runs them.
 
-import { parse } from 'yaml';
-import { gateTier } from './verified.pure.ts';
+import { readPipeline, type Job } from '../../../../src/lib/episode-pipeline-jobs.pure.ts';
+import { gateTier } from '../../../../src/lib/staging-file.pure.ts';
 
 export type JobState = 'done' | 'gate' | 'blocked' | 'ready' | 'waiting';
 
-interface PipelineJob {
-  id: string;
-  needs: string[];
-  wants: string[];
-  gate: boolean;
-  outputs: string[];
-}
-
 /**
- * What a gate reads from one output: a markdown staging file's trust tier (`gateTier`: unverified, checked or
- * approved, from `verified` and `generated.at`), and for any other file, pipeline.yml, its `status:` (design-ADR
+ * Whether one output opens its gate: a markdown staging file once its trust tier is approved (`gateTier`, from
+ * `verified` and `generated.at`), and any other file, pipeline.yml, once its `status:` is approved (design-ADR
  * 0005 keeps `status: approved` there because it is config, not markdown).
  */
-export function outputGate(file: string, text: string): string | null {
-  return file.endsWith('.md') ? gateTier(text) : frontmatterStatus(text);
-}
-
-/** The `status:` value of a file, tolerant of quotes and trailing space; null when there is none. */
-export function frontmatterStatus(text: string): string | null {
-  return /^status:[ \t]*["']?([^\s"']+)["']?[ \t]*$/m.exec(text)?.[1] ?? null;
+export function outputApproved(file: string, text: string): boolean {
+  return file.endsWith('.md') ? gateTier(text) === 'approved' : readPipeline(text)?.status === 'approved';
 }
 
 /** A sub-issue as `gh api .../sub_issues` returns it, reduced to what the gate reads. */
@@ -45,18 +32,6 @@ export function subIssuesApproved(tickets: readonly SubIssue[]): boolean {
 
 const ENTRY = /^## (\S+) · \S+$/;
 const METRIC = /^- \S+ · attempt (\d+) · (pass|fail)\b/;
-
-function strings(value: unknown): string[] {
-  return Array.isArray(value) ? value.map(String) : [];
-}
-
-function jobsOf(yaml: string): PipelineJob[] {
-  const jobs = (parse(yaml) as { jobs?: unknown[] } | null)?.jobs ?? [];
-  return jobs.map((job) => {
-    const { id, needs, wants, gate, outputs } = job as Record<string, unknown>;
-    return { id: String(id), needs: strings(needs), wants: strings(wants), gate: gate === 'human', outputs: strings(outputs) };
-  });
-}
 
 /** The lines of each job's latest run-log entry, by job id. */
 function latestEntries(runLog: string): Map<string, string[]> {
@@ -93,10 +68,41 @@ function logged(lines: readonly string[]): JobState | null {
   return final.every(({ pass }) => pass) ? 'done' : null;
 }
 
-/** How a gate is read: a staging output's gate state (`outputGate`), or, for a job with no output, its tickets' labels. */
+/** How a gate is read: whether a staging output is approved (`outputApproved`), or, for a job with no output, its tickets. */
 export interface GateReaders {
-  outputStatus?: (output: string) => string | null;
+  outputApproved?: (output: string) => boolean;
   labelApproved?: (jobId: string) => boolean;
+}
+
+/** What the gate readers reach outside the process: a repo file's text, null when it is missing, and gh's stdout. */
+export interface GateSources {
+  read: (file: string) => string | null;
+  /** Runs `gh` with these arguments and returns its stdout; throws when gh fails. */
+  gh: (args: readonly string[]) => string;
+}
+
+/**
+ * The gate readers for one Episode run. An output path names `<slug>`, filled in before it is read; a missing
+ * output is not approved. A label gate asks gh for the spec issue labelled `episode:<slug>` and its sub-issues
+ * (`subIssuesApproved`); any gh failure or unreadable answer reads as not approved, so the gate stays shut.
+ */
+export function gateReaders(slug: string, { read, gh }: GateSources): GateReaders {
+  return {
+    outputApproved: (output) => {
+      const file = output.replaceAll('<slug>', slug);
+      const text = read(file);
+      return text !== null && outputApproved(file, text);
+    },
+    labelApproved: () => {
+      try {
+        const [spec] = JSON.parse(gh(['issue', 'list', '--label', `episode:${slug}`, '--state', 'all', '--json', 'number'])) as { number: number }[];
+        if (spec === undefined) return false;
+        return subIssuesApproved(JSON.parse(gh(['api', `repos/{owner}/{repo}/issues/${spec.number}/sub_issues`])) as SubIssue[]);
+      } catch {
+        return false;
+      }
+    },
+  };
 }
 
 /**
@@ -104,8 +110,8 @@ export interface GateReaders {
  * blocked when a job it needs is blocked, ready when every job it needs is
  * done and every job it wants is done or blocked, and waiting otherwise.
  * A `gate: human` job that is logged done reads `gate` until every output
- * it names reads `approved` (`outputGate`); `readers.outputStatus` reads one output's gate state (an output path with
- * `<slug>` as written in pipeline.yml), null when unreadable. A gate job that names no output has no
+ * it names is approved; `readers.outputApproved` reads one output (an output path with `<slug>` as written in
+ * pipeline.yml) and is built by `gateReaders`. A gate job that names no output has no
  * status to read: it reads `gate` until `readers.labelApproved(jobId)` says its tickets are approved, and
  * stays `gate` when none is given, so an unreadable label never opens the gate.
  */
@@ -114,7 +120,7 @@ export function runStatus(
   runLog: string,
   readers: GateReaders = {},
 ): { id: string; state: JobState }[] {
-  const jobs = jobsOf(pipelineYaml);
+  const jobs = readPipeline(pipelineYaml)?.jobs ?? [];
   const entries = latestEntries(runLog);
   const states = new Map<string, JobState>();
   const stateOf = (id: string): JobState => {
@@ -132,17 +138,17 @@ export function runStatus(
   return jobs.map(({ id }) => ({ id, state: stateOf(id) }));
 }
 
-function stateFor(job: PipelineJob, fromLog: JobState | null, readers: GateReaders): JobState | null {
+function stateFor(job: Job, fromLog: JobState | null, readers: GateReaders): JobState | null {
   if (fromLog === 'done' && job.gate && !approved(job, readers)) return 'gate';
   return fromLog;
 }
 
-function approved(job: PipelineJob, { outputStatus = () => null, labelApproved = () => false }: GateReaders): boolean {
+function approved(job: Job, { outputApproved = () => false, labelApproved = () => false }: GateReaders): boolean {
   if (job.outputs.length === 0) return labelApproved(job.id);
-  return job.outputs.every((output) => outputStatus(output) === 'approved');
+  return job.outputs.every((output) => outputApproved(output));
 }
 
-function pending(job: PipelineJob, stateOf: (id: string) => JobState): JobState {
+function pending(job: Job, stateOf: (id: string) => JobState): JobState {
   const needs = job.needs.map(stateOf);
   if (needs.includes('blocked')) return 'blocked';
   const wantsFinished = job.wants.map(stateOf).every((state) => state === 'done' || state === 'blocked');

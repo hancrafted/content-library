@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { frontmatterStatus, outputGate, runStatus, subIssuesApproved } from './status.pure.ts';
+import { gateReaders, outputApproved, runStatus, subIssuesApproved, type GateSources } from './status.pure.ts';
 
 /*
  * A run's state read back from disk: a small per-run pipeline and run logs
@@ -75,11 +75,11 @@ describe('gate jobs', () => {
 
   it('prints gate for a logged gate job until its output is approved, and holds back what needs it', () => {
     // ARRANGE
-    const draft = () => 'draft';
-    const approved = () => 'approved';
+    const draft = () => false;
+    const approved = () => true;
     // ACT
-    const whileDraft = runStatus(GATED, runLog, { outputStatus: draft }).map(({ state }) => state);
-    const afterApproval = runStatus(GATED, runLog, { outputStatus: approved }).map(({ state }) => state);
+    const whileDraft = runStatus(GATED, runLog, { outputApproved: draft }).map(({ state }) => state);
+    const afterApproval = runStatus(GATED, runLog, { outputApproved: approved }).map(({ state }) => state);
     // ASSERT
     expect(whileDraft).toEqual(['gate', 'waiting']);
     expect(afterApproval).toEqual(['done', 'ready']);
@@ -125,7 +125,7 @@ describe('edge cases', () => {
   });
 });
 
-describe('outputGate', () => {
+describe('outputApproved', () => {
   const brief = (generatedAt: string): string =>
     `---\ntype: brief\ngenerated:\n  by: claude-code/opus-5.5\n  at: ${generatedAt}\nverified:\n  - by: human:han\n    at: 2026-10-12T09:30:00Z\n---\n`;
   const GATED = `jobs:
@@ -136,34 +136,118 @@ describe('outputGate', () => {
   it('reads a markdown file by its trust tier and pipeline.yml by its status', () => {
     // ARRANGE
     const approved = brief('2026-10-12T09:00:00Z');
+    const expected = [true, true, false];
     // ACT
-    const tiers = [outputGate('brief.md', approved), outputGate('pipeline.yml', 'status: approved\njobs: []\n')];
+    const gates = [
+      outputApproved('brief.md', approved),
+      outputApproved('pipeline.yml', 'status: approved\njobs: []\n'),
+      outputApproved('pipeline.yml', 'status: draft\njobs: []\n'),
+    ];
     // ASSERT
-    expect(tiers).toEqual(['approved', 'approved']);
+    expect(gates).toEqual(expected);
+  });
+
+  it('reads pipeline.yml status as YAML: quoted, commented or trailing space', () => {
+    // ARRANGE
+    const texts = ['status: "approved"\njobs: []\n', "status: 'approved' \njobs: []\n", 'status: approved # by Han\njobs: []\n'];
+    const expected = [true, true, true];
+    // ACT
+    const gates = texts.map((text) => outputApproved('pipeline.yml', text));
+    // ASSERT
+    expect(gates).toEqual(expected);
   });
 
   it('opens the gate on Han\'s entry and closes it again when the file is edited after approval', () => {
     // ARRANGE
-    const fresh = () => outputGate('brief.md', brief('2026-10-12T09:00:00Z'));
-    const edited = () => outputGate('brief.md', brief('2026-10-12T10:00:00Z'));
+    const fresh = () => outputApproved('brief.md', brief('2026-10-12T09:00:00Z'));
+    const edited = () => outputApproved('brief.md', brief('2026-10-12T10:00:00Z'));
+    const expected = { open: ['done'], reopened: ['gate'] };
     // ACT
-    const open = runStatus(GATED, runLog, { outputStatus: fresh }).map(({ state }) => state);
-    const reopened = runStatus(GATED, runLog, { outputStatus: edited }).map(({ state }) => state);
+    const open = runStatus(GATED, runLog, { outputApproved: fresh }).map(({ state }) => state);
+    const reopened = runStatus(GATED, runLog, { outputApproved: edited }).map(({ state }) => state);
     // ASSERT
-    expect(open).toEqual(['done']);
-    expect(reopened).toEqual(['gate']);
+    expect({ open, reopened }).toEqual(expected);
   });
 });
 
-describe('frontmatterStatus', () => {
-  it('reads a plain, quoted or trailing-space status', () => {
-    expect(frontmatterStatus('---\nstatus: approved\n---\n')).toBe('approved');
-    expect(frontmatterStatus('---\nstatus: "approved"\n---\n')).toBe('approved');
-    expect(frontmatterStatus("---\nstatus: 'approved' \n---\n")).toBe('approved');
+describe('gateReaders', () => {
+  const SLUG = 'ep';
+  const APPROVED_BRIEF =
+    '---\ntype: brief\ngenerated:\n  by: claude-code/opus-5.5\n  at: 2026-10-12T09:00:00Z\nverified:\n  - by: human:han\n    at: 2026-10-12T09:30:00Z\n---\n';
+  const SPEC_ISSUE = 41;
+  const OUTPUT = 'docs/episodes/<slug>/brief.md';
+
+  /** A disk holding only these files, and a gh answering the spec-issue lookup and its sub-issues. */
+  function sources(files: Record<string, string>, gh: GateSources['gh']): GateSources {
+    return { read: (file) => files[file] ?? null, gh };
+  }
+
+  function gh(spec: { number: number }[], subIssues: unknown[]): GateSources['gh'] {
+    return (args) => JSON.stringify(args[0] === 'issue' ? spec : subIssues);
+  }
+
+  const failingGh: GateSources['gh'] = () => {
+    throw new Error('gh: not logged in');
+  };
+
+  it('reads an output at its path with the slug filled in', () => {
+    // ARRANGE
+    const readers = gateReaders(SLUG, sources({ 'docs/episodes/ep/brief.md': APPROVED_BRIEF }, failingGh));
+    const expected = true;
+    // ACT
+    const approved = readers.outputApproved?.(OUTPUT);
+    // ASSERT
+    expect(approved).toBe(expected);
   });
 
-  it('is null without a status line', () => {
-    expect(frontmatterStatus('# Title\n')).toBeNull();
+  it('keeps the gate shut for an output that is missing', () => {
+    // ARRANGE
+    const readers = gateReaders(SLUG, sources({}, failingGh));
+    const expected = false;
+    // ACT
+    const approved = readers.outputApproved?.(OUTPUT);
+    // ASSERT
+    expect(approved).toBe(expected);
+  });
+
+  it('opens a label gate once the spec issue\'s sub-issues have left triage', () => {
+    // ARRANGE
+    const tickets = [{ state: 'open', labels: [{ name: 'ready-for-agent' }] }];
+    const readers = gateReaders(SLUG, sources({}, gh([{ number: SPEC_ISSUE }], tickets)));
+    const expected = true;
+    // ACT
+    const approved = readers.labelApproved?.('write-design-spec');
+    // ASSERT
+    expect(approved).toBe(expected);
+  });
+
+  it('keeps a label gate shut when gh fails, answers garbage, or finds no spec issue', () => {
+    // ARRANGE
+    const tickets = [{ state: 'open', labels: [] }];
+    const garbage: GateSources['gh'] = () => 'not json';
+    const worlds = [failingGh, garbage, gh([], tickets)];
+    const expected = [false, false, false];
+    // ACT
+    const approved = worlds.map((world) => gateReaders(SLUG, sources({}, world)).labelApproved?.('write-design-spec'));
+    // ASSERT
+    expect(approved).toEqual(expected);
+  });
+
+  it('asks gh for the spec issue by the Episode\'s label, then for that issue\'s sub-issues', () => {
+    // ARRANGE
+    const calls: string[][] = [];
+    const recording: GateSources['gh'] = (args) => {
+      calls.push([...args]);
+      return JSON.stringify(args[0] === 'issue' ? [{ number: SPEC_ISSUE }] : []);
+    };
+    const expected = [
+      ['issue', 'list', '--label', 'episode:ep', '--state', 'all', '--json', 'number'],
+      ['api', 'repos/{owner}/{repo}/issues/41/sub_issues'],
+    ];
+    // ACT
+    gateReaders(SLUG, sources({}, recording)).labelApproved?.('write-design-spec');
+    // ASSERT
+    expect(calls).toEqual(expected);
   });
 });
 

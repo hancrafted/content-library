@@ -5,14 +5,7 @@
  * wants as for one it needs; only a blocked need blocks it.
  */
 
-/** A pipeline job as the graph sees it: its id, the jobs it needs and wants, and the staging paths it writes. */
-export interface Job {
-  id: string;
-  needs: string[];
-  /** Jobs it waits for that do not block it when they block; empty when it wants none. */
-  wants: string[];
-  outputs: string[];
-}
+import type { Job } from './episode-pipeline-jobs.pure';
 
 /** Every job `id` waits for directly: the ones it needs, then the ones it wants. */
 export function waitsFor(id: string, byId: ReadonlyMap<string, Job>): string[] {

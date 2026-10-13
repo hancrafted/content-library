@@ -1,7 +1,7 @@
+import { verifiedProblems } from '@/lib/staging-file.pure';
 import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { verifiedProblems } from '../../.agents/skills/new-episode/scripts/verified.pure';
 
 /*
  * Every `verified` entry in the staging files is a { by, at } mapping (design-ADR 0005), checked on the real
