@@ -1,0 +1,40 @@
+{
+  "title": "Der Plan muss bis Feierabend stehen",
+  "heading": "Sommerfest für 100, fällig um 17:00",
+  "caption": "Du kannst nicht sagen, dass er morgen fertig ist.",
+  "brief": {
+    "task": "Firmenweites Sommerfest für etwa 100 Leute.",
+    "deliverable": "Ein vollständig ausgearbeiteter Plan.",
+    "deadline": "Fällig bis Feierabend, für den CEO."
+  },
+  "day": {
+    "label": "Der Arbeitstag, 09:00 bis 17:00",
+    "start": "09:00",
+    "due": "17:00"
+  },
+  "notes": {
+    "onboarding-as-the-yardstick": {
+      "header": "Onboarding als Maßstab",
+      "description": "Andrej Karpathy beschrieb den echten Fähigkeitstest nicht als das Lösen von Aufgaben auf Doktorandenniveau, sondern als die Frage, ob Du es als Junior-Praktikanten einstellen würdest: „richte dein Slack ein, lies diese Onboarding-Unterlagen, erledige diese Aufgabe, und nächste Woche sprechen wir uns“.[1]",
+      "sources": {
+        "karpathy-post": {
+          "title": "Andrej Karpathy, post on X (14 Dec 2024)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-task": {
+        "title": "Die Aufgabe",
+        "keywords": "Sommerfest, Weihnachtsfeier, hundert Leute, Praktikanten bis Geschäftsführung",
+        "script": "Hier ist die Aufgabe. Die Firma will ein Sommerfest, oder eine Weihnachtsfeier, je nachdem, welche Jahreszeit Dir lieber ist. Etwa hundert Leute. Alle, von den Praktikanten bis zur Geschäftsführung."
+      },
+      "the-clock": {
+        "title": "Die Uhr",
+        "keywords": "erster Tag, dringend, Feierabend, nicht morgen",
+        "script": "Und es ist sein erster Tag, und es ist dringend. Bis Feierabend muss ein vollständig ausgearbeiteter Plan auf dem Tisch liegen. Deine Teamleitung will ihn. Vielleicht will ihn der CEO. Du kannst nicht sagen, dass er morgen fertig ist."
+      }
+    }
+  }
+}

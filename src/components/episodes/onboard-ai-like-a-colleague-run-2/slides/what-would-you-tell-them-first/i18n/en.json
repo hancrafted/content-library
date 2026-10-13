@@ -1,0 +1,81 @@
+{
+  "title": "What would you tell them first",
+  "heading": "Your first day together",
+  "caption": "Just notice what you would do first.",
+  "items": {
+    "a": {
+      "date": "09:00",
+      "title": "Walk them through last year's party",
+      "caption": "What worked, what flopped, what the CEO hated."
+    },
+    "b": {
+      "date": "09:30",
+      "title": "Tell them the budget and the headcount",
+      "caption": "Formal, casual, loud, quiet."
+    },
+    "c": {
+      "date": "10:00",
+      "title": "Hand over the booking login and the caterer's number",
+      "caption": "Access to the shared calendar so they stop proposing dates that clash."
+    },
+    "d": {
+      "date": "10:30",
+      "title": "Say what the plan must look like and who reads it",
+      "caption": "A plan of what shape, for whom, how long."
+    },
+    "e": {
+      "date": "13:00",
+      "title": "Look at the first draft",
+      "caption": "Is this going in the right direction?"
+    },
+    "f": {
+      "date": "16:00",
+      "title": "Check it before it goes up",
+      "caption": "Because it is your name on it too."
+    }
+  },
+  "notes": {
+    "write-for-the-newcomer": {
+      "header": "Write for the newcomer",
+      "description": "Michael Nygard wrote decision records “as if it is a conversation with a future developer”, so a newcomer need not blindly accept or blindly change a decision. Carried from an earlier research file, not re-fetched.[1]",
+      "sources": {
+        "documenting-architecture-decisions": {
+          "title": "Michael Nygard, Documenting Architecture Decisions"
+        }
+      }
+    },
+    "checking-is-part-of-the-frame": {
+      "header": "Checking is part of the frame",
+      "description": "Anthropic’s best-practices page says to “Give Claude a way to verify its work” and “If you can’t verify it, don’t ship it”. Carried from an earlier research file, not re-fetched.[1]",
+      "sources": {
+        "claude-code-best-practices": {
+          "title": "Anthropic, Claude Code best practices"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "take-a-second": {
+        "title": "Take a second",
+        "keywords": "take a second, how would you onboard, notice what you do first",
+        "script": "So take a second. Really. How would you onboard this person? Do not think about the right answer. Just notice what you would do first."
+      },
+      "walk-the-morning": {
+        "title": "Walk the morning",
+        "keywords": "last year's party, the budget, how many people, what our company is like",
+        "script": "I guess you would start with the morning. You would walk them through last year's party. What worked, what flopped, what the CEO hated. You would tell them the budget. You would tell them how many people are coming, and what our company is like. Formal, casual, loud, quiet."
+      },
+      "tools-and-the-ask": {
+        "title": "Tools and the ask",
+        "keywords": "the keys, booking login, caterer, shared calendar, what you expect",
+        "script": "Then you would give them the keys. The login for the booking system. The number of the caterer you trust. Access to the shared calendar so they stop proposing dates that clash. And you would say what you expect. A plan of what shape, for whom, how long."
+      },
+      "look-at-the-draft": {
+        "title": "Look at the draft",
+        "keywords": "not wait until five, first draft over lunch, check once more, your name on it",
+        "script": "And you would not wait until five o'clock. You would look at the first draft over lunch. Is this going in the right direction? Then you would check it once more before it goes upstairs. Because it is your name on it too."
+      }
+    }
+  }
+}

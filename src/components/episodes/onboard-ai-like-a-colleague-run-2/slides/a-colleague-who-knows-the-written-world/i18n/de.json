@@ -1,0 +1,71 @@
+{
+  "title": "Ein Kollege, der die geschriebene Welt kennt",
+  "heading": "Dein neuer Kollege",
+  "caption": "Er weiß nichts über Deine Firma.",
+  "traits": {
+    "written-world": {
+      "title": "Kennt die geschriebene Welt",
+      "caption": "Er hat praktisch alles gelesen, was je aufgeschrieben wurde."
+    },
+    "confident": {
+      "title": "Völlig selbstsicher",
+      "caption": "Er zögert nie."
+    },
+    "eager": {
+      "title": "Will es allen recht machen",
+      "caption": "Er sagt zu allem ja, und er sagt fast nie: Ich weiß es nicht."
+    }
+  },
+  "gap": {
+    "label": "Deine Firma",
+    "rows": {
+      "people": "Deine Leute",
+      "budget": "Dein Budget",
+      "last-year": "letztes Jahr"
+    },
+    "empty": "noch unbekannt"
+  },
+  "notes": {
+    "vendors-brief-it": {
+      "header": "Die Anbieter briefen es wie einen fähigen Neuling",
+      "description": "Anthropics Prompting-Leitfaden rät, sich das Modell als „brillanten, aber neuen Mitarbeiter“ vorzustellen, dem der Kontext zu Euren Normen und Abläufen fehlt, und einen Prompt zu testen, indem man ihn einem Kollegen mit minimalem Kontext zeigt.[1]",
+      "sources": {
+        "be-clear-and-direct": {
+          "title": "Anthropic, Be clear and direct (prompting guidance)"
+        }
+      }
+    },
+    "the-lens-has-a-lineage": {
+      "header": "Die Sichtweise hat eine Geschichte",
+      "description": "Ethan Mollick nannte KI zuerst einen Praktikanten, verwarf „Praktikant“ im November 2024 als zu eng und schlug stattdessen einen „unendlich geduldigen neuen Kollegen“ vor, „der alles vergisst, was Du ihm sagst, mit jedem neuen Gespräch“.[1]",
+      "sources": {
+        "good-enough-prompting": {
+          "title": "Ethan Mollick, Getting started with AI: Good enough prompting, One Useful Thing (24 Nov 2024)"
+        }
+      }
+    },
+    "developers-use-the-same-picture": {
+      "header": "Entwickler nutzen dasselbe Bild",
+      "description": "Matt Pocock beschreibt den Agenten als Kollegen, „der jeden Morgen aufwacht und nicht mehr weiß, wer er ist“, und sagt, die Codebasis müsse für Neueinsteiger optimiert sein, weil ein Agent jede Sitzung von vorn beginnt. Das stützt sich auf die veröffentlichten Notizen zum Podcast, nicht auf die volle Aufnahme.[1]",
+      "sources": {
+        "ai-skills-podcast": {
+          "title": "Gergely Orosz, AI Skills with Matt Pocock, The Pragmatic Engineer (17 Sep 2026; podcast notes quoting Pocock)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "profile": {
+        "title": "Profil",
+        "keywords": "alles gelesen, kenntnisreich, völlig selbstsicher, zögert nie",
+        "script": "Das hier weißt Du über ihn. Er hat praktisch alles gelesen, was je aufgeschrieben wurde. Enorm kenntnisreich, in fast jedem Thema, das Dir einfällt. Und er ist völlig selbstsicher. Er zögert nie."
+      },
+      "eager": {
+        "title": "Bemüht",
+        "keywords": "will es recht machen, zu allem ja, ich weiß es nicht, nichts über Deine Firma",
+        "script": "Er will es Dir außerdem unbedingt recht machen. Er sagt zu allem ja, und er sagt fast nie: Ich weiß es nicht. Und noch etwas. Er weiß nichts über Deine Firma. Nicht über Deine Leute, nicht über Dein Budget, nicht darüber, was Ihr letztes Jahr gemacht habt."
+      }
+    }
+  }
+}
