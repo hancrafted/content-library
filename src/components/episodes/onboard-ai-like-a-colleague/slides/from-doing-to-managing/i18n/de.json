@@ -1,0 +1,13 @@
+{
+  "title": "Vom Erledigen zum Managen",
+  "caption": "Was die Arbeit mit KI von dir verlangt.",
+  "voiceScript": {
+    "segments": {
+      "look-at-what-you-did": {
+        "title": "Schau, was du getan hast",
+        "keywords": "zurückschauen, was du gerade getan hast",
+        "script": "Schau dir jetzt an, was du gerade getan hast."
+      }
+    }
+  }
+}

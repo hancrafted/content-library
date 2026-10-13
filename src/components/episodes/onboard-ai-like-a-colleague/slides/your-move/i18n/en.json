@@ -1,0 +1,13 @@
+{
+  "title": "Your move",
+  "caption": "One small habit, and one twist.",
+  "voiceScript": {
+    "segments": {
+      "habit-and-twist": {
+        "title": "A habit and a twist",
+        "keywords": "one small habit, one twist",
+        "script": "One small habit, and one twist."
+      }
+    }
+  }
+}

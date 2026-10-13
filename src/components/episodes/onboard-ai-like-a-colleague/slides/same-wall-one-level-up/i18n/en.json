@@ -1,0 +1,78 @@
+{
+  "title": "The same wall, one level up",
+  "caption": "Same new colleague, same wall. The value arrives when you reinvest.",
+  "columns": {
+    "you": {
+      "title": "You",
+      "prose": "The day-one note."
+    },
+    "team": {
+      "title": "Your team",
+      "prose": "The shared setup."
+    },
+    "organization": {
+      "title": "Your organization",
+      "prose": "The training and workflow redesign."
+    }
+  },
+  "notes": {
+    "complementary-investment": {
+      "header": "Value needs complementary investment",
+      "description": "General-purpose technologies \"enable and require significant complementary investments\" in processes and human capital, often intangible, so gains show up late.[1]",
+      "sources": {
+        "productivity-j-curve": {
+          "title": "The Productivity J-Curve"
+        }
+      }
+    },
+    "adoption-without-impact": {
+      "header": "Adoption without impact",
+      "description": "In a survey of about 6,000 executives, about 69% of firms use AI while roughly 90% report no effect on productivity or employment over three years.[1]",
+      "sources": {
+        "firm-data-on-ai": {
+          "title": "Firm Data on AI (NBER w34836)"
+        }
+      }
+    },
+    "disputed-headline": {
+      "header": "A disputed headline",
+      "description": "The \"95% of pilots fail\" figure is the MIT NANDA report's own directional, interview-based number, read here from a third-party copy; a Wharton survey of about 800 leaders found nearly three in four see positive ROI, also self-reported. Neither settles the true share, so do not lead with 95%.[1][2]",
+      "sources": {
+        "genai-divide": {
+          "title": "The GenAI Divide: State of AI in Business 2025 (copy of the PDF)"
+        },
+        "accountable-acceleration": {
+          "title": "Accountable Acceleration: Gen AI Fast-Tracks Into the Enterprise"
+        }
+      }
+    },
+    "skills-lag-usage": {
+      "header": "Skills lag usage",
+      "description": "Nearly half of organizations report technical skill gaps while training investment softened.[1]",
+      "sources": {
+        "accountable-acceleration": {
+          "title": "Accountable Acceleration: Gen AI Fast-Tracks Into the Enterprise"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "not-only-you": {
+        "title": "Not only you",
+        "keywords": "teams, companies, same wall",
+        "script": "And it is not only you. A team hits the same wall. So does a whole company. Everyone gets the same new colleague, and nobody hands them a day-one note."
+      },
+      "adopted-not-absorbed": {
+        "title": "Adopted, not absorbed",
+        "keywords": "tools in, workflows unchanged",
+        "script": "One large survey of about six thousand executives found that most firms use AI, yet most see no effect on their output so far. Leaders asked about it themselves sound more upbeat. Nobody knows the true share. The tools came in, and the way of working stayed exactly as it was."
+      },
+      "reinvest": {
+        "title": "Reinvest",
+        "keywords": "new skills, new disciplines, across the organization",
+        "script": "So the value does not arrive by itself. It arrives when you reinvest. The effort AI saves you goes back in, as new skills and new disciplines. For you. For your team. Across the whole organization. AI does not remove the work. It moves it."
+      }
+    }
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "title": "Vier Disziplinen",
+  "caption": "Die Fähigkeit hat inzwischen Namen.",
+  "cells": {
+    "c1": {
+      "title": "Prompt Engineering",
+      "caption": "Die Bitte, als klares Briefing, das niemand missverstehen kann."
+    },
+    "c2": {
+      "title": "Context Engineering",
+      "caption": "Der Hintergrund: Budget, Gästezahl, Kultur, frühere Feste."
+    },
+    "c3": {
+      "title": "Harness Engineering",
+      "caption": "Die Werkzeuge: Buchungssystem, Caterer-Kontakte, Kalender."
+    },
+    "c4": {
+      "title": "Graph Engineering",
+      "caption": "Der Ablauf über mehrere Agenten: Projektmanagement für KI.",
+      "tag": "neu, noch locker definiert"
+    }
+  },
+  "notes": {
+    "prompt-engineering": {
+      "header": "Prompt Engineering",
+      "description": "Unterspezifizierte Prompts verschlechtern sich bei einem Wechsel von Modell oder Prompt etwa doppelt so oft.[1]",
+      "sources": {
+        "what-prompts-dont-say": {
+          "title": "What Prompts Don't Say"
+        }
+      }
+    },
+    "context-engineering": {
+      "header": "Context Engineering",
+      "description": "Anthropic behandelt Kontext als knappe Ressource mit abnehmendem Nutzen und sucht die kleinste Menge an Information, die das erwartete Verhalten vollständig beschreibt. Klein heißt dabei nicht unbedingt kurz. In Studien zu Coding-Agenten halfen Überblicke über das Repository nicht; dass gerade unübliche Besonderheiten helfen, ist plausibel und von einer Quelle berichtet, aber nicht belegt.[1][2]",
+      "sources": {
+        "anthropic-context-engineering": {
+          "title": "Effective context engineering for AI agents"
+        },
+        "evaluating-agents-md": {
+          "title": "Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?"
+        }
+      }
+    },
+    "harness-engineering": {
+      "header": "Harness Engineering",
+      "description": "Anthropics Mittel gegen Agenten, die zwischen zwei Schichten alles vergessen, sind schriftliche Übergaben, die jede neue Sitzung als Erstes liest.[1]",
+      "sources": {
+        "anthropic-long-running-harnesses": {
+          "title": "Effective harnesses for long-running agents"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "four-names": {
+        "title": "Vier Namen",
+        "keywords": "Prompt, Kontext, Harness, Graph",
+        "script": "Diese Fähigkeit hat inzwischen Namen. Vier davon. Prompt Engineering. Context Engineering. Harness Engineering. Graph Engineering."
+      },
+      "prompt-and-context": {
+        "title": "Prompt und Kontext",
+        "keywords": "die Bitte, der Hintergrund",
+        "script": "Prompt Engineering ist, wie du die Bitte formulierst: als klares Briefing, das niemand missverstehen kann. Context Engineering ist der Hintergrund, den du mitgibst: das Budget, die Gästezahl, die Kultur, die Feste der letzten Jahre."
+      },
+      "harness-and-graph": {
+        "title": "Harness und Graph",
+        "keywords": "die Werkzeuge, der Ablauf über mehrere Agenten",
+        "script": "Harness Engineering sind die Werkzeuge und die Umgebung, auf die du Zugriff gibst: das Buchungssystem, die Kontakte zum Caterer, der Kalender. Graph Engineering heißt, den Ablauf über mehrere Agenten hinweg zu steuern. Projektmanagement, für KI."
+      },
+      "newest-term": {
+        "title": "Der jüngste Begriff",
+        "keywords": "Mitte 2026, noch locker definiert",
+        "script": "Graph Engineering ist der jüngste der vier Begriffe. Es gibt ihn erst seit Mitte dieses Jahres, und man streitet noch darüber, was genau er umfasst. Nimm ihn als neu und noch nicht gefestigt."
+      }
+    }
+  }
+}

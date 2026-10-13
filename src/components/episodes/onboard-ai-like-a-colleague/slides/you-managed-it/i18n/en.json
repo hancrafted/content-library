@@ -1,0 +1,56 @@
+{
+  "title": "You did not do the task.",
+  "caption": "You managed it.",
+  "figure": "A pen, an arrow, a clipboard: from doing to managing.",
+  "notes": {
+    "work-moves": {
+      "header": "The work moves, it does not vanish",
+      "description": "METR's developers spent about 9% of their time reviewing and cleaning AI output, and said the AI acted like a new contributor lacking the repository's tacit knowledge. Early-2025 tools and 16 people, so read it as a mechanism.[1]",
+      "sources": {
+        "metr-early-2025-study": {
+          "title": "Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity"
+        }
+      }
+    },
+    "employers-added-oversight": {
+      "header": "Employers added oversight work",
+      "description": "In Danish records, chatbots left earnings and hours nearly unchanged while employers added new tasks in content generation, AI oversight and AI integration.[1]",
+      "sources": {
+        "small-labor-market-effects": {
+          "title": "Large Language Models, Small Labor Market Effects (NBER w33777; now retitled \"Still Waters, Rapid Currents\")"
+        }
+      }
+    },
+    "why-novices-still-gain": {
+      "header": "Why novices still gain",
+      "description": "Studies where AI helps novices most give bounded tasks inside the model's reach. The claim here is that the task demands delegation discipline, which experience only correlates with. This is an inference; no study tests management skill directly.[1][2]",
+      "sources": {
+        "generative-ai-at-work": {
+          "title": "Generative AI at Work"
+        },
+        "jagged-technological-frontier": {
+          "title": "Navigating the Jagged Technological Frontier"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "what-you-did": {
+        "title": "What you actually did",
+        "keywords": "not the plan, the briefing",
+        "script": "Look back at your afternoon. Did you plan the party? No. You never booked a venue. You never called a caterer. You set someone up to do it, and then you read their work."
+      },
+      "doing-to-managing": {
+        "title": "Doing to managing",
+        "keywords": "the shift, a skill of its own",
+        "script": "You did not do the task. You managed it. That shift, from doing to managing, is what working with AI asks of you. It is a skill of its own, and it is not the skill that makes you good at the task itself. And it answers your flat result from the start. You prompted it like a tool, when it needed onboarding like a colleague."
+      },
+      "not-about-rank": {
+        "title": "Not about rank",
+        "keywords": "the task asks, experience helps",
+        "script": "This is not about rank. You do not need a title for it. The task asks for it. Experience tends to help, because older hands have managed before. But the job is waiting for everyone, from the very first prompt."
+      }
+    }
+  }
+}

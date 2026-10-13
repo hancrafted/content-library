@@ -1,0 +1,66 @@
+{
+  "title": "Tag eins, bevor du tippst",
+  "caption": "Vier kurze Zeilen. Zwei Minuten. Dann tippen.",
+  "note": {
+    "label": "Eine leere Notiz für Tag eins",
+    "lines": {
+      "context": "Der Kontext",
+      "tools": "Die Werkzeuge, die sie brauchen",
+      "brief": "Das Briefing",
+      "check": "Wie du ihre Arbeit prüfst"
+    }
+  },
+  "notes": {
+    "why-check-is-on-the-list": {
+      "header": "Warum die Prüfung auf der Liste steht",
+      "description": "Anthropic rät für seinen Coding-Agenten: Gib ihm eine Möglichkeit, seine Arbeit zu überprüfen, und was du nicht überprüfen kannst, liefere nicht aus. Die Seite wurde aus einem früheren Abruf zitiert und nicht erneut abgerufen.[1]",
+      "sources": {
+        "claude-code-best-practices": {
+          "title": "Best practices for Claude Code"
+        }
+      }
+    },
+    "a-short-checklist-can-cut-errors": {
+      "header": "Eine kurze Checkliste kann Fehler bei Fachleuten senken",
+      "description": "Mit einer chirurgischen Checkliste aus 19 Punkten ging die Sterblichkeit im Krankenhaus von 1,5 % auf 0,8 % zurück; gemessen wurde ein Zusammenhang. Das ist Chirurgie, nicht KI, und zeigt nur, dass ein einfacher Schritt auch Expertinnen und Experten hilft.[1]",
+      "sources": {
+        "surgical-safety-checklist": {
+          "title": "A Surgical Safety Checklist to Reduce Morbidity and Mortality in a Global Population"
+        }
+      }
+    },
+    "keep-the-note-short": {
+      "header": "Halte die Notiz kurz",
+      "description": "Eine Zeile bleibt nur, wenn ihr Fehlen zu Fehlern führen würde. Aufgeblähte Anweisungsdateien führen dazu, dass das Modell die eigentlichen Anweisungen übergeht.[1]",
+      "sources": {
+        "claude-code-best-practices": {
+          "title": "Best practices for Claude Code"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "next-time": {
+        "title": "Beim nächsten Mal",
+        "keywords": "etwas Echtes, vor dem ersten Wort",
+        "script": "Das ist also dein Zug. Wenn du das nächste Mal für etwas Echtes zur KI greifst: halt an. Bevor du auch nur ein Wort tippst."
+      },
+      "jot-it-down": {
+        "title": "Schreib es auf",
+        "keywords": "Tag eins, eine neue Kollegin",
+        "script": "Nimm ein Blatt Papier oder eine leere Notiz. Und schreib auf, was du einer ganz neuen Kollegin an ihrem ersten Tag sagen würdest."
+      },
+      "four-lines": {
+        "title": "Vier Zeilen",
+        "keywords": "Kontext, Werkzeuge, Briefing, Prüfung",
+        "script": "Vier kurze Zeilen. Der Kontext. Die Werkzeuge, die sie braucht. Das Briefing. Und wie du ihre Arbeit prüfst."
+      },
+      "two-minutes": {
+        "title": "Zwei Minuten",
+        "keywords": "klein, dann tippen",
+        "script": "Das dauert zwei Minuten. Halte es klein. Erst dann, und wirklich erst dann, tippst du."
+      }
+    }
+  }
+}
