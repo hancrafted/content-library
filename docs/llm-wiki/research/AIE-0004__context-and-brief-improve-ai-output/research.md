@@ -2,7 +2,9 @@
 type: research
 description: 'Relevant, specific context and a fully specified brief measurably lift LLM output, but padding, noise and boilerplate overviews do not help and can hurt.'
 question: 'Why does richer context and a clearer brief measurably improve AI output?'
-researched_on: 2026-10-13T00:00:00Z
+generated:
+  by: claude-code/opus-5.5
+  at: 2026-10-13T00:00:00Z
 stale_after: 2027-04-13T00:00:00Z
 ---
 

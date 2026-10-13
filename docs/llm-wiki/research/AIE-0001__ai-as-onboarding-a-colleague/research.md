@@ -2,7 +2,9 @@
 type: research
 description: 'Vendors and practitioners call AI a new colleague because it has broad ability but no knowledge of your work, so you must supply context, a brief and checks.'
 question: 'Why do others frame working with AI as onboarding a colleague?'
-researched_on: 2026-10-13T00:00:00Z
+generated:
+  by: claude-code/opus-5.5
+  at: 2026-10-13T00:00:00Z
 stale_after: 2027-04-13T00:00:00Z
 ---
 

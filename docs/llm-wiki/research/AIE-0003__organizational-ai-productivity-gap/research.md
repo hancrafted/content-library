@@ -2,7 +2,9 @@
 type: research
 description: 'AI value needs complementary investment in workflows and skills that adoption alone skips, so measured firm gains are small; the "95% of pilots fail" figure is disputed, but the gap is real.'
 question: 'Why do organizations fail to reach the promised AI productivity boost?'
-researched_on: 2026-10-13T00:00:00Z
+generated:
+  by: claude-code/opus-5.5
+  at: 2026-10-13T00:00:00Z
 stale_after: 2027-04-13T00:00:00Z
 ---
 

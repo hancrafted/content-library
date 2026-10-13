@@ -2,7 +2,9 @@
 type: research
 description: 'Delegating real work to AI takes management disciplines (briefing, context, verification) that experience merely correlates with, and novice-boost studies measure bounded tasks, not that discipline.'
 question: 'Why is effective AI delegation a staff-level management discipline, and how does that reconcile with findings that AI boosts novices more on simple tasks?'
-researched_on: 2026-10-13T00:00:00Z
+generated:
+  by: claude-code/opus-5.5
+  at: 2026-10-13T00:00:00Z
 stale_after: 2027-04-13T00:00:00Z
 ---
 

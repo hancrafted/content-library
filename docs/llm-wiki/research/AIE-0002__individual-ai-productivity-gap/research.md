@@ -2,7 +2,9 @@
 type: research
 description: 'Individuals miss the promised AI boost because gains depend on task fit, context and checking: measured effects are mixed and smaller than the hype, and self-reports overstate them.'
 question: 'Why do individuals fail to reach the promised AI productivity boost?'
-researched_on: 2026-10-13T00:00:00Z
+generated:
+  by: claude-code/opus-5.5
+  at: 2026-10-13T00:00:00Z
 stale_after: 2027-04-13T00:00:00Z
 ---
 
