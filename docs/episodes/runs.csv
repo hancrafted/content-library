@@ -54,3 +54,5 @@ run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at
 2026-10-13T22:43:23Z,never-too-early-sales,brief-grill,reviewer,2,fail,"The text under every heading is Han's wording: `.scratch/<slug>/handoff.md` when it exists, his answers in this session, or a shape-only fix the run-log entry names.",73,59528,2026-10-13T22:55:45Z
 2026-10-13T22:43:23Z,never-too-early-sales,brief-grill,implementor,3,pass,,170,,2026-10-13T22:58:45Z
 2026-10-13T22:43:23Z,never-too-early-sales,brief-grill,reviewer,3,pass,,35,46963,2026-10-13T22:59:25Z
+2026-10-13T22:43:23Z,never-too-early-sales,categorize-research,implementor,1,pass,,52,47332,2026-10-13T23:05:50Z
+2026-10-13T22:43:23Z,never-too-early-sales,customize-pipeline,implementor,1,pass,,90,,2026-10-13T23:07:30Z
