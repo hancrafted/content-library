@@ -1,0 +1,108 @@
+// `npm run episode:log -- <slug> '<event json>'` (or the JSON on stdin): validates one event, stamps it (clock,
+// sequence, ids, and for start-run the template sha, branch and run id) and appends one line to the Episode's
+// events.jsonl under a lock, so concurrent writers never interleave. Prints the written line; a start's
+// `span_id` in it is what the caller passes as `parent_span_id` or `span_id` later. The shape lives in
+// run-log.pure.ts; this file only reads the clock, git and the disk.
+import { execFileSync } from 'node:child_process';
+import { randomBytes } from 'node:crypto';
+import { appendFileSync, closeSync, existsSync, openSync, readFileSync, statSync, unlinkSync } from 'node:fs';
+import path from 'node:path';
+import { parseLog, record, type RunLogLine, type Stamp } from './run-log.pure.ts';
+
+const STALE_LOCK_MS = 10_000;
+const LOCK_WAIT_MS = 15_000;
+
+const git = (...args: string[]): string => execFileSync('git', args, { encoding: 'utf8' }).trim();
+const sleep = (ms: number): unknown => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
+
+/** Creates the lock file exclusively; false when another writer holds it. */
+function tryLock(lockFile: string): boolean {
+  try {
+    closeSync(openSync(lockFile, 'wx'));
+    return true;
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === 'EEXIST') return false;
+    throw error;
+  }
+}
+
+/** Removes a lock its holder never released, such as one left by a crashed writer. */
+function breakStaleLock(lockFile: string): void {
+  try {
+    if (Date.now() - statSync(lockFile).mtimeMs > STALE_LOCK_MS) unlinkSync(lockFile);
+  } catch {
+    // the holder released it between our checks
+  }
+}
+
+function lock(lockFile: string): void {
+  const deadline = Date.now() + LOCK_WAIT_MS;
+  while (!tryLock(lockFile)) {
+    if (Date.now() > deadline) throw new Error(`could not take ${lockFile}`);
+    breakStaleLock(lockFile);
+    sleep(20);
+  }
+}
+
+/** The event with what only git and the clock know filled in for a start-run. */
+function withRunFacts(fields: Record<string, unknown>, now: string): Record<string, unknown> {
+  return {
+    ...fields,
+    run_id: fields.run_id ?? now.replace(/:/g, '-'),
+    branch: fields.branch ?? git('rev-parse', '--abbrev-ref', 'HEAD'),
+    template_sha: fields.template_sha ?? git('merge-base', 'HEAD', 'main'),
+  };
+}
+
+/** The trace id of the newest Run in the log, which every later line of that Run carries. */
+function currentTrace(lines: readonly RunLogLine[], file: string): string {
+  const run = [...lines].reverse().find((l) => l.kind === 'start-run');
+  if (run === undefined) throw new Error(`${file} has no start-run line; log kind "start-run" first`);
+  return run.trace_id;
+}
+
+/** The clock, the next sequence number and a fresh span id for the line about to be written. */
+function stampFor(lines: readonly RunLogLine[], traceId: string, now: string): Stamp {
+  return { t: now, seq: lines.reduce((max, l) => Math.max(max, l.seq), 0) + 1, traceId, spanId: randomBytes(8).toString('hex') };
+}
+
+function readLines(file: string): RunLogLine[] {
+  const { lines, errors } = parseLog(existsSync(file) ? readFileSync(file, 'utf8') : '');
+  if (errors.length > 0) throw new Error(`${file}: ${errors.join('; ')}`);
+  return lines;
+}
+
+function append(file: string, event: unknown): string {
+  const lines = readLines(file);
+  const now = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
+  const starting = (event as { kind?: unknown } | null)?.kind === 'start-run';
+  const traceId = starting ? randomBytes(16).toString('hex') : currentTrace(lines, file);
+  const result = record(starting ? withRunFacts(event as Record<string, unknown>, now) : event, stampFor(lines, traceId, now));
+  if (!result.ok) throw new Error(result.errors.map((e) => `  ${e}`).join('\n'));
+  const text = JSON.stringify(result.line);
+  appendFileSync(file, `${text}\n`);
+  return text;
+}
+
+function main(): void {
+  const slug = process.argv[2];
+  if (!slug) throw new Error("usage: npm run episode:log -- <slug> '<event json>'   (or the JSON on stdin)");
+  const folder = path.join('docs/episodes', slug);
+  if (!existsSync(folder)) throw new Error(`${folder} does not exist; run this from the Episode's worktree root.`);
+  const event: unknown = JSON.parse(process.argv[3] ?? readFileSync(0, 'utf8'));
+  const file = path.join(folder, 'events.jsonl');
+  const lockFile = `${file}.lock`;
+  lock(lockFile);
+  try {
+    console.log(append(file, event));
+  } finally {
+    if (existsSync(lockFile)) unlinkSync(lockFile);
+  }
+}
+
+try {
+  main();
+} catch (error) {
+  console.error(`✖ ${error instanceof SyntaxError ? 'the event is not valid JSON' : (error as Error).message}`);
+  process.exitCode = 1;
+}

@@ -106,6 +106,24 @@ _Avoid_: Drafts, workspace
 **Promotion**: the step that moves a final Episode's text out of Staging and into its code folder, one text file per Slide, after which Staging is deleted.
 _Avoid_: Publish, migration, release
 
+**Run**: one execution of an Episode's per-run pipeline, from its start to the moment it is finished or abandoned. An Episode can have many Runs, each one comparable with the others.
+_Avoid_: Session, execution, pipeline run
+
+**Job**: one step of the per-run pipeline, such as writing the Dossier, which a Run does once or repeats until it passes.
+_Avoid_: Task, stage, step
+
+**Attempt**: one try at a Job, numbered from 1. A retry is a new Attempt that names the Attempt it retries.
+_Avoid_: Retry, iteration, round
+
+**Gate**: the point where a Run waits for Han's decision on a Job's output, from the moment the output is ready until he decides.
+_Avoid_: Approval step, checkpoint, review stop
+
+**Span**: a stretch of a Run with a start and an end, a status, and a parent: the Run itself, a Job, an Attempt, an agent working inside an Attempt, or a Gate. Spans nest, so a Run reads back as a tree.
+_Avoid_: Step, event, trace
+
+**Score**: one verdict on a Span, from a named judge: a reviewer's rubric result, a check's result, or Han's decision at a Gate. A re-judgement is a new Score; the earlier one stays.
+_Avoid_: Grade, rating, result
+
 ## Research categories
 
 A research folder is named `<category>-<####>__<question-slug>`: the category below, a number counted per category across the repo, and the question's subject in 20-40 characters of kebab case. In the llm-wiki it sits in its category's folder, `docs/llm-wiki/research/<category>/`. The `categorize-research` job of `/new-episode` picks the category, or adds a new one here.
