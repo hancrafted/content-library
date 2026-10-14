@@ -27,3 +27,6 @@ docs/profile/han/
 
 # Claude Desktop upload folder, rebuilt by the claude-project-context skill.
 docs/claude-project-context/
+
+# inspect-page: the cached chrome-headless-shell, its endpoint and profile.
+.cache/

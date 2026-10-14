@@ -18,7 +18,7 @@ This project is a localized Next.js application which serves to visualize theory
 
 ## Testing
 
-- Visual checks: `npm run shot` (the `visual-check` skill) prints DOM numbers; prefer them, and read at most one image per iteration.
+- Visual checks: `npm run inspect-page` (the `visual-check` skill) prints DOM numbers; prefer them, and read at most one image per iteration.
 - Chrome tools: load with `ToolSearch` `select:mcp__claude-in-chrome__…`; regex tool search cannot see them. `list_connected_browsers` returning `[]` means the extension is signed out: ask the user to re-auth. Several browsers and none selected: ask, then `select_browser`. Still blocked: `visual-check`.
 - Browser checks of GSAP motion (the landing hero): a background or occluded tab never fires `requestAnimationFrame`, so the animation stays paused and any window resize finishes it by design. Bring the tab to the front before judging motion; DOM counts (`[data-task-paper]` opacity, `[data-completed-papers]`, `[data-overflow-papers]`) verify the mechanics without it.
 

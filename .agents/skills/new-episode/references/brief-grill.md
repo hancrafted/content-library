@@ -34,3 +34,5 @@ Then append the run-log entry (creating `run-log.md` with its `# Run log` h1 if 
 ## Rubric
 
 1. The text under every heading is Han's wording: `.scratch/<slug>/handoff.md` when it exists, his answers in this session, or a shape-only fix the run-log entry names.
+2. No two sections of the Brief contradict each other, and no section contradicts itself.
+3. Every sentence is one a downstream job acts on: a sentence that changes no job's output is noise.

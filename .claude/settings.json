@@ -11,6 +11,20 @@
           }
         ]
       }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PROJECT_DIR}/.agents/skills/new-episode/scripts/remind.ts\" 2>/dev/null"
+          }
+        ]
+      }
     ]
+  },
+  "env": {
+    "CLAUDE_CODE_AUTO_COMPACT_WINDOW": "400000"
   }
 }

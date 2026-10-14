@@ -1,7 +1,7 @@
 /*
  * A research folder's name is its lasting ID, `<category>-<####>__<question-slug>`:
- * it moves unchanged from a staging folder to `docs/llm-wiki/research/` at
- * Promotion, and a person reads the subject from it. The categories are the
+ * it moves unchanged from a staging folder to `docs/llm-wiki/research/<category>/`
+ * at Promotion, and a person reads the subject from it. The categories are the
  * IDs GLOSSARY.md lists under `## Research categories`; the number counts per
  * category across the repo.
  */
@@ -9,6 +9,7 @@
 import type { Finding } from './finding.pure';
 
 const CATEGORIES_HEADING = '## Research categories';
+const LLM_WIKI_RESEARCH = 'docs/llm-wiki/research/';
 const NAME = /^([A-Z]+)-(\d{4})__([a-z0-9]+(?:-[a-z0-9]+)*)$/;
 const SLUG_LENGTH = { min: 20, max: 40 };
 const FORMAT = `<category>-<####>__<question-slug, ${SLUG_LENGTH.min}-${SLUG_LENGTH.max} chars kebab-case>`;
@@ -37,11 +38,19 @@ function categoryOf(folder: string): string | null {
   return slug.length >= SLUG_LENGTH.min && slug.length <= SLUG_LENGTH.max ? match[1] : null;
 }
 
-/** One folder's name against the format and the known categories. */
+/** An llm-wiki folder sits in the folder of its category: `docs/llm-wiki/research/<category>/<ID>__<slug>`. */
+function checkPlace(folder: string, category: string): Finding[] {
+  if (!folder.startsWith(LLM_WIKI_RESEARCH)) return [];
+  const home = `${LLM_WIKI_RESEARCH}${category}/`;
+  const inHome = folder.startsWith(home) && !folder.slice(home.length).includes('/');
+  return inHome ? [] : [finding(folder, `${folder} sits outside its category folder: move it to ${home}.`)];
+}
+
+/** One folder's name against the format and the known categories, and an llm-wiki folder's place. */
 function checkName(folder: string, categories: readonly string[]): Finding[] {
   const category = categoryOf(folder);
   if (category === null) return [finding(folder, `${folder} is no research folder name: ${FORMAT}.`)];
-  if (categories.includes(category)) return [];
+  if (categories.includes(category)) return checkPlace(folder, category);
   return [
     finding(
       folder,

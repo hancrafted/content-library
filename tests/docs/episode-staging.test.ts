@@ -35,10 +35,7 @@ const TEMPLATE = path.join(ROOT, SKILL_FOLDER, 'assets/pipeline.yml');
  * are missing; a per-run pipeline never does. Delete an entry when its file
  * lands: a test fails until you do.
  */
-const PENDING = [
-  'docs/llm-wiki/index.md',
-  ...['storytelling', 'tone', 'mental-model'].map((guide) => `docs/profile/han/${guide}-guide.md`),
-];
+const PENDING = [...['storytelling', 'tone', 'mental-model'].map((guide) => `docs/profile/han/${guide}-guide.md`)];
 
 /** Every file under `folder`, keyed by its path relative to it with `/` separators. */
 function readFolder(folder: string): Record<string, string> {
@@ -100,17 +97,19 @@ function llmWikiResearch(): Record<string, string> {
 
 /**
  * Every research folder in the repo, as a repo path: those on disk in each
- * staging folder and in the llm-wiki, and those a per-run pipeline will write.
+ * staging folder and in each llm-wiki category folder, and those a per-run
+ * pipeline will write.
  */
 function researchFolders(): string[] {
-  const research = [...Object.values(stagingFolders()), LLM_WIKI].map((folder) => path.join(folder, 'research'));
-  const onDisk = research
-    .filter((folder) => existsSync(folder))
-    .flatMap((folder) =>
-      readdirSync(folder, { withFileTypes: true })
-        .filter((entry) => entry.isDirectory())
-        .map(({ name }) => path.relative(ROOT, path.join(folder, name))),
-    );
+  const subfolders = (folder: string): string[] =>
+    existsSync(folder)
+      ? readdirSync(folder, { withFileTypes: true })
+          .filter((entry) => entry.isDirectory())
+          .map(({ name }) => path.join(folder, name))
+      : [];
+  const staging = Object.values(stagingFolders()).flatMap((folder) => subfolders(path.join(folder, 'research')));
+  const llmWiki = subfolders(path.join(LLM_WIKI, 'research')).flatMap(subfolders);
+  const onDisk = [...staging, ...llmWiki].map((folder) => path.relative(ROOT, folder));
   const planned = Object.values(perRunPipelines())
     .flatMap((yaml) => (parse(yaml) as { jobs: { outputs?: string[] }[] }).jobs)
     .flatMap(({ outputs }) => outputs ?? [])
@@ -147,9 +146,15 @@ function pipelineContext(pending: readonly string[], staging: string): PipelineC
     .filter((entry) => entry.isDirectory())
     .map(({ name }) => name);
   const exists = (file: string): boolean => existsSync(path.join(ROOT, file));
+  const disabled = skills.filter((name) =>
+    /^disable-model-invocation:\s*true\s*$/m.test(
+      readFileSync(path.join(SKILLS, name, 'SKILL.md'), 'utf8').split(/^---$/m)[1] ?? '',
+    ),
+  );
   return {
     skillFolder: SKILL_FOLDER,
     skills,
+    disabled,
     exists,
     staging,
     perRun: staging !== TEMPLATE_STAGING,
@@ -355,8 +360,8 @@ describe('failure cases', () => {
   it('checks the template against the real skills, so a misspelled skill fails', () => {
     // ARRANGE
     const yaml = readFileSync(TEMPLATE, 'utf8').replace(
-      'skills: [to-spec, to-tickets]',
-      'skills: [to-spec, to-ticket]',
+      'skills: [to-spec, to-tickets, writing-for-agents]',
+      'skills: [to-spec, to-ticket, writing-for-agents]',
     );
     const expected = ['Job "write-spec", agent 1 names the skill "to-ticket", which does not exist.'];
     // ACT

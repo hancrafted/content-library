@@ -4,7 +4,7 @@
  * read them live in episode-pipeline.pure.ts.
  */
 
-import { field, isString, isStringList, optional, requiredWhen, type Field } from './mapping-fields.pure';
+import { field, isMapping, isString, isStringList, optional, requiredWhen, type Field } from './mapping-fields.pure';
 
 const AGENT_TYPES = ['implementor', 'reviewer'];
 /** The models an agent may run on; `inherit` runs it on the orchestrator's model. */
@@ -13,14 +13,12 @@ const MODELS: readonly string[] = ['opus', 'sonnet', 'haiku', 'inherit'];
 const SESSIONS: readonly string[] = ['subagent', 'orchestrator'];
 /** Skills that spawn subagents themselves; a subagent cannot spawn one, so only the orchestrator runs them. */
 export const SPAWNING_SKILLS = ['implement-spec', 'code-review'];
-/** Plugin skills an agent may name; they live in `~/.claude`, so the check cannot find them on disk. */
-export const PLUGIN_SKILLS: readonly string[] = ['ui-ux-pro-max:slides'];
 /** What a job's `before` may run ahead of its implementor. */
 const BEFORE_STEPS: readonly string[] = ['mh-query'];
 /** Where a job's agents work: `worktree` gives the job its own worktree, merged back on a pass. */
 const ISOLATIONS: readonly string[] = ['worktree'];
 /** The done-checks a job may name, cheapest first. */
-export const CHECKS = ['mh', 'vitest', 'verify', 'build', 'test:build', 'visual-check'];
+export const CHECKS = ['mh', 'vitest', 'sources', 'impeccable', 'verify', 'build', 'test:build', 'visual-check'];
 /** Path prefixes that resolve inside the new-episode skill's folder rather than the repo root. */
 export const SKILL_PREFIXES = ['references/', 'assets/'];
 
@@ -74,7 +72,14 @@ export function agentFields(reviewer: boolean): Field[] {
     field('references', isStringList, LIST),
     requiredWhen(reviewer, field('rubric', isString, 'it must be a path')),
     optional(field('agent', isString, 'it must be a Claude Code agent type')),
+    optional(field('ticket', isMapping, 'it must be a mapping of agent and skills')),
     field('model', (value) => MODELS.includes(value as string), `it must be ${oneOf(MODELS)}`),
     optional(field('session', (value) => SESSIONS.includes(value as string), `it must be ${oneOf(SESSIONS)}`)),
   ];
 }
+
+/** The ticket subagents an implementor's skill spawns: their agent type and skills. */
+export const TICKET_FIELDS = [
+  field('agent', isString, 'it must be a Claude Code agent type'),
+  field('skills', isStringList, LIST),
+];
