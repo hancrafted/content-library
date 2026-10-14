@@ -4,6 +4,16 @@
  * column. Once, when the Slide becomes active (FE-009 §6.2); at rest and under reduced motion the board is finished.
  */
 
+/*
+ * The stamp lands from 1.6 times its size, wider than a phone-width board: the Scene clips its own box on the x axis
+ * (FE-009 §3 keeps the Slide wrapper unclipped), with a bleed wide enough for the primary rings at the board's edge.
+ */
+.bounds {
+  overflow-x: clip;
+  margin-inline: -0.5rem;
+  padding-inline: 0.5rem;
+}
+
 .note {
   composes: stickOn from '../../../../slide-shared/motions/stick-on.module.css';
 }

@@ -1,6 +1,7 @@
 import { slide } from '@/components/slide-master/slide';
 import { SlideCaption, SlideFrame } from '@/components/slide-master/slide-master';
 import { Board, type BoardColumnProps } from '@/components/slide-shared/board/board';
+import { GhostNote } from '@/components/slide-shared/board/ghost-note';
 import { StickyNote } from '@/components/slide-shared/board/sticky-note';
 import { cn } from '@/lib/utils';
 import type { CSSProperties } from 'react';
@@ -50,15 +51,7 @@ export const pipelineToolsInPractice = slide({
             {t('total', { amount: view.totalText, count: view.count })}
           </p>
           {view.column === 'needs-defined' && (
-            <div
-              role="img"
-              aria-label={t('ghost')}
-              style={step(GHOST_STEP)}
-              className={cn(
-                styles.ghost,
-                'min-h-14 w-[min(100%-0.5rem,8rem)] self-center justify-self-center rounded-sm border-2 border-dashed border-border sm:aspect-square',
-              )}
-            />
+            <GhostNote label={t('ghost')} style={step(GHOST_STEP)} className={styles.ghost} />
           )}
           {view.deals.map((deal) => {
             const i = next++;
@@ -90,7 +83,7 @@ export const pipelineToolsInPractice = slide({
     return (
       <SlideFrame>
         <Title>{t('title')}</Title>
-        <SlideCaption data-target="caption">{t('caption')}</SlideCaption>
+        <SlideCaption>{t('caption')}</SlideCaption>
         <div className={cn('mt-10', styles.board)}>
           <Board columns={columns} aria-label={t('figure')} className={REFLOW} />
         </div>

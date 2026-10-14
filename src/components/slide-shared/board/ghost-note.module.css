@@ -1,0 +1,7 @@
+/* The empty place a note left: a sticky note's footprint, dashed and unfilled. Colours are global tokens (FE-011 §2). */
+
+.ghost {
+  composes: footprint from './sticky-note.module.css';
+
+  border: 2px dashed var(--border);
+}

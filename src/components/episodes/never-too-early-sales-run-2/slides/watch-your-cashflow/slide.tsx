@@ -1,6 +1,7 @@
 import { slide } from '@/components/slide-master/slide';
 import { SlideFrame } from '@/components/slide-master/slide-master';
 import { CashflowBoard, type CashColumn } from '@/components/slide-shared/board/cashflow-board';
+import { cn } from '@/lib/utils';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import styles from './watch-your-cashflow.module.css';
@@ -94,7 +95,7 @@ export const watchYourCashflow = slide({
     return (
       <SlideFrame>
         <Title>{t('title')}</Title>
-        <div className="mt-10">
+        <div className={cn('mt-10', styles.bounds)}>
           <CashflowBoard
             columns={columns}
             locale={locale}

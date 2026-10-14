@@ -3,26 +3,34 @@
  * tokens, so it follows the theme with no dark value of its own (FE-011 §2).
  */
 
+/*
+ * A note's footprint, which a ghost note composes too: centred in a grid cell and, through align-self, in a board
+ * column without rows, which is a flex stack; square from `sm`.
+ */
+.footprint {
+  justify-self: center;
+  align-self: center;
+  width: min(100% - 0.5rem, 8rem);
+  min-height: 3.5rem;
+}
+
+@media (width >= 40rem) {
+  .footprint {
+    aspect-ratio: 1;
+  }
+}
+
 .note {
+  composes: footprint;
+
   --note-neutral: var(--card);
   --note-cost: color-mix(in oklab, var(--destructive) 22%, var(--card));
   --note-revenue: color-mix(in oklab, var(--success) 24%, var(--card));
   --note-warning: color-mix(in oklab, var(--warning) 30%, var(--card));
 
-  /* Centred in a grid cell and, through align-self, in a board column without rows, which is a flex stack. */
-  justify-self: center;
-  align-self: center;
-  width: min(100% - 0.5rem, 8rem);
-  min-height: 3.5rem;
   background: var(--note-neutral);
   border: 1px solid var(--border);
   box-shadow: 0 1px 3px color-mix(in oklab, var(--foreground) 18%, transparent);
-}
-
-@media (width >= 40rem) {
-  .note {
-    aspect-ratio: 1;
-  }
 }
 
 .note[data-tone='cost'] {
@@ -42,9 +50,10 @@
   outline-offset: 3px;
 }
 
+/* A fill note takes its parent's alignment, such as a row's `items-start`, and its cell's full width. */
 .note[data-fill] {
   justify-self: stretch;
-  align-self: stretch;
+  align-self: auto;
   width: 100%;
   aspect-ratio: auto;
 }

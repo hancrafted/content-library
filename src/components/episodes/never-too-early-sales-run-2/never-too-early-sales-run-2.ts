@@ -23,8 +23,7 @@ import { whyWatchingCashflowIsMissionCritical } from './slides/why-watching-cash
  * docs/episodes/never-too-early-sales-run-2/; each Slide is one folder under `slides/`, named after its Dossier
  * heading id. Upcoming until its video is live.
  *
- * Five Sections, one per Dossier h2. Each later ticket replaces its Section's comment with that Section's list,
- * `[sectionSlide, ...pageSlides]`, and adds one import per Slide.
+ * Five Sections, one per Dossier h2, each `[sectionSlide, ...pageSlides]`.
  */
 export const neverTooEarlySalesRun2 = episode({
   slug: 'never-too-early-sales-run-2',

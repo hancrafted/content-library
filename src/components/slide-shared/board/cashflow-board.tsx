@@ -2,7 +2,7 @@ import type { TargetProps } from '@/lib/context-link.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { cn } from '@/lib/utils';
 import type { CSSProperties, ReactNode } from 'react';
-import { formatAmount } from './amount.pure';
+import { Amount } from './amount';
 import { Board, type BoardColumnProps } from './board';
 import { BoardArrow } from './board-arrow';
 import styles from './cashflow-board.module.css';
@@ -65,24 +65,10 @@ export interface CashflowBoardProps {
 
 const bySlot = (a: CashNote, b: CashNote) => SLOTS.indexOf(a.slot) - SLOTS.indexOf(b.slot);
 
-/** How a note writes its amount: below `sm` compact, so four columns fit a phone; from `sm` in full; revenue signed. */
+/** How the board writes every amount: in the page's locale and the board's currency. */
 interface AmountFormat {
   readonly locale: Locale;
   readonly currency: string;
-}
-
-function Amount({ value, format, signed }: { value: number; format: AmountFormat; signed: boolean }) {
-  const { full, compact } = formatAmount(value, { ...format, signed });
-  return (
-    <>
-      <span data-amount="compact" className="sm:hidden">
-        {compact}
-      </span>
-      <span data-amount="full" className="hidden sm:inline">
-        {full}
-      </span>
-    </>
-  );
 }
 
 function Note({
@@ -101,7 +87,7 @@ function Note({
       tone={note.zeroCash ? 'warning' : TONE[note.slot]}
       primary={note.zeroCash || note.primary}
       label={note.label}
-      value={<Amount value={note.amount} format={format} signed={note.slot === 'revenue'} />}
+      value={<Amount value={note.amount} {...format} signed={note.slot === 'revenue'} />}
       target={note.target}
       dataSlot={note.slug}
       style={{ '--i': index, gridRow: ROW[note.slot] } as CSSProperties}

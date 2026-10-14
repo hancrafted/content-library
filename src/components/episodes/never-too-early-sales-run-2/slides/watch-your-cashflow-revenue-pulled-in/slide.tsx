@@ -1,9 +1,9 @@
 import { slide } from '@/components/slide-master/slide';
 import { SlideCaption, SlideFrame } from '@/components/slide-master/slide-master';
-import { formatAmount } from '@/components/slide-shared/board/amount.pure';
+import { Amount } from '@/components/slide-shared/board/amount';
 import { CashflowBoard, type CashColumn } from '@/components/slide-shared/board/cashflow-board';
+import { GhostNote } from '@/components/slide-shared/board/ghost-note';
 import { StickyNote } from '@/components/slide-shared/board/sticky-note';
-import type { Locale } from '@/lib/locale.pure';
 import { cn } from '@/lib/utils';
 import type { CSSProperties } from 'react';
 import de from './i18n/de.json';
@@ -17,22 +17,6 @@ const MOVE_STEP = 8;
 const ZERO_STEP = 9;
 
 const step = (i: number) => ({ '--i': i }) as CSSProperties;
-
-/** An overlay note's amount written as the board writes its own: compact below `sm`, in full from `sm`, revenue signed. */
-function Amount({ value, locale, signed = false }: { value: number; locale: Locale; signed?: boolean }) {
-  const { full, compact } = formatAmount(value, { currency: CURRENCY, locale, signed });
-  return (
-    <>
-      <span className="sm:hidden">{compact}</span>
-      <span className="hidden sm:inline">{full}</span>
-    </>
-  );
-}
-
-/** Sized like a note, dashed: where April's revenue was before it moved. */
-const GHOST =
-  'col-start-4 row-start-4 flex min-h-14 w-[min(100%-0.5rem,8rem)] items-center justify-center justify-self-center ' +
-  'rounded-sm border-2 border-dashed border-border p-1.5 text-center sm:aspect-square';
 
 /*
  * The hook's board returns: the same January to March, but April's million is pulled back two months into
@@ -85,23 +69,31 @@ export const watchYourCashflowRevenuePulledIn = slide({
           tone="revenue"
           primary
           label={t('board.kinds.revenue')}
-          value={<Amount value={1_000_000} locale={locale} signed />}
+          value={<Amount value={1_000_000} locale={locale} currency={CURRENCY} signed />}
           target={target('revenue')}
           style={step(MOVE_STEP)}
           className={cn('col-start-2 row-start-4', styles.moved)}
         />
-        <div role="img" aria-label={t('ghost')} style={step(MOVE_STEP)} className={cn(GHOST, styles.ghost)}>
-          <span className="text-caption text-muted-foreground">{t('ghost')}</span>
-        </div>
+        <GhostNote
+          label={t('ghost')}
+          showLabel
+          style={step(MOVE_STEP)}
+          className={cn('col-start-4 row-start-4', styles.ghost)}
+        />
         <div aria-hidden="true" style={step(ZERO_STEP)} className={cn('col-start-2 row-start-5 grid', styles.zero)}>
-          <StickyNote tone="warning" primary label={cash} value={<Amount value={0} locale={locale} />} />
+          <StickyNote
+            tone="warning"
+            primary
+            label={cash}
+            value={<Amount value={0} locale={locale} currency={CURRENCY} />}
+          />
         </div>
       </>
     );
     return (
       <SlideFrame>
         <Title>{t('title')}</Title>
-        <SlideCaption data-target="caption">{t('caption')}</SlideCaption>
+        <SlideCaption>{t('caption')}</SlideCaption>
         <div className={cn('mt-10', styles.board)}>
           <CashflowBoard
             columns={columns}

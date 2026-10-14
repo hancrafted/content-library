@@ -110,7 +110,7 @@ export const stagesOfSale = slide({
     return (
       <SlideFrame>
         <Title>{t('title')}</Title>
-        <SlideCaption data-target="caption">{t('caption')}</SlideCaption>
+        <SlideCaption>{t('caption')}</SlideCaption>
         <Board
           columns={columns}
           overlay={arrows}

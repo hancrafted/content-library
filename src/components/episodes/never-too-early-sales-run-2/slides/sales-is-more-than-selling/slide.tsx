@@ -46,7 +46,7 @@ export const salesIsMoreThanSelling = slide({
   content: ({ t, target, Title }) => (
     <SlideFrame>
       <Title>{t('title')}</Title>
-      <SlideCaption data-target="caption">{t('caption')}</SlideCaption>
+      <SlideCaption>{t('caption')}</SlideCaption>
       <div className="mt-12">
         <ConvergingNotes
           label={t('board.label')}

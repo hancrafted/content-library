@@ -80,7 +80,7 @@ export const howMarketingFeedsThePipeline = slide({
     return (
       <SlideFrame>
         <Title>{t('title')}</Title>
-        <SlideCaption data-target="caption">{t('caption')}</SlideCaption>
+        <SlideCaption>{t('caption')}</SlideCaption>
         <div className="mt-10">
           <MarketingFunnel label={t('funnel')} target={target('funnel')} />
           <Board
