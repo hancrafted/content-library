@@ -11,7 +11,7 @@ const ROOT = path.resolve(__dirname, '../..');
 const MASTER_SLIDES = path.join(ROOT, 'src/components/episodes/slide-master/slides');
 const LIBRARY_DOC = path.join(ROOT, 'docs/design/slide-library.md');
 const MOTIONS_DIR = path.join(ROOT, 'src/components/slide-shared/motions');
-const NOT_A_MASTER_SLIDE = ['Library motions'];
+const NOT_A_MASTER_SLIDE = ['Library motions', 'Shared parts'];
 
 function masterSlideFolders(): string[] {
   return readdirSync(MASTER_SLIDES, { withFileTypes: true })

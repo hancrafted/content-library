@@ -1,0 +1,17 @@
+{
+  "title": "Warum der Blick auf den Cashflow überlebenswichtig ist",
+  "voiceScript": {
+    "segments": {
+      "hook": {
+        "title": "Einstieg",
+        "keywords": "pleite im März, eine Million im April, einen Monat daneben",
+        "script": "Stell Dir ein Unternehmen vor, das im März pleitegeht. Sein größter Auftrag, eine Million Dollar, kommt im April. Die Zahlen stimmten. Nur das Timing lag einen Monat daneben. Ich zeige Dir, warum so etwas passiert, und was Du dagegen tust, bevor es Dir passiert."
+      },
+      "todays-route": {
+        "title": "Der Weg für heute",
+        "keywords": "vier Schritte, Dein Cash, was Vertrieb ist, wie Du anfängst, wann anfangen?",
+        "script": "Wir gehen heute vier Schritte. Erstens siehst Du Dein Cash. Zweitens siehst Du, was Vertrieb wirklich ist. Drittens lernst Du, wie Du anfängst. Viertens siehst Du, warum eine Pipeline Zeit braucht. Und dann entscheidet eine einzige Frage alles: Wann fängst Du an?"
+      }
+    }
+  }
+}

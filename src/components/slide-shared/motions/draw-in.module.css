@@ -1,0 +1,22 @@
+/*
+ * Library motion: a stroke drawn once from its tail, `--draw-origin` (BoardArrow sets it), in reading order by `--i`,
+ * when its Slide becomes active (FE-009 §6.2). At rest and under reduced motion it is the finished picture; it
+ * replays when the reader returns and never loops.
+ */
+
+.drawIn {
+  transform-origin: var(--draw-origin, left);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .drawIn {
+    animation: draw-in 600ms cubic-bezier(0.2, 0, 0, 1) both;
+    animation-delay: calc(200ms + var(--i, 0) * 260ms);
+  }
+}
+
+@keyframes draw-in {
+  from {
+    transform: scaleX(0);
+  }
+}

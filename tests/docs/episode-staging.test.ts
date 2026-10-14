@@ -413,13 +413,13 @@ describe('edge cases', () => {
   it('walks the sample Episode and reads a frame component and a slide-master Slide, and reads the library motions folder', () => {
     // ARRANGE
     const sample = path.relative(ROOT, SAMPLE);
-    const expected = { masters: ['basic-page', 'grid-2x2'] };
+    const expected = { masters: ['basic-page', 'grid-2x2'], motions: ['draw-in', 'stick-on'] };
     // ACT
     const walked = Object.keys(stagingFolders());
     const names = knownVisuals();
     // ASSERT
     expect(walked).toContain(sample);
     expect(names.masters).toEqual(expect.arrayContaining(expected.masters));
-    expect(names.motions).toEqual([]);
+    expect(names.motions).toEqual(expect.arrayContaining(expected.motions));
   });
 });

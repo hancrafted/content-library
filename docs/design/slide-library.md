@@ -12,7 +12,7 @@ Each entry has three lines.
 
 - _Shows_: a fact taken from the code.
 - _When_: when to use it. <!-- draft: Han edits --> The _When_ lines are drafts from the code and from how earlier Episodes used each Master slide.
-- _Motion_: starts with the `motion:` value a copy of the Master slide carries, `none` or `local` (no library motions exist yet), then the motion the Master slide has today, read from its CSS and client parts. Every motion here is a CSS transition, keyframe or scroll-driven animation, except the `radial-cycle` hand, which a client part turns with the Web Animations API (`element.animate`). Elsewhere a client part only flips a state or a play state, as FE-009 describes, or, in `grid-3x2`, writes the pointer position into two CSS variables that a CSS transition then shows. `grid-2x3`, `horizontal-gantt`, `horizontal-rail` and `metro-map` run their entrance as a CSS transition that a client part latches on once, when the Slide first becomes `active`.
+- _Motion_: starts with the `motion:` value a copy of the Master slide carries, `none` or `local` (no Master slide carries a library motion), then the motion the Master slide has today, read from its CSS and client parts. Every motion here is a CSS transition, keyframe or scroll-driven animation, except the `radial-cycle` hand, which a client part turns with the Web Animations API (`element.animate`). Elsewhere a client part only flips a state or a play state, as FE-009 describes, or, in `grid-3x2`, writes the pointer position into two CSS variables that a CSS transition then shows. `grid-2x3`, `horizontal-gantt`, `horizontal-rail` and `metro-map` run their entrance as a CSS transition that a client part latches on once, when the Slide first becomes `active`.
 
 A Slide whose motion is only hover is a hover transition, not an animation, and [the design guide](design-guide.md) lists "motion reduced to hover" under "Not this". Under the Editorial style it is a weak starting point: add an entrance or a scroll-driven motion.
 
@@ -142,4 +142,16 @@ Motion rules and the reasons behind them live in [the design system](design-syst
 
 ## Library motions
 
-A library motion is a CSS module under `src/components/slide-shared/motions/`. The folder `src/components/slide-shared/motions/` is empty today, so no Slide carries a library motion and every motion above is Slide-local. A motion moves into the folder when a second Slide needs it.
+A library motion is a CSS module under `src/components/slide-shared/motions/`. Every motion above is Slide-local. A motion moves into the folder when a second Slide needs it. Each one runs once when its Slide becomes active, in reading order by `--i` (`calc(200ms + var(--i) * 260ms)`), replays when the reader returns, and rests on the finished picture under reduced motion.
+
+- `stick-on`: `.stickOn`, a note stuck on a board: it drops in from slightly above, tilted, and settles.
+- `draw-in`: `.drawIn`, a stroke drawn once from its tail, `--draw-origin` (`BoardArrow` sets it), by scaling it in along its length.
+
+## Shared parts
+
+A shared part is a server component under `src/components/slide-shared/` with plain props, which a Slide imports when a second Slide needs the same piece. The board parts sit in `src/components/slide-shared/board/`, each with a CSS module whose colours are mixed from global tokens:
+
+- `Board`: the neutral surface, as columns with a dark pill header each (`columns`, optional fixed `rows` shared through a subgrid) or as one free surface for the Slide's own layout; `overlay` paints last on the same grid. A Slide reflows the columns by setting `--columns` in its `className`.
+- `StickyNote`: one note, `tone` `neutral`, `cost`, `revenue` or `warning`, with a label, a short `value` or a rich body, an optional `primary` ring and `fill` to fill its grid cell.
+- `BoardArrow`: a drawn stroke with a head, `left` or `right`, optionally `dashed` and labelled, all in `currentColor`; it sets `--draw-origin` to its tail for `draw-in`.
+- `CashflowBoard`: a `Board` with four fixed rows, `opening`, `cost`, `revenue` and `closing`, one note per slot, each amount a number written in the page's locale and `currency` (compact below `sm`, such as "$1M", "1 Mio. $" or the German "100k $", in full from `sm`), an optional stamp and arrow, and `--i` on every item in reading order for the Slide's motion classes.

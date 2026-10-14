@@ -1,0 +1,23 @@
+/*
+ * Watch your cashflow: motion only, no colour, size or weight (FE-011). The notes stick on in reading order with the
+ * library motion; the stamp lands after March's cost note, and April's revenue note lands last in its out-of-reach
+ * column. Once, when the Slide becomes active (FE-009 §6.2); at rest and under reduced motion the board is finished.
+ */
+
+.note {
+  composes: stickOn from '../../../../slide-shared/motions/stick-on.module.css';
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .stamp {
+    animation: stamp 320ms cubic-bezier(0.3, 0, 0, 1) both;
+    animation-delay: calc(200ms + var(--i) * 260ms);
+  }
+}
+
+@keyframes stamp {
+  from {
+    opacity: 0;
+    transform: rotate(-18deg) scale(1.6);
+  }
+}

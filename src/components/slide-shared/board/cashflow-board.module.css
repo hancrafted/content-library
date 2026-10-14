@@ -1,0 +1,19 @@
+/*
+ * The cashflow board's own marks: the stamp across a month, framed like a rubber stamp, and the arrow reaching into
+ * the gaps beside the columns it spans. Colours are global tokens (FE-011 §2).
+ */
+
+.stamp {
+  grid-column: var(--col);
+  grid-row: 4 / 6;
+  place-self: center;
+  rotate: -18deg;
+  color: var(--destructive);
+  border: 0.1875rem solid currentColor;
+  background: color-mix(in oklab, var(--card) 75%, transparent);
+  white-space: nowrap;
+}
+
+.arrow {
+  margin-inline: calc(-1 * var(--board-gap));
+}
