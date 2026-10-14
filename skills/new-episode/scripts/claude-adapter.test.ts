@@ -14,13 +14,21 @@ const JOB_SPAN = 'aaaaaaaaaaaaaaaa';
 const RUN_SPAN = 'cccccccccccccccc';
 const LOG = 'events.jsonl';
 
+/** The environment without the GIT_* variables a git hook sets, which would point every git call at the hooked repository. */
+const cleanEnv = (): NodeJS.ProcessEnv =>
+  Object.fromEntries(Object.entries(process.env).filter(([key]) => !key.startsWith('GIT_'))) as NodeJS.ProcessEnv;
+
 let dir: string;
 let main: string;
 let wt: string;
 let other: string;
 
 const git = (cwd: string, ...args: string[]): string =>
-  execFileSync('git', ['-c', 'user.email=t@t', '-c', 'user.name=t', ...args], { cwd, encoding: 'utf8' });
+  execFileSync('git', ['-c', 'user.email=t@t', '-c', 'user.name=t', ...args], {
+    cwd,
+    encoding: 'utf8',
+    env: cleanEnv(),
+  });
 
 const marker = (sessions: string[]): string =>
   JSON.stringify({
@@ -53,7 +61,7 @@ function hook(event: 'start' | 'stop', session: string, env: Record<string, stri
   return spawnSync('node', [ADAPTER, event], {
     input: JSON.stringify(payload),
     encoding: 'utf8',
-    env: { ...process.env, CLAUDE_PROJECT_DIR: main, ...env },
+    env: { ...cleanEnv(), CLAUDE_PROJECT_DIR: main, ...env },
   });
 }
 
