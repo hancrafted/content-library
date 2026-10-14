@@ -4,9 +4,11 @@ import en from './i18n/en.json';
 import { howMarketingFeedsThePipeline } from './slides/how-marketing-feeds-the-pipeline/slide';
 import { howToStartDoingSales } from './slides/how-to-start-doing-sales/slide';
 import { pipelineToolsInPractice } from './slides/pipeline-tools-in-practice/slide';
+import { salesIsMoreThanSelling } from './slides/sales-is-more-than-selling/slide';
 import { stagesOfSale } from './slides/stages-of-sale/slide';
 import { watchYourCashflowRevenuePulledIn } from './slides/watch-your-cashflow-revenue-pulled-in/slide';
 import { watchYourCashflow } from './slides/watch-your-cashflow/slide';
+import { whySalesIsMoreThanJustSelling } from './slides/why-sales-is-more-than-just-selling/slide';
 import { whyWatchingCashflowIsMissionCritical } from './slides/why-watching-cashflow-is-mission-critical/slide';
 
 /*
@@ -24,7 +26,7 @@ export const neverTooEarlySalesRun2 = episode({
   sections: [
     [whyWatchingCashflowIsMissionCritical, watchYourCashflow],
 
-    // Section 2, #175: why-sales-is-more-than-just-selling
+    [whySalesIsMoreThanJustSelling, salesIsMoreThanSelling],
 
     [
       howToStartDoingSales,
