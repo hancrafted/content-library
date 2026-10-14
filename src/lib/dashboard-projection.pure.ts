@@ -4,7 +4,7 @@ import { latestJobSpans } from '../../skills/new-episode/scripts/status.pure';
 import { agentFields, JOB_FIELDS, TOP_FIELDS } from './episode-pipeline-fields.pure';
 import { findCycle } from './episode-pipeline-graph.pure';
 import { JOB_ID, jobOf, type Job, type JobAgent } from './episode-pipeline-jobs.pure';
-import { checkMapping, isMapping, optional, stringsOf, type Field, type Mapping } from './mapping-fields.pure';
+import { checkMapping, field, isMapping, optional, stringsOf, type Field, type Mapping } from './mapping-fields.pure';
 
 export interface DashboardAgentConfig extends JobAgent {
   agent: string;
@@ -24,11 +24,16 @@ export interface DashboardPipeline {
   jobs: DashboardJobConfig[];
 }
 
-/** A Run scaffolded before the stages layer lists no `stages` and no Job `stage`; the dashboard still reads it. */
+/**
+ * A Run scaffolded before the stages layer lists no `stages` and no Job `stage`, and its implementors may carry the
+ * `ticket` block of the per-ticket fan-out the Build Jobs replaced; the dashboard still reads it.
+ */
 const legacyOptional = (fields: readonly Field[], key: string) =>
   fields.map((candidate) => (candidate.key === key ? optional(candidate) : candidate));
 const PIPELINE_FIELDS = legacyOptional(TOP_FIELDS, 'stages');
 const STAGED_JOB_FIELDS = legacyOptional(JOB_FIELDS, 'stage');
+const LEGACY_TICKET = optional(field('ticket', isMapping, 'it must be a mapping of agent and skills'));
+const legacyAgentFields = (reviewer: boolean): Field[] => [...agentFields(reviewer), LEGACY_TICKET];
 
 function jobErrors(job: unknown, at: number): string[] {
   const where = `Job ${at + 1}`;
@@ -38,7 +43,7 @@ function jobErrors(job: unknown, at: number): string[] {
     ...checkMapping(where, job, STAGED_JOB_FIELDS),
     ...agents.flatMap((agent) =>
       isMapping(agent)
-        ? checkMapping(`${where} agent`, agent, agentFields(agent.type === 'reviewer'))
+        ? checkMapping(`${where} agent`, agent, legacyAgentFields(agent.type === 'reviewer'))
         : [`${where} agent must be a mapping.`],
     ),
   ];

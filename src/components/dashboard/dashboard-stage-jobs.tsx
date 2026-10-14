@@ -1,5 +1,12 @@
 import type { DashboardJob } from '@/lib/dashboard-projection.pure';
-import { jobLabel, needsAttention, runningAgents, stageLayers, type DashboardStage } from '@/lib/dashboard-stages.pure';
+import {
+  jobLabel,
+  needsAttention,
+  runningAgents,
+  stageLayers,
+  stateText,
+  type DashboardStage,
+} from '@/lib/dashboard-stages.pure';
 import { fillTemplate } from '@/lib/template.pure';
 import { ArrowDown, CircleAlert, GitBranch } from 'lucide-react';
 import type { CSSProperties } from 'react';
@@ -27,7 +34,7 @@ function JobStatus({ job, copy }: Pick<JobProps, 'job' | 'copy'>) {
   return (
     <>
       <span className="block text-caption text-(--node-tone)">
-        {job.state === 'gate' ? copy.waitingOnHan : job.state}
+        {stateText(job.state, { gate: copy.waitingOnHan, complete: copy.graph.complete })}
       </span>
       {sessions > 0 ? (
         <span className="block text-caption text-(--info)">

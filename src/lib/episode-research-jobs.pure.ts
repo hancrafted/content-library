@@ -2,8 +2,8 @@
  * A per-run pipeline writes research only where retrieval asked for it: retrieval decides per research question
  * whether the llm-wiki answers it (reuse, no job), answers it but is stale (a refresh job) or does not (a new job),
  * and lists each question needing a job under `### Research jobs` in its run-log entry, one item per job naming its
- * research folder. customize-pipeline expands the template's `write-research` into one job per item (design-ADR
- * 0008). This keeps the two in step: every listed folder has a job writing it, and every job writes a listed folder.
+ * research folder. customize-pipeline expands the template's `write-research` into one job per item (design-ADR-0008).
+ * This keeps the two in step: every listed folder has a job writing it, and every job writes a listed folder.
  */
 
 import { readPipeline } from './episode-pipeline-jobs.pure';

@@ -42,25 +42,26 @@ describe('success cases', () => {
     expect(pipeline).toEqual(expected);
   });
 
-  it('reads each agent with its skills, its ticket subagents skills and its session; a job runs in the orchestrator when an agent does', () => {
+  it('reads each agent with its skills and its session; a job runs in the orchestrator when an agent does', () => {
     // ARRANGE
     const yaml = `jobs:
   - id: build
     needs: []
     agents:
-      - { type: implementor, skills: [implement-spec], session: orchestrator, ticket: { agent: dev, skills: [tdd, commit] } }
+      - { type: implementor, skills: [tdd, commit], session: orchestrator }
       - { type: reviewer, skills: [code-review] }
 `;
+    const expected = {
+      session: 'orchestrator',
+      agents: [
+        { type: 'implementor', skills: ['tdd', 'commit'], session: 'orchestrator' },
+        { type: 'reviewer', skills: ['code-review'] },
+      ],
+    };
     // ACT
     const job = readPipeline(yaml)?.jobs[0];
     // ASSERT
-    expect(job).toMatchObject({
-      session: 'orchestrator',
-      agents: [
-        { type: 'implementor', skills: ['implement-spec'], ticketSkills: ['tdd', 'commit'], session: 'orchestrator' },
-        { type: 'reviewer', skills: ['code-review'], ticketSkills: [] },
-      ],
-    });
+    expect({ session: job?.session, agents: job?.agents }).toEqual(expected);
   });
 
   it('reads the ordered stage list and the stage each job names', () => {

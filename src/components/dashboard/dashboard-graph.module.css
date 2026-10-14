@@ -23,7 +23,6 @@
 }
 
 .node {
-  --node-tone: var(--muted-foreground);
   position: relative;
   display: flex;
   align-items: flex-start;
@@ -34,22 +33,28 @@
   text-align: left;
 }
 
-.node[data-state='ok'],
-.node[data-state='reused'] {
+/* One tone per state, shared by a stage node and a Job: its border, icon and status text read it. */
+.node,
+.job {
+  --node-tone: var(--muted-foreground);
+}
+
+:is(.node, .job)[data-state='ok'],
+:is(.node, .job)[data-state='reused'] {
   --node-tone: var(--success);
 }
 
-.node[data-state='running'] {
+:is(.node, .job)[data-state='running'] {
   --node-tone: var(--info);
 }
 
-.node[data-state='gate'],
-.node[data-state='refused'] {
+:is(.node, .job)[data-state='gate'],
+:is(.node, .job)[data-state='refused'] {
   --node-tone: var(--warning);
 }
 
-.node[data-state='error'],
-.node[data-state='crashed'] {
+:is(.node, .job)[data-state='error'],
+:is(.node, .job)[data-state='crashed'] {
   --node-tone: var(--destructive);
 }
 
@@ -131,7 +136,6 @@
 }
 
 .job {
-  --node-tone: var(--muted-foreground);
   display: flex;
   align-items: flex-start;
   gap: 0.5rem;
@@ -142,25 +146,6 @@
   border-radius: var(--radius);
   background: var(--card);
   text-align: left;
-}
-
-.job[data-state='ok'],
-.job[data-state='reused'] {
-  --node-tone: var(--success);
-}
-
-.job[data-state='running'] {
-  --node-tone: var(--info);
-}
-
-.job[data-state='gate'],
-.job[data-state='refused'] {
-  --node-tone: var(--warning);
-}
-
-.job[data-state='error'],
-.job[data-state='crashed'] {
-  --node-tone: var(--destructive);
 }
 
 .job[data-state='template'] {

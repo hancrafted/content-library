@@ -15,12 +15,10 @@ const LEGACY_STAGES = [
   { id: 'pr', jobs: ['open-pr'] },
 ];
 
-const STAGE_TITLES: Readonly<Record<string, string>> = { pr: 'PR' };
-
-/** A stage id as a title: `publish-recording` reads Publish Recording. */
-export function stageTitle(id: string): string {
+/** A stage's title from the message files' `stageNames`; an id they do not name is title-cased, `publish-recording` as Publish Recording. */
+export function stageTitle(id: string, names: Readonly<Record<string, string>>): string {
   return (
-    STAGE_TITLES[id] ??
+    names[id] ??
     id
       .split('-')
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -47,6 +45,12 @@ export type DashboardState = DashboardJob['state'] | 'unclosed';
 export const isComplete = (state: DashboardState): boolean => state === 'ok' || state === 'reused';
 export const needsAttention = (state: DashboardState): boolean =>
   ['gate', 'error', 'refused', 'crashed'].includes(state);
+
+/** A stage's or Job's state as shown: the gate and a finished state in words, any other state as it is. */
+export function stateText(state: DashboardState, words: { gate: string; complete: string }): string {
+  if (state === 'gate') return words.gate;
+  return isComplete(state) ? words.complete : state;
+}
 
 function groupState(states: DashboardState[]): DashboardState {
   if (states.length === 0) return 'waiting';

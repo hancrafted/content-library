@@ -12,12 +12,10 @@ export const JOB_ID = /^[a-z0-9][a-z0-9-]*$/;
 export const BAD_JOB_ID =
   'an id the spawn description <job>#<attempt>/<role> cannot carry; use lowercase letters, digits and hyphens.';
 
-/** An agent of a job as the skill-use check reads it: its type, the skills it must invoke, and those of its per-ticket subagents. */
+/** An agent of a job as the skill-use check reads it: its type, the skills it must invoke, and where it runs. */
 export interface JobAgent {
   type: string;
   skills: string[];
-  /** The skills of each ticket subagent an implementor's skill spawns (`ticket.skills`); empty when it has none. */
-  ticketSkills: string[];
   session?: 'orchestrator';
 }
 
@@ -58,7 +56,6 @@ function agentOf(agent: Record<string, unknown>): JobAgent {
   return {
     type: String(agent.type),
     skills: strings(agent.skills),
-    ticketSkills: isMapping(agent.ticket) ? strings(agent.ticket.skills) : [],
     ...(agent.session === 'orchestrator' && { session: 'orchestrator' as const }),
   };
 }

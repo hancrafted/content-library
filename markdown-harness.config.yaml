@@ -127,7 +127,13 @@ frontmatter:
         generated.at: *generated-at
         verified: *verified
         locale: *staging-locale
-        brief: *staging-brief-link
+        brief: &spec-brief-link
+          presence: required
+          allowed:
+            - {
+                value: ../brief.md,
+                intent: 'The Brief one folder up from spec/, whose goals this file is written towards. Fail if slugged material serves no Learning goal, Actionable or Red thread step the Brief states.',
+              }
     - ruleId: staging-design-spec
       fileNames: [design-spec.md]
       intent: "The design of an Episode: its visual language, then a design answer for every Slide, which Han approves at the write-design-spec gate and the Build jobs build to. Fail if a Slide has no design answer, or the design leaves the Brief's Style."
@@ -146,7 +152,7 @@ frontmatter:
         generated.at: *generated-at
         verified: *verified
         locale: *staging-locale
-        brief: *staging-brief-link
+        brief: *spec-brief-link
     # A rule selects by literal file name, never by folder: folders do not recurse and every staging
     # folder is `docs/episodes/<slug>/`. So the identifier lives in a folder and the kind is the file
     # name: `research/<question-slug>/research.md` and `feedback/<NN>/feedback.md`. The same name

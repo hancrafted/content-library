@@ -23,7 +23,10 @@ export interface SkillWarning {
   missing: string[];
 }
 
-/** The pipeline agents a span answers to: an implementor or reviewer by its role, the ticket subagents of the implementor, an orchestrator-session Job by its agents that run there. */
+/**
+ * The pipeline agents a span answers to: an implementor or reviewer by its role, an orchestrator-session Job by its
+ * agents that run there. A `ticket-implementor` of an old log answers to none: no pipeline lists its skills now.
+ */
 function listedSkills(span: Span, job: Job): string[] {
   const of = (agents: readonly JobAgent[], pick: (agent: JobAgent) => string[]): string[] => agents.flatMap(pick);
   const subagents = job.agents.filter((agent) => agent.session === undefined);
@@ -37,11 +40,6 @@ function listedSkills(span: Span, job: Job): string[] {
       : [];
   if (span.role === 'implementor') return of(byType('implementor'), (agent) => agent.skills);
   if (span.role?.startsWith('reviewer')) return of(byType('reviewer'), (agent) => agent.skills);
-  if (span.role === 'ticket-implementor')
-    return of(
-      job.agents.filter((agent) => agent.type === 'implementor'),
-      (agent) => agent.ticketSkills,
-    );
   return [];
 }
 

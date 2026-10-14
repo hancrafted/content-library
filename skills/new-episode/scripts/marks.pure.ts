@@ -1,8 +1,7 @@
 // The agent marks, read back: the job id behind a commit message's
 // `Agent:` trailer or an issue body's `Edited-by:` footer, null when the
-// text is unmarked, which means Han wrote it. The `write-design-spec`
-// approved-as-drafted / edited metric and `harvest-run` use it to tell an
-// agent's edit from Han's.
+// text is unmarked, which means Han wrote it, so a gate diff tells an agent's
+// edit from Han's.
 
 const MARK = /^(?:Agent|Edited-by): *(\S+) *$/;
 

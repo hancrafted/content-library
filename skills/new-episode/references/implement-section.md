@@ -1,6 +1,6 @@
 # implement-section
 
-Output: one Section's page Slides in `src/`, built at its placement marker, merged into `episode/<slug>`. One job per Section, `implement-section-<section-slug>`, each in its own worktree and run in parallel; the job's `intent` names its Section.
+Output: one Section's page Slides in `src/`, built at its placement marker, merged into `episode/<slug>`. One job per Section, `implement-section-<section-slug>`, each in its own worktree and run in parallel; the job's `intent` names its Section. `<section-slug>` is the Section's h3 title under the Brief's `## Slides` in kebab case, the slug `customize-pipeline` expands the foreach by, and the same slug names the Section's placement marker, so the job id names the module it owns.
 
 ## Prompt
 

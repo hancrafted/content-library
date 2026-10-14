@@ -10,6 +10,7 @@ import {
   runningAgents,
   stageLayers,
   stageTitle,
+  stateText,
 } from './dashboard-stages.pure';
 
 function fixtureView() {
@@ -134,14 +135,26 @@ describe('success cases', () => {
     expect(labels).toEqual(expectedLabels);
   });
 
-  it('names known stages and title-cases an unknown id', () => {
+  it('names a stage by the message files and title-cases an id they do not name', () => {
     // ARRANGE
+    const names = { pr: 'Pull request' };
     const ids = ['pr', 'publish-recording'];
-    const expectedTitles = ['PR', 'Publish Recording'];
+    const expectedTitles = ['Pull request', 'Publish Recording'];
     // ACT
-    const titles = ids.map(stageTitle);
+    const titles = ids.map((id) => stageTitle(id, names));
     // ASSERT
     expect(titles).toEqual(expectedTitles);
+  });
+
+  it('words a finished or gated state as the stage does, and keeps any other state as it is', () => {
+    // ARRANGE
+    const words = { gate: 'Waiting on Han', complete: 'Complete' };
+    const states = ['ok', 'reused', 'gate', 'running'] as const;
+    const expected = ['Complete', 'Complete', 'Waiting on Han', 'running'];
+    // ACT
+    const texts = states.map((state) => stateText(state, words));
+    // ASSERT
+    expect(texts).toEqual(expected);
   });
 });
 

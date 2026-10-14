@@ -2,7 +2,7 @@
 # scaffold-pipeline copies this file to docs/episodes/<slug>/pipeline.yml as a
 # draft, customize-pipeline tailors it for that Episode once the Setup jobs
 # have collected what it needs, and Han approves it by setting
-# `status: approved` (design-ADR 0008).
+# `status: approved` (design-ADR-0008).
 #
 # Schema (checked by src/lib/episode-pipeline.pure.ts in `npm run verify`):
 #   status    draft | approved
@@ -41,9 +41,6 @@
 #                   skill's folder, anything else is a repo path
 #       rubric      reviewers only: `<file>#<heading>` holding the pass/fail lines
 #       agent       optional; the Claude Code agent type to spawn, general-purpose when omitted
-#       ticket      optional, implementors only; for a skill that spawns subagents per ticket:
-#                   `{ agent, skills }`, the agent type and the skills of each ticket
-#                   subagent. Same skill rules as `skills`
 #       model       the model it runs on, or inherit; SKILL.md's job loop says where it applies
 #       session     optional; subagent (default) or orchestrator, by SKILL.md's job loop
 status: draft

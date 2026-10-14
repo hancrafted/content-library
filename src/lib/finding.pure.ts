@@ -35,3 +35,8 @@ export interface Finding {
 export function unless<T>(holds: boolean, finding: T): T[] {
   return holds ? [] : [finding];
 }
+
+/** Each value the list holds more than once, named once, in the order it first repeats. */
+export function repeated<T>(values: readonly T[]): T[] {
+  return [...new Set(values.filter((value, at) => values.indexOf(value) !== at))];
+}

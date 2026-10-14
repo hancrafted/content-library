@@ -13,7 +13,7 @@ A new-episode `pipeline.yml` lists its Stages in order, `stages: [brief, setup, 
 2. **Setup opens with a scaffold and closes by finalizing it.** `scaffold-pipeline` (Stage setup, needs `brief-grill`, orchestrator session, no gate) copies the template to `docs/episodes/<slug>/pipeline.yml` with `status: draft`, `template:` and `<slug>` filled. Then `categorize-research`, `retrieval` and `convert-references` collect what tailoring needs (`retrieval` and `convert-references` move into Setup; `categorize-research` and `retrieval` gain `isolation: worktree`, since they now run beside `convert-references`). `customize-pipeline` (human gate) finalizes the file, and Han approves it.
 3. **A draft per-run pipeline may keep `foreach` and glob outputs; an approved one has none.** The scaffold holds the template's fan-out Jobs unexpanded until `customize-pipeline` expands them, and the check refuses them only once `status: approved`.
 4. **Research Jobs are lazy.** `retrieval` decides per research question: a fitting, fresh llm-wiki file is reused with no Job; a fitting file past its `stale_after` gets a refresh Job; no fit gets a new research Job. It records each decision in its `run-log.md` entry and lists the questions needing a Job under `### Research jobs`, one item per Job with its research folder. `write-research` has `foreach: docs/episodes/<slug>/run-log.md#research-jobs` and needs `customize-pipeline`, which expands only those items, as `write-research-<question-slug>`. The research-jobs check (`src/lib/episode-research-jobs.pure.ts`) keeps the Jobs and the list in step, folder for folder, instead of one Job per Brief question. `write-dossier` needs `customize-pipeline` and wants `write-research`.
-5. **The Spec is local markdown.** `write-spec` writes `docs/episodes/<slug>/spec/spec.md`, one h2 per Section, and `write-design-spec` writes `spec/design-spec.md`, both governed by markdown-harness rules and queried before writing. No GitHub spec issue or sub-issues: `write-design-spec` keeps its human gate, now Han's approval of the design spec file. `spec/` joins the staging list of design-ADR 0004.
+5. **The Spec is local markdown.** `write-spec` writes `docs/episodes/<slug>/spec/spec.md`, one h2 per Section, and `write-design-spec` writes `spec/design-spec.md`, both governed by markdown-harness rules and queried before writing. No GitHub spec issue or sub-issues: `write-design-spec` keeps its human gate, now Han's approval of the design spec file. `spec/` joins the staging list of design-ADR-0004.
 6. **Build is one Job per Section.** `implement-episode-init` scaffolds the Episode page with one placement marker per Section, then `implement-section` with `foreach: docs/episodes/<slug>/brief.md#slides` expands to one `implement-section-<section-slug>` Job per h3 of the Brief's Slides, in parallel worktrees, each an implementor and reviewer pair. This replaces `implement-episode` and `implement-spec`'s hidden per-ticket fan-out. `open-pr` needs every Section Job.
 
 ## Considered options
@@ -28,7 +28,7 @@ A new-episode `pipeline.yml` lists its Stages in order, `stages: [brief, setup, 
 - `customize-pipeline` needs `retrieval` but only wants `convert-references`, so a missing conversion tool still leaves the design references out instead of blocking the Episode, as before.
 - The `implement-section` reviewer runs in the orchestrator session: `code-review` spawns subagents, which a subagent cannot.
 - A refresh Job writes a new numbered research folder, because the research-folder check refuses an ID used twice (see Open).
-- `implement-section-<section-slug>` takes its slug from the Brief's Slides h3 title, since `customize-pipeline` runs before the Dossier exists.
+- `implement-section-<section-slug>` takes its slug from the Brief's Slides h3 title in kebab case, since `customize-pipeline` runs before the Dossier exists, and `implement-episode-init` names each Section's placement marker by the same slug, never the Dossier h2's `{#slug}`, so a job id always names the marker it owns.
 
 ## Open
 
@@ -38,5 +38,6 @@ A new-episode `pipeline.yml` lists its Stages in order, `stages: [brief, setup, 
 
 ## Consequences
 
-- The `write-design-spec` label gate (`subIssuesApproved` in the skill's `status.pure.ts`) no longer serves a template Job; it stays until a later change removes it.
+- The GitHub label gate goes: every `gate: human` Job of the template names an output Han approves, so `episode:status` asks `gh` nothing, and a gate Job with no output stays `gate`.
+- An agent's `ticket` block goes with `implement-spec`'s per-ticket fan-out: the schema check refuses it, `implement-spec` no longer counts as a skill that spawns subagents, and the skill-use check lists no ticket subagent's skills. The dashboard still reads a `ticket` block in an old pipeline, and the run log still parses a `ticket` field and the `/#<ticket>` spawn suffix, so a Run logged before this change keeps its ticket lanes.
 - A per-run pipeline committed before this change lacks `stages` and fails the schema check; none is committed today.

@@ -12,7 +12,7 @@ The implementor (`archgate:developer`) builds `## Episode page` of the spec, tes
 
 ### Placement markers
 
-Proposed, and open until Han settles it (design-ADR 0008): one module per Section, `src/components/episodes/<ep>/sections/<section-slug>.ts`, exporting that Section's ordered Slide list, which the Episode record imports into `sections` in order. `<section-slug>` is the Dossier h2's `{#slug}`. Its Section job adds its page Slides to that list alone, so parallel Section branches never edit one line, and its job id `implement-section-<section-slug>` names the module it owns. Should FE-002 or FE-004 refuse a `sections/` folder, the marker falls back to one commented line per Section in the record's `sections` array, and the merges are serialised.
+Proposed, and open until Han settles it (design-ADR-0008): one module per Section, `src/components/episodes/<ep>/sections/<section-slug>.ts`, exporting that Section's ordered Slide list, which the Episode record imports into `sections` in order. `<section-slug>` is the Section's h3 title under the Brief's `## Slides` in kebab case, the one slug [`customize-pipeline`](customize-pipeline.md) gives the Section's job when it expands the `implement-section` foreach; never the Dossier h2's `{#slug}`, which may differ. Its Section job adds its page Slides to that list alone, so parallel Section branches never edit one line, and its job id `implement-section-<section-slug>` names the module it owns. Should FE-002 or FE-004 refuse a `sections/` folder, the marker falls back to one commented line per Section in the record's `sections` array, and the merges are serialised.
 
 ### Metadata
 

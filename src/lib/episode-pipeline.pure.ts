@@ -17,9 +17,9 @@ import {
 import { ancestors, concurrentJobs, findCycle, waitsFor } from './episode-pipeline-graph.pure';
 import { BAD_JOB_ID, JOB_ID, jobOf, type Job } from './episode-pipeline-jobs.pure';
 import { checkOutputs } from './episode-pipeline-outputs.pure';
-import { checkSkillNames, checkTicket } from './episode-pipeline-skills.pure';
+import { checkSkillNames } from './episode-pipeline-skills.pure';
 import { checkStages } from './episode-pipeline-stages.pure';
-import { unless, type Finding } from './finding.pure';
+import { repeated, unless, type Finding } from './finding.pure';
 import { checkMapping, isMapping, isString, isStringList, stringsOf, type Mapping } from './mapping-fields.pure';
 
 /** What exists around a pipeline: its skill's folder, the skill names, and a repo-path lookup. */
@@ -96,7 +96,6 @@ function checkAgent(reader: Reader, agent: unknown): string[] {
     ...checkMapping(where, agent, agentFields(reviewer)),
     ...unless(!strayRubric, `${where} is an implementor and has a rubric; only a reviewer has one.`),
     ...checkSkillNames(where, stringsOf(agent.skills), context),
-    ...checkTicket(where, agent, context),
     ...stringsOf(agent.skills)
       .filter((skill) => SPAWNING_SKILLS.includes(skill) && agent.session !== 'orchestrator')
       .map(
@@ -174,9 +173,7 @@ function checkJobs(raw: readonly unknown[], document: Mapping, context: Pipeline
     ...mappings.flatMap((job, index) =>
       checkJob({ job: ids[index], where: `Job "${ids[index]}"`, byId, jobs, context, expanded }, job),
     ),
-    ...[...new Set(ids.filter((id, at) => ids.indexOf(id) !== at))].map(
-      (id) => `The job id "${id}" appears twice; job ids are unique.`,
-    ),
+    ...repeated(ids).map((id) => `The job id "${id}" appears twice; job ids are unique.`),
     ...(stages === null ? [] : checkStages(stages, jobs)),
     ...(cycle === null ? [] : [`The needs graph has a cycle: ${cycle.join(' → ')}.`]),
     ...(cycle === null && !brokenEdge ? checkIsolation(mappings, jobs, byId) : []),

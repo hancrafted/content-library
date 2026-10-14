@@ -79,12 +79,9 @@ describe('success cases', () => {
     expect(messages).toEqual([]);
   });
 
-  it('accepts a ticket block on an implementor, and the checks sources and impeccable', () => {
+  it('accepts the checks sources and impeccable', () => {
     // ARRANGE
-    const yaml = PIPELINE.replace(
-      '{ type: implementor, skills: [research],',
-      '{ type: implementor, ticket: { agent: archgate:developer, skills: [tdd, ui-ux-pro-max:slides] }, skills: [research],',
-    ).replace('checks: [mh, vitest]', 'checks: [mh, vitest, sources, impeccable]');
+    const yaml = PIPELINE.replace('checks: [mh, vitest]', 'checks: [mh, vitest, sources, impeccable]');
     // ACT
     const messages = check(yaml);
     // ASSERT
@@ -111,7 +108,7 @@ describe('failure cases', () => {
     const expected = [
       'The pipeline has an unknown key "owner"; the keys are status, stages, jobs, template.',
       'Job "brief-grill", agent 1 lacks the key "skills".',
-      'Job "brief-grill", agent 1 has an unknown key "skill"; the keys are type, skills, references, rubric, agent, ticket, model, session.',
+      'Job "brief-grill", agent 1 has an unknown key "skill"; the keys are type, skills, references, rubric, agent, model, session.',
       'Job "research" lacks the key "retries".',
       'Job "research" has an unknown key "retry"; the keys are id, stage, intent, needs, wants, isolation, foreach, before, outputs, checks, retries, gate, agents.',
     ];
@@ -186,39 +183,27 @@ describe('failure cases', () => {
     expect(messages).toEqual(expected);
   });
 
-  it('rejects a skill that disables model invocation, in skills and in ticket.skills', () => {
+  it('rejects a skill that disables model invocation', () => {
     // ARRANGE
-    const yaml = PIPELINE.replace('skills: [research],', 'skills: [handoff], ticket: { agent: x, skills: [handoff] },');
+    const yaml = PIPELINE.replace('skills: [research],', 'skills: [handoff],');
     const why = 'which sets disable-model-invocation: true; the Skill tool refuses it for every agent.';
-    const expected = [
-      `Job "research", agent 1 names the skill "handoff", ${why}`,
-      `Job "research", agent 1 ticket names the skill "handoff", ${why}`,
-    ];
+    const expected = [`Job "research", agent 1 names the skill "handoff", ${why}`];
     // ACT
     const messages = check(yaml);
     // ASSERT
     expect(messages).toEqual(expected);
   });
 
-  it('rejects an unknown ticket skill, a ticket without skills and a ticket on a reviewer', () => {
+  it('rejects a ticket block, which no agent carries now that a Section is a Job', () => {
     // ARRANGE
-    const unknown = PIPELINE.replace(
-      'skills: [research],',
-      'skills: [research], ticket: { agent: x, skills: [tdd2] },',
-    );
-    const bare = PIPELINE.replace('skills: [research],', 'skills: [research], ticket: { agent: x },');
-    const reviewer = PIPELINE.replace(
-      '{ type: reviewer, skills: [],',
-      '{ type: reviewer, ticket: { agent: x, skills: [] }, skills: [],',
-    );
+    const yaml = PIPELINE.replace('skills: [research],', 'skills: [research], ticket: { agent: x, skills: [tdd] },');
+    const expected = [
+      'Job "research", agent 1 has an unknown key "ticket"; the keys are type, skills, references, rubric, agent, model, session.',
+    ];
     // ACT
-    const messages = [check(unknown), check(bare), check(reviewer)];
+    const messages = check(yaml);
     // ASSERT
-    expect(messages).toEqual([
-      ['Job "research", agent 1 ticket names the skill "tdd2", which does not exist.'],
-      ['Job "research", agent 1 ticket lacks the key "skills".'],
-      ['Job "research", agent 2 is a reviewer and has a ticket; only an implementor has one.'],
-    ]);
+    expect(messages).toEqual(expected);
   });
 
   it('rejects a staging file read before the job that writes it', () => {
@@ -308,12 +293,12 @@ describe('failure cases', () => {
 
   it('rejects a skill that spawns subagents in an agent that runs as a subagent', () => {
     // ARRANGE
-    const yaml = PIPELINE.replace('skills: [research]', 'skills: [research, implement-spec]').replace(
+    const yaml = PIPELINE.replace('skills: [research]', 'skills: [research, code-review]').replace(
       '{ type: reviewer, skills: []',
       '{ type: reviewer, skills: [code-review], session: subagent',
     );
     const expected = [
-      'Job "research", agent 1 names the skill "implement-spec", which spawns subagents; the agent needs session: orchestrator.',
+      'Job "research", agent 1 names the skill "code-review", which spawns subagents; the agent needs session: orchestrator.',
       'Job "research", agent 2 names the skill "code-review", which spawns subagents; the agent needs session: orchestrator.',
     ];
     // ACT

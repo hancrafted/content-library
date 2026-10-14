@@ -6,7 +6,7 @@ generated:
   by: claude-code/opus-5.5
   at: 2026-10-12T12:30:00Z
 locale: en
-brief: ./brief.md
+brief: ../brief.md
 ---
 
 # The context window is a budget

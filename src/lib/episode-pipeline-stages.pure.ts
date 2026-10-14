@@ -1,19 +1,19 @@
 /*
  * The stages of a new-episode pipeline: the top-level `stages` list fixes their order, and each job names the one it
- * belongs to in `stage` (design-ADR 0008). A job waits only for jobs of its own or an earlier stage, so the stages
+ * belongs to in `stage` (design-ADR-0008). A job waits only for jobs of its own or an earlier stage, so the stages
  * read left to right as the run moves. A stage may hold no job: a per-run pipeline whose retrieval reuses every
  * research file has an empty Research stage. Whether `stages` and `stage` are present and of the right type is the
  * field check's finding; this checks what they say.
  */
 
 import type { Job } from './episode-pipeline-jobs.pure';
+import { repeated } from './finding.pure';
 
 export function checkStages(stages: readonly string[], jobs: readonly Job[]): string[] {
-  const position = new Map(stages.map((stage) => [stage, stages.indexOf(stage)]));
+  const position = new Map(stages.map((stage, at) => [stage, at]));
   const byId = new Map(jobs.map((job) => [job.id, job]));
-  const duplicates = [...new Set(stages.filter((stage, at) => stages.indexOf(stage) !== at))];
   return [
-    ...duplicates.map((stage) => `The stage "${stage}" appears twice in stages; stage ids are unique.`),
+    ...repeated(stages).map((stage) => `The stage "${stage}" appears twice in stages; stage ids are unique.`),
     ...jobs
       .filter(({ stage }) => stage !== undefined && !position.has(stage))
       .map(({ id, stage }) => `Job "${id}" has stage "${stage}", which stages does not list.`),

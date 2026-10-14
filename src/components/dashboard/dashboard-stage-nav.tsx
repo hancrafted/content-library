@@ -1,4 +1,4 @@
-import { isComplete, runningAgents, stageTitle, type DashboardStage } from '@/lib/dashboard-stages.pure';
+import { isComplete, runningAgents, stageTitle, stateText, type DashboardStage } from '@/lib/dashboard-stages.pure';
 import { fillTemplate } from '@/lib/template.pure';
 import { CircleAlert } from 'lucide-react';
 import type { DashboardCopy } from './dashboard-evidence';
@@ -7,8 +7,7 @@ import { StageJobs, type SelectJob } from './dashboard-stage-jobs';
 import { StageStateIcon } from './dashboard-state-icon';
 
 export function stageName(stage: DashboardStage, copy: DashboardCopy): string {
-  const names: Readonly<Record<string, string>> = copy.graph.stageNames;
-  return names[stage.id] ?? stageTitle(stage.id);
+  return stageTitle(stage.id, copy.graph.stageNames);
 }
 
 interface NavigationProps {
@@ -54,8 +53,7 @@ function StageActivity({ stage, copy }: LabelProps) {
 }
 
 function StageLabel({ stage, copy }: LabelProps) {
-  const state =
-    stage.state === 'gate' ? copy.waitingOnHan : isComplete(stage.state) ? copy.graph.complete : stage.state;
+  const state = stateText(stage.state, { gate: copy.waitingOnHan, complete: copy.graph.complete });
   return (
     <span className="min-w-0 flex-1 space-y-1 wrap-anywhere">
       <span className="block text-body font-semibold">{stageName(stage, copy)}</span>
