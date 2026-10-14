@@ -13,7 +13,7 @@ describe('the corpus', () => {
 
   /** The staging files that carry a `verified` entry: the sample Episode and every Episode under docs/episodes. */
   function stagingFiles(): string[] {
-    const folders = [path.join(ROOT, '.agents/skills/new-episode/assets/sample-episode')];
+    const folders = [path.join(ROOT, 'skills/new-episode/assets/sample-episode')];
     try {
       const episodes = path.join(ROOT, 'docs/episodes');
       folders.push(
