@@ -35,10 +35,7 @@ const TEMPLATE = path.join(ROOT, SKILL_FOLDER, 'assets/pipeline.yml');
  * are missing; a per-run pipeline never does. Delete an entry when its file
  * lands: a test fails until you do.
  */
-const PENDING = [
-  'docs/llm-wiki/index.md',
-  ...['storytelling', 'tone', 'mental-model'].map((guide) => `docs/profile/han/${guide}-guide.md`),
-];
+const PENDING = [...['storytelling', 'tone', 'mental-model'].map((guide) => `docs/profile/han/${guide}-guide.md`)];
 
 /** Every file under `folder`, keyed by its path relative to it with `/` separators. */
 function readFolder(folder: string): Record<string, string> {
