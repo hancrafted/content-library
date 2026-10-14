@@ -6,6 +6,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { readPipeline } from '../../../../src/lib/episode-pipeline-jobs.pure.ts';
 import { episodeBranches, unfinishedReminder, type EpisodeRun } from './remind.pure.ts';
+import { fold, parseLog } from './run-log.pure.ts';
 import { gateReaders, runStatus } from './status.pure.ts';
 
 const root = process.env.CLAUDE_PROJECT_DIR ?? process.cwd();
@@ -21,7 +22,10 @@ function episodeRuns(): EpisodeRun[] {
     const pipeline = read(`docs/episodes/${slug}/pipeline.yml`);
     if (pipeline === null || readPipeline(pipeline) === null) return [];
     const gh = (args: readonly string[]): string => run('gh', args, dir);
-    const states = runStatus(pipeline, read(`docs/episodes/${slug}/run-log.md`) ?? '', gateReaders(slug, { read, gh })).map(({ state }) => state);
+    const { lines } = parseLog(read(`docs/episodes/${slug}/events.jsonl`) ?? '');
+    const folded = fold(lines, { openAs: lines.some((line) => line.kind === 'end-run') ? 'crashed' : 'running' });
+    const { jobs } = runStatus(pipeline, folded, { ...gateReaders(slug, { read, gh }), now: new Date().toISOString() });
+    const states = jobs.map(({ state }) => state);
     return [{ slug, states }];
   });
 }
