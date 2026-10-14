@@ -24,7 +24,7 @@ Add `--out <scratchpad path>.png`, optionally `--clip <selector>` to frame one e
 
 ## Browser
 
-The first call installs `chrome-headless-shell` into the git-ignored `.cache/inspect-page/` (once, slow) and starts it detached; every later call, parallel ones included, opens its own tab in that one browser and closes only that tab. It exits after 10 minutes without a call; `npm run inspect-page -- --stop` ends it early. A dead browser is replaced on the next call. `CHROME_PATH` overrides the binary.
+The first call installs `chrome-headless-shell` into the git-ignored `.cache/inspect-page-shared/` of the main checkout (once for all worktrees, slow) and starts it detached; every later call, parallel ones included, opens its own tab in that worktree's one browser (profile and endpoint in its own `.cache/inspect-page/`) and closes only that tab. It exits after 10 minutes without a call; `npm run inspect-page -- --stop` ends it early. A dead browser is replaced on the next call. `CHROME_PATH` overrides the binary.
 
 ## Browser tools
 
