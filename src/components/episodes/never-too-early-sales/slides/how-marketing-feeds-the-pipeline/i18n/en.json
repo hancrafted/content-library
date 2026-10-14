@@ -1,0 +1,91 @@
+{
+  "title": "How marketing feeds the pipeline",
+  "caption": "Marketing adds volume to one defined stage: the first column.",
+  "funnel": {
+    "title": "Marketing",
+    "channels": "webinar · post",
+    "label": "A marketing funnel pouring new names into the first stage"
+  },
+  "entry": "+40 new names",
+  "board": {
+    "label": "A deal board with four stages",
+    "columns": {
+      "new": {
+        "title": "New",
+        "summary": "3 · $29k"
+      },
+      "meeting": {
+        "title": "Meeting",
+        "summary": "1 · $20k"
+      },
+      "proposal": {
+        "title": "Proposal",
+        "summary": "2 · $52k"
+      },
+      "won": {
+        "title": "Won",
+        "summary": "1 · $18k"
+      }
+    },
+    "cards": {
+      "brightfold": {
+        "name": "Brightfold",
+        "value": "$8k"
+      },
+      "okapi-logistics": {
+        "name": "Okapi Logistics",
+        "value": "$15k"
+      },
+      "talvik-energy": {
+        "name": "Talvik Energy",
+        "value": "$6k"
+      },
+      "mosswell-clinics": {
+        "name": "Mosswell Clinics",
+        "value": "$20k"
+      },
+      "kestrel-labs": {
+        "name": "Kestrel Labs",
+        "value": "$40k"
+      },
+      "harbor-and-pine": {
+        "name": "Harbor & Pine",
+        "value": "$12k"
+      },
+      "lindgren-tools": {
+        "name": "Lindgren Tools",
+        "value": "$18k"
+      }
+    }
+  },
+  "notes": {
+    "rates-differ-per-stage": {
+      "header": "Rates differ per stage",
+      "description": "The same dataset shows 68 percent from marketing-qualified to sales-qualified lead beside a 19 percent win rate, so each stage needs its own number.[1]",
+      "sources": {
+        "ebsta-pavilion-gtm-benchmarks": {
+          "title": "Ebsta and Pavilion, GTM Benchmarks Report"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "marketing-adds-volume": {
+        "title": "Marketing adds volume",
+        "keywords": "clear job, more leads, one stage, first column, the stage must exist",
+        "script": "Marketing has a clear job in this picture. It adds volume. It brings more leads into one stage of your pipeline, the first column of the board. A bigger flow of leads helps only if that stage exists and you know where it sits."
+      },
+      "defined-entry-point": {
+        "title": "Defined entry point",
+        "keywords": "decide the stage, measure it, webinar or post, forty new names, compare on one board",
+        "script": "That only works if you decide which stage marketing feeds. If you do not, the volume goes in somewhere, but nobody can see where it goes or what it turns into. Give it a defined entry point, and then you can measure it. For example, a webinar or a post might bring in forty new names. If they all land in one column, you can see in a month how many of them became meetings. If they land nowhere, you have forty names and no idea. Marketing and your own outreach can then be compared on the same board."
+      },
+      "not-a-substitute": {
+        "title": "Not a substitute",
+        "keywords": "do not wait for marketing, your own first contact, first opportunities, do both, carry the message",
+        "script": "But do not wait for marketing to do your first sales for you. Early on, your own first contact is what opens the first opportunities. Marketing helps it grow. So do both. Make the first calls yourself, learn what works, and then let marketing carry that message to many more people."
+      }
+    }
+  }
+}

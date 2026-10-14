@@ -1,0 +1,43 @@
+/*
+ * The stage flow's entrance: columns placed one by one, each arrow drawn after
+ * its column, the dashed delivery arrow and the cash note last. Transform and
+ * animation only: colours and type come from token classes in the markup
+ * (FE-011). The base rules are the finished flow, which carries the claim at
+ * rest; the entrance runs only on the active Slide and never under reduced
+ * motion (FE-009 §6).
+ */
+
+@keyframes place-stage {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}
+
+/* Drawn along the arrow's own axis: turned down while the stages stack, so it grows from the top there. */
+@keyframes draw-arrow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+.arrow {
+  transform-origin: left center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .stage {
+    animation: place-stage 300ms ease-out both;
+    animation-delay: calc(var(--step) * 400ms);
+  }
+
+  :global([data-zone='active']) .arrow {
+    animation: draw-arrow 300ms ease-out both;
+    animation-delay: calc(var(--step) * 400ms + 300ms);
+  }
+
+  :global([data-zone='active']) .delivery {
+    animation: place-stage 300ms ease-out both;
+    animation-delay: calc(var(--step) * 400ms + 200ms);
+  }
+}

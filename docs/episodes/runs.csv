@@ -48,3 +48,59 @@ run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at
 2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,implement-episode,implementor,2,pass,,153,85358,2026-10-13T06:04:50Z
 2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,implement-episode,reviewer,2,pass,,25,,2026-10-13T06:06:58Z
 2026-10-12T19:22:40Z,onboard-ai-like-a-colleague,open-pr,implementor,1,pass,,49,58068,2026-10-13T06:09:26Z
+2026-10-13T22:43:23Z,never-too-early-sales,brief-grill,implementor,1,pass,,367,,2026-10-13T22:49:30Z
+2026-10-13T22:43:23Z,never-too-early-sales,brief-grill,reviewer,1,fail,"The text under every heading is Han's wording: `.scratch/<slug>/handoff.md` when it exists, his answers in this session, or a shape-only fix the run-log entry names.",105,67514,2026-10-13T22:51:15Z
+2026-10-13T22:43:23Z,never-too-early-sales,brief-grill,implementor,2,pass,,180,,2026-10-13T22:54:30Z
+2026-10-13T22:43:23Z,never-too-early-sales,brief-grill,reviewer,2,fail,"The text under every heading is Han's wording: `.scratch/<slug>/handoff.md` when it exists, his answers in this session, or a shape-only fix the run-log entry names.",73,59528,2026-10-13T22:55:45Z
+2026-10-13T22:43:23Z,never-too-early-sales,brief-grill,implementor,3,pass,,170,,2026-10-13T22:58:45Z
+2026-10-13T22:43:23Z,never-too-early-sales,brief-grill,reviewer,3,pass,,35,46963,2026-10-13T22:59:25Z
+2026-10-13T22:43:23Z,never-too-early-sales,categorize-research,implementor,1,pass,,52,47332,2026-10-13T23:05:50Z
+2026-10-13T22:43:23Z,never-too-early-sales,customize-pipeline,implementor,1,pass,,90,,2026-10-13T23:07:30Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-revenue-lags-costs-in-startups,implementor,1,pass,,51,50175,2026-10-13T23:16:40Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-revenue-lags-costs-in-startups,reviewer,1,pass,,60,48272,2026-10-13T23:19:40Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-b2b-sales-cycle-length,implementor,1,pass,,172,84633,2026-10-13T23:18:40Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-b2b-sales-cycle-length,reviewer,1,fail,"Fail if it hedges without saying what is known, or states something no Finding supports and the Caveats do not flag as inference.",92,55293,2026-10-13T23:21:00Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-b2b-sales-cycle-length,implementor,2,pass,,21,40561,2026-10-13T23:21:35Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-b2b-sales-cycle-length,reviewer,2,pass,,10,39723,2026-10-13T23:22:30Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-b2b-pipeline-conversion-rates,implementor,1,pass,,140,117734,2026-10-13T23:18:10Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-b2b-pipeline-conversion-rates,reviewer,1,fail,"Fail if it hedges without saying what is known, or states something no Finding supports and the Caveats do not flag as inference.",123,61637,2026-10-13T23:21:00Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-b2b-pipeline-conversion-rates,implementor,2,pass,,21,45619,2026-10-13T23:21:35Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-b2b-pipeline-conversion-rates,reviewer,2,pass,,13,40371,2026-10-13T23:22:40Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-early-selling-market-insight,implementor,1,pass,,75,53462,2026-10-13T23:17:05Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-early-selling-market-insight,reviewer,1,fail,"Fail if it hedges without saying what is known, or states something no Finding supports and the Caveats do not flag as inference.",81,48684,2026-10-13T23:19:30Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-early-selling-market-insight,implementor,2,pass,,12,40684,2026-10-13T23:20:03Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-early-selling-market-insight,reviewer,2,pass,,9,38767,2026-10-13T23:20:20Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-early-sales-results-build-trust,implementor,1,pass,,132,63893,2026-10-13T23:18:00Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-early-sales-results-build-trust,reviewer,1,fail,"Fail if it holds more than one question, or differs from the Brief that asked it when that Brief is at hand.",107,57244,2026-10-13T23:20:30Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-early-sales-results-build-trust,implementor,2,pass,,24,44903,2026-10-13T23:21:01Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-early-sales-results-build-trust,reviewer,2,pass,,27,43056,2026-10-13T23:22:20Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-early-selling-repeatable-process,implementor,1,pass,,92,56368,2026-10-13T23:17:20Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-early-selling-repeatable-process,reviewer,1,fail,"Fail if it hedges without saying what is known, or states something no Finding supports and the Caveats do not flag as inference.",73,52260,2026-10-13T23:20:15Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-early-selling-repeatable-process,implementor,2,pass,,16,43206,2026-10-13T23:20:57Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-early-selling-repeatable-process,reviewer,2,pass,,24,40514,2026-10-13T23:22:00Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-sales-pipeline-ramp-up-time,implementor,1,pass,,121,70303,2026-10-13T23:19:10Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-sales-pipeline-ramp-up-time,reviewer,1,fail,"A research file answers one question on its own, so any later Episode can cite it without the one that asked. Fail if understanding it needs the Brief or Episode that prompted it.",83,53508,2026-10-13T23:22:45Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-sales-pipeline-ramp-up-time,implementor,2,pass,,21,42381,2026-10-13T23:23:42Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-research-sales-pipeline-ramp-up-time,reviewer,2,pass,,17,40470,2026-10-13T23:24:30Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-dossier,implementor,1,pass,,135,85475,2026-10-13T23:28:55Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-dossier,reviewer,1,fail,"a page slide's material would leave an implementer guessing",125,108230,2026-10-13T23:31:00Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-dossier,implementor,2,pass,,24,47752,2026-10-13T23:32:05Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-dossier,reviewer,2,pass,,23,50008,2026-10-13T23:32:40Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-voice-script,implementor,1,pass,,106,69700,2026-10-13T23:35:06Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-voice-script,reviewer,1,fail,"Fail if any material contradicts the Voice script it sits beside.",226,72514,2026-10-13T23:39:00Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-voice-script,implementor,2,pass,,87,62560,2026-10-13T23:40:50Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-voice-script,reviewer,2,fail,"Fail if any material contradicts the Voice script it sits beside.",112,60548,2026-10-13T23:42:50Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-voice-script,implementor,3,pass,,52,58913,2026-10-13T23:44:13Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-voice-script,reviewer,3,pass,,97,64776,2026-10-13T23:46:00Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-spec,implementor,1,pass,,149,86052,2026-10-13T23:49:33Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-spec,reviewer,1,pass,,58,70772,2026-10-13T23:51:30Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-design-spec,implementor,1,pass,,404,577094,2026-10-13T23:58:19Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-design-spec,reviewer,1,fail,"Colour, size and weight are tokens (FE-011); every import is one FE-007 §5 allows.",210,421737,2026-10-14T00:01:00Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-design-spec,implementor,2,pass,,309,268751,2026-10-14T00:06:11Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-design-spec,reviewer,2,pass,,360,229401,2026-10-14T00:07:50Z
+2026-10-13T22:43:23Z,never-too-early-sales,implement-episode,implementor,1,pass,,4992,841098,2026-10-14T01:10:00Z
+2026-10-13T22:43:23Z,never-too-early-sales,implement-episode,reviewer,1,fail,"The visual check ran at 375, 1100 and 1440 px, drawer beside, over and closed, in both themes, and its numbers show no overflow, wrappers at least viewport height and Foreground clear of the chrome.",184,171431,2026-10-14T01:20:00Z
+2026-10-13T22:43:23Z,never-too-early-sales,implement-episode,implementor,2,pass,,505,92401,2026-10-14T01:30:00Z
+2026-10-13T22:43:23Z,never-too-early-sales,implement-episode,implementor,3,pass,,488,84086,2026-10-14T02:05:00Z
+2026-10-13T22:43:23Z,never-too-early-sales,implement-episode,reviewer,3,pass,,841,55951,2026-10-14T07:40:29Z
+2026-10-13T22:43:23Z,never-too-early-sales,open-pr,implementor,1,pass,,240,,2026-10-14T07:42:35Z

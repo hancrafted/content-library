@@ -112,6 +112,10 @@ A research folder is named `<category>-<####>__<question-slug>`: the category be
 
 **AIE**: AI Enablement: how people and organizations learn to work with AI, and what it changes in their work.
 
+**FIN**: Startup finance: how cash, costs and revenue move over time in an early-stage company.
+
+**GTM**: Go-to-market: how a company finds, wins and closes its own customers, from first lead to signed deal.
+
 **SALES**: Sales: how a buyer finds, trusts and chooses a coach or consultant.
 
 ## Localization

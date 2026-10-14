@@ -1,0 +1,85 @@
+{
+  "title": "Was ist eine Vertriebspipeline",
+  "caption": "Drei Zahlen sagen dir etwas über dein Volumen, dein Angebot und deine Effizienz.",
+  "columns": {
+    "funnel": {
+      "label": "Verkaufstrichter",
+      "caption": "Zählt jede Woche Leads, Verkaufschancen und Aufträge.",
+      "tells": "Sagt dir etwas über dein <b>Volumen</b>",
+      "rows": {
+        "leads": "Leads",
+        "opportunities": "Chancen",
+        "deals": "Aufträge"
+      }
+    },
+    "conversion": {
+      "label": "Konversionsrate",
+      "caption": "Der Anteil, der in die nächste Stufe kommt, Stufe für Stufe.",
+      "tells": "Sagt dir etwas über dein <b>Angebot</b>",
+      "from": "3 Leads",
+      "to": "1 Verkaufschance"
+    },
+    "cycle": {
+      "label": "Verkaufszyklus",
+      "caption": "Die Zeit vom Erstkontakt bis zum Auftrag.",
+      "tells": "Sagt dir etwas über deine <b>Effizienz</b>",
+      "start": "Erstkontakt",
+      "end": "Auftrag"
+    }
+  },
+  "sheet": {
+    "title": "Fang mit einer Tabelle an",
+    "columns": {
+      "stage": "Stufe",
+      "firstContact": "Erstkontakt",
+      "closed": "Abschluss"
+    },
+    "rows": {
+      "r1": {
+        "stage": "Verkaufschance",
+        "firstContact": "3. Feb.",
+        "closed": "—"
+      },
+      "r2": {
+        "stage": "Auftrag",
+        "firstContact": "12. Jan.",
+        "closed": "28. Juli"
+      }
+    }
+  },
+  "notes": {
+    "know-your-cycle": {
+      "header": "Kenne deinen Zyklus",
+      "description": "Blanks Abschlusskriterien für einen validierten Vertriebsprozess fragen, ob der Verkaufszyklus verstanden ist, samt durchschnittlichem Verkaufspreis, Kundenwert über die gesamte Laufzeit und Rendite.[1]",
+      "sources": {
+        "blank": {
+          "title": "Blank, The Customer Development Methodology (course slides)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "funnel": {
+        "title": "Trichter",
+        "keywords": "Leads, Verkaufschancen, Aufträge, Volumen, jede Woche zählen",
+        "script": "Erstens der Trichter. Er zählt Leads, Verkaufschancen und Aufträge. Wie viele kommen oben herein? Das sagt dir etwas über dein Volumen. Zähl sie jede Woche, dann siehst du, ob genug Menschen in deine Pipeline kommen."
+      },
+      "conversion-rate": {
+        "title": "Konversionsrate",
+        "keywords": "Anteil, der weiterkommt, passt das Angebot, Preis, Versprechen, Ansprechperson, Stufe für Stufe",
+        "script": "Zweitens die Konversionsrate. Das ist der Anteil, der in die nächste Stufe weiterkommt. Sie zeigt dir, ob dein Angebot zu dem passt, was die Leute kaufen wollen. Eine niedrige Rate ist ein Signal über dein Angebot, und darauf kannst du reagieren. Vielleicht liegt es am Preis, vielleicht am Versprechen, vielleicht an der Person, mit der du sprichst. Beurteile sie Stufe für Stufe, denn jede Stufe hat ihre eigene Zahl."
+      },
+      "sales-cycle": {
+        "title": "Verkaufszyklus",
+        "keywords": "Erstkontakt bis Auftrag, Effizienz, wie früh anfangen, vom Null-Monat zurückrechnen",
+        "script": "Drittens der Verkaufszyklus. Das ist die Zeit vom ersten Kontakt bis zum Auftrag. Er zeigt dir, wie effizient du bist und wie weit im Voraus du anfangen musst. Rechne von deinem Null-Monat um genau so viele Monate zurück."
+      },
+      "measure-both": {
+        "title": "Beides messen",
+        "keywords": "vierter Schritt, Aufträge in einer Pipeline verfolgen, Konversionsrate und Zyklus, eine Tabelle mit drei Spalten",
+        "script": "Und das ist dein vierter Schritt. Verfolge deine Aufträge in einer Pipeline und miss die Konversionsrate und den Zyklus. Ohne diese beiden Zahlen rätst du nur, wann dein Umsatz ankommt. Kompliziert ist das nicht. Eine Tabelle mit einer Spalte für die Stufe, einer für das Datum des ersten Gesprächs und einer für das Abschlussdatum. Mehr brauchst du für den Anfang nicht."
+      }
+    }
+  }
+}

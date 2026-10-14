@@ -1,0 +1,79 @@
+{
+  "title": "Warum der Anlauf Zeit braucht",
+  "caption": "Drei Dinge bekommst du nur, wenn du anfängst: einen aufgeschriebenen Prozess, Wissen über deinen Markt und deine eigenen Zahlen.",
+  "headers": {
+    "lack": "Was dir noch fehlt",
+    "unlock": "Wie du es bekommst"
+  },
+  "rows": {
+    "preparation": {
+      "title": "Vorbereitung",
+      "lack": "Ein aufgeschriebener Prozess: wen du anrufst, was du sagst, was nach einem Ja passiert.",
+      "unlock": "Schreib ihn vor dem ersten Anruf auf."
+    },
+    "unknown-market": {
+      "title": "Unbekannter Markt",
+      "lack": "Wer kauft, warum, und was er zu zahlen bereit ist.",
+      "unlock": "Echte Gespräche, und jedes braucht Zeit."
+    },
+    "unknown-metrics": {
+      "title": "Unbekannte Kennzahlen",
+      "lack": "Deine eigene Konversionsrate und die Länge deines Zyklus.",
+      "unlock": "Sammle sie. Nenn die ersten Zahlen Schätzungen."
+    }
+  },
+  "stamp": "Früh anfangen",
+  "notes": {
+    "metrics-lag-by-one-cycle": {
+      "header": "Kennzahlen hinken einen Zyklus hinterher",
+      "description": "Neue Leads sehen schlechter aus als der langfristige Wert, weil sie noch keinen ganzen Zyklus durchlaufen haben.[1]",
+      "sources": {
+        "roberge-science-of-scaling": {
+          "title": "Mark Roberge, The Science of Scaling"
+        }
+      }
+    },
+    "scaling-too-early-burns-cash": {
+      "header": "Zu frühes Skalieren verbrennt Geld",
+      "description": "Vertrieb und Marketing zu früh hochzufahren ist die häufigste Ursache dafür, dass ein Startup Geld verliert.[1]",
+      "sources": {
+        "blank-marketing-problem": {
+          "title": "Steve Blank, It Must Be A Marketing Problem"
+        }
+      }
+    },
+    "customers-do-not-come-to-you": {
+      "header": "Kunden kommen nicht von allein",
+      "description": "Paul Graham sinngemäß: Du kannst nicht darauf warten, dass Nutzer zu dir kommen. Du musst rausgehen und sie dir holen.[1]",
+      "sources": {
+        "graham-do-things-that-dont-scale": {
+          "title": "Paul Graham, Do Things that Don't Scale"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "preparation": {
+        "title": "Vorbereitung",
+        "keywords": "Monate Anlauf, Prozess aufschreiben, wen du anrufst, was du sagst, nach einem Ja",
+        "script": "Warum braucht eine Pipeline Monate, bis sie läuft? Der erste Grund ist die Vorbereitung. Bevor jemand einen Prozess wiederholen kann, musst du ihn aufschreiben. Wen du anrufst, was du sagst, was nach einem Ja passiert. Diese Arbeit kommt vor dem ersten Auftrag, und sie schiebt alles nach hinten. Je früher du mit dem Aufschreiben beginnst, desto früher kann dein erstes echtes Gespräch stattfinden."
+      },
+      "unknown-market": {
+        "title": "Unbekannter Markt",
+        "keywords": "wer kauft, warum, was er zahlt, echte Gespräche, falsche Vermutungen, früh anfangen",
+        "script": "Der zweite Grund ist der unbekannte Markt. Wer kauft, warum, und was er zu zahlen bereit ist. Das lernst du nur in echten Gesprächen, und jedes davon braucht Zeit, bis es zustande kommt. Du weißt noch nicht, ob deine Käufer in der Finanzabteilung sitzen oder im operativen Geschäft. Du weißt nicht, ob sie im Frühjahr kaufen oder zum Jahresende. Das findest du heraus, indem du fragst und dich ein paarmal irrst. Jeder Irrtum kostet ein Gespräch, und Gespräche sind das Knappe daran. Also fang früh damit an."
+      },
+      "unknown-metrics": {
+        "title": "Unbekannte Kennzahlen",
+        "keywords": "eigene Konversionsrate, Zykluslänge, erste Zahlen sind Schätzungen, sammeln",
+        "script": "Der dritte Grund sind unbekannte Kennzahlen. Deine eigene Konversionsrate und die Länge deines Zyklus kennst du noch nicht. Deine ersten Zahlen sind Schätzungen. Niemand kann dir die echten Werte im Voraus sagen. Du kannst sie nur sammeln, und eine gute Schätzung ist in Ordnung, solange du sie auch so nennst."
+      },
+      "so-start-early": {
+        "title": "Also früh anfangen",
+        "keywords": "früh anfangen, jeder Monat Verzögerung, langsame erste Monate, Warten macht nichts schneller",
+        "script": "Also fang früh an. Jeder Monat, den du wartest, ist ein Monat Lernen, den du nie zurückbekommst. Die ersten Monate fühlen sich langsam an, und das ist normal. Durch Warten geht hier nichts schneller."
+      }
+    }
+  }
+}

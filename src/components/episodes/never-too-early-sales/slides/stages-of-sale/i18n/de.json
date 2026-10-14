@@ -1,0 +1,85 @@
+{
+  "title": "Die Stufen eines Verkaufs",
+  "caption": "Aus Leads werden Abschlüsse, und das Geld wartet trotzdem noch auf die Lieferung.",
+  "flow": {
+    "label": "Die drei Stufen eines Verkaufs, von Leads bis zum Abschluss"
+  },
+  "stages": {
+    "leads": {
+      "title": "Leads",
+      "notes": {
+        "research": "Recherche",
+        "first-contact": "Erstkontakt",
+        "first-contact-detail": "Kaltakquise · Anfrage · Netzwerk"
+      }
+    },
+    "opportunities": {
+      "title": "Chancen",
+      "tag": "die eigentliche Arbeit",
+      "notes": {
+        "conversations": "Gespräche",
+        "questions": "Fragen",
+        "proposal": "Angebot"
+      }
+    },
+    "closing": {
+      "title": "Abschluss",
+      "notes": {
+        "signature": "Unterschrift"
+      }
+    }
+  },
+  "delivery": {
+    "cash": "Geld",
+    "label": "Lieferung: noch mehr Wartezeit bis zum Geld"
+  },
+  "notes": {
+    "delivery-adds-lag": {
+      "header": "Die Lieferung verlängert die Wartezeit",
+      "description": "Ist die Arbeit erledigt, beginnt die Zahlungsfrist des Kunden unter Umständen erst nach einer Abnahme, die bis zu 30 Tage dauern darf.[1]",
+      "sources": {
+        "eu-late-payment-directive": {
+          "title": "Europäisches Parlament und Rat, Richtlinie 2011/7/EU zur Bekämpfung von Zahlungsverzug im Geschäftsverkehr"
+        }
+      }
+    },
+    "early-channels-do-not-scale": {
+      "header": "Frühe Kanäle skalieren nicht, und das ist in Ordnung",
+      "description": "Vor dem Product-Market-Fit setzt du auf die persönlichen Netzwerke von Gründern, Mitarbeitenden und Investoren und auf Empfehlungen von Kunden; dort findest du die Chancen, aus denen du am meisten lernst.[1]",
+      "sources": {
+        "roberge-science-of-scaling": {
+          "title": "Mark Roberge, The Science of Scaling"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "three-stages": {
+        "title": "Drei Stufen",
+        "keywords": "Leads, Chancen, Abschluss, vom Fremden zum Kunden, drei Wörter",
+        "script": "Ein Verkauf hat drei Stufen, von links nach rechts. Leads, Chancen und Abschluss. Jede davon ist eine andere Art von Arbeit. Erst ist jemand ein Fremder, dann ein Name auf deiner Liste, dann ein Gespräch und schließlich ein Kunde. Die Stufen benennen nur, wo eine Person auf diesem Weg gerade steht. Merk dir diese drei Wörter, denn der Rest dieses Teils baut auf ihnen auf."
+      },
+      "leads": {
+        "title": "Leads",
+        "keywords": "zweiter Schritt, Tabelle, heute zehn Namen, jede Woche, Firma, Person, warum es sie interessiert",
+        "script": "Fang mit den Leads an. Ein Lead ist einfach der Name von jemandem, der kaufen könnte. Recherchiere diese Menschen und führ eine Liste. Das ist dein zweiter Schritt, und den kannst du heute gehen. Öffne eine Tabelle, trag zehn Namen ein und ergänze jede Woche neue. Die Liste muss nicht perfekt sein. Notier die Firma, die Person und warum sie sich deiner Meinung nach dafür interessieren könnte. Wenn du es noch nicht weißt, schreib eine Vermutung auf und korrigiere sie nach dem ersten Gespräch. Die einzige falsche Liste ist die leere."
+      },
+      "first-contact": {
+        "title": "Erstkontakt",
+        "keywords": "dritter Schritt, Kaltakquise, Anfrage, Netzwerk, kurze ehrliche Nachricht, ein Nein lehrt kostenlos",
+        "script": "Danach kommt der Erstkontakt. Du kannst kalt anrufen, auf jemanden antworten, der sich bei dir gemeldet hat, oder dein Netzwerk fragen. Nimm den Weg, vor dem du am wenigsten Angst hast, und leg los. Das ist dein dritter Schritt. Jedes Gespräch, aus dem etwas wird, macht aus einem Lead eine Chance. Viele fürchten, anderen auf die Nerven zu gehen. Eine kurze, ehrliche Nachricht ist aber etwas völlig Faires. Und wenn die Antwort Nein lautet, hast du kostenlos etwas gelernt."
+      },
+      "opportunities": {
+        "title": "Chancen",
+        "keywords": "die eigentliche Arbeit, Gespräche, Fragen, Angebot, der größte Teil der Woche, stetige Lead-Recherche",
+        "script": "Bei den Chancen passiert die eigentliche Arbeit. Gespräche, Fragen, ein Angebot. Wenn du deine ganze Zeit in die Lead-Recherche steckst, recherchierst du, statt zu verkaufen. Irgendwann muss aus einem Namen ein Gespräch werden und aus einem Gespräch ein Angebot. Steck den größten Teil deiner Woche in die Chancen, die du schon hast. Und reserviere einen kleinen, festen Teil dafür, neue Namen in die Lead-Stufe aufzunehmen."
+      },
+      "after-closing": {
+        "title": "Nach dem Abschluss",
+        "keywords": "Unterschrift, Lieferung, noch mehr Warten, Umsatz nach der Unterschrift, Null-Monat früher",
+        "script": "Für dein Geld ist der Abschluss noch nicht das Ende der Geschichte. Nach der Unterschrift kommt die Lieferung, und die Lieferung bedeutet weiteres Warten. Dein Umsatz kommt später an als die Unterschrift, also rechne diese Lücke in deine Tafel ein. Wie lange dauert die Lieferung bei dir? Eine Woche? Ein Quartal? Kleb sie als Zettel hinter die Unterschrift, und du findest deinen Null-Monat ein Stück früher, als du dachtest."
+      }
+    }
+  }
+}

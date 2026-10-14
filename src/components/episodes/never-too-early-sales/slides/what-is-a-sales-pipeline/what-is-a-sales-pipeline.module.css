@@ -1,0 +1,63 @@
+/*
+ * Entrance only (FE-009 §6): the base rules are the finished board, which
+ * carries the claim at rest. The columns are placed left to right (`--step`,
+ * 200ms apart), the conversion arrow draws, the cycle bar grows from its first
+ * tick, then the sheet rows slide in. About 2s, no loop, no hover motion.
+ */
+
+@keyframes place {
+  from {
+    opacity: 0;
+    translate: 0 0.5rem;
+  }
+}
+
+@keyframes draw {
+  from {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+
+  to {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes slide {
+  from {
+    opacity: 0;
+    translate: -0.5rem 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .column {
+    animation: place 300ms ease-out both;
+    animation-delay: calc(var(--step) * 200ms);
+  }
+
+  /* After the second column is placed. */
+  :global([data-zone='active']) .draw {
+    animation: draw 400ms ease-out both;
+    animation-delay: 500ms;
+  }
+
+  /* After the third column is placed. */
+  :global([data-zone='active']) .grow {
+    transform-origin: left center;
+    animation: grow 500ms ease-out both;
+    animation-delay: 700ms;
+  }
+
+  :global([data-zone='active']) .row {
+    animation: slide 250ms ease-out both;
+    animation-delay: calc(1200ms + var(--row) * 250ms);
+  }
+}

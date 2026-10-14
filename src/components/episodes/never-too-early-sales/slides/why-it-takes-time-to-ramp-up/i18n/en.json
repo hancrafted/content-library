@@ -1,0 +1,79 @@
+{
+  "title": "Why it takes time to ramp up",
+  "caption": "Three things you only get by starting: a written process, market knowledge and your own numbers.",
+  "headers": {
+    "lack": "What you don't have yet",
+    "unlock": "How you get it"
+  },
+  "rows": {
+    "preparation": {
+      "title": "Preparation",
+      "lack": "A written process: who you call, what you say, what follows a yes.",
+      "unlock": "Write it down before the first call."
+    },
+    "unknown-market": {
+      "title": "Unknown market",
+      "lack": "Who buys, why they buy, what they will pay.",
+      "unlock": "Real conversations, each one takes time."
+    },
+    "unknown-metrics": {
+      "title": "Unknown metrics",
+      "lack": "Your own conversion rate and cycle length.",
+      "unlock": "Collect them. Call the first numbers guesses."
+    }
+  },
+  "stamp": "Start early",
+  "notes": {
+    "metrics-lag-by-one-cycle": {
+      "header": "Metrics lag by one cycle",
+      "description": "Recent leads look worse than the long-run value because they have not yet gone through a full cycle.[1]",
+      "sources": {
+        "roberge-science-of-scaling": {
+          "title": "Mark Roberge, The Science of Scaling"
+        }
+      }
+    },
+    "scaling-too-early-burns-cash": {
+      "header": "Scaling too early burns cash",
+      "description": "Premature scaling of sales and marketing is the leading cause of cash loss in a startup.[1]",
+      "sources": {
+        "blank-marketing-problem": {
+          "title": "Steve Blank, It Must Be A Marketing Problem"
+        }
+      }
+    },
+    "customers-do-not-come-to-you": {
+      "header": "Customers do not come to you",
+      "description": "\"You can't wait for users to come to you. You have to go out and get them.\"[1]",
+      "sources": {
+        "graham-do-things-that-dont-scale": {
+          "title": "Paul Graham, Do Things that Don't Scale"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "preparation": {
+        "title": "Preparation",
+        "keywords": "months to ramp up, write the process down, who you call, what you say, after a yes",
+        "script": "Why does a pipeline need months to ramp up? The first reason is preparation. Before anyone can repeat a process, you have to write it down. Who you call, what you say, what happens after a yes. That work happens before the first deal can, and it pushes everything later. The sooner you begin writing it down, the sooner your first real call can happen."
+      },
+      "unknown-market": {
+        "title": "Unknown market",
+        "keywords": "who buys, why they buy, what they pay, real conversations, wrong guesses, start early",
+        "script": "The second reason is the unknown market. Who buys, why they buy, and what they will pay. You only learn that in real conversations, and each one takes time to arrange. You do not know yet whether your buyers are in the finance team or in operations. You do not know if they buy in spring or at year end. You find out by asking, and by being wrong a few times. Each wrong guess costs a conversation, and conversations are the scarce part, so you want to start having them early."
+      },
+      "unknown-metrics": {
+        "title": "Unknown metrics",
+        "keywords": "own conversion rate, cycle length, first numbers are guesses, collect them",
+        "script": "The third is unknown metrics. You do not know your own conversion rate or your cycle length yet. Your first numbers will be guesses. Nobody can tell you the true numbers in advance. You can only collect them, and a good guess is fine as long as you call it a guess."
+      },
+      "so-start-early": {
+        "title": "So start early",
+        "keywords": "start early, every month of delay, slow early months, nothing goes faster by waiting",
+        "script": "So start early. Every month you delay is a month of learning that you never get back. The early months feel slow, and that is normal. Nothing here goes faster by waiting."
+      }
+    }
+  }
+}

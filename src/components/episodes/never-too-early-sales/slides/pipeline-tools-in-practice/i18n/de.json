@@ -1,0 +1,85 @@
+{
+  "title": "Pipeline-Werkzeuge in der Praxis",
+  "caption": "Eine Karte pro Deal, eine Spalte pro Stufe: Was feststeckt, siehst du auf einen Blick.",
+  "board": {
+    "label": "Eine Deal-Tafel mit vier Stufen",
+    "columns": {
+      "new": {
+        "title": "Neu",
+        "summary": "3 · 29k $"
+      },
+      "meeting": {
+        "title": "Termin",
+        "summary": "1 · 20k $"
+      },
+      "proposal": {
+        "title": "Angebot",
+        "summary": "2 · 52k $"
+      },
+      "won": {
+        "title": "Gewonnen",
+        "summary": "1 · 18k $"
+      }
+    },
+    "cards": {
+      "brightfold": {
+        "name": "Brightfold",
+        "value": "8k $"
+      },
+      "okapi-logistics": {
+        "name": "Okapi Logistics",
+        "value": "15k $"
+      },
+      "talvik-energy": {
+        "name": "Talvik Energy",
+        "value": "6k $"
+      },
+      "mosswell-clinics": {
+        "name": "Mosswell Clinics",
+        "value": "20k $"
+      },
+      "kestrel-labs": {
+        "name": "Kestrel Labs",
+        "value": "40k $"
+      },
+      "harbor-and-pine": {
+        "name": "Harbor & Pine",
+        "value": "12k $"
+      },
+      "lindgren-tools": {
+        "name": "Lindgren Tools",
+        "value": "18k $"
+      }
+    }
+  },
+  "notes": {
+    "late-slippage-hurts": {
+      "header": "Spätes Verrutschen schadet",
+      "description": "In den Daten eines Anbieters schließen Deals, die spät im Verkaufszyklus verrutschen, seltener ab, und bei gewonnenen Deals waren die Entscheider früh beteiligt.[1]",
+      "sources": {
+        "ebsta-pavilion-gtm-benchmarks": {
+          "title": "Ebsta and Pavilion, GTM Benchmarks Report"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "simple-board": {
+        "title": "Eine einfache Tafel",
+        "keywords": "eine Spalte pro Stufe, eine Karte pro Deal, Anzahl und Wert, Montagmorgen, wen du anrufst",
+        "script": "Eine Deal-Tafel ist einfach. Eine Spalte für jede Stufe: Neu, Termin, Angebot und Gewonnen. Jeder Deal ist eine Karte. Oben in jeder Spalte siehst du, wie viele Deals dort liegen und was sie zusammen wert sind. Stell dir einen Montagmorgen vor, an dem diese Tafel vor dir hängt. Zwei Deals stehen bei Angebot, und einer hängt bei Termin fest. Du weißt genau, wen du anrufen musst und in welcher Reihenfolge."
+      },
+      "track-every-deal": {
+        "title": "Jeden Deal verfolgen",
+        "keywords": "Schritt für Schritt, nichts nur im Kopf, volle Spalte, leere Spalte, eine Minute statt ein Quartal",
+        "script": "Dann verfolgst du jeden Deal. Eine Karte wandert Schritt für Schritt von einer Spalte in die nächste. Nichts existiert nur in deinem Kopf, und nichts geht vergessen. So findest du auch die Probleme. Eine Spalte, die sich füllt und nie leert, zeigt dir, wo Deals feststecken. Eine Spalte, die leer bleibt, zeigt dir, wo nichts nachkommt. Beides siehst du in deinem Posteingang nicht. Wenn etwas feststeckt, merkst du es in einer Minute statt erst nach einem Quartal."
+      },
+      "start-simple": {
+        "title": "Einfach anfangen",
+        "keywords": "kein perfektes Werkzeug, Tabelle, Haftnotizen, wöchentliche Gewohnheit, fünfzehn Minuten, klein und regelmäßig",
+        "script": "Warte nicht auf das perfekte Werkzeug. Eine Tabelle reicht. Haftnotizen an der Wand reichen auch. Das Werkzeug zählt viel weniger als die Gewohnheit, es jede Woche zu pflegen. Such dir einen festen Termin pro Woche, fünfzehn Minuten. Verschieb die Karten, ergänze die neuen und streich die toten. Klein und regelmäßig schlägt groß und selten."
+      }
+    }
+  }
+}

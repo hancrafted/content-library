@@ -43,6 +43,16 @@ Suits a mixed audience and consulting prospects: sober, self-explanatory Slides 
 - `primary` marks the one thing to look at.
 - The meaning colours (`machine`, `human`, `ai`) appear only for their meanings.
 
+### Board
+
+Suits founders and workshop cohorts: Slides look like the planning board they would sketch themselves, so the viewer can copy the method.
+
+- A Slide is a board: columns (months, stages) holding sticky notes.
+- One note colour per kind of thing (cash, cost, revenue), kept across the Episode.
+- A returning board changes only what the argument moves; the rest stays put.
+- Arrows and stamps mark the one thing to look at.
+- The meaning colours (`machine`, `human`, `ai`) appear only for their meanings.
+
 ## Like this
 
 `markdown-in-ai-workflows` (Episode `maintaining-markdown-for-ai`). It stands on its own at rest, with depth behind a modal and the Context drawer. Its meaning colours (Knowledge `ai`, Instructions `human`, Memory `machine`) colour things that are not those meanings, so do not copy them. The Episode is legacy and keeps them until it is next touched.

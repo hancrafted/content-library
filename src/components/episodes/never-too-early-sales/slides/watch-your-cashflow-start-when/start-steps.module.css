@@ -1,0 +1,26 @@
+/*
+ * The steps' entrance, after the board's own: the board places its four
+ * columns (4 × 250ms), then draws the arrow from 1300ms for 600ms. The steps
+ * rise one by one once the arrow ends, and the footer comes last. The base
+ * rules are the finished list; the entrance runs only on the active Slide and
+ * never under reduced motion (FE-009 §6).
+ */
+
+@keyframes rise-step {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .step {
+    animation: rise-step 300ms ease-out both;
+    animation-delay: calc(1900ms + var(--step) * 120ms);
+  }
+
+  :global([data-zone='active']) .footer {
+    animation: rise-step 300ms ease-out both;
+    animation-delay: 2400ms;
+  }
+}

@@ -47,9 +47,12 @@ export const LAYOUT_REFERENCES = [
 /** A registered Episode the overview lists: every one but the layout references. */
 export type ListedEpisodeSlug = Exclude<EpisodeSlug, (typeof LAYOUT_REFERENCES)[number]>;
 
-/** The Featured slots: exactly three published Episodes, lead first. Re-ranking is this one edit. */
-export const FEATURED: readonly [ListedEpisodeSlug, ListedEpisodeSlug, ListedEpisodeSlug] = [
+/**
+ * The Featured slots: exactly three published Episodes, lead first. Re-ranking is this one edit. Kept as literals, so
+ * `featuredSlugs()` can refuse a slug whose metadata is upcoming once an upcoming Episode has a page.
+ */
+export const FEATURED = [
   'amnesiac-freelancer',
   'maintaining-markdown-for-ai',
   'ai-token-economy',
-];
+] as const satisfies readonly [ListedEpisodeSlug, ListedEpisodeSlug, ListedEpisodeSlug];

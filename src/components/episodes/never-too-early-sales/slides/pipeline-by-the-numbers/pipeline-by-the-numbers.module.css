@@ -1,0 +1,79 @@
+/*
+ * Entrance only (FE-009 §6): the base rules are the finished picture, which
+ * carries the claim at rest. The stages fill in one after the other, the bars
+ * grow, the revenue note lands, the 27:1 bracket draws last. Each element's
+ * order is its inline `--step`, times 300ms. The illustration
+ * caption never animates.
+ */
+
+@keyframes place {
+  from {
+    opacity: 0;
+    scale: 0.6;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes land {
+  from {
+    opacity: 0;
+    translate: 0 -0.5rem;
+  }
+}
+
+/*
+ * The bracket's stroke does not scale (`vector-effect`), so its dashes are
+ * screen pixels and `pathLength` does not apply: one dash longer than any
+ * Foreground covers the whole path, and the finished bracket is solid.
+ */
+@keyframes draw {
+  from {
+    stroke-dasharray: 4000;
+    stroke-dashoffset: 4000;
+  }
+
+  to {
+    stroke-dasharray: 4000;
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Lead notes come in three quick rows: `--row` adds 50ms per row. */
+  :global([data-zone='active']) .place {
+    animation: place 200ms ease-out both;
+    animation-delay: calc(var(--step) * 300ms + var(--row, 0) * 50ms);
+  }
+
+  :global([data-zone='active']) .fade {
+    animation: fade 200ms ease-out both;
+    animation-delay: calc(var(--step) * 300ms);
+  }
+
+  :global([data-zone='active']) .grow {
+    transform-origin: left center;
+    animation: grow var(--duration, 400ms) ease-out both;
+    animation-delay: calc(var(--step) * 300ms);
+  }
+
+  :global([data-zone='active']) .land {
+    animation: land 250ms ease-out both;
+    animation-delay: calc(var(--step) * 300ms);
+  }
+
+  :global([data-zone='active']) .draw {
+    animation: draw 400ms ease-out both;
+    animation-delay: calc(var(--step) * 300ms);
+  }
+}

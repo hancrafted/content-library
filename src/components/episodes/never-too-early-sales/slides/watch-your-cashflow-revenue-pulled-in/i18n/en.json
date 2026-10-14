@@ -1,0 +1,57 @@
+{
+  "title": "Watch your cashflow, revenue pulled in",
+  "caption": "Same costs, same deal, two months earlier: cash never hits zero.",
+  "board": {
+    "label": "Cashflow board, January to April, with the revenue moved to February",
+    "rows": {
+      "cash": "Cash",
+      "cost": "Cost",
+      "revenue": "Revenue"
+    },
+    "months": {
+      "jan": "Jan",
+      "feb": "Feb",
+      "mar": "Mar",
+      "apr": "Apr"
+    },
+    "amounts": {
+      "cashJan": "$100k",
+      "cashFeb": "$50k",
+      "cashMar": "$1M",
+      "cashApr": "$950k",
+      "cost": "$50k",
+      "revenue": "+$1M"
+    },
+    "arrow": "Two months earlier"
+  },
+  "notes": {
+    "promised-revenue-is-discounted": {
+      "header": "Promised revenue is discounted",
+      "description": "Revenue that is only predicted is discounted by investors, and founders who rely on raising more money often find the assumption false, so projected revenue does not cover present costs.[1]",
+      "sources": {
+        "paul-graham-default-alive": {
+          "title": "Paul Graham, Default Alive or Default Dead?"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "same-board": {
+        "title": "Same board",
+        "keywords": "the board again, same costs, same four months, one note different",
+        "script": "Here is the board again, with the same costs and the same four months. Only one note is different. That one note is what this whole talk is about."
+      },
+      "revenue-earlier": {
+        "title": "Revenue earlier",
+        "keywords": "April revenue now in February, cash dips but never zero, stamp gone, timing matters",
+        "script": "The April revenue note has moved. It now sits in February. Follow the cash row. It dips, but it never reaches zero. The stamp is gone, and the company lives on into the summer. In the first board you were out of money while waiting for a good deal. Here the same deal came earlier. That is how much timing matters."
+      },
+      "how-it-moves": {
+        "title": "How it moves",
+        "keywords": "not by hoping, not a nicer spreadsheet, start the pipeline earlier, signed and paid in time",
+        "script": "How did the note move? Not by hoping, and not by a nicer spreadsheet. The only way is to start the pipeline earlier, so that the deal is signed and the money has arrived by the time the cost notes pile up."
+      }
+    }
+  }
+}

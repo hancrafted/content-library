@@ -1,0 +1,18 @@
+{
+  "title": "Warum der Blick auf den Cashflow überlebenswichtig ist",
+  "caption": "Eine Firma kann auf dem Papier gesund aussehen und trotzdem einen Monat zu früh ohne Geld dastehen.",
+  "voiceScript": {
+    "segments": {
+      "opening-promise": {
+        "title": "Das Versprechen",
+        "keywords": "gesund auf dem Papier, pleite im März, einen Monat zu spät, vier erste Schritte",
+        "script": "Stell dir eine Firma vor, die auf dem Papier gesund aussieht. Sie hat ein Produkt, ein großer Auftrag ist in Sicht, und das Team arbeitet hart. Und im März ist sie pleite. Nicht weil das Geschäft schlecht war, sondern weil das Geld einen Monat zu spät kam. Niemand hatte die einfache Tafel gezeichnet, auf der man es hätte kommen sehen. Heute zeige ich dir, warum Vertrieb lange vor dem Moment beginnen muss, in dem du den Umsatz brauchst, und welche vier ersten Schritte du gehen kannst."
+      },
+      "who-this-is-for": {
+        "title": "Für wen das ist",
+        "keywords": "Gründerinnen und Gründer, Gründungsteam, Business oder Technik, später ist teuer",
+        "script": "Das hier ist für Gründerinnen, Gründer und alle im Gründungsteam. Vielleicht kümmerst du dich ums Geschäft, vielleicht bist du die Person, die entwickelt. So oder so weißt du, dass du verkaufen solltest. Du hältst es nur für etwas, das später kommt, wenn das Produkt fertig ist. Am Ende möchte ich, dass du siehst, warum später die teure Antwort ist."
+      }
+    }
+  }
+}

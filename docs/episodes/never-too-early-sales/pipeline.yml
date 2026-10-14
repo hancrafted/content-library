@@ -1,0 +1,398 @@
+# The per-run pipeline of the Episode never-too-early-sales, tailored from the
+# new-episode template by customize-pipeline. Han approves it by setting
+# `status: approved`; the run log's customize-pipeline entry lists every change.
+#
+# Schema (checked by src/lib/episode-pipeline.pure.ts in `npm run verify`):
+#   status    draft | approved
+#   template  per-run only: the feat/89-new-episode commit the pipeline was tailored
+#             from; the template is not merged into the Episode branch again until
+#             open-pr is done
+#   jobs      run once every job in `needs` is done; independent jobs may run in parallel
+#     intent    optional; the job's task as a prompt, for a job no reference describes
+#     needs     job ids this job waits for; a blocked one blocks this job too
+#     wants     optional; job ids this job waits for, passed or blocked: a blocked
+#               one does not block it, and its implementor learns which blocked
+#     isolation optional; `worktree`: the job's agents and checks work in their own
+#               worktree on episode/never-too-early-sales--<job id>, merged back only on a pass.
+#               Required on a job that may run beside another or has foreach,
+#               unless all its agents run in the orchestrator session
+#     foreach   template only; `<file>#<heading>`: customize-pipeline writes one job per list item
+#     before    what runs before the implementor writes: `mh-query`, required when a job
+#               writes markdown, has the implementor run `npx mh query <path>` on every
+#               .md output and follow its intents; the reviewer runs it as its baseline
+#     outputs   full repo paths in the staging folder docs/episodes/never-too-early-sales/; a job reading
+#               one must need or want its writer; a rule must govern every .md one
+#     checks    cheapest first; names and commands in SKILL.md's job-loop check table
+#     retries   reviewer failures sent back before this branch of the pipeline stops
+#     gate      optional; `human` stops the run until Han approves the output; a job
+#               with no staging output is approved by its tickets' labels instead
+#     agents    run in order; a reviewer is fresh: it did not write the output
+#       type        implementor | reviewer
+#       skills      skill names under .agents/skills/
+#       references  files the agent reads: `references/` and `assets/` sit in this
+#                   skill's folder, anything else is a repo path
+#       rubric      reviewers only: `<file>#<heading>` holding the pass/fail lines
+#       agent       optional; the Claude Code agent type to spawn, general-purpose when omitted
+#       model       the model it runs on, or inherit; SKILL.md's job loop says where it applies
+#       session     optional; subagent (default) or orchestrator, by SKILL.md's job loop
+status: approved
+template: 26f560f
+jobs:
+  - id: brief-grill
+    needs: []
+    before: [mh-query]
+    outputs: [docs/episodes/never-too-early-sales/brief.md]
+    checks: [mh, vitest]
+    retries: 2
+    gate: human
+    agents:
+      - type: implementor
+        skills: [brief-grill, grilling, handoff]
+        references: [references/brief-grill.md]
+        model: inherit
+        session: orchestrator
+      - type: reviewer
+        skills: []
+        references: [references/brief-grill.md]
+        rubric: references/brief-grill.md#rubric
+        model: opus
+
+  # An information architect's call, before the pipeline names any research file.
+  - id: categorize-research
+    intent: >-
+      Name one research folder per research question of the Brief, in its
+      order, as `<category>-<####>__<question-slug>` by GLOSSARY.md's Research
+      categories: pick the category each question belongs to, or, when none
+      fits, add a new category there with its meaning. Number each folder with
+      the next free number of its category, counting every research folder in
+      docs/episodes/*/research/ and docs/llm-wiki/research/. Write the
+      question's subject, not the Episode, in 20-40 characters of kebab case.
+      Return the names, each beside its question, and any category you added
+      with why no existing one fits.
+    needs: [brief-grill]
+    outputs: []
+    checks: [mh]
+    retries: 1
+    agents:
+      - type: implementor
+        skills: [domain-modeling]
+        references: [GLOSSARY.md, docs/episodes/never-too-early-sales/brief.md]
+        model: opus
+
+  - id: customize-pipeline
+    needs: [categorize-research]
+    outputs: [docs/episodes/never-too-early-sales/pipeline.yml]
+    checks: [vitest]
+    retries: 0
+    gate: human
+    agents:
+      - type: implementor
+        skills: []
+        references:
+          [references/customize-pipeline.md, assets/pipeline.yml, docs/episodes/never-too-early-sales/brief.md]
+        model: inherit
+        session: orchestrator
+
+  # No retrieval job: docs/llm-wiki/index.md does not exist yet, so every
+  # research question is new. One write-research job per question, in the
+  # Brief's order.
+  - id: write-research-revenue-lags-costs-in-startups
+    intent: >-
+      Answer the research question "Why does revenue typically lag the costs that generate it in an early-stage startup?" by references/write-research.md.
+    needs: [customize-pipeline]
+    isolation: worktree
+    before: [mh-query]
+    outputs: [docs/episodes/never-too-early-sales/research/FIN-0001__revenue-lags-costs-in-startups/research.md]
+    checks: [mh, vitest]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research]
+        references: [references/write-research.md, docs/episodes/never-too-early-sales/brief.md]
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-b2b-sales-cycle-length
+    intent: >-
+      Answer the research question "Why do typical B2B sales cycles take as long as they do?" by references/write-research.md.
+    needs: [customize-pipeline]
+    isolation: worktree
+    before: [mh-query]
+    outputs: [docs/episodes/never-too-early-sales/research/GTM-0001__b2b-sales-cycle-length/research.md]
+    checks: [mh, vitest]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research]
+        references:
+          [
+            references/write-research.md,
+            docs/episodes/never-too-early-sales/brief.md,
+            docs/episodes/never-too-early-sales/source-deck.pdf,
+          ]
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-b2b-pipeline-conversion-rates
+    intent: >-
+      Answer the research question "Why are stage conversion rates in a B2B sales pipeline as low as they are?" by references/write-research.md.
+    needs: [customize-pipeline]
+    isolation: worktree
+    before: [mh-query]
+    outputs: [docs/episodes/never-too-early-sales/research/GTM-0002__b2b-pipeline-conversion-rates/research.md]
+    checks: [mh, vitest]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research]
+        references:
+          [
+            references/write-research.md,
+            docs/episodes/never-too-early-sales/brief.md,
+            docs/episodes/never-too-early-sales/source-deck.pdf,
+          ]
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-early-selling-market-insight
+    intent: >-
+      Answer the research question "Why does selling early yield market insight?" by references/write-research.md.
+    needs: [customize-pipeline]
+    isolation: worktree
+    before: [mh-query]
+    outputs: [docs/episodes/never-too-early-sales/research/GTM-0003__early-selling-market-insight/research.md]
+    checks: [mh, vitest]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research]
+        references: [references/write-research.md, docs/episodes/never-too-early-sales/brief.md]
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-early-sales-results-build-trust
+    intent: >-
+      Answer the research question "Why does engaging in sales and obtaining early sales results, like LOI, filled sales pipeline, generate trust?" by references/write-research.md.
+    needs: [customize-pipeline]
+    isolation: worktree
+    before: [mh-query]
+    outputs: [docs/episodes/never-too-early-sales/research/GTM-0004__early-sales-results-build-trust/research.md]
+    checks: [mh, vitest]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research]
+        references: [references/write-research.md, docs/episodes/never-too-early-sales/brief.md]
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-early-selling-repeatable-process
+    intent: >-
+      Answer the research question "Why does engaging in sales early lead to a repeatable sales process?" by references/write-research.md.
+    needs: [customize-pipeline]
+    isolation: worktree
+    before: [mh-query]
+    outputs: [docs/episodes/never-too-early-sales/research/GTM-0005__early-selling-repeatable-process/research.md]
+    checks: [mh, vitest]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research]
+        references: [references/write-research.md, docs/episodes/never-too-early-sales/brief.md]
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-sales-pipeline-ramp-up-time
+    intent: >-
+      Answer the research question "Why does building an effective sales pipeline take months to ramp up?" by references/write-research.md.
+    needs: [customize-pipeline]
+    isolation: worktree
+    before: [mh-query]
+    outputs: [docs/episodes/never-too-early-sales/research/GTM-0006__sales-pipeline-ramp-up-time/research.md]
+    checks: [mh, vitest]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research]
+        references: [references/write-research.md, docs/episodes/never-too-early-sales/brief.md]
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  # Wants the research rather than needing it: a blocked question leaves a
+  # gap the Dossier works around, instead of blocking the Episode.
+  - id: write-dossier
+    needs: [customize-pipeline]
+    wants:
+      - write-research-revenue-lags-costs-in-startups
+      - write-research-b2b-sales-cycle-length
+      - write-research-b2b-pipeline-conversion-rates
+      - write-research-early-selling-market-insight
+      - write-research-early-sales-results-build-trust
+      - write-research-early-selling-repeatable-process
+      - write-research-sales-pipeline-ramp-up-time
+    before: [mh-query]
+    outputs: [docs/episodes/never-too-early-sales/dossier.md]
+    checks: [mh, vitest]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: []
+        references:
+          - references/write-dossier.md
+          - docs/episodes/never-too-early-sales/brief.md
+          - docs/episodes/never-too-early-sales/research/FIN-0001__revenue-lags-costs-in-startups/research.md
+          - docs/episodes/never-too-early-sales/research/GTM-0001__b2b-sales-cycle-length/research.md
+          - docs/episodes/never-too-early-sales/research/GTM-0002__b2b-pipeline-conversion-rates/research.md
+          - docs/episodes/never-too-early-sales/research/GTM-0003__early-selling-market-insight/research.md
+          - docs/episodes/never-too-early-sales/research/GTM-0004__early-sales-results-build-trust/research.md
+          - docs/episodes/never-too-early-sales/research/GTM-0005__early-selling-repeatable-process/research.md
+          - docs/episodes/never-too-early-sales/research/GTM-0006__sales-pipeline-ramp-up-time/research.md
+          - docs/episodes/never-too-early-sales/source-deck.pdf
+        model: inherit
+      - type: reviewer
+        skills: []
+        references: [references/write-dossier.md, docs/episodes/never-too-early-sales/brief.md]
+        rubric: references/write-dossier.md#rubric
+        model: opus
+
+  # Rewrites the Voice script lines of dossier.md and nothing else; the staging
+  # test checks that against write-dossier's commit, so no schema key says it.
+  # Han reads and edits the whole Dossier at this gate.
+  - id: write-voice-script
+    needs: [write-dossier]
+    before: [mh-query]
+    outputs: [docs/episodes/never-too-early-sales/dossier.md]
+    checks: [mh, vitest]
+    retries: 2
+    gate: human
+    agents:
+      - type: implementor
+        skills: []
+        references:
+          - references/write-voice-script.md
+          - docs/episodes/never-too-early-sales/brief.md
+          - docs/episodes/never-too-early-sales/dossier.md
+        model: inherit
+      - type: reviewer
+        skills: []
+        references:
+          - references/write-voice-script.md
+          - docs/episodes/never-too-early-sales/brief.md
+        rubric: references/write-voice-script.md#rubric
+        model: opus
+
+  # Writes no staging file: its output is a spec issue with one sub-issue per Section.
+  - id: write-spec
+    needs: [write-voice-script]
+    outputs: []
+    checks: []
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [to-spec, to-tickets]
+        references:
+          [
+            references/write-spec.md,
+            docs/episodes/never-too-early-sales/brief.md,
+            docs/episodes/never-too-early-sales/dossier.md,
+          ]
+        model: inherit
+      - type: reviewer
+        skills: []
+        references: [references/write-spec.md, docs/episodes/never-too-early-sales/dossier.md]
+        rubric: references/write-spec.md#rubric
+        model: opus
+
+  # Writes no staging file: its output is the spec issue's visual language and a
+  # design answer in every ticket body. The implementor runs in the orchestrator's
+  # session, because it spawns the designers (ui-ux-pro-max:slides). The gate is a label, not a
+  # status: Han relabels each ticket from needs-triage to ready-for-agent.
+  - id: write-design-spec
+    needs: [write-spec]
+    outputs: []
+    checks: []
+    retries: 2
+    gate: human
+    agents:
+      - type: implementor
+        skills: [ui-ux-pro-max:slides]
+        references:
+          - references/write-design-spec.md
+          - GLOSSARY.md
+          - docs/episodes/never-too-early-sales/brief.md
+          - docs/episodes/never-too-early-sales/dossier.md
+          - docs/design/slide-library.md
+          - docs/design/design-guide.md
+          - docs/design/design-system.md
+          - docs/episodes/never-too-early-sales/source-deck.pdf
+        model: opus
+        session: orchestrator
+      - type: reviewer
+        skills: []
+        references:
+          - references/write-design-spec.md
+          - GLOSSARY.md
+          - docs/episodes/never-too-early-sales/brief.md
+          - docs/episodes/never-too-early-sales/dossier.md
+          - docs/design/slide-library.md
+          - docs/design/design-guide.md
+        rubric: references/write-design-spec.md#rubric
+        model: opus
+
+  # Writes the Episode under src/, outside the staging folder.
+  - id: implement-episode
+    needs: [write-design-spec]
+    outputs: []
+    checks: [verify, build, test:build, visual-check]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [implement-spec, visual-check]
+        references: [references/implement-episode.md, docs/episodes/never-too-early-sales/dossier.md]
+        model: opus
+        session: orchestrator
+      - type: reviewer
+        skills: [code-review, visual-check]
+        references: [references/implement-episode.md, docs/episodes/never-too-early-sales/dossier.md]
+        rubric: references/implement-episode.md#rubric
+        model: opus
+        session: orchestrator
+
+  - id: open-pr
+    needs: [implement-episode]
+    outputs: []
+    checks: []
+    retries: 0
+    agents:
+      - type: implementor
+        skills: [pr]
+        references: [references/open-pr.md, docs/episodes/never-too-early-sales/run-log.md]
+        model: sonnet

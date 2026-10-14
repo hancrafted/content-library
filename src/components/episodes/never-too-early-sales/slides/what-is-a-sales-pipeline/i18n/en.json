@@ -1,0 +1,85 @@
+{
+  "title": "What is a sales pipeline",
+  "caption": "Three numbers tell you about your volume, your offering and your efficiency.",
+  "columns": {
+    "funnel": {
+      "label": "Sales funnel",
+      "caption": "Counts leads, opportunities and deals each week.",
+      "tells": "Tells you about your <b>volume</b>",
+      "rows": {
+        "leads": "Leads",
+        "opportunities": "Opps",
+        "deals": "Deals"
+      }
+    },
+    "conversion": {
+      "label": "Conversion rate",
+      "caption": "The share that moves on, stage by stage.",
+      "tells": "Tells you about your <b>offering</b>",
+      "from": "3 leads",
+      "to": "1 opportunity"
+    },
+    "cycle": {
+      "label": "Sales cycle",
+      "caption": "The time from first contact to the deal.",
+      "tells": "Tells you about your <b>efficiency</b>",
+      "start": "first contact",
+      "end": "deal"
+    }
+  },
+  "sheet": {
+    "title": "Start with a sheet",
+    "columns": {
+      "stage": "Stage",
+      "firstContact": "First contact",
+      "closed": "Closed"
+    },
+    "rows": {
+      "r1": {
+        "stage": "Opportunity",
+        "firstContact": "3 Feb",
+        "closed": "—"
+      },
+      "r2": {
+        "stage": "Deal",
+        "firstContact": "12 Jan",
+        "closed": "28 Jul"
+      }
+    }
+  },
+  "notes": {
+    "know-your-cycle": {
+      "header": "Know your cycle",
+      "description": "Blank's exit criteria for validating a sales process ask whether the sales cycle is understood, including average selling price, lifetime value and return on investment.[1]",
+      "sources": {
+        "blank": {
+          "title": "Blank, The Customer Development Methodology (course slides)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "funnel": {
+        "title": "Funnel",
+        "keywords": "leads, opportunities, deals, volume, count every week",
+        "script": "First, the funnel. It counts leads, opportunities and deals. How many come in at the top? That tells you about your volume. Count them every week, and you will see whether enough people are entering your pipeline."
+      },
+      "conversion-rate": {
+        "title": "Conversion rate",
+        "keywords": "share that moves on, fit of the offering, price, promise, person, stage by stage",
+        "script": "Second, the conversion rate. This is the share that moves on to the next stage. It tells you whether your offering fits what people want to buy. A low rate is a signal about the offer, and you can act on it. Maybe the price, maybe the promise, maybe the person you talk to. Judge it stage by stage, because each stage has its own number."
+      },
+      "sales-cycle": {
+        "title": "Sales cycle",
+        "keywords": "first contact to deal, efficiency, how far ahead to start, count back from the zero-cash month",
+        "script": "Third, the sales cycle. That is the time from first contact until the deal. It tells you how efficient you are, and how far ahead you have to start. Count back from your zero-cash month by that many months."
+      },
+      "measure-both": {
+        "title": "Measure both",
+        "keywords": "fourth action, track deals in a pipeline, conversion rate and cycle, a spreadsheet with three columns",
+        "script": "And this is your fourth action. Track your deals in a pipeline and measure the conversion rate and the cycle. Without those two numbers you are guessing when your revenue will land. It is not complicated. A spreadsheet with a column for the stage, a column for the date you first spoke, and a column for the date you closed. That is all you need to get started."
+      }
+    }
+  }
+}
