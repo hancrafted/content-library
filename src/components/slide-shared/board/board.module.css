@@ -49,18 +49,40 @@
   grid-template-columns: minmax(0, 1fr);
 }
 
-.column[data-primary] {
-  outline: 2px solid var(--primary);
-  outline-offset: 3px;
+/*
+ * The primary ring and the dashed edge are a border on a pseudo-element, never an outline: an outline paints over
+ * the column's content, so it would strike through the pill that hangs over the top edge. The pseudo-element comes
+ * first in paint order and the pill, positioned after it, covers the line.
+ */
+.column {
+  position: relative;
+}
+
+.column[data-primary]::before,
+.column[data-dashed]::before {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+}
+
+.column[data-primary]::before {
+  inset: -5px;
+  border: 2px solid var(--primary);
+  border-radius: calc(var(--radius-lg) + 5px);
 }
 
 .column[data-dashed] {
   background: transparent;
-  outline: 2px dashed var(--border);
-  outline-offset: -2px;
+}
+
+.column[data-dashed]::before {
+  inset: 0;
+  border: 2px dashed var(--border);
+  border-radius: inherit;
 }
 
 .pill {
+  position: relative;
   justify-self: center;
   align-self: center;
   margin-top: -0.875rem;

@@ -67,6 +67,27 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('signs a revenue note with a plus in both forms, and leaves cost and cash unsigned', () => {
+    // ARRANGE
+    const expected = { revenue: ['+$1M', '+$1,000,000'], cost: ['$50K', '$50,000'] };
+    const columns: readonly CashColumn[] = [
+      {
+        slug: 'april',
+        label: 'April',
+        notes: [
+          { slug: 'april-cost', slot: 'cost', label: 'Cost', amount: 50_000 },
+          { slug: 'april-revenue', slot: 'revenue', label: 'Revenue', amount: 1_000_000 },
+        ],
+      },
+    ];
+    // ACT
+    const $ = render({ locale: 'en', currency: 'USD', columns });
+    const forms = (slug: string) =>
+      ['compact', 'full'].map((form) => $(`[data-slot="${slug}"] [data-amount="${form}"]`).text());
+    // ASSERT
+    expect({ revenue: forms('april-revenue'), cost: forms('april-cost') }).toEqual(expected);
+  });
+
   it('turns a zero-cash note into a primary warning note, whatever its slot', () => {
     // ARRANGE
     const expected = { tone: 'warning', primary: '' };

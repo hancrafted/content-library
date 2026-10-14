@@ -9,7 +9,9 @@
   --note-revenue: color-mix(in oklab, var(--success) 24%, var(--card));
   --note-warning: color-mix(in oklab, var(--warning) 30%, var(--card));
 
+  /* Centred in a grid cell and, through align-self, in a board column without rows, which is a flex stack. */
   justify-self: center;
+  align-self: center;
   width: min(100% - 0.5rem, 8rem);
   min-height: 3.5rem;
   background: var(--note-neutral);
@@ -42,6 +44,7 @@
 
 .note[data-fill] {
   justify-self: stretch;
+  align-self: stretch;
   width: 100%;
   aspect-ratio: auto;
 }

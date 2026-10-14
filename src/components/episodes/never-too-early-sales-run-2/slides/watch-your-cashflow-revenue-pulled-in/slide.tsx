@@ -18,9 +18,9 @@ const ZERO_STEP = 9;
 
 const step = (i: number) => ({ '--i': i }) as CSSProperties;
 
-/** An overlay note's amount written as the board writes its own: compact below `sm`, in full from `sm`. */
-function Amount({ value, locale }: { value: number; locale: Locale }) {
-  const { full, compact } = formatAmount(value, CURRENCY, locale);
+/** An overlay note's amount written as the board writes its own: compact below `sm`, in full from `sm`, revenue signed. */
+function Amount({ value, locale, signed = false }: { value: number; locale: Locale; signed?: boolean }) {
+  const { full, compact } = formatAmount(value, { currency: CURRENCY, locale, signed });
   return (
     <>
       <span className="sm:hidden">{compact}</span>
@@ -85,7 +85,7 @@ export const watchYourCashflowRevenuePulledIn = slide({
           tone="revenue"
           primary
           label={t('board.kinds.revenue')}
-          value={<Amount value={1_000_000} locale={locale} />}
+          value={<Amount value={1_000_000} locale={locale} signed />}
           target={target('revenue')}
           style={step(MOVE_STEP)}
           className={cn('col-start-2 row-start-4', styles.moved)}

@@ -25,8 +25,7 @@ const UNREACHED = ['contact-made', 'needs-defined', 'proposal-made', 'negotiatio
  */
 /*
  * The arrow runs from Lead in's edge across the gap and the empty Contact made column, so its label pill sits over
- * that empty column and never over a lead note. Lead in's notes are centred, as on the cashflow board: a flex stack
- * ignores a note's own `justify-self`.
+ * that empty column and never over a lead note.
  */
 const PIN_COLUMNS =
   'md:[&>[data-board-column]]:row-start-1 md:[&>[data-board-column]:nth-child(1)]:col-start-1 ' +
@@ -88,7 +87,7 @@ export const howMarketingFeedsThePipeline = slide({
             columns={columns}
             overlay={arrow}
             aria-label={t('figure')}
-            className={cn('[--columns:1] md:[--columns:5] [&_[data-board-note]]:self-center', PIN_COLUMNS)}
+            className={cn('[--columns:1] md:[--columns:5]', PIN_COLUMNS)}
           />
         </div>
       </SlideFrame>

@@ -9,11 +9,8 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 import styles from './pipeline-tools-in-practice.module.css';
 
-/*
- * Without `rows` a board column is a flex stack, where a note's own `justify-self: center` does nothing: centre the
- * notes in their column here, as they sit on the cashflow board.
- */
-const CENTRE_NOTES = '[--columns:1] md:[--columns:3] lg:[--columns:5] [&_[data-board-note]]:self-center';
+/** One stage per row on a phone, three from `md`, all five from `lg`. */
+const REFLOW = '[--columns:1] md:[--columns:3] lg:[--columns:5]';
 
 const step = (i: number) => ({ '--i': i }) as CSSProperties;
 
@@ -95,7 +92,7 @@ export const pipelineToolsInPractice = slide({
         <Title>{t('title')}</Title>
         <SlideCaption data-target="caption">{t('caption')}</SlideCaption>
         <div className={cn('mt-10', styles.board)}>
-          <Board columns={columns} aria-label={t('figure')} className={CENTRE_NOTES} />
+          <Board columns={columns} aria-label={t('figure')} className={REFLOW} />
         </div>
       </SlideFrame>
     );

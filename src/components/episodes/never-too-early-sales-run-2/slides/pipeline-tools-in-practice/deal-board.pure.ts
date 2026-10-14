@@ -53,7 +53,7 @@ const CURRENCY = 'USD';
 
 /** Every column in board order, its total and count summed from its deals, never written by hand. */
 export function dealColumns(deals: readonly Deal[], locale: Locale): readonly DealColumnView[] {
-  const write = (amount: number) => formatAmount(amount, CURRENCY, locale).full;
+  const write = (amount: number) => formatAmount(amount, { currency: CURRENCY, locale }).full;
   return DEAL_COLUMNS.map((column) => {
     const own = deals.filter((deal) => deal.column === column);
     const total = own.reduce((sum, deal) => sum + deal.amount, 0);

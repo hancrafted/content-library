@@ -1,6 +1,6 @@
 {
   "title": "Die Stufen eines Verkaufs",
-  "caption": "Jeder Kunde, den du je gewinnst, geht diesen Weg von links nach rechts.",
+  "caption": "Jeder Kunde, den Du je gewinnst, geht diesen Weg von links nach rechts.",
   "figure": "Drei Stufen eines Verkaufs, Leads, Opportunities und Abschluss, danach die Lieferung, bevor das Geld kommt.",
   "stages": {
     "leads": "Leads",
@@ -44,27 +44,27 @@
       "three-stages": {
         "title": "Drei Stufen",
         "keywords": "Leads, Opportunities, Abschluss, von links nach rechts, manche steigen aus",
-        "script": "Ein Verkauf hat drei Stufen. Leads, Opportunities, Abschluss. Jeder Kunde, den du je gewinnst, geht diesen Weg von links nach rechts. Manche steigen unterwegs aus. Das ist normal."
+        "script": "Ein Verkauf hat drei Stufen. Leads, Opportunities, Abschluss. Jeder Kunde, den Du je gewinnst, geht diesen Weg von links nach rechts. Manche steigen unterwegs aus. Das ist normal."
       },
       "second-actionable-lead-list": {
         "title": "Zweite Aufgabe: die Lead-Liste",
         "keywords": "Leadgenerierung jetzt, recherchieren, Liste potenzieller Kunden, jede Woche Namen ergänzen",
-        "script": "Deine zweite Aufgabe steht unter den Leads. Fang jetzt mit der Leadgenerierung an. Recherchiere, wer bei dir kaufen könnte, und schreib diese Kunden in eine Liste. Dann halte die Liste lebendig und ergänze jede Woche neue Namen. Eine Liste potenzieller Kunden ist das günstigste Kapital, das du heute aufbauen kannst."
+        "script": "Deine zweite Aufgabe steht unter den Leads. Fang jetzt mit der Leadgenerierung an. Recherchiere, wer bei Dir kaufen könnte, und schreib diese Kunden in eine Liste. Dann halte die Liste lebendig und ergänze jede Woche neue Namen. Eine Liste potenzieller Kunden ist das günstigste Kapital, das Du heute aufbauen kannst."
       },
       "third-actionable-first-contact": {
         "title": "Dritte Aufgabe: der Erstkontakt",
         "keywords": "Kaltakquise, Inbound, Empfehlung aus dem Netzwerk, aus einem Namen wird eine Opportunity",
-        "script": "Deine dritte Aufgabe ist der Erstkontakt. Ruf einen Namen von deiner Liste an, ganz kalt. Beantworte eine Anfrage, die bei dir eingeht. Bitte jemanden aus deinem Netzwerk um eine Empfehlung. Jeder dieser drei Wege funktioniert. Entscheidend ist: Erst der Kontakt macht aus einem Namen eine Opportunity."
+        "script": "Deine dritte Aufgabe ist der Erstkontakt. Ruf einen Namen von Deiner Liste an, ganz kalt. Beantworte eine Anfrage, die bei Dir eingeht. Bitte jemanden aus Deinem Netzwerk um eine Empfehlung. Jeder dieser drei Wege funktioniert. Entscheidend ist: Erst der Kontakt macht aus einem Namen eine Opportunity."
       },
       "opportunities-are-the-work": {
         "title": "Opportunities sind die Arbeit",
         "keywords": "nachfassen, Material, Termine, verhandeln, Vertrag",
-        "script": "Mit einer Opportunity beginnt die Arbeit. Jemand hat Interesse, und jetzt fasst du nach. Du schickst Material, du hältst Termine, du verhandelst. Interesse ist nur der Anfang. Im Abschluss stimmt der Kunde einem Vertrag zu."
+        "script": "Mit einer Opportunity beginnt die Arbeit. Jemand hat Interesse, und jetzt fasst Du nach. Du schickst Material, Du hältst Termine, Du verhandelst. Interesse ist nur der Anfang. Im Abschluss stimmt der Kunde einem Vertrag zu."
       },
       "lag-after-the-deal": {
         "title": "Die Verzögerung nach dem Abschluss",
         "keywords": "blasser Zettel, liefern, Rechnung stellen, auf Zahlung warten, Geld kommt noch später",
-        "script": "Und schau auf den blassen Zettel nach dem Abschluss. Selbst ein unterschriebener Vertrag bringt noch kein Geld aufs Konto. Erst lieferst du, dann stellst du die Rechnung, dann wartest du auf die Zahlung. Das Geld kommt also noch später, und genau diese Wartezeit muss das Board mitzählen."
+        "script": "Und schau auf den blassen Zettel nach dem Abschluss. Selbst ein unterschriebener Vertrag bringt noch kein Geld aufs Konto. Erst lieferst Du, dann stellst Du die Rechnung, dann wartest Du auf die Zahlung. Das Geld kommt also noch später, und genau diese Wartezeit muss das Board mitzählen."
       }
     }
   }

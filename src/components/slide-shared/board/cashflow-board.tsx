@@ -65,14 +65,14 @@ export interface CashflowBoardProps {
 
 const bySlot = (a: CashNote, b: CashNote) => SLOTS.indexOf(a.slot) - SLOTS.indexOf(b.slot);
 
-/** How a note writes its amount: below `sm` compact, so four columns fit a phone; from `sm` in full. */
+/** How a note writes its amount: below `sm` compact, so four columns fit a phone; from `sm` in full; revenue signed. */
 interface AmountFormat {
   readonly locale: Locale;
   readonly currency: string;
 }
 
-function Amount({ value, format }: { value: number; format: AmountFormat }) {
-  const { full, compact } = formatAmount(value, format.currency, format.locale);
+function Amount({ value, format, signed }: { value: number; format: AmountFormat; signed: boolean }) {
+  const { full, compact } = formatAmount(value, { ...format, signed });
   return (
     <>
       <span data-amount="compact" className="sm:hidden">
@@ -101,7 +101,7 @@ function Note({
       tone={note.zeroCash ? 'warning' : TONE[note.slot]}
       primary={note.zeroCash || note.primary}
       label={note.label}
-      value={<Amount value={note.amount} format={format} />}
+      value={<Amount value={note.amount} format={format} signed={note.slot === 'revenue'} />}
       target={note.target}
       dataSlot={note.slug}
       style={{ '--i': index, gridRow: ROW[note.slot] } as CSSProperties}
