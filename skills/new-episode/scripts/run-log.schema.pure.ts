@@ -158,6 +158,6 @@ export interface Folded {
 }
 
 export interface FoldOptions {
-  /** The trace ids of the Runs that are live now (see the run-log module): an open span is `running` only in one of them, else `crashed`. Decided per trace, so one Run ending never crashes another in the same file. */
-  live?: ReadonlySet<string>;
+  /** Live trace ids, or `unfinished` to infer them from Runs with no end. An ended Run always crashes its open spans. Omitted: open spans are crashed. */
+  live?: ReadonlySet<string> | 'unfinished';
 }

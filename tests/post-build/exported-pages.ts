@@ -4,21 +4,20 @@
 
 import { join } from 'node:path';
 import nextConfig from '../../next.config';
-import { LOCALES, localizePath, type Locale } from '../../src/lib/locale.pure';
-import { EPISODE_SLUGS, episodeRoute, ROUTES } from '../../src/lib/routes';
+import { localizePath, type Locale } from '../../src/lib/locale.pure';
+import { EPISODE_SLUGS, pageLocales, routeOf, type PageRef } from '../../src/lib/routes';
 
 export const OUT_DIR = join(import.meta.dirname, '..', '..', 'out');
-
-// ROUTES.episodes is only a prefix; every Episode is exported under it, one per registry slug (FE-002).
-const PAGE_ROUTES = [ROUTES.home, ...EPISODE_SLUGS.map(episodeRoute)];
 
 export interface ExportedPage {
   locale: Locale;
   url: string;
 }
 
-export const EXPORTED_PAGES: readonly ExportedPage[] = LOCALES.flatMap((locale) =>
-  PAGE_ROUTES.map((route) => ({ locale, url: localizePath(route, locale) })),
+const PAGES: readonly PageRef[] = ['home', 'dashboard', ...EPISODE_SLUGS.map((episode) => ({ episode }))];
+
+export const EXPORTED_PAGES: readonly ExportedPage[] = PAGES.flatMap((page) =>
+  pageLocales(page).map((locale) => ({ locale, url: localizePath(routeOf(page), locale) })),
 );
 
 /** The file `next build` writes for a URL: `trailingSlash` puts `/de` at `de/index.html`, else `de.html`. */

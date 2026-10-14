@@ -89,13 +89,19 @@ describe('page metadata', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('lists every locale and x-default as an alternate on every page', () => {
+  it('lists only exported locales and x-default as alternates on each page', () => {
     // ARRANGE
-    const expectedLangs = [...new Set(EXPORTED_PAGES.map((page) => page.locale)), 'x-default'].sort();
+    const englishOnlyRoute = '/dashboard';
+    const englishOnlyLanguages = ['en', 'x-default'];
+    const bilingualLanguages = ['de', 'en', 'x-default'];
+    const expected = EXPORTED_PAGES.map(({ url }) => ({
+      file: exportedFile(url),
+      langs: url === englishOnlyRoute ? englishOnlyLanguages : bilingualLanguages,
+    }));
     // ACT
     const actual = pages.map(({ file, alternates }) => ({ file, langs: Object.keys(alternates).sort() }));
     // ASSERT
-    expect(actual).toEqual(pages.map(({ file }) => ({ file, langs: expectedLangs })));
+    expect(actual).toEqual(expected);
   });
 
   it('points every alternate at an exported file', () => {

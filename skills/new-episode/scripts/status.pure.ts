@@ -34,7 +34,7 @@ export function subIssuesApproved(tickets: readonly SubIssue[]): boolean {
 }
 
 /** The latest job span per job id, by start time then sequence: a retried job reads as its last run. A `reused` span stands for the earlier Run's ok span. */
-function latestJobSpans(spans: readonly Span[]): Map<string, Span> {
+export function latestJobSpans(spans: readonly Span[]): Map<string, Span> {
   const latest = new Map<string, Span>();
   for (const span of spans) {
     if (span.type !== 'job') continue;

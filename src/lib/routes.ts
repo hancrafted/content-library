@@ -1,6 +1,9 @@
+import { LOCALES, type Locale } from './locale.pure';
+
 /** Locale-neutral logical paths. Turn one into a URL with `localizePath`. */
 export const ROUTES = {
   home: '/',
+  dashboard: '/dashboard',
   /** Prefix every Episode route sits under; there is no page at this path. */
   episodes: '/episode',
 } as const;
@@ -32,10 +35,15 @@ export function episodeParams(): { episode: EpisodeSlug }[] {
   return EPISODE_SLUGS.map((episode) => ({ episode }));
 }
 
-/** A page with its own metadata (FE-008): the landing page, or one Episode. */
-export type PageRef = 'home' | { readonly episode: EpisodeSlug };
+/** A page with its own metadata and a closed set of exported locales. */
+export type PageRef = 'home' | 'dashboard' | { readonly episode: EpisodeSlug };
+
+/** English-only operations pages have no German counterpart. */
+export function pageLocales(page: PageRef): readonly Locale[] {
+  return page === 'dashboard' ? ['en'] : LOCALES;
+}
 
 /** The logical path a page is exported at. */
 export function routeOf(page: PageRef): string {
-  return page === 'home' ? ROUTES.home : episodeRoute(page.episode);
+  return typeof page === 'string' ? ROUTES[page] : episodeRoute(page.episode);
 }

@@ -1,0 +1,137 @@
+import { parse } from 'yaml';
+import type { Folded, Score, Span, SpanStatus } from '../../skills/new-episode/scripts/run-log.schema.pure';
+import { latestJobSpans } from '../../skills/new-episode/scripts/status.pure';
+import { agentFields, JOB_FIELDS, TOP_FIELDS } from './episode-pipeline-fields.pure';
+import { findCycle } from './episode-pipeline-graph.pure';
+import { JOB_ID, jobOf, type Job } from './episode-pipeline-jobs.pure';
+import { checkMapping, isMapping, type Mapping } from './mapping-fields.pure';
+
+export interface DashboardAgentConfig {
+  type: string;
+  agent: string;
+  skills: string[];
+  session: string;
+}
+
+export interface DashboardJobConfig extends Job {
+  retries: number;
+  agents: DashboardAgentConfig[];
+}
+
+export interface DashboardPipeline {
+  status: string;
+  jobs: DashboardJobConfig[];
+}
+
+function jobErrors(job: unknown, at: number): string[] {
+  const where = `Job ${at + 1}`;
+  if (!isMapping(job)) return [`${where} must be a mapping.`];
+  const agents = Array.isArray(job.agents) ? job.agents : [];
+  return [
+    ...checkMapping(where, job, JOB_FIELDS),
+    ...agents.flatMap((agent) =>
+      isMapping(agent)
+        ? checkMapping(`${where} agent`, agent, agentFields(agent.type === 'reviewer'))
+        : [`${where} agent must be a mapping.`],
+    ),
+  ];
+}
+
+function jobConfig(job: Mapping): DashboardJobConfig {
+  return {
+    ...jobOf(job),
+    retries: Number(job.retries),
+    agents: (job.agents as Mapping[]).map((agent) => ({
+      type: String(agent.type),
+      agent: typeof agent.agent === 'string' ? agent.agent : 'general-purpose',
+      session: typeof agent.session === 'string' ? agent.session : 'subagent',
+      skills: agent.skills as string[],
+    })),
+  };
+}
+
+function orderedJobs(jobs: DashboardJobConfig[]): DashboardJobConfig[] {
+  const byId = new Map(jobs.map((job) => [job.id, job]));
+  if (byId.size !== jobs.length) throw new Error('The pipeline has duplicate Job ids.');
+  for (const job of jobs) {
+    if (!JOB_ID.test(job.id)) throw new Error(`Job "${job.id}" has an invalid id.`);
+    for (const dependency of [...job.needs, ...job.wants]) {
+      if (!byId.has(dependency)) throw new Error(`Job "${job.id}" names missing Job "${dependency}".`);
+    }
+  }
+  const cycle = findCycle(jobs, byId);
+  if (cycle !== null) throw new Error(`The pipeline has a dependency cycle: ${cycle.join(' → ')}.`);
+  const ordered: DashboardJobConfig[] = [];
+  const visited = new Set<string>();
+  const visit = (job: DashboardJobConfig) => {
+    if (visited.has(job.id)) return;
+    visited.add(job.id);
+    job.needs.forEach((id) => visit(byId.get(id)!));
+    ordered.push(job);
+  };
+  jobs.forEach(visit);
+  return ordered;
+}
+
+/** Reads the local pipeline's display configuration without consulting the repository or network. */
+export function parseDashboardPipeline(text: string): DashboardPipeline {
+  const document: unknown = parse(text);
+  if (!isMapping(document) || !Array.isArray(document.jobs)) throw new Error('The pipeline needs a mapping with jobs.');
+  const errors = [...checkMapping('The pipeline', document, TOP_FIELDS), ...document.jobs.flatMap(jobErrors)];
+  if (errors.length > 0) throw new Error(errors.join('\n'));
+  return { status: String(document.status), jobs: orderedJobs(document.jobs.filter(isMapping).map(jobConfig)) };
+}
+
+export interface DashboardJob extends Omit<DashboardJobConfig, 'agents'> {
+  config: DashboardAgentConfig[];
+  state: SpanStatus | 'waiting' | 'gate';
+  span?: Span;
+  attempts: Span[];
+  agents: Span[];
+  gates: Span[];
+  scores: Score[];
+}
+
+function ownerOf(span: Span, byId: ReadonlyMap<string, Span>): string | undefined {
+  const seen = new Set<string>();
+  let current: Span | undefined = span;
+  while (current !== undefined && !seen.has(current.span_id)) {
+    seen.add(current.span_id);
+    if (current.job !== undefined) return current.job;
+    if (current.type === 'job') return current.name;
+    current = byId.get(current.parent_span_id ?? '');
+  }
+  return undefined;
+}
+
+/** Raw terminal states and evidence; no CLI readiness vocabulary or inferred approval of staging files. */
+export function projectDashboard(pipeline: DashboardPipeline, folded: Folded) {
+  const byId = new Map(folded.spans.map((span) => [span.span_id, span]));
+  const latest = latestJobSpans(folded.spans);
+  const owners = new Map(folded.spans.map((span) => [span.span_id, ownerOf(span, byId)]));
+  const openGates = folded.spans.filter((span) => span.type === 'gate' && span.status === 'running');
+  const jobs: DashboardJob[] = pipeline.jobs.map(({ agents: config, ...job }) => {
+    const children = folded.spans.filter((span) => owners.get(span.span_id) === job.id);
+    const span = latest.get(job.id);
+    return {
+      ...job,
+      config,
+      span,
+      state: openGates.some((gate) => owners.get(gate.span_id) === job.id && gate.trace_id === span?.trace_id)
+        ? 'gate'
+        : (span?.status ?? 'waiting'),
+      attempts: children.filter((child) => child.type === 'attempt'),
+      agents: children.filter((child) => child.type === 'agent'),
+      gates: children.filter((child) => child.type === 'gate'),
+      scores: folded.scores.filter(
+        (score) =>
+          owners.get(score.span_id) === job.id &&
+          score.name === 'rubric' &&
+          (score.value === 'fail' || score.value === 'needs-human'),
+      ),
+    };
+  });
+  return { jobs, openGates, runs: folded.spans.filter((span) => span.type === 'run') };
+}
+
+export type DashboardView = ReturnType<typeof projectDashboard>;

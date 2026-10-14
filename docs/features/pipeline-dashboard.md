@@ -1,0 +1,86 @@
+---
+type: feature-guide
+title: Pipeline dashboard
+stale_after: 2027-01-14T00:00:00Z
+---
+
+# Pipeline dashboard
+
+`/dashboard` is a read-only operations view of one local Episode's `pipeline.yml`
+and `events.jsonl`. Its picker needs Chrome or Edge with the File System Access
+API on a secure origin (HTTPS or localhost). Folder selection is a user gesture;
+the page asks for read access only. Cancelling the picker is not an error.
+
+## Local access
+
+Choose `docs/episodes/<slug>`. A folder without a readable, valid `pipeline.yml`
+is refused with the file name and the reason. Missing `events.jsonl` is a visible
+waiting-for-file condition; polling can discover it when the writer creates it.
+Permission failures, malformed YAML, invalid UTF-8 and malformed log lines are
+visible. An error marks the view as potentially stale; valid lines remain visible.
+
+Folder handles, parsed configuration, byte buffers, folded spans and errors live
+only in page memory. Reloading returns to the picker. The dashboard writes no
+files, stores no handles and uploads no local data. It does not approve Gates.
+Log text is rendered as text, not HTML. Transcript paths and agent input messages
+are not rendered.
+
+## Reading and interpretation
+
+Polling runs about every two seconds after each completed read, never overlapping.
+Each poll obtains fresh files. `pipeline.yml` is parsed only when `lastModified`
+changes, including when its contents are invalid. The reader calls
+`events.jsonl.slice(offset)` only for appended bytes. Its offset includes bytes
+buffered in a partial line; complete newline-terminated lines alone reach the
+parser, so partial UTF-8 and JSONL survive appends.
+
+A file smaller than the offset resets byte state, line numbers, errors and the
+incremental fold, including a file that shrinks to empty. An append-only file
+replaced by an equal-sized or larger unrelated file cannot be detected by size;
+choose the folder again in that case. The footer reports bytes read and complete
+lines, including malformed lines.
+
+The shared `createLogFold()` in `skills/new-episode/scripts/run-log-fold.pure.ts`
+owns both batch and incremental span semantics. `live: 'unfinished'` treats open
+spans as running only while their own trace's Run has no end. Chronological order
+is timestamp then sequence; the latest end supplies the terminal state. The
+batch fold's default remains crashed for open spans.
+
+Every configured Job appears in topological `needs` order. `wants` are labelled
+non-blocking dependencies separately. Raw terminal states stay visible;
+Attempts retain retry links, and failed or `needs-human` rubric Scores retain
+their text. Measured durations and input, output and cache-read token counts come
+from the log; missing measurements are labelled, not fabricated.
+
+An open Gate is prominently labelled **Waiting on Han**. Closing a Gate removes
+that notice; a Gate without an end in a finished Run is crashed, not waiting.
+Agents attach by their `job` or parent ancestry, including `role: skill-spawned`
+agents directly under a Job. A spawn description labels an agent when present.
+
+## English-only route and metadata
+
+Han's approved FE-008 exception permits English-only operational pages:
+`PageRef` includes `dashboard`, and `pageLocales('dashboard')` contains only `en`.
+`pageMetadata('dashboard', 'en')` supplies `noindex`, an English canonical, and
+only `en` and `x-default` alternates. There is no `/de/dashboard` export.
+
+Dashboard navigation appears in the English header only. The dashboard's locale
+toggle offers English only, so it cannot emit a nonexistent German counterpart.
+German Translation keys remain typed alongside the site's English source.
+The shared post-build route walk checks the dashboard as an English-only page,
+and every emitted alternate must resolve and link back.
+
+## Public test seams
+
+- `createLogStream().append(bytes, fileSize)` and `.offset`: complete-line byte
+  splitting, partial UTF-8, empty appends and truncation.
+- `createLogFold().append(lines)` and `.snapshot()`, plus `projectDashboard()`:
+  shared spans, retries, Run liveness, Gates, Scores and Job-parented agents.
+- `createEpisodeReader(folder).poll()`: structural read-only file handles, fresh
+  files, offsets, pipeline modification times and visible source errors.
+- Built output: the English-only route, metadata, header and picker markup.
+
+The frozen fixture under `tests/fixtures/pipeline-dashboard/` contains exact
+snapshots of the approved `never-too-early-sales-run-2` files. It carries private
+absolute transcript paths; live-state screenshots must not be published. Picker
+permissions and pixel layout are outside the unit-test seams.

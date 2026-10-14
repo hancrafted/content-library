@@ -5,6 +5,21 @@ import { pageMetadata, resolveSiteUrl, siteMetadata } from './page-metadata.pure
 const COPY = { title: 'Seitenvorlage', description: 'Diese Episode kopieren.' };
 
 describe('success cases', () => {
+  it('exports English-only dashboard metadata without a nonexistent German alternate', () => {
+    // ARRANGE
+    const expectedCanonical = '/dashboard';
+    const expectedLanguages = { en: '/dashboard', 'x-default': '/dashboard' };
+    const expectedTitle = 'Pipeline dashboard';
+    const expectedRobots = { index: false };
+    // ACT
+    const metadata = pageMetadata('dashboard', 'en');
+    // ASSERT
+    expect(metadata.alternates?.canonical).toBe(expectedCanonical);
+    expect(metadata.alternates?.languages).toEqual(expectedLanguages);
+    expect(metadata.title).toBe(expectedTitle);
+    expect(metadata.robots).toEqual(expectedRobots);
+  });
+
   it('points the canonical at the page in its own locale', () => {
     // ARRANGE
     const expected = '/de/episode/page-template';

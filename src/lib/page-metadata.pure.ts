@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { TRANSLATIONS } from '../i18n/translations';
 import type { EpisodeStatus } from './episode-metadata.pure';
-import { DEFAULT_LOCALE, LOCALES, localizePath, type Locale } from './locale.pure';
-import { routeOf, type PageRef } from './routes';
+import { DEFAULT_LOCALE, localizePath, type Locale } from './locale.pure';
+import { pageLocales, routeOf, type PageRef } from './routes';
 
 /** Used when the deploy sets no `SITE_URL`: local and pull-request builds. */
 const LOCAL_ORIGIN = 'http://localhost:3000';
@@ -44,11 +44,12 @@ export interface PageCopy {
  * is `noindex`, so the publish flip removes it from search.
  */
 export function pageMetadata(page: 'home', locale: Locale): Metadata;
-export function pageMetadata(page: Exclude<PageRef, 'home'>, locale: Locale, copy: PageCopy): Metadata;
+export function pageMetadata(page: 'dashboard', locale: 'en'): Metadata;
+export function pageMetadata(page: Exclude<PageRef, string>, locale: Locale, copy: PageCopy): Metadata;
 export function pageMetadata(page: PageRef, locale: Locale, copy?: PageCopy): Metadata {
   const route = routeOf(page);
-  const languages = Object.fromEntries(LOCALES.map((each) => [each, localizePath(route, each)]));
-  const { title, description } = copy ?? TRANSLATIONS[locale].meta.home;
+  const languages = Object.fromEntries(pageLocales(page).map((each) => [each, localizePath(route, each)]));
+  const { title, description } = copy ?? TRANSLATIONS[locale].meta[page === 'dashboard' ? 'dashboard' : 'home'];
   return {
     title,
     description,
@@ -56,6 +57,6 @@ export function pageMetadata(page: PageRef, locale: Locale, copy?: PageCopy): Me
       canonical: localizePath(route, locale),
       languages: { ...languages, 'x-default': localizePath(route, DEFAULT_LOCALE) },
     },
-    ...(copy?.status === 'upcoming' ? { robots: { index: false } } : {}),
+    ...(page === 'dashboard' || copy?.status === 'upcoming' ? { robots: { index: false } } : {}),
   };
 }

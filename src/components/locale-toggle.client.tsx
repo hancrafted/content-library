@@ -4,6 +4,7 @@ import { SEGMENTED_GROUP, segmentedItem } from '@/components/segmented';
 import { Button } from '@/components/ui/button';
 import { LOCALES, localizePath, stripLocale, type Locale } from '@/lib/locale.pure';
 import { writePrefs } from '@/lib/prefs-storage';
+import { pageLocales, ROUTES } from '@/lib/routes';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import type { MouseEvent } from 'react';
@@ -54,9 +55,10 @@ function LocaleOption({ option, locale, pathname }: { option: Locale; locale: Lo
  */
 export function LocaleToggle({ locale, label }: { locale: Locale; label: string }) {
   const pathname = usePathname();
+  const locales = stripLocale(pathname) === ROUTES.dashboard ? pageLocales('dashboard') : LOCALES;
   return (
     <div role="group" aria-label={label} data-testid="locale-toggle" className={SEGMENTED_GROUP}>
-      {LOCALES.map((option) => (
+      {locales.map((option) => (
         <LocaleOption key={option} option={option} locale={locale} pathname={pathname} />
       ))}
     </div>
