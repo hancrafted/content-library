@@ -9,14 +9,14 @@ Both agents run with `session: orchestrator`. The implementor invokes the vendor
 - The integration branch already exists: it is `episode/<slug>`, the worktree from step 1.
 - No PR opens and none is marked ready here: `open-pr` opens the one draft PR, and it stays a draft until Promotion.
 - Skip its step 7 `code-review`: the job's reviewer runs it on the whole Episode, so the verdict, the retry and the metrics stay with the job loop.
-- After each ticket implementer returns and before its merge, invoke the `code-review` skill on the ticket branch (base `episode/<slug>`), have its findings fixed, then merge. Each review follows the report-path convention in [the job loop](../SKILL.md#the-job-loop): a report in `.scratch/<slug>/reviews/implement-episode-<n>.md`, and only `pass` or `fail` plus the path comes back.
+- After each ticket implementer returns and before its merge, invoke the `code-review` skill on the ticket branch (base `episode/<slug>`), have its findings fixed, then merge. When the ticket's design answers name `Design reference:` page images, pass each path to the Spec subagent: it captures the built Slide with `npm run inspect-page -- … --clip '[id="<section>--<slide>"]' --out <scratchpad>.png`, reads the page image and that capture, and judges each `Build against this page` line. Each review follows the report-path convention in [the job loop](../SKILL.md#the-job-loop): a report in `.scratch/<slug>/reviews/implement-episode-<n>.md`, and only `pass` or `fail` plus the path comes back.
 - Ticket implementers (`archgate:developer`) skip `archgate:reviewer` and `archgate:lessons-learned`: the per-ticket `code-review` covers review, and the orchestrator writes `LEARNINGS.md`. `archgate check` still runs.
 - Apply [`skill-overrides.md`](skill-overrides.md) to every skill the job lists: ticket implementers get it by path, beside `ticket.skills`.
 - On a retry, the failed lines go to a new implementer subagent, quoted verbatim, as fix work on the integration branch.
 
 ## Design answers
 
-Every ticket was approved at the `write-design-spec` gate: it carries `ready-for-agent` and a design answer for each of its Slides. Build each Slide to its design answer, its wireframe and its named parts, tokens, props and i18n keys; the answer's `master:` and `motion:` (already rewritten into the Dossier) are the ones to use. Refuse to start while any ticket of the Episode is still `needs-triage`, and tell Han which. Build no layout the answer does not give, and ask no design question: a gap in the answer is a `Needs human:` line.
+Every ticket was approved at the `write-design-spec` gate: it carries `ready-for-agent` and a design answer for each of its Slides. Build each Slide to its design answer, its wireframe and its named parts, tokens, props and i18n keys; the answer's `master:` and `motion:` (already rewritten into the Dossier) are the ones to use. Refuse to start while any ticket of the Episode is still `needs-triage`, and tell Han which. Build no layout the answer does not give, and ask no design question: a gap in the answer is a `Needs human:` line. A design answer naming a `Design reference:` page image is built against it: keep what its `Build against this page` line keeps, by [`skill-overrides.md`](skill-overrides.md#visual-check).
 
 ## Metadata
 
@@ -28,7 +28,7 @@ The Episode is a draft: it has no video and no Promotion. This overrides the met
 
 ## Review
 
-The reviewer calls the Skill tool with `code-review`, the fixed point the last commit before this job started (the merge-base with `main` would pull in everything the Episode branch carries from earlier jobs), its subagents on the agent's `model`. Pass the spec issue to its Spec subagent with the lines under `## Rubric` beside it, so one review judges both the tickets and the Episode. After the merge it makes one interactive Chrome pass (Context drawer, scroll, motion), the Episode's tab in front. With no connected browser it never blocks: it writes `Needs human: interactive pass skipped, no browser` and goes on. Each finding the Spec or Standards report marks hard is a failed line, quoted verbatim; a judgement call goes into Notes.
+The reviewer calls the Skill tool with `code-review`, the fixed point the last commit before this job started (the merge-base with `main` would pull in everything the Episode branch carries from earlier jobs), its subagents on the agent's `model`. Pass the spec issue to its Spec subagent with the lines under `## Rubric` beside it, so one review judges both the tickets and the Episode, and every `Design reference:` page image the design answers name: for rubric line 4 it reads each page image beside a `--clip` capture of its Slide, one pair per Slide. After the merge it makes one interactive Chrome pass (Context drawer, scroll, motion), the Episode's tab in front. With no connected browser it never blocks: it writes `Needs human: interactive pass skipped, no browser` and goes on. Each finding the Spec or Standards report marks hard is a failed line, quoted verbatim; a judgement call goes into Notes.
 
 ## Done when
 
@@ -50,5 +50,5 @@ The `visual-check` check, in both themes, by FE-009's browser check. By the `vis
 1. Every Dossier Voice script item's paragraph appears verbatim as a Voice script segment of its Slide.
 2. Every Slide uses the master and motion its Dossier Visual names (`none` is no motion), shows the Visual's `title:` when it has one and the Dossier h3 otherwise, and the table of contents shows the h3. Where the Visual's `title:` goes: the h3 is the Slide's `title` key in `i18n/<locale>.json` (the table of contents reads it), and the Visual's `title:` is a separate `heading` key in the same file, which the kit's `Title` renders in place of its children; a Slide without a `title:` has no `heading` key. The Title slide and section slides use the kit's title and section layouts with no motion.
 3. Every Speaker note in the Dossier appears in its Slide's notes.
-4. Every Slide follows its ticket's design answer, with no layout, component or motion the answer does not give.
+4. Every Slide follows its ticket's design answer, with no layout, component or motion the answer does not give; a Slide whose answer names a `Design reference:` page keeps what the answer keeps from that page image.
 5. The visual check ran at 375, 1100 and 1440 px, drawer beside, over and closed, in both themes, and its numbers show no overflow, wrappers at least viewport height and Foreground clear of the chrome.

@@ -179,6 +179,39 @@ frontmatter:
               }
             - { value: practice, intent: 'When via is practice: changes Han found while rehearsing the recording.' }
 
+    - ruleId: episode-design-reference
+      fileNames: [design-reference.md]
+      intent: 'A file (pdf, word) brought in as a model for the Episode (a deck, a sketch, miro slides export), converted using marker by `npm run convert-reference` so every job can read its words and see its pages. The script writes it; a job that changes a word breaks the copy.'
+      unknownKeys: forbidden
+      fields:
+        type:
+          presence: required
+          allowed: [{ value: episode-design-reference }]
+        title: *title
+        generated.by:
+          presence: required
+          format: actor
+          intent: 'The converter, as an OKF actor `marker/<version>`. Fail if it names an agent: an agent never writes this file.'
+        generated.at:
+          presence: required
+          format: datetime
+          intent: 'When the conversion ran, with an explicit UTC offset.'
+        sources:
+          minItems: 1
+          maxItems: 1
+          intent: 'The one file this design reference was converted from, as OKF §5.1 `sources`.'
+        sources[].id:
+          presence: required
+          intent: 'Always 1: a design reference has one source.'
+        sources[].resource:
+          presence: required
+          format: uri
+          intent: 'The path of the original design-reference file, `.scratch/<slug>/<file-slug>.<file-extension>`.'
+        sources[].title:
+          presence: required
+          intent: 'By default the same name as the file.'
+        verified: *verified
+
 body-structure:
   rules:
     - ruleId: staging-brief-body
@@ -372,6 +405,19 @@ body-structure:
             allowed:
               [
                 {
+                  title: Episode Design Reference,
+                  intent: 'Files (pdf, word) brought in as a model for the Episode (a deck, a sketch, miro slides export), one per item, `[<title>](reference/<file-slug>/design-reference.md)`: the file the convert-references job writes from the copy at `.scratch/<slug>/<file-slug>.<file-extension>`. Fail if an item names a file the prompt or handoff did not bring.',
+                },
+              ],
+            mayHold: [unordered-list],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            presence: optional,
+            allowed:
+              [
+                {
                   title: Open ideas,
                   intent: 'Ideas the grill did not settle, kept for the feedback loop; nothing here binds the run. Fail if an item restates or overrides a settled section.',
                 },
@@ -495,6 +541,18 @@ body-structure:
           }
       intent: 'One list of items, each a single change keyed to its Slide and tagged with where it lands, so it routes to the Dossier, the implementation, or the recording. Fail if an item holds more than one change, its tag sends it to the wrong place, or it cannot be acted on without asking Han.'
       undefinedHeadings: forbid
+    - ruleId: episode-design-reference-body
+      fileNames: [design-reference.md]
+      intent: "One h2 per page of the PDF, in its order, each opening with the whole page as an image, then the page's text as OCR read it, its own headings moved two levels down, and the cut-outs worth reading. A Slide that copies a page cites `design-reference.md#page-<n>`."
+      headings:
+        - { purpose: heading, level: 1, intent: 'The design reference title, equal to the frontmatter title.' }
+        - {
+            purpose: enumeration,
+            level: 2,
+            minCount: 1,
+            pattern: '^Page \d+$',
+            intent: 'One page of the PDF, `Page <n>` counted from 1, its anchor `#page-<n>`.',
+          }
     - ruleId: run-log-body
       fileNames: [run-log.md]
       intent: 'An append-only record of every job run, so a run can be read and its failures traced without the session that ran it. Fail if an entry cannot explain on its own why its job passed or failed.'

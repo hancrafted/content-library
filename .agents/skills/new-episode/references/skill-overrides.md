@@ -25,6 +25,11 @@ Where a vendored third-party skill disagrees with this repo's ADRs, the ADR wins
 - Size images by hand before they enter the repo.
 - Keep Lighthouse and `lhci` out of `npm run verify`; measure with `npm run inspect-page`.
 
+## visual-check
+
+- A ticket whose design answer names a `Design reference:` page image reads that image once, then one screenshot per iteration, as the skill says; the page is the target, the screenshot what was built.
+- Clip the screenshot to the Slide (`--clip '[id="<section>--<slide>"]'`), so the pair compares one Slide to one page.
+
 ## impeccable
 
 - A finding outside the rules `.impeccable/config.json` leaves enabled is advisory.

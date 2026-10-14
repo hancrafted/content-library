@@ -110,6 +110,22 @@ jobs:
         references: [references/retrieval.md, docs/episodes/<slug>/brief.md, docs/llm-wiki/index.md]
         model: inherit
 
+  # Runs `npm run convert-reference` once per file the Brief lists under
+  # References, beside the research: a script, so no reviewer. A run with no
+  # References drops it.
+  - id: convert-references
+    needs: [retrieval]
+    before: [mh-query]
+    outputs: [docs/episodes/<slug>/reference/*/design-reference.md]
+    checks: [mh, vitest]
+    retries: 1
+    agents:
+      - type: implementor
+        skills: []
+        references: [references/convert-references.md, docs/episodes/<slug>/brief.md]
+        model: inherit
+        session: orchestrator
+
   - id: write-research
     needs: [retrieval]
     isolation: worktree
@@ -133,7 +149,7 @@ jobs:
   # gap the Dossier works around, instead of blocking the Episode.
   - id: write-dossier
     needs: [retrieval]
-    wants: [write-research]
+    wants: [write-research, convert-references]
     before: [mh-query]
     outputs: [docs/episodes/<slug>/dossier.md]
     checks: [mh, vitest]
@@ -145,6 +161,7 @@ jobs:
           - references/write-dossier.md
           - docs/episodes/<slug>/brief.md
           - docs/episodes/<slug>/research/*/research.md
+          - docs/episodes/<slug>/reference/*/design-reference.md
           - docs/profile/han/storytelling-guide.md
           - docs/profile/han/tone-guide.md
           - docs/profile/han/mental-model-guide.md
@@ -226,6 +243,7 @@ jobs:
           - docs/design/slide-library.md
           - docs/design/design-guide.md
           - docs/design/design-system.md
+          - docs/episodes/<slug>/reference/*/design-reference.md
         model: opus
         session: orchestrator
       - type: reviewer
@@ -237,6 +255,7 @@ jobs:
           - docs/episodes/<slug>/dossier.md
           - docs/design/slide-library.md
           - docs/design/design-guide.md
+          - docs/episodes/<slug>/reference/*/design-reference.md
         rubric: references/write-design-spec.md#rubric
         model: opus
 
@@ -253,7 +272,11 @@ jobs:
         ticket:
           agent: archgate:developer
           skills: [tdd, visual-check, vercel-react-best-practices, web-design-guidelines, commit]
-        references: [references/implement-episode.md, references/skill-overrides.md, docs/episodes/<slug>/dossier.md]
+        references:
+          - references/implement-episode.md
+          - references/skill-overrides.md
+          - docs/episodes/<slug>/dossier.md
+          - docs/episodes/<slug>/reference/*/design-reference.md
         model: opus
         session: orchestrator
       - type: reviewer
@@ -264,7 +287,11 @@ jobs:
           - vercel-react-best-practices
           - web-design-guidelines
           - performance-optimization
-        references: [references/implement-episode.md, references/skill-overrides.md, docs/episodes/<slug>/dossier.md]
+        references:
+          - references/implement-episode.md
+          - references/skill-overrides.md
+          - docs/episodes/<slug>/dossier.md
+          - docs/episodes/<slug>/reference/*/design-reference.md
         rubric: references/implement-episode.md#rubric
         model: opus
         session: orchestrator
