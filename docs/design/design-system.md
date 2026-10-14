@@ -147,7 +147,7 @@ A Slide stands on its own at rest, so the final state of a motion must carry the
 
 ### Library motions
 
-A **Slide library motion** is a CSS module under `src/components/slide-shared/motions/`. The folder is empty today. A motion moves there when a second Slide needs it ([FE-007](../../.archgate/adrs/FE-007-module-layering.md) Do 7). A Slide's CSS module takes it with `composes:`, a relative import that [FE-007](../../.archgate/adrs/FE-007-module-layering.md) §1 and the dependency rules allow, and that builds under Next.js CSS modules (verified with a throwaway module):
+A **Slide library motion** is a CSS module under `src/components/slide-shared/motions/`: `stick-on` and `draw-in`, listed in [the Slide library](slide-library.md#library-motions). A motion moves there when a second Slide needs it ([FE-007](../../.archgate/adrs/FE-007-module-layering.md) Do 7). A Slide's CSS module takes it with `composes:`, a relative import that [FE-007](../../.archgate/adrs/FE-007-module-layering.md) §1 and the dependency rules allow, and that builds under Next.js CSS modules (verified with a throwaway module):
 
 ```css
 .bar {

@@ -1,0 +1,17 @@
+{
+  "title": "Why watching cashflow is mission critical",
+  "voiceScript": {
+    "segments": {
+      "hook": {
+        "title": "Hook",
+        "keywords": "bankrupt in March, a million in April, one month off",
+        "script": "Picture a company that goes bankrupt in March. Its biggest deal, a million dollars, lands in April. The numbers were fine. The timing was one month off. I want to show you why that happens, and what you do about it before it happens to you."
+      },
+      "todays-route": {
+        "title": "Today's route",
+        "keywords": "four steps, your cash, what sales is, how to start, start when?",
+        "script": "We take four steps today. First, you see your cash. Second, you see what sales really is. Third, you learn how to start. Fourth, you see why a pipeline takes time to build. Then one question decides it all: start when?"
+      }
+    }
+  }
+}

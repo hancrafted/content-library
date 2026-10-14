@@ -1,0 +1,71 @@
+/*
+ * The board: neutral columns, each with a dark pill header that overlaps its top edge, or one free surface. Layout
+ * only, plus a dashed edge and a primary ring built from global tokens (FE-011 §2). The column gap is a custom
+ * property, so a part placed across a gap (CashflowBoard's arrow) can reach into it.
+ */
+
+.board {
+  --board-gap: 0.25rem;
+
+  padding-top: 1.5rem;
+}
+
+@media (width >= 40rem) {
+  .board {
+    --board-gap: 1rem;
+  }
+}
+
+@media (width >= 64rem) {
+  .board {
+    --board-gap: 1.5rem;
+  }
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(var(--columns, var(--board-columns)), minmax(0, 1fr));
+  column-gap: var(--board-gap);
+  row-gap: 1.75rem;
+}
+
+.rows {
+  grid-template-rows: auto repeat(var(--rows), auto);
+  row-gap: 0.75rem;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.75rem;
+  padding-bottom: 1rem;
+}
+
+.rows > .column {
+  display: grid;
+  grid-row: 1 / -1;
+  grid-template-rows: subgrid;
+  /* One track the column's own width, so a note's width resolves against the column, never against its figure. */
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.column[data-primary] {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+
+.column[data-dashed] {
+  background: transparent;
+  outline: 2px dashed var(--border);
+  outline-offset: -2px;
+}
+
+.pill {
+  justify-self: center;
+  align-self: center;
+  margin-top: -0.875rem;
+}
+
+.rows > .column > .pill {
+  grid-row: 1;
+}

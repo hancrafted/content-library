@@ -1,0 +1,80 @@
+{
+  "title": "Watch your cashflow",
+  "board": {
+    "months": {
+      "january": "January",
+      "february": "February",
+      "march": "March",
+      "april": "April"
+    },
+    "kinds": {
+      "cash": "Cash",
+      "cost": "Cost",
+      "revenue": "Revenue"
+    },
+    "amounts": {
+      "january-opening": "$100,000",
+      "january-cost": "$50,000",
+      "january-closing": "$50,000",
+      "february-opening": "$50,000",
+      "february-cost": "$50,000",
+      "february-closing": "$0",
+      "march-cost": "$50,000",
+      "april-revenue": "$1,000,000"
+    },
+    "stamp": "Bankrupt"
+  },
+  "notes": {
+    "costs-come-first": {
+      "header": "Costs come first",
+      "description": "A startup's first expenses, such as company setup and the founders' living costs, arise before it has users or income.[1]",
+      "sources": {
+        "startup-funding": {
+          "title": "Paul Graham, A Student's Guide to Startups: Startup Funding"
+        }
+      }
+    },
+    "promised-money-arrives-late": {
+      "header": "Promised money arrives late",
+      "description": "Closing an investor takes longer than expected even after a yes, and one angel took months to pay.[1]",
+      "sources": {
+        "startup-funding": {
+          "title": "Paul Graham, A Student's Guide to Startups: Startup Funding"
+        }
+      }
+    },
+    "hiring-ahead-does-not-pay-itself": {
+      "header": "Hiring ahead does not pay itself",
+      "description": "There is little connection between how much a startup spends and how fast it grows, so rising costs do not bring revenue forward.[1]",
+      "sources": {
+        "default-alive-or-default-dead": {
+          "title": "Paul Graham, Default Alive or Default Dead?"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "read-the-board": {
+        "title": "Read the board",
+        "keywords": "one column per month, cash, cost, revenue, left to right",
+        "script": "Here is the board. One column per month. Yellow notes are cash, red notes are cost, green notes are revenue. In January you have a hundred thousand dollars and spend fifty thousand. In February you have fifty thousand and spend fifty thousand again. Revenue shows up only in April. Walk it month by month, left to right."
+      },
+      "zero-cash-month": {
+        "title": "Zero-cash month",
+        "keywords": "cash reads zero, March, bankrupt, the number you need",
+        "script": "Look at the cash note after February. It reads zero. March has a cost note and nothing to pay it with. So you stamp the board: bankrupt. That month, the one where cash hits zero, is the number you need to find. Everything else on this board is secondary."
+      },
+      "first-actionable": {
+        "title": "First actionable",
+        "keywords": "build your own board, mark your zero-cash month, sticky notes, spreadsheet",
+        "script": "So here is your first task. Build this board for your own company. One column per month. Cash, cost, revenue. Fill it in honestly, then mark your zero-cash month. Pen and sticky notes are enough. A spreadsheet works too."
+      },
+      "right-deal-wrong-month": {
+        "title": "Right deal, wrong month",
+        "keywords": "the million is real, late revenue, timing not total",
+        "script": "Notice what is not wrong here. The million dollars is real. The customer is real. The revenue is simply late. It is the timing that kills the company, not the total."
+      }
+    }
+  }
+}

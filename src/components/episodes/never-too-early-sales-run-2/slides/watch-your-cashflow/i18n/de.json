@@ -1,0 +1,80 @@
+{
+  "title": "Behalte Deinen Cashflow im Blick",
+  "board": {
+    "months": {
+      "january": "Januar",
+      "february": "Februar",
+      "march": "März",
+      "april": "April"
+    },
+    "kinds": {
+      "cash": "Cash",
+      "cost": "Kosten",
+      "revenue": "Umsatz"
+    },
+    "amounts": {
+      "january-opening": "100.000 $",
+      "january-cost": "50.000 $",
+      "january-closing": "50.000 $",
+      "february-opening": "50.000 $",
+      "february-cost": "50.000 $",
+      "february-closing": "0 $",
+      "march-cost": "50.000 $",
+      "april-revenue": "1.000.000 $"
+    },
+    "stamp": "Pleite"
+  },
+  "notes": {
+    "costs-come-first": {
+      "header": "Erst kommen die Kosten",
+      "description": "Die ersten Ausgaben eines Startups, etwa die Gründung der Firma und die Lebenshaltung der Gründer, fallen an, bevor es Nutzer oder Einnahmen hat.[1]",
+      "sources": {
+        "startup-funding": {
+          "title": "Paul Graham, A Student's Guide to Startups: Startup Funding"
+        }
+      }
+    },
+    "promised-money-arrives-late": {
+      "header": "Zugesagtes Geld kommt spät",
+      "description": "Eine Investition abzuschließen dauert länger als erwartet, selbst nach einer Zusage, und ein Business Angel brauchte Monate, bis er zahlte.[1]",
+      "sources": {
+        "startup-funding": {
+          "title": "Paul Graham, A Student's Guide to Startups: Startup Funding"
+        }
+      }
+    },
+    "hiring-ahead-does-not-pay-itself": {
+      "header": "Vorab einstellen bezahlt sich nicht selbst",
+      "description": "Wie viel ein Startup ausgibt und wie schnell es wächst, hängt kaum zusammen. Steigende Kosten holen den Umsatz also nicht nach vorn.[1]",
+      "sources": {
+        "default-alive-or-default-dead": {
+          "title": "Paul Graham, Default Alive or Default Dead?"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "read-the-board": {
+        "title": "Das Board lesen",
+        "keywords": "eine Spalte pro Monat, Cash, Kosten, Umsatz, von links nach rechts",
+        "script": "Das hier ist das Board. Eine Spalte pro Monat. Gelbe Zettel sind Cash, rote Zettel sind Kosten, grüne Zettel sind Umsatz. Im Januar hast Du hunderttausend Dollar und gibst fünfzigtausend aus. Im Februar hast Du fünfzigtausend und gibst wieder fünfzigtausend aus. Umsatz taucht erst im April auf. Geh es Monat für Monat durch, von links nach rechts."
+      },
+      "zero-cash-month": {
+        "title": "Der Monat ohne Cash",
+        "keywords": "Cash steht auf null, März, pleite, die Zahl, die Du brauchst",
+        "script": "Schau auf den Cash-Zettel nach dem Februar. Da steht null. Im März gibt es Kosten und nichts, womit Du sie bezahlst. Also kommt der Stempel aufs Board: pleite. Dieser Monat, in dem das Cash auf null fällt, ist die Zahl, die Du finden musst. Alles andere auf diesem Board ist zweitrangig."
+      },
+      "first-actionable": {
+        "title": "Die erste Aufgabe",
+        "keywords": "Dein eigenes Board, Monat ohne Cash markieren, Haftnotizen, Tabelle",
+        "script": "Hier ist also Deine erste Aufgabe. Bau dieses Board für Dein eigenes Unternehmen. Eine Spalte pro Monat. Cash, Kosten, Umsatz. Füll es ehrlich aus und markiere dann Deinen Monat ohne Cash. Stift und Haftnotizen reichen. Eine Tabelle geht auch."
+      },
+      "right-deal-wrong-month": {
+        "title": "Richtiger Auftrag, falscher Monat",
+        "keywords": "die Million ist echt, später Umsatz, Timing statt Summe",
+        "script": "Sieh Dir an, was hier nicht falsch ist. Die Million ist echt. Der Kunde ist echt. Der Umsatz kommt nur zu spät. Es ist das Timing, das die Firma umbringt, nicht die Summe."
+      }
+    }
+  }
+}

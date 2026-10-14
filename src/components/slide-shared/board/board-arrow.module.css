@@ -1,0 +1,35 @@
+/*
+ * A drawn arrow: a solid head and a shaft, both currentColor. `--draw-origin` is its tail, so the shared draw-in
+ * motion grows it from where it starts.
+ */
+
+.arrow {
+  position: relative;
+  align-self: center;
+  min-width: 0;
+}
+
+.arrow[data-direction='left'] {
+  --draw-origin: right;
+}
+
+.arrow[data-direction='right'] {
+  --draw-origin: left;
+}
+
+.head {
+  flex: none;
+  width: 1rem;
+  height: 1.25rem;
+}
+
+.arrow[data-direction='right'] .head {
+  transform: scaleX(-1);
+}
+
+.label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+}

@@ -1,0 +1,47 @@
+/*
+ * A sticky note on a board: its fill names its meaning (the Episode's Visual language), every fill a mix of global
+ * tokens, so it follows the theme with no dark value of its own (FE-011 §2).
+ */
+
+.note {
+  --note-neutral: var(--card);
+  --note-cost: color-mix(in oklab, var(--destructive) 22%, var(--card));
+  --note-revenue: color-mix(in oklab, var(--success) 24%, var(--card));
+  --note-warning: color-mix(in oklab, var(--warning) 30%, var(--card));
+
+  justify-self: center;
+  width: min(100% - 0.5rem, 8rem);
+  min-height: 3.5rem;
+  background: var(--note-neutral);
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 3px color-mix(in oklab, var(--foreground) 18%, transparent);
+}
+
+@media (width >= 40rem) {
+  .note {
+    aspect-ratio: 1;
+  }
+}
+
+.note[data-tone='cost'] {
+  background: var(--note-cost);
+}
+
+.note[data-tone='revenue'] {
+  background: var(--note-revenue);
+}
+
+.note[data-tone='warning'] {
+  background: var(--note-warning);
+}
+
+.note[data-primary] {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+
+.note[data-fill] {
+  justify-self: stretch;
+  width: 100%;
+  aspect-ratio: auto;
+}
