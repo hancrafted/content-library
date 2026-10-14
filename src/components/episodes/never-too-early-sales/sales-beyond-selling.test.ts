@@ -281,11 +281,12 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('shows German readers the same convergence as an explicit provisional English fallback', () => {
     // ARRANGE
-    const english = wordsOf(sceneOf(PAGE, 'en'), 'article');
+    const expected =
+      'Sales is more than selling Three questions to work on together, not three proven causes of trust. Market insight test a real offer Customer trust earn reasons to continue Internal insight test your promises Increase trust? A possibility to earn, not an automatic result of outreach Learn before you depend on the cash';
     // ACT
     const german = wordsOf(sceneOf(PAGE, 'de'), 'article');
     // ASSERT
-    expect(german).toBe(english);
+    expect(german).toBe(expected);
   });
 
   it('keeps the dashed connector decorative: hidden from assistive technology, with no words of its own', () => {
@@ -305,10 +306,20 @@ describe('edge cases', () => {
 
   it('shows German readers the section slide as an explicit provisional English fallback', () => {
     // ARRANGE
-    const english = { title: slideAt(OPENER, 'en').title, script: scriptOf(slideAt(OPENER, 'en')) };
+    const expected = {
+      title: 'Why sales is more than just selling',
+      script: [
+        {
+          slug: 'use-the-lead-time',
+          title: 'Use the lead time',
+          script:
+            'There is work between deciding to sell and receiving money. We can use that time deliberately. Our scheduling company can speak with potential customers while it is still building. Those conversations need a purpose. We want to test a route to a paying customer, not simply collect friendly conversations and call that sales.',
+        },
+      ],
+    };
     // ACT
     const german = { title: slideAt(OPENER, 'de').title, script: scriptOf(slideAt(OPENER, 'de')) };
     // ASSERT
-    expect(german).toEqual(english);
+    expect(german).toEqual(expected);
   });
 });
