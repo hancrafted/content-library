@@ -230,6 +230,17 @@ describe('failure cases', () => {
     expect(messages).toEqual(expected);
   });
 
+  it('rejects a job id that cannot be written in the spawn description', () => {
+    // ARRANGE
+    const yaml = PIPELINE.replace('id: research', 'id: Write_Dossier#1').replace('needs: [brief-grill]', 'needs: []');
+    const expected =
+      'Job "Write_Dossier#1" has an id the spawn description <job>#<attempt>/<role> cannot carry; use lowercase letters, digits and hyphens.';
+    // ACT
+    const messages = check(yaml);
+    // ASSERT
+    expect(messages).toContain(expected);
+  });
+
   it('rejects a reviewer without a rubric and an implementor with one', () => {
     // ARRANGE
     const yaml = PIPELINE.replace(', rubric: references/research.md#rubric', '').replace(

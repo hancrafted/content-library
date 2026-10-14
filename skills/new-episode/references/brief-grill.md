@@ -33,7 +33,7 @@ The job's `checks:` in `assets/pipeline.yml` run by the check table in [SKILL.md
 1. Every heading holds Han's choice. A heading still reading `Not settled.` goes back to Han by name: the orchestrator refuses to start on it.
 2. The Brief carries `status: draft`, a `generated: { by, at }` and a `process:markdown-harness` entry in `verified` (written after the checks and the reviewer pass), and is committed through the `commit` skill with `Gate: draft brief` before Han edits it.
 
-Then append the run-log entry (creating `run-log.md` with its `# Run log` h1 if it is new) and its runs CSV rows, then stop: the gate opens when Han runs `node skills/new-episode/scripts/approve.ts docs/episodes/<slug>/brief.md` and commits it with `Gate: approved brief`.
+Then append the run-log entry (creating `run-log.md` with its `# Run log` h1 if it is new), log the Gate's `start` for `draft brief`, and stop: the gate opens when Han runs `node skills/new-episode/scripts/approve.ts docs/episodes/<slug>/brief.md` and commits it with `Gate: approved brief`.
 
 ## Rubric
 

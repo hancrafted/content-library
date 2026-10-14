@@ -1,0 +1,14 @@
+---
+type: design-adr
+status: proposed
+---
+
+# Pipeline runs are logged as OpenTelemetry-shaped spans in append-only JSONL
+
+Every Run of `/new-episode` appends start, end and score lines to one `events.jsonl` in the Episode's staging folder, written by one writer (run-log-writer.ts) so no harness types a timestamp, with OpenTelemetry ids and field names so a later export to a tracing tool is a field mapping. Plain text in the Episode branch can be diffed in a draft PR and read with `cat`, and every harness can call the same writer.
+
+## Considered options
+
+- **SQLite in WAL mode**: safe for concurrent writers, but binary, so it cannot be committed or diffed. SQL stays as an in-memory view over the lines.
+- **OTLP as the stored format**: a span is one record only after it ends, so a crash leaves nothing to read. It is an export target, not the source.
+- **A hook-only writer**: hooks exist only in Claude Code and see no Runs, Gates or Scores. The hooks enrich the log through the command instead.

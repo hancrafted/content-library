@@ -7,6 +7,11 @@
 
 import { parse } from 'yaml';
 
+/** What a job id may be: it is the `<job>` of a spawn description `<job>#<attempt>/<role>[/#<ticket>]`, which the Claude Code adapter parses. */
+export const JOB_ID = /^[a-z0-9][a-z0-9-]*$/;
+export const BAD_JOB_ID =
+  'an id the spawn description <job>#<attempt>/<role> cannot carry; use lowercase letters, digits and hyphens.';
+
 /** A pipeline job as its readers see it: its id, the jobs it needs and wants, the staging paths it writes, its gate. */
 export interface Job {
   id: string;
