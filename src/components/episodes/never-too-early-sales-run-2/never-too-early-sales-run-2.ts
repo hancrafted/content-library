@@ -1,6 +1,8 @@
 import { episode } from '@/components/slide-master/slide';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
+import { startBeforeYouNeedTheMoney } from './slides/start-before-you-need-the-money/slide';
+import { watchYourCashflowStartWhen } from './slides/watch-your-cashflow-start-when/slide';
 import { watchYourCashflow } from './slides/watch-your-cashflow/slide';
 import { whyWatchingCashflowIsMissionCritical } from './slides/why-watching-cashflow-is-mission-critical/slide';
 
@@ -25,6 +27,6 @@ export const neverTooEarlySalesRun2 = episode({
 
     // Section 4, #177: why-building-an-effective-sales-pipeline-takes-time
 
-    // Section 5, #178: start-before-you-need-the-money
+    [startBeforeYouNeedTheMoney, watchYourCashflowStartWhen],
   ],
 });
