@@ -15,7 +15,7 @@ import {
   TOP_FIELDS,
 } from './episode-pipeline-fields.pure';
 import { ancestors, concurrentJobs, findCycle, waitsFor } from './episode-pipeline-graph.pure';
-import { jobOf, type Job } from './episode-pipeline-jobs.pure';
+import { BAD_JOB_ID, JOB_ID, jobOf, type Job } from './episode-pipeline-jobs.pure';
 import { checkSkillNames, checkTicket } from './episode-pipeline-skills.pure';
 import { unless, type Finding } from './finding.pure';
 import { checkMapping, isMapping, isString, stringsOf, type Mapping } from './mapping-fields.pure';
@@ -143,6 +143,7 @@ function checkJob(reader: Reader, job: Mapping): string[] {
     ...stringsOf(job.checks)
       .filter((check) => !CHECKS.includes(check))
       .map((check) => `${where} has the check "${check}"; the checks are ${CHECKS.join(', ')}.`),
+    ...unless(!isString(job.id) || JOB_ID.test(job.id), `${where} has ${BAD_JOB_ID}`),
     ...checkOutputs(where, job, context),
     ...stringsOf(job.outputs)
       .filter((output) => output.endsWith('.md') && !context.governs(output))

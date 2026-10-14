@@ -22,6 +22,26 @@
           }
         ]
       }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PROJECT_DIR}/.agents/skills/new-episode/scripts/claude-adapter.ts\" start 2>/dev/null"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PROJECT_DIR}/.agents/skills/new-episode/scripts/claude-adapter.ts\" stop 2>/dev/null"
+          }
+        ]
+      }
     ]
   },
   "env": {
