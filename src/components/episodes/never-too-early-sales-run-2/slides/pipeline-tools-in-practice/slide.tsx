@@ -2,6 +2,7 @@ import { slide } from '@/components/slide-master/slide';
 import { SlideCaption, SlideFrame } from '@/components/slide-master/slide-master';
 import { Board, type BoardColumnProps } from '@/components/slide-shared/board/board';
 import { StickyNote } from '@/components/slide-shared/board/sticky-note';
+import { cn } from '@/lib/utils';
 import type { CSSProperties } from 'react';
 import { DEALS, dealColumns } from './deal-board.pure';
 import de from './i18n/de.json';
@@ -45,7 +46,7 @@ export const pipelineToolsInPractice = slide({
     let next = 0;
     const columns: readonly BoardColumnProps[] = dealColumns(DEALS, locale).map((view) => ({
       slug: view.column,
-      label: t(`columns.${view.column}`),
+      label: t(`board.columns.${view.column}`),
       children: (
         <>
           <p className="text-caption text-muted-foreground tabular-nums">
@@ -56,7 +57,10 @@ export const pipelineToolsInPractice = slide({
               role="img"
               aria-label={t('ghost')}
               style={step(GHOST_STEP)}
-              className={`${styles.ghost} min-h-14 w-[min(100%-0.5rem,8rem)] self-center justify-self-center rounded-sm border-2 border-dashed border-border sm:aspect-square`}
+              className={cn(
+                styles.ghost,
+                'min-h-14 w-[min(100%-0.5rem,8rem)] self-center justify-self-center rounded-sm border-2 border-dashed border-border sm:aspect-square',
+              )}
             />
           )}
           {view.deals.map((deal) => {
@@ -90,7 +94,7 @@ export const pipelineToolsInPractice = slide({
       <SlideFrame>
         <Title>{t('title')}</Title>
         <SlideCaption data-target="caption">{t('caption')}</SlideCaption>
-        <div className={`mt-10 ${styles.board}`}>
+        <div className={cn('mt-10', styles.board)}>
           <Board columns={columns} aria-label={t('figure')} className={CENTRE_NOTES} />
         </div>
       </SlideFrame>

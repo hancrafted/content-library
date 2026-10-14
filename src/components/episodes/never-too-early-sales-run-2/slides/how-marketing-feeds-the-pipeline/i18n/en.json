@@ -5,12 +5,14 @@
   "funnel": "Marketing, high volume",
   "lead": "Inbound lead",
   "salesContact": "Sales makes contact",
-  "columns": {
-    "lead-in": "Lead in",
-    "contact-made": "Contact made",
-    "needs-defined": "Needs defined",
-    "proposal-made": "Proposal made",
-    "negotiations-started": "Negotiations started"
+  "board": {
+    "columns": {
+      "lead-in": "Lead in",
+      "contact-made": "Contact made",
+      "needs-defined": "Needs defined",
+      "proposal-made": "Proposal made",
+      "negotiations-started": "Negotiations started"
+    }
   },
   "notes": {
     "customers-do-not-arrive-on-their-own": {

@@ -53,11 +53,13 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('marks exactly one deal as moved, Nordwerk in Proposal made', () => {
+  it('keeps the moved deal flagged in the column it moved to, and only that one', () => {
     // ARRANGE
     const expected = [{ slug: 'nordwerk', column: 'proposal-made' }];
     // ACT
-    const moved = DEALS.filter((deal) => deal.moved).map(({ slug, column }) => ({ slug, column }));
+    const moved = dealColumns(DEALS, 'en').flatMap(({ column, deals }) =>
+      deals.filter((deal) => deal.moved).map(({ slug }) => ({ slug, column })),
+    );
     // ASSERT
     expect(moved).toEqual(expected);
   });

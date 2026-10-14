@@ -5,12 +5,14 @@
   "funnel": "Marketing, hohe Reichweite",
   "lead": "Inbound-Lead",
   "salesContact": "Vertrieb nimmt Kontakt auf",
-  "columns": {
-    "lead-in": "Lead eingegangen",
-    "contact-made": "Kontakt aufgenommen",
-    "needs-defined": "Bedarf geklärt",
-    "proposal-made": "Angebot gemacht",
-    "negotiations-started": "Verhandlung läuft"
+  "board": {
+    "columns": {
+      "lead-in": "Lead eingegangen",
+      "contact-made": "Kontakt aufgenommen",
+      "needs-defined": "Bedarf geklärt",
+      "proposal-made": "Angebot gemacht",
+      "negotiations-started": "Verhandlung läuft"
+    }
   },
   "notes": {
     "customers-do-not-arrive-on-their-own": {

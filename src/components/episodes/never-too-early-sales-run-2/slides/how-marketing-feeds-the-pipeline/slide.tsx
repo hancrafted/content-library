@@ -53,7 +53,7 @@ export const howMarketingFeedsThePipeline = slide({
     const columns: readonly BoardColumnProps[] = [
       {
         slug: 'lead-in',
-        label: t('columns.lead-in'),
+        label: t('board.columns.lead-in'),
         primary: true,
         children: LEADS.map((lead, i) => (
           <StickyNote
@@ -65,7 +65,7 @@ export const howMarketingFeedsThePipeline = slide({
           />
         )),
       },
-      ...UNREACHED.map((slug) => ({ slug, label: t(`columns.${slug}`), dashed: true })),
+      ...UNREACHED.map((slug) => ({ slug, label: t(`board.columns.${slug}`), dashed: true })),
     ];
     const arrow = (
       <BoardArrow

@@ -2,12 +2,14 @@
   "title": "Pipeline tools in practice",
   "caption": "You see your whole pipeline at a glance.",
   "figure": "A deal board with five stages; the Nordwerk deal moved from Needs defined to Proposal made.",
-  "columns": {
-    "lead-in": "Lead in",
-    "contact-made": "Contact made",
-    "needs-defined": "Needs defined",
-    "proposal-made": "Proposal made",
-    "negotiations-started": "Negotiations started"
+  "board": {
+    "columns": {
+      "lead-in": "Lead in",
+      "contact-made": "Contact made",
+      "needs-defined": "Needs defined",
+      "proposal-made": "Proposal made",
+      "negotiations-started": "Negotiations started"
+    }
   },
   "total": "{amount} · {count, plural, one {# deal} other {# deals}}",
   "ghost": "Moved from here",

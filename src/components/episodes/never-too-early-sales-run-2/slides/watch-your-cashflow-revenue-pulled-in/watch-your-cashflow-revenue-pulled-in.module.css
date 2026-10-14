@@ -8,21 +8,6 @@
 
 .board {
   container-type: inline-size;
-
-  /* Board's column gap per breakpoint, so the slide is two columns at any width. */
-  --gap: 0.25rem;
-}
-
-@media (width >= 40rem) {
-  .board {
-    --gap: 1rem;
-  }
-}
-
-@media (width >= 64rem) {
-  .board {
-    --gap: 1.5rem;
-  }
 }
 
 .arrow {
@@ -51,9 +36,10 @@
   }
 }
 
+/* Two columns at any width: half the board plus one of Board's column gaps, `--board-gap`, which the note inherits. */
 @keyframes pull-in {
   from {
-    transform: translateX(calc((100cqi + var(--gap)) / 2));
+    transform: translateX(calc((100cqi + var(--board-gap)) / 2));
   }
 }
 

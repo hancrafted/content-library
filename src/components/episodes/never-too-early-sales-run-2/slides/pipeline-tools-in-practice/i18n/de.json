@@ -2,12 +2,14 @@
   "title": "Pipeline-Tools in der Praxis",
   "caption": "So siehst du deine ganze Pipeline auf einen Blick.",
   "figure": "Ein Deal-Board mit fünf Stufen; der Deal Nordwerk ist von Bedarf geklärt zu Angebot gemacht gewandert.",
-  "columns": {
-    "lead-in": "Lead eingegangen",
-    "contact-made": "Kontakt aufgenommen",
-    "needs-defined": "Bedarf geklärt",
-    "proposal-made": "Angebot gemacht",
-    "negotiations-started": "Verhandlung läuft"
+  "board": {
+    "columns": {
+      "lead-in": "Lead eingegangen",
+      "contact-made": "Kontakt aufgenommen",
+      "needs-defined": "Bedarf geklärt",
+      "proposal-made": "Angebot gemacht",
+      "negotiations-started": "Verhandlung läuft"
+    }
   },
   "total": "{amount} · {count, plural, one {# Deal} other {# Deals}}",
   "ghost": "Von hier verschoben",
