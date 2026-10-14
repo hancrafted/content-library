@@ -27,7 +27,7 @@
     "episode:status": "node skills/new-episode/scripts/status.ts",
     "preview": "node skills/visual-check/scripts/preview.ts",
     "inspect-page": "node skills/visual-check/scripts/inspect-page.ts",
-    "check:skills": "for d in skills/*/; do mh check --root \"$d\" --config \"${d}markdown-harness.config.yaml\" || exit 1; done"
+    "check:skills": "mh check --root skills --config skills/markdown-harness.config.yaml && for c in skills/*/markdown-harness.config.yaml; do test ! -e \"$c\" || mh check --root \"$(dirname \"$c\")\" --config \"$c\" || exit 1; done"
   },
   "devDependencies": {
     "@eslint/js": "~10.0.1",
