@@ -1,10 +1,14 @@
 import { episode } from '@/components/slide-master/slide';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
+import { pipelineByTheNumbers } from './slides/pipeline-by-the-numbers/slide';
 import { salesIsMoreThanSelling } from './slides/sales-is-more-than-selling/slide';
 import { startBeforeYouNeedTheMoney } from './slides/start-before-you-need-the-money/slide';
 import { watchYourCashflowStartWhen } from './slides/watch-your-cashflow-start-when/slide';
 import { watchYourCashflow } from './slides/watch-your-cashflow/slide';
+import { whatIsASalesPipeline } from './slides/what-is-a-sales-pipeline/slide';
+import { whyBuildingAnEffectiveSalesPipelineTakesTime } from './slides/why-building-an-effective-sales-pipeline-takes-time/slide';
+import { whyItTakesTimeToRampUp } from './slides/why-it-takes-time-to-ramp-up/slide';
 import { whySalesIsMoreThanJustSelling } from './slides/why-sales-is-more-than-just-selling/slide';
 import { whyWatchingCashflowIsMissionCritical } from './slides/why-watching-cashflow-is-mission-critical/slide';
 
@@ -27,7 +31,7 @@ export const neverTooEarlySalesRun2 = episode({
 
     // Section 3, #176: how-to-start-doing-sales
 
-    // Section 4, #177: why-building-an-effective-sales-pipeline-takes-time
+    [whyBuildingAnEffectiveSalesPipelineTakesTime, whatIsASalesPipeline, pipelineByTheNumbers, whyItTakesTimeToRampUp],
 
     [startBeforeYouNeedTheMoney, watchYourCashflowStartWhen],
   ],

@@ -1,0 +1,93 @@
+{
+  "title": "Why it takes time to ramp up",
+  "caption": "No shortcut through any of them.",
+  "board": {
+    "preparation": {
+      "label": "Preparation",
+      "groups": {
+        "before": {
+          "label": "Before",
+          "items": "Sales deck, pricing, offering, business model"
+        },
+        "during": {
+          "label": "During",
+          "items": "Demo, meeting slides, proposal"
+        },
+        "deal": {
+          "label": "Deal",
+          "items": "Contract, compliance, legal"
+        }
+      }
+    },
+    "market": {
+      "label": "Unknown market",
+      "questions": {
+        "customer": "Who is your customer?",
+        "price": "What will they pay?",
+        "problem": "What problem needs solving?"
+      }
+    },
+    "metrics": {
+      "label": "Unknown metrics",
+      "items": {
+        "conversionRate": "Conversion rate",
+        "salesCycle": "Sales cycle"
+      },
+      "why": "Needed to plan backwards"
+    }
+  },
+  "rail": "Months, not days",
+  "notes": {
+    "you-search-before-you-execute": {
+      "header": "You search before you execute",
+      "description": "A startup is a temporary organization designed to search for a repeatable and scalable business model; the facts a pipeline depends on are found in conversations with customers.[1]",
+      "sources": {
+        "customer-development-manifesto": {
+          "title": "Steve Blank, The Customer Development Manifesto"
+        }
+      }
+    },
+    "metrics-lag-by-the-cycle": {
+      "header": "Metrics lag by the cycle",
+      "description": "A conversion figure for recent leads looks worse than the long-run value because those leads have not yet gone through a full sales cycle.[1]",
+      "sources": {
+        "science-of-scaling": {
+          "title": "Mark Roberge, The Science of Scaling"
+        }
+      }
+    },
+    "codify-after-you-learn": {
+      "header": "Codify after you learn",
+      "description": "Roberge advises codifying the go-to-market playbook only after the learning, and proving scalable unit economics before aggressively hiring salespeople.[1]",
+      "sources": {
+        "science-of-scaling": {
+          "title": "Mark Roberge, The Science of Scaling"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "preparation": {
+        "title": "Preparation",
+        "keywords": "sales deck, pricing, demo, proposal, contract, takes longer than you think",
+        "script": "The first note is preparation. A sales deck. Pricing. An offering and a business model. A demo, meeting slides, a proposal. A contract, with compliance and legal covered. All of this has to exist before the first deal can close. Writing it takes longer than you think."
+      },
+      "unknown-market": {
+        "title": "Unknown market",
+        "keywords": "who, what they pay, which problem, months not days, the clock runs",
+        "script": "The second note is the unknown market. Who is your customer? What will they pay? Which problem do they truly need solved? Until you know, every number on the cashflow board is a guess. Price, volume, timing: each rests on those three answers. The answers take months, not days. The clock on your cash keeps running meanwhile."
+      },
+      "unknown-metrics": {
+        "title": "Unknown metrics",
+        "keywords": "conversion rate and sales cycle unknown, plan backwards, only by selling",
+        "script": "The third note is unknown metrics. At the start you do not know your conversion rate or your sales cycle. You need both to plan backwards from your cash. And you only get them by selling."
+      },
+      "no-shortcut": {
+        "title": "No shortcut",
+        "keywords": "preparation, market, metrics, real time, start early",
+        "script": "Preparation, market, metrics. Each of the three takes real time, and there is no shortcut through any of them. You cannot rush them once the money is short. You can only start them early."
+      }
+    }
+  }
+}

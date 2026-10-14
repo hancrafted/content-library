@@ -1,0 +1,12 @@
+{
+  "title": "Why building an effective sales pipeline takes time",
+  "voiceScript": {
+    "segments": {
+      "not-a-switch": {
+        "title": "Not a switch",
+        "keywords": "not a switch, build, measure, tune, weeks",
+        "script": "A pipeline is not a switch you flip when the money runs low. You build it. You measure it. You tune it. And each of those takes weeks before it works."
+      }
+    }
+  }
+}

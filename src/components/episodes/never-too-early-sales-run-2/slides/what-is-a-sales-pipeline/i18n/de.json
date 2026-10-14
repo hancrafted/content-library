@@ -1,0 +1,53 @@
+{
+  "title": "Was ist eine Vertriebspipeline",
+  "caption": "Drei Zahlen beschreiben eine Pipeline.",
+  "board": {
+    "funnel": {
+      "label": "Sales Funnel",
+      "line": "Volumen pro Stufe"
+    },
+    "conversionRate": {
+      "label": "Conversion Rate",
+      "line": "wie attraktiv Dein Angebot ist"
+    },
+    "salesCycle": {
+      "label": "Sales Cycle",
+      "line": "Effizienz"
+    }
+  },
+  "notes": {
+    "rates-differ-per-stage": {
+      "header": "Die Raten unterscheiden sich je Stufe",
+      "description": "In einem Datensatz lag die Rate von MQL zu SQL bei 68 Prozent, die Abschlussquote dagegen bei 19 Prozent.[1] Das ist eine Schlussfolgerung, kein Befund: Jedes Unternehmen grenzt seine Stufen womöglich anders ab, daher lassen sich die Raten zwischen Unternehmen kaum vergleichen.",
+      "sources": {
+        "ebsta-pavilion": {
+          "title": "Ebsta und Pavilion, GTM Benchmarks Report"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "funnel": {
+        "title": "Funnel",
+        "keywords": "drei Zahlen, der Funnel, Volumen pro Stufe",
+        "script": "Drei Zahlen beschreiben eine Pipeline. Die erste ist der Funnel selbst. Nimm jede Stufe Deines Verkaufs und zähle, wie viel Volumen gerade darin liegt."
+      },
+      "conversion-rate": {
+        "title": "Conversion Rate",
+        "keywords": "wie viele die nächste Stufe erreichen, Attraktivität, niedrige Rate",
+        "script": "Die zweite ist die Conversion Rate. Von allen in einer Stufe: Wie viele schaffen es in die nächste? Sie zeigt Dir, wie attraktiv Dein Angebot ist. Eine niedrige Rate heißt: Die Leute schauen hin und gehen wieder."
+      },
+      "sales-cycle": {
+        "title": "Sales Cycle",
+        "keywords": "Tage vom Erstkontakt bis zum Abschluss, Effizienz, gebundenes Geld",
+        "script": "Die dritte ist der Sales Cycle. Zähle die Tage vom ersten Kontakt bis zum unterschriebenen Vertrag, oder bis zur bezahlten Rechnung. Er zeigt Dir, wie effizient Du bist. Ein langer Zyklus heißt: Dein Geld steckt unterwegs fest."
+      },
+      "fourth-actionable-measure": {
+        "title": "Vierte Aufgabe: messen",
+        "keywords": "vierte Aufgabe, Conversion Rate und Sales Cycle notieren, rückwärts planen",
+        "script": "Deshalb gehört zu Deiner vierten Aufgabe das Messen. Schreib ab Deinen ersten Deals Deine Conversion Rate und Deinen Sales Cycle auf. Zwei Zahlen. Du brauchst beide, um von Deinem Monat ohne Cash aus rückwärts zu planen."
+      }
+    }
+  }
+}
