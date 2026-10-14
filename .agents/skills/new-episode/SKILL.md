@@ -132,10 +132,10 @@ npm run episode:run -- <slug> <command> ...
 
 | command | does |
 | --- | --- |
-| `begin-run --model <model>` | writes the Run's `start-run` line and the active-run marker |
-| `end-run [status] [--summary s]` | ends the Run, records the orchestrator's usage on it and clears the marker |
-| `begin-job <job>` | opens the Job under the Run (an open one is reused) and points unparsed agents at it |
-| `end-job <job> [status] [--summary s]` | ends the Job |
+| `begin-run --model <model>` | writes the Run's `start-run` line and the active-run marker; refused while the current Run has no `end-run` |
+| `end-run [status] [--summary s]` | ends the Run, records the orchestrator's usage on it and clears the marker; `ok` is refused while a Job, Attempt, Gate or agent is open, `error` or `crashed` leaves them `crashed` |
+| `begin-job <job>` | opens the Job under the Run (an open one is reused); the id must be a job of `pipeline.yml`, the template's before the Episode has one |
+| `end-job <job> [status] [--summary s]` | ends the Job; refused while its Attempt is open |
 | `begin-attempt <job>` | opens the next Attempt (number and `retry_of` derived) and prints its spawn description |
 | `end-attempt <job> [status] [--summary s]` | ends the open Attempt |
 | `open-gate <job> "<name>"` / `close-gate "<name>" [status]` | a Gate under the Run, named as its commit, `draft <name>` |
@@ -143,15 +143,15 @@ npm run episode:run -- <slug> <command> ...
 | `resume` | in a new session or after a crash, points the marker at the current Run and its open Job |
 | `archive` | copies the log to `.logs/new-episode/<slug>/<run id>.jsonl` |
 
-`status` is `ok` (default), `error`, `refused` or `reused`. A command refuses what the log cannot support (no open Job, a second open Attempt) and says which; the writer refuses a malformed field and says which. Fix the call, never the log: a line is never edited, a correction is a new line.
+`status` is `ok` (default), `error`, `refused`, `crashed` or `reused`. A command refuses what the log cannot support (no open Job, a second open Attempt) and says which; the writer refuses a malformed field and says which. Fix the call, never the log: a line is never edited, a correction is a new line.
 
 `npm run episode:log -- <slug> '<event json>'` (or the JSON on stdin) appends one raw event, for what the commands do not cover: the typed agent span of a harness that gives none (any harness but Claude Code, a refused spawn, a skill that ran in this session), `"type":"agent","job":…,"attempt":…,"role":…,"source":"typed"` with `parent_span_id` read from `npm run episode:trace -- <slug>`, so a report never mixes measured and typed numbers.
 
 **Spawn description.** Every Agent spawn's `description` is `<job id>#<attempt>/<role>[/#<ticket>]`: `write-dossier#2/reviewer`, `implement-episode#1/ticket-implementor/#148`. Job and role are lowercase kebab-case, attempt and ticket positive integers. The Claude Code adapter reads it to attribute the agent to its Job, Attempt and role.
 
-**The Claude Code adapter** adds, per subagent, what only Claude Code knows: launch and end times, the model asked for and the model that ran, tokens, the prompt, the transcript path, and `request_shape` (`background` or not). A parsed agent nests under the open Attempt of its job and number (Run → Job → Attempt → agent), so `begin-attempt` before spawning; a skill-spawned agent nests under the one open Job, or under the Run when several are open. The adapter ends every agent `ok`, since Stop carries no error signal: a failure is the Attempt's `error` end line or a rubric Score. When the transcript did not yet exist at launch, the end line carries the prompt and launch time. It is registered on `SubagentStart` and `SubagentStop` in `.claude/settings.json`, and acts only for a session named in the active-run marker. The log works without it; log agent spans by hand where it does not run.
+**The Claude Code adapter** adds, per subagent, what only Claude Code knows: launch and end times, the model asked for and the model that ran, tokens, the prompt, the transcript path, and `request_shape` (`background` or not). A parsed agent nests under the open Attempt of its job and number (Run → Job → Attempt → agent), so `begin-attempt` before spawning; with no such Attempt it nests under its Job while open, else under the Run. A skill-spawned agent nests under the one open Job, or under the Run when none or several are open. The adapter ends every agent `ok`, since Stop carries no error signal: a failure is the Attempt's `error` end line or a rubric Score. When the transcript did not yet exist at launch, the end line carries the prompt and launch time. It is registered on `SubagentStart` and `SubagentStop` in `.claude/settings.json`, and acts only for a session named in the active-run marker. The log works without it; log agent spans by hand where it does not run.
 
-**The active-run marker** `.scratch/active-run` (git-ignored) is the commands' own bookkeeping, never typed: `begin-run` writes it, `begin-job` and `end-job` move it, `end-run` removes it after recording the orchestrator session's model and summed usage on the Run. It names this session, so a second session in the worktree stays out of the log, and it says which Run is live: a span with no `end` line reads `running` only while the marker names its Run, and `crashed` otherwise (status, remind, trace and query all apply this per Run).
+**The active-run marker** `.scratch/active-run` (git-ignored) is the commands' own bookkeeping, never typed: `begin-run` writes it, `begin-job` and `end-job` move it, `end-run` removes it after recording on the Run the orchestrator's model and the usage it spent between `start-run` and `end-run`, summed over every session that drove the Run (`begin-run`'s and each `resume`'s). It names this session, so a second session in the worktree stays out of the log, and it says which Run is live: a span with no `end` line reads `running` only while the marker names its Run, and `crashed` otherwise (status, remind, trace and query all apply this per Run).
 
 **Read it, never the raw file.**
 
@@ -186,7 +186,7 @@ Tag any row with its Run by joining the Run's span on `trace_id`: `SELECT r.run_
 
 ## Resuming a run
 
-In a new session, or after a compaction, never trust memory of the run: run `npm run episode:status -- <slug>` and rebuild the todo list from its output. Its `crashed` lines are spans that never ended in a Run that is no longer live, which includes a Run whose session died; `running` lines are agents of the live Run, so wait for them. After a crash, run `resume` first so the resumed Run reads as live. A worktree `episode/<slug>--<job id>` whose job has no run-log entry is a crashed attempt: remove it with `wt:done` and its `--base`, delete its branch, run `end-attempt <job> error --summary "crashed"` and then `begin-attempt <job>` again: the next number and `retry_of` follow from the log. In a session that did not start the Run, `resume` makes it the orchestrator for the adapter.
+In a new session, or after a compaction, never trust memory of the run: run `npm run episode:status -- <slug>` and rebuild the todo list from its output. Its `crashed` lines are spans that never ended in a Run that is no longer live, which includes a Run whose session died; `running` lines are agents of the live Run, so wait for them. After a crash, run `resume` first so the resumed Run reads as live; `begin-run` is refused while the Run has no `end-run`, so to abandon it instead run `end-run crashed`, which leaves its open spans `crashed`. A worktree `episode/<slug>--<job id>` whose job has no run-log entry is a crashed attempt: remove it with `wt:done` and its `--base`, delete its branch, run `end-attempt <job> error --summary "crashed"` and then `begin-attempt <job>` again: the next number and `retry_of` follow from the log. In a session that did not start the Run, `resume` makes it the orchestrator for the adapter.
 
 ## Gate commits
 

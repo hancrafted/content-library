@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -12,19 +12,22 @@ import { runCommand, type RunContext } from './run-commands.ts';
 
 const SLUG = 'demo';
 const SESSION = 'sess-1';
+const JOBS = ['brief-grill', 'write-dossier', 'open-pr', 'write-spec', 'a'];
+const pipeline = (jobs: readonly string[]): string => `status: approved\njobs:\n${jobs.map((id) => `  - id: ${id}\n`).join('')}`;
 const roots: string[] = [];
 
-function context(transcript: string | null = null): RunContext {
+function context(transcript: string | null | Record<string, string> = null): RunContext {
   const root = mkdtempSync(path.join(os.tmpdir(), 'run-commands-'));
   roots.push(root);
   mkdirSync(path.join(root, 'docs/episodes', SLUG), { recursive: true });
+  writeFileSync(path.join(root, 'docs/episodes', SLUG, 'pipeline.yml'), pipeline(JOBS));
   let n = 0;
   let minute = 0;
   return {
     root,
     slug: SLUG,
     sessionId: SESSION,
-    transcriptOf: () => transcript,
+    transcriptOf: (session) => (typeof transcript === 'string' || transcript === null ? transcript : (transcript[session] ?? null)),
     writer: {
       now: () => `2026-10-14T09:${String(minute++).padStart(2, '0')}:00Z`,
       id: (bytes) => String(++n).padStart(bytes * 2, '0'),
@@ -55,7 +58,7 @@ describe('success cases', () => {
     // ASSERT
     expect(result).toEqual({ ok: true, output: expect.stringContaining('2026-10-14T09-00-00Z') });
     expect(lines(ctx)).toEqual([expect.objectContaining({ kind: 'start-run', harness: 'claude-code', 'gen_ai.request.model': 'opus' })]);
-    expect(readMarker(ctx.root)).toEqual({ log: episodeLogPath(SLUG), session_id: SESSION, trace_id: lines(ctx)[0]?.trace_id, job_span_id: lines(ctx)[0]?.span_id });
+    expect(readMarker(ctx.root)).toEqual({ log: episodeLogPath(SLUG), session_id: SESSION, trace_id: lines(ctx)[0]?.trace_id, job_span_id: lines(ctx)[0]?.span_id, session_ids: [SESSION] });
   });
 
   it('begins a Job under the Run and moves the marker to it', () => {
@@ -129,7 +132,7 @@ describe('success cases', () => {
 
   it('ends the Run, records orchestrator usage and clears the marker in one step', () => {
     // ARRANGE
-    const transcript = [{ type: 'assistant', message: { model: 'opus', usage: { input_tokens: 100, output_tokens: 20 } } }].map((e) => JSON.stringify(e)).join('\n');
+    const transcript = [{ type: 'assistant', timestamp: '2026-10-14T09:00:30Z', message: { model: 'opus', usage: { input_tokens: 100, output_tokens: 20 } } }].map((e) => JSON.stringify(e)).join('\n');
     const ctx = context(transcript);
     run(ctx, 'begin-run', '--model', 'opus');
     // ACT
@@ -142,11 +145,26 @@ describe('success cases', () => {
     expect(existsSync(path.join(ctx.root, '.scratch/active-run'))).toBe(false);
   });
 
+  it('counts only the orchestrator usage inside the Run, across every session that drove it', () => {
+    // ARRANGE
+    const said = (t: string, id: string, output: number) => JSON.stringify({ type: 'assistant', timestamp: t, message: { id, model: 'opus', usage: { input_tokens: 1, output_tokens: output } } });
+    const ctx = context({
+      'sess-1': [said('2026-10-14T08:00:00Z', 'before', 1000), said('2026-10-14T09:00:30Z', 'm1', 20)].join('\n'),
+      'sess-2': [said('2026-10-14T09:00:45Z', 'm2', 5)].join('\n'),
+    });
+    run(ctx, 'begin-run', '--model', 'opus');
+    // ACT
+    run({ ...ctx, sessionId: 'sess-2' }, 'resume');
+    run({ ...ctx, sessionId: 'sess-2' }, 'end-run');
+    // ASSERT
+    expect(lines(ctx).filter((l) => l.kind === 'end-run').at(-1)).toEqual(expect.objectContaining({ 'gen_ai.usage.input_tokens': 2, 'gen_ai.usage.output_tokens': 25 }));
+  });
+
   it('resumes the current Run in the newest open Job after a crash', () => {
     // ARRANGE
     const ctx = begun();
     run(ctx, 'begin-job', 'write-dossier');
-    run(ctx, 'end-run');
+    run(ctx, 'end-run', 'crashed');
     run(ctx, 'begin-run', '--model', 'opus');
     rmSync(path.join(ctx.root, '.scratch/active-run'));
     // ACT
@@ -244,9 +262,80 @@ describe('failure cases', () => {
     // ASSERT
     expect(result).toEqual({ ok: false, error: expect.stringContaining('status must be') });
   });
+
+  it('refuses a Job the Episode pipeline does not declare', () => {
+    // ARRANGE
+    const ctx = begun();
+    // ACT
+    const result = run(ctx, 'begin-job', 'Not A Job');
+    // ASSERT
+    expect(result).toEqual({ ok: false, error: expect.stringContaining('docs/episodes/demo/pipeline.yml') });
+    expect(spans(ctx).filter((s) => s.type === 'job')).toEqual([]);
+  });
+
+  it('refuses ending a Job while its Attempt is open', () => {
+    // ARRANGE
+    const ctx = begun();
+    run(ctx, 'begin-job', 'write-spec');
+    run(ctx, 'begin-attempt', 'write-spec');
+    // ACT
+    const result = run(ctx, 'end-job', 'write-spec');
+    // ASSERT
+    expect(result).toEqual({ ok: false, error: expect.stringContaining('end-attempt write-spec') });
+    expect(spans(ctx).find((s) => s.type === 'job')?.end_t).toBeNull();
+  });
+
+  it('refuses a new Run while the current one has not ended', () => {
+    // ARRANGE
+    const ctx = begun();
+    // ACT
+    const result = run(ctx, 'begin-run', '--model', 'opus');
+    // ASSERT
+    expect(result).toEqual({ ok: false, error: expect.stringContaining('end-run crashed') });
+    expect(lines(ctx).filter((l) => l.kind === 'start-run')).toHaveLength(1);
+  });
+
+  it('refuses ending a Run ok while it has open spans, and names them', () => {
+    // ARRANGE
+    const ctx = begun();
+    run(ctx, 'begin-job', 'write-spec');
+    run(ctx, 'begin-attempt', 'write-spec');
+    run(ctx, 'open-gate', 'write-spec', 'draft spec');
+    // ACT
+    const result = run(ctx, 'end-run', 'ok');
+    // ASSERT
+    expect(result).toEqual({ ok: false, error: expect.stringMatching(/write-spec#1[\s\S]*draft spec[\s\S]*end-run error/) });
+    expect(lines(ctx).filter((l) => l.kind === 'end-run')).toEqual([]);
+    expect(readMarker(ctx.root)).not.toBeNull();
+  });
 });
 
 describe('edge cases', () => {
+  it('ends a Run as crashed with spans still open, which then read crashed', () => {
+    // ARRANGE
+    const ctx = begun();
+    run(ctx, 'begin-job', 'write-spec');
+    // ACT
+    const result = run(ctx, 'end-run', 'crashed');
+    // ASSERT
+    expect(result.ok).toBe(true);
+    expect(spans(ctx).map((s) => [s.type, s.status])).toEqual([['run', 'crashed'], ['job', 'crashed']]);
+  });
+
+  it('reads Job ids from the template pipeline before the Episode has its own', () => {
+    // ARRANGE
+    const ctx = begun();
+    rmSync(path.join(ctx.root, 'docs/episodes', SLUG, 'pipeline.yml'));
+    mkdirSync(path.join(ctx.root, '.agents/skills/new-episode/assets'), { recursive: true });
+    writeFileSync(path.join(ctx.root, '.agents/skills/new-episode/assets/pipeline.yml'), pipeline(['categorize-research']));
+    // ACT
+    const declared = run(ctx, 'begin-job', 'categorize-research');
+    const undeclared = run(ctx, 'begin-job', 'write-dossier');
+    // ASSERT
+    expect(declared.ok).toBe(true);
+    expect(undeclared).toEqual({ ok: false, error: expect.stringContaining('assets/pipeline.yml') });
+  });
+
   it('reuses an already open Job instead of opening a second', () => {
     // ARRANGE
     const ctx = begun();

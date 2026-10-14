@@ -122,14 +122,15 @@ function openAttempt(log: readonly RunLogLine[], trace: string, who: { job: stri
 }
 
 /**
- * Where an agent nests: the open Attempt its description names; an unparsed agent the one open Job, or the Run when
- * none or several are open, since the marker only names the newest Job.
+ * Where an agent nests: the open Attempt its description names, else its Job while open; an unparsed agent the one
+ * open Job. Otherwise the Run, since a closed or never-begun Job is no place to guess.
  */
 function parentOf(where: { log: readonly RunLogLine[]; marker: Marker }, identity: Partial<ParsedDescription>, jobs: readonly RunLogLine[]): string | undefined {
   const { log, marker } = where;
   const { job, attempt } = identity;
-  if (job !== undefined && attempt !== undefined) return (openAttempt(log, marker.trace_id, { job, attempt }) ?? { span_id: marker.job_span_id }).span_id;
-  if (jobs.length === 1) return jobs[0].span_id;
+  const ownAttempt = job !== undefined && attempt !== undefined ? openAttempt(log, marker.trace_id, { job, attempt }) : undefined;
+  const own = ownAttempt ?? jobs.find((l) => job !== undefined && l.job === job);
+  if (own !== undefined) return own.span_id;
   return log.find((l) => l.kind === 'start-run' && l.trace_id === marker.trace_id)?.span_id;
 }
 
@@ -197,15 +198,22 @@ export function adaptSubagent(input: AdapterInput): LogEvent | null {
 
 /**
  * The orchestrator's own cost for the Run span, when the Run ends: a second `end-run` line for the Run that
- * repeats the first one's status and summary and adds the orchestrator session's model and summed usage, read
- * from its transcript. The latest end line wins when folded. Null when the Run has no `end-run` yet, already
- * carries usage, or the transcript reports none.
+ * repeats the first one's status and summary and adds the orchestrator's model and the usage it spent inside the
+ * Run (from start-run to the end of end-run's second), summed over the transcripts of every session that drove it. The latest end line
+ * wins when folded. Null when the Run has no `end-run` yet, already carries usage, or the transcripts report none.
  */
-export function runUsageEvent(log: readonly RunLogLine[], marker: Marker, transcript: string | null): LogEvent | null {
+export function runUsageEvent(log: readonly RunLogLine[], marker: Marker, transcripts: readonly (string | null)[]): LogEvent | null {
   const run = log.find((l) => l.kind === 'start-run' && l.trace_id === marker.trace_id);
   const ended = [...log].reverse().find((l) => l.kind === 'end-run' && l.span_id === run?.span_id);
   if (run?.span_id === undefined || ended === undefined || ended['gen_ai.usage.input_tokens'] !== undefined) return null;
-  const all = entries(transcript);
+  // Line times are whole seconds, transcript times milliseconds: the window runs to the end of end-run's second.
+  const from = Date.parse(run.t);
+  const until = Date.parse(ended.t) + 1000;
+  const inside = (e: Entry): boolean => {
+    const at = e.timestamp === undefined ? Number.NaN : Date.parse(e.timestamp);
+    return at >= from && at < until;
+  };
+  const all = transcripts.flatMap((t) => entries(t)).filter(inside);
   const usage = usageOf(all);
   if (Object.keys(usage).length === 0) return null;
   return definedOnly({ kind: 'end-run', span_id: run.span_id, status: ended.status, summary: ended.summary, source: 'measured', 'gen_ai.response.model': modelOf(all), ...usage });
