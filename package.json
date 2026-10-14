@@ -28,7 +28,7 @@
     "episode:log": "node .agents/skills/new-episode/scripts/log.ts",
     "episode:trace": "node .agents/skills/new-episode/scripts/trace.ts",
     "episode:query": "node .agents/skills/new-episode/scripts/query.ts",
-    "episode:run-state": "node .agents/skills/new-episode/scripts/run-state.ts",
+    "episode:run": "node .agents/skills/new-episode/scripts/run.ts",
     "episode:runs-csv": "node .agents/skills/new-episode/scripts/runs-csv.ts",
     "preview": "node .agents/skills/visual-check/scripts/preview.ts",
     "inspect-page": "node .agents/skills/visual-check/scripts/inspect-page.ts"
