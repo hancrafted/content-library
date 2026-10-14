@@ -1,0 +1,57 @@
+{
+  "title": "Behalte deinen Cashflow im Blick, mit vorgezogenem Umsatz",
+  "caption": "Gleiche Kosten, gleicher Auftrag, zwei Monate früher: Die Kasse kommt nie bei null an.",
+  "board": {
+    "label": "Cashflow-Tafel, Januar bis April, mit dem Umsatz in den Februar verschoben",
+    "rows": {
+      "cash": "Kasse",
+      "cost": "Kosten",
+      "revenue": "Umsatz"
+    },
+    "months": {
+      "jan": "Jan.",
+      "feb": "Feb.",
+      "mar": "März",
+      "apr": "Apr."
+    },
+    "amounts": {
+      "cashJan": "100k $",
+      "cashFeb": "50k $",
+      "cashMar": "1 Mio. $",
+      "cashApr": "950k $",
+      "cost": "50k $",
+      "revenue": "+1 Mio. $"
+    },
+    "arrow": "Zwei Monate früher"
+  },
+  "notes": {
+    "promised-revenue-is-discounted": {
+      "header": "Versprochener Umsatz zählt weniger",
+      "description": "Umsatz, der nur vorhergesagt ist, rechnen Investoren mit einem Abschlag, und wer darauf baut, noch einmal Geld einzusammeln, merkt oft, dass die Annahme nicht stimmt; geplanter Umsatz deckt also keine heutigen Kosten.[1]",
+      "sources": {
+        "paul-graham-default-alive": {
+          "title": "Paul Graham, Default Alive or Default Dead?"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "same-board": {
+        "title": "Dieselbe Tafel",
+        "keywords": "die Tafel noch einmal, gleiche Kosten, gleiche vier Monate, ein Zettel anders",
+        "script": "Hier ist die Tafel noch einmal, mit denselben Kosten und denselben vier Monaten. Nur ein einziger Zettel ist anders. Und genau um diesen Zettel geht es in diesem ganzen Vortrag."
+      },
+      "revenue-earlier": {
+        "title": "Früherer Umsatz",
+        "keywords": "Umsatz vom April jetzt im Februar, Kasse sinkt, aber nie auf null, Stempel weg, Timing zählt",
+        "script": "Der Umsatzzettel aus dem April ist gewandert. Er klebt jetzt im Februar. Folge der Kassenzeile. Sie sinkt, aber sie kommt nie bei null an. Der Stempel ist weg, und die Firma lebt bis in den Sommer weiter. Auf der ersten Tafel war dir das Geld ausgegangen, während du auf einen guten Auftrag gewartet hast. Hier kam derselbe Auftrag früher. So viel macht das Timing aus."
+      },
+      "how-it-moves": {
+        "title": "Wie der Zettel wandert",
+        "keywords": "nicht durch Hoffen, keine schönere Tabelle, die Pipeline früher starten, rechtzeitig unterschrieben und bezahlt",
+        "script": "Wie ist der Zettel dorthin gekommen? Nicht durch Hoffen und nicht durch eine schönere Tabelle. Der einzige Weg ist, die Pipeline früher zu starten, damit der Auftrag unterschrieben und das Geld angekommen ist, bevor sich die Kostenzettel stapeln."
+      }
+    }
+  }
+}

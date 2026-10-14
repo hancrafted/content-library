@@ -1,7 +1,7 @@
 {
   "title": "Start selling before you need the money · hancrafted",
   "description": "Why early-stage founders have to start selling long before revenue is needed: a month-by-month cashflow board, the stages of a sale, and four first steps to build a sales pipeline.",
-  "toc": "Contents Loading 3 min left 1 Why watching cashflow is mission critical Watch your cashflow Open contents : Contents · Loading Contents 3 min left 1 Why watching cashflow is mission critical Watch your cashflow",
+  "toc": "Contents Loading 10 min left 1 Why watching cashflow is mission critical Watch your cashflow 2 How to start doing sales Stages of sale Pipeline tools in practice How marketing feeds the pipeline Watch your cashflow, revenue pulled in Open contents : Contents · Loading Contents 10 min left 1 Why watching cashflow is mission critical Watch your cashflow 2 How to start doing sales Stages of sale Pipeline tools in practice How marketing feeds the pipeline Watch your cashflow, revenue pulled in",
   "slides": [
     {
       "id": "top",
@@ -14,6 +14,26 @@
     {
       "id": "why-watching-cashflow-is-mission-critical--watch-your-cashflow",
       "text": "Watch your cashflow Costs land every month. The big deal lands in April. The cash runs out in March. Cash Cost Revenue Jan Cash $100k Cost $50k Feb Cash $50k Cost $50k Mar Cash $0 Cost $50k Apr Cost $50k Revenue +$1M Bankrupt Find your zero-cash month: walk the cash row to where it hits zero."
+    },
+    {
+      "id": "how-to-start-doing-sales",
+      "text": "How to start doing sales The stages of a sale, a deal board, and where marketing feeds it."
+    },
+    {
+      "id": "how-to-start-doing-sales--stages-of-sale",
+      "text": "Stages of sale Leads become deals, and cash still waits for delivery. Leads Research First contact cold call · inbound · network Opportunities the real work Conversations Questions Proposal Closing Signature Cash Delivery: more lag before cash"
+    },
+    {
+      "id": "how-to-start-doing-sales--pipeline-tools-in-practice",
+      "text": "Pipeline tools in practice One card per deal, one column per stage: stuck deals show at a glance. New 3 · $29k Brightfold $8k Okapi Logistics $15k Talvik Energy $6k Meeting 1 · $20k Mosswell Clinics $20k Proposal 2 · $52k Kestrel Labs $40k Harbor & Pine $12k Won 1 · $18k Lindgren Tools $18k"
+    },
+    {
+      "id": "how-to-start-doing-sales--how-marketing-feeds-the-pipeline",
+      "text": "How marketing feeds the pipeline Marketing adds volume to one defined stage: the first column. Marketing webinar · post +40 new names New 3 · $29k Brightfold $8k Okapi Logistics $15k Talvik Energy $6k Meeting 1 · $20k Mosswell Clinics $20k Proposal 2 · $52k Kestrel Labs $40k Harbor & Pine $12k Won 1 · $18k Lindgren Tools $18k"
+    },
+    {
+      "id": "how-to-start-doing-sales--watch-your-cashflow-revenue-pulled-in",
+      "text": "Watch your cashflow, revenue pulled in Same costs, same deal, two months earlier: cash never hits zero. Cash Cost Revenue Jan Cash $100k Cost $50k Feb Cash $50k Cost $50k Revenue +$1M Mar Cash $1M Cost $50k Apr Cash $950k Cost $50k Two months earlier"
     }
   ],
   "notes": [
@@ -28,6 +48,23 @@
     {
       "id": "why-watching-cashflow-is-mission-critical--watch-your-cashflow",
       "text": "Watch your cashflow Costs start first Company setup and the founders' living costs arise before the first user or any income. 1 Sources (1) Paul Graham, A Student's Guide to Startups: Startup Funding ( opens in a new tab ) paulgraham.com Even a signed deal waits With no contract term, interest on a late B2B payment starts only 30 days after the invoice is received, and agreed terms may run up to 60 days. 1 Sources (1) European Parliament and Council, Directive 2011/7/EU on combating late payment in commercial transactions ( opens in a new tab ) eur-lex.europa.eu"
+    },
+    { "id": "how-to-start-doing-sales", "text": "How to start doing sales No speaker notes for this Slide." },
+    {
+      "id": "how-to-start-doing-sales--stages-of-sale",
+      "text": "Stages of sale Delivery adds lag After the work is done the customer's payment period may only start after an acceptance step of up to 30 days. 1 Sources (1) European Parliament and Council, Directive 2011/7/EU on combating late payment in commercial transactions ( opens in a new tab ) eur-lex.europa.eu Early channels do not scale, and that is fine Before product-market fit, rely on the personal networks of founders, employees and investors and on customer referrals; they yield the best opportunities to learn from. 1 Sources (1) Mark Roberge, The Science of Scaling ( opens in a new tab ) f.hubspotusercontent10.net"
+    },
+    {
+      "id": "how-to-start-doing-sales--pipeline-tools-in-practice",
+      "text": "Pipeline tools in practice Late slippage hurts In one vendor dataset, deals that slip late in the cycle convert worse, and winning deals involved decision makers early. 1 Sources (1) Ebsta and Pavilion, GTM Benchmarks Report ( opens in a new tab ) benchmarks.ebsta.com"
+    },
+    {
+      "id": "how-to-start-doing-sales--how-marketing-feeds-the-pipeline",
+      "text": "How marketing feeds the pipeline Rates differ per stage The same dataset shows 68 percent from marketing-qualified to sales-qualified lead beside a 19 percent win rate, so each stage needs its own number. 1 Sources (1) Ebsta and Pavilion, GTM Benchmarks Report ( opens in a new tab ) benchmarks.ebsta.com"
+    },
+    {
+      "id": "how-to-start-doing-sales--watch-your-cashflow-revenue-pulled-in",
+      "text": "Watch your cashflow, revenue pulled in Promised revenue is discounted Revenue that is only predicted is discounted by investors, and founders who rely on raising more money often find the assumption false, so projected revenue does not cover present costs. 1 Sources (1) Paul Graham, Default Alive or Default Dead? ( opens in a new tab ) paulgraham.com"
     }
   ],
   "script": [
@@ -42,6 +79,26 @@
     {
       "id": "why-watching-cashflow-is-mission-critical--watch-your-cashflow",
       "text": "Watch your cashflow 0:00 – 0:26 The board sticky notes January to April cash cost revenue costs every month Here is a board of sticky notes. One column for each month, January to April. Three rows: cash, cost and revenue. Start with the cost row. A cost note sits in every single column. Salaries, tools, rent. They do not wait for you. People still need paying on the last day of the month, whether or not a customer said yes. 0:26 – 1:02 Big deal lands in April big deal in April zero in March bankrupt a verbal yes is not cash Now the revenue row. There is one big note, and it sits in April. It is a good deal, a real one. But watch the cash row. Month by month the cash note gets smaller. In March it falls to zero dollars, and a stamp lands on it. Bankrupt. One month before the money would have arrived. A deal that is nearly done is not cash. A verbal yes is not cash either. Until the money is on the account, it does not count. 1:02 – 1:51 Find your zero-cash month first action your own board zero-cash month deadline for sales results count back So here is your first action. Build this board for your own company. Month by month: cash, cost and revenue, as simple as sticky notes. Then walk along the cash row and find the month where it reaches zero. That is your zero-cash month, and everything else today is measured against it. Pen and paper is enough, and twelve months is plenty. Be honest about the costs. Be careful with the revenue, and write only the revenue you would bet your own salary on. Write that date down. It is the deadline for your sales results, not for your product. Count back from it, and you know how much time you really have to start."
+    },
+    {
+      "id": "how-to-start-doing-sales",
+      "text": "How to start doing sales 0:00 – 0:17 From idea to practice how to start stages of a sale deal board marketing revenue pulled forward So how do you actually start? Three things. The stages a sale goes through, what a real deal board looks like, and where marketing fits in. After that we come back to our sticky-note board, with the revenue pulled forward."
+    },
+    {
+      "id": "how-to-start-doing-sales--stages-of-sale",
+      "text": "Stages of sale 0:00 – 0:27 Three stages leads opportunities closing stranger to customer three words A sale has three stages, from left to right. Leads, opportunities, and closing. Each one is a different kind of work. Someone is a stranger, then a name on your list, then a conversation, then a customer. The stages are only names for where a person is on that way. Keep these three words, because the rest of this part uses them. 0:27 – 1:04 Leads second action spreadsheet ten names today every week company person why they care Start with leads. A lead is simply the name of someone who might buy. Research them and keep a list. This is your second action, and you can do it today. Open a spreadsheet, add ten names, and keep adding them every week. Do not make the list perfect. Write down the company, the person, and why you think they might care. If you do not know yet, write down a guess, and fix it after the first call. The only wrong list is the empty one. 1:04 – 1:37 First contact third action cold call inbound network short honest message a no teaches for free Then comes first contact. You can cold call, you can answer someone who came to you, or you can ask your network. Pick the one you are least afraid of and begin. This is your third action. Each conversation that goes somewhere turns a lead into an opportunity. Many people fear that they are bothering others. A short, honest message is a fair thing to send. And if they say no, you have learned something for free. 1:37 – 2:06 Opportunities the real work conversations questions proposal most of your week steady lead research Opportunities are where the real work lives. Conversations, questions, a proposal. If you spend all your time on lead research, you are researching, not selling. At some point a name has to become a conversation, and a conversation has to become a proposal. Put most of your week into the opportunities you already have. Keep a small, steady part for adding new names to the lead stage. 2:06 – 2:36 After closing signature delivery more waiting revenue after signature zero-cash month earlier Closing is not the end of the story for your cash. After the signature comes the delivery, and delivery is more waiting. Your revenue lands later than your signature, so count that gap into your board. How long does delivery take in your business? A week? A quarter? Add it to the board as a note after the signature, and you will find your zero-cash month a little earlier than you thought."
+    },
+    {
+      "id": "how-to-start-doing-sales--pipeline-tools-in-practice",
+      "text": "Pipeline tools in practice 0:00 – 0:30 Simple board one column per stage one card per deal count and value Monday morning who to call A deal board is simple. One column for each stage: New, Meeting, Proposal and Won. Each deal is one card. On top of each column you see how many deals sit there and what they are worth together. Imagine a Monday morning with this board in front of you. Two deals are in Proposal and one is stuck in Meeting. You know exactly who to call, and in which order. 0:30 – 1:07 Track every deal one step at a time nothing in your head stuck column empty column a minute not a quarter Then you track every deal. A card moves one step at a time, from one column to the next. Nothing lives only in your head, and nothing gets forgotten. This is also how you find problems. A column that fills up and never empties tells you where deals get stuck. A column that stays empty tells you where you have no flow. You cannot see either from your inbox. When something is stuck, you see it in a minute instead of finding out in a quarter. 1:07 – 1:30 Start simple no perfect tool spreadsheet sticky notes weekly habit fifteen minutes small and regular Do not wait for the perfect tool. A spreadsheet works. Sticky notes on a wall work. The tool matters much less than the habit of updating it every week. Pick a weekly slot, fifteen minutes. Move the cards, add the new ones, remove the dead ones. Small and regular beats big and rare."
+    },
+    {
+      "id": "how-to-start-doing-sales--how-marketing-feeds-the-pipeline",
+      "text": "How marketing feeds the pipeline 0:00 – 0:19 Marketing adds volume clear job more leads one stage first column the stage must exist Marketing has a clear job in this picture. It adds volume. It brings more leads into one stage of your pipeline, the first column of the board. A bigger flow of leads helps only if that stage exists and you know where it sits. 0:19 – 1:01 Defined entry point decide the stage measure it webinar or post forty new names compare on one board That only works if you decide which stage marketing feeds. If you do not, the volume goes in somewhere, but nobody can see where it goes or what it turns into. Give it a defined entry point, and then you can measure it. For example, a webinar or a post might bring in forty new names. If they all land in one column, you can see in a month how many of them became meetings. If they land nowhere, you have forty names and no idea. Marketing and your own outreach can then be compared on the same board. 1:01 – 1:23 Not a substitute do not wait for marketing your own first contact first opportunities do both carry the message But do not wait for marketing to do your first sales for you. Early on, your own first contact is what opens the first opportunities. Marketing helps it grow. So do both. Make the first calls yourself, learn what works, and then let marketing carry that message to many more people."
+    },
+    {
+      "id": "how-to-start-doing-sales--watch-your-cashflow-revenue-pulled-in",
+      "text": "Watch your cashflow, revenue pulled in 0:00 – 0:12 Same board the board again same costs same four months one note different Here is the board again, with the same costs and the same four months. Only one note is different. That one note is what this whole talk is about. 0:12 – 0:39 Revenue earlier April revenue now in February cash dips but never zero stamp gone timing matters The April revenue note has moved. It now sits in February. Follow the cash row. It dips, but it never reaches zero. The stamp is gone, and the company lives on into the summer. In the first board you were out of money while waiting for a good deal. Here the same deal came earlier. That is how much timing matters. 0:39 – 0:57 How it moves not by hoping not a nicer spreadsheet start the pipeline earlier signed and paid in time How did the note move? Not by hoping, and not by a nicer spreadsheet. The only way is to start the pipeline earlier, so that the deal is signed and the money has arrived by the time the cost notes pile up."
     }
   ]
 }

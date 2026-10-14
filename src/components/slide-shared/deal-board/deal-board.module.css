@@ -1,0 +1,42 @@
+/*
+ * The deal board's one entrance: a moved card slides in from the column to
+ * its left. Transform and animation only: colours and type come from token
+ * classes in the markup (FE-011). The base rules are the finished board, with
+ * the card resting in its new column and a dashed ghost in the old one, which
+ * carries the claim at rest; the entrance runs only on the active Slide, while
+ * the board is wide enough for four columns side by side (the `@2xl` of its
+ * markup, 42rem) and never under reduced motion (FE-009 §6).
+ */
+
+.board {
+  /* Equal to the grid's `gap-3`: one column step is a card width plus this gap. */
+  --board-gap: 0.75rem;
+}
+
+@keyframes move-in {
+  from {
+    transform: translateX(calc(-100% - var(--board-gap)));
+  }
+}
+
+/* The ghost starts as the card still standing there, then empties to its dashed outline. */
+@keyframes empty-ghost {
+  from {
+    opacity: 1;
+    background-color: var(--card);
+  }
+}
+
+@container (min-width: 42rem) {
+  @media (prefers-reduced-motion: no-preference) {
+    :global([data-zone='active']) .moved {
+      position: relative;
+      z-index: 1;
+      animation: move-in 700ms cubic-bezier(0.2, 0, 0, 1) 300ms both;
+    }
+
+    :global([data-zone='active']) .ghost {
+      animation: empty-ghost 700ms ease-out 300ms both;
+    }
+  }
+}

@@ -1,0 +1,60 @@
+/*
+ * The marketing funnel's drawing and its one-shot entrance: each dot falls
+ * once from the mouth into the spout, then the arrow draws. Fill, stroke from
+ * tokens and transform only: no raw colour or type (FE-011). The base rules
+ * are the finished picture, dots heaped in the spout and the arrow drawn;
+ * the entrance runs only on the active Slide and never under reduced motion
+ * (FE-009 §6). No loop, so no pause duty.
+ */
+
+.funnel {
+  fill: var(--muted);
+  stroke: currentColor;
+}
+
+.dot {
+  fill: var(--primary);
+}
+
+.across {
+  transform-origin: left center;
+}
+
+.down {
+  transform-origin: center top;
+}
+
+/* In the SVG's own units: from just inside the mouth down to the heap. */
+@keyframes fall {
+  from {
+    opacity: 0;
+    transform: translateY(-165px);
+  }
+}
+
+@keyframes draw-across {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes draw-down {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .dot {
+    animation: fall 600ms cubic-bezier(0.2, 0, 0, 1) both;
+    animation-delay: calc(var(--dot) * 120ms);
+  }
+
+  :global([data-zone='active']) .across {
+    animation: draw-across 300ms ease-out 1100ms both;
+  }
+
+  :global([data-zone='active']) .down {
+    animation: draw-down 300ms ease-out 1100ms both;
+  }
+}
