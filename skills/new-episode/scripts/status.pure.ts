@@ -8,6 +8,7 @@ import { readPipeline, type Job } from '../../../src/lib/episode-pipeline-jobs.p
 import { gateTier } from '../../../src/lib/staging-file.pure.ts';
 import type { Folded, Span } from './run-log.pure.ts';
 import { formatDuration } from './run-log.pure.ts';
+import { labelled, skillWarningsOf, type SkillWarning } from './status-skills.pure.ts';
 
 export type JobState = 'done' | 'running' | 'gate' | 'blocked' | 'ready' | 'waiting';
 
@@ -93,17 +94,8 @@ export interface RunStatus {
   running: RunningAgent[];
   problems: ProblemSpan[];
   waiting: WaitingGate[];
-}
-
-/** Only the fields a span has, so an absent attempt or role stays absent. */
-function labelled(span: Span): { name: string; job?: string; attempt?: number; role?: string } {
-  const { name, job, attempt, role } = span;
-  return {
-    name,
-    ...(job !== undefined && { job }),
-    ...(attempt !== undefined && { attempt }),
-    ...(role !== undefined && { role }),
-  };
+  /** Skills listed for an agent that its transcript shows it never invoked; only spans that recorded `skills_invoked` are judged. */
+  skillWarnings: SkillWarning[];
 }
 
 /** The crashed and refused spans of a run, the Run itself aside. */
@@ -134,8 +126,7 @@ export function runStatus(
 ): RunStatus {
   const spans = trace === undefined ? folded.spans : folded.spans.filter((span) => span.trace_id === trace);
   const jobs = readPipeline(pipelineYaml)?.jobs ?? [];
-  const latest = latestJobSpans(spans);
-  const states = new Map<string, JobState>();
+  const [latest, states] = [latestJobSpans(spans), new Map<string, JobState>()];
   const stateOf = (id: string): JobState => {
     const known = states.get(id);
     if (known !== undefined) return known;
@@ -155,6 +146,7 @@ export function runStatus(
     running: open('agent').map((span) => ({ ...labelled(span), elapsed_ms: since(span) })),
     problems: problemsOf(spans),
     waiting: open('gate').map((span) => ({ ...labelled(span), waiting_ms: since(span) })),
+    skillWarnings: skillWarningsOf(spans, jobs),
   };
 }
 
@@ -171,14 +163,17 @@ const spawnName = ({
 }): string =>
   job !== undefined && attempt !== undefined && role !== undefined ? `${name} · ${job}#${attempt}/${role}` : name;
 
-/** The status as the CLI prints it: one line per job, then running agents, crashed and refused spans, waiting gates. */
-export function renderStatus({ jobs, running, problems, waiting }: RunStatus): string {
+/** The status as the CLI prints it: one line per job, then running agents, crashed and refused spans, waiting gates, skills listed and not invoked. */
+export function renderStatus({ jobs, running, problems, waiting, skillWarnings }: RunStatus): string {
   return [
     ...jobs.map(({ id, state }) => `${state.padEnd(8)}${id}`),
     ...running.map((agent) => `${'running'.padEnd(8)}${spawnName(agent)} · ${formatDuration(agent.elapsed_ms)}`),
     ...problems.map((span) => `${span.status.padEnd(8)}${spawnName(span)}`),
     ...waiting.map(
       (gate) => `${'gate'.padEnd(8)}${gate.job ?? gate.name} · waiting on Han ${formatDuration(gate.waiting_ms)}`,
+    ),
+    ...skillWarnings.map(
+      (span) => `${'warn'.padEnd(8)}${spawnName(span)} · skill not invoked: ${span.missing.join(', ')}`,
     ),
   ].join('\n');
 }

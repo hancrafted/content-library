@@ -50,6 +50,7 @@ const SPAN_COLUMNS = [
   'gen_ai.usage.input_tokens',
   'gen_ai.usage.output_tokens',
   'gen_ai.usage.cache_read.input_tokens',
+  'skills_invoked',
 ] as const;
 
 /** `scores` columns: the Score's own fields plus `episode`. */
@@ -93,7 +94,7 @@ function load(sources: readonly RunSource[]): DatabaseSync {
     insertAll(
       db,
       { name: 'spans', columns: SPAN_COLUMNS },
-      folded.spans.map((span) => ({ ...span, episode })),
+      folded.spans.map((span) => ({ ...span, episode, skills_invoked: span.skills_invoked?.join(',') })),
     );
     insertAll(
       db,

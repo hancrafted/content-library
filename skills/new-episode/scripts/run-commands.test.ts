@@ -609,7 +609,7 @@ describe('orchestrator Job usage', () => {
       message: { id, model: 'opus', usage: { input_tokens: 1, output_tokens: output } },
     });
 
-  it('measures the orchestrator usage between the Job start and end on the Job end line', () => {
+  it('measures the orchestrator usage between the Job start and end, laid over the Job by one attrs line', () => {
     // ARRANGE
     const ctx = context(
       [
@@ -637,6 +637,39 @@ describe('orchestrator Job usage', () => {
         'gen_ai.usage.output_tokens': 7,
       }),
     );
+  });
+
+  it('appends an attrs line, never a second end, and records the skills the orchestrator invoked in the window', () => {
+    // ARRANGE
+    const skill = (t: string, name: string) =>
+      JSON.stringify({
+        type: 'assistant',
+        timestamp: t,
+        message: { id: `sk-${name}`, content: [{ type: 'tool_use', name: 'Skill', input: { skill: name } }] },
+      });
+    const ctx = context(
+      [
+        skill('2026-10-14T09:00:30Z', 'before-job'),
+        skill('2026-10-14T09:01:30Z', 'grilling'),
+        said('2026-10-14T09:01:40Z', 'in-job', 7),
+      ].join('\n'),
+    );
+    writeFileSync(
+      path.join(ctx.root, 'docs/episodes', SLUG, 'pipeline.yml'),
+      'status: approved\njobs:\n  - id: write-dossier\n    session: orchestrator\n  - id: a\n',
+    );
+    run(ctx, 'begin-run', '--model', 'opus');
+    run(ctx, 'begin-job', 'write-dossier');
+    // ACT
+    run(ctx, 'end-job', 'write-dossier', 'ok', '--summary', 'done');
+    // ASSERT
+    const lines = readFileSync(path.join(ctx.root, 'docs/episodes', SLUG, 'events.jsonl'), 'utf8')
+      .trim()
+      .split('\n')
+      .map((l) => JSON.parse(l));
+    const ofJob = lines.filter((l) => l.span_id === spans(ctx).find((s) => s.type === 'job')?.span_id);
+    expect(ofJob.map((l) => l.kind)).toEqual(['start', 'end', 'attrs']);
+    expect(spans(ctx).find((s) => s.type === 'job')).toMatchObject({ status: 'ok', skills_invoked: ['grilling'] });
   });
 
   it('leaves a subagent Job without usage', () => {

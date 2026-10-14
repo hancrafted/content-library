@@ -47,3 +47,16 @@ export function usageOf(all: readonly Entry[]): Partial<LogEvent> {
 /** The model of the last assistant message. */
 export const modelOf = (all: readonly Entry[]): string | undefined =>
   [...all].reverse().find((e) => e.type === 'assistant' && e.message?.model)?.message?.model;
+
+/** The skills the transcript invoked with the Skill tool, first-use order, once each; `plugin:skill` as the tool call names them. */
+export function skillsInvoked(all: readonly Entry[]): string[] {
+  const names = all.flatMap((e) =>
+    e.type === 'assistant' && Array.isArray(e.message?.content)
+      ? e.message.content.flatMap((b: unknown) => {
+          if (!isRecord(b) || b.type !== 'tool_use' || b.name !== 'Skill' || !isRecord(b.input)) return [];
+          return typeof b.input.skill === 'string' && b.input.skill !== '' ? [b.input.skill] : [];
+        })
+      : [],
+  );
+  return [...new Set(names)];
+}
