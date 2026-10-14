@@ -1,6 +1,6 @@
 // `record`: builds and validates one run-log line from an event and an explicit stamp.
 
-import { KINDS, SPAN_TYPES, STATUSES, SUMMARY_MAX, type Kind, type RecordResult, type RunLogLine, type Stamp } from './run-log.schema.pure.ts';
+import { KINDS, SPAN_TYPES, STATUSES, SUMMARY_MAX, VIAS, type Kind, type RecordResult, type RunLogLine, type Stamp } from './run-log.schema.pure.ts';
 
 type Fields = Record<string, unknown>;
 type Check = (v: unknown) => string | null;
@@ -43,7 +43,7 @@ const CHECKS: Record<string, Check> = {
   'gen_ai.usage.output_tokens': count,
   'gen_ai.usage.cache_read.input_tokens': count,
   status: oneOf(STATUSES),
-  via: oneOf(['chat', 'commit']),
+  via: oneOf(VIAS),
   summary,
   value,
 };

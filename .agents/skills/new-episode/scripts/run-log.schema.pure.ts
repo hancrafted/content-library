@@ -9,6 +9,10 @@ export type Kind = (typeof KINDS)[number];
 export const STATUSES = ['ok', 'error', 'refused', 'crashed', 'reused'] as const;
 export type Status = (typeof STATUSES)[number];
 
+/** How a human's approval reached the log. */
+export const VIAS = ['chat', 'commit'] as const;
+export type Via = (typeof VIAS)[number];
+
 /** A span that has started and not ended, as `fold` reports it when asked to treat open spans as live. */
 export type SpanStatus = Status | 'running';
 
@@ -67,7 +71,7 @@ export interface LogEvent {
   value?: number | string;
   rubric?: string;
   body?: string;
-  via?: 'chat' | 'commit';
+  via?: Via;
   comment?: string;
 }
 
@@ -134,7 +138,7 @@ export interface Score {
   source: string;
   rubric?: string;
   body?: string;
-  via?: 'chat' | 'commit';
+  via?: Via;
   comment?: string;
 }
 

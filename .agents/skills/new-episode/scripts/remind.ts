@@ -2,7 +2,8 @@
 // jobs not done; silent otherwise. It reads each Episode's state through the same `readEpisodeStatus`
 // that `npm run episode:status` uses.
 import { execFileSync } from 'node:child_process';
-import { episodeBranches, readEpisodeStatus, unfinishedReminder, type EpisodeRun } from './episode-status.ts';
+import { episodeBranches, unfinishedReminder, type EpisodeRun } from './episode-reminder.pure.ts';
+import { readEpisodeStatus } from './episode-status.ts';
 
 const root = process.env.CLAUDE_PROJECT_DIR ?? process.cwd();
 const run = (cmd: string, args: readonly string[], cwd: string): string =>

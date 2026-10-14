@@ -190,7 +190,22 @@ In a new session, or after a compaction, never trust memory of the run: run `npm
 
 ## Gate commits
 
-Every commit goes through the `commit` skill. A gate is also a span: `open-gate <job> "draft <name>"` when the `Gate: draft <name>` commit lands. When Han approves (in chat, or by committing the approval), `score "gate:draft <name>" gate approved --source human:han --via chat|commit --comment "<his words>"`; `close-gate "draft <name>"` follows. A change he asks for is a Score with value `changes` and his words, and the Gate stays open. Never log a gate Score of Han's that he did not give. A gate commit adds a `Gate:` trailer beside `Source:` (`Gate: draft brief`, `Gate: approved pipeline`, `Gate: draft feedback-01`). The agent's draft is committed before Han edits it, so the pair of gate commits shows his edit as a diff: that diff is what later teaches agents his style. Only Han approves, with `approve.ts`, which appends his `verified` entry. Who commits sets the mark: the orchestrator's `Gate: draft <name>` commit carries `Agent: <job id>` beside `Gate:` and `Source:`, like every agent commit (see [agent marks](#agent-marks)); Han's approval commit carries no `Agent:` trailer, which is how a gate diff is told to be his. An approval commit the orchestrator makes at Han's word is still an agent commit and carries `Agent: <job id>`, while the approval entry in `verified` stays his.
+Every commit goes through the `commit` skill. A gate is also a span, logged with these commands:
+
+- `open-gate <job> "draft <name>"` when the `Gate: draft <name>` commit lands.
+- `score "gate:draft <name>" gate approved --source human:han --via chat|commit --comment "<his words>"` when Han approves, in chat or by committing the approval.
+- `close-gate "draft <name>"` after the approval Score.
+- `score "gate:draft <name>" gate changes --source human:han --comment "<his words>"` for a change he asks for; the Gate stays open.
+
+Log only a gate Score Han gave.
+
+A gate commit adds a `Gate:` trailer beside `Source:` (`Gate: draft brief`, `Gate: approved pipeline`, `Gate: draft feedback-01`). The agent's draft is committed before Han edits it, so the pair of gate commits shows his edit as a diff: that diff is what later teaches agents his style. Only Han approves, with `approve.ts`, which appends his `verified` entry.
+
+Who commits sets the mark:
+
+- The orchestrator's `Gate: draft <name>` commit carries `Agent: <job id>` beside `Gate:` and `Source:`, like every agent commit (see [agent marks](#agent-marks)).
+- Han's approval commit carries no `Agent:` trailer, which is how a gate diff is told to be his.
+- An approval commit the orchestrator makes at Han's word is still an agent commit and carries `Agent: <job id>`, while the approval entry in `verified` stays his.
 
 After `Gate: approved pipeline`, the template is frozen for the run: `main` is not merged into the Episode branch again until `open-pr` is done. The pipeline's `template` field names the commit it was tailored from. A template change found during the run goes into `LEARNINGS.md` Lessons and is applied after the run.
 

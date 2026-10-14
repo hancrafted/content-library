@@ -2,7 +2,7 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-import { episodeBranches, readEpisodeStatus, unfinishedReminder, type Gh } from './episode-status.ts';
+import { readEpisodeStatus, type Gh } from './episode-status.ts';
 
 /*
  * The run status reader against a real temp worktree and a fake gh (an adapter at the seam): the
@@ -119,42 +119,5 @@ describe('readEpisodeStatus', () => {
     const live = worktree({ ...base, '.scratch/active-run': marker });
     const dead = worktree(base);
     expect([states(live, failingGh)[0], states(dead, failingGh)[0]]).toEqual(['running', 'ready']);
-  });
-});
-
-describe('unfinishedReminder', () => {
-  it('stays silent with no Episode worktree or when every job is done', () => {
-    const done = statusOf(worktree({ 'docs/episodes/ep/pipeline.yml': 'status: approved\njobs:\n  - { id: only, needs: [] }\n', 'docs/episodes/ep/events.jsonl': jobLog('ok').replaceAll('brief-grill', 'only') }), failingGh);
-    expect([unfinishedReminder([]), unfinishedReminder([{ slug: 'a', status: done }])]).toEqual([null, null]);
-  });
-
-  it('names each Episode with a job not done and the status command', () => {
-    const open = statusOf(worktree(files('')), failingGh);
-    const done = { jobs: [{ id: 'x', state: 'done' as const }], running: [], problems: [], waiting: [] };
-    const text = unfinishedReminder([{ slug: 'a', status: open }, { slug: 'c', status: done }]);
-    expect(text).toContain('npm run episode:status -- a');
-    expect(text).not.toContain('-- c');
-    expect(text).toContain('todo list');
-  });
-});
-
-describe('episodeBranches', () => {
-  const porcelain = [
-    'worktree /repo',
-    'branch refs/heads/main',
-    '',
-    'worktree /repo/.worktrees/episode-a',
-    'branch refs/heads/episode/a',
-    '',
-    'worktree /repo/.worktrees/episode-a--write-research-x',
-    'branch refs/heads/episode/a--write-research-x',
-    '',
-    'worktree /repo/.worktrees/detached',
-    'detached',
-    '',
-  ].join('\n');
-
-  it('lists the integration worktrees, not job worktrees nor other branches', () => {
-    expect(episodeBranches(porcelain)).toEqual([{ slug: 'a', dir: '/repo/.worktrees/episode-a' }]);
   });
 });

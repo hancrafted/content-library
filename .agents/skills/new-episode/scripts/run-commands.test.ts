@@ -168,6 +168,27 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('refuses a second end-run for a Run that already has one', () => {
+    // ARRANGE
+    const ctx = begun();
+    run(ctx, 'end-run');
+    // ACT
+    const result = run(ctx, 'end-run');
+    // ASSERT
+    expect(result).toEqual({ ok: false, error: expect.stringContaining('already ended') });
+    expect(lines(ctx).filter((l) => l.kind === 'end-run')).toHaveLength(1);
+  });
+
+  it('refuses a score --via value the schema does not allow', () => {
+    // ARRANGE
+    const ctx = begun();
+    run(ctx, 'open-gate', 'j', 'x');
+    // ACT
+    const result = run(ctx, 'score', 'gate:x', 'gate', 'approved', '--via', 'telepathy');
+    // ASSERT
+    expect(result).toEqual({ ok: false, error: expect.stringContaining('--via') });
+  });
+
   it('refuses any command before the Run begins', () => {
     // ARRANGE
     const ctx = context();

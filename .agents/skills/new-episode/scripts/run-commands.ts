@@ -9,20 +9,15 @@ import { copyFileSync, existsSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 import { parseArgs } from 'node:util';
 import { episodeLogPath, readEpisodeLog, readMarker } from './episode-run-log.ts';
-import { endMarker, liveMarker, pointMarker } from './run-marker.ts';
-import { appendEvent, type WriterDeps } from './run-log-writer.ts';
-import type { LogEvent, RunLogLine, Span } from './run-log.pure.ts';
+import { endMarker, liveMarker, type MarkerHome, pointMarker } from './run-marker.ts';
+import { appendEvent } from './run-log-writer.ts';
+import { isOpen, latest, openSpan, scoreTarget } from './run-spans.pure.ts';
+import { STATUSES, VIAS, type LogEvent, type RunLogLine, type Span, type Status, type Via } from './run-log.pure.ts';
 
 /** What a command reads from outside; each defaults to the real thing. */
-export interface RunContext {
-  /** The Episode's worktree root. */
-  root: string;
-  slug: string;
+export interface RunContext extends MarkerHome {
   /** The orchestrator's session id (CLAUDE_CODE_SESSION_ID, else SESSION_ID); begin-run and resume need it. */
   sessionId?: string;
-  /** The orchestrator's transcript text, null when it is not found. */
-  transcriptOf?: (sessionId: string) => string | null;
-  writer?: WriterDeps;
 }
 
 export type CommandResult = { ok: true; output: string } | { ok: false; error: string };
@@ -42,12 +37,16 @@ export const USAGE = `usage: npm run episode:run -- <slug> <command> ...
   archive                                          copy the log to .logs/new-episode/<slug>/<run id>.jsonl
 status is ok (default), error, refused or reused.`;
 
-const fail = (error: string): CommandResult => ({ ok: false, error });
-const done = (output: string): CommandResult => ({ ok: true, output });
+const failure = (error: string): CommandResult => ({ ok: false, error });
+const success = (output: string): CommandResult => ({ ok: true, output });
 
-/** The Run a command acts on and the spans of it, read fresh from the log. */
+/** A line as written: its span id is known. */
+type Written = RunLogLine & { span_id: string };
+
+/** The current Run, its lines and its spans, read fresh from the log. */
 interface View {
-  run: RunLogLine;
+  run: Written;
+  lines: RunLogLine[];
   spans: Span[];
 }
 
@@ -72,72 +71,84 @@ const refuse = (message: string): never => {
 function viewOf(ctx: RunContext): View {
   const log = readEpisodeLog(ctx.slug, ctx.root);
   if (log.errors.length > 0) refuse(log.errors.join('\n'));
-  if (log.current === null) return refuse('the log has no Run; run begin-run first');
-  const trace = log.current.trace_id;
-  return { run: log.current, spans: log.folded.spans.filter((s) => s.trace_id === trace) };
+  const run = log.current ?? refuse('the log has no Run; run begin-run first');
+  const spanId = run.span_id ?? refuse('the start-run line has no span id');
+  const trace = run.trace_id;
+  return { run: { ...run, span_id: spanId }, lines: log.lines, spans: log.folded.spans.filter((s) => s.trace_id === trace) };
 }
 
-const latest = (spans: readonly Span[], match: (s: Span) => boolean): Span | undefined => spans.filter(match).sort((a, b) => b.seq - a.seq)[0];
-const isOpen = (s: Span): boolean => s.end_t === null;
-
-/** Writes one event and returns the span id of the written line. */
-function write(ctx: RunContext, event: LogEvent): RunLogLine {
+/** Writes one event and returns the line as written. */
+function write(ctx: RunContext, event: LogEvent): Written {
   const result = appendEvent({ root: ctx.root, file: episodeLogPath(ctx.slug) }, event, ctx.writer);
   if (!result.ok) return refuse(result.errors.join('\n'));
-  return JSON.parse(result.line) as RunLogLine;
+  const line = JSON.parse(result.line) as RunLogLine;
+  return { ...line, span_id: line.span_id ?? refuse('the writer returned a line with no span id') };
 }
+
+/** The one place a marker is built: this Run, the span agents join, the session that orchestrates. */
+const pointAt = (ctx: RunContext, run: RunLogLine, to: { jobSpanId: string; sessionId: string }): void => pointMarker(ctx, { run, ...to });
 
 function sessionOf(ctx: RunContext): string {
   return ctx.sessionId ?? refuse('no session id: set SESSION_ID, or run inside Claude Code (CLAUDE_CODE_SESSION_ID)');
 }
 
-function statusOf(positional: readonly string[], at: number): { status: 'ok' | 'error' | 'refused' | 'reused' } {
-  const status = positional[at] ?? 'ok';
-  if (status !== 'ok' && status !== 'error' && status !== 'refused' && status !== 'reused') return refuse(`status must be ok, error, refused or reused, not "${status}"`);
-  return { status };
+/** The end line of a span (or of the Run, with kind `end-run`): `[status] [summary]`, status ok by default. */
+function endEvent(kind: 'end' | 'end-run', spanId: string, args: { status?: string; summary?: string }): LogEvent {
+  const status = args.status ?? 'ok';
+  if (!(STATUSES as readonly string[]).includes(status)) refuse(`status must be ${STATUSES.join(', ')}, not "${status}"`);
+  return { kind, span_id: spanId, status: status as Status, summary: args.summary };
 }
 
-const need = (positional: readonly string[], at: number, what: string): string => positional[at] ?? refuse(`missing <${what}>\n${USAGE}`);
+function viaOf(value: string | undefined): Via | undefined {
+  if (value === undefined) return undefined;
+  return (VIAS as readonly string[]).includes(value) ? (value as Via) : refuse(`--via must be ${VIAS.join(' or ')}, not "${value}"`);
+}
+
+/** The Params of a command, named by position; a missing one is undefined. */
+type Params<K extends string> = Partial<Record<K, string>>;
+
+const need = (value: string | undefined, what: string): string => value ?? refuse(`missing <${what}>\n${USAGE}`);
 
 function beginRun(ctx: RunContext, opts: Opts): string {
   const sessionId = sessionOf(ctx);
   const model = opts.model ?? refuse('begin-run needs --model <the model you run on>');
   const line = write(ctx, { kind: 'start-run', harness: opts.harness ?? 'claude-code', 'gen_ai.request.model': model });
-  pointMarker(ctx, { run: line, jobSpanId: line.span_id as string, sessionId });
+  pointAt(ctx, line, { jobSpanId: line.span_id, sessionId });
   return `Run begun (${line.run_id})`;
 }
 
-function endRun(ctx: RunContext, positional: readonly string[], opts: Opts): string {
-  const { run } = viewOf(ctx);
-  write(ctx, { kind: 'end-run', span_id: run.span_id, ...statusOf(positional, 0), summary: opts.summary ?? positional[1] });
+function endRun(ctx: RunContext, p: Params<'status' | 'summary'>): string {
+  const { run, lines } = viewOf(ctx);
+  if (lines.some((l) => l.kind === 'end-run' && l.trace_id === run.trace_id)) refuse(`Run ${run.run_id} already ended`);
+  write(ctx, endEvent('end-run', run.span_id, p));
   const warning = endMarker(ctx, run, readEpisodeLog(ctx.slug, ctx.root).lines);
   return warning === '' ? 'Run ended' : `Run ended (${warning})`;
 }
 
-function beginJob(ctx: RunContext, positional: readonly string[]): string {
-  const job = need(positional, 0, 'job');
+function beginJob(ctx: RunContext, p: Params<'job'>): string {
+  const job = need(p.job, 'job');
   const { run, spans } = viewOf(ctx);
   const marker = liveMarker(ctx.root, run);
-  const open = latest(spans, (s) => s.type === 'job' && s.job === job && isOpen(s));
-  const spanId = open?.span_id ?? (write(ctx, { kind: 'start', type: 'job', name: job, job, parent_span_id: run.span_id }).span_id as string);
-  pointMarker(ctx, { run, jobSpanId: spanId, sessionId: marker.session_id });
+  const open = openSpan(spans, 'job', { job });
+  const spanId = open?.span_id ?? write(ctx, { kind: 'start', type: 'job', name: job, job, parent_span_id: run.span_id }).span_id;
+  pointAt(ctx, run, { jobSpanId: spanId, sessionId: marker.session_id });
   return open === undefined ? `Job ${job} begun` : `Job ${job} already open; agents now join it`;
 }
 
-function endJob(ctx: RunContext, positional: readonly string[], opts: Opts): string {
-  const job = need(positional, 0, 'job');
+function endJob(ctx: RunContext, p: Params<'job' | 'status' | 'summary'>): string {
+  const job = need(p.job, 'job');
   const { run, spans } = viewOf(ctx);
-  const open = latest(spans, (s) => s.type === 'job' && s.job === job && isOpen(s)) ?? refuse(`no open Job ${job}`);
-  write(ctx, { kind: 'end', span_id: open.span_id, ...statusOf(positional, 1), summary: opts.summary ?? positional[2] });
+  const open = openSpan(spans, 'job', { job }) ?? refuse(`no open Job ${job}`);
+  write(ctx, endEvent('end', open.span_id, p));
   const marker = readMarker(ctx.root);
-  if (marker !== null && marker.job_span_id === open.span_id) pointMarker(ctx, { run, jobSpanId: run.span_id as string, sessionId: marker.session_id });
+  if (marker !== null && marker.job_span_id === open.span_id) pointAt(ctx, run, { jobSpanId: run.span_id, sessionId: marker.session_id });
   return `Job ${job} ended`;
 }
 
-function beginAttempt(ctx: RunContext, positional: readonly string[]): string {
-  const job = need(positional, 0, 'job');
+function beginAttempt(ctx: RunContext, p: Params<'job'>): string {
+  const job = need(p.job, 'job');
   const { spans } = viewOf(ctx);
-  const jobSpan = latest(spans, (s) => s.type === 'job' && s.job === job && isOpen(s)) ?? refuse(`no open Job ${job}; run begin-job ${job} first`);
+  const jobSpan = openSpan(spans, 'job', { job }) ?? refuse(`no open Job ${job}; run begin-job ${job} first`);
   const attempts = spans.filter((s) => s.type === 'attempt' && s.job === job);
   if (attempts.some(isOpen)) refuse(`${job} has an open Attempt; run end-attempt ${job} first`);
   const previous = latest(attempts, () => true);
@@ -146,57 +157,46 @@ function beginAttempt(ctx: RunContext, positional: readonly string[]): string {
   return `Attempt ${job}#${n} begun; spawn each agent with description ${job}#${n}/<role>[/#<ticket>]`;
 }
 
-function endAttempt(ctx: RunContext, positional: readonly string[], opts: Opts): string {
-  const job = need(positional, 0, 'job');
+function endAttempt(ctx: RunContext, p: Params<'job' | 'status' | 'summary'>): string {
+  const job = need(p.job, 'job');
   const { spans } = viewOf(ctx);
-  const open = latest(spans, (s) => s.type === 'attempt' && s.job === job && isOpen(s)) ?? refuse(`no open Attempt of ${job}`);
-  write(ctx, { kind: 'end', span_id: open.span_id, ...statusOf(positional, 1), summary: opts.summary ?? positional[2] });
+  const open = openSpan(spans, 'attempt', { job }) ?? refuse(`no open Attempt of ${job}`);
+  write(ctx, endEvent('end', open.span_id, p));
   return `Attempt ${open.name} ended`;
 }
 
-function openGate(ctx: RunContext, positional: readonly string[]): string {
-  const job = need(positional, 0, 'job');
-  const name = need(positional, 1, 'name');
+function openGate(ctx: RunContext, p: Params<'job' | 'name'>): string {
+  const job = need(p.job, 'job');
+  const name = need(p.name, 'name');
   const { run, spans } = viewOf(ctx);
-  if (latest(spans, (s) => s.type === 'gate' && s.name === name && isOpen(s)) !== undefined) refuse(`Gate "${name}" is already open`);
+  if (openSpan(spans, 'gate', { name }) !== undefined) refuse(`Gate "${name}" is already open`);
   write(ctx, { kind: 'start', type: 'gate', name, job, parent_span_id: run.span_id });
   return `Gate "${name}" opened`;
 }
 
-function closeGate(ctx: RunContext, positional: readonly string[], opts: Opts): string {
-  const name = need(positional, 0, 'name');
+function closeGate(ctx: RunContext, p: Params<'name' | 'status' | 'summary'>): string {
+  const name = need(p.name, 'name');
   const { spans } = viewOf(ctx);
-  const open = latest(spans, (s) => s.type === 'gate' && s.name === name && isOpen(s)) ?? refuse(`no open Gate "${name}"`);
-  write(ctx, { kind: 'end', span_id: open.span_id, ...statusOf(positional, 1), summary: opts.summary ?? positional[2] });
+  const open = openSpan(spans, 'gate', { name }) ?? refuse(`no open Gate "${name}"`);
+  write(ctx, endEvent('end', open.span_id, p));
   return `Gate "${name}" closed`;
 }
 
-/** The span a Score names: a Job by its id, an Attempt as `<job>#<n>`, a Gate as `gate:<name>`; the latest, ended or not. */
-function scoreTarget(spans: readonly Span[], target: string): Span {
-  const gate = /^gate:(.+)$/.exec(target);
-  const attempt = /^(.+)#([1-9]\d*)$/.exec(target);
-  const found = gate
-    ? latest(spans, (s) => s.type === 'gate' && s.name === gate[1])
-    : attempt
-      ? latest(spans, (s) => s.type === 'attempt' && s.job === attempt[1] && s.attempt === Number(attempt[2]))
-      : latest(spans, (s) => s.type === 'job' && s.job === target);
-  return found ?? refuse(`no span named "${target}" in the current Run`);
-}
-
-function score(ctx: RunContext, positional: readonly string[], opts: Opts): string {
-  const target = need(positional, 0, 'target');
-  const name = need(positional, 1, 'name');
-  const raw = need(positional, 2, 'value');
+function score(ctx: RunContext, p: Params<'target' | 'name' | 'value'>, opts: Opts): string {
+  const target = need(p.target, 'target');
+  const name = need(p.name, 'name');
+  const raw = need(p.value, 'value');
+  const via = viaOf(opts.via);
   const { spans } = viewOf(ctx);
-  const span = scoreTarget(spans, target);
-  write(ctx, { kind: 'score', span_id: span.span_id, name, value: /^-?\d+(\.\d+)?$/.test(raw) ? Number(raw) : raw, source: opts.source, rubric: opts.rubric, body: opts.body, via: opts.via as LogEvent['via'], comment: opts.comment });
+  const span = scoreTarget(spans, target) ?? refuse(`no span named "${target}" in the current Run`);
+  write(ctx, { kind: 'score', span_id: span.span_id, name, value: /^-?\d+(\.\d+)?$/.test(raw) ? Number(raw) : raw, source: opts.source, rubric: opts.rubric, body: opts.body, via, comment: opts.comment });
   return `Score ${name}=${raw} on ${target}`;
 }
 
 function resume(ctx: RunContext): string {
   const { run, spans } = viewOf(ctx);
-  const job = latest(spans, (s) => s.type === 'job' && isOpen(s));
-  pointMarker(ctx, { run, jobSpanId: job?.span_id ?? (run.span_id as string), sessionId: sessionOf(ctx) });
+  const job = openSpan(spans, 'job');
+  pointAt(ctx, run, { jobSpanId: job?.span_id ?? run.span_id, sessionId: sessionOf(ctx) });
   return `Run ${run.run_id} resumed${job === undefined ? '' : ` in Job ${job.job}`}`;
 }
 
@@ -208,32 +208,42 @@ function archive(ctx: RunContext): string {
   return target;
 }
 
-type Handler = (ctx: RunContext, positional: readonly string[], opts: Opts) => string;
+/** A command: the names of its positional parameters, and what it does with them. */
+interface Command {
+  params: readonly string[];
+  run: (ctx: RunContext, positional: Record<string, string | undefined>, opts: Opts) => string;
+}
 
-const HANDLERS: Record<string, Handler> = {
-  'begin-run': (ctx, _p, o) => beginRun(ctx, o),
-  'end-run': endRun,
-  'begin-job': beginJob,
-  'end-job': endJob,
-  'begin-attempt': beginAttempt,
-  'end-attempt': endAttempt,
-  'open-gate': openGate,
-  'close-gate': closeGate,
-  score,
-  resume: (ctx) => resume(ctx),
-  archive: (ctx) => archive(ctx),
+const command = <K extends string>(params: readonly K[], run: (ctx: RunContext, p: Params<K>, opts: Opts) => string): Command => ({
+  params,
+  run: (ctx, positional, opts) => run(ctx, { ...positional, ...(opts.summary === undefined ? {} : { summary: opts.summary }) } as Params<K>, opts),
+});
+
+const COMMANDS: Record<string, Command> = {
+  'begin-run': command([], (ctx, _p, o) => beginRun(ctx, o)),
+  'end-run': command(['status', 'summary'], endRun),
+  'begin-job': command(['job'], beginJob),
+  'end-job': command(['job', 'status', 'summary'], endJob),
+  'begin-attempt': command(['job'], beginAttempt),
+  'end-attempt': command(['job', 'status', 'summary'], endAttempt),
+  'open-gate': command(['job', 'name'], openGate),
+  'close-gate': command(['name', 'status', 'summary'], closeGate),
+  score: command(['target', 'name', 'value'], score),
+  resume: command([], (ctx) => resume(ctx)),
+  archive: command([], (ctx) => archive(ctx)),
 };
 
 /** Runs one command (`argv` after the slug) and returns what to print, or why it was refused. */
 export function runCommand(ctx: RunContext, argv: readonly string[]): CommandResult {
   try {
-    const [command = '', ...rest] = argv;
-    const handler = HANDLERS[command];
-    if (handler === undefined) return fail(USAGE);
+    const [name = '', ...rest] = argv;
+    const spec = COMMANDS[name];
+    if (spec === undefined) return failure(USAGE);
     const { values, positionals } = parseArgs({ args: rest, options: OPTIONS, allowPositionals: true });
     if (!existsSync(path.join(ctx.root, path.dirname(episodeLogPath(ctx.slug))))) refuse(`docs/episodes/${ctx.slug} does not exist; run this from the Episode's worktree root.`);
-    return done(handler(ctx, positionals, values));
+    const named = Object.fromEntries(spec.params.map((param, i) => [param, positionals[i]]));
+    return success(spec.run(ctx, named, values));
   } catch (error) {
-    return fail((error as Error).message);
+    return failure((error as Error).message);
   }
 }

@@ -84,17 +84,17 @@ function withRunFacts(event: LogEvent, t: string, git: (...args: string[]) => st
 }
 
 /** What the line about to be written is stamped with: the injected clock, ids and git, resolved. */
-type Sources = Required<WriterDeps>;
+type ResolvedDeps = Required<WriterDeps>;
 
 /** The trace a new line joins: a fresh one for a start-run, else the newest Run's; a message when there is no Run. */
-function traceFor(event: unknown, current: RunLogLine | null, src: Sources): string | { error: string } {
+function traceFor(event: unknown, current: RunLogLine | null, src: ResolvedDeps): string | { error: string } {
   if (isEvent(event) && event.kind === 'start-run') return src.id(16);
   return current === null ? { error: 'the log has no start-run line; log kind "start-run" first' } : current.trace_id;
 }
 
 /** Stamps and appends under the lock already held. */
-function appendLocked(at: LogLocation, event: unknown, src: Sources): WriteResult {
-  const full = path.join(at.root, at.file);
+function appendLocked(at: LogLocation, event: unknown, src: ResolvedDeps): WriteResult {
+  const full = path.resolve(at.root, at.file);
   const { lines, errors, current } = readLog(at.file, at.root);
   const t = src.now();
   const traceId = traceFor(event, current, src);
@@ -114,10 +114,10 @@ function appendLocked(at: LogLocation, event: unknown, src: Sources): WriteResul
  * joins the newest Run; with no Run it is refused. Throws only on I/O or git failure.
  */
 export function appendEvent(at: LogLocation, event: unknown, deps: WriterDeps = {}): WriteResult {
-  const src: Sources = {
+  const src: ResolvedDeps = {
     now: deps.now ?? (() => new Date().toISOString().replace(/\.\d{3}Z$/, 'Z')),
     id: deps.id ?? ((bytes) => randomBytes(bytes).toString('hex')),
     git: deps.git ?? realGit,
   };
-  return withLock(`${path.join(at.root, at.file)}.lock`, () => appendLocked(at, event, src));
+  return withLock(`${path.resolve(at.root, at.file)}.lock`, () => appendLocked(at, event, src));
 }

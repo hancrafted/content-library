@@ -2,7 +2,7 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-import { episodeLogPath, readEpisodeLog, readRuns } from './episode-run-log.ts';
+import { episodeLogPath, readEpisodeLog, readLog, readRuns } from './episode-run-log.ts';
 
 /*
  * The run-log module against a real temp folder: path rules, folding with liveness from the marker,
@@ -80,13 +80,14 @@ describe('failure cases', () => {
     expect(lines).toHaveLength(1);
   });
 
-  it('reports a bad line of a globbed log under its relative path', () => {
+  it('reports a bad line of a globbed log with the same file prefix as readLog', () => {
     // ARRANGE
     const root = worktree({ [episodeLogPath(SLUG)]: 'oops\n' });
     // ACT
     const { errors } = readRuns([], root);
     // ASSERT
-    expect(errors).toEqual([`${episodeLogPath(SLUG)}: line 1 is not a JSON object`]);
+    expect(errors).toEqual(readLog(episodeLogPath(SLUG), root).errors);
+    expect(errors).toEqual([`${path.join(root, episodeLogPath(SLUG))}: line 1 is not a JSON object`]);
   });
 });
 
@@ -119,5 +120,31 @@ describe('edge cases', () => {
     const { sources } = readRuns([episodeLogPath('other')], root);
     // ASSERT
     expect(sources.map((source) => source.episode)).toEqual(['other']);
+  });
+
+  it('reads a log named by an absolute path as is, not under the root', () => {
+    // ARRANGE
+    const archive = worktree({ 'run-a.jsonl': jsonl(startRun(TRACE_A, 1, '2026-10-14T09:00:00Z')) });
+    const root = worktree({});
+    // ACT
+    const log = readLog(path.join(archive, 'run-a.jsonl'), root);
+    // ASSERT
+    expect(log.file).toBe(path.join(archive, 'run-a.jsonl'));
+    expect(log.current?.trace_id).toBe(TRACE_A);
+  });
+
+  it('keeps the copy of a Run with the most lines when several logs hold it', () => {
+    // ARRANGE
+    const start = startRun(TRACE_A, 1, '2026-10-14T09:00:00Z');
+    const job = startJob(TRACE_A, 2, '2026-10-14T09:01:00Z');
+    const root = worktree({
+      [`.logs/new-episode/${SLUG}/run-a.jsonl`]: jsonl(start),
+      [episodeLogPath(SLUG)]: jsonl(start, job),
+    });
+    // ACT
+    const { sources } = readRuns([], root);
+    // ASSERT
+    expect(sources).toHaveLength(1);
+    expect(sources[0]?.folded.spans.map((span) => span.type)).toEqual(['run', 'job']);
   });
 });
