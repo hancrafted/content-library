@@ -12,6 +12,7 @@ function graph(
     wants: wanted[id] ?? [],
     outputs: [],
     gate: false,
+    agents: [],
   }));
   return { jobs, byId: new Map(jobs.map((job) => [job.id, job])) };
 }

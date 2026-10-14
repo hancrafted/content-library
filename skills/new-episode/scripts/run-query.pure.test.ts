@@ -336,3 +336,34 @@ describe('orchestrator Job rows and score tickets', () => {
     expect(result).toEqual({ ok: true, columns: ['ticket'], rows: [{ ticket: 176 }] });
   });
 });
+
+describe('skills_invoked column', () => {
+  it('exposes the invoked skills of a span as a comma list', () => {
+    // ARRANGE
+    const lines = [
+      {
+        kind: 'start',
+        t: '2026-10-14T10:00:00Z',
+        seq: 1,
+        trace_id: 'a'.repeat(32),
+        span_id: 'b'.repeat(16),
+        type: 'job',
+        name: 'j',
+        parent_span_id: 'c'.repeat(16),
+      },
+      {
+        kind: 'end',
+        t: '2026-10-14T10:01:00Z',
+        seq: 2,
+        trace_id: 'a'.repeat(32),
+        span_id: 'b'.repeat(16),
+        status: 'ok',
+        skills_invoked: ['tdd', 'x:y'],
+      },
+    ] as RunLogLine[];
+    // ACT
+    const result = queryRuns([{ episode: 'ep', folded: fold(lines) }], 'SELECT skills_invoked FROM spans');
+    // ASSERT
+    expect(result).toEqual({ ok: true, columns: ['skills_invoked'], rows: [{ skills_invoked: 'tdd,x:y' }] });
+  });
+});

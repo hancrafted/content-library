@@ -589,3 +589,65 @@ describe('score tickets and reuse links', () => {
     });
   });
 });
+
+describe('skills_invoked', () => {
+  const stamp = { t: '2026-10-14T10:00:00Z', seq: 5, traceId: 'a'.repeat(32), spanId: 'b'.repeat(16) };
+  const span = 'c'.repeat(16);
+
+  it('is accepted, empty or not, on an end line and an attrs line, and refused as anything but a list of names', () => {
+    // ACT
+    const results = [
+      record({ kind: 'end', span_id: span, status: 'ok', skills_invoked: [] }, stamp),
+      record({ kind: 'attrs', span_id: span, skills_invoked: ['tdd', 'a:b'], 'gen_ai.usage.input_tokens': 3 }, stamp),
+      record({ kind: 'end', span_id: span, status: 'ok', skills_invoked: 'tdd' }, stamp),
+    ];
+    // ASSERT
+    expect(results.map((r) => r.ok)).toEqual([true, true, false]);
+  });
+
+  it('is laid over the span by an attrs line without a second end, the first end line keeping status and summary', () => {
+    // ARRANGE
+    const lines = [
+      {
+        kind: 'start',
+        t: '2026-10-14T10:00:00Z',
+        seq: 1,
+        trace_id: stamp.traceId,
+        span_id: span,
+        type: 'job',
+        name: 'j',
+        parent_span_id: 'd'.repeat(16),
+      },
+      {
+        kind: 'end',
+        t: '2026-10-14T10:01:00Z',
+        seq: 2,
+        trace_id: stamp.traceId,
+        span_id: span,
+        status: 'ok',
+        summary: 'done',
+      },
+      {
+        kind: 'attrs',
+        t: '2026-10-14T10:01:01Z',
+        seq: 3,
+        trace_id: stamp.traceId,
+        span_id: span,
+        source: 'measured',
+        skills_invoked: ['tdd'],
+        'gen_ai.usage.output_tokens': 7,
+      },
+    ] as RunLogLine[];
+    // ACT
+    const [folded] = fold(lines).spans;
+    // ASSERT
+    expect(folded).toMatchObject({
+      status: 'ok',
+      summary: 'done',
+      end_t: '2026-10-14T10:01:00Z',
+      source: 'measured',
+      skills_invoked: ['tdd'],
+      'gen_ai.usage.output_tokens': 7,
+    });
+  });
+});

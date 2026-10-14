@@ -64,9 +64,10 @@ function closeSpan(span: Span, entry: RunLogLine): void {
   span.source ??= entry.source;
 }
 
-/** An attrs line: identity laid over a span, leaving how it ended as it was. */
+/** An attrs line: facts laid over a span, leaving how it ended as it was. Its `source` fills in only when the span has none. */
 function applyAttributes(span: Span, entry: RunLogLine): void {
   Object.assign(span, Object.fromEntries(Object.entries(entry).filter(([key]) => !NOT_ATTRIBUTES.has(key))));
+  span.source ??= entry.source;
 }
 
 interface Accumulator {

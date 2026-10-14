@@ -2,7 +2,7 @@
 // stamp a writer supplies, and the Span and Score a reader folds lines into. Types only; import them through
 // `run-log.pure.ts`.
 
-/** `attrs` adds identity to a span that already ended (the backfill's line); it never closes or reopens a span. */
+/** `attrs` lays facts over a span that already ended (the backfill's identity, an orchestrator Job's usage and skills); it never closes or reopens a span. */
 export const KINDS = ['start-run', 'end-run', 'start', 'end', 'attrs', 'score'] as const;
 export type Kind = (typeof KINDS)[number];
 
@@ -69,6 +69,8 @@ export interface LogEvent {
   'gen_ai.usage.input_tokens'?: number;
   'gen_ai.usage.output_tokens'?: number;
   'gen_ai.usage.cache_read.input_tokens'?: number;
+  /** end, attrs: the skills the agent (or the orchestrator, inside a Job's window) invoked with the Skill tool, `plugin:skill` for a plugin's. An empty list means none were. */
+  skills_invoked?: string[];
   status?: Status;
   summary?: string;
   /** score (`ticket` is the one above: the ticket a Score judges) */
@@ -129,6 +131,7 @@ export interface Span {
   'gen_ai.usage.input_tokens'?: number;
   'gen_ai.usage.output_tokens'?: number;
   'gen_ai.usage.cache_read.input_tokens'?: number;
+  skills_invoked?: string[];
 }
 
 /** One verdict on a span. Re-judging appends another; nothing is overwritten. */

@@ -9,6 +9,7 @@ const status = (...states: RunStatus['jobs'][number]['state'][]): RunStatus => (
   running: [],
   problems: [],
   waiting: [],
+  skillWarnings: [],
 });
 
 describe('unfinishedReminder', () => {

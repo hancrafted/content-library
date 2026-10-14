@@ -181,6 +181,7 @@ describe('success cases', () => {
       'gen_ai.usage.input_tokens': 30,
       'gen_ai.usage.output_tokens': 10,
       'gen_ai.usage.cache_read.input_tokens': 150,
+      skills_invoked: [],
     });
   });
 });
@@ -315,6 +316,56 @@ describe('nesting and late facts', () => {
     // ASSERT
     expect(event).not.toHaveProperty('start_t');
     expect(event).not.toHaveProperty('gen_ai.input.messages');
+  });
+});
+
+describe('skills invoked and the summary at SubagentStop', () => {
+  const skillCall = (name: string): string =>
+    JSON.stringify({
+      type: 'assistant',
+      timestamp: '2026-10-09T10:00:20.000Z',
+      message: {
+        id: `s-${name}`,
+        role: 'assistant',
+        content: [{ type: 'tool_use', name: 'Skill', input: { skill: name } }],
+      },
+    });
+  const bash = JSON.stringify({
+    type: 'assistant',
+    timestamp: '2026-10-09T10:00:30.000Z',
+    message: { id: 'b', role: 'assistant', content: [{ type: 'tool_use', name: 'Bash', input: { skill: 'nope' } }] },
+  });
+  const stop = (text: string | null, last?: string) =>
+    adaptSubagent(
+      base({
+        event: 'stop',
+        log: [jobLine, startLine],
+        transcript: text,
+        payload: { ...base({}).payload, last_assistant_message: last },
+      }),
+    );
+
+  it('records the Skill tool calls of the subagent transcript, plugin skills as plugin:skill, once each', () => {
+    // ARRANGE
+    const text = [transcript, skillCall('tdd'), skillCall('ui-ux-pro-max:slides'), skillCall('tdd'), bash].join('\n');
+    // ACT
+    const event = stop(text);
+    // ASSERT
+    expect(event).toMatchObject({ skills_invoked: ['tdd', 'ui-ux-pro-max:slides'] });
+  });
+
+  it('records an empty list for a readable transcript with no Skill call, and nothing for an unreadable one', () => {
+    expect(stop(transcript)).toMatchObject({ skills_invoked: [] });
+    expect(stop(null)).not.toHaveProperty('skills_invoked');
+  });
+
+  it('stores the summary verdict-first with the absolute path shortened', () => {
+    // ARRANGE
+    const last = 'Written at /Users/han/repo/.worktrees/w/docs/episodes/x/dossier.md. pass';
+    // ACT
+    const event = stop(transcript, last);
+    // ASSERT
+    expect(event?.summary).toBe('Written at docs/episodes/x/dossier.md. pass');
   });
 });
 
