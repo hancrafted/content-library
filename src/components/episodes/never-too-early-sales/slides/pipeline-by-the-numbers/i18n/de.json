@@ -1,0 +1,87 @@
+{
+  "title": "Die Pipeline in Zahlen",
+  "caption": "In diesem Beispiel beginnt ein Auftrag mit 27 Leads, rund 9,5 Monate bevor das Geld da ist.",
+  "stages": {
+    "lead": {
+      "label": "Leads · 27",
+      "note": "Lead"
+    },
+    "opportunity": {
+      "label": "Verkaufschancen · 9",
+      "note": "Verkaufschance"
+    },
+    "deal": {
+      "label": "Auftrag · 1",
+      "note": "Auftrag"
+    }
+  },
+  "ratios": {
+    "leadToOpportunity": "3 : 1",
+    "opportunityToDeal": "9 : 1",
+    "total": "27 : 1 insgesamt"
+  },
+  "durations": {
+    "lead": "2 Wochen",
+    "opportunity": "6 Monate",
+    "deal": "3 Monate",
+    "total": "≈ 9,5 Monate bis zum ersten Umsatz"
+  },
+  "timeline": {
+    "axis": "Monate ab dem Erstkontakt",
+    "revenue": "Umsatz"
+  },
+  "illustration": "Illustration, kein Benchmark",
+  "notes": {
+    "a-real-dataset-other-numbers": {
+      "header": "Echte Daten, andere Zahlen",
+      "description": "In den Daten eines Anbieters mit 655.000 Verkaufschancen lag die Abschlussquote bei Neukunden bei 19 Prozent (rund 5,3 Verkaufschancen pro Abschluss), bei einem Verkaufszyklus von 91 Tagen und 8 Beteiligten pro Auftrag. Beim Ausbau bestehender Kunden waren es 45 Prozent, 52 Tage und 5 Beteiligte.[1]",
+      "sources": {
+        "ebsta-pavilion-gtm-benchmarks": {
+          "title": "Ebsta and Pavilion, GTM Benchmarks Report"
+        }
+      }
+    },
+    "the-biggest-loss-is-no-decision": {
+      "header": "Der größte Verlust ist keine Entscheidung",
+      "description": "40 bis 60 Prozent der Aufträge gehen an Käufer verloren, die kaufen wollen, aber nie handeln.[1]",
+      "sources": {
+        "hbr-customer-indecision": {
+          "title": "Dixon and McKenna, Stop Losing Sales to Customer Indecision (Harvard Business Review)"
+        }
+      }
+    },
+    "why-cycles-are-long": {
+      "header": "Warum Zyklen lang sind",
+      "description": "Die Entscheidung trifft eine Gruppe, deren Mitglieder verschiedene Rollen haben und alle ein Veto einlegen können.[1]",
+      "sources": {
+        "hbr-consensus-sale": {
+          "title": "Schmidt, Adamson and Bird, Making the Consensus Sale (Harvard Business Review)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "walk-the-funnel": {
+        "title": "Den Trichter durchgehen",
+        "keywords": "ausgedachtes Beispiel, 3 Leads zu 1 Verkaufschance, 9 Verkaufschancen zu 1 Auftrag, 27 Leads pro Auftrag, eine Kette",
+        "script": "Gehen wir ein Beispiel durch. Die Zahlen sind ausgedacht, sie sollen nur die Mechanik zeigen. Sagen wir, aus drei Leads wird eine Verkaufschance, und das dauert etwa zwei Wochen. Aus neun Verkaufschancen wird ein Auftrag, und das dauert etwa sechs Monate. Multipliziert ergibt das siebenundzwanzig Leads pro Auftrag. Lies das Beispiel als Kette. Der erste Schritt geht schnell, der zweite langsam, und der letzte bringt noch mehr Warten. Für deine Tafel zählt die Summe, denn sie sagt dir, wie früh du den ersten Lead hättest ansprechen müssen."
+      },
+      "fill-it-with-many": {
+        "title": "Viele hineingeben",
+        "keywords": "viel mehr Namen als Aufträge, rückwärts planen, vier Aufträge brauchen hundert Leads, deine eigene Quote",
+        "script": "Du brauchst also viel mehr Namen als Aufträge. Plane rückwärts. Für vier Aufträge in diesem Jahr bräuchtest du in diesem Beispiel rund hundert Leads auf deiner Liste. Rechne das aus, bevor du anfängst, nicht hinterher. Später funktioniert dieselbe Rechnung mit deinen eigenen Zahlen. Nimm die Aufträge, die du willst, multipliziere sie mit deiner eigenen Quote, und du weißt, wie lang deine Liste sein muss."
+      },
+      "time-adds-up": {
+        "title": "Die Zeit summiert sich",
+        "keywords": "zwei Wochen, sechs Monate, drei Monate, neuneinhalb Monate, Umsatz weit rechts, 285.000 $ Warten",
+        "script": "Jetzt zähl die Zeit im Beispiel zusammen. Zwei Wochen, sechs Monate und dann noch drei Monate für den Auftrag selbst. Das sind rund neuneinhalb Monate vom ersten Namen auf deiner Liste bis zum Geld auf dem Konto. Damit rutscht dein Umsatz auf der Tafel weit nach rechts. Sagen wir, deine Kosten liegen bei dreißigtausend Dollar im Monat. Dann kosten dich neuneinhalb Monate Warten rund zweihundertfünfundachtzigtausend Dollar. Genau deshalb zählen die Haftnotizen."
+      },
+      "illustration-only": {
+        "title": "Nur eine Illustration",
+        "keywords": "kein Benchmark, deine Zahlen sind anders, selbst messen, schlechtere Zahlen heißen früher anfangen",
+        "script": "Denk daran: Das ist eine Illustration, kein Benchmark. Deine Zahlen werden anders sein, und genau darum geht es. Miss deine eigene Abschlussquote und deinen eigenen Zyklus und ersetze damit meine. Fallen sie schlechter aus, hast du einen Grund, früher anzufangen, und weißt, wo du nach Verbesserungen suchen kannst."
+      }
+    }
+  }
+}

@@ -1,7 +1,7 @@
 {
   "title": "Start selling before you need the money · hancrafted",
   "description": "Why early-stage founders have to start selling long before revenue is needed: a month-by-month cashflow board, the stages of a sale, and four first steps to build a sales pipeline.",
-  "toc": "Contents Loading 3 min left 1 Why watching cashflow is mission critical Watch your cashflow Open contents : Contents · Loading Contents 3 min left 1 Why watching cashflow is mission critical Watch your cashflow",
+  "toc": "Contents Loading 9 min left 1 Why watching cashflow is mission critical Watch your cashflow 2 Why building an effective sales pipeline takes time What is a sales pipeline Pipeline by the numbers Why it takes time to ramp up Open contents : Contents · Loading Contents 9 min left 1 Why watching cashflow is mission critical Watch your cashflow 2 Why building an effective sales pipeline takes time What is a sales pipeline Pipeline by the numbers Why it takes time to ramp up",
   "slides": [
     {
       "id": "top",
@@ -14,6 +14,22 @@
     {
       "id": "why-watching-cashflow-is-mission-critical--watch-your-cashflow",
       "text": "Watch your cashflow Costs land every month. The big deal lands in April. The cash runs out in March. Cash Cost Revenue Jan Cash $100k Cost $50k Feb Cash $50k Cost $50k Mar Cash $0 Cost $50k Apr Cost $50k Revenue +$1M Bankrupt Find your zero-cash month: walk the cash row to where it hits zero."
+    },
+    {
+      "id": "why-building-an-effective-sales-pipeline-takes-time",
+      "text": "Why building an effective sales pipeline takes time A pipeline has its own ramp-up time, and it does not shrink because you are in a hurry."
+    },
+    {
+      "id": "why-building-an-effective-sales-pipeline-takes-time--what-is-a-sales-pipeline",
+      "text": "What is a sales pipeline Three numbers tell you about your volume, your offering and your efficiency. Sales funnel Leads Opps Deals Counts leads, opportunities and deals each week. Tells you about your volume Conversion rate 3 leads 1 opportunity The share that moves on, stage by stage. Tells you about your offering Sales cycle 1 2 3 4 5 6 first contact deal The time from first contact to the deal. Tells you about your efficiency Start with a sheet Stage First contact Closed Opportunity 3 Feb — Deal 12 Jan 28 Jul"
+    },
+    {
+      "id": "why-building-an-effective-sales-pipeline-takes-time--pipeline-by-the-numbers",
+      "text": "Pipeline by the numbers In this example, one deal starts 27 leads and about 9.5 months earlier. 27 : 1 in total Leads · 27 3 : 1 Opportunities · 9 9 : 1 Deal · 1 Deal 1 2 3 4 5 6 7 8 9 10 2 weeks 6 months 3 months Revenue Months from first contact ≈ 9.5 months to first revenue Illustration, not a benchmark"
+    },
+    {
+      "id": "why-building-an-effective-sales-pipeline-takes-time--why-it-takes-time-to-ramp-up",
+      "text": "Why it takes time to ramp up Three things you only get by starting: a written process, market knowledge and your own numbers. What you don't have yet How you get it 1 Preparation What you don't have yet : A written process: who you call, what you say, what follows a yes. How you get it : Write it down before the first call. 2 Unknown market What you don't have yet : Who buys, why they buy, what they will pay. How you get it : Real conversations, each one takes time. 3 Unknown metrics What you don't have yet : Your own conversion rate and cycle length. How you get it : Collect them. Call the first numbers guesses. Start early"
     }
   ],
   "notes": [
@@ -28,6 +44,22 @@
     {
       "id": "why-watching-cashflow-is-mission-critical--watch-your-cashflow",
       "text": "Watch your cashflow Costs start first Company setup and the founders' living costs arise before the first user or any income. 1 Sources (1) Paul Graham, A Student's Guide to Startups: Startup Funding ( opens in a new tab ) paulgraham.com Even a signed deal waits With no contract term, interest on a late B2B payment starts only 30 days after the invoice is received, and agreed terms may run up to 60 days. 1 Sources (1) European Parliament and Council, Directive 2011/7/EU on combating late payment in commercial transactions ( opens in a new tab ) eur-lex.europa.eu"
+    },
+    {
+      "id": "why-building-an-effective-sales-pipeline-takes-time",
+      "text": "Why building an effective sales pipeline takes time No speaker notes for this Slide."
+    },
+    {
+      "id": "why-building-an-effective-sales-pipeline-takes-time--what-is-a-sales-pipeline",
+      "text": "What is a sales pipeline Know your cycle Blank's exit criteria for validating a sales process ask whether the sales cycle is understood, including average selling price, lifetime value and return on investment. 1 Sources (1) Blank, The Customer Development Methodology (course slides) ( opens in a new tab ) innovation.ucsd.edu"
+    },
+    {
+      "id": "why-building-an-effective-sales-pipeline-takes-time--pipeline-by-the-numbers",
+      "text": "Pipeline by the numbers A real dataset, other numbers In one vendor dataset of 655 thousand opportunities, the new-customer win rate was 19 percent (about 5.3 opportunities per win) with a 91-day sales cycle and 8 stakeholders per deal, against 45 percent, 52 days and 5 stakeholders for expansion sales. 1 Sources (1) Ebsta and Pavilion, GTM Benchmarks Report ( opens in a new tab ) benchmarks.ebsta.com The biggest loss is no decision 40 to 60 percent of deals are lost to buyers who intend to buy but never act. 1 Sources (1) Dixon and McKenna, Stop Losing Sales to Customer Indecision (Harvard Business Review) ( opens in a new tab ) hbr.org Why cycles are long Decision authority rests with a group whose members have different roles and all have veto power. 1 Sources (1) Schmidt, Adamson and Bird, Making the Consensus Sale (Harvard Business Review) ( opens in a new tab ) hbr.org"
+    },
+    {
+      "id": "why-building-an-effective-sales-pipeline-takes-time--why-it-takes-time-to-ramp-up",
+      "text": "Why it takes time to ramp up Metrics lag by one cycle Recent leads look worse than the long-run value because they have not yet gone through a full cycle. 1 Sources (1) Mark Roberge, The Science of Scaling ( opens in a new tab ) f.hubspotusercontent10.net Scaling too early burns cash Premature scaling of sales and marketing is the leading cause of cash loss in a startup. 1 Sources (1) Steve Blank, It Must Be A Marketing Problem ( opens in a new tab ) steveblank.com Customers do not come to you \"You can't wait for users to come to you. You have to go out and get them.\" 1 Sources (1) Paul Graham, Do Things that Don't Scale ( opens in a new tab ) paulgraham.com"
     }
   ],
   "script": [
@@ -42,6 +74,22 @@
     {
       "id": "why-watching-cashflow-is-mission-critical--watch-your-cashflow",
       "text": "Watch your cashflow 0:00 – 0:26 The board sticky notes January to April cash cost revenue costs every month Here is a board of sticky notes. One column for each month, January to April. Three rows: cash, cost and revenue. Start with the cost row. A cost note sits in every single column. Salaries, tools, rent. They do not wait for you. People still need paying on the last day of the month, whether or not a customer said yes. 0:26 – 1:02 Big deal lands in April big deal in April zero in March bankrupt a verbal yes is not cash Now the revenue row. There is one big note, and it sits in April. It is a good deal, a real one. But watch the cash row. Month by month the cash note gets smaller. In March it falls to zero dollars, and a stamp lands on it. Bankrupt. One month before the money would have arrived. A deal that is nearly done is not cash. A verbal yes is not cash either. Until the money is on the account, it does not count. 1:02 – 1:51 Find your zero-cash month first action your own board zero-cash month deadline for sales results count back So here is your first action. Build this board for your own company. Month by month: cash, cost and revenue, as simple as sticky notes. Then walk along the cash row and find the month where it reaches zero. That is your zero-cash month, and everything else today is measured against it. Pen and paper is enough, and twelve months is plenty. Be honest about the costs. Be careful with the revenue, and write only the revenue you would bet your own salary on. Write that date down. It is the deadline for your sales results, not for your product. Count back from it, and you know how much time you really have to start."
+    },
+    {
+      "id": "why-building-an-effective-sales-pipeline-takes-time",
+      "text": "Why building an effective sales pipeline takes time 0:00 – 0:28 Why not start later start later better product a salesperson funding the lag grows ramp-up time You may think you can start later, when you need the money. Maybe you plan to start once the product is better, or once you have a salesperson, or once the funding is in. Each of those sounds sensible. But each of them only makes the lag longer. A pipeline has its own ramp-up time, and it does not shrink because you are in a hurry."
+    },
+    {
+      "id": "why-building-an-effective-sales-pipeline-takes-time--what-is-a-sales-pipeline",
+      "text": "What is a sales pipeline 0:00 – 0:16 Funnel leads opportunities deals volume count every week First, the funnel. It counts leads, opportunities and deals. How many come in at the top? That tells you about your volume. Count them every week, and you will see whether enough people are entering your pipeline. 0:16 – 0:44 Conversion rate share that moves on fit of the offering price promise person stage by stage Second, the conversion rate. This is the share that moves on to the next stage. It tells you whether your offering fits what people want to buy. A low rate is a signal about the offer, and you can act on it. Maybe the price, maybe the promise, maybe the person you talk to. Judge it stage by stage, because each stage has its own number. 0:44 – 1:01 Sales cycle first contact to deal efficiency how far ahead to start count back from the zero-cash month Third, the sales cycle. That is the time from first contact until the deal. It tells you how efficient you are, and how far ahead you have to start. Count back from your zero-cash month by that many months. 1:01 – 1:30 Measure both fourth action track deals in a pipeline conversion rate and cycle a spreadsheet with three columns And this is your fourth action. Track your deals in a pipeline and measure the conversion rate and the cycle. Without those two numbers you are guessing when your revenue will land. It is not complicated. A spreadsheet with a column for the stage, a column for the date you first spoke, and a column for the date you closed. That is all you need to get started."
+    },
+    {
+      "id": "why-building-an-effective-sales-pipeline-takes-time--pipeline-by-the-numbers",
+      "text": "Pipeline by the numbers 0:00 – 0:41 Walk the funnel made-up example 3 leads to 1 opportunity 9 opportunities to 1 deal 27 leads per deal a chain Let me walk through an example. These numbers are made up to show the mechanics. Say three leads give you one opportunity, and that takes about two weeks. Nine opportunities give you one deal, and that takes about six months. Multiply it out and you get twenty-seven leads for every deal. Read the example as a chain. The first step is quick, the second is slow, and the last one adds more waiting. The total is what matters for your board, because the total tells you how early the first lead had to be contacted. 0:41 – 1:08 Fill it with many far more names than deals plan backwards four deals need a hundred leads your own ratio That means you need far more names than deals. Plan backwards. In this example, four deals this year would need roughly a hundred leads on your list. Do the multiplication before you start, not after. The same calculation works with your own numbers later. Take the deals you want, multiply by your own ratio, and you know how long your list has to be. 1:08 – 1:45 Time adds up two weeks six months three months nine and a half months revenue far to the right $285k of waiting Now add up the time in the example. Two weeks, six months, and then three more months on the deal itself. That is about nine and a half months from the first name on your list to money in the bank. That pushes your revenue far out to the right on the board. Say your costs are thirty thousand dollars a month. Then nine and a half months of waiting adds up to about two hundred eighty-five thousand dollars. This is why the sticky notes matter. 1:45 – 2:07 Illustration only not a benchmark your numbers differ measure your own worse numbers mean start sooner Remember that this is an illustration, not a benchmark. Your numbers will be different, and that is the point. Measure your own conversion rate and your own cycle, then replace mine. If they turn out worse, you have a reason to start sooner, and a place to look for what to fix."
+    },
+    {
+      "id": "why-building-an-effective-sales-pipeline-takes-time--why-it-takes-time-to-ramp-up",
+      "text": "Why it takes time to ramp up 0:00 – 0:28 Preparation months to ramp up write the process down who you call what you say after a yes Why does a pipeline need months to ramp up? The first reason is preparation. Before anyone can repeat a process, you have to write it down. Who you call, what you say, what happens after a yes. That work happens before the first deal can, and it pushes everything later. The sooner you begin writing it down, the sooner your first real call can happen. 0:28 – 1:07 Unknown market who buys why they buy what they pay real conversations wrong guesses start early The second reason is the unknown market. Who buys, why they buy, and what they will pay. You only learn that in real conversations, and each one takes time to arrange. You do not know yet whether your buyers are in the finance team or in operations. You do not know if they buy in spring or at year end. You find out by asking, and by being wrong a few times. Each wrong guess costs a conversation, and conversations are the scarce part, so you want to start having them early. 1:07 – 1:30 Unknown metrics own conversion rate cycle length first numbers are guesses collect them The third is unknown metrics. You do not know your own conversion rate or your cycle length yet. Your first numbers will be guesses. Nobody can tell you the true numbers in advance. You can only collect them, and a good guess is fine as long as you call it a guess. 1:30 – 1:43 So start early start early every month of delay slow early months nothing goes faster by waiting So start early. Every month you delay is a month of learning that you never get back. The early months feel slow, and that is normal. Nothing here goes faster by waiting."
     }
   ]
 }

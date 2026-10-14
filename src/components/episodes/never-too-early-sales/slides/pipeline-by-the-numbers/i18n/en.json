@@ -1,0 +1,87 @@
+{
+  "title": "Pipeline by the numbers",
+  "caption": "In this example, one deal starts 27 leads and about 9.5 months earlier.",
+  "stages": {
+    "lead": {
+      "label": "Leads · 27",
+      "note": "Lead"
+    },
+    "opportunity": {
+      "label": "Opportunities · 9",
+      "note": "Opportunity"
+    },
+    "deal": {
+      "label": "Deal · 1",
+      "note": "Deal"
+    }
+  },
+  "ratios": {
+    "leadToOpportunity": "3 : 1",
+    "opportunityToDeal": "9 : 1",
+    "total": "27 : 1 in total"
+  },
+  "durations": {
+    "lead": "2 weeks",
+    "opportunity": "6 months",
+    "deal": "3 months",
+    "total": "≈ 9.5 months to first revenue"
+  },
+  "timeline": {
+    "axis": "Months from first contact",
+    "revenue": "Revenue"
+  },
+  "illustration": "Illustration, not a benchmark",
+  "notes": {
+    "a-real-dataset-other-numbers": {
+      "header": "A real dataset, other numbers",
+      "description": "In one vendor dataset of 655 thousand opportunities, the new-customer win rate was 19 percent (about 5.3 opportunities per win) with a 91-day sales cycle and 8 stakeholders per deal, against 45 percent, 52 days and 5 stakeholders for expansion sales.[1]",
+      "sources": {
+        "ebsta-pavilion-gtm-benchmarks": {
+          "title": "Ebsta and Pavilion, GTM Benchmarks Report"
+        }
+      }
+    },
+    "the-biggest-loss-is-no-decision": {
+      "header": "The biggest loss is no decision",
+      "description": "40 to 60 percent of deals are lost to buyers who intend to buy but never act.[1]",
+      "sources": {
+        "hbr-customer-indecision": {
+          "title": "Dixon and McKenna, Stop Losing Sales to Customer Indecision (Harvard Business Review)"
+        }
+      }
+    },
+    "why-cycles-are-long": {
+      "header": "Why cycles are long",
+      "description": "Decision authority rests with a group whose members have different roles and all have veto power.[1]",
+      "sources": {
+        "hbr-consensus-sale": {
+          "title": "Schmidt, Adamson and Bird, Making the Consensus Sale (Harvard Business Review)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "walk-the-funnel": {
+        "title": "Walk the funnel",
+        "keywords": "made-up example, 3 leads to 1 opportunity, 9 opportunities to 1 deal, 27 leads per deal, a chain",
+        "script": "Let me walk through an example. These numbers are made up to show the mechanics. Say three leads give you one opportunity, and that takes about two weeks. Nine opportunities give you one deal, and that takes about six months. Multiply it out and you get twenty-seven leads for every deal. Read the example as a chain. The first step is quick, the second is slow, and the last one adds more waiting. The total is what matters for your board, because the total tells you how early the first lead had to be contacted."
+      },
+      "fill-it-with-many": {
+        "title": "Fill it with many",
+        "keywords": "far more names than deals, plan backwards, four deals need a hundred leads, your own ratio",
+        "script": "That means you need far more names than deals. Plan backwards. In this example, four deals this year would need roughly a hundred leads on your list. Do the multiplication before you start, not after. The same calculation works with your own numbers later. Take the deals you want, multiply by your own ratio, and you know how long your list has to be."
+      },
+      "time-adds-up": {
+        "title": "Time adds up",
+        "keywords": "two weeks, six months, three months, nine and a half months, revenue far to the right, $285k of waiting",
+        "script": "Now add up the time in the example. Two weeks, six months, and then three more months on the deal itself. That is about nine and a half months from the first name on your list to money in the bank. That pushes your revenue far out to the right on the board. Say your costs are thirty thousand dollars a month. Then nine and a half months of waiting adds up to about two hundred eighty-five thousand dollars. This is why the sticky notes matter."
+      },
+      "illustration-only": {
+        "title": "Illustration only",
+        "keywords": "not a benchmark, your numbers differ, measure your own, worse numbers mean start sooner",
+        "script": "Remember that this is an illustration, not a benchmark. Your numbers will be different, and that is the point. Measure your own conversion rate and your own cycle, then replace mine. If they turn out worse, you have a reason to start sooner, and a place to look for what to fix."
+      }
+    }
+  }
+}

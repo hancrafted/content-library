@@ -1,0 +1,13 @@
+{
+  "title": "Warum eine wirksame Vertriebspipeline Zeit braucht",
+  "caption": "Eine Pipeline hat ihre eigene Anlaufzeit, und die wird nicht kürzer, nur weil du es eilig hast.",
+  "voiceScript": {
+    "segments": {
+      "why-not-start-later": {
+        "title": "Warum nicht später anfangen",
+        "keywords": "später anfangen, besseres Produkt, Vertriebler, Finanzierung, der Abstand wächst, Anlaufzeit",
+        "script": "Vielleicht denkst du, du kannst später anfangen, wenn du das Geld brauchst. Wenn das Produkt besser ist, wenn jemand für den Vertrieb an Bord ist oder wenn die Finanzierung steht. Jeder dieser Gründe klingt vernünftig. Aber jeder davon macht den Abstand nur größer. Eine Pipeline hat ihre eigene Anlaufzeit, und die wird nicht kürzer, nur weil du es eilig hast."
+      }
+    }
+  }
+}
