@@ -1,0 +1,70 @@
+{
+  "title": "Behalte deinen Cashflow im Blick: „Wann anfangen?“",
+  "caption": "Bau deine Pipeline auf, bevor du das Geld brauchst, damit der Umsatz da ist, bevor die Kasse leer ist.",
+  "board": {
+    "label": "Cashflow nach Quartalen: Die Kasse steht im Q2 bei null, der Umsatz kommt erst im Q3.",
+    "rows": {
+      "cash": "Kasse",
+      "cost": "Kosten",
+      "revenue": "Umsatz"
+    },
+    "months": {
+      "q1": "Q1",
+      "q2": "Q2",
+      "q3": "Q3",
+      "q4": "Q4"
+    },
+    "amounts": {
+      "cashQ1": "50k $",
+      "cashQ2": "0 $",
+      "cost": "50k $",
+      "revenue": "+50k $"
+    },
+    "arrow": "Wann anfangen?"
+  },
+  "steps": {
+    "heading": "Fang diese Woche an",
+    "items": {
+      "zero-cash-month": "Bau dir deine Cashflow-Übersicht und finde deinen Null-Monat.",
+      "customer-list": "Leg eine Liste möglicher Kunden an.",
+      "first-contact": "Nimm den ersten Kontakt auf: Kaltakquise, Inbound, Netzwerk.",
+      "deal-board": "Bring deine Deals auf eine Tafel und miss Abschlussquote und Verkaufszyklus."
+    },
+    "footer": "Such dir einen Schritt aus. Fang diese Woche damit an."
+  },
+  "notes": {
+    "worrying-early-is-cheap": {
+      "header": "Früh nervös zu werden kostet wenig",
+      "description": "Die Frage, ob eine Firma mit dem verbleibenden Geld profitabel wird, zeigt den Zeitraum, in dem eine Verzögerung tödlich wird; sich zu früh Sorgen zu machen kostet wenig, sich zu spät Sorgen zu machen ist gefährlich.[1]",
+      "sources": {
+        "default-alive": {
+          "title": "Paul Graham, Default Alive or Default Dead?"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "revenue-lags-costs": {
+        "title": "Der Umsatz hinkt den Kosten hinterher",
+        "keywords": "Kosten zuerst, Umsatz Monate später, schon zu spät, das dritte Mal an der Tafel",
+        "script": "Erinnere dich, was die Tafel uns gezeigt hat. Die Kosten kommen zuerst. Der Umsatz kommt Monate später. Und wenn du spürst, dass du Vertrieb brauchst, ist es schon zu spät. Beim ersten Mal hast du das Problem gesehen. Beim zweiten Mal, was sich ändert, wenn der Umsatz früher kommt. Diesmal siehst du, was du dagegen tust."
+      },
+      "start-now": {
+        "title": "Fang jetzt an",
+        "keywords": "Pipeline jetzt aufbauen, Umsatz vor der leeren Kasse, wann anfangen, ein paar Stunden pro Woche",
+        "script": "Also fang jetzt an. Bau deine Pipeline auf, bevor du das Geld brauchst, damit der Umsatz da ist, bevor die Kasse leer ist. Die Tafel zeigt zurück auf das erste Quartal und fragt: Wann anfangen? Dafür brauchst du kein großes Budget und keine neue Stelle. Du brauchst ein paar Stunden Aufmerksamkeit pro Woche, ab jetzt."
+      },
+      "four-steps": {
+        "title": "Vier Schritte",
+        "keywords": "Null-Monat, Liste möglicher Kunden, erster Kontakt, Tafel für Deals, Abschlussquote und Zyklus",
+        "script": "Hier sind die vier Schritte noch einmal. Erstens: Bau dir deine Cashflow-Übersicht und finde deinen Null-Monat. Zweitens: Leg eine Liste möglicher Kunden an. Drittens: Nimm den ersten Kontakt auf. Viertens: Bring deine Deals auf eine Tafel und miss deine Abschlussquote und deinen Verkaufszyklus. Für keinen davon brauchst du die Erlaubnis von irgendwem."
+      },
+      "this-week": {
+        "title": "Diese Woche",
+        "keywords": "einen Schritt auswählen, diese Woche anfangen, in den Kalender eintragen, klein anfangen",
+        "script": "Versuch nicht, alle vier auf einmal zu machen. Such dir einen Schritt aus, den, der dir am wenigsten Angst macht, und fang diese Woche damit an. Trag ihn jetzt in deinen Kalender ein, mit Uhrzeit und Ort. Wenn du nächsten Monat wieder vor deiner Cashflow-Tafel stehst, wirst du froh darüber sein. Fang mit der kleinen Version an. Zehn Minuten an der Tafel sind besser als ein perfekter Plan, der erst im nächsten Quartal beginnt."
+      }
+    }
+  }
+}
