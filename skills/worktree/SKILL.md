@@ -19,7 +19,7 @@ A real `node_modules` is the point: a symlinked one breaks Turbopack, `mh check`
 
 Run `npm run wt:done -- <branch>` from the main checkout once the PR merged. It refuses while any process (a dev server) has its cwd inside the worktree and names it; stop that process and rerun. It then removes the worktree and its Claude Desktop folder (`docs/claude-project-context/<branch-slug>/`), deletes the branch when git sees it merged, and fast-forwards local `main`. When local `main` holds unpushed commits it stops and lists them: push them through a PR or move them to a branch, then rerun.
 
-With `--base <branch>`, run from that branch's worktree, it leaves `main` alone: it removes the worktree, deletes the branch when it is merged into the base, and otherwise keeps it and says so, as for a blocked Episode job.
+With `--base <branch>`, run from anywhere but the worktree itself, it leaves `main` alone and first merges the branch into the base (`git merge --no-ff`, inside the worktree that has the base checked out). When the base is checked out nowhere, or the merge conflicts or hits a dirty base, it aborts the merge, removes nothing and says so; fix that and rerun. Once merged it removes the worktree and deletes the branch.
 
 ## Preflight
 
