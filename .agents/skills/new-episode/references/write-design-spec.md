@@ -23,7 +23,7 @@ Every Slide is designed, not only the ones the Dossier's Visual could not match.
 - Otherwise the Slide is a copy of a Master slide with changes, or a one-off Scene from `SlideFrame` and the kit's `<Title>` (FE-002 §3). A new part or motion lives in the Slide's own folder, a server part or its own `*.client.tsx`, and moves to `slide-shared/` once a second Slide needs it (FE-007).
 - The answer names parts, tokens, props and i18n keys, plus a low-fidelity text wireframe (ASCII in a code block) for every Slide that is not a library entry used as is. It builds no rendered prototype: the rendered check stays in `implement-episode`.
 - A Slide is a scrolling web section, not a fixed frame (FE-009): the wrapper's "at least viewport height" is the only height rule.
-- A Slide whose Visual names a `Reference:` page, or that redraws one, opens that page image and names it in the answer, `Reference: reference/<file-slug>/reference.md#page-<n>`, so the implementer builds against the same picture. The answer says what it keeps from the page and what it changes.
+- A Slide whose Visual names a `Reference:` page, or that redraws one, opens that page image and names it in the answer by its repo path, `Reference: docs/episodes/<slug>/reference/<file-slug>/pages/page-<NN>.jpg`, then `Build against this page: keep <what>; change <what>`. The ticket is all a ticket implementer reads, so the line carries both the image and what to keep.
 
 ### Settle it as a Scene
 
@@ -57,4 +57,4 @@ Every ticket body has a design answer for every Slide, the spec issue has its `#
 4. Every overruled `master:` or `motion:` names its reason.
 5. Colour, size and weight are tokens (FE-011); every import is one FE-007 §5 allows.
 6. The Slide follows FE-009: no fixed height, no clipping, Foreground clear of the chrome (see "What a designer decides").
-7. Every Slide that redraws a reference page names it with `Reference:`.
+7. Every Slide that redraws a reference page names its page image by repo path with `Reference:`, and says what to keep and what to change.
