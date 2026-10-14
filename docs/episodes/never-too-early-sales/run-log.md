@@ -589,3 +589,27 @@ Needs human: `sales-is-more-than-selling` keeps "Trust" as its third column besi
 Needs human: in dark mode `primary` is near-white, so the 27:1 spine, the cycle bar and the "Start early" stamp read white.
 
 Needs human: the German amounts `100k $` and `+1 Mio. $` wrap onto two lines in a note at 375 px.
+
+## open-pr · 2026-10-14T07:42:35Z
+
+### Inputs
+
+- `run-log.md`: every `Needs human:` and `Research gap:` line.
+- `.agents/skills/new-episode/references/open-pr.md`, the `pr` skill.
+
+### Output
+
+- Dev server: http://localhost:3000/episode/never-too-early-sales/ answers 200; `/episodes/never-too-early-sales/` answers 404.
+- Draft PR https://github.com/hancrafted/content-library/pull/159 from `episode/never-too-early-sales` to `main`, with a 43-item Needs Han checklist; the branch is pushed.
+
+### Checks
+
+- `gh pr view --json isDraft,url`: one draft PR.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 240 s
+
+### Notes
+
+The open-pr job ran in this session, not as a sonnet subagent. A `next dev` was already running from this worktree on port 3000, so a second one exited and the existing one serves the Episode. The route answers only at `/episode/<slug>` until #85, which is on the checklist.
