@@ -148,6 +148,30 @@ describe('nesting and late facts', () => {
     expect(event).toMatchObject({ parent_span_id: JOB_SPAN });
   });
 
+  it('files an unparsed agent under the one open Job even when the marker points at an ended one', () => {
+    // ARRANGE
+    const openJob: RunLogLine = { ...jobLine, seq: 3, span_id: 'eeeeeeeeeeeeeee1', name: 'other', job: 'other' };
+    const endMarkerJob: RunLogLine = { kind: 'end', t: '2026-10-09T09:40:00Z', seq: 4, trace_id: TRACE, span_id: JOB_SPAN, status: 'ok' };
+    const input = base({ description: 'Spec review of hero changes', log: [jobLine, openJob, endMarkerJob] });
+    // ACT
+    const event = adaptSubagent(input);
+    // ASSERT
+    expect(event).toMatchObject({ job: 'other', role: 'skill-spawned', parent_span_id: 'eeeeeeeeeeeeeee1' });
+  });
+
+  it('files an unparsed agent under the Run, never a guessed Job, when two Jobs are open', () => {
+    // ARRANGE
+    const runStart: RunLogLine = { kind: 'start-run', t: '2026-10-09T08:00:00Z', seq: 0, trace_id: TRACE, span_id: 'ffffffffffffffff', run_id: 'r' };
+    const otherJob: RunLogLine = { ...jobLine, seq: 3, span_id: 'eeeeeeeeeeeeeee1', name: 'other', job: 'other' };
+    const description = 'Spec review of hero changes';
+    const input = base({ description, log: [runStart, jobLine, otherJob] });
+    // ACT
+    const event = adaptSubagent(input);
+    // ASSERT
+    expect(event).toMatchObject({ role: 'skill-spawned', description, parent_span_id: 'ffffffffffffffff' });
+    expect(event).not.toHaveProperty('job');
+  });
+
   it('carries the prompt and launch time on the end line when the start ran before the transcript existed', () => {
     // ARRANGE
     const lateStart: RunLogLine = { ...startLine, t: '2026-10-09T10:00:00Z', 'gen_ai.input.messages': undefined };

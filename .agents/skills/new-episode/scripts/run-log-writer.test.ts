@@ -1,5 +1,5 @@
 import { fork } from 'node:child_process';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, unlinkSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -104,5 +104,26 @@ for (let i = 0; i < 10; i++) appendEvent({ root: ${JSON.stringify(root)}, file: 
     const seqs = written(root).map((l) => l.seq as number);
     expect(seqs).toHaveLength(31);
     expect(new Set(seqs).size).toBe(31);
+  });
+});
+
+describe('lock ownership', () => {
+  it('leaves a lock another writer took after breaking ours in place when we release', () => {
+    // ARRANGE
+    const root = worktree();
+    appendEvent(at(root), START, deps());
+    const lock = path.join(root, `${FILE}.lock`);
+    const d = deps();
+    // while A holds the lock, B breaks it as stale and takes it
+    d.now = () => {
+      unlinkSync(lock);
+      writeFileSync(lock, 'writer-b-token');
+      return '2026-10-14T09:00:00Z';
+    };
+    // ACT
+    appendEvent(at(root), { kind: 'start', type: 'job', name: 'x', job: 'j', parent_span_id: '0123456789abcdef' }, d);
+    // ASSERT
+    expect(existsSync(lock)).toBe(true);
+    expect(readFileSync(lock, 'utf8')).toBe('writer-b-token');
   });
 });

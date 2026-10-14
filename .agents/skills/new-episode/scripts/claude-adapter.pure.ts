@@ -101,11 +101,17 @@ function metaOf(text: string | null): { description: string; model?: string; req
   return { description: read('description') ?? '', model: read('model'), requestShape: read('requestShape') };
 }
 
-/** Who the agent is: its parsed description, else the Job the orchestrator session is in as a skill-spawned agent. */
-function identityOf(description: string, jobSpan: RunLogLine | undefined): Partial<ParsedDescription> | null {
+/** The Jobs of this Run that have no end line yet. */
+function openJobs(log: readonly RunLogLine[], trace: string): RunLogLine[] {
+  const ended = new Set(log.filter((l) => l.kind === 'end').map((l) => l.span_id));
+  return log.filter((l) => l.kind === 'start' && l.type === 'job' && l.trace_id === trace && !ended.has(l.span_id));
+}
+
+/** Who the agent is: its parsed description, else a skill-spawned agent of the one open Job; of no Job when several are open. */
+function identityOf(description: string, jobs: readonly RunLogLine[]): Partial<ParsedDescription> {
   const parsed = parseDescription(description);
   if (parsed !== null) return parsed;
-  return jobSpan?.job === undefined ? null : { job: jobSpan.job, role: 'skill-spawned' };
+  return jobs.length === 1 && jobs[0].job !== undefined ? { job: jobs[0].job, role: 'skill-spawned' } : { role: 'skill-spawned' };
 }
 
 /** The newest Attempt span of this Run and Job that has no end line yet: where a parsed agent nests. */
@@ -115,25 +121,31 @@ function openAttempt(log: readonly RunLogLine[], trace: string, who: { job: stri
   return [...attempts].reverse().find((l) => !ended.has(l.span_id));
 }
 
-/** Where an agent nests: the open Attempt its description names, else the marker's Job span. */
-function parentOf(log: readonly RunLogLine[], marker: Marker, identity: Partial<ParsedDescription>): string {
+/**
+ * Where an agent nests: the open Attempt its description names; an unparsed agent the one open Job, or the Run when
+ * none or several are open, since the marker only names the newest Job.
+ */
+function parentOf(where: { log: readonly RunLogLine[]; marker: Marker }, identity: Partial<ParsedDescription>, jobs: readonly RunLogLine[]): string | undefined {
+  const { log, marker } = where;
   const { job, attempt } = identity;
-  const found = job !== undefined && attempt !== undefined ? openAttempt(log, marker.trace_id, { job, attempt }) : undefined;
-  return found?.span_id ?? marker.job_span_id;
+  if (job !== undefined && attempt !== undefined) return (openAttempt(log, marker.trace_id, { job, attempt }) ?? { span_id: marker.job_span_id }).span_id;
+  if (jobs.length === 1) return jobs[0].span_id;
+  return log.find((l) => l.kind === 'start-run' && l.trace_id === marker.trace_id)?.span_id;
 }
 
 function startEvent(input: AdapterInput, marker: Marker, files: { transcript: string }): LogEvent | null {
   const { description, model, requestShape } = metaOf(input.meta);
   const all = entries(input.transcript);
-  const jobSpan = input.log.find((l) => l.span_id === marker.job_span_id && l.type === 'job');
-  const identity = identityOf(description, jobSpan);
-  if (identity === null) return null;
+  const jobs = openJobs(input.log, marker.trace_id);
+  const identity = identityOf(description, jobs);
+  const parent = parentOf({ log: input.log, marker }, identity, jobs);
+  if (parent === undefined) return null;
   return definedOnly({
     kind: 'start',
     type: 'agent',
     t: all[0]?.timestamp,
-    parent_span_id: parentOf(input.log, marker, identity),
-    name: description || `${identity.job}/${identity.role}`,
+    parent_span_id: parent,
+    name: description || `${identity.job ?? 'run'}/${identity.role}`,
     ...identity,
     harness: 'claude-code',
     source: 'measured',

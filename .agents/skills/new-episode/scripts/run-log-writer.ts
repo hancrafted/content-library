@@ -5,7 +5,7 @@
 // A lock its holder never released (a crashed writer) is broken after ten seconds. Shapes live in run-log.pure.ts.
 import { execFileSync } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
-import { appendFileSync, closeSync, existsSync, openSync, statSync, unlinkSync } from 'node:fs';
+import { appendFileSync, readFileSync, statSync, unlinkSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { readLog } from './episode-run-log.ts';
 import { record, type LogEvent, type RunLogLine } from './run-log.pure.ts';
@@ -27,10 +27,10 @@ const LOCK_WAIT_MS = 15_000;
 
 const sleep = (ms: number): unknown => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
 
-/** Creates the lock file exclusively; false when another writer holds it. */
-function tryLock(lockFile: string): boolean {
+/** Creates the lock file exclusively, holding our owner token; false when another writer holds it. */
+function tryLock(lockFile: string, token: string): boolean {
   try {
-    closeSync(openSync(lockFile, 'wx'));
+    writeFileSync(lockFile, token, { flag: 'wx' });
     return true;
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === 'EEXIST') return false;
@@ -47,10 +47,20 @@ function breakStaleLock(lockFile: string): void {
   }
 }
 
+/** Deletes the lock only while it still holds our token: a stale-broken lock now belongs to another writer. */
+function release(lockFile: string, token: string): void {
+  try {
+    if (readFileSync(lockFile, 'utf8') === token) unlinkSync(lockFile);
+  } catch {
+    // already gone
+  }
+}
+
 /** Runs `work` while holding the lock, and releases it however `work` ends. */
 function withLock<T>(lockFile: string, work: () => T): T {
   const deadline = Date.now() + LOCK_WAIT_MS;
-  while (!tryLock(lockFile)) {
+  const token = randomBytes(16).toString('hex');
+  while (!tryLock(lockFile, token)) {
     if (Date.now() > deadline) throw new Error(`could not take ${lockFile}`);
     breakStaleLock(lockFile);
     sleep(20);
@@ -58,7 +68,7 @@ function withLock<T>(lockFile: string, work: () => T): T {
   try {
     return work();
   } finally {
-    if (existsSync(lockFile)) unlinkSync(lockFile);
+    release(lockFile, token);
   }
 }
 
