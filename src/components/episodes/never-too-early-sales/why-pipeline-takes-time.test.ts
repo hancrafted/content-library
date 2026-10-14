@@ -1016,13 +1016,88 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('shows German readers every Slide of the Section as an explicit provisional English fallback', () => {
+  it('shows German readers every Slide of the Section in the approved provisional English text', () => {
     // ARRANGE
-    const english = SLIDES.map((id) => wordsOf(sceneOf(id, 'en'), 'article'));
+    const expected = [
+      'Why building an effective sales pipeline takes time',
+      [
+        'What is a sales pipeline',
+        'A pipeline is our working record of potential deals; a funnel counts how many progress.',
+        'Volume how many enter each stage?',
+        'Offering / conversion which advance?',
+        'Efficiency / cycle how long does progress take?',
+        'Pipeline: records and next actions Leads Opportunities Won',
+        'Funnel: how many progress Leads Opportunities Won',
+        'Define entry, exit, cohort and dates before comparing numbers',
+      ].join(' '),
+      [
+        'Pipeline by the numbers',
+        'An invented, completed cohort: the ratios count progress; the time rail adds duration separately.',
+        'Illustration, not benchmark',
+        '27 leads',
+        '3 leads : 1 opportunity · 1/3 advance',
+        '9 opportunities',
+        '9 opportunities : 1 deal · 1/9 advance',
+        '1 won deal',
+        '27 leads : 1 deal · 1/27 ≈ 3.7% overall',
+        'One completed cohort; every successful path passes both gates in order',
+        'Lead work: 2 weeks',
+        'Opportunity work: 6 months',
+        'Closing: 3 months',
+        'About 9.5 months, counting 2 weeks as about half a month',
+        'Illustrative sequential first-contact-to-win path, not time to cash receipt',
+        'Cash timing also needs delivery and payment terms',
+      ].join(' '),
+      [
+        'Pipeline tools in practice',
+        'Track your deals in a simple pipeline.',
+        'Example records, not a product screenshot',
+        'Leads Alder Works Not contacted · owner: founder · next: request introduction, 6 Jan',
+        'Opportunities Birch Studio Problem confirmed · next: scope meeting, 10 Jan',
+        'Closing Cedar Labs Proposal discussed · next: payment-terms review, 14 Jan',
+        'Won Delta Office Agreed 5 Jan · receipt expected 20 Feb',
+        'Lost Elm Services No current budget · revisit only if timing changes',
+        'Birch Studio First contact: 3 Jan opportunity entered: 7 Jan last contact: 8 Jan next step: 10 Jan receipt date: not agreed',
+        'Update after contact review next actions weekly keep open, won and lost separate',
+      ].join(' '),
+      [
+        'How marketing feeds the pipeline',
+        'Marketing hands a named entry to the pipeline; qualification still decides what becomes an opportunity.',
+        'Attention Anonymous viewers · outside the pipeline',
+        'Useful article → enquiry Relevant event → requested follow-up Network introduction → conversation',
+        'Pipeline Identified lead Buyer response, plausible fit, agreed next step Not qualified / not now Qualified opportunity',
+        'Birch Studio · scheduling problem · source: article enquiry · owner: founder · next: discovery call',
+        'More attention is not automatically more deals',
+      ].join(' '),
+      [
+        'Why it takes time to ramp up',
+        'Separate the sources of delay: they are not three standard durations to add together.',
+        'Preparation list, offer, stage rules',
+        'Unknown market test buyer response',
+        'Unknown metrics wait for outcomes',
+        'Construct the pipeline Learn the selling work Buyer decision time',
+        'No measured pipeline-from-zero duration here',
+      ].join(' '),
+      [
+        'Watch your cashflow, "Start when?"',
+        'Plan backwards from the cash you need, then act forwards.',
+        'Fictional example · cash received, not booked revenue',
+        'Start when? Q1 is not a proven latest safe start',
+        'Start now · before you need the cash First contact Opportunities Closing Planned April receipt',
+        'Q1: January–March; Q2: April Q1 Q2',
+        'January Opening cash $100,000 Cash costs $50,000 Receipts $0 Closing cash $50,000',
+        'February Zero-cash month Opening cash $50,000 Cash costs $50,000 Receipts $0 Closing cash $0',
+        'March Cash costs $50,000 Cannot fund $50,000 payment',
+        'April Cash costs $50,000 Customer receipt $1,000,000 Too late without bridge funding',
+        'Closing cash = opening cash + receipts − payments',
+        'February receipt would change the outcome',
+        '1 Find your zero-cash month 2 Research and maintain a prospect list 3 Make first contact 4 Track stages, conversion and cycle',
+      ].join(' '),
+    ];
     // ACT
     const german = SLIDES.map((id) => wordsOf(sceneOf(id, 'de'), 'article'));
     // ASSERT
-    expect(german).toEqual(english);
+    expect(german).toEqual(expected);
   });
   it('keeps the "Start when?" arrow in forward reading order while it points backwards', () => {
     // ARRANGE
