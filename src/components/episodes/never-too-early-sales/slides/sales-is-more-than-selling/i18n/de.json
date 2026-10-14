@@ -1,0 +1,90 @@
+{
+  "title": "Vertrieb ist mehr als Verkaufen",
+  "caption": "Früh verkaufen zahlt sich aus, bevor der Umsatz es tut.",
+  "columns": {
+    "insight": {
+      "title": "Erkenntnis",
+      "items": {
+        "assumption": "Jedes Gespräch ersetzt eine Annahme",
+        "feature": "Ein Gespräch kann ein Feature ändern oder streichen"
+      }
+    },
+    "process": {
+      "title": "Prozess",
+      "items": {
+        "who-buys": "Wer kauft, warum und wie lange es dauert",
+        "pattern": "Nach zehn Abschlüssen: ein Muster"
+      }
+    },
+    "trust": {
+      "title": "Vertrauen",
+      "items": {
+        "loi": "Eine Absichtserklärung",
+        "real-names": "Eine Pipeline mit echten Namen"
+      }
+    }
+  },
+  "result": "Vertrauen aufbauen",
+  "notes": {
+    "founders-picture": {
+      "header": "Das Bild der Gründer von ihren Nutzern stimmt nicht",
+      "description": "Das erste Bild, das sich Gründerinnen und Gründer von ihren Nutzern machen, ist immer ungenau, selbst wenn sie selbst zu diesen Nutzern gehören.[1]",
+      "sources": {
+        "graham-ds": {
+          "title": "Graham, Do Things that Don't Scale"
+        }
+      }
+    },
+    "early-deals-teach-process": {
+      "header": "Warum frühe Abschlüsse den Prozess lehren",
+      "description": "Ein Startup ist eine Organisation, die nach einem wiederholbaren und skalierbaren Geschäftsmodell sucht. Den Prozess findest du also durch Verkaufen, du entwirfst ihn nicht vorab.[1]",
+      "sources": {
+        "blank-startup": {
+          "title": "Blank, What's A Startup? First Principles"
+        }
+      }
+    },
+    "investors-read-the-team": {
+      "header": "Investoren schauen aufs Team",
+      "description": "Von 885 befragten Risikokapitalgebern nannten 95 % das Managementteam einen wichtigen Faktor, häufiger als Geschäftsmodell, Produkt oder Markt.[1]",
+      "sources": {
+        "gompers-vc": {
+          "title": "Gompers, Gornall, Kaplan und Strebulaev, How Do Venture Capitalists Make Decisions?"
+        }
+      }
+    },
+    "costly-signal": {
+      "header": "Vertrauen braucht ein Signal, das etwas kostet",
+      "description": "Ein Signal sagt nur dann etwas aus, wenn ein schwächeres Unternehmen es nur unter hohen Kosten nachahmen kann. Ein Signal, das Vertrauen schafft, muss den Absender also etwas kosten.[1]",
+      "sources": {
+        "spence-signaling": {
+          "title": "Spence, Job Market Signaling"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "insight": {
+        "title": "Erkenntnis",
+        "keywords": "jedes Gespräch ersetzt eine Annahme, Feature ändern oder streichen, erste Gespräche als Recherche, jede Überraschung notieren",
+        "script": "Das Erste ist Erkenntnis. Jedes Gespräch ersetzt eine Annahme durch etwas, das du wirklich gehört hast. Vielleicht ändert schon das erste echte Gespräch ein Feature, oder es streicht eines. Das ist billiger, als drei weitere Monate das Falsche zu bauen. Sieh die ersten Gespräche also als Recherche. Schreib jede Überraschung auf."
+      },
+      "process": {
+        "title": "Prozess",
+        "keywords": "erste Abschlüsse selbst machen, wer kauft, warum, wie lange, nach zehn Abschlüssen ein Muster, keine Software nötig",
+        "script": "Das Zweite ist der Prozess. Wenn du die ersten Abschlüsse selbst machst, siehst du, wer kauft, warum und wie lange es dauert. Schreib das auf und wiederhole es. Das ist der Anfang eines Vertriebsprozesses. Am Anfang ist jeder Abschluss eine Überraschung. Nach zehn Abschlüssen erkennst du vielleicht ein Muster: dieselben Fragen, dieselben Sorgen, derselbe Schritt, an dem die Leute verstummen. Dafür brauchst du keine Software. Eine Seite mit deinen Fragen und den Antworten, die du bekommen hast, reicht."
+      },
+      "trust": {
+        "title": "Vertrauen",
+        "keywords": "Absichtserklärung, Pipeline mit echten Namen, du kannst Kunden gewinnen, Käufer fühlen sich sicherer",
+        "script": "Das Dritte ist Vertrauen. Frühe Ergebnisse wie eine Absichtserklärung oder eine Pipeline mit echten Namen zeigen, dass du Kunden gewinnen kannst. Wer sieht, dass andere schon mit dir sprechen, spricht selbst leichter mit dir."
+      },
+      "all-three-build-trust": {
+        "title": "Alle drei schaffen Vertrauen",
+        "keywords": "Erkenntnis, Prozess und Ergebnisse, derselbe Punkt, Käufer und Investoren vertrauen dir, vor dem ersten Dollar, ein guter Tausch",
+        "script": "Nimm die drei zusammen. Erkenntnis, Prozess und Ergebnisse zeigen alle in dieselbe Richtung. Käufer und Investoren bekommen einen Grund, dir zu vertrauen. Das kannst du aufbauen, bevor du den ersten Dollar Umsatz machst. Es kostet Zeit und ein bisschen Mut. Genau deshalb ist früh anzufangen so ein guter Tausch."
+      }
+    }
+  }
+}
