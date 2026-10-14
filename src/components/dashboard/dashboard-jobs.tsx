@@ -37,7 +37,7 @@ function AgentConfig({ job, copy }: { job: DashboardJob; copy: DashboardCopy }) 
               {agent.type} · {agent.agent}
             </p>
             <p className="text-muted-foreground">
-              {copy.session}: {agent.session}
+              {copy.session}: {agent.session ?? 'subagent'}
             </p>
             <p className="font-mono wrap-anywhere">
               {copy.skills}: {agent.skills.join(', ') || copy.none}

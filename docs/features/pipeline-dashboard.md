@@ -91,6 +91,9 @@ owns both batch and incremental span semantics. `live: 'unfinished'` treats open
 spans as running only while their own trace's Run has no end. Chronological order
 is timestamp then sequence; the latest end supplies the terminal state. The
 batch fold's default remains crashed for open spans.
+Attribute-only `attrs` records update evidence without closing or reopening a
+Span. Measured end times can precede their stamped start records; those ends
+still pair with their Span rather than being reported as orphaned.
 
 Every configured Job appears in topological `needs` order. `wants` are labelled
 non-blocking dependencies separately. Raw terminal states stay visible;

@@ -134,12 +134,13 @@ describe('failure cases', () => {
     ];
     const expectedStates = ['ok', 'gate', 'running', 'running'];
     const expectedAttention = 2;
+    const researchStageIndex = 2;
     // ACT
     const graph = projectStages(jobs);
     // ASSERT
     expect(graph.stages.map((stage) => stage.state)).toEqual(expectedStates);
     expect(graph.completed).toBe(1);
     expect(graph.attention).toBe(expectedAttention);
-    expect(graph.stages[2].attention).toBe(1);
+    expect(graph.stages[researchStageIndex].attention).toBe(1);
   });
 });

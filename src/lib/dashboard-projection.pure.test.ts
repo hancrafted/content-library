@@ -31,6 +31,7 @@ describe('success cases', () => {
       type: 'implementor',
       agent: 'archgate:developer',
       skills: ['tdd'],
+      ticketSkills: [],
       session: 'orchestrator',
     };
     const expectedWants = ['optional'];

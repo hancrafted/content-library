@@ -3,14 +3,11 @@ import type { Folded, Score, Span, SpanStatus } from '../../skills/new-episode/s
 import { latestJobSpans } from '../../skills/new-episode/scripts/status.pure';
 import { agentFields, JOB_FIELDS, TOP_FIELDS } from './episode-pipeline-fields.pure';
 import { findCycle } from './episode-pipeline-graph.pure';
-import { JOB_ID, jobOf, type Job } from './episode-pipeline-jobs.pure';
+import { JOB_ID, jobOf, type Job, type JobAgent } from './episode-pipeline-jobs.pure';
 import { checkMapping, isMapping, type Mapping } from './mapping-fields.pure';
 
-export interface DashboardAgentConfig {
-  type: string;
+export interface DashboardAgentConfig extends JobAgent {
   agent: string;
-  skills: string[];
-  session: string;
 }
 
 export interface DashboardJobConfig extends Job {
@@ -38,14 +35,13 @@ function jobErrors(job: unknown, at: number): string[] {
 }
 
 function jobConfig(job: Mapping): DashboardJobConfig {
+  const parsed = jobOf(job);
   return {
-    ...jobOf(job),
+    ...parsed,
     retries: Number(job.retries),
-    agents: (job.agents as Mapping[]).map((agent) => ({
-      type: String(agent.type),
+    agents: (job.agents as Mapping[]).map((agent, index) => ({
+      ...parsed.agents[index],
       agent: typeof agent.agent === 'string' ? agent.agent : 'general-purpose',
-      session: typeof agent.session === 'string' ? agent.session : 'subagent',
-      skills: agent.skills as string[],
     })),
   };
 }
