@@ -112,6 +112,10 @@ A research folder is named `<category>-<####>__<question-slug>`: the category be
 
 **AIE**: AI Enablement: how people and organizations learn to work with AI, and what it changes in their work.
 
+**BIZ**: B2B sales: how a company finds, converts and wins business customers through a pipeline over time, and what selling teaches it beyond the revenue.
+
+**FIN**: Startup finance: how cash, costs and revenue move month by month through an early-stage company.
+
 **SALES**: Sales: how a buyer finds, trusts and chooses a coach or consultant.
 
 ## Localization

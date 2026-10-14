@@ -1,0 +1,85 @@
+{
+  "title": "Watch your cashflow",
+  "caption": "In this fictional example, cash reaches $0 in February, so March's $50,000 payment goes unfunded before April's $1,000,000 receipt arrives.",
+  "board": {
+    "label": "Fictional example · <recognition>cash received, not booked revenue</recognition>",
+    "months": {
+      "january": "January",
+      "february": "February",
+      "march": "March",
+      "april": "April"
+    },
+    "opening": "Opening cash",
+    "costs": "Cash costs",
+    "receipts": "Receipts",
+    "closing": "Closing cash",
+    "customerReceipt": "Customer receipt",
+    "amounts": {
+      "hundredThousand": "$100,000",
+      "fiftyThousand": "$50,000",
+      "zero": "$0",
+      "million": "$1,000,000"
+    },
+    "zeroCashMonth": "Zero-cash month",
+    "cannotFund": "Cannot fund $50,000 payment",
+    "tooLate": "Too late without bridge funding",
+    "rule": "Closing cash = opening cash + receipts − <payments>payments</payments>",
+    "stamp": "Bankrupt",
+    "shorthand": "Scenario shorthand: unable to pay March's costs",
+    "ifFunded": "If funded: March −$50,000; April $900,000"
+  },
+  "notes": {
+    "recognition-has-its-own-trigger": {
+      "header": "Recognition has its own trigger",
+      "description": "IFRS 15 ties revenue recognition to satisfying a performance obligation through transfer of a good or service. That accounting trigger is not the receipt of cash; the board is deliberately not an income statement [1].",
+      "sources": {
+        "eu-regulation-2016-1905": {
+          "title": "European Commission, Regulation (EU) 2016/1905 (endorsing IFRS 15 Revenue from Contracts with Customers)"
+        }
+      }
+    },
+    "expenses-and-payments-can-differ-too": {
+      "header": "Expenses and payments can differ too",
+      "description": "Publication 538 distinguishes incurred expenses under accrual accounting from paid expenses under cash accounting. It describes US tax accounting, not a universal financial-reporting rule; this example explicitly assumes costs are paid monthly [1].",
+      "sources": {
+        "irs-publication-538": {
+          "title": "Internal Revenue Service, Publication 538: Accounting Periods and Methods"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "count-january-first": {
+        "title": "Count January first",
+        "keywords": "",
+        "script": "We give this company one hundred thousand dollars at the start of January. Each month, it pays out fifty thousand dollars. Nothing comes in during January. Subtract fifty thousand from one hundred thousand. January ends with fifty thousand dollars. These are invented numbers. Keep them in mind, because we will return to this company."
+      },
+      "zero-is-the-warning": {
+        "title": "Zero is the warning",
+        "keywords": "",
+        "script": "February starts with the remaining fifty thousand dollars. Another fifty thousand goes out. Now the account is empty. March needs another fifty thousand, but there is nothing to pay it with. April's million does not solve March. In this example, nobody has agreed to lend the missing money. The company has to stop."
+      },
+      "a-signature-cannot-pay-payroll": {
+        "title": "A signature cannot pay payroll",
+        "keywords": "",
+        "script": "Imagine the founder celebrating a signed contract while preparing the next payroll payment. The bank asks for available money, not a signature. So do not stop at the deal date or the revenue figure in your plan. For this decision, ask one plain question. On which date can we actually use the customer's money?"
+      },
+      "build-your-own-monthly-view": {
+        "title": "Build your own monthly view",
+        "keywords": "",
+        "script": "Build a simple month-by-month cashflow view. A spreadsheet is enough. Start each month with its opening cash. Add the customer money you expect to receive that month. Subtract the payments you expect to make. That gives closing cash. Carry it into the next month. Repeat this calculation across the months ahead."
+      },
+      "mark-the-zero-cash-month": {
+        "title": "Mark the zero-cash month",
+        "keywords": "",
+        "script": "Find the first month whose closing cash reaches zero or goes below it. Mark that month. Then try a less comfortable version of your plan. Move an expected receipt back a month. What changes? If the balance gets tight, check the individual payment dates too. A monthly total can hide a difficult week."
+      },
+      "do-not-wait-for-the-alarm": {
+        "title": "Do not wait for the alarm",
+        "keywords": "",
+        "script": "Our founders can see the March problem while they still have January's money. That is the moment to ask what work must happen before a customer pays. Waiting until the account is empty leaves no room for that work. The cashflow view is not just a warning. It tells us why we need a pipeline."
+      }
+    }
+  }
+}

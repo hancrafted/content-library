@@ -1,0 +1,82 @@
+/* The board reflows by its own width, so a Chrome inset never overflows it. */
+.board {
+  container-type: inline-size;
+}
+
+.months {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@container (min-width: 32rem) {
+  .months {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container (min-width: 46rem) {
+  .months {
+    grid-template-columns: repeat(var(--cashflow-columns, 4), minmax(0, 1fr));
+  }
+}
+
+/* Tones map onto the global status tokens; neutral keeps the border and the foreground. */
+.month,
+.paper {
+  --paper-tone: var(--border);
+  --paper-tone-text: var(--foreground);
+}
+
+.month[data-tone='success'],
+.paper[data-tone='success'] {
+  --paper-tone: var(--success);
+  --paper-tone-text: var(--success);
+}
+
+.month[data-tone='warning'],
+.paper[data-tone='warning'] {
+  --paper-tone: var(--warning);
+  --paper-tone-text: var(--warning);
+}
+
+.month[data-tone='destructive'],
+.paper[data-tone='destructive'] {
+  --paper-tone: var(--destructive);
+  --paper-tone-text: var(--destructive);
+}
+
+.month[data-tone='primary'],
+.paper[data-tone='primary'] {
+  --paper-tone: var(--primary);
+  --paper-tone-text: var(--primary);
+}
+
+.month:not([data-tone='neutral']) {
+  border-color: var(--paper-tone);
+}
+
+.status {
+  color: var(--paper-tone-text);
+}
+
+.amount {
+  overflow-wrap: anywhere;
+}
+
+.paper {
+  border-inline-start: 4px solid var(--paper-tone);
+}
+
+.paper[data-state='counterfactual'] {
+  border-style: dashed;
+  border-inline-start-color: var(--border);
+}
+
+.paper[data-state='counterfactual'] > span {
+  color: var(--muted-foreground);
+}
+
+.paper[data-state='vacated'] {
+  border-style: dashed;
+  border-inline-start: 1px dashed var(--border);
+  background-color: transparent;
+}

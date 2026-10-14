@@ -1,0 +1,77 @@
+{
+  "title": "Stages of after-sale",
+  "caption": "Agreement starts delivery work. Payment arrives when the agreed terms say, and repeat business needs its own agreement.",
+  "flow": {
+    "label": "From agreement to the customer's outcome"
+  },
+  "production": {
+    "title": "Production",
+    "note": "<ref>Do the promised work</ref>",
+    "example": "Fictional: prepare Birch's scheduling setup and make time to support it"
+  },
+  "delivery": {
+    "title": "Delivery / operations",
+    "note": "Get it into the customer's hands",
+    "example": "Fictional: a setup session that agrees who receives it, how the team starts and what counts as delivered"
+  },
+  "success": {
+    "title": "Customer success",
+    "note": "<ref>Check the customer's outcome</ref>",
+    "example": "Fictional: can Birch plan next week's jobs? Where does it still get stuck?"
+  },
+  "return": {
+    "label": "Repeat or recurring business, if earned and agreed",
+    "target": "New opportunity",
+    "condition": "Needs its own agreement, price and payment schedule. Not in next month's cash plan before then"
+  },
+  "payment": {
+    "label": "Payment follows agreed terms: before, during or after delivery",
+    "before": "Before delivery",
+    "during": "During",
+    "after": "After delivery"
+  },
+  "notes": {
+    "relationship-performance-is-broader-than-trust": {
+      "header": "Relationship performance is broader than trust",
+      "description": "Palmatier et al.'s meta-analysis reports relationship-marketing performance effects and stronger effectiveness in certain relationship-relevant settings and with an individual person. It does not establish that a customer-success step automatically creates renewals, nor does its moderator isolate trust [1].",
+      "sources": {
+        "palmatier-relationship-marketing": {
+          "title": "Palmatier et al., Factors Influencing the Effectiveness of Relationship Marketing: A Meta-Analysis"
+        }
+      }
+    },
+    "doing-work-by-hand-can-reveal-process-details": {
+      "header": "Doing work by hand can reveal process details",
+      "description": "Graham's practitioner example describes a hardware startup assembling early watches and learning details such as the importance of sourcing good screws. It is an example about early users and production, not measured evidence of paying-customer retention [1].",
+      "sources": {
+        "graham-do-things-that-dont-scale": {
+          "title": "Graham, Do Things that Don't Scale"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "a-win-starts-another-responsibility": {
+        "title": "A win starts another responsibility",
+        "keywords": "",
+        "script": "Suppose Birch agrees to the trial. Now our company has a promise to fulfil. Someone must prepare the scheduling setup. Someone must make time to support it. The founder puts those tasks into the work plan and their payments into the cash plan. Signing the trial does not switch off the company's monthly bills."
+      },
+      "delivery-must-reach-the-buyer": {
+        "title": "Delivery must reach the buyer",
+        "keywords": "",
+        "script": "A finished setup on our founder's laptop is not yet a handoff to Birch. They need to agree who receives it, how the team starts using it and what counts as the promised delivery. In this fictional trial, the founder arranges a setup session. Another offer might need a different handoff. Name the responsibilities."
+      },
+      "ask-whether-the-outcome-happened": {
+        "title": "Ask whether the outcome happened",
+        "keywords": "",
+        "script": "After the trial begins, ask Birch what happened to the scheduling problem. Can the team plan next week's jobs? Where does it still get stuck? If nobody is using the setup, find out why before proposing more work. The next conversation is about the customer's result, not just whether our team completed its task."
+      },
+      "recurring-is-conditional": {
+        "title": "Recurring is conditional",
+        "keywords": "",
+        "script": "Our founder can ask whether Birch wants another project or an ongoing arrangement. Put that possible work back into a new opportunity. Do not put money into next month's plan just because the trial went well. Any repeat purchase needs an agreement. Specify its price and payment schedule instead of assuming the first agreement covers it."
+      }
+    }
+  }
+}

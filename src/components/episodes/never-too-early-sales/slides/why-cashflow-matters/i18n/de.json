@@ -1,0 +1,18 @@
+{
+  "title": "Why watching cashflow is mission critical",
+  "caption": "A good deal can still arrive on a bad date: work backwards from when cash must reach the account.",
+  "voiceScript": {
+    "segments": {
+      "a-good-deal-a-bad-date": {
+        "title": "A good deal, a bad date",
+        "keywords": "",
+        "script": "Imagine winning a million-dollar customer and still running out of money. Our fictional company builds scheduling software for small teams. Its big customer pays in April. But the company cannot fund its March bills. The deal sounds wonderful. The date makes it useless for getting through March. How did we get here?"
+      },
+      "work-backwards-from-cash": {
+        "title": "Work backwards from cash",
+        "keywords": "",
+        "script": "Let us put ourselves in the founders' position. They are building the product. They are paying people. They plan to focus on sales when the product feels ready. Before making that decision, they need a different starting point. When must money reach their account? We will work backwards from that deadline."
+      }
+    }
+  }
+}
