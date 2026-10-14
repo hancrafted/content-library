@@ -62,37 +62,6 @@ export interface GateReaders {
   labelApproved?: (jobId: string) => boolean;
 }
 
-/** What the gate readers reach outside the process: a repo file's text, null when it is missing, and gh's stdout. */
-export interface GateSources {
-  read: (file: string) => string | null;
-  /** Runs `gh` with these arguments and returns its stdout; throws when gh fails. */
-  gh: (args: readonly string[]) => string;
-}
-
-/**
- * The gate readers for one Episode run. An output path names `<slug>`, filled in before it is read; a missing
- * output is not approved. A label gate asks gh for the spec issue labelled `episode:<slug>` and its sub-issues
- * (`subIssuesApproved`); any gh failure or unreadable answer reads as not approved, so the gate stays shut.
- */
-export function gateReaders(slug: string, { read, gh }: GateSources): GateReaders {
-  return {
-    outputApproved: (output) => {
-      const file = output.replaceAll('<slug>', slug);
-      const text = read(file);
-      return text !== null && outputApproved(file, text);
-    },
-    labelApproved: () => {
-      try {
-        const [spec] = JSON.parse(gh(['issue', 'list', '--label', `episode:${slug}`, '--state', 'all', '--json', 'number'])) as { number: number }[];
-        if (spec === undefined) return false;
-        return subIssuesApproved(JSON.parse(gh(['api', `repos/{owner}/{repo}/issues/${spec.number}/sub_issues`])) as SubIssue[]);
-      } catch {
-        return false;
-      }
-    },
-  };
-}
-
 /** One agent span still open on a live log. */
 export interface RunningAgent {
   name: string;
@@ -139,7 +108,7 @@ function labelled(span: Span): { name: string; job?: string; attempt?: number; r
  * done and every job it wants is done or blocked, and waiting otherwise.
  * A `gate: human` job that is done reads `gate` until every output
  * it names is approved; `readers.outputApproved` reads one output (an output path with `<slug>` as written in
- * pipeline.yml) and is built by `gateReaders`. A gate job that names no output has no
+ * pipeline.yml) and is built by `readEpisodeStatus`. A gate job that names no output has no
  * status to read: it reads `gate` until `readers.labelApproved(jobId)` says its tickets are approved, and
  * stays `gate` when none is given, so an unreadable label never opens the gate.
  */
