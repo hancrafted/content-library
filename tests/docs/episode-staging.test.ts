@@ -23,11 +23,12 @@ import { parse } from 'yaml';
 
 const ROOT = path.join(__dirname, '../..');
 const EPISODES = path.join(ROOT, 'docs/episodes');
-const SAMPLE = path.join(ROOT, '.agents/skills/new-episode/assets/sample-episode');
+const SAMPLE = path.join(ROOT, 'skills/new-episode/assets/sample-episode');
 const LLM_WIKI = path.join(ROOT, 'docs/llm-wiki');
 const RUNS_CSV = path.join(EPISODES, 'runs.csv');
-const SKILLS = path.join(ROOT, '.agents/skills');
-const SKILL_FOLDER = '.agents/skills/new-episode';
+/** Installed skills, then the ones authored here (design-ADR 0006). */
+const SKILL_FOLDERS = [path.join(ROOT, '.agents/skills'), path.join(ROOT, 'skills')];
+const SKILL_FOLDER = 'skills/new-episode';
 const TEMPLATE = path.join(ROOT, SKILL_FOLDER, 'assets/pipeline.yml');
 
 /*
@@ -139,19 +140,22 @@ function governed(file: string): boolean {
 }
 
 /**
- * What a pipeline may name: the skills under `.agents/skills/`, the files in
+ * What a pipeline may name: the skills installed under `.agents/skills/` and authored under `skills/`, the files in
  * the repo, the staging folder its outputs sit in, and the outputs a rule governs.
  */
 function pipelineContext(pending: readonly string[], staging: string): PipelineContext {
-  const skills = readdirSync(SKILLS, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
-    .map(({ name }) => name);
-  const exists = (file: string): boolean => existsSync(path.join(ROOT, file));
-  const disabled = skills.filter((name) =>
-    /^disable-model-invocation:\s*true\s*$/m.test(
-      readFileSync(path.join(SKILLS, name, 'SKILL.md'), 'utf8').split(/^---$/m)[1] ?? '',
-    ),
+  const skillFiles = SKILL_FOLDERS.flatMap((folder) =>
+    readdirSync(folder, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory())
+      .map(({ name }) => [name, path.join(folder, name, 'SKILL.md')] as const),
   );
+  const skills = skillFiles.map(([name]) => name);
+  const exists = (file: string): boolean => existsSync(path.join(ROOT, file));
+  const disabled = skillFiles
+    .filter(([, file]) =>
+      /^disable-model-invocation:\s*true\s*$/m.test(readFileSync(file, 'utf8').split(/^---$/m)[1] ?? ''),
+    )
+    .map(([name]) => name);
   return {
     skillFolder: SKILL_FOLDER,
     skills,

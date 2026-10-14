@@ -1,0 +1,11 @@
+# This skill's own markdown rules, run by `npm run check:skills`. The agentskills.io
+# spec rule lives once in the root config; this file pins what is this skill's.
+frontmatter:
+  rules:
+    - ruleId: skill-name
+      fileNames: [SKILL.md]
+      intent: 'agentskills.io requires a skill name to match its folder, so a harness finds the skill by either'
+      fields:
+        name:
+          presence: required
+          allowed: [{ value: brief-grill, intent: 'The folder name, skills/brief-grill/.' }]
