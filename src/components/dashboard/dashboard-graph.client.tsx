@@ -11,6 +11,7 @@ import { flushSync } from 'react-dom';
 import { StateBadge, type DashboardCopy } from './dashboard-evidence';
 import styles from './dashboard-graph.module.css';
 import { DashboardLog } from './dashboard-log.client';
+import { DashboardMoment, type Moment } from './dashboard-moment';
 import { jobDetailId, StageLanes, type OpenEventLog } from './dashboard-stage-lanes';
 import { stageName, StageNavigation } from './dashboard-stage-nav';
 
@@ -18,8 +19,8 @@ interface GraphProps {
   view: DashboardView;
   events: readonly DashboardEvent[];
   stale: boolean;
-  /** A replayed moment stands still, so activity animation pauses. */
-  replaying: boolean;
+  /** The moment shown; while replaying it stands still, so activity animation pauses. */
+  moment: Moment;
   outputs: EpisodeOutputs;
   copy: DashboardCopy;
 }
@@ -186,22 +187,24 @@ function StageDetail({ stage, copy, openLog, outputs }: DetailProps) {
   );
 }
 
-export function DashboardGraph({ view, events, stale, replaying, outputs, copy }: GraphProps) {
+export function DashboardGraph({ view, events, stale, moment, outputs, copy }: GraphProps) {
   const controls = useGraphControls(view);
   const { stage, log, openLog, dismissLog } = controls;
   return (
-    <section
-      className={`${styles.graph} space-y-6`}
-      data-motion={controls.paused || stale || replaying ? 'paused' : 'running'}
-      aria-label={copy.graph.title}
-    >
-      <GraphOverview controls={controls} stale={stale} copy={copy} />
-      <div id="dashboard-stage-detail">
-        {stage ? <StageDetail key={stage.id} stage={stage} copy={copy} openLog={openLog} outputs={outputs} /> : null}
-      </div>
-      {log ? (
-        <DashboardLog events={events} scope={log.scope} title={log.title} copy={copy} onDismiss={dismissLog} />
-      ) : null}
-    </section>
+    <DashboardMoment value={moment}>
+      <section
+        className={`${styles.graph} space-y-6`}
+        data-motion={controls.paused || stale || moment.replaying ? 'paused' : 'running'}
+        aria-label={copy.graph.title}
+      >
+        <GraphOverview controls={controls} stale={stale} copy={copy} />
+        <div id="dashboard-stage-detail">
+          {stage ? <StageDetail key={stage.id} stage={stage} copy={copy} openLog={openLog} outputs={outputs} /> : null}
+        </div>
+        {log ? (
+          <DashboardLog events={events} scope={log.scope} title={log.title} copy={copy} onDismiss={dismissLog} />
+        ) : null}
+      </section>
+    </DashboardMoment>
   );
 }

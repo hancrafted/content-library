@@ -262,6 +262,7 @@
     "output": "Output-Token",
     "cache": "Cache-Read-Token",
     "pendingDuration": "Nicht beendet",
+    "elapsedSoFar": "bisher {duration}",
     "notMeasured": "Nicht gemessen",
     "waitingOnHan": "Wartet auf Han",
     "gateHelp": "Ein offenes Gate braucht deine Entscheidung. Dieses Dashboard kann es nicht freigeben oder Dateien ändern.",
@@ -276,7 +277,7 @@
       "liveHelp": "An: folgt dem Run, sobald Ereignisse eintreffen. Aus: spielt den Run bis zu einem gewählten Zeitpunkt nach.",
       "slider": "Nachspielen bis",
       "position": "+{minutes} Min. · {time}",
-      "replaying": "Nachgespielt aus den bisher gelesenen Ereignissen. Neue Ereignisse werden weiter gelesen; mit Live folgst du ihnen wieder."
+      "replaying": "Nachgespielt aus den bisher gelesenen Ereignissen. Neue Ereignisse werden weiter gelesen; mit Live folgst du ihnen wieder. Outputs öffnen sich so, wie sie jetzt auf der Festplatte liegen, nicht wie damals."
     },
     "graph": {
       "title": "Run-Fortschritt",

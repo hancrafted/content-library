@@ -95,22 +95,30 @@ queued close notification only dismisses a dialog that is still closed.
 ## Time travel
 
 A **Live** checkbox above the graph is on by default: the view follows each
-poll. Off, a slider replays the Run from its first event to now, the last
-event's time or, while the newest Run has no end, the later of that and the
-last read. Its readout gives minutes since Run start and the cutoff's local
-time, also as the slider's `aria-valuetext`. Arrow keys move one minute, Page
-Up and Page Down ten; tick marks sit at each stage's earliest Job start.
+poll. Off, a slider replays the current Run, the one started latest by time,
+from its start to now: its end once the fold has closed it, else the later of
+its last event and the last read. Its readout gives minutes since Run start and
+the cutoff's local time, also as the slider's `aria-valuetext`. Arrow keys move
+one minute, Page Up and Page Down ten; tick marks sit at each stage's earliest
+Job start.
 
 Replay logs nothing new and never reads the file again. `replayDashboard()`
 feeds the retained events stamped no later than the cutoff through the shared
 fold with `live: 'unfinished'` and the live projection, so a Run that had not
-ended at the cutoff reads its open spans as running, and a span open then
-reads "Not ended" with no duration, as it does live. Ties at the cutoff are
-all included; the fold orders them by sequence. Polling continues while
-scrubbing and extends the slider, but the view stays at the cutoff and its
-animation pauses; turning Live back on shows the current state. Outputs,
-previews and the event log still reflect the folder now, not the cutoff. The
-checkbox and cutoff are transient page memory (FE-001).
+ended at the cutoff reads its open spans as running. Ties at the cutoff are all
+included; the fold orders them by sequence. The event log modal shows the same
+events, `eventsAt()`. Polling continues while scrubbing and extends the slider,
+but the view stays at the cutoff and its animation pauses; turning Live back on
+shows the current state. The checkbox and cutoff are transient page memory
+(FE-001).
+
+Job boxes, Job and Attempt summaries, agent chips and evidence metrics show how
+long each span took: its measured duration once ended, otherwise the time so far
+from its start to the cutoff, or to the last read while live; never a clock read
+at render. A span open without running (crashed, or an agent unclosed under an
+ended Job) shows no time. While replaying, a Job not started by the cutoff lists
+no outputs, and previews follow the replayed state; outputs still open as they
+are on disk now, which the slider says once.
 
 ## Outputs, previews and attention
 
@@ -197,8 +205,11 @@ and every emitted alternate must resolve and link back.
   `previewHref()`: an output's path in the chosen folder, its label, whether it
   is a pattern, and when and where a Job's preview shows.
 - `jobNeedsAttention()`: the attention mark.
-- `replayDashboard()`, `replayBounds()` and `stageMarks()`: the view at a cutoff
-  from the retained events, the slider's range and its stage tick marks.
+- `replayDashboard()`, `eventsAt()`, `replayBounds()` and `stageMarks()`: the
+  view and event log at a cutoff from the retained events, the slider's range
+  and its stage tick marks.
+- `spanElapsed()` and `agentElapsed()`: a span's duration, or its time so far
+  at the moment shown.
 - `selectEvents()`: scoped, chronological source events, including ends and
   Scores associated through their start Span's ancestry.
 

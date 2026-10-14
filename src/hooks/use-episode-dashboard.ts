@@ -53,8 +53,14 @@ function useFolderSelection() {
   return { selection, choosing, error, choose };
 }
 
-function useEpisodePolling(selection: Selection | undefined) {
-  const [observed, setObserved] = useState<{ selection: Selection; read: EpisodeRead; readAt: number }>();
+/** The latest read and when it finished, epoch milliseconds: the dashboard's "now" without a render-time clock. */
+export interface Polled {
+  read: EpisodeRead;
+  readAt: number;
+}
+
+function useEpisodePolling(selection: Selection | undefined): Polled | undefined {
+  const [observed, setObserved] = useState<Polled & { selection: Selection }>();
   useEffect(() => {
     if (selection === undefined) return;
     let cancelled = false;
@@ -80,11 +86,10 @@ function useEpisodePolling(selection: Selection | undefined) {
 export function useEpisodeDashboard() {
   const picker = useFolderSelection();
   const polled = useEpisodePolling(picker.selection);
-  const read = polled?.read;
-  const outputs = useEpisodeOutputs(picker.selection?.folder, read);
+  const outputs = useEpisodeOutputs(picker.selection?.folder, polled?.read);
   const [supported, setSupported] = useState<boolean | null>(null);
   useEffect(() => {
     setSupported(typeof (window as PickerWindow).showDirectoryPicker === 'function');
   }, []);
-  return { ...picker, read, readAt: polled?.readAt, outputs, supported, name: picker.selection?.folder.name };
+  return { ...picker, polled, outputs, supported, name: picker.selection?.folder.name };
 }

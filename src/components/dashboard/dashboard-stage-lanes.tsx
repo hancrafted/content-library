@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { agentElapsed, spanElapsed } from '@/lib/dashboard-elapsed.pure';
 import type { EventScope } from '@/lib/dashboard-events.pure';
 import type { EpisodeOutputs } from '@/lib/dashboard-outputs.pure';
 import type { DashboardJob } from '@/lib/dashboard-projection.pure';
@@ -13,10 +14,12 @@ import {
 } from '@/lib/dashboard-stages.pure';
 import { fillTemplate } from '@/lib/template.pure';
 import { ArrowDown, GitBranch } from 'lucide-react';
-import { AgentEvidence, StateBadge, type DashboardCopy } from './dashboard-evidence';
+import { useContext } from 'react';
+import { AgentEvidence, ElapsedTime, StateBadge, type DashboardCopy } from './dashboard-evidence';
 import styles from './dashboard-graph.module.css';
 import { JobLinks } from './dashboard-job-links';
 import { JobEvidence } from './dashboard-jobs';
+import { DashboardMoment } from './dashboard-moment';
 import { AttentionMarker, StageStateIcon } from './dashboard-state-icon';
 
 export const jobDetailId = (job: string) => `dashboard-job-${job}`;
@@ -33,6 +36,7 @@ interface LaneProps extends JobProps {
 }
 
 function AgentChips({ agents, job, copy }: { agents: Lane['agents']; job: DashboardJob; copy: DashboardCopy }) {
+  const { now } = useContext(DashboardMoment);
   return (
     <ul className="flex flex-wrap gap-2" aria-label={copy.agents}>
       {agents.map((agent) => (
@@ -43,6 +47,7 @@ function AgentChips({ agents, job, copy }: { agents: Lane['agents']; job: Dashbo
           <StageStateIcon state={agentState(job, agent)} />
           <span className="min-w-0 wrap-anywhere">{agent.description ?? agentIdentity(agent).role}</span>
           <span className="text-muted-foreground">{agentState(job, agent)}</span>
+          <ElapsedTime elapsed={agentElapsed(job, agent, now)} copy={copy} />
         </li>
       ))}
     </ul>
@@ -103,11 +108,13 @@ function ActiveSessions({ job, copy }: Pick<JobProps, 'job' | 'copy'>) {
 }
 
 function JobSummary({ job, copy }: Pick<JobProps, 'job' | 'copy'>) {
+  const { now } = useContext(DashboardMoment);
   return (
     <summary className="cursor-pointer space-y-2 p-4 focus-visible:outline-2 focus-visible:outline-ring">
       <span className="inline-flex max-w-full flex-wrap items-center gap-2 align-middle">
         <span className="text-body font-medium wrap-anywhere">{job.id}</span>
         <StateBadge state={job.state} />
+        {job.span ? <ElapsedTime elapsed={spanElapsed(job.span, now)} copy={copy} /> : null}
         <AttentionMarker job={job} label={copy.graph.jobAttention} />
       </span>
       <span className="block text-caption text-muted-foreground wrap-anywhere">

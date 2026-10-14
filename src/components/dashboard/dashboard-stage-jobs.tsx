@@ -1,11 +1,13 @@
+import { spanElapsed } from '@/lib/dashboard-elapsed.pure';
 import type { DashboardJob } from '@/lib/dashboard-projection.pure';
 import { jobLabel, runningAgents, stageLayers, stateText, type DashboardStage } from '@/lib/dashboard-stages.pure';
 import { fillTemplate } from '@/lib/template.pure';
 import { ArrowDown, GitBranch } from 'lucide-react';
-import type { CSSProperties } from 'react';
-import type { DashboardCopy } from './dashboard-evidence';
+import { useContext, type CSSProperties } from 'react';
+import { ElapsedTime, type DashboardCopy } from './dashboard-evidence';
 import styles from './dashboard-graph.module.css';
 import { PreviewButton } from './dashboard-job-links';
+import { DashboardMoment } from './dashboard-moment';
 import { AttentionMarker, StageStateIcon } from './dashboard-state-icon';
 
 export type SelectJob = (stage: string, job: string) => void;
@@ -18,6 +20,7 @@ interface JobProps {
 }
 
 function JobStatus({ job, copy }: Pick<JobProps, 'job' | 'copy'>) {
+  const { now } = useContext(DashboardMoment);
   const sessions = runningAgents(job).length;
   if (job.foreach !== undefined) {
     const heading = job.foreach.split('#').at(-1) ?? job.foreach;
@@ -30,6 +33,11 @@ function JobStatus({ job, copy }: Pick<JobProps, 'job' | 'copy'>) {
       <span className="block text-caption text-(--node-tone)">
         {stateText(job.state, { gate: copy.waitingOnHan, complete: copy.graph.complete })}
       </span>
+      {job.span ? (
+        <span className="block text-caption">
+          <ElapsedTime elapsed={spanElapsed(job.span, now)} copy={copy} />
+        </span>
+      ) : null}
       {sessions > 0 ? (
         <span className="block text-caption text-(--info)">
           {fillTemplate(copy.graph.running, { count: sessions })}

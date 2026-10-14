@@ -262,6 +262,7 @@
     "output": "Output tokens",
     "cache": "Cache-read tokens",
     "pendingDuration": "Not ended",
+    "elapsedSoFar": "{duration} so far",
     "notMeasured": "Not measured",
     "waitingOnHan": "Waiting on Han",
     "gateHelp": "An open Gate needs your decision. This dashboard cannot approve it or change your files.",
@@ -276,7 +277,7 @@
       "liveHelp": "On: follows the Run as events arrive. Off: replay the Run up to a moment you choose.",
       "slider": "Replay up to",
       "position": "+{minutes} min · {time}",
-      "replaying": "Replaying from the events read so far. New events are still read; turn Live on to follow them."
+      "replaying": "Replaying from the events read so far. New events are still read; turn Live on to follow them. Outputs open as they are on disk now, not as they were then."
     },
     "graph": {
       "title": "Run progress",

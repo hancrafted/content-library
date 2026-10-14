@@ -1,4 +1,4 @@
-import { createLogFold, currentRun } from '../../skills/new-episode/scripts/run-log.pure';
+import { createLogFold, fold } from '../../skills/new-episode/scripts/run-log.pure';
 import type { RunLogLine } from '../../skills/new-episode/scripts/run-log.schema.pure';
 import type { DashboardEvent } from './dashboard-events.pure';
 import { projectDashboard, type DashboardPipeline, type DashboardView } from './dashboard-projection.pure';
@@ -7,9 +7,14 @@ import type { DashboardStage } from './dashboard-stages.pure';
 const readable = (events: readonly DashboardEvent[]): RunLogLine[] =>
   events.flatMap((event) => (event.line ? [event.line] : []));
 
+/** The retained events as they stood at `at` (epoch milliseconds): readable records stamped no later than it. */
+export function eventsAt(events: readonly DashboardEvent[], at: number): DashboardEvent[] {
+  return events.filter((event) => event.line !== undefined && Date.parse(event.line.t) <= at);
+}
+
 /**
- * The view as it stood at `at` (epoch milliseconds): the retained events stamped no later than `at`, through the shared
- * fold and the live projection. A Run whose end lies after `at` had not ended then, so its open spans read running.
+ * The view as it stood at `at`: the events up to `at` through the shared fold and the live projection. A Run whose
+ * end lies after `at` had not ended then, so its open spans read running.
  */
 export function replayDashboard(
   pipeline: DashboardPipeline,
@@ -17,22 +22,27 @@ export function replayDashboard(
   at: number,
 ): DashboardView {
   const log = createLogFold({ live: 'unfinished' });
-  log.append(readable(events).filter((line) => Date.parse(line.t) <= at));
+  log.append(readable(eventsAt(events, at)));
   return projectDashboard(pipeline, log.snapshot());
 }
 
-/** The first and last event times, and whether the newest Run has ended; null without a readable event. */
+/**
+ * The replay range of the current Run, the one started latest by time then sequence: from its start to its end once
+ * the fold has closed it, else to the last event. Null without a readable event; the first event starts a log
+ * without a Run.
+ */
 export function replayBounds(events: readonly DashboardEvent[]) {
   const lines = readable(events);
   if (lines.length === 0) return null;
+  const folded = fold(lines, { live: 'unfinished' });
+  // The fold orders spans by start time then sequence, so the last Run span is the current Run.
+  const run = folded.spans.filter((span) => span.type === 'run').at(-1);
+  const end = run?.end_t ?? null;
   const times = lines.map((line) => Date.parse(line.t));
-  const run = currentRun(lines);
   return {
-    start: Math.min(...times),
-    last: Math.max(...times),
-    finished: lines.some(
-      (line) => line.kind === 'end-run' && line.trace_id === run?.trace_id && line.span_id === run.span_id,
-    ),
+    start: run ? Date.parse(run.start_t) : Math.min(...times),
+    last: end === null ? Math.max(...times) : Date.parse(end),
+    finished: end !== null,
   };
 }
 
@@ -42,15 +52,4 @@ export function stageMarks(stages: readonly DashboardStage[]) {
     const starts = jobs.flatMap((job) => (job.span ? [Date.parse(job.span.start_t)] : []));
     return starts.length > 0 ? [{ stage: id, at: Math.min(...starts) }] : [];
   });
-}
-
-/** What the Live checkbox and replay slider read and set; times are epoch milliseconds. */
-export interface ReplayControls {
-  live: boolean;
-  setLive: (live: boolean) => void;
-  seek: (moment: number) => void;
-  /** The cutoff while replaying, null while live. */
-  at: number | null;
-  range: { start: number; end: number } | null;
-  marks: ReturnType<typeof stageMarks>;
 }

@@ -3,7 +3,7 @@ import { createLogFold } from '../../skills/new-episode/scripts/run-log.pure';
 import type { RunLogLine } from '../../skills/new-episode/scripts/run-log.schema.pure';
 import type { DashboardEvent } from './dashboard-events.pure';
 import { parseDashboardPipeline, projectDashboard } from './dashboard-projection.pure';
-import { replayBounds, replayDashboard, stageMarks } from './dashboard-replay.pure';
+import { eventsAt, replayBounds, replayDashboard, stageMarks } from './dashboard-replay.pure';
 import { projectStages } from './dashboard-stages.pure';
 
 const RUN_START = Date.parse('2026-10-14T10:00:00Z');
@@ -34,10 +34,10 @@ const pipeline = parseDashboardPipeline(
   }),
 );
 
-type Fields = Omit<RunLogLine, 't' | 'seq' | 'trace_id'>;
+type Fields = Omit<RunLogLine, 't' | 'seq' | 'trace_id'> & { trace_id?: string };
 function events(...entries: [number, Fields][]): DashboardEvent[] {
   return entries.map(([time, fields], index) => {
-    const line = { ...fields, t: minute(time), seq: index + 1, trace_id: 'trace' } as RunLogLine;
+    const line = { trace_id: 'trace', ...fields, t: minute(time), seq: index + 1 } as RunLogLine;
     return { number: index + 1, raw: JSON.stringify(line), line };
   });
 }
@@ -121,6 +121,29 @@ describe('success cases', () => {
     // ASSERT
     expect(bounds).toEqual(expected);
     expect(open).toEqual(expectedOpen);
+  });
+
+  it('starts at the current Run, the latest started by time, not the last in the log', () => {
+    // ARRANGE
+    const earlier = events(
+      [-100, { kind: 'start-run', span_id: 'old', run_id: 'run-0', trace_id: 'old' } as Fields],
+      [-90, { kind: 'end-run', span_id: 'old', status: 'ok', trace_id: 'old' } as Fields],
+    );
+    const expected = { start: at(0), last: at(31), finished: true };
+    // ACT
+    const bounds = replayBounds([...run, ...earlier]);
+    // ASSERT
+    expect(bounds).toEqual(expected);
+  });
+
+  it('gives the event log only the records stamped no later than the cutoff', () => {
+    // ARRANGE
+    const malformed: DashboardEvent = { number: 99, raw: '{not json', error: 'not a JSON object.' };
+    const expected = [1, 2, 3, 4, 5, 6, 7];
+    // ACT
+    const shown = eventsAt([...run, malformed], at(10));
+    // ASSERT
+    expect(shown.map((event) => event.number)).toEqual(expected);
   });
 
   it('marks each stage at its earliest Job start', () => {

@@ -1,4 +1,6 @@
-import type { ReplayControls } from '@/lib/dashboard-replay.pure';
+'use client';
+
+import type { ReplayControls } from '@/hooks/use-dashboard-replay';
 import { stageTitle } from '@/lib/dashboard-stages.pure';
 import { fillTemplate } from '@/lib/template.pure';
 import type { KeyboardEvent } from 'react';
@@ -31,33 +33,23 @@ interface SliderProps {
   copy: DashboardCopy;
 }
 
-function StageTicks({
-  id,
-  replay,
-  start,
-  copy,
-}: {
-  id: string;
-  replay: ReplayControls;
-  start: number;
-  copy: DashboardCopy;
-}) {
+interface Tick {
+  value: number;
+  label: string;
+}
+
+function StageTicks({ id, marks }: { id: string; marks: readonly Tick[] }) {
   return (
     <datalist id={id}>
-      {replay.marks.map((mark) => (
-        <option
-          key={mark.stage}
-          value={Math.round((mark.at - start) / SECOND)}
-          label={stageTitle(mark.stage, copy.graph.stageNames)}
-        />
+      {marks.map((mark) => (
+        <option key={mark.label} value={mark.value} label={mark.label} />
       ))}
     </datalist>
   );
 }
 
 /** Seconds since Run start; the stage marks become tick marks through the datalist. */
-function RangeInput({ replay, range, at, copy, id }: SliderProps & { id: string }) {
-  const ticks = useId();
+function RangeInput({ replay, range, at, copy, id, ticks }: SliderProps & { id: string; ticks: string }) {
   const max = Math.ceil((range.end - range.start) / SECOND);
   const value = Math.round((at - range.start) / SECOND);
   const moveTo = (seconds: number) => replay.seek(range.start + Math.min(Math.max(seconds, 0), max) * SECOND);
@@ -82,13 +74,17 @@ function RangeInput({ replay, range, at, copy, id }: SliderProps & { id: string 
         aria-valuetext={position(at, range.start, copy)}
         className="h-11 w-full cursor-pointer accent-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
       />
-      <StageTicks id={ticks} replay={replay} start={range.start} copy={copy} />
     </>
   );
 }
 
 function ReplaySlider({ replay, range, at, copy }: SliderProps) {
   const slider = useId();
+  const ticks = useId();
+  const marks = replay.marks.map((mark) => ({
+    value: Math.round((mark.at - range.start) / SECOND),
+    label: stageTitle(mark.stage, copy.graph.stageNames),
+  }));
   return (
     <div className="space-y-2">
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
@@ -97,7 +93,8 @@ function ReplaySlider({ replay, range, at, copy }: SliderProps) {
         </label>
         <p className="font-mono text-caption tabular-nums">{position(at, range.start, copy)}</p>
       </div>
-      <RangeInput replay={replay} range={range} at={at} copy={copy} id={slider} />
+      <RangeInput replay={replay} range={range} at={at} copy={copy} id={slider} ticks={ticks} />
+      <StageTicks id={ticks} marks={marks} />
       <p className="text-caption text-muted-foreground">{copy.timeTravel.replaying}</p>
     </div>
   );
