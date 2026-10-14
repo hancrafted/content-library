@@ -95,3 +95,7 @@ run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at
 2026-10-13T22:50:35Z,never-too-early-sales,write-voice-script,reviewer,1,pass,,102,,2026-10-14T00:02:03Z
 2026-10-13T22:50:35Z,never-too-early-sales,write-spec,implementor,1,pass,,226.816938,,2026-10-14T00:09:40.816938Z
 2026-10-13T22:50:35Z,never-too-early-sales,write-spec,reviewer,1,pass,,65,,2026-10-14T00:11:33Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-design-spec,implementor,1,pass,,629,,2026-10-14T00:28:11Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-design-spec,reviewer,1,pass,,276,,2026-10-14T05:27:03Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-design-spec,implementor,2,pass,,74,,2026-10-14T05:30:35Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-design-spec,reviewer,2,pass,,40,,2026-10-14T05:31:45Z

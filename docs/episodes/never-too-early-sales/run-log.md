@@ -608,3 +608,61 @@
 - Needs human: the Brief names no curated Topic or Tags, so the required metadata uses the closest existing Topic, economics, and an empty tag list; extra Topics are omitted.
 - German translation remains after Promotion. The draft German route must visibly identify its provisional English content rather than hide a fallback.
 - Han's blanket approval covers future gates, but the design answers must still be written and independently reviewed before labels change.
+
+## write-design-spec · 2026-10-14T05:35:35Z
+
+### Inputs
+
+- Approved `brief.md`, `dossier.md`, `pipeline.yml` and preceding `run-log.md` entries.
+- Own spec #153 and Section tickets #154-157, scoped by this run's label and explicit IDs.
+- `.agents/skills/new-episode/references/write-design-spec.md`, GLOSSARY, FE-002, FE-007, FE-009 and FE-011.
+- `docs/design/slide-library.md`, `design-guide.md`, `design-system.md` and actual frame APIs.
+- Historical #100-103 design-answer excerpts: explicit reference examples of the old catalog-gap anti-pattern, not the concurrent experiment #147.
+- Available `ui-ux-pro-max` guidance, including responsive card layouts and server-component defaults.
+
+### Output
+
+- #153: Editorial visual language, shared board identity, token palette, CSS motion and responsive Scene rules.
+- #154: three design answers, including the reusable plain-props CashflowBoard/Month/Paper/Stamp parts.
+- #155: two design answers for the section and qualified sales-benefits diagram.
+- #156: four design answers for the section, sales/after-sale flows and earlier-receipt callback.
+- #157: seven design answers for the section and pipeline, funnel, kanban, marketing, ramp-up and closing callback.
+- Edited #153 · 2026-10-14T00:17:44Z
+- Edited #154 · 2026-10-14T00:23:41Z
+- Edited #154 · 2026-10-14T05:29:47Z
+- Edited #155 · 2026-10-14T00:22:34Z
+- Edited #156 · 2026-10-14T00:28:01Z
+- Edited #156 · 2026-10-14T05:29:37Z
+- Edited #157 · 2026-10-14T00:26:25Z
+- Edited #157 · 2026-10-14T05:30:33Z
+- Approval decision: Han's pre-authorization recorded by relabelling all four children `ready-for-agent` at 2026-10-14T05:35:34-35Z.
+
+### Checks
+
+- Initial fresh review: all six rubric lines pass on all four tickets, covering all sixteen rendered Slides.
+- Targeted fresh recheck: all three concrete layout/contract inconsistencies corrected.
+- Every issue body ends `Edited-by: write-design-spec`; own native parent/blocker graph retained.
+- No Dossier master/motion overruled; no Visual rewrite is needed.
+- Title/section layouts use motion none; page Scenes retain their nearest-frame designation and local CSS motion.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 629 s
+- reviewer · attempt 1 · pass · 276 s
+- implementor · attempt 2 · pass · 74 s
+- reviewer · attempt 2 · pass · 40 s
+- #154 · approved as drafted
+- #155 · approved as drafted
+- #156 · approved as drafted
+- #157 · approved as drafted
+
+### Notes
+
+- Initial review passed the rubric but identified concrete defects before approval: #154's column matrix contradicted its container threshold, #156 nested two checklists inside a narrow Leads column, and #157 referenced undefined month IDs/quarter bands.
+- The corrective round fixes those only: 375px one column, 1100px two-by-two, 1440px beside two-by-two and closed/over four columns; stacked Leads checklists; existing board `above` slot with a local four-column quarter bracket or narrow-layout legend.
+- Needs human: #157's written rendered-check list omits the 1440px over state. Implementation validation still covers it as the pipeline requires.
+- Nearest basic-page/three-column designations describe allowed custom Scenes composed from SlideFrame, Title and SlideCaption. Their prose APIs contain paragraphs and must not receive block graphics; no shared master API change is needed.
+- The named `ui-ux-pro-max:slides` add-on is unavailable in this CLI. Designers explicitly used the available base skill plus the repository's Episode procedure; the actual design rubric was independently checked.
+- Individual first-round designer intervals were #154 227s, #155 166s, #156 497s and #157 393s, overlapping in parallel. Metrics record the orchestrator's active output window, not their sum; idle time between rounds is excluded. Token counts were unavailable.
+- Approval is as drafted because Han made no unmarked body edits; the agent's own corrections remain marked and are not attributed to Han.
+- Han explicitly entered `/implement-spec #153`. Its CLI registration is unavailable, but the checked-in procedure was read; the required human invocation is satisfied and that procedure governs implementation.
