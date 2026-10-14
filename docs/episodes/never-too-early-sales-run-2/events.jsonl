@@ -86,3 +86,9 @@
 {"kind":"end","t":"2026-10-14T18:56:13Z","seq":86,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"e8d1c2a9df21caac","status":"reused","summary":"docs/llm-wiki/research/SALES/SALES-0005__early-selling-repeatable-process/research.md"}
 {"kind":"start","t":"2026-10-14T18:56:13Z","seq":87,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"ef4c68cc95a1e691","type":"job","name":"write-research-sales-pipeline-ramp-up-time","job":"write-research-sales-pipeline-ramp-up-time","parent_span_id":"30e2f016b9c612f9"}
 {"kind":"end","t":"2026-10-14T18:56:14Z","seq":88,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"ef4c68cc95a1e691","status":"reused","summary":"docs/llm-wiki/research/SALES/SALES-0006__sales-pipeline-ramp-up-time/research.md"}
+{"kind":"start","t":"2026-10-14T18:56:36Z","seq":89,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"e2ed8d468424bf1c","type":"job","name":"convert-references","job":"convert-references","parent_span_id":"30e2f016b9c612f9"}
+{"kind":"start","t":"2026-10-14T18:56:36Z","seq":90,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"7e39a4fd0e08689c","type":"attempt","name":"convert-references#1","job":"convert-references","attempt":1,"parent_span_id":"e2ed8d468424bf1c"}
+{"kind":"score","t":"2026-10-14T18:59:18Z","seq":91,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"7e39a4fd0e08689c","name":"check","value":"pass","source":"check:mh","body":"totalViolations 0"}
+{"kind":"score","t":"2026-10-14T18:59:18Z","seq":92,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"7e39a4fd0e08689c","name":"check","value":"pass","source":"check:vitest","body":"16/16 passed"}
+{"kind":"end","t":"2026-10-14T18:59:36Z","seq":93,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"7e39a4fd0e08689c","status":"ok"}
+{"kind":"end","t":"2026-10-14T18:59:39Z","seq":94,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"e2ed8d468424bf1c","status":"ok","summary":"16 pages, 5 cut-outs"}

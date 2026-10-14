@@ -264,3 +264,25 @@ The question is answered by the llm-wiki file above, which is fresh and fits (se
 ### Notes
 
 The question is answered by the llm-wiki file above, which is fresh and fits (see the `retrieval` entry).
+
+## convert-references · 2026-10-14T18:59:39Z
+
+### Inputs
+
+- `brief.md#episode-design-reference`: one item, the source deck.
+- `.scratch/never-too-early-sales-run-2/source-deck.pdf`: Han's source deck, 16 pages.
+
+### Output
+
+- `reference/source-deck/design-reference.md`, 16 `## Page` sections, with a `process:markdown-harness` `verified` entry.
+- `reference/source-deck/pages/`: 16 page images.
+- `reference/source-deck/crops/`: 5 of 27 cut-outs kept.
+
+### Checks
+
+- `mh check`: pass.
+- `vitest` staging test: pass.
+
+### Notes
+
+The job ran in the worktree `episode/never-too-early-sales-run-2--convert-references`, which was merged and removed. Page 8 (the cashflow board, Jan–April, with the revenue arrow) was spot-checked: its text matches its image. Pages 1, 2, 5, 9, 12 and 14 were read too, and every page has text. Page 12 is a third-party pipeline tool screenshot, which the Brief's Constraint says to redraw.
