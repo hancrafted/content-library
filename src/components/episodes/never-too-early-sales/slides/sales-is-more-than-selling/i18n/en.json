@@ -1,0 +1,90 @@
+{
+  "title": "Sales is more than selling",
+  "caption": "Selling early pays before the revenue does.",
+  "columns": {
+    "insight": {
+      "title": "Insight",
+      "items": {
+        "assumption": "Every call replaces an assumption",
+        "feature": "One call can change or kill a feature"
+      }
+    },
+    "process": {
+      "title": "Process",
+      "items": {
+        "who-buys": "Who buys, why, and how long it takes",
+        "pattern": "After ten deals: a pattern"
+      }
+    },
+    "trust": {
+      "title": "Trust",
+      "items": {
+        "loi": "A letter of intent",
+        "real-names": "A pipeline with real names"
+      }
+    }
+  },
+  "result": "Increase trust",
+  "notes": {
+    "founders-picture": {
+      "header": "A founder's picture of users is wrong",
+      "description": "A founder's initial model of users is always inaccurate, even when the founder is one of them.[1]",
+      "sources": {
+        "graham-ds": {
+          "title": "Graham, Do Things that Don't Scale"
+        }
+      }
+    },
+    "early-deals-teach-process": {
+      "header": "Why early deals teach the process",
+      "description": "A startup is an organization built to search for a repeatable and scalable business model, so the process is found by selling, not designed in advance.[1]",
+      "sources": {
+        "blank-startup": {
+          "title": "Blank, What's A Startup? First Principles"
+        }
+      }
+    },
+    "investors-read-the-team": {
+      "header": "Investors read the team",
+      "description": "Among 885 venture capitalists, 95% named the management team an important factor, more than business model, product or market.[1]",
+      "sources": {
+        "gompers-vc": {
+          "title": "Gompers, Gornall, Kaplan and Strebulaev, How Do Venture Capitalists Make Decisions?"
+        }
+      }
+    },
+    "costly-signal": {
+      "header": "Trust needs a signal that costs something",
+      "description": "A signal carries information only when it is costly for a weaker firm to imitate, so a trust-building signal has to cost the sender something.[1]",
+      "sources": {
+        "spence-signaling": {
+          "title": "Spence, Job Market Signaling"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "insight": {
+        "title": "Insight",
+        "keywords": "every call replaces an assumption, change or kill a feature, first calls as research, write down every surprise",
+        "script": "The first is insight. Every call replaces one assumption with something you actually heard. Maybe the first real conversation changes a feature, or kills one. That is cheaper than building the wrong thing for another three months. So treat the first calls as research. Write down every surprise."
+      },
+      "process": {
+        "title": "Process",
+        "keywords": "close early deals yourself, who buys, why, how long, after ten deals a pattern, no software needed",
+        "script": "The second is process. When you close early deals yourself, you see who buys, why they buy, and how long it takes. Write that down and repeat it. That is the beginning of a sales process. At first every deal is a surprise. After ten deals you may start to see a pattern: the same questions, the same worries, the same step where people go quiet. You do not need software for this. A page with the questions you asked and the answers you got is enough."
+      },
+      "trust": {
+        "title": "Trust",
+        "keywords": "letter of intent, pipeline with real names, you can win buyers, buyers feel safer",
+        "script": "The third is trust. Early results such as a letter of intent, or a pipeline with real names in it, show that you can win buyers. A buyer who sees that others are talking to you feels safer talking to you as well."
+      },
+      "all-three-build-trust": {
+        "title": "All three build trust",
+        "keywords": "insight, process and results, same place, buyers and investors trust you, before the first dollar, a good trade",
+        "script": "Put the three together. Insight, process and results all point to the same place. Buyers and investors get a reason to trust you. You can build that before your first dollar of revenue. It costs time and a bit of courage. That is why starting early is such a good trade."
+      }
+    }
+  }
+}

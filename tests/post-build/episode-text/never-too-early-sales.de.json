@@ -1,7 +1,7 @@
 {
   "title": "Verkaufen, bevor das Geld knapp wird · hancrafted",
   "description": "Warum Gründerinnen und Gründer mit dem Vertrieb lange vor dem ersten Umsatz beginnen müssen: ein Cashflow-Board Monat für Monat, die Stufen eines Verkaufs und vier erste Schritte zur eigenen Vertriebspipeline.",
-  "toc": "Inhalt Wird geladen noch 4 Min. 1 Warum der Blick auf den Cashflow überlebenswichtig ist Behalte deinen Cashflow im Blick Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 4 Min. 1 Warum der Blick auf den Cashflow überlebenswichtig ist Behalte deinen Cashflow im Blick",
+  "toc": "Inhalt Wird geladen noch 6 Min. 1 Warum der Blick auf den Cashflow überlebenswichtig ist Behalte deinen Cashflow im Blick 2 Warum Vertrieb mehr ist als nur Verkaufen Vertrieb ist mehr als Verkaufen Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 6 Min. 1 Warum der Blick auf den Cashflow überlebenswichtig ist Behalte deinen Cashflow im Blick 2 Warum Vertrieb mehr ist als nur Verkaufen Vertrieb ist mehr als Verkaufen",
   "slides": [
     {
       "id": "top",
@@ -14,6 +14,14 @@
     {
       "id": "why-watching-cashflow-is-mission-critical--watch-your-cashflow",
       "text": "Behalte deinen Cashflow im Blick Kosten fallen jeden Monat an. Der große Auftrag kommt im April. Das Geld ist im März weg. Kasse Kosten Umsatz Jan. Kasse 100k $ Kosten 50k $ Feb. Kasse 50k $ Kosten 50k $ März Kasse 0 $ Kosten 50k $ Apr. Kosten 50k $ Umsatz +1 Mio. $ Pleite Finde deinen Null-Monat: Geh die Kassenzeile entlang, bis sie bei null ankommt."
+    },
+    {
+      "id": "why-sales-is-more-than-just-selling",
+      "text": "Warum Vertrieb mehr ist als nur Verkaufen Früh verkaufen zahlt sich aus, bevor der erste Umsatz kommt: Erkenntnis, ein Prozess und Vertrauen."
+    },
+    {
+      "id": "why-sales-is-more-than-just-selling--sales-is-more-than-selling",
+      "text": "Vertrieb ist mehr als Verkaufen Früh verkaufen zahlt sich aus, bevor der Umsatz es tut. Erkenntnis Jedes Gespräch ersetzt eine Annahme Ein Gespräch kann ein Feature ändern oder streichen Prozess Wer kauft, warum und wie lange es dauert Nach zehn Abschlüssen: ein Muster Vertrauen Eine Absichtserklärung Eine Pipeline mit echten Namen Vertrauen aufbauen"
     }
   ],
   "notes": [
@@ -28,6 +36,14 @@
     {
       "id": "why-watching-cashflow-is-mission-critical--watch-your-cashflow",
       "text": "Behalte deinen Cashflow im Blick Die Kosten kommen zuerst Gründung und Lebenshaltung der Gründer kosten Geld, bevor es den ersten Nutzer oder irgendeine Einnahme gibt. 1 Quellen (1) Paul Graham, A Student's Guide to Startups: Startup Funding ( öffnet in neuem Tab ) paulgraham.com Auch ein unterschriebener Auftrag lässt warten Ohne vertragliche Frist fallen Verzugszinsen auf eine verspätete B2B-Zahlung erst 30 Tage nach Eingang der Rechnung an, und vereinbarte Zahlungsfristen dürfen bis zu 60 Tage betragen. 1 Quellen (1) Europäisches Parlament und Rat, Richtlinie 2011/7/EU zur Bekämpfung von Zahlungsverzug im Geschäftsverkehr ( öffnet in neuem Tab ) eur-lex.europa.eu"
+    },
+    {
+      "id": "why-sales-is-more-than-just-selling",
+      "text": "Warum Vertrieb mehr ist als nur Verkaufen Keine Sprechernotizen für diese Folie."
+    },
+    {
+      "id": "why-sales-is-more-than-just-selling--sales-is-more-than-selling",
+      "text": "Vertrieb ist mehr als Verkaufen Das Bild der Gründer von ihren Nutzern stimmt nicht Das erste Bild, das sich Gründerinnen und Gründer von ihren Nutzern machen, ist immer ungenau, selbst wenn sie selbst zu diesen Nutzern gehören. 1 Quellen (1) Graham, Do Things that Don't Scale ( öffnet in neuem Tab ) paulgraham.com Warum frühe Abschlüsse den Prozess lehren Ein Startup ist eine Organisation, die nach einem wiederholbaren und skalierbaren Geschäftsmodell sucht. Den Prozess findest du also durch Verkaufen, du entwirfst ihn nicht vorab. 1 Quellen (1) Blank, What's A Startup? First Principles ( öffnet in neuem Tab ) steveblank.com Investoren schauen aufs Team Von 885 befragten Risikokapitalgebern nannten 95 % das Managementteam einen wichtigen Faktor, häufiger als Geschäftsmodell, Produkt oder Markt. 1 Quellen (1) Gompers, Gornall, Kaplan und Strebulaev, How Do Venture Capitalists Make Decisions? ( öffnet in neuem Tab ) nber.org Vertrauen braucht ein Signal, das etwas kostet Ein Signal sagt nur dann etwas aus, wenn ein schwächeres Unternehmen es nur unter hohen Kosten nachahmen kann. Ein Signal, das Vertrauen schafft, muss den Absender also etwas kosten. 1 Quellen (1) Spence, Job Market Signaling ( öffnet in neuem Tab ) doi.org"
     }
   ],
   "script": [
@@ -42,6 +58,14 @@
     {
       "id": "why-watching-cashflow-is-mission-critical--watch-your-cashflow",
       "text": "Behalte deinen Cashflow im Blick 0:00 – 0:30 Die Tafel Haftnotizen Januar bis April Kasse Kosten Umsatz Kosten in jedem Monat Hier siehst du eine Tafel mit Haftnotizen. Eine Spalte pro Monat, von Januar bis April. Drei Zeilen: Kasse, Kosten und Umsatz. Fang bei den Kosten an. In jeder einzelnen Spalte klebt ein Kostenzettel. Gehälter, Tools, Miete. Die warten nicht auf dich. Am letzten Tag des Monats wollen die Leute bezahlt werden, ganz egal, ob ein Kunde schon Ja gesagt hat. 0:30 – 1:07 Der große Auftrag kommt im April großer Auftrag im April null im März pleite ein mündliches Ja ist kein Geld Jetzt die Umsatzzeile. Dort klebt ein einziger großer Zettel, und zwar im April. Ein guter Auftrag, ein echter. Aber schau auf die Kassenzeile. Von Monat zu Monat wird der Betrag kleiner. Im März liegt er bei null, und ein Stempel landet darauf. Pleite. Einen Monat bevor das Geld gekommen wäre. Ein Auftrag, der fast durch ist, ist kein Geld. Ein mündliches Ja auch nicht. Erst wenn das Geld auf dem Konto ist, zählt es. 1:07 – 2:03 Finde deinen Null-Monat erster Schritt eigene Tafel Null-Monat Frist für Vertriebsergebnisse zurückrechnen Damit kommt dein erster Schritt. Bau diese Tafel für deine eigene Firma. Monat für Monat: Kasse, Kosten und Umsatz, so einfach wie Haftnotizen. Dann geh die Kassenzeile entlang und such den Monat, in dem sie bei null ankommt. Das ist dein Null-Monat, und an ihm misst sich alles, was heute noch kommt. Stift und Papier reichen, zwölf Monate genügen völlig. Sei ehrlich bei den Kosten. Sei vorsichtig beim Umsatz und trag nur ein, worauf du dein eigenes Gehalt verwetten würdest. Schreib dir dieses Datum auf. Es ist die Frist für deine Vertriebsergebnisse, nicht für dein Produkt. Rechne von dort zurück, und du weißt, wie viel Zeit dir wirklich bleibt, um anzufangen."
+    },
+    {
+      "id": "why-sales-is-more-than-just-selling",
+      "text": "Warum Vertrieb mehr ist als nur Verkaufen 0:00 – 0:23 Der zweite Grund Cash ist der erste Grund zahlt sich vor dem Umsatz aus Erkenntnis Prozess Vertrauen Das Geld ist der erste Grund, früh anzufangen. Es gibt noch einen zweiten, und der zahlt sich aus, bevor überhaupt ein Dollar Umsatz auf dem Konto ist. Früh zu verkaufen bringt dir nicht nur Geld. Es bringt dir drei Dinge: Erkenntnis, einen Prozess und Vertrauen."
+    },
+    {
+      "id": "why-sales-is-more-than-just-selling--sales-is-more-than-selling",
+      "text": "Vertrieb ist mehr als Verkaufen 0:00 – 0:26 Erkenntnis jedes Gespräch ersetzt eine Annahme Feature ändern oder streichen erste Gespräche als Recherche jede Überraschung notieren Das Erste ist Erkenntnis. Jedes Gespräch ersetzt eine Annahme durch etwas, das du wirklich gehört hast. Vielleicht ändert schon das erste echte Gespräch ein Feature, oder es streicht eines. Das ist billiger, als drei weitere Monate das Falsche zu bauen. Sieh die ersten Gespräche also als Recherche. Schreib jede Überraschung auf. 0:26 – 1:05 Prozess erste Abschlüsse selbst machen wer kauft warum wie lange nach zehn Abschlüssen ein Muster keine Software nötig Das Zweite ist der Prozess. Wenn du die ersten Abschlüsse selbst machst, siehst du, wer kauft, warum und wie lange es dauert. Schreib das auf und wiederhole es. Das ist der Anfang eines Vertriebsprozesses. Am Anfang ist jeder Abschluss eine Überraschung. Nach zehn Abschlüssen erkennst du vielleicht ein Muster: dieselben Fragen, dieselben Sorgen, derselbe Schritt, an dem die Leute verstummen. Dafür brauchst du keine Software. Eine Seite mit deinen Fragen und den Antworten, die du bekommen hast, reicht. 1:05 – 1:22 Vertrauen Absichtserklärung Pipeline mit echten Namen du kannst Kunden gewinnen Käufer fühlen sich sicherer Das Dritte ist Vertrauen. Frühe Ergebnisse wie eine Absichtserklärung oder eine Pipeline mit echten Namen zeigen, dass du Kunden gewinnen kannst. Wer sieht, dass andere schon mit dir sprechen, spricht selbst leichter mit dir. 1:22 – 1:46 Alle drei schaffen Vertrauen Erkenntnis Prozess und Ergebnisse derselbe Punkt Käufer und Investoren vertrauen dir vor dem ersten Dollar ein guter Tausch Nimm die drei zusammen. Erkenntnis, Prozess und Ergebnisse zeigen alle in dieselbe Richtung. Käufer und Investoren bekommen einen Grund, dir zu vertrauen. Das kannst du aufbauen, bevor du den ersten Dollar Umsatz machst. Es kostet Zeit und ein bisschen Mut. Genau deshalb ist früh anzufangen so ein guter Tausch."
     }
   ]
 }
