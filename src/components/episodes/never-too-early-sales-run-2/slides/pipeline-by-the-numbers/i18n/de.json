@@ -1,0 +1,84 @@
+{
+  "title": "Die Pipeline in Zahlen",
+  "caption": "Viele Leads gehen rein. Heraus kommt langes Warten.",
+  "illustration": "Beispiel eines komplexen Verkaufs, kein Benchmark",
+  "stages": {
+    "lead": "Lead",
+    "opportunity": "Opportunity",
+    "deal": "Deal"
+  },
+  "ratios": {
+    "leadToOpportunity": "3 : 1",
+    "opportunityToDeal": "9 : 1",
+    "total": "27 : 1"
+  },
+  "durations": {
+    "lead": "2 Wochen",
+    "opportunity": "6 Monate",
+    "deal": "3 Monate",
+    "total": "9,5 Monate"
+  },
+  "measured": {
+    "label": "Ein Datensatz eines Anbieters",
+    "winRate": "19 % Abschlussquote bei Neukunden",
+    "cycle": "91 Tage Sales Cycle"
+  },
+  "notes": {
+    "measured-one-dataset": {
+      "header": "Gemessen, ein Datensatz",
+      "description": "In einem Datensatz von 655.000 Opportunities aus 387 Unternehmen lag die Abschlussquote bei Neukunden bei 19 Prozent, der Sales Cycle bei 91 Tagen, mit 8 Beteiligten pro Deal; beim Ausbau bestehender Kunden waren es 45 Prozent, 52 Tage und 5 Beteiligte.[1]",
+      "sources": {
+        "ebsta-pavilion": {
+          "title": "Ebsta und Pavilion, GTM Benchmarks Report"
+        }
+      }
+    },
+    "most-losses-are-no-decision": {
+      "header": "Die meisten Deals scheitern an keiner Entscheidung",
+      "description": "Eine Auswertung von mehr als 2,5 Millionen Verkaufsgesprächen ergab: 40 bis 60 Prozent der Deals gehen an Käufer verloren, die kaufen wollen, aber nie handeln.[1]",
+      "sources": {
+        "hbr-indecision": {
+          "title": "Dixon und McKenna, Stop Losing Sales to Customer Indecision (Harvard Business Review)"
+        }
+      }
+    },
+    "the-buyer-is-a-group": {
+      "header": "Der Käufer ist eine Gruppe",
+      "description": "Eine Gartner-Umfrage unter 632 B2B-Käufern beschreibt Einkaufsgruppen von fünf bis 16 Personen, und in 74 Prozent der Käuferteams gab es ungesunde Konflikte.[1]",
+      "sources": {
+        "gartner-buyer-teams": {
+          "title": "Gartner, Gartner Sales Survey Finds 74% of B2B Buyer Teams Demonstrate \"Unhealthy Conflict\" During The Decision Process"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "illustration": {
+        "title": "Beispiel",
+        "keywords": "ein komplexer Verkauf, Beispiel statt Benchmark, Deine Zahlen weichen ab",
+        "script": "Hier ist ein Beispiel für einen komplexen Verkauf. Es ist eine Veranschaulichung, kein Benchmark. Deine Zahlen werden anders aussehen. Aber es zeigt, wie sich die Rechnung verhält."
+      },
+      "ratios-multiply": {
+        "title": "Quoten multiplizieren sich",
+        "keywords": "drei zu eins, neun zu eins, siebenundzwanzig Leads pro Deal",
+        "script": "Aus drei Leads wird eine Opportunity. Aus neun Opportunities wird ein Deal. Rechne es durch, und Du brauchst siebenundzwanzig Leads für einen einzigen Deal. Kleine Quoten auf jeder Stufe ergeben oben eine sehr große Zahl."
+      },
+      "time-adds-up": {
+        "title": "Die Zeit summiert sich",
+        "keywords": "zwei Wochen, sechs Monate, drei Monate, fast ein Jahr",
+        "script": "Jetzt die Zeit. Zwei Wochen für die erste Stufe. Sechs Monate für die zweite. Drei Monate für die dritte. Zusammen kommt der Umsatz fast ein Jahr nach dem ersten Kontakt. Und ein Jahr ist länger, als das Geld der meisten Gründer reicht."
+      },
+      "measured-sits-beside-it": {
+        "title": "Daneben: gemessene Zahlen",
+        "keywords": "ein echter Datensatz, kürzerer Zyklus, Deine eigenen Zahlen",
+        "script": "Daneben steht ein echter, gemessener Datensatz. Sein Zyklus ist deutlich kürzer als im Beispiel. Trotzdem ist es nur ein Datensatz, von anderen Unternehmen. Deine eigenen Zahlen sagen Dir mehr als jede dieser Zahlen."
+      },
+      "so-fill-early": {
+        "title": "Also früh füllen",
+        "keywords": "viele Leads rein, langes Warten raus, jetzt füllen",
+        "script": "Viele Leads gehen rein. Heraus kommt langes Warten. Wenn das für Dich gilt, hast Du nur einen Zug. Fang jetzt an, die Pipeline zu füllen, solange Du noch das Geld hast, um zu warten."
+      }
+    }
+  }
+}

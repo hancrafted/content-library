@@ -1,0 +1,12 @@
+{
+  "title": "Start before you need the money",
+  "voiceScript": {
+    "segments": {
+      "back-to-the-board": {
+        "title": "Back to the board",
+        "keywords": "the board one last time, quarters Q1 to Q4, revenue in the third quarter, one question",
+        "script": "Let us go back to the board one last time. Now with four quarter columns, Q1 to Q4. Cash, cost and revenue as before. Revenue arrives only in the third quarter. And the board has been asking one question all along."
+      }
+    }
+  }
+}

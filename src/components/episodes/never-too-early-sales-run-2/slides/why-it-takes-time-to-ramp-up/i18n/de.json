@@ -1,0 +1,93 @@
+{
+  "title": "Warum der Anlauf Zeit braucht",
+  "caption": "Für keinen davon gibt es eine Abkürzung.",
+  "board": {
+    "preparation": {
+      "label": "Vorbereitung",
+      "groups": {
+        "before": {
+          "label": "Vorher",
+          "items": "Sales Deck, Preise, Angebot, Geschäftsmodell"
+        },
+        "during": {
+          "label": "Währenddessen",
+          "items": "Demo, Folien fürs Meeting, Angebot"
+        },
+        "deal": {
+          "label": "Abschluss",
+          "items": "Vertrag, Compliance, Recht"
+        }
+      }
+    },
+    "market": {
+      "label": "Unbekannter Markt",
+      "questions": {
+        "customer": "Wer ist Dein Kunde?",
+        "price": "Was zahlt er?",
+        "problem": "Welches Problem muss gelöst werden?"
+      }
+    },
+    "metrics": {
+      "label": "Unbekannte Kennzahlen",
+      "items": {
+        "conversionRate": "Conversion Rate",
+        "salesCycle": "Sales Cycle"
+      },
+      "why": "Nötig, um rückwärts zu planen"
+    }
+  },
+  "rail": "Monate, nicht Tage",
+  "notes": {
+    "you-search-before-you-execute": {
+      "header": "Erst suchen, dann umsetzen",
+      "description": "Ein Startup ist eine vorübergehende Organisation, die nach einem wiederholbaren und skalierbaren Geschäftsmodell sucht; die Fakten, auf denen eine Pipeline beruht, findest Du erst in Gesprächen mit Kunden.[1]",
+      "sources": {
+        "customer-development-manifesto": {
+          "title": "Steve Blank, The Customer Development Manifesto"
+        }
+      }
+    },
+    "metrics-lag-by-the-cycle": {
+      "header": "Kennzahlen hinken um einen Zyklus hinterher",
+      "description": "Die Conversion von frischen Leads sieht schlechter aus als ihr langfristiger Wert, weil diese Leads noch keinen vollen Sales Cycle durchlaufen haben.[1]",
+      "sources": {
+        "science-of-scaling": {
+          "title": "Mark Roberge, The Science of Scaling"
+        }
+      }
+    },
+    "codify-after-you-learn": {
+      "header": "Erst lernen, dann festschreiben",
+      "description": "Roberge rät, das Go-to-Market-Playbook erst nach dem Lernen festzuschreiben und skalierbare Unit Economics zu belegen, bevor man in großem Stil Vertriebsleute einstellt.[1]",
+      "sources": {
+        "science-of-scaling": {
+          "title": "Mark Roberge, The Science of Scaling"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "preparation": {
+        "title": "Vorbereitung",
+        "keywords": "Sales Deck, Preise, Demo, Angebot, Vertrag, dauert länger als gedacht",
+        "script": "Die erste Notiz ist die Vorbereitung. Ein Sales Deck. Preise. Ein Angebot und ein Geschäftsmodell. Eine Demo, Folien fürs Meeting, ein schriftliches Angebot. Ein Vertrag, bei dem Compliance und Recht geklärt sind. All das muss stehen, bevor der erste Deal abschließen kann. Und das Schreiben dauert länger, als Du denkst."
+      },
+      "unknown-market": {
+        "title": "Unbekannter Markt",
+        "keywords": "wer, was er zahlt, welches Problem, Monate statt Tage, die Uhr läuft",
+        "script": "Die zweite Notiz ist der unbekannte Markt. Wer ist Dein Kunde? Was zahlt er? Welches Problem muss er wirklich gelöst haben? Solange Du das nicht weißt, ist jede Zahl auf dem Cashflow-Board geraten. Preis, Volumen, Timing: Alles hängt an diesen drei Antworten. Und die Antworten brauchen Monate, nicht Tage. Die Uhr auf Deinem Konto läuft derweil weiter."
+      },
+      "unknown-metrics": {
+        "title": "Unbekannte Kennzahlen",
+        "keywords": "Conversion Rate und Sales Cycle unbekannt, rückwärts planen, nur durch Verkaufen",
+        "script": "Die dritte Notiz sind die unbekannten Kennzahlen. Am Anfang kennst Du weder Deine Conversion Rate noch Deinen Sales Cycle. Du brauchst beide, um von Deinem Cash aus rückwärts zu planen. Und Du bekommst sie nur, indem Du verkaufst."
+      },
+      "no-shortcut": {
+        "title": "Keine Abkürzung",
+        "keywords": "Vorbereitung, Markt, Kennzahlen, echte Zeit, früh anfangen",
+        "script": "Vorbereitung, Markt, Kennzahlen. Jedes der drei braucht echte Zeit, und für keines gibt es eine Abkürzung. Du kannst sie nicht beschleunigen, wenn das Geld schon knapp ist. Du kannst sie nur früh beginnen."
+      }
+    }
+  }
+}

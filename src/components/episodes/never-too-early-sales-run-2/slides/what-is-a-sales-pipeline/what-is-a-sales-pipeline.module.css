@@ -1,0 +1,9 @@
+/*
+ * What is a sales pipeline: motion only, no colour, size or weight (FE-011). The three notes stick on in reading
+ * order with the library motion, once, when the Slide becomes active; at rest and under reduced motion the board is
+ * finished.
+ */
+
+.note {
+  composes: stickOn from '../../../../slide-shared/motions/stick-on.module.css';
+}

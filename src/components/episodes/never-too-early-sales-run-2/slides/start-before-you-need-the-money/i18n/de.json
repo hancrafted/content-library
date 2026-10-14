@@ -1,0 +1,12 @@
+{
+  "title": "Fang an, bevor Du das Geld brauchst",
+  "voiceScript": {
+    "segments": {
+      "back-to-the-board": {
+        "title": "Zurück zum Board",
+        "keywords": "das Board ein letztes Mal, Quartale Q1 bis Q4, Umsatz im dritten Quartal, eine Frage",
+        "script": "Gehen wir ein letztes Mal zurück zum Board. Diesmal mit vier Spalten, eine pro Quartal, Q1 bis Q4. Cash, Kosten und Umsatz wie gehabt. Umsatz kommt erst im dritten Quartal. Und die ganze Zeit stellt das Board eine einzige Frage."
+      }
+    }
+  }
+}
