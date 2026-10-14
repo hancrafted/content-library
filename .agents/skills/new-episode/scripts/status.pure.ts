@@ -1,13 +1,15 @@
 // A run's state, read from disk alone: each job of a per-run pipeline.yml
-// as done, blocked, ready or waiting, from the latest run-log.md entry per
-// job id. The orchestrator builds its todo list from this, never from memory.
+// as done, running, gate, blocked, ready or waiting, from the latest job span
+// per job id in the Episode's events.jsonl, folded by `fold`. The orchestrator builds its todo list from this, never from memory.
 // It reads the pipeline and the gates through the same src/lib modules the
 // pipeline check uses; they import nothing but `yaml`, so bare node runs them.
 
 import { readPipeline, type Job } from '../../../../src/lib/episode-pipeline-jobs.pure.ts';
+import type { Folded, Span } from './run-log.pure.ts';
+import { formatDuration } from './run-log.pure.ts';
 import { gateTier } from '../../../../src/lib/staging-file.pure.ts';
 
-export type JobState = 'done' | 'gate' | 'blocked' | 'ready' | 'waiting';
+export type JobState = 'done' | 'running' | 'gate' | 'blocked' | 'ready' | 'waiting';
 
 /**
  * Whether one output opens its gate: a markdown staging file once its trust tier is approved (`gateTier`, from
@@ -30,42 +32,28 @@ export function subIssuesApproved(tickets: readonly SubIssue[]): boolean {
   return tickets.length > 0 && open.every((ticket) => !ticket.labels.some((label) => label.name === 'needs-triage'));
 }
 
-const ENTRY = /^## (\S+) · \S+$/;
-const METRIC = /^- \S+ · attempt (\d+) · (pass|fail)\b/;
-
-/** The lines of each job's latest run-log entry, by job id. */
-function latestEntries(runLog: string): Map<string, string[]> {
-  const entries = new Map<string, string[]>();
-  let current: string[] = [];
-  for (const line of runLog.split('\n')) {
-    const job = ENTRY.exec(line)?.[1];
-    if (job !== undefined) {
-      current = [];
-      entries.set(job, current);
-    } else current.push(line);
+/** The latest job span per job id, by start time then sequence: a retried job reads as its last run. */
+function latestJobSpans(folded: Folded): Map<string, Span> {
+  const latest = new Map<string, Span>();
+  for (const span of folded.spans) {
+    if (span.type !== 'job') continue;
+    const id = span.job ?? span.name;
+    const known = latest.get(id);
+    const order = known === undefined ? 1 : Date.parse(span.start_t) - Date.parse(known.start_t) || span.seq - known.seq;
+    if (order >= 0) latest.set(id, span);
   }
-  return entries;
+  return latest;
 }
 
-/** The lines under one h3 of an entry. */
-function section(lines: readonly string[], title: string): string[] {
-  const start = lines.indexOf(`### ${title}`);
-  if (start === -1) return [];
-  const end = lines.findIndex((line, at) => at > start && line.startsWith('### '));
-  return lines.slice(start + 1, end === -1 ? undefined : end).filter((line) => line.trim() !== '');
-}
-
-/** Blocked when a Notes line starts `Blocked:`; done when every agent run of the last attempt passed. */
-function logged(lines: readonly string[]): JobState | null {
-  if (section(lines, 'Notes').some((line) => /^(- )?Blocked:/.test(line))) return 'blocked';
-  const runs = section(lines, 'Metrics').flatMap((line) => {
-    const match = METRIC.exec(line);
-    return match === null ? [] : [{ attempt: Number(match[1]), pass: match[2] === 'pass' }];
-  });
-  if (runs.length === 0) return null;
-  const last = Math.max(...runs.map(({ attempt }) => attempt));
-  const final = runs.filter(({ attempt }) => attempt === last);
-  return final.every(({ pass }) => pass) ? 'done' : null;
+/**
+ * What a job's latest span says: done when it ended ok or reused, blocked when it ended in error, running while
+ * it is open on a live log. A crashed, refused or missing span says nothing, so the job runs again.
+ */
+function logged(span: Span | undefined): JobState | null {
+  if (span === undefined) return null;
+  if (span.status === 'ok' || span.status === 'reused') return 'done';
+  if (span.status === 'error') return 'blocked';
+  return span.status === 'running' ? 'running' : null;
 }
 
 /** How a gate is read: whether a staging output is approved (`outputApproved`), or, for a job with no output, its tickets. */
@@ -105,23 +93,59 @@ export function gateReaders(slug: string, { read, gh }: GateSources): GateReader
   };
 }
 
+/** One agent span still open on a live log. */
+export interface RunningAgent {
+  name: string;
+  job?: string;
+  attempt?: number;
+  role?: string;
+  elapsed_ms: number;
+}
+
+/** A span that crashed or was refused (the concurrency limit). */
+export interface ProblemSpan {
+  name: string;
+  job?: string;
+  attempt?: number;
+  role?: string;
+  status: 'crashed' | 'refused';
+}
+
+/** A Gate span with no end: waiting on Han since it opened. */
+export interface WaitingGate {
+  name: string;
+  job?: string;
+  waiting_ms: number;
+}
+
+export interface RunStatus {
+  jobs: { id: string; state: JobState }[];
+  running: RunningAgent[];
+  problems: ProblemSpan[];
+  waiting: WaitingGate[];
+}
+
+/** Only the fields a span has, so an absent attempt or role stays absent. */
+function labelled(span: Span): { name: string; job?: string; attempt?: number; role?: string } {
+  const { name, job, attempt, role } = span;
+  return { name, ...(job !== undefined && { job }), ...(attempt !== undefined && { attempt }), ...(role !== undefined && { role }) };
+}
+
 /**
- * Each job's state, in pipeline order. A job with no finished entry is
- * blocked when a job it needs is blocked, ready when every job it needs is
+ * A run's status: each job's state in pipeline order, the agents running now with their elapsed time, the
+ * crashed and refused spans, and the gates waiting on Han with their wait. `folded` is the log folded with
+ * `fold` (live logs with `openAs: 'running'`); `now` (beside the gate readers) is the clock, an ISO time, so nothing here reads it.
+ * A job with no finished span is blocked when a job it needs is blocked, ready when every job it needs is
  * done and every job it wants is done or blocked, and waiting otherwise.
- * A `gate: human` job that is logged done reads `gate` until every output
+ * A `gate: human` job that is done reads `gate` until every output
  * it names is approved; `readers.outputApproved` reads one output (an output path with `<slug>` as written in
  * pipeline.yml) and is built by `gateReaders`. A gate job that names no output has no
  * status to read: it reads `gate` until `readers.labelApproved(jobId)` says its tickets are approved, and
  * stays `gate` when none is given, so an unreadable label never opens the gate.
  */
-export function runStatus(
-  pipelineYaml: string,
-  runLog: string,
-  readers: GateReaders = {},
-): { id: string; state: JobState }[] {
+export function runStatus(pipelineYaml: string, folded: Folded, { now, ...readers }: GateReaders & { now: string }): RunStatus {
   const jobs = readPipeline(pipelineYaml)?.jobs ?? [];
-  const entries = latestEntries(runLog);
+  const latest = latestJobSpans(folded);
   const states = new Map<string, JobState>();
   const stateOf = (id: string): JobState => {
     const known = states.get(id);
@@ -129,13 +153,34 @@ export function runStatus(
     // Seeded before recursing, so a cycle the pipeline check would refuse reads as waiting, not a stack overflow.
     states.set(id, 'waiting');
     const job = jobs.find((candidate) => candidate.id === id);
-    const fromLog = entries.has(id) ? logged(entries.get(id) ?? []) : null;
-    const state =
-      job === undefined ? (fromLog ?? 'waiting') : (stateFor(job, fromLog, readers) ?? pending(job, stateOf));
+    const fromLog = logged(latest.get(id));
+    const state = job === undefined ? (fromLog ?? 'waiting') : (stateFor(job, fromLog, readers) ?? pending(job, stateOf));
     states.set(id, state);
     return state;
   };
-  return jobs.map(({ id }) => ({ id, state: stateOf(id) }));
+  const since = (span: Span): number => Date.parse(now) - Date.parse(span.start_t);
+  const open = (type: Span['type']) => folded.spans.filter((span) => span.type === type && span.status === 'running');
+  return {
+    jobs: jobs.map(({ id }) => ({ id, state: stateOf(id) })),
+    running: open('agent').map((span) => ({ ...labelled(span), elapsed_ms: since(span) })),
+    problems: folded.spans.flatMap((span) =>
+      span.type !== 'run' && (span.status === 'crashed' || span.status === 'refused') ? [{ ...labelled(span), status: span.status }] : [],
+    ),
+    waiting: open('gate').map((span) => ({ ...labelled(span), waiting_ms: since(span) })),
+  };
+}
+
+const spawnName = ({ name, job, attempt, role }: { name: string; job?: string; attempt?: number; role?: string }): string =>
+  job !== undefined && attempt !== undefined && role !== undefined ? `${name} · ${job}#${attempt}/${role}` : name;
+
+/** The status as the CLI prints it: one line per job, then running agents, crashed and refused spans, waiting gates. */
+export function renderStatus({ jobs, running, problems, waiting }: RunStatus): string {
+  return [
+    ...jobs.map(({ id, state }) => `${state.padEnd(8)}${id}`),
+    ...running.map((agent) => `${'running'.padEnd(8)}${spawnName(agent)} · ${formatDuration(agent.elapsed_ms)}`),
+    ...problems.map((span) => `${span.status.padEnd(8)}${spawnName(span)}`),
+    ...waiting.map((gate) => `${'gate'.padEnd(8)}${gate.job ?? gate.name} · waiting on Han ${formatDuration(gate.waiting_ms)}`),
+  ].join('\n');
 }
 
 function stateFor(job: Job, fromLog: JobState | null, readers: GateReaders): JobState | null {
