@@ -1,4 +1,4 @@
-// The pure half of `npm run convert-reference`: turns marker's paginated Markdown into a reference.md,
+// The pure half of `npm run convert-reference`: turns marker's paginated Markdown into a design-reference.md,
 // one `## Page <n>` per page under its whole-page image, and decides which of marker's cut-out images
 // stay. The script runs marker, pdftoppm and ImageMagick; nothing here touches the disk.
 import { stringify } from 'yaml';
@@ -22,7 +22,7 @@ export interface ReferenceInput {
   /** The OKF actor that wrote it, `marker/<version>`. */
   generatedBy: string;
   generatedAt: string;
-  /** The PDF the reference was converted from: a repo path and the name Han gave the file. */
+  /** The PDF the design reference was converted from: a repo path and the file name. */
   source: { resource: string; title: string };
   pageCount: number;
   /** marker's cut-out name → the name it is kept under in `crops/`, or null when it is dropped. */
@@ -33,7 +33,7 @@ function pad(page: number, pageCount: number): string {
   return String(page).padStart(Math.max(2, String(pageCount).length), '0');
 }
 
-/** The whole-page image of a 1-based page, relative to reference.md. */
+/** The whole-page image of a 1-based page, relative to design-reference.md. */
 export function pageImage(page: number, pageCount: number): string {
   return `pages/page-${pad(page, pageCount)}.jpg`;
 }
@@ -97,10 +97,10 @@ function pagesOf(markdown: string): Map<number, string[]> {
   return pages;
 }
 
-/** The reference.md for one converted PDF. */
+/** The design-reference.md for one converted PDF. */
 export function renderReference(input: ReferenceInput): string {
   const frontmatter = stringify({
-    type: 'reference',
+    type: 'episode-design-reference',
     title: input.title,
     generated: { by: input.generatedBy, at: input.generatedAt },
     sources: [{ id: 1, resource: input.source.resource, title: input.source.title }],

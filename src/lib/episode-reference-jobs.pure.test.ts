@@ -2,14 +2,14 @@ import { describe, expect, it } from 'vitest';
 import { checkReferenceJobs } from './episode-reference-jobs.pure';
 
 /*
- * A Brief's `## References` against the outputs of a per-run pipeline's
- * convert-references job: one reference.md per listed file, no more.
+ * A Brief's `## Episode Design Reference` against the outputs of a per-run pipeline's
+ * convert-references job: one design-reference.md per listed file, no more.
  */
 
 function brief(...references: string[]): string {
   const list = references.map((reference) => `- [A deck](${reference})`).join('\n');
-  const section = references.length === 0 ? '' : `## References\n\n${list}\n\n`;
-  return `---\ntype: brief\n---\n\n# A title\n\n## Research questions\n\n1. Why?\n\n${section}## Open ideas\n\n- [Not a reference](reference/idea/reference.md)\n`;
+  const section = references.length === 0 ? '' : `## Episode Design Reference\n\n${list}\n\n`;
+  return `---\ntype: brief\n---\n\n# A title\n\n## Research questions\n\n1. Why?\n\n${section}## Open ideas\n\n- [Not a reference](reference/idea/design-reference.md)\n`;
 }
 
 function pipeline(...outputs: string[]): string {
@@ -19,8 +19,8 @@ function pipeline(...outputs: string[]): string {
 }
 
 const FILE = 'docs/episodes/demo/pipeline.yml';
-const DECK = 'docs/episodes/demo/reference/sales-deck/reference.md';
-const SKETCH = 'docs/episodes/demo/reference/board-sketch/reference.md';
+const DECK = 'docs/episodes/demo/reference/sales-deck/design-reference.md';
+const SKETCH = 'docs/episodes/demo/reference/board-sketch/design-reference.md';
 
 function messages(yaml: string, text: string): string[] {
   return checkReferenceJobs(FILE, yaml, text).map(({ message }) => message);
@@ -29,7 +29,7 @@ function messages(yaml: string, text: string): string[] {
 describe('success cases', () => {
   it('finds nothing when convert-references writes each file the Brief lists', () => {
     // ARRANGE
-    const text = brief('reference/sales-deck/reference.md', 'reference/board-sketch/reference.md');
+    const text = brief('reference/sales-deck/design-reference.md', 'reference/board-sketch/design-reference.md');
     const yaml = pipeline(DECK, SKETCH);
     // ACT
     const findings = messages(yaml, text);
@@ -37,7 +37,7 @@ describe('success cases', () => {
     expect(findings).toEqual([]);
   });
 
-  it('finds nothing when the Brief lists no References and the pipeline has no convert-references job', () => {
+  it('finds nothing when the Brief lists no Episode Design Reference and the pipeline has no convert-references job', () => {
     // ARRANGE
     const text = brief();
     const yaml = pipeline();
@@ -51,10 +51,10 @@ describe('success cases', () => {
 describe('failure cases', () => {
   it('names a listed reference no output writes', () => {
     // ARRANGE
-    const text = brief('reference/sales-deck/reference.md', 'reference/board-sketch/reference.md');
+    const text = brief('reference/sales-deck/design-reference.md', 'reference/board-sketch/design-reference.md');
     const yaml = pipeline(DECK);
     const expected = [
-      `The Brief lists ${SKETCH} under References, which no convert-references output names; customize-pipeline writes one per reference.`,
+      `The Brief lists ${SKETCH} under Episode Design Reference, which no convert-references output names; customize-pipeline writes one per reference.`,
     ];
     // ACT
     const findings = messages(yaml, text);
@@ -64,9 +64,11 @@ describe('failure cases', () => {
 
   it('names an output the Brief does not list', () => {
     // ARRANGE
-    const text = brief('reference/sales-deck/reference.md');
+    const text = brief('reference/sales-deck/design-reference.md');
     const yaml = pipeline(DECK, SKETCH);
-    const expected = [`convert-references writes ${SKETCH}, which the Brief does not list under References.`];
+    const expected = [
+      `convert-references writes ${SKETCH}, which the Brief does not list under Episode Design Reference.`,
+    ];
     // ACT
     const findings = messages(yaml, text);
     // ASSERT
@@ -75,11 +77,13 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('reads links only under References, not a reference-shaped link elsewhere in the Brief', () => {
+  it('reads links only under Episode Design Reference, not a reference-shaped link elsewhere in the Brief', () => {
     // ARRANGE
     const text = brief();
     const yaml = pipeline(DECK);
-    const expected = [`convert-references writes ${DECK}, which the Brief does not list under References.`];
+    const expected = [
+      `convert-references writes ${DECK}, which the Brief does not list under Episode Design Reference.`,
+    ];
     // ACT
     const findings = messages(yaml, text);
     // ASSERT
@@ -88,7 +92,7 @@ describe('edge cases', () => {
 
   it('leaves a pipeline that does not parse to the schema check', () => {
     // ARRANGE
-    const text = brief('reference/sales-deck/reference.md');
+    const text = brief('reference/sales-deck/design-reference.md');
     const yaml = 'jobs: [oops';
     // ACT
     const findings = messages(yaml, text);

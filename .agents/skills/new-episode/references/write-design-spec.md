@@ -12,7 +12,7 @@ Name every domain concept by its [`GLOSSARY.md`](../../../../GLOSSARY.md) term, 
 
 ### What the designers read
 
-The Brief, including its `## Style`; each reference the Brief lists, `reference.md` with its page images, which is the model Han brought; the Dossier (the Visual, title and Voice script of each Slide); `GLOSSARY.md`; the spec issue's `## Visual language`; the ADRs `.archgate/adrs/FE-002-episode-page.md`, `FE-007-module-layering.md`, `FE-009-slide-wrapper-and-scene.md` and `FE-011-design-tokens.md`; and `docs/design/`: [the Slide library](../../../../docs/design/slide-library.md) (which Master slides and library motions exist), [the design guide](../../../../docs/design/design-guide.md) (Han's taste, and the run-1 Slides as "not this") and [the design system](../../../../docs/design/design-system.md) (tokens and motion rules). Point each designer at the files; never paste them.
+The Brief, including its `## Style`; each reference the Brief lists, `design-reference.md` with its page images, which is the model Han brought; the Dossier (the Visual, title and Voice script of each Slide); `GLOSSARY.md`; the spec issue's `## Visual language`; the ADRs `.archgate/adrs/FE-002-episode-page.md`, `FE-007-module-layering.md`, `FE-009-slide-wrapper-and-scene.md` and `FE-011-design-tokens.md`; and `docs/design/`: [the Slide library](../../../../docs/design/slide-library.md) (which Master slides and library motions exist), [the design guide](../../../../docs/design/design-guide.md) (Han's taste, and the run-1 Slides as "not this") and [the design system](../../../../docs/design/design-system.md) (tokens and motion rules). Point each designer at the files; never paste them.
 
 ### What a designer decides
 
@@ -23,7 +23,7 @@ Every Slide is designed, not only the ones the Dossier's Visual could not match.
 - Otherwise the Slide is a copy of a Master slide with changes, or a one-off Scene from `SlideFrame` and the kit's `<Title>` (FE-002 §3). A new part or motion lives in the Slide's own folder, a server part or its own `*.client.tsx`, and moves to `slide-shared/` once a second Slide needs it (FE-007).
 - The answer names parts, tokens, props and i18n keys, plus a low-fidelity text wireframe (ASCII in a code block) for every Slide that is not a library entry used as is. It builds no rendered prototype: the rendered check stays in `implement-episode`.
 - A Slide is a scrolling web section, not a fixed frame (FE-009): the wrapper's "at least viewport height" is the only height rule.
-- A Slide whose Visual names a `Reference:` page, or that redraws one, opens that page image and names it in the answer by its repo path, `Reference: docs/episodes/<slug>/reference/<file-slug>/pages/page-<NN>.jpg`, then `Build against this page: keep <what>; change <what>`. The ticket is all a ticket implementer reads, so the line carries both the image and what to keep.
+- A Slide whose Visual names a `Design reference:` page, or that redraws one, opens that page image and names it in the answer by its repo path, `Design reference: docs/episodes/<slug>/reference/<file-slug>/pages/page-<NN>.jpg`, then `Build against this page: keep <what>; change <what>`. The ticket is all a ticket implementer reads, so the line carries both the image and what to keep.
 
 ### Settle it as a Scene
 
@@ -57,4 +57,4 @@ Every ticket body has a design answer for every Slide, the spec issue has its `#
 4. Every overruled `master:` or `motion:` names its reason.
 5. Colour, size and weight are tokens (FE-011); every import is one FE-007 §5 allows.
 6. The Slide follows FE-009: no fixed height, no clipping, Foreground clear of the chrome (see "What a designer decides").
-7. Every Slide that redraws a reference page names its page image by repo path with `Reference:`, and says what to keep and what to change.
+7. Every Slide that redraws a reference page names its page image by repo path with `Design reference:`, and says what to keep and what to change.

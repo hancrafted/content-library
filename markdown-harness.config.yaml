@@ -179,18 +179,14 @@ frontmatter:
               }
             - { value: practice, intent: 'When via is practice: changes Han found while rehearsing the recording.' }
 
-    - ruleId: reference
-      fileNames: [reference.md]
-      intent: 'A file Han brought as a model for the Episode (a deck, a sketch), converted by `npm run convert-reference` so every job can read its words and see its pages. The script writes it; a job that changes a word breaks the copy.'
+    - ruleId: episode-design-reference
+      fileNames: [design-reference.md]
+      intent: 'A file (pdf, word) brought in as a model for the Episode (a deck, a sketch, miro slides export), converted using marker by `npm run convert-reference` so every job can read its words and see its pages. The script writes it; a job that changes a word breaks the copy.'
       unknownKeys: forbidden
       fields:
         type:
           presence: required
-          allowed:
-            - {
-                value: reference,
-                intent: 'A model Han brought, kept as he made it: text by OCR, each page as an image.',
-              }
+          allowed: [{ value: episode-design-reference }]
         title: *title
         generated.by:
           presence: required
@@ -203,17 +199,17 @@ frontmatter:
         sources:
           minItems: 1
           maxItems: 1
-          intent: 'The one file this reference was converted from, as OKF §5.1 `sources`.'
+          intent: 'The one file this design reference was converted from, as OKF §5.1 `sources`.'
         sources[].id:
           presence: required
-          intent: 'Always 1: a reference has one source.'
+          intent: 'Always 1: a design reference has one source.'
         sources[].resource:
           presence: required
           format: uri
-          intent: 'The repo path of the PDF, `.scratch/<slug>/<file-slug>.pdf`, the copy brief-grill made of the file Han brought.'
+          intent: 'The path of the original design-reference file, `.scratch/<slug>/<file-slug>.<file-extension>`.'
         sources[].title:
           presence: required
-          intent: 'The file name Han gave the PDF, so he recognises it.'
+          intent: 'By default the same name as the file.'
         verified: *verified
 
 body-structure:
@@ -409,8 +405,8 @@ body-structure:
             allowed:
               [
                 {
-                  title: References,
-                  intent: 'Files Han brought as a model for the Episode (a deck, a sketch), one per item, `[<title>](reference/<file-slug>/reference.md)`: the file the convert-references job writes from his PDF, copied to `.scratch/<slug>/<file-slug>.pdf`. Fail if an item names a file Han did not bring.',
+                  title: Episode Design Reference,
+                  intent: 'Files (pdf, word) brought in as a model for the Episode (a deck, a sketch, miro slides export), one per item, `[<title>](reference/<file-slug>/design-reference.md)`: the file the convert-references job writes from the copy at `.scratch/<slug>/<file-slug>.<file-extension>`. Fail if an item names a file the prompt or handoff did not bring.',
                 },
               ],
             mayHold: [unordered-list],
@@ -545,11 +541,11 @@ body-structure:
           }
       intent: 'One list of items, each a single change keyed to its Slide and tagged with where it lands, so it routes to the Dossier, the implementation, or the recording. Fail if an item holds more than one change, its tag sends it to the wrong place, or it cannot be acted on without asking Han.'
       undefinedHeadings: forbid
-    - ruleId: reference-body
-      fileNames: [reference.md]
-      intent: "One h2 per page of the PDF, in its order, each opening with the whole page as an image, then the page's text as OCR read it, its own headings moved two levels down, and the cut-outs worth reading. A Slide that copies a page cites `reference.md#page-<n>`."
+    - ruleId: episode-design-reference-body
+      fileNames: [design-reference.md]
+      intent: "One h2 per page of the PDF, in its order, each opening with the whole page as an image, then the page's text as OCR read it, its own headings moved two levels down, and the cut-outs worth reading. A Slide that copies a page cites `design-reference.md#page-<n>`."
       headings:
-        - { purpose: heading, level: 1, intent: 'The reference title, equal to the frontmatter title.' }
+        - { purpose: heading, level: 1, intent: 'The design reference title, equal to the frontmatter title.' }
         - {
             purpose: enumeration,
             level: 2,

@@ -1,5 +1,5 @@
-// `npm run convert-reference -- <pdf> <out-dir> --title <title>`: converts a PDF Han brings as a reference
-// into <out-dir>/reference.md, with every page rendered whole to pages/ and marker's larger cut-outs to
+// `npm run convert-reference -- <pdf> <out-dir> --title <title>`: converts a PDF brought in as an Episode design reference
+// into <out-dir>/design-reference.md, with every page rendered whole to pages/ and marker's larger cut-outs to
 // crops/, each at most 1568 px on its longer edge. Text comes from marker (`marker_single`), which OCRs
 // image-only pages through surya: by default on a llama.cpp `llama-server` marker starts itself; with
 // SURYA_INFERENCE_URL set, on that server instead (see references/convert-references.md for oMLX).
@@ -62,6 +62,7 @@ function shrink(from: string, to: string): void {
 
 const { pdf, out, title } = parseArgs(process.argv.slice(2));
 if (!existsSync(pdf)) fail(`${pdf} does not exist.`);
+if (path.extname(pdf).toLowerCase() !== '.pdf') fail(`${pdf} is not a PDF: export it to PDF first, since the page images come from the PDF.`);
 const missing = Object.keys(TOOLS).filter((tool) => which(tool) === null);
 if (missing.length > 0) fail(`missing ${missing.map((tool) => `${tool} (${TOOLS[tool]})`).join(', ')}.`);
 const markerBinary = which('marker_single') as string;
@@ -77,7 +78,7 @@ try {
 
   const pageCount = Number(/^Pages:\s+(\d+)/m.exec(execFileSync('pdfinfo', [pdf], { encoding: 'utf8' }))?.[1]);
   if (!Number.isInteger(pageCount) || pageCount < 1) fail(`pdfinfo reports no page count for ${pdf}.`);
-  for (const stale of ['pages', 'crops', 'reference.md']) rmSync(path.join(out, stale), { recursive: true, force: true });
+  for (const stale of ['pages', 'crops', 'design-reference.md']) rmSync(path.join(out, stale), { recursive: true, force: true });
   mkdirSync(path.join(out, 'pages'), { recursive: true });
   mkdirSync(path.join(out, 'crops'), { recursive: true });
 
@@ -100,7 +101,7 @@ try {
     if (keep) shrink(from, path.join(out, 'crops', kept));
   }
 
-  const reference = path.join(out, 'reference.md');
+  const reference = path.join(out, 'design-reference.md');
   writeFileSync(
     reference,
     renderReference({

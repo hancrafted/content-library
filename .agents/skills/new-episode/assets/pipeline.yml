@@ -116,7 +116,7 @@ jobs:
   - id: convert-references
     needs: [retrieval]
     before: [mh-query]
-    outputs: [docs/episodes/<slug>/reference/*/reference.md]
+    outputs: [docs/episodes/<slug>/reference/*/design-reference.md]
     checks: [mh, vitest]
     retries: 1
     agents:
@@ -161,7 +161,7 @@ jobs:
           - references/write-dossier.md
           - docs/episodes/<slug>/brief.md
           - docs/episodes/<slug>/research/*/research.md
-          - docs/episodes/<slug>/reference/*/reference.md
+          - docs/episodes/<slug>/reference/*/design-reference.md
           - docs/profile/han/storytelling-guide.md
           - docs/profile/han/tone-guide.md
           - docs/profile/han/mental-model-guide.md
@@ -243,7 +243,7 @@ jobs:
           - docs/design/slide-library.md
           - docs/design/design-guide.md
           - docs/design/design-system.md
-          - docs/episodes/<slug>/reference/*/reference.md
+          - docs/episodes/<slug>/reference/*/design-reference.md
         model: opus
         session: orchestrator
       - type: reviewer
@@ -255,7 +255,7 @@ jobs:
           - docs/episodes/<slug>/dossier.md
           - docs/design/slide-library.md
           - docs/design/design-guide.md
-          - docs/episodes/<slug>/reference/*/reference.md
+          - docs/episodes/<slug>/reference/*/design-reference.md
         rubric: references/write-design-spec.md#rubric
         model: opus
 
@@ -276,7 +276,7 @@ jobs:
           - references/implement-episode.md
           - references/skill-overrides.md
           - docs/episodes/<slug>/dossier.md
-          - docs/episodes/<slug>/reference/*/reference.md
+          - docs/episodes/<slug>/reference/*/design-reference.md
         model: opus
         session: orchestrator
       - type: reviewer
@@ -291,7 +291,7 @@ jobs:
           - references/implement-episode.md
           - references/skill-overrides.md
           - docs/episodes/<slug>/dossier.md
-          - docs/episodes/<slug>/reference/*/reference.md
+          - docs/episodes/<slug>/reference/*/design-reference.md
         rubric: references/implement-episode.md#rubric
         model: opus
         session: orchestrator

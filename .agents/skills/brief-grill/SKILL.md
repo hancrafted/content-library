@@ -71,7 +71,7 @@ A voice session hands over the **Brief file itself**: the template filled in as 
 
 ## Brief template
 
-Every heading, Style included, is required and stays in this order, except Threads, Constraints, References and Open ideas, which are optional: delete any of them when it is empty. Actionables, Research questions and each Section under Slides are ordered lists; Constraints, References and Open ideas are unordered lists; Analogy is prose or an unordered list; every other section is prose. A Slide is `**<title>** — <purpose>. _Visual:_ <idea>`, with `_Research:_ <n, m>` at the end when its claims rest on research, and `(A)` or `(B)` in front when the Brief has Threads; numbering runs on across Sections. The `staging-brief` and `staging-brief-body` rules in `markdown-harness.config.yaml` govern the Brief, the staging test checks its Slides, and `npm run verify` checks this template against both.
+Every heading, Style included, is required and stays in this order, except Threads, Constraints, Episode Design Reference and Open ideas, which are optional: delete any of them when it is empty. Actionables, Research questions and each Section under Slides are ordered lists; Constraints, Episode Design Reference and Open ideas are unordered lists; Analogy is prose or an unordered list; every other section is prose. A Slide is `**<title>** — <purpose>. _Visual:_ <idea>`, with `_Research:_ <n, m>` at the end when its claims rest on research, and `(A)` or `(B)` in front when the Brief has Threads; numbering runs on across Sections. The `staging-brief` and `staging-brief-body` rules in `markdown-harness.config.yaml` govern the Brief, the staging test checks its Slides, and `npm run verify` checks this template against both.
 
 ```markdown
 ---
@@ -148,9 +148,9 @@ One everyday picture the Episode returns to.
 1. Why does one claim the Episode makes hold, scoped to a subject matter?
 2. Why does another claim hold, one research job per question?
 
-## References
+## Episode Design Reference
 
-- [A deck Han brought](reference/a-deck-han-brought/reference.md)
+- [A sales deck](reference/sales-deck/design-reference.md)
 
 ## Open ideas
 
