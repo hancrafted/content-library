@@ -140,7 +140,7 @@ export const RUNS_CSV_COLUMNS = [
 
 /** One row per agent span; a failed rubric on the agent or, for an implementor (any role ending in `implementor`), on its Attempt makes the result `fail`. */
 const RUNS_SQL = `
-  SELECT r.run_id AS run, s.episode AS episode, s.job AS job, s.role AS agent, s.attempt AS attempt,
+  SELECT r.run_id AS run, s.episode AS episode, s.job AS job, CASE WHEN s.type = 'job' THEN 'orchestrator' ELSE s.role END AS agent, s.attempt AS attempt,
     CASE WHEN failed.lines IS NOT NULL THEN 'fail' WHEN s.status = 'ok' THEN 'pass' ELSE s.status END AS result,
     failed.lines AS failed_rubric,
     CASE WHEN s.duration_ms IS NULL THEN NULL ELSE CAST(round(s.duration_ms / 1000.0) AS INTEGER) END AS duration_s,
@@ -153,7 +153,7 @@ const RUNS_SQL = `
     SELECT episode, span_id, group_concat(rubric, '; ') AS lines FROM scores
     WHERE name = 'rubric' AND value = 'fail' GROUP BY episode, span_id
   ) failed ON failed.episode = s.episode AND (failed.span_id = s.span_id OR (s.role LIKE '%implementor' AND failed.span_id = s.parent_span_id))
-  WHERE s.type = 'agent'
+  WHERE s.type = 'agent' OR (s.type = 'job' AND (s.gen_ai_usage_input_tokens IS NOT NULL OR s.gen_ai_usage_output_tokens IS NOT NULL))
   ORDER BY r.start_t, s.episode, coalesce(s.end_t, s.start_t), s.seq`;
 
 const csvField = (value: unknown): string => {

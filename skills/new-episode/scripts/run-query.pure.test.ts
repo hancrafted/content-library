@@ -310,6 +310,13 @@ describe('orchestrator Job rows and score tickets', () => {
     }),
   ];
 
+  it('lists a Job that has measured usage as an orchestrator row of the runs CSV', () => {
+    // ACT
+    const csv = runsCsv([{ episode: 'ep', folded: fold(JOB) }]);
+    // ASSERT
+    expect(csv.split('\n')[1]).toContain('run-9,ep,write,orchestrator,,pass,,120,42,');
+  });
+
   it('exposes the Score ticket to queries', () => {
     // ACT
     const result = queryRuns([{ episode: 'ep', folded: fold(JOB) }], 'SELECT ticket FROM scores');
