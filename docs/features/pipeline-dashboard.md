@@ -103,11 +103,13 @@ output of a draft is shown as text. A path outside the folder is never opened.
 
 A Build Job with a `port` (design-ADR-0008, Ports) shows **Preview :<port>**
 in its card and in its Job box, a button opening `http://localhost:<port>` in a
-new tab. It is a button, not a link, because FE-003 admits no `http:` href; it
-does not check that the Job's `next dev` answers.
+new tab, while its server is meant to run: `implement-episode-init`'s once it
+has started, a Section Job's only while the Job is open, since the orchestrator
+stops that server before removing its worktree. It is a button, not a link,
+because FE-003 admits no `http:` href; it does not check that `next dev` answers.
 
-A Job waiting on Han or ended `error`, `refused` or `crashed` carries an
-exclamation mark in its Job box and its card, labelled **Needs attention** for
+A Job waiting on Han, ended `error`, `refused` or `crashed`, or whose latest
+Attempt holds a `needs-human` rubric Score carries an exclamation mark in its Job box and its card, labelled **Needs attention** for
 screen readers and on hover, beside its state in words.
 
 ## Reading and interpretation
@@ -171,8 +173,10 @@ and every emitted alternate must resolve and link back.
   stage order and membership from the pipeline, not-planned stages, template
   placeholders, the legacy fallback, stage progress, attention, parallel
   dependency levels and ticket/session identity.
-- `outputSegments()`, `outputLabel()` and `previewHref()`: an output's path in
-  the chosen folder, its label, and a port's link.
+- `outputSegments()`, `outputLabel()`, `isGlob()`, `previewPort()` and
+  `previewHref()`: an output's path in the chosen folder, its label, whether it
+  is a pattern, and when and where a Job's preview shows.
+- `jobNeedsAttention()`: the attention mark.
 - `selectEvents()`: scoped, chronological source events, including ends and
   Scores associated through their start Span's ancestry.
 

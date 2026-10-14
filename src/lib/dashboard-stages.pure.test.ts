@@ -1,11 +1,13 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { createLogFold, parseLog } from '../../skills/new-episode/scripts/run-log.pure';
+import type { Score } from '../../skills/new-episode/scripts/run-log.schema.pure';
 import { parseDashboardPipeline, projectDashboard, type DashboardJob } from './dashboard-projection.pure';
 import {
   agentState,
   jobLabel,
   jobLanes,
+  jobNeedsAttention,
   projectStages,
   runningAgents,
   stageLayers,
@@ -19,6 +21,28 @@ function fixtureView() {
   const log = createLogFold({ live: 'unfinished' });
   log.append(parseLog(fixture('events.jsonl')).lines);
   return projectDashboard(parseDashboardPipeline(fixture('pipeline.yml')), log.snapshot());
+}
+
+/** A running Job with two Attempts, the later one `a2`, and the rubric Scores given. */
+function reviewedJob(scores: Pick<Score, 'span_id' | 'value'>[]): DashboardJob {
+  const base = fixtureView().jobs[0];
+  const attempt = { ...base.span!, type: 'attempt' as const, status: 'ok' as const };
+  return {
+    ...base,
+    state: 'running',
+    attempts: [
+      { ...attempt, span_id: 'a1', seq: 1 },
+      { ...attempt, span_id: 'a2', seq: 2 },
+    ],
+    scores: scores.map((score, at) => ({
+      trace_id: 't',
+      t: '2026-10-15T00:00:00Z',
+      seq: at + 3,
+      name: 'rubric',
+      source: 'agent:x/reviewer',
+      ...score,
+    })),
+  };
 }
 
 describe('success cases', () => {
@@ -159,6 +183,18 @@ describe('success cases', () => {
 });
 
 describe('edge cases', () => {
+  it("marks a Job whose latest Attempt has a needs-human Score, but not for an earlier Attempt's", () => {
+    // ARRANGE
+    const latest = reviewedJob([{ span_id: 'a2', value: 'needs-human' }]);
+    const earlier = reviewedJob([{ span_id: 'a1', value: 'needs-human' }]);
+    const failedOnly = reviewedJob([{ span_id: 'a2', value: 'fail' }]);
+    const expected = [true, false, false];
+    // ACT
+    const marked = [latest, earlier, failedOnly].map(jobNeedsAttention);
+    // ASSERT
+    expect(marked).toEqual(expected);
+  });
+
   it('counts an unexpanded foreach template as a placeholder, not as planned work', () => {
     // ARRANGE
     const base = fixtureView().jobs[0];
@@ -210,6 +246,16 @@ describe('edge cases', () => {
 });
 
 describe('failure cases', () => {
+  it('marks a Job waiting on a gate or ended error, refused or crashed, and not one running or done', () => {
+    // ARRANGE
+    const states = ['gate', 'error', 'refused', 'crashed', 'running', 'ok', 'reused', 'waiting'] as const;
+    const expected = [true, true, true, true, false, false, false, false];
+    // ACT
+    const marked = states.map((state) => jobNeedsAttention({ ...reviewedJob([]), state }));
+    // ASSERT
+    expect(marked).toEqual(expected);
+  });
+
   it('keeps the full id of a Job that is no fan-out, or is the bare template', () => {
     // ARRANGE
     const ids = ['write-dossier', 'write-research', 'write-research-', 'implement-episode-init'];

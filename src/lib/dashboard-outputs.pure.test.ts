@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { outputLabel, outputSegments, previewHref } from './dashboard-outputs.pure';
+import { isGlob, outputLabel, outputSegments, previewHref, previewPort } from './dashboard-outputs.pure';
 
 /*
  * A Job's output path read against the Episode folder the dashboard was given, `docs/episodes/<slug>`, and a Build
@@ -32,6 +32,20 @@ describe('success cases', () => {
     expect(labels).toEqual(expected);
   });
 
+  it("shows a running Section Job's preview, and the integration Job's from its start on, finished too", () => {
+    // ARRANGE
+    const jobs = [
+      { id: 'implement-section-why', port: 4001, state: 'running' as const },
+      { id: 'implement-episode-init', port: 4000, state: 'running' as const },
+      { id: 'implement-episode-init', port: 4000, state: 'ok' as const },
+    ];
+    const expected = [4001, 4000, 4000];
+    // ACT
+    const ports = jobs.map(previewPort);
+    // ASSERT
+    expect(ports).toEqual(expected);
+  });
+
   it('links a port on localhost', () => {
     // ARRANGE
     const port = 4001;
@@ -44,6 +58,22 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it("hides a Section Job's preview before it starts and once it has ended, and the integration Job's before it starts", () => {
+    // ARRANGE
+    const jobs = [
+      { id: 'implement-section-why', port: 4001, state: 'waiting' as const },
+      { id: 'implement-section-why', port: 4001, state: 'ok' as const },
+      { id: 'implement-section-why', port: 4001, state: 'reused' as const },
+      { id: 'implement-section-why', port: 4001, state: 'error' as const },
+      { id: 'implement-episode-init', port: 4000, state: 'waiting' as const },
+    ];
+    const expected = [undefined, undefined, undefined, undefined, undefined];
+    // ACT
+    const ports = jobs.map(previewPort);
+    // ASSERT
+    expect(ports).toEqual(expected);
+  });
+
   it("answers null for an output outside the chosen folder or another Episode's", () => {
     // ARRANGE
     const outputs = ['src/components/episodes/x/page.tsx', 'docs/episodes/other/brief.md', 'docs/episodes/brief.md'];
@@ -70,6 +100,25 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('tells a glob output from a file', () => {
+    // ARRANGE
+    const outputs = ['docs/episodes/x/research/*/research.md', 'docs/episodes/x/brief.md'];
+    const expected = [true, false];
+    // ACT
+    const globs = outputs.map(isGlob);
+    // ASSERT
+    expect(globs).toEqual(expected);
+  });
+
+  it('shows no preview for a Job without a port', () => {
+    // ARRANGE
+    const job = { id: 'implement-section-why', state: 'running' as const };
+    // ACT
+    const port = previewPort(job);
+    // ASSERT
+    expect(port).toBeUndefined();
+  });
+
   it('answers null for the folder itself, which names no file', () => {
     // ARRANGE
     const outputs = ['docs/episodes/never-too-early/', 'docs/episodes/never-too-early'];

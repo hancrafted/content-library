@@ -22,7 +22,8 @@ Each Build Job serves its worktree with `next dev` on its own port, and the dash
 
 1. **`port` on a Job.** An optional whole number from 1024 to 65535. The template and the draft scaffold carry none; `customize-pipeline` writes them, so in an approved per-run pipeline every Job of the `build` stage has one. The port check (`src/lib/episode-pipeline-ports.pure.ts`) refuses a port in the template, a port on a Job outside the `build` stage, a port two Jobs share, 4382 (the dashboard's own dev port) and a `build` Job without a port once approved.
 2. **A consecutive block from the first free port.** `customize-pipeline` probes ports from 4000 and gives `implement-episode-init` the first free one, then each `implement-section-*` Job the next free one in Section order, skipping a busy port and 4382.
-3. **The Job's agent starts the server and leaves it running** in its worktree, `npx next dev -p <port>`, for Han to look at; the dashboard only links it and never checks it answers.
+3. **The Job's agent starts the server detached**, `npx next dev -p <port>`, so it outlives the agent's session, and records its PID in `.scratch/dev-<port>.pid`. `implement-episode-init`'s server runs in the Episode's worktree and stays up for Han, showing each Section once merged. A Section Job's server lives only while the Job runs: the orchestrator stops it before `wt:done` removes the worktree it serves.
+4. **The dashboard shows a Preview only while the server is meant to answer:** a Section Job's until it finishes `ok` or `reused`, the integration Job's once it has started. It never checks the server answers.
 
 ## Considered options
 

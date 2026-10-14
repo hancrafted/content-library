@@ -46,6 +46,19 @@ export const isComplete = (state: DashboardState): boolean => state === 'ok' || 
 export const needsAttention = (state: DashboardState): boolean =>
   ['gate', 'error', 'refused', 'crashed'].includes(state);
 
+/** A Job waiting on Han or ended badly, or whose latest Attempt's reviewer left a line only Han can judge. */
+export function jobNeedsAttention(job: Pick<DashboardJob, 'state' | 'attempts' | 'scores'>): boolean {
+  if (needsAttention(job.state)) return true;
+  const latest = job.attempts.reduce<Span | undefined>(
+    (last, span) => (last && last.seq > span.seq ? last : span),
+    undefined,
+  );
+  return (
+    latest !== undefined &&
+    job.scores.some((score) => score.span_id === latest.span_id && score.value === 'needs-human')
+  );
+}
+
 /** A stage's or Job's state as shown: the gate and a finished state in words, any other state as it is. */
 export function stateText(state: DashboardState, words: { gate: string; complete: string }): string {
   if (state === 'gate') return words.gate;
@@ -80,7 +93,7 @@ export function projectStages(jobs: readonly DashboardJob[], order: readonly str
     planned: grouped.some((job) => job.foreach === undefined),
     state: groupState(grouped.map((job) => job.state)),
     completed: grouped.filter((job) => isComplete(job.state)).length,
-    attention: grouped.filter((job) => needsAttention(job.state)).length,
+    attention: grouped.filter(jobNeedsAttention).length,
   }));
   return {
     stages,

@@ -71,9 +71,9 @@ function JobNode({ stage, job, onSelectJob, copy }: JobProps) {
           <JobName id={job.id} />
           <JobStatus job={job} copy={copy} />
         </span>
-        <AttentionMarker state={job.state} label={copy.graph.jobAttention} />
+        <AttentionMarker job={job} label={copy.graph.jobAttention} />
       </button>
-      {job.port !== undefined ? <PreviewButton port={job.port} copy={copy} className="mt-1 ml-2" /> : null}
+      <PreviewButton job={job} copy={copy} className="mt-1 ml-2" />
     </li>
   );
 }

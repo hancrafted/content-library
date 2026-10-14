@@ -1,4 +1,4 @@
-import { outputLabel, previewHref, type EpisodeOutputs } from '@/lib/dashboard-outputs.pure';
+import { isGlob, outputLabel, previewHref, previewPort, type EpisodeOutputs } from '@/lib/dashboard-outputs.pure';
 import type { DashboardJob } from '@/lib/dashboard-projection.pure';
 import { fillTemplate } from '@/lib/template.pure';
 import { ExternalLink, FileText } from 'lucide-react';
@@ -8,18 +8,20 @@ const LINK =
   'inline-flex min-w-0 items-center gap-2 rounded-md text-caption font-medium text-primary underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring';
 
 /**
- * A Build Job's dev server on its pipeline port; it answers only while the Job's agent keeps `next dev` running. A
+ * A Build Job's dev server on its pipeline port, shown while `previewPort` says it is meant to answer. A
  * button, not a link: FE-003 admits no `http:` href, and the dev server is plain http on localhost.
  */
 export function PreviewButton({
-  port,
+  job,
   copy,
   className = '',
 }: {
-  port: number;
+  job: DashboardJob;
   copy: DashboardCopy;
   className?: string;
 }) {
+  const port = previewPort(job);
+  if (port === undefined) return null;
   const url = previewHref(port);
   return (
     <button
@@ -38,8 +40,7 @@ export function PreviewButton({
 
 function OutputItem({ output, outputs, copy }: { output: string; outputs: EpisodeOutputs; copy: DashboardCopy }) {
   const label = outputLabel(output);
-  if (output.includes('*'))
-    return <li className="font-mono text-caption text-muted-foreground wrap-anywhere">{label}</li>;
+  if (isGlob(output)) return <li className="font-mono text-caption text-muted-foreground wrap-anywhere">{label}</li>;
   const written = outputs.written.has(output);
   return (
     <li>
@@ -64,10 +65,10 @@ function OutputItem({ output, outputs, copy }: { output: string; outputs: Episod
 
 /** A Job's output files, each opened read-only as plain text in a new tab once written, and its preview link. */
 export function JobLinks({ job, outputs, copy }: { job: DashboardJob; outputs: EpisodeOutputs; copy: DashboardCopy }) {
-  if (job.outputs.length === 0 && job.port === undefined) return null;
+  if (job.outputs.length === 0 && previewPort(job) === undefined) return null;
   return (
     <section className="space-y-1" aria-label={copy.graph.outputs}>
-      {job.port !== undefined ? <PreviewButton port={job.port} copy={copy} className="min-h-11" /> : null}
+      <PreviewButton job={job} copy={copy} className="min-h-11" />
       {job.outputs.length > 0 ? (
         <>
           <h3 className="text-caption text-muted-foreground">{copy.graph.outputs}</h3>

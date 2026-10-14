@@ -108,7 +108,7 @@ function JobSummary({ job, copy }: Pick<JobProps, 'job' | 'copy'>) {
       <span className="inline-flex max-w-full flex-wrap items-center gap-2 align-middle">
         <span className="text-body font-medium wrap-anywhere">{job.id}</span>
         <StateBadge state={job.state} />
-        <AttentionMarker state={job.state} label={copy.graph.jobAttention} />
+        <AttentionMarker job={job} label={copy.graph.jobAttention} />
       </span>
       <span className="block text-caption text-muted-foreground wrap-anywhere">
         {copy.needs}: {job.needs.join(', ') || copy.none}
