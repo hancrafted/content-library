@@ -1,0 +1,53 @@
+{
+  "title": "What is a sales pipeline",
+  "caption": "Three numbers describe a pipeline.",
+  "board": {
+    "funnel": {
+      "label": "Sales funnel",
+      "line": "volume per stage"
+    },
+    "conversionRate": {
+      "label": "Conversion rate",
+      "line": "attractiveness of your offering"
+    },
+    "salesCycle": {
+      "label": "Sales cycle",
+      "line": "efficiency"
+    }
+  },
+  "notes": {
+    "rates-differ-per-stage": {
+      "header": "Rates differ per stage",
+      "description": "In one dataset the MQL-to-SQL rate was 68 percent beside a 19 percent win rate.[1] Inference, not a finding: stage definitions may differ per company, so rates may not be comparable across companies.",
+      "sources": {
+        "ebsta-pavilion": {
+          "title": "Ebsta and Pavilion, GTM Benchmarks Report"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "funnel": {
+        "title": "Funnel",
+        "keywords": "three numbers, the funnel, volume per stage",
+        "script": "Three numbers describe a pipeline. The first is the funnel itself. Take each stage of the sale and count how much volume sits in it right now."
+      },
+      "conversion-rate": {
+        "title": "Conversion rate",
+        "keywords": "how many reach the next stage, attractiveness, low rate",
+        "script": "The second is the conversion rate. Out of everyone in one stage, how many reach the next? It tells you how attractive your offering is. A low rate means people look and walk away."
+      },
+      "sales-cycle": {
+        "title": "Sales cycle",
+        "keywords": "days from first contact to close, efficiency, money stuck",
+        "script": "The third is the sales cycle. Count the days from first contact to a closed deal, or to a paid invoice. It tells you how efficient you are. A long cycle means your money is stuck on the way."
+      },
+      "fourth-actionable-measure": {
+        "title": "Fourth actionable, measure",
+        "keywords": "fourth task, write down conversion rate and sales cycle, plan backwards",
+        "script": "That is why your fourth task includes measuring. From your first deals on, write down your conversion rate and your sales cycle. Two numbers. You will need both to plan backwards from your zero-cash month."
+      }
+    }
+  }
+}

@@ -1,0 +1,71 @@
+/*
+ * Pipeline by the numbers: clip-path geometry and motion only, no colour, size or weight (FE-011). Each band is a
+ * trapezoid that starts at the height where the previous one ends (`--in` on its left edge, `--out` on its right),
+ * so the three read as one narrowing funnel. One sequence on `--i` with the library delay: band, ratio note and
+ * arrow, band, note and arrow, band, the three duration segments, the total, the measured note. Once, when the Slide
+ * becomes active (FE-009 §6.2); at rest and under reduced motion the board is finished.
+ */
+
+.note {
+  composes: stickOn from '../../../../slide-shared/motions/stick-on.module.css';
+}
+
+.arrow {
+  composes: drawIn from '../../../../slide-shared/motions/draw-in.module.css';
+}
+
+.band {
+  clip-path: polygon(0 var(--in), 100% var(--out), 100% calc(100% - var(--out)), 0 calc(100% - var(--in)));
+}
+
+.band[data-stage='lead'] {
+  --in: 0%;
+  --out: 12%;
+}
+
+.band[data-stage='opportunity'] {
+  --in: 12%;
+  --out: 24%;
+}
+
+.band[data-stage='deal'] {
+  --in: 24%;
+  --out: 32%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .band {
+    animation: band-reveal 500ms cubic-bezier(0.2, 0, 0, 1) both;
+    animation-delay: calc(200ms + var(--i) * 260ms);
+  }
+
+  :global([data-zone='active']) .segment {
+    transform-origin: left;
+    animation: segment-grow 400ms cubic-bezier(0.2, 0, 0, 1) both;
+    animation-delay: calc(200ms + var(--i) * 260ms);
+  }
+
+  :global([data-zone='active']) .total {
+    animation: total-in 300ms ease-out both;
+    animation-delay: calc(200ms + var(--i) * 260ms);
+  }
+}
+
+/* Revealed from the left: the right edge starts on the left edge and slides out to the trapezoid. */
+@keyframes band-reveal {
+  from {
+    clip-path: polygon(0 var(--in), 0 var(--in), 0 calc(100% - var(--in)), 0 calc(100% - var(--in)));
+  }
+}
+
+@keyframes segment-grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes total-in {
+  from {
+    opacity: 0;
+  }
+}

@@ -1,7 +1,11 @@
 import { episode } from '@/components/slide-master/slide';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
+import { pipelineByTheNumbers } from './slides/pipeline-by-the-numbers/slide';
 import { watchYourCashflow } from './slides/watch-your-cashflow/slide';
+import { whatIsASalesPipeline } from './slides/what-is-a-sales-pipeline/slide';
+import { whyBuildingAnEffectiveSalesPipelineTakesTime } from './slides/why-building-an-effective-sales-pipeline-takes-time/slide';
+import { whyItTakesTimeToRampUp } from './slides/why-it-takes-time-to-ramp-up/slide';
 import { whyWatchingCashflowIsMissionCritical } from './slides/why-watching-cashflow-is-mission-critical/slide';
 
 /*
@@ -23,7 +27,7 @@ export const neverTooEarlySalesRun2 = episode({
 
     // Section 3, #176: how-to-start-doing-sales
 
-    // Section 4, #177: why-building-an-effective-sales-pipeline-takes-time
+    [whyBuildingAnEffectiveSalesPipelineTakesTime, whatIsASalesPipeline, pipelineByTheNumbers, whyItTakesTimeToRampUp],
 
     // Section 5, #178: start-before-you-need-the-money
   ],

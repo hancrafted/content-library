@@ -1,0 +1,84 @@
+{
+  "title": "Pipeline by the numbers",
+  "caption": "Many leads go in. A long wait comes out.",
+  "illustration": "Illustration of a complex sale, not a benchmark",
+  "stages": {
+    "lead": "Lead",
+    "opportunity": "Opportunity",
+    "deal": "Deal"
+  },
+  "ratios": {
+    "leadToOpportunity": "3 : 1",
+    "opportunityToDeal": "9 : 1",
+    "total": "27 : 1"
+  },
+  "durations": {
+    "lead": "2 weeks",
+    "opportunity": "6 months",
+    "deal": "3 months",
+    "total": "9.5 months"
+  },
+  "measured": {
+    "label": "One vendor dataset",
+    "winRate": "19% new-customer win rate",
+    "cycle": "91-day sales cycle"
+  },
+  "notes": {
+    "measured-one-dataset": {
+      "header": "Measured, one dataset",
+      "description": "In a dataset of 655 thousand opportunities across 387 companies, the new-customer win rate was 19 percent, the sales cycle 91 days and 8 stakeholders per deal; for expansion sales to existing customers it was 45 percent, 52 days and 5 stakeholders.[1]",
+      "sources": {
+        "ebsta-pavilion": {
+          "title": "Ebsta and Pavilion, GTM Benchmarks Report"
+        }
+      }
+    },
+    "most-losses-are-no-decision": {
+      "header": "Most losses are no decision",
+      "description": "An analysis of more than 2.5 million sales conversations found that 40 to 60 percent of deals are lost to buyers who intend to buy but never act.[1]",
+      "sources": {
+        "hbr-indecision": {
+          "title": "Dixon and McKenna, Stop Losing Sales to Customer Indecision (Harvard Business Review)"
+        }
+      }
+    },
+    "the-buyer-is-a-group": {
+      "header": "The buyer is a group",
+      "description": "A Gartner survey of 632 B2B buyers describes buying groups of five to 16 people, and 74 percent of buyer teams showed unhealthy conflict.[1]",
+      "sources": {
+        "gartner-buyer-teams": {
+          "title": "Gartner, Gartner Sales Survey Finds 74% of B2B Buyer Teams Demonstrate \"Unhealthy Conflict\" During The Decision Process"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "illustration": {
+        "title": "Illustration",
+        "keywords": "a complex sale, illustration not benchmark, your numbers differ",
+        "script": "Here is an example of a complex sale. It is an illustration, not a benchmark. Your numbers will differ. But it shows how the arithmetic behaves."
+      },
+      "ratios-multiply": {
+        "title": "Ratios multiply",
+        "keywords": "three to one, nine to one, twenty-seven leads per deal",
+        "script": "Three leads become one opportunity. Nine opportunities become one deal. Multiply it out and you need twenty-seven leads for a single deal. Small ratios at each stage add up to a very big number at the top."
+      },
+      "time-adds-up": {
+        "title": "Time adds up",
+        "keywords": "two weeks, six months, three months, most of a year",
+        "script": "Now the time. Two weeks for the first stage. Six months for the second. Three months for the third. Add them up and revenue lands most of a year after the first contact. A year is longer than most founders' cash."
+      },
+      "measured-sits-beside-it": {
+        "title": "Measured sits beside it",
+        "keywords": "a real dataset, shorter cycle, your own numbers",
+        "script": "Beside it sits a real, measured dataset. Its cycle is much shorter than the illustration's. Still, it is one dataset from other companies. Your own numbers will tell you more than any of these."
+      },
+      "so-fill-early": {
+        "title": "So fill early",
+        "keywords": "many leads in, long wait out, start filling now",
+        "script": "Many leads go in. A long wait comes out. If that is true for you, you have only one move. Start filling the pipeline now, while you still have cash to wait with."
+      }
+    }
+  }
+}

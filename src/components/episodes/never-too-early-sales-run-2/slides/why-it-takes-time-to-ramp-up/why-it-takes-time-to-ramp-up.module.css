@@ -1,0 +1,39 @@
+/*
+ * Why it takes time to ramp up: motion only, no colour, size or weight (FE-011). The three notes stick on in reading
+ * order with the library motion; then the rail grows from the left and its label fades in at its end. Once, when
+ * the Slide becomes active (FE-009 §6.2); at rest and under reduced motion the board is finished.
+ */
+
+.note {
+  composes: stickOn from '../../../../slide-shared/motions/stick-on.module.css';
+}
+
+/* The rail starts after the third note: `--i` 3 in the notes' sequence. */
+.rail {
+  --i: 3;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .rail [data-rail-line] {
+    transform-origin: left;
+    animation: rail-grow 700ms cubic-bezier(0.2, 0, 0, 1) both;
+    animation-delay: calc(200ms + var(--i) * 260ms);
+  }
+
+  :global([data-zone='active']) .rail [data-rail-label] {
+    animation: rail-label 300ms ease-out both;
+    animation-delay: calc(200ms + var(--i) * 260ms + 700ms);
+  }
+}
+
+@keyframes rail-grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes rail-label {
+  from {
+    opacity: 0;
+  }
+}
