@@ -36,7 +36,7 @@ The job's `checks:` in `assets/pipeline.yml` run by the check table in [SKILL.md
 The `visual-check` check, in both themes, by FE-009's browser check. By the `visual-check` skill: serve `out/` with `npm run preview` in the background, then probe every Slide by its own `#<section>--<slide>` URL (an Episode mounts a Slide's content only near the viewport, so one page load measures every off-screen Slide as an empty box). Cover three widths, 375, 1100 and 1440 px, each with the Context drawer beside, over and closed, in light and dark:
 
    ```sh
-   npm run shot -- --url http://localhost:4300/<episode path>#<section>--<slide> --theme light --width <w> --height 800 \
+   npm run inspect-page -- --url http://localhost:4300/<episode path>#<section>--<slide> --theme light --width <w> --height 800 \
      --probe '[id="<section>--<slide>"]' …
    ```
 
