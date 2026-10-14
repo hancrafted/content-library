@@ -1,9 +1,10 @@
-// The Claude Code adapter's PostToolUse half (design-ADR 0009): a Skill tool call's hook payload, the active-run marker
+// The Claude Code adapter's PostToolUse half (design-ADR-0009): a Skill tool call's hook payload, the active-run marker
 // and the run log so far in; the `skill` event for the core writer to append, or null, out. Pure; `claude-adapter.ts
 // skill` is the I/O.
 import { openJobs, subagentFiles } from './claude-adapter.pure.ts';
-import { isRecord, parseMarker, sessionsOf, type Marker } from './marker.pure.ts';
+import { parseMarker, sessionsOf, type Marker } from './marker.pure.ts';
 import type { LogEvent, RunLogLine } from './run-log.pure.ts';
+import { skillName } from './transcript.pure.ts';
 
 /** The PostToolUse payload fields the skill hook reads; `agent_id` is present only when a subagent made the call. */
 export interface SkillHookPayload {
@@ -22,13 +23,6 @@ export interface SkillHookInput {
   marker: string | null;
   /** The run log's lines so far: the agent's start, or the open Job the marker names. */
   log: readonly RunLogLine[];
-}
-
-/** The skill a Skill tool call names, as `skills_invoked` records it; `command` is the input's older name. */
-function skillName(toolInput: unknown): string | null {
-  if (!isRecord(toolInput)) return null;
-  const name = toolInput.skill ?? toolInput.command;
-  return typeof name === 'string' && name.trim() !== '' ? name : null;
 }
 
 /** The span a Skill call belongs to: the subagent's agent span, else the open Job the orchestrator is in; never a guess. */

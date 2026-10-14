@@ -123,7 +123,7 @@ Every agent write is marked, so gate diffs teach Han's style and nothing else. A
 
 ## The event log
 
-Every Run appends to one log, `docs/episodes/<slug>/events.jsonl` ([design-ADR 0007](../../docs/adr/0007-pipeline-runs-are-logged-as-spans-in-append-only-jsonl.md)): spans (Run → Job → Attempt → agent, plus Gates under the Run) as a `start` and an `end` line each, Scores as `score` lines, and each Skill tool call as a `skill` line on the span that made it ([design-ADR 0009](../../docs/adr/0009-skill-invocations-are-logged-as-point-records.md)). One writer appends to it; you drive it with the run commands, addressed by names (a job id, an attempt number, a gate name), never by span id. They read the clock, git and the sequence, resolve each parent and target from the log, and print what they did. Run them from the Episode's worktree root:
+Every Run appends to one log, `docs/episodes/<slug>/events.jsonl` ([design-ADR 0007](../../docs/adr/0007-pipeline-runs-are-logged-as-spans-in-append-only-jsonl.md)): spans (Run → Job → Attempt → agent, plus Gates under the Run) as a `start` and an `end` line each, Scores as `score` lines, and each Skill tool call as a `skill` line on the span that made it ([design-ADR-0009](../../docs/adr/0009-skill-invocations-are-logged-as-point-records.md)). One writer appends to it; you drive it with the run commands, addressed by names (a job id, an attempt number, a gate name), never by span id. They read the clock, git and the sequence, resolve each parent and target from the log, and print what they did. Run them from the Episode's worktree root:
 
 ```sh
 npm run episode:run -- <slug> <command> ...

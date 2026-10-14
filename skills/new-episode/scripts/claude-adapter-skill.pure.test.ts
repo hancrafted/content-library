@@ -137,6 +137,18 @@ describe('edge cases', () => {
     expect(event).toBeNull();
   });
 
+  it('trims the name, and writes nothing for a blank one, as skills_invoked does', () => {
+    // ARRANGE
+    const name = 'a:b';
+    // ACT
+    const events = [
+      adaptSkill(input({ agent: true, toolInput: { skill: ` ${name} ` } }))?.name,
+      adaptSkill(input({ agent: true, toolInput: { skill: '   ' } })),
+    ];
+    // ASSERT
+    expect(events).toEqual([name, null]);
+  });
+
   it('reads an older Skill tool input that names the skill as command', () => {
     // ARRANGE
     const name = 'tdd';

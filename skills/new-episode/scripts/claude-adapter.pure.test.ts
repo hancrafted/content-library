@@ -354,6 +354,22 @@ describe('skills invoked and the summary at SubagentStop', () => {
     expect(event).toMatchObject({ skills_invoked: ['tdd', 'ui-ux-pro-max:slides'] });
   });
 
+  it('names a skill as the PostToolUse hook does: skill or the older command, trimmed, blanks left out', () => {
+    // ARRANGE
+    const call = (input: Record<string, unknown>): string =>
+      JSON.stringify({
+        type: 'assistant',
+        timestamp: '2026-10-09T10:00:20.000Z',
+        message: { id: 'c', role: 'assistant', content: [{ type: 'tool_use', name: 'Skill', input }] },
+      });
+    const text = [transcript, call({ skill: ' tdd ' }), call({ command: 'a:b' }), call({ skill: '  ' })].join('\n');
+    const expected = ['tdd', 'a:b'];
+    // ACT
+    const event = stop(text);
+    // ASSERT
+    expect(event?.skills_invoked).toEqual(expected);
+  });
+
   it('records an empty list for a readable transcript with no Skill call, and nothing for an unreadable one', () => {
     expect(stop(transcript)).toMatchObject({ skills_invoked: [] });
     expect(stop(null)).not.toHaveProperty('skills_invoked');

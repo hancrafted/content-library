@@ -13,7 +13,7 @@ import type {
 } from './run-log.schema.pure.ts';
 
 /** Oldest first by time, ties by sequence number. */
-function order(a: { t: string; seq: number }, b: { t: string; seq: number }): number {
+export function order(a: { t: string; seq: number }, b: { t: string; seq: number }): number {
   return Date.parse(a.t) - Date.parse(b.t) || a.seq - b.seq;
 }
 

@@ -287,7 +287,7 @@
         "pass": "passed",
         "fail": "failed"
       },
-      "help": "From pipeline.yml. A skill turns green once an agent of this Job's latest Attempt invokes it, red once that agent ended without it; a check by its latest result."
+      "help": "From pipeline.yml. A skill turns green once an agent of this Job's latest Attempt invokes it, red once that agent ended without it; a check by its latest result. The Job box shows a skill green once every agent listing it ran it, red if any skipped it."
     },
     "timeTravel": {
       "title": "Time travel",

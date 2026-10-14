@@ -48,13 +48,23 @@ export function usageOf(all: readonly Entry[]): Partial<LogEvent> {
 export const modelOf = (all: readonly Entry[]): string | undefined =>
   [...all].reverse().find((e) => e.type === 'assistant' && e.message?.model)?.message?.model;
 
-/** The skills the transcript invoked with the Skill tool, first-use order, once each; `plugin:skill` as the tool call names them. */
+/**
+ * The skill a Skill tool call's input names, the one normalisation of `skills_invoked` and `skill` lines: `skill`, else
+ * the older `command`, trimmed, `plugin:skill` for a plugin's as the call names it; null when blank or absent.
+ */
+export function skillName(input: unknown): string | null {
+  if (!isRecord(input)) return null;
+  const name = input.skill ?? input.command;
+  return typeof name === 'string' && name.trim() !== '' ? name.trim() : null;
+}
+
+/** The skills the transcript invoked with the Skill tool, first-use order, once each (see `skillName`). */
 export function skillsInvoked(all: readonly Entry[]): string[] {
   const names = all.flatMap((e) =>
     e.type === 'assistant' && Array.isArray(e.message?.content)
       ? e.message.content.flatMap((b: unknown) => {
-          if (!isRecord(b) || b.type !== 'tool_use' || b.name !== 'Skill' || !isRecord(b.input)) return [];
-          return typeof b.input.skill === 'string' && b.input.skill !== '' ? [b.input.skill] : [];
+          const name = isRecord(b) && b.type === 'tool_use' && b.name === 'Skill' ? skillName(b.input) : null;
+          return name === null ? [] : [name];
         })
       : [],
   );

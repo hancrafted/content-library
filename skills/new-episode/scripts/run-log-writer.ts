@@ -18,6 +18,8 @@ export interface WriterDeps {
   id?: (bytes: number) => string;
   /** The trimmed stdout of `git <args>`. */
   git?: (...args: string[]) => string;
+  /** The longest wait for the lock, in ms; `RUN_LOG_LOCK_WAIT_MS` still shortens it for tests. */
+  lockWaitMs?: number;
 }
 
 export type WriteResult = { ok: true; line: string } | { ok: false; errors: string[] };
@@ -36,8 +38,8 @@ export class LockTimeoutError extends Error {
   }
 }
 
-/** The wait in ms; `RUN_LOG_LOCK_WAIT_MS` shortens it for tests. */
-const lockWait = (): number => Number(process.env.RUN_LOG_LOCK_WAIT_MS) || LOCK_WAIT_MS;
+/** The wait in ms: `RUN_LOG_LOCK_WAIT_MS` (tests), else the caller's, else the default. */
+const lockWait = (wanted?: number): number => Number(process.env.RUN_LOG_LOCK_WAIT_MS) || wanted || LOCK_WAIT_MS;
 
 const sleep = (ms: number): unknown => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
 
@@ -71,8 +73,9 @@ function release(lockFile: string, token: string): void {
 }
 
 /** Runs `work` while holding the lock, and releases it however `work` ends. */
-function withLock<T>(lockFile: string, work: () => T): T {
-  const deadline = Date.now() + lockWait();
+function withLock<T>(lock: { file: string; waitMs?: number }, work: () => T): T {
+  const lockFile = lock.file;
+  const deadline = Date.now() + lockWait(lock.waitMs);
   const token = randomBytes(16).toString('hex');
   while (!tryLock(lockFile, token)) {
     if (Date.now() > deadline) throw new LockTimeoutError(lockFile);
@@ -109,7 +112,7 @@ function withRunFacts(event: LogEvent, t: string, git: (...args: string[]) => st
 }
 
 /** What the line about to be written is stamped with: the injected clock, ids and git, resolved. */
-type ResolvedDeps = Required<WriterDeps>;
+type ResolvedDeps = Required<Omit<WriterDeps, 'lockWaitMs'>>;
 
 /** The trace a new line joins: a fresh one for a start-run, else the newest Run's; a message when there is no Run. */
 function traceFor(event: unknown, current: RunLogLine | null, src: ResolvedDeps): string | { error: string } {
@@ -153,5 +156,6 @@ export function appendEvent(at: LogLocation, event: unknown, deps: WriterDeps = 
     id: deps.id ?? ((bytes) => randomBytes(bytes).toString('hex')),
     git: deps.git ?? realGit,
   };
-  return withLock(`${path.resolve(at.root, at.file)}.lock`, () => appendLocked(at, event, src));
+  const lock = { file: `${path.resolve(at.root, at.file)}.lock`, waitMs: deps.lockWaitMs };
+  return withLock(lock, () => appendLocked(at, event, src));
 }

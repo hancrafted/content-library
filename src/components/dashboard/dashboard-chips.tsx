@@ -95,23 +95,19 @@ export function JobChipList({ job, copy }: { job: DashboardJob; copy: DashboardC
   );
 }
 
-/** The Job card: each agent's listed skills under its type, then the Job's checks. */
+/** The Job card: each agent's listed skills in its own state, under its type, then the Job's checks. */
 export function JobChipDetail({ job, copy }: { job: DashboardJob; copy: DashboardCopy }) {
-  const { skills, checks } = job.chips;
-  const agents = job.config.filter((agent) => agent.skills.length > 0);
+  const { agents, checks } = job.chips;
   if (agents.length === 0 && checks.length === 0) return null;
   return (
     <section className="space-y-2" data-job-chip-detail={job.id}>
       <h3 className="text-body font-medium">{copy.chips.title}</h3>
       <p className="text-caption text-muted-foreground">{copy.chips.help}</p>
-      {agents.map((agent, index) => (
+      {agents.map((agent) => (
         <ChipRow
-          key={index}
+          key={`${agent.type}:${agent.session ?? 'subagent'}`}
           heading={[agent.type, agent.session].filter(Boolean).join(' · ')}
-          chips={skillChips(
-            skills.filter((chip) => agent.skills.includes(chip.name)),
-            copy,
-          )}
+          chips={skillChips(agent.skills, copy)}
         />
       ))}
       <ChipRow heading={copy.chips.checks} chips={checkChips(checks, copy)} />

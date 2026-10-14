@@ -287,7 +287,7 @@
         "pass": "bestanden",
         "fail": "fehlgeschlagen"
       },
-      "help": "Aus pipeline.yml. Ein Skill wird grün, sobald ein Agent des letzten Attempts dieses Jobs ihn aufruft, rot, sobald dieser Agent ohne ihn endete; ein Check nach seinem letzten Ergebnis."
+      "help": "Aus pipeline.yml. Ein Skill wird grün, sobald ein Agent des letzten Attempts dieses Jobs ihn aufruft, rot, sobald dieser Agent ohne ihn endete; ein Check nach seinem letzten Ergebnis. Im Job-Kasten ist ein Skill grün, sobald jeder Agent, der ihn listet, ihn ausgeführt hat, rot, sobald einer ihn übersprungen hat."
     },
     "timeTravel": {
       "title": "Zeitreise",

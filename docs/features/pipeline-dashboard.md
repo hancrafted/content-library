@@ -149,10 +149,14 @@ once run or passed, red with a cross once skipped or failed; its state is in
 words for screen readers and on hover. It reads only the Job's current Run and
 latest Attempt, so a retry starts its chips over, and the replay cutoff applies.
 
-A skill is run when a `skill` line (design-ADR-0009) or a `skills_invoked` on
-the Job span or one of its agents names it, and skipped once every span
-answering to an agent that lists it ended with `skills_invoked` known and
-without it; an unknown `skills_invoked` keeps it pending. A check reads its
+Each agent row of the card holds its own state: a skill is run when a `skill`
+line (design-ADR-0009) or a `skills_invoked` names it on a span answering to
+that agent, an agent span by role or, for an orchestrator-session agent only,
+the Job span; skipped once each such span ended with `skills_invoked` known and
+without it; an unknown `skills_invoked` keeps it pending. On the Job span only
+`skill` lines from the latest Attempt's start count, and its `skills_invoked`
+only while the Run has one Attempt. The Job box shows each skill once: green
+when every agent listing it ran it, red when any skipped it. A check reads its
 latest `check:<name>` Score: `pass` or `fail`. `jobChips()` in
 `src/lib/dashboard-chips.pure.ts` computes both for the projection; the
 pipeline's `checks` reach it through `jobOf()`.

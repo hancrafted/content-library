@@ -4,7 +4,7 @@
 
 /**
  * `attrs` lays facts over a span that already ended (the backfill's identity, an orchestrator Job's usage and skills); it
- * never closes or reopens a span. `skill` is one Skill tool call, a point record on the span that made it (design-ADR 0009).
+ * never closes or reopens a span. `skill` is one Skill tool call, a point record on the span that made it (design-ADR-0009).
  */
 export const KINDS = ['start-run', 'end-run', 'start', 'end', 'attrs', 'score', 'skill'] as const;
 export type Kind = (typeof KINDS)[number];

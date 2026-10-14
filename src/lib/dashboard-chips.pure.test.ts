@@ -24,6 +24,25 @@ const pipeline = parseDashboardPipeline(
   }),
 );
 
+const orchestrated = parseDashboardPipeline(
+  JSON.stringify({
+    status: 'approved',
+    jobs: [
+      {
+        id: 'write',
+        needs: [],
+        outputs: [],
+        checks: [],
+        retries: 2,
+        agents: [
+          { ...implementor, skills: ['grilling'], session: 'orchestrator' },
+          { ...reviewer, skills: ['grilling'] },
+        ],
+      },
+    ],
+  }),
+);
+
 type Fields = Omit<RunLogLine, 't' | 'seq' | 'trace_id'> & { trace_id?: string };
 const lines = (...entries: [number, Fields][]): RunLogLine[] =>
   entries.map(
@@ -70,6 +89,15 @@ const check = (span_id: string, name: string, value: string): Fields => ({
 const ended = (span_id: string, skills_invoked?: string[]): Fields =>
   ({ kind: 'end', span_id, status: 'ok', ...(skills_invoked && { skills_invoked }) }) as Fields;
 
+/** Each agent row as `<type>:<skill>=<state>`, then the Job box's aggregate as `job:<skill>=<state>`. */
+const rowsOf = (log: RunLogLine[], source = pipeline) => {
+  const { chips } = projectDashboard(source, fold(log, { live: 'unfinished' })).jobs[0];
+  return [
+    ...chips.agents.flatMap((row) => row.skills.map((chip) => `${row.type}:${chip.name}=${chip.state}`)),
+    ...chips.skills.map((chip) => `job:${chip.name}=${chip.state}`),
+  ];
+};
+
 const chipsOf = (log: RunLogLine[]) => {
   const job = projectDashboard(pipeline, fold(log, { live: 'unfinished' })).jobs[0];
   return {
@@ -100,14 +128,17 @@ describe('success cases', () => {
       [5, check('write', 'mh', 'pass')],
       [5, check('write', 'vitest', 'fail')],
     );
-    const expected = { skills: ['research:pending', 'tdd:run'], checks: ['mh:pass', 'vitest:fail'] };
+    const expected = { skills: ['research:pending', 'tdd:pending'], checks: ['mh:pass', 'vitest:fail'] };
+    const row = 'implementor:tdd=run';
     // ACT
     const chips = chipsOf(log);
+    const rows = rowsOf(log);
     // ASSERT
     expect(chips).toEqual(expected);
+    expect(rows).toContain(row);
   });
 
-  it('marks a skill run from skills_invoked on an ended agent, and the agents it groups under', () => {
+  it('reads each agent row on its own, the Job box green only once every agent listing a skill ran it', () => {
     // ARRANGE
     const log = lines(
       [0, runStart],
@@ -116,13 +147,26 @@ describe('success cases', () => {
       [3, ended('impl', ['research', 'tdd'])],
     );
     const expected = [
-      { name: 'research', state: 'run', agents: ['implementor'] },
-      { name: 'tdd', state: 'run', agents: ['implementor', 'reviewer'] },
+      'implementor:research=run',
+      'implementor:tdd=run',
+      'reviewer:tdd=pending',
+      'job:research=run',
+      'job:tdd=pending',
     ];
     // ACT
-    const job = projectDashboard(pipeline, fold(log, { live: 'unfinished' })).jobs[0];
+    const rows = rowsOf(log);
     // ASSERT
-    expect(job.chips.skills).toEqual(expected);
+    expect(rows).toEqual(expected);
+  });
+
+  it("counts the orchestrator's own skill calls on the Job span for its orchestrator-session agent only", () => {
+    // ARRANGE
+    const log = lines([0, runStart], [1, jobStart], [2, skill('write', 'grilling')]);
+    const expected = ['implementor:grilling=run', 'reviewer:grilling=pending', 'job:grilling=pending'];
+    // ACT
+    const rows = rowsOf(log, orchestrated);
+    // ASSERT
+    expect(rows).toEqual(expected);
   });
 });
 
@@ -135,11 +179,34 @@ describe('failure cases', () => {
       [2, agent('impl', 'implementor', 'write')],
       [3, ended('impl', ['tdd'])],
     );
-    const expected = { skills: ['research:skipped', 'tdd:run'], checks: ['mh:pending', 'vitest:pending'] };
+    const expected = { skills: ['research:skipped', 'tdd:pending'], checks: ['mh:pending', 'vitest:pending'] };
     // ACT
     const chips = chipsOf(log);
     // ASSERT
     expect(chips).toEqual(expected);
+  });
+
+  it('turns the Job box red when any agent listing a skill skipped it, though another ran it', () => {
+    // ARRANGE
+    const log = lines(
+      [0, runStart],
+      [1, jobStart],
+      [2, agent('impl', 'implementor', 'write')],
+      [3, ended('impl', ['tdd'])],
+      [4, agent('rev', 'reviewer', 'write')],
+      [5, ended('rev', [])],
+    );
+    const expected = [
+      'implementor:research=skipped',
+      'implementor:tdd=run',
+      'reviewer:tdd=skipped',
+      'job:research=skipped',
+      'job:tdd=skipped',
+    ];
+    // ACT
+    const rows = rowsOf(log);
+    // ASSERT
+    expect(rows).toEqual(expected);
   });
 
   it('keeps a skill pending when the agent ended without a readable transcript', () => {
@@ -173,6 +240,29 @@ describe('edge cases', () => {
     const chips = chipsOf(log);
     // ASSERT
     expect(chips).toEqual(expected);
+  });
+
+  it("counts the Job span's skill calls only from the latest Attempt's start", () => {
+    // ARRANGE
+    const before = lines(
+      [0, runStart],
+      [1, jobStart],
+      [1, attempt(1)],
+      [2, skill('write', 'grilling')],
+      [3, attempt(2)],
+    );
+    const after = lines(
+      [0, runStart],
+      [1, jobStart],
+      [1, attempt(1)],
+      [3, attempt(2)],
+      [4, skill('write', 'grilling')],
+    );
+    const expected = { before: ['implementor:grilling=pending'], after: ['implementor:grilling=run'] };
+    // ACT
+    const rows = { before: rowsOf(before, orchestrated).slice(0, 1), after: rowsOf(after, orchestrated).slice(0, 1) };
+    // ASSERT
+    expect(rows).toEqual(expected);
   });
 
   it('reads only the current Run: an earlier Run that passed leaves the chips pending', () => {
@@ -209,12 +299,12 @@ describe('edge cases', () => {
       [0, runStart],
       [1, jobStart],
       [2, agent('impl', 'implementor', 'write')],
-      [3, skill('impl', 'tdd')],
-      [6, skill('impl', 'research')],
+      [3, skill('impl', 'research')],
+      [6, skill('impl', 'tdd')],
       [7, check('write', 'mh', 'pass')],
     );
     const cutoff = RUN_START + 4 * 60_000;
-    const expected = { skills: ['research:pending', 'tdd:run'], checks: ['mh:pending', 'vitest:pending'] };
+    const expected = { skills: ['research:run', 'tdd:pending'], checks: ['mh:pending', 'vitest:pending'] };
     // ACT
     const job = replayDashboard(pipeline, toEvents(log), cutoff).jobs[0];
     const chips = {

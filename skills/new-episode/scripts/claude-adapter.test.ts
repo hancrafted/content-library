@@ -180,6 +180,22 @@ describe('skill invocations (PostToolUse)', () => {
     expect(result.stderr).toMatch(/run-log lock/);
   });
 
+  it('gives up on a held lock within its own short wait, not the 15 s a subagent hook waits', () => {
+    // ARRANGE
+    writeFileSync(path.join(wt, `${LOG}.lock`), 'held');
+    const input = { session_id: 's2', transcript_path: path.join(dir, 'session.jsonl'), cwd: main, tool_name: 'Skill' };
+    // ACT
+    const result = spawnSync('node', [ADAPTER, 'skill'], {
+      input: JSON.stringify({ ...input, tool_input: { skill: 'tdd' } }),
+      encoding: 'utf8',
+      env: { ...cleanEnv(), CLAUDE_PROJECT_DIR: main },
+      timeout: 8_000,
+    });
+    // ASSERT
+    expect(result.status).toBe(0);
+    expect(result.stderr).toMatch(/run-log lock/);
+  });
+
   it('exits 0 and writes nothing for a payload that is not JSON', () => {
     // ACT
     const result = spawnSync('node', [ADAPTER, 'skill'], { input: 'not json', encoding: 'utf8', env: cleanEnv() });
