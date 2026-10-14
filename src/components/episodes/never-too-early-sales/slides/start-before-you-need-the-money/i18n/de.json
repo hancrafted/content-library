@@ -1,0 +1,13 @@
+{
+  "title": "Anfangen, bevor das Geld fehlt",
+  "caption": "Ob später Geld da ist, entscheidet sich an dem, was du jetzt anfängst.",
+  "voiceScript": {
+    "segments": {
+      "landing-it": {
+        "title": "Der Schluss",
+        "keywords": "eine Tafel fehlt noch, eine Frage, wann fängst du an, entscheidet sich jetzt",
+        "script": "Wir sind fast am Ziel. Eine Tafel fehlt noch, und sie stellt eine einzige Frage: Wann fängst du an? Alles bisher war eine Idee, erzählt auf einer Tafel: Ob du später das Geld hast, das du brauchst, entscheidet sich an dem, was du jetzt anfängst."
+      }
+    }
+  }
+}

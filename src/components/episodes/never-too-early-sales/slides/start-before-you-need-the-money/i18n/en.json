@@ -1,0 +1,13 @@
+{
+  "title": "Start before you need the money",
+  "caption": "The money you need later is decided by what you start now.",
+  "voiceScript": {
+    "segments": {
+      "landing-it": {
+        "title": "Landing it",
+        "keywords": "one board left, one question, when do you start, decided by what you start now",
+        "script": "We are almost there. One board is left, and it asks one question. When do you start? Everything so far was one idea, told on one board: the money you need later is decided by what you start now."
+      }
+    }
+  }
+}

@@ -1,6 +1,8 @@
 import { episode } from '@/components/slide-master/slide';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
+import { startBeforeYouNeedTheMoney } from './slides/start-before-you-need-the-money/slide';
+import { watchYourCashflowStartWhen } from './slides/watch-your-cashflow-start-when/slide';
 import { watchYourCashflow } from './slides/watch-your-cashflow/slide';
 import { whyWatchingCashflowIsMissionCritical } from './slides/why-watching-cashflow-is-mission-critical/slide';
 
@@ -12,5 +14,8 @@ import { whyWatchingCashflowIsMissionCritical } from './slides/why-watching-cash
 export const neverTooEarlySales = episode({
   slug: 'never-too-early-sales',
   messages: { en, de },
-  sections: [[whyWatchingCashflowIsMissionCritical, watchYourCashflow]],
+  sections: [
+    [whyWatchingCashflowIsMissionCritical, watchYourCashflow],
+    [startBeforeYouNeedTheMoney, watchYourCashflowStartWhen],
+  ],
 });
