@@ -43,6 +43,14 @@ Suits a mixed audience and consulting prospects: sober, self-explanatory Slides 
 - `primary` marks the one thing to look at.
 - The meaning colours (`machine`, `human`, `ai`) appear only for their meanings.
 
+### Board
+
+Suits founders and coaching cohorts, who plan on whiteboards and sticky notes: a planning board reads as their own tool, one they can copy straight away.
+
+- A board surface carries the Slide; sticky notes carry the content.
+- `primary` marks the one thing to look at.
+- The meaning colours (`machine`, `human`, `ai`) appear only for their meanings.
+
 ## Like this
 
 `markdown-in-ai-workflows` (Episode `maintaining-markdown-for-ai`). It stands on its own at rest, with depth behind a modal and the Context drawer. Its meaning colours (Knowledge `ai`, Instructions `human`, Memory `machine`) colour things that are not those meanings, so do not copy them. The Episode is legacy and keeps them until it is next touched.
