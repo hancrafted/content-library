@@ -30,7 +30,7 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 ### 3. Test-body structure
 
 1. Every test body MUST carry `// ARRANGE`, `// ACT` and `// ASSERT`, uppercase, exactly once each, in that order; one marker per comment, so `// ARRANGE / ACT` is two markers short. (📜 Rule: `test-body-aaa`)
-2. The `// ASSERT` block MUST NOT hold a magic string or number; name it in `// ARRANGE`, so a reviewer can disagree with it. Exempt as pure noise: `0`, `1`, `-1`, `true`, `false`, `null`, `undefined`, `''`, `[]`, `{}`.
+2. The `// ASSERT` block MUST NOT hold a magic string or number; name it in `// ARRANGE`, so a reviewer can disagree with it. Exempt: `0`, `1`, `-1`, `true`, `false`, `null`, `undefined`, `''`, `[]`, `{}`. (📜 Rule: `assert-no-magic`)
 3. An assertion MUST NOT collapse into a boolean inside `// ACT`. Put the observation in `// ACT` and keep the rich matcher in `// ASSERT` — `expect(seen).toContain(key)` names the missing key, while `expect(isSeen).toBe(true)` discards why it failed.
 
 ### 4. Where a test lives
@@ -60,7 +60,7 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 4. **DON'T** use `toMatchSnapshot`, `toMatchInlineSnapshot`, or any matcher ending in `Snapshot`. (Decision 1.2)
 5. **DON'T** call `vi.mock`, `vi.doMock`, `vi.spyOn`, `vi.mocked`, `vi.stubGlobal`, or a `jest` equivalent. (Decision 1.2)
 6. **DON'T** assert an expected value the code under test computed. (Decision 1.2)
-7. **DON'T** inline a magic string or number in the `// ASSERT` block. (Decision 3.2)
+7. **DON'T** inline a magic string or number in the `// ASSERT` block. Strings: by review. (Decision 3, 📜 Rule: `assert-no-magic`)
 8. **DON'T** assert a side effect's absence against a pristine or empty baseline — that measures ambient repository state, and it fails on the very commit that changes the tree it guards. (Decision 1.2)
 
 ## Consequences
@@ -82,11 +82,11 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 
 ## Compliance and Enforcement
 
-1. **Rules** (archgate, error): `suite-three-blocks` (§2.1), `test-body-aaa` (§3.1), over `src/**/*.test.ts`.
+1. **Rules** (archgate, error): `suite-three-blocks` (§2.1), `test-body-aaa` (§3.1), `assert-no-magic` (§3.2, numbers only), over `src/**/*.test.ts`.
 2. **Dependency rules:** Episode tests reach only Slide parts and builtins (§4.3).
 3. **Test config:** the fast suite excludes `*.build.test.ts` (§4.2).
 
-**Manual review duties:** §1 — no mocks, spies, snapshots, `.skip`/`.only`, ambient time or randomness, network, assertion-free or tautological bodies; nesting depth and a test per block (§2); no magic values in `// ASSERT`, rich matchers (§3.2, §3.3).
+**Manual review duties:** §1 — no mocks, spies, snapshots, `.skip`/`.only`, ambient time or randomness, network, assertion-free or tautological bodies; nesting depth and a test per block (§2); no magic strings in `// ASSERT` (§3.2), rich matchers (§3.3).
 
 **Exceptions:** amend this record; never an inline suppression.
 

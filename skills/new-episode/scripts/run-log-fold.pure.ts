@@ -39,8 +39,8 @@ function openSpan(entry: RunLogLine, open: SpanStatus): Span {
 }
 
 function scoreOf(entry: RunLogLine): Score {
-  const { trace_id, span_id, t, seq, name, value, source, rubric, body, via, comment } = entry;
-  const score = { trace_id, span_id, t, seq, name, value, source, rubric, body, via, comment };
+  const { trace_id, span_id, t, seq, name, value, source, rubric, body, via, comment, ticket } = entry;
+  const score = { trace_id, span_id, t, seq, name, value, source, rubric, body, via, comment, ticket };
   return Object.fromEntries(Object.entries(score).filter(([, v]) => v !== undefined)) as unknown as Score;
 }
 
@@ -64,6 +64,12 @@ function closeSpan(span: Span, entry: RunLogLine): void {
   span.source ??= entry.source;
 }
 
+/** An attrs line: facts laid over a span, leaving how it ended as it was. Its `source` fills in only when the span has none. */
+function applyAttributes(span: Span, entry: RunLogLine): void {
+  Object.assign(span, Object.fromEntries(Object.entries(entry).filter(([key]) => !NOT_ATTRIBUTES.has(key))));
+  span.source ??= entry.source;
+}
+
 interface Accumulator {
   open: SpanStatus;
   live?: ReadonlySet<string>;
@@ -82,7 +88,7 @@ function place(entry: RunLogLine, acc: Accumulator): void {
   const id = entry.span_id as string;
   if (entry.kind === 'start' || entry.kind === 'start-run') acc.spans.set(id, openSpan(entry, openStatus(entry, acc)));
   else if (entry.kind === 'score') acc.scores.push(scoreOf(entry));
-  else if (acc.spans.has(id)) closeSpan(acc.spans.get(id) as Span, entry);
+  else if (acc.spans.has(id)) (entry.kind === 'attrs' ? applyAttributes : closeSpan)(acc.spans.get(id) as Span, entry);
   else acc.orphans.push(entry);
 }
 
@@ -91,10 +97,14 @@ export function currentRun(lines: readonly RunLogLine[]): RunLogLine | null {
   return [...lines].reverse().find((l) => l.kind === 'start-run') ?? null;
 }
 
-/** Folds lines into spans and scores. Input order does not matter: lines are sorted by `t`, then `seq`. */
+const isStart = (entry: RunLogLine): boolean => entry.kind === 'start' || entry.kind === 'start-run';
+
+/** Folds lines into spans and scores. Input order does not matter: lines are sorted by `t`, then `seq`; every start is placed before any end or score, so an end links to its start by `span_id` even when its `t` is earlier. */
 export function fold(lines: readonly RunLogLine[], options: FoldOptions = {}): Folded {
   const acc: Accumulator = { open: 'crashed', live: options.live, spans: new Map(), scores: [], orphans: [] };
-  for (const entry of chronological(lines)) place(entry, acc);
+  const ordered = chronological(lines);
+  for (const entry of ordered.filter(isStart)) place(entry, acc);
+  for (const entry of ordered.filter((e) => !isStart(e))) place(entry, acc);
   return { spans: [...acc.spans.values()], scores: acc.scores, orphans: acc.orphans };
 }
 

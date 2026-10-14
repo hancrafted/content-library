@@ -4,10 +4,12 @@
 // asked for and the model that ran, tokens, the prompt) and never writes a line. `claude-adapter.ts` is the I/O.
 import path from 'node:path';
 import { JOB_ID } from '../../../src/lib/episode-pipeline-jobs.pure.ts';
-import { isRecord, parseJson, parseMarker, type Marker } from './marker.pure.ts';
+import { verdictFirst } from './agent-summary.pure.ts';
+import { isRecord, parseJson, parseMarker, sessionsOf, type Marker } from './marker.pure.ts';
 import type { LogEvent, RunLogLine } from './run-log.pure.ts';
 import { SUMMARY_MAX } from './run-log.pure.ts';
-import { entries, promptOf, usageOf, type Entry } from './transcript.pure.ts';
+import { entries, modelOf, promptOf, skillsInvoked, usageOf, type Entry } from './transcript.pure.ts';
+import { measuredUsage } from './usage-window.pure.ts';
 
 /** The hook payload fields the adapter reads. */
 export interface HookPayload {
@@ -30,6 +32,8 @@ export interface AdapterInput {
   transcript: string | null;
   /** The run log's lines so far: a stop finds its start, an unparsed start finds its Job. */
   log: readonly RunLogLine[];
+  /** The `model` in the agent type's definition frontmatter (see `frontmatterModel`), when one could be found. */
+  agentModel?: string;
 }
 
 export interface ParsedDescription {
@@ -106,25 +110,28 @@ function openAttempt(
  * open Job. Otherwise the Run, since a closed or never-begun Job is no place to guess.
  */
 function parentOf(
-  where: { log: readonly RunLogLine[]; marker: Marker },
+  where: { log: readonly RunLogLine[]; trace: string },
   identity: Partial<ParsedDescription>,
   jobs: readonly RunLogLine[],
 ): string | undefined {
-  const { log, marker } = where;
+  const { log, trace } = where;
   const { job, attempt } = identity;
-  const ownAttempt =
-    job !== undefined && attempt !== undefined ? openAttempt(log, marker.trace_id, { job, attempt }) : undefined;
+  const ownAttempt = job !== undefined && attempt !== undefined ? openAttempt(log, trace, { job, attempt }) : undefined;
   const own = ownAttempt ?? jobs.find((l) => job !== undefined && l.job === job);
   if (own !== undefined) return own.span_id;
-  return log.find((l) => l.kind === 'start-run' && l.trace_id === marker.trace_id)?.span_id;
+  return log.find((l) => l.kind === 'start-run' && l.trace_id === trace)?.span_id;
 }
 
+/** The model asked for: meta.json's, else the agent type's frontmatter. */
+const requestedModel = (input: AdapterInput): string | undefined => metaOf(input.meta).model ?? input.agentModel;
+
 function startEvent(input: AdapterInput, marker: Marker, files: { transcript: string }): LogEvent | null {
-  const { description, model, requestShape } = metaOf(input.meta);
+  const { description, requestShape } = metaOf(input.meta);
+  const model = requestedModel(input);
   const all = entries(input.transcript);
   const jobs = openJobs(input.log, marker.trace_id);
   const identity = identityOf(description, jobs);
-  const parent = parentOf({ log: input.log, marker }, identity, jobs);
+  const parent = parentOf({ log: input.log, trace: marker.trace_id }, identity, jobs);
   if (parent === undefined) return null;
   return definedOnly({
     kind: 'start',
@@ -144,9 +151,6 @@ function startEvent(input: AdapterInput, marker: Marker, files: { transcript: st
   });
 }
 
-const modelOf = (all: readonly Entry[]): string | undefined =>
-  [...all].reverse().find((e) => e.type === 'assistant' && e.message?.model)?.message?.model;
-
 /** The transcript may not have existed at SubagentStart: the launch time and prompt the start could not measure. */
 function lateStartFacts(started: RunLogLine, all: readonly Entry[]): Partial<LogEvent> {
   const launched = all[0]?.timestamp;
@@ -156,32 +160,60 @@ function lateStartFacts(started: RunLogLine, all: readonly Entry[]): Partial<Log
   };
 }
 
-function stopEvent(input: AdapterInput, files: { transcript: string }): LogEvent | null {
+/** The identity meta.json names by SubagentStop (or, for a log that predates that, by the backfill), for a start filed provisionally (meta.json did not exist yet): the fold applies it over the start. */
+export function identityFact(meta: string | null, log: readonly RunLogLine[], started: RunLogLine): Partial<LogEvent> {
+  if (started.role !== 'skill-spawned') return {};
+  const { description } = metaOf(meta);
+  const parsed = parseDescription(description);
+  if (parsed === null) return {};
+  const trace = started.trace_id;
+  const parent = parentOf({ log, trace }, parsed, openJobs(log, trace));
+  return { ...parsed, parent_span_id: parent, name: description, description };
+}
+
+/** The requested model, when only SubagentStop knows it. */
+const lateModel = (input: AdapterInput, started: RunLogLine): Partial<LogEvent> => ({
+  'gen_ai.request.model': started['gen_ai.request.model'] === undefined ? requestedModel(input) : undefined,
+});
+
+/** The skills the subagent invoked; without a readable transcript nothing is known, which is not the same as none. */
+const lateSkills = (transcript: string | null, all: readonly Entry[]): Partial<LogEvent> =>
+  transcript === null ? {} : { skills_invoked: skillsInvoked(all) };
+
+function stopEvent(input: AdapterInput, marker: Marker, files: { transcript: string }): LogEvent | null {
   const started = input.log.find(
     (l) => l.kind === 'start' && l.type === 'agent' && l.transcript_path === files.transcript,
   );
   if (started?.span_id === undefined) return null;
+  // A repeated delivery of the same stop must not append a second completion.
+  if (input.log.some((l) => l.kind === 'end' && l.span_id === started.span_id)) return null;
   const all = entries(input.transcript);
   return definedOnly({
     kind: 'end',
     span_id: started.span_id,
     ...lateStartFacts(started, all),
+    ...identityFact(input.meta, input.log, started),
+    ...lateModel(input, started),
     t: all.at(-1)?.timestamp,
     status: 'ok',
     source: 'measured',
-    summary: input.payload.last_assistant_message?.slice(0, SUMMARY_MAX) || undefined,
+    summary: verdictFirst(input.payload.last_assistant_message ?? '', SUMMARY_MAX) || undefined,
     transcript_path: files.transcript,
     'gen_ai.response.model': modelOf(all),
     ...usageOf(all),
+    ...lateSkills(input.transcript, all),
   });
 }
 
 /** The event to append for this hook call, or null: no marker, another session's marker, or nothing to attribute. */
 export function adaptSubagent(input: AdapterInput): LogEvent | null {
   const marker = parseMarker(input.marker);
-  if (marker === null || marker.session_id !== input.payload.session_id) return null;
+  if (marker === null) return null;
   const files = subagentFiles(input.payload);
-  return input.event === 'start' ? startEvent(input, marker, files) : stopEvent(input, files);
+  // A start only from the current session; a stop from any session of the Run (S2).
+  if (input.event === 'start')
+    return marker.session_id === input.payload.session_id ? startEvent(input, marker, files) : null;
+  return sessionsOf(marker).includes(input.payload.session_id) ? stopEvent(input, marker, files) : null;
 }
 
 /**
@@ -199,23 +231,13 @@ export function runUsageEvent(
   const ended = [...log].reverse().find((l) => l.kind === 'end-run' && l.span_id === run?.span_id);
   if (run?.span_id === undefined || ended === undefined || ended['gen_ai.usage.input_tokens'] !== undefined)
     return null;
-  // Line times are whole seconds, transcript times milliseconds: the window runs to the end of end-run's second.
-  const from = Date.parse(run.t);
-  const until = Date.parse(ended.t) + 1000;
-  const inside = (e: Entry): boolean => {
-    const at = e.timestamp === undefined ? Number.NaN : Date.parse(e.timestamp);
-    return at >= from && at < until;
-  };
-  const all = transcripts.flatMap((t) => entries(t)).filter(inside);
-  const usage = usageOf(all);
-  if (Object.keys(usage).length === 0) return null;
+  const measured = measuredUsage(run.t, ended.t, transcripts);
+  if (measured === null) return null;
   return definedOnly({
     kind: 'end-run',
     span_id: run.span_id,
     status: ended.status,
     summary: ended.summary,
-    source: 'measured',
-    'gen_ai.response.model': modelOf(all),
-    ...usage,
+    ...measured,
   });
 }

@@ -190,11 +190,13 @@ describe('edge cases', () => {
   it('set both inset variables for narrow screens and again from md', () => {
     // ARRANGE
     const classes = INSET_CLASSES.split(/\s+/);
+    const leftCount = 2;
+    const rightCount = 3;
     // ACT
     const names = classes.map((name) => /\[(--inset-[lr]):/.exec(name)?.[1]);
     // ASSERT
-    expect(names.filter((name) => name === '--inset-l')).toHaveLength(2);
-    expect(names.filter((name) => name === '--inset-r')).toHaveLength(3);
+    expect(names.filter((name) => name === '--inset-l')).toHaveLength(leftCount);
+    expect(names.filter((name) => name === '--inset-r')).toHaveLength(rightCount);
   });
 
   it('reserves the docked player height and a gap on the table of contents, from lg, on the attribute the player sets', () => {

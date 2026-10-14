@@ -1,10 +1,11 @@
 // The worktree lifecycle: `new <branch>` makes a checkout that passes preflight,
 // `done <branch>` removes it and fast-forwards local main. With `--base <branch>`
-// both work against that branch instead of main. See ../SKILL.md.
+// both work against that branch instead of main, and `done` merges into it first. See ../SKILL.md.
 import { execFileSync, spawnSync } from 'node:child_process';
 import { rmSync } from 'node:fs';
 import path from 'node:path';
 import { parseArgs } from './worktree-args.pure.ts';
+import { mergeIntoBase } from './worktree-merge.ts';
 
 /** Runs a command and returns its output. */
 const capture = (cmd: string, args: string[], cwd?: string): string =>
@@ -58,7 +59,8 @@ function processesIn(target: string): string[] {
 }
 
 function refuseWhileBusy(target: string): void {
-  if (process.cwd().startsWith(target)) fail(`run this from the main checkout, not from inside ${target}`);
+  if ((process.cwd() + '/').startsWith(target + '/'))
+    fail(`run this from the main checkout, not from inside ${target}`);
   const busy = processesIn(target);
   if (busy.length > 0) fail(`still in use, stop these first (a dev server?):\n  ${busy.join('\n  ')}`);
 }
@@ -88,26 +90,32 @@ function syncMain(root: string): void {
   console.log('✔ local main fast-forwarded to origin/main');
 }
 
-/** A branch merged into its base goes; an unmerged one (a blocked job) stays for a human to inspect. */
-function deleteIfMerged(branch: string, base: string): void {
-  const merged = spawnSync('git', ['merge-base', '--is-ancestor', branch, base]).status === 0;
-  if (!merged) {
-    console.warn(`! kept branch ${branch}: it is not merged into ${base}.`);
-    return;
-  }
+/** The branch is merged into its base by now, so it goes. */
+function deleteMerged(branch: string, base: string): void {
   capture('git', ['branch', '-D', branch]);
   console.log(`✔ deleted branch ${branch}, merged into ${base}`);
+}
+
+function mergeBeforeRemoval(branch: string, base: string): void {
+  try {
+    const result = mergeIntoBase(branch, base, mainRoot());
+    console.log(result === 'merged' ? `✔ merged ${branch} into ${base}` : `✔ ${branch} already merged into ${base}`);
+  } catch (error) {
+    fail(`${(error as Error).message}\n  nothing was removed`);
+  }
 }
 
 function finish(branch: string, base: string | null): void {
   const target = worktreePath(branch);
   refuseWhileBusy(target);
   if (base === null) refuseUnpushedMain();
+  // Merged before anything is removed, so a failure leaves the worktree and branch intact.
+  else mergeBeforeRemoval(branch, base);
   stream('git', ['worktree', 'remove', target]);
   removeContextFolder(branch);
   console.log(`✔ removed ${target} and its Claude Desktop folder`);
   if (base !== null) {
-    deleteIfMerged(branch, base);
+    deleteMerged(branch, base);
     return;
   }
   deleteBranch(branch);

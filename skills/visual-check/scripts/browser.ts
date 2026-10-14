@@ -1,17 +1,23 @@
 // The shared chrome-headless-shell: install, start once (even across parallel
 // callers), find again, stop, and end after IDLE_MS without a call.
 import { execFileSync, spawn } from 'node:child_process';
-import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
-import { isIdle, parseEndpoint, type Endpoint } from './inspect-page.pure.ts';
+import { isIdle, mainCheckout, parseEndpoint, type Endpoint } from './inspect-page.pure.ts';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 const CACHE = path.join(ROOT, '.cache', 'inspect-page');
 const ENDPOINT = path.join(CACHE, 'endpoint');
 const LAST_USE = path.join(CACHE, 'last-use');
-const BINARY = path.join(CACHE, 'binary');
+// The binary is shared by every worktree (one 217 MB download); the browser instance stays per worktree.
+const SHARED = path.join(
+  mainCheckout(execFileSync('git', ['rev-parse', '--git-common-dir'], { cwd: ROOT, encoding: 'utf8' }).trim(), ROOT),
+  '.cache',
+  'inspect-page-shared',
+);
+const BINARY = path.join(SHARED, 'binary');
 const LOCK = path.join(CACHE, 'start.lock');
 const ENTRY = path.join(path.dirname(fileURLToPath(import.meta.url)), 'inspect-page.ts');
 
@@ -34,21 +40,44 @@ const savedEndpoint = (): Endpoint | null =>
 const PUPPETEER_BROWSERS = '@puppeteer/browsers@3.2.4';
 const HEADLESS_SHELL = 'chrome-headless-shell@155.0.8059.79';
 
+/** Downloads the pinned browser into the shared cache; returns the binary's final path. */
+function installShared(): string {
+  // Install beside the final dir, then rename into place: a concurrent first download from another worktree
+  // either wins the rename or is discarded, and nobody ever sees a half-written install.
+  mkdirSync(SHARED, { recursive: true });
+  const staging = path.join(SHARED, `browser.${process.pid}.tmp`);
+  const final = path.join(SHARED, 'browser');
+  let installed: string;
+  try {
+    const output = execFileSync('npx', ['--yes', PUPPETEER_BROWSERS, 'install', HEADLESS_SHELL, '--path', staging], {
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'inherit'],
+    });
+    const stagedBinary = output
+      .trim()
+      .split('\n')
+      .at(-1)!
+      .replace(/^\S+\s+/, '');
+    try {
+      renameSync(staging, final);
+    } catch {
+      if (!existsSync(final)) throw new Error(`Could not move the browser into ${final}`);
+    }
+    installed = path.join(final, path.relative(staging, stagedBinary));
+  } finally {
+    rmSync(staging, { recursive: true, force: true });
+  }
+  return installed;
+}
+
 /** CHROME_PATH, else the cached chrome-headless-shell, installed on first use. */
 function resolveBinary(): string {
   if (process.env.CHROME_PATH) return process.env.CHROME_PATH;
   if (existsSync(BINARY) && existsSync(readFileSync(BINARY, 'utf8'))) return readFileSync(BINARY, 'utf8');
-  const output = execFileSync(
-    'npx',
-    ['--yes', PUPPETEER_BROWSERS, 'install', HEADLESS_SHELL, '--path', path.join(CACHE, 'browser')],
-    { encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'] },
-  );
-  const installed = output
-    .trim()
-    .split('\n')
-    .at(-1)!
-    .replace(/^\S+\s+/, '');
-  writeFileSync(BINARY, installed);
+  const installed = installShared();
+  const tmp = `${BINARY}.${process.pid}.tmp`;
+  writeFileSync(tmp, installed);
+  renameSync(tmp, BINARY);
   return installed;
 }
 

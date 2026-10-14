@@ -9,6 +9,7 @@ import { episodeLogPath, readMarker } from './episode-run-log.ts';
 import { MARKER_PATH, sessionsOf, type Marker } from './marker.pure.ts';
 import { appendEvent, type WriterDeps } from './run-log-writer.ts';
 import type { RunLogLine } from './run-log.pure.ts';
+import { jobFactsEvent } from './usage-window.pure.ts';
 
 /** Where the marker lives and what its end-of-Run step reads from outside. */
 export interface MarkerHome {
@@ -62,4 +63,23 @@ export function endMarker(home: MarkerHome, run: RunLogLine, lines: readonly Run
   } finally {
     rmSync(path.join(home.root, MARKER_PATH), { force: true });
   }
+}
+
+/**
+ * Records the orchestrator's usage and invoked skills on a Job that ran in its session, as an `attrs` line over the
+ * Job span: the sessions' transcript between the Job's start and its end line, by the method of `endMarker`. Returns
+ * a warning, or '' (also when there was nothing to record).
+ */
+export function recordJobUsage(
+  home: MarkerHome,
+  span: { span_id: string; start_t: string },
+  ended: RunLogLine,
+): string {
+  const marker = readMarker(home.root);
+  if (marker === null) return '';
+  const read = home.transcriptOf ?? transcriptOf;
+  const event = jobFactsEvent(span, ended, sessionsOf(marker).map(read));
+  if (event === null) return '';
+  const result = appendEvent({ root: home.root, file: marker.log }, event, home.writer);
+  return result.ok ? '' : `job facts not recorded: ${result.errors.join('; ')}`;
 }

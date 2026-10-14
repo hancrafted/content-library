@@ -37,6 +37,8 @@ const summary: Check = (v) => {
   if (typeof v !== 'string') return 'must be a string';
   return v.length > SUMMARY_MAX ? `must be at most ${SUMMARY_MAX} characters` : null;
 };
+const skillList: Check = (v) =>
+  Array.isArray(v) && v.every((s) => typeof s === 'string' && s.trim() !== '') ? null : 'must be a list of skill names';
 const value: Check = (v) =>
   typeof v === 'number' || (typeof v === 'string' && v !== '') ? null : 'must be a number or a non-empty string';
 
@@ -46,6 +48,8 @@ const CHECKS: Record<string, Check> = {
   span_id: spanId,
   parent_span_id: spanId,
   retry_of: spanId,
+  link_span_id: spanId,
+  link_trace_id: matching(TRACE_ID, '32 lowercase hex characters'),
   type: oneOf(SPAN_TYPES),
   attempt: positive,
   ticket: positive,
@@ -56,6 +60,7 @@ const CHECKS: Record<string, Check> = {
   status: oneOf(STATUSES),
   via: oneOf(VIAS),
   summary,
+  skills_invoked: skillList,
   value,
 };
 
@@ -81,6 +86,18 @@ const END_KEYS = [
   'gen_ai.usage.input_tokens',
   'gen_ai.usage.output_tokens',
   'gen_ai.usage.cache_read.input_tokens',
+  'skills_invoked',
+];
+/** What an end line may add beyond END_KEYS, and the identity an attrs line carries (with the measured facts of END_KEYS it may add): what meta.json names, which the fold applies over the start's. */
+const END_IDENTITY = [
+  'name',
+  'job',
+  'attempt',
+  'role',
+  'ticket',
+  'parent_span_id',
+  'description',
+  'gen_ai.request.model',
 ];
 const RULES: Record<Kind, { required: string[]; optional: string[] }> = {
   'start-run': {
@@ -96,6 +113,8 @@ const RULES: Record<Kind, { required: string[]; optional: string[] }> = {
       'role',
       'ticket',
       'retry_of',
+      'link_trace_id',
+      'link_span_id',
       'harness',
       'source',
       'description',
@@ -108,8 +127,24 @@ const RULES: Record<Kind, { required: string[]; optional: string[] }> = {
     ],
   },
   'end-run': { required: ['span_id', 'status'], optional: END_KEYS },
-  end: { required: ['span_id', 'status'], optional: END_KEYS },
-  score: { required: ['span_id', 'name', 'value', 'source'], optional: ['t', 'rubric', 'body', 'via', 'comment'] },
+  end: { required: ['span_id', 'status'], optional: [...END_KEYS, ...END_IDENTITY] },
+  attrs: {
+    required: ['span_id'],
+    optional: [
+      't',
+      'source',
+      'gen_ai.response.model',
+      'gen_ai.usage.input_tokens',
+      'gen_ai.usage.output_tokens',
+      'gen_ai.usage.cache_read.input_tokens',
+      'skills_invoked',
+      ...END_IDENTITY,
+    ],
+  },
+  score: {
+    required: ['span_id', 'name', 'value', 'source'],
+    optional: ['t', 'rubric', 'body', 'via', 'comment', 'ticket'],
+  },
 };
 
 /** What a start line of each span type cannot omit: which Job, Attempt and role it belongs to. */

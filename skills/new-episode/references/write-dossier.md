@@ -32,3 +32,4 @@ The job's `checks:` in `assets/pipeline.yml` run by the check table in [SKILL.md
 2. Every Slide carries out the purpose its Brief entry states, and every Brief Constraint holds on every Slide.
 3. Every `Spine change:` line names a reason the research or the Learning goal gives.
 4. Every instruction the Brief gives about how to tell the story is followed.
+5. No Voice script item repeats a claim a Speaker note on the same Slide makes.

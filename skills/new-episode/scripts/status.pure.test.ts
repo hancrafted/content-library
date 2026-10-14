@@ -148,6 +148,30 @@ describe('success cases', () => {
   });
 });
 
+describe('the current Run', () => {
+  it('counts only the trace it is given, so an earlier Run no longer makes a job done', () => {
+    // ARRANGE
+    const earlier = log(...job('brief-grill', 0, 'ok'), ...job('retrieval', 10, 'ok'));
+    const current = log(...job('brief-grill', 20, 'ok')).map((l) => ({ ...l, trace_id: 'b'.repeat(32) }));
+    const folded = fold([...earlier, ...current], { live: new Set(['b'.repeat(32)]) });
+    // ACT
+    const all = runStatus(PIPELINE, folded, { now: NOW }).jobs.map(({ state }) => state);
+    const scoped = runStatus(PIPELINE, folded, { now: NOW, trace: 'b'.repeat(32) }).jobs.map(({ state }) => state);
+    // ASSERT
+    expect(all.slice(0, 2)).toEqual(['done', 'done']);
+    expect(scoped.slice(0, 3)).toEqual(['done', 'ready', 'waiting']);
+  });
+
+  it('reads a reused job as done', () => {
+    // ARRANGE
+    const folded = live(log(...job('brief-grill', 0, 'reused')));
+    // ACT
+    const jobs = runStatus(PIPELINE, folded, { now: NOW, trace: TRACE }).jobs;
+    // ASSERT
+    expect(jobs[0]).toEqual({ id: 'brief-grill', state: 'done' });
+  });
+});
+
 describe('failure cases', () => {
   it('lists crashed and refused spans of a finished log, and leaves a crashed job to run again', () => {
     // ARRANGE
@@ -294,5 +318,80 @@ describe('subIssuesApproved', () => {
 
   it('is not approved when there are no sub-issues', () => {
     expect(subIssuesApproved([])).toBe(false);
+  });
+});
+
+describe('skills listed and not invoked', () => {
+  const SKILLS_PIPELINE = `status: approved
+jobs:
+  - id: build
+    needs: []
+    agents:
+      - { type: implementor, skills: [implement-spec, tdd], session: orchestrator, ticket: { agent: dev, skills: [commit] } }
+      - { type: reviewer, skills: [code-review, ui-ux-pro-max:slides], session: orchestrator }
+  - id: write
+    needs: []
+    agents:
+      - { type: implementor, skills: [writing-for-agents] }
+      - { type: reviewer, skills: [domain-modeling] }
+`;
+  const agent = (id: string, who: { job: string; role: string }, invoked?: string[]): Record<string, unknown>[] => [
+    start(id, 'agent', [1, { ...who, attempt: 1 }]),
+    { ...end(id, 'ok', 2), ...(invoked && { skills_invoked: invoked }) },
+  ];
+  const warnings = (lines: Record<string, unknown>[]) =>
+    runStatus(SKILLS_PIPELINE, fold(log(...lines)), { now: NOW }).skillWarnings.map(({ role, missing }) => ({
+      role,
+      missing,
+    }));
+
+  it('warns per agent for a skill its type lists and its transcript never invoked', () => {
+    // ARRANGE
+    const lines = [
+      ...agent('i', { job: 'write', role: 'implementor' }, ['writing-for-agents']),
+      ...agent('r', { job: 'write', role: 'reviewer' }, []),
+      ...agent('t', { job: 'build', role: 'ticket-implementor' }, ['tdd']),
+    ];
+    // ACT
+    const result = warnings(lines);
+    // ASSERT
+    expect(result).toEqual([
+      { role: 'reviewer', missing: ['domain-modeling'] },
+      { role: 'ticket-implementor', missing: ['commit'] },
+    ]);
+  });
+
+  it('warns for an orchestrator-session Job by the skills of its orchestrator agents, plugin skills as plugin:skill', () => {
+    // ARRANGE
+    const lines = [
+      start('j', 'job', [1, { job: 'build' }]),
+      { ...end('j', 'ok', 9), skills_invoked: ['implement-spec', 'code-review'] },
+    ];
+    // ACT
+    const result = runStatus(SKILLS_PIPELINE, fold(log(...lines)), { now: NOW }).skillWarnings;
+    // ASSERT
+    expect(result).toEqual([expect.objectContaining({ job: 'build', missing: ['tdd', 'ui-ux-pro-max:slides'] })]);
+  });
+
+  it('stays quiet when every listed skill was invoked, or the span recorded nothing about skills', () => {
+    // ARRANGE
+    const lines = [
+      ...agent('i', { job: 'write', role: 'implementor' }, ['writing-for-agents', 'extra']),
+      ...agent('r', { job: 'write', role: 'reviewer' }),
+      ...agent('s', { job: 'write', role: 'skill-spawned' }, []),
+    ];
+    // ACT
+    const result = warnings(lines);
+    // ASSERT
+    expect(result).toEqual([]);
+  });
+
+  it('prints a warn line', () => {
+    // ARRANGE
+    const folded = fold(log(...agent('r', { job: 'write', role: 'reviewer' }, [])));
+    // ACT
+    const text = renderStatus(runStatus(SKILLS_PIPELINE, folded, { now: NOW }));
+    // ASSERT
+    expect(text).toContain('warn    r · write#1/reviewer · skill not invoked: domain-modeling');
   });
 });

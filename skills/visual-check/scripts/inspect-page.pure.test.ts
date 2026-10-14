@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { IDLE_MS, expandJobs, fitScale, isIdle, parseArgs, parseEndpoint } from './inspect-page.pure.ts';
+import { IDLE_MS, expandJobs, fitScale, isIdle, mainCheckout, parseArgs, parseEndpoint } from './inspect-page.pure.ts';
 
 describe('parseArgs', () => {
   it('collects repeated --url and a comma-separated --theme', () => {
@@ -54,5 +54,14 @@ describe('isIdle', () => {
   it('is idle only after ten minutes without a call', () => {
     expect(isIdle(0, IDLE_MS - 1)).toBe(false);
     expect(isIdle(0, IDLE_MS)).toBe(true);
+  });
+});
+
+describe('mainCheckout', () => {
+  it('is the parent of an absolute common dir, so every worktree resolves to the same checkout', () => {
+    expect(mainCheckout('/repo/.git', '/repo/.worktrees/a')).toBe('/repo');
+  });
+  it('resolves the relative common dir of the main checkout itself', () => {
+    expect(mainCheckout('.git', '/repo')).toBe('/repo');
   });
 });

@@ -12,6 +12,15 @@ export const JOB_ID = /^[a-z0-9][a-z0-9-]*$/;
 export const BAD_JOB_ID =
   'an id the spawn description <job>#<attempt>/<role> cannot carry; use lowercase letters, digits and hyphens.';
 
+/** An agent of a job as the skill-use check reads it: its type, the skills it must invoke, and those of its per-ticket subagents. */
+export interface JobAgent {
+  type: string;
+  skills: string[];
+  /** The skills of each ticket subagent an implementor's skill spawns (`ticket.skills`); empty when it has none. */
+  ticketSkills: string[];
+  session?: 'orchestrator';
+}
+
 /** A pipeline job as its readers see it: its id, the jobs it needs and wants, the staging paths it writes, its gate. */
 export interface Job {
   id: string;
@@ -21,6 +30,9 @@ export interface Job {
   outputs: string[];
   /** True for `gate: human`: the job reads done only once Han approves its outputs. */
   gate: boolean;
+  /** `orchestrator` when the job itself says so or any of its agents runs in the orchestrator session (the schema sets `session` per agent); absent for the default, a subagent. */
+  session?: 'orchestrator';
+  agents: JobAgent[];
 }
 
 export interface Pipeline {
@@ -38,14 +50,27 @@ function strings(value: unknown): string[] {
   return Array.isArray(value) && value.every((item) => typeof item === 'string') ? value : [];
 }
 
+function agentOf(agent: Record<string, unknown>): JobAgent {
+  return {
+    type: String(agent.type),
+    skills: strings(agent.skills),
+    ticketSkills: isMapping(agent.ticket) ? strings(agent.ticket.skills) : [],
+    ...(agent.session === 'orchestrator' && { session: 'orchestrator' as const }),
+  };
+}
+
 /** One job mapping as a `Job`. */
 export function jobOf(job: Record<string, unknown>): Job {
+  const agents = Array.isArray(job.agents) ? job.agents.filter(isMapping).map(agentOf) : [];
+  const inSession = job.session === 'orchestrator' || agents.some((agent) => agent.session === 'orchestrator');
   return {
     id: String(job.id),
     needs: strings(job.needs),
     wants: strings(job.wants),
     outputs: strings(job.outputs),
     gate: job.gate === 'human',
+    ...(inSession && { session: 'orchestrator' as const }),
+    agents,
   };
 }
 

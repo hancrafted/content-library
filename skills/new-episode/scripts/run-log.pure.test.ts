@@ -73,7 +73,7 @@ describe('failure cases', () => {
     // ACT
     const result = record(event, STAMP);
     // ASSERT
-    expect(result).toEqual({ ok: false, errors: ['kind must be one of start-run, end-run, start, end, score'] });
+    expect(result).toEqual({ ok: false, errors: ['kind must be one of start-run, end-run, start, end, attrs, score'] });
   });
 
   it('rejects lines with missing ids, an unknown status, a summary over 500 characters or an unknown field', () => {
@@ -389,6 +389,265 @@ describe('live Runs and late start facts', () => {
       start_t: '2026-10-14T10:00:00Z',
       duration_ms: 65_000,
       'gen_ai.input.messages': 'the prompt',
+    });
+  });
+});
+
+describe('an end that is timestamped before its start', () => {
+  it("still closes the span and applies the end line's start_t backfill", () => {
+    // ARRANGE
+    const trace = 'a'.repeat(32);
+    const run = 'a1'.repeat(8);
+    const agent = 'a2'.repeat(8);
+    const lines = [
+      { seq: 1, t: '2026-10-14T16:07:00Z', trace_id: trace, kind: 'start-run', span_id: run, run_id: 'r' },
+      {
+        seq: 2,
+        t: '2026-10-14T16:07:56Z',
+        trace_id: trace,
+        kind: 'start',
+        span_id: agent,
+        type: 'agent',
+        name: 'a',
+        parent_span_id: run,
+      },
+      {
+        seq: 3,
+        t: '2026-10-14T16:07:55Z',
+        trace_id: trace,
+        kind: 'end',
+        span_id: agent,
+        status: 'ok',
+        start_t: '2026-10-14T16:07:54Z',
+      },
+    ] as RunLogLine[];
+    // ACT
+    const { spans, orphans } = fold(lines);
+    // ASSERT
+    expect(orphans).toEqual([]);
+    expect(spans.find((s) => s.span_id === agent)).toMatchObject({
+      status: 'ok',
+      start_t: '2026-10-14T16:07:54Z',
+      end_t: '2026-10-14T16:07:55Z',
+      duration_ms: 1000,
+    });
+  });
+});
+
+describe('identity on an end line', () => {
+  it("replaces the start's provisional identity, parent and name", () => {
+    // ARRANGE
+    const trace = 'a'.repeat(32);
+    const run = 'a1'.repeat(8);
+    const attempt = 'a3'.repeat(8);
+    const agent = 'a2'.repeat(8);
+    const lines = [
+      { seq: 1, t: '2026-10-14T10:00:00Z', trace_id: trace, kind: 'start-run', span_id: run, run_id: 'r' },
+      {
+        seq: 2,
+        t: '2026-10-14T10:00:01Z',
+        trace_id: trace,
+        kind: 'start',
+        span_id: agent,
+        type: 'agent',
+        name: 'j/skill-spawned',
+        parent_span_id: run,
+        role: 'skill-spawned',
+      },
+      {
+        seq: 3,
+        t: '2026-10-14T10:00:09Z',
+        trace_id: trace,
+        kind: 'end',
+        span_id: agent,
+        status: 'ok',
+        job: 'j',
+        attempt: 2,
+        role: 'reviewer',
+        parent_span_id: attempt,
+        name: 'j#2/reviewer',
+      },
+    ] as RunLogLine[];
+    // ACT
+    const span = fold(lines).spans.find((s) => s.span_id === agent);
+    // ASSERT
+    expect(span).toMatchObject({
+      job: 'j',
+      attempt: 2,
+      role: 'reviewer',
+      parent_span_id: attempt,
+      name: 'j#2/reviewer',
+      start_t: '2026-10-14T10:00:01Z',
+    });
+  });
+});
+
+describe('the record of an end line with identity', () => {
+  it('accepts identity fields on end and refuses them on end-run', () => {
+    // ARRANGE
+    const stamp = { t: '2026-10-14T10:00:00Z', seq: 3, traceId: 'a'.repeat(32), spanId: 'b'.repeat(16) };
+    const identity = { span_id: 'a1'.repeat(8), status: 'ok', role: 'reviewer', parent_span_id: 'a3'.repeat(8) };
+    // ACT
+    const end = record({ kind: 'end', ...identity }, stamp);
+    const endRun = record({ kind: 'end-run', ...identity }, stamp);
+    // ASSERT
+    expect(end.ok).toBe(true);
+    expect(endRun.ok).toBe(false);
+  });
+});
+
+describe('attrs lines', () => {
+  const START_AGENT = {
+    kind: 'start',
+    type: 'agent',
+    name: 'write/skill-spawned',
+    job: 'write',
+    role: 'skill-spawned',
+    parent_span_id: RUN_SPAN,
+  };
+  const stamp = (seq: number, t: string, spanId = JOB_SPAN): Stamp => ({ t, seq, traceId: TRACE, spanId });
+  const lines = (attrs: Record<string, unknown>): RunLogLine[] => {
+    const start = record(START_AGENT, stamp(1, '2026-10-14T09:00:00Z'));
+    const end = record(
+      { kind: 'end', span_id: JOB_SPAN, status: 'ok', summary: 'done' },
+      stamp(2, '2026-10-14T09:01:00Z'),
+    );
+    const extra = record({ kind: 'attrs', span_id: JOB_SPAN, ...attrs }, stamp(3, '2026-10-14T10:00:00Z'));
+    return [start, end, extra].flatMap((r) => (r.ok ? [r.line] : []));
+  };
+
+  it('gives an ended span its identity without touching how it ended', () => {
+    // ARRANGE
+    const attrs = { job: 'write', attempt: 2, role: 'reviewer', ticket: 7, name: 'write#2/reviewer/#7' };
+    // ACT
+    const span = fold(lines(attrs)).spans[0];
+    // ASSERT
+    expect(span).toMatchObject({
+      ...attrs,
+      status: 'ok',
+      summary: 'done',
+      end_t: '2026-10-14T09:01:00Z',
+      duration_ms: 60_000,
+    });
+  });
+
+  it('refuses a field that is not identity', () => {
+    // ACT
+    const result = record({ kind: 'attrs', span_id: JOB_SPAN, status: 'error' }, stamp(3, '2026-10-14T10:00:00Z'));
+    // ASSERT
+    expect(result).toMatchObject({ ok: false, errors: [expect.stringContaining('status is not a field')] });
+  });
+
+  it('keeps an attrs line for a span that never started as an orphan', () => {
+    // ARRANGE
+    const orphan = record({ kind: 'attrs', span_id: JOB_SPAN, role: 'x' }, stamp(1, '2026-10-14T10:00:00Z'));
+    // ACT
+    const folded = fold(orphan.ok ? [orphan.line] : []);
+    // ASSERT
+    expect(folded.orphans).toHaveLength(1);
+  });
+});
+
+describe('score tickets and reuse links', () => {
+  const score = { kind: 'score', span_id: JOB_SPAN, name: 'rubric', value: 'pass', source: 'agent:j/reviewer' };
+
+  it('accepts a positive ticket on a score and keeps it on the line', () => {
+    // ACT
+    const result = record({ ...score, ticket: 176 }, STAMP);
+    // ASSERT
+    expect(result).toEqual({ ok: true, line: expect.objectContaining({ ticket: 176 }) });
+  });
+
+  it('refuses a ticket that is not a positive integer', () => {
+    // ACT
+    const result = record({ ...score, ticket: 0 }, STAMP);
+    // ASSERT
+    expect(result).toEqual({ ok: false, errors: ['ticket must be a positive integer'] });
+  });
+
+  it('accepts a Job start that links the earlier Run span it reuses', () => {
+    // ARRANGE
+    const start = {
+      kind: 'start',
+      type: 'job',
+      name: 'a',
+      job: 'a',
+      parent_span_id: RUN_SPAN,
+      link_trace_id: 'd'.repeat(32),
+      link_span_id: 'e'.repeat(16),
+    };
+    // ACT
+    const result = record(start, STAMP);
+    // ASSERT
+    expect(result).toEqual({
+      ok: true,
+      line: expect.objectContaining({ link_trace_id: 'd'.repeat(32), link_span_id: 'e'.repeat(16) }),
+    });
+    expect(record({ ...start, link_span_id: 'nope' }, STAMP)).toEqual({
+      ok: false,
+      errors: ['link_span_id must be 16 lowercase hex characters'],
+    });
+  });
+});
+
+describe('skills_invoked', () => {
+  const stamp = { t: '2026-10-14T10:00:00Z', seq: 5, traceId: 'a'.repeat(32), spanId: 'b'.repeat(16) };
+  const span = 'c'.repeat(16);
+
+  it('is accepted, empty or not, on an end line and an attrs line, and refused as anything but a list of names', () => {
+    // ACT
+    const results = [
+      record({ kind: 'end', span_id: span, status: 'ok', skills_invoked: [] }, stamp),
+      record({ kind: 'attrs', span_id: span, skills_invoked: ['tdd', 'a:b'], 'gen_ai.usage.input_tokens': 3 }, stamp),
+      record({ kind: 'end', span_id: span, status: 'ok', skills_invoked: 'tdd' }, stamp),
+    ];
+    // ASSERT
+    expect(results.map((r) => r.ok)).toEqual([true, true, false]);
+  });
+
+  it('is laid over the span by an attrs line without a second end, the first end line keeping status and summary', () => {
+    // ARRANGE
+    const lines = [
+      {
+        kind: 'start',
+        t: '2026-10-14T10:00:00Z',
+        seq: 1,
+        trace_id: stamp.traceId,
+        span_id: span,
+        type: 'job',
+        name: 'j',
+        parent_span_id: 'd'.repeat(16),
+      },
+      {
+        kind: 'end',
+        t: '2026-10-14T10:01:00Z',
+        seq: 2,
+        trace_id: stamp.traceId,
+        span_id: span,
+        status: 'ok',
+        summary: 'done',
+      },
+      {
+        kind: 'attrs',
+        t: '2026-10-14T10:01:01Z',
+        seq: 3,
+        trace_id: stamp.traceId,
+        span_id: span,
+        source: 'measured',
+        skills_invoked: ['tdd'],
+        'gen_ai.usage.output_tokens': 7,
+      },
+    ] as RunLogLine[];
+    // ACT
+    const [folded] = fold(lines).spans;
+    // ASSERT
+    expect(folded).toMatchObject({
+      status: 'ok',
+      summary: 'done',
+      end_t: '2026-10-14T10:01:00Z',
+      source: 'measured',
+      skills_invoked: ['tdd'],
+      'gen_ai.usage.output_tokens': 7,
     });
   });
 });

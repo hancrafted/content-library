@@ -8,6 +8,7 @@ import { readPipeline, type Job } from '../../../src/lib/episode-pipeline-jobs.p
 import { gateTier } from '../../../src/lib/staging-file.pure.ts';
 import type { Folded, Span } from './run-log.pure.ts';
 import { formatDuration } from './run-log.pure.ts';
+import { labelled, skillWarningsOf, type SkillWarning } from './status-skills.pure.ts';
 
 export type JobState = 'done' | 'running' | 'gate' | 'blocked' | 'ready' | 'waiting';
 
@@ -32,10 +33,10 @@ export function subIssuesApproved(tickets: readonly SubIssue[]): boolean {
   return tickets.length > 0 && open.every((ticket) => !ticket.labels.some((label) => label.name === 'needs-triage'));
 }
 
-/** The latest job span per job id, by start time then sequence: a retried job reads as its last run. */
-function latestJobSpans(folded: Folded): Map<string, Span> {
+/** The latest job span per job id, by start time then sequence: a retried job reads as its last run. A `reused` span stands for the earlier Run's ok span. */
+function latestJobSpans(spans: readonly Span[]): Map<string, Span> {
   const latest = new Map<string, Span>();
-  for (const span of folded.spans) {
+  for (const span of spans) {
     if (span.type !== 'job') continue;
     const id = span.job ?? span.name;
     const known = latest.get(id);
@@ -93,22 +94,13 @@ export interface RunStatus {
   running: RunningAgent[];
   problems: ProblemSpan[];
   waiting: WaitingGate[];
-}
-
-/** Only the fields a span has, so an absent attempt or role stays absent. */
-function labelled(span: Span): { name: string; job?: string; attempt?: number; role?: string } {
-  const { name, job, attempt, role } = span;
-  return {
-    name,
-    ...(job !== undefined && { job }),
-    ...(attempt !== undefined && { attempt }),
-    ...(role !== undefined && { role }),
-  };
+  /** Skills listed for an agent that its transcript shows it never invoked; only spans that recorded `skills_invoked` are judged. */
+  skillWarnings: SkillWarning[];
 }
 
 /** The crashed and refused spans of a run, the Run itself aside. */
-const problemsOf = (folded: Folded): RunStatus['problems'] =>
-  folded.spans.flatMap((span) =>
+const problemsOf = (spans: readonly Span[]): RunStatus['problems'] =>
+  spans.flatMap((span) =>
     span.type !== 'run' && (span.status === 'crashed' || span.status === 'refused')
       ? [{ ...labelled(span), status: span.status }]
       : [],
@@ -116,7 +108,8 @@ const problemsOf = (folded: Folded): RunStatus['problems'] =>
 
 /**
  * A run's status: each job's state in pipeline order, the agents running now with their elapsed time, the
- * crashed and refused spans, and the gates waiting on Han with their wait. `folded` is the log folded with
+ * crashed and refused spans, and the gates waiting on Han with their wait. Only the spans of `trace` (the current
+ * Run) count when it is given: an earlier Run's ok span makes nothing done, `reuse` links it instead. `folded` is the log folded with
  * `fold` (live Runs named in `live`); `now` (beside the gate readers) is the clock, an ISO time, so nothing here reads it.
  * A job with no finished span is blocked when a job it needs is blocked, ready when every job it needs is
  * done and every job it wants is done or blocked, and waiting otherwise.
@@ -129,11 +122,11 @@ const problemsOf = (folded: Folded): RunStatus['problems'] =>
 export function runStatus(
   pipelineYaml: string,
   folded: Folded,
-  { now, ...readers }: GateReaders & { now: string },
+  { now, trace, ...readers }: GateReaders & { now: string; trace?: string },
 ): RunStatus {
+  const spans = trace === undefined ? folded.spans : folded.spans.filter((span) => span.trace_id === trace);
   const jobs = readPipeline(pipelineYaml)?.jobs ?? [];
-  const latest = latestJobSpans(folded);
-  const states = new Map<string, JobState>();
+  const [latest, states] = [latestJobSpans(spans), new Map<string, JobState>()];
   const stateOf = (id: string): JobState => {
     const known = states.get(id);
     if (known !== undefined) return known;
@@ -147,12 +140,13 @@ export function runStatus(
     return state;
   };
   const since = (span: Span): number => Date.parse(now) - Date.parse(span.start_t);
-  const open = (type: Span['type']) => folded.spans.filter((span) => span.type === type && span.status === 'running');
+  const open = (type: Span['type']) => spans.filter((span) => span.type === type && span.status === 'running');
   return {
     jobs: jobs.map(({ id }) => ({ id, state: stateOf(id) })),
     running: open('agent').map((span) => ({ ...labelled(span), elapsed_ms: since(span) })),
-    problems: problemsOf(folded),
+    problems: problemsOf(spans),
     waiting: open('gate').map((span) => ({ ...labelled(span), waiting_ms: since(span) })),
+    skillWarnings: skillWarningsOf(spans, jobs),
   };
 }
 
@@ -169,14 +163,17 @@ const spawnName = ({
 }): string =>
   job !== undefined && attempt !== undefined && role !== undefined ? `${name} · ${job}#${attempt}/${role}` : name;
 
-/** The status as the CLI prints it: one line per job, then running agents, crashed and refused spans, waiting gates. */
-export function renderStatus({ jobs, running, problems, waiting }: RunStatus): string {
+/** The status as the CLI prints it: one line per job, then running agents, crashed and refused spans, waiting gates, skills listed and not invoked. */
+export function renderStatus({ jobs, running, problems, waiting, skillWarnings }: RunStatus): string {
   return [
     ...jobs.map(({ id, state }) => `${state.padEnd(8)}${id}`),
     ...running.map((agent) => `${'running'.padEnd(8)}${spawnName(agent)} · ${formatDuration(agent.elapsed_ms)}`),
     ...problems.map((span) => `${span.status.padEnd(8)}${spawnName(span)}`),
     ...waiting.map(
       (gate) => `${'gate'.padEnd(8)}${gate.job ?? gate.name} · waiting on Han ${formatDuration(gate.waiting_ms)}`,
+    ),
+    ...skillWarnings.map(
+      (span) => `${'warn'.padEnd(8)}${spawnName(span)} · skill not invoked: ${span.missing.join(', ')}`,
     ),
   ].join('\n');
 }

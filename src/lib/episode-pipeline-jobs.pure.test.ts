@@ -24,14 +24,42 @@ describe('success cases', () => {
     const expected = {
       status: 'approved',
       jobs: [
-        { id: 'write-brief', needs: [], wants: [], outputs: ['docs/episodes/<slug>/brief.md'], gate: true },
-        { id: 'write-research-1', needs: ['write-brief'], wants: ['write-brief'], outputs: [], gate: false },
+        { id: 'write-brief', needs: [], wants: [], outputs: ['docs/episodes/<slug>/brief.md'], gate: true, agents: [] },
+        {
+          id: 'write-research-1',
+          needs: ['write-brief'],
+          wants: ['write-brief'],
+          outputs: [],
+          gate: false,
+          agents: [],
+        },
       ],
     };
     // ACT
     const pipeline = readPipeline(PIPELINE);
     // ASSERT
     expect(pipeline).toEqual(expected);
+  });
+
+  it('reads each agent with its skills, its ticket subagents skills and its session; a job runs in the orchestrator when an agent does', () => {
+    // ARRANGE
+    const yaml = `jobs:
+  - id: build
+    needs: []
+    agents:
+      - { type: implementor, skills: [implement-spec], session: orchestrator, ticket: { agent: dev, skills: [tdd, commit] } }
+      - { type: reviewer, skills: [code-review] }
+`;
+    // ACT
+    const job = readPipeline(yaml)?.jobs[0];
+    // ASSERT
+    expect(job).toMatchObject({
+      session: 'orchestrator',
+      agents: [
+        { type: 'implementor', skills: ['implement-spec'], ticketSkills: ['tdd', 'commit'], session: 'orchestrator' },
+        { type: 'reviewer', skills: ['code-review'], ticketSkills: [] },
+      ],
+    });
   });
 });
 
@@ -51,7 +79,7 @@ describe('edge cases', () => {
   it('reads a status of any shape as null unless it is text, and skips a job that is not a mapping', () => {
     // ARRANGE
     const yaml = 'status: [approved]\njobs:\n  - just-a-name\n  - id: a\n    needs: [b, 1]\n';
-    const expected = { status: null, jobs: [{ id: 'a', needs: [], wants: [], outputs: [], gate: false }] };
+    const expected = { status: null, jobs: [{ id: 'a', needs: [], wants: [], outputs: [], gate: false, agents: [] }] };
     // ACT
     const pipeline = readPipeline(yaml);
     // ASSERT

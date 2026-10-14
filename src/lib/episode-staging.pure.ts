@@ -225,7 +225,8 @@ export function checkResearchIndex(index: string | undefined, research: Readonly
 }
 
 /** The header row of `docs/episodes/runs.csv`, one row per agent run below it. */
-export const RUNS_CSV_HEADER = 'run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at';
+export const RUNS_CSV_HEADER =
+  'run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,cache_read_tokens,at';
 
 /** Checks that the runs CSV's first line is exactly {@link RUNS_CSV_HEADER}. */
 export function checkRunsCsv(csv: string): Finding[] {

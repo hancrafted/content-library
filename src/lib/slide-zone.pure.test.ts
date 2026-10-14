@@ -55,7 +55,7 @@ describe('success cases', () => {
       // ACT
       const kept = [keptHeight('far', measured), keptHeight('near', measured), keptHeight('active', measured)];
       // ASSERT
-      expect(kept).toEqual([1800, 0, 0]);
+      expect(kept).toEqual([measured, 0, 0]);
     });
   });
 
@@ -103,13 +103,14 @@ describe('failure cases', () => {
     const store = createZoneStore();
     const listener = vi.fn();
     store.subscribe(listener);
+    const changes = 2;
     // ACT
     store.setNear('a', false);
     store.setNear('a', false);
     store.setActive('b');
     store.setActive('b');
     // ASSERT
-    expect(listener).toHaveBeenCalledTimes(2);
+    expect(listener).toHaveBeenCalledTimes(changes);
   });
 });
 

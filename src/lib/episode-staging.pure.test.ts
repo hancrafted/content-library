@@ -118,7 +118,7 @@ describe('success cases', () => {
   it('finds nothing in a runs CSV whose header is exact, with rows below it', () => {
     // ARRANGE
     const csv = [
-      'run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at',
+      'run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,cache_read_tokens,at',
       '1,context-window-budget,research,implementor,1,pass,,120,9000,2026-10-12T10:15:00Z',
       '',
     ].join('\n');
@@ -463,9 +463,9 @@ describe('failure cases', () => {
 
   it('reports a runs CSV header with its columns out of order', () => {
     // ARRANGE
-    const csv = 'run,episode,agent,job,attempt,result,failed_rubric,duration_s,tokens,at\n';
+    const csv = 'run,episode,agent,job,attempt,result,failed_rubric,duration_s,tokens,cache_read_tokens,at\n';
     const expected = [{ kind: 'runs-header', file: 'runs.csv' }];
-    const expectedHeader = 'run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at';
+    const expectedHeader = 'run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,cache_read_tokens,at';
     // ACT
     const findings = checkRunsCsv(csv);
     // ASSERT
@@ -584,7 +584,7 @@ describe('edge cases', () => {
 
   it('reports a runs CSV header that differs only by a trailing carriage return or space', () => {
     // ARRANGE
-    const header = 'run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at';
+    const header = 'run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,cache_read_tokens,at';
     const csvs = [`${header}\r\n`, `${header} \n`];
     const expectedKinds = [['runs-header'], ['runs-header']];
     // ACT

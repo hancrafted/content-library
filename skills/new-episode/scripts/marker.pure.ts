@@ -46,3 +46,10 @@ export function liveTraces(markerText: string | null): ReadonlySet<string> {
   const marker = parseMarker(markerText);
   return new Set(marker === null ? [] : [marker.trace_id]);
 }
+
+/** The worktree paths in `git worktree list --porcelain` output, main checkout first. */
+export const worktreePaths = (porcelain: string): string[] =>
+  porcelain
+    .split('\n')
+    .filter((line) => line.startsWith('worktree '))
+    .map((line) => line.slice('worktree '.length));

@@ -107,6 +107,35 @@ describe('failure cases', () => {
   });
 });
 
+describe('unknown targets', () => {
+  const GHOST = 'ffffffffffffffff';
+  it.each([
+    ['end', { kind: 'end', span_id: GHOST, status: 'ok' }],
+    ['attrs', { kind: 'attrs', span_id: GHOST, role: 'reviewer' }],
+    ['score', { kind: 'score', span_id: GHOST, name: 'check', value: 'pass', source: 'check:sim' }],
+  ])('refuses an %s whose span_id is in no start line and writes nothing', (_kind, event) => {
+    // ARRANGE
+    const root = worktree();
+    appendEvent(at(root), START, deps());
+    // ACT
+    const result = appendEvent(at(root), event, deps());
+    // ASSERT
+    expect(result).toEqual({ ok: false, errors: [expect.stringContaining(GHOST)] });
+    expect(written(root)).toHaveLength(1);
+  });
+
+  it('still accepts an end for the Run span it started', () => {
+    // ARRANGE
+    const root = worktree();
+    const start = appendEvent(at(root), START, deps());
+    const runSpan = JSON.parse((start as { line: string }).line).span_id;
+    // ACT
+    const result = appendEvent(at(root), { kind: 'end-run', span_id: runSpan, status: 'ok' }, deps());
+    // ASSERT
+    expect(result.ok).toBe(true);
+  });
+});
+
 describe('concurrency', () => {
   it('keeps every line whole and numbers them uniquely when writers race', async () => {
     // ARRANGE

@@ -2,7 +2,8 @@
 // stamp a writer supplies, and the Span and Score a reader folds lines into. Types only; import them through
 // `run-log.pure.ts`.
 
-export const KINDS = ['start-run', 'end-run', 'start', 'end', 'score'] as const;
+/** `attrs` lays facts over a span that already ended (the backfill's identity, an orchestrator Job's usage and skills); it never closes or reopens a span. */
+export const KINDS = ['start-run', 'end-run', 'start', 'end', 'attrs', 'score'] as const;
 export type Kind = (typeof KINDS)[number];
 
 /** How a span ended. `reused` is a Job whose result an earlier Run already produced. */
@@ -33,7 +34,7 @@ export interface LogEvent {
   kind: Kind;
   /** Overrides the stamped clock: how an adapter reports a measured launch or end time. */
   t?: string;
-  /** end, end-run and score: the span the line belongs to. */
+  /** end, end-run, attrs and score: the span the line belongs to. */
   span_id?: string;
   /** end: the launch time, when the start line could not measure it (the transcript did not exist yet). */
   start_t?: string;
@@ -47,6 +48,9 @@ export interface LogEvent {
   ticket?: number;
   /** The span id of the Attempt this one retries. */
   retry_of?: string;
+  /** start of a `reused` Job: the earlier Run's ok Job span it stands for (OpenTelemetry span link). */
+  link_trace_id?: string;
+  link_span_id?: string;
   harness?: string;
   /** start, end: measured or typed. On a score: who judged (`agent:<job>/reviewer`, `check:<name>`, `human:han`). */
   source?: string;
@@ -65,9 +69,11 @@ export interface LogEvent {
   'gen_ai.usage.input_tokens'?: number;
   'gen_ai.usage.output_tokens'?: number;
   'gen_ai.usage.cache_read.input_tokens'?: number;
+  /** end, attrs: the skills the agent (or the orchestrator, inside a Job's window) invoked with the Skill tool, `plugin:skill` for a plugin's. An empty list means none were. */
+  skills_invoked?: string[];
   status?: Status;
   summary?: string;
-  /** score */
+  /** score (`ticket` is the one above: the ticket a Score judges) */
   value?: number | string;
   rubric?: string;
   body?: string;
@@ -107,6 +113,8 @@ export interface Span {
   role?: string;
   ticket?: number;
   retry_of?: string;
+  link_trace_id?: string;
+  link_span_id?: string;
   harness?: string;
   source?: string;
   description?: string;
@@ -123,6 +131,7 @@ export interface Span {
   'gen_ai.usage.input_tokens'?: number;
   'gen_ai.usage.output_tokens'?: number;
   'gen_ai.usage.cache_read.input_tokens'?: number;
+  skills_invoked?: string[];
 }
 
 /** One verdict on a span. Re-judging appends another; nothing is overwritten. */
@@ -138,6 +147,7 @@ export interface Score {
   body?: string;
   via?: Via;
   comment?: string;
+  ticket?: number;
 }
 
 export interface Folded {
