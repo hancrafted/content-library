@@ -73,7 +73,7 @@ describe('failure cases', () => {
     // ACT
     const result = record(event, STAMP);
     // ASSERT
-    expect(result).toEqual({ ok: false, errors: ['kind must be one of start-run, end-run, start, end, score'] });
+    expect(result).toEqual({ ok: false, errors: ['kind must be one of start-run, end-run, start, end, attrs, score'] });
   });
 
   it('rejects lines with missing ids, an unknown status, a summary over 500 characters or an unknown field', () => {
@@ -493,5 +493,57 @@ describe('the record of an end line with identity', () => {
     // ASSERT
     expect(end.ok).toBe(true);
     expect(endRun.ok).toBe(false);
+  });
+});
+
+describe('attrs lines', () => {
+  const START_AGENT = {
+    kind: 'start',
+    type: 'agent',
+    name: 'write/skill-spawned',
+    job: 'write',
+    role: 'skill-spawned',
+    parent_span_id: RUN_SPAN,
+  };
+  const stamp = (seq: number, t: string, spanId = JOB_SPAN): Stamp => ({ t, seq, traceId: TRACE, spanId });
+  const lines = (attrs: Record<string, unknown>): RunLogLine[] => {
+    const start = record(START_AGENT, stamp(1, '2026-10-14T09:00:00Z'));
+    const end = record(
+      { kind: 'end', span_id: JOB_SPAN, status: 'ok', summary: 'done' },
+      stamp(2, '2026-10-14T09:01:00Z'),
+    );
+    const extra = record({ kind: 'attrs', span_id: JOB_SPAN, ...attrs }, stamp(3, '2026-10-14T10:00:00Z'));
+    return [start, end, extra].flatMap((r) => (r.ok ? [r.line] : []));
+  };
+
+  it('gives an ended span its identity without touching how it ended', () => {
+    // ARRANGE
+    const attrs = { job: 'write', attempt: 2, role: 'reviewer', ticket: 7, name: 'write#2/reviewer/#7' };
+    // ACT
+    const span = fold(lines(attrs)).spans[0];
+    // ASSERT
+    expect(span).toMatchObject({
+      ...attrs,
+      status: 'ok',
+      summary: 'done',
+      end_t: '2026-10-14T09:01:00Z',
+      duration_ms: 60_000,
+    });
+  });
+
+  it('refuses a field that is not identity', () => {
+    // ACT
+    const result = record({ kind: 'attrs', span_id: JOB_SPAN, status: 'error' }, stamp(3, '2026-10-14T10:00:00Z'));
+    // ASSERT
+    expect(result).toMatchObject({ ok: false, errors: [expect.stringContaining('status is not a field')] });
+  });
+
+  it('keeps an attrs line for a span that never started as an orphan', () => {
+    // ARRANGE
+    const orphan = record({ kind: 'attrs', span_id: JOB_SPAN, role: 'x' }, stamp(1, '2026-10-14T10:00:00Z'));
+    // ACT
+    const folded = fold(orphan.ok ? [orphan.line] : []);
+    // ASSERT
+    expect(folded.orphans).toHaveLength(1);
   });
 });

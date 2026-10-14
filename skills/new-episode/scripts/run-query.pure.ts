@@ -132,6 +132,7 @@ export const RUNS_CSV_COLUMNS = [
   'failed_rubric',
   'duration_s',
   'tokens',
+  'cache_read_tokens',
   'at',
 ] as const;
 
@@ -143,6 +144,7 @@ const RUNS_SQL = `
     CASE WHEN s.duration_ms IS NULL THEN NULL ELSE CAST(round(s.duration_ms / 1000.0) AS INTEGER) END AS duration_s,
     CASE WHEN s.gen_ai_usage_input_tokens IS NULL AND s.gen_ai_usage_output_tokens IS NULL THEN NULL
       ELSE coalesce(s.gen_ai_usage_input_tokens, 0) + coalesce(s.gen_ai_usage_output_tokens, 0) END AS tokens,
+    s.gen_ai_usage_cache_read_input_tokens AS cache_read_tokens,
     s.end_t AS at
   FROM spans s
   JOIN spans r ON r.trace_id = s.trace_id AND r.type = 'run' AND r.episode = s.episode
@@ -160,7 +162,7 @@ const csvField = (value: unknown): string => {
 
 type Row = Record<string, unknown>;
 
-/** The records of CSV text, quoted fields (with commas, quotes, newlines) intact, the header dropped. */
+/** The records of CSV text, quoted fields (with commas, quotes, newlines) intact, the header first. */
 function csvRecords(text: string): string[][] {
   const records: string[][] = [];
   let record: string[] = [];
@@ -170,7 +172,7 @@ function csvRecords(text: string): string[][] {
     records.push(record);
     record = [];
   }
-  return records.filter((fields) => fields.length > 1).slice(1);
+  return records.filter((fields) => fields.length > 1);
 }
 
 /** A Run's identity in either spelling: `run_id` (colons already dashed) or the ISO start time older rows carry. */
@@ -185,9 +187,11 @@ export function runsCsv(sources: readonly RunSource[], existing = ''): string {
   const result = queryRuns(sources, RUNS_SQL);
   const generated: Row[] = result.ok ? result.rows : [];
   const held = new Set(generated.map((row) => runKey(row.run)));
-  const kept: Row[] = csvRecords(existing)
+  // Kept rows are read by the column names of the file's own header, so a CSV written before a column existed still lines up.
+  const [header = [], ...records] = csvRecords(existing);
+  const kept: Row[] = records
     .filter((fields) => !held.has(runKey(fields[0])))
-    .map((fields) => Object.fromEntries(RUNS_CSV_COLUMNS.map((column, at) => [column, fields[at]])));
+    .map((fields) => Object.fromEntries(header.map((column, at) => [column, fields[at]])));
   const rows = [...kept, ...generated].sort((a, b) => runKey(a.run).localeCompare(runKey(b.run)));
   const body = rows.map((row) => RUNS_CSV_COLUMNS.map((column) => csvField(row[column])).join(','));
   return `${[RUNS_CSV_COLUMNS.join(','), ...body].join('\n')}\n`;

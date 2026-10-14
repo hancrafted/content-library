@@ -117,9 +117,9 @@ function traceFor(event: unknown, current: RunLogLine | null, src: ResolvedDeps)
   return current === null ? { error: 'the log has no start-run line; log kind "start-run" first' } : current.trace_id;
 }
 
-/** A message when an end or score names a span no start line opened, else null. */
+/** A message when an end, attrs or score names a span no start line opened, else null. */
 function unknownTarget(line: RunLogLine, lines: readonly RunLogLine[]): string | null {
-  if (line.kind !== 'end' && line.kind !== 'end-run' && line.kind !== 'score') return null;
+  if (!['end', 'end-run', 'attrs', 'score'].includes(line.kind)) return null;
   const known = lines.some((l) => (l.kind === 'start' || l.kind === 'start-run') && l.span_id === line.span_id);
   return known ? null : `${line.kind} targets span_id ${String(line.span_id)}, which no start line opened`;
 }

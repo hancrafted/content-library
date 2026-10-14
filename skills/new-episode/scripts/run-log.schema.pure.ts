@@ -2,7 +2,8 @@
 // stamp a writer supplies, and the Span and Score a reader folds lines into. Types only; import them through
 // `run-log.pure.ts`.
 
-export const KINDS = ['start-run', 'end-run', 'start', 'end', 'score'] as const;
+/** `attrs` adds identity to a span that already ended (the backfill's line); it never closes or reopens a span. */
+export const KINDS = ['start-run', 'end-run', 'start', 'end', 'attrs', 'score'] as const;
 export type Kind = (typeof KINDS)[number];
 
 /** How a span ended. `reused` is a Job whose result an earlier Run already produced. */
@@ -33,7 +34,7 @@ export interface LogEvent {
   kind: Kind;
   /** Overrides the stamped clock: how an adapter reports a measured launch or end time. */
   t?: string;
-  /** end, end-run and score: the span the line belongs to. */
+  /** end, end-run, attrs and score: the span the line belongs to. */
   span_id?: string;
   /** end: the launch time, when the start line could not measure it (the transcript did not exist yet). */
   start_t?: string;

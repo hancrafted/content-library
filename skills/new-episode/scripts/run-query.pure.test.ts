@@ -50,6 +50,7 @@ const RUN_ONE: RunLogLine[] = [
     'gen_ai.response.model': 'sonnet',
     'gen_ai.usage.input_tokens': 100,
     'gen_ai.usage.output_tokens': 20,
+    'gen_ai.usage.cache_read.input_tokens': 4000,
   }),
   line(6, '2026-10-14T09:01:40Z', {
     kind: 'score',
@@ -167,10 +168,10 @@ describe('success cases', () => {
   it('generates the runs CSV from the agent spans, quoting fields and naming a failed rubric', () => {
     // ARRANGE
     const expected = [
-      'run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at',
-      'run-1,alpha,write,implementor,1,fail,The Answer answers the h1 question.,60,120,2026-10-14T09:01:30Z',
-      'run-1,alpha,write,implementor,2,pass,,60,350,2026-10-14T09:03:10Z',
-      'run-2,beta,plan,implementor,1,crashed,,,,',
+      'run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,cache_read_tokens,at',
+      'run-1,alpha,write,implementor,1,fail,The Answer answers the h1 question.,60,120,4000,2026-10-14T09:01:30Z',
+      'run-1,alpha,write,implementor,2,pass,,60,350,,2026-10-14T09:03:10Z',
+      'run-2,beta,plan,implementor,1,crashed,,,,,',
       '',
     ].join('\n');
     // ACT
@@ -213,7 +214,7 @@ describe('edge cases', () => {
 
   it('writes only the header for no logs', () => {
     // ARRANGE
-    const expected = 'run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at\n';
+    const expected = 'run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,cache_read_tokens,at\n';
     // ACT
     const csv = runsCsv([]);
     // ASSERT
@@ -223,7 +224,7 @@ describe('edge cases', () => {
   it('quotes a comma or a double quote in a field when it reaches the CSV', () => {
     // ARRANGE
     const sources = [{ episode: 'a,b', folded: fold(RUN_TWO) }];
-    const expected = 'run-2,"a,b",plan,implementor,1,crashed,,,,';
+    const expected = 'run-2,"a,b",plan,implementor,1,crashed,,,,,';
     // ACT
     const row = runsCsv(sources).split('\n')[1];
     // ASSERT
@@ -242,23 +243,34 @@ describe('edge cases', () => {
   it('keeps the rows of Runs no log holds and regenerates the rows of Runs the logs hold', () => {
     // ARRANGE
     const existing = [
-      'run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at',
-      '2026-10-12T19:22:40Z,old,brief-grill,implementor,1,pass,"a, b",1043,,2026-10-12T19:40:03Z',
-      'run-1,alpha,stale,implementor,9,pass,,1,1,x',
+      'run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,cache_read_tokens,at',
+      '2026-10-12T19:22:40Z,old,brief-grill,implementor,1,pass,"a, b",1043,,,2026-10-12T19:40:03Z',
+      'run-1,alpha,stale,implementor,9,pass,,1,1,,x',
       '',
     ].join('\n');
     // ACT
     const rows = runsCsv([ONE], existing).split('\n');
     // ASSERT
-    expect(rows[1]).toBe('2026-10-12T19:22:40Z,old,brief-grill,implementor,1,pass,"a, b",1043,,2026-10-12T19:40:03Z');
+    expect(rows[1]).toBe('2026-10-12T19:22:40Z,old,brief-grill,implementor,1,pass,"a, b",1043,,,2026-10-12T19:40:03Z');
     expect(rows).toHaveLength(5);
     expect(rows.join('\n')).not.toContain('stale');
+  });
+
+  it('keeps a row of a CSV written before cache_read_tokens under the columns its header names', () => {
+    // ARRANGE
+    const existing =
+      'run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at\nold-run,old,write,implementor,1,pass,,5,77,2026-10-01T00:00:00Z\n';
+    const expected = 'old-run,old,write,implementor,1,pass,,5,77,,2026-10-01T00:00:00Z';
+    // ACT
+    const row = runsCsv([ONE], existing).split('\n')[1];
+    // ASSERT
+    expect(row).toBe(expected);
   });
 
   it('treats an old row stamped with the Run start time as the same Run as its run_id', () => {
     // ARRANGE
     const existing =
-      'run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at\n2026-10-14T09-00-00Z,alpha,old,implementor,1,pass,,1,1,x\n';
+      'run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,cache_read_tokens,at\n2026-10-14T09-00-00Z,alpha,old,implementor,1,pass,,1,1,,x\n';
     const source = {
       episode: 'alpha',
       folded: fold(
