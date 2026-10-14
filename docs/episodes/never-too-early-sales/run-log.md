@@ -561,3 +561,50 @@
 - Needs human: the instruction not to add three standard ramp durations is close to the source-limit note; reviewer passes it as listener guidance.
 - Needs human: the instruction to multiply the example's consistent path is close to the same-cohort note; the note's extra fact about real reports skipping stages is not spoken.
 - Han has already approved this gate in advance. Keep the draft and approved commits separate so provenance remains explicit.
+
+## write-spec · 2026-10-14T00:11:33Z
+
+### Inputs
+
+- `brief.md`, approved `dossier.md`, `pipeline.yml` and `run-log.md`.
+- Dossier approval commit `18901b1`: the issues pin their content references to this baseline.
+- `.agents/skills/new-episode/references/write-spec.md`, `.agents/skills/to-spec/SKILL.md` and `.agents/skills/to-tickets/SKILL.md`.
+- `docs/agents/issue-tracker.md`, `docs/agents/triage-labels.md`, FE-004 and applicable Episode ADRs.
+- `docs/features/episode-migration.md`: upcoming registration and post-build capture procedure.
+
+### Output
+
+- Spec https://github.com/hancrafted/content-library/issues/153, scoped by `episode:never-too-early-sales` and `run:sales-pipeline-episode-sol`.
+- Section ticket https://github.com/hancrafted/content-library/issues/154: Title, first Section/page Slide, shared Episode wiring and build captures.
+- Section ticket https://github.com/hancrafted/content-library/issues/155: sales beyond selling.
+- Section ticket https://github.com/hancrafted/content-library/issues/156: how to start doing sales.
+- Section ticket https://github.com/hancrafted/content-library/issues/157: why the pipeline takes time.
+- Native graph decision: #154 blocks #155, #156 and #157; all four are native children of #153 and remain `needs-triage`.
+- Edited #153 · 2026-10-14T00:09:18Z
+- Edited #153 · 2026-10-14T00:09:35Z
+- Edited #154 · 2026-10-14T00:09:20Z
+- Edited #155 · 2026-10-14T00:09:24Z
+- Edited #156 · 2026-10-14T00:09:28Z
+- Edited #157 · 2026-10-14T00:09:31Z
+
+### Checks
+
+- Native parent and blocker links: persisted and independently checked.
+- Coverage: all eleven h3s exactly once, 71 Voice script items and 27 note keys referenced by heading/item, not pasted.
+- Masters and motions: match the Dossier; Title/Section layouts have no Visual and motion none.
+- Footer: every own issue body ends `Edited-by: write-spec`.
+- Fresh reviewer: all five rubric lines and other applicable duties pass.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 226.816938 s
+- reviewer · attempt 1 · pass · 65 s
+
+### Notes
+
+- Existing Episode seams were used without a new interface: the route list, record registry, metadata registry and one container.
+- The first ticket owns post-build en/de captures and `npm run test:build`; the upcoming slug is not added to the published list.
+- Concurrent experiment #147 shares the Episode label and was untouched. This run uses the extra run label and explicit spec #153; no other worktree was inspected.
+- Needs human: the Brief names no curated Topic or Tags, so the required metadata uses the closest existing Topic, economics, and an empty tag list; extra Topics are omitted.
+- German translation remains after Promotion. The draft German route must visibly identify its provisional English content rather than hide a fallback.
+- Han's blanket approval covers future gates, but the design answers must still be written and independently reviewed before labels change.
