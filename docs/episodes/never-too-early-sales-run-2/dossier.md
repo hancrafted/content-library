@@ -12,6 +12,8 @@ verified:
     at: 2026-10-14T19:07:59Z
   - by: process:markdown-harness
     at: 2026-10-14T19:17:49Z
+  - by: human:han
+    at: 2026-10-14T19:19:45Z
 ---
 
 # Start selling before you need the money {#start-selling-before-you-need-the-money}

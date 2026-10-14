@@ -178,3 +178,5 @@
 {"kind":"end","t":"2026-10-14T19:17:49Z","seq":178,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"92ab616d6e0b0a8e","status":"ok"}
 {"kind":"end","t":"2026-10-14T19:17:49Z","seq":179,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"010a208cde93670f","status":"ok","summary":"46 paragraphs; passed on attempt 3"}
 {"kind":"start","t":"2026-10-14T19:18:08Z","seq":180,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"a60f83be40d4b8d5","type":"gate","name":"draft dossier","job":"write-voice-script","parent_span_id":"30e2f016b9c612f9"}
+{"kind":"score","t":"2026-10-14T19:19:45Z","seq":181,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"a60f83be40d4b8d5","name":"gate","value":"approved","source":"human:han","via":"chat","comment":"approved"}
+{"kind":"end","t":"2026-10-14T19:19:45Z","seq":182,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"a60f83be40d4b8d5","status":"ok"}
