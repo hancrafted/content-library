@@ -531,3 +531,61 @@ Needs human: #149's third column is "Trust" while its result note is "Increase t
 Needs human: Speaker notes without a Dossier `target:` got one from the designers (#149 note 4 to `result`, #151's no-decision note to `funnel`).
 
 Needs human: the first board (#148) has no `primary` mark; the destructive "Bankrupt" stamp is its focus.
+
+## implement-episode · 2026-10-14T07:40:29Z
+
+### Inputs
+
+- Spec https://github.com/hancrafted/content-library/issues/147 and tickets #148–#152, all `ready-for-agent` with approved design answers.
+- `dossier.md`, approved, with the overruled masters written back.
+- `.agents/skills/new-episode/references/implement-episode.md`, `docs/features/episode-migration.md`, `docs/features/episode-translation-keys.md`.
+- `/implement-spec` on #147, typed by Han.
+
+### Output
+
+- The Episode in `src/components/episodes/never-too-early-sales/`: Title slide, 5 section slides, 10 page Slides, English and German, `status: 'upcoming'` with no `publishedOn`, registered in `REGISTERED`.
+- Shared parts `src/components/slide-shared/cashflow-board.tsx`, `deal-board/` and `board-note.tsx`.
+- `src/lib/utils.ts`: `cn` keeps the five type roles as font sizes (`extendTailwindMerge`), with `utils.test.ts`.
+- Outside the Episode: `src/lib/episode-overview.ts` (`FEATURED` as `as const satisfies`, so an upcoming Episode with a page type-checks) and `tests/post-build/episode-text.build.test.ts` (skips the published-anchors check for a `noindex` page).
+- `tests/post-build/episode-text/never-too-early-sales.{en,de}.json` captured.
+- Commits 4486ee4 (#148), 21e4486 (#152), 078b071 (#149), 0204221 (#150), 2c229d5 (#151), ad5025b and 0f67cd5 (review fixes), on `episode/never-too-early-sales`.
+
+### Checks
+
+- `verify`: pass.
+- `build`: pass.
+- `test:build`: pass, 542 passed, 2 skipped (the published-anchors check for this upcoming Episode, en and de).
+- `visual-check`: pass. 20 runs × 15 Slides: 375, 1100, 1280 and 1440 px; drawer closed, beside and over (beside from 1280, an overlay below it); light and dark. Every Slide count 1, wrapper at least 800 px, mounted content, no horizontal scroll, nothing past the Foreground; at 1280 beside the Foreground is 336+464 and at 1440 beside 336+624, both clear of the drawer.
+- Reviewer: pass on attempt 3.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 4992 s · 841098 tokens
+- reviewer · attempt 1 · fail · rubric "The visual check ran at 375, 1100 and 1440 px, drawer beside, over and closed, in both themes, and its numbers show no overflow, wrappers at least viewport height and Foreground clear of the chrome." · 184 s · 171431 tokens
+- implementor · attempt 2 · pass · 505 s · 92401 tokens
+- implementor · attempt 3 · pass · 488 s · 84086 tokens
+- reviewer · attempt 3 · pass · 841 s · 55951 tokens
+
+### Notes
+
+Han typed `/implement-spec` on #147, because the skill sets `disable-model-invocation`. Ticket #148 ran first; #149–#152 ran in parallel worktrees and were merged one at a time, each regenerating the captured text. Attempt 1's metrics sum the five implementers.
+
+Attempt 1 failed the code review on three Standards lines (`cn()` dropped `text-body`, `text-caption` and `text-subheading`; a `clsx` workaround pasted into three files; `BoardNote` copied into four Slide folders) and on Rubric 5: the orchestrator's first drawer matrix never opened the drawer, because zsh did not split the env string. Attempt 2 fixed the code lines once in `cn` and moved the note to `slide-shared`. Its `visual-check`, now with the drawer open, failed: the Bankrupt stamp ran 16 px past the Foreground at 1280 beside (larger once `cn` kept `text-subheading`), and the tilted notes on `sales-is-more-than-selling` ran 1 px past it. Attempt 3 capped the stamp's offset inside the board and inset the note column; no reviewer ran on attempt 2, as the check failure counted as the failed attempt.
+
+Needs human: the Brief names no Topic or Tags; the metadata uses `topic: 'economics'` (the nearest existing Topic) and `tags: []`.
+
+Needs human: the German text is written fresh in "du", while other Episodes use "Sie" and the German audience is businesses; the German title is "Verkaufen, bevor das Geld knapp wird".
+
+Needs human: the #150 Slides key their columns on container queries (`@2xl`, `@4xl`) instead of the design answer's viewport `md`, so the marketing row stacks at 1100 px and beside the drawer at 1440 px; the design answers did not fit the Foreground at `md`.
+
+Needs human: the last board (#152) is drawn in quarters with $50k amounts, as the design answer proposed, unlike the first two boards' months and `$100k`/`+$1M`.
+
+Needs human: the steps on the last Slide add "cold call, inbound, network" and "sales cycle" to Voice script item 3's wording, as the design answer's strings do.
+
+Needs human: copy the Dossier does not name is the designers' proposal and built as proposed: all captions, the board's short amounts, the German "Pleite", the deal board's invented company names, "Start this week", the "Start early" stamp, and an added `stages.<stage>.note` key.
+
+Needs human: `sales-is-more-than-selling` keeps "Trust" as its third column beside the "Increase trust" result, and its arrowhead fades in as the lines finish, a motion the design answer does not name.
+
+Needs human: in dark mode `primary` is near-white, so the 27:1 spine, the cycle bar and the "Start early" stamp read white.
+
+Needs human: the German amounts `100k $` and `+1 Mio. $` wrap onto two lines in a note at 375 px.

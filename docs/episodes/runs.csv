@@ -98,3 +98,8 @@ run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at
 2026-10-13T22:43:23Z,never-too-early-sales,write-design-spec,reviewer,1,fail,"Colour, size and weight are tokens (FE-011); every import is one FE-007 §5 allows.",210,421737,2026-10-14T00:01:00Z
 2026-10-13T22:43:23Z,never-too-early-sales,write-design-spec,implementor,2,pass,,309,268751,2026-10-14T00:06:11Z
 2026-10-13T22:43:23Z,never-too-early-sales,write-design-spec,reviewer,2,pass,,360,229401,2026-10-14T00:07:50Z
+2026-10-13T22:43:23Z,never-too-early-sales,implement-episode,implementor,1,pass,,4992,841098,2026-10-14T01:10:00Z
+2026-10-13T22:43:23Z,never-too-early-sales,implement-episode,reviewer,1,fail,"The visual check ran at 375, 1100 and 1440 px, drawer beside, over and closed, in both themes, and its numbers show no overflow, wrappers at least viewport height and Foreground clear of the chrome.",184,171431,2026-10-14T01:20:00Z
+2026-10-13T22:43:23Z,never-too-early-sales,implement-episode,implementor,2,pass,,505,92401,2026-10-14T01:30:00Z
+2026-10-13T22:43:23Z,never-too-early-sales,implement-episode,implementor,3,pass,,488,84086,2026-10-14T02:05:00Z
+2026-10-13T22:43:23Z,never-too-early-sales,implement-episode,reviewer,3,pass,,841,55951,2026-10-14T07:40:29Z
