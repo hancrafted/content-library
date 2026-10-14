@@ -60,7 +60,7 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 4. **DON'T** use `toMatchSnapshot`, `toMatchInlineSnapshot`, or any matcher ending in `Snapshot`. (Decision 1.2)
 5. **DON'T** call `vi.mock`, `vi.doMock`, `vi.spyOn`, `vi.mocked`, `vi.stubGlobal`, or a `jest` equivalent. (Decision 1.2)
 6. **DON'T** assert an expected value the code under test computed. (Decision 1.2)
-7. **DON'T** inline a magic string or number in the `// ASSERT` block. (Decision 3, 📜 Rule: `assert-no-magic`)
+7. **DON'T** inline a magic string or number in the `// ASSERT` block. Strings: by review. (Decision 3, 📜 Rule: `assert-no-magic`)
 8. **DON'T** assert a side effect's absence against a pristine or empty baseline — that measures ambient repository state, and it fails on the very commit that changes the tree it guards. (Decision 1.2)
 
 ## Consequences

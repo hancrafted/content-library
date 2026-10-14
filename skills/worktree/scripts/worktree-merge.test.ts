@@ -16,6 +16,9 @@ function fixture() {
   const root = realpathSync(mkdtempSync(path.join(tmpdir(), 'wt-merge-')));
   const main = path.join(root, 'main');
   git(root, 'init', '-q', '-b', 'main', main);
+  // mergeIntoBase runs git without -c, so the repo carries its own identity: CI has no global one.
+  git(main, 'config', 'user.name', 't');
+  git(main, 'config', 'user.email', 't@t');
   writeFileSync(path.join(main, 'a.txt'), 'a');
   git(main, 'add', '.');
   git(main, 'commit', '-qm', 'init');
