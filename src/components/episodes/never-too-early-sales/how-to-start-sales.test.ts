@@ -640,15 +640,29 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it.each([OPENER, SALE, AFTER_SALE, PULLED_IN])(
-    'shows German readers %s as an explicit provisional English fallback',
-    (id) => {
-      // ARRANGE
-      const english = wordsOf(sceneOf(id, 'en'), 'article');
-      // ACT
-      const german = wordsOf(sceneOf(id, 'de'), 'article');
-      // ASSERT
-      expect(german).toBe(english);
+  it.each([
+    { id: OPENER, expected: 'How to start doing sales' },
+    {
+      id: SALE,
+      expected:
+        'Stages of sale A lead becomes an opportunity only when the buyer responds, fits and agrees a next step. The work after that decides the deal, and won is not cash received. Leads Research and maintain a prospect list Company and the relevant role Your problem hypothesis Where you found it How you could reach someone Contact status and next action Update the entry after every response Sample list card · fictional Alder Works operations buyer manual scheduling problem source: trade directory contact route: introduction status: not contacted Make first contact A plausible reason and a suitable route? Use it Cold call · inbound enquiry · network introduction Open with the problem you want to discuss Ask for one next step Qualify Buyer response + plausible fit + agreed next step First contact alone does not cross it Opportunities Agreed problem and next conversation Follow-up Meetings Proposal Negotiation Every step ends with a next action and a date Fictional: Birch Studio described a scheduling problem and agreed to discuss a trial Closing Won: agreement Lost: record reason Won is not cash received',
     },
-  );
+    {
+      id: AFTER_SALE,
+      expected:
+        "Stages of after-sale Agreement starts delivery work. Payment arrives when the agreed terms say, and repeat business needs its own agreement. Production Do the promised work Fictional: prepare Birch's scheduling setup and make time to support it Delivery / operations Get it into the customer's hands Fictional: a setup session that agrees who receives it, how the team starts and what counts as delivered Customer success Check the customer's outcome Fictional: can Birch plan next week's jobs? Where does it still get stuck? Repeat or recurring business, if earned and agreed New opportunity Needs its own agreement, price and payment schedule. Not in next month's cash plan before then Payment follows agreed terms: before, during or after delivery Before delivery During After delivery",
+    },
+    {
+      id: PULLED_IN,
+      expected:
+        'Watch your cashflow, revenue pulled in Same deal, same costs: receiving the $1,000,000 in February instead of April funds March. Only the cash date moved. Fictional example · cash received, not booked revenue Counterfactual: customer cash arrives in February; costs unchanged Receipt moved from April to February January Opening cash $100,000 Cash costs $50,000 Receipts $0 Closing cash $50,000 February February: $0 → $1,000,000 Opening cash $50,000 Customer receipt $1,000,000 Moved from April Cash costs $50,000 Closing cash $1,000,000 March Opening cash $1,000,000 Cash costs $50,000 Receipts $0 Closing cash $950,000 April Opening cash $950,000 Original receipt date Moved to February Cash costs $50,000 Closing cash $900,000 Closing cash = opening cash + receipts − payments An earlier signature alone changes none of these cash balances',
+    },
+  ])('shows German readers $id in its approved English text, an explicit provisional fallback', ({ id, expected }) => {
+    // ARRANGE
+    const $ = sceneOf(id, 'de');
+    // ACT
+    const german = wordsOf($, 'article');
+    // ASSERT
+    expect(german).toBe(expected);
+  });
 });
