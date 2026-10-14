@@ -111,6 +111,15 @@ describe('success cases', () => {
     expect(parsed).toEqual({ job: 'write-dossier', attempt: 2, role: 'reviewer' });
   });
 
+  it.each(['reviewer-standards', 'reviewer-spec'])('parses the per-ticket %s role', (role) => {
+    // ARRANGE
+    const description = `implement-episode#1/${role}/#174`;
+    // ACT
+    const parsed = parseDescription(description);
+    // ASSERT
+    expect(parsed).toEqual({ job: 'implement-episode', attempt: 1, role, ticket: 174 });
+  });
+
   it('parses the optional ticket', () => {
     // ARRANGE
     const description = 'implement-episode#1/ticket-implementor/#148';
