@@ -3,8 +3,8 @@ node_modules
 coverage
 dist
 .agents/skills/*
-!.agents/skills/worktree
-!.agents/skills/visual-check
+# Fixture of agent-written staging files: research.md keeps `[n]: <url> "title"`, which Prettier rewrites.
+skills/new-episode/assets/sample-episode
 .vitest
 .claude/settings.local.json
 .next

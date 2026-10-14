@@ -13,7 +13,7 @@ import { describe, expect, it } from 'vitest';
  */
 
 const ROOT = path.join(__dirname, '../..');
-const GUIDE = path.join(ROOT, '.agents/skills/brief-grill/SKILL.md');
+const GUIDE = path.join(ROOT, 'skills/brief-grill/SKILL.md');
 const MH = path.join(ROOT, 'node_modules/@hancrafted/markdown-harness/dist/packages/cli/cli.js');
 const TEMPLATE_BLOCK = /^## Brief template\n[\s\S]*?^```markdown\n([\s\S]*?)^```$/m;
 

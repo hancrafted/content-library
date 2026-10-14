@@ -1,0 +1,3 @@
+interface:
+  display_name: 'New Episode'
+  short_description: 'Orchestrate an Episode from Brief to implemented draft PR'

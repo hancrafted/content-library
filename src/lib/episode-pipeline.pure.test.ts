@@ -7,7 +7,7 @@ import { checkPipeline, type PipelineContext } from './episode-pipeline.pure';
  * the disk: the skills that exist and the repo paths that exist.
  */
 
-const SKILL_FOLDER = '.agents/skills/new-episode';
+const SKILL_FOLDER = 'skills/new-episode';
 
 const CONTEXT: PipelineContext = {
   skillFolder: SKILL_FOLDER,
