@@ -64,6 +64,11 @@ function closeSpan(span: Span, entry: RunLogLine): void {
   span.source ??= entry.source;
 }
 
+/** An attrs line: identity laid over a span, leaving how it ended as it was. */
+function applyAttributes(span: Span, entry: RunLogLine): void {
+  Object.assign(span, Object.fromEntries(Object.entries(entry).filter(([key]) => !NOT_ATTRIBUTES.has(key))));
+}
+
 interface Accumulator {
   open: SpanStatus;
   live?: ReadonlySet<string>;
@@ -82,7 +87,7 @@ function place(entry: RunLogLine, acc: Accumulator): void {
   const id = entry.span_id as string;
   if (entry.kind === 'start' || entry.kind === 'start-run') acc.spans.set(id, openSpan(entry, openStatus(entry, acc)));
   else if (entry.kind === 'score') acc.scores.push(scoreOf(entry));
-  else if (acc.spans.has(id)) closeSpan(acc.spans.get(id) as Span, entry);
+  else if (acc.spans.has(id)) (entry.kind === 'attrs' ? applyAttributes : closeSpan)(acc.spans.get(id) as Span, entry);
   else acc.orphans.push(entry);
 }
 

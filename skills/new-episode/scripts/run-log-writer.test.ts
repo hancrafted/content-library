@@ -111,6 +111,7 @@ describe('unknown targets', () => {
   const GHOST = 'ffffffffffffffff';
   it.each([
     ['end', { kind: 'end', span_id: GHOST, status: 'ok' }],
+    ['attrs', { kind: 'attrs', span_id: GHOST, role: 'reviewer' }],
     ['score', { kind: 'score', span_id: GHOST, name: 'check', value: 'pass', source: 'check:sim' }],
   ])('refuses an %s whose span_id is in no start line and writes nothing', (_kind, event) => {
     // ARRANGE

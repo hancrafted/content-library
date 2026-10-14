@@ -108,17 +108,16 @@ function openAttempt(
  * open Job. Otherwise the Run, since a closed or never-begun Job is no place to guess.
  */
 function parentOf(
-  where: { log: readonly RunLogLine[]; marker: Marker },
+  where: { log: readonly RunLogLine[]; trace: string },
   identity: Partial<ParsedDescription>,
   jobs: readonly RunLogLine[],
 ): string | undefined {
-  const { log, marker } = where;
+  const { log, trace } = where;
   const { job, attempt } = identity;
-  const ownAttempt =
-    job !== undefined && attempt !== undefined ? openAttempt(log, marker.trace_id, { job, attempt }) : undefined;
+  const ownAttempt = job !== undefined && attempt !== undefined ? openAttempt(log, trace, { job, attempt }) : undefined;
   const own = ownAttempt ?? jobs.find((l) => job !== undefined && l.job === job);
   if (own !== undefined) return own.span_id;
-  return log.find((l) => l.kind === 'start-run' && l.trace_id === marker.trace_id)?.span_id;
+  return log.find((l) => l.kind === 'start-run' && l.trace_id === trace)?.span_id;
 }
 
 /** The model asked for: meta.json's, else the agent type's frontmatter. */
@@ -130,7 +129,7 @@ function startEvent(input: AdapterInput, marker: Marker, files: { transcript: st
   const all = entries(input.transcript);
   const jobs = openJobs(input.log, marker.trace_id);
   const identity = identityOf(description, jobs);
-  const parent = parentOf({ log: input.log, marker }, identity, jobs);
+  const parent = parentOf({ log: input.log, trace: marker.trace_id }, identity, jobs);
   if (parent === undefined) return null;
   return definedOnly({
     kind: 'start',
@@ -162,13 +161,14 @@ function lateStartFacts(started: RunLogLine, all: readonly Entry[]): Partial<Log
   };
 }
 
-/** The identity meta.json names by SubagentStop, for a start filed provisionally (meta.json did not exist yet): the fold applies it over the start. */
-function identityFact(input: AdapterInput, started: RunLogLine, marker: Marker): Partial<LogEvent> {
+/** The identity meta.json names by SubagentStop (or, for a log that predates that, by the backfill), for a start filed provisionally (meta.json did not exist yet): the fold applies it over the start. */
+export function identityFact(meta: string | null, log: readonly RunLogLine[], started: RunLogLine): Partial<LogEvent> {
   if (started.role !== 'skill-spawned') return {};
-  const { description } = metaOf(input.meta);
+  const { description } = metaOf(meta);
   const parsed = parseDescription(description);
   if (parsed === null) return {};
-  const parent = parentOf({ log: input.log, marker }, parsed, openJobs(input.log, marker.trace_id));
+  const trace = started.trace_id;
+  const parent = parentOf({ log, trace }, parsed, openJobs(log, trace));
   return { ...parsed, parent_span_id: parent, name: description, description };
 }
 
@@ -189,7 +189,7 @@ function stopEvent(input: AdapterInput, marker: Marker, files: { transcript: str
     kind: 'end',
     span_id: started.span_id,
     ...lateStartFacts(started, all),
-    ...identityFact(input, started, marker),
+    ...identityFact(input.meta, input.log, started),
     ...lateModel(input, started),
     t: all.at(-1)?.timestamp,
     status: 'ok',
