@@ -320,7 +320,13 @@
       "localLog": "Nur lokale events.jsonl. Rohdaten können private Prompts oder Pfade enthalten; nichts wird hochgeladen.",
       "pauseMotion": "Animation pausieren",
       "resumeMotion": "Animation fortsetzen",
-      "stale": "Die Quelle ist veraltet; Aktivitätsanimation pausiert."
+      "stale": "Die Quelle ist veraltet; Aktivitätsanimation pausiert.",
+      "jobAttention": "Braucht Aufmerksamkeit",
+      "outputs": "Ausgaben",
+      "notWritten": "noch nicht geschrieben",
+      "openOutput": "öffnet als Klartext in einem neuen Tab",
+      "preview": "Vorschau :{port}",
+      "previewHelp": "Dev-Server dieses Jobs, öffnet in einem neuen Tab"
     }
   },
   "meta": {

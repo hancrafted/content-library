@@ -8,6 +8,7 @@ The implementor (`archgate:developer`) builds its Section of `docs/episodes/<slu
 
 - Build each page Slide of the Section in its own Slide folder and add it to the Section's placement marker ([`implement-episode-init.md`](implement-episode-init.md#placement-markers)) in spec order. Touch no other Section's marker or Slides: a sibling job builds them in parallel.
 - On a retry, the failed lines go to a new implementor, quoted verbatim, as fix work in the job's worktree.
+- Serve the Section for Han: start `npx next dev -p <port>` in the background in the job's worktree, `<port>` the job's `port` in `pipeline.yml`, and leave it running when the job ends. The dashboard links it. A retry reuses the server already listening there.
 
 ## Design answers
 

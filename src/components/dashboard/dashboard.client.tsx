@@ -1,6 +1,7 @@
 'use client';
 
 import { useEpisodeDashboard } from '@/hooks/use-episode-dashboard';
+import type { EpisodeOutputs } from '@/lib/dashboard-outputs.pure';
 import type { EpisodeRead } from '@/lib/dashboard-reader.pure';
 import type { ReactNode } from 'react';
 import { BrowserHelp, ChooseFolder, DashboardEntry, PrivacyNote } from './dashboard-entry';
@@ -10,12 +11,13 @@ import { OpenGates, ReaderFooter, SourceErrors, SourceStatus } from './dashboard
 
 interface LiveProps {
   read: EpisodeRead;
+  outputs: EpisodeOutputs;
   name?: string;
   chooser: ReactNode;
   copy: DashboardCopy;
 }
 
-function LiveDashboard({ read, name, chooser, copy }: LiveProps) {
+function LiveDashboard({ read, outputs, name, chooser, copy }: LiveProps) {
   return (
     <>
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -31,6 +33,7 @@ function LiveDashboard({ read, name, chooser, copy }: LiveProps) {
             view={read.view}
             events={read.events}
             stale={read.condition !== 'live'}
+            outputs={outputs}
             copy={copy}
           />
         </>
@@ -49,7 +52,7 @@ export function Dashboard({ copy }: { copy: DashboardCopy }) {
   return (
     <div className="space-y-6">
       {read?.view ? (
-        <LiveDashboard read={read} name={source.name} chooser={chooser} copy={copy} />
+        <LiveDashboard read={read} outputs={source.outputs} name={source.name} chooser={chooser} copy={copy} />
       ) : (
         <DashboardEntry copy={copy}>
           {chooser}

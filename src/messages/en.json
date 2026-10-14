@@ -320,7 +320,13 @@
       "localLog": "Local events.jsonl only. Raw records may contain private prompts or paths; nothing is uploaded.",
       "pauseMotion": "Pause animation",
       "resumeMotion": "Resume animation",
-      "stale": "Source is stale; activity animation is paused."
+      "stale": "Source is stale; activity animation is paused.",
+      "jobAttention": "Needs attention",
+      "outputs": "Outputs",
+      "notWritten": "not written yet",
+      "openOutput": "opens as plain text in a new tab",
+      "preview": "Preview :{port}",
+      "previewHelp": "this Job's dev server, opens in a new tab"
     }
   },
   "meta": {

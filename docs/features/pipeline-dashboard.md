@@ -21,7 +21,8 @@ visible. An error marks the view as potentially stale; valid lines remain visibl
 
 Folder handles, parsed configuration, byte buffers, folded spans and errors live
 only in page memory. Reloading returns to the picker. The dashboard writes no
-files, stores no handles and uploads no local data. It does not approve Gates.
+files, stores no handles and uploads no local data. An output a Job writes opens
+read-only in a new tab as plain text, from an object URL revoked after a minute. It does not approve Gates.
 Log text is rendered as text, not HTML. Transcript paths and agent input messages
 stay out of the graph and cards. Expanding **Raw JSON** in the local log modal can
 reveal them; no external transcript is opened and nothing is uploaded.
@@ -91,6 +92,24 @@ focus to the trigger. The browser's modal makes the background inert.
 React's development effect replay may close and reopen the native dialog; a
 queued close notification only dismisses a dialog that is still closed.
 
+## Outputs, previews and attention
+
+A Job's card lists its `outputs`. After every poll the dashboard probes each one
+through the chosen folder's handle: it strips the staging prefix
+`docs/episodes/<slug>/`, `<slug>` the folder's name, and walks the sub-folders.
+A written output is a button that opens the file as plain text in a new tab; one
+not on disk yet reads **not written yet** and is disabled, not an error. A glob
+output of a draft is shown as text. A path outside the folder is never opened.
+
+A Build Job with a `port` (design-ADR-0008, Ports) shows **Preview :<port>**
+in its card and in its Job box, a button opening `http://localhost:<port>` in a
+new tab. It is a button, not a link, because FE-003 admits no `http:` href; it
+does not check that the Job's `next dev` answers.
+
+A Job waiting on Han or ended `error`, `refused` or `crashed` carries an
+exclamation mark in its Job box and its card, labelled **Needs attention** for
+screen readers and on hover, beside its state in words.
+
 ## Reading and interpretation
 
 Polling runs about every two seconds after each completed read, never overlapping.
@@ -152,6 +171,8 @@ and every emitted alternate must resolve and link back.
   stage order and membership from the pipeline, not-planned stages, template
   placeholders, the legacy fallback, stage progress, attention, parallel
   dependency levels and ticket/session identity.
+- `outputSegments()`, `outputLabel()` and `previewHref()`: an output's path in
+  the chosen folder, its label, and a port's link.
 - `selectEvents()`: scoped, chronological source events, including ends and
   Scores associated through their start Span's ancestry.
 

@@ -32,6 +32,10 @@
 #     checks    cheapest first; names and commands in SKILL.md's job-loop check table
 #     retries   reviewer failures sent back before this branch of the pipeline stops
 #     gate      optional; `human` stops the run until Han approves the output
+#     port      per-run build jobs only, 1024–65535: the port the job's agent serves its
+#               worktree on with `npx next dev -p <port>`, linked by the dashboard.
+#               customize-pipeline assigns each build job its own; never 4382, the
+#               dashboard's port. An approved per-run pipeline gives every build job one
 #     agents    run in order; a reviewer is fresh: it did not write the output
 #       type        implementor | reviewer
 #       skills      skill names under .agents/skills/, or plugin:skill; refused when the

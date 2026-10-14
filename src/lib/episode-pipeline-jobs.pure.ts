@@ -33,6 +33,8 @@ export interface Job {
   /** `orchestrator` when the job itself says so or any of its agents runs in the orchestrator session (the schema sets `session` per agent); absent for the default, a subagent. */
   session?: 'orchestrator';
   agents: JobAgent[];
+  /** A Build job's dev-server port, which customize-pipeline assigns; absent on any other job and in the template. */
+  port?: number;
 }
 
 export interface Pipeline {
@@ -73,6 +75,7 @@ export function jobOf(job: Record<string, unknown>): Job {
     gate: job.gate === 'human',
     ...(inSession && { session: 'orchestrator' as const }),
     agents,
+    ...(Number.isInteger(job.port) && { port: job.port as number }),
   };
 }
 

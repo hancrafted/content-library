@@ -1,18 +1,12 @@
 import type { DashboardJob } from '@/lib/dashboard-projection.pure';
-import {
-  jobLabel,
-  needsAttention,
-  runningAgents,
-  stageLayers,
-  stateText,
-  type DashboardStage,
-} from '@/lib/dashboard-stages.pure';
+import { jobLabel, runningAgents, stageLayers, stateText, type DashboardStage } from '@/lib/dashboard-stages.pure';
 import { fillTemplate } from '@/lib/template.pure';
-import { ArrowDown, CircleAlert, GitBranch } from 'lucide-react';
+import { ArrowDown, GitBranch } from 'lucide-react';
 import type { CSSProperties } from 'react';
 import type { DashboardCopy } from './dashboard-evidence';
 import styles from './dashboard-graph.module.css';
-import { StageStateIcon } from './dashboard-state-icon';
+import { PreviewButton } from './dashboard-job-links';
+import { AttentionMarker, StageStateIcon } from './dashboard-state-icon';
 
 export type SelectJob = (stage: string, job: string) => void;
 
@@ -57,17 +51,6 @@ function JobName({ id }: { id: string }) {
   );
 }
 
-function AttentionMarker({ job, copy }: Pick<JobProps, 'job' | 'copy'>) {
-  if (!needsAttention(job.state)) return null;
-  return (
-    <CircleAlert
-      role="img"
-      aria-label={fillTemplate(copy.graph.attention, { count: 1 })}
-      className="size-4 shrink-0 text-(--warning)"
-    />
-  );
-}
-
 function JobNode({ stage, job, onSelectJob, copy }: JobProps) {
   const template = job.foreach !== undefined;
   return (
@@ -88,8 +71,9 @@ function JobNode({ stage, job, onSelectJob, copy }: JobProps) {
           <JobName id={job.id} />
           <JobStatus job={job} copy={copy} />
         </span>
-        <AttentionMarker job={job} copy={copy} />
+        <AttentionMarker state={job.state} label={copy.graph.jobAttention} />
       </button>
+      {job.port !== undefined ? <PreviewButton port={job.port} copy={copy} className="mt-1 ml-2" /> : null}
     </li>
   );
 }

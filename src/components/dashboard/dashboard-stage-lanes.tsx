@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import type { EventScope } from '@/lib/dashboard-events.pure';
+import type { EpisodeOutputs } from '@/lib/dashboard-outputs.pure';
 import type { DashboardJob } from '@/lib/dashboard-projection.pure';
 import {
   agentIdentity,
@@ -14,8 +15,9 @@ import { fillTemplate } from '@/lib/template.pure';
 import { ArrowDown, GitBranch } from 'lucide-react';
 import { AgentEvidence, StateBadge, type DashboardCopy } from './dashboard-evidence';
 import styles from './dashboard-graph.module.css';
+import { JobLinks } from './dashboard-job-links';
 import { JobEvidence } from './dashboard-jobs';
-import { StageStateIcon } from './dashboard-state-icon';
+import { AttentionMarker, StageStateIcon } from './dashboard-state-icon';
 
 export const jobDetailId = (job: string) => `dashboard-job-${job}`;
 
@@ -106,6 +108,7 @@ function JobSummary({ job, copy }: Pick<JobProps, 'job' | 'copy'>) {
       <span className="inline-flex max-w-full flex-wrap items-center gap-2 align-middle">
         <span className="text-body font-medium wrap-anywhere">{job.id}</span>
         <StateBadge state={job.state} />
+        <AttentionMarker state={job.state} label={copy.graph.jobAttention} />
       </span>
       <span className="block text-caption text-muted-foreground wrap-anywhere">
         {copy.needs}: {job.needs.join(', ') || copy.none}
@@ -120,12 +123,13 @@ function JobSummary({ job, copy }: Pick<JobProps, 'job' | 'copy'>) {
   );
 }
 
-function JobLane({ job, copy, openLog }: JobProps) {
+function JobLane({ job, copy, openLog, outputs }: JobProps & { outputs: EpisodeOutputs }) {
   return (
     <li className={styles.branch} data-complete={isComplete(job.state)}>
       <details id={jobDetailId(job.id)} className="min-w-0 rounded-lg border border-border bg-card">
         <JobSummary job={job} copy={copy} />
         <div className="space-y-4 border-t border-border p-4">
+          <JobLinks job={job} outputs={outputs} copy={copy} />
           <Button variant="outline" onClick={() => openLog(job.id, { jobs: [job.id] })}>
             {copy.graph.logs}
           </Button>
@@ -159,9 +163,10 @@ interface StageProps {
   stage: DashboardStage;
   copy: DashboardCopy;
   openLog: OpenEventLog;
+  outputs: EpisodeOutputs;
 }
 
-export function StageLanes({ stage, copy, openLog }: StageProps) {
+export function StageLanes({ stage, copy, openLog, outputs }: StageProps) {
   return (
     <div className="space-y-5">
       {stageLayers(stage).map((jobs, index) => (
@@ -169,7 +174,7 @@ export function StageLanes({ stage, copy, openLog }: StageProps) {
           <LayerHeading count={jobs.length} level={index + 1} copy={copy} />
           <ul className="grid grid-cols-1 items-start gap-4 xl:grid-cols-2">
             {jobs.map((job) => (
-              <JobLane key={job.id} job={job} copy={copy} openLog={openLog} />
+              <JobLane key={job.id} job={job} copy={copy} openLog={openLog} outputs={outputs} />
             ))}
           </ul>
         </section>

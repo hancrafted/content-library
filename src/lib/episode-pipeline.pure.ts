@@ -17,6 +17,7 @@ import {
 import { ancestors, concurrentJobs, findCycle, waitsFor } from './episode-pipeline-graph.pure';
 import { BAD_JOB_ID, JOB_ID, jobOf, type Job } from './episode-pipeline-jobs.pure';
 import { checkOutputs } from './episode-pipeline-outputs.pure';
+import { checkPorts } from './episode-pipeline-ports.pure';
 import { checkSkillNames } from './episode-pipeline-skills.pure';
 import { checkStages } from './episode-pipeline-stages.pure';
 import { repeated, unless, type Finding } from './finding.pure';
@@ -175,6 +176,7 @@ function checkJobs(raw: readonly unknown[], document: Mapping, context: Pipeline
     ),
     ...repeated(ids).map((id) => `The job id "${id}" appears twice; job ids are unique.`),
     ...(stages === null ? [] : checkStages(stages, jobs)),
+    ...checkPorts(jobs, { perRun: context.perRun, expanded }),
     ...(cycle === null ? [] : [`The needs graph has a cycle: ${cycle.join(' → ')}.`]),
     ...(cycle === null && !brokenEdge ? checkIsolation(mappings, jobs, byId) : []),
   ];

@@ -1,9 +1,10 @@
-import { createEpisodeReader, type EpisodeFolder, type EpisodeRead } from '@/lib/dashboard-reader.pure';
+import { createEpisodeReader, type EpisodeRead } from '@/lib/dashboard-reader.pure';
 import { useEffect, useRef, useState } from 'react';
+import { useEpisodeOutputs, type OutputFolder } from './use-episode-outputs';
 
-type PickerWindow = Window & { showDirectoryPicker?: (options: { mode: 'read' }) => Promise<EpisodeFolder> };
+type PickerWindow = Window & { showDirectoryPicker?: (options: { mode: 'read' }) => Promise<OutputFolder> };
 interface Selection {
-  folder: EpisodeFolder;
+  folder: OutputFolder;
   reader: ReturnType<typeof createEpisodeReader>;
   initial: EpisodeRead;
 }
@@ -75,9 +76,10 @@ function useEpisodePolling(selection: Selection | undefined) {
 export function useEpisodeDashboard() {
   const picker = useFolderSelection();
   const read = useEpisodePolling(picker.selection);
+  const outputs = useEpisodeOutputs(picker.selection?.folder, read);
   const [supported, setSupported] = useState<boolean | null>(null);
   useEffect(() => {
     setSupported(typeof (window as PickerWindow).showDirectoryPicker === 'function');
   }, []);
-  return { ...picker, read, supported, name: picker.selection?.folder.name };
+  return { ...picker, read, outputs, supported, name: picker.selection?.folder.name };
 }

@@ -9,6 +9,7 @@ The implementor (`archgate:developer`) builds `## Episode page` of the spec, tes
 - Scaffold the Episode by [episode-migration](../../../docs/features/episode-migration.md): steps 2, 3 and 7 for its slugs, folder, record, Translation files and page, and steps 4 and 5 for the Title slide and one section slide per Section only, built to `design-spec.md`.
 - Write one placement marker per Section, by the [naming below](#placement-markers), in Dossier order. Each holds that Section's section slide and no page Slide.
 - Capture the post-build text: `npm run build`, then `npm run test:build`, and commit the written `tests/post-build/episode-text/<ep>.{en,de}.json`. The slug joins `PUBLISHED_SLUGS` only at publication.
+- Serve the Episode for Han: start `npx next dev -p <port>` in the background, `<port>` the job's `port` in `pipeline.yml`, and leave it running when the job ends. The dashboard links it.
 
 ### Placement markers
 

@@ -16,6 +16,14 @@ A new-episode `pipeline.yml` lists its Stages in order, `stages: [brief, setup, 
 5. **The Spec is local markdown.** `write-spec` writes `docs/episodes/<slug>/spec/spec.md`, one h2 per Section, and `write-design-spec` writes `spec/design-spec.md`, both governed by markdown-harness rules and queried before writing. No GitHub spec issue or sub-issues: `write-design-spec` keeps its human gate, now Han's approval of the design spec file. `spec/` joins the staging list of design-ADR-0004.
 6. **Build is one Job per Section.** `implement-episode-init` scaffolds the Episode page with one placement marker per Section, then `implement-section` with `foreach: docs/episodes/<slug>/brief.md#slides` expands to one `implement-section-<section-slug>` Job per h3 of the Brief's Slides, in parallel worktrees, each an implementor and reviewer pair. This replaces `implement-episode` and `implement-spec`'s hidden per-ticket fan-out. `open-pr` needs every Section Job.
 
+## Ports
+
+Each Build Job serves its worktree with `next dev` on its own port, and the dashboard links `http://localhost:<port>`, so Han previews a Section while it is built with no backend: `pipeline.yml` is the contract. Issue #184.
+
+1. **`port` on a Job.** An optional whole number from 1024 to 65535. The template and the draft scaffold carry none; `customize-pipeline` writes them, so in an approved per-run pipeline every Job of the `build` stage has one. The port check (`src/lib/episode-pipeline-ports.pure.ts`) refuses a port in the template, a port on a Job outside the `build` stage, a port two Jobs share, 4382 (the dashboard's own dev port) and a `build` Job without a port once approved.
+2. **A consecutive block from the first free port.** `customize-pipeline` probes ports from 4000 and gives `implement-episode-init` the first free one, then each `implement-section-*` Job the next free one in Section order, skipping a busy port and 4382.
+3. **The Job's agent starts the server and leaves it running** in its worktree, `npx next dev -p <port>`, for Han to look at; the dashboard only links it and never checks it answers.
+
 ## Considered options
 
 - **Infer Stages from job ids**, as the dashboard did: every new Job needs a dashboard change, and a one-off Job falls in no Stage. Rejected.

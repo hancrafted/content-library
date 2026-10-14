@@ -77,6 +77,16 @@ jobs:
     // ASSERT
     expect({ stages: pipeline?.stages, jobStages: pipeline?.jobs.map((job) => job.stage) }).toEqual(expected);
   });
+
+  it("reads a build job's dev-server port", () => {
+    // ARRANGE
+    const yaml = 'jobs:\n  - { id: implement-section-why, stage: build, needs: [], port: 4001 }\n';
+    const expected = 4001;
+    // ACT
+    const port = readPipeline(yaml)?.jobs[0].port;
+    // ASSERT
+    expect(port).toBe(expected);
+  });
 });
 
 describe('failure cases', () => {
@@ -114,5 +124,15 @@ describe('edge cases', () => {
     const pipeline = readPipeline(yaml);
     // ASSERT
     expect({ stages: pipeline?.stages, hasStage: Object.hasOwn(pipeline?.jobs[0] ?? {}, 'stage') }).toEqual(expected);
+  });
+
+  it('reads a port that is not a whole number as no port', () => {
+    // ARRANGE
+    const yaml = "jobs:\n  - { id: a, needs: [], port: '4001' }\n  - { id: b, needs: [], port: 4001.5 }\n";
+    const expected = [false, false];
+    // ACT
+    const ported = readPipeline(yaml)?.jobs.map((job) => Object.hasOwn(job, 'port'));
+    // ASSERT
+    expect(ported).toEqual(expected);
   });
 });

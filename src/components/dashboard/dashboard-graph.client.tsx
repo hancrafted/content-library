@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import type { DashboardEvent, EventScope } from '@/lib/dashboard-events.pure';
+import type { EpisodeOutputs } from '@/lib/dashboard-outputs.pure';
 import type { DashboardView } from '@/lib/dashboard-projection.pure';
 import { projectStages, type DashboardStage } from '@/lib/dashboard-stages.pure';
 import { fillTemplate } from '@/lib/template.pure';
@@ -17,6 +18,7 @@ interface GraphProps {
   view: DashboardView;
   events: readonly DashboardEvent[];
   stale: boolean;
+  outputs: EpisodeOutputs;
   copy: DashboardCopy;
 }
 
@@ -156,9 +158,10 @@ interface DetailProps {
   stage: DashboardStage;
   copy: DashboardCopy;
   openLog: OpenEventLog;
+  outputs: EpisodeOutputs;
 }
 
-function StageDetail({ stage, copy, openLog }: DetailProps) {
+function StageDetail({ stage, copy, openLog, outputs }: DetailProps) {
   return (
     <section
       className={`${styles.panel} space-y-5 rounded-2xl border border-border bg-card p-4 sm:p-6`}
@@ -176,12 +179,12 @@ function StageDetail({ stage, copy, openLog }: DetailProps) {
           {copy.graph.logs}
         </Button>
       </div>
-      <StageLanes stage={stage} copy={copy} openLog={openLog} />
+      <StageLanes stage={stage} copy={copy} openLog={openLog} outputs={outputs} />
     </section>
   );
 }
 
-export function DashboardGraph({ view, events, stale, copy }: GraphProps) {
+export function DashboardGraph({ view, events, stale, outputs, copy }: GraphProps) {
   const controls = useGraphControls(view);
   const { stage, log, openLog, dismissLog } = controls;
   return (
@@ -192,7 +195,7 @@ export function DashboardGraph({ view, events, stale, copy }: GraphProps) {
     >
       <GraphOverview controls={controls} stale={stale} copy={copy} />
       <div id="dashboard-stage-detail">
-        {stage ? <StageDetail key={stage.id} stage={stage} copy={copy} openLog={openLog} /> : null}
+        {stage ? <StageDetail key={stage.id} stage={stage} copy={copy} openLog={openLog} outputs={outputs} /> : null}
       </div>
       {log ? (
         <DashboardLog events={events} scope={log.scope} title={log.title} copy={copy} onDismiss={dismissLog} />

@@ -55,6 +55,25 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('accepts a port from 1024 to 65535 and refuses one outside it or not whole', () => {
+    // ARRANGE
+    const job = { id: 'a', stage: 'build', needs: [], outputs: [], checks: [], retries: 0, agents: [AGENT] };
+    const ports = [1024, 65535, 1023, 65536, 4000.5, '4000'];
+    const range = 'it must be a whole number from 1024 to 65535.';
+    const expected = [
+      [],
+      [],
+      [`Job has port 1023; ${range}`],
+      [`Job has port 65536; ${range}`],
+      [`Job has port 4000.5; ${range}`],
+      [`Job has port "4000"; ${range}`],
+    ];
+    // ACT
+    const messages = ports.map((port) => checkMapping('Job', { ...job, port }, JOB_FIELDS));
+    // ASSERT
+    expect(messages).toEqual(expected);
+  });
+
   it('requires a rubric of a reviewer and leaves it optional for an implementor', () => {
     // ARRANGE
     const withoutRubric = { type: 'reviewer', skills: [], references: [], model: 'opus' };

@@ -63,6 +63,13 @@ export const JOB_FIELDS = [
   field('checks', isStringList, LIST),
   field('retries', (value) => Number.isInteger(value) && Number(value) >= 0, 'it must be a whole number of 0 or more'),
   optional(field('gate', (value) => value === 'human', 'the only gate is human')),
+  optional(
+    field(
+      'port',
+      (value) => Number.isInteger(value) && Number(value) >= 1024 && Number(value) <= 65535,
+      'it must be a whole number from 1024 to 65535',
+    ),
+  ),
   field('agents', (value) => Array.isArray(value) && value.length > 0, 'it must be a non-empty list of agents'),
 ];
 
