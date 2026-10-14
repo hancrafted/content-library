@@ -1,7 +1,7 @@
 /// <reference path="../rules.d.ts" />
 
 // Sibling test for ARCH-003-testing.rules.ts — pass and fail path for
-// `suite-three-blocks` and `test-body-aaa`, plus their easy-to-get-wrong
+// `suite-three-blocks`, `test-body-aaa` and `assert-no-magic`, plus their easy-to-get-wrong
 // boundaries: nested describes, it.each, combined and lowercase markers, and
 // the src/ scope.
 
@@ -188,5 +188,85 @@ describe('test-body-aaa', () => {
     await rule.check(ctx);
     // ASSERT
     expect(violations[0].message).toContain(provenance);
+  });
+});
+
+describe('assert-no-magic', () => {
+  const rule = ruleSet.rules['assert-no-magic'];
+  const withAssert = (assertion: string) =>
+    block(
+      'success cases',
+      test('t', `    // ARRANGE\n    const a = 1;\n    // ACT\n    const b = a;\n    // ASSERT\n${assertion}\n`),
+    );
+
+  it('passes the exempt numbers, named constants, strings, regexes, comments and digits inside identifiers', async () => {
+    // ARRANGE
+    const assertion = [
+      '    expect(b).toBe(a);',
+      "    expect([b, 0, -1, 1.0]).toContain('v2');",
+      '    expect(list[0]).toMatch(/^a{2,3}\\d+$/); // 42 here is a comment',
+      '    expect(x2).toBe(item1);',
+    ].join('\n');
+    const { ctx, violations } = makeCtx({ [FILE]: withAssert(assertion) });
+    // ACT
+    await rule.check(ctx);
+    // ASSERT
+    expect(violations).toEqual([]);
+  });
+
+  it('fails a number literal, on its own line, in a multi-line assertion', async () => {
+    // ARRANGE
+    const source = withAssert('    expect(b).toEqual({\n      count: 42,\n    });');
+    const expectedLine = source.split('\n').findIndex((l) => l.includes('count: 42')) + 1;
+    const { ctx, violations } = makeCtx({ [FILE]: source });
+    // ACT
+    await rule.check(ctx);
+    // ASSERT
+    expect(violations.map((v) => v.line)).toEqual([expectedLine]);
+    expect(violations[0].message).toMatch(/Magic number 42/);
+  });
+
+  it.each([['toHaveLength(3)'], ['toBeCloseTo(0.5)'], ['toBe(10_000)'], ['toBe(-7)']])('fails %s', async (matcher) => {
+    // ARRANGE
+    const { ctx, violations } = makeCtx({ [FILE]: withAssert(`    expect(b).${matcher};`) });
+    // ACT
+    await rule.check(ctx);
+    // ASSERT
+    expect(violations).toHaveLength(1);
+  });
+
+  it('reads only the ASSERT block, not ARRANGE or ACT', async () => {
+    // ARRANGE
+    const body = `    // ARRANGE\n    const a = 42;\n    // ACT\n    const b = a + 7;\n    // ASSERT\n    expect(b).toBe(a);\n`;
+    const { ctx, violations } = makeCtx({ [FILE]: block('success cases', test('t', body)) });
+    // ACT
+    await rule.check(ctx);
+    // ASSERT
+    expect(violations).toEqual([]);
+  });
+
+  it('stops at the test end, so a helper between tests is not judged', async () => {
+    // ARRANGE
+    const helper = `const LIMIT = 99;\n`;
+    const source = block('success cases', `${test('t')}${helper}`);
+    const { ctx, violations } = makeCtx({ [FILE]: source });
+    // ACT
+    await rule.check(ctx);
+    // ASSERT
+    expect(violations).toEqual([]);
+  });
+
+  it('leaves files outside src/**/*.test.ts alone and carries the provenance tag', async () => {
+    // ARRANGE
+    const source = withAssert('    expect(b).toBe(42);');
+    const provenance = '(ARCH-003 [assert-no-magic])';
+    const outside = makeCtx({ 'tests/post-build/x.build.test.ts': source });
+    const inside = makeCtx({ [FILE]: source });
+    // ACT
+    await rule.check(outside.ctx);
+    await rule.check(inside.ctx);
+    // ASSERT
+    expect(outside.violations).toEqual([]);
+    expect(inside.violations[0].message).toContain(provenance);
   });
 });
