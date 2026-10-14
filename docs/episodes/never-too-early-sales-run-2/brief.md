@@ -14,6 +14,8 @@ verified:
     at: 2026-10-13T23:04:47Z
   - by: process:markdown-harness
     at: 2026-10-14T18:35:31Z
+  - by: human:han
+    at: 2026-10-14T18:47:57Z
 ---
 
 # Why it's never too early to start with sales

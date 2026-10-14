@@ -48,3 +48,5 @@
 {"kind":"end","t":"2026-10-14T18:35:30Z","seq":48,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"6a3cb25e3f89e27c","status":"ok"}
 {"kind":"end","t":"2026-10-14T18:35:31Z","seq":49,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"056c166635f8ab1d","status":"ok","summary":"Han's Brief accepted after his answers on 7 reviewer lines"}
 {"kind":"start","t":"2026-10-14T18:36:00Z","seq":50,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"13243625687eaa27","type":"gate","name":"draft brief","job":"brief-grill","parent_span_id":"30e2f016b9c612f9"}
+{"kind":"score","t":"2026-10-14T18:47:57Z","seq":51,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"13243625687eaa27","name":"gate","value":"approved","source":"human:han","via":"chat","comment":"approved, continue with categorize-research"}
+{"kind":"end","t":"2026-10-14T18:47:57Z","seq":52,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"13243625687eaa27","status":"ok"}
