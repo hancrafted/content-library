@@ -15,7 +15,7 @@ Paths below are relative to the repo root, except `references/` and `assets/`, w
 
 Settle the `<slug>` (the working title in kebab case) with Han, then run `npm run wt:new -- episode/<slug>` and work in that worktree. This branch is the Episode's **integration branch** for the whole run and carries its one draft PR until Promotion.
 
-Then open the Run in the [event log](#the-event-log): `npm run episode:run -- <slug> begin-run --model <the model you run on>`. It writes the Run's `start-run` line (harness, run id, branch and template commit included) and the active-run marker.
+Then open the Run in the [event log](#the-event-log): `npm run episode:run -- <slug> begin-run --model <the model you run on>`. It creates the staging folder `docs/episodes/<slug>/` when absent, writes the Run's `start-run` line (harness, run id, branch and template commit included) and the active-run marker.
 
 _Done when_ the worktree exists, `git branch --show-current` prints `episode/<slug>`, and `docs/episodes/<slug>/events.jsonl` holds the Run's `start-run` line.
 

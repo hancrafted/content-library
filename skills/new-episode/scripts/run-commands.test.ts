@@ -174,6 +174,29 @@ describe('success cases', () => {
     ]);
   });
 
+  it('scores a negative number given as a plain positional, and still with the -- separator', () => {
+    // ARRANGE
+    const ctx = begun();
+    run(ctx, 'begin-job', 'write-spec');
+    // ACT
+    const plain = run(ctx, 'score', 'write-spec', 'check', '-1', '--source', 'check:sim');
+    const separated = run(ctx, 'score', '--source', 'check:sim', '--', 'write-spec', 'check', '-2');
+    // ASSERT
+    expect(plain).toEqual({ ok: true, output: expect.stringContaining('check=-1') });
+    expect(separated).toEqual({ ok: true, output: expect.stringContaining('check=-2') });
+  });
+
+  it('begins the first Run of an Episode whose staging folder does not exist yet', () => {
+    // ARRANGE
+    const ctx = context();
+    rmSync(path.join(ctx.root, 'docs/episodes', SLUG), { recursive: true });
+    // ACT
+    const result = run(ctx, 'begin-run', '--model', 'opus');
+    // ASSERT
+    expect(result.ok).toBe(true);
+    expect(lines(ctx)).toHaveLength(1);
+  });
+
   it('ends the Run, records orchestrator usage and clears the marker in one step', () => {
     // ARRANGE
     const transcript = [
