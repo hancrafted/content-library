@@ -7,6 +7,8 @@ interface Selection {
   folder: OutputFolder;
   reader: ReturnType<typeof createEpisodeReader>;
   initial: EpisodeRead;
+  /** When the initial read finished, epoch milliseconds. */
+  readAt: number;
 }
 
 async function pickEpisode(): Promise<Selection | null> {
@@ -17,7 +19,7 @@ async function pickEpisode(): Promise<Selection | null> {
     const reader = createEpisodeReader(folder);
     const initial = await reader.poll();
     if (initial.pipeline === undefined) throw new Error(initial.errors.join('\n'));
-    return { folder, reader, initial };
+    return { folder, reader, initial, readAt: Date.now() };
   } catch (error) {
     if (error instanceof Error && error.name === 'AbortError') return null;
     throw error;
@@ -52,7 +54,7 @@ function useFolderSelection() {
 }
 
 function useEpisodePolling(selection: Selection | undefined) {
-  const [observed, setObserved] = useState<{ selection: Selection; read: EpisodeRead }>();
+  const [observed, setObserved] = useState<{ selection: Selection; read: EpisodeRead; readAt: number }>();
   useEffect(() => {
     if (selection === undefined) return;
     let cancelled = false;
@@ -60,7 +62,7 @@ function useEpisodePolling(selection: Selection | undefined) {
     const tick = async () => {
       const read = await selection.reader.poll();
       if (cancelled) return;
-      setObserved({ selection, read });
+      setObserved({ selection, read, readAt: Date.now() });
       timer = setTimeout(tick, 2000);
     };
     timer = setTimeout(tick, 2000);
@@ -69,17 +71,20 @@ function useEpisodePolling(selection: Selection | undefined) {
       clearTimeout(timer);
     };
   }, [selection]);
-  return observed?.selection === selection ? observed?.read : selection?.initial;
+  return observed?.selection === selection
+    ? observed
+    : selection && { read: selection.initial, readAt: selection.readAt };
 }
 
 /** Folder handles, source data and errors are transient; a reload returns to the picker. */
 export function useEpisodeDashboard() {
   const picker = useFolderSelection();
-  const read = useEpisodePolling(picker.selection);
+  const polled = useEpisodePolling(picker.selection);
+  const read = polled?.read;
   const outputs = useEpisodeOutputs(picker.selection?.folder, read);
   const [supported, setSupported] = useState<boolean | null>(null);
   useEffect(() => {
     setSupported(typeof (window as PickerWindow).showDirectoryPicker === 'function');
   }, []);
-  return { ...picker, read, outputs, supported, name: picker.selection?.folder.name };
+  return { ...picker, read, readAt: polled?.readAt, outputs, supported, name: picker.selection?.folder.name };
 }

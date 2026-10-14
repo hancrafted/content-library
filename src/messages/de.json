@@ -270,6 +270,14 @@
     "lines": "vollständige Zeilen",
     "refresh": "Aktualisierung ≈ 2 s",
     "reload": "Der Ordnerzugriff bleibt nur im Speicher. Neuladen führt zur Ordnerauswahl.",
+    "timeTravel": {
+      "title": "Zeitreise",
+      "live": "Live",
+      "liveHelp": "An: folgt dem Run, sobald Ereignisse eintreffen. Aus: spielt den Run bis zu einem gewählten Zeitpunkt nach.",
+      "slider": "Nachspielen bis",
+      "position": "+{minutes} Min. · {time}",
+      "replaying": "Nachgespielt aus den bisher gelesenen Ereignissen. Neue Ereignisse werden weiter gelesen; mit Live folgst du ihnen wieder."
+    },
     "graph": {
       "title": "Run-Fortschritt",
       "stagesComplete": "{done} von {total} Phasen abgeschlossen",

@@ -92,6 +92,26 @@ focus to the trigger. The browser's modal makes the background inert.
 React's development effect replay may close and reopen the native dialog; a
 queued close notification only dismisses a dialog that is still closed.
 
+## Time travel
+
+A **Live** checkbox above the graph is on by default: the view follows each
+poll. Off, a slider replays the Run from its first event to now, the last
+event's time or, while the newest Run has no end, the later of that and the
+last read. Its readout gives minutes since Run start and the cutoff's local
+time, also as the slider's `aria-valuetext`. Arrow keys move one minute, Page
+Up and Page Down ten; tick marks sit at each stage's earliest Job start.
+
+Replay logs nothing new and never reads the file again. `replayDashboard()`
+feeds the retained events stamped no later than the cutoff through the shared
+fold with `live: 'unfinished'` and the live projection, so a Run that had not
+ended at the cutoff reads its open spans as running, and a span open then
+reads "Not ended" with no duration, as it does live. Ties at the cutoff are
+all included; the fold orders them by sequence. Polling continues while
+scrubbing and extends the slider, but the view stays at the cutoff and its
+animation pauses; turning Live back on shows the current state. Outputs,
+previews and the event log still reflect the folder now, not the cutoff. The
+checkbox and cutoff are transient page memory (FE-001).
+
 ## Outputs, previews and attention
 
 A Job's card lists its `outputs`. After every poll the dashboard probes each one
@@ -177,6 +197,8 @@ and every emitted alternate must resolve and link back.
   `previewHref()`: an output's path in the chosen folder, its label, whether it
   is a pattern, and when and where a Job's preview shows.
 - `jobNeedsAttention()`: the attention mark.
+- `replayDashboard()`, `replayBounds()` and `stageMarks()`: the view at a cutoff
+  from the retained events, the slider's range and its stage tick marks.
 - `selectEvents()`: scoped, chronological source events, including ends and
   Scores associated through their start Span's ancestry.
 

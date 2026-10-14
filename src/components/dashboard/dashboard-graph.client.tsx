@@ -18,6 +18,8 @@ interface GraphProps {
   view: DashboardView;
   events: readonly DashboardEvent[];
   stale: boolean;
+  /** A replayed moment stands still, so activity animation pauses. */
+  replaying: boolean;
   outputs: EpisodeOutputs;
   copy: DashboardCopy;
 }
@@ -184,13 +186,13 @@ function StageDetail({ stage, copy, openLog, outputs }: DetailProps) {
   );
 }
 
-export function DashboardGraph({ view, events, stale, outputs, copy }: GraphProps) {
+export function DashboardGraph({ view, events, stale, replaying, outputs, copy }: GraphProps) {
   const controls = useGraphControls(view);
   const { stage, log, openLog, dismissLog } = controls;
   return (
     <section
       className={`${styles.graph} space-y-6`}
-      data-motion={controls.paused || stale ? 'paused' : 'running'}
+      data-motion={controls.paused || stale || replaying ? 'paused' : 'running'}
       aria-label={copy.graph.title}
     >
       <GraphOverview controls={controls} stale={stale} copy={copy} />

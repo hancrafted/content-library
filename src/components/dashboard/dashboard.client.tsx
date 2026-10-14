@@ -1,5 +1,6 @@
 'use client';
 
+import { useDashboardReplay } from '@/hooks/use-dashboard-replay';
 import { useEpisodeDashboard } from '@/hooks/use-episode-dashboard';
 import type { EpisodeOutputs } from '@/lib/dashboard-outputs.pure';
 import type { EpisodeRead } from '@/lib/dashboard-reader.pure';
@@ -8,16 +9,20 @@ import { BrowserHelp, ChooseFolder, DashboardEntry, PrivacyNote } from './dashbo
 import type { DashboardCopy } from './dashboard-evidence';
 import { DashboardGraph } from './dashboard-graph.client';
 import { OpenGates, ReaderFooter, SourceErrors, SourceStatus } from './dashboard-source';
+import { TimeTravel } from './dashboard-time-travel';
 
 interface LiveProps {
   read: EpisodeRead;
+  readAt: number;
   outputs: EpisodeOutputs;
   name?: string;
   chooser: ReactNode;
   copy: DashboardCopy;
 }
 
-function LiveDashboard({ read, outputs, name, chooser, copy }: LiveProps) {
+function LiveDashboard({ read, readAt, outputs, name, chooser, copy }: LiveProps) {
+  const replay = useDashboardReplay(read, readAt);
+  const { view } = replay;
   return (
     <>
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -25,14 +30,16 @@ function LiveDashboard({ read, outputs, name, chooser, copy }: LiveProps) {
         {chooser}
       </div>
       <SourceErrors errors={read.errors} copy={copy} condition={read.condition} />
-      {read.view ? (
+      {view ? (
         <>
-          <OpenGates view={read.view} copy={copy} />
+          <TimeTravel replay={replay} copy={copy} />
+          <OpenGates view={view} copy={copy} />
           <DashboardGraph
             key={name}
-            view={read.view}
+            view={view}
             events={read.events}
             stale={read.condition !== 'live'}
+            replaying={!replay.live}
             outputs={outputs}
             copy={copy}
           />
@@ -51,8 +58,15 @@ export function Dashboard({ copy }: { copy: DashboardCopy }) {
   );
   return (
     <div className="space-y-6">
-      {read?.view ? (
-        <LiveDashboard read={read} outputs={source.outputs} name={source.name} chooser={chooser} copy={copy} />
+      {read?.view && source.readAt !== undefined ? (
+        <LiveDashboard
+          read={read}
+          readAt={source.readAt}
+          outputs={source.outputs}
+          name={source.name}
+          chooser={chooser}
+          copy={copy}
+        />
       ) : (
         <DashboardEntry copy={copy}>
           {chooser}

@@ -270,6 +270,14 @@
     "lines": "complete lines",
     "refresh": "Refresh ≈ 2 s",
     "reload": "Folder access is kept only in memory. Reloading returns to the picker.",
+    "timeTravel": {
+      "title": "Time travel",
+      "live": "Live",
+      "liveHelp": "On: follows the Run as events arrive. Off: replay the Run up to a moment you choose.",
+      "slider": "Replay up to",
+      "position": "+{minutes} min · {time}",
+      "replaying": "Replaying from the events read so far. New events are still read; turn Live on to follow them."
+    },
     "graph": {
       "title": "Run progress",
       "stagesComplete": "{done} of {total} stages complete",
