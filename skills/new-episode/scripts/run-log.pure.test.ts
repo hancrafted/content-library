@@ -392,3 +392,44 @@ describe('live Runs and late start facts', () => {
     });
   });
 });
+
+describe('an end that is timestamped before its start', () => {
+  it("still closes the span and applies the end line's start_t backfill", () => {
+    // ARRANGE
+    const trace = 'a'.repeat(32);
+    const run = 'a1'.repeat(8);
+    const agent = 'a2'.repeat(8);
+    const lines = [
+      { seq: 1, t: '2026-10-14T16:07:00Z', trace_id: trace, kind: 'start-run', span_id: run, run_id: 'r' },
+      {
+        seq: 2,
+        t: '2026-10-14T16:07:56Z',
+        trace_id: trace,
+        kind: 'start',
+        span_id: agent,
+        type: 'agent',
+        name: 'a',
+        parent_span_id: run,
+      },
+      {
+        seq: 3,
+        t: '2026-10-14T16:07:55Z',
+        trace_id: trace,
+        kind: 'end',
+        span_id: agent,
+        status: 'ok',
+        start_t: '2026-10-14T16:07:54Z',
+      },
+    ] as RunLogLine[];
+    // ACT
+    const { spans, orphans } = fold(lines);
+    // ASSERT
+    expect(orphans).toEqual([]);
+    expect(spans.find((s) => s.span_id === agent)).toMatchObject({
+      status: 'ok',
+      start_t: '2026-10-14T16:07:54Z',
+      end_t: '2026-10-14T16:07:55Z',
+      duration_ms: 1000,
+    });
+  });
+});

@@ -397,6 +397,23 @@ describe('failure cases', () => {
     expect(parsed).toBeNull();
   });
 
+  it('writes no second end for a stop delivered twice', () => {
+    // ARRANGE
+    const endLine: RunLogLine = {
+      kind: 'end',
+      t: '2026-10-09T10:01:00.000Z',
+      seq: 3,
+      trace_id: TRACE,
+      span_id: AGENT_SPAN,
+      status: 'ok',
+    };
+    const input = base({ event: 'stop', log: [jobLine, startLine, endLine] });
+    // ACT
+    const event = adaptSubagent(input);
+    // ASSERT
+    expect(event).toBeNull();
+  });
+
   it('writes no end for a stop whose start was never logged', () => {
     // ARRANGE
     const input = base({ event: 'stop', log: [jobLine] });
