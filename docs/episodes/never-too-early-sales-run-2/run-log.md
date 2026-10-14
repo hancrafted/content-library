@@ -481,3 +481,25 @@ Han set two copy rules during the run: amounts on narrow screens are written wit
 - Needs human: on a phone, the watch-your-cashflow board clips the "Bankrupt" stamp for about 32px while it animates in, which #174's "nothing clips" forbids. Either accept the brief cut or make the entry scale smaller on narrow screens.
 - Needs human: the stamp enters at about −36° and settles at −18°, because the keyframe's `rotate(-18deg)` adds to its own `rotate`. Remove it from the start frame in `watch-your-cashflow.module.css` if the stamp should drop straight.
 - Needs human: in the light theme, `primary` is near-black, so the outline marking the one note to look at reads as plain black.
+
+## open-pr · 2026-10-14T21:36:26Z
+
+### Inputs
+
+- `skills/new-episode/references/open-pr.md`.
+- This run log.
+
+### Output
+
+- `npm run dev` serves the Episode at `http://localhost:3000/episode/never-too-early-sales-run-2` and `/de/episode/never-too-early-sales-run-2`, both answering 200.
+- The PR title and body are in `.scratch/never-too-early-sales-run-2/pr-body.md`, with a `## Needs Han` checklist of 32 items.
+- No PR was opened.
+
+### Checks
+
+- None; the job has no reviewer.
+
+### Notes
+
+- Blocked: `episode/never-too-early-sales-run-2` is not on origin. Pushing is Han's act, so the draft PR waits for him to run `git push -u origin episode/never-too-early-sales-run-2`, then `gh pr create --draft --base main --head episode/never-too-early-sales-run-2 --title "feat(episode): Start selling before you need the money (never-too-early-sales-run-2)" --body-file .scratch/never-too-early-sales-run-2/pr-body.md`.
+- Needs human: the Episode answers only on `/episode/<slug>`, not on `/episodes/<slug>`, until #85 lands.
