@@ -1,0 +1,17 @@
+{
+  "title": "How to start doing sales",
+  "voiceScript": {
+    "segments": {
+      "make-the-first-moves-concrete": {
+        "title": "Make the first moves concrete",
+        "keywords": "",
+        "script": "What should our founder do tomorrow? Find potential customers. Contact one. If a useful conversation opens, work out whether there is a real opportunity. Then do the work needed to reach an agreement. There is work after agreement too. We will follow that route, because the cashflow question remains at the end of it."
+      },
+      "keep-the-method-small": {
+        "title": "Keep the method small",
+        "keywords": "",
+        "script": "You do not need to build a sales department before taking the first step. You need somewhere to record who you might contact and what you will do next. Keep the first version small enough to use tomorrow. A method that you maintain is more useful here than an elaborate system you never open."
+      }
+    }
+  }
+}

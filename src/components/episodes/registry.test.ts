@@ -36,7 +36,10 @@ const COMPOSITION = [
   },
   {
     slug: 'never-too-early-sales',
-    sections: [{ opener: 'why-cashflow-matters', pageSlides: 1 }],
+    sections: [
+      { opener: 'why-cashflow-matters', pageSlides: 1 },
+      { opener: 'how-to-start-sales', pageSlides: 3 },
+    ],
   },
 ] as const;
 

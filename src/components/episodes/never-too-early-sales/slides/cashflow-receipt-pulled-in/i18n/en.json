@@ -1,0 +1,83 @@
+{
+  "title": "Watch your cashflow, revenue pulled in",
+  "caption": "Same deal, same costs: receiving the $1,000,000 in February instead of April funds March. Only the cash date moved.",
+  "board": {
+    "label": "Fictional example · cash received, not booked revenue",
+    "counterfactual": "Counterfactual: customer cash arrives in February; costs unchanged",
+    "months": {
+      "january": "January",
+      "february": "February",
+      "march": "March",
+      "april": "April"
+    },
+    "opening": "Opening cash",
+    "costs": "Cash costs",
+    "receipts": "Receipts",
+    "closing": "Closing cash",
+    "customerReceipt": "Customer receipt",
+    "originalReceipt": "<ref>Original receipt date</ref>",
+    "movedFrom": "<ref>Moved</ref> from April",
+    "movedTo": "Moved to February",
+    "move": "Receipt moved from April to February",
+    "change": "February: $0 → $1,000,000",
+    "amounts": {
+      "hundredThousand": "$100,000",
+      "fiftyThousand": "$50,000",
+      "zero": "$0",
+      "million": "$1,000,000",
+      "nineHundredFiftyThousand": "$950,000",
+      "nineHundredThousand": "$900,000"
+    },
+    "rule": "Closing cash = opening cash + receipts − payments"
+  },
+  "warning": "An earlier signature alone changes none of these cash balances",
+  "notes": {
+    "a-prepayment-reverses-the-receipt-lag": {
+      "header": "A prepayment reverses the receipt lag",
+      "description": "IFRS 15 describes a contract liability when a customer pays, or payment becomes due, before transfer of the promised goods or services. Cash can arrive before recognised revenue; an advance payment brings obligations as well as liquidity [1].",
+      "sources": {
+        "eu-regulation-2016-1905": {
+          "title": "European Commission, Regulation (EU) 2016/1905 (endorsing IFRS 15 Revenue from Contracts with Customers)"
+        }
+      }
+    },
+    "deferred-payment-carries-liquidity-risk": {
+      "header": "Deferred payment carries liquidity risk",
+      "description": "The EU late-payment directive describes deferred-payment B2B trade and the adverse liquidity effects of late payment. Its contractual-period rules are jurisdiction-specific, not a universal promise about when a customer's invoice will clear [1].",
+      "sources": {
+        "eu-directive-2011-7": {
+          "title": "European Parliament and Council, Directive 2011/7/EU on combating late payment in commercial transactions"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "move-cash-not-the-signature": {
+        "title": "Move cash, not the signature",
+        "keywords": "",
+        "script": "Return to our company with one hundred thousand dollars at the start of January. Let us change one assumption. Instead of receiving the million in April, suppose it receives the money in February. This is an alternative story, not a prediction. The monthly payments stay at fifty thousand dollars. Only the receipt date moves."
+      },
+      "check-februarys-arithmetic": {
+        "title": "Check February's arithmetic",
+        "keywords": "",
+        "script": "January still ends with fifty thousand dollars. February starts there, adds one million and pays out fifty thousand. It closes with one million dollars. March's payment leaves nine hundred and fifty thousand. April's payment leaves nine hundred thousand. In this version, March is funded. Moving the receipt changes the result without changing the deal's size."
+      },
+      "ask-what-could-make-receipt-earlier": {
+        "title": "Ask what could make receipt earlier",
+        "keywords": "",
+        "script": "What would have to change for that version to happen? Our founder would need to discuss timing with the buyer. When could a decision happen? What work must be delivered? Which payment arrangement would both sides accept? Starting sales earlier creates time to explore those questions. It does not give the founder control over the buyer's answer."
+      },
+      "keep-the-backup-question-open": {
+        "title": "Keep the backup question open",
+        "keywords": "",
+        "script": "The founder should still ask what happens if this earlier receipt is not available. Could the company reduce its planned payments? Would anyone agree to provide bridge funding? Those options need their own work and decisions. Keep the original unfunded case visible. A sales conversation is not a replacement for an emergency funding plan."
+      },
+      "find-the-work-before-the-payment": {
+        "title": "Find the work before the payment",
+        "keywords": "",
+        "script": "Now walk backwards from the required receipt. What must happen after agreement? What must be settled to close? Which questions need opportunity work? Which first conversation could open that work? Which prospects must we research to get that conversation? This chain gives the founder a starting point long before she needs the money."
+      }
+    }
+  }
+}

@@ -1,0 +1,43 @@
+/* The win's mark takes the global success token; the word "Won" beside it carries the meaning. */
+.won {
+  color: var(--success);
+}
+
+/*
+ * The arrows trace the route once the Slide is active, in route order: each
+ * rule grows down while the stages stack and right once they form a row. The
+ * base rule is the finished route; boxes, checklists and labels never move.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  [data-zone='active'] .connector .rule {
+    animation: trace-down 450ms cubic-bezier(0.2, 0, 0, 1) both;
+    transform-origin: top;
+  }
+
+  [data-zone='active'] .connector[data-step='1'] .rule {
+    animation-delay: 250ms;
+  }
+
+  [data-zone='active'] .connector[data-step='2'] .rule {
+    animation-delay: 500ms;
+  }
+
+  @container (min-width: 56rem) {
+    [data-zone='active'] .connector .rule {
+      animation-name: trace-right;
+      transform-origin: left;
+    }
+  }
+}
+
+@keyframes trace-down {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes trace-right {
+  from {
+    transform: scaleX(0);
+  }
+}

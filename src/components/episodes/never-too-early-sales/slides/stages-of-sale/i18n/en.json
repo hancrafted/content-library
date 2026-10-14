@@ -1,0 +1,121 @@
+{
+  "title": "Stages of sale",
+  "caption": "A lead becomes an opportunity only when the buyer responds, fits and agrees a next step. The work after that decides the deal, and won is not cash received.",
+  "flow": {
+    "label": "From lead to closing"
+  },
+  "leads": {
+    "title": "Leads",
+    "research": {
+      "title": "Research and maintain a prospect list",
+      "items": {
+        "company": "Company and the relevant role",
+        "problem": "Your problem hypothesis",
+        "source": "Where you found it",
+        "route": "How you could reach someone",
+        "status": "Contact status and next action",
+        "update": "Update the entry after every response"
+      }
+    },
+    "prospect": {
+      "label": "Sample list card · fictional",
+      "company": "Alder Works",
+      "role": "operations buyer",
+      "problem": "manual scheduling problem",
+      "source": "source: trade directory",
+      "route": "contact route: introduction",
+      "status": "status: not contacted"
+    },
+    "contact": {
+      "title": "Make first contact",
+      "items": {
+        "ready": "A plausible reason and a suitable route? Use it",
+        "routes": "Cold call · inbound enquiry · network introduction",
+        "question": "Open with the problem you want to discuss",
+        "nextStep": "Ask for one next step"
+      }
+    }
+  },
+  "gate": {
+    "title": "<ref>Qualify</ref>",
+    "rule": "Buyer response + plausible fit + agreed next step",
+    "notCrossing": "First contact alone does not cross it"
+  },
+  "opportunities": {
+    "title": "Opportunities",
+    "entry": "Agreed problem and next conversation",
+    "steps": {
+      "follow-up": "Follow-up",
+      "meetings": "Meetings",
+      "proposal": "Proposal",
+      "negotiation": "Negotiation"
+    },
+    "rule": "Every step ends with a next action and a date",
+    "example": "Fictional: Birch Studio described a scheduling problem and agreed to discuss a trial"
+  },
+  "closing": {
+    "title": "Closing",
+    "won": "Won: agreement",
+    "lost": "Lost: <ref>record reason</ref>",
+    "footer": "Won is not cash received"
+  },
+  "notes": {
+    "qualification-is-a-separate-transition": {
+      "header": "Qualification is a separate transition",
+      "description": "Dynamics 365 distinguishes a lead record from the opportunity record created through qualification. Budget and a clear decision timeline are its example of qualification evidence, not mandatory criteria imposed here on every startup [1].",
+      "sources": {
+        "microsoft-qualify-lead": {
+          "title": "Microsoft, Qualify and convert a lead to opportunity"
+        }
+      }
+    },
+    "do-not-erase-disqualified-leads": {
+      "header": "Do not erase disqualified leads",
+      "description": "Microsoft's model retains a disqualified lead as an audit trail. The simple instructional flow uses that principle without copying a vendor's entire stage model [1].",
+      "sources": {
+        "microsoft-qualify-lead": {
+          "title": "Microsoft, Qualify and convert a lead to opportunity"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "choose-who-might-have-the-problem": {
+        "title": "Choose who might have the problem",
+        "keywords": "",
+        "script": "Let us introduce two fictional prospects. Alder Works is a workshop. Birch Studio is a small design team. Our founder thinks both might struggle to schedule jobs. At Alder, she wants to reach the person organising workshop operations. At Birch, she wants to find whoever plans the team's work. These are starting hypotheses, not confirmed needs."
+      },
+      "build-and-maintain-the-list": {
+        "title": "Build and maintain the list",
+        "keywords": "",
+        "script": "Start lead generation now. Research and maintain a list of potential customers. For Alder, record the company name, the relevant role and your scheduling hypothesis. Add where you found it, how you could reach someone, its contact status and your next action. After a response, update the entry. The list should reflect what you know today."
+      },
+      "research-is-not-contact": {
+        "title": "Research is not contact",
+        "keywords": "",
+        "script": "Our founder could spend all week finding more workshops. But a longer list would not answer whether Alder wants a conversation. Once she has a plausible reason for contact and a suitable route, she should use it. Research prepares the first move. It should not become a way to postpone hearing an answer."
+      },
+      "make-the-first-contact": {
+        "title": "Make the first contact",
+        "keywords": "",
+        "script": "Make first contact to open a conversation. That could be an appropriate cold call. It could be answering an inbound enquiry. It could be asking someone in your network for an introduction. Our founder chooses an introduction to Alder's operations manager. She explains the scheduling question she wants to discuss, rather than sending her entire product story."
+      },
+      "ask-for-one-next-step": {
+        "title": "Ask for one next step",
+        "keywords": "",
+        "script": "Birch has asked about the scheduling offer. Our founder proposes a short conversation about how the team plans jobs today. That is one clear next step. She does not assume Birch wants to buy. She asks whether the conversation would be useful and waits for an answer. The invitation gives the buyer something specific to accept or decline."
+      },
+      "open-an-opportunity-with-evidence": {
+        "title": "Open an opportunity with evidence",
+        "keywords": "",
+        "script": "For this example, our founder sets a simple rule. She opens an opportunity when a conversation reveals plausible fit and the buyer agrees to a next step. Birch describes a scheduling problem and agrees to discuss a trial. That gives her work to pursue. Alder has not replied yet. She cannot treat that silence as an active deal."
+      },
+      "work-opportunities-deliberately": {
+        "title": "Work opportunities deliberately",
+        "keywords": "",
+        "script": "This is where the real work sits. With Birch, our founder must understand the problem, arrange the scope meeting and answer practical questions. She may need to revise a proposal or negotiate what is included. Each conversation ends with a next action and date. Follow up on that action. Record whether the deal is won or lost. Do not just move a card and wait for money. Agreement still needs its own payment plan."
+      }
+    }
+  }
+}

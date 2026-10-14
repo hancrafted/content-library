@@ -1,0 +1,72 @@
+/* The warning's edge and mark take the global warning token; its words carry the meaning. */
+.warning {
+  border-inline-start-color: var(--warning);
+}
+
+.warningMark {
+  color: var(--warning);
+}
+
+/*
+ * The arrow lane spans February to April above the months, shown only once the
+ * board's own width lays the months out in one row; narrower, the papers'
+ * status lines carry the move in words.
+ */
+.lane {
+  display: none;
+}
+
+@container (min-width: 46rem) {
+  .lane {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .track {
+    grid-column: 2 / 5;
+  }
+}
+
+/*
+ * Once the Slide is active the lane grows from April and the moved receipt
+ * travels in: up from below while months stack, from the right in one row,
+ * never starting invisible. The base rule is the finished board; balances
+ * never move.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  [data-zone='active'] .lane > * {
+    animation: lane-grow 450ms cubic-bezier(0.2, 0, 0, 1) both;
+    transform-origin: right;
+  }
+
+  [data-zone='active'] .moved {
+    animation: arrive-up 700ms cubic-bezier(0.2, 0, 0, 1) 250ms both;
+  }
+
+  @container (min-width: 46rem) {
+    [data-zone='active'] .moved {
+      animation-name: arrive-left;
+    }
+  }
+}
+
+@keyframes lane-grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes arrive-up {
+  from {
+    opacity: 0.6;
+    translate: 0 1.5rem;
+  }
+}
+
+@keyframes arrive-left {
+  from {
+    opacity: 0.6;
+    translate: 3rem 0;
+  }
+}
