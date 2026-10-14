@@ -5,6 +5,7 @@ import {
   SPAN_TYPES,
   STATUSES,
   SUMMARY_MAX,
+  VIAS,
   type Kind,
   type RecordResult,
   type RunLogLine,
@@ -53,7 +54,7 @@ const CHECKS: Record<string, Check> = {
   'gen_ai.usage.output_tokens': count,
   'gen_ai.usage.cache_read.input_tokens': count,
   status: oneOf(STATUSES),
-  via: oneOf(['chat', 'commit']),
+  via: oneOf(VIAS),
   summary,
   value,
 };
@@ -117,7 +118,9 @@ const NEEDED_BY_TYPE: Record<string, string[]> = { job: ['job'], attempt: ['job'
 function fieldErrors(kind: Kind, fields: Fields): string[] {
   const { required, optional } = RULES[kind];
   const known = new Set(['kind', ...required, ...optional]);
-  const needed = [...required, ...(kind === 'start' ? (NEEDED_BY_TYPE[fields.type as string] ?? []) : [])];
+  const byType = kind === 'start' ? (NEEDED_BY_TYPE[fields.type as string] ?? []) : [];
+  // a skill-spawned agent filed under the Run, because several Jobs were open, belongs to no one Job
+  const needed = [...required, ...byType.filter((key) => key !== 'job' || fields.role !== 'skill-spawned')];
   const unknown = Object.keys(fields)
     .filter((key) => !known.has(key))
     .map((key) => `${key} is not a field of a ${kind} line`);

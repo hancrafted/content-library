@@ -30,7 +30,7 @@
     "episode:log": "node skills/new-episode/scripts/log.ts",
     "episode:trace": "node skills/new-episode/scripts/trace.ts",
     "episode:query": "node skills/new-episode/scripts/query.ts",
-    "episode:run-state": "node skills/new-episode/scripts/run-state.ts",
+    "episode:run": "node skills/new-episode/scripts/run.ts",
     "episode:runs-csv": "node skills/new-episode/scripts/runs-csv.ts",
     "check:skills": "mh check --root skills --config skills/markdown-harness.config.yaml && for c in skills/*/markdown-harness.config.yaml; do test ! -e \"$c\" || mh check --root \"$(dirname \"$c\")\" --config \"$c\" || exit 1; done"
   },

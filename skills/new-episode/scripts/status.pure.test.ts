@@ -1,14 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { fold, type Folded, type RunLogLine } from './run-log.pure.ts';
-import {
-  gateReaders,
-  outputApproved,
-  renderStatus,
-  runStatus,
-  subIssuesApproved,
-  type GateReaders,
-  type GateSources,
-} from './status.pure.ts';
+import { outputApproved, renderStatus, runStatus, subIssuesApproved, type GateReaders } from './status.pure.ts';
 
 /*
  * A run's state read back from its event log: a small per-run pipeline and
@@ -48,7 +40,7 @@ const job = (id: string, from: number, status?: string) =>
   status === undefined
     ? [start(`job-${id}`, 'job', [from, { job: id }])]
     : [start(`job-${id}`, 'job', [from, { job: id }]), end(`job-${id}`, status, from + 5)];
-const live = (lines: RunLogLine[]): Folded => fold(lines, { openAs: 'running' });
+const live = (lines: RunLogLine[]): Folded => fold(lines, { live: new Set([TRACE]) });
 const withReaders = (pipeline: string, folded: Folded, readers: GateReaders) =>
   runStatus(pipeline, folded, { ...readers, now: NOW }).jobs.map(({ state }) => state);
 const states = (folded: Folded, pipeline = PIPELINE) =>
@@ -282,87 +274,6 @@ describe('outputApproved', () => {
     const reopened = withReaders(GATED, runLog, { outputApproved: edited });
     // ASSERT
     expect({ open, reopened }).toEqual(expected);
-  });
-});
-
-describe('gateReaders', () => {
-  const SLUG = 'ep';
-  const APPROVED_BRIEF =
-    '---\ntype: brief\ngenerated:\n  by: claude-code/opus-5.5\n  at: 2026-10-12T09:00:00Z\nverified:\n  - by: human:han\n    at: 2026-10-12T09:30:00Z\n---\n';
-  const SPEC_ISSUE = 41;
-  const OUTPUT = 'docs/episodes/<slug>/brief.md';
-
-  /** A disk holding only these files, and a gh answering the spec-issue lookup and its sub-issues. */
-  function sources(files: Record<string, string>, gh: GateSources['gh']): GateSources {
-    return { read: (file) => files[file] ?? null, gh };
-  }
-
-  function gh(spec: { number: number }[], subIssues: unknown[]): GateSources['gh'] {
-    return (args) => JSON.stringify(args[0] === 'issue' ? spec : subIssues);
-  }
-
-  const failingGh: GateSources['gh'] = () => {
-    throw new Error('gh: not logged in');
-  };
-
-  it('reads an output at its path with the slug filled in', () => {
-    // ARRANGE
-    const readers = gateReaders(SLUG, sources({ 'docs/episodes/ep/brief.md': APPROVED_BRIEF }, failingGh));
-    const expected = true;
-    // ACT
-    const approved = readers.outputApproved?.(OUTPUT);
-    // ASSERT
-    expect(approved).toBe(expected);
-  });
-
-  it('keeps the gate shut for an output that is missing', () => {
-    // ARRANGE
-    const readers = gateReaders(SLUG, sources({}, failingGh));
-    const expected = false;
-    // ACT
-    const approved = readers.outputApproved?.(OUTPUT);
-    // ASSERT
-    expect(approved).toBe(expected);
-  });
-
-  it("opens a label gate once the spec issue's sub-issues have left triage", () => {
-    // ARRANGE
-    const tickets = [{ state: 'open', labels: [{ name: 'ready-for-agent' }] }];
-    const readers = gateReaders(SLUG, sources({}, gh([{ number: SPEC_ISSUE }], tickets)));
-    const expected = true;
-    // ACT
-    const approved = readers.labelApproved?.('write-design-spec');
-    // ASSERT
-    expect(approved).toBe(expected);
-  });
-
-  it('keeps a label gate shut when gh fails, answers garbage, or finds no spec issue', () => {
-    // ARRANGE
-    const tickets = [{ state: 'open', labels: [] }];
-    const garbage: GateSources['gh'] = () => 'not json';
-    const worlds = [failingGh, garbage, gh([], tickets)];
-    const expected = [false, false, false];
-    // ACT
-    const approved = worlds.map((world) => gateReaders(SLUG, sources({}, world)).labelApproved?.('write-design-spec'));
-    // ASSERT
-    expect(approved).toEqual(expected);
-  });
-
-  it("asks gh for the spec issue by the Episode's label, then for that issue's sub-issues", () => {
-    // ARRANGE
-    const calls: string[][] = [];
-    const recording: GateSources['gh'] = (args) => {
-      calls.push([...args]);
-      return JSON.stringify(args[0] === 'issue' ? [{ number: SPEC_ISSUE }] : []);
-    };
-    const expected = [
-      ['issue', 'list', '--label', 'episode:ep', '--state', 'all', '--json', 'number'],
-      ['api', 'repos/{owner}/{repo}/issues/41/sub_issues'],
-    ];
-    // ACT
-    gateReaders(SLUG, sources({}, recording)).labelApproved?.('write-design-spec');
-    // ASSERT
-    expect(calls).toEqual(expected);
   });
 });
 

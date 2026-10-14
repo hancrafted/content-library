@@ -1,16 +1,16 @@
-// The SessionStart `compact` reminder: which Episode worktrees still have jobs to run.
-// The states come from `runStatus` (status.pure.ts), so this file only decides what to say.
+// The SessionStart reminder's pure rules: which Episodes have a job not done, and which worktrees are Episode
+// integration worktrees. The reader that supplies the statuses is episode-status.ts.
+import type { RunStatus } from './status.pure.ts';
 
-import type { JobState } from './status.pure.ts';
-
+/** An Episode with a job not done, as the hook sees it. */
 export interface EpisodeRun {
   slug: string;
-  states: readonly JobState[];
+  status: RunStatus;
 }
 
-/** The reminder, or null when no Episode has a job that is not done. */
+/** The SessionStart reminder, or null when no Episode has a job that is not done. */
 export function unfinishedReminder(runs: readonly EpisodeRun[]): string | null {
-  const open = runs.filter(({ states }) => states.some((state) => state !== 'done'));
+  const open = runs.filter(({ status }) => status.jobs.some(({ state }) => state !== 'done'));
   if (open.length === 0) return null;
   const lines = open.map(({ slug }) => `- npm run episode:status -- ${slug}`);
   return [

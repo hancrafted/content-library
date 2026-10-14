@@ -1,34 +1,25 @@
-// `npm run episode:status -- <slug>`: prints each job of the Episode's
-// per-run pipeline with its state, derived from pipeline.yml and events.jsonl.
-// The gates are read through `gateReaders`; this file only hands it node's disk and gh.
+// `npm run episode:status -- <slug>`: prints each job of the Episode's per-run pipeline with its state,
+// derived from pipeline.yml and events.jsonl. The reading is `readEpisodeStatus`; this file hands it gh and prints.
 import { execFileSync } from 'node:child_process';
-import path from 'node:path';
-import { readPipeline } from '../../../src/lib/episode-pipeline-jobs.pure.ts';
-import { liveTracesIn, readOrNull as read } from './run-files.ts';
-import { fold, parseLog } from './run-log.pure.ts';
-import { gateReaders, renderStatus, runStatus } from './status.pure.ts';
+import { readEpisodeStatus } from './episode-status.ts';
+import { renderStatus } from './status.pure.ts';
 
 const slug = process.argv[2];
 if (!slug) {
   console.error('✖ usage: npm run episode:status -- <slug>');
   process.exit(1);
 }
-const folder = path.join('docs/episodes', slug);
-const pipelineFile = path.join(folder, 'pipeline.yml');
-const pipeline = read(pipelineFile);
-if (pipeline === null) {
-  console.error(`✖ ${pipelineFile} does not exist; run this from the Episode's worktree root.`);
+const result = readEpisodeStatus('.', slug, {
+  now: new Date().toISOString(),
+  gh: (args) => execFileSync('gh', args, { encoding: 'utf8' }),
+});
+if (result.kind === 'no-pipeline') {
+  console.error(`✖ ${result.file} does not exist; run this from the Episode's worktree root.`);
   process.exit(1);
 }
-if (readPipeline(pipeline) === null) {
-  console.error(`✖ ${pipelineFile} has no job list; run npm run verify for the pipeline check's findings.`);
+if (result.kind === 'no-jobs') {
+  console.error(`✖ ${result.file} has no job list; run npm run verify for the pipeline check's findings.`);
   process.exit(1);
 }
-const { lines, errors } = parseLog(read(path.join(folder, 'events.jsonl')) ?? '');
-for (const error of errors) console.error(`! ${error}`);
-// A span with no end is running only while its Run is live (the marker names its trace), else crashed.
-const folded = fold(lines, { live: liveTracesIn() });
-const gh = (args: readonly string[]): string => execFileSync('gh', args, { encoding: 'utf8' });
-console.log(
-  renderStatus(runStatus(pipeline, folded, { ...gateReaders(slug, { read, gh }), now: new Date().toISOString() })),
-);
+for (const error of result.errors) console.error(`! ${error}`);
+console.log(renderStatus(result.status));

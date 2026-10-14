@@ -220,6 +220,61 @@ describe('nesting and late facts', () => {
     expect(event).toMatchObject({ parent_span_id: JOB_SPAN });
   });
 
+  it('files an unparsed agent under the one open Job even when the marker points at an ended one', () => {
+    // ARRANGE
+    const openJob: RunLogLine = { ...jobLine, seq: 3, span_id: 'eeeeeeeeeeeeeee1', name: 'other', job: 'other' };
+    const endMarkerJob: RunLogLine = {
+      kind: 'end',
+      t: '2026-10-09T09:40:00Z',
+      seq: 4,
+      trace_id: TRACE,
+      span_id: JOB_SPAN,
+      status: 'ok',
+    };
+    const input = base({ description: 'Spec review of hero changes', log: [jobLine, openJob, endMarkerJob] });
+    // ACT
+    const event = adaptSubagent(input);
+    // ASSERT
+    expect(event).toMatchObject({ job: 'other', role: 'skill-spawned', parent_span_id: 'eeeeeeeeeeeeeee1' });
+  });
+
+  it('files an unparsed agent under the Run, never a guessed Job, when two Jobs are open', () => {
+    // ARRANGE
+    const runStart: RunLogLine = {
+      kind: 'start-run',
+      t: '2026-10-09T08:00:00Z',
+      seq: 0,
+      trace_id: TRACE,
+      span_id: 'ffffffffffffffff',
+      run_id: 'r',
+    };
+    const otherJob: RunLogLine = { ...jobLine, seq: 3, span_id: 'eeeeeeeeeeeeeee1', name: 'other', job: 'other' };
+    const description = 'Spec review of hero changes';
+    const input = base({ description, log: [runStart, jobLine, otherJob] });
+    // ACT
+    const event = adaptSubagent(input);
+    // ASSERT
+    expect(event).toMatchObject({ role: 'skill-spawned', description, parent_span_id: 'ffffffffffffffff' });
+    expect(event).not.toHaveProperty('job');
+  });
+
+  it('files an agent whose named Job is not open under the Run, never the Job the marker points at', () => {
+    // ARRANGE
+    const runStart: RunLogLine = {
+      kind: 'start-run',
+      t: '2026-10-09T08:00:00Z',
+      seq: 0,
+      trace_id: TRACE,
+      span_id: 'ffffffffffffffff',
+      run_id: 'r',
+    };
+    const input = base({ description: 'brief-grill#1/writer', log: [runStart, jobLine] });
+    // ACT
+    const event = adaptSubagent(input);
+    // ASSERT
+    expect(event).toMatchObject({ job: 'brief-grill', attempt: 1, role: 'writer', parent_span_id: 'ffffffffffffffff' });
+  });
+
   it('carries the prompt and launch time on the end line when the start ran before the transcript existed', () => {
     // ARRANGE
     const lateStart: RunLogLine = { ...startLine, t: '2026-10-09T10:00:00Z', 'gen_ai.input.messages': undefined };
@@ -287,18 +342,28 @@ describe('orchestrator usage', () => {
       'gen_ai.usage.cache_read.input_tokens': 150,
     };
     // ACT
-    const event = runUsageEvent([runStart, runEnd], parsed, transcript);
+    const event = runUsageEvent([runStart, runEnd], parsed, [transcript]);
     // ASSERT
     expect(event).toEqual(expected);
+  });
+
+  it('counts what the orchestrator spent within the second the Run ended in, since line times are whole seconds', () => {
+    // ARRANGE
+    const late = assistant('2026-10-09T11:00:00.700Z', 'm9', { input_tokens: 5, output_tokens: 7 });
+    const after = assistant('2026-10-09T11:00:01.200Z', 'm10', { input_tokens: 1000, output_tokens: 1000 });
+    // ACT
+    const event = runUsageEvent([runStart, runEnd], parsed, [[late, after].join('\n')]);
+    // ASSERT
+    expect(event).toMatchObject({ 'gen_ai.usage.input_tokens': 5, 'gen_ai.usage.output_tokens': 7 });
   });
 
   it('writes nothing before the Run has ended, twice, or without usage', () => {
     // ARRANGE
     const counted: RunLogLine = { ...runEnd, 'gen_ai.usage.input_tokens': 1 };
     // ACT
-    const open = runUsageEvent([runStart], parsed, transcript);
-    const again = runUsageEvent([runStart, counted], parsed, transcript);
-    const empty = runUsageEvent([runStart, runEnd], parsed, null);
+    const open = runUsageEvent([runStart], parsed, [transcript]);
+    const again = runUsageEvent([runStart, counted], parsed, [transcript]);
+    const empty = runUsageEvent([runStart, runEnd], parsed, [null]);
     // ASSERT
     expect([open, again, empty]).toEqual([null, null, null]);
   });

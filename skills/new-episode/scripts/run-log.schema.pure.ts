@@ -1,4 +1,4 @@
-// The run event log's vocabulary: the kinds, statuses and field names of one JSONL line (design-ADR 0006), the
+// The run event log's vocabulary: the kinds, statuses and field names of one JSONL line (design-ADR 0007), the
 // stamp a writer supplies, and the Span and Score a reader folds lines into. Types only; import them through
 // `run-log.pure.ts`.
 
@@ -8,6 +8,10 @@ export type Kind = (typeof KINDS)[number];
 /** How a span ended. `reused` is a Job whose result an earlier Run already produced. */
 export const STATUSES = ['ok', 'error', 'refused', 'crashed', 'reused'] as const;
 export type Status = (typeof STATUSES)[number];
+
+/** How a human's approval reached the log. */
+export const VIAS = ['chat', 'commit'] as const;
+export type Via = (typeof VIAS)[number];
 
 /** A span that has started and not ended, as `fold` reports it when asked to treat open spans as live. */
 export type SpanStatus = Status | 'running';
@@ -67,7 +71,7 @@ export interface LogEvent {
   value?: number | string;
   rubric?: string;
   body?: string;
-  via?: 'chat' | 'commit';
+  via?: Via;
   comment?: string;
 }
 
@@ -132,7 +136,7 @@ export interface Score {
   source: string;
   rubric?: string;
   body?: string;
-  via?: 'chat' | 'commit';
+  via?: Via;
   comment?: string;
 }
 
@@ -144,8 +148,6 @@ export interface Folded {
 }
 
 export interface FoldOptions {
-  /** What a span with no end line is when `live` is not given. `crashed` (the default), or `running`. */
-  openAs?: 'crashed' | 'running';
-  /** The trace ids of the Runs that are live now (see `liveTraces`): an open span is `running` only in one of them, else `crashed`. Decided per trace, so one Run ending never crashes another in the same file. */
+  /** The trace ids of the Runs that are live now (see the run-log module): an open span is `running` only in one of them, else `crashed`. Decided per trace, so one Run ending never crashes another in the same file. */
   live?: ReadonlySet<string>;
 }

@@ -1,28 +1,28 @@
 import { describe, expect, it } from 'vitest';
-import { episodeBranches, unfinishedReminder } from './remind.pure.ts';
+import { episodeBranches, unfinishedReminder } from './episode-reminder.pure.ts';
+import type { RunStatus } from './status.pure.ts';
 
-/*
- * The SessionStart `compact` reminder: after a compaction the orchestrator forgets the run, so
- * a worktree with jobs not done tells it to rebuild its todo list from `episode:status`.
- */
+/* The reminder rules over plain values: which Episodes are unfinished and which worktrees hold one. */
+
+const status = (...states: RunStatus['jobs'][number]['state'][]): RunStatus => ({
+  jobs: states.map((state, i) => ({ id: `j${i}`, state })),
+  running: [],
+  problems: [],
+  waiting: [],
+});
+
 describe('unfinishedReminder', () => {
-  it('stays silent when every job of every Episode is done', () => {
-    expect(unfinishedReminder([{ slug: 'a', states: ['done', 'done'] }])).toBeNull();
-  });
-
-  it('stays silent with no Episode worktree', () => {
-    expect(unfinishedReminder([])).toBeNull();
+  it('stays silent with no Episode worktree or when every job is done', () => {
+    expect([unfinishedReminder([]), unfinishedReminder([{ slug: 'a', status: status('done') }])]).toEqual([null, null]);
   });
 
   it('names each Episode with a job not done and the status command', () => {
     const text = unfinishedReminder([
-      { slug: 'a', states: ['done', 'ready', 'waiting'] },
-      { slug: 'b', states: ['done'] },
-      { slug: 'c', states: ['blocked'] },
+      { slug: 'a', status: status('done', 'ready') },
+      { slug: 'c', status: status('done') },
     ]);
     expect(text).toContain('npm run episode:status -- a');
-    expect(text).toContain('npm run episode:status -- c');
-    expect(text).not.toContain('-- b');
+    expect(text).not.toContain('-- c');
     expect(text).toContain('todo list');
   });
 });
