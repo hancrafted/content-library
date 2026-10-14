@@ -4,7 +4,7 @@
 #
 # Schema (checked by src/lib/episode-pipeline.pure.ts in `npm run verify`):
 #   status    draft | approved
-#   template  per-run only: the feat/89-new-episode commit the pipeline was tailored
+#   template  per-run only: the main commit the pipeline was tailored
 #             from; the template is not merged into the Episode branch again until
 #             open-pr is done
 #   jobs      run once every job in `needs` is done; independent jobs may run in parallel
@@ -56,7 +56,7 @@ jobs:
         model: inherit
         session: orchestrator
       - type: reviewer
-        skills: []
+        skills: [writing-for-agents]
         references: [references/brief-grill.md]
         rubric: references/brief-grill.md#rubric
         model: opus
@@ -91,7 +91,7 @@ jobs:
     gate: human
     agents:
       - type: implementor
-        skills: []
+        skills: [writing-for-agents]
         references: [references/customize-pipeline.md, assets/pipeline.yml, docs/episodes/<slug>/brief.md]
         model: inherit
         session: orchestrator
@@ -116,11 +116,11 @@ jobs:
     foreach: docs/episodes/<slug>/brief.md#research-questions
     before: [mh-query]
     outputs: [docs/episodes/<slug>/research/*/research.md]
-    checks: [mh, vitest]
+    checks: [mh, vitest, sources]
     retries: 2
     agents:
       - type: implementor
-        skills: [research]
+        skills: [research, writing-for-agents]
         references: [references/write-research.md, docs/episodes/<slug>/brief.md, docs/episodes/<slug>/run-log.md]
         model: sonnet
       - type: reviewer
@@ -194,11 +194,13 @@ jobs:
     retries: 2
     agents:
       - type: implementor
-        skills: [to-spec, to-tickets]
+        skills: [to-spec, to-tickets, writing-for-agents]
+        agent: archgate:developer
         references: [references/write-spec.md, docs/episodes/<slug>/brief.md, docs/episodes/<slug>/dossier.md]
         model: inherit
       - type: reviewer
-        skills: []
+        skills: [writing-for-agents]
+        agent: archgate:developer
         references: [references/write-spec.md, docs/episodes/<slug>/dossier.md]
         rubric: references/write-spec.md#rubric
         model: opus
@@ -227,7 +229,7 @@ jobs:
         model: opus
         session: orchestrator
       - type: reviewer
-        skills: []
+        skills: [ui-ux-pro-max:ui-ux-pro-max]
         references:
           - references/write-design-spec.md
           - GLOSSARY.md
@@ -242,17 +244,27 @@ jobs:
   - id: implement-episode
     needs: [write-design-spec]
     outputs: []
-    checks: [verify, build, test:build, visual-check]
+    checks: [verify, build, test:build, impeccable, visual-check]
     retries: 2
     agents:
+      # `ticket` is the agent and skills of each ticket subagent implement-spec spawns.
       - type: implementor
-        skills: [implement-spec, visual-check]
-        references: [references/implement-episode.md, docs/episodes/<slug>/dossier.md]
+        skills: [implement-spec]
+        ticket:
+          agent: archgate:developer
+          skills: [tdd, visual-check, vercel-react-best-practices, web-design-guidelines, commit]
+        references: [references/implement-episode.md, references/skill-overrides.md, docs/episodes/<slug>/dossier.md]
         model: opus
         session: orchestrator
       - type: reviewer
-        skills: [code-review, visual-check]
-        references: [references/implement-episode.md, docs/episodes/<slug>/dossier.md]
+        skills:
+          - code-review
+          - visual-check
+          - ui-ux-pro-max:ui-ux-pro-max
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - performance-optimization
+        references: [references/implement-episode.md, references/skill-overrides.md, docs/episodes/<slug>/dossier.md]
         rubric: references/implement-episode.md#rubric
         model: opus
         session: orchestrator

@@ -4,11 +4,14 @@ Output: the Episode in `src/`, on the integration branch `episode/<slug>`. The h
 
 ## Prompt
 
-Both agents run with `session: orchestrator`. `implement-spec` is a vendored skill (`skills-lock.json`) that sets `disable-model-invocation: true`, so the Skill tool refuses it: ask Han to type `/implement-spec` on the spec issue, and stop until he does. Its implementer and merger subagents run on the agent's `model`, with these changes to its steps:
+Both agents run with `session: orchestrator`. The implementor invokes the vendored `implement-spec` skill (`skills-lock.json`) with the Skill tool on the spec issue. Its implementer subagents take the implementor's `ticket` agent type and skills, and its implementer and merger subagents run on the agent's `model`, with these changes to its steps:
 
 - The integration branch already exists: it is `episode/<slug>`, the worktree from step 1.
 - No PR opens and none is marked ready here: `open-pr` opens the one draft PR, and it stays a draft until Promotion.
-- Skip its `code-review` step: the job's reviewer runs it, so the verdict, the retry and the metrics stay with the job loop.
+- Skip its step 7 `code-review`: the job's reviewer runs it on the whole Episode, so the verdict, the retry and the metrics stay with the job loop.
+- After each ticket implementer returns and before its merge, invoke the `code-review` skill on the ticket branch (base `episode/<slug>`), have its findings fixed, then merge. Each review follows the report-path convention in [the job loop](../SKILL.md#the-job-loop): a report in `.scratch/<slug>/reviews/implement-episode-<n>.md`, and only `pass` or `fail` plus the path comes back.
+- Ticket implementers (`archgate:developer`) skip `archgate:reviewer` and `archgate:lessons-learned`: the per-ticket `code-review` covers review, and the orchestrator writes `LEARNINGS.md`. `archgate check` still runs.
+- Apply [`skill-overrides.md`](skill-overrides.md) to every skill the job lists: ticket implementers get it by path, beside `ticket.skills`.
 - On a retry, the failed lines go to a new implementer subagent, quoted verbatim, as fix work on the integration branch.
 
 ## Design answers
@@ -25,7 +28,7 @@ The Episode is a draft: it has no video and no Promotion. This overrides the met
 
 ## Review
 
-The reviewer calls the Skill tool with `code-review`, the fixed point the last commit before this job started (the Episode branch carries the unmerged template branch, so the merge-base with `main` pulls in the whole template diff), its subagents on the agent's `model`. Pass the spec issue to its Spec subagent with the lines under `## Rubric` beside it, so one review judges both the tickets and the Episode. Each finding the Spec or Standards report marks hard is a failed line, quoted verbatim; a judgement call goes into Notes.
+The reviewer calls the Skill tool with `code-review`, the fixed point the last commit before this job started (the merge-base with `main` would pull in everything the Episode branch carries from earlier jobs), its subagents on the agent's `model`. Pass the spec issue to its Spec subagent with the lines under `## Rubric` beside it, so one review judges both the tickets and the Episode. After the merge it makes one interactive Chrome pass (Context drawer, scroll, motion), the Episode's tab in front. With no connected browser it never blocks: it writes `Needs human: interactive pass skipped, no browser` and goes on. Each finding the Spec or Standards report marks hard is a failed line, quoted verbatim; a judgement call goes into Notes.
 
 ## Done when
 

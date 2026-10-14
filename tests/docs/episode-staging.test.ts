@@ -358,8 +358,8 @@ describe('failure cases', () => {
   it('checks the template against the real skills, so a misspelled skill fails', () => {
     // ARRANGE
     const yaml = readFileSync(TEMPLATE, 'utf8').replace(
-      'skills: [to-spec, to-tickets]',
-      'skills: [to-spec, to-ticket]',
+      'skills: [to-spec, to-tickets, writing-for-agents]',
+      'skills: [to-spec, to-ticket, writing-for-agents]',
     );
     const expected = ['Job "write-spec", agent 1 names the skill "to-ticket", which does not exist.'];
     // ACT
