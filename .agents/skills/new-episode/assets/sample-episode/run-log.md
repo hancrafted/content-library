@@ -15,10 +15,6 @@
 - `mh check`: pass.
 - `vitest` staging test: pass.
 
-### Metrics
-
-- implementor · attempt 1 · pass · 1800 s · 42000 tokens
-
 ### Notes
 
 Han reworded the Red thread in Settle; the agent's candidate framed the window as memory, not budget.
@@ -39,12 +35,6 @@ Han reworded the Red thread in Settle; the agent's candidate framed the window a
 
 - `mh check`: pass.
 - Reviewer: pass.
-
-### Metrics
-
-- implementor · attempt 1 · fail · rubric "Fail if a finding cites no Source" · 240 s · 18000 tokens
-- implementor · attempt 2 · pass · 120 s · 9000 tokens
-- reviewer · attempt 2 · pass · 60 s · 6000 tokens
 
 ### Notes
 

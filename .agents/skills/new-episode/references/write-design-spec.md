@@ -41,9 +41,9 @@ Each design answer is a bullet `**Design answer (ui-ux-pro-max:slides)**` under 
 
 When no ticket is `needs-triage`, and before `implement-episode`, rewrite every overruled `master:` and `motion:` into the Dossier: one commit on `episode/<slug>` through the `commit` skill, a `Source:` trailer per overruling ticket, as its full issue URL (`https://github.com/hancrafted/content-library/issues/<ticket>`, since the `commit` skill rejects `#<ticket>`), and `Agent: write-design-spec`. Do it in this session. The designers never edit the Dossier, because parallel edits to one file would conflict.
 
-### Metrics
+### Approved as drafted or edited
 
-The run-log entry's Metrics carry one line per ticket, `approved as drafted` or `edited`, read from the ticket's edit history when Han has approved it. A ticket edit whose body ends `Edited-by: <job id>` is an agent's, so only an unmarked edit counts as `edited` (`agentOf` in [`scripts/marks.pure.ts`](../scripts/marks.pure.ts)). When most tickets pass unedited across runs, `gate: human` is removed.
+When Han has approved, log one Score per ticket on the Job span: `episode:log` with `{"kind":"score","span_id":"<job span>","name":"gate","value":"approved as drafted"|"edited","source":"human:han","via":"chat","comment":"#<issue>"}`, read from the ticket's edit history. The run-log entry carries no Metrics. A ticket edit whose body ends `Edited-by: <job id>` is an agent's, so only an unmarked edit counts as `edited` (`agentOf` in [`scripts/marks.pure.ts`](../scripts/marks.pure.ts)). When most tickets pass unedited across runs (`SELECT value, count(*) FROM scores WHERE name = 'gate' AND source = 'human:han' GROUP BY value`), `gate: human` is removed.
 
 ## Done when
 

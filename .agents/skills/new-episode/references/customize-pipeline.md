@@ -27,4 +27,4 @@ The job's `checks:` in `assets/pipeline.yml` run by the check table in [SKILL.md
 
 1. The draft is committed through the `commit` skill with `Gate: draft pipeline`.
 
-Then append the run-log entry, whose Notes list every change from the template with its reason, and its runs CSV row, then stop: the gate opens when Han commits `status: approved` with `Gate: approved pipeline`.
+Then append the run-log entry, whose Notes list every change from the template with its reason, and log the Gate's `start` for `draft pipeline`, then stop: the gate opens when Han commits `status: approved` with `Gate: approved pipeline`.

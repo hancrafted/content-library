@@ -23,4 +23,4 @@ The job's `checks:` in `assets/pipeline.yml` run by the check table in [SKILL.md
 
 ## After the job
 
-The orchestrator marks the `write-research-<question-slug>` job of each `reuse` question done, and passes each reused or extended path to the `write-research` and `write-dossier` implementors: the Dossier cites a reused file at its llm-wiki path.
+The orchestrator ends the `write-research-<question-slug>` job of each `reuse` question with a Job span of status `reused`: `episode:log` `start` (type `job`) then `end` with `status: reused` and a `summary` naming the reused path. It runs no agent and logs no pass. `episode:status` reads `reused` as done. It passes each reused or extended path to the `write-research` and `write-dossier` implementors: the Dossier cites a reused file at its llm-wiki path.

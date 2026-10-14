@@ -8,8 +8,8 @@ Both agents run with `session: orchestrator`. The implementor invokes the vendor
 
 - The integration branch already exists: it is `episode/<slug>`, the worktree from step 1.
 - No PR opens and none is marked ready here: `open-pr` opens the one draft PR, and it stays a draft until Promotion.
-- Skip its step 7 `code-review`: the job's reviewer runs it on the whole Episode, so the verdict, the retry and the metrics stay with the job loop.
-- After each ticket implementer returns and before its merge, invoke the `code-review` skill on the ticket branch (base `episode/<slug>`), have its findings fixed, then merge. When the ticket's design answers name `Design reference:` page images, pass each path to the Spec subagent: it captures the built Slide with `npm run inspect-page -- … --clip '[id="<section>--<slide>"]' --out <scratchpad>.png`, reads the page image and that capture, and judges each `Build against this page` line. Each review follows the report-path convention in [the job loop](../SKILL.md#the-job-loop): a report in `.scratch/<slug>/reviews/implement-episode-<n>.md`, and only `pass` or `fail` plus the path comes back.
+- Skip its step 7 `code-review`: the job's reviewer runs it on the whole Episode, so the verdict and the retry stay with the job loop.
+- After each ticket implementer returns and before its merge, invoke the `code-review` skill on the ticket branch (base `episode/<slug>`), have its findings fixed, then merge. When the ticket's design answers name `Design reference:` page images, pass each path to the Spec subagent: it captures the built Slide with `npm run inspect-page -- … --clip '[id="<section>--<slide>"]' --out <scratchpad>.png`, reads the page image and that capture, and judges each `Build against this page` line. Each review logs its verdict as Score lines on the Attempt span, as in [the job loop](../SKILL.md#the-job-loop) (a rubric line, its value and the evidence in `body`, the ticket number in `body`), writes no report file, and returns only `pass` or `fail`. Describe each ticket subagent `implement-episode#<attempt>/ticket-implementor/#<ticket>`, and its reviewers `implement-episode#<attempt>/reviewer/#<ticket>`.
 - Ticket implementers (`archgate:developer`) skip `archgate:reviewer` and `archgate:lessons-learned`: the per-ticket `code-review` covers review, and the orchestrator writes `LEARNINGS.md`. `archgate check` still runs.
 - Apply [`skill-overrides.md`](skill-overrides.md) to every skill the job lists: ticket implementers get it by path, beside `ticket.skills`.
 - On a retry, the failed lines go to a new implementer subagent, quoted verbatim, as fix work on the integration branch.
@@ -43,7 +43,7 @@ The `visual-check` check, in both themes, by FE-009's browser check. By the `vis
      --probe '[id="<section>--<slide>"]' …
    ```
 
-   Every Slide must have a `count` of 1, a wrapper box at least the viewport tall (the wrapper's "at least viewport height" is FE-009's only height rule, so a taller Slide is fine), no horizontal overflow, and a Foreground clear of the chrome; also probe its mounted descendants (`[id="<section>--<slide>"] *`) and require a `count` above 0. Record the numbers per Slide, width, drawer state and theme in the run-log entry's Checks.
+   Every Slide must have a `count` of 1, a wrapper box at least the viewport tall (the wrapper's "at least viewport height" is FE-009's only height rule, so a taller Slide is fine), no horizontal overflow, and a Foreground clear of the chrome; also probe its mounted descendants (`[id="<section>--<slide>"] *`) and require a `count` above 0. Record the numbers per Slide, width, drawer state and theme in the run-log entry's Checks, and log the `visual-check` result as a `check` Score with the failing numbers as `body`.
 
 ## Rubric
 
