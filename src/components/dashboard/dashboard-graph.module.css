@@ -1,0 +1,167 @@
+.stages {
+  display: grid;
+  gap: 1rem;
+}
+
+.stage {
+  position: relative;
+  min-width: 0;
+}
+
+.stage:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 1.875rem;
+  top: 3rem;
+  bottom: -2rem;
+  width: 2px;
+  background: var(--border);
+}
+
+.stage[data-complete='true']::before {
+  background: var(--success);
+}
+
+.node {
+  --node-tone: var(--muted-foreground);
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  width: 100%;
+  padding: 0.375rem;
+  border-radius: var(--radius);
+  text-align: left;
+}
+
+.node[data-state='ok'],
+.node[data-state='reused'] {
+  --node-tone: var(--success);
+}
+
+.node[data-state='running'] {
+  --node-tone: var(--info);
+}
+
+.node[data-state='gate'],
+.node[data-state='refused'] {
+  --node-tone: var(--warning);
+}
+
+.node[data-state='error'],
+.node[data-state='crashed'] {
+  --node-tone: var(--destructive);
+}
+
+.orbit {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border: 2px solid var(--node-tone);
+  border-radius: 50%;
+  background: var(--card);
+  color: var(--node-tone);
+}
+
+.node[aria-expanded='true'] .orbit {
+  outline: 2px solid var(--selected);
+  outline-offset: 4px;
+}
+
+.node[data-state='running'] .orbit::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border: 2px solid var(--info);
+  border-radius: 50%;
+  animation: pulse 2s ease-out infinite;
+}
+
+.panel {
+  animation: enter 180ms ease-out;
+}
+
+.branch {
+  position: relative;
+  padding-left: 1rem;
+  border-left: 2px solid var(--border);
+}
+
+.branch::before {
+  content: '';
+  position: absolute;
+  top: 1.75rem;
+  left: 0;
+  width: 1rem;
+  height: 2px;
+  background: var(--border);
+}
+
+.branch[data-complete='true'],
+.branch[data-complete='true']::before {
+  border-color: var(--success);
+}
+
+.branch[data-complete='true']::before {
+  background: var(--success);
+}
+
+.graph[data-motion='paused'] *,
+.graph[data-motion='paused'] *::after {
+  animation: none;
+}
+
+@media (min-width: 64rem) {
+  .stages {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: 0.75rem;
+  }
+
+  .stage:not(:last-child)::before {
+    left: 50%;
+    top: 1.875rem;
+    bottom: auto;
+    width: calc(100% + 0.75rem);
+    height: 2px;
+  }
+
+  .node {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+@keyframes pulse {
+  from {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(0.375rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .node[data-state='running'] .orbit::after,
+  .panel {
+    animation: none;
+  }
+}

@@ -23,7 +23,53 @@ Folder handles, parsed configuration, byte buffers, folded spans and errors live
 only in page memory. Reloading returns to the picker. The dashboard writes no
 files, stores no handles and uploads no local data. It does not approve Gates.
 Log text is rendered as text, not HTML. Transcript paths and agent input messages
-are not rendered.
+stay out of the graph and cards. Expanding **Raw JSON** in the local log modal can
+reveal them; no external transcript is opened and nothing is uploaded.
+
+## Graph and disclosure
+
+The overview groups existing Jobs for display, without changing the pipeline:
+
+| Stage         | Jobs                                                        |
+| ------------- | ----------------------------------------------------------- |
+| Brief         | `brief-grill`                                               |
+| Setup         | `categorize-research`, `customize-pipeline`                 |
+| Research      | `retrieval`, `convert-references`, every `write-research-*` |
+| Dossier       | `write-dossier`, `write-voice-script`                       |
+| Specification | `write-spec`, `write-design-spec`                           |
+| Build         | `implement-episode`                                         |
+| PR            | `open-pr`                                                   |
+
+Unrecognized Jobs remain visible as their own stage. Desktop reads left to right;
+smaller screens read top to bottom. Progress counts successful/reused stages,
+not elapsed time. A stage is complete only when all its Jobs are successful or
+reused, with no open Gate. Attention is counted separately from active work, so
+a failed optional research Job remains visible when the Dossier proceeds.
+
+Selecting a node reveals dependency levels and parallel Job lanes. Expanding a
+Job reveals observed ticket/session lanes and the existing evidence cards.
+Ticket identity comes from an explicit `ticket` or a matching structured spawn
+description. Unidentified sessions stay unassigned; the dashboard does not
+invent ticket totals. The spawn-label parser is shared with the adapter; adapter
+behavior is unchanged. Role retries remain inspectable instead of being erased.
+An agent without an end record whose Job or parent Attempt has ended is labelled
+`unclosed`, not running. This is a display distinction: it does not invent a
+successful finish, a duration, or alter the shared fold's raw history.
+
+The initial active stage opens automatically. Later polls do not move selection,
+collapse evidence, or steal focus. Running nodes pulse, completed connectors are
+green, and icons/text distinguish attention and failure. Animation can be paused
+without stopping polling and respects reduced motion; source errors pause it.
+
+**View events** opens a large native modal, scoped to a stage, Job, or ticket.
+**All Run events** includes malformed records with their source line numbers.
+Original records are retained during the incremental read, not read again for
+the modal. Readable events follow timestamp/sequence order; raw source lines,
+including repeated ends and Scores, remain available. Following new events is
+explicitly opt-in; scrolling away pauses it. Escape and the close button return
+focus to the trigger. The browser's modal makes the background inert.
+React's development effect replay may close and reopen the native dialog; a
+queued close notification only dismisses a dialog that is still closed.
 
 ## Reading and interpretation
 
@@ -79,6 +125,10 @@ and every emitted alternate must resolve and link back.
 - `createEpisodeReader(folder).poll()`: structural read-only file handles, fresh
   files, offsets, pipeline modification times and visible source errors.
 - Built output: the English-only route, metadata, header and picker markup.
+- `projectStages()`, `stageLayers()` and `jobLanes()`: stage progress, attention,
+  research grouping, parallel dependency levels and ticket/session identity.
+- `selectEvents()`: scoped, chronological source events, including ends and
+  Scores associated through their start Span's ancestry.
 
 The frozen fixture under `tests/fixtures/pipeline-dashboard/` contains exact
 snapshots of the approved `never-too-early-sales-run-2` files. It carries private

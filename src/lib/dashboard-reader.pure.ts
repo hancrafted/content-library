@@ -1,4 +1,6 @@
 import { createLogFold, parseLog, record } from '../../skills/new-episode/scripts/run-log.pure';
+import type { RunLogLine } from '../../skills/new-episode/scripts/run-log.schema.pure';
+import type { DashboardEvent } from './dashboard-events.pure';
 import {
   parseDashboardPipeline,
   projectDashboard,
@@ -25,11 +27,23 @@ export interface EpisodeRead {
   offset: number;
   lines: number;
   errors: string[];
+  events: readonly DashboardEvent[];
   pipeline?: DashboardPipeline;
   view?: DashboardView;
 }
 
 const messageOf = (error: unknown): string => (error instanceof Error ? error.message : String(error));
+
+function lineError(line: RunLogLine): string | undefined {
+  const { seq, trace_id, span_id, ...fields } = line;
+  const isStart = fields.kind === 'start' || fields.kind === 'start-run';
+  const checked = record(
+    { ...fields, ...(!isStart ? { span_id } : {}) },
+    { t: line.t, seq, traceId: trace_id, spanId: span_id as string },
+  );
+  if (!checked.ok) return checked.errors.join('; ');
+  return Number.isFinite(Date.parse(line.t)) ? undefined : 'invalid timestamp.';
+}
 
 class EpisodeReader {
   private stream = createLogStream();
@@ -39,6 +53,8 @@ class EpisodeReader {
   private pipelineError?: string;
   private lineNumber = 0;
   private errors: string[] = [];
+  private events: DashboardEvent[] = [];
+  private eventSnapshot: readonly DashboardEvent[] = [];
   private reading = 'pipeline.yml';
 
   constructor(private folder: EpisodeFolder) {}
@@ -46,11 +62,13 @@ class EpisodeReader {
   private result(condition: EpisodeRead['condition'], errors = this.errors): EpisodeRead {
     const folded = this.log.snapshot();
     const orphans = folded.orphans.map((line) => `events.jsonl: ${line.kind} for unknown span ${line.span_id}.`);
+    if (this.eventSnapshot.length !== this.events.length) this.eventSnapshot = this.events.slice();
     return {
       condition: orphans.length > 0 && condition === 'live' ? 'error' : condition,
       offset: this.stream.offset,
       lines: this.lineNumber,
       errors: [...errors, ...orphans],
+      events: this.eventSnapshot,
       pipeline: this.pipeline,
       view: this.pipeline ? projectDashboard(this.pipeline, folded) : undefined,
     };
@@ -74,24 +92,20 @@ class EpisodeReader {
     if (raw.trim() === '') return;
     const line = parseLog(raw).lines[0];
     const prefix = `events.jsonl line ${this.lineNumber}: `;
+    const event: DashboardEvent = { number: this.lineNumber, raw };
+    this.events.push(event);
     if (!line) {
-      this.errors.push(`${prefix}not a JSON object.`);
+      event.error = `${prefix}not a JSON object.`;
+      this.errors.push(event.error);
       return;
     }
-    const { seq, trace_id, span_id, ...event } = line;
-    const isStart = event.kind === 'start' || event.kind === 'start-run';
-    const checked = record(
-      { ...event, ...(!isStart ? { span_id } : {}) },
-      {
-        t: line.t,
-        seq,
-        traceId: trace_id,
-        spanId: span_id as string,
-      },
-    );
-    if (!checked.ok) this.errors.push(`${prefix}${checked.errors.join('; ')}`);
-    else if (!Number.isFinite(Date.parse(line.t))) this.errors.push(`${prefix}invalid timestamp.`);
-    else this.log.append([line]);
+    const invalid = lineError(line);
+    if (invalid) event.error = `${prefix}${invalid}`;
+    if (event.error) this.errors.push(event.error);
+    else {
+      event.line = line;
+      this.log.append([line]);
+    }
   }
 
   private async readEvents(): Promise<EpisodeRead> {
@@ -101,6 +115,8 @@ class EpisodeReader {
       this.log = createLogFold({ live: 'unfinished' });
       this.lineNumber = 0;
       this.errors = [];
+      this.events = [];
+      this.eventSnapshot = [];
     }
     if (file.size > this.stream.offset) {
       const bytes = new Uint8Array(await file.slice(this.stream.offset).arrayBuffer());

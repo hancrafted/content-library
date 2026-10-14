@@ -42,6 +42,30 @@ class LocalFolder implements EpisodeFolder {
 }
 
 describe('success cases', () => {
+  it('retains original events once across polls and clears the event timeline when truncated', async () => {
+    // ARRANGE
+    const folder = new LocalFolder();
+    const raw = fixture('events.jsonl').split('\n')[0];
+    const events = new LocalFile(`${raw}\n`);
+    folder.files.set('pipeline.yml', new LocalFile(fixture('pipeline.yml')));
+    folder.files.set('events.jsonl', events);
+    const reader = createEpisodeReader(folder);
+    const expectedError = 'not a JSON object.';
+    // ACT
+    const first = await reader.poll();
+    events.content += '{bad\n';
+    const second = await reader.poll();
+    const unchanged = await reader.poll();
+    events.content = '';
+    const cleared = await reader.poll();
+    // ASSERT
+    expect(first.events.map((entry) => entry.raw)).toEqual([raw]);
+    expect(second.events[1].error).toContain(expectedError);
+    expect(unchanged.events).toEqual(second.events);
+    expect(cleared.events).toEqual([]);
+    expect(first.events).toHaveLength(1);
+  });
+
   it('gets fresh files, reads only appended bytes and reparses pipeline only when modified', async () => {
     // ARRANGE
     const folder = new LocalFolder();

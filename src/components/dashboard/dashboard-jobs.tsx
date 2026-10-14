@@ -1,4 +1,4 @@
-import type { DashboardJob, DashboardView } from '@/lib/dashboard-projection.pure';
+import type { DashboardJob } from '@/lib/dashboard-projection.pure';
 import type { Span } from '../../../skills/new-episode/scripts/run-log.schema.pure';
 import {
   AgentEvidence,
@@ -68,46 +68,19 @@ function GateHistory({ gates, copy }: { gates: Span[]; copy: DashboardCopy }) {
   );
 }
 
-function JobCard({ job, copy, index }: { job: DashboardJob; copy: DashboardCopy; index: number }) {
+export function JobEvidence({ job, copy }: { job: DashboardJob; copy: DashboardCopy }) {
   return (
-    <li className="min-w-0 rounded-xl border border-border bg-card p-4 sm:p-5">
-      <article aria-labelledby={`job-${job.id}`} className="space-y-4">
-        <div className="flex items-start justify-between gap-3">
-          <h2 id={`job-${job.id}`} className="min-w-0 text-body font-semibold wrap-anywhere">
-            <span className="mr-3 font-mono text-muted-foreground">{String(index + 1).padStart(2, '0')}</span>
-            {job.id}
-          </h2>
-          <StateBadge state={job.state} />
-        </div>
-        <Dependencies job={job} copy={copy} />
-        <p className="text-caption text-muted-foreground">
-          {job.gate ? copy.gateConfig : copy.noGate} · {copy.retryLimit}: {job.retries}
-        </p>
-        {job.span ? <SpanMetrics span={job.span} copy={copy} /> : null}
-        <AgentConfig job={job} copy={copy} />
-        <AttemptEvidence spans={job.attempts} copy={copy} />
-        <AgentEvidence spans={job.agents} copy={copy} />
-        <GateHistory gates={job.gates} copy={copy} />
-        <ReviewEvidence scores={job.scores} attempts={job.attempts} copy={copy} />
-      </article>
-    </li>
-  );
-}
-
-export function DashboardJobs({ view, copy }: { view: DashboardView; copy: DashboardCopy }) {
-  return (
-    <section className="space-y-4">
-      <div className="space-y-1">
-        <p className="text-body font-semibold">
-          {copy.jobs} <span className="text-muted-foreground">({view.jobs.length})</span>
-        </p>
-        <p className="text-caption text-muted-foreground">{copy.order}</p>
-      </div>
-      <ol className="grid items-start gap-4 lg:grid-cols-2">
-        {view.jobs.map((job, index) => (
-          <JobCard key={job.id} job={job} copy={copy} index={index} />
-        ))}
-      </ol>
-    </section>
+    <article aria-label={job.id} className="min-w-0 space-y-4 rounded-xl border border-border bg-card p-4 sm:p-5">
+      <Dependencies job={job} copy={copy} />
+      <p className="text-caption text-muted-foreground">
+        {job.gate ? copy.gateConfig : copy.noGate} · {copy.retryLimit}: {job.retries}
+      </p>
+      {job.span ? <SpanMetrics span={job.span} copy={copy} /> : null}
+      <AgentConfig job={job} copy={copy} />
+      <AttemptEvidence spans={job.attempts} copy={copy} />
+      <AgentEvidence spans={job.agents} job={job} copy={copy} />
+      <GateHistory gates={job.gates} copy={copy} />
+      <ReviewEvidence scores={job.scores} attempts={job.attempts} copy={copy} />
+    </article>
   );
 }

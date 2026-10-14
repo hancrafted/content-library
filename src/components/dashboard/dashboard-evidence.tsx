@@ -1,11 +1,12 @@
 import type { Messages } from '@/i18n/translations';
 import type { DashboardJob } from '@/lib/dashboard-projection.pure';
+import { agentState, type DashboardState } from '@/lib/dashboard-stages.pure';
 import { formatDuration } from '../../../skills/new-episode/scripts/run-log-tree.pure';
 import type { Score, Span } from '../../../skills/new-episode/scripts/run-log.schema.pure';
 
 export type DashboardCopy = Messages['dashboard'];
 
-const STATUS_COLOR: Record<DashboardJob['state'], string> = {
+const STATUS_COLOR: Record<DashboardState, string> = {
   waiting: 'bg-muted text-muted-foreground',
   running: 'bg-(--info)/10 text-(--info)',
   ok: 'bg-(--success)/10 text-(--success)',
@@ -14,9 +15,10 @@ const STATUS_COLOR: Record<DashboardJob['state'], string> = {
   crashed: 'bg-destructive/10 text-destructive',
   reused: 'bg-(--success)/10 text-(--success)',
   gate: 'bg-(--warning)/10 text-(--warning)',
+  unclosed: 'bg-muted text-muted-foreground',
 };
 
-export function StateBadge({ state }: { state: DashboardJob['state'] }) {
+export function StateBadge({ state }: { state: DashboardState }) {
   return <span className={`rounded-md px-2 py-1 text-caption font-medium ${STATUS_COLOR[state]}`}>{state}</span>;
 }
 
@@ -41,12 +43,18 @@ export function SpanMetrics({ span, copy }: { span: Span; copy: DashboardCopy })
   );
 }
 
-function SpanRow({ span, copy }: { span: Span; copy: DashboardCopy }) {
+interface AgentRowProps {
+  span: Span;
+  job: DashboardJob;
+  copy: DashboardCopy;
+}
+
+function SpanRow({ span, job, copy }: AgentRowProps) {
   return (
     <li className="space-y-3 rounded-lg border border-border p-3">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <p className="min-w-0 flex-1 text-body font-medium wrap-anywhere">{span.description ?? span.name}</p>
-        <StateBadge state={span.status} />
+        <StateBadge state={agentState(job, span)} />
       </div>
       <p className="text-caption text-muted-foreground wrap-anywhere">
         {span['gen_ai.agent.name']} {span.role} {span.source} {span['gen_ai.response.model']}
@@ -57,7 +65,7 @@ function SpanRow({ span, copy }: { span: Span; copy: DashboardCopy }) {
   );
 }
 
-export function AgentEvidence({ spans, copy }: { spans: Span[]; copy: DashboardCopy }) {
+export function AgentEvidence({ spans, job, copy }: { spans: Span[]; job: DashboardJob; copy: DashboardCopy }) {
   if (spans.length === 0) return null;
   return (
     <details className="group">
@@ -66,7 +74,7 @@ export function AgentEvidence({ spans, copy }: { spans: Span[]; copy: DashboardC
       </summary>
       <ul className="mt-2 space-y-2">
         {spans.map((span) => (
-          <SpanRow key={span.span_id} span={span} copy={copy} />
+          <SpanRow key={span.span_id} span={span} job={job} copy={copy} />
         ))}
       </ul>
     </details>

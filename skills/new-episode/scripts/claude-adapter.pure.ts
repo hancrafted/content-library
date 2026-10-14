@@ -3,7 +3,7 @@
 // (`log.ts`) to append, or null, out. It adds what only Claude Code knows (launch and end times, the model
 // asked for and the model that ran, tokens, the prompt) and never writes a line. `claude-adapter.ts` is the I/O.
 import path from 'node:path';
-import { JOB_ID } from '../../../src/lib/episode-pipeline-jobs.pure.ts';
+import { parseDescription, type ParsedDescription } from '../../../src/lib/episode-spawn-description.pure.ts';
 import { verdictFirst } from './agent-summary.pure.ts';
 import { isRecord, parseJson, parseMarker, sessionsOf, type Marker } from './marker.pure.ts';
 import type { LogEvent, RunLogLine } from './run-log.pure.ts';
@@ -36,22 +36,7 @@ export interface AdapterInput {
   agentModel?: string;
 }
 
-export interface ParsedDescription {
-  job: string;
-  attempt: number;
-  role: string;
-  ticket?: number;
-}
-
-/** `<job>#<attempt>/<role>[/#<ticket>]`; job and role follow `JOB_ID` (the pipeline check's grammar), attempt and ticket are positive integers. */
-const ID = JOB_ID.source.slice(1, -1);
-const DESCRIPTION = new RegExp(`^(${ID})#([1-9]\\d*)/(${ID})(?:/#([1-9]\\d*))?$`);
-
-export function parseDescription(description: string): ParsedDescription | null {
-  const m = DESCRIPTION.exec(description);
-  if (m === null) return null;
-  return { job: m[1], attempt: Number(m[2]), role: m[3], ...(m[4] === undefined ? {} : { ticket: Number(m[4]) }) };
-}
+export { parseDescription } from '../../../src/lib/episode-spawn-description.pure.ts';
 
 /** Where the subagent's transcript and meta.json sit: `<session dir>/subagents/agent-<id>.*`. */
 export function subagentFiles(payload: HookPayload): { transcript: string; meta: string } {
