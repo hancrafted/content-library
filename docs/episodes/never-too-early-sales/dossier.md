@@ -4,7 +4,7 @@ title: Start selling before you need the money
 status: draft
 generated:
   by: claude-code/opus-5.5
-  at: 2026-10-13T23:44:08Z
+  at: 2026-10-14T00:08:13Z
 locale: en
 brief: ./brief.md
 verified:
@@ -14,6 +14,10 @@ verified:
     at: 2026-10-13T23:46:18Z
   - by: human:han
     at: 2026-10-13T23:46:27Z
+  - by: process:markdown-harness
+    at: 2026-10-14T00:08:27Z
+  - by: human:han
+    at: 2026-10-14T00:08:27Z
 ---
 
 # Start selling before you need the money {#start-selling-early}
@@ -58,7 +62,7 @@ No library match: a planning board of sticky notes, one column per month from Ja
 
 #### Visual
 
-master: grid-1x3 · motion: local
+master: basic-page · motion: local
 
 Three columns, one per thing early selling gives you: market insight, a repeatable process, and trust with investors and customers. Beneath them one line draws them together into a single result, "increase trust". The columns react only to hover.
 
@@ -93,7 +97,7 @@ Three columns, one per thing early selling gives you: market insight, a repeatab
 
 #### Visual
 
-master: three-column · motion: local
+master: basic-page · motion: local
 
 No library match: three boxes in a left-to-right flow, "Leads", "Opportunities", "Closing", joined by arrows. Under Leads two small labels: "research" and "first contact (cold call, inbound, network)". Opportunities is drawn largest, as the real work. After Closing a short trailing arrow marks delivery, labelled as more lag before cash. The arrows draw in from left to right when the slide appears.
 
@@ -184,7 +188,7 @@ No library match: the same cashflow board as the first board slide, with the Apr
 
 #### Visual
 
-master: grid-1x3 · motion: local
+master: basic-page · motion: local
 
 Three columns: "Sales funnel" tells you about your volume, "Conversion rate" about your offering, "Sales cycle" about your efficiency. The columns react only to hover.
 
@@ -231,7 +235,7 @@ No library match: a horizontal funnel of three stages, lead, opportunity and dea
 
 #### Visual
 
-master: grid-3x1 · motion: local
+master: basic-page · motion: local
 
 Three rows in reading order: "Preparation", "Unknown market", "Unknown metrics", each with a short caption. The rows react only to hover.
 
