@@ -1,0 +1,78 @@
+{
+  "title": "Sales is more than selling",
+  "caption": "Selling early pays before the revenue does.",
+  "board": {
+    "label": "Market insight, trust and a repeatable process all lead to increased trust.",
+    "notes": {
+      "market-insight": {
+        "label": "Market insight",
+        "line": "Every customer talk is market research."
+      },
+      "trust": {
+        "label": "Trust",
+        "line": "An early deal, even a small one, is proof."
+      },
+      "repeatable-process": {
+        "label": "Repeatable process",
+        "line": "The steps that work, written down for your first sales hire."
+      }
+    },
+    "outcome": {
+      "label": "Increase trust",
+      "line": "A company others dare to bet on."
+    }
+  },
+  "notes": {
+    "your-guess-of-the-customer-is-wrong": {
+      "header": "Your guess of the customer is wrong",
+      "description": "A founder's initial model of users is always inaccurate, even if the founder is one of them; direct contact is what corrects it.[1]",
+      "sources": {
+        "graham-do-things-that-dont-scale": {
+          "title": "Graham, Do Things that Don't Scale"
+        }
+      }
+    },
+    "investors-read-the-team": {
+      "header": "Investors read the team",
+      "description": "Among 885 venture capitalists the management team was the most-cited important factor (95%), ahead of product and market. That a signed letter of intent or a full pipeline raises trust is an inference: no study tests them directly.[1]",
+      "sources": {
+        "gompers-how-vcs-decide": {
+          "title": "Gompers, Gornall, Kaplan and Strebulaev, How Do Venture Capitalists Make Decisions?"
+        }
+      }
+    },
+    "scale-after-you-find-the-process": {
+      "header": "Scale after you find the process",
+      "description": "Premature scaling of sales and marketing is the leading cause of cash loss in a startup; scale after the founders have found a repeatable sales model.[1]",
+      "sources": {
+        "blank-marketing-problem": {
+          "title": "Blank, It Must Be A Marketing Problem"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "market-insight": {
+        "title": "Market insight",
+        "keywords": "wrong buyer, build already paid for, price of skipping early sales",
+        "script": "The first note: market insight. Look at your offer. Suppose it is aimed at the wrong buyer. You will not see that on the board. You will see it after the build is paid for. The money is gone, and the offer still has to change. That is the price of skipping early sales."
+      },
+      "trust": {
+        "title": "Trust",
+        "keywords": "customers and investors, an early deal, paid attention or money, faith",
+        "script": "The second note: trust. Customers and investors both trust a company that has already sold something. An early deal, even a small one, says that someone paid attention, or paid money. A company with nothing sold asks them to take it on faith."
+      },
+      "repeatable-process": {
+        "title": "Repeatable process",
+        "keywords": "which steps work, write it down, first sales hire",
+        "script": "The third note: a repeatable process. When you sell yourself, you see which steps work, and in which order. Write that down. It becomes the process you can later hand to a first sales hire, instead of handing over a hope."
+      },
+      "converge-on-trust": {
+        "title": "Converge on trust",
+        "keywords": "three notes, three arrows, a company others dare to bet on",
+        "script": "Three notes, three arrows, one place they end. A company others dare to bet on. That is what early selling builds, long before it builds revenue."
+      }
+    }
+  }
+}
