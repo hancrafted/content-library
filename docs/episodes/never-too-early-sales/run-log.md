@@ -724,3 +724,44 @@
 - The full matrix's app source commit is `4ee251c`; the subsequent anchor-contract fix changes only a test and preserves that app tree.
 - Individual worker/merger intervals are recorded in the session ledger; Metrics use the orchestrator's observed implementation/review windows and exclude idle gaps. Token counts were unavailable.
 - No spine changes, blocked implementation branch, new dependency, route/container, shared Slide schema or publication occurred.
+
+## open-pr · 2026-10-14T07:19:26Z
+
+### Inputs
+
+- Implemented and reviewed Episode at `455fdf2`, persistent implementation evidence in `b507ac1`.
+- `run-log.md`: every prefixed human-review note for the PR checklist.
+- `.agents/skills/new-episode/references/open-pr.md` and the PR-body skill template.
+- `.agents/skills/new-episode/LEARNINGS.md`, current session ledger and governance review context for conservative knowledge capture.
+
+### Output
+
+- Local English Episode: http://127.0.0.1:4310/episode/never-too-early-sales/
+- Provisional German route: http://127.0.0.1:4310/de/episode/never-too-early-sales/
+- Draft PR https://github.com/hancrafted/content-library/pull/158, head `sales-pipeline-episode-sol`, base `main`.
+- PR description: component tree, before/after execution evidence, two-way merge danger and 24 preserved checklist items.
+- `.agents/skills/new-episode/LEARNINGS.md`: eight evidence-backed procedure proposals, committed in `193b4be`; no template, binding ADR or always-loaded instruction change.
+- Cleanup decision: all four implementation worktrees removed; the original #154 audit branch is retained because its unmarked merge was intentionally excluded from integration.
+
+### Checks
+
+- Own-head PR lookup: none existed before creation, so no duplicate was opened.
+- Detached Next dev server: ready on loopback port 4310; both locale routes answer HTTP 200.
+- Plural `/episodes/never-too-early-sales/`: HTTP 404; the working singular route is recorded on the PR checklist.
+- `gh pr view 158`: `isDraft: true`, correct head/base and URL.
+- Push gate: complete `npm run verify` passes before publishing the isolated head; no force push or main-branch update.
+- Governance context: architecture/frontend/general coverage, 14 changed-scope checks pass with zero warnings; prior full checks remain 32/32.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 1316 s
+
+### Notes
+
+- The dev server intentionally remains available after this session; bounded preview/Chrome helpers were stopped and their temporary profiles removed.
+- The PR stays draft through feedback and Promotion; it does not publish the Episode, add a video, translate German or merge main.
+- The checklist preserves historical advisory notes verbatim, including ones resolved downstream, rather than misrepresenting them as failed code checks.
+- Existing ARCH-003 and FE-009 already cover the testing and pause duties. Lessons propose procedure examples and runtime preflight, not new governance.
+- Knowledge capture used this Copilot run's log/ledger rather than reading an unrelated Claude transcript, preserving the isolated-run boundary.
+- No repeated unmarked human gate edits occurred, so no new writing-style rubric was inferred from agent corrections.
+- The singular-route deviation is already represented by the explicit #85 checklist item on the PR.

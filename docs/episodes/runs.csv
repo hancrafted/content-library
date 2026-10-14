@@ -103,3 +103,4 @@ run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at
 2026-10-13T22:50:35Z,never-too-early-sales,implement-episode,reviewer,1,fail,"DON'T assert an expected value the code under test computed.",139,,2026-10-14T06:46:23Z
 2026-10-13T22:50:35Z,never-too-early-sales,implement-episode,implementor,2,pass,,74,,2026-10-14T06:50:17Z
 2026-10-13T22:50:35Z,never-too-early-sales,implement-episode,reviewer,2,pass,,13,,2026-10-14T06:52:59Z
+2026-10-13T22:50:35Z,never-too-early-sales,open-pr,implementor,1,pass,,1316,,2026-10-14T07:19:26Z
