@@ -1,0 +1,48 @@
+/*
+ * Pipeline tools in practice: motion only, no colour, size or weight (FE-011). The notes stick on column by column
+ * with the library motion, the ghost fades in after them, then Nordwerk slides one column right, from the ghost's
+ * place into Proposal made. The slide runs only from `lg`, where the board has five columns; below it the moved note
+ * only sticks on. Once, when the Slide becomes active (FE-009 §6.2); at rest and under reduced motion the board is
+ * finished.
+ */
+
+.board {
+  container-type: inline-size;
+}
+
+.note {
+  composes: stickOn from '../../../../slide-shared/motions/stick-on.module.css';
+}
+
+/* The moved note sticks on like the others below `lg`; from `lg` it is there at once and slides instead. */
+.moved {
+  composes: stickOn from '../../../../slide-shared/motions/stick-on.module.css';
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .ghost {
+    animation: ghost-in 420ms cubic-bezier(0.2, 0, 0, 1) both;
+    animation-delay: calc(200ms + var(--i) * 260ms);
+  }
+}
+
+/* One column's step is a fifth of the board plus one of Board's column gaps, `--board-gap`, which it inherits. */
+@media (prefers-reduced-motion: no-preference) and (width >= 64rem) {
+  /* Doubled to outrank the composed stick-on rule, whatever order the two stylesheets load in. */
+  :global([data-zone='active']) .moved.moved {
+    animation: move-right 700ms cubic-bezier(0.2, 0, 0, 1) both;
+    animation-delay: calc(200ms + var(--i) * 260ms);
+  }
+}
+
+@keyframes ghost-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes move-right {
+  from {
+    transform: translateX(calc(-1 * (100cqi + var(--board-gap)) / 5));
+  }
+}

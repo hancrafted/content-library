@@ -1,0 +1,47 @@
+{
+  "title": "Wie Marketing die Pipeline füllt",
+  "caption": "Marketing füllt die Pipeline, der Vertrieb arbeitet sie ab.",
+  "figure": "Ein Marketing-Trichter lässt drei Inbound-Leads in die Stufe Lead eingegangen des Deal-Boards fallen.",
+  "funnel": "Marketing, hohe Reichweite",
+  "lead": "Inbound-Lead",
+  "salesContact": "Vertrieb nimmt Kontakt auf",
+  "board": {
+    "columns": {
+      "lead-in": "Lead eingegangen",
+      "contact-made": "Kontakt aufgenommen",
+      "needs-defined": "Bedarf geklärt",
+      "proposal-made": "Angebot gemacht",
+      "negotiations-started": "Verhandlung läuft"
+    }
+  },
+  "notes": {
+    "customers-do-not-arrive-on-their-own": {
+      "header": "Kunden kommen nicht von allein",
+      "description": "Man kann nicht darauf warten, dass die Nutzer von selbst kommen, man muss rausgehen und sie holen; Nutzer zu gewinnen ist ein schrittweiser Prozess.[1]",
+      "sources": {
+        "do-things-that-dont-scale": {
+          "title": "Paul Graham, Do Things that Don't Scale"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "volume": {
+        "title": "Reichweite",
+        "keywords": "Trichter, viele Menschen auf einmal, wenige melden sich, viel rein, wenig raus",
+        "script": "Marketing funktioniert wie ein Trichter. Es spricht viele Menschen auf einmal an, und ein paar davon melden sich. Große Reichweite, kleine Ausbeute. Genau so soll es funktionieren."
+      },
+      "enter-a-defined-stage": {
+        "title": "Rein in eine feste Stufe",
+        "keywords": "ein Lead, kein Kunde, Inbound-Lead, Vertrieb nimmt Kontakt auf, füllen und abarbeiten",
+        "script": "Wer sich meldet, wird dadurch noch kein Kunde. Er wird zu einem Lead in einer festen Stufe deiner Pipeline, zum Beispiel als Inbound-Lead. Erst dann nimmt der Vertrieb Kontakt auf. Marketing füllt die Pipeline, der Vertrieb arbeitet sie ab."
+      },
+      "you-do-not-need-it-first": {
+        "title": "Du brauchst es nicht zuerst",
+        "keywords": "keine Kampagne vorab, kein Budget, Netzwerk und Telefon, Erstkontakt diese Woche",
+        "script": "Schieb deine erste Aufgabe also nicht hinter eine Kampagne. Du hast noch kein Budget und kein Publikum. Aber du hast ein Netzwerk und ein Telefon. Nimm diese Woche deinen ersten Kontakt auf, und lass den Trichter später kommen."
+      }
+    }
+  }
+}

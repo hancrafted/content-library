@@ -1,0 +1,46 @@
+{
+  "title": "Pipeline-Tools in der Praxis",
+  "caption": "So siehst du deine ganze Pipeline auf einen Blick.",
+  "figure": "Ein Deal-Board mit fünf Stufen; der Deal Nordwerk ist von Bedarf geklärt zu Angebot gemacht gewandert.",
+  "board": {
+    "columns": {
+      "lead-in": "Lead eingegangen",
+      "contact-made": "Kontakt aufgenommen",
+      "needs-defined": "Bedarf geklärt",
+      "proposal-made": "Angebot gemacht",
+      "negotiations-started": "Verhandlung läuft"
+    }
+  },
+  "total": "{amount} · {count, plural, one {# Deal} other {# Deals}}",
+  "ghost": "Von hier verschoben",
+  "notes": {
+    "slipping-deals-convert-worse": {
+      "header": "Verschleppte Deals schließen seltener ab",
+      "description": "In den Daten eines Anbieters schließen Deals, die spät im Verkaufszyklus ins Stocken geraten, seltener ab, und bei gewonnenen Deals waren die Entscheider früh eingebunden.[1]",
+      "sources": {
+        "gtm-benchmarks": {
+          "title": "Ebsta und Pavilion, GTM Benchmarks Report"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "one-board-for-all-deals": {
+        "title": "Ein Board für alle Deals",
+        "keywords": "ein Ort, ein Zettel pro Deal, fünf Spalten, Firma und Wert, Summe oben",
+        "script": "Jetzt brauchst du einen Ort für alle deine Deals. Zeichne ein Board. Jeder Deal ist ein Zettel, und jeder Zettel steht in genau einer Spalte: Lead eingegangen, Kontakt aufgenommen, Bedarf geklärt, Angebot gemacht, Verhandlung läuft. Auf dem Zettel stehen der Firmenname und der Wert. Oben auf jeder Spalte steht die Summe. So siehst du deine ganze Pipeline auf einen Blick."
+      },
+      "fourth-actionable-track-deals": {
+        "title": "Vierte Aufgabe: Deals verfolgen",
+        "keywords": "einfache Pipeline, Tabelle oder kostenloses Tool, aktuell statt clever, messen",
+        "script": "Hier ist deine vierte Aufgabe. Verfolge jeden Deal in einer einfachen Pipeline. Fang mit einer Tabelle oder einem kostenlosen Tool an. Es muss nicht clever sein. Es muss aktuell sein. Dann kannst du es messen, und dazu kommen wir gleich."
+      },
+      "move-or-drop": {
+        "title": "Weiterschieben oder fallen lassen",
+        "keywords": "ein Zettel wandert, nicht hoffen, entscheiden, voranbringen oder streichen",
+        "script": "Sieh zu, wie ein Zettel von einer Spalte in die nächste wandert. Genau das willst du. Bewegt sich ein Deal nicht, dann hoffst du nicht. Du entscheidest. Bring ihn voran, oder lass ihn fallen und mach deinen Kopf frei."
+      }
+    }
+  }
+}
