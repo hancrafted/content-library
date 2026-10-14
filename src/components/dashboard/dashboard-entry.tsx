@@ -20,7 +20,7 @@ export function ChooseFolder({
       onClick={choose}
       disabled={choosing || supported !== true}
       aria-busy={choosing}
-      className="min-h-11 cursor-pointer"
+      className="h-auto min-h-11 min-w-0 max-w-full cursor-pointer whitespace-normal"
     >
       <FolderOpen aria-hidden="true" />
       {choosing ? copy.choosing : copy.choose}
@@ -39,7 +39,7 @@ export function BrowserHelp({ supported, copy }: { supported: boolean | null; co
 
 function ExpectedFiles({ copy }: { copy: DashboardCopy }) {
   return (
-    <aside className="space-y-5 rounded-xl bg-muted/50 p-5">
+    <aside className="min-w-0 space-y-5 rounded-xl bg-muted/50 p-5">
       <h3 className="text-body font-medium">{copy.filesTitle}</h3>
       <dl className="space-y-4 text-caption">
         <div>
@@ -57,8 +57,8 @@ function ExpectedFiles({ copy }: { copy: DashboardCopy }) {
 
 export function DashboardEntry({ children, copy }: { children: ReactNode; copy: DashboardCopy }) {
   return (
-    <section className="grid items-center gap-8 rounded-2xl border border-border bg-card p-6 sm:p-8 lg:grid-cols-2">
-      <div className="space-y-5">
+    <section className="grid grid-cols-1 items-center gap-8 rounded-2xl border border-border bg-card p-6 wrap-anywhere sm:p-8 lg:grid-cols-2">
+      <div className="min-w-0 space-y-5">
         <div className="flex size-12 items-center justify-center rounded-xl border border-border bg-background text-primary">
           <FolderOpen aria-hidden="true" className="size-6" />
         </div>
