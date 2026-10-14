@@ -129,9 +129,6 @@ frontmatter:
           presence: required
           maxLength: 200
           intent: 'One sentence stating the Answer, which the retrieval job reads to decide whether this file answers a new question. Fail if it names the topic without stating the answer.'
-        question:
-          presence: required
-          intent: 'The research question in the words that first asked it, so retrieval can compare it with a new one. Fail if it holds more than one question, or differs from the Brief that asked it when that Brief is at hand.'
         generated.by:
           presence: required
           format: actor
@@ -142,11 +139,10 @@ frontmatter:
           intent: 'When the Sources were read and the Findings last changed in substance, with an explicit UTC offset, so a reader can weigh their age.'
         sources:
           minItems: 1
-          intent: 'The primary sources the Findings rest on, as OKF §5.1 `sources`, each cited in the body as a `[^id]` footnote. Fail if a source reports on a work instead of being it, unless it is an earlier research file this one extends.'
+          intent: 'The primary sources the Findings rest on, as OKF §5.1 `sources`, each cited in the body as a `[n]` link, whose definition `[n]: <url> "title"` closes the file. Fail if a source reports on a work instead of being it, unless it is an earlier research file this one extends.'
         sources[].id:
           presence: required
-          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
-          intent: 'The footnote label a Finding cites the source by, `[^id]`, in lowercase words joined by hyphens, unique within the file.'
+          intent: 'The number a Finding cites the source by, `[n]`: the integers 1..n in order, each once. The staging test checks it against the body.'
         sources[].resource:
           presence: required
           format: uri
@@ -471,7 +467,7 @@ body-structure:
               [
                 {
                   title: Findings,
-                  intent: 'The evidence behind the Answer, one finding per item, each citing its source as a `[^id]` footnote of the frontmatter `sources`, whose definitions close the file. Fail if a finding cites no source, or gives an opinion instead of what a source shows.',
+                  intent: 'The evidence behind the Answer, one finding per item, each citing its source as `[n]`, the `id` of a frontmatter `sources` entry, whose link definitions close the file. Fail if a finding cites no source, or gives an opinion instead of what a source shows.',
                 },
               ],
             mayHold: [ordered-list],
