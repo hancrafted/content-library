@@ -1,0 +1,91 @@
+{
+  "title": "Wie Marketing die Pipeline füttert",
+  "caption": "Marketing bringt Menge in eine festgelegte Stufe: die erste Spalte.",
+  "funnel": {
+    "title": "Marketing",
+    "channels": "Webinar · Beitrag",
+    "label": "Ein Marketing-Trichter, der neue Namen in die erste Stufe schüttet"
+  },
+  "entry": "+40 neue Namen",
+  "board": {
+    "label": "Eine Deal-Tafel mit vier Stufen",
+    "columns": {
+      "new": {
+        "title": "Neu",
+        "summary": "3 · 29k $"
+      },
+      "meeting": {
+        "title": "Termin",
+        "summary": "1 · 20k $"
+      },
+      "proposal": {
+        "title": "Angebot",
+        "summary": "2 · 52k $"
+      },
+      "won": {
+        "title": "Gewonnen",
+        "summary": "1 · 18k $"
+      }
+    },
+    "cards": {
+      "brightfold": {
+        "name": "Brightfold",
+        "value": "8k $"
+      },
+      "okapi-logistics": {
+        "name": "Okapi Logistics",
+        "value": "15k $"
+      },
+      "talvik-energy": {
+        "name": "Talvik Energy",
+        "value": "6k $"
+      },
+      "mosswell-clinics": {
+        "name": "Mosswell Clinics",
+        "value": "20k $"
+      },
+      "kestrel-labs": {
+        "name": "Kestrel Labs",
+        "value": "40k $"
+      },
+      "harbor-and-pine": {
+        "name": "Harbor & Pine",
+        "value": "12k $"
+      },
+      "lindgren-tools": {
+        "name": "Lindgren Tools",
+        "value": "18k $"
+      }
+    }
+  },
+  "notes": {
+    "rates-differ-per-stage": {
+      "header": "Jede Stufe hat ihre eigene Quote",
+      "description": "Dieselben Daten zeigen 68 Prozent vom marketingqualifizierten zum vertriebsqualifizierten Lead neben einer Abschlussquote von 19 Prozent; jede Stufe braucht also ihre eigene Zahl.[1]",
+      "sources": {
+        "ebsta-pavilion-gtm-benchmarks": {
+          "title": "Ebsta and Pavilion, GTM Benchmarks Report"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "marketing-adds-volume": {
+        "title": "Marketing bringt Menge",
+        "keywords": "klare Aufgabe, mehr Leads, eine Stufe, erste Spalte, die Stufe muss existieren",
+        "script": "Marketing hat in diesem Bild eine klare Aufgabe. Es sorgt für Menge. Es bringt mehr Leads in eine Stufe deiner Pipeline, in die erste Spalte der Tafel. Ein größerer Strom an Leads hilft aber nur, wenn es diese Stufe gibt und du weißt, wo sie liegt."
+      },
+      "defined-entry-point": {
+        "title": "Ein fester Einstiegspunkt",
+        "keywords": "Stufe festlegen, messen, Webinar oder Beitrag, vierzig neue Namen, auf einer Tafel vergleichen",
+        "script": "Das klappt nur, wenn du festlegst, welche Stufe das Marketing füttert. Tust du das nicht, landet die Menge zwar irgendwo, aber niemand sieht, wohin sie geht und was daraus wird. Gib ihr einen festen Einstiegspunkt, dann kannst du sie messen. Ein Webinar oder ein Beitrag bringt dir zum Beispiel vierzig neue Namen. Landen alle in einer Spalte, siehst du nach einem Monat, wie viele davon zu Terminen wurden. Landen sie nirgends, hast du vierzig Namen und keine Ahnung. So kannst du Marketing und deine eigene Ansprache auf derselben Tafel vergleichen."
+      },
+      "not-a-substitute": {
+        "title": "Kein Ersatz",
+        "keywords": "nicht auf Marketing warten, eigener Erstkontakt, erste Chancen, beides tun, die Botschaft weitertragen",
+        "script": "Warte aber nicht darauf, dass das Marketing deine ersten Verkäufe für dich erledigt. Am Anfang öffnet dein eigener Erstkontakt die ersten Chancen. Marketing lässt das wachsen. Mach also beides. Führ die ersten Gespräche selbst, lerne, was funktioniert, und lass dann das Marketing diese Botschaft zu viel mehr Menschen tragen."
+      }
+    }
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "title": "Stages of sale",
+  "caption": "Leads become deals, and cash still waits for delivery.",
+  "flow": {
+    "label": "The three stages of a sale, from leads to closing"
+  },
+  "stages": {
+    "leads": {
+      "title": "Leads",
+      "notes": {
+        "research": "Research",
+        "first-contact": "First contact",
+        "first-contact-detail": "cold call · inbound · network"
+      }
+    },
+    "opportunities": {
+      "title": "Opportunities",
+      "tag": "the real work",
+      "notes": {
+        "conversations": "Conversations",
+        "questions": "Questions",
+        "proposal": "Proposal"
+      }
+    },
+    "closing": {
+      "title": "Closing",
+      "notes": {
+        "signature": "Signature"
+      }
+    }
+  },
+  "delivery": {
+    "cash": "Cash",
+    "label": "Delivery: more lag before cash"
+  },
+  "notes": {
+    "delivery-adds-lag": {
+      "header": "Delivery adds lag",
+      "description": "After the work is done the customer's payment period may only start after an acceptance step of up to 30 days.[1]",
+      "sources": {
+        "eu-late-payment-directive": {
+          "title": "European Parliament and Council, Directive 2011/7/EU on combating late payment in commercial transactions"
+        }
+      }
+    },
+    "early-channels-do-not-scale": {
+      "header": "Early channels do not scale, and that is fine",
+      "description": "Before product-market fit, rely on the personal networks of founders, employees and investors and on customer referrals; they yield the best opportunities to learn from.[1]",
+      "sources": {
+        "roberge-science-of-scaling": {
+          "title": "Mark Roberge, The Science of Scaling"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "three-stages": {
+        "title": "Three stages",
+        "keywords": "leads, opportunities, closing, stranger to customer, three words",
+        "script": "A sale has three stages, from left to right. Leads, opportunities, and closing. Each one is a different kind of work. Someone is a stranger, then a name on your list, then a conversation, then a customer. The stages are only names for where a person is on that way. Keep these three words, because the rest of this part uses them."
+      },
+      "leads": {
+        "title": "Leads",
+        "keywords": "second action, spreadsheet, ten names today, every week, company, person, why they care",
+        "script": "Start with leads. A lead is simply the name of someone who might buy. Research them and keep a list. This is your second action, and you can do it today. Open a spreadsheet, add ten names, and keep adding them every week. Do not make the list perfect. Write down the company, the person, and why you think they might care. If you do not know yet, write down a guess, and fix it after the first call. The only wrong list is the empty one."
+      },
+      "first-contact": {
+        "title": "First contact",
+        "keywords": "third action, cold call, inbound, network, short honest message, a no teaches for free",
+        "script": "Then comes first contact. You can cold call, you can answer someone who came to you, or you can ask your network. Pick the one you are least afraid of and begin. This is your third action. Each conversation that goes somewhere turns a lead into an opportunity. Many people fear that they are bothering others. A short, honest message is a fair thing to send. And if they say no, you have learned something for free."
+      },
+      "opportunities": {
+        "title": "Opportunities",
+        "keywords": "the real work, conversations, questions, proposal, most of your week, steady lead research",
+        "script": "Opportunities are where the real work lives. Conversations, questions, a proposal. If you spend all your time on lead research, you are researching, not selling. At some point a name has to become a conversation, and a conversation has to become a proposal. Put most of your week into the opportunities you already have. Keep a small, steady part for adding new names to the lead stage."
+      },
+      "after-closing": {
+        "title": "After closing",
+        "keywords": "signature, delivery, more waiting, revenue after signature, zero-cash month earlier",
+        "script": "Closing is not the end of the story for your cash. After the signature comes the delivery, and delivery is more waiting. Your revenue lands later than your signature, so count that gap into your board. How long does delivery take in your business? A week? A quarter? Add it to the board as a note after the signature, and you will find your zero-cash month a little earlier than you thought."
+      }
+    }
+  }
+}

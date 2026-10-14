@@ -1,0 +1,85 @@
+{
+  "title": "Pipeline tools in practice",
+  "caption": "One card per deal, one column per stage: stuck deals show at a glance.",
+  "board": {
+    "label": "A deal board with four stages",
+    "columns": {
+      "new": {
+        "title": "New",
+        "summary": "3 · $29k"
+      },
+      "meeting": {
+        "title": "Meeting",
+        "summary": "1 · $20k"
+      },
+      "proposal": {
+        "title": "Proposal",
+        "summary": "2 · $52k"
+      },
+      "won": {
+        "title": "Won",
+        "summary": "1 · $18k"
+      }
+    },
+    "cards": {
+      "brightfold": {
+        "name": "Brightfold",
+        "value": "$8k"
+      },
+      "okapi-logistics": {
+        "name": "Okapi Logistics",
+        "value": "$15k"
+      },
+      "talvik-energy": {
+        "name": "Talvik Energy",
+        "value": "$6k"
+      },
+      "mosswell-clinics": {
+        "name": "Mosswell Clinics",
+        "value": "$20k"
+      },
+      "kestrel-labs": {
+        "name": "Kestrel Labs",
+        "value": "$40k"
+      },
+      "harbor-and-pine": {
+        "name": "Harbor & Pine",
+        "value": "$12k"
+      },
+      "lindgren-tools": {
+        "name": "Lindgren Tools",
+        "value": "$18k"
+      }
+    }
+  },
+  "notes": {
+    "late-slippage-hurts": {
+      "header": "Late slippage hurts",
+      "description": "In one vendor dataset, deals that slip late in the cycle convert worse, and winning deals involved decision makers early.[1]",
+      "sources": {
+        "ebsta-pavilion-gtm-benchmarks": {
+          "title": "Ebsta and Pavilion, GTM Benchmarks Report"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "simple-board": {
+        "title": "Simple board",
+        "keywords": "one column per stage, one card per deal, count and value, Monday morning, who to call",
+        "script": "A deal board is simple. One column for each stage: New, Meeting, Proposal and Won. Each deal is one card. On top of each column you see how many deals sit there and what they are worth together. Imagine a Monday morning with this board in front of you. Two deals are in Proposal and one is stuck in Meeting. You know exactly who to call, and in which order."
+      },
+      "track-every-deal": {
+        "title": "Track every deal",
+        "keywords": "one step at a time, nothing in your head, stuck column, empty column, a minute not a quarter",
+        "script": "Then you track every deal. A card moves one step at a time, from one column to the next. Nothing lives only in your head, and nothing gets forgotten. This is also how you find problems. A column that fills up and never empties tells you where deals get stuck. A column that stays empty tells you where you have no flow. You cannot see either from your inbox. When something is stuck, you see it in a minute instead of finding out in a quarter."
+      },
+      "start-simple": {
+        "title": "Start simple",
+        "keywords": "no perfect tool, spreadsheet, sticky notes, weekly habit, fifteen minutes, small and regular",
+        "script": "Do not wait for the perfect tool. A spreadsheet works. Sticky notes on a wall work. The tool matters much less than the habit of updating it every week. Pick a weekly slot, fifteen minutes. Move the cards, add the new ones, remove the dead ones. Small and regular beats big and rare."
+      }
+    }
+  }
+}
