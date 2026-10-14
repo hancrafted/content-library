@@ -19,6 +19,17 @@ export type EpisodeStatus =
 /** The pipeline file of an Episode, relative to the worktree root. */
 const pipelineFile = (slug: string): string => path.join('docs/episodes', slug, 'pipeline.yml');
 
+/** The template's pipeline: the jobs an Episode has before customize-pipeline writes its own. */
+const TEMPLATE_PIPELINE = '.agents/skills/new-episode/assets/pipeline.yml';
+
+/** The job ids a Job may be begun with, and the file they come from: the Episode's pipeline once it exists, else the template's. */
+export function declaredJobs(root: string, slug: string): { file: string; ids: string[] } {
+  const own = readOrNull(path.join(root, pipelineFile(slug)));
+  const file = own === null ? TEMPLATE_PIPELINE : pipelineFile(slug);
+  const yaml = own ?? readOrNull(path.join(root, TEMPLATE_PIPELINE)) ?? '';
+  return { file, ids: readPipeline(yaml)?.jobs.map((j) => j.id) ?? [] };
+}
+
 /**
  * The gate readers for one Episode run. An output path names `<slug>`, filled in before it is read; a missing
  * output is not approved. A label gate asks gh for the spec issue labelled `episode:<slug>` and its sub-issues

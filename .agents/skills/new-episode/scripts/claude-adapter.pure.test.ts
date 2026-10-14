@@ -172,6 +172,16 @@ describe('nesting and late facts', () => {
     expect(event).not.toHaveProperty('job');
   });
 
+  it('files an agent whose named Job is not open under the Run, never the Job the marker points at', () => {
+    // ARRANGE
+    const runStart: RunLogLine = { kind: 'start-run', t: '2026-10-09T08:00:00Z', seq: 0, trace_id: TRACE, span_id: 'ffffffffffffffff', run_id: 'r' };
+    const input = base({ description: 'brief-grill#1/writer', log: [runStart, jobLine] });
+    // ACT
+    const event = adaptSubagent(input);
+    // ASSERT
+    expect(event).toMatchObject({ job: 'brief-grill', attempt: 1, role: 'writer', parent_span_id: 'ffffffffffffffff' });
+  });
+
   it('carries the prompt and launch time on the end line when the start ran before the transcript existed', () => {
     // ARRANGE
     const lateStart: RunLogLine = { ...startLine, t: '2026-10-09T10:00:00Z', 'gen_ai.input.messages': undefined };
@@ -217,7 +227,7 @@ describe('orchestrator usage', () => {
       'gen_ai.usage.cache_read.input_tokens': 150,
     };
     // ACT
-    const event = runUsageEvent([runStart, runEnd], parsed, transcript);
+    const event = runUsageEvent([runStart, runEnd], parsed, [transcript]);
     // ASSERT
     expect(event).toEqual(expected);
   });
@@ -226,9 +236,9 @@ describe('orchestrator usage', () => {
     // ARRANGE
     const counted: RunLogLine = { ...runEnd, 'gen_ai.usage.input_tokens': 1 };
     // ACT
-    const open = runUsageEvent([runStart], parsed, transcript);
-    const again = runUsageEvent([runStart, counted], parsed, transcript);
-    const empty = runUsageEvent([runStart, runEnd], parsed, null);
+    const open = runUsageEvent([runStart], parsed, [transcript]);
+    const again = runUsageEvent([runStart, counted], parsed, [transcript]);
+    const empty = runUsageEvent([runStart, runEnd], parsed, [null]);
     // ASSERT
     expect([open, again, empty]).toEqual([null, null, null]);
   });

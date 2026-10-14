@@ -14,6 +14,8 @@ export interface Marker {
   session_id: string;
   trace_id: string;
   job_span_id: string;
+  /** Every session that has driven this Run, oldest first (begin-run, then each resume): end-run counts their usage. */
+  session_ids?: string[];
 }
 
 /** JSON text to a value, null when it is absent or malformed. */

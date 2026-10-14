@@ -26,7 +26,10 @@ export function transcriptOf(sessionId: string): string | null {
 
 /** Points the marker at a Run: this session, the Run's trace, and the span agents with an unparsed description join. */
 export function pointMarker(home: MarkerHome, to: { run: RunLogLine; jobSpanId: string; sessionId: string }): void {
-  const marker: Marker = { log: episodeLogPath(home.slug), session_id: to.sessionId, trace_id: to.run.trace_id, job_span_id: to.jobSpanId };
+  const before = readMarker(home.root);
+  const earlier = before !== null && before.trace_id === to.run.trace_id ? (before.session_ids ?? [before.session_id]) : [];
+  const sessionIds = earlier.includes(to.sessionId) ? earlier : [...earlier, to.sessionId];
+  const marker: Marker = { log: episodeLogPath(home.slug), session_id: to.sessionId, trace_id: to.run.trace_id, job_span_id: to.jobSpanId, session_ids: sessionIds };
   const file = path.join(home.root, MARKER_PATH);
   mkdirSync(path.dirname(file), { recursive: true });
   writeFileSync(file, `${JSON.stringify(marker)}\n`);
@@ -44,7 +47,8 @@ export function endMarker(home: MarkerHome, run: RunLogLine, lines: readonly Run
   try {
     const marker = readMarker(home.root);
     if (marker === null || marker.trace_id !== run.trace_id) return '';
-    const event = runUsageEvent(lines, marker, (home.transcriptOf ?? transcriptOf)(marker.session_id));
+    const read = home.transcriptOf ?? transcriptOf;
+    const event = runUsageEvent(lines, marker, (marker.session_ids ?? [marker.session_id]).map(read));
     if (event === null) return '';
     const result = appendEvent({ root: home.root, file: marker.log }, event, home.writer);
     return result.ok ? '' : `run usage not recorded: ${result.errors.join('; ')}`;

@@ -9,9 +9,11 @@ import { copyFileSync, existsSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 import { parseArgs } from 'node:util';
 import { episodeLogPath, readEpisodeLog, readMarker } from './episode-run-log.ts';
+import { declaredJobs } from './episode-status.ts';
 import { endMarker, liveMarker, type MarkerHome, pointMarker } from './run-marker.ts';
 import { appendEvent } from './run-log-writer.ts';
-import { isOpen, latest, openSpan, scoreTarget } from './run-spans.pure.ts';
+import { USAGE } from './run-usage.pure.ts';
+import { hasEnded, isOpen, latest, openSpan, openUnderRun, scoreTarget } from './run-spans.pure.ts';
 import { STATUSES, VIAS, type LogEvent, type RunLogLine, type Span, type Status, type Via } from './run-log.pure.ts';
 
 /** What a command reads from outside; each defaults to the real thing. */
@@ -21,21 +23,6 @@ export interface RunContext extends MarkerHome {
 }
 
 export type CommandResult = { ok: true; output: string } | { ok: false; error: string };
-
-export const USAGE = `usage: npm run episode:run -- <slug> <command> ...
-  begin-run --model <model> [--harness <h>]        open the Run and the marker
-  end-run [status] [summary]                       close the Run, record orchestrator usage, clear the marker
-  begin-job <job>                                  open the Job (reused when already open) and point agents at it
-  end-job <job> [status] [summary]                 close the Job
-  begin-attempt <job>                              open the next Attempt; prints its spawn description
-  end-attempt <job> [status] [summary]             close the open Attempt
-  open-gate <job> <name>                           open a Gate under the Run
-  close-gate <name> [status] [summary]             close the open Gate
-  score <target> <name> <value> [--source s] [--rubric r] [--body b] [--via chat|commit] [--comment c]
-                                                   target: <job> (Job), <job>#<n> (Attempt) or gate:<name>
-  resume                                           re-open the marker for the current Run in a new session
-  archive                                          copy the log to .logs/new-episode/<slug>/<run id>.jsonl
-status is ok (default), error, refused or reused.`;
 
 const failure = (error: string): CommandResult => ({ ok: false, error });
 const success = (output: string): CommandResult => ({ ok: true, output });
@@ -112,14 +99,21 @@ const need = (value: string | undefined, what: string): string => value ?? refus
 function beginRun(ctx: RunContext, opts: Opts): string {
   const sessionId = sessionOf(ctx);
   const model = opts.model ?? refuse('begin-run needs --model <the model you run on>');
+  const { current, lines } = readEpisodeLog(ctx.slug, ctx.root);
+  if (current !== null && !hasEnded(lines, current)) refuse(`Run ${current.run_id} has not ended: resume it, or run end-run crashed first`);
   const line = write(ctx, { kind: 'start-run', harness: opts.harness ?? 'claude-code', 'gen_ai.request.model': model });
   pointAt(ctx, line, { jobSpanId: line.span_id, sessionId });
   return `Run begun (${line.run_id})`;
 }
 
+/** Statuses a Run may end with while spans under it are still open: those spans then read crashed. */
+const ABANDONING: readonly string[] = ['error', 'crashed'];
+
 function endRun(ctx: RunContext, p: Params<'status' | 'summary'>): string {
-  const { run, lines } = viewOf(ctx);
-  if (lines.some((l) => l.kind === 'end-run' && l.trace_id === run.trace_id)) refuse(`Run ${run.run_id} already ended`);
+  const { run, lines, spans } = viewOf(ctx);
+  if (hasEnded(lines, run)) refuse(`Run ${run.run_id} already ended`);
+  const open = openUnderRun(spans).map((s) => `${s.type} ${s.name}`);
+  if (open.length > 0 && !ABANDONING.includes(p.status ?? 'ok')) refuse(`Run ${run.run_id} still has open spans: ${open.join(', ')}. End them, or run end-run error|crashed to leave them crashed`);
   write(ctx, endEvent('end-run', run.span_id, p));
   const warning = endMarker(ctx, run, readEpisodeLog(ctx.slug, ctx.root).lines);
   return warning === '' ? 'Run ended' : `Run ended (${warning})`;
@@ -127,6 +121,8 @@ function endRun(ctx: RunContext, p: Params<'status' | 'summary'>): string {
 
 function beginJob(ctx: RunContext, p: Params<'job'>): string {
   const job = need(p.job, 'job');
+  const declared = declaredJobs(ctx.root, ctx.slug);
+  if (!declared.ids.includes(job)) refuse(`${declared.file} declares no job "${job}"`);
   const { run, spans } = viewOf(ctx);
   const marker = liveMarker(ctx.root, run);
   const open = openSpan(spans, 'job', { job });
@@ -139,6 +135,7 @@ function endJob(ctx: RunContext, p: Params<'job' | 'status' | 'summary'>): strin
   const job = need(p.job, 'job');
   const { run, spans } = viewOf(ctx);
   const open = openSpan(spans, 'job', { job }) ?? refuse(`no open Job ${job}`);
+  if (openSpan(spans, 'attempt', { job }) !== undefined) refuse(`${job} has an open Attempt; run end-attempt ${job} first`);
   write(ctx, endEvent('end', open.span_id, p));
   const marker = readMarker(ctx.root);
   if (marker !== null && marker.job_span_id === open.span_id) pointAt(ctx, run, { jobSpanId: run.span_id, sessionId: marker.session_id });
