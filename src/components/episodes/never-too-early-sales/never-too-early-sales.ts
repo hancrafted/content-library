@@ -1,6 +1,8 @@
 import { episode } from '@/components/slide-master/slide';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
+import { salesBeyondSelling } from './slides/sales-beyond-selling/slide';
+import { salesIsMoreThanSelling } from './slides/sales-is-more-than-selling/slide';
 import { watchYourCashflow } from './slides/watch-your-cashflow/slide';
 import { whyCashflowMatters } from './slides/why-cashflow-matters/slide';
 
@@ -13,5 +15,8 @@ import { whyCashflowMatters } from './slides/why-cashflow-matters/slide';
 export const neverTooEarlySales = episode({
   slug: 'never-too-early-sales',
   messages: { en, de },
-  sections: [[whyCashflowMatters, watchYourCashflow]],
+  sections: [
+    [whyCashflowMatters, watchYourCashflow],
+    [salesBeyondSelling, salesIsMoreThanSelling],
+  ],
 });
