@@ -2,7 +2,7 @@
 
 Output: `docs/episodes/<slug>/brief.md`, ending at a human gate. A fresh reviewer judges it against its intents, and Han answers every failed line: he is the implementor's only source of words.
 
-The grill is a dialogue with Han, so the implementor runs in the orchestrator's own session, where Han answers. The `brief-grill` skill is the whole procedure: the phases Frame → Explore → Settle → Self-check, writing the Brief, and the Brief template. Load it, and follow it wherever the `grilling` skill differs.
+The grill is a dialogue with Han, so the implementor runs in the orchestrator's own session, where Han answers. The `brief-grill` skill is the whole procedure: the phases Frame → Explore → Settle → Self-check, writing the Brief, and the Brief template. Invoke `brief-grill` and `grilling` with the Skill tool, never read their `SKILL.md`: invoking loads each skill's own references. Follow `brief-grill` wherever `grilling` differs.
 
 ## Starting points
 

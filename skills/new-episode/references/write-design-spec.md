@@ -41,9 +41,9 @@ Each design answer is a bullet `**Design answer (ui-ux-pro-max:slides)**` under 
 
 When no ticket is `needs-triage`, and before `implement-episode`, rewrite every overruled `master:` and `motion:` into the Dossier: one commit on `episode/<slug>` through the `commit` skill, a `Source:` trailer per overruling ticket, as its full issue URL (`https://github.com/hancrafted/content-library/issues/<ticket>`, since the `commit` skill rejects `#<ticket>`), and `Agent: write-design-spec`. Do it in this session. The designers never edit the Dossier, because parallel edits to one file would conflict.
 
-### Approved as drafted or edited
+### Gate outcome per ticket
 
-When Han has approved, log one Score per ticket on the Job: `episode:run -- <slug> score write-design-spec gate "approved as drafted"|edited --source human:han --via chat --ticket <issue> --comment "<his words, if any>"`, read from the ticket's edit history. The run-log entry carries no Metrics. A ticket edit whose body ends `Edited-by: <job id>` is an agent's, so only an unmarked edit counts as `edited` (`agentOf` in [`scripts/marks.pure.ts`](../scripts/marks.pure.ts)). When most tickets pass unedited across runs (`SELECT value, count(*) FROM scores WHERE name = 'gate' AND source = 'human:han' GROUP BY value`), `gate: human` is removed.
+When Han has approved, log one Score per ticket on the Job: `episode:run -- <slug> score write-design-spec gate "<outcome>" --source human:han --via chat --ticket <issue> --comment "<his words, if any>"`, read from the ticket's edit history. The outcome is `approved after edits` (Han edited the ticket before approving), `approved as drafted` (he read it and approved it untouched) or `approved unreviewed` (he approved without reading it, in bulk or on trust; his words say so). Record the Score once Han has said which, after the label change that approves the ticket. The run-log entry carries no Metrics. A ticket edit whose body ends `Edited-by: <job id>` is an agent's, so only an unmarked edit counts as an edit (`agentOf` in [`scripts/marks.pure.ts`](../scripts/marks.pure.ts)). When most tickets are `approved as drafted` across runs (`SELECT value, count(*) FROM scores WHERE name = 'gate' AND source = 'human:han' GROUP BY value`; `approved unreviewed` counts for nothing), `gate: human` is removed.
 
 ## Done when
 
