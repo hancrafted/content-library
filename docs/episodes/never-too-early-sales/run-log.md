@@ -666,3 +666,61 @@
 - Individual first-round designer intervals were #154 227s, #155 166s, #156 497s and #157 393s, overlapping in parallel. Metrics record the orchestrator's active output window, not their sum; idle time between rounds is excluded. Token counts were unavailable.
 - Approval is as drafted because Han made no unmarked body edits; the agent's own corrections remain marked and are not attributed to Han.
 - Han explicitly entered `/implement-spec #153`. Its CLI registration is unavailable, but the checked-in procedure was read; the required human invocation is satisfied and that procedure governs implementation.
+
+## implement-episode · 2026-10-14T06:54:30Z
+
+### Inputs
+
+- Approved `brief.md`, `dossier.md`, `pipeline.yml`, spec #153 and the latest design answers in #154-157.
+- `.agents/skills/new-episode/references/implement-episode.md`, the checked-in implement-spec procedure, TDD and code-review skills.
+- `AGENTS.md`, `CODING_STANDARDS.md`, GLOSSARY, applicable Archgate ADRs and Episode feature/design guides.
+- Fixed review baseline `99b9e18`, the final commit before implementation.
+- Existing page template, Slide kit, registries, shared parts and build-test contracts.
+
+### Output
+
+- `src/components/episodes/never-too-early-sales/`: complete upcoming Episode, four Sections with 1/1/3/6 page Slides, sixteen rendered Slides including Title and section slides.
+- `src/components/slide-shared/cashflow-board.tsx` and its styles/tests: shared plain-props board, month, paper and stamp parts reused by the three cashflow callbacks.
+- Route/record/metadata registration, honest upcoming metadata, English and explicitly provisional English German-route messages.
+- Reviewed `tests/post-build/episode-text/never-too-early-sales.{en,de}.json` captures of the complete Episode.
+- `visual-check.csv`: all 640 per-Slide, locale, theme, width, requested/effective drawer-state and reduced-motion observations.
+- Implementation commits: foundation `994c9c2`/`7c4eb61`, benefits `625e93e`, method `df6437a` with integration merges, timing `1a1492b`/`caa4893`, and the marked integration/correction commits leading to `455fdf2`.
+- Code-review decision: Standards passes after the independent anchor-contract correction; Spec has no hard failures.
+
+### Checks
+
+- TDD: new registry/record/rendered-Scene/shared-board contracts went red then green; no mocks, skipped tests or snapshot matchers.
+- `npm run verify`: pass; 120 fast test files, 1,404 tests, 32/32 full Archgate checks, lint/boundaries, format, typecheck, knip and docs.
+- `npm run build`: complete static export succeeds for both locale routes.
+- `npm run test:build`: 9 files and 546 tests pass; missing/stale capture failures were observed before the reviewed refresh, never bypassed.
+- Source fidelity: all 71 Voice paragraphs and 27 Speaker notes match the Dossier, with source titles/URLs preserved and citation indices normalized per note.
+- Full browser matrix: `visual-check.csv`, 640 actual observations, all sixteen Slides, en/de, light/dark, 375/1100/1440px, closed/beside/over requests and 64 reduced-motion cases; zero failures.
+- DOM numbers: every wrapper count is 1, every Slide has mounted descendants, minimum wrapper height is 800px, maximum Slide horizontal overflow is 0, configured insets clear, no visible Foreground escape and no loop-pause violation.
+- Below xl, a requested beside layout is correctly an effective overlay; the CSV records both rather than claiming an impossible layout.
+- Initial Standards review: one hard ARCH-003 finding on production-derived Upcoming anchor expectations.
+- Corrective test `455fdf2`: reviewed capture IDs replace production-derived expectations; a mutated capture ID passed the old case and failed the corrected case, then original bytes were restored.
+- Fresh targeted Standards recheck: zero hard issues. Published-anchor, noindex and missing-capture gates remain intact.
+- Spec review: all five rubric lines pass, no missing requirement or scope creep; all 71 paragraphs, 27 notes and 31 source-title occurrences checked.
+- Final code change after the 640-case probe is test-only; `src`, Next config and package manifest are unchanged from the probed `4ee251c`.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 3582 s
+- reviewer · attempt 1 · fail · rubric "DON'T assert an expected value the code under test computed." · 139 s
+- implementor · attempt 2 · pass · 74 s
+- reviewer · attempt 2 · pass · 13 s
+
+### Notes
+
+- Independent ticket worktrees delivered the tested foundation before the three sibling Sections. Native #154 stayed open for final coordination/capture ownership; the tested code prerequisite, not premature issue closure, opened the coding frontier.
+- Real browser checks caught two foundation defects that equivalent-width checks missed: inherited Title glows still running while near, and a rotated mobile stamp escaping the inset. Both were fixed and passed the real 200-case intermediate matrix before final integration.
+- Title glows retain their active behavior and now pause off-active; the fix is internal to the Episode Title layout, not a Landing animation or master API change.
+- New German fallback tests initially compared two production renders. They now use independently written Dossier/design expectations; prior art was not treated as an ADR exception.
+- One worker accidentally created unmarked merge `50a3a1f`. It was never integrated: marked fixes and capture patches were integrated through marked replacement commits, without rewriting existing history. The original worker branch remains as an unmerged audit branch.
+- Citation indices restart at 1 within each note, as the renderer requires; the source and words are unchanged. Empty keyword arrays reflect the approved Dossier's lack of separate keyword text, not invented content.
+- Required metadata uses economics, foundations and empty tags as documented. No video, publication date, publication anchor contract, Featured insertion or published overview link was added; both routes are noindex.
+- Needs human: the German route deliberately remains a labelled English draft; authentic German content follows Promotion.
+- Needs human: the fixed Context trigger and mobile navigation pill can cross tall content while scrolling, as in the existing framework. Overlay drawers intentionally cover content; no such overlay was misreported as a beside layout.
+- The full matrix's app source commit is `4ee251c`; the subsequent anchor-contract fix changes only a test and preserves that app tree.
+- Individual worker/merger intervals are recorded in the session ledger; Metrics use the orchestrator's observed implementation/review windows and exclude idle gaps. Token counts were unavailable.
+- No spine changes, blocked implementation branch, new dependency, route/container, shared Slide schema or publication occurred.
