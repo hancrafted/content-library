@@ -1,0 +1,38 @@
+# implement-episode-init
+
+Output: the Episode's page in `src/`, on the integration branch `episode/<slug>`: its wiring, metadata, Title slide, section slides and one placement marker per Section, so the `implement-section` jobs that follow build in parallel without touching the same file. Built from `## Episode page` of `docs/episodes/<slug>/spec/spec.md`.
+
+## Prompt
+
+The implementor (`archgate:developer`) builds `## Episode page` of the spec, test-first by `tdd`, and commits through `commit`. It skips `archgate:reviewer` and `archgate:lessons-learned`: the job's reviewer covers review, and the orchestrator writes `LEARNINGS.md`. `archgate check` still runs. Apply [`skill-overrides.md`](skill-overrides.md) to every skill the job lists.
+
+- Scaffold the Episode by [episode-migration](../../../docs/features/episode-migration.md): steps 2, 3 and 7 for its slugs, folder, record, Translation files and page, and steps 4 and 5 for the Title slide and one section slide per Section only, built to `design-spec.md`.
+- Write one placement marker per Section, by the [naming below](#placement-markers), in Dossier order. Each holds that Section's section slide and no page Slide.
+- Capture the post-build text: `npm run build`, then `npm run test:build`, and commit the written `tests/post-build/episode-text/<ep>.{en,de}.json`. The slug joins `PUBLISHED_SLUGS` only at publication.
+
+### Placement markers
+
+Proposed, and open until Han settles it (design-ADR 0008): one module per Section, `src/components/episodes/<ep>/sections/<section-slug>.ts`, exporting that Section's ordered Slide list, which the Episode record imports into `sections` in order. `<section-slug>` is the Dossier h2's `{#slug}`. Its Section job adds its page Slides to that list alone, so parallel Section branches never edit one line, and its job id `implement-section-<section-slug>` names the module it owns. Should FE-002 or FE-004 refuse a `sections/` folder, the marker falls back to one commented line per Section in the record's `sections` array, and the merges are serialised.
+
+### Metadata
+
+The Episode is a draft: it has no video and no Promotion. This overrides the metadata line in step 3 of [episode-migration](../../../docs/features/episode-migration.md).
+
+- Write `episode-metadata.ts` with `status: 'upcoming'` (the existing non-published value, `UpcomingEpisodeMetadata`) and no `publishedOn`; the type refuses one. Publishing flips both and is Han's separate step ([episode-publishing](../../../docs/features/episode-publishing.md)), never this job's or Promotion's.
+- Topic, extra Topics and Tags come from the Brief. `topic`, `format` and `tags` are required in `SharedMetadata` (`src/lib/episode-metadata.pure.ts`), so a required field the Brief does not name gets a `Needs human:` line in the run-log entry plus the closest honest value (the nearest existing Topic or Format, an empty `tags` list), never an invented one. `extraTopics` is optional: when the Brief names none, leave it out.
+- Register the metadata in the `REGISTERED` map in `episode-repository.ts`: it holds every registered slug whatever its `status`, so an upcoming Episode with a page type-checks. The page is built `noindex` and its card stays unlinked until publishing; write no `published-anchors.json` here.
+
+## Review
+
+The reviewer calls the Skill tool with `code-review`, the fixed point the last commit before this job started (the merge-base with `main` would pull in everything the Episode branch carries from earlier jobs), its subagents on the agent's `model`. Pass `## Episode page` of the spec to its Spec subagent with the lines under `## Rubric` beside it. Each finding the Spec or Standards report marks hard is a failed line, quoted verbatim; a judgement call goes into Notes.
+
+## Done when
+
+The job's `checks:` in `assets/pipeline.yml` run by the check table in [SKILL.md](../SKILL.md#the-job-loop). The first failure is the failed attempt.
+
+## Rubric
+
+1. The page serves at its route, with the Title slide and every section slide of the spec, in Dossier order.
+2. Every Section of the spec has exactly one placement marker, named as [Placement markers](#placement-markers) says, holding its section slide and no page Slide.
+3. The metadata is `upcoming` with no `publishedOn`, and every value comes from the Brief or carries a `Needs human:` line.
+4. The post-build text captures are committed and `npm run test:build` passes.

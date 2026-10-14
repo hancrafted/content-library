@@ -10,7 +10,7 @@ Change the spine only where the research or the Brief's Learning goal demands it
 
 Read each reference in your references, its `## Page <n>` text and page images: Han brought it as the model for the Episode, so a Slide that takes a page's argument or picture names it in its Visual as `Design reference: reference/<file-slug>/design-reference.md#page-<n>`. The orchestrator names a blocked `convert-references`: then the Brief's Episode Design Reference has no Markdown, so say so in Notes and write without them.
 
-Read the research the run produced and any file retrieval reused. The orchestrator names each research job that blocked: write no Slide that rests on its question, and add `Research gap: <job id> — <what the Episode leaves out>` to the run-log entry's Notes. Write in Han's voice by the human-profile guides in your references; a guide that does not exist yet is skipped.
+Read the research the run produced and every file retrieval reused, named in its run-log entry's Output. The orchestrator names each research job that blocked: write no Slide that rests on its question, and add `Research gap: <job id> — <what the Episode leaves out>` to the run-log entry's Notes. Write in Han's voice by the human-profile guides in your references; a guide that does not exist yet is skipped.
 
 Frontmatter: `status: draft`, `generated: { by, at }` naming you and the current UTC time, and no `verified` (the orchestrator adds it). The shape is the `staging-dossier` rules': `npx mh query` on [the sample Dossier](../assets/sample-episode/dossier.md) prints every intent, and the sample shows them met.
 

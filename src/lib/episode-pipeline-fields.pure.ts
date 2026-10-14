@@ -31,6 +31,7 @@ function oneOf(values: readonly string[]): string {
 
 export const TOP_FIELDS = [
   field('status', (value) => value === 'draft' || value === 'approved', 'it must be draft or approved'),
+  field('stages', isStringList, 'it must be a list of stage ids'),
   field('jobs', Array.isArray, 'it must be a list of jobs'),
   optional(
     field(
@@ -43,6 +44,7 @@ export const TOP_FIELDS = [
 
 export const JOB_FIELDS = [
   field('id', isString, 'it must be a name'),
+  field('stage', isString, 'it must be a stage id'),
   optional(field('intent', isString, 'it must be the task, written as a prompt')),
   field('needs', isStringList, LIST),
   optional(field('wants', isStringList, LIST)),

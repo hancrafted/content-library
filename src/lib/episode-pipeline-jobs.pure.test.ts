@@ -23,6 +23,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = {
       status: 'approved',
+      stages: [],
       jobs: [
         { id: 'write-brief', needs: [], wants: [], outputs: ['docs/episodes/<slug>/brief.md'], gate: true, agents: [] },
         {
@@ -61,6 +62,20 @@ describe('success cases', () => {
       ],
     });
   });
+
+  it('reads the ordered stage list and the stage each job names', () => {
+    // ARRANGE
+    const yaml = `stages: [brief, setup]
+jobs:
+  - { id: brief-grill, stage: brief, needs: [] }
+  - { id: retrieval, stage: setup, needs: [brief-grill] }
+`;
+    const expected = { stages: ['brief', 'setup'], jobStages: ['brief', 'setup'] };
+    // ACT
+    const pipeline = readPipeline(yaml);
+    // ASSERT
+    expect({ stages: pipeline?.stages, jobStages: pipeline?.jobs.map((job) => job.stage) }).toEqual(expected);
+  });
 });
 
 describe('failure cases', () => {
@@ -79,10 +94,24 @@ describe('edge cases', () => {
   it('reads a status of any shape as null unless it is text, and skips a job that is not a mapping', () => {
     // ARRANGE
     const yaml = 'status: [approved]\njobs:\n  - just-a-name\n  - id: a\n    needs: [b, 1]\n';
-    const expected = { status: null, jobs: [{ id: 'a', needs: [], wants: [], outputs: [], gate: false, agents: [] }] };
+    const expected = {
+      status: null,
+      stages: [],
+      jobs: [{ id: 'a', needs: [], wants: [], outputs: [], gate: false, agents: [] }],
+    };
     // ACT
     const pipeline = readPipeline(yaml);
     // ASSERT
     expect(pipeline).toEqual(expected);
+  });
+
+  it('reads a pipeline without stages as an empty stage list and jobs without a stage', () => {
+    // ARRANGE
+    const yaml = 'stages: brief\njobs:\n  - { id: a, needs: [], stage: [brief] }\n';
+    const expected = { stages: [], hasStage: false };
+    // ACT
+    const pipeline = readPipeline(yaml);
+    // ASSERT
+    expect({ stages: pipeline?.stages, hasStage: Object.hasOwn(pipeline?.jobs[0] ?? {}, 'stage') }).toEqual(expected);
   });
 });

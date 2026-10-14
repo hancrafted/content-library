@@ -25,8 +25,10 @@ const CONTEXT: PipelineContext = {
 };
 
 const PIPELINE = `status: draft
+stages: [brief, research]
 jobs:
   - id: brief-grill
+    stage: brief
     needs: []
     before: [mh-query]
     outputs: [docs/episodes/demo/brief.md]
@@ -36,6 +38,7 @@ jobs:
     agents:
       - { type: implementor, skills: [grilling], references: [docs/agents/grilling-voice.md], model: inherit }
   - id: research
+    stage: research
     needs: [brief-grill]
     isolation: worktree
     foreach: docs/episodes/demo/brief.md#research-questions
@@ -106,11 +109,11 @@ describe('failure cases', () => {
       .replace('    retries: 2', '    retry: 2')
       .replace('skills: [grilling],', 'skill: [grilling],');
     const expected = [
-      'The pipeline has an unknown key "owner"; the keys are status, jobs, template.',
+      'The pipeline has an unknown key "owner"; the keys are status, stages, jobs, template.',
       'Job "brief-grill", agent 1 lacks the key "skills".',
       'Job "brief-grill", agent 1 has an unknown key "skill"; the keys are type, skills, references, rubric, agent, ticket, model, session.',
       'Job "research" lacks the key "retries".',
-      'Job "research" has an unknown key "retry"; the keys are id, intent, needs, wants, isolation, foreach, before, outputs, checks, retries, gate, agents.',
+      'Job "research" has an unknown key "retry"; the keys are id, stage, intent, needs, wants, isolation, foreach, before, outputs, checks, retries, gate, agents.',
     ];
     // ACT
     const messages = check(yaml);
@@ -136,7 +139,10 @@ describe('failure cases', () => {
   it('rejects a cycle in the needs graph', () => {
     // ARRANGE
     const yaml = PIPELINE.replace('    needs: []', '    needs: [research]');
-    const expected = ['The needs graph has a cycle: brief-grill → research → brief-grill.'];
+    const expected = [
+      'Job "brief-grill" of stage "brief" needs "research", a job of the later stage "research"; a job waits only for jobs of its own or an earlier stage.',
+      'The needs graph has a cycle: brief-grill → research → brief-grill.',
+    ];
     // ACT
     const messages = check(yaml);
     // ASSERT
@@ -380,12 +386,12 @@ describe('failure cases', () => {
     expect(messages).toContain(expected);
   });
 
-  it('rejects a foreach and a glob output in a per-run pipeline, whose jobs name one file each', () => {
+  it('rejects a foreach and a glob output in an approved per-run pipeline, whose jobs name one file each', () => {
     // ARRANGE
-    const yaml = PIPELINE.replace('status: draft', `status: draft\ntemplate: ${SHA}`);
+    const yaml = PIPELINE.replace('status: draft', `status: approved\ntemplate: ${SHA}`);
     const expected = [
-      'Job "research" has foreach; a per-run pipeline names one job per item, which customize-pipeline expands.',
-      'Job "research" writes "docs/episodes/demo/research/*/research.md", a glob; a per-run pipeline names each file.',
+      'Job "research" has foreach; an approved per-run pipeline names one job per item, which customize-pipeline expands.',
+      'Job "research" writes "docs/episodes/demo/research/*/research.md", a glob; an approved per-run pipeline names each file.',
     ];
     // ACT
     const messages = check(yaml, { ...CONTEXT, perRun: true });
@@ -413,7 +419,46 @@ describe('failure cases', () => {
     const expected = [
       'Job "research" has isolation "container"; it must be worktree.',
       'Job "research" wants "retrieval", which is no job in the pipeline.',
+      'Job "brief-grill" of stage "brief" wants "research", a job of the later stage "research"; a job waits only for jobs of its own or an earlier stage.',
       'The needs graph has a cycle: brief-grill → research → brief-grill.',
+    ];
+    // ACT
+    const messages = check(yaml);
+    // ASSERT
+    expect(messages).toEqual(expected);
+  });
+
+  it('rejects a pipeline without stages and a job without a stage', () => {
+    // ARRANGE
+    const yaml = PIPELINE.replace('stages: [brief, research]\n', '').replace('    stage: research\n', '');
+    const expected = ['The pipeline lacks the key "stages".', 'Job "research" lacks the key "stage".'];
+    // ACT
+    const messages = check(yaml);
+    // ASSERT
+    expect(messages).toEqual(expected);
+  });
+
+  it('rejects a stage listed twice and a job whose stage is not listed', () => {
+    // ARRANGE
+    const yaml = PIPELINE.replace('stages: [brief, research]', 'stages: [brief, brief, research]').replace(
+      'stage: research',
+      'stage: reserch',
+    );
+    const expected = [
+      'The stage "brief" appears twice in stages; stage ids are unique.',
+      'Job "research" has stage "reserch", which stages does not list.',
+    ];
+    // ACT
+    const messages = check(yaml);
+    // ASSERT
+    expect(messages).toEqual(expected);
+  });
+
+  it('rejects a job that needs a job of a later stage', () => {
+    // ARRANGE
+    const yaml = PIPELINE.replace('stages: [brief, research]', 'stages: [research, brief]');
+    const expected = [
+      'Job "research" of stage "research" needs "brief-grill", a job of the later stage "brief"; a job waits only for jobs of its own or an earlier stage.',
     ];
     // ACT
     const messages = check(yaml);
@@ -450,10 +495,17 @@ describe('edge cases', () => {
   it('accepts a needs graph with a diamond, which is no cycle', () => {
     // ARRANGE
     const job = (id: string, needs: string): string =>
-      `  - { id: ${id}, needs: [${needs}], isolation: worktree, outputs: [], checks: [], retries: 0, agents: [{ type: implementor, skills: [], references: [], model: inherit }] }`;
-    const yaml = ['status: approved', 'jobs:', job('a', ''), job('b', 'a'), job('c', 'a'), job('d', 'b, c'), ''].join(
-      '\n',
-    );
+      `  - { id: ${id}, stage: build, needs: [${needs}], isolation: worktree, outputs: [], checks: [], retries: 0, agents: [{ type: implementor, skills: [], references: [], model: inherit }] }`;
+    const yaml = [
+      'status: approved',
+      'stages: [build]',
+      'jobs:',
+      job('a', ''),
+      job('b', 'a'),
+      job('c', 'a'),
+      job('d', 'b, c'),
+      '',
+    ].join('\n');
     // ACT
     const findings = checkPipeline(FILE, yaml, CONTEXT);
     // ASSERT
@@ -465,6 +517,7 @@ describe('edge cases', () => {
     const yaml = PIPELINE.concat(
       [
         '  - id: consolidate',
+        '    stage: research',
         '    needs: [research]',
         '    isolation: worktree',
         '    foreach: docs/episodes/demo/brief.md#research-questions',
@@ -520,6 +573,24 @@ describe('edge cases', () => {
     expect(findings).toEqual([]);
   });
 
+  it('accepts a stage that no job belongs to', () => {
+    // ARRANGE
+    const yaml = PIPELINE.replace('stages: [brief, research]', 'stages: [brief, setup, research]');
+    // ACT
+    const findings = checkPipeline(FILE, yaml, CONTEXT);
+    // ASSERT
+    expect(findings).toEqual([]);
+  });
+
+  it('accepts foreach and a glob output in a draft per-run pipeline, the scaffold customize-pipeline expands', () => {
+    // ARRANGE
+    const yaml = PIPELINE.replace('status: draft', `status: draft\ntemplate: ${SHA}`);
+    // ACT
+    const findings = checkPipeline(FILE, yaml, { ...CONTEXT, perRun: true });
+    // ASSERT
+    expect(findings).toEqual([]);
+  });
+
   it('reports YAML that does not parse as one finding instead of throwing', () => {
     // ARRANGE
     const yaml = 'status: draft\njobs: [\n';
@@ -534,6 +605,7 @@ describe('edge cases', () => {
     const yaml = PIPELINE.concat(
       [
         '  - id: write-dossier',
+        '    stage: research',
         '    needs: [brief-grill]',
         '    wants: [research]',
         '    before: [mh-query]',

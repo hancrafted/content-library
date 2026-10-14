@@ -36,7 +36,16 @@ describe('failure cases', () => {
 
   it('names the allowed before steps when a job lists another', () => {
     // ARRANGE
-    const job = { id: 'a', needs: [], before: ['lint'], outputs: [], checks: [], retries: 0, agents: [AGENT] };
+    const job = {
+      id: 'a',
+      stage: 'build',
+      needs: [],
+      before: ['lint'],
+      outputs: [],
+      checks: [],
+      retries: 0,
+      agents: [AGENT],
+    };
     const expected = ['Job has before ["lint"]; the steps are mh-query.'];
     // ACT
     const messages = checkMapping('Job', job, JOB_FIELDS);

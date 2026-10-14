@@ -109,6 +109,44 @@ frontmatter:
                 value: ./brief.md,
                 intent: 'The Brief in the same folder, whose goals this file is written towards. Fail if slugged material serves no Learning goal, Actionable or Red thread step the Brief states.',
               }
+    - ruleId: staging-spec
+      fileNames: [spec.md]
+      intent: 'The build spec of an Episode: what implement-episode-init and each implement-section job build, one section per Section, pointing at the Dossier by heading anchor instead of copying it, so the Dossier stays the one source of content. Fail if it copies Dossier text, asks a design question, or leaves a Slide of the Dossier to no Section.'
+      unknownKeys: forbidden
+      fields:
+        type:
+          presence: required
+          allowed:
+            - {
+                value: spec,
+                intent: 'What to build for the Episode, Section by Section, written from the approved Dossier.',
+              }
+        title: *title
+        status: *staging-status
+        generated.by: *generated-by
+        generated.at: *generated-at
+        verified: *verified
+        locale: *staging-locale
+        brief: *staging-brief-link
+    - ruleId: staging-design-spec
+      fileNames: [design-spec.md]
+      intent: "The design of an Episode: its visual language, then a design answer for every Slide, which Han approves at the write-design-spec gate and the Build jobs build to. Fail if a Slide has no design answer, or the design leaves the Brief's Style."
+      unknownKeys: forbidden
+      fields:
+        type:
+          presence: required
+          allowed:
+            - {
+                value: design-spec,
+                intent: 'How every Slide of the Episode looks and moves, designed from the Dossier and the build spec.',
+              }
+        title: *title
+        status: *staging-status
+        generated.by: *generated-by
+        generated.at: *generated-at
+        verified: *verified
+        locale: *staging-locale
+        brief: *staging-brief-link
     # A rule selects by literal file name, never by folder: folders do not recurse and every staging
     # folder is `docs/episodes/<slug>/`. So the identifier lives in a folder and the kind is the file
     # name: `research/<question-slug>/research.md` and `feedback/<NN>/feedback.md`. The same name
@@ -473,6 +511,62 @@ body-structure:
                       },
                     ]
                   mayHold: [ordered-list]
+    - ruleId: staging-spec-body
+      fileNames: [spec.md]
+      intent: 'The Episode page first, then one h2 per Section in Dossier order, each holding one h3 per Slide, so each Build job reads only its own part. Fail if a Section or Slide of the Dossier is missing or appears twice.'
+      undefinedHeadings: forbid
+      headings:
+        - { purpose: heading, level: 1, intent: 'The Episode title, equal to the frontmatter title.' }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Episode page,
+                  intent: 'What implement-episode-init builds before any Section: the route, the metadata from the Brief, the registration, the Title slide and its Voice script, one placement marker per Section, and the post-build text captures. Fail if a Section has no placement marker or a Section job would have to touch a file outside its own Section.',
+                },
+              ],
+          }
+        - purpose: enumeration
+          level: 2
+          minCount: 1
+          pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
+          intent: "One Section, titled and slugged as its Dossier h2, in the Dossier's order: what its implement-section job builds at its placement marker, the section slide included. Fail if it names a Slide of another Section."
+          headings:
+            - purpose: enumeration
+              level: 3
+              minCount: 1
+              pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
+              intent: "One page Slide, titled and slugged as its Dossier h3: its Voice script items by number, its Visual's master, motion and `title:` line, and its Speaker notes as note keys, each pointed at by Dossier heading anchor. Fail if it pastes Dossier text, or names a different Visual than the Dossier."
+    - ruleId: staging-design-spec-body
+      fileNames: [design-spec.md]
+      intent: 'The visual language first, then the spec Sections and Slides with one design answer each, so each implement-section job finds its own Slides under its Section. Fail if a Slide of the spec has no design answer here.'
+      undefinedHeadings: forbid
+      headings:
+        - { purpose: heading, level: 1, intent: 'The Episode title, equal to the frontmatter title.' }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Visual language,
+                  intent: "The Episode's recurring motifs, its motion character and how it uses the accent colours, in a few lines, inside the Brief's Style. Fail if it contradicts the named style in docs/design/design-guide.md.",
+                },
+              ],
+          }
+        - purpose: enumeration
+          level: 2
+          minCount: 1
+          pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
+          intent: 'One Section, titled and slugged as its spec h2, in the same order.'
+          headings:
+            - purpose: enumeration
+              level: 3
+              minCount: 1
+              pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
+              intent: "One Slide's design answer, titled and slugged as its spec h3: kept or overruled master and motion with the reason, the parts, tokens, props and i18n keys, a text wireframe unless it is a Slide library entry used as is, and any `Design reference:` page with what to keep and change. Fail if it asks Han a design question it could settle as a Scene, or names a raw colour, size or weight."
     - ruleId: research-body
       fileNames: [research.md]
       intent: 'Question, reason, answer, evidence and its limits, in that order, so a reader trusts the Answer as far as the Findings and Caveats carry it.'
@@ -595,6 +689,19 @@ body-structure:
                     {
                       title: Output,
                       intent: 'What the job produced, one per item: each file it wrote with the status it left, or the decision or URL when it writes no file. Fail if an item names no file, decision or URL.',
+                    },
+                  ],
+                mayHold: [unordered-list],
+              }
+            - {
+                purpose: heading,
+                level: 3,
+                presence: optional,
+                allowed:
+                  [
+                    {
+                      title: Research jobs,
+                      intent: "retrieval's entry only: one item per research question that needs a job, `new: <research folder>` or `refresh: <research folder>, <the stale file>`, with its question number; customize-pipeline writes one write-research job per item. Fail if a question decided reuse is listed, or an item names no research folder.",
                     },
                   ],
                 mayHold: [unordered-list],

@@ -277,6 +277,18 @@ describe('success cases', () => {
     expect(findings).toEqual([]);
   });
 
+  it('finds the template well formed as the draft scaffold-pipeline copies, foreach jobs unexpanded', () => {
+    // ARRANGE
+    const staging = 'docs/episodes/scaffold-demo';
+    const yaml = readFileSync(TEMPLATE, 'utf8')
+      .replaceAll('<slug>', 'scaffold-demo')
+      .replace('status: draft', 'status: draft\ntemplate: 6426e9c');
+    // ACT
+    const findings = checkPipeline(`${staging}/pipeline.yml`, yaml, pipelineContext(PENDING, staging));
+    // ASSERT
+    expect(findings).toEqual([]);
+  });
+
   it('finds every per-run pipeline well formed, with no pending file tolerated', () => {
     // ARRANGE
     const pipelines = Object.entries(perRunPipelines());
@@ -288,13 +300,14 @@ describe('success cases', () => {
     expect(findings).toEqual([]);
   });
 
-  it('finds one write-research job per research question of the Brief, in every per-run pipeline', () => {
+  it('finds one write-research job per research job retrieval lists in the run log, in every per-run pipeline', () => {
     // ARRANGE
-    const pairs = Object.entries(perRunPipelines()).map(
-      ([file, yaml]) => [file, yaml, readFileSync(path.join(ROOT, path.dirname(file), 'brief.md'), 'utf8')] as const,
-    );
+    const pairs = Object.entries(perRunPipelines()).map(([file, yaml]) => {
+      const runLog = path.join(ROOT, path.dirname(file), 'run-log.md');
+      return [file, yaml, existsSync(runLog) ? readFileSync(runLog, 'utf8') : undefined] as const;
+    });
     // ACT
-    const findings = pairs.flatMap(([file, yaml, brief]) => checkResearchJobs(file, yaml, brief));
+    const findings = pairs.flatMap(([file, yaml, runLog]) => checkResearchJobs(file, yaml, runLog));
     // ASSERT
     expect(findings).toEqual([]);
   });
@@ -376,10 +389,10 @@ describe('failure cases', () => {
   it('checks the template against the real skills, so a misspelled skill fails', () => {
     // ARRANGE
     const yaml = readFileSync(TEMPLATE, 'utf8').replace(
-      'skills: [to-spec, to-tickets, writing-for-agents]',
-      'skills: [to-spec, to-ticket, writing-for-agents]',
+      'skills: [research, writing-for-agents]',
+      'skills: [reserch, writing-for-agents]',
     );
-    const expected = ['Job "write-spec", agent 1 names the skill "to-ticket", which does not exist.'];
+    const expected = ['Job "write-research", agent 1 names the skill "reserch", which does not exist.'];
     // ACT
     const messages = checkPipeline('pipeline.yml', yaml, pipelineContext(PENDING, TEMPLATE_STAGING)).map(
       ({ message }) => message,

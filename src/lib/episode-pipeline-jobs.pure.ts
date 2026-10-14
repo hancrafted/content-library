@@ -24,6 +24,8 @@ export interface JobAgent {
 /** A pipeline job as its readers see it: its id, the jobs it needs and wants, the staging paths it writes, its gate. */
 export interface Job {
   id: string;
+  /** The stage the job belongs to, one of the pipeline's `stages`; absent when the job names none. */
+  stage?: string;
   needs: string[];
   /** Jobs it waits for that do not block it when they block; empty when it wants none. */
   wants: string[];
@@ -38,6 +40,8 @@ export interface Job {
 export interface Pipeline {
   /** The pipeline's own `status:` (draft or approved), null when it is not text. */
   status: string | null;
+  /** The pipeline's ordered stage ids; empty when it lists none. */
+  stages: string[];
   jobs: Job[];
 }
 
@@ -65,6 +69,7 @@ export function jobOf(job: Record<string, unknown>): Job {
   const inSession = job.session === 'orchestrator' || agents.some((agent) => agent.session === 'orchestrator');
   return {
     id: String(job.id),
+    ...(typeof job.stage === 'string' && { stage: job.stage }),
     needs: strings(job.needs),
     wants: strings(job.wants),
     outputs: strings(job.outputs),
@@ -85,6 +90,7 @@ export function readPipeline(yaml: string): Pipeline | null {
   if (!isMapping(document) || !Array.isArray(document.jobs)) return null;
   return {
     status: typeof document.status === 'string' ? document.status : null,
+    stages: strings(document.stages),
     jobs: document.jobs.filter(isMapping).map(jobOf),
   };
 }
