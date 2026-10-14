@@ -1,0 +1,78 @@
+{
+  "title": "Vertrieb ist mehr als Verkaufen",
+  "caption": "Früh verkaufen zahlt sich aus, lange bevor Umsatz kommt.",
+  "board": {
+    "label": "Marktwissen, Vertrauen und ein wiederholbarer Prozess führen alle zu mehr Vertrauen.",
+    "notes": {
+      "market-insight": {
+        "label": "Marktwissen",
+        "line": "Jedes Kundengespräch ist Marktforschung."
+      },
+      "trust": {
+        "label": "Vertrauen",
+        "line": "Ein früher Abschluss, auch ein kleiner, ist ein Beweis."
+      },
+      "repeatable-process": {
+        "label": "Wiederholbarer Prozess",
+        "line": "Die Schritte, die funktionieren, aufgeschrieben für die erste Vertriebskraft."
+      }
+    },
+    "outcome": {
+      "label": "Mehr Vertrauen",
+      "line": "Ein Unternehmen, auf das andere setzen."
+    }
+  },
+  "notes": {
+    "your-guess-of-the-customer-is-wrong": {
+      "header": "Dein Bild vom Kunden ist falsch",
+      "description": "Das erste Bild, das sich Gründer von ihren Nutzern machen, stimmt nie, selbst wenn sie selbst zu diesen Nutzern gehören. Erst der direkte Kontakt korrigiert es.[1]",
+      "sources": {
+        "graham-do-things-that-dont-scale": {
+          "title": "Graham, Do Things that Don't Scale"
+        }
+      }
+    },
+    "investors-read-the-team": {
+      "header": "Investoren schauen auf das Team",
+      "description": "Unter 885 Risikokapitalgebern war das Managementteam der am häufigsten genannte wichtige Faktor (95 %), noch vor Produkt und Markt. Dass eine unterschriebene Absichtserklärung oder eine volle Pipeline Vertrauen schafft, ist eine Schlussfolgerung: Keine Studie prüft das direkt.[1]",
+      "sources": {
+        "gompers-how-vcs-decide": {
+          "title": "Gompers, Gornall, Kaplan und Strebulaev, How Do Venture Capitalists Make Decisions?"
+        }
+      }
+    },
+    "scale-after-you-find-the-process": {
+      "header": "Erst den Prozess finden, dann skalieren",
+      "description": "Vertrieb und Marketing zu früh zu skalieren ist der häufigste Grund, warum ein Startup Geld verbrennt. Skaliere erst, wenn die Gründer ein wiederholbares Vertriebsmodell gefunden haben.[1]",
+      "sources": {
+        "blank-marketing-problem": {
+          "title": "Blank, It Must Be A Marketing Problem"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "market-insight": {
+        "title": "Marktwissen",
+        "keywords": "falscher Käufer, Entwicklung schon bezahlt, Preis für fehlenden frühen Vertrieb",
+        "script": "Die erste Notiz: Marktwissen. Schau Dir Dein Angebot an. Angenommen, es zielt auf den falschen Käufer. Auf dem Board siehst Du das nicht. Du siehst es erst, wenn die Entwicklung bezahlt ist. Das Geld ist weg, und das Angebot muss trotzdem geändert werden. Das ist der Preis dafür, früh nicht zu verkaufen."
+      },
+      "trust": {
+        "title": "Vertrauen",
+        "keywords": "Kunden und Investoren, ein früher Abschluss, Aufmerksamkeit oder Geld, blindes Vertrauen",
+        "script": "Die zweite Notiz: Vertrauen. Kunden und Investoren vertrauen einem Unternehmen, das schon etwas verkauft hat. Ein früher Abschluss, auch ein kleiner, zeigt: Jemand hat zugehört oder sogar bezahlt. Ein Unternehmen ohne einen einzigen Verkauf verlangt, dass man ihm blind glaubt."
+      },
+      "repeatable-process": {
+        "title": "Wiederholbarer Prozess",
+        "keywords": "welche Schritte funktionieren, aufschreiben, erste Vertriebskraft",
+        "script": "Die dritte Notiz: ein wiederholbarer Prozess. Wenn Du selbst verkaufst, siehst Du, welche Schritte funktionieren, und in welcher Reihenfolge. Schreib das auf. Daraus wird der Prozess, den Du später Deiner ersten Vertriebskraft übergibst, statt ihr nur eine Hoffnung zu übergeben."
+      },
+      "converge-on-trust": {
+        "title": "Alles läuft auf Vertrauen zu",
+        "keywords": "drei Notizen, drei Pfeile, ein Unternehmen, auf das andere setzen",
+        "script": "Drei Notizen, drei Pfeile, ein gemeinsames Ziel. Ein Unternehmen, auf das andere setzen. Das baut früher Vertrieb auf, lange bevor er Umsatz aufbaut."
+      }
+    }
+  }
+}

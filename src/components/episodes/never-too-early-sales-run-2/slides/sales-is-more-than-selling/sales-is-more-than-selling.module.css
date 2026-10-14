@@ -1,0 +1,13 @@
+/*
+ * Sales is more than selling: motion only, no colour, size or weight (FE-011). The payoff notes stick on in reading
+ * order, each arrow draws from its tail, and the outcome note lands last, once, when the Slide becomes active
+ * (FE-009 §6.2). At rest and under reduced motion the board is finished.
+ */
+
+.note {
+  composes: stickOn from '../../../../slide-shared/motions/stick-on.module.css';
+}
+
+.arrow {
+  composes: drawIn from '../../../../slide-shared/motions/draw-in.module.css';
+}
