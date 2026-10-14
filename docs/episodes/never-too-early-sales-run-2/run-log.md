@@ -286,3 +286,50 @@ The question is answered by the llm-wiki file above, which is fresh and fits (se
 ### Notes
 
 The job ran in the worktree `episode/never-too-early-sales-run-2--convert-references`, which was merged and removed. Page 8 (the cashflow board, Jan–April, with the revenue arrow) was spot-checked: its text matches its image. Pages 1, 2, 5, 9, 12 and 14 were read too, and every page has text. Page 12 is a third-party pipeline tool screenshot, which the Brief's Constraint says to redraw.
+
+## write-dossier · 2026-10-14T19:07:59Z
+
+### Inputs
+
+- `skills/new-episode/references/write-dossier.md`.
+- `skills/new-episode/assets/sample-episode/dossier.md`.
+- `brief.md`.
+- The `retrieval` entry above: its reuse decisions and research gaps.
+- `docs/llm-wiki/research/START/START-0001__revenue-lags-costs-in-startups/research.md`.
+- `docs/llm-wiki/research/SALES/SALES-0001__b2b-sales-cycle-length/research.md`.
+- `docs/llm-wiki/research/SALES/SALES-0002__b2b-pipeline-conversion-rates/research.md`.
+- `docs/llm-wiki/research/SALES/SALES-0003__early-selling-market-insight/research.md`.
+- `docs/llm-wiki/research/SALES/SALES-0004__early-sales-results-build-trust/research.md`.
+- `docs/llm-wiki/research/SALES/SALES-0005__early-selling-repeatable-process/research.md`.
+- `docs/llm-wiki/research/SALES/SALES-0006__sales-pipeline-ramp-up-time/research.md`.
+- `reference/source-deck/design-reference.md` and its page images.
+- `docs/design/slide-library.md` and `docs/design/design-guide.md` (Board).
+- `src/components/slide-master/` and `src/components/episodes/slide-master/slides/`, for master names.
+
+### Output
+
+- `dossier.md`, `status: draft`, with a `process:markdown-harness` `verified` entry. It holds 5 Sections and the Brief's 10 Slides with their titles and order, and the Title slide "Start selling before you need the money". Every Voice script still holds keywords.
+
+### Checks
+
+- `mh check`: pass.
+- `vitest` staging test: pass.
+- Reviewer: pass on attempt 2.
+
+### Notes
+
+Attempt 1 failed on two lines:
+
+- `#how-marketing-feeds-the-pipeline`: the Visual dropped the leads into a "Contact made" column, while the Voice script says sales makes contact afterwards. Attempt 2 changed the column to "Lead in", which is what page 14 of the deck shows.
+- `#what-is-a-sales-pipeline`: Speaker note 1 claimed stage rates are not comparable across companies, which SALES-0002 marks as inference. Attempt 2 kept only Finding 7 and marked the cross-company point as inference.
+
+Every actionable is spoken on a Slide: the cashflow view on `watch-your-cashflow`, the lead list and first contact on `stages-of-sale`, deal tracking on `pipeline-tools-in-practice`, and conversion and cycle on `what-is-a-sales-pipeline`. The Slides about the cashflow board use `basic-page` with `motion: local`, so `write-design-spec` designs the board.
+
+- Research gap: Slide 8's ~27:1 and ~9.5-month figures are labelled "Illustration of a complex sale, not a benchmark", next to SALES-0002's measured 19% win rate and 91-day cycle.
+- Research gap: Slide 9 claims only the mechanism of ramp-up, with no month count.
+- Research gap: the Brief cites no research for Slides 4, 5 and 7, but the body rule requires Speaker notes. Their notes come from SALES-0002 (Slides 4 and 7) and SALES-0006 (Slide 5).
+- Needs human: the Title slide reads "Start selling before you need the money", not the Brief's title.
+- Needs human: the "Today's route" beat names four steps while the Dossier has five Sections.
+- Needs human: on `#pipeline-tools-in-practice`, Voice script 1 says owner is visible at a glance, but the Visual's deal notes show no owner.
+- Needs human: the Gartner figures on `#pipeline-by-the-numbers` were read from search excerpts (SALES-0002 Caveats). Check them against the page before quoting.
+- Needs human: there are no profile guides, so voice and emphasis follow no guide of Han's.
