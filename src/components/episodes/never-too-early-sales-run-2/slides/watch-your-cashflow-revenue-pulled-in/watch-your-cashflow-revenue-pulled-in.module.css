@@ -1,0 +1,70 @@
+/*
+ * Watch your cashflow, revenue pulled in: motion only, no colour, size or weight (FE-011). The board returns as it
+ * was, so its notes do not stick on again. The arrow draws from April to February, the revenue note slides two
+ * columns left into February while its ghost fades in behind, then the "$0" layer over February's closing cash
+ * fades, uncovering $1,000,000. Once, when the Slide becomes active (FE-009 §6.2); at rest and under reduced motion
+ * the board is finished.
+ */
+
+.board {
+  container-type: inline-size;
+
+  /* Board's column gap per breakpoint, so the slide is two columns at any width. */
+  --gap: 0.25rem;
+}
+
+@media (width >= 40rem) {
+  .board {
+    --gap: 1rem;
+  }
+}
+
+@media (width >= 64rem) {
+  .board {
+    --gap: 1.5rem;
+  }
+}
+
+.arrow {
+  composes: drawIn from '../../../../slide-shared/motions/draw-in.module.css';
+}
+
+/* The finished board covers February's cash with nothing: the "$0" layer rests invisible. */
+.zero {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .moved {
+    animation: pull-in 800ms cubic-bezier(0.2, 0, 0, 1) both;
+    animation-delay: calc(200ms + var(--i) * 260ms);
+  }
+
+  :global([data-zone='active']) .ghost {
+    animation: fade-in 800ms cubic-bezier(0.2, 0, 0, 1) both;
+    animation-delay: calc(200ms + var(--i) * 260ms);
+  }
+
+  :global([data-zone='active']) .zero {
+    animation: fade-out 420ms cubic-bezier(0.2, 0, 0, 1) both;
+    animation-delay: calc(200ms + var(--i) * 260ms);
+  }
+}
+
+@keyframes pull-in {
+  from {
+    transform: translateX(calc((100cqi + var(--gap)) / 2));
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+}

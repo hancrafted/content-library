@@ -1,0 +1,45 @@
+{
+  "title": "How marketing feeds the pipeline",
+  "caption": "Marketing fills the pipeline, and sales works it.",
+  "figure": "A marketing funnel drops three inbound leads into the Lead in stage of the deal board.",
+  "funnel": "Marketing, high volume",
+  "lead": "Inbound lead",
+  "salesContact": "Sales makes contact",
+  "columns": {
+    "lead-in": "Lead in",
+    "contact-made": "Contact made",
+    "needs-defined": "Needs defined",
+    "proposal-made": "Proposal made",
+    "negotiations-started": "Negotiations started"
+  },
+  "notes": {
+    "customers-do-not-arrive-on-their-own": {
+      "header": "Customers do not arrive on their own",
+      "description": "“You can’t wait for users to come to you. You have to go out and get them”; getting users is a gradual process.[1]",
+      "sources": {
+        "do-things-that-dont-scale": {
+          "title": "Paul Graham, Do Things that Don't Scale"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "volume": {
+        "title": "Volume",
+        "keywords": "funnel, many people at once, a few raise a hand, high volume, small yield",
+        "script": "Marketing works like a funnel. It speaks to many people at once, and a few of them raise a hand. High volume, small yield. That is how it is supposed to work."
+      },
+      "enter-a-defined-stage": {
+        "title": "Enter a defined stage",
+        "keywords": "a lead, not a customer, inbound lead, sales makes contact, fills and works",
+        "script": "A person who raises a hand does not become a customer. They become a lead in one defined stage of your pipeline, for example an inbound lead. Only then does sales make contact. Marketing fills the pipeline, and sales works it."
+      },
+      "you-do-not-need-it-first": {
+        "title": "You do not need it first",
+        "keywords": "no campaign first, no budget, network and phone, first contact this week",
+        "script": "So do not park your first task behind a campaign. You have no budget and no audience yet. You do have a network and a phone. Make your first contact this week, and let the funnel come later."
+      }
+    }
+  }
+}

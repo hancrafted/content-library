@@ -1,0 +1,44 @@
+{
+  "title": "Pipeline tools in practice",
+  "caption": "You see your whole pipeline at a glance.",
+  "figure": "A deal board with five stages; the Nordwerk deal moved from Needs defined to Proposal made.",
+  "columns": {
+    "lead-in": "Lead in",
+    "contact-made": "Contact made",
+    "needs-defined": "Needs defined",
+    "proposal-made": "Proposal made",
+    "negotiations-started": "Negotiations started"
+  },
+  "total": "{amount} · {count, plural, one {# deal} other {# deals}}",
+  "ghost": "Moved from here",
+  "notes": {
+    "slipping-deals-convert-worse": {
+      "header": "Slipping deals convert worse",
+      "description": "In one vendor dataset, deals that slip late in the cycle convert worse, and winning deals involved decision makers early.[1]",
+      "sources": {
+        "gtm-benchmarks": {
+          "title": "Ebsta and Pavilion, GTM Benchmarks Report"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "one-board-for-all-deals": {
+        "title": "One board for all deals",
+        "keywords": "one place, one note per deal, five columns, company and value, total on top",
+        "script": "Now you need one place for all your deals. Draw a board. Each deal is one note, and each note sits in one column: lead in, contact made, needs defined, proposal made, negotiations started. The company name and the value are on the note. The total sits on top of each column. You see your whole pipeline at a glance."
+      },
+      "fourth-actionable-track-deals": {
+        "title": "Fourth actionable, track deals",
+        "keywords": "simple pipeline, spreadsheet or free tool, current not clever, measure it",
+        "script": "Here is your fourth task. Track every deal in a simple pipeline. Start with a spreadsheet or a free tool. It does not need to be clever. It needs to be current. Then you can measure it, and we come to that in a minute."
+      },
+      "move-or-drop": {
+        "title": "Move or drop",
+        "keywords": "one note moves, do not hope, decide, push forward or drop",
+        "script": "Watch one note move from one column to the next. That is what you want. If a deal does not move, you do not hope. You decide. Push it forward, or drop it and free your attention."
+      }
+    }
+  }
+}

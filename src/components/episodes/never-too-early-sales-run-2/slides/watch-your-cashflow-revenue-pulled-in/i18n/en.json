@@ -1,0 +1,48 @@
+{
+  "title": "Watch your cashflow, revenue pulled in",
+  "caption": "You do not need more revenue. You need revenue earlier.",
+  "ghost": "moved to February",
+  "board": {
+    "months": {
+      "january": "January",
+      "february": "February",
+      "march": "March",
+      "april": "April"
+    },
+    "kinds": {
+      "cash": "Cash",
+      "cost": "Cost",
+      "revenue": "Revenue"
+    }
+  },
+  "notes": {
+    "predicted-revenue-does-not-count": {
+      "header": "Predicted revenue does not count",
+      "description": "Revenue that is only predicted is discounted by investors, and founders who rely on raising more money often find that assumption false.[1]",
+      "sources": {
+        "default-alive-or-default-dead": {
+          "title": "Paul Graham, Default Alive or Default Dead?"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "same-board-earlier-revenue": {
+        "title": "Same board, earlier revenue",
+        "keywords": "first board, same costs, revenue back to February, stays positive, no stamp",
+        "script": "Now back to our first board. Same notes, same costs. This time, I drag April's revenue back two months, to February. The cash note after February no longer reads zero. It stays positive. No bankrupt stamp. The story flips."
+      },
+      "not-more-earlier": {
+        "title": "Not more, earlier",
+        "keywords": "not a cent more, revenue moved to the costs, the whole game, earlier",
+        "script": "Look at what changed. The company did not earn a cent more. Its revenue moved to the month where the costs were. That is the whole game. You do not need more revenue. You need revenue earlier."
+      },
+      "how-it-moves": {
+        "title": "How it moves",
+        "keywords": "not by wishing, earlier sales, sales takes time, next part",
+        "script": "But revenue does not move by wishing. Earlier revenue only comes from earlier sales. And sales takes time. That is why the next part is about time."
+      }
+    }
+  }
+}

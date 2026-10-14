@@ -1,0 +1,48 @@
+{
+  "title": "Behalte deinen Cashflow im Blick: Umsatz vorgezogen",
+  "caption": "Du brauchst nicht mehr Umsatz. Du brauchst ihn früher.",
+  "ghost": "in den Februar vorgezogen",
+  "board": {
+    "months": {
+      "january": "Januar",
+      "february": "Februar",
+      "march": "März",
+      "april": "April"
+    },
+    "kinds": {
+      "cash": "Cash",
+      "cost": "Kosten",
+      "revenue": "Umsatz"
+    }
+  },
+  "notes": {
+    "predicted-revenue-does-not-count": {
+      "header": "Prognostizierter Umsatz zählt nicht",
+      "description": "Umsatz, der nur prognostiziert ist, rechnen Investoren herunter, und Gründer, die fest mit der nächsten Finanzierungsrunde planen, merken oft, dass diese Annahme nicht trägt.[1]",
+      "sources": {
+        "default-alive-or-default-dead": {
+          "title": "Paul Graham, Default Alive or Default Dead?"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "same-board-earlier-revenue": {
+        "title": "Dasselbe Board, früherer Umsatz",
+        "keywords": "erstes Board, dieselben Kosten, Umsatz in den Februar, bleibt positiv, kein Stempel",
+        "script": "Jetzt zurück zu unserem ersten Board. Dieselben Zettel, dieselben Kosten. Diesmal ziehe ich den Umsatz aus dem April zwei Monate nach vorn, in den Februar. Der Cash-Zettel nach dem Februar steht nicht mehr auf null. Er bleibt positiv. Kein Pleite-Stempel. Die Geschichte dreht sich."
+      },
+      "not-more-earlier": {
+        "title": "Nicht mehr, sondern früher",
+        "keywords": "keinen Cent mehr, Umsatz zu den Kosten verschoben, darum geht es, früher",
+        "script": "Schau, was sich verändert hat. Die Firma hat keinen Cent mehr verdient. Ihr Umsatz ist nur in den Monat gewandert, in dem die Kosten anfielen. Darum geht es. Du brauchst nicht mehr Umsatz. Du brauchst ihn früher."
+      },
+      "how-it-moves": {
+        "title": "Wie er sich verschiebt",
+        "keywords": "nicht durch Wünschen, früherer Vertrieb, Vertrieb braucht Zeit, nächster Teil",
+        "script": "Aber Umsatz verschiebt sich nicht, nur weil du es dir wünschst. Früherer Umsatz kommt nur aus früherem Vertrieb. Und Vertrieb braucht Zeit. Deshalb geht es im nächsten Teil um Zeit."
+      }
+    }
+  }
+}

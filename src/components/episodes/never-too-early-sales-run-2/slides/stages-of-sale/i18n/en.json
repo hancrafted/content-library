@@ -1,0 +1,71 @@
+{
+  "title": "Stages of sale",
+  "caption": "Every customer you will ever win walks this path, left to right.",
+  "figure": "Three stages of a sale, leads, opportunities and closing, then delivery before the cash arrives.",
+  "stages": {
+    "leads": "Leads",
+    "opportunities": "Opportunities",
+    "closing": "Closing",
+    "later": "Cash arrives later"
+  },
+  "tasks": {
+    "second": "Task 2",
+    "third": "Task 3"
+  },
+  "board": {
+    "research": "Research and maintain a list of potential customers",
+    "contact": "First contact: cold call, inbound, network",
+    "work": "Follow-up, sales material, meetings, negotiations",
+    "contract": "Customer agrees to a contract",
+    "delivery": "Delivery, then payment"
+  },
+  "notes": {
+    "delivery-is-not-payment": {
+      "header": "Delivery is not payment",
+      "description": "With no contract term, interest on a late B2B payment starts only 30 days after the invoice is received, and contract terms may run up to 60 days.[1]",
+      "sources": {
+        "late-payment-directive": {
+          "title": "European Parliament and Council, Directive 2011/7/EU on combating late payment in commercial transactions"
+        }
+      }
+    },
+    "acceptance-adds-time": {
+      "header": "Acceptance adds time",
+      "description": "An acceptance or verification step can add up to 30 more days before the payment period starts.[1]",
+      "sources": {
+        "late-payment-directive": {
+          "title": "European Parliament and Council, Directive 2011/7/EU on combating late payment in commercial transactions"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "three-stages": {
+        "title": "Three stages",
+        "keywords": "leads, opportunities, closing, left to right, some drop out",
+        "script": "A sale has three stages. Leads, opportunities, closing. Every customer you will ever win walks this path, left to right. Some drop out on the way. That is normal."
+      },
+      "second-actionable-lead-list": {
+        "title": "Second actionable, lead list",
+        "keywords": "lead generation now, research, list of potential customers, add names every week",
+        "script": "Your second task sits under leads. Start lead generation now. Research who could buy from you, and write them in a list. Then keep the list alive. Add names every week. A list of potential customers is the cheapest asset you can build today."
+      },
+      "third-actionable-first-contact": {
+        "title": "Third actionable, first contact",
+        "keywords": "cold call, inbound, network introduction, name to opportunity",
+        "script": "Your third task is the first contact. Call a name from your list, cold. Answer an inbound message. Ask someone in your network for an introduction. Any of the three works. The point is that contact turns a name into an opportunity."
+      },
+      "opportunities-are-the-work": {
+        "title": "Opportunities are the work",
+        "keywords": "follow up, material, meetings, negotiate, contract",
+        "script": "An opportunity is where the work begins. Someone is interested, and now you follow up. You send material, you hold meetings, you negotiate. Interest is only the start. Closing is where the customer agrees to a contract."
+      },
+      "lag-after-the-deal": {
+        "title": "Lag after the deal",
+        "keywords": "faint note, deliver, invoice, wait for payment, cash later still",
+        "script": "And look at the faint note after closing. Even a signed deal does not put cash in the bank. First you deliver, then you invoice, then you wait for payment. The cash arrives later still, so the board needs to count that wait too."
+      }
+    }
+  }
+}
