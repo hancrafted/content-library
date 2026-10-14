@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { frontmatterModel } from './agent-definition.pure.ts';
 import {
   adaptSubagent,
   parseDescription,
@@ -166,6 +167,7 @@ describe('success cases', () => {
       t: '2026-10-09T10:01:00.000Z',
       summary: expectedSummary,
       transcript_path: TRANSCRIPT,
+      'gen_ai.request.model': 'sonnet',
       'gen_ai.response.model': 'claude-sonnet-5-5',
       'gen_ai.usage.input_tokens': 30,
       'gen_ai.usage.output_tokens': 10,
@@ -482,5 +484,131 @@ describe('edge cases', () => {
     const event = adaptSubagent(input);
     // ASSERT
     expect(event).not.toHaveProperty('gen_ai.usage.input_tokens');
+  });
+});
+
+describe('identity on the end line (R1)', () => {
+  const provisional: RunLogLine = {
+    ...startLine,
+    role: 'skill-spawned',
+    job: 'write-dossier',
+    name: 'write-dossier/skill-spawned',
+  };
+
+  it('puts the identity meta.json now names on the end line, and its parent', () => {
+    // ARRANGE
+    const input = base({
+      event: 'stop',
+      description: 'write-dossier#2/ticket-implementor/#148',
+      log: [jobLine, attemptLine(ATTEMPT_SPAN, 2, 2), provisional],
+    });
+    // ACT
+    const event = adaptSubagent(input);
+    // ASSERT
+    expect(event).toMatchObject({
+      kind: 'end',
+      job: 'write-dossier',
+      attempt: 2,
+      role: 'ticket-implementor',
+      ticket: 148,
+      parent_span_id: ATTEMPT_SPAN,
+      name: 'write-dossier#2/ticket-implementor/#148',
+      description: 'write-dossier#2/ticket-implementor/#148',
+    });
+  });
+
+  it('leaves a start that already parsed alone', () => {
+    // ARRANGE
+    const parsed: RunLogLine = { ...startLine, role: 'reviewer', job: 'write-dossier', attempt: 2 };
+    const input = base({ event: 'stop', log: [jobLine, parsed] });
+    // ACT
+    const event = adaptSubagent(input);
+    // ASSERT
+    for (const key of ['job', 'attempt', 'role', 'ticket', 'parent_span_id', 'name'])
+      expect(event).not.toHaveProperty(key);
+  });
+
+  it('adds no identity when meta.json still does not parse', () => {
+    // ARRANGE
+    const input = base({ event: 'stop', description: 'Spec review', log: [jobLine, provisional] });
+    // ACT
+    const event = adaptSubagent(input);
+    // ASSERT
+    expect(event).not.toHaveProperty('role');
+  });
+
+  it('puts the model meta.json names on the end line when the start had none', () => {
+    // ARRANGE
+    const input = base({ event: 'stop', log: [jobLine, provisional] });
+    // ACT
+    const event = adaptSubagent(input);
+    // ASSERT
+    expect(event).toMatchObject({ 'gen_ai.request.model': 'sonnet' });
+  });
+});
+
+describe('requested model fallback (R8)', () => {
+  const noModel = JSON.stringify({ agentType: 'ticket-implementor', description: 'write-dossier#2/reviewer' });
+
+  it('uses the agent definition model when meta.json has none, at start', () => {
+    // ARRANGE
+    const input = base({ meta: noModel, agentModel: 'opus' });
+    // ACT
+    const event = adaptSubagent(input);
+    // ASSERT
+    expect(event).toMatchObject({ 'gen_ai.request.model': 'opus' });
+  });
+
+  it('prefers meta.json', () => {
+    // ARRANGE
+    const input = base({ agentModel: 'opus' });
+    // ACT
+    const event = adaptSubagent(input);
+    // ASSERT
+    expect(event).toMatchObject({ 'gen_ai.request.model': 'sonnet' });
+  });
+
+  it('reads the model from frontmatter', () => {
+    // ARRANGE
+    const text = '---\nname: x\nmodel: "haiku"\n---\nbody\nmodel: opus\n';
+    // ACT
+    const model = frontmatterModel(text);
+    // ASSERT
+    expect(model).toBe('haiku');
+    expect(frontmatterModel('no frontmatter')).toBeUndefined();
+    expect(frontmatterModel('---\nmodel: inherit\n---\n')).toBeUndefined();
+  });
+});
+
+describe('sessions (S2)', () => {
+  const resumed = JSON.stringify({
+    log: 'docs/episodes/x/events.jsonl',
+    session_id: 'session-2',
+    session_ids: [SESSION, 'session-2'],
+    trace_id: TRACE,
+    job_span_id: JOB_SPAN,
+  });
+  const forOld = (event: 'start' | 'stop'): AdapterInput => base({ event, marker: resumed, log: [jobLine, startLine] });
+
+  it('accepts a stop from an earlier session of the Run', () => {
+    // ACT
+    const event = adaptSubagent(forOld('stop'));
+    // ASSERT
+    expect(event).toMatchObject({ kind: 'end', span_id: AGENT_SPAN });
+  });
+
+  it('still refuses a start from an earlier session, and a stop from a stranger', () => {
+    // ARRANGE
+    const stranger = { ...forOld('stop'), payload: { ...forOld('stop').payload, session_id: 'other' } };
+    // ACT / ASSERT
+    expect(adaptSubagent(forOld('start'))).toBeNull();
+    expect(adaptSubagent(stranger)).toBeNull();
+  });
+
+  it('accepts a start from the current session', () => {
+    // ARRANGE
+    const input = { ...forOld('start'), payload: { ...forOld('start').payload, session_id: 'session-2' } };
+    // ACT / ASSERT
+    expect(adaptSubagent(input)).toMatchObject({ kind: 'start' });
   });
 });

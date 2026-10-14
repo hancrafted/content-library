@@ -28,7 +28,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PROJECT_DIR}/skills/new-episode/scripts/claude-adapter.ts\" start 2>/dev/null"
+            "command": "node \"${CLAUDE_PROJECT_DIR}/skills/new-episode/scripts/claude-adapter.ts\" start"
           }
         ]
       }
@@ -38,7 +38,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PROJECT_DIR}/skills/new-episode/scripts/claude-adapter.ts\" stop 2>/dev/null"
+            "command": "node \"${CLAUDE_PROJECT_DIR}/skills/new-episode/scripts/claude-adapter.ts\" stop"
           }
         ]
       }

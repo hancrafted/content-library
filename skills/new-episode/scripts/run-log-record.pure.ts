@@ -82,6 +82,17 @@ const END_KEYS = [
   'gen_ai.usage.output_tokens',
   'gen_ai.usage.cache_read.input_tokens',
 ];
+/** What an end line may add beyond END_KEYS: the identity meta.json names at stop, which the fold applies over the start's. */
+const END_IDENTITY = [
+  'name',
+  'job',
+  'attempt',
+  'role',
+  'ticket',
+  'parent_span_id',
+  'description',
+  'gen_ai.request.model',
+];
 const RULES: Record<Kind, { required: string[]; optional: string[] }> = {
   'start-run': {
     required: ['run_id', 'template_sha', 'harness', 'branch', 'gen_ai.request.model'],
@@ -108,7 +119,7 @@ const RULES: Record<Kind, { required: string[]; optional: string[] }> = {
     ],
   },
   'end-run': { required: ['span_id', 'status'], optional: END_KEYS },
-  end: { required: ['span_id', 'status'], optional: END_KEYS },
+  end: { required: ['span_id', 'status'], optional: [...END_KEYS, ...END_IDENTITY] },
   score: { required: ['span_id', 'name', 'value', 'source'], optional: ['t', 'rubric', 'body', 'via', 'comment'] },
 };
 

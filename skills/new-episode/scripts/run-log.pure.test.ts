@@ -433,3 +433,65 @@ describe('an end that is timestamped before its start', () => {
     });
   });
 });
+
+describe('identity on an end line', () => {
+  it("replaces the start's provisional identity, parent and name", () => {
+    // ARRANGE
+    const trace = 'a'.repeat(32);
+    const run = 'a1'.repeat(8);
+    const attempt = 'a3'.repeat(8);
+    const agent = 'a2'.repeat(8);
+    const lines = [
+      { seq: 1, t: '2026-10-14T10:00:00Z', trace_id: trace, kind: 'start-run', span_id: run, run_id: 'r' },
+      {
+        seq: 2,
+        t: '2026-10-14T10:00:01Z',
+        trace_id: trace,
+        kind: 'start',
+        span_id: agent,
+        type: 'agent',
+        name: 'j/skill-spawned',
+        parent_span_id: run,
+        role: 'skill-spawned',
+      },
+      {
+        seq: 3,
+        t: '2026-10-14T10:00:09Z',
+        trace_id: trace,
+        kind: 'end',
+        span_id: agent,
+        status: 'ok',
+        job: 'j',
+        attempt: 2,
+        role: 'reviewer',
+        parent_span_id: attempt,
+        name: 'j#2/reviewer',
+      },
+    ] as RunLogLine[];
+    // ACT
+    const span = fold(lines).spans.find((s) => s.span_id === agent);
+    // ASSERT
+    expect(span).toMatchObject({
+      job: 'j',
+      attempt: 2,
+      role: 'reviewer',
+      parent_span_id: attempt,
+      name: 'j#2/reviewer',
+      start_t: '2026-10-14T10:00:01Z',
+    });
+  });
+});
+
+describe('the record of an end line with identity', () => {
+  it('accepts identity fields on end and refuses them on end-run', () => {
+    // ARRANGE
+    const stamp = { t: '2026-10-14T10:00:00Z', seq: 3, traceId: 'a'.repeat(32), spanId: 'b'.repeat(16) };
+    const identity = { span_id: 'a1'.repeat(8), status: 'ok', role: 'reviewer', parent_span_id: 'a3'.repeat(8) };
+    // ACT
+    const end = record({ kind: 'end', ...identity }, stamp);
+    const endRun = record({ kind: 'end-run', ...identity }, stamp);
+    // ASSERT
+    expect(end.ok).toBe(true);
+    expect(endRun.ok).toBe(false);
+  });
+});
