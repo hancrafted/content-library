@@ -97,7 +97,7 @@ Three sticky notes on the board, "Market insight", "Trust" and "Repeatable proce
 
 #### Visual
 
-master: three-column · motion: local
+master: basic-page · motion: local
 
 Design reference: reference/source-deck/design-reference.md#page-6, reference/source-deck/design-reference.md#page-7
 
@@ -193,7 +193,7 @@ The same cashflow board as the first, with the same January to March notes. Now 
 
 #### Visual
 
-master: grid-1x3 · motion: local
+master: basic-page · motion: local
 
 Design reference: reference/source-deck/design-reference.md#page-10
 
@@ -244,7 +244,7 @@ Our own drawn funnel of three stages, Lead, Opportunity and Deal. Between Lead a
 
 #### Visual
 
-master: grid-1x3 · motion: local
+master: basic-page · motion: local
 
 Design reference: reference/source-deck/design-reference.md#page-15
 
