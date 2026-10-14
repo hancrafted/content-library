@@ -2,7 +2,7 @@
 // live, `.logs/new-episode/<slug>/<run id>.jsonl` archived), reads and folds them, applies liveness, and says which
 // Run is current. Every reader and writer of the log goes through it. Real disk only; the shapes live in run-log.pure.ts.
 // Liveness: a span with no end line is `running` only when the worktree's active-run marker names its Run, else `crashed`.
-import { existsSync, globSync, readFileSync } from 'node:fs';
+import { copyFileSync, existsSync, globSync, mkdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { liveTraces, MARKER_PATH, parseMarker, type Marker } from './marker.pure.ts';
 import { currentRun, fold, parseLog, type Folded, type RunLogLine } from './run-log.pure.ts';
@@ -93,4 +93,12 @@ function keepLargest(
   { trace, size, source }: { trace: string; size: number; source: RunSource },
 ): void {
   if (size > (best.get(trace)?.size ?? 0)) best.set(trace, { size, source });
+}
+
+/** Copies the Episode's log to `.logs/new-episode/<slug>/<run id>.jsonl` and returns that path. */
+export function archiveEpisodeLog(slug: string, root: string, run: RunLogLine): string {
+  const target = `.logs/new-episode/${slug}/${run.run_id}.jsonl`;
+  mkdirSync(path.dirname(path.join(root, target)), { recursive: true });
+  copyFileSync(path.join(root, episodeLogPath(slug)), path.join(root, target));
+  return target;
 }

@@ -39,3 +39,7 @@ export const hasEnded = (lines: readonly RunLogLine[], run: RunLogLine): boolean
 
 /** The spans of a Run, the Run itself aside, that have no end line yet. */
 export const openUnderRun = (spans: readonly Span[]): Span[] => spans.filter((s) => s.type !== 'run' && isOpen(s));
+
+/** The agent spans still open under an Attempt. */
+export const openAgentsOf = (spans: readonly Span[], attempt: Span): Span[] =>
+  spans.filter((s) => s.type === 'agent' && isOpen(s) && s.parent_span_id === attempt.span_id);

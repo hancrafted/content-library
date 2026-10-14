@@ -3,19 +3,19 @@
 // from the log itself, and keeps the active-run marker (`.scratch/active-run`) in step, so the marker is an internal
 // detail of this module. begin-run opens the Run and the marker; begin-job and begin-attempt nest under it (an
 // Attempt's number and `retry_of` are derived, and the spawn description is printed); end-run records the
-// orchestrator's usage and clears the marker in one step. A command refuses a step the log cannot support: a Job
-// pipeline.yml does not declare, a second Run while one is open, a Job or Run ended over open spans. Real disk; the
-// clock, ids, git and the transcript lookup are injectable. Shapes live in run-log.pure.ts; `run.ts` is the argv wrapper.
-import { copyFileSync, existsSync, mkdirSync } from 'node:fs';
+// orchestrator's usage and clears the marker in one step. A command refuses a step the log cannot support: an
+// undeclared Job, a second Run while one is open, a new span on an ended Run, a Job or Run ended over open spans.
+// Real disk; clock, ids, git and the transcript lookup are injectable. Shapes: run-log.pure.ts; `run.ts` wraps argv.
+import { existsSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
-import { episodeLogPath, readEpisodeLog, readMarker } from './episode-run-log.ts';
+import { archiveEpisodeLog, episodeLogPath, readEpisodeLog, readMarker } from './episode-run-log.ts';
 import { declaredJobs } from './episode-status.ts';
 import { endEvent, need, parseRunArgs, refuse, viaOf, type Opts, type Params } from './run-args.pure.ts';
 import { USAGE } from './run-help.pure.ts';
 import { appendEvent } from './run-log-writer.ts';
 import { type LogEvent, type RunLogLine, type Span, type Status } from './run-log.pure.ts';
 import { endMarker, liveMarker, pointMarker, type MarkerHome } from './run-marker.ts';
-import { hasEnded, isOpen, latest, openSpan, openUnderRun, scoreTarget } from './run-spans.pure.ts';
+import { hasEnded, isOpen, latest, openAgentsOf, openSpan, openUnderRun, scoreTarget } from './run-spans.pure.ts';
 
 /** What a command reads from outside; each defaults to the real thing. */
 export interface RunContext extends MarkerHome {
@@ -49,6 +49,13 @@ function viewOf(ctx: RunContext): View {
     lines: log.lines,
     spans: log.folded.spans.filter((s) => s.trace_id === trace),
   };
+}
+
+/** The current Run's view, refused once it has ended: a new span needs begin-run. */
+function openView(ctx: RunContext): View {
+  const view = viewOf(ctx);
+  if (!hasEnded(view.lines, view.run)) return view;
+  return refuse(`Run ${view.run.run_id} has ended; run begin-run first`);
 }
 
 /** Writes one event and returns the line as written. */
@@ -99,7 +106,7 @@ function beginJob(ctx: RunContext, p: Params<'job'>): string {
   const job = need(p.job, 'job');
   const declared = declaredJobs(ctx.root, ctx.slug);
   if (!declared.ids.includes(job)) refuse(`${declared.file} declares no job "${job}"`);
-  const { run, spans } = viewOf(ctx);
+  const { run, spans } = openView(ctx);
   const marker = liveMarker(ctx.root, run);
   const open = openSpan(spans, 'job', { job });
   const spanId =
@@ -123,7 +130,7 @@ function endJob(ctx: RunContext, p: Params<'job' | 'status' | 'summary'>): strin
 
 function beginAttempt(ctx: RunContext, p: Params<'job'>): string {
   const job = need(p.job, 'job');
-  const { spans } = viewOf(ctx);
+  const { spans } = openView(ctx);
   const jobSpan = openSpan(spans, 'job', { job }) ?? refuse(`no open Job ${job}; run begin-job ${job} first`);
   const attempts = spans.filter((s) => s.type === 'attempt' && s.job === job);
   if (attempts.some(isOpen)) refuse(`${job} has an open Attempt; run end-attempt ${job} first`);
@@ -145,6 +152,8 @@ function endAttempt(ctx: RunContext, p: Params<'job' | 'status' | 'summary'>): s
   const job = need(p.job, 'job');
   const { spans } = viewOf(ctx);
   const open = openSpan(spans, 'attempt', { job }) ?? refuse(`no open Attempt of ${job}`);
+  if ((ABANDONING as readonly string[]).includes(p.status ?? 'ok'))
+    for (const agent of openAgentsOf(spans, open)) write(ctx, endEvent('end', agent.span_id, { status: 'crashed' }));
   write(ctx, endEvent('end', open.span_id, p));
   return `Attempt ${open.name} ended`;
 }
@@ -152,7 +161,7 @@ function endAttempt(ctx: RunContext, p: Params<'job' | 'status' | 'summary'>): s
 function openGate(ctx: RunContext, p: Params<'job' | 'name'>): string {
   const job = need(p.job, 'job');
   const name = need(p.name, 'name');
-  const { run, spans } = viewOf(ctx);
+  const { run, spans } = openView(ctx);
   if (openSpan(spans, 'gate', { name }) !== undefined) refuse(`Gate "${name}" is already open`);
   write(ctx, { kind: 'start', type: 'gate', name, job, parent_span_id: run.span_id });
   return `Gate "${name}" opened`;
@@ -188,18 +197,10 @@ function score(ctx: RunContext, p: Params<'target' | 'name' | 'value'>, opts: Op
 }
 
 function resume(ctx: RunContext): string {
-  const { run, spans } = viewOf(ctx);
+  const { run, spans } = openView(ctx);
   const job = openSpan(spans, 'job');
   pointAt(ctx, run, { jobSpanId: job?.span_id ?? run.span_id, sessionId: sessionOf(ctx) });
   return `Run ${run.run_id} resumed${job === undefined ? '' : ` in Job ${job.job}`}`;
-}
-
-function archive(ctx: RunContext): string {
-  const { run } = viewOf(ctx);
-  const target = `.logs/new-episode/${ctx.slug}/${run.run_id}.jsonl`;
-  mkdirSync(path.dirname(path.join(ctx.root, target)), { recursive: true });
-  copyFileSync(path.join(ctx.root, episodeLogPath(ctx.slug)), path.join(ctx.root, target));
-  return target;
 }
 
 /** A command: the names of its positional parameters, and what it does with them. */
@@ -228,7 +229,7 @@ const COMMANDS: Record<string, Command> = {
   'close-gate': command(['name', 'status', 'summary'], closeGate),
   score: command(['target', 'name', 'value'], score),
   resume: command([], (ctx) => resume(ctx)),
-  archive: command([], (ctx) => archive(ctx)),
+  archive: command([], (ctx) => archiveEpisodeLog(ctx.slug, ctx.root, viewOf(ctx).run)),
 };
 
 /** Runs one command (`argv` after the slug) and returns what to print, or why it was refused. */

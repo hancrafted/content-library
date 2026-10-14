@@ -4,6 +4,7 @@ import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { episodeLogPath, readEpisodeLog, readMarker } from './episode-run-log.ts';
 import { runCommand, type RunContext } from './run-commands.ts';
+import { appendEvent } from './run-log-writer.ts';
 
 /*
  * The run-scoped commands against a real temp worktree: names in, lines and marker out. Clock, ids, git,
@@ -402,6 +403,73 @@ describe('failure cases', () => {
     });
     expect(lines(ctx).filter((l) => l.kind === 'end-run')).toEqual([]);
     expect(readMarker(ctx.root)).not.toBeNull();
+  });
+});
+
+/** An agent span the hook adapter would have started under the open Attempt of a Job. */
+const startAgent = (ctx: RunContext, job: string, role: string): void => {
+  const attempt = spans(ctx).find((s) => s.type === 'attempt' && s.job === job && s.end_t === null);
+  appendEvent(
+    { root: ctx.root, file: episodeLogPath(SLUG) },
+    { kind: 'start', type: 'agent', name: `${job}#1/${role}`, job, role, attempt: 1, parent_span_id: attempt?.span_id },
+    ctx.writer,
+  );
+};
+
+describe('lifecycle cases', () => {
+  it.each(['error', 'crashed'])('ends the open agents crashed when an Attempt ends %s', (status) => {
+    // ARRANGE
+    const ctx = begun();
+    run(ctx, 'begin-job', 'a');
+    run(ctx, 'begin-attempt', 'a');
+    startAgent(ctx, 'a', 'implementor');
+    // ACT
+    const result = run(ctx, 'end-attempt', 'a', status);
+    // ASSERT
+    expect(result.ok).toBe(true);
+    expect(spans(ctx).map((s) => [s.type, s.status])).toEqual([
+      ['run', 'running'],
+      ['job', 'running'],
+      ['attempt', status],
+      ['agent', 'crashed'],
+    ]);
+    expect(run(ctx, 'begin-attempt', 'a').ok).toBe(true);
+  });
+
+  it('keeps an open agent open when an Attempt ends ok', () => {
+    // ARRANGE
+    const ctx = begun();
+    run(ctx, 'begin-job', 'a');
+    run(ctx, 'begin-attempt', 'a');
+    startAgent(ctx, 'a', 'implementor');
+    // ACT
+    run(ctx, 'end-attempt', 'a', 'ok');
+    // ASSERT
+    expect(spans(ctx).find((s) => s.type === 'agent')?.status).toBe('running');
+  });
+
+  it('refuses new spans and resume on an ended Run, naming begin-run, but still takes Scores', () => {
+    // ARRANGE
+    const ctx = begun();
+    run(ctx, 'begin-job', 'a');
+    run(ctx, 'begin-attempt', 'a');
+    run(ctx, 'end-attempt', 'a', 'ok');
+    run(ctx, 'end-job', 'a', 'ok');
+    run(ctx, 'end-run', 'ok');
+    // ACT
+    const results = [
+      run(ctx, 'resume'),
+      run(ctx, 'begin-job', 'a'),
+      run(ctx, 'begin-attempt', 'a'),
+      run(ctx, 'open-gate', 'a', 'g'),
+    ];
+    // ASSERT
+    for (const r of results) expect(r).toEqual({ ok: false, error: expect.stringContaining('begin-run') });
+    expect(run(ctx, 'score', 'a#1', 'rubric', 'pass', '--source', 'agent:a/reviewer')).toEqual({
+      ok: true,
+      output: expect.any(String),
+    });
+    expect(run(ctx, 'begin-run', '--model', 'opus').ok).toBe(true);
   });
 });
 
