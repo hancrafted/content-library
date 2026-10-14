@@ -2,7 +2,7 @@
 // reader exactly the text it showed before the Self-contained Slides move, with
 // no Translation key left raw. A published Episode renders under exactly the
 // anchors `published-anchors.json` lists; an Upcoming one has no bound anchors
-// yet, so it renders under exactly the anchors its record's Sections derive.
+// yet, so it renders under exactly the anchors its reviewed capture lists.
 // The expected text is a fixture file per page under `episode-text/`, captured
 // once from the build before anything moved; a page without one gets it written
 // and fails, so the capture is reviewed and committed, never silently accepted.
@@ -13,8 +13,6 @@ import { join } from 'node:path';
 import { format, resolveConfig } from 'prettier';
 import { describe, expect, it } from 'vitest';
 import { episodeStatus } from '../../src/components/episodes/episode-repository';
-import { findEpisode } from '../../src/components/episodes/registry';
-import { placeSections, type SlideOutline } from '../../src/lib/episode.pure';
 import { LOCALES, localizePath } from '../../src/lib/locale.pure';
 import { EPISODE_SLUGS, episodeRoute } from '../../src/lib/routes';
 import { episodeText, type EpisodeText } from './episode-text';
@@ -45,10 +43,10 @@ async function capturedText(file: string, built: EpisodeText): Promise<EpisodeTe
   throw new Error(`No captured text at ${file}: written from this build. Review it, commit it, and run again.`);
 }
 
-/** The Slide anchors of an exported page, the Title slide's `top` left out, sorted. */
-function builtAnchors(url: string): string[] {
-  return builtText(url)
-    .slides.map(({ id }) => id)
+/** The Slide anchors of a page's text, the Title slide's `top` left out, sorted. */
+function slideAnchors(text: EpisodeText): string[] {
+  return text.slides
+    .map(({ id }) => id)
     .filter((id) => id !== 'top')
     .sort();
 }
@@ -89,21 +87,20 @@ describe.each(PUBLISHED_PAGES)('$url, published', ({ slug, url }) => {
     const published = JSON.parse(readFileSync(join(EPISODES_DIR, slug, 'published-anchors.json'), 'utf8')) as string[];
     const expected = [...published].sort();
     // ACT
-    const anchors = builtAnchors(url);
+    const anchors = slideAnchors(builtText(url));
     // ASSERT
     expect(anchors).toEqual(expected);
   });
 });
 
-describe.each(UPCOMING_PAGES)('$url, upcoming', ({ slug, url }) => {
-  it('renders its Slides under exactly the anchors its record derives, none of them bound yet', () => {
+describe.each(UPCOMING_PAGES)('$url, upcoming', ({ slug, locale, url }) => {
+  it('renders its Slides under exactly the anchors its reviewed capture lists, none of them bound yet', async () => {
     // ARRANGE
-    const expected = placeSections<SlideOutline>(findEpisode(slug).sections)
-      .flatMap((section) => section.map(({ id }) => id))
-      .sort();
+    const built = builtText(url);
+    const expected = slideAnchors(await capturedText(join(FIXTURE_DIR, `${slug}.${locale}.json`), built));
     const snapshot = join(EPISODES_DIR, slug, 'published-anchors.json');
     // ACT
-    const anchors = builtAnchors(url);
+    const anchors = slideAnchors(built);
     const bound = existsSync(snapshot);
     // ASSERT
     expect(anchors).toEqual(expected);
