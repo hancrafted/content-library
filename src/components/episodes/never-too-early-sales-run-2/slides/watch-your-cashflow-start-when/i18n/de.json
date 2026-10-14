@@ -1,0 +1,53 @@
+{
+  "title": "Behalte Deinen Cashflow im Blick: „Wann starten?“",
+  "caption": "Der richtige Moment ist die erste Spalte. Also jetzt.",
+  "board": {
+    "quarters": {
+      "q1": "Q1",
+      "q2": "Q2",
+      "q3": "Q3",
+      "q4": "Q4"
+    },
+    "kinds": {
+      "cash": "Cash",
+      "cost": "Kosten",
+      "revenue": "Umsatz"
+    },
+    "arrow": "Wann starten?"
+  },
+  "notes": {
+    "worry-early": {
+      "header": "Früh Sorgen machen",
+      "description": "Die Frage ist, ob ein Unternehmen mit dem Geld, das es noch hat, bei heutigen Ausgaben und heutigem Wachstum profitabel wird. Sich zu früh Sorgen zu machen kostet wenig, sich zu spät Sorgen zu machen ist gefährlich.[1]",
+      "sources": {
+        "default-alive-or-default-dead": {
+          "title": "Paul Graham, Default Alive or Default Dead?"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "start-when": {
+        "title": "Wann starten",
+        "keywords": "Pfeil von Q3 zurück zu Q1, nicht wenn das Geld knapp wird, die erste Spalte, jetzt",
+        "script": "Schau auf den Pfeil von Q3 zurück zu Q1. Er fragt: Wann starten? Nicht erst, wenn das Geld knapp wird. Dann ist der Umsatz schon Monate entfernt. Der richtige Moment ist die erste Spalte. Also jetzt."
+      },
+      "learning-goal": {
+        "title": "Das Lernziel",
+        "keywords": "Vertrieb vor dem Umsatzbedarf, Umsatz folgt den Kosten, so läuft die Uhr",
+        "script": "Darum geht es in diesem Vortrag. Mit dem Vertrieb musst Du lange anfangen, bevor Du den Umsatz brauchst, denn der Umsatz kommt immer nach den Kosten. Immer. Das ist kein Zeichen für ein schlechtes Unternehmen. So läuft einfach die Uhr."
+      },
+      "your-four-steps": {
+        "title": "Deine vier Schritte",
+        "keywords": "Cashflow-Übersicht, Leadliste, Erstkontakt, Deals verfolgen, Abschlussquote, Verkaufszyklus",
+        "script": "Deine vier Schritte. Erstens: Bau Deine Cashflow-Übersicht und finde Deinen Monat ohne Cash. Zweitens: Führ eine Leadliste und erweitere sie laufend. Drittens: Nimm den ersten Kontakt auf, per Kaltakquise, über Anfragen oder über Dein Netzwerk. Viertens: Verfolge Deine Deals und miss Deine Abschlussquote und Deinen Verkaufszyklus."
+      },
+      "this-week": {
+        "title": "Diese Woche",
+        "keywords": "den ersten Schritt wählen, das Board zeichnen, den Monat finden, wie früh anfangen",
+        "script": "Du musst nicht alle vier heute erledigen. Nimm Dir den ersten vor und mach ihn diese Woche. Zeichne das Board, finde den Monat, und Du weißt genau, wie früh Du anfangen musst."
+      }
+    }
+  }
+}

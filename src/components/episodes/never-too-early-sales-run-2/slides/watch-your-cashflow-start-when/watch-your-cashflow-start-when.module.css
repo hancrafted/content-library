@@ -1,0 +1,13 @@
+/*
+ * Watch your cashflow, "Start when?": motion only, no colour, size or weight (FE-011). The notes stick on in reading
+ * order with the library motion, Q1 to Q4; the arrow draws in last, from its tail at Q3 back to Q1. Once, when the
+ * Slide becomes active (FE-009 §6.2); at rest and under reduced motion the board is finished.
+ */
+
+.note {
+  composes: stickOn from '../../../../slide-shared/motions/stick-on.module.css';
+}
+
+.arrow {
+  composes: drawIn from '../../../../slide-shared/motions/draw-in.module.css';
+}
