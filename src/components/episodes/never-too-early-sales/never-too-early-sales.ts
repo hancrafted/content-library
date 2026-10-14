@@ -5,6 +5,8 @@ import { cashflowStartWhen } from './slides/cashflow-start-when/slide';
 import { marketingFeedsThePipeline } from './slides/marketing-feeds-the-pipeline/slide';
 import { pipelineByTheNumbers } from './slides/pipeline-by-the-numbers/slide';
 import { pipelineToolsInPractice } from './slides/pipeline-tools-in-practice/slide';
+import { salesBeyondSelling } from './slides/sales-beyond-selling/slide';
+import { salesIsMoreThanSelling } from './slides/sales-is-more-than-selling/slide';
 import { watchYourCashflow } from './slides/watch-your-cashflow/slide';
 import { whatIsASalesPipeline } from './slides/what-is-a-sales-pipeline/slide';
 import { whyCashflowMatters } from './slides/why-cashflow-matters/slide';
@@ -22,6 +24,7 @@ export const neverTooEarlySales = episode({
   messages: { en, de },
   sections: [
     [whyCashflowMatters, watchYourCashflow],
+    [salesBeyondSelling, salesIsMoreThanSelling],
     [
       whyPipelineTakesTime,
       whatIsASalesPipeline,

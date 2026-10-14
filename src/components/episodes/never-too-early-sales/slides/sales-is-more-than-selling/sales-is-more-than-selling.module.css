@@ -1,0 +1,32 @@
+/* The boxes settle in, staggered, then the trust note, once the Slide is active; the base rules are the finished picture. */
+.box:nth-child(2) {
+  --order: 1;
+}
+
+.box:nth-child(3) {
+  --order: 2;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-zone='active'] .box {
+    animation: settle 480ms cubic-bezier(0.2, 0, 0, 1) calc(var(--order, 0) * 80ms) both;
+  }
+
+  [data-zone='active'] .trustNote {
+    animation: arrive 480ms cubic-bezier(0.2, 0, 0, 1) 320ms both;
+  }
+}
+
+@keyframes settle {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}
+
+@keyframes arrive {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
