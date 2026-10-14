@@ -1,7 +1,7 @@
 // `npm run episode:run -- <slug> <command> ...`: the run-scoped commands (see run-commands.ts for what each does).
 // This file only reads argv and the session id and prints the result.
 import { runCommand } from './run-commands.ts';
-import { USAGE } from './run-usage.pure.ts';
+import { USAGE } from './run-help.pure.ts';
 
 const [slug, ...argv] = process.argv.slice(2);
 if (!slug || argv.length === 0) {

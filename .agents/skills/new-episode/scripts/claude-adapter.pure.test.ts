@@ -232,6 +232,16 @@ describe('orchestrator usage', () => {
     expect(event).toEqual(expected);
   });
 
+  it('counts what the orchestrator spent within the second the Run ended in, since line times are whole seconds', () => {
+    // ARRANGE
+    const late = assistant('2026-10-09T11:00:00.700Z', 'm9', { input_tokens: 5, output_tokens: 7 });
+    const after = assistant('2026-10-09T11:00:01.200Z', 'm10', { input_tokens: 1000, output_tokens: 1000 });
+    // ACT
+    const event = runUsageEvent([runStart, runEnd], parsed, [[late, after].join('\n')]);
+    // ASSERT
+    expect(event).toMatchObject({ 'gen_ai.usage.input_tokens': 5, 'gen_ai.usage.output_tokens': 7 });
+  });
+
   it('writes nothing before the Run has ended, twice, or without usage', () => {
     // ARRANGE
     const counted: RunLogLine = { ...runEnd, 'gen_ai.usage.input_tokens': 1 };

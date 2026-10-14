@@ -143,7 +143,7 @@ npm run episode:run -- <slug> <command> ...
 | `resume` | in a new session or after a crash, points the marker at the current Run and its open Job |
 | `archive` | copies the log to `.logs/new-episode/<slug>/<run id>.jsonl` |
 
-`status` is `ok` (default), `error`, `refused` or `reused`. A command refuses what the log cannot support (no open Job, a second open Attempt) and says which; the writer refuses a malformed field and says which. Fix the call, never the log: a line is never edited, a correction is a new line.
+`status` is `ok` (default), `error`, `refused`, `crashed` or `reused`. A command refuses what the log cannot support (no open Job, a second open Attempt) and says which; the writer refuses a malformed field and says which. Fix the call, never the log: a line is never edited, a correction is a new line.
 
 `npm run episode:log -- <slug> '<event json>'` (or the JSON on stdin) appends one raw event, for what the commands do not cover: the typed agent span of a harness that gives none (any harness but Claude Code, a refused spawn, a skill that ran in this session), `"type":"agent","job":…,"attempt":…,"role":…,"source":"typed"` with `parent_span_id` read from `npm run episode:trace -- <slug>`, so a report never mixes measured and typed numbers.
 
@@ -186,7 +186,7 @@ Tag any row with its Run by joining the Run's span on `trace_id`: `SELECT r.run_
 
 ## Resuming a run
 
-In a new session, or after a compaction, never trust memory of the run: run `npm run episode:status -- <slug>` and rebuild the todo list from its output. Its `crashed` lines are spans that never ended in a Run that is no longer live, which includes a Run whose session died; `running` lines are agents of the live Run, so wait for them. After a crash, run `resume` first so the resumed Run reads as live. A worktree `episode/<slug>--<job id>` whose job has no run-log entry is a crashed attempt: remove it with `wt:done` and its `--base`, delete its branch, run `end-attempt <job> error --summary "crashed"` and then `begin-attempt <job>` again: the next number and `retry_of` follow from the log. In a session that did not start the Run, `resume` makes it the orchestrator for the adapter.
+In a new session, or after a compaction, never trust memory of the run: run `npm run episode:status -- <slug>` and rebuild the todo list from its output. Its `crashed` lines are spans that never ended in a Run that is no longer live, which includes a Run whose session died; `running` lines are agents of the live Run, so wait for them. After a crash, run `resume` first so the resumed Run reads as live; `begin-run` is refused while the Run has no `end-run`, so to abandon it instead run `end-run crashed`, which leaves its open spans `crashed`. A worktree `episode/<slug>--<job id>` whose job has no run-log entry is a crashed attempt: remove it with `wt:done` and its `--base`, delete its branch, run `end-attempt <job> error --summary "crashed"` and then `begin-attempt <job>` again: the next number and `retry_of` follow from the log. In a session that did not start the Run, `resume` makes it the orchestrator for the adapter.
 
 ## Gate commits
 

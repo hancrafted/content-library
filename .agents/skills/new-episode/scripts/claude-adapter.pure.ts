@@ -199,15 +199,20 @@ export function adaptSubagent(input: AdapterInput): LogEvent | null {
 /**
  * The orchestrator's own cost for the Run span, when the Run ends: a second `end-run` line for the Run that
  * repeats the first one's status and summary and adds the orchestrator's model and the usage it spent inside the
- * Run (from start-run to end-run), summed over the transcripts of every session that drove it. The latest end line
+ * Run (from start-run to the end of end-run's second), summed over the transcripts of every session that drove it. The latest end line
  * wins when folded. Null when the Run has no `end-run` yet, already carries usage, or the transcripts report none.
  */
 export function runUsageEvent(log: readonly RunLogLine[], marker: Marker, transcripts: readonly (string | null)[]): LogEvent | null {
   const run = log.find((l) => l.kind === 'start-run' && l.trace_id === marker.trace_id);
   const ended = [...log].reverse().find((l) => l.kind === 'end-run' && l.span_id === run?.span_id);
   if (run?.span_id === undefined || ended === undefined || ended['gen_ai.usage.input_tokens'] !== undefined) return null;
-  const [from, to] = [Date.parse(run.t), Date.parse(ended.t)];
-  const inside = (e: Entry): boolean => e.timestamp !== undefined && Date.parse(e.timestamp) >= from && Date.parse(e.timestamp) <= to;
+  // Line times are whole seconds, transcript times milliseconds: the window runs to the end of end-run's second.
+  const from = Date.parse(run.t);
+  const until = Date.parse(ended.t) + 1000;
+  const inside = (e: Entry): boolean => {
+    const at = e.timestamp === undefined ? Number.NaN : Date.parse(e.timestamp);
+    return at >= from && at < until;
+  };
   const all = transcripts.flatMap((t) => entries(t)).filter(inside);
   const usage = usageOf(all);
   if (Object.keys(usage).length === 0) return null;

@@ -3,8 +3,9 @@
 // from the log itself, and keeps the active-run marker (`.scratch/active-run`) in step, so the marker is an internal
 // detail of this module. begin-run opens the Run and the marker; begin-job and begin-attempt nest under it (an
 // Attempt's number and `retry_of` are derived, and the spawn description is printed); end-run records the
-// orchestrator's usage and clears the marker in one step. Real disk; the clock, ids, git and the transcript lookup
-// are injectable. Shapes live in run-log.pure.ts; `run.ts` is the argv wrapper.
+// orchestrator's usage and clears the marker in one step. A command refuses a step the log cannot support: a Job
+// pipeline.yml does not declare, a second Run while one is open, a Job or Run ended over open spans. Real disk; the
+// clock, ids, git and the transcript lookup are injectable. Shapes live in run-log.pure.ts; `run.ts` is the argv wrapper.
 import { copyFileSync, existsSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 import { parseArgs } from 'node:util';
@@ -12,7 +13,7 @@ import { episodeLogPath, readEpisodeLog, readMarker } from './episode-run-log.ts
 import { declaredJobs } from './episode-status.ts';
 import { endMarker, liveMarker, type MarkerHome, pointMarker } from './run-marker.ts';
 import { appendEvent } from './run-log-writer.ts';
-import { USAGE } from './run-usage.pure.ts';
+import { USAGE } from './run-help.pure.ts';
 import { hasEnded, isOpen, latest, openSpan, openUnderRun, scoreTarget } from './run-spans.pure.ts';
 import { STATUSES, VIAS, type LogEvent, type RunLogLine, type Span, type Status, type Via } from './run-log.pure.ts';
 
@@ -107,13 +108,13 @@ function beginRun(ctx: RunContext, opts: Opts): string {
 }
 
 /** Statuses a Run may end with while spans under it are still open: those spans then read crashed. */
-const ABANDONING: readonly string[] = ['error', 'crashed'];
+const ABANDONING: readonly Status[] = ['error', 'crashed'];
 
 function endRun(ctx: RunContext, p: Params<'status' | 'summary'>): string {
   const { run, lines, spans } = viewOf(ctx);
   if (hasEnded(lines, run)) refuse(`Run ${run.run_id} already ended`);
   const open = openUnderRun(spans).map((s) => `${s.type} ${s.name}`);
-  if (open.length > 0 && !ABANDONING.includes(p.status ?? 'ok')) refuse(`Run ${run.run_id} still has open spans: ${open.join(', ')}. End them, or run end-run error|crashed to leave them crashed`);
+  if (open.length > 0 && !(ABANDONING as readonly string[]).includes(p.status ?? 'ok')) refuse(`Run ${run.run_id} still has open spans: ${open.join(', ')}. End them, or run end-run error|crashed to leave them crashed`);
   write(ctx, endEvent('end-run', run.span_id, p));
   const warning = endMarker(ctx, run, readEpisodeLog(ctx.slug, ctx.root).lines);
   return warning === '' ? 'Run ended' : `Run ended (${warning})`;
