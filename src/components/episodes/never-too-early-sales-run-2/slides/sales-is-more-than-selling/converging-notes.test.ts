@@ -79,14 +79,16 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('rings only the outcome note, which fills all three rows on the right', () => {
     // ARRANGE
-    const expected = ['Increase trust'];
+    const expected = { labels: ['Increase trust'], cell: ['col-start-3', 'row-span-3', 'row-start-1'] };
     // ACT
     const $ = render();
     const primary = $('[data-board-note][data-primary]');
+    const actual = {
+      labels: primary.toArray().map((note) => $(note).children().first().text()),
+      cell: (primary.parent().attr('class') ?? '').split(' ').sort(),
+    };
     // ASSERT
-    expect(primary.toArray().map((note) => $(note).children().first().text())).toEqual(expected);
-    expect(primary.parent().hasClass('row-span-3')).toBe(true);
-    expect(primary.parent().hasClass('col-start-3')).toBe(true);
+    expect(actual).toEqual(expected);
   });
 
   it('points every arrow right, at the outcome, as a drawing hidden from assistive tech', () => {

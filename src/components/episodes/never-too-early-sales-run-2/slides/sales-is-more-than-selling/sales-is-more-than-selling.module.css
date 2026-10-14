@@ -8,10 +8,6 @@
   composes: stickOn from '../../../../slide-shared/motions/stick-on.module.css';
 }
 
-.outcome {
-  composes: stickOn from '../../../../slide-shared/motions/stick-on.module.css';
-}
-
 .arrow {
   composes: drawIn from '../../../../slide-shared/motions/draw-in.module.css';
 }

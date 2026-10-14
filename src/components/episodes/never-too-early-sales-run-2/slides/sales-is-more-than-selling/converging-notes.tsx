@@ -78,7 +78,7 @@ export function ConvergingNotes({ label, notes, outcome }: ConvergingNotesProps)
               primary
               label={outcome.label}
               style={order(notes.length * 2)}
-              className={cn(styles.outcome, 'h-full')}
+              className={cn(styles.note, 'h-full')}
             >
               {outcome.line}
             </StickyNote>
