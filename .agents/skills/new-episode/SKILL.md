@@ -76,7 +76,7 @@ A job with `isolation: worktree` works in a worktree of its own, so jobs running
 3. On a pass, merge the job branch into `episode/<slug>` and run `mh` and `vitest` again there: a file can pass alone and fail beside its siblings, through a duplicate research ID or a cross-file check. A failure after the merge counts as a failed attempt of that job.
 4. After the merge, or when the job is blocked, run `npm run wt:done -- episode/<slug>--<job id> --base episode/<slug>` from the Episode's worktree. It deletes a merged branch and keeps a blocked job's branch; the `Blocked:` note names that branch for Han.
 
-A subagent never writes `run-log.md` or `docs/episodes/runs.csv`: it returns the parts of its run-log entry and its metrics, and you append them on `episode/<slug>` after the merge. Parallel branches that each appended to those two files would conflict at every merge.
+A subagent never writes `run-log.md`: it returns the parts of its run-log entry and its metrics, and you append them on `episode/<slug>` after the merge. Parallel branches that each appended to it would conflict at every merge. Nobody writes `docs/episodes/runs.csv`: [`npm run episode:runs-csv`](#run-log-and-runs-csv) generates it.
 
 Every agent runs where its `session` says. `subagent`, the default, is spawned with the Agent tool, its `subagent_type` the agent's `agent` (general-purpose when omitted) and its `model` the agent's `model`, left out for `inherit`. `orchestrator` runs in this session, because a subagent has no Agent tool: a skill that spawns subagents needs it, and so does a job that talks to Han. Its `model` goes to the subagents the skill spawns.
 
@@ -101,9 +101,9 @@ Every agent runs where its `session` says. `subagent`, the default, is spawned w
 4. **Retry.** On any failed line, run the implementor again with every failed line quoted verbatim, then the checks and a fresh reviewer again. A job gets `1 + retries` attempts. A job whose output lives outside git (an issue, a PR) is retried by updating what its earlier attempt made, never by creating a second one; its reference says how it finds that output.
 5. **Retries run out.** Mark the todo and every todo downstream of it blocked. The run-log entry's Notes start `Blocked:` and quote the last failed lines; they go on the PR checklist.
 6. **Pass.** Run `node .agents/skills/new-episode/scripts/approve.ts <output> --by process:markdown-harness` on each staging output, which appends the machine entry to its `verified` list with the clock's UTC time and never overwrites an entry; never type the entry (research files carry no gate), and commit through the `commit` skill with `Source: docs/episodes/<slug>/brief.md` and `Agent: <job id>` (see [agent marks](#agent-marks)), in the job's worktree when it has one, then merge it as above.
-7. **Log.** On `episode/<slug>`, append the [run-log entry](#run-log-and-runs-csv), listing each ticket the job edited (see [agent marks](#agent-marks)), then the runs CSV rows. A `needs human` reviewer line goes into Notes as `Needs human: <what>`.
+7. **Log.** On `episode/<slug>`, append the [run-log entry](#run-log-and-runs-csv), listing each ticket the job edited (see [agent marks](#agent-marks)). A `needs human` reviewer line goes into Notes as `Needs human: <what>`.
 
-_Done when_ the job passed or is blocked, its outputs are committed, and its run-log entry and CSV rows are appended.
+_Done when_ the job passed or is blocked, its outputs are committed, and its run-log entry is appended.
 
 ## Agent marks
 
@@ -118,23 +118,28 @@ Every agent write is marked, so gate diffs and ticket edit history teach Han's s
 
 Every job run appends one entry to `docs/episodes/<slug>/run-log.md`, never editing an earlier one: `## <job id> · <ISO 8601 timestamp>`, then the h3s `Inputs`, `Output`, `Checks`, `Metrics` and `Notes`. Before your first entry, run `npx mh query docs/episodes/<slug>/run-log.md` and follow every intent it prints, as an implementor does; the `run-log-body` rule holds each part's intent, and `assets/sample-episode/run-log.md` shows two entries. Write it for an agent reading the run cold, by `writing-for-agents`.
 
-Every agent run, each attempt counted, appends one row to `docs/episodes/runs.csv`, which outlives Promotion:
+`docs/episodes/runs.csv` is a report generated from the run event logs, never written by hand: no subagent or orchestrator appends a row. After a run, and again after Promotion archives the log, run `npm run episode:runs-csv`. It rebuilds the file from every live log (`docs/episodes/*/events.jsonl`) and archived log (`.logs/new-episode/*/*.jsonl`), one row per agent span, so the CSV outlives Promotion and cannot disagree with the logs.
 
 ```csv
 run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at
-2026-10-12T09:00:00Z,context-window-budget,research,implementor,1,fail,"Every Finding cites a Source.",240,18000,2026-10-12T10:15:00Z
 ```
 
-- `run` is the run id from step 1; `episode` the slug; `agent` the agent's `type`.
-- `result` is `pass` or `fail`; `failed_rubric` the first failed line, quoted, empty on a pass.
-- `duration_s` and `tokens` come from the Agent tool's result. For an agent run in this session, write the wall-clock seconds and leave `tokens` empty.
-- `at` is when the agent finished.
+- `run` is the Run's start time; `episode` the slug; `agent` the span's role.
+- `result` is `pass` for an `ok` span, `fail` when a failed rubric Score sits on it (or on its Attempt, for an implementor), else the span's status (`error`, `refused`, `crashed`, `reused`).
+- `failed_rubric` holds the failed rubric lines, joined with `; `; `duration_s` is the span's real duration and `tokens` its input plus output tokens; both are empty when the log holds none.
 
-Each row matches one item under that entry's `Metrics`.
+### Query runs
+
+`npm run episode:query -- "<sql>" [log.jsonl|glob ...]` runs one SELECT or WITH over two in-memory tables across one or many logs (default: the live and archived logs above), printing one JSON object per row. Select only the columns you need: `gen_ai_input_messages` and score `body` hold whole prompts and reports.
+
+- `spans`: `episode`, `trace_id` (one per Run), `span_id`, `parent_span_id`, `type` (`run`, `job`, `attempt`, `agent`, `gate`), `name`, `status` (`ok`, `error`, `refused`, `crashed`, `reused`, `running`), `start_t`, `end_t`, `duration_ms`, `summary`, `seq`, `job`, `attempt`, `role`, `ticket`, `retry_of`, `harness`, `source`, `description`, `transcript_path`, `run_id` and `template_sha` and `branch` (on the Run's row), and the `gen_ai.*` attributes with dots written as underscores: `gen_ai_operation_name`, `gen_ai_agent_name`, `gen_ai_request_model`, `gen_ai_response_model`, `gen_ai_input_messages`, `gen_ai_usage_input_tokens`, `gen_ai_usage_output_tokens`, `gen_ai_usage_cache_read_input_tokens`.
+- `scores`: `episode`, `trace_id`, `span_id`, `t`, `seq`, `name` (`rubric`, `check`, `gate`), `value`, `source`, `rubric`, `body`, `via`, `comment`.
+
+Tag any row with its Run by joining the Run's span on `trace_id`: `SELECT r.run_id, count(*) AS retries FROM spans a JOIN spans r ON r.trace_id = a.trace_id AND r.type = 'run' WHERE a.type = 'attempt' AND a.attempt > 1 GROUP BY r.run_id`.
 
 ## Resuming a run
 
-In a new session, or after a compaction, never trust memory of the run: run `npm run episode:status -- <slug>` again and rebuild the todo list from its output. A worktree `episode/<slug>--<job id>` whose job has no run-log entry is a crashed attempt: remove it with `wt:done` and its `--base`, delete its branch, and run the job again as its next attempt, numbered after the attempts its runs CSV rows show.
+In a new session, or after a compaction, never trust memory of the run: run `npm run episode:status -- <slug>` again and rebuild the todo list from its output. A worktree `episode/<slug>--<job id>` whose job has no run-log entry is a crashed attempt: remove it with `wt:done` and its `--base`, delete its branch, and run the job again as its next attempt, numbered after the attempts `npm run episode:query` shows for it in the run log.
 
 ## Gate commits
 
