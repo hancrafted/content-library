@@ -1,7 +1,9 @@
 import { HeroTitle, SlideBackdrop, SlideCaption, SlideFrame } from '@/components/slide-master/slide-master';
 import { TITLE_ANCHOR } from '@/lib/episode.pure';
+import { cn } from '@/lib/utils';
 import { SlideWrapper } from './slide-wrapper';
 import { TalkLauncher, type TalkPlayerLabels } from './talk-player.client';
+import styles from './title-slide.module.css';
 
 /** The elements of the Title slide a Speaker note can target. */
 export type TitleTarget = 'title' | 'caption';
@@ -34,8 +36,8 @@ export function TitleSlide({
   return (
     <SlideWrapper id={TITLE_ANCHOR} data-slot="title-slide">
       <SlideBackdrop mobile>
-        <div className="hero-glow absolute inset-0 text-primary" />
-        <div className="hero-glow hero-glow--accent absolute inset-0 text-accent" />
+        <div className={cn(styles.glow, 'hero-glow absolute inset-0 text-primary')} />
+        <div className={cn(styles.glow, 'hero-glow hero-glow--accent absolute inset-0 text-accent')} />
       </SlideBackdrop>
       <SlideFrame className="justify-center">
         <HeroTitle {...targetOf('title')}>{title}</HeroTitle>
