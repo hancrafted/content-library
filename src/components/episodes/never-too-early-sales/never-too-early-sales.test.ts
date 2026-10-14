@@ -304,13 +304,23 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('shows German readers the same board as an explicit provisional English fallback', () => {
+  it('shows German readers the approved English board as an explicit provisional fallback', () => {
     // ARRANGE
-    const english = wordsOf(sceneOf(WATCH, 'en'), 'article');
+    const expected = [
+      'Watch your cashflow',
+      "In this fictional example, cash reaches $0 in February, so March's $50,000 payment goes unfunded before April's $1,000,000 receipt arrives.",
+      'Fictional example · cash received, not booked revenue',
+      'January Opening cash $100,000 Cash costs $50,000 Receipts $0 Closing cash $50,000',
+      'February Zero-cash month Opening cash $50,000 Cash costs $50,000 Receipts $0 Closing cash $0',
+      'March Cash costs $50,000 Cannot fund $50,000 payment',
+      'April Cash costs $50,000 Customer receipt $1,000,000 Too late without bridge funding',
+      'Closing cash = opening cash + receipts − payments',
+      "Bankrupt Scenario shorthand: unable to pay March's costs If funded: March −$50,000; April $900,000",
+    ].join(' ');
     // ACT
     const german = wordsOf(sceneOf(WATCH, 'de'), 'article');
     // ASSERT
-    expect(german).toBe(english);
+    expect(german).toBe(expected);
   });
   it('declares no recording, Title Speaker notes or Title Voice script', () => {
     // ARRANGE
