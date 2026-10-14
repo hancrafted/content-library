@@ -1,6 +1,7 @@
 import { episode } from '@/components/slide-master/slide';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
+import { cashflowStartWhen } from './slides/cashflow-start-when/slide';
 import { marketingFeedsThePipeline } from './slides/marketing-feeds-the-pipeline/slide';
 import { pipelineByTheNumbers } from './slides/pipeline-by-the-numbers/slide';
 import { pipelineToolsInPractice } from './slides/pipeline-tools-in-practice/slide';
@@ -28,6 +29,7 @@ export const neverTooEarlySales = episode({
       pipelineToolsInPractice,
       marketingFeedsThePipeline,
       whyRampUpTakesTime,
+      cashflowStartWhen,
     ],
   ],
 });

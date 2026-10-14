@@ -23,6 +23,8 @@ const BY_NUMBERS = `${SECTION}--pipeline-by-the-numbers`;
 const TOOLS = `${SECTION}--pipeline-tools-in-practice`;
 const MARKETING = `${SECTION}--marketing-feeds-the-pipeline`;
 const RAMP_UP = `${SECTION}--why-ramp-up-takes-time`;
+const START_WHEN = `${SECTION}--cashflow-start-when`;
+const SLIDES = [SECTION, WHAT_IS, BY_NUMBERS, TOOLS, MARKETING, RAMP_UP, START_WHEN];
 
 /** Every Slide of the Episode, localized and placed as its page renders it. */
 function localizedSlides(locale: Locale): LocalizedSlide[] {
@@ -714,9 +716,168 @@ describe('success cases', () => {
     // ASSERT
     expect(seen).toEqual(expected);
   });
+  it('places the "Start when?" cashflow callback in the Section with its Dossier h3, Speaker notes, sources and Voice script, verbatim', () => {
+    // ARRANGE
+    const expected = {
+      id: 'why-pipeline-takes-time--cashflow-start-when',
+      level: 'h3',
+      title: 'Watch your cashflow, "Start when?"',
+      notes: [
+        {
+          slug: 'an-unpaid-earned-amount-is-not-spendable-cash',
+          header: 'An unpaid earned amount is not spendable cash',
+          description:
+            'IFRS 15 distinguishes contract assets and receivables after transfer from cash settlement. A receivable can record a right to payment while the account still lacks the funds needed for an outgoing payment [1].',
+          target: 'board',
+          sources: [
+            {
+              slug: 'eu-regulation-2016-1905',
+              url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R1905',
+              title:
+                'European Commission, Regulation (EU) 2016/1905 (endorsing IFRS 15 Revenue from Contracts with Customers)',
+            },
+          ],
+        },
+        {
+          slug: 'payment-risk-is-distinct-from-deal-risk',
+          header: 'Payment risk is distinct from deal risk',
+          description:
+            'The EU directive documents that invoices may be paid after agreed terms, with consequences for liquidity. A cash scenario should therefore allow receipt-date uncertainty even after the sales opportunity has become an agreement [1].',
+          target: 'april-receipt',
+          sources: [
+            {
+              slug: 'eu-directive-2011-7',
+              url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32011L0007',
+              title:
+                'European Parliament and Council, Directive 2011/7/EU on combating late payment in commercial transactions',
+            },
+          ],
+        },
+      ],
+      script: [
+        {
+          slug: 'return-to-the-unfunded-month',
+          title: 'Return to the unfunded month',
+          script:
+            'Return once more to the original company. One hundred thousand dollars at the start. Fifty thousand paid each month. January ends with fifty thousand. February ends with zero. March cannot be funded. The million is still in April. We have not fixed that story by discussing sales. We have identified the work the founder postponed.',
+        },
+        {
+          slug: 'plan-backwards-act-forwards',
+          title: 'Plan backwards, act forwards',
+          script:
+            'Plan backwards from the cash you need. Ask what delivery and payment arrangement would support it. Ask what decision must come before that work. Ask which opportunity conversations would support the decision. Then act forwards: research a plausible customer, make contact and pursue the agreed next step. Start that chain before the cash becomes urgent.',
+        },
+        {
+          slug: 'do-not-mix-the-two-illustrations',
+          title: 'Do not mix the two illustrations',
+          script:
+            'Our January-to-April cash story and our nine-and-a-half-month sales path were separate examples. Do not squeeze the long path into those four months. Starting in January is not a proven rescue for the March gap. The lesson is the direction of planning. Find the deadline, then examine how much unfinished work sits before it.',
+        },
+        {
+          slug: 'take-the-cash-action-now',
+          title: 'Take the cash action now',
+          script:
+            'Your first action is to build the monthly cashflow view and find your zero-cash month. Use your own opening balance, receipts and payments. Write down the month the plan runs out. Try the plan without your largest unconfirmed deal too. That gives you a concrete cash deadline to work with, rather than a general feeling that sales can wait.',
+        },
+        {
+          slug: 'take-the-customer-actions-now',
+          title: 'Take the customer actions now',
+          script:
+            "Your next actions are to research and maintain a prospect list, then make first contact. Choose a plausible buyer and a suitable cold, inbound or network route. Ask for one useful next step. If a conversation opens, do the opportunity work. A list alone will not prepare the proposal or answer the buyer's questions.",
+        },
+        {
+          slug: 'keep-evidence-as-you-go',
+          title: 'Keep evidence as you go',
+          script:
+            'Finally, track deals in a simple pipeline. Keep dates, next actions and outcomes. Measure conversion with a clear starting count. Measure the sales cycle with clear endpoints. Use what you learn to adjust your plan. You do not need all the answers before the first contact. You need to start finding them now, before you depend on the money.',
+        },
+      ],
+    };
+    // ACT
+    const record = recordOf('why-pipeline-takes-time--cashflow-start-when');
+    // ASSERT
+    expect(record).toEqual(expected);
+  });
+  it('reads the "Start when?" callback as the arrow and quarters above the unchanged board, then a reminder and four actions', () => {
+    // ARRANGE
+    const expected = {
+      caption: 'Plan backwards from the cash you need, then act forwards.',
+      arrow:
+        'Start when? Q1 is not a proven latest safe start Start now · before you need the cash First contact Opportunities Closing Planned April receipt',
+      legend: 'Q1: January–March; Q2: April',
+      months: [
+        { tone: 'neutral', text: 'January Opening cash $100,000 Cash costs $50,000 Receipts $0 Closing cash $50,000' },
+        {
+          tone: 'warning',
+          text: 'February Zero-cash month Opening cash $50,000 Cash costs $50,000 Receipts $0 Closing cash $0',
+        },
+        { tone: 'neutral', text: 'March Cash costs $50,000 Cannot fund $50,000 payment' },
+        {
+          tone: 'neutral',
+          text: 'April Cash costs $50,000 Customer receipt $1,000,000 Too late without bridge funding',
+        },
+      ],
+      rule: 'Closing cash = opening cash + receipts − payments',
+      label: 'Fictional example · cash received, not booked revenue',
+      reminder: 'February receipt would change the outcome',
+      actions: [
+        '1 Find your zero-cash month',
+        '2 Research and maintain a prospect list',
+        '3 Make first contact',
+        '4 Track stages, conversion and cycle',
+      ],
+    };
+    const $ = sceneOf(START_WHEN);
+    // ACT
+    const seen = {
+      caption: wordsOf($, '[data-target="caption"]'),
+      arrow: wordsOf($, 'figure [data-arrow]'),
+      legend: wordsOf($, 'figure [data-target="quarters"] p'),
+      months: $('figure ol > li[data-tone]')
+        .toArray()
+        .map((month) => ({ tone: $(month).attr('data-tone'), text: wordsOf($, month) })),
+      rule: wordsOf($, 'figure > p'),
+      label: wordsOf($, 'figcaption'),
+      reminder: wordsOf($, '[data-target="reminder"]'),
+      actions: $('[data-target="actions"] > li')
+        .toArray()
+        .map((action) => wordsOf($, action)),
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it('brackets January to March as Q1 and April as Q2 by column count, hidden from assistive technology', () => {
+    // ARRANGE
+    const expected = [
+      { label: 'Q1', style: 'grid-column:span 3' },
+      { label: 'Q2', style: 'grid-column:span 1' },
+    ];
+    const expectedHidden = 'true';
+    const $ = sceneOf(START_WHEN);
+    // ACT
+    const bracket = $('figure [data-target="quarters"] [data-quarter]')
+      .toArray()
+      .map((quarter) => ({ label: wordsOf($, quarter), style: $(quarter).attr('style') }));
+    const hidden = $('figure [data-target="quarters"] [data-quarter]').parent().attr('aria-hidden');
+    // ASSERT
+    expect(bracket).toEqual(expected);
+    expect(hidden).toBe(expectedHidden);
+  });
 });
 
 describe('failure cases', () => {
+  it('resolves every Speaker note of the Section to exactly one element of its own Slide', () => {
+    // ARRANGE
+    const expected = SLIDES.flatMap((id) => slideAt(id).notes.map(({ slug }) => `${id} ${slug}: 1`));
+    // ACT
+    const resolved = SLIDES.flatMap((id) => {
+      const $ = sceneOf(id);
+      return slideAt(id).notes.map(({ slug, target }) => `${id} ${slug}: ${$(`[data-target="${target}"]`).length}`);
+    });
+    // ASSERT
+    expect(resolved).toEqual(expected);
+  });
   it('renders the section slide with its h2 alone, no caption', () => {
     // ARRANGE
     const expected = { heading: 'Why building an effective sales pipeline takes time', captions: 0 };
@@ -819,15 +980,43 @@ describe('failure cases', () => {
     expect(targets).toEqual(expectedTargets);
     expect(band).toEqual(expectedBand);
   });
+  it('gives the "Start when?" callback one element per target, and its board no stamp', () => {
+    // ARRANGE
+    const expectedTargets = { board: 1, 'april-receipt': 1, 'start-now': 1, quarters: 1, actions: 1, reminder: 1 };
+    const expectedBoard = { stamps: 0, figures: 1 };
+    const $ = sceneOf(START_WHEN);
+    // ACT
+    const targets = Object.fromEntries(
+      Object.keys(expectedTargets).map((name) => [name, $(`[data-target="${name}"]`).length]),
+    );
+    const board = {
+      stamps: $('[data-target="board"] p.uppercase').length,
+      figures: $('[data-target="board"] figure').length,
+    };
+    // ASSERT
+    expect(targets).toEqual(expectedTargets);
+    expect(board).toEqual(expectedBoard);
+  });
 });
 
 describe('edge cases', () => {
-  it('shows German readers the section slide as an explicit provisional English fallback', () => {
+  it('shows German readers every Slide of the Section as an explicit provisional English fallback', () => {
     // ARRANGE
-    const english = wordsOf(sceneOf(SECTION, 'en'), 'article');
+    const english = SLIDES.map((id) => wordsOf(sceneOf(id, 'en'), 'article'));
     // ACT
-    const german = wordsOf(sceneOf(SECTION, 'de'), 'article');
+    const german = SLIDES.map((id) => wordsOf(sceneOf(id, 'de'), 'article'));
     // ASSERT
-    expect(german).toBe(english);
+    expect(german).toEqual(english);
+  });
+  it('keeps the "Start when?" arrow in forward reading order while it points backwards', () => {
+    // ARRANGE
+    const expected = ['start-now', 'first-contact', 'opportunities', 'closing', 'april-receipt'];
+    const $ = sceneOf(START_WHEN);
+    // ACT
+    const order = $('[data-arrow] ol > li')
+      .toArray()
+      .map((step) => $(step).attr('data-target'));
+    // ASSERT
+    expect(order).toEqual(expected);
   });
 });

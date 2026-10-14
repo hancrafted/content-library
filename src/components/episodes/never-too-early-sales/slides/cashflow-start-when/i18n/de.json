@@ -1,0 +1,105 @@
+{
+  "title": "Watch your cashflow, \"Start when?\"",
+  "caption": "Plan backwards from the cash you need, then act forwards.",
+  "arrow": {
+    "question": "Start when?",
+    "caveat": "Q1 is not a proven latest safe start",
+    "start": "Start now · before you need the cash",
+    "steps": {
+      "first-contact": "First contact",
+      "opportunities": "Opportunities",
+      "closing": "Closing",
+      "april-receipt": "Planned April receipt"
+    }
+  },
+  "quarters": {
+    "legend": "Q1: January–March; Q2: April",
+    "q1": "Q1",
+    "q2": "Q2"
+  },
+  "board": {
+    "label": "Fictional example · cash received, not booked revenue",
+    "months": {
+      "january": "January",
+      "february": "February",
+      "march": "March",
+      "april": "April"
+    },
+    "opening": "Opening cash",
+    "costs": "Cash costs",
+    "receipts": "Receipts",
+    "closing": "Closing cash",
+    "customerReceipt": "Customer receipt",
+    "amounts": {
+      "hundredThousand": "$100,000",
+      "fiftyThousand": "$50,000",
+      "zero": "$0",
+      "million": "$1,000,000"
+    },
+    "zeroCashMonth": "Zero-cash month",
+    "cannotFund": "Cannot fund $50,000 payment",
+    "tooLate": "Too late without bridge funding",
+    "rule": "Closing cash = opening cash + receipts − payments"
+  },
+  "reminder": "February receipt would change the outcome",
+  "actions": {
+    "zero-cash-month": "Find your zero-cash month",
+    "prospect-list": "Research and maintain a prospect list",
+    "first-contact": "Make first contact",
+    "track-pipeline": "Track stages, conversion and cycle"
+  },
+  "notes": {
+    "an-unpaid-earned-amount-is-not-spendable-cash": {
+      "header": "An unpaid earned amount is not spendable cash",
+      "description": "IFRS 15 distinguishes contract assets and receivables after transfer from cash settlement. A receivable can record a right to payment while the account still lacks the funds needed for an outgoing payment [1].",
+      "sources": {
+        "eu-regulation-2016-1905": {
+          "title": "European Commission, Regulation (EU) 2016/1905 (endorsing IFRS 15 Revenue from Contracts with Customers)"
+        }
+      }
+    },
+    "payment-risk-is-distinct-from-deal-risk": {
+      "header": "Payment risk is distinct from deal risk",
+      "description": "The EU directive documents that invoices may be paid after agreed terms, with consequences for liquidity. A cash scenario should therefore allow receipt-date uncertainty even after the sales opportunity has become an agreement [1].",
+      "sources": {
+        "eu-directive-2011-7": {
+          "title": "European Parliament and Council, Directive 2011/7/EU on combating late payment in commercial transactions"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "return-to-the-unfunded-month": {
+        "title": "Return to the unfunded month",
+        "keywords": "",
+        "script": "Return once more to the original company. One hundred thousand dollars at the start. Fifty thousand paid each month. January ends with fifty thousand. February ends with zero. March cannot be funded. The million is still in April. We have not fixed that story by discussing sales. We have identified the work the founder postponed."
+      },
+      "plan-backwards-act-forwards": {
+        "title": "Plan backwards, act forwards",
+        "keywords": "",
+        "script": "Plan backwards from the cash you need. Ask what delivery and payment arrangement would support it. Ask what decision must come before that work. Ask which opportunity conversations would support the decision. Then act forwards: research a plausible customer, make contact and pursue the agreed next step. Start that chain before the cash becomes urgent."
+      },
+      "do-not-mix-the-two-illustrations": {
+        "title": "Do not mix the two illustrations",
+        "keywords": "",
+        "script": "Our January-to-April cash story and our nine-and-a-half-month sales path were separate examples. Do not squeeze the long path into those four months. Starting in January is not a proven rescue for the March gap. The lesson is the direction of planning. Find the deadline, then examine how much unfinished work sits before it."
+      },
+      "take-the-cash-action-now": {
+        "title": "Take the cash action now",
+        "keywords": "",
+        "script": "Your first action is to build the monthly cashflow view and find your zero-cash month. Use your own opening balance, receipts and payments. Write down the month the plan runs out. Try the plan without your largest unconfirmed deal too. That gives you a concrete cash deadline to work with, rather than a general feeling that sales can wait."
+      },
+      "take-the-customer-actions-now": {
+        "title": "Take the customer actions now",
+        "keywords": "",
+        "script": "Your next actions are to research and maintain a prospect list, then make first contact. Choose a plausible buyer and a suitable cold, inbound or network route. Ask for one useful next step. If a conversation opens, do the opportunity work. A list alone will not prepare the proposal or answer the buyer's questions."
+      },
+      "keep-evidence-as-you-go": {
+        "title": "Keep evidence as you go",
+        "keywords": "",
+        "script": "Finally, track deals in a simple pipeline. Keep dates, next actions and outcomes. Measure conversion with a clear starting count. Measure the sales cycle with clear endpoints. Use what you learn to adjust your plan. You do not need all the answers before the first contact. You need to start finding them now, before you depend on the money."
+      }
+    }
+  }
+}
