@@ -146,8 +146,6 @@ export interface Folded {
 }
 
 export interface FoldOptions {
-  /** What a span with no end line is when `live` is not given. `crashed` (the default), or `running`. */
-  openAs?: 'crashed' | 'running';
-  /** The trace ids of the Runs that are live now (see `liveTraces`): an open span is `running` only in one of them, else `crashed`. Decided per trace, so one Run ending never crashes another in the same file. */
+  /** The trace ids of the Runs that are live now (see the run-log module): an open span is `running` only in one of them, else `crashed`. Decided per trace, so one Run ending never crashes another in the same file. */
   live?: ReadonlySet<string>;
 }

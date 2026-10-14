@@ -30,7 +30,7 @@ const start = (id: string, type: string, when: [number, Record<string, unknown>?
 const end = (id: string, status: string, minute: number) => ({ kind: 'end', span_id: id, status, t: at(minute) });
 const job = (id: string, from: number, status?: string) =>
   status === undefined ? [start(`job-${id}`, 'job', [from, { job: id }])] : [start(`job-${id}`, 'job', [from, { job: id }]), end(`job-${id}`, status, from + 5)];
-const live = (lines: RunLogLine[]): Folded => fold(lines, { openAs: 'running' });
+const live = (lines: RunLogLine[]): Folded => fold(lines, { live: new Set([TRACE]) });
 const withReaders = (pipeline: string, folded: Folded, readers: GateReaders) => runStatus(pipeline, folded, { ...readers, now: NOW }).jobs.map(({ state }) => state);
 const states = (folded: Folded, pipeline = PIPELINE) => runStatus(pipeline, folded, { now: NOW }).jobs.map(({ state }) => state);
 

@@ -6,5 +6,5 @@
 
 export * from './run-log.schema.pure.ts';
 export { record } from './run-log-record.pure.ts';
-export { fold, parseLog } from './run-log-fold.pure.ts';
+export { currentRun, fold, parseLog } from './run-log-fold.pure.ts';
 export { formatDuration, renderTree } from './run-log-tree.pure.ts';

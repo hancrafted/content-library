@@ -1,6 +1,6 @@
 // The active-run marker: `.scratch/active-run`, JSON written at run start and removed at run end. It says which Run
-// is live and which session orchestrates it. Pure: `run-state.ts` writes it, `run-files.ts` reads it from disk,
-// and the Claude Code adapter and every reader of open spans parse it here.
+// is live and which session orchestrates it. Pure: `run-state.ts` writes it, and the run-log module (episode-run-log.ts) reads it
+// from disk and derives liveness from it.
 
 /** Where the marker sits, relative to the worktree root. */
 export const MARKER_PATH = '.scratch/active-run';

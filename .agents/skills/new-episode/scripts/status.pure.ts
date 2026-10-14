@@ -134,7 +134,7 @@ function labelled(span: Span): { name: string; job?: string; attempt?: number; r
 /**
  * A run's status: each job's state in pipeline order, the agents running now with their elapsed time, the
  * crashed and refused spans, and the gates waiting on Han with their wait. `folded` is the log folded with
- * `fold` (live logs with `openAs: 'running'`); `now` (beside the gate readers) is the clock, an ISO time, so nothing here reads it.
+ * `fold` (live Runs named in `live`); `now` (beside the gate readers) is the clock, an ISO time, so nothing here reads it.
  * A job with no finished span is blocked when a job it needs is blocked, ready when every job it needs is
  * done and every job it wants is done or blocked, and waiting otherwise.
  * A `gate: human` job that is done reads `gate` until every output

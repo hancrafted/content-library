@@ -4,8 +4,7 @@
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import { readPipeline } from '../../../../src/lib/episode-pipeline-jobs.pure.ts';
-import { liveTracesIn, readOrNull as read } from './run-files.ts';
-import { fold, parseLog } from './run-log.pure.ts';
+import { readEpisodeLog, readOrNull as read } from './episode-run-log.ts';
 import { gateReaders, renderStatus, runStatus } from './status.pure.ts';
 
 const slug = process.argv[2];
@@ -24,9 +23,7 @@ if (readPipeline(pipeline) === null) {
   console.error(`✖ ${pipelineFile} has no job list; run npm run verify for the pipeline check's findings.`);
   process.exit(1);
 }
-const { lines, errors } = parseLog(read(path.join(folder, 'events.jsonl')) ?? '');
+const { folded, errors } = readEpisodeLog(slug);
 for (const error of errors) console.error(`! ${error}`);
-// A span with no end is running only while its Run is live (the marker names its trace), else crashed.
-const folded = fold(lines, { live: liveTracesIn() });
 const gh = (args: readonly string[]): string => execFileSync('gh', args, { encoding: 'utf8' });
 console.log(renderStatus(runStatus(pipeline, folded, { ...gateReaders(slug, { read, gh }), now: new Date().toISOString() })));

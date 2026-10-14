@@ -133,7 +133,7 @@ describe('fold', () => {
     const open = LOG.slice(0, 4);
     // ACT
     const crashed = fold(open).spans.map((span) => span.status);
-    const live = fold(open, { openAs: 'running' }).spans.map((span) => span.status);
+    const live = fold(open, { live: new Set([T]) }).spans.map((span) => span.status);
     // ASSERT
     expect(crashed).toEqual(['crashed', 'crashed', 'crashed', 'crashed']);
     expect(live).toEqual(['running', 'running', 'running', 'running']);

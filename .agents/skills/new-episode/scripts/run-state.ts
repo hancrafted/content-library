@@ -7,9 +7,9 @@ import { copyFileSync, globSync, mkdirSync, readFileSync, rmSync, writeFileSync 
 import os from 'node:os';
 import path from 'node:path';
 import { runUsageEvent } from './claude-adapter.pure.ts';
-import { MARKER_PATH, parseMarker } from './marker.pure.ts';
-import { readOrNull } from './run-files.ts';
-import { parseLog, type RunLogLine } from './run-log.pure.ts';
+import { MARKER_PATH } from './marker.pure.ts';
+import { readEpisodeLog, readLog, readMarker } from './episode-run-log.ts';
+import type { RunLogLine } from './run-log.pure.ts';
 import { archiveTarget, markerText } from './run-state.pure.ts';
 
 const [command, slug, jobSpanId] = process.argv.slice(2);
@@ -38,9 +38,9 @@ const transcriptOf = (sessionId: string): string | null => {
 
 /** Adds the orchestrator's usage to the ended Run through the core writer; silent when there is nothing to add. */
 function recordRunUsage(): void {
-  const marker = parseMarker(readOrNull(MARKER_PATH));
+  const marker = readMarker();
   if (marker === null) return;
-  const lines = parseLog(readOrNull(marker.log) ?? '').lines;
+  const lines = readLog(marker.log).lines;
   const event = runUsageEvent(lines, marker, transcriptOf(marker.session_id));
   if (event === null) return;
   const writer = path.join(import.meta.dirname, 'log.ts');
@@ -58,9 +58,8 @@ function clear(): void {
 function main(): void {
   if (command === 'clear') return clear();
   if (!slug || (command !== 'set' && command !== 'archive')) throw new Error('usage: npm run episode:run-state -- set <slug> [job-span-id] | clear | archive <slug>');
-  const log = path.join('docs/episodes', slug, 'events.jsonl');
-  const lines = parseLog(readFileSync(log, 'utf8')).lines;
-  (command === 'archive' ? archive : set)(log, lines);
+  const { file, lines } = readEpisodeLog(slug);
+  (command === 'archive' ? archive : set)(file, lines);
 }
 
 try {

@@ -7,9 +7,9 @@ import { execFileSync } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
 import { appendFileSync, existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
-import { readOrNull } from './run-files.ts';
+import { episodeLogPath, readLog } from './episode-run-log.ts';
 import { withLock } from './run-log-lock.ts';
-import { parseLog, record, type LogEvent, type RunLogLine, type Stamp } from './run-log.pure.ts';
+import { record, type LogEvent, type RunLogLine, type Stamp } from './run-log.pure.ts';
 
 const git = (...args: string[]): string => execFileSync('git', args, { encoding: 'utf8' }).trim();
 
@@ -23,11 +23,11 @@ function withRunFacts(fields: LogEvent, now: string): LogEvent {
   };
 }
 
-/** The trace id of the newest Run in the log, which every later line of that Run carries. */
-function currentTrace(lines: readonly RunLogLine[], file: string): string {
-  const run = [...lines].reverse().find((l) => l.kind === 'start-run');
-  if (run === undefined) throw new Error(`${file} has no start-run line; log kind "start-run" first`);
-  return run.trace_id;
+
+/** The trace id of the current Run, which every later line of that Run carries. */
+function traceOf(current: RunLogLine | null, file: string): string {
+  if (current === null) throw new Error(`${file} has no start-run line; log kind "start-run" first`);
+  return current.trace_id;
 }
 
 /** The clock, the next sequence number and a fresh span id for the line about to be written. */
@@ -35,20 +35,15 @@ function stampFor(lines: readonly RunLogLine[], traceId: string, now: string): S
   return { t: now, seq: lines.reduce((max, l) => Math.max(max, l.seq), 0) + 1, traceId, spanId: randomBytes(8).toString('hex') };
 }
 
-function readLines(file: string): RunLogLine[] {
-  const { lines, errors } = parseLog(readOrNull(file) ?? '');
-  if (errors.length > 0) throw new Error(`${file}: ${errors.join('; ')}`);
-  return lines;
-}
-
 /** Any JSON object; `record` validates its fields, so this only narrows enough to read `kind`. */
 const isEvent = (event: unknown): event is LogEvent => typeof event === 'object' && event !== null && !Array.isArray(event);
 
 function append(file: string, event: unknown): string {
-  const lines = readLines(file);
+  const { lines, errors, current } = readLog(file);
+  if (errors.length > 0) throw new Error(errors.join('; '));
   const now = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
   const starting = isEvent(event) && event.kind === 'start-run';
-  const traceId = starting ? randomBytes(16).toString('hex') : currentTrace(lines, file);
+  const traceId = starting ? randomBytes(16).toString('hex') : traceOf(current, file);
   const result = record(starting ? withRunFacts(event, now) : event, stampFor(lines, traceId, now));
   if (!result.ok) throw new Error(result.errors.map((e) => `  ${e}`).join('\n'));
   const text = JSON.stringify(result.line);
@@ -59,10 +54,10 @@ function append(file: string, event: unknown): string {
 function main(): void {
   const slug = process.argv[2];
   if (!slug) throw new Error("usage: npm run episode:log -- <slug> '<event json>'   (or the JSON on stdin)");
-  const folder = path.join('docs/episodes', slug);
+  const file = episodeLogPath(slug);
+  const folder = path.dirname(file);
   if (!existsSync(folder)) throw new Error(`${folder} does not exist; run this from the Episode's worktree root.`);
   const event: unknown = JSON.parse(process.argv[3] ?? readFileSync(0, 'utf8'));
-  const file = path.join(folder, 'events.jsonl');
   console.log(withLock(`${file}.lock`, () => append(file, event)));
 }
 

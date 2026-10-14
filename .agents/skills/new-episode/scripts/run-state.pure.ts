@@ -1,13 +1,13 @@
 // The Run's two bookkeeping artifacts, built from the log's lines: the `.scratch/active-run` marker the Claude Code
 // adapter reads (see `Marker` in marker.pure.ts) and the archive path a log is copied to at Promotion.
 // Pure: `run-state.ts` reads the disk and the session id and calls these.
-import type { RunLogLine } from './run-log.pure.ts';
+import { currentRun, type RunLogLine } from './run-log.pure.ts';
 
 const newest = (lines: readonly RunLogLine[], pick: (l: RunLogLine) => boolean): RunLogLine | undefined => [...lines].reverse().find(pick);
 
 function runOf(lines: readonly RunLogLine[]): RunLogLine & { run_id: string } {
-  const run = newest(lines, (l) => l.kind === 'start-run');
-  if (run?.run_id === undefined) throw new Error('the log has no start-run line; log kind "start-run" first');
+  const run = currentRun(lines);
+  if (run === null || run.run_id === undefined) throw new Error('the log has no start-run line; log kind "start-run" first');
   return run as RunLogLine & { run_id: string };
 }
 

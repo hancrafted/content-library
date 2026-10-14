@@ -57,9 +57,14 @@ function place(entry: RunLogLine, acc: Accumulator): void {
   else acc.orphans.push(entry);
 }
 
+/** The newest Run's `start-run` line (the last in log order), null when the log holds no Run. The one rule for "the current Run". */
+export function currentRun(lines: readonly RunLogLine[]): RunLogLine | null {
+  return [...lines].reverse().find((l) => l.kind === 'start-run') ?? null;
+}
+
 /** Folds lines into spans and scores. Input order does not matter: lines are sorted by `t`, then `seq`. */
 export function fold(lines: readonly RunLogLine[], options: FoldOptions = {}): Folded {
-  const acc: Accumulator = { open: options.openAs === 'running' ? 'running' : 'crashed', live: options.live, spans: new Map(), scores: [], orphans: [] };
+  const acc: Accumulator = { open: 'crashed', live: options.live, spans: new Map(), scores: [], orphans: [] };
   for (const entry of chronological(lines)) place(entry, acc);
   return { spans: [...acc.spans.values()], scores: acc.scores, orphans: acc.orphans };
 }
