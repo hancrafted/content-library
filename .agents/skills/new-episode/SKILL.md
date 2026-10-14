@@ -47,7 +47,7 @@ Start only when all of these hold; otherwise name each one that fails to Han and
 3. `npm run check:docs` is clean.
 4. `npx vitest run tests/docs/episode-staging.test.ts` passes. It checks the per-run pipeline's schema, one research job per research question, and that no approved Brief keeps a `Not settled.` section.
 
-Then run `npm run episode:status -- <slug>` and write the todo list from its output: one todo per job that is not `done`, in its order. It reads each job's state from `pipeline.yml` and the latest `run-log.md` entry per job id, so the list never rests on memory. A per-run pipeline has no `foreach`: customize-pipeline expanded it into one job per research question.
+Then run `npm run episode:status -- <slug>` and write the todo list from its output: one todo per job that is not `done`, in its order. It reads each job's state from `pipeline.yml` and the latest job span per job id in `events.jsonl`, so the list never rests on memory. A per-run pipeline has no `foreach`: customize-pipeline expanded it into one job per research question.
 
 _Done when_ the todo list holds every job the script does not print as `done`.
 
