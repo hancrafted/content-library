@@ -25,6 +25,20 @@ export type WriteResult = { ok: true; line: string } | { ok: false; errors: stri
 const STALE_LOCK_MS = 10_000;
 const LOCK_WAIT_MS = 15_000;
 
+/** Another writer held the lock for the whole wait. A hook reports it on stderr and exits 1 (never 2, which blocks Claude Code). */
+export class LockTimeoutError extends Error {
+  readonly lockFile: string;
+  constructor(lockFile: string) {
+    super(
+      `run-log lock ${lockFile} still held after waiting; a line was not written (end-attempt or end-run crashed recovers the span)`,
+    );
+    this.lockFile = lockFile;
+  }
+}
+
+/** The wait in ms; `RUN_LOG_LOCK_WAIT_MS` shortens it for tests. */
+const lockWait = (): number => Number(process.env.RUN_LOG_LOCK_WAIT_MS) || LOCK_WAIT_MS;
+
 const sleep = (ms: number): unknown => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
 
 /** Creates the lock file exclusively, holding our owner token; false when another writer holds it. */
@@ -58,10 +72,10 @@ function release(lockFile: string, token: string): void {
 
 /** Runs `work` while holding the lock, and releases it however `work` ends. */
 function withLock<T>(lockFile: string, work: () => T): T {
-  const deadline = Date.now() + LOCK_WAIT_MS;
+  const deadline = Date.now() + lockWait();
   const token = randomBytes(16).toString('hex');
   while (!tryLock(lockFile, token)) {
-    if (Date.now() > deadline) throw new Error(`could not take ${lockFile}`);
+    if (Date.now() > deadline) throw new LockTimeoutError(lockFile);
     breakStaleLock(lockFile);
     sleep(20);
   }

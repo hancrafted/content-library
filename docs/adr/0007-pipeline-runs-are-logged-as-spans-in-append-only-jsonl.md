@@ -12,3 +12,7 @@ Every Run of `/new-episode` appends start, end and score lines to one `events.js
 - **SQLite in WAL mode**: safe for concurrent writers, but binary, so it cannot be committed or diffed. SQL stays as an in-memory view over the lines.
 - **OTLP as the stored format**: a span is one record only after it ends, so a crash leaves nothing to read. It is an export target, not the source.
 - **A hook-only writer**: hooks exist only in Claude Code and see no Runs, Gates or Scores. The hooks enrich the log through the command instead.
+
+## Consequences
+
+- **Identity may arrive on the end line.** Claude Code fires SubagentStart before it writes the subagent's `meta.json`, so the start line of an agent can only carry a provisional identity (usually role `skill-spawned`, parent the Job). At SubagentStop the adapter reads `meta.json` and, when the start was provisional and the description now parses, puts `job`, `attempt`, `role`, `ticket`, `parent_span_id`, `name` and `description` on the end line, plus `gen_ai.request.model` when the start lacked one. The fold applies an end line's attributes over the start's, so the span reads with the final identity. Lines are never rewritten; a start that already parsed keeps its identity and the end carries none.
