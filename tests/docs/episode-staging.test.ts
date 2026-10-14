@@ -144,9 +144,15 @@ function pipelineContext(pending: readonly string[], staging: string): PipelineC
     .filter((entry) => entry.isDirectory())
     .map(({ name }) => name);
   const exists = (file: string): boolean => existsSync(path.join(ROOT, file));
+  const disabled = skills.filter((name) =>
+    /^disable-model-invocation:\s*true\s*$/m.test(
+      readFileSync(path.join(SKILLS, name, 'SKILL.md'), 'utf8').split(/^---$/m)[1] ?? '',
+    ),
+  );
   return {
     skillFolder: SKILL_FOLDER,
     skills,
+    disabled,
     exists,
     staging,
     perRun: staging !== TEMPLATE_STAGING,

@@ -28,11 +28,16 @@
 #               with no staging output is approved by its tickets' labels instead
 #     agents    run in order; a reviewer is fresh: it did not write the output
 #       type        implementor | reviewer
-#       skills      skill names under .agents/skills/
+#       skills      skill names under .agents/skills/, or plugin:skill; refused when the
+#                   skill's SKILL.md sets disable-model-invocation: true (the Skill tool
+#                   refuses it for every agent)
 #       references  files the agent reads: `references/` and `assets/` sit in this
 #                   skill's folder, anything else is a repo path
 #       rubric      reviewers only: `<file>#<heading>` holding the pass/fail lines
 #       agent       optional; the Claude Code agent type to spawn, general-purpose when omitted
+#       ticket      optional, implementors only; for a skill that spawns subagents per ticket
+#                   (implement-spec): `{ agent, skills }`, the agent type and the skills of each
+#                   ticket subagent. Same skill rules as `skills`
 #       model       the model it runs on, or inherit; SKILL.md's job loop says where it applies
 #       session     optional; subagent (default) or orchestrator, by SKILL.md's job loop
 status: draft
@@ -46,7 +51,7 @@ jobs:
     gate: human
     agents:
       - type: implementor
-        skills: [brief-grill, grilling, handoff]
+        skills: [brief-grill, grilling]
         references: [references/brief-grill.md]
         model: inherit
         session: orchestrator

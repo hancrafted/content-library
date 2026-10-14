@@ -87,6 +87,8 @@ Every agent runs where its `session` says. `subagent`, the default, is spawned w
    | --- | --- |
    | `mh` | `npm run check:docs` |
    | `vitest` | `npx vitest run tests/docs/episode-staging.test.ts` |
+   | `sources` | `npm run check:sources -- <research.md…>`: every source URL of the job's research files; exit 1 only when one is `dead`, and `unverifiable` links go to the reviewer as `needs human` |
+   | `impeccable` | with `npm run preview` serving `out/`, `DO_NOT_TRACK=1 npx --yes impeccable@4.5.2 detect --json http://localhost:4300/episode/<slug>` and the `/de/` URL: a rendered scan, limited to the rules `.impeccable/config.json` leaves on; exit 2 is a failed attempt |
    | `verify` | `npm run verify` |
    | `build` | `npm run build` |
    | `test:build` | `npm run test:build` |

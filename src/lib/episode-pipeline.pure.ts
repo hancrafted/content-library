@@ -10,13 +10,13 @@ import {
   agentFields,
   CHECKS,
   JOB_FIELDS,
-  PLUGIN_SKILLS,
   SKILL_PREFIXES,
   SPAWNING_SKILLS,
   TOP_FIELDS,
 } from './episode-pipeline-fields.pure';
 import { ancestors, concurrentJobs, findCycle, waitsFor } from './episode-pipeline-graph.pure';
 import { jobOf, type Job } from './episode-pipeline-jobs.pure';
+import { checkSkillNames, checkTicket } from './episode-pipeline-skills.pure';
 import { unless, type Finding } from './finding.pure';
 import { checkMapping, isMapping, isString, stringsOf, type Mapping } from './mapping-fields.pure';
 
@@ -25,6 +25,8 @@ export interface PipelineContext {
   /** The new-episode skill's folder, repo-relative; `references/` and `assets/` paths resolve inside it. */
   skillFolder: string;
   skills: readonly string[];
+  /** The skills whose SKILL.md sets `disable-model-invocation: true`; the Skill tool refuses them for every agent. */
+  disabled: readonly string[];
   /** Whether a repo-relative path names an existing file. */
   exists: (path: string) => boolean;
   /** The Episode's staging folder, repo-relative: every output sits in it. */
@@ -88,9 +90,8 @@ function checkAgent(reader: Reader, agent: unknown): string[] {
   return [
     ...checkMapping(where, agent, agentFields(reviewer)),
     ...unless(!strayRubric, `${where} is an implementor and has a rubric; only a reviewer has one.`),
-    ...stringsOf(agent.skills)
-      .filter((skill) => !context.skills.includes(skill) && !PLUGIN_SKILLS.includes(skill))
-      .map((skill) => `${where} names the skill "${skill}", which does not exist.`),
+    ...checkSkillNames(where, stringsOf(agent.skills), context),
+    ...checkTicket(where, agent, context),
     ...stringsOf(agent.skills)
       .filter((skill) => SPAWNING_SKILLS.includes(skill) && agent.session !== 'orchestrator')
       .map(

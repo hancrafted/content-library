@@ -137,8 +137,8 @@ After step 8's build, serve the export and shoot each Slide in each theme and lo
 
 ```sh
 npm run preview &   # serves out/ at http://localhost:4300/
-npm run shot -- --url http://localhost:4300/episode/<ep> --clip '#<slide-id>' --theme light --out <scratchpad>/<slide-id>-light.png
-npm run shot -- --url http://localhost:4300/de/episode/<ep> --clip '#<slide-id>' --theme dark --out <scratchpad>/<slide-id>-de-dark.png
+npm run inspect-page -- --url http://localhost:4300/episode/<ep> --clip '#<slide-id>' --theme light --out <scratchpad>/<slide-id>-light.png
+npm run inspect-page -- --url http://localhost:4300/de/episode/<ep> --clip '#<slide-id>' --theme dark --out <scratchpad>/<slide-id>-de-dark.png
 ```
 
 Read the images one at a time (the `visual-check` skill has the probe options for layout questions a picture is not needed for).
