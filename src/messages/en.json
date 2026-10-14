@@ -271,6 +271,24 @@
     "lines": "complete lines",
     "refresh": "Refresh ≈ 2 s",
     "reload": "Folder access is kept only in memory. Reloading returns to the picker.",
+    "chips": {
+      "title": "Skills and checks",
+      "skills": "Skills",
+      "checks": "Checks",
+      "label": "{kind} {name}: {state}",
+      "kinds": {
+        "skill": "Skill",
+        "check": "Check"
+      },
+      "states": {
+        "pending": "pending",
+        "run": "run",
+        "skipped": "skipped",
+        "pass": "passed",
+        "fail": "failed"
+      },
+      "help": "From pipeline.yml. A skill turns green once an agent of this Job's latest Attempt invokes it, red once that agent ended without it; a check by its latest result."
+    },
     "timeTravel": {
       "title": "Time travel",
       "live": "Live",

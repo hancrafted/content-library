@@ -28,6 +28,8 @@ export interface Job {
   /** Jobs it waits for that do not block it when they block; empty when it wants none. */
   wants: string[];
   outputs: string[];
+  /** The done-checks the job names, cheapest first; empty when it names none. */
+  checks: string[];
   /** True for `gate: human`: the job reads done only once Han approves its outputs. */
   gate: boolean;
   /** `orchestrator` when the job itself says so or any of its agents runs in the orchestrator session (the schema sets `session` per agent); absent for the default, a subagent. */
@@ -72,6 +74,7 @@ export function jobOf(job: Record<string, unknown>): Job {
     needs: strings(job.needs),
     wants: strings(job.wants),
     outputs: strings(job.outputs),
+    checks: strings(job.checks),
     gate: job.gate === 'human',
     ...(inSession && { session: 'orchestrator' as const }),
     agents,

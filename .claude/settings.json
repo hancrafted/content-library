@@ -10,6 +10,15 @@
             "command": "node \"${CLAUDE_PROJECT_DIR}/.agents/skills/markdown-harness/scripts/assess-hook.mjs\""
           }
         ]
+      },
+      {
+        "matcher": "Skill",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PROJECT_DIR}/skills/new-episode/scripts/claude-adapter.ts\" skill"
+          }
+        ]
       }
     ],
     "SessionStart": [

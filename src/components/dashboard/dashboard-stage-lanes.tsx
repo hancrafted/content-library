@@ -15,6 +15,7 @@ import {
 import { fillTemplate } from '@/lib/template.pure';
 import { ArrowDown, GitBranch } from 'lucide-react';
 import { useContext } from 'react';
+import { JobChipDetail } from './dashboard-chips';
 import { AgentEvidence, ElapsedTime, StateBadge, type DashboardCopy } from './dashboard-evidence';
 import styles from './dashboard-graph.module.css';
 import { JobLinks } from './dashboard-job-links';
@@ -137,6 +138,7 @@ function JobLane({ job, copy, openLog, outputs }: JobProps & { outputs: EpisodeO
         <JobSummary job={job} copy={copy} />
         <div className="space-y-4 border-t border-border p-4">
           <JobLinks job={job} outputs={outputs} copy={copy} />
+          <JobChipDetail job={job} copy={copy} />
           <Button variant="outline" onClick={() => openLog(job.id, { jobs: [job.id] })}>
             {copy.graph.logs}
           </Button>

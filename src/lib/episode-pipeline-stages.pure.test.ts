@@ -15,6 +15,7 @@ function job(id: string, stage: string | undefined, edges: { needs?: string[]; w
     needs: edges.needs ?? [],
     wants: edges.wants ?? [],
     outputs: [],
+    checks: [],
     gate: false,
     agents: [],
   };

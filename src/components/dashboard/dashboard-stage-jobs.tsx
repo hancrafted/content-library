@@ -4,6 +4,7 @@ import { jobLabel, runningAgents, stageLayers, stateText, type DashboardStage } 
 import { fillTemplate } from '@/lib/template.pure';
 import { ArrowDown, GitBranch } from 'lucide-react';
 import { useContext, type CSSProperties } from 'react';
+import { JobChipList } from './dashboard-chips';
 import { ElapsedTime, type DashboardCopy } from './dashboard-evidence';
 import styles from './dashboard-graph.module.css';
 import { PreviewButton } from './dashboard-job-links';
@@ -81,6 +82,7 @@ function JobNode({ stage, job, onSelectJob, copy }: JobProps) {
         </span>
         <AttentionMarker job={job} label={copy.graph.jobAttention} />
       </button>
+      {template ? null : <JobChipList job={job} copy={copy} />}
       <PreviewButton job={job} copy={copy} className="mt-1 ml-2" />
     </li>
   );

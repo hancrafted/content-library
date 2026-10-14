@@ -11,6 +11,7 @@ jobs:
   - id: write-brief
     needs: []
     outputs: [docs/episodes/<slug>/brief.md]
+    checks: [mh, vitest]
     gate: human
   - id: write-research-1
     needs: [write-brief]
@@ -19,18 +20,27 @@ jobs:
 `;
 
 describe('success cases', () => {
-  it('reads the status and each job with its needs, wants, outputs and gate', () => {
+  it('reads the status and each job with its needs, wants, outputs, checks and gate', () => {
     // ARRANGE
     const expected = {
       status: 'approved',
       stages: [],
       jobs: [
-        { id: 'write-brief', needs: [], wants: [], outputs: ['docs/episodes/<slug>/brief.md'], gate: true, agents: [] },
+        {
+          id: 'write-brief',
+          needs: [],
+          wants: [],
+          outputs: ['docs/episodes/<slug>/brief.md'],
+          checks: ['mh', 'vitest'],
+          gate: true,
+          agents: [],
+        },
         {
           id: 'write-research-1',
           needs: ['write-brief'],
           wants: ['write-brief'],
           outputs: [],
+          checks: [],
           gate: false,
           agents: [],
         },
@@ -108,7 +118,7 @@ describe('edge cases', () => {
     const expected = {
       status: null,
       stages: [],
-      jobs: [{ id: 'a', needs: [], wants: [], outputs: [], gate: false, agents: [] }],
+      jobs: [{ id: 'a', needs: [], wants: [], outputs: [], checks: [], gate: false, agents: [] }],
     };
     // ACT
     const pipeline = readPipeline(yaml);

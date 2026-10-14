@@ -10,6 +10,7 @@ function graph(
     id,
     needs,
     wants: wanted[id] ?? [],
+    checks: [],
     outputs: [],
     gate: false,
     agents: [],

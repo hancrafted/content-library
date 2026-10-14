@@ -2,8 +2,11 @@
 // stamp a writer supplies, and the Span and Score a reader folds lines into. Types only; import them through
 // `run-log.pure.ts`.
 
-/** `attrs` lays facts over a span that already ended (the backfill's identity, an orchestrator Job's usage and skills); it never closes or reopens a span. */
-export const KINDS = ['start-run', 'end-run', 'start', 'end', 'attrs', 'score'] as const;
+/**
+ * `attrs` lays facts over a span that already ended (the backfill's identity, an orchestrator Job's usage and skills); it
+ * never closes or reopens a span. `skill` is one Skill tool call, a point record on the span that made it (design-ADR 0009).
+ */
+export const KINDS = ['start-run', 'end-run', 'start', 'end', 'attrs', 'score', 'skill'] as const;
 export type Kind = (typeof KINDS)[number];
 
 /** How a span ended. `reused` is a Job whose result an earlier Run already produced. */
@@ -34,7 +37,7 @@ export interface LogEvent {
   kind: Kind;
   /** Overrides the stamped clock: how an adapter reports a measured launch or end time. */
   t?: string;
-  /** end, end-run, attrs and score: the span the line belongs to. */
+  /** end, end-run, attrs, score and skill: the span the line belongs to. */
   span_id?: string;
   /** end: the launch time, when the start line could not measure it (the transcript did not exist yet). */
   start_t?: string;
@@ -132,6 +135,15 @@ export interface Span {
   'gen_ai.usage.output_tokens'?: number;
   'gen_ai.usage.cache_read.input_tokens'?: number;
   skills_invoked?: string[];
+  /** The `skill` lines on this span, oldest first: what it invoked so far, live. Absent when it has none yet. */
+  skills?: SkillUse[];
+}
+
+/** One `skill` line as the fold attaches it to its span: the skill's name (`plugin:skill` for a plugin's) and when. */
+export interface SkillUse {
+  name: string;
+  t: string;
+  seq: number;
 }
 
 /** One verdict on a span. Re-judging appends another; nothing is overwritten. */
@@ -153,7 +165,7 @@ export interface Score {
 export interface Folded {
   spans: Span[];
   scores: Score[];
-  /** End lines whose span never started: kept so a reader can flag them instead of losing them. */
+  /** End, attrs and skill lines whose span never started: kept so a reader can flag them instead of losing them. */
   orphans: RunLogLine[];
 }
 

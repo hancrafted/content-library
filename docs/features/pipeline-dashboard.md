@@ -140,6 +140,23 @@ A Job waiting on Han, ended `error`, `refused` or `crashed`, or whose latest
 Attempt holds a `needs-human` rubric Score carries an exclamation mark in its Job box and its card, labelled **Needs attention** for
 screen readers and on hover, beside its state in words.
 
+## Skills and checks
+
+Every Job box lists, under the Job, a chip for each skill its agents' `skills`
+name (once each) and each check its `checks` name; the card groups the skills by
+agent type. A chip is bordered and grey while pending, green with a check mark
+once run or passed, red with a cross once skipped or failed; its state is in
+words for screen readers and on hover. It reads only the Job's current Run and
+latest Attempt, so a retry starts its chips over, and the replay cutoff applies.
+
+A skill is run when a `skill` line (design-ADR-0009) or a `skills_invoked` on
+the Job span or one of its agents names it, and skipped once every span
+answering to an agent that lists it ended with `skills_invoked` known and
+without it; an unknown `skills_invoked` keeps it pending. A check reads its
+latest `check:<name>` Score: `pass` or `fail`. `jobChips()` in
+`src/lib/dashboard-chips.pure.ts` computes both for the projection; the
+pipeline's `checks` reach it through `jobOf()`.
+
 ## Reading and interpretation
 
 Polling runs about every two seconds after each completed read, never overlapping.
@@ -161,7 +178,7 @@ spans as running only while their own trace's Run has no end. Chronological orde
 is timestamp then sequence; the latest end supplies the terminal state. The
 batch fold's default remains crashed for open spans.
 Attribute-only `attrs` records update evidence without closing or reopening a
-Span. Measured end times can precede their stamped start records; those ends
+Span; `skill` records join their Span's `skills`. Measured end times can precede their stamped start records; those ends
 still pair with their Span rather than being reported as orphaned.
 
 Every configured Job appears in topological `needs` order. `wants` are labelled

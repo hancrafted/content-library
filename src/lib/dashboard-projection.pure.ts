@@ -1,6 +1,7 @@
 import { parse } from 'yaml';
 import type { Folded, Score, Span, SpanStatus } from '../../skills/new-episode/scripts/run-log.schema.pure';
 import { latestJobSpans } from '../../skills/new-episode/scripts/status.pure';
+import { jobChips, type JobChips } from './dashboard-chips.pure';
 import { agentFields, JOB_FIELDS, TOP_FIELDS } from './episode-pipeline-fields.pure';
 import { findCycle } from './episode-pipeline-graph.pure';
 import { JOB_ID, jobOf, type Job, type JobAgent } from './episode-pipeline-jobs.pure';
@@ -106,6 +107,8 @@ export interface DashboardJob extends Omit<DashboardJobConfig, 'agents'> {
   agents: Span[];
   gates: Span[];
   scores: Score[];
+  /** Every skill and check the Job's pipeline entry names, with what the current Run's latest Attempt shows of each. */
+  chips: JobChips;
 }
 
 function ownerOf(span: Span, byId: ReadonlyMap<string, Span>): string | undefined {
@@ -120,33 +123,48 @@ function ownerOf(span: Span, byId: ReadonlyMap<string, Span>): string | undefine
   return undefined;
 }
 
+interface ProjectionContext {
+  folded: Folded;
+  owners: ReadonlyMap<string, string | undefined>;
+  latest: ReadonlyMap<string, Span>;
+  openGates: readonly Span[];
+}
+
+/** One configured Job with its latest span, its children, the Scores worth Han's eye and its chips. */
+function jobView({ agents: config, ...job }: DashboardJobConfig, context: ProjectionContext): DashboardJob {
+  const { folded, owners, latest, openGates } = context;
+  const children = folded.spans.filter((span) => owners.get(span.span_id) === job.id);
+  const span = latest.get(job.id);
+  const owned = folded.scores.filter((score) => owners.get(score.span_id) === job.id);
+  const attempts = children.filter((child) => child.type === 'attempt');
+  const agents = children.filter((child) => child.type === 'agent');
+  return {
+    ...job,
+    config,
+    span,
+    state: openGates.some((gate) => owners.get(gate.span_id) === job.id && gate.trace_id === span?.trace_id)
+      ? 'gate'
+      : (span?.status ?? 'waiting'),
+    attempts,
+    agents,
+    gates: children.filter((child) => child.type === 'gate'),
+    scores: owned.filter(
+      (score) => score.name === 'rubric' && (score.value === 'fail' || score.value === 'needs-human'),
+    ),
+    chips: jobChips(
+      { agents: config, checks: job.checks },
+      { span, attempts, agents, checkScores: owned.filter((score) => score.name === 'check') },
+    ),
+  };
+}
+
 /** Raw terminal states and evidence; no CLI readiness vocabulary or inferred approval of staging files. */
 export function projectDashboard(pipeline: DashboardPipeline, folded: Folded) {
   const byId = new Map(folded.spans.map((span) => [span.span_id, span]));
   const latest = latestJobSpans(folded.spans);
   const owners = new Map(folded.spans.map((span) => [span.span_id, ownerOf(span, byId)]));
   const openGates = folded.spans.filter((span) => span.type === 'gate' && span.status === 'running');
-  const jobs: DashboardJob[] = pipeline.jobs.map(({ agents: config, ...job }) => {
-    const children = folded.spans.filter((span) => owners.get(span.span_id) === job.id);
-    const span = latest.get(job.id);
-    return {
-      ...job,
-      config,
-      span,
-      state: openGates.some((gate) => owners.get(gate.span_id) === job.id && gate.trace_id === span?.trace_id)
-        ? 'gate'
-        : (span?.status ?? 'waiting'),
-      attempts: children.filter((child) => child.type === 'attempt'),
-      agents: children.filter((child) => child.type === 'agent'),
-      gates: children.filter((child) => child.type === 'gate'),
-      scores: folded.scores.filter(
-        (score) =>
-          owners.get(score.span_id) === job.id &&
-          score.name === 'rubric' &&
-          (score.value === 'fail' || score.value === 'needs-human'),
-      ),
-    };
-  });
+  const jobs = pipeline.jobs.map((job) => jobView(job, { folded, owners, latest, openGates }));
   return { stages: pipeline.stages, jobs, openGates, runs: folded.spans.filter((span) => span.type === 'run') };
 }
 

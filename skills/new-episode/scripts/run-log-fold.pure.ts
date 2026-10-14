@@ -5,6 +5,7 @@ import type {
   FoldOptions,
   RunLogLine,
   Score,
+  SkillUse,
   Span,
   SpanStatus,
   SpanType,
@@ -81,6 +82,7 @@ interface Accumulator {
   ends: Map<string, RunLogLine>;
   endFacts: Map<string, Map<string, RunLogLine>>;
   scores: Score[];
+  skills: Map<string, SkillUse[]>;
   orphans: RunLogLine[];
 }
 
@@ -100,12 +102,22 @@ function rebuildSpan(id: string, entry: RunLogLine, acc: Accumulator): void {
   acc.orphans = acc.orphans.filter((orphan) => orphan.span_id !== id);
 }
 
+/** A skill line joins its span's invocations; until that span has started it waits among the orphans. */
+function placeSkill(id: string, entry: RunLogLine, acc: Accumulator): void {
+  acc.skills.set(id, [...(acc.skills.get(id) ?? []), { name: entry.name as string, t: entry.t, seq: entry.seq }]);
+  if (!acc.spans.has(id)) acc.orphans.push(entry);
+}
+
 function place(entry: RunLogLine, acc: Accumulator): void {
   if (entry.kind === 'score') {
     acc.scores.push(scoreOf(entry));
     return;
   }
   const id = entry.span_id as string;
+  if (entry.kind === 'skill') {
+    placeSkill(id, entry, acc);
+    return;
+  }
   if (entry.kind === 'start' || entry.kind === 'start-run') {
     const known = acc.starts.get(id);
     if (known !== undefined && order(entry, known) < 0) return;
@@ -156,6 +168,7 @@ function snapshot(acc: Accumulator): Folded {
     .sort((a, b) => order(acc.starts.get(a.span_id)!, acc.starts.get(b.span_id)!))
     .map((span) => ({
       ...span,
+      ...(acc.skills.has(span.span_id) && { skills: [...acc.skills.get(span.span_id)!].sort(order) }),
       ...(span.end_t === null ? { status: live.has(span.trace_id) ? ('running' as const) : ('crashed' as const) } : {}),
     }));
   return {
@@ -174,6 +187,7 @@ export function createLogFold(options: FoldOptions = {}) {
     ends: new Map(),
     endFacts: new Map(),
     scores: [],
+    skills: new Map(),
     orphans: [],
   };
   return {

@@ -141,3 +141,50 @@ describe('lock timeout', () => {
     expect(result.stderr).toContain(`${LOG}.lock`);
   });
 });
+
+/** Runs the adapter's PostToolUse mode for a Skill call, from the orchestrator (no agent id) or a subagent. */
+function skillHook(session: string, payload: Record<string, unknown>, env: Record<string, string> = {}) {
+  const transcript = path.join(dir, 'session.jsonl');
+  const input = { session_id: session, transcript_path: transcript, cwd: main, tool_name: 'Skill', ...payload };
+  return spawnSync('node', [ADAPTER, 'skill'], {
+    input: JSON.stringify(input),
+    encoding: 'utf8',
+    env: { ...cleanEnv(), CLAUDE_PROJECT_DIR: main, ...env },
+  });
+}
+
+describe('skill invocations (PostToolUse)', () => {
+  it("appends a skill line on the agent span for a subagent's call and on the marker's Job for the orchestrator's", () => {
+    // ARRANGE
+    hook('start', 's2');
+    const agentSpan = linesOf(wt).at(-1)?.span_id;
+    // ACT
+    const fromAgent = skillHook('s2', { agent_id: 'a1', agent_type: 'general-purpose', tool_input: { skill: 'tdd' } });
+    const fromOrchestrator = skillHook('s2', { tool_input: { skill: 'grilling' } });
+    // ASSERT
+    expect(fromAgent.status).toBe(0);
+    expect(fromOrchestrator.status).toBe(0);
+    expect(linesOf(wt).slice(-2)).toMatchObject([
+      { kind: 'skill', span_id: agentSpan, name: 'tdd', source: 'measured' },
+      { kind: 'skill', span_id: JOB_SPAN, name: 'grilling', source: 'measured' },
+    ]);
+  });
+
+  it('exits 0 on a lock timeout, so the tool call it follows is never blocked', () => {
+    // ARRANGE
+    writeFileSync(path.join(wt, `${LOG}.lock`), 'held');
+    // ACT
+    const result = skillHook('s2', { tool_input: { skill: 'tdd' } }, { RUN_LOG_LOCK_WAIT_MS: '200' });
+    // ASSERT
+    expect(result.status).toBe(0);
+    expect(result.stderr).toMatch(/run-log lock/);
+  });
+
+  it('exits 0 and writes nothing for a payload that is not JSON', () => {
+    // ACT
+    const result = spawnSync('node', [ADAPTER, 'skill'], { input: 'not json', encoding: 'utf8', env: cleanEnv() });
+    // ASSERT
+    expect(result.status).toBe(0);
+    expect(linesOf(wt)).toHaveLength(2);
+  });
+});

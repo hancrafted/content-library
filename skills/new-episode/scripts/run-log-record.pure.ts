@@ -145,6 +145,7 @@ const RULES: Record<Kind, { required: string[]; optional: string[] }> = {
     required: ['span_id', 'name', 'value', 'source'],
     optional: ['t', 'rubric', 'body', 'via', 'comment', 'ticket'],
   },
+  skill: { required: ['span_id', 'name', 'source'], optional: ['t'] },
 };
 
 /** What a start line of each span type cannot omit: which Job, Attempt and role it belongs to. */

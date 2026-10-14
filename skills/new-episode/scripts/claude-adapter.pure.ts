@@ -58,7 +58,7 @@ function metaOf(text: string | null): { description: string; model?: string; req
 }
 
 /** The Jobs of this Run that have no end line yet. */
-function openJobs(log: readonly RunLogLine[], trace: string): RunLogLine[] {
+export function openJobs(log: readonly RunLogLine[], trace: string): RunLogLine[] {
   const ended = new Set(log.filter((l) => l.kind === 'end').map((l) => l.span_id));
   return log.filter((l) => l.kind === 'start' && l.type === 'job' && l.trace_id === trace && !ended.has(l.span_id));
 }

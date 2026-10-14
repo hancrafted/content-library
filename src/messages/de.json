@@ -271,6 +271,24 @@
     "lines": "vollständige Zeilen",
     "refresh": "Aktualisierung ≈ 2 s",
     "reload": "Der Ordnerzugriff bleibt nur im Speicher. Neuladen führt zur Ordnerauswahl.",
+    "chips": {
+      "title": "Skills und Checks",
+      "skills": "Skills",
+      "checks": "Checks",
+      "label": "{kind} {name}: {state}",
+      "kinds": {
+        "skill": "Skill",
+        "check": "Check"
+      },
+      "states": {
+        "pending": "ausstehend",
+        "run": "ausgeführt",
+        "skipped": "übersprungen",
+        "pass": "bestanden",
+        "fail": "fehlgeschlagen"
+      },
+      "help": "Aus pipeline.yml. Ein Skill wird grün, sobald ein Agent des letzten Attempts dieses Jobs ihn aufruft, rot, sobald dieser Agent ohne ihn endete; ein Check nach seinem letzten Ergebnis."
+    },
     "timeTravel": {
       "title": "Zeitreise",
       "live": "Live",
