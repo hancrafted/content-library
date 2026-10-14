@@ -3,6 +3,8 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { cashflowReceiptPulledIn } from './slides/cashflow-receipt-pulled-in/slide';
 import { howToStartSales } from './slides/how-to-start-sales/slide';
+import { salesBeyondSelling } from './slides/sales-beyond-selling/slide';
+import { salesIsMoreThanSelling } from './slides/sales-is-more-than-selling/slide';
 import { stagesOfAfterSale } from './slides/stages-of-after-sale/slide';
 import { stagesOfSale } from './slides/stages-of-sale/slide';
 import { watchYourCashflow } from './slides/watch-your-cashflow/slide';
@@ -19,6 +21,7 @@ export const neverTooEarlySales = episode({
   messages: { en, de },
   sections: [
     [whyCashflowMatters, watchYourCashflow],
+    [salesBeyondSelling, salesIsMoreThanSelling],
     [howToStartSales, stagesOfSale, stagesOfAfterSale, cashflowReceiptPulledIn],
   ],
 });

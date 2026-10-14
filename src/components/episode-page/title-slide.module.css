@@ -1,0 +1,8 @@
+/*
+ * The Title slide's decorative glows loop only while it is the active Slide
+ * (FE-009 §6): near, they rest where they are. Reduced motion already stops
+ * them in `globals.css`.
+ */
+:global([data-zone]:not([data-zone='active'])) .glow {
+  animation-play-state: paused;
+}
