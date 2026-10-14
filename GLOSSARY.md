@@ -103,6 +103,9 @@ _Avoid_: Plot, subplot, storyline
 **Staging**: where an Episode's text lives while it is being made, before it is final: its Brief, research and Dossier, outside the code.
 _Avoid_: Drafts, workspace
 
+**Reference**: a file Han brings as the model for an Episode, such as an earlier deck, kept in Staging as Markdown with an image of every page, so each job can read its words and see its pages.
+_Avoid_: Source deck, attachment, input file
+
 **Promotion**: the step that moves a final Episode's text out of Staging and into its code folder, one text file per Slide, after which Staging is deleted.
 _Avoid_: Publish, migration, release
 

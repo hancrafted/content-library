@@ -11,6 +11,10 @@ Han either brings a Brief or brings an idea. Accept the Brief when he has one; g
 - **An existing Brief**, from a voice session (pasted, or written by Cowork to `.scratch/<slug>/handoff.md`) or written elsewhere: save a paste verbatim to `.scratch/<slug>/handoff.md` first; that file stays Han's original. Copy it into the Episode worktree as `docs/episodes/<slug>/brief.md` by the skill's _Writing the Brief_ steps, dropping only the `<!-- save as … -->` line. Run the job's checks (`mh`, then `vitest`) and list every gap: each failed line, and each heading reading `Not settled.`.
 - **A one-line idea, or nothing**: run the `brief-grill` skill from Frame.
 
+## References
+
+When Han's prompt or Brief names a PDF he brings as a model (a deck, a sketch), copy it to `.scratch/<slug>/<file-slug>.pdf`, the `<file-slug>` its subject in kebab case, never the file name he gave it. Then add the Brief's optional `## References` with one item per file, `[<title>](reference/<file-slug>/reference.md)`: a shape-only fix the run-log entry's Notes name with the file's original path. The `convert-references` job writes that path after the pipeline gate; until then the link has no target.
+
 ## Fixing a failed check
 
 The Brief is Han's wording, so a fix changes shape, never words:
@@ -33,6 +37,6 @@ Then append the run-log entry (creating `run-log.md` with its `# Run log` h1 if 
 
 ## Rubric
 
-1. The text under every heading is Han's wording: `.scratch/<slug>/handoff.md` when it exists, his answers in this session, or a shape-only fix the run-log entry names.
+1. The text under every heading except References is Han's wording: `.scratch/<slug>/handoff.md` when it exists, his answers in this session, or a shape-only fix the run-log entry names.
 2. No two sections of the Brief contradict each other, and no section contradicts itself.
 3. Every sentence is one a downstream job acts on: a sentence that changes no job's output is noise.

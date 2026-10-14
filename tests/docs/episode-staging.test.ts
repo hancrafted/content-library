@@ -1,4 +1,5 @@
 import { checkPipeline, type PipelineContext } from '@/lib/episode-pipeline.pure';
+import { checkReferenceJobs } from '@/lib/episode-reference-jobs.pure';
 import { checkResearchJobs } from '@/lib/episode-research-jobs.pure';
 import { unsettledBriefSections } from '@/lib/episode-staging-brief.pure';
 import { checkResearchIndex, checkRunsCsv, checkStagingFolder, type KnownVisuals } from '@/lib/episode-staging.pure';
@@ -290,6 +291,17 @@ describe('success cases', () => {
     );
     // ACT
     const findings = pairs.flatMap(([file, yaml, brief]) => checkResearchJobs(file, yaml, brief));
+    // ASSERT
+    expect(findings).toEqual([]);
+  });
+
+  it('finds one convert-references output per reference the Brief lists, in every per-run pipeline', () => {
+    // ARRANGE
+    const pairs = Object.entries(perRunPipelines()).map(
+      ([file, yaml]) => [file, yaml, readFileSync(path.join(ROOT, path.dirname(file), 'brief.md'), 'utf8')] as const,
+    );
+    // ACT
+    const findings = pairs.flatMap(([file, yaml, brief]) => checkReferenceJobs(file, yaml, brief));
     // ASSERT
     expect(findings).toEqual([]);
   });

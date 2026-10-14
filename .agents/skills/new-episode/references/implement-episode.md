@@ -16,7 +16,7 @@ Both agents run with `session: orchestrator`. The implementor invokes the vendor
 
 ## Design answers
 
-Every ticket was approved at the `write-design-spec` gate: it carries `ready-for-agent` and a design answer for each of its Slides. Build each Slide to its design answer, its wireframe and its named parts, tokens, props and i18n keys; the answer's `master:` and `motion:` (already rewritten into the Dossier) are the ones to use. Refuse to start while any ticket of the Episode is still `needs-triage`, and tell Han which. Build no layout the answer does not give, and ask no design question: a gap in the answer is a `Needs human:` line.
+Every ticket was approved at the `write-design-spec` gate: it carries `ready-for-agent` and a design answer for each of its Slides. Build each Slide to its design answer, its wireframe and its named parts, tokens, props and i18n keys; the answer's `master:` and `motion:` (already rewritten into the Dossier) are the ones to use. Refuse to start while any ticket of the Episode is still `needs-triage`, and tell Han which. Build no layout the answer does not give, and ask no design question: a gap in the answer is a `Needs human:` line. A design answer naming a `Reference:` page is built against that page image: open it beside your one screenshot of the built Slide, and keep what the answer keeps.
 
 ## Metadata
 
@@ -50,5 +50,5 @@ The `visual-check` check, in both themes, by FE-009's browser check. By the `vis
 1. Every Dossier Voice script item's paragraph appears verbatim as a Voice script segment of its Slide.
 2. Every Slide uses the master and motion its Dossier Visual names (`none` is no motion), shows the Visual's `title:` when it has one and the Dossier h3 otherwise, and the table of contents shows the h3. Where the Visual's `title:` goes: the h3 is the Slide's `title` key in `i18n/<locale>.json` (the table of contents reads it), and the Visual's `title:` is a separate `heading` key in the same file, which the kit's `Title` renders in place of its children; a Slide without a `title:` has no `heading` key. The Title slide and section slides use the kit's title and section layouts with no motion.
 3. Every Speaker note in the Dossier appears in its Slide's notes.
-4. Every Slide follows its ticket's design answer, with no layout, component or motion the answer does not give.
+4. Every Slide follows its ticket's design answer, with no layout, component or motion the answer does not give; a Slide whose answer names a `Reference:` page keeps what the answer keeps from that page image.
 5. The visual check ran at 375, 1100 and 1440 px, drawer beside, over and closed, in both themes, and its numbers show no overflow, wrappers at least viewport height and Foreground clear of the chrome.
