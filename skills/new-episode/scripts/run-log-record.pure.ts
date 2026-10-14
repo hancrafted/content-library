@@ -46,6 +46,8 @@ const CHECKS: Record<string, Check> = {
   span_id: spanId,
   parent_span_id: spanId,
   retry_of: spanId,
+  link_span_id: spanId,
+  link_trace_id: matching(TRACE_ID, '32 lowercase hex characters'),
   type: oneOf(SPAN_TYPES),
   attempt: positive,
   ticket: positive,
@@ -107,6 +109,8 @@ const RULES: Record<Kind, { required: string[]; optional: string[] }> = {
       'role',
       'ticket',
       'retry_of',
+      'link_trace_id',
+      'link_span_id',
       'harness',
       'source',
       'description',
@@ -121,7 +125,10 @@ const RULES: Record<Kind, { required: string[]; optional: string[] }> = {
   'end-run': { required: ['span_id', 'status'], optional: END_KEYS },
   end: { required: ['span_id', 'status'], optional: [...END_KEYS, ...END_IDENTITY] },
   attrs: { required: ['span_id'], optional: ['t', ...END_IDENTITY] },
-  score: { required: ['span_id', 'name', 'value', 'source'], optional: ['t', 'rubric', 'body', 'via', 'comment'] },
+  score: {
+    required: ['span_id', 'name', 'value', 'source'],
+    optional: ['t', 'rubric', 'body', 'via', 'comment', 'ticket'],
+  },
 };
 
 /** What a start line of each span type cannot omit: which Job, Attempt and role it belongs to. */

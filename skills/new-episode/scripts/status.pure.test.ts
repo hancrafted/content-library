@@ -148,6 +148,30 @@ describe('success cases', () => {
   });
 });
 
+describe('the current Run', () => {
+  it('counts only the trace it is given, so an earlier Run no longer makes a job done', () => {
+    // ARRANGE
+    const earlier = log(...job('brief-grill', 0, 'ok'), ...job('retrieval', 10, 'ok'));
+    const current = log(...job('brief-grill', 20, 'ok')).map((l) => ({ ...l, trace_id: 'b'.repeat(32) }));
+    const folded = fold([...earlier, ...current], { live: new Set(['b'.repeat(32)]) });
+    // ACT
+    const all = runStatus(PIPELINE, folded, { now: NOW }).jobs.map(({ state }) => state);
+    const scoped = runStatus(PIPELINE, folded, { now: NOW, trace: 'b'.repeat(32) }).jobs.map(({ state }) => state);
+    // ASSERT
+    expect(all.slice(0, 2)).toEqual(['done', 'done']);
+    expect(scoped.slice(0, 3)).toEqual(['done', 'ready', 'waiting']);
+  });
+
+  it('reads a reused job as done', () => {
+    // ARRANGE
+    const folded = live(log(...job('brief-grill', 0, 'reused')));
+    // ACT
+    const jobs = runStatus(PIPELINE, folded, { now: NOW, trace: TRACE }).jobs;
+    // ASSERT
+    expect(jobs[0]).toEqual({ id: 'brief-grill', state: 'done' });
+  });
+});
+
 describe('failure cases', () => {
   it('lists crashed and refused spans of a finished log, and leaves a crashed job to run again', () => {
     // ARRANGE

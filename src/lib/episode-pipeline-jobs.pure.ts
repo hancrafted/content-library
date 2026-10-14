@@ -21,6 +21,8 @@ export interface Job {
   outputs: string[];
   /** True for `gate: human`: the job reads done only once Han approves its outputs. */
   gate: boolean;
+  /** `orchestrator` when the job's agents run in the orchestrator session; absent for the default, a subagent. */
+  session?: 'orchestrator';
 }
 
 export interface Pipeline {
@@ -46,6 +48,7 @@ export function jobOf(job: Record<string, unknown>): Job {
     wants: strings(job.wants),
     outputs: strings(job.outputs),
     gate: job.gate === 'human',
+    ...(job.session === 'orchestrator' && { session: 'orchestrator' as const }),
   };
 }
 

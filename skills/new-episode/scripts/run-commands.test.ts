@@ -534,3 +534,119 @@ describe('edge cases', () => {
     expect(readMarker(ctx.root)).toBeNull();
   });
 });
+
+describe('reuse', () => {
+  const finishedRun = (): RunContext => {
+    const ctx = begun();
+    run(ctx, 'begin-job', 'write-dossier');
+    run(ctx, 'end-job', 'write-dossier');
+    run(ctx, 'end-run');
+    run(ctx, 'begin-run', '--model', 'opus');
+    return ctx;
+  };
+
+  it('writes a reused Job span in the current Run linked to the earlier Run ok span, once', () => {
+    // ARRANGE
+    const ctx = finishedRun();
+    const earlier = spans(ctx).find((s) => s.type === 'job');
+    // ACT
+    const first = run(ctx, 'reuse', 'write-dossier');
+    const second = run(ctx, 'reuse', 'write-dossier');
+    // ASSERT
+    const reused = spans(ctx).filter((s) => s.type === 'job' && s.status === 'reused');
+    expect(first).toEqual({ ok: true, output: expect.stringContaining('reused') });
+    expect(second).toEqual({ ok: true, output: expect.stringContaining('already') });
+    expect(reused).toHaveLength(1);
+    expect(reused[0]).toEqual(
+      expect.objectContaining({
+        job: 'write-dossier',
+        link_span_id: earlier?.span_id,
+        link_trace_id: earlier?.trace_id,
+      }),
+    );
+    expect(reused[0]?.trace_id).not.toBe(earlier?.trace_id);
+  });
+
+  it('refuses when no earlier Run has an ok span of that Job', () => {
+    // ARRANGE
+    const ctx = begun();
+    const before = lines(ctx).length;
+    // ACT
+    const result = run(ctx, 'reuse', 'write-dossier');
+    // ASSERT
+    expect(result).toEqual({ ok: false, error: expect.stringContaining('no earlier') });
+    expect(lines(ctx)).toHaveLength(before);
+  });
+});
+
+describe('score ticket', () => {
+  it('puts --ticket on the Score line', () => {
+    // ARRANGE
+    const ctx = begun();
+    run(ctx, 'begin-job', 'write-spec');
+    // ACT
+    run(ctx, 'score', 'write-spec', 'check', 'pass', '--source', 'check:mh', '--ticket', '176');
+    // ASSERT
+    expect(readEpisodeLog(SLUG, ctx.root).folded.scores[0]).toEqual(expect.objectContaining({ ticket: 176 }));
+  });
+
+  it('refuses a ticket that is not a number', () => {
+    // ARRANGE
+    const ctx = begun();
+    run(ctx, 'begin-job', 'write-spec');
+    // ACT
+    const result = run(ctx, 'score', 'write-spec', 'check', 'pass', '--source', 'check:mh', '--ticket', 'x');
+    // ASSERT
+    expect(result).toEqual({ ok: false, error: expect.stringContaining('ticket') });
+  });
+});
+
+describe('orchestrator Job usage', () => {
+  const said = (t: string, id: string, output: number) =>
+    JSON.stringify({
+      type: 'assistant',
+      timestamp: t,
+      message: { id, model: 'opus', usage: { input_tokens: 1, output_tokens: output } },
+    });
+
+  it('measures the orchestrator usage between the Job start and end on the Job end line', () => {
+    // ARRANGE
+    const ctx = context(
+      [
+        said('2026-10-14T09:00:30Z', 'before-job', 1000),
+        said('2026-10-14T09:01:30Z', 'in-job', 7),
+        said('2026-10-14T09:05:30Z', 'after-job', 1000),
+      ].join('\n'),
+    );
+    writeFileSync(
+      path.join(ctx.root, 'docs/episodes', SLUG, 'pipeline.yml'),
+      'status: approved\njobs:\n  - id: write-dossier\n    session: orchestrator\n  - id: a\n',
+    );
+    run(ctx, 'begin-run', '--model', 'opus');
+    run(ctx, 'begin-job', 'write-dossier');
+    // ACT
+    run(ctx, 'end-job', 'write-dossier', 'ok', '--summary', 'done');
+    // ASSERT
+    const job = spans(ctx).find((s) => s.type === 'job');
+    expect(job).toEqual(
+      expect.objectContaining({
+        status: 'ok',
+        summary: 'done',
+        source: 'measured',
+        'gen_ai.usage.input_tokens': 1,
+        'gen_ai.usage.output_tokens': 7,
+      }),
+    );
+  });
+
+  it('leaves a subagent Job without usage', () => {
+    // ARRANGE
+    const ctx = context(said('2026-10-14T09:01:30Z', 'x', 7));
+    run(ctx, 'begin-run', '--model', 'opus');
+    run(ctx, 'begin-job', 'write-dossier');
+    // ACT
+    run(ctx, 'end-job', 'write-dossier');
+    // ASSERT
+    expect(spans(ctx).find((s) => s.type === 'job')?.['gen_ai.usage.output_tokens']).toBeUndefined();
+  });
+});

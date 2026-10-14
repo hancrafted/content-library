@@ -13,6 +13,7 @@ export const OPTIONS = {
   body: { type: 'string' },
   via: { type: 'string' },
   comment: { type: 'string' },
+  ticket: { type: 'string' },
 } as const;
 
 export type Opts = Partial<Record<keyof typeof OPTIONS, string>>;

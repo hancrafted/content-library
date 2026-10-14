@@ -293,3 +293,46 @@ describe('edge cases', () => {
     expect(result).toEqual(expected);
   });
 });
+
+describe('orchestrator Job rows and score tickets', () => {
+  const JOB: RunLogLine[] = [
+    line(1, '2026-10-14T09:00:00Z', { kind: 'start-run', span_id: ID(1), run_id: 'run-9', harness: 'claude-code' }),
+    line(2, '2026-10-14T09:00:10Z', {
+      kind: 'start',
+      span_id: ID(2),
+      parent_span_id: ID(1),
+      type: 'job',
+      name: 'write',
+      job: 'write',
+    }),
+    line(3, '2026-10-14T09:02:10Z', {
+      kind: 'end',
+      span_id: ID(2),
+      status: 'ok',
+      'gen_ai.usage.input_tokens': 30,
+      'gen_ai.usage.output_tokens': 12,
+    }),
+    line(4, '2026-10-14T09:02:20Z', {
+      kind: 'score',
+      span_id: ID(2),
+      name: 'check',
+      value: 'pass',
+      source: 'check:x',
+      ticket: 176,
+    }),
+  ];
+
+  it('lists a Job that has measured usage as an orchestrator row of the runs CSV', () => {
+    // ACT
+    const csv = runsCsv([{ episode: 'ep', folded: fold(JOB) }]);
+    // ASSERT
+    expect(csv.split('\n')[1]).toContain('run-9,ep,write,orchestrator,,pass,,120,42,');
+  });
+
+  it('exposes the Score ticket to queries', () => {
+    // ACT
+    const result = queryRuns([{ episode: 'ep', folded: fold(JOB) }], 'SELECT ticket FROM scores');
+    // ASSERT
+    expect(result).toEqual({ ok: true, columns: ['ticket'], rows: [{ ticket: 176 }] });
+  });
+});

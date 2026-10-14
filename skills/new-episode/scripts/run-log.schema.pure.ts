@@ -48,6 +48,9 @@ export interface LogEvent {
   ticket?: number;
   /** The span id of the Attempt this one retries. */
   retry_of?: string;
+  /** start of a `reused` Job: the earlier Run's ok Job span it stands for (OpenTelemetry span link). */
+  link_trace_id?: string;
+  link_span_id?: string;
   harness?: string;
   /** start, end: measured or typed. On a score: who judged (`agent:<job>/reviewer`, `check:<name>`, `human:han`). */
   source?: string;
@@ -68,7 +71,7 @@ export interface LogEvent {
   'gen_ai.usage.cache_read.input_tokens'?: number;
   status?: Status;
   summary?: string;
-  /** score */
+  /** score (`ticket` is the one above: the ticket a Score judges) */
   value?: number | string;
   rubric?: string;
   body?: string;
@@ -108,6 +111,8 @@ export interface Span {
   role?: string;
   ticket?: number;
   retry_of?: string;
+  link_trace_id?: string;
+  link_span_id?: string;
   harness?: string;
   source?: string;
   description?: string;
@@ -139,6 +144,7 @@ export interface Score {
   body?: string;
   via?: Via;
   comment?: string;
+  ticket?: number;
 }
 
 export interface Folded {

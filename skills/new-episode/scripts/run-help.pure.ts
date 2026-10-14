@@ -4,12 +4,15 @@ export const USAGE = `usage: npm run episode:run -- <slug> <command> ...
   end-run [status] [summary]                       close the Run, record orchestrator usage, clear the marker
                                                    (ok refused while a span is open; error|crashed leaves it crashed)
   begin-job <job>                                  open a Job pipeline.yml declares (reused when already open)
-  end-job <job> [status] [summary]                 close the Job (refused while its Attempt is open)
+  end-job <job> [status] [summary]                 close the Job (refused while its Attempt is open); an orchestrator-session
+                                                   Job also records the orchestrator's usage over its span
+  reuse <job>                                      count an earlier Run's ok Job as done in this Run: a reused Job span
+                                                   linked to it (idempotent; refused with no earlier ok span)
   begin-attempt <job>                              open the next Attempt; prints its spawn description
   end-attempt <job> [status] [summary]             close the open Attempt
   open-gate <job> <name>                           open a Gate under the Run
   close-gate <name> [status] [summary]             close the open Gate
-  score <target> <name> <value> --source s [--rubric r] [--body b] [--via chat|commit] [--comment c]
+  score <target> <name> <value> --source s [--rubric r] [--body b] [--via chat|commit] [--comment c] [--ticket n]
                                                    target: <job> (Job), <job>#<n> (Attempt) or gate:<name>
   resume                                           re-open the marker for the current Run in a new session
   archive                                          copy the log to .logs/new-episode/<slug>/<run id>.jsonl

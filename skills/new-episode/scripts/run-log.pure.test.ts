@@ -547,3 +547,45 @@ describe('attrs lines', () => {
     expect(folded.orphans).toHaveLength(1);
   });
 });
+
+describe('score tickets and reuse links', () => {
+  const score = { kind: 'score', span_id: JOB_SPAN, name: 'rubric', value: 'pass', source: 'agent:j/reviewer' };
+
+  it('accepts a positive ticket on a score and keeps it on the line', () => {
+    // ACT
+    const result = record({ ...score, ticket: 176 }, STAMP);
+    // ASSERT
+    expect(result).toEqual({ ok: true, line: expect.objectContaining({ ticket: 176 }) });
+  });
+
+  it('refuses a ticket that is not a positive integer', () => {
+    // ACT
+    const result = record({ ...score, ticket: 0 }, STAMP);
+    // ASSERT
+    expect(result).toEqual({ ok: false, errors: ['ticket must be a positive integer'] });
+  });
+
+  it('accepts a Job start that links the earlier Run span it reuses', () => {
+    // ARRANGE
+    const start = {
+      kind: 'start',
+      type: 'job',
+      name: 'a',
+      job: 'a',
+      parent_span_id: RUN_SPAN,
+      link_trace_id: 'd'.repeat(32),
+      link_span_id: 'e'.repeat(16),
+    };
+    // ACT
+    const result = record(start, STAMP);
+    // ASSERT
+    expect(result).toEqual({
+      ok: true,
+      line: expect.objectContaining({ link_trace_id: 'd'.repeat(32), link_span_id: 'e'.repeat(16) }),
+    });
+    expect(record({ ...start, link_span_id: 'nope' }, STAMP)).toEqual({
+      ok: false,
+      errors: ['link_span_id must be 16 lowercase hex characters'],
+    });
+  });
+});
