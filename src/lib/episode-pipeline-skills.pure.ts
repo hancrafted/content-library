@@ -3,7 +3,7 @@
  * ticket. A name must exist and must be invocable by a model, because the Skill tool refuses a skill with
  * `disable-model-invocation: true` for every agent. Reading the disk is the caller's job.
  */
-import { PLUGIN_SKILLS, TICKET_FIELDS } from './episode-pipeline-fields.pure';
+import { TICKET_FIELDS } from './episode-pipeline-fields.pure';
 import { unless } from './finding.pure';
 import { checkMapping, isMapping, stringsOf, type Mapping } from './mapping-fields.pure';
 
@@ -17,7 +17,7 @@ export interface SkillContext {
 export function checkSkillNames(where: string, skills: readonly string[], context: SkillContext): string[] {
   return skills.flatMap((skill) => [
     ...unless(
-      context.skills.includes(skill) || PLUGIN_SKILLS.includes(skill) || skill.includes(':'),
+      context.skills.includes(skill) || skill.includes(':'),
       `${where} names the skill "${skill}", which does not exist.`,
     ),
     ...unless(

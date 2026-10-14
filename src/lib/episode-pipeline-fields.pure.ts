@@ -13,8 +13,6 @@ const MODELS: readonly string[] = ['opus', 'sonnet', 'haiku', 'inherit'];
 const SESSIONS: readonly string[] = ['subagent', 'orchestrator'];
 /** Skills that spawn subagents themselves; a subagent cannot spawn one, so only the orchestrator runs them. */
 export const SPAWNING_SKILLS = ['implement-spec', 'code-review'];
-/** Plugin skills an agent may name; they live in `~/.claude`, so the check cannot find them on disk. */
-export const PLUGIN_SKILLS: readonly string[] = ['ui-ux-pro-max:slides'];
 /** What a job's `before` may run ahead of its implementor. */
 const BEFORE_STEPS: readonly string[] = ['mh-query'];
 /** Where a job's agents work: `worktree` gives the job its own worktree, merged back on a pass. */

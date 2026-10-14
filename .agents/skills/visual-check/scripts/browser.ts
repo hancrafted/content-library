@@ -30,13 +30,17 @@ export const touch = (): void => writeFileSync(LAST_USE, String(Date.now()));
 const savedEndpoint = (): Endpoint | null =>
   existsSync(ENDPOINT) ? parseEndpoint(readFileSync(ENDPOINT, 'utf8')) : null;
 
+// Pinned so the browser every run drives is the one this skill was checked against; bump both together.
+const PUPPETEER_BROWSERS = '@puppeteer/browsers@3.2.4';
+const HEADLESS_SHELL = 'chrome-headless-shell@155.0.8059.79';
+
 /** CHROME_PATH, else the cached chrome-headless-shell, installed on first use. */
 function resolveBinary(): string {
   if (process.env.CHROME_PATH) return process.env.CHROME_PATH;
   if (existsSync(BINARY) && existsSync(readFileSync(BINARY, 'utf8'))) return readFileSync(BINARY, 'utf8');
   const output = execFileSync(
     'npx',
-    ['--yes', '@puppeteer/browsers', 'install', 'chrome-headless-shell@stable', '--path', path.join(CACHE, 'browser')],
+    ['--yes', PUPPETEER_BROWSERS, 'install', HEADLESS_SHELL, '--path', path.join(CACHE, 'browser')],
     { encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'] },
   );
   const installed = output
