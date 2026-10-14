@@ -1,0 +1,66 @@
+{
+  "title": "Watch your cashflow",
+  "caption": "Costs land every month. The big deal lands in April. The cash runs out in March.",
+  "takeaway": "Find your zero-cash month: walk the cash row to where it hits zero.",
+  "board": {
+    "label": "Cashflow board, January to April: costs of $50k every month, the cash falls from $100k to $0 in March, and the $1M deal lands only in April.",
+    "rows": {
+      "cash": "Cash",
+      "cost": "Cost",
+      "revenue": "Revenue"
+    },
+    "months": {
+      "jan": "Jan",
+      "feb": "Feb",
+      "mar": "Mar",
+      "apr": "Apr"
+    },
+    "amounts": {
+      "cashJan": "$100k",
+      "cashFeb": "$50k",
+      "cashMar": "$0",
+      "cost": "$50k",
+      "revenue": "+$1M"
+    },
+    "stamp": "Bankrupt"
+  },
+  "notes": {
+    "costs-start-first": {
+      "header": "Costs start first",
+      "description": "Company setup and the founders' living costs arise before the first user or any income.[1]",
+      "sources": {
+        "paul-graham-startup-funding": {
+          "title": "Paul Graham, A Student's Guide to Startups: Startup Funding"
+        }
+      }
+    },
+    "even-a-signed-deal-waits": {
+      "header": "Even a signed deal waits",
+      "description": "With no contract term, interest on a late B2B payment starts only 30 days after the invoice is received, and agreed terms may run up to 60 days.[1]",
+      "sources": {
+        "eu-late-payment-directive": {
+          "title": "European Parliament and Council, Directive 2011/7/EU on combating late payment in commercial transactions"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-board": {
+        "title": "The board",
+        "keywords": "sticky notes, January to April, cash, cost, revenue, costs every month",
+        "script": "Here is a board of sticky notes. One column for each month, January to April. Three rows: cash, cost and revenue. Start with the cost row. A cost note sits in every single column. Salaries, tools, rent. They do not wait for you. People still need paying on the last day of the month, whether or not a customer said yes."
+      },
+      "big-deal-lands-in-april": {
+        "title": "Big deal lands in April",
+        "keywords": "big deal in April, zero in March, bankrupt, a verbal yes is not cash",
+        "script": "Now the revenue row. There is one big note, and it sits in April. It is a good deal, a real one. But watch the cash row. Month by month the cash note gets smaller. In March it falls to zero dollars, and a stamp lands on it. Bankrupt. One month before the money would have arrived. A deal that is nearly done is not cash. A verbal yes is not cash either. Until the money is on the account, it does not count."
+      },
+      "find-your-zero-cash-month": {
+        "title": "Find your zero-cash month",
+        "keywords": "first action, your own board, zero-cash month, deadline for sales results, count back",
+        "script": "So here is your first action. Build this board for your own company. Month by month: cash, cost and revenue, as simple as sticky notes. Then walk along the cash row and find the month where it reaches zero. That is your zero-cash month, and everything else today is measured against it. Pen and paper is enough, and twelve months is plenty. Be honest about the costs. Be careful with the revenue, and write only the revenue you would bet your own salary on. Write that date down. It is the deadline for your sales results, not for your product. Count back from it, and you know how much time you really have to start."
+      }
+    }
+  }
+}

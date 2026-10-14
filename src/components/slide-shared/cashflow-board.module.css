@@ -1,0 +1,163 @@
+/*
+ * The cashflow board's grid and entrance. Grid, transform and animation only:
+ * colours and type come from token classes in the markup (FE-011). The base
+ * rules are the finished board, which carries the claim at rest; the entrance
+ * runs only on the active Slide and never under reduced motion (FE-009 §6).
+ */
+
+.board {
+  --board-gap: 0.75rem;
+  --row-head: 0rem;
+  /* One month track plus one gap: the row-head track always exists, so there are exactly `--months` gaps. */
+  --board-pitch: calc((100cqi - var(--row-head)) / var(--months));
+  container-type: inline-size;
+  display: grid;
+  grid-template-columns: var(--row-head) repeat(var(--months), minmax(0, 1fr));
+  grid-template-rows: auto repeat(3, minmax(4rem, auto)) auto;
+  column-gap: var(--board-gap);
+  row-gap: 0.5rem;
+  margin: 0;
+}
+
+@media (min-width: 48rem) {
+  .board {
+    --row-head: 6rem;
+  }
+}
+
+.rowHead {
+  grid-column: 1;
+}
+
+.rowHead.cash {
+  grid-row: 2;
+}
+
+.rowHead.cost {
+  grid-row: 3;
+}
+
+.rowHead.revenue {
+  grid-row: 4;
+}
+
+.month {
+  grid-column: calc(var(--col) + 2);
+  grid-row: 1 / 5;
+  display: grid;
+  grid-template-rows: subgrid;
+}
+
+.notes {
+  grid-row: 2 / 5;
+  display: grid;
+  grid-template-rows: subgrid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.notes > .cash {
+  grid-row: 1;
+}
+
+.notes > .cost {
+  grid-row: 2;
+}
+
+.notes > .revenue {
+  grid-row: 3;
+}
+
+.gap {
+  grid-column: calc(var(--col) + 2);
+  grid-row: 1 / 5;
+  justify-self: end;
+  width: 0;
+  margin-inline-end: calc(var(--board-gap) / -2);
+}
+
+.stamp {
+  grid-column: calc(var(--col) + 2);
+  grid-row: 2 / 4;
+}
+
+.arrow {
+  grid-column: calc(var(--start) + 2) / calc(var(--end) + 3);
+  grid-row: 5;
+  /* From the centre of the first month to the centre of the last: half a month track in from each side. */
+  margin-inline: calc((var(--board-pitch) - var(--board-gap)) / 2);
+}
+
+.head {
+  translate: 0 -50%;
+}
+
+.leftward .head {
+  left: -0.25rem;
+  clip-path: polygon(0 50%, 100% 0, 100% 100%);
+}
+
+.rightward .head {
+  right: -0.25rem;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+/* The arrow grows from its `from` end. */
+.leftward {
+  transform-origin: right center;
+}
+
+.rightward {
+  transform-origin: left center;
+}
+
+@keyframes place-note {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+}
+
+@keyframes slide-note {
+  from {
+    transform: translateX(calc(var(--shift) * var(--board-pitch)));
+  }
+}
+
+@keyframes draw-arrow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes land-stamp {
+  from {
+    opacity: 0;
+    scale: 1.6;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .note {
+    animation: place-note 300ms ease-out both;
+    animation-delay: calc(var(--col) * 250ms);
+  }
+
+  /* A moved note slides in by whole columns of the grid, after the columns are placed. */
+  :global([data-zone='active']) .note.moved {
+    animation: slide-note 600ms ease-in-out both;
+    animation-delay: calc(var(--months) * 250ms + 300ms);
+  }
+
+  :global([data-zone='active']) .shaft {
+    animation: draw-arrow 600ms ease-out both;
+    animation-delay: calc(var(--months) * 250ms + 300ms);
+  }
+
+  /* The stamp lands last, after the last column. */
+  :global([data-zone='active']) .stamp {
+    animation: land-stamp 250ms ease-in both;
+    animation-delay: calc(var(--months) * 250ms + 100ms);
+  }
+}

@@ -25,6 +25,15 @@ const EPISODES_DIR = join(import.meta.dirname, '..', '..', 'src', 'components', 
 /** A dotted Translation key path as next-intl prints a message it cannot find. */
 const RAW_KEY = /\b(?:episodes|landing|contextDrawer|tableOfContents|talkPlayer)\.[a-z0-9-]+\.[A-Za-z0-9.-]+/;
 
+/**
+ * An upcoming Episode's page is built `noindex` and has no `published-anchors.json` yet: its anchors bind at
+ * publication (docs/features/episode-publishing.md), as `published-anchors.test.ts` skips it too.
+ */
+function isUpcoming(url: string): boolean {
+  const $ = load(readFileSync(join(OUT_DIR, exportedFile(url)), 'utf8'));
+  return $('meta[name="robots"]').attr('content')?.includes('noindex') ?? false;
+}
+
 function builtText(url: string): EpisodeText {
   return episodeText(load(readFileSync(join(OUT_DIR, exportedFile(url)), 'utf8')));
 }
@@ -58,7 +67,7 @@ describe.each(PAGES)('$url', ({ slug, locale, url }) => {
     expect(actual).toEqual(expected);
   });
 
-  it('renders its Slides under exactly the published anchors', () => {
+  it.skipIf(isUpcoming(url))('renders its Slides under exactly the published anchors', () => {
     // ARRANGE
     const published = JSON.parse(readFileSync(join(EPISODES_DIR, slug, 'published-anchors.json'), 'utf8')) as string[];
     const expected = [...published].sort();

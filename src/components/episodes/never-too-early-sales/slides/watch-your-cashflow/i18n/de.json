@@ -1,0 +1,66 @@
+{
+  "title": "Behalte deinen Cashflow im Blick",
+  "caption": "Kosten fallen jeden Monat an. Der große Auftrag kommt im April. Das Geld ist im März weg.",
+  "takeaway": "Finde deinen Null-Monat: Geh die Kassenzeile entlang, bis sie bei null ankommt.",
+  "board": {
+    "label": "Cashflow-Tafel, Januar bis April: jeden Monat 50.000 $ Kosten, die Kasse sinkt von 100.000 $ auf 0 $ im März, und der Auftrag über 1 Mio. $ kommt erst im April.",
+    "rows": {
+      "cash": "Kasse",
+      "cost": "Kosten",
+      "revenue": "Umsatz"
+    },
+    "months": {
+      "jan": "Jan.",
+      "feb": "Feb.",
+      "mar": "März",
+      "apr": "Apr."
+    },
+    "amounts": {
+      "cashJan": "100k $",
+      "cashFeb": "50k $",
+      "cashMar": "0 $",
+      "cost": "50k $",
+      "revenue": "+1 Mio. $"
+    },
+    "stamp": "Pleite"
+  },
+  "notes": {
+    "costs-start-first": {
+      "header": "Die Kosten kommen zuerst",
+      "description": "Gründung und Lebenshaltung der Gründer kosten Geld, bevor es den ersten Nutzer oder irgendeine Einnahme gibt.[1]",
+      "sources": {
+        "paul-graham-startup-funding": {
+          "title": "Paul Graham, A Student's Guide to Startups: Startup Funding"
+        }
+      }
+    },
+    "even-a-signed-deal-waits": {
+      "header": "Auch ein unterschriebener Auftrag lässt warten",
+      "description": "Ohne vertragliche Frist fallen Verzugszinsen auf eine verspätete B2B-Zahlung erst 30 Tage nach Eingang der Rechnung an, und vereinbarte Zahlungsfristen dürfen bis zu 60 Tage betragen.[1]",
+      "sources": {
+        "eu-late-payment-directive": {
+          "title": "Europäisches Parlament und Rat, Richtlinie 2011/7/EU zur Bekämpfung von Zahlungsverzug im Geschäftsverkehr"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-board": {
+        "title": "Die Tafel",
+        "keywords": "Haftnotizen, Januar bis April, Kasse, Kosten, Umsatz, Kosten in jedem Monat",
+        "script": "Hier siehst du eine Tafel mit Haftnotizen. Eine Spalte pro Monat, von Januar bis April. Drei Zeilen: Kasse, Kosten und Umsatz. Fang bei den Kosten an. In jeder einzelnen Spalte klebt ein Kostenzettel. Gehälter, Tools, Miete. Die warten nicht auf dich. Am letzten Tag des Monats wollen die Leute bezahlt werden, ganz egal, ob ein Kunde schon Ja gesagt hat."
+      },
+      "big-deal-lands-in-april": {
+        "title": "Der große Auftrag kommt im April",
+        "keywords": "großer Auftrag im April, null im März, pleite, ein mündliches Ja ist kein Geld",
+        "script": "Jetzt die Umsatzzeile. Dort klebt ein einziger großer Zettel, und zwar im April. Ein guter Auftrag, ein echter. Aber schau auf die Kassenzeile. Von Monat zu Monat wird der Betrag kleiner. Im März liegt er bei null, und ein Stempel landet darauf. Pleite. Einen Monat bevor das Geld gekommen wäre. Ein Auftrag, der fast durch ist, ist kein Geld. Ein mündliches Ja auch nicht. Erst wenn das Geld auf dem Konto ist, zählt es."
+      },
+      "find-your-zero-cash-month": {
+        "title": "Finde deinen Null-Monat",
+        "keywords": "erster Schritt, eigene Tafel, Null-Monat, Frist für Vertriebsergebnisse, zurückrechnen",
+        "script": "Damit kommt dein erster Schritt. Bau diese Tafel für deine eigene Firma. Monat für Monat: Kasse, Kosten und Umsatz, so einfach wie Haftnotizen. Dann geh die Kassenzeile entlang und such den Monat, in dem sie bei null ankommt. Das ist dein Null-Monat, und an ihm misst sich alles, was heute noch kommt. Stift und Papier reichen, zwölf Monate genügen völlig. Sei ehrlich bei den Kosten. Sei vorsichtig beim Umsatz und trag nur ein, worauf du dein eigenes Gehalt verwetten würdest. Schreib dir dieses Datum auf. Es ist die Frist für deine Vertriebsergebnisse, nicht für dein Produkt. Rechne von dort zurück, und du weißt, wie viel Zeit dir wirklich bleibt, um anzufangen."
+      }
+    }
+  }
+}

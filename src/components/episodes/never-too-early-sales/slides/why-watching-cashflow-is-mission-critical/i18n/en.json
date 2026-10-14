@@ -1,0 +1,18 @@
+{
+  "title": "Why watching cashflow is mission critical",
+  "caption": "A company can look healthy on paper and still run out of cash one month too early.",
+  "voiceScript": {
+    "segments": {
+      "opening-promise": {
+        "title": "Opening promise",
+        "keywords": "healthy on paper, bankrupt in March, one month too late, four first steps",
+        "script": "Picture a company that looks healthy on paper. It has a product, a big deal on the way, and a team that works hard. And in March it is bankrupt. Not because the business was bad, but because the money arrived one month too late. Nobody had drawn the simple board that showed it coming. Today I will show you why sales has to start long before you need the revenue, and four first steps you can take."
+      },
+      "who-this-is-for": {
+        "title": "Who this is for",
+        "keywords": "founders, founding team, business or engineering, later is expensive",
+        "script": "This is for founders and founding-team members. Maybe you are the business person, maybe you are the engineer. Either way you know you should sell. You just think it is something for later, once the product is ready. By the end I want you to see why later is the expensive answer."
+      }
+    }
+  }
+}
