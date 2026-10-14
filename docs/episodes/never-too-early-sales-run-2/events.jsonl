@@ -57,3 +57,9 @@
 {"kind":"score","t":"2026-10-14T18:48:56Z","seq":57,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"5dc3b1553c6b4be2","name":"check","value":"pass","source":"check:mh","body":"totalViolations 0"}
 {"kind":"end","t":"2026-10-14T18:48:56Z","seq":58,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"5dc3b1553c6b4be2","status":"ok"}
 {"kind":"end","t":"2026-10-14T18:48:57Z","seq":59,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"bbe09361de1498a4","status":"ok","summary":"7 folder names, START-0002 and SALES-0007..0012; no new category"}
+{"kind":"start","t":"2026-10-14T18:49:55Z","seq":60,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"e4357182052196b9","type":"job","name":"customize-pipeline","job":"customize-pipeline","parent_span_id":"30e2f016b9c612f9"}
+{"kind":"start","t":"2026-10-14T18:49:55Z","seq":61,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"d73799f7b2c36cbd","type":"attempt","name":"customize-pipeline#1","job":"customize-pipeline","attempt":1,"parent_span_id":"e4357182052196b9"}
+{"kind":"score","t":"2026-10-14T18:50:43Z","seq":62,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"d73799f7b2c36cbd","name":"check","value":"pass","source":"check:vitest","body":"16/16 passed"}
+{"kind":"end","t":"2026-10-14T18:50:44Z","seq":63,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"d73799f7b2c36cbd","status":"ok"}
+{"kind":"end","t":"2026-10-14T18:50:44Z","seq":64,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"e4357182052196b9","status":"ok","summary":"7 research jobs, source-deck reference, profile guides dropped"}
+{"kind":"start","t":"2026-10-14T18:51:02Z","seq":65,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"1947f97e5979cff2","type":"gate","name":"draft pipeline","job":"customize-pipeline","parent_span_id":"30e2f016b9c612f9"}

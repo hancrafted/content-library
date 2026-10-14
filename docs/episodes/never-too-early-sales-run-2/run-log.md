@@ -62,3 +62,31 @@ Shape-only fix: the `## Episode Design Reference` section was added for `.scratc
 ### Notes
 
 Every research question already has a research file in `docs/llm-wiki/index.md` with the same question text: question 1 matches START-0001, and questions 2 to 7 match SALES-0001 to SALES-0006. The names above take the next free numbers, as the job's intent says. The `retrieval` job decides whether each question reuses its existing file. A reused question writes no new folder.
+
+## customize-pipeline · 2026-10-14T18:50:44Z
+
+### Inputs
+
+- `skills/new-episode/assets/pipeline.yml`: the template, at `main` 5d396b4.
+- `brief.md`, approved.
+- `.scratch/never-too-early-sales-run-2/research-folders.md`: the seven names from `categorize-research`.
+- Han's answer in this session: reuse the existing llm-wiki research instead of writing it again.
+
+### Output
+
+- `pipeline.yml`, `status: draft`, `template: 5d396b4`, committed with `Gate: draft pipeline` for Han to approve.
+
+### Checks
+
+- `vitest` staging test: pass.
+
+### Notes
+
+Changes from the template:
+
+- `write-research` became seven jobs, one per research question in the Brief's order, `write-research-<question-slug>`, writing the folders `categorize-research` named. Each `intent` quotes its question and names the llm-wiki file that matches it, because Han chose reuse: `retrieval` should decide `reuse <path>` for each one, so these jobs run no agent.
+- `write-dossier` wants all seven research jobs. Its references name the seven reused llm-wiki files (START-0001, SALES-0001 to SALES-0006) instead of the staging research glob, because reuse writes no staging research file.
+- `convert-references` writes one output, `reference/source-deck/design-reference.md`, from the Brief's one Episode Design Reference. That path replaces the glob in every agent's references. It also gained `isolation: worktree`, because it runs beside the research jobs once `retrieval` passes.
+- Dropped `docs/profile/han/storytelling-guide.md`, `tone-guide.md` and `mental-model-guide.md` from `write-dossier` and `write-voice-script`, because none of them exists in the repo yet.
+- Retries, gates, skills and models are unchanged: the Brief gives no reason to change them.
+- Needs human: the three profile guides are missing, so the Dossier and Voice script are written without Han's storytelling, tone and mental-model guides.
