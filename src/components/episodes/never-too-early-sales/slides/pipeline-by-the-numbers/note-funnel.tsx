@@ -1,6 +1,6 @@
-import { clsx } from 'clsx';
+import { BoardNote } from '@/components/slide-shared/board-note';
+import { cn } from '@/lib/utils';
 import { Fragment, type CSSProperties } from 'react';
-import { BoardNote } from './board-note';
 import styles from './pipeline-by-the-numbers.module.css';
 
 export interface FunnelStage {
@@ -32,12 +32,12 @@ function vars(values: Readonly<Record<string, number>>): CSSProperties {
 function Marks({ count, step }: { count: number; step: number }) {
   const wide = count > 9;
   return (
-    <div aria-hidden="true" data-marks className={clsx('grid w-fit', wide ? 'grid-cols-9 gap-1' : 'grid-cols-3 gap-2')}>
+    <div aria-hidden="true" data-marks className={cn('grid w-fit', wide ? 'grid-cols-9 gap-1' : 'grid-cols-3 gap-2')}>
       {Array.from({ length: count }, (_, index) => (
         <span
           key={index}
           style={vars({ '--step': step, '--row': Math.floor(index / (wide ? 9 : 3)) })}
-          className={clsx(styles.place, 'rounded-xs border border-border bg-card', wide ? 'size-3' : 'size-6')}
+          className={cn(styles.place, 'rounded-xs border border-border bg-card', wide ? 'size-3' : 'size-6')}
         />
       ))}
     </div>
@@ -51,8 +51,8 @@ function Stage({ stage, step }: { stage: FunnelStage; step: number }) {
         {stage.label}
       </span>
       {stage.count === 1 ? (
-        <span style={vars({ '--step': step })} className={clsx(styles.place, 'block')}>
-          <BoardNote className="text-body font-semibold">{stage.countLabel}</BoardNote>
+        <span style={vars({ '--step': step })} className={cn(styles.place, 'block')}>
+          <BoardNote className="w-fit font-semibold">{stage.countLabel}</BoardNote>
         </span>
       ) : (
         <Marks count={stage.count} step={step} />
@@ -65,7 +65,7 @@ function Ratio({ ratio, step }: { ratio: string; step: number }) {
   return (
     <span
       style={vars({ '--step': step })}
-      className={clsx(
+      className={cn(
         styles.fade,
         'flex items-center gap-2 pl-6 text-body font-semibold text-foreground tabular-nums @2xl:pl-0',
       )}
@@ -89,7 +89,7 @@ function Total({ total, target }: { total: string; target?: string }) {
     <div data-target={target} className="mb-4 flex flex-col gap-1">
       <p
         style={vars({ '--step': TOTAL_STEP })}
-        className={clsx(styles.fade, 'text-subheading font-semibold text-primary tabular-nums @2xl:text-center')}
+        className={cn(styles.fade, 'text-subheading font-semibold text-primary tabular-nums @2xl:text-center')}
       >
         {total}
       </p>

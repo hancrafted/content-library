@@ -95,7 +95,7 @@ function noteClass(note: CashflowNote): string {
   return cn(
     styles.note,
     styles[note.row],
-    'flex flex-col rounded-sm p-2 shadow-sm',
+    'flex min-w-0 flex-col rounded-sm p-1 shadow-sm sm:p-2',
     note.zero ? 'bg-destructive text-destructive-foreground' : NOTE_SURFACE[note.row],
     moved && [styles.moved, 'ring-2 ring-primary ring-offset-2 ring-offset-muted'],
   );
@@ -105,7 +105,7 @@ function Note({ note, kind, shift }: { note: CashflowNote; kind: string; shift: 
   return (
     <li data-target={note.target} style={vars({ '--shift': shift })} className={noteClass(note)}>
       <span className="text-caption">{kind}</span>
-      <span className="text-body font-semibold">{note.amount}</span>
+      <span className="text-body font-semibold wrap-anywhere">{note.amount}</span>
     </li>
   );
 }

@@ -1,6 +1,8 @@
+import { BoardNote } from '@/components/slide-shared/board-note';
 import type { TargetProps } from '@/lib/context-link.pure';
+import { cn } from '@/lib/utils';
 import { useId } from 'react';
-import { BoardNote } from './board-note';
+import styles from './sales-is-more-than-selling.module.css';
 
 export interface BoardColumnItem {
   readonly slug: string;
@@ -16,6 +18,9 @@ export interface BoardColumnProps {
   readonly targetProps: TargetProps;
 }
 
+// A slight tilt, alternating per note, so the notes read as pinned to a board.
+const TILT = ['-rotate-1', 'rotate-1', ''] as const;
+
 /** One board column: a hairline, its header and its sticky notes. */
 export function BoardColumn({ slug, title, items, firstStep, targetProps }: BoardColumnProps) {
   const id = `${slug}-${useId()}`;
@@ -26,8 +31,10 @@ export function BoardColumn({ slug, title, items, firstStep, targetProps }: Boar
       </h4>
       <ul className="mt-4 flex list-none flex-col gap-3">
         {items.map((item, index) => (
-          <li key={item.slug}>
-            <BoardNote text={item.text} tone="neutral" step={firstStep + index} />
+          <li key={item.slug} data-step={firstStep + index}>
+            <BoardNote className={cn(styles.note, 'p-4', TILT[(firstStep + index) % TILT.length])}>
+              {item.text}
+            </BoardNote>
           </li>
         ))}
       </ul>

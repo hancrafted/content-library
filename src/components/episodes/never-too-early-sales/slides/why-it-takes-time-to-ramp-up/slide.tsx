@@ -1,6 +1,6 @@
 import { slide } from '@/components/slide-master/slide';
 import { SlideCaption, SlideFrame } from '@/components/slide-master/slide-master';
-import { clsx } from 'clsx';
+import { cn } from '@/lib/utils';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { RampRow, ROW_TEMPLATE } from './ramp-row';
@@ -51,7 +51,7 @@ export const whyItTakesTimeToRampUp = slide({
       <SlideCaption data-target="caption">{t('caption')}</SlideCaption>
       <div
         aria-hidden="true"
-        className={clsx('mt-10 hidden pb-3 text-caption font-medium text-muted-foreground @md:grid', ROW_TEMPLATE)}
+        className={cn('mt-10 hidden pb-3 text-caption font-medium text-muted-foreground @md:grid', ROW_TEMPLATE)}
       >
         <span className="hidden @3xl:block" />
         <span>{t('headers.lack')}</span>

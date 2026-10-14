@@ -1,5 +1,5 @@
-import { clsx } from 'clsx';
-import { BoardNote } from './board-note';
+import { BoardNote } from '@/components/slide-shared/board-note';
+import { cn } from '@/lib/utils';
 import styles from './what-is-a-sales-pipeline.module.css';
 
 const FUNNEL_MARKS = [6, 2, 1] as const;
@@ -27,7 +27,7 @@ export function FunnelDrawing({ rows }: { rows: readonly [string, string, string
 export function ConversionDrawing({ from, to }: { from: string; to: string }) {
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <BoardNote className="text-body whitespace-nowrap">{from}</BoardNote>
+      <BoardNote className="w-fit whitespace-nowrap">{from}</BoardNote>
       <svg viewBox="0 0 24 24" fill="none" className="size-6 shrink-0 stroke-current text-muted-foreground">
         <path
           d="M3 12h17m-5-5 5 5-5 5"
@@ -38,7 +38,7 @@ export function ConversionDrawing({ from, to }: { from: string; to: string }) {
           className={styles.draw}
         />
       </svg>
-      <BoardNote className="text-body whitespace-nowrap">{to}</BoardNote>
+      <BoardNote className="w-fit whitespace-nowrap">{to}</BoardNote>
     </div>
   );
 }
@@ -54,7 +54,7 @@ export function CycleDrawing({ start, end }: { start: string; end: string }) {
           </span>
         ))}
       </div>
-      <span className={clsx(styles.grow, 'block h-1.5 w-full rounded-full bg-primary')} />
+      <span className={cn(styles.grow, 'block h-1.5 w-full rounded-full bg-primary')} />
       <div className="flex justify-between gap-2 text-caption text-muted-foreground">
         <span>{start}</span>
         <span>{end}</span>

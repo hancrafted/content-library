@@ -1,6 +1,6 @@
-import { clsx } from 'clsx';
+import { BoardNote } from '@/components/slide-shared/board-note';
+import { cn } from '@/lib/utils';
 import type { CSSProperties, ReactNode } from 'react';
-import { BoardNote } from './board-note';
 import styles from './what-is-a-sales-pipeline.module.css';
 
 interface BoardColumnProps {
@@ -13,7 +13,7 @@ interface BoardColumnProps {
   'data-target'?: string;
 }
 
-const COLUMN = clsx(
+const COLUMN = cn(
   styles.column,
   'flex min-w-0 flex-col gap-4 rounded-lg border border-border bg-muted/40 p-4',
   '@xl:grid @xl:grid-cols-[minmax(0,14rem)_minmax(0,1fr)] @xl:items-start @3xl:flex @3xl:items-stretch',
@@ -34,7 +34,7 @@ export function BoardColumn({ label, caption, tells, step, children, ...rest }: 
       </div>
       <div className="flex min-w-0 flex-col gap-4">
         <p className="text-body text-muted-foreground">{caption}</p>
-        <BoardNote className="text-body">{tells}</BoardNote>
+        <BoardNote className="w-fit">{tells}</BoardNote>
       </div>
     </li>
   );

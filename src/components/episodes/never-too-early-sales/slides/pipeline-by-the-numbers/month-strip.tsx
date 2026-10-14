@@ -1,6 +1,6 @@
-import { clsx } from 'clsx';
+import { BoardNote } from '@/components/slide-shared/board-note';
+import { cn } from '@/lib/utils';
 import type { CSSProperties } from 'react';
-import { BoardNote } from './board-note';
 import styles from './pipeline-by-the-numbers.module.css';
 
 /** Half months on the strip: ten months, like the cashflow board's month columns. */
@@ -51,7 +51,7 @@ function Bar({ bar, index }: { bar: MonthStripBar; index: number }) {
         <span
           aria-hidden="true"
           style={step(BAR_STEPS[index] ?? REVENUE_STEP, BAR_DURATIONS[index])}
-          className={clsx(styles.grow, 'mt-1 block h-3 rounded-sm border border-border bg-muted')}
+          className={cn(styles.grow, 'mt-1 block h-3 rounded-sm border border-border bg-muted')}
         />
       </div>
     </div>
@@ -60,11 +60,11 @@ function Bar({ bar, index }: { bar: MonthStripBar; index: number }) {
 
 function Revenue({ label }: { label: string }) {
   return (
-    <div style={step(REVENUE_STEP)} className={clsx(styles.land, 'flex flex-col items-end gap-1 justify-self-end')}>
+    <div style={step(REVENUE_STEP)} className={cn(styles.land, 'flex flex-col items-end gap-1 justify-self-end')}>
       <svg aria-hidden="true" viewBox="0 0 12 8" className="size-3 text-muted-foreground @xl:hidden">
         <path d="M6 0 L12 8 H0 Z" fill="currentColor" />
       </svg>
-      <BoardNote tone="revenue" className="text-body font-semibold">
+      <BoardNote tone="revenue" className="w-fit font-semibold">
         {label}
       </BoardNote>
     </div>

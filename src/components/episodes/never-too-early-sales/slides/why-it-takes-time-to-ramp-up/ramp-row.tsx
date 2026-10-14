@@ -1,6 +1,6 @@
-import { clsx } from 'clsx';
+import { BoardNote } from '@/components/slide-shared/board-note';
+import { cn } from '@/lib/utils';
 import type { CSSProperties } from 'react';
-import { BoardNote } from './board-note';
 import styles from './why-it-takes-time-to-ramp-up.module.css';
 
 /** One row template for the header row and every row: notes side by side from 448px, the title a column from 768px. */
@@ -47,18 +47,18 @@ export function RampRow({ index, title, lack, unlock, lackHeader, unlockHeader, 
     <li
       data-target={rest['data-target']}
       style={{ '--row': index - 1 } as CSSProperties}
-      className={clsx('grid grid-cols-1 gap-3 py-6', ROW_TEMPLATE)}
+      className={cn('grid grid-cols-1 gap-3 py-6', ROW_TEMPLATE)}
     >
-      <h4 className={clsx(styles.place, 'text-body font-semibold text-foreground @md:col-span-3 @3xl:col-span-1')}>
+      <h4 className={cn(styles.place, 'text-body font-semibold text-foreground @md:col-span-3 @3xl:col-span-1')}>
         <span className="mr-2 text-caption text-muted-foreground tabular-nums">{index}</span>
         {title}
       </h4>
-      <BoardNote tone="unknown" className={styles.place}>
+      <BoardNote tone="unknown" className={cn(styles.place, 'min-w-0 p-4')}>
         <span className="sr-only">{lackHeader}: </span>
         {lack}
       </BoardNote>
       <Arrow />
-      <BoardNote className={styles.land}>
+      <BoardNote className={cn(styles.land, 'min-w-0 p-4')}>
         <span className="sr-only">{unlockHeader}: </span>
         {unlock}
       </BoardNote>

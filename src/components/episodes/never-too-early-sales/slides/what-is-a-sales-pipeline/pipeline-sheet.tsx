@@ -1,4 +1,4 @@
-import { clsx } from 'clsx';
+import { cn } from '@/lib/utils';
 import type { CSSProperties } from 'react';
 import styles from './what-is-a-sales-pipeline.module.css';
 
@@ -15,7 +15,7 @@ export function PipelineSheet({ title, columns, rows }: { title: string; columns
         <thead>
           <tr>
             {columns.map((column) => (
-              <th key={column} scope="col" className={clsx(CELL, 'bg-muted font-medium text-foreground')}>
+              <th key={column} scope="col" className={cn(CELL, 'bg-muted font-medium text-foreground')}>
                 {column}
               </th>
             ))}
@@ -25,7 +25,7 @@ export function PipelineSheet({ title, columns, rows }: { title: string; columns
           {rows.map((row, index) => (
             <tr key={row[0]} style={{ '--row': index } as CSSProperties} className={styles.row}>
               {row.map((cell, cellIndex) => (
-                <td key={cellIndex} className={clsx(CELL, 'text-muted-foreground')}>
+                <td key={cellIndex} className={cn(CELL, 'text-muted-foreground')}>
                   {cell}
                 </td>
               ))}

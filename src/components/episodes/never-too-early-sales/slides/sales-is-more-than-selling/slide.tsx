@@ -1,10 +1,12 @@
 import { slide } from '@/components/slide-master/slide';
 import { SlideCaption, SlideFrame } from '@/components/slide-master/slide-master';
+import { BoardNote } from '@/components/slide-shared/board-note';
+import { cn } from '@/lib/utils';
 import { BoardColumn } from './board-column';
-import { BoardNote } from './board-note';
 import { ConvergeLines } from './converge-lines';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
+import styles from './sales-is-more-than-selling.module.css';
 
 // A Scene from a copy of the master `grid-1x3`: it has no part below its columns, and the three gains converge
 // on one result. Each column holds two sticky notes instead of a numeral and caption; the entrance is CSS only.
@@ -74,7 +76,9 @@ export const salesIsMoreThanSelling = slide({
         <ConvergeLines />
       </div>
       <div {...target('result')} className="mx-auto mt-4 w-full max-w-sm">
-        <BoardNote text={t('result')} tone="result" step={6} />
+        <BoardNote tone="result" className={cn(styles.result, 'p-4 text-center font-semibold')}>
+          {t('result')}
+        </BoardNote>
       </div>
     </SlideFrame>
   ),
