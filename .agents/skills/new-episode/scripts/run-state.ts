@@ -2,13 +2,13 @@
 // CLAUDE_CODE_SESSION_ID, or SESSION_ID); `clear` ends the marker, first recording the orchestrator session's model and
 // usage on the Run span when its transcript is found; `archive <slug>` copies the Episode's log to
 // `.logs/new-episode/<slug>/<run id>.jsonl`. The shapes live in run-state.pure.ts; this file only touches the disk.
-import { execFileSync } from 'node:child_process';
 import { copyFileSync, globSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { runUsageEvent } from './claude-adapter.pure.ts';
 import { MARKER_PATH } from './marker.pure.ts';
 import { readEpisodeLog, readLog, readMarker } from './episode-run-log.ts';
+import { appendEvent } from './run-log-writer.ts';
 import type { RunLogLine } from './run-log.pure.ts';
 import { archiveTarget, markerText } from './run-state.pure.ts';
 
@@ -43,8 +43,8 @@ function recordRunUsage(): void {
   const lines = readLog(marker.log).lines;
   const event = runUsageEvent(lines, marker, transcriptOf(marker.session_id));
   if (event === null) return;
-  const writer = path.join(import.meta.dirname, 'log.ts');
-  execFileSync('node', [writer, path.basename(path.dirname(marker.log)), JSON.stringify(event)], { stdio: 'ignore' });
+  const result = appendEvent({ root: '.', file: marker.log }, event);
+  if (!result.ok) console.error(`⚠ run usage not recorded: ${result.errors.join('; ')}`);
 }
 
 function clear(): void {

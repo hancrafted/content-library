@@ -5,7 +5,7 @@ status: proposed
 
 # Pipeline runs are logged as OpenTelemetry-shaped spans in append-only JSONL
 
-Every Run of `/new-episode` appends start, end and score lines to one `events.jsonl` in the Episode's staging folder, written only by a command so no harness types a timestamp, with OpenTelemetry ids and field names so a later export to a tracing tool is a field mapping. Plain text in the Episode branch can be diffed in a draft PR and read with `cat`, and every harness can call the same writer.
+Every Run of `/new-episode` appends start, end and score lines to one `events.jsonl` in the Episode's staging folder, written by one writer (run-log-writer.ts) so no harness types a timestamp, with OpenTelemetry ids and field names so a later export to a tracing tool is a field mapping. Plain text in the Episode branch can be diffed in a draft PR and read with `cat`, and every harness can call the same writer.
 
 ## Considered options
 
