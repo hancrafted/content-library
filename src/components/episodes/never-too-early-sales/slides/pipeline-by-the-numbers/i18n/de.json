@@ -1,0 +1,100 @@
+{
+  "title": "Pipeline by the numbers",
+  "caption": "An invented, completed cohort: the ratios count progress; the time rail adds duration separately.",
+  "disclaimer": "Illustration, not benchmark",
+  "funnel": {
+    "label": "27 leads → 9 opportunities → 1 won deal",
+    "bands": {
+      "leads": "27 leads",
+      "opportunities": "9 opportunities",
+      "won": "1 won deal"
+    },
+    "ratios": {
+      "leads-to-opportunities": "3 leads : 1 opportunity · 1/3 advance",
+      "opportunities-to-deals": "9 opportunities : 1 deal · 1/9 advance"
+    },
+    "overall": "27 leads : 1 deal · 1/27 ≈ 3.7% overall",
+    "condition": "One completed cohort; every successful path passes both gates in order"
+  },
+  "rail": {
+    "stages": {
+      "lead-work": "Lead work: 2 weeks",
+      "opportunity-work": "Opportunity work: 6 months",
+      "closing": "Closing: 3 months"
+    },
+    "total": "About 9.5 months, counting 2 weeks as about half a month",
+    "label": "Illustrative sequential first-contact-to-win path, not time to cash receipt",
+    "cashNote": "Cash timing also needs delivery and payment terms"
+  },
+  "notes": {
+    "real-reports-may-skip-gates": {
+      "header": "Real reports may skip gates",
+      "description": "HubSpot permits optional funnel stages; Pipedrive counts won deals as completing every stage. Multiplying conditional rates is valid for the worked example's strict same-cohort sequence, not automatically for cumulative reached-stage percentages or arbitrary CRM exports [1] [2].",
+      "sources": {
+        "hubspot-custom-funnel": {
+          "title": "HubSpot, Create custom funnel reports"
+        },
+        "pipedrive-deal-conversion": {
+          "title": "Pipedrive, Insights reports: deal conversion"
+        }
+      }
+    },
+    "buying-groups-vary-without-a-measured-clock": {
+      "header": "Buying groups vary, without a measured clock",
+      "description": "Johnston and Bonoma studied 31 firms' capital-equipment and industrial-service buying groups and found differences in group structure and interaction. That supports variation by purchase situation, not a measured duration of the example's stages [1].",
+      "sources": {
+        "johnston-bonoma-buying-center": {
+          "title": "Johnston and Bonoma, The Buying Center: Structure and Interaction Patterns"
+        }
+      }
+    },
+    "public-procurement-is-a-bounded-special-case": {
+      "header": "Public procurement is a bounded special case",
+      "description": "EU public-procurement open procedures carry an ordinary 35-day tender-receipt minimum, with conditional shortening routes including qualifying prior notice, urgency and electronic submission. Those legal clocks have conditions and are not private-company sales-cycle benchmarks [1].",
+      "sources": {
+        "eu-directive-2014-24": {
+          "title": "European Parliament and Council, Directive 2014/24/EU on public procurement"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "read-the-example-as-inputs": {
+        "title": "Read the example as inputs",
+        "keywords": "",
+        "script": "Imagine our scheduling company has finished working through a group of twenty-seven leads. We know the final outcomes for this invented group. Every win in this example went through an opportunity first. Nobody is still waiting for an answer. With those assumptions in place, we can practise counting the route from leads to deals."
+      },
+      "three-leads-for-one-opportunity": {
+        "title": "Three leads for one opportunity",
+        "keywords": "",
+        "script": "Nine of the twenty-seven leads became opportunities. Divide nine by twenty-seven. One third advanced. Another way to say it is three leads for each opportunity. That is a relationship between counts. It tells us nothing about how long any conversation took. For timing, we will need a separate set of dates."
+      },
+      "nine-opportunities-for-one-win": {
+        "title": "Nine opportunities for one win",
+        "keywords": "",
+        "script": "Of those nine opportunities, one became a won deal. One divided by nine is one ninth. Think about the work behind those nine records. Our founder still had conversations to prepare, questions to answer and proposals to discuss. Only one ended in a win. The other work happened too, even though it produced no agreement."
+      },
+      "multiply-only-this-consistent-path": {
+        "title": "Multiply only this consistent path",
+        "keywords": "",
+        "script": "For our invented group, multiply one third by one ninth. The result is one twenty-seventh, or about three point seven percent. We can check it directly: one win from twenty-seven original leads. That describes this completed example. Finding another twenty-seven names tomorrow would not entitle the founder to another win. She still has to do the work."
+      },
+      "add-the-time-on-a-different-rail": {
+        "title": "Add the time on a different rail",
+        "keywords": "",
+        "script": "Now give one successful path an invented timetable. Two weeks of lead work from first contact. Six months of opportunity work. Three months of closing. Assume those periods happen one after another. Counting two weeks as roughly half a month gives about nine and a half months to agreement. This is a timing illustration, not a forecast."
+      },
+      "the-buyer-has-work-too": {
+        "title": "The buyer has work too",
+        "keywords": "",
+        "script": "Imagine Birch's contact likes the trial proposal but wants a colleague to review it. Perhaps someone else must agree to the spending. Our founder should ask who needs to be involved and what the next decision requires. These are possible steps in this story. She should discover Birch's actual process rather than assume every buyer follows it."
+      },
+      "the-bank-deadline-comes-later-in-the-chain": {
+        "title": "The bank deadline comes later in the chain",
+        "keywords": "",
+        "script": "Our nine-and-a-half-month illustration ends at a win. Now place the agreed receipt date beside that endpoint. Does payment happen before delivery, during the work or afterwards? A prepaid arrangement would not add a waiting period after the win. Use the actual arrangement to connect the deal timetable to the cash plan."
+      }
+    }
+  }
+}

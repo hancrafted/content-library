@@ -1,0 +1,84 @@
+/* Layout reflows by the Scene's own width, so the Context drawer beside it never squeezes the columns. */
+.scene {
+  container-type: inline-size;
+}
+
+.notes,
+.figures {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* Narrow: the pipeline flows top to bottom, its arrows turned down. */
+.flow {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.flowStep {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.flowArrow {
+  transform: rotate(90deg);
+}
+
+.funnelRow {
+  grid-template-columns: minmax(0, 1fr) minmax(0, auto);
+}
+
+/* Symbolic narrowing: the widths say "fewer", never a measured count. */
+.funnelRow:nth-child(1) .bar {
+  width: 100%;
+}
+
+.funnelRow:nth-child(2) .bar {
+  width: 70%;
+}
+
+.funnelRow:nth-child(3) .bar {
+  width: 40%;
+}
+
+@container (min-width: 36rem) {
+  .notes {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .figures {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .flow,
+  .flowStep {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .flowArrow {
+    transform: none;
+  }
+}
+
+/* The three questions settle in once the Slide is active; the base rule is the finished picture. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-zone='active'] .note {
+    animation: settle 400ms cubic-bezier(0.2, 0, 0, 1) both;
+  }
+
+  [data-zone='active'] .note:nth-child(2) {
+    animation-delay: 80ms;
+  }
+
+  [data-zone='active'] .note:nth-child(3) {
+    animation-delay: 160ms;
+  }
+}
+
+@keyframes settle {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}

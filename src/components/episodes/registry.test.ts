@@ -40,6 +40,7 @@ const COMPOSITION = [
       { opener: 'why-cashflow-matters', pageSlides: 1 },
       { opener: 'sales-beyond-selling', pageSlides: 1 },
       { opener: 'how-to-start-sales', pageSlides: 3 },
+      { opener: 'why-pipeline-takes-time', pageSlides: 6 },
     ],
   },
 ] as const;

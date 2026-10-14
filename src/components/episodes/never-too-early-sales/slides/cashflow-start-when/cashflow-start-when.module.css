@@ -1,0 +1,145 @@
+/* The actions reflow by the Scene's own width; the arrow and the quarters answer to the board they sit in. */
+.scene {
+  container-type: inline-size;
+}
+
+/* Actions: one column, then two by two, then one row of four. */
+.actions {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@container (min-width: 36rem) {
+  .actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container (min-width: 56rem) {
+  .actions {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/*
+ * The arrow, narrow: steps stacked under the start note, each pointing up
+ * towards it. These queries resolve against the board's figure, the nearest
+ * size container around its `above` row.
+ */
+.arrow,
+.arrowStep {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.arrowHead {
+  flex-direction: column;
+  margin-inline-start: 1rem;
+}
+
+.arrowHead > svg {
+  transform: rotate(90deg);
+}
+
+.arrowLine {
+  width: 2px;
+  height: 1rem;
+  transform-origin: bottom;
+}
+
+/* From a 36rem board: the arrow runs right to left, its steps wrapping onto a second line if needed. */
+@container (min-width: 36rem) {
+  .arrow,
+  .arrowStep {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .arrowHead {
+    flex-direction: row;
+    margin-inline-start: 0;
+  }
+
+  .arrowHead > svg {
+    transform: none;
+  }
+
+  .arrowLine {
+    width: 1.5rem;
+    height: 2px;
+    transform-origin: right;
+  }
+}
+
+/* Quarters: the written legend below a four-column board; no bracket, since January to March do not share a row. */
+.bracket {
+  display: none;
+}
+
+/* A four-column board: the bracket spans the same columns as the months; the legend stays for assistive technology only. */
+@container (min-width: 46rem) {
+  .bracket {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .legend {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+.quarter {
+  position: relative;
+  border-top: 1px solid var(--border);
+}
+
+.quarter::before,
+.quarter::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 1px;
+  height: 0.5rem;
+  background-color: var(--border);
+}
+
+.quarter::before {
+  left: 0;
+}
+
+.quarter::after {
+  right: 0;
+}
+
+/* The arrow traces backwards once the Slide is active, from the receipt towards the start; everything else rests. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-zone='active'] .arrowLine {
+    animation: trace-up 600ms cubic-bezier(0.2, 0, 0, 1) both;
+    animation-delay: calc((var(--step, 1) - 1) * 100ms);
+  }
+}
+
+@container (min-width: 36rem) {
+  @media (prefers-reduced-motion: no-preference) {
+    [data-zone='active'] .arrowLine {
+      animation-name: trace-back;
+    }
+  }
+}
+
+@keyframes trace-up {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes trace-back {
+  from {
+    transform: scaleX(0);
+  }
+}
