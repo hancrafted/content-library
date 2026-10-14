@@ -469,3 +469,65 @@ Needs human: spec #147 carries `ready-for-agent` (as run 1's #99 did); an agent 
 Needs human: the issue links to Dossier headings resolve only once `episode/never-too-early-sales` is pushed.
 
 Needs human: sub-issue titles differ from the Dossier h2s (#148 "The cashflow board, first time"; #149 and #151 shortened); the bodies use the right anchors.
+
+## write-design-spec · 2026-10-14T00:08:40Z
+
+### Inputs
+
+- `brief.md` (`## Style`: Board) and `docs/design/design-guide.md#board`.
+- `dossier.md`, approved.
+- `GLOSSARY.md`, `docs/design/slide-library.md`, `docs/design/design-system.md`.
+- `.archgate/adrs/FE-002-episode-page.md`, `FE-007-module-layering.md`, `FE-009-slide-wrapper-and-scene.md`, `FE-011-design-tokens.md`.
+- Run-1 tickets #100–#103 as Design answer examples.
+- `source-deck.pdf`.
+
+### Output
+
+- `## Visual language` on spec https://github.com/hancrafted/content-library/issues/147 (board motif, note colours `info`/`warning`/`success`/`destructive`, `primary` for the one thing to look at, note-placing motion).
+- A Design answer for every Slide in #148–#152, each body ending `Edited-by: write-design-spec`. The shared parts are `slide-shared/cashflow-board.tsx` (#148, reused by #150 and #152) and `slide-shared/deal-board/` (#150).
+- Edited #147 · 2026-10-13T23:51:35Z
+- Edited #152 · 2026-10-13T23:55:33Z
+- Edited #149 · 2026-10-13T23:56:36Z
+- Edited #150 · 2026-10-13T23:57:10Z
+- Edited #148 · 2026-10-13T23:57:29Z
+- Edited #151 · 2026-10-13T23:58:15Z
+- Edited #152 · 2026-10-14T00:01:35Z
+- Edited #148 · 2026-10-14T00:02:57Z
+- Edited #150 · 2026-10-14T00:04:12Z
+- Edited #151 · 2026-10-14T00:06:11Z
+- Gate: #148–#152 relabelled `needs-triage` to `ready-for-agent` at 2026-10-14T00:08:13Z, at Han's standing approval ("i approve all subsequent gates, run until episode is implemented").
+- `dossier.md`: four overruled masters rewritten to `basic-page` (the nearest frame component for a Scene), re-verified by machine and by Han's standing approval.
+
+### Checks
+
+- Reviewer: pass on attempt 2 for every ticket (#149 on attempt 1).
+
+### Metrics
+
+- implementor · attempt 1 · pass · 404 s · 577094 tokens
+- reviewer · attempt 1 · fail · rubric "Colour, size and weight are tokens (FE-011); every import is one FE-007 §5 allows." · 210 s · 421737 tokens
+- implementor · attempt 2 · pass · 309 s · 268751 tokens
+- reviewer · attempt 2 · pass · 360 s · 229401 tokens
+- #148 · approved as drafted
+- #149 · approved as drafted
+- #150 · approved as drafted
+- #151 · approved as drafted
+- #152 · approved as drafted
+
+### Notes
+
+The implementor ran in this session and spawned five designers (one per ticket, opus). The metrics sum their tokens; attempt 2 re-ran only the four failing tickets' designers.
+
+Attempt 1 failed four tickets. #148 broke the visual language (a `foreground` month pill, and no `primary` mark on a moved note). #150 and #152 passed board props #148 does not define. #151's multi-column layouts were keyed on the viewport's `md` while the Foreground is only about 384px there. Attempt 2 fixed each: #151 now switches on the Foreground with container queries.
+
+"Approved as drafted" means Han made no edit of his own: the relabel was done at his standing approval, not after he read the answers.
+
+Needs human: copy the Dossier does not name is the designers' proposal on every ticket: captions, the board's short amounts (`$100k`, `+$1M`; German `100k $`, `+1 Mio. $`, "Pleite"), the deal board's invented company names, the steps column heading "Start this week", and the "Start early" stamp.
+
+Needs human: #152 draws the last board in quarters (Q1–Q4, $50k amounts) as the source deck does, against the visual language's "same grid, note size and positions" for all three boards.
+
+Needs human: #149's third column is "Trust" while its result note is "Increase trust"; the designer suggests "Results", as Voice script item 4 says.
+
+Needs human: Speaker notes without a Dossier `target:` got one from the designers (#149 note 4 to `result`, #151's no-decision note to `funnel`).
+
+Needs human: the first board (#148) has no `primary` mark; the destructive "Bankrupt" stamp is its focus.

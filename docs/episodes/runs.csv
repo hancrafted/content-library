@@ -94,3 +94,7 @@ run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at
 2026-10-13T22:43:23Z,never-too-early-sales,write-voice-script,reviewer,3,pass,,97,64776,2026-10-13T23:46:00Z
 2026-10-13T22:43:23Z,never-too-early-sales,write-spec,implementor,1,pass,,149,86052,2026-10-13T23:49:33Z
 2026-10-13T22:43:23Z,never-too-early-sales,write-spec,reviewer,1,pass,,58,70772,2026-10-13T23:51:30Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-design-spec,implementor,1,pass,,404,577094,2026-10-13T23:58:19Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-design-spec,reviewer,1,fail,"Colour, size and weight are tokens (FE-011); every import is one FE-007 §5 allows.",210,421737,2026-10-14T00:01:00Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-design-spec,implementor,2,pass,,309,268751,2026-10-14T00:06:11Z
+2026-10-13T22:43:23Z,never-too-early-sales,write-design-spec,reviewer,2,pass,,360,229401,2026-10-14T00:07:50Z
