@@ -146,3 +146,12 @@ A library motion is a CSS module under `src/components/slide-shared/motions/`. E
 
 - `stick-on`: `.stickOn`, a note stuck on a board: it drops in from slightly above, tilted, and settles.
 - `draw-in`: `.drawIn`, a stroke drawn once from its tail, `--draw-origin` (`BoardArrow` sets it), by scaling it in along its length.
+
+## Shared parts
+
+A shared part is a server component under `src/components/slide-shared/` with plain props, which a Slide imports when a second Slide needs the same piece. The board parts sit in `src/components/slide-shared/board/`, each with a CSS module whose colours are mixed from global tokens:
+
+- `Board`: the neutral surface, as columns with a dark pill header each (`columns`, optional fixed `rows` shared through a subgrid) or as one free surface for the Slide's own layout; `overlay` paints last on the same grid. A Slide reflows the columns by setting `--columns` in its `className`.
+- `StickyNote`: one note, `tone` `neutral`, `cost`, `revenue` or `warning`, with a label, a short `value` or a rich body, an optional `primary` ring and `fill` to fill its grid cell.
+- `BoardArrow`: a drawn stroke with a head, `left` or `right`, optionally `dashed` and labelled, all in `currentColor`; it sets `--draw-origin` to its tail for `draw-in`.
+- `CashflowBoard`: a `Board` with four fixed rows, `opening`, `cost`, `revenue` and `closing`, one note per slot, each amount a number written in the page's locale and `currency` (compact below `sm`, such as "$1M" or "1 Mio. $", in full from `sm`), an optional stamp and arrow, and `--i` on every item in reading order for the Slide's motion classes.

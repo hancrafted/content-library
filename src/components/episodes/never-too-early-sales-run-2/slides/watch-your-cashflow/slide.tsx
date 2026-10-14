@@ -37,7 +37,7 @@ export const watchYourCashflow = slide({
     { slug: 'first-actionable' },
     { slug: 'right-deal-wrong-month' },
   ],
-  content: ({ t, target, Title }) => {
+  content: ({ t, locale, target, Title }) => {
     const cash = t('board.kinds.cash');
     const cost = t('board.kinds.cost');
     const columns: readonly CashColumn[] = [
@@ -45,28 +45,28 @@ export const watchYourCashflow = slide({
         slug: 'january',
         label: t('board.months.january'),
         notes: [
-          { slug: 'january-opening', slot: 'opening', label: cash, amount: t('board.amounts.january-opening') },
+          { slug: 'january-opening', slot: 'opening', label: cash, amount: 100_000 },
           {
             slug: 'january-cost',
             slot: 'cost',
             label: cost,
-            amount: t('board.amounts.january-cost'),
+            amount: 50_000,
             target: target('first-cost'),
           },
-          { slug: 'january-closing', slot: 'closing', label: cash, amount: t('board.amounts.january-closing') },
+          { slug: 'january-closing', slot: 'closing', label: cash, amount: 50_000 },
         ],
       },
       {
         slug: 'february',
         label: t('board.months.february'),
         notes: [
-          { slug: 'february-opening', slot: 'opening', label: cash, amount: t('board.amounts.february-opening') },
-          { slug: 'february-cost', slot: 'cost', label: cost, amount: t('board.amounts.february-cost') },
+          { slug: 'february-opening', slot: 'opening', label: cash, amount: 50_000 },
+          { slug: 'february-cost', slot: 'cost', label: cost, amount: 50_000 },
           {
             slug: 'february-closing',
             slot: 'closing',
             label: cash,
-            amount: t('board.amounts.february-closing'),
+            amount: 0,
             zeroCash: true,
           },
         ],
@@ -74,7 +74,7 @@ export const watchYourCashflow = slide({
       {
         slug: 'march',
         label: t('board.months.march'),
-        notes: [{ slug: 'march-cost', slot: 'cost', label: cost, amount: t('board.amounts.march-cost') }],
+        notes: [{ slug: 'march-cost', slot: 'cost', label: cost, amount: 50_000 }],
       },
       {
         slug: 'april',
@@ -85,7 +85,7 @@ export const watchYourCashflow = slide({
             slug: 'april-revenue',
             slot: 'revenue',
             label: t('board.kinds.revenue'),
-            amount: t('board.amounts.april-revenue'),
+            amount: 1_000_000,
             target: target('revenue'),
           },
         ],
@@ -97,6 +97,8 @@ export const watchYourCashflow = slide({
         <div className="mt-10">
           <CashflowBoard
             columns={columns}
+            locale={locale}
+            currency="USD"
             stamp={{ text: t('board.stamp'), column: 3 }}
             target={target('board')}
             noteClassName={styles.note}

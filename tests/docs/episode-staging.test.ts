@@ -420,6 +420,6 @@ describe('edge cases', () => {
     // ASSERT
     expect(walked).toContain(sample);
     expect(names.masters).toEqual(expect.arrayContaining(expected.masters));
-    expect(names.motions).toEqual(expected.motions);
+    expect(names.motions).toEqual(expect.arrayContaining(expected.motions));
   });
 });

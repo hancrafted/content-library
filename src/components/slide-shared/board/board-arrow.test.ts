@@ -3,7 +3,6 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { BoardArrow, type BoardArrowProps } from './board-arrow';
-import { CashflowBoard } from './cashflow-board';
 
 function render(props: BoardArrowProps) {
   return load(renderToStaticMarkup(createElement(BoardArrow, props)));
@@ -38,31 +37,16 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('spans only the columns between its ends on a cashflow board, pointing back, indexed last', () => {
+  it('draws a dashed shaft as a border while the head stays solid', () => {
     // ARRANGE
-    const month = (slug: string) => ({
-      slug,
-      label: slug,
-      notes: [{ slug: `${slug}-cost`, slot: 'cost' as const, label: 'Cost', amount: '$1' }],
-    });
-    const expected = { direction: 'left', column: '2 / 4', row: '4', index: '4' };
+    const expected = { dashed: '', shaftDashed: true, headFill: 'currentColor' };
     // ACT
-    const $ = load(
-      renderToStaticMarkup(
-        createElement(CashflowBoard, {
-          columns: [month('january'), month('february'), month('march'), month('april')],
-          arrow: { from: 4, to: 1, slot: 'revenue' },
-        }),
-      ),
-    );
-    const arrow = $('[data-board-arrow]');
-    const style = arrow.attr('style') ?? '';
+    const $ = render({ direction: 'right', dashed: true });
     // ASSERT
     expect({
-      direction: arrow.attr('data-direction'),
-      column: /grid-column:\s*([^;]+)/.exec(style)?.[1],
-      row: /grid-row:\s*([^;]+)/.exec(style)?.[1],
-      index: /--i:\s*([^;]+)/.exec(style)?.[1],
+      dashed: $('[data-board-arrow]').attr('data-dashed'),
+      shaftDashed: $('[data-arrow-shaft]').hasClass('border-dashed'),
+      headFill: $('svg').attr('fill'),
     }).toEqual(expected);
   });
 });

@@ -10,17 +10,17 @@ const TWO_MONTHS: readonly CashColumn[] = [
     slug: 'january',
     label: 'January',
     notes: [
-      { slug: 'january-opening', slot: 'opening', label: 'Cash', amount: '$100,000' },
-      { slug: 'january-cost', slot: 'cost', label: 'Cost', amount: '$50,000' },
-      { slug: 'january-closing', slot: 'closing', label: 'Cash', amount: '$50,000' },
+      { slug: 'january-opening', slot: 'opening', label: 'Cash', amount: 100_000 },
+      { slug: 'january-cost', slot: 'cost', label: 'Cost', amount: 50_000 },
+      { slug: 'january-closing', slot: 'closing', label: 'Cash', amount: 50_000 },
     ],
   },
   {
     slug: 'february',
     label: 'February',
     notes: [
-      { slug: 'february-cost', slot: 'cost', label: 'Cost', amount: '$50,000' },
-      { slug: 'february-closing', slot: 'closing', label: 'Cash', amount: '$0', zeroCash: true },
+      { slug: 'february-cost', slot: 'cost', label: 'Cost', amount: 50_000 },
+      { slug: 'february-closing', slot: 'closing', label: 'Cash', amount: 0, zeroCash: true },
     ],
   },
 ];
@@ -40,7 +40,7 @@ describe('success cases', () => {
       'february-closing': '5',
     };
     // ACT
-    const $ = render({ columns: TWO_MONTHS });
+    const $ = render({ locale: 'en', currency: 'USD', columns: TWO_MONTHS });
     const rows = Object.fromEntries(
       $('[data-board-note]')
         .toArray()
@@ -49,6 +49,21 @@ describe('success cases', () => {
     // ASSERT
     expect(rows).toEqual(expected);
   });
+
+  it('writes each amount compact below sm and in full from sm, in the page locale', () => {
+    // ARRANGE
+    const expected = { compact: ['$100K', 'Hidden from sm'], full: ['$100,000', 'Shown from sm'] };
+    // ACT
+    const $ = render({ locale: 'en', currency: 'USD', columns: TWO_MONTHS });
+    const note = $('[data-slot="january-opening"]');
+    const compact = note.find('[data-amount="compact"]');
+    const full = note.find('[data-amount="full"]');
+    // ASSERT
+    expect({
+      compact: [compact.text(), compact.hasClass('sm:hidden') ? 'Hidden from sm' : 'Shown from sm'],
+      full: [full.text(), full.hasClass('sm:inline') ? 'Shown from sm' : 'Hidden from sm'],
+    }).toEqual(expected);
+  });
 });
 
 describe('failure cases', () => {
@@ -56,7 +71,7 @@ describe('failure cases', () => {
     // ARRANGE
     const expected = { tone: 'warning', primary: '' };
     // ACT
-    const $ = render({ columns: TWO_MONTHS });
+    const $ = render({ locale: 'en', currency: 'USD', columns: TWO_MONTHS });
     const note = $('[data-slot="february-closing"]');
     // ASSERT
     expect({ tone: note.attr('data-tone'), primary: note.attr('data-primary') }).toEqual(expected);
@@ -76,7 +91,7 @@ describe('edge cases', () => {
       'february-closing',
     ];
     // ACT
-    const $ = render({ columns: TWO_MONTHS, stamp: { text: 'Bankrupt', column: 1 } });
+    const $ = render({ locale: 'en', currency: 'USD', columns: TWO_MONTHS, stamp: { text: 'Bankrupt', column: 1 } });
     const order = $('[data-board-note], [data-board-stamp]')
       .toArray()
       .sort((a, b) => indexOf($(a).attr('style')) - indexOf($(b).attr('style')))
@@ -88,6 +103,36 @@ describe('edge cases', () => {
     // ASSERT
     expect(order).toEqual(expectedOrder);
     expect(indices).toEqual(expectedIndices);
+  });
+
+  it('spans only the columns between its ends on a cashflow board, pointing back, indexed last', () => {
+    // ARRANGE
+    const month = (slug: string) => ({
+      slug,
+      label: slug,
+      notes: [{ slug: `${slug}-cost`, slot: 'cost' as const, label: 'Cost', amount: 1 }],
+    });
+    const expected = { direction: 'left', column: '2 / 4', row: '4', index: '4' };
+    // ACT
+    const $ = load(
+      renderToStaticMarkup(
+        createElement(CashflowBoard, {
+          locale: 'en',
+          currency: 'USD',
+          columns: [month('january'), month('february'), month('march'), month('april')],
+          arrow: { from: 4, to: 1, slot: 'revenue' },
+        }),
+      ),
+    );
+    const arrow = $('[data-board-arrow]');
+    const style = arrow.attr('style') ?? '';
+    // ASSERT
+    expect({
+      direction: arrow.attr('data-direction'),
+      column: /grid-column:\s*([^;]+)/.exec(style)?.[1],
+      row: /grid-row:\s*([^;]+)/.exec(style)?.[1],
+      index: /--i:\s*([^;]+)/.exec(style)?.[1],
+    }).toEqual(expected);
   });
 });
 

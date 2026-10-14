@@ -48,7 +48,8 @@ describe('edge cases', () => {
       { slug: 'march', label: 'March', primary: true },
       { slug: 'april', label: 'April', dashed: true },
     ];
-    const overlay = createElement('p', { id: 'stamp' }, 'Bankrupt');
+    const overlayId = 'stamp';
+    const overlay = createElement('p', { id: overlayId }, 'Bankrupt');
     const expected = [
       { primary: '', dashed: undefined },
       { primary: undefined, dashed: '' },
@@ -60,7 +61,7 @@ describe('edge cases', () => {
       .map((column) => ({ primary: $(column).attr('data-primary'), dashed: $(column).attr('data-dashed') }));
     // ASSERT
     expect(marks).toEqual(expected);
-    expect($('[data-board] > :last-child').attr('id')).toBe('stamp');
+    expect($('[data-board] > :last-child').attr('id')).toBe(overlayId);
   });
 
   it('pins each column to its own track when rows are fixed, so an overlay placed in a column cannot push it aside', () => {

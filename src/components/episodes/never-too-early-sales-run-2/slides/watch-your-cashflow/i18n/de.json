@@ -12,16 +12,6 @@
       "cost": "Kosten",
       "revenue": "Umsatz"
     },
-    "amounts": {
-      "january-opening": "100.000 $",
-      "january-cost": "50.000 $",
-      "january-closing": "50.000 $",
-      "february-opening": "50.000 $",
-      "february-cost": "50.000 $",
-      "february-closing": "0 $",
-      "march-cost": "50.000 $",
-      "april-revenue": "1.000.000 $"
-    },
     "stamp": "Pleite"
   },
   "notes": {

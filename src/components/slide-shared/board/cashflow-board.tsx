@@ -1,6 +1,8 @@
 import type { TargetProps } from '@/lib/context-link.pure';
+import type { Locale } from '@/lib/locale.pure';
 import { cn } from '@/lib/utils';
 import type { CSSProperties, ReactNode } from 'react';
+import { formatAmount } from './amount.pure';
 import { Board, type BoardColumnProps } from './board';
 import { BoardArrow } from './board-arrow';
 import styles from './cashflow-board.module.css';
@@ -25,7 +27,8 @@ export interface CashNote {
   slug: string;
   slot: CashSlot;
   label: string;
-  amount: string;
+  /** Whole units of the board's `currency`; written by `locale`, compact below `sm`, in full from `sm`. */
+  amount: number;
   /** The month cash hits zero: a warning note with the primary ring. */
   zeroCash?: boolean;
   primary?: boolean;
@@ -44,6 +47,10 @@ export interface CashColumn {
 
 export interface CashflowBoardProps {
   columns: readonly CashColumn[];
+  /** The page's locale, which writes every amount. */
+  locale: Locale;
+  /** An ISO 4217 code, such as `USD`. */
+  currency: string;
   /** A stamp across one month; `column` is 1-based. */
   stamp?: { text: string; column: number };
   /** An arrow across the columns strictly between `from` and `to` (1-based), in the row of `slot`. */
@@ -58,13 +65,43 @@ export interface CashflowBoardProps {
 
 const bySlot = (a: CashNote, b: CashNote) => SLOTS.indexOf(a.slot) - SLOTS.indexOf(b.slot);
 
-function Note({ note, index, className }: { note: CashNote; index: number; className?: string }) {
+/** How a note writes its amount: below `sm` compact, so four columns fit a phone; from `sm` in full. */
+interface AmountFormat {
+  readonly locale: Locale;
+  readonly currency: string;
+}
+
+function Amount({ value, format }: { value: number; format: AmountFormat }) {
+  const { full, compact } = formatAmount(value, format.currency, format.locale);
+  return (
+    <>
+      <span data-amount="compact" className="sm:hidden">
+        {compact}
+      </span>
+      <span data-amount="full" className="hidden sm:inline">
+        {full}
+      </span>
+    </>
+  );
+}
+
+function Note({
+  note,
+  index,
+  format,
+  className,
+}: {
+  note: CashNote;
+  index: number;
+  format: AmountFormat;
+  className?: string;
+}) {
   return (
     <StickyNote
       tone={note.zeroCash ? 'warning' : TONE[note.slot]}
       primary={note.zeroCash || note.primary}
       label={note.label}
-      value={note.amount}
+      value={<Amount value={note.amount} format={format} />}
       target={note.target}
       dataSlot={note.slug}
       style={{ '--i': index, gridRow: ROW[note.slot] } as CSSProperties}
@@ -77,14 +114,14 @@ function Note({ note, index, className }: { note: CashNote; index: number; class
 function placeNotes(
   columns: readonly CashColumn[],
   stampColumn: number | undefined,
-  noteClassName: string | undefined,
+  { format, noteClassName }: { format: AmountFormat; noteClassName?: string },
 ): { columns: BoardColumnProps[]; stampIndex?: number; next: number } {
   let next = 0;
   let stampIndex: number | undefined;
   const placed = columns.map((column, position) => {
     const notes = [...column.notes]
       .sort(bySlot)
-      .map((note) => <Note key={note.slug} note={note} index={next++} className={noteClassName} />);
+      .map((note) => <Note key={note.slug} note={note} index={next++} format={format} className={noteClassName} />);
     if (stampColumn === position + 1) stampIndex = next++;
     const { slug, label, primary, outOfReach } = column;
     return { slug, label, primary, dashed: outOfReach, children: notes };
@@ -146,8 +183,11 @@ function Arrow({
  * stamp, arrow, then the Slide's overlays. A server part with plain props (FE-007 §5.2).
  */
 export function CashflowBoard(props: CashflowBoardProps) {
-  const { stamp, arrow, overlays, target } = props;
-  const placed = placeNotes(props.columns, stamp?.column, props.noteClassName);
+  const { stamp, arrow, overlays, target, locale, currency } = props;
+  const placed = placeNotes(props.columns, stamp?.column, {
+    format: { locale, currency },
+    noteClassName: props.noteClassName,
+  });
   const overlay = (
     <>
       {stamp && <Stamp {...stamp} index={placed.stampIndex} className={props.stampClassName} />}
