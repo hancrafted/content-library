@@ -2,6 +2,7 @@
 // `done <branch>` removes it and fast-forwards local main. With `--base <branch>`
 // both work against that branch instead of main. See ../SKILL.md.
 import { execFileSync, spawnSync } from 'node:child_process';
+import { rmSync } from 'node:fs';
 import path from 'node:path';
 import { parseArgs } from './worktree-args.pure.ts';
 
@@ -23,6 +24,12 @@ function mainRoot(): string {
 
 function worktreePath(branch: string): string {
   return path.join(mainRoot(), '.worktrees', branch.replaceAll('/', '-'));
+}
+
+/** The branch's Claude Desktop folder; skills/claude-project-context/scripts/sync.ts names it by the same slug. */
+function removeContextFolder(branch: string): void {
+  const folder = path.join(mainRoot(), 'docs', 'claude-project-context', branch.replaceAll('/', '-'));
+  rmSync(folder, { recursive: true, force: true });
 }
 
 function create(branch: string, base: string | null): void {
@@ -97,7 +104,8 @@ function finish(branch: string, base: string | null): void {
   refuseWhileBusy(target);
   if (base === null) refuseUnpushedMain();
   stream('git', ['worktree', 'remove', target]);
-  console.log(`✔ removed ${target}`);
+  removeContextFolder(branch);
+  console.log(`✔ removed ${target} and its Claude Desktop folder`);
   if (base !== null) {
     deleteIfMerged(branch, base);
     return;

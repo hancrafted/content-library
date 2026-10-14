@@ -52,7 +52,3 @@ Default vocabulary: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-
 ### Domain docs
 
 Single-context: `GLOSSARY.md` at the root. When an engineering skill says "ADR", it means a **design-ADR**: it goes in `docs/adr/` with `type: design-adr` front matter. Archgate ADRs in `.archgate/adrs/` are separate, and engineering skills never write them. See `docs/agents/domain.md`.
-
-### Claude Desktop project
-
-When you change a file listed in `skills/claude-project-context/assets/files.md`, run the `claude-project-context` skill and end your final report with the `Re-upload to Claude Desktop:` paths it names.
