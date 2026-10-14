@@ -77,9 +77,23 @@
   margin-inline-end: calc(var(--board-gap) / -2);
 }
 
+/*
+ * The stamp sits over its month's cash and cost cells, but its area is every month
+ * column: it is shifted onto its own month's centre and the shift is clamped, so
+ * a stamp wider than the room beside its month moves inwards instead of passing
+ * the board's edge. `--reach` is how far it may move: half the months' width less
+ * half its rotated box (border-box width and one line plus its 2px borders).
+ */
 .stamp {
-  grid-column: calc(var(--col) + 2);
+  --tilt: 12deg;
+  --reach: max(
+    0px,
+    calc((100cqi - var(--row-head) - var(--board-gap) - 100% * cos(var(--tilt)) - (1lh + 4px) * sin(var(--tilt))) / 2)
+  );
+  grid-column: 2 / -1;
   grid-row: 2 / 4;
+  rotate: calc(-1 * var(--tilt));
+  translate: clamp(-1 * var(--reach), (var(--col) + 0.5 - var(--months) / 2) * var(--board-pitch), var(--reach)) 0;
 }
 
 .arrow {

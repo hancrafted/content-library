@@ -18,7 +18,9 @@ export interface BoardColumnProps {
   readonly targetProps: TargetProps;
 }
 
-// A slight tilt, alternating per note, so the notes read as pinned to a board.
+// A slight tilt, alternating per note, so the notes read as pinned to a board. A 1° tilt reaches out
+// about h·sin(1°)/2 on each side (~1.5px for a 160px note), so the list is inset by `px-1` (4px) to keep
+// every tilted note inside the column, for notes up to ~450px tall.
 const TILT = ['-rotate-1', 'rotate-1', ''] as const;
 
 /** One board column: a hairline, its header and its sticky notes. */
@@ -29,7 +31,7 @@ export function BoardColumn({ slug, title, items, firstStep, targetProps }: Boar
       <h4 id={id} className="text-body font-semibold text-foreground">
         {title}
       </h4>
-      <ul className="mt-4 flex list-none flex-col gap-3">
+      <ul className="mt-4 flex list-none flex-col gap-3 px-1">
         {items.map((item, index) => (
           <li key={item.slug} data-step={firstStep + index}>
             <BoardNote className={cn(styles.note, 'p-4', TILT[(firstStep + index) % TILT.length])}>

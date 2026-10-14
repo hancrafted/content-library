@@ -30,7 +30,7 @@ export interface CashflowBoardProps {
   /** Row heads (md+) and the kind word printed on every note. */
   readonly rowLabels: Readonly<Record<CashflowRow, string>>;
   readonly months: readonly CashflowMonth[];
-  /** Rotated stamp over one month's cash and cost cells. */
+  /** Rotated stamp over one month's cash and cost cells; it moves inwards rather than pass the board's edge. */
   readonly stamp?: { readonly month: string; readonly text: string; readonly target?: string };
   /** One arrow under the revenue row, drawn from `from` back to `to`. */
   readonly arrow?: { readonly from: string; readonly to: string; readonly label?: string; readonly target?: string };
@@ -177,7 +177,7 @@ function Stamp({ stamp, column }: { stamp: NonNullable<CashflowBoardProps['stamp
       style={vars({ '--col': column })}
       className={cn(
         styles.stamp,
-        'relative z-10 place-self-center -rotate-12 rounded-md border-2 border-destructive bg-card px-3 text-subheading font-semibold tracking-widest text-destructive uppercase',
+        'relative z-10 place-self-center rounded-md border-2 border-destructive bg-card px-3 text-subheading font-semibold tracking-widest text-destructive uppercase',
       )}
     >
       {stamp.text}
