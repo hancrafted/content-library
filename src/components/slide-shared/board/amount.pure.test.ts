@@ -16,13 +16,16 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('keeps a German thousand in full when compact, since German has no short word for it', () => {
+  it('writes German thousands compact with k, which Intl leaves in full and a phone note cannot hold', () => {
     // ARRANGE
-    const expected = { full: `50.000${NBSP}$`, compact: `50.000${NBSP}$` };
+    const expected = [
+      { full: `50.000${NBSP}$`, compact: `50k${NBSP}$` },
+      { full: `100.000${NBSP}$`, compact: `100k${NBSP}$` },
+    ];
     // ACT
-    const amount = formatAmount(50_000, 'USD', 'de');
+    const amounts = [formatAmount(50_000, 'USD', 'de'), formatAmount(100_000, 'USD', 'de')];
     // ASSERT
-    expect(amount).toEqual(expected);
+    expect(amounts).toEqual(expected);
   });
 });
 
