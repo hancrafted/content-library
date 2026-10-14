@@ -108,15 +108,13 @@ _Avoid_: Publish, migration, release
 
 ## Research categories
 
-A research folder is named `<category>-<####>__<question-slug>`: the category below, a number counted per category across the repo, and the question's subject in 20-40 characters of kebab case. The `categorize-research` job of `/new-episode` picks the category, or adds a new one here.
+A research folder is named `<category>-<####>__<question-slug>`: the category below, a number counted per category across the repo, and the question's subject in 20-40 characters of kebab case. In the llm-wiki it sits in its category's folder, `docs/llm-wiki/research/<category>/`. The `categorize-research` job of `/new-episode` picks the category, or adds a new one here.
 
 **AIE**: AI Enablement: how people and organizations learn to work with AI, and what it changes in their work.
 
-**FIN**: Startup finance: how cash, costs and revenue move over time in an early-stage company.
+**SALES**: Sales: how a company finds, wins and closes its customers, from first lead to signed deal, and how a buyer finds, trusts and chooses a coach or consultant.
 
-**GTM**: Go-to-market: how a company finds, wins and closes its own customers, from first lead to signed deal.
-
-**SALES**: Sales: how a buyer finds, trusts and chooses a coach or consultant.
+**START**: Startups: how an early-stage company builds and funds itself, and how its cash, costs and revenue move over time.
 
 ## Localization
 

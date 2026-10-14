@@ -25,7 +25,7 @@ The Slide's `i18n/*.json` holds strings, not a story. Freezing the markdown at i
 2. **Promotion happens when the Episode is final**, after practice and before German translation. Promotion removes `status: draft` from every file it moves.
    - `brief.md` and `dossier.md` move to `src/components/episodes/<ep>/`.
    - Each Dossier h2 and h3 block becomes `slides/<slug>/slide.md`. The h1 block, the Title slide's optional Voice script and Speaker notes, moves to the Episode folder's own text file, because the Title slide has no Slide folder.
-   - Research files the Dossier still cites move to `docs/llm-wiki/research/` and are listed in `docs/llm-wiki/index.md`. The rest are deleted.
+   - Research files the Dossier still cites move to `docs/llm-wiki/research/<category>/` and are listed in `docs/llm-wiki/index.md` under their category's h3. The rest are deleted.
    - The staging folder is deleted after the style harvest has read it. git history keeps it.
 3. **After promotion, each file has one owner.** `slide.md` owns a Slide's text, and a test checks `i18n/en.json` against it. `<ep>.ts` owns Slide order, and a test checks the Dossier's heading order against it. A reading copy of the Episode's whole Voice script may be generated on demand and is never committed.
 4. **German comes after promotion** as a translation task: `slide.de.md` per Slide, with `de.json` checked against it.

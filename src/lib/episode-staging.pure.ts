@@ -199,7 +199,7 @@ const INDEX_ENTRY = /^- \[[^\]]+\]\(([^)]+)\) — (.*)$/;
  * Checks the llm-wiki index against its research files: one entry per file,
  * each entry's description byte-identical to the file's frontmatter
  * `description`. `research` maps a path relative to the index's folder
- * (`research/<question-slug>/research.md`) to its text. While the index does
+ * (`research/<category>/<ID>__<question-slug>/research.md`) to its text. While the index does
  * not exist (`undefined`), there is nothing to check.
  */
 export function checkResearchIndex(index: string | undefined, research: Readonly<Record<string, string>>): Finding[] {

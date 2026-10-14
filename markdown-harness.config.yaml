@@ -112,7 +112,7 @@ frontmatter:
     # A rule selects by literal file name, never by folder: folders do not recurse and every staging
     # folder is `docs/episodes/<slug>/`. So the identifier lives in a folder and the kind is the file
     # name: `research/<question-slug>/research.md` and `feedback/<NN>/feedback.md`. The same name
-    # governs research after Promotion moves it to `docs/llm-wiki/research/<question-slug>/`.
+    # governs research after Promotion moves it to `docs/llm-wiki/research/<category>/<ID>__<question-slug>/`.
     - ruleId: research
       fileNames: [research.md]
       intent: 'A research file answers one question on its own, so any later Episode can cite it without the one that asked. Fail if understanding it needs the Brief or Episode that prompted it.'

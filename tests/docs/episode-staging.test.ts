@@ -97,17 +97,19 @@ function llmWikiResearch(): Record<string, string> {
 
 /**
  * Every research folder in the repo, as a repo path: those on disk in each
- * staging folder and in the llm-wiki, and those a per-run pipeline will write.
+ * staging folder and in each llm-wiki category folder, and those a per-run
+ * pipeline will write.
  */
 function researchFolders(): string[] {
-  const research = [...Object.values(stagingFolders()), LLM_WIKI].map((folder) => path.join(folder, 'research'));
-  const onDisk = research
-    .filter((folder) => existsSync(folder))
-    .flatMap((folder) =>
-      readdirSync(folder, { withFileTypes: true })
-        .filter((entry) => entry.isDirectory())
-        .map(({ name }) => path.relative(ROOT, path.join(folder, name))),
-    );
+  const subfolders = (folder: string): string[] =>
+    existsSync(folder)
+      ? readdirSync(folder, { withFileTypes: true })
+          .filter((entry) => entry.isDirectory())
+          .map(({ name }) => path.join(folder, name))
+      : [];
+  const staging = Object.values(stagingFolders()).flatMap((folder) => subfolders(path.join(folder, 'research')));
+  const llmWiki = subfolders(path.join(LLM_WIKI, 'research')).flatMap(subfolders);
+  const onDisk = [...staging, ...llmWiki].map((folder) => path.relative(ROOT, folder));
   const planned = Object.values(perRunPipelines())
     .flatMap((yaml) => (parse(yaml) as { jobs: { outputs?: string[] }[] }).jobs)
     .flatMap(({ outputs }) => outputs ?? [])

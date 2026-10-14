@@ -40,6 +40,7 @@ describe('success cases', () => {
     const folders = [
       'docs/episodes/a/research/AIE-0001__why-ai-is-onboarded-like-a-colleague',
       'docs/episodes/a/research/SALES-0001__why-buyers-trust-a-demo-first',
+      'docs/llm-wiki/research/SALES/SALES-0002__why-pipelines-take-months',
     ];
     // ACT
     const findings = messages(folders);
@@ -83,14 +84,30 @@ describe('failure cases', () => {
     expect(findings).toEqual(expected);
   });
 
+  it('rejects an llm-wiki folder outside the folder of its category', () => {
+    // ARRANGE
+    const folders = [
+      'docs/llm-wiki/research/AIE-0001__why-context-improves-ai-output',
+      'docs/llm-wiki/research/SALES/AIE-0002__why-ai-is-onboarded-like-a-colleague',
+    ];
+    const expected = [
+      'docs/llm-wiki/research/AIE-0001__why-context-improves-ai-output sits outside its category folder: move it to docs/llm-wiki/research/AIE/.',
+      'docs/llm-wiki/research/SALES/AIE-0002__why-ai-is-onboarded-like-a-colleague sits outside its category folder: move it to docs/llm-wiki/research/AIE/.',
+    ];
+    // ACT
+    const findings = messages(folders);
+    // ASSERT
+    expect(findings).toEqual(expected);
+  });
+
   it('rejects an ID two folders share, wherever they sit', () => {
     // ARRANGE
     const folders = [
       'docs/episodes/a/research/AIE-0001__why-ai-is-onboarded-like-a-colleague',
-      'docs/llm-wiki/research/AIE-0001__why-context-improves-ai-output',
+      'docs/llm-wiki/research/AIE/AIE-0001__why-context-improves-ai-output',
     ];
     const expected = [
-      'The research ID AIE-0001 names 2 folders: docs/episodes/a/research/AIE-0001__why-ai-is-onboarded-like-a-colleague, docs/llm-wiki/research/AIE-0001__why-context-improves-ai-output.',
+      'The research ID AIE-0001 names 2 folders: docs/episodes/a/research/AIE-0001__why-ai-is-onboarded-like-a-colleague, docs/llm-wiki/research/AIE/AIE-0001__why-context-improves-ai-output.',
     ];
     // ACT
     const findings = messages(folders);
