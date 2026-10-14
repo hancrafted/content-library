@@ -63,3 +63,5 @@
 {"kind":"end","t":"2026-10-14T18:50:44Z","seq":63,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"d73799f7b2c36cbd","status":"ok"}
 {"kind":"end","t":"2026-10-14T18:50:44Z","seq":64,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"e4357182052196b9","status":"ok","summary":"7 research jobs, source-deck reference, profile guides dropped"}
 {"kind":"start","t":"2026-10-14T18:51:02Z","seq":65,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"1947f97e5979cff2","type":"gate","name":"draft pipeline","job":"customize-pipeline","parent_span_id":"30e2f016b9c612f9"}
+{"kind":"score","t":"2026-10-14T18:54:54Z","seq":66,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"1947f97e5979cff2","name":"gate","value":"approved","source":"human:han","via":"chat","comment":"approve pipeline"}
+{"kind":"end","t":"2026-10-14T18:54:55Z","seq":67,"trace_id":"5aa1693bef52315f23a9ae8c9aa031b2","span_id":"1947f97e5979cff2","status":"ok"}
