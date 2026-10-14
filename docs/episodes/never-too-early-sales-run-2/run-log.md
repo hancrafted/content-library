@@ -439,3 +439,45 @@ Overruled masters: every page Slide is built as a Scene from `SlideFrame` and th
 - Needs human: copy the Dossier does not name is the designers' draft. That covers the captions of `watch-your-cashflow` (none yet), `sales-is-more-than-selling` and its note lines, and the three #177 captions and the rail label "Months, not days". It also covers the deal names and amounts on `pipeline-tools-in-practice`, the "Cash arrives later" label, and the "Sales makes contact" arrow label.
 - Needs human: in #176, the standalone arrows centred on column gaps may run onto the `fill` notes on `stages-of-sale` and `how-marketing-feeds-the-pipeline`. This is a layout point for `implement-episode`'s visual check.
 - Needs human: #178 lists a top-level `target` on `CashflowBoard`, but also says the figure takes none. Only the arrow's target is used.
+
+## implement-episode · 2026-10-14T21:34:11Z
+
+### Inputs
+
+- `skills/new-episode/references/implement-episode.md` and `references/skill-overrides.md`.
+- Spec #173 and tickets #174 to #178, as Han approved them.
+- `dossier.md`, `voice-script.md` and `reference/source-deck/pages/`.
+
+### Output
+
+- Edited #174 · 2026-10-14T21:34:11Z: the "Shared API" block, to match what was built.
+- Tickets #174 to #178, each built on its own ticket branch, reviewed by `code-review` and merged into `episode/never-too-early-sales-run-2`.
+- 16 Slides, built on the shared board parts in `src/components/slide-shared/board/` (`Board`, `StickyNote`, `GhostNote`, `BoardArrow`, `CashflowBoard`, `Amount`) and the motions `stick-on` and `draw-in`.
+- Fix pass 7f273cd across tickets, the step-8 text capture f7d9432, and the retry 11b730c.
+
+### Checks
+
+- `verify`, `build`, `test:build` (544) and `impeccable` (en and de; advisories only) pass on both attempts.
+- `visual-check`: 16 Slides at 375, 768 and 1440px, in both themes and every drawer state, with no overflow at rest. After 11b730c, the page measures 375px wide at 375px, including every frame of the stamp's entry, where it was 399px before. "One vendor dataset" measures 256×97 at 1440px, where it was 521px tall.
+- Reviewer, attempt 1: fail.
+  - Standards: FE-004 Do 4, because the ghost note and the amount were each built by hand in two Slides.
+  - Spec line 4: `.note[data-fill]` stretched the notes on `pipeline-by-the-numbers` and `why-it-takes-time-to-ramp-up`.
+- Reviewer, attempt 2: pass on both lines.
+
+### Notes
+
+Han set two copy rules during the run: amounts on narrow screens are written with `k` (German "100k $"), and German uses a capitalised "Du".
+
+- Needs human: the drafted copy is not yet confirmed. It covers:
+  - the captions;
+  - the note lines on `sales-is-more-than-selling`;
+  - the deal names and amounts on `pipeline-tools-in-practice`;
+  - the rail label "Months, not days", which no source backs;
+  - the label "Cash arrives later";
+  - the arrow label "Sales makes contact".
+- Needs human: `watch-your-cashflow` has no caption in the Dossier, so the caption it shows is drafted.
+- Needs human: the Voice script says "Yellow notes are cash", but the cash notes are neutral on the board.
+- Needs human: the German text needs a native speaker's read.
+- Needs human: on a phone, the watch-your-cashflow board clips the "Bankrupt" stamp for about 32px while it animates in, which #174's "nothing clips" forbids. Either accept the brief cut or make the entry scale smaller on narrow screens.
+- Needs human: the stamp enters at about −36° and settles at −18°, because the keyframe's `rotate(-18deg)` adds to its own `rotate`. Remove it from the start frame in `watch-your-cashflow.module.css` if the stamp should drop straight.
+- Needs human: in the light theme, `primary` is near-black, so the outline marking the one note to look at reads as plain black.
