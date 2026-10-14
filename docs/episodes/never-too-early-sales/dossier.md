@@ -4,12 +4,14 @@ title: Why it's never too early to start with sales
 status: draft
 generated:
   by: copilot-cli/gpt-6.1-sol
-  at: 2026-10-13T23:47:29Z
+  at: 2026-10-13T23:59:26Z
 locale: en
 brief: ./brief.md
 verified:
   - by: process:markdown-harness
     at: 2026-10-13T23:54:26Z
+  - by: process:markdown-harness
+    at: 2026-10-14T00:02:57Z
 ---
 
 # Why it's never too early to start with sales {#never-too-early-sales}
@@ -18,8 +20,8 @@ verified:
 
 #### Voice script
 
-1. **A good deal, a bad date** — FICTIONAL COMPANY; big customer payment; timing rather than deal size; survival question
-2. **Work backwards from cash** — FOUNDERS; costs already running; cash deadline before sales deadline; first practical decision
+1. **A good deal, a bad date** — Imagine winning a million-dollar customer and still running out of money. Our fictional company builds scheduling software for small teams. Its big customer pays in April. But the company cannot fund its March bills. The deal sounds wonderful. The date makes it useless for getting through March. How did we get here?
+2. **Work backwards from cash** — Let us put ourselves in the founders' position. They are building the product. They are paying people. They plan to focus on sales when the product feels ready. Before making that decision, they need a different starting point. When must money reach their account? We will work backwards from that deadline.
 
 ### Watch your cashflow {#watch-your-cashflow}
 
@@ -40,18 +42,18 @@ The bottom edge carries the rule “Closing cash = opening cash + receipts − p
 
 #### Voice script
 
-1. **Count January first** — $100,000 START; $50,000 monthly payment; no receipts; January closing $50,000; fictional assumptions
-2. **Zero is the warning** — FEBRUARY closing $0; March payment unfunded; April million too late; no automatic bridge funding
-3. **A signature cannot pay payroll** — CASH RECEIPT date; signed contract versus booked revenue versus money available; deadline distinction
-4. **Build your own monthly view** — MONTH columns; opening cash; expected receipts by payment date; cash payments; closing cash; repeat balance formula
-5. **Mark the zero-cash month** — FIRST zero or negative closing balance; monthly estimate; exact payment dates if tight; late-receipt scenario; actionable one
-6. **Do not wait for the alarm** — CASH deadline already visible; work needed before receipt; pipeline question before account empty
+1. **Count January first** — We give this company one hundred thousand dollars at the start of January. Each month, it pays out fifty thousand dollars. Nothing comes in during January. Subtract fifty thousand from one hundred thousand. January ends with fifty thousand dollars. These are invented numbers. Keep them in mind, because we will return to this company.
+2. **Zero is the warning** — February starts with the remaining fifty thousand dollars. Another fifty thousand goes out. Now the account is empty. March needs another fifty thousand, but there is nothing to pay it with. April's million does not solve March. In this example, nobody has agreed to lend the missing money. The company has to stop.
+3. **A signature cannot pay payroll** — Imagine the founder celebrating a signed contract while preparing the next payroll payment. The bank asks for available money, not a signature. So do not stop at the deal date or the revenue figure in your plan. For this decision, ask one plain question. On which date can we actually use the customer's money?
+4. **Build your own monthly view** — Build a simple month-by-month cashflow view. A spreadsheet is enough. Start each month with its opening cash. Add the customer money you expect to receive that month. Subtract the payments you expect to make. That gives closing cash. Carry it into the next month. Repeat this calculation across the months ahead.
+5. **Mark the zero-cash month** — Find the first month whose closing cash reaches zero or goes below it. Mark that month. Then try a less comfortable version of your plan. Move an expected receipt back a month. What changes? If the balance gets tight, check the individual payment dates too. A monthly total can hide a difficult week.
+6. **Do not wait for the alarm** — Our founders can see the March problem while they still have January's money. That is the moment to ask what work must happen before a customer pays. Waiting until the account is empty leaves no room for that work. The cashflow view is not just a warning. It tells us why we need a pipeline.
 
 ## Why sales is more than just selling {#sales-beyond-selling}
 
 #### Voice script
 
-1. **Use the lead time** — BEFORE payment; customer conversations; learning while building a route to cash; not selling for its own sake
+1. **Use the lead time** — There is work between deciding to sell and receiving money. We can use that time deliberately. Our scheduling company can speak with potential customers while it is still building. Those conversations need a purpose. We want to test a route to a paying customer, not simply collect friendly conversations and call that sales.
 
 ### Sales is more than selling {#sales-is-more-than-selling}
 
@@ -76,19 +78,19 @@ Three sticky-note boxes read “Market insight · test a real offer”, “Custo
 
 #### Voice script
 
-1. **Test an offer, not applause** — MARKET insight; concrete problem; proposed price; requested next step; enthusiasm versus observed response
-2. **Learn from a no** — OBJECTION notes; wrong buyer, timing, unclear value; questions rather than instant verdict about whole market
-3. **Early buyers are a small sample** — SELF-SELECTION; network bias; compare conversations; avoid building everything for one enthusiastic prospect
-4. **Give reasons to keep talking** — TRUST can develop; realistic promises; follow-through; practical recommendation, not causal guarantee; outreach alone insufficient
-5. **Test what you can deliver** — INTERNAL insight; offer promise versus actual work; log delivery uncertainty; capacity exposure as hypothesis, not measured research result
-6. **Turn contact into a learning loop** — ASSUMPTION; buyer response; next test; learn without treating every change as progress; revenue remains necessary
+1. **Test an offer, not applause** — Suppose our founder offers to help a workshop organise next week's jobs. She names the scheduling problem, proposes a price and asks for a conversation about a small trial. Now she has something concrete to discuss. Does the buyer ask about the trial? Ask about the price? Or decline the conversation? Write down the response.
+2. **Learn from a no** — A workshop manager might say that scheduling is someone else's responsibility. Another might be interested, but not during its busy season. A third might not understand what would change. These imagined answers suggest different next questions. Ask who owns scheduling, when a discussion would make sense, or which part of the offer was unclear.
+3. **Early buyers are a small sample** — Our founder starts with two people she already knows. Both enjoy talking about software. Before rebuilding the product around their suggestions, she should speak with other kinds of buyers too. Perhaps a team without a technical enthusiast. Perhaps a team with a different way of scheduling. Compare the responses before making a large commitment.
+4. **Give reasons to keep talking** — I would give the founder a small promise she can keep. Send the agreed trial outline on Friday. Admit which features are not ready. Arrive prepared for the next conversation. These are practical choices, not a recipe that guarantees trust. The buyer still decides whether to continue. A first message does not settle that decision.
+5. **Test what you can deliver** — Now imagine the buyer asks for a trial next week. Our founder has to check what that promise would require. Can the team import this workshop's existing schedule? Who will answer questions? Write down what is known and what still needs testing. This is a possible delivery problem to investigate, not proof that the team cannot deliver.
+6. **Turn contact into a learning loop** — Start with an assumption: a workshop wants help with scheduling. Make a specific offer. Record the response. Choose the next test from that response. If the question was unclear, rewrite it and try again. Do not change everything after every call. The purpose is to make better decisions while pursuing customers who may actually pay.
 
 ## How to start doing sales {#how-to-start-sales}
 
 #### Voice script
 
-1. **Make the first moves concrete** — POTENTIAL customers; first contact; qualified opportunity; work after agreement; route from list to receipt
-2. **Keep the method small** — SIMPLE records; explicit next action; founder can start without a sales department
+1. **Make the first moves concrete** — What should our founder do tomorrow? Find potential customers. Contact one. If a useful conversation opens, work out whether there is a real opportunity. Then do the work needed to reach an agreement. There is work after agreement too. We will follow that route, because the cashflow question remains at the end of it.
+2. **Keep the method small** — You do not need to build a sales department before taking the first step. You need somewhere to record who you might contact and what you will do next. Keep the first version small enough to use tomorrow. A method that you maintain is more useful here than an elaborate system you never open.
 
 ### Stages of sale {#stages-of-sale}
 
@@ -109,13 +111,13 @@ The Opportunities box reads “Agreed problem and next conversation · follow-up
 
 #### Voice script
 
-1. **Choose who might have the problem** — PROSPECT hypothesis; customer type; named organisations; relevant buyer role; reason for fit
-2. **Build and maintain the list** — COMPANY; contact or role; problem hypothesis; source; contact route; status; next action; update after each response; actionable two
-3. **Research is not contact** — LIST ready enough; avoid endless collection; select first plausible prospect; learn by response
-4. **Make the first contact** — COLD call where appropriate; answer inbound enquiry; request network introduction; relevant problem; short invitation to conversation; actionable three
-5. **Ask for one next step** — EXAMPLE scheduling problem; brief discovery conversation; buyer response; no generic pitch dump; no fabricated interest
-6. **Open an opportunity with evidence** — PLAUSIBLE fit; actual conversation; agreed next step; define entry rule; silence not an opportunity
-7. **Work opportunities deliberately** — FOLLOW-UP date; meeting; buyer questions; proposal; negotiation; win or loss record; agreement separate from payment
+1. **Choose who might have the problem** — Let us introduce two fictional prospects. Alder Works is a workshop. Birch Studio is a small design team. Our founder thinks both might struggle to schedule jobs. At Alder, she wants to reach the person organising workshop operations. At Birch, she wants to find whoever plans the team's work. These are starting hypotheses, not confirmed needs.
+2. **Build and maintain the list** — Start lead generation now. Research and maintain a list of potential customers. For Alder, record the company name, the relevant role and your scheduling hypothesis. Add where you found it, how you could reach someone, its contact status and your next action. After a response, update the entry. The list should reflect what you know today.
+3. **Research is not contact** — Our founder could spend all week finding more workshops. But a longer list would not answer whether Alder wants a conversation. Once she has a plausible reason for contact and a suitable route, she should use it. Research prepares the first move. It should not become a way to postpone hearing an answer.
+4. **Make the first contact** — Make first contact to open a conversation. That could be an appropriate cold call. It could be answering an inbound enquiry. It could be asking someone in your network for an introduction. Our founder chooses an introduction to Alder's operations manager. She explains the scheduling question she wants to discuss, rather than sending her entire product story.
+5. **Ask for one next step** — Birch has asked about the scheduling offer. Our founder proposes a short conversation about how the team plans jobs today. That is one clear next step. She does not assume Birch wants to buy. She asks whether the conversation would be useful and waits for an answer. The invitation gives the buyer something specific to accept or decline.
+6. **Open an opportunity with evidence** — For this example, our founder sets a simple rule. She opens an opportunity when a conversation reveals plausible fit and the buyer agrees to a next step. Birch describes a scheduling problem and agrees to discuss a trial. That gives her work to pursue. Alder has not replied yet. She cannot treat that silence as an active deal.
+7. **Work opportunities deliberately** — This is where the real work sits. With Birch, our founder must understand the problem, arrange the scope meeting and answer practical questions. She may need to revise a proposal or negotiate what is included. Each conversation ends with a next action and date. Follow up on that action. Record whether the deal is won or lost. Do not just move a card and wait for money. Agreement still needs its own payment plan.
 
 ### Stages of after-sale {#stages-of-after-sale}
 
@@ -134,10 +136,10 @@ An original three-box flow continues “Production → Delivery / operations →
 
 #### Voice script
 
-1. **A win starts another responsibility** — PRODUCTION; promise made; work and capacity; cash cost can continue after signature
-2. **Delivery must reach the buyer** — OPERATIONS; accepted output; agreed handoff; practical responsibilities rather than a universal process
-3. **Ask whether the outcome happened** — CUSTOMER success; use and result; unresolved problem; next conversation
-4. **Recurring is conditional** — REPEAT purchase or ongoing agreement; earned and agreed, not automatic; payment schedule specified separately
+1. **A win starts another responsibility** — Suppose Birch agrees to the trial. Now our company has a promise to fulfil. Someone must prepare the scheduling setup. Someone must make time to support it. The founder puts those tasks into the work plan and their payments into the cash plan. Signing the trial does not switch off the company's monthly bills.
+2. **Delivery must reach the buyer** — A finished setup on our founder's laptop is not yet a handoff to Birch. They need to agree who receives it, how the team starts using it and what counts as the promised delivery. In this fictional trial, the founder arranges a setup session. Another offer might need a different handoff. Name the responsibilities.
+3. **Ask whether the outcome happened** — After the trial begins, ask Birch what happened to the scheduling problem. Can the team plan next week's jobs? Where does it still get stuck? If nobody is using the setup, find out why before proposing more work. The next conversation is about the customer's result, not just whether our team completed its task.
+4. **Recurring is conditional** — Our founder can ask whether Birch wants another project or an ongoing arrangement. Put that possible work back into a new opportunity. Do not put money into next month's plan just because the trial went well. Any repeat purchase needs an agreement. Specify its price and payment schedule instead of assuming the first agreement covers it.
 
 ### Watch your cashflow, revenue pulled in {#cashflow-receipt-pulled-in}
 
@@ -158,18 +160,18 @@ The receipt note briefly travels along the arrow on arrival, with the final bala
 
 #### Voice script
 
-1. **Move cash, not the signature** — SAME company; counterfactual February receipt; unchanged monthly costs; specific change in assumption
-2. **Check February's arithmetic** — $50,000 opening; $1,000,000 receipt; $50,000 payment; $1,000,000 closing; March $950,000; April $900,000
-3. **Ask what could make receipt earlier** — EARLIER sales start; buyer decision; delivery obligations; agreed payment terms; no guarantee of pulling this customer's payment forward
-4. **Keep the backup question open** — CASH uncertainty; delayed-receipt scenario; lower payments or bridge funding if needed; sales alone not emergency financing
-5. **Find the work before the payment** — RECEIPT deadline; after-sale steps; closing; opportunity work; first contact; lead research; backwards chain
+1. **Move cash, not the signature** — Return to our company with one hundred thousand dollars at the start of January. Let us change one assumption. Instead of receiving the million in April, suppose it receives the money in February. This is an alternative story, not a prediction. The monthly payments stay at fifty thousand dollars. Only the receipt date moves.
+2. **Check February's arithmetic** — January still ends with fifty thousand dollars. February starts there, adds one million and pays out fifty thousand. It closes with one million dollars. March's payment leaves nine hundred and fifty thousand. April's payment leaves nine hundred thousand. In this version, March is funded. Moving the receipt changes the result without changing the deal's size.
+3. **Ask what could make receipt earlier** — What would have to change for that version to happen? Our founder would need to discuss timing with the buyer. When could a decision happen? What work must be delivered? Which payment arrangement would both sides accept? Starting sales earlier creates time to explore those questions. It does not give the founder control over the buyer's answer.
+4. **Keep the backup question open** — The founder should still ask what happens if this earlier receipt is not available. Could the company reduce its planned payments? Would anyone agree to provide bridge funding? Those options need their own work and decisions. Keep the original unfunded case visible. A sales conversation is not a replacement for an emergency funding plan.
+5. **Find the work before the payment** — Now walk backwards from the required receipt. What must happen after agreement? What must be settled to close? Which questions need opportunity work? Which first conversation could open that work? Which prospects must we research to get that conversation? This chain gives the founder a starting point long before she needs the money.
 
 ## Why building an effective sales pipeline takes time {#why-pipeline-takes-time}
 
 #### Voice script
 
-1. **Timing needs a system** — ONE deal not a pipeline; repeated stages; observe conversion and elapsed time; learn own numbers
-2. **Illustrations are not forecasts** — FICTIONAL worked inputs; arithmetic to explain mechanism; own evidence for planning; no universal B2B rate or duration
+1. **Timing needs a system** — One promising customer is not enough to tell our founder how her selling works. She needs to repeat the steps and keep records. Which conversations advance? Which stop? How much time passes before an agreement? A pipeline makes that work visible. Over time, those records can help her replace guesses with her own numbers.
+2. **Illustrations are not forecasts** — We will use a small invented example to understand the numbers. It has a conversion rate and a duration. Neither describes what your company should expect. Think of it as practice with the calculation. When you make your own cash plan, use evidence from your selling work and be explicit about what you still do not know.
 
 ### What is a sales pipeline {#what-is-a-sales-pipeline}
 
@@ -189,12 +191,12 @@ Three sticky-note boxes read “Volume · how many enter each stage?”, “Offe
 
 #### Voice script
 
-1. **Records, not a wish list** — PIPELINE; named potential deals; present stage; owner; dated next action
-2. **Count the flow** — FUNNEL; entering and progressing counts; volume question; list distinct from opportunity records
-3. **Measure conversion with a denominator** — STAGE-to-stage advances divided by entrants; total won divided by original leads; same cohort; unresolved shown separately
-4. **Conversion raises questions about the offer** — FIT; qualification; message; price; buyer timing; rate not a diagnosis of one cause
-5. **Measure the sales cycle explicitly** — START event and end event; dates; first contact to win in this talk; cash receipt date recorded separately
-6. **Efficiency is not speed at any cost** — ELAPSED time reveals waiting; sensible next action; buyer process; volume, conversion and cycle different levers
+1. **Records, not a wish list** — A pipeline is our working record of potential deals. For each one, write its name, current stage, owner and dated next action. Birch is an opportunity with a scope meeting ahead. Alder still needs contact. Those entries tell the founder what to do. A wish that both companies will buy tells her very little.
+2. **Count the flow** — A funnel answers a different question. How many entered, and how many progressed? Count the researched leads. Then count which became opportunities and which became wins. Keep those categories clear. Adding ten names to the prospect list is more starting volume. It is not the same as opening ten opportunities with buyers.
+3. **Measure conversion with a denominator** — To measure conversion, divide the number that advanced by the number that entered. Say how many you started with. Follow that same starting group through the stages. For overall conversion, divide its wins by its original leads. If some are still open, show them separately. We cannot yet describe their final outcomes.
+4. **Conversion raises questions about the offer** — Suppose few of our founder's conversations move forward. She can examine the response notes. Did she reach people with the scheduling problem? Was her invitation clear? Did price become a sticking point? Was this simply the wrong time? The rate tells her where to look. It does not choose the explanation for her.
+5. **Measure the sales cycle explicitly** — Measure your sales cycle too. Choose a start and an end, then record both dates. In this talk, we use first contact to a won agreement. Count the elapsed time between them. Keep the receipt date in another field. That lets our founder ask both when she reached agreement and when the money became available.
+6. **Efficiency is not speed at any cost** — If Birch has waited a week for our founder's trial outline, sending it is a useful next action. If Birch needs an internal discussion, another daily reminder may not help. Look at what the elapsed time contains. More prospects, better progression and less avoidable waiting are different questions. Do not answer all three by demanding faster calls.
 
 ### Pipeline by the numbers {#pipeline-by-the-numbers}
 
@@ -218,13 +220,13 @@ Beside the funnel, a separate time rail shows “Lead work: 2 weeks → Opportun
 
 #### Voice script
 
-1. **Read the example as inputs** — FICTIONAL completed cohort; mandatory order; no measured benchmark; simple model before own data
-2. **Three leads for one opportunity** — 27 LEADS; 9 opportunities; 9 divided by 27; one-third advancement; ratio is not time
-3. **Nine opportunities for one win** — 9 OPPORTUNITIES; 1 deal; one-ninth advancement; opportunities need real work
-4. **Multiply only this consistent path** — ONE-THIRD times one-ninth; one twenty-seventh; about 3.7%; one illustrative result, not guarantee per next 27 leads
-5. **Add the time on a different rail** — 2 WEEKS plus 6 months plus 3 months; approximately 9.5 months; sequential illustrative path
-6. **The buyer has work too** — PEOPLE to involve; decisions to organise; possible review and approval; plausible delays, not measured causes or universal requirements
-7. **The bank deadline comes later in the chain** — WIN not receipt; delivery and payment terms; no extra lag if prepaid; actual dates determine cash plan
+1. **Read the example as inputs** — Imagine our scheduling company has finished working through a group of twenty-seven leads. We know the final outcomes for this invented group. Every win in this example went through an opportunity first. Nobody is still waiting for an answer. With those assumptions in place, we can practise counting the route from leads to deals.
+2. **Three leads for one opportunity** — Nine of the twenty-seven leads became opportunities. Divide nine by twenty-seven. One third advanced. Another way to say it is three leads for each opportunity. That is a relationship between counts. It tells us nothing about how long any conversation took. For timing, we will need a separate set of dates.
+3. **Nine opportunities for one win** — Of those nine opportunities, one became a won deal. One divided by nine is one ninth. Think about the work behind those nine records. Our founder still had conversations to prepare, questions to answer and proposals to discuss. Only one ended in a win. The other work happened too, even though it produced no agreement.
+4. **Multiply only this consistent path** — For our invented group, multiply one third by one ninth. The result is one twenty-seventh, or about three point seven percent. We can check it directly: one win from twenty-seven original leads. That describes this completed example. Finding another twenty-seven names tomorrow would not entitle the founder to another win. She still has to do the work.
+5. **Add the time on a different rail** — Now give one successful path an invented timetable. Two weeks of lead work from first contact. Six months of opportunity work. Three months of closing. Assume those periods happen one after another. Counting two weeks as roughly half a month gives about nine and a half months to agreement. This is a timing illustration, not a forecast.
+6. **The buyer has work too** — Imagine Birch's contact likes the trial proposal but wants a colleague to review it. Perhaps someone else must agree to the spending. Our founder should ask who needs to be involved and what the next decision requires. These are possible steps in this story. She should discover Birch's actual process rather than assume every buyer follows it.
+7. **The bank deadline comes later in the chain** — Our nine-and-a-half-month illustration ends at a win. Now place the agreed receipt date beside that endpoint. Does payment happen before delivery, during the work or afterwards? A prepaid arrangement would not add a waiting period after the win. Use the actual arrangement to connect the deal timetable to the cash plan.
 
 ### Pipeline tools in practice {#pipeline-tools-in-practice}
 
@@ -245,12 +247,12 @@ A detail strip under Birch reads “First contact: 3 Jan · opportunity entered:
 
 #### Voice script
 
-1. **Start with a board or spreadsheet** — TOOL choice secondary; same stages; named prospects; fictional records; no purchase needed to begin
-2. **Give each card a next action** — OWNER; next step; date; Alder introduction versus Birch scope meeting; movement requires evidence
-3. **Keep dates for measurement** — FIRST contact; stage entry; won or lost; expected and actual receipt; missing date remains unknown
-4. **Review stuck work** — WEEKLY check; stale next step; buyer follow-up; lost reason; no arbitrary probability to make forecast reassuring
-5. **Measure without hiding open deals** — SAME starting cohort; reached counts; open separate from lost; completed first-contact-to-win durations; small sample and unresolved cases
-6. **Maintain the source list too** — NEW prospects; researched fit; contact status; refresh stale information; pipeline review leads to next real contact
+1. **Start with a board or spreadsheet** — Track your deals in a simple pipeline. You can begin with a board or spreadsheet you already have. Give it stages for leads, opportunities and closing, plus won and lost outcomes. Add the names we introduced earlier: Alder Works and Birch Studio. The point is to organise the work, not to buy software before starting.
+2. **Give each card a next action** — Our founder owns both records. For Alder, her next action is to request an introduction on the sixth of January. For Birch, it is a scope meeting on the tenth. Those are different tasks at different stages. At the review, ask what actually happened and what the buyer agreed next. Update the cards from those answers.
+3. **Keep dates for measurement** — Birch's first contact was on the third of January. It entered the opportunity stage on the seventh. Record later stage changes and the eventual win or loss date too. Add expected and actual receipt dates when known. If no payment date has been agreed, leave it unknown. An empty field is more honest than an invented date.
+4. **Review stuck work** — Set aside time each week to review the next actions. Did the scope meeting happen? Are we waiting for the buyer, or did we forget our task? Has a buyer explained why the discussion stopped? Use the answers to decide what happens next. Do not assign a comforting chance of winning just because a card has sat there.
+5. **Measure without hiding open deals** — When reviewing conversion, return to the same group you started with. Count how many reached each stage. Show those still open alongside the final outcomes. For won deals, calculate first-contact-to-win durations. If only one has finished, say so. That is a beginning of evidence, not a stable answer for every future deal.
+6. **Maintain the source list too** — The board also reminds our founder to keep researching. Alder's contact information might be stale. Another workshop might fit the offer better. Update the source list as you learn. Then choose the next real contact. Do not let maintaining records become the entire activity. The records should help you decide which conversation to pursue next.
 
 ### How marketing feeds the pipeline {#marketing-feeds-the-pipeline}
 
@@ -271,11 +273,11 @@ A handoff card reads “Birch Studio · scheduling problem · source: article en
 
 #### Voice script
 
-1. **Attention needs an entry route** — ANONYMOUS reach; relevant invitation; identifiable enquiry; no counting every viewer as a sales lead
-2. **Choose where marketing hands over** — NAMED stage; information required; owner; response step; same definitions as pipeline
-3. **Feed the list, then qualify** — ARTICLE enquiry; event follow-up; introduction; source recorded; readiness checked rather than assumed
-4. **More volume is not a guarantee** — FIT and progression; not-now branch; compare channel cohorts carefully; no measured causal promise
-5. **Close the feedback loop** — BUYER questions and losses; improve message and targeting; connect marketing work to next contact, not vanity counts
+1. **Attention needs an entry route** — Suppose our founder writes about the scheduling problem. Someone reads it, but she does not know who. That person is not yet a named entry she can work with. Include a relevant invitation to discuss the problem. Birch sends an enquiry through it. Now she has someone to answer, rather than just a readership count.
+2. **Choose where marketing hands over** — For our small company, that enquiry becomes a lead for the founder to handle. Decide what information the handoff must contain. Which company asked? What problem did it mention? Who will respond, and when? Put the entry into the same working system as the other leads. Otherwise a useful enquiry may simply wait in an inbox.
+3. **Feed the list, then qualify** — In this story, Birch arrived through the scheduling article. Record that source. If our founder later meets another team at an event, record what follow-up it requested. If a contact makes an introduction, record the reason. Then ask the questions needed for the next step. The route into the conversation does not answer them for us.
+4. **More volume is not a guarantee** — Imagine a new article brings many enquiries from teams outside the offer's scope. That would give our founder more responses to handle, but not necessarily more useful opportunities. Some might be a fit later. Some might need something else. When comparing sources, examine who came in and what happened next, not only which source produced the largest count.
+5. **Close the feedback loop** — Suppose several buyers ask whether the software can handle last-minute job changes. Bring that question back to the article and the offer. Could the explanation be clearer? Are we contacting the right teams? Choose a specific change to test. Marketing and sales can share these questions, with the next buyer conversation showing what happens.
 
 ### Why it takes time to ramp up {#why-ramp-up-takes-time}
 
@@ -298,12 +300,12 @@ Three sticky-note boxes read “Preparation · list, offer, stage rules”, “U
 
 #### Voice script
 
-1. **Preparation is real work** — PROSPECT list; offer; contact route; entry rule; usable board; first small version rather than perfect setup
-2. **You do not know the market yet** — BUYER response; relevant role; actual objection; test and revise; early sample not market census
-3. **You do not know your numbers yet** — OUTCOMES need elapsed time; open deals unresolved; completed cohorts; do not borrow illustrative rates as forecast
-4. **Separate the sources of delay** — PIPELINE construction; seller learning; buyer decisions; conceptual distinction; no universal durations to sum
-5. **Balance new leads with current work** — PROSPECTING; opportunity follow-up; delivery promises; finite founder time; activity alone not productivity
-6. **Start learning before cash is urgent** — REPEAT contacts and records; growing evidence; receipt scenarios updated; no guaranteed completion date
+1. **Preparation is real work** — At the beginning, our founder must create a usable first version. Research a few prospects. Write the offer. Choose a contact route. Decide what evidence opens an opportunity. Set up the board. None of that requires a perfect system. It requires enough preparation to make the first contact and remember what happens afterwards.
+2. **You do not know the market yet** — She might initially contact a workshop owner and discover that a different person handles scheduling. She can test that new route on the next call. Or a buyer may object to the trial's scope. She can ask which part is unsuitable. These conversations inform her next move. A handful of answers does not describe every potential customer.
+3. **You do not know your numbers yet** — On the first day, there are no completed deals to measure. A week later, several conversations may still be open. The founder cannot hurry their final outcomes by filling in a spreadsheet. Keep recording what happens. Until there is enough evidence, use explicit scenarios rather than treating our invented conversion rate as her own.
+4. **Separate the sources of delay** — Ask what kind of waiting you are dealing with. Are you still building the prospect list? Are you learning how to explain the offer? Or is a buyer considering a decision? Those questions point to different actions. They are not three standard durations to add together. Name the unfinished work instead of guessing a universal clock.
+5. **Balance new leads with current work** — Our founder has one afternoon. She could research Alder, prepare Birch's scope meeting or fulfil a trial promise. All three might matter. Put the dates and responsibilities together before deciding. Do not celebrate a long contact list if the active opportunity goes unanswered. Choose work that moves the actual customer conversations and commitments forward.
+6. **Start learning before cash is urgent** — Starting now gives the founder time to make contacts, record responses and try the next steps. As agreements become clearer, update the receipt scenarios in the cashflow view. Some answers may be uncomfortable. Better to see them while there are choices to consider. The process does not promise a completion date. Waiting does not provide one either.
 
 ### Watch your cashflow, "Start when?" {#cashflow-start-when}
 
@@ -326,9 +328,9 @@ Four final sticky notes remain visible together: “Find your zero-cash month”
 
 #### Voice script
 
-1. **Return to the unfunded month** — FEBRUARY zero; March cost cannot be paid; April million; same fictional assumptions, same timing problem
-2. **Plan backwards, act forwards** — RECEIPT date; delivery and payment terms; buyer decision; opportunity work; contact; lead research; start before need
-3. **Do not mix the two illustrations** — JANUARY–April cash board; separate 9.5-month funnel example; Q1 arrow not sufficient lead time or guaranteed rescue
-4. **Take the cash action now** — MONTH-by-month view; zero-cash month; receipt uncertainty; explicit cash deadline
-5. **Take the customer actions now** — MAINTAIN prospect list; select plausible buyer; first cold, inbound or network contact; agreed next step
-6. **Keep evidence as you go** — SIMPLE pipeline; dates and outcomes; conversion with denominator; cycle with endpoints; adjust own plan; START NOW
+1. **Return to the unfunded month** — Return once more to the original company. One hundred thousand dollars at the start. Fifty thousand paid each month. January ends with fifty thousand. February ends with zero. March cannot be funded. The million is still in April. We have not fixed that story by discussing sales. We have identified the work the founder postponed.
+2. **Plan backwards, act forwards** — Plan backwards from the cash you need. Ask what delivery and payment arrangement would support it. Ask what decision must come before that work. Ask which opportunity conversations would support the decision. Then act forwards: research a plausible customer, make contact and pursue the agreed next step. Start that chain before the cash becomes urgent.
+3. **Do not mix the two illustrations** — Our January-to-April cash story and our nine-and-a-half-month sales path were separate examples. Do not squeeze the long path into those four months. Starting in January is not a proven rescue for the March gap. The lesson is the direction of planning. Find the deadline, then examine how much unfinished work sits before it.
+4. **Take the cash action now** — Your first action is to build the monthly cashflow view and find your zero-cash month. Use your own opening balance, receipts and payments. Write down the month the plan runs out. Try the plan without your largest unconfirmed deal too. That gives you a concrete cash deadline to work with, rather than a general feeling that sales can wait.
+5. **Take the customer actions now** — Your next actions are to research and maintain a prospect list, then make first contact. Choose a plausible buyer and a suitable cold, inbound or network route. Ask for one useful next step. If a conversation opens, do the opportunity work. A list alone will not prepare the proposal or answer the buyer's questions.
+6. **Keep evidence as you go** — Finally, track deals in a simple pipeline. Keep dates, next actions and outcomes. Measure conversion with a clear starting count. Measure the sales cycle with clear endpoints. Use what you learn to adjust your plan. You do not need all the answers before the first contact. You need to start finding them now, before you depend on the money.

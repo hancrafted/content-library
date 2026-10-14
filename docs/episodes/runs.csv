@@ -91,3 +91,5 @@ run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at
 2026-10-13T22:50:35Z,never-too-early-sales,write-research-sales-pipeline-ramp-up-time,reviewer,2,pass,,9,,2026-10-13T23:37:47Z
 2026-10-13T22:50:35Z,never-too-early-sales,write-dossier,implementor,1,pass,,218,,2026-10-13T23:50:41Z
 2026-10-13T22:50:35Z,never-too-early-sales,write-dossier,reviewer,1,pass,,139,,2026-10-13T23:53:47Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-voice-script,implementor,1,pass,,217,,2026-10-13T23:59:41Z
+2026-10-13T22:50:35Z,never-too-early-sales,write-voice-script,reviewer,1,pass,,102,,2026-10-14T00:02:03Z

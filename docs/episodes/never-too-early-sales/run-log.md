@@ -522,3 +522,42 @@
 - Needs human: repeat revenue on Slide 4 remains conditional, not a promise.
 - Needs human: the Voice script writer must introduce the fictional Alder and Birch cards before referring to them, so the audio stands alone.
 - All remaining gates are pre-approved by Han; independent reviews and checks continue.
+
+## write-voice-script · 2026-10-14T00:02:57Z
+
+### Inputs
+
+- `brief.md`, approved `pipeline.yml` and reviewed `dossier.md`.
+- Baseline commit `bc8488d`, the write-dossier output with 71 keyword beats.
+- `.agents/skills/new-episode/references/write-voice-script.md`, its sample and Dossier governance intents.
+- `run-log.md#write-dossier`: scope, source caveats and audio-only clarity concerns.
+
+### Output
+
+- `dossier.md`: draft, machine-verified, 71 fixed beats expanded into 3,911 spoken words; committed at `Gate: draft dossier` before recording Han's pre-authorized approval.
+- Duration decision: 27.94 minutes at the site's English speaking rate, within the approved 20-30-minute range.
+- Spine decision: no changes.
+
+### Checks
+
+- `npm run check:docs`: pass, zero violations.
+- Staging vitest: 15 tests pass.
+- Strict comparison to `bc8488d`: only the 71 paragraph lines and generated timestamp changed before verification; all headings, Visuals, notes, beat names and counts unchanged.
+- `git diff --check`: pass.
+- Fresh reviewer: every governing intent and all six rubric lines pass.
+- Same-Slide note-claim duplication: reviewer passes application-versus-source distinctions.
+- `approve.ts --by process:markdown-harness`: new machine entry appended.
+
+### Metrics
+
+- implementor · attempt 1 · pass · 217 s
+- reviewer · attempt 1 · pass · 102 s
+
+### Notes
+
+- All four actionables are explicit in the audio. Alder and Birch are introduced before their names are used; opportunities carry the "real work" emphasis.
+- The three cashflow callbacks and fictional funnel arithmetic agree with the Visuals. No vendor or academic dated claims are spoken.
+- Needs human: the ramp-up advice on balancing new leads with current work is close to its note's prospecting trade-off; reviewer passes it as application, not repeated research.
+- Needs human: the instruction not to add three standard ramp durations is close to the source-limit note; reviewer passes it as listener guidance.
+- Needs human: the instruction to multiply the example's consistent path is close to the same-cohort note; the note's extra fact about real reports skipping stages is not spoken.
+- Han has already approved this gate in advance. Keep the draft and approved commits separate so provenance remains explicit.
