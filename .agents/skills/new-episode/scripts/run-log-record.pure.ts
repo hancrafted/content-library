@@ -31,6 +31,7 @@ const value: Check = (v) => (typeof v === 'number' || (typeof v === 'string' && 
 
 const CHECKS: Record<string, Check> = {
   t: matching(ISO, 'an ISO 8601 UTC time'),
+  start_t: matching(ISO, 'an ISO 8601 UTC time'),
   span_id: spanId,
   parent_span_id: spanId,
   retry_of: spanId,
@@ -58,12 +59,12 @@ function checkFor(kind: Kind, key: string): Check {
   return CHECKS[key] ?? text;
 }
 
-const END_KEYS = ['t', 'summary', 'source', 'transcript_path', 'gen_ai.response.model', 'gen_ai.usage.input_tokens', 'gen_ai.usage.output_tokens', 'gen_ai.usage.cache_read.input_tokens'];
+const END_KEYS = ['t', 'start_t', 'gen_ai.input.messages', 'summary', 'source', 'transcript_path', 'gen_ai.response.model', 'gen_ai.usage.input_tokens', 'gen_ai.usage.output_tokens', 'gen_ai.usage.cache_read.input_tokens'];
 const RULES: Record<Kind, { required: string[]; optional: string[] }> = {
   'start-run': { required: ['run_id', 'template_sha', 'harness', 'branch', 'gen_ai.request.model'], optional: ['t', 'name', 'source', 'gen_ai.operation.name'] },
   start: {
     required: ['type', 'name', 'parent_span_id'],
-    optional: ['t', 'job', 'attempt', 'role', 'ticket', 'retry_of', 'harness', 'source', 'description', 'transcript_path', 'gen_ai.operation.name', 'gen_ai.agent.name', 'gen_ai.request.model', 'gen_ai.input.messages'],
+    optional: ['t', 'job', 'attempt', 'role', 'ticket', 'retry_of', 'harness', 'source', 'description', 'transcript_path', 'request_shape', 'gen_ai.operation.name', 'gen_ai.agent.name', 'gen_ai.request.model', 'gen_ai.input.messages'],
   },
   'end-run': { required: ['span_id', 'status'], optional: END_KEYS },
   end: { required: ['span_id', 'status'], optional: END_KEYS },

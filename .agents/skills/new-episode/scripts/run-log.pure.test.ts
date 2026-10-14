@@ -210,3 +210,36 @@ describe('edge cases', () => {
     expect(tied.spans.map((span) => span.status)).toEqual(['ok']);
   });
 });
+
+describe('live Runs and late start facts', () => {
+  const OTHER = 'f'.repeat(32);
+  const at = (seq: number, t: string, rest: Partial<RunLogLine>): RunLogLine => ({ seq, t, trace_id: TRACE_A, ...rest }) as RunLogLine;
+  const TRACE_A = 'a'.repeat(32);
+
+  it('decides running or crashed per trace, so one Run ending does not crash another in the file', () => {
+    // ARRANGE
+    const lines = [
+      at(1, '2026-10-14T09:00:00Z', { kind: 'start-run', span_id: 'a1'.repeat(8), run_id: 'one' }),
+      at(2, '2026-10-14T09:00:01Z', { kind: 'start', span_id: 'a2'.repeat(8), type: 'job', name: 'j', job: 'j', parent_span_id: 'a1'.repeat(8) }),
+      at(3, '2026-10-15T09:00:00Z', { kind: 'start-run', span_id: 'b1'.repeat(8), run_id: 'two', trace_id: OTHER }),
+      at(4, '2026-10-15T09:00:01Z', { kind: 'start', span_id: 'b2'.repeat(8), type: 'job', name: 'j', job: 'j', parent_span_id: 'b1'.repeat(8), trace_id: OTHER }),
+      at(5, '2026-10-15T10:00:00Z', { kind: 'end-run', span_id: 'a1'.repeat(8), status: 'ok' }),
+    ];
+    // ACT
+    const statuses = fold(lines, { live: new Set([OTHER]) }).spans.map((span) => [span.span_id.slice(0, 2), span.status]);
+    // ASSERT
+    expect(statuses).toEqual([['a1', 'ok'], ['a2', 'crashed'], ['b1', 'running'], ['b2', 'running']]);
+  });
+
+  it('fills the launch time and prompt an end line carries when the start had neither', () => {
+    // ARRANGE
+    const lines = [
+      at(1, '2026-10-14T10:00:05Z', { kind: 'start', span_id: 'c1'.repeat(8), type: 'agent', name: 'x', parent_span_id: 'a1'.repeat(8), job: 'j', role: 'r' }),
+      at(2, '2026-10-14T10:01:05Z', { kind: 'end', span_id: 'c1'.repeat(8), status: 'ok', start_t: '2026-10-14T10:00:00Z', 'gen_ai.input.messages': 'the prompt' }),
+    ];
+    // ACT
+    const [span] = fold(lines).spans;
+    // ASSERT
+    expect(span).toMatchObject({ start_t: '2026-10-14T10:00:00Z', duration_ms: 65_000, 'gen_ai.input.messages': 'the prompt' });
+  });
+});

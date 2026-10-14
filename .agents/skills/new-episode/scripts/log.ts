@@ -5,47 +5,16 @@
 // run-log.pure.ts; this file only reads the clock, git and the disk.
 import { execFileSync } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
-import { appendFileSync, closeSync, existsSync, openSync, readFileSync, statSync, unlinkSync } from 'node:fs';
+import { appendFileSync, existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
-import { parseLog, record, type RunLogLine, type Stamp } from './run-log.pure.ts';
-
-const STALE_LOCK_MS = 10_000;
-const LOCK_WAIT_MS = 15_000;
+import { readOrNull } from './run-files.ts';
+import { withLock } from './run-log-lock.ts';
+import { parseLog, record, type LogEvent, type RunLogLine, type Stamp } from './run-log.pure.ts';
 
 const git = (...args: string[]): string => execFileSync('git', args, { encoding: 'utf8' }).trim();
-const sleep = (ms: number): unknown => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
-
-/** Creates the lock file exclusively; false when another writer holds it. */
-function tryLock(lockFile: string): boolean {
-  try {
-    closeSync(openSync(lockFile, 'wx'));
-    return true;
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === 'EEXIST') return false;
-    throw error;
-  }
-}
-
-/** Removes a lock its holder never released, such as one left by a crashed writer. */
-function breakStaleLock(lockFile: string): void {
-  try {
-    if (Date.now() - statSync(lockFile).mtimeMs > STALE_LOCK_MS) unlinkSync(lockFile);
-  } catch {
-    // the holder released it between our checks
-  }
-}
-
-function lock(lockFile: string): void {
-  const deadline = Date.now() + LOCK_WAIT_MS;
-  while (!tryLock(lockFile)) {
-    if (Date.now() > deadline) throw new Error(`could not take ${lockFile}`);
-    breakStaleLock(lockFile);
-    sleep(20);
-  }
-}
 
 /** The event with what only git and the clock know filled in for a start-run. */
-function withRunFacts(fields: Record<string, unknown>, now: string): Record<string, unknown> {
+function withRunFacts(fields: LogEvent, now: string): LogEvent {
   return {
     ...fields,
     run_id: fields.run_id ?? now.replace(/:/g, '-'),
@@ -67,17 +36,20 @@ function stampFor(lines: readonly RunLogLine[], traceId: string, now: string): S
 }
 
 function readLines(file: string): RunLogLine[] {
-  const { lines, errors } = parseLog(existsSync(file) ? readFileSync(file, 'utf8') : '');
+  const { lines, errors } = parseLog(readOrNull(file) ?? '');
   if (errors.length > 0) throw new Error(`${file}: ${errors.join('; ')}`);
   return lines;
 }
 
+/** Any JSON object; `record` validates its fields, so this only narrows enough to read `kind`. */
+const isEvent = (event: unknown): event is LogEvent => typeof event === 'object' && event !== null && !Array.isArray(event);
+
 function append(file: string, event: unknown): string {
   const lines = readLines(file);
   const now = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
-  const starting = (event as { kind?: unknown } | null)?.kind === 'start-run';
+  const starting = isEvent(event) && event.kind === 'start-run';
   const traceId = starting ? randomBytes(16).toString('hex') : currentTrace(lines, file);
-  const result = record(starting ? withRunFacts(event as Record<string, unknown>, now) : event, stampFor(lines, traceId, now));
+  const result = record(starting ? withRunFacts(event, now) : event, stampFor(lines, traceId, now));
   if (!result.ok) throw new Error(result.errors.map((e) => `  ${e}`).join('\n'));
   const text = JSON.stringify(result.line);
   appendFileSync(file, `${text}\n`);
@@ -91,13 +63,7 @@ function main(): void {
   if (!existsSync(folder)) throw new Error(`${folder} does not exist; run this from the Episode's worktree root.`);
   const event: unknown = JSON.parse(process.argv[3] ?? readFileSync(0, 'utf8'));
   const file = path.join(folder, 'events.jsonl');
-  const lockFile = `${file}.lock`;
-  lock(lockFile);
-  try {
-    console.log(append(file, event));
-  } finally {
-    if (existsSync(lockFile)) unlinkSync(lockFile);
-  }
+  console.log(withLock(`${file}.lock`, () => append(file, event)));
 }
 
 try {

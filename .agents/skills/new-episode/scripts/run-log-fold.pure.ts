@@ -20,11 +20,16 @@ function scoreOf(entry: RunLogLine): Score {
   return Object.fromEntries(Object.entries(score).filter(([, v]) => v !== undefined)) as unknown as Score;
 }
 
-const NOT_ATTRIBUTES = new Set(['kind', 't', 'seq', 'span_id', 'trace_id', 'status', 'summary', 'source']);
+const NOT_ATTRIBUTES = new Set(['kind', 't', 'start_t', 'seq', 'span_id', 'trace_id', 'status', 'summary', 'source']);
 
-/** Closes a span with an end line. The span keeps its own `source`; the end line's fills it in only when the start gave none. */
+/**
+ * Closes a span with an end line. The span keeps its own `source`; the end line's fills it in only when the start gave none.
+ * An end line may carry start facts the start could not measure: `start_t` replaces the stamped launch time, and
+ * `gen_ai.input.messages` fills the prompt the start lacked.
+ */
 function closeSpan(span: Span, entry: RunLogLine): void {
   const attributes = Object.entries(entry).filter(([key]) => !NOT_ATTRIBUTES.has(key));
+  if (entry.start_t !== undefined) span.start_t = entry.start_t;
   const end = { status: entry.status as Status, summary: entry.summary ?? null, end_t: entry.t, duration_ms: Date.parse(entry.t) - Date.parse(span.start_t) };
   Object.assign(span, Object.fromEntries(attributes), end);
   span.source ??= entry.source;
@@ -32,14 +37,21 @@ function closeSpan(span: Span, entry: RunLogLine): void {
 
 interface Accumulator {
   open: SpanStatus;
+  live?: ReadonlySet<string>;
   spans: Map<string, Span>;
   scores: Score[];
   orphans: RunLogLine[];
 }
 
+/** What a start's span is until it ends: running in a live Run, else the fold's default for open spans. */
+function openStatus(entry: RunLogLine, acc: Accumulator): SpanStatus {
+  if (acc.live === undefined) return acc.open;
+  return acc.live.has(entry.trace_id) ? 'running' : 'crashed';
+}
+
 function place(entry: RunLogLine, acc: Accumulator): void {
   const id = entry.span_id as string;
-  if (entry.kind === 'start' || entry.kind === 'start-run') acc.spans.set(id, openSpan(entry, acc.open));
+  if (entry.kind === 'start' || entry.kind === 'start-run') acc.spans.set(id, openSpan(entry, openStatus(entry, acc)));
   else if (entry.kind === 'score') acc.scores.push(scoreOf(entry));
   else if (acc.spans.has(id)) closeSpan(acc.spans.get(id) as Span, entry);
   else acc.orphans.push(entry);
@@ -47,7 +59,7 @@ function place(entry: RunLogLine, acc: Accumulator): void {
 
 /** Folds lines into spans and scores. Input order does not matter: lines are sorted by `t`, then `seq`. */
 export function fold(lines: readonly RunLogLine[], options: FoldOptions = {}): Folded {
-  const acc: Accumulator = { open: options.openAs === 'running' ? 'running' : 'crashed', spans: new Map(), scores: [], orphans: [] };
+  const acc: Accumulator = { open: options.openAs === 'running' ? 'running' : 'crashed', live: options.live, spans: new Map(), scores: [], orphans: [] };
   for (const entry of chronological(lines)) place(entry, acc);
   return { spans: [...acc.spans.values()], scores: acc.scores, orphans: acc.orphans };
 }

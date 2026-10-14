@@ -2,9 +2,9 @@
 // per-run pipeline with its state, derived from pipeline.yml and events.jsonl.
 // The gates are read through `gateReaders`; this file only hands it node's disk and gh.
 import { execFileSync } from 'node:child_process';
-import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { readPipeline } from '../../../../src/lib/episode-pipeline-jobs.pure.ts';
+import { liveTracesIn, readOrNull as read } from './run-files.ts';
 import { fold, parseLog } from './run-log.pure.ts';
 import { gateReaders, renderStatus, runStatus } from './status.pure.ts';
 
@@ -13,7 +13,6 @@ if (!slug) {
   console.error('✖ usage: npm run episode:status -- <slug>');
   process.exit(1);
 }
-const read = (file: string): string | null => (existsSync(file) ? readFileSync(file, 'utf8') : null);
 const folder = path.join('docs/episodes', slug);
 const pipelineFile = path.join(folder, 'pipeline.yml');
 const pipeline = read(pipelineFile);
@@ -27,7 +26,7 @@ if (readPipeline(pipeline) === null) {
 }
 const { lines, errors } = parseLog(read(path.join(folder, 'events.jsonl')) ?? '');
 for (const error of errors) console.error(`! ${error}`);
-// A span with no end is running while the Run has no end line, and crashed once it has one.
-const folded = fold(lines, { openAs: lines.some((line) => line.kind === 'end-run') ? 'crashed' : 'running' });
+// A span with no end is running only while its Run is live (the marker names its trace), else crashed.
+const folded = fold(lines, { live: liveTracesIn() });
 const gh = (args: readonly string[]): string => execFileSync('gh', args, { encoding: 'utf8' });
 console.log(renderStatus(runStatus(pipeline, folded, { ...gateReaders(slug, { read, gh }), now: new Date().toISOString() })));

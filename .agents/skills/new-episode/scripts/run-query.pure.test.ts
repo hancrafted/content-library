@@ -67,9 +67,9 @@ describe('success cases', () => {
     // ARRANGE
     const expected = [
       'run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at',
-      '2026-10-14T09:00:00Z,alpha,write,implementor,1,fail,The Answer answers the h1 question.,60,120,2026-10-14T09:01:30Z',
-      '2026-10-14T09:00:00Z,alpha,write,implementor,2,pass,,60,350,2026-10-14T09:03:10Z',
-      '2026-10-15T09:00:00Z,beta,plan,implementor,1,crashed,,,,',
+      'run-1,alpha,write,implementor,1,fail,The Answer answers the h1 question.,60,120,2026-10-14T09:01:30Z',
+      'run-1,alpha,write,implementor,2,pass,,60,350,2026-10-14T09:03:10Z',
+      'run-2,beta,plan,implementor,1,crashed,,,,',
       '',
     ].join('\n');
     // ACT
@@ -122,11 +122,46 @@ describe('edge cases', () => {
   it('quotes a comma or a double quote in a field when it reaches the CSV', () => {
     // ARRANGE
     const sources = [{ episode: 'a,b', folded: fold(RUN_TWO) }];
-    const expected = '2026-10-15T09:00:00Z,"a,b",plan,implementor,1,crashed,,,,';
+    const expected = 'run-2,"a,b",plan,implementor,1,crashed,,,,';
     // ACT
     const row = runsCsv(sources).split('\n')[1];
     // ASSERT
     expect(row).toBe(expected);
+  });
+
+  it('counts a failed Attempt rubric against a ticket-implementor nested under that Attempt', () => {
+    // ARRANGE
+    const lines = RUN_ONE.map((l) => (l.span_id === ID(4) ? { ...l, role: 'ticket-implementor' } : l)) as RunLogLine[];
+    // ACT
+    const row = runsCsv([{ episode: 'alpha', folded: fold(lines) }]).split('\n')[1];
+    // ASSERT
+    expect(row).toContain(',ticket-implementor,1,fail,');
+  });
+
+  it('keeps the rows of Runs no log holds and regenerates the rows of Runs the logs hold', () => {
+    // ARRANGE
+    const existing = [
+      'run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at',
+      '2026-10-12T19:22:40Z,old,brief-grill,implementor,1,pass,"a, b",1043,,2026-10-12T19:40:03Z',
+      'run-1,alpha,stale,implementor,9,pass,,1,1,x',
+      '',
+    ].join('\n');
+    // ACT
+    const rows = runsCsv([ONE], existing).split('\n');
+    // ASSERT
+    expect(rows[1]).toBe('2026-10-12T19:22:40Z,old,brief-grill,implementor,1,pass,"a, b",1043,,2026-10-12T19:40:03Z');
+    expect(rows).toHaveLength(5);
+    expect(rows.join('\n')).not.toContain('stale');
+  });
+
+  it('treats an old row stamped with the Run start time as the same Run as its run_id', () => {
+    // ARRANGE
+    const existing = 'run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,at\n2026-10-14T09-00-00Z,alpha,old,implementor,1,pass,,1,1,x\n';
+    const source = { episode: 'alpha', folded: fold(RUN_ONE.map((l) => (l.kind === 'start-run' ? { ...l, run_id: '2026-10-14T09-00-00Z' } : l)) as RunLogLine[]) };
+    // ACT
+    const csv = runsCsv([source], existing);
+    // ASSERT
+    expect(csv).not.toContain(',old,');
   });
 
   it('allows a leading comment and lower-case WITH', () => {

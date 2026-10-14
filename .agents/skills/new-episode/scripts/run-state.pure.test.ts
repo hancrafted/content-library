@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { parseMarker } from './claude-adapter.pure.ts';
+import { liveTraces, parseMarker } from './marker.pure.ts';
 import { archiveTarget, markerText } from './run-state.pure.ts';
 import type { RunLogLine } from './run-log.pure.ts';
 
@@ -54,6 +54,41 @@ describe('failure cases', () => {
     const act = (): string => archiveTarget('demo', lines);
     // ASSERT
     expect(act).toThrow('start-run');
+  });
+});
+
+describe('Job span check', () => {
+  it('refuses a Job span id the log does not hold', () => {
+    // ARRANGE
+    const lines = [RUN, JOB];
+    // ACT
+    const act = (): string => markerText({ log: LOG, sessionId: 's', lines, jobSpanId: 'e'.repeat(16) });
+    // ASSERT
+    expect(act).toThrow('not a Job span');
+  });
+
+  it('refuses a Job span that has ended, named or defaulted', () => {
+    // ARRANGE
+    const ended: RunLogLine = { kind: 'end', t: '2026-10-14T08:02:00Z', seq: 3, trace_id: TRACE, span_id: JOB.span_id, status: 'ok' };
+    // ACT
+    const named = (): string => markerText({ log: LOG, sessionId: 's', lines: [RUN, JOB, ended], jobSpanId: JOB.span_id });
+    const defaulted = (): string => markerText({ log: LOG, sessionId: 's', lines: [RUN, JOB, ended] });
+    // ASSERT
+    expect(named).toThrow('already ended');
+    expect(defaulted).toThrow('already ended');
+  });
+});
+
+describe('live Runs', () => {
+  it('names the marker trace as the only live one, and none without a marker', () => {
+    // ARRANGE
+    const text = markerText({ log: LOG, sessionId: 's', lines: [RUN, JOB] });
+    // ACT
+    const live = liveTraces(text);
+    const none = liveTraces(null);
+    // ASSERT
+    expect([...live]).toEqual([TRACE]);
+    expect(none.size).toBe(0);
   });
 });
 

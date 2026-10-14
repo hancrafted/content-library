@@ -1,8 +1,9 @@
 // `npm run episode:trace -- <slug|events.jsonl> [span-id]`: prints the Run's span tree from the Episode's log
 // with statuses, durations, models and tokens, or the subtree under a span id. A span with no end line reads
-// as running while the Run has no end line, and crashed once it has one.
+// as running only while the active-run marker names its Run, and crashed otherwise.
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
+import { liveTracesIn } from './run-files.ts';
 import { fold, parseLog, renderTree } from './run-log.pure.ts';
 
 const target = process.argv[2];
@@ -18,8 +19,7 @@ if (!existsSync(file)) {
 }
 const { lines, errors } = parseLog(readFileSync(file, 'utf8'));
 for (const error of errors) console.error(`! ${error}`);
-const finished = lines.some((l) => l.kind === 'end-run');
-const folded = fold(lines, { openAs: finished ? 'crashed' : 'running' });
+const folded = fold(lines, { live: liveTracesIn() });
 const tree = renderTree(folded, spanId);
 if (tree === null) {
   console.error(spanId ? `✖ no span ${spanId} in ${file}` : `✖ ${file} holds no spans`);

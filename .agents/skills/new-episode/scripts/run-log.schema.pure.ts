@@ -31,6 +31,8 @@ export interface LogEvent {
   t?: string;
   /** end, end-run and score: the span the line belongs to. */
   span_id?: string;
+  /** end: the launch time, when the start line could not measure it (the transcript did not exist yet). */
+  start_t?: string;
   /** start: the span this one nests under. Absent only on start-run. */
   parent_span_id?: string;
   type?: SpanType;
@@ -46,6 +48,8 @@ export interface LogEvent {
   source?: string;
   description?: string;
   transcript_path?: string;
+  /** start: how the harness launched the agent (Claude Code's `requestShape`, background or not). */
+  request_shape?: string;
   run_id?: string;
   template_sha?: string;
   branch?: string;
@@ -105,6 +109,7 @@ export interface Span {
   source?: string;
   description?: string;
   transcript_path?: string;
+  request_shape?: string;
   run_id?: string;
   template_sha?: string;
   branch?: string;
@@ -141,6 +146,8 @@ export interface Folded {
 }
 
 export interface FoldOptions {
-  /** What a span with no end line is. `crashed` for a finished log (the default); `running` for a live one. */
+  /** What a span with no end line is when `live` is not given. `crashed` (the default), or `running`. */
   openAs?: 'crashed' | 'running';
+  /** The trace ids of the Runs that are live now (see `liveTraces`): an open span is `running` only in one of them, else `crashed`. Decided per trace, so one Run ending never crashes another in the same file. */
+  live?: ReadonlySet<string>;
 }

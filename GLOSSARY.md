@@ -113,13 +113,13 @@ _Avoid_: Session, execution, pipeline run
 _Avoid_: Task, stage, step
 
 **Attempt**: one try at a Job, numbered from 1. A retry is a new Attempt that names the Attempt it retries.
-_Avoid_: Retry, iteration, round
+_Avoid_: Iteration, round
 
 **Gate**: the point where a Run waits for Han's decision on a Job's output, from the moment the output is ready until he decides.
 _Avoid_: Approval step, checkpoint, review stop
 
 **Span**: a stretch of a Run with a start and an end, a status, and a parent: the Run itself, a Job, an Attempt, an agent working inside an Attempt, or a Gate. Spans nest, so a Run reads back as a tree.
-_Avoid_: Step, event, trace
+_Avoid_: Step
 
 **Score**: one verdict on a Span, from a named judge: a reviewer's rubric result, a check's result, or Han's decision at a Gate. A re-judgement is a new Score; the earlier one stays.
 _Avoid_: Grade, rating, result
