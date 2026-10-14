@@ -289,6 +289,10 @@
         "build": "Umsetzung",
         "pr": "PR"
       },
+      "showJobs": "Jobs anzeigen",
+      "showJobsHelp": "Klappt jede Phase in ihre Jobs auf, geordnet nach needs und wants.",
+      "notPlanned": "Noch nicht geplant",
+      "onePer": "Ein Job je Eintrag in {heading}",
       "parallel": "{count} parallele Pfade",
       "step": "Abhängigkeitsebene {number}",
       "active": "Aktiv: {name}",

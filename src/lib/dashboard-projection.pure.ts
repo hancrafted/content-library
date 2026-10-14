@@ -4,7 +4,7 @@ import { latestJobSpans } from '../../skills/new-episode/scripts/status.pure';
 import { agentFields, JOB_FIELDS, TOP_FIELDS } from './episode-pipeline-fields.pure';
 import { findCycle } from './episode-pipeline-graph.pure';
 import { JOB_ID, jobOf, type Job, type JobAgent } from './episode-pipeline-jobs.pure';
-import { checkMapping, isMapping, type Mapping } from './mapping-fields.pure';
+import { checkMapping, isMapping, optional, stringsOf, type Field, type Mapping } from './mapping-fields.pure';
 
 export interface DashboardAgentConfig extends JobAgent {
   agent: string;
@@ -12,20 +12,30 @@ export interface DashboardAgentConfig extends JobAgent {
 
 export interface DashboardJobConfig extends Job {
   retries: number;
+  /** A template Job's `<file>#<heading>`: customize-pipeline writes one Job per item; absent on a real Job. */
+  foreach?: string;
   agents: DashboardAgentConfig[];
 }
 
 export interface DashboardPipeline {
   status: string;
+  /** The ordered stage ids the pipeline lists; empty for a Run scaffolded before stages existed. */
+  stages: string[];
   jobs: DashboardJobConfig[];
 }
+
+/** A Run scaffolded before the stages layer lists no `stages` and no Job `stage`; the dashboard still reads it. */
+const legacyOptional = (fields: readonly Field[], key: string) =>
+  fields.map((candidate) => (candidate.key === key ? optional(candidate) : candidate));
+const PIPELINE_FIELDS = legacyOptional(TOP_FIELDS, 'stages');
+const STAGED_JOB_FIELDS = legacyOptional(JOB_FIELDS, 'stage');
 
 function jobErrors(job: unknown, at: number): string[] {
   const where = `Job ${at + 1}`;
   if (!isMapping(job)) return [`${where} must be a mapping.`];
   const agents = Array.isArray(job.agents) ? job.agents : [];
   return [
-    ...checkMapping(where, job, JOB_FIELDS),
+    ...checkMapping(where, job, STAGED_JOB_FIELDS),
     ...agents.flatMap((agent) =>
       isMapping(agent)
         ? checkMapping(`${where} agent`, agent, agentFields(agent.type === 'reviewer'))
@@ -39,6 +49,7 @@ function jobConfig(job: Mapping): DashboardJobConfig {
   return {
     ...parsed,
     retries: Number(job.retries),
+    ...(typeof job.foreach === 'string' && { foreach: job.foreach }),
     agents: (job.agents as Mapping[]).map((agent, index) => ({
       ...parsed.agents[index],
       agent: typeof agent.agent === 'string' ? agent.agent : 'general-purpose',
@@ -73,9 +84,13 @@ function orderedJobs(jobs: DashboardJobConfig[]): DashboardJobConfig[] {
 export function parseDashboardPipeline(text: string): DashboardPipeline {
   const document: unknown = parse(text);
   if (!isMapping(document) || !Array.isArray(document.jobs)) throw new Error('The pipeline needs a mapping with jobs.');
-  const errors = [...checkMapping('The pipeline', document, TOP_FIELDS), ...document.jobs.flatMap(jobErrors)];
+  const errors = [...checkMapping('The pipeline', document, PIPELINE_FIELDS), ...document.jobs.flatMap(jobErrors)];
   if (errors.length > 0) throw new Error(errors.join('\n'));
-  return { status: String(document.status), jobs: orderedJobs(document.jobs.filter(isMapping).map(jobConfig)) };
+  return {
+    status: String(document.status),
+    stages: stringsOf(document.stages),
+    jobs: orderedJobs(document.jobs.filter(isMapping).map(jobConfig)),
+  };
 }
 
 export interface DashboardJob extends Omit<DashboardJobConfig, 'agents'> {
@@ -127,7 +142,7 @@ export function projectDashboard(pipeline: DashboardPipeline, folded: Folded) {
       ),
     };
   });
-  return { jobs, openGates, runs: folded.spans.filter((span) => span.type === 'run') };
+  return { stages: pipeline.stages, jobs, openGates, runs: folded.spans.filter((span) => span.type === 'run') };
 }
 
 export type DashboardView = ReturnType<typeof projectDashboard>;

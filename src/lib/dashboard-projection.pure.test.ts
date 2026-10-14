@@ -76,6 +76,30 @@ describe('success cases', () => {
     expect(view.jobs.flatMap((job) => job.scores)).toHaveLength(expectedProblems);
     expect(view.openGates).toEqual([]);
   });
+
+  it("carries the pipeline's stage order, each Job's stage and a template's foreach into the view", () => {
+    // ARRANGE
+    const agent = { type: 'implementor', skills: [], references: [], model: 'opus' };
+    const base = { needs: [], outputs: [], checks: [], retries: 0, agents: [agent] };
+    const order = ['brief', 'research'];
+    const template = 'docs/episodes/x/brief.md#Research questions';
+    const text = JSON.stringify({
+      status: 'draft',
+      stages: order,
+      jobs: [
+        { ...base, id: 'brief-grill', stage: 'brief' },
+        { ...base, id: 'write-research', stage: 'research', foreach: template },
+      ],
+    });
+    const expectedStages = ['brief', 'research'];
+    // ACT
+    const view = projectDashboard(parseDashboardPipeline(text), { spans: [], scores: [], orphans: [] });
+    // ASSERT
+    expect(view.stages).toEqual(order);
+    expect(view.jobs.map((job) => job.stage)).toEqual(expectedStages);
+    expect(view.jobs[1].foreach).toBe(template);
+    expect(view.jobs[0].foreach).toBeUndefined();
+  });
 });
 
 describe('failure cases', () => {
@@ -94,6 +118,16 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('reads a Run scaffolded before stages existed, with no stage order and no Job stage', () => {
+    // ARRANGE
+    const text = fixture('pipeline.yml');
+    // ACT
+    const pipeline = parseDashboardPipeline(text);
+    // ASSERT
+    expect(pipeline.stages).toEqual([]);
+    expect(pipeline.jobs.filter((job) => job.stage !== undefined)).toEqual([]);
+  });
+
   it('shows an open Gate after Job completion, closes it on its end and retains measured agent evidence', () => {
     // ARRANGE
     const pipeline = parseDashboardPipeline(fixture('pipeline.yml'));

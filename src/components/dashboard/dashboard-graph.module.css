@@ -81,8 +81,112 @@
   animation: pulse 2s ease-out infinite;
 }
 
+.node[data-planned='false'] .orbit {
+  border-style: dashed;
+}
+
 .panel {
   animation: enter 180ms ease-out;
+}
+
+.switch {
+  position: relative;
+  flex: 0 0 auto;
+  width: 2.5rem;
+  height: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--muted);
+  appearance: none;
+  cursor: pointer;
+  transition: background-color 160ms ease-out;
+}
+
+.switch::before {
+  content: '';
+  position: absolute;
+  top: 0.125rem;
+  left: 0.125rem;
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 50%;
+  background: var(--muted-foreground);
+  transition: transform 160ms ease-out;
+}
+
+.switch:checked {
+  border-color: var(--primary);
+  background: var(--primary);
+}
+
+.switch:checked::before {
+  background: var(--primary-foreground);
+  transform: translateX(1rem);
+}
+
+.jobs {
+  margin: 0.75rem 0 0 4.375rem;
+  animation: unfold 260ms ease-out both;
+  animation-delay: calc(var(--stage-index, 0) * 40ms);
+}
+
+.job {
+  --node-tone: var(--muted-foreground);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--node-tone);
+  border-radius: var(--radius);
+  background: var(--card);
+  text-align: left;
+}
+
+.job[data-state='ok'],
+.job[data-state='reused'] {
+  --node-tone: var(--success);
+}
+
+.job[data-state='running'] {
+  --node-tone: var(--info);
+}
+
+.job[data-state='gate'],
+.job[data-state='refused'] {
+  --node-tone: var(--warning);
+}
+
+.job[data-state='error'],
+.job[data-state='crashed'] {
+  --node-tone: var(--destructive);
+}
+
+.job[data-state='template'] {
+  border-style: dashed;
+}
+
+.jobDot {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 2px solid var(--node-tone);
+  border-radius: 50%;
+  color: var(--node-tone);
+}
+
+.job[data-state='running'] .jobDot::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border: 2px solid var(--info);
+  border-radius: 50%;
+  animation: pulse 2s ease-out infinite;
 }
 
 .branch {
@@ -135,6 +239,17 @@
     align-items: center;
     text-align: center;
   }
+
+  .stages[data-jobs='true'] {
+    grid-auto-columns: minmax(8rem, 1fr);
+    align-items: start;
+    overflow-x: auto;
+    padding: 0.5rem 0.25rem;
+  }
+
+  .jobs {
+    margin: 1rem 0 0;
+  }
 }
 
 @keyframes pulse {
@@ -159,9 +274,27 @@
   }
 }
 
+@keyframes unfold {
+  from {
+    opacity: 0;
+    transform: translateY(-0.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .node[data-state='running'] .orbit::after,
-  .panel {
+  .job[data-state='running'] .jobDot::after,
+  .panel,
+  .jobs {
     animation: none;
+  }
+
+  .switch,
+  .switch::before {
+    transition: none;
   }
 }

@@ -28,23 +28,43 @@ reveal them; no external transcript is opened and nothing is uploaded.
 
 ## Graph and disclosure
 
-The overview groups existing Jobs for display, without changing the pipeline:
+The overview groups Jobs into stages without changing the pipeline. A pipeline
+with a top-level `stages:` list sets the stages and their order; each Job sits in
+the stage its `stage:` names. A listed stage without Jobs yet (Research or Build
+before `customize-pipeline` expands them) shows as **Not planned yet** with a
+dashed node. An unexpanded `foreach` template Job in a draft scaffold shows as a
+dashed placeholder, "One Job per item in <heading>", and does not count as planned
+work. A Job naming a stage the list lacks gets its own stage after the listed ones.
+Known stage ids have translated names; an unknown id is title-cased.
 
-| Stage         | Jobs                                                        |
-| ------------- | ----------------------------------------------------------- |
-| Brief         | `brief-grill`                                               |
-| Setup         | `categorize-research`, `customize-pipeline`                 |
-| Research      | `retrieval`, `convert-references`, every `write-research-*` |
-| Dossier       | `write-dossier`, `write-voice-script`                       |
-| Specification | `write-spec`, `write-design-spec`                           |
-| Build         | `implement-episode`                                         |
-| PR            | `open-pr`                                                   |
+A Run scaffolded before stages existed lists no `stages:`. The dashboard still
+reads it and falls back to a fixed grouping:
+
+| Stage         | Jobs                                                                                                |
+| ------------- | --------------------------------------------------------------------------------------------------- |
+| Brief         | `brief-grill`                                                                                       |
+| Setup         | `scaffold-pipeline`, `categorize-research`, `retrieval`, `convert-references`, `customize-pipeline` |
+| Research      | every `write-research-*`                                                                            |
+| Dossier       | `write-dossier`, `write-voice-script`                                                               |
+| Specification | `write-spec`, `write-design-spec`                                                                   |
+| Build         | `implement-episode`, `implement-episode-init`, every `implement-section-*`                          |
+| PR            | `open-pr`                                                                                           |
 
 Unrecognized Jobs remain visible as their own stage. Desktop reads left to right;
 smaller screens read top to bottom. Progress counts successful/reused stages,
 not elapsed time. A stage is complete only when all its Jobs are successful or
 reused, with no open Gate. Attention is counted separately from active work, so
 a failed optional research Job remains visible when the Dossier proceeds.
+
+**Show Jobs** is a switch beside the progress summary, off by default. On, each
+stage unfolds into a column of its Jobs (stacked under each stage on screens
+narrower than 64rem), laid out by `needs`/`wants` within the stage: Jobs in one
+layer run in parallel, the next layer follows. Each Job box carries the same
+state colours and icons as the nodes, its running-session count, the running
+pulse and an attention marker. Clicking a Job selects its stage, opens that Job's
+evidence card below and moves focus to it. The switch is transient page memory
+(FE-001): a reload returns to the picker anyway. The unfold animation respects
+reduced motion and the animation pause.
 
 Selecting a node reveals dependency levels and parallel Job lanes. Expanding a
 Job reveals observed ticket/session lanes and the existing evidence cards.
@@ -128,8 +148,10 @@ and every emitted alternate must resolve and link back.
 - `createEpisodeReader(folder).poll()`: structural read-only file handles, fresh
   files, offsets, pipeline modification times and visible source errors.
 - Built output: the English-only route, metadata, header and picker markup.
-- `projectStages()`, `stageLayers()` and `jobLanes()`: stage progress, attention,
-  research grouping, parallel dependency levels and ticket/session identity.
+- `projectStages(jobs, stages)`, `stageTitle()`, `stageLayers()` and `jobLanes()`:
+  stage order and membership from the pipeline, not-planned stages, template
+  placeholders, the legacy fallback, stage progress, attention, parallel
+  dependency levels and ticket/session identity.
 - `selectEvents()`: scoped, chronological source events, including ends and
   Scores associated through their start Span's ancestry.
 

@@ -289,6 +289,10 @@
         "build": "Build",
         "pr": "PR"
       },
+      "showJobs": "Show Jobs",
+      "showJobsHelp": "Expand each stage into its Jobs, ordered by needs and wants.",
+      "notPlanned": "Not planned yet",
+      "onePer": "One Job per item in {heading}",
       "parallel": "{count} parallel lanes",
       "step": "Dependency level {number}",
       "active": "Active: {name}",

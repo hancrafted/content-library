@@ -15,7 +15,9 @@ import { ArrowDown, GitBranch } from 'lucide-react';
 import { AgentEvidence, StateBadge, type DashboardCopy } from './dashboard-evidence';
 import styles from './dashboard-graph.module.css';
 import { JobEvidence } from './dashboard-jobs';
-import { StageStateIcon } from './dashboard-stage-nav';
+import { StageStateIcon } from './dashboard-state-icon';
+
+export const jobDetailId = (job: string) => `dashboard-job-${job}`;
 
 export type OpenEventLog = (title: string, scope: EventScope) => void;
 interface JobProps {
@@ -121,7 +123,7 @@ function JobSummary({ job, copy }: Pick<JobProps, 'job' | 'copy'>) {
 function JobLane({ job, copy, openLog }: JobProps) {
   return (
     <li className={styles.branch} data-complete={isComplete(job.state)}>
-      <details className="min-w-0 rounded-lg border border-border bg-card">
+      <details id={jobDetailId(job.id)} className="min-w-0 rounded-lg border border-border bg-card">
         <JobSummary job={job} copy={copy} />
         <div className="space-y-4 border-t border-border p-4">
           <Button variant="outline" onClick={() => openLog(job.id, { jobs: [job.id] })}>

@@ -2,7 +2,15 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { createLogFold, parseLog } from '../../skills/new-episode/scripts/run-log.pure';
 import { parseDashboardPipeline, projectDashboard, type DashboardJob } from './dashboard-projection.pure';
-import { agentState, jobLanes, projectStages, runningAgents, stageLayers } from './dashboard-stages.pure';
+import {
+  agentState,
+  jobLabel,
+  jobLanes,
+  projectStages,
+  runningAgents,
+  stageLayers,
+  stageTitle,
+} from './dashboard-stages.pure';
 
 function fixtureView() {
   const fixture = (name: string) =>
@@ -17,7 +25,7 @@ describe('success cases', () => {
     // ARRANGE
     const view = fixtureView();
     const expectedStages = ['brief', 'setup', 'research', 'dossier', 'specification', 'build', 'pr'];
-    const expectedResearchJobs = 9;
+    const expectedResearchJobs = 7;
     // ACT
     const graph = projectStages(view.jobs);
     // ASSERT
@@ -64,21 +72,115 @@ describe('success cases', () => {
     expect(lanes[0].agents).toHaveLength(expectedHistory);
   });
 
-  it('places dependency roots before the parallel research lanes', () => {
+  it('orders sequential Setup Jobs and stacks the parallel research lanes in one layer', () => {
     // ARRANGE
     const graph = projectStages(fixtureView().jobs);
+    const setup = graph.stages.find((stage) => stage.id === 'setup')!;
     const research = graph.stages.find((stage) => stage.id === 'research')!;
-    const expectedRoot = ['retrieval'];
-    const expectedParallelJobs = 8;
+    const expectedSetup = [['categorize-research'], ['customize-pipeline'], ['retrieval'], ['convert-references']];
+    const expectedParallelJobs = 7;
     // ACT
-    const layers = stageLayers(research);
+    const setupLayers = stageLayers(setup);
+    const researchLayers = stageLayers(research);
     // ASSERT
-    expect(layers[0].map((job) => job.id)).toEqual(expectedRoot);
-    expect(layers[1]).toHaveLength(expectedParallelJobs);
+    expect(setupLayers.map((layer) => layer.map((job) => job.id))).toEqual(expectedSetup);
+    expect(researchLayers).toHaveLength(1);
+    expect(researchLayers[0]).toHaveLength(expectedParallelJobs);
+  });
+
+  it("groups Jobs by their own stage in the pipeline's stage order", () => {
+    // ARRANGE
+    const base = fixtureView().jobs[0];
+    const jobs: DashboardJob[] = [
+      { ...base, id: 'retrieval', stage: 'setup', state: 'ok' },
+      { ...base, id: 'brief-grill', stage: 'brief', state: 'ok' },
+      { ...base, id: 'implement-section-hook', stage: 'build', state: 'running' },
+      { ...base, id: 'scaffold-pipeline', stage: 'setup', state: 'ok' },
+    ];
+    const order = ['brief', 'setup', 'build'];
+    const expectedSetup = ['retrieval', 'scaffold-pipeline'];
+    const expectedCompleted = 2;
+    // ACT
+    const graph = projectStages(jobs, order);
+    // ASSERT
+    expect(graph.stages.map((stage) => stage.id)).toEqual(order);
+    expect(graph.stages[1].jobs.map((job) => job.id)).toEqual(expectedSetup);
+    expect(graph.completed).toBe(expectedCompleted);
+  });
+
+  it('shows a listed stage without Jobs as not planned yet', () => {
+    // ARRANGE
+    const base = fixtureView().jobs[0];
+    const jobs: DashboardJob[] = [{ ...base, id: 'brief-grill', stage: 'brief', state: 'ok' }];
+    const order = ['brief', 'research', 'pr'];
+    const expectedPlanned = [true, false, false];
+    const expectedStates = ['ok', 'waiting', 'waiting'];
+    // ACT
+    const graph = projectStages(jobs, order);
+    // ASSERT
+    expect(graph.stages.map((stage) => stage.planned)).toEqual(expectedPlanned);
+    expect(graph.stages.map((stage) => stage.state)).toEqual(expectedStates);
+    expect(graph.stages[1].jobs).toEqual([]);
+    expect(graph.completed).toBe(1);
+  });
+
+  it('labels a fan-out Job by what follows its template prefix', () => {
+    // ARRANGE
+    const ids = ['write-research-revenue-lags-costs-in-startups', 'implement-section-the-hook'];
+    const expectedLabels = ['revenue lags costs in startups', 'the hook'];
+    // ACT
+    const labels = ids.map(jobLabel);
+    // ASSERT
+    expect(labels).toEqual(expectedLabels);
+  });
+
+  it('names known stages and title-cases an unknown id', () => {
+    // ARRANGE
+    const ids = ['pr', 'publish-recording'];
+    const expectedTitles = ['PR', 'Publish Recording'];
+    // ACT
+    const titles = ids.map(stageTitle);
+    // ASSERT
+    expect(titles).toEqual(expectedTitles);
   });
 });
 
 describe('edge cases', () => {
+  it('counts an unexpanded foreach template as a placeholder, not as planned work', () => {
+    // ARRANGE
+    const base = fixtureView().jobs[0];
+    const jobs: DashboardJob[] = [
+      {
+        ...base,
+        id: 'write-research',
+        stage: 'research',
+        foreach: 'docs/brief.md#Research questions',
+        state: 'waiting',
+      },
+    ];
+    const order = ['research'];
+    // ACT
+    const graph = projectStages(jobs, order);
+    // ASSERT
+    expect(graph.stages[0].planned).toBe(false);
+    expect(graph.stages[0].jobs).toHaveLength(1);
+  });
+
+  it('keeps a Job whose stage is not listed visible after the listed stages', () => {
+    // ARRANGE
+    const base = fixtureView().jobs[0];
+    const jobs: DashboardJob[] = [
+      { ...base, id: 'publish', stage: 'publish', state: 'waiting' },
+      { ...base, id: 'brief-grill', stage: 'brief', state: 'ok' },
+    ];
+    const order = ['brief'];
+    const expectedStages = ['brief', 'publish'];
+    // ACT
+    const graph = projectStages(jobs, order);
+    // ASSERT
+    expect(graph.stages.map((stage) => stage.id)).toEqual(expectedStages);
+  });
+
   it('keeps an unfamiliar Job visible and does not invent progress for an empty pipeline', () => {
     // ARRANGE
     const base = fixtureView().jobs[0];
@@ -95,6 +197,16 @@ describe('edge cases', () => {
 });
 
 describe('failure cases', () => {
+  it('keeps the full id of a Job that is no fan-out, or is the bare template', () => {
+    // ARRANGE
+    const ids = ['write-dossier', 'write-research', 'write-research-', 'implement-episode-init'];
+    const expectedLabels = ['write-dossier', 'write-research', 'write-research-', 'implement-episode-init'];
+    // ACT
+    const labels = ids.map(jobLabel);
+    // ASSERT
+    expect(labels).toEqual(expectedLabels);
+  });
+
   it('does not report missing agent ends as activity after a Job or Attempt has closed', () => {
     // ARRANGE
     const base = fixtureView().jobs[0];

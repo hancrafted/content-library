@@ -1,35 +1,26 @@
-import { isComplete, runningAgents, type DashboardStage, type DashboardState } from '@/lib/dashboard-stages.pure';
+import { isComplete, runningAgents, stageTitle, type DashboardStage } from '@/lib/dashboard-stages.pure';
 import { fillTemplate } from '@/lib/template.pure';
-import { Check, Circle, CircleAlert, Play, X } from 'lucide-react';
+import { CircleAlert } from 'lucide-react';
 import type { DashboardCopy } from './dashboard-evidence';
 import styles from './dashboard-graph.module.css';
-
-export function StageStateIcon({ state }: { state: DashboardState }) {
-  const Icon = isComplete(state)
-    ? Check
-    : state === 'running'
-      ? Play
-      : state === 'gate' || state === 'refused'
-        ? CircleAlert
-        : state === 'crashed' || state === 'error'
-          ? X
-          : Circle;
-  return <Icon aria-hidden="true" className="size-5 shrink-0" />;
-}
+import { StageJobs, type SelectJob } from './dashboard-stage-jobs';
+import { StageStateIcon } from './dashboard-state-icon';
 
 export function stageName(stage: DashboardStage, copy: DashboardCopy): string {
   const names: Readonly<Record<string, string>> = copy.graph.stageNames;
-  return names[stage.id] ?? stage.id;
+  return names[stage.id] ?? stageTitle(stage.id);
 }
 
 interface NavigationProps {
   stages: DashboardStage[];
   selected: string | null;
   onSelect: (id: string) => void;
+  /** Present when the view shows each stage's Jobs. */
+  onSelectJob?: SelectJob;
   copy: DashboardCopy;
 }
 
-type NodeProps = Omit<NavigationProps, 'stages'> & { stage: DashboardStage };
+type NodeProps = Omit<NavigationProps, 'stages'> & { stage: DashboardStage; index: number };
 type LabelProps = Pick<NodeProps, 'stage' | 'copy'>;
 
 function StageActivity({ stage, copy }: LabelProps) {
@@ -70,20 +61,23 @@ function StageLabel({ stage, copy }: LabelProps) {
       <span className="block text-body font-semibold">{stageName(stage, copy)}</span>
       <span className="block text-caption text-(--node-tone)">{state}</span>
       <span className="block text-caption text-muted-foreground">
-        {fillTemplate(copy.graph.jobsComplete, { done: stage.completed, total: stage.jobs.length })}
+        {stage.planned
+          ? fillTemplate(copy.graph.jobsComplete, { done: stage.completed, total: stage.jobs.length })
+          : copy.graph.notPlanned}
       </span>
       <StageActivity stage={stage} copy={copy} />
     </span>
   );
 }
 
-function StageNode({ stage, selected, onSelect, copy }: NodeProps) {
+function StageNode({ stage, index, selected, onSelect, onSelectJob, copy }: NodeProps) {
   return (
     <li className={styles.stage} data-complete={isComplete(stage.state)}>
       <button
         type="button"
         data-stage={stage.id}
         data-state={stage.state}
+        data-planned={stage.planned}
         aria-expanded={selected === stage.id}
         aria-controls="dashboard-stage-detail"
         onClick={() => onSelect(stage.id)}
@@ -94,15 +88,24 @@ function StageNode({ stage, selected, onSelect, copy }: NodeProps) {
         </span>
         <StageLabel stage={stage} copy={copy} />
       </button>
+      {onSelectJob ? <StageJobs stage={stage} index={index} onSelectJob={onSelectJob} copy={copy} /> : null}
     </li>
   );
 }
 
-export function StageNavigation({ stages, selected, onSelect, copy }: NavigationProps) {
+export function StageNavigation({ stages, selected, onSelect, onSelectJob, copy }: NavigationProps) {
   return (
-    <ol className={styles.stages} aria-label={copy.graph.title}>
-      {stages.map((stage) => (
-        <StageNode key={stage.id} stage={stage} selected={selected} onSelect={onSelect} copy={copy} />
+    <ol className={styles.stages} data-jobs={onSelectJob !== undefined} aria-label={copy.graph.title}>
+      {stages.map((stage, index) => (
+        <StageNode
+          key={stage.id}
+          stage={stage}
+          index={index}
+          selected={selected}
+          onSelect={onSelect}
+          onSelectJob={onSelectJob}
+          copy={copy}
+        />
       ))}
     </ol>
   );
