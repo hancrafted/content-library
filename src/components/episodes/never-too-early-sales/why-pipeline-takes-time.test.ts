@@ -869,7 +869,23 @@ describe('success cases', () => {
 describe('failure cases', () => {
   it('resolves every Speaker note of the Section to exactly one element of its own Slide', () => {
     // ARRANGE
-    const expected = SLIDES.flatMap((id) => slideAt(id).notes.map(({ slug }) => `${id} ${slug}: 1`));
+    const expected = [
+      `${WHAT_IS} default-report-populations-differ: 1`,
+      `${WHAT_IS} forecast-weights-are-settings: 1`,
+      `${BY_NUMBERS} real-reports-may-skip-gates: 1`,
+      `${BY_NUMBERS} buying-groups-vary-without-a-measured-clock: 1`,
+      `${BY_NUMBERS} public-procurement-is-a-bounded-special-case: 1`,
+      `${TOOLS} stage-evidence-can-be-made-explicit: 1`,
+      `${TOOLS} qualification-can-leave-an-audit-trail: 1`,
+      `${MARKETING} marketing-and-sales-qualification-are-distinct-definitions: 1`,
+      `${MARKETING} entry-routes-are-broader-than-one-funnel: 1`,
+      `${RAMP_UP} tenure-is-not-a-stopwatch-for-ramp-up: 1`,
+      `${RAMP_UP} training-evidence-has-a-narrow-setting: 1`,
+      `${RAMP_UP} budget-association-is-not-a-timing-prescription: 1`,
+      `${RAMP_UP} buyer-led-journeys-are-conceptual-evidence: 1`,
+      `${START_WHEN} an-unpaid-earned-amount-is-not-spendable-cash: 1`,
+      `${START_WHEN} payment-risk-is-distinct-from-deal-risk: 1`,
+    ];
     // ACT
     const resolved = SLIDES.flatMap((id) => {
       const $ = sceneOf(id);
