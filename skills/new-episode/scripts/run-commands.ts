@@ -8,10 +8,9 @@
 // clock, ids, git and the transcript lookup are injectable. Shapes live in run-log.pure.ts; `run.ts` is the argv wrapper.
 import { copyFileSync, existsSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
-import { parseArgs } from 'node:util';
 import { episodeLogPath, readEpisodeLog, readMarker } from './episode-run-log.ts';
 import { declaredJobs } from './episode-status.ts';
-import { endEvent, need, OPTIONS, refuse, viaOf, type Opts, type Params } from './run-args.pure.ts';
+import { endEvent, need, parseRunArgs, refuse, viaOf, type Opts, type Params } from './run-args.pure.ts';
 import { USAGE } from './run-help.pure.ts';
 import { appendEvent } from './run-log-writer.ts';
 import { type LogEvent, type RunLogLine, type Span, type Status } from './run-log.pure.ts';
@@ -74,6 +73,7 @@ function beginRun(ctx: RunContext, opts: Opts): string {
   const { current, lines } = readEpisodeLog(ctx.slug, ctx.root);
   if (current !== null && !hasEnded(lines, current))
     refuse(`Run ${current.run_id} has not ended: resume it, or run end-run crashed first`);
+  mkdirSync(path.join(ctx.root, path.dirname(episodeLogPath(ctx.slug))), { recursive: true });
   const line = write(ctx, { kind: 'start-run', harness: opts.harness ?? 'claude-code', 'gen_ai.request.model': model });
   pointAt(ctx, line, { jobSpanId: line.span_id, sessionId });
   return `Run begun (${line.run_id})`;
@@ -237,8 +237,9 @@ export function runCommand(ctx: RunContext, argv: readonly string[]): CommandRes
     const [name = '', ...rest] = argv;
     const spec = COMMANDS[name];
     if (spec === undefined) return failure(USAGE);
-    const { values, positionals } = parseArgs({ args: rest, options: OPTIONS, allowPositionals: true });
-    if (!existsSync(path.join(ctx.root, path.dirname(episodeLogPath(ctx.slug)))))
+    const { values, positionals } = parseRunArgs(rest);
+    // begin-run creates the staging folder with the log; every other command needs a Run already begun.
+    if (name !== 'begin-run' && !existsSync(path.join(ctx.root, path.dirname(episodeLogPath(ctx.slug)))))
       refuse(`docs/episodes/${ctx.slug} does not exist; run this from the Episode's worktree root.`);
     const named = Object.fromEntries(spec.params.map((param, i) => [param, positionals[i]]));
     return success(spec.run(ctx, named, values));

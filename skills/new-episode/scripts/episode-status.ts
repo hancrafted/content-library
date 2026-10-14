@@ -71,8 +71,9 @@ function gateReaders(slug: string, read: (file: string) => string | null, gh: Gh
 
 /** The run status of the Episode `slug` in the worktree at `root`; `now` is an ISO time, `gh` answers the label gates. */
 export function readEpisodeStatus(root: string, slug: string, { now, gh }: { now: string; gh: Gh }): EpisodeStatus {
-  const file = pipelineFile(slug);
   const read = (relative: string): string | null => readOrNull(path.join(root, relative));
+  // Before customize-pipeline writes the Episode's own pipeline, the template's jobs are the declared ones.
+  const { file } = declaredJobs(root, slug);
   const pipeline = read(file);
   if (pipeline === null) return { kind: 'no-pipeline', file };
   if (readPipeline(pipeline) === null) return { kind: 'no-jobs', file };

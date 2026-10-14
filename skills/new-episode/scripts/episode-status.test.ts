@@ -86,9 +86,17 @@ describe('readEpisodeStatus', () => {
       gh: failingGh,
     });
     expect([missing, empty]).toEqual([
-      { kind: 'no-pipeline', file: 'docs/episodes/ep/pipeline.yml' },
+      { kind: 'no-pipeline', file: 'skills/new-episode/assets/pipeline.yml' },
       { kind: 'no-jobs', file: 'docs/episodes/ep/pipeline.yml' },
     ]);
+  });
+
+  it('falls back to the template pipeline before the Episode has its own, as begin-job does', () => {
+    const root = worktree({
+      'skills/new-episode/assets/pipeline.yml': PIPELINE(''),
+      'docs/episodes/ep/events.jsonl': jobLog(),
+    });
+    expect(states(root, failingGh)).toEqual(['ready', 'waiting']);
   });
 
   it('reports log lines that do not parse, prefixed with the file', () => {

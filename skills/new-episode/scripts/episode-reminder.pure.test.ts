@@ -13,17 +13,25 @@ const status = (...states: RunStatus['jobs'][number]['state'][]): RunStatus => (
 
 describe('unfinishedReminder', () => {
   it('stays silent with no Episode worktree or when every job is done', () => {
-    expect([unfinishedReminder([]), unfinishedReminder([{ slug: 'a', status: status('done') }])]).toEqual([null, null]);
+    expect([unfinishedReminder([]), unfinishedReminder([{ slug: 'a', dir: '/w/a', status: status('done') }])]).toEqual([
+      null,
+      null,
+    ]);
   });
 
   it('names each Episode with a job not done and the status command', () => {
     const text = unfinishedReminder([
-      { slug: 'a', status: status('done', 'ready') },
-      { slug: 'c', status: status('done') },
+      { slug: 'a', dir: '/w/a', status: status('done', 'ready') },
+      { slug: 'c', dir: '/w/c', status: status('done') },
     ]);
     expect(text).toContain('npm run episode:status -- a');
     expect(text).not.toContain('-- c');
     expect(text).toContain('todo list');
+  });
+
+  it('prints each command so it works from any directory: it enters the Episode worktree first', () => {
+    const text = unfinishedReminder([{ slug: 'a', dir: '/work trees/a', status: status('ready') }]);
+    expect(text).toContain("cd '/work trees/a' && npm run episode:status -- a");
   });
 });
 
