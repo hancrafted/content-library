@@ -34,6 +34,10 @@ const COMPOSITION = [
       { opener: 'the-verifying-half-is-yours', pageSlides: 0 },
     ],
   },
+  {
+    slug: 'never-too-early-sales',
+    sections: [{ opener: 'why-cashflow-matters', pageSlides: 1 }],
+  },
 ] as const;
 
 /** The recorded YouTube video of the Episodes that have one asserted here. */

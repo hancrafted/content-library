@@ -6,6 +6,7 @@ import { episodeMetadata as aiTokenEconomy } from './ai-token-economy/episode-me
 import { episodeMetadata as amnesiacFreelancer } from './amnesiac-freelancer/episode-metadata';
 import { episodeMetadata as choosingTheRightModel } from './choosing-the-right-model/episode-metadata';
 import { episodeMetadata as maintainingMarkdownForAi } from './maintaining-markdown-for-ai/episode-metadata';
+import { episodeMetadata as neverTooEarlySales } from './never-too-early-sales/episode-metadata';
 import { episodeMetadata as rollingOutAiInATeam } from './rolling-out-ai-in-a-team/episode-metadata';
 import { episodeMetadata as specsAnAgentCanFollow } from './specs-an-agent-can-follow/episode-metadata';
 import { episodeMetadata as theBottleneckBuildsTheFix } from './the-bottleneck-builds-the-fix/episode-metadata';
@@ -27,6 +28,7 @@ const REGISTERED = {
   'amnesiac-freelancer': amnesiacFreelancer,
   'maintaining-markdown-for-ai': maintainingMarkdownForAi,
   'ai-token-economy': aiTokenEconomy,
+  'never-too-early-sales': neverTooEarlySales,
 } as const satisfies { readonly [S in ListedEpisodeSlug]: EpisodeMetadata & { readonly slug: S } };
 
 /** The slugs whose metadata says `published`. */
@@ -49,7 +51,7 @@ const UPCOMING: readonly UpcomingEpisodeMetadata[] = [
   theBottleneckBuildsTheFix,
 ];
 
-/** Every Episode's metadata: the published ones, then the upcoming ones in overview order. */
+/** Every Episode's metadata: the ones with a page, then the upcoming ones without a page in overview order. */
 export function listEpisodes(): readonly EpisodeMetadata[] {
   return [...Object.values(REGISTERED), ...UPCOMING];
 }

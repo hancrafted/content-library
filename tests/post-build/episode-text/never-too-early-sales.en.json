@@ -1,0 +1,47 @@
+{
+  "title": "Why it's never too early to start with sales · hancrafted",
+  "description": "Why early-stage founders should start sales long before revenue is needed, and the first concrete steps to build a sales pipeline.",
+  "toc": "Contents Loading 4 min left 1 Why watching cashflow is mission critical Watch your cashflow Open contents : Contents · Loading Contents 4 min left 1 Why watching cashflow is mission critical Watch your cashflow",
+  "slides": [
+    {
+      "id": "top",
+      "text": "Why it's never too early to start with sales Revenue arrives months after the costs that create it. Find your zero-cash month, then start the sales pipeline before you need the money."
+    },
+    {
+      "id": "why-cashflow-matters",
+      "text": "Why watching cashflow is mission critical A good deal can still arrive on a bad date: work backwards from when cash must reach the account."
+    },
+    {
+      "id": "why-cashflow-matters--watch-your-cashflow",
+      "text": "Watch your cashflow In this fictional example, cash reaches $0 in February, so March's $50,000 payment goes unfunded before April's $1,000,000 receipt arrives. Fictional example · cash received, not booked revenue ( opens speaker note ) January Opening cash $100,000 Cash costs $50,000 Receipts $0 Closing cash $50,000 February Zero-cash month Opening cash $50,000 Cash costs $50,000 Receipts $0 Closing cash $0 March Cash costs $50,000 Cannot fund $50,000 payment April Cash costs $50,000 Customer receipt $1,000,000 Too late without bridge funding Closing cash = opening cash + receipts − payments ( opens speaker note ) Bankrupt Scenario shorthand: unable to pay March's costs If funded: March −$50,000; April $900,000"
+    }
+  ],
+  "notes": [
+    {
+      "id": "top",
+      "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
+    },
+    {
+      "id": "why-cashflow-matters",
+      "text": "Why watching cashflow is mission critical No speaker notes for this Slide."
+    },
+    {
+      "id": "why-cashflow-matters--watch-your-cashflow",
+      "text": "Watch your cashflow Recognition has its own trigger IFRS 15 ties revenue recognition to satisfying a performance obligation through transfer of a good or service. That accounting trigger is not the receipt of cash; the board is deliberately not an income statement 1 . Sources (1) European Commission, Regulation (EU) 2016/1905 (endorsing IFRS 15 Revenue from Contracts with Customers) ( opens in a new tab ) eur-lex.europa.eu Expenses and payments can differ too Publication 538 distinguishes incurred expenses under accrual accounting from paid expenses under cash accounting. It describes US tax accounting, not a universal financial-reporting rule; this example explicitly assumes costs are paid monthly 1 . Sources (1) Internal Revenue Service, Publication 538: Accounting Periods and Methods ( opens in a new tab ) irs.gov"
+    }
+  ],
+  "script": [
+    {
+      "id": "top",
+      "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
+    },
+    {
+      "id": "why-cashflow-matters",
+      "text": "Why watching cashflow is mission critical 0:00 – 0:22 A good deal, a bad date Imagine winning a million-dollar customer and still running out of money. Our fictional company builds scheduling software for small teams. Its big customer pays in April. But the company cannot fund its March bills. The deal sounds wonderful. The date makes it useless for getting through March. How did we get here? 0:22 – 0:44 Work backwards from cash Let us put ourselves in the founders' position. They are building the product. They are paying people. They plan to focus on sales when the product feels ready. Before making that decision, they need a different starting point. When must money reach their account? We will work backwards from that deadline."
+    },
+    {
+      "id": "why-cashflow-matters--watch-your-cashflow",
+      "text": "Watch your cashflow 0:00 – 0:23 Count January first We give this company one hundred thousand dollars at the start of January. Each month, it pays out fifty thousand dollars. Nothing comes in during January. Subtract fifty thousand from one hundred thousand. January ends with fifty thousand dollars. These are invented numbers. Keep them in mind, because we will return to this company. 0:23 – 0:46 Zero is the warning February starts with the remaining fifty thousand dollars. Another fifty thousand goes out. Now the account is empty. March needs another fifty thousand, but there is nothing to pay it with. April's million does not solve March. In this example, nobody has agreed to lend the missing money. The company has to stop. 0:46 – 1:09 A signature cannot pay payroll Imagine the founder celebrating a signed contract while preparing the next payroll payment. The bank asks for available money, not a signature. So do not stop at the deal date or the revenue figure in your plan. For this decision, ask one plain question. On which date can we actually use the customer's money? 1:09 – 1:31 Build your own monthly view Build a simple month-by-month cashflow view. A spreadsheet is enough. Start each month with its opening cash. Add the customer money you expect to receive that month. Subtract the payments you expect to make. That gives closing cash. Carry it into the next month. Repeat this calculation across the months ahead. 1:31 – 1:54 Mark the zero-cash month Find the first month whose closing cash reaches zero or goes below it. Mark that month. Then try a less comfortable version of your plan. Move an expected receipt back a month. What changes? If the balance gets tight, check the individual payment dates too. A monthly total can hide a difficult week. 1:54 – 2:17 Do not wait for the alarm Our founders can see the March problem while they still have January's money. That is the moment to ask what work must happen before a customer pays. Waiting until the account is empty leaves no room for that work. The cashflow view is not just a warning. It tells us why we need a pipeline."
+    }
+  ]
+}
