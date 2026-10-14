@@ -161,6 +161,8 @@ function stopEvent(input: AdapterInput, files: { transcript: string }): LogEvent
     (l) => l.kind === 'start' && l.type === 'agent' && l.transcript_path === files.transcript,
   );
   if (started?.span_id === undefined) return null;
+  // A repeated delivery of the same stop must not append a second completion.
+  if (input.log.some((l) => l.kind === 'end' && l.span_id === started.span_id)) return null;
   const all = entries(input.transcript);
   return definedOnly({
     kind: 'end',

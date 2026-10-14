@@ -103,6 +103,13 @@ function traceFor(event: unknown, current: RunLogLine | null, src: ResolvedDeps)
   return current === null ? { error: 'the log has no start-run line; log kind "start-run" first' } : current.trace_id;
 }
 
+/** A message when an end or score names a span no start line opened, else null. */
+function unknownTarget(line: RunLogLine, lines: readonly RunLogLine[]): string | null {
+  if (line.kind !== 'end' && line.kind !== 'end-run' && line.kind !== 'score') return null;
+  const known = lines.some((l) => (l.kind === 'start' || l.kind === 'start-run') && l.span_id === line.span_id);
+  return known ? null : `${line.kind} targets span_id ${String(line.span_id)}, which no start line opened`;
+}
+
 /** Stamps and appends under the lock already held. */
 function appendLocked(at: LogLocation, event: unknown, src: ResolvedDeps): WriteResult {
   const full = path.resolve(at.root, at.file);
@@ -115,6 +122,8 @@ function appendLocked(at: LogLocation, event: unknown, src: ResolvedDeps): Write
   const starting = isEvent(event) && event.kind === 'start-run';
   const result = record(starting ? withRunFacts(event, t, src.git) : event, { t, seq, traceId, spanId: src.id(8) });
   if (!result.ok) return { ok: false, errors: result.errors };
+  const unknown = unknownTarget(result.line, lines);
+  if (unknown !== null) return { ok: false, errors: [`${full}: ${unknown}`] };
   const line = JSON.stringify(result.line);
   appendFileSync(full, `${line}\n`);
   return { ok: true, line };
