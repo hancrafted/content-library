@@ -10,6 +10,12 @@
 // `// ASSERT`, uppercase, once each, in that order, one marker per comment
 // (§3.1). A body runs from its `it(`/`test(` line to the next test or describe
 // line, so markers in a helper between tests count toward the test above it.
+// `assert-no-magic` — the `// ASSERT` block holds no number literal other than
+// `0`, `1`, `-1` (§3.2). String literals are NOT flagged: a string expected
+// value (`toBe('far')`, `toContain('grid')`) is the hand-written expected value
+// ARCH-003 §1.2 asks for, and a scan cannot tell it from a magic string, so the
+// string half of §3.2 stays a review duty. The block runs from `// ASSERT` to the test's closing line, the
+// first line at or left of the test's own indent that opens with `}`.
 // Self-contained: archgate forbids imports
 // between rules files.
 const TEST_GLOB = 'src/**/*.test.ts';
@@ -50,6 +56,112 @@ function testBodies(lines: string[]): Body[] {
     else current.markers.push(word);
   });
   return bodies;
+}
+
+const ASSERT_MARKER_RE = /^\s*\/\/\s*ASSERT\s*$/;
+const INDENT_RE = /^\s*/;
+const NUMBER_RE = /^(?:0[xX][\da-fA-F_]+|\d[\d_]*(?:\.\d+)?(?:[eE][+-]?\d+)?)n?/;
+const REGEX_PRECEDER_RE = /[(,=:[!&|?{};]$|^$/;
+
+interface Magic {
+  line: number;
+  literal: string;
+}
+
+// Scan one ASSERT block's text for number literals, skipping strings,
+// comments, regex literals and identifiers that merely contain digits.
+function magicIn(text: string, firstLine: number): Magic[] {
+  const found: Magic[] = [];
+  let line = firstLine;
+  let i = 0;
+  let lastSignificant = '';
+  while (i < text.length) {
+    const ch = text[i];
+    if (ch === '\n') {
+      line++;
+      i++;
+      continue;
+    }
+    if (ch === '/' && text[i + 1] === '/') {
+      while (i < text.length && text[i] !== '\n') i++;
+      continue;
+    }
+    if (ch === '/' && text[i + 1] === '*') {
+      const end = text.indexOf('*/', i + 2);
+      const stop = end === -1 ? text.length : end + 2;
+      line += text.slice(i, stop).split('\n').length - 1;
+      i = stop;
+      continue;
+    }
+    if (ch === "'" || ch === '"' || ch === '`') {
+      i++;
+      while (i < text.length && text[i] !== ch) {
+        if (text[i] === '\\') i++;
+        if (text[i] === '\n') line++;
+        i++;
+      }
+      i++;
+      lastSignificant = ch;
+      continue;
+    }
+    if (ch === '/' && REGEX_PRECEDER_RE.test(lastSignificant)) {
+      i++;
+      let inClass = false;
+      while (i < text.length && text[i] !== '\n' && (inClass || text[i] !== '/')) {
+        if (text[i] === '\\') i++;
+        else if (text[i] === '[') inClass = true;
+        else if (text[i] === ']') inClass = false;
+        i++;
+      }
+      i++;
+      while (i < text.length && /[a-z]/i.test(text[i])) i++;
+      lastSignificant = '/';
+      continue;
+    }
+    if (/\d/.test(ch) && !/[\w$.]/.test(text[i - 1] ?? ' ')) {
+      const m = NUMBER_RE.exec(text.slice(i));
+      if (m !== null) {
+        const value = Number(m[0].replace(/_/g, '').replace(/n$/, ''));
+        if (value !== 0 && value !== 1) found.push({ line, literal: m[0] });
+        i += m[0].length;
+        lastSignificant = '0';
+        continue;
+      }
+    }
+    if (!/\s/.test(ch)) lastSignificant = ch;
+    i++;
+  }
+  return found;
+}
+
+function assertBlocks(lines: string[]): { start: number; text: string }[] {
+  const blocks: { start: number; text: string }[] = [];
+  let testIndent = -1;
+  let start = -1;
+  let buffer: string[] = [];
+  const flush = () => {
+    if (start !== -1) blocks.push({ start, text: buffer.join('\n') });
+    start = -1;
+    buffer = [];
+  };
+  lines.forEach((text, index) => {
+    if (TEST_START_RE.test(text) || BLOCK_START_RE.test(text)) {
+      flush();
+      testIndent = TEST_START_RE.test(text) ? INDENT_RE.exec(text)![0].length : -1;
+      return;
+    }
+    if (ASSERT_MARKER_RE.test(text)) {
+      flush();
+      start = index + 2;
+      return;
+    }
+    if (start === -1) return;
+    const closes = /^\s*\}/.test(text) && INDENT_RE.exec(text)![0].length <= testIndent;
+    if (closes) flush();
+    else buffer.push(text);
+  });
+  flush();
+  return blocks;
 }
 
 export default {
@@ -112,6 +224,25 @@ export default {
                 message: `Test body carries [${body.markers.join(', ')}] — it needs // ARRANGE, // ACT, // ASSERT exactly once each, in that order (ARCH-003 [test-body-aaa]).`,
                 file,
                 line: body.line,
+              });
+            }
+          }
+        }
+      },
+    },
+    'assert-no-magic': {
+      description:
+        'The // ASSERT block of every test under src/ holds no number literal other than 0, 1 and -1 — name the value in // ARRANGE (§3.2).',
+      severity: 'error',
+      async check(ctx) {
+        for (const file of await ctx.glob(TEST_GLOB)) {
+          const lines = (await ctx.readFile(file)).split('\n');
+          for (const block of assertBlocks(lines)) {
+            for (const { line, literal } of magicIn(block.text, block.start)) {
+              ctx.report.violation({
+                message: `Magic number ${literal} in // ASSERT — name it in // ARRANGE so a reviewer can disagree with it (ARCH-003 [assert-no-magic]).`,
+                file,
+                line,
               });
             }
           }

@@ -58,6 +58,7 @@ describe('edge cases', () => {
   it('bows to either side depending on the roll and survives a zero offset', () => {
     // ARRANGE
     const offset = { x: 0, y: 200 };
+    const stillApex = { x: 0, y: -100 };
     // ACT
     const left = promotionArc(offset, () => 0);
     const right = promotionArc(offset, () => 1);
@@ -65,6 +66,6 @@ describe('edge cases', () => {
     // ASSERT
     expect(left.apex.x).toBeGreaterThan(0);
     expect(right.apex.x).toBeLessThan(0);
-    expect(still.apex).toEqual({ x: 0, y: -100 });
+    expect(still.apex).toEqual(stillApex);
   });
 });

@@ -66,10 +66,11 @@ describe('failure cases', () => {
     // ARRANGE
     const short = 'docs/episodes/a/research/AIE-0001__too-short';
     const long = `docs/episodes/a/research/AIE-0002__${'a'.repeat(41)}`;
+    const rejected = 2;
     // ACT
     const findings = messages([short, long]);
     // ASSERT
-    expect(findings).toHaveLength(2);
+    expect(findings).toHaveLength(rejected);
   });
 
   it('rejects a category the glossary does not list', () => {

@@ -368,6 +368,7 @@ describe('edge cases', () => {
     it('never writes more than once per interval over a long fling', () => {
       // ARRANGE
       const { state, writes } = setup();
+      const flingMs = 10_000;
       // ACT: a new Slide every 10 ms for 10 s
       for (let tick = 0; tick < 1000; tick++) {
         state.reportReading(`slide-${tick}`);
@@ -375,7 +376,7 @@ describe('edge cases', () => {
       }
       vi.advanceTimersByTime(WRITE_INTERVAL_MS);
       // ASSERT
-      expect(writes.length).toBeLessThanOrEqual(Math.ceil(10_000 / WRITE_INTERVAL_MS) + 1);
+      expect(writes.length).toBeLessThanOrEqual(Math.ceil(flingMs / WRITE_INTERVAL_MS) + 1);
       expect(writes.at(-1)).toBe('#slide-999');
     });
   });

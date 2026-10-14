@@ -92,10 +92,12 @@ describe('success cases', () => {
       // ARRANGE
       const order = readingOrder(folded);
       const index = order.ids.indexOf('a--visual');
+      const total = 10;
+      const remaining = 2;
       // ACT
-      const time = readingTime({ minutes: order.minutes, total: 10 }, index, 0.5);
+      const time = readingTime({ minutes: order.minutes, total }, index, 0.5);
       // ASSERT
-      expect(time).toMatchObject({ total: 10, remaining: 2 });
+      expect(time).toMatchObject({ total, remaining });
     });
 
     it('is the plain entry order when nothing is unlisted', () => {
