@@ -1,7 +1,9 @@
 import { episode } from '@/components/slide-master/slide';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
+import { salesIsMoreThanSelling } from './slides/sales-is-more-than-selling/slide';
 import { watchYourCashflow } from './slides/watch-your-cashflow/slide';
+import { whySalesIsMoreThanJustSelling } from './slides/why-sales-is-more-than-just-selling/slide';
 import { whyWatchingCashflowIsMissionCritical } from './slides/why-watching-cashflow-is-mission-critical/slide';
 
 /*
@@ -19,7 +21,7 @@ export const neverTooEarlySalesRun2 = episode({
   sections: [
     [whyWatchingCashflowIsMissionCritical, watchYourCashflow],
 
-    // Section 2, #175: why-sales-is-more-than-just-selling
+    [whySalesIsMoreThanJustSelling, salesIsMoreThanSelling],
 
     // Section 3, #176: how-to-start-doing-sales
 
