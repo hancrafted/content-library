@@ -333,3 +333,37 @@ Every actionable is spoken on a Slide: the cashflow view on `watch-your-cashflow
 - Needs human: on `#pipeline-tools-in-practice`, Voice script 1 says owner is visible at a glance, but the Visual's deal notes show no owner.
 - Needs human: the Gartner figures on `#pipeline-by-the-numbers` were read from search excerpts (SALES-0002 Caveats). Check them against the page before quoting.
 - Needs human: there are no profile guides, so voice and emphasis follow no guide of Han's.
+
+## write-voice-script · 2026-10-14T19:17:49Z
+
+### Inputs
+
+- `skills/new-episode/references/write-voice-script.md`.
+- `brief.md`: Hook, Red thread, Analogy, Format and Constraints.
+- `dossier.md`, as `write-dossier` committed it.
+- The `write-dossier` entry above.
+
+### Output
+
+- `dossier.md`, `status: draft`, with a `process:markdown-harness` `verified` entry. All 46 Voice script items are spoken paragraphs, about 1,970 words. No beat, heading, Visual or Speaker note changed. Committed with `Gate: draft dossier` for Han to read and edit.
+
+### Checks
+
+- `mh check`: pass.
+- `vitest` staging test: pass.
+- Reviewer: pass on attempt 3.
+
+### Notes
+
+The script opens on the March bankruptcy and returns to the cashflow board three times. Each actionable is spoken as a labelled task, and the closing Slide repeats all four.
+
+Attempts 1 and 2 failed on paragraphs that repeated their Slide's Speaker note. In `#sales-is-more-than-selling` Voice 1, the paragraph said customer contact corrects the founder's guess. In `#why-it-takes-time-to-ramp-up` Voice 2, it said the answers come from conversations. In `#how-marketing-feeds-the-pipeline` Voice 3, it said not to wait for users. Attempt 2 fixed the third. Attempt 3 rewrote the first two to speak the cost and the clock instead.
+
+The `write-dossier` entry has no `Spine change:` lines.
+
+- Needs human: the script runs about 14 minutes at speaking pace, against the Brief's 20-30 minutes.
+- Needs human: `#why-it-takes-time-to-ramp-up` Voice 2 says the answers "take months, not days". The research (SALES-0006) gives no month count. The orchestrator's attempt 3 instruction introduced this wording.
+- Needs human: the opening route names four steps for five Sections, and the closing recap also says "four" for the actionables. A listener may confuse the two.
+- Needs human: in `#why-it-takes-time-to-ramp-up`, Voice 1 says all preparation must exist before the first deal, while note 3 says to codify the playbook only after learning. The two may read as contradicting.
+- Needs human: `#how-marketing-feeds-the-pipeline` Voice 3 is close to note 1, but the reviewer judged it not a repeat.
+- Needs human: there are no profile guides, so the voice follows no guide of Han's.
