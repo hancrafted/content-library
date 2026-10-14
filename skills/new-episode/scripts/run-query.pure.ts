@@ -32,6 +32,8 @@ const SPAN_COLUMNS = [
   'role',
   'ticket',
   'retry_of',
+  'link_trace_id',
+  'link_span_id',
   'harness',
   'source',
   'description',
@@ -64,6 +66,7 @@ const SCORE_COLUMNS = [
   'body',
   'via',
   'comment',
+  'ticket',
 ] as const;
 
 const sqlName = (column: string): string => column.replaceAll('.', '_');

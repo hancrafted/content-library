@@ -32,10 +32,10 @@ export function subIssuesApproved(tickets: readonly SubIssue[]): boolean {
   return tickets.length > 0 && open.every((ticket) => !ticket.labels.some((label) => label.name === 'needs-triage'));
 }
 
-/** The latest job span per job id, by start time then sequence: a retried job reads as its last run. */
-function latestJobSpans(folded: Folded): Map<string, Span> {
+/** The latest job span per job id, by start time then sequence: a retried job reads as its last run. A `reused` span stands for the earlier Run's ok span. */
+function latestJobSpans(spans: readonly Span[]): Map<string, Span> {
   const latest = new Map<string, Span>();
-  for (const span of folded.spans) {
+  for (const span of spans) {
     if (span.type !== 'job') continue;
     const id = span.job ?? span.name;
     const known = latest.get(id);
@@ -107,8 +107,8 @@ function labelled(span: Span): { name: string; job?: string; attempt?: number; r
 }
 
 /** The crashed and refused spans of a run, the Run itself aside. */
-const problemsOf = (folded: Folded): RunStatus['problems'] =>
-  folded.spans.flatMap((span) =>
+const problemsOf = (spans: readonly Span[]): RunStatus['problems'] =>
+  spans.flatMap((span) =>
     span.type !== 'run' && (span.status === 'crashed' || span.status === 'refused')
       ? [{ ...labelled(span), status: span.status }]
       : [],
@@ -116,7 +116,8 @@ const problemsOf = (folded: Folded): RunStatus['problems'] =>
 
 /**
  * A run's status: each job's state in pipeline order, the agents running now with their elapsed time, the
- * crashed and refused spans, and the gates waiting on Han with their wait. `folded` is the log folded with
+ * crashed and refused spans, and the gates waiting on Han with their wait. Only the spans of `trace` (the current
+ * Run) count when it is given: an earlier Run's ok span makes nothing done, `reuse` links it instead. `folded` is the log folded with
  * `fold` (live Runs named in `live`); `now` (beside the gate readers) is the clock, an ISO time, so nothing here reads it.
  * A job with no finished span is blocked when a job it needs is blocked, ready when every job it needs is
  * done and every job it wants is done or blocked, and waiting otherwise.
@@ -129,10 +130,11 @@ const problemsOf = (folded: Folded): RunStatus['problems'] =>
 export function runStatus(
   pipelineYaml: string,
   folded: Folded,
-  { now, ...readers }: GateReaders & { now: string },
+  { now, trace, ...readers }: GateReaders & { now: string; trace?: string },
 ): RunStatus {
+  const spans = trace === undefined ? folded.spans : folded.spans.filter((span) => span.trace_id === trace);
   const jobs = readPipeline(pipelineYaml)?.jobs ?? [];
-  const latest = latestJobSpans(folded);
+  const latest = latestJobSpans(spans);
   const states = new Map<string, JobState>();
   const stateOf = (id: string): JobState => {
     const known = states.get(id);
@@ -147,11 +149,11 @@ export function runStatus(
     return state;
   };
   const since = (span: Span): number => Date.parse(now) - Date.parse(span.start_t);
-  const open = (type: Span['type']) => folded.spans.filter((span) => span.type === type && span.status === 'running');
+  const open = (type: Span['type']) => spans.filter((span) => span.type === type && span.status === 'running');
   return {
     jobs: jobs.map(({ id }) => ({ id, state: stateOf(id) })),
     running: open('agent').map((span) => ({ ...labelled(span), elapsed_ms: since(span) })),
-    problems: problemsOf(folded),
+    problems: problemsOf(spans),
     waiting: open('gate').map((span) => ({ ...labelled(span), waiting_ms: since(span) })),
   };
 }

@@ -39,8 +39,8 @@ function openSpan(entry: RunLogLine, open: SpanStatus): Span {
 }
 
 function scoreOf(entry: RunLogLine): Score {
-  const { trace_id, span_id, t, seq, name, value, source, rubric, body, via, comment } = entry;
-  const score = { trace_id, span_id, t, seq, name, value, source, rubric, body, via, comment };
+  const { trace_id, span_id, t, seq, name, value, source, rubric, body, via, comment, ticket } = entry;
+  const score = { trace_id, span_id, t, seq, name, value, source, rubric, body, via, comment, ticket };
   return Object.fromEntries(Object.entries(score).filter(([, v]) => v !== undefined)) as unknown as Score;
 }
 

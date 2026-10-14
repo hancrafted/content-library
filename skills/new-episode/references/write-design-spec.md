@@ -43,7 +43,7 @@ When no ticket is `needs-triage`, and before `implement-episode`, rewrite every 
 
 ### Approved as drafted or edited
 
-When Han has approved, log one Score per ticket on the Job: `episode:run -- <slug> score write-design-spec gate "approved as drafted"|edited --source human:han --via chat --comment "#<issue>"`, read from the ticket's edit history. The run-log entry carries no Metrics. A ticket edit whose body ends `Edited-by: <job id>` is an agent's, so only an unmarked edit counts as `edited` (`agentOf` in [`scripts/marks.pure.ts`](../scripts/marks.pure.ts)). When most tickets pass unedited across runs (`SELECT value, count(*) FROM scores WHERE name = 'gate' AND source = 'human:han' GROUP BY value`), `gate: human` is removed.
+When Han has approved, log one Score per ticket on the Job: `episode:run -- <slug> score write-design-spec gate "approved as drafted"|edited --source human:han --via chat --ticket <issue> --comment "<his words, if any>"`, read from the ticket's edit history. The run-log entry carries no Metrics. A ticket edit whose body ends `Edited-by: <job id>` is an agent's, so only an unmarked edit counts as `edited` (`agentOf` in [`scripts/marks.pure.ts`](../scripts/marks.pure.ts)). When most tickets pass unedited across runs (`SELECT value, count(*) FROM scores WHERE name = 'gate' AND source = 'human:han' GROUP BY value`), `gate: human` is removed.
 
 ## Done when
 

@@ -4,7 +4,7 @@
 // (the CLI and the hook each hand in a real `gh`); the gh call protocol lives here, the rules in status.pure.ts.
 import path from 'node:path';
 import { readPipeline } from '../../../src/lib/episode-pipeline-jobs.pure.ts';
-import { readEpisodeLog, readOrNull } from './episode-run-log.ts';
+import { readEpisodeLog, readMarker, readOrNull } from './episode-run-log.ts';
 import {
   outputApproved,
   runStatus,
@@ -34,11 +34,16 @@ const pipelineFile = (slug: string): string => path.join('docs/episodes', slug, 
 const TEMPLATE_PIPELINE = 'skills/new-episode/assets/pipeline.yml';
 
 /** The job ids a Job may be begun with, and the file they come from: the Episode's pipeline once it exists, else the template's. */
-export function declaredJobs(root: string, slug: string): { file: string; ids: string[] } {
+export function declaredJobs(root: string, slug: string): { file: string; ids: string[]; orchestrator: string[] } {
   const own = readOrNull(path.join(root, pipelineFile(slug)));
   const file = own === null ? TEMPLATE_PIPELINE : pipelineFile(slug);
   const yaml = own ?? readOrNull(path.join(root, TEMPLATE_PIPELINE)) ?? '';
-  return { file, ids: readPipeline(yaml)?.jobs.map((j) => j.id) ?? [] };
+  const jobs = readPipeline(yaml)?.jobs ?? [];
+  return {
+    file,
+    ids: jobs.map((j) => j.id),
+    orchestrator: jobs.filter((j) => j.session === 'orchestrator').map((j) => j.id),
+  };
 }
 
 /**
@@ -77,6 +82,8 @@ export function readEpisodeStatus(root: string, slug: string, { now, gh }: { now
   const pipeline = read(file);
   if (pipeline === null) return { kind: 'no-pipeline', file };
   if (readPipeline(pipeline) === null) return { kind: 'no-jobs', file };
-  const { folded, errors } = readEpisodeLog(slug, root);
-  return { kind: 'ok', status: runStatus(pipeline, folded, { ...gateReaders(slug, read, gh), now }), errors };
+  const { folded, errors, current } = readEpisodeLog(slug, root);
+  // The current Run: the live marker's, else the latest. Earlier Runs make no job done; `reuse` brings one over.
+  const trace = readMarker(root)?.trace_id ?? current?.trace_id;
+  return { kind: 'ok', status: runStatus(pipeline, folded, { ...gateReaders(slug, read, gh), now, trace }), errors };
 }

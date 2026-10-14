@@ -43,3 +43,7 @@ export function usageOf(all: readonly Entry[]): Partial<LogEvent> {
     'gen_ai.usage.cache_read.input_tokens': sum('cache_read_input_tokens'),
   };
 }
+
+/** The model of the last assistant message. */
+export const modelOf = (all: readonly Entry[]): string | undefined =>
+  [...all].reverse().find((e) => e.type === 'assistant' && e.message?.model)?.message?.model;

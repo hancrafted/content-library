@@ -7,7 +7,8 @@ import { JOB_ID } from '../../../src/lib/episode-pipeline-jobs.pure.ts';
 import { isRecord, parseJson, parseMarker, sessionsOf, type Marker } from './marker.pure.ts';
 import type { LogEvent, RunLogLine } from './run-log.pure.ts';
 import { SUMMARY_MAX } from './run-log.pure.ts';
-import { entries, promptOf, usageOf, type Entry } from './transcript.pure.ts';
+import { entries, modelOf, promptOf, usageOf, type Entry } from './transcript.pure.ts';
+import { measuredUsage } from './usage-window.pure.ts';
 
 /** The hook payload fields the adapter reads. */
 export interface HookPayload {
@@ -150,9 +151,6 @@ function startEvent(input: AdapterInput, marker: Marker, files: { transcript: st
   });
 }
 
-const modelOf = (all: readonly Entry[]): string | undefined =>
-  [...all].reverse().find((e) => e.type === 'assistant' && e.message?.model)?.message?.model;
-
 /** The transcript may not have existed at SubagentStart: the launch time and prompt the start could not measure. */
 function lateStartFacts(started: RunLogLine, all: readonly Entry[]): Partial<LogEvent> {
   const launched = all[0]?.timestamp;
@@ -227,23 +225,13 @@ export function runUsageEvent(
   const ended = [...log].reverse().find((l) => l.kind === 'end-run' && l.span_id === run?.span_id);
   if (run?.span_id === undefined || ended === undefined || ended['gen_ai.usage.input_tokens'] !== undefined)
     return null;
-  // Line times are whole seconds, transcript times milliseconds: the window runs to the end of end-run's second.
-  const from = Date.parse(run.t);
-  const until = Date.parse(ended.t) + 1000;
-  const inside = (e: Entry): boolean => {
-    const at = e.timestamp === undefined ? Number.NaN : Date.parse(e.timestamp);
-    return at >= from && at < until;
-  };
-  const all = transcripts.flatMap((t) => entries(t)).filter(inside);
-  const usage = usageOf(all);
-  if (Object.keys(usage).length === 0) return null;
+  const measured = measuredUsage(run.t, ended.t, transcripts);
+  if (measured === null) return null;
   return definedOnly({
     kind: 'end-run',
     span_id: run.span_id,
     status: ended.status,
     summary: ended.summary,
-    source: 'measured',
-    'gen_ai.response.model': modelOf(all),
-    ...usage,
+    ...measured,
   });
 }
