@@ -1,0 +1,87 @@
+{
+  "title": "What is a sales pipeline",
+  "caption": "A pipeline is our working record of potential deals; a funnel counts how many progress.",
+  "questions": {
+    "volume": {
+      "label": "Volume",
+      "question": "how many enter each stage?"
+    },
+    "offering": {
+      "label": "Offering / <ref>conversion</ref>",
+      "question": "which advance?"
+    },
+    "efficiency": {
+      "label": "Efficiency / cycle",
+      "question": "how long does progress take?"
+    }
+  },
+  "pipeline": {
+    "label": "Pipeline: records and next actions"
+  },
+  "funnel": {
+    "label": "Funnel: how many progress"
+  },
+  "stages": {
+    "leads": "Leads",
+    "opportunities": "Opportunities",
+    "won": "Won"
+  },
+  "definitions": "Define entry, exit, <ref>cohort</ref> and dates before comparing numbers",
+  "notes": {
+    "default-report-populations-differ": {
+      "header": "Default report populations differ",
+      "description": "Pipedrive's documented default deal-conversion report uses deals created in a period and marked won or lost, whereas HubSpot's funnel dates filter stage activity. Such reports do not automatically compare the same cohort, especially when open deals remain unresolved [1] [2].",
+      "sources": {
+        "pipedrive-deal-conversion": {
+          "title": "Pipedrive, Insights reports: deal conversion"
+        },
+        "hubspot-custom-funnel": {
+          "title": "HubSpot, Create custom funnel reports"
+        }
+      }
+    },
+    "forecast-weights-are-settings": {
+      "header": "Forecast weights are settings",
+      "description": "HubSpot's default stage probabilities weight deal amounts and can be customised. A configured probability is not an observed stage-to-stage conversion rate and should not be presented as one [1].",
+      "sources": {
+        "hubspot-pipelines": {
+          "title": "HubSpot, Set up and customize pipelines"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "records-not-a-wish-list": {
+        "title": "Records, not a wish list",
+        "keywords": "",
+        "script": "A pipeline is our working record of potential deals. For each one, write its name, current stage, owner and dated next action. Birch is an opportunity with a scope meeting ahead. Alder still needs contact. Those entries tell the founder what to do. A wish that both companies will buy tells her very little."
+      },
+      "count-the-flow": {
+        "title": "Count the flow",
+        "keywords": "",
+        "script": "A funnel answers a different question. How many entered, and how many progressed? Count the researched leads. Then count which became opportunities and which became wins. Keep those categories clear. Adding ten names to the prospect list is more starting volume. It is not the same as opening ten opportunities with buyers."
+      },
+      "measure-conversion-with-a-denominator": {
+        "title": "Measure conversion with a denominator",
+        "keywords": "",
+        "script": "To measure conversion, divide the number that advanced by the number that entered. Say how many you started with. Follow that same starting group through the stages. For overall conversion, divide its wins by its original leads. If some are still open, show them separately. We cannot yet describe their final outcomes."
+      },
+      "conversion-raises-questions-about-the-offer": {
+        "title": "Conversion raises questions about the offer",
+        "keywords": "",
+        "script": "Suppose few of our founder's conversations move forward. She can examine the response notes. Did she reach people with the scheduling problem? Was her invitation clear? Did price become a sticking point? Was this simply the wrong time? The rate tells her where to look. It does not choose the explanation for her."
+      },
+      "measure-the-sales-cycle-explicitly": {
+        "title": "Measure the sales cycle explicitly",
+        "keywords": "",
+        "script": "Measure your sales cycle too. Choose a start and an end, then record both dates. In this talk, we use first contact to a won agreement. Count the elapsed time between them. Keep the receipt date in another field. That lets our founder ask both when she reached agreement and when the money became available."
+      },
+      "efficiency-is-not-speed-at-any-cost": {
+        "title": "Efficiency is not speed at any cost",
+        "keywords": "",
+        "script": "If Birch has waited a week for our founder's trial outline, sending it is a useful next action. If Birch needs an internal discussion, another daily reminder may not help. Look at what the elapsed time contains. More prospects, better progression and less avoidable waiting are different questions. Do not answer all three by demanding faster calls."
+      }
+    }
+  }
+}

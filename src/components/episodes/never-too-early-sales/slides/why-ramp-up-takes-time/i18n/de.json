@@ -1,0 +1,96 @@
+{
+  "title": "Why it takes time to ramp up",
+  "caption": "Separate the sources of delay: they are not three standard durations to add together.",
+  "boxes": {
+    "preparation": {
+      "label": "Preparation",
+      "detail": "list, offer, stage rules"
+    },
+    "market": {
+      "label": "Unknown market",
+      "detail": "test buyer response"
+    },
+    "metrics": {
+      "label": "Unknown metrics",
+      "detail": "wait for outcomes"
+    }
+  },
+  "mechanisms": {
+    "construct": "Construct the pipeline",
+    "learn": "Learn the selling work",
+    "buyer": "Buyer decision time"
+  },
+  "footer": "No measured pipeline-from-zero duration here",
+  "notes": {
+    "tenure-is-not-a-stopwatch-for-ramp-up": {
+      "header": "Tenure is not a stopwatch for ramp-up",
+      "description": "Peasley and Hochstein's authors' summary discusses early-tenure salespeople hired 18–24 months before the survey; that tenure and their framing do not measure a founder's pipeline-from-zero ramp period. The source also reports a prospecting-versus-account-work trade-off, not that maximum prospecting is always best [1].",
+      "sources": {
+        "peasley-hochstein-summary": {
+          "title": "Peasley and Hochstein, Insights for Optimizing Early-Tenure Sales Success (summary of their Journal of Personal Selling & Sales Management article, doi:10.1080/08853134.2024.2316383)"
+        }
+      }
+    },
+    "training-evidence-has-a-narrow-setting": {
+      "header": "Training evidence has a narrow setting",
+      "description": "Chung, Kim and Park fit a structural model to one firm's sales force; tenure and training affected modelled performance, with stronger training effects for junior staff. That does not establish how long a startup founder needs to become productive [1].",
+      "sources": {
+        "chung-kim-park": {
+          "title": "Chung, Kim and Park, The Comprehensive Effects of Sales Force Management: A Dynamic Structural Analysis of Selection, Compensation, and Training"
+        }
+      }
+    },
+    "budget-association-is-not-a-timing-prescription": {
+      "header": "Budget association is not a timing prescription",
+      "description": "The longitudinal B2B high-tech startup survey associates a larger personal-sales budget share with better early-stage performance and worse later-stage performance. It does not demonstrate that a budget shift causes faster ramp-up; this result was available at abstract level [1].",
+      "sources": {
+        "vomberg-et-al": {
+          "title": "Vomberg et al., The Different Effects of Mass-Media Marketing and Personal Sales Budgets Across the Life Cycle of B2B High-Tech Start-Ups"
+        }
+      }
+    },
+    "buyer-led-journeys-are-conceptual-evidence": {
+      "header": "Buyer-led journeys are conceptual evidence",
+      "description": "Kalwey et al.'s interview-based conceptual paper describes a role coordinating buyer–seller touchpoints. It does not quantify sales-cycle duration or prove a combined duration for construction, learning and buyer pacing [1].",
+      "sources": {
+        "kalwey-et-al": {
+          "title": "Kalwey et al., Holistic Selling: An Emerging Paradigm in B2B Markets"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "preparation-is-real-work": {
+        "title": "Preparation is real work",
+        "keywords": "",
+        "script": "At the beginning, our founder must create a usable first version. Research a few prospects. Write the offer. Choose a contact route. Decide what evidence opens an opportunity. Set up the board. None of that requires a perfect system. It requires enough preparation to make the first contact and remember what happens afterwards."
+      },
+      "you-do-not-know-the-market-yet": {
+        "title": "You do not know the market yet",
+        "keywords": "",
+        "script": "She might initially contact a workshop owner and discover that a different person handles scheduling. She can test that new route on the next call. Or a buyer may object to the trial's scope. She can ask which part is unsuitable. These conversations inform her next move. A handful of answers does not describe every potential customer."
+      },
+      "you-do-not-know-your-numbers-yet": {
+        "title": "You do not know your numbers yet",
+        "keywords": "",
+        "script": "On the first day, there are no completed deals to measure. A week later, several conversations may still be open. The founder cannot hurry their final outcomes by filling in a spreadsheet. Keep recording what happens. Until there is enough evidence, use explicit scenarios rather than treating our invented conversion rate as her own."
+      },
+      "separate-the-sources-of-delay": {
+        "title": "Separate the sources of delay",
+        "keywords": "",
+        "script": "Ask what kind of waiting you are dealing with. Are you still building the prospect list? Are you learning how to explain the offer? Or is a buyer considering a decision? Those questions point to different actions. They are not three standard durations to add together. Name the unfinished work instead of guessing a universal clock."
+      },
+      "balance-new-leads-with-current-work": {
+        "title": "Balance new leads with current work",
+        "keywords": "",
+        "script": "Our founder has one afternoon. She could research Alder, prepare Birch's scope meeting or fulfil a trial promise. All three might matter. Put the dates and responsibilities together before deciding. Do not celebrate a long contact list if the active opportunity goes unanswered. Choose work that moves the actual customer conversations and commitments forward."
+      },
+      "start-learning-before-cash-is-urgent": {
+        "title": "Start learning before cash is urgent",
+        "keywords": "",
+        "script": "Starting now gives the founder time to make contacts, record responses and try the next steps. As agreements become clearer, update the receipt scenarios in the cashflow view. Some answers may be uncomfortable. Better to see them while there are choices to consider. The process does not promise a completion date. Waiting does not provide one either."
+      }
+    }
+  }
+}
