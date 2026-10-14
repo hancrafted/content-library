@@ -367,3 +367,36 @@ The `write-dossier` entry has no `Spine change:` lines.
 - Needs human: in `#why-it-takes-time-to-ramp-up`, Voice 1 says all preparation must exist before the first deal, while note 3 says to codify the playbook only after learning. The two may read as contradicting.
 - Needs human: `#how-marketing-feeds-the-pipeline` Voice 3 is close to note 1, but the reviewer judged it not a repeat.
 - Needs human: there are no profile guides, so the voice follows no guide of Han's.
+
+## write-spec · 2026-10-14T19:26:28Z
+
+### Inputs
+
+- `skills/new-episode/references/write-spec.md`.
+- `brief.md`.
+- `dossier.md`, as Han approved it.
+- `.archgate/adrs/FE-004-slide-architecture.md`: the Episode seams, used because Han was away.
+- `docs/features/episode-migration.md`: step 8, for the wiring ticket.
+- The `write-dossier` and `write-voice-script` entries above.
+
+### Output
+
+- Spec issue https://github.com/hancrafted/content-library/issues/173, labelled `episode:never-too-early-sales-run-2`. The label was created for it.
+- Edited #173 · 2026-10-14T19:21:05Z: the spec.
+- Edited #174 · 2026-10-14T19:21:26Z: the Title slide, the Episode wiring and Section 1, "Why watching cashflow is mission critical". It blocks #175 to #178.
+- Edited #175 · 2026-10-14T19:21:29Z: Section 2, "Why sales is more than just selling".
+- Edited #176 · 2026-10-14T19:21:32Z: Section 3, "How to start doing sales".
+- Edited #177 · 2026-10-14T19:21:36Z: Section 4, "Why building an effective sales pipeline takes time".
+- Edited #178 · 2026-10-14T19:21:39Z: Section 5, "Start before you need the money".
+
+### Checks
+
+- Reviewer: pass on attempt 1, 13 lines.
+
+### Notes
+
+Each sub-issue is labelled `needs-triage` and linked to #173. Every body ends with `Edited-by: write-spec`. The text capture of step 8 is written as an orchestrator step in #174, run after every ticket has built its Slides.
+
+The implementor reported that `grid-1x3` does not exist. That is wrong: it is a folder under `src/components/episodes/slide-master/slides/`, so the masters the Dossier names hold.
+
+- Needs human: the Dossier holds no caption for the Episode and none for the section slides. The tickets tell the implementer to write the Episode's caption from the Brief's goal and Hook, and each section caption from its Voice script.
