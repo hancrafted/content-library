@@ -400,3 +400,42 @@ Each sub-issue is labelled `needs-triage` and linked to #173. Every body ends wi
 The implementor reported that `grid-1x3` does not exist. That is wrong: it is a folder under `src/components/episodes/slide-master/slides/`, so the masters the Dossier names hold.
 
 - Needs human: the Dossier holds no caption for the Episode and none for the section slides. The tickets tell the implementer to write the Episode's caption from the Brief's goal and Hook, and each section caption from its Voice script.
+
+## write-design-spec · 2026-10-14T19:52:03Z
+
+### Inputs
+
+- `skills/new-episode/references/write-design-spec.md`.
+- `brief.md` (`## Style`: Board) and `docs/design/design-guide.md` (Board).
+- `dossier.md`, as Han approved it.
+- `reference/source-deck/design-reference.md` and its page images.
+- `GLOSSARY.md`, `docs/design/slide-library.md` and `docs/design/design-system.md`.
+- `.archgate/adrs/FE-002-episode-page.md`, `FE-007-module-layering.md`, `FE-009-slide-wrapper-and-scene.md` and `FE-011-design-tokens.md`.
+- Run-1 tickets #100 to #103, as worked examples.
+- Spec #173 and tickets #174 to #178.
+
+### Output
+
+- Edited #173 · 2026-10-14T19:27:05Z: `## Visual language` (Board).
+- Edited #174 · 2026-10-14T19:46:04Z: design answers for the Title slide, Section 1, and the shared board API.
+- Edited #175 · 2026-10-14T19:47:58Z: design answers for Section 2.
+- Edited #176 · 2026-10-14T19:49:31Z: design answers for Section 3.
+- Edited #177 · 2026-10-14T19:48:05Z: design answers for Section 4.
+- Edited #178 · 2026-10-14T19:47:50Z: design answers for Section 5.
+- Every ticket still carries `needs-triage`, the gate for Han.
+
+### Checks
+
+- Reviewer: pass on attempt 2.
+
+### Notes
+
+The five designers ran in parallel and named the shared board parts differently. The orchestrator then set one contract. #174 builds `Board`, `StickyNote`, `BoardArrow` and `CashflowBoard` in `src/components/slide-shared/board/`, and the motions `stick-on` and `draw-in` in `slide-shared/motions/`. Every other ticket imports them. #174 builds them directly in `slide-shared/` because #175 to #178 are built in parallel after #174, so a move in a later ticket would race with the others.
+
+Attempt 1 failed on #175 to #178, because each one used shared parts outside #174's API. For attempt 2, #174 widened the API: a `Board` with children, a `StickyNote` with `fill` and a body, a standalone `BoardArrow`, and `CashflowBoard` `overlays`. #174 states the API in one "Shared API" block. The other four tickets now use only what that block names.
+
+Overruled masters: every page Slide is built as a Scene from `SlideFrame` and the kit's `<Title>`. `BasicPageSlide`'s body is a `<p>` and cannot hold a board. `grid-1x3` on `what-is-a-sales-pipeline` and `why-it-takes-time-to-ramp-up` and `three-column` on `stages-of-sale` are overruled. Their own grids are the "Not this" of the design guide, or cannot hold notes. The Dossier rewrite after the gate sets `master: basic-page` there and keeps `motion: local` everywhere: the library motions do not exist until #174 is built, so the staging check would refuse their names.
+
+- Needs human: copy the Dossier does not name is the designers' draft. That covers the captions of `watch-your-cashflow` (none yet), `sales-is-more-than-selling` and its note lines, and the three #177 captions and the rail label "Months, not days". It also covers the deal names and amounts on `pipeline-tools-in-practice`, the "Cash arrives later" label, and the "Sales makes contact" arrow label.
+- Needs human: in #176, the standalone arrows centred on column gaps may run onto the `fill` notes on `stages-of-sale` and `how-marketing-feeds-the-pipeline`. This is a layout point for `implement-episode`'s visual check.
+- Needs human: #178 lists a top-level `target` on `CashflowBoard`, but also says the figure takes none. Only the arrow's target is used.
