@@ -39,6 +39,7 @@ const COMPOSITION = [
     sections: [
       { opener: 'why-cashflow-matters', pageSlides: 1 },
       { opener: 'sales-beyond-selling', pageSlides: 1 },
+      { opener: 'why-pipeline-takes-time', pageSlides: 6 },
     ],
   },
 ] as const;

@@ -1,0 +1,102 @@
+{
+  "title": "Pipeline tools in practice",
+  "caption": "Track your deals in a simple pipeline.",
+  "disclaimer": "Example records, not a product screenshot",
+  "columns": {
+    "leads": "Leads",
+    "opportunities": "Opportunities",
+    "closing": "Closing",
+    "won": "Won",
+    "lost": "Lost"
+  },
+  "cards": {
+    "alder": {
+      "name": "Alder Works",
+      "status": "Not contacted · owner: founder · next: request introduction, 6 Jan"
+    },
+    "birch": {
+      "name": "Birch Studio",
+      "status": "Problem confirmed · next: scope meeting, 10 Jan"
+    },
+    "cedar": {
+      "name": "Cedar Labs",
+      "status": "Proposal discussed · next: payment-terms review, 14 Jan"
+    },
+    "delta": {
+      "name": "Delta Office",
+      "status": "Agreed 5 Jan · receipt expected 20 Feb"
+    },
+    "elm": {
+      "name": "Elm Services",
+      "status": "No current budget · revisit only if timing changes"
+    }
+  },
+  "detail": {
+    "items": {
+      "first-contact": "First contact: 3 Jan",
+      "opportunity-entered": "opportunity entered: 7 Jan",
+      "last-contact": "last contact: 8 Jan",
+      "next-step": "next step: 10 Jan",
+      "receipt-date": "receipt date: not agreed"
+    }
+  },
+  "checklist": {
+    "update-after-contact": "Update after contact",
+    "review-weekly": "review next actions weekly",
+    "keep-separate": "keep open, won and lost separate"
+  },
+  "notes": {
+    "stage-evidence-can-be-made-explicit": {
+      "header": "Stage evidence can be made explicit",
+      "description": "HubSpot's example default pipeline separates appointment, qualification, presentation, decision-maker buy-in and contract-sent evidence. Those names are configurable; the fictional board deliberately uses a smaller instructional set rather than claiming those defaults fit every organisation [1].",
+      "sources": {
+        "hubspot-pipelines": {
+          "title": "HubSpot, Set up and customize pipelines"
+        }
+      }
+    },
+    "qualification-can-leave-an-audit-trail": {
+      "header": "Qualification can leave an audit trail",
+      "description": "Dynamics 365's documented disqualification retains the lead record. Recording a loss or lack of fit is therefore different from quietly deleting it and losing the denominator [1].",
+      "sources": {
+        "dynamics-qualify-lead": {
+          "title": "Microsoft, Qualify and convert a lead to opportunity"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "start-with-a-board-or-spreadsheet": {
+        "title": "Start with a board or spreadsheet",
+        "keywords": "",
+        "script": "Track your deals in a simple pipeline. You can begin with a board or spreadsheet you already have. Give it stages for leads, opportunities and closing, plus won and lost outcomes. Add the names we introduced earlier: Alder Works and Birch Studio. The point is to organise the work, not to buy software before starting."
+      },
+      "give-each-card-a-next-action": {
+        "title": "Give each card a next action",
+        "keywords": "",
+        "script": "Our founder owns both records. For Alder, her next action is to request an introduction on the sixth of January. For Birch, it is a scope meeting on the tenth. Those are different tasks at different stages. At the review, ask what actually happened and what the buyer agreed next. Update the cards from those answers."
+      },
+      "keep-dates-for-measurement": {
+        "title": "Keep dates for measurement",
+        "keywords": "",
+        "script": "Birch's first contact was on the third of January. It entered the opportunity stage on the seventh. Record later stage changes and the eventual win or loss date too. Add expected and actual receipt dates when known. If no payment date has been agreed, leave it unknown. An empty field is more honest than an invented date."
+      },
+      "review-stuck-work": {
+        "title": "Review stuck work",
+        "keywords": "",
+        "script": "Set aside time each week to review the next actions. Did the scope meeting happen? Are we waiting for the buyer, or did we forget our task? Has a buyer explained why the discussion stopped? Use the answers to decide what happens next. Do not assign a comforting chance of winning just because a card has sat there."
+      },
+      "measure-without-hiding-open-deals": {
+        "title": "Measure without hiding open deals",
+        "keywords": "",
+        "script": "When reviewing conversion, return to the same group you started with. Count how many reached each stage. Show those still open alongside the final outcomes. For won deals, calculate first-contact-to-win durations. If only one has finished, say so. That is a beginning of evidence, not a stable answer for every future deal."
+      },
+      "maintain-the-source-list-too": {
+        "title": "Maintain the source list too",
+        "keywords": "",
+        "script": "The board also reminds our founder to keep researching. Alder's contact information might be stale. Another workshop might fit the offer better. Update the source list as you learn. Then choose the next real contact. Do not let maintaining records become the entire activity. The records should help you decide which conversation to pursue next."
+      }
+    }
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "title": "How marketing feeds the pipeline",
+  "caption": "Marketing hands a named entry to the pipeline; qualification still decides what becomes an opportunity.",
+  "flow": {
+    "attention": "Attention",
+    "lead": "Identified lead",
+    "opportunity": "Qualified opportunity"
+  },
+  "routes": {
+    "article": "Useful article → enquiry",
+    "event": "Relevant event → requested follow-up",
+    "introduction": "Network introduction → conversation"
+  },
+  "viewers": "Anonymous viewers · outside the pipeline",
+  "pipeline": "Pipeline",
+  "gate": "Buyer response, plausible fit, agreed next step",
+  "branch": "Not qualified / not now",
+  "handoff": "Birch Studio · scheduling problem · source: article enquiry · owner: founder · next: discovery call",
+  "footer": "More attention is not automatically more deals",
+  "notes": {
+    "marketing-and-sales-qualification-are-distinct-definitions": {
+      "header": "Marketing and sales qualification are distinct definitions",
+      "description": "HubSpot's lifecycle model separately defines Marketing Qualified Lead and Sales Qualified Lead. Its configurable stages describe handoff ownership, not measured causal effects of a marketing channel on sales [1].",
+      "sources": {
+        "hubspot-lifecycle-stages": {
+          "title": "HubSpot, Use lifecycle stages (HubSpot Knowledge Base)"
+        }
+      }
+    },
+    "entry-routes-are-broader-than-one-funnel": {
+      "header": "Entry routes are broader than one funnel",
+      "description": "Microsoft's documented process includes website opt-ins, email enquiries and trade-show cards as lead sources. These are examples of recorded entry routes, not evidence of a universally best channel or its conversion rate [1].",
+      "sources": {
+        "dynamics-sales-process": {
+          "title": "Microsoft, Understand the sales process (Dynamics 365 Sales documentation)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "attention-needs-an-entry-route": {
+        "title": "Attention needs an entry route",
+        "keywords": "",
+        "script": "Suppose our founder writes about the scheduling problem. Someone reads it, but she does not know who. That person is not yet a named entry she can work with. Include a relevant invitation to discuss the problem. Birch sends an enquiry through it. Now she has someone to answer, rather than just a readership count."
+      },
+      "choose-where-marketing-hands-over": {
+        "title": "Choose where marketing hands over",
+        "keywords": "",
+        "script": "For our small company, that enquiry becomes a lead for the founder to handle. Decide what information the handoff must contain. Which company asked? What problem did it mention? Who will respond, and when? Put the entry into the same working system as the other leads. Otherwise a useful enquiry may simply wait in an inbox."
+      },
+      "feed-the-list-then-qualify": {
+        "title": "Feed the list, then qualify",
+        "keywords": "",
+        "script": "In this story, Birch arrived through the scheduling article. Record that source. If our founder later meets another team at an event, record what follow-up it requested. If a contact makes an introduction, record the reason. Then ask the questions needed for the next step. The route into the conversation does not answer them for us."
+      },
+      "more-volume-is-not-a-guarantee": {
+        "title": "More volume is not a guarantee",
+        "keywords": "",
+        "script": "Imagine a new article brings many enquiries from teams outside the offer's scope. That would give our founder more responses to handle, but not necessarily more useful opportunities. Some might be a fit later. Some might need something else. When comparing sources, examine who came in and what happened next, not only which source produced the largest count."
+      },
+      "close-the-feedback-loop": {
+        "title": "Close the feedback loop",
+        "keywords": "",
+        "script": "Suppose several buyers ask whether the software can handle last-minute job changes. Bring that question back to the article and the offer. Could the explanation be clearer? Are we contacting the right teams? Choose a specific change to test. Marketing and sales can share these questions, with the next buyer conversation showing what happens."
+      }
+    }
+  }
+}

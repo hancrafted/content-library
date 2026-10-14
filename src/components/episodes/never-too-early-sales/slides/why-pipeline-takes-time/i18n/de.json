@@ -1,0 +1,17 @@
+{
+  "title": "Why building an effective sales pipeline takes time",
+  "voiceScript": {
+    "segments": {
+      "timing-needs-a-system": {
+        "title": "Timing needs a system",
+        "keywords": "",
+        "script": "One promising customer is not enough to tell our founder how her selling works. She needs to repeat the steps and keep records. Which conversations advance? Which stop? How much time passes before an agreement? A pipeline makes that work visible. Over time, those records can help her replace guesses with her own numbers."
+      },
+      "illustrations-are-not-forecasts": {
+        "title": "Illustrations are not forecasts",
+        "keywords": "",
+        "script": "We will use a small invented example to understand the numbers. It has a conversion rate and a duration. Neither describes what your company should expect. Think of it as practice with the calculation. When you make your own cash plan, use evidence from your selling work and be explicit about what you still do not know."
+      }
+    }
+  }
+}
