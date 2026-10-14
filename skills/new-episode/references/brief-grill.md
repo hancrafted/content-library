@@ -22,6 +22,10 @@ The Brief is Han's wording, so a fix changes shape, never words:
 - **Shape only**: frontmatter, heading order, a list written as prose or the reverse, where every word stays. Fix it yourself and name each fix in the run-log entry's Notes.
 - **Anything that changes a word**, and every `Not settled.` heading: put it to Han as a question, heading by heading as in the skill's Settle phase, and write his answer verbatim. Leave every heading he settled as he wrote it.
 
+## Waiting on Han
+
+Each question you put to Han, in the Settle phase or on a retry, opens a Gate span before you wait: `open-gate brief-grill han-reply`, and `close-gate han-reply` when he answers, so his thinking time stays apart from yours.
+
 ## Retry
 
 The reviewer's failed lines go to Han, not to a rewrite: on attempt 2 and later, quote each failed line to him as a question, write down his answer verbatim, then run the checks and a fresh reviewer again.

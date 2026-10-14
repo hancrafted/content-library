@@ -115,7 +115,7 @@ jobs:
   # References, beside the research: a script, so no reviewer. A run with no
   # References drops it.
   - id: convert-references
-    needs: [retrieval]
+    needs: [retrieval] # serialises two jobs without worktree isolation; not a data dependency
     before: [mh-query]
     outputs: [docs/episodes/<slug>/reference/*/design-reference.md]
     checks: [mh, vitest]
