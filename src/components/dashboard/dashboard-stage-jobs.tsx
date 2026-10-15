@@ -1,6 +1,6 @@
 import { agentElapsed, spanElapsed } from '@/lib/dashboard-elapsed.pure';
 import type { DashboardJob } from '@/lib/dashboard-projection.pure';
-import { agentIdentity, agentState, stageLayers, type DashboardStage } from '@/lib/dashboard-stages.pure';
+import { agentState, currentAgent, stageLayers, type DashboardStage } from '@/lib/dashboard-stages.pure';
 import { fillTemplate } from '@/lib/template.pure';
 import { useContext, useState, type KeyboardEvent } from 'react';
 import { JobChipList } from './dashboard-chips';
@@ -30,7 +30,7 @@ interface BranchProps extends JobProps {
 function nodeAgents(job: DashboardJob) {
   if (job.config.length === 0) return [{ role: job.id, state: job.state, span: job.span }];
   return job.config.map((config) => {
-    const span = job.agents.filter((agent) => agentIdentity(agent).role === config.type).at(-1);
+    const span = currentAgent(job, config.type);
     return {
       role: config.type,
       state: span ? agentState(job, span) : config.session === 'orchestrator' ? job.state : ('waiting' as const),
@@ -58,7 +58,7 @@ function TemplateLabel({ job, copy }: Pick<JobProps, 'job' | 'copy'>) {
 function JobPopover({ job, agent, stage, onSelectJob, copy }: JobProps & { agent: Agent }) {
   const { now } = useContext(DashboardMoment);
   const elapsed =
-    agent.span?.type === 'agent' ? agentElapsed(job, agent.span, now) : job.span && spanElapsed(job.span, now);
+    agent.span && (agent.span.type === 'agent' ? agentElapsed(job, agent.span, now) : spanElapsed(agent.span, now));
   return (
     <div className={styles.popover}>
       <button
@@ -94,6 +94,7 @@ function AgentNode({ job, stage, agent, x, y, onSelectJob, copy }: NodeProps) {
   return (
     <div
       className={styles.branchNode}
+      data-graph-node
       data-popover-dismissed={dismissed}
       style={{ left: `${x}%`, top: `calc(50% + ${y}px)` }}
       onPointerEnter={() => setDismissed(false)}
@@ -103,7 +104,6 @@ function AgentNode({ job, stage, agent, x, y, onSelectJob, copy }: NodeProps) {
       <button
         type="button"
         data-job={job.id}
-        data-agent={agent.role}
         data-template={job.foreach !== undefined}
         data-state={agent.state}
         aria-label={`${job.id} · ${agent.role} · ${agent.state}`}

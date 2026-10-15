@@ -136,6 +136,7 @@ function StageNode(props: NodeProps) {
     <li className={styles.stage} data-complete={isComplete(stage.state)}>
       <div
         className={styles.stageAnchor}
+        data-graph-stage
         data-popover-dismissed={dismissed}
         onPointerEnter={() => setDismissed(false)}
         onFocusCapture={() => setDismissed(false)}

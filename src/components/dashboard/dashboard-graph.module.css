@@ -481,7 +481,8 @@
   .switch,
   .switch::before,
   .branchProgress,
-  .drawer {
+  .drawer,
+  .drawer[data-open='true'] {
     transition: none;
   }
 }

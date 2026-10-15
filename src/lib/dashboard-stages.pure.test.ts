@@ -5,6 +5,7 @@ import type { Score } from '../../skills/new-episode/scripts/run-log.schema.pure
 import { parseDashboardPipeline, projectDashboard, type DashboardJob } from './dashboard-projection.pure';
 import {
   agentState,
+  currentAgent,
   jobLabel,
   jobLanes,
   jobNeedsAttention,
@@ -46,6 +47,47 @@ function reviewedJob(scores: Pick<Score, 'span_id' | 'value'>[]): DashboardJob {
 }
 
 describe('success cases', () => {
+  it('selects an agent only from the current Run and latest Attempt', () => {
+    // ARRANGE
+    const base = reviewedJob([]);
+    const agent = base.agents[0];
+    const job: DashboardJob = {
+      ...base,
+      agents: [
+        {
+          ...agent,
+          description: undefined,
+          role: 'reviewer',
+          span_id: 'old-run',
+          trace_id: 'other',
+          parent_span_id: 'a2',
+        },
+        {
+          ...agent,
+          description: undefined,
+          role: 'reviewer',
+          span_id: 'old-attempt',
+          trace_id: base.span!.trace_id,
+          parent_span_id: 'a1',
+        },
+        {
+          ...agent,
+          description: undefined,
+          role: 'implementor',
+          span_id: 'current',
+          trace_id: base.span!.trace_id,
+          parent_span_id: 'a2',
+        },
+      ],
+    };
+    const expected = 'current';
+    // ACT
+    const reviewer = currentAgent(job, 'reviewer');
+    const implementor = currentAgent(job, 'implementor');
+    // ASSERT
+    expect(reviewer).toBeUndefined();
+    expect(implementor?.span_id).toBe(expected);
+  });
   it('collapses the real research fan-out into seven stages without dropping Jobs', () => {
     // ARRANGE
     const view = fixtureView();

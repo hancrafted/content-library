@@ -2,6 +2,19 @@ import { describe, expect, it } from 'vitest';
 import { scrubPosition, scrubTime, scrubTimeline, snapScrubPosition } from './dashboard-scrub.pure';
 
 describe('success cases', () => {
+  it('lets a pointer scrub through the final Stage instead of jumping over its events', () => {
+    // ARRANGE
+    const stages = [[{ start: 0, end: 10 }], [{ start: 10, end: 30 }], [{ start: 30, end: 60 }]];
+    const expectedTime = 45;
+    const expectedPosition = 0.875;
+    // ACT
+    const timeline = scrubTimeline(stages, { start: 0, end: 60 });
+    const time = scrubTime(timeline, expectedPosition);
+    const position = scrubPosition(timeline, expectedTime);
+    // ASSERT
+    expect(time).toBe(expectedTime);
+    expect(position).toBe(expectedPosition);
+  });
   it('lightly snaps near a stage but leaves the middle of a gap freely scrubbable', () => {
     // ARRANGE
     const stageCount = 7;

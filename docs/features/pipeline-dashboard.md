@@ -127,8 +127,10 @@ Parallel Jobs contribute their individual elapsed fractions together; a long
 Job gets no extra width. Knots come from observed Job starts/ends and the Run
 bounds, never estimated durations. Open Jobs use the latest read as their
 observed endpoint. Idle plateaus select the latest observation at that position;
-the first point remains Run start. The last stage shares the terminal point
-(there is no gap after PR); minute keys can still inspect it. The rightmost
+the first point remains Run start. Since there is no gap after PR, the final
+gap shares its space equally across the preceding stage's Jobs and PR's Jobs;
+PR execution stays scrubbable instead of collapsing to one terminal instant.
+The rightmost
 point always means the latest event/read, even with unstarted stages.
 
 Replay logs nothing new and never reads the file again. `replayDashboard()`
@@ -255,6 +257,8 @@ and every emitted alternate must resolve and link back.
   `previewHref()`: an output's path in the chosen folder, its label, whether it
   is a pattern, and when and where a Job's preview shows.
 - `jobNeedsAttention()`: the attention mark.
+- `currentAgent()`: a graph node's role evidence stays within its current Run
+  and latest Attempt instead of inheriting an earlier success.
 - `replayDashboard()`, `eventsAt()`, `replayBounds()` and `stageMarks()`: the
   view and event log at a cutoff from the retained events, the slider's range
   and its stage tick marks.

@@ -5,6 +5,13 @@ interface Selection {
   job?: string;
 }
 
+function graphOpener(): HTMLElement | null {
+  const active = document.activeElement;
+  if (!(active instanceof HTMLElement)) return null;
+  const anchor = active.closest('[data-graph-node], [data-graph-stage]');
+  return anchor?.querySelector<HTMLButtonElement>('[data-job], [data-stage]') ?? active;
+}
+
 function useEscape(open: boolean, close: () => void) {
   useEffect(() => {
     if (!open) return;
@@ -25,7 +32,7 @@ export function useDashboardDetail() {
   const closeButton = useRef<HTMLButtonElement>(null);
   const body = useRef<HTMLDivElement>(null);
   const open = (stage: string, job?: string) => {
-    opener.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    opener.current = graphOpener();
     setSelection({ stage, job });
   };
   const close = useCallback(() => {

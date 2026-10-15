@@ -21,10 +21,16 @@ function jobProgress(job: ScrubJob, at: number, latest: number): number {
 }
 
 function stagePosition(stages: readonly (readonly ScrubJob[])[], at: number, latest: number) {
-  return stages.slice(0, -1).reduce((position, jobs, index) => {
+  const gaps =
+    stages.length < 2
+      ? stages
+      : stages
+          .slice(0, -1)
+          .map((jobs, index) => (index === stages.length - 2 ? [...jobs, ...stages[stages.length - 1]] : jobs));
+  return gaps.reduce((position, jobs, index) => {
     if (!jobs.some((job) => job.start !== null && job.start <= at)) return position;
     const progress = jobs.reduce((sum, job) => sum + jobProgress(job, at, latest), 0) / jobs.length;
-    return Math.max(position, (index + progress) / Math.max(1, stages.length - 1));
+    return Math.max(position, (index + progress) / Math.max(1, gaps.length));
   }, 0);
 }
 

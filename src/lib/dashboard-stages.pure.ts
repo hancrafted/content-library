@@ -142,6 +142,29 @@ export function agentIdentity(span: Span) {
   return { ticket: span.ticket, role: span.role ?? span.name };
 }
 
+const byStart = (a: Span, b: Span) => Date.parse(a.start_t) - Date.parse(b.start_t) || a.seq - b.seq;
+
+function inCurrentAttempt(agent: Span, latest: Span | undefined, earlier: ReadonlySet<string>): boolean {
+  if (!latest || agent.parent_span_id === latest.span_id) return true;
+  return !earlier.has(agent.parent_span_id ?? '') && Date.parse(agent.start_t) >= Date.parse(latest.start_t);
+}
+
+/** A configured node never borrows a successful role from another Run or an earlier Attempt. */
+export function currentAgent(job: DashboardJob, role: string): Span | undefined {
+  if (!job.span) return undefined;
+  const trace = job.span.trace_id;
+  const attempts = job.attempts.filter((attempt) => attempt.trace_id === trace).sort(byStart);
+  const latest = attempts.at(-1);
+  const earlier = new Set(attempts.slice(0, -1).map((attempt) => attempt.span_id));
+  return job.agents
+    .filter(
+      (agent) =>
+        agent.trace_id === trace && agentIdentity(agent).role === role && inCurrentAttempt(agent, latest, earlier),
+    )
+    .sort(byStart)
+    .at(-1);
+}
+
 /** A lane is an observed ticket's sessions, never an inferred ticket or an estimate of remaining work. */
 export function jobLanes(job: DashboardJob) {
   const groups = new Map<number | undefined, Span[]>();
