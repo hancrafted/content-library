@@ -1,3 +1,4 @@
+import type { DashboardJob } from '@/lib/dashboard-projection.pure';
 import { createContext } from 'react';
 
 /**
@@ -7,6 +8,8 @@ import { createContext } from 'react';
 export interface Moment {
   now: number;
   replaying: boolean;
+  observedJobs?: readonly DashboardJob[];
+  observedAt?: number;
 }
 
 export const DashboardMoment = createContext<Moment>({ now: 0, replaying: false });

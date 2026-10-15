@@ -29,7 +29,7 @@ function LiveDashboard({ polled, outputs, name, copy }: LiveProps) {
             view={view}
             events={events}
             stale={read.condition !== 'live'}
-            moment={{ now, replaying: !controls.live }}
+            moment={{ now, replaying: !controls.live, observedJobs: read.view?.jobs, observedAt: polled.readAt }}
             outputs={outputs}
             copy={copy}
             replay={controls}

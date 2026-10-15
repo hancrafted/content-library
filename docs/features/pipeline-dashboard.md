@@ -55,21 +55,27 @@ reads it and falls back to a fixed grouping:
 | Build         | `implement-episode`, `implement-episode-init`, every `implement-section-*`                          |
 | PR            | `open-pr`                                                                                           |
 
-Unrecognized Jobs remain visible as their own stage. Desktop reads left to right;
-smaller screens read top to bottom. Progress counts successful/reused stages,
+Unrecognized Jobs remain visible as their own stage. The graph reads left to
+right at every width, scrolling inside its own container on narrow screens.
+The summary counts successful/reused stages,
 not elapsed time. A stage is complete only when all its Jobs are successful or
 reused, with no open Gate. Attention is counted separately from active work, so
 a failed optional research Job remains visible when the Dossier proceeds.
 
-**Show Jobs** is a switch beside the progress summary, off by default. On, each
-stage unfolds into a column of its Jobs (stacked under each stage on screens
-narrower than 64rem), laid out by `needs`/`wants` within the stage: Jobs in one
-layer run in parallel, the next layer follows. Each Job box carries the same
-state colours and icons as the nodes, its running-session count, the running
-pulse and an attention marker. Clicking a Job selects its stage, opens that Job's
-evidence card below and moves focus to it. The switch is transient page memory
-(FE-001): a reload returns to the picker anyway. The unfold animation respects
-reduced motion.
+**Show Jobs** is a switch beside Live, off by default. On, stages remain on a
+vertically centred spine. Dependency layers follow left to right within each
+stage gap; parallel Jobs branch evenly above and below the spine. Each Job's
+configured agents are consecutive nodes, in pipeline order. The final stage's
+branch folds back into its terminal node. Longer stages widen the shared canvas
+instead of shrinking pointer targets or overflowing the page.
+
+Job cards are gone from the overview. Hover or keyboard-focus an agent node for
+a speech bubble with status, elapsed time, skills, checks and available preview.
+Escape dismisses the bubble without removing focus. Clicking a node or bubble
+selects its Job's evidence. State icons accompany colours. Branch strokes fill
+according to observed Job times at the replay cutoff; stage positions have a
+light snap zone (at most 0.8% of the rail). The switch is transient page memory
+(FE-001), and all motion respects reduced motion.
 
 Selecting a node reveals dependency levels and parallel Job lanes. Expanding a
 Job reveals observed ticket/session lanes and the existing evidence cards.
@@ -155,7 +161,7 @@ screen readers and on hover, beside its state in words.
 
 ## Skills and checks
 
-Every Job box lists, under the Job, a chip for each skill its agents' `skills`
+Every Job popover lists a chip for each skill its agents' `skills`
 name (once each) and each check its `checks` name; the card groups the skills by
 agent type. A chip is bordered and grey while pending, green with a check mark
 once run or passed, red with a cross once skipped or failed; its state is in

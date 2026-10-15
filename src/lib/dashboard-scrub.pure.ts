@@ -8,6 +8,12 @@ interface Point {
   position: number;
 }
 
+export function snapScrubPosition(position: number, stageCount: number): number {
+  const gaps = Math.max(1, stageCount - 1);
+  const stage = Math.round(position * gaps) / gaps;
+  return Math.abs(stage - position) <= Math.min(0.008, 0.08 / gaps) ? stage : position;
+}
+
 function jobProgress(job: ScrubJob, at: number, latest: number): number {
   if (job.start === null || at < job.start) return 0;
   const end = job.end ?? latest;

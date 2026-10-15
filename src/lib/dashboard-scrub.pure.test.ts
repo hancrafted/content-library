@@ -1,7 +1,16 @@
 import { describe, expect, it } from 'vitest';
-import { scrubPosition, scrubTime, scrubTimeline } from './dashboard-scrub.pure';
+import { scrubPosition, scrubTime, scrubTimeline, snapScrubPosition } from './dashboard-scrub.pure';
 
 describe('success cases', () => {
+  it('lightly snaps near a stage but leaves the middle of a gap freely scrubbable', () => {
+    // ARRANGE
+    const stageCount = 7;
+    const expected = [0.5, 0.45];
+    // ACT
+    const positions = [0.506, 0.45].map((position) => snapScrubPosition(position, stageCount));
+    // ASSERT
+    expect(positions).toEqual(expected);
+  });
   it('gives each Job equal space within its stage gap, not equal time', () => {
     // ARRANGE
     const stages = [

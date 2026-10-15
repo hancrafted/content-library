@@ -1,7 +1,7 @@
 'use client';
 
 import type { ReplayControls } from '@/hooks/use-dashboard-replay';
-import { scrubPosition, scrubTime } from '@/lib/dashboard-scrub.pure';
+import { scrubPosition, scrubTime, snapScrubPosition } from '@/lib/dashboard-scrub.pure';
 import { fillTemplate } from '@/lib/template.pure';
 import { useId, useState, type CSSProperties, type KeyboardEvent } from 'react';
 import { formatDuration } from '../../../skills/new-episode/scripts/run-log-tree.pure';
@@ -37,9 +37,10 @@ interface ScrubProps {
   replay: ReplayControls;
   range: NonNullable<ReplayControls['range']>;
   copy: DashboardCopy;
+  stages: number;
 }
 
-function scrubState({ replay, range, copy }: ScrubProps) {
+function scrubState({ replay, range, copy, stages }: ScrubProps) {
   const at = replay.at ?? range.end;
   const fraction = replay.live ? 1 : scrubPosition(replay.timeline, at);
   const text = fillTemplate(copy.timeTravel.position, {
@@ -52,18 +53,18 @@ function scrubState({ replay, range, copy }: ScrubProps) {
     event.preventDefault();
     replay.seek(event.key === 'Home' ? range.start : event.key === 'End' ? range.end : at + step);
   };
-  return { fraction, text, onKeyDown };
+  const seek = (position: number) => replay.seek(scrubTime(replay.timeline, snapScrubPosition(position, stages)));
+  return { fraction, text, onKeyDown, seek };
 }
 
 interface InputProps {
-  replay: ReplayControls;
   copy: DashboardCopy;
   state: ReturnType<typeof scrubState>;
   help: string;
   onDrag: (dragging: boolean) => void;
 }
 
-function ScrubInput({ replay, copy, state, help, onDrag }: InputProps) {
+function ScrubInput({ copy, state, help, onDrag }: InputProps) {
   return (
     <input
       type="range"
@@ -75,7 +76,7 @@ function ScrubInput({ replay, copy, state, help, onDrag }: InputProps) {
       aria-label={copy.timeTravel.slider}
       aria-valuetext={state.text}
       aria-describedby={help}
-      onChange={(event) => replay.seek(scrubTime(replay.timeline, Number(event.target.value) / 10000))}
+      onChange={(event) => state.seek(Number(event.target.value) / 10000)}
       onKeyDown={state.onKeyDown}
       onPointerDown={() => onDrag(true)}
       onPointerUp={() => onDrag(false)}
@@ -86,19 +87,19 @@ function ScrubInput({ replay, copy, state, help, onDrag }: InputProps) {
   );
 }
 
-function Scrubber({ replay, range, copy }: ScrubProps) {
+function Scrubber({ replay, range, copy, stages }: ScrubProps) {
   const help = useId();
   const [dragging, setDragging] = useState(false);
-  const state = scrubState({ replay, range, copy });
+  const state = scrubState({ replay, range, copy, stages });
   return (
     <div className={styles.scrubber} style={{ '--scrub-position': `${state.fraction * 100}%` } as CSSProperties}>
-      <div className="relative">
+      <div className={styles.scrubTrack}>
         {dragging ? (
           <output className={`${styles.bubble} text-caption`} aria-hidden="true">
             {state.text}
           </output>
         ) : null}
-        <ScrubInput replay={replay} copy={copy} state={state} help={help} onDrag={setDragging} />
+        <ScrubInput copy={copy} state={state} help={help} onDrag={setDragging} />
       </div>
       <div className="flex items-baseline justify-between gap-3 font-mono text-caption text-muted-foreground tabular-nums">
         <time dateTime={new Date(range.start).toISOString()}>{clock.format(range.start)}</time>
@@ -112,6 +113,6 @@ function Scrubber({ replay, range, copy }: ScrubProps) {
 }
 
 /** The progress track itself is the native keyboard- and pointer-operable scrubber. */
-export function TimeTravel({ replay, copy }: { replay: ReplayControls; copy: DashboardCopy }) {
-  return replay.range ? <Scrubber replay={replay} range={replay.range} copy={copy} /> : null;
+export function TimeTravel({ replay, copy, stages }: Omit<ScrubProps, 'range'>) {
+  return replay.range ? <Scrubber replay={replay} range={replay.range} copy={copy} stages={stages} /> : null;
 }

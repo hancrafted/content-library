@@ -5,7 +5,7 @@ import type { ReplayControls } from '@/hooks/use-dashboard-replay';
 import type { DashboardEvent, EventScope } from '@/lib/dashboard-events.pure';
 import type { EpisodeOutputs } from '@/lib/dashboard-outputs.pure';
 import type { DashboardView } from '@/lib/dashboard-projection.pure';
-import { projectStages, type DashboardStage } from '@/lib/dashboard-stages.pure';
+import { projectStages, stageLayers, type DashboardStage } from '@/lib/dashboard-stages.pure';
 import { fillTemplate } from '@/lib/template.pure';
 import { useId, useState, type CSSProperties } from 'react';
 import { flushSync } from 'react-dom';
@@ -126,15 +126,33 @@ function GraphToolbar({ controls, copy, replay }: Pick<OverviewProps, 'controls'
   );
 }
 
+function graphWidth(graph: Controls['graph'], showJobs: boolean) {
+  return showJobs
+    ? Math.max(
+        160,
+        ...graph.stages.map((stage) =>
+          stageLayers(stage).reduce(
+            (sum, jobs) => sum + Math.max(...jobs.map((job) => Math.max(1, job.config.length))) * 64 + 32,
+            0,
+          ),
+        ),
+      )
+    : 160;
+}
+
 function GraphOverview({ controls, stale, copy, replay }: OverviewProps) {
   const { graph, selected, select, showJobs, selectJob } = controls;
+  const width = graphWidth(graph, showJobs);
   return (
     <div className="space-y-6 rounded-2xl border border-border bg-card p-4 sm:p-6">
       <GraphToolbar controls={controls} copy={copy} replay={replay} />
       {stale ? <p className="text-caption text-(--warning)">{copy.graph.stale}</p> : null}
       <div className={styles.graphScroll}>
-        <div className={styles.canvas} style={{ '--stage-count': Math.max(1, graph.stages.length) } as CSSProperties}>
-          <TimeTravel replay={replay} copy={copy} />
+        <div
+          className={styles.canvas}
+          style={{ '--stage-count': Math.max(1, graph.stages.length), '--stage-width': `${width}px` } as CSSProperties}
+        >
+          <TimeTravel replay={replay} copy={copy} stages={graph.stages.length} />
           <StageNavigation
             stages={graph.stages}
             selected={selected}

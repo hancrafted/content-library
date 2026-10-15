@@ -1,6 +1,14 @@
-import { isComplete, runningAgents, stageTitle, stateText, type DashboardStage } from '@/lib/dashboard-stages.pure';
+import {
+  isComplete,
+  runningAgents,
+  stageLayers,
+  stageTitle,
+  stateText,
+  type DashboardStage,
+} from '@/lib/dashboard-stages.pure';
 import { fillTemplate } from '@/lib/template.pure';
 import { CircleAlert } from 'lucide-react';
+import type { CSSProperties } from 'react';
 import type { DashboardCopy } from './dashboard-evidence';
 import styles from './dashboard-graph.module.css';
 import { StageJobs, type SelectJob } from './dashboard-stage-jobs';
@@ -19,7 +27,7 @@ interface NavigationProps {
   copy: DashboardCopy;
 }
 
-type NodeProps = Omit<NavigationProps, 'stages'> & { stage: DashboardStage; index: number };
+type NodeProps = Omit<NavigationProps, 'stages'> & { stage: DashboardStage; last: boolean };
 type LabelProps = Pick<NodeProps, 'stage' | 'copy'>;
 
 function StageActivity({ stage, copy }: LabelProps) {
@@ -68,7 +76,7 @@ function StageLabel({ stage, copy }: LabelProps) {
   );
 }
 
-function StageNode({ stage, index, selected, onSelect, onSelectJob, copy }: NodeProps) {
+function StageNode({ stage, last, selected, onSelect, onSelectJob, copy }: NodeProps) {
   return (
     <li className={styles.stage} data-complete={isComplete(stage.state)}>
       <button
@@ -84,21 +92,34 @@ function StageNode({ stage, index, selected, onSelect, onSelectJob, copy }: Node
         <span className={styles.orbit}>
           <StageStateIcon state={stage.state} />
         </span>
-        <StageLabel stage={stage} copy={copy} />
+        {onSelectJob ? (
+          <span className="text-caption font-semibold">{stageName(stage, copy)}</span>
+        ) : (
+          <StageLabel stage={stage} copy={copy} />
+        )}
       </button>
-      {onSelectJob ? <StageJobs stage={stage} index={index} onSelectJob={onSelectJob} copy={copy} /> : null}
+      {onSelectJob ? <StageJobs stage={stage} last={last} onSelectJob={onSelectJob} copy={copy} /> : null}
     </li>
   );
 }
 
 export function StageNavigation({ stages, selected, onSelect, onSelectJob, copy }: NavigationProps) {
   return (
-    <ol className={styles.stages} data-jobs={onSelectJob !== undefined} aria-label={copy.graph.title}>
+    <ol
+      className={styles.stages}
+      data-jobs={onSelectJob !== undefined}
+      aria-label={copy.graph.title}
+      style={
+        {
+          '--network-height': `${Math.max(1, ...stages.flatMap((stage) => stageLayers(stage).map((jobs) => jobs.length))) * 96 + 160}px`,
+        } as CSSProperties
+      }
+    >
       {stages.map((stage, index) => (
         <StageNode
           key={stage.id}
           stage={stage}
-          index={index}
+          last={index === stages.length - 1}
           selected={selected}
           onSelect={onSelect}
           onSelectJob={onSelectJob}
