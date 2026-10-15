@@ -11,6 +11,7 @@
 
 import type { Job } from './episode-pipeline-definition.pure';
 import { ancestors } from './episode-pipeline-graph.pure';
+import { SPEC_FILE } from './episode-spec-page.pure';
 import { unless } from './finding.pure';
 
 /**
@@ -39,7 +40,7 @@ function checkStageJobs(byId: ReadonlyMap<string, Job>, staging: string): string
   const voice = byId.get('write-voice-script');
   const spec = byId.get('write-spec');
   const init = byId.get('implement-episode-init');
-  const page = `${staging}/spec/spec.html`;
+  const page = `${staging}/${SPEC_FILE}`;
   return [
     ...unless(
       !byId.has('write-design-spec'),

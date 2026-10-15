@@ -7,6 +7,7 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import postcss from 'postcss';
+import { SPEC_FILE } from '../../../src/lib/episode-spec-page.pure.ts';
 import { startSpecServer, type SpecServer } from './spec-server.ts';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
@@ -49,7 +50,7 @@ if (arg === undefined || extra.length > 0) {
   process.exit(1);
 }
 const folder = episodeFolder(arg);
-const spec = path.join(folder, 'spec/spec.html');
+const spec = path.join(folder, SPEC_FILE);
 if (!existsSync(spec)) {
   console.error(`✖ ${path.relative(ROOT, spec)} does not exist`);
   process.exit(1);

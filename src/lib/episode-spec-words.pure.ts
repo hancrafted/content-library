@@ -5,10 +5,9 @@
  */
 
 import { type CheerioAPI } from 'cheerio';
+import { SLIDE } from './episode-spec-page.pure';
 import { type Element, type Selection } from './episode-spec-slide.pure';
 import { unless } from './finding.pure';
-
-const SLIDE = 'article[data-spec="slide"]';
 
 /** The slug a Voice script or Speaker notes list belongs to: its Slide, its Section or the page section. */
 function ownerOf(list: Selection): string {

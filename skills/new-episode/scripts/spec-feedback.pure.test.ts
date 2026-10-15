@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { nextRound, reviewToFeedback, type SpecSlide } from './spec-feedback.pure.ts';
+import type { SpecSlide } from '../../../src/lib/episode-spec-page.pure.ts';
+import { nextRound, reviewToFeedback } from './spec-feedback.pure.ts';
 
 /*
  * A Spec review, as the served page's form posts it, turned into the next `feedback.md` round (design-ADR 0011):

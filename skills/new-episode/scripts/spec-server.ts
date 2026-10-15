@@ -2,11 +2,11 @@
 // review form's POST as the next `feedback/<NN>/feedback.md` round. It lives with the skill's scripts, outside `src/`
 // and the static export; `spec.ts` is its command line.
 
-import { load } from 'cheerio';
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
 import path from 'node:path';
-import { nextRound, reviewToFeedback, type Fault, type SpecSlide } from './spec-feedback.pure.ts';
+import { SPEC_FILE, specSlides } from '../../../src/lib/episode-spec-page.pure.ts';
+import { nextRound, reviewToFeedback, type Fault } from './spec-feedback.pure.ts';
 
 export interface SpecServer {
   port: number;
@@ -23,21 +23,6 @@ export interface SpecServerOptions {
 
 /** The review form posts a few kilobytes; anything far larger is not a review. */
 const MAX_BODY = 1_000_000;
-
-/** The Spec's Slides in page order, each with the Section it sits in and its Option ids. */
-export function specSlides(html: string): SpecSlide[] {
-  const $ = load(html);
-  return $('article[data-spec="slide"]')
-    .toArray()
-    .map((slide) => ({
-      section: $(slide).closest('section[data-spec="section"]').attr('id') ?? '',
-      slug: $(slide).attr('id') ?? '',
-      options: $(slide)
-        .find('figure[data-spec="option"]')
-        .toArray()
-        .map((option) => $(option).attr('data-option') ?? ''),
-    }));
-}
 
 function escapeHtml(text: string): string {
   return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -92,7 +77,7 @@ function existingRounds(folder: string): string[] {
 
 async function save(response: ServerResponse, request: IncomingMessage, options: SpecServerOptions): Promise<void> {
   const fields = [...new URLSearchParams(await readBody(request))];
-  const slides = specSlides(readFileSync(path.join(options.folder, 'spec/spec.html'), 'utf8'));
+  const slides = specSlides(readFileSync(path.join(options.folder, SPEC_FILE), 'utf8'));
   const round = nextRound(existingRounds(options.folder));
   const result = reviewToFeedback({ fields, slides, round, now: options.now() });
   if (result.kind === 'rejected')
@@ -106,8 +91,8 @@ async function save(response: ServerResponse, request: IncomingMessage, options:
 
 /** The files the server serves, by URL path; nothing else under the folder is reachable. */
 const FILES: Readonly<Record<string, { file: string; type: string }>> = {
-  '/': { file: 'spec/spec.html', type: HTML },
-  '/spec.html': { file: 'spec/spec.html', type: HTML },
+  '/': { file: SPEC_FILE, type: HTML },
+  '/spec.html': { file: SPEC_FILE, type: HTML },
   '/design.css': { file: 'spec/design.css', type: 'text/css; charset=utf-8' },
 };
 

@@ -54,6 +54,8 @@ function meta({ verified }: Meta = {}): string {
 interface OptionShape {
   recommended?: boolean;
   picked?: boolean;
+  /** Whether the pick checkbox carries `checked`; a picked Option's does, as the contract demands. */
+  checked?: boolean;
   mock?: string;
   caption?: string | null;
   notes?: string | null;
@@ -68,15 +70,20 @@ const OPTION_DEFAULTS = {
 };
 
 function option(slug: string, id: string, shape: OptionShape = {}): string {
-  const { recommended, picked, mock, caption, notes } = { ...OPTION_DEFAULTS, ...shape };
+  const { recommended, picked, checked, mock, caption, notes } = {
+    ...OPTION_DEFAULTS,
+    checked: shape.picked,
+    ...shape,
+  };
   const flags = [recommended ? ' data-recommended' : '', picked ? ' data-picked' : ''].join('');
+  const tick = checked === true ? ' checked' : '';
   const figcaption = caption === null ? '' : `<figcaption><b>${id}</b> ${caption}</figcaption>`;
   const buildNotes = notes === null ? '' : `<div data-spec="build-notes">${notes}</div>`;
   return `<figure data-spec="option" data-option="${id}"${flags}>
   <div data-spec="mock" class="${mock}"><div class="h-4 w-1/2 bg-accent"></div></div>
   ${figcaption}
   ${buildNotes}
-  <label><input type="checkbox" form="spec-review" name="pick:${slug}" value="${id}"> ${id}</label>
+  <label><input type="checkbox" form="spec-review" name="pick:${slug}" value="${id}"${tick}> ${id}</label>
 </figure>`;
 }
 
@@ -362,6 +369,33 @@ describe('failure cases', () => {
         ],
       },
       'The Slide {#spent} marks 2 Options picked: mark at most one with data-picked.',
+    ],
+    [
+      'a picked Option whose checkbox is not ticked',
+      {
+        slides: [
+          slide('spent', 1, {
+            options: [
+              option('spent', '1a', { recommended: true, picked: true, checked: false }),
+              option('spent', '1b'),
+            ],
+          }),
+          slide('middle', 2),
+        ],
+      },
+      'Option 1a of {#spent} is picked, but its checkbox lacks checked: a locked Slide comes ticked, so the next round needs nothing on it.',
+    ],
+    [
+      'an unpicked Option whose checkbox is ticked',
+      {
+        slides: [
+          slide('spent', 1, {
+            options: [option('spent', '1a', { recommended: true }), option('spent', '1b', { checked: true })],
+          }),
+          slide('middle', 2),
+        ],
+      },
+      'Option 1b of {#spent} is not picked, but its checkbox is checked: tick only the data-picked Option.',
     ],
   ] satisfies [string, SpecShape, string][])('names %s', (_name, shape, expected) => {
     // ARRANGE

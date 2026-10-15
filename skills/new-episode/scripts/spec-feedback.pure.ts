@@ -2,14 +2,8 @@
 // Spec's Slides, the round number and the clock in, the `feedback.md` text out, or the Slides that break the rule
 // that a Slide with no pick carries a note. The server reads and writes; nothing here touches the disk.
 
-import { HAN_ACTOR } from '../../../src/lib/staging-file.pure.ts';
-
-/** One Slide of the Spec: the Section it sits in, its slug and its Option ids in page order. */
-export interface SpecSlide {
-  section: string;
-  slug: string;
-  options: readonly string[];
-}
+import type { SpecSlide } from '../../../src/lib/episode-spec-page.pure.ts';
+import { HAN_ACTOR, utcSeconds } from '../../../src/lib/staging-file.pure.ts';
 
 export interface Review {
   /** The posted form fields in order, as `URLSearchParams` yields them. */
@@ -78,7 +72,7 @@ function feedbackText(round: number, now: Date, items: readonly string[]): strin
     `title: ${title}`,
     'generated:',
     `  by: ${HAN_ACTOR}`,
-    `  at: ${now.toISOString().replace(/\.\d+Z$/, 'Z')}`,
+    `  at: ${utcSeconds(now)}`,
     `round: ${round}`,
     'via: spec',
     '---',

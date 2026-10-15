@@ -5,7 +5,8 @@
  * is the caller's job, so every rule tests against an in-memory folder.
  */
 
-import { checkSpec, specSlideAnchors } from './episode-spec.pure';
+import { SPEC_FILE, specSlideAnchors } from './episode-spec-page.pure';
+import { checkSpec } from './episode-spec.pure';
 import { checkBrief } from './episode-staging-brief.pure';
 import { checkFeedback } from './episode-staging-feedback.pure';
 import { checkStagingOrder } from './episode-staging-order.pure';
@@ -166,7 +167,7 @@ export function checkStagingFolder(
  */
 function checkFeedbackRounds(files: Readonly<Record<string, string>>): Finding[] {
   const dossier = files['dossier.md'];
-  const spec = files['spec/spec.html'];
+  const spec = files[SPEC_FILE];
   if (dossier !== undefined)
     return checkFeedback(files, { anchors: slideAnchors(blocksOf(bodyLines(dossier))), source: 'Dossier' });
   if (spec !== undefined) return checkFeedback(files, { anchors: specSlideAnchors(spec), source: 'Spec' });

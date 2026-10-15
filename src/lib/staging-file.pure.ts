@@ -19,6 +19,11 @@ export interface VerifiedEntry {
   at: string;
 }
 
+/** An instant as the UTC datetime to the second that `generated.at` and `verified` entries carry. */
+export function utcSeconds(instant: Date): string {
+  return instant.toISOString().replace(/\.\d+Z$/, 'Z');
+}
+
 const FRONTMATTER = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/;
 
 function isMapping(node: unknown): node is Record<string, unknown> {
@@ -111,12 +116,17 @@ export function appendVerified(text: string, entry: VerifiedEntry): string {
 const META_BLOCK =
   /(<script\b(?=[^>]*\bid=["']spec-meta["'])(?=[^>]*\btype=["']application\/json["'])[^>]*>)([\s\S]*?)(<\/script>)/;
 
+/** The JSON text of an HTML Spec's meta block, `<script type="application/json" id="spec-meta">`, or undefined when it has none. */
+export function metaBlockText(html: string): string | undefined {
+  return META_BLOCK.exec(html)?.[2];
+}
+
 /**
  * The gate tier of an HTML Spec, read from its meta block as `gateTier` reads frontmatter: JSON is YAML, so the
  * tiers of design-ADR 0005 apply unchanged. A page with no meta block is unverified.
  */
 export function metaGateTier(html: string): Tier {
-  const json = META_BLOCK.exec(html)?.[2];
+  const json = metaBlockText(html);
   return json === undefined ? 'unverified' : gateTier(`---\n${json.trim()}\n---\n`);
 }
 
