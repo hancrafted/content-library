@@ -1,15 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import { createLogFold, type RunLogLine } from './run-log.pure.ts';
 
-const run: RunLogLine = {
+const run = {
   kind: 'start-run',
   t: '2026-10-14T10:00:00Z',
   seq: 1,
   trace_id: 'trace-a',
   span_id: 'run-a',
   run_id: 'run-a',
-};
-const job: RunLogLine = {
+} as RunLogLine;
+const job = {
   ...run,
   kind: 'start',
   seq: 2,
@@ -18,29 +18,29 @@ const job: RunLogLine = {
   type: 'job',
   name: 'write',
   job: 'write',
-};
-const attempt: RunLogLine = {
+} as RunLogLine;
+const attempt = {
   ...job,
   seq: 3,
   span_id: 'attempt-a',
   parent_span_id: 'job-a',
   type: 'attempt',
   attempt: 1,
-};
-const end: RunLogLine = {
+} as RunLogLine;
+const end = {
   kind: 'end',
   t: '2026-10-14T10:00:10Z',
   seq: 4,
   trace_id: 'trace-a',
   span_id: 'attempt-a',
   status: 'error',
-};
+} as RunLogLine;
 
 describe('success cases', () => {
   it('applies appended attributes without changing how a Span ended', () => {
     // ARRANGE
     const log = createLogFold();
-    const attrs: RunLogLine = { ...end, kind: 'attrs', seq: 5, t: '2026-10-14T10:00:20Z', ticket: 174 };
+    const attrs = { ...end, kind: 'attrs', seq: 5, t: '2026-10-14T10:00:20Z', ticket: 174 } as RunLogLine;
     const expected = { status: 'error', end_t: end.t, duration_ms: 10000, ticket: 174 };
     // ACT
     log.append([run, job, attempt, end]);
@@ -53,8 +53,8 @@ describe('success cases', () => {
   it('keeps measured end attributes when a later end only supplies a status', () => {
     // ARRANGE
     const log = createLogFold();
-    const measured: RunLogLine = { ...end, source: 'measured', 'gen_ai.usage.input_tokens': 123 };
-    const terminal: RunLogLine = { ...end, seq: 9, t: '2026-10-14T10:00:20Z', status: 'ok' };
+    const measured = { ...end, source: 'measured', 'gen_ai.usage.input_tokens': 123 } as RunLogLine;
+    const terminal = { ...end, seq: 9, t: '2026-10-14T10:00:20Z', status: 'ok' } as RunLogLine;
     const expected = { status: 'ok', duration_ms: 20000, source: 'measured', 'gen_ai.usage.input_tokens': 123 };
     // ACT
     log.append([run, job, attempt, measured]);
@@ -67,8 +67,15 @@ describe('success cases', () => {
   it('pairs appended ends with starts and preserves retries and Scores', () => {
     // ARRANGE
     const log = createLogFold();
-    const retry: RunLogLine = { ...attempt, seq: 5, t: end.t, span_id: 'attempt-b', attempt: 2, retry_of: 'attempt-a' };
-    const score: RunLogLine = {
+    const retry = {
+      ...attempt,
+      seq: 5,
+      t: end.t,
+      span_id: 'attempt-b',
+      attempt: 2,
+      retry_of: 'attempt-a',
+    } as RunLogLine;
+    const score = {
       ...end,
       kind: 'score',
       seq: 6,
@@ -76,7 +83,7 @@ describe('success cases', () => {
       value: 'fail',
       source: 'reviewer',
       body: 'Needs a source.',
-    };
+    } as RunLogLine;
     const expected = [
       { status: 'error', attempt: 1, retry: undefined, duration: 10000 },
       { status: 'crashed', attempt: 2, retry: 'attempt-a', duration: null },
@@ -104,7 +111,7 @@ describe('failure cases', () => {
   it('ends liveness even when an explicit live set still names the finished trace', () => {
     // ARRANGE
     const log = createLogFold({ live: new Set(['trace-a']) });
-    const finish: RunLogLine = { ...end, kind: 'end-run', span_id: 'run-a', status: 'ok' };
+    const finish = { ...end, kind: 'end-run', span_id: 'run-a', status: 'ok' } as RunLogLine;
     const expected = ['ok', 'crashed', 'crashed'];
     // ACT
     log.append([run, job, attempt]);
@@ -117,8 +124,8 @@ describe('failure cases', () => {
   it('crashes only the open spans of the Run that ended', () => {
     // ARRANGE
     const log = createLogFold({ live: 'unfinished' });
-    const other: RunLogLine = { ...run, trace_id: 'trace-b', span_id: 'run-b', seq: 5 };
-    const finish: RunLogLine = { ...end, kind: 'end-run', span_id: 'run-a', seq: 6, status: 'ok' };
+    const other = { ...run, trace_id: 'trace-b', span_id: 'run-b', seq: 5 } as RunLogLine;
+    const finish = { ...end, kind: 'end-run', span_id: 'run-a', seq: 6, status: 'ok' } as RunLogLine;
     const expectedBefore = ['running', 'running', 'running', 'running'];
     const expectedAfter = ['ok', 'crashed', 'crashed', 'running'];
     // ACT
@@ -136,9 +143,9 @@ describe('edge cases', () => {
   it('orders measured facts by their own end timestamps across late arrivals', () => {
     // ARRANGE
     const log = createLogFold();
-    const latest: RunLogLine = { ...end, seq: 10, t: '2026-10-14T10:00:30Z', status: 'ok' };
-    const early: RunLogLine = { ...end, seq: 8, t: '2026-10-14T10:00:20Z', 'gen_ai.usage.output_tokens': 100 };
-    const middle: RunLogLine = { ...end, seq: 9, t: '2026-10-14T10:00:25Z', 'gen_ai.usage.output_tokens': 200 };
+    const latest = { ...end, seq: 10, t: '2026-10-14T10:00:30Z', status: 'ok' } as RunLogLine;
+    const early = { ...end, seq: 8, t: '2026-10-14T10:00:20Z', 'gen_ai.usage.output_tokens': 100 } as RunLogLine;
+    const middle = { ...end, seq: 9, t: '2026-10-14T10:00:25Z', 'gen_ai.usage.output_tokens': 200 } as RunLogLine;
     const expected = { status: 'ok', duration_ms: 30000, 'gen_ai.usage.output_tokens': 200 };
     // ACT
     log.append([run, job, attempt, latest]);
@@ -152,8 +159,8 @@ describe('edge cases', () => {
   it('takes summary absence from the latest end while retaining measured attributes', () => {
     // ARRANGE
     const log = createLogFold();
-    const first: RunLogLine = { ...end, summary: 'Review failed.', 'gen_ai.usage.output_tokens': 456 };
-    const latest: RunLogLine = { ...end, seq: 8, t: '2026-10-14T10:00:20Z', status: 'ok' };
+    const first = { ...end, summary: 'Review failed.', 'gen_ai.usage.output_tokens': 456 } as RunLogLine;
+    const latest = { ...end, seq: 8, t: '2026-10-14T10:00:20Z', status: 'ok' } as RunLogLine;
     const expected = { status: 'ok', summary: null, 'gen_ai.usage.output_tokens': 456 };
     // ACT
     log.append([run, job, attempt, first]);
@@ -166,7 +173,7 @@ describe('edge cases', () => {
   it('keeps the chronologically latest end across out-of-order appends and pairs late starts', () => {
     // ARRANGE
     const log = createLogFold();
-    const latest: RunLogLine = { ...end, t: '2026-10-14T10:00:20Z', seq: 8, status: 'ok' };
+    const latest = { ...end, t: '2026-10-14T10:00:20Z', seq: 8, status: 'ok' } as RunLogLine;
     const expected = { status: 'ok', duration_ms: 20000 };
     // ACT
     log.append([latest]);

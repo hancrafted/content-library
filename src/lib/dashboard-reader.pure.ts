@@ -1,4 +1,4 @@
-import { createLogFold, parseLog, record } from '../../skills/new-episode/scripts/run-log.pure';
+import { createLogFold, lineErrors, parseLog } from '../../skills/new-episode/scripts/run-log.pure';
 import type { RunLogLine } from '../../skills/new-episode/scripts/run-log.schema.pure';
 import type { DashboardEvent } from './dashboard-events.pure';
 import {
@@ -35,13 +35,8 @@ export interface EpisodeRead {
 const messageOf = (error: unknown): string => (error instanceof Error ? error.message : String(error));
 
 function lineError(line: RunLogLine): string | undefined {
-  const { seq, trace_id, span_id, ...fields } = line;
-  const isStart = fields.kind === 'start' || fields.kind === 'start-run';
-  const checked = record(
-    { ...fields, ...(!isStart ? { span_id } : {}) },
-    { t: line.t, seq, traceId: trace_id, spanId: span_id as string },
-  );
-  if (!checked.ok) return checked.errors.join('; ');
+  const errors = lineErrors(line);
+  if (errors.length > 0) return errors.join('; ');
   return Number.isFinite(Date.parse(line.t)) ? undefined : 'invalid timestamp.';
 }
 
