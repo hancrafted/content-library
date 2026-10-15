@@ -19,6 +19,11 @@ export interface VerifiedEntry {
   at: string;
 }
 
+/** An instant as the UTC datetime to the second that `generated.at` and `verified` entries carry. */
+export function utcSeconds(instant: Date): string {
+  return instant.toISOString().replace(/\.\d+Z$/, 'Z');
+}
+
 const FRONTMATTER = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/;
 
 function isMapping(node: unknown): node is Record<string, unknown> {
@@ -106,6 +111,49 @@ export function appendVerified(text: string, entry: VerifiedEntry): string {
   doc.set('verified', doc.createNode([...kept, entry]));
   const end = match[0].endsWith('\n') ? '\n' : '';
   return `---\n${doc.toString().trimEnd()}\n---${end}${text.slice(match[0].length)}`;
+}
+
+const META_BLOCK =
+  /(<script\b(?=[^>]*\bid=["']spec-meta["'])(?=[^>]*\btype=["']application\/json["'])[^>]*>)([\s\S]*?)(<\/script>)/;
+
+/** The JSON text of an HTML Spec's meta block, `<script type="application/json" id="spec-meta">`, or undefined when it has none. */
+export function metaBlockText(html: string): string | undefined {
+  return META_BLOCK.exec(html)?.[2];
+}
+
+/**
+ * The gate tier of an HTML Spec, read from its meta block as `gateTier` reads frontmatter: JSON is YAML, so the
+ * tiers of design-ADR 0005 apply unchanged. A page with no meta block is unverified.
+ */
+export function metaGateTier(html: string): Tier {
+  const json = metaBlockText(html);
+  return json === undefined ? 'unverified' : gateTier(`---\n${json.trim()}\n---\n`);
+}
+
+/**
+ * An HTML Spec with `{ by, at }` appended to its meta block's `verified` list, the frontmatter equivalent of
+ * design-ADR 0011: the same never-overwrite rule as appendVerified, the JSON rewritten at the block's indent and
+ * every other byte of the page as written. Throws when the page has no meta block, or one that is not a JSON object.
+ */
+export function appendMetaVerified(html: string, entry: VerifiedEntry): string {
+  const match = META_BLOCK.exec(html);
+  if (match === null)
+    throw new Error(
+      'the Spec has no meta block, a <script type="application/json" id="spec-meta">, to append a verified entry to',
+    );
+  const [, open, json, close] = match as unknown as [string, string, string, string];
+  let meta: unknown;
+  try {
+    meta = JSON.parse(json);
+  } catch {
+    meta = undefined;
+  }
+  if (!isMapping(meta)) throw new Error('the meta block is not a JSON object, so no verified entry can be appended');
+  const indent = /[ \t]*$/.exec(html.slice(0, match.index))?.[0] ?? '';
+  const value = { ...meta, verified: [...asEntries(meta.verified), entry] };
+  const body = JSON.stringify(value, null, 2).replaceAll('</', '<\\/').replaceAll('\n', `\n${indent}  `);
+  const block = `${open}\n${indent}  ${body}\n${indent}${close}`;
+  return html.slice(0, match.index) + block + html.slice(match.index + match[0].length);
 }
 
 const ACTOR = /^(?:human|process):[a-z0-9-]+$|^[a-z0-9-]+\/[A-Za-z0-9.-]+$/;

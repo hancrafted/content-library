@@ -5,7 +5,10 @@
  * is the caller's job, so every rule tests against an in-memory folder.
  */
 
+import { SPEC_FILE, specSlideAnchors } from './episode-spec-page.pure';
+import { checkSpec } from './episode-spec.pure';
 import { checkBrief } from './episode-staging-brief.pure';
+import { checkFeedback } from './episode-staging-feedback.pure';
 import { checkStagingOrder } from './episode-staging-order.pure';
 import { checkTexts } from './episode-staging-texts.pure';
 import { checkTitleSlide } from './episode-staging-title.pure';
@@ -15,7 +18,6 @@ import {
   blocksOf,
   bodyLines,
   h4s,
-  headingsOf,
   orderedList,
   slideAnchors,
   type Block,
@@ -139,44 +141,37 @@ function checkSpeakerNotes(blocks: readonly Block[]): Finding[] {
   });
 }
 
-const FEEDBACK_FILE = /^feedback\/[^/]+\/feedback\.md$/;
-const FEEDBACK_ITEM = /^- `([a-z0-9-]+--[a-z0-9-]+)` · (content|implementation|practice) — \S.*$/;
-
-function checkFeedbackFile(file: string, markdown: string, anchors: readonly string[]): Finding[] {
-  const practice = frontmatterField(markdown, 'via') === 'practice';
-  const h1 = headingsOf(bodyLines(markdown)).find(({ level }) => level === 1)?.line;
-  const messages = bodyLines(markdown).flatMap((line, index) => {
-    if (line.trim() === '' || index === h1) return [];
-    const item = FEEDBACK_ITEM.exec(line);
-    if (item === null) {
-      const tags = practice ? 'content|implementation|practice' : 'content|implementation';
-      return [`Feedback line not of the form "- \`<section>--<slide>\` · ${tags} — text": "${line}".`];
-    }
-    const [, anchor, tag] = item;
-    return [
-      ...unless(
-        tag !== 'practice' || practice,
-        `Feedback item "${line}" is tagged practice, which only a file with "via: practice" may use.`,
-      ),
-      ...unless(anchors.includes(anchor), `Feedback anchor "${anchor}" is no page slide in the Dossier.`),
-    ];
-  });
-  return messages.map((message): Finding => ({ kind: 'feedback', file, message }));
-}
-
-function checkFeedback(files: Readonly<Record<string, string>>, dossier: readonly Block[]): Finding[] {
-  const anchors = slideAnchors(dossier);
-  return Object.entries(files)
-    .filter(([file]) => FEEDBACK_FILE.test(file))
-    .flatMap(([file, markdown]) => checkFeedbackFile(file, markdown, anchors));
+/**
+ * Checks one staging folder's files against each other. `files` maps a path
+ * relative to the folder (`dossier.md`, `feedback/01/feedback.md`) to its text;
+ * `reviewAsset` is the shared review asset a Spec page must inline.
+ */
+export function checkStagingFolder(
+  files: Readonly<Record<string, string>>,
+  known: KnownVisuals,
+  reviewAsset: string,
+): Finding[] {
+  return [
+    ...checkStagingOrder(files),
+    ...checkTexts(files),
+    ...checkBrief(files),
+    ...checkDossier(files, known),
+    ...checkSpec(files, reviewAsset),
+    ...checkFeedbackRounds(files),
+  ];
 }
 
 /**
- * Checks one staging folder's files against each other. `files` maps a path
- * relative to the folder (`dossier.md`, `feedback/01/feedback.md`) to its text.
+ * The feedback rounds, keyed by the Dossier's page Slides while it exists and by the Spec's once its Gate deleted
+ * the Dossier; none before either exists.
  */
-export function checkStagingFolder(files: Readonly<Record<string, string>>, known: KnownVisuals): Finding[] {
-  return [...checkStagingOrder(files), ...checkTexts(files), ...checkBrief(files), ...checkDossier(files, known)];
+function checkFeedbackRounds(files: Readonly<Record<string, string>>): Finding[] {
+  const dossier = files['dossier.md'];
+  const spec = files[SPEC_FILE];
+  if (dossier !== undefined)
+    return checkFeedback(files, { anchors: slideAnchors(blocksOf(bodyLines(dossier))), source: 'Dossier' });
+  if (spec !== undefined) return checkFeedback(files, { anchors: specSlideAnchors(spec), source: 'Spec' });
+  return [];
 }
 
 /** The checks that read the Dossier; none until it exists. */
@@ -189,7 +184,6 @@ function checkDossier(files: Readonly<Record<string, string>>, known: KnownVisua
     ...checkTitleSlide(dossierBlocks),
     ...checkVisuals(dossierBlocks, known),
     ...checkSpeakerNotes(dossierBlocks),
-    ...checkFeedback(files, dossierBlocks),
   ];
 }
 

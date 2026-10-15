@@ -272,6 +272,23 @@ describe('outputApproved', () => {
     expect(gates).toEqual(expected);
   });
 
+  it("reads an HTML Spec by its meta block's trust tier, so write-spec's gate opens on Han's approval", () => {
+    // ARRANGE
+    const spec = (verified: string): string =>
+      `<html><head><script type="application/json" id="spec-meta">{"type":"spec","generated":{"by":"claude-code/opus-5.5","at":"2026-10-12T09:00:00Z"}${verified}}</script></head><body></body></html>`;
+    const approved = spec(',"verified":[{"by":"human:han","at":"2026-10-12T09:30:00Z"}]');
+    const checked = spec(',"verified":[{"by":"process:markdown-harness","at":"2026-10-12T09:10:00Z"}]');
+    const expected = [true, false, false];
+    // ACT
+    const gates = [
+      outputApproved('spec/spec.html', approved),
+      outputApproved('spec/spec.html', checked),
+      outputApproved('spec/spec.html', '<html><body></body></html>'),
+    ];
+    // ASSERT
+    expect(gates).toEqual(expected);
+  });
+
   it('reads pipeline.yml status as YAML: quoted, commented or trailing space', () => {
     // ARRANGE
     const texts = [

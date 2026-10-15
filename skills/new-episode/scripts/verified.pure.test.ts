@@ -22,7 +22,7 @@ describe('approveText', () => {
     // ARRANGE
     const text = file(list(HAN));
     // ACT
-    const result = approveText(text, 'process:markdown-harness', '2026-10-13T12:00:00Z');
+    const result = approveText('brief.md', text, { by: 'process:markdown-harness', at: '2026-10-13T12:00:00Z' });
     // ASSERT
     expect(frontmatterValue(result, 'verified')).toEqual([
       HAN,
@@ -34,9 +34,56 @@ describe('approveText', () => {
     // ARRANGE
     const text = file('');
     // ACT
-    const act = () => approveText(text, 'han', '2026-10-13T12:00:00Z');
+    const act = () => approveText('brief.md', text, { by: 'han', at: '2026-10-13T12:00:00Z' });
     // ASSERT
     expect(act).toThrow('not an actor');
+  });
+});
+
+function spec(verified?: { by: string; at: string }[]): string {
+  const meta = { type: 'spec', generated: { by: 'claude-code/opus-5.5', at: GENERATED }, verified };
+  return `<html>\n  <head>\n    <script type="application/json" id="spec-meta">${JSON.stringify(meta)}</script>\n  </head>\n</html>\n`;
+}
+
+function metaOf(html: string): unknown {
+  const json = /<script type="application\/json" id="spec-meta">([\s\S]*?)<\/script>/.exec(html)?.[1];
+  return json === undefined ? undefined : JSON.parse(json);
+}
+
+describe('approveText on an HTML Spec', () => {
+  it("appends Han's entry at the given time to the meta block's verified list", () => {
+    // ARRANGE
+    const text = spec();
+    const now = '2026-10-13T12:00:00Z';
+    const expected = [{ by: 'human:han', at: now }];
+    // ACT
+    const meta = metaOf(approveText('spec/spec.html', text, { by: 'human:han', at: now }));
+    // ASSERT
+    expect(meta).toMatchObject({ verified: expected });
+  });
+
+  it('keeps the earlier entries and the rest of the page', () => {
+    // ARRANGE
+    const machine = { by: 'process:markdown-harness', at: '2026-10-12T09:05:00Z' };
+    const text = spec([machine, HAN]);
+    const now = { by: 'human:han', at: '2026-10-13T12:00:00Z' };
+    const expected = { verified: [machine, HAN, now], generated: { by: 'claude-code/opus-5.5', at: GENERATED } };
+    const tail = '</head>\n</html>\n';
+    // ACT
+    const result = approveText('spec/spec.html', text, now);
+    // ASSERT
+    expect(metaOf(result)).toMatchObject(expected);
+    expect(result.slice(-tail.length)).toBe(tail);
+  });
+
+  it('refuses a Spec without a meta block, naming the block it needs', () => {
+    // ARRANGE
+    const text = '<html><head></head></html>\n';
+    const expected = 'no meta block';
+    // ACT
+    const act = () => approveText('spec/spec.html', text, { by: 'human:han', at: '2026-10-13T12:00:00Z' });
+    // ASSERT
+    expect(act).toThrow(expected);
   });
 });
 

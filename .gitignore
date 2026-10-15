@@ -30,3 +30,6 @@ docs/claude-project-context/
 
 # inspect-page: the cached chrome-headless-shell, its endpoint and profile.
 .cache/
+
+# The Spec's compiled tokens, rebuilt by `npm run episode:spec`.
+**/spec/design.css

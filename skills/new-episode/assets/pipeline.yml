@@ -218,7 +218,8 @@ jobs:
 
   # Rewrites the Voice script lines of dossier.md and nothing else; the staging
   # test checks that against write-dossier's commit, so no schema key says it.
-  # Han reads and edits the whole Dossier at this gate.
+  # No gate: the designers read the spoken argument, and Han reviews the Voice
+  # script with the Spec and reworks it against the built Slides.
   - id: write-voice-script
     stage: dossier
     needs: [write-dossier]
@@ -226,7 +227,6 @@ jobs:
     outputs: [docs/episodes/<slug>/dossier.md]
     checks: [mh, vitest]
     retries: 2
-    gate: human
     agents:
       - type: implementor
         skills: []
@@ -248,48 +248,28 @@ jobs:
         rubric: references/write-voice-script.md#rubric
         model: opus
 
-  # The build spec, one section per Section, pointing at the Dossier instead of
-  # copying it.
+  # The Spec: one static HTML page with two or three Options per Slide beside
+  # its words (design-ADR-0011). The implementor runs in the orchestrator's
+  # session, because it spawns one designer per Section and writes the page
+  # alone. Han picks an Option per Slide through `npm run episode:spec`; every
+  # review round is a new Attempt, and he approves the Spec at the gate.
   - id: write-spec
     stage: specification
     needs: [write-voice-script]
-    before: [mh-query]
-    outputs: [docs/episodes/<slug>/spec/spec.md]
-    checks: [mh, vitest]
-    retries: 2
-    agents:
-      - type: implementor
-        skills: [writing-for-agents]
-        agent: archgate:developer
-        references: [references/write-spec.md, docs/episodes/<slug>/brief.md, docs/episodes/<slug>/dossier.md]
-        model: inherit
-      - type: reviewer
-        skills: [writing-for-agents]
-        agent: archgate:developer
-        references: [references/write-spec.md, docs/episodes/<slug>/dossier.md]
-        rubric: references/write-spec.md#rubric
-        model: opus
-
-  # The Episode's visual language and a design answer for every Slide. The
-  # implementor runs in the orchestrator's session, because it spawns the
-  # designers (ui-ux-pro-max:slides). Han approves the design spec at the gate.
-  - id: write-design-spec
-    stage: specification
-    needs: [write-spec]
-    before: [mh-query]
-    outputs: [docs/episodes/<slug>/spec/design-spec.md]
-    checks: [mh, vitest]
+    outputs: [docs/episodes/<slug>/spec/spec.html]
+    checks: [vitest]
     retries: 2
     gate: human
     agents:
       - type: implementor
         skills: [ui-ux-pro-max:slides]
         references:
-          - references/write-design-spec.md
+          - references/write-spec.md
+          - assets/spec-review.html
+          - assets/sample-episode/spec/spec.html
           - GLOSSARY.md
           - docs/episodes/<slug>/brief.md
           - docs/episodes/<slug>/dossier.md
-          - docs/episodes/<slug>/spec/spec.md
           - docs/design/slide-library.md
           - docs/design/design-guide.md
           - docs/design/design-system.md
@@ -299,22 +279,23 @@ jobs:
       - type: reviewer
         skills: [ui-ux-pro-max:ui-ux-pro-max]
         references:
-          - references/write-design-spec.md
+          - references/write-spec.md
           - GLOSSARY.md
           - docs/episodes/<slug>/brief.md
           - docs/episodes/<slug>/dossier.md
-          - docs/episodes/<slug>/spec/spec.md
           - docs/design/slide-library.md
           - docs/design/design-guide.md
           - docs/episodes/<slug>/reference/*/design-reference.md
-        rubric: references/write-design-spec.md#rubric
+        rubric: references/write-spec.md#rubric
         model: opus
 
   # Writes the Episode's page under src/, outside the staging folder: its
   # wiring, metadata, Title slide and one placement marker per Section.
+  # From here on every job reads the Spec alone: the Spec Gate deleted
+  # dossier.md, and the schema check refuses a later job that reads it.
   - id: implement-episode-init
     stage: build
-    needs: [write-design-spec]
+    needs: [write-spec]
     outputs: []
     checks: [verify, build]
     retries: 2
@@ -326,16 +307,14 @@ jobs:
           - references/implement-episode-init.md
           - references/skill-overrides.md
           - docs/episodes/<slug>/brief.md
-          - docs/episodes/<slug>/dossier.md
-          - docs/episodes/<slug>/spec/spec.md
-          - docs/episodes/<slug>/spec/design-spec.md
+          - docs/episodes/<slug>/spec/spec.html
         model: opus
       - type: reviewer
         skills: [code-review, vercel-react-best-practices]
         references:
           - references/implement-episode-init.md
           - references/skill-overrides.md
-          - docs/episodes/<slug>/spec/spec.md
+          - docs/episodes/<slug>/spec/spec.html
         rubric: references/implement-episode-init.md#rubric
         model: opus
         session: orchestrator
@@ -357,9 +336,7 @@ jobs:
         references:
           - references/implement-section.md
           - references/skill-overrides.md
-          - docs/episodes/<slug>/dossier.md
-          - docs/episodes/<slug>/spec/spec.md
-          - docs/episodes/<slug>/spec/design-spec.md
+          - docs/episodes/<slug>/spec/spec.html
           - docs/episodes/<slug>/reference/*/design-reference.md
         model: opus
       # code-review spawns its own subagents, so the reviewer runs in the
@@ -375,9 +352,7 @@ jobs:
         references:
           - references/implement-section.md
           - references/skill-overrides.md
-          - docs/episodes/<slug>/dossier.md
-          - docs/episodes/<slug>/spec/spec.md
-          - docs/episodes/<slug>/spec/design-spec.md
+          - docs/episodes/<slug>/spec/spec.html
           - docs/episodes/<slug>/reference/*/design-reference.md
         rubric: references/implement-section.md#rubric
         model: opus
