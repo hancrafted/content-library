@@ -3,7 +3,8 @@
  * document and the typed Pipeline beside it, which the schema check (episode-pipeline.pure.ts), the dashboard
  * projection, the research-jobs check and the skill's status script all share. It imports nothing but `yaml`, so
  * the status script runs it under bare node. Whether the pipeline is well formed is its readers' question: this
- * reads what is there and skips what is not.
+ * reads what is there and skips what is not, pairs each Job with its mapping, and answers the structural rules of the
+ * `needs`/`wants` graph (`jobGraph`) the schema check and the dashboard both apply.
  */
 
 import { parse } from 'yaml';
@@ -99,11 +100,19 @@ function jobOf(job: Record<string, unknown>): Job {
   };
 }
 
+/** A Job beside the mapping it was read from, so a check of the raw mapping never pairs it with another Job by index. */
+export interface JobSource {
+  job: Job;
+  mapping: Record<string, unknown>;
+}
+
 /**
- * The text parsed once: the raw document a schema check reads, and the typed Pipeline beside it, null when the
- * document is not a mapping with a job list. Text that is not YAML answers the parser's complaint instead.
+ * The text parsed once: the raw document a schema check reads, the typed Pipeline beside it, null when the document
+ * is not a mapping with a job list, and each of its Jobs beside its mapping. Text that is not YAML answers the
+ * parser's complaint instead.
  */
-export type PipelineText = { error: string } | { document: unknown; pipeline: Pipeline | null };
+export type PipelineText =
+  { error: string } | { document: unknown; pipeline: Pipeline | null; sources: readonly JobSource[] };
 
 export function parsePipeline(yaml: string): PipelineText {
   let document: unknown;
@@ -112,14 +121,16 @@ export function parsePipeline(yaml: string): PipelineText {
   } catch (error) {
     return { error: `The pipeline is not valid YAML: ${(error as Error).message}` };
   }
-  if (!isMapping(document) || !Array.isArray(document.jobs)) return { document, pipeline: null };
+  if (!isMapping(document) || !Array.isArray(document.jobs)) return { document, pipeline: null, sources: [] };
+  const sources = document.jobs.filter(isMapping).map((mapping) => ({ job: jobOf(mapping), mapping }));
   return {
     document,
     pipeline: {
       status: typeof document.status === 'string' ? document.status : null,
       stages: strings(document.stages),
-      jobs: document.jobs.filter(isMapping).map(jobOf),
+      jobs: sources.map(({ job }) => job),
     },
+    sources,
   };
 }
 
@@ -127,4 +138,73 @@ export function parsePipeline(yaml: string): PipelineText {
 export function readPipeline(yaml: string): Pipeline | null {
   const parsed = parsePipeline(yaml);
   return 'pipeline' in parsed ? parsed.pipeline : null;
+}
+
+/** Every job `id` waits for directly: the ones it needs, then the ones it wants. */
+export function waitsFor(id: string, byId: ReadonlyMap<string, Job>): string[] {
+  const job = byId.get(id);
+  return job === undefined ? [] : [...job.needs, ...job.wants];
+}
+
+/** The first cycle in the needs graph, as the ids along it, or null. */
+export function findCycle(jobs: readonly Job[], byId: ReadonlyMap<string, Job>): string[] | null {
+  const done = new Set<string>();
+  const walk = (id: string, path: readonly string[]): string[] | null => {
+    if (path.includes(id)) return [...path.slice(path.indexOf(id)), id];
+    if (done.has(id)) return null;
+    const needs = waitsFor(id, byId);
+    const cycle = needs.reduce<string[] | null>((found, need) => found ?? walk(need, [...path, id]), null);
+    done.add(id);
+    return cycle;
+  };
+  return jobs.reduce<string[] | null>((found, { id }) => found ?? walk(id, []), null);
+}
+
+/** A `needs` or `wants` entry of `job` naming no Job of the pipeline. */
+export interface MissingEdge {
+  job: string;
+  edge: 'needs' | 'wants';
+  other: string;
+}
+
+/** The entries of one Job's `needs`, then its `wants`, that name no Job in `byId`. */
+export function missingEdges(job: Job, byId: ReadonlyMap<string, Job>): MissingEdge[] {
+  return (['needs', 'wants'] as const).flatMap((edge) =>
+    job[edge].filter((other) => !byId.has(other)).map((other) => ({ job: job.id, edge, other })),
+  );
+}
+
+/** Each id more than one Job carries, named once, in the order it first repeats. */
+function duplicateIds(jobs: readonly Job[]): string[] {
+  const seen = new Set<string>();
+  const repeated = new Set<string>();
+  for (const { id } of jobs) (seen.has(id) ? repeated : seen).add(id);
+  return [...repeated];
+}
+
+/** Each Job after the Jobs it needs, depth first in listed order; the graph must be whole and acyclic. */
+function topological(jobs: readonly Job[], byId: ReadonlyMap<string, Job>): Job[] {
+  const ordered: Job[] = [];
+  const visited = new Set<string>();
+  const visit = (job: Job) => {
+    if (visited.has(job.id)) return;
+    visited.add(job.id);
+    job.needs.forEach((id) => visit(byId.get(id)!));
+    ordered.push(job);
+  };
+  jobs.forEach(visit);
+  return ordered;
+}
+
+/**
+ * The structural rules of the `needs`/`wants` graph every reader of a pipeline shares: ids repeated, edges naming no
+ * Job, the first cycle, and the Jobs ordered so each follows the Jobs it needs, null unless the graph is sound.
+ */
+export function jobGraph(jobs: readonly Job[]) {
+  const byId: ReadonlyMap<string, Job> = new Map(jobs.map((job) => [job.id, job]));
+  const duplicates = duplicateIds(jobs);
+  const missing = jobs.flatMap((job) => missingEdges(job, byId));
+  const cycle = findCycle(jobs, byId);
+  const sound = duplicates.length === 0 && missing.length === 0 && cycle === null;
+  return { byId, duplicates, missing, cycle, ordered: sound ? topological(jobs, byId) : null };
 }
