@@ -254,3 +254,36 @@ Changes from the template, each with its reason:
   - 4: `pipeline-tools-in-practice`, `what-is-a-sales-pipeline`, `pipeline-by-the-numbers` and "Four steps".
 - The cashflow board returns three times as a callback.
 - The 27:1 over 9.5 months is spoken as the worked example. A line of calibrated candour says it is not a law. No ramp-up month count is invented, because no source gives one.
+
+## write-spec · 2026-10-15T13:15:14Z
+
+### Inputs
+
+- `skills/new-episode/references/write-spec.md`, `brief.md` (Style: Board), and `dossier.md` with its Voice script.
+- `docs/design/design-guide.md` (the Board named style), `slide-library.md`, `design-system.md`, and the ADRs FE-002, FE-007, FE-009 and FE-011.
+- `reference/source-deck/design-reference.md` and its page images, and the write-dossier entry's `No library match:` lines.
+- One designer per Section, five in parallel, each given the Visual language and its Section's Slides.
+
+### Output
+
+- `spec/spec.html`, `status: draft`, with a `process:markdown-harness` `verified` entry. Its Style is the Brief's line. Its Visual language is board lanes under dark pills, content on sticky notes, cash, cost and revenue tints, `primary` for the one thing to look at, and calm one-shot motion. Its Episode page section, the five Sections and the ten Slides carry the Dossier's words word for word.
+- 29 Options. Recommended: 1a, 2a, 3a, 4a, 5a, 6a, 7b, 8b, 9b and 10a. Slide 6 has two Options, every other Slide three.
+- One shared `CashflowBoard` part in `src/components/slide-shared/cashflow-board/`, whose single interface the Visual language fixes, for Slides 1, 6 and 10.
+- Committed with `Gate: draft spec-1` for Han's first review round.
+
+### Checks
+
+- `vitest` staging test: fail on attempt 1, pass on attempts 2 and 3.
+- Reviewer: fail on attempt 2, pass on attempt 3 on all 9 rubric lines.
+
+### Notes
+
+- Attempt 1 failed the Spec contract with 33 arbitrary Tailwind values (`grid-cols-[...]`, `w-[16%]`, `border-y-[10px]` and others) in the mocks of Slides 2, 3, 4, 5, 6, 8 and 10. Each Section's designer rewrote them with standard utilities.
+- Attempt 2 failed two lines:
+  - "Every Option follows the Spec's Visual language, inside the Brief's Style." The 10a–c overlay pushed the board aside, the notes were solid colours instead of tints, and 3b coloured a cash note as revenue.
+  - "Every Option's figcaption gives a one-line reason and its build cost, and its build notes name parts, tokens, props and i18n keys." The Options for Slides 7–9 gave no props, and `CashflowBoard` had three interfaces and two paths. The orchestrator fixed one interface in the Visual language, and the designers aligned to it.
+- No Spine change: the Dossier kept the Brief's spine.
+- Every recommended Option is a Scene or a Master slide copy. `basic-page`, `three-column` and `grid-1x3` are overruled where their slots cannot hold a board, and each Option's build notes give the reason.
+- Needs human: on the Spec page each mock renders at about 326px wide in a 16:9 box that clips overflow, so the board mocks show little more than their titles. The reviewer judged them from a desktop-width copy.
+- Needs human: the three Section jobs that draw `CashflowBoard` (Sections 1, 3 and 5) run in parallel, so the part's first author is whichever merges first.
+- Needs human: `stages-of-sale` note 2 cites only EU Directive 2011/7/EU for delays the Directive does not cover. This is carried over from write-dossier.
