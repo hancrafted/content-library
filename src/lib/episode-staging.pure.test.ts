@@ -107,6 +107,22 @@ describe('success cases', () => {
     expect(findings).toEqual([]);
   });
 
+  it('finds nothing in a Spec review whose items name the picks of each Slide, and the Visual language note', () => {
+    // ARRANGE
+    const files = folder({
+      [FEEDBACK_PATH]: feedback('spec', [
+        '- `why--spent` · design — picked: 1a',
+        '- `why--spent` · design — picked: 1a, 1b — Combine them.',
+        '- `why--spent` · design — picked: none — Try a heat strip.',
+        '- `visual-language` · design — More accent.',
+      ]),
+    });
+    // ACT
+    const findings = checkStagingFolder(files, KNOWN_VISUALS, REVIEW_ASSET);
+    // ASSERT
+    expect(findings).toEqual([]);
+  });
+
   it('finds nothing when the llm-wiki index lists each research file once with its description', () => {
     // ARRANGE
     const index = ['# Research', '', RECALL_ENTRY, ''].join('\n');
@@ -425,6 +441,39 @@ describe('failure cases', () => {
     expect(findings[0].message).toContain(expectedTag);
   });
 
+  it('reports a design tag in feedback that did not come from a Spec review', () => {
+    // ARRANGE
+    const files = folder({ [FEEDBACK_PATH]: feedback('app', ['- `why--spent` · design — picked: 1a']) });
+    const expectedKinds = ['feedback'];
+    const expectedTag = 'design';
+    // ACT
+    const findings = checkStagingFolder(files, KNOWN_VISUALS, REVIEW_ASSET);
+    // ASSERT
+    expect(kinds(findings)).toEqual(expectedKinds);
+    expect(findings[0].message).toContain(expectedTag);
+  });
+
+  it('reports Spec review items without picks, with none and no note, or tagged other than design', () => {
+    // ARRANGE
+    const files = folder({
+      [FEEDBACK_PATH]: feedback('spec', [
+        '- `why--spent` · design — Thinner bar.',
+        '- `why--spent` · design — picked: none',
+        '- `why--spent` · content — picked: 1a',
+      ]),
+    });
+    const expectedForm = '`<section>--<slide>` · design — picked: <option ids>|none — note';
+    // ACT
+    const findings = checkStagingFolder(files, KNOWN_VISUALS, REVIEW_ASSET);
+    // ASSERT
+    expect(kinds(findings)).toEqual(['feedback', 'feedback', 'feedback']);
+    expect(findings.map(({ message }) => message)).toEqual([
+      expect.stringContaining(expectedForm),
+      expect.stringContaining(expectedForm),
+      expect.stringContaining(expectedForm),
+    ]);
+  });
+
   it('names a research file whose description differs from its index entry', () => {
     // ARRANGE
     const index = RECALL_ENTRY;
@@ -538,6 +587,19 @@ describe('edge cases', () => {
     const findings = checkStagingFolder(files, KNOWN_VISUALS, REVIEW_ASSET);
     // ASSERT
     expect(findings).toEqual([]);
+  });
+
+  it('takes a visual-language item only in a Spec review, where it carries no picks', () => {
+    // ARRANGE
+    const files = folder({
+      [FEEDBACK_PATH]: feedback('spec', ['- `visual-language` · design — picked: 1a — More accent.']),
+      'feedback/02/feedback.md': feedback('app', ['- `visual-language` · content — More accent.']),
+    });
+    const expectedFiles = [FEEDBACK_PATH, 'feedback/02/feedback.md'];
+    // ACT
+    const findings = checkStagingFolder(files, KNOWN_VISUALS, REVIEW_ASSET).filter(({ kind }) => kind === 'feedback');
+    // ASSERT
+    expect(findings.map(({ file }) => file)).toEqual(expectedFiles);
   });
 
   it('checks the Spec page of a folder against the Spec contract', () => {

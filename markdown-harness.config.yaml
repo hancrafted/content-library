@@ -222,6 +222,10 @@ frontmatter:
                 intent: "When via is voice: distilled from a Claude Desktop voice session's handoff, keeping each change without the conversation around it. Fail if an item keeps that conversation.",
               }
             - { value: practice, intent: 'When via is practice: changes Han found while rehearsing the recording.' }
+            - {
+                value: spec,
+                intent: 'When via is spec: saved from the served Spec by `npm run episode:spec`, one item per Slide naming its picks (`picked: 3b`, `picked: 4a, 4c` or `picked: none`) and the note, then the Visual language note.',
+              }
 
     - ruleId: episode-design-reference
       fileNames: [design-reference.md]
@@ -639,7 +643,7 @@ body-structure:
             pattern: '^Feedback round \d+$',
             intent: "Names the round, `Feedback round <n>`, the number the file's `round` holds.",
           }
-      intent: 'One list of items, each a single change keyed to its Slide and tagged with where it lands, so it routes to the Dossier, the implementation, or the recording. Fail if an item holds more than one change, its tag sends it to the wrong place, or it cannot be acted on without asking Han.'
+      intent: 'One list of items, each a single change keyed to its Slide and tagged with where it lands, so it routes to the Dossier, the implementation, or the recording; a Spec review tags each item `design` and names its picks, so it routes to the Spec. Fail if an item holds more than one change, its tag sends it to the wrong place, or it cannot be acted on without asking Han.'
       undefinedHeadings: forbid
     - ruleId: episode-design-reference-body
       fileNames: [design-reference.md]
