@@ -104,10 +104,7 @@ function ReplaySlider({ replay, range, at, copy }: SliderProps) {
 export function TimeTravel({ replay, copy }: { replay: ReplayControls; copy: DashboardCopy }) {
   const help = useId();
   return (
-    <section
-      aria-label={copy.timeTravel.title}
-      className="space-y-3 rounded-2xl border border-border bg-card p-4 sm:p-6"
-    >
+    <section aria-label={copy.timeTravel.title} className="space-y-3">
       <label className="flex min-h-11 w-fit cursor-pointer items-center gap-3 text-body font-medium">
         <input
           type="checkbox"
@@ -119,7 +116,7 @@ export function TimeTravel({ replay, copy }: { replay: ReplayControls; copy: Das
         />
         {copy.timeTravel.live}
       </label>
-      <p id={help} className="text-caption text-muted-foreground">
+      <p id={help} className="sr-only">
         {copy.timeTravel.liveHelp}
       </p>
       {replay.range !== null && replay.at !== null ? (

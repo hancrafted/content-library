@@ -39,14 +39,11 @@ function useGraphControls(view: DashboardView) {
   const graph = projectStages(view.jobs, view.stages);
   const initial = graph.stages.find((stage) => stage.state === 'gate' || stage.state === 'running');
   const [selected, setSelected] = useState<string | null>(() => initial?.id ?? graph.stages[0]?.id ?? null);
-  const [paused, setPaused] = useState(false);
   const [showJobs, setShowJobs] = useState(false);
   const [log, setLog] = useState<{ title: string; scope: EventScope } | null>(null);
   return {
     graph,
     selected,
-    paused,
-    setPaused,
     showJobs,
     setShowJobs,
     log,
@@ -116,9 +113,6 @@ function GraphToolbar({ controls, copy }: Pick<OverviewProps, 'controls' | 'copy
       <ProgressSummary graph={controls.graph} copy={copy} />
       <div className="flex flex-wrap items-center gap-2">
         <JobsSwitch controls={controls} copy={copy} />
-        <Button variant="ghost" aria-pressed={controls.paused} onClick={() => controls.setPaused(!controls.paused)}>
-          {controls.paused ? copy.graph.resumeMotion : copy.graph.pauseMotion}
-        </Button>
         <Button variant="outline" onClick={() => controls.openLog(copy.graph.allLogs, {})}>
           {copy.graph.allLogs}
         </Button>
@@ -146,13 +140,6 @@ function GraphOverview({ controls, stale, copy }: OverviewProps) {
         onSelectJob={showJobs ? selectJob : undefined}
         copy={copy}
       />
-      <p className="text-caption text-muted-foreground">{copy.graph.inspect}</p>
-      <details className="text-caption text-muted-foreground">
-        <summary className="cursor-pointer py-1 focus-visible:outline-2 focus-visible:outline-ring">
-          {copy.graph.legend}
-        </summary>
-        <p className="pt-2">{copy.graph.legendText}</p>
-      </details>
     </div>
   );
 }
@@ -194,7 +181,7 @@ export function DashboardGraph({ view, events, stale, moment, outputs, copy }: G
     <DashboardMoment value={moment}>
       <section
         className={`${styles.graph} space-y-6`}
-        data-motion={controls.paused || stale || moment.replaying ? 'paused' : 'running'}
+        data-motion={stale || moment.replaying ? 'paused' : 'running'}
         aria-label={copy.graph.title}
       >
         <GraphOverview controls={controls} stale={stale} copy={copy} />

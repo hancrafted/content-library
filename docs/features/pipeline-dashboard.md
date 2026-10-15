@@ -29,6 +29,10 @@ reveal them; no external transcript is opened and nothing is uploaded.
 
 ## Graph and disclosure
 
+The operations header is one line: Dashboard, the selected folder and Choose
+folder. Marketing navigation is hidden on this page. Motion follows
+`prefers-reduced-motion` automatically; there is no manual pause control.
+
 The overview groups Jobs into stages without changing the pipeline. A pipeline
 with a top-level `stages:` list sets the stages and their order; each Job sits in
 the stage its `stage:` names. A listed stage without Jobs yet (Research or Build
@@ -65,7 +69,7 @@ state colours and icons as the nodes, its running-session count, the running
 pulse and an attention marker. Clicking a Job selects its stage, opens that Job's
 evidence card below and moves focus to it. The switch is transient page memory
 (FE-001): a reload returns to the picker anyway. The unfold animation respects
-reduced motion and the animation pause.
+reduced motion.
 
 Selecting a node reveals dependency levels and parallel Job lanes. Expanding a
 Job reveals observed ticket/session lanes and the existing evidence cards.
@@ -79,8 +83,7 @@ successful finish, a duration, or alter the shared fold's raw history.
 
 The initial active stage opens automatically. Later polls do not move selection,
 collapse evidence, or steal focus. Running nodes pulse, completed connectors are
-green, and icons/text distinguish attention and failure. Animation can be paused
-without stopping polling and respects reduced motion; source errors pause it.
+green, and icons/text distinguish attention and failure. Animation respects reduced motion; replay and source errors pause it.
 
 **View events** opens a large native modal, scoped to a stage, Job, or ticket.
 **All Run events** includes malformed records with their source line numbers.

@@ -283,3 +283,6 @@
     transition: none;
   }
 }
+:global(body:has([data-dashboard]) [data-testid='site-header']) {
+  display: none;
+}
