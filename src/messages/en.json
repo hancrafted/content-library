@@ -294,6 +294,7 @@
       "live": "Live",
       "liveHelp": "On: follows the Run as events arrive. Off: replay the Run up to a moment you choose.",
       "slider": "Replay up to",
+      "keyboard": "Drag or click the progress bar to replay. Arrow keys move one minute; Page Up and Down ten. Home goes to the start; End resumes Live.",
       "position": "+{minutes} min · {time}",
       "replaying": "Replaying from the events read so far. New events are still read; turn Live on to follow them. Outputs open as they are on disk now, not as they were then."
     },

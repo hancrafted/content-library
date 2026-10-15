@@ -97,13 +97,23 @@ queued close notification only dismisses a dialog that is still closed.
 
 ## Time travel
 
-A **Live** checkbox above the graph is on by default: the view follows each
-poll. Off, a slider replays the current Run, the one started latest by time,
-from its start to now: its end once the fold has closed it, else the later of
-its last event and the last read. Its readout gives minutes since Run start and
-the cutoff's local time, also as the slider's `aria-valuetext`. Arrow keys move
-one minute, Page Up and Page Down ten; tick marks sit at each stage's earliest
-Job start.
+The progress bar **is** the scrubber, aligned with the first and last stage
+centres. **Live**, beside **Show Jobs**, follows the latest read at the right
+edge. Dragging or clicking left unchecks Live; reaching the far right or pressing
+End rechecks it. Unchecking Live freezes the latest moment while polling
+continues. Arrow keys move one minute, Page Up/Down ten; Home selects Run start.
+The accessible readout and drag bubble give minutes since start and local time.
+Start time is below the left end; total observed duration is below the right.
+
+`scrubTimeline()`, `scrubPosition()` and `scrubTime()` map time to structure:
+each stage gap has equal width, each Job an equal share within that gap.
+Parallel Jobs contribute their individual elapsed fractions together; a long
+Job gets no extra width. Knots come from observed Job starts/ends and the Run
+bounds, never estimated durations. Open Jobs use the latest read as their
+observed endpoint. Idle plateaus select the latest observation at that position;
+the first point remains Run start. The last stage shares the terminal point
+(there is no gap after PR); minute keys can still inspect it. The rightmost
+point always means the latest event/read, even with unstarted stages.
 
 Replay logs nothing new and never reads the file again. `replayDashboard()`
 feeds the retained events stamped no later than the cutoff through the shared
@@ -234,6 +244,8 @@ and every emitted alternate must resolve and link back.
   and its stage tick marks.
 - `spanElapsed()` and `agentElapsed()`: a span's duration, or its time so far
   at the moment shown.
+- `scrubTimeline()`, `scrubPosition()` and `scrubTime()`: equal structural
+  shares, concurrent Jobs, the observed time inverse and terminal bounds.
 - `selectEvents()`: scoped, chronological source events, including ends and
   Scores associated through their start Span's ancestry.
 

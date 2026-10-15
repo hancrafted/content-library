@@ -1,6 +1,7 @@
 import type { DashboardEvent } from '@/lib/dashboard-events.pure';
 import type { EpisodeRead } from '@/lib/dashboard-reader.pure';
 import { eventsAt, replayBounds, replayDashboard, stageMarks } from '@/lib/dashboard-replay.pure';
+import { scrubTimeline } from '@/lib/dashboard-scrub.pure';
 import { projectStages } from '@/lib/dashboard-stages.pure';
 import { useDeferredValue, useMemo, useState } from 'react';
 import type { Polled } from './use-episode-dashboard';
@@ -14,6 +15,7 @@ export interface ReplayControls {
   at: number | null;
   range: { start: number; end: number } | null;
   marks: ReturnType<typeof stageMarks>;
+  timeline: ReturnType<typeof scrubTimeline>;
 }
 
 /** The slider's range: the current Run's start to its end, or, while it has not ended, the later of its last event and the last read. */
@@ -48,18 +50,36 @@ const clamp = (value: number, range: { start: number; end: number }) =>
  * Live follows each poll; off, the view and the event log replay the retained events up to a chosen moment while
  * polling continues. `now` is the moment shown: the cutoff, or the last read while live.
  */
+function useScrubTimeline(read: EpisodeRead, range: ReplayControls['range']) {
+  return useMemo(() => {
+    if (range === null) return [];
+    const stages = read.view ? projectStages(read.view.jobs, read.view.stages).stages : [];
+    return scrubTimeline(
+      stages.map((stage) =>
+        stage.jobs.map((job) => ({
+          start: job.span ? Date.parse(job.span.start_t) : null,
+          end: job.span?.end_t ? Date.parse(job.span.end_t) : null,
+        })),
+      ),
+      range,
+    );
+  }, [read.view, range?.start, range?.end]);
+}
+
 export function useDashboardReplay(polled: Polled) {
   const [cutoff, setCutoff] = useState<number | null>(null);
   const { range, marks } = useReplayRange(polled);
+  const timeline = useScrubTimeline(polled.read, range);
   const at = cutoff === null || range === null ? null : clamp(cutoff, range);
   const replayed = useReplayed(polled.read, at);
   const controls: ReplayControls = {
     live: at === null,
     setLive: (live) => setCutoff(live || range === null ? null : range.end),
-    seek: setCutoff,
+    seek: (moment) => setCutoff(range === null || moment >= range.end ? null : clamp(moment, range)),
     at,
     range,
     marks,
+    timeline,
   };
   const events: readonly DashboardEvent[] = replayed ? replayed.events : polled.read.events;
   return {

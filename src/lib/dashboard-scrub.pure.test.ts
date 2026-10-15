@@ -1,0 +1,84 @@
+import { describe, expect, it } from 'vitest';
+import { scrubPosition, scrubTime, scrubTimeline } from './dashboard-scrub.pure';
+
+describe('success cases', () => {
+  it('gives each Job equal space within its stage gap, not equal time', () => {
+    // ARRANGE
+    const stages = [
+      [
+        { start: 0, end: 10 },
+        { start: 10, end: 30 },
+      ],
+      [{ start: 30, end: 50 }],
+      [{ start: 50, end: 60 }],
+    ];
+    const expectedPosition = 0.375;
+    const expectedTime = 20;
+    // ACT
+    const timeline = scrubTimeline(stages, { start: 0, end: 60 });
+    const position = scrubPosition(timeline, 20);
+    const time = scrubTime(timeline, 0.375);
+    // ASSERT
+    expect(position).toBe(expectedPosition);
+    expect(time).toBe(expectedTime);
+  });
+
+  it('moves parallel branches together without assigning the longest Job extra space', () => {
+    // ARRANGE
+    const stages = [
+      [
+        { start: 0, end: 10 },
+        { start: 0, end: 30 },
+      ],
+      [],
+      [],
+    ];
+    const expectedPosition = 1 / 3;
+    const expectedTime = 10;
+    // ACT
+    const timeline = scrubTimeline(stages, { start: 0, end: 60 });
+    const position = scrubPosition(timeline, 10);
+    const time = scrubTime(timeline, expectedPosition);
+    // ASSERT
+    expect(position).toBeCloseTo(expectedPosition);
+    expect(time).toBeCloseTo(expectedTime);
+  });
+});
+
+describe('failure cases', () => {
+  it('rejects an inverted replay range rather than presenting backwards time', () => {
+    // ARRANGE
+    const range = { start: 60, end: 0 };
+    // ACT
+    const build = () => scrubTimeline([], range);
+    // ASSERT
+    expect(build).toThrow(RangeError);
+  });
+});
+
+describe('edge cases', () => {
+  it('keeps the final edge at the latest read without inventing starts for unplanned stages', () => {
+    // ARRANGE
+    const stages = [[{ start: 10, end: null }], [], [{ start: null, end: null }]];
+    const expectedStart = 0;
+    const expectedEnd = 40;
+    // ACT
+    const timeline = scrubTimeline(stages, { start: 0, end: 40 });
+    const start = scrubTime(timeline, -1);
+    const end = scrubTime(timeline, 1);
+    const live = scrubPosition(timeline, 40);
+    // ASSERT
+    expect(start).toBe(expectedStart);
+    expect(end).toBe(expectedEnd);
+    expect(live).toBe(1);
+  });
+  it('keeps a zero-length Run usable', () => {
+    // ARRANGE
+    const instant = 25;
+    // ACT
+    const timeline = scrubTimeline([], { start: instant, end: instant });
+    const time = scrubTime(timeline, 0.5);
+    // ASSERT
+    expect(time).toBe(instant);
+  });
+});

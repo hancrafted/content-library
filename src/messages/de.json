@@ -294,6 +294,7 @@
       "live": "Live",
       "liveHelp": "An: folgt dem Run, sobald Ereignisse eintreffen. Aus: spielt den Run bis zu einem gewählten Zeitpunkt nach.",
       "slider": "Nachspielen bis",
+      "keyboard": "Fortschrittsbalken ziehen oder anklicken. Pfeiltasten bewegen eine Minute, Bild auf und ab zehn. Pos1 springt zum Anfang; Ende setzt Live fort.",
       "position": "+{minutes} Min. · {time}",
       "replaying": "Nachgespielt aus den bisher gelesenen Ereignissen. Neue Ereignisse werden weiter gelesen; mit Live folgst du ihnen wieder. Outputs öffnen sich so, wie sie jetzt auf der Festplatte liegen, nicht wie damals."
     },

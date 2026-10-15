@@ -7,7 +7,6 @@ import { BrowserHelp, ChooseFolder, DashboardEntry, PrivacyNote } from './dashbo
 import type { DashboardCopy } from './dashboard-evidence';
 import { DashboardGraph } from './dashboard-graph.client';
 import { OpenGates, ReaderFooter, SourceErrors } from './dashboard-source';
-import { TimeTravel } from './dashboard-time-travel.client';
 
 interface LiveProps {
   polled: Polled;
@@ -24,7 +23,6 @@ function LiveDashboard({ polled, outputs, name, copy }: LiveProps) {
       <SourceErrors errors={read.errors} copy={copy} condition={read.condition} />
       {view ? (
         <>
-          <TimeTravel replay={controls} copy={copy} />
           <OpenGates view={view} copy={copy} />
           <DashboardGraph
             key={name}
@@ -34,6 +32,7 @@ function LiveDashboard({ polled, outputs, name, copy }: LiveProps) {
             moment={{ now, replaying: !controls.live }}
             outputs={outputs}
             copy={copy}
+            replay={controls}
           />
         </>
       ) : null}
