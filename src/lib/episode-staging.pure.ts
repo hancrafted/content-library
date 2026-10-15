@@ -5,7 +5,7 @@
  * is the caller's job, so every rule tests against an in-memory folder.
  */
 
-import { checkSpec } from './episode-spec.pure';
+import { checkSpec, specSlideAnchors } from './episode-spec.pure';
 import { checkBrief } from './episode-staging-brief.pure';
 import { checkFeedback } from './episode-staging-feedback.pure';
 import { checkStagingOrder } from './episode-staging-order.pure';
@@ -18,6 +18,7 @@ import {
   bodyLines,
   h4s,
   orderedList,
+  slideAnchors,
   type Block,
   type Heading,
   type ListItem,
@@ -155,7 +156,21 @@ export function checkStagingFolder(
     ...checkBrief(files),
     ...checkDossier(files, known),
     ...checkSpec(files, reviewAsset),
+    ...checkFeedbackRounds(files),
   ];
+}
+
+/**
+ * The feedback rounds, keyed by the Dossier's page Slides while it exists and by the Spec's once its Gate deleted
+ * the Dossier; none before either exists.
+ */
+function checkFeedbackRounds(files: Readonly<Record<string, string>>): Finding[] {
+  const dossier = files['dossier.md'];
+  const spec = files['spec/spec.html'];
+  if (dossier !== undefined)
+    return checkFeedback(files, { anchors: slideAnchors(blocksOf(bodyLines(dossier))), source: 'Dossier' });
+  if (spec !== undefined) return checkFeedback(files, { anchors: specSlideAnchors(spec), source: 'Spec' });
+  return [];
 }
 
 /** The checks that read the Dossier; none until it exists. */
@@ -168,7 +183,6 @@ function checkDossier(files: Readonly<Record<string, string>>, known: KnownVisua
     ...checkTitleSlide(dossierBlocks),
     ...checkVisuals(dossierBlocks, known),
     ...checkSpeakerNotes(dossierBlocks),
-    ...checkFeedback(files, dossierBlocks),
   ];
 }
 

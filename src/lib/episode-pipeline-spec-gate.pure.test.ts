@@ -139,6 +139,21 @@ describe('failure cases', () => {
     expect(messages).toEqual(expect.arrayContaining(expected));
   });
 
+  it('rejects a job after the Spec Gate that reads the Dossier, which the Gate deletes', () => {
+    // ARRANGE
+    const yaml = PIPELINE.replace(
+      '      - { type: implementor, skills: [], references: [], model: opus }\n',
+      `      - { type: implementor, skills: [], references: [${STAGING}/dossier.md], model: opus }\n`,
+    );
+    const expected = [
+      `Job "implement-episode-init" reads ${STAGING}/dossier.md, which the Spec Gate deletes; after it every job reads the Spec alone.`,
+    ];
+    // ACT
+    const messages = check(yaml);
+    // ASSERT
+    expect(messages).toEqual(expected);
+  });
+
   it('applies the Spec Gate to a draft per-run pipeline, the copy scaffold-pipeline makes of the template', () => {
     // ARRANGE
     const yaml = PIPELINE.replace('status: draft', `status: draft\ntemplate: ${SHA}`).replace(
@@ -162,6 +177,18 @@ describe('edge cases', () => {
       .replace('    checks: [verify]\n', '    checks: [verify]\n    port: 4001\n');
     // ACT
     const messages = check(yaml, { ...CONTEXT, perRun: true });
+    // ASSERT
+    expect(messages).toEqual([]);
+  });
+
+  it('lets write-spec itself read the Dossier, the draft the Spec is written from', () => {
+    // ARRANGE
+    const yaml = PIPELINE.replace(
+      '      - { type: implementor, skills: [], references: [], model: opus, session: orchestrator }\n',
+      `      - { type: implementor, skills: [], references: [${STAGING}/dossier.md], model: opus, session: orchestrator }\n`,
+    );
+    // ACT
+    const messages = check(yaml);
     // ASSERT
     expect(messages).toEqual([]);
   });

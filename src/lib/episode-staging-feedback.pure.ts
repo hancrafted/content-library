@@ -1,12 +1,12 @@
 /*
  * The feedback rounds of a staging folder (design-ADR 0004): each item of the form its `via` asks for, and keyed
- * by a page Slide anchor of the Dossier. markdown-harness holds the file's frontmatter and h1; the items sit inside
- * a list, where it cannot see.
+ * by a page Slide anchor of the Episode's source: the Dossier, or the Spec once its Gate deleted the Dossier.
+ * markdown-harness holds the file's frontmatter and h1; the items sit inside a list, where it cannot see.
  */
 
 import { unless, type Finding } from './finding.pure';
 import { frontmatterField } from './staging-file.pure';
-import { bodyLines, headingsOf, slideAnchors, type Block } from './staging-markdown.pure';
+import { bodyLines, headingsOf } from './staging-markdown.pure';
 
 const FEEDBACK_FILE = /^feedback\/[^/]+\/feedback\.md$/;
 const FEEDBACK_ITEM = /^- `([a-z0-9-]+--[a-z0-9-]+)` · (content|implementation|practice|design) — \S.*$/;
@@ -19,17 +19,27 @@ const SPEC_SLIDE_ITEM =
   /^- `([a-z0-9-]+--[a-z0-9-]+)` · design — picked: (?:none — \S.*|\d+[a-z](?:, \d+[a-z])*(?: — \S.*)?)$/;
 const SPEC_VISUAL_LANGUAGE_ITEM = /^- `visual-language` · design — (?!picked:)\S.*$/;
 
-function checkSpecFeedbackLine(line: string, anchors: readonly string[]): string[] {
+/** The page Slide anchors feedback items may name, and the source they come from, as a finding names it. */
+export interface FeedbackAnchors {
+  anchors: readonly string[];
+  source: 'Dossier' | 'Spec';
+}
+
+function unknownAnchor(anchor: string, { anchors, source }: FeedbackAnchors): string[] {
+  return unless(anchors.includes(anchor), `Feedback anchor "${anchor}" is no page slide in the ${source}.`);
+}
+
+function checkSpecFeedbackLine(line: string, anchors: FeedbackAnchors): string[] {
   if (SPEC_VISUAL_LANGUAGE_ITEM.test(line)) return [];
   const item = SPEC_SLIDE_ITEM.exec(line);
   if (item === null)
     return [
       `Spec review line not of the form "- \`<section>--<slide>\` · design — picked: <option ids>|none — note" (the note required with none) or "- \`visual-language\` · design — note": "${line}".`,
     ];
-  return unless(anchors.includes(item[1]), `Feedback anchor "${item[1]}" is no page slide in the Dossier.`);
+  return unknownAnchor(item[1], anchors);
 }
 
-function checkFeedbackFile(file: string, markdown: string, anchors: readonly string[]): Finding[] {
+function checkFeedbackFile(file: string, markdown: string, anchors: FeedbackAnchors): Finding[] {
   const via = frontmatterField(markdown, 'via');
   const practice = via === 'practice';
   const h1 = headingsOf(bodyLines(markdown)).find(({ level }) => level === 1)?.line;
@@ -51,15 +61,14 @@ function checkFeedbackFile(file: string, markdown: string, anchors: readonly str
         tag !== 'design',
         `Feedback item "${line}" is tagged design, which only a Spec review, a file with "via: spec", may use.`,
       ),
-      ...unless(anchors.includes(anchor), `Feedback anchor "${anchor}" is no page slide in the Dossier.`),
+      ...unknownAnchor(anchor, anchors),
     ];
   });
   return messages.map((message): Finding => ({ kind: 'feedback', file, message }));
 }
 
-/** Every feedback round of the folder, its items checked against the Dossier's page Slide anchors. */
-export function checkFeedback(files: Readonly<Record<string, string>>, dossier: readonly Block[]): Finding[] {
-  const anchors = slideAnchors(dossier);
+/** Every feedback round of the folder, its items checked against the page Slide anchors of the Episode's source. */
+export function checkFeedback(files: Readonly<Record<string, string>>, anchors: FeedbackAnchors): Finding[] {
   return Object.entries(files)
     .filter(([file]) => FEEDBACK_FILE.test(file))
     .flatMap(([file, markdown]) => checkFeedbackFile(file, markdown, anchors));
