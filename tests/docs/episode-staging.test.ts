@@ -117,7 +117,8 @@ function researchFolders(): string[] {
   const planned = Object.values(perRunPipelines())
     .flatMap((yaml) => (parse(yaml) as { jobs: { outputs?: string[] }[] }).jobs)
     .flatMap(({ outputs }) => outputs ?? [])
-    .filter((output) => output.endsWith('/research.md'))
+    // A draft keeps write-research's foreach glob; only a named folder is a planned one.
+    .filter((output) => output.endsWith('/research.md') && !output.includes('*'))
     .map((output) => path.dirname(output));
   return [...onDisk, ...planned];
 }
