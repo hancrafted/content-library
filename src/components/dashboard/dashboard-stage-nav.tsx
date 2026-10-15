@@ -1,9 +1,9 @@
 import { spanElapsed } from '@/lib/dashboard-elapsed.pure';
-import type { dashboardLayout, StageGeometry } from '@/lib/dashboard-layout.pure';
-import { isComplete, runningAgents, stageTitle, stateText, type DashboardStage } from '@/lib/dashboard-stages.pure';
+import type { GraphGeometry, StageGeometry } from '@/lib/dashboard-graph-geometry.pure';
+import type { StageNode } from '@/lib/dashboard-graph-view.pure';
 import { fillTemplate } from '@/lib/template.pure';
 import { CircleAlert } from 'lucide-react';
-import { useContext, type CSSProperties } from 'react';
+import { useContext } from 'react';
 import { JobChipList } from './dashboard-chips';
 import { ElapsedTime, StateBadge, type DashboardCopy } from './dashboard-evidence';
 import styles from './dashboard-graph.module.css';
@@ -12,37 +12,28 @@ import { blurGraphPopover, dismissGraphPopover, leaveGraphPopover, openGraphPopo
 import { StageJobs, type SelectJob } from './dashboard-stage-jobs';
 import { StageStateIcon } from './dashboard-state-icon';
 
-export function stageName(stage: DashboardStage, copy: DashboardCopy): string {
-  return stageTitle(stage.id, copy.graph.stageNames);
-}
-
 interface NavigationProps {
-  stages: DashboardStage[];
-  selected: string | null;
+  stages: StageNode[];
   onSelect: (id: string) => void;
   /** Present when the view shows each stage's Jobs. */
   onSelectJob?: SelectJob;
   copy: DashboardCopy;
-  layout: ReturnType<typeof dashboardLayout>;
-  selectedJob?: string;
-  endPosition: number;
+  geometry: GraphGeometry;
 }
 
-type NodeProps = Omit<NavigationProps, 'stages' | 'layout' | 'endPosition'> & {
-  stage: DashboardStage;
-  layout: StageGeometry;
-  placement?: CSSProperties;
+type NodeProps = Omit<NavigationProps, 'stages' | 'geometry'> & {
+  stage: StageNode;
+  geometry: StageGeometry;
 };
 type LabelProps = Pick<NodeProps, 'stage' | 'copy'>;
 
 function StageActivity({ stage, copy }: LabelProps) {
-  const active = stage.jobs.filter((job) => job.state === 'running' || job.state === 'gate');
-  const sessions = stage.jobs.flatMap(runningAgents);
+  const { active, sessions } = stage;
   return (
     <>
-      {active.slice(0, 1).map((job) => (
-        <span key={job.id} className="block text-caption" title={job.id}>
-          {job.id}
+      {active.slice(0, 1).map((id) => (
+        <span key={id} className="block text-caption" title={id}>
+          {id}
         </span>
       ))}
       {active.length > 1 ? (
@@ -50,9 +41,9 @@ function StageActivity({ stage, copy }: LabelProps) {
           {fillTemplate(copy.graph.moreActive, { count: active.length - 1 })}
         </span>
       ) : null}
-      {sessions.length > 0 ? (
+      {sessions > 0 ? (
         <span className="block text-caption text-(--info)">
-          {fillTemplate(copy.graph.running, { count: sessions.length })}
+          {fillTemplate(copy.graph.running, { count: sessions })}
         </span>
       ) : null}
       {stage.attention > 0 ? (
@@ -66,11 +57,10 @@ function StageActivity({ stage, copy }: LabelProps) {
 }
 
 function StageLabel({ stage, copy }: LabelProps) {
-  const state = stateText(stage.state, { gate: copy.waitingOnHan, complete: copy.graph.complete });
   return (
     <span className="min-w-0 flex-1 space-y-1 wrap-anywhere">
-      <span className="block text-body font-semibold">{stageName(stage, copy)}</span>
-      <span className="block text-caption text-(--node-tone)">{state}</span>
+      <span className="block text-body font-semibold">{stage.label}</span>
+      <span className="block text-caption text-(--node-tone)">{stage.stateLabel}</span>
       <span className="block text-caption text-muted-foreground">
         {stage.planned
           ? fillTemplate(copy.graph.jobsComplete, { done: stage.completed, total: stage.jobs.length })
@@ -91,12 +81,12 @@ function StagePopover({ stage, copy, onSelect }: LabelProps & { onSelect: (id: s
         onClick={() => onSelect(stage.id)}
         className="w-full cursor-pointer space-y-3 text-left focus-visible:outline-2 focus-visible:outline-ring"
       >
-        <span className="block text-body font-semibold">{stageName(stage, copy)}</span>
+        <span className="block text-body font-semibold">{stage.label}</span>
         <span className="flex items-center gap-2">
           <StageStateIcon state={stage.state} />
           <StateBadge state={stage.state} />
         </span>
-        {stage.jobs.map((job) => (
+        {stage.nodes.map(({ job }) => (
           <div key={job.id} className="space-y-1 border-t border-border pt-2 text-caption">
             <span className="block font-medium wrap-anywhere">{job.id}</span>
             {job.span ? <ElapsedTime elapsed={spanElapsed(job.span, now)} copy={copy} /> : null}
@@ -108,14 +98,14 @@ function StagePopover({ stage, copy, onSelect }: LabelProps & { onSelect: (id: s
   );
 }
 
-function StageButton({ stage, selected, onSelect, onSelectJob, copy }: NodeProps) {
+function StageButton({ stage, onSelect, onSelectJob, copy }: NodeProps) {
   return (
     <button
       type="button"
       data-stage={stage.id}
       data-state={stage.state}
       data-planned={stage.planned}
-      aria-expanded={selected === stage.id}
+      aria-expanded={stage.selected}
       aria-controls="dashboard-stage-detail"
       onClick={() => onSelect(stage.id)}
       className={`${styles.node} cursor-pointer transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring`}
@@ -124,7 +114,7 @@ function StageButton({ stage, selected, onSelect, onSelectJob, copy }: NodeProps
         <StageStateIcon state={stage.state} />
       </span>
       {onSelectJob ? (
-        <span className={`${styles.stageCaption} text-caption font-semibold`}>{stageName(stage, copy)}</span>
+        <span className={`${styles.stageCaption} text-caption font-semibold`}>{stage.label}</span>
       ) : (
         <StageLabel stage={stage} copy={copy} />
       )}
@@ -133,9 +123,9 @@ function StageButton({ stage, selected, onSelect, onSelectJob, copy }: NodeProps
 }
 
 function StageNode(props: NodeProps) {
-  const { stage, layout, onSelectJob, onSelect, copy, selectedJob } = props;
+  const { stage, geometry, onSelectJob, onSelect, copy } = props;
   return (
-    <li className={styles.stage} data-complete={isComplete(stage.state)} style={props.placement}>
+    <li className={styles.stage} data-complete={stage.complete} style={onSelectJob ? geometry.placement : undefined}>
       <div
         className={styles.stageAnchor}
         data-graph-stage
@@ -148,30 +138,18 @@ function StageNode(props: NodeProps) {
         <StageButton {...props} />
         <StagePopover stage={stage} copy={copy} onSelect={onSelect} />
       </div>
-      {onSelectJob ? (
-        <StageJobs stage={stage} layout={layout} onSelectJob={onSelectJob} copy={copy} selected={selectedJob} />
-      ) : null}
+      {onSelectJob ? <StageJobs stage={stage} geometry={geometry} onSelectJob={onSelectJob} copy={copy} /> : null}
     </li>
   );
 }
 
 function StageNodes(props: NavigationProps) {
-  const { stages, layout, onSelectJob, selected, selectedJob, onSelect, copy } = props;
+  const { stages, geometry, onSelectJob, onSelect, copy } = props;
   return stages.map((stage, index) => (
     <StageNode
       key={stage.id}
       stage={stage}
-      layout={layout.stages[index]}
-      selectedJob={selectedJob}
-      placement={
-        onSelectJob
-          ? {
-              left: `${(layout.stages[index].x / layout.width) * 100}%`,
-              width: `${(layout.stages[index].width / layout.width) * 100}%`,
-            }
-          : undefined
-      }
-      selected={selected}
+      geometry={geometry.stages[index]}
       onSelect={onSelect}
       onSelectJob={onSelectJob}
       copy={copy}
@@ -180,11 +158,11 @@ function StageNodes(props: NavigationProps) {
 }
 
 export function StageNavigation(props: NavigationProps) {
-  const { onSelectJob, copy, endPosition } = props;
+  const { onSelectJob, copy, geometry } = props;
   return (
     <ol className={styles.stages} data-jobs={onSelectJob !== undefined} aria-label={copy.graph.title}>
       <StageNodes {...props} />
-      <li className={styles.endNode} style={{ left: `${endPosition * 100}%` }}>
+      <li className={styles.endNode} style={{ left: `${geometry.end * 100}%` }}>
         <span role="img" aria-label={copy.graph.runEnd} title={copy.graph.runEnd} className={styles.endDot} />
       </li>
     </ol>

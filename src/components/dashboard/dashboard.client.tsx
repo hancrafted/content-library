@@ -1,8 +1,9 @@
 'use client';
 
 import { useDashboardReplay } from '@/hooks/use-dashboard-replay';
-import { useEpisodeDashboard, type Polled } from '@/hooks/use-episode-dashboard';
+import { useEpisodeDashboard } from '@/hooks/use-episode-dashboard';
 import type { EpisodeOutputs } from '@/lib/dashboard-outputs.pure';
+import type { Polled } from '@/lib/dashboard-reader.pure';
 import { BrowserHelp, ChooseFolder, DashboardEntry, PrivacyNote } from './dashboard-entry';
 import type { DashboardCopy } from './dashboard-evidence';
 import { DashboardGraph } from './dashboard-graph.client';

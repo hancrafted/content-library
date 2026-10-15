@@ -4,7 +4,7 @@
  * port is a whole number in range is the field check's finding; this checks what the ports say together.
  */
 
-import type { Job } from './episode-pipeline-jobs.pure';
+import type { Job } from './episode-pipeline-definition.pure';
 import { repeated } from './finding.pure';
 
 /** The stage whose jobs serve a dev server. */

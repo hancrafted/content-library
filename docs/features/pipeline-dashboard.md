@@ -138,7 +138,9 @@ Start time is below the left end; total observed duration is below the right.
 
 `scrubTimeline()`, `scrubPosition()` and `scrubTime()` map time to structure:
 each Job has an equal share within its stage gap.
-`graphGeometry()` maps these structural fractions onto the weighted stage centres
+`graphGeometry()` (`dashboard-graph-geometry.pure.ts`) is the one owner of graph
+geometry: node positions, edge paths, the CSS variables the stylesheet reads, and
+the rail stops that map these structural fractions onto the weighted stage centres
 and back, keeping the rail aligned when Show Jobs changes the stage widths.
 Completed work contributes its structural shares; an open Job contributes only
 its start boundary, never an estimated fraction or a completion. The furthest
@@ -154,12 +156,15 @@ The latest point is the furthest observed structural progress, not automatically
 the end of the rail. Seeking that point (or the unfilled track after it) resumes
 Live. The right-hand duration is elapsed-so-far, or the final total once ended.
 
-Replay logs nothing new and never reads the file again. `replayDashboard()`
-feeds the retained events stamped no later than the cutoff through the shared
+Replay logs nothing new and never reads the file again. One Dashboard timeline,
+`dashboardTimeline(polled)`, answers what the dashboard shows at a cutoff (a
+moment, or `'live'`): `at(cutoff)` gives the view, the event log and the clock,
+and it maps the Live checkbox, the slider and its keys to cutoffs and back; the
+hook `useDashboardReplay` keeps only the cutoff. Replaying, it feeds the retained events stamped no later than the cutoff through the shared
 fold with `live: 'unfinished'` and the live projection, so a Run that had not
 ended at the cutoff reads its open spans as running. Ties at the cutoff are all
 included; the fold orders them by sequence. The event log modal shows the same
-events, `eventsAt()`. Polling continues while scrubbing and extends the slider,
+events. Polling continues while scrubbing and extends the slider,
 but the view stays at the cutoff and its animation pauses; turning Live back on
 shows the current state. The checkbox and cutoff are transient page memory
 (FE-001).
@@ -270,18 +275,24 @@ and every emitted alternate must resolve and link back.
 - `createEpisodeReader(folder).poll()`: structural read-only file handles, fresh
   files, offsets, pipeline modification times and visible source errors.
 - Built output: the English-only route, metadata, header and picker markup.
-- `projectStages(jobs, stages)`, `stageTitle()`, `stageLayers()` and `jobLanes()`:
-  stage order and membership from the pipeline, not-planned stages, template
-  placeholders, the legacy fallback, stage progress, attention, parallel
-  dependency levels and ticket/session identity.
+- `projectStages(jobs, stages)` and `stageLayers()`: stage order and membership
+  from the pipeline, not-planned stages, template placeholders, the legacy
+  fallback, stage progress, attention and parallel dependency levels.
+- `graphView(view, labels, selection)`: the Graph view model the graph, its
+  popovers and the drawer read — each Stage node's label, worded state,
+  activity and selection, the next waiting Stage, and each Job node's agents
+  (identity matching Graph geometry's node ids), attention, fan-out heading
+  from the pipeline's `foreach` and observed tickets. An agent node's role
+  evidence stays within its current Run and latest Attempt instead of
+  inheriting an earlier success.
 - `outputSegments()`, `outputLabel()`, `isGlob()`, `previewPort()` and
   `previewHref()`: an output's path in the chosen folder, its label, whether it
   is a pattern, and when and where a Job's preview shows.
 - `jobNeedsAttention()`: the attention mark.
-- `currentAgent()`: a graph node's role evidence stays within its current Run
-  and latest Attempt instead of inheriting an earlier success.
-- `replayDashboard()`, `eventsAt()` and `replayBounds()`: the view and event log
-  at a cutoff from retained events, and the slider's time range.
+- `dashboardTimeline()`: the view, event log, chips and clock at a cutoff from
+  retained events (live equals replay at the Run's end, a finished Run stays
+  finished, gates, retries and fan-out), the slider's time range, and slider
+  position to cutoff and back.
 - `spanElapsed()` and `agentElapsed()`: a span's duration, or its time so far
   at the moment shown.
 - `scrubTimeline()`, `scrubPosition()` and `scrubTime()`: equal structural

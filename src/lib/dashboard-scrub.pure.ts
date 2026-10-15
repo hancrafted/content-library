@@ -3,22 +3,19 @@ export interface ScrubJob {
   end: number | null;
 }
 
-interface Point {
+/**
+ * A point on a replay rail: `at` (a moment in epoch milliseconds, or a stage index fraction as Graph geometry lays
+ * them) and the position, 0 to 1, it sits at along the rail.
+ */
+export interface RailStop {
   at: number;
   position: number;
 }
 
-/** Actual stage centres and their equivalent positions along the shared replay rail. */
-export function graphGeometry(positions: readonly number[], total: number) {
-  const centres = positions.map((position) => position / total);
-  const left = centres[0] ?? 0;
-  const right = centres.at(-1) ?? 1;
-  const width = right - left || 1;
-  const stops = centres.map((centre, index) => ({
-    at: index / Math.max(1, positions.length - 1),
-    position: (centre - left) / width,
-  }));
-  return { left, right: 1 - right, stops, width: total };
+/** The replayed span of a Run, epoch milliseconds from `start` to `end`. */
+export interface ReplayRange {
+  start: number;
+  end: number;
 }
 
 export function snapScrubPosition(position: number, stageCount: number): number {
@@ -64,17 +61,14 @@ export function jobTimings(
   );
 }
 
-function validateRange(range: { start: number; end: number }) {
+function validateRange(range: ReplayRange) {
   if (!Number.isFinite(range.start) || !Number.isFinite(range.end) || range.end < range.start) {
     throw new RangeError('Replay needs a finite, ordered range.');
   }
 }
 
 /** Equal Job shares within each stage gap; parallel Jobs contribute together. No duration is predicted. */
-export function scrubTimeline(
-  stages: readonly (readonly ScrubJob[])[],
-  range: { start: number; end: number },
-): Point[] {
+export function scrubTimeline(stages: readonly (readonly ScrubJob[])[], range: ReplayRange): RailStop[] {
   validateRange(range);
   const times = new Set([range.start, range.end]);
   for (const jobs of stages) {
@@ -91,11 +85,11 @@ export function scrubTimeline(
     }));
 }
 
-function interpolate(value: number, a: Point, b: Point) {
+function interpolate(value: number, a: RailStop, b: RailStop) {
   return b.at === a.at ? b.position : a.position + ((value - a.at) / (b.at - a.at)) * (b.position - a.position);
 }
 
-export function scrubPosition(timeline: readonly Point[], at: number): number {
+export function scrubPosition(timeline: readonly RailStop[], at: number): number {
   const next = timeline.findIndex((point) => point.at >= at);
   if (next < 0) return timeline.at(-1)?.position ?? 0;
   if (next === 0) return timeline[0].position;
@@ -105,7 +99,7 @@ export function scrubPosition(timeline: readonly Point[], at: number): number {
 }
 
 /** Plateaus choose their latest observed moment; reaching the observed leading edge means Live. */
-export function scrubTime(timeline: readonly Point[], position: number): number {
+export function scrubTime(timeline: readonly RailStop[], position: number): number {
   const last = timeline.at(-1)!;
   if (position >= last.position) return last.at;
   if (position <= 0) return timeline[0].at;

@@ -4,11 +4,11 @@ import { Button } from '@/components/ui/button';
 import { useDashboardDetail } from '@/hooks/use-dashboard-detail';
 import type { ReplayControls } from '@/hooks/use-dashboard-replay';
 import type { DashboardEvent, EventScope } from '@/lib/dashboard-events.pure';
-import { dashboardLayout, GRAPH_LAYOUT } from '@/lib/dashboard-layout.pure';
+import { graphGeometry } from '@/lib/dashboard-graph-geometry.pure';
+import { graphView, type GraphView } from '@/lib/dashboard-graph-view.pure';
 import type { EpisodeOutputs } from '@/lib/dashboard-outputs.pure';
 import type { DashboardJob, DashboardView } from '@/lib/dashboard-projection.pure';
-import { graphGeometry, jobTimings } from '@/lib/dashboard-scrub.pure';
-import { projectStages } from '@/lib/dashboard-stages.pure';
+import { jobTimings } from '@/lib/dashboard-scrub.pure';
 import { fillTemplate } from '@/lib/template.pure';
 import { useId, useState, type CSSProperties } from 'react';
 import { DashboardDrawer } from './dashboard-drawer.client';
@@ -17,7 +17,7 @@ import styles from './dashboard-graph.module.css';
 import { DashboardLog } from './dashboard-log.client';
 import { DashboardMoment, type Moment } from './dashboard-moment';
 import { DashboardObservations } from './dashboard-observations';
-import { stageName, StageNavigation } from './dashboard-stage-nav';
+import { StageNavigation } from './dashboard-stage-nav';
 import { LiveToggle, TimeTravel } from './dashboard-time-travel.client';
 
 interface GraphProps {
@@ -52,16 +52,16 @@ interface OverviewProps {
   stale: boolean;
   copy: DashboardCopy;
   replay: ReplayControls;
-  graph: ReturnType<typeof projectStages>;
+  graph: GraphView;
 }
 
 function ProgressSummary({ graph, copy }: Pick<OverviewProps, 'graph' | 'copy'>) {
-  const next = graph.stages.find((stage) => stage.state === 'waiting');
+  const { next } = graph;
   return (
     <div className="space-y-1">
       <h2 className="text-body font-semibold">{copy.graph.title}</h2>
       <p role="status" className="text-caption">
-        {fillTemplate(copy.graph.stagesComplete, { done: graph.completed, total: graph.stages.length })}
+        {fillTemplate(copy.graph.stagesComplete, { done: graph.completed, total: graph.total })}
         {graph.attention > 0 ? (
           <span className="ml-3 font-medium text-(--warning)">
             {fillTemplate(copy.graph.attention, { count: graph.attention })}
@@ -69,9 +69,7 @@ function ProgressSummary({ graph, copy }: Pick<OverviewProps, 'graph' | 'copy'>)
         ) : null}
       </p>
       {next ? (
-        <p className="text-caption text-muted-foreground">
-          {fillTemplate(copy.graph.next, { name: stageName(next, copy) })}
-        </p>
+        <p className="text-caption text-muted-foreground">{fillTemplate(copy.graph.next, { name: next.label })}</p>
       ) : null}
     </div>
   );
@@ -112,49 +110,22 @@ function GraphToolbar({ controls, copy, replay, graph }: Omit<OverviewProps, 'st
   );
 }
 
-function canvasStyle(geometry: ReturnType<typeof graphGeometry>, height: number): CSSProperties {
-  return {
-    '--stage-columns': `repeat(${geometry.stops.length}, minmax(0, 1fr))`,
-    '--canvas-min': `${geometry.width}px`,
-    '--start-inset': `${geometry.left * 100}%`,
-    '--end-inset': `${geometry.right * 100}%`,
-    '--network-height': `${height}px`,
-    '--stage-size': `${GRAPH_LAYOUT.stageNode}px`,
-    '--node-inset': `${GRAPH_LAYOUT.nodeInset}px`,
-    '--job-size': `${GRAPH_LAYOUT.agentNode}px`,
-    '--job-dot-size': `${GRAPH_LAYOUT.agentDot}px`,
-    '--end-size': `${GRAPH_LAYOUT.endNode}px`,
-  } as CSSProperties;
-}
-
-function railGeometry(layout: ReturnType<typeof dashboardLayout>, showJobs: boolean) {
-  const positions = layout.stages.map((stage, index) =>
-    showJobs ? stage.x : (index + 0.5) * GRAPH_LAYOUT.minimumColumn,
-  );
-  positions.push(showJobs ? layout.end.x : (layout.stages.length + 0.5) * GRAPH_LAYOUT.minimumColumn);
-  return graphGeometry(positions, showJobs ? layout.width : positions.length * GRAPH_LAYOUT.minimumColumn);
-}
-
 function GraphOverview({ controls, graph, stale, copy, replay }: OverviewProps) {
   const { detail, showJobs } = controls;
-  const layout = dashboardLayout(graph.stages);
-  const geometry = railGeometry(layout, showJobs);
+  const geometry = graphGeometry(graph.stages, showJobs);
   return (
     <div className="space-y-6 rounded-2xl border border-border bg-card p-4 sm:p-6">
       <GraphToolbar controls={controls} copy={copy} replay={replay} graph={graph} />
       {stale ? <p className="text-caption text-(--warning)">{copy.graph.stale}</p> : null}
-      <div className={styles.graphScroll} style={{ maxHeight: GRAPH_LAYOUT.maximumHeight }}>
-        <div className={styles.canvas} style={canvasStyle(geometry, layout.height)}>
-          <TimeTravel replay={replay} copy={copy} stages={geometry.stops.length} geometry={geometry} />
+      <div className={styles.graphScroll} style={{ maxHeight: geometry.maxHeight }}>
+        <div className={styles.canvas} style={geometry.cssVars as CSSProperties}>
+          <TimeTravel replay={replay} copy={copy} geometry={geometry} />
           <StageNavigation
             stages={graph.stages}
-            selected={detail.selection?.stage ?? null}
-            selectedJob={detail.selection?.job}
             onSelect={detail.open}
             onSelectJob={showJobs ? detail.open : undefined}
             copy={copy}
-            layout={layout}
-            endPosition={1 - geometry.right}
+            geometry={geometry}
           />
         </div>
       </div>
@@ -164,8 +135,8 @@ function GraphOverview({ controls, graph, stale, copy, replay }: OverviewProps) 
 
 export function DashboardGraph({ view, events, stale, moment, outputs, copy, replay, observedJobs }: GraphProps) {
   const controls = useGraphControls();
-  const graph = projectStages(view.jobs, view.stages);
-  const stage = graph.stages.find((candidate) => candidate.id === controls.detail.selection?.stage);
+  const labels = { stageNames: copy.graph.stageNames, gate: copy.waitingOnHan, complete: copy.graph.complete };
+  const graph = graphView(view, labels, controls.detail.selection);
   const { log, openLog, dismissLog } = controls;
   return (
     <DashboardMoment value={moment}>
@@ -176,7 +147,13 @@ export function DashboardGraph({ view, events, stale, moment, outputs, copy, rep
           aria-label={copy.graph.title}
         >
           <GraphOverview controls={controls} graph={graph} stale={stale} copy={copy} replay={replay} />
-          <DashboardDrawer detail={controls.detail} stage={stage} copy={copy} openLog={openLog} outputs={outputs} />
+          <DashboardDrawer
+            detail={controls.detail}
+            selection={graph.selection}
+            copy={copy}
+            openLog={openLog}
+            outputs={outputs}
+          />
           {log ? (
             <DashboardLog events={events} scope={log.scope} title={log.title} copy={copy} onDismiss={dismissLog} />
           ) : null}

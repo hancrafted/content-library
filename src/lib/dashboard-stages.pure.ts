@@ -1,6 +1,5 @@
 import type { Span } from '../../skills/new-episode/scripts/run-log.schema.pure';
 import type { DashboardJob } from './dashboard-projection.pure';
-import { parseDescription } from './episode-spawn-description.pure';
 
 /** The grouping for a pipeline that lists no `stages`: Runs scaffolded before the stages layer existed. */
 const LEGACY_STAGES = [
@@ -14,17 +13,6 @@ const LEGACY_STAGES = [
   { id: 'build', jobs: ['implement-episode', 'implement-episode-init'] },
   { id: 'pr', jobs: ['open-pr'] },
 ];
-
-/** A stage's title from the message files' `stageNames`; an id they do not name is title-cased, `publish-recording` as Publish Recording. */
-export function stageTitle(id: string, names: Readonly<Record<string, string>>): string {
-  return (
-    names[id] ??
-    id
-      .split('-')
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ')
-  );
-}
 
 function legacyStage(job: DashboardJob): string {
   if (job.id.startsWith('write-research-')) return 'research';
@@ -48,12 +36,6 @@ export function jobNeedsAttention(job: Pick<DashboardJob, 'state' | 'attempts' |
     latest !== undefined &&
     job.scores.some((score) => score.span_id === latest.span_id && score.value === 'needs-human')
   );
-}
-
-/** A stage's or Job's state as shown: the gate and a finished state in words, any other state as it is. */
-export function stateText(state: DashboardState, words: { gate: string; complete: string }): string {
-  if (state === 'gate') return words.gate;
-  return isComplete(state) ? words.complete : state;
 }
 
 function groupState(states: DashboardState[]): DashboardState {
@@ -95,12 +77,6 @@ export function projectStages(jobs: readonly DashboardJob[], order: readonly str
 
 export type DashboardStage = ReturnType<typeof projectStages>['stages'][number];
 
-export function runningAgents(job: DashboardJob): Span[] {
-  return job.agents.filter(
-    (agent) => agentState(job, agent) === 'running' && (!job.span || agent.trace_id === job.span.trace_id),
-  );
-}
-
 /** A missing end is not proof of activity once its Job or Attempt has ended; raw folded evidence stays intact. */
 export function agentState(job: DashboardJob, agent: Span): DashboardState {
   if (agent.status !== 'running') return agent.status;
@@ -125,52 +101,4 @@ export function stageLayers(stage: DashboardStage): DashboardJob[][] {
   const layers: DashboardJob[][] = [];
   for (const job of stage.jobs) (layers[levelOf(job.id)] ??= []).push(job);
   return layers;
-}
-
-export function agentIdentity(span: Span) {
-  const parsed = parseDescription(span.description ?? '');
-  if (parsed && parsed.job === span.job) return { ticket: span.ticket ?? parsed.ticket, role: parsed.role };
-  return { ticket: span.ticket, role: span.role ?? span.name };
-}
-
-const byStart = (a: Span, b: Span) => Date.parse(a.start_t) - Date.parse(b.start_t) || a.seq - b.seq;
-
-function inCurrentAttempt(agent: Span, latest: Span | undefined, earlier: ReadonlySet<string>): boolean {
-  if (!latest || agent.parent_span_id === latest.span_id) return true;
-  return !earlier.has(agent.parent_span_id ?? '') && Date.parse(agent.start_t) >= Date.parse(latest.start_t);
-}
-
-/** A configured node never borrows a successful role from another Run or an earlier Attempt. */
-export function currentAgent(job: DashboardJob, role: string): Span | undefined {
-  if (!job.span) return undefined;
-  const trace = job.span.trace_id;
-  const attempts = job.attempts.filter((attempt) => attempt.trace_id === trace).sort(byStart);
-  const latest = attempts.at(-1);
-  const earlier = new Set(attempts.slice(0, -1).map((attempt) => attempt.span_id));
-  return job.agents
-    .filter(
-      (agent) =>
-        agent.trace_id === trace && agentIdentity(agent).role === role && inCurrentAttempt(agent, latest, earlier),
-    )
-    .sort(byStart)
-    .at(-1);
-}
-
-/** A lane is an observed ticket's sessions, never an inferred ticket or an estimate of remaining work. */
-export function jobLanes(job: DashboardJob) {
-  const groups = new Map<number | undefined, Span[]>();
-  for (const agent of job.agents) {
-    if (job.span && agent.trace_id !== job.span.trace_id) continue;
-    const { ticket } = agentIdentity(agent);
-    const group = groups.get(ticket) ?? [];
-    group.push(agent);
-    groups.set(ticket, group);
-  }
-  return [...groups].map(([ticket, agents]) => {
-    const latest = new Map<string, Span>();
-    for (const agent of [...agents].sort((a, b) => Date.parse(a.start_t) - Date.parse(b.start_t) || a.seq - b.seq)) {
-      latest.set(ticket === undefined ? agent.span_id : agentIdentity(agent).role, agent);
-    }
-    return { ticket, agents, state: groupState([...latest.values()].map((agent) => agentState(job, agent))) };
-  });
 }
