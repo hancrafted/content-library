@@ -6,6 +6,17 @@ import { parseDashboardPipeline, projectDashboard } from './dashboard-projection
 import { scrubPosition, scrubTime } from './dashboard-scrub.pure';
 import { projectStages } from './dashboard-stages.pure';
 
+/**
+ * Three Stages without Jobs in the Job network, laid out from GRAPH_LAYOUT by hand: the first centre sits at half a
+ * Stage node plus the node inset (24 + 6 = 30); an inner Stage spans the minimum gap (96); the last spans half a Stage
+ * node, a Job node and edge padding to the Run end (24 + 14 + 8 = 46) plus the same to it (8 + 14 + 8 = 30), 76; and
+ * the canvas runs half an end node and edge padding past the Run end (8 + 8). Centres 30, 126, 222; Run end 298; 314 wide.
+ */
+const EMPTY_STAGES = projectStages([], ['brief', 'research', 'pr']).stages;
+const EMPTY_WIDTH = 314;
+
+const percentOf = (inset: string) => Number.parseFloat(inset);
+
 function stagesOf(file: string) {
   const text = readFileSync(new URL(`../../tests/fixtures/pipeline-dashboard/${file}`, import.meta.url), 'utf8');
   const view = projectDashboard(parseDashboardPipeline(text), createLogFold({ live: 'unfinished' }).snapshot());
@@ -27,16 +38,18 @@ describe('success cases', () => {
   });
   it('ends the replay rail under the first Stage and the Run end in the Job network', () => {
     // ARRANGE
-    const stages = stagesOf('synthetic-pipeline.yml');
-    const expected = { first: 0, last: 1 };
+    const expected = {
+      start: (30 / EMPTY_WIDTH) * 100,
+      end: ((EMPTY_WIDTH - 298) / EMPTY_WIDTH) * 100,
+      stops: [0, 96 / 268, 192 / 268, 1],
+    };
     // ACT
-    const geometry = graphGeometry(stages, true);
-    const insets = [geometry.cssVars['--start-inset'], geometry.cssVars['--end-inset']];
-    const ends = [`${geometry.stages[0].centre * 100}%`, `${(1 - geometry.end) * 100}%`];
+    const geometry = graphGeometry(EMPTY_STAGES, true);
+    const stops = geometry.stops.map((stop) => stop.position);
     // ASSERT
-    expect(insets).toEqual(ends);
-    expect(geometry.stops[0].position).toBe(expected.first);
-    expect(geometry.stops.at(-1)!.position).toBe(expected.last);
+    expect(percentOf(geometry.cssVars['--start-inset'])).toBeCloseTo(expected.start);
+    expect(percentOf(geometry.cssVars['--end-inset'])).toBeCloseTo(expected.end);
+    expect(stops).toEqual(expected.stops.map((position) => expect.closeTo(position)));
   });
   it('draws every edge from one node centre to another', () => {
     // ARRANGE
@@ -114,10 +127,10 @@ describe('edge cases', () => {
   });
   it('puts the scrubber on a Stage centre when replay reaches that Stage, and back', () => {
     // ARRANGE
-    const geometry = graphGeometry(stagesOf('synthetic-pipeline.yml'), true);
-    const stage = 2 / geometry.stages.length;
-    const first = geometry.stages[0].centre;
-    const expected = (geometry.stages[2].centre - first) / (geometry.end - first);
+    const geometry = graphGeometry(EMPTY_STAGES, true);
+    // The third of four rail stops; its centre 222 is 192 along the 268 from the first centre to the Run end.
+    const stage = 2 / 3;
+    const expected = 192 / 268;
     // ACT
     const visual = scrubPosition(geometry.stops, stage);
     const structural = scrubTime(geometry.stops, expected);
