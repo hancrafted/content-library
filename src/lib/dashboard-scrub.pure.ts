@@ -8,23 +8,17 @@ interface Point {
   position: number;
 }
 
-/** Weighted grid centres and their equivalent positions along the shared replay rail. */
-export function graphGeometry(weights: readonly number[]) {
-  const total = weights.reduce((sum, weight) => sum + weight, 0) || 1;
-  let before = 0;
-  const centres = weights.map((weight) => {
-    const centre = (before + weight / 2) / total;
-    before += weight;
-    return centre;
-  });
+/** Actual stage centres and their equivalent positions along the shared replay rail. */
+export function graphGeometry(positions: readonly number[], total: number) {
+  const centres = positions.map((position) => position / total);
   const left = centres[0] ?? 0;
   const right = centres.at(-1) ?? 1;
   const width = right - left || 1;
   const stops = centres.map((centre, index) => ({
-    at: index / Math.max(1, weights.length - 1),
+    at: index / Math.max(1, positions.length - 1),
     position: (centre - left) / width,
   }));
-  return { left, right: 1 - right, stops };
+  return { left, right: 1 - right, stops, width: total };
 }
 
 export function snapScrubPosition(position: number, stageCount: number): number {
@@ -33,24 +27,41 @@ export function snapScrubPosition(position: number, stageCount: number): number 
   return Math.abs(stage - position) <= Math.min(0.008, 0.08 / gaps) ? stage : position;
 }
 
-function jobProgress(job: ScrubJob, at: number, latest: number): number {
-  if (job.start === null || at < job.start) return 0;
-  const end = job.end ?? latest;
+/** Only observed ends supply partial replay progress; open work never borrows an estimated end. */
+export function jobProgress(job: ScrubJob, at: number): number {
+  if (job.start === null || job.end === null || at < job.start) return 0;
+  const end = job.end;
   return end <= job.start ? 1 : Math.min(1, (at - job.start) / (end - job.start));
 }
 
-function stagePosition(stages: readonly (readonly ScrubJob[])[], at: number, latest: number) {
-  const gaps =
-    stages.length < 2
-      ? stages
-      : stages
-          .slice(0, -1)
-          .map((jobs, index) => (index === stages.length - 2 ? [...jobs, ...stages[stages.length - 1]] : jobs));
-  return gaps.reduce((position, jobs, index) => {
+function stagePosition(stages: readonly (readonly ScrubJob[])[], at: number) {
+  return stages.reduce((position, jobs, index) => {
     if (!jobs.some((job) => job.start !== null && job.start <= at)) return position;
-    const progress = jobs.reduce((sum, job) => sum + jobProgress(job, at, latest), 0) / jobs.length;
-    return Math.max(position, (index + progress) / Math.max(1, gaps.length));
+    const runningStart = jobs.reduce(
+      (furthest, job, jobIndex) =>
+        job.start !== null && job.start <= at && job.end === null
+          ? Math.max(furthest, jobIndex / jobs.length)
+          : furthest,
+      0,
+    );
+    const completed = jobs.reduce((sum, job) => sum + jobProgress(job, at), 0) / jobs.length;
+    const progress = Math.max(runningStart, completed);
+    return Math.min(1, Math.max(position, (index + progress) / Math.max(1, stages.length)));
   }, 0);
+}
+
+export function jobTimings(
+  jobs: readonly { id: string; span?: { start_t: string; end_t: string | null } }[],
+): ReadonlyMap<string, ScrubJob> {
+  return new Map(
+    jobs.map((job) => [
+      job.id,
+      {
+        start: job.span ? Date.parse(job.span.start_t) : null,
+        end: job.span?.end_t ? Date.parse(job.span.end_t) : null,
+      },
+    ]),
+  );
 }
 
 function validateRange(range: { start: number; end: number }) {
@@ -76,7 +87,7 @@ export function scrubTimeline(
     .sort((a, b) => a - b)
     .map((at) => ({
       at,
-      position: stagePosition(stages, at, range.end),
+      position: stagePosition(stages, at),
     }));
 }
 

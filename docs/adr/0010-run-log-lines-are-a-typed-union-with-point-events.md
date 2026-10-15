@@ -35,11 +35,11 @@ type EventLine =
 6. **Q6, where the contract lives: `skills/new-episode/scripts/`.** The lines in `run-log-line.schema.pure.ts`, re-exported by `run-log.schema.pure.ts` beside the folded Span and Score. The skill stays self-contained and the dashboard already imports from there. _Alternative:_ `src/lib`, which would make the skill's scripts import from the site.
 7. **Q7, how it evolves: additively, no version field.** A new key or event name is added to the key lists; the writer refuses any top-level key its kind does not declare, so extras go in `payload`. _Alternative:_ a schema version on `start-run`.
 8. **Names follow OpenTelemetry semantic conventions where one exists** (`file.path`), decided without asking; the `gen_ai.*` keys are unchanged.
-9. **Attribution is the skill hook's, for every point fact** (decided without asking): inside a subagent, the agent span whose start names `<session>/subagents/agent-<agent_id>.jsonl`; in the orchestrator, the Job the marker names while it is open; otherwise nothing. A hook waits at most 2 s for the lock and exits 0 on every failure. `InstructionsLoaded` runs `async`.
+9. **Attribution is the skill hook's, for every point fact** (decided without asking): inside a subagent, the agent span whose start names `<session>/subagents/agent-<agent_id>.jsonl`; in the orchestrator, the Job the marker names while it is open; otherwise nothing. A hook waits at most 2 s for the lock and exits 0 on every failure. The logging hooks for `PostToolUse` Read and Skill, and `InstructionsLoaded`, all run `async`.
 
 ## Consequences
 
 - **Readers narrow on `kind`, or read any key as optional.** Test fixtures that held partial lines are cast; production readers needed no change beyond the chips and the dashboard reader, which now validates a stored line with `lineErrors()` instead of re-recording it.
-- **The Read hook runs on every Read, synchronously.** It spawns node and scans `git worktree list`; it writes nothing outside a Run. If that latency shows, it can run `async` like `InstructionsLoaded`, at the cost of nothing the log needs.
+- **Logging does not hold up a tool.** The Read and Skill logging hooks run asynchronously, like `InstructionsLoaded`; they spawn node and scan `git worktree list`, writing nothing outside a Run. A point fact can arrive after the tool returns, and the writer serializes its append.
 - **`AGENTS.md` read directly fires no `InstructionsLoaded`** (Claude Code's Project instructions setting); only an import or a CLAUDE.md symlink to it does.
 - **Older logs have no events.** Their chips go green only from `skills_invoked`, after an agent ends, as design-ADR-0009 already said.

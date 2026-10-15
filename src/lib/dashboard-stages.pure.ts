@@ -26,15 +26,6 @@ export function stageTitle(id: string, names: Readonly<Record<string, string>>):
   );
 }
 
-/** The prefixes `customize-pipeline` gives the Jobs it writes from a `foreach` template. */
-const FAN_OUT_PREFIXES = ['write-research-', 'implement-section-'];
-
-/** A fan-out Job's readable name, what follows its template prefix with hyphens as spaces; any other Job keeps its id. */
-export function jobLabel(id: string): string {
-  const prefix = FAN_OUT_PREFIXES.find((candidate) => id.startsWith(candidate) && id.length > candidate.length);
-  return prefix ? id.slice(prefix.length).replaceAll('-', ' ') : id;
-}
-
 function legacyStage(job: DashboardJob): string {
   if (job.id.startsWith('write-research-')) return 'research';
   if (job.id.startsWith('implement-section-')) return 'build';

@@ -2,7 +2,6 @@ import { createLogFold, fold } from '../../skills/new-episode/scripts/run-log.pu
 import type { RunLogLine } from '../../skills/new-episode/scripts/run-log.schema.pure';
 import type { DashboardEvent } from './dashboard-events.pure';
 import { projectDashboard, type DashboardPipeline, type DashboardView } from './dashboard-projection.pure';
-import type { DashboardStage } from './dashboard-stages.pure';
 
 const readable = (events: readonly DashboardEvent[]): RunLogLine[] =>
   events.flatMap((event) => (event.line ? [event.line] : []));
@@ -44,12 +43,4 @@ export function replayBounds(events: readonly DashboardEvent[]) {
     last: end === null ? Math.max(...times) : Date.parse(end),
     finished: end !== null,
   };
-}
-
-/** Where each stage began: its earliest Job start, for tick marks on the replay slider. A stage not started is left out. */
-export function stageMarks(stages: readonly DashboardStage[]) {
-  return stages.flatMap(({ id, jobs }) => {
-    const starts = jobs.flatMap((job) => (job.span ? [Date.parse(job.span.start_t)] : []));
-    return starts.length > 0 ? [{ stage: id, at: Math.min(...starts) }] : [];
-  });
 }

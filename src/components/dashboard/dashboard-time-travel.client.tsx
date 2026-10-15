@@ -76,7 +76,6 @@ function ScrubInput({ copy, state, help, onDrag }: InputProps) {
   return (
     <input
       type="range"
-      role="slider"
       min={0}
       max={10000}
       step={1}
@@ -111,7 +110,10 @@ function Scrubber({ replay, range, copy, stages, geometry }: ScrubProps) {
       </div>
       <div className="flex items-baseline justify-between gap-3 font-mono text-caption text-muted-foreground tabular-nums">
         <time dateTime={new Date(range.start).toISOString()}>{clock.format(range.start)}</time>
-        <span aria-label={copy.duration}>{formatDuration(range.end - range.start)}</span>
+        <span>
+          <span className="sr-only">{copy.duration}: </span>
+          {formatDuration(range.end - range.start)}
+        </span>
       </div>
       <p id={help} className="sr-only">
         {copy.timeTravel.keyboard} {copy.timeTravel.replaying}

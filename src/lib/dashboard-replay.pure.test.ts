@@ -3,8 +3,7 @@ import { createLogFold } from '../../skills/new-episode/scripts/run-log.pure';
 import type { RunLogLine } from '../../skills/new-episode/scripts/run-log.schema.pure';
 import type { DashboardEvent } from './dashboard-events.pure';
 import { parseDashboardPipeline, projectDashboard } from './dashboard-projection.pure';
-import { eventsAt, replayBounds, replayDashboard, stageMarks } from './dashboard-replay.pure';
-import { projectStages } from './dashboard-stages.pure';
+import { eventsAt, replayBounds, replayDashboard } from './dashboard-replay.pure';
 
 const RUN_START = Date.parse('2026-10-14T10:00:00Z');
 const minute = (count: number) => new Date(RUN_START + count * 60_000).toISOString();
@@ -145,20 +144,6 @@ describe('success cases', () => {
     // ASSERT
     expect(shown.map((event) => event.number)).toEqual(expected);
   });
-
-  it('marks each stage at its earliest Job start', () => {
-    // ARRANGE
-    const view = replayDashboard(pipeline, run, at(31));
-    const expected = [
-      { stage: 'draft', at: at(1) },
-      { stage: 'review', at: at(11) },
-      { stage: 'publish', at: at(21) },
-    ];
-    // ACT
-    const marks = stageMarks(projectStages(view.jobs, view.stages).stages);
-    // ASSERT
-    expect(marks).toEqual(expected);
-  });
 });
 
 describe('failure cases', () => {
@@ -195,19 +180,6 @@ describe('edge cases', () => {
     // ASSERT
     expect(states(view)).toEqual(expected);
     expect(view.runs).toEqual([]);
-  });
-
-  it('leaves a stage without a started Job unmarked', () => {
-    // ARRANGE
-    const view = replayDashboard(pipeline, run, at(15));
-    const expected = [
-      { stage: 'draft', at: at(1) },
-      { stage: 'review', at: at(11) },
-    ];
-    // ACT
-    const marks = stageMarks(projectStages(view.jobs, view.stages).stages);
-    // ASSERT
-    expect(marks).toEqual(expected);
   });
 
   it('includes every event stamped at the cutoff, the later sequence number deciding the end', () => {

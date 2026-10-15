@@ -12,7 +12,7 @@
   content: '';
   position: absolute;
   left: 50%;
-  top: 1.875rem;
+  top: calc(var(--stage-size) / 2 + var(--node-inset));
   width: var(--stage-gap, 100%);
   height: 2px;
   background: var(--border);
@@ -29,7 +29,7 @@
   align-items: center;
   gap: 1rem;
   width: 100%;
-  padding: 0.375rem;
+  padding: var(--node-inset);
   border-radius: var(--radius);
   text-align: center;
 }
@@ -65,8 +65,8 @@
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  width: 3rem;
-  height: 3rem;
+  width: var(--stage-size);
+  height: var(--stage-size);
   border: 2px solid var(--node-tone);
   border-radius: 50%;
   background: var(--card);
@@ -93,7 +93,7 @@
 
 .drawer {
   position: fixed;
-  top: 5.5rem;
+  top: 6rem;
   right: 1rem;
   bottom: 1rem;
   z-index: 70;
@@ -130,6 +130,10 @@
 }
 
 @media (max-width: 47.99rem) {
+  .drawer {
+    top: 8rem;
+  }
+
   .drawerScrim[data-open='true'] {
     visibility: visible;
     pointer-events: auto;
@@ -173,8 +177,8 @@
 
 .jobs {
   position: absolute;
-  inset: 0 auto 0 50%;
-  width: var(--stage-gap, 100%);
+  inset: 0;
+  width: 100%;
   animation: unfold 260ms ease-out both;
   pointer-events: none;
 }
@@ -183,8 +187,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
+  width: var(--job-size);
+  height: var(--job-size);
   border-radius: 50%;
 }
 
@@ -198,8 +202,8 @@
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: var(--job-dot-size);
+  height: var(--job-dot-size);
   border: 2px solid var(--node-tone);
   border-radius: 50%;
   color: var(--node-tone);
@@ -315,23 +319,60 @@
 }
 
 .stages[data-jobs='true'] {
+  position: relative;
+  display: block;
   height: var(--network-height);
   align-items: stretch;
 }
 
+.stages[data-jobs='true'] .stage {
+  position: absolute;
+  top: 0;
+  height: 100%;
+}
+
 .stages[data-jobs='true'] .stage::before {
+  left: 0;
   top: 50%;
 }
 
 .stages[data-jobs='true'] .stageAnchor {
   position: absolute;
   z-index: 2;
-  top: calc(50% - 1.875rem);
-  width: 100%;
+  top: calc(50% - var(--stage-size) / 2 - var(--node-inset));
+  width: calc(var(--stage-size) + var(--node-inset) * 2);
+  transform: translateX(-50%);
 }
 
 .stageAnchor {
   position: relative;
+}
+
+.stages[data-jobs='true'] .stageCaption {
+  white-space: nowrap;
+}
+
+.endNode {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.endDot {
+  display: block;
+  width: var(--end-size);
+  height: var(--end-size);
+  border: 2px solid var(--muted-foreground);
+  border-radius: 50%;
+  background: var(--card);
+}
+
+.stages[data-jobs='false'] {
+  position: relative;
+}
+
+.stages[data-jobs='false'] .endNode {
+  top: calc(var(--stage-size) / 2 + var(--node-inset));
 }
 
 .stageAnchor:is(:hover, :focus-within) {
@@ -356,21 +397,9 @@
   visibility: hidden;
 }
 
-.jobs[data-last='true'] {
-  left: 0;
-  width: 50%;
-}
-
 .jobBranch {
   position: absolute;
   inset: 0;
-}
-
-.branchCurve {
-  position: absolute;
-  bottom: 50%;
-  width: 100%;
-  transform-origin: bottom;
 }
 
 .branchLine {
@@ -487,7 +516,4 @@
   .drawer[data-open='true'] {
     transition: none;
   }
-}
-:global(body:has([data-dashboard]) [data-testid='site-header']) {
-  display: none;
 }

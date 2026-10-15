@@ -98,6 +98,34 @@ beforeEach(() => {
 afterEach(() => rmSync(dir, { recursive: true, force: true }));
 
 describe('root scanning', () => {
+  it('registers Read and Skill logging asynchronously', () => {
+    // ARRANGE
+    const file = new URL('../../../.claude/settings.json', import.meta.url);
+    const expected = { Read: true, Skill: true };
+    // ACT
+    const settings = JSON.parse(readFileSync(file, 'utf8')) as {
+      hooks: { PostToolUse: { matcher: string; hooks: { command: string; async?: boolean }[] }[] };
+    };
+    const registered = Object.fromEntries(
+      settings.hooks.PostToolUse.flatMap((entry) =>
+        entry.hooks
+          .filter((hook) => hook.command.includes('claude-adapter.ts'))
+          .map((hook) => [entry.matcher, hook.async]),
+      ),
+    );
+    // ASSERT
+    expect(registered).toEqual(expected);
+  });
+  it('ignores an unknown mode rather than recording a subagent start', () => {
+    // ARRANGE
+    const before = linesOf(wt);
+    // ACT
+    const result = pointHook('unknown', 's2', { agent_id: 'a1' });
+    const after = linesOf(wt);
+    // ASSERT
+    expect(result.status).toBe(0);
+    expect(after).toEqual(before);
+  });
   it('logs a start in the worktree whose marker names the session, not the project dir', () => {
     // ACT
     const result = hook('start', 's2');
