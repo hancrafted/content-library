@@ -1,7 +1,7 @@
-import { order } from '../../skills/new-episode/scripts/run-log-fold.pure';
+import { order, skillUses } from '../../skills/new-episode/scripts/run-log-fold.pure';
 import type { Score, Span } from '../../skills/new-episode/scripts/run-log.schema.pure';
 import { answersTo } from '../../skills/new-episode/scripts/status-skills.pure';
-import type { JobAgent } from './episode-pipeline-jobs.pure';
+import type { JobAgent } from './episode-pipeline-definition.pure';
 
 /** A skill `pipeline.yml` lists for a Job's agents, in one agent's row or aggregated for the Job box. */
 export interface SkillChip {
@@ -64,14 +64,14 @@ function inLatestAttempt(evidence: ChipEvidence, latest: Span | undefined) {
 }
 
 /**
- * The Job span as the latest Attempt saw it: its skill calls from that Attempt's start on, and its `skills_invoked`
+ * The Job span as the latest Attempt saw it: its events from that Attempt's start on, and its `skills_invoked`
  * only while the Run has one Attempt, since that list covers the whole Job window.
  */
 function jobSpanSince(span: Span, attempts: readonly Span[], latest: Span | undefined): Span {
   if (latest === undefined) return span;
-  const skills = span.skills?.filter((use) => order(use, startOf(latest)) >= 0);
+  const events = span.events?.filter((event) => order(event, startOf(latest)) >= 0);
   const { skills_invoked, ...rest } = span;
-  return { ...rest, skills, ...(attempts.length === 1 && skills_invoked !== undefined && { skills_invoked }) };
+  return { ...rest, events, ...(attempts.length === 1 && skills_invoked !== undefined && { skills_invoked }) };
 }
 
 /** The Job span and the agents of its current Run and latest Attempt; none before the Job has started. */
@@ -91,7 +91,7 @@ function scope(evidence: ChipEvidence) {
 }
 
 const invoked = (span: Span, name: string): boolean =>
-  (span.skills ?? []).some((use) => use.name === name) || (span.skills_invoked ?? []).includes(name);
+  skillUses(span).some((use) => use.name === name) || (span.skills_invoked ?? []).includes(name);
 
 /** One agent's state: run when a span answering to it invoked it; skipped once each such span ended knowing its skills without it. */
 function skillState(name: string, agent: JobAgent, spans: readonly Span[]): SkillChip['state'] {

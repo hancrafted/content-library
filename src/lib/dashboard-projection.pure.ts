@@ -1,106 +1,64 @@
-import { parse } from 'yaml';
 import type { Folded, Score, Span, SpanStatus } from '../../skills/new-episode/scripts/run-log.schema.pure';
 import { latestJobSpans } from '../../skills/new-episode/scripts/status.pure';
 import { jobChips, type JobChips } from './dashboard-chips.pure';
-import { agentFields, JOB_FIELDS, TOP_FIELDS } from './episode-pipeline-fields.pure';
-import { findCycle } from './episode-pipeline-graph.pure';
-import { JOB_ID, jobOf, type Job, type JobAgent } from './episode-pipeline-jobs.pure';
-import { checkMapping, field, isMapping, optional, stringsOf, type Field, type Mapping } from './mapping-fields.pure';
+import {
+  JOB_ID,
+  jobGraph,
+  missingEdges,
+  parsePipeline,
+  type Job,
+  type JobAgent,
+  type Pipeline,
+} from './episode-pipeline-definition.pure';
+import { LEGACY_FIELDS } from './episode-pipeline-fields.pure';
+import { checkMapping, isMapping } from './mapping-fields.pure';
 
-export interface DashboardAgentConfig extends JobAgent {
-  agent: string;
-}
-
-export interface DashboardJobConfig extends Job {
-  retries: number;
-  /** A template Job's `<file>#<heading>`: customize-pipeline writes one Job per item; absent on a real Job. */
-  foreach?: string;
-  agents: DashboardAgentConfig[];
-}
-
-export interface DashboardPipeline {
+export interface DashboardPipeline extends Pipeline {
   status: string;
-  /** The ordered stage ids the pipeline lists; empty for a Run scaffolded before stages existed. */
-  stages: string[];
-  jobs: DashboardJobConfig[];
 }
 
-/**
- * A Run scaffolded before the stages layer lists no `stages` and no Job `stage`, and its implementors may carry the
- * `ticket` block of the per-ticket fan-out the Build Jobs replaced; the dashboard still reads it.
- */
-const legacyOptional = (fields: readonly Field[], key: string) =>
-  fields.map((candidate) => (candidate.key === key ? optional(candidate) : candidate));
-const PIPELINE_FIELDS = legacyOptional(TOP_FIELDS, 'stages');
-const STAGED_JOB_FIELDS = legacyOptional(JOB_FIELDS, 'stage');
-const LEGACY_TICKET = optional(field('ticket', isMapping, 'it must be a mapping of agent and skills'));
-const legacyAgentFields = (reviewer: boolean): Field[] => [...agentFields(reviewer), LEGACY_TICKET];
-
+/** The dashboard reads a Run scaffolded before the stages layer by the Pipeline definition's legacy fields. */
 function jobErrors(job: unknown, at: number): string[] {
   const where = `Job ${at + 1}`;
   if (!isMapping(job)) return [`${where} must be a mapping.`];
   const agents = Array.isArray(job.agents) ? job.agents : [];
   return [
-    ...checkMapping(where, job, STAGED_JOB_FIELDS),
+    ...checkMapping(where, job, LEGACY_FIELDS.job),
     ...agents.flatMap((agent) =>
       isMapping(agent)
-        ? checkMapping(`${where} agent`, agent, legacyAgentFields(agent.type === 'reviewer'))
+        ? checkMapping(`${where} agent`, agent, LEGACY_FIELDS.agent(agent.type === 'reviewer'))
         : [`${where} agent must be a mapping.`],
     ),
   ];
 }
 
-function jobConfig(job: Mapping): DashboardJobConfig {
-  const parsed = jobOf(job);
-  return {
-    ...parsed,
-    retries: Number(job.retries),
-    ...(typeof job.foreach === 'string' && { foreach: job.foreach }),
-    agents: (job.agents as Mapping[]).map((agent, index) => ({
-      ...parsed.agents[index],
-      agent: typeof agent.agent === 'string' ? agent.agent : 'general-purpose',
-    })),
-  };
-}
-
-function orderedJobs(jobs: DashboardJobConfig[]): DashboardJobConfig[] {
-  const byId = new Map(jobs.map((job) => [job.id, job]));
-  if (byId.size !== jobs.length) throw new Error('The pipeline has duplicate Job ids.');
+/** The Jobs in needs order by the Pipeline definition's graph rules, throwing at the first rule broken. */
+function orderedJobs(jobs: Job[]): Job[] {
+  const graph = jobGraph(jobs);
+  if (graph.duplicates.length > 0) throw new Error('The pipeline has duplicate Job ids.');
   for (const job of jobs) {
     if (!JOB_ID.test(job.id)) throw new Error(`Job "${job.id}" has an invalid id.`);
-    for (const dependency of [...job.needs, ...job.wants]) {
-      if (!byId.has(dependency)) throw new Error(`Job "${job.id}" names missing Job "${dependency}".`);
-    }
+    const [missing] = missingEdges(job, graph.byId);
+    if (missing) throw new Error(`Job "${job.id}" names missing Job "${missing.other}".`);
   }
-  const cycle = findCycle(jobs, byId);
-  if (cycle !== null) throw new Error(`The pipeline has a dependency cycle: ${cycle.join(' → ')}.`);
-  const ordered: DashboardJobConfig[] = [];
-  const visited = new Set<string>();
-  const visit = (job: DashboardJobConfig) => {
-    if (visited.has(job.id)) return;
-    visited.add(job.id);
-    job.needs.forEach((id) => visit(byId.get(id)!));
-    ordered.push(job);
-  };
-  jobs.forEach(visit);
-  return ordered;
+  if (graph.cycle !== null) throw new Error(`The pipeline has a dependency cycle: ${graph.cycle.join(' → ')}.`);
+  return graph.ordered!;
 }
 
-/** Reads the local pipeline's display configuration without consulting the repository or network. */
+/** Reads the local pipeline's display configuration through the Pipeline definition reader, offline. */
 export function parseDashboardPipeline(text: string): DashboardPipeline {
-  const document: unknown = parse(text);
-  if (!isMapping(document) || !Array.isArray(document.jobs)) throw new Error('The pipeline needs a mapping with jobs.');
-  const errors = [...checkMapping('The pipeline', document, PIPELINE_FIELDS), ...document.jobs.flatMap(jobErrors)];
+  const parsed = parsePipeline(text);
+  if ('error' in parsed) throw new Error(parsed.error);
+  const { document, pipeline } = parsed;
+  if (!isMapping(document) || pipeline === null) throw new Error('The pipeline needs a mapping with jobs.');
+  const jobs = document.jobs as unknown[];
+  const errors = [...checkMapping('The pipeline', document, LEGACY_FIELDS.top), ...jobs.flatMap(jobErrors)];
   if (errors.length > 0) throw new Error(errors.join('\n'));
-  return {
-    status: String(document.status),
-    stages: stringsOf(document.stages),
-    jobs: orderedJobs(document.jobs.filter(isMapping).map(jobConfig)),
-  };
+  return { status: String(document.status), stages: pipeline.stages, jobs: orderedJobs(pipeline.jobs) };
 }
 
-export interface DashboardJob extends Omit<DashboardJobConfig, 'agents'> {
-  config: DashboardAgentConfig[];
+export interface DashboardJob extends Omit<Job, 'agents'> {
+  config: JobAgent[];
   state: SpanStatus | 'waiting' | 'gate';
   span?: Span;
   attempts: Span[];
@@ -131,7 +89,7 @@ interface ProjectionContext {
 }
 
 /** One configured Job with its latest span, its children, the Scores worth Han's eye and its chips. */
-function jobView({ agents: config, ...job }: DashboardJobConfig, context: ProjectionContext): DashboardJob {
+function jobView({ agents: config, ...job }: Job, context: ProjectionContext): DashboardJob {
   const { folded, owners, latest, openGates } = context;
   const children = folded.spans.filter((span) => owners.get(span.span_id) === job.id);
   const span = latest.get(job.id);

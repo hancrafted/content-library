@@ -9,10 +9,11 @@ describe('dashboard static contract', () => {
     // ARRANGE
     const file = join(OUT_DIR, exportedFile('/dashboard'));
     const germanFile = join(OUT_DIR, exportedFile('/de/dashboard'));
-    const expectedTitle = 'Pipeline dashboard';
-    const expectedButton = 'Choose Episode folder';
+    const expectedTitle = 'Dashboard';
+    const expectedButton = 'Choose folder';
     const expectedRobots = 'noindex';
     const expectedLangs = ['en', 'x-default'];
+    const expectedNavigation = ['Episodes', 'Dashboard'];
     // ACT
     const exists = existsSync(file);
     const germanExists = existsSync(germanFile);
@@ -33,6 +34,13 @@ describe('dashboard static contract', () => {
         .get(),
     ).toEqual(expectedLangs);
     expect($('[data-testid="nav-dashboard"]').length).toBe(1);
+    expect($('[data-testid="site-header"]').length).toBe(1);
+    expect(
+      $('[data-testid="site-nav"] a')
+        .map((_, element) => $(element).text())
+        .get(),
+    ).toEqual(expectedNavigation);
+    expect($('[data-testid="site-header"] [data-testid="header-contact"]').length).toBe(1);
     expect($('[data-testid="locale-de"]').length).toBe(0);
     expect($('a[href*="/de/dashboard"]').length).toBe(0);
   });

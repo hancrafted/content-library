@@ -17,10 +17,12 @@ export function PreviewButton({
   job,
   copy,
   className = '',
+  tabIndex,
 }: {
   job: DashboardJob;
   copy: DashboardCopy;
   className?: string;
+  tabIndex?: number;
 }) {
   const port = previewPort(job);
   if (port === undefined) return null;
@@ -28,6 +30,7 @@ export function PreviewButton({
   return (
     <button
       type="button"
+      tabIndex={tabIndex}
       data-preview={url}
       title={url}
       onClick={() => window.open(url, '_blank', 'noopener')}

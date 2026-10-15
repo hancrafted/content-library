@@ -75,7 +75,7 @@ describe('failure cases', () => {
     // ASSERT
     expect(result).toEqual({
       ok: false,
-      errors: ['kind must be one of start-run, end-run, start, end, attrs, score, skill'],
+      errors: ['kind must be one of start-run, end-run, start, end, attrs, score, event'],
     });
   });
 

@@ -70,7 +70,7 @@ function GateHistory({ gates, copy }: { gates: Span[]; copy: DashboardCopy }) {
 
 export function JobEvidence({ job, copy }: { job: DashboardJob; copy: DashboardCopy }) {
   return (
-    <article aria-label={job.id} className="min-w-0 space-y-4 rounded-xl border border-border bg-card p-4 sm:p-5">
+    <article aria-label={job.id} className="min-w-0 space-y-4 border-t border-border pt-4">
       <Dependencies job={job} copy={copy} />
       <p className="text-caption text-muted-foreground">
         {job.gate ? copy.gateConfig : copy.noGate} · {copy.retryLimit}: {job.retries}

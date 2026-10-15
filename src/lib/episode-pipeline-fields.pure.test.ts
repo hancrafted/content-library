@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { agentFields, JOB_FIELDS } from './episode-pipeline-fields.pure';
+import { agentFields, JOB_FIELDS, LEGACY_FIELDS, TOP_FIELDS } from './episode-pipeline-fields.pure';
 import { checkMapping } from './mapping-fields.pure';
 
 /*
  * The pipeline vocabulary through checkMapping, the one way the pipeline
- * check reads it: a valid agent and job, then the values each list refuses.
+ * check and the dashboard read it: a valid agent and job, then the values each list refuses.
  */
 
 const AGENT = { type: 'reviewer', skills: [], references: [], rubric: 'references/x.md#rubric', model: 'opus' };
@@ -17,6 +17,32 @@ describe('success cases', () => {
     const messages = checkMapping('Agent', agent, agentFields(true));
     // ASSERT
     expect(messages).toEqual([]);
+  });
+
+  it('lets a Run scaffolded before stages leave out stages and stage, and keep a ticket block, which the template may not', () => {
+    // ARRANGE
+    const top = { status: 'approved', jobs: [] };
+    const job = { id: 'a', needs: [], outputs: [], checks: [], retries: 0, agents: [AGENT] };
+    const agent = { ...AGENT, ticket: { agent: 'general-purpose', skills: [] } };
+    const expected = [
+      'Pipeline lacks the key "stages".',
+      'Job lacks the key "stage".',
+      'Agent has an unknown key "ticket"; the keys are type, skills, references, rubric, agent, model, session.',
+    ];
+    // ACT
+    const legacy = [
+      ...checkMapping('Pipeline', top, LEGACY_FIELDS.top),
+      ...checkMapping('Job', job, LEGACY_FIELDS.job),
+      ...checkMapping('Agent', agent, LEGACY_FIELDS.agent(true)),
+    ];
+    const strict = [
+      ...checkMapping('Pipeline', top, TOP_FIELDS),
+      ...checkMapping('Job', job, JOB_FIELDS),
+      ...checkMapping('Agent', agent, agentFields(true)),
+    ];
+    // ASSERT
+    expect(legacy).toEqual([]);
+    expect(strict).toEqual(expected);
   });
 });
 
