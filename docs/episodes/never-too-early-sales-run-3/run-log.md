@@ -75,3 +75,67 @@ Attempt 1 failed on the staging test, which the scaffold-pipeline reference cont
 ### Notes
 
 Other branches still carry folders under retired categories (`BIZ-*`, `GTM-*`, `FIN-*`) for the same questions. `GLOSSARY.md` no longer lists those categories, so they were not reused. Retrieval decides whether each reused folder needs a refresh.
+
+## convert-references · 2026-10-15T12:18:18Z
+
+### Inputs
+
+- `brief.md`: one Episode Design Reference, `reference/source-deck/design-reference.md`.
+- `.scratch/never-too-early-sales-run-3/source-deck.pdf`: the source deck brief-grill copied, 16 pages.
+
+### Output
+
+- `reference/source-deck/design-reference.md`: 16 pages, each with a `## Page <n>` and its page image in `pages/`.
+- `crops/`: 5 of marker's 27 cut-outs kept, from pages 2, 8, 12, 14 and 16.
+
+### Checks
+
+- `mh check`: pass.
+- `vitest` staging test: pass.
+- Page 8 (the cashflow board) checked against its image: the text holds every note's words and amounts.
+
+### Notes
+
+Pages 1, 5 and 9 hold only their title, which matches the title and section-divider pages.
+
+Needs human: page 16's text came back empty. Its board, Q1–Q4 with "Start when?", came through only as the cut-out `crops/page-16-diagram-3.jpg` and its page image, so no note's words or amounts are in the text. Page 13 is a third-party Pipedrive screenshot; its OCR text is UI noise. The Brief says to draw our own deal board instead.
+
+## retrieval · 2026-10-15T12:18:21Z
+
+### Inputs
+
+- `skills/new-episode/references/retrieval.md`: the job's reference.
+- `docs/episodes/never-too-early-sales-run-3/brief.md`: the seven Research questions and the Slides that cite them.
+- `docs/llm-wiki/index.md`: the research descriptions searched per question.
+- The seven research files the `categorize-research` folders name, each read in full under `docs/llm-wiki/research/`.
+- `docs/episodes/never-too-early-sales-run-3/run-log.md`: the `categorize-research` entry with the folder names.
+
+### Output
+
+- Question 1: reuse `docs/llm-wiki/research/START/START-0001__revenue-lags-costs-in-startups/research.md`.
+- Question 2: reuse `docs/llm-wiki/research/SALES/SALES-0001__b2b-sales-cycle-length/research.md`.
+- Question 3: reuse `docs/llm-wiki/research/SALES/SALES-0002__b2b-pipeline-conversion-rates/research.md`.
+- Question 4: reuse `docs/llm-wiki/research/SALES/SALES-0003__early-selling-market-insight/research.md`.
+- Question 5: reuse `docs/llm-wiki/research/SALES/SALES-0004__early-sales-results-build-trust/research.md`.
+- Question 6: reuse `docs/llm-wiki/research/SALES/SALES-0005__early-selling-repeatable-process/research.md`.
+- Question 7: reuse `docs/llm-wiki/research/SALES/SALES-0006__sales-pipeline-ramp-up-time/research.md`.
+
+### Research jobs
+
+- none: every question reused.
+
+### Checks
+
+- mh check: pass.
+
+### Notes
+
+Every file is fresh: the earliest `stale_after` is 2027-10-13, after today (2026-10-15).
+
+- Question 1 (START-0001): its Context supports the claim that cash position is decided by timing, which is what slides 1, 3, 6 and 10 use the cashflow board for.
+- Question 2 (SALES-0001): its Context claims a B2B deal needs months from first contact to signature because the buyer group decides slowly, which is slide 8's ~9.5-month cycle.
+- Question 3 (SALES-0002): its Context claims a pipeline needs many more leads than deals and says it checks a worked example of such ratios, which is slide 8's ~27:1.
+- Question 4 (SALES-0003): its Context is scoped to what direct contact with buyers teaches, the market insight claim of slide 2.
+- Question 5 (SALES-0004): its Context claims early sales earn investor and customer trust, slide 2's claim. Its description says no study measures letters of intent or pipelines directly; write-dossier should not claim more.
+- Question 6 (SALES-0005): its Context claims early selling yields a process, slide 2's repeatable-process box.
+- Question 7 (SALES-0006): its Context claims a pipeline cannot be switched on when money is needed, slide 9's ramp-up.

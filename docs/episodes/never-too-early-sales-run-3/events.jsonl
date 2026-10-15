@@ -91,3 +91,12 @@
 {"kind":"score","t":"2026-10-15T12:16:29Z","seq":91,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"5f89fc2f1424e82c","name":"check","value":"pass","source":"check:mh"}
 {"kind":"end","t":"2026-10-15T12:16:29Z","seq":92,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"5f89fc2f1424e82c","status":"ok"}
 {"kind":"end","t":"2026-10-15T12:16:32Z","seq":93,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"1a3ce710c8d9d934","status":"ok"}
+{"kind":"start","t":"2026-10-15T12:17:19Z","seq":94,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"7b4bfaa6eea78ad2","type":"job","name":"retrieval","job":"retrieval","parent_span_id":"c47a980a192e386a"}
+{"kind":"start","t":"2026-10-15T12:17:19Z","seq":95,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"3405cb19c1aa9c80","type":"attempt","name":"retrieval#1","job":"retrieval","attempt":1,"parent_span_id":"7b4bfaa6eea78ad2"}
+{"kind":"score","t":"2026-10-15T12:18:17Z","seq":96,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"4066f2d3ee37f893","name":"check","value":"pass","source":"check:mh"}
+{"kind":"score","t":"2026-10-15T12:18:17Z","seq":97,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"4066f2d3ee37f893","name":"check","value":"pass","source":"check:vitest"}
+{"kind":"end","t":"2026-10-15T12:18:17Z","seq":98,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"4066f2d3ee37f893","status":"ok"}
+{"kind":"end","t":"2026-10-15T12:18:18Z","seq":99,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"d4349033f5786619","status":"ok"}
+{"kind":"score","t":"2026-10-15T12:18:18Z","seq":100,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"3405cb19c1aa9c80","name":"check","value":"pass","source":"check:mh"}
+{"kind":"end","t":"2026-10-15T12:18:18Z","seq":101,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"3405cb19c1aa9c80","status":"ok"}
+{"kind":"end","t":"2026-10-15T12:18:21Z","seq":102,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"7b4bfaa6eea78ad2","status":"ok"}
