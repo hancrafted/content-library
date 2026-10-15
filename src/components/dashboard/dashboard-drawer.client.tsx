@@ -1,17 +1,16 @@
 'use client';
 
 import type { useDashboardDetail } from '@/hooks/use-dashboard-detail';
+import type { GraphView } from '@/lib/dashboard-graph-view.pure';
 import type { EpisodeOutputs } from '@/lib/dashboard-outputs.pure';
-import type { DashboardStage } from '@/lib/dashboard-stages.pure';
 import { X } from 'lucide-react';
 import { JobDetail, StageDetail, type OpenEventLog } from './dashboard-detail';
 import type { DashboardCopy } from './dashboard-evidence';
 import styles from './dashboard-graph.module.css';
-import { stageName } from './dashboard-stage-nav';
 
 interface DrawerProps {
   detail: ReturnType<typeof useDashboardDetail>;
-  stage?: DashboardStage;
+  selection: GraphView['selection'];
   outputs: EpisodeOutputs;
   openLog: OpenEventLog;
   copy: DashboardCopy;
@@ -37,26 +36,25 @@ function DrawerHead({ detail, copy, title }: Pick<DrawerProps, 'detail' | 'copy'
 }
 
 /** The Context drawer's floating-card pattern, without its Episode-specific content or preferences. */
-export function DashboardDrawer({ detail, stage, outputs, openLog, copy }: DrawerProps) {
-  const job = stage?.jobs.find((candidate) => candidate.id === detail.selection?.job);
-  const title = job?.id ?? (stage ? stageName(stage, copy) : copy.drawer.title);
+export function DashboardDrawer({ detail, selection, outputs, openLog, copy }: DrawerProps) {
+  const title = selection?.title ?? copy.drawer.title;
   return (
     <>
-      <div aria-hidden="true" onClick={detail.close} data-open={!!stage} className={styles.drawerScrim} />
+      <div aria-hidden="true" onClick={detail.close} data-open={!!selection} className={styles.drawerScrim} />
       <section
         id="dashboard-stage-detail"
         aria-labelledby="dashboard-detail-title"
         data-dashboard-drawer
-        data-open={!!stage}
+        data-open={!!selection}
         className={styles.drawer}
       >
         <DrawerHead detail={detail} copy={copy} title={title} />
         <div ref={detail.body} className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-4">
-          {stage ? (
-            job ? (
-              <JobDetail job={job} copy={copy} outputs={outputs} openLog={openLog} />
+          {selection ? (
+            selection.job ? (
+              <JobDetail node={selection.job} copy={copy} outputs={outputs} openLog={openLog} />
             ) : (
-              <StageDetail stage={stage} copy={copy} outputs={outputs} openLog={openLog} />
+              <StageDetail stage={selection.stage} copy={copy} outputs={outputs} openLog={openLog} />
             )
           ) : null}
         </div>

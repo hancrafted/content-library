@@ -1,9 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { spanElapsed } from '@/lib/dashboard-elapsed.pure';
 import type { EventScope } from '@/lib/dashboard-events.pure';
+import type { JobNode, StageNode } from '@/lib/dashboard-graph-view.pure';
 import type { EpisodeOutputs } from '@/lib/dashboard-outputs.pure';
-import type { DashboardJob } from '@/lib/dashboard-projection.pure';
-import { jobLanes, type DashboardStage } from '@/lib/dashboard-stages.pure';
 import { fillTemplate } from '@/lib/template.pure';
 import { useContext } from 'react';
 import { JobChipDetail } from './dashboard-chips';
@@ -20,30 +19,26 @@ interface DetailProps {
   openLog: OpenEventLog;
 }
 
-function TicketLogs({ job, copy, openLog }: Pick<DetailProps, 'copy' | 'openLog'> & { job: DashboardJob }) {
-  return jobLanes(job).flatMap((lane) => {
-    if (lane.ticket === undefined) return [];
-    const label = fillTemplate(copy.graph.ticket, { number: lane.ticket });
-    return [
-      <Button
-        key={lane.ticket}
-        variant="outline"
-        onClick={() => openLog(label, { jobs: [job.id], ticket: lane.ticket })}
-      >
+function TicketLogs({ node, copy, openLog }: Pick<DetailProps, 'copy' | 'openLog'> & { node: JobNode }) {
+  return node.tickets.map((ticket) => {
+    const label = fillTemplate(copy.graph.ticket, { number: ticket });
+    return (
+      <Button key={ticket} variant="outline" onClick={() => openLog(label, { jobs: [node.id], ticket })}>
         {label} · {copy.graph.logs}
-      </Button>,
-    ];
+      </Button>
+    );
   });
 }
 
-export function JobDetail({ job, copy, outputs, openLog }: DetailProps & { job: DashboardJob }) {
+export function JobDetail({ node, copy, outputs, openLog }: DetailProps & { node: JobNode }) {
   const { now } = useContext(DashboardMoment);
+  const { job } = node;
   return (
     <div id={`dashboard-job-${job.id}`} className="space-y-5">
       <div className="flex flex-wrap items-center gap-2 text-caption">
         <StateBadge state={job.state} />
         {job.span ? <ElapsedTime elapsed={spanElapsed(job.span, now)} copy={copy} /> : null}
-        <AttentionMarker job={job} label={copy.graph.jobAttention} />
+        <AttentionMarker attention={node.attention} label={copy.graph.jobAttention} />
       </div>
       <JobLinks job={job} outputs={outputs} copy={copy} />
       <JobChipDetail job={job} copy={copy} />
@@ -51,14 +46,14 @@ export function JobDetail({ job, copy, outputs, openLog }: DetailProps & { job: 
         <Button variant="outline" onClick={() => openLog(job.id, { jobs: [job.id] })}>
           {copy.graph.logs}
         </Button>
-        <TicketLogs job={job} copy={copy} openLog={openLog} />
+        <TicketLogs node={node} copy={copy} openLog={openLog} />
       </div>
       <JobEvidence job={job} copy={copy} />
     </div>
   );
 }
 
-export function StageDetail({ stage, copy, outputs, openLog }: DetailProps & { stage: DashboardStage }) {
+export function StageDetail({ stage, copy, outputs, openLog }: DetailProps & { stage: StageNode }) {
   return (
     <div className="space-y-5">
       <StateBadge state={stage.state} />
@@ -66,13 +61,13 @@ export function StageDetail({ stage, copy, outputs, openLog }: DetailProps & { s
       <Button variant="outline" onClick={() => openLog(stage.id, { jobs: stage.jobs.map((job) => job.id) })}>
         {copy.graph.logs}
       </Button>
-      {stage.jobs.map((job) => (
-        <details key={job.id} className="border-t border-border pt-3">
+      {stage.nodes.map((node) => (
+        <details key={node.id} className="border-t border-border pt-3">
           <summary className="cursor-pointer py-2 text-body font-medium wrap-anywhere focus-visible:outline-2 focus-visible:outline-ring">
-            {job.id}
+            {node.id}
           </summary>
           <div className="py-3">
-            <JobDetail job={job} copy={copy} outputs={outputs} openLog={openLog} />
+            <JobDetail node={node} copy={copy} outputs={outputs} openLog={openLog} />
           </div>
         </details>
       ))}

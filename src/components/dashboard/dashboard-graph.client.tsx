@@ -5,10 +5,10 @@ import { useDashboardDetail } from '@/hooks/use-dashboard-detail';
 import type { ReplayControls } from '@/hooks/use-dashboard-replay';
 import type { DashboardEvent, EventScope } from '@/lib/dashboard-events.pure';
 import { graphGeometry } from '@/lib/dashboard-graph-geometry.pure';
+import { graphView, type GraphView } from '@/lib/dashboard-graph-view.pure';
 import type { EpisodeOutputs } from '@/lib/dashboard-outputs.pure';
 import type { DashboardJob, DashboardView } from '@/lib/dashboard-projection.pure';
 import { jobTimings } from '@/lib/dashboard-scrub.pure';
-import { projectStages } from '@/lib/dashboard-stages.pure';
 import { fillTemplate } from '@/lib/template.pure';
 import { useId, useState, type CSSProperties } from 'react';
 import { DashboardDrawer } from './dashboard-drawer.client';
@@ -17,7 +17,7 @@ import styles from './dashboard-graph.module.css';
 import { DashboardLog } from './dashboard-log.client';
 import { DashboardMoment, type Moment } from './dashboard-moment';
 import { DashboardObservations } from './dashboard-observations';
-import { stageName, StageNavigation } from './dashboard-stage-nav';
+import { StageNavigation } from './dashboard-stage-nav';
 import { LiveToggle, TimeTravel } from './dashboard-time-travel.client';
 
 interface GraphProps {
@@ -52,16 +52,16 @@ interface OverviewProps {
   stale: boolean;
   copy: DashboardCopy;
   replay: ReplayControls;
-  graph: ReturnType<typeof projectStages>;
+  graph: GraphView;
 }
 
 function ProgressSummary({ graph, copy }: Pick<OverviewProps, 'graph' | 'copy'>) {
-  const next = graph.stages.find((stage) => stage.state === 'waiting');
+  const { next } = graph;
   return (
     <div className="space-y-1">
       <h2 className="text-body font-semibold">{copy.graph.title}</h2>
       <p role="status" className="text-caption">
-        {fillTemplate(copy.graph.stagesComplete, { done: graph.completed, total: graph.stages.length })}
+        {fillTemplate(copy.graph.stagesComplete, { done: graph.completed, total: graph.total })}
         {graph.attention > 0 ? (
           <span className="ml-3 font-medium text-(--warning)">
             {fillTemplate(copy.graph.attention, { count: graph.attention })}
@@ -69,9 +69,7 @@ function ProgressSummary({ graph, copy }: Pick<OverviewProps, 'graph' | 'copy'>)
         ) : null}
       </p>
       {next ? (
-        <p className="text-caption text-muted-foreground">
-          {fillTemplate(copy.graph.next, { name: stageName(next, copy) })}
-        </p>
+        <p className="text-caption text-muted-foreground">{fillTemplate(copy.graph.next, { name: next.label })}</p>
       ) : null}
     </div>
   );
@@ -124,8 +122,6 @@ function GraphOverview({ controls, graph, stale, copy, replay }: OverviewProps) 
           <TimeTravel replay={replay} copy={copy} geometry={geometry} />
           <StageNavigation
             stages={graph.stages}
-            selected={detail.selection?.stage ?? null}
-            selectedJob={detail.selection?.job}
             onSelect={detail.open}
             onSelectJob={showJobs ? detail.open : undefined}
             copy={copy}
@@ -139,8 +135,8 @@ function GraphOverview({ controls, graph, stale, copy, replay }: OverviewProps) 
 
 export function DashboardGraph({ view, events, stale, moment, outputs, copy, replay, observedJobs }: GraphProps) {
   const controls = useGraphControls();
-  const graph = projectStages(view.jobs, view.stages);
-  const stage = graph.stages.find((candidate) => candidate.id === controls.detail.selection?.stage);
+  const labels = { stageNames: copy.graph.stageNames, gate: copy.waitingOnHan, complete: copy.graph.complete };
+  const graph = graphView(view, labels, controls.detail.selection);
   const { log, openLog, dismissLog } = controls;
   return (
     <DashboardMoment value={moment}>
@@ -151,7 +147,13 @@ export function DashboardGraph({ view, events, stale, moment, outputs, copy, rep
           aria-label={copy.graph.title}
         >
           <GraphOverview controls={controls} graph={graph} stale={stale} copy={copy} replay={replay} />
-          <DashboardDrawer detail={controls.detail} stage={stage} copy={copy} openLog={openLog} outputs={outputs} />
+          <DashboardDrawer
+            detail={controls.detail}
+            selection={graph.selection}
+            copy={copy}
+            openLog={openLog}
+            outputs={outputs}
+          />
           {log ? (
             <DashboardLog events={events} scope={log.scope} title={log.title} copy={copy} onDismiss={dismissLog} />
           ) : null}
