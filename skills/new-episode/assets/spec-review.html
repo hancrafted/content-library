@@ -4,9 +4,47 @@
   (design-ADR 0011). Its fields sit beside what they review and join it by form="spec-review":
   per Option a checkbox name="pick:<slide-slug>" value="<option-id>", per Slide a textarea
   name="note:<slide-slug>", and one textarea name="note:visual-language".
+  npm run episode:spec serves the page and saves the review as the next feedback round.
 -->
 <form id="spec-review" class="spec-review" method="post">
   <p>Tick the Options you want under each Slide and dictate a note per Slide. A Slide with no tick needs a note.</p>
+  <output name="status" aria-live="polite"></output>
   <button type="submit">Save review</button>
 </form>
+<script>
+  (() => {
+    // A Slide with no tick needs a note; ticks and notes survive a reload until a save succeeds.
+    const form = document.getElementById('spec-review');
+    const meta = JSON.parse(document.getElementById('spec-meta')?.textContent || '{}');
+    const key = 'spec-review:' + (meta.title || location.pathname);
+    const fields = [...form.elements].filter((field) => /^(pick|note):/.test(field.name));
+    const isBox = (field) => field.type === 'checkbox';
+    const id = (field) => (isBox(field) ? field.name + '=' + field.value : field.name);
+    const ticked = (slug) => fields.some((field) => field.name === 'pick:' + slug && field.checked);
+    const sync = () => {
+      for (const note of fields.filter((field) => !isBox(field))) {
+        const slug = note.name.slice('note:'.length);
+        note.required = slug !== 'visual-language' && !ticked(slug);
+      }
+    };
+    const store = () => {
+      const draft = fields.map((field) => [id(field), isBox(field) ? field.checked : field.value]);
+      localStorage.setItem(key, JSON.stringify(Object.fromEntries(draft)));
+    };
+    const saved = new URLSearchParams(location.search).get('saved');
+    if (saved) {
+      localStorage.removeItem(key);
+      form.elements.status.value = 'Saved as feedback/' + saved + '/feedback.md.';
+      history.replaceState(null, '', location.pathname);
+    } else {
+      const draft = JSON.parse(localStorage.getItem(key) || '{}');
+      for (const field of fields.filter((candidate) => id(candidate) in draft))
+        if (isBox(field)) field.checked = draft[id(field)];
+        else field.value = draft[id(field)];
+    }
+    sync();
+    for (const field of fields)
+      for (const type of ['input', 'change']) field.addEventListener(type, () => (sync(), store()));
+  })();
+</script>
 <!-- spec-review:end -->

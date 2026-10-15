@@ -7,6 +7,7 @@
 
 import { checkSpec } from './episode-spec.pure';
 import { checkBrief } from './episode-staging-brief.pure';
+import { checkFeedback } from './episode-staging-feedback.pure';
 import { checkStagingOrder } from './episode-staging-order.pure';
 import { checkTexts } from './episode-staging-texts.pure';
 import { checkTitleSlide } from './episode-staging-title.pure';
@@ -16,9 +17,7 @@ import {
   blocksOf,
   bodyLines,
   h4s,
-  headingsOf,
   orderedList,
-  slideAnchors,
   type Block,
   type Heading,
   type ListItem,
@@ -138,38 +137,6 @@ function checkSpeakerNotes(blocks: readonly Block[]): Finding[] {
     ];
     return messages.map((message): Finding => ({ kind: 'speaker-note', file: 'dossier.md', message }));
   });
-}
-
-const FEEDBACK_FILE = /^feedback\/[^/]+\/feedback\.md$/;
-const FEEDBACK_ITEM = /^- `([a-z0-9-]+--[a-z0-9-]+)` · (content|implementation|practice) — \S.*$/;
-
-function checkFeedbackFile(file: string, markdown: string, anchors: readonly string[]): Finding[] {
-  const practice = frontmatterField(markdown, 'via') === 'practice';
-  const h1 = headingsOf(bodyLines(markdown)).find(({ level }) => level === 1)?.line;
-  const messages = bodyLines(markdown).flatMap((line, index) => {
-    if (line.trim() === '' || index === h1) return [];
-    const item = FEEDBACK_ITEM.exec(line);
-    if (item === null) {
-      const tags = practice ? 'content|implementation|practice' : 'content|implementation';
-      return [`Feedback line not of the form "- \`<section>--<slide>\` · ${tags} — text": "${line}".`];
-    }
-    const [, anchor, tag] = item;
-    return [
-      ...unless(
-        tag !== 'practice' || practice,
-        `Feedback item "${line}" is tagged practice, which only a file with "via: practice" may use.`,
-      ),
-      ...unless(anchors.includes(anchor), `Feedback anchor "${anchor}" is no page slide in the Dossier.`),
-    ];
-  });
-  return messages.map((message): Finding => ({ kind: 'feedback', file, message }));
-}
-
-function checkFeedback(files: Readonly<Record<string, string>>, dossier: readonly Block[]): Finding[] {
-  const anchors = slideAnchors(dossier);
-  return Object.entries(files)
-    .filter(([file]) => FEEDBACK_FILE.test(file))
-    .flatMap(([file, markdown]) => checkFeedbackFile(file, markdown, anchors));
 }
 
 /**
