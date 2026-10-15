@@ -81,7 +81,8 @@ Job cards are gone from the overview. Hover or keyboard-focus an agent node for
 a speech bubble with status, elapsed time, skills, checks and available preview.
 Native top-layer popovers escape the graph's scroll container without requiring
 extra vertical whitespace. Only one is open at a time, positioned outside the
-hovered node. A short, cancellable close delay lets the pointer
+hovered node. Their opaque card surface, matching foreground, border and header
+shadow tokens prevent graph content from showing through in either theme. A short, cancellable close delay lets the pointer
 cross the gap into the bubble. Each node has one tab stop; its bubble provides
 the same drawer action without adding another keyboard stop.
 Escape dismisses the bubble without removing focus. Clicking a node or bubble

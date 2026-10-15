@@ -314,8 +314,8 @@
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 0.25rem 0.5rem;
-  background: var(--popover);
-  color: var(--popover-foreground);
+  background: var(--card);
+  color: var(--card-foreground);
 }
 
 .stages[data-jobs='true'] {
@@ -391,9 +391,8 @@
   padding: 0.75rem;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: var(--popover);
-  color: var(--popover-foreground);
-  box-shadow: 0 4px 16px var(--border);
+  background: var(--card);
+  color: var(--card-foreground);
   visibility: hidden;
 }
 
@@ -443,9 +442,8 @@
   transform: translateX(-50%);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: var(--popover);
-  color: var(--popover-foreground);
-  box-shadow: 0 4px 16px var(--border);
+  background: var(--card);
+  color: var(--card-foreground);
   visibility: hidden;
   pointer-events: none;
 }
@@ -459,13 +457,14 @@
   transform: rotate(45deg);
   border-right: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
-  background: var(--popover);
+  background: var(--card);
   content: '';
 }
 
 .popover,
 .stagePopover {
   position: fixed;
+  isolation: isolate;
   inset: auto;
   margin: 0;
   transform: none;

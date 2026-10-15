@@ -62,7 +62,7 @@ function JobPopover({ job, agent, stage, onSelectJob, copy }: JobProps & { agent
   const elapsed =
     agent.span && (agent.span.type === 'agent' ? agentElapsed(job, agent.span, now) : spanElapsed(agent.span, now));
   return (
-    <div className={styles.popover} popover="manual" data-dashboard-popover>
+    <div className={`${styles.popover} shadow-header`} popover="manual" data-dashboard-popover>
       <button
         type="button"
         tabIndex={-1}

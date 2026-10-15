@@ -84,7 +84,7 @@ function StageLabel({ stage, copy }: LabelProps) {
 function StagePopover({ stage, copy, onSelect }: LabelProps & { onSelect: (id: string) => void }) {
   const { now } = useContext(DashboardMoment);
   return (
-    <div className={styles.stagePopover} popover="manual" data-dashboard-popover>
+    <div className={`${styles.stagePopover} shadow-header`} popover="manual" data-dashboard-popover>
       <button
         type="button"
         tabIndex={-1}
