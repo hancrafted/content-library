@@ -8,19 +8,7 @@ import {
   type DashboardView,
 } from './dashboard-projection.pure';
 import { createLogStream } from './dashboard-stream.pure';
-
-/** Minimal read-only contracts implemented by browser handles and deterministic stand-ins. */
-export interface EpisodeFile {
-  size: number;
-  lastModified: number;
-  text(): Promise<string>;
-  slice(start: number): { arrayBuffer(): Promise<ArrayBuffer> };
-}
-
-export interface EpisodeFolder {
-  name: string;
-  getFileHandle(name: string): Promise<{ getFile(): Promise<EpisodeFile> }>;
-}
+import type { EpisodeFolder } from './episode-folder.pure';
 
 export interface EpisodeRead {
   condition: 'live' | 'waiting' | 'error';
@@ -30,6 +18,12 @@ export interface EpisodeRead {
   events: readonly DashboardEvent[];
   pipeline?: DashboardPipeline;
   view?: DashboardView;
+}
+
+/** A reading and when it finished, epoch milliseconds: the dashboard's "now" without a render-time clock. */
+export interface Polled {
+  read: EpisodeRead;
+  readAt: number;
 }
 
 const messageOf = (error: unknown): string => (error instanceof Error ? error.message : String(error));
@@ -52,7 +46,10 @@ class EpisodeReader {
   private eventSnapshot: readonly DashboardEvent[] = [];
   private reading = 'pipeline.yml';
 
-  constructor(private folder: EpisodeFolder) {}
+  constructor(
+    private folder: EpisodeFolder,
+    private now: () => number,
+  ) {}
 
   private result(condition: EpisodeRead['condition'], errors = this.errors): EpisodeRead {
     const folded = this.log.snapshot();
@@ -70,10 +67,10 @@ class EpisodeReader {
   }
 
   private async readPipeline(): Promise<void> {
-    const config = await (await this.folder.getFileHandle('pipeline.yml')).getFile();
-    if (this.pipelineModified === config.lastModified) return;
-    const text = await config.text();
-    this.pipelineModified = config.lastModified;
+    const { lastModified } = await this.folder.stat('pipeline.yml');
+    if (this.pipelineModified === lastModified) return;
+    const text = await this.folder.readText('pipeline.yml');
+    this.pipelineModified = lastModified;
     try {
       this.pipeline = parseDashboardPipeline(text);
       this.pipelineError = undefined;
@@ -104,7 +101,7 @@ class EpisodeReader {
   }
 
   private async readEvents(): Promise<EpisodeRead> {
-    const file = await (await this.folder.getFileHandle('events.jsonl')).getFile();
+    const file = await this.folder.stat('events.jsonl');
     if (file.size < this.stream.offset) {
       this.stream.append(new Uint8Array(), file.size);
       this.log = createLogFold({ live: 'unfinished' });
@@ -114,14 +111,19 @@ class EpisodeReader {
       this.eventSnapshot = [];
     }
     if (file.size > this.stream.offset) {
-      const bytes = new Uint8Array(await file.slice(this.stream.offset).arrayBuffer());
+      const bytes = await this.folder.readBytes('events.jsonl', this.stream.offset);
       const { lines } = this.stream.append(bytes, file.size);
       lines.forEach((raw) => this.acceptLine(raw));
     }
     return this.result(this.errors.length > 0 ? 'error' : 'live');
   }
 
-  async poll(): Promise<EpisodeRead> {
+  async poll(): Promise<Polled> {
+    const read = await this.read();
+    return { read, readAt: this.now() };
+  }
+
+  private async read(): Promise<EpisodeRead> {
     this.reading = 'pipeline.yml';
     try {
       await this.readPipeline();
@@ -137,7 +139,18 @@ class EpisodeReader {
   }
 }
 
-/** Per-selection memory: fresh files each poll, cached YAML, buffered bytes and a shared incremental fold. */
-export function createEpisodeReader(folder: EpisodeFolder) {
-  return new EpisodeReader(folder);
+/**
+ * The poll step, one per chosen folder: fresh stats each poll, YAML re-read only when modified, only appended bytes
+ * read, an unfinished last line carried, and a shrunk events.jsonl read as replaced. `now` stamps each reading.
+ */
+export function createEpisodeReader(folder: EpisodeFolder, now: () => number) {
+  return new EpisodeReader(folder, now);
+}
+
+/** Opens a chosen folder with its first reading; rejects, naming the problem, when its pipeline.yml can't be read. */
+export async function openEpisode(folder: EpisodeFolder, now: () => number) {
+  const reader = createEpisodeReader(folder, now);
+  const initial = await reader.poll();
+  if (initial.read.pipeline === undefined) throw new Error(initial.read.errors.join('\n'));
+  return { reader, initial };
 }
