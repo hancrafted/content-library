@@ -84,3 +84,10 @@
 {"kind":"score","t":"2026-10-15T12:14:27Z","seq":84,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"95227c66a5c1cfd5","name":"check","value":"pass","source":"check:vitest"}
 {"kind":"end","t":"2026-10-15T12:14:27Z","seq":85,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"95227c66a5c1cfd5","status":"ok"}
 {"kind":"end","t":"2026-10-15T12:14:31Z","seq":86,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"9ecbb7672d9a0a2a","status":"ok"}
+{"kind":"start","t":"2026-10-15T12:15:29Z","seq":87,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"d4349033f5786619","type":"job","name":"convert-references","job":"convert-references","parent_span_id":"c47a980a192e386a"}
+{"kind":"start","t":"2026-10-15T12:15:29Z","seq":88,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"4066f2d3ee37f893","type":"attempt","name":"convert-references#1","job":"convert-references","attempt":1,"parent_span_id":"d4349033f5786619"}
+{"kind":"start","t":"2026-10-15T12:15:29Z","seq":89,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"1a3ce710c8d9d934","type":"job","name":"categorize-research","job":"categorize-research","parent_span_id":"c47a980a192e386a"}
+{"kind":"start","t":"2026-10-15T12:15:29Z","seq":90,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"5f89fc2f1424e82c","type":"attempt","name":"categorize-research#1","job":"categorize-research","attempt":1,"parent_span_id":"1a3ce710c8d9d934"}
+{"kind":"score","t":"2026-10-15T12:16:29Z","seq":91,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"5f89fc2f1424e82c","name":"check","value":"pass","source":"check:mh"}
+{"kind":"end","t":"2026-10-15T12:16:29Z","seq":92,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"5f89fc2f1424e82c","status":"ok"}
+{"kind":"end","t":"2026-10-15T12:16:32Z","seq":93,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"1a3ce710c8d9d934","status":"ok"}

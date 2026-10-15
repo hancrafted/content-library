@@ -53,3 +53,25 @@ Attempt 1 also marked one line as needs-human: Audience, Format and a Constraint
 Removed because the files do not exist yet: `docs/profile/han/storytelling-guide.md`, `docs/profile/han/tone-guide.md` and `docs/profile/han/mental-model-guide.md`, from the agents of `write-dossier` and `write-voice-script`.
 
 Attempt 1 failed on the staging test, which the scaffold-pipeline reference contradicts: "docs/episodes/never-too-early-sales-run-3/research/* is no research folder name: <category>-<####>__<question-slug, 20-40 chars kebab-case>." The job has 0 retries. Han chose to fix the test on this branch, before the pipeline gate freezes the template, and to retry the job. The `han-reply` Gate also carries a rubric `pass` Score on `scaffold-pipeline#1` from `human:han`. It was logged by mistake: it records his choice to fix the test, not a judgement of the output.
+
+## categorize-research · 2026-10-15T12:16:32Z
+
+### Inputs
+
+- `brief.md`: the seven questions under `## Research questions`.
+- `GLOSSARY.md`: the Research categories.
+- `docs/llm-wiki/index.md` and the research folders under `docs/llm-wiki/research/`.
+- Branch `episode/never-too-early-sales-run-2`: it holds the same llm-wiki folders, and none under `docs/episodes/*/research/`.
+
+### Output
+
+- One folder name per question, in the Brief's order. Each one reuses an existing llm-wiki folder whose `research.md` title matches the question word for word: 1 `START-0001__revenue-lags-costs-in-startups`, 2 `SALES-0001__b2b-sales-cycle-length`, 3 `SALES-0002__b2b-pipeline-conversion-rates`, 4 `SALES-0003__early-selling-market-insight`, 5 `SALES-0004__early-sales-results-build-trust`, 6 `SALES-0005__early-selling-repeatable-process`, 7 `SALES-0006__sales-pipeline-ramp-up-time`.
+- No category was added. No file changed, so the job branch merged with no commit.
+
+### Checks
+
+- `mh check`: pass.
+
+### Notes
+
+Other branches still carry folders under retired categories (`BIZ-*`, `GTM-*`, `FIN-*`) for the same questions. `GLOSSARY.md` no longer lists those categories, so they were not reused. Retrieval decides whether each reused folder needs a refresh.
