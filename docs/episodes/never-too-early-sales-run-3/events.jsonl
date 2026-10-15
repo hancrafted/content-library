@@ -112,3 +112,5 @@
 {"kind":"score","t":"2026-10-15T12:37:29Z","seq":112,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"c1f8d5d62403150e","name":"check","value":"pass","source":"check:vitest"}
 {"kind":"end","t":"2026-10-15T12:37:30Z","seq":113,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"c1f8d5d62403150e","status":"ok"}
 {"kind":"end","t":"2026-10-15T12:37:30Z","seq":114,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"8ca6219c2f38aea8","status":"ok"}
+{"kind":"score","t":"2026-10-15T12:38:48Z","seq":115,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"bf0b4ce74014d236","name":"gate","value":"approved","source":"human:han","via":"chat","comment":"approved"}
+{"kind":"end","t":"2026-10-15T12:38:48Z","seq":116,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"bf0b4ce74014d236","status":"ok"}
