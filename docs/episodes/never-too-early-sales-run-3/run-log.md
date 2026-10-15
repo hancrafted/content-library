@@ -139,3 +139,30 @@ Every file is fresh: the earliest `stale_after` is 2027-10-13, after today (2026
 - Question 5 (SALES-0004): its Context claims early sales earn investor and customer trust, slide 2's claim. Its description says no study measures letters of intent or pipelines directly; write-dossier should not claim more.
 - Question 6 (SALES-0005): its Context claims early selling yields a process, slide 2's repeatable-process box.
 - Question 7 (SALES-0006): its Context claims a pipeline cannot be switched on when money is needed, slide 9's ramp-up.
+
+## customize-pipeline · 2026-10-15T12:20:19Z
+
+### Inputs
+
+- `pipeline.yml`: the draft scaffold-pipeline wrote from template `dc8e88f`.
+- `brief.md`: five Section h3s under `## Slides`.
+- `run-log.md`: retrieval's `### Research jobs` reads `- none: every question reused.`
+
+### Output
+
+- `pipeline.yml`, `status: draft`: no `foreach` and no glob output left; committed with `Gate: draft pipeline` for Han to approve.
+
+### Checks
+
+- `vitest` staging test: pass, also with `status: approved` set for a trial run and then reverted.
+
+### Notes
+
+Changes from the template, each with its reason:
+
+- `write-research` removed, along with `write-dossier`'s `wants: [write-research]`: retrieval reused every question, so the Research stage stays empty.
+- `write-dossier` references the seven reused llm-wiki files in place of the `research/*/research.md` glob: START-0001 and SALES-0001 to SALES-0006 under `docs/llm-wiki/research/`.
+- `implement-section` is expanded into one job per Section, in the Brief's order, each with an `intent` naming the Section and its position: `implement-section-why-watching-cashflow-is-mission-critical`, `-why-sales-is-more-than-just-selling`, `-how-to-start-doing-sales`, `-why-building-an-effective-sales-pipeline-takes-time` and `-start-before-you-need-the-money`. `open-pr` needs all five.
+- Ports: `implement-episode-init` 4000, then the Sections 4001 to 4005 in order. All six were free.
+- The comments on `retrieval` and `write-dossier` now describe this run, since the ones from the template named the dropped foreach.
+- Retries, gates, skills and models are unchanged: the Brief gives no reason to change them.

@@ -100,3 +100,8 @@
 {"kind":"score","t":"2026-10-15T12:18:18Z","seq":100,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"3405cb19c1aa9c80","name":"check","value":"pass","source":"check:mh"}
 {"kind":"end","t":"2026-10-15T12:18:18Z","seq":101,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"3405cb19c1aa9c80","status":"ok"}
 {"kind":"end","t":"2026-10-15T12:18:21Z","seq":102,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"7b4bfaa6eea78ad2","status":"ok"}
+{"kind":"start","t":"2026-10-15T12:19:21Z","seq":103,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"7c8d7132d9a49fd8","type":"job","name":"customize-pipeline","job":"customize-pipeline","parent_span_id":"c47a980a192e386a"}
+{"kind":"start","t":"2026-10-15T12:19:22Z","seq":104,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"80689f3398d5350d","type":"attempt","name":"customize-pipeline#1","job":"customize-pipeline","attempt":1,"parent_span_id":"7c8d7132d9a49fd8"}
+{"kind":"score","t":"2026-10-15T12:20:18Z","seq":105,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"80689f3398d5350d","name":"check","value":"pass","source":"check:vitest"}
+{"kind":"end","t":"2026-10-15T12:20:18Z","seq":106,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"80689f3398d5350d","status":"ok"}
+{"kind":"end","t":"2026-10-15T12:20:19Z","seq":107,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"7c8d7132d9a49fd8","status":"ok"}
