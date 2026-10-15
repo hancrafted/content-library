@@ -30,3 +30,26 @@ Attempt 1 also marked one line as needs-human: Audience, Format and a Constraint
 
 - `convert-references` writes `reference/source-deck/design-reference.md` after the pipeline gate. Until then the Brief's Episode Design Reference link has no target.
 - Run 2's Brief-level Needs human items stand unchanged, because Han kept the Brief: Slides 4–5 use the pipeline before Slide 7 defines it, and Q5 covers two causes.
+
+## scaffold-pipeline · 2026-10-15T12:14:31Z
+
+### Inputs
+
+- `skills/new-episode/assets/pipeline.yml`: the template, at `main`'s `dc8e88f`, the commit last merged into this branch.
+- `brief.md`: its Episode Design Reference names one file, `reference/source-deck/design-reference.md`.
+
+### Output
+
+- `pipeline.yml`, `status: draft`, `template: dc8e88f`, with every job of the template; `write-research` and `implement-section` stay unexpanded `foreach` jobs.
+- Every `reference/*/design-reference.md` glob is replaced by `docs/episodes/never-too-early-sales-run-3/reference/source-deck/design-reference.md`.
+- `tests/docs/episode-staging.test.ts` (commit `5b5647a`): `researchFolders()` skips a glob output. The test had read the draft's `research/*/research.md` as a folder name and refused it.
+
+### Checks
+
+- `vitest` staging test: fail on attempt 1, pass on attempt 2.
+
+### Notes
+
+Removed because the files do not exist yet: `docs/profile/han/storytelling-guide.md`, `docs/profile/han/tone-guide.md` and `docs/profile/han/mental-model-guide.md`, from the agents of `write-dossier` and `write-voice-script`.
+
+Attempt 1 failed on the staging test, which the scaffold-pipeline reference contradicts: "docs/episodes/never-too-early-sales-run-3/research/* is no research folder name: <category>-<####>__<question-slug, 20-40 chars kebab-case>." The job has 0 retries. Han chose to fix the test on this branch, before the pipeline gate freezes the template, and to retry the job. The `han-reply` Gate also carries a rubric `pass` Score on `scaffold-pipeline#1` from `human:han`. It was logged by mistake: it records his choice to fix the test, not a judgement of the output.
