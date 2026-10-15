@@ -91,7 +91,7 @@ _Avoid_: Transition, segue
 **Spine**: the Brief's ordered Sections, each listing its **Brief Slides**: a planned page Slide's title, purpose and visual idea. The Red thread made concrete. write-dossier keeps it title for title, and names every change in a `Spine change:` line of its run-log entry.
 _Avoid_: Outline, pitch, plan
 
-**Dossier**: the one text an Episode is built and recorded from: its h1 is the Title slide, its h2s the Sections and its h3s the Slides, and each Slide carries its Visual, Speaker notes with citations and Voice script.
+**Dossier**: the draft the Spec is written from: its h1 is the Title slide, its h2s the Sections and its h3s the Slides, and each Slide carries its Visual idea, Speaker notes with citations and Voice script. Everything in it moves into the Spec, and it is deleted when Han approves the Spec.
 _Avoid_: Manuscript, script, Episode file, companion, notes
 
 **Red thread**: the single line of argument that runs from an Episode's hook to its learning goal, which every Section advances.
@@ -100,10 +100,10 @@ _Avoid_: Through-line, redline, golden thread
 **Thread**: one of two parallel storylines in a longer Episode, the A thread and the B thread, told in turns so the audience never follows one story too long, each strengthening the other.
 _Avoid_: Plot, subplot, storyline
 
-**Staging**: where an Episode's text lives while it is being made, before it is final: its Brief, research and Dossier, outside the code.
+**Staging**: where an Episode's text lives while it is being made, before it is final: its Brief, research, Dossier and Spec, outside the code.
 _Avoid_: Drafts, workspace
 
-**Promotion**: the step that moves a final Episode's text out of Staging and into its code folder, one text file per Slide, after which Staging is deleted.
+**Promotion**: the step that moves a final Episode's words out of its Spec and into its code folder, one text file per Slide, after which Staging is deleted.
 _Avoid_: Publish, migration, release
 
 **Run**: one execution of an Episode's per-run pipeline, from its start to the moment it is finished or abandoned. An Episode can have many Runs, each one comparable with the others.
@@ -115,8 +115,11 @@ _Avoid_: Task, step
 **Stage**: one of the ordered phases a Run moves through (Brief, Setup, Research, Dossier, Specification, Build, PR), grouping the Jobs that serve it. A Job waits only for Jobs of its own or an earlier Stage, and a Stage may hold no Job.
 _Avoid_: Phase, step
 
-**Spec**: the two files the Specification Stage writes in Staging: the build spec, what each Section's Build Job builds, and the design spec, how every Slide looks, which Han approves at its Gate.
-_Avoid_: Ticket, spec issue
+**Spec**: the one page the Specification Stage writes in Staging, read in a browser: per Slide its Options and what Build needs to build the chosen one. Han picks an Option per Slide at its Gate, and Build builds from the Spec alone.
+_Avoid_: Ticket, spec issue, build spec, design spec
+
+**Option**: one of two or three ways a Slide could look, shown side by side in the Spec at low to medium fidelity, each with its reason. Han picks one per Slide.
+_Avoid_: Variant, alternative, mock
 
 **Attempt**: one try at a Job, numbered from 1. A retry is a new Attempt that names the Attempt it retries.
 _Avoid_: Iteration, round
