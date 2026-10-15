@@ -226,3 +226,31 @@ Changes from the template, each with its reason:
 - Page 13, the third-party Pipedrive screenshot, is unused. Slide 4 draws its own deal board, per the Brief.
 - Needs human: `stages-of-sale` note 2 says "the sources show each delay separately: finding customers, closing, invoicing, payment terms" but cites only EU Directive 2011/7/EU, which covers payment terms and acceptance, not finding customers or closing.
 - Needs human: Slides 4 and 5 use the pipeline before Slide 7 defines it. This is carried over from the Brief, which Han kept.
+
+## write-voice-script · 2026-10-15T12:55:42Z
+
+### Inputs
+
+- `skills/new-episode/references/write-voice-script.md`, `brief.md`, and `dossier.md` as write-dossier committed it in `76a123e`.
+- `docs/profile/storytelling-guide.md`, `tone-guide.md` and `mental-model-guide.md`.
+- `npx mh query` on this Dossier and on the sample Dossier.
+
+### Output
+
+- `dossier.md`: all 49 Voice script items across the 5 Sections and 10 Slides now hold a spoken paragraph. Each keeps its number and bold beat. Only the item lines and `generated.at` changed, and a new `process:markdown-harness` `verified` entry was added.
+
+### Checks
+
+- `mh check`: pass.
+- `vitest` staging test: pass. Only Voice script lines changed against write-dossier's commit.
+- Reviewer: pass on all rubric lines and intents.
+
+### Notes
+
+- Every beat became a paragraph. The Brief has no Threads, so there is no alternation to check.
+- Where each actionable is spoken:
+  - 1: `watch-your-cashflow`, `watch-your-cashflow-revenue-pulled-in` and `watch-your-cashflow-start-when`.
+  - 2 and 3: `stages-of-sale` and the closing "Four steps" beat.
+  - 4: `pipeline-tools-in-practice`, `what-is-a-sales-pipeline`, `pipeline-by-the-numbers` and "Four steps".
+- The cashflow board returns three times as a callback.
+- The 27:1 over 9.5 months is spoken as the worked example. A line of calibrated candour says it is not a law. No ramp-up month count is invented, because no source gives one.

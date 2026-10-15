@@ -4,12 +4,14 @@ title: Why it's never too early to start with sales
 status: draft
 generated:
   by: claude-code/sonnet-5.5
-  at: 2026-10-15T12:50:33Z
+  at: 2026-10-15T12:53:44Z
 locale: en
 brief: ./brief.md
 verified:
   - by: process:markdown-harness
     at: 2026-10-15T12:52:11Z
+  - by: process:markdown-harness
+    at: 2026-10-15T12:55:42Z
 ---
 
 # Why it's never too early to start with sales {#never-too-early-sales}
@@ -18,9 +20,9 @@ verified:
 
 #### Voice script
 
-1. **Imagine the wall** — imagine you are the founder, one wall, sticky notes, one column per month, yellow cash, red cost, green revenue. Shared pain: you have watched this board, or you are about to
-2. **Cash decides how long you have** — the claim of this Section: not how much you earn in the end, but when. Callback promise: this one board comes back three times
-3. **The route** — signposting: four questions, why cashflow, why sales is more than selling, how to start, why a pipeline takes time. The first answer sits on the wall
+1. **Imagine the wall** — Imagine you are the founder, standing in front of one wall. Sticky notes, one column per month, yellow for the cash you have, red for the costs, green for the revenue. You have watched a board like this, or you are about to, and you know the feeling when you read the last column.
+2. **Cash decides how long you have** — Here is the claim of this whole Episode: what decides how long your company lives is not how much you earn in the end, but when the money arrives. This one board comes back three times, and each time it answers a bigger question.
+3. **The route** — We will go through four questions. Why cashflow is mission critical, why sales is more than selling, how to start doing sales, and why a pipeline takes time to build. The first answer is already on the wall.
 
 ### Watch your cashflow {#watch-your-cashflow}
 
@@ -44,17 +46,17 @@ Design reference: reference/source-deck/design-reference.md#page-3
 
 #### Voice script
 
-1. **Walk the months** — Jan 100k cash, 50k out. Feb another 50k out. Cash zero at the end of Feb
-2. **March has no money** — March cost lands on an empty account. April has the big number, one month late
-3. **Antithesis** — a million dollars is coming, and the company is gone. Right on paper, dead on the calendar
-4. **Hand over the verdict** — find your own Feb: the month your cash hits zero. When would you have needed to start selling?
+1. **Walk the months** — Read it with me. January, you start with 100 thousand in cash and 50 thousand goes out. February, another 50 thousand goes out, and at the end of February your cash is zero.
+2. **March has no money** — March arrives and the cost lands on an empty account, with nothing to pay it. The big number sits in April, one month late.
+3. **Antithesis** — A million dollars is coming, and the company is gone. Right on paper, dead on the calendar.
+4. **Hand over the verdict** — So find your own February: the month your cash hits zero. And if that is the month you run out, when would you have needed to start selling?
 
 ## Why sales is more than just selling {#why-sales-is-more-than-just-selling}
 
 #### Voice script
 
-1. **Pain first** — you may think sales is something for later, when the money is needed. If so you leave most of its value on the table
-2. **The claim** — selling early pays out before the revenue does. Three things, each one a reason to start now
+1. **Pain first** — You may think sales is something for later, when the money is needed. If so, you leave most of its value on the table, because the money is the last thing sales gives you.
+2. **The claim** — My claim is this: selling early pays out before the revenue does. There are three payouts, and each one is a reason to start now.
 
 ### Sales is more than selling {#sales-is-more-than-selling}
 
@@ -92,18 +94,18 @@ Design reference: reference/source-deck/design-reference.md#page-4
 
 #### Voice script
 
-1. **Every talk is research** — each customer conversation is market research you did not pay for. It tells you where to spend your time and which hypothesis to drop. This is my reading of selling as a conversation
-2. **Know how well you sell** — the second gain stays inside: how effective are you, can anyone else repeat it. A repeatable process is what lets you hire the first salesperson
-3. **Trust is the sum** — investors and reluctant customers trust what someone else already bought. Calibrated candour: claim, not proof; a result shows the team can sell
-4. **Verdict** — insight and process both end in trust. Which of the three would your next investor ask about first?
+1. **Every talk is research** — Every customer conversation is market research you did not have to pay for. It tells you where to spend your time and which hypothesis to drop. This is my reading of selling as a conversation, not a measured result.
+2. **Know how well you sell** — The second payout stays inside your company. You learn how well you sell, and whether anyone besides you could repeat it, because a repeatable process is what lets you hire the first salesperson.
+3. **Trust is the sum** — The third is trust. Investors and reluctant customers trust what someone else has already bought. To be straight about it, that is a claim and not a proof: a first result shows that your team can sell, and that is why it counts.
+4. **Verdict** — Insight and process both end in trust, so look at the three boxes and ask yourself which one your next investor would ask about first.
 
 ## How to start doing sales {#how-to-start-doing-sales}
 
 #### Voice script
 
-1. **Backward chaining** — start from the signed contract and walk back until the next step is in your hands. "Do sales" is too vague to start on a Monday
-2. **The claim** — three stages, leads, opportunities, closing. Three steps you control, then a numbers game
-3. **Signposting** — left to right: the stages, a deal board to track them, then marketing, and then the board again
+1. **Backward chaining** — Start from the end and walk backwards. The end is a signed contract, and you walk back until the next step is in your own hands, because do sales is too vague to start on a Monday.
+2. **The claim** — Here is the claim: sales has three stages, leads, opportunities and closing. The first steps are ones you control, and only after them does it become a numbers game.
+3. **Signposting** — We go left to right. First the stages, then a deal board to track them, then marketing, and then the cashflow board once more.
 
 ### Stages of sale {#stages-of-sale}
 
@@ -126,10 +128,10 @@ Design reference: reference/source-deck/design-reference.md#page-7
 
 #### Voice script
 
-1. **Leads, step one** — Actionable: research and keep a list of potential customers, names, not a feeling. Start the list this week, maintain it every week
-2. **First contact, step two** — cold call, call an inbound lead, ask your network. Pick one and make the first call. Opens opportunities
-3. **Opportunities are the work** — interest is not a deal. Follow-up, material, meetings, negotiation: this is the hard part, and it takes calendar time
-4. **Closing is not cash** — the contract is signed, then production, delivery, customer success, then the invoice. Each stage pushes cash later
+1. **Leads, step one** — The first step is lead generation. Research and keep a list of potential customers, with names, not a feeling. Start the list this week, and maintain it every week after that.
+2. **First contact, step two** — The second step is first contact. Cold call, call back an inbound lead, or ask your network, and pick one of them. Make that first call, because that is what opens opportunities.
+3. **Opportunities are the work** — An opportunity means interest, and interest is not a deal. Follow-up, material, meetings and negotiation are the hard part of sales, and they take calendar time that you cannot compress with willpower.
+4. **Closing is not cash** — Even a signed contract is not cash. After it come production, delivery and customer success, and only then the invoice, so every stage pushes the money further to the right.
 
 ### Pipeline tools in practice {#pipeline-tools-in-practice}
 
@@ -149,9 +151,9 @@ Design reference: reference/source-deck/design-reference.md#page-12
 
 #### Voice script
 
-1. **One place for every deal** — a deal board is the cashflow board for sales: every prospect a card, every stage a column
-2. **Read it at a glance** — what sits in each stage, the value per column, the next step per deal. Seen on a Monday morning, tells you where to spend the week
-3. **Start small** — Actionable: track deals in a simple pipeline. A spreadsheet is enough. The tool is not the point, the habit is
+1. **One place for every deal** — A deal board is the cashflow board for sales. Every prospect is a card, every stage is a column, so the whole pipeline sits in one place.
+2. **Read it at a glance** — You read it at a glance: what sits in each stage, what it is worth per column, and the next step per deal. On a Monday morning, it tells you where to spend your week.
+3. **Start small** — So start small. Track your deals in a simple pipeline, and know that a spreadsheet is enough. The tool is not the point, the habit is.
 
 ### How marketing feeds the pipeline {#how-marketing-feeds-the-pipeline}
 
@@ -173,9 +175,9 @@ Design reference: reference/source-deck/design-reference.md#page-14
 
 #### Voice script
 
-1. **Two ways in** — you can go and get a lead, or a lead can walk in. Marketing is the second
-2. **Volume into a defined stage** — marketing publishes something to many people so that a customer enters themselves into a stage: an inbound lead, an e-commerce checkout
-3. **Hand to sales** — marketing fills the stage, sales works what lands. It does not replace the first call
+1. **Two ways in** — There are two ways to get a lead. You go and get it, or it walks in on its own, and marketing is the second way.
+2. **Volume into a defined stage** — Marketing speaks to many people at once, so that a customer enters themselves into a defined stage. An inbound lead is one example, an e-commerce checkout is another.
+3. **Hand to sales** — Marketing fills the stage and sales works what lands in it. Which means marketing does not replace the first call, it gives that call someone to be made to.
 
 ### Watch your cashflow, revenue pulled in {#watch-your-cashflow-revenue-pulled-in}
 
@@ -195,16 +197,16 @@ Design reference: reference/source-deck/design-reference.md#page-8
 
 #### Voice script
 
-1. **Callback** — second time on this board. Same notes, same costs, one thing moved
-2. **Timing, not amount** — the amount did not change, one month did. The company lives. Antithesis: the same million, a month earlier
-3. **How it moves** — a deal lands earlier only if the first call came earlier. Actionable: build your own month-by-month board, find the zero-cash month, and count back from it
+1. **Callback** — Second time on this board. Same notes, same costs, and one thing has moved.
+2. **Timing, not amount** — The amount did not change, one month did. The company lives. The same million, a month earlier, and that is the whole difference between a company and a story.
+3. **How it moves** — Now, how does a note move? A deal lands earlier only if the first call came earlier. So build your own month-by-month board, find your zero-cash month, and count back from it.
 
 ## Why building an effective sales pipeline takes time {#why-building-an-effective-sales-pipeline-takes-time}
 
 #### Voice script
 
-1. **The obvious objection** — so start selling in January and the April revenue lands in March? It does not work like a switch
-2. **The claim** — a pipeline is built, measured and tuned. That takes months, and three words describe it: funnel, conversion rate, sales cycle
+1. **The obvious objection** — So the obvious objection: I start selling in January, and the April revenue lands in March? It does not work like a switch.
+2. **The claim** — A pipeline is built, measured and tuned, and that takes months. Three words describe it: funnel, conversion rate and sales cycle.
 
 ### What is a sales pipeline {#what-is-a-sales-pipeline}
 
@@ -227,9 +229,9 @@ Design reference: reference/source-deck/design-reference.md#page-10
 
 #### Voice script
 
-1. **Funnel is volume** — the funnel names each stage. How many enter each stage says how much you can put through
-2. **Conversion is the offer** — out of many actions in a stage, how many become one success in the next. A low rate may say your offering is not yet attractive
-3. **Cycle is efficiency** — start to finish, until the deal or the money. Two numbers, conversion and cycle: Actionable, measure both from the first deal
+1. **Funnel is volume** — The funnel names each stage of your sales process. How many enter each stage tells you how much volume you can put through.
+2. **Conversion is the offer** — The conversion rate says how many actions in a stage become one success in the next. A low rate may be telling you that your offering is not yet attractive, and that is useful to know early.
+3. **Cycle is efficiency** — The cycle is the time from start to finish, until the deal or the money. It is your efficiency, and with conversion that gives you two numbers you should measure from your first deal.
 
 ### Pipeline by the numbers {#pipeline-by-the-numbers}
 
@@ -257,10 +259,10 @@ Design reference: reference/source-deck/design-reference.md#page-11
 
 #### Voice script
 
-1. **Read the picture** — lead to opportunity, 3 to 1. Opportunity to deal, 9 to 1. Together 27 leads for one deal
-2. **Read the clock** — two weeks, six months, three months: 9.5 months from first lead to money. Second-order thinking: ten deals need 270 leads
-3. **Backward chain** — want a deal in month X: count back 9.5 months, and put 27 names in the funnel by then. Hand-over: do you have 27 names?
-4. **Your numbers, not mine** — calibrated candour: this is my worked example. Yours will be shorter or longer, so measure them
+1. **Read the picture** — Read the picture. Lead to opportunity is three to one, opportunity to deal is nine to one, so together it takes 27 leads for one deal.
+2. **Read the clock** — Now read the clock. Two weeks, six months, three months, which makes 9.5 months from first lead to money. Think one step further and ten deals need 270 leads.
+3. **Backward chain** — So chain it backwards. If you want a deal in month X, count back 9.5 months, and by then you need 27 names in the funnel. Do you have 27 names?
+4. **Your numbers, not mine** — One thing I want to be straight about: this is my worked example, not a law. Yours will be shorter or longer, which is exactly why you measure your own.
 
 ### Why it takes time to ramp up {#why-it-takes-time-to-ramp-up}
 
@@ -289,17 +291,17 @@ Design reference: reference/source-deck/design-reference.md#page-15
 
 #### Voice script
 
-1. **Preparation** — before, during, deal: deck and pricing, demo and proposal, contract and legal. None of it exists on day one
-2. **Unknown market** — who is your customer, what do they pay, what problem hurts. Only real conversations answer it
-3. **Unknown metrics** — no conversion rate, no cycle length yet, and you need both to plan backwards from the cash. No source gives a number of months, I will not invent one
-4. **So start now** — each box shrinks only by doing. Verdict: how many months do you have left, and how many of these three have you started?
+1. **Preparation** — The first box is preparation. Before, during and at the deal you need a deck and pricing, a demo and a proposal, a contract and the legal side. None of that exists on day one.
+2. **Unknown market** — The second is an unknown market. Who is your customer, what do they pay, which problem really hurts. Only real conversations answer that, and desk research will not.
+3. **Unknown metrics** — The third is unknown metrics. You have no conversion rate and no cycle length yet, and you need both to plan backwards from your cash. How many months this takes, I will not invent for you.
+4. **So start now** — So start now, because each box shrinks only by doing. How many months do you have left, and how many of these three boxes have you started?
 
 ## Start before you need the money {#start-before-you-need-the-money}
 
 #### Voice script
 
-1. **Back to the wall** — the board one last time, with the answer to the question we opened with
-2. **Peak-end close** — recap in four steps, an honest caveat, and a low-key offer
+1. **Back to the wall** — Back to the wall, one last time, with the answer to the question we opened with.
+2. **Peak-end close** — I will close with the four steps, one honest caveat and a small offer. Here they come.
 
 ### Watch your cashflow, "Start when?" {#watch-your-cashflow-start-when}
 
@@ -319,8 +321,8 @@ Design reference: reference/source-deck/design-reference.md#page-16
 
 #### Voice script
 
-1. **Third time, new question** — same board, quarters instead of months. This time the question is not what happens, but when to start
-2. **The arrow points at Q1** — revenue in Q3 means the first call happens in Q1, while cash is still on the board
-3. **Four steps** — build the month-by-month cashflow view and find your zero-cash month. Start the lead list. Make the first contact. Track deals and measure conversion and cycle
-4. **Honest caveat** — I cannot tell you your cycle length. It may be shorter, it may be longer. That is why you measure
-5. **Hand over the verdict** — when does your cash run out, and what did you do this week? Low-key offer: copy the board, it is yours. Thank you
+1. **Third time, new question** — Third time on this board, and this time the quarters replace the months. The question is not what happens any more, it is when you start.
+2. **The arrow points at Q1** — The arrow points at Q1. If you want revenue in Q3, the first call happens in Q1, while there is still cash on the board.
+3. **Four steps** — Four steps. Build your month-by-month cashflow view and find your zero-cash month. Start the lead list. Make the first contact. Track your deals, and measure conversion and cycle.
+4. **Honest caveat** — The honest caveat: I cannot tell you your cycle length. It may be shorter, it may be longer, and that is why you measure it.
+5. **Hand over the verdict** — So, when does your cash run out, and what did you do this week to move the money earlier? If the board helps, copy it, it is yours. Thank you.
