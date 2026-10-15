@@ -1,6 +1,6 @@
 // Which listed skills a finished span did not invoke: the pipeline's skills for the agent type a span stands for,
 // against the `skills_invoked` its end line (or an orchestrator Job's attrs line) recorded. Pure.
-import type { Job, JobAgent } from '../../../src/lib/episode-pipeline-jobs.pure.ts';
+import type { Job, JobAgent } from '../../../src/lib/episode-pipeline-definition.pure.ts';
 import type { Span } from './run-log.pure.ts';
 
 /** Only the fields a span has, so an absent attempt or role stays absent. */

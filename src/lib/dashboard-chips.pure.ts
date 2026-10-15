@@ -1,7 +1,7 @@
 import { order, skillUses } from '../../skills/new-episode/scripts/run-log-fold.pure';
 import type { Score, Span } from '../../skills/new-episode/scripts/run-log.schema.pure';
 import { answersTo } from '../../skills/new-episode/scripts/status-skills.pure';
-import type { JobAgent } from './episode-pipeline-jobs.pure';
+import type { JobAgent } from './episode-pipeline-definition.pure';
 
 /** A skill `pipeline.yml` lists for a Job's agents, in one agent's row or aggregated for the Job box. */
 export interface SkillChip {

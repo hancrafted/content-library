@@ -5,7 +5,7 @@
  * wants as for one it needs; only a blocked need blocks it.
  */
 
-import type { Job } from './episode-pipeline-jobs.pure';
+import type { Job } from './episode-pipeline-definition.pure';
 
 /** Every job `id` waits for directly: the ones it needs, then the ones it wants. */
 export function waitsFor(id: string, byId: ReadonlyMap<string, Job>): string[] {

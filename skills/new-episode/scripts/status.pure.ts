@@ -4,7 +4,7 @@
 // It reads the pipeline and the gates through the same src/lib modules the
 // pipeline check uses; they import nothing but `yaml`, so bare node runs them.
 
-import { readPipeline, type Job } from '../../../src/lib/episode-pipeline-jobs.pure.ts';
+import { readPipeline, type Job } from '../../../src/lib/episode-pipeline-definition.pure.ts';
 import { gateTier } from '../../../src/lib/staging-file.pure.ts';
 import type { Folded, Span } from './run-log.pure.ts';
 import { formatDuration } from './run-log.pure.ts';

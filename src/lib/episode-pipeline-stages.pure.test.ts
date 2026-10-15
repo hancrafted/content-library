@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { Job } from './episode-pipeline-jobs.pure';
+import type { Job } from './episode-pipeline-definition.pure';
 import { checkStages } from './episode-pipeline-stages.pure';
 
 /*
@@ -17,6 +17,7 @@ function job(id: string, stage: string | undefined, edges: { needs?: string[]; w
     outputs: [],
     checks: [],
     gate: false,
+    retries: 0,
     agents: [],
   };
 }
