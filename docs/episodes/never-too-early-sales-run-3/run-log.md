@@ -187,3 +187,42 @@ Changes from the template, each with its reason:
 - `write-dossier` implementor and `write-voice-script` implementor: all three guides. `write-voice-script` reviewer: storytelling and tone. These are the same paths and places as the template at `main`.
 - `template:` moves from `dc8e88f` to `f211581`, the `main` commit this branch now sits on. The template changed between the two only in these guide paths.
 - These guides replace the three `docs/profile/han/*` files that scaffold-pipeline removed because they did not exist.
+
+## write-dossier · 2026-10-15T12:52:11Z
+
+### Inputs
+
+- `skills/new-episode/references/write-dossier.md`, `brief.md` and this run log: retrieval reused all seven questions, and no job blocked.
+- The seven reused research files: START-0001 for question 1, and SALES-0001 to SALES-0006 for questions 2 to 7, under `docs/llm-wiki/research/`.
+- `reference/source-deck/design-reference.md` and its page images. Pages 8, 11 and 16 were checked against their images, and page 16 was written from its image because its text was empty.
+- `docs/profile/storytelling-guide.md`, `tone-guide.md` and `mental-model-guide.md`.
+- `skills/new-episode/assets/sample-episode/dossier.md`, `docs/design/slide-library.md` and the Master slides in `src/components/episodes/slide-master/slides/`.
+
+### Output
+
+- `dossier.md`, `status: draft`, with a `process:markdown-harness` `verified` entry: one h1, five h2 Sections and ten h3 Slides, the Brief's spine one for one.
+- Masters: `grid-1x3` for Slides 2, 7 and 9, `three-column` for Slide 3, and `basic-page` for Slides 1, 4, 5, 6, 8 and 10. Every Visual names its source-deck page.
+- Actionable 1 is on `watch-your-cashflow`, `watch-your-cashflow-revenue-pulled-in` and `watch-your-cashflow-start-when`. Actionables 2 and 3 are on `stages-of-sale`. Actionable 4 is on `pipeline-tools-in-practice`, `what-is-a-sales-pipeline`, `pipeline-by-the-numbers`, `why-it-takes-time-to-ramp-up` and `watch-your-cashflow-start-when`.
+- Voice scripts hold beats with keywords, ready for `write-voice-script`.
+
+### Checks
+
+- `mh check`: pass on all three attempts.
+- `vitest` staging test: pass on all three attempts.
+- Reviewer: fail on attempts 1 and 2, pass on attempt 3, with all 5 rubric lines and 16 intents passing.
+
+### Notes
+
+- Attempt 1 failed "5. No Voice script item repeats a claim a Speaker note on the same Slide makes." and the Speaker notes intent. Voice items repeated notes on `why-it-takes-time-to-ramp-up`, `pipeline-by-the-numbers` and `sales-is-more-than-selling`. Attempt 2 cut the repeated clauses from the notes.
+- Attempt 2 failed the same two lines, because the `pipeline-by-the-numbers` note header "No single typical cycle length" still restated voice item 4. It also failed the `generated.at` intent, which still held Attempt 1's time. Attempt 3 removed that note, trimmed `sales-is-more-than-selling` note 6 to premature scaling burning cash, and reset `generated.at`.
+- No Spine change and no Research gap.
+- Q5's limit is carried into Slide 2's notes: no study measures letters of intent or pipelines directly, so applying signaling theory to them is stated as an inference. Slide 8's 3:1, 9:1, 27:1 over 9.5 months is spoken as Han's worked example, not a benchmark.
+- No library match: why-watching-cashflow-is-mission-critical--watch-your-cashflow — a four-month board of cash, cost and revenue notes filling month by month, ending on a "Bankrupt" stamp.
+- No library match: how-to-start-doing-sales--pipeline-tools-in-practice — our own illustrated deal board with five stage columns, stage totals and deal cards sliding in.
+- No library match: how-to-start-doing-sales--how-marketing-feeds-the-pipeline — a funnel from a wide marketing mouth into one named pipeline stage, dots flowing in.
+- No library match: how-to-start-doing-sales--watch-your-cashflow-revenue-pulled-in — the same board with April's revenue note dragged by an arrow into March.
+- No library match: why-building-an-effective-sales-pipeline-takes-time--pipeline-by-the-numbers — a three-segment funnel with 3:1, 9:1 and 27:1 brackets over a 2-week, 6-month and 3-month cycle bar.
+- No library match: start-before-you-need-the-money--watch-your-cashflow-start-when — the quarterly board with a "Start when?" arrow from Q3 revenue back to Q1.
+- Page 13, the third-party Pipedrive screenshot, is unused. Slide 4 draws its own deal board, per the Brief.
+- Needs human: `stages-of-sale` note 2 says "the sources show each delay separately: finding customers, closing, invoicing, payment terms" but cites only EU Directive 2011/7/EU, which covers payment terms and acceptance, not finding customers or closing.
+- Needs human: Slides 4 and 5 use the pipeline before Slide 7 defines it. This is carried over from the Brief, which Han kept.
