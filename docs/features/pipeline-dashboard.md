@@ -149,12 +149,12 @@ once run or passed, red with a cross once skipped or failed; its state is in
 words for screen readers and on hover. It reads only the Job's current Run and
 latest Attempt, so a retry starts its chips over, and the replay cutoff applies.
 
-Each agent row of the card holds its own state: a skill is run when a `skill`
-line (design-ADR-0009) or a `skills_invoked` names it on a span answering to
+Each agent row of the card holds its own state: a skill is run when a
+`skill.invoke` event (design-ADR-0010) or a `skills_invoked` names it on a span answering to
 that agent, an agent span by role or, for an orchestrator-session agent only,
 the Job span; skipped once each such span ended with `skills_invoked` known and
 without it; an unknown `skills_invoked` keeps it pending. On the Job span only
-`skill` lines from the latest Attempt's start count, and its `skills_invoked`
+`skill.invoke` events from the latest Attempt's start count, and its `skills_invoked`
 only while the Run has one Attempt. The Job box shows each skill once: green
 when every agent listing it ran it, red when any skipped it. A check reads its
 latest `check:<name>` Score: `pass` or `fail`. `jobChips()` in
@@ -182,7 +182,7 @@ spans as running only while their own trace's Run has no end. Chronological orde
 is timestamp then sequence; the latest end supplies the terminal state. The
 batch fold's default remains crashed for open spans.
 Attribute-only `attrs` records update evidence without closing or reopening a
-Span; `skill` records join their Span's `skills`. Measured end times can precede their stamped start records; those ends
+Span; `event` records join their Span's `events`, which `skillUses()` reads skills from. Measured end times can precede their stamped start records; those ends
 still pair with their Span rather than being reported as orphaned.
 
 Every configured Job appears in topological `needs` order. `wants` are labelled

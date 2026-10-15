@@ -78,7 +78,13 @@ const agent = (id: string, role: string, parent: string): Fields => ({
   role,
   parent_span_id: parent,
 });
-const skill = (span_id: string, name: string): Fields => ({ kind: 'skill', span_id, name, source: 'measured' });
+const skill = (span_id: string, name: string): Fields => ({
+  kind: 'event',
+  span_id,
+  name: 'skill.invoke',
+  source: 'measured',
+  attributes: { 'skill.name': name },
+});
 const check = (span_id: string, name: string, value: string): Fields => ({
   kind: 'score',
   span_id,

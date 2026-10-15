@@ -12,7 +12,7 @@ import { archiveEpisodeLog, episodeLogPath, readEpisodeLog, readMarker } from '.
 import { declaredJobs } from './episode-status.ts';
 import { endEvent, need, parseRunArgs, refuse, viaOf, type Opts, type Params } from './run-args.pure.ts';
 import { USAGE } from './run-help.pure.ts';
-import { type Status } from './run-log.pure.ts';
+import { type LogEvent, type Status } from './run-log.pure.ts';
 import { endMarker, liveMarker, recordJobUsage } from './run-marker.ts';
 import { hasEnded, isOpen, latest, openAgentsOf, openSpan, openUnderRun, scoreTarget } from './run-spans.pure.ts';
 import { openView, pointAt, sessionOf, viewOf, write, type RunContext } from './run-view.ts';
@@ -161,6 +161,7 @@ function score(ctx: RunContext, p: Params<'target' | 'name' | 'value'>, opts: Op
   const via = viaOf(opts.via);
   const { spans } = viewOf(ctx);
   const span = scoreTarget(spans, target) ?? refuse(`no span named "${target}" in the current Run`);
+  // --source may be missing: the writer refuses that line with its own message
   write(ctx, {
     kind: 'score',
     span_id: span.span_id,
@@ -172,7 +173,7 @@ function score(ctx: RunContext, p: Params<'target' | 'name' | 'value'>, opts: Op
     via,
     comment: opts.comment,
     ticket,
-  });
+  } as LogEvent);
   return `Score ${name}=${raw} on ${target}`;
 }
 

@@ -7,6 +7,8 @@ status: proposed
 
 The dashboard shows, per Job, a chip for every skill and check `pipeline.yml` names. Checks already reach the log as `score` lines with `source: check:<name>`; skills reached it only as `skills_invoked` on an agent's end line, known once the agent stopped. So a running agent's skills could not be watched, and an orchestrator-session Job's only once `end-job` measured its window. Every Skill tool call is now logged as it happens, one line each, extending the vocabulary of design-ADR-0007. Issue #186.
 
+**Superseded in part by design-ADR-0010** for the record shape: the `skill` line of decisions 1 and 2 is an `event` line named `skill.invoke` with attribute `skill.name`, and the fold attaches it to `span.events`, read back as skills by `skillUses()`. Decisions 3 to 6 and the consequences stand, with "`skill` line" read as that event.
+
 ## Decisions
 
 1. **A `skill` line is a point record, like a `score`.** `{ kind: "skill", t, seq, trace_id, span_id, name, source: "measured" }`: `span_id` is the span that made the call, `name` the skill the Skill tool call names: its input's `skill`, else the older `command`, trimmed, `plugin:skill` for a plugin's, a blank one written as nothing. `skillName()` in `transcript.pure.ts` is that one normalisation, and `skills_invoked` is read through it too, so both paths name a skill alike. It carries no other field; `t` is the writer's clock when the hook ran. The writer refuses one whose `span_id` no start line opened, as it does an end, attrs or score line.

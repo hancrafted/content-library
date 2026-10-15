@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { createLogFold, parseLog } from '../../skills/new-episode/scripts/run-log.pure';
+import { createLogFold, parseLog, type RunLogLine } from '../../skills/new-episode/scripts/run-log.pure';
 import { parseDashboardPipeline, projectDashboard } from './dashboard-projection.pure';
 
 const fixture = (name: string) =>
@@ -60,7 +60,9 @@ describe('success cases', () => {
     const expectedParent = '056c166635f8ab1d';
     // ACT
     const lines = parseLog(fixture('events.jsonl')).lines;
-    log.append(lines.map((line) => (line.seq === 6 ? { ...line, description: expectedDescription } : line)));
+    log.append(
+      lines.map((line) => (line.seq === 6 ? ({ ...line, description: expectedDescription } as RunLogLine) : line)),
+    );
     const view = projectDashboard(pipeline, log.snapshot());
     const brief = view.jobs[0];
     const agents = view.jobs.flatMap((job) => job.agents);

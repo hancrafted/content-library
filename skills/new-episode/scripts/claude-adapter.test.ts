@@ -1,5 +1,5 @@
 import { execFileSync, spawnSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
@@ -142,32 +142,93 @@ describe('lock timeout', () => {
   });
 });
 
-/** Runs the adapter's PostToolUse mode for a Skill call, from the orchestrator (no agent id) or a subagent. */
-function skillHook(session: string, payload: Record<string, unknown>, env: Record<string, string> = {}) {
+/** Runs one of the adapter's point-fact modes, from the orchestrator (no agent id) or a subagent. */
+function pointHook(mode: string, session: string, payload: Record<string, unknown> & { env?: Record<string, string> }) {
+  const { env = {}, ...fields } = payload;
   const transcript = path.join(dir, 'session.jsonl');
-  const input = { session_id: session, transcript_path: transcript, cwd: main, tool_name: 'Skill', ...payload };
-  return spawnSync('node', [ADAPTER, 'skill'], {
+  const input = { session_id: session, transcript_path: transcript, cwd: main, ...fields };
+  return spawnSync('node', [ADAPTER, mode], {
     input: JSON.stringify(input),
     encoding: 'utf8',
     env: { ...cleanEnv(), CLAUDE_PROJECT_DIR: main, ...env },
   });
 }
+const skillHook = (session: string, payload: Record<string, unknown>, env: Record<string, string> = {}) =>
+  pointHook('skill', session, { tool_name: 'Skill', ...payload, env });
+const SUBAGENT = { agent_id: 'a1', agent_type: 'general-purpose' };
 
-describe('skill invocations (PostToolUse)', () => {
-  it("appends a skill line on the agent span for a subagent's call and on the marker's Job for the orchestrator's", () => {
+describe('point facts (PostToolUse on Skill and Read, InstructionsLoaded)', () => {
+  it("appends a skill.invoke event on the agent span for a subagent's call and on the marker's Job for the orchestrator's", () => {
     // ARRANGE
     hook('start', 's2');
     const agentSpan = linesOf(wt).at(-1)?.span_id;
+    const expected = [
+      { kind: 'event', span_id: agentSpan, name: 'skill.invoke', attributes: { 'skill.name': 'tdd' } },
+      { kind: 'event', span_id: JOB_SPAN, name: 'skill.invoke', attributes: { 'skill.name': 'grilling' } },
+    ];
     // ACT
-    const fromAgent = skillHook('s2', { agent_id: 'a1', agent_type: 'general-purpose', tool_input: { skill: 'tdd' } });
+    const fromAgent = skillHook('s2', { ...SUBAGENT, tool_input: { skill: 'tdd' } });
     const fromOrchestrator = skillHook('s2', { tool_input: { skill: 'grilling' } });
     // ASSERT
     expect(fromAgent.status).toBe(0);
     expect(fromOrchestrator.status).toBe(0);
-    expect(linesOf(wt).slice(-2)).toMatchObject([
-      { kind: 'skill', span_id: agentSpan, name: 'tdd', source: 'measured' },
-      { kind: 'skill', span_id: JOB_SPAN, name: 'grilling', source: 'measured' },
-    ]);
+    expect(linesOf(wt).slice(-2)).toMatchObject(expected);
+  });
+
+  it('appends a file.read with the path relative to the checkout the agent works in, and nothing for a file outside it', () => {
+    // ARRANGE
+    hook('start', 's2');
+    const expected = { kind: 'event', name: 'file.read', attributes: { 'file.path': 'src/a.ts' } };
+    const before = linesOf(wt).length;
+    // ACT
+    const inside = pointHook('read', 's2', {
+      ...SUBAGENT,
+      cwd: wt,
+      tool_name: 'Read',
+      tool_input: { file_path: path.join(wt, 'src/a.ts') },
+    });
+    const outside = pointHook('read', 's2', {
+      ...SUBAGENT,
+      cwd: wt,
+      tool_name: 'Read',
+      tool_input: { file_path: path.join(dir, 'x.md') },
+    });
+    // ASSERT
+    expect([inside.status, outside.status]).toEqual([0, 0]);
+    expect(linesOf(wt)).toHaveLength(before + 1);
+    expect(linesOf(wt).at(-1)).toMatchObject(expected);
+  });
+
+  it('appends an instructions.load naming the ADR a rule symlink resolves to', () => {
+    // ARRANGE
+    const adr = 'GEN-002-adr-symlink-claude-rules';
+    mkdirSync(path.join(wt, '.archgate/adrs'), { recursive: true });
+    mkdirSync(path.join(wt, '.claude/rules'), { recursive: true });
+    writeFileSync(path.join(wt, `.archgate/adrs/${adr}.md`), '# ADR');
+    symlinkSync(`../../.archgate/adrs/${adr}.md`, path.join(wt, '.claude/rules/gen-002-adr-symlink-claude-rules.md'));
+    const rule = path.join(wt, '.claude/rules/gen-002-adr-symlink-claude-rules.md');
+    const expected = {
+      kind: 'event',
+      span_id: JOB_SPAN,
+      name: 'instructions.load',
+      attributes: {
+        'file.path': '.claude/rules/gen-002-adr-symlink-claude-rules.md',
+        load_reason: 'path_glob_match',
+        adr,
+      },
+      payload: { claude_code: { memory_type: 'Project' } },
+    };
+    // ACT
+    const result = pointHook('instructions', 's2', {
+      cwd: wt,
+      hook_event_name: 'InstructionsLoaded',
+      file_path: rule,
+      memory_type: 'Project',
+      load_reason: 'path_glob_match',
+    });
+    // ASSERT
+    expect(result.status).toBe(0);
+    expect(linesOf(wt).at(-1)).toMatchObject(expected);
   });
 
   it('exits 0 on a lock timeout, so the tool call it follows is never blocked', () => {
