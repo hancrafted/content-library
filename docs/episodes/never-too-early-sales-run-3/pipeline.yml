@@ -48,7 +48,7 @@
 #       model       the model it runs on, or inherit; SKILL.md's job loop says where it applies
 #       session     optional; subagent (default) or orchestrator, by SKILL.md's job loop
 status: draft
-template: dc8e88f
+template: f211581
 stages: [brief, setup, research, dossier, specification, build, pr]
 jobs:
   - id: brief-grill
@@ -192,6 +192,9 @@ jobs:
           - docs/llm-wiki/research/SALES/SALES-0005__early-selling-repeatable-process/research.md
           - docs/llm-wiki/research/SALES/SALES-0006__sales-pipeline-ramp-up-time/research.md
           - docs/episodes/never-too-early-sales-run-3/reference/source-deck/design-reference.md
+          - docs/profile/storytelling-guide.md
+          - docs/profile/tone-guide.md
+          - docs/profile/mental-model-guide.md
         model: inherit
       - type: reviewer
         skills: []
@@ -217,12 +220,17 @@ jobs:
           - references/write-voice-script.md
           - docs/episodes/never-too-early-sales-run-3/brief.md
           - docs/episodes/never-too-early-sales-run-3/dossier.md
+          - docs/profile/storytelling-guide.md
+          - docs/profile/tone-guide.md
+          - docs/profile/mental-model-guide.md
         model: inherit
       - type: reviewer
         skills: []
         references:
           - references/write-voice-script.md
           - docs/episodes/never-too-early-sales-run-3/brief.md
+          - docs/profile/storytelling-guide.md
+          - docs/profile/tone-guide.md
         rubric: references/write-voice-script.md#rubric
         model: opus
 

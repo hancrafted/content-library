@@ -166,3 +166,24 @@ Changes from the template, each with its reason:
 - Ports: `implement-episode-init` 4000, then the Sections 4001 to 4005 in order. All six were free.
 - The comments on `retrieval` and `write-dossier` now describe this run, since the ones from the template named the dropped foreach.
 - Retries, gates, skills and models are unchanged: the Brief gives no reason to change them.
+
+## customize-pipeline · 2026-10-15T12:37:30Z
+
+### Inputs
+
+- Han's change at the pipeline gate: "i've added some steering files for voice script in docs/profile add in the pipeline".
+- `docs/profile/storytelling-guide.md`, `tone-guide.md` and `mental-model-guide.md`, which reached this branch through `main`'s `f211581`.
+
+### Output
+
+- `pipeline.yml`, still `status: draft`, with the three guides added back where the template lists them. It is committed again with `Gate: draft pipeline`.
+
+### Checks
+
+- `vitest` staging test: pass.
+
+### Notes
+
+- `write-dossier` implementor and `write-voice-script` implementor: all three guides. `write-voice-script` reviewer: storytelling and tone. These are the same paths and places as the template at `main`.
+- `template:` moves from `dc8e88f` to `f211581`, the `main` commit this branch now sits on. The template changed between the two only in these guide paths.
+- These guides replace the three `docs/profile/han/*` files that scaffold-pipeline removed because they did not exist.
