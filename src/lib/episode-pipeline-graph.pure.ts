@@ -1,17 +1,11 @@
 /*
  * The `needs` and `wants` graph of a new-episode pipeline: which jobs a job
- * waits for, directly or through others, whether the waiting ever loops
- * back, and which jobs may run at the same time. A job waits for a job it
- * wants as for one it needs; only a blocked need blocks it.
+ * waits for through others, and which jobs may run at the same time. Whether
+ * the waiting ever loops back is the Pipeline definition's `jobGraph`. A job
+ * waits for a job it wants as for one it needs; only a blocked need blocks it.
  */
 
-import type { Job } from './episode-pipeline-definition.pure';
-
-/** Every job `id` waits for directly: the ones it needs, then the ones it wants. */
-export function waitsFor(id: string, byId: ReadonlyMap<string, Job>): string[] {
-  const job = byId.get(id);
-  return job === undefined ? [] : [...job.needs, ...job.wants];
-}
+import { waitsFor, type Job } from './episode-pipeline-definition.pure';
 
 /** Every job `id` waits for, directly or through another job, guarded against cycles. */
 export function ancestors(id: string, byId: ReadonlyMap<string, Job>): Set<string> {
@@ -25,20 +19,6 @@ export function ancestors(id: string, byId: ReadonlyMap<string, Job>): Set<strin
   };
   visit(id);
   return seen;
-}
-
-/** The first cycle in the needs graph, as the ids along it, or null. */
-export function findCycle(jobs: readonly Job[], byId: ReadonlyMap<string, Job>): string[] | null {
-  const done = new Set<string>();
-  const walk = (id: string, path: readonly string[]): string[] | null => {
-    if (path.includes(id)) return [...path.slice(path.indexOf(id)), id];
-    if (done.has(id)) return null;
-    const needs = waitsFor(id, byId);
-    const cycle = needs.reduce<string[] | null>((found, need) => found ?? walk(need, [...path, id]), null);
-    done.add(id);
-    return cycle;
-  };
-  return jobs.reduce<string[] | null>((found, { id }) => found ?? walk(id, []), null);
 }
 
 /**

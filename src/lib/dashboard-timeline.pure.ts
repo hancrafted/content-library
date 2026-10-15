@@ -3,22 +3,18 @@ import type { RunLogLine } from '../../skills/new-episode/scripts/run-log.schema
 import type { DashboardEvent } from './dashboard-events.pure';
 import { projectDashboard, type DashboardView } from './dashboard-projection.pure';
 import type { Polled } from './dashboard-reader.pure';
-import { scrubPosition, scrubTime, scrubTimeline, snapScrubPosition } from './dashboard-scrub.pure';
+import {
+  scrubPosition,
+  scrubTime,
+  scrubTimeline,
+  snapScrubPosition,
+  type RailStop,
+  type ReplayRange,
+} from './dashboard-scrub.pure';
 import { projectStages } from './dashboard-stages.pure';
 
 /** Where the dashboard stands: following each poll, or a moment (epoch milliseconds) replayed from the events. */
 export type Cutoff = number | 'live';
-
-/** A stage index fraction (`at`) and the visual position it sits at along the rail (`position`), as Graph geometry lays them. */
-interface RailStop {
-  at: number;
-  position: number;
-}
-
-interface Range {
-  start: number;
-  end: number;
-}
 
 const readable = (events: readonly DashboardEvent[]): RunLogLine[] =>
   events.flatMap((event) => (event.line ? [event.line] : []));
@@ -26,14 +22,14 @@ const readable = (events: readonly DashboardEvent[]): RunLogLine[] =>
 const eventsAt = (events: readonly DashboardEvent[], at: number): DashboardEvent[] =>
   events.filter((event) => event.line !== undefined && Date.parse(event.line.t) <= at);
 
-const clamp = (value: number, range: Range) => Math.min(Math.max(value, range.start), range.end);
+const clamp = (value: number, range: ReplayRange) => Math.min(Math.max(value, range.start), range.end);
 
 /** The replayed moment a cutoff stands for, kept within the range; null while live. */
-const momentOf = (range: Range | null, cutoff: Cutoff): number | null =>
+const momentOf = (range: ReplayRange | null, cutoff: Cutoff): number | null =>
   cutoff === 'live' || range === null ? null : clamp(cutoff, range);
 
 /** The cutoff seeking `to` sets: the Run's leading edge or later resumes Live. */
-const seekTo = (range: Range | null, to: number): Cutoff =>
+const seekTo = (range: ReplayRange | null, to: number): Cutoff =>
   range === null || to >= range.end ? 'live' : clamp(to, range);
 
 /**
@@ -41,7 +37,7 @@ const seekTo = (range: Range | null, to: number): Cutoff =>
  * it, else to the later of its last event and the reading. Null without a readable event; the first event starts a
  * log without a Run.
  */
-function replayRange({ read, readAt }: Polled): Range | null {
+function replayRange({ read, readAt }: Polled): ReplayRange | null {
   const lines = readable(read.events);
   if (lines.length === 0) return null;
   // The fold orders spans by start time then sequence, so the last Run span is the current Run.
@@ -55,7 +51,7 @@ function replayRange({ read, readAt }: Polled): Range | null {
 }
 
 /** Observed starts and ends map the structural rail; the live view supplies them, never a replayed one. */
-function railOf(view: DashboardView | undefined, range: Range) {
+function railOf(view: DashboardView | undefined, range: ReplayRange) {
   const stages = view ? projectStages(view.jobs, view.stages).stages : [];
   return scrubTimeline(
     stages.map((stage) =>
@@ -80,7 +76,7 @@ function shownAt({ read, readAt }: Polled, moment: number | null) {
 type Rail = ReturnType<typeof railOf>;
 
 /** The replay slider over the rail `stops` lay out: a cutoff's position, 0 to 1, and the cutoff a position sets. */
-function slider(rail: Rail, range: Range | null) {
+function slider(rail: Rail, range: ReplayRange | null) {
   return {
     position(cutoff: Cutoff, stops: readonly RailStop[]): number {
       if (range === null) return 0;

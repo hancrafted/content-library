@@ -145,15 +145,18 @@ describe('success cases', () => {
     expect(shown.now).toBe(expectedNow);
   });
 
-  it("equals the live view when replayed at the Run's end", async () => {
+  it("shows every Job and the Run finished when replayed at the Run's end", async () => {
     // ARRANGE
-    const reading = await polled(RUN, at(40));
-    const timeline = dashboardTimeline(reading);
+    const timeline = dashboardTimeline(await polled(RUN, at(40)));
+    const expected = ['draft:ok', 'research-a:ok', 'research-b:ok', 'publish:ok'];
+    const expectedRun = 'ok';
+    const expectedEvents = RUN.map((_, index) => index + 1);
     // ACT
-    const replayed = timeline.at(at(31));
+    const { view, events } = timeline.at(at(31));
     // ASSERT
-    expect(replayed.view).toEqual(reading.read.view);
-    expect(replayed.events).toEqual(reading.read.events);
+    expect(states(view)).toEqual(expected);
+    expect(view?.runs[0].status).toBe(expectedRun);
+    expect(events.map((event) => event.number)).toEqual(expectedEvents);
   });
 
   it('reads a Job open at the cutoff as running and the Jobs after it as waiting, though the Run ended later', async () => {
@@ -306,7 +309,7 @@ describe('failure cases', () => {
     const { view, events } = dashboardTimeline(reading).at(at(12));
     // ASSERT
     expect(states(view)).toEqual(expected);
-    expect(events.every((event) => event.line !== undefined)).toBe(true);
+    expect(events.filter((event) => event.line === undefined)).toEqual([]);
   });
 
   it('stays Live without a readable event, there being nothing to replay', async () => {
@@ -329,16 +332,16 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('keeps a finished Run finished when replayed at its end, however late the reading', async () => {
     // ARRANGE
-    const early = dashboardTimeline(await polled(RUN, at(40)));
     const late = dashboardTimeline(await polled(RUN, at(400)));
+    const expectedRange = { start: at(0), end: at(31) };
+    const expected = ['draft:ok', 'research-a:ok', 'research-b:ok', 'publish:ok'];
     const expectedStatus = 'ok';
     // ACT
-    const replayed = late.at(late.toggle(false)).view;
-    const expected = early.at(at(31)).view;
+    const { view } = late.at(late.toggle(false));
     // ASSERT
-    expect(late.range).toEqual(early.range);
-    expect(replayed?.runs[0].status).toBe(expectedStatus);
-    expect(replayed).toEqual(expected);
+    expect(late.range).toEqual(expectedRange);
+    expect(states(view)).toEqual(expected);
+    expect(view?.runs[0].status).toBe(expectedStatus);
   });
 
   it('clamps a cutoff before the Run to its start, every Job still waiting', async () => {

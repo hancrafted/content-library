@@ -1,8 +1,7 @@
 import type { Polled } from '@/lib/dashboard-reader.pure';
+import type { RailStop } from '@/lib/dashboard-scrub.pure';
 import { dashboardTimeline, type Cutoff, type DashboardTimeline } from '@/lib/dashboard-timeline.pure';
 import { useDeferredValue, useMemo, useState } from 'react';
-
-type Stops = Parameters<DashboardTimeline['position']>[1];
 
 /** What the Live checkbox and replay slider read and set; times are epoch milliseconds. */
 export interface ReplayControls {
@@ -10,9 +9,9 @@ export interface ReplayControls {
   setLive: (live: boolean) => void;
   seek: (moment: number) => void;
   /** Seeks to a slider position along the rail the Graph geometry `stops` lay out. */
-  seekPosition: (position: number, stops: Stops) => void;
+  seekPosition: (position: number, stops: readonly RailStop[]) => void;
   /** The slider position of the cutoff along that rail. */
-  position: (stops: Stops) => number;
+  position: (stops: readonly RailStop[]) => number;
   /** The cutoff while replaying, null while live. */
   at: number | null;
   range: DashboardTimeline['range'];

@@ -1,12 +1,8 @@
 import { dashboardLayout, edgePath, GRAPH_LAYOUT } from './dashboard-layout.pure';
+import type { RailStop } from './dashboard-scrub.pure';
 import type { DashboardStage } from './dashboard-stages.pure';
 
 type Layout = ReturnType<typeof dashboardLayout>;
-/** A stage index fraction (`at`) and the visual position it sits at along the rail (`position`). */
-interface RailStop {
-  at: number;
-  position: number;
-}
 
 const px = (value: number) => `${value}px`;
 const percent = (fraction: number) => `${fraction * 100}%`;
