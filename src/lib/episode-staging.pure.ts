@@ -5,6 +5,7 @@
  * is the caller's job, so every rule tests against an in-memory folder.
  */
 
+import { checkSpec } from './episode-spec.pure';
 import { checkBrief } from './episode-staging-brief.pure';
 import { checkStagingOrder } from './episode-staging-order.pure';
 import { checkTexts } from './episode-staging-texts.pure';
@@ -173,10 +174,21 @@ function checkFeedback(files: Readonly<Record<string, string>>, dossier: readonl
 
 /**
  * Checks one staging folder's files against each other. `files` maps a path
- * relative to the folder (`dossier.md`, `feedback/01/feedback.md`) to its text.
+ * relative to the folder (`dossier.md`, `feedback/01/feedback.md`) to its text;
+ * `reviewAsset` is the shared review asset a Spec page must inline.
  */
-export function checkStagingFolder(files: Readonly<Record<string, string>>, known: KnownVisuals): Finding[] {
-  return [...checkStagingOrder(files), ...checkTexts(files), ...checkBrief(files), ...checkDossier(files, known)];
+export function checkStagingFolder(
+  files: Readonly<Record<string, string>>,
+  known: KnownVisuals,
+  reviewAsset: string,
+): Finding[] {
+  return [
+    ...checkStagingOrder(files),
+    ...checkTexts(files),
+    ...checkBrief(files),
+    ...checkDossier(files, known),
+    ...checkSpec(files, reviewAsset),
+  ];
 }
 
 /** The checks that read the Dossier; none until it exists. */

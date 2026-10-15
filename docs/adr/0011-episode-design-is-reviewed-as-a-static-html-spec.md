@@ -26,6 +26,13 @@ Han reviewed an Episode's design as a markdown build spec and a markdown design 
 - **Save the review by clipboard or the File System Access API.** Rejected: the clipboard needs a paste step that loses work, and File System Access is Chromium-only and asks for a folder each time. A native form posted to a local server writes the round with no copy and paste.
 - **Promote the Spec whole** into the code folder. Rejected: a Slide is a self-contained folder (design-ADR-0001), and an Episode-wide Spec would claim text that a Slide copied into another Episode also carries. Promotion keeps one owner per Slide by moving the words into `slide.md`.
 
+## Agent-decided (contest in review)
+
+- The Spec check is `checkSpec(files, reviewAsset)` in `src/lib/episode-spec.pure.ts`; `checkStagingFolder` takes the review asset as a third argument and runs it.
+- The page's markup is addressed by role, never by styling class: `data-spec` on `section`, `slide`, `option`, `mock`, `build-notes`, `voice-script`, `speaker-notes` and `visual-idea`, plus `data-number`, `data-option`, `data-recommended`, `data-picked` and `data-source`. The meta block is `<script type="application/json" id="spec-meta">`.
+- The review asset is `skills/new-episode/assets/spec-review.html`, inlined between its `spec-review:start` and `spec-review:end` markers and compared with whitespace collapsed, so Prettier may reformat a Spec. The per-Slide fields sit beside what they review and join the form by `form="spec-review"`: a checkbox `pick:<slide-slug>` valued by the Option id, a note `note:<slide-slug>` per Slide and one `note:visual-language`.
+- The sample Spec carries an inline fallback stylesheet in a CSS layer declared before `design.css`, so it reads in system colours when opened without the compiled tokens.
+
 ## Consequences
 
 - Han's reviews per Episode become three: the Brief, the Spec and the PR loop. `customize-pipeline` keeps its Gate for a few more Runs.
