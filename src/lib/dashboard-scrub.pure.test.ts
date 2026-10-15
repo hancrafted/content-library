@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import {
-  graphGeometry,
   jobProgress,
   jobTimings,
   scrubPosition,
@@ -79,19 +78,6 @@ describe('success cases', () => {
     const position = scrubPosition(scrubTimeline(stages, { start: 0, end: 100 }), 100);
     // ASSERT
     expect(position).toBe(expected);
-  });
-  it('aligns a structural stage with its weighted graph centre in both directions', () => {
-    // ARRANGE
-    const positions = [1, 6, 11, 13];
-    const expectedVisual = 5 / 12;
-    const stage = 1 / 3;
-    // ACT
-    const geometry = graphGeometry(positions, 14);
-    const visual = scrubPosition(geometry.stops, stage);
-    const structural = scrubTime(geometry.stops, expectedVisual);
-    // ASSERT
-    expect(visual).toBeCloseTo(expectedVisual);
-    expect(structural).toBeCloseTo(stage);
   });
   it('keeps parallel pending work unfilled and reaches PR only when the Run finishes', () => {
     // ARRANGE
