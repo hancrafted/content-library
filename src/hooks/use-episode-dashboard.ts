@@ -1,25 +1,18 @@
-import { createEpisodeReader, type EpisodeRead } from '@/lib/dashboard-reader.pure';
+import { openEpisode, type Polled } from '@/lib/dashboard-reader.pure';
+import type { EpisodeFolder } from '@/lib/episode-folder.pure';
 import { useEffect, useRef, useState } from 'react';
-import { useEpisodeOutputs, type OutputFolder } from './use-episode-outputs';
+import { fileSystemFolder, type DirectoryHandle } from './file-system-folder';
+import { useEpisodeOutputs } from './use-episode-outputs';
 
-type PickerWindow = Window & { showDirectoryPicker?: (options: { mode: 'read' }) => Promise<OutputFolder> };
-interface Selection {
-  folder: OutputFolder;
-  reader: ReturnType<typeof createEpisodeReader>;
-  initial: EpisodeRead;
-  /** When the initial read finished, epoch milliseconds. */
-  readAt: number;
-}
+type PickerWindow = Window & { showDirectoryPicker?: (options: { mode: 'read' }) => Promise<DirectoryHandle> };
+type Selection = { folder: EpisodeFolder } & Awaited<ReturnType<typeof openEpisode>>;
 
 async function pickEpisode(): Promise<Selection | null> {
   const picker = (window as PickerWindow).showDirectoryPicker;
   if (picker === undefined) throw new Error('This page needs Chrome or Edge with local folder access.');
   try {
-    const folder = await picker.call(window, { mode: 'read' });
-    const reader = createEpisodeReader(folder);
-    const initial = await reader.poll();
-    if (initial.pipeline === undefined) throw new Error(initial.errors.join('\n'));
-    return { folder, reader, initial, readAt: Date.now() };
+    const folder = fileSystemFolder(await picker.call(window, { mode: 'read' }));
+    return { folder, ...(await openEpisode(folder, Date.now)) };
   } catch (error) {
     if (error instanceof Error && error.name === 'AbortError') return null;
     throw error;
@@ -53,12 +46,6 @@ function useFolderSelection() {
   return { selection, choosing, error, choose };
 }
 
-/** The latest read and when it finished, epoch milliseconds: the dashboard's "now" without a render-time clock. */
-export interface Polled {
-  read: EpisodeRead;
-  readAt: number;
-}
-
 function useEpisodePolling(selection: Selection | undefined): Polled | undefined {
   const [observed, setObserved] = useState<Polled & { selection: Selection }>();
   useEffect(() => {
@@ -66,9 +53,9 @@ function useEpisodePolling(selection: Selection | undefined): Polled | undefined
     let cancelled = false;
     let timer: ReturnType<typeof setTimeout>;
     const tick = async () => {
-      const read = await selection.reader.poll();
+      const polled = await selection.reader.poll();
       if (cancelled) return;
-      setObserved({ selection, read, readAt: Date.now() });
+      setObserved({ selection, ...polled });
       timer = setTimeout(tick, 2000);
     };
     timer = setTimeout(tick, 2000);
@@ -77,9 +64,7 @@ function useEpisodePolling(selection: Selection | undefined): Polled | undefined
       clearTimeout(timer);
     };
   }, [selection]);
-  return observed?.selection === selection
-    ? observed
-    : selection && { read: selection.initial, readAt: selection.readAt };
+  return observed?.selection === selection ? observed : selection?.initial;
 }
 
 /** Folder handles, source data and errors are transient; a reload returns to the picker. */

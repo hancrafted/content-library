@@ -1,10 +1,9 @@
 import type { DashboardEvent } from '@/lib/dashboard-events.pure';
-import type { EpisodeRead } from '@/lib/dashboard-reader.pure';
+import type { EpisodeRead, Polled } from '@/lib/dashboard-reader.pure';
 import { eventsAt, replayBounds, replayDashboard } from '@/lib/dashboard-replay.pure';
 import { scrubTimeline } from '@/lib/dashboard-scrub.pure';
 import { projectStages } from '@/lib/dashboard-stages.pure';
 import { useDeferredValue, useMemo, useState } from 'react';
-import type { Polled } from './use-episode-dashboard';
 
 /** What the Live checkbox and replay slider read and set; times are epoch milliseconds. */
 export interface ReplayControls {

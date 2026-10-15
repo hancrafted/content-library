@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { isGlob, outputLabel, outputSegments, previewHref, previewPort } from './dashboard-outputs.pure';
+import {
+  isGlob,
+  outputLabel,
+  outputSegments,
+  previewHref,
+  previewPort,
+  readOutput,
+  writtenOutputs,
+} from './dashboard-outputs.pure';
+import { createMemoryFolder } from './episode-folder.pure';
 
 /*
  * A Job's output path read against the Episode folder the dashboard was given, `docs/episodes/<slug>`, and a Build
@@ -9,6 +18,34 @@ import { isGlob, outputLabel, outputSegments, previewHref, previewPort } from '.
 const FOLDER = 'never-too-early';
 
 describe('success cases', () => {
+  it("finds which of the jobs' outputs are written in the chosen folder, once a file appears", async () => {
+    // ARRANGE
+    const folder = createMemoryFolder(FOLDER, { 'brief.md': '# Brief' });
+    const jobs = [
+      { outputs: ['docs/episodes/never-too-early/brief.md'] },
+      { outputs: ['docs/episodes/never-too-early/spec/spec.md', 'docs/episodes/never-too-early/brief.md'] },
+    ];
+    const expectedBefore = ['docs/episodes/never-too-early/brief.md'];
+    const expectedAfter = ['docs/episodes/never-too-early/brief.md', 'docs/episodes/never-too-early/spec/spec.md'];
+    // ACT
+    const before = await writtenOutputs(folder, jobs);
+    folder.write('spec/spec.md', '# Spec');
+    const after = await writtenOutputs(folder, jobs);
+    // ASSERT
+    expect([...before]).toEqual(expectedBefore);
+    expect([...after]).toEqual(expectedAfter);
+  });
+
+  it('reads a written output as text', async () => {
+    // ARRANGE
+    const folder = createMemoryFolder(FOLDER, { 'research/AIE-0001__recall/research.md': '# Recall' });
+    const expected = '# Recall';
+    // ACT
+    const text = await readOutput(folder, 'docs/episodes/never-too-early/research/AIE-0001__recall/research.md');
+    // ASSERT
+    expect(text).toBe(expected);
+  });
+
   it('maps an output in the chosen folder to its path inside it, one segment per sub-folder', () => {
     // ARRANGE
     const outputs = [
@@ -58,6 +95,21 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('reads no text for an output that is gone, outside the folder or a glob', async () => {
+    // ARRANGE
+    const folder = createMemoryFolder(FOLDER, { 'brief.md': '# Brief' });
+    const outputs = [
+      'docs/episodes/never-too-early/spec/spec.md',
+      'docs/episodes/other/brief.md',
+      'docs/episodes/never-too-early/*.md',
+    ];
+    const expected = [null, null, null];
+    // ACT
+    const texts = await Promise.all(outputs.map((output) => readOutput(folder, output)));
+    // ASSERT
+    expect(texts).toEqual(expected);
+  });
+
   it("hides a Section Job's preview before it starts and once it has ended, and the integration Job's before it starts", () => {
     // ARRANGE
     const jobs = [
@@ -100,6 +152,16 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('counts no output outside the chosen folder or naming a glob as written, even when a file matches', async () => {
+    // ARRANGE
+    const folder = createMemoryFolder(FOLDER, { 'brief.md': '# Brief', '*.md': 'literal' });
+    const jobs = [{ outputs: ['docs/episodes/other/brief.md', 'docs/episodes/never-too-early/*.md'] }];
+    // ACT
+    const written = await writtenOutputs(folder, jobs);
+    // ASSERT
+    expect([...written]).toEqual([]);
+  });
+
   it('tells a glob output from a file', () => {
     // ARRANGE
     const outputs = ['docs/episodes/x/research/*/research.md', 'docs/episodes/x/brief.md'];
