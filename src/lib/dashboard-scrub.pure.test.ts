@@ -1,14 +1,92 @@
 import { describe, expect, it } from 'vitest';
-import { graphGeometry, scrubPosition, scrubTime, scrubTimeline, snapScrubPosition } from './dashboard-scrub.pure';
+import {
+  graphGeometry,
+  jobProgress,
+  jobTimings,
+  scrubPosition,
+  scrubTime,
+  scrubTimeline,
+  snapScrubPosition,
+} from './dashboard-scrub.pure';
 
 describe('success cases', () => {
+  it('keeps the final running Job unfilled until its observed end', () => {
+    // ARRANGE
+    const stages = [[{ start: 0, end: 10 }], [{ start: 10, end: 20 }], [{ start: 20, end: null }]];
+    const expected = 2 / 3;
+    // ACT
+    const edge = scrubPosition(scrubTimeline(stages, { start: 0, end: 60 }), 60);
+    // ASSERT
+    expect(edge).toBe(expected);
+  });
+  it('reads branch boundaries without assigning a made-up end to open Jobs', () => {
+    // ARRANGE
+    const jobs = [
+      { id: 'done', span: { start_t: '2026-01-01T00:00:00Z', end_t: '2026-01-01T00:01:00Z' } },
+      { id: 'running', span: { start_t: '2026-01-01T00:01:00Z', end_t: null } },
+      { id: 'pending' },
+    ];
+    const expected = [
+      ['done', { start: 1767225600000, end: 1767225660000 }],
+      ['running', { start: 1767225660000, end: null }],
+      ['pending', { start: null, end: null }],
+    ];
+    // ACT
+    const timings = [...jobTimings(jobs)];
+    // ASSERT
+    expect(timings).toEqual(expected);
+  });
+  it('leaves unfinished parallel work unfilled when a later Job has already ended', () => {
+    // ARRANGE
+    const stages = [
+      [
+        { start: 0, end: null },
+        { start: 0, end: 10 },
+      ],
+      [],
+      [],
+    ];
+    const expected = 1 / 6;
+    // ACT
+    const edge = scrubPosition(scrubTimeline(stages, { start: 0, end: 30 }), 30);
+    // ASSERT
+    expect(edge).toBe(expected);
+  });
+  it('uses measured Job ends for branch replay and never estimates open-Job progress', () => {
+    // ARRANGE
+    const expected = [0.5, 0, 1];
+    // ACT
+    const progress = [
+      jobProgress({ start: 10, end: 30 }, 20),
+      jobProgress({ start: 10, end: null }, 200),
+      jobProgress({ start: 10, end: 30 }, 40),
+    ];
+    // ASSERT
+    expect(progress).toEqual(expected);
+  });
+  it('stops Live at the start boundary of a running Job, not its completion boundary', () => {
+    // ARRANGE
+    const stages = [
+      [
+        { start: 0, end: 10 },
+        { start: 10, end: null },
+      ],
+      [],
+      [],
+    ];
+    const expected = 1 / 6;
+    // ACT
+    const position = scrubPosition(scrubTimeline(stages, { start: 0, end: 100 }), 100);
+    // ASSERT
+    expect(position).toBe(expected);
+  });
   it('aligns a structural stage with its weighted graph centre in both directions', () => {
     // ARRANGE
-    const weights = [1, 4, 1, 1];
+    const positions = [1, 6, 11, 13];
     const expectedVisual = 5 / 12;
     const stage = 1 / 3;
     // ACT
-    const geometry = graphGeometry(weights);
+    const geometry = graphGeometry(positions, 14);
     const visual = scrubPosition(geometry.stops, stage);
     const structural = scrubTime(geometry.stops, expectedVisual);
     // ASSERT
@@ -20,7 +98,7 @@ describe('success cases', () => {
     const pending = { start: null, end: null };
     const parallel = [[{ start: 0, end: 10 }, { start: 0, end: null }, pending], [pending], [pending]];
     const complete = [[{ start: 0, end: 10 }], [{ start: 10, end: 20 }], [{ start: 20, end: 30 }]];
-    const expectedParallel = 1 / 3;
+    const expectedParallel = 1 / 9;
     // ACT
     const edge = scrubPosition(scrubTimeline(parallel, { start: 0, end: 20 }), 20);
     const finished = scrubPosition(scrubTimeline(complete, { start: 0, end: 30 }), 30);
@@ -31,7 +109,7 @@ describe('success cases', () => {
   it('keeps Live at observed mid-run progress and maps its leading edge back to now', () => {
     // ARRANGE
     const stages = [[{ start: 0, end: 10 }], [{ start: 10, end: null }], [{ start: null, end: null }]];
-    const expectedEdge = 0.75;
+    const expectedEdge = 1 / 3;
     const now = 20;
     // ACT
     const timeline = scrubTimeline(stages, { start: 0, end: now });
@@ -41,11 +119,11 @@ describe('success cases', () => {
     expect(edge).toBe(expectedEdge);
     expect(time).toBe(now);
   });
-  it('lets a pointer scrub through the final Stage instead of jumping over its events', () => {
+  it('keeps the penultimate stage gap separate from the terminal Stage', () => {
     // ARRANGE
     const stages = [[{ start: 0, end: 10 }], [{ start: 10, end: 30 }], [{ start: 30, end: 60 }]];
-    const expectedTime = 45;
-    const expectedPosition = 0.875;
+    const expectedTime = 20;
+    const expectedPosition = 0.5;
     // ACT
     const timeline = scrubTimeline(stages, { start: 0, end: 60 });
     const time = scrubTime(timeline, expectedPosition);
@@ -73,12 +151,12 @@ describe('success cases', () => {
       [{ start: 30, end: 50 }],
       [{ start: 50, end: 60 }],
     ];
-    const expectedPosition = 0.375;
+    const expectedPosition = 0.25;
     const expectedTime = 20;
     // ACT
     const timeline = scrubTimeline(stages, { start: 0, end: 60 });
     const position = scrubPosition(timeline, 20);
-    const time = scrubTime(timeline, 0.375);
+    const time = scrubTime(timeline, expectedPosition);
     // ASSERT
     expect(position).toBe(expectedPosition);
     expect(time).toBe(expectedTime);
@@ -94,7 +172,7 @@ describe('success cases', () => {
       [],
       [],
     ];
-    const expectedPosition = 1 / 3;
+    const expectedPosition = 2 / 9;
     const expectedTime = 10;
     // ACT
     const timeline = scrubTimeline(stages, { start: 0, end: 60 });
@@ -123,7 +201,7 @@ describe('edge cases', () => {
     const stages = [[{ start: 10, end: null }], [], [{ start: null, end: null }]];
     const expectedStart = 0;
     const expectedEnd = 40;
-    const expectedEdge = 0.5;
+    const expectedEdge = 0;
     // ACT
     const timeline = scrubTimeline(stages, { start: 0, end: 40 });
     const start = scrubTime(timeline, -1);

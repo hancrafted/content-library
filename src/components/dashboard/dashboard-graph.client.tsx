@@ -4,10 +4,11 @@ import { Button } from '@/components/ui/button';
 import { useDashboardDetail } from '@/hooks/use-dashboard-detail';
 import type { ReplayControls } from '@/hooks/use-dashboard-replay';
 import type { DashboardEvent, EventScope } from '@/lib/dashboard-events.pure';
+import { dashboardLayout, GRAPH_LAYOUT } from '@/lib/dashboard-layout.pure';
 import type { EpisodeOutputs } from '@/lib/dashboard-outputs.pure';
-import type { DashboardView } from '@/lib/dashboard-projection.pure';
-import { graphGeometry } from '@/lib/dashboard-scrub.pure';
-import { projectStages, stageLayers } from '@/lib/dashboard-stages.pure';
+import type { DashboardJob, DashboardView } from '@/lib/dashboard-projection.pure';
+import { graphGeometry, jobTimings } from '@/lib/dashboard-scrub.pure';
+import { projectStages } from '@/lib/dashboard-stages.pure';
 import { fillTemplate } from '@/lib/template.pure';
 import { useId, useState, type CSSProperties } from 'react';
 import { DashboardDrawer } from './dashboard-drawer.client';
@@ -15,6 +16,7 @@ import type { DashboardCopy } from './dashboard-evidence';
 import styles from './dashboard-graph.module.css';
 import { DashboardLog } from './dashboard-log.client';
 import { DashboardMoment, type Moment } from './dashboard-moment';
+import { DashboardObservations } from './dashboard-observations';
 import { stageName, StageNavigation } from './dashboard-stage-nav';
 import { LiveToggle, TimeTravel } from './dashboard-time-travel.client';
 
@@ -27,24 +29,18 @@ interface GraphProps {
   outputs: EpisodeOutputs;
   copy: DashboardCopy;
   replay: ReplayControls;
+  observedJobs: readonly DashboardJob[];
 }
 
-function useGraphControls(view: DashboardView) {
-  const graph = projectStages(view.jobs, view.stages);
+function useGraphControls() {
   const detail = useDashboardDetail();
-  const selected = detail.selection?.stage ?? null;
   const [showJobs, setShowJobs] = useState(false);
   const [log, setLog] = useState<{ title: string; scope: EventScope } | null>(null);
   return {
-    graph,
     detail,
-    selected,
     showJobs,
     setShowJobs,
     log,
-    stage: graph.stages.find((candidate) => candidate.id === selected),
-    select: (id: string) => detail.open(id),
-    selectJob: detail.open,
     openLog: (title: string, scope: EventScope) => setLog({ title, scope }),
     dismissLog: () => setLog(null),
   };
@@ -56,9 +52,10 @@ interface OverviewProps {
   stale: boolean;
   copy: DashboardCopy;
   replay: ReplayControls;
+  graph: ReturnType<typeof projectStages>;
 }
 
-function ProgressSummary({ graph, copy }: { graph: Controls['graph']; copy: DashboardCopy }) {
+function ProgressSummary({ graph, copy }: Pick<OverviewProps, 'graph' | 'copy'>) {
   const next = graph.stages.find((stage) => stage.state === 'waiting');
   return (
     <div className="space-y-1">
@@ -100,10 +97,10 @@ function JobsSwitch({ controls, copy }: Pick<OverviewProps, 'controls' | 'copy'>
   );
 }
 
-function GraphToolbar({ controls, copy, replay }: Pick<OverviewProps, 'controls' | 'copy' | 'replay'>) {
+function GraphToolbar({ controls, copy, replay, graph }: Omit<OverviewProps, 'stale'>) {
   return (
     <div className="flex flex-wrap items-start justify-between gap-4">
-      <ProgressSummary graph={controls.graph} copy={copy} />
+      <ProgressSummary graph={graph} copy={copy} />
       <div className="flex flex-wrap items-center gap-2">
         <JobsSwitch controls={controls} copy={copy} />
         <LiveToggle replay={replay} copy={copy} />
@@ -115,47 +112,49 @@ function GraphToolbar({ controls, copy, replay }: Pick<OverviewProps, 'controls'
   );
 }
 
-function graphWeights(graph: Controls['graph'], showJobs: boolean) {
-  return graph.stages.map((stage) =>
-    showJobs
-      ? Math.max(
-          1.5,
-          stageLayers(stage).reduce(
-            (sum, jobs) => sum + Math.max(...jobs.map((job) => Math.max(1, job.config.length))) + 0.5,
-            0,
-          ),
-        )
-      : 1,
-  );
-}
-
-function canvasStyle(weights: number[]): CSSProperties {
-  const geometry = graphGeometry(weights);
+function canvasStyle(geometry: ReturnType<typeof graphGeometry>, height: number): CSSProperties {
   return {
-    '--stage-columns': weights.map((weight) => `${weight}fr`).join(' '),
-    '--canvas-min': `${Math.max(560, weights.reduce((sum, weight) => sum + weight, 0) * 36)}px`,
+    '--stage-columns': `repeat(${geometry.stops.length}, minmax(0, 1fr))`,
+    '--canvas-min': `${geometry.width}px`,
     '--start-inset': `${geometry.left * 100}%`,
     '--end-inset': `${geometry.right * 100}%`,
+    '--network-height': `${height}px`,
+    '--stage-size': `${GRAPH_LAYOUT.stageNode}px`,
+    '--node-inset': `${GRAPH_LAYOUT.nodeInset}px`,
+    '--job-size': `${GRAPH_LAYOUT.agentNode}px`,
+    '--job-dot-size': `${GRAPH_LAYOUT.agentDot}px`,
+    '--end-size': `${GRAPH_LAYOUT.endNode}px`,
   } as CSSProperties;
 }
 
-function GraphOverview({ controls, stale, copy, replay }: OverviewProps) {
-  const { graph, selected, select, showJobs, selectJob } = controls;
-  const weights = graphWeights(graph, showJobs);
+function railGeometry(layout: ReturnType<typeof dashboardLayout>, showJobs: boolean) {
+  const positions = layout.stages.map((stage, index) =>
+    showJobs ? stage.x : (index + 0.5) * GRAPH_LAYOUT.minimumColumn,
+  );
+  positions.push(showJobs ? layout.end.x : (layout.stages.length + 0.5) * GRAPH_LAYOUT.minimumColumn);
+  return graphGeometry(positions, showJobs ? layout.width : positions.length * GRAPH_LAYOUT.minimumColumn);
+}
+
+function GraphOverview({ controls, graph, stale, copy, replay }: OverviewProps) {
+  const { detail, showJobs } = controls;
+  const layout = dashboardLayout(graph.stages);
+  const geometry = railGeometry(layout, showJobs);
   return (
     <div className="space-y-6 rounded-2xl border border-border bg-card p-4 sm:p-6">
-      <GraphToolbar controls={controls} copy={copy} replay={replay} />
+      <GraphToolbar controls={controls} copy={copy} replay={replay} graph={graph} />
       {stale ? <p className="text-caption text-(--warning)">{copy.graph.stale}</p> : null}
-      <div className={styles.graphScroll}>
-        <div className={styles.canvas} style={canvasStyle(weights)}>
-          <TimeTravel replay={replay} copy={copy} stages={graph.stages.length} geometry={graphGeometry(weights)} />
+      <div className={styles.graphScroll} style={{ maxHeight: GRAPH_LAYOUT.maximumHeight }}>
+        <div className={styles.canvas} style={canvasStyle(geometry, layout.height)}>
+          <TimeTravel replay={replay} copy={copy} stages={geometry.stops.length} geometry={geometry} />
           <StageNavigation
             stages={graph.stages}
-            selected={selected}
-            onSelect={select}
-            onSelectJob={showJobs ? selectJob : undefined}
+            selected={detail.selection?.stage ?? null}
+            selectedJob={detail.selection?.job}
+            onSelect={detail.open}
+            onSelectJob={showJobs ? detail.open : undefined}
             copy={copy}
-            weights={weights}
+            layout={layout}
+            endPosition={1 - geometry.right}
           />
         </div>
       </div>
@@ -163,22 +162,26 @@ function GraphOverview({ controls, stale, copy, replay }: OverviewProps) {
   );
 }
 
-export function DashboardGraph({ view, events, stale, moment, outputs, copy, replay }: GraphProps) {
-  const controls = useGraphControls(view);
-  const { stage, log, openLog, dismissLog } = controls;
+export function DashboardGraph({ view, events, stale, moment, outputs, copy, replay, observedJobs }: GraphProps) {
+  const controls = useGraphControls();
+  const graph = projectStages(view.jobs, view.stages);
+  const stage = graph.stages.find((candidate) => candidate.id === controls.detail.selection?.stage);
+  const { log, openLog, dismissLog } = controls;
   return (
     <DashboardMoment value={moment}>
-      <section
-        className={`${styles.graph} space-y-6`}
-        data-motion={stale || moment.replaying ? 'paused' : 'running'}
-        aria-label={copy.graph.title}
-      >
-        <GraphOverview controls={controls} stale={stale} copy={copy} replay={replay} />
-        <DashboardDrawer detail={controls.detail} stage={stage} copy={copy} openLog={openLog} outputs={outputs} />
-        {log ? (
-          <DashboardLog events={events} scope={log.scope} title={log.title} copy={copy} onDismiss={dismissLog} />
-        ) : null}
-      </section>
+      <DashboardObservations value={jobTimings(observedJobs)}>
+        <section
+          className={`${styles.graph} space-y-6`}
+          data-motion={stale || moment.replaying ? 'paused' : 'running'}
+          aria-label={copy.graph.title}
+        >
+          <GraphOverview controls={controls} graph={graph} stale={stale} copy={copy} replay={replay} />
+          <DashboardDrawer detail={controls.detail} stage={stage} copy={copy} openLog={openLog} outputs={outputs} />
+          {log ? (
+            <DashboardLog events={events} scope={log.scope} title={log.title} copy={copy} onDismiss={dismissLog} />
+          ) : null}
+        </section>
+      </DashboardObservations>
     </DashboardMoment>
   );
 }

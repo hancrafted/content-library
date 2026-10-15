@@ -6,7 +6,6 @@ import { parseDashboardPipeline, projectDashboard, type DashboardJob } from './d
 import {
   agentState,
   currentAgent,
-  jobLabel,
   jobLanes,
   jobNeedsAttention,
   projectStages,
@@ -191,16 +190,6 @@ describe('success cases', () => {
     expect(graph.completed).toBe(1);
   });
 
-  it('labels a fan-out Job by what follows its template prefix', () => {
-    // ARRANGE
-    const ids = ['write-research-revenue-lags-costs-in-startups', 'implement-section-the-hook'];
-    const expectedLabels = ['revenue lags costs in startups', 'the hook'];
-    // ACT
-    const labels = ids.map(jobLabel);
-    // ASSERT
-    expect(labels).toEqual(expectedLabels);
-  });
-
   it('names a stage by the message files and title-cases an id they do not name', () => {
     // ARRANGE
     const names = { pr: 'Pull request' };
@@ -296,16 +285,6 @@ describe('failure cases', () => {
     const marked = states.map((state) => jobNeedsAttention({ ...reviewedJob([]), state }));
     // ASSERT
     expect(marked).toEqual(expected);
-  });
-
-  it('keeps the full id of a Job that is no fan-out, or is the bare template', () => {
-    // ARRANGE
-    const ids = ['write-dossier', 'write-research', 'write-research-', 'implement-episode-init'];
-    const expectedLabels = ['write-dossier', 'write-research', 'write-research-', 'implement-episode-init'];
-    // ACT
-    const labels = ids.map(jobLabel);
-    // ASSERT
-    expect(labels).toEqual(expectedLabels);
   });
 
   it('does not report missing agent ends as activity after a Job or Attempt has closed', () => {

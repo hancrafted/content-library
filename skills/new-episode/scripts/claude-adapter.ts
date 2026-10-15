@@ -14,6 +14,7 @@ import {
   adaptInstructions,
   adaptRead,
   adaptSkill,
+  type InstructionsHookInput,
   type InstructionsHookPayload,
   type ToolHookPayload,
 } from './claude-adapter-event.pure.ts';
@@ -24,7 +25,15 @@ import { findRun } from './run-root.ts';
 
 /** A point-fact hook waits at most this long for the lock, so a contended log never stalls the call it follows. */
 const POINT_LOCK_WAIT_MS = 2_000;
-const POINT_MODES = ['skill', 'read', 'instructions'];
+type PointMode = 'skill' | 'read' | 'instructions';
+type Mode = PointMode | 'start' | 'stop';
+type AdapterPayload = HookPayload & ToolHookPayload & InstructionsHookPayload;
+type PointInput = InstructionsHookInput & { payload: ToolHookPayload & InstructionsHookPayload };
+const POINT_HANDLERS: Record<PointMode, (input: PointInput) => ReturnType<typeof adaptSkill>> = {
+  skill: adaptSkill,
+  read: adaptRead,
+  instructions: adaptInstructions,
+};
 
 /** The worktree whose marker lists the hook's session, scanned from the payload's cwd. */
 const runOf = (payload: { cwd?: string; session_id: string }) =>
@@ -53,16 +62,13 @@ function resolvedUnder(repoRoot: string, file: string | undefined): string | nul
 }
 
 /** Skill, Read or InstructionsLoaded: one `event` line on the span that made the call, when there is one. */
-function pointFact(mode: string, payload: ToolHookPayload & InstructionsHookPayload): void {
+function pointFact(mode: PointMode, payload: ToolHookPayload & InstructionsHookPayload): void {
   const run = runOf(payload);
   if (run === null) return;
   const { root, marker } = run;
   const input = { payload, marker: run.text, log: readLog(marker.log, root).lines };
   const repoRoot = repoRootOf(payload.cwd ?? root);
-  let line;
-  if (mode === 'skill') line = adaptSkill(input);
-  else if (mode === 'read') line = adaptRead({ ...input, repoRoot });
-  else line = adaptInstructions({ ...input, repoRoot, resolvedPath: resolvedUnder(repoRoot, payload.file_path) });
+  const line = POINT_HANDLERS[mode]({ ...input, repoRoot, resolvedPath: resolvedUnder(repoRoot, payload.file_path) });
   if (line !== null) appendEvent({ root, file: marker.log }, line, { lockWaitMs: POINT_LOCK_WAIT_MS });
 }
 
@@ -84,19 +90,30 @@ function subagent(event: 'start' | 'stop', payload: HookPayload): void {
   appendEvent({ root, file: marker.log }, line);
 }
 
-function main(mode: string | undefined): void {
-  const payload: unknown = JSON.parse(readFileSync(0, 'utf8'));
-  if (POINT_MODES.includes(mode ?? '')) pointFact(mode as string, payload as ToolHookPayload & InstructionsHookPayload);
-  else subagent(mode === 'stop' ? 'stop' : 'start', payload as HookPayload);
+const HANDLERS: Record<Mode, (payload: AdapterPayload) => void> = {
+  start: (payload) => subagent('start', payload),
+  stop: (payload) => subagent('stop', payload),
+  skill: (payload) => pointFact('skill', payload),
+  read: (payload) => pointFact('read', payload),
+  instructions: (payload) => pointFact('instructions', payload),
+};
+
+function isMode(value: string | undefined): value is Mode {
+  return value !== undefined && Object.hasOwn(HANDLERS, value);
+}
+
+function main(mode: Mode): void {
+  const payload = JSON.parse(readFileSync(0, 'utf8')) as AdapterPayload;
+  HANDLERS[mode](payload);
 }
 
 const mode = process.argv[2];
 try {
-  main(mode);
+  if (isMode(mode)) main(mode);
 } catch (error) {
   if (error instanceof LockTimeoutError) {
     process.stderr.write(`new-episode adapter: ${error.message}\n`);
-    process.exitCode = POINT_MODES.includes(mode ?? '') ? 0 : 1;
+    process.exitCode = isMode(mode) && Object.hasOwn(POINT_HANDLERS, mode) ? 0 : 1;
   }
   // Any other failure: a hook must never fail the session or the run, so the line is simply missing.
 }

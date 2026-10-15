@@ -11,7 +11,8 @@
           },
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PROJECT_DIR}/skills/new-episode/scripts/claude-adapter.ts\" read"
+            "command": "node \"${CLAUDE_PROJECT_DIR}/skills/new-episode/scripts/claude-adapter.ts\" read",
+            "async": true
           }
         ]
       },
@@ -20,7 +21,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PROJECT_DIR}/skills/new-episode/scripts/claude-adapter.ts\" skill"
+            "command": "node \"${CLAUDE_PROJECT_DIR}/skills/new-episode/scripts/claude-adapter.ts\" skill",
+            "async": true
           }
         ]
       }

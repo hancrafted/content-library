@@ -1,6 +1,6 @@
 import type { DashboardEvent } from '@/lib/dashboard-events.pure';
 import type { EpisodeRead } from '@/lib/dashboard-reader.pure';
-import { eventsAt, replayBounds, replayDashboard, stageMarks } from '@/lib/dashboard-replay.pure';
+import { eventsAt, replayBounds, replayDashboard } from '@/lib/dashboard-replay.pure';
 import { scrubTimeline } from '@/lib/dashboard-scrub.pure';
 import { projectStages } from '@/lib/dashboard-stages.pure';
 import { useDeferredValue, useMemo, useState } from 'react';
@@ -14,19 +14,14 @@ export interface ReplayControls {
   /** The cutoff while replaying, null while live. */
   at: number | null;
   range: { start: number; end: number } | null;
-  marks: ReturnType<typeof stageMarks>;
   timeline: ReturnType<typeof scrubTimeline>;
 }
 
 /** The slider's range: the current Run's start to its end, or, while it has not ended, the later of its last event and the last read. */
 function useReplayRange({ read, readAt }: Polled) {
   const bounds = useMemo(() => replayBounds(read.events), [read.events]);
-  const marks = useMemo(
-    () => (read.view ? stageMarks(projectStages(read.view.jobs, read.view.stages).stages) : []),
-    [read.view],
-  );
-  if (bounds === null) return { range: null, marks };
-  return { range: { start: bounds.start, end: bounds.finished ? bounds.last : Math.max(bounds.last, readAt) }, marks };
+  if (bounds === null) return null;
+  return { start: bounds.start, end: bounds.finished ? bounds.last : Math.max(bounds.last, readAt) };
 }
 
 /** The view and event log at `at`, re-folded only when the deferred cutoff or the retained events change. */
@@ -46,10 +41,7 @@ function useReplayed(read: EpisodeRead, at: number | null) {
 const clamp = (value: number, range: { start: number; end: number }) =>
   Math.min(Math.max(value, range.start), range.end);
 
-/**
- * Live follows each poll; off, the view and the event log replay the retained events up to a chosen moment while
- * polling continues. `now` is the moment shown: the cutoff, or the last read while live.
- */
+/** Observed starts and ends map the structural rail without consulting the replayed projection. */
 function useScrubTimeline(read: EpisodeRead, range: ReplayControls['range']) {
   return useMemo(() => {
     if (range === null) return [];
@@ -66,9 +58,10 @@ function useScrubTimeline(read: EpisodeRead, range: ReplayControls['range']) {
   }, [read.view, range?.start, range?.end]);
 }
 
+/** Live follows each poll; off, replay retained events at the cutoff while polling continues. */
 export function useDashboardReplay(polled: Polled) {
   const [cutoff, setCutoff] = useState<number | null>(null);
-  const { range, marks } = useReplayRange(polled);
+  const range = useReplayRange(polled);
   const timeline = useScrubTimeline(polled.read, range);
   const at = cutoff === null || range === null ? null : clamp(cutoff, range);
   const replayed = useReplayed(polled.read, at);
@@ -78,7 +71,6 @@ export function useDashboardReplay(polled: Polled) {
     seek: (moment) => setCutoff(range === null || moment >= range.end ? null : clamp(moment, range)),
     at,
     range,
-    marks,
     timeline,
   };
   const events: readonly DashboardEvent[] = replayed ? replayed.events : polled.read.events;

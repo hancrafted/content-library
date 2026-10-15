@@ -30,7 +30,8 @@ reveal them; no external transcript is opened and nothing is uploaded.
 ## Graph and disclosure
 
 The operations header is one line: Dashboard, the selected folder and Choose
-folder. Marketing navigation is hidden on this page. Motion follows
+folder. It sits below the unchanged global site header, including navigation,
+social links, theme and locale controls, and the contact action. Motion follows
 `prefers-reduced-motion` automatically; there is no manual pause control.
 
 The overview groups Jobs into stages without changing the pipeline. A pipeline
@@ -63,19 +64,27 @@ reused, with no open Gate. Attention is counted separately from active work, so
 a failed optional research Job remains visible when the Dossier proceeds.
 
 **Show Jobs** is a switch beside Live, off by default. On, stages remain on a
-vertically centred spine. Dependency layers follow left to right within each
-stage gap; parallel Jobs branch evenly above and below the spine. Each Job's
-configured agents are consecutive nodes, in pipeline order. The final stage's
-branch folds back into its terminal node. Stage widths are proportional to their
-dependency layers and agents, with a minimum. The whole graph fits the desktop
+vertically centred spine. Jobs sit strictly to the right of their Stage, in
+the gap before the next one. `needs` and `wants` supply forward edges: independent
+chains fan above and below, a fan-in merges its parents, and terminal Jobs connect
+directly to the next Stage. A lone chain may use the intervening spine segment,
+but never overlaps a Stage. Each Job's configured agents are consecutive nodes,
+in pipeline order. PR's outgoing chain ends at an explicit **Run end** marker;
+no edge returns to its source Stage.
+
+Each gap scales with its longest chain's agent count, with a minimum. The whole graph fits the desktop
 card; only viewports below its compact minimum scroll horizontally. The rail
 uses the same weighted stage centres in both views. Graph height follows the
-branch count rather than reserving empty space for disclosure.
+parallel branches, with contained vertical scrolling above its height cap.
 
 Job cards are gone from the overview. Hover or keyboard-focus an agent node for
 a speech bubble with status, elapsed time, skills, checks and available preview.
 Native top-layer popovers escape the graph's scroll container without requiring
-extra vertical whitespace.
+extra vertical whitespace. Only one is open at a time, positioned outside the
+hovered node. Their opaque card surface, matching foreground, border and header
+shadow tokens prevent graph content from showing through in either theme. A short, cancellable close delay lets the pointer
+cross the gap into the bubble. Each node has one tab stop; its bubble provides
+the same drawer action without adding another keyboard stop.
 Escape dismisses the bubble without removing focus. Clicking a node or bubble
 selects its Job's evidence. State icons accompany colours. Branch strokes fill
 according to observed Job times at the replay cutoff; stage positions have a
@@ -118,8 +127,7 @@ queued close notification only dismisses a dialog that is still closed.
 
 ## Time travel
 
-The progress bar **is** the scrubber, aligned with the first and last stage
-centres. **Live**, beside **Show Jobs**, follows the latest read at its structural
+The progress bar **is** the scrubber, aligned with Brief and the Run-end marker. **Live**, beside **Show Jobs**, follows the latest read at its structural
 leading edge. Future work toward PR remains unfilled. Dragging or clicking left
 unchecks Live; reaching that leading edge or pressing
 End rechecks it. Unchecking Live freezes the latest moment while polling
@@ -132,13 +140,16 @@ Start time is below the left end; total observed duration is below the right.
 each Job has an equal share within its stage gap.
 `graphGeometry()` maps these structural fractions onto the weighted stage centres
 and back, keeping the rail aligned when Show Jobs changes the stage widths.
-Parallel Jobs contribute their individual elapsed fractions together; a long
-Job gets no extra width. Knots come from observed Job starts/ends and the Run
-bounds, never estimated durations. Open Jobs use the latest read as their
-observed endpoint. Idle plateaus select the latest observation at that position;
-the first point remains Run start. Since there is no gap after PR, the final
-gap shares its space equally across the preceding stage's Jobs and PR's Jobs;
-PR execution stays scrubbable instead of collapsing to one terminal instant.
+Completed work contributes its structural shares; an open Job contributes only
+its start boundary, never an estimated fraction or a completion. The furthest
+running Job's start can advance the leading edge, but a later parallel completion
+does not fill unfinished work. During replay, actual observed starts and ends
+provide interpolation. Open Jobs have no invented end. `jobProgress()` supplies
+the same measured progress to branch strokes.
+
+Stage-to-stage gaps stay separate. PR has its own final gap to Run end, so its
+running Job stays unfilled and its timestamps remain scrubbable. Idle plateaus select
+their latest observation; the first point remains Run start.
 The latest point is the furthest observed structural progress, not automatically
 the end of the rail. Seeking that point (or the unfilled track after it) resumes
 Live. The right-hand duration is elapsed-so-far, or the final total once ended.
@@ -269,13 +280,15 @@ and every emitted alternate must resolve and link back.
 - `jobNeedsAttention()`: the attention mark.
 - `currentAgent()`: a graph node's role evidence stays within its current Run
   and latest Attempt instead of inheriting an earlier success.
-- `replayDashboard()`, `eventsAt()`, `replayBounds()` and `stageMarks()`: the
-  view and event log at a cutoff from the retained events, the slider's range
-  and its stage tick marks.
+- `replayDashboard()`, `eventsAt()` and `replayBounds()`: the view and event log
+  at a cutoff from retained events, and the slider's time range.
 - `spanElapsed()` and `agentElapsed()`: a span's duration, or its time so far
   at the moment shown.
 - `scrubTimeline()`, `scrubPosition()` and `scrubTime()`: equal structural
   shares, concurrent Jobs, the observed time inverse and terminal bounds.
+- `jobTimings()` and `jobProgress()`: measured branch progress without estimated ends.
+- `dashboardLayout()`: forward dependency edges, fan-in and terminal exits, and
+  non-overlapping stage and agent nodes for the dogfood and synthetic pipelines.
 - `selectEvents()`: scoped, chronological source events, including ends and
   Scores associated through their start Span's ancestry.
 
