@@ -70,3 +70,6 @@
 {"kind":"end","t":"2026-10-15T11:46:50Z","seq":70,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"fdbb6ea3411d720d","status":"ok","summary":"pass: Style line now names Board, re-added to the design guide"}
 {"kind":"end","t":"2026-10-15T11:46:50Z","seq":71,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"4589d913959b1749","status":"ok","summary":"Run-2 Brief accepted verbatim; Board style re-added"}
 {"kind":"attrs","t":"2026-10-15T11:46:50Z","seq":72,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"4589d913959b1749","source":"measured","gen_ai.response.model":"claude-opus-5-5","gen_ai.usage.input_tokens":46,"gen_ai.usage.output_tokens":7456,"gen_ai.usage.cache_read.input_tokens":1794889,"skills_invoked":[]}
+{"kind":"start","t":"2026-10-15T11:47:31Z","seq":73,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"fdabe7a7834c8a90","type":"gate","name":"draft brief","job":"brief-grill","parent_span_id":"c47a980a192e386a"}
+{"kind":"score","t":"2026-10-15T11:59:56Z","seq":74,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"fdabe7a7834c8a90","name":"gate","value":"approved","source":"human:han","via":"chat","comment":"approve brief"}
+{"kind":"end","t":"2026-10-15T11:59:56Z","seq":75,"trace_id":"432968af566e1a2a82d8f764f0b0e286","span_id":"fdabe7a7834c8a90","status":"ok"}
