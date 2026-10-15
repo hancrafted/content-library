@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { checkSpec } from './episode-spec.pure';
+import { appendMetaVerified } from './staging-file.pure';
 
 /*
  * In-memory staging folders: a Dossier of one Section with two Slides and a
@@ -390,6 +391,23 @@ describe('failure cases', () => {
     const expected = ['The Slide {#middle} has no picked Option: an approved Spec picks exactly one per Slide.'];
     // ACT
     const found = messages(checkSpec(files, REVIEW_ASSET));
+    // ASSERT
+    expect(found).toEqual(expected);
+  });
+
+  it("demands the picks once approve.ts has appended Han's entry to the meta block", () => {
+    // ARRANGE
+    const unapproved = spec({ slides: [picked('spent', 1), slide('middle', 2)] });
+    const approved = appendMetaVerified(unapproved, { by: 'human:han', at: HAN_AT });
+    const expected = {
+      before: [],
+      after: ['The Slide {#middle} has no picked Option: an approved Spec picks exactly one per Slide.'],
+    };
+    // ACT
+    const found = {
+      before: messages(checkSpec({ 'spec/spec.html': unapproved }, REVIEW_ASSET)),
+      after: messages(checkSpec({ 'spec/spec.html': approved }, REVIEW_ASSET)),
+    };
     // ASSERT
     expect(found).toEqual(expected);
   });

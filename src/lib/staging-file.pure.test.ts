@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { appendVerified, frontmatterField, frontmatterValue, gateTier, verifiedProblems } from './staging-file.pure';
+import {
+  appendMetaVerified,
+  appendVerified,
+  frontmatterField,
+  frontmatterValue,
+  gateTier,
+  verifiedProblems,
+} from './staging-file.pure';
 
 /*
  * A Staging file's frontmatter, its gate tier from `verified` and `generated.at` (design-ADR 0005), and the
@@ -14,6 +21,17 @@ const NOW = { by: 'human:han', at: '2026-10-13T12:00:00Z' };
 function file(verified: string, generated = GENERATED): string {
   return `---\ntype: brief\ntitle: T\nstatus: draft\ngenerated:\n  by: claude-code/opus-5.5\n  at: ${generated}\n${verified}---\n\n# T\n`;
 }
+
+function page(meta: string): string {
+  return `<html>\n  <head>\n    <script type="application/json" id="spec-meta">${meta}</script>\n  </head>\n</html>\n`;
+}
+
+function metaOf(html: string): unknown {
+  const json = /<script[^>]*id="spec-meta"[^>]*>([\s\S]*?)<\/script>/.exec(html)?.[1];
+  return json === undefined ? undefined : JSON.parse(json);
+}
+
+const SPEC_META = { type: 'spec', generated: { by: 'claude-code/opus-5.5', at: GENERATED } };
 
 function list(...entries: { by: string; at: string }[]): string {
   return `verified:\n${entries.map(({ by, at }) => `  - by: ${by}\n    at: ${at}\n`).join('')}`;
@@ -139,6 +157,16 @@ describe('success cases', () => {
     expect(tier).toBe(expected);
   });
 
+  it("appends to a Spec meta block's verified list after the existing entries, keeping the other keys", () => {
+    // ARRANGE
+    const text = page(JSON.stringify({ ...SPEC_META, verified: [MACHINE, HAN] }));
+    const expected = { ...SPEC_META, verified: [MACHINE, HAN, NOW] };
+    // ACT
+    const meta = metaOf(appendMetaVerified(text, NOW));
+    // ASSERT
+    expect(meta).toEqual(expected);
+  });
+
   it('finds no problem in a list, a bare mapping or a file with no verified key', () => {
     // ARRANGE
     const texts = [file(list(MACHINE, HAN)), file(BARE_HAN), file('')];
@@ -242,6 +270,26 @@ describe('failure cases', () => {
     // ASSERT
     expect(act).toThrow(expected);
   });
+
+  it('refuses to append to a page with no meta block', () => {
+    // ARRANGE
+    const text = '<html><head><script type="application/json" id="other">{}</script></head></html>';
+    const expected = 'no meta block';
+    // ACT
+    const act = () => appendMetaVerified(text, NOW);
+    // ASSERT
+    expect(act).toThrow(expected);
+  });
+
+  it('refuses to append to a meta block that is not a JSON object', () => {
+    // ARRANGE
+    const texts = [page('{ "type": "spec",'), page('[]')];
+    const expected = 'not a JSON object';
+    // ACT
+    const acts = texts.map((text) => () => appendMetaVerified(text, NOW));
+    // ASSERT
+    for (const act of acts) expect(act).toThrow(expected);
+  });
 });
 
 describe('edge cases', () => {
@@ -318,5 +366,19 @@ describe('edge cases', () => {
     const tier = gateTier(appendVerified(crlf, NOW));
     // ASSERT
     expect(tier).toBe(expected);
+  });
+
+  it('finds the meta block with its attributes in any order and keeps a closing tag out of the JSON', () => {
+    // ARRANGE
+    const escaped = JSON.stringify({ ...SPEC_META, title: 'a </script> b' }).replace('</', '<\\/');
+    const swapped = page(escaped).replace(
+      'type="application/json" id="spec-meta"',
+      'id="spec-meta" type="application/json"',
+    );
+    const expected = { ...SPEC_META, title: 'a </script> b', verified: [NOW] };
+    // ACT
+    const meta = metaOf(appendMetaVerified(swapped, NOW));
+    // ASSERT
+    expect(meta).toEqual(expected);
   });
 });
