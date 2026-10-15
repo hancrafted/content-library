@@ -9,8 +9,8 @@ describe('dashboard static contract', () => {
     // ARRANGE
     const file = join(OUT_DIR, exportedFile('/dashboard'));
     const germanFile = join(OUT_DIR, exportedFile('/de/dashboard'));
-    const expectedTitle = 'Pipeline dashboard';
-    const expectedButton = 'Choose Episode folder';
+    const expectedTitle = 'Dashboard';
+    const expectedButton = 'Choose folder';
     const expectedRobots = 'noindex';
     const expectedLangs = ['en', 'x-default'];
     // ACT

@@ -1,7 +1,8 @@
 import { agentElapsed, spanElapsed } from '@/lib/dashboard-elapsed.pure';
 import type { DashboardJob } from '@/lib/dashboard-projection.pure';
 import { agentIdentity, agentState, stageLayers, type DashboardStage } from '@/lib/dashboard-stages.pure';
-import { useContext, useState, type CSSProperties, type KeyboardEvent } from 'react';
+import { fillTemplate } from '@/lib/template.pure';
+import { useContext, useState, type KeyboardEvent } from 'react';
 import { JobChipList } from './dashboard-chips';
 import { ElapsedTime, StateBadge, type DashboardCopy } from './dashboard-evidence';
 import styles from './dashboard-graph.module.css';
@@ -45,6 +46,15 @@ interface NodeProps extends JobProps {
   y: number;
 }
 
+function TemplateLabel({ job, copy }: Pick<JobProps, 'job' | 'copy'>) {
+  if (!job.foreach) return null;
+  return (
+    <span className="block text-caption text-muted-foreground">
+      {fillTemplate(copy.graph.onePer, { heading: job.foreach.split('#').at(-1) ?? job.foreach })}
+    </span>
+  );
+}
+
 function JobPopover({ job, agent, stage, onSelectJob, copy }: JobProps & { agent: Agent }) {
   const { now } = useContext(DashboardMoment);
   const elapsed =
@@ -66,6 +76,7 @@ function JobPopover({ job, agent, stage, onSelectJob, copy }: JobProps & { agent
           <AttentionMarker job={job} label={copy.graph.jobAttention} />
         </span>
         <JobChipList job={job} copy={copy} />
+        <TemplateLabel job={job} copy={copy} />
       </button>
       <PreviewButton job={job} copy={copy} className="mt-2" />
     </div>
@@ -93,6 +104,7 @@ function AgentNode({ job, stage, agent, x, y, onSelectJob, copy }: NodeProps) {
         type="button"
         data-job={job.id}
         data-agent={agent.role}
+        data-template={job.foreach !== undefined}
         data-state={agent.state}
         aria-label={`${job.id} · ${agent.role} · ${agent.state}`}
         aria-controls="dashboard-stage-detail"
@@ -145,7 +157,7 @@ function JobBranch(props: BranchProps) {
   const width = end - left;
   const path = `M ${start} 100 C ${left + width * 0.15} 100 ${left + width * 0.15} 0 ${left + width * 0.3} 0 L ${left + width * 0.7} 0 C ${left + width * 0.85} 0 ${left + width * 0.85} 100 ${end} 100`;
   return (
-    <li className={styles.jobBranch} style={{ '--branch-y': `${y}px` } as CSSProperties}>
+    <li className={styles.jobBranch}>
       <div
         className={styles.branchCurve}
         style={{ height: `${Math.max(1, Math.abs(y))}px`, transform: y > 0 ? 'scaleY(-1)' : undefined }}

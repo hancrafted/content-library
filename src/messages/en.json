@@ -287,7 +287,11 @@
         "pass": "passed",
         "fail": "failed"
       },
-      "help": "From pipeline.yml. A skill turns green once an agent of this Job's latest Attempt invokes it, red once that agent ended without it; a check by its latest result. The Job box shows a skill green once every agent listing it ran it, red if any skipped it."
+      "help": "From pipeline.yml. A skill turns green once an agent of this Job's latest Attempt invokes it, red once that agent ended without it; a check by its latest result. The node popover shows a skill green once every agent listing it ran it, red if any skipped it."
+    },
+    "drawer": {
+      "title": "Run detail",
+      "close": "Close detail"
     },
     "timeTravel": {
       "title": "Time travel",
@@ -318,7 +322,7 @@
         "pr": "PR"
       },
       "showJobs": "Show Jobs",
-      "showJobsHelp": "Expand each stage into its Jobs, ordered by needs and wants.",
+      "showJobsHelp": "Show branching Jobs and their consecutive agents, ordered by needs and wants. Scroll inside the graph to follow all stages.",
       "notPlanned": "Not planned yet",
       "onePer": "One Job per item in {heading}",
       "parallel": "{count} parallel lanes",

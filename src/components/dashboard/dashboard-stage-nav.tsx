@@ -1,3 +1,4 @@
+import { spanElapsed } from '@/lib/dashboard-elapsed.pure';
 import {
   isComplete,
   runningAgents,
@@ -8,9 +9,11 @@ import {
 } from '@/lib/dashboard-stages.pure';
 import { fillTemplate } from '@/lib/template.pure';
 import { CircleAlert } from 'lucide-react';
-import type { CSSProperties } from 'react';
-import type { DashboardCopy } from './dashboard-evidence';
+import { useContext, useState, type CSSProperties } from 'react';
+import { JobChipList } from './dashboard-chips';
+import { ElapsedTime, StateBadge, type DashboardCopy } from './dashboard-evidence';
 import styles from './dashboard-graph.module.css';
+import { DashboardMoment } from './dashboard-moment';
 import { StageJobs, type SelectJob } from './dashboard-stage-jobs';
 import { StageStateIcon } from './dashboard-state-icon';
 
@@ -76,28 +79,76 @@ function StageLabel({ stage, copy }: LabelProps) {
   );
 }
 
-function StageNode({ stage, last, selected, onSelect, onSelectJob, copy }: NodeProps) {
+function StagePopover({ stage, copy, onSelect }: LabelProps & { onSelect: (id: string) => void }) {
+  const { now } = useContext(DashboardMoment);
   return (
-    <li className={styles.stage} data-complete={isComplete(stage.state)}>
+    <div className={styles.stagePopover}>
       <button
         type="button"
-        data-stage={stage.id}
-        data-state={stage.state}
-        data-planned={stage.planned}
-        aria-expanded={selected === stage.id}
-        aria-controls="dashboard-stage-detail"
         onClick={() => onSelect(stage.id)}
-        className={`${styles.node} cursor-pointer transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring`}
+        className="w-full cursor-pointer space-y-3 text-left focus-visible:outline-2 focus-visible:outline-ring"
       >
-        <span className={styles.orbit}>
+        <span className="block text-body font-semibold">{stageName(stage, copy)}</span>
+        <span className="flex items-center gap-2">
           <StageStateIcon state={stage.state} />
+          <StateBadge state={stage.state} />
         </span>
-        {onSelectJob ? (
-          <span className="text-caption font-semibold">{stageName(stage, copy)}</span>
-        ) : (
-          <StageLabel stage={stage} copy={copy} />
-        )}
+        {stage.jobs.map((job) => (
+          <div key={job.id} className="space-y-1 border-t border-border pt-2 text-caption">
+            <span className="block font-medium wrap-anywhere">{job.id}</span>
+            {job.span ? <ElapsedTime elapsed={spanElapsed(job.span, now)} copy={copy} /> : null}
+            <JobChipList job={job} copy={copy} />
+          </div>
+        ))}
       </button>
+    </div>
+  );
+}
+
+function StageButton({ stage, selected, onSelect, onSelectJob, copy }: Omit<NodeProps, 'last'>) {
+  return (
+    <button
+      type="button"
+      data-stage={stage.id}
+      data-state={stage.state}
+      data-planned={stage.planned}
+      aria-expanded={selected === stage.id}
+      aria-controls="dashboard-stage-detail"
+      onClick={() => onSelect(stage.id)}
+      className={`${styles.node} cursor-pointer transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring`}
+    >
+      <span className={styles.orbit}>
+        <StageStateIcon state={stage.state} />
+      </span>
+      {onSelectJob ? (
+        <span className="text-caption font-semibold">{stageName(stage, copy)}</span>
+      ) : (
+        <StageLabel stage={stage} copy={copy} />
+      )}
+    </button>
+  );
+}
+
+function StageNode(props: NodeProps) {
+  const { stage, last, onSelectJob, onSelect, copy } = props;
+  const [dismissed, setDismissed] = useState(false);
+  return (
+    <li className={styles.stage} data-complete={isComplete(stage.state)}>
+      <div
+        className={styles.stageAnchor}
+        data-popover-dismissed={dismissed}
+        onPointerEnter={() => setDismissed(false)}
+        onFocusCapture={() => setDismissed(false)}
+        onKeyDown={(event) => {
+          if (event.key === 'Escape') {
+            setDismissed(true);
+            event.stopPropagation();
+          }
+        }}
+      >
+        <StageButton {...props} />
+        <StagePopover stage={stage} copy={copy} onSelect={onSelect} />
+      </div>
       {onSelectJob ? <StageJobs stage={stage} last={last} onSelectJob={onSelectJob} copy={copy} /> : null}
     </li>
   );

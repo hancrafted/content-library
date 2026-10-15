@@ -287,7 +287,11 @@
         "pass": "bestanden",
         "fail": "fehlgeschlagen"
       },
-      "help": "Aus pipeline.yml. Ein Skill wird grün, sobald ein Agent des letzten Attempts dieses Jobs ihn aufruft, rot, sobald dieser Agent ohne ihn endete; ein Check nach seinem letzten Ergebnis. Im Job-Kasten ist ein Skill grün, sobald jeder Agent, der ihn listet, ihn ausgeführt hat, rot, sobald einer ihn übersprungen hat."
+      "help": "Aus pipeline.yml. Ein Skill wird grün, sobald ein Agent des letzten Attempts dieses Jobs ihn aufruft, rot, sobald dieser Agent ohne ihn endete; ein Check nach seinem letzten Ergebnis. In der Sprechblase ist ein Skill grün, sobald jeder Agent, der ihn listet, ihn ausgeführt hat, rot, sobald einer ihn übersprungen hat."
+    },
+    "drawer": {
+      "title": "Run-Details",
+      "close": "Details schließen"
     },
     "timeTravel": {
       "title": "Zeitreise",
@@ -318,7 +322,7 @@
         "pr": "PR"
       },
       "showJobs": "Jobs anzeigen",
-      "showJobsHelp": "Klappt jede Phase in ihre Jobs auf, geordnet nach needs und wants.",
+      "showJobsHelp": "Zeigt Jobs als Zweige und ihre Agenten hintereinander, geordnet nach needs und wants. Im Graphen scrollen, um allen Stages zu folgen.",
       "notPlanned": "Noch nicht geplant",
       "onePer": "Ein Job je Eintrag in {heading}",
       "parallel": "{count} parallele Pfade",

@@ -87,8 +87,18 @@ An agent without an end record whose Job or parent Attempt has ended is labelled
 `unclosed`, not running. This is a display distinction: it does not invent a
 successful finish, a duration, or alter the shared fold's raw history.
 
-The initial active stage opens automatically. Later polls do not move selection,
-collapse evidence, or steal focus. Running nodes pulse, completed connectors are
+The detail drawer starts closed. Clicking a stage, Job or agent node opens its
+detail in a fixed right-side card, following the Context drawer pattern: a
+non-modal region, transform-only entry, close button and Escape, focus handed
+in on open and back to the trigger on close. Narrow screens add a pointer-dismiss
+scrim; keyboard navigation remains non-modal. The body scrolls independently,
+so inspecting evidence never scrolls the graph out of view. Stage details group
+Jobs into expandable rows; selecting a Job goes directly to its outputs, skills,
+checks, elapsed time, state, Attempts, agents and event-log buttons. Ticket log
+scopes remain available. No files-read or ADR-read section exists yet.
+
+Later polls do not move selection, collapse evidence, or steal focus.
+Running nodes pulse, completed connectors are
 green, and icons/text distinguish attention and failure. Animation respects reduced motion; replay and source errors pause it.
 
 **View events** opens a large native modal, scoped to a stage, Job, or ticket.
@@ -141,7 +151,7 @@ are on disk now, which the slider says once.
 
 ## Outputs, previews and attention
 
-A Job's card lists its `outputs`. After every poll the dashboard probes each one
+A Job's drawer lists its `outputs`. After every poll the dashboard probes each one
 through the chosen folder's handle: it strips the staging prefix
 `docs/episodes/<slug>/`, `<slug>` the folder's name, and walks the sub-folders.
 A written output is a button that opens the file as plain text in a new tab; one
@@ -149,7 +159,7 @@ not on disk yet reads **not written yet** and is disabled, not an error. A glob
 output of a draft is shown as text. A path outside the folder is never opened.
 
 A Build Job with a `port` (design-ADR-0008, Ports) shows **Preview :<port>**
-in its card and in its Job box, a button opening `http://localhost:<port>` in a
+in its drawer and its node popover, a button opening `http://localhost:<port>` in a
 new tab, while its server is meant to run: `implement-episode-init`'s once it
 has started, a Section Job's only while the Job is open, since the orchestrator
 stops that server before removing its worktree. It is a button, not a link,
