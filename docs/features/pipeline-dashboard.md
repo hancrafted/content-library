@@ -275,16 +275,20 @@ and every emitted alternate must resolve and link back.
 - `createEpisodeReader(folder).poll()`: structural read-only file handles, fresh
   files, offsets, pipeline modification times and visible source errors.
 - Built output: the English-only route, metadata, header and picker markup.
-- `projectStages(jobs, stages)`, `stageTitle()`, `stageLayers()` and `jobLanes()`:
-  stage order and membership from the pipeline, not-planned stages, template
-  placeholders, the legacy fallback, stage progress, attention, parallel
-  dependency levels and ticket/session identity.
+- `projectStages(jobs, stages)` and `stageLayers()`: stage order and membership
+  from the pipeline, not-planned stages, template placeholders, the legacy
+  fallback, stage progress, attention and parallel dependency levels.
+- `graphView(view, labels, selection)`: the Graph view model the graph, its
+  popovers and the drawer read — each Stage node's label, worded state,
+  activity and selection, the next waiting Stage, and each Job node's agents
+  (identity matching Graph geometry's node ids), attention, fan-out heading
+  from the pipeline's `foreach` and observed tickets. An agent node's role
+  evidence stays within its current Run and latest Attempt instead of
+  inheriting an earlier success.
 - `outputSegments()`, `outputLabel()`, `isGlob()`, `previewPort()` and
   `previewHref()`: an output's path in the chosen folder, its label, whether it
   is a pattern, and when and where a Job's preview shows.
 - `jobNeedsAttention()`: the attention mark.
-- `currentAgent()`: a graph node's role evidence stays within its current Run
-  and latest Attempt instead of inheriting an earlier success.
 - `dashboardTimeline()`: the view, event log, chips and clock at a cutoff from
   retained events (live equals replay at the Run's end, a finished Run stays
   finished, gates, retries and fan-out), the slider's time range, and slider
