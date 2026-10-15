@@ -64,7 +64,7 @@ const base = (over: Partial<AdapterInput> & { description?: string }): AdapterIn
   ...over,
 });
 
-const jobLine: RunLogLine = {
+const jobLine = {
   kind: 'start',
   t: '2026-10-09T09:00:00Z',
   seq: 1,
@@ -74,7 +74,7 @@ const jobLine: RunLogLine = {
   name: 'write-dossier',
   job: 'write-dossier',
   parent_span_id: 'cccccccccccccccc',
-};
+} as RunLogLine;
 const ATTEMPT_SPAN = 'dddddddddddddddd';
 const attemptLine = (span: string, seq: number, attempt: number): RunLogLine => ({
   kind: 'start',
@@ -88,7 +88,7 @@ const attemptLine = (span: string, seq: number, attempt: number): RunLogLine => 
   attempt,
   parent_span_id: JOB_SPAN,
 });
-const startLine: RunLogLine = {
+const startLine = {
   kind: 'start',
   t: '2026-10-09T10:00:00.000Z',
   'gen_ai.input.messages': 'Review the dossier.',
@@ -99,7 +99,7 @@ const startLine: RunLogLine = {
   name: 'x',
   parent_span_id: JOB_SPAN,
   transcript_path: TRANSCRIPT,
-};
+} as RunLogLine;
 
 describe('success cases', () => {
   it('parses job, attempt and role', () => {
@@ -199,14 +199,14 @@ describe('nesting and late facts', () => {
   it('nests under the latest open Attempt when an earlier one of that number ended', () => {
     // ARRANGE
     const older = attemptLine('eeeeeeeeeeeeeeee', 2, 2);
-    const ended: RunLogLine = {
+    const ended = {
       kind: 'end',
       t: '2026-10-09T09:40:00Z',
       seq: 3,
       trace_id: TRACE,
       span_id: ATTEMPT_SPAN,
       status: 'error',
-    };
+    } as RunLogLine;
     const input = base({ log: [jobLine, older, attemptLine(ATTEMPT_SPAN, 4, 2), ended] });
     // ACT
     const event = adaptSubagent(input);
@@ -234,15 +234,15 @@ describe('nesting and late facts', () => {
 
   it('files an unparsed agent under the one open Job even when the marker points at an ended one', () => {
     // ARRANGE
-    const openJob: RunLogLine = { ...jobLine, seq: 3, span_id: 'eeeeeeeeeeeeeee1', name: 'other', job: 'other' };
-    const endMarkerJob: RunLogLine = {
+    const openJob = { ...jobLine, seq: 3, span_id: 'eeeeeeeeeeeeeee1', name: 'other', job: 'other' } as RunLogLine;
+    const endMarkerJob = {
       kind: 'end',
       t: '2026-10-09T09:40:00Z',
       seq: 4,
       trace_id: TRACE,
       span_id: JOB_SPAN,
       status: 'ok',
-    };
+    } as RunLogLine;
     const input = base({ description: 'Spec review of hero changes', log: [jobLine, openJob, endMarkerJob] });
     // ACT
     const event = adaptSubagent(input);
@@ -252,15 +252,15 @@ describe('nesting and late facts', () => {
 
   it('files an unparsed agent under the Run, never a guessed Job, when two Jobs are open', () => {
     // ARRANGE
-    const runStart: RunLogLine = {
+    const runStart = {
       kind: 'start-run',
       t: '2026-10-09T08:00:00Z',
       seq: 0,
       trace_id: TRACE,
       span_id: 'ffffffffffffffff',
       run_id: 'r',
-    };
-    const otherJob: RunLogLine = { ...jobLine, seq: 3, span_id: 'eeeeeeeeeeeeeee1', name: 'other', job: 'other' };
+    } as RunLogLine;
+    const otherJob = { ...jobLine, seq: 3, span_id: 'eeeeeeeeeeeeeee1', name: 'other', job: 'other' } as RunLogLine;
     const description = 'Spec review of hero changes';
     const input = base({ description, log: [runStart, jobLine, otherJob] });
     // ACT
@@ -272,14 +272,14 @@ describe('nesting and late facts', () => {
 
   it('files an agent whose named Job is not open under the Run, never the Job the marker points at', () => {
     // ARRANGE
-    const runStart: RunLogLine = {
+    const runStart = {
       kind: 'start-run',
       t: '2026-10-09T08:00:00Z',
       seq: 0,
       trace_id: TRACE,
       span_id: 'ffffffffffffffff',
       run_id: 'r',
-    };
+    } as RunLogLine;
     const input = base({ description: 'brief-grill#1/writer', log: [runStart, jobLine] });
     // ACT
     const event = adaptSubagent(input);
@@ -289,7 +289,7 @@ describe('nesting and late facts', () => {
 
   it('carries the prompt and launch time on the end line when the start ran before the transcript existed', () => {
     // ARRANGE
-    const lateStart: RunLogLine = { ...startLine, t: '2026-10-09T10:00:00Z', 'gen_ai.input.messages': undefined };
+    const lateStart = { ...startLine, t: '2026-10-09T10:00:00Z', 'gen_ai.input.messages': undefined } as RunLogLine;
     const noPrompt = base({ log: [jobLine], transcript: '' });
     const input = base({
       event: 'stop',
@@ -354,6 +354,22 @@ describe('skills invoked and the summary at SubagentStop', () => {
     expect(event).toMatchObject({ skills_invoked: ['tdd', 'ui-ux-pro-max:slides'] });
   });
 
+  it('names a skill as the PostToolUse hook does: skill or the older command, trimmed, blanks left out', () => {
+    // ARRANGE
+    const call = (input: Record<string, unknown>): string =>
+      JSON.stringify({
+        type: 'assistant',
+        timestamp: '2026-10-09T10:00:20.000Z',
+        message: { id: 'c', role: 'assistant', content: [{ type: 'tool_use', name: 'Skill', input }] },
+      });
+    const text = [transcript, call({ skill: ' tdd ' }), call({ command: 'a:b' }), call({ skill: '  ' })].join('\n');
+    const expected = ['tdd', 'a:b'];
+    // ACT
+    const event = stop(text);
+    // ASSERT
+    expect(event?.skills_invoked).toEqual(expected);
+  });
+
   it('records an empty list for a readable transcript with no Skill call, and nothing for an unreadable one', () => {
     expect(stop(transcript)).toMatchObject({ skills_invoked: [] });
     expect(stop(null)).not.toHaveProperty('skills_invoked');
@@ -371,15 +387,15 @@ describe('skills invoked and the summary at SubagentStop', () => {
 
 describe('orchestrator usage', () => {
   const RUN_SPAN = 'ffffffffffffffff';
-  const runStart: RunLogLine = {
+  const runStart = {
     kind: 'start-run',
     t: '2026-10-09T08:00:00Z',
     seq: 1,
     trace_id: TRACE,
     span_id: RUN_SPAN,
     run_id: 'r',
-  };
-  const runEnd: RunLogLine = {
+  } as RunLogLine;
+  const runEnd = {
     kind: 'end-run',
     t: '2026-10-09T11:00:00Z',
     seq: 9,
@@ -387,7 +403,7 @@ describe('orchestrator usage', () => {
     span_id: RUN_SPAN,
     status: 'ok',
     summary: 'done',
-  };
+  } as RunLogLine;
   const parsed = parseMarker(marker) as NonNullable<ReturnType<typeof parseMarker>>;
 
   it('repeats the Run end with the orchestrator session model and summed usage', () => {
@@ -421,7 +437,7 @@ describe('orchestrator usage', () => {
 
   it('writes nothing before the Run has ended, twice, or without usage', () => {
     // ARRANGE
-    const counted: RunLogLine = { ...runEnd, 'gen_ai.usage.input_tokens': 1 };
+    const counted = { ...runEnd, 'gen_ai.usage.input_tokens': 1 } as RunLogLine;
     // ACT
     const open = runUsageEvent([runStart], parsed, [transcript]);
     const again = runUsageEvent([runStart, counted], parsed, [transcript]);
@@ -461,14 +477,14 @@ describe('failure cases', () => {
 
   it('writes no second end for a stop delivered twice', () => {
     // ARRANGE
-    const endLine: RunLogLine = {
+    const endLine = {
       kind: 'end',
       t: '2026-10-09T10:01:00.000Z',
       seq: 3,
       trace_id: TRACE,
       span_id: AGENT_SPAN,
       status: 'ok',
-    };
+    } as RunLogLine;
     const input = base({ event: 'stop', log: [jobLine, startLine, endLine] });
     // ACT
     const event = adaptSubagent(input);
@@ -548,12 +564,12 @@ describe('edge cases', () => {
 });
 
 describe('identity on the end line (R1)', () => {
-  const provisional: RunLogLine = {
+  const provisional = {
     ...startLine,
     role: 'skill-spawned',
     job: 'write-dossier',
     name: 'write-dossier/skill-spawned',
-  };
+  } as RunLogLine;
 
   it('puts the identity meta.json now names on the end line, and its parent', () => {
     // ARRANGE
@@ -579,7 +595,7 @@ describe('identity on the end line (R1)', () => {
 
   it('leaves a start that already parsed alone', () => {
     // ARRANGE
-    const parsed: RunLogLine = { ...startLine, role: 'reviewer', job: 'write-dossier', attempt: 2 };
+    const parsed = { ...startLine, role: 'reviewer', job: 'write-dossier', attempt: 2 } as RunLogLine;
     const input = base({ event: 'stop', log: [jobLine, parsed] });
     // ACT
     const event = adaptSubagent(input);

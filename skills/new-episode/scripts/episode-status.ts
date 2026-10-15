@@ -2,7 +2,7 @@
 // run status (pipeline.yml + events.jsonl + the gates). `npm run episode:status` prints it, the SessionStart
 // `compact` hook summarises it. The disk goes through the run-log module; the rules live in status.pure.ts.
 import path from 'node:path';
-import { readPipeline } from '../../../src/lib/episode-pipeline-jobs.pure.ts';
+import { readPipeline } from '../../../src/lib/episode-pipeline-definition.pure.ts';
 import { readEpisodeLog, readMarker, readOrNull } from './episode-run-log.ts';
 import { outputApproved, runStatus, type GateReaders, type RunStatus } from './status.pure.ts';
 

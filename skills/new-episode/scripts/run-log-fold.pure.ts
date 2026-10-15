@@ -5,14 +5,16 @@ import type {
   FoldOptions,
   RunLogLine,
   Score,
+  SkillUse,
   Span,
+  SpanEvent,
   SpanStatus,
   SpanType,
   Status,
 } from './run-log.schema.pure.ts';
 
 /** Oldest first by time, ties by sequence number. */
-function order(a: { t: string; seq: number }, b: { t: string; seq: number }): number {
+export function order(a: { t: string; seq: number }, b: { t: string; seq: number }): number {
   return Date.parse(a.t) - Date.parse(b.t) || a.seq - b.seq;
 }
 
@@ -20,8 +22,12 @@ function chronological(lines: readonly RunLogLine[]): RunLogLine[] {
   return [...lines].sort(order);
 }
 
+/** Line keys a reader may display and never derives span state from. */
+const DISPLAY_ONLY = new Set(['payload', 'payload_truncated']);
+
 function openSpan(entry: RunLogLine, open: SpanStatus): Span {
-  const { kind, t, seq, span_id, parent_span_id, type, name, ...attributes } = entry;
+  const { kind, t, seq, span_id, parent_span_id, type, name, ...rest } = entry;
+  const attributes = Object.fromEntries(Object.entries(rest).filter(([key]) => !DISPLAY_ONLY.has(key)));
   const spanType = kind === 'start-run' ? 'run' : (type as SpanType);
   const base = {
     trace_id: entry.trace_id,
@@ -48,7 +54,20 @@ function scoreOf(entry: RunLogLine): Score {
   return Object.fromEntries(Object.entries(score).filter(([, v]) => v !== undefined)) as unknown as Score;
 }
 
-const NOT_ATTRIBUTES = new Set(['kind', 't', 'start_t', 'seq', 'span_id', 'trace_id', 'status', 'summary', 'source']);
+/** Line keys that are not span attributes. A payload is display-only, so it never becomes one either. */
+const NOT_ATTRIBUTES = new Set([
+  'kind',
+  't',
+  'start_t',
+  'seq',
+  'span_id',
+  'trace_id',
+  'status',
+  'summary',
+  'source',
+  'payload',
+  'payload_truncated',
+]);
 
 /**
  * Closes a span with an end line. The span keeps its own `source`; the end line's fills it in only when the start gave none.
@@ -81,6 +100,7 @@ interface Accumulator {
   ends: Map<string, RunLogLine>;
   endFacts: Map<string, Map<string, RunLogLine>>;
   scores: Score[];
+  events: Map<string, SpanEvent[]>;
   orphans: RunLogLine[];
 }
 
@@ -100,12 +120,23 @@ function rebuildSpan(id: string, entry: RunLogLine, acc: Accumulator): void {
   acc.orphans = acc.orphans.filter((orphan) => orphan.span_id !== id);
 }
 
+/** An event line joins its span's events; until that span has started it waits among the orphans. */
+function placeEvent(id: string, entry: RunLogLine & { kind: 'event' }, acc: Accumulator): void {
+  const { name, t, seq, attributes } = entry;
+  acc.events.set(id, [...(acc.events.get(id) ?? []), { name, t, seq, attributes } as SpanEvent]);
+  if (!acc.spans.has(id)) acc.orphans.push(entry);
+}
+
 function place(entry: RunLogLine, acc: Accumulator): void {
   if (entry.kind === 'score') {
     acc.scores.push(scoreOf(entry));
     return;
   }
   const id = entry.span_id as string;
+  if (entry.kind === 'event') {
+    placeEvent(id, entry, acc);
+    return;
+  }
   if (entry.kind === 'start' || entry.kind === 'start-run') {
     const known = acc.starts.get(id);
     if (known !== undefined && order(entry, known) < 0) return;
@@ -129,6 +160,13 @@ function rememberEnd(id: string, entry: RunLogLine, acc: Accumulator): void {
   );
   keys.forEach((key) => rememberFact(key, entry, facts));
   acc.endFacts.set(id, facts);
+}
+
+/** The skills a span invoked so far, oldest first: its `skill.invoke` events. */
+export function skillUses(span: Pick<Span, 'events'>): SkillUse[] {
+  return (span.events ?? []).flatMap((event) =>
+    event.name === 'skill.invoke' ? [{ name: event.attributes['skill.name'], t: event.t, seq: event.seq }] : [],
+  );
 }
 
 /** The newest Run's `start-run` line (the last in log order), null when the log holds no Run. The one rule for "the current Run". */
@@ -156,6 +194,7 @@ function snapshot(acc: Accumulator): Folded {
     .sort((a, b) => order(acc.starts.get(a.span_id)!, acc.starts.get(b.span_id)!))
     .map((span) => ({
       ...span,
+      ...(acc.events.has(span.span_id) && { events: [...acc.events.get(span.span_id)!].sort(order) }),
       ...(span.end_t === null ? { status: live.has(span.trace_id) ? ('running' as const) : ('crashed' as const) } : {}),
     }));
   return {
@@ -174,6 +213,7 @@ export function createLogFold(options: FoldOptions = {}) {
     ends: new Map(),
     endFacts: new Map(),
     scores: [],
+    events: new Map(),
     orphans: [],
   };
   return {

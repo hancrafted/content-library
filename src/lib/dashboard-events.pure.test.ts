@@ -2,7 +2,10 @@ import { describe, expect, it } from 'vitest';
 import type { RunLogLine } from '../../skills/new-episode/scripts/run-log.schema.pure';
 import { selectEvents, type DashboardEvent } from './dashboard-events.pure';
 
-const event = (number: number, line: RunLogLine): DashboardEvent => ({ number, line, raw: JSON.stringify(line) });
+const event = (number: number, fields: Record<string, unknown>): DashboardEvent => {
+  const line = fields as unknown as RunLogLine;
+  return { number, line, raw: JSON.stringify(line) };
+};
 const base = { trace_id: 'trace', t: '2026-10-14T10:00:00Z', seq: 1 };
 
 describe('success cases', () => {

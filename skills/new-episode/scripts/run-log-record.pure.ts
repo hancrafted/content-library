@@ -1,11 +1,16 @@
-// `record`: builds and validates one run-log line from an event and an explicit stamp.
+// `record`: builds and validates one run-log line from an event and an explicit stamp. `lineErrors`: validates a stored line.
 
 import {
+  EVENT_ATTRIBUTES,
+  EVENT_NAMES,
   KINDS,
+  LINE_KEYS,
+  PAYLOAD_MAX_BYTES,
   SPAN_TYPES,
   STATUSES,
   SUMMARY_MAX,
   VIAS,
+  type EventName,
   type Kind,
   type RecordResult,
   type RunLogLine,
@@ -42,8 +47,21 @@ const skillList: Check = (v) =>
 const value: Check = (v) =>
   typeof v === 'number' || (typeof v === 'string' && v !== '') ? null : 'must be a number or a non-empty string';
 
+const repoPath: Check = (v) =>
+  typeof v === 'string' && v.trim() !== '' && !/^([/\\]|[A-Za-z]:)/.test(v) && !v.split(/[/\\]/).includes('..')
+    ? null
+    : 'must be a repo-relative path';
+const isObject = (v: unknown): v is Fields => typeof v === 'object' && v !== null && !Array.isArray(v);
+const payload: Check = (v) =>
+  isObject(v) && Object.entries(v).every(([harness, extras]) => /^[a-z][a-z0-9_]*$/.test(harness) && isObject(extras))
+    ? null
+    : 'must map each harness, in snake_case, to an object';
+const bytesOf = (v: unknown): number => new TextEncoder().encode(JSON.stringify(v)).length;
+
 const CHECKS: Record<string, Check> = {
   t: matching(ISO, 'an ISO 8601 UTC time'),
+  seq: count,
+  trace_id: matching(TRACE_ID, '32 lowercase hex characters'),
   start_t: matching(ISO, 'an ISO 8601 UTC time'),
   span_id: spanId,
   parent_span_id: spanId,
@@ -62,6 +80,15 @@ const CHECKS: Record<string, Check> = {
   summary,
   skills_invoked: skillList,
   value,
+  payload,
+  payload_truncated: (v) => (v === true ? null : 'must be true'),
+  attributes: (v) => (isObject(v) ? null : 'must be an object'),
+};
+
+const ATTRIBUTE_CHECKS: Record<string, Check> = {
+  'file.path': repoPath,
+  'trigger_file.path': repoPath,
+  adr: matching(/^[A-Z]+-\d{3}-[a-z0-9-]+$/, 'an ADR id and slug, GEN-002-adr-symlink-claude-rules'),
 };
 
 /** A span line's `source` says whether a number was measured; a score's `source` names the judge. */
@@ -72,86 +99,55 @@ const SOURCES: Record<'span' | 'score', Check> = {
 
 function checkFor(kind: Kind, key: string): Check {
   if (key === 'source') return SOURCES[kind === 'score' ? 'score' : 'span'];
+  if (key === 'name' && kind === 'event') return oneOf(EVENT_NAMES);
   return CHECKS[key] ?? text;
 }
 
-const END_KEYS = [
-  't',
-  'start_t',
-  'gen_ai.input.messages',
-  'summary',
-  'source',
-  'transcript_path',
-  'gen_ai.response.model',
-  'gen_ai.usage.input_tokens',
-  'gen_ai.usage.output_tokens',
-  'gen_ai.usage.cache_read.input_tokens',
-  'skills_invoked',
-];
-/** What an end line may add beyond END_KEYS, and the identity an attrs line carries (with the measured facts of END_KEYS it may add): what meta.json names, which the fold applies over the start's. */
-const END_IDENTITY = [
-  'name',
-  'job',
-  'attempt',
-  'role',
-  'ticket',
-  'parent_span_id',
-  'description',
-  'gen_ai.request.model',
-];
-const RULES: Record<Kind, { required: string[]; optional: string[] }> = {
-  'start-run': {
-    required: ['run_id', 'template_sha', 'harness', 'branch', 'gen_ai.request.model'],
-    optional: ['t', 'name', 'source', 'gen_ai.operation.name'],
-  },
-  start: {
-    required: ['type', 'name', 'parent_span_id'],
-    optional: [
-      't',
-      'job',
-      'attempt',
-      'role',
-      'ticket',
-      'retry_of',
-      'link_trace_id',
-      'link_span_id',
-      'harness',
-      'source',
-      'description',
-      'transcript_path',
-      'request_shape',
-      'gen_ai.operation.name',
-      'gen_ai.agent.name',
-      'gen_ai.request.model',
-      'gen_ai.input.messages',
-    ],
-  },
-  'end-run': { required: ['span_id', 'status'], optional: END_KEYS },
-  end: { required: ['span_id', 'status'], optional: [...END_KEYS, ...END_IDENTITY] },
-  attrs: {
-    required: ['span_id'],
-    optional: [
-      't',
-      'source',
-      'gen_ai.response.model',
-      'gen_ai.usage.input_tokens',
-      'gen_ai.usage.output_tokens',
-      'gen_ai.usage.cache_read.input_tokens',
-      'skills_invoked',
-      ...END_IDENTITY,
-    ],
-  },
-  score: {
-    required: ['span_id', 'name', 'value', 'source'],
-    optional: ['t', 'rubric', 'body', 'via', 'comment', 'ticket'],
-  },
-};
+interface Keys {
+  required: readonly string[];
+  optional: readonly string[];
+}
+
+const STARTS: readonly Kind[] = ['start', 'start-run'];
+
+/** What an event handed to the writer must and may carry: the stored keys less what the writer stamps, plus a measured `t`. */
+function inputKeys(kind: Kind): Keys {
+  const { required, optional } = LINE_KEYS[kind];
+  const stamped = STARTS.includes(kind) ? ['span_id'] : [];
+  return { required: required.filter((key) => !stamped.includes(key)), optional: [...optional, 't', 'payload'] };
+}
+
+/** What a stored line must and may carry: its kind's keys and the envelope. */
+function storedKeys(kind: Kind): Keys {
+  const { required, optional } = LINE_KEYS[kind];
+  return { required: [...required, 't', 'seq', 'trace_id'], optional: [...optional, 'payload', 'payload_truncated'] };
+}
 
 /** What a start line of each span type cannot omit: which Job, Attempt and role it belongs to. */
 const NEEDED_BY_TYPE: Record<string, string[]> = { job: ['job'], attempt: ['job', 'attempt'], agent: ['job', 'role'] };
 
-function fieldErrors(kind: Kind, fields: Fields): string[] {
-  const { required, optional } = RULES[kind];
+/** An event's attributes against its name's: none unknown, none missing, each well-formed. */
+function attributeErrors(name: EventName, attributes: Fields): string[] {
+  const { required, optional } = EVENT_ATTRIBUTES[name] as Keys;
+  const known = new Set([...required, ...optional]);
+  return [
+    ...Object.keys(attributes)
+      .filter((key) => !known.has(key))
+      .map((key) => `attributes.${key} is not an attribute of a ${name} event`),
+    ...required
+      .filter((key) => attributes[key] === undefined)
+      .map((key) => `attributes.${key} is required on a ${name} event`),
+    ...Object.entries(attributes)
+      .filter(([key, v]) => known.has(key) && v !== undefined)
+      .flatMap(([key, v]) => {
+        const problem = (ATTRIBUTE_CHECKS[key] ?? text)(v);
+        return problem ? [`attributes.${key} ${problem}`] : [];
+      }),
+  ];
+}
+
+function fieldErrors(kind: Kind, fields: Fields, keys: Keys): string[] {
+  const { required, optional } = keys;
   const known = new Set(['kind', ...required, ...optional]);
   const byType = kind === 'start' ? (NEEDED_BY_TYPE[fields.type as string] ?? []) : [];
   // a skill-spawned agent filed under the Run, because several Jobs were open, belongs to no one Job
@@ -168,7 +164,10 @@ function fieldErrors(kind: Kind, fields: Fields): string[] {
       const problem = checkFor(kind, key)(v);
       return problem ? [`${key} ${problem}`] : [];
     });
-  return [...unknown, ...missing, ...invalid];
+  const named = EVENT_NAMES.includes(fields.name as EventName) && isObject(fields.attributes);
+  const attributes =
+    kind === 'event' && named ? attributeErrors(fields.name as EventName, fields.attributes as Fields) : [];
+  return [...unknown, ...missing, ...invalid, ...attributes];
 }
 
 function stampErrors(kind: Kind, stamp: Stamp): string[] {
@@ -187,24 +186,47 @@ function operationOf(kind: Kind, type: unknown): Fields {
   return kind === 'start' && type === 'agent' ? { 'gen_ai.operation.name': 'invoke_agent' } : {};
 }
 
-function build(kind: Kind, fields: Fields, stamp: Stamp): RunLogLine {
-  const own = kind.startsWith('start') ? { span_id: stamp.spanId } : {};
-  const rest = Object.entries(fields).filter(([key, v]) => key !== 'kind' && key !== 't' && v !== undefined);
-  const head = { kind, t: fields.t ?? stamp.t, seq: stamp.seq, trace_id: stamp.traceId };
-  return { ...head, ...own, ...operationOf(kind, fields.type), ...Object.fromEntries(rest) } as unknown as RunLogLine;
+/** A payload over PAYLOAD_MAX_BYTES is dropped whole, and the line says so. */
+function boundedPayload(fields: Fields): Fields {
+  if (fields.payload === undefined) return {};
+  return bytesOf(fields.payload) > PAYLOAD_MAX_BYTES ? { payload_truncated: true } : { payload: fields.payload };
 }
+
+function build(kind: Kind, fields: Fields, stamp: Stamp): RunLogLine {
+  const own = STARTS.includes(kind) ? { span_id: stamp.spanId } : {};
+  const rest = Object.entries(fields).filter(
+    ([key, v]) => key !== 'kind' && key !== 't' && key !== 'payload' && v !== undefined,
+  );
+  const head = { kind, t: fields.t ?? stamp.t, seq: stamp.seq, trace_id: stamp.traceId };
+  const line = { ...head, ...own, ...operationOf(kind, fields.type), ...Object.fromEntries(rest) };
+  return { ...line, ...boundedPayload(fields) } as unknown as RunLogLine;
+}
+
+const kindOf = (fields: Fields): Kind | null => (KINDS.includes(fields.kind as Kind) ? (fields.kind as Kind) : null);
+const KIND_ERROR = `kind must be one of ${KINDS.join(', ')}`;
 
 /**
  * Builds one validated line from an event and a stamp, or lists why it is malformed. Deterministic: the same
  * event and stamp give the same line. A start takes its `span_id` from the stamp, so the writer decides ids;
- * every other kind must name the span it belongs to.
+ * every other kind must name the span it belongs to. A key its kind does not take is refused; a payload over
+ * PAYLOAD_MAX_BYTES is dropped and the line marked `payload_truncated`.
  */
 export function record(event: unknown, stamp: Stamp): RecordResult {
-  if (typeof event !== 'object' || event === null || Array.isArray(event))
-    return { ok: false, errors: ['event must be a JSON object'] };
-  const fields = event as Fields;
-  const kind = fields.kind as Kind;
-  if (!KINDS.includes(kind)) return { ok: false, errors: [`kind must be one of ${KINDS.join(', ')}`] };
-  const errors = [...fieldErrors(kind, fields), ...stampErrors(kind, stamp)];
-  return errors.length > 0 ? { ok: false, errors } : { ok: true, line: build(kind, fields, stamp) };
+  if (!isObject(event)) return { ok: false, errors: ['event must be a JSON object'] };
+  const kind = kindOf(event);
+  if (kind === null) return { ok: false, errors: [KIND_ERROR] };
+  const errors = [...fieldErrors(kind, event, inputKeys(kind)), ...stampErrors(kind, stamp)];
+  return errors.length > 0 ? { ok: false, errors } : { ok: true, line: build(kind, event, stamp) };
+}
+
+/** Why a line read back from events.jsonl breaks the contract; empty when it holds. */
+export function lineErrors(line: unknown): string[] {
+  if (!isObject(line)) return ['line must be a JSON object'];
+  const kind = kindOf(line);
+  if (kind === null) return [KIND_ERROR];
+  const tooLarge = line.payload !== undefined && bytesOf(line.payload) > PAYLOAD_MAX_BYTES;
+  return [
+    ...fieldErrors(kind, line, storedKeys(kind)),
+    ...(tooLarge ? [`payload must be at most ${PAYLOAD_MAX_BYTES} bytes`] : []),
+  ];
 }

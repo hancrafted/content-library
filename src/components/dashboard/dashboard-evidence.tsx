@@ -1,8 +1,12 @@
 import type { Messages } from '@/i18n/translations';
+import { agentElapsed, spanElapsed, type Elapsed } from '@/lib/dashboard-elapsed.pure';
 import type { DashboardJob } from '@/lib/dashboard-projection.pure';
 import { agentState, type DashboardState } from '@/lib/dashboard-stages.pure';
+import { fillTemplate } from '@/lib/template.pure';
+import { useContext } from 'react';
 import { formatDuration } from '../../../skills/new-episode/scripts/run-log-tree.pure';
 import type { Score, Span } from '../../../skills/new-episode/scripts/run-log.schema.pure';
+import { DashboardMoment } from './dashboard-moment';
 
 export type DashboardCopy = Messages['dashboard'];
 
@@ -22,9 +26,23 @@ export function StateBadge({ state }: { state: DashboardState }) {
   return <span className={`rounded-md px-2 py-1 text-caption font-medium ${STATUS_COLOR[state]}`}>{state}</span>;
 }
 
-export function SpanMetrics({ span, copy }: { span: Span; copy: DashboardCopy }) {
+/** A measured duration, or the time so far of a span still running at the moment shown. */
+export function elapsedText(elapsed: Elapsed, copy: DashboardCopy): string {
+  const duration = formatDuration(elapsed.ms);
+  return elapsed.open ? fillTemplate(copy.elapsedSoFar, { duration }) : duration;
+}
+
+export function ElapsedTime({ elapsed, copy }: { elapsed: Elapsed | null; copy: DashboardCopy }) {
+  if (elapsed === null) return null;
+  return <span className="font-mono text-muted-foreground tabular-nums">{elapsedText(elapsed, copy)}</span>;
+}
+
+/** An agent's span counts as an agent: unclosed under an ended Job or Attempt, it has no time so far. */
+export function SpanMetrics({ span, job, copy }: { span: Span; job?: DashboardJob; copy: DashboardCopy }) {
+  const { now } = useContext(DashboardMoment);
+  const elapsed = job && span.type === 'agent' ? agentElapsed(job, span, now) : spanElapsed(span, now);
   const metrics = [
-    [copy.duration, span.duration_ms === null ? copy.pendingDuration : formatDuration(span.duration_ms)],
+    [copy.duration, elapsed === null ? copy.pendingDuration : elapsedText(elapsed, copy)],
     [copy.input, span['gen_ai.usage.input_tokens'] ?? copy.notMeasured],
     [copy.output, span['gen_ai.usage.output_tokens'] ?? copy.notMeasured],
     [copy.cache, span['gen_ai.usage.cache_read.input_tokens'] ?? copy.notMeasured],
@@ -59,7 +77,7 @@ function SpanRow({ span, job, copy }: AgentRowProps) {
       <p className="text-caption text-muted-foreground wrap-anywhere">
         {span['gen_ai.agent.name']} {span.role} {span.source} {span['gen_ai.response.model']}
       </p>
-      <SpanMetrics span={span} copy={copy} />
+      <SpanMetrics span={span} job={job} copy={copy} />
       {span.summary ? <p className="text-caption whitespace-pre-wrap wrap-anywhere">{span.summary}</p> : null}
     </li>
   );
@@ -81,6 +99,28 @@ export function AgentEvidence({ spans, job, copy }: { spans: Span[]; job: Dashbo
   );
 }
 
+function AttemptRow({ span, spans, copy }: { span: Span; spans: Span[]; copy: DashboardCopy }) {
+  const { now } = useContext(DashboardMoment);
+  return (
+    <li className="text-caption">
+      <details>
+        <summary className="cursor-pointer py-1 focus-visible:outline-2 focus-visible:outline-ring">
+          <span className="font-mono">{span.name}</span> <StateBadge state={span.status} />{' '}
+          <ElapsedTime elapsed={spanElapsed(span, now)} copy={copy} />
+          {span.retry_of ? (
+            <span className="text-muted-foreground">
+              {copy.retryOf} {spans.find((other) => other.span_id === span.retry_of)?.name ?? span.retry_of}
+            </span>
+          ) : null}
+        </summary>
+        <div className="py-3">
+          <SpanMetrics span={span} copy={copy} />
+        </div>
+      </details>
+    </li>
+  );
+}
+
 export function AttemptEvidence({ spans, copy }: { spans: Span[]; copy: DashboardCopy }) {
   if (spans.length === 0) return null;
   return (
@@ -90,22 +130,7 @@ export function AttemptEvidence({ spans, copy }: { spans: Span[]; copy: Dashboar
       </h3>
       <ul className="space-y-2">
         {spans.map((span) => (
-          <li key={span.span_id} className="text-caption">
-            <details>
-              <summary className="cursor-pointer py-1 focus-visible:outline-2 focus-visible:outline-ring">
-                <span className="font-mono">{span.name}</span> <StateBadge state={span.status} />{' '}
-                <span className="text-muted-foreground">{formatDuration(span.duration_ms)}</span>
-                {span.retry_of ? (
-                  <span className="text-muted-foreground">
-                    {copy.retryOf} {spans.find((other) => other.span_id === span.retry_of)?.name ?? span.retry_of}
-                  </span>
-                ) : null}
-              </summary>
-              <div className="py-3">
-                <SpanMetrics span={span} copy={copy} />
-              </div>
-            </details>
-          </li>
+          <AttemptRow key={span.span_id} span={span} spans={spans} copy={copy} />
         ))}
       </ul>
     </section>

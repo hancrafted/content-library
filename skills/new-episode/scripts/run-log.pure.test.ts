@@ -73,7 +73,10 @@ describe('failure cases', () => {
     // ACT
     const result = record(event, STAMP);
     // ASSERT
-    expect(result).toEqual({ ok: false, errors: ['kind must be one of start-run, end-run, start, end, attrs, score'] });
+    expect(result).toEqual({
+      ok: false,
+      errors: ['kind must be one of start-run, end-run, start, end, attrs, score, event'],
+    });
   });
 
   it('rejects lines with missing ids, an unknown status, a summary over 500 characters or an unknown field', () => {

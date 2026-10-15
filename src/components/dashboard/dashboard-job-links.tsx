@@ -2,7 +2,9 @@ import { isGlob, outputLabel, previewHref, previewPort, type EpisodeOutputs } fr
 import type { DashboardJob } from '@/lib/dashboard-projection.pure';
 import { fillTemplate } from '@/lib/template.pure';
 import { ExternalLink, FileText } from 'lucide-react';
+import { useContext } from 'react';
 import type { DashboardCopy } from './dashboard-evidence';
+import { DashboardMoment } from './dashboard-moment';
 
 const LINK =
   'inline-flex min-w-0 items-center gap-2 rounded-md text-caption font-medium text-primary underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring';
@@ -15,10 +17,12 @@ export function PreviewButton({
   job,
   copy,
   className = '',
+  tabIndex,
 }: {
   job: DashboardJob;
   copy: DashboardCopy;
   className?: string;
+  tabIndex?: number;
 }) {
   const port = previewPort(job);
   if (port === undefined) return null;
@@ -26,6 +30,7 @@ export function PreviewButton({
   return (
     <button
       type="button"
+      tabIndex={tabIndex}
       data-preview={url}
       title={url}
       onClick={() => window.open(url, '_blank', 'noopener')}
@@ -63,17 +68,22 @@ function OutputItem({ output, outputs, copy }: { output: string; outputs: Episod
   );
 }
 
-/** A Job's output files, each opened read-only as plain text in a new tab once written, and its preview link. */
+/**
+ * A Job's output files, each opened read-only as plain text in a new tab once written, and its preview link. While
+ * replaying, a Job not started by the cutoff lists no outputs: the files on disk are today's.
+ */
 export function JobLinks({ job, outputs, copy }: { job: DashboardJob; outputs: EpisodeOutputs; copy: DashboardCopy }) {
-  if (job.outputs.length === 0 && previewPort(job) === undefined) return null;
+  const { replaying } = useContext(DashboardMoment);
+  const files = replaying && job.span === undefined ? [] : job.outputs;
+  if (files.length === 0 && previewPort(job) === undefined) return null;
   return (
     <section className="space-y-1" aria-label={copy.graph.outputs}>
       <PreviewButton job={job} copy={copy} className="min-h-11" />
-      {job.outputs.length > 0 ? (
+      {files.length > 0 ? (
         <>
           <h3 className="text-caption text-muted-foreground">{copy.graph.outputs}</h3>
           <ul>
-            {job.outputs.map((output) => (
+            {files.map((output) => (
               <OutputItem key={output} output={output} outputs={outputs} copy={copy} />
             ))}
           </ul>
