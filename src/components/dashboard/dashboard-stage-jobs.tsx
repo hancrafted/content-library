@@ -2,12 +2,13 @@ import { agentElapsed, spanElapsed } from '@/lib/dashboard-elapsed.pure';
 import type { DashboardJob } from '@/lib/dashboard-projection.pure';
 import { agentState, currentAgent, stageLayers, type DashboardStage } from '@/lib/dashboard-stages.pure';
 import { fillTemplate } from '@/lib/template.pure';
-import { useContext, useState, type KeyboardEvent } from 'react';
+import { useContext } from 'react';
 import { JobChipList } from './dashboard-chips';
 import { ElapsedTime, StateBadge, type DashboardCopy } from './dashboard-evidence';
 import styles from './dashboard-graph.module.css';
 import { PreviewButton } from './dashboard-job-links';
 import { DashboardMoment, type Moment } from './dashboard-moment';
+import { blurGraphPopover, dismissGraphPopover, leaveGraphPopover, openGraphPopover } from './dashboard-popover';
 import { AttentionMarker, StageStateIcon } from './dashboard-state-icon';
 
 export type SelectJob = (stage: string, job: string) => void;
@@ -60,7 +61,7 @@ function JobPopover({ job, agent, stage, onSelectJob, copy }: JobProps & { agent
   const elapsed =
     agent.span && (agent.span.type === 'agent' ? agentElapsed(job, agent.span, now) : spanElapsed(agent.span, now));
   return (
-    <div className={styles.popover}>
+    <div className={styles.popover} popover="manual">
       <button
         type="button"
         onClick={() => onSelectJob(stage.id, job.id)}
@@ -83,23 +84,17 @@ function JobPopover({ job, agent, stage, onSelectJob, copy }: JobProps & { agent
   );
 }
 
-function dismissPopover(event: KeyboardEvent, dismiss: (value: boolean) => void) {
-  if (event.key !== 'Escape') return;
-  dismiss(true);
-  event.stopPropagation();
-}
-
 function AgentNode({ job, stage, agent, x, y, onSelectJob, copy }: NodeProps) {
-  const [dismissed, setDismissed] = useState(false);
   return (
     <div
       className={styles.branchNode}
       data-graph-node
-      data-popover-dismissed={dismissed}
       style={{ left: `${x}%`, top: `calc(50% + ${y}px)` }}
-      onPointerEnter={() => setDismissed(false)}
-      onFocusCapture={() => setDismissed(false)}
-      onKeyDown={(event) => dismissPopover(event, setDismissed)}
+      onPointerEnter={(event) => openGraphPopover(event.currentTarget)}
+      onPointerLeave={(event) => leaveGraphPopover(event.currentTarget)}
+      onFocusCapture={(event) => openGraphPopover(event.currentTarget)}
+      onBlurCapture={blurGraphPopover}
+      onKeyDown={dismissGraphPopover}
     >
       <button
         type="button"
@@ -150,7 +145,7 @@ function BranchLine({ job, path }: { job: DashboardJob; path: string }) {
 function JobBranch(props: BranchProps) {
   const { job, layer, layers, lane, lanes, last } = props;
   const agents = nodeAgents(job);
-  const y = (lane - (lanes - 1) / 2) * 96;
+  const y = last ? 32 : (lane - (lanes - 1) / 2) * 64;
   const start = last ? 100 : (layer / layers) * 100;
   const end = ((layer + 1) / layers) * 100;
   const left = last ? 0 : start;

@@ -66,11 +66,16 @@ a failed optional research Job remains visible when the Dossier proceeds.
 vertically centred spine. Dependency layers follow left to right within each
 stage gap; parallel Jobs branch evenly above and below the spine. Each Job's
 configured agents are consecutive nodes, in pipeline order. The final stage's
-branch folds back into its terminal node. Longer stages widen the shared canvas
-instead of shrinking pointer targets or overflowing the page.
+branch folds back into its terminal node. Stage widths are proportional to their
+dependency layers and agents, with a minimum. The whole graph fits the desktop
+card; only viewports below its compact minimum scroll horizontally. The rail
+uses the same weighted stage centres in both views. Graph height follows the
+branch count rather than reserving empty space for disclosure.
 
 Job cards are gone from the overview. Hover or keyboard-focus an agent node for
 a speech bubble with status, elapsed time, skills, checks and available preview.
+Native top-layer popovers escape the graph's scroll container without requiring
+extra vertical whitespace.
 Escape dismisses the bubble without removing focus. Clicking a node or bubble
 selects its Job's evidence. State icons accompany colours. Branch strokes fill
 according to observed Job times at the replay cutoff; stage positions have a
@@ -114,15 +119,19 @@ queued close notification only dismisses a dialog that is still closed.
 ## Time travel
 
 The progress bar **is** the scrubber, aligned with the first and last stage
-centres. **Live**, beside **Show Jobs**, follows the latest read at the right
-edge. Dragging or clicking left unchecks Live; reaching the far right or pressing
+centres. **Live**, beside **Show Jobs**, follows the latest read at its structural
+leading edge. Future work toward PR remains unfilled. Dragging or clicking left
+unchecks Live; reaching that leading edge or pressing
 End rechecks it. Unchecking Live freezes the latest moment while polling
 continues. Arrow keys move one minute, Page Up/Down ten; Home selects Run start.
-The accessible readout and drag bubble give minutes since start and local time.
+The accessible readout gives minutes since start and local time; the drag bubble
+shows the current minute.
 Start time is below the left end; total observed duration is below the right.
 
 `scrubTimeline()`, `scrubPosition()` and `scrubTime()` map time to structure:
-each stage gap has equal width, each Job an equal share within that gap.
+each Job has an equal share within its stage gap.
+`graphGeometry()` maps these structural fractions onto the weighted stage centres
+and back, keeping the rail aligned when Show Jobs changes the stage widths.
 Parallel Jobs contribute their individual elapsed fractions together; a long
 Job gets no extra width. Knots come from observed Job starts/ends and the Run
 bounds, never estimated durations. Open Jobs use the latest read as their
@@ -130,8 +139,9 @@ observed endpoint. Idle plateaus select the latest observation at that position;
 the first point remains Run start. Since there is no gap after PR, the final
 gap shares its space equally across the preceding stage's Jobs and PR's Jobs;
 PR execution stays scrubbable instead of collapsing to one terminal instant.
-The rightmost
-point always means the latest event/read, even with unstarted stages.
+The latest point is the furthest observed structural progress, not automatically
+the end of the rail. Seeking that point (or the unfilled track after it) resumes
+Live. The right-hand duration is elapsed-so-far, or the final total once ended.
 
 Replay logs nothing new and never reads the file again. `replayDashboard()`
 feeds the retained events stamped no later than the cutoff through the shared

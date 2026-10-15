@@ -8,6 +8,25 @@ interface Point {
   position: number;
 }
 
+/** Weighted grid centres and their equivalent positions along the shared replay rail. */
+export function graphGeometry(weights: readonly number[]) {
+  const total = weights.reduce((sum, weight) => sum + weight, 0) || 1;
+  let before = 0;
+  const centres = weights.map((weight) => {
+    const centre = (before + weight / 2) / total;
+    before += weight;
+    return centre;
+  });
+  const left = centres[0] ?? 0;
+  const right = centres.at(-1) ?? 1;
+  const width = right - left || 1;
+  const stops = centres.map((centre, index) => ({
+    at: index / Math.max(1, weights.length - 1),
+    position: (centre - left) / width,
+  }));
+  return { left, right: 1 - right, stops };
+}
+
 export function snapScrubPosition(position: number, stageCount: number): number {
   const gaps = Math.max(1, stageCount - 1);
   const stage = Math.round(position * gaps) / gaps;
@@ -57,7 +76,7 @@ export function scrubTimeline(
     .sort((a, b) => a - b)
     .map((at) => ({
       at,
-      position: at === range.end ? 1 : stagePosition(stages, at, range.end),
+      position: stagePosition(stages, at, range.end),
     }));
 }
 
@@ -67,18 +86,18 @@ function interpolate(value: number, a: Point, b: Point) {
 
 export function scrubPosition(timeline: readonly Point[], at: number): number {
   const next = timeline.findIndex((point) => point.at >= at);
-  if (next < 0) return 1;
+  if (next < 0) return timeline.at(-1)?.position ?? 0;
   if (next === 0) return timeline[0].position;
   const a = timeline[next - 1];
   const b = timeline[next];
   return interpolate(at, a, b);
 }
 
-/** Plateaus choose their latest observed moment; the terminal point always means Live. */
+/** Plateaus choose their latest observed moment; reaching the observed leading edge means Live. */
 export function scrubTime(timeline: readonly Point[], position: number): number {
-  if (position <= 0) return timeline[0].at;
   const last = timeline.at(-1)!;
-  if (position >= 1) return last.at;
+  if (position >= last.position) return last.at;
+  if (position <= 0) return timeline[0].at;
   const next = timeline.findIndex((point) => point.position > position);
   if (next <= 0) return next < 0 ? last.at : timeline[0].at;
   const a = timeline[next - 1];

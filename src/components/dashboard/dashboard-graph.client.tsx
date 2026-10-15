@@ -6,6 +6,7 @@ import type { ReplayControls } from '@/hooks/use-dashboard-replay';
 import type { DashboardEvent, EventScope } from '@/lib/dashboard-events.pure';
 import type { EpisodeOutputs } from '@/lib/dashboard-outputs.pure';
 import type { DashboardView } from '@/lib/dashboard-projection.pure';
+import { graphGeometry } from '@/lib/dashboard-scrub.pure';
 import { projectStages, stageLayers } from '@/lib/dashboard-stages.pure';
 import { fillTemplate } from '@/lib/template.pure';
 import { useId, useState, type CSSProperties } from 'react';
@@ -114,39 +115,47 @@ function GraphToolbar({ controls, copy, replay }: Pick<OverviewProps, 'controls'
   );
 }
 
-function graphWidth(graph: Controls['graph'], showJobs: boolean) {
-  return showJobs
-    ? Math.max(
-        160,
-        ...graph.stages.map((stage) =>
+function graphWeights(graph: Controls['graph'], showJobs: boolean) {
+  return graph.stages.map((stage) =>
+    showJobs
+      ? Math.max(
+          1.5,
           stageLayers(stage).reduce(
-            (sum, jobs) => sum + Math.max(...jobs.map((job) => Math.max(1, job.config.length))) * 64 + 32,
+            (sum, jobs) => sum + Math.max(...jobs.map((job) => Math.max(1, job.config.length))) + 0.5,
             0,
           ),
-        ),
-      )
-    : 160;
+        )
+      : 1,
+  );
+}
+
+function canvasStyle(weights: number[]): CSSProperties {
+  const geometry = graphGeometry(weights);
+  return {
+    '--stage-columns': weights.map((weight) => `${weight}fr`).join(' '),
+    '--canvas-min': `${Math.max(560, weights.reduce((sum, weight) => sum + weight, 0) * 36)}px`,
+    '--start-inset': `${geometry.left * 100}%`,
+    '--end-inset': `${geometry.right * 100}%`,
+  } as CSSProperties;
 }
 
 function GraphOverview({ controls, stale, copy, replay }: OverviewProps) {
   const { graph, selected, select, showJobs, selectJob } = controls;
-  const width = graphWidth(graph, showJobs);
+  const weights = graphWeights(graph, showJobs);
   return (
     <div className="space-y-6 rounded-2xl border border-border bg-card p-4 sm:p-6">
       <GraphToolbar controls={controls} copy={copy} replay={replay} />
       {stale ? <p className="text-caption text-(--warning)">{copy.graph.stale}</p> : null}
       <div className={styles.graphScroll}>
-        <div
-          className={styles.canvas}
-          style={{ '--stage-count': Math.max(1, graph.stages.length), '--stage-width': `${width}px` } as CSSProperties}
-        >
-          <TimeTravel replay={replay} copy={copy} stages={graph.stages.length} />
+        <div className={styles.canvas} style={canvasStyle(weights)}>
+          <TimeTravel replay={replay} copy={copy} stages={graph.stages.length} geometry={graphGeometry(weights)} />
           <StageNavigation
             stages={graph.stages}
             selected={selected}
             onSelect={select}
             onSelectJob={showJobs ? selectJob : undefined}
             copy={copy}
+            weights={weights}
           />
         </div>
       </div>

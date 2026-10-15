@@ -9,11 +9,12 @@ import {
 } from '@/lib/dashboard-stages.pure';
 import { fillTemplate } from '@/lib/template.pure';
 import { CircleAlert } from 'lucide-react';
-import { useContext, useState, type CSSProperties } from 'react';
+import { useContext, type CSSProperties } from 'react';
 import { JobChipList } from './dashboard-chips';
 import { ElapsedTime, StateBadge, type DashboardCopy } from './dashboard-evidence';
 import styles from './dashboard-graph.module.css';
 import { DashboardMoment } from './dashboard-moment';
+import { blurGraphPopover, dismissGraphPopover, leaveGraphPopover, openGraphPopover } from './dashboard-popover';
 import { StageJobs, type SelectJob } from './dashboard-stage-jobs';
 import { StageStateIcon } from './dashboard-state-icon';
 
@@ -28,9 +29,10 @@ interface NavigationProps {
   /** Present when the view shows each stage's Jobs. */
   onSelectJob?: SelectJob;
   copy: DashboardCopy;
+  weights: number[];
 }
 
-type NodeProps = Omit<NavigationProps, 'stages'> & { stage: DashboardStage; last: boolean };
+type NodeProps = Omit<NavigationProps, 'stages' | 'weights'> & { stage: DashboardStage; last: boolean; gap: number };
 type LabelProps = Pick<NodeProps, 'stage' | 'copy'>;
 
 function StageActivity({ stage, copy }: LabelProps) {
@@ -82,7 +84,7 @@ function StageLabel({ stage, copy }: LabelProps) {
 function StagePopover({ stage, copy, onSelect }: LabelProps & { onSelect: (id: string) => void }) {
   const { now } = useContext(DashboardMoment);
   return (
-    <div className={styles.stagePopover}>
+    <div className={styles.stagePopover} popover="manual">
       <button
         type="button"
         onClick={() => onSelect(stage.id)}
@@ -131,21 +133,20 @@ function StageButton({ stage, selected, onSelect, onSelectJob, copy }: Omit<Node
 
 function StageNode(props: NodeProps) {
   const { stage, last, onSelectJob, onSelect, copy } = props;
-  const [dismissed, setDismissed] = useState(false);
   return (
-    <li className={styles.stage} data-complete={isComplete(stage.state)}>
+    <li
+      className={styles.stage}
+      data-complete={isComplete(stage.state)}
+      style={{ '--stage-gap': `${props.gap}%` } as CSSProperties}
+    >
       <div
         className={styles.stageAnchor}
         data-graph-stage
-        data-popover-dismissed={dismissed}
-        onPointerEnter={() => setDismissed(false)}
-        onFocusCapture={() => setDismissed(false)}
-        onKeyDown={(event) => {
-          if (event.key === 'Escape') {
-            setDismissed(true);
-            event.stopPropagation();
-          }
-        }}
+        onPointerEnter={(event) => openGraphPopover(event.currentTarget)}
+        onPointerLeave={(event) => leaveGraphPopover(event.currentTarget)}
+        onFocusCapture={(event) => openGraphPopover(event.currentTarget)}
+        onBlurCapture={blurGraphPopover}
+        onKeyDown={dismissGraphPopover}
       >
         <StageButton {...props} />
         <StagePopover stage={stage} copy={copy} onSelect={onSelect} />
@@ -155,7 +156,7 @@ function StageNode(props: NodeProps) {
   );
 }
 
-export function StageNavigation({ stages, selected, onSelect, onSelectJob, copy }: NavigationProps) {
+export function StageNavigation({ stages, selected, onSelect, onSelectJob, copy, weights }: NavigationProps) {
   return (
     <ol
       className={styles.stages}
@@ -163,7 +164,7 @@ export function StageNavigation({ stages, selected, onSelect, onSelectJob, copy 
       aria-label={copy.graph.title}
       style={
         {
-          '--network-height': `${Math.max(1, ...stages.flatMap((stage) => stageLayers(stage).map((jobs) => jobs.length))) * 96 + 160}px`,
+          '--network-height': `${Math.max(128, Math.max(1, ...stages.flatMap((stage) => stageLayers(stage).map((jobs) => jobs.length))) * 64)}px`,
         } as CSSProperties
       }
     >
@@ -172,6 +173,7 @@ export function StageNavigation({ stages, selected, onSelect, onSelectJob, copy 
           key={stage.id}
           stage={stage}
           last={index === stages.length - 1}
+          gap={((weights[index] + (weights[index + 1] ?? weights[index])) / (2 * weights[index])) * 100}
           selected={selected}
           onSelect={onSelect}
           onSelectJob={onSelectJob}

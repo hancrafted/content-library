@@ -1,7 +1,7 @@
 'use client';
 
 import type { ReplayControls } from '@/hooks/use-dashboard-replay';
-import { scrubPosition, scrubTime, snapScrubPosition } from '@/lib/dashboard-scrub.pure';
+import { scrubPosition, scrubTime, snapScrubPosition, type graphGeometry } from '@/lib/dashboard-scrub.pure';
 import { fillTemplate } from '@/lib/template.pure';
 import { useId, useState, type CSSProperties, type KeyboardEvent } from 'react';
 import { formatDuration } from '../../../skills/new-episode/scripts/run-log-tree.pure';
@@ -38,11 +38,12 @@ interface ScrubProps {
   range: NonNullable<ReplayControls['range']>;
   copy: DashboardCopy;
   stages: number;
+  geometry: ReturnType<typeof graphGeometry>;
 }
 
-function scrubState({ replay, range, copy, stages }: ScrubProps) {
+function scrubState({ replay, range, copy, stages, geometry }: ScrubProps) {
   const at = replay.at ?? range.end;
-  const fraction = replay.live ? 1 : scrubPosition(replay.timeline, at);
+  const fraction = scrubPosition(geometry.stops, scrubPosition(replay.timeline, at));
   const text = fillTemplate(copy.timeTravel.position, {
     minutes: Math.floor((at - range.start) / 60_000),
     time: clock.format(at),
@@ -53,8 +54,15 @@ function scrubState({ replay, range, copy, stages }: ScrubProps) {
     event.preventDefault();
     replay.seek(event.key === 'Home' ? range.start : event.key === 'End' ? range.end : at + step);
   };
-  const seek = (position: number) => replay.seek(scrubTime(replay.timeline, snapScrubPosition(position, stages)));
-  return { fraction, text, onKeyDown, seek };
+  const seek = (position: number) => {
+    const structural = scrubTime(geometry.stops, position);
+    const edge = scrubPosition(replay.timeline, range.end);
+    replay.seek(
+      structural >= edge - 0.0001 ? range.end : scrubTime(replay.timeline, snapScrubPosition(structural, stages)),
+    );
+  };
+  const minute = fillTemplate(copy.timeTravel.minute, { minutes: Math.floor((at - range.start) / 60_000) });
+  return { fraction, text, minute, onKeyDown, seek };
 }
 
 interface InputProps {
@@ -87,16 +95,16 @@ function ScrubInput({ copy, state, help, onDrag }: InputProps) {
   );
 }
 
-function Scrubber({ replay, range, copy, stages }: ScrubProps) {
+function Scrubber({ replay, range, copy, stages, geometry }: ScrubProps) {
   const help = useId();
   const [dragging, setDragging] = useState(false);
-  const state = scrubState({ replay, range, copy, stages });
+  const state = scrubState({ replay, range, copy, stages, geometry });
   return (
     <div className={styles.scrubber} style={{ '--scrub-position': `${state.fraction * 100}%` } as CSSProperties}>
       <div className={styles.scrubTrack}>
         {dragging ? (
           <output className={`${styles.bubble} text-caption`} aria-hidden="true">
-            {state.text}
+            {state.minute}
           </output>
         ) : null}
         <ScrubInput copy={copy} state={state} help={help} onDrag={setDragging} />
@@ -113,6 +121,6 @@ function Scrubber({ replay, range, copy, stages }: ScrubProps) {
 }
 
 /** The progress track itself is the native keyboard- and pointer-operable scrubber. */
-export function TimeTravel({ replay, copy, stages }: Omit<ScrubProps, 'range'>) {
-  return replay.range ? <Scrubber replay={replay} range={replay.range} copy={copy} stages={stages} /> : null;
+export function TimeTravel(props: Omit<ScrubProps, 'range'>) {
+  return props.replay.range ? <Scrubber {...props} range={props.replay.range} /> : null;
 }
