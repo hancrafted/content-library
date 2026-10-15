@@ -1,5 +1,5 @@
 import { agentElapsed, spanElapsed } from '@/lib/dashboard-elapsed.pure';
-import { edgePath, type JobGeometry, type StageGeometry } from '@/lib/dashboard-layout.pure';
+import type { BranchGeometry, StageGeometry } from '@/lib/dashboard-graph-geometry.pure';
 import type { DashboardJob } from '@/lib/dashboard-projection.pure';
 import { jobProgress } from '@/lib/dashboard-scrub.pure';
 import { agentState, currentAgent, type DashboardStage } from '@/lib/dashboard-stages.pure';
@@ -25,8 +25,8 @@ interface JobProps {
 }
 
 interface BranchProps extends JobProps {
-  geometry: JobGeometry;
-  layout: StageGeometry;
+  geometry: BranchGeometry;
+  viewBox: string;
 }
 
 function nodeAgents(job: DashboardJob) {
@@ -44,8 +44,7 @@ function nodeAgents(job: DashboardJob) {
 type Agent = ReturnType<typeof nodeAgents>[number];
 interface NodeProps extends JobProps {
   agent: Agent;
-  x: number;
-  y: number;
+  position: { left: string; top: string };
 }
 
 function TemplateLabel({ job, copy }: Pick<JobProps, 'job' | 'copy'>) {
@@ -107,12 +106,12 @@ function AgentButton({ job, stage, agent, onSelectJob, copy, selected }: NodePro
 }
 
 function AgentNode(props: NodeProps) {
-  const { job, stage, agent, x, y, onSelectJob, copy } = props;
+  const { job, stage, agent, position, onSelectJob, copy } = props;
   return (
     <div
       className={styles.branchNode}
       data-graph-node
-      style={{ left: `${x}%`, top: `calc(50% + ${y}px)` }}
+      style={{ left: position.left, top: position.top }}
       onPointerEnter={(event) => openGraphPopover(event.currentTarget)}
       onPointerLeave={(event) => leaveGraphPopover(event.currentTarget)}
       onFocusCapture={(event) => openGraphPopover(event.currentTarget)}
@@ -125,22 +124,17 @@ function AgentNode(props: NodeProps) {
   );
 }
 
-function BranchLine({ job, geometry, layout }: Pick<BranchProps, 'job' | 'geometry' | 'layout'>) {
+function BranchLine({ job, geometry, viewBox }: Pick<BranchProps, 'job' | 'geometry' | 'viewBox'>) {
   const { now } = useContext(DashboardMoment);
   const timings = useContext(DashboardObservations);
   const progress = jobProgress(timings.get(job.id) ?? { start: null, end: null }, now);
   return (
-    <svg
-      aria-hidden="true"
-      className={styles.branchLine}
-      viewBox={`0 ${-layout.height / 2} ${layout.width} ${layout.height}`}
-      preserveAspectRatio="none"
-    >
+    <svg aria-hidden="true" className={styles.branchLine} viewBox={viewBox} preserveAspectRatio="none">
       {geometry.edges.map((edge) => (
-        <g key={`${edge.from.id}-${edge.to.id}`}>
-          <path d={edgePath(edge)} className={styles.branchTrack} />
+        <g key={edge.id}>
+          <path d={edge.path} className={styles.branchTrack} />
           <path
-            d={edgePath(edge)}
+            d={edge.path}
             className={styles.branchProgress}
             pathLength={1}
             style={{ strokeDasharray: 1, strokeDashoffset: 1 - progress }}
@@ -153,19 +147,13 @@ function BranchLine({ job, geometry, layout }: Pick<BranchProps, 'job' | 'geomet
 }
 
 function JobBranch(props: BranchProps) {
-  const { job, geometry, layout } = props;
+  const { job, geometry, viewBox } = props;
   const agents = nodeAgents(job);
   return (
     <li className={styles.jobBranch}>
-      <BranchLine job={job} geometry={geometry} layout={layout} />
+      <BranchLine job={job} geometry={geometry} viewBox={viewBox} />
       {agents.map((agent, index) => (
-        <AgentNode
-          key={`${agent.role}-${index}`}
-          {...props}
-          agent={agent}
-          x={(geometry.nodes[index].x / layout.width) * 100}
-          y={geometry.nodes[index].y}
-        />
+        <AgentNode key={`${agent.role}-${index}`} {...props} agent={agent} position={geometry.nodes[index]} />
       ))}
     </li>
   );
@@ -177,20 +165,20 @@ export function StageJobs({
   onSelectJob,
   copy,
   selected,
-  layout,
-}: Omit<JobProps, 'job'> & { layout: StageGeometry }) {
+  geometry,
+}: Omit<JobProps, 'job'> & { geometry: StageGeometry }) {
   return (
     <ul className={styles.jobs} data-stage-jobs={stage.id}>
-      {layout.branches.map((geometry) => (
+      {geometry.branches.map((branch) => (
         <JobBranch
-          key={geometry.job}
-          job={stage.jobs.find((job) => job.id === geometry.job)!}
+          key={branch.job}
+          job={stage.jobs.find((job) => job.id === branch.job)!}
           stage={stage}
           onSelectJob={onSelectJob}
           copy={copy}
           selected={selected}
-          geometry={geometry}
-          layout={layout}
+          geometry={branch}
+          viewBox={geometry.viewBox}
         />
       ))}
     </ul>

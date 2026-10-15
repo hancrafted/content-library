@@ -138,7 +138,9 @@ Start time is below the left end; total observed duration is below the right.
 
 `scrubTimeline()`, `scrubPosition()` and `scrubTime()` map time to structure:
 each Job has an equal share within its stage gap.
-`graphGeometry()` maps these structural fractions onto the weighted stage centres
+`graphGeometry()` (`dashboard-graph-geometry.pure.ts`) is the one owner of graph
+geometry: node positions, edge paths, the CSS variables the stylesheet reads, and
+the rail stops that map these structural fractions onto the weighted stage centres
 and back, keeping the rail aligned when Show Jobs changes the stage widths.
 Completed work contributes its structural shares; an open Job contributes only
 its start boundary, never an estimated fraction or a completion. The furthest

@@ -8,19 +8,6 @@ interface Point {
   position: number;
 }
 
-/** Actual stage centres and their equivalent positions along the shared replay rail. */
-export function graphGeometry(positions: readonly number[], total: number) {
-  const centres = positions.map((position) => position / total);
-  const left = centres[0] ?? 0;
-  const right = centres.at(-1) ?? 1;
-  const width = right - left || 1;
-  const stops = centres.map((centre, index) => ({
-    at: index / Math.max(1, positions.length - 1),
-    position: (centre - left) / width,
-  }));
-  return { left, right: 1 - right, stops, width: total };
-}
-
 export function snapScrubPosition(position: number, stageCount: number): number {
   const gaps = Math.max(1, stageCount - 1);
   const stage = Math.round(position * gaps) / gaps;
