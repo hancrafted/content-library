@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import type { Job } from './episode-pipeline-definition.pure';
 import { ancestors, concurrentJobs, findCycle } from './episode-pipeline-graph.pure';
-import type { Job } from './episode-pipeline-jobs.pure';
 
 function graph(
   edges: Record<string, string[]>,
@@ -13,6 +13,7 @@ function graph(
     checks: [],
     outputs: [],
     gate: false,
+    retries: 0,
     agents: [],
   }));
   return { jobs, byId: new Map(jobs.map((job) => [job.id, job])) };

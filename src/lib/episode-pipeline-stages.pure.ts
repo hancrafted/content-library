@@ -6,7 +6,7 @@
  * field check's finding; this checks what they say.
  */
 
-import type { Job } from './episode-pipeline-jobs.pure';
+import type { Job } from './episode-pipeline-definition.pure';
 import { repeated } from './finding.pure';
 
 export function checkStages(stages: readonly string[], jobs: readonly Job[]): string[] {

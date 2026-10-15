@@ -105,6 +105,7 @@ describe('success cases', () => {
 
 describe('failure cases', () => {
   it.each([
+    'jobs: [unclosed',
     'jobs: [null]',
     'status: approved\njobs: [{id: write, needs: missing}]',
     'status: approved\njobs: [{id: write, needs: [], outputs: [], checks: [], retries: 0, agents: []}]',

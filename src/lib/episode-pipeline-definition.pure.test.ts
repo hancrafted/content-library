@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { readPipeline } from './episode-pipeline-jobs.pure';
+import { parsePipeline, readPipeline } from './episode-pipeline-definition.pure';
 
 /*
- * A new-episode pipeline read into its status and jobs: the one view of a job the schema check, the research-jobs
- * check and the status script share.
+ * The one Pipeline definition reader: a new-episode pipeline parsed once into its status, stages and jobs, the view
+ * the schema check, the dashboard, the research-jobs check and the status script share.
  */
 
 const PIPELINE = `status: approved
@@ -33,6 +33,7 @@ describe('success cases', () => {
           outputs: ['docs/episodes/<slug>/brief.md'],
           checks: ['mh', 'vitest'],
           gate: true,
+          retries: 0,
           agents: [],
         },
         {
@@ -42,6 +43,7 @@ describe('success cases', () => {
           outputs: [],
           checks: [],
           gate: false,
+          retries: 0,
           agents: [],
         },
       ],
@@ -64,8 +66,8 @@ describe('success cases', () => {
     const expected = {
       session: 'orchestrator',
       agents: [
-        { type: 'implementor', skills: ['tdd', 'commit'], session: 'orchestrator' },
-        { type: 'reviewer', skills: ['code-review'] },
+        { type: 'implementor', agent: 'general-purpose', skills: ['tdd', 'commit'], session: 'orchestrator' },
+        { type: 'reviewer', agent: 'general-purpose', skills: ['code-review'] },
       ],
     };
     // ACT
@@ -97,6 +99,56 @@ jobs:
     // ASSERT
     expect(port).toBe(expected);
   });
+
+  it("reads a job's retry limit, its foreach template and the agent definition each agent runs as", () => {
+    // ARRANGE
+    const yaml = `jobs:
+  - id: write-research
+    needs: []
+    retries: 2
+    foreach: docs/episodes/<slug>/brief.md#Research
+    agents:
+      - { type: implementor, agent: archgate:developer, skills: [tdd] }
+`;
+    const expected = {
+      retries: 2,
+      foreach: 'docs/episodes/<slug>/brief.md#Research',
+      agents: [{ type: 'implementor', agent: 'archgate:developer', skills: ['tdd'] }],
+    };
+    // ACT
+    const job = readPipeline(yaml)?.jobs[0];
+    // ASSERT
+    expect({ retries: job?.retries, foreach: job?.foreach, agents: job?.agents }).toEqual(expected);
+  });
+
+  it('parses the text once into the raw document and the typed pipeline beside it', () => {
+    // ARRANGE
+    const yaml = 'status: draft\nstages: [brief]\njobs:\n  - { id: a, stage: brief, needs: [] }\n';
+    const expected = {
+      document: { status: 'draft', stages: ['brief'], jobs: [{ id: 'a', stage: 'brief', needs: [] }] },
+      pipeline: {
+        status: 'draft',
+        stages: ['brief'],
+        jobs: [
+          {
+            id: 'a',
+            stage: 'brief',
+            needs: [],
+            wants: [],
+            outputs: [],
+            checks: [],
+            gate: false,
+            retries: 0,
+            agents: [],
+          },
+        ],
+      },
+    };
+    // ACT
+    const parsed = parsePipeline(yaml);
+    // ASSERT
+    expect(parsed).toEqual(expected);
+  });
 });
 
 describe('failure cases', () => {
@@ -109,6 +161,19 @@ describe('failure cases', () => {
     // ASSERT
     expect(pipelines).toEqual(expected);
   });
+
+  it("answers the parser's complaint for text that is not YAML, and no pipeline for a document without a job list", () => {
+    // ARRANGE
+    const texts = ['jobs: [unclosed', '- just a list'];
+    const expected = [
+      { error: expect.stringMatching(/^The pipeline is not valid YAML: /) },
+      { document: ['just a list'], pipeline: null },
+    ];
+    // ACT
+    const parsed = texts.map(parsePipeline);
+    // ASSERT
+    expect(parsed).toEqual(expected);
+  });
 });
 
 describe('edge cases', () => {
@@ -118,7 +183,7 @@ describe('edge cases', () => {
     const expected = {
       status: null,
       stages: [],
-      jobs: [{ id: 'a', needs: [], wants: [], outputs: [], checks: [], gate: false, agents: [] }],
+      jobs: [{ id: 'a', needs: [], wants: [], outputs: [], checks: [], gate: false, retries: 0, agents: [] }],
     };
     // ACT
     const pipeline = readPipeline(yaml);
