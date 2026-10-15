@@ -23,7 +23,7 @@ The job's `checks:` in `assets/pipeline.yml` run by the check table in [SKILL.md
 ## Rubric
 
 1. The Threads alternate, if the Brief has them.
-2. It matches `docs/profile/han/tone-guide.md`, when that guide exists.
-3. It follows `docs/profile/han/storytelling-guide.md`, when that guide exists.
+2. It matches `docs/profile/tone-guide.md`, when that guide exists.
+3. It follows `docs/profile/storytelling-guide.md`, when that guide exists.
 4. Every instruction the Brief gives about how to tell the story is followed.
 5. Every actionable of the Brief is spoken in some Voice script.

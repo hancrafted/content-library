@@ -18,9 +18,8 @@ next-env.d.ts
 # OS
 .DS_Store
 
-# Profile documents stay private; the voice guides the new-episode pipeline reads are shared.
-docs/profile/han/*
-!docs/profile/han/*-guide.md
+# Private profile documents; the shared voice guides sit one level up in docs/profile/.
+docs/profile/han/
 
 # Per-feature handoffs and agent scratch work (see AGENTS.md).
 .scratch/

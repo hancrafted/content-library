@@ -204,9 +204,9 @@ jobs:
           - docs/episodes/demo-episode/run-log.md
           - docs/episodes/demo-episode/research/*/research.md
           - docs/episodes/demo-episode/reference/*/design-reference.md
-          - docs/profile/han/storytelling-guide.md
-          - docs/profile/han/tone-guide.md
-          - docs/profile/han/mental-model-guide.md
+          - docs/profile/storytelling-guide.md
+          - docs/profile/tone-guide.md
+          - docs/profile/mental-model-guide.md
         model: inherit
       - type: reviewer
         skills: []
@@ -232,17 +232,17 @@ jobs:
           - references/write-voice-script.md
           - docs/episodes/demo-episode/brief.md
           - docs/episodes/demo-episode/dossier.md
-          - docs/profile/han/storytelling-guide.md
-          - docs/profile/han/tone-guide.md
-          - docs/profile/han/mental-model-guide.md
+          - docs/profile/storytelling-guide.md
+          - docs/profile/tone-guide.md
+          - docs/profile/mental-model-guide.md
         model: inherit
       - type: reviewer
         skills: []
         references:
           - references/write-voice-script.md
           - docs/episodes/demo-episode/brief.md
-          - docs/profile/han/storytelling-guide.md
-          - docs/profile/han/tone-guide.md
+          - docs/profile/storytelling-guide.md
+          - docs/profile/tone-guide.md
         rubric: references/write-voice-script.md#rubric
         model: opus
 
