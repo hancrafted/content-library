@@ -110,7 +110,7 @@ describe('failure cases', () => {
       'Job "brief-grill", agent 1 lacks the key "skills".',
       'Job "brief-grill", agent 1 has an unknown key "skill"; the keys are type, skills, references, rubric, agent, model, session.',
       'Job "research" lacks the key "retries".',
-      'Job "research" has an unknown key "retry"; the keys are id, stage, intent, needs, wants, isolation, foreach, before, outputs, checks, retries, gate, agents.',
+      'Job "research" has an unknown key "retry"; the keys are id, stage, intent, needs, wants, isolation, foreach, before, outputs, checks, retries, gate, port, agents.',
     ];
     // ACT
     const messages = check(yaml);
@@ -380,6 +380,19 @@ describe('failure cases', () => {
     ];
     // ACT
     const messages = check(yaml, { ...CONTEXT, perRun: true });
+    // ASSERT
+    expect(messages).toEqual(expected);
+  });
+
+  it('rejects a port in the template, where customize-pipeline has assigned none, and outside the build stage', () => {
+    // ARRANGE
+    const yaml = PIPELINE.replace('    gate: human\n', '    gate: human\n    port: 4001\n');
+    const expected = [
+      'Job "brief-grill" has port 4001; the template assigns no port, customize-pipeline assigns one per run.',
+      'Job "brief-grill" of stage "brief" has port 4001; only a job of the build stage serves a dev server.',
+    ];
+    // ACT
+    const messages = check(yaml);
     // ASSERT
     expect(messages).toEqual(expected);
   });

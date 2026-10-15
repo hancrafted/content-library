@@ -1,10 +1,11 @@
 /*
  * The vocabulary of a new-episode pipeline: the values its keys allow and the
- * fields each mapping (the pipeline, a job, an agent) holds. The checks that
- * read them live in episode-pipeline.pure.ts.
+ * fields each mapping (the pipeline, a job, an agent) holds, and the relaxed
+ * set the dashboard reads a legacy Run by. The checks that read them live in
+ * episode-pipeline.pure.ts and dashboard-projection.pure.ts.
  */
 
-import { field, isString, isStringList, optional, requiredWhen, type Field } from './mapping-fields.pure';
+import { field, isMapping, isString, isStringList, optional, requiredWhen, type Field } from './mapping-fields.pure';
 
 const AGENT_TYPES = ['implementor', 'reviewer'];
 /** The models an agent may run on; `inherit` runs it on the orchestrator's model. */
@@ -63,6 +64,13 @@ export const JOB_FIELDS = [
   field('checks', isStringList, LIST),
   field('retries', (value) => Number.isInteger(value) && Number(value) >= 0, 'it must be a whole number of 0 or more'),
   optional(field('gate', (value) => value === 'human', 'the only gate is human')),
+  optional(
+    field(
+      'port',
+      (value) => Number.isInteger(value) && Number(value) >= 1024 && Number(value) <= 65535,
+      'it must be a whole number from 1024 to 65535',
+    ),
+  ),
   field('agents', (value) => Array.isArray(value) && value.length > 0, 'it must be a non-empty list of agents'),
 ];
 
@@ -78,3 +86,17 @@ export function agentFields(reviewer: boolean): Field[] {
     optional(field('session', (value) => SESSIONS.includes(value as string), `it must be ${oneOf(SESSIONS)}`)),
   ];
 }
+
+const relaxed = (fields: readonly Field[], key: string) =>
+  fields.map((candidate) => (candidate.key === key ? optional(candidate) : candidate));
+const LEGACY_TICKET = optional(field('ticket', isMapping, 'it must be a mapping of agent and skills'));
+
+/**
+ * The fields the dashboard still reads a Run by. A Run scaffolded before the stages layer lists no `stages` and no
+ * Job `stage`, and its implementors may carry the `ticket` block of the per-ticket fan-out the Build Jobs replaced.
+ */
+export const LEGACY_FIELDS = {
+  top: relaxed(TOP_FIELDS, 'stages'),
+  job: relaxed(JOB_FIELDS, 'stage'),
+  agent: (reviewer: boolean): Field[] => [...agentFields(reviewer), LEGACY_TICKET],
+};

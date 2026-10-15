@@ -18,6 +18,8 @@ export interface WriterDeps {
   id?: (bytes: number) => string;
   /** The trimmed stdout of `git <args>`. */
   git?: (...args: string[]) => string;
+  /** The longest wait for the lock, in ms; `RUN_LOG_LOCK_WAIT_MS` still shortens it for tests. */
+  lockWaitMs?: number;
 }
 
 export type WriteResult = { ok: true; line: string } | { ok: false; errors: string[] };
@@ -36,8 +38,8 @@ export class LockTimeoutError extends Error {
   }
 }
 
-/** The wait in ms; `RUN_LOG_LOCK_WAIT_MS` shortens it for tests. */
-const lockWait = (): number => Number(process.env.RUN_LOG_LOCK_WAIT_MS) || LOCK_WAIT_MS;
+/** The wait in ms: `RUN_LOG_LOCK_WAIT_MS` (tests), else the caller's, else the default. */
+const lockWait = (wanted?: number): number => Number(process.env.RUN_LOG_LOCK_WAIT_MS) || wanted || LOCK_WAIT_MS;
 
 const sleep = (ms: number): unknown => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
 
@@ -71,8 +73,9 @@ function release(lockFile: string, token: string): void {
 }
 
 /** Runs `work` while holding the lock, and releases it however `work` ends. */
-function withLock<T>(lockFile: string, work: () => T): T {
-  const deadline = Date.now() + lockWait();
+function withLock<T>(lock: { file: string; waitMs?: number }, work: () => T): T {
+  const lockFile = lock.file;
+  const deadline = Date.now() + lockWait(lock.waitMs);
   const token = randomBytes(16).toString('hex');
   while (!tryLock(lockFile, token)) {
     if (Date.now() > deadline) throw new LockTimeoutError(lockFile);
@@ -99,7 +102,11 @@ export interface LogLocation {
 }
 
 /** The event with what only git and the clock know filled in for a start-run. */
-function withRunFacts(event: LogEvent, t: string, git: (...args: string[]) => string): LogEvent {
+function withRunFacts(
+  event: Extract<LogEvent, { kind: 'start-run' }>,
+  t: string,
+  git: (...args: string[]) => string,
+): LogEvent {
   return {
     ...event,
     run_id: event.run_id ?? t.replace(/:/g, '-'),
@@ -109,7 +116,7 @@ function withRunFacts(event: LogEvent, t: string, git: (...args: string[]) => st
 }
 
 /** What the line about to be written is stamped with: the injected clock, ids and git, resolved. */
-type ResolvedDeps = Required<WriterDeps>;
+type ResolvedDeps = Required<Omit<WriterDeps, 'lockWaitMs'>>;
 
 /** The trace a new line joins: a fresh one for a start-run, else the newest Run's; a message when there is no Run. */
 function traceFor(event: unknown, current: RunLogLine | null, src: ResolvedDeps): string | { error: string } {
@@ -117,9 +124,9 @@ function traceFor(event: unknown, current: RunLogLine | null, src: ResolvedDeps)
   return current === null ? { error: 'the log has no start-run line; log kind "start-run" first' } : current.trace_id;
 }
 
-/** A message when an end, attrs or score names a span no start line opened, else null. */
+/** A message when an end, attrs, score or event line names a span no start line opened, else null. */
 function unknownTarget(line: RunLogLine, lines: readonly RunLogLine[]): string | null {
-  if (!['end', 'end-run', 'attrs', 'score'].includes(line.kind)) return null;
+  if (!['end', 'end-run', 'attrs', 'score', 'event'].includes(line.kind)) return null;
   const known = lines.some((l) => (l.kind === 'start' || l.kind === 'start-run') && l.span_id === line.span_id);
   return known ? null : `${line.kind} targets span_id ${String(line.span_id)}, which no start line opened`;
 }
@@ -153,5 +160,6 @@ export function appendEvent(at: LogLocation, event: unknown, deps: WriterDeps = 
     id: deps.id ?? ((bytes) => randomBytes(bytes).toString('hex')),
     git: deps.git ?? realGit,
   };
-  return withLock(`${path.resolve(at.root, at.file)}.lock`, () => appendLocked(at, event, src));
+  const lock = { file: `${path.resolve(at.root, at.file)}.lock`, waitMs: deps.lockWaitMs };
+  return withLock(lock, () => appendLocked(at, event, src));
 }

@@ -1,6 +1,5 @@
 import type { Span } from '../../skills/new-episode/scripts/run-log.schema.pure';
 import type { DashboardJob } from './dashboard-projection.pure';
-import { parseDescription } from './episode-spawn-description.pure';
 
 /** The grouping for a pipeline that lists no `stages`: Runs scaffolded before the stages layer existed. */
 const LEGACY_STAGES = [
@@ -15,26 +14,6 @@ const LEGACY_STAGES = [
   { id: 'pr', jobs: ['open-pr'] },
 ];
 
-/** A stage's title from the message files' `stageNames`; an id they do not name is title-cased, `publish-recording` as Publish Recording. */
-export function stageTitle(id: string, names: Readonly<Record<string, string>>): string {
-  return (
-    names[id] ??
-    id
-      .split('-')
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ')
-  );
-}
-
-/** The prefixes `customize-pipeline` gives the Jobs it writes from a `foreach` template. */
-const FAN_OUT_PREFIXES = ['write-research-', 'implement-section-'];
-
-/** A fan-out Job's readable name, what follows its template prefix with hyphens as spaces; any other Job keeps its id. */
-export function jobLabel(id: string): string {
-  const prefix = FAN_OUT_PREFIXES.find((candidate) => id.startsWith(candidate) && id.length > candidate.length);
-  return prefix ? id.slice(prefix.length).replaceAll('-', ' ') : id;
-}
-
 function legacyStage(job: DashboardJob): string {
   if (job.id.startsWith('write-research-')) return 'research';
   if (job.id.startsWith('implement-section-')) return 'build';
@@ -46,10 +25,17 @@ export const isComplete = (state: DashboardState): boolean => state === 'ok' || 
 export const needsAttention = (state: DashboardState): boolean =>
   ['gate', 'error', 'refused', 'crashed'].includes(state);
 
-/** A stage's or Job's state as shown: the gate and a finished state in words, any other state as it is. */
-export function stateText(state: DashboardState, words: { gate: string; complete: string }): string {
-  if (state === 'gate') return words.gate;
-  return isComplete(state) ? words.complete : state;
+/** A Job waiting on Han or ended badly, or whose latest Attempt's reviewer left a line only Han can judge. */
+export function jobNeedsAttention(job: Pick<DashboardJob, 'state' | 'attempts' | 'scores'>): boolean {
+  if (needsAttention(job.state)) return true;
+  const latest = job.attempts.reduce<Span | undefined>(
+    (last, span) => (last && last.seq > span.seq ? last : span),
+    undefined,
+  );
+  return (
+    latest !== undefined &&
+    job.scores.some((score) => score.span_id === latest.span_id && score.value === 'needs-human')
+  );
 }
 
 function groupState(states: DashboardState[]): DashboardState {
@@ -80,7 +66,7 @@ export function projectStages(jobs: readonly DashboardJob[], order: readonly str
     planned: grouped.some((job) => job.foreach === undefined),
     state: groupState(grouped.map((job) => job.state)),
     completed: grouped.filter((job) => isComplete(job.state)).length,
-    attention: grouped.filter((job) => needsAttention(job.state)).length,
+    attention: grouped.filter(jobNeedsAttention).length,
   }));
   return {
     stages,
@@ -90,12 +76,6 @@ export function projectStages(jobs: readonly DashboardJob[], order: readonly str
 }
 
 export type DashboardStage = ReturnType<typeof projectStages>['stages'][number];
-
-export function runningAgents(job: DashboardJob): Span[] {
-  return job.agents.filter(
-    (agent) => agentState(job, agent) === 'running' && (!job.span || agent.trace_id === job.span.trace_id),
-  );
-}
 
 /** A missing end is not proof of activity once its Job or Attempt has ended; raw folded evidence stays intact. */
 export function agentState(job: DashboardJob, agent: Span): DashboardState {
@@ -121,29 +101,4 @@ export function stageLayers(stage: DashboardStage): DashboardJob[][] {
   const layers: DashboardJob[][] = [];
   for (const job of stage.jobs) (layers[levelOf(job.id)] ??= []).push(job);
   return layers;
-}
-
-export function agentIdentity(span: Span) {
-  const parsed = parseDescription(span.description ?? '');
-  if (parsed && parsed.job === span.job) return { ticket: span.ticket ?? parsed.ticket, role: parsed.role };
-  return { ticket: span.ticket, role: span.role ?? span.name };
-}
-
-/** A lane is an observed ticket's sessions, never an inferred ticket or an estimate of remaining work. */
-export function jobLanes(job: DashboardJob) {
-  const groups = new Map<number | undefined, Span[]>();
-  for (const agent of job.agents) {
-    if (job.span && agent.trace_id !== job.span.trace_id) continue;
-    const { ticket } = agentIdentity(agent);
-    const group = groups.get(ticket) ?? [];
-    group.push(agent);
-    groups.set(ticket, group);
-  }
-  return [...groups].map(([ticket, agents]) => {
-    const latest = new Map<string, Span>();
-    for (const agent of [...agents].sort((a, b) => Date.parse(a.start_t) - Date.parse(b.start_t) || a.seq - b.seq)) {
-      latest.set(ticket === undefined ? agent.span_id : agentIdentity(agent).role, agent);
-    }
-    return { ticket, agents, state: groupState([...latest.values()].map((agent) => agentState(job, agent))) };
-  });
 }
