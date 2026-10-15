@@ -5,7 +5,7 @@
 // pipeline check uses; they import nothing but `yaml`, so bare node runs them.
 
 import { readPipeline, type Job } from '../../../src/lib/episode-pipeline-definition.pure.ts';
-import { gateTier } from '../../../src/lib/staging-file.pure.ts';
+import { gateTier, metaGateTier } from '../../../src/lib/staging-file.pure.ts';
 import type { Folded, Span } from './run-log.pure.ts';
 import { formatDuration } from './run-log.pure.ts';
 import { labelled, skillWarningsOf, type SkillWarning } from './status-skills.pure.ts';
@@ -14,11 +14,14 @@ export type JobState = 'done' | 'running' | 'gate' | 'blocked' | 'ready' | 'wait
 
 /**
  * Whether one output opens its gate: a markdown staging file once its trust tier is approved (`gateTier`, from
- * `verified` and `generated.at`), and any other file, pipeline.yml, once its `status:` is approved (design-ADR
- * 0005 keeps `status: approved` there because it is config, not markdown).
+ * `verified` and `generated.at`), the HTML Spec by the same tier read from its meta block (design-ADR 0011), and any
+ * other file, pipeline.yml, once its `status:` is approved (design-ADR 0005 keeps `status: approved` there because it
+ * is config, not markdown).
  */
 export function outputApproved(file: string, text: string): boolean {
-  return file.endsWith('.md') ? gateTier(text) === 'approved' : readPipeline(text)?.status === 'approved';
+  if (file.endsWith('.md')) return gateTier(text) === 'approved';
+  if (file.endsWith('.html')) return metaGateTier(text) === 'approved';
+  return readPipeline(text)?.status === 'approved';
 }
 
 /** The latest job span per job id, by start time then sequence: a retried job reads as its last run. A `reused` span stands for the earlier Run's ok span. */

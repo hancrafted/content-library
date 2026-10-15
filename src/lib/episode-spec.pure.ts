@@ -23,7 +23,7 @@ import { load, type CheerioAPI } from 'cheerio';
 import { checkSlide, FORM } from './episode-spec-slide.pure';
 import { checkCitations, checkVoiceScripts } from './episode-spec-words.pure';
 import { unless, type Finding } from './finding.pure';
-import { gateTier } from './staging-file.pure';
+import { metaGateTier } from './staging-file.pure';
 import { blocksOf, bodyLines } from './staging-markdown.pure';
 
 const SPEC_FILE = 'spec/spec.html';
@@ -54,15 +54,6 @@ function checkMeta(text: string | undefined): string[] {
   const missing = META_FIELDS.filter((field) => meta[field] === undefined);
   if (missing.length > 0) return [`The meta block lacks "${missing.join('", "')}".`];
   return unless(meta.type === 'spec', `The meta block's type is ${JSON.stringify(meta.type)}, not "spec".`);
-}
-
-/**
- * Whether Han approved the Spec. JSON is YAML, so the meta block reads as
- * frontmatter and the gate tiers of design-ADR 0005 apply unchanged: an
- * approval older than `generated.at` does not count.
- */
-function approved(text: string | undefined): boolean {
-  return text !== undefined && gateTier(`---\n${text.trim()}\n---\n`) === 'approved';
 }
 
 /** Markup with its whitespace collapsed and dropped beside tags, so a reformatted copy still compares equal. */
@@ -128,7 +119,7 @@ export function checkSpec(files: Readonly<Record<string, string>>, reviewAsset: 
   if (html === undefined) return [];
   const $ = load(html);
   const meta = metaText($);
-  const isApproved = approved(meta);
+  const isApproved = metaGateTier(html) === 'approved';
   const dossier = files[DOSSIER_FILE];
   const messages = [
     ...checkMeta(meta),
