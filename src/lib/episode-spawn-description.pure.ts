@@ -1,4 +1,4 @@
-import { JOB_ID } from './episode-pipeline-jobs.pure.ts';
+import { JOB_ID } from './episode-pipeline-definition.pure.ts';
 
 export interface ParsedDescription {
   job: string;

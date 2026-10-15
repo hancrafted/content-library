@@ -2,18 +2,6 @@ import type { DashboardView } from '@/lib/dashboard-projection.pure';
 import type { EpisodeRead } from '@/lib/dashboard-reader.pure';
 import type { DashboardCopy } from './dashboard-evidence';
 
-export function SourceStatus({ read, name, copy }: { read: EpisodeRead; name?: string; copy: DashboardCopy }) {
-  const tone = read.condition === 'live' ? 'text-(--success)' : 'text-(--warning)';
-  return (
-    <div className="min-w-0 space-y-1">
-      <p role="status" className={`text-caption font-medium ${tone}`}>
-        {copy[read.condition]}
-      </p>
-      <p className="text-body font-semibold wrap-anywhere">{name}</p>
-    </div>
-  );
-}
-
 export function SourceErrors({
   errors,
   copy,

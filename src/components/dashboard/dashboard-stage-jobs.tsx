@@ -1,119 +1,170 @@
-import { spanElapsed } from '@/lib/dashboard-elapsed.pure';
-import type { DashboardJob } from '@/lib/dashboard-projection.pure';
-import { jobLabel, runningAgents, stageLayers, stateText, type DashboardStage } from '@/lib/dashboard-stages.pure';
+import { agentElapsed, spanElapsed } from '@/lib/dashboard-elapsed.pure';
+import type { BranchGeometry, StageGeometry } from '@/lib/dashboard-graph-geometry.pure';
+import type { AgentNode, JobNode, StageNode } from '@/lib/dashboard-graph-view.pure';
+import { jobProgress } from '@/lib/dashboard-scrub.pure';
 import { fillTemplate } from '@/lib/template.pure';
-import { ArrowDown, GitBranch } from 'lucide-react';
-import { useContext, type CSSProperties } from 'react';
-import { ElapsedTime, type DashboardCopy } from './dashboard-evidence';
+import { useContext } from 'react';
+import { JobChipList } from './dashboard-chips';
+import { ElapsedTime, StateBadge, type DashboardCopy } from './dashboard-evidence';
 import styles from './dashboard-graph.module.css';
 import { PreviewButton } from './dashboard-job-links';
 import { DashboardMoment } from './dashboard-moment';
+import { DashboardObservations } from './dashboard-observations';
+import { blurGraphPopover, dismissGraphPopover, leaveGraphPopover, openGraphPopover } from './dashboard-popover';
 import { AttentionMarker, StageStateIcon } from './dashboard-state-icon';
 
 export type SelectJob = (stage: string, job: string) => void;
 
 interface JobProps {
-  stage: DashboardStage;
-  job: DashboardJob;
+  node: JobNode;
   onSelectJob: SelectJob;
   copy: DashboardCopy;
 }
 
-function JobStatus({ job, copy }: Pick<JobProps, 'job' | 'copy'>) {
-  const { now } = useContext(DashboardMoment);
-  const sessions = runningAgents(job).length;
-  if (job.foreach !== undefined) {
-    const heading = job.foreach.split('#').at(-1) ?? job.foreach;
-    return (
-      <span className="block text-caption text-muted-foreground">{fillTemplate(copy.graph.onePer, { heading })}</span>
-    );
-  }
-  return (
-    <>
-      <span className="block text-caption text-(--node-tone)">
-        {stateText(job.state, { gate: copy.waitingOnHan, complete: copy.graph.complete })}
-      </span>
-      {job.span ? (
-        <span className="block text-caption">
-          <ElapsedTime elapsed={spanElapsed(job.span, now)} copy={copy} />
-        </span>
-      ) : null}
-      {sessions > 0 ? (
-        <span className="block text-caption text-(--info)">
-          {fillTemplate(copy.graph.running, { count: sessions })}
-        </span>
-      ) : null}
-    </>
-  );
+interface BranchProps extends JobProps {
+  geometry: BranchGeometry;
+  viewBox: string;
 }
 
-/** A fan-out Job shows its readable label; screen readers and the tooltip keep the full id. */
-function JobName({ id }: { id: string }) {
-  const label = jobLabel(id);
-  if (label === id) return <span className="block text-caption font-medium">{id}</span>;
+interface NodeProps extends JobProps {
+  agent: AgentNode;
+  position: { left: string; top: string };
+}
+
+function FanOutLabel({ node, copy }: Pick<JobProps, 'node' | 'copy'>) {
+  if (node.fanOut === undefined) return null;
   return (
-    <span className="block text-caption font-medium">
-      <span className="sr-only">{id}</span>
-      <span aria-hidden="true">{label}</span>
+    <span className="block text-caption text-muted-foreground">
+      {fillTemplate(copy.graph.onePer, { heading: node.fanOut })}
     </span>
   );
 }
 
-function JobNode({ stage, job, onSelectJob, copy }: JobProps) {
-  const template = job.foreach !== undefined;
+function JobPopover({ node, agent, onSelectJob, copy }: JobProps & { agent: AgentNode }) {
+  const { now } = useContext(DashboardMoment);
+  const { job } = node;
+  const elapsed =
+    agent.span && (agent.span.type === 'agent' ? agentElapsed(job, agent.span, now) : spanElapsed(agent.span, now));
   return (
-    <li className="min-w-0">
+    <div className={`${styles.popover} shadow-header`} popover="manual" data-dashboard-popover>
       <button
         type="button"
-        data-job={job.id}
-        title={job.id}
-        data-state={template ? 'template' : job.state}
-        aria-controls="dashboard-stage-detail"
-        onClick={() => onSelectJob(stage.id, job.id)}
-        className={`${styles.job} cursor-pointer transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring`}
+        tabIndex={-1}
+        onClick={() => onSelectJob(node.stage, node.id)}
+        className="block w-full cursor-pointer space-y-2 text-left focus-visible:outline-2 focus-visible:outline-ring"
       >
-        <span className={styles.jobDot}>
-          <StageStateIcon state={job.state} className="size-4" />
+        <span className="block text-caption font-semibold wrap-anywhere">{agent.label}</span>
+        <span className="flex flex-wrap items-center gap-2 text-caption">
+          <StageStateIcon state={agent.state} />
+          <StateBadge state={agent.state} />
+          <ElapsedTime elapsed={elapsed ?? null} copy={copy} />
+          <AttentionMarker attention={node.attention} label={copy.graph.jobAttention} />
         </span>
-        <span className="min-w-0 flex-1 wrap-anywhere">
-          <JobName id={job.id} />
-          <JobStatus job={job} copy={copy} />
-        </span>
-        <AttentionMarker job={job} label={copy.graph.jobAttention} />
+        <JobChipList job={job} copy={copy} />
+        <FanOutLabel node={node} copy={copy} />
       </button>
-      <PreviewButton job={job} copy={copy} className="mt-1 ml-2" />
-    </li>
+      <PreviewButton job={job} copy={copy} className="mt-2" tabIndex={-1} />
+    </div>
   );
 }
 
-function Layer({ jobs, index, ...props }: Omit<JobProps, 'job'> & { jobs: DashboardJob[]; index: number }) {
+function AgentButton({ node, agent, onSelectJob, copy }: NodeProps) {
   return (
-    <li className="space-y-2">
-      {index > 0 ? <ArrowDown aria-hidden="true" className="mx-auto size-4 text-muted-foreground" /> : null}
-      {jobs.length > 1 ? (
-        <p className="flex items-center gap-1 text-caption text-muted-foreground">
-          <GitBranch aria-hidden="true" className="size-4 shrink-0" />
-          {fillTemplate(props.copy.graph.parallel, { count: jobs.length })}
-        </p>
-      ) : null}
-      <ul className="space-y-2" aria-label={fillTemplate(props.copy.graph.step, { number: index + 1 })}>
-        {jobs.map((job) => (
-          <JobNode key={job.id} job={job} {...props} />
-        ))}
-      </ul>
-    </li>
+    <button
+      type="button"
+      data-job={node.id}
+      data-template={node.fanOut !== undefined}
+      data-state={agent.state}
+      aria-label={`${agent.label} · ${copy.states[agent.state]}`}
+      aria-expanded={node.selected}
+      aria-controls="dashboard-stage-detail"
+      onClick={() => onSelectJob(node.stage, node.id)}
+      className={`${styles.job} cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring`}
+    >
+      <span className={styles.jobDot}>
+        <StageStateIcon state={agent.state} className="size-4" />
+      </span>
+    </button>
   );
 }
 
-/** A stage's Jobs in dependency layers: a layer's Jobs run in parallel, the next layer follows it. */
-export function StageJobs({ stage, index, onSelectJob, copy }: Omit<JobProps, 'job'> & { index: number }) {
-  const style = { '--stage-index': index } as CSSProperties;
-  if (stage.jobs.length === 0) return null;
+function AgentNodeView(props: NodeProps) {
+  const { node, agent, position, onSelectJob, copy } = props;
   return (
-    <ol className={`${styles.jobs} space-y-2`} style={style} data-stage-jobs={stage.id}>
-      {stageLayers(stage).map((jobs, layer) => (
-        <Layer key={layer} jobs={jobs} index={layer} stage={stage} onSelectJob={onSelectJob} copy={copy} />
+    <div
+      className={styles.branchNode}
+      data-graph-node
+      style={{ left: position.left, top: position.top }}
+      onPointerEnter={(event) => openGraphPopover(event.currentTarget)}
+      onPointerLeave={(event) => leaveGraphPopover(event.currentTarget)}
+      onFocusCapture={(event) => openGraphPopover(event.currentTarget)}
+      onBlurCapture={blurGraphPopover}
+      onKeyDown={dismissGraphPopover}
+    >
+      <AgentButton {...props} />
+      <JobPopover node={node} agent={agent} onSelectJob={onSelectJob} copy={copy} />
+    </div>
+  );
+}
+
+function BranchLine({ node, geometry, viewBox }: Pick<BranchProps, 'node' | 'geometry' | 'viewBox'>) {
+  const { now } = useContext(DashboardMoment);
+  const timings = useContext(DashboardObservations);
+  const progress = jobProgress(timings.get(node.id) ?? { start: null, end: null }, now);
+  return (
+    <svg aria-hidden="true" className={styles.branchLine} viewBox={viewBox} preserveAspectRatio="none">
+      {geometry.edges.map((edge) => (
+        <g key={edge.id}>
+          <path d={edge.path} className={styles.branchTrack} />
+          <path
+            d={edge.path}
+            className={styles.branchProgress}
+            pathLength={1}
+            style={{ strokeDasharray: 1, strokeDashoffset: 1 - progress }}
+            data-branch-progress={progress}
+          />
+        </g>
       ))}
-    </ol>
+    </svg>
+  );
+}
+
+function JobBranch(props: BranchProps) {
+  const { node, geometry, viewBox } = props;
+  return (
+    <li className={styles.jobBranch}>
+      <BranchLine node={node} geometry={geometry} viewBox={viewBox} />
+      {node.agents.map((agent) => (
+        <AgentNodeView
+          key={agent.id}
+          {...props}
+          agent={agent}
+          position={geometry.nodes.find((point) => point.id === agent.id)!}
+        />
+      ))}
+    </li>
+  );
+}
+
+/** Parallel Jobs fan out around the spine; dependency layers and configured agent order run left to right. */
+export function StageJobs({
+  stage,
+  onSelectJob,
+  copy,
+  geometry,
+}: Omit<JobProps, 'node'> & { stage: StageNode; geometry: StageGeometry }) {
+  return (
+    <ul className={styles.jobs} data-stage-jobs={stage.id}>
+      {geometry.branches.map((branch) => (
+        <JobBranch
+          key={branch.job}
+          node={stage.nodes.find((node) => node.id === branch.job)!}
+          onSelectJob={onSelectJob}
+          copy={copy}
+          geometry={branch}
+          viewBox={geometry.viewBox}
+        />
+      ))}
+    </ul>
   );
 }

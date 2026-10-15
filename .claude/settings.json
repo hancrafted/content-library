@@ -8,6 +8,32 @@
           {
             "type": "command",
             "command": "node \"${CLAUDE_PROJECT_DIR}/.agents/skills/markdown-harness/scripts/assess-hook.mjs\""
+          },
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PROJECT_DIR}/skills/new-episode/scripts/claude-adapter.ts\" read",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "Skill",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PROJECT_DIR}/skills/new-episode/scripts/claude-adapter.ts\" skill",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "InstructionsLoaded": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PROJECT_DIR}/skills/new-episode/scripts/claude-adapter.ts\" instructions",
+            "async": true
           }
         ]
       }

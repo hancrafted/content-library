@@ -6,7 +6,7 @@
  * This keeps the two in step: every listed folder has a job writing it, and every job writes a listed folder.
  */
 
-import { readPipeline } from './episode-pipeline-jobs.pure';
+import { readPipeline } from './episode-pipeline-definition.pure';
 import type { Finding } from './finding.pure';
 
 const TEMPLATE_JOB = 'write-research';

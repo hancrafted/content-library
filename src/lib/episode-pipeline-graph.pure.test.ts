@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { ancestors, concurrentJobs, findCycle } from './episode-pipeline-graph.pure';
-import type { Job } from './episode-pipeline-jobs.pure';
+import type { Job } from './episode-pipeline-definition.pure';
+import { ancestors, concurrentJobs } from './episode-pipeline-graph.pure';
 
 function graph(
   edges: Record<string, string[]>,
@@ -10,8 +10,10 @@ function graph(
     id,
     needs,
     wants: wanted[id] ?? [],
+    checks: [],
     outputs: [],
     gate: false,
+    retries: 0,
     agents: [],
   }));
   return { jobs, byId: new Map(jobs.map((job) => [job.id, job])) };
@@ -54,28 +56,27 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('names the jobs along a cycle, back to where it starts', () => {
+  it('stops collecting ancestors at a cycle, naming each job along it once', () => {
     // ARRANGE
-    const { jobs, byId } = graph({ a: ['c'], b: ['a'], c: ['b'] });
-    const expected = ['a', 'c', 'b', 'a'];
+    const { byId } = graph({ a: ['c'], b: ['a'], c: ['b'] });
+    const expected = ['a', 'b', 'c'];
     // ACT
-    const cycle = findCycle(jobs, byId);
+    const upstream = [...ancestors('a', byId)].sort();
     // ASSERT
-    expect(cycle).toEqual(expected);
+    expect(upstream).toEqual(expected);
   });
 });
 
 describe('edge cases', () => {
-  it('finds no cycle in a diamond, and stops collecting ancestors at a cycle and at an unknown need', () => {
+  it('collects an unknown need without following it, and finds no concurrency in a chain', () => {
     // ARRANGE
-    const diamond = graph({ a: [], b: ['a'], c: ['a'], d: ['b', 'c'] });
-    const looped = graph({ a: ['b', 'ghost'], b: ['a'] });
-    const expected = ['a', 'b', 'ghost'];
+    const { jobs, byId } = graph({ a: ['ghost'], b: ['a'] });
+    const expected = ['a', 'ghost'];
     // ACT
-    const cycle = findCycle(diamond.jobs, diamond.byId);
-    const upstream = [...ancestors('a', looped.byId)].sort();
+    const upstream = [...ancestors('b', byId)].sort();
+    const concurrent = [...concurrentJobs(jobs, byId)];
     // ASSERT
-    expect(cycle).toBeNull();
     expect(upstream).toEqual(expected);
+    expect(concurrent).toEqual([]);
   });
 });

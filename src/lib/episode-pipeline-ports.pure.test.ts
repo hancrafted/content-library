@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { Job } from './episode-pipeline-jobs.pure';
+import type { Job } from './episode-pipeline-definition.pure';
 import { checkPorts } from './episode-pipeline-ports.pure';
 
 /*
@@ -8,7 +8,18 @@ import { checkPorts } from './episode-pipeline-ports.pure';
  */
 
 function job(id: string, stage: string, port?: number): Job {
-  return { id, stage, needs: [], wants: [], outputs: [], gate: false, agents: [], ...(port !== undefined && { port }) };
+  return {
+    id,
+    stage,
+    needs: [],
+    wants: [],
+    outputs: [],
+    checks: [],
+    gate: false,
+    retries: 0,
+    agents: [],
+    ...(port !== undefined && { port }),
+  };
 }
 
 const APPROVED = { perRun: true, expanded: true };
@@ -110,7 +121,9 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('leaves a job with no stage to the stage check', () => {
     // ARRANGE
-    const jobs: Job[] = [{ id: 'unstaged', needs: [], wants: [], outputs: [], gate: false, agents: [] }];
+    const jobs: Job[] = [
+      { id: 'unstaged', needs: [], wants: [], outputs: [], checks: [], gate: false, retries: 0, agents: [] },
+    ];
     const expected: string[] = [];
     // ACT
     const findings = checkPorts(jobs, APPROVED);

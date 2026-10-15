@@ -5,7 +5,7 @@
  * pipeline are approved separately; this keeps the two lists equal.
  */
 
-import { readPipeline } from './episode-pipeline-jobs.pure';
+import { readPipeline } from './episode-pipeline-definition.pure';
 import type { Finding } from './finding.pure';
 
 const JOB = 'convert-references';
