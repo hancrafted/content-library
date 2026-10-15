@@ -109,8 +109,14 @@ _Avoid_: Publish, migration, release
 **Run**: one execution of an Episode's per-run pipeline, from its start to the moment it is finished or abandoned. An Episode can have many Runs, each one comparable with the others.
 _Avoid_: Session, execution, pipeline run
 
-**Job**: one step of the per-run pipeline, such as writing the Dossier, which a Run does once or repeats until it passes.
-_Avoid_: Task, stage, step
+**Job**: one step of the per-run pipeline, such as writing the Dossier, which a Run does once or repeats until it passes. Each Job belongs to one Stage.
+_Avoid_: Task, step
+
+**Stage**: one of the ordered phases a Run moves through (Brief, Setup, Research, Dossier, Specification, Build, PR), grouping the Jobs that serve it. A Job waits only for Jobs of its own or an earlier Stage, and a Stage may hold no Job.
+_Avoid_: Phase, step
+
+**Spec**: the two files the Specification Stage writes in Staging: the build spec, what each Section's Build Job builds, and the design spec, how every Slide looks, which Han approves at its Gate.
+_Avoid_: Ticket, spec issue
 
 **Attempt**: one try at a Job, numbered from 1. A retry is a new Attempt that names the Attempt it retries.
 _Avoid_: Iteration, round

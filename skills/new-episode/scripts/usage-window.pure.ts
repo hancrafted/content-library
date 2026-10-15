@@ -1,7 +1,7 @@
 // The orchestrator's measured usage over a window of its transcripts: the one method end-run uses for the Run total
 // (claude-adapter.pure.ts `runUsageEvent`) and end-job uses for a Job that ran in the orchestrator session. Pure.
-import type { LogEvent, RunLogLine } from './run-log.pure.ts';
-import { entries, modelOf, skillsInvoked, usageOf, type Entry } from './transcript.pure.ts';
+import type { LogEvent, MeasuredFacts, RunLogLine } from './run-log.pure.ts';
+import { entries, modelOf, skillsInvoked, usageOf, type Entry, type Usage } from './transcript.pure.ts';
 
 /** The transcripts' entries from `from` to the end of `until`'s second. Line times are whole seconds, transcript times milliseconds. */
 function inWindow(from: string, until: string, transcripts: readonly (string | null)[]): Entry[] {
@@ -18,7 +18,7 @@ export function measuredUsage(
   from: string,
   until: string,
   transcripts: readonly (string | null)[],
-): Partial<LogEvent> | null {
+): (Pick<MeasuredFacts, 'source' | 'gen_ai.response.model'> & Usage) | null {
   const all = inWindow(from, until, transcripts);
   const usage = usageOf(all);
   if (Object.keys(usage).length === 0) return null;

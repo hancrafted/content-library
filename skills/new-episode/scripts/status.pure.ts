@@ -4,7 +4,7 @@
 // It reads the pipeline and the gates through the same src/lib modules the
 // pipeline check uses; they import nothing but `yaml`, so bare node runs them.
 
-import { readPipeline, type Job } from '../../../src/lib/episode-pipeline-jobs.pure.ts';
+import { readPipeline, type Job } from '../../../src/lib/episode-pipeline-definition.pure.ts';
 import { gateTier } from '../../../src/lib/staging-file.pure.ts';
 import type { Folded, Span } from './run-log.pure.ts';
 import { formatDuration } from './run-log.pure.ts';
@@ -19,18 +19,6 @@ export type JobState = 'done' | 'running' | 'gate' | 'blocked' | 'ready' | 'wait
  */
 export function outputApproved(file: string, text: string): boolean {
   return file.endsWith('.md') ? gateTier(text) === 'approved' : readPipeline(text)?.status === 'approved';
-}
-
-/** A sub-issue as `gh api .../sub_issues` returns it, reduced to what the gate reads. */
-export interface SubIssue {
-  state: string;
-  labels: { name: string }[];
-}
-
-/** The design gate's rule: the spec issue has sub-issues, and none still open carries `needs-triage`. */
-export function subIssuesApproved(tickets: readonly SubIssue[]): boolean {
-  const open = tickets.filter((ticket) => ticket.state === 'open');
-  return tickets.length > 0 && open.every((ticket) => !ticket.labels.some((label) => label.name === 'needs-triage'));
 }
 
 /** The latest job span per job id, by start time then sequence: a retried job reads as its last run. A `reused` span stands for the earlier Run's ok span. */
@@ -58,10 +46,9 @@ function logged(span: Span | undefined): JobState | null {
   return span.status === 'running' ? 'running' : null;
 }
 
-/** How a gate is read: whether a staging output is approved (`outputApproved`), or, for a job with no output, its tickets. */
+/** How a gate is read: whether a staging output is approved. */
 export interface GateReaders {
   outputApproved?: (output: string) => boolean;
-  labelApproved?: (jobId: string) => boolean;
 }
 
 /** One agent span still open on a live log. */
@@ -115,9 +102,8 @@ const problemsOf = (spans: readonly Span[]): RunStatus['problems'] =>
  * done and every job it wants is done or blocked, and waiting otherwise.
  * A `gate: human` job that is done reads `gate` until every output
  * it names is approved; `readers.outputApproved` reads one output (an output path with `<slug>` as written in
- * pipeline.yml) and is built by `readEpisodeStatus`. A gate job that names no output has no
- * status to read: it reads `gate` until `readers.labelApproved(jobId)` says its tickets are approved, and
- * stays `gate` when none is given, so an unreadable label never opens the gate.
+ * pipeline.yml) and is built by `readEpisodeStatus`. A gate job that names no output has nothing to approve,
+ * so it stays `gate`.
  */
 export function runStatus(
   pipelineYaml: string,
@@ -183,9 +169,8 @@ function stateFor(job: Job, fromLog: JobState | null, readers: GateReaders): Job
   return fromLog;
 }
 
-function approved(job: Job, { outputApproved = () => false, labelApproved = () => false }: GateReaders): boolean {
-  if (job.outputs.length === 0) return labelApproved(job.id);
-  return job.outputs.every((output) => outputApproved(output));
+function approved(job: Job, { outputApproved = () => false }: GateReaders): boolean {
+  return job.outputs.length > 0 && job.outputs.every((output) => outputApproved(output));
 }
 
 function pending(job: Job, stateOf: (id: string) => JobState): JobState {

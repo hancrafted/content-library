@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { createLogFold, parseLog } from '../../skills/new-episode/scripts/run-log.pure';
+import { createLogFold, parseLog, type RunLogLine } from '../../skills/new-episode/scripts/run-log.pure';
 import { parseDashboardPipeline, projectDashboard } from './dashboard-projection.pure';
 
 const fixture = (name: string) =>
@@ -31,7 +31,6 @@ describe('success cases', () => {
       type: 'implementor',
       agent: 'archgate:developer',
       skills: ['tdd'],
-      ticketSkills: [],
       session: 'orchestrator',
     };
     const expectedWants = ['optional'];
@@ -61,7 +60,9 @@ describe('success cases', () => {
     const expectedParent = '056c166635f8ab1d';
     // ACT
     const lines = parseLog(fixture('events.jsonl')).lines;
-    log.append(lines.map((line) => (line.seq === 6 ? { ...line, description: expectedDescription } : line)));
+    log.append(
+      lines.map((line) => (line.seq === 6 ? ({ ...line, description: expectedDescription } as RunLogLine) : line)),
+    );
     const view = projectDashboard(pipeline, log.snapshot());
     const brief = view.jobs[0];
     const agents = view.jobs.flatMap((job) => job.agents);
@@ -76,10 +77,35 @@ describe('success cases', () => {
     expect(view.jobs.flatMap((job) => job.scores)).toHaveLength(expectedProblems);
     expect(view.openGates).toEqual([]);
   });
+
+  it("carries the pipeline's stage order, each Job's stage and a template's foreach into the view", () => {
+    // ARRANGE
+    const agent = { type: 'implementor', skills: [], references: [], model: 'opus' };
+    const base = { needs: [], outputs: [], checks: [], retries: 0, agents: [agent] };
+    const order = ['brief', 'research'];
+    const template = 'docs/episodes/x/brief.md#Research questions';
+    const text = JSON.stringify({
+      status: 'draft',
+      stages: order,
+      jobs: [
+        { ...base, id: 'brief-grill', stage: 'brief' },
+        { ...base, id: 'write-research', stage: 'research', foreach: template },
+      ],
+    });
+    const expectedStages = ['brief', 'research'];
+    // ACT
+    const view = projectDashboard(parseDashboardPipeline(text), { spans: [], scores: [], orphans: [] });
+    // ASSERT
+    expect(view.stages).toEqual(order);
+    expect(view.jobs.map((job) => job.stage)).toEqual(expectedStages);
+    expect(view.jobs[1].foreach).toBe(template);
+    expect(view.jobs[0].foreach).toBeUndefined();
+  });
 });
 
 describe('failure cases', () => {
   it.each([
+    'jobs: [unclosed',
     'jobs: [null]',
     'status: approved\njobs: [{id: write, needs: missing}]',
     'status: approved\njobs: [{id: write, needs: [], outputs: [], checks: [], retries: 0, agents: []}]',
@@ -94,6 +120,16 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('reads a Run scaffolded before stages existed, with no stage order and no Job stage', () => {
+    // ARRANGE
+    const text = fixture('pipeline.yml');
+    // ACT
+    const pipeline = parseDashboardPipeline(text);
+    // ASSERT
+    expect(pipeline.stages).toEqual([]);
+    expect(pipeline.jobs.filter((job) => job.stage !== undefined)).toEqual([]);
+  });
+
   it('shows an open Gate after Job completion, closes it on its end and retains measured agent evidence', () => {
     // ARRANGE
     const pipeline = parseDashboardPipeline(fixture('pipeline.yml'));

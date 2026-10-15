@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { fold, type Folded, type RunLogLine } from './run-log.pure.ts';
-import { outputApproved, renderStatus, runStatus, subIssuesApproved, type GateReaders } from './status.pure.ts';
+import { outputApproved, renderStatus, runStatus, type GateReaders } from './status.pure.ts';
 
 /*
  * A run's state read back from its event log: a small per-run pipeline and
@@ -232,23 +232,21 @@ describe('gate jobs', () => {
 });
 
 describe('gate jobs without a staging output', () => {
-  const GATED_BY_LABEL = `jobs:
+  const GATED_WITHOUT_OUTPUT = `jobs:
   - { id: write-design-spec, needs: [], gate: human, outputs: [] }
-  - { id: implement-episode, needs: [write-design-spec] }
+  - { id: implement-episode-init, needs: [write-design-spec] }
 `;
   const runLog = live(log(...job('write-design-spec', 0, 'ok')));
 
-  it('prints gate for a logged label-gated job until its tickets are approved, and holds back what needs it', () => {
+  it('keeps a gate with no output to approve shut, and holds back what needs it', () => {
     // ARRANGE
-    const approvedByLabel = () => true;
+    const everyOutputApproved = () => true;
     // ACT
-    const whileTriage = withReaders(GATED_BY_LABEL, runLog, { labelApproved: () => false });
-    const withoutReader = states(runLog, GATED_BY_LABEL);
-    const afterApproval = withReaders(GATED_BY_LABEL, runLog, { labelApproved: approvedByLabel });
+    const withReader = withReaders(GATED_WITHOUT_OUTPUT, runLog, { outputApproved: everyOutputApproved });
+    const withoutReader = states(runLog, GATED_WITHOUT_OUTPUT);
     // ASSERT
-    expect(whileTriage).toEqual(['gate', 'waiting']);
+    expect(withReader).toEqual(['gate', 'waiting']);
     expect(withoutReader).toEqual(['gate', 'waiting']);
-    expect(afterApproval).toEqual(['done', 'ready']);
   });
 });
 
@@ -301,33 +299,13 @@ describe('outputApproved', () => {
   });
 });
 
-describe('subIssuesApproved', () => {
-  const ticket = (state: string, ...labels: string[]) => ({ state, labels: labels.map((name) => ({ name })) });
-
-  it('is approved when every open sub-issue has left needs-triage', () => {
-    expect(subIssuesApproved([ticket('open', 'ready-for-agent'), ticket('open')])).toBe(true);
-  });
-
-  it('is not approved while an open sub-issue still carries needs-triage', () => {
-    expect(subIssuesApproved([ticket('open', 'ready-for-agent'), ticket('open', 'needs-triage')])).toBe(false);
-  });
-
-  it('ignores closed sub-issues, even one still labelled needs-triage', () => {
-    expect(subIssuesApproved([ticket('closed', 'needs-triage'), ticket('open')])).toBe(true);
-  });
-
-  it('is not approved when there are no sub-issues', () => {
-    expect(subIssuesApproved([])).toBe(false);
-  });
-});
-
 describe('skills listed and not invoked', () => {
   const SKILLS_PIPELINE = `status: approved
 jobs:
   - id: build
     needs: []
     agents:
-      - { type: implementor, skills: [implement-spec, tdd], session: orchestrator, ticket: { agent: dev, skills: [commit] } }
+      - { type: implementor, skills: [implement-spec, tdd], session: orchestrator }
       - { type: reviewer, skills: [code-review, ui-ux-pro-max:slides], session: orchestrator }
   - id: write
     needs: []
@@ -350,15 +328,20 @@ jobs:
     const lines = [
       ...agent('i', { job: 'write', role: 'implementor' }, ['writing-for-agents']),
       ...agent('r', { job: 'write', role: 'reviewer' }, []),
-      ...agent('t', { job: 'build', role: 'ticket-implementor' }, ['tdd']),
     ];
     // ACT
     const result = warnings(lines);
     // ASSERT
-    expect(result).toEqual([
-      { role: 'reviewer', missing: ['domain-modeling'] },
-      { role: 'ticket-implementor', missing: ['commit'] },
-    ]);
+    expect(result).toEqual([{ role: 'reviewer', missing: ['domain-modeling'] }]);
+  });
+
+  it("stays quiet for an old log's ticket-implementor, whose skills no pipeline lists any more", () => {
+    // ARRANGE
+    const lines = agent('t', { job: 'build', role: 'ticket-implementor' }, []);
+    // ACT
+    const result = warnings(lines);
+    // ASSERT
+    expect(result).toEqual([]);
   });
 
   it('warns for an orchestrator-session Job by the skills of its orchestrator agents, plugin skills as plugin:skill', () => {

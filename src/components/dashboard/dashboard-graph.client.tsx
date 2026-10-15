@@ -1,38 +1,46 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { useDashboardDetail } from '@/hooks/use-dashboard-detail';
+import type { ReplayControls } from '@/hooks/use-dashboard-replay';
 import type { DashboardEvent, EventScope } from '@/lib/dashboard-events.pure';
-import type { DashboardView } from '@/lib/dashboard-projection.pure';
-import { projectStages, type DashboardStage } from '@/lib/dashboard-stages.pure';
+import { graphGeometry } from '@/lib/dashboard-graph-geometry.pure';
+import { graphView, type GraphView } from '@/lib/dashboard-graph-view.pure';
+import type { EpisodeOutputs } from '@/lib/dashboard-outputs.pure';
+import type { DashboardJob, DashboardView } from '@/lib/dashboard-projection.pure';
+import { jobTimings } from '@/lib/dashboard-scrub.pure';
 import { fillTemplate } from '@/lib/template.pure';
-import { useState } from 'react';
-import { StateBadge, type DashboardCopy } from './dashboard-evidence';
+import { useId, useState, type CSSProperties } from 'react';
+import { DashboardDrawer } from './dashboard-drawer.client';
+import type { DashboardCopy } from './dashboard-evidence';
 import styles from './dashboard-graph.module.css';
 import { DashboardLog } from './dashboard-log.client';
-import { StageLanes, type OpenEventLog } from './dashboard-stage-lanes';
-import { stageName, StageNavigation } from './dashboard-stage-nav';
+import { DashboardMoment, type Moment } from './dashboard-moment';
+import { DashboardObservations } from './dashboard-observations';
+import { StageNavigation } from './dashboard-stage-nav';
+import { LiveToggle, TimeTravel } from './dashboard-time-travel.client';
 
 interface GraphProps {
   view: DashboardView;
   events: readonly DashboardEvent[];
   stale: boolean;
+  /** The moment shown; while replaying it stands still, so activity animation pauses. */
+  moment: Moment;
+  outputs: EpisodeOutputs;
   copy: DashboardCopy;
+  replay: ReplayControls;
+  observedJobs: readonly DashboardJob[];
 }
 
-function useGraphControls(view: DashboardView) {
-  const graph = projectStages(view.jobs);
-  const initial = graph.stages.find((stage) => stage.state === 'gate' || stage.state === 'running');
-  const [selected, setSelected] = useState<string | null>(() => initial?.id ?? graph.stages[0]?.id ?? null);
-  const [paused, setPaused] = useState(false);
+function useGraphControls() {
+  const detail = useDashboardDetail();
+  const [showJobs, setShowJobs] = useState(false);
   const [log, setLog] = useState<{ title: string; scope: EventScope } | null>(null);
   return {
-    graph,
-    selected,
-    paused,
-    setPaused,
+    detail,
+    showJobs,
+    setShowJobs,
     log,
-    stage: graph.stages.find((candidate) => candidate.id === selected),
-    select: (id: string) => setSelected(selected === id ? null : id),
     openLog: (title: string, scope: EventScope) => setLog({ title, scope }),
     dismissLog: () => setLog(null),
   };
@@ -43,15 +51,17 @@ interface OverviewProps {
   controls: Controls;
   stale: boolean;
   copy: DashboardCopy;
+  replay: ReplayControls;
+  graph: GraphView;
 }
 
-function ProgressSummary({ graph, copy }: { graph: Controls['graph']; copy: DashboardCopy }) {
-  const next = graph.stages.find((stage) => stage.state === 'waiting');
+function ProgressSummary({ graph, copy }: Pick<OverviewProps, 'graph' | 'copy'>) {
+  const { next } = graph;
   return (
     <div className="space-y-1">
       <h2 className="text-body font-semibold">{copy.graph.title}</h2>
       <p role="status" className="text-caption">
-        {fillTemplate(copy.graph.stagesComplete, { done: graph.completed, total: graph.stages.length })}
+        {fillTemplate(copy.graph.stagesComplete, { done: graph.completed, total: graph.total })}
         {graph.attention > 0 ? (
           <span className="ml-3 font-medium text-(--warning)">
             {fillTemplate(copy.graph.attention, { count: graph.attention })}
@@ -59,22 +69,39 @@ function ProgressSummary({ graph, copy }: { graph: Controls['graph']; copy: Dash
         ) : null}
       </p>
       {next ? (
-        <p className="text-caption text-muted-foreground">
-          {fillTemplate(copy.graph.next, { name: stageName(next, copy) })}
-        </p>
+        <p className="text-caption text-muted-foreground">{fillTemplate(copy.graph.next, { name: next.label })}</p>
       ) : null}
     </div>
   );
 }
 
-function GraphToolbar({ controls, copy }: Pick<OverviewProps, 'controls' | 'copy'>) {
+function JobsSwitch({ controls, copy }: Pick<OverviewProps, 'controls' | 'copy'>) {
+  const help = useId();
+  return (
+    <label className="flex min-h-11 cursor-pointer items-center gap-3 text-body font-medium">
+      <input
+        type="checkbox"
+        role="switch"
+        checked={controls.showJobs}
+        onChange={(event) => controls.setShowJobs(event.target.checked)}
+        aria-describedby={help}
+        className={`${styles.switch} focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring`}
+      />
+      {copy.graph.showJobs}
+      <span id={help} className="sr-only">
+        {copy.graph.showJobsHelp}
+      </span>
+    </label>
+  );
+}
+
+function GraphToolbar({ controls, copy, replay, graph }: Omit<OverviewProps, 'stale'>) {
   return (
     <div className="flex flex-wrap items-start justify-between gap-4">
-      <ProgressSummary graph={controls.graph} copy={copy} />
-      <div className="flex flex-wrap gap-2">
-        <Button variant="ghost" aria-pressed={controls.paused} onClick={() => controls.setPaused(!controls.paused)}>
-          {controls.paused ? copy.graph.resumeMotion : copy.graph.pauseMotion}
-        </Button>
+      <ProgressSummary graph={graph} copy={copy} />
+      <div className="flex flex-wrap items-center gap-2">
+        <JobsSwitch controls={controls} copy={copy} />
+        <LiveToggle replay={replay} copy={copy} />
         <Button variant="outline" onClick={() => controls.openLog(copy.graph.allLogs, {})}>
           {copy.graph.allLogs}
         </Button>
@@ -83,75 +110,55 @@ function GraphToolbar({ controls, copy }: Pick<OverviewProps, 'controls' | 'copy
   );
 }
 
-function GraphOverview({ controls, stale, copy }: OverviewProps) {
-  const { graph, selected, select } = controls;
+function GraphOverview({ controls, graph, stale, copy, replay }: OverviewProps) {
+  const { detail, showJobs } = controls;
+  const geometry = graphGeometry(graph.stages, showJobs);
   return (
     <div className="space-y-6 rounded-2xl border border-border bg-card p-4 sm:p-6">
-      <GraphToolbar controls={controls} copy={copy} />
-      <progress
-        value={graph.completed}
-        max={Math.max(1, graph.stages.length)}
-        aria-label={fillTemplate(copy.graph.stagesComplete, { done: graph.completed, total: graph.stages.length })}
-        className="h-1.5 w-full accent-success"
-      />
+      <GraphToolbar controls={controls} copy={copy} replay={replay} graph={graph} />
       {stale ? <p className="text-caption text-(--warning)">{copy.graph.stale}</p> : null}
-      <StageNavigation stages={graph.stages} selected={selected} onSelect={select} copy={copy} />
-      <p className="text-caption text-muted-foreground">{copy.graph.inspect}</p>
-      <details className="text-caption text-muted-foreground">
-        <summary className="cursor-pointer py-1 focus-visible:outline-2 focus-visible:outline-ring">
-          {copy.graph.legend}
-        </summary>
-        <p className="pt-2">{copy.graph.legendText}</p>
-      </details>
+      <div className={styles.graphScroll} style={{ maxHeight: geometry.maxHeight }}>
+        <div className={styles.canvas} style={geometry.cssVars as CSSProperties}>
+          <TimeTravel replay={replay} copy={copy} geometry={geometry} />
+          <StageNavigation
+            stages={graph.stages}
+            onSelect={detail.open}
+            onSelectJob={showJobs ? detail.open : undefined}
+            copy={copy}
+            geometry={geometry}
+          />
+        </div>
+      </div>
     </div>
   );
 }
 
-interface DetailProps {
-  stage: DashboardStage;
-  copy: DashboardCopy;
-  openLog: OpenEventLog;
-}
-
-function StageDetail({ stage, copy, openLog }: DetailProps) {
+export function DashboardGraph({ view, events, stale, moment, outputs, copy, replay, observedJobs }: GraphProps) {
+  const controls = useGraphControls();
+  const labels = { stageNames: copy.graph.stageNames, gate: copy.waitingOnHan, complete: copy.graph.complete };
+  const graph = graphView(view, labels, controls.detail.selection);
+  const { log, openLog, dismissLog } = controls;
   return (
-    <section
-      className={`${styles.panel} space-y-5 rounded-2xl border border-border bg-card p-4 sm:p-6`}
-      aria-label={stageName(stage, copy)}
-    >
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <h2 className="text-body font-semibold">{stageName(stage, copy)}</h2>
-          <StateBadge state={stage.state} />
-        </div>
-        <Button
-          variant="outline"
-          onClick={() => openLog(stageName(stage, copy), { jobs: stage.jobs.map((job) => job.id) })}
+    <DashboardMoment value={moment}>
+      <DashboardObservations value={jobTimings(observedJobs)}>
+        <section
+          className={`${styles.graph} space-y-6`}
+          data-motion={stale || moment.replaying ? 'paused' : 'running'}
+          aria-label={copy.graph.title}
         >
-          {copy.graph.logs}
-        </Button>
-      </div>
-      <StageLanes stage={stage} copy={copy} openLog={openLog} />
-    </section>
-  );
-}
-
-export function DashboardGraph({ view, events, stale, copy }: GraphProps) {
-  const controls = useGraphControls(view);
-  const { stage, log, openLog, dismissLog } = controls;
-  return (
-    <section
-      className={`${styles.graph} space-y-6`}
-      data-motion={controls.paused || stale ? 'paused' : 'running'}
-      aria-label={copy.graph.title}
-    >
-      <GraphOverview controls={controls} stale={stale} copy={copy} />
-      <div id="dashboard-stage-detail">
-        {stage ? <StageDetail key={stage.id} stage={stage} copy={copy} openLog={openLog} /> : null}
-      </div>
-      {log ? (
-        <DashboardLog events={events} scope={log.scope} title={log.title} copy={copy} onDismiss={dismissLog} />
-      ) : null}
-    </section>
+          <GraphOverview controls={controls} graph={graph} stale={stale} copy={copy} replay={replay} />
+          <DashboardDrawer
+            detail={controls.detail}
+            selection={graph.selection}
+            copy={copy}
+            openLog={openLog}
+            outputs={outputs}
+          />
+          {log ? (
+            <DashboardLog events={events} scope={log.scope} title={log.title} copy={copy} onDismiss={dismissLog} />
+          ) : null}
+        </section>
+      </DashboardObservations>
+    </DashboardMoment>
   );
 }

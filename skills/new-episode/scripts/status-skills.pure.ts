@@ -1,6 +1,6 @@
 // Which listed skills a finished span did not invoke: the pipeline's skills for the agent type a span stands for,
 // against the `skills_invoked` its end line (or an orchestrator Job's attrs line) recorded. Pure.
-import type { Job, JobAgent } from '../../../src/lib/episode-pipeline-jobs.pure.ts';
+import type { Job, JobAgent } from '../../../src/lib/episode-pipeline-definition.pure.ts';
 import type { Span } from './run-log.pure.ts';
 
 /** Only the fields a span has, so an absent attempt or role stays absent. */
@@ -23,27 +23,20 @@ export interface SkillWarning {
   missing: string[];
 }
 
-/** The pipeline agents a span answers to: an implementor or reviewer by its role, the ticket subagents of the implementor, an orchestrator-session Job by its agents that run there. */
-function listedSkills(span: Span, job: Job): string[] {
-  const of = (agents: readonly JobAgent[], pick: (agent: JobAgent) => string[]): string[] => agents.flatMap(pick);
-  const subagents = job.agents.filter((agent) => agent.session === undefined);
-  const byType = (type: string): JobAgent[] => subagents.filter((agent) => agent.type === type);
-  if (span.type === 'job')
-    return job.session === 'orchestrator'
-      ? of(
-          job.agents.filter((agent) => agent.session === 'orchestrator'),
-          (agent) => agent.skills,
-        )
-      : [];
-  if (span.role === 'implementor') return of(byType('implementor'), (agent) => agent.skills);
-  if (span.role?.startsWith('reviewer')) return of(byType('reviewer'), (agent) => agent.skills);
-  if (span.role === 'ticket-implementor')
-    return of(
-      job.agents.filter((agent) => agent.type === 'implementor'),
-      (agent) => agent.ticketSkills,
-    );
-  return [];
+/**
+ * Whether a span answers to a pipeline agent: an orchestrator-session agent to its Job's span, an implementor or
+ * reviewer subagent to an agent span by its role. A `ticket-implementor` of an old log answers to none: no pipeline
+ * lists its skills now.
+ */
+export function answersTo(span: Pick<Span, 'type' | 'role'>, agent: JobAgent): boolean {
+  if (agent.session === 'orchestrator') return span.type === 'job';
+  if (span.type !== 'agent') return false;
+  if (agent.type === 'implementor') return span.role === 'implementor';
+  return agent.type === 'reviewer' && span.role?.startsWith('reviewer') === true;
 }
+
+const listedSkills = (span: Span, job: Job): string[] =>
+  job.agents.filter((agent) => answersTo(span, agent)).flatMap((agent) => agent.skills);
 
 /** The ended spans that recorded their invoked skills and left a listed one out. */
 export function skillWarningsOf(spans: readonly Span[], jobs: readonly Job[]): SkillWarning[] {

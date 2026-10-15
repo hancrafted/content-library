@@ -1,37 +1,40 @@
 'use client';
 
+import { useDashboardReplay } from '@/hooks/use-dashboard-replay';
 import { useEpisodeDashboard } from '@/hooks/use-episode-dashboard';
-import type { EpisodeRead } from '@/lib/dashboard-reader.pure';
-import type { ReactNode } from 'react';
+import type { EpisodeOutputs } from '@/lib/dashboard-outputs.pure';
+import type { Polled } from '@/lib/dashboard-reader.pure';
 import { BrowserHelp, ChooseFolder, DashboardEntry, PrivacyNote } from './dashboard-entry';
 import type { DashboardCopy } from './dashboard-evidence';
 import { DashboardGraph } from './dashboard-graph.client';
-import { OpenGates, ReaderFooter, SourceErrors, SourceStatus } from './dashboard-source';
+import { OpenGates, ReaderFooter, SourceErrors } from './dashboard-source';
 
 interface LiveProps {
-  read: EpisodeRead;
+  polled: Polled;
+  outputs: EpisodeOutputs;
   name?: string;
-  chooser: ReactNode;
   copy: DashboardCopy;
 }
 
-function LiveDashboard({ read, name, chooser, copy }: LiveProps) {
+function LiveDashboard({ polled, outputs, name, copy }: LiveProps) {
+  const { read } = polled;
+  const { controls, view, events, now } = useDashboardReplay(polled);
   return (
     <>
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <SourceStatus read={read} name={name} copy={copy} />
-        {chooser}
-      </div>
       <SourceErrors errors={read.errors} copy={copy} condition={read.condition} />
-      {read.view ? (
+      {view ? (
         <>
-          <OpenGates view={read.view} copy={copy} />
+          <OpenGates view={view} copy={copy} />
           <DashboardGraph
             key={name}
-            view={read.view}
-            events={read.events}
+            view={view}
+            events={events}
             stale={read.condition !== 'live'}
+            moment={{ now, replaying: !controls.live }}
+            observedJobs={read.view?.jobs ?? []}
+            outputs={outputs}
             copy={copy}
+            replay={controls}
           />
         </>
       ) : null}
@@ -42,17 +45,25 @@ function LiveDashboard({ read, name, chooser, copy }: LiveProps) {
 
 export function Dashboard({ copy }: { copy: DashboardCopy }) {
   const source = useEpisodeDashboard();
-  const { read } = source;
+  const { polled } = source;
   const chooser = (
     <ChooseFolder choose={source.choose} choosing={source.choosing} supported={source.supported} copy={copy} />
   );
   return (
     <div className="space-y-6">
-      {read?.view ? (
-        <LiveDashboard read={read} name={source.name} chooser={chooser} copy={copy} />
+      <header className="flex min-w-0 items-center justify-between gap-3 border-b border-border pb-3">
+        <h1 className="shrink-0 text-body font-semibold">{copy.title}</h1>
+        <div className="flex min-w-0 items-center justify-end gap-3">
+          <span className="truncate font-mono text-caption text-muted-foreground" title={source.name}>
+            {source.name}
+          </span>
+          {chooser}
+        </div>
+      </header>
+      {polled?.read.view ? (
+        <LiveDashboard polled={polled} outputs={source.outputs} name={source.name} copy={copy} />
       ) : (
         <DashboardEntry copy={copy}>
-          {chooser}
           <BrowserHelp supported={source.supported} copy={copy} />
         </DashboardEntry>
       )}

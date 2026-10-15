@@ -11,7 +11,7 @@ const run = (cmd: string, args: readonly string[], cwd: string): string =>
 
 function episodeRuns(): EpisodeRun[] {
   return episodeBranches(run('git', ['worktree', 'list', '--porcelain'], root)).flatMap(({ slug, dir }) => {
-    const result = readEpisodeStatus(dir, slug, { now: new Date().toISOString(), gh: (args) => run('gh', args, dir) });
+    const result = readEpisodeStatus(dir, slug, { now: new Date().toISOString() });
     return result.kind === 'ok' ? [{ slug, dir, status: result.status }] : [];
   });
 }
