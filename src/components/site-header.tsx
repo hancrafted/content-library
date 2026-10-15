@@ -37,6 +37,15 @@ function ContactButton({ label, newTab }: { label: string; newTab: string }) {
   );
 }
 
+function DashboardNav({ locale, label }: { locale: Locale; label: string }) {
+  if (locale !== 'en') return null;
+  return (
+    <NavLink section={ROUTES.dashboard} href={localizePath(ROUTES.dashboard, locale)} data-testid="nav-dashboard">
+      {label}
+    </NavLink>
+  );
+}
+
 /**
  * A floating, translucent bar. It is sticky rather than fixed, so it keeps its
  * place in the document flow: every page starts below it with no per-page offset.
@@ -57,6 +66,7 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
         >
           {t('nav.episodes')}
         </NavLink>
+        <DashboardNav locale={locale} label={t('nav.dashboard')} />
       </nav>
       <SocialLinks locale={locale} className="ml-auto max-sm:order-1" />
       <div className="flex items-center gap-3 max-sm:order-2 max-sm:ml-auto">

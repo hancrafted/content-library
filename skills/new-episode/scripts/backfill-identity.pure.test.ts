@@ -10,7 +10,7 @@ import { fold, type RunLogLine } from './run-log.pure.ts';
 const TRACE = 'a'.repeat(32);
 const OLD_TRACE = 'f'.repeat(32);
 const ID = (n: number): string => n.toString(16).padStart(16, '0');
-const line = (seq: number, t: string, rest: Partial<RunLogLine>): RunLogLine =>
+const line = (seq: number, t: string, rest: Record<string, unknown>): RunLogLine =>
   ({ seq, t, trace_id: TRACE, ...rest }) as RunLogLine;
 const META = (description: string): string => JSON.stringify({ agentType: 'general-purpose', description });
 const TRANSCRIPT = '/s/subagents/agent-a1.jsonl';
@@ -99,7 +99,7 @@ describe('idempotence and skips', () => {
 
   it('leaves an agent whose end line already carries identity alone', () => {
     // ARRANGE
-    const log = [RUN, JOB, ATTEMPT, SPAWNED, { ...END, role: 'reviewer' }];
+    const log = [RUN, JOB, ATTEMPT, SPAWNED, { ...END, role: 'reviewer' } as RunLogLine];
     // ACT
     const { events } = identityBackfill(log, metaOf('write#2/reviewer'));
     // ASSERT
@@ -117,7 +117,7 @@ describe('idempotence and skips', () => {
 
   it('leaves an agent that started parsed', () => {
     // ARRANGE
-    const log = [RUN, JOB, ATTEMPT, { ...SPAWNED, role: 'reviewer' }, END];
+    const log = [RUN, JOB, ATTEMPT, { ...SPAWNED, role: 'reviewer' } as RunLogLine, END];
     // ACT
     const { events } = identityBackfill(log, metaOf('write#2/reviewer'));
     // ASSERT

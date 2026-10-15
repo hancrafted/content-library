@@ -1,13 +1,18 @@
-# The new-episode pipeline template. After Han approves the Brief, the
-# orchestrator copies this file to docs/episodes/<slug>/pipeline.yml, tailors
-# it for that Episode, and Han approves it by setting `status: approved`.
+# The new-episode pipeline template. After Han approves the Brief,
+# scaffold-pipeline copies this file to docs/episodes/<slug>/pipeline.yml as a
+# draft, customize-pipeline tailors it for that Episode once the Setup jobs
+# have collected what it needs, and Han approves it by setting
+# `status: approved` (design-ADR-0008).
 #
 # Schema (checked by src/lib/episode-pipeline.pure.ts in `npm run verify`):
 #   status    draft | approved
 #   template  per-run only: the main commit the pipeline was tailored
 #             from; the template is not merged into the Episode branch again until
 #             open-pr is done
+#   stages    the ordered stage ids; every job belongs to one, and a stage may hold none
 #   jobs      run once every job in `needs` is done; independent jobs may run in parallel
+#     stage     the stage the job belongs to, one of `stages`; a job needs or wants
+#               only jobs of its own or an earlier stage
 #     intent    optional; the job's task as a prompt, for a job no reference describes
 #     needs     job ids this job waits for; a blocked one blocks this job too
 #     wants     optional; job ids this job waits for, passed or blocked: a blocked
@@ -16,7 +21,9 @@
 #               worktree on episode/<slug>--<job id>, merged back only on a pass.
 #               Required on a job that may run beside another or has foreach,
 #               unless all its agents run in the orchestrator session
-#     foreach   template only; `<file>#<heading>`: customize-pipeline writes one job per list item
+#     foreach   template and draft scaffold only; `<file>#<heading>`: customize-pipeline
+#               writes one job per list item under the heading, or per h3 when it holds h3s.
+#               An approved per-run pipeline has none, and no glob output
 #     before    what runs before the implementor writes: `mh-query`, required when a job
 #               writes markdown, has the implementor run `npx mh query <path>` on every
 #               .md output and follow its intents; the reviewer runs it as its baseline
@@ -24,8 +31,11 @@
 #               one must need or want its writer; a rule must govern every .md one
 #     checks    cheapest first; names and commands in SKILL.md's job-loop check table
 #     retries   reviewer failures sent back before this branch of the pipeline stops
-#     gate      optional; `human` stops the run until Han approves the output; a job
-#               with no staging output is approved by its tickets' labels instead
+#     gate      optional; `human` stops the run until Han approves the output
+#     port      per-run build jobs only, 1024–65535: the port the job's agent serves its
+#               worktree on with `npx next dev -p <port>`, linked by the dashboard.
+#               customize-pipeline assigns each build job its own; never 4382, the
+#               dashboard's port. An approved per-run pipeline gives every build job one
 #     agents    run in order; a reviewer is fresh: it did not write the output
 #       type        implementor | reviewer
 #       skills      skill names under .agents/skills/, or plugin:skill; refused when the
@@ -35,14 +45,13 @@
 #                   skill's folder, anything else is a repo path
 #       rubric      reviewers only: `<file>#<heading>` holding the pass/fail lines
 #       agent       optional; the Claude Code agent type to spawn, general-purpose when omitted
-#       ticket      optional, implementors only; for a skill that spawns subagents per ticket
-#                   (implement-spec): `{ agent, skills }`, the agent type and the skills of each
-#                   ticket subagent. Same skill rules as `skills`
 #       model       the model it runs on, or inherit; SKILL.md's job loop says where it applies
 #       session     optional; subagent (default) or orchestrator, by SKILL.md's job loop
 status: draft
+stages: [brief, setup, research, dossier, specification, build, pr]
 jobs:
   - id: brief-grill
+    stage: brief
     needs: []
     before: [mh-query]
     outputs: [docs/episodes/<slug>/brief.md]
@@ -61,8 +70,25 @@ jobs:
         rubric: references/brief-grill.md#rubric
         model: opus
 
+  # Copies this template to the Episode as a draft, so every job shows from the
+  # start, naming the Brief's design references; customize-pipeline expands its
+  # foreach jobs at the end of Setup.
+  - id: scaffold-pipeline
+    stage: setup
+    needs: [brief-grill]
+    outputs: [docs/episodes/<slug>/pipeline.yml]
+    checks: [vitest]
+    retries: 0
+    agents:
+      - type: implementor
+        skills: []
+        references: [references/scaffold-pipeline.md, assets/pipeline.yml, docs/episodes/<slug>/brief.md]
+        model: inherit
+        session: orchestrator
+
   # An information architect's call, before the pipeline names any research file.
   - id: categorize-research
+    stage: setup
     intent: >-
       Name one research folder per research question of the Brief, in its
       order, as `<category>-<####>__<question-slug>` by GLOSSARY.md's Research
@@ -74,7 +100,8 @@ jobs:
       question's subject, not the Episode, in 20-40 characters of kebab case.
       Return the names, each beside its question, and any category you added
       with why no existing one fits.
-    needs: [brief-grill]
+    needs: [scaffold-pipeline]
+    isolation: worktree
     outputs: []
     checks: [mh]
     retries: 1
@@ -84,23 +111,13 @@ jobs:
         references: [GLOSSARY.md, docs/episodes/<slug>/brief.md, docs/llm-wiki/index.md]
         model: opus
 
-  - id: customize-pipeline
-    needs: [categorize-research]
-    outputs: [docs/episodes/<slug>/pipeline.yml]
-    checks: [vitest]
-    retries: 0
-    gate: human
-    agents:
-      - type: implementor
-        skills: [writing-for-agents]
-        references: [references/customize-pipeline.md, assets/pipeline.yml, docs/episodes/<slug>/brief.md]
-        model: inherit
-        session: orchestrator
-
-  # Matches each research question against the llm-wiki index and records in
-  # the run log which questions remain unanswered.
+  # Decides per research question: reuse, refresh or new. Lists the questions
+  # needing a job under the run-log entry's `### Research jobs`, which the
+  # write-research foreach reads.
   - id: retrieval
-    needs: [customize-pipeline]
+    stage: setup
+    needs: [categorize-research]
+    isolation: worktree
     before: [mh-query]
     outputs: [docs/episodes/<slug>/run-log.md]
     checks: [mh]
@@ -112,10 +129,10 @@ jobs:
         model: inherit
 
   # Runs `npm run convert-reference` once per file the Brief lists under
-  # References, beside the research: a script, so no reviewer. A run with no
-  # References drops it.
+  # References: a script, so no reviewer. A run with no References drops it.
   - id: convert-references
-    needs: [retrieval] # serialises two jobs without worktree isolation; not a data dependency
+    stage: setup
+    needs: [scaffold-pipeline]
     before: [mh-query]
     outputs: [docs/episodes/<slug>/reference/*/design-reference.md]
     checks: [mh, vitest]
@@ -127,10 +144,34 @@ jobs:
         model: inherit
         session: orchestrator
 
-  - id: write-research
+  # Wants convert-references rather than needing it: a missing conversion tool
+  # leaves the design references out instead of blocking the Episode.
+  - id: customize-pipeline
+    stage: setup
     needs: [retrieval]
+    wants: [convert-references]
+    outputs: [docs/episodes/<slug>/pipeline.yml]
+    checks: [vitest]
+    retries: 0
+    gate: human
+    agents:
+      - type: implementor
+        skills: [writing-for-agents]
+        references:
+          - references/customize-pipeline.md
+          - assets/pipeline.yml
+          - docs/episodes/<slug>/brief.md
+          - docs/episodes/<slug>/run-log.md
+        model: inherit
+        session: orchestrator
+
+  # One job per question retrieval lists under Research jobs, new or refresh;
+  # a reused question has none.
+  - id: write-research
+    stage: research
+    needs: [customize-pipeline]
     isolation: worktree
-    foreach: docs/episodes/<slug>/brief.md#research-questions
+    foreach: docs/episodes/<slug>/run-log.md#research-jobs
     before: [mh-query]
     outputs: [docs/episodes/<slug>/research/*/research.md]
     checks: [mh, vitest, sources]
@@ -149,8 +190,9 @@ jobs:
   # Wants the research rather than needing it: a blocked question leaves a
   # gap the Dossier works around, instead of blocking the Episode.
   - id: write-dossier
-    needs: [retrieval]
-    wants: [write-research, convert-references]
+    stage: dossier
+    needs: [customize-pipeline]
+    wants: [write-research]
     before: [mh-query]
     outputs: [docs/episodes/<slug>/dossier.md]
     checks: [mh, vitest]
@@ -161,6 +203,7 @@ jobs:
         references:
           - references/write-dossier.md
           - docs/episodes/<slug>/brief.md
+          - docs/episodes/<slug>/run-log.md
           - docs/episodes/<slug>/research/*/research.md
           - docs/episodes/<slug>/reference/*/design-reference.md
           - docs/profile/han/storytelling-guide.md
@@ -177,6 +220,7 @@ jobs:
   # test checks that against write-dossier's commit, so no schema key says it.
   # Han reads and edits the whole Dossier at this gate.
   - id: write-voice-script
+    stage: dossier
     needs: [write-dossier]
     before: [mh-query]
     outputs: [docs/episodes/<slug>/dossier.md]
@@ -204,15 +248,18 @@ jobs:
         rubric: references/write-voice-script.md#rubric
         model: opus
 
-  # Writes no staging file: its output is a spec issue with one sub-issue per Section.
+  # The build spec, one section per Section, pointing at the Dossier instead of
+  # copying it.
   - id: write-spec
+    stage: specification
     needs: [write-voice-script]
-    outputs: []
-    checks: []
+    before: [mh-query]
+    outputs: [docs/episodes/<slug>/spec/spec.md]
+    checks: [mh, vitest]
     retries: 2
     agents:
       - type: implementor
-        skills: [to-spec, to-tickets, writing-for-agents]
+        skills: [writing-for-agents]
         agent: archgate:developer
         references: [references/write-spec.md, docs/episodes/<slug>/brief.md, docs/episodes/<slug>/dossier.md]
         model: inherit
@@ -223,14 +270,15 @@ jobs:
         rubric: references/write-spec.md#rubric
         model: opus
 
-  # Writes no staging file: its output is the spec issue's visual language and a
-  # design answer in every ticket body. The implementor runs in the orchestrator's
-  # session, because it spawns the designers (ui-ux-pro-max:slides). The gate is a label, not a
-  # status: Han relabels each ticket from needs-triage to ready-for-agent.
+  # The Episode's visual language and a design answer for every Slide. The
+  # implementor runs in the orchestrator's session, because it spawns the
+  # designers (ui-ux-pro-max:slides). Han approves the design spec at the gate.
   - id: write-design-spec
+    stage: specification
     needs: [write-spec]
-    outputs: []
-    checks: []
+    before: [mh-query]
+    outputs: [docs/episodes/<slug>/spec/design-spec.md]
+    checks: [mh, vitest]
     retries: 2
     gate: human
     agents:
@@ -241,6 +289,7 @@ jobs:
           - GLOSSARY.md
           - docs/episodes/<slug>/brief.md
           - docs/episodes/<slug>/dossier.md
+          - docs/episodes/<slug>/spec/spec.md
           - docs/design/slide-library.md
           - docs/design/design-guide.md
           - docs/design/design-system.md
@@ -254,32 +303,67 @@ jobs:
           - GLOSSARY.md
           - docs/episodes/<slug>/brief.md
           - docs/episodes/<slug>/dossier.md
+          - docs/episodes/<slug>/spec/spec.md
           - docs/design/slide-library.md
           - docs/design/design-guide.md
           - docs/episodes/<slug>/reference/*/design-reference.md
         rubric: references/write-design-spec.md#rubric
         model: opus
 
-  # Writes the Episode under src/, outside the staging folder.
-  - id: implement-episode
+  # Writes the Episode's page under src/, outside the staging folder: its
+  # wiring, metadata, Title slide and one placement marker per Section.
+  - id: implement-episode-init
+    stage: build
     needs: [write-design-spec]
+    outputs: []
+    checks: [verify, build]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [tdd, vercel-react-best-practices, commit]
+        agent: archgate:developer
+        references:
+          - references/implement-episode-init.md
+          - references/skill-overrides.md
+          - docs/episodes/<slug>/brief.md
+          - docs/episodes/<slug>/dossier.md
+          - docs/episodes/<slug>/spec/spec.md
+          - docs/episodes/<slug>/spec/design-spec.md
+        model: opus
+      - type: reviewer
+        skills: [code-review, vercel-react-best-practices]
+        references:
+          - references/implement-episode-init.md
+          - references/skill-overrides.md
+          - docs/episodes/<slug>/spec/spec.md
+        rubric: references/implement-episode-init.md#rubric
+        model: opus
+        session: orchestrator
+
+  # One job per Section, the h3s under the Brief's Slides, in parallel: each
+  # builds its Slides at its own placement marker.
+  - id: implement-section
+    stage: build
+    needs: [implement-episode-init]
+    isolation: worktree
+    foreach: docs/episodes/<slug>/brief.md#slides
     outputs: []
     checks: [verify, build, test:build, impeccable, visual-check]
     retries: 2
     agents:
-      # `ticket` is the agent and skills of each ticket subagent implement-spec spawns.
       - type: implementor
-        skills: [implement-spec]
-        ticket:
-          agent: archgate:developer
-          skills: [tdd, visual-check, vercel-react-best-practices, web-design-guidelines, commit]
+        skills: [tdd, visual-check, vercel-react-best-practices, web-design-guidelines, commit]
+        agent: archgate:developer
         references:
-          - references/implement-episode.md
+          - references/implement-section.md
           - references/skill-overrides.md
           - docs/episodes/<slug>/dossier.md
+          - docs/episodes/<slug>/spec/spec.md
+          - docs/episodes/<slug>/spec/design-spec.md
           - docs/episodes/<slug>/reference/*/design-reference.md
         model: opus
-        session: orchestrator
+      # code-review spawns its own subagents, so the reviewer runs in the
+      # orchestrator's session; its subagents give the fresh eyes.
       - type: reviewer
         skills:
           - code-review
@@ -289,16 +373,19 @@ jobs:
           - web-design-guidelines
           - performance-optimization
         references:
-          - references/implement-episode.md
+          - references/implement-section.md
           - references/skill-overrides.md
           - docs/episodes/<slug>/dossier.md
+          - docs/episodes/<slug>/spec/spec.md
+          - docs/episodes/<slug>/spec/design-spec.md
           - docs/episodes/<slug>/reference/*/design-reference.md
-        rubric: references/implement-episode.md#rubric
+        rubric: references/implement-section.md#rubric
         model: opus
         session: orchestrator
 
   - id: open-pr
-    needs: [implement-episode]
+    stage: pr
+    needs: [implement-section]
     outputs: []
     checks: []
     retries: 0

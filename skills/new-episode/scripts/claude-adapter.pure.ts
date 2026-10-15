@@ -3,10 +3,10 @@
 // (`log.ts`) to append, or null, out. It adds what only Claude Code knows (launch and end times, the model
 // asked for and the model that ran, tokens, the prompt) and never writes a line. `claude-adapter.ts` is the I/O.
 import path from 'node:path';
-import { JOB_ID } from '../../../src/lib/episode-pipeline-jobs.pure.ts';
+import { parseDescription, type ParsedDescription } from '../../../src/lib/episode-spawn-description.pure.ts';
 import { verdictFirst } from './agent-summary.pure.ts';
 import { isRecord, parseJson, parseMarker, sessionsOf, type Marker } from './marker.pure.ts';
-import type { LogEvent, RunLogLine } from './run-log.pure.ts';
+import type { IdentityFacts, LogEvent, MeasuredFacts, RunLogLine } from './run-log.pure.ts';
 import { SUMMARY_MAX } from './run-log.pure.ts';
 import { entries, modelOf, promptOf, skillsInvoked, usageOf, type Entry } from './transcript.pure.ts';
 import { measuredUsage } from './usage-window.pure.ts';
@@ -36,22 +36,7 @@ export interface AdapterInput {
   agentModel?: string;
 }
 
-export interface ParsedDescription {
-  job: string;
-  attempt: number;
-  role: string;
-  ticket?: number;
-}
-
-/** `<job>#<attempt>/<role>[/#<ticket>]`; job and role follow `JOB_ID` (the pipeline check's grammar), attempt and ticket are positive integers. */
-const ID = JOB_ID.source.slice(1, -1);
-const DESCRIPTION = new RegExp(`^(${ID})#([1-9]\\d*)/(${ID})(?:/#([1-9]\\d*))?$`);
-
-export function parseDescription(description: string): ParsedDescription | null {
-  const m = DESCRIPTION.exec(description);
-  if (m === null) return null;
-  return { job: m[1], attempt: Number(m[2]), role: m[3], ...(m[4] === undefined ? {} : { ticket: Number(m[4]) }) };
-}
+export { parseDescription } from '../../../src/lib/episode-spawn-description.pure.ts';
 
 /** Where the subagent's transcript and meta.json sit: `<session dir>/subagents/agent-<id>.*`. */
 export function subagentFiles(payload: HookPayload): { transcript: string; meta: string } {
@@ -73,7 +58,7 @@ function metaOf(text: string | null): { description: string; model?: string; req
 }
 
 /** The Jobs of this Run that have no end line yet. */
-function openJobs(log: readonly RunLogLine[], trace: string): RunLogLine[] {
+export function openJobs(log: readonly RunLogLine[], trace: string): RunLogLine[] {
   const ended = new Set(log.filter((l) => l.kind === 'end').map((l) => l.span_id));
   return log.filter((l) => l.kind === 'start' && l.type === 'job' && l.trace_id === trace && !ended.has(l.span_id));
 }
@@ -152,7 +137,7 @@ function startEvent(input: AdapterInput, marker: Marker, files: { transcript: st
 }
 
 /** The transcript may not have existed at SubagentStart: the launch time and prompt the start could not measure. */
-function lateStartFacts(started: RunLogLine, all: readonly Entry[]): Partial<LogEvent> {
+function lateStartFacts(started: RunLogLine, all: readonly Entry[]): MeasuredFacts {
   const launched = all[0]?.timestamp;
   return {
     start_t: launched !== undefined && launched !== started.t ? launched : undefined,
@@ -161,7 +146,7 @@ function lateStartFacts(started: RunLogLine, all: readonly Entry[]): Partial<Log
 }
 
 /** The identity meta.json names by SubagentStop (or, for a log that predates that, by the backfill), for a start filed provisionally (meta.json did not exist yet): the fold applies it over the start. */
-export function identityFact(meta: string | null, log: readonly RunLogLine[], started: RunLogLine): Partial<LogEvent> {
+export function identityFact(meta: string | null, log: readonly RunLogLine[], started: RunLogLine): IdentityFacts {
   if (started.role !== 'skill-spawned') return {};
   const { description } = metaOf(meta);
   const parsed = parseDescription(description);
@@ -172,12 +157,12 @@ export function identityFact(meta: string | null, log: readonly RunLogLine[], st
 }
 
 /** The requested model, when only SubagentStop knows it. */
-const lateModel = (input: AdapterInput, started: RunLogLine): Partial<LogEvent> => ({
+const lateModel = (input: AdapterInput, started: RunLogLine): IdentityFacts => ({
   'gen_ai.request.model': started['gen_ai.request.model'] === undefined ? requestedModel(input) : undefined,
 });
 
 /** The skills the subagent invoked; without a readable transcript nothing is known, which is not the same as none. */
-const lateSkills = (transcript: string | null, all: readonly Entry[]): Partial<LogEvent> =>
+const lateSkills = (transcript: string | null, all: readonly Entry[]): MeasuredFacts =>
   transcript === null ? {} : { skills_invoked: skillsInvoked(all) };
 
 function stopEvent(input: AdapterInput, marker: Marker, files: { transcript: string }): LogEvent | null {

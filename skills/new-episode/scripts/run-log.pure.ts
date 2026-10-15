@@ -4,7 +4,7 @@
 // `trace.ts`) read the clock and git and hand the results in, and a later reader (query, status, the
 // Claude Code adapter) builds on this one import without changing it.
 
-export { currentRun, fold, parseLog } from './run-log-fold.pure.ts';
-export { record } from './run-log-record.pure.ts';
+export { createLogFold, currentRun, fold, order, parseLog, skillUses } from './run-log-fold.pure.ts';
+export { lineErrors, record } from './run-log-record.pure.ts';
 export { formatDuration, renderTree } from './run-log-tree.pure.ts';
 export * from './run-log.schema.pure.ts';

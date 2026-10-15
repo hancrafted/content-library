@@ -1,11 +1,19 @@
 /*
  * The schema check for a new-episode pipeline: the skill's template and every
- * per-run `docs/episodes/<slug>/pipeline.yml`. It parses the YAML and checks
- * its keys, its `needs` graph, the skills it names and the paths it reads, so
+ * per-run `docs/episodes/<slug>/pipeline.yml`. It reads the YAML through the
+ * Pipeline definition reader and checks its keys, its `needs` graph, the skills it names and the paths it reads, so
  * a typo or a missing file fails `npm run verify` instead of a run. Reading
  * the disk is the caller's job: the context says which skills and paths exist.
  */
-import { parse } from 'yaml';
+import {
+  BAD_JOB_ID,
+  JOB_ID,
+  jobGraph,
+  missingEdges,
+  parsePipeline,
+  type Job,
+  type JobSource,
+} from './episode-pipeline-definition.pure';
 import {
   agentFields,
   CHECKS,
@@ -14,11 +22,13 @@ import {
   SPAWNING_SKILLS,
   TOP_FIELDS,
 } from './episode-pipeline-fields.pure';
-import { ancestors, concurrentJobs, findCycle, waitsFor } from './episode-pipeline-graph.pure';
-import { BAD_JOB_ID, JOB_ID, jobOf, type Job } from './episode-pipeline-jobs.pure';
-import { checkSkillNames, checkTicket } from './episode-pipeline-skills.pure';
+import { ancestors, concurrentJobs } from './episode-pipeline-graph.pure';
+import { checkOutputs } from './episode-pipeline-outputs.pure';
+import { checkPorts } from './episode-pipeline-ports.pure';
+import { checkSkillNames } from './episode-pipeline-skills.pure';
+import { checkStages } from './episode-pipeline-stages.pure';
 import { unless, type Finding } from './finding.pure';
-import { checkMapping, isMapping, isString, stringsOf, type Mapping } from './mapping-fields.pure';
+import { checkMapping, isMapping, isString, isStringList, stringsOf, type Mapping } from './mapping-fields.pure';
 
 /** What exists around a pipeline: its skill's folder, the skill names, and a repo-path lookup. */
 export interface PipelineContext {
@@ -32,8 +42,9 @@ export interface PipelineContext {
   /** The Episode's staging folder, repo-relative: every output sits in it. */
   staging: string;
   /**
-   * A per-run pipeline, not the template: customize-pipeline has expanded
-   * every `foreach` into one job per item, so each output names one file.
+   * A per-run pipeline, not the template. Once approved, customize-pipeline
+   * has expanded every `foreach` into one job per item, so each output names
+   * one file; the draft scaffold-pipeline copies still keeps them.
    */
   perRun: boolean;
   /**
@@ -55,6 +66,8 @@ interface Reader {
   byId: ReadonlyMap<string, Job>;
   jobs: readonly Job[];
   context: PipelineContext;
+  /** An approved per-run pipeline: every `foreach` is expanded and every output names one file. */
+  expanded: boolean;
 }
 
 /**
@@ -91,7 +104,6 @@ function checkAgent(reader: Reader, agent: unknown): string[] {
     ...checkMapping(where, agent, agentFields(reviewer)),
     ...unless(!strayRubric, `${where} is an implementor and has a rubric; only a reviewer has one.`),
     ...checkSkillNames(where, stringsOf(agent.skills), context),
-    ...checkTicket(where, agent, context),
     ...stringsOf(agent.skills)
       .filter((skill) => SPAWNING_SKILLS.includes(skill) && agent.session !== 'orchestrator')
       .map(
@@ -102,40 +114,8 @@ function checkAgent(reader: Reader, agent: unknown): string[] {
   ];
 }
 
-/**
- * A per-run pipeline has no `foreach` and no glob output. Every output sits
- * in the staging folder, and a job writing markdown runs
- * `mh-query` before its implementor, so the implementor follows the rules'
- * intents; a job writing none has nothing to query.
- */
-function checkOutputs(where: string, job: Mapping, context: PipelineContext): string[] {
-  const outputs = stringsOf(job.outputs);
-  const markdown = outputs.some((output) => output.endsWith('.md'));
-  const queries = stringsOf(job.before).includes('mh-query');
-  return [
-    ...unless(
-      !context.perRun || !Object.hasOwn(job, 'foreach'),
-      `${where} has foreach; a per-run pipeline names one job per item, which customize-pipeline expands.`,
-    ),
-    ...outputs
-      .filter((output) => context.perRun && output.includes('*'))
-      .map((output) => `${where} writes "${output}", a glob; a per-run pipeline names each file.`),
-    ...outputs
-      .filter((output) => !output.startsWith(`${context.staging}/`))
-      .map((output) => `${where} writes "${output}", outside its staging folder ${context.staging}.`),
-    ...unless(
-      !markdown || queries,
-      `${where} writes markdown but lacks before: [mh-query]; its implementor queries each output's intents before writing it.`,
-    ),
-    ...unless(
-      markdown || !queries,
-      `${where} has before: [mh-query] but writes no markdown, so it has nothing to query.`,
-    ),
-  ];
-}
-
-function checkJob(reader: Reader, job: Mapping): string[] {
-  const { where, byId, context } = reader;
+function checkJob(reader: Reader, { job: read, mapping: job }: JobSource): string[] {
+  const { where, byId, context, expanded } = reader;
   const foreach = isString(job.foreach) ? [job.foreach] : [];
   const agents = Array.isArray(job.agents) ? (job.agents as unknown[]) : [];
   return [
@@ -144,17 +124,15 @@ function checkJob(reader: Reader, job: Mapping): string[] {
       .filter((check) => !CHECKS.includes(check))
       .map((check) => `${where} has the check "${check}"; the checks are ${CHECKS.join(', ')}.`),
     ...unless(!isString(job.id) || JOB_ID.test(job.id), `${where} has ${BAD_JOB_ID}`),
-    ...checkOutputs(where, job, context),
+    ...checkOutputs(where, job, { staging: context.staging, expanded }),
     ...stringsOf(job.outputs)
       .filter((output) => output.endsWith('.md') && !context.governs(output))
       .map(
         (output) =>
           `${where} writes "${output}", which no markdown-harness rule governs; its implementor would query no intents.`,
       ),
-    ...(['needs', 'wants'] as const).flatMap((edge) =>
-      stringsOf(job[edge])
-        .filter((other) => !byId.has(other))
-        .map((other) => `${where} ${edge} "${other}", which is no job in the pipeline.`),
+    ...missingEdges(read, byId).map(
+      ({ edge, other }) => `${where} ${edge} "${other}", which is no job in the pipeline.`,
     ),
     ...foreach.flatMap((path) => checkRead({ ...reader, where: `${where} foreach` }, path)),
     ...agents.flatMap((agent, at) => checkAgent({ ...reader, where: `${where}, agent ${at + 1}` }, agent)),
@@ -170,12 +148,13 @@ function inOrchestrator(job: Mapping): boolean {
 /**
  * A job that may run beside another, or fans out by `foreach`, works in its own worktree, so parallel jobs never
  * fail each other's repo-wide checks; one run wholly in the orchestrator's session stays on the integration branch.
- * `mappings` and `jobs` are the same jobs in the same order: the raw mapping and its graph view.
  */
-function checkIsolation(mappings: readonly Mapping[], jobs: readonly Job[], byId: ReadonlyMap<string, Job>): string[] {
+function checkIsolation(sources: readonly JobSource[], byId: ReadonlyMap<string, Job>): string[] {
+  const jobs = sources.map(({ job }) => job);
   const concurrent = concurrentJobs(jobs, byId);
-  return mappings
-    .filter((job, at) => concurrent.has(jobs[at].id) || Object.hasOwn(job, 'foreach'))
+  return sources
+    .filter(({ job, mapping }) => concurrent.has(job.id) || Object.hasOwn(mapping, 'foreach'))
+    .map(({ mapping }) => mapping)
     .filter((job) => job.isolation !== 'worktree' && !inOrchestrator(job))
     .map(
       (job) =>
@@ -183,23 +162,27 @@ function checkIsolation(mappings: readonly Mapping[], jobs: readonly Job[], byId
     );
 }
 
-function checkJobs(raw: readonly unknown[], context: PipelineContext): string[] {
-  const mappings = raw.filter(isMapping);
-  const jobs = mappings.map(jobOf);
-  const byId = new Map(jobs.map((job) => [job.id, job]));
-  const ids = jobs.map(({ id }) => id);
-  const cycle = findCycle(jobs, byId);
-  const brokenEdge = jobs.some(({ id }) => waitsFor(id, byId).some((other) => !byId.has(other)));
+/**
+ * The jobs of `document` and what they say together, each Job read beside its own mapping. Its `stages` are checked
+ * only when they are a list (else the field check's finding), and it is expanded once a per-run pipeline is approved.
+ */
+function checkJobs(document: Mapping, sources: readonly JobSource[], context: PipelineContext): string[] {
+  // The reader returns a Pipeline only for a document with a job list.
+  const raw = document.jobs as unknown[];
+  const stages = isStringList(document.stages) ? document.stages : null;
+  const expanded = context.perRun && document.status === 'approved';
+  const jobs = sources.map(({ job }) => job);
+  const { byId, duplicates, missing, cycle } = jobGraph(jobs);
   return [
     ...raw.flatMap((job, index) => unless(isMapping(job), `Job ${index + 1} must be a mapping.`)),
-    ...mappings.flatMap((job, index) =>
-      checkJob({ job: ids[index], where: `Job "${ids[index]}"`, byId, jobs, context }, job),
+    ...sources.flatMap((source) =>
+      checkJob({ job: source.job.id, where: `Job "${source.job.id}"`, byId, jobs, context, expanded }, source),
     ),
-    ...[...new Set(ids.filter((id, at) => ids.indexOf(id) !== at))].map(
-      (id) => `The job id "${id}" appears twice; job ids are unique.`,
-    ),
+    ...duplicates.map((id) => `The job id "${id}" appears twice; job ids are unique.`),
+    ...(stages === null ? [] : checkStages(stages, jobs)),
+    ...checkPorts(jobs, { perRun: context.perRun, expanded }),
     ...(cycle === null ? [] : [`The needs graph has a cycle: ${cycle.join(' → ')}.`]),
-    ...(cycle === null && !brokenEdge ? checkIsolation(mappings, jobs, byId) : []),
+    ...(cycle === null && missing.length === 0 ? checkIsolation(sources, byId) : []),
   ];
 }
 
@@ -218,22 +201,15 @@ function checkTemplate(document: Mapping, context: PipelineContext): string[] {
   ];
 }
 
-/** The parsed document, or the parser's complaint. */
-function parseDocument(yaml: string): { document: unknown } | { error: string } {
-  try {
-    return { document: parse(yaml) };
-  } catch (error) {
-    return { error: `The pipeline is not valid YAML: ${(error as Error).message}` };
-  }
-}
-
 /**
  * Checks one pipeline file. `file` is the path a finding names; `yaml` is its
  * text. Returns no findings when the pipeline is well formed.
  */
 export function checkPipeline(file: string, yaml: string, context: PipelineContext): Finding[] {
-  const parsed = parseDocument(yaml);
+  const parsed = parsePipeline(yaml);
   const document = 'document' in parsed ? parsed.document : undefined;
+  const pipeline = 'pipeline' in parsed ? parsed.pipeline : null;
+  const sources = 'sources' in parsed ? parsed.sources : [];
   const messages =
     'error' in parsed
       ? [parsed.error]
@@ -242,7 +218,7 @@ export function checkPipeline(file: string, yaml: string, context: PipelineConte
         : [
             ...checkMapping('The pipeline', document, TOP_FIELDS),
             ...checkTemplate(document, context),
-            ...(Array.isArray(document.jobs) ? checkJobs(document.jobs, context) : []),
+            ...(pipeline === null ? [] : checkJobs(document, sources, context)),
           ];
   return messages.map((message): Finding => ({ kind: 'pipeline', file, message }));
 }

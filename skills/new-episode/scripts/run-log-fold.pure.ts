@@ -5,19 +5,29 @@ import type {
   FoldOptions,
   RunLogLine,
   Score,
+  SkillUse,
   Span,
+  SpanEvent,
   SpanStatus,
   SpanType,
   Status,
 } from './run-log.schema.pure.ts';
 
 /** Oldest first by time, ties by sequence number. */
-function chronological(lines: readonly RunLogLine[]): RunLogLine[] {
-  return [...lines].sort((a, b) => Date.parse(a.t) - Date.parse(b.t) || a.seq - b.seq);
+export function order(a: { t: string; seq: number }, b: { t: string; seq: number }): number {
+  return Date.parse(a.t) - Date.parse(b.t) || a.seq - b.seq;
 }
 
+function chronological(lines: readonly RunLogLine[]): RunLogLine[] {
+  return [...lines].sort(order);
+}
+
+/** Line keys a reader may display and never derives span state from. */
+const DISPLAY_ONLY = new Set(['payload', 'payload_truncated']);
+
 function openSpan(entry: RunLogLine, open: SpanStatus): Span {
-  const { kind, t, seq, span_id, parent_span_id, type, name, ...attributes } = entry;
+  const { kind, t, seq, span_id, parent_span_id, type, name, ...rest } = entry;
+  const attributes = Object.fromEntries(Object.entries(rest).filter(([key]) => !DISPLAY_ONLY.has(key)));
   const spanType = kind === 'start-run' ? 'run' : (type as SpanType);
   const base = {
     trace_id: entry.trace_id,
@@ -44,7 +54,20 @@ function scoreOf(entry: RunLogLine): Score {
   return Object.fromEntries(Object.entries(score).filter(([, v]) => v !== undefined)) as unknown as Score;
 }
 
-const NOT_ATTRIBUTES = new Set(['kind', 't', 'start_t', 'seq', 'span_id', 'trace_id', 'status', 'summary', 'source']);
+/** Line keys that are not span attributes. A payload is display-only, so it never becomes one either. */
+const NOT_ATTRIBUTES = new Set([
+  'kind',
+  't',
+  'start_t',
+  'seq',
+  'span_id',
+  'trace_id',
+  'status',
+  'summary',
+  'source',
+  'payload',
+  'payload_truncated',
+]);
 
 /**
  * Closes a span with an end line. The span keeps its own `source`; the end line's fills it in only when the start gave none.
@@ -71,25 +94,79 @@ function applyAttributes(span: Span, entry: RunLogLine): void {
 }
 
 interface Accumulator {
-  open: SpanStatus;
-  live?: ReadonlySet<string>;
+  live?: FoldOptions['live'];
   spans: Map<string, Span>;
+  starts: Map<string, RunLogLine>;
+  ends: Map<string, RunLogLine>;
+  endFacts: Map<string, Map<string, RunLogLine>>;
   scores: Score[];
+  events: Map<string, SpanEvent[]>;
   orphans: RunLogLine[];
 }
 
-/** What a start's span is until it ends: running in a live Run, else the fold's default for open spans. */
-function openStatus(entry: RunLogLine, acc: Accumulator): SpanStatus {
-  if (acc.live === undefined) return acc.open;
-  return acc.live.has(entry.trace_id) ? 'running' : 'crashed';
+function rebuildSpan(id: string, entry: RunLogLine, acc: Accumulator): void {
+  const start = acc.starts.get(id);
+  const end = acc.ends.get(id);
+  if (start === undefined) {
+    acc.orphans.push(entry);
+    return;
+  }
+  const span = openSpan(start, 'crashed');
+  const facts = acc.endFacts.get(id) ?? new Map<string, RunLogLine>();
+  const values = Object.fromEntries([...facts].map(([key, line]) => [key, line[key as keyof RunLogLine]]));
+  if (end !== undefined) closeSpan(span, { ...end, ...values });
+  else applyAttributes(span, { ...start, ...values });
+  acc.spans.set(id, span);
+  acc.orphans = acc.orphans.filter((orphan) => orphan.span_id !== id);
+}
+
+/** An event line joins its span's events; until that span has started it waits among the orphans. */
+function placeEvent(id: string, entry: RunLogLine & { kind: 'event' }, acc: Accumulator): void {
+  const { name, t, seq, attributes } = entry;
+  acc.events.set(id, [...(acc.events.get(id) ?? []), { name, t, seq, attributes } as SpanEvent]);
+  if (!acc.spans.has(id)) acc.orphans.push(entry);
 }
 
 function place(entry: RunLogLine, acc: Accumulator): void {
+  if (entry.kind === 'score') {
+    acc.scores.push(scoreOf(entry));
+    return;
+  }
   const id = entry.span_id as string;
-  if (entry.kind === 'start' || entry.kind === 'start-run') acc.spans.set(id, openSpan(entry, openStatus(entry, acc)));
-  else if (entry.kind === 'score') acc.scores.push(scoreOf(entry));
-  else if (acc.spans.has(id)) (entry.kind === 'attrs' ? applyAttributes : closeSpan)(acc.spans.get(id) as Span, entry);
-  else acc.orphans.push(entry);
+  if (entry.kind === 'event') {
+    placeEvent(id, entry, acc);
+    return;
+  }
+  if (entry.kind === 'start' || entry.kind === 'start-run') {
+    const known = acc.starts.get(id);
+    if (known !== undefined && order(entry, known) < 0) return;
+    acc.starts.set(id, entry);
+  } else rememberEnd(id, entry, acc);
+  rebuildSpan(id, entry, acc);
+}
+
+function rememberFact(key: string, entry: RunLogLine, facts: Map<string, RunLogLine>): void {
+  const previous = facts.get(key);
+  const precedence = previous === undefined ? 1 : order(entry, previous);
+  if (previous === undefined || (key === 'source' ? precedence < 0 : precedence >= 0)) facts.set(key, entry);
+}
+
+function rememberEnd(id: string, entry: RunLogLine, acc: Accumulator): void {
+  const known = acc.ends.get(id);
+  if (entry.kind !== 'attrs' && (known === undefined || order(entry, known) >= 0)) acc.ends.set(id, entry);
+  const facts = acc.endFacts.get(id) ?? new Map<string, RunLogLine>();
+  const keys = Object.keys(entry).filter(
+    (key) => !NOT_ATTRIBUTES.has(key) || (key === 'start_t' && entry.kind !== 'attrs') || key === 'source',
+  );
+  keys.forEach((key) => rememberFact(key, entry, facts));
+  acc.endFacts.set(id, facts);
+}
+
+/** The skills a span invoked so far, oldest first: its `skill.invoke` events. */
+export function skillUses(span: Pick<Span, 'events'>): SkillUse[] {
+  return (span.events ?? []).flatMap((event) =>
+    event.name === 'skill.invoke' ? [{ name: event.attributes['skill.name'], t: event.t, seq: event.seq }] : [],
+  );
 }
 
 /** The newest Run's `start-run` line (the last in log order), null when the log holds no Run. The one rule for "the current Run". */
@@ -97,15 +174,56 @@ export function currentRun(lines: readonly RunLogLine[]): RunLogLine | null {
   return [...lines].reverse().find((l) => l.kind === 'start-run') ?? null;
 }
 
-const isStart = (entry: RunLogLine): boolean => entry.kind === 'start' || entry.kind === 'start-run';
-
 /** Folds lines into spans and scores. Input order does not matter: lines are sorted by `t`, then `seq`; every start is placed before any end or score, so an end links to its start by `span_id` even when its `t` is earlier. */
 export function fold(lines: readonly RunLogLine[], options: FoldOptions = {}): Folded {
-  const acc: Accumulator = { open: 'crashed', live: options.live, spans: new Map(), scores: [], orphans: [] };
-  const ordered = chronological(lines);
-  for (const entry of ordered.filter(isStart)) place(entry, acc);
-  for (const entry of ordered.filter((e) => !isStart(e))) place(entry, acc);
-  return { spans: [...acc.spans.values()], scores: acc.scores, orphans: acc.orphans };
+  const log = createLogFold(options);
+  log.append(lines);
+  return log.snapshot();
+}
+
+function snapshot(acc: Accumulator): Folded {
+  const runs = [...acc.spans.values()].filter((span) => span.type === 'run');
+  const live =
+    acc.live === 'unfinished'
+      ? new Set(runs.filter((span) => span.end_t === null).map((span) => span.trace_id))
+      : new Set(acc.live);
+  for (const run of runs) {
+    if (run.end_t !== null) live.delete(run.trace_id);
+  }
+  const spans = [...acc.spans.values()]
+    .sort((a, b) => order(acc.starts.get(a.span_id)!, acc.starts.get(b.span_id)!))
+    .map((span) => ({
+      ...span,
+      ...(acc.events.has(span.span_id) && { events: [...acc.events.get(span.span_id)!].sort(order) }),
+      ...(span.end_t === null ? { status: live.has(span.trace_id) ? ('running' as const) : ('crashed' as const) } : {}),
+    }));
+  return {
+    spans,
+    scores: [...acc.scores].sort(order).map((score) => ({ ...score })),
+    orphans: chronological(acc.orphans),
+  };
+}
+
+/** An append-only fold. Appending applies only the supplied lines; snapshots never replay log history. */
+export function createLogFold(options: FoldOptions = {}) {
+  const acc: Accumulator = {
+    live: options.live,
+    spans: new Map(),
+    starts: new Map(),
+    ends: new Map(),
+    endFacts: new Map(),
+    scores: [],
+    events: new Map(),
+    orphans: [],
+  };
+  return {
+    append(lines: readonly RunLogLine[]): void {
+      for (const entry of chronological(lines)) place(entry, acc);
+    },
+    snapshot(): Folded {
+      return snapshot(acc);
+    },
+  };
 }
 
 function parseLine(raw: string): RunLogLine | null {
