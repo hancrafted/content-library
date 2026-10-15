@@ -112,6 +112,15 @@ const META_BLOCK =
   /(<script\b(?=[^>]*\bid=["']spec-meta["'])(?=[^>]*\btype=["']application\/json["'])[^>]*>)([\s\S]*?)(<\/script>)/;
 
 /**
+ * The gate tier of an HTML Spec, read from its meta block as `gateTier` reads frontmatter: JSON is YAML, so the
+ * tiers of design-ADR 0005 apply unchanged. A page with no meta block is unverified.
+ */
+export function metaGateTier(html: string): Tier {
+  const json = META_BLOCK.exec(html)?.[2];
+  return json === undefined ? 'unverified' : gateTier(`---\n${json.trim()}\n---\n`);
+}
+
+/**
  * An HTML Spec with `{ by, at }` appended to its meta block's `verified` list, the frontmatter equivalent of
  * design-ADR 0011: the same never-overwrite rule as appendVerified, the JSON rewritten at the block's indent and
  * every other byte of the page as written. Throws when the page has no meta block, or one that is not a JSON object.

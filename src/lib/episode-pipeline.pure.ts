@@ -26,6 +26,7 @@ import { ancestors, concurrentJobs } from './episode-pipeline-graph.pure';
 import { checkOutputs } from './episode-pipeline-outputs.pure';
 import { checkPorts } from './episode-pipeline-ports.pure';
 import { checkSkillNames } from './episode-pipeline-skills.pure';
+import { checkSpecGate } from './episode-pipeline-spec-gate.pure';
 import { checkStages } from './episode-pipeline-stages.pure';
 import { unless, type Finding } from './finding.pure';
 import { checkMapping, isMapping, isString, isStringList, stringsOf, type Mapping } from './mapping-fields.pure';
@@ -181,6 +182,7 @@ function checkJobs(document: Mapping, sources: readonly JobSource[], context: Pi
     ...duplicates.map((id) => `The job id "${id}" appears twice; job ids are unique.`),
     ...(stages === null ? [] : checkStages(stages, jobs)),
     ...checkPorts(jobs, { perRun: context.perRun, expanded }),
+    ...checkSpecGate(jobs, { staging: context.staging, expanded }),
     ...(cycle === null ? [] : [`The needs graph has a cycle: ${cycle.join(' → ')}.`]),
     ...(cycle === null && missing.length === 0 ? checkIsolation(sources, byId) : []),
   ];
