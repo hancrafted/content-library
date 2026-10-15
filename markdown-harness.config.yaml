@@ -543,7 +543,7 @@ body-structure:
             pattern: '^Feedback round \d+$',
             intent: "Names the round, `Feedback round <n>`, the number the file's `round` holds.",
           }
-      intent: 'One list of items, each a single change keyed to its Slide and tagged with where it lands, so it routes to the Dossier, the implementation, or the recording; a Spec review tags each item `design` and names its picks, so it routes to the Spec. Fail if an item holds more than one change, its tag sends it to the wrong place, or it cannot be acted on without asking Han.'
+      intent: 'One list of items, each a single change keyed to its Slide and tagged with where it lands: `content`, any change to what a Slide says or cites, its title, Voice script or Speaker notes, routes to the Spec first and then the implementation; `implementation` to the code alone; `practice` to the recording; a Spec review tags each item `design` and names its picks, so it routes to the Spec. Fail if an item holds more than one change, its tag sends it to the wrong place (a Voice script change tagged anything but `content`), or it cannot be acted on without asking Han.'
       undefinedHeadings: forbid
     - ruleId: episode-design-reference-body
       fileNames: [design-reference.md]

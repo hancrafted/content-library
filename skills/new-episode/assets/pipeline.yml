@@ -291,6 +291,8 @@ jobs:
 
   # Writes the Episode's page under src/, outside the staging folder: its
   # wiring, metadata, Title slide and one placement marker per Section.
+  # From here on every job reads the Spec alone: the Spec Gate deleted
+  # dossier.md, and the schema check refuses a later job that reads it.
   - id: implement-episode-init
     stage: build
     needs: [write-spec]
@@ -305,7 +307,6 @@ jobs:
           - references/implement-episode-init.md
           - references/skill-overrides.md
           - docs/episodes/<slug>/brief.md
-          - docs/episodes/<slug>/dossier.md
           - docs/episodes/<slug>/spec/spec.html
         model: opus
       - type: reviewer
@@ -335,7 +336,6 @@ jobs:
         references:
           - references/implement-section.md
           - references/skill-overrides.md
-          - docs/episodes/<slug>/dossier.md
           - docs/episodes/<slug>/spec/spec.html
           - docs/episodes/<slug>/reference/*/design-reference.md
         model: opus
@@ -352,7 +352,6 @@ jobs:
         references:
           - references/implement-section.md
           - references/skill-overrides.md
-          - docs/episodes/<slug>/dossier.md
           - docs/episodes/<slug>/spec/spec.html
           - docs/episodes/<slug>/reference/*/design-reference.md
         rubric: references/implement-section.md#rubric

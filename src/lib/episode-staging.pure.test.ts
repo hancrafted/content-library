@@ -429,6 +429,27 @@ describe('failure cases', () => {
     expect(findings[0].message).toContain(expectedAnchor);
   });
 
+  it("checks feedback beside a Spec whose Dossier the Gate deleted, keyed by the Spec's own Slides", () => {
+    // ARRANGE
+    const page = `<!doctype html><html><body>
+<section data-spec="section" id="why"><article data-spec="slide" id="spent" data-number="1"></article></section>
+</body></html>`;
+    const files = {
+      'spec/spec.html': page,
+      [FEEDBACK_PATH]: feedback('app', [
+        '- `why--spent` · content — Open with the budget.',
+        '- `why--gone` · content — Cut it.',
+      ]),
+    };
+    const expected = [
+      { kind: 'feedback', file: FEEDBACK_PATH, message: 'Feedback anchor "why--gone" is no page slide in the Spec.' },
+    ];
+    // ACT
+    const findings = checkStagingFolder(files, KNOWN_VISUALS, REVIEW_ASSET).filter(({ kind }) => kind === 'feedback');
+    // ASSERT
+    expect(findings).toEqual(expected);
+  });
+
   it('reports a practice tag in feedback that did not come from practice', () => {
     // ARRANGE
     const files = folder({ [FEEDBACK_PATH]: feedback('app', ['- `why--spent` · practice — Slow down here.']) });

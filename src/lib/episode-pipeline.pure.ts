@@ -163,6 +163,18 @@ function checkIsolation(sources: readonly JobSource[], byId: ReadonlyMap<string,
     );
 }
 
+/** The paths each job's agents read, by job id. */
+function readsOf(sources: readonly JobSource[]): Map<string, string[]> {
+  return new Map(
+    sources.map(({ job, mapping }) => [
+      job.id,
+      (Array.isArray(mapping.agents) ? (mapping.agents as unknown[]) : [])
+        .filter(isMapping)
+        .flatMap((agent) => stringsOf(agent.references)),
+    ]),
+  );
+}
+
 /**
  * The jobs of `document` and what they say together, each Job read beside its own mapping. Its `stages` are checked
  * only when they are a list (else the field check's finding), and it is expanded once a per-run pipeline is approved.
@@ -182,7 +194,7 @@ function checkJobs(document: Mapping, sources: readonly JobSource[], context: Pi
     ...duplicates.map((id) => `The job id "${id}" appears twice; job ids are unique.`),
     ...(stages === null ? [] : checkStages(stages, jobs)),
     ...checkPorts(jobs, { perRun: context.perRun, expanded }),
-    ...checkSpecGate(jobs, { staging: context.staging, expanded }),
+    ...checkSpecGate(jobs, { staging: context.staging, expanded, reads: readsOf(sources) }),
     ...(cycle === null ? [] : [`The needs graph has a cycle: ${cycle.join(' → ')}.`]),
     ...(cycle === null && missing.length === 0 ? checkIsolation(sources, byId) : []),
   ];

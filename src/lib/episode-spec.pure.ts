@@ -108,6 +108,17 @@ function checkAgainstDossier($: CheerioAPI, dossier: string): string[] {
   ];
 }
 
+/** The page Slide anchors of a Spec, `<section id>--<slide id>` in page order, as feedback items key them. */
+export function specSlideAnchors(html: string): string[] {
+  const $ = load(html);
+  return $(`section[data-spec="section"] ${SLIDE}`)
+    .toArray()
+    .map((element) => {
+      const section = $(element).closest('section[data-spec="section"]').attr('id') ?? '';
+      return `${section}--${$(element).attr('id') ?? ''}`;
+    });
+}
+
 /**
  * Checks a staging folder's Spec page against the Spec contract, and against
  * the Dossier while one exists; nothing until `spec/spec.html` exists. `files`

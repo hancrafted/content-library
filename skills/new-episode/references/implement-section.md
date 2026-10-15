@@ -10,6 +10,15 @@ The implementor (`archgate:developer`) builds its Section of the approved Spec, 
 - On a retry, the failed lines go to a new implementor, quoted verbatim, as fix work in the job's worktree.
 - Serve the Section for Han while the job runs: in the job's worktree, start `npx next dev -p <port>`, `<port>` the job's `port` in `pipeline.yml`, detached, so it outlives the agent's session: the harness's detached background mode, or `nohup npx next dev -p <port> > .scratch/dev-<port>.log 2>&1 & echo $! > .scratch/dev-<port>.pid`. A retry reuses the server already listening there. The orchestrator stops it before it removes the worktree; after the merge, `implement-episode-init`'s server shows the Section.
 
+## The Spec is the source
+
+The approved Spec is the Section's only source; the Spec Gate deleted the Dossier. Read the job's `data-spec="section"` alone, and from each of its `article[data-spec="slide"]`:
+
+- **Title**: the `<h3>` after its `<n> · ` number, the Slide's `title` key in `i18n/<locale>.json`, which the table of contents reads. An on-screen title the picked Option's mock shows in place of it is a separate `heading` key in the same file, which the kit's `Title` renders in place of its children; a Slide whose Option shows the h3 has no `heading` key.
+- **Voice script**: each `<li>` of `ol[data-spec="voice-script"]` becomes one Voice script segment of the Slide, verbatim, its `<strong>` the segment's title.
+- **Speaker notes**: each `<li>` of `ol[data-spec="speaker-notes"]` becomes one Speaker note, its `<strong>` the title, its `data-source` items the sources and a `target:` item its target.
+- The Section's own `ol[data-spec="voice-script"]` belongs to its section slide, which `implement-episode-init` built; leave it.
+
 ## Picked Options
 
 Han picked one Option per Slide at the Spec Gate: build each Slide to its `data-picked` Option, its mock and its build notes' parts, tokens, props and i18n keys, and the `master:` and `motion:` those notes keep or overrule. Build no layout the Option does not give, and ask no design question: a gap in it is a `Needs human:` line. An Option naming a `Design reference:` page image is built against it: keep what its `Build against this page` line keeps, by [`skill-overrides.md`](skill-overrides.md#visual-check).
@@ -35,9 +44,9 @@ Every Slide must have a `count` of 1, a wrapper box at least the viewport tall (
 
 ## Rubric
 
-1. Every Dossier Voice script item of the Section's Slides appears verbatim as a Voice script segment of its Slide.
-2. Every Slide uses the master and motion its Dossier Visual names (`none` is no motion), shows the Visual's `title:` when it has one and the Dossier h3 otherwise, and the table of contents shows the h3. Where the Visual's `title:` goes: the h3 is the Slide's `title` key in `i18n/<locale>.json` (the table of contents reads it), and the Visual's `title:` is a separate `heading` key in the same file, which the kit's `Title` renders in place of its children; a Slide without a `title:` has no `heading` key.
-3. Every Speaker note of the Section's Slides in the Dossier appears in its Slide's notes.
+1. Every Spec Voice script item of the Section's Slides appears verbatim as a Voice script segment of its Slide.
+2. Every Slide uses the master and motion its picked Option's build notes keep or overrule (`none` is no motion), shows the on-screen title its picked Option's mock shows, and the table of contents shows the Spec h3, as [The Spec is the source](#the-spec-is-the-source) keys them.
+3. Every Speaker note of the Section's Slides in the Spec appears in its Slide's notes, with its sources.
 4. Every Slide follows its picked Option, with no layout, component or motion the Option does not give; a Slide whose Option names a `Design reference:` page keeps what the Option keeps from that page image.
 5. The visual check ran at 375, 1100 and 1440 px, drawer beside, over and closed, in both themes, and its numbers show no overflow, wrappers at least viewport height and Foreground clear of the chrome.
 6. The job changed no file of another Section.
