@@ -265,6 +265,8 @@ jobs:
         skills: [ui-ux-pro-max:slides]
         references:
           - references/write-spec.md
+          - references/spec-designer.md
+          - assets/spec-frame.html
           - assets/spec-review.html
           - assets/sample-episode/spec/spec.html
           - GLOSSARY.md
@@ -280,6 +282,7 @@ jobs:
         skills: [ui-ux-pro-max:ui-ux-pro-max]
         references:
           - references/write-spec.md
+          - references/spec-designer.md
           - GLOSSARY.md
           - docs/episodes/<slug>/brief.md
           - docs/episodes/<slug>/dossier.md
