@@ -1,13 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { fold } from '../../skills/new-episode/scripts/run-log.pure';
 import type { RunLogLine } from '../../skills/new-episode/scripts/run-log.schema.pure';
-import type { DashboardEvent } from './dashboard-events.pure';
 import { parseDashboardPipeline, projectDashboard } from './dashboard-projection.pure';
-import { replayDashboard } from './dashboard-replay.pure';
 
 /*
  * Monitoring chips per Job (design-ADR 0009): every skill and check `pipeline.yml` names for a Job, read from the
- * Job's current Run and latest Attempt through the projection the dashboard renders, and through the replay cutoff.
+ * Job's current Run and latest Attempt through the projection the dashboard renders. The replay cutoff's share is
+ * tested through the Dashboard timeline.
  */
 
 const RUN_START = Date.parse('2026-10-14T10:00:00Z');
@@ -48,9 +47,6 @@ const lines = (...entries: [number, Fields][]): RunLogLine[] =>
   entries.map(
     ([time, fields], index) => ({ trace_id: 'trace', ...fields, t: minute(time), seq: index + 1 }) as RunLogLine,
   );
-const toEvents = (log: RunLogLine[]): DashboardEvent[] =>
-  log.map((line, index) => ({ number: index + 1, raw: JSON.stringify(line), line }));
-
 const runStart: Fields = { kind: 'start-run', span_id: 'run', run_id: 'run-1' };
 const jobStart: Fields = {
   kind: 'start',
@@ -297,27 +293,5 @@ describe('edge cases', () => {
     const chips = chipsOf([...earlier, ...later]);
     // ASSERT
     expect(chips.checks).toEqual(expected);
-  });
-
-  it('respects the replay cutoff: a skill line and a Score after it are not yet seen', () => {
-    // ARRANGE
-    const log = lines(
-      [0, runStart],
-      [1, jobStart],
-      [2, agent('impl', 'implementor', 'write')],
-      [3, skill('impl', 'research')],
-      [6, skill('impl', 'tdd')],
-      [7, check('write', 'mh', 'pass')],
-    );
-    const cutoff = RUN_START + 4 * 60_000;
-    const expected = { skills: ['research:run', 'tdd:pending'], checks: ['mh:pending', 'vitest:pending'] };
-    // ACT
-    const job = replayDashboard(pipeline, toEvents(log), cutoff).jobs[0];
-    const chips = {
-      skills: job.chips.skills.map((chip) => `${chip.name}:${chip.state}`),
-      checks: job.chips.checks.map((chip) => `${chip.name}:${chip.state}`),
-    };
-    // ASSERT
-    expect(chips).toEqual(expected);
   });
 });

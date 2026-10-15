@@ -121,7 +121,7 @@ function GraphOverview({ controls, graph, stale, copy, replay }: OverviewProps) 
       {stale ? <p className="text-caption text-(--warning)">{copy.graph.stale}</p> : null}
       <div className={styles.graphScroll} style={{ maxHeight: geometry.maxHeight }}>
         <div className={styles.canvas} style={geometry.cssVars as CSSProperties}>
-          <TimeTravel replay={replay} copy={copy} stages={geometry.stops.length} geometry={geometry} />
+          <TimeTravel replay={replay} copy={copy} geometry={geometry} />
           <StageNavigation
             stages={graph.stages}
             selected={detail.selection?.stage ?? null}
