@@ -1,6 +1,6 @@
 // `node skills/new-episode/scripts/approve.ts <file> [--by <actor>]`: appends `{ by, at: <now UTC> }`
-// to a staging file's `verified` list; never typed by hand. `by` defaults to `human:han` (Han's approval at a
-// gate); the orchestrator passes `--by process:markdown-harness` for a machine-confirmed pass.
+// to a staging file's `verified` list, an HTML Spec's in its meta block; never typed by hand. `by` defaults to
+// `human:han` (Han's approval at a gate); the orchestrator passes `--by process:markdown-harness` for a machine-confirmed pass.
 import { readFileSync, writeFileSync } from 'node:fs';
 import { approveText, parseApproveArgs } from './verified.pure.ts';
 
@@ -11,5 +11,10 @@ if (typeof args === 'string') {
   process.exit(1);
 }
 const at = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
-writeFileSync(args.file, approveText(readFileSync(args.file, 'utf8'), args.by, at));
+try {
+  writeFileSync(args.file, approveText(args.file, readFileSync(args.file, 'utf8'), { by: args.by, at }));
+} catch (error) {
+  console.error(`✖ ${args.file}: ${error instanceof Error ? error.message : String(error)}`);
+  process.exit(1);
+}
 console.log(`✔ ${args.file}: verified by ${args.by} at ${at}`);

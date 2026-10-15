@@ -2,12 +2,21 @@
 // gate tiers themselves live in src/lib/staging-file.pure.ts, which imports nothing but `yaml`, so this script
 // reaches it with a relative `.ts` import under bare node.
 
-import { appendVerified, HAN_ACTOR, isActor } from '../../../src/lib/staging-file.pure.ts';
+import {
+  appendMetaVerified,
+  appendVerified,
+  HAN_ACTOR,
+  isActor,
+  type VerifiedEntry,
+} from '../../../src/lib/staging-file.pure.ts';
 
-/** The file with an entry by `by` at `at` appended; `by` must be a `human:<id>` or `process:<id>` actor. */
-export function approveText(text: string, by: string, at: string): string {
-  if (!isActor(by)) throw new Error(`\`${by}\` is not an actor (human:<id> or process:<id>)`);
-  return appendVerified(text, { by, at });
+/**
+ * The file with an entry by `by` at `at` appended; `by` must be a `human:<id>` or `process:<id>` actor. An HTML
+ * Spec (`.html`) takes it in its meta block, any other file in its frontmatter.
+ */
+export function approveText(file: string, text: string, entry: VerifiedEntry): string {
+  if (!isActor(entry.by)) throw new Error(`\`${entry.by}\` is not an actor (human:<id> or process:<id>)`);
+  return file.endsWith('.html') ? appendMetaVerified(text, entry) : appendVerified(text, entry);
 }
 
 /** The command line of approve.ts: `<file> [--by <actor>]`, `by` defaulting to Han; a string is the usage error. */
