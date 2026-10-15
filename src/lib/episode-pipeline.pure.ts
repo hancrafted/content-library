@@ -1,11 +1,11 @@
 /*
  * The schema check for a new-episode pipeline: the skill's template and every
- * per-run `docs/episodes/<slug>/pipeline.yml`. It parses the YAML and checks
- * its keys, its `needs` graph, the skills it names and the paths it reads, so
+ * per-run `docs/episodes/<slug>/pipeline.yml`. It reads the YAML through the
+ * Pipeline definition reader and checks its keys, its `needs` graph, the skills it names and the paths it reads, so
  * a typo or a missing file fails `npm run verify` instead of a run. Reading
  * the disk is the caller's job: the context says which skills and paths exist.
  */
-import { parse } from 'yaml';
+import { BAD_JOB_ID, JOB_ID, parsePipeline, type Job, type Pipeline } from './episode-pipeline-definition.pure';
 import {
   agentFields,
   CHECKS,
@@ -15,7 +15,6 @@ import {
   TOP_FIELDS,
 } from './episode-pipeline-fields.pure';
 import { ancestors, concurrentJobs, findCycle, waitsFor } from './episode-pipeline-graph.pure';
-import { BAD_JOB_ID, JOB_ID, jobOf, type Job } from './episode-pipeline-jobs.pure';
 import { checkOutputs } from './episode-pipeline-outputs.pure';
 import { checkPorts } from './episode-pipeline-ports.pure';
 import { checkSkillNames } from './episode-pipeline-skills.pure';
@@ -157,14 +156,16 @@ function checkIsolation(mappings: readonly Mapping[], jobs: readonly Job[], byId
 }
 
 /**
- * The jobs of `document` and what they say together. Its `stages` are checked only when they are a list (else the
- * field check's finding), and it is expanded once a per-run pipeline is approved.
+ * The jobs of `document` and what they say together; `jobs` is the reader's view of its job mappings, in order.
+ * Its `stages` are checked only when they are a list (else the field check's finding), and it is expanded once a
+ * per-run pipeline is approved.
  */
-function checkJobs(raw: readonly unknown[], document: Mapping, context: PipelineContext): string[] {
+function checkJobs(document: Mapping, { jobs }: Pipeline, context: PipelineContext): string[] {
+  // The reader returns a Pipeline only for a document with a job list.
+  const raw = document.jobs as unknown[];
   const stages = isStringList(document.stages) ? document.stages : null;
   const expanded = context.perRun && document.status === 'approved';
   const mappings = raw.filter(isMapping);
-  const jobs = mappings.map(jobOf);
   const byId = new Map(jobs.map((job) => [job.id, job]));
   const ids = jobs.map(({ id }) => id);
   const cycle = findCycle(jobs, byId);
@@ -197,22 +198,14 @@ function checkTemplate(document: Mapping, context: PipelineContext): string[] {
   ];
 }
 
-/** The parsed document, or the parser's complaint. */
-function parseDocument(yaml: string): { document: unknown } | { error: string } {
-  try {
-    return { document: parse(yaml) };
-  } catch (error) {
-    return { error: `The pipeline is not valid YAML: ${(error as Error).message}` };
-  }
-}
-
 /**
  * Checks one pipeline file. `file` is the path a finding names; `yaml` is its
  * text. Returns no findings when the pipeline is well formed.
  */
 export function checkPipeline(file: string, yaml: string, context: PipelineContext): Finding[] {
-  const parsed = parseDocument(yaml);
+  const parsed = parsePipeline(yaml);
   const document = 'document' in parsed ? parsed.document : undefined;
+  const pipeline = 'pipeline' in parsed ? parsed.pipeline : null;
   const messages =
     'error' in parsed
       ? [parsed.error]
@@ -221,7 +214,7 @@ export function checkPipeline(file: string, yaml: string, context: PipelineConte
         : [
             ...checkMapping('The pipeline', document, TOP_FIELDS),
             ...checkTemplate(document, context),
-            ...(Array.isArray(document.jobs) ? checkJobs(document.jobs, document, context) : []),
+            ...(pipeline === null ? [] : checkJobs(document, pipeline, context)),
           ];
   return messages.map((message): Finding => ({ kind: 'pipeline', file, message }));
 }

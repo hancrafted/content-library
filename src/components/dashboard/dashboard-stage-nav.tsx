@@ -1,9 +1,9 @@
 import { spanElapsed } from '@/lib/dashboard-elapsed.pure';
-import type { dashboardLayout, StageGeometry } from '@/lib/dashboard-layout.pure';
+import type { GraphGeometry, StageGeometry } from '@/lib/dashboard-graph-geometry.pure';
 import { isComplete, runningAgents, stageTitle, stateText, type DashboardStage } from '@/lib/dashboard-stages.pure';
 import { fillTemplate } from '@/lib/template.pure';
 import { CircleAlert } from 'lucide-react';
-import { useContext, type CSSProperties } from 'react';
+import { useContext } from 'react';
 import { JobChipList } from './dashboard-chips';
 import { ElapsedTime, StateBadge, type DashboardCopy } from './dashboard-evidence';
 import styles from './dashboard-graph.module.css';
@@ -23,15 +23,13 @@ interface NavigationProps {
   /** Present when the view shows each stage's Jobs. */
   onSelectJob?: SelectJob;
   copy: DashboardCopy;
-  layout: ReturnType<typeof dashboardLayout>;
+  geometry: GraphGeometry;
   selectedJob?: string;
-  endPosition: number;
 }
 
-type NodeProps = Omit<NavigationProps, 'stages' | 'layout' | 'endPosition'> & {
+type NodeProps = Omit<NavigationProps, 'stages' | 'geometry'> & {
   stage: DashboardStage;
-  layout: StageGeometry;
-  placement?: CSSProperties;
+  geometry: StageGeometry;
 };
 type LabelProps = Pick<NodeProps, 'stage' | 'copy'>;
 
@@ -133,9 +131,13 @@ function StageButton({ stage, selected, onSelect, onSelectJob, copy }: NodeProps
 }
 
 function StageNode(props: NodeProps) {
-  const { stage, layout, onSelectJob, onSelect, copy, selectedJob } = props;
+  const { stage, geometry, onSelectJob, onSelect, copy, selectedJob } = props;
   return (
-    <li className={styles.stage} data-complete={isComplete(stage.state)} style={props.placement}>
+    <li
+      className={styles.stage}
+      data-complete={isComplete(stage.state)}
+      style={onSelectJob ? geometry.placement : undefined}
+    >
       <div
         className={styles.stageAnchor}
         data-graph-stage
@@ -149,28 +151,20 @@ function StageNode(props: NodeProps) {
         <StagePopover stage={stage} copy={copy} onSelect={onSelect} />
       </div>
       {onSelectJob ? (
-        <StageJobs stage={stage} layout={layout} onSelectJob={onSelectJob} copy={copy} selected={selectedJob} />
+        <StageJobs stage={stage} geometry={geometry} onSelectJob={onSelectJob} copy={copy} selected={selectedJob} />
       ) : null}
     </li>
   );
 }
 
 function StageNodes(props: NavigationProps) {
-  const { stages, layout, onSelectJob, selected, selectedJob, onSelect, copy } = props;
+  const { stages, geometry, onSelectJob, selected, selectedJob, onSelect, copy } = props;
   return stages.map((stage, index) => (
     <StageNode
       key={stage.id}
       stage={stage}
-      layout={layout.stages[index]}
+      geometry={geometry.stages[index]}
       selectedJob={selectedJob}
-      placement={
-        onSelectJob
-          ? {
-              left: `${(layout.stages[index].x / layout.width) * 100}%`,
-              width: `${(layout.stages[index].width / layout.width) * 100}%`,
-            }
-          : undefined
-      }
       selected={selected}
       onSelect={onSelect}
       onSelectJob={onSelectJob}
@@ -180,11 +174,11 @@ function StageNodes(props: NavigationProps) {
 }
 
 export function StageNavigation(props: NavigationProps) {
-  const { onSelectJob, copy, endPosition } = props;
+  const { onSelectJob, copy, geometry } = props;
   return (
     <ol className={styles.stages} data-jobs={onSelectJob !== undefined} aria-label={copy.graph.title}>
       <StageNodes {...props} />
-      <li className={styles.endNode} style={{ left: `${endPosition * 100}%` }}>
+      <li className={styles.endNode} style={{ left: `${geometry.end * 100}%` }}>
         <span role="img" aria-label={copy.graph.runEnd} title={copy.graph.runEnd} className={styles.endDot} />
       </li>
     </ol>

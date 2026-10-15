@@ -12,7 +12,7 @@
   content: '';
   position: absolute;
   left: 50%;
-  top: calc(var(--stage-size) / 2 + var(--node-inset));
+  top: var(--stage-centre);
   width: var(--stage-gap, 100%);
   height: 2px;
   background: var(--border);
@@ -339,8 +339,8 @@
 .stages[data-jobs='true'] .stageAnchor {
   position: absolute;
   z-index: 2;
-  top: calc(50% - var(--stage-size) / 2 - var(--node-inset));
-  width: calc(var(--stage-size) + var(--node-inset) * 2);
+  top: calc(50% - var(--stage-centre));
+  width: var(--stage-anchor-size);
   transform: translateX(-50%);
 }
 
@@ -372,7 +372,7 @@
 }
 
 .stages[data-jobs='false'] .endNode {
-  top: calc(var(--stage-size) / 2 + var(--node-inset));
+  top: var(--stage-centre);
 }
 
 .stageAnchor:is(:hover, :focus-within) {

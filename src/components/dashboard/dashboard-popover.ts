@@ -1,5 +1,7 @@
-import { GRAPH_LAYOUT } from '@/lib/dashboard-layout.pure';
 import type { FocusEvent, KeyboardEvent } from 'react';
+
+const POPOVER_GAP = 8;
+const POPOVER_DELAY = 180;
 
 const closing = new WeakMap<HTMLElement, ReturnType<typeof setTimeout>>();
 
@@ -13,7 +15,7 @@ export function openGraphPopover(anchor: HTMLElement) {
     if (other !== popover) other.hidePopover();
   });
   const box = trigger.getBoundingClientRect();
-  const gap = GRAPH_LAYOUT.popoverGap;
+  const gap = POPOVER_GAP;
   const available = Math.max(box.top, window.innerHeight - box.bottom) - gap * 2;
   popover.style.maxHeight = `${Math.max(0, available)}px`;
   popover.showPopover();
@@ -37,7 +39,7 @@ export function leaveGraphPopover(anchor: HTMLElement) {
     anchor,
     setTimeout(() => {
       if (!anchor.matches(':hover') && !anchor.contains(document.activeElement)) closeGraphPopover(anchor);
-    }, GRAPH_LAYOUT.popoverDelay),
+    }, POPOVER_DELAY),
   );
 }
 

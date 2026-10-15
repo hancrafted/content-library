@@ -16,8 +16,6 @@ export const GRAPH_LAYOUT = {
   minimumHeight: 128,
   maximumHeight: 560,
   clearance: 4,
-  popoverGap: 8,
-  popoverDelay: 180,
 } as const;
 
 interface Point {
@@ -33,13 +31,6 @@ export interface JobGeometry {
   job: string;
   nodes: Point[];
   edges: GraphEdge[];
-}
-export interface StageGeometry {
-  id: string;
-  x: number;
-  width: number;
-  height: number;
-  branches: JobGeometry[];
 }
 
 const countOf = (job: DashboardJob) => Math.max(1, job.config.length);

@@ -1,7 +1,8 @@
 'use client';
 
 import type { ReplayControls } from '@/hooks/use-dashboard-replay';
-import { scrubPosition, scrubTime, snapScrubPosition, type graphGeometry } from '@/lib/dashboard-scrub.pure';
+import type { GraphGeometry } from '@/lib/dashboard-graph-geometry.pure';
+import { scrubPosition, scrubTime, snapScrubPosition } from '@/lib/dashboard-scrub.pure';
 import { fillTemplate } from '@/lib/template.pure';
 import { useId, useState, type CSSProperties, type KeyboardEvent } from 'react';
 import { formatDuration } from '../../../skills/new-episode/scripts/run-log-tree.pure';
@@ -38,7 +39,7 @@ interface ScrubProps {
   range: NonNullable<ReplayControls['range']>;
   copy: DashboardCopy;
   stages: number;
-  geometry: ReturnType<typeof graphGeometry>;
+  geometry: Pick<GraphGeometry, 'stops'>;
 }
 
 function scrubState({ replay, range, copy, stages, geometry }: ScrubProps) {

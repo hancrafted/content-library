@@ -4,10 +4,10 @@ import { Button } from '@/components/ui/button';
 import { useDashboardDetail } from '@/hooks/use-dashboard-detail';
 import type { ReplayControls } from '@/hooks/use-dashboard-replay';
 import type { DashboardEvent, EventScope } from '@/lib/dashboard-events.pure';
-import { dashboardLayout, GRAPH_LAYOUT } from '@/lib/dashboard-layout.pure';
+import { graphGeometry } from '@/lib/dashboard-graph-geometry.pure';
 import type { EpisodeOutputs } from '@/lib/dashboard-outputs.pure';
 import type { DashboardJob, DashboardView } from '@/lib/dashboard-projection.pure';
-import { graphGeometry, jobTimings } from '@/lib/dashboard-scrub.pure';
+import { jobTimings } from '@/lib/dashboard-scrub.pure';
 import { projectStages } from '@/lib/dashboard-stages.pure';
 import { fillTemplate } from '@/lib/template.pure';
 import { useId, useState, type CSSProperties } from 'react';
@@ -112,39 +112,15 @@ function GraphToolbar({ controls, copy, replay, graph }: Omit<OverviewProps, 'st
   );
 }
 
-function canvasStyle(geometry: ReturnType<typeof graphGeometry>, height: number): CSSProperties {
-  return {
-    '--stage-columns': `repeat(${geometry.stops.length}, minmax(0, 1fr))`,
-    '--canvas-min': `${geometry.width}px`,
-    '--start-inset': `${geometry.left * 100}%`,
-    '--end-inset': `${geometry.right * 100}%`,
-    '--network-height': `${height}px`,
-    '--stage-size': `${GRAPH_LAYOUT.stageNode}px`,
-    '--node-inset': `${GRAPH_LAYOUT.nodeInset}px`,
-    '--job-size': `${GRAPH_LAYOUT.agentNode}px`,
-    '--job-dot-size': `${GRAPH_LAYOUT.agentDot}px`,
-    '--end-size': `${GRAPH_LAYOUT.endNode}px`,
-  } as CSSProperties;
-}
-
-function railGeometry(layout: ReturnType<typeof dashboardLayout>, showJobs: boolean) {
-  const positions = layout.stages.map((stage, index) =>
-    showJobs ? stage.x : (index + 0.5) * GRAPH_LAYOUT.minimumColumn,
-  );
-  positions.push(showJobs ? layout.end.x : (layout.stages.length + 0.5) * GRAPH_LAYOUT.minimumColumn);
-  return graphGeometry(positions, showJobs ? layout.width : positions.length * GRAPH_LAYOUT.minimumColumn);
-}
-
 function GraphOverview({ controls, graph, stale, copy, replay }: OverviewProps) {
   const { detail, showJobs } = controls;
-  const layout = dashboardLayout(graph.stages);
-  const geometry = railGeometry(layout, showJobs);
+  const geometry = graphGeometry(graph.stages, showJobs);
   return (
     <div className="space-y-6 rounded-2xl border border-border bg-card p-4 sm:p-6">
       <GraphToolbar controls={controls} copy={copy} replay={replay} graph={graph} />
       {stale ? <p className="text-caption text-(--warning)">{copy.graph.stale}</p> : null}
-      <div className={styles.graphScroll} style={{ maxHeight: GRAPH_LAYOUT.maximumHeight }}>
-        <div className={styles.canvas} style={canvasStyle(geometry, layout.height)}>
+      <div className={styles.graphScroll} style={{ maxHeight: geometry.maxHeight }}>
+        <div className={styles.canvas} style={geometry.cssVars as CSSProperties}>
           <TimeTravel replay={replay} copy={copy} stages={geometry.stops.length} geometry={geometry} />
           <StageNavigation
             stages={graph.stages}
@@ -153,8 +129,7 @@ function GraphOverview({ controls, graph, stale, copy, replay }: OverviewProps) 
             onSelect={detail.open}
             onSelectJob={showJobs ? detail.open : undefined}
             copy={copy}
-            layout={layout}
-            endPosition={1 - geometry.right}
+            geometry={geometry}
           />
         </div>
       </div>
