@@ -43,3 +43,7 @@ The Slide's `i18n/*.json` holds strings, not a story. Freezing the markdown at i
 - The Archgate ADR `FE-002-episode-page` needs amending to admit `slide.md`, `dossier.md` and `brief.md` in the Episode and Slide folders.
 - The Archgate ADR `FE-004-slide-architecture` §6 needs amending: the Title slide carries an optional Voice script and Speaker notes, so a feedback round can add them.
 - Two parity tests join `npm run verify`: `slide.md` against `i18n/en.json`, and the Dossier against `<ep>.ts`.
+
+## Amendment: the Spec replaces the Dossier at its Gate
+
+Design-ADR 0011, issue #209. §1: before the Spec Gate, feedback lands in the Dossier first; from the Gate on the Dossier is deleted and content changes from the feedback loop, Voice script changes included, land in `spec/spec.html` first, then in the implementation. §2: Promotion splits the Spec, not the Dossier: each Slide's words move from the Spec into `slides/<slug>/slide.md`, the Episode-level part into the Episode folder, and the Spec is deleted with Staging; the picked visual already exists as code. Until the pipeline cutover, `spec/spec.md` and `spec/design-spec.md` stay in the staging list beside `spec/spec.html`.

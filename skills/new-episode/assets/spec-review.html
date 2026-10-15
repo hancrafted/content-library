@@ -1,0 +1,12 @@
+<!-- spec-review:start -->
+<!--
+  The Spec review form, inlined verbatim into every spec/spec.html by write-spec
+  (design-ADR 0011). Its fields sit beside what they review and join it by form="spec-review":
+  per Option a checkbox name="pick:<slide-slug>" value="<option-id>", per Slide a textarea
+  name="note:<slide-slug>", and one textarea name="note:visual-language".
+-->
+<form id="spec-review" class="spec-review" method="post">
+  <p>Tick the Options you want under each Slide and dictate a note per Slide. A Slide with no tick needs a note.</p>
+  <button type="submit">Save review</button>
+</form>
+<!-- spec-review:end -->

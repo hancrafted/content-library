@@ -50,3 +50,7 @@ Each Build Job serves its worktree with `next dev` on its own port, and the dash
 - The GitHub label gate goes: every `gate: human` Job of the template names an output Han approves, so `episode:status` asks `gh` nothing, and a gate Job with no output stays `gate`.
 - An agent's `ticket` block goes with `implement-spec`'s per-ticket fan-out: the schema check refuses it, `implement-spec` no longer counts as a skill that spawns subagents, and the skill-use check lists no ticket subagent's skills. The dashboard still reads a `ticket` block in an old pipeline, and the run log still parses a `ticket` field and the `/#<ticket>` spawn suffix, so a Run logged before this change keeps its ticket lanes.
 - A per-run pipeline committed before this change lacks `stages` and fails the schema check; none is committed today.
+
+## Amendment: one HTML Spec
+
+Design-ADR 0011, issue #209. Decision 5 becomes: `write-spec` writes one `spec/spec.html`, carries the human gate and folds in `write-design-spec`, which goes; `write-voice-script` loses its gate. The Spec's structure is held by a test (`src/lib/episode-spec.pure.ts`), not markdown-harness rules. The Open question on `spec/` is settled: the Spec is deleted with Staging after Promotion has moved its words.
