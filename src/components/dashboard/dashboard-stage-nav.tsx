@@ -1,8 +1,20 @@
-import { isComplete, runningAgents, stageTitle, stateText, type DashboardStage } from '@/lib/dashboard-stages.pure';
+import { spanElapsed } from '@/lib/dashboard-elapsed.pure';
+import {
+  isComplete,
+  runningAgents,
+  stageLayers,
+  stageTitle,
+  stateText,
+  type DashboardStage,
+} from '@/lib/dashboard-stages.pure';
 import { fillTemplate } from '@/lib/template.pure';
 import { CircleAlert } from 'lucide-react';
-import type { DashboardCopy } from './dashboard-evidence';
+import { useContext, type CSSProperties } from 'react';
+import { JobChipList } from './dashboard-chips';
+import { ElapsedTime, StateBadge, type DashboardCopy } from './dashboard-evidence';
 import styles from './dashboard-graph.module.css';
+import { DashboardMoment } from './dashboard-moment';
+import { blurGraphPopover, dismissGraphPopover, leaveGraphPopover, openGraphPopover } from './dashboard-popover';
 import { StageJobs, type SelectJob } from './dashboard-stage-jobs';
 import { StageStateIcon } from './dashboard-state-icon';
 
@@ -17,9 +29,10 @@ interface NavigationProps {
   /** Present when the view shows each stage's Jobs. */
   onSelectJob?: SelectJob;
   copy: DashboardCopy;
+  weights: number[];
 }
 
-type NodeProps = Omit<NavigationProps, 'stages'> & { stage: DashboardStage; index: number };
+type NodeProps = Omit<NavigationProps, 'stages' | 'weights'> & { stage: DashboardStage; last: boolean; gap: number };
 type LabelProps = Pick<NodeProps, 'stage' | 'copy'>;
 
 function StageActivity({ stage, copy }: LabelProps) {
@@ -68,37 +81,99 @@ function StageLabel({ stage, copy }: LabelProps) {
   );
 }
 
-function StageNode({ stage, index, selected, onSelect, onSelectJob, copy }: NodeProps) {
+function StagePopover({ stage, copy, onSelect }: LabelProps & { onSelect: (id: string) => void }) {
+  const { now } = useContext(DashboardMoment);
   return (
-    <li className={styles.stage} data-complete={isComplete(stage.state)}>
+    <div className={styles.stagePopover} popover="manual">
       <button
         type="button"
-        data-stage={stage.id}
-        data-state={stage.state}
-        data-planned={stage.planned}
-        aria-expanded={selected === stage.id}
-        aria-controls="dashboard-stage-detail"
         onClick={() => onSelect(stage.id)}
-        className={`${styles.node} cursor-pointer transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring`}
+        className="w-full cursor-pointer space-y-3 text-left focus-visible:outline-2 focus-visible:outline-ring"
       >
-        <span className={styles.orbit}>
+        <span className="block text-body font-semibold">{stageName(stage, copy)}</span>
+        <span className="flex items-center gap-2">
           <StageStateIcon state={stage.state} />
+          <StateBadge state={stage.state} />
         </span>
-        <StageLabel stage={stage} copy={copy} />
+        {stage.jobs.map((job) => (
+          <div key={job.id} className="space-y-1 border-t border-border pt-2 text-caption">
+            <span className="block font-medium wrap-anywhere">{job.id}</span>
+            {job.span ? <ElapsedTime elapsed={spanElapsed(job.span, now)} copy={copy} /> : null}
+            <JobChipList job={job} copy={copy} />
+          </div>
+        ))}
       </button>
-      {onSelectJob ? <StageJobs stage={stage} index={index} onSelectJob={onSelectJob} copy={copy} /> : null}
+    </div>
+  );
+}
+
+function StageButton({ stage, selected, onSelect, onSelectJob, copy }: Omit<NodeProps, 'last'>) {
+  return (
+    <button
+      type="button"
+      data-stage={stage.id}
+      data-state={stage.state}
+      data-planned={stage.planned}
+      aria-expanded={selected === stage.id}
+      aria-controls="dashboard-stage-detail"
+      onClick={() => onSelect(stage.id)}
+      className={`${styles.node} cursor-pointer transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring`}
+    >
+      <span className={styles.orbit}>
+        <StageStateIcon state={stage.state} />
+      </span>
+      {onSelectJob ? (
+        <span className="text-caption font-semibold">{stageName(stage, copy)}</span>
+      ) : (
+        <StageLabel stage={stage} copy={copy} />
+      )}
+    </button>
+  );
+}
+
+function StageNode(props: NodeProps) {
+  const { stage, last, onSelectJob, onSelect, copy } = props;
+  return (
+    <li
+      className={styles.stage}
+      data-complete={isComplete(stage.state)}
+      style={{ '--stage-gap': `${props.gap}%` } as CSSProperties}
+    >
+      <div
+        className={styles.stageAnchor}
+        data-graph-stage
+        onPointerEnter={(event) => openGraphPopover(event.currentTarget)}
+        onPointerLeave={(event) => leaveGraphPopover(event.currentTarget)}
+        onFocusCapture={(event) => openGraphPopover(event.currentTarget)}
+        onBlurCapture={blurGraphPopover}
+        onKeyDown={dismissGraphPopover}
+      >
+        <StageButton {...props} />
+        <StagePopover stage={stage} copy={copy} onSelect={onSelect} />
+      </div>
+      {onSelectJob ? <StageJobs stage={stage} last={last} onSelectJob={onSelectJob} copy={copy} /> : null}
     </li>
   );
 }
 
-export function StageNavigation({ stages, selected, onSelect, onSelectJob, copy }: NavigationProps) {
+export function StageNavigation({ stages, selected, onSelect, onSelectJob, copy, weights }: NavigationProps) {
   return (
-    <ol className={styles.stages} data-jobs={onSelectJob !== undefined} aria-label={copy.graph.title}>
+    <ol
+      className={styles.stages}
+      data-jobs={onSelectJob !== undefined}
+      aria-label={copy.graph.title}
+      style={
+        {
+          '--network-height': `${Math.max(128, Math.max(1, ...stages.flatMap((stage) => stageLayers(stage).map((jobs) => jobs.length))) * 64)}px`,
+        } as CSSProperties
+      }
+    >
       {stages.map((stage, index) => (
         <StageNode
           key={stage.id}
           stage={stage}
-          index={index}
+          last={index === stages.length - 1}
+          gap={((weights[index] + (weights[index + 1] ?? weights[index])) / (2 * weights[index])) * 100}
           selected={selected}
           onSelect={onSelect}
           onSelectJob={onSelectJob}

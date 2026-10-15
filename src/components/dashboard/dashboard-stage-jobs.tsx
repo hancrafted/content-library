@@ -1,14 +1,14 @@
-import { spanElapsed } from '@/lib/dashboard-elapsed.pure';
+import { agentElapsed, spanElapsed } from '@/lib/dashboard-elapsed.pure';
 import type { DashboardJob } from '@/lib/dashboard-projection.pure';
-import { jobLabel, runningAgents, stageLayers, stateText, type DashboardStage } from '@/lib/dashboard-stages.pure';
+import { agentState, currentAgent, stageLayers, type DashboardStage } from '@/lib/dashboard-stages.pure';
 import { fillTemplate } from '@/lib/template.pure';
-import { ArrowDown, GitBranch } from 'lucide-react';
-import { useContext, type CSSProperties } from 'react';
+import { useContext } from 'react';
 import { JobChipList } from './dashboard-chips';
-import { ElapsedTime, type DashboardCopy } from './dashboard-evidence';
+import { ElapsedTime, StateBadge, type DashboardCopy } from './dashboard-evidence';
 import styles from './dashboard-graph.module.css';
 import { PreviewButton } from './dashboard-job-links';
-import { DashboardMoment } from './dashboard-moment';
+import { DashboardMoment, type Moment } from './dashboard-moment';
+import { blurGraphPopover, dismissGraphPopover, leaveGraphPopover, openGraphPopover } from './dashboard-popover';
 import { AttentionMarker, StageStateIcon } from './dashboard-state-icon';
 
 export type SelectJob = (stage: string, job: string) => void;
@@ -20,102 +20,179 @@ interface JobProps {
   copy: DashboardCopy;
 }
 
-function JobStatus({ job, copy }: Pick<JobProps, 'job' | 'copy'>) {
-  const { now } = useContext(DashboardMoment);
-  const sessions = runningAgents(job).length;
-  if (job.foreach !== undefined) {
-    const heading = job.foreach.split('#').at(-1) ?? job.foreach;
-    return (
-      <span className="block text-caption text-muted-foreground">{fillTemplate(copy.graph.onePer, { heading })}</span>
-    );
-  }
-  return (
-    <>
-      <span className="block text-caption text-(--node-tone)">
-        {stateText(job.state, { gate: copy.waitingOnHan, complete: copy.graph.complete })}
-      </span>
-      {job.span ? (
-        <span className="block text-caption">
-          <ElapsedTime elapsed={spanElapsed(job.span, now)} copy={copy} />
-        </span>
-      ) : null}
-      {sessions > 0 ? (
-        <span className="block text-caption text-(--info)">
-          {fillTemplate(copy.graph.running, { count: sessions })}
-        </span>
-      ) : null}
-    </>
-  );
+interface BranchProps extends JobProps {
+  layer: number;
+  layers: number;
+  lane: number;
+  lanes: number;
+  last: boolean;
 }
 
-/** A fan-out Job shows its readable label; screen readers and the tooltip keep the full id. */
-function JobName({ id }: { id: string }) {
-  const label = jobLabel(id);
-  if (label === id) return <span className="block text-caption font-medium">{id}</span>;
+function nodeAgents(job: DashboardJob) {
+  if (job.config.length === 0) return [{ role: job.id, state: job.state, span: job.span }];
+  return job.config.map((config) => {
+    const span = currentAgent(job, config.type);
+    return {
+      role: config.type,
+      state: span ? agentState(job, span) : config.session === 'orchestrator' ? job.state : ('waiting' as const),
+      span: span ?? (config.session === 'orchestrator' ? job.span : undefined),
+    };
+  });
+}
+
+type Agent = ReturnType<typeof nodeAgents>[number];
+interface NodeProps extends JobProps {
+  agent: Agent;
+  x: number;
+  y: number;
+}
+
+function TemplateLabel({ job, copy }: Pick<JobProps, 'job' | 'copy'>) {
+  if (!job.foreach) return null;
   return (
-    <span className="block text-caption font-medium">
-      <span className="sr-only">{id}</span>
-      <span aria-hidden="true">{label}</span>
+    <span className="block text-caption text-muted-foreground">
+      {fillTemplate(copy.graph.onePer, { heading: job.foreach.split('#').at(-1) ?? job.foreach })}
     </span>
   );
 }
 
-function JobNode({ stage, job, onSelectJob, copy }: JobProps) {
-  const template = job.foreach !== undefined;
+function JobPopover({ job, agent, stage, onSelectJob, copy }: JobProps & { agent: Agent }) {
+  const { now } = useContext(DashboardMoment);
+  const elapsed =
+    agent.span && (agent.span.type === 'agent' ? agentElapsed(job, agent.span, now) : spanElapsed(agent.span, now));
   return (
-    <li className="min-w-0">
+    <div className={styles.popover} popover="manual">
+      <button
+        type="button"
+        onClick={() => onSelectJob(stage.id, job.id)}
+        className="block w-full cursor-pointer space-y-2 text-left focus-visible:outline-2 focus-visible:outline-ring"
+      >
+        <span className="block text-caption font-semibold wrap-anywhere">
+          {job.id} · {agent.role}
+        </span>
+        <span className="flex flex-wrap items-center gap-2 text-caption">
+          <StageStateIcon state={agent.state} />
+          <StateBadge state={agent.state} />
+          <ElapsedTime elapsed={elapsed ?? null} copy={copy} />
+          <AttentionMarker job={job} label={copy.graph.jobAttention} />
+        </span>
+        <JobChipList job={job} copy={copy} />
+        <TemplateLabel job={job} copy={copy} />
+      </button>
+      <PreviewButton job={job} copy={copy} className="mt-2" />
+    </div>
+  );
+}
+
+function AgentNode({ job, stage, agent, x, y, onSelectJob, copy }: NodeProps) {
+  return (
+    <div
+      className={styles.branchNode}
+      data-graph-node
+      style={{ left: `${x}%`, top: `calc(50% + ${y}px)` }}
+      onPointerEnter={(event) => openGraphPopover(event.currentTarget)}
+      onPointerLeave={(event) => leaveGraphPopover(event.currentTarget)}
+      onFocusCapture={(event) => openGraphPopover(event.currentTarget)}
+      onBlurCapture={blurGraphPopover}
+      onKeyDown={dismissGraphPopover}
+    >
       <button
         type="button"
         data-job={job.id}
-        title={job.id}
-        data-state={template ? 'template' : job.state}
+        data-template={job.foreach !== undefined}
+        data-state={agent.state}
+        aria-label={`${job.id} · ${agent.role} · ${agent.state}`}
         aria-controls="dashboard-stage-detail"
         onClick={() => onSelectJob(stage.id, job.id)}
-        className={`${styles.job} cursor-pointer transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring`}
+        className={`${styles.job} cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring`}
       >
         <span className={styles.jobDot}>
-          <StageStateIcon state={job.state} className="size-4" />
+          <StageStateIcon state={agent.state} className="size-4" />
         </span>
-        <span className="min-w-0 flex-1 wrap-anywhere">
-          <JobName id={job.id} />
-          <JobStatus job={job} copy={copy} />
-        </span>
-        <AttentionMarker job={job} label={copy.graph.jobAttention} />
       </button>
-      {template ? null : <JobChipList job={job} copy={copy} />}
-      <PreviewButton job={job} copy={copy} className="mt-1 ml-2" />
-    </li>
+      <JobPopover job={job} stage={stage} agent={agent} onSelectJob={onSelectJob} copy={copy} />
+    </div>
   );
 }
 
-function Layer({ jobs, index, ...props }: Omit<JobProps, 'job'> & { jobs: DashboardJob[]; index: number }) {
+function branchTimes(job: DashboardJob, { now, observedJobs, observedAt }: Moment) {
+  const observed = observedJobs ?? [job];
+  const span = observed.find((candidate) => candidate.id === job.id)?.span;
+  const start = span ? Date.parse(span.start_t) : null;
+  const end = span?.end_t ? Date.parse(span.end_t) : observedAt;
+  return { start, end: end ?? now };
+}
+
+function BranchLine({ job, path }: { job: DashboardJob; path: string }) {
+  const moment = useContext(DashboardMoment);
+  const { start, end } = branchTimes(job, moment);
+  const progress =
+    start === null || moment.now < start ? 0 : end <= start ? 1 : Math.min(1, (moment.now - start) / (end - start));
   return (
-    <li className="space-y-2">
-      {index > 0 ? <ArrowDown aria-hidden="true" className="mx-auto size-4 text-muted-foreground" /> : null}
-      {jobs.length > 1 ? (
-        <p className="flex items-center gap-1 text-caption text-muted-foreground">
-          <GitBranch aria-hidden="true" className="size-4 shrink-0" />
-          {fillTemplate(props.copy.graph.parallel, { count: jobs.length })}
-        </p>
-      ) : null}
-      <ul className="space-y-2" aria-label={fillTemplate(props.copy.graph.step, { number: index + 1 })}>
-        {jobs.map((job) => (
-          <JobNode key={job.id} job={job} {...props} />
-        ))}
-      </ul>
-    </li>
+    <svg aria-hidden="true" className={styles.branchLine} viewBox="0 0 100 100" preserveAspectRatio="none">
+      <path d={path} className={styles.branchTrack} />
+      <path
+        d={path}
+        className={styles.branchProgress}
+        pathLength={1}
+        style={{ strokeDasharray: 1, strokeDashoffset: 1 - progress }}
+        data-branch-progress={progress}
+      />
+    </svg>
   );
 }
 
-/** A stage's Jobs in dependency layers: a layer's Jobs run in parallel, the next layer follows it. */
-export function StageJobs({ stage, index, onSelectJob, copy }: Omit<JobProps, 'job'> & { index: number }) {
-  const style = { '--stage-index': index } as CSSProperties;
-  if (stage.jobs.length === 0) return null;
+function JobBranch(props: BranchProps) {
+  const { job, layer, layers, lane, lanes, last } = props;
+  const agents = nodeAgents(job);
+  const y = last ? 32 : (lane - (lanes - 1) / 2) * 64;
+  const start = last ? 100 : (layer / layers) * 100;
+  const end = ((layer + 1) / layers) * 100;
+  const left = last ? 0 : start;
+  const width = end - left;
+  const path = `M ${start} 100 C ${left + width * 0.15} 100 ${left + width * 0.15} 0 ${left + width * 0.3} 0 L ${left + width * 0.7} 0 C ${left + width * 0.85} 0 ${left + width * 0.85} 100 ${end} 100`;
   return (
-    <ol className={`${styles.jobs} space-y-2`} style={style} data-stage-jobs={stage.id}>
-      {stageLayers(stage).map((jobs, layer) => (
-        <Layer key={layer} jobs={jobs} index={layer} stage={stage} onSelectJob={onSelectJob} copy={copy} />
+    <li className={styles.jobBranch}>
+      <div
+        className={styles.branchCurve}
+        style={{ height: `${Math.max(1, Math.abs(y))}px`, transform: y > 0 ? 'scaleY(-1)' : undefined }}
+      >
+        <BranchLine job={job} path={path} />
+      </div>
+      {agents.map((agent, index) => (
+        <AgentNode
+          key={`${agent.role}-${index}`}
+          {...props}
+          agent={agent}
+          x={left + width * ((index + 1) / (agents.length + 1))}
+          y={y}
+        />
       ))}
-    </ol>
+    </li>
+  );
+}
+
+/** Parallel Jobs fan out around the spine; dependency layers and configured agent order run left to right. */
+export function StageJobs({ stage, onSelectJob, copy, last = false }: Omit<JobProps, 'job'> & { last?: boolean }) {
+  const layers = stageLayers(stage);
+  return (
+    <ul className={styles.jobs} data-stage-jobs={stage.id} data-last={last}>
+      {layers.flatMap((jobs, layer) =>
+        jobs.map((job, lane) => (
+          <JobBranch
+            key={job.id}
+            job={job}
+            stage={stage}
+            onSelectJob={onSelectJob}
+            copy={copy}
+            layer={layer}
+            layers={layers.length}
+            lane={lane}
+            lanes={jobs.length}
+            last={last}
+          />
+        )),
+      )}
+    </ul>
   );
 }

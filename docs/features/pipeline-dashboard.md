@@ -29,6 +29,10 @@ reveal them; no external transcript is opened and nothing is uploaded.
 
 ## Graph and disclosure
 
+The operations header is one line: Dashboard, the selected folder and Choose
+folder. Marketing navigation is hidden on this page. Motion follows
+`prefers-reduced-motion` automatically; there is no manual pause control.
+
 The overview groups Jobs into stages without changing the pipeline. A pipeline
 with a top-level `stages:` list sets the stages and their order; each Job sits in
 the stage its `stage:` names. A listed stage without Jobs yet (Research or Build
@@ -51,21 +55,32 @@ reads it and falls back to a fixed grouping:
 | Build         | `implement-episode`, `implement-episode-init`, every `implement-section-*`                          |
 | PR            | `open-pr`                                                                                           |
 
-Unrecognized Jobs remain visible as their own stage. Desktop reads left to right;
-smaller screens read top to bottom. Progress counts successful/reused stages,
+Unrecognized Jobs remain visible as their own stage. The graph reads left to
+right at every width, scrolling inside its own container on narrow screens.
+The summary counts successful/reused stages,
 not elapsed time. A stage is complete only when all its Jobs are successful or
 reused, with no open Gate. Attention is counted separately from active work, so
 a failed optional research Job remains visible when the Dossier proceeds.
 
-**Show Jobs** is a switch beside the progress summary, off by default. On, each
-stage unfolds into a column of its Jobs (stacked under each stage on screens
-narrower than 64rem), laid out by `needs`/`wants` within the stage: Jobs in one
-layer run in parallel, the next layer follows. Each Job box carries the same
-state colours and icons as the nodes, its running-session count, the running
-pulse and an attention marker. Clicking a Job selects its stage, opens that Job's
-evidence card below and moves focus to it. The switch is transient page memory
-(FE-001): a reload returns to the picker anyway. The unfold animation respects
-reduced motion and the animation pause.
+**Show Jobs** is a switch beside Live, off by default. On, stages remain on a
+vertically centred spine. Dependency layers follow left to right within each
+stage gap; parallel Jobs branch evenly above and below the spine. Each Job's
+configured agents are consecutive nodes, in pipeline order. The final stage's
+branch folds back into its terminal node. Stage widths are proportional to their
+dependency layers and agents, with a minimum. The whole graph fits the desktop
+card; only viewports below its compact minimum scroll horizontally. The rail
+uses the same weighted stage centres in both views. Graph height follows the
+branch count rather than reserving empty space for disclosure.
+
+Job cards are gone from the overview. Hover or keyboard-focus an agent node for
+a speech bubble with status, elapsed time, skills, checks and available preview.
+Native top-layer popovers escape the graph's scroll container without requiring
+extra vertical whitespace.
+Escape dismisses the bubble without removing focus. Clicking a node or bubble
+selects its Job's evidence. State icons accompany colours. Branch strokes fill
+according to observed Job times at the replay cutoff; stage positions have a
+light snap zone (at most 0.8% of the rail). The switch is transient page memory
+(FE-001), and all motion respects reduced motion.
 
 Selecting a node reveals dependency levels and parallel Job lanes. Expanding a
 Job reveals observed ticket/session lanes and the existing evidence cards.
@@ -77,10 +92,19 @@ An agent without an end record whose Job or parent Attempt has ended is labelled
 `unclosed`, not running. This is a display distinction: it does not invent a
 successful finish, a duration, or alter the shared fold's raw history.
 
-The initial active stage opens automatically. Later polls do not move selection,
-collapse evidence, or steal focus. Running nodes pulse, completed connectors are
-green, and icons/text distinguish attention and failure. Animation can be paused
-without stopping polling and respects reduced motion; source errors pause it.
+The detail drawer starts closed. Clicking a stage, Job or agent node opens its
+detail in a fixed right-side card, following the Context drawer pattern: a
+non-modal region, transform-only entry, close button and Escape, focus handed
+in on open and back to the trigger on close. Narrow screens add a pointer-dismiss
+scrim; keyboard navigation remains non-modal. The body scrolls independently,
+so inspecting evidence never scrolls the graph out of view. Stage details group
+Jobs into expandable rows; selecting a Job goes directly to its outputs, skills,
+checks, elapsed time, state, Attempts, agents and event-log buttons. Ticket log
+scopes remain available. No files-read or ADR-read section exists yet.
+
+Later polls do not move selection, collapse evidence, or steal focus.
+Running nodes pulse, completed connectors are
+green, and icons/text distinguish attention and failure. Animation respects reduced motion; replay and source errors pause it.
 
 **View events** opens a large native modal, scoped to a stage, Job, or ticket.
 **All Run events** includes malformed records with their source line numbers.
@@ -94,13 +118,30 @@ queued close notification only dismisses a dialog that is still closed.
 
 ## Time travel
 
-A **Live** checkbox above the graph is on by default: the view follows each
-poll. Off, a slider replays the current Run, the one started latest by time,
-from its start to now: its end once the fold has closed it, else the later of
-its last event and the last read. Its readout gives minutes since Run start and
-the cutoff's local time, also as the slider's `aria-valuetext`. Arrow keys move
-one minute, Page Up and Page Down ten; tick marks sit at each stage's earliest
-Job start.
+The progress bar **is** the scrubber, aligned with the first and last stage
+centres. **Live**, beside **Show Jobs**, follows the latest read at its structural
+leading edge. Future work toward PR remains unfilled. Dragging or clicking left
+unchecks Live; reaching that leading edge or pressing
+End rechecks it. Unchecking Live freezes the latest moment while polling
+continues. Arrow keys move one minute, Page Up/Down ten; Home selects Run start.
+The accessible readout gives minutes since start and local time; the drag bubble
+shows the current minute.
+Start time is below the left end; total observed duration is below the right.
+
+`scrubTimeline()`, `scrubPosition()` and `scrubTime()` map time to structure:
+each Job has an equal share within its stage gap.
+`graphGeometry()` maps these structural fractions onto the weighted stage centres
+and back, keeping the rail aligned when Show Jobs changes the stage widths.
+Parallel Jobs contribute their individual elapsed fractions together; a long
+Job gets no extra width. Knots come from observed Job starts/ends and the Run
+bounds, never estimated durations. Open Jobs use the latest read as their
+observed endpoint. Idle plateaus select the latest observation at that position;
+the first point remains Run start. Since there is no gap after PR, the final
+gap shares its space equally across the preceding stage's Jobs and PR's Jobs;
+PR execution stays scrubbable instead of collapsing to one terminal instant.
+The latest point is the furthest observed structural progress, not automatically
+the end of the rail. Seeking that point (or the unfilled track after it) resumes
+Live. The right-hand duration is elapsed-so-far, or the final total once ended.
 
 Replay logs nothing new and never reads the file again. `replayDashboard()`
 feeds the retained events stamped no later than the cutoff through the shared
@@ -122,7 +163,7 @@ are on disk now, which the slider says once.
 
 ## Outputs, previews and attention
 
-A Job's card lists its `outputs`. After every poll the dashboard probes each one
+A Job's drawer lists its `outputs`. After every poll the dashboard probes each one
 through the chosen folder's handle: it strips the staging prefix
 `docs/episodes/<slug>/`, `<slug>` the folder's name, and walks the sub-folders.
 A written output is a button that opens the file as plain text in a new tab; one
@@ -130,7 +171,7 @@ not on disk yet reads **not written yet** and is disabled, not an error. A glob
 output of a draft is shown as text. A path outside the folder is never opened.
 
 A Build Job with a `port` (design-ADR-0008, Ports) shows **Preview :<port>**
-in its card and in its Job box, a button opening `http://localhost:<port>` in a
+in its drawer and its node popover, a button opening `http://localhost:<port>` in a
 new tab, while its server is meant to run: `implement-episode-init`'s once it
 has started, a Section Job's only while the Job is open, since the orchestrator
 stops that server before removing its worktree. It is a button, not a link,
@@ -142,7 +183,7 @@ screen readers and on hover, beside its state in words.
 
 ## Skills and checks
 
-Every Job box lists, under the Job, a chip for each skill its agents' `skills`
+Every Job popover lists a chip for each skill its agents' `skills`
 name (once each) and each check its `checks` name; the card groups the skills by
 agent type. A chip is bordered and grey while pending, green with a check mark
 once run or passed, red with a cross once skipped or failed; its state is in
@@ -226,11 +267,15 @@ and every emitted alternate must resolve and link back.
   `previewHref()`: an output's path in the chosen folder, its label, whether it
   is a pattern, and when and where a Job's preview shows.
 - `jobNeedsAttention()`: the attention mark.
+- `currentAgent()`: a graph node's role evidence stays within its current Run
+  and latest Attempt instead of inheriting an earlier success.
 - `replayDashboard()`, `eventsAt()`, `replayBounds()` and `stageMarks()`: the
   view and event log at a cutoff from the retained events, the slider's range
   and its stage tick marks.
 - `spanElapsed()` and `agentElapsed()`: a span's duration, or its time so far
   at the moment shown.
+- `scrubTimeline()`, `scrubPosition()` and `scrubTime()`: equal structural
+  shares, concurrent Jobs, the observed time inverse and terminal bounds.
 - `selectEvents()`: scoped, chronological source events, including ends and
   Scores associated through their start Span's ancestry.
 
