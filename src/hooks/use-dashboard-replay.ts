@@ -1,82 +1,39 @@
-import type { DashboardEvent } from '@/lib/dashboard-events.pure';
-import type { EpisodeRead, Polled } from '@/lib/dashboard-reader.pure';
-import { eventsAt, replayBounds, replayDashboard } from '@/lib/dashboard-replay.pure';
-import { scrubTimeline } from '@/lib/dashboard-scrub.pure';
-import { projectStages } from '@/lib/dashboard-stages.pure';
+import type { Polled } from '@/lib/dashboard-reader.pure';
+import { dashboardTimeline, type Cutoff, type DashboardTimeline } from '@/lib/dashboard-timeline.pure';
 import { useDeferredValue, useMemo, useState } from 'react';
+
+type Stops = Parameters<DashboardTimeline['position']>[1];
 
 /** What the Live checkbox and replay slider read and set; times are epoch milliseconds. */
 export interface ReplayControls {
   live: boolean;
   setLive: (live: boolean) => void;
   seek: (moment: number) => void;
+  /** Seeks to a slider position along the rail the Graph geometry `stops` lay out. */
+  seekPosition: (position: number, stops: Stops) => void;
+  /** The slider position of the cutoff along that rail. */
+  position: (stops: Stops) => number;
   /** The cutoff while replaying, null while live. */
   at: number | null;
-  range: { start: number; end: number } | null;
-  timeline: ReturnType<typeof scrubTimeline>;
+  range: DashboardTimeline['range'];
 }
 
-/** The slider's range: the current Run's start to its end, or, while it has not ended, the later of its last event and the last read. */
-function useReplayRange({ read, readAt }: Polled) {
-  const bounds = useMemo(() => replayBounds(read.events), [read.events]);
-  if (bounds === null) return null;
-  return { start: bounds.start, end: bounds.finished ? bounds.last : Math.max(bounds.last, readAt) };
-}
-
-/** The view and event log at `at`, re-folded only when the deferred cutoff or the retained events change. */
-function useReplayed(read: EpisodeRead, at: number | null) {
-  const shown = useDeferredValue(at);
-  const replayed = useMemo(() => {
-    if (shown === null || read.pipeline === undefined) return null;
-    return {
-      view: replayDashboard(read.pipeline, read.events, shown),
-      events: eventsAt(read.events, shown),
-      at: shown,
-    };
-  }, [shown, read.pipeline, read.events]);
-  return at === null ? null : replayed;
-}
-
-const clamp = (value: number, range: { start: number; end: number }) =>
-  Math.min(Math.max(value, range.start), range.end);
-
-/** Observed starts and ends map the structural rail without consulting the replayed projection. */
-function useScrubTimeline(read: EpisodeRead, range: ReplayControls['range']) {
-  return useMemo(() => {
-    if (range === null) return [];
-    const stages = read.view ? projectStages(read.view.jobs, read.view.stages).stages : [];
-    return scrubTimeline(
-      stages.map((stage) =>
-        stage.jobs.map((job) => ({
-          start: job.span ? Date.parse(job.span.start_t) : null,
-          end: job.span?.end_t ? Date.parse(job.span.end_t) : null,
-        })),
-      ),
-      range,
-    );
-  }, [read.view, range?.start, range?.end]);
-}
-
-/** Live follows each poll; off, replay retained events at the cutoff while polling continues. */
+/** Live follows each poll; off, the timeline replays retained events at the cutoff while polling continues. */
 export function useDashboardReplay(polled: Polled) {
-  const [cutoff, setCutoff] = useState<number | null>(null);
-  const range = useReplayRange(polled);
-  const timeline = useScrubTimeline(polled.read, range);
-  const at = cutoff === null || range === null ? null : clamp(cutoff, range);
-  const replayed = useReplayed(polled.read, at);
+  const [cutoff, setCutoff] = useState<Cutoff>('live');
+  const timeline = useMemo(() => dashboardTimeline(polled), [polled]);
+  const at = timeline.moment(cutoff);
+  const deferred = useDeferredValue(at);
+  const shown: Cutoff = at === null || deferred === null ? 'live' : deferred;
+  const { view, events, now } = useMemo(() => timeline.at(shown), [timeline, shown]);
   const controls: ReplayControls = {
     live: at === null,
-    setLive: (live) => setCutoff(live || range === null ? null : range.end),
-    seek: (moment) => setCutoff(range === null || moment >= range.end ? null : clamp(moment, range)),
+    setLive: (live) => setCutoff(timeline.toggle(live)),
+    seek: (moment) => setCutoff(timeline.seek(moment)),
+    seekPosition: (position, stops) => setCutoff(timeline.seekPosition(position, stops)),
+    position: (stops) => timeline.position(cutoff, stops),
     at,
-    range,
-    timeline,
+    range: timeline.range,
   };
-  const events: readonly DashboardEvent[] = replayed ? replayed.events : polled.read.events;
-  return {
-    controls,
-    view: replayed ? replayed.view : polled.read.view,
-    events,
-    now: replayed ? replayed.at : polled.readAt,
-  };
+  return { controls, view, events, now };
 }

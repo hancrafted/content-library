@@ -156,12 +156,15 @@ The latest point is the furthest observed structural progress, not automatically
 the end of the rail. Seeking that point (or the unfilled track after it) resumes
 Live. The right-hand duration is elapsed-so-far, or the final total once ended.
 
-Replay logs nothing new and never reads the file again. `replayDashboard()`
-feeds the retained events stamped no later than the cutoff through the shared
+Replay logs nothing new and never reads the file again. One Dashboard timeline,
+`dashboardTimeline(polled)`, answers what the dashboard shows at a cutoff (a
+moment, or `'live'`): `at(cutoff)` gives the view, the event log and the clock,
+and it maps the Live checkbox, the slider and its keys to cutoffs and back; the
+hook `useDashboardReplay` keeps only the cutoff. Replaying, it feeds the retained events stamped no later than the cutoff through the shared
 fold with `live: 'unfinished'` and the live projection, so a Run that had not
 ended at the cutoff reads its open spans as running. Ties at the cutoff are all
 included; the fold orders them by sequence. The event log modal shows the same
-events, `eventsAt()`. Polling continues while scrubbing and extends the slider,
+events. Polling continues while scrubbing and extends the slider,
 but the view stays at the cutoff and its animation pauses; turning Live back on
 shows the current state. The checkbox and cutoff are transient page memory
 (FE-001).
@@ -282,8 +285,10 @@ and every emitted alternate must resolve and link back.
 - `jobNeedsAttention()`: the attention mark.
 - `currentAgent()`: a graph node's role evidence stays within its current Run
   and latest Attempt instead of inheriting an earlier success.
-- `replayDashboard()`, `eventsAt()` and `replayBounds()`: the view and event log
-  at a cutoff from retained events, and the slider's time range.
+- `dashboardTimeline()`: the view, event log, chips and clock at a cutoff from
+  retained events (live equals replay at the Run's end, a finished Run stays
+  finished, gates, retries and fan-out), the slider's time range, and slider
+  position to cutoff and back.
 - `spanElapsed()` and `agentElapsed()`: a span's duration, or its time so far
   at the moment shown.
 - `scrubTimeline()`, `scrubPosition()` and `scrubTime()`: equal structural

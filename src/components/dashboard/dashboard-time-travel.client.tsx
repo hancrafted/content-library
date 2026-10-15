@@ -2,7 +2,6 @@
 
 import type { ReplayControls } from '@/hooks/use-dashboard-replay';
 import type { GraphGeometry } from '@/lib/dashboard-graph-geometry.pure';
-import { scrubPosition, scrubTime, snapScrubPosition } from '@/lib/dashboard-scrub.pure';
 import { fillTemplate } from '@/lib/template.pure';
 import { useId, useState, type CSSProperties, type KeyboardEvent } from 'react';
 import { formatDuration } from '../../../skills/new-episode/scripts/run-log-tree.pure';
@@ -38,13 +37,12 @@ interface ScrubProps {
   replay: ReplayControls;
   range: NonNullable<ReplayControls['range']>;
   copy: DashboardCopy;
-  stages: number;
   geometry: Pick<GraphGeometry, 'stops'>;
 }
 
-function scrubState({ replay, range, copy, stages, geometry }: ScrubProps) {
+function scrubState({ replay, range, copy, geometry }: ScrubProps) {
   const at = replay.at ?? range.end;
-  const fraction = scrubPosition(geometry.stops, scrubPosition(replay.timeline, at));
+  const fraction = replay.position(geometry.stops);
   const text = fillTemplate(copy.timeTravel.position, {
     minutes: Math.floor((at - range.start) / 60_000),
     time: clock.format(at),
@@ -55,13 +53,7 @@ function scrubState({ replay, range, copy, stages, geometry }: ScrubProps) {
     event.preventDefault();
     replay.seek(event.key === 'Home' ? range.start : event.key === 'End' ? range.end : at + step);
   };
-  const seek = (position: number) => {
-    const structural = scrubTime(geometry.stops, position);
-    const edge = scrubPosition(replay.timeline, range.end);
-    replay.seek(
-      structural >= edge - 0.0001 ? range.end : scrubTime(replay.timeline, snapScrubPosition(structural, stages)),
-    );
-  };
+  const seek = (position: number) => replay.seekPosition(position, geometry.stops);
   const minute = fillTemplate(copy.timeTravel.minute, { minutes: Math.floor((at - range.start) / 60_000) });
   return { fraction, text, minute, onKeyDown, seek };
 }
@@ -95,10 +87,10 @@ function ScrubInput({ copy, state, help, onDrag }: InputProps) {
   );
 }
 
-function Scrubber({ replay, range, copy, stages, geometry }: ScrubProps) {
+function Scrubber({ replay, range, copy, geometry }: ScrubProps) {
   const help = useId();
   const [dragging, setDragging] = useState(false);
-  const state = scrubState({ replay, range, copy, stages, geometry });
+  const state = scrubState({ replay, range, copy, geometry });
   return (
     <div className={styles.scrubber} style={{ '--scrub-position': `${state.fraction * 100}%` } as CSSProperties}>
       <div className={styles.scrubTrack}>
