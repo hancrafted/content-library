@@ -14,32 +14,26 @@
  *   until the Gate deletes the Dossier and the Spec's own Slides are the list;
  * - per Slide two or three `<figure data-spec="option" data-option="<n><letter>">`,
  *   each with a figcaption and build notes, exactly one `data-recommended`, at
- *   most one `data-picked` and exactly one once approved, and token classes
- *   only: no hex colour, no arbitrary Tailwind value;
+ *   most one `data-picked` and exactly one once approved, whose checkbox alone
+ *   carries `checked` so a locked Slide needs nothing in the next round, and
+ *   token classes only: no hex colour, no arbitrary Tailwind value;
  * - every Voice script item a `<strong>` title then its text, every Speaker
  *   note citation `[n]` resolved by a nested `data-source="n"`.
  */
 import { load, type CheerioAPI } from 'cheerio';
+import { SECTION, SLIDE, SPEC_FILE } from './episode-spec-page.pure';
 import { checkSlide, FORM } from './episode-spec-slide.pure';
 import { checkCitations, checkVoiceScripts } from './episode-spec-words.pure';
 import { unless, type Finding } from './finding.pure';
-import { metaGateTier } from './staging-file.pure';
+import { metaBlockText, metaGateTier } from './staging-file.pure';
 import { blocksOf, bodyLines } from './staging-markdown.pure';
 
-const SPEC_FILE = 'spec/spec.html';
 const DOSSIER_FILE = 'dossier.md';
 /** Where the review asset lives, as a finding names it. */
 const REVIEW_ASSET_FILE = 'skills/new-episode/assets/spec-review.html';
 const ASSET_START = '<!-- spec-review:start -->';
 const ASSET_END = '<!-- spec-review:end -->';
 const META_FIELDS = ['type', 'title', 'status', 'generated', 'locale', 'brief'];
-const SLIDE = 'article[data-spec="slide"]';
-
-/** The meta block's JSON as text, or undefined when the page has none. */
-function metaText($: CheerioAPI): string | undefined {
-  const block = $('script#spec-meta[type="application/json"]');
-  return block.length === 0 ? undefined : block.text();
-}
 
 function checkMeta(text: string | undefined): string[] {
   if (text === undefined)
@@ -103,20 +97,9 @@ function checkAgainstDossier($: CheerioAPI, dossier: string): string[] {
       .toArray()
       .map((element) => $(element).attr('id') ?? '');
   return [
-    ...checkSlugsAgree('Section', dossierSlugs(dossier, 2), ids('section[data-spec="section"]')),
+    ...checkSlugsAgree('Section', dossierSlugs(dossier, 2), ids(SECTION)),
     ...checkSlugsAgree('Slide', dossierSlugs(dossier, 3), ids(SLIDE)),
   ];
-}
-
-/** The page Slide anchors of a Spec, `<section id>--<slide id>` in page order, as feedback items key them. */
-export function specSlideAnchors(html: string): string[] {
-  const $ = load(html);
-  return $(`section[data-spec="section"] ${SLIDE}`)
-    .toArray()
-    .map((element) => {
-      const section = $(element).closest('section[data-spec="section"]').attr('id') ?? '';
-      return `${section}--${$(element).attr('id') ?? ''}`;
-    });
 }
 
 /**
@@ -129,7 +112,7 @@ export function checkSpec(files: Readonly<Record<string, string>>, reviewAsset: 
   const html = files[SPEC_FILE];
   if (html === undefined) return [];
   const $ = load(html);
-  const meta = metaText($);
+  const meta = metaBlockText(html);
   const isApproved = metaGateTier(html) === 'approved';
   const dossier = files[DOSSIER_FILE];
   const messages = [

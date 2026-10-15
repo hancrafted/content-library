@@ -5,6 +5,7 @@
  */
 
 import { type Cheerio, type CheerioAPI } from 'cheerio';
+import { OPTION } from './episode-spec-page.pure';
 import { unless } from './finding.pure';
 
 /** One element of a parsed page, read off cheerio's own types, and a selection of them. */
@@ -14,7 +15,6 @@ export type Selection = Cheerio<Element>;
 
 /** The review form's id, which every field names in its `form` attribute. */
 export const FORM = 'spec-review';
-export const OPTION = 'figure[data-spec="option"]';
 const LETTERS = 'abc';
 
 /** What a Slide's rules read beside the Slide: the page and whether Han approved it. */
@@ -70,8 +70,23 @@ function checkOption($: CheerioAPI, figure: Selection, slug: string): string[] {
       checkboxes.length === 1,
       `${where} has no <input type="checkbox" form="${FORM}" name="pick:${slug}" value="${id}">.`,
     ),
+    ...checkTicked(
+      figure.is('[data-picked]'),
+      checkboxes.some((element) => $(element).is('[checked]')),
+      where,
+    ),
     ...checkTokens($, figure, where),
   ];
+}
+
+/** A picked Option's checkbox comes ticked and no other does, so a review round needs nothing on a locked Slide. */
+function checkTicked(isPicked: boolean, isTicked: boolean, where: string): string[] {
+  if (isPicked === isTicked) return [];
+  return isPicked
+    ? [
+        `${where} is picked, but its checkbox lacks checked: a locked Slide comes ticked, so the next round needs nothing on it.`,
+      ]
+    : [`${where} is not picked, but its checkbox is checked: tick only the data-picked Option.`];
 }
 
 /** The count, ids, recommended mark and picked mark of a Slide's Options. */

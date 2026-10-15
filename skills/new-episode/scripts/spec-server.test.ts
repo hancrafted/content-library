@@ -4,6 +4,7 @@ import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { startSpecServer, type SpecServer } from './spec-server.ts';
 
+// A real loopback socket on port 0, against ARCH-003 §1.1: the spec (#211) asks for the POST → file round trip end to end.
 /*
  * The Spec server against a real temp Episode folder on port 0: it serves the Spec, saves a valid review as the next
  * feedback round and redirects back, and answers an invalid one with 400 and writes nothing.

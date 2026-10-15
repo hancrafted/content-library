@@ -5,6 +5,7 @@ import {
   frontmatterField,
   frontmatterValue,
   gateTier,
+  utcSeconds,
   verifiedProblems,
 } from './staging-file.pure';
 
@@ -53,6 +54,16 @@ after: top
 `;
 
 describe('success cases', () => {
+  it('writes an instant as a UTC datetime to the second, the form `generated.at` and `verified` take', () => {
+    // ARRANGE
+    const instant = new Date('2026-10-13T12:00:05.678Z');
+    const expected = '2026-10-13T12:00:05Z';
+    // ACT
+    const written = utcSeconds(instant);
+    // ASSERT
+    expect(written).toBe(expected);
+  });
+
   it('reads a frontmatter field as YAML does, plain, single-quoted or double-quoted', () => {
     // ARRANGE
     const expected = ['dossier', "Han's budget", 'a "spent" window'];
