@@ -287,3 +287,40 @@ Changes from the template, each with its reason:
 - Needs human: on the Spec page each mock renders at about 326px wide in a 16:9 box that clips overflow, so the board mocks show little more than their titles. The reviewer judged them from a desktop-width copy.
 - Needs human: the three Section jobs that draw `CashflowBoard` (Sections 1, 3 and 5) run in parallel, so the part's first author is whichever merges first.
 - Needs human: `stages-of-sale` note 2 cites only EU Directive 2011/7/EU for delays the Directive does not cover. This is carried over from write-dossier.
+
+## write-spec · 2026-10-15T14:04:02Z
+
+### Inputs
+
+- Han's round-1 verdict on the Spec: it showed text, not Slides; aim for the richness of `maintaining-markdown-for-ai`; show one Option at a time, as tabs or stacked; every mock visualizes the Slide.
+- The new `skills/new-episode/assets/spec-frame.html`, `references/spec-designer.md` and rubric line 10 (fidelity at 1440px).
+- The Visual language, updated with the `CashflowBoard` props `annotations?` and per-column `footer?`, and with one way every mock draws the board, taken from Option 1a.
+
+### Output
+
+- `spec/spec.html` in the new frame: an outline, one Slide per screen, its Options as tabs on a full-width stage, and the words and build notes under each Slide. It has a fresh `process:markdown-harness` `verified` entry.
+- All 10 Slides redesigned at full fidelity: real notes, names, amounts and SVG arrows, brackets and curves on the Board style's paper material. Still 29 Options, with the same recommended set: 1a, 2a, 3a, 4a, 5a, 6a, 7b, 8b, 9b and 10a.
+- Committed with `Gate: draft spec-2` for Han's second review round.
+
+### Checks
+
+- `vitest` staging test and `mh`: pass on attempts 4, 5 and 6.
+- Reviewer:
+  - fail on attempt 4 on lines 2, 3, 5 and 10;
+  - fail on attempt 5 on line 10;
+  - pass on attempt 6 on all 10 rubric lines.
+
+### Notes
+
+- Attempt 4 failed four lines:
+  - "Every Option follows the Spec's Visual language" (line 2): 1a drew the board differently from 6a–b and 10a–c. The orchestrator added the one drawing to the Visual language, and the designers of Sections 1, 3 and 5 redrew to it.
+  - Line 3: the figcaptions of 7a–9c gave no reason.
+  - Line 5: 7a and 9a set numerals at `text-hero`, which FE-011 §3.2 reserves for `HeroTitle`.
+  - Line 10: text ran past its note in 3c, 7b and 8b.
+- Attempt 5 failed line 10 on 3c. The designer's preview rendered columns about 40px wider than the Spec page, so the measure has to be taken in the real page. 3c now splits its columns 3 / 5 / 4.
+- In 8b, two Lead names were shortened to fit: "Hofmann" to "Hahn" and "Lindqvist" to "Lind".
+- On Slide 10, the "Start when?" arrow now runs under the notes it crosses, so the Q2 cost note stays readable. Design reference page 16 covers it.
+- Needs human: `--primary` is near-black, so each Slide's focal point reads by weight, size and rings, not by colour.
+- Needs human: Sections 1, 3 and 5 all build on `CashflowBoard` in parallel jobs. Carried over from round 1.
+- Needs human: `stages-of-sale` note 2 cites only EU Directive 2011/7/EU. Carried over from round 1.
+- Needs human: Slides 4 and 5 use the pipeline before Slide 7 defines it.
