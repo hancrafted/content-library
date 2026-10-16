@@ -1,0 +1,78 @@
+{
+  "title": "Behalte Deinen Cashflow im Blick",
+  "kicker": "01 · Warum der Blick auf den Cashflow überlebenswichtig ist",
+  "caption": "Eine Million Euro ist unterwegs, und die Firma ist weg.",
+  "board": "Cashflow-Board, Januar bis April",
+  "months": {
+    "jan": "Jan",
+    "feb": "Feb",
+    "mar": "März",
+    "apr": "April"
+  },
+  "note": {
+    "cash": "Kasse",
+    "cost": "Kosten",
+    "revenue": "Umsatz"
+  },
+  "stamp": "Pleite",
+  "runway": "Zwei Monate Cash",
+  "late": "Die Million kommt einen Monat zu spät",
+  "cashLeft": "Kassenstand",
+  "question": {
+    "label": "Du bist dran",
+    "text": "Wenn der Februar der Monat ist, in dem Dir das Geld ausgeht: Wann hättest Du mit dem Verkaufen anfangen müssen?"
+  },
+  "notes": {
+    "costs-begin-before-customers": {
+      "header": "Kosten kommen vor den Kunden",
+      "description": "Die Gründung der Firma und die Lebenshaltungskosten der Gründer fallen an, bevor ein Startup Nutzer oder Einnahmen hat.[1]",
+      "sources": {
+        "startup-funding": {
+          "title": "Paul Graham, A Student's Guide to Startups: Startup Funding"
+        }
+      }
+    },
+    "high-burn-rate-is-a-clock": {
+      "header": "Eine hohe Burn Rate ist eine Uhr",
+      "description": "Sie setzt ein Startup unter ständigen Zeitdruck, und das genannte Gegenmittel ist, wenig auszugeben und dabei schnell zu arbeiten.[1]",
+      "sources": {
+        "startup-funding": {
+          "title": "Paul Graham, A Student's Guide to Startups: Startup Funding"
+        }
+      }
+    },
+    "default-alive-test": {
+      "header": "Der Default-Alive-Test",
+      "description": "Frag Dich, ob die Firma mit dem verbleibenden Geld bei den aktuellen Ausgaben und dem aktuellen Wachstum profitabel wird; sich zu früh Sorgen zu machen ist billig, zu spät ist gefährlich.[1]",
+      "sources": {
+        "default-alive": {
+          "title": "Paul Graham, Default Alive or Default Dead?"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "walk-the-months": {
+        "title": "Geh die Monate durch",
+        "keywords": "",
+        "script": "Lies es mit mir. Januar: Du startest mit 100 Tausend Cash, und 50 Tausend gehen raus. Februar: weitere 50 Tausend gehen raus, und Ende Februar ist Dein Cash bei null."
+      },
+      "march-has-no-money": {
+        "title": "Im März ist kein Geld da",
+        "keywords": "",
+        "script": "Der März kommt, und die Kosten landen auf einem leeren Konto, ohne etwas, womit sie bezahlt werden. Die große Zahl steht im April, einen Monat zu spät."
+      },
+      "antithesis": {
+        "title": "Antithese",
+        "keywords": "",
+        "script": "Eine Million Euro ist unterwegs, und die Firma ist weg. Auf dem Papier richtig, auf dem Kalender tot."
+      },
+      "hand-over-the-verdict": {
+        "title": "Übergib das Urteil",
+        "keywords": "",
+        "script": "Also finde Deinen eigenen Februar: den Monat, in dem Dein Cash auf null fällt. Und wenn das der Monat ist, in dem Dir das Geld ausgeht: Wann hättest Du mit dem Verkaufen anfangen müssen?"
+      }
+    }
+  }
+}

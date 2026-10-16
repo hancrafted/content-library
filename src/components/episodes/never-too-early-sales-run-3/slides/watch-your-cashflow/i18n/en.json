@@ -1,0 +1,78 @@
+{
+  "title": "Watch your cashflow",
+  "kicker": "01 · Why watching cashflow is mission-critical",
+  "caption": "A million euros is coming, and the company is gone.",
+  "board": "Cashflow board, January to April",
+  "months": {
+    "jan": "Jan",
+    "feb": "Feb",
+    "mar": "March",
+    "apr": "April"
+  },
+  "note": {
+    "cash": "Cash",
+    "cost": "Cost",
+    "revenue": "Revenue"
+  },
+  "stamp": "Bankrupt",
+  "runway": "Two months of cash",
+  "late": "The million lands one month late",
+  "cashLeft": "Cash left",
+  "question": {
+    "label": "Your turn",
+    "text": "If February is the month you run out, when would you have needed to start selling?"
+  },
+  "notes": {
+    "costs-begin-before-customers": {
+      "header": "Costs begin before customers",
+      "description": "Company setup and the founders' living costs arise before a startup has users or income.[1]",
+      "sources": {
+        "startup-funding": {
+          "title": "Paul Graham, A Student's Guide to Startups: Startup Funding"
+        }
+      }
+    },
+    "high-burn-rate-is-a-clock": {
+      "header": "A high burn rate is a clock",
+      "description": "It puts a startup under constant time pressure, and the stated remedy is to spend little while working fast.[1]",
+      "sources": {
+        "startup-funding": {
+          "title": "Paul Graham, A Student's Guide to Startups: Startup Funding"
+        }
+      }
+    },
+    "default-alive-test": {
+      "header": "The default-alive test",
+      "description": "Ask whether the company reaches profitability on its remaining money at current expenses and growth; worrying too early is cheap, worrying too late is dangerous.[1]",
+      "sources": {
+        "default-alive": {
+          "title": "Paul Graham, Default Alive or Default Dead?"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "walk-the-months": {
+        "title": "Walk the months",
+        "keywords": "",
+        "script": "Read it with me. January, you start with 100 thousand in cash and 50 thousand goes out. February, another 50 thousand goes out, and at the end of February your cash is zero."
+      },
+      "march-has-no-money": {
+        "title": "March has no money",
+        "keywords": "",
+        "script": "March arrives and the cost lands on an empty account, with nothing to pay it. The big number sits in April, one month late."
+      },
+      "antithesis": {
+        "title": "Antithesis",
+        "keywords": "",
+        "script": "A million euros is coming, and the company is gone. Right on paper, dead on the calendar."
+      },
+      "hand-over-the-verdict": {
+        "title": "Hand over the verdict",
+        "keywords": "",
+        "script": "So find your own February: the month your cash hits zero. And if that is the month you run out, when would you have needed to start selling?"
+      }
+    }
+  }
+}

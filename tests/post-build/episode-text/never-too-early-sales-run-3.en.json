@@ -1,13 +1,17 @@
 {
   "title": "Why it's never too early to start with sales · hancrafted",
   "description": "Why sales must start long before revenue is needed, and the first concrete steps to build a sales pipeline: find your zero-cash month, keep a list of potential customers, make first contact, and track your conversion rate and sales cycle.",
-  "toc": "Contents Loading 3 min left 1 Why watching cashflow is mission critical 2 Why sales is more than just selling 3 How to start doing sales 4 Why building an effective sales pipeline takes time 5 Start before you need the money Open contents : Contents · Loading Contents 3 min left 1 Why watching cashflow is mission critical 2 Why sales is more than just selling 3 How to start doing sales 4 Why building an effective sales pipeline takes time 5 Start before you need the money",
+  "toc": "Contents Loading 4 min left 1 Why watching cashflow is mission critical Watch your cashflow 2 Why sales is more than just selling 3 How to start doing sales 4 Why building an effective sales pipeline takes time 5 Start before you need the money Open contents : Contents · Loading Contents 4 min left 1 Why watching cashflow is mission critical Watch your cashflow 2 Why sales is more than just selling 3 How to start doing sales 4 Why building an effective sales pipeline takes time 5 Start before you need the money",
   "slides": [
     {
       "id": "top",
       "text": "Why it's never too early to start with sales Revenue arrives months after the costs that create it, so by the time you feel you need sales it is already too late: start the pipeline before you need the money."
     },
     { "id": "why-watching-cashflow-is-mission-critical", "text": "Why watching cashflow is mission critical" },
+    {
+      "id": "why-watching-cashflow-is-mission-critical--watch-your-cashflow",
+      "text": "01 · Why watching cashflow is mission-critical Watch your cashflow A million euros is coming, and the company is gone. Your turn If February is the month you run out, when would you have needed to start selling? Jan Cash €100,000 Cost −€50,000 Cash €50,000 Cash left €50,000 Feb Cash €50,000 Cost −€50,000 Cash €0 Cash left €0 March Cost −€50,000 Cash left −€50,000 April Revenue €1,000,000 Cash left €950,000 Bankrupt Two months of cash The million lands one month late"
+    },
     { "id": "why-sales-is-more-than-just-selling", "text": "Why sales is more than just selling" },
     { "id": "how-to-start-doing-sales", "text": "How to start doing sales" },
     {
@@ -24,6 +28,10 @@
     {
       "id": "why-watching-cashflow-is-mission-critical",
       "text": "Why watching cashflow is mission critical No speaker notes for this Slide."
+    },
+    {
+      "id": "why-watching-cashflow-is-mission-critical--watch-your-cashflow",
+      "text": "Watch your cashflow Costs begin before customers Company setup and the founders' living costs arise before a startup has users or income. 1 Sources (1) Paul Graham, A Student's Guide to Startups: Startup Funding ( opens in a new tab ) paulgraham.com A high burn rate is a clock It puts a startup under constant time pressure, and the stated remedy is to spend little while working fast. 1 Sources (1) Paul Graham, A Student's Guide to Startups: Startup Funding ( opens in a new tab ) paulgraham.com The default-alive test Ask whether the company reaches profitability on its remaining money at current expenses and growth; worrying too early is cheap, worrying too late is dangerous. 1 Sources (1) Paul Graham, Default Alive or Default Dead? ( opens in a new tab ) paulgraham.com"
     },
     {
       "id": "why-sales-is-more-than-just-selling",
@@ -47,6 +55,10 @@
     {
       "id": "why-watching-cashflow-is-mission-critical",
       "text": "Why watching cashflow is mission critical 0:00 – 0:23 Imagine the wall Imagine you are the founder, standing in front of one wall. Sticky notes, one column per month, yellow for the cash you have, red for the costs, green for the revenue. You have watched a board like this, or you are about to, and you know the feeling when you read the last column. 0:23 – 0:42 Cash decides how long you have Here is the claim of this whole Episode: what decides how long your company lives is not how much you earn in the end, but when the money arrives. This one board comes back three times, and each time it answers a bigger question. 0:42 – 0:58 The route We will go through four questions. Why cashflow is mission critical, why sales is more than selling, how to start doing sales, and why a pipeline takes time to build. The first answer is already on the wall."
+    },
+    {
+      "id": "why-watching-cashflow-is-mission-critical--watch-your-cashflow",
+      "text": "Watch your cashflow 0:00 – 0:14 Walk the months Read it with me. January, you start with 100 thousand in cash and 50 thousand goes out. February, another 50 thousand goes out, and at the end of February your cash is zero. 0:14 – 0:24 March has no money March arrives and the cost lands on an empty account, with nothing to pay it. The big number sits in April, one month late. 0:24 – 0:32 Antithesis A million euros is coming, and the company is gone. Right on paper, dead on the calendar. 0:32 – 0:44 Hand over the verdict So find your own February: the month your cash hits zero. And if that is the month you run out, when would you have needed to start selling?"
     },
     {
       "id": "why-sales-is-more-than-just-selling",

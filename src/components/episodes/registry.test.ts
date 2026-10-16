@@ -38,7 +38,7 @@ const COMPOSITION = [
     // Section openers only until each Section job adds its page Slides at its placement marker.
     slug: 'never-too-early-sales-run-3',
     sections: [
-      { opener: 'why-watching-cashflow-is-mission-critical', pageSlides: 0 },
+      { opener: 'why-watching-cashflow-is-mission-critical', pageSlides: 1 },
       { opener: 'why-sales-is-more-than-just-selling', pageSlides: 0 },
       { opener: 'how-to-start-doing-sales', pageSlides: 0 },
       { opener: 'why-building-an-effective-sales-pipeline-takes-time', pageSlides: 0 },
