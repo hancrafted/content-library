@@ -91,7 +91,7 @@ export type BoardCell = readonly [column: number, slot: number];
 export interface BoardPlacements {
   readonly count: number;
   readonly stamp?: { readonly column: number };
-  readonly arrow?: { readonly from: BoardCell; readonly to: BoardCell };
+  readonly arrow?: { readonly from: BoardCell; readonly to: BoardCell; readonly labelGap?: number };
   readonly highlight?: number;
   readonly annotations?: readonly { readonly column: number; readonly span?: number }[];
 }
@@ -107,14 +107,19 @@ function checkCell([column, slot]: BoardCell, count: number, what: string) {
   throw new Error(`CashflowBoard: ${what} names slot ${slot}, but a lane has slots 1 to 3.`);
 }
 
+function checkArrow({ from, to, labelGap }: NonNullable<BoardPlacements['arrow']>, count: number) {
+  checkCell(from, count, "the arrow's start");
+  checkCell(to, count, "the arrow's end");
+  if (labelGap === undefined) return;
+  checkColumn(labelGap, count, "the arrow's label gap");
+  checkColumn(labelGap + 1, count, "the column after the arrow's label gap");
+}
+
 /** Throws when an overlay names a column or slot the board does not have, so a bad board fails the build. */
 export function checkBoard({ count, stamp, arrow, highlight, annotations = [] }: BoardPlacements): void {
   if (stamp) checkColumn(stamp.column, count, 'the stamp');
   if (highlight !== undefined) checkColumn(highlight, count, 'the highlight');
-  if (arrow) {
-    checkCell(arrow.from, count, "the arrow's start");
-    checkCell(arrow.to, count, "the arrow's end");
-  }
+  if (arrow) checkArrow(arrow, count);
   for (const { column, span = 1 } of annotations) {
     checkColumn(column, count, 'an annotation');
     checkColumn(column + span - 1, count, "an annotation's span");

@@ -42,7 +42,7 @@ const COMPOSITION = [
       { opener: 'why-sales-is-more-than-just-selling', pageSlides: 1 },
       { opener: 'how-to-start-doing-sales', pageSlides: 4 },
       { opener: 'why-building-an-effective-sales-pipeline-takes-time', pageSlides: 3 },
-      { opener: 'start-before-you-need-the-money', pageSlides: 0 },
+      { opener: 'start-before-you-need-the-money', pageSlides: 1 },
     ],
   },
 ] as const;

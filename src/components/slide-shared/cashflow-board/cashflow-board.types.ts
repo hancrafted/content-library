@@ -37,6 +37,14 @@ export interface BoardArrow {
   readonly to: BoardCell;
   readonly label?: string;
   readonly variant?: 'shaft' | 'curve';
+  /**
+   * A shaft's label stands on the shaft in the gap between this column's lane and the next, clear of the notes on
+   * either side, where the board is wide enough to hold it there; narrower, it stands in the slot under `from`. With
+   * no `labelGap`, the label is a pill under the middle of the shaft.
+   */
+  readonly labelGap?: number;
+  /** Where a shaft's head stops: on the centre of the `to` cell (the default) or just beside its note. */
+  readonly stop?: 'centre' | 'beside';
 }
 
 export interface CashflowBoardProps {

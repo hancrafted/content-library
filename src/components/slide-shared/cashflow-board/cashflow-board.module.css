@@ -120,6 +120,35 @@
 }
 
 /*
+ * A shaft told to stop beside its end note leaves room at its head end for half a lane and half a note: notes are at
+ * most 8rem wide, inside the lane's padding (0.5rem narrow, 1rem wide).
+ */
+.arrow[data-stop='beside'] {
+  --lane: calc((100% - (var(--narrow-span) - 1) * var(--gap)) / var(--narrow-span));
+  --beside: calc(var(--lane) / 2 + min(4rem, var(--lane) / 2 - 0.5rem) + 0.5rem);
+}
+
+.arrow[data-stop='beside'][data-direction='left'] {
+  padding-inline-start: var(--beside);
+}
+
+.arrow[data-stop='beside'][data-direction='right'] {
+  padding-inline-end: var(--beside);
+}
+
+/*
+ * A shaft's standing label is a pill in the slot under the arrow's start; on a narrow board whose shaft is not drawn
+ * its head points toward the end's row of lanes.
+ */
+.shaftLabel {
+  position: relative;
+  z-index: 2;
+  grid-column: var(--nc);
+  grid-row: calc(var(--nr) + var(--slot));
+  place-self: start center;
+}
+
+/*
  * The curved arrow is a zero-height box on its start slot; its arc is centred on the gap beside that lane, toward
  * the arrow's end, and stands over the notes. Its label is a pill in the slot under the start.
  */
@@ -210,7 +239,33 @@
     grid-row: calc(1 + var(--slot));
   }
 
+  .arrow[data-stop='beside'] {
+    --lane: calc((100% - (var(--span) - 1) * var(--gap)) / var(--span));
+    --beside: calc(var(--lane) / 2 + min(4rem, var(--lane) / 2 - 1rem) + 0.5rem);
+  }
+
+  .shaftLabel {
+    grid-column: var(--wc);
+    grid-row: calc(1 + var(--slot));
+  }
+
+  .pointer {
+    display: none;
+  }
+
   .annotation {
     grid-column: var(--wc) / span var(--span);
+  }
+}
+
+/*
+ * From 64rem of board, four lanes leave an alley between neighbouring notes wide enough for a short label, so a
+ * standing label moves onto the shaft, centred on the gap after its column.
+ */
+@container (min-width: 64rem) {
+  .shaftLabel {
+    grid-column: var(--gap-wc) / span 2;
+    grid-row: var(--slot);
+    place-self: center;
   }
 }

@@ -85,6 +85,41 @@ describe('success cases', () => {
     expect(expected.filter((part) => !html.includes(part))).toEqual([]);
   });
 
+  it("stands a shaft's label on its own in the gap after the column it is told, outside the shaft", () => {
+    // ARRANGE
+    const expected =
+      /<p data-cashflow="arrow-label" data-variant="shaft" data-gap="1"[^>]*><span[^>]*>Start early!<\/span>/;
+    // ACT
+    const html = board({ arrow: { from: [2, 2], to: [1, 2], label: 'Start early!', labelGap: 1 } });
+    // ASSERT
+    expect(html).toMatch(expected);
+    expect(html.match(/Start early!/g)?.length).toBe(1);
+  });
+
+  it("stops a shaft's head beside the note it points at when told, and marks no stop by default", () => {
+    // ARRANGE
+    const expected = /data-cashflow="arrow" data-variant="shaft"[^>]*data-stop="beside"/;
+    // ACT
+    const html = board({ arrow: { from: [2, 2], to: [1, 2], stop: 'beside' } });
+    const plain = board({ arrow: { from: [2, 2], to: [1, 2] } });
+    // ASSERT
+    expect(html).toMatch(expected);
+    expect(plain).not.toContain('data-stop');
+  });
+
+  it("gives a standing shaft label a head toward the arrow's end, for a narrow board that cannot draw the shaft", () => {
+    // ARRANGE
+    const expected = /data-cashflow="arrow-label"[^>]*data-points="up"[^>]*><span[^>]*><svg[^>]*aria-hidden="true"/;
+    const lane = (label: string) => ({ label, notes: [null, { kind: 'cost', amount: 50000 } as const, null] });
+    // ACT
+    const html = board({
+      columns: [lane('Q1'), lane('Q2'), lane('Q3')],
+      arrow: { from: [3, 2], to: [1, 2], label: 'Start early!', labelGap: 2 },
+    });
+    // ASSERT
+    expect(html).toMatch(expected);
+  });
+
   it('rings a note it is told to ring in primary, and only that note', () => {
     // ARRANGE
     const expected = 1;
@@ -122,6 +157,15 @@ describe('failure cases', () => {
     const expected = /slot 4/;
     // ACT
     const render = () => board({ arrow: { from: [1, 4], to: [2, 1] } });
+    // ASSERT
+    expect(render).toThrow(expected);
+  });
+
+  it("refuses a shaft label in the gap after the board's last column", () => {
+    // ARRANGE
+    const expected = /column 3/;
+    // ACT
+    const render = () => board({ arrow: { from: [2, 2], to: [1, 2], label: 'Start early!', labelGap: 2 } });
     // ASSERT
     expect(render).toThrow(expected);
   });
