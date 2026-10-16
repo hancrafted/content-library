@@ -92,12 +92,12 @@ export const whatIsASalesPipeline = slide({
         conversion={{
           label: t('terms.conversion.label'),
           ratio: t('ratio'),
-          caption: t.rich('terms.conversion.caption', { b: (chunks) => <b className="text-foreground">{chunks}</b> }),
+          caption: t.rich('terms.conversion.caption'),
           target: target('conversion'),
         }}
         funnel={{
           label: t('terms.funnel.label'),
-          caption: t.rich('terms.funnel.caption', { b: (chunks) => <b className="text-foreground">{chunks}</b> }),
+          caption: t.rich('terms.funnel.caption'),
         }}
         cycle={{ caption: t.rich('terms.cycle'), target: target('cycle') }}
       />

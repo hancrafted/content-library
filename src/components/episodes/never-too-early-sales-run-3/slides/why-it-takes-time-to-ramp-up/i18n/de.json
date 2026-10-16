@@ -3,7 +3,7 @@
   "title": "Warum der Hochlauf Zeit braucht",
   "lead": "Noch ist nichts geschrieben: kein Material, nur Fragen zum Markt, und die zwei Zahlen, mit denen Du planst, sind leer.",
   "stamp": "Tag eins",
-  "columns": {
+  "lanes": {
     "preparation": "1 · Vorbereitung",
     "market": "2 · Unbekannter Markt",
     "metrics": "3 · Unbekannte Kennzahlen"

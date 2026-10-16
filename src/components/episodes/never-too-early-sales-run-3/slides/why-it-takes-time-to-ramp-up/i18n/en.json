@@ -3,7 +3,7 @@
   "title": "Why it takes time to ramp up",
   "lead": "Nothing is written yet: no material, only questions about the market, and the two numbers you plan with are blank.",
   "stamp": "Day one",
-  "columns": {
+  "lanes": {
     "preparation": "1 · Preparation",
     "market": "2 · Unknown market",
     "metrics": "3 · Unknown metrics"

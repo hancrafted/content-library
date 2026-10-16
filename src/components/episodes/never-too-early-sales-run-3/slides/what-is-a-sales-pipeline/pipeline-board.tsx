@@ -153,7 +153,7 @@ function PlainNote({ note }: { note: BoardNote }) {
   if (note.state === undefined) return <p className="font-medium">{note.name}</p>;
   return (
     <p>
-      <b>{note.name}</b>
+      <b className="font-semibold">{note.name}</b>
       <br />
       {note.state}
     </p>

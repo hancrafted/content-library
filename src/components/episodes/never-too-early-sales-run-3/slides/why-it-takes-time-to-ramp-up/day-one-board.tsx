@@ -145,7 +145,7 @@ function BlankNote({ note, tilt }: { note: PreparationNote; tilt?: string }) {
         tilt,
       )}
     >
-      <b className="text-foreground">{note.label}</b>
+      <b className="font-semibold text-foreground">{note.label}</b>
       <br />
       {note.items}
     </div>

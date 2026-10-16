@@ -63,9 +63,9 @@ export const whyItTakesTimeToRampUp = slide({
       <DayOneBoard
         stamp={t('stamp')}
         columns={{
-          preparation: t('columns.preparation'),
-          market: t('columns.market'),
-          metrics: t('columns.metrics'),
+          preparation: t('lanes.preparation'),
+          market: t('lanes.market'),
+          metrics: t('lanes.metrics'),
         }}
         preparation={[
           { id: 'before', label: t('preparation.before.label'), items: t('preparation.before.items') },

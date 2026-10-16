@@ -184,7 +184,7 @@ function OpportunityNotes({ notes }: { notes: readonly CountNote[] }) {
           )}
           style={{ '--i': index } as CSSProperties}
         >
-          <b>{note.name}</b>
+          <b className="font-semibold">{note.name}</b>
           <br />
           {note.state}
         </p>

@@ -19,8 +19,7 @@
     animation-delay: calc(200ms + var(--i, 0) * 120ms);
   }
 
-  .arrow,
-  .bar {
+  .arrow {
     transform-origin: left center;
   }
 
