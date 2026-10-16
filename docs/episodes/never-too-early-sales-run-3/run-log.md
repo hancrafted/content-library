@@ -532,3 +532,37 @@ Changes from the template, each with its reason:
 - Needs human: whether the near-black primary ring on Slides 3 and 6 reads as the one focus mark.
 - Needs human: the German text is the implementor's translation.
 - Needs human: interactive pass skipped, no browser.
+
+## implement-section-start-before-you-need-the-money · 2026-10-16T16:47:34Z
+
+### Inputs
+
+- The approved Spec, `spec/spec.html`: Section `start-before-you-need-the-money`, Slide 10 with picked Option 10a (Han's lock note: the arrow reads "Start early!") and its build notes, and the Visual language.
+- `reference/source-deck/design-reference.md`, page 16.
+- `skills/new-episode/references/implement-section.md`, `references/skill-overrides.md` and `docs/features/episode-translation-keys.md`.
+- `src/components/slide-shared/cashflow-board/` as merged from Section 1 (Attempt 1) and as extended by Section 3 (Attempt 2); this job branched from the Episode branch after Section 1 merged.
+- Attempt 2: Attempt 1's failed rubric line 4, quoted verbatim.
+
+### Output
+
+- `5265a0d` (Attempt 1): Slide `watch-your-cashflow-start-when` built to 10a, listed in `sections/start-before-you-need-the-money.ts`: a four-quarter board with Q1 ringed and an arrow from Q3 to Q1, the dashed drop and a four-step lane; five Voice script segments and one Speaker note, in English and German.
+- `5e3d9c8`: the Episode branch, Sections 1 to 4 included, merged into the job branch before Attempt 2.
+- `27519a5` (Attempt 2): `CashflowBoard`'s arrow gains optional `labelGap` (the label as its own item on the shaft in a column gap, above the notes) and `stop: 'beside'` (the head stops just past the end cell's note); Slide 10 passes both; captures written again.
+- `1fe47ae`: the job branch merged into `episode/never-too-early-sales-run-3`; worktree and branch removed.
+
+### Checks
+
+- `verify`, `build`, `test:build`, `impeccable` (en and de, exit 0): pass.
+- `visual-check`: pass. Count 1, 145 mounted descendants, wrapper 2183, 1476 and 1505 px at 375, 1100 and 1440 (viewport 800), no horizontal overflow, the same in light and dark; the label and the arrow head overlap no note box at any width.
+- Reviewer (`code-review`, base `a0b7bb3`): Attempt 1 Standards pass and Spec fail on line 4; Attempt 2 passes line 4.
+- After the merge: `build`, `test:build`, `verify`, `mh` and the staging test pass.
+
+### Notes
+
+- Attempt 1 failed rubric line 4: the "Start early!" label and the arrow head sat under board notes, and the arrow was hidden at 375. The shared part could not place them, so the job waited for Section 3's merge and Attempt 2 added the two arrow props. Slides 1 and 6 pass neither and render as before.
+- Attempt 1's `verify` first failed on the implementor's untracked, gitignored `.scratch/dbg/anim.ts`; it passed once that file was removed. The committed tree was not changed.
+- Needs human: below a 64rem board (1100 px), the Q2 to Q3 gap is 56 px, narrower than the label, so it drops into Q3's empty slot under the arrow's tail.
+- Needs human: 10a gives no phone form for the arrow; at 375 the shaft is hidden and a "▲ Start early!" pill stands under Q3's revenue note.
+- Needs human: the German label "Früh starten!" leaves 4 to 5 px each side in the Q2 to Q3 gap at 1440.
+- Needs human: the German text is the implementor's translation.
+- Needs human: interactive pass skipped, no browser.
