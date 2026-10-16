@@ -30,7 +30,7 @@ verified:
 
 master: basic-page · motion: local
 
-A planning board of four month columns, Jan to April, each a pale lane under a dark month label, filled with sticky notes: yellow cash, red cost, green revenue. The notes arrive month by month: Jan holds cash 100.000$, cost 50.000$ and cash 50.000$; Feb holds cash 50.000$, cost 50.000$ and a larger cash 0$; March holds a cost of 50.000$ with nothing to pay it; April holds revenue +1.000.000$. After the March note lands, a red "Bankrupt" stamp falls across the board. The viewer sees the million-dollar note arrive one column too late.
+A planning board of four month columns, Jan to April, each a pale lane under a dark month label, filled with sticky notes: yellow cash, red cost, green revenue. The notes arrive month by month: Jan holds cash €100.000, cost €50.000 and cash €50.000; Feb holds cash €50.000, cost €50.000 and a larger cash €0; March holds a cost of €50.000 with nothing to pay it; April holds revenue +€1.000.000. After the March note lands, a red "Bankrupt" stamp falls across the board. The viewer sees the million-euro note arrive one column too late.
 
 Design reference: reference/source-deck/design-reference.md#page-3
 
@@ -42,13 +42,13 @@ Design reference: reference/source-deck/design-reference.md#page-3
    - sources: [1] Paul Graham, A Student's Guide to Startups: Startup Funding — https://www.paulgraham.com/startupfunding.html
 3. **The default-alive test** — ask whether the company reaches profitability on its remaining money at current expenses and growth; worrying too early is cheap, worrying too late is dangerous [2].
    - sources: [2] Paul Graham, Default Alive or Default Dead? — https://paulgraham.com/aord.html
-   - target: the Cash 0$ note in Feb
+   - target: the Cash €0 note in Feb
 
 #### Voice script
 
 1. **Walk the months** — Read it with me. January, you start with 100 thousand in cash and 50 thousand goes out. February, another 50 thousand goes out, and at the end of February your cash is zero.
 2. **March has no money** — March arrives and the cost lands on an empty account, with nothing to pay it. The big number sits in April, one month late.
-3. **Antithesis** — A million dollars is coming, and the company is gone. Right on paper, dead on the calendar.
+3. **Antithesis** — A million euros is coming, and the company is gone. Right on paper, dead on the calendar.
 4. **Hand over the verdict** — So find your own February: the month your cash hits zero. And if that is the month you run out, when would you have needed to start selling?
 
 ## Why sales is more than just selling {#why-sales-is-more-than-just-selling}
@@ -309,7 +309,7 @@ Design reference: reference/source-deck/design-reference.md#page-15
 
 master: basic-page · motion: local
 
-The board a third time, now by quarter: Q1 holds cash 100.000$, cost 50.000$, cash 50.000$; Q2 holds cash 50.000$, cost 50.000$, cash 0$; Q3 holds cost 50.000$ and revenue 50.000$; Q4 holds cost 50.000$ and revenue 50.000$. A thick dark arrow labelled "Start when?" sweeps from the Q3 revenue note back across Q2 into Q1 and points at the Q1 column, which is highlighted.
+The board a third time, now by quarter: Q1 holds cash €100.000, cost €50.000, cash €50.000; Q2 holds cash €50.000, cost €50.000, cash €0; Q3 holds cost €50.000 and revenue €50.000; Q4 holds cost €50.000 and revenue €50.000. A thick dark arrow labelled "Start when?" sweeps from the Q3 revenue note back across Q2 into Q1 and points at the Q1 column, which is highlighted.
 
 Design reference: reference/source-deck/design-reference.md#page-16
 
@@ -317,7 +317,7 @@ Design reference: reference/source-deck/design-reference.md#page-16
 
 1. **Even a yes arrives late** — finding investors takes time, closing takes longer than expected even after a yes, and one angel took months to pay [1].
    - sources: [1] Paul Graham, A Student's Guide to Startups: Startup Funding — https://www.paulgraham.com/startupfunding.html
-   - target: the Q2 cash 0$ note
+   - target: the Q2 cash €0 note
 
 #### Voice script
 

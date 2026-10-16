@@ -450,14 +450,14 @@
         "status": "draft",
         "generated": {
           "by": "claude-code/opus-5.5",
-          "at": "2026-10-15T14:01:45Z"
+          "at": "2026-10-16T14:05:46Z"
         },
         "locale": "en",
         "brief": "../brief.md",
         "verified": [
           {
             "by": "process:markdown-harness",
-            "at": "2026-10-15T14:04:02Z"
+            "at": "2026-10-16T14:07:26Z"
           }
         ]
       }
@@ -581,17 +581,23 @@
                 <code>--destructive</code>, <code>--note-revenue</code> from <code>--success</code>, the same mix, with
                 no separate dark values, because the global tokens already switch in dark mode; note text
                 <code>text-foreground</code>. Mocks show the tints as <code>bg-warning/25</code>,
-                <code>bg-destructive/25</code> and <code>bg-success/25</code>. Amounts are written
-                <code>$100,000</code> on every board, formatted by <code>Intl.NumberFormat</code>. Every mock draws the
-                board one way, the way Option 1a draws it, so Han sees on Slides 6 and 10 what Slide 1 builds: a
-                <code>bg-card</code> board surface with the dotted pattern, <code>rounded-xl</code> and
-                <code>shadow-md</code>; each lane <code>bg-muted</code> and <code>rounded-xl</code> with its label as a
-                dark pill (<code>bg-foreground text-background rounded-full</code>) over its top edge; each note a
-                square of paper (<code>bg-card shadow-md</code>, the slot's tilt) with the tint as a top-to-bottom
-                gradient, its kind in small uppercase mono at the top and its amount at the bottom, unsigned (a cost
-                reads <code>Cost</code> over <code>$50,000</code>), every word inside its note. No legend: each note
-                names its kind. A Slide's alternatives differ in what the board carries (stamp, arrow, highlight,
-                annotations, footers) and in what stands around it, never in the board's surface, notes or props.
+                <code>bg-destructive/25</code> and <code>bg-success/25</code>. Amounts are in euros, written
+                <code>€100,000</code> on every board, formatted by <code>Intl.NumberFormat</code> with
+                <code>currency: 'EUR'</code>; a cost note carries its sign, <code>−€50,000</code>, so the subtraction
+                reads at a glance (Han, round 2). Every board that is built draws it one way, the way Option 1c draws
+                it, Han's pick; from round 3 this binds the picked Options 1c, 6a and 10a, while the Options Han did not
+                pick keep their round-2 drawing as the record of what he chose between and are never built, so Han sees
+                on Slides 6 and 10 what Slide 1 builds: a <code>bg-card</code> board surface with the dotted pattern,
+                <code>rounded-xl</code> and <code>shadow-md</code>; each lane <code>bg-muted</code> and
+                <code>rounded-xl</code> with its label as a dark pill (<code
+                  >bg-foreground text-background rounded-full</code
+                >) over its top edge; each note a square of paper (<code>bg-card shadow-md</code>, the slot's tilt) with
+                the tint as a top-to-bottom gradient, its kind in small uppercase mono at the top and its amount at the
+                bottom (a cost reads <code>Cost</code> over <code>−€50,000</code>), every word inside its note. No
+                legend: each note names its kind. Every built board shows the cash left at each column's end as a
+                <code>footer</code> line, <code>Cash left €50,000</code>, the guide Han singled out in 1c. A Slide's
+                alternatives differ in what the board carries (stamp, arrow, highlight, annotations) and in what stands
+                around it, never in the board's surface, notes or props.
               </li>
             </ul>
             <textarea
@@ -674,7 +680,7 @@
                     </p>
                     <h3 class="mt-3 text-heading font-semibold">Watch your cashflow</h3>
                     <p class="mt-4 max-w-2xl text-body text-muted-foreground">
-                      A million dollars is on its way for April. The cash runs out at the end of February.
+                      A million euros is on its way for April. The cash runs out at the end of February.
                     </p>
                   </header>
 
@@ -701,7 +707,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-body font-semibold">$100,000</span>
+                                ><span class="text-body font-semibold">€100,000</span>
                               </div>
                             </li>
                             <li class="w-32 rotate-1 bg-card shadow-md">
@@ -709,7 +715,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-destructive/35 to-destructive/20 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cost</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                             <li class="w-32 -rotate-1 bg-card shadow-md">
@@ -717,7 +723,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                           </ul>
@@ -734,7 +740,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                             <li class="w-32 -rotate-1 bg-card shadow-md">
@@ -742,7 +748,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-destructive/35 to-destructive/20 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cost</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                             <li
@@ -753,7 +759,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-4"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-heading font-semibold">$0</span>
+                                ><span class="text-heading font-semibold">€0</span>
                               </div>
                             </li>
                           </ul>
@@ -770,7 +776,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-destructive/35 to-destructive/20 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cost</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                             <li class="w-32" aria-hidden="true"></li>
@@ -790,7 +796,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-success/40 to-success/25 p-4"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Revenue</span
-                                ><span class="text-body font-semibold">$1,000,000</span>
+                                ><span class="text-body font-semibold">€1,000,000</span>
                               </div>
                             </li>
                             <li class="w-32" aria-hidden="true"></li>
@@ -857,7 +863,7 @@
                 <figcaption>
                   <b>1a</b> The source-deck board, redrawn as a real wall: four lanes on a dotted whiteboard, paper
                   notes in the same three slots, the stamp across March, a <code>primary</code> call-out on Feb's
-                  oversized <code>$0</code> note, and a bracket showing the million landing one column too late.
+                  oversized <code>€0</code> note, and a bracket showing the million landing one column too late.
                   Recommended over 1b and 1c: it is the board Han brought and voices ("read it with me, January…"), its
                   one focal point is the note Speaker note 3 targets, and it leaves the board's footers and highlight
                   free for nothing but this Slide's point. Build cost: Scene.
@@ -869,10 +875,10 @@
                       Design reference:
                       <code>docs/episodes/never-too-early-sales-run-3/reference/source-deck/pages/page-03.jpg</code>.
                       Build against this page: keep the four pale lanes under dark pill labels, the three notes per lane
-                      in the same vertical positions, the larger <code>Cash 0$</code> and <code>Revenue</code> notes,
+                      in the same vertical positions, the larger <code>Cash €0</code> and <code>Revenue</code> notes,
                       and the red diagonal "Bankrupt" stamp across March; change the colours, the amounts and the paper
                       to the board the Visual language draws, add the <code>primary</code> call-out on Feb's
-                      <code>$0</code> note and the bracket under March and April, and draw our own stamp as type, not an
+                      <code>€0</code> note and the bracket under March and April, and draw our own stamp as type, not an
                       image.
                     </p>
                     <p>
@@ -886,20 +892,19 @@
                       reading order (Jan top to bottom, then Feb, then March's cost; each drops 8px from
                       <code>rotate(0)</code> to its resting tilt and fades in, 250ms, 350ms apart, delay from an
                       <code>--i</code> index custom property), the call-out arrow draws (<code>stroke-dashoffset</code>,
-                      300ms) as the <code>$0</code> note lands, then the stamp falls (scale 1.4 to 1, 200ms), then
+                      300ms) as the <code>€0</code> note lands, then the stamp falls (scale 1.4 to 1, 200ms), then
                       April's revenue note lands last and the bracket fades in under it. Base rule is the finished
                       board; nothing loops, so FE-009 §6 needs no zone hook.
                     </p>
                     <p>
                       <b>Part and props.</b> Draws the shared server part <code>CashflowBoard</code> from
-                      <code>src/components/slide-shared/cashflow-board/</code> exactly as the last bullet of
-                      <code>.scratch/never-too-early-sales-run-3/spec/visual-language.md</code> sets its interface,
-                      geometry, surface, notes and tints; this Option adds no prop and renames none. This Slide passes
-                      <code>columns</code>, four of them (<code>label</code> from <code>months.jan</code> to
-                      <code>months.apr</code>): Jan <code>cash 100000</code>, <code>cost 50000</code>,
-                      <code>cash 50000</code>; Feb <code>cash 50000</code>, <code>cost 50000</code>,
-                      <code>{ kind: 'cash', amount: 0, big: true, target: 'zero-cash' }</code>; March
-                      <code>cost 50000</code>, <code>null</code>, <code>null</code>; April <code>null</code>,
+                      <code>src/components/slide-shared/cashflow-board/</code> exactly as the last bullet of the Spec's
+                      Visual language sets its interface, geometry, surface, notes and tints; this Option adds no prop
+                      and renames none. This Slide passes <code>columns</code>, four of them (<code>label</code> from
+                      <code>months.jan</code> to <code>months.apr</code>): Jan <code>cash 100000</code>,
+                      <code>cost 50000</code>, <code>cash 50000</code>; Feb <code>cash 50000</code>,
+                      <code>cost 50000</code>, <code>{ kind: 'cash', amount: 0, big: true, target: 'zero-cash' }</code>;
+                      March <code>cost 50000</code>, <code>null</code>, <code>null</code>; April <code>null</code>,
                       <code>{ kind: 'revenue', amount: 1000000, big: true }</code>, <code>null</code>.
                       <code>stamp: { label: t('stamp'), column: 3 }</code>. <code>annotations</code>:
                       <code>{ column: 2, kind: 'callout', text: t('callout') }</code> (the call-out's arrow points up to
@@ -914,7 +919,7 @@
                       <code>bg-primary</code>, and the ring on the note it points to.
                     </p>
                     <p>
-                      <b>Targets and i18n.</b> <code>target('zero-cash')</code> on Feb's <code>Cash $0</code> note
+                      <b>Targets and i18n.</b> <code>target('zero-cash')</code> on Feb's <code>Cash €0</code> note
                       (Speaker note 3). Keys <code>kicker</code>, <code>title</code> ("Watch your cashflow"),
                       <code>caption</code>, <code>board</code> (the list's <code>aria-label</code>),
                       <code>months.jan</code>, <code>months.feb</code>, <code>months.mar</code>,
@@ -940,7 +945,7 @@
                     </p>
                     <h3 class="mt-3 text-heading font-semibold">Watch your cashflow</h3>
                     <p class="mt-4 max-w-2xl text-body text-muted-foreground">
-                      Read it month by month: January leaves $50,000, February leaves nothing.
+                      Read it month by month: January leaves €50,000, February leaves nothing.
                     </p>
                   </header>
 
@@ -967,7 +972,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-body font-semibold">$100,000</span>
+                                ><span class="text-body font-semibold">€100,000</span>
                               </div>
                             </li>
                             <li class="w-32 rotate-1 bg-card shadow-md">
@@ -975,7 +980,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-destructive/35 to-destructive/20 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cost</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                             <li class="w-32 -rotate-1 bg-card shadow-md">
@@ -983,7 +988,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                           </ul>
@@ -991,7 +996,7 @@
                             class="mt-auto flex flex-col items-center gap-1 border-t-2 border-dashed border-border pt-4"
                           >
                             <span class="font-mono text-caption text-muted-foreground uppercase">Cash left</span
-                            ><span class="text-subheading font-semibold text-foreground">$50,000</span>
+                            ><span class="text-subheading font-semibold text-foreground">€50,000</span>
                           </div>
                         </li>
                         <li
@@ -1008,7 +1013,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                             <li class="w-32 -rotate-1 bg-card shadow-md">
@@ -1016,7 +1021,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-destructive/35 to-destructive/20 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cost</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                             <li data-target="zero-cash" class="w-40 rotate-1 bg-card shadow-xl">
@@ -1024,7 +1029,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-4"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-heading font-semibold">$0</span>
+                                ><span class="text-heading font-semibold">€0</span>
                               </div>
                             </li>
                           </ul>
@@ -1032,7 +1037,7 @@
                             class="mt-auto flex flex-col items-center gap-1 border-t-2 border-dashed border-border pt-4"
                           >
                             <span class="font-mono text-caption text-muted-foreground uppercase">Cash left</span
-                            ><span class="text-subheading font-semibold text-foreground">$0</span>
+                            ><span class="text-subheading font-semibold text-foreground">€0</span>
                           </div>
                         </li>
                         <li class="relative flex flex-col gap-8 rounded-xl border bg-muted px-4 pt-12 pb-8">
@@ -1047,7 +1052,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-destructive/35 to-destructive/20 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cost</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                             <li class="w-32" aria-hidden="true"></li>
@@ -1057,7 +1062,7 @@
                             class="mt-auto flex flex-col items-center gap-1 border-t-2 border-dashed border-border pt-4"
                           >
                             <span class="font-mono text-caption text-muted-foreground uppercase">Unpaid</span
-                            ><span class="text-subheading font-semibold text-destructive">$50,000</span>
+                            ><span class="text-subheading font-semibold text-destructive">€50,000</span>
                           </div>
                         </li>
                         <li class="relative flex flex-col gap-8 rounded-xl border bg-muted px-4 pt-12 pb-8">
@@ -1073,7 +1078,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-success/40 to-success/25 p-4"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Revenue</span
-                                ><span class="text-body font-semibold">$1,000,000</span>
+                                ><span class="text-body font-semibold">€1,000,000</span>
                               </div>
                             </li>
                             <li class="w-32" aria-hidden="true"></li>
@@ -1144,7 +1149,7 @@
                     <p>
                       <b>Tokens and i18n.</b> Board as the part's; footer rule <code>border-dashed border-border</code>,
                       unpaid amount <code>text-destructive</code>; the one focal point is the <code>primary</code> ring
-                      of <code>highlight</code>. <code>target('zero-cash')</code> on Feb's <code>Cash $0</code> note.
+                      of <code>highlight</code>. <code>target('zero-cash')</code> on Feb's <code>Cash €0</code> note.
                       Keys <code>kicker</code>, <code>title</code>, <code>caption</code>, <code>board</code>,
                       <code>months.*</code>, <code>note.*</code>, <code>stamp</code>, <code>foot.cashLeft</code>,
                       <code>foot.unpaid</code>, <code>foot.arrives</code>, <code>foot.tooLate</code>,
@@ -1159,7 +1164,7 @@
                 >
               </figure>
 
-              <figure data-spec="option" data-option="1c">
+              <figure data-picked data-spec="option" data-option="1c">
                 <div data-spec="mock" class="flex flex-col gap-10 bg-background px-12 py-12">
                   <header class="grid grid-cols-12 items-end gap-8">
                     <div class="col-span-7">
@@ -1168,7 +1173,7 @@
                       </p>
                       <h3 class="mt-3 text-heading font-semibold">Watch your cashflow</h3>
                       <p class="mt-4 text-body text-muted-foreground">
-                        A million dollars is coming, and the company is gone.
+                        A million euros is coming, and the company is gone.
                       </p>
                     </div>
                     <aside class="col-span-5 rotate-1 border bg-card p-6 shadow-md">
@@ -1202,7 +1207,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-body font-semibold">$100,000</span>
+                                ><span class="text-body font-semibold">€100,000</span>
                               </div>
                             </li>
                             <li class="w-32 rotate-1 bg-card shadow-md">
@@ -1210,7 +1215,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-destructive/35 to-destructive/20 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cost</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">−€50,000</span>
                               </div>
                             </li>
                             <li class="w-32 -rotate-1 bg-card shadow-md">
@@ -1218,10 +1223,16 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                           </ul>
+                          <p
+                            class="mt-auto flex items-baseline justify-between gap-2 border-t border-foreground/15 pt-3"
+                          >
+                            <span class="font-mono text-caption text-muted-foreground uppercase">Cash left</span
+                            ><span class="text-body font-semibold text-foreground">€50,000</span>
+                          </p>
                         </li>
                         <li class="relative flex flex-col gap-8 rounded-xl border bg-muted px-4 pt-12 pb-8">
                           <h4
@@ -1235,7 +1246,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                             <li class="w-32 -rotate-1 bg-card shadow-md">
@@ -1243,7 +1254,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-destructive/35 to-destructive/20 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cost</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">−€50,000</span>
                               </div>
                             </li>
                             <li data-target="zero-cash" class="w-40 rotate-1 bg-card shadow-xl">
@@ -1251,10 +1262,16 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-4"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-heading font-semibold">$0</span>
+                                ><span class="text-heading font-semibold">€0</span>
                               </div>
                             </li>
                           </ul>
+                          <p
+                            class="mt-auto flex items-baseline justify-between gap-2 border-t border-foreground/15 pt-3"
+                          >
+                            <span class="font-mono text-caption text-muted-foreground uppercase">Cash left</span
+                            ><span class="text-body font-semibold text-foreground">€0</span>
+                          </p>
                         </li>
                         <li
                           class="relative flex flex-col gap-8 rounded-xl border bg-muted px-4 pt-12 pb-8 ring-4 ring-primary ring-offset-4 ring-offset-card"
@@ -1270,12 +1287,18 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-destructive/35 to-destructive/20 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cost</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">−€50,000</span>
                               </div>
                             </li>
                             <li class="w-32" aria-hidden="true"></li>
                             <li class="w-32" aria-hidden="true"></li>
                           </ul>
+                          <p
+                            class="mt-auto flex items-baseline justify-between gap-2 border-t border-foreground/15 pt-3"
+                          >
+                            <span class="font-mono text-caption text-muted-foreground uppercase">Cash left</span
+                            ><span class="text-body font-semibold text-destructive">−€50,000</span>
+                          </p>
                         </li>
                         <li class="relative flex flex-col gap-8 rounded-xl border bg-muted px-4 pt-12 pb-8">
                           <h4
@@ -1290,11 +1313,17 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-success/40 to-success/25 p-4"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Revenue</span
-                                ><span class="text-body font-semibold">$1,000,000</span>
+                                ><span class="text-body font-semibold">€1,000,000</span>
                               </div>
                             </li>
                             <li class="w-32" aria-hidden="true"></li>
                           </ul>
+                          <p
+                            class="mt-auto flex items-baseline justify-between gap-2 border-t border-foreground/15 pt-3"
+                          >
+                            <span class="font-mono text-caption text-muted-foreground uppercase">Cash left</span
+                            ><span class="text-body font-semibold text-foreground">€950,000</span>
+                          </p>
                         </li>
                       </ol>
                       <div class="pointer-events-none absolute inset-0 grid grid-cols-4 gap-6" aria-hidden="true">
@@ -1340,8 +1369,8 @@
                   <b>1c</b> The same board aimed at March: the lane where a cost lands on an empty account is ringed in
                   <code>primary</code> under the stamp, two brackets read the timing (two months of cash, the million
                   one month late), and the Voice script's closing question is pinned as a neutral note beside the title.
-                  Not recommended: it puts the focus on the failure rather than on the zero-cash note the Speaker notes
-                  target, and it shows the hand-over question before the Voice script asks it. Build cost: Scene.
+                  Picked by Han in round 2 for its simple visual language, with enough guides to read at rest; it now
+                  carries a Cash left footer per column and signed costs. Build cost: Scene.
                 </figcaption>
                 <details class="spec-build">
                   <summary>Build notes</summary>
@@ -1350,9 +1379,9 @@
                       Design reference:
                       <code>docs/episodes/never-too-early-sales-run-3/reference/source-deck/pages/page-03.jpg</code>.
                       Build against this page: keep the lanes, pills, notes in their slots and the "Bankrupt" stamp
-                      across March; change the board to the one the Visual language draws, ring the March lane in
-                      <code>primary</code>, add the two brackets under the board and the pinned question beside the
-                      title.
+                      across March; change the board to the one the Visual language draws (euro amounts, signed costs, a
+                      <code>Cash left</code> footer under each lane), ring the March lane in <code>primary</code>, add
+                      the two brackets under the board and the pinned question beside the title.
                     </p>
                     <p>
                       <b>Master and motion.</b> Scene from <code>SlideFrame</code> + <code>&lt;Title&gt;</code> +
@@ -1367,23 +1396,35 @@
                       renamed. <code>columns</code> and <code>stamp</code> as 1a. <code>highlight: 3</code>.
                       <code>annotations</code>:
                       <code>{ column: 1, span: 2, kind: 'bracket', text: t('runway') }</code> and
-                      <code>{ column: 3, span: 2, kind: 'bracket', text: t('late') }</code>. No <code>arrow</code>, no
-                      <code>footer</code>. The question note beside the title is Slide-local markup, a neutral note
-                      (<code>bg-card border shadow-md rotate-1</code>) as the Visual language's second bullet says.
+                      <code>{ column: 3, span: 2, kind: 'bracket', text: t('late') }</code>. No <code>arrow</code>.
+                      Footers (Han, round 2: "write 'Cash left' in each column"): each column's <code>footer</code> (the
+                      part's <code>footer?: ReactNode</code>) is a <code>Cash left</code> line under the lane, a thin
+                      rule with <code>t('cashLeft')</code> in small uppercase mono on the left and the column's running
+                      balance, computed from its own notes, in <code>text-body font-semibold</code> on the right: Jan
+                      <code>€50,000</code>, Feb <code>€0</code>, March <code>−€50,000</code> in
+                      <code>text-destructive</code> (the cost lands on an empty account, under the stamp), April
+                      <code>€950,000</code> (the million minus March's hole, one month too late). The question note
+                      beside the title is Slide-local markup, a neutral note (<code
+                        >bg-card border shadow-md rotate-1</code
+                      >) as the Visual language's second bullet says.
                     </p>
                     <p>
                       <b>Tokens and i18n.</b> Board as the part's; the one focal point is the <code>primary</code> ring
-                      of <code>highlight</code>. <code>target('zero-cash')</code> on Feb's <code>Cash $0</code> note.
+                      of <code>highlight</code>. <code>target('zero-cash')</code> on Feb's <code>Cash €0</code> note.
                       Keys <code>kicker</code>, <code>title</code>, <code>caption</code>, <code>board</code>,
                       <code>months.*</code>, <code>note.*</code>, <code>stamp</code>, <code>runway</code> ("Two months
                       of cash"), <code>late</code> ("The million lands one month late"),
-                      <code>question.label</code> ("Your turn"), <code>question.text</code>. Amounts as the last bullet
-                      of the Visual language says.
+                      <code>question.label</code> ("Your turn"), <code>question.text</code>,
+                      <code>cashLeft</code> ("Cash left" / "Kassenstand"). Amounts in euros as the last bullet of the
+                      Visual language says: numbers formatted by <code>Intl.NumberFormat</code> with
+                      <code>currency: 'EUR'</code>; a cost passes a positive amount and the part prints its sign,
+                      <code>Cost</code> over <code>−€50,000</code> (Han, round 2); footer balances are computed, not
+                      translated.
                     </p>
                   </div>
                 </details>
                 <label class="spec-pick"
-                  ><input type="checkbox" form="spec-review" name="pick:watch-your-cashflow" value="1c" /> Pick
+                  ><input type="checkbox" form="spec-review" name="pick:watch-your-cashflow" value="1c" checked /> Pick
                   1c</label
                 >
               </figure>
@@ -1402,7 +1443,7 @@
                     nothing to pay it. The big number sits in April, one month late.
                   </li>
                   <li>
-                    <strong>Antithesis</strong> — A million dollars is coming, and the company is gone. Right on paper,
+                    <strong>Antithesis</strong> — A million euros is coming, and the company is gone. Right on paper,
                     dead on the calendar.
                   </li>
                   <li>
@@ -1416,10 +1457,10 @@
                   <p data-spec="visual-idea">
                     A planning board of four month columns, Jan to April, each a pale lane under a dark month label,
                     filled with sticky notes: yellow cash, red cost, green revenue. The notes arrive month by month: Jan
-                    holds cash 100.000$, cost 50.000$ and cash 50.000$; Feb holds cash 50.000$, cost 50.000$ and a
-                    larger cash 0$; March holds a cost of 50.000$ with nothing to pay it; April holds revenue
-                    +1.000.000$. After the March note lands, a red "Bankrupt" stamp falls across the board. The viewer
-                    sees the million-dollar note arrive one column too late.
+                    holds cash €100.000, cost €50.000 and cash €50.000; Feb holds cash €50.000, cost €50.000 and a
+                    larger cash €0; March holds a cost of €50.000 with nothing to pay it; April holds revenue
+                    +€1.000.000. After the March note lands, a red "Bankrupt" stamp falls across the board. The viewer
+                    sees the million-euro note arrive one column too late.
                   </p>
                   <p class="text-caption">
                     <code>Design reference: reference/source-deck/design-reference.md#page-3</code>
@@ -1462,7 +1503,7 @@
                         [2] Paul Graham, Default Alive or Default Dead? —
                         <a href="https://paulgraham.com/aord.html">https://paulgraham.com/aord.html</a>
                       </li>
-                      <li>target: the Cash 0$ note in Feb</li>
+                      <li>target: the Cash €0 note in Feb</li>
                     </ul>
                   </li>
                 </ol>
@@ -2012,7 +2053,7 @@
                 >
               </figure>
 
-              <figure data-spec="option" data-option="2c">
+              <figure data-picked data-spec="option" data-option="2c">
                 <div data-spec="mock" class="flex flex-col gap-10 bg-background p-12">
                   <div>
                     <p
@@ -2034,24 +2075,25 @@
                           class="absolute -top-3 left-1/2 h-6 w-16 -translate-x-1/2 rotate-3 bg-foreground/10"
                         ></span>
                         <p class="text-subheading font-semibold leading-none text-muted-foreground/40">01</p>
-                        <p class="mt-3 text-body font-semibold">Market insight</p>
+                        <p class="mt-3 text-body font-semibold">Gain market insight</p>
                         <p class="mt-2 text-caption text-muted-foreground">
-                          Where to spend your time, which hypothesis to drop, a network.
+                          Every customer talk is research you did not pay for.
                         </p>
-                        <svg viewBox="0 0 200 70" class="mt-4 w-full" aria-hidden="true">
-                          <path
-                            d="M30 35 L90 15 M30 35 L90 55 M90 15 L150 30 M90 55 L150 30 M150 30 L185 12 M150 30 L185 55"
-                            class="fill-none stroke-muted-foreground"
-                            stroke-width="2"
-                          />
-                          <circle cx="30" cy="35" r="10" class="fill-foreground" />
-                          <circle cx="90" cy="15" r="7" class="fill-muted-foreground/50" />
-                          <circle cx="90" cy="55" r="7" class="fill-muted-foreground/50" />
-                          <circle cx="150" cy="30" r="7" class="fill-muted-foreground/50" />
-                          <circle cx="185" cy="12" r="5" class="fill-muted-foreground/30" />
-                          <circle cx="185" cy="55" r="5" class="fill-muted-foreground/30" />
-                        </svg>
-                        <p class="mt-1 text-center text-caption text-muted-foreground">one talk, a network</p>
+                        <div class="mt-4 flex flex-col gap-2">
+                          <p class="self-start rounded-2xl rounded-bl-sm bg-muted px-3 py-2 text-caption">
+                            When did this last happen to you?
+                          </p>
+                          <p class="self-end rounded-2xl rounded-br-sm border bg-card px-3 py-2 text-caption shadow-sm">
+                            Last month. We lost two days on it.
+                          </p>
+                        </div>
+                        <ul class="mt-4 flex flex-wrap gap-2 text-caption">
+                          <li class="rounded-full border px-3 py-0.5">Where to spend your time</li>
+                          <li class="rounded-full border px-3 py-0.5 text-muted-foreground line-through">
+                            Hypothesis 2
+                          </li>
+                          <li class="rounded-full border px-3 py-0.5">A network</li>
+                        </ul>
                       </article>
 
                       <svg viewBox="0 0 80 80" class="col-span-1 w-full" aria-hidden="true">
@@ -2066,42 +2108,52 @@
                       <article class="relative col-span-3 rotate-1 rounded-md bg-card p-6 shadow-md">
                         <span class="absolute -top-3 left-1/3 h-6 w-16 -rotate-3 bg-foreground/10"></span>
                         <p class="text-subheading font-semibold leading-none text-muted-foreground/40">02</p>
-                        <p class="mt-3 text-body font-semibold">Internal insight</p>
+                        <p class="mt-3 text-body font-semibold">Gain internal insights</p>
                         <p class="mt-2 text-caption text-muted-foreground">
-                          How well you sell, and whether someone else could repeat it.
+                          How well do you sell, and could anyone besides you repeat it?
                         </p>
-                        <svg viewBox="0 0 200 84" class="mt-4 w-full" aria-hidden="true">
+                        <svg viewBox="0 0 200 190" class="mt-4 w-full" aria-hidden="true">
+                          <circle cx="30" cy="40" r="22" class="fill-foreground" />
+                          <text x="30" y="45" text-anchor="middle" class="fill-background text-caption font-semibold">
+                            You
+                          </text>
                           <path
-                            d="M44 30 A 22 22 0 1 1 44 31"
+                            d="M58 40 H116"
                             class="fill-none stroke-foreground"
-                            stroke-width="3"
-                            stroke-dasharray="7 5"
+                            stroke-width="2"
+                            stroke-dasharray="6 5"
                           />
                           <path
-                            d="M36 25 L44 33 L52 25"
+                            d="M110 33 L120 40 L110 47"
                             class="fill-none stroke-foreground"
-                            stroke-width="3"
+                            stroke-width="2"
                             stroke-linecap="round"
                             stroke-linejoin="round"
                           />
-                          <text x="44" y="78" text-anchor="middle" class="fill-muted-foreground text-caption">
-                            repeat
-                          </text>
-                          <circle cx="112" cy="30" r="10" class="fill-foreground" />
-                          <text x="112" y="78" text-anchor="middle" class="fill-muted-foreground text-caption">
-                            you
+                          <text x="87" y="28" text-anchor="middle" class="fill-muted-foreground text-caption">
+                            repeat it
                           </text>
                           <circle
-                            cx="144"
-                            cy="30"
-                            r="10"
+                            cx="148"
+                            cy="40"
+                            r="22"
                             class="fill-card stroke-foreground"
                             stroke-width="2"
-                            stroke-dasharray="4 3"
+                            stroke-dasharray="5 4"
                           />
-                          <circle cx="176" cy="30" r="8" class="fill-muted-foreground/30" />
-                          <text x="162" y="78" text-anchor="middle" class="fill-muted-foreground text-caption">
-                            first hire
+                          <text x="120" y="84" text-anchor="middle" class="fill-muted-foreground text-caption">
+                            first sales hire
+                          </text>
+                          <path
+                            d="M148 62 V66 M148 94 V100 M148 100 C 148 114, 52 110, 52 134 M148 100 C 148 114, 100 110, 100 134 M148 100 V134"
+                            class="fill-none stroke-muted-foreground"
+                            stroke-width="2"
+                          />
+                          <circle cx="52" cy="148" r="12" class="fill-muted-foreground/40" />
+                          <circle cx="100" cy="148" r="12" class="fill-muted-foreground/40" />
+                          <circle cx="148" cy="148" r="12" class="fill-muted-foreground/40" />
+                          <text x="100" y="184" text-anchor="middle" class="fill-muted-foreground text-caption">
+                            a team
                           </text>
                         </svg>
                       </article>
@@ -2119,13 +2171,63 @@
                         <span
                           class="absolute -top-2 left-1/2 size-4 -translate-x-1/2 rounded-full bg-foreground shadow-md ring-2 ring-card"
                         ></span>
+                        <p
+                          class="absolute -top-5 -right-4 rotate-6 rounded-md border-2 border-primary bg-card px-3 py-1 font-mono text-caption font-semibold uppercase tracking-widest text-primary shadow-md"
+                        >
+                          Before revenue
+                        </p>
                         <p class="text-subheading font-semibold leading-none text-primary-foreground/40">03</p>
-                        <p class="mt-3 text-heading font-semibold leading-none">Trust</p>
+                        <p class="mt-3 text-heading font-semibold leading-none">Increase trust</p>
                         <p class="mt-4 text-body text-primary-foreground/80">
                           Investors and reluctant customers trust what someone else has already bought.
                         </p>
-                        <ul class="mt-5 flex flex-col gap-2 text-caption">
-                          <li class="flex items-center gap-2">
+                        <div class="mt-6 rounded-md bg-primary-foreground/10 p-4">
+                          <p class="font-mono text-caption uppercase tracking-widest text-primary-foreground/70">
+                            What 885 VCs weigh most
+                          </p>
+                          <dl class="mt-3 flex flex-col gap-2 text-caption">
+                            <div>
+                              <div class="flex justify-between">
+                                <dt class="font-semibold">Team</dt>
+                                <dd class="font-semibold">95%</dd>
+                              </div>
+                              <dd class="mt-1 h-2 rounded-full bg-primary-foreground/10">
+                                <span class="block h-2 w-11/12 rounded-full bg-primary-foreground"></span>
+                              </dd>
+                            </div>
+                            <div>
+                              <div class="flex justify-between text-primary-foreground/70">
+                                <dt>Business model</dt>
+                                <dd>83%</dd>
+                              </div>
+                              <dd class="mt-1 h-2 rounded-full bg-primary-foreground/10">
+                                <span class="block h-2 w-5/6 rounded-full bg-primary-foreground/40"></span>
+                              </dd>
+                            </div>
+                            <div>
+                              <div class="flex justify-between text-primary-foreground/70">
+                                <dt>Product</dt>
+                                <dd>74%</dd>
+                              </div>
+                              <dd class="mt-1 h-2 rounded-full bg-primary-foreground/10">
+                                <span class="block h-2 w-3/4 rounded-full bg-primary-foreground/40"></span>
+                              </dd>
+                            </div>
+                            <div>
+                              <div class="flex justify-between text-primary-foreground/70">
+                                <dt>Market</dt>
+                                <dd>68%</dd>
+                              </div>
+                              <dd class="mt-1 h-2 rounded-full bg-primary-foreground/10">
+                                <span class="block h-2 w-2/3 rounded-full bg-primary-foreground/40"></span>
+                              </dd>
+                            </div>
+                          </dl>
+                        </div>
+                        <ul class="mt-6 flex flex-wrap gap-2 text-caption">
+                          <li
+                            class="flex items-center gap-2 rounded-full border border-primary-foreground/30 px-3 py-1"
+                          >
                             <svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
                               <path
                                 d="M3 8.5 L6.5 12 L13 4.5"
@@ -2136,7 +2238,9 @@
                               /></svg
                             >Attracting investment
                           </li>
-                          <li class="flex items-center gap-2">
+                          <li
+                            class="flex items-center gap-2 rounded-full border border-primary-foreground/30 px-3 py-1"
+                          >
                             <svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
                               <path
                                 d="M3 8.5 L6.5 12 L13 4.5"
@@ -2192,63 +2296,114 @@
                   </div>
                 </div>
                 <figcaption>
-                  <b>2c</b> A sum on the board: market insight plus internal insight equals trust, with marker-drawn
-                  operators, a brace gathering the two insights under "What you learn", and a margin note hung on the
-                  "=" that says out loud it is a claim, not a proof. The line a founder copies onto their own
-                  whiteboard, and the most honest about the caveat, but the arithmetic still reads as a result before
-                  the note is read, and the "Relevant" points shrink to one line each. Build cost: Scene.
+                  <b>2c</b> The sum on the board, filled with 2a's notes (Han, round 3): "Gain market insight" plus
+                  "Gain internal insights" equals "Increase trust", with marker-drawn operators, a brace gathering the
+                  two insights under "What you learn", and a margin note on the "=" that says it is a claim, not a
+                  proof. The notes now carry 2a's evidence: the "ask about the last time" exchange and the "Relevant"
+                  chips on 01, the path from you to a first sales hire to a team on 02, and on 03 the 885-VC bars (team
+                  first at 95%), the two checked payoffs and the "Before revenue" stamp. Read left to right in the order
+                  the voice speaks, 01, 02, then 03, which carries <code>primary</code> and the largest title. Build
+                  cost: Scene.
                 </figcaption>
                 <details class="spec-build">
                   <summary>Build notes</summary>
                   <div data-spec="build-notes">
                     <p>
                       Overrules <code>master: grid-1x3</code>: an equation is one row read left to right with operators
-                      between the terms, which the master's equal hairline columns do not carry. A Scene from
-                      <code>SlideFrame</code>, the kit's <code>&lt;Title&gt;</code> and <code>SlideCaption</code>;
-                      kicker and lead as in 2a. Local parts: the taped <code>Note</code> of 2a (<code
-                        >{ index; title; body; tilt; children?; emphasis? }</code
-                      >); <code>Operator</code> (<code>{ symbol: 'plus' | 'equals' }</code>), an inline SVG of two
-                      slightly uneven marker strokes, <code>plus</code> in <code>stroke-foreground</code>,
-                      <code>equals</code> in <code>stroke-primary</code>, <code>aria-hidden</code>, the sentence carried
-                      by a visually hidden <code>equationLabel</code>; <code>NetworkSketch</code> and
-                      <code>RepeatSketch</code>, the two small inline SVGs inside notes 01 and 02; <code>Brace</code>,
-                      an inline SVG under the two insight notes with the "What you learn" pill;
+                      between the terms, which the master's equal hairline columns do not carry, and fitting the idea to
+                      them repeats run 1's "Master slide with its text swapped" (design guide, Not this). A Scene from
+                      <code>SlideFrame</code>, the kit's <code>&lt;Title&gt;</code> and <code>SlideCaption</code> (all
+                      <code>slide-master/</code>, FE-007 §5); kicker and lead as in 2a.
+                    </p>
+                    <p>
+                      Parts in the Slide folder, all server: <code>slide.tsx</code>; the local <code>Note</code> of 2a
+                      (<code
+                        >{ index: string; title: string; body: string; tilt: 'left' | 'right' | 'none'; children?:
+                        ReactNode; emphasis?: boolean }</code
+                      >), with <code>emphasis</code> the <code>bg-primary text-primary-foreground shadow-xl</code> fill,
+                      the pin and the title at <code>text-heading</code>; 2a's <code>Exchange</code> (<code
+                        >{ ask: string; answer: string }</code
+                      >) and <code>Chips</code> (<code>{ items: { label: string; dropped?: boolean }[] }</code>) inside
+                      note 01; 2a's <code>RepeatPath</code> (labels passed in) inside note 02;
+                      <code>SignalBars</code> (<code
+                        >{ heading: string; source: string; rows: { label: string; percent: number }[] }</code
+                      >) and 2a's <code>Stamp</code> on note 03; <code>Operator</code> (<code
+                        >{ symbol: 'plus' | 'equals' }</code
+                      >), an inline SVG of two slightly uneven marker strokes, <code>plus</code> in
+                      <code>stroke-foreground</code>, <code>equals</code> in <code>stroke-primary</code>,
+                      <code>aria-hidden</code>, the sentence carried by a visually hidden <code>equationLabel</code>;
+                      <code>Brace</code>, an inline SVG under the two insight notes with the "What you learn" pill;
                       <code>MarginNote</code> (<code>{ text: string }</code>), a curved SVG arrow pointing up at the
-                      equals and the caveat in <code>text-caption italic text-muted-foreground</code>.
+                      equals and the caveat in <code>text-caption italic text-muted-foreground</code>. 2c's own
+                      <code>NetworkSketch</code> and <code>RepeatSketch</code> are dropped: 2a's exchange, chips and
+                      repeat path replace them.
                     </p>
                     <p>
-                      Layout: the row is <code>grid-cols-12</code>, notes <code>col-span-3</code>, operators
-                      <code>col-span-1</code>, trust <code>col-span-4</code> (<code
-                        >bg-primary text-primary-foreground shadow-xl</code
-                      >, title at <code>text-heading</code>); the brace row shares the grid. Below <code>md</code> one
-                      column with the operators between the notes and the brace hidden. No fixed height (FE-009).
+                      Adapted from 2a where 2c's narrower slots force it, words unchanged: <code>RepeatPath</code> is
+                      redrawn in a portrait <code>viewBox</code> (You and the dashed first hire on top, the three team
+                      dots branching below), because 2a's wide strip shrunk to a <code>col-span-3</code> note would
+                      leave its labels unreadably small; <code>SignalBars</code> stacks each label and percent on one
+                      line over its bar, because 2a's label, bar and percent columns do not fit "Business model" in a
+                      <code>col-span-4</code> note; the speech bubbles use <code>px-3</code> instead of
+                      <code>px-4</code>; the stamp hangs <code>-right-4</code> instead of <code>-right-6</code> so it
+                      stays inside the board padding; the trust note sits flat (no tilt), as in 2c, since its stamp
+                      already tilts. Bar widths come from <code>percent</code> through a CSS custom property in
+                      <code>slide.module.css</code> (the mock rounds them to <code>w-11/12</code> … <code>w-2/3</code>).
                     </p>
                     <p>
-                      Keeps <code>motion: local</code>, overruling its hover-only line for an entrance on
-                      <code>[data-zone='active']</code>: the terms are placed left to right with their operators drawn
-                      (<code>stroke-dashoffset</code>), the trust note last, then the brace and the margin note. Reduced
-                      motion rests on the full line.
+                      Layout: the row is <code>grid-cols-12</code> on <code>bg-muted rounded-xl shadow-inner</code>,
+                      notes <code>col-span-3</code>, operators <code>col-span-1</code>, trust <code>col-span-4</code>,
+                      items centred; the brace row shares the grid (<code>col-span-7</code> brace,
+                      <code>col-span-5</code> margin note). Below <code>md</code> one column, notes 01, 02, 03 with the
+                      operators between them and the brace hidden. No fixed height: the board grows with the notes, the
+                      stamp overhangs into the board padding, nothing clips (FE-009). No cash, cost or revenue tints:
+                      none of the three is on this Slide; the pin head is <code>bg-foreground</code> on a
+                      <code>ring-card</code>, so no meaning colour leaks in.
                     </p>
                     <p>
-                      i18n keys: <code>kicker</code>, <code>title</code>, <code>lead</code>, <code>caption</code>,
+                      Keeps <code>motion: local</code> but overrules its hover-only accent line, which the design guide
+                      lists as "motion reduced to hover": one entrance keyed on <code>[data-zone='active']</code> in
+                      <code>slide.module.css</code>, inside <code>@media (prefers-reduced-motion: no-preference)</code>.
+                      Note 01 is placed, the plus is drawn (<code>stroke-dashoffset</code>), note 02 is placed, the
+                      equals is drawn, the trust note is placed and its bars grow left to right, the stamp lands, then
+                      the brace and the margin note. It replays on return; at rest and under reduced motion the full
+                      line stands.
+                    </p>
+                    <p>
+                      i18n keys (<code>en.json</code>, <code>de.json</code>): <code>kicker</code>, <code>title</code>,
+                      <code>lead</code> (rich text, <code>&lt;em&gt;</code> for the emphasis), <code>caption</code>,
                       <code>equationLabel</code>, <code>brace</code>, <code>marginNote</code>,
-                      <code>notes.market.title</code>, <code>notes.market.body</code>, <code>notes.internal.*</code>,
-                      <code>notes.trust.title</code>, <code>notes.trust.body</code>,
-                      <code>notes.trust.points</code> (array). Context targets <code>market</code>,
-                      <code>internal</code>, <code>trust</code>.
+                      <code>notes.market.title</code>, <code>notes.market.body</code>, <code>notes.market.ask</code>,
+                      <code>notes.market.answer</code>, <code>notes.market.points</code> (array),
+                      <code>notes.market.dropped</code>, <code>notes.internal.title</code>,
+                      <code>notes.internal.body</code>, <code>notes.internal.path.you</code>, <code>.repeat</code>,
+                      <code>.hire</code>, <code>.team</code>, <code>notes.trust.title</code>,
+                      <code>notes.trust.body</code>, <code>notes.trust.points</code> (array),
+                      <code>notes.trust.bars.heading</code>, <code>.rows</code> (label per row; the percentages are
+                      numbers in the Slide), <code>stamp</code>. 2a's <code>columns.learn</code> and
+                      <code>columns.earn</code> are not used: the brace carries "What you learn" as <code>brace</code>.
+                      Context targets: <code>target('market')</code>, <code>target('internal')</code>,
+                      <code>target('trust')</code> on the three notes, matching the Speaker notes' targets.
                     </p>
                     <p>
                       Design reference:
                       <code>docs/episodes/never-too-early-sales-run-3/reference/source-deck/pages/page-04.jpg</code>.
-                      Build against this page: keep the three headings and the idea that the two insights feed trust;
-                      change the arrows into plus and equals, the boxes into taped notes on a board, fold the "Relevant"
-                      lists of the insights into one line per note, and add the brace and the margin note.
+                      Build against this page: keep the three boxes, their headings and "Relevant" points, and the idea
+                      that the two insights feed trust; change the arrows into plus and equals, the boxes into taped
+                      notes on a board, the "Relevant:" lists into chips, and add the exchange, the repeat path, the VC
+                      bars, the stamp, the brace and the margin note.
                     </p>
                   </div>
                 </details>
                 <label class="spec-pick"
-                  ><input type="checkbox" form="spec-review" name="pick:sales-is-more-than-selling" value="2c" /> Pick
-                  2c</label
+                  ><input
+                    type="checkbox"
+                    form="spec-review"
+                    name="pick:sales-is-more-than-selling"
+                    value="2c"
+                    checked
+                  />
+                  Pick 2c</label
                 >
               </figure>
             </div>
@@ -2424,7 +2579,7 @@
               <h3>Stages of sale</h3>
             </header>
             <div class="spec-options">
-              <figure data-spec="option" data-option="3a" data-recommended>
+              <figure data-picked data-spec="option" data-option="3a" data-recommended>
                 <div data-spec="mock" class="flex flex-col gap-10 bg-background p-12">
                   <div>
                     <p class="font-mono text-caption font-semibold uppercase tracking-widest text-muted-foreground">
@@ -2762,7 +2917,8 @@
                   </div>
                 </details>
                 <label class="spec-pick"
-                  ><input type="checkbox" form="spec-review" name="pick:stages-of-sale" value="3a" /> Pick 3a</label
+                  ><input type="checkbox" form="spec-review" name="pick:stages-of-sale" value="3a" checked /> Pick
+                  3a</label
                 >
               </figure>
 
@@ -3161,7 +3317,7 @@
               <h3>Pipeline tools in practice</h3>
             </header>
             <div class="spec-options">
-              <figure data-spec="option" data-option="4a" data-recommended>
+              <figure data-picked data-spec="option" data-option="4a" data-recommended>
                 <div data-spec="mock" class="flex flex-col gap-8 bg-background p-12">
                   <div class="flex items-end justify-between gap-8">
                     <div>
@@ -3177,7 +3333,7 @@
                       <p class="font-mono text-caption uppercase tracking-widest text-muted-foreground">
                         Monday · open pipeline
                       </p>
-                      <p class="text-body font-semibold text-foreground">$168,000</p>
+                      <p class="text-body font-semibold text-foreground">€168,000</p>
                       <p class="text-caption text-muted-foreground">11 deals in 5 stages</p>
                     </div>
                   </div>
@@ -3213,23 +3369,23 @@
                         >Lead in</span
                       >
                       <div class="flex items-baseline justify-between px-1">
-                        <span class="text-body font-semibold text-foreground">$24,500</span
+                        <span class="text-body font-semibold text-foreground">€24,500</span
                         ><span class="font-mono text-caption text-muted-foreground">3 deals</span>
                       </div>
                       <div class="-rotate-1 bg-card p-3 shadow-md">
                         <p class="text-caption font-semibold text-foreground">Brightfield</p>
                         <p class="text-caption text-muted-foreground">Jonas Weber</p>
-                        <p class="mt-2 text-body font-semibold text-foreground">$12,000</p>
+                        <p class="mt-2 text-body font-semibold text-foreground">€12,000</p>
                       </div>
                       <div class="rotate-1 bg-card p-3 shadow-md">
                         <p class="text-caption font-semibold text-foreground">Kestrel Labs</p>
                         <p class="text-caption text-muted-foreground">Mia Novak</p>
-                        <p class="mt-2 text-body font-semibold text-foreground">$8,500</p>
+                        <p class="mt-2 text-body font-semibold text-foreground">€8,500</p>
                       </div>
                       <div class="-rotate-2 bg-card p-3 shadow-md">
                         <p class="text-caption font-semibold text-foreground">Larchwood Foods</p>
                         <p class="text-caption text-muted-foreground">Tom Reyes</p>
-                        <p class="mt-2 text-body font-semibold text-foreground">$4,000</p>
+                        <p class="mt-2 text-body font-semibold text-foreground">€4,000</p>
                       </div>
                     </li>
                     <li class="relative flex flex-col gap-4 rounded-xl bg-muted px-3 pt-12 pb-5">
@@ -3238,18 +3394,18 @@
                         >Contact made</span
                       >
                       <div class="flex items-baseline justify-between px-1">
-                        <span class="text-body font-semibold text-foreground">$21,000</span
+                        <span class="text-body font-semibold text-foreground">€21,000</span
                         ><span class="font-mono text-caption text-muted-foreground">2 deals</span>
                       </div>
                       <div class="rotate-1 bg-card p-3 shadow-md">
                         <p class="text-caption font-semibold text-foreground">Orbit Logistics</p>
                         <p class="text-caption text-muted-foreground">Sara Kim</p>
-                        <p class="mt-2 text-body font-semibold text-foreground">$15,000</p>
+                        <p class="mt-2 text-body font-semibold text-foreground">€15,000</p>
                       </div>
                       <div class="-rotate-1 bg-card p-3 shadow-md">
                         <p class="text-caption font-semibold text-foreground">Pinecrest Clinic</p>
                         <p class="text-caption text-muted-foreground">Ali Demir</p>
-                        <p class="mt-2 text-body font-semibold text-foreground">$6,000</p>
+                        <p class="mt-2 text-body font-semibold text-foreground">€6,000</p>
                       </div>
                     </li>
                     <li class="relative flex flex-col gap-4 rounded-xl bg-muted px-3 pt-12 pb-5">
@@ -3258,18 +3414,18 @@
                         >Needs defined</span
                       >
                       <div class="flex items-baseline justify-between px-1">
-                        <span class="text-body font-semibold text-foreground">$25,500</span
+                        <span class="text-body font-semibold text-foreground">€25,500</span
                         ><span class="font-mono text-caption text-muted-foreground">2 deals</span>
                       </div>
                       <div class="-rotate-2 bg-card p-3 shadow-md">
                         <p class="text-caption font-semibold text-foreground">Quarry Systems</p>
                         <p class="text-caption text-muted-foreground">Eva Lind</p>
-                        <p class="mt-2 text-body font-semibold text-foreground">$22,000</p>
+                        <p class="mt-2 text-body font-semibold text-foreground">€22,000</p>
                       </div>
                       <div class="rotate-1 bg-card p-3 shadow-md">
                         <p class="text-caption font-semibold text-foreground">Redwood Print</p>
                         <p class="text-caption text-muted-foreground">Ben Ortiz</p>
-                        <p class="mt-2 text-body font-semibold text-foreground">$3,500</p>
+                        <p class="mt-2 text-body font-semibold text-foreground">€3,500</p>
                       </div>
                     </li>
                     <li
@@ -3280,18 +3436,18 @@
                         >Proposal made</span
                       >
                       <div class="flex items-baseline justify-between px-1">
-                        <span class="text-body font-semibold text-primary">$49,000</span
+                        <span class="text-body font-semibold text-primary">€49,000</span
                         ><span class="font-mono text-caption text-muted-foreground">2 deals</span>
                       </div>
                       <div class="rotate-1 bg-card p-3 shadow-lg">
                         <p class="text-caption font-semibold text-foreground">Saltmarsh Energy</p>
                         <p class="text-caption text-muted-foreground">Nora Fischer</p>
-                        <p class="mt-2 text-body font-semibold text-foreground">$40,000</p>
+                        <p class="mt-2 text-body font-semibold text-foreground">€40,000</p>
                       </div>
                       <div class="-rotate-1 bg-card p-3 shadow-md">
                         <p class="text-caption font-semibold text-foreground">Tidewater Hotels</p>
                         <p class="text-caption text-muted-foreground">Raj Patel</p>
-                        <p class="mt-2 text-body font-semibold text-foreground">$9,000</p>
+                        <p class="mt-2 text-body font-semibold text-foreground">€9,000</p>
                       </div>
                     </li>
                     <li class="relative flex flex-col gap-4 rounded-xl bg-muted px-3 pt-12 pb-5">
@@ -3300,18 +3456,18 @@
                         >Negotiation</span
                       >
                       <div class="flex items-baseline justify-between px-1">
-                        <span class="text-body font-semibold text-foreground">$48,000</span
+                        <span class="text-body font-semibold text-foreground">€48,000</span
                         ><span class="font-mono text-caption text-muted-foreground">2 deals</span>
                       </div>
                       <div class="-rotate-1 bg-card p-3 shadow-md">
                         <p class="text-caption font-semibold text-foreground">Vela Insurance</p>
                         <p class="text-caption text-muted-foreground">Lisa Moreau</p>
-                        <p class="mt-2 text-body font-semibold text-foreground">$30,000</p>
+                        <p class="mt-2 text-body font-semibold text-foreground">€30,000</p>
                       </div>
                       <div class="rotate-2 bg-card p-3 shadow-md">
                         <p class="text-caption font-semibold text-foreground">Umbra Studio</p>
                         <p class="text-caption text-muted-foreground">Kai Berg</p>
-                        <p class="mt-2 text-body font-semibold text-foreground">$18,000</p>
+                        <p class="mt-2 text-body font-semibold text-foreground">€18,000</p>
                       </div>
                     </li>
                   </ol>
@@ -3365,7 +3521,7 @@
                       };</code
                     ><br />
                     Totals, counts and the open-pipeline sum are computed from <code>deals</code>, never written; values
-                    are numbers formatted <code>$12,000</code> by <code>Intl.NumberFormat</code>, as the Visual
+                    are numbers formatted <code>€12,000</code> by <code>Intl.NumberFormat</code>, as the Visual
                     language's boards are. Tokens: lanes <code>rounded-xl bg-muted</code>, pills
                     <code>rounded-full bg-foreground text-background text-caption font-medium</code>, deal notes paper
                     <code>bg-card shadow-md</code> tilted by index (<code>-rotate-1</code>, <code>rotate-1</code>,
@@ -3391,8 +3547,14 @@
                   </div>
                 </details>
                 <label class="spec-pick"
-                  ><input type="checkbox" form="spec-review" name="pick:pipeline-tools-in-practice" value="4a" /> Pick
-                  4a</label
+                  ><input
+                    type="checkbox"
+                    form="spec-review"
+                    name="pick:pipeline-tools-in-practice"
+                    value="4a"
+                    checked
+                  />
+                  Pick 4a</label
                 >
               </figure>
 
@@ -3428,7 +3590,7 @@
                           >
                         </div>
                         <div class="flex items-center justify-between gap-4 border-b border-dashed border-border py-4">
-                          <p class="text-heading font-semibold text-foreground">$40,000</p>
+                          <p class="text-heading font-semibold text-foreground">€40,000</p>
                           <span
                             class="shrink-0 whitespace-nowrap rounded-full bg-foreground px-3 py-1 font-mono text-caption text-background"
                             >worth</span
@@ -3519,7 +3681,7 @@
                         </li>
                       </ol>
                       <p class="mt-4 text-right font-mono text-caption text-muted-foreground">
-                        11 deals · $168,000 open
+                        11 deals · €168,000 open
                       </p>
                     </div>
                   </div>
@@ -3592,18 +3754,18 @@
                       >
                       <div class="col-span-6 flex gap-3">
                         <span class="-rotate-1 bg-card px-3 py-2 text-caption shadow-md"
-                          ><b class="font-semibold">Brightfield</b> $12,000</span
+                          ><b class="font-semibold">Brightfield</b> €12,000</span
                         ><span class="rotate-1 bg-card px-3 py-2 text-caption shadow-md"
-                          ><b class="font-semibold">Kestrel Labs</b> $8,500</span
+                          ><b class="font-semibold">Kestrel Labs</b> €8,500</span
                         ><span class="-rotate-1 bg-card px-3 py-2 text-caption shadow-md"
-                          ><b class="font-semibold">Larchwood</b> $4,000</span
+                          ><b class="font-semibold">Larchwood</b> €4,000</span
                         >
                       </div>
                       <div class="col-span-4 flex items-center gap-3">
                         <div class="h-6 flex-1 rounded-full bg-background">
                           <div class="h-6 w-1/2 rounded-full bg-foreground/25"></div>
                         </div>
-                        <span class="w-20 text-right text-body font-semibold text-foreground">$24,500</span>
+                        <span class="w-20 text-right text-body font-semibold text-foreground">€24,500</span>
                       </div>
                     </div>
                     <div class="grid grid-cols-12 items-center gap-4 rounded-lg bg-background/60 p-3">
@@ -3613,16 +3775,16 @@
                       >
                       <div class="col-span-6 flex gap-3">
                         <span class="rotate-1 bg-card px-3 py-2 text-caption shadow-md"
-                          ><b class="font-semibold">Orbit Logistics</b> $15,000</span
+                          ><b class="font-semibold">Orbit Logistics</b> €15,000</span
                         ><span class="-rotate-1 bg-card px-3 py-2 text-caption shadow-md"
-                          ><b class="font-semibold">Pinecrest</b> $6,000</span
+                          ><b class="font-semibold">Pinecrest</b> €6,000</span
                         >
                       </div>
                       <div class="col-span-4 flex items-center gap-3">
                         <div class="h-6 flex-1 rounded-full bg-background">
                           <div class="h-6 w-5/12 rounded-full bg-foreground/25"></div>
                         </div>
-                        <span class="w-20 text-right text-body font-semibold text-foreground">$21,000</span>
+                        <span class="w-20 text-right text-body font-semibold text-foreground">€21,000</span>
                       </div>
                     </div>
                     <div class="grid grid-cols-12 items-center gap-4 rounded-lg bg-background/60 p-3">
@@ -3632,16 +3794,16 @@
                       >
                       <div class="col-span-6 flex gap-3">
                         <span class="-rotate-1 bg-card px-3 py-2 text-caption shadow-md"
-                          ><b class="font-semibold">Quarry Systems</b> $22,000</span
+                          ><b class="font-semibold">Quarry Systems</b> €22,000</span
                         ><span class="rotate-1 bg-card px-3 py-2 text-caption shadow-md"
-                          ><b class="font-semibold">Redwood Print</b> $3,500</span
+                          ><b class="font-semibold">Redwood Print</b> €3,500</span
                         >
                       </div>
                       <div class="col-span-4 flex items-center gap-3">
                         <div class="h-6 flex-1 rounded-full bg-background">
                           <div class="h-6 w-1/2 rounded-full bg-foreground/25"></div>
                         </div>
-                        <span class="w-20 text-right text-body font-semibold text-foreground">$25,500</span>
+                        <span class="w-20 text-right text-body font-semibold text-foreground">€25,500</span>
                       </div>
                     </div>
                     <div class="grid grid-cols-12 items-center gap-4 rounded-lg bg-background p-3 ring-2 ring-primary">
@@ -3651,16 +3813,16 @@
                       >
                       <div class="col-span-6 flex gap-3">
                         <span class="rotate-1 bg-card px-3 py-2 text-caption shadow-lg"
-                          ><b class="font-semibold">Saltmarsh Energy</b> $40,000</span
+                          ><b class="font-semibold">Saltmarsh Energy</b> €40,000</span
                         ><span class="-rotate-1 bg-card px-3 py-2 text-caption shadow-md"
-                          ><b class="font-semibold">Tidewater</b> $9,000</span
+                          ><b class="font-semibold">Tidewater</b> €9,000</span
                         >
                       </div>
                       <div class="col-span-4 flex items-center gap-3">
                         <div class="h-6 flex-1 rounded-full bg-muted">
                           <div class="h-6 w-full rounded-full bg-primary"></div>
                         </div>
-                        <span class="w-20 text-right text-body font-semibold text-primary">$49,000</span>
+                        <span class="w-20 text-right text-body font-semibold text-primary">€49,000</span>
                       </div>
                     </div>
                     <div class="grid grid-cols-12 items-center gap-4 rounded-lg bg-background/60 p-3">
@@ -3670,16 +3832,16 @@
                       >
                       <div class="col-span-6 flex gap-3">
                         <span class="-rotate-1 bg-card px-3 py-2 text-caption shadow-md"
-                          ><b class="font-semibold">Vela Insurance</b> $30,000</span
+                          ><b class="font-semibold">Vela Insurance</b> €30,000</span
                         ><span class="rotate-2 bg-card px-3 py-2 text-caption shadow-md"
-                          ><b class="font-semibold">Umbra Studio</b> $18,000</span
+                          ><b class="font-semibold">Umbra Studio</b> €18,000</span
                         >
                       </div>
                       <div class="col-span-4 flex items-center gap-3">
                         <div class="h-6 flex-1 rounded-full bg-background">
                           <div class="h-6 w-11/12 rounded-full bg-foreground/25"></div>
                         </div>
-                        <span class="w-20 text-right text-body font-semibold text-foreground">$48,000</span>
+                        <span class="w-20 text-right text-body font-semibold text-foreground">€48,000</span>
                       </div>
                     </div>
                   </div>
@@ -3787,7 +3949,7 @@
               <h3>How marketing feeds the pipeline</h3>
             </header>
             <div class="spec-options">
-              <figure data-spec="option" data-option="5a" data-recommended>
+              <figure data-picked data-spec="option" data-option="5a" data-recommended>
                 <div data-spec="mock" class="flex flex-col gap-10 bg-background p-12">
                   <div>
                     <p class="font-mono text-caption font-semibold uppercase tracking-widest text-muted-foreground">
@@ -4002,7 +4164,13 @@
                   </div>
                 </details>
                 <label class="spec-pick"
-                  ><input type="checkbox" form="spec-review" name="pick:how-marketing-feeds-the-pipeline" value="5a" />
+                  ><input
+                    type="checkbox"
+                    form="spec-review"
+                    name="pick:how-marketing-feeds-the-pipeline"
+                    value="5a"
+                    checked
+                  />
                   Pick 5a</label
                 >
               </figure>
@@ -4402,7 +4570,7 @@
               <h3>Watch your cashflow, revenue pulled in</h3>
             </header>
             <div class="spec-options">
-              <figure data-spec="option" data-option="6a" data-recommended>
+              <figure data-picked data-spec="option" data-option="6a" data-recommended>
                 <div data-spec="mock" class="flex flex-col gap-10 bg-background px-12 py-12">
                   <header>
                     <p class="font-mono text-caption tracking-widest text-muted-foreground uppercase">
@@ -4426,7 +4594,7 @@
 
                     <div class="relative">
                       <ol class="grid grid-cols-4 gap-6" aria-label="Cashflow board, January to April">
-                        <li class="relative rounded-xl border bg-muted px-4 pt-12 pb-8">
+                        <li class="relative flex flex-col gap-8 rounded-xl border bg-muted px-4 pt-12 pb-8">
                           <h4
                             class="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-foreground px-10 py-1.5 text-caption font-medium text-background shadow-md"
                           >
@@ -4438,7 +4606,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-body font-semibold">$100,000</span>
+                                ><span class="text-body font-semibold">€100,000</span>
                               </div>
                             </li>
                             <li class="w-32 rotate-1 bg-card shadow-md">
@@ -4446,7 +4614,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-destructive/35 to-destructive/20 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cost</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">−€50,000</span>
                               </div>
                             </li>
                             <li class="w-32 -rotate-1 bg-card shadow-md">
@@ -4454,12 +4622,18 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                           </ul>
+                          <p
+                            class="mt-auto flex items-baseline justify-between gap-2 border-t border-foreground/15 pt-3"
+                          >
+                            <span class="font-mono text-caption text-muted-foreground uppercase">Cash left</span
+                            ><span class="text-body font-semibold text-foreground">€50,000</span>
+                          </p>
                         </li>
-                        <li class="relative rounded-xl border bg-muted px-4 pt-12 pb-8">
+                        <li class="relative flex flex-col gap-8 rounded-xl border bg-muted px-4 pt-12 pb-8">
                           <h4
                             class="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-foreground px-10 py-1.5 text-caption font-medium text-background shadow-md"
                           >
@@ -4471,7 +4645,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                             <li class="w-32 -rotate-1 bg-card shadow-md">
@@ -4479,7 +4653,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-destructive/35 to-destructive/20 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cost</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">−€50,000</span>
                               </div>
                             </li>
                             <li class="w-40 rotate-1 bg-card shadow-xl">
@@ -4487,12 +4661,18 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-4"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-heading font-semibold">$0</span>
+                                ><span class="text-heading font-semibold">€0</span>
                               </div>
                             </li>
                           </ul>
+                          <p
+                            class="mt-auto flex items-baseline justify-between gap-2 border-t border-foreground/15 pt-3"
+                          >
+                            <span class="font-mono text-caption text-muted-foreground uppercase">Cash left</span
+                            ><span class="text-body font-semibold text-foreground">€0</span>
+                          </p>
                         </li>
-                        <li class="relative rounded-xl border bg-muted px-4 pt-12 pb-8">
+                        <li class="relative flex flex-col gap-8 rounded-xl border bg-muted px-4 pt-12 pb-8">
                           <h4
                             class="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-foreground px-10 py-1.5 text-caption font-medium text-background shadow-md"
                           >
@@ -4504,7 +4684,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-destructive/35 to-destructive/20 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cost</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">−€50,000</span>
                               </div>
                             </li>
                             <li
@@ -4515,13 +4695,19 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-success/40 to-success/25 p-4"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Revenue</span
-                                ><span class="text-body font-semibold">$1,000,000</span>
+                                ><span class="text-body font-semibold">€1,000,000</span>
                               </div>
                             </li>
                             <li class="w-32" aria-hidden="true"></li>
                           </ul>
+                          <p
+                            class="mt-auto flex items-baseline justify-between gap-2 border-t border-foreground/15 pt-3"
+                          >
+                            <span class="font-mono text-caption text-muted-foreground uppercase">Cash left</span
+                            ><span class="text-body font-semibold text-foreground">€950,000</span>
+                          </p>
                         </li>
-                        <li class="relative rounded-xl border bg-muted px-4 pt-12 pb-8">
+                        <li class="relative flex flex-col gap-8 rounded-xl border bg-muted px-4 pt-12 pb-8">
                           <h4
                             class="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-foreground px-10 py-1.5 text-caption font-medium text-background shadow-md"
                           >
@@ -4569,6 +4755,12 @@
                               >
                             </li>
                           </ul>
+                          <p
+                            class="mt-auto flex items-baseline justify-between gap-2 border-t border-foreground/15 pt-3"
+                          >
+                            <span class="font-mono text-caption text-muted-foreground uppercase">Cash left</span
+                            ><span class="text-body font-semibold text-foreground">€950,000</span>
+                          </p>
                         </li>
                       </ol>
                     </div>
@@ -4595,8 +4787,7 @@
                     slot 2 (a calm ease-out translate, no bounce), the outline fades in behind it and the label pill
                     lands last; once, replaying on return; the base rule is the final picture shown here. No stamp.
                     <br />Part, path, props, geometry, tints, dark mode and notation are fixed by the last bullet of the
-                    Visual language (<code>.scratch/never-too-early-sales-run-3/spec/visual-language.md</code>): this
-                    Slide imports <code>CashflowBoard</code> from
+                    Visual language (the Spec's Visual language): this Slide imports <code>CashflowBoard</code> from
                     <code>src/components/slide-shared/cashflow-board/</code> (FE-007 §5) and passes only data. The
                     redesign asks three things of that part, all inside its interface and shared with Slides 1 and 10:
                     notes are paper (<code>shadow-md</code>, a tilt cycled by column and slot, <code>shadow-xl</code> on
@@ -4609,19 +4800,29 @@
                     <code>[cost 50000, revenue 1000000 big target 'march', null]</code>; April
                     <code>[null, ghost, null]</code>;
                     <code>arrow: { from: [4, 2], to: [3, 2], label: 'one month earlier' }</code>; no <code>stamp</code>,
-                    no <code>highlight</code>. The arrow, its label and the moved note's ring are the one
-                    <code>primary</code> focus; Feb's <code>$0</code> stays large but loses Slide 1's ring. Speaker note
+                    no <code>highlight</code>. Footers, as on Slide 1 (Han, round 2): each column's
+                    <code>footer</code> (the part's <code>footer?: ReactNode</code>) is a <code>Cash left</code> line
+                    under the lane, a thin rule with <code>t('cashLeft')</code> in small uppercase mono on the left and
+                    the column's running balance, computed from its own notes, in
+                    <code>text-body font-semibold</code> on the right: Jan <code>€50,000</code>, Feb <code>€0</code>,
+                    March <code>€950,000</code> (the million lands before March's cost empties the account), April
+                    <code>€950,000</code> (no notes, the balance carries). Costs show their sign, <code>Cost</code> over
+                    <code>−€50,000</code>. The arrow, its label and the moved note's ring are the one
+                    <code>primary</code> focus; Feb's <code>€0</code> stays large but loses Slide 1's ring. Speaker note
                     1's target "the March column" is the <code>march</code> target on the moved note. i18n keys:
                     <code>kicker</code>, <code>title</code> (Dossier title, table of contents),
                     <code>heading</code> ("Watch your cashflow"), <code>caption</code>,
                     <code>months.jan|feb|march|april</code>, <code>notes.cash|cost|revenue</code>,
-                    <code>ghost</code> (the outline's text and accessible label), <code>arrow</code>; amounts are
-                    numbers. <br />Design reference:
+                    <code>ghost</code> (the outline's text and accessible label), <code>arrow</code>,
+                    <code>cashLeft</code> ("Cash left" / "Kassenstand"); amounts are numbers in euros, formatted by
+                    <code>Intl.NumberFormat</code> with <code>currency: 'EUR'</code>, a cost passed positive and signed
+                    by the part; footer balances are computed, not translated. <br />Design reference:
                     <code>docs/episodes/never-too-early-sales-run-3/reference/source-deck/pages/page-08.jpg</code>.
                     Build against this page: keep the four month columns, dark pill headers, square notes in their slots
                     and the thick arrow from April's revenue into March; change the revenue note's resting place from
-                    April into March, leave a dashed outline in April, and draw the arrow in <code>primary</code> with
-                    its label.
+                    April into March, leave a dashed outline in April, draw the arrow in <code>primary</code> with its
+                    label, and write amounts in euros with signed costs and a <code>Cash left</code> footer under each
+                    lane.
                   </div>
                 </details>
                 <label class="spec-pick"
@@ -4630,6 +4831,7 @@
                     form="spec-review"
                     name="pick:watch-your-cashflow-revenue-pulled-in"
                     value="6a"
+                    checked
                   />
                   Pick 6a</label
                 >
@@ -4671,7 +4873,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-body font-semibold">$100,000</span>
+                                ><span class="text-body font-semibold">€100,000</span>
                               </div>
                             </li>
                             <li class="w-32 rotate-1 bg-card shadow-md">
@@ -4679,7 +4881,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-destructive/35 to-destructive/20 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cost</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                             <li class="w-32 -rotate-1 bg-card shadow-md">
@@ -4687,7 +4889,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                           </ul>
@@ -4704,7 +4906,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                             <li class="w-32 -rotate-1 bg-card shadow-md">
@@ -4712,7 +4914,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-destructive/35 to-destructive/20 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cost</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                             <li class="w-40 rotate-1 bg-card shadow-xl">
@@ -4720,7 +4922,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-4"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-heading font-semibold">$0</span>
+                                ><span class="text-heading font-semibold">€0</span>
                               </div>
                             </li>
                           </ul>
@@ -4737,7 +4939,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-destructive/35 to-destructive/20 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cost</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                             <li
@@ -4762,7 +4964,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-success/40 to-success/25 p-4"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Revenue</span
-                                ><span class="text-body font-semibold">$1,000,000</span>
+                                ><span class="text-body font-semibold">€1,000,000</span>
                               </div>
                               <svg
                                 viewBox="0 0 120 60"
@@ -4813,10 +5015,9 @@
                     reduces it to the arrow drawing from April into March on <code>[data-zone='active']</code>, then the
                     target slot's outline fading in; overrules the Dossier's sliding note, the reason being page 8's own
                     drawing, which never moves the note. Part, path, props, geometry, tints, dark mode and notation as
-                    fixed by the last bullet of the Visual language
-                    (<code>.scratch/never-too-early-sales-run-3/spec/visual-language.md</code>), with the same paper
+                    fixed by the last bullet of the Visual language (the Spec's Visual language), with the same paper
                     notes and SVG arrow as 6a asks of <code>CashflowBoard</code>. Data: Slide 1's notes unchanged (Feb's
-                    <code>$0</code> large, without its ring), the March column's slot 1 cost carrying target
+                    <code>€0</code> large, without its ring), the March column's slot 1 cost carrying target
                     <code>march</code>, March slot 2 a <code>ghost</code> drawn in <code>primary</code> as the landing
                     slot (the part's <code>ghost</code> takes the arrow's colour when it is the arrow's
                     <code>to</code>), plus <code>arrow: { from: [4, 2], to: [3, 2] }</code>; no <code>stamp</code>. The
@@ -5079,7 +5280,7 @@
                   7a</label
                 >
               </figure>
-              <figure data-spec="option" data-option="7b" data-recommended>
+              <figure data-picked data-spec="option" data-option="7b" data-recommended>
                 <div data-spec="mock" class="flex flex-col gap-8 bg-background p-12">
                   <div>
                     <p class="font-mono text-caption font-semibold uppercase tracking-widest text-muted-foreground">
@@ -5202,7 +5403,7 @@
                           </div>
                           <div class="-rotate-2 rounded-sm bg-success/25 p-3 text-foreground shadow-lg">
                             <p class="text-caption font-semibold">Novak Dental</p>
-                            <p class="text-body font-semibold leading-tight tabular-nums">$12,000</p>
+                            <p class="text-body font-semibold leading-tight tabular-nums">€12,000</p>
                             <p class="text-caption">signed, invoice in 30 days</p>
                           </div>
                         </div>
@@ -5270,8 +5471,8 @@
                   </div>
                 </details>
                 <label class="spec-pick"
-                  ><input type="checkbox" form="spec-review" name="pick:what-is-a-sales-pipeline" value="7b" /> Pick
-                  7b</label
+                  ><input type="checkbox" form="spec-review" name="pick:what-is-a-sales-pipeline" value="7b" checked />
+                  Pick 7b</label
                 >
               </figure>
               <figure data-spec="option" data-option="7c">
@@ -5649,7 +5850,7 @@
                   8a</label
                 >
               </figure>
-              <figure data-spec="option" data-option="8b" data-recommended>
+              <figure data-picked data-spec="option" data-option="8b" data-recommended>
                 <div data-spec="mock" class="flex flex-col gap-6 bg-background p-12">
                   <div>
                     <p class="font-mono text-caption font-semibold uppercase tracking-widest text-muted-foreground">
@@ -5776,7 +5977,7 @@
                         <div class="my-auto flex flex-col gap-3">
                           <div class="-rotate-3 scale-110 rounded-sm bg-success/25 p-4 text-foreground shadow-xl">
                             <p class="text-caption font-semibold">Novak</p>
-                            <p class="text-body font-semibold tabular-nums">$12,000</p>
+                            <p class="text-body font-semibold tabular-nums">€12,000</p>
                             <p class="text-caption">signed</p>
                           </div>
                           <p class="text-center text-caption text-muted-foreground">8 others still talking or lost</p>
@@ -5856,8 +6057,8 @@
                   </div>
                 </details>
                 <label class="spec-pick"
-                  ><input type="checkbox" form="spec-review" name="pick:pipeline-by-the-numbers" value="8b" /> Pick
-                  8b</label
+                  ><input type="checkbox" form="spec-review" name="pick:pipeline-by-the-numbers" value="8b" checked />
+                  Pick 8b</label
                 >
               </figure>
               <figure data-spec="option" data-option="8c">
@@ -5951,7 +6152,7 @@
                       </div>
                       <div class="col-span-3 col-start-18 row-start-5 rotate-2 rounded-sm bg-success/25 p-3 shadow-lg">
                         <p class="text-caption font-semibold text-foreground">Money in</p>
-                        <p class="text-body font-semibold text-foreground tabular-nums">$12,000</p>
+                        <p class="text-body font-semibold text-foreground tabular-nums">€12,000</p>
                       </div>
                       <svg
                         viewBox="0 0 1000 70"
@@ -6296,7 +6497,7 @@
                   9a</label
                 >
               </figure>
-              <figure data-spec="option" data-option="9b" data-recommended>
+              <figure data-picked data-spec="option" data-option="9b" data-recommended>
                 <div data-spec="mock" class="flex flex-col gap-10 bg-background p-12">
                   <div>
                     <p class="font-mono text-caption font-semibold uppercase tracking-widest text-muted-foreground">
@@ -6433,8 +6634,14 @@
                   </div>
                 </details>
                 <label class="spec-pick"
-                  ><input type="checkbox" form="spec-review" name="pick:why-it-takes-time-to-ramp-up" value="9b" /> Pick
-                  9b</label
+                  ><input
+                    type="checkbox"
+                    form="spec-review"
+                    name="pick:why-it-takes-time-to-ramp-up"
+                    value="9b"
+                    checked
+                  />
+                  Pick 9b</label
                 >
               </figure>
               <figure data-spec="option" data-option="9c">
@@ -6691,7 +6898,7 @@
               <h3>Watch your cashflow, &quot;Start when?&quot;</h3>
             </header>
             <div class="spec-options">
-              <figure data-spec="option" data-option="10a" data-recommended>
+              <figure data-picked data-spec="option" data-option="10a" data-recommended>
                 <div data-spec="mock" class="flex flex-col gap-10 bg-background px-12 py-12">
                   <header>
                     <p class="font-mono text-caption tracking-widest text-muted-foreground uppercase">
@@ -6715,7 +6922,7 @@
                     <div class="relative">
                       <ol class="grid grid-cols-4 gap-6" aria-label="Cashflow board, Q1 to Q4">
                         <li
-                          class="relative flex flex-col rounded-xl border bg-muted px-4 pt-12 pb-8 ring-4 ring-primary ring-offset-4 ring-offset-card"
+                          class="relative flex flex-col gap-8 rounded-xl border bg-muted px-4 pt-12 pb-8 ring-4 ring-primary ring-offset-4 ring-offset-card"
                         >
                           <h4
                             class="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-foreground px-10 py-1.5 text-caption font-medium text-background shadow-md"
@@ -6728,7 +6935,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-body font-semibold">$100,000</span>
+                                ><span class="text-body font-semibold">€100,000</span>
                               </div>
                             </li>
                             <li class="w-32 rotate-1 bg-card shadow-md">
@@ -6736,7 +6943,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-destructive/35 to-destructive/20 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cost</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">−€50,000</span>
                               </div>
                             </li>
                             <li class="w-32 -rotate-1 bg-card shadow-md">
@@ -6744,12 +6951,18 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                           </ul>
+                          <p
+                            class="mt-auto flex items-baseline justify-between gap-2 border-t border-foreground/15 pt-3"
+                          >
+                            <span class="font-mono text-caption text-muted-foreground uppercase">Cash left</span
+                            ><span class="text-body font-semibold text-foreground">€50,000</span>
+                          </p>
                         </li>
-                        <li class="relative flex flex-col rounded-xl border bg-muted px-4 pt-12 pb-8">
+                        <li class="relative flex flex-col gap-8 rounded-xl border bg-muted px-4 pt-12 pb-8">
                           <h4
                             class="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-foreground px-10 py-1.5 text-caption font-medium text-background shadow-md"
                           >
@@ -6761,7 +6974,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                             <li class="w-32 -rotate-1 bg-card shadow-md relative z-10">
@@ -6769,7 +6982,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-destructive/35 to-destructive/20 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cost</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">−€50,000</span>
                               </div>
                             </li>
                             <li data-target="q2-cash-zero" class="w-40 rotate-1 bg-card shadow-xl">
@@ -6777,12 +6990,18 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-4"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-heading font-semibold">$0</span>
+                                ><span class="text-heading font-semibold">€0</span>
                               </div>
                             </li>
                           </ul>
+                          <p
+                            class="mt-auto flex items-baseline justify-between gap-2 border-t border-foreground/15 pt-3"
+                          >
+                            <span class="font-mono text-caption text-muted-foreground uppercase">Cash left</span
+                            ><span class="text-body font-semibold text-foreground">€0</span>
+                          </p>
                         </li>
-                        <li class="relative flex flex-col rounded-xl border bg-muted px-4 pt-12 pb-8">
+                        <li class="relative flex flex-col gap-8 rounded-xl border bg-muted px-4 pt-12 pb-8">
                           <h4
                             class="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-foreground px-10 py-1.5 text-caption font-medium text-background shadow-md"
                           >
@@ -6794,7 +7013,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-destructive/35 to-destructive/20 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cost</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">−€50,000</span>
                               </div>
                             </li>
                             <li class="w-32 rotate-1 bg-card shadow-md relative z-10">
@@ -6802,13 +7021,19 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-success/40 to-success/25 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Revenue</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                             <li class="w-32" aria-hidden="true"></li>
                           </ul>
+                          <p
+                            class="mt-auto flex items-baseline justify-between gap-2 border-t border-foreground/15 pt-3"
+                          >
+                            <span class="font-mono text-caption text-muted-foreground uppercase">Cash left</span
+                            ><span class="text-body font-semibold text-foreground">€0</span>
+                          </p>
                         </li>
-                        <li class="relative flex flex-col rounded-xl border bg-muted px-4 pt-12 pb-8">
+                        <li class="relative flex flex-col gap-8 rounded-xl border bg-muted px-4 pt-12 pb-8">
                           <h4
                             class="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-foreground px-10 py-1.5 text-caption font-medium text-background shadow-md"
                           >
@@ -6820,7 +7045,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-destructive/35 to-destructive/20 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cost</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">−€50,000</span>
                               </div>
                             </li>
                             <li class="w-32 rotate-2 bg-card shadow-md">
@@ -6828,11 +7053,17 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-success/40 to-success/25 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Revenue</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                             <li class="w-32" aria-hidden="true"></li>
                           </ul>
+                          <p
+                            class="mt-auto flex items-baseline justify-between gap-2 border-t border-foreground/15 pt-3"
+                          >
+                            <span class="font-mono text-caption text-muted-foreground uppercase">Cash left</span
+                            ><span class="text-body font-semibold text-foreground">€0</span>
+                          </p>
                         </li>
                       </ol>
                       <div
@@ -6852,7 +7083,7 @@
                           </svg>
                           <span
                             class="absolute top-1/2 left-2/3 -translate-x-1/2 -translate-y-1/2 text-body font-semibold whitespace-nowrap text-primary-foreground"
-                            >Start when?</span
+                            >Start early!</span
                           >
                         </div>
                       </div>
@@ -7077,19 +7308,25 @@
                   <div data-spec="build-notes">
                     <p>
                       <b>Board.</b> Draws the shared server part <code>CashflowBoard</code> from
-                      <code>src/components/slide-shared/cashflow-board/</code> exactly as Option 1a draws it, with the
-                      interface, geometry, paper material and note tints of the last bullet of
-                      <code>.scratch/never-too-early-sales-run-3/spec/visual-language.md</code>; this build note does
-                      not restate them. Props: four <code>columns</code> labelled <code>quarters.q1</code> to
-                      <code>quarters.q4</code>. Q1 holds cash <code>100000</code>, cost <code>50000</code>, cash
-                      <code>50000</code>. Q2 holds cash <code>50000</code>, cost <code>50000</code> and
+                      <code>src/components/slide-shared/cashflow-board/</code> exactly as Option 1c draws it, with the
+                      interface, geometry, paper material and note tints of the last bullet of the Spec's Visual
+                      language; this build note does not restate them. Props: four <code>columns</code> labelled
+                      <code>quarters.q1</code> to <code>quarters.q4</code>. Q1 holds cash <code>100000</code>, cost
+                      <code>50000</code>, cash <code>50000</code>. Q2 holds cash <code>50000</code>, cost
+                      <code>50000</code> and
                       <code>{ kind: 'cash', amount: 0, big: true, target: 'q2-cash-zero' }</code> (Speaker note 1). Q3
                       and Q4 each hold cost <code>50000</code>, revenue <code>50000</code> and <code>null</code>.
-                      <code>highlight: 1</code> and <code>arrow: { from: [3, 2], to: [1, 2], label: t('arrow') }</code>;
-                      the arrow and the Q1 ring are the Slide's one <code>primary</code> mark. Every note keeps the tilt
-                      its column and slot have on Slides 1 and 6 (Q3 slot 2, the revenue note, at
-                      <code>rotate-1</code> as on 6a; Q4 slot 2 at <code>rotate-2</code>). Unsigned amounts: a cost
-                      reads <code>Cost</code> over <code>$50,000</code>. No legend: each note names its kind.
+                      <code>highlight: 1</code> and <code>arrow: { from: [3, 2], to: [1, 2], label: t('arrow') }</code>,
+                      the label "Start early!" (Han, round 2: the arrow says what to do, not asks when); the arrow and
+                      the Q1 ring are the Slide's one <code>primary</code> mark. <code>footer</code> per column, a
+                      <code>Cash left</code> line under each lane with that column's running balance from its own notes:
+                      Q1 <code>€50,000</code>, Q2 <code>€0</code>, Q3 <code>€0</code> (cost and revenue cancel), Q4
+                      <code>€0</code>; drawn as Slide 1 (Option 1c) draws it, a thin rule, <code>Cash left</code> in
+                      small uppercase mono on the left and the amount in <code>text-body font-semibold</code> on the
+                      right. Every note keeps the tilt its column and slot have on Slides 1 and 6 (Q3 slot 2, the
+                      revenue note, at <code>rotate-1</code> as on 6a; Q4 slot 2 at <code>rotate-2</code>). Amounts in
+                      euros; a cost carries its sign, <code>Cost</code> over <code>−€50,000</code> (Han, round 2). No
+                      legend: each note names its kind.
                     </p>
                     <p>
                       <b>Arrow route.</b> The <code>arrow</code> prop draws one inline <code>&lt;svg&gt;</code> in
@@ -7099,7 +7336,7 @@
                       of every note. What changed from page 16: there the arrow is painted over Q2's
                       <code>Cost</code> note and hides it. Here it keeps the same route but passes <i>under</i> the
                       notes it crosses: the part stacks notes above the arrow layer (notes <code>relative z-10</code>,
-                      arrow layer below), so Q2's <code>Cost $50,000</code> stays fully readable and the arrow reads as
+                      arrow layer below), so Q2's <code>Cost €50,000</code> stays fully readable and the arrow reads as
                       drawn on the board with the paper pinned over it. The board sets no height and the overlays are
                       placed by column and slot, clear of the chrome (FE-009).
                     </p>
@@ -7137,25 +7374,35 @@
                       <b>i18n.</b> <code>kicker</code>, <code>title</code> ("Watch your cashflow"), <code>lead</code>,
                       <code>caption</code>, <code>board</code> (the list's <code>aria-label</code>),
                       <code>quarters.q1|q2|q3|q4</code>, <code>note.cash|cost|revenue</code>, <code>arrow</code> ("Start
-                      when?" / "Wann starten?"), <code>link</code> (the line beside the down-arrow),
-                      <code>steps.label</code>, <code>steps.s1|s2|s3|s4.title|detail</code>. Amounts are numbers
-                      formatted as the Visual language says.
+                      early!" / "Früh starten!"), <code>cashLeft</code> ("Cash left" / "Kassenstand"), the footer's
+                      label, <code>link</code> (the line beside the down-arrow), <code>steps.label</code>,
+                      <code>steps.s1|s2|s3|s4.title|detail</code>. Amounts are numbers, formatted by
+                      <code>Intl.NumberFormat</code> with <code>currency: 'EUR'</code> as the Visual language says; a
+                      cost passes a positive amount and the part prints its sign; the footer balances are computed from
+                      the column's notes, not translated.
                     </p>
                     <p>
                       Design reference:
                       <code>docs/episodes/never-too-early-sales-run-3/reference/source-deck/pages/page-16.jpg</code>.
                       Build against this page: keep the four quarter lanes under dark pills, the note order and amounts,
-                      the larger Q2 <code>Cash $0</code> note, and the thick arrow labelled "Start when?" on its route
-                      from the Q3 revenue note to Q1; change the arrow from black to <code>primary</code> and slide it
-                      under the notes it crosses so Q2's cost note stays readable, add the Q1 ring, and draw the board
-                      as Slide 1 (Option 1a) does: dotted <code>bg-card</code> surface, paper notes with tint gradients,
-                      kind labels in mono, unsigned <code>$100,000</code> amounts. Add the step lane and the dashed drop
-                      below the board.
+                      the larger Q2 <code>Cash €0</code> note, and the thick arrow on its route from the Q3 revenue note
+                      to Q1; change its label from "Start when?" to "Start early!", the arrow from black to
+                      <code>primary</code> and slide it under the notes it crosses so Q2's cost note stays readable, add
+                      the Q1 ring, and draw the board as Slide 1 (Option 1c) does: dotted <code>bg-card</code> surface,
+                      paper notes with tint gradients, kind labels in mono, euro amounts with signed costs
+                      (<code>−€50,000</code>), and a <code>Cash left</code> footer under each lane. Add the step lane
+                      and the dashed drop below the board.
                     </p>
                   </div>
                 </details>
                 <label class="spec-pick"
-                  ><input type="checkbox" form="spec-review" name="pick:watch-your-cashflow-start-when" value="10a" />
+                  ><input
+                    type="checkbox"
+                    form="spec-review"
+                    name="pick:watch-your-cashflow-start-when"
+                    value="10a"
+                    checked
+                  />
                   Pick 10a</label
                 >
               </figure>
@@ -7196,7 +7443,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-body font-semibold">$100,000</span>
+                                ><span class="text-body font-semibold">€100,000</span>
                               </div>
                             </li>
                             <li class="w-32 rotate-1 bg-card shadow-md">
@@ -7204,7 +7451,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-destructive/35 to-destructive/20 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cost</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                             <li class="w-32 -rotate-1 bg-card shadow-md">
@@ -7212,7 +7459,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                           </ul>
@@ -7236,7 +7483,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                             <li class="w-32 -rotate-1 bg-card shadow-md relative z-10">
@@ -7244,7 +7491,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-destructive/35 to-destructive/20 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cost</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                             <li data-target="q2-cash-zero" class="w-40 rotate-1 bg-card shadow-xl">
@@ -7252,7 +7499,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-4"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-heading font-semibold">$0</span>
+                                ><span class="text-heading font-semibold">€0</span>
                               </div>
                             </li>
                           </ul>
@@ -7276,7 +7523,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-destructive/35 to-destructive/20 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cost</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                             <li class="w-32 rotate-1 bg-card shadow-md relative z-10">
@@ -7284,7 +7531,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-success/40 to-success/25 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Revenue</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                             <li class="w-32" aria-hidden="true"></li>
@@ -7309,7 +7556,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-destructive/35 to-destructive/20 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cost</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                             <li class="w-32 rotate-2 bg-card shadow-md">
@@ -7317,7 +7564,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-success/40 to-success/25 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Revenue</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                             <li class="w-32" aria-hidden="true"></li>
@@ -7366,19 +7613,19 @@
                   <div data-spec="build-notes">
                     <p>
                       <b>Board.</b> Draws the shared server part <code>CashflowBoard</code> from
-                      <code>src/components/slide-shared/cashflow-board/</code> exactly as Option 1a draws it, with the
-                      interface, geometry, paper material and note tints of the last bullet of
-                      <code>.scratch/never-too-early-sales-run-3/spec/visual-language.md</code>; this build note does
-                      not restate them. Props: four <code>columns</code> labelled <code>quarters.q1</code> to
-                      <code>quarters.q4</code>. Q1 holds cash <code>100000</code>, cost <code>50000</code>, cash
-                      <code>50000</code>. Q2 holds cash <code>50000</code>, cost <code>50000</code> and
+                      <code>src/components/slide-shared/cashflow-board/</code> exactly as Option 1c draws it, with the
+                      interface, geometry, paper material and note tints of the last bullet of the Spec's Visual
+                      language; this build note does not restate them. Props: four <code>columns</code> labelled
+                      <code>quarters.q1</code> to <code>quarters.q4</code>. Q1 holds cash <code>100000</code>, cost
+                      <code>50000</code>, cash <code>50000</code>. Q2 holds cash <code>50000</code>, cost
+                      <code>50000</code> and
                       <code>{ kind: 'cash', amount: 0, big: true, target: 'q2-cash-zero' }</code> (Speaker note 1). Q3
                       and Q4 each hold cost <code>50000</code>, revenue <code>50000</code> and <code>null</code>.
                       <code>highlight: 1</code> and <code>arrow: { from: [3, 2], to: [1, 2], label: t('arrow') }</code>;
                       the arrow and the Q1 ring are the Slide's one <code>primary</code> mark. Every note keeps the tilt
                       its column and slot have on Slides 1 and 6 (Q3 slot 2, the revenue note, at
                       <code>rotate-1</code> as on 6a; Q4 slot 2 at <code>rotate-2</code>). Unsigned amounts: a cost
-                      reads <code>Cost</code> over <code>$50,000</code>. No legend: each note names its kind.
+                      reads <code>Cost</code> over <code>€50,000</code>. No legend: each note names its kind.
                     </p>
                     <p>
                       <b>Arrow route.</b> The <code>arrow</code> prop draws one inline <code>&lt;svg&gt;</code> in
@@ -7388,7 +7635,7 @@
                       of every note. What changed from page 16: there the arrow is painted over Q2's
                       <code>Cost</code> note and hides it. Here it keeps the same route but passes <i>under</i> the
                       notes it crosses: the part stacks notes above the arrow layer (notes <code>relative z-10</code>,
-                      arrow layer below), so Q2's <code>Cost $50,000</code> stays fully readable and the arrow reads as
+                      arrow layer below), so Q2's <code>Cost €50,000</code> stays fully readable and the arrow reads as
                       drawn on the board with the paper pinned over it. The board sets no height and the overlays are
                       placed by column and slot, clear of the chrome (FE-009).
                     </p>
@@ -7424,11 +7671,11 @@
                       Design reference:
                       <code>docs/episodes/never-too-early-sales-run-3/reference/source-deck/pages/page-16.jpg</code>.
                       Build against this page: keep the four quarter lanes under dark pills, the note order and amounts,
-                      the larger Q2 <code>Cash $0</code> note, and the thick arrow labelled "Start when?" on its route
+                      the larger Q2 <code>Cash €0</code> note, and the thick arrow labelled "Start when?" on its route
                       from the Q3 revenue note to Q1; change the arrow from black to <code>primary</code> and slide it
                       under the notes it crosses so Q2's cost note stays readable, add the Q1 ring, and draw the board
-                      as Slide 1 (Option 1a) does: dotted <code>bg-card</code> surface, paper notes with tint gradients,
-                      kind labels in mono, unsigned <code>$100,000</code> amounts. Add the quarter footers.
+                      as Slide 1 (Option 1c) does: dotted <code>bg-card</code> surface, paper notes with tint gradients,
+                      kind labels in mono, unsigned <code>€100,000</code> amounts. Add the quarter footers.
                     </p>
                   </div>
                 </details>
@@ -7472,7 +7719,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-body font-semibold">$100,000</span>
+                                ><span class="text-body font-semibold">€100,000</span>
                               </div>
                             </li>
                             <li class="w-32 rotate-1 bg-card shadow-md">
@@ -7480,7 +7727,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-destructive/35 to-destructive/20 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cost</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                             <li class="w-32 -rotate-1 bg-card shadow-md">
@@ -7488,7 +7735,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                           </ul>
@@ -7530,7 +7777,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                             <li class="w-32 -rotate-1 bg-card shadow-md relative z-10">
@@ -7538,7 +7785,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-destructive/35 to-destructive/20 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cost</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                             <li data-target="q2-cash-zero" class="w-40 rotate-1 bg-card shadow-xl">
@@ -7546,7 +7793,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-4"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-heading font-semibold">$0</span>
+                                ><span class="text-heading font-semibold">€0</span>
                               </div>
                             </li>
                           </ul>
@@ -7563,7 +7810,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-destructive/35 to-destructive/20 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cost</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                             <li class="w-32 rotate-1 bg-card shadow-md relative z-10">
@@ -7571,7 +7818,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-success/40 to-success/25 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Revenue</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                             <li class="w-32" aria-hidden="true"></li>
@@ -7589,7 +7836,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-destructive/35 to-destructive/20 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Cost</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                             <li class="w-32 rotate-2 bg-card shadow-md">
@@ -7597,7 +7844,7 @@
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-success/40 to-success/25 p-3"
                               >
                                 <span class="font-mono text-caption text-foreground/70 uppercase">Revenue</span
-                                ><span class="text-body font-semibold">$50,000</span>
+                                ><span class="text-body font-semibold">€50,000</span>
                               </div>
                             </li>
                             <li class="w-32" aria-hidden="true"></li>
@@ -7658,19 +7905,19 @@
                   <div data-spec="build-notes">
                     <p>
                       <b>Board.</b> Draws the shared server part <code>CashflowBoard</code> from
-                      <code>src/components/slide-shared/cashflow-board/</code> exactly as Option 1a draws it, with the
-                      interface, geometry, paper material and note tints of the last bullet of
-                      <code>.scratch/never-too-early-sales-run-3/spec/visual-language.md</code>; this build note does
-                      not restate them. Props: four <code>columns</code> labelled <code>quarters.q1</code> to
-                      <code>quarters.q4</code>. Q1 holds cash <code>100000</code>, cost <code>50000</code>, cash
-                      <code>50000</code>. Q2 holds cash <code>50000</code>, cost <code>50000</code> and
+                      <code>src/components/slide-shared/cashflow-board/</code> exactly as Option 1c draws it, with the
+                      interface, geometry, paper material and note tints of the last bullet of the Spec's Visual
+                      language; this build note does not restate them. Props: four <code>columns</code> labelled
+                      <code>quarters.q1</code> to <code>quarters.q4</code>. Q1 holds cash <code>100000</code>, cost
+                      <code>50000</code>, cash <code>50000</code>. Q2 holds cash <code>50000</code>, cost
+                      <code>50000</code> and
                       <code>{ kind: 'cash', amount: 0, big: true, target: 'q2-cash-zero' }</code> (Speaker note 1). Q3
                       and Q4 each hold cost <code>50000</code>, revenue <code>50000</code> and <code>null</code>.
                       <code>highlight: 1</code> and <code>arrow: { from: [3, 2], to: [1, 2], label: t('arrow') }</code>;
                       the arrow and the Q1 ring are the Slide's one <code>primary</code> mark. Every note keeps the tilt
                       its column and slot have on Slides 1 and 6 (Q3 slot 2, the revenue note, at
                       <code>rotate-1</code> as on 6a; Q4 slot 2 at <code>rotate-2</code>). Unsigned amounts: a cost
-                      reads <code>Cost</code> over <code>$50,000</code>. No legend: each note names its kind.
+                      reads <code>Cost</code> over <code>€50,000</code>. No legend: each note names its kind.
                     </p>
                     <p>
                       <b>Arrow route.</b> The <code>arrow</code> prop draws one inline <code>&lt;svg&gt;</code> in
@@ -7680,7 +7927,7 @@
                       of every note. What changed from page 16: there the arrow is painted over Q2's
                       <code>Cost</code> note and hides it. Here it keeps the same route but passes <i>under</i> the
                       notes it crosses: the part stacks notes above the arrow layer (notes <code>relative z-10</code>,
-                      arrow layer below), so Q2's <code>Cost $50,000</code> stays fully readable and the arrow reads as
+                      arrow layer below), so Q2's <code>Cost €50,000</code> stays fully readable and the arrow reads as
                       drawn on the board with the paper pinned over it. The board sets no height and the overlays are
                       placed by column and slot, clear of the chrome (FE-009).
                     </p>
@@ -7720,11 +7967,11 @@
                       Design reference:
                       <code>docs/episodes/never-too-early-sales-run-3/reference/source-deck/pages/page-16.jpg</code>.
                       Build against this page: keep the four quarter lanes under dark pills, the note order and amounts,
-                      the larger Q2 <code>Cash $0</code> note, and the thick arrow labelled "Start when?" on its route
+                      the larger Q2 <code>Cash €0</code> note, and the thick arrow labelled "Start when?" on its route
                       from the Q3 revenue note to Q1; change the arrow from black to <code>primary</code> and slide it
                       under the notes it crosses so Q2's cost note stays readable, add the Q1 ring, and draw the board
-                      as Slide 1 (Option 1a) does: dotted <code>bg-card</code> surface, paper notes with tint gradients,
-                      kind labels in mono, unsigned <code>$100,000</code> amounts. Add the "This week" footer in Q1 and
+                      as Slide 1 (Option 1c) does: dotted <code>bg-card</code> surface, paper notes with tint gradients,
+                      kind labels in mono, unsigned <code>€100,000</code> amounts. Add the "This week" footer in Q1 and
                       the cycle bracket under Q1 to Q3.
                     </p>
                   </div>
@@ -7765,9 +8012,9 @@
                   <summary>Visual idea from the Dossier</summary>
                   <p class="text-caption"><code>master: basic-page · motion: local</code></p>
                   <p data-spec="visual-idea">
-                    The board a third time, now by quarter: Q1 holds cash 100.000$, cost 50.000$, cash 50.000$; Q2 holds
-                    cash 50.000$, cost 50.000$, cash 0$; Q3 holds cost 50.000$ and revenue 50.000$; Q4 holds cost
-                    50.000$ and revenue 50.000$. A thick dark arrow labelled "Start when?" sweeps from the Q3 revenue
+                    The board a third time, now by quarter: Q1 holds cash €100.000, cost €50.000, cash €50.000; Q2 holds
+                    cash €50.000, cost €50.000, cash €0; Q3 holds cost €50.000 and revenue €50.000; Q4 holds cost
+                    €50.000 and revenue €50.000. A thick dark arrow labelled "Start when?" sweeps from the Q3 revenue
                     note back across Q2 into Q1 and points at the Q1 column, which is highlighted.
                   </p>
                   <p class="text-caption">
@@ -7788,7 +8035,7 @@
                           >https://www.paulgraham.com/startupfunding.html</a
                         >
                       </li>
-                      <li>target: the Q2 cash 0$ note</li>
+                      <li>target: the Q2 cash €0 note</li>
                     </ul>
                   </li>
                 </ol>

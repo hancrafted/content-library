@@ -324,3 +324,39 @@ Changes from the template, each with its reason:
 - Needs human: Sections 1, 3 and 5 all build on `CashflowBoard` in parallel jobs. Carried over from round 1.
 - Needs human: `stages-of-sale` note 2 cites only EU Directive 2011/7/EU. Carried over from round 1.
 - Needs human: Slides 4 and 5 use the pipeline before Slide 7 defines it.
+
+## write-spec · 2026-10-16T14:40:00Z
+
+### Inputs
+
+- Han's round-2 feedback, `feedback/01/feedback.md`: one pick per Slide (1c, 2c, 3a, 4a, 5a, 6a, 7b, 8b, 9b, 10a), with notes on Slides 1, 2 and 10.
+
+### Output
+
+- `spec/spec.html` with every Slide locked: the picked Option carries `data-picked` and a checked box, and it has a fresh `process:markdown-harness` `verified` entry.
+- 1c, 6a and 10a carry signed costs (`−€50,000`) and a `Cash left` footer per column; the 10a arrow reads "Start early!". 2c keeps its layout with 2a's card content.
+- Euros throughout: the mocks, the Visual language and the Voice script ("A million euros"); the Dossier draft was edited to match.
+- The Visual language binds the built boards to 1c's drawing; the unpicked Options stay as the round-2 record and are never built.
+- Committed with `Gate: draft spec-3` for Han's third review round.
+
+### Checks
+
+- `vitest` staging test and `mh`: pass on attempts 7, 8 and 9.
+- Reviewer:
+  - fail on attempt 7 on line 2;
+  - fail on attempt 8 on line 2;
+  - pass on attempt 9 on 9 rubric lines, with line 9 `needs-human`.
+
+### Notes
+
+- Attempt 7 failed line 2 on four slips:
+  - a `Cash 0$` in 1a's build notes;
+  - the Visual language naming 1a, not 1c, as the board's reference;
+  - footers listed as optional;
+  - build notes citing the gitignored `.scratch` Visual language.
+- Attempt 8 failed line 2 because the Visual language bound the unpicked Options to 1c's drawing. It is now scoped to the built boards.
+- Han's "use €" note was given on Slide 1 and applied Episode-wide, the Voice script included, so the words match the boards.
+- Needs human: 1c's April footer reads €950,000 beside the Bankrupt stamp. The sum is right, but it may soften "the company is gone".
+- Needs human: 2a keeps `data-recommended` and its caption still argues for 2a over the pick 2c. 1a keeps `data-recommended` while 1c is picked.
+- Needs human: `CashflowBoard` is shared by Sections 1, 3 and 5, whose jobs build in parallel. Carried over.
+- Needs human: `stages-of-sale` note 2 cites only EU Directive 2011/7/EU. Carried over.
