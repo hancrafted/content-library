@@ -566,3 +566,27 @@ Changes from the template, each with its reason:
 - Needs human: the German label "Früh starten!" leaves 4 to 5 px each side in the Q2 to Q3 gap at 1440.
 - Needs human: the German text is the implementor's translation.
 - Needs human: interactive pass skipped, no browser.
+
+## open-pr · 2026-10-16T16:48:57Z
+
+### Inputs
+
+- `skills/new-episode/references/open-pr.md` and the `pr` skill.
+- `docs/episodes/never-too-early-sales-run-3/run-log.md`: every `Needs human:`, `Blocked:`, `Research gap:` and `Spine change:` line.
+- The handoff's rule: push only if Han asks.
+
+### Output
+
+- The Episode served by `implement-episode-init`'s dev server on port 4000: `http://localhost:4000/episode/never-too-early-sales-run-3/` and `/de/episode/never-too-early-sales-run-3/` answer 200; `/episodes/never-too-early-sales-run-3/` answers 404.
+- The PR body, with its `## Needs Han` checklist of 46 items, written to `.scratch/never-too-early-sales-run-3/pr-body.md` in the Episode worktree (git-ignored).
+- No draft PR: `gh pr view episode/never-too-early-sales-run-3` finds none, and the branch is not on `origin`.
+
+### Checks
+
+- No checks and no reviewer: the job has none.
+
+### Notes
+
+- Blocked: the draft PR is not open. The handoff allows a push only at Han's word, and Han was not available to answer. To open it: `git push -u origin episode/never-too-early-sales-run-3 && gh pr create --draft --base main --head episode/never-too-early-sales-run-3 --title "feat(episodes): never-too-early-sales-run-3 Episode" --body-file .scratch/never-too-early-sales-run-3/pr-body.md`.
+- The Episode answers only on `/episode/never-too-early-sales-run-3`, not `/episodes/...`, until #85 lands; it is on the checklist.
+- The branch's upstream is set to `origin/main`; `-u` above repoints it.
