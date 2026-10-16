@@ -1,7 +1,7 @@
 {
   "title": "Why it's never too early to start with sales · hancrafted",
   "description": "Why sales must start long before revenue is needed, and the first concrete steps to build a sales pipeline: find your zero-cash month, keep a list of potential customers, make first contact, and track your conversion rate and sales cycle.",
-  "toc": "Contents Loading 3 min left 1 Why watching cashflow is mission critical 2 Why sales is more than just selling 3 How to start doing sales 4 Why building an effective sales pipeline takes time 5 Start before you need the money Open contents : Contents · Loading Contents 3 min left 1 Why watching cashflow is mission critical 2 Why sales is more than just selling 3 How to start doing sales 4 Why building an effective sales pipeline takes time 5 Start before you need the money",
+  "toc": "Contents Loading 5 min left 1 Why watching cashflow is mission critical 2 Why sales is more than just selling 3 How to start doing sales 4 Why building an effective sales pipeline takes time What is a sales pipeline Pipeline by the numbers Why it takes time to ramp up 5 Start before you need the money Open contents : Contents · Loading Contents 5 min left 1 Why watching cashflow is mission critical 2 Why sales is more than just selling 3 How to start doing sales 4 Why building an effective sales pipeline takes time What is a sales pipeline Pipeline by the numbers Why it takes time to ramp up 5 Start before you need the money",
   "slides": [
     {
       "id": "top",
@@ -13,6 +13,18 @@
     {
       "id": "why-building-an-effective-sales-pipeline-takes-time",
       "text": "Why building an effective sales pipeline takes time"
+    },
+    {
+      "id": "why-building-an-effective-sales-pipeline-takes-time--what-is-a-sales-pipeline",
+      "text": "One board, three readings What is a sales pipeline The columns are your funnel, the drop between them is your conversion rate, and the way across is your sales cycle. Conversion rate 3 : 1 How many leads become one opportunity: tells you your offering Sales funnel the stages, and how many sit in each: tells you your volume Lead 6 Kraus Bakery Novak Dental Hofmann Logistics Brightline Studio Okafor & Co Lindqvist Tools Opportunity 2 Kraus Bakery demo booked Novak Dental proposal sent Deal 1 Novak Dental €12,000 signed, invoice in 30 days Sales cycle · first contact to the money: tells you your efficiency"
+    },
+    {
+      "id": "why-building-an-effective-sales-pipeline-takes-time--pipeline-by-the-numbers",
+      "text": "Count the notes Pipeline by the numbers Do you have 27 names? That is what one deal takes in this example, 9.5 months before the money. 27 : 1 total conversion: 27 leads for 1 deal Lead · 27 2 weeks Kraus Novak Hahn Okafor Lind Meyer Santos Petrov Weber Dubois Haas Larsen Moretti Fischer Ito Becker Nowak Schulz Rossi Keller Varga Bauer Jansen Wolf Costa Sato Ahmed 3:1 Opportunity · 9 6 months Kraus demo Novak proposal Weber pricing Haas demo Fischer legal Nowak proposal Keller demo Bauer pricing Sato demo 9:1 Deal · 1 3 months Novak €12,000 signed 8 others still talking or lost Sales cycle: 9.5 months from first lead to money 2 wk Opportunity · 6 months Deal · 3 months → money"
+    },
+    {
+      "id": "why-building-an-effective-sales-pipeline-takes-time--why-it-takes-time-to-ramp-up",
+      "text": "Your board on day one Why it takes time to ramp up Nothing is written yet: no material, only questions about the market, and the two numbers you plan with are blank. 1 · Preparation Before Sales deck · Pricing · Offering · Business model During Demo · Meeting slides · Proposal Deal Contract · Compliance · Legal dashed: not written yet 2 · Unknown market Who is really your customer? What are they willing to pay? What problem do they really need solved? answered only by real conversations 3 · Unknown metrics Conversion rate ? : 1 Sales cycle ? months Both needed to plan backwards from your cash. Day one Each column shrinks only by doing. How many of these three have you started?"
     },
     { "id": "start-before-you-need-the-money", "text": "Start before you need the money" }
   ],
@@ -33,6 +45,18 @@
     {
       "id": "why-building-an-effective-sales-pipeline-takes-time",
       "text": "Why building an effective sales pipeline takes time No speaker notes for this Slide."
+    },
+    {
+      "id": "why-building-an-effective-sales-pipeline-takes-time--what-is-a-sales-pipeline",
+      "text": "What is a sales pipeline Stage rates are not portable A stage's rate depends on where a vendor draws its start and end, so rates from different companies are likely not comparable stage by stage; in one dataset two stages already differ, 68 and 19 percent. This is an inference 1 . Sources (1) Ebsta and Pavilion, GTM Benchmarks Report ( opens in a new tab ) benchmarks.ebsta.com Cycle length hits cash A unit-economics model leaves out the sales cycle and the ramp time of a salesperson; their effect on cash flow has to be modelled separately 1 . Sources (1) Mark Roberge, The Science of Scaling ( opens in a new tab ) f.hubspotusercontent10.net"
+    },
+    {
+      "id": "why-building-an-effective-sales-pipeline-takes-time--pipeline-by-the-numbers",
+      "text": "Pipeline by the numbers A reference win rate In a dataset of 655 thousand opportunities across 387 companies, the new-customer win rate was 19 percent (about 5.3 opportunities per win), the sales cycle 91 days and 8 stakeholders per deal; expansion sales to existing customers ran 45 percent, 52 days and 5 stakeholders. It is a vendor study of its own customers' CRM data 1 . Sources (1) Ebsta and Pavilion, GTM Benchmarks Report ( opens in a new tab ) benchmarks.ebsta.com The biggest loss is no decision An analysis of more than 2.5 million recorded sales conversations found 40 to 60 percent of deals are lost to buyers who intend to buy but never act 1 . Sources (1) Dixon and McKenna, Stop Losing Sales to Customer Indecision (Harvard Business Review) ( opens in a new tab ) hbr.org Everyone holds a veto Sellers rarely find one person who can approve a deal alone; decision authority rests with a group whose members have different roles and all have veto power 1 . Sources (1) Schmidt, Adamson and Bird, Making the Consensus Sale (Harvard Business Review) ( opens in a new tab ) hbr.org Buying groups disagree A Gartner survey of 632 B2B buyers describes buying groups of five to 16 people; 74 percent of teams showed unhealthy conflict, and groups that reached consensus were 2.5 times more likely to report a high-quality deal 1 . Sources (1) Gartner, Gartner Sales Survey Finds 74% of B2B Buyer Teams Demonstrate \"Unhealthy Conflict\" During The Decision Process ( opens in a new tab ) gartner.com"
+    },
+    {
+      "id": "why-building-an-effective-sales-pipeline-takes-time--why-it-takes-time-to-ramp-up",
+      "text": "Why it takes time to ramp up Startups search, they do not execute Established companies execute a business model, a startup is a temporary organization designed to search for a repeatable and scalable one 1 . Sources (1) Steve Blank, The Customer Development Manifesto ( opens in a new tab ) steveblank.com Selling blind In one case, early orders from industry friends and board connections covered the first months of the revenue plan but did not show why customers would buy, because nobody had run customer discovery 1 . Sources (1) Steve Blank, It Must Be A Marketing Problem ( opens in a new tab ) steveblank.com Learn first, codify later Before product-market fit, rely on personal networks and customer referrals: they do not scale but yield the best opportunities to learn from. Codify the playbook after that learning and prove the unit economics before hiring salespeople aggressively 1 . Sources (1) Mark Roberge, The Science of Scaling ( opens in a new tab ) f.hubspotusercontent10.net Metrics lag by one cycle A conversion figure for recent leads looks worse than its long-run value because those leads have not yet gone through a full cycle; older results are the better estimate 1 . Sources (1) Mark Roberge, The Science of Scaling ( opens in a new tab ) f.hubspotusercontent10.net"
     },
     {
       "id": "start-before-you-need-the-money",
@@ -59,6 +83,18 @@
     {
       "id": "why-building-an-effective-sales-pipeline-takes-time",
       "text": "Why building an effective sales pipeline takes time 0:00 – 0:10 The obvious objection So the obvious objection: I start selling in January, and the April revenue lands in March? It does not work like a switch. 0:10 – 0:19 The claim A pipeline is built, measured and tuned, and that takes months. Three words describe it: funnel, conversion rate and sales cycle."
+    },
+    {
+      "id": "why-building-an-effective-sales-pipeline-takes-time--what-is-a-sales-pipeline",
+      "text": "What is a sales pipeline 0:00 – 0:10 Funnel is volume The funnel names each stage of your sales process. How many enter each stage tells you how much volume you can put through. 0:10 – 0:26 Conversion is the offer The conversion rate says how many actions in a stage become one success in the next. A low rate may be telling you that your offering is not yet attractive, and that is useful to know early. 0:26 – 0:40 Cycle is efficiency The cycle is the time from start to finish, until the deal or the money. It is your efficiency, and with conversion that gives you two numbers you should measure from your first deal."
+    },
+    {
+      "id": "why-building-an-effective-sales-pipeline-takes-time--pipeline-by-the-numbers",
+      "text": "Pipeline by the numbers 0:00 – 0:11 Read the picture Read the picture. Lead to opportunity is three to one, opportunity to deal is nine to one, so together it takes 27 leads for one deal. 0:11 – 0:24 Read the clock Now read the clock. Two weeks, six months, three months, which makes 9.5 months from first lead to money. Think one step further and ten deals need 270 leads. 0:24 – 0:37 Backward chain So chain it backwards. If you want a deal in month X, count back 9.5 months, and by then you need 27 names in the funnel. Do you have 27 names? 0:37 – 0:50 Your numbers, not mine One thing I want to be straight about: this is my worked example, not a law. Yours will be shorter or longer, which is exactly why you measure your own."
+    },
+    {
+      "id": "why-building-an-effective-sales-pipeline-takes-time--why-it-takes-time-to-ramp-up",
+      "text": "Why it takes time to ramp up 0:00 – 0:15 Preparation The first box is preparation. Before, during and at the deal you need a deck and pricing, a demo and a proposal, a contract and the legal side. None of that exists on day one. 0:15 – 0:27 Unknown market The second is an unknown market. Who is your customer, what do they pay, which problem really hurts. Only real conversations answer that, and desk research will not. 0:27 – 0:42 Unknown metrics The third is unknown metrics. You have no conversion rate and no cycle length yet, and you need both to plan backwards from your cash. How many months this takes, I will not invent for you. 0:42 – 0:54 So start now So start now, because each box shrinks only by doing. How many months do you have left, and how many of these three boxes have you started?"
     },
     {
       "id": "start-before-you-need-the-money",

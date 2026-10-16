@@ -1,0 +1,72 @@
+{
+  "kicker": "Ein Board, drei Lesarten",
+  "title": "Was ist eine Sales-Pipeline",
+  "lead": "Die Spalten sind Dein Funnel, der Schwund zwischen ihnen ist Deine Conversion-Rate, und der Weg hinüber ist Dein Verkaufszyklus.",
+  "stages": {
+    "lead": "Lead",
+    "opportunity": "Opportunity",
+    "deal": "Deal"
+  },
+  "cards": {
+    "kraus": "Bäckerei Kraus",
+    "novak": "Zahnarztpraxis Novak",
+    "hofmann": "Hofmann Logistik",
+    "brightline": "Brightline Studio",
+    "okafor": "Okafor & Co",
+    "lindqvist": "Lindqvist Werkzeuge",
+    "demoBooked": "Demo gebucht",
+    "proposalSent": "Angebot verschickt",
+    "signed": "unterschrieben, Rechnung in 30 Tagen"
+  },
+  "terms": {
+    "funnel": {
+      "label": "Sales-Funnel",
+      "caption": "die Stufen, und wie viele in jeder stehen: zeigt Dir Dein <b>Volumen</b>"
+    },
+    "conversion": {
+      "label": "Conversion-Rate",
+      "caption": "Wie viele Leads zu einer Opportunity werden: zeigt Dir Dein <b>Angebot</b>"
+    },
+    "cycle": "<b>Verkaufszyklus</b> · vom ersten Kontakt bis zum Geld: zeigt Dir Deine <b>Effizienz</b>"
+  },
+  "ratio": "3 : 1",
+  "notes": {
+    "stage-rates-are-not-portable": {
+      "header": "Stufenraten lassen sich nicht übertragen",
+      "description": "Die Rate einer Stufe hängt davon ab, wo ein Anbieter ihren Anfang und ihr Ende zieht. Raten verschiedener Unternehmen sind daher Stufe für Stufe wahrscheinlich nicht vergleichbar; schon in einem einzigen Datensatz liegen zwei Stufen bei 68 und 19 Prozent. Das ist eine Schlussfolgerung [1].",
+      "sources": {
+        "ebsta-pavilion": {
+          "title": "Ebsta und Pavilion, GTM Benchmarks Report"
+        }
+      }
+    },
+    "cycle-length-hits-cash": {
+      "header": "Die Länge des Zyklus trifft den Cashflow",
+      "description": "Ein Unit-Economics-Modell lässt den Verkaufszyklus und die Einarbeitungszeit eines Vertrieblers außen vor; ihre Wirkung auf den Cashflow muss man getrennt modellieren [1].",
+      "sources": {
+        "roberge-science-of-scaling": {
+          "title": "Mark Roberge, The Science of Scaling"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "funnel-is-volume": {
+        "title": "Funnel ist Volumen",
+        "keywords": "",
+        "script": "Der Funnel benennt jede Stufe Deines Verkaufsprozesses. Wie viele in jede Stufe hineinkommen, zeigt Dir, wie viel Volumen Du durchbringen kannst."
+      },
+      "conversion-is-the-offer": {
+        "title": "Conversion ist das Angebot",
+        "keywords": "",
+        "script": "Die Conversion-Rate sagt, wie viele Aktionen in einer Stufe zu einem Erfolg in der nächsten werden. Eine niedrige Rate sagt Dir vielleicht, dass Dein Angebot noch nicht attraktiv genug ist, und das willst Du früh wissen."
+      },
+      "cycle-is-efficiency": {
+        "title": "Zyklus ist Effizienz",
+        "keywords": "",
+        "script": "Der Zyklus ist die Zeit vom Anfang bis zum Ende, bis zum Deal oder bis zum Geld. Er ist Deine Effizienz, und zusammen mit der Conversion hast Du zwei Zahlen, die Du ab Deinem ersten Deal messen solltest."
+      }
+    }
+  }
+}

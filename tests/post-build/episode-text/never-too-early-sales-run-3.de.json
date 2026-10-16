@@ -1,7 +1,7 @@
 {
   "title": "Warum es nie zu früh ist, mit dem Vertrieb anzufangen · hancrafted",
   "description": "Warum Vertrieb lange vor dem Tag beginnen muss, an dem Du Umsatz brauchst, und die ersten konkreten Schritte zu einer Sales-Pipeline: Finde Deinen Monat ohne Cash, pflege eine Liste möglicher Kunden, nimm den ersten Kontakt auf und miss Conversion-Rate und Verkaufszyklus.",
-  "toc": "Inhalt Wird geladen noch 4 Min. 1 Warum der Blick auf den Cashflow überlebenswichtig ist 2 Warum Vertrieb mehr ist als Verkaufen 3 Wie Du mit dem Vertrieb anfängst 4 Warum eine wirksame Sales-Pipeline Zeit braucht 5 Fang an, bevor Du das Geld brauchst Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 4 Min. 1 Warum der Blick auf den Cashflow überlebenswichtig ist 2 Warum Vertrieb mehr ist als Verkaufen 3 Wie Du mit dem Vertrieb anfängst 4 Warum eine wirksame Sales-Pipeline Zeit braucht 5 Fang an, bevor Du das Geld brauchst",
+  "toc": "Inhalt Wird geladen noch 6 Min. 1 Warum der Blick auf den Cashflow überlebenswichtig ist 2 Warum Vertrieb mehr ist als Verkaufen 3 Wie Du mit dem Vertrieb anfängst 4 Warum eine wirksame Sales-Pipeline Zeit braucht Was ist eine Sales-Pipeline Die Pipeline in Zahlen Warum der Hochlauf Zeit braucht 5 Fang an, bevor Du das Geld brauchst Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 6 Min. 1 Warum der Blick auf den Cashflow überlebenswichtig ist 2 Warum Vertrieb mehr ist als Verkaufen 3 Wie Du mit dem Vertrieb anfängst 4 Warum eine wirksame Sales-Pipeline Zeit braucht Was ist eine Sales-Pipeline Die Pipeline in Zahlen Warum der Hochlauf Zeit braucht 5 Fang an, bevor Du das Geld brauchst",
   "slides": [
     {
       "id": "top",
@@ -16,6 +16,18 @@
     {
       "id": "why-building-an-effective-sales-pipeline-takes-time",
       "text": "Warum eine wirksame Sales-Pipeline Zeit braucht"
+    },
+    {
+      "id": "why-building-an-effective-sales-pipeline-takes-time--what-is-a-sales-pipeline",
+      "text": "Ein Board, drei Lesarten Was ist eine Sales-Pipeline Die Spalten sind Dein Funnel, der Schwund zwischen ihnen ist Deine Conversion-Rate, und der Weg hinüber ist Dein Verkaufszyklus. Conversion-Rate 3 : 1 Wie viele Leads zu einer Opportunity werden: zeigt Dir Dein Angebot Sales-Funnel die Stufen, und wie viele in jeder stehen: zeigt Dir Dein Volumen Lead 6 Bäckerei Kraus Zahnarztpraxis Novak Hofmann Logistik Brightline Studio Okafor & Co Lindqvist Werkzeuge Opportunity 2 Bäckerei Kraus Demo gebucht Zahnarztpraxis Novak Angebot verschickt Deal 1 Zahnarztpraxis Novak 12.000 € unterschrieben, Rechnung in 30 Tagen Verkaufszyklus · vom ersten Kontakt bis zum Geld: zeigt Dir Deine Effizienz"
+    },
+    {
+      "id": "why-building-an-effective-sales-pipeline-takes-time--pipeline-by-the-numbers",
+      "text": "Zähl die Zettel Die Pipeline in Zahlen Hast Du 27 Namen? So viele braucht ein Deal in diesem Beispiel, 9,5 Monate bevor das Geld kommt. 27 : 1 Gesamt-Conversion: 27 Leads für 1 Deal Lead · 27 2 Wochen Kraus Novak Hahn Okafor Lind Meyer Santos Petrov Weber Dubois Haas Larsen Moretti Fischer Ito Becker Nowak Schulz Rossi Keller Varga Bauer Jansen Wolf Costa Sato Ahmed 3:1 Opportunity · 9 6 Monate Kraus Demo Novak Angebot Weber Preis Haas Demo Fischer Recht Nowak Angebot Keller Demo Bauer Preis Sato Demo 9:1 Deal · 1 3 Monate Novak 12.000 € unterschrieben 8 weitere reden noch oder sind verloren Verkaufszyklus: 9,5 Monate vom ersten Lead bis zum Geld 2 Wo. Opportunity · 6 Monate Deal · 3 Monate → Geld"
+    },
+    {
+      "id": "why-building-an-effective-sales-pipeline-takes-time--why-it-takes-time-to-ramp-up",
+      "text": "Dein Board am ersten Tag Warum der Hochlauf Zeit braucht Noch ist nichts geschrieben: kein Material, nur Fragen zum Markt, und die zwei Zahlen, mit denen Du planst, sind leer. 1 · Vorbereitung Vorher Sales-Deck · Preise · Angebot · Geschäftsmodell Währenddessen Demo · Meeting-Folien · Angebot Deal Vertrag · Compliance · Recht gestrichelt: noch nicht geschrieben 2 · Unbekannter Markt Wer ist wirklich Dein Kunde? Was ist er bereit zu zahlen? Welches Problem muss wirklich gelöst werden? beantworten nur echte Gespräche 3 · Unbekannte Kennzahlen Conversion-Rate ? : 1 Verkaufszyklus ? Monate Beide brauchst Du, um von Deinem Cash aus rückwärts zu planen. Tag eins Jede Spalte schrumpft nur durch Tun. Mit wie vielen dieser drei hast Du angefangen?"
     },
     { "id": "start-before-you-need-the-money", "text": "Fang an, bevor Du das Geld brauchst" }
   ],
@@ -39,6 +51,18 @@
     {
       "id": "why-building-an-effective-sales-pipeline-takes-time",
       "text": "Warum eine wirksame Sales-Pipeline Zeit braucht Keine Sprechernotizen für diese Folie."
+    },
+    {
+      "id": "why-building-an-effective-sales-pipeline-takes-time--what-is-a-sales-pipeline",
+      "text": "Was ist eine Sales-Pipeline Stufenraten lassen sich nicht übertragen Die Rate einer Stufe hängt davon ab, wo ein Anbieter ihren Anfang und ihr Ende zieht. Raten verschiedener Unternehmen sind daher Stufe für Stufe wahrscheinlich nicht vergleichbar; schon in einem einzigen Datensatz liegen zwei Stufen bei 68 und 19 Prozent. Das ist eine Schlussfolgerung 1 . Quellen (1) Ebsta und Pavilion, GTM Benchmarks Report ( öffnet in neuem Tab ) benchmarks.ebsta.com Die Länge des Zyklus trifft den Cashflow Ein Unit-Economics-Modell lässt den Verkaufszyklus und die Einarbeitungszeit eines Vertrieblers außen vor; ihre Wirkung auf den Cashflow muss man getrennt modellieren 1 . Quellen (1) Mark Roberge, The Science of Scaling ( öffnet in neuem Tab ) f.hubspotusercontent10.net"
+    },
+    {
+      "id": "why-building-an-effective-sales-pipeline-takes-time--pipeline-by-the-numbers",
+      "text": "Die Pipeline in Zahlen Eine Abschlussquote zum Vergleich In einem Datensatz von 655.000 Opportunities aus 387 Unternehmen lag die Abschlussquote bei Neukunden bei 19 Prozent (rund 5,3 Opportunities pro Abschluss), der Verkaufszyklus bei 91 Tagen, mit 8 Beteiligten pro Deal; beim Ausbau bestehender Kunden waren es 45 Prozent, 52 Tage und 5 Beteiligte. Es ist die Studie eines Anbieters über die CRM-Daten seiner eigenen Kunden 1 . Quellen (1) Ebsta und Pavilion, GTM Benchmarks Report ( öffnet in neuem Tab ) benchmarks.ebsta.com Der größte Verlust ist keine Entscheidung Eine Auswertung von mehr als 2,5 Millionen aufgezeichneten Verkaufsgesprächen ergab: 40 bis 60 Prozent der Deals gehen an Käufer verloren, die kaufen wollen, aber nie handeln 1 . Quellen (1) Dixon und McKenna, Stop Losing Sales to Customer Indecision (Harvard Business Review) ( öffnet in neuem Tab ) hbr.org Jeder hat ein Veto Selten findet ein Verkäufer die eine Person, die einen Deal allein freigeben kann; die Entscheidung liegt bei einer Gruppe, deren Mitglieder verschiedene Rollen haben und alle ein Vetorecht 1 . Quellen (1) Schmidt, Adamson und Bird, Making the Consensus Sale (Harvard Business Review) ( öffnet in neuem Tab ) hbr.org Einkaufsgruppen sind sich uneinig Eine Gartner-Umfrage unter 632 B2B-Käufern beschreibt Einkaufsgruppen von fünf bis 16 Personen; in 74 Prozent der Teams gab es ungesunde Konflikte, und Gruppen, die sich einig wurden, berichteten 2,5-mal so oft von einem hochwertigen Deal 1 . Quellen (1) Gartner, Gartner Sales Survey Finds 74% of B2B Buyer Teams Demonstrate \"Unhealthy Conflict\" During The Decision Process ( öffnet in neuem Tab ) gartner.com"
+    },
+    {
+      "id": "why-building-an-effective-sales-pipeline-takes-time--why-it-takes-time-to-ramp-up",
+      "text": "Warum der Hochlauf Zeit braucht Startups suchen, sie führen nicht aus Etablierte Unternehmen führen ein Geschäftsmodell aus; ein Startup ist eine vorübergehende Organisation, die ein wiederholbares und skalierbares Geschäftsmodell erst sucht 1 . Quellen (1) Steve Blank, The Customer Development Manifesto ( öffnet in neuem Tab ) steveblank.com Blind verkaufen In einem Fall deckten frühe Aufträge von Branchenfreunden und Kontakten aus dem Board die ersten Monate des Umsatzplans, zeigten aber nicht, warum Kunden kaufen würden, weil niemand Customer Discovery betrieben hatte 1 . Quellen (1) Steve Blank, It Must Be A Marketing Problem ( öffnet in neuem Tab ) steveblank.com Erst lernen, dann festschreiben Vor dem Product-Market-Fit setzt Du auf persönliche Netzwerke und Kundenempfehlungen: Sie skalieren nicht, bieten aber die besten Gelegenheiten zum Lernen. Erst nach diesem Lernen schreibst Du das Playbook fest und belegst die Unit Economics, bevor Du offensiv Vertriebler einstellst 1 . Quellen (1) Mark Roberge, The Science of Scaling ( öffnet in neuem Tab ) f.hubspotusercontent10.net Kennzahlen hinken einen Zyklus hinterher Die Conversion für frische Leads sieht schlechter aus als ihr langfristiger Wert, weil diese Leads noch keinen vollen Zyklus durchlaufen haben; ältere Ergebnisse sind die bessere Schätzung 1 . Quellen (1) Mark Roberge, The Science of Scaling ( öffnet in neuem Tab ) f.hubspotusercontent10.net"
     },
     {
       "id": "start-before-you-need-the-money",
@@ -65,6 +89,18 @@
     {
       "id": "why-building-an-effective-sales-pipeline-takes-time",
       "text": "Warum eine wirksame Sales-Pipeline Zeit braucht 0:00 – 0:14 Der naheliegende Einwand Der naheliegende Einwand: Ich fange im Januar an zu verkaufen, und der Umsatz aus dem April landet schon im März? So funktioniert das nicht, Vertrieb ist kein Schalter. 0:14 – 0:24 Die These Eine Pipeline wird aufgebaut, gemessen und justiert, und das dauert Monate. Drei Begriffe beschreiben sie: Funnel, Conversion-Rate und Verkaufszyklus."
+    },
+    {
+      "id": "why-building-an-effective-sales-pipeline-takes-time--what-is-a-sales-pipeline",
+      "text": "Was ist eine Sales-Pipeline 0:00 – 0:11 Funnel ist Volumen Der Funnel benennt jede Stufe Deines Verkaufsprozesses. Wie viele in jede Stufe hineinkommen, zeigt Dir, wie viel Volumen Du durchbringen kannst. 0:11 – 0:29 Conversion ist das Angebot Die Conversion-Rate sagt, wie viele Aktionen in einer Stufe zu einem Erfolg in der nächsten werden. Eine niedrige Rate sagt Dir vielleicht, dass Dein Angebot noch nicht attraktiv genug ist, und das willst Du früh wissen. 0:29 – 0:48 Zyklus ist Effizienz Der Zyklus ist die Zeit vom Anfang bis zum Ende, bis zum Deal oder bis zum Geld. Er ist Deine Effizienz, und zusammen mit der Conversion hast Du zwei Zahlen, die Du ab Deinem ersten Deal messen solltest."
+    },
+    {
+      "id": "why-building-an-effective-sales-pipeline-takes-time--pipeline-by-the-numbers",
+      "text": "Die Pipeline in Zahlen 0:00 – 0:13 Lies das Bild Lies das Bild. Von Lead zu Opportunity ist es drei zu eins, von Opportunity zu Deal neun zu eins, zusammen braucht ein Deal also 27 Leads. 0:13 – 0:28 Lies die Uhr Jetzt lies die Uhr. Zwei Wochen, sechs Monate, drei Monate, das macht 9,5 Monate vom ersten Lead bis zum Geld. Denk einen Schritt weiter, und zehn Deals brauchen 270 Leads. 0:28 – 0:42 Rückwärts rechnen Also rechne rückwärts. Wenn Du in Monat X einen Deal willst, zähl 9,5 Monate zurück, und bis dahin brauchst Du 27 Namen im Funnel. Hast Du 27 Namen? 0:42 – 0:55 Deine Zahlen, nicht meine Eins will ich klar sagen: Das ist mein durchgerechnetes Beispiel, kein Gesetz. Deine Zahlen werden kürzer oder länger sein, und genau deshalb misst Du Deine eigenen."
+    },
+    {
+      "id": "why-building-an-effective-sales-pipeline-takes-time--why-it-takes-time-to-ramp-up",
+      "text": "Warum der Hochlauf Zeit braucht 0:00 – 0:18 Vorbereitung Die erste Box ist die Vorbereitung. Vorher, währenddessen und beim Deal brauchst Du ein Deck und Preise, eine Demo und ein Angebot, einen Vertrag und die rechtliche Seite. Nichts davon gibt es am ersten Tag. 0:18 – 0:31 Unbekannter Markt Die zweite ist ein unbekannter Markt. Wer ist Dein Kunde, was zahlt er, welches Problem tut wirklich weh. Das beantworten nur echte Gespräche, Recherche am Schreibtisch nicht. 0:31 – 0:48 Unbekannte Kennzahlen Die dritte sind unbekannte Kennzahlen. Du hast noch keine Conversion-Rate und keine Zykluslänge, und Du brauchst beide, um von Deinem Cash aus rückwärts zu planen. Wie viele Monate das dauert, erfinde ich Dir nicht. 0:48 – 1:02 Also fang jetzt an Also fang jetzt an, denn jede Box schrumpft nur durch Tun. Wie viele Monate hast Du noch, und mit wie vielen dieser drei Boxen hast Du angefangen?"
     },
     {
       "id": "start-before-you-need-the-money",
