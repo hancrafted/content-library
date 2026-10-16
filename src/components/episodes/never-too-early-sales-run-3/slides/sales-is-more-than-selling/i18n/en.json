@@ -1,0 +1,137 @@
+{
+  "kicker": "Three payouts before revenue",
+  "title": "Sales is more than selling",
+  "lead": "Selling early pays out three times, and all three arrive <em>before the revenue does</em>.",
+  "caption": "Survey of 885 institutional venture capitalists: Gompers, Gornall, Kaplan and Strebulaev, How Do Venture Capitalists Make Decisions?",
+  "equationLabel": "Gain market insight plus gain internal insights equals increase trust.",
+  "brace": "What you learn",
+  "marginNote": "The \"=\" is a claim, not a proof: a first result shows your team can sell.",
+  "stamp": "Before revenue",
+  "notes": {
+    "market": {
+      "title": "Gain market insight",
+      "body": "Every customer talk is research you did not pay for.",
+      "ask": "When did this last happen to you?",
+      "answer": "Last month. We lost two days on it.",
+      "points": {
+        "time": "Where to spend your time",
+        "network": "A network"
+      },
+      "dropped": "Hypothesis 2"
+    },
+    "internal": {
+      "title": "Gain internal insights",
+      "body": "How well do you sell, and could anyone besides you repeat it?",
+      "path": {
+        "you": "You",
+        "repeat": "repeat it",
+        "hire": "first sales hire",
+        "team": "a team"
+      }
+    },
+    "trust": {
+      "title": "Increase trust",
+      "body": "Investors and reluctant customers trust what someone else has already bought.",
+      "points": {
+        "investment": "Attracting investment",
+        "customers": "Convincing reluctant customers"
+      },
+      "bars": {
+        "heading": "What 885 VCs weigh most",
+        "rows": {
+          "team": "Team",
+          "model": "Business model",
+          "product": "Product",
+          "market": "Market"
+        }
+      }
+    },
+    "your-starting-model-is-wrong": {
+      "header": "Your starting model is wrong",
+      "description": "A founder's initial model of users is always inaccurate, even when the founder is one of them, and direct contact with the earliest users gives the best feedback the company will get.[1]",
+      "sources": {
+        "graham-do-things-that-dont-scale": {
+          "title": "Graham, Do Things that Don't Scale"
+        }
+      }
+    },
+    "ask-about-the-last-time": {
+      "header": "Ask about the last time",
+      "description": "What yields insight is specifics: ask about problems the user already faced, not hypotheticals, and treat talking to customers as part of the CEO's job.[1] The sources are interviews and users, not sales calls; that a sales conversation yields the same facts is an inference.",
+      "sources": {
+        "yc-how-to-talk-to-users": {
+          "title": "Y Combinator (Migicovsky), Startup School Week 1 Recap: How to Talk to Users"
+        }
+      }
+    },
+    "a-signal-must-be-costly-to-fake": {
+      "header": "A signal must be costly to fake",
+      "description": "When one side knows more than the other, an action that is cheaper for a strong type than a weak one carries information, because the cost carries it, not the content.[1]",
+      "sources": {
+        "spence-job-market-signaling": {
+          "title": "Spence, Job Market Signaling"
+        }
+      }
+    },
+    "investors-read-the-team": {
+      "header": "Investors read the team",
+      "description": "In a survey of 885 institutional venture capitalists the management team was the most-cited factor (95%), ahead of business model (83%), product (74%) and market (68%).[1]",
+      "sources": {
+        "gompers-how-vcs-make-decisions": {
+          "title": "Gompers, Gornall, Kaplan and Strebulaev, How Do Venture Capitalists Make Decisions?"
+        }
+      }
+    },
+    "no-study-measures-lois-or-pipelines": {
+      "header": "No study measures LOIs or pipelines",
+      "description": "Carrying signaling theory over to early sales results is an inference, and a non-binding letter of intent is cheap to give, so it separates strong from weak firms poorly; the more binding the commitment, the more trust it plausibly earns.[1]",
+      "sources": {
+        "spence-job-market-signaling": {
+          "title": "Spence, Job Market Signaling"
+        }
+      }
+    },
+    "premature-scaling-burns-cash": {
+      "header": "Premature scaling burns cash",
+      "description": "Blank calls premature scaling of sales and marketing the leading cause of cash loss in a startup.[1]",
+      "sources": {
+        "blank-it-must-be-a-marketing-problem": {
+          "title": "Blank, It Must Be A Marketing Problem"
+        }
+      }
+    },
+    "friends-orders-can-mislead": {
+      "header": "Friends' orders can mislead",
+      "description": "Early orders from board members or friends are good for morale and cash but may not show what the business model is.[1]",
+      "sources": {
+        "blank-it-must-be-a-marketing-problem": {
+          "title": "Blank, It Must Be A Marketing Problem"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "every-talk-is-research": {
+        "title": "Every talk is research",
+        "keywords": "",
+        "script": "Every customer conversation is market research you did not have to pay for. It tells you where to spend your time and which hypothesis to drop. This is my reading of selling as a conversation, not a measured result."
+      },
+      "know-how-well-you-sell": {
+        "title": "Know how well you sell",
+        "keywords": "",
+        "script": "The second payout stays inside your company. You learn how well you sell, and whether anyone besides you could repeat it, because a repeatable process is what lets you hire the first salesperson."
+      },
+      "trust-is-the-sum": {
+        "title": "Trust is the sum",
+        "keywords": "",
+        "script": "The third is trust. Investors and reluctant customers trust what someone else has already bought. To be straight about it, that is a claim and not a proof: a first result shows that your team can sell, and that is why it counts."
+      },
+      "verdict": {
+        "title": "Verdict",
+        "keywords": "",
+        "script": "Insight and process both end in trust, so look at the three boxes and ask yourself which one your next investor would ask about first."
+      }
+    }
+  }
+}
