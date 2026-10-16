@@ -4,90 +4,359 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Spec · The context window is a budget</title>
+    <!--
+      The Spec's page frame, copied verbatim into every spec/spec.html by write-spec up to the meta block, with only
+      the <title> set to "Spec · <Episode title>". The body it lays out is described in references/write-spec.md step 3.
+    -->
     <style>
       /*
-       * Declared before design.css links in, so the fallback layer ranks below Tailwind's: opened
-       * directly, without the compiled tokens, the page and its mocks still read in system colours.
+       * The Spec's page frame. design.css (compiled from the site's globals.css by `npm run episode:spec`) supplies
+       * the tokens and every utility the mocks use; this block only lays out the review page around them. The
+       * fallback layer ranks below Tailwind, so the page still reads in system colours when opened without it.
        */
       @layer fallback;
 
+      :root {
+        color-scheme: light;
+      }
       body {
         margin: 0;
-        font-family: system-ui, sans-serif;
-        line-height: 1.5;
-        color: CanvasText;
-        background: Canvas;
+        font-family: var(--font-sans, system-ui, sans-serif);
+        line-height: 1.55;
+        color: var(--foreground, CanvasText);
+        background: color-mix(in oklch, var(--muted, Canvas) 55%, var(--background, Canvas));
       }
-      .spec-page {
-        max-width: 72rem;
+      code {
+        font-family: var(--font-mono, ui-monospace, monospace);
+        font-size: 0.85em;
+      }
+
+      /* Layout: a sticky outline beside one wide column. */
+      .spec-shell {
+        display: grid;
+        grid-template-columns: 15rem minmax(0, 1fr);
+        gap: 2.5rem;
+        max-width: 96rem;
         margin: 0 auto;
-        padding: 2rem 1.5rem 6rem;
+        padding: 0 2rem 8rem;
       }
-      .spec-page h1 {
-        font-size: 2rem;
-        margin: 0 0 0.25rem;
+      .spec-outline {
+        position: sticky;
+        top: 0;
+        align-self: start;
+        max-height: 100vh;
+        overflow-y: auto;
+        padding: 2rem 0;
+        font-size: 0.8125rem;
       }
-      .spec-page h2 {
-        font-size: 1.5rem;
-        margin: 3rem 0 0.75rem;
-        border-bottom: 1px solid GrayText;
+      .spec-outline ol {
+        list-style: none;
+        margin: 0;
+        padding: 0;
       }
-      .spec-page h3 {
-        font-size: 1.25rem;
-        margin: 2.5rem 0 0.5rem;
+      .spec-outline > ol > li {
+        margin-bottom: 1rem;
       }
-      .spec-page h4 {
-        font-size: 0.875rem;
+      .spec-outline .spec-outline-section {
+        display: block;
+        font-weight: 600;
+        color: var(--muted-foreground, GrayText);
         text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: GrayText;
-        margin: 1rem 0 0.25rem;
+        letter-spacing: 0.06em;
+        font-size: 0.6875rem;
+        margin-bottom: 0.25rem;
       }
-      .spec-words {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1.5rem;
+      .spec-outline a {
+        display: flex;
+        gap: 0.5rem;
+        align-items: baseline;
+        padding: 0.2rem 0.5rem;
+        border-radius: 0.375rem;
+        color: inherit;
+        text-decoration: none;
       }
-      .spec-options {
+      .spec-outline a:hover {
+        background: var(--card, Canvas);
+      }
+      .spec-outline a::before {
+        content: '';
+        flex: none;
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 999px;
+        border: 1.5px solid var(--muted-foreground, GrayText);
+        transform: translateY(-0.05rem);
+      }
+      .spec-outline a[data-state='picked']::before {
+        background: var(--success, Highlight);
+        border-color: var(--success, Highlight);
+      }
+      .spec-outline a[data-state='open']::before {
+        border-color: var(--primary, Highlight);
+      }
+
+      .spec-page {
+        min-width: 0;
+        padding-top: 2rem;
+      }
+      .spec-masthead {
+        padding: 3rem 0 2rem;
+      }
+      .spec-kicker {
+        font-family: var(--font-mono, monospace);
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--primary, Highlight);
+        margin: 0 0 0.75rem;
+      }
+      .spec-masthead h1 {
+        font-size: var(--size-hero, 3rem);
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+        margin: 0 0 1rem;
+      }
+      .spec-masthead p {
+        max-width: 48rem;
+        color: var(--muted-foreground, GrayText);
+        font-size: 1.125rem;
+        margin: 0;
+      }
+
+      /* Cards: Style, Visual language, Episode page and each Slide's words. */
+      .spec-card {
+        background: var(--card, Canvas);
+        border: 1px solid var(--border, GrayText);
+        border-radius: 1rem;
+        padding: 1.5rem 1.75rem;
+      }
+      .spec-intro {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-        gap: 1.5rem;
-        margin-top: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+        gap: 1.25rem;
+        margin-bottom: 4rem;
+      }
+      .spec-intro h2,
+      .spec-card h4 {
+        font-family: var(--font-mono, monospace);
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--muted-foreground, GrayText);
+        margin: 0 0 0.75rem;
+        border: 0;
+      }
+      .spec-intro ul {
+        margin: 0;
+        padding-left: 1.1rem;
+      }
+      .spec-intro li + li {
+        margin-top: 0.4rem;
+      }
+
+      /* A Section opens with a band; its section slide's Voice script sits in it. */
+      [data-spec='section'] {
+        margin-top: 5rem;
+      }
+      .spec-section-band {
+        border-radius: 1.25rem;
+        padding: 2.5rem 2.75rem;
+        background: var(--foreground, CanvasText);
+        color: var(--background, Canvas);
+      }
+      .spec-section-band h2 {
+        font-size: var(--size-heading, 2.5rem);
+        line-height: 1.1;
+        letter-spacing: -0.015em;
+        margin: 0 0 0.25rem;
+        border: 0;
+      }
+      .spec-section-band .spec-kicker {
+        color: inherit;
+        opacity: 0.6;
+      }
+      .spec-section-band [data-spec='voice-script'] {
+        max-width: 52rem;
+        margin-top: 1.5rem;
+        opacity: 0.85;
+      }
+
+      /* A Slide: header, the Option stage, then its words. */
+      [data-spec='slide'] {
+        margin-top: 4rem;
+        scroll-margin-top: 1rem;
+      }
+      .spec-slide-head {
+        display: flex;
+        align-items: baseline;
+        gap: 1rem;
+        margin-bottom: 1.25rem;
+      }
+      .spec-slide-head h3 {
+        font-size: var(--size-subheading, 2rem);
+        line-height: 1.15;
+        letter-spacing: -0.01em;
+        margin: 0;
+      }
+      .spec-slide-head .spec-number {
+        font-family: var(--font-mono, monospace);
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--primary, Highlight);
+        border: 1.5px solid currentColor;
+        border-radius: 999px;
+        padding: 0.1rem 0.6rem;
+        transform: translateY(-0.3rem);
+      }
+
+      /* Option tabs: built by the script below from the figures; without it the Options stack. */
+      .spec-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+      }
+      .spec-tabs button {
+        font: inherit;
+        font-size: 0.875rem;
+        font-weight: 600;
+        display: inline-flex;
+        gap: 0.5rem;
+        align-items: center;
+        padding: 0.45rem 0.9rem;
+        border-radius: 999px;
+        border: 1px solid var(--border, GrayText);
+        background: var(--card, Canvas);
+        color: inherit;
+        cursor: pointer;
+      }
+      .spec-tabs button[aria-selected='true'] {
+        background: var(--foreground, CanvasText);
+        color: var(--background, Canvas);
+        border-color: transparent;
+      }
+      .spec-tabs .spec-badge {
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        padding: 0.05rem 0.45rem;
+        border-radius: 999px;
+        background: var(--primary, Highlight);
+        color: var(--primary-foreground, HighlightText);
+      }
+      .spec-tabs .spec-picked {
+        color: var(--success, Highlight);
+      }
+      .spec-options.is-tabbed > [data-spec='option'] {
+        display: none;
+      }
+      .spec-options.is-tabbed > [data-spec='option'][data-active] {
+        display: block;
       }
       [data-spec='option'] {
-        margin: 0;
-        padding: 0.75rem;
-        border: 1px solid GrayText;
-        border-radius: 0.5rem;
+        margin: 0 0 2rem;
       }
-      [data-spec='option'][data-recommended] {
-        outline: 2px solid Highlight;
+      /* The mock is a slide at desktop width: full column, at least 16:9, never clipped. */
+      [data-spec='mock'] {
+        position: relative;
+        min-height: min(40rem, 56.25vw);
+        border-radius: 1rem;
+        border: 1px solid var(--border, GrayText);
+        box-shadow:
+          0 1px 2px color-mix(in oklch, var(--foreground, CanvasText) 6%, transparent),
+          0 24px 48px -24px color-mix(in oklch, var(--foreground, CanvasText) 22%, transparent);
+        background: var(--background, Canvas);
+        overflow: visible;
       }
       [data-spec='option'] figcaption {
-        font-size: 0.875rem;
-        margin-top: 0.5rem;
+        font-size: 1rem;
+        max-width: 60rem;
+        margin: 1rem 0 0;
       }
-      [data-spec='mock'] {
-        aspect-ratio: 16 / 9;
-        overflow: hidden;
-        border-radius: 0.25rem;
+      .spec-build {
+        margin-top: 0.75rem;
+        max-width: 60rem;
+      }
+      .spec-build > summary {
+        cursor: pointer;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: var(--muted-foreground, GrayText);
       }
       [data-spec='build-notes'] {
         font-size: 0.8125rem;
-        color: GrayText;
+        color: var(--muted-foreground, GrayText);
         margin-top: 0.5rem;
       }
       .spec-pick {
-        display: block;
-        margin-top: 0.5rem;
+        display: inline-flex;
+        gap: 0.5rem;
+        align-items: center;
+        margin-top: 1rem;
+        padding: 0.55rem 1rem;
+        border-radius: 0.6rem;
+        border: 1.5px solid var(--primary, Highlight);
+        color: var(--primary, Highlight);
         font-weight: 600;
+        cursor: pointer;
+      }
+      .spec-pick:has(input:checked) {
+        background: var(--primary, Highlight);
+        color: var(--primary-foreground, HighlightText);
+      }
+
+      .spec-words {
+        display: grid;
+        grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+        gap: 1.25rem;
+        margin-top: 1.5rem;
+      }
+      .spec-words ol {
+        margin: 0;
+        padding-left: 1.25rem;
+      }
+      [data-spec='voice-script'] > li {
+        margin-bottom: 0.75rem;
+        font-size: 1.0625rem;
+        line-height: 1.6;
+      }
+      [data-spec='speaker-notes'] > li {
+        margin-bottom: 0.9rem;
+        font-size: 0.9375rem;
+      }
+      [data-spec='speaker-notes'] ul {
+        list-style: none;
+        padding: 0;
+        margin: 0.3rem 0 0;
+        font-size: 0.8125rem;
+        color: var(--muted-foreground, GrayText);
+      }
+      [data-spec='speaker-notes'] a {
+        color: inherit;
+        word-break: break-all;
+      }
+      .spec-visual-idea {
+        margin-top: 1.25rem;
+      }
+      .spec-visual-idea > summary {
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.875rem;
       }
       .spec-note {
         display: block;
+        box-sizing: border-box;
         width: 100%;
-        min-height: 4rem;
-        margin-top: 1rem;
+        min-height: 4.5rem;
+        margin-top: 1.25rem;
+        padding: 0.75rem 1rem;
         font: inherit;
+        border-radius: 0.75rem;
+        border: 1px dashed var(--border, GrayText);
+        background: var(--card, Canvas);
+        color: inherit;
       }
       .spec-review {
         position: sticky;
@@ -96,126 +365,86 @@
         gap: 1rem;
         align-items: center;
         justify-content: space-between;
-        max-width: 72rem;
-        margin: 0 auto;
-        padding: 0.75rem 1.5rem;
-        background: Canvas;
-        border-top: 1px solid GrayText;
+        padding: 0.9rem 2rem;
+        background: color-mix(in oklch, var(--card, Canvas) 92%, transparent);
+        backdrop-filter: blur(8px);
+        border-top: 1px solid var(--border, GrayText);
+      }
+
+      @media (max-width: 70rem) {
+        .spec-shell {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .spec-outline {
+          display: none;
+        }
+        .spec-words {
+          grid-template-columns: minmax(0, 1fr);
+        }
       }
 
       @layer fallback {
         [data-spec='mock'] {
-          background: color-mix(in srgb, CanvasText 4%, Canvas);
-          border: 1px solid GrayText;
-        }
-        .flex {
-          display: flex;
-        }
-        .flex-col {
-          flex-direction: column;
-        }
-        .flex-1 {
-          flex: 1 1 0%;
-        }
-        .grid {
-          display: grid;
-        }
-        .grid-cols-2 {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-        .grid-cols-3 {
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-        }
-        .items-center {
-          align-items: center;
-        }
-        .items-end {
-          align-items: flex-end;
-        }
-        .justify-between {
-          justify-content: space-between;
-        }
-        .gap-1 {
-          gap: 0.25rem;
-        }
-        .gap-2 {
-          gap: 0.5rem;
-        }
-        .gap-4 {
-          gap: 1rem;
-        }
-        .p-2 {
-          padding: 0.5rem;
-        }
-        .p-4 {
-          padding: 1rem;
-        }
-        .h-full {
-          height: 100%;
-        }
-        .h-2 {
-          height: 0.5rem;
-        }
-        .h-8 {
-          height: 2rem;
-        }
-        .h-16 {
-          height: 4rem;
-        }
-        .w-full {
-          width: 100%;
-        }
-        .w-1\/3 {
-          width: 33.333%;
-        }
-        .w-1\/2 {
-          width: 50%;
-        }
-        .w-3\/4 {
-          width: 75%;
-        }
-        .rounded {
-          border-radius: 0.25rem;
-        }
-        .border {
-          border: 1px solid GrayText;
-        }
-        .bg-card,
-        .bg-background {
           background: Canvas;
-        }
-        .bg-muted {
-          background: color-mix(in srgb, CanvasText 15%, Canvas);
-        }
-        .bg-primary {
-          background: CanvasText;
-        }
-        .bg-accent {
-          background: Highlight;
-        }
-        .text-muted-foreground {
-          color: GrayText;
-        }
-        .text-heading {
-          font-size: 1.25rem;
-        }
-        .text-body {
-          font-size: 0.875rem;
-        }
-        .text-caption {
-          font-size: 0.75rem;
-        }
-        .font-semibold {
-          font-weight: 600;
-        }
-        .opacity-40 {
-          opacity: 0.4;
         }
       }
     </style>
     <link rel="stylesheet" href="design.css" />
-    <script type="application/json" id="spec-meta">
-      {
+    <script>
+      // Option tabs and the outline's pick state. Runs after the page parses; the review form's own script is
+      // the inlined spec-review asset. Without this script every Option shows, stacked.
+      addEventListener('DOMContentLoaded', () => {
+        const outline = document.querySelector('.spec-outline');
+        const refresh = () => {
+          for (const slide of document.querySelectorAll('[data-spec="slide"]')) {
+            const picks = slide.querySelectorAll('.spec-pick input:checked').length;
+            const link = outline?.querySelector(`a[href="#${slide.id}"]`);
+            if (link) link.dataset.state = picks === 1 ? 'picked' : 'open';
+            for (const button of slide.querySelectorAll('.spec-tabs button')) {
+              const box = slide.querySelector(`.spec-pick input[value="${button.dataset.option}"]`);
+              button.querySelector('.spec-picked').textContent = box?.checked ? '✓' : '';
+            }
+          }
+        };
+        for (const options of document.querySelectorAll('.spec-options')) {
+          const figures = [...options.querySelectorAll(':scope > [data-spec="option"]')];
+          const tabs = document.createElement('div');
+          tabs.className = 'spec-tabs';
+          tabs.setAttribute('role', 'tablist');
+          const show = (figure) => {
+            for (const other of figures) other.toggleAttribute('data-active', other === figure);
+            for (const button of tabs.children)
+              button.setAttribute('aria-selected', String(button.dataset.option === figure.dataset.option));
+          };
+          for (const figure of figures) {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.setAttribute('role', 'tab');
+            button.dataset.option = figure.dataset.option;
+            button.innerHTML = `Option ${figure.dataset.option}<span class="spec-picked"></span>`;
+            if (figure.hasAttribute('data-recommended')) {
+              const badge = document.createElement('span');
+              badge.className = 'spec-badge';
+              badge.textContent = 'Recommended';
+              button.append(badge);
+            }
+            button.addEventListener('click', () => show(figure));
+            tabs.append(button);
+          }
+          options.before(tabs);
+          options.classList.add('is-tabbed');
+          show(
+            figures.find((f) => f.querySelector('.spec-pick input:checked')) ??
+              figures.find((f) => f.hasAttribute('data-recommended')) ??
+              figures[0],
+          );
+        }
+        document.addEventListener('change', refresh);
+        refresh();
+      });
+    </script>
+<script type="application/json" id="spec-meta">
+{
         "type": "spec",
         "title": "The context window is a budget",
         "status": "draft",
@@ -226,38 +455,40 @@
     </script>
   </head>
   <body>
-    <main class="spec-page">
-      <header>
+    <div class="spec-shell">
+      <nav class="spec-outline" aria-label="Slides"><ol>
+        <li><span class="spec-outline-section">Why the agent forgets</span><ol>
+          <li><a href="#every-token-is-spent-attention">1 · Every token is spent attention</a></li>
+          <li><a href="#the-middle-goes-quiet-first">2 · The middle goes quiet first</a></li>
+        </ol></li>
+        <li><span class="spec-outline-section">Spend the budget on purpose</span><ol>
+          <li><a href="#start-fresh-when-the-task-changes">3 · Start fresh when the task changes</a></li>
+          <li><a href="#cut-what-you-paste">4 · Cut what you paste</a></li>
+        </ol></li>
+      </ol></nav>
+      <main class="spec-page">
+      <header class="spec-masthead">
+        <p class="spec-kicker">Spec · 4 Slides</p>
         <h1 id="context-window-budget">The context window is a budget</h1>
-        <p>
-          Spec for the Episode's four Slides: tick the Options you want, dictate a note per Slide, then save. The
-          outlined Option is recommended.
-        </p>
+        <p>Each Slide shows its Options as tabs: open each, pick one, and dictate a note where it should change. The Recommended tab is the designer's choice. Save at the bottom when done.</p>
       </header>
 
-      <section id="style">
+      <div class="spec-intro">
+      <section id="style" class="spec-card">
         <h2>Style</h2>
-        <p>
-          Editorial: developers read code-heavy Slides fast, and sober, self-explanatory ones keep their attention on
-          the one idea.
-        </p>
+        <p>Editorial: developers read code-heavy Slides fast, and sober, self-explanatory ones keep their attention on the one idea.</p>
       </section>
 
-      <section id="visual-language">
+      <section id="visual-language" class="spec-card">
         <h2>Visual language</h2>
         <p>
           The window is always a horizontal bar, filled left to right with message blocks. No motion: the bar's fill
           carries the point. The accent marks the instruction block wherever it sits.
         </p>
-        <textarea
-          class="spec-note"
-          form="spec-review"
-          name="note:visual-language"
-          placeholder="Note on the Visual language"
-        ></textarea>
+        <textarea class="spec-note" form="spec-review" name="note:visual-language" placeholder="Note on the Visual language"></textarea>
       </section>
 
-      <section id="episode-page">
+      <section id="episode-page" class="spec-card">
         <h2>Episode page</h2>
         <ul>
           <li>
@@ -278,100 +509,74 @@
           </li>
         </ul>
       </section>
+      </div>
 
       <section data-spec="section" id="why-the-agent-forgets">
+        <div class="spec-section-band">
+        <p class="spec-kicker">Section 1 · section slide, the kit's section layout, motion none</p>
         <h2>Why the agent forgets</h2>
-        <p>Section slide: the kit's section layout, motion none.</p>
-        <h4>Voice script</h4>
         <ol data-spec="voice-script">
-          <li>
-            <strong>Not a bug</strong> — Forgetting is not a bug in one agent. It is what a fixed budget does when you
-            keep spending.
-          </li>
+          <li><strong>Not a bug</strong> — Forgetting is not a bug in one agent. It is what a fixed budget does when you keep spending.</li>
         </ol>
+        </div>
 
         <article data-spec="slide" id="every-token-is-spent-attention" data-number="1">
-          <h3>1 · Every token is spent attention</h3>
-          <div class="spec-words">
-            <div>
-              <h4>Visual idea</h4>
-              <p data-spec="visual-idea">
-                A window drawn as a bar that fills with blocks, one per message, while the share left for the newest
-                answer shrinks.
-              </p>
-              <h4>Voice script</h4>
-              <ol data-spec="voice-script">
-                <li>
-                  <strong>Whole window, every turn</strong> — A model reads its whole window on every turn. Each line
-                  you add takes a share of the attention the next answer gets.
-                </li>
-                <li>
-                  <strong>Not seen, but how much</strong> — So the question is never whether the agent saw your
-                  instruction. It is how much attention was left for it.
-                </li>
-              </ol>
-            </div>
-            <div>
-              <h4>Speaker notes</h4>
-              <ol data-spec="speaker-notes">
-                <li>
-                  <strong>Attention sums to one</strong> — a softmax normalises each token's attention weights over the
-                  window, so every token added dilutes the share of the rest [1].
-                  <ul>
-                    <li data-source="1">
-                      [1] Attention Is All You Need —
-                      <a href="https://arxiv.org/abs/1706.03762">https://arxiv.org/abs/1706.03762</a>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <strong>The window has a size</strong> — a model's context window is a fixed maximum number of tokens
-                  it can reference at once [2].
-                  <ul>
-                    <li data-source="2">
-                      [2] Context windows —
-                      <a href="https://docs.claude.com/en/docs/build-with-claude/context-windows"
-                        >https://docs.claude.com/en/docs/build-with-claude/context-windows</a
-                      >
-                    </li>
-                    <li>target: the bar in the visual</li>
-                  </ul>
-                </li>
-              </ol>
-            </div>
-          </div>
+          <header class="spec-slide-head">
+            <span class="spec-number">1</span>
+            <h3>Every token is spent attention</h3>
+          </header>
           <div class="spec-options">
-            <figure data-spec="option" data-option="1a" data-recommended>
-              <div data-spec="mock" class="flex flex-col justify-between bg-card p-4">
-                <p class="text-heading font-semibold">Every token is spent attention</p>
-                <div class="flex gap-1 h-8">
-                  <div class="flex-1 bg-muted"></div>
-                  <div class="flex-1 bg-muted"></div>
-                  <div class="flex-1 bg-muted"></div>
-                  <div class="flex-1 bg-muted"></div>
-                  <div class="flex-1 bg-muted"></div>
-                  <div class="flex-1 bg-muted"></div>
-                  <div class="flex-1 bg-accent"></div>
-                  <div class="flex-1 border"></div>
+<figure data-spec="option" data-option="1a" data-recommended>
+              <div data-spec="mock" class="flex flex-col justify-between gap-10 bg-background p-12">
+                <div>
+                  <p class="text-caption font-semibold uppercase tracking-widest text-primary">Why the agent forgets</p>
+                  <h3 class="mt-3 text-heading font-semibold">Every token is spent attention</h3>
+                  <p class="mt-4 max-w-2xl text-body text-muted-foreground">
+                    The model reads the whole window on every turn. Each message takes a share; the newest answer gets
+                    what is left.
+                  </p>
                 </div>
-                <p class="text-caption text-muted-foreground">messages … newest</p>
+                <div class="flex flex-col gap-3">
+                  <div class="flex items-end justify-between text-caption text-muted-foreground">
+                    <span>Turn 1</span>
+                    <span class="font-semibold text-foreground">Context window · 200k tokens</span>
+                    <span>Turn 40</span>
+                  </div>
+                  <ol class="flex h-28 gap-1 rounded-xl border border-border bg-muted p-2" aria-label="Messages in the window">
+                    <li class="flex w-1/12 items-end rounded-md bg-primary p-2 text-caption font-semibold text-primary-foreground">Your instruction</li>
+                    <li class="w-1/12 rounded-md bg-card shadow-sm"></li>
+                    <li class="w-1/6 rounded-md bg-card shadow-sm"></li>
+                    <li class="w-1/12 rounded-md bg-card shadow-sm"></li>
+                    <li class="w-1/4 rounded-md bg-card shadow-sm"></li>
+                    <li class="w-1/12 rounded-md bg-card shadow-sm"></li>
+                    <li class="w-1/6 rounded-md bg-card shadow-sm"></li>
+                    <li class="flex w-1/12 items-end rounded-md border-2 border-dashed border-primary p-2 text-caption text-primary">Next answer</li>
+                  </ol>
+                  <svg viewBox="0 0 1200 120" class="h-24 w-full" aria-hidden="true">
+                    <path d="M0 20 C 300 40, 600 80, 1200 108" class="fill-none stroke-primary" stroke-width="4" />
+                    <circle cx="60" cy="22" r="8" class="fill-primary" />
+                    <circle cx="1140" cy="105" r="8" class="fill-background stroke-primary" stroke-width="4" />
+                  </svg>
+                  <div class="flex justify-between text-caption text-muted-foreground">
+                    <span>Share of attention left for the instruction</span>
+                    <span class="font-semibold text-primary">a sliver by turn 40</span>
+                  </div>
+                </div>
               </div>
               <figcaption>
                 <b>1a</b> One bar of message blocks, the newest in the accent: the fill alone tells the story. Build
                 cost: Scene.
               </figcaption>
-              <div data-spec="build-notes">
+              <details class="spec-build"><summary>Build notes</summary><div data-spec="build-notes">
                 Keeps <code>basic-page</code>, motion none. A Scene from <code>SlideFrame</code> and the kit's
                 <code>&lt;Title&gt;</code>; blocks in <code>bg-muted</code>, the newest in <code>bg-accent</code>, the
                 free share as a bordered block. i18n keys <code>title</code>, <code>messages</code>,
                 <code>newest</code>.
               </div>
-              <label class="spec-pick"
-                ><input type="checkbox" form="spec-review" name="pick:every-token-is-spent-attention" value="1a" />
-                Pick 1a</label
-              >
-            </figure>
-            <figure data-spec="option" data-option="1b">
+            </details>
+<label class="spec-pick"><input type="checkbox" form="spec-review" name="pick:every-token-is-spent-attention" value="1a" /> Pick 1a</label>
+</figure>
+<figure data-spec="option" data-option="1b">
               <div data-spec="mock" class="grid grid-cols-2 gap-4 bg-card p-4">
                 <div class="flex flex-col gap-2">
                   <p class="text-body font-semibold">Turn 1</p>
@@ -387,57 +592,57 @@
                 <b>1b</b> Before and after: the instruction's share of attention at turn 1 against turn 40, as two
                 stacks. Build cost: Master slide copy of <code>grid-2x2</code>.
               </figcaption>
-              <div data-spec="build-notes">
+              <details class="spec-build"><summary>Build notes</summary><div data-spec="build-notes">
                 Overrules <code>basic-page</code>: copies the <code>grid-2x2</code> Master slide down to two cells.
                 Tokens <code>bg-accent</code> and <code>bg-muted</code>; i18n keys <code>turnFirst</code>,
                 <code>turnLate</code>.
               </div>
-              <label class="spec-pick"
-                ><input type="checkbox" form="spec-review" name="pick:every-token-is-spent-attention" value="1b" />
-                Pick 1b</label
-              >
-            </figure>
+            </details>
+<label class="spec-pick"><input type="checkbox" form="spec-review" name="pick:every-token-is-spent-attention" value="1b" /> Pick 1b</label>
+</figure>
           </div>
-          <textarea
-            class="spec-note"
-            form="spec-review"
-            name="note:every-token-is-spent-attention"
-            placeholder="Note on Slide 1"
-          ></textarea>
-        </article>
-
-        <article data-spec="slide" id="the-middle-goes-quiet-first" data-number="2">
-          <h3>2 · The middle goes quiet first</h3>
           <div class="spec-words">
-            <div>
-              <h4>Visual idea</h4>
-              <p data-spec="visual-idea">Three columns: the start, the middle and the end of the window.</p>
+            <div class="spec-card">
               <h4>Voice script</h4>
               <ol data-spec="voice-script">
-                <li>
-                  <strong>Start and end, not the middle</strong> — Models recall the start and the end of a long window
-                  better than the middle. Your instruction from an hour ago now sits in the middle.
-                </li>
+                <li><strong>Whole window, every turn</strong> — A model reads its whole window on every turn. Each line you add takes a share of the attention the next answer gets.</li>
+                <li><strong>Not seen, but how much</strong> — So the question is never whether the agent saw your instruction. It is how much attention was left for it.</li>
               </ol>
+              <details class="spec-visual-idea">
+                <summary>Visual idea from the Dossier</summary>
+              <p class="text-caption"><code>master: basic-page · motion: none</code></p>
+              <p data-spec="visual-idea">A window drawn as a bar that fills with blocks, one per message, while the share left for the newest answer shrinks.</p>
+              </details>
             </div>
-            <div>
+            <div class="spec-card">
               <h4>Speaker notes</h4>
               <ol data-spec="speaker-notes">
                 <li>
-                  <strong>A longer window does not help</strong> — extended-context models show the same drop in the
-                  middle; size alone does not make it reliable [1].
+                  <strong>Attention sums to one</strong> — a softmax normalises each token's attention weights over the window, so every token added dilutes the share of the rest [1].
                   <ul>
-                    <li data-source="1">
-                      [1] Lost in the Middle —
-                      <a href="https://arxiv.org/abs/2307.03172">https://arxiv.org/abs/2307.03172</a>
-                    </li>
+                    <li data-source="1">[1] Attention Is All You Need — <a href="https://arxiv.org/abs/1706.03762">https://arxiv.org/abs/1706.03762</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <strong>The window has a size</strong> — a model's context window is a fixed maximum number of tokens it can reference at once [2].
+                  <ul>
+                    <li data-source="2">[2] Context windows — <a href="https://docs.claude.com/en/docs/build-with-claude/context-windows">https://docs.claude.com/en/docs/build-with-claude/context-windows</a></li>
+                    <li>target: the bar in the visual</li>
                   </ul>
                 </li>
               </ol>
             </div>
           </div>
+          <textarea class="spec-note" form="spec-review" name="note:every-token-is-spent-attention" placeholder="Note on Slide 1"></textarea>
+        </article>
+
+        <article data-spec="slide" id="the-middle-goes-quiet-first" data-number="2">
+          <header class="spec-slide-head">
+            <span class="spec-number">2</span>
+            <h3>The middle goes quiet first</h3>
+          </header>
           <div class="spec-options">
-            <figure data-spec="option" data-option="2a" data-recommended>
+<figure data-spec="option" data-option="2a" data-recommended>
               <div data-spec="mock" class="grid grid-cols-3 gap-4 bg-card p-4">
                 <div class="flex flex-col gap-2">
                   <p class="text-body font-semibold">Start</p>
@@ -456,17 +661,15 @@
                 <b>2a</b> The library's three columns as is, the middle one faded where the instruction sits. Build
                 cost: library entry.
               </figcaption>
-              <div data-spec="build-notes">
+              <details class="spec-build"><summary>Build notes</summary><div data-spec="build-notes">
                 The Slide library entry <code>three-column</code> used as is, motion none. The middle column in
                 <code>text-muted-foreground</code>; i18n keys <code>start</code>, <code>middle</code>,
                 <code>end</code>.
               </div>
-              <label class="spec-pick"
-                ><input type="checkbox" form="spec-review" name="pick:the-middle-goes-quiet-first" value="2a" /> Pick
-                2a</label
-              >
-            </figure>
-            <figure data-spec="option" data-option="2b">
+            </details>
+<label class="spec-pick"><input type="checkbox" form="spec-review" name="pick:the-middle-goes-quiet-first" value="2a" /> Pick 2a</label>
+</figure>
+<figure data-spec="option" data-option="2b">
               <div data-spec="mock" class="flex flex-col justify-between bg-card p-4">
                 <p class="text-heading font-semibold">The middle goes quiet first</p>
                 <div class="flex items-end gap-1 h-16">
@@ -482,69 +685,58 @@
                 <b>2b</b> A U-shaped bar chart of recall by position, the instruction's bar in the accent at the low
                 point. Build cost: Scene.
               </figcaption>
-              <div data-spec="build-notes">
+              <details class="spec-build"><summary>Build notes</summary><div data-spec="build-notes">
                 Overrules <code>three-column</code> for <code>basic-page</code>: a Scene with five bars from the cited
                 curve's shape, not its numbers. Tokens <code>bg-primary</code>, <code>bg-muted</code>,
                 <code>bg-accent</code>; i18n keys <code>title</code>, <code>axis</code>.
               </div>
-              <label class="spec-pick"
-                ><input type="checkbox" form="spec-review" name="pick:the-middle-goes-quiet-first" value="2b" /> Pick
-                2b</label
-              >
-            </figure>
+            </details>
+<label class="spec-pick"><input type="checkbox" form="spec-review" name="pick:the-middle-goes-quiet-first" value="2b" /> Pick 2b</label>
+</figure>
           </div>
-          <textarea
-            class="spec-note"
-            form="spec-review"
-            name="note:the-middle-goes-quiet-first"
-            placeholder="Note on Slide 2"
-          ></textarea>
-        </article>
-      </section>
-
-      <section data-spec="section" id="spend-the-budget-on-purpose">
-        <h2>Spend the budget on purpose</h2>
-        <p>Section slide: the kit's section layout, motion none.</p>
-        <h4>Voice script</h4>
-        <ol data-spec="voice-script">
-          <li>
-            <strong>Three cheap habits</strong> — Once the window is a budget, three habits follow, and each one is
-            cheap.
-          </li>
-        </ol>
-
-        <article data-spec="slide" id="start-fresh-when-the-task-changes" data-number="3">
-          <h3>3 · Start fresh when the task changes</h3>
           <div class="spec-words">
-            <div>
-              <h4>Visual idea</h4>
-              <p data-spec="visual-idea">An old window beside an empty one.</p>
+            <div class="spec-card">
               <h4>Voice script</h4>
               <ol data-spec="voice-script">
-                <li>
-                  <strong>Rent on the past</strong> — A new task in an old session pays rent on everything that came
-                  before. A fresh session spends the whole budget on the work in front of you.
-                </li>
+                <li><strong>Start and end, not the middle</strong> — Models recall the start and the end of a long window better than the middle. Your instruction from an hour ago now sits in the middle.</li>
               </ol>
+              <details class="spec-visual-idea">
+                <summary>Visual idea from the Dossier</summary>
+              <p class="text-caption"><code>master: three-column · motion: none</code></p>
+              </details>
             </div>
-            <div>
+            <div class="spec-card">
               <h4>Speaker notes</h4>
               <ol data-spec="speaker-notes">
                 <li>
-                  <strong>The start is weighted most</strong> — attention carries a built-in bias toward the start of
-                  the input, so a fresh session puts the new task where it counts most [1].
+                  <strong>A longer window does not help</strong> — extended-context models show the same drop in the middle; size alone does not make it reliable [1].
                   <ul>
-                    <li data-source="1">
-                      [1] Found in the Middle —
-                      <a href="https://arxiv.org/abs/2406.16008">https://arxiv.org/abs/2406.16008</a>
-                    </li>
+                    <li data-source="1">[1] Lost in the Middle — <a href="https://arxiv.org/abs/2307.03172">https://arxiv.org/abs/2307.03172</a></li>
                   </ul>
                 </li>
               </ol>
             </div>
           </div>
+          <textarea class="spec-note" form="spec-review" name="note:the-middle-goes-quiet-first" placeholder="Note on Slide 2"></textarea>
+        </article>
+      </section>
+
+      <section data-spec="section" id="spend-the-budget-on-purpose">
+        <div class="spec-section-band">
+        <p class="spec-kicker">Section 2 · section slide, the kit's section layout, motion none</p>
+        <h2>Spend the budget on purpose</h2>
+        <ol data-spec="voice-script">
+          <li><strong>Three cheap habits</strong> — Once the window is a budget, three habits follow, and each one is cheap.</li>
+        </ol>
+        </div>
+
+        <article data-spec="slide" id="start-fresh-when-the-task-changes" data-number="3">
+          <header class="spec-slide-head">
+            <span class="spec-number">3</span>
+            <h3>Start fresh when the task changes</h3>
+          </header>
           <div class="spec-options">
-            <figure data-spec="option" data-option="3a" data-recommended>
+<figure data-spec="option" data-option="3a" data-recommended>
               <div data-spec="mock" class="grid grid-cols-2 gap-4 items-center bg-card p-4">
                 <div class="flex flex-col gap-2">
                   <div class="flex gap-1 h-8">
@@ -567,16 +759,14 @@
                 <b>3a</b> Two bars side by side, the old one full and the fresh one nearly empty: the Visual language's
                 bar, twice. Build cost: Scene.
               </figcaption>
-              <div data-spec="build-notes">
+              <details class="spec-build"><summary>Build notes</summary><div data-spec="build-notes">
                 Keeps <code>basic-page</code>, motion none. Reuses the bar from Option 1a as a local part; tokens
                 <code>bg-muted</code>, <code>bg-accent</code>; i18n keys <code>old</code> and <code>fresh</code>.
               </div>
-              <label class="spec-pick"
-                ><input type="checkbox" form="spec-review" name="pick:start-fresh-when-the-task-changes" value="3a" />
-                Pick 3a</label
-              >
-            </figure>
-            <figure data-spec="option" data-option="3b">
+            </details>
+<label class="spec-pick"><input type="checkbox" form="spec-review" name="pick:start-fresh-when-the-task-changes" value="3a" /> Pick 3a</label>
+</figure>
+<figure data-spec="option" data-option="3b">
               <div data-spec="mock" class="flex flex-col gap-2 bg-card p-4">
                 <p class="text-heading font-semibold">Start fresh</p>
                 <div class="flex gap-2 items-center">
@@ -592,17 +782,15 @@
                 <b>3b</b> A decision rule instead of a picture: when the task changes, the session does too. Build
                 cost: Scene.
               </figcaption>
-              <div data-spec="build-notes">
+              <details class="spec-build"><summary>Build notes</summary><div data-spec="build-notes">
                 Keeps <code>basic-page</code>, motion none. Two rows, each a block and a label; tokens
                 <code>bg-muted</code>, <code>bg-accent</code>; i18n keys <code>title</code>, <code>ifTask</code>,
                 <code>thenSession</code>.
               </div>
-              <label class="spec-pick"
-                ><input type="checkbox" form="spec-review" name="pick:start-fresh-when-the-task-changes" value="3b" />
-                Pick 3b</label
-              >
-            </figure>
-            <figure data-spec="option" data-option="3c">
+            </details>
+<label class="spec-pick"><input type="checkbox" form="spec-review" name="pick:start-fresh-when-the-task-changes" value="3b" /> Pick 3b</label>
+</figure>
+<figure data-spec="option" data-option="3c">
               <div data-spec="mock" class="grid grid-cols-3 gap-2 bg-card p-4">
                 <div class="h-full bg-muted"></div>
                 <div class="h-full bg-muted"></div>
@@ -612,58 +800,47 @@
                 <b>3c</b> Three sessions as three windows, one per task, the third still empty. Build cost: Master
                 slide copy of <code>grid-2x2</code>.
               </figcaption>
-              <div data-spec="build-notes">
+              <details class="spec-build"><summary>Build notes</summary><div data-spec="build-notes">
                 Overrules <code>basic-page</code>: a three-cell copy of the <code>grid-2x2</code> Master slide. Tokens
                 <code>bg-muted</code>; i18n keys <code>taskOne</code>, <code>taskTwo</code>, <code>taskThree</code>.
               </div>
-              <label class="spec-pick"
-                ><input type="checkbox" form="spec-review" name="pick:start-fresh-when-the-task-changes" value="3c" />
-                Pick 3c</label
-              >
-            </figure>
+            </details>
+<label class="spec-pick"><input type="checkbox" form="spec-review" name="pick:start-fresh-when-the-task-changes" value="3c" /> Pick 3c</label>
+</figure>
           </div>
-          <textarea
-            class="spec-note"
-            form="spec-review"
-            name="note:start-fresh-when-the-task-changes"
-            placeholder="Note on Slide 3"
-          ></textarea>
-        </article>
-
-        <article data-spec="slide" id="cut-what-you-paste" data-number="4">
-          <h3>4 · Cut what you paste</h3>
           <div class="spec-words">
-            <div>
-              <h4>Visual idea</h4>
-              <p data-spec="visual-idea">A long log cut down to its ten lines.</p>
+            <div class="spec-card">
               <h4>Voice script</h4>
               <ol data-spec="voice-script">
-                <li>
-                  <strong>Impulse buy</strong> — A full log is an impulse buy. Paste the ten lines that matter, and keep
-                  standing instructions in a file the agent reads at start.
-                </li>
+                <li><strong>Rent on the past</strong> — A new task in an old session pays rent on everything that came before. A fresh session spends the whole budget on the work in front of you.</li>
               </ol>
+              <details class="spec-visual-idea">
+                <summary>Visual idea from the Dossier</summary>
+              <p class="text-caption"><code>master: basic-page · motion: none</code></p>
+              </details>
             </div>
-            <div>
+            <div class="spec-card">
               <h4>Speaker notes</h4>
               <ol data-spec="speaker-notes">
                 <li>
-                  <strong>Why the file works</strong> — text read at the start of a session sits where recall is
-                  strongest, so standing instructions there survive a long session [1].
+                  <strong>The start is weighted most</strong> — attention carries a built-in bias toward the start of the input, so a fresh session puts the new task where it counts most [1].
                   <ul>
-                    <li data-source="1">
-                      [1] Lost in the Middle —
-                      <a href="https://arxiv.org/abs/2307.03172">https://arxiv.org/abs/2307.03172</a>
-                    </li>
+                    <li data-source="1">[1] Found in the Middle — <a href="https://arxiv.org/abs/2406.16008">https://arxiv.org/abs/2406.16008</a></li>
                   </ul>
                 </li>
               </ol>
-              <h4>Production note</h4>
-              <p>The counter overlay from the Brief's open ideas would sit on this Slide if it is built.</p>
             </div>
           </div>
+          <textarea class="spec-note" form="spec-review" name="note:start-fresh-when-the-task-changes" placeholder="Note on Slide 3"></textarea>
+        </article>
+
+        <article data-spec="slide" id="cut-what-you-paste" data-number="4">
+          <header class="spec-slide-head">
+            <span class="spec-number">4</span>
+            <h3>Cut what you paste</h3>
+          </header>
           <div class="spec-options">
-            <figure data-spec="option" data-option="4a" data-recommended>
+<figure data-spec="option" data-option="4a" data-recommended>
               <div data-spec="mock" class="grid grid-cols-2 gap-4 items-center bg-card p-4">
                 <div class="flex flex-col gap-1">
                   <div class="h-2 w-full bg-muted"></div>
@@ -682,16 +859,15 @@
               <figcaption>
                 <b>4a</b> The log beside its kept lines, the kept lines in the accent on both sides. Build cost: Scene.
               </figcaption>
-              <div data-spec="build-notes">
+              <details class="spec-build"><summary>Build notes</summary><div data-spec="build-notes">
                 Keeps <code>basic-page</code>, motion none. Two columns of line stubs; kept lines in
                 <code>bg-accent</code>, the rest in <code>bg-muted</code>. i18n keys <code>log</code> and
                 <code>kept</code>.
               </div>
-              <label class="spec-pick"
-                ><input type="checkbox" form="spec-review" name="pick:cut-what-you-paste" value="4a" /> Pick 4a</label
-              >
-            </figure>
-            <figure data-spec="option" data-option="4b">
+            </details>
+<label class="spec-pick"><input type="checkbox" form="spec-review" name="pick:cut-what-you-paste" value="4a" /> Pick 4a</label>
+</figure>
+<figure data-spec="option" data-option="4b">
               <div data-spec="mock" class="flex flex-col justify-between bg-card p-4">
                 <p class="text-heading font-semibold">Cut what you paste</p>
                 <div class="flex gap-1 h-8">
@@ -704,74 +880,93 @@
               <figcaption>
                 <b>4b</b> Back to the budget bar: the cut log hands its share back to the task. Build cost: Scene.
               </figcaption>
-              <div data-spec="build-notes">
+              <details class="spec-build"><summary>Build notes</summary><div data-spec="build-notes">
                 Keeps <code>basic-page</code>, motion none. The bar part from Option 1a with three labelled shares;
                 tokens <code>bg-muted</code>, <code>bg-accent</code>; i18n keys <code>system</code>, <code>log</code>,
                 <code>task</code>.
               </div>
-              <label class="spec-pick"
-                ><input type="checkbox" form="spec-review" name="pick:cut-what-you-paste" value="4b" /> Pick 4b</label
-              >
-            </figure>
+            </details>
+<label class="spec-pick"><input type="checkbox" form="spec-review" name="pick:cut-what-you-paste" value="4b" /> Pick 4b</label>
+</figure>
           </div>
-          <textarea
-            class="spec-note"
-            form="spec-review"
-            name="note:cut-what-you-paste"
-            placeholder="Note on Slide 4"
-          ></textarea>
+          <div class="spec-words">
+            <div class="spec-card">
+              <h4>Voice script</h4>
+              <ol data-spec="voice-script">
+                <li><strong>Impulse buy</strong> — A full log is an impulse buy. Paste the ten lines that matter, and keep standing instructions in a file the agent reads at start.</li>
+              </ol>
+              <details class="spec-visual-idea">
+                <summary>Visual idea from the Dossier</summary>
+              <p class="text-caption"><code>master: basic-page · motion: none</code></p>
+              </details>
+            </div>
+            <div class="spec-card">
+              <h4>Speaker notes</h4>
+              <ol data-spec="speaker-notes">
+                <li>
+                  <strong>Why the file works</strong> — text read at the start of a session sits where recall is strongest, so standing instructions there survive a long session [1].
+                  <ul>
+                    <li data-source="1">[1] Lost in the Middle — <a href="https://arxiv.org/abs/2307.03172">https://arxiv.org/abs/2307.03172</a></li>
+                  </ul>
+                </li>
+              </ol>
+            </div>
+          </div>
+          <textarea class="spec-note" form="spec-review" name="note:cut-what-you-paste" placeholder="Note on Slide 4"></textarea>
         </article>
       </section>
-    </main>
-    <!-- spec-review:start -->
-    <!--
-      The Spec review form, inlined verbatim into every spec/spec.html by write-spec
-      (design-ADR 0011). Its fields sit beside what they review and join it by form="spec-review":
-      per Option a checkbox name="pick:<slide-slug>" value="<option-id>", per Slide a textarea
-      name="note:<slide-slug>", and one textarea name="note:visual-language".
-      npm run episode:spec serves the page and saves the review as the next feedback round.
-    -->
-    <form id="spec-review" class="spec-review" method="post">
-      <p>Tick the Options you want under each Slide and dictate a note per Slide. A Slide with no tick needs a note.</p>
-      <output name="status" aria-live="polite"></output>
-      <button type="submit">Save review</button>
-    </form>
-    <script>
-      (() => {
-        // A Slide with no tick needs a note; ticks and notes survive a reload until a save succeeds.
-        const form = document.getElementById('spec-review');
-        const meta = JSON.parse(document.getElementById('spec-meta')?.textContent || '{}');
-        const key = 'spec-review:' + (meta.title || location.pathname);
-        const fields = [...form.elements].filter((field) => /^(pick|note):/.test(field.name));
-        const isBox = (field) => field.type === 'checkbox';
-        const id = (field) => (isBox(field) ? field.name + '=' + field.value : field.name);
-        const ticked = (slug) => fields.some((field) => field.name === 'pick:' + slug && field.checked);
-        const sync = () => {
-          for (const note of fields.filter((field) => !isBox(field))) {
-            const slug = note.name.slice('note:'.length);
-            note.required = slug !== 'visual-language' && !ticked(slug);
-          }
-        };
-        const store = () => {
-          const draft = fields.map((field) => [id(field), isBox(field) ? field.checked : field.value]);
-          localStorage.setItem(key, JSON.stringify(Object.fromEntries(draft)));
-        };
-        const saved = new URLSearchParams(location.search).get('saved');
-        if (saved) {
-          localStorage.removeItem(key);
-          form.elements.status.value = 'Saved as feedback/' + saved + '/feedback.md.';
-          history.replaceState(null, '', location.pathname);
-        } else {
-          const draft = JSON.parse(localStorage.getItem(key) || '{}');
-          for (const field of fields.filter((candidate) => id(candidate) in draft))
-            if (isBox(field)) field.checked = draft[id(field)];
-            else field.value = draft[id(field)];
-        }
-        sync();
-        for (const field of fields)
-          for (const type of ['input', 'change']) field.addEventListener(type, () => (sync(), store()));
-      })();
-    </script>
-    <!-- spec-review:end -->
+
+      </main>
+    </div>
+<!-- spec-review:start -->
+<!--
+  The Spec review form, inlined verbatim into every spec/spec.html by write-spec
+  (design-ADR 0011). Its fields sit beside what they review and join it by form="spec-review":
+  per Option a checkbox name="pick:<slide-slug>" value="<option-id>", per Slide a textarea
+  name="note:<slide-slug>", and one textarea name="note:visual-language".
+  npm run episode:spec serves the page and saves the review as the next feedback round.
+-->
+<form id="spec-review" class="spec-review" method="post">
+  <p>Tick the Options you want under each Slide and dictate a note per Slide. A Slide with no tick needs a note.</p>
+  <output name="status" aria-live="polite"></output>
+  <button type="submit">Save review</button>
+</form>
+<script>
+  (() => {
+    // A Slide with no tick needs a note; ticks and notes survive a reload until a save succeeds.
+    const form = document.getElementById('spec-review');
+    const meta = JSON.parse(document.getElementById('spec-meta')?.textContent || '{}');
+    const key = 'spec-review:' + (meta.title || location.pathname);
+    const fields = [...form.elements].filter((field) => /^(pick|note):/.test(field.name));
+    const isBox = (field) => field.type === 'checkbox';
+    const id = (field) => (isBox(field) ? field.name + '=' + field.value : field.name);
+    const ticked = (slug) => fields.some((field) => field.name === 'pick:' + slug && field.checked);
+    const sync = () => {
+      for (const note of fields.filter((field) => !isBox(field))) {
+        const slug = note.name.slice('note:'.length);
+        note.required = slug !== 'visual-language' && !ticked(slug);
+      }
+    };
+    const store = () => {
+      const draft = fields.map((field) => [id(field), isBox(field) ? field.checked : field.value]);
+      localStorage.setItem(key, JSON.stringify(Object.fromEntries(draft)));
+    };
+    const saved = new URLSearchParams(location.search).get('saved');
+    if (saved) {
+      localStorage.removeItem(key);
+      form.elements.status.value = 'Saved as feedback/' + saved + '/feedback.md.';
+      history.replaceState(null, '', location.pathname);
+    } else {
+      const draft = JSON.parse(localStorage.getItem(key) || '{}');
+      for (const field of fields.filter((candidate) => id(candidate) in draft))
+        if (isBox(field)) field.checked = draft[id(field)];
+        else field.value = draft[id(field)];
+    }
+    sync();
+    for (const field of fields)
+      for (const type of ['input', 'change']) field.addEventListener(type, () => (sync(), store()));
+  })();
+</script>
+<!-- spec-review:end -->
   </body>
 </html>

@@ -39,7 +39,7 @@ const REVIEW_ASSET = path.join(ROOT, SKILL_FOLDER, 'assets/spec-review.html');
  * are missing; a per-run pipeline never does. Delete an entry when its file
  * lands: a test fails until you do.
  */
-const PENDING = [...['storytelling', 'tone', 'mental-model'].map((guide) => `docs/profile/han/${guide}-guide.md`)];
+const PENDING: readonly string[] = [];
 
 /** Every file under `folder`, keyed by its path relative to it with `/` separators. */
 function readFolder(folder: string): Record<string, string> {
@@ -117,7 +117,8 @@ function researchFolders(): string[] {
   const planned = Object.values(perRunPipelines())
     .flatMap((yaml) => (parse(yaml) as { jobs: { outputs?: string[] }[] }).jobs)
     .flatMap(({ outputs }) => outputs ?? [])
-    .filter((output) => output.endsWith('/research.md'))
+    // A draft keeps write-research's foreach glob; only a named folder is a planned one.
+    .filter((output) => output.endsWith('/research.md') && !output.includes('*'))
     .map((output) => path.dirname(output));
   return [...onDisk, ...planned];
 }

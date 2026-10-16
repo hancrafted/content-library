@@ -18,7 +18,7 @@ next-env.d.ts
 # OS
 .DS_Store
 
-# Profile documents
+# Private profile documents; the shared voice guides sit one level up in docs/profile/.
 docs/profile/han/
 
 # Per-feature handoffs and agent scratch work (see AGENTS.md).

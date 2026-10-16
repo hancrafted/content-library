@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Spec · Episode title</title>
+    <!--
+      The Spec's page frame, copied verbatim into every spec/spec.html by write-spec up to the meta block, with only
+      the <title> set to "Spec · <Episode title>". The body it lays out is described in references/write-spec.md step 3.
+    -->
+    <style>
+      /*
+       * The Spec's page frame. design.css (compiled from the site's globals.css by `npm run episode:spec`) supplies
+       * the tokens and every utility the mocks use; this block only lays out the review page around them. The
+       * fallback layer ranks below Tailwind, so the page still reads in system colours when opened without it.
+       */
+      @layer fallback;
+
+      :root {
+        color-scheme: light;
+      }
+      body {
+        margin: 0;
+        font-family: var(--font-sans, system-ui, sans-serif);
+        line-height: 1.55;
+        color: var(--foreground, CanvasText);
+        background: color-mix(in oklch, var(--muted, Canvas) 55%, var(--background, Canvas));
+      }
+      code {
+        font-family: var(--font-mono, ui-monospace, monospace);
+        font-size: 0.85em;
+      }
+
+      /* Layout: a sticky outline beside one wide column. */
+      .spec-shell {
+        display: grid;
+        grid-template-columns: 15rem minmax(0, 1fr);
+        gap: 2.5rem;
+        max-width: 96rem;
+        margin: 0 auto;
+        padding: 0 2rem 8rem;
+      }
+      .spec-outline {
+        position: sticky;
+        top: 0;
+        align-self: start;
+        max-height: 100vh;
+        overflow-y: auto;
+        padding: 2rem 0;
+        font-size: 0.8125rem;
+      }
+      .spec-outline ol {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .spec-outline > ol > li {
+        margin-bottom: 1rem;
+      }
+      .spec-outline .spec-outline-section {
+        display: block;
+        font-weight: 600;
+        color: var(--muted-foreground, GrayText);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        font-size: 0.6875rem;
+        margin-bottom: 0.25rem;
+      }
+      .spec-outline a {
+        display: flex;
+        gap: 0.5rem;
+        align-items: baseline;
+        padding: 0.2rem 0.5rem;
+        border-radius: 0.375rem;
+        color: inherit;
+        text-decoration: none;
+      }
+      .spec-outline a:hover {
+        background: var(--card, Canvas);
+      }
+      .spec-outline a::before {
+        content: '';
+        flex: none;
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 999px;
+        border: 1.5px solid var(--muted-foreground, GrayText);
+        transform: translateY(-0.05rem);
+      }
+      .spec-outline a[data-state='picked']::before {
+        background: var(--success, Highlight);
+        border-color: var(--success, Highlight);
+      }
+      .spec-outline a[data-state='open']::before {
+        border-color: var(--primary, Highlight);
+      }
+
+      .spec-page {
+        min-width: 0;
+        padding-top: 2rem;
+      }
+      .spec-masthead {
+        padding: 3rem 0 2rem;
+      }
+      .spec-kicker {
+        font-family: var(--font-mono, monospace);
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--primary, Highlight);
+        margin: 0 0 0.75rem;
+      }
+      .spec-masthead h1 {
+        font-size: var(--size-hero, 3rem);
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+        margin: 0 0 1rem;
+      }
+      .spec-masthead p {
+        max-width: 48rem;
+        color: var(--muted-foreground, GrayText);
+        font-size: 1.125rem;
+        margin: 0;
+      }
+
+      /* Cards: Style, Visual language, Episode page and each Slide's words. */
+      .spec-card {
+        background: var(--card, Canvas);
+        border: 1px solid var(--border, GrayText);
+        border-radius: 1rem;
+        padding: 1.5rem 1.75rem;
+      }
+      .spec-intro {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+        gap: 1.25rem;
+        margin-bottom: 4rem;
+      }
+      .spec-intro h2,
+      .spec-card h4 {
+        font-family: var(--font-mono, monospace);
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--muted-foreground, GrayText);
+        margin: 0 0 0.75rem;
+        border: 0;
+      }
+      .spec-intro ul {
+        margin: 0;
+        padding-left: 1.1rem;
+      }
+      .spec-intro li + li {
+        margin-top: 0.4rem;
+      }
+
+      /* A Section opens with a band; its section slide's Voice script sits in it. */
+      [data-spec='section'] {
+        margin-top: 5rem;
+      }
+      .spec-section-band {
+        border-radius: 1.25rem;
+        padding: 2.5rem 2.75rem;
+        background: var(--foreground, CanvasText);
+        color: var(--background, Canvas);
+      }
+      .spec-section-band h2 {
+        font-size: var(--size-heading, 2.5rem);
+        line-height: 1.1;
+        letter-spacing: -0.015em;
+        margin: 0 0 0.25rem;
+        border: 0;
+      }
+      .spec-section-band .spec-kicker {
+        color: inherit;
+        opacity: 0.6;
+      }
+      .spec-section-band [data-spec='voice-script'] {
+        max-width: 52rem;
+        margin-top: 1.5rem;
+        opacity: 0.85;
+      }
+
+      /* A Slide: header, the Option stage, then its words. */
+      [data-spec='slide'] {
+        margin-top: 4rem;
+        scroll-margin-top: 1rem;
+      }
+      .spec-slide-head {
+        display: flex;
+        align-items: baseline;
+        gap: 1rem;
+        margin-bottom: 1.25rem;
+      }
+      .spec-slide-head h3 {
+        font-size: var(--size-subheading, 2rem);
+        line-height: 1.15;
+        letter-spacing: -0.01em;
+        margin: 0;
+      }
+      .spec-slide-head .spec-number {
+        font-family: var(--font-mono, monospace);
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--primary, Highlight);
+        border: 1.5px solid currentColor;
+        border-radius: 999px;
+        padding: 0.1rem 0.6rem;
+        transform: translateY(-0.3rem);
+      }
+
+      /* Option tabs: built by the script below from the figures; without it the Options stack. */
+      .spec-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+      }
+      .spec-tabs button {
+        font: inherit;
+        font-size: 0.875rem;
+        font-weight: 600;
+        display: inline-flex;
+        gap: 0.5rem;
+        align-items: center;
+        padding: 0.45rem 0.9rem;
+        border-radius: 999px;
+        border: 1px solid var(--border, GrayText);
+        background: var(--card, Canvas);
+        color: inherit;
+        cursor: pointer;
+      }
+      .spec-tabs button[aria-selected='true'] {
+        background: var(--foreground, CanvasText);
+        color: var(--background, Canvas);
+        border-color: transparent;
+      }
+      .spec-tabs .spec-badge {
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        padding: 0.05rem 0.45rem;
+        border-radius: 999px;
+        background: var(--primary, Highlight);
+        color: var(--primary-foreground, HighlightText);
+      }
+      .spec-tabs .spec-picked {
+        color: var(--success, Highlight);
+      }
+      .spec-options.is-tabbed > [data-spec='option'] {
+        display: none;
+      }
+      .spec-options.is-tabbed > [data-spec='option'][data-active] {
+        display: block;
+      }
+      [data-spec='option'] {
+        margin: 0 0 2rem;
+      }
+      /* The mock is a slide at desktop width: full column, at least 16:9, never clipped. */
+      [data-spec='mock'] {
+        position: relative;
+        min-height: min(40rem, 56.25vw);
+        border-radius: 1rem;
+        border: 1px solid var(--border, GrayText);
+        box-shadow:
+          0 1px 2px color-mix(in oklch, var(--foreground, CanvasText) 6%, transparent),
+          0 24px 48px -24px color-mix(in oklch, var(--foreground, CanvasText) 22%, transparent);
+        background: var(--background, Canvas);
+        overflow: visible;
+      }
+      [data-spec='option'] figcaption {
+        font-size: 1rem;
+        max-width: 60rem;
+        margin: 1rem 0 0;
+      }
+      .spec-build {
+        margin-top: 0.75rem;
+        max-width: 60rem;
+      }
+      .spec-build > summary {
+        cursor: pointer;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: var(--muted-foreground, GrayText);
+      }
+      [data-spec='build-notes'] {
+        font-size: 0.8125rem;
+        color: var(--muted-foreground, GrayText);
+        margin-top: 0.5rem;
+      }
+      .spec-pick {
+        display: inline-flex;
+        gap: 0.5rem;
+        align-items: center;
+        margin-top: 1rem;
+        padding: 0.55rem 1rem;
+        border-radius: 0.6rem;
+        border: 1.5px solid var(--primary, Highlight);
+        color: var(--primary, Highlight);
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .spec-pick:has(input:checked) {
+        background: var(--primary, Highlight);
+        color: var(--primary-foreground, HighlightText);
+      }
+
+      .spec-words {
+        display: grid;
+        grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+        gap: 1.25rem;
+        margin-top: 1.5rem;
+      }
+      .spec-words ol {
+        margin: 0;
+        padding-left: 1.25rem;
+      }
+      [data-spec='voice-script'] > li {
+        margin-bottom: 0.75rem;
+        font-size: 1.0625rem;
+        line-height: 1.6;
+      }
+      [data-spec='speaker-notes'] > li {
+        margin-bottom: 0.9rem;
+        font-size: 0.9375rem;
+      }
+      [data-spec='speaker-notes'] ul {
+        list-style: none;
+        padding: 0;
+        margin: 0.3rem 0 0;
+        font-size: 0.8125rem;
+        color: var(--muted-foreground, GrayText);
+      }
+      [data-spec='speaker-notes'] a {
+        color: inherit;
+        word-break: break-all;
+      }
+      .spec-visual-idea {
+        margin-top: 1.25rem;
+      }
+      .spec-visual-idea > summary {
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.875rem;
+      }
+      .spec-note {
+        display: block;
+        box-sizing: border-box;
+        width: 100%;
+        min-height: 4.5rem;
+        margin-top: 1.25rem;
+        padding: 0.75rem 1rem;
+        font: inherit;
+        border-radius: 0.75rem;
+        border: 1px dashed var(--border, GrayText);
+        background: var(--card, Canvas);
+        color: inherit;
+      }
+      .spec-review {
+        position: sticky;
+        bottom: 0;
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.9rem 2rem;
+        background: color-mix(in oklch, var(--card, Canvas) 92%, transparent);
+        backdrop-filter: blur(8px);
+        border-top: 1px solid var(--border, GrayText);
+      }
+
+      @media (max-width: 70rem) {
+        .spec-shell {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .spec-outline {
+          display: none;
+        }
+        .spec-words {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+
+      @layer fallback {
+        [data-spec='mock'] {
+          background: Canvas;
+        }
+      }
+    </style>
+    <link rel="stylesheet" href="design.css" />
+    <script>
+      // Option tabs and the outline's pick state. Runs after the page parses; the review form's own script is
+      // the inlined spec-review asset. Without this script every Option shows, stacked.
+      addEventListener('DOMContentLoaded', () => {
+        const outline = document.querySelector('.spec-outline');
+        const refresh = () => {
+          for (const slide of document.querySelectorAll('[data-spec="slide"]')) {
+            const picks = slide.querySelectorAll('.spec-pick input:checked').length;
+            const link = outline?.querySelector(`a[href="#${slide.id}"]`);
+            if (link) link.dataset.state = picks === 1 ? 'picked' : 'open';
+            for (const button of slide.querySelectorAll('.spec-tabs button')) {
+              const box = slide.querySelector(`.spec-pick input[value="${button.dataset.option}"]`);
+              button.querySelector('.spec-picked').textContent = box?.checked ? '✓' : '';
+            }
+          }
+        };
+        for (const options of document.querySelectorAll('.spec-options')) {
+          const figures = [...options.querySelectorAll(':scope > [data-spec="option"]')];
+          const tabs = document.createElement('div');
+          tabs.className = 'spec-tabs';
+          tabs.setAttribute('role', 'tablist');
+          const show = (figure) => {
+            for (const other of figures) other.toggleAttribute('data-active', other === figure);
+            for (const button of tabs.children)
+              button.setAttribute('aria-selected', String(button.dataset.option === figure.dataset.option));
+          };
+          for (const figure of figures) {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.setAttribute('role', 'tab');
+            button.dataset.option = figure.dataset.option;
+            button.innerHTML = `Option ${figure.dataset.option}<span class="spec-picked"></span>`;
+            if (figure.hasAttribute('data-recommended')) {
+              const badge = document.createElement('span');
+              badge.className = 'spec-badge';
+              badge.textContent = 'Recommended';
+              button.append(badge);
+            }
+            button.addEventListener('click', () => show(figure));
+            tabs.append(button);
+          }
+          options.before(tabs);
+          options.classList.add('is-tabbed');
+          show(
+            figures.find((f) => f.querySelector('.spec-pick input:checked')) ??
+              figures.find((f) => f.hasAttribute('data-recommended')) ??
+              figures[0],
+          );
+        }
+        document.addEventListener('change', refresh);
+        refresh();
+      });
+    </script>
+  </head>
+</html>
