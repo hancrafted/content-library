@@ -1,0 +1,123 @@
+{
+  "title": "Stages of sale",
+  "kicker": "How to start doing sales · the stages",
+  "caption": "The first two steps are in your hands. After them, every stage pushes the money further to the right.",
+  "brackets": {
+    "yours": "In your hands",
+    "calendar": "Calendar time you cannot compress"
+  },
+  "lanes": {
+    "leads": {
+      "label": "Leads",
+      "notes": {
+        "generation": {
+          "step": "Step 1",
+          "title": "Lead generation",
+          "text": "Research and keep a list of potential customers",
+          "list": {
+            "brightfield": { "company": "Brightfield", "contact": "Jonas Weber" },
+            "kestrel": { "company": "Kestrel Labs", "contact": "Mia Novak" },
+            "orbit": { "company": "Orbit Logistics", "contact": "Sara Kim" }
+          }
+        },
+        "contact": {
+          "step": "Step 2",
+          "title": "First contact",
+          "chips": {
+            "coldCall": "Cold call",
+            "inbound": "Inbound lead",
+            "network": "Your network"
+          }
+        }
+      }
+    },
+    "opportunities": {
+      "label": "Opportunities",
+      "footnote": "The actual hard work",
+      "notes": {
+        "interest": {
+          "title": "The customer shows interest",
+          "text": "Interest is not a deal"
+        },
+        "followUp": "Follow-up",
+        "material": "Sales material",
+        "meetings": "Meetings",
+        "negotiation": "Negotiation"
+      }
+    },
+    "closing": {
+      "label": "Closing",
+      "footnote": "Still not cash",
+      "notes": {
+        "agreement": {
+          "title": "Signed contract",
+          "text": "The customer agrees to a contractual and transactional relationship",
+          "signature": "signature"
+        }
+      }
+    },
+    "afterSale": {
+      "label": "After-sale",
+      "notes": {
+        "production": "Production",
+        "delivery": "Delivery",
+        "success": "Customer success",
+        "cash": {
+          "kind": "Cash",
+          "title": "Invoice paid",
+          "text": "30 to 60 days after it is sent"
+        }
+      }
+    }
+  },
+  "axis": {
+    "week": "This week",
+    "months": "Weeks to months",
+    "signature": "One signature",
+    "money": "Money arrives"
+  },
+  "notes": {
+    "cash-waits-on-paperwork": {
+      "header": "Cash waits on paperwork",
+      "description": "With no contract term, interest on a late B2B payment starts only 30 days after the invoice is received, contract terms may run up to 60 days, and an acceptance step can add up to 30 more days before the clock starts. This is an EU directive; other jurisdictions differ.[1]",
+      "sources": {
+        "late-payment-directive": {
+          "title": "European Parliament and Council, Directive 2011/7/EU on combating late payment in commercial transactions"
+        }
+      }
+    },
+    "the-lags-add-up": {
+      "header": "The lags add up",
+      "description": "The sources show each delay separately: finding customers, closing, invoicing, payment terms. That they add into one lag, which is why the chain must start early, is an inference.[1]",
+      "sources": {
+        "late-payment-directive": {
+          "title": "European Parliament and Council, Directive 2011/7/EU on combating late payment in commercial transactions"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "leads-step-one": {
+        "title": "Leads, step one",
+        "keywords": "",
+        "script": "The first step is lead generation. Research and keep a list of potential customers, with names, not a feeling. Start the list this week, and maintain it every week after that."
+      },
+      "first-contact-step-two": {
+        "title": "First contact, step two",
+        "keywords": "",
+        "script": "The second step is first contact. Cold call, call back an inbound lead, or ask your network, and pick one of them. Make that first call, because that is what opens opportunities."
+      },
+      "opportunities-are-the-work": {
+        "title": "Opportunities are the work",
+        "keywords": "",
+        "script": "An opportunity means interest, and interest is not a deal. Follow-up, material, meetings and negotiation are the hard part of sales, and they take calendar time that you cannot compress with willpower."
+      },
+      "closing-is-not-cash": {
+        "title": "Closing is not cash",
+        "keywords": "",
+        "script": "Even a signed contract is not cash. After it come production, delivery and customer success, and only then the invoice, so every stage pushes the money further to the right."
+      }
+    }
+  }
+}

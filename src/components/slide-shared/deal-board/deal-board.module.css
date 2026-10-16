@@ -1,0 +1,90 @@
+/*
+ * The deal board's geometry. Its lanes and the bracket row share one grid: wide enough, the lanes split the board's
+ * width; narrower, each lane keeps a readable width and the row scrolls sideways inside its own box, with room around
+ * it for the pills and the ring, so nothing is cut. The annotation row repeats the lanes' columns to stand over the
+ * emphasised lane.
+ */
+
+.board {
+  --gap: 1.25rem;
+  --lane-width: 10rem;
+
+  container-type: inline-size;
+  gap: 0.5rem;
+}
+
+.compact {
+  --gap: 0.75rem;
+  --lane-width: 7.5rem;
+}
+
+.scroller {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  padding: 1.5rem 0.5rem 0.5rem;
+}
+
+.grid {
+  display: grid;
+  grid-auto-columns: var(--lane-width);
+  column-gap: var(--gap);
+  row-gap: 0.75rem;
+  width: max-content;
+}
+
+/* The list adds no box: its lanes are items of the grid, beside the bracket row. */
+.lanes {
+  display: contents;
+}
+
+.lane {
+  grid-row: 1;
+  grid-column: var(--n);
+  align-self: start;
+}
+
+.stage {
+  grid-row: 2;
+  grid-column: var(--n);
+}
+
+.bracket {
+  grid-row: 2;
+  grid-column: var(--from) / var(--to);
+}
+
+.annotationRow {
+  padding-inline: 0.5rem;
+}
+
+.annotation {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+@container (min-width: 44rem) {
+  .board:not(.compact) .grid {
+    grid-template-columns: repeat(var(--lanes), minmax(0, 1fr));
+    width: auto;
+  }
+
+  .board:not(.compact) .annotationRow {
+    display: grid;
+    grid-template-columns: repeat(var(--lanes), minmax(0, 1fr));
+    column-gap: var(--gap);
+  }
+
+  .board:not(.compact) .annotation {
+    grid-column: span 2 / calc(var(--emphasis) + 1);
+    justify-content: flex-end;
+    margin-bottom: -1rem;
+  }
+}
+
+@container (min-width: 36rem) {
+  .compact .grid {
+    grid-template-columns: repeat(var(--lanes), minmax(0, 1fr));
+    width: auto;
+  }
+}

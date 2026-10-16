@@ -19,7 +19,8 @@ interface StickyNoteProps {
 /** The note's list item attributes: its kind, its target and the custom properties its tilt and motion read. */
 function placement({ note, column, slot, order }: StickyNoteProps) {
   const style = { '--i': order, '--tilt': `${tiltOf(column, slot)}deg` } as CSSProperties;
-  return { 'data-cashflow': 'note', 'data-kind': note.kind, 'data-target': note.target, style };
+  const ring = note.ring ? 'true' : undefined;
+  return { 'data-cashflow': 'note', 'data-kind': note.kind, 'data-target': note.target, 'data-ring': ring, style };
 }
 
 /** A dashed outline where a note used to be, its label in mono. */
@@ -48,7 +49,13 @@ export function StickyNote(props: StickyNoteProps) {
   return (
     <li
       {...placement(props)}
-      className={cn(styles.note, big && styles.big, 'bg-card', big ? 'shadow-xl' : 'shadow-md')}
+      className={cn(
+        styles.note,
+        big && styles.big,
+        'bg-card',
+        big ? 'shadow-xl' : 'shadow-md',
+        note.ring && 'ring-4 ring-primary ring-offset-4 ring-offset-muted',
+      )}
     >
       <div className={cn(TINT[note.kind], 'flex aspect-square flex-col justify-between', big ? 'p-4' : 'p-3')}>
         <span className="font-mono text-caption text-foreground/70 uppercase">{labels[note.kind]}</span>

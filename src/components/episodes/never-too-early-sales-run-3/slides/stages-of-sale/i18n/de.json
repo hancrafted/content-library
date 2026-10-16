@@ -1,0 +1,123 @@
+{
+  "title": "Phasen des Verkaufs",
+  "kicker": "Wie Du mit dem Vertrieb anfängst · die Phasen",
+  "caption": "Die ersten zwei Schritte liegen in Deiner Hand. Danach schiebt jede Phase das Geld weiter nach rechts.",
+  "brackets": {
+    "yours": "In Deiner Hand",
+    "calendar": "Kalenderzeit, die Du nicht verkürzen kannst"
+  },
+  "lanes": {
+    "leads": {
+      "label": "Leads",
+      "notes": {
+        "generation": {
+          "step": "Schritt 1",
+          "title": "Leadgenerierung",
+          "text": "Recherchiere potenzielle Kunden und führe eine Liste",
+          "list": {
+            "brightfield": { "company": "Brightfield", "contact": "Jonas Weber" },
+            "kestrel": { "company": "Kestrel Labs", "contact": "Mia Novak" },
+            "orbit": { "company": "Orbit Logistics", "contact": "Sara Kim" }
+          }
+        },
+        "contact": {
+          "step": "Schritt 2",
+          "title": "Erstkontakt",
+          "chips": {
+            "coldCall": "Kaltakquise",
+            "inbound": "Inbound-Lead",
+            "network": "Dein Netzwerk"
+          }
+        }
+      }
+    },
+    "opportunities": {
+      "label": "Opportunities",
+      "footnote": "Die eigentliche harte Arbeit",
+      "notes": {
+        "interest": {
+          "title": "Der Kunde zeigt Interesse",
+          "text": "Interesse ist noch kein Deal"
+        },
+        "followUp": "Nachfassen",
+        "material": "Vertriebsmaterial",
+        "meetings": "Termine",
+        "negotiation": "Verhandlung"
+      }
+    },
+    "closing": {
+      "label": "Abschluss",
+      "footnote": "Noch kein Geld",
+      "notes": {
+        "agreement": {
+          "title": "Unterschriebener Vertrag",
+          "text": "Der Kunde stimmt einer vertraglichen und geschäftlichen Beziehung zu",
+          "signature": "Unterschrift"
+        }
+      }
+    },
+    "afterSale": {
+      "label": "Nach dem Verkauf",
+      "notes": {
+        "production": "Produktion",
+        "delivery": "Lieferung",
+        "success": "Kundenbetreuung",
+        "cash": {
+          "kind": "Kasse",
+          "title": "Rechnung bezahlt",
+          "text": "30 bis 60 Tage nach dem Versand"
+        }
+      }
+    }
+  },
+  "axis": {
+    "week": "Diese Woche",
+    "months": "Wochen bis Monate",
+    "signature": "Eine Unterschrift",
+    "money": "Geld kommt an"
+  },
+  "notes": {
+    "cash-waits-on-paperwork": {
+      "header": "Das Geld wartet auf den Papierkram",
+      "description": "Ohne vereinbarte Frist laufen Verzugszinsen auf eine verspätete B2B-Zahlung erst 30 Tage nach Eingang der Rechnung, vertragliche Fristen dürfen bis zu 60 Tage betragen, und eine Abnahme kann bis zu 30 weitere Tage hinzufügen, bevor die Frist beginnt. Das ist eine EU-Richtlinie; andere Rechtsordnungen weichen ab.[1]",
+      "sources": {
+        "late-payment-directive": {
+          "title": "Europäisches Parlament und Rat, Richtlinie 2011/7/EU zur Bekämpfung von Zahlungsverzug im Geschäftsverkehr"
+        }
+      }
+    },
+    "the-lags-add-up": {
+      "header": "Die Verzögerungen addieren sich",
+      "description": "Die Quellen zeigen jede Verzögerung für sich: Kunden finden, abschließen, Rechnung stellen, Zahlungsfristen. Dass sie sich zu einer einzigen Verzögerung addieren und die Kette deshalb früh beginnen muss, ist eine Schlussfolgerung.[1]",
+      "sources": {
+        "late-payment-directive": {
+          "title": "Europäisches Parlament und Rat, Richtlinie 2011/7/EU zur Bekämpfung von Zahlungsverzug im Geschäftsverkehr"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "leads-step-one": {
+        "title": "Leads, Schritt eins",
+        "keywords": "",
+        "script": "Der erste Schritt ist die Leadgenerierung. Recherchiere potenzielle Kunden und führe eine Liste, mit Namen, nicht mit einem Gefühl. Fang die Liste diese Woche an, und pflege sie danach jede Woche."
+      },
+      "first-contact-step-two": {
+        "title": "Erstkontakt, Schritt zwei",
+        "keywords": "",
+        "script": "Der zweite Schritt ist der Erstkontakt. Kaltakquise, einen Inbound-Lead zurückrufen oder Dein Netzwerk fragen, und such Dir eins davon aus. Führ diesen ersten Anruf, denn genau der öffnet Opportunities."
+      },
+      "opportunities-are-the-work": {
+        "title": "Opportunities sind die Arbeit",
+        "keywords": "",
+        "script": "Eine Opportunity bedeutet Interesse, und Interesse ist noch kein Deal. Nachfassen, Material, Termine und Verhandlung sind der harte Teil des Vertriebs, und sie brauchen Kalenderzeit, die Du mit Willenskraft nicht verkürzen kannst."
+      },
+      "closing-is-not-cash": {
+        "title": "Abschluss ist kein Geld",
+        "keywords": "",
+        "script": "Selbst ein unterschriebener Vertrag ist noch kein Geld. Danach kommen Produktion, Lieferung und Kundenbetreuung, und erst dann die Rechnung, also schiebt jede Phase das Geld weiter nach rechts."
+      }
+    }
+  }
+}
