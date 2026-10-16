@@ -1,0 +1,81 @@
+/*
+ * The funnel beside the compact deal board once the Scene is wide enough, the spout pointing into Lead in; narrower,
+ * the funnel stands over the board. While the Slide is active the crowd travels in from the funnel's mouth one dot at
+ * a time, never looping, then the two spout dots and the spout, then the Lead in notes are placed. The base rules are
+ * the finished picture, which is also what reduced motion shows.
+ */
+
+.scene {
+  container-type: inline-size;
+}
+
+.layout {
+  display: grid;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+.funnel {
+  display: grid;
+  grid-template-columns: minmax(7rem, 2fr) minmax(0, 3fr);
+  align-items: center;
+}
+
+.sources {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.shape {
+  width: 100%;
+  max-height: 22rem;
+  margin-left: -1.5rem;
+}
+
+@container (min-width: 60rem) {
+  .layout {
+    grid-template-columns: 5fr 7fr;
+    gap: 0;
+  }
+}
+
+@keyframes travel {
+  from {
+    opacity: 0;
+    transform: translateX(calc(var(--x) * -1px));
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes place {
+  from {
+    opacity: 0;
+    translate: 0 -6px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .scene :global([data-funnel='dot']) {
+    transform-box: view-box;
+  }
+
+  :global([data-zone='active']) .scene :global([data-funnel='dot']) {
+    animation: travel 520ms ease-out backwards;
+    animation-delay: calc(var(--i) * 110ms);
+  }
+
+  :global([data-zone='active']) .scene :global([data-funnel='spout']) {
+    animation: fade-in 240ms ease-out 2100ms backwards;
+  }
+
+  :global([data-zone='active']) .scene :global([data-emphasis='true'] [data-deal='note']) {
+    animation: place 260ms ease-out backwards;
+    animation-delay: calc(2400ms + var(--i) * 220ms);
+  }
+}

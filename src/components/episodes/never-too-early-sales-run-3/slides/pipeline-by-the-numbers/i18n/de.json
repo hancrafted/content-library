@@ -1,0 +1,126 @@
+{
+  "kicker": "Zähl die Zettel",
+  "title": "Die Pipeline in Zahlen",
+  "lead": "Hast Du 27 Namen? So viele braucht ein Deal in diesem Beispiel, 9,5 Monate bevor das Geld kommt.",
+  "stages": {
+    "lead": "Lead · {count}",
+    "opportunity": "Opportunity · {count}",
+    "deal": "Deal · {count}"
+  },
+  "durations": {
+    "lead": "2 Wochen",
+    "opportunity": "6 Monate",
+    "deal": "3 Monate"
+  },
+  "names": {
+    "kraus": "Kraus",
+    "novak": "Novak",
+    "hahn": "Hahn",
+    "okafor": "Okafor",
+    "lind": "Lind",
+    "meyer": "Meyer",
+    "santos": "Santos",
+    "petrov": "Petrov",
+    "weber": "Weber",
+    "dubois": "Dubois",
+    "haas": "Haas",
+    "larsen": "Larsen",
+    "moretti": "Moretti",
+    "fischer": "Fischer",
+    "ito": "Ito",
+    "becker": "Becker",
+    "nowak": "Nowak",
+    "schulz": "Schulz",
+    "rossi": "Rossi",
+    "keller": "Keller",
+    "varga": "Varga",
+    "bauer": "Bauer",
+    "jansen": "Jansen",
+    "wolf": "Wolf",
+    "costa": "Costa",
+    "sato": "Sato",
+    "ahmed": "Ahmed"
+  },
+  "states": {
+    "demo": "Demo",
+    "proposal": "Angebot",
+    "pricing": "Preis",
+    "legal": "Recht",
+    "signed": "unterschrieben"
+  },
+  "ratios": {
+    "leadOpp": "{ratio}:1",
+    "oppDeal": "{ratio}:1"
+  },
+  "total": "{total} : 1",
+  "totalCaption": "Gesamt-Conversion: {total} Leads für 1 Deal",
+  "others": "{count} weitere reden noch oder sind verloren",
+  "cycle": {
+    "total": "Verkaufszyklus: {months, number} Monate vom ersten Lead bis zum Geld",
+    "lead": "2 Wo.",
+    "opportunity": "Opportunity · 6 Monate",
+    "deal": "Deal · 3 Monate → Geld"
+  },
+  "notes": {
+    "a-reference-win-rate": {
+      "header": "Eine Abschlussquote zum Vergleich",
+      "description": "In einem Datensatz von 655.000 Opportunities aus 387 Unternehmen lag die Abschlussquote bei Neukunden bei 19 Prozent (rund 5,3 Opportunities pro Abschluss), der Verkaufszyklus bei 91 Tagen, mit 8 Beteiligten pro Deal; beim Ausbau bestehender Kunden waren es 45 Prozent, 52 Tage und 5 Beteiligte. Es ist die Studie eines Anbieters über die CRM-Daten seiner eigenen Kunden [1].",
+      "sources": {
+        "ebsta-pavilion": {
+          "title": "Ebsta und Pavilion, GTM Benchmarks Report"
+        }
+      }
+    },
+    "the-biggest-loss-is-no-decision": {
+      "header": "Der größte Verlust ist keine Entscheidung",
+      "description": "Eine Auswertung von mehr als 2,5 Millionen aufgezeichneten Verkaufsgesprächen ergab: 40 bis 60 Prozent der Deals gehen an Käufer verloren, die kaufen wollen, aber nie handeln [1].",
+      "sources": {
+        "hbr-indecision": {
+          "title": "Dixon und McKenna, Stop Losing Sales to Customer Indecision (Harvard Business Review)"
+        }
+      }
+    },
+    "everyone-holds-a-veto": {
+      "header": "Jeder hat ein Veto",
+      "description": "Selten findet ein Verkäufer die eine Person, die einen Deal allein freigeben kann; die Entscheidung liegt bei einer Gruppe, deren Mitglieder verschiedene Rollen haben und alle ein Vetorecht [1].",
+      "sources": {
+        "hbr-consensus-sale": {
+          "title": "Schmidt, Adamson und Bird, Making the Consensus Sale (Harvard Business Review)"
+        }
+      }
+    },
+    "buying-groups-disagree": {
+      "header": "Einkaufsgruppen sind sich uneinig",
+      "description": "Eine Gartner-Umfrage unter 632 B2B-Käufern beschreibt Einkaufsgruppen von fünf bis 16 Personen; in 74 Prozent der Teams gab es ungesunde Konflikte, und Gruppen, die sich einig wurden, berichteten 2,5-mal so oft von einem hochwertigen Deal [1].",
+      "sources": {
+        "gartner-buyer-teams": {
+          "title": "Gartner, Gartner Sales Survey Finds 74% of B2B Buyer Teams Demonstrate \"Unhealthy Conflict\" During The Decision Process"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "read-the-picture": {
+        "title": "Lies das Bild",
+        "keywords": "",
+        "script": "Lies das Bild. Von Lead zu Opportunity ist es drei zu eins, von Opportunity zu Deal neun zu eins, zusammen braucht ein Deal also 27 Leads."
+      },
+      "read-the-clock": {
+        "title": "Lies die Uhr",
+        "keywords": "",
+        "script": "Jetzt lies die Uhr. Zwei Wochen, sechs Monate, drei Monate, das macht 9,5 Monate vom ersten Lead bis zum Geld. Denk einen Schritt weiter, und zehn Deals brauchen 270 Leads."
+      },
+      "backward-chain": {
+        "title": "Rückwärts rechnen",
+        "keywords": "",
+        "script": "Also rechne rückwärts. Wenn Du in Monat X einen Deal willst, zähl 9,5 Monate zurück, und bis dahin brauchst Du 27 Namen im Funnel. Hast Du 27 Namen?"
+      },
+      "your-numbers-not-mine": {
+        "title": "Deine Zahlen, nicht meine",
+        "keywords": "",
+        "script": "Eins will ich klar sagen: Das ist mein durchgerechnetes Beispiel, kein Gesetz. Deine Zahlen werden kürzer oder länger sein, und genau deshalb misst Du Deine eigenen."
+      }
+    }
+  }
+}

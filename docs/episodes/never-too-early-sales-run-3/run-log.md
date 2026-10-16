@@ -397,3 +397,101 @@ Changes from the template, each with its reason:
 - Needs human: FE-002 Do 1 and FE-004 now describe `sections/` for every Episode, while `page-template/` and older Episodes list Slides in the record: migrate them, or scope the rule to Section-built Episodes.
 - Needs human: every Voice script segment has `"keywords": ""`, which no other Episode has.
 - Needs human: `episode-migration.md` calls `<section-slug>` the section slide's slug, `implement-episode-init.md` the Brief h3 in kebab case; they agree here but may drift.
+
+## implement-section-why-watching-cashflow-is-mission-critical · 2026-10-16T15:41:19Z
+
+### Inputs
+
+- The approved Spec, `spec/spec.html`: Section `why-watching-cashflow-is-mission-critical`, Slide 1 with picked Option 1c and its build notes, 1a's build notes that 1c points to, and the Visual language's `CashflowBoard` interface and reference drawing.
+- Options 6a and 10a, read so the shared part's interface covers them.
+- `reference/source-deck/design-reference.md`, page 3.
+- `skills/new-episode/references/implement-section.md` and `references/skill-overrides.md`.
+- The orchestrator's settlement in the handoff: this job owns and builds `CashflowBoard`.
+
+### Output
+
+- `206e484`: the shared server part `src/components/slide-shared/cashflow-board/` (`CashflowBoard`, `CashLeft`, `cashLeft()`), placed by column and slot, with stamp, arrow, highlight and call-out or bracket annotations, tested at its pure helpers and rendered markup.
+- `34e18a7`: Slide `watch-your-cashflow` built to 1c in `src/components/episodes/never-too-early-sales-run-3/slides/`, listed in `sections/why-watching-cashflow-is-mission-critical.ts`; four Voice script segments and three Speaker notes, in English and German.
+- `e012191`: the job branch merged into `episode/never-too-early-sales-run-3`; its worktree and branch removed.
+- Decision: Sections 3 and 5 branch from the Episode branch after this merge, so they import the merged part instead of coding against its interface.
+
+### Checks
+
+- `verify`, `build`, `test:build`, `impeccable` (en and de, exit 0): pass.
+- `visual-check`: pass. Count 1, 89 mounted descendants, wrapper 1768, 1153 and 1210 px at 375, 1100 and 1440 (viewport 800), no horizontal overflow, the same in light and dark; drawer beside clears by 72 px and the table of contents by 48 px.
+- Reviewer (`code-review`, base `d4fedd7`): Standards pass; Spec pass on rubric lines 1 to 4 and 6, line 5 `needs-human`.
+- After the merge: `mh` and the staging test pass.
+
+### Notes
+
+- Needs human: with the drawer closed, the floating Context button covers April's amount. The board ends at FE-009's 3rem inset, which is narrower than the button; it applies to every full-width Slide.
+- Needs human: April's `Cash left €950,000` footer stays beside the Bankrupt stamp, as the Spec draws it.
+- Needs human: `CashflowBoard` adds `labels` and `locale` props that the Visual language's interface does not name; they localise the note kinds and the euro format.
+- Needs human: 6a and 10a disagree on the arrow label (under the `from` slot or on the shaft); the part draws a pill under the middle of the shaft.
+- Needs human: the German text is the implementor's translation; the Spec is English only.
+- Needs human: interactive pass skipped, no browser.
+- The merge commit `e012191` carries git's default message, without `Source:` or `Agent:` trailers.
+
+## implement-section-why-sales-is-more-than-just-selling · 2026-10-16T15:41:19Z
+
+### Inputs
+
+- The approved Spec, `spec/spec.html`: Section `why-sales-is-more-than-just-selling`, Slide 2 with picked Option 2c (2c's layout with 2a's card content) and its build notes.
+- `reference/source-deck/design-reference.md`, page 4.
+- `skills/new-episode/references/implement-section.md`, `references/skill-overrides.md` and `docs/features/episode-translation-keys.md`.
+- Attempt 2: Attempt 1's failed Standards line, quoted verbatim.
+
+### Output
+
+- `b72277e` (Attempt 1): Slide `sales-is-more-than-selling` built to 2c, listed in `sections/why-sales-is-more-than-just-selling.ts`; four Voice script segments and seven Speaker notes, in English and German.
+- `26e9603` (Attempt 2): the board's Scene text moved from `notes.{market,internal,trust}` to `board.*`; a guard in `slide-folders.test.ts` fails any `notes.<key>` that is not a declared Speaker note; each `SignalBars` row is a valid `div > dt + dd`.
+- `2567983`: the job branch merged into `episode/never-too-early-sales-run-3`; Section counts in `registry.test.ts` and the post-build captures resolved to hold Sections 1 and 2; worktree and branch removed.
+
+### Checks
+
+- `verify`, `build`, `test:build`, `impeccable` (en and de, exit 0): pass.
+- `visual-check`: pass. Count 1, 100 mounted descendants, wrapper 2065, 1908 and 1333 px at 375, 1100 and 1440 (viewport 800), no horizontal overflow, the same in light and dark; 48 px clear of the table of contents and the drawer beside.
+- Reviewer (`code-review`, base `d4fedd7`): Attempt 2 passes the Standards line Attempt 1 failed; the Spec axis passed all six rubric lines in Attempt 1.
+- After the merge: `verify`, `mh` and the staging test pass; the rebuilt captures hold every line of both job branches.
+
+### Notes
+
+- Attempt 1 failed "Standards: FE-010 §3.1 Translation keys follow docs/features/episode-translation-keys.md; notes.<note> is reserved for Speaker notes": the board text sat under `notes.*`. Attempt 2 moved it to `board.*`.
+- The one-column fallback switches on the board's own width (896 px), not the viewport, so the board fits beside the drawer.
+- Needs human: the on-screen caption cites the Gompers, Gornall, Kaplan and Strebulaev survey of 885 VCs; the Spec gives no caption text.
+- Needs human: 2a keeps `data-recommended` and a caption arguing for 2a in the Spec, while 2c is built.
+- Needs human: the German text is the implementor's translation.
+- Needs human: the `SignalBars` value `dd` uses `display: contents`; confirm it reads right with a screen reader.
+- Needs human: interactive pass skipped, no browser.
+
+## implement-section-why-building-an-effective-sales-pipeline-takes-time · 2026-10-16T15:52:21Z
+
+### Inputs
+
+- The approved Spec, `spec/spec.html`: Section `why-building-an-effective-sales-pipeline-takes-time`, Slides 7, 8 and 9 with picked Options 7b, 8b and 9b and their build notes, and the Visual language.
+- `reference/source-deck/design-reference.md`, pages 10, 11 and 15.
+- `skills/new-episode/references/implement-section.md`, `references/skill-overrides.md` and `docs/features/episode-translation-keys.md`.
+- Attempt 2: Attempt 1's failed Standards line, quoted verbatim, and `.archgate/adrs/FE-011-design-tokens.md`.
+
+### Output
+
+- `20212df` (Attempt 1): Slides `what-is-a-sales-pipeline`, `pipeline-by-the-numbers` and `why-it-takes-time-to-ramp-up`, listed in `sections/why-building-an-effective-sales-pipeline-takes-time.ts` in Spec order; eleven Voice script segments and ten Speaker notes, in English and German; a tested count table for Slide 8.
+- `56bd0a5` (Attempt 2): every Scene `<b>` carries `font-semibold`, the `t.rich` `b` override in Slide 7 is removed so the site's rich tag applies, an unused `.bar` selector is removed, and Slide 9's lane labels are keyed `lanes.*` instead of `columns.*`.
+- `3f1e64c`: the job branch merged into `episode/never-too-early-sales-run-3`, the post-build captures written again from the merged build to hold Sections 1, 2 and 4; worktree and branch removed.
+
+### Checks
+
+- `verify`, `build`, `test:build`, `impeccable` (en and de, exit 0): pass.
+- `visual-check`: pass. Count 1 for each Slide; 75, 118 and 47 mounted descendants; wrappers 1349, 923 and 874 px (Slide 7), 1869, 1505 and 1042 (Slide 8), 1740, 1628 and 997 (Slide 9) at 375, 1100 and 1440 (viewport 800); no horizontal overflow; the same in light and dark; 48 px clear of the drawer beside.
+- Reviewer (`code-review`, base `d4fedd7`): Attempt 2 passes the Standards line Attempt 1 failed; the Spec axis passed all six rubric lines in Attempt 1.
+- After the merge: `verify`, `mh` and the staging test pass.
+
+### Notes
+
+- Attempt 1 failed "Standards: FE-011 §3.4 Weights are normal, medium, semibold; §1.1 font weight inside a Scene MUST come from tokens": four `<b>` rendered at 700. Attempt 2 set them to semibold.
+- Slide 7's build notes key the company cards as `notes.*`, which FE-010 reserves for Speaker notes; they are keyed `cards.*`.
+- Needs human: Slide 8's Speaker note "A reference win rate" has no target in the Spec; it targets the Slide title.
+- Needs human: Slide 9's "? months" note wraps to two lines at 1440 px, where the mock shows one.
+- Needs human: with the drawer closed, the floating Context button sits over a line of content near the screen bottom on some widths, as on Section 1.
+- Needs human: the German text is the implementor's translation.
+- Needs human: interactive pass skipped, no browser.

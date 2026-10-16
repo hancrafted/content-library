@@ -71,6 +71,31 @@ describe('success cases', () => {
     expect(expected.filter((part) => !html.includes(part))).toEqual([]);
   });
 
+  it('draws a curved arrow as a stroked path, its label on a pill in the slot under its start', () => {
+    // ARRANGE
+    const expected = [
+      'data-cashflow="arrow" data-variant="curve"',
+      '<path',
+      'data-cashflow="arrow-label"',
+      'One month earlier',
+    ];
+    // ACT
+    const html = board({ arrow: { from: [2, 2], to: [1, 2], label: 'One month earlier', variant: 'curve' } });
+    // ASSERT
+    expect(expected.filter((part) => !html.includes(part))).toEqual([]);
+  });
+
+  it('rings a note it is told to ring in primary, and only that note', () => {
+    // ARRANGE
+    const expected = 1;
+    // ACT
+    const html = board({
+      columns: [{ label: 'March', notes: [{ kind: 'cost', amount: 50000 }, { kind: 'revenue', ring: true }, null] }],
+    });
+    // ASSERT
+    expect(html.match(/data-ring="true"[^>]*ring-primary/g)?.length).toBe(expected);
+  });
+
   it("draws a column's footer under its lane, the cash left line the Slides pass", () => {
     // ARRANGE
     const footer = createElement(CashLeft, { label: 'Cash left', amount: -50000, locale: 'en' });
@@ -110,6 +135,17 @@ describe('edge cases', () => {
     const text = textOf(board());
     // ASSERT
     expect(text).toContain(expected);
+  });
+
+  it('draws an arrow given no variant as the straight shaft, its label on the shaft', () => {
+    // ARRANGE
+    const expected = 'data-cashflow="arrow" data-variant="shaft"';
+    const absent = 'data-cashflow="arrow-label"';
+    // ACT
+    const html = board({ arrow: { from: [2, 2], to: [1, 2], label: 'One month earlier' } });
+    // ASSERT
+    expect(html).toContain(expected);
+    expect(html).not.toContain(absent);
   });
 
   it('names the board for a screen reader and draws nothing it was not given', () => {

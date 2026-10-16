@@ -1,0 +1,74 @@
+{
+  "title": "How marketing feeds the pipeline",
+  "kicker": "How to start doing sales · marketing",
+  "caption": "Massive volume, into one defined stage. Sales works what lands there.",
+  "marketing": "Marketing",
+  "volume": "massive volume",
+  "sources": {
+    "content": "Content",
+    "ads": "Ads",
+    "web": "Web page"
+  },
+  "board": "Pipeline, five stages; marketing feeds the first",
+  "lanes": {
+    "leadIn": { "short": "Lead in" },
+    "contact": { "short": "Contact" },
+    "needs": { "short": "Needs" },
+    "proposal": { "short": "Proposal" },
+    "negotiation": { "short": "Negotiation" }
+  },
+  "deals": {
+    "orbit": "Orbit",
+    "pinecrest": "Pinecrest",
+    "quarry": "Quarry",
+    "redwood": "Redwood",
+    "saltmarsh": "Saltmarsh",
+    "vela": "Vela"
+  },
+  "incoming": {
+    "form": { "tag": "inbound", "text": "A form sent: sales can call" },
+    "checkout": { "tag": "checkout", "text": "An order placed online" },
+    "demo": { "tag": "inbound", "text": "A demo booked" }
+  },
+  "stage": "A defined stage",
+  "handOff": "Sales works what lands here",
+  "notes": {
+    "customers-do-not-arrive-alone": {
+      "header": "Customers do not arrive alone",
+      "description": "\"You can't wait for users to come to you. You have to go out and get them\": getting users is a gradual process, and early numbers look too small only to those who underestimate compound growth.[1]",
+      "sources": {
+        "graham-do-things-that-dont-scale": {
+          "title": "Paul Graham, Do Things that Don't Scale"
+        }
+      }
+    },
+    "the-marketing-hand-off-has-its-own-rate": {
+      "header": "The marketing hand-off has its own rate",
+      "description": "In one vendor dataset the rate from marketing-qualified to sales-qualified lead was 68 percent, against a 19 percent win rate further down; stage rates are measured on one company's own stage definitions.[1]",
+      "sources": {
+        "ebsta-gtm-benchmarks": {
+          "title": "Ebsta and Pavilion, GTM Benchmarks Report"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "two-ways-in": {
+        "title": "Two ways in",
+        "keywords": "",
+        "script": "There are two ways to get a lead. You go and get it, or it walks in on its own, and marketing is the second way."
+      },
+      "volume-into-a-defined-stage": {
+        "title": "Volume into a defined stage",
+        "keywords": "",
+        "script": "Marketing speaks to many people at once, so that a customer enters themselves into a defined stage. An inbound lead is one example, an e-commerce checkout is another."
+      },
+      "hand-to-sales": {
+        "title": "Hand to sales",
+        "keywords": "",
+        "script": "Marketing fills the stage and sales works what lands in it. Which means marketing does not replace the first call, it gives that call someone to be made to."
+      }
+    }
+  }
+}

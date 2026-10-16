@@ -7,6 +7,8 @@ export interface Note {
   readonly amount?: number;
   /** A larger note, for the one number the board turns on. */
   readonly big?: boolean;
+  /** A `primary` ring around the note, for the one note a Slide points at. */
+  readonly ring?: boolean;
   /** The Context drawer target the note carries, the value a Slide kit's `target(…)` names. */
   readonly target?: string;
 }
