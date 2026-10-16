@@ -1,0 +1,139 @@
+{
+  "kicker": "Drei Erträge vor dem Umsatz",
+  "title": "Vertrieb ist mehr als Verkaufen",
+  "lead": "Früh zu verkaufen zahlt sich dreimal aus, und alle drei Erträge kommen <em>vor dem Umsatz</em>.",
+  "caption": "Befragung von 885 institutionellen Risikokapitalgebern: Gompers, Gornall, Kaplan und Strebulaev, How Do Venture Capitalists Make Decisions?",
+  "equationLabel": "Markterkenntnisse gewinnen plus interne Erkenntnisse gewinnen ergibt Vertrauen stärken.",
+  "brace": "Was Du lernst",
+  "marginNote": "Das „=“ ist eine These, kein Beweis: Ein erstes Ergebnis zeigt, dass Dein Team verkaufen kann.",
+  "stamp": "Vor dem Umsatz",
+  "board": {
+    "market": {
+      "title": "Markterkenntnisse gewinnen",
+      "body": "Jedes Kundengespräch ist Marktforschung, die Du nicht bezahlen musstest.",
+      "ask": "Wann ist Dir das zuletzt passiert?",
+      "answer": "Letzten Monat. Wir haben zwei Tage dadurch verloren.",
+      "points": {
+        "time": "Wofür Du Deine Zeit einsetzt",
+        "network": "Ein Netzwerk"
+      },
+      "dropped": "Hypothese 2"
+    },
+    "internal": {
+      "title": "Interne Erkenntnisse gewinnen",
+      "body": "Wie gut verkaufst Du, und könnte es außer Dir jemand wiederholen?",
+      "path": {
+        "you": "Du",
+        "repeat": "wiederholen",
+        "hire": "erste Vertriebskraft",
+        "team": "ein Team"
+      }
+    },
+    "trust": {
+      "title": "Vertrauen stärken",
+      "body": "Investoren und zögerliche Kunden vertrauen dem, was schon jemand anderes gekauft hat.",
+      "points": {
+        "investment": "Investitionen gewinnen",
+        "customers": "Zögerliche Kunden überzeugen"
+      },
+      "bars": {
+        "heading": "Was 885 VCs am meisten gewichten",
+        "rows": {
+          "team": "Team",
+          "model": "Geschäftsmodell",
+          "product": "Produkt",
+          "market": "Markt"
+        }
+      }
+    }
+  },
+  "notes": {
+    "your-starting-model-is-wrong": {
+      "header": "Dein erstes Modell ist falsch",
+      "description": "Das erste Modell, das sich ein Gründer von seinen Nutzern macht, ist immer ungenau, selbst wenn er einer von ihnen ist, und der direkte Kontakt zu den ersten Nutzern bringt das beste Feedback, das die Firma je bekommen wird.[1]",
+      "sources": {
+        "graham-do-things-that-dont-scale": {
+          "title": "Graham, Do Things that Don't Scale"
+        }
+      }
+    },
+    "ask-about-the-last-time": {
+      "header": "Frag nach dem letzten Mal",
+      "description": "Erkenntnis kommt aus Einzelheiten: Frag nach Problemen, die der Nutzer schon hatte, nicht nach hypothetischen, und betrachte Kundengespräche als Teil der Aufgabe des CEO.[1] Die Quellen sprechen von Interviews und Nutzern, nicht von Verkaufsgesprächen; dass ein Verkaufsgespräch dieselben Fakten liefert, ist eine Schlussfolgerung.",
+      "sources": {
+        "yc-how-to-talk-to-users": {
+          "title": "Y Combinator (Migicovsky), Startup School Week 1 Recap: How to Talk to Users"
+        }
+      }
+    },
+    "a-signal-must-be-costly-to-fake": {
+      "header": "Ein Signal muss schwer zu fälschen sein",
+      "description": "Wenn eine Seite mehr weiß als die andere, trägt eine Handlung Information, die für einen starken Typ billiger ist als für einen schwachen, denn die Information steckt in den Kosten, nicht im Inhalt.[1]",
+      "sources": {
+        "spence-job-market-signaling": {
+          "title": "Spence, Job Market Signaling"
+        }
+      }
+    },
+    "investors-read-the-team": {
+      "header": "Investoren schauen aufs Team",
+      "description": "In einer Befragung von 885 institutionellen Risikokapitalgebern war das Managementteam der am häufigsten genannte Faktor (95 %), vor Geschäftsmodell (83 %), Produkt (74 %) und Markt (68 %).[1]",
+      "sources": {
+        "gompers-how-vcs-make-decisions": {
+          "title": "Gompers, Gornall, Kaplan und Strebulaev, How Do Venture Capitalists Make Decisions?"
+        }
+      }
+    },
+    "no-study-measures-lois-or-pipelines": {
+      "header": "Keine Studie misst Absichtserklärungen oder Pipelines",
+      "description": "Die Signaltheorie auf frühe Verkaufserfolge zu übertragen ist eine Schlussfolgerung, und eine unverbindliche Absichtserklärung ist billig zu haben, also trennt sie starke von schwachen Firmen schlecht; je verbindlicher die Zusage, desto mehr Vertrauen bringt sie plausibel ein.[1]",
+      "sources": {
+        "spence-job-market-signaling": {
+          "title": "Spence, Job Market Signaling"
+        }
+      }
+    },
+    "premature-scaling-burns-cash": {
+      "header": "Zu frühes Skalieren verbrennt Geld",
+      "description": "Blank nennt das verfrühte Skalieren von Vertrieb und Marketing die häufigste Ursache dafür, dass ein Startup Geld verliert.[1]",
+      "sources": {
+        "blank-it-must-be-a-marketing-problem": {
+          "title": "Blank, It Must Be A Marketing Problem"
+        }
+      }
+    },
+    "friends-orders-can-mislead": {
+      "header": "Aufträge von Freunden können täuschen",
+      "description": "Frühe Aufträge von Beiratsmitgliedern oder Freunden sind gut für die Moral und die Kasse, zeigen aber womöglich nicht, was das Geschäftsmodell ist.[1]",
+      "sources": {
+        "blank-it-must-be-a-marketing-problem": {
+          "title": "Blank, It Must Be A Marketing Problem"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "every-talk-is-research": {
+        "title": "Jedes Gespräch ist Forschung",
+        "keywords": "",
+        "script": "Jedes Kundengespräch ist Marktforschung, für die Du nicht bezahlen musstest. Es zeigt Dir, wofür Du Deine Zeit einsetzen solltest und welche Hypothese Du fallen lassen kannst. Das ist meine Lesart von Verkaufen als Gespräch, kein gemessenes Ergebnis."
+      },
+      "know-how-well-you-sell": {
+        "title": "Wisse, wie gut Du verkaufst",
+        "keywords": "",
+        "script": "Der zweite Ertrag bleibt in Deiner Firma. Du lernst, wie gut Du verkaufst und ob es außer Dir jemand wiederholen könnte, denn erst ein wiederholbarer Prozess erlaubt Dir, die erste Vertriebskraft einzustellen."
+      },
+      "trust-is-the-sum": {
+        "title": "Vertrauen ist die Summe",
+        "keywords": "",
+        "script": "Der dritte ist Vertrauen. Investoren und zögerliche Kunden vertrauen dem, was schon jemand anderes gekauft hat. Um ehrlich zu sein: Das ist eine These und kein Beweis. Ein erstes Ergebnis zeigt, dass Dein Team verkaufen kann, und deshalb zählt es."
+      },
+      "verdict": {
+        "title": "Fazit",
+        "keywords": "",
+        "script": "Erkenntnis und Prozess münden beide in Vertrauen. Schau Dir also die drei Kästen an und frag Dich, nach welchem Dein nächster Investor zuerst fragen würde."
+      }
+    }
+  }
+}
