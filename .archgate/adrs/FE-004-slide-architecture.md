@@ -32,7 +32,7 @@ flowchart TD
 
 ```mermaid
 flowchart LR
-  ep["episodes/ep — record + Slide folders"] --> master["slide-master — frame, layouts, record and kit types"]
+  ep["episodes/ep — record, sections/ + Slide folders"] --> master["slide-master — frame, layouts, record and kit types"]
   ep --> shared["slide-shared — parts two Slides share"]
   ep --> ui["ui — primitives"]
   shared --> ui
@@ -83,16 +83,16 @@ For this project the map matters because handoffs run on agents with no session 
 
 ### 1. This record is the map
 
-1. Read this before touching an Episode: modules and flows, not mechanism. Rules live with each area's owner: Episode page, import boundary, server/client boundary, Slide wrapper, Context drawer.
+1. Read this before touching an Episode: modules and flows, not mechanism; rules live with each area's owner (Context).
 
 ### 2. Four tiers, one direction
 
-1. `app → components → hooks → lib`, skips downward only. Routes stay thin, reach components through the page composition roots.
+1. `app → components → hooks → lib`, skips downward only. Routes stay thin, reaching components via the page composition roots.
 
 ### 3. Each module owns one thing
 
-1. `episodes/<ep>/` owns one Episode: its record (Sections of Slides), its own text, published anchors, and one folder per Slide.
-2. A Slide folder owns all its Slide needs: Scene, widgets, logic, CSS, text, notes, Voice script.
+1. `episodes/<ep>/` owns one Episode: its record, its own text, published anchors, one folder per Slide, and one `sections/<section-slug>.ts` per Section, exporting its ordered Slides to the record's `sections`.
+2. A Slide folder owns all it needs: Scene, widgets, logic, CSS, text, notes, Voice script.
 3. `slide-master/` owns the frame, the Slide layouts and the record and kit types; `slide-shared/` owns parts two Slides share, as plain props.
 4. `episode-page/` owns the one container and Slide mechanics; `table-of-contents/` and `context-drawer/` own the chrome, reached only from the container.
 
@@ -117,7 +117,7 @@ For this project the map matters because handoffs run on agents with no session 
 
 1. **DO** start from this map, then open the record that owns the concern. (Decision 1)
 2. **DO** add an Episode by copying `page-template/` and registering it. (Decision 3, Decision 4)
-3. **DO** add a Slide as one folder, one import and one list entry. (Decision 3)
+3. **DO** add a Slide as one folder, one import and one list entry in its Section's `sections/<section-slug>.ts`. (Decision 3, design-ADR-0008)
 4. **DO** promote a part a second Slide needs into `slide-shared/`. (Decision 3, Decision 6)
 5. **DO** put Slide text in its folder's `i18n/`, Slide CSS in its own module. (Decision 5)
 6. **DO** keep interactivity in the smallest `*.client.tsx` leaf. (Decision 5)
@@ -165,4 +165,5 @@ For this project the map matters because handoffs run on agents with no session 
 - [`GLOSSARY.md`](../../GLOSSARY.md) — Episode, Slide, Scene, chrome.
 - [`docs/adr/0001-the-slide-is-a-self-contained-folder.md`](../../docs/adr/0001-the-slide-is-a-self-contained-folder.md) — why a Slide is a folder.
 - [`docs/features/episode-migration.md`](../../docs/features/episode-migration.md) — building an Episode step by step.
+- [`docs/adr/0008-pipeline-jobs-belong-to-stages.md`](../../docs/adr/0008-pipeline-jobs-belong-to-stages.md) — why each Section is its own `sections/` module.
 - [Mermaid flowcharts](https://mermaid.js.org/syntax/flowchart.html)

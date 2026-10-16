@@ -10,7 +10,7 @@ Read before turning a prototype (for example an HTML tower page) into an Episode
 
 Each step ends on a completion criterion. Stop at a step only when its criterion holds. Work in a worktree; commit through `/commit`.
 
-**Splitting the work across agents.** The orchestrator does steps 1–3 and 7–10. Each sub-agent owns whole Slide folders, steps 4–6: Scene, widgets, CSS module and its `i18n/` text, and touches no file outside them. The orchestrator then adds only one import and one list entry per Slide to the Episode file. No two agents write the same file.
+**Splitting the work across agents.** The orchestrator does steps 1–3 and 7–10. Each sub-agent owns whole Slide folders, steps 4–6: Scene, widgets, CSS module and its `i18n/` text, and touches no file outside them. The orchestrator then adds only one import and one list entry per Slide to its Section's module (step 7). No two agents write the same file.
 
 ## 1. Read the source
 
@@ -110,7 +110,8 @@ Done when: each widget's pure logic has a passing test.
 
 ## 7. Compose and snapshot
 
-- `episodes/<ep>/<ep>.ts`: fill `sections: [[sectionSlide, ...pages], ...]` in `episode({ slug, youtube, messages: { en, de }, sections })`. Copying a Slide in from another Episode is `cp -r` of its folder plus one import and one entry here.
+- `episodes/<ep>/sections/<section-slug>.ts`, one per Section, `<section-slug>` the slug of its section slide: export that Section's Slide list, `[sectionSlide, ...pages]`, in order ([FE-004 §3](../../.archgate/adrs/FE-004-slide-architecture.md#3-each-module-owns-one-thing), [design-ADR-0008](../adr/0008-pipeline-jobs-belong-to-stages.md)). A page Slide is listed there, never in the Episode file. Copying a Slide in from another Episode is `cp -r` of its folder plus one import and one entry in its Section's module.
+- `episodes/<ep>/<ep>.ts`: import each Section's list and fill `sections: [...]` with them, in Section order, in `episode({ slug, youtube, messages: { en, de }, sections })`.
 - To feature it, edit the three slugs in `FEATURED` in `src/lib/episode-overview.ts`.
 - Do not write `published-anchors.json`: `published-anchors.test.ts` skips an upcoming Episode, and the publish step writes the file ([Episode publishing](episode-publishing.md)).
 
@@ -123,7 +124,7 @@ npm run verify
 npm run build && npm run test:build
 ```
 
-`test:build` holds three hand-kept expectations a new Episode touches:
+`test:build` holds three hand-kept expectations a new Episode touches; the rest, such as whether a page must carry Speaker notes, it derives from the built pages:
 
 - **Captured text:** the first run writes `tests/post-build/episode-text/<ep>.{en,de}.json` and fails on purpose. Review both files, commit them, run again. A later wording change fails against the capture: delete the two files, rerun, review the new capture.
 - **Untitled Slides:** each Slide left without a `title` gets its anchor in `UNTITLED` in `tests/post-build/episode-structure.build.test.ts`.

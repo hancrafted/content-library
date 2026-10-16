@@ -27,12 +27,16 @@ const DOGFOOD_COUNTS = [
   { slide: 'where-it-breaks--enforce-and-verify', notes: 4, segments: 3 },
 ];
 
-// Episodes whose page holds no Speaker note yet: one built Section by Section
-// starts with its section slides alone, and its Section jobs add the notes.
-const NOTELESS: readonly string[] = ['never-too-early-sales-run-3'];
-
 function page(url: string): CheerioAPI {
   return load(readFileSync(join(OUT_DIR, exportedFile(url)), 'utf8'));
+}
+
+/**
+ * Whether the page holds a page Slide: one whose anchor is `<section>--<slide>`. A page of the Title slide and
+ * section slides alone, as an Episode built Section by Section starts, carries no Speaker note yet.
+ */
+function holdsPageSlide($: CheerioAPI): boolean {
+  return $('[data-slot="slides"] [data-slide*="--"]').length > 0;
 }
 
 function entry($: CheerioAPI, panel: 'notes' | 'script', anchor: string) {
@@ -77,7 +81,7 @@ describe.each(PAGES)('$url', ({ slug, url }) => {
     // ARRANGE
     const $ = page(url);
     const notes = $('#context-panel-notes [data-note-target]').toArray();
-    const fewestNotes = NOTELESS.includes(slug) ? 0 : 1;
+    const fewestNotes = holdsPageSlide($) ? 1 : 0;
     // ACT
     const unresolved = notes
       .map((note) => ({
