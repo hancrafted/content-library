@@ -463,3 +463,35 @@ Changes from the template, each with its reason:
 - Needs human: the German text is the implementor's translation.
 - Needs human: the `SignalBars` value `dd` uses `display: contents`; confirm it reads right with a screen reader.
 - Needs human: interactive pass skipped, no browser.
+
+## implement-section-why-building-an-effective-sales-pipeline-takes-time · 2026-10-16T15:52:21Z
+
+### Inputs
+
+- The approved Spec, `spec/spec.html`: Section `why-building-an-effective-sales-pipeline-takes-time`, Slides 7, 8 and 9 with picked Options 7b, 8b and 9b and their build notes, and the Visual language.
+- `reference/source-deck/design-reference.md`, pages 10, 11 and 15.
+- `skills/new-episode/references/implement-section.md`, `references/skill-overrides.md` and `docs/features/episode-translation-keys.md`.
+- Attempt 2: Attempt 1's failed Standards line, quoted verbatim, and `.archgate/adrs/FE-011-design-tokens.md`.
+
+### Output
+
+- `20212df` (Attempt 1): Slides `what-is-a-sales-pipeline`, `pipeline-by-the-numbers` and `why-it-takes-time-to-ramp-up`, listed in `sections/why-building-an-effective-sales-pipeline-takes-time.ts` in Spec order; eleven Voice script segments and ten Speaker notes, in English and German; a tested count table for Slide 8.
+- `56bd0a5` (Attempt 2): every Scene `<b>` carries `font-semibold`, the `t.rich` `b` override in Slide 7 is removed so the site's rich tag applies, an unused `.bar` selector is removed, and Slide 9's lane labels are keyed `lanes.*` instead of `columns.*`.
+- `3f1e64c`: the job branch merged into `episode/never-too-early-sales-run-3`, the post-build captures written again from the merged build to hold Sections 1, 2 and 4; worktree and branch removed.
+
+### Checks
+
+- `verify`, `build`, `test:build`, `impeccable` (en and de, exit 0): pass.
+- `visual-check`: pass. Count 1 for each Slide; 75, 118 and 47 mounted descendants; wrappers 1349, 923 and 874 px (Slide 7), 1869, 1505 and 1042 (Slide 8), 1740, 1628 and 997 (Slide 9) at 375, 1100 and 1440 (viewport 800); no horizontal overflow; the same in light and dark; 48 px clear of the drawer beside.
+- Reviewer (`code-review`, base `d4fedd7`): Attempt 2 passes the Standards line Attempt 1 failed; the Spec axis passed all six rubric lines in Attempt 1.
+- After the merge: `verify`, `mh` and the staging test pass.
+
+### Notes
+
+- Attempt 1 failed "Standards: FE-011 §3.4 Weights are normal, medium, semibold; §1.1 font weight inside a Scene MUST come from tokens": four `<b>` rendered at 700. Attempt 2 set them to semibold.
+- Slide 7's build notes key the company cards as `notes.*`, which FE-010 reserves for Speaker notes; they are keyed `cards.*`.
+- Needs human: Slide 8's Speaker note "A reference win rate" has no target in the Spec; it targets the Slide title.
+- Needs human: Slide 9's "? months" note wraps to two lines at 1440 px, where the mock shows one.
+- Needs human: with the drawer closed, the floating Context button sits over a line of content near the screen bottom on some widths, as on Section 1.
+- Needs human: the German text is the implementor's translation.
+- Needs human: interactive pass skipped, no browser.
