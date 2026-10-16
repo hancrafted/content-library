@@ -495,3 +495,40 @@ Changes from the template, each with its reason:
 - Needs human: with the drawer closed, the floating Context button sits over a line of content near the screen bottom on some widths, as on Section 1.
 - Needs human: the German text is the implementor's translation.
 - Needs human: interactive pass skipped, no browser.
+
+## implement-section-how-to-start-doing-sales · 2026-10-16T16:30:16Z
+
+### Inputs
+
+- The approved Spec, `spec/spec.html`: Section `how-to-start-doing-sales`, Slides 3 to 6 with picked Options 3a, 4a, 5a and 6a and their build notes, and the Visual language.
+- `reference/source-deck/design-reference.md`, page 6.
+- `skills/new-episode/references/implement-section.md`, `references/skill-overrides.md` and `docs/features/episode-translation-keys.md`.
+- `src/components/slide-shared/cashflow-board/` as merged from Section 1, and Slides 1 and 2 as examples; this job branched from the Episode branch after Section 1 merged.
+- The FE-010 and FE-011 lessons from Sections 2 and 4's failed lines, given to the implementor up front.
+
+### Output
+
+- `ef1af92`: Slides `stages-of-sale`, `pipeline-tools-in-practice`, `how-marketing-feeds-the-pipeline` and `watch-your-cashflow-revenue-pulled-in`, listed in `sections/how-to-start-doing-sales.ts` in Spec order; thirteen Voice script segments and six Speaker notes, in English and German.
+- `ef1af92`: a new shared part `src/components/slide-shared/deal-board/`, which Slides 4 and 5 draw, as 5a's build notes ask.
+- `ef1af92`: `CashflowBoard` extended additively: an optional arrow `variant: 'curve'` (a stroked arc with its label under the `from` slot) and an optional `ring` on a note; the default shaft arrow is unchanged.
+- `a7bb833`: the job branch merged into `episode/never-too-early-sales-run-3`, Section counts and post-build captures written again for Sections 1 to 4; worktree and branch removed.
+
+### Checks
+
+- `verify`, `build`, `test:build`, `impeccable` (en and de, exit 0): pass.
+- `visual-check`: pass. Count 1 for each Slide; 97, 105, 86 and 81 mounted descendants; wrappers 2141, 2188 and 1038 px (Slide 3), 1045, 1006 and 906 (Slide 4), 1106, 1141 and 803 (Slide 5), 1457, 1010 and 1091 (Slide 6) at 375, 1100 and 1440 (viewport 800); no horizontal overflow; the same in light and dark; clear of the drawer beside at 1440.
+- Reviewer (`code-review`, base `a0b7bb3`): Standards pass; Spec pass on all six rubric lines.
+- After the merge: `verify`, `mh` and the staging test pass.
+
+### Notes
+
+- Slide 6's board text and Slides 4 and 5's company names are keyed under `board.*` and `deals.*`, not the `notes.*` their build notes name, since FE-010 reserves `notes.*`.
+- Speaker notes with no target in the Spec target the Slide title: `stages-of-sale` note 2 and the marketing note 1.
+- The deal boards scroll sideways inside their own focusable row below 44rem (Slide 4) and 36rem (Slide 5).
+- Needs human: `stages-of-sale` Speaker note 2 cites only EU Directive 2011/7/EU.
+- Needs human: Slides 4 and 5 use "pipeline" before Slide 7 defines it.
+- Needs human: 5a gives no narrow layout; the funnel stacks above the board, which scrolls sideways.
+- Needs human: at 375 px, 6a's curved arrow overlaps the edge of the moved revenue note and the "One month earlier" pill wraps.
+- Needs human: whether the near-black primary ring on Slides 3 and 6 reads as the one focus mark.
+- Needs human: the German text is the implementor's translation.
+- Needs human: interactive pass skipped, no browser.
