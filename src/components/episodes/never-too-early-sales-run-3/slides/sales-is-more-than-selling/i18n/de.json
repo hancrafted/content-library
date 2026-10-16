@@ -7,7 +7,7 @@
   "brace": "Was Du lernst",
   "marginNote": "Das „=“ ist eine These, kein Beweis: Ein erstes Ergebnis zeigt, dass Dein Team verkaufen kann.",
   "stamp": "Vor dem Umsatz",
-  "notes": {
+  "board": {
     "market": {
       "title": "Markterkenntnisse gewinnen",
       "body": "Jedes Kundengespräch ist Marktforschung, die Du nicht bezahlen musstest.",
@@ -45,7 +45,9 @@
           "market": "Markt"
         }
       }
-    },
+    }
+  },
+  "notes": {
     "your-starting-model-is-wrong": {
       "header": "Dein erstes Modell ist falsch",
       "description": "Das erste Modell, das sich ein Gründer von seinen Nutzern macht, ist immer ungenau, selbst wenn er einer von ihnen ist, und der direkte Kontakt zu den ersten Nutzern bringt das beste Feedback, das die Firma je bekommen wird.[1]",

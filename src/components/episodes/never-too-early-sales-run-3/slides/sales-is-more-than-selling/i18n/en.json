@@ -7,7 +7,7 @@
   "brace": "What you learn",
   "marginNote": "The \"=\" is a claim, not a proof: a first result shows your team can sell.",
   "stamp": "Before revenue",
-  "notes": {
+  "board": {
     "market": {
       "title": "Gain market insight",
       "body": "Every customer talk is research you did not pay for.",
@@ -45,7 +45,9 @@
           "market": "Market"
         }
       }
-    },
+    }
+  },
+  "notes": {
     "your-starting-model-is-wrong": {
       "header": "Your starting model is wrong",
       "description": "A founder's initial model of users is always inaccurate, even when the founder is one of them, and direct contact with the earliest users gives the best feedback the company will get.[1]",

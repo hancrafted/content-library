@@ -8,23 +8,23 @@ interface BarRow {
   percent: number;
 }
 
-/** One factor: its label and share on a line, its bar below, growing from the left. */
+/** One factor as one `dt` + `dd` group: its label and share on a line, its bar below, growing from the left. */
 function Bar({ row, lead, format, step }: { row: BarRow; lead: boolean; format: Intl.NumberFormat; step: number }) {
   return (
-    <div>
-      <div className={cn('flex justify-between gap-2', lead ? 'font-semibold' : 'text-primary-foreground/70')}>
-        <dt>{row.label}</dt>
-        <dd>{format.format(row.percent / 100)}</dd>
-      </div>
-      <dd aria-hidden="true" className="mt-1 h-2 rounded-full bg-primary-foreground/10">
-        <span
-          style={{ '--bar': `${row.percent}%`, '--step': step } as CSSProperties}
-          className={cn(
-            styles.bar,
-            'block h-2 rounded-full',
-            lead ? 'bg-primary-foreground' : 'bg-primary-foreground/40',
-          )}
-        />
+    <div className={cn('grid grid-cols-[1fr_auto] gap-x-2', lead ? 'font-semibold' : 'text-primary-foreground/70')}>
+      <dt>{row.label}</dt>
+      <dd className="contents">
+        <span>{format.format(row.percent / 100)}</span>
+        <span aria-hidden="true" className="col-span-2 mt-1 h-2 rounded-full bg-primary-foreground/10">
+          <span
+            style={{ '--bar': `${row.percent}%`, '--step': step } as CSSProperties}
+            className={cn(
+              styles.bar,
+              'block h-2 rounded-full',
+              lead ? 'bg-primary-foreground' : 'bg-primary-foreground/40',
+            )}
+          />
+        </span>
       </dd>
     </div>
   );

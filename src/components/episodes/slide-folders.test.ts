@@ -36,6 +36,17 @@ async function declaredSlugs(entry: string): Promise<string[]> {
     .map(({ slug }) => slug);
 }
 
+interface SlideRecord {
+  slug: string;
+  notes: { slug: string }[];
+  messages: Record<string, { notes?: Record<string, unknown> }>;
+}
+
+/** A Slide record an entry module exports: its slug, declared notes and messages per locale. */
+function isSlideRecord(value: unknown): value is SlideRecord {
+  return typeof value === 'object' && value !== null && 'slug' in value && 'notes' in value && 'messages' in value;
+}
+
 describe('success cases', () => {
   it('names every Slide folder after the one Slide slug its server entry declares', async () => {
     // ARRANGE
@@ -62,6 +73,24 @@ describe('failure cases', () => {
       .map(({ episode, folder }) => `${episode}/slides/${folder} has no ${ENTRY}`);
     // ASSERT
     expect(missing).toEqual(expected);
+  });
+
+  it('keeps under notes.* only the Speaker notes a Slide declares, in every locale (FE-010 §3.1)', async () => {
+    // ARRANGE
+    const expected: string[] = [];
+    // ACT
+    const strays = (await Promise.all(slideFolders().map(async ({ entry }) => (await import(entry)) as object)))
+      .flatMap((exported) => Object.values(exported).filter(isSlideRecord))
+      .flatMap(({ slug, notes, messages }) => {
+        const declared = new Set(notes.map((note) => note.slug));
+        return Object.entries(messages).flatMap(([locale, strings]) =>
+          Object.keys(strings.notes ?? {})
+            .filter((key) => !declared.has(key))
+            .map((key) => `${slug} ${locale}: notes.${key} is no declared Speaker note`),
+        );
+      });
+    // ASSERT
+    expect(strays).toEqual(expected);
   });
 
   it('keeps no Episode-level parts/ or client/ folder: Slide code lives only in its Slide folder', () => {

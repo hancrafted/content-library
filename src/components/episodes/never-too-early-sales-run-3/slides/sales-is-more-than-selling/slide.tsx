@@ -88,12 +88,12 @@ export const salesIsMoreThanSelling = slide({
   ],
   content: ({ t, locale, target, Title }) => {
     const marketChips = [
-      { label: t('notes.market.points.time') },
-      { label: t('notes.market.dropped'), dropped: true },
-      { label: t('notes.market.points.network') },
+      { label: t('board.market.points.time') },
+      { label: t('board.market.dropped'), dropped: true },
+      { label: t('board.market.points.network') },
     ];
-    const trustChips = [t('notes.trust.points.investment'), t('notes.trust.points.customers')];
-    const barRows = VC_FACTORS.map(({ slug, percent }) => ({ label: t(`notes.trust.bars.rows.${slug}`), percent }));
+    const trustChips = [t('board.trust.points.investment'), t('board.trust.points.customers')];
+    const barRows = VC_FACTORS.map(({ slug, percent }) => ({ label: t(`board.trust.bars.rows.${slug}`), percent }));
     return (
       <SlideFrame className="gap-10">
         <div>
@@ -117,45 +117,45 @@ export const salesIsMoreThanSelling = slide({
             <Note
               {...target(MARKET)}
               index="01"
-              title={t('notes.market.title')}
-              body={t('notes.market.body')}
+              title={t('board.market.title')}
+              body={t('board.market.body')}
               tilt="left"
               step={0}
               className="@4xl:col-span-3"
             >
-              <Exchange ask={t('notes.market.ask')} answer={t('notes.market.answer')} />
+              <Exchange ask={t('board.market.ask')} answer={t('board.market.answer')} />
               <Chips items={marketChips} />
             </Note>
             <Operator symbol="plus" step={1} className="mx-auto w-12 @4xl:col-span-1 @4xl:w-full" />
             <Note
               {...target(INTERNAL)}
               index="02"
-              title={t('notes.internal.title')}
-              body={t('notes.internal.body')}
+              title={t('board.internal.title')}
+              body={t('board.internal.body')}
               tilt="right"
               step={2}
               className="@4xl:col-span-3"
             >
               <RepeatPath
-                you={t('notes.internal.path.you')}
-                repeat={t('notes.internal.path.repeat')}
-                hire={t('notes.internal.path.hire')}
-                team={t('notes.internal.path.team')}
+                you={t('board.internal.path.you')}
+                repeat={t('board.internal.path.repeat')}
+                hire={t('board.internal.path.hire')}
+                team={t('board.internal.path.team')}
               />
             </Note>
             <Operator symbol="equals" step={3} className="mx-auto w-12 @4xl:col-span-1 @4xl:w-full" />
             <Note
               {...target(TRUST)}
               index="03"
-              title={t('notes.trust.title')}
-              body={t('notes.trust.body')}
+              title={t('board.trust.title')}
+              body={t('board.trust.body')}
               tilt="none"
               emphasis
               step={4}
               className="@4xl:col-span-4"
             >
               <Stamp label={t('stamp')} step={6.5} />
-              <SignalBars heading={t('notes.trust.bars.heading')} rows={barRows} locale={locale} step={5} />
+              <SignalBars heading={t('board.trust.bars.heading')} rows={barRows} locale={locale} step={5} />
               <CheckedChips items={trustChips} />
             </Note>
           </div>
