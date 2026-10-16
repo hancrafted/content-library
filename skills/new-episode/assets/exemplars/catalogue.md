@@ -317,3 +317,12 @@ Drafts for Han, not applied. Each names its file, under `skills/new-episode/` un
 8. `references/write-spec.md`, rubric line 10: append "and at least the density of the catalogue exemplar for its claim type; text that runs past its box at 1440 px in the Spec frame fails."
 9. `assets/spec-frame.html`: show the claim type and its exemplar thumbnail in each `spec-slide-head`, so Han sees the bar each Option was held to.
 10. `scripts/` (new, by `/tdd` after Han agrees the seams): promote this harvest's capture (reduced motion, unrolled tower, one image per `section.beat`) into a script, so a new hand-built page joins the catalogue with one command.
+
+### Spec page UX, from Han's round-2 review
+
+Han's words, 2026-10-16: the note sits below the Slide where he can no longer see it; the intro is three text-heavy columns he does not read; save should be a full button that confirms and keeps his input. These change `assets/spec-frame.html`, `assets/spec-review.html` and the Spec contract in `src/lib/episode-spec*.pure.ts` with its staging test, so they are built by `/tdd`.
+
+11. Pick by tab: the pick checkbox goes; the active tab is the Slide's pick, so every Slide always has exactly one, defaulting to the recommended Option. The contract and `feedback.md` read the pick from the active tab.
+12. Note as a speech bubble: a Note button to the right of the tabs opens a bubble over the stage, typed or dictated, so the Slide stays in view. It stays open with its text while Han switches tabs, has no save of its own, and closes with an × at its top right. The page's Submit saves every bubble's text.
+13. Submit as a full-width primary button; on save, a confirmation alert; inputs and picks are kept after saving, never cleared.
+14. Intro as visuals, not columns: Style, Visual language and Episode page render as visual cards, for example a swatch strip of the tints and tokens, the recurring motif drawn small (the board, the pills), and the Episode page as a mini outline of title slide, Sections and markers, with prose behind a closed `details`.
