@@ -206,9 +206,9 @@ jobs:
           - docs/episodes/<slug>/run-log.md
           - docs/episodes/<slug>/research/*/research.md
           - docs/episodes/<slug>/reference/*/design-reference.md
-          - docs/profile/han/storytelling-guide.md
-          - docs/profile/han/tone-guide.md
-          - docs/profile/han/mental-model-guide.md
+          - docs/profile/storytelling-guide.md
+          - docs/profile/tone-guide.md
+          - docs/profile/mental-model-guide.md
         model: inherit
       - type: reviewer
         skills: []
@@ -234,17 +234,17 @@ jobs:
           - references/write-voice-script.md
           - docs/episodes/<slug>/brief.md
           - docs/episodes/<slug>/dossier.md
-          - docs/profile/han/storytelling-guide.md
-          - docs/profile/han/tone-guide.md
-          - docs/profile/han/mental-model-guide.md
+          - docs/profile/storytelling-guide.md
+          - docs/profile/tone-guide.md
+          - docs/profile/mental-model-guide.md
         model: inherit
       - type: reviewer
         skills: []
         references:
           - references/write-voice-script.md
           - docs/episodes/<slug>/brief.md
-          - docs/profile/han/storytelling-guide.md
-          - docs/profile/han/tone-guide.md
+          - docs/profile/storytelling-guide.md
+          - docs/profile/tone-guide.md
         rubric: references/write-voice-script.md#rubric
         model: opus
 
@@ -265,6 +265,8 @@ jobs:
         skills: [ui-ux-pro-max:slides]
         references:
           - references/write-spec.md
+          - references/spec-designer.md
+          - assets/spec-frame.html
           - assets/spec-review.html
           - assets/sample-episode/spec/spec.html
           - GLOSSARY.md
@@ -280,6 +282,7 @@ jobs:
         skills: [ui-ux-pro-max:ui-ux-pro-max]
         references:
           - references/write-spec.md
+          - references/spec-designer.md
           - GLOSSARY.md
           - docs/episodes/<slug>/brief.md
           - docs/episodes/<slug>/dossier.md
