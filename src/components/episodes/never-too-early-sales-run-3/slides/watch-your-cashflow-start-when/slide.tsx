@@ -94,7 +94,7 @@ export const watchYourCashflowStartWhen = slide({
             labels={{ board: t('board'), cash: t('note.cash'), cost: t('note.cost'), revenue: t('note.revenue') }}
             locale={locale}
             highlight={1}
-            arrow={{ from: [3, 2], to: [1, 2], label: t('arrow') }}
+            arrow={{ from: [3, 2], to: [1, 2], label: t('arrow'), labelGap: 2, stop: 'beside' }}
           />
           <Drop text={t('link')} />
           <div className="mt-4">

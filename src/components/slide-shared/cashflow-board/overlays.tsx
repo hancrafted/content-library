@@ -15,11 +15,29 @@ export function Stamp({ label, column }: { label: string; column: number }) {
   );
 }
 
+const PILL =
+  'rounded-full bg-primary py-1 text-caption font-medium whitespace-nowrap text-primary-foreground shadow-md';
+
 /** The arrow's label, a `primary` pill under its shaft. */
 function ArrowLabel({ label }: { label: string }) {
-  const pill =
-    'rounded-full bg-primary px-3 py-1 text-caption font-medium whitespace-nowrap text-primary-foreground shadow-md';
-  return <span className={cn(styles.arrowLabel, pill)}>{label}</span>;
+  return <span className={cn(styles.arrowLabel, PILL, 'px-3')}>{label}</span>;
+}
+
+/**
+ * A shaft label's `primary` pill. With `points`, it carries a head toward the arrow's end, which a narrow board shows
+ * where it cannot draw the shaft.
+ */
+function ArrowPill({ label, points }: { label: string; points?: 'up' | 'down' }) {
+  return (
+    <span className={cn('inline-flex items-center gap-1.5 px-2.5', PILL)}>
+      {points ? (
+        <svg viewBox="0 0 24 24" className={cn(styles.pointer, 'size-4 fill-current')} aria-hidden="true">
+          <path d={points === 'up' ? 'M12 2 L22 22 L2 22 Z' : 'M12 22 L22 2 L2 2 Z'} />
+        </svg>
+      ) : null}
+      {label}
+    </span>
+  );
 }
 
 /** Where the arrow sits: its first column, its span in either layout, its slot row, and whether it is drawn narrow. */
@@ -34,26 +52,70 @@ function arrowPlacement([fromColumn, slot]: BoardArrow['from'], [toColumn]: Boar
   return { style, 'data-narrow': a.narrowRow === b.narrowRow ? 'true' : 'false' };
 }
 
+/** Which way a narrow board's rows of lanes lie from the arrow's start to its end, when they differ. */
+function rowsBetween(from: BoardArrow['from'], to: BoardArrow['to']) {
+  const start = lanePlacement(from[0]).narrowRow;
+  const end = lanePlacement(to[0]).narrowRow;
+  if (start === end) return undefined;
+  return end < start ? 'up' : 'down';
+}
+
+/**
+ * A shaft's label standing on its own: on the shaft in the gap after column `gap` where the board is wide enough,
+ * else in the slot under `from`, with a head toward `to`'s row on a narrow board that cannot draw the shaft.
+ */
+function ShaftLabel({
+  label,
+  from,
+  to,
+  gap,
+}: {
+  label: string;
+  from: BoardArrow['from'];
+  to: BoardArrow['to'];
+  gap: number;
+}) {
+  const [column, slot] = from;
+  const points = rowsBetween(from, to);
+  return (
+    <p
+      data-cashflow="arrow-label"
+      data-variant="shaft"
+      data-gap={gap}
+      data-points={points}
+      style={placeOn(column, { '--slot': slot, '--gap-wc': gap })}
+      className={styles.shaftLabel}
+    >
+      <ArrowPill label={label} points={points} />
+    </p>
+  );
+}
+
 /**
  * A `primary` arrow along one slot row from the centre of one column to another's, under the notes it crosses, its
- * label on a pill below the shaft. A narrow board draws it only when both ends share a row of lanes.
+ * label on a pill below the shaft or, with `labelGap`, standing on its own. A narrow board draws the shaft only when
+ * both ends share a row of lanes.
  */
-function ShaftArrow({ from, to, label }: BoardArrow) {
+function ShaftArrow({ from, to, label, labelGap, stop }: BoardArrow) {
   const leftward = to[0] < from[0];
   return (
-    <div
-      data-cashflow="arrow"
-      data-variant="shaft"
-      data-direction={leftward ? 'left' : 'right'}
-      {...arrowPlacement(from, to)}
-      className={styles.arrow}
-    >
-      <svg viewBox="0 0 24 24" className="size-8 flex-none fill-primary" aria-hidden="true">
-        <path d={leftward ? 'M2 12 L22 2 L22 22 Z' : 'M22 12 L2 2 L2 22 Z'} />
-      </svg>
-      <span className="h-2 flex-1 rounded-full bg-primary" aria-hidden="true" />
-      {label ? <ArrowLabel label={label} /> : null}
-    </div>
+    <>
+      <div
+        data-cashflow="arrow"
+        data-variant="shaft"
+        data-direction={leftward ? 'left' : 'right'}
+        data-stop={stop}
+        {...arrowPlacement(from, to)}
+        className={styles.arrow}
+      >
+        <svg viewBox="0 0 24 24" className="size-8 flex-none fill-primary" aria-hidden="true">
+          <path d={leftward ? 'M2 12 L22 2 L22 22 Z' : 'M22 12 L2 2 L2 22 Z'} />
+        </svg>
+        <span className="h-2 flex-1 rounded-full bg-primary" aria-hidden="true" />
+        {label && labelGap === undefined ? <ArrowLabel label={label} /> : null}
+      </div>
+      {label && labelGap !== undefined ? <ShaftLabel label={label} from={from} to={to} gap={labelGap} /> : null}
+    </>
   );
 }
 
