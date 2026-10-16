@@ -360,3 +360,40 @@ Changes from the template, each with its reason:
 - Needs human: 2a keeps `data-recommended` and its caption still argues for 2a over the pick 2c. 1a keeps `data-recommended` while 1c is picked.
 - Needs human: `CashflowBoard` is shared by Sections 1, 3 and 5, whose jobs build in parallel. Carried over.
 - Needs human: `stages-of-sale` note 2 cites only EU Directive 2011/7/EU. Carried over.
+
+## implement-episode-init · 2026-10-16T15:01:35Z
+
+### Inputs
+
+- The approved Spec, `spec/spec.html`: its `Episode page` section and, per Section, its `<h2>` and Voice script list.
+- The Brief, `brief.md`: Format, Learning goal, Actionables and the `## Slides` h3s that name the Sections.
+- `skills/new-episode/references/implement-episode-init.md` and `references/skill-overrides.md`.
+- `docs/features/episode-migration.md` steps 2 to 5 and 7.
+- Attempt 2: Attempt 1's failed Standards line, quoted verbatim, and Han's decisions of 2026-10-16 (make `sections/` binding; keep `topic: 'economics'` and `tags: []`).
+- Attempt 2: `.archgate/adrs/FE-002-episode-page.md`, `.archgate/adrs/FE-004-slide-architecture.md`, `docs/adr/0008-pipeline-jobs-belong-to-stages.md` and the archgate ADR format reference.
+
+### Output
+
+- `c31129e` (Attempt 1): the Episode page at `/episode/never-too-early-sales-run-3/` and `/de/…`, `episode-metadata.ts` (`status: 'upcoming'`, no `publishedOn`, registered in `REGISTERED`), the Title slide, five section slides with their Voice scripts, and five placement markers `src/components/episodes/never-too-early-sales-run-3/sections/<section-slug>.ts`, each holding only its section slide.
+- `c31129e`: post-build text captures `tests/post-build/episode-text/never-too-early-sales-run-3.{en,de}.json`; the slug is not in `PUBLISHED_SLUGS`.
+- `32535ac` (Attempt 2): design-ADR-0008 `status: accepted` with Decision 7 (one `sections/<section-slug>.ts` per Section); FE-004 Decision 3.1, its map and Do 3, and FE-002 Do 1 name `sections/`; FE-004 1.1, 2.1, 3.1 and 3.2 reworded to fit archgate's length cap, meaning kept.
+- `32535ac`: `episode-migration.md` step 7 and §8 updated; `implement-episode-init.md` describes the markers as binding, its fallback removed.
+- `32535ac`: `NOTELESS` in `context-drawer.build.test.ts` is derived from the built HTML (a page with no `<section>--<slide>` anchor); `placement-markers.test.ts` no longer repeats `registry.test.ts`'s Section order.
+- The dev server on port 4000 serves the Episode worktree and stays running.
+
+### Checks
+
+- `verify`: pass.
+- `build`: pass.
+- Reviewer (`code-review`, fixed point `bc60be0`): pass on the Standards line Attempt 1 failed and on rubric lines 1 to 4.
+
+### Notes
+
+- Attempt 1 failed the Standards line "FE-004 §6.2, a new module needs an ADR": the `sections/` markers had no binding ADR. Han settled them as binding on 2026-10-16, and Attempt 2 made the ADRs say so.
+- Topic and Tags: the Brief names neither. Han decided on 2026-10-16 to keep `topic: 'economics'` and `tags: []`.
+- Attempt 2 skipped the optional call to read "upcoming" from the metadata `status` in `episode-text.build.test.ts`: the post-build tests have no `@/` alias to import the repository.
+- Han merged `origin/main` into the Episode branch (`ab0f384`) during Attempt 2; it carries the template changes already on this branch.
+- The Copilot CLI harness gives no session id, so this session ran `resume` with `SESSION_ID=copilot-<session>`, and its agent spans are typed by hand.
+- Needs human: FE-002 Do 1 and FE-004 now describe `sections/` for every Episode, while `page-template/` and older Episodes list Slides in the record: migrate them, or scope the rule to Section-built Episodes.
+- Needs human: every Voice script segment has `"keywords": ""`, which no other Episode has.
+- Needs human: `episode-migration.md` calls `<section-slug>` the section slide's slug, `implement-episode-init.md` the Brief h3 in kebab case; they agree here but may drift.
