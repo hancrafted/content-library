@@ -325,7 +325,7 @@ Changes from the template, each with its reason:
 - Needs human: `stages-of-sale` note 2 cites only EU Directive 2011/7/EU. Carried over from round 1.
 - Needs human: Slides 4 and 5 use the pipeline before Slide 7 defines it.
 
-## write-spec · 2026-10-16T14:40:00Z
+## write-spec · 2026-10-16T14:07:26Z
 
 ### Inputs
 
