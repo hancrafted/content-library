@@ -1,7 +1,7 @@
 {
   "title": "Why it's never too early to start with sales · hancrafted",
   "description": "Why sales must start long before revenue is needed, and the first concrete steps to build a sales pipeline: find your zero-cash month, keep a list of potential customers, make first contact, and track your conversion rate and sales cycle.",
-  "toc": "Contents Loading 5 min left 1 Why watching cashflow is mission critical Watch your cashflow 2 Why sales is more than just selling Sales is more than selling 3 How to start doing sales 4 Why building an effective sales pipeline takes time 5 Start before you need the money Open contents : Contents · Loading Contents 5 min left 1 Why watching cashflow is mission critical Watch your cashflow 2 Why sales is more than just selling Sales is more than selling 3 How to start doing sales 4 Why building an effective sales pipeline takes time 5 Start before you need the money",
+  "toc": "Contents Loading 6 min left 1 Why watching cashflow is mission critical Watch your cashflow 2 Why sales is more than just selling Sales is more than selling 3 How to start doing sales 4 Why building an effective sales pipeline takes time 5 Start before you need the money Watch your cashflow, \"Start when?\" Open contents : Contents · Loading Contents 6 min left 1 Why watching cashflow is mission critical Watch your cashflow 2 Why sales is more than just selling Sales is more than selling 3 How to start doing sales 4 Why building an effective sales pipeline takes time 5 Start before you need the money Watch your cashflow, \"Start when?\"",
   "slides": [
     {
       "id": "top",
@@ -22,7 +22,11 @@
       "id": "why-building-an-effective-sales-pipeline-takes-time",
       "text": "Why building an effective sales pipeline takes time"
     },
-    { "id": "start-before-you-need-the-money", "text": "Start before you need the money" }
+    { "id": "start-before-you-need-the-money", "text": "Start before you need the money" },
+    {
+      "id": "start-before-you-need-the-money--watch-your-cashflow-start-when",
+      "text": "10 · Start before you need the money Watch your cashflow Revenue in Q3 means the first call in Q1, while there is still cash on the board. Q1 Cash €100,000 Cost −€50,000 Cash €50,000 Cash left €50,000 Q2 Cash €50,000 Cost −€50,000 Cash €0 Cash left €0 Q3 Cost −€50,000 Revenue €50,000 Cash left €0 Q4 Cost −€50,000 Revenue €50,000 Cash left €0 Start early! Q1 means this week, while there is still cash on the board. This week: four steps 01 Cashflow view Month by month. Find your zero-cash month. 02 Lead list Research potential customers. Keep the list current. 03 First contact Cold call, inbound, network. Open opportunities. 04 Track deals A simple pipeline. Measure conversion and cycle."
+    }
   ],
   "notes": [
     {
@@ -53,6 +57,10 @@
     {
       "id": "start-before-you-need-the-money",
       "text": "Start before you need the money No speaker notes for this Slide."
+    },
+    {
+      "id": "start-before-you-need-the-money--watch-your-cashflow-start-when",
+      "text": "Watch your cashflow, \"Start when?\" Even a yes arrives late Finding investors takes time, closing takes longer than expected even after a yes, and one angel took months to pay. 1 Sources (1) Paul Graham, A Student's Guide to Startups: Startup Funding ( opens in a new tab ) paulgraham.com"
     }
   ],
   "script": [
@@ -87,6 +95,10 @@
     {
       "id": "start-before-you-need-the-money",
       "text": "Start before you need the money 0:00 – 0:07 Back to the wall Back to the wall, one last time, with the answer to the question we opened with. 0:07 – 0:14 Peak-end close I will close with the four steps, one honest caveat and a small offer. Here they come."
+    },
+    {
+      "id": "start-before-you-need-the-money--watch-your-cashflow-start-when",
+      "text": "Watch your cashflow, \"Start when?\" 0:00 – 0:11 Third time, new question Third time on this board, and this time the quarters replace the months. The question is not what happens any more, it is when you start. 0:11 – 0:22 The arrow points at Q1 The arrow points at Q1. If you want revenue in Q3, the first call happens in Q1, while there is still cash on the board. 0:22 – 0:34 Four steps Four steps. Build your month-by-month cashflow view and find your zero-cash month. Start the lead list. Make the first contact. Track your deals, and measure conversion and cycle. 0:34 – 0:45 Honest caveat The honest caveat: I cannot tell you your cycle length. It may be shorter, it may be longer, and that is why you measure it. 0:45 – 0:57 Hand over the verdict So, when does your cash run out, and what did you do this week to move the money earlier? If the board helps, copy it, it is yours. Thank you."
     }
   ]
 }

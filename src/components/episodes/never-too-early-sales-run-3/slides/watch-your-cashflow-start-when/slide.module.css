@@ -1,0 +1,50 @@
+/*
+ * The Slide's one entrance while it is active. The board stands fully drawn at once, a callback to Slides 1 and 6;
+ * then the arrow sweeps from Q3 to Q1, the Q1 ring fades in, and the four step notes are placed one at a time. The
+ * base rules are the finished Slide, which is also what reduced motion shows.
+ */
+
+/* The step drawings' tints: cash and revenue, the board's meanings, mixed into the card so both themes hold. */
+.scene {
+  --step-cash: color-mix(in oklch, var(--warning) 25%, var(--card));
+  --step-revenue: color-mix(in oklch, var(--success) 25%, var(--card));
+}
+
+@keyframes sweep {
+  from {
+    clip-path: inset(-3rem 0 -3rem 100%);
+  }
+
+  to {
+    clip-path: inset(-3rem 0 -3rem 0);
+  }
+}
+
+@keyframes ring-in {
+  from {
+    box-shadow: none;
+  }
+}
+
+@keyframes place {
+  from {
+    opacity: 0;
+    translate: 0 -8px;
+    rotate: 0deg;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-zone='active']) .scene :global([data-cashflow='arrow']) {
+    animation: sweep 400ms ease-out 200ms backwards;
+  }
+
+  :global([data-zone='active']) .scene :global([data-highlight='true']) {
+    animation: ring-in 300ms ease-out 600ms backwards;
+  }
+
+  :global([data-zone='active']) .scene .step {
+    animation: place 250ms ease-out backwards;
+    animation-delay: calc(1000ms + var(--i) * 350ms);
+  }
+}
