@@ -1,0 +1,72 @@
+{
+  "kicker": "One board, three readings",
+  "title": "What is a sales pipeline",
+  "lead": "The columns are your funnel, the drop between them is your conversion rate, and the way across is your sales cycle.",
+  "stages": {
+    "lead": "Lead",
+    "opportunity": "Opportunity",
+    "deal": "Deal"
+  },
+  "cards": {
+    "kraus": "Kraus Bakery",
+    "novak": "Novak Dental",
+    "hofmann": "Hofmann Logistics",
+    "brightline": "Brightline Studio",
+    "okafor": "Okafor & Co",
+    "lindqvist": "Lindqvist Tools",
+    "demoBooked": "demo booked",
+    "proposalSent": "proposal sent",
+    "signed": "signed, invoice in 30 days"
+  },
+  "terms": {
+    "funnel": {
+      "label": "Sales funnel",
+      "caption": "the stages, and how many sit in each: tells you your <b>volume</b>"
+    },
+    "conversion": {
+      "label": "Conversion rate",
+      "caption": "How many leads become one opportunity: tells you your <b>offering</b>"
+    },
+    "cycle": "<b>Sales cycle</b> · first contact to the money: tells you your <b>efficiency</b>"
+  },
+  "ratio": "3 : 1",
+  "notes": {
+    "stage-rates-are-not-portable": {
+      "header": "Stage rates are not portable",
+      "description": "A stage's rate depends on where a vendor draws its start and end, so rates from different companies are likely not comparable stage by stage; in one dataset two stages already differ, 68 and 19 percent. This is an inference [1].",
+      "sources": {
+        "ebsta-pavilion": {
+          "title": "Ebsta and Pavilion, GTM Benchmarks Report"
+        }
+      }
+    },
+    "cycle-length-hits-cash": {
+      "header": "Cycle length hits cash",
+      "description": "A unit-economics model leaves out the sales cycle and the ramp time of a salesperson; their effect on cash flow has to be modelled separately [1].",
+      "sources": {
+        "roberge-science-of-scaling": {
+          "title": "Mark Roberge, The Science of Scaling"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "funnel-is-volume": {
+        "title": "Funnel is volume",
+        "keywords": "",
+        "script": "The funnel names each stage of your sales process. How many enter each stage tells you how much volume you can put through."
+      },
+      "conversion-is-the-offer": {
+        "title": "Conversion is the offer",
+        "keywords": "",
+        "script": "The conversion rate says how many actions in a stage become one success in the next. A low rate may be telling you that your offering is not yet attractive, and that is useful to know early."
+      },
+      "cycle-is-efficiency": {
+        "title": "Cycle is efficiency",
+        "keywords": "",
+        "script": "The cycle is the time from start to finish, until the deal or the money. It is your efficiency, and with conversion that gives you two numbers you should measure from your first deal."
+      }
+    }
+  }
+}

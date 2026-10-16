@@ -1,0 +1,106 @@
+{
+  "kicker": "Dein Board am ersten Tag",
+  "title": "Warum der Hochlauf Zeit braucht",
+  "lead": "Noch ist nichts geschrieben: kein Material, nur Fragen zum Markt, und die zwei Zahlen, mit denen Du planst, sind leer.",
+  "stamp": "Tag eins",
+  "lanes": {
+    "preparation": "1 · Vorbereitung",
+    "market": "2 · Unbekannter Markt",
+    "metrics": "3 · Unbekannte Kennzahlen"
+  },
+  "preparation": {
+    "before": {
+      "label": "Vorher",
+      "items": "Sales-Deck · Preise · Angebot · Geschäftsmodell"
+    },
+    "during": {
+      "label": "Währenddessen",
+      "items": "Demo · Meeting-Folien · Angebot"
+    },
+    "deal": {
+      "label": "Deal",
+      "items": "Vertrag · Compliance · Recht"
+    },
+    "hint": "gestrichelt: noch nicht geschrieben"
+  },
+  "market": {
+    "q1": "Wer ist wirklich Dein Kunde?",
+    "q2": "Was ist er bereit zu zahlen?",
+    "q3": "Welches Problem muss wirklich gelöst werden?",
+    "hint": "beantworten nur echte Gespräche"
+  },
+  "metrics": {
+    "conversion": {
+      "label": "Conversion-Rate",
+      "unknown": "? : 1"
+    },
+    "cycle": {
+      "label": "Verkaufszyklus",
+      "unknown": "? Monate"
+    },
+    "why": "Beide brauchst Du, um von Deinem Cash aus rückwärts zu planen."
+  },
+  "close": "<b>Jede Spalte schrumpft nur durch Tun.</b> Mit wie vielen dieser drei hast Du angefangen?",
+  "notes": {
+    "startups-search-they-do-not-execute": {
+      "header": "Startups suchen, sie führen nicht aus",
+      "description": "Etablierte Unternehmen führen ein Geschäftsmodell aus; ein Startup ist eine vorübergehende Organisation, die ein wiederholbares und skalierbares Geschäftsmodell erst sucht [1].",
+      "sources": {
+        "blank-manifesto": {
+          "title": "Steve Blank, The Customer Development Manifesto"
+        }
+      }
+    },
+    "selling-blind": {
+      "header": "Blind verkaufen",
+      "description": "In einem Fall deckten frühe Aufträge von Branchenfreunden und Kontakten aus dem Board die ersten Monate des Umsatzplans, zeigten aber nicht, warum Kunden kaufen würden, weil niemand Customer Discovery betrieben hatte [1].",
+      "sources": {
+        "blank-marketing-problem": {
+          "title": "Steve Blank, It Must Be A Marketing Problem"
+        }
+      }
+    },
+    "learn-first-codify-later": {
+      "header": "Erst lernen, dann festschreiben",
+      "description": "Vor dem Product-Market-Fit setzt Du auf persönliche Netzwerke und Kundenempfehlungen: Sie skalieren nicht, bieten aber die besten Gelegenheiten zum Lernen. Erst nach diesem Lernen schreibst Du das Playbook fest und belegst die Unit Economics, bevor Du offensiv Vertriebler einstellst [1].",
+      "sources": {
+        "roberge-science-of-scaling": {
+          "title": "Mark Roberge, The Science of Scaling"
+        }
+      }
+    },
+    "metrics-lag-by-one-cycle": {
+      "header": "Kennzahlen hinken einen Zyklus hinterher",
+      "description": "Die Conversion für frische Leads sieht schlechter aus als ihr langfristiger Wert, weil diese Leads noch keinen vollen Zyklus durchlaufen haben; ältere Ergebnisse sind die bessere Schätzung [1].",
+      "sources": {
+        "roberge-science-of-scaling": {
+          "title": "Mark Roberge, The Science of Scaling"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "preparation": {
+        "title": "Vorbereitung",
+        "keywords": "",
+        "script": "Die erste Box ist die Vorbereitung. Vorher, währenddessen und beim Deal brauchst Du ein Deck und Preise, eine Demo und ein Angebot, einen Vertrag und die rechtliche Seite. Nichts davon gibt es am ersten Tag."
+      },
+      "unknown-market": {
+        "title": "Unbekannter Markt",
+        "keywords": "",
+        "script": "Die zweite ist ein unbekannter Markt. Wer ist Dein Kunde, was zahlt er, welches Problem tut wirklich weh. Das beantworten nur echte Gespräche, Recherche am Schreibtisch nicht."
+      },
+      "unknown-metrics": {
+        "title": "Unbekannte Kennzahlen",
+        "keywords": "",
+        "script": "Die dritte sind unbekannte Kennzahlen. Du hast noch keine Conversion-Rate und keine Zykluslänge, und Du brauchst beide, um von Deinem Cash aus rückwärts zu planen. Wie viele Monate das dauert, erfinde ich Dir nicht."
+      },
+      "so-start-now": {
+        "title": "Also fang jetzt an",
+        "keywords": "",
+        "script": "Also fang jetzt an, denn jede Box schrumpft nur durch Tun. Wie viele Monate hast Du noch, und mit wie vielen dieser drei Boxen hast Du angefangen?"
+      }
+    }
+  }
+}
