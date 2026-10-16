@@ -27,11 +27,16 @@ export interface BoardLabels {
   readonly ghost?: string;
 }
 
-/** An arrow dragging a note from one cell to another, its label on the shaft. */
+/**
+ * An arrow dragging a note from one cell to another. A `shaft` (the default) runs straight along the slot row, its
+ * label on the shaft; a `curve` is a stroked arc across the gap beside the `from` cell, toward `to`, its label on a
+ * pill in the slot under `from`.
+ */
 export interface BoardArrow {
   readonly from: BoardCell;
   readonly to: BoardCell;
   readonly label?: string;
+  readonly variant?: 'shaft' | 'curve';
 }
 
 export interface CashflowBoardProps {

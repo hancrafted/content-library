@@ -38,11 +38,12 @@ function arrowPlacement([fromColumn, slot]: BoardArrow['from'], [toColumn]: Boar
  * A `primary` arrow along one slot row from the centre of one column to another's, under the notes it crosses, its
  * label on a pill below the shaft. A narrow board draws it only when both ends share a row of lanes.
  */
-export function Arrow({ from, to, label }: BoardArrow) {
+function ShaftArrow({ from, to, label }: BoardArrow) {
   const leftward = to[0] < from[0];
   return (
     <div
       data-cashflow="arrow"
+      data-variant="shaft"
       data-direction={leftward ? 'left' : 'right'}
       {...arrowPlacement(from, to)}
       className={styles.arrow}
@@ -54,6 +55,63 @@ export function Arrow({ from, to, label }: BoardArrow) {
       {label ? <ArrowLabel label={label} /> : null}
     </div>
   );
+}
+
+/** The arc and its filled head, drawn leftwards; the stroke's path length is 1 for a `stroke-dashoffset` draw. */
+function Arc() {
+  return (
+    <svg viewBox="0 0 120 60" className={styles.curveSvg} aria-hidden="true">
+      <path
+        data-arrow="stroke"
+        d="M116 46 C 92 6, 44 6, 12 36"
+        pathLength={1}
+        className="fill-none stroke-primary"
+        strokeWidth="6"
+        strokeLinecap="round"
+      />
+      <path data-arrow="head" d="M3 45 L20 42 L8 28 Z" className="fill-primary" />
+    </svg>
+  );
+}
+
+/** The curved arrow's label: a tilted `primary` pill in the slot under the arrow's start. */
+function CurveLabel({ label, from: [column, slot] }: { label: string; from: BoardArrow['from'] }) {
+  const pill =
+    'inline-block -rotate-2 rounded-full bg-primary px-4 py-1.5 text-body font-semibold text-balance text-primary-foreground shadow-md';
+  return (
+    <p data-cashflow="arrow-label" style={placeOn(column, { '--slot': slot })} className={styles.curveLabel}>
+      <span className={pill}>{label}</span>
+    </p>
+  );
+}
+
+/**
+ * A thick `primary` arc over the notes, across the gap beside the `from` cell toward `to`, its head filled; mirrored
+ * for a rightward arrow. Its label is a pill in the slot under `from`. A narrow board draws the arc only when both
+ * ends share a row of lanes.
+ */
+function CurveArrow({ from, to, label }: BoardArrow) {
+  const [column, slot] = from;
+  return (
+    <>
+      <div
+        data-cashflow="arrow"
+        data-variant="curve"
+        data-direction={to[0] < column ? 'left' : 'right'}
+        data-narrow={arrowPlacement(from, to)['data-narrow']}
+        style={placeOn(column, { '--slot': slot - 1 })}
+        className={styles.curve}
+      >
+        <Arc />
+      </div>
+      {label ? <CurveLabel label={label} from={from} /> : null}
+    </>
+  );
+}
+
+/** The board's arrow, as a straight shaft or, with `variant: 'curve'`, an arc. */
+export function Arrow(props: BoardArrow) {
+  return props.variant === 'curve' ? <CurveArrow {...props} /> : <ShaftArrow {...props} />;
 }
 
 /** A `primary` call-out pointing up at its column. */

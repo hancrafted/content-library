@@ -1,0 +1,71 @@
+/*
+ * The stages of a sale: four lanes in a row of equal columns once the Scene is wide enough, the brackets and the axis
+ * labels on the same columns. Narrower, the lanes stack, each arrow turns down under its lane and the brackets drop.
+ * The cash note's tint mixes the global warning colour into the card colour, so it follows the theme on its own.
+ */
+
+.stages {
+  --note-cash: color-mix(in oklch, var(--warning) 25%, var(--card));
+  --note-cash-top: color-mix(in oklch, var(--warning) 40%, var(--card));
+
+  container-type: inline-size;
+}
+
+.cash {
+  background-image: linear-gradient(to bottom, var(--note-cash-top), var(--note-cash));
+}
+
+.brackets {
+  display: none;
+}
+
+.lanes {
+  display: grid;
+  gap: 3rem;
+  padding-top: 1.5rem;
+}
+
+/* Stacked, the arrow points down out of the bottom of its lane. */
+.next {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  z-index: 1;
+  width: 2rem;
+  translate: -50% 0.5rem;
+  rotate: 90deg;
+}
+
+.axis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.axis > li:last-child {
+  text-align: end;
+}
+
+@container (min-width: 56rem) {
+  .brackets,
+  .lanes {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-gap: 2rem;
+  }
+
+  .bracket {
+    grid-column: var(--from) / var(--to);
+  }
+
+  .next {
+    top: 50%;
+    left: 100%;
+    translate: 0 -50%;
+    rotate: none;
+  }
+
+  .axis {
+    column-gap: 2rem;
+  }
+}
