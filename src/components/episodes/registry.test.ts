@@ -10,7 +10,7 @@ import { episodeCopy, findEpisode } from './registry';
  * Per-Episode facts sit in the tables below, written out by hand.
  */
 
-/** The Section openers and page-Slide counts each Episode composes, in Dossier order. */
+/** The Section openers and page-Slide counts each Episode composes, in Dossier (or approved Spec) order. */
 const COMPOSITION = [
   {
     slug: 'ai-token-economy',
@@ -32,6 +32,17 @@ const COMPOSITION = [
       { opener: 'google-okf', pageSlides: 0 },
       { opener: 'steering-the-ai', pageSlides: 3 },
       { opener: 'the-verifying-half-is-yours', pageSlides: 0 },
+    ],
+  },
+  {
+    // Section openers only until each Section job adds its page Slides at its placement marker.
+    slug: 'never-too-early-sales-run-3',
+    sections: [
+      { opener: 'why-watching-cashflow-is-mission-critical', pageSlides: 0 },
+      { opener: 'why-sales-is-more-than-just-selling', pageSlides: 0 },
+      { opener: 'how-to-start-doing-sales', pageSlides: 0 },
+      { opener: 'why-building-an-effective-sales-pipeline-takes-time', pageSlides: 0 },
+      { opener: 'start-before-you-need-the-money', pageSlides: 0 },
     ],
   },
 ] as const;

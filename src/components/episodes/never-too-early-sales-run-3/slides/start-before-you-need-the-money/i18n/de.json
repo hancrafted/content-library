@@ -1,0 +1,17 @@
+{
+  "title": "Fang an, bevor Du das Geld brauchst",
+  "voiceScript": {
+    "segments": {
+      "back-to-the-wall": {
+        "title": "Zurück an die Wand",
+        "keywords": "",
+        "script": "Zurück an die Wand, ein letztes Mal, mit der Antwort auf die Frage, mit der wir angefangen haben."
+      },
+      "peak-end-close": {
+        "title": "Ein starkes Ende",
+        "keywords": "",
+        "script": "Zum Schluss kommen die vier Schritte, ein ehrlicher Vorbehalt und ein kleines Angebot. Hier sind sie."
+      }
+    }
+  }
+}

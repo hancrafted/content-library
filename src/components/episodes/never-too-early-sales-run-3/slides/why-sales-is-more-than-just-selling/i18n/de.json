@@ -1,0 +1,17 @@
+{
+  "title": "Warum Vertrieb mehr ist als Verkaufen",
+  "voiceScript": {
+    "segments": {
+      "pain-first": {
+        "title": "Erst der Schmerz",
+        "keywords": "",
+        "script": "Vielleicht denkst Du, Vertrieb ist etwas für später, für den Moment, in dem Du das Geld brauchst. Dann lässt Du den größten Teil seines Werts liegen, denn das Geld ist das Letzte, was Dir Vertrieb gibt."
+      },
+      "the-claim": {
+        "title": "Die These",
+        "keywords": "",
+        "script": "Meine These: Wer früh verkauft, wird bezahlt, bevor der Umsatz kommt. Es gibt drei Erträge, und jeder ist ein Grund, jetzt anzufangen."
+      }
+    }
+  }
+}

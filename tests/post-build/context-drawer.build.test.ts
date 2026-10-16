@@ -27,6 +27,10 @@ const DOGFOOD_COUNTS = [
   { slide: 'where-it-breaks--enforce-and-verify', notes: 4, segments: 3 },
 ];
 
+// Episodes whose page holds no Speaker note yet: one built Section by Section
+// starts with its section slides alone, and its Section jobs add the notes.
+const NOTELESS: readonly string[] = ['never-too-early-sales-run-3'];
+
 function page(url: string): CheerioAPI {
   return load(readFileSync(join(OUT_DIR, exportedFile(url)), 'utf8'));
 }
@@ -73,6 +77,7 @@ describe.each(PAGES)('$url', ({ slug, url }) => {
     // ARRANGE
     const $ = page(url);
     const notes = $('#context-panel-notes [data-note-target]').toArray();
+    const fewestNotes = NOTELESS.includes(slug) ? 0 : 1;
     // ACT
     const unresolved = notes
       .map((note) => ({
@@ -82,7 +87,7 @@ describe.each(PAGES)('$url', ({ slug, url }) => {
       .filter(({ owner, target }) => targetsOf($, owner, target).length !== 1)
       .map(({ owner, target }) => `${owner} → ${target}`);
     // ASSERT
-    expect(notes.length).toBeGreaterThan(0);
+    expect(notes.length).toBeGreaterThanOrEqual(fewestNotes);
     expect(unresolved).toEqual([]);
   });
 

@@ -1,0 +1,22 @@
+{
+  "title": "Warum der Blick auf den Cashflow überlebenswichtig ist",
+  "voiceScript": {
+    "segments": {
+      "imagine-the-wall": {
+        "title": "Stell Dir die Wand vor",
+        "keywords": "",
+        "script": "Stell Dir vor, Du bist der Gründer und stehst vor einer Wand. Haftnotizen, eine Spalte pro Monat, gelb für das Cash, das Du hast, rot für die Kosten, grün für den Umsatz. Du hast so ein Board schon einmal vor Dir gehabt, oder Du wirst es bald, und Du kennst das Gefühl, wenn Du die letzte Spalte liest."
+      },
+      "cash-decides-how-long-you-have": {
+        "title": "Cash entscheidet, wie lange Du hast",
+        "keywords": "",
+        "script": "Das ist die These dieser ganzen Episode: Wie lange Dein Unternehmen lebt, entscheidet nicht, wie viel Du am Ende verdienst, sondern wann das Geld ankommt. Dieses eine Board kommt dreimal wieder, und jedes Mal beantwortet es eine größere Frage."
+      },
+      "the-route": {
+        "title": "Der Weg",
+        "keywords": "",
+        "script": "Wir gehen durch vier Fragen. Warum der Cashflow überlebenswichtig ist, warum Vertrieb mehr ist als Verkaufen, wie Du mit dem Vertrieb anfängst und warum eine Pipeline Zeit braucht. Die erste Antwort hängt schon an der Wand."
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "title": "How to start doing sales",
+  "voiceScript": {
+    "segments": {
+      "backward-chaining": {
+        "title": "Backward chaining",
+        "keywords": "",
+        "script": "Start from the end and walk backwards. The end is a signed contract, and you walk back until the next step is in your own hands, because do sales is too vague to start on a Monday."
+      },
+      "the-claim": {
+        "title": "The claim",
+        "keywords": "",
+        "script": "Here is the claim: sales has three stages, leads, opportunities and closing. The first steps are ones you control, and only after them does it become a numbers game."
+      },
+      "signposting": {
+        "title": "Signposting",
+        "keywords": "",
+        "script": "We go left to right. First the stages, then a deal board to track them, then marketing, and then the cashflow board once more."
+      }
+    }
+  }
+}
