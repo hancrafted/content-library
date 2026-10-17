@@ -133,6 +133,14 @@ describe('success cases', () => {
     expect(textOf(html)).toBe(expected);
     expect(html).toContain(ring);
   });
+  it("puts a lane's Context marker in that lane, by the lane's slug", () => {
+    // ARRANGE
+    const expected = /data-deal="lane"[^>]*>(?:(?!data-deal="lane").)*data-marker="proposal"/s;
+    // ACT
+    const html = board({ markers: { 'proposal-made': createElement('button', { 'data-marker': 'proposal' }) } });
+    // ASSERT
+    expect(html).toMatch(expected);
+  });
 });
 
 describe('failure cases', () => {

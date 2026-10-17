@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { cashLeft, formatEuro, lanePlacement, signedAmount, tiltOf, type NoteSlots } from './cashflow-board.pure';
+import {
+  cashLeft,
+  formatEuro,
+  lanePlacement,
+  signedAmount,
+  slotRows,
+  tiltOf,
+  type NoteSlots,
+} from './cashflow-board.pure';
 
 /** Slide 1's board: the million lands in April, one month after March's cost hits an empty account. */
 const SLIDE_1: readonly NoteSlots[] = [
@@ -71,6 +79,20 @@ describe('success cases', () => {
     // ASSERT
     expect(placements).toEqual(expected);
   });
+
+  it('draws only the note rows its notes, stamp and arrow labels reach, three at most', () => {
+    // ARRANGE
+    const twoRows = [{ notes: [{ kind: 'cash', amount: 100000 }, { kind: 'cost', amount: 50000 }, null] }] as const;
+    const expected = [2, 3, 3];
+    // ACT
+    const rows = [
+      slotRows({ columns: twoRows }),
+      slotRows({ columns: SLIDE_1 }),
+      slotRows({ columns: twoRows, arrow: { from: [1, 2], to: [1, 1], label: 'One month earlier', variant: 'curve' } }),
+    ];
+    // ASSERT
+    expect(rows).toEqual(expected);
+  });
 });
 
 describe('failure cases', () => {
@@ -101,6 +123,16 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('keeps the middle row for a stamp, and one row for a board with no notes', () => {
+    // ARRANGE
+    const empty = [{ notes: [null, null, null] }];
+    const expected = [2, 1];
+    // ACT
+    const rows = [slotRows({ columns: empty, stamp: { column: 1 } }), slotRows({ columns: empty })];
+    // ASSERT
+    expect(rows).toEqual(expected);
+  });
+
   it('carries the balance through a column with no notes, as April does on Slide 6', () => {
     // ARRANGE
     const board: readonly NoteSlots[] = [

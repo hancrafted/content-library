@@ -8,6 +8,8 @@ export interface CashflowColumn {
   readonly notes: readonly (Note | null)[];
   /** Content under the lane, such as a `CashLeft` line. */
   readonly footer?: ReactNode;
+  /** A Context marker in the lane's top-right corner, for a fact the whole column shows. */
+  readonly marker?: ReactNode;
 }
 
 /** A call-out or bracket in the row under the lanes, on the lanes' grid; columns count from 1. */
@@ -15,7 +17,8 @@ export interface CashflowAnnotation {
   readonly column: number;
   readonly span?: number;
   readonly kind: 'callout' | 'bracket';
-  readonly text: string;
+  /** Its words, which may end in a Context marker. */
+  readonly text: ReactNode;
 }
 
 /** The Slide's words for the board: its accessible name, each note kind, and a ghost outline's text. */

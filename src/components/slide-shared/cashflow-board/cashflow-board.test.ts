@@ -140,6 +140,47 @@ describe('success cases', () => {
     // ASSERT
     expect(text).toContain(expected);
   });
+
+  it('lays a lane out in as many note rows as its notes reach, and the footer after them', () => {
+    // ARRANGE
+    const expected = '--lane-rows:3';
+    const slot = /<li aria-hidden="true"><\/li>|data-cashflow="note"/g;
+    const slotsPerLane = 2;
+    // ACT
+    const html = board({
+      columns: [{ label: 'Jan', notes: [{ kind: 'cash', amount: 100000 }, null, null], footer: 'x' }],
+      stamp: { label: 'Bankrupt', column: 1 },
+    });
+    // ASSERT
+    expect(html).toContain(expected);
+    expect(html.match(slot)).toHaveLength(slotsPerLane);
+  });
+
+  it("puts a column's marker in its lane, a marker in an annotation's words, and a footer's beside its label with its target", () => {
+    // ARRANGE
+    const marker = (name: string) => createElement('button', { 'data-marker': name });
+    const footer = createElement(CashLeft, {
+      label: 'Cash left',
+      amount: 0,
+      locale: 'en',
+      target: 'zero-cash',
+      marker: marker('footer'),
+    });
+    const expected = [
+      /data-cashflow="lane"[^>]*>.*data-marker="lane"/,
+      /Two months of cash.*data-marker="bracket"/,
+      /data-target="zero-cash"[^>]*>.*Cash left.*data-marker="footer"/,
+    ];
+    // ACT
+    const html = board({
+      columns: [{ label: 'Jan', notes: [null, null, null], footer, marker: marker('lane') }],
+      annotations: [
+        { column: 1, kind: 'bracket', text: createElement('span', null, 'Two months of cash', marker('bracket')) },
+      ],
+    });
+    // ASSERT
+    expect(expected.filter((pattern) => !pattern.test(html))).toEqual([]);
+  });
 });
 
 describe('failure cases', () => {

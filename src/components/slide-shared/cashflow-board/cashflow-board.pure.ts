@@ -25,8 +25,10 @@ export interface LanePlacement {
   readonly wideColumn: number;
 }
 
-/** Grid rows one lane spans: its three slots and its footer. */
-export const LANE_ROWS = 4;
+/** Note slots a lane has at most. */
+export const SLOTS = 3;
+/** Grid rows one lane spans at most: its three slots and its footer. */
+export const LANE_ROWS = SLOTS + 1;
 /** Lanes per row while the board is narrow. */
 export const NARROW_LANES = 2;
 
@@ -74,14 +76,48 @@ export function tiltOf(column: number, slot: number): number {
   return TILTS[(column - 1) % TILTS.length][(slot - 1) % 3];
 }
 
+/** Which row of lanes, from 0, a column's lane stands in while the board is narrow. */
+export function narrowBand(column: number): number {
+  return Math.floor((column - 1) / NARROW_LANES);
+}
+
 /** Where the lane of a column, counted from 1, sits on the board's grid in its narrow and wide layouts. */
 export function lanePlacement(column: number): LanePlacement {
   const index = column - 1;
   return {
     narrowColumn: (index % NARROW_LANES) + 1,
-    narrowRow: Math.floor(index / NARROW_LANES) * LANE_ROWS + 1,
+    narrowRow: narrowBand(column) * LANE_ROWS + 1,
     wideColumn: column,
   };
+}
+
+/** What `slotRows` reads: the notes, and the overlays that stand in a slot row. */
+export interface SlotReach {
+  readonly columns: readonly NoteSlots[];
+  readonly stamp?: { readonly column: number };
+  readonly arrow?: {
+    readonly from: readonly [number, number];
+    readonly to: readonly [number, number];
+    readonly label?: string;
+    readonly variant?: 'shaft' | 'curve';
+    readonly labelGap?: number;
+  };
+}
+
+/** The slot an arrow reaches: its ends, and the slot under its start when its label stands there. */
+function arrowReach({ from, to, label, variant, labelGap }: NonNullable<SlotReach['arrow']>): number {
+  const labelUnder = label !== undefined && (variant === 'curve' || labelGap !== undefined);
+  return Math.max(from[1], to[1], labelUnder ? from[1] + 1 : 0);
+}
+
+/**
+ * How many note rows the board's lanes draw: the lowest slot a note fills, the middle one under a stamp, and the
+ * slots an arrow and its standing label reach; at least one, at most three. A board whose footers state each balance
+ * has no third note, so its lanes come out shorter.
+ */
+export function slotRows({ columns, stamp, arrow }: SlotReach): number {
+  const notes = columns.map(({ notes: slots }) => slots.reduce((low, note, index) => (note ? index + 1 : low), 0));
+  return Math.min(SLOTS, Math.max(1, ...notes, stamp ? 2 : 0, arrow ? arrowReach(arrow) : 0));
 }
 
 /** A column and a slot, both counted from 1. */

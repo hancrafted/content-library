@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils';
+import type { ReactNode } from 'react';
 import styles from './cashflow-board.module.css';
 import { lanePlacement } from './cashflow-board.pure';
 import type { BoardArrow, CashflowAnnotation } from './cashflow-board.types';
@@ -177,7 +178,7 @@ export function Arrow(props: BoardArrow) {
 }
 
 /** A `primary` call-out pointing up at its column. */
-function Callout({ text }: { text: string }) {
+function Callout({ text }: { text: ReactNode }) {
   return (
     <>
       <svg viewBox="0 0 24 12" className="h-3 w-6 fill-primary" aria-hidden="true">
@@ -191,7 +192,7 @@ function Callout({ text }: { text: string }) {
 }
 
 /** A bracket under the columns it spans, its text centred below. */
-function Bracket({ text }: { text: string }) {
+function Bracket({ text }: { text: ReactNode }) {
   return (
     <>
       <svg viewBox="0 0 400 40" className="h-10 w-full" preserveAspectRatio="none" aria-hidden="true">

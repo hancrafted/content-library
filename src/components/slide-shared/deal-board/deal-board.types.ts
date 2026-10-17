@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import type { DealLane } from './deal-board.pure';
 
 /** A note a customer put into the emphasised lane themselves: a mono tag over one line. */
@@ -40,4 +41,6 @@ export interface DealBoardProps {
   readonly 'data-target'?: string;
   /** The Context drawer's target on the emphasised lane. */
   readonly emphasisTarget?: string;
+  /** Context markers by lane slug, each in its lane's top-right corner. */
+  readonly markers?: Readonly<Record<string, ReactNode>>;
 }

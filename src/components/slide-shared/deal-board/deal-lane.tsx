@@ -158,6 +158,7 @@ export function Lane(props: LaneProps) {
       className={laneClass(compact, emphasised)}
     >
       <h4 className={`${pill} ${compact ? 'px-3' : 'px-5'}`}>{lane.label}</h4>
+      {board.markers?.[lane.slug]}
       {compact || !board.countLabel ? null : (
         <LaneHead lane={lane} emphasised={emphasised} locale={board.locale} countLabel={board.countLabel} />
       )}

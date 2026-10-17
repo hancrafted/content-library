@@ -11,13 +11,15 @@ interface LaneProps {
   highlighted: boolean;
   labels: BoardLabels;
   locale: string;
+  /** How many note rows every lane of the board draws. */
+  slots: number;
 }
 
-/** The three slots of a lane, top to bottom; an empty slot keeps its row and says nothing. */
-function Slots({ column, number, labels, locale }: LaneProps) {
+/** The lane's note slots, top to bottom; an empty slot keeps its row and says nothing. */
+function Slots({ column, number, labels, locale, slots }: LaneProps) {
   return (
     <ul role="list" className={styles.slots}>
-      {[1, 2, 3].map((slot) => {
+      {Array.from({ length: slots }, (_, index) => index + 1).map((slot) => {
         const note = column.notes[slot - 1] ?? null;
         if (note === null) return <li key={slot} aria-hidden="true" />;
         const props = { note, column: number, slot, labels, locale };
@@ -27,7 +29,7 @@ function Slots({ column, number, labels, locale }: LaneProps) {
   );
 }
 
-/** One column of the board: a pale lane under a dark pill label, its notes, and its footer. */
+/** One column of the board: a pale lane under a dark pill label, its marker in the corner, its notes, and its footer. */
 export function Lane(props: LaneProps) {
   const { column, number, highlighted } = props;
   return (
@@ -45,6 +47,7 @@ export function Lane(props: LaneProps) {
       <h4 className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-foreground px-8 py-1.5 text-caption font-medium whitespace-nowrap text-background shadow-md">
         {column.label}
       </h4>
+      {column.marker}
       <Slots {...props} />
       {column.footer ? <div className={styles.footer}>{column.footer}</div> : null}
     </li>
