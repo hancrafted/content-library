@@ -13,7 +13,7 @@ describe('checkScope', () => {
       'docs/adr/0008-x.md',
       'GLOSSARY.md',
     ];
-    expect(checkScope(paths)).toEqual({ ok: true, episode: [], outside: [] });
+    expect(checkScope(paths)).toEqual({ ok: true, episode: [], outside: [], frozen: [] });
   });
 
   it('names every Episode file, which is refused even though it sits under docs/', () => {
@@ -26,6 +26,7 @@ describe('checkScope', () => {
       ok: false,
       episode: ['docs/episodes/my-slug/brief.md', 'docs/episodes/my-slug/events.jsonl'],
       outside: [],
+      frozen: [],
     });
   });
 
@@ -35,6 +36,17 @@ describe('checkScope', () => {
       ok: false,
       episode: [],
       outside: ['src/episodes/my-slug/page.tsx', 'skills/brief-grill/SKILL.md'],
+      frozen: [],
+    });
+  });
+
+  it('names the frozen pipeline template, which is in the skill folder but never ships', () => {
+    const result = checkScope(['skills/new-episode/SKILL.md', 'skills/new-episode/assets/pipeline.yml']);
+    expect(result).toEqual({
+      ok: false,
+      episode: [],
+      outside: [],
+      frozen: ['skills/new-episode/assets/pipeline.yml'],
     });
   });
 
