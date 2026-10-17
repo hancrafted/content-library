@@ -63,7 +63,7 @@ function templateOf(t: RuntimeTranslator, slideId: string): RuntimeKit['template
 }
 
 /**
- * The kit's Context references to one of the Slide's notes (FE-010 §4, FE-012):
+ * The kit's Context references to one of the Slide's notes (FE-010 §4, FE-013):
  * `ref` underlines a phrase, `marker` follows one with a Context marker and
  * `Marker` places a marker on an element. Each throws for a note the Slide
  * does not declare. A marker is named after its note's header, read from the
