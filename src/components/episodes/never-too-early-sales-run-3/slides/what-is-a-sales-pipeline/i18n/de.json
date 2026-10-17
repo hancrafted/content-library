@@ -7,12 +7,12 @@
     "deal": "Deal"
   },
   "cards": {
-    "kraus": "Bäckerei Kraus",
-    "novak": "Zahnarztpraxis Novak",
-    "hofmann": "Hofmann Logistik",
-    "brightline": "Brightline Studio",
-    "okafor": "Okafor & Co",
-    "lindqvist": "Lindqvist Werkzeuge",
+    "kraus": "Zahnpraxis Kraus",
+    "novak": "Zahnpraxis Novak",
+    "hofmann": "Zahnpraxis Hofmann",
+    "brightline": "Brightline Dental",
+    "okafor": "Zahnpraxis Okafor",
+    "lindqvist": "Zahnpraxis Lindqvist",
     "demoBooked": "Demo gebucht",
     "proposalSent": "Angebot verschickt",
     "signed": "unterschrieben, Rechnung in 30 Tagen"

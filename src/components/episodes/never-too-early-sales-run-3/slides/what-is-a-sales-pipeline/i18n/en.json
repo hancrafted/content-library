@@ -7,12 +7,12 @@
     "deal": "Deal"
   },
   "cards": {
-    "kraus": "Kraus Bakery",
+    "kraus": "Kraus Dental",
     "novak": "Novak Dental",
-    "hofmann": "Hofmann Logistics",
-    "brightline": "Brightline Studio",
-    "okafor": "Okafor & Co",
-    "lindqvist": "Lindqvist Tools",
+    "hofmann": "Hofmann Dental",
+    "brightline": "Brightline Dental",
+    "okafor": "Okafor Dental",
+    "lindqvist": "Lindqvist Dental",
     "demoBooked": "demo booked",
     "proposalSent": "proposal sent",
     "signed": "signed, invoice in 30 days"

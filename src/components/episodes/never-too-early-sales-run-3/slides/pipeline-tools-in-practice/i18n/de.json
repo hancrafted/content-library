@@ -31,47 +31,47 @@
   },
   "deals": {
     "brightfield": {
-      "company": "Brightfield",
+      "company": "Brightfield Cargo",
       "contact": "Jonas Weber"
     },
     "kestrel": {
-      "company": "Kestrel Labs",
+      "company": "Kestrel Fracht",
       "contact": "Mia Novak"
     },
     "larchwood": {
-      "company": "Larchwood Foods",
+      "company": "Larchwood Spedition",
       "contact": "Tom Reyes"
     },
     "orbit": {
-      "company": "Orbit Logistics",
+      "company": "Orbit Logistik",
       "contact": "Sara Kim"
     },
     "pinecrest": {
-      "company": "Pinecrest Clinic",
+      "company": "Pinecrest Fracht",
       "contact": "Ali Demir"
     },
     "quarry": {
-      "company": "Quarry Systems",
+      "company": "Quarry Transport",
       "contact": "Eva Lind"
     },
     "redwood": {
-      "company": "Redwood Print",
+      "company": "Redwood Spedition",
       "contact": "Ben Ortiz"
     },
     "saltmarsh": {
-      "company": "Saltmarsh Energy",
+      "company": "Saltmarsh Cargo",
       "contact": "Nora Fischer"
     },
     "tidewater": {
-      "company": "Tidewater Hotels",
+      "company": "Tidewater Fracht",
       "contact": "Raj Patel"
     },
     "vela": {
-      "company": "Vela Insurance",
+      "company": "Vela Logistik",
       "contact": "Lisa Moreau"
     },
     "umbra": {
-      "company": "Umbra Studio",
+      "company": "Umbra Kurier",
       "contact": "Kai Berg"
     }
   },

@@ -15,15 +15,15 @@
           "text": "Recherchiere potenzielle Kunden und führe eine Liste",
           "list": {
             "brightfield": {
-              "company": "Brightfield",
+              "company": "Brightfield Cargo",
               "contact": "Jonas Weber"
             },
             "kestrel": {
-              "company": "Kestrel Labs",
+              "company": "Kestrel Fracht",
               "contact": "Mia Novak"
             },
             "orbit": {
-              "company": "Orbit Logistics",
+              "company": "Orbit Logistik",
               "contact": "Sara Kim"
             }
           }
