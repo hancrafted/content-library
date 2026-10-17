@@ -145,6 +145,33 @@ const BASE = {
   reviewAsset: REVIEW_ASSET,
   generated: { by: 'process:spec-assemble', at: '2026-10-12T12:00:00Z' },
 };
+const CARD_BRIEF = BRIEF.replace(
+  '## Style',
+  `## Learning goal
+
+Know the budget.
+
+## Actionables
+
+1. Trim pastes.
+2. Reset early.
+
+## Research questions
+
+- How does recall drop?
+
+## Constraints
+
+Under ten minutes.
+
+## Style`,
+);
+
+const APPROVED_BRIEF = CARD_BRIEF.replace(
+  'title: Budget\n',
+  'title: Budget\ngenerated:\n  by: process:brief-grill\n  at: 2026-10-12T10:00:00Z\nverified:\n  - by: human:han\n    at: 2026-10-12T11:00:00Z\n',
+);
+
 const BRIEF_ONLY: SpecInputs = { ...BASE, brief: BRIEF };
 const WITH_DOSSIER: SpecInputs = { ...BRIEF_ONLY, dossier: DOSSIER };
 const FULL: SpecInputs = {
@@ -293,6 +320,38 @@ describe('success cases', () => {
     // ASSERT
     expect(html).toContain('<title>Spec · Budget &lt;&amp;&gt;</title>');
     expect(meta).toMatchObject({ type: 'spec', status: 'draft', generated: BASE.generated, brief: '../brief.md' });
+  });
+
+  it('shows the five Brief headings with a note field each, keyed brief--<heading-slug>', () => {
+    // ARRANGE
+    const brief = CARD_BRIEF;
+    // ACT
+    const $ = page({ ...BASE, brief });
+    // ASSERT
+    expect(
+      $('[data-spec="brief-card"] h3')
+        .map((_, h) => $(h).text())
+        .get(),
+    ).toEqual(['Learning goal', 'Actionables', 'Research questions', 'Style', 'Constraints']);
+    expect(ids($, '[data-spec="brief-card"] textarea', 'name')).toEqual([
+      'note:brief--learning-goal',
+      'note:brief--actionables',
+      'note:brief--research-questions',
+      'note:brief--style',
+      'note:brief--constraints',
+    ]);
+    expect($('[data-spec="brief-card"]').text()).toContain('Trim pastes.');
+  });
+
+  it('is read-only once the Brief is approved: the text stays, the note fields go', () => {
+    // ARRANGE
+    const brief = APPROVED_BRIEF;
+    // ACT
+    const $ = page({ ...BASE, brief });
+    // ASSERT
+    expect($('[data-spec="brief-card"]').text()).toContain('Know the budget.');
+    expect($('[data-spec="brief-card"] textarea')).toHaveLength(0);
+    expect($('[data-spec="brief-card"][data-locked]')).toHaveLength(1);
   });
 });
 

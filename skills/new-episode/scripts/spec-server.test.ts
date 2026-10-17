@@ -14,6 +14,7 @@ const NOW = new Date('2026-10-15T10:40:05Z');
 const SPEC = `<!doctype html>
 <html lang="en"><head><title>Spec · Budget</title><link rel="stylesheet" href="design.css" /></head>
 <body>
+  <section data-spec="brief-card"><textarea name="note:brief--style"></textarea></section>
   <article data-spec="title-slide" id="top">
     <figure data-spec="option" data-option="0a" data-recommended></figure>
     <figure data-spec="option" data-option="0b"></figure>
@@ -61,6 +62,22 @@ function post(base: string, fields: [string, string][]): Promise<Response> {
 const feedbackFolders = (folder: string) => readdirSync(path.join(folder, 'feedback')).sort();
 
 describe('success cases', () => {
+  it('saves a Brief card note as a brief-- item of the round', async () => {
+    // ARRANGE
+    const { folder, base } = await serve();
+    const fields: [string, string][] = [
+      ['pick:top', '0a'],
+      ['pick:spent', '1a'],
+      ['pick:quiet', '2a'],
+      ['note:brief--style', 'Sober, please.'],
+    ];
+    // ACT
+    await post(base, fields);
+    const saved = readFileSync(path.join(folder, 'feedback/02/feedback.md'), 'utf8');
+    // ASSERT
+    expect(saved).toContain('- `brief--style` · design — Sober, please.\n');
+  });
+
   it('serves the Spec page at the root', async () => {
     // ARRANGE
     const { base } = await serve();

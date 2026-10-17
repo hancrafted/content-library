@@ -134,12 +134,25 @@ describe('success cases', () => {
         '- `why--spent` · design — picked: none — Try a heat strip.',
         '- `top` · design — picked: 0b — Fuel the rocket in fewer steps.',
         '- `visual-language` · design — More accent.',
+        '- `brief--learning-goal` · design — Sharper goal.',
+        '- `brief--research-questions` · design — Add one on cost.',
       ]),
     });
     // ACT
     const findings = checkStagingFolder(files, KNOWN_VISUALS, REVIEW_ASSET);
     // ASSERT
     expect(findings).toEqual([]);
+  });
+
+  it('reports a brief-- item for a heading the Brief card lacks, or without a note', () => {
+    // ARRANGE
+    const files = folder({
+      [FEEDBACK_PATH]: feedback('spec', ['- `brief--hook` · design — Louder.', '- `brief--style` · design —']),
+    });
+    // ACT
+    const findings = checkStagingFolder(files, KNOWN_VISUALS, REVIEW_ASSET);
+    // ASSERT
+    expect(kinds(findings)).toEqual(['feedback', 'feedback']);
   });
 
   it('finds nothing when the llm-wiki index lists each research file once with its description', () => {

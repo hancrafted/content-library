@@ -37,7 +37,12 @@ The job's `checks:` in `assets/pipeline.yml` run by the check table in [SKILL.md
 1. Every heading holds Han's choice. A heading still reading `Not settled.` goes back to Han by name: the orchestrator refuses to start on it.
 2. The Brief carries `status: draft`, a `generated: { by, at }` and a `process:markdown-harness` entry in `verified` (written after the checks and the reviewer pass), and is committed through the `commit` skill with `Gate: draft brief` before Han edits it.
 
-Then append the run-log entry (creating `run-log.md` with its `# Run log` h1 if it is new), log the Gate's `start` for `draft brief`, and stop: the gate opens when Han runs `node skills/new-episode/scripts/approve.ts docs/episodes/<slug>/brief.md` and commits it with `Gate: approved brief`.
+Then append the run-log entry (creating `run-log.md` with its `# Run log` h1 if it is new), log the Gate's `start` for `draft brief`, and open the Spec for Han:
+
+1. Run `npm run episode:spec-assemble -- <slug>`: the Spec holds the Brief as Slide cards and a Brief card (Learning goal, Actionables, Research questions, Style, Constraints), each heading with a note field keyed `brief--<heading-slug>`.
+2. Open `http://localhost:<spec_port>` in Han's browser (`open <url>`) and print the URL; `spec_port` is in `pipeline.yml`.
+3. Stop. Han saves notes on the page; each lands as a `brief--<heading-slug>` item in `feedback/<NN>/feedback.md`. Write each note verbatim into `brief.md` under that heading, commit with `Gate: draft brief`, and re-run `episode:spec-assemble`.
+4. Han approves in chat, never on the page. Then run `node skills/new-episode/scripts/approve.ts docs/episodes/<slug>/brief.md` and commit it with `Gate: approved brief` and an `Agent: brief-grill` trailer; `verified` stays `human:han`. Re-assembling now renders the Brief card read-only.
 
 ## Rubric
 

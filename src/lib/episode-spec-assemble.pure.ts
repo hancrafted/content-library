@@ -7,6 +7,7 @@
  */
 
 import { load } from 'cheerio';
+import { briefCardMarkup } from './episode-spec-assemble-brief.pure.ts';
 import { escape, inline, notesList, visualPanel, voiceList, wordTabs } from './episode-spec-assemble-words.pure.ts';
 import { fragmentSlides, pickBox } from './episode-spec-fragment.pure.ts';
 import { FORM } from './episode-spec-slide.pure.ts';
@@ -143,6 +144,7 @@ function outline(source: Source, hasTitle: boolean): string {
 
 function intro(inputs: SpecInputs, source: Source): string {
   const cards = [
+    briefCardMarkup(inputs.brief),
     source.style === undefined
       ? ''
       : `<section id="style" class="spec-card">\n<h2>Style</h2>\n<p>${inline(source.style)}</p>\n</section>`,

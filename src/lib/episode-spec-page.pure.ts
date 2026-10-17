@@ -61,3 +61,11 @@ export function specTitleSlideOptions(html: string): string[] | undefined {
     .toArray()
     .map((option) => $(option).attr('data-option') ?? '');
 }
+
+/** The Brief card's note keys on the Spec, `brief--<heading-slug>` in page order; none once the card is read-only. */
+export function specBriefKeys(html: string): string[] {
+  const $ = load(html);
+  return $('[data-spec="brief-card"] textarea')
+    .toArray()
+    .map((field) => ($(field).attr('name') ?? '').replace(/^note:/, ''));
+}
