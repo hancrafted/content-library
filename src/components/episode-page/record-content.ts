@@ -1,15 +1,17 @@
 import {
   episodeMinutes,
   localizeSlide,
+  localizeTitleScene,
   titleContext,
   type EpisodeContext,
   type LocalizedSlide,
   type SlideContext,
 } from '@/components/slide-master/localized-slide';
-import type { EpisodeRecord, Slide } from '@/components/slide-master/slide';
+import type { EpisodeRecord, Slide, SlideEntrance } from '@/components/slide-master/slide';
 import type { RuntimeTranslator } from '@/components/slide-master/slide-base';
 import { placeSections } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
+import type { ReactNode } from 'react';
 
 /*
  * Turns an Episode record into what one locale of its page renders: the
@@ -30,6 +32,11 @@ export interface EpisodeContent {
   readonly slides: readonly LocalizedSlide[];
   /** The Title slide's own Speaker notes and Voice script; both empty for an Episode that gives it none. */
   readonly titleContext: SlideContext;
+  /** The record's authored Title slide Scene, rendered; absent for the shared glow. */
+  readonly hero?: ReactNode;
+  /** Whether the Slide wrapper renders each Slide's header (`shared`) or each Scene does (`authored`). */
+  readonly header: 'shared' | 'authored';
+  readonly entrance: SlideEntrance;
 }
 
 /**
@@ -48,6 +55,7 @@ export async function recordContent(
     locale,
     placed: placeSections<Slide>(record.sections).flat(),
     refLabel: (await translatorOf('contextDrawer'))('refNote'),
+    header: record.header === 'authored' ? 'authored' : 'shared',
   };
   const { title, caption } = record.messages[locale];
   return {
@@ -55,6 +63,9 @@ export async function recordContent(
     caption,
     minutes: episodeMinutes(record, locale),
     titleContext: titleContext(record, locale),
+    ...(record.title && { hero: localizeTitleScene(record.title, episode) }),
+    header: episode.header,
+    entrance: record.entrance ?? 'typewriter',
     slides: episode.placed.map((placed) => localizeSlide(placed, episode)),
   };
 }

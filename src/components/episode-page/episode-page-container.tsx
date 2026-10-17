@@ -1,26 +1,28 @@
 import { ContextDrawerSlot } from '@/components/context-drawer/context-drawer-slot';
 import { DevSlideReporter } from '@/components/design-system-token-editor/dev-slide-reporter';
 import type { LocalizedSlide } from '@/components/slide-master/localized-slide';
-import type { EpisodeRecord } from '@/components/slide-master/slide';
+import type { EpisodeRecord, SlideEntrance } from '@/components/slide-master/slide';
 import type { RuntimeTranslator } from '@/components/slide-master/slide-base';
+import type { EyebrowText } from '@/components/slide-master/slide-eyebrow';
+import type { SlideHeaderProps } from '@/components/slide-master/slide-header';
 import { TableOfContents, type TocLabels } from '@/components/table-of-contents/table-of-contents.client';
 import { readTranslationStrings } from '@/i18n/translation-strings';
-import type { SpeakerNoteItem } from '@/lib/context-drawer.pure';
 import { TITLE_ANCHOR } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { episodeRoute, type EpisodeSlug } from '@/lib/routes';
+import type { TocSection } from '@/lib/table-of-contents.pure';
 import { cn } from '@/lib/utils';
 import { getTranslations } from 'next-intl/server';
 import { ContentArea } from './content-area';
 import { contextDrawerInput } from './context-drawer-input';
-import { INSET_CLASSES, TOC_RESERVE_CLASS, tocSectionsOf } from './episode-page-container.pure';
-import { recordContent, type TranslatorOf } from './record-content';
+import { eyebrowsOf, INSET_CLASSES, TOC_RESERVE_CLASS, tocSectionsOf } from './episode-page-container.pure';
+import { recordContent, type EpisodeContent, type TranslatorOf } from './record-content';
 import { SlideKeys } from './slide-keys.client';
 import { SlideObserver } from './slide-observer.client';
 import { SlideWrapper } from './slide-wrapper';
 import { SlideZones } from './slide-zones.client';
-import { TalkPlayer, type TalkPlayerLabels } from './talk-player.client';
-import { isTitleTarget, TitleSlide } from './title-slide';
+import { TalkPlayer } from './talk-player.client';
+import { isTitleTarget, TitleSlide, type TitleSlideProps } from './title-slide';
 import { UrlStateProvider } from './url-state-provider.client';
 
 /** The Slides grouped by the Section the walk placed each in, in page order. */
@@ -34,51 +36,70 @@ function bySection(slides: readonly LocalizedSlide[]): (readonly LocalizedSlide[
   return groups;
 }
 
-function SectionSlides({ slides }: { slides: readonly LocalizedSlide[] }) {
+/** How the page renders each Slide's header: by the wrapper with this entrance, or by each Scene (`null`). */
+type HeaderMode = { readonly entrance: SlideEntrance; readonly eyebrows: ReadonlyMap<string, EyebrowText> } | null;
+
+/** The Slide header the wrapper renders for one Slide, when the Episode is on the shared header and the Slide is titled. */
+function headerOf(slide: LocalizedSlide, mode: HeaderMode): SlideHeaderProps | undefined {
+  if (mode === null || slide.header === undefined) return undefined;
+  const eyebrow = mode.eyebrows.get(slide.id);
+  return { seed: slide.id, level: slide.level, ...slide.header, ...(eyebrow && { eyebrow }), entrance: mode.entrance };
+}
+
+function SectionSlides({ slides, mode }: { slides: readonly LocalizedSlide[]; mode: HeaderMode }) {
   return (
     <section data-section={slides[0].section} className="contents">
-      {slides.map(({ id, slug, content }) => (
-        <SlideWrapper key={slug} id={id}>
-          {content}
+      {slides.map((slide) => (
+        <SlideWrapper
+          key={slide.slug}
+          id={slide.id}
+          size={slide.level === 'h2' ? 'section' : 'page'}
+          header={headerOf(slide, mode)}
+          entrance={mode !== null}
+        >
+          {slide.content}
         </SlideWrapper>
       ))}
     </section>
   );
 }
 
-function SlideColumn(props: {
-  title: string;
-  caption?: string;
-  slides: readonly LocalizedSlide[];
-  youtubeId?: string;
-  talkLabels?: TalkPlayerLabels;
-  titleNotes: readonly SpeakerNoteItem[];
-}) {
+function SlideColumn(props: { titleSlide: TitleSlideProps; slides: readonly LocalizedSlide[]; mode: HeaderMode }) {
   const ids = [TITLE_ANCHOR, ...props.slides.map(({ id }) => id)];
   return (
     <SlideZones>
       <SlideObserver ids={ids} />
       <SlideKeys ids={ids} />
       <ContentArea>
-        <TitleSlide
-          title={props.title}
-          caption={props.caption}
-          youtubeId={props.youtubeId}
-          talkLabels={props.talkLabels}
-          targets={props.titleNotes.map(({ target }) => target).filter(isTitleTarget)}
-        />
+        <TitleSlide {...props.titleSlide} />
         {bySection(props.slides).map((section) => (
-          <SectionSlides key={section[0].id} slides={section} />
+          <SectionSlides key={section[0].id} slides={section} mode={props.mode} />
         ))}
       </ContentArea>
     </SlideZones>
   );
 }
 
+/** The Title slide's props: the Episode's text, its hero Scene and entrance, its recording, and what its notes target. */
+function titleSlideOf(
+  content: EpisodeContent,
+  mode: HeaderMode,
+  talk: Pick<TitleSlideProps, 'youtubeId' | 'talkLabels'>,
+): TitleSlideProps {
+  return {
+    title: content.title,
+    caption: content.caption,
+    entrance: mode?.entrance,
+    hero: content.hero,
+    ...talk,
+    targets: content.titleContext.notes.map(({ target }) => target).filter(isTitleTarget),
+  };
+}
+
 function EpisodeToc(props: {
   locale: Locale;
   slug: EpisodeSlug;
-  slides: readonly LocalizedSlide[];
+  sections: readonly TocSection[];
   minutes: number;
   labels: TocLabels;
 }) {
@@ -87,7 +108,7 @@ function EpisodeToc(props: {
       <TableOfContents
         locale={props.locale}
         route={episodeRoute(props.slug)}
-        sections={tocSectionsOf(props.slides)}
+        sections={props.sections}
         total={props.minutes}
         targetAttribute="data-slide"
         topId={TITLE_ANCHOR}
@@ -122,7 +143,11 @@ function translatorOf(locale: Locale): TranslatorOf {
  * provides the page's one URL-state service (FE-001 §2).
  */
 export async function EpisodePageContainer({ locale, episode }: { locale: Locale; episode: EpisodeRecord }) {
-  const { title, caption, minutes, slides, titleContext } = await recordContent(episode, locale, translatorOf(locale));
+  const content = await recordContent(episode, locale, translatorOf(locale));
+  const { minutes, slides, titleContext } = content;
+  const sections = tocSectionsOf(slides);
+  const mode: HeaderMode =
+    content.header === 'shared' ? { entrance: content.entrance, eyebrows: eyebrowsOf(sections) } : null;
   const youtubeId = episode.youtube?.[locale];
   const talkLabels = youtubeId ? await readTranslationStrings(locale, 'talkPlayer') : undefined;
   const tocLabels = await tocLabelsOf(locale);
@@ -134,15 +159,8 @@ export async function EpisodePageContainer({ locale, episode }: { locale: Locale
         data-episode={episode.slug}
         className={cn('mt-6', INSET_CLASSES, TOC_RESERVE_CLASS)}
       >
-        <EpisodeToc locale={locale} slug={episode.slug} slides={slides} minutes={minutes} labels={tocLabels} />
-        <SlideColumn
-          title={title}
-          caption={caption}
-          slides={slides}
-          youtubeId={youtubeId}
-          talkLabels={talkLabels}
-          titleNotes={titleContext.notes}
-        />
+        <EpisodeToc locale={locale} slug={episode.slug} sections={sections} minutes={minutes} labels={tocLabels} />
+        <SlideColumn titleSlide={titleSlideOf(content, mode, { youtubeId, talkLabels })} slides={slides} mode={mode} />
         <ContextDrawerSlot input={drawer} />
         {youtubeId && talkLabels && <TalkPlayer youtubeId={youtubeId} labels={talkLabels} />}
       </div>

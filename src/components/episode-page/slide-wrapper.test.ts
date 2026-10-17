@@ -34,6 +34,29 @@ describe('success cases', () => {
     // ASSERT
     expect(html).toMatch(/data-slot="slide-mount"[^>]*>.*<p>kept<\/p>/);
   });
+
+  it('renders the Slide header above the Scene, which holds the visual only', () => {
+    // ARRANGE
+    const header = { seed: 'a--b', level: 'h3' as const, title: 'Why a template', entrance: 'none' as const };
+    const wrapper = createElement(SlideWrapper, { id: 'a--b', header }, createElement('figure', null, 'visual'));
+    const expected =
+      /data-slot="slide-header".*<h3[^>]*>Why a template<\/h3>.*data-slot="slide-scene".*<figure>visual<\/figure>/;
+    // ACT
+    const html = renderToStaticMarkup(wrapper);
+    // ASSERT
+    expect(html).toMatch(expected);
+  });
+
+  it('keeps a section slide at least 40% of the viewport tall, free to grow', () => {
+    // ARRANGE
+    const wrapper = createElement(SlideWrapper, { id: 'a', size: 'section' }, 'content');
+    const expected = 'min-h-[40svh]';
+    // ACT
+    const html = renderToStaticMarkup(wrapper);
+    // ASSERT
+    expect(html).toContain(expected);
+    expect(html).not.toContain('min-h-svh');
+  });
 });
 
 describe('failure cases', () => {

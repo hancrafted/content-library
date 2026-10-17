@@ -33,7 +33,8 @@ function scene({ episode, slide }: PlacedSlide) {
   const placed = placeSections<Slide>(findEpisode(episode).sections).flat();
   const own = placed.find((entry) => entry.slide === slide);
   if (own === undefined) throw new Error(`No Slide "${slide.slug}" in "${episode}".`);
-  return localizeSlide(own, { episode, locale: 'en', placed, refLabel: 'opens speaker note' }).content;
+  const header = findEpisode(episode).header ?? 'shared';
+  return localizeSlide(own, { episode, locale: 'en', placed, refLabel: 'opens speaker note', header }).content;
 }
 
 /** Every `id="..."` in rendered markup, in document order. */

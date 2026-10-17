@@ -112,6 +112,9 @@ export interface EpisodeMessages {
   readonly voiceScript?: Readonly<Record<string, unknown>>;
 }
 
+/** How a Slide header enters the first time its Slide is active (FE-012). */
+export type SlideEntrance = 'typewriter' | 'fade' | 'none';
+
 /**
  * An Episode record of Slides: static data. It carries its own
  * text, so the site-wide Translation files hold nothing of it.
@@ -124,6 +127,21 @@ export interface EpisodeRecord<Ep extends EpisodeSlug = EpisodeSlug> {
   /** The Title slide's Speaker notes and Voice script segments, when its text holds them. */
   readonly notes?: readonly NoteSpec[];
   readonly segments?: readonly SegmentSpec[];
+  /**
+   * The Title slide's authored hero Scene: the Episode's visual opening, drawn
+   * behind and below the container's `h1` and caption. Absent, the Title slide
+   * shows its shared glow. Its own text is its Scene's only; the Title slide's
+   * notes and Voice script stay on the record.
+   */
+  readonly title?: Slide;
+  /**
+   * Who renders each Slide's Eyebrow, title and caption. Absent, the Slide
+   * wrapper renders the shared Slide header and a Scene holds the visual only;
+   * `'authored'` leaves them to each Scene, which renders the kit's `Title`.
+   */
+  readonly header?: 'authored';
+  /** The Slide header's entrance, once per Episode; `'typewriter'` when absent. */
+  readonly entrance?: SlideEntrance;
   readonly sections: readonly Section[];
 }
 
