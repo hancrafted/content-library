@@ -50,7 +50,7 @@ interface Placement {
 export type LocalizedSlide = Placement &
   Omit<SlideText, 'title'> & {
     readonly content: ReactNode;
-    /** The Slide header's text: set for a titled Slide of an Episode on the shared header (FE-012). */
+    /** The Slide header's text: set for a titled Slide of an Episode on the shared header (design-ADR-0012). */
     readonly header?: SlideHeaderText;
   } & (
     | { readonly level: Extract<SlideLevel, 'h2'>; readonly title: string }

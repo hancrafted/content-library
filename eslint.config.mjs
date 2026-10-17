@@ -19,7 +19,7 @@ const CSS_HOOK_CLASSES = [
   '^s2-flow-dash$',
   '^is-active$',
   '^dark$',
-  // FE-012 §3: the hover vocabulary, BEM classes in globals.css `@layer components`.
+  // design-ADR-0012 §8: the hover vocabulary, BEM classes in globals.css `@layer components`.
   '^card-hover(--raise|--outline)?$',
   '^focus-group(--dim-others|__item)?$',
   '^hover-reveal(__detail)?$',
@@ -288,7 +288,7 @@ export default tseslint.config(
   },
   {
     // The rule guards the Pages Router; an App Router root layout renders its own <head>,
-    // which carries the pre-paint `js` class script (FE-012 §2).
+    // which carries the pre-paint `js` class script (design-ADR-0012 §5).
     files: ['src/components/site-shell.tsx'],
     rules: { '@next/next/no-head-element': 'off' },
   },

@@ -20,7 +20,7 @@ const ELEMENT = 'absolute top-2 right-2 grid size-6 place-items-center rounded-f
 const ELEMENT_ICON = 'size-3.5';
 
 /**
- * A Context marker (FE-013): the Context drawer's speech-bubble
+ * A Context marker (design-ADR-0013): the Context drawer's speech-bubble
  * icon as a small button beside a fact, naming one Speaker note of its Slide
  * by slug, exactly as a `ContextRef` does; the drawer's delegated listener
  * opens it. `inline` sits in running text after the phrase as `(icon)`;

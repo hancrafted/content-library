@@ -42,7 +42,7 @@ function Heading({ level, children }: { level: SlideHeaderProps['level']; childr
 }
 
 /**
- * The Slide header (FE-012): Eyebrow, title and caption, rendered by the
+ * The Slide header (design-ADR-0012): Eyebrow, title and caption, rendered by the
  * Slide wrapper above the Scene. A server component: the typewriter is CSS
  * over the spans split here, so no client code runs for it. The caption sits
  * close under the title and the Eyebrow further above, so title and caption

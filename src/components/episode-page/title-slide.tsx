@@ -58,7 +58,7 @@ function AuthoredTitleSlide({ title, caption, hero, launcher, targets }: TitleSl
  * contents heading links to. The Episode's recording joins it when youtubeId is provided.
  *
  * On the shared header it types in like every Slide header on page load
- * (FE-012), over the record's hero Scene or, without one, the shared glow.
+ * (design-ADR-0012), over the record's hero Scene or, without one, the shared glow.
  */
 export function TitleSlide(props: TitleSlideProps) {
   const { youtubeId, talkLabels, entrance, hero } = props;

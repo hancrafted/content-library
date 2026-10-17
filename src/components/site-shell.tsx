@@ -6,7 +6,7 @@ import type { ReactNode } from 'react';
 
 const THEME_INIT_SCRIPT = buildThemeInitScript();
 
-/** Marks the document as scripted before first paint, so CSS may hide what JavaScript will reveal (FE-012). */
+/** Marks the document as scripted before first paint, so CSS may hide what JavaScript will reveal (design-ADR-0012). */
 const JS_CLASS_SCRIPT = "document.documentElement.classList.add('js')";
 
 /**

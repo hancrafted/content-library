@@ -60,7 +60,7 @@ export function SlideMountView({
  * while they are gone, so unmounting never moves the scroll height. Provides
  * the Slide id (the Title slide has none and is never far), so
  * `useSlideZone()` below it reads this Slide's zone. On the shared header it
- * also carries the Slide's entrance state for the play-once CSS (FE-012).
+ * also carries the Slide's entrance state for the play-once CSS (design-ADR-0012).
  */
 export function SlideMount({ id, mode, children }: { id?: string; mode: HeaderMode; children: ReactNode }) {
   const zone = useZoneOf(id ?? null);

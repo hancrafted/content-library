@@ -102,7 +102,7 @@ flowchart LR
 1. **DO** start an Episode by copying `page-template/`: rename the slug; register slug, record and metadata together; write its `i18n/`; then each Slide as a whole folder (copy one with `cp -r`), listed in its Section's `sections/<section-slug>.ts`, which the record imports in order; at publication, `published-anchors.json`. (Decision 2, Decision 5)
 2. **DO** write a Voice script for every Slide the speaker talks over; its words are the reading time. (Decision 2)
 3. **DO** leave `title` off a purely visual Slide. (Decision 2)
-4. **DO** build a one-off Scene from `SlideFrame`; its heading per FE-012. (Decision 3, Decision 4)
+4. **DO** build a one-off Scene from `SlideFrame`; heading per design-ADR-0012. (Decisions 3 and 4)
 5. **DO** mark the element a note explains with `{...target('chart')}`. (Decision 3)
 6. **DO** link with `slideHref('the-lost-middle')`; pass a part its strings — `<Statement>{t('statement')}</Statement>`. (Decision 3)
 7. **DO** colour _only_ a machine/human/AI meaning with `text-machine`, `text-human`, `text-ai`; check every Slide in both themes. (Decision 7)

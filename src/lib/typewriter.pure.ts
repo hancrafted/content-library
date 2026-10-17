@@ -1,5 +1,5 @@
 /*
- * The typewriter entrance's timing (FE-012): when each character of a Slide
+ * The typewriter entrance's timing (design-ADR-0012): when each character of a Slide
  * header appears. The pace is irregular, a bit faster then a bit slower, like
  * a person typing, but seeded by the Slide's id, so it is the same on every
  * load and in the static HTML. No DOM, no React: the header renders the
