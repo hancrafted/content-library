@@ -52,8 +52,12 @@ export interface Envelope {
   payload_truncated?: true;
 }
 
+/** What a note on a Job says: where a human is needed, what blocked, what research went without, a spine change, a Slide with no library match. */
+export const NOTE_TYPES = ['needs-human', 'blocked', 'research-gap', 'spine-change', 'no-library-match'] as const;
+export type NoteType = (typeof NOTE_TYPES)[number];
+
 /** The point facts an `event` line may record. */
-export const EVENT_NAMES = ['skill.invoke', 'file.read', 'instructions.load'] as const;
+export const EVENT_NAMES = ['skill.invoke', 'file.read', 'instructions.load', 'note'] as const;
 export type EventName = (typeof EVENT_NAMES)[number];
 
 /**
@@ -65,6 +69,7 @@ export const EVENT_ATTRIBUTES = {
   'skill.invoke': { required: ['skill.name'], optional: [] },
   'file.read': { required: ['file.path'], optional: [] },
   'instructions.load': { required: ['file.path', 'load_reason'], optional: ['trigger_file.path', 'adr'] },
+  note: { required: ['note.type', 'note.text'], optional: [] },
 } as const satisfies Record<EventName, { required: readonly string[]; optional: readonly string[] }>;
 
 export type EventAttributes = {

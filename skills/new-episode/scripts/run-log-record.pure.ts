@@ -5,6 +5,7 @@ import {
   EVENT_NAMES,
   KINDS,
   LINE_KEYS,
+  NOTE_TYPES,
   PAYLOAD_MAX_BYTES,
   SPAN_TYPES,
   STATUSES,
@@ -88,6 +89,7 @@ const CHECKS: Record<string, Check> = {
 const ATTRIBUTE_CHECKS: Record<string, Check> = {
   'file.path': repoPath,
   'trigger_file.path': repoPath,
+  'note.type': oneOf(NOTE_TYPES),
   adr: matching(/^[A-Z]+-\d{3}-[a-z0-9-]+$/, 'an ADR id and slug, GEN-002-adr-symlink-claude-rules'),
 };
 

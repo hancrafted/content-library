@@ -1,9 +1,9 @@
 // The run-scoped commands: how the orchestrator drives an Episode's Run by names (a job id, an attempt number, a gate
-// name) and never by span id. Each command writes its line through the run-log writer, resolves parents and targets
-// from the log itself, and keeps the active-run marker (`.scratch/active-run`) in step, so the marker is an internal
-// detail of this module. begin-run opens the Run and the marker; begin-job and begin-attempt nest under it; end-run
-// records the orchestrator's usage and clears the marker in one step. A command refuses a step the log cannot
-// support. Real disk; clock, ids, git and the transcript lookup are injectable.
+// name) and never by span id. Each command writes its line through the run-log writer, resolves parents and targets from
+// the log itself, and keeps the active-run marker (`.scratch/active-run`) in step, so the marker is an internal detail
+// of this module. begin-run opens the Run and the marker; begin-job and begin-attempt nest under it; end-run records the
+// orchestrator's usage and clears the marker in one step. A command refuses a step the log cannot support. Real disk;
+// clock, ids, git and the transcript lookup are injectable.
 import { existsSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 import { archiveEpisodeLog, episodeLogPath, readEpisodeLog, readMarker } from './episode-run-log.ts';
@@ -13,6 +13,7 @@ import { endEvent, need, parseRunArgs, refuse, viaOf, type Opts, type Params } f
 import { USAGE } from './run-help.pure.ts';
 import { type LogEvent, type Status } from './run-log.pure.ts';
 import { endMarker, liveMarker, recordJobUsage } from './run-marker.ts';
+import { note } from './run-note-command.ts';
 import { hasEnded, isOpen, latest, openAgentsOf, openSpan, openUnderRun, scoreTarget } from './run-spans.pure.ts';
 import { openView, pointAt, sessionOf, viewOf, write, type RunContext } from './run-view.ts';
 import { serversNote } from './servers.ts';
@@ -32,11 +33,10 @@ function beginRun(ctx: RunContext, opts: Opts): string {
   mkdirSync(path.join(ctx.root, path.dirname(episodeLogPath(ctx.slug))), { recursive: true });
   const line = write(ctx, { kind: 'start-run', harness: opts.harness ?? 'claude-code', 'gen_ai.request.model': model });
   pointAt(ctx, line, { jobSpanId: line.span_id, sessionId });
-  const note = serversNote(ctx.servers, { root: ctx.root, slug: ctx.slug, sha: line.template_sha ?? '' });
-  return `Run begun (${line.run_id})${note}`;
+  return `Run begun (${line.run_id})${serversNote(ctx.servers, { root: ctx.root, slug: ctx.slug, sha: line.template_sha ?? '' })}`;
 }
 
-/** Statuses a Run may end with while spans under it are still open: those spans then read crashed. */
+/** Statuses a Run may end with while spans are open; they then read crashed. */
 const ABANDONING: readonly Status[] = ['error', 'crashed'];
 
 function endRun(ctx: RunContext, p: Params<'status' | 'summary'>): string {
@@ -81,7 +81,7 @@ function endJob(ctx: RunContext, p: Params<'job' | 'status' | 'summary'>): strin
   return warning === '' ? `Job ${job} ended` : `Job ${job} ended (${warning})`;
 }
 
-/** Brings an earlier Run's ok Job over as a `reused` Job span of this Run, linked to it; a second call changes nothing. */
+/** Brings an earlier Run's ok Job over as a linked `reused` Job span; a second call changes nothing. */
 function reuse(ctx: RunContext, p: Params<'job'>): string {
   const job = need(p.job, 'job');
   const declared = declaredJobs(ctx.root, ctx.slug);
@@ -163,7 +163,6 @@ function score(ctx: RunContext, p: Params<'target' | 'name' | 'value'>, opts: Op
   const via = viaOf(opts.via);
   const { spans } = viewOf(ctx);
   const span = scoreTarget(spans, target) ?? refuse(`no span named "${target}" in the current Run`);
-  // --source may be missing: the writer refuses that line with its own message
   write(ctx, {
     kind: 'score',
     span_id: span.span_id,
@@ -227,6 +226,7 @@ const COMMANDS: Record<string, Command> = {
   'open-gate': command(['job', 'name'], openGate),
   'close-gate': command(['name', 'status', 'summary'], closeGate),
   reuse: command(['job'], reuse),
+  note: command(['job', 'type', 'text'], note),
   score: command(['target', 'name', 'value'], score),
   resume: command([], (ctx) => resume(ctx)),
   archive: command([], (ctx) => archiveEpisodeLog(ctx.slug, ctx.root, viewOf(ctx).run)),

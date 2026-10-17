@@ -245,6 +245,7 @@
     "wants": "Wants · nicht blockierend",
     "none": "Keine",
     "gateConfig": "Menschliches Gate",
+    "needsHan": "Braucht Han",
     "noGate": "Kein menschliches Gate",
     "retryLimit": "Retry-Limit",
     "config": "Agent-Konfiguration",
