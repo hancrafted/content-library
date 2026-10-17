@@ -119,6 +119,11 @@ function slide(slug: string, number: number, shape: SlideShape = {}): string {
 </article>`;
 }
 
+/** A Context marker in a mock, naming the Speaker note it opens by its title. */
+function marker(note: string): string {
+  return `<p>Fact <span data-spec="context-marker" data-note="${note}" role="img" aria-label="Speaker note: ${note}"><svg viewBox="0 0 16 16" class="size-4"><path d="M2 3h12v8H6l-4 3z" class="fill-muted-foreground" /></svg></span></p>`;
+}
+
 /** A Title-slide Option's section slides: one per Section slug, in order. */
 function echoes(sections: readonly string[], mock = 'bg-muted'): string {
   const items = sections.map(
@@ -520,6 +525,26 @@ describe('failure cases', () => {
     expect(found).toContain(expected);
   });
 
+  it('names a Context marker whose note is no Speaker note of its Slide', () => {
+    // ARRANGE
+    const marked = option('spent', '1b', { after: marker('Attention is finite') });
+    const files = folder({
+      'spec/spec.html': spec({
+        slides: [
+          slide('spent', 1, { options: [option('spent', '1a', { recommended: true }), marked] }),
+          slide('middle', 2),
+        ],
+      }),
+    });
+    const expected = [
+      'Option 1b of {#spent} has a Context marker for "Attention is finite", which is no Speaker note of the Slide: name the note by its title in data-note.',
+    ];
+    // ACT
+    const found = messages(checkSpec(files, REVIEW_ASSET));
+    // ASSERT
+    expect(found).toEqual(expected);
+  });
+
   it('requires a picked Title-slide Option once Han approved the Spec', () => {
     // ARRANGE
     const files = { 'spec/spec.html': spec({ meta: APPROVED, slides: [picked('spent', 1), picked('middle', 2)] }) };
@@ -592,6 +617,20 @@ describe('edge cases', () => {
   it('checks nothing in a folder with no Spec yet', () => {
     // ARRANGE
     const files = { 'dossier.md': DOSSIER };
+    // ACT
+    const findings = checkSpec(files, REVIEW_ASSET);
+    // ASSERT
+    expect(findings).toEqual([]);
+  });
+
+  it('accepts a Context marker that names a Speaker note of its Slide by title', () => {
+    // ARRANGE
+    const marked = option('spent', '1a', { recommended: true, after: marker('Attention sums to one') });
+    const files = folder({
+      'spec/spec.html': spec({
+        slides: [slide('spent', 1, { options: [marked, option('spent', '1b')] }), slide('middle', 2)],
+      }),
+    });
     // ACT
     const findings = checkSpec(files, REVIEW_ASSET);
     // ASSERT

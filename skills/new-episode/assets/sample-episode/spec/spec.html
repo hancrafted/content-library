@@ -803,14 +803,14 @@
                   <p class="flex justify-between text-caption uppercase text-muted-foreground"><span>Why the agent forgets</span><span>1 / 2</span></p>
                   <h3 class="mt-6 text-subheading font-semibold">Every token is spent attention</h3>
                   <p class="mt-2 max-w-2xl text-body">
-                    The model reads the whole window on every turn. Each message takes a share; the newest answer gets
-                    what is left.
+                    The model reads the whole window on every turn. Each message takes a share
+                    (<span data-spec="context-marker" data-note="Attention sums to one" role="img" aria-label="Speaker note: Attention sums to one" class="inline-flex align-middle text-primary"><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true"><path d="M2.5 2.5h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3.5 3v-3h-1a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z" class="fill-none stroke-current" stroke-width="1.5" stroke-linejoin="round" /></svg></span>); the newest answer gets what is left.
                   </p>
                 </div>
                 <div class="flex flex-col gap-3">
                   <div class="flex items-end justify-between text-caption text-muted-foreground">
                     <span>Turn 1</span>
-                    <span class="font-semibold text-foreground">Context window · 200k tokens</span>
+                    <span class="inline-flex items-center gap-1 font-semibold text-foreground">Context window · 200k tokens <span data-spec="context-marker" data-note="The window has a size" role="img" aria-label="Speaker note: The window has a size" class="inline-flex align-middle text-primary"><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true"><path d="M2.5 2.5h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3.5 3v-3h-1a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z" class="fill-none stroke-current" stroke-width="1.5" stroke-linejoin="round" /></svg></span></span>
                     <span>Turn 40</span>
                   </div>
                   <ol class="focus-group focus-group--dim-others flex h-28 gap-1 rounded-xl border border-border bg-muted p-2" aria-label="Messages in the window">
@@ -843,7 +843,9 @@
                 wrapper's; the Scene from <code>SlideFrame</code> draws the bar alone. Blocks in <code>bg-muted</code>,
                 the newest in <code>bg-accent</code>, the free share as a bordered block. Hover: the blocks are
                 <code>focus-group__item</code>s of a <code>focus-group--dim-others</code>, the percentage a
-                <code>hover-reveal__detail</code>. i18n keys <code>title</code>, <code>caption</code>,
+                <code>hover-reveal__detail</code>. Context markers (<code>ContextMarker</code>): inline after "Each
+                message takes a share" opens the Speaker note "Attention sums to one"; beside the "Context window"
+                label opens "The window has a size". i18n keys <code>title</code>, <code>caption</code>,
                 <code>messages</code>, <code>newest</code>.
               </div>
             </details>
