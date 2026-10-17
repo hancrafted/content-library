@@ -5,6 +5,7 @@
 import path from 'node:path';
 import { parseDescription, type ParsedDescription } from '../../../src/lib/episode-spawn-description.pure.ts';
 import { verdictFirst } from './agent-summary.pure.ts';
+import { openedByCommand, unclaimedAgents } from './claude-adapter-spans.pure.ts';
 import { isRecord, parseJson, parseMarker, sessionsOf, type Marker } from './marker.pure.ts';
 import type { IdentityFacts, LogEvent, MeasuredFacts, RunLogLine } from './run-log.pure.ts';
 import { SUMMARY_MAX } from './run-log.pure.ts';
@@ -110,25 +111,15 @@ function parentOf(
 /** The model asked for: meta.json's, else the agent type's frontmatter. */
 const requestedModel = (input: AdapterInput): string | undefined => metaOf(input.meta).model ?? input.agentModel;
 
-/** The agent span `begin-agent` opened for this spawn description and no adapter has claimed yet: harness detail joins it. */
-function openedByCommand(log: readonly RunLogLine[], trace: string, description: string): RunLogLine | undefined {
-  if (description === '') return undefined;
-  const ended = new Set(log.filter((l) => l.kind === 'end').map((l) => l.span_id));
-  return log.find(
-    (l) =>
-      l.kind === 'start' &&
-      l.type === 'agent' &&
-      l.trace_id === trace &&
-      l.name === description &&
-      l.transcript_path === undefined &&
-      l.span_id !== undefined &&
-      !ended.has(l.span_id),
-  );
+/** A start adds no span when `begin-agent` opened one for it, or may have (no meta.json yet: SubagentStop claims it). */
+function claimsOpenSpan(input: AdapterInput, trace: string, description: string): boolean {
+  if (input.meta === null) return unclaimedAgents(input.log, trace).length > 0;
+  return openedByCommand(input.log, trace, description) !== undefined;
 }
 
 function startEvent(input: AdapterInput, marker: Marker, files: { transcript: string }): LogEvent | null {
   const { description, requestShape } = metaOf(input.meta);
-  if (openedByCommand(input.log, marker.trace_id, description) !== undefined) return null;
+  if (claimsOpenSpan(input, marker.trace_id, description)) return null;
   const model = requestedModel(input);
   const all = entries(input.transcript);
   const jobs = openJobs(input.log, marker.trace_id);

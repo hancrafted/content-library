@@ -740,4 +740,31 @@ describe('enriching a span begin-agent opened', () => {
     // ASSERT
     expect(event).toMatchObject({ kind: 'start', type: 'agent' });
   });
+
+  it('files nothing at SubagentStart while meta.json is unreadable and a begin-agent span waits to be claimed', () => {
+    // ARRANGE
+    const input = base({ meta: null, log: open });
+    // ACT
+    const event = adaptSubagent(input);
+    // ASSERT
+    expect(event).toBeNull();
+  });
+
+  it('ends the begin-agent span at SubagentStop once meta.json names it, so one agent is one span', () => {
+    // ARRANGE
+    const input = base({ event: 'stop', log: open });
+    // ACT
+    const event = adaptSubagent(input);
+    // ASSERT
+    expect(event).toMatchObject({ kind: 'end', span_id: TYPED_SPAN });
+  });
+
+  it('still files a provisional span when meta.json is unreadable and no begin-agent span is open', () => {
+    // ARRANGE
+    const input = base({ meta: null, log: [jobLine] });
+    // ACT
+    const event = adaptSubagent(input);
+    // ASSERT
+    expect(event).toMatchObject({ kind: 'start', type: 'agent', role: 'skill-spawned' });
+  });
 });

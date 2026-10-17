@@ -571,6 +571,21 @@ describe('edge cases', () => {
     expect(findings).toEqual([]);
   });
 
+  it("tolerates a retired job's reference in a per-run pipeline, and not in the template", () => {
+    // ARRANGE
+    const retired = [`${SKILL_FOLDER}/references/scaffold-pipeline.md`];
+    const yaml = PIPELINE.replace('status: draft', `status: draft\ntemplate: ${SHA}`).replace(
+      'references: [references/research.md, docs/episodes/demo/brief.md]',
+      'references: [references/scaffold-pipeline.md, docs/episodes/demo/brief.md]',
+    );
+    // ACT
+    const perRun = checkPipeline(FILE, yaml, { ...CONTEXT, perRun: true, retired });
+    const template = check(yaml, { ...CONTEXT, retired });
+    // ASSERT
+    expect(perRun).toEqual([]);
+    expect(template.some((message) => message.includes('scaffold-pipeline.md'))).toBe(true);
+  });
+
   it('accepts a stage that no job belongs to', () => {
     // ARRANGE
     const yaml = PIPELINE.replace('stages: [brief, research]', 'stages: [brief, setup, research]');

@@ -58,6 +58,11 @@ export interface PipelineContext {
    * missing; the caller keeps this list for the template only.
    */
   pending?: readonly string[];
+  /**
+   * Repo paths a retired job read. A promoted Episode's pipeline is frozen, so a per-run pipeline may still name
+   * one; the template may not.
+   */
+  retired?: readonly string[];
 }
 
 /** A job reading a path: who reads it, how a finding names the reader, and the pipeline around it. */
@@ -69,6 +74,12 @@ interface Reader {
   context: PipelineContext;
   /** An approved per-run pipeline: every `foreach` is expanded and every output names one file. */
   expanded: boolean;
+}
+
+/** Whether a resolved path exists, is pending, or (in a per-run pipeline) belongs to a retired job. */
+function isKnownPath(context: PipelineContext, resolved: string): boolean {
+  const retired = context.perRun ? (context.retired ?? []) : [];
+  return context.exists(resolved) || (context.pending ?? []).includes(resolved) || retired.includes(resolved);
 }
 
 /**
@@ -91,7 +102,7 @@ function checkRead({ job, where, byId, jobs, context }: Reader, reference: strin
   const resolved = SKILL_PREFIXES.some((prefix) => target.startsWith(prefix))
     ? `${context.skillFolder}/${target}`
     : target;
-  if (context.exists(resolved) || (context.pending ?? []).includes(resolved)) return [];
+  if (isKnownPath(context, resolved)) return [];
   return [`${where} reads "${reference}", which resolves to ${resolved}, no existing file.`];
 }
 
