@@ -23,19 +23,12 @@ function feedback(round: number): string {
   ].join('\n');
 }
 
-function runLog(entries: readonly string[]): string {
-  return ['# Run log', '', ...entries.flatMap((entry) => [`## ${entry}`, '', '### Notes', '', 'Done.', '']), ''].join(
-    '\n',
-  );
-}
-
 describe('success cases', () => {
-  it('finds nothing when feedback rounds match their folders, and the run log runs forward', () => {
+  it('finds nothing when feedback rounds match their folders', () => {
     // ARRANGE
     const files = {
       [FEEDBACK_PATH]: feedback(1),
       'feedback/02/feedback.md': feedback(2),
-      'run-log.md': runLog(['brief-grill · 2026-10-12T09:00:00Z', 'research · 2026-10-12T10:15:00Z']),
     };
     // ACT
     const findings = checkStagingOrder(files);
@@ -69,33 +62,12 @@ describe('failure cases', () => {
     expect(findings).toMatchObject(expected);
     expect(findings[0].message).toContain(expectedFirst);
   });
-
-  it('names a run-log entry stamped earlier than the entry above it', () => {
-    // ARRANGE
-    const late = 'write-voice-script · 2026-10-12T10:00:00Z';
-    const files = {
-      'run-log.md': runLog(['brief-grill · 2026-10-12T09:00:00Z', 'research · 2026-10-12T10:15:00Z', late]),
-    };
-    const expected = [{ kind: 'run-log-order', file: 'run-log.md' }];
-    // ACT
-    const findings = checkStagingOrder(files);
-    // ASSERT
-    expect(findings).toMatchObject(expected);
-    expect(findings[0].message).toContain(late);
-  });
 });
 
 describe('edge cases', () => {
-  it('accepts run-log entries stamped at the same instant, compared as instants across offsets', () => {
+  it('reads no order from a run-log.md a branch in flight keeps', () => {
     // ARRANGE
-    const files = {
-      'run-log.md': runLog([
-        'research · 2026-10-12T10:15:00Z',
-        'research · 2026-10-12T10:15:00Z',
-        'write-spec · 2026-10-12T11:20:00+01:00',
-        'write-dossier · 2026-10-12T10:30:00Z',
-      ]),
-    };
+    const files = { 'run-log.md': '# Run log\n\n## b · 2026-10-12T10:00:00Z\n\n## a · 2026-10-12T09:00:00Z\n' };
     // ACT
     const findings = checkStagingOrder(files);
     // ASSERT

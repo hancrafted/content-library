@@ -21,4 +21,4 @@ The job's `checks:` in `assets/pipeline.yml` run by the check table in [SKILL.md
 1. Every design reference the Brief lists has its `design-reference.md`, one `## Page <n>` per page of its PDF.
 2. Open one page image per design reference and its `## Page <n>` text: the text is the page's words. A page whose text came back empty or garbled is a `Needs human:` line naming the page, never a hand edit.
 
-Then append the run-log entry, whose Output names each `design-reference.md` with its page count and the cut-outs kept.
+Then close the Job with a summary naming each `design-reference.md` with its page count and the cut-outs kept.

@@ -14,7 +14,7 @@ Point, never paste: read each file yourself.
 - The ADRs `.archgate/adrs/FE-002-episode-page.md`, `FE-007-module-layering.md`, `FE-009-slide-wrapper-and-scene.md`, `FE-011-design-tokens.md`.
 - The Master slides in `src/components/episodes/slide-master/slides/` and the frame components in `src/components/slide-master/`.
 - [`write-spec.md`](write-spec.md): "What an Option settles", "Settle it as a Scene" and `## Rubric`. Your Options are judged by that rubric.
-- The write-dossier run-log entry's `No library match:` lines for your Slides.
+- The `no-library-match` notes of the write-dossier Job for your Slides (`npm run episode:query -- "SELECT text FROM notes WHERE type = 'no-library-match'"`).
 - The sample Option `1a` in [`../assets/sample-episode/spec/spec.html`](../assets/sample-episode/spec/spec.html): the fragment's shape, and the fidelity bar below met.
 
 ## The mock is the Slide

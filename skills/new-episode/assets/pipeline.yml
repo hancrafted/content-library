@@ -101,14 +101,14 @@ jobs:
         model: opus
 
   # Decides per research question: reuse, refresh or new. Lists the questions
-  # needing a job under the run-log entry's `### Research jobs`, which the
+  # needing a job under `## Research jobs` in its research plan, which the
   # write-research foreach reads.
   - id: retrieval
     stage: setup
     needs: [categorize-research]
     isolation: worktree
     before: [mh-query]
-    outputs: [docs/episodes/<slug>/run-log.md]
+    outputs: [docs/episodes/<slug>/research-plan.md]
     checks: [mh]
     retries: 0
     agents:
@@ -150,7 +150,7 @@ jobs:
           - references/customize-pipeline.md
           - assets/pipeline.yml
           - docs/episodes/<slug>/brief.md
-          - docs/episodes/<slug>/run-log.md
+          - docs/episodes/<slug>/research-plan.md
         model: inherit
         session: orchestrator
 
@@ -160,7 +160,7 @@ jobs:
     stage: research
     needs: [customize-pipeline]
     isolation: worktree
-    foreach: docs/episodes/<slug>/run-log.md#research-jobs
+    foreach: docs/episodes/<slug>/research-plan.md#research-jobs
     before: [mh-query]
     outputs: [docs/episodes/<slug>/research/*/research.md]
     checks: [mh, vitest, sources]
@@ -168,7 +168,7 @@ jobs:
     agents:
       - type: implementor
         skills: [research, writing-for-agents]
-        references: [references/write-research.md, docs/episodes/<slug>/brief.md, docs/episodes/<slug>/run-log.md]
+        references: [references/write-research.md, docs/episodes/<slug>/brief.md, docs/episodes/<slug>/research-plan.md]
         model: sonnet
       - type: reviewer
         skills: []
@@ -192,7 +192,7 @@ jobs:
         references:
           - references/write-dossier.md
           - docs/episodes/<slug>/brief.md
-          - docs/episodes/<slug>/run-log.md
+          - docs/episodes/<slug>/research-plan.md
           - docs/episodes/<slug>/research/*/research.md
           - docs/episodes/<slug>/reference/*/design-reference.md
           - docs/profile/storytelling-guide.md
@@ -359,5 +359,5 @@ jobs:
     agents:
       - type: implementor
         skills: [pr]
-        references: [references/open-pr.md, docs/episodes/<slug>/run-log.md]
+        references: [references/open-pr.md]
         model: sonnet
