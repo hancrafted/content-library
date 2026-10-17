@@ -11,7 +11,7 @@ import { SpineStepper } from './spine-stepper.client';
 // Notes: `target` is the Scene element a note explains. Mark it with the kit's `{...target('name')}`, as the spine and
 // the prose below do; the Slide header marks `title` and `caption`.
 // Add `sources: [{ slug, url }]` to cite; its title goes under `notes.<note>.sources.<slug>.title`.
-// A Context marker shows a reader a note is there (FE-013): every fact whose note carries a source gets one. In text,
+// A Context marker shows a reader a note is there (design-ADR-0013): every fact whose note carries a source gets one. In text,
 // `<marker>phrase</marker>` with `marker('<note>')` follows the phrase with `(icon)`; on an element, `<Marker note />`
 // sits in the corner of a `relative` element, or where its `className` puts it. `<ref>` underlines a phrase instead.
 // Reading time is counted from the Voice script's words (`speaking-time.pure.ts`): no minutes or spans to set.
