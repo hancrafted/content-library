@@ -127,11 +127,8 @@ _Avoid_: Task, step
 **Stage**: one of the ordered phases a Run moves through (Brief, Setup, Research, Dossier, Specification, Build, PR), grouping the Jobs that serve it. A Job waits only for Jobs of its own or an earlier Stage, and a Stage may hold no Job.
 _Avoid_: Phase, step
 
-**Spec**: the one page the Specification Stage writes in Staging, read in a browser: per Slide its Options and what Build needs to build the chosen one. Han picks an Option per Slide at its Gate, and Build builds from the Spec alone.
+**Spec**: the one page the Specification Stage writes in Staging, read in a browser: per Slide its options and what Build needs to build the chosen one. Han picks an option per Slide at its Gate, and Build builds from the Spec alone.
 _Avoid_: Ticket, spec issue, build spec, design spec
-
-**Option**: one of two or three ways a Slide could look, shown side by side in the Spec at low to medium fidelity, each with its reason. Han picks one per Slide. The Title slide has three, each a set: the Title slide and, under it, every section slide, so picking one picks the Hero motif.
-_Avoid_: Variant, alternative, mock
 
 **Attempt**: one try at a Job, numbered from 1. A retry is a new Attempt that names the Attempt it retries.
 _Avoid_: Iteration, round
