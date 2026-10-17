@@ -21,7 +21,7 @@ The approved Spec is the Section's only source; the Spec Gate deleted the Dossie
 
 ## Picked Options
 
-Han picked one Option per Slide at the Spec Gate: build each Slide to its `data-picked` Option, its mock and its build notes' parts, tokens, props and i18n keys, and the `master:` and `motion:` those notes keep or overrule. Build no layout the Option does not give, and ask no design question: a gap in it is a `Needs human:` line. An Option naming a `Design reference:` page image is built against it: keep what its `Build against this page` line keeps, by [`skill-overrides.md`](skill-overrides.md#visual-check).
+Han picked one Option per Slide at the Spec Gate: build each Slide to its `data-picked` Option, its mock and its build notes' parts, tokens, props and i18n keys, and the `master:` and `motion:` those notes keep or overrule. Build no layout the Option does not give, and ask no design question: a gap in it is a `Needs human:` line. The wrapper renders the Slide header (Eyebrow, title, caption) and the play-once entrance, so the Scene holds the visual alone and adds no entrance motion; the hover classes the mock uses come along as they are. Each Context marker in the mock is a `ContextMarker` at the same place, opening the Speaker note its build notes name. An Option naming a `Design reference:` page image is built against it: keep what its `Build against this page` line keeps, by [`skill-overrides.md`](skill-overrides.md#visual-check).
 
 ## Review
 
@@ -47,6 +47,6 @@ Every Slide must have a `count` of 1, a wrapper box at least the viewport tall (
 1. Every Spec Voice script item of the Section's Slides appears verbatim as a Voice script segment of its Slide.
 2. Every Slide uses the master and motion its picked Option's build notes keep or overrule (`none` is no motion), shows the on-screen title its picked Option's mock shows, and the table of contents shows the Spec h3, as [The Spec is the source](#the-spec-is-the-source) keys them.
 3. Every Speaker note of the Section's Slides in the Spec appears in its Slide's notes, with its sources.
-4. Every Slide follows its picked Option, with no layout, component or motion the Option does not give; a Slide whose Option names a `Design reference:` page keeps what the Option keeps from that page image.
+4. Every Slide follows its picked Option, with no layout, component or motion the Option does not give, and a `ContextMarker` opening its named Speaker note wherever the mock shows a Context marker; a Slide whose Option names a `Design reference:` page keeps what the Option keeps from that page image.
 5. The visual check ran at 375, 1100 and 1440 px, drawer beside, over and closed, in both themes, and its numbers show no overflow, wrappers at least viewport height and Foreground clear of the chrome.
 6. The job changed no file of another Section.

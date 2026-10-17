@@ -1,0 +1,23 @@
+{
+  "title": "Why watching cashflow is mission critical",
+  "caption": "An empty pipeline; the payment lane reads €0.",
+  "voiceScript": {
+    "segments": {
+      "imagine-the-wall": {
+        "title": "Imagine the wall",
+        "keywords": "",
+        "script": "Imagine you are the founder, standing in front of one wall. Sticky notes, one column per month, yellow for the cash you have, red for the costs, green for the revenue. You have watched a board like this, or you are about to, and you know the feeling when you read the last column."
+      },
+      "cash-decides-how-long-you-have": {
+        "title": "Cash decides how long you have",
+        "keywords": "",
+        "script": "Here is the claim of this whole Episode: what decides how long your company lives is not how much you earn in the end, but when the money arrives. This one board comes back three times, and each time it answers a bigger question."
+      },
+      "the-route": {
+        "title": "The route",
+        "keywords": "",
+        "script": "We will go through four questions. Why cashflow is mission critical, why sales is more than selling, how to start doing sales, and why a pipeline takes time to build. The first answer is already on the wall."
+      }
+    }
+  }
+}

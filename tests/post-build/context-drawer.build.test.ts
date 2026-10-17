@@ -31,6 +31,14 @@ function page(url: string): CheerioAPI {
   return load(readFileSync(join(OUT_DIR, exportedFile(url)), 'utf8'));
 }
 
+/**
+ * Whether the page holds a page Slide: one whose anchor is `<section>--<slide>`. A page of the Title slide and
+ * section slides alone, as an Episode built Section by Section starts, carries no Speaker note yet.
+ */
+function holdsPageSlide($: CheerioAPI): boolean {
+  return $('[data-slot="slides"] [data-slide*="--"]').length > 0;
+}
+
 function entry($: CheerioAPI, panel: 'notes' | 'script', anchor: string) {
   return $(`#context-panel-${panel} [data-context-for="${anchor}"]`);
 }
@@ -73,6 +81,7 @@ describe.each(PAGES)('$url', ({ slug, url }) => {
     // ARRANGE
     const $ = page(url);
     const notes = $('#context-panel-notes [data-note-target]').toArray();
+    const fewestNotes = holdsPageSlide($) ? 1 : 0;
     // ACT
     const unresolved = notes
       .map((note) => ({
@@ -82,7 +91,7 @@ describe.each(PAGES)('$url', ({ slug, url }) => {
       .filter(({ owner, target }) => targetsOf($, owner, target).length !== 1)
       .map(({ owner, target }) => `${owner} → ${target}`);
     // ASSERT
-    expect(notes.length).toBeGreaterThan(0);
+    expect(notes.length).toBeGreaterThanOrEqual(fewestNotes);
     expect(unresolved).toEqual([]);
   });
 

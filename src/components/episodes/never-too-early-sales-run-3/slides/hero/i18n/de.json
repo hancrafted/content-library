@@ -1,0 +1,15 @@
+{
+  "caption": "Eine leere Pipeline, eine Notiz darin, und eine Zahlungsspalte, die auf eine Notiz wartet, die Monate braucht.",
+  "board": "Die Pipeline, fast leer",
+  "lanes": {
+    "leads": "Leads",
+    "opportunities": "Opportunities",
+    "closing": "Abschluss",
+    "payment": "Zahlung"
+  },
+  "firstLead": {
+    "tag": "Lead",
+    "text": "Dein erster Lead"
+  },
+  "tooLate": "zu spät?"
+}

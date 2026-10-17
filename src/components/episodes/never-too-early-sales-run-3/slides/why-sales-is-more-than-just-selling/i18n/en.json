@@ -1,0 +1,23 @@
+{
+  "title": "Why sales is more than just selling",
+  "caption": "Each stage pays out before the payment lane does.",
+  "payouts": {
+    "insight": "Insight",
+    "trust": "Trust",
+    "process": "Process"
+  },
+  "voiceScript": {
+    "segments": {
+      "pain-first": {
+        "title": "Pain first",
+        "keywords": "",
+        "script": "You may think sales is something for later, when the money is needed. If so, you leave most of its value on the table, because the money is the last thing sales gives you."
+      },
+      "the-claim": {
+        "title": "The claim",
+        "keywords": "",
+        "script": "My claim is this: selling early pays out before the revenue does. There are three payouts, and each one is a reason to start now."
+      }
+    }
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "title": "Pipeline-Tools in der Praxis",
+  "caption": "Jeder Interessent eine Karte, jede Phase eine Spalte. Eine Tabelle reicht.",
+  "board": "Deal-Board, fünf Phasen vom Lead-Eingang bis zur Verhandlung",
+  "summary": {
+    "label": "Montag · offene Pipeline",
+    "deals": "{count, plural, one {# Deal} other {# Deals}} in {stages, plural, one {# Phase} other {# Phasen}}"
+  },
+  "annotation": "Hier geht Deine Woche hin",
+  "ends": {
+    "start": "Ein Name auf Deiner Liste",
+    "end": "Ein unterschriebener Vertrag"
+  },
+  "lanes": {
+    "count": "{count, plural, one {# Deal} other {# Deals}}",
+    "leadIn": {
+      "label": "Lead-Eingang"
+    },
+    "contactMade": {
+      "label": "Kontakt hergestellt"
+    },
+    "needsDefined": {
+      "label": "Bedarf geklärt"
+    },
+    "proposalMade": {
+      "label": "Angebot gemacht"
+    },
+    "negotiation": {
+      "label": "Verhandlung"
+    }
+  },
+  "deals": {
+    "brightfield": {
+      "company": "Brightfield Cargo",
+      "contact": "Jonas Weber"
+    },
+    "kestrel": {
+      "company": "Kestrel Fracht",
+      "contact": "Mia Novak"
+    },
+    "larchwood": {
+      "company": "Larchwood Spedition",
+      "contact": "Tom Reyes"
+    },
+    "orbit": {
+      "company": "Orbit Logistik",
+      "contact": "Sara Kim"
+    },
+    "pinecrest": {
+      "company": "Pinecrest Fracht",
+      "contact": "Ali Demir"
+    },
+    "quarry": {
+      "company": "Quarry Transport",
+      "contact": "Eva Lind"
+    },
+    "redwood": {
+      "company": "Redwood Spedition",
+      "contact": "Ben Ortiz"
+    },
+    "saltmarsh": {
+      "company": "Saltmarsh Cargo",
+      "contact": "Nora Fischer"
+    },
+    "tidewater": {
+      "company": "Tidewater Fracht",
+      "contact": "Raj Patel"
+    },
+    "vela": {
+      "company": "Vela Logistik",
+      "contact": "Lisa Moreau"
+    },
+    "umbra": {
+      "company": "Umbra Kurier",
+      "contact": "Kai Berg"
+    }
+  },
+  "notes": {
+    "late-deals-convert-worse": {
+      "header": "Späte Deals schließen schlechter ab",
+      "description": "In einem Datensatz von 655 Tausend Opportunities schließen Deals, die sich spät im Zyklus verschieben, schlechter ab, und bei gewonnenen Deals waren die Entscheider früh beteiligt; die prozentualen Veränderungen im Bericht sind relativ, keine Prozentpunkte.[1]",
+      "sources": {
+        "ebsta-gtm-benchmarks": {
+          "title": "Ebsta and Pavilion, GTM Benchmarks Report"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "one-place-for-every-deal": {
+        "title": "Ein Ort für jeden Deal",
+        "keywords": "",
+        "script": "Ein Deal-Board ist das Cashflow-Board für den Vertrieb. Jeder Interessent ist eine Karte, jede Phase eine Spalte, so liegt die ganze Pipeline an einem Ort."
+      },
+      "read-it-at-a-glance": {
+        "title": "Auf einen Blick lesen",
+        "keywords": "",
+        "script": "Du liest es auf einen Blick: was in jeder Phase steht, was jede Spalte wert ist, und den nächsten Schritt pro Deal. An einem Montagmorgen sagt es Dir, wo Du Deine Woche verbringst."
+      },
+      "start-small": {
+        "title": "Fang klein an",
+        "keywords": "",
+        "script": "Also fang klein an. Verfolge Deine Deals in einer einfachen Pipeline, und wisse, dass eine Tabelle reicht. Nicht das Tool ist der Punkt, sondern die Gewohnheit."
+      }
+    }
+  }
+}

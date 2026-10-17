@@ -1,0 +1,24 @@
+{
+  "title": "Why building an effective sales pipeline takes time",
+  "caption": "The lanes thin out, and slowly.",
+  "counts": {
+    "leads": "27",
+    "opportunities": "3",
+    "closing": "1"
+  },
+  "cycle": "27:1 over ≈ 9.5 months",
+  "voiceScript": {
+    "segments": {
+      "the-obvious-objection": {
+        "title": "The obvious objection",
+        "keywords": "",
+        "script": "So the obvious objection: I start selling in January, and the April revenue lands in March? It does not work like a switch."
+      },
+      "the-claim": {
+        "title": "The claim",
+        "keywords": "",
+        "script": "A pipeline is built, measured and tuned, and that takes months. Three words describe it: funnel, conversion rate and sales cycle."
+      }
+    }
+  }
+}

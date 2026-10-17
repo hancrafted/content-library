@@ -6,6 +6,9 @@ import type { ReactNode } from 'react';
 
 const THEME_INIT_SCRIPT = buildThemeInitScript();
 
+/** Marks the document as scripted before first paint, so CSS may hide what JavaScript will reveal (design-ADR-0012). */
+const JS_CLASS_SCRIPT = "document.documentElement.classList.add('js')";
+
 /**
  * The `<html>` document every root layout renders. English and German each have
  * their own root layout (see README), and both delegate here.
@@ -13,6 +16,9 @@ const THEME_INIT_SCRIPT = buildThemeInitScript();
 export function SiteShell({ locale, children }: { locale: Locale; children: ReactNode }) {
   return (
     <html lang={locale} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: JS_CLASS_SCRIPT }} />
+      </head>
       <body className="min-h-screen antialiased">
         {/* First in <body>: sets the theme class before anything below paints. */}
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />

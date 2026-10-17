@@ -1,0 +1,30 @@
+import { episode } from '@/components/slide-master/slide';
+import de from './i18n/de.json';
+import en from './i18n/en.json';
+import { howToStartDoingSalesSection } from './sections/how-to-start-doing-sales';
+import { startBeforeYouNeedTheMoneySection } from './sections/start-before-you-need-the-money';
+import { whyBuildingAnEffectiveSalesPipelineTakesTimeSection } from './sections/why-building-an-effective-sales-pipeline-takes-time';
+import { whySalesIsMoreThanJustSellingSection } from './sections/why-sales-is-more-than-just-selling';
+import { whyWatchingCashflowIsMissionCriticalSection } from './sections/why-watching-cashflow-is-mission-critical';
+import { hero } from './slides/hero/slide';
+
+/*
+ * "Why it's never too early to start with sales": revenue arrives months after the costs that create it, so start the
+ * pipeline before you need the money. Built from the approved Spec under docs/episodes/never-too-early-sales-run-3/.
+ * Upcoming until its video is live.
+ *
+ * Each Section is one placement marker under `sections/`, named after the Section's slug and listed here in Spec
+ * order: a Section job adds its page Slides to its own marker, so parallel Section branches never edit one line.
+ */
+export const neverTooEarlySalesRun3 = episode({
+  slug: 'never-too-early-sales-run-3',
+  messages: { en, de },
+  title: hero,
+  sections: [
+    whyWatchingCashflowIsMissionCriticalSection,
+    whySalesIsMoreThanJustSellingSection,
+    howToStartDoingSalesSection,
+    whyBuildingAnEffectiveSalesPipelineTakesTimeSection,
+    startBeforeYouNeedTheMoneySection,
+  ],
+});

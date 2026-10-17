@@ -1,6 +1,8 @@
 import { placeSections } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
-import { isValidElement, type ReactElement, type ReactNode } from 'react';
+import { load } from 'cheerio';
+import { createElement, Fragment, isValidElement, type ReactElement, type ReactNode } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { episodeMinutes, localizeSlide, type EpisodeContext, type LocalizedSlide } from './localized-slide';
 import { episode, slide, type Slide } from './slide';
@@ -97,7 +99,11 @@ function episodeOf(locale: Locale, sections: readonly (readonly [Slide, ...Slide
     episode: 'page-template',
     locale,
     placed: placeSections<Slide>(sections).flat(),
-    refLabel: 'opens speaker note',
+    referenceLabels: {
+      ref: 'opens speaker note',
+      marker: (title) => (locale === 'de' ? `Sprechernotiz: ${title}` : `Speaker note: ${title}`),
+    },
+    header: 'authored',
   };
 }
 
@@ -203,6 +209,43 @@ describe('success cases', () => {
     expect(parts.map((part) => (isValidElement(part) ? part.type : typeof part))).toEqual(expected);
   });
 
+  it('names a Context marker after the header of the note it opens, in the page locale', () => {
+    // ARRANGE
+    const expected = { label: 'Sprechernotiz: Warum eine Referenz-Episode', note: 'reference-episode' };
+    const { Marker } = kitOf(localized('de')[1]);
+    // ACT
+    const button = load(renderToStaticMarkup(Marker({ note: 'reference-episode' })))('button');
+    const seen = { label: button.attr('aria-label'), note: button.attr('data-context-ref') };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it('follows a phrase in running text with its inline Context marker, kept on the same line', () => {
+    // ARRANGE
+    const kit = kitOf(localized('en')[1]);
+    const expected = { text: 'keeps the shape\u00a0', label: 'Speaker note: Why a reference Episode' };
+    // ACT
+    const html = renderToStaticMarkup(
+      createElement(Fragment, null, kit.marker('reference-episode')('keeps the shape')),
+    );
+    const $ = load(html);
+    const seen = { text: $('body').contents().first().text(), label: $('button').attr('aria-label') };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it('colours an inline Context marker as its surface needs, by the class it is given', () => {
+    // ARRANGE
+    const kit = kitOf(localized('en')[1]);
+    const expected = 'text-primary-foreground/70';
+    // ACT
+    const html = renderToStaticMarkup(
+      createElement(Fragment, null, kit.marker('reference-episode', expected)('keeps the shape')),
+    );
+    // ASSERT
+    expect(load(html)('button').attr('class')?.split(/\s+/)).toContain(expected);
+  });
+
   it("resolves the Slide's notes and Voice script from its own file, with short targets and titled sources", () => {
     // ARRANGE
     const expectedNote = {
@@ -295,6 +338,18 @@ describe('failure cases', () => {
     const ref = () => kit.ref('reference-episode');
     // ASSERT
     expect(ref).toThrow(expected);
+  });
+
+  it('rejects a Context marker for a note the Slide does not declare, even past the types', () => {
+    // ARRANGE
+    const kit = kitOf(localized('en')[0]);
+    const expected = 'reference-episode';
+    // ACT
+    const inline = () => kit.marker('reference-episode');
+    const element = () => kit.Marker({ note: 'reference-episode' });
+    // ASSERT
+    expect(inline).toThrow(expected);
+    expect(element).toThrow(expected);
   });
 
   it('rejects a template key that holds no string, even past the types', () => {

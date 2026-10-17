@@ -1,0 +1,17 @@
+/*
+ * Pipeline by the numbers: the revenue note's tint and the Deal segment's fill. Colour only through tokens (FE-011);
+ * the tint mixes global tokens, which already switch in dark mode.
+ */
+
+.scene {
+  --note-revenue: color-mix(in oklch, var(--success) 25%, var(--card));
+}
+
+.revenue {
+  background-color: var(--note-revenue);
+}
+
+/* The cycle bar's Deal segment: the stage that ends in revenue. */
+.dealSegment {
+  fill: var(--success);
+}

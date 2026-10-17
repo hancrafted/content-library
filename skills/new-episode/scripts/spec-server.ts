@@ -5,7 +5,7 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
 import path from 'node:path';
-import { SPEC_FILE, specSlides } from '../../../src/lib/episode-spec-page.pure.ts';
+import { SPEC_FILE, specSlides, specTitleSlideOptions } from '../../../src/lib/episode-spec-page.pure.ts';
 import { nextRound, reviewToFeedback, type Fault } from './spec-feedback.pure.ts';
 
 export interface SpecServer {
@@ -77,9 +77,15 @@ function existingRounds(folder: string): string[] {
 
 async function save(response: ServerResponse, request: IncomingMessage, options: SpecServerOptions): Promise<void> {
   const fields = [...new URLSearchParams(await readBody(request))];
-  const slides = specSlides(readFileSync(path.join(options.folder, SPEC_FILE), 'utf8'));
+  const html = readFileSync(path.join(options.folder, SPEC_FILE), 'utf8');
   const round = nextRound(existingRounds(options.folder));
-  const result = reviewToFeedback({ fields, slides, round, now: options.now() });
+  const result = reviewToFeedback({
+    fields,
+    slides: specSlides(html),
+    titleSlide: specTitleSlideOptions(html),
+    round,
+    now: options.now(),
+  });
   if (result.kind === 'rejected')
     return send(response, { status: 400, type: HTML, body: rejectionPage(result.faults) });
   const file = path.join(options.folder, result.file);

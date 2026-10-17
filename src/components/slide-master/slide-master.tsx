@@ -15,7 +15,17 @@ interface PartProps {
  */
 export function SlideFrame({ className, children }: { className?: string; children: ReactNode }) {
   return (
-    <article className={cn('flex min-h-[calc(100svh-8rem)] flex-col py-16 md:py-24', className)}>{children}</article>
+    <article
+      className={cn(
+        'flex min-h-[calc(100svh-8rem)] flex-col py-16 md:py-24',
+        // Under the Slide header (design-ADR-0012) the header holds the top space; the frame fills the rest of the wrapper, or
+        // on the Title slide hugs its hero so the header and hero sit together, centred.
+        '[[data-headed]>&]:min-h-0 [[data-headed]>&]:pt-0! [[data-headed=fill]>&]:flex-1 [[data-headed=hug]>&]:mb-auto',
+        className,
+      )}
+    >
+      {children}
+    </article>
   );
 }
 

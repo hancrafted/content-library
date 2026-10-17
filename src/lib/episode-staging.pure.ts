@@ -5,7 +5,7 @@
  * is the caller's job, so every rule tests against an in-memory folder.
  */
 
-import { SPEC_FILE, specSlideAnchors } from './episode-spec-page.pure';
+import { SPEC_FILE, specSectionSlugs, specSlideAnchors } from './episode-spec-page.pure';
 import { checkSpec } from './episode-spec.pure';
 import { checkBrief } from './episode-staging-brief.pure';
 import { checkFeedback } from './episode-staging-feedback.pure';
@@ -19,6 +19,7 @@ import {
   bodyLines,
   h4s,
   orderedList,
+  sectionSlugs,
   slideAnchors,
   type Block,
   type Heading,
@@ -162,15 +163,18 @@ export function checkStagingFolder(
 }
 
 /**
- * The feedback rounds, keyed by the Dossier's page Slides while it exists and by the Spec's once its Gate deleted
- * the Dossier; none before either exists.
+ * The feedback rounds, keyed by the Dossier's Sections and page Slides while it exists and by the Spec's once its
+ * Gate deleted the Dossier; none before either exists.
  */
 function checkFeedbackRounds(files: Readonly<Record<string, string>>): Finding[] {
   const dossier = files['dossier.md'];
   const spec = files[SPEC_FILE];
-  if (dossier !== undefined)
-    return checkFeedback(files, { anchors: slideAnchors(blocksOf(bodyLines(dossier))), source: 'Dossier' });
-  if (spec !== undefined) return checkFeedback(files, { anchors: specSlideAnchors(spec), source: 'Spec' });
+  if (dossier !== undefined) {
+    const blocks = blocksOf(bodyLines(dossier));
+    return checkFeedback(files, { anchors: slideAnchors(blocks), sections: sectionSlugs(blocks), source: 'Dossier' });
+  }
+  if (spec !== undefined)
+    return checkFeedback(files, { anchors: specSlideAnchors(spec), sections: specSectionSlugs(spec), source: 'Spec' });
   return [];
 }
 

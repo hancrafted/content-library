@@ -1,0 +1,125 @@
+{
+  "title": "Pipeline by the numbers",
+  "caption": "Do you have 27 names? That is what one deal takes in this example, 9.5 months before the money.",
+  "stages": {
+    "lead": "Lead · {count}",
+    "opportunity": "Opportunity · {count}",
+    "deal": "Deal · {count}"
+  },
+  "durations": {
+    "lead": "2 weeks",
+    "opportunity": "6 months",
+    "deal": "3 months"
+  },
+  "names": {
+    "kraus": "Kraus",
+    "novak": "Novak",
+    "hahn": "Hahn",
+    "okafor": "Okafor",
+    "lind": "Lind",
+    "meyer": "Meyer",
+    "santos": "Santos",
+    "petrov": "Petrov",
+    "weber": "Weber",
+    "dubois": "Dubois",
+    "haas": "Haas",
+    "larsen": "Larsen",
+    "moretti": "Moretti",
+    "fischer": "Fischer",
+    "ito": "Ito",
+    "becker": "Becker",
+    "nowak": "Nowak",
+    "schulz": "Schulz",
+    "rossi": "Rossi",
+    "keller": "Keller",
+    "varga": "Varga",
+    "bauer": "Bauer",
+    "jansen": "Jansen",
+    "wolf": "Wolf",
+    "costa": "Costa",
+    "sato": "Sato",
+    "ahmed": "Ahmed"
+  },
+  "states": {
+    "demo": "demo",
+    "proposal": "proposal",
+    "pricing": "pricing",
+    "legal": "legal",
+    "signed": "signed"
+  },
+  "ratios": {
+    "leadOpp": "{ratio}:1",
+    "oppDeal": "{ratio}:1"
+  },
+  "total": "{total} : 1",
+  "totalCaption": "<marker>total conversion: {total} leads for 1 deal</marker>",
+  "others": "{count} others still talking or lost",
+  "cycle": {
+    "total": "Sales cycle: {months, number} months from first lead to money",
+    "lead": "2 wk",
+    "opportunity": "Opportunity · 6 months",
+    "deal": "Deal · 3 months → money"
+  },
+  "notes": {
+    "a-reference-win-rate": {
+      "header": "A reference win rate",
+      "description": "In a dataset of 655 thousand opportunities across 387 companies, the new-customer win rate was 19 percent (about 5.3 opportunities per win), the sales cycle 91 days and 8 stakeholders per deal; expansion sales to existing customers ran 45 percent, 52 days and 5 stakeholders. It is a vendor study of its own customers' CRM data [1].",
+      "sources": {
+        "ebsta-pavilion": {
+          "title": "Ebsta and Pavilion, GTM Benchmarks Report"
+        }
+      }
+    },
+    "the-biggest-loss-is-no-decision": {
+      "header": "The biggest loss is no decision",
+      "description": "An analysis of more than 2.5 million recorded sales conversations found 40 to 60 percent of deals are lost to buyers who intend to buy but never act [1].",
+      "sources": {
+        "hbr-indecision": {
+          "title": "Dixon and McKenna, Stop Losing Sales to Customer Indecision (Harvard Business Review)"
+        }
+      }
+    },
+    "everyone-holds-a-veto": {
+      "header": "Everyone holds a veto",
+      "description": "Sellers rarely find one person who can approve a deal alone; decision authority rests with a group whose members have different roles and all have veto power [1].",
+      "sources": {
+        "hbr-consensus-sale": {
+          "title": "Schmidt, Adamson and Bird, Making the Consensus Sale (Harvard Business Review)"
+        }
+      }
+    },
+    "buying-groups-disagree": {
+      "header": "Buying groups disagree",
+      "description": "A Gartner survey of 632 B2B buyers describes buying groups of five to 16 people; 74 percent of teams showed unhealthy conflict, and groups that reached consensus were 2.5 times more likely to report a high-quality deal [1].",
+      "sources": {
+        "gartner-buyer-teams": {
+          "title": "Gartner, Gartner Sales Survey Finds 74% of B2B Buyer Teams Demonstrate \"Unhealthy Conflict\" During The Decision Process"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "read-the-picture": {
+        "title": "Read the picture",
+        "keywords": "",
+        "script": "Read the picture. Lead to opportunity is three to one, opportunity to deal is nine to one, so together it takes 27 leads for one deal."
+      },
+      "read-the-clock": {
+        "title": "Read the clock",
+        "keywords": "",
+        "script": "Now read the clock. Two weeks, six months, three months, which makes 9.5 months from first lead to money. Think one step further and ten deals need 270 leads."
+      },
+      "backward-chain": {
+        "title": "Backward chain",
+        "keywords": "",
+        "script": "So chain it backwards. If you want a deal in month X, count back 9.5 months, and by then you need 27 names in the funnel. Do you have 27 names?"
+      },
+      "your-numbers-not-mine": {
+        "title": "Your numbers, not mine",
+        "keywords": "",
+        "script": "One thing I want to be straight about: this is my worked example, not a law. Yours will be shorter or longer, which is exactly why you measure your own."
+      }
+    }
+  }
+}

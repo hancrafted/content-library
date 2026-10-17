@@ -33,6 +33,9 @@ export const SOURCE_ATTR = 'data-source';
 /** Keeps a note lit (and in view) while the Context reference that opened it is pinned. */
 export const PINNED_ATTR = 'data-context-pinned';
 
+/** On the drawer's one scroll container, which a revealed note scrolls to the top of. */
+export const CONTEXT_SCROLL_ATTR = 'data-context-scroll';
+
 /** Any Speaker note item inside the drawer's slot. */
 export const NOTE_SELECTOR = `[data-slot="context"] [${NOTE_TARGET_ATTR}]`;
 

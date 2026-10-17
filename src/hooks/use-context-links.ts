@@ -1,8 +1,10 @@
+import { revealScrollTop } from '@/lib/context-drawer.pure';
 import {
   CITATION_ATTR,
   CONTEXT_ACTIVE_ATTR,
   CONTEXT_ITEM_ATTR,
   CONTEXT_REF_ATTR,
+  CONTEXT_SCROLL_ATTR,
   ITEM_SELECTOR,
   itemSelector,
   NOTE_SELECTOR,
@@ -95,14 +97,26 @@ export function useContextLinks(reveal: (ref: NoteRef) => void) {
   }, [reveal]);
 }
 
-/** Pins a note (so it stays lit, and in view) while `ref` is set; unpins when it clears. */
+/** Scrolls the drawer's body, and only it, so `note` sits as near its top as the content allows. */
+function scrollToTop(note: HTMLElement): void {
+  const body = note.closest<HTMLElement>(`[${CONTEXT_SCROLL_ATTR}]`);
+  if (!body) return;
+  const offset = note.getBoundingClientRect().top - body.getBoundingClientRect().top - body.clientTop + body.scrollTop;
+  const inset = Number.parseFloat(getComputedStyle(body).paddingTop) || 0;
+  body.scrollTo({
+    top: revealScrollTop({ offset, inset, scrollHeight: body.scrollHeight, clientHeight: body.clientHeight }),
+  });
+}
+
+/** Pins a note (so it stays lit, at the top of the drawer) while `ref` is set; unpins when it clears. */
 export function usePinnedNote(ref: NoteRef | null) {
   useEffect(() => {
     if (!ref) return;
     const note = noteOfRef(ref);
-    note?.setAttribute(PINNED_ATTR, '');
-    note?.scrollIntoView({ block: 'nearest' });
-    return () => note?.removeAttribute(PINNED_ATTR);
+    if (!note) return;
+    note.setAttribute(PINNED_ATTR, '');
+    scrollToTop(note);
+    return () => note.removeAttribute(PINNED_ATTR);
   }, [ref]);
 }
 

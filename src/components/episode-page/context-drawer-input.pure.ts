@@ -17,6 +17,28 @@ import { checkedSlug, TITLE_ANCHOR } from '@/lib/episode.pure';
  * nothing from the Episode modules (FE-010 §8).
  */
 
+/*
+ * The ICU leaves (formatted by the adapter, with their arguments) and `refNote`
+ * and `markerNote` (read by Slide text, not the drawer) stay out of the strings
+ * the drawer receives.
+ */
+export const NOT_DRAWER_STRINGS = ['explainer', 'sourcesCount', 'citation', 'refNote', 'markerNote'] as const;
+
+/**
+ * Throws when a `contextDrawer` string that takes an ICU argument is not left
+ * out of the drawer's strings: read unformatted, it fails the page in
+ * `next dev` and only logs in the static build.
+ */
+export function checkDrawerStrings(namespace: Readonly<Record<string, unknown>>): void {
+  const kept: readonly string[] = NOT_DRAWER_STRINGS;
+  const leaked = Object.entries(namespace)
+    .filter(([key, value]) => typeof value === 'string' && /\{\w+/.test(value) && !kept.includes(key))
+    .map(([key]) => key);
+  if (leaked.length > 0) {
+    throw new Error(`contextDrawer strings ${leaked.join(', ')} take an argument: add them to NOT_DRAWER_STRINGS.`);
+  }
+}
+
 function assertValidUniqueSlugs(kind: string, slide: string, slugs: readonly string[]): void {
   const seen = new Set<string>();
   for (const slug of slugs) {

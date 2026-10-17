@@ -1,5 +1,5 @@
 import { slide } from '@/components/slide-master/slide';
-import { SlideCaption, SlideFrame } from '@/components/slide-master/slide-master';
+import { SlideFrame } from '@/components/slide-master/slide-master';
 import { useId } from 'react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
@@ -12,7 +12,7 @@ interface HalfProps {
 }
 
 // One half of the split: the two halves face each other across the hairline (mirrored alignment from md up), and
-// hovering one dims the other through the parent `group`. CSS only, so no client widget.
+// pointing at one dims the other (`focus-group--dim-others`). CSS only, so no client widget.
 function Half({ index, title, caption, side }: HalfProps) {
   const id = `grid-1x2-${useId()}`;
   const facing = side === 'start' ? 'md:items-end md:text-right md:pr-10' : 'md:items-start md:text-left md:pl-10';
@@ -20,7 +20,7 @@ function Half({ index, title, caption, side }: HalfProps) {
   return (
     <article
       aria-labelledby={id}
-      className={`flex min-h-56 flex-col justify-between gap-10 py-8 transition-opacity duration-300 ease-out group-hover:[&:not(:hover)]:opacity-30 motion-reduce:transition-none md:min-h-80 md:py-4 ${facing}`}
+      className={`focus-group__item flex min-h-56 flex-col justify-between gap-10 py-8 md:min-h-80 md:py-4 ${facing}`}
     >
       <span aria-hidden className="flex items-center gap-3 font-mono text-body tracking-[0.3em] text-muted-foreground">
         <span className={`size-2 rounded-full ${accent}`} />
@@ -43,13 +43,11 @@ export const grid1x2 = slide({
   messages: { en, de },
   notes: [{ slug: 'layout', target: 'grid' }],
   segments: [{ slug: 'walkthrough' }],
-  content: ({ t, target, Title }) => (
+  content: ({ t, target }) => (
     <SlideFrame>
-      <Title>{t('title')}</Title>
-      <SlideCaption>{t('caption')}</SlideCaption>
       <div
         {...target('grid')}
-        className="group mt-10 grid grid-cols-1 divide-y divide-border border-y border-border md:grid-cols-2 md:divide-x md:divide-y-0"
+        className="focus-group focus-group--dim-others mt-10 grid grid-cols-1 divide-y divide-border border-y border-border md:grid-cols-2 md:divide-x md:divide-y-0"
       >
         <Half index="01" side="start" title={t('cells.c1.title')} caption={t('cells.c1.caption')} />
         <Half index="02" side="end" title={t('cells.c2.title')} caption={t('cells.c2.caption')} />

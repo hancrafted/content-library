@@ -1,0 +1,93 @@
+{
+  "title": "Wie Marketing die Pipeline füllt",
+  "caption": "Riesige Reichweite, in eine definierte Phase. Der Vertrieb bearbeitet, was dort landet.",
+  "marketing": "Marketing",
+  "volume": "<marker>riesige Reichweite</marker>",
+  "funnelName": "Marketing-Funnel",
+  "sources": {
+    "content": "Content",
+    "ads": "Anzeigen",
+    "web": "Webseite"
+  },
+  "board": "Pipeline, fünf Phasen; Marketing füllt die erste",
+  "lanes": {
+    "leadIn": {
+      "short": "Lead-Eingang"
+    },
+    "contact": {
+      "short": "Kontakt"
+    },
+    "needs": {
+      "short": "Bedarf"
+    },
+    "proposal": {
+      "short": "Angebot"
+    },
+    "negotiation": {
+      "short": "Verhandlung"
+    }
+  },
+  "deals": {
+    "orbit": "Orbit",
+    "pinecrest": "Pinecrest",
+    "quarry": "Quarry",
+    "redwood": "Redwood",
+    "saltmarsh": "Saltmarsh",
+    "vela": "Vela"
+  },
+  "incoming": {
+    "form": {
+      "tag": "inbound",
+      "text": "Formular gesendet: der Vertrieb kann anrufen"
+    },
+    "checkout": {
+      "tag": "checkout",
+      "text": "Eine Bestellung online"
+    },
+    "demo": {
+      "tag": "inbound",
+      "text": "Eine Demo gebucht"
+    }
+  },
+  "stage": "Eine definierte Phase",
+  "handOff": "Der Vertrieb bearbeitet, was hier landet",
+  "notes": {
+    "customers-do-not-arrive-alone": {
+      "header": "Kunden kommen nicht von allein",
+      "description": "„Du kannst nicht warten, bis die Nutzer zu Dir kommen. Du musst rausgehen und sie holen“: Nutzer zu gewinnen ist ein schrittweiser Prozess, und frühe Zahlen wirken nur auf die zu klein, die Zinseszins-Wachstum unterschätzen.[1]",
+      "sources": {
+        "graham-do-things-that-dont-scale": {
+          "title": "Paul Graham, Do Things that Don't Scale"
+        }
+      }
+    },
+    "the-marketing-hand-off-has-its-own-rate": {
+      "header": "Die Übergabe aus dem Marketing hat ihre eigene Quote",
+      "description": "In einem Datensatz eines Anbieters lag die Quote von marketing- zu vertriebsqualifizierten Leads bei 68 Prozent, gegenüber einer Abschlussquote von 19 Prozent weiter unten; Phasenquoten werden an den Phasendefinitionen des jeweiligen Unternehmens gemessen.[1]",
+      "sources": {
+        "ebsta-gtm-benchmarks": {
+          "title": "Ebsta and Pavilion, GTM Benchmarks Report"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "two-ways-in": {
+        "title": "Zwei Wege hinein",
+        "keywords": "",
+        "script": "Es gibt zwei Wege zu einem Lead. Du gehst los und holst ihn, oder er kommt von allein herein, und Marketing ist der zweite Weg."
+      },
+      "volume-into-a-defined-stage": {
+        "title": "Reichweite in eine definierte Phase",
+        "keywords": "",
+        "script": "Marketing spricht viele Menschen auf einmal an, damit ein Kunde sich selbst in eine definierte Phase einträgt. Ein Inbound-Lead ist ein Beispiel, ein Checkout im Onlineshop ein anderes."
+      },
+      "hand-to-sales": {
+        "title": "Übergabe an den Vertrieb",
+        "keywords": "",
+        "script": "Marketing füllt die Phase, und der Vertrieb bearbeitet, was darin landet. Das heißt, Marketing ersetzt nicht den ersten Anruf, es gibt diesem Anruf jemanden, der angerufen werden kann."
+      }
+    }
+  }
+}

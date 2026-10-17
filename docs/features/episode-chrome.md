@@ -6,7 +6,7 @@ stale_after: 2027-01-11T00:00:00Z
 
 # Episode chrome
 
-Read before changing the look, layout or interaction of what surrounds an Episode's Slides: the table of contents, the Context drawer, the video player and where each sits. Binding rules: [FE-010 Context Drawer](../../.archgate/adrs/FE-010-context-drawer.md) and [FE-002 Episode Page](../../.archgate/adrs/FE-002-episode-page.md). This guide holds the detail that does not bind.
+Read before changing the look, layout or interaction of what surrounds an Episode's Slides: the table of contents, the Context drawer, the video player and where each sits. Binding rules: [FE-010 Context Drawer](../../.archgate/adrs/FE-010-context-drawer.md) and [FE-002 Episode Page](../../.archgate/adrs/FE-002-episode-page.md); the Context marker is decided in [design-ADR-0013](../adr/0013-context-markers.md). This guide holds the detail that does not bind.
 
 ## Layers
 
@@ -55,7 +55,7 @@ Sticky. Row one: the tabs left, the menu and close right. The tabs may shrink an
 ## Notes
 
 - **Flat items.** A note or segment is no bordered card inside the card: a flat list, items spaced apart by a short centred divider, hierarchy by type alone. Chips and badges are fine.
-- **No numbers.** A note header and a `ContextRef` carry no number. The only superscript is a citation marker.
+- **No numbers.** A note header and a Context reference carry no number. The only superscript is a citation marker.
 - **Sources.** A closed `<details>` "Sources (n)" holding a numbered list. Each source is a link whose text is its localized title, with the domain as muted meta and an external-link icon. `beforeprint` opens every `<details>` in the slot, `afterprint` restores them.
 - **Citation markers.** `[n]` in a description becomes a `<sup>` button in the body font (`0.7em`, tabular numerals, padded for a comfortable target, focus ring on `:focus-visible` only). Click expands that note's Sources and moves focus to source n. In print it is plain superscript text.
 
@@ -64,9 +64,11 @@ Sticky. Row one: the tabs left, the menu and close right. The tabs may shrink an
 The targeting rules are in [FE-010 §4](../../.archgate/adrs/FE-010-context-drawer.md#4-targets). What they leave open:
 
 - **Which targets exist.** The kit's `<Title>` marks `title`. The section slide, basic page and three-column layouts mark `caption`; basic page marks `prose`; three-column marks each column by its slug. A free layout (`SlideFrame`) marks only `title`, so a note aiming at `caption` or `prose` there resolves to nothing, silently: mark the element yourself with `{...target('caption')}`.
-- **A `ContextRef` names a note, not an element.** A note's `target` is the prose block holding the phrase, not the phrase.
-- **Highlight.** Hovering or focusing a note, or a `ContextRef`, sets `data-context-active` on the other side; a note pinned open by a `ContextRef` sets `data-context-pinned` on its item. Both tint the whole item with `--highlight-target` at 14% opacity, with no border or outline. The Slide's element, which has no padding of its own, gets the same tint spread 0.25rem past its box by a `box-shadow` ring, which takes no space, so nothing shifts. Screen only; print shows none.
-- **Click.** Clicking a `ContextRef` opens the drawer on Notes at that note.
+- **Two forms of Context reference.** `ContextRef` underlines a phrase (`<ref>` in the string, `ref('<note>')` in `t.rich`). `ContextMarker` is the Context button's speech-bubble icon beside a fact: inline, `<marker>phrase</marker>` with `marker('<note>')` renders the phrase, a no-break space and `(icon)` on its baseline; on an element, the kit's `<Marker note="…" />` sits in the top-right corner of a `relative` element, or where its `className` puts it (`static ml-1` beside a label). Both use the same `data-context-ref` attribute and listener. A marker is named `Speaker note: <note header>` (`contextDrawer.markerNote`), muted at rest, foreground on an accent tint on hover, a ring on keyboard focus, and absent from print.
+- **Which form** ([design-ADR-0013](../adr/0013-context-markers.md)). A new Episode gives every fact whose note carries a source a Context reference: a marker, or an underline where a phrase fits. `page-template`'s `why-a-template` shows one of each marker.
+- **A Context reference names a note, not an element.** A note's `target` is the element holding the fact, not the reference.
+- **Highlight.** Hovering or focusing a note, or a Context reference, sets `data-context-active` on the other side; a note pinned open by a Context reference sets `data-context-pinned` on its item. Both tint the whole item with `--highlight-target` at 14% opacity, with no border or outline. The Slide's element, which has no padding of its own, gets the same tint spread 0.25rem past its box by a `box-shadow` ring, which takes no space, so nothing shifts. Screen only; print shows none.
+- **Click.** Clicking a Context reference opens the drawer on Notes at that note and scrolls the drawer's body so the note sits as near the top as the content allows (`revealScrollTop`); a note near the end stops where the content ends.
 
 ## Selected
 

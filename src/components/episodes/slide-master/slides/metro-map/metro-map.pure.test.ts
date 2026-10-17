@@ -5,13 +5,11 @@ import { describe, expect, it } from 'vitest';
 import {
   canvasShare,
   contrastRatio,
-  DRAW_MS,
   LANE_ROUTES,
   LANES,
   litLanes,
   metroPath,
   POPOVER_RULES,
-  stationDelayMs,
   stationLanes,
   STATIONS,
 } from './metro-map.pure';
@@ -115,16 +113,6 @@ describe('success cases', () => {
     const share = canvasShare(centre);
     // ASSERT
     expect(share).toEqual(expected);
-  });
-
-  it('shows stations left to right as the lines reach them, all within the draw', () => {
-    // ARRANGE
-    const draw = DRAW_MS;
-    // ACT
-    const delays = STATIONS.map(stationDelayMs);
-    // ASSERT
-    expect(delays).toEqual([...delays].sort((x, y) => x - y));
-    expect(Math.max(...delays)).toBeLessThanOrEqual(draw);
   });
 });
 

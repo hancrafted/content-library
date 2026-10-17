@@ -1,0 +1,27 @@
+/*
+ * The paper tints of the boards' money notes, shared by the cashflow board and the deal board: cash in the warning
+ * colour, a cost in the destructive colour, revenue in the success colour, each mixed into the card colour from a
+ * stronger top to a paler foot, so it follows the theme with no dark values of its own.
+ */
+
+.cash {
+  --tint: var(--warning);
+}
+
+.cost {
+  --tint: var(--destructive);
+}
+
+.revenue {
+  --tint: var(--success);
+}
+
+.cash,
+.cost,
+.revenue {
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in oklch, var(--tint) 40%, var(--card)),
+    color-mix(in oklch, var(--tint) 25%, var(--card))
+  );
+}

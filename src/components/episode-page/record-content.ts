@@ -1,15 +1,24 @@
 import {
   episodeMinutes,
   localizeSlide,
+  localizeTitleScene,
+  titleCaptionOf,
   titleContext,
   type EpisodeContext,
   type LocalizedSlide,
   type SlideContext,
 } from '@/components/slide-master/localized-slide';
-import type { EpisodeRecord, Slide } from '@/components/slide-master/slide';
+import {
+  headerModeOf,
+  type EpisodeRecord,
+  type HeaderMode,
+  type Slide,
+  type SlideEntrance,
+} from '@/components/slide-master/slide';
 import type { RuntimeTranslator } from '@/components/slide-master/slide-base';
 import { placeSections } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
+import type { ReactNode } from 'react';
 
 /*
  * Turns an Episode record into what one locale of its page renders: the
@@ -30,11 +39,16 @@ export interface EpisodeContent {
   readonly slides: readonly LocalizedSlide[];
   /** The Title slide's own Speaker notes and Voice script; both empty for an Episode that gives it none. */
   readonly titleContext: SlideContext;
+  /** The record's authored Title slide Scene, rendered; absent for the shared glow. */
+  readonly hero?: ReactNode;
+  /** Whether the Slide wrapper renders each Slide's header (`shared`) or each Scene does (`authored`). */
+  readonly header: HeaderMode;
+  readonly entrance: SlideEntrance;
 }
 
 /**
  * One locale of an Episode record, walked once (`placeSections`);
- * `translatorOf` serves only the site-wide Context reference label. The walk's
+ * `translatorOf` serves only the site-wide Context reference and marker labels. The walk's
  * ids are also every kit's `slideHref` targets, so a link cannot drift from
  * the anchor it points at.
  */
@@ -43,18 +57,24 @@ export async function recordContent(
   locale: Locale,
   translatorOf: TranslatorOf,
 ): Promise<EpisodeContent> {
+  const drawer = await translatorOf('contextDrawer');
   const episode: EpisodeContext = {
     episode: record.slug,
     locale,
     placed: placeSections<Slide>(record.sections).flat(),
-    refLabel: (await translatorOf('contextDrawer'))('refNote'),
+    referenceLabels: { ref: drawer('refNote'), marker: (title) => drawer('markerNote', { title }) },
+    header: headerModeOf(record),
   };
   const { title, caption } = record.messages[locale];
   return {
     title,
-    caption,
+    // A title Slide's own caption belongs to its Hero motif, so it takes the Title slide's caption line.
+    caption: (record.title && titleCaptionOf(record.title, locale)) ?? caption,
     minutes: episodeMinutes(record, locale),
     titleContext: titleContext(record, locale),
+    ...(record.title && { hero: localizeTitleScene(record.title, episode) }),
+    header: episode.header,
+    entrance: record.entrance ?? 'typewriter',
     slides: episode.placed.map((placed) => localizeSlide(placed, episode)),
   };
 }

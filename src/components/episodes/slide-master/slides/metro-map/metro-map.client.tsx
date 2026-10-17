@@ -1,6 +1,5 @@
 'use client';
 
-import { useSlideZone } from '@/hooks/use-slide-zone';
 import { cn } from '@/lib/utils';
 import { useCallback, useId, useState, type MouseEvent } from 'react';
 import { laneClass, MetroLines } from './metro-map-lines.client';
@@ -11,14 +10,6 @@ import { LANES, litLanes, stationLanes, STATIONS, type Lane, type MapFocus, type
 interface Open {
   station: Station;
   anchor: HTMLElement;
-}
-
-/** Plays once: the first time the Slide reaches the reading line, the lines draw on and the stations pop in behind them. */
-function useDrawn(): boolean {
-  const zone = useSlideZone();
-  const [drawn, setDrawn] = useState(false);
-  if (!drawn && zone === 'active') setDrawn(true);
-  return drawn;
 }
 
 /**
@@ -61,12 +52,11 @@ export interface MetroMapProps {
 /** Three lanes that branch apart and merge at interchanges; the legend and stations light their lanes, a station opens its story. */
 export function MetroMap({ label, lanes, items }: MetroMapProps) {
   const baseId = useId();
-  const drawn = useDrawn();
   const state = useMapFocus();
   return (
-    <div data-slot="metro-map" data-drawn={drawn} className="flex flex-col gap-6">
+    <div data-slot="metro-map" className="flex flex-col gap-6">
       <MetroLegend lanes={lanes} state={state} />
-      <MetroCanvas label={label} items={items} drawn={drawn} state={state} baseId={baseId} />
+      <MetroCanvas label={label} items={items} state={state} baseId={baseId} />
       {state.open && (
         <MetroPopover
           id={`${baseId}-popover`}
@@ -84,17 +74,16 @@ export function MetroMap({ label, lanes, items }: MetroMapProps) {
 interface CanvasProps {
   label: string;
   items: Record<Station, StationCopy>;
-  drawn: boolean;
   state: MapState;
   baseId: string;
 }
 
 /** The map itself: scrolls sideways on a phone rather than squeezing the stations into each other. */
-function MetroCanvas({ label, items, drawn, state, baseId }: CanvasProps) {
+function MetroCanvas({ label, items, state, baseId }: CanvasProps) {
   return (
     <div className="-mx-4 overflow-x-auto px-4 py-14 md:mx-0 md:px-0">
       <div className="relative aspect-1000/380 min-w-[44rem]">
-        <MetroLines lit={state.lit} drawn={drawn} />
+        <MetroLines lit={state.lit} />
         <ol role="list" aria-label={label} className="absolute inset-0">
           {STATIONS.map((station) => (
             <MetroStation
@@ -102,7 +91,6 @@ function MetroCanvas({ label, items, drawn, state, baseId }: CanvasProps) {
               station={station}
               copy={items[station]}
               lit={stationLanes(station).some((lane) => state.lit.includes(lane))}
-              drawn={drawn}
               expanded={state.open?.station === station}
               popoverId={`${baseId}-popover`}
               handlers={stationHandlers(station, state)}

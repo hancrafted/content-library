@@ -1,0 +1,24 @@
+{
+  "title": "Warum eine wirksame Sales-Pipeline Zeit braucht",
+  "caption": "Die Spalten dünnen aus, und zwar langsam.",
+  "counts": {
+    "leads": "27",
+    "opportunities": "3",
+    "closing": "1"
+  },
+  "cycle": "27:1 in ≈ 9,5 Monaten",
+  "voiceScript": {
+    "segments": {
+      "the-obvious-objection": {
+        "title": "Der naheliegende Einwand",
+        "keywords": "",
+        "script": "Der naheliegende Einwand: Ich fange im Januar an zu verkaufen, und der Umsatz aus dem April landet schon im März? So funktioniert das nicht, Vertrieb ist kein Schalter."
+      },
+      "the-claim": {
+        "title": "Die These",
+        "keywords": "",
+        "script": "Eine Pipeline wird aufgebaut, gemessen und justiert, und das dauert Monate. Drei Begriffe beschreiben sie: Funnel, Conversion-Rate und Verkaufszyklus."
+      }
+    }
+  }
+}

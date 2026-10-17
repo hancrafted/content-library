@@ -14,6 +14,11 @@ const NOW = new Date('2026-10-15T10:40:05Z');
 const SPEC = `<!doctype html>
 <html lang="en"><head><title>Spec · Budget</title><link rel="stylesheet" href="design.css" /></head>
 <body>
+  <article data-spec="title-slide" id="top">
+    <figure data-spec="option" data-option="0a" data-recommended></figure>
+    <figure data-spec="option" data-option="0b"></figure>
+    <figure data-spec="option" data-option="0c"></figure>
+  </article>
   <section data-spec="section" id="why">
     <article data-spec="slide" id="spent" data-number="1">
       <figure data-spec="option" data-option="1a" data-recommended></figure>
@@ -73,6 +78,7 @@ describe('success cases', () => {
     // ARRANGE
     const { folder, base } = await serve();
     const fields: [string, string][] = [
+      ['pick:top', '0a'],
       ['pick:spent', '1a'],
       ['note:spent', ''],
       ['note:quiet', 'None fit: try a heat strip.'],
@@ -92,6 +98,7 @@ describe('success cases', () => {
       '',
       '# Feedback round 2',
       '',
+      '- `top` · design — picked: 0a',
       '- `why--spent` · design — picked: 1a',
       '- `why--quiet` · design — picked: none — None fit: try a heat strip.',
       '',
@@ -112,6 +119,7 @@ describe('failure cases', () => {
     const { folder, base } = await serve();
     const before = feedbackFolders(folder);
     const fields: [string, string][] = [
+      ['pick:top', '0b'],
       ['pick:spent', '1b'],
       ['note:quiet', ''],
     ];

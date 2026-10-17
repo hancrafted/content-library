@@ -1,0 +1,23 @@
+{
+  "title": "Wie Du mit dem Vertrieb anfängst",
+  "caption": "Leads füllen die erste Spalte; zwei ziehen weiter.",
+  "voiceScript": {
+    "segments": {
+      "backward-chaining": {
+        "title": "Vom Ende her denken",
+        "keywords": "",
+        "script": "Fang am Ende an und geh rückwärts. Das Ende ist ein unterschriebener Vertrag, und Du gehst so weit zurück, bis der nächste Schritt in Deiner eigenen Hand liegt, denn „mach Vertrieb“ ist zu vage, um an einem Montag damit anzufangen."
+      },
+      "the-claim": {
+        "title": "Die These",
+        "keywords": "",
+        "script": "Die These: Vertrieb hat drei Stufen, Leads, Opportunities und Abschluss. Die ersten Schritte hast Du selbst in der Hand, und erst danach wird es ein Spiel mit Zahlen."
+      },
+      "signposting": {
+        "title": "Der Fahrplan",
+        "keywords": "",
+        "script": "Wir gehen von links nach rechts. Zuerst die Stufen, dann ein Deal-Board, um sie zu verfolgen, dann das Marketing, und dann noch einmal das Cashflow-Board."
+      }
+    }
+  }
+}

@@ -14,5 +14,6 @@ import { threeColumn } from './slides/three-column/slide';
 export const slideLayouts = episode({
   slug: 'slide-layouts',
   messages: { en, de },
+  header: 'authored',
   sections: [[sectionSlide, basicPage, threeColumn]],
 });

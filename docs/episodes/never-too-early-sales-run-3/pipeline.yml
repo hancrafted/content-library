@@ -1,0 +1,530 @@
+# The new-episode pipeline template. After Han approves the Brief,
+# scaffold-pipeline copies this file to docs/episodes/never-too-early-sales-run-3/pipeline.yml as a
+# draft, customize-pipeline tailors it for that Episode once the Setup jobs
+# have collected what it needs, and Han approves it by setting
+# `status: approved` (design-ADR-0008).
+#
+# Schema (checked by src/lib/episode-pipeline.pure.ts in `npm run verify`):
+#   status    draft | approved
+#   template  per-run only: the main commit the pipeline was tailored
+#             from; the template is not merged into the Episode branch again until
+#             open-pr is done
+#   stages    the ordered stage ids; every job belongs to one, and a stage may hold none
+#   jobs      run once every job in `needs` is done; independent jobs may run in parallel
+#     stage     the stage the job belongs to, one of `stages`; a job needs or wants
+#               only jobs of its own or an earlier stage
+#     intent    optional; the job's task as a prompt, for a job no reference describes
+#     needs     job ids this job waits for; a blocked one blocks this job too
+#     wants     optional; job ids this job waits for, passed or blocked: a blocked
+#               one does not block it, and its implementor learns which blocked
+#     isolation optional; `worktree`: the job's agents and checks work in their own
+#               worktree on episode/never-too-early-sales-run-3--<job id>, merged back only on a pass.
+#               Required on a job that may run beside another or has foreach,
+#               unless all its agents run in the orchestrator session
+#     foreach   template and draft scaffold only; `<file>#<heading>`: customize-pipeline
+#               writes one job per list item under the heading, or per h3 when it holds h3s.
+#               An approved per-run pipeline has none, and no glob output
+#     before    what runs before the implementor writes: `mh-query`, required when a job
+#               writes markdown, has the implementor run `npx mh query <path>` on every
+#               .md output and follow its intents; the reviewer runs it as its baseline
+#     outputs   full repo paths in the staging folder docs/episodes/never-too-early-sales-run-3/; a job reading
+#               one must need or want its writer; a rule must govern every .md one
+#     checks    cheapest first; names and commands in SKILL.md's job-loop check table
+#     retries   reviewer failures sent back before this branch of the pipeline stops
+#     gate      optional; `human` stops the run until Han approves the output
+#     port      per-run build jobs only, 1024–65535: the port the job's agent serves its
+#               worktree on with `npx next dev -p <port>`, linked by the dashboard.
+#               customize-pipeline assigns each build job its own; never 4382, the
+#               dashboard's port. An approved per-run pipeline gives every build job one
+#     agents    run in order; a reviewer is fresh: it did not write the output
+#       type        implementor | reviewer
+#       skills      skill names under .agents/skills/, or plugin:skill; refused when the
+#                   skill's SKILL.md sets disable-model-invocation: true (the Skill tool
+#                   refuses it for every agent)
+#       references  files the agent reads: `references/` and `assets/` sit in this
+#                   skill's folder, anything else is a repo path
+#       rubric      reviewers only: `<file>#<heading>` holding the pass/fail lines
+#       agent       optional; the Claude Code agent type to spawn, general-purpose when omitted
+#       model       the model it runs on, or inherit; SKILL.md's job loop says where it applies
+#       session     optional; subagent (default) or orchestrator, by SKILL.md's job loop
+status: approved
+template: f211581
+stages: [brief, setup, research, dossier, specification, build, pr]
+jobs:
+  - id: brief-grill
+    stage: brief
+    needs: []
+    before: [mh-query]
+    outputs: [docs/episodes/never-too-early-sales-run-3/brief.md]
+    checks: [mh, vitest]
+    retries: 2
+    gate: human
+    agents:
+      - type: implementor
+        skills: [brief-grill, grilling]
+        references: [references/brief-grill.md]
+        model: inherit
+        session: orchestrator
+      - type: reviewer
+        skills: [writing-for-agents]
+        references: [references/brief-grill.md]
+        rubric: references/brief-grill.md#rubric
+        model: opus
+
+  # Copies this template to the Episode as a draft, so every job shows from the
+  # start, naming the Brief's design references; customize-pipeline expands its
+  # foreach jobs at the end of Setup.
+  - id: scaffold-pipeline
+    stage: setup
+    needs: [brief-grill]
+    outputs: [docs/episodes/never-too-early-sales-run-3/pipeline.yml]
+    checks: [vitest]
+    retries: 0
+    agents:
+      - type: implementor
+        skills: []
+        references:
+          [references/scaffold-pipeline.md, assets/pipeline.yml, docs/episodes/never-too-early-sales-run-3/brief.md]
+        model: inherit
+        session: orchestrator
+
+  # An information architect's call, before the pipeline names any research file.
+  - id: categorize-research
+    stage: setup
+    intent: >-
+      Name one research folder per research question of the Brief, in its
+      order, as `<category>-<####>__<question-slug>` by GLOSSARY.md's Research
+      categories: pick the category each question belongs to, or, when none
+      fits, add a new category there with its meaning. Number each folder with
+      the next free number of its category, counting every research folder in
+      docs/episodes/*/research/ and docs/llm-wiki/research/*/. When an existing
+      research folder answers the question, reuse its category and number. Write the
+      question's subject, not the Episode, in 20-40 characters of kebab case.
+      Return the names, each beside its question, and any category you added
+      with why no existing one fits.
+    needs: [scaffold-pipeline]
+    isolation: worktree
+    outputs: []
+    checks: [mh]
+    retries: 1
+    agents:
+      - type: implementor
+        skills: [domain-modeling]
+        references: [GLOSSARY.md, docs/episodes/never-too-early-sales-run-3/brief.md, docs/llm-wiki/index.md]
+        model: opus
+
+  # Decides per research question: reuse, refresh or new. Lists the questions
+  # needing a job under the run-log entry's `### Research jobs`; this run
+  # listed none.
+  - id: retrieval
+    stage: setup
+    needs: [categorize-research]
+    isolation: worktree
+    before: [mh-query]
+    outputs: [docs/episodes/never-too-early-sales-run-3/run-log.md]
+    checks: [mh]
+    retries: 0
+    agents:
+      - type: implementor
+        skills: []
+        references:
+          [references/retrieval.md, docs/episodes/never-too-early-sales-run-3/brief.md, docs/llm-wiki/index.md]
+        model: inherit
+
+  # Runs `npm run convert-reference` once per file the Brief lists under
+  # References: a script, so no reviewer. A run with no References drops it.
+  - id: convert-references
+    stage: setup
+    needs: [scaffold-pipeline]
+    before: [mh-query]
+    outputs: [docs/episodes/never-too-early-sales-run-3/reference/source-deck/design-reference.md]
+    checks: [mh, vitest]
+    retries: 1
+    agents:
+      - type: implementor
+        skills: []
+        references: [references/convert-references.md, docs/episodes/never-too-early-sales-run-3/brief.md]
+        model: inherit
+        session: orchestrator
+
+  # Wants convert-references rather than needing it: a missing conversion tool
+  # leaves the design references out instead of blocking the Episode.
+  - id: customize-pipeline
+    stage: setup
+    needs: [retrieval]
+    wants: [convert-references]
+    outputs: [docs/episodes/never-too-early-sales-run-3/pipeline.yml]
+    checks: [vitest]
+    retries: 0
+    gate: human
+    agents:
+      - type: implementor
+        skills: [writing-for-agents]
+        references:
+          - references/customize-pipeline.md
+          - assets/pipeline.yml
+          - docs/episodes/never-too-early-sales-run-3/brief.md
+          - docs/episodes/never-too-early-sales-run-3/run-log.md
+        model: inherit
+        session: orchestrator
+
+  # Retrieval reused all seven research questions, so the Research stage is
+  # empty and the Dossier reads the seven llm-wiki research files directly.
+  - id: write-dossier
+    stage: dossier
+    needs: [customize-pipeline]
+    before: [mh-query]
+    outputs: [docs/episodes/never-too-early-sales-run-3/dossier.md]
+    checks: [mh, vitest]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: []
+        references:
+          - references/write-dossier.md
+          - docs/episodes/never-too-early-sales-run-3/brief.md
+          - docs/episodes/never-too-early-sales-run-3/run-log.md
+          - docs/llm-wiki/research/START/START-0001__revenue-lags-costs-in-startups/research.md
+          - docs/llm-wiki/research/SALES/SALES-0001__b2b-sales-cycle-length/research.md
+          - docs/llm-wiki/research/SALES/SALES-0002__b2b-pipeline-conversion-rates/research.md
+          - docs/llm-wiki/research/SALES/SALES-0003__early-selling-market-insight/research.md
+          - docs/llm-wiki/research/SALES/SALES-0004__early-sales-results-build-trust/research.md
+          - docs/llm-wiki/research/SALES/SALES-0005__early-selling-repeatable-process/research.md
+          - docs/llm-wiki/research/SALES/SALES-0006__sales-pipeline-ramp-up-time/research.md
+          - docs/episodes/never-too-early-sales-run-3/reference/source-deck/design-reference.md
+          - docs/profile/storytelling-guide.md
+          - docs/profile/tone-guide.md
+          - docs/profile/mental-model-guide.md
+        model: inherit
+      - type: reviewer
+        skills: []
+        references: [references/write-dossier.md, docs/episodes/never-too-early-sales-run-3/brief.md]
+        rubric: references/write-dossier.md#rubric
+        model: opus
+
+  # Rewrites the Voice script lines of dossier.md and nothing else; the staging
+  # test checks that against write-dossier's commit, so no schema key says it.
+  # No gate: the designers read the spoken argument, and Han reviews the Voice
+  # script with the Spec and reworks it against the built Slides.
+  - id: write-voice-script
+    stage: dossier
+    needs: [write-dossier]
+    before: [mh-query]
+    outputs: [docs/episodes/never-too-early-sales-run-3/dossier.md]
+    checks: [mh, vitest]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: []
+        references:
+          - references/write-voice-script.md
+          - docs/episodes/never-too-early-sales-run-3/brief.md
+          - docs/episodes/never-too-early-sales-run-3/dossier.md
+          - docs/profile/storytelling-guide.md
+          - docs/profile/tone-guide.md
+          - docs/profile/mental-model-guide.md
+        model: inherit
+      - type: reviewer
+        skills: []
+        references:
+          - references/write-voice-script.md
+          - docs/episodes/never-too-early-sales-run-3/brief.md
+          - docs/profile/storytelling-guide.md
+          - docs/profile/tone-guide.md
+        rubric: references/write-voice-script.md#rubric
+        model: opus
+
+  # The Spec: one static HTML page with two or three Options per Slide beside
+  # its words (design-ADR-0011). The implementor runs in the orchestrator's
+  # session, because it spawns one designer per Section and writes the page
+  # alone. Han picks an Option per Slide through `npm run episode:spec`; every
+  # review round is a new Attempt, and he approves the Spec at the gate.
+  - id: write-spec
+    stage: specification
+    needs: [write-voice-script]
+    outputs: [docs/episodes/never-too-early-sales-run-3/spec/spec.html]
+    checks: [vitest]
+    retries: 2
+    gate: human
+    agents:
+      - type: implementor
+        skills: [ui-ux-pro-max:slides]
+        references:
+          - references/write-spec.md
+          - references/spec-designer.md
+          - assets/spec-frame.html
+          - assets/spec-review.html
+          - assets/sample-episode/spec/spec.html
+          - GLOSSARY.md
+          - docs/episodes/never-too-early-sales-run-3/brief.md
+          - docs/episodes/never-too-early-sales-run-3/dossier.md
+          - docs/design/slide-library.md
+          - docs/design/design-guide.md
+          - docs/design/design-system.md
+          - docs/episodes/never-too-early-sales-run-3/reference/source-deck/design-reference.md
+        model: opus
+        session: orchestrator
+      - type: reviewer
+        skills: [ui-ux-pro-max:ui-ux-pro-max]
+        references:
+          - references/write-spec.md
+          - references/spec-designer.md
+          - GLOSSARY.md
+          - docs/episodes/never-too-early-sales-run-3/brief.md
+          - docs/episodes/never-too-early-sales-run-3/dossier.md
+          - docs/design/slide-library.md
+          - docs/design/design-guide.md
+          - docs/episodes/never-too-early-sales-run-3/reference/source-deck/design-reference.md
+        rubric: references/write-spec.md#rubric
+        model: opus
+
+  # Writes the Episode's page under src/, outside the staging folder: its
+  # wiring, metadata, Title slide and one placement marker per Section.
+  # From here on every job reads the Spec alone: the Spec Gate deleted
+  # dossier.md, and the schema check refuses a later job that reads it.
+  - id: implement-episode-init
+    stage: build
+    needs: [write-spec]
+    outputs: []
+    port: 4000
+    checks: [verify, build]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [tdd, vercel-react-best-practices, commit]
+        agent: archgate:developer
+        references:
+          - references/implement-episode-init.md
+          - references/skill-overrides.md
+          - docs/episodes/never-too-early-sales-run-3/brief.md
+          - docs/episodes/never-too-early-sales-run-3/spec/spec.html
+        model: opus
+      - type: reviewer
+        skills: [code-review, vercel-react-best-practices]
+        references:
+          - references/implement-episode-init.md
+          - references/skill-overrides.md
+          - docs/episodes/never-too-early-sales-run-3/spec/spec.html
+        rubric: references/implement-episode-init.md#rubric
+        model: opus
+        session: orchestrator
+
+  # One job per Section, the h3s under the Brief's Slides, in parallel: each
+  # builds its Slides at its own placement marker.
+
+  - id: implement-section-why-watching-cashflow-is-mission-critical
+    stage: build
+    needs: [implement-episode-init]
+    isolation: worktree
+    intent: >-
+      Build Section 1 of 5, "Why watching cashflow is mission critical", from the Brief's Slides: its Slides at
+      its placement marker, by references/implement-section.md.
+    outputs: []
+    port: 4001
+    checks: [verify, build, test:build, impeccable, visual-check]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [tdd, visual-check, vercel-react-best-practices, web-design-guidelines, commit]
+        agent: archgate:developer
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/never-too-early-sales-run-3/spec/spec.html
+          - docs/episodes/never-too-early-sales-run-3/reference/source-deck/design-reference.md
+        model: opus
+      # code-review spawns its own subagents, so the reviewer runs in the
+      # orchestrator's session; its subagents give the fresh eyes.
+      - type: reviewer
+        skills:
+          - code-review
+          - visual-check
+          - ui-ux-pro-max:ui-ux-pro-max
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - performance-optimization
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/never-too-early-sales-run-3/spec/spec.html
+          - docs/episodes/never-too-early-sales-run-3/reference/source-deck/design-reference.md
+        rubric: references/implement-section.md#rubric
+        model: opus
+        session: orchestrator
+
+  - id: implement-section-why-sales-is-more-than-just-selling
+    stage: build
+    needs: [implement-episode-init]
+    isolation: worktree
+    intent: >-
+      Build Section 2 of 5, "Why sales is more than just selling", from the Brief's Slides: its Slides at
+      its placement marker, by references/implement-section.md.
+    outputs: []
+    port: 4002
+    checks: [verify, build, test:build, impeccable, visual-check]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [tdd, visual-check, vercel-react-best-practices, web-design-guidelines, commit]
+        agent: archgate:developer
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/never-too-early-sales-run-3/spec/spec.html
+          - docs/episodes/never-too-early-sales-run-3/reference/source-deck/design-reference.md
+        model: opus
+      # code-review spawns its own subagents, so the reviewer runs in the
+      # orchestrator's session; its subagents give the fresh eyes.
+      - type: reviewer
+        skills:
+          - code-review
+          - visual-check
+          - ui-ux-pro-max:ui-ux-pro-max
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - performance-optimization
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/never-too-early-sales-run-3/spec/spec.html
+          - docs/episodes/never-too-early-sales-run-3/reference/source-deck/design-reference.md
+        rubric: references/implement-section.md#rubric
+        model: opus
+        session: orchestrator
+
+  - id: implement-section-how-to-start-doing-sales
+    stage: build
+    needs: [implement-episode-init]
+    isolation: worktree
+    intent: >-
+      Build Section 3 of 5, "How to start doing sales", from the Brief's Slides: its Slides at
+      its placement marker, by references/implement-section.md.
+    outputs: []
+    port: 4003
+    checks: [verify, build, test:build, impeccable, visual-check]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [tdd, visual-check, vercel-react-best-practices, web-design-guidelines, commit]
+        agent: archgate:developer
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/never-too-early-sales-run-3/spec/spec.html
+          - docs/episodes/never-too-early-sales-run-3/reference/source-deck/design-reference.md
+        model: opus
+      # code-review spawns its own subagents, so the reviewer runs in the
+      # orchestrator's session; its subagents give the fresh eyes.
+      - type: reviewer
+        skills:
+          - code-review
+          - visual-check
+          - ui-ux-pro-max:ui-ux-pro-max
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - performance-optimization
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/never-too-early-sales-run-3/spec/spec.html
+          - docs/episodes/never-too-early-sales-run-3/reference/source-deck/design-reference.md
+        rubric: references/implement-section.md#rubric
+        model: opus
+        session: orchestrator
+
+  - id: implement-section-why-building-an-effective-sales-pipeline-takes-time
+    stage: build
+    needs: [implement-episode-init]
+    isolation: worktree
+    intent: >-
+      Build Section 4 of 5, "Why building an effective sales pipeline takes time", from the Brief's Slides: its Slides at
+      its placement marker, by references/implement-section.md.
+    outputs: []
+    port: 4004
+    checks: [verify, build, test:build, impeccable, visual-check]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [tdd, visual-check, vercel-react-best-practices, web-design-guidelines, commit]
+        agent: archgate:developer
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/never-too-early-sales-run-3/spec/spec.html
+          - docs/episodes/never-too-early-sales-run-3/reference/source-deck/design-reference.md
+        model: opus
+      # code-review spawns its own subagents, so the reviewer runs in the
+      # orchestrator's session; its subagents give the fresh eyes.
+      - type: reviewer
+        skills:
+          - code-review
+          - visual-check
+          - ui-ux-pro-max:ui-ux-pro-max
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - performance-optimization
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/never-too-early-sales-run-3/spec/spec.html
+          - docs/episodes/never-too-early-sales-run-3/reference/source-deck/design-reference.md
+        rubric: references/implement-section.md#rubric
+        model: opus
+        session: orchestrator
+
+  - id: implement-section-start-before-you-need-the-money
+    stage: build
+    needs: [implement-episode-init]
+    isolation: worktree
+    intent: >-
+      Build Section 5 of 5, "Start before you need the money", from the Brief's Slides: its Slides at
+      its placement marker, by references/implement-section.md.
+    outputs: []
+    port: 4005
+    checks: [verify, build, test:build, impeccable, visual-check]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [tdd, visual-check, vercel-react-best-practices, web-design-guidelines, commit]
+        agent: archgate:developer
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/never-too-early-sales-run-3/spec/spec.html
+          - docs/episodes/never-too-early-sales-run-3/reference/source-deck/design-reference.md
+        model: opus
+      # code-review spawns its own subagents, so the reviewer runs in the
+      # orchestrator's session; its subagents give the fresh eyes.
+      - type: reviewer
+        skills:
+          - code-review
+          - visual-check
+          - ui-ux-pro-max:ui-ux-pro-max
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - performance-optimization
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/never-too-early-sales-run-3/spec/spec.html
+          - docs/episodes/never-too-early-sales-run-3/reference/source-deck/design-reference.md
+        rubric: references/implement-section.md#rubric
+        model: opus
+        session: orchestrator
+
+  - id: open-pr
+    stage: pr
+    needs:
+      - implement-section-why-watching-cashflow-is-mission-critical
+      - implement-section-why-sales-is-more-than-just-selling
+      - implement-section-how-to-start-doing-sales
+      - implement-section-why-building-an-effective-sales-pipeline-takes-time
+      - implement-section-start-before-you-need-the-money
+    outputs: []
+    checks: []
+    retries: 0
+    agents:
+      - type: implementor
+        skills: [pr]
+        references: [references/open-pr.md, docs/episodes/never-too-early-sales-run-3/run-log.md]
+        model: sonnet

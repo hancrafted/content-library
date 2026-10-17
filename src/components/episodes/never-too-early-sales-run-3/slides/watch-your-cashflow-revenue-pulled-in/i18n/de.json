@@ -1,0 +1,52 @@
+{
+  "title": "Behalte Deinen Cashflow im Blick, Umsatz vorgezogen",
+  "heading": "Behalte Deinen Cashflow im Blick",
+  "caption": "Dieselbe Million, einen Monat früher. Die Firma lebt.",
+  "board": {
+    "label": "Cashflow-Board, Januar bis April, der Umsatz einen Monat früher",
+    "months": {
+      "jan": "Jan",
+      "feb": "Feb",
+      "march": "März",
+      "april": "April"
+    },
+    "note": {
+      "cash": "Kasse",
+      "cost": "Kosten",
+      "revenue": "Umsatz"
+    },
+    "ghost": "War hier",
+    "arrow": "Einen Monat früher",
+    "cashLeft": "Kassenstand"
+  },
+  "notes": {
+    "predicted-revenue-is-discounted": {
+      "header": "Prognostizierter Umsatz wird abgezinst",
+      "description": "Investoren ziehen Umsatz, der nur prognostiziert ist, ab, und Gründer, die fest mit weiterem Kapital rechnen, stellen oft fest, dass diese Annahme falsch ist; prognostizierter Umsatz deckt also keine heutigen Kosten.[1]",
+      "sources": {
+        "default-alive": {
+          "title": "Paul Graham, Default Alive or Default Dead?"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "callback": {
+        "title": "Rückbezug",
+        "keywords": "",
+        "script": "Zum zweiten Mal an diesem Board. Dieselben Zettel, dieselben Kosten, und eine Sache hat sich bewegt."
+      },
+      "timing-not-amount": {
+        "title": "Zeitpunkt, nicht Betrag",
+        "keywords": "",
+        "script": "Der Betrag hat sich nicht geändert, ein Monat schon. Die Firma lebt. Dieselbe Million, einen Monat früher, und das ist der ganze Unterschied zwischen einer Firma und einer Geschichte."
+      },
+      "how-it-moves": {
+        "title": "Wie er sich bewegt",
+        "keywords": "",
+        "script": "Wie bewegt sich also ein Zettel? Ein Deal kommt nur früher, wenn der erste Anruf früher kam. Also bau Dir Dein eigenes Board, Monat für Monat, finde Deinen Monat, in dem das Cash auf null fällt, und zähl von dort zurück."
+      }
+    }
+  }
+}

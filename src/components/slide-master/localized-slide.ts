@@ -5,9 +5,10 @@ import type { EpisodeSlug } from '@/lib/routes';
 import { segmentSpans, type SpokenSegment } from '@/lib/speaking-time.pure';
 import { createTranslator } from 'next-intl';
 import type { ReactNode } from 'react';
-import type { EpisodeRecord, Slide, SlideMessages } from './slide';
+import type { EpisodeRecord, HeaderMode, Slide, SlideMessages } from './slide';
 import type { NoteSpec, RuntimeTranslator, SegmentSpec, SourceSpec } from './slide-base';
-import { slideKit } from './slide-kit';
+import { captionTextOf, headerTextOf, titleTakenBy, type SlideHeaderText } from './slide-header-text';
+import { slideKit, type ReferenceLabels } from './slide-kit';
 
 /*
  * The Localized Slide: one Slide in one locale, as the page renders it
@@ -47,7 +48,11 @@ interface Placement {
  * since it names its Section in the table of contents.
  */
 export type LocalizedSlide = Placement &
-  Omit<SlideText, 'title'> & { readonly content: ReactNode } & (
+  Omit<SlideText, 'title'> & {
+    readonly content: ReactNode;
+    /** The Slide header's text: set for a titled Slide of an Episode on the shared header (design-ADR-0012). */
+    readonly header?: SlideHeaderText;
+  } & (
     | { readonly level: Extract<SlideLevel, 'h2'>; readonly title: string }
     | { readonly level: Extract<SlideLevel, 'h3'>; readonly title?: string }
   );
@@ -58,8 +63,10 @@ export interface EpisodeContext {
   readonly locale: Locale;
   /** Every Slide of the Episode as the walk (`placeSections`) placed it: what `slideHref` links to. */
   readonly placed: readonly PlacedListSlide<Slide>[];
-  /** Said after a Context reference's phrase, e.g. `opens speaker note`. */
-  readonly refLabel: string;
+  /** What assistive tech hears for a Context reference: the underline's suffix and a marker's name. */
+  readonly referenceLabels: ReferenceLabels;
+  /** Whether the Slide wrapper renders each Slide's header or its Scene does (the record's `header`). */
+  readonly header: HeaderMode;
 }
 
 /**
@@ -172,6 +179,35 @@ export function episodeMinutes(record: EpisodeRecord, locale: Locale): number {
     );
 }
 
+/** The caption the record's Title slide Scene (`title`) gives in its own messages, which the Title slide shows. */
+export function titleCaptionOf(slide: Slide, locale: Locale): string | undefined {
+  return captionTextOf(ownTranslator(slide.messages[locale], locale));
+}
+
+/**
+ * The record's authored Title slide Scene (`title`), rendered with a kit over
+ * its own messages. The container renders the Title slide's `h1` and caption,
+ * so its `Title` throws; its notes and Voice script belong on the record, so
+ * declaring either fails the build.
+ */
+export function localizeTitleScene(slide: Slide, episode: EpisodeContext): ReactNode {
+  if (slide.notes.length > 0 || slide.segments.length > 0) {
+    throw new Error(`Title slide Scene "${slide.slug}" declares notes or a Voice script: put them on the record.`);
+  }
+  const t = ownTranslator(slide.messages[episode.locale], episode.locale);
+  const kit = slideKit(
+    { ...episode, anchors: new Map(episode.placed.map((placed) => [placed.slide.slug, placed.id])) },
+    {
+      t,
+      level: 'h2',
+      notes: [],
+      slideId: slide.slug,
+      titleTaken: `The Title slide's h1 is the Episode title, which the container renders: drop <Title> from "${slide.slug}".`,
+    },
+  );
+  return slide.content(kit);
+}
+
 /**
  * One placed Slide of an Episode, localized: its text, and its Scene rendered
  * with the kit (FE-002 §3). Throws on a missing message, a bad `ref`,
@@ -185,11 +221,19 @@ export function localizeSlide(
   const { locale } = episode;
   const t = ownTranslator(slide.messages[locale], locale);
   const text = textOf(slide, t, locale);
+  const shared = episode.header === 'shared';
   const kit = slideKit(
     { ...episode, anchors: new Map(episode.placed.map((placed) => [placed.slide.slug, placed.id])) },
-    { t, level, notes: slide.notes.map((note) => note.slug), slideId: id },
+    {
+      t,
+      level,
+      notes: slide.notes.map((note) => note.slug),
+      slideId: id,
+      ...(shared && { titleTaken: titleTakenBy(id) }),
+    },
   );
-  const placed = { id, section, ...text, content: slide.content(kit) };
+  const header = shared ? headerTextOf(t) : undefined;
+  const placed = { id, section, ...text, ...(header && { header }), content: slide.content(kit) };
   if (level === 'h3') return { ...placed, level };
   if (text.title === undefined) throw new Error(`Section "${slide.slug}" opens with a Slide that has no title.`);
   return { ...placed, level, title: text.title };

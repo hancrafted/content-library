@@ -77,7 +77,7 @@ flowchart LR
 
 ### 4. Headings mirror the Dossier
 
-1. One `h1`: the Episode title. Position sets `h2`/`h3` via the kit's `Title`; no Episode file MAY write `h1`–`h3`.
+1. One `h1`: the Episode title. Position sets `h2`/`h3` via the header or `Title`; no Episode file MAY write `h1`–`h3`.
 
 ### 5. Strings and anchors keyed by Slide slug
 
@@ -99,14 +99,13 @@ flowchart LR
 
 ### Do's
 
-1. **DO** start an Episode by copying `page-template/`: rename the slug; register slug, record and metadata together; write its `i18n/`; then each Slide as a whole folder, the Episode file adding only its import and list entry; at publication, `published-anchors.json`. (Decision 2, Decision 5)
+1. **DO** start an Episode by copying `page-template/`: rename the slug; register slug, record and metadata together; write its `i18n/`; then each Slide as a whole folder (copy one with `cp -r`), listed in its Section's `sections/<section-slug>.ts`, which the record imports in order; at publication, `published-anchors.json`. (Decision 2, Decision 5)
 2. **DO** write a Voice script for every Slide the speaker talks over; its words are the reading time. (Decision 2)
 3. **DO** leave `title` off a purely visual Slide. (Decision 2)
-4. **DO** build a one-off Scene from `SlideFrame` and the kit's `<Title>`. (Decision 3, Decision 4)
+4. **DO** build a one-off Scene from `SlideFrame`; heading per design-ADR-0012. (Decisions 3 and 4)
 5. **DO** mark the element a note explains with `{...target('chart')}`. (Decision 3)
 6. **DO** link with `slideHref('the-lost-middle')`; pass a part its strings — `<Statement>{t('statement')}</Statement>`. (Decision 3)
 7. **DO** colour _only_ a machine/human/AI meaning with `text-machine`, `text-human`, `text-ai`; check every Slide in both themes. (Decision 7)
-8. **DO** copy a Slide with `cp -r` of its folder, one import, one list entry. (Decision 2)
 
 ### Don'ts
 
@@ -160,6 +159,7 @@ flowchart LR
 - [`docs/features/episode-translation-keys.md`](../../docs/features/episode-translation-keys.md) — key roles, worked examples.
 - [`docs/features/episode-migration.md`](../../docs/features/episode-migration.md) — converting a prototype into an Episode, step by step.
 - [`docs/adr/0001-the-slide-is-a-self-contained-folder.md`](../../docs/adr/0001-the-slide-is-a-self-contained-folder.md) — why a Slide is a folder.
+- [`docs/adr/0008-pipeline-jobs-belong-to-stages.md`](../../docs/adr/0008-pipeline-jobs-belong-to-stages.md) — why each Section is its own `sections/` module.
 - [`docs/features/episode-chrome.md`](../../docs/features/episode-chrome.md) — table of contents placement, corner allocation, reserved places.
 
 ### Terms

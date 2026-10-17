@@ -12,17 +12,22 @@
  * - one `<section data-spec="section" id>` per Dossier h2 and one
  *   `<article data-spec="slide" id data-number>` per Dossier h3, slugged alike,
  *   until the Gate deletes the Dossier and the Spec's own Slides are the list;
+ * - one `<article data-spec="title-slide" id="top">` with three Options ided
+ *   `0a` to `0c`, each the Title slide's mock and one section slide per Section
+ *   (episode-spec-title.pure.ts), checked as a Slide's Options are;
  * - per Slide two or three `<figure data-spec="option" data-option="<n><letter>">`,
  *   each with a figcaption and build notes, exactly one `data-recommended`, at
  *   most one `data-picked` and exactly one once approved, whose checkbox alone
- *   carries `checked` so a locked Slide needs nothing in the next round, and
- *   token classes only: no hex colour, no arbitrary Tailwind value;
+ *   carries `checked` so a locked Slide needs nothing in the next round,
+ *   token classes only (no hex colour, no arbitrary Tailwind value), and each
+ *   `data-spec="context-marker"` naming a Speaker note of its Slide in `data-note`;
  * - every Voice script item a `<strong>` title then its text, every Speaker
  *   note citation `[n]` resolved by a nested `data-source="n"`.
  */
 import { load, type CheerioAPI } from 'cheerio';
 import { SECTION, SLIDE, SPEC_FILE } from './episode-spec-page.pure';
-import { checkSlide, FORM } from './episode-spec-slide.pure';
+import { checkSlide, FORM, type SpecPage } from './episode-spec-slide.pure';
+import { checkTitleSlide } from './episode-spec-title.pure';
 import { checkCitations, checkVoiceScripts } from './episode-spec-words.pure';
 import { unless, type Finding } from './finding.pure';
 import { metaBlockText, metaGateTier } from './staging-file.pure';
@@ -102,6 +107,23 @@ function checkAgainstDossier($: CheerioAPI, dossier: string): string[] {
   ];
 }
 
+/** The Title slide, every Slide, the review fields and the words of the page. */
+function checkSlides(page: SpecPage): string[] {
+  const { $ } = page;
+  return [
+    ...checkTitleSlide(page),
+    ...$(SLIDE)
+      .toArray()
+      .flatMap((element, at) => checkSlide(page, element, at)),
+    ...unless(
+      $(`#visual-language textarea[form="${FORM}"][name="note:visual-language"]`).length === 1,
+      `The Visual language has no <textarea form="${FORM}" name="note:visual-language">.`,
+    ),
+    ...checkVoiceScripts($),
+    ...checkCitations($),
+  ];
+}
+
 /**
  * Checks a staging folder's Spec page against the Spec contract, and against
  * the Dossier while one exists; nothing until `spec/spec.html` exists. `files`
@@ -119,15 +141,7 @@ export function checkSpec(files: Readonly<Record<string, string>>, reviewAsset: 
     ...checkMeta(meta),
     ...checkAsset(html, reviewAsset),
     ...(dossier === undefined || isApproved ? [] : checkAgainstDossier($, dossier)),
-    ...$(SLIDE)
-      .toArray()
-      .flatMap((element, at) => checkSlide({ $, approved: isApproved }, element, at)),
-    ...unless(
-      $(`#visual-language textarea[form="${FORM}"][name="note:visual-language"]`).length === 1,
-      `The Visual language has no <textarea form="${FORM}" name="note:visual-language">.`,
-    ),
-    ...checkVoiceScripts($),
-    ...checkCitations($),
+    ...checkSlides({ $, approved: isApproved }),
   ];
   const stale = unless(
     !isApproved || dossier === undefined,

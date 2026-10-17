@@ -1,0 +1,251 @@
+/*
+ * The cashflow board's geometry and paper. One grid holds the lanes and every overlay: each lane is a subgrid over
+ * four rows (three note slots and its footer), so a stamp, an arrow or an annotation lands on a lane's column and slot
+ * by grid lines, never by pixels. Narrow boards stand their lanes two by two; from 38rem of board width all lanes
+ * stand in one row. Note tints come from `note-tints/`, which the deal board shares.
+ */
+
+.board {
+  container-type: inline-size;
+  isolation: isolate;
+  background-image: radial-gradient(circle, var(--border) 1.2px, transparent 1.4px);
+  background-size: 24px 24px;
+}
+
+.grid {
+  --gap: 0.75rem;
+
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--gap);
+  row-gap: 1rem;
+  padding: 2.5rem 0.75rem 1rem;
+}
+
+/* The list adds no box: its lanes are items of the board's grid, beside the overlays. */
+.lanes {
+  display: contents;
+}
+
+.lane {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-column: var(--nc);
+  grid-row: var(--nr) / span var(--lane-rows);
+}
+
+/* Lanes after the first row of a narrow board leave room for their pills. */
+.lane:nth-child(n + 3) {
+  margin-top: 1.25rem;
+}
+
+.slots {
+  display: contents;
+}
+
+.slots > li {
+  position: relative;
+  z-index: 2;
+  justify-self: center;
+  align-self: start;
+}
+
+.note {
+  width: min(8rem, 100%);
+  transform: rotate(var(--tilt));
+}
+
+.note.big {
+  width: min(10rem, 100%);
+}
+
+.footer {
+  align-self: end;
+}
+
+/* The stamp falls across its lane's middle slot. */
+.stamp {
+  position: relative;
+  z-index: 3;
+  grid-column: var(--nc);
+  grid-row: calc(var(--nr) + 1);
+  place-self: center;
+  pointer-events: none;
+}
+
+.arrow {
+  position: relative;
+  z-index: 1;
+  display: none;
+  grid-row: calc(var(--nr) + var(--slot));
+  align-self: center;
+  align-items: center;
+  padding-inline: calc(50% / var(--span));
+}
+
+.arrow[data-narrow='true'] {
+  display: flex;
+  grid-column: var(--nc) / span var(--narrow-span);
+}
+
+.arrow[data-direction='right'] {
+  flex-direction: row-reverse;
+}
+
+.arrowLabel {
+  position: absolute;
+  top: calc(100% + 0.25rem);
+  left: 50%;
+  translate: -50% 0;
+}
+
+/*
+ * A shaft told to stop beside its end note leaves room at its head end for half a lane and half a note: notes are at
+ * most 8rem wide, inside the lane's padding (0.5rem narrow, 1rem wide).
+ */
+.arrow[data-stop='beside'] {
+  --lane: calc((100% - (var(--narrow-span) - 1) * var(--gap)) / var(--narrow-span));
+  --beside: calc(var(--lane) / 2 + min(4rem, var(--lane) / 2 - 0.5rem) + 0.5rem);
+}
+
+.arrow[data-stop='beside'][data-direction='left'] {
+  padding-inline-start: var(--beside);
+}
+
+.arrow[data-stop='beside'][data-direction='right'] {
+  padding-inline-end: var(--beside);
+}
+
+/*
+ * A shaft's standing label is a pill in the slot under the arrow's start; on a narrow board whose shaft is not drawn
+ * its head points toward the end's row of lanes.
+ */
+.shaftLabel {
+  position: relative;
+  z-index: 2;
+  grid-column: var(--nc);
+  grid-row: calc(var(--nr) + var(--slot));
+  place-self: start center;
+}
+
+/*
+ * The curved arrow is a zero-height box on its start slot; its arc is centred on the gap beside that lane, toward
+ * the arrow's end, and stands over the notes. Its label is a pill in the slot under the start.
+ */
+.curve {
+  position: relative;
+  z-index: 3;
+  display: none;
+  grid-column: var(--nc);
+  grid-row: calc(var(--nr) + var(--slot));
+  align-self: center;
+  height: 0;
+  pointer-events: none;
+}
+
+.curve[data-narrow='true'] {
+  display: block;
+}
+
+.curveSvg {
+  position: absolute;
+  top: 0;
+  left: calc(var(--gap) / -2);
+  width: 5rem;
+  height: 2.5rem;
+  overflow: visible;
+  translate: -50% -50%;
+}
+
+.curve[data-direction='right'] .curveSvg {
+  left: calc(100% + var(--gap) / 2);
+  scale: -1 1;
+}
+
+.curveLabel {
+  position: relative;
+  z-index: 2;
+  grid-column: var(--nc);
+  grid-row: calc(var(--nr) + var(--slot));
+  place-self: start center;
+  text-align: center;
+}
+
+/* Narrow, each annotation takes the full width under the lanes, in order. */
+.annotation {
+  grid-column: 1 / -1;
+}
+
+@container (min-width: 38rem) {
+  .grid {
+    --gap: 1.5rem;
+
+    grid-template-columns: repeat(var(--lanes), minmax(0, 1fr));
+    row-gap: 2rem;
+    padding: 3rem 2rem 2rem;
+  }
+
+  .lane {
+    grid-column: var(--wc);
+    grid-row: 1 / span var(--lane-rows);
+    padding-inline: 1rem;
+  }
+
+  .lane:nth-child(n + 3) {
+    margin-top: 0;
+  }
+
+  .stamp {
+    grid-column: var(--wc);
+    grid-row: 2;
+  }
+
+  .curve,
+  .curve[data-narrow='true'] {
+    display: block;
+    grid-column: var(--wc);
+    grid-row: calc(1 + var(--slot));
+  }
+
+  .curveLabel {
+    grid-column: var(--wc);
+    grid-row: calc(1 + var(--slot));
+  }
+
+  .arrow,
+  .arrow[data-narrow='true'] {
+    display: flex;
+    grid-column: var(--wc) / span var(--span);
+    grid-row: calc(1 + var(--slot));
+  }
+
+  .arrow[data-stop='beside'] {
+    --lane: calc((100% - (var(--span) - 1) * var(--gap)) / var(--span));
+    --beside: calc(var(--lane) / 2 + min(4rem, var(--lane) / 2 - 1rem) + 0.5rem);
+  }
+
+  .shaftLabel {
+    grid-column: var(--wc);
+    grid-row: calc(1 + var(--slot));
+  }
+
+  .pointer {
+    display: none;
+  }
+
+  .annotation {
+    grid-column: var(--wc) / span var(--span);
+  }
+}
+
+/*
+ * From 64rem of board, four lanes leave an alley between neighbouring notes wide enough for a short label, so a
+ * standing label moves onto the shaft, centred on the gap after its column.
+ */
+@container (min-width: 64rem) {
+  .shaftLabel {
+    grid-column: var(--gap-wc) / span 2;
+    grid-row: var(--slot);
+    place-self: center;
+  }
+}

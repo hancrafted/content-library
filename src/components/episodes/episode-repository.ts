@@ -6,6 +6,7 @@ import { episodeMetadata as aiTokenEconomy } from './ai-token-economy/episode-me
 import { episodeMetadata as amnesiacFreelancer } from './amnesiac-freelancer/episode-metadata';
 import { episodeMetadata as choosingTheRightModel } from './choosing-the-right-model/episode-metadata';
 import { episodeMetadata as maintainingMarkdownForAi } from './maintaining-markdown-for-ai/episode-metadata';
+import { episodeMetadata as neverTooEarlySalesRun3 } from './never-too-early-sales-run-3/episode-metadata';
 import { episodeMetadata as rollingOutAiInATeam } from './rolling-out-ai-in-a-team/episode-metadata';
 import { episodeMetadata as specsAnAgentCanFollow } from './specs-an-agent-can-follow/episode-metadata';
 import { episodeMetadata as theBottleneckBuildsTheFix } from './the-bottleneck-builds-the-fix/episode-metadata';
@@ -27,6 +28,7 @@ const REGISTERED = {
   'amnesiac-freelancer': amnesiacFreelancer,
   'maintaining-markdown-for-ai': maintainingMarkdownForAi,
   'ai-token-economy': aiTokenEconomy,
+  'never-too-early-sales-run-3': neverTooEarlySalesRun3,
 } as const satisfies { readonly [S in ListedEpisodeSlug]: EpisodeMetadata & { readonly slug: S } };
 
 /** The slugs whose metadata says `published`. */

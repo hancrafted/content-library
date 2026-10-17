@@ -92,3 +92,8 @@ export function slideAnchors(dossier: readonly Block[]): string[] {
     return heading.level === 3 && section !== null && heading.slug !== null ? [`${section}--${heading.slug}`] : [];
   });
 }
+
+/** Every Section's slug, the anchor of its section slide, from the Dossier's h2 headings. */
+export function sectionSlugs(dossier: readonly Block[]): string[] {
+  return dossier.flatMap(({ heading }) => (heading.level === 2 && heading.slug !== null ? [heading.slug] : []));
+}

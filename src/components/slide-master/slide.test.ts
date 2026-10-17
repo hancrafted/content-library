@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { episode, slide, type OwnSlideKit, type Section } from './slide';
+import { episode, headerModeOf, slide, type OwnSlideKit, type Section } from './slide';
 import type { RuntimeKit } from './slide-base';
 
 /*
@@ -39,6 +39,8 @@ function recordingKit(): { kit: RuntimeKit; calls: string[] } {
     slideHref: (slug) => (calls.push(`slideHref:${slug}`), `#${slug}`),
     template: (key) => (calls.push(`template:${key}`), key),
     ref: (note) => (calls.push(`ref:${note}`), (chunks) => chunks),
+    marker: (note) => (calls.push(`marker:${note}`), (chunks) => chunks),
+    Marker: ({ note }) => (calls.push(`Marker:${note}`), null as never),
     target: (name) => (calls.push(`target:${name}`), { 'data-target': name }),
     Title: () => null as never,
   };
@@ -50,9 +52,11 @@ const whyATemplate = slide({
   messages: { en: EN, de: DE },
   notes: [{ slug: 'reference-episode', target: 'prose' }],
   segments: [{ slug: 'one-breath' }],
-  content: ({ t, ref, target, slideHref, template }) => {
+  content: ({ t, ref, marker, Marker, target, slideHref, template }) => {
     t('title');
     ref('reference-episode');
+    marker('reference-episode');
+    Marker({ note: 'reference-episode' });
     target('prose');
     slideHref('any-slide-of-the-episode');
     template('spine.next');
@@ -67,6 +71,8 @@ describe('success cases', () => {
     const expected = [
       't:title',
       'ref:reference-episode',
+      'marker:reference-episode',
+      'Marker:reference-episode',
       'target:prose',
       'slideHref:any-slide-of-the-episode',
       'template:spine.next',
@@ -98,6 +104,16 @@ describe('success cases', () => {
     expect(record.sections).toBe(sections);
     expect(record.messages).toBe(messages);
   });
+
+  it('puts an Episode on the shared Slide header unless its record says otherwise', () => {
+    // ARRANGE
+    const record = {};
+    const expected = 'shared';
+    // ACT
+    const mode = headerModeOf(record);
+    // ASSERT
+    expect(mode).toBe(expected);
+  });
 });
 
 describe('failure cases', () => {
@@ -108,13 +124,17 @@ describe('failure cases', () => {
         slug: 'why-a-template',
         messages: { en: EN, de: DE },
         notes: [{ slug: 'reference-episode', target: 'prose' }],
-        content: ({ t, ref, target, template }) => {
+        content: ({ t, ref, marker, Marker, target, template }) => {
           // @ts-expect-error -- a key outside this Slide's own file
           t('statement');
           // @ts-expect-error -- a subtree, not a string leaf
           template('spine');
           // @ts-expect-error -- a note this Slide does not declare
           ref('no-such-note');
+          // @ts-expect-error -- a marker for a note this Slide does not declare
+          marker('no-such-note');
+          // @ts-expect-error -- an element marker for a note this Slide does not declare
+          Marker({ note: 'no-such-note' });
           // @ts-expect-error -- a target no note of this Slide names
           target('caption');
           return null;
@@ -157,6 +177,16 @@ describe('failure cases', () => {
     const opener = sections[0][0].slug;
     // ASSERT
     expect(opener).toBe(untitled.slug);
+  });
+
+  it("leaves the header to each Scene when the record sets header: 'authored'", () => {
+    // ARRANGE
+    const record = { header: 'authored' } as const;
+    const expected = 'authored';
+    // ACT
+    const mode = headerModeOf(record);
+    // ASSERT
+    expect(mode).toBe(expected);
   });
 });
 

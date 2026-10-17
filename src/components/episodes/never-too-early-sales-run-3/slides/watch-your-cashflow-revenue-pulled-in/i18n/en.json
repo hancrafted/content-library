@@ -1,0 +1,52 @@
+{
+  "title": "Watch your cashflow, revenue pulled in",
+  "heading": "Watch your cashflow",
+  "caption": "The same million, one month earlier. The company lives.",
+  "board": {
+    "label": "Cashflow board, January to April, the revenue one month earlier",
+    "months": {
+      "jan": "Jan",
+      "feb": "Feb",
+      "march": "March",
+      "april": "April"
+    },
+    "note": {
+      "cash": "Cash",
+      "cost": "Cost",
+      "revenue": "Revenue"
+    },
+    "ghost": "Was here",
+    "arrow": "One month earlier",
+    "cashLeft": "Cash left"
+  },
+  "notes": {
+    "predicted-revenue-is-discounted": {
+      "header": "Predicted revenue is discounted",
+      "description": "Investors discount revenue that is only predicted, and founders who count on raising more money often find that assumption false, so projected revenue does not cover present costs.[1]",
+      "sources": {
+        "default-alive": {
+          "title": "Paul Graham, Default Alive or Default Dead?"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "callback": {
+        "title": "Callback",
+        "keywords": "",
+        "script": "Second time on this board. Same notes, same costs, and one thing has moved."
+      },
+      "timing-not-amount": {
+        "title": "Timing, not amount",
+        "keywords": "",
+        "script": "The amount did not change, one month did. The company lives. The same million, a month earlier, and that is the whole difference between a company and a story."
+      },
+      "how-it-moves": {
+        "title": "How it moves",
+        "keywords": "",
+        "script": "Now, how does a note move? A deal lands earlier only if the first call came earlier. So build your own month-by-month board, find your zero-cash month, and count back from it."
+      }
+    }
+  }
+}

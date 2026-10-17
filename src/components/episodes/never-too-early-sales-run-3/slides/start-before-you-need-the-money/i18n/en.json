@@ -1,0 +1,18 @@
+{
+  "title": "Start before you need the money",
+  "caption": "A full pipeline: <b>revenue lands</b> in the payment lane.",
+  "voiceScript": {
+    "segments": {
+      "back-to-the-wall": {
+        "title": "Back to the wall",
+        "keywords": "",
+        "script": "Back to the wall, one last time, with the answer to the question we opened with."
+      },
+      "peak-end-close": {
+        "title": "Peak-end close",
+        "keywords": "",
+        "script": "I will close with the four steps, one honest caveat and a small offer. Here they come."
+      }
+    }
+  }
+}

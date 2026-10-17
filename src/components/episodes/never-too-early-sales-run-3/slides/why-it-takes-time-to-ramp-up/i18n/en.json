@@ -1,0 +1,105 @@
+{
+  "title": "Why it takes time to ramp up",
+  "caption": "Nothing is written yet: no material, only questions about the market, and the two numbers you plan with are blank.",
+  "stamp": "Day one",
+  "lanes": {
+    "preparation": "1 · Preparation",
+    "market": "2 · Unknown market",
+    "metrics": "3 · Unknown metrics"
+  },
+  "preparation": {
+    "before": {
+      "label": "Before",
+      "items": "Sales deck · Pricing · Offering · Business model"
+    },
+    "during": {
+      "label": "During",
+      "items": "Demo · Meeting slides · Proposal"
+    },
+    "deal": {
+      "label": "Deal",
+      "items": "Contract · Compliance · Legal"
+    },
+    "hint": "dashed: not written yet"
+  },
+  "market": {
+    "q1": "Who is really your customer?",
+    "q2": "What are they willing to pay?",
+    "q3": "What problem do they really need solved?",
+    "hint": "answered only by real conversations"
+  },
+  "metrics": {
+    "conversion": {
+      "label": "Conversion rate",
+      "unknown": "? : 1"
+    },
+    "cycle": {
+      "label": "Sales cycle",
+      "unknown": "? months"
+    },
+    "why": "Both needed to plan backwards from your cash."
+  },
+  "close": "<b>Each column shrinks only by doing.</b> How many of these three have you started?",
+  "notes": {
+    "startups-search-they-do-not-execute": {
+      "header": "Startups search, they do not execute",
+      "description": "Established companies execute a business model, a startup is a temporary organization designed to search for a repeatable and scalable one [1].",
+      "sources": {
+        "blank-manifesto": {
+          "title": "Steve Blank, The Customer Development Manifesto"
+        }
+      }
+    },
+    "selling-blind": {
+      "header": "Selling blind",
+      "description": "In one case, early orders from industry friends and board connections covered the first months of the revenue plan but did not show why customers would buy, because nobody had run customer discovery [1].",
+      "sources": {
+        "blank-marketing-problem": {
+          "title": "Steve Blank, It Must Be A Marketing Problem"
+        }
+      }
+    },
+    "learn-first-codify-later": {
+      "header": "Learn first, codify later",
+      "description": "Before product-market fit, rely on personal networks and customer referrals: they do not scale but yield the best opportunities to learn from. Codify the playbook after that learning and prove the unit economics before hiring salespeople aggressively [1].",
+      "sources": {
+        "roberge-science-of-scaling": {
+          "title": "Mark Roberge, The Science of Scaling"
+        }
+      }
+    },
+    "metrics-lag-by-one-cycle": {
+      "header": "Metrics lag by one cycle",
+      "description": "A conversion figure for recent leads looks worse than its long-run value because those leads have not yet gone through a full cycle; older results are the better estimate [1].",
+      "sources": {
+        "roberge-science-of-scaling": {
+          "title": "Mark Roberge, The Science of Scaling"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "preparation": {
+        "title": "Preparation",
+        "keywords": "",
+        "script": "The first box is preparation. Before, during and at the deal you need a deck and pricing, a demo and a proposal, a contract and the legal side. None of that exists on day one."
+      },
+      "unknown-market": {
+        "title": "Unknown market",
+        "keywords": "",
+        "script": "The second is an unknown market. Who is your customer, what do they pay, which problem really hurts. Only real conversations answer that, and desk research will not."
+      },
+      "unknown-metrics": {
+        "title": "Unknown metrics",
+        "keywords": "",
+        "script": "The third is unknown metrics. You have no conversion rate and no cycle length yet, and you need both to plan backwards from your cash. How many months this takes, I will not invent for you."
+      },
+      "so-start-now": {
+        "title": "So start now",
+        "keywords": "",
+        "script": "So start now, because each box shrinks only by doing. How many months do you have left, and how many of these three boxes have you started?"
+      }
+    }
+  }
+}

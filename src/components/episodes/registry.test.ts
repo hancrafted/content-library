@@ -1,3 +1,4 @@
+import { headerModeOf } from '@/components/slide-master/slide';
 import { pageMetadata } from '@/lib/page-metadata.pure';
 import { EPISODE_SLUGS, isEpisodeSlug } from '@/lib/routes';
 import { describe, expect, it } from 'vitest';
@@ -10,7 +11,7 @@ import { episodeCopy, findEpisode } from './registry';
  * Per-Episode facts sit in the tables below, written out by hand.
  */
 
-/** The Section openers and page-Slide counts each Episode composes, in Dossier order. */
+/** The Section openers and page-Slide counts each Episode composes, in Dossier (or approved Spec) order. */
 const COMPOSITION = [
   {
     slug: 'ai-token-economy',
@@ -34,6 +35,23 @@ const COMPOSITION = [
       { opener: 'the-verifying-half-is-yours', pageSlides: 0 },
     ],
   },
+  {
+    slug: 'never-too-early-sales-run-3',
+    sections: [
+      { opener: 'why-watching-cashflow-is-mission-critical', pageSlides: 1 },
+      { opener: 'why-sales-is-more-than-just-selling', pageSlides: 1 },
+      { opener: 'how-to-start-doing-sales', pageSlides: 4 },
+      { opener: 'why-building-an-effective-sales-pipeline-takes-time', pageSlides: 3 },
+      { opener: 'start-before-you-need-the-money', pageSlides: 1 },
+    ],
+  },
+] as const;
+
+/** Who renders each Slide header (design-ADR-0012): the Slide wrapper (`shared`) or each Scene (`authored`). */
+const HEADER_MODES = [
+  { slug: 'ai-token-economy', header: 'authored' },
+  { slug: 'page-template', header: 'shared' },
+  { slug: 'never-too-early-sales-run-3', header: 'shared' },
 ] as const;
 
 /** The recorded YouTube video of the Episodes that have one asserted here. */
@@ -106,6 +124,15 @@ describe('success cases', () => {
     }));
     // ASSERT
     expect(composed).toEqual(expectedSections);
+  });
+
+  it.each(HEADER_MODES)('renders the Slide headers of $slug in the $header mode', ({ slug, header }) => {
+    // ARRANGE
+    const expected = header;
+    // ACT
+    const mode = headerModeOf(findEpisode(slug));
+    // ASSERT
+    expect(mode).toBe(expected);
   });
 
   it.each(RECORDINGS)('keeps the recorded YouTube video of $slug', ({ slug, en, de }) => {

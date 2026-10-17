@@ -152,16 +152,6 @@ export function litLanes(focus: MapFocus): Lane[] {
   return 'lane' in focus ? [focus.lane] : stationLanes(focus.station);
 }
 
-/** How long the lines take to draw across the whole canvas. */
-export const DRAW_MS = 1600;
-
-/** A station appears when the lines, drawn left to right, reach it. */
-export function stationDelayMs(station: Station): number {
-  const start = LANE_ROUTES.a[0].x;
-  const end = LANE_ROUTES.a[LANE_ROUTES.a.length - 1].x;
-  return Math.round((DRAW_MS * (STATION_AT[station].x - start)) / (end - start));
-}
-
 function luminance(hex: string): number {
   const match = /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(hex);
   if (match === null) throw new Error(`${hex} is not a six-digit hex colour.`);

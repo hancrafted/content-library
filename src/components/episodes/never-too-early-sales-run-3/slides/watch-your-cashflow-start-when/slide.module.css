@@ -1,0 +1,5 @@
+/* The step drawings' tints: cash and revenue, the board's meanings, mixed into the card so both themes hold. */
+.scene {
+  --step-cash: color-mix(in oklch, var(--warning) 25%, var(--card));
+  --step-revenue: color-mix(in oklch, var(--success) 25%, var(--card));
+}

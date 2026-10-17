@@ -1,0 +1,12 @@
+/*
+ * What is a sales pipeline: the revenue note's tint. Colour only through tokens (FE-011); the tint mixes global
+ * tokens, which already switch in dark mode.
+ */
+
+.scene {
+  --note-revenue: color-mix(in oklch, var(--success) 25%, var(--card));
+}
+
+.revenue {
+  background-color: var(--note-revenue);
+}

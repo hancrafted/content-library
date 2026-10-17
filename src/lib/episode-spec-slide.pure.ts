@@ -1,7 +1,8 @@
 /*
  * The Spec contract's rules for one Slide and its Options (design-ADR 0011):
  * numbering, the Option ids and marks, each Option's figcaption, build notes,
- * pick checkbox and tokens, and the Slide's note. episode-spec.pure.ts runs them.
+ * pick checkbox, tokens and Context markers, and the Slide's note. episode-spec.pure.ts runs them;
+ * the Title slide's rules reuse the Option rules.
  */
 
 import { type Cheerio, type CheerioAPI } from 'cheerio';
@@ -50,7 +51,7 @@ function checkTokens($: CheerioAPI, figure: Selection, where: string): string[] 
   ];
 }
 
-function checkOption($: CheerioAPI, figure: Selection, slug: string): string[] {
+export function checkOption($: CheerioAPI, figure: Selection, slug: string): string[] {
   const id = figure.attr('data-option') ?? '';
   const where = `Option ${id} of {#${slug}}`;
   const checkboxes = figure
@@ -89,20 +90,29 @@ function checkTicked(isPicked: boolean, isTicked: boolean, where: string): strin
     : [`${where} is not picked, but its checkbox is checked: tick only the data-picked Option.`];
 }
 
+/** How many Options a Slide carries, and how a finding says it. */
+export interface OptionCount {
+  min: number;
+  max: number;
+  words: string;
+}
+
+const PAGE_SLIDE_OPTIONS: OptionCount = { min: 2, max: 3, words: 'two or three' };
+
 /** The count, ids, recommended mark and picked mark of a Slide's Options. */
-function checkOptionMarks(
+export function checkOptionMarks(
   figures: readonly Selection[],
   where: string,
-  { number, approved }: { number: number; approved: boolean },
+  { number, approved, count: wanted }: { number: number; approved: boolean; count: OptionCount },
 ): string[] {
   const ids = figures.map((figure) => figure.attr('data-option') ?? '');
   const expectedIds = ids.map((_, index) => `${number}${LETTERS[index] ?? '?'}`);
   const recommended = figures.filter((figure) => figure.is('[data-recommended]')).length;
   const picked = figures.filter((figure) => figure.is('[data-picked]')).length;
   const count = figures.length;
-  const countFits = count >= 2 && count <= 3;
+  const countFits = count >= wanted.min && count <= wanted.max;
   return [
-    ...unless(countFits, `${where} has ${count} Option${count === 1 ? '' : 's'}: it needs two or three.`),
+    ...unless(countFits, `${where} has ${count} Option${count === 1 ? '' : 's'}: it needs ${wanted.words}.`),
     ...unless(
       !countFits || ids.join() === expectedIds.join(),
       `${where} has the Options [${ids.join(', ')}]: id them ${expectedIds.join(', ')} in order, the Slide number and a letter.`,
@@ -119,6 +129,28 @@ function checkOptionMarks(
   ];
 }
 
+/** The Speaker note titles of a Slide, each its first `<strong>`. */
+function noteTitles($: CheerioAPI, slide: Selection): string[] {
+  return slide
+    .find('ol[data-spec="speaker-notes"] > li')
+    .toArray()
+    .map((item) => $(item).children('strong').first().text().trim());
+}
+
+/** Each Context marker in an Option names, in `data-note`, a Speaker note of its Slide by title. */
+function checkMarkers(figure: Selection, slug: string, notes: readonly string[]): string[] {
+  const where = `Option ${figure.attr('data-option') ?? ''} of {#${slug}}`;
+  return figure
+    .find('[data-spec="context-marker"]')
+    .toArray()
+    .map((marker) => marker.attribs['data-note'] ?? '')
+    .filter((note) => !notes.includes(note))
+    .map(
+      (note) =>
+        `${where} has a Context marker for "${note}", which is no Speaker note of the Slide: name the note by its title in data-note.`,
+    );
+}
+
 /** The rules of one Slide, the `at`-th in page order. */
 export function checkSlide({ $, approved }: SpecPage, element: Element, at: number): string[] {
   const slide = $(element);
@@ -133,8 +165,15 @@ export function checkSlide({ $, approved }: SpecPage, element: Element, at: numb
       slide.attr('data-number') === String(at + 1),
       `${where} is numbered ${slide.attr('data-number')}, but it is Slide ${at + 1} in page order.`,
     ),
-    ...checkOptionMarks(figures, where, { number: Number(slide.attr('data-number')), approved }),
-    ...figures.flatMap((figure) => checkOption($, figure, slug)),
+    ...checkOptionMarks(figures, where, {
+      number: Number(slide.attr('data-number')),
+      approved,
+      count: PAGE_SLIDE_OPTIONS,
+    }),
+    ...figures.flatMap((figure) => [
+      ...checkOption($, figure, slug),
+      ...checkMarkers(figure, slug, noteTitles($, slide)),
+    ]),
     ...unless(
       slide.find(`textarea[form="${FORM}"][name="note:${slug}"]`).length === 1,
       `${where} has no <textarea form="${FORM}" name="note:${slug}">.`,
