@@ -6,8 +6,8 @@
  */
 
 import { type Cheerio, type CheerioAPI } from 'cheerio';
-import { OPTION } from './episode-spec-page.pure';
-import { unless } from './finding.pure';
+import { OPTION } from './episode-spec-page.pure.ts';
+import { unless } from './finding.pure.ts';
 
 /** One element of a parsed page, read off cheerio's own types, and a selection of them. */
 type PageDocument = ReturnType<CheerioAPI['root']>[number];
