@@ -16,19 +16,13 @@ import { type LogEvent, type Status } from './run-log.pure.ts';
 import { endMarker, liveMarker, recordJobUsage } from './run-marker.ts';
 import { hasEnded, isOpen, latest, openAgentsOf, openSpan, openUnderRun, scoreTarget } from './run-spans.pure.ts';
 import { openView, pointAt, sessionOf, viewOf, write, type RunContext } from './run-view.ts';
-import { startRunServers } from './servers.ts';
+import { serversNote } from './servers.ts';
 
 export type { RunContext } from './run-view.ts';
 export type CommandResult = { ok: true; output: string } | { ok: false; error: string };
 
 const failure = (error: string): CommandResult => ({ ok: false, error });
 const success = (output: string): CommandResult => ({ ok: true, output });
-
-/** What begin-run prints about the servers it started: nothing when the context has no server host. */
-function serversNote(ctx: RunContext, sha: string): string {
-  const ports = ctx.servers && startRunServers(ctx.servers, { root: ctx.root, slug: ctx.slug, sha });
-  return ports ? `; dashboard on :${ports.dev}, Spec on :${ports.spec}` : '';
-}
 
 function beginRun(ctx: RunContext, opts: Opts): string {
   const sessionId = sessionOf(ctx);
@@ -39,7 +33,7 @@ function beginRun(ctx: RunContext, opts: Opts): string {
   mkdirSync(path.join(ctx.root, path.dirname(episodeLogPath(ctx.slug))), { recursive: true });
   const line = write(ctx, { kind: 'start-run', harness: opts.harness ?? 'claude-code', 'gen_ai.request.model': model });
   pointAt(ctx, line, { jobSpanId: line.span_id, sessionId });
-  const note = serversNote(ctx, line.template_sha ?? '');
+  const note = serversNote(ctx.servers, { root: ctx.root, slug: ctx.slug, sha: line.template_sha ?? '' });
   return `Run begun (${line.run_id})${note}`;
 }
 
@@ -193,6 +187,20 @@ function resume(ctx: RunContext): string {
   return `Run ${run.run_id} resumed${job === undefined ? '' : ` in Job ${job.job}`}`;
 }
 
+/** Runs `step` for a session the live marker does not list yet: resumes first, and prints that it did. */
+const resuming =
+  <K extends string>(step: (ctx: RunContext, p: Params<K>) => string) =>
+  (ctx: RunContext, p: Params<K>): string => {
+    const marker = readMarker(ctx.root);
+    const current = readEpisodeLog(ctx.slug, ctx.root).current;
+    const unlisted =
+      marker !== null &&
+      current !== null &&
+      marker.trace_id === current.trace_id &&
+      !(marker.session_ids ?? [marker.session_id]).includes(sessionOf(ctx));
+    return unlisted ? `${resume(ctx)} (this session was not on the Run)\n${step(ctx, p)}` : step(ctx, p);
+  };
+
 /** A command: the names of its positional parameters, and what it does with them. */
 interface Command {
   params: readonly string[];
@@ -211,9 +219,9 @@ const command = <K extends string>(
 const COMMANDS: Record<string, Command> = {
   'begin-run': command([], (ctx, _p, o) => beginRun(ctx, o)),
   'end-run': command(['status', 'summary'], endRun),
-  'begin-job': command(['job'], beginJob),
+  'begin-job': command(['job'], resuming(beginJob)),
   'end-job': command(['job', 'status', 'summary'], endJob),
-  'begin-attempt': command(['job'], beginAttempt),
+  'begin-attempt': command(['job'], resuming(beginAttempt)),
   'end-attempt': command(['job', 'status', 'summary'], endAttempt),
   'open-gate': command(['job', 'name'], openGate),
   'close-gate': command(['name', 'status', 'summary'], closeGate),

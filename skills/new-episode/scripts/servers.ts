@@ -118,3 +118,9 @@ export function startRunServers(host: ServerHost, { root, slug, sha }: { root: s
   if (ports !== null) host.start(root, slug, ports);
   return ports;
 }
+
+/** What begin-run prints about the servers it started: nothing when the context has no server host. */
+export function serversNote(host: ServerHost | undefined, where: { root: string; slug: string; sha: string }): string {
+  const ports = host && startRunServers(host, where);
+  return ports ? `; dashboard on :${ports.dev}, Spec on :${ports.spec}` : '';
+}

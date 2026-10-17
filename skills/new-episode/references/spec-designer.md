@@ -28,7 +28,7 @@ Han judges each Option from its mock alone, on a stage the full width of the pag
 - **Context markers.** Every fact whose Speaker note carries a source shows a Context marker beside it: `(💬)` after the phrase in text, or in the corner or beside the label of a card, column or chart ([`write-spec.md`](write-spec.md#what-an-option-settles) gives the markup; the sample's `1a` shows one of each).
 - **Hover and motion.** Hover that helps Han point while presenting is live, by the shared hover classes; emphasis motion shows as its end state. Entrance is the wrapper's, never the Option's ([`write-spec.md`](write-spec.md#what-an-option-settles)).
 
-A mock that shows a title over grey boxes, empty squares or a paragraph is a wireframe, not an Option: it fails the rubric's fidelity line. Before you return, look at each mock rendered at 1440px with the preview command the orchestrator gives you, then `npm run inspect-page -- --url <its url> --width 1440 --clip '[data-option="<id>"]' --out <png>`, and fix what reads as a wireframe.
+A mock that shows a title over grey boxes, empty squares or a paragraph is a wireframe, not an Option: it fails the rubric's fidelity line. Before you return, run `npm run episode:spec-preview -- <your fragment file>`: it renders every Option in the Spec frame at the Spec's exact width (1440px), runs the Spec contract and measures text overflow. It prints one `✖` line per violation and one `screenshot` line per Option, and exits 1 on any violation. Fix every line and rerun; you return only on exit 0. Then read the screenshot of each mock and fix what reads as a wireframe.
 
 ## The markup rules
 
@@ -70,4 +70,4 @@ Write one file, the fragment file the orchestrator names, holding per Slide, in 
 </figure>
 ```
 
-`<N>` is the Slide's number, letters from `a`. Leave out the pick checkbox and the note field: the orchestrator adds them. Write no other file and commit nothing. Return per Slide the Options' ids, one line each, the recommended one marked, and the path of each screenshot you checked.
+`<N>` is the Slide's number, letters from `a`. Leave out the pick checkbox and the note field: the orchestrator adds them. Write no other file and commit nothing. Return per Slide the Options' ids, one line each, the recommended one marked, and the path of each screenshot you checked, after the last `episode:spec-preview` run exited 0.
