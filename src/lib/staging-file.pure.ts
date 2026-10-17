@@ -102,12 +102,13 @@ export function gateTier(text: string): Tier {
  * mapping into a list, and leaves every other frontmatter key and the body as written. Throws when the
  * file has no frontmatter, or frontmatter that is not valid YAML.
  */
-export function appendVerified(text: string, entry: VerifiedEntry): string {
+export function appendVerified(text: string, entry: VerifiedEntry, generated?: VerifiedEntry): string {
   const match = FRONTMATTER.exec(text);
   if (match === null) throw new Error('the file has no frontmatter to append a verified entry to');
   const doc = parseDocument(match[1] as string);
   if (doc.errors.length > 0) throw new Error('the frontmatter is not valid YAML, so no verified entry can be appended');
   const kept = asEntries(doc.toJS().verified as unknown);
+  if (generated !== undefined) doc.set('generated', doc.createNode({ by: generated.by, at: generated.at }));
   doc.set('verified', doc.createNode([...kept, entry]));
   const end = match[0].endsWith('\n') ? '\n' : '';
   return `---\n${doc.toString().trimEnd()}\n---${end}${text.slice(match[0].length)}`;
@@ -135,7 +136,7 @@ export function metaGateTier(html: string): Tier {
  * design-ADR 0011: the same never-overwrite rule as appendVerified, the JSON rewritten at the block's indent and
  * every other byte of the page as written. Throws when the page has no meta block, or one that is not a JSON object.
  */
-export function appendMetaVerified(html: string, entry: VerifiedEntry): string {
+export function appendMetaVerified(html: string, entry: VerifiedEntry, generated?: VerifiedEntry): string {
   const match = META_BLOCK.exec(html);
   if (match === null)
     throw new Error(
@@ -150,7 +151,8 @@ export function appendMetaVerified(html: string, entry: VerifiedEntry): string {
   }
   if (!isMapping(meta)) throw new Error('the meta block is not a JSON object, so no verified entry can be appended');
   const indent = /[ \t]*$/.exec(html.slice(0, match.index))?.[0] ?? '';
-  const value = { ...meta, verified: [...asEntries(meta.verified), entry] };
+  const stamped = generated === undefined ? meta : { ...meta, generated: { by: generated.by, at: generated.at } };
+  const value = { ...stamped, verified: [...asEntries(meta.verified), entry] };
   const body = JSON.stringify(value, null, 2).replaceAll('</', '<\\/').replaceAll('\n', `\n${indent}  `);
   const block = `${open}\n${indent}  ${body}\n${indent}${close}`;
   return html.slice(0, match.index) + block + html.slice(match.index + match[0].length);
