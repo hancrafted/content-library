@@ -61,9 +61,29 @@ describe('success cases', () => {
     expect(html).toContain(expected);
     expect(html).not.toContain('min-h-svh');
   });
+
+  it('lays a section slide on the shared header on a full-bleed band one step off the page', () => {
+    // ARRANGE
+    const wrapper = createElement(SlideWrapper, { id: 'a', size: 'section', mode: 'shared' }, 'content');
+    const expected = 'bg-section-band';
+    // ACT
+    const html = renderToStaticMarkup(wrapper);
+    // ASSERT
+    expect(html).toContain(expected);
+  });
 });
 
 describe('failure cases', () => {
+  it('leaves a section slide on an Episode with authored headers on the page background', () => {
+    // ARRANGE
+    const wrapper = createElement(SlideWrapper, { id: 'a', size: 'section', mode: 'authored' }, 'content');
+    const band = 'bg-section-band';
+    // ACT
+    const html = renderToStaticMarkup(wrapper);
+    // ASSERT
+    expect(html).not.toContain(band);
+  });
+
   it('leaves the header and the entrance to the Scene on an Episode with authored headers', () => {
     // ARRANGE
     const header = { seed: 'a--b', level: 'h3' as const, title: 'Why a template', entrance: 'none' as const };

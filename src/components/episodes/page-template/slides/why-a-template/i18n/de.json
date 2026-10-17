@@ -1,7 +1,7 @@
 {
   "title": "Warum jede Episode als Kopie beginnt",
   "caption": "Ein Rückgrat: Episode, Abschnitt, Folie.",
-  "prose": "Diesen Ordner kopieren, dann die Wörter ersetzen. Eine <ref>Referenz-Episode</ref> hält jede Episode in derselben Form.",
+  "prose": "Diesen Ordner kopieren, dann die Wörter ersetzen. Eine Referenz-Episode <marker>hält jede Episode in derselben Form</marker>.",
   "spine": {
     "episode": "Episode",
     "section": "Abschnitt",

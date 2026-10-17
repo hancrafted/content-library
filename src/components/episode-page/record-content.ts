@@ -48,7 +48,7 @@ export interface EpisodeContent {
 
 /**
  * One locale of an Episode record, walked once (`placeSections`);
- * `translatorOf` serves only the site-wide Context reference label. The walk's
+ * `translatorOf` serves only the site-wide Context reference and marker labels. The walk's
  * ids are also every kit's `slideHref` targets, so a link cannot drift from
  * the anchor it points at.
  */
@@ -57,11 +57,12 @@ export async function recordContent(
   locale: Locale,
   translatorOf: TranslatorOf,
 ): Promise<EpisodeContent> {
+  const drawer = await translatorOf('contextDrawer');
   const episode: EpisodeContext = {
     episode: record.slug,
     locale,
     placed: placeSections<Slide>(record.sections).flat(),
-    refLabel: (await translatorOf('contextDrawer'))('refNote'),
+    referenceLabels: { ref: drawer('refNote'), marker: (title) => drawer('markerNote', { title }) },
     header: headerModeOf(record),
   };
   const { title, caption } = record.messages[locale];

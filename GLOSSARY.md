@@ -45,7 +45,7 @@ _Avoid_: Sitenav, sidebar
 **Section**: an Episode's second level: an ordered group of Slides whose first is its section slide, which names the Section. A Slide's heading level comes from its place in the Section, not from the Slide.
 _Avoid_: Chapter, part
 
-**Slide**: one frame in an Episode, stacked under the one before it: a page slide at least the viewport's height, a section slide at least 40% of it; one folder named after its slug, carrying its own Scene, Speaker notes, Voice script and text, so an Episode is a composition of Slides and a Slide copies into another Episode with one import and one list entry. A Section's own slide is a **section slide**; the slides it holds are **page slides**.
+**Slide**: one frame in an Episode, stacked under the one before it: a page slide at least the viewport's height, a section slide at least 40% of it and, on the shared Slide header, on a band one step off the page; one folder named after its slug, carrying its own Scene, Speaker notes, Voice script and text, so an Episode is a composition of Slides and a Slide copies into another Episode with one import and one list entry. A Section's own slide is a **section slide**; the slides it holds are **page slides**.
 _Avoid_: Card, panel; page, which means the Next.js route the whole Episode renders as; "self-contained Slide", since every Slide is one
 
 **Title slide**: an Episode's opening Slide: its title, caption, optional Voice script and Speaker notes and, once recorded, its video. Not listed in the table of contents.
@@ -78,8 +78,11 @@ _Avoid_: Notes, comments
 **Speaker note item**: one talking point: a header, a description, optional titled sources and image, and the element of its Slide it explains.
 _Avoid_: Note, bullet, comment
 
-**Context reference**: an underlined phrase in a Slide's text that opens one Speaker note item in the Context drawer.
+**Context reference**: an underlined phrase or a Context marker on a Slide that opens one Speaker note item in the Context drawer.
 _Avoid_: Footnote, tooltip, annotation
+
+**Context marker**: the Context drawer's speech-bubble icon as a small button beside a fact on a Slide, `(icon)` after a phrase or in an element's corner; the Context reference a new Episode puts on every fact whose Speaker note carries a source.
+_Avoid_: Note icon, info button, badge
 
 **Citation marker**: the `[n]` in a Speaker note item's description, the only superscript in the Context drawer, a number that points at source n of that note.
 _Avoid_: Footnote, reference

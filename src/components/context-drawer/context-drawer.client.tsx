@@ -11,7 +11,7 @@ import {
   titleOfItem,
   type DrawerTab,
 } from '@/lib/context-drawer.pure';
-import { CONTEXT_ITEM_ATTR } from '@/lib/context-link.pure';
+import { CONTEXT_ITEM_ATTR, CONTEXT_SCROLL_ATTR } from '@/lib/context-link.pure';
 import { cn } from '@/lib/utils';
 import { X } from 'lucide-react';
 import { useEffect, useMemo, useRef, type ReactNode } from 'react';
@@ -109,7 +109,7 @@ function PanelHead(props: { labels: DrawerStrings; drawer: Drawer; title: string
   );
 }
 
-/** The one scroll container; it returns to the top when the item or tab changes. */
+/** The one scroll container; it returns to the top when the item or tab changes, and a revealed note scrolls to its top. */
 function PanelBody(props: { labels: DrawerStrings; drawer: Drawer; entries: readonly ContextEntry[] }) {
   const { labels, drawer, entries } = props;
   const body = useRef<HTMLDivElement>(null);
@@ -117,7 +117,12 @@ function PanelBody(props: { labels: DrawerStrings; drawer: Drawer; entries: read
     body.current?.scrollTo({ top: 0 });
   }, [drawer.current, drawer.tab]);
   return (
-    <div ref={body} onClick={revealCitation} className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-4">
+    <div
+      ref={body}
+      {...{ [CONTEXT_SCROLL_ATTR]: '' }}
+      onClick={revealCitation}
+      className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-4"
+    >
       {DRAWER_TABS.map((kind) => (
         <Panel key={kind} tab={kind} selected={drawer.tab} heading={labels.tabs[kind]}>
           <Entries entries={entries} current={drawer.current} kind={kind} />

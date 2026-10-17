@@ -39,6 +39,8 @@ function recordingKit(): { kit: RuntimeKit; calls: string[] } {
     slideHref: (slug) => (calls.push(`slideHref:${slug}`), `#${slug}`),
     template: (key) => (calls.push(`template:${key}`), key),
     ref: (note) => (calls.push(`ref:${note}`), (chunks) => chunks),
+    marker: (note) => (calls.push(`marker:${note}`), (chunks) => chunks),
+    Marker: ({ note }) => (calls.push(`Marker:${note}`), null as never),
     target: (name) => (calls.push(`target:${name}`), { 'data-target': name }),
     Title: () => null as never,
   };
@@ -50,9 +52,11 @@ const whyATemplate = slide({
   messages: { en: EN, de: DE },
   notes: [{ slug: 'reference-episode', target: 'prose' }],
   segments: [{ slug: 'one-breath' }],
-  content: ({ t, ref, target, slideHref, template }) => {
+  content: ({ t, ref, marker, Marker, target, slideHref, template }) => {
     t('title');
     ref('reference-episode');
+    marker('reference-episode');
+    Marker({ note: 'reference-episode' });
     target('prose');
     slideHref('any-slide-of-the-episode');
     template('spine.next');
@@ -67,6 +71,8 @@ describe('success cases', () => {
     const expected = [
       't:title',
       'ref:reference-episode',
+      'marker:reference-episode',
+      'Marker:reference-episode',
       'target:prose',
       'slideHref:any-slide-of-the-episode',
       'template:spine.next',
@@ -118,13 +124,17 @@ describe('failure cases', () => {
         slug: 'why-a-template',
         messages: { en: EN, de: DE },
         notes: [{ slug: 'reference-episode', target: 'prose' }],
-        content: ({ t, ref, target, template }) => {
+        content: ({ t, ref, marker, Marker, target, template }) => {
           // @ts-expect-error -- a key outside this Slide's own file
           t('statement');
           // @ts-expect-error -- a subtree, not a string leaf
           template('spine');
           // @ts-expect-error -- a note this Slide does not declare
           ref('no-such-note');
+          // @ts-expect-error -- a marker for a note this Slide does not declare
+          marker('no-such-note');
+          // @ts-expect-error -- an element marker for a note this Slide does not declare
+          Marker({ note: 'no-such-note' });
           // @ts-expect-error -- a target no note of this Slide names
           target('caption');
           return null;

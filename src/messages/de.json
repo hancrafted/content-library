@@ -404,6 +404,7 @@
       "over": "Überlagert"
     },
     "refNote": "öffnet Sprechernotiz",
+    "markerNote": "Sprechernotiz: {title}",
     "citation": "Quelle {number}"
   },
   "talkPlayer": {

@@ -404,6 +404,7 @@
       "over": "Overlay"
     },
     "refNote": "opens speaker note",
+    "markerNote": "Speaker note: {title}",
     "citation": "Source {number}"
   },
   "talkPlayer": {

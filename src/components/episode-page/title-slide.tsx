@@ -70,12 +70,12 @@ export function TitleSlide(props: TitleSlideProps) {
     title: props.title,
     caption: props.caption,
     entrance,
-    // Without a hero Scene the header sits centred in the viewport, as the glow alone leaves room for.
-    className: hero === undefined ? 'my-auto pb-16 md:pb-24' : undefined,
+    // Without a hero Scene the header sits centred over the glow; with one, header and hero sit together, centred.
+    className: hero === undefined ? 'my-auto pb-16 md:pb-24' : 'mt-auto',
     children: launcher,
   };
   return (
-    <SlideWrapper id={TITLE_ANCHOR} data-slot="title-slide" mode="shared" header={header}>
+    <SlideWrapper id={TITLE_ANCHOR} data-slot="title-slide" mode="shared" header={header} scene="hug">
       {hero ?? <HeroGlow />}
     </SlideWrapper>
   );

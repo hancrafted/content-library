@@ -124,3 +124,19 @@ export function splitCitations(text: string): DescriptionPart[] {
 export function sourceDomain(url: string): string {
   return new URL(url).hostname.replace(/^www\./, '');
 }
+
+/** Where a revealed note sits in the drawer's scroll container, measured in its content box. */
+export interface RevealLayout {
+  /** The note's top, from the top of the scrolled content. */
+  readonly offset: number;
+  /** The container's top padding: the note stops this far below the edge. */
+  readonly inset: number;
+  readonly scrollHeight: number;
+  readonly clientHeight: number;
+}
+
+/** The `scrollTop` that brings a revealed note as near the top of the drawer as the content allows. */
+export function revealScrollTop(layout: RevealLayout): number {
+  const furthest = Math.max(0, layout.scrollHeight - layout.clientHeight);
+  return Math.min(furthest, Math.max(0, layout.offset - layout.inset));
+}

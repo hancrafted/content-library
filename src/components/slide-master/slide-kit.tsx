@@ -2,6 +2,7 @@ import type { SlideLevel } from '@/lib/episode.pure';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { episodeRoute, type EpisodeSlug } from '@/lib/routes';
 import type { ReactNode } from 'react';
+import { ContextMarker } from './context-marker';
 import { ContextRef } from './context-ref';
 import { DEFAULT_RICH_TAGS } from './rich-tags';
 import type { RuntimeKit, RuntimeTranslator } from './slide-base';
@@ -10,14 +11,21 @@ import { SlideTitle } from './slide-master';
 /** The optional message key a Slide sets when its on-screen title differs from its table-of-contents `title`. */
 export const ON_SCREEN_TITLE_KEY = 'heading';
 
+/** What assistive tech hears for a Context reference, in the page's locale. */
+export interface ReferenceLabels {
+  /** Said after an underlined phrase, e.g. `opens speaker note`. */
+  readonly ref: string;
+  /** A Context marker's accessible name from its note's header, e.g. `Speaker note: Stateless by design`. */
+  readonly marker: (title: string) => string;
+}
+
 /** What the container knows about the whole Episode when it builds a kit: the same for every Slide. */
 export interface EpisodeKitInput {
   readonly episode: EpisodeSlug;
   readonly locale: Locale;
   /** Each Slide slug's placed id, from the walk (`placeSections`): what `slideHref` links to. */
   readonly anchors: ReadonlyMap<string, string>;
-  /** Said after a Context reference's phrase, e.g. `opens speaker note`. */
-  readonly refLabel: string;
+  readonly referenceLabels: ReferenceLabels;
 }
 
 /** What the container knows about one placed Slide when it builds its kit. */
@@ -62,6 +70,44 @@ function templateOf(t: RuntimeTranslator, slideId: string): RuntimeKit['template
 }
 
 /**
+ * The kit's Context references to one of the Slide's notes (FE-010 §4, FE-013):
+ * `ref` underlines a phrase, `marker` follows one with a Context marker and
+ * `Marker` places a marker on an element. Each throws for a note the Slide
+ * does not declare. A marker is named after its note's header, read from the
+ * Slide's own file.
+ */
+function contextRefsOf(episode: EpisodeKitInput, slide: SlideKitInput): Pick<RuntimeKit, 'ref' | 'marker' | 'Marker'> {
+  const declared = (note: string) => {
+    if (!slide.notes.includes(note)) {
+      throw new Error(`No note "${note}" on "${slide.slideId}": a context reference must name one of its notes.`);
+    }
+  };
+  const labelOf = (note: string) => (declared(note), episode.referenceLabels.marker(slide.t(`notes.${note}.header`)));
+  return {
+    ref: (note) => {
+      declared(note);
+      return (chunks) => (
+        <ContextRef note={note} label={episode.referenceLabels.ref}>
+          {chunks}
+        </ContextRef>
+      );
+    },
+    marker: (note) => {
+      const label = labelOf(note);
+      // A no-break space keeps the marker on the line of the phrase it follows.
+      return (chunks) => (
+        <>
+          {chunks}
+          {'\u00a0'}
+          <ContextMarker note={note} label={label} placement="inline" />
+        </>
+      );
+    },
+    Marker: ({ note, className }) => <ContextMarker note={note} label={labelOf(note)} className={className} />,
+  };
+}
+
+/**
  * The kit's `Title`: the Slide's heading at its level, marked as the `title`
  * target. An optional `heading` key in the Slide's messages is the on-screen
  * title; the table of contents keeps `title`. Throws `titleTaken` when the
@@ -84,29 +130,21 @@ function titleOf({ t, level, titleTaken }: SlideKitInput): RuntimeKit['Title'] {
  * heading at the level its position gives it, marked as the `title` target,
  * showing the optional `heading` message when the Slide has one;
  * `ref` wraps a phrase as a Context reference to one of the Slide's notes;
+ * `marker` follows a phrase with a Context marker and `Marker` places one on
+ * an element;
  * `target` marks the element a note explains; `slideHref` links to another
  * Slide of the Episode; `template` hands a client component a raw string to
  * fill. The types already confine every name; the kit checks again at
  * render, so a cast in a Slide still fails the build.
  */
 export function slideKit(episode: EpisodeKitInput, slide: SlideKitInput): RuntimeKit {
-  const { notes, slideId } = slide;
+  const { slideId } = slide;
   const Title = titleOf(slide);
-  const ref = (note: string) => {
-    if (!notes.includes(note)) {
-      throw new Error(`No note "${note}" on "${slideId}": a context reference must name one of its notes.`);
-    }
-    return (chunks: ReactNode) => (
-      <ContextRef note={note} label={episode.refLabel}>
-        {chunks}
-      </ContextRef>
-    );
-  };
   const t = withDefaultTags(slide.t);
   return {
     t,
     locale: episode.locale,
-    ref,
+    ...contextRefsOf(episode, slide),
     target: (name) => ({ 'data-target': name }),
     Title,
     slideHref: slideHrefOf(episode, slideId),

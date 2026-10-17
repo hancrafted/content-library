@@ -8,7 +8,7 @@ import type { ReactNode } from 'react';
 import type { EpisodeRecord, HeaderMode, Slide, SlideMessages } from './slide';
 import type { NoteSpec, RuntimeTranslator, SegmentSpec, SourceSpec } from './slide-base';
 import { captionTextOf, headerTextOf, titleTakenBy, type SlideHeaderText } from './slide-header-text';
-import { slideKit } from './slide-kit';
+import { slideKit, type ReferenceLabels } from './slide-kit';
 
 /*
  * The Localized Slide: one Slide in one locale, as the page renders it
@@ -63,8 +63,8 @@ export interface EpisodeContext {
   readonly locale: Locale;
   /** Every Slide of the Episode as the walk (`placeSections`) placed it: what `slideHref` links to. */
   readonly placed: readonly PlacedListSlide<Slide>[];
-  /** Said after a Context reference's phrase, e.g. `opens speaker note`. */
-  readonly refLabel: string;
+  /** What assistive tech hears for a Context reference: the underline's suffix and a marker's name. */
+  readonly referenceLabels: ReferenceLabels;
   /** Whether the Slide wrapper renders each Slide's header or its Scene does (the record's `header`). */
   readonly header: HeaderMode;
 }

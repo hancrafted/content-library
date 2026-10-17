@@ -1,6 +1,6 @@
+import { ContextIcon } from '@/components/ui/context-icon';
 import { SHORTCUT_LABEL } from '@/lib/context-drawer.pure';
 import { cn } from '@/lib/utils';
-import { MessageSquareText } from 'lucide-react';
 import type { Ref } from 'react';
 
 function Hint({ hint }: { hint: string }) {
@@ -40,7 +40,7 @@ export function DrawerTrigger(props: {
         props.open && 'invisible',
       )}
     >
-      <MessageSquareText aria-hidden className="size-4 shrink-0" />
+      <ContextIcon aria-hidden className="size-4 shrink-0" />
       <span className="font-medium">{props.text}</span>
       <Hint hint={props.hint} />
     </button>

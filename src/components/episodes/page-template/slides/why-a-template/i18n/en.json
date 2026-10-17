@@ -1,7 +1,7 @@
 {
   "title": "Why every Episode starts from a copy",
   "caption": "One spine: Episode, Section, Slide.",
-  "prose": "Copy this folder, then replace the words. A <ref>reference Episode</ref> keeps every Episode the same shape.",
+  "prose": "Copy this folder, then replace the words. A reference Episode <marker>keeps every Episode the same shape</marker>.",
   "spine": {
     "episode": "Episode",
     "section": "Section",
