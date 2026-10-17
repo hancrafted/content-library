@@ -4,7 +4,7 @@
 import { execFileSync, spawn } from 'node:child_process';
 import { closeSync, existsSync, mkdirSync, openSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { draftPipeline, pickPorts, portsOf } from './servers.pure.ts';
+import { draftPipeline, pickPorts, portsOf, type RunWhere } from './servers.pure.ts';
 
 /** What begin-run and end-run need from the machine; each defaults to the real thing, a test passes its own. */
 export interface ServerHost {
@@ -69,32 +69,32 @@ function listening(port: number): boolean {
 }
 
 function detach({
-  pid,
+  pidPath,
   port,
   command,
   root,
 }: {
-  pid: string;
+  pidPath: string;
   port: number;
   command: readonly string[];
   root: string;
 }): void {
   if (listening(port)) return;
-  mkdirSync(path.dirname(pid), { recursive: true });
-  const log = openSync(pid.replace(/\.pid$/, '.log'), 'a');
+  mkdirSync(path.dirname(pidPath), { recursive: true });
+  const log = openSync(pidPath.replace(/\.pid$/, '.log'), 'a');
   const [program = '', ...args] = command;
   const child = spawn(program, args, { cwd: root, detached: true, stdio: ['ignore', log, log] });
   child.unref();
   closeSync(log);
-  writeFileSync(pid, `${child.pid}\n`);
+  writeFileSync(pidPath, `${child.pid}\n`);
 }
 
 export const realServers: ServerHost = {
   isFree: (port) => !listening(port),
   start: (root, slug, { dev, spec }) => {
-    detach({ pid: pidFile(root, slug, dev), port: dev, command: ['npx', 'next', 'dev', '-p', String(dev)], root });
+    detach({ pidPath: pidFile(root, slug, dev), port: dev, command: ['npx', 'next', 'dev', '-p', String(dev)], root });
     detach({
-      pid: pidFile(root, slug, spec),
+      pidPath: pidFile(root, slug, spec),
       port: spec,
       command: ['node', 'skills/new-episode/scripts/spec.ts', slug, '--port', String(spec), '--watch'],
       root,
@@ -107,7 +107,7 @@ export const realServers: ServerHost = {
  * Writes the Run's draft pipeline.yml when the Episode has none, then starts the dashboard and Spec servers on the
  * ports it names. A pipeline that exists keeps its ports (a second begin-run after a crash).
  */
-export function startRunServers(host: ServerHost, { root, slug, sha }: { root: string; slug: string; sha: string }) {
+export function startRunServers(host: ServerHost, { root, slug, sha }: RunWhere) {
   const file = path.join(root, 'docs/episodes', slug, 'pipeline.yml');
   const template = path.join(root, 'skills/new-episode/assets/pipeline.yml');
   let ports = existsSync(file) ? portsOf(readFileSync(file, 'utf8')) : null;
@@ -120,7 +120,7 @@ export function startRunServers(host: ServerHost, { root, slug, sha }: { root: s
 }
 
 /** What begin-run prints about the servers it started: nothing when the context has no server host. */
-export function serversNote(host: ServerHost | undefined, where: { root: string; slug: string; sha: string }): string {
+export function serversNote(host: ServerHost | undefined, where: RunWhere): string {
   const ports = host && startRunServers(host, where);
   return ports ? `; dashboard on :${ports.dev}, Spec on :${ports.spec}` : '';
 }

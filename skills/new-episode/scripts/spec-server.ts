@@ -2,7 +2,7 @@
 // review form's POST as the next `feedback/<NN>/feedback.md` round. It lives with the skill's scripts, outside `src/`
 // and the static export; `spec.ts` is its command line.
 
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
 import path from 'node:path';
 import {
@@ -102,23 +102,72 @@ async function save(response: ServerResponse, request: IncomingMessage, options:
 }
 
 /** The files the server serves, by URL path; nothing else under the folder is reachable. */
-const FILES: Readonly<Record<string, { file: string; type: string }>> = {
+interface Served {
+  file: string;
+  type: string;
+}
+
+const FILES: Readonly<Record<string, Served>> = {
   '/': { file: SPEC_FILE, type: HTML },
   '/spec.html': { file: SPEC_FILE, type: HTML },
   '/design.css': { file: 'spec/design.css', type: 'text/css; charset=utf-8' },
 };
 
-function serveFile(response: ServerResponse, folder: string, served: { file: string; type: string }): void {
+/** Live reload: the page polls this and reloads when the Spec or its CSS changed on disk (re-assembly, `--watch`). */
+const VERSION_PATH = '/__spec-version';
+
+const RELOAD_SCRIPT = `<script>
+(function () {
+  var seen = null;
+  function poll() {
+    fetch('${VERSION_PATH}', { cache: 'no-store' })
+      .then(function (r) { return r.text(); })
+      .then(function (version) {
+        if (seen !== null && version !== seen) return location.reload();
+        seen = version;
+      })
+      .catch(function () {})
+      .then(function () { setTimeout(poll, 1000); });
+  }
+  poll();
+})();
+</script>
+`;
+
+/** The modification times of everything the page is built from, as one comparable string. */
+function version(folder: string): string {
+  return [SPEC_FILE, 'spec/design.css']
+    .map((name) => {
+      const file = path.join(folder, name);
+      return existsSync(file) ? String(statSync(file).mtimeMs) : '-';
+    })
+    .join(':');
+}
+
+function withReload(html: string): string {
+  return html.includes('</body>') ? html.replace('</body>', `${RELOAD_SCRIPT}</body>`) : html + RELOAD_SCRIPT;
+}
+
+function serveFile(response: ServerResponse, folder: string, served: Served): void {
   const file = path.join(folder, served.file);
   if (!existsSync(file)) return send(response, { status: 404, type: TEXT, body: `${served.file} does not exist\n` });
-  send(response, { status: 200, type: served.type, body: readFileSync(file, 'utf8') });
+  const text = readFileSync(file, 'utf8');
+  send(response, { status: 200, type: served.type, body: served.type === HTML ? withReload(text) : text });
+}
+
+function get(response: ServerResponse, folder: string, pathname: string): void {
+  const served = FILES[pathname];
+  if (pathname === VERSION_PATH) return send(response, { status: 200, type: TEXT, body: version(folder) });
+  if (served !== undefined) return serveFile(response, folder, served);
+  send(response, { status: 404, type: TEXT, body: 'Not found\n' });
 }
 
 /** GET serves a file, POST to the page saves the review; anything else is 404. */
 async function handle(request: IncomingMessage, response: ServerResponse, options: SpecServerOptions): Promise<void> {
-  const served = FILES[new URL(request.url ?? '/', 'http://localhost').pathname];
+  const { pathname } = new URL(request.url ?? '/', 'http://localhost');
+  const served = FILES[pathname];
   if (request.method === 'POST' && served?.type === HTML) return save(response, request, options);
-  if (request.method === 'GET' && served !== undefined) return serveFile(response, options.folder, served);
+  if (request.method === 'GET') return get(response, options.folder, pathname);
   send(response, { status: 404, type: TEXT, body: 'Not found\n' });
 }
 

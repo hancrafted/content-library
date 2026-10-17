@@ -34,8 +34,14 @@ describe('eventLogDeletions', () => {
     expect(eventLogDeletions(diff(LOG, '+x'))).toEqual([]);
   });
 
-  it('names a log that is deleted whole', () => {
+  it('passes a log deleted whole, which Promotion does after archiving it to .logs/', () => {
     const text = `diff --git a/${LOG} b/${LOG}\ndeleted file mode 100644\n--- a/${LOG}\n+++ /dev/null\n@@ -1 +0,0 @@\n-{"a":1}\n`;
-    expect(eventLogDeletions(text)).toEqual([LOG]);
+    expect(eventLogDeletions(text)).toEqual([]);
+  });
+
+  it('still names a log that remains and loses lines beside one that is deleted whole', () => {
+    const other = 'docs/episodes/y/events.jsonl';
+    const gone = `diff --git a/${other} b/${other}\ndeleted file mode 100644\n--- a/${other}\n+++ /dev/null\n@@ -1 +0,0 @@\n-{"a":1}\n`;
+    expect(eventLogDeletions(gone + diff(LOG, '-{"a":1}'))).toEqual([LOG]);
   });
 });

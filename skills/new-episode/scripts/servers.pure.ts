@@ -7,6 +7,13 @@ export const FIRST_PORT = 4000;
 export const DASHBOARD_PORT = 4382;
 const LAST_PORT = 65534;
 
+/** Where a Run's servers live: the worktree root, the Episode slug and the template's sha. */
+export interface RunWhere {
+  root: string;
+  slug: string;
+  sha: string;
+}
+
 /** The first `P` from 4000 with both `P` and `P + 1` free, never the dashboard's port. */
 export function pickPorts(isFree: (port: number) => boolean): { dev: number; spec: number } {
   for (let dev = FIRST_PORT; dev <= LAST_PORT; dev++) {

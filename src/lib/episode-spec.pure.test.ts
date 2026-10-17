@@ -199,6 +199,11 @@ describe('success cases', () => {
   });
 });
 
+const bare = (slug: string, number: number) =>
+  `<article data-spec="slide" id="${slug}" data-number="${number}"><h3>${number} · A Slide</h3></article>`;
+const bareSpec = (shape: Parameters<typeof spec>[0] = {}) =>
+  spec({ title: '', slides: [bare('spent', 1), bare('middle', 2)], ...shape });
+
 const SPENT_3 = [option('spent', '1a', { recommended: true }), option('spent', '1b'), option('spent', '1c')];
 
 const APPROVED = meta({ verified: [{ by: 'human:han', at: HAN_AT }] });
@@ -641,6 +646,28 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('asks nothing of Options, Title slide or words a Brief- or Dossier-stage Spec cannot have yet', () => {
+    // ARRANGE
+    const files = folder({ 'spec/spec.html': bareSpec() });
+    // ACT
+    const findings = checkSpec(files, REVIEW_ASSET, 'early');
+    // ASSERT
+    expect(findings).toEqual([]);
+  });
+
+  it('still holds the meta block, the review asset and the Dossier agreement', () => {
+    // ARRANGE
+    const files = folder({ 'spec/spec.html': bareSpec({ meta: '', asset: '', slides: [bare('spent', 1)] }) });
+    // ACT
+    const expectedFindings = 3;
+    const found = messages(checkSpec(files, REVIEW_ASSET, 'early'));
+    // ASSERT
+    expect(found).toHaveLength(expectedFindings);
+    expect(found.join('\n')).toContain('no meta block');
+    expect(found.join('\n')).toContain('does not inline the review asset');
+    expect(found.join('\n')).toContain('Dossier Slide {#middle}');
+  });
+
   it('checks nothing in a folder with no Spec yet', () => {
     // ARRANGE
     const files = { 'dossier.md': DOSSIER };
