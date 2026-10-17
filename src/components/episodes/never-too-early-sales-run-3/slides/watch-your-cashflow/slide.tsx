@@ -6,10 +6,8 @@ import {
   CashLeft,
   type CashflowColumn,
 } from '@/components/slide-shared/cashflow-board/cashflow-board';
-import { cn } from '@/lib/utils';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
-import styles from './watch-your-cashflow.module.css';
 
 const STARTUP_FUNDING = { slug: 'startup-funding', url: 'https://www.paulgraham.com/startupfunding.html' };
 const DEFAULT_ALIVE = { slug: 'default-alive', url: 'https://paulgraham.com/aord.html' };
@@ -17,8 +15,7 @@ const DEFAULT_ALIVE = { slug: 'default-alive', url: 'https://paulgraham.com/aord
 /**
  * The cashflow board, January to April: two months of cash run out in February, March's cost lands on an empty
  * account under a Bankrupt stamp, and the million arrives in April, one month late. The March lane is ringed, two
- * brackets read the timing, and the closing question is pinned under the board. Notes are placed one at a time in
- * reading order while the Slide is active.
+ * brackets read the timing, and the closing question is pinned under the board.
  */
 export const watchYourCashflow = slide({
   slug: 'watch-your-cashflow',
@@ -61,7 +58,7 @@ export const watchYourCashflow = slide({
       footer: <CashLeft label={t('cashLeft')} amount={balances[index]} locale={locale} />,
     }));
     return (
-      <SlideFrame className={cn(styles.scene, 'gap-10')}>
+      <SlideFrame className="gap-10">
         <CashflowBoard
           columns={columns}
           labels={{ board: t('board'), cash: t('note.cash'), cost: t('note.cost'), revenue: t('note.revenue') }}
@@ -73,7 +70,7 @@ export const watchYourCashflow = slide({
             { column: 3, span: 2, kind: 'bracket', text: t('late') },
           ]}
         />
-        <aside className={cn(styles.question, 'rotate-1 self-end border bg-card p-6 shadow-md lg:w-5/12')}>
+        <aside className="rotate-1 self-end border bg-card p-6 shadow-md lg:w-5/12">
           <p className="font-mono text-caption tracking-widest text-muted-foreground uppercase">
             {t('question.label')}
           </p>

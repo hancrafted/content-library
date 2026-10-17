@@ -31,8 +31,7 @@ const SOURCES = ['content', 'ads', 'web'] as const;
 /**
  * How marketing feeds the pipeline (Spec Option 5a): a funnel of our own drawing narrows from three marketing notes
  * into the ringed Lead in lane of the compact deal board, where the inbound examples sit; a bracket under the other
- * lanes says sales works what lands there. While the Slide is active the dots travel the funnel one at a time, then
- * the Lead in notes are placed.
+ * lanes says sales works what lands there. While the Slide is active the dots travel the funnel one at a time.
  */
 export const howMarketingFeedsThePipeline = slide({
   slug: 'how-marketing-feeds-the-pipeline',

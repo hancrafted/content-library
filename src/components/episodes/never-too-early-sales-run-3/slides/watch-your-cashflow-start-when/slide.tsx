@@ -37,7 +37,7 @@ function Drop({ text }: { text: string }) {
 /**
  * The cashflow board a third time, by quarter: cash hits zero in Q2 and revenue only lands in Q3, so a `primary`
  * arrow drags it back to the ringed Q1 lane, "Start early!". Under the board, a dashed drop from Q1 leads to a lane of
- * this week's four steps. The arrow sweeps in, the ring fades in, then the steps are placed one at a time.
+ * this week's four steps.
  */
 export const watchYourCashflowStartWhen = slide({
   slug: 'watch-your-cashflow-start-when',

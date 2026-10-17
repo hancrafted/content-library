@@ -1,6 +1,4 @@
 import { cn } from '@/lib/utils';
-import { stepStyle } from './note';
-import styles from './slide.module.css';
 
 const STROKES = {
   plus: { d: 'M40 14 C 41 30, 39 50, 40 66 M14 41 C 30 39, 50 41, 66 40', stroke: 'stroke-foreground' },
@@ -8,27 +6,19 @@ const STROKES = {
 } as const;
 
 /** A marker-drawn plus or equals between the notes; the sentence it stands for is the board's hidden label. */
-export function Operator({
-  symbol,
-  step,
-  className,
-}: {
-  symbol: keyof typeof STROKES;
-  step: number;
-  className?: string;
-}) {
+export function Operator({ symbol, className }: { symbol: keyof typeof STROKES; className?: string }) {
   const { d, stroke } = STROKES[symbol];
   return (
-    <svg viewBox="0 0 80 80" style={stepStyle(step)} className={cn(styles.draw, className)} aria-hidden="true">
-      <path d={d} pathLength={1} className={cn('fill-none', stroke)} strokeWidth="8" strokeLinecap="round" />
+    <svg viewBox="0 0 80 80" className={className} aria-hidden="true">
+      <path d={d} className={cn('fill-none', stroke)} strokeWidth="8" strokeLinecap="round" />
     </svg>
   );
 }
 
 /** The brace gathering the two insight notes under one pill. */
-export function Brace({ label, step, className }: { label: string; step: number; className?: string }) {
+export function Brace({ label, className }: { label: string; className?: string }) {
   return (
-    <div style={stepStyle(step)} className={cn(styles.fade, 'flex-col items-center', className)}>
+    <div className={cn('flex-col items-center', className)}>
       <svg viewBox="0 0 600 40" className="w-full" aria-hidden="true">
         <path
           d="M10 6 C 10 22, 20 22, 40 22 H270 C 290 22, 300 26, 300 38 C 300 26, 310 22, 330 22 H560 C 580 22, 590 22, 590 6"
@@ -44,9 +34,9 @@ export function Brace({ label, step, className }: { label: string; step: number;
 }
 
 /** The caveat on the equals: a curved arrow up at it and the note beside. */
-export function MarginNote({ text, step, className }: { text: string; step: number; className?: string }) {
+export function MarginNote({ text, className }: { text: string; className?: string }) {
   return (
-    <div style={stepStyle(step)} className={cn(styles.fade, 'flex items-start justify-center gap-3 pt-2', className)}>
+    <div className={cn('flex items-start justify-center gap-3 pt-2', className)}>
       <svg
         viewBox="0 0 60 50"
         className="w-12 shrink-0 fill-none stroke-muted-foreground"

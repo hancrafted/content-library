@@ -4,7 +4,6 @@ import { DealBoard, OpenPipeline, type DealLane } from '@/components/slide-share
 import { dealCount, pipelineTotal } from '@/components/slide-shared/deal-board/deal-board.pure';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
-import styles from './pipeline-tools-in-practice.module.css';
 
 const GTM_BENCHMARKS = {
   slug: 'ebsta-gtm-benchmarks',
@@ -55,8 +54,7 @@ const BOARD = [
 
 /**
  * Our own deal board (Spec Option 4a): five stages as lanes, each with its total and count, the deals as paper notes,
- * the open pipeline pinned over the board, and the Proposal made lane ringed as where the week goes. The notes are
- * placed lane by lane while the Slide is active, then the ring and the annotation are drawn.
+ * the open pipeline pinned over the board, and the Proposal made lane ringed as where the week goes, under its annotation.
  */
 export const pipelineToolsInPractice = slide({
   slug: 'pipeline-tools-in-practice',
@@ -75,7 +73,7 @@ export const pipelineToolsInPractice = slide({
       })),
     }));
     return (
-      <SlideFrame className={`${styles.scene} gap-8`}>
+      <SlideFrame className="gap-8">
         <div className="self-end">
           <OpenPipeline
             label={t('summary.label')}

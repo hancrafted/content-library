@@ -1,7 +1,7 @@
 import { formatEuro } from '@/components/slide-shared/cashflow-board/cashflow-board.pure';
 import type { CSSProperties } from 'react';
 import styles from './deal-board.module.css';
-import { checkDealBoard, type DealLane } from './deal-board.pure';
+import { checkDealBoard } from './deal-board.pure';
 import type { DealBoardProps } from './deal-board.types';
 import { Lane } from './deal-lane';
 import { Annotation, Bracket, Ends } from './deal-marks';
@@ -9,18 +9,9 @@ import { Annotation, Bracket, Ends } from './deal-marks';
 export type { DealLane } from './deal-board.pure';
 export type { DealBoardProps } from './deal-board.types';
 
-/** Each lane's first note in reading order: the deals before it, and the incoming notes when it follows the emphasis. */
-function firstOrders(lanes: readonly DealLane[], emphasis: number, incoming: number): number[] {
-  return lanes.map((_, index) => {
-    const before = lanes.slice(0, index).reduce((sum, lane) => sum + lane.deals.length, 0);
-    return emphasis > 0 && index + 1 > emphasis ? before + incoming : before;
-  });
-}
-
 /** The lanes, and the bracket row on their grid, in a row that scrolls sideways when the board is narrow. */
 function LaneRow({ board, emphasis }: { board: DealBoardProps; emphasis: number }) {
-  const { label, lanes, incoming = [], bracket } = board;
-  const orders = firstOrders(lanes, emphasis, incoming.length);
+  const { label, lanes, bracket } = board;
   return (
     <div
       role="region"
@@ -32,14 +23,7 @@ function LaneRow({ board, emphasis }: { board: DealBoardProps; emphasis: number 
       <div className={styles.grid}>
         <ol role="list" className={styles.lanes}>
           {lanes.map((lane, index) => (
-            <Lane
-              key={lane.slug}
-              lane={lane}
-              number={index + 1}
-              firstOrder={orders[index]}
-              emphasised={index + 1 === emphasis}
-              board={board}
-            />
+            <Lane key={lane.slug} lane={lane} number={index + 1} emphasised={index + 1 === emphasis} board={board} />
           ))}
         </ol>
         {bracket ? <Bracket bracket={bracket} emphasis={Math.max(emphasis, 1)} /> : null}

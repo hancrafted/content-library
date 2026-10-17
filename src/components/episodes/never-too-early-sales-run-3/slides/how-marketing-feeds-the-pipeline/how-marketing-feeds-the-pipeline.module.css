@@ -1,7 +1,7 @@
 /*
  * The funnel beside the compact deal board once the Scene is wide enough, the spout pointing into Lead in; narrower,
  * the funnel stands over the board. While the Slide is active the crowd travels in from the funnel's mouth one dot at
- * a time, never looping, then the two spout dots and the spout, then the Lead in notes are placed. The base rules are
+ * a time, never looping, then the two spout dots and the spout. The base rules are
  * the finished picture, which is also what reduced motion shows.
  */
 
@@ -53,13 +53,6 @@
   }
 }
 
-@keyframes place {
-  from {
-    opacity: 0;
-    translate: 0 -6px;
-  }
-}
-
 @media (prefers-reduced-motion: no-preference) {
   .scene :global([data-funnel='dot']) {
     transform-box: view-box;
@@ -72,10 +65,5 @@
 
   :global([data-zone='active']) .scene :global([data-funnel='spout']) {
     animation: fade-in 240ms ease-out 2100ms backwards;
-  }
-
-  :global([data-zone='active']) .scene :global([data-emphasis='true'] [data-deal='note']) {
-    animation: place 260ms ease-out backwards;
-    animation-delay: calc(2400ms + var(--i) * 220ms);
   }
 }

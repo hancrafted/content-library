@@ -20,9 +20,6 @@ export type { CashflowBoardProps, CashflowColumn } from './cashflow-board.types'
 export function CashflowBoard(props: CashflowBoardProps) {
   const { columns, labels, locale, stamp, arrow, highlight, annotations = [] } = props;
   checkBoard({ ...props, count: columns.length });
-  const firstOrders = columns.map((_, index) =>
-    columns.slice(0, index).reduce((sum, column) => sum + column.notes.filter(Boolean).length, 0),
-  );
   const gridStyle = { '--lanes': columns.length, '--lane-rows': LANE_ROWS } as CSSProperties;
   return (
     <div data-slot="cashflow-board" className={cn(styles.board, 'rounded-xl border bg-card shadow-md')}>
@@ -33,7 +30,6 @@ export function CashflowBoard(props: CashflowBoardProps) {
               key={column.label}
               {...{ column, labels, locale }}
               number={index + 1}
-              firstOrder={firstOrders[index]}
               highlighted={highlight === index + 1}
             />
           ))}

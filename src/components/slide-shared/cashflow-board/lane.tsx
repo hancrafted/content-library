@@ -8,22 +8,19 @@ interface LaneProps {
   column: CashflowColumn;
   /** The column's number, counted from 1. */
   number: number;
-  /** The reading-order index of the lane's first note. */
-  firstOrder: number;
   highlighted: boolean;
   labels: BoardLabels;
   locale: string;
 }
 
 /** The three slots of a lane, top to bottom; an empty slot keeps its row and says nothing. */
-function Slots({ column, number, firstOrder, labels, locale }: LaneProps) {
-  let order = firstOrder;
+function Slots({ column, number, labels, locale }: LaneProps) {
   return (
     <ul role="list" className={styles.slots}>
       {[1, 2, 3].map((slot) => {
         const note = column.notes[slot - 1] ?? null;
         if (note === null) return <li key={slot} aria-hidden="true" />;
-        const props = { note, column: number, slot, order: order++, labels, locale };
+        const props = { note, column: number, slot, labels, locale };
         return <StickyNote key={slot} {...props} />;
       })}
     </ul>

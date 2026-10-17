@@ -104,20 +104,18 @@ export const salesIsMoreThanSelling = slide({
               title={t('board.market.title')}
               body={t('board.market.body')}
               tilt="left"
-              step={0}
               className="@4xl:col-span-3"
             >
               <Exchange ask={t('board.market.ask')} answer={t('board.market.answer')} />
               <Chips items={marketChips} />
             </Note>
-            <Operator symbol="plus" step={1} className="mx-auto w-12 @4xl:col-span-1 @4xl:w-full" />
+            <Operator symbol="plus" className="mx-auto w-12 @4xl:col-span-1 @4xl:w-full" />
             <Note
               {...target(INTERNAL)}
               index="02"
               title={t('board.internal.title')}
               body={t('board.internal.body')}
               tilt="right"
-              step={2}
               className="@4xl:col-span-3"
             >
               <RepeatPath
@@ -127,7 +125,7 @@ export const salesIsMoreThanSelling = slide({
                 team={t('board.internal.path.team')}
               />
             </Note>
-            <Operator symbol="equals" step={3} className="mx-auto w-12 @4xl:col-span-1 @4xl:w-full" />
+            <Operator symbol="equals" className="mx-auto w-12 @4xl:col-span-1 @4xl:w-full" />
             <Note
               {...target(TRUST)}
               index="03"
@@ -135,18 +133,17 @@ export const salesIsMoreThanSelling = slide({
               body={t('board.trust.body')}
               tilt="none"
               emphasis
-              step={4}
               className="@4xl:col-span-4"
             >
-              <Stamp label={t('stamp')} step={6.5} />
-              <SignalBars heading={t('board.trust.bars.heading')} rows={barRows} locale={locale} step={5} />
+              <Stamp label={t('stamp')} />
+              <SignalBars heading={t('board.trust.bars.heading')} rows={barRows} locale={locale} />
               <CheckedChips items={trustChips} />
             </Note>
           </div>
 
           <div className="grid grid-cols-1 gap-4 @4xl:grid-cols-12">
-            <Brace label={t('brace')} step={7.5} className="hidden @4xl:col-span-7 @4xl:flex" />
-            <MarginNote text={t('marginNote')} step={7.5} className="@4xl:col-span-5" />
+            <Brace label={t('brace')} className="hidden @4xl:col-span-7 @4xl:flex" />
+            <MarginNote text={t('marginNote')} className="@4xl:col-span-5" />
           </div>
         </div>
         <p className="text-caption text-muted-foreground">{t('source')}</p>

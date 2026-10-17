@@ -39,7 +39,7 @@ export function CycleBar({ total, segments, ticks, months }: CycleBarProps) {
   return (
     <div className="@container flex flex-col gap-2">
       <p className="text-body font-semibold text-foreground">{total}</p>
-      <div className={styles.bar}>
+      <div>
         <svg viewBox={`0 0 ${months * MONTH} 32`} preserveAspectRatio="none" className="h-8 w-full" aria-hidden="true">
           {segments.map((segment, index) => (
             <SegmentRect key={segment.id} segment={segment} first={index === 0} last={index === segments.length - 1} />

@@ -1,6 +1,4 @@
 import { cn } from '@/lib/utils';
-import type { CSSProperties } from 'react';
-import styles from './slide.module.css';
 import { StepIcon, type StepSlug } from './step-icon';
 
 /** The four steps, in the order the voice names them. */
@@ -28,9 +26,7 @@ export function StartSteps({ label, steps }: { label: string; steps: readonly St
           <li
             key={slug}
             data-step={slug}
-            style={{ '--i': index } as CSSProperties}
             className={cn(
-              styles.step,
               'flex min-w-0 flex-col gap-3 border border-border bg-card p-4 shadow-md @min-[38rem]:p-5',
               index % 2 === 0 ? '-rotate-1' : 'rotate-1',
             )}
