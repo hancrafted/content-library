@@ -366,6 +366,21 @@ describe('failure cases', () => {
       'Option 1a of {#spent} uses the type size "md:text-sm" outside the FE-011 type roles: use a type role (text-body, text-caption, text-subheading, text-heading).',
     ],
     [
+      'a type role behind a variant prefix in an Option',
+      {
+        slides: [
+          slide('spent', 1, {
+            options: [
+              option('spent', '1a', { recommended: true, mock: 'bg-card md:text-heading' }),
+              option('spent', '1b'),
+            ],
+          }),
+          slide('middle', 2),
+        ],
+      },
+      'Option 1a of {#spent} puts the type role "md:text-heading" behind a prefix, which FE-011 forbids: use "text-heading" alone.',
+    ],
+    [
       'a missing meta block',
       { meta: '' },
       'The Spec has no meta block: a <script type="application/json" id="spec-meta"> in its head.',
