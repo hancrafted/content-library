@@ -14,7 +14,7 @@ Name every domain concept by its [`GLOSSARY.md`](../../../GLOSSARY.md) term, nev
 
 ### What the designers read
 
-[`spec-designer.md`](spec-designer.md) lists it, with the fidelity bar a mock meets and the markup rules. A `No library match:` line in the run log is input for the designer. Point each designer at the files; never paste them.
+[`spec-designer.md`](spec-designer.md) lists it, with the fidelity bar a mock meets and the markup rules. A `no-library-match` note is input for the designer. Point each designer at the files; never paste them.
 
 ### What an Option settles
 
@@ -41,7 +41,7 @@ Run 1's designers stopped, or handed the question to Han, whenever the library h
 
 The Job span stays open from the first Attempt to the approval; each review round is a Gate span on the Run, so waiting time stays apart from working time.
 
-1. **Draft.** After the Attempt passes (job loop steps 1 to 6), commit the page through the `commit` skill with `Gate: draft spec-<n>`, `<n>` the review round from 1, then `open-gate write-spec "draft spec-<n>"` and stop. In round 1's stop message, quote every `Spine change:` line of the `write-dossier` entry, so Han judges each change to his spine first. Tell Han to run `npm run episode:spec -- <slug>`: it compiles `spec/design.css` (gitignored) and serves the Spec on a free port from 4000. He ticks Options, dictates a note per Slide and saves; the save writes the next `feedback/<NN>/feedback.md`, `via: spec`, one item for the Title slide, ``- `top` · design — picked: 0b``, then one per page Slide, ``- `<section>--<slide>` · design — picked: 3b`` (or `4a, 4c`, or `none — <note>`).
+1. **Draft.** After the Attempt passes (job loop steps 1 to 6), commit the page through the `commit` skill with `Gate: draft spec-<n>`, `<n>` the review round from 1, then `open-gate write-spec "draft spec-<n>"` and stop. In round 1's stop message, quote every `spine-change` note of the `write-dossier` Job, so Han judges each change to his spine first. Tell Han to run `npm run episode:spec -- <slug>`: it compiles `spec/design.css` (gitignored) and serves the Spec on a free port from 4000. He ticks Options, dictates a note per Slide and saves; the save writes the next `feedback/<NN>/feedback.md`, `via: spec`, one item for the Title slide, ``- `top` · design — picked: 0b``, then one per page Slide, ``- `<section>--<slide>` · design — picked: 3b`` (or `4a, 4c`, or `none — <note>`).
 2. **Read the round.** Commit the feedback file through the `commit` skill, then `score "gate:draft spec-<n>" gate changes --source human:han --via commit --comment "<the round's file>"` and `close-gate "draft spec-<n>"`.
 3. **Lock.** Fold each locked Slide's note into its Option's build notes in the fragment file, and the Visual language note into `visual-language.html`, then run `episode:spec-assemble`: it marks each Slide with exactly one pick, the Title slide included, `data-picked` and ticks its checkbox, so the next round comes ticked and needs nothing on that Slide.
 4. **Redesign.** When a Slide has zero or several picks, `begin-attempt write-spec` and spawn designers for those Slides only (the Title-slide designer for `top`), each given its note and picks: zero picks is "none fit, try what the note says", several is "combine these". Replace those Slides' Options, lettered from `a` again, and leave every locked Slide as it is. Run the checks and a fresh reviewer on the redesigned Slides, then `end-attempt write-spec ok` and go to step 1 with `<n> + 1`.

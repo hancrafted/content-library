@@ -1,10 +1,11 @@
 /*
  * The Brief's checks (design-ADR 0004) beyond markdown-harness: its spine,
  * the `## Slides` Han settles in the Brief grill and write-dossier keeps,
- * read inside each list item and across to the Dossier and the run log; and
+ * read inside each list item and across to the Dossier and the event log's notes; and
  * the headings the grill left `Not settled.`.
  */
 
+import { fold, parseLog } from '../../skills/new-episode/scripts/run-log-fold.pure';
 import { type Finding } from './finding.pure';
 import { blocksOf, bodyLines, orderedList, type Block } from './staging-markdown.pure';
 
@@ -123,18 +124,19 @@ function dossierTitles(dossier: string): string[] {
     .map(({ heading }) => heading.text.replace(SLUG, ''));
 }
 
-const WRITE_DOSSIER_ENTRY = /^write-dossier · /;
-const SPINE_CHANGE = /^Spine change: (.+?) — \S/;
+const SPINE_CHANGE = /^(.+?) — \S/;
 
-/** The titles named by `Spine change:` lines in the run log's write-dossier entries. */
-function spineChanges(runLog: string | undefined): string[] {
-  if (runLog === undefined) return [];
-  let inWriteDossier = false;
-  return blocksOf(bodyLines(runLog)).flatMap(({ heading, body }) => {
-    if (heading.level === 2) inWriteDossier = WRITE_DOSSIER_ENTRY.test(heading.text);
-    if (!inWriteDossier || heading.level < 2) return [];
-    return body.flatMap((line) => SPINE_CHANGE.exec(line)?.[1] ?? []);
-  });
+/** The titles named by `spine-change` notes the event log holds for write-dossier, each `<Slide title> — <why>`. */
+function spineChanges(events: string | undefined): string[] {
+  if (events === undefined) return [];
+  const { spans } = fold(parseLog(events).lines, {});
+  return spans
+    .filter((span) => span.job === 'write-dossier')
+    .flatMap((span) => span.events ?? [])
+    .flatMap(({ attributes }) =>
+      'note.type' in attributes && attributes['note.type'] === 'spine-change' ? [attributes['note.text']] : [],
+    )
+    .flatMap((text) => SPINE_CHANGE.exec(text)?.[1] ?? []);
 }
 
 function longest(runs: readonly number[][]): number[] {
@@ -164,15 +166,15 @@ function spineFinding(message: string): Finding {
 /**
  * write-dossier keeps the Brief's spine: the Brief's Slide titles and the
  * Dossier's page Slide titles are the same list, except the titles a
- * `Spine change:` line names.
+ * `spine-change` note on write-dossier names.
  */
-function checkSpine(slides: readonly BriefSlide[], dossier: string | undefined, runLog: string | undefined): Finding[] {
+function checkSpine(slides: readonly BriefSlide[], dossier: string | undefined, events: string | undefined): Finding[] {
   if (dossier === undefined) return [];
   const planned = slides.flatMap(({ title }) => title ?? []);
   const kept = dossierTitles(dossier);
-  const changed = spineChanges(runLog);
+  const changed = spineChanges(events);
   const unlogged = (title: string): boolean => !changed.includes(title);
-  const why = (title: string): string => `log "Spine change: ${title} — <why>" in the write-dossier run-log entry`;
+  const why = (title: string): string => `record \`note write-dossier spine-change "${title} — <why>"\``;
   return [
     ...planned
       .filter((title) => !kept.includes(title) && unlogged(title))
@@ -196,7 +198,7 @@ function checkSpine(slides: readonly BriefSlide[], dossier: string | undefined, 
  * Checks a staging folder's Brief beyond markdown-harness: its Slide entries,
  * their research numbers and Thread tags, and the Dossier's hold on the spine.
  * `files` maps a path relative to the
- * folder (`brief.md`, `dossier.md`, `run-log.md`) to its text; without a
+ * folder (`brief.md`, `dossier.md`, `events.jsonl`) to its text; without a
  * Brief there is nothing to check.
  */
 export function checkBrief(files: Readonly<Record<string, string>>): Finding[] {
@@ -209,7 +211,7 @@ export function checkBrief(files: Readonly<Record<string, string>>): Finding[] {
     ...checkShapes(slides),
     ...checkResearch(slides, researchQuestions(blocks)),
     ...checkThreads(slides, hasThreads),
-    ...checkSpine(slides, files['dossier.md'], files['run-log.md']),
+    ...checkSpine(slides, files['dossier.md'], files['events.jsonl']),
   ];
 }
 
