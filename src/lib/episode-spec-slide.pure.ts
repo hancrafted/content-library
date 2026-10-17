@@ -1,7 +1,7 @@
 /*
  * The Spec contract's rules for one Slide and its Options (design-ADR 0011):
  * numbering, the Option ids and marks, each Option's figcaption, build notes,
- * pick checkbox and tokens, and the Slide's note. episode-spec.pure.ts runs them;
+ * pick checkbox, tokens and Context markers, and the Slide's note. episode-spec.pure.ts runs them;
  * the Title slide's rules reuse the Option rules.
  */
 
@@ -129,6 +129,28 @@ export function checkOptionMarks(
   ];
 }
 
+/** The Speaker note titles of a Slide, each its first `<strong>`. */
+function noteTitles($: CheerioAPI, slide: Selection): string[] {
+  return slide
+    .find('ol[data-spec="speaker-notes"] > li')
+    .toArray()
+    .map((item) => $(item).children('strong').first().text().trim());
+}
+
+/** Each Context marker in an Option names, in `data-note`, a Speaker note of its Slide by title. */
+function checkMarkers(figure: Selection, slug: string, notes: readonly string[]): string[] {
+  const where = `Option ${figure.attr('data-option') ?? ''} of {#${slug}}`;
+  return figure
+    .find('[data-spec="context-marker"]')
+    .toArray()
+    .map((marker) => marker.attribs['data-note'] ?? '')
+    .filter((note) => !notes.includes(note))
+    .map(
+      (note) =>
+        `${where} has a Context marker for "${note}", which is no Speaker note of the Slide: name the note by its title in data-note.`,
+    );
+}
+
 /** The rules of one Slide, the `at`-th in page order. */
 export function checkSlide({ $, approved }: SpecPage, element: Element, at: number): string[] {
   const slide = $(element);
@@ -148,7 +170,10 @@ export function checkSlide({ $, approved }: SpecPage, element: Element, at: numb
       approved,
       count: PAGE_SLIDE_OPTIONS,
     }),
-    ...figures.flatMap((figure) => checkOption($, figure, slug)),
+    ...figures.flatMap((figure) => [
+      ...checkOption($, figure, slug),
+      ...checkMarkers(figure, slug, noteTitles($, slide)),
+    ]),
     ...unless(
       slide.find(`textarea[form="${FORM}"][name="note:${slug}"]`).length === 1,
       `${where} has no <textarea form="${FORM}" name="note:${slug}">.`,
