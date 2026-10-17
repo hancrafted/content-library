@@ -1,3 +1,9 @@
+---
+type: writing-guide
+title: Han's tone
+stale_after: 2026-11-17T00:00:00Z
+---
+
 # Han's tone
 
 How a Voice script sounds in Han's voice. The listener hears it once and sees nothing. Examples show the move. Write fresh lines from the Episode's own material.

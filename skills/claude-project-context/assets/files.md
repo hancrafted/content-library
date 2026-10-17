@@ -9,4 +9,5 @@ Documents the Claude Desktop project holds. One path or glob per line, relative 
 - `docs/features/*.md`
 - `docs/adr/*.md`
 - `docs/design/*.md`
+- `docs/profile/*.md`
 - `markdown-harness.config.yaml`

@@ -1,3 +1,9 @@
+---
+type: writing-guide
+title: Han's storytelling
+stale_after: 2026-11-17T00:00:00Z
+---
+
 # Han's storytelling
 
 How Han builds a story. Shape the Dossier's Sections and every Slide's Voice script with this method. Examples show the move. Write fresh lines from the Episode's own material.
