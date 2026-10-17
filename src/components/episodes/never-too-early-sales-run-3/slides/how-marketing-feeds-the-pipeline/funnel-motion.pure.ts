@@ -10,7 +10,7 @@ export interface FunnelMotionState {
 }
 
 /**
- * Whether the funnel's dots play their travel (FE-012 §2.4: emphasis motion with a purpose). They arrive once, from
+ * Whether the funnel's dots play their travel (design-ADR-0012 §9: emphasis motion with a purpose). They arrive once, from
  * the Slide's first `active`, and keep playing past the end of the shared entrance so the last dots finish; every
  * mouse enter replays them. A funnel mounted again after its Slide entered stands at rest until pointed at.
  */

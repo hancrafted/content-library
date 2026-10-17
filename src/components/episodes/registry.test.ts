@@ -47,7 +47,7 @@ const COMPOSITION = [
   },
 ] as const;
 
-/** Who renders each Slide header (FE-012): the Slide wrapper (`shared`) or each Scene (`authored`). */
+/** Who renders each Slide header (design-ADR-0012): the Slide wrapper (`shared`) or each Scene (`authored`). */
 const HEADER_MODES = [
   { slug: 'ai-token-economy', header: 'authored' },
   { slug: 'page-template', header: 'shared' },

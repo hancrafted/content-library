@@ -16,7 +16,7 @@ function useFunnelPlay() {
 }
 
 /**
- * The funnel's trigger (FE-012 §4), which starts its dots' travel: once on the Slide's first `active`, and again on
+ * The funnel's trigger (design-ADR-0012 §9), which starts its dots' travel: once on the Slide's first `active`, and again on
  * every mouse enter and keyboard focus, by mounting the moving part (`children`) afresh. The trigger and the `still`
  * part stay mounted, so focus on the trigger or on a Context marker in the still part survives a replay. `data-play`
  * is the CSS hook; the keyframes and reduced motion live in the Slide's CSS module.
