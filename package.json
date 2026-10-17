@@ -20,6 +20,7 @@
     "verify:commit": "npm run preflight && npm run check:events && lint-staged && archgate check && npm run lint:boundaries && npm run typecheck && vitest run",
     "check:docs": "mh check && npm run check:skills",
     "test:build": "vitest run --config vitest.build.config.ts",
+    "test:browser": "vitest run --config vitest.browser.config.ts",
     "wt:new": "node skills/worktree/scripts/worktree.ts new",
     "wt:done": "node skills/worktree/scripts/worktree.ts done",
     "check:events": "node skills/new-episode/scripts/check-events-append-only.ts",

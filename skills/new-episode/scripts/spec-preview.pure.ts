@@ -4,7 +4,10 @@
  * so the Option stage has the Spec's exact width at every viewport; only the tab script is left out, which lets
  * every Option show, stacked, each its own screenshot target.
  */
-import { fragmentSlides, pickBox } from '../../../src/lib/episode-spec-fragment.pure.ts';
+import { checkFragment, fragmentSlides, pickBox } from '../../../src/lib/episode-spec-fragment.pure.ts';
+
+/** The width the Spec is reviewed at, and so the width every Option is rendered and measured at. */
+export const WIDTH = 1440;
 
 /** Marks each element of an Option that runs past the Option's box, by `data-overflow`, once the page has laid out. */
 const OVERFLOW_SCRIPT = `<script>
@@ -59,4 +62,47 @@ ${slides.join('\n')}
   </body>
 </html>
 `;
+}
+
+/** One rendered Option: its screenshot path and how many of its elements run past its box. */
+export interface Rendered {
+  path: string;
+  overflow: number;
+}
+
+/** Renders one Option by id; throws when it cannot. */
+export type Render = (id: string) => Rendered;
+
+/** The slug whose Slide holds an Option: the nearest slide marker above its figure. */
+function slideOf(fragment: string, id: string): string {
+  const before = fragment.slice(0, fragment.indexOf(`data-option="${id}"`));
+  return [...before.matchAll(/<!-- slide: ([a-z0-9-]+) -->/g)].at(-1)?.[1] ?? '';
+}
+
+/** What overflow measuring says about an Option, as a violation when it overflows. */
+function overflowViolation(fragment: string, id: string, count: number): string[] {
+  if (count === 0) return [];
+  const plural = count === 1 ? '' : 's';
+  return [
+    `Option ${id} of {#${slideOf(fragment, id)}} has text running past its box at ${WIDTH}px (${count} element${plural}): shorten it or let it wrap.`,
+  ];
+}
+
+/**
+ * What the command prints for a fragment: one `✖` line per contract or overflow violation, then one `screenshot`
+ * line per rendered Option. Every Option is rendered, violations or not; `failed` on any violation.
+ */
+export function previewReport(fragment: string, render: Render): { lines: string[]; failed: boolean } {
+  const violations = checkFragment(fragment);
+  const shots: string[] = [];
+  for (const id of optionIds(fragment)) {
+    try {
+      const rendered = render(id);
+      shots.push(`screenshot ${id} ${rendered.path}`);
+      violations.push(...overflowViolation(fragment, id, rendered.overflow));
+    } catch (error) {
+      violations.push(`Option ${id} could not be rendered: ${(error as Error).message}`);
+    }
+  }
+  return { lines: [...violations.map((line) => `✖ ${line}`), ...shots], failed: violations.length > 0 };
 }

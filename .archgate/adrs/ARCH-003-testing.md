@@ -36,7 +36,7 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 ### 4. Where a test lives
 
 1. A unit test sits beside its subject under `src/` — `slide-zone.pure.test.ts` beside `slide-zone.pure.ts` — and runs in the fast suite.
-2. A test that needs the built site is `*.build.test.ts` under `tests/post-build/`, run only after `npm run build`; the fast suite never needs a build.
+2. `*.build.test.ts` (in `tests/post-build/`) runs after `npm run build`; `*.browser.test.ts` only locally, via `npm run test:browser`. CI opens no browser.
 3. An Episode test reaches only what an Episode file may, plus Node builtins for in-test fixtures.
 
 ## Do's and Don'ts
@@ -84,7 +84,7 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 
 1. **Rules** (archgate, error): `suite-three-blocks` (§2.1), `test-body-aaa` (§3.1), `assert-no-magic` (§3.2, numbers only), over `src/**/*.test.ts`.
 2. **Dependency rules:** Episode tests reach only Slide parts and builtins (§4.3).
-3. **Test config:** the fast suite excludes `*.build.test.ts` (§4.2).
+3. **Test config:** the fast suite excludes `*.build.test.ts` and `*.browser.test.ts` (§4.2).
 
 **Manual review duties:** §1 — no mocks, spies, snapshots, `.skip`/`.only`, ambient time or randomness, network, assertion-free or tautological bodies; nesting depth and a test per block (§2); no magic strings in `// ASSERT` (§3.2), rich matchers (§3.3).
 
