@@ -25,13 +25,13 @@
  *   note citation `[n]` resolved by a nested `data-source="n"`.
  */
 import { load, type CheerioAPI } from 'cheerio';
-import { SECTION, SLIDE, SPEC_FILE } from './episode-spec-page.pure';
-import { checkSlide, FORM, type SpecPage } from './episode-spec-slide.pure';
-import { checkTitleSlide } from './episode-spec-title.pure';
-import { checkCitations, checkVoiceScripts } from './episode-spec-words.pure';
-import { unless, type Finding } from './finding.pure';
-import { metaBlockText, metaGateTier } from './staging-file.pure';
-import { blocksOf, bodyLines } from './staging-markdown.pure';
+import { SECTION, SLIDE, SPEC_FILE } from './episode-spec-page.pure.ts';
+import { checkSlide, FORM, type SpecPage } from './episode-spec-slide.pure.ts';
+import { checkTitleSlide } from './episode-spec-title.pure.ts';
+import { checkCitations, checkVoiceScripts } from './episode-spec-words.pure.ts';
+import { unless, type Finding } from './finding.pure.ts';
+import { metaBlockText, metaGateTier } from './staging-file.pure.ts';
+import { blocksOf, bodyLines } from './staging-markdown.pure.ts';
 
 const DOSSIER_FILE = 'dossier.md';
 /** Where the review asset lives, as a finding names it. */
