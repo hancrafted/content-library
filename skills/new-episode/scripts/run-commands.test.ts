@@ -72,6 +72,30 @@ describe('success cases', () => {
     });
   });
 
+  it('resumes the Run itself when a second session begins a Job, and says so', () => {
+    // ARRANGE
+    const ctx = begun();
+    const second = { ...ctx, sessionId: 'sess-2' };
+    // ACT
+    const result = run(second, 'begin-job', 'brief-grill');
+    // ASSERT
+    expect(result).toEqual({ ok: true, output: expect.stringMatching(/resumed.*\n.*Job brief-grill begun/s) });
+    expect(readMarker(ctx.root)).toEqual(
+      expect.objectContaining({ session_id: 'sess-2', session_ids: [SESSION, 'sess-2'] }),
+    );
+  });
+
+  it('resumes the Run itself when a second session begins an Attempt, and says so', () => {
+    // ARRANGE
+    const ctx = begun();
+    run(ctx, 'begin-job', 'brief-grill');
+    // ACT
+    const result = run({ ...ctx, sessionId: 'sess-2' }, 'begin-attempt', 'brief-grill');
+    // ASSERT
+    expect(result).toEqual({ ok: true, output: expect.stringMatching(/resumed.*\n.*Attempt brief-grill#1 begun/s) });
+    expect(readMarker(ctx.root)?.session_ids).toEqual([SESSION, 'sess-2']);
+  });
+
   it('begins a Job under the Run and moves the marker to it', () => {
     // ARRANGE
     const ctx = begun();

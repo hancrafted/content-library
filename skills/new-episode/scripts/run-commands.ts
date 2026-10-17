@@ -184,6 +184,20 @@ function resume(ctx: RunContext): string {
   return `Run ${run.run_id} resumed${job === undefined ? '' : ` in Job ${job.job}`}`;
 }
 
+/** Runs `step` for a session the live marker does not list yet: resumes first, and prints that it did. */
+const resuming =
+  <K extends string>(step: (ctx: RunContext, p: Params<K>) => string) =>
+  (ctx: RunContext, p: Params<K>): string => {
+    const marker = readMarker(ctx.root);
+    const current = readEpisodeLog(ctx.slug, ctx.root).current;
+    const unlisted =
+      marker !== null &&
+      current !== null &&
+      marker.trace_id === current.trace_id &&
+      !(marker.session_ids ?? [marker.session_id]).includes(sessionOf(ctx));
+    return unlisted ? `${resume(ctx)} (this session was not on the Run)\n${step(ctx, p)}` : step(ctx, p);
+  };
+
 /** A command: the names of its positional parameters, and what it does with them. */
 interface Command {
   params: readonly string[];
@@ -202,9 +216,9 @@ const command = <K extends string>(
 const COMMANDS: Record<string, Command> = {
   'begin-run': command([], (ctx, _p, o) => beginRun(ctx, o)),
   'end-run': command(['status', 'summary'], endRun),
-  'begin-job': command(['job'], beginJob),
+  'begin-job': command(['job'], resuming(beginJob)),
   'end-job': command(['job', 'status', 'summary'], endJob),
-  'begin-attempt': command(['job'], beginAttempt),
+  'begin-attempt': command(['job'], resuming(beginAttempt)),
   'end-attempt': command(['job', 'status', 'summary'], endAttempt),
   'open-gate': command(['job', 'name'], openGate),
   'close-gate': command(['name', 'status', 'summary'], closeGate),
