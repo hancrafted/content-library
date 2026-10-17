@@ -13,6 +13,9 @@ export const SPEC_FILE = 'spec/spec.html';
 export const SECTION = 'section[data-spec="section"]';
 export const SLIDE = 'article[data-spec="slide"]';
 export const OPTION = 'figure[data-spec="option"]';
+export const TITLE_SLIDE = 'article[data-spec="title-slide"]';
+/** The Title slide's slug and feedback anchor: its pick field is `pick:top`. */
+export const TITLE_SLIDE_SLUG = 'top';
 
 /** One Slide of the Spec: the Section it sits in, its slug and its Option ids in page order. */
 export interface SpecSlide {
@@ -47,4 +50,15 @@ export function specSectionSlugs(html: string): string[] {
   return $(SECTION)
     .toArray()
     .map((section) => $(section).attr('id') ?? '');
+}
+
+/** The Option ids of the Spec's Title slide in page order, or `undefined` when the Spec has none. */
+export function specTitleSlideOptions(html: string): string[] | undefined {
+  const $ = load(html);
+  const article = $(`${TITLE_SLIDE}#${TITLE_SLIDE_SLUG}`).first();
+  if (article.length === 0) return undefined;
+  return article
+    .find(OPTION)
+    .toArray()
+    .map((option) => $(option).attr('data-option') ?? '');
 }

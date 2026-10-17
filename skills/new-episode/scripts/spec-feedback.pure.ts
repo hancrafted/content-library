@@ -1,14 +1,16 @@
 // A Spec review turned into the next feedback round (design-ADR 0011): the form fields the served Spec posts, the
-// Spec's Slides, the round number and the clock in, the `feedback.md` text out, or the Slides that break the rule
-// that a Slide with no pick carries a note. The server reads and writes; nothing here touches the disk.
+// Spec's Title slide and Slides, the round number and the clock in, the `feedback.md` text out, or the Slides that
+// break the rule that a Slide with no pick carries a note. The server reads and writes; nothing here touches the disk.
 
-import type { SpecSlide } from '../../../src/lib/episode-spec-page.pure.ts';
+import { TITLE_SLIDE_SLUG, type SpecSlide } from '../../../src/lib/episode-spec-page.pure.ts';
 import { HAN_ACTOR, utcSeconds } from '../../../src/lib/staging-file.pure.ts';
 
 export interface Review {
   /** The posted form fields in order, as `URLSearchParams` yields them. */
   fields: readonly (readonly [string, string])[];
   slides: readonly SpecSlide[];
+  /** The Title slide's Option ids, whose sets carry the section slides; absent when the Spec has no Title slide. */
+  titleSlide?: readonly string[];
   round: number;
   now: Date;
 }
@@ -40,15 +42,40 @@ export function nextRound(folders: readonly string[]): number {
   return Math.max(0, ...folders.filter((name) => ROUND_FOLDER.test(name)).map(Number)) + 1;
 }
 
+/** One reviewed Slide: its pick field slug, its feedback anchor, its Option ids and how a fault names it. */
+interface Reviewed {
+  slug: string;
+  anchor: string;
+  options: readonly string[];
+  where: string;
+}
+
+/** The Title slide first, when the Spec has one, then the page Slides in page order. */
+function reviewedSlides({ slides, titleSlide }: Review): Reviewed[] {
+  const title: Reviewed[] =
+    titleSlide === undefined
+      ? []
+      : [{ slug: TITLE_SLIDE_SLUG, anchor: TITLE_SLIDE_SLUG, options: titleSlide, where: 'The Title slide' }];
+  return [
+    ...title,
+    ...slides.map(({ section, slug, options }, index) => ({
+      slug,
+      anchor: `${section}--${slug}`,
+      options,
+      where: `Slide ${index + 1} "${slug}"`,
+    })),
+  ];
+}
+
 /** The faults that refuse the round: picks and notes for Slides the Spec lacks, unknown Options, a Slide left blank. */
 function faultsOf(review: Review, picks: (slug: string) => string[], note: (slug: string) => string): Fault[] {
-  const known = new Set([VISUAL_LANGUAGE, ...review.slides.map(({ slug }) => slug)]);
+  const reviewed = reviewedSlides(review);
+  const known = new Set([VISUAL_LANGUAGE, ...reviewed.map(({ slug }) => slug)]);
   const strays = [
     ...new Set(review.fields.flatMap(([name]) => FIELD.exec(name)?.[2] ?? []).filter((slug) => !known.has(slug))),
   ];
   return [
-    ...review.slides.flatMap(({ slug, options }, index): Fault[] => {
-      const where = `Slide ${index + 1} "${slug}"`;
+    ...reviewed.flatMap(({ slug, options, where }): Fault[] => {
       const unknown = picks(slug).filter((pick) => !options.includes(pick));
       if (unknown.length > 0)
         return unknown.map((pick) => ({ slide: slug, message: `${where} has no Option ${pick}.` }));
@@ -86,17 +113,17 @@ function feedbackText(round: number, now: Date, items: readonly string[]): strin
 
 /** The review as the next round's file and its path under the Episode folder, or every fault that refuses it. */
 export function reviewToFeedback(review: Review): ReviewResult {
-  const { fields, slides, round, now } = review;
+  const { fields, round, now } = review;
   const values = (name: string) => fields.filter(([key]) => key === name).map(([, value]) => value);
   const picks = (slug: string) => [...new Set(values(`pick:${slug}`))];
   const note = (slug: string) => oneLine(values(`note:${slug}`).join(' '));
   const faults = faultsOf(review, picks, note);
   if (faults.length > 0) return { kind: 'rejected', faults };
   const withNote = (item: string, text: string) => (text === '' ? item : `${item} — ${text}`);
-  const items = slides.map(({ section, slug }) => {
+  const items = reviewedSlides(review).map(({ slug, anchor }) => {
     const picked = picks(slug);
     return withNote(
-      `- \`${section}--${slug}\` · design — picked: ${picked.length === 0 ? 'none' : picked.join(', ')}`,
+      `- \`${anchor}\` · design — picked: ${picked.length === 0 ? 'none' : picked.join(', ')}`,
       note(slug),
     );
   });

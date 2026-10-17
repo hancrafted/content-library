@@ -685,7 +685,7 @@ describe('edge cases', () => {
   it('checks the Spec page of a folder against the Spec contract', () => {
     // ARRANGE
     const files = folder({ 'spec/spec.html': '<!doctype html><html><body></body></html>' });
-    const expectedKinds = ['spec', 'spec', 'spec', 'spec', 'spec'];
+    const expectedKinds = ['spec', 'spec', 'spec', 'spec', 'spec', 'spec'];
     // ACT
     const findings = checkStagingFolder(files, KNOWN_VISUALS, REVIEW_ASSET);
     // ASSERT

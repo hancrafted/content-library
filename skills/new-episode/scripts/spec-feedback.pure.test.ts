@@ -12,6 +12,7 @@ const SLIDES: readonly SpecSlide[] = [
   { section: 'why', slug: 'spent', options: ['1a', '1b'] },
   { section: 'why', slug: 'quiet', options: ['2a', '2b', '2c'] },
 ];
+const TITLE = ['0a', '0b', '0c'];
 const NOW = new Date('2026-10-15T10:40:05.123Z');
 
 function header(round: number): string[] {
@@ -85,6 +86,27 @@ describe('success cases', () => {
     // ASSERT
     expect(round).toBe(expected);
   });
+
+  it('writes the Title slide item first, keyed top, before the page Slides', () => {
+    // ARRANGE
+    const fields: [string, string][] = [
+      ['pick:top', '0b'],
+      ['note:top', 'Fewer fuel steps.'],
+      ['pick:spent', '1a'],
+      ['pick:quiet', '2b'],
+    ];
+    const expected = [
+      ...header(1),
+      '- `top` · design — picked: 0b — Fewer fuel steps.',
+      '- `why--spent` · design — picked: 1a',
+      '- `why--quiet` · design — picked: 2b',
+      '',
+    ].join('\n');
+    // ACT
+    const result = reviewToFeedback({ fields, slides: SLIDES, titleSlide: TITLE, round: 1, now: NOW });
+    // ASSERT
+    expect(result).toEqual({ kind: 'saved', file: 'feedback/01/feedback.md', text: expected });
+  });
 });
 
 describe('failure cases', () => {
@@ -120,6 +142,47 @@ describe('failure cases', () => {
         { slide: 'spent', message: 'Slide 1 "spent" has no Option 1c.' },
         { slide: 'gone', message: 'The Spec has no Slide "gone": reload the page and review again.' },
       ],
+    };
+    // ACT
+    const result = reviewToFeedback({ fields, slides: SLIDES, round: 1, now: NOW });
+    // ASSERT
+    expect(result).toEqual(expected);
+  });
+
+  it('refuses a Title slide with no pick and no note, and an Option it does not have', () => {
+    // ARRANGE
+    const fields: [string, string][] = [
+      ['pick:spent', '1a'],
+      ['pick:quiet', '2b'],
+    ];
+    const withUnknown: [string, string][] = [...fields, ['pick:top', '0d']];
+    const expected = [
+      {
+        kind: 'rejected',
+        faults: [
+          { slide: 'top', message: 'The Title slide has no pick and no note: tick an Option or say what to try.' },
+        ],
+      },
+      { kind: 'rejected', faults: [{ slide: 'top', message: 'The Title slide has no Option 0d.' }] },
+    ];
+    // ACT
+    const results = [fields, withUnknown].map((posted) =>
+      reviewToFeedback({ fields: posted, slides: SLIDES, titleSlide: TITLE, round: 1, now: NOW }),
+    );
+    // ASSERT
+    expect(results).toEqual(expected);
+  });
+
+  it('refuses a pick for the Title slide of a Spec that has none', () => {
+    // ARRANGE
+    const fields: [string, string][] = [
+      ['pick:top', '0a'],
+      ['pick:spent', '1a'],
+      ['pick:quiet', '2b'],
+    ];
+    const expected = {
+      kind: 'rejected',
+      faults: [{ slide: 'top', message: 'The Spec has no Slide "top": reload the page and review again.' }],
     };
     // ACT
     const result = reviewToFeedback({ fields, slides: SLIDES, round: 1, now: NOW });

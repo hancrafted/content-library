@@ -270,6 +270,27 @@
         background: var(--background, Canvas);
         overflow: visible;
       }
+      /*
+       * A Title-slide Option is a set: the Title slide's mock, then a strip of the section slides that echo its
+       * Hero motif, one per Section, so the motif reads across the Episode at a glance.
+       */
+      .spec-echoes {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+        gap: 1rem;
+        list-style: none;
+        margin: 1rem 0 0;
+        padding: 0;
+      }
+      .spec-echoes > li > p {
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: var(--muted-foreground, GrayText);
+        margin: 0 0 0.4rem;
+      }
+      .spec-echoes [data-spec='mock'] {
+        min-height: 14rem;
+      }
       [data-spec='option'] figcaption {
         font-size: 1rem;
         max-width: 60rem;
@@ -439,7 +460,7 @@
       addEventListener('DOMContentLoaded', () => {
         const outline = document.querySelector('.spec-outline');
         const refresh = () => {
-          for (const slide of document.querySelectorAll('[data-spec="slide"]')) {
+          for (const slide of document.querySelectorAll('[data-spec="slide"], [data-spec="title-slide"]')) {
             const picks = slide.querySelectorAll('.spec-pick input:checked').length;
             const link = outline?.querySelector(`a[href="#${slide.id}"]`);
             if (link) link.dataset.state = picks === 1 ? 'picked' : 'open';
