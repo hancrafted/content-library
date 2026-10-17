@@ -513,8 +513,8 @@
         "title": "Why it's never too early to start with sales",
         "status": "draft",
         "generated": {
-          "by": "claude-code/opus-5.5",
-          "at": "2026-10-17T08:55:56Z"
+          "by": "copilot-cli/claude-opus-5.5",
+          "at": "2026-10-17T14:26:03Z"
         },
         "locale": "en",
         "brief": "../brief.md",
@@ -530,6 +530,10 @@
           {
             "by": "process:markdown-harness",
             "at": "2026-10-17T08:58:46Z"
+          },
+          {
+            "by": "process:markdown-harness",
+            "at": "2026-10-17T14:26:07Z"
           }
         ]
       }
@@ -1205,7 +1209,7 @@
                 ><input type="checkbox" form="spec-review" name="pick:top" value="0b" /> Pick 0b</label
               >
             </figure>
-            <figure data-spec="option" data-option="0c">
+            <figure data-picked data-spec="option" data-option="0c">
               <div data-spec="mock" class="flex flex-col justify-between gap-8 bg-background px-12 py-12">
                 <div class="max-w-4xl">
                   <p class="font-mono text-caption tracking-widest text-muted-foreground uppercase">
@@ -1213,7 +1217,8 @@
                   </p>
                   <p class="mt-4 text-hero font-semibold">Why it's never too early to start with sales</p>
                   <p class="mt-4 text-body text-muted-foreground">
-                    An empty pipeline, one note in it, and a cash lane waiting for a note that takes months to arrive.
+                    An empty pipeline, one note in it, and a payment lane waiting for a note that takes months to
+                    arrive.
                   </p>
                 </div>
                 <ol
@@ -1261,13 +1266,12 @@
                   >
                     <span
                       class="absolute -top-3 rounded-full bg-foreground px-5 py-1 text-caption font-medium text-background shadow-md"
-                      >Cash in</span
+                      >Payment</span
                     >
                     <span
-                      class="flex aspect-square w-28 rotate-1 flex-col justify-between border-2 border-dashed border-success p-3"
+                      class="flex aspect-square w-28 rotate-1 items-center justify-center border-2 border-dashed border-success p-3"
                     >
-                      <span class="font-mono text-caption text-muted-foreground uppercase">Revenue</span>
-                      <span class="text-body font-semibold text-muted-foreground">April?</span>
+                      <span class="text-body font-semibold text-muted-foreground">too late?</span>
                     </span>
                   </li>
                 </ol>
@@ -1288,7 +1292,7 @@
                         >
                       </li>
                     </ol>
-                    <p class="text-caption text-muted-foreground">An empty pipeline; the cash lane reads €0.</p>
+                    <p class="text-caption text-muted-foreground">An empty pipeline; the payment lane reads €0.</p>
                   </div>
                 </li>
                 <li data-spec="echo" data-section="why-sales-is-more-than-just-selling">
@@ -1312,7 +1316,7 @@
                         <span class="size-7 border-2 border-dashed border-success"></span>
                       </li>
                     </ol>
-                    <p class="text-caption text-muted-foreground">Each stage pays out before the cash lane does.</p>
+                    <p class="text-caption text-muted-foreground">Each stage pays out before the payment lane does.</p>
                   </div>
                 </li>
                 <li data-spec="echo" data-section="how-to-start-doing-sales">
@@ -1381,16 +1385,16 @@
                       </li>
                     </ol>
                     <p class="text-caption text-muted-foreground">
-                      A full pipeline: <b class="text-primary">revenue lands</b> in the cash lane.
+                      A full pipeline: <b class="text-primary">revenue lands</b> in the payment lane.
                     </p>
                   </div>
                 </li>
               </ol>
               <figcaption>
                 <b>0c</b> The pipeline filled step by step: the Title slide is an empty deal board with one lead and a
-                dashed revenue note waiting in the cash lane, and each section slide fuels it a little more until the
-                revenue note lands in Section 5. It foreshadows the method most strongly, but leaves the cashflow board,
-                the Brief's Analogy, to the page Slides. Build cost: Slide 4's deal board moved to
+                dashed "too late?" note waiting in the payment lane, and each section slide fuels it a little more until
+                the revenue note lands in Section 5. It foreshadows the method most strongly, but leaves the cashflow
+                board, the Brief's Analogy, to the page Slides. Build cost: Slide 4's deal board moved to
                 <code>slide-shared/</code>, a Scene for the Title slide and one per section slide.
               </figcaption>
               <details class="spec-build">
@@ -1399,19 +1403,19 @@
                   The record's <code>title</code> Slide: a Scene from <code>SlideFrame</code>,
                   <code>HeroTitle</code> and caption above four lanes drawn with Slide 4's <code>deal-board.tsx</code>,
                   which moves to <code>slide-shared/deal-board/</code> once the Title slide imports it (FE-007), given
-                  four lanes Leads, Opportunities, Closing, Cash in; the first lead ringed in <code>primary</code>, the
-                  cash lane a dashed <code>border-success</code> ghost note. Hover: the lanes are
+                  four lanes Leads, Opportunities, Closing, Payment; the first lead ringed in <code>primary</code>, the
+                  payment lane a dashed <code>border-success</code> ghost note reading "too late?". Hover: the lanes are
                   <code>focus-group__item</code>s of a <code>focus-group--dim-others</code>, so pointing at one lane
                   dims the rest. Section slides: Scenes over the kit's section layout, each a compact board in that
-                  Section's state (cash lane €0; Insight, Trust, Process per lane; leads filling; counts 27, 3, 1 with a
-                  <code>stroke-primary</code> bracket; a revenue note in the cash lane), the one change ringed in
-                  <code>primary</code>. Motion none beyond the shared entrance. i18n keys <code>title</code>,
-                  <code>caption</code>, <code>lanes.leads|opportunities|closing|cashIn</code>, <code>firstLead</code>,
-                  <code>payouts.*</code>, <code>cycle</code>.
+                  Section's state (payment lane €0; Insight, Trust, Process per lane; leads filling; counts 27, 3, 1
+                  with a <code>stroke-primary</code> bracket; a revenue note in the payment lane), the one change ringed
+                  in <code>primary</code>. Motion none beyond the shared entrance. i18n keys <code>title</code>,
+                  <code>caption</code>, <code>lanes.leads|opportunities|closing|payment</code>, <code>tooLate</code>,
+                  <code>firstLead</code>, <code>payouts.*</code>, <code>cycle</code>.
                 </div>
               </details>
               <label class="spec-pick"
-                ><input type="checkbox" form="spec-review" name="pick:top" value="0c" /> Pick 0c</label
+                ><input type="checkbox" form="spec-review" name="pick:top" value="0c" checked /> Pick 0c</label
               >
             </figure>
           </div>
@@ -3569,10 +3573,10 @@
                           </p>
                           <ul class="mt-3 flex flex-col text-caption text-foreground">
                             <li class="flex justify-between border-b border-dashed border-border py-1">
-                              <span>Brightfield</span><span class="text-muted-foreground">Jonas Weber</span>
+                              <span>Brightfield Cargo</span><span class="text-muted-foreground">Jonas Weber</span>
                             </li>
                             <li class="flex justify-between border-b border-dashed border-border py-1">
-                              <span>Kestrel Labs</span><span class="text-muted-foreground">Mia Novak</span>
+                              <span>Kestrel Freight</span><span class="text-muted-foreground">Mia Novak</span>
                             </li>
                             <li class="flex justify-between py-1">
                               <span>Orbit Logistics</span><span class="text-muted-foreground">Sara Kim</span>
@@ -3835,7 +3839,8 @@
                     paper notes, and add the brackets, the After-sale lane and the axis. <br />Design reference:
                     <code>docs/episodes/never-too-early-sales-run-3/reference/source-deck/pages/page-07.jpg</code>.
                     Build against this page: keep its three stage names; change its three full boxes into one faint
-                    dashed lane with one note each, ending in the Cash note.
+                    dashed lane with one note each, ending in the Cash note. The lead list names logistics companies
+                    only, one client industry for the Slide.
                   </div>
                 </details>
                 <label class="spec-pick"
@@ -4290,17 +4295,17 @@
                         ><span class="font-mono text-caption text-muted-foreground">3 deals</span>
                       </div>
                       <div class="-rotate-1 bg-card p-3 shadow-md">
-                        <p class="text-caption font-semibold text-foreground">Brightfield</p>
+                        <p class="text-caption font-semibold text-foreground">Brightfield Cargo</p>
                         <p class="text-caption text-muted-foreground">Jonas Weber</p>
                         <p class="mt-2 text-body font-semibold text-foreground">€12,000</p>
                       </div>
                       <div class="rotate-1 bg-card p-3 shadow-md">
-                        <p class="text-caption font-semibold text-foreground">Kestrel Labs</p>
+                        <p class="text-caption font-semibold text-foreground">Kestrel Freight</p>
                         <p class="text-caption text-muted-foreground">Mia Novak</p>
                         <p class="mt-2 text-body font-semibold text-foreground">€8,500</p>
                       </div>
                       <div class="-rotate-2 bg-card p-3 shadow-md">
-                        <p class="text-caption font-semibold text-foreground">Larchwood Foods</p>
+                        <p class="text-caption font-semibold text-foreground">Larchwood Haulage</p>
                         <p class="text-caption text-muted-foreground">Tom Reyes</p>
                         <p class="mt-2 text-body font-semibold text-foreground">€4,000</p>
                       </div>
@@ -4320,7 +4325,7 @@
                         <p class="mt-2 text-body font-semibold text-foreground">€15,000</p>
                       </div>
                       <div class="-rotate-1 bg-card p-3 shadow-md">
-                        <p class="text-caption font-semibold text-foreground">Pinecrest Clinic</p>
+                        <p class="text-caption font-semibold text-foreground">Pinecrest Freight</p>
                         <p class="text-caption text-muted-foreground">Ali Demir</p>
                         <p class="mt-2 text-body font-semibold text-foreground">€6,000</p>
                       </div>
@@ -4335,12 +4340,12 @@
                         ><span class="font-mono text-caption text-muted-foreground">2 deals</span>
                       </div>
                       <div class="-rotate-2 bg-card p-3 shadow-md">
-                        <p class="text-caption font-semibold text-foreground">Quarry Systems</p>
+                        <p class="text-caption font-semibold text-foreground">Quarry Transport</p>
                         <p class="text-caption text-muted-foreground">Eva Lind</p>
                         <p class="mt-2 text-body font-semibold text-foreground">€22,000</p>
                       </div>
                       <div class="rotate-1 bg-card p-3 shadow-md">
-                        <p class="text-caption font-semibold text-foreground">Redwood Print</p>
+                        <p class="text-caption font-semibold text-foreground">Redwood Shipping</p>
                         <p class="text-caption text-muted-foreground">Ben Ortiz</p>
                         <p class="mt-2 text-body font-semibold text-foreground">€3,500</p>
                       </div>
@@ -4357,12 +4362,12 @@
                         ><span class="font-mono text-caption text-muted-foreground">2 deals</span>
                       </div>
                       <div class="rotate-1 bg-card p-3 shadow-lg">
-                        <p class="text-caption font-semibold text-foreground">Saltmarsh Energy</p>
+                        <p class="text-caption font-semibold text-foreground">Saltmarsh Cargo</p>
                         <p class="text-caption text-muted-foreground">Nora Fischer</p>
                         <p class="mt-2 text-body font-semibold text-foreground">€40,000</p>
                       </div>
                       <div class="-rotate-1 bg-card p-3 shadow-md">
-                        <p class="text-caption font-semibold text-foreground">Tidewater Hotels</p>
+                        <p class="text-caption font-semibold text-foreground">Tidewater Freight</p>
                         <p class="text-caption text-muted-foreground">Raj Patel</p>
                         <p class="mt-2 text-body font-semibold text-foreground">€9,000</p>
                       </div>
@@ -4377,12 +4382,12 @@
                         ><span class="font-mono text-caption text-muted-foreground">2 deals</span>
                       </div>
                       <div class="-rotate-1 bg-card p-3 shadow-md">
-                        <p class="text-caption font-semibold text-foreground">Vela Insurance</p>
+                        <p class="text-caption font-semibold text-foreground">Vela Logistics</p>
                         <p class="text-caption text-muted-foreground">Lisa Moreau</p>
                         <p class="mt-2 text-body font-semibold text-foreground">€30,000</p>
                       </div>
                       <div class="rotate-2 bg-card p-3 shadow-md">
-                        <p class="text-caption font-semibold text-foreground">Umbra Studio</p>
+                        <p class="text-caption font-semibold text-foreground">Umbra Couriers</p>
                         <p class="text-caption text-muted-foreground">Kai Berg</p>
                         <p class="mt-2 text-body font-semibold text-foreground">€18,000</p>
                       </div>
@@ -4460,7 +4465,8 @@
                     Build against this page: keep lanes with a stage name and count, a total under each header, and
                     stacked deal cards with company and value; change the coloured chevrons into dark pills and the
                     cards into tilted paper notes, drop avatars, priority tags, comment counts and the tool chrome, use
-                    the Dossier's five stages, and invent every name. Page 13 (Pipedrive) is not used.
+                    the Dossier's five stages, and invent every name, each a logistics company: one client industry for
+                    the Slide. Page 13 (Pipedrive) is not used.
                   </div>
                 </details>
                 <label class="spec-pick"
@@ -6349,7 +6355,7 @@
                             <p
                               class="-rotate-1 rounded-sm bg-card p-3 text-caption font-medium text-foreground shadow-md"
                             >
-                              Kraus Bakery
+                              Kraus Dental
                             </p>
                             <p
                               class="rotate-1 rounded-sm bg-card p-3 text-caption font-medium text-foreground shadow-md"
@@ -6359,22 +6365,22 @@
                             <p
                               class="rotate-1 rounded-sm bg-card p-3 text-caption font-medium text-foreground shadow-md"
                             >
-                              Hofmann Logistics
+                              Hofmann Dental
                             </p>
                             <p
                               class="-rotate-2 rounded-sm bg-card p-3 text-caption font-medium text-foreground shadow-md"
                             >
-                              Brightline Studio
+                              Brightline Dental
                             </p>
                             <p
                               class="-rotate-1 rounded-sm bg-card p-3 text-caption font-medium text-foreground shadow-md"
                             >
-                              Okafor &amp; Co
+                              Okafor Dental
                             </p>
                             <p
                               class="rotate-2 rounded-sm bg-card p-3 text-caption font-medium text-foreground shadow-md"
                             >
-                              Lindqvist Tools
+                              Lindqvist Dental
                             </p>
                           </div>
                         </div>
@@ -6387,7 +6393,7 @@
                           </div>
                           <div class="flex flex-col gap-3">
                             <p class="rotate-1 rounded-sm bg-card p-3 text-caption text-foreground shadow-md">
-                              <b>Kraus Bakery</b><br />demo booked
+                              <b>Kraus Dental</b><br />demo booked
                             </p>
                             <p class="-rotate-1 rounded-sm bg-card p-3 text-caption text-foreground shadow-md">
                               <b>Novak Dental</b><br />proposal sent
@@ -6467,7 +6473,8 @@
                     >. Design reference:
                     <code>docs/episodes/never-too-early-sales-run-3/reference/source-deck/pages/page-10.jpg</code>.
                     Build against this page: keep the three terms, definitions and the volume/offering/efficiency
-                    payoff; change the three boxes into annotations on one drawn pipeline board.
+                    payoff; change the three boxes into annotations on one drawn pipeline board. Every card names a
+                    dental practice, one client industry for the Slide.
                   </div>
                 </details>
                 <label class="spec-pick"
