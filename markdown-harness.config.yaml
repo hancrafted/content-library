@@ -557,9 +557,9 @@ body-structure:
             pattern: '^Page \d+$',
             intent: 'One page of the PDF, `Page <n>` counted from 1, its anchor `#page-<n>`.',
           }
-    - ruleId: run-log-body
-      fileNames: [run-log.md]
-      intent: 'An append-only record of every job run, so a run can be read and its failures traced without the session that ran it. Fail if an entry cannot explain on its own why its job passed or failed.'
+    - ruleId: research-plan-body
+      fileNames: [research-plan.md]
+      intent: "Retrieval's decision per research question, so the pipeline's write-research jobs and the Dossier read one file instead of prose in a log. Fail if a question the Brief lists is missing from both sections, or a question appears in both."
       undefinedHeadings: forbid
       headings:
         - {
@@ -568,75 +568,33 @@ body-structure:
             allowed:
               [
                 {
-                  title: Run log,
-                  intent: "The record of one Episode's production. Fail if it logs jobs from another Episode.",
+                  title: Research plan,
+                  intent: "One Episode's research plan. Fail if it plans research for another Episode.",
                 },
               ],
           }
-        - purpose: enumeration
-          level: 2
-          minCount: 1
-          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)* · \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$'
-          intent: 'One job run, headed by the time it finished and appended in that order; an earlier entry is never edited.'
-          headings:
-            - {
-                purpose: heading,
-                level: 3,
-                allowed:
-                  [
-                    {
-                      title: Inputs,
-                      intent: 'Every file, question or handoff the job read, one per item, so a failure can be traced to its input. Fail if Output or Notes name an input not listed.',
-                    },
-                  ],
-                mayHold: [unordered-list],
-              }
-            - {
-                purpose: heading,
-                level: 3,
-                allowed:
-                  [
-                    {
-                      title: Output,
-                      intent: 'What the job produced, one per item: each file it wrote with the status it left, or the decision or URL when it writes no file. Fail if an item names no file, decision or URL.',
-                    },
-                  ],
-                mayHold: [unordered-list],
-              }
-            - {
-                purpose: heading,
-                level: 3,
-                presence: optional,
-                allowed:
-                  [
-                    {
-                      title: Research jobs,
-                      intent: "retrieval's entry only: one item per research question that needs a job, `new: <research folder>` or `refresh: <research folder>, <the stale file>`, with its question number; customize-pipeline writes one write-research job per item. Fail if a question decided reuse is listed, or an item names no research folder.",
-                    },
-                  ],
-                mayHold: [unordered-list],
-              }
-            - {
-                purpose: heading,
-                level: 3,
-                allowed:
-                  [
-                    {
-                      title: Checks,
-                      intent: "Each check of the job's final attempt and its result, cheapest first: markdown-harness, vitest, reviewer. Fail if it disagrees with the job's Score lines in the run event log.",
-                    },
-                  ],
-                mayHold: [unordered-list],
-              }
-            - {
-                purpose: heading,
-                level: 3,
-                allowed:
-                  [
-                    {
-                      title: Notes,
-                      intent: "What a reader needs that the other parts do not say: a retry and why, a gate edit. Each blocked branch, call for human judgement, missing library match or research gap gets its own line, starting `Blocked:`, `Needs human:`, `No library match:`, `Research gap:` or `Spine change:` (a write-dossier change to the Brief's spine, naming the Slide title and why). Fail if a retry or blocked branch shown under Checks goes unexplained, or such a line lacks its prefix.",
-                    },
-                  ],
-                mayHold: [prose, unordered-list],
-              }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Research jobs,
+                  intent: 'One item per research question that needs a job, `new: <research folder>, question <n>` or `refresh: <research folder>, question <n>, <the stale file>`; customize-pipeline writes one write-research job per item and the foreach reads this heading. Fail if a question decided reuse is listed, or an item names no research folder.',
+                },
+              ],
+            mayHold: [unordered-list],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            presence: optional,
+            allowed:
+              [
+                {
+                  title: Reuse,
+                  intent: 'One item per question the llm-wiki already answers, `Question <n>: reuse <path to research.md>`. Fail if an item names no existing research file.',
+                },
+              ],
+            mayHold: [unordered-list],
+          }

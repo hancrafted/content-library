@@ -26,7 +26,7 @@ describe('success cases', () => {
   it('lets a draft keep its foreach and glob output until customize-pipeline expands them', () => {
     // ARRANGE
     const job = {
-      foreach: `${STAGING}/run-log.md#research-jobs`,
+      foreach: `${STAGING}/research-plan.md#research-jobs`,
       outputs: [`${STAGING}/research/*/research.md`],
       before: ['mh-query'],
     };
@@ -42,7 +42,7 @@ describe('failure cases', () => {
   it('refuses a foreach and a glob output once the pipeline is approved', () => {
     // ARRANGE
     const glob = `${STAGING}/research/*/research.md`;
-    const job = { foreach: `${STAGING}/run-log.md#research-jobs`, outputs: [glob], before: ['mh-query'] };
+    const job = { foreach: `${STAGING}/research-plan.md#research-jobs`, outputs: [glob], before: ['mh-query'] };
     const expected = [
       `${WHERE} has foreach; an approved per-run pipeline names one job per item, which customize-pipeline expands.`,
       `${WHERE} writes "${glob}", a glob; an approved per-run pipeline names each file.`,

@@ -40,7 +40,7 @@ npm run inspect-page -- --url http://localhost:4300/<episode path>#<section>--<s
   --probe '[id="<section>--<slide>"]' …
 ```
 
-Every Slide must have a `count` of 1, a wrapper box at least the viewport tall (the wrapper's "at least viewport height" is FE-009's only height rule, so a taller Slide is fine), no horizontal overflow, and a Foreground clear of the chrome; also probe its mounted descendants (`[id="<section>--<slide>"] *`) and require a `count` above 0. Record the numbers per Slide, width, drawer state and theme in the run-log entry's Checks, and log the `visual-check` result as a `check` Score with the failing numbers as `body`.
+Every Slide must have a `count` of 1, a wrapper box at least the viewport tall (the wrapper's "at least viewport height" is FE-009's only height rule, so a taller Slide is fine), no horizontal overflow, and a Foreground clear of the chrome; also probe its mounted descendants (`[id="<section>--<slide>"] *`) and require a `count` above 0. Record the numbers per Slide, width, drawer state and theme in the Job's summary, and log the `visual-check` result as a `check` Score with the failing numbers as `body`.
 
 ## Rubric
 

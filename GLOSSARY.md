@@ -100,8 +100,11 @@ _Avoid_: Transition, segue
 
 **Brief**: the goals an Episode is written towards, fixed before any research: its audience, learning goal, actionables, hook and Threads, and the Spine that carries them out. The structured result of a grilling session; just enough to start. Its goals stay as settled once the draft exists; its Spine is kept in step with the Dossier until the Spec Gate and with the Spec after it.
 
-**Spine**: the Brief's ordered Sections, each listing its **Brief Slides**: a planned page Slide's title, purpose and visual idea. The Red thread made concrete. It is kept in step with the Dossier until the Spec Gate and with the Spec after it: write-dossier keeps it title for title, and names every change in a `Spine change:` line of its run-log entry.
+**Spine**: the Brief's ordered Sections, each listing its **Brief Slides**: a planned page Slide's title, purpose and visual idea. The Red thread made concrete. It is kept in step with the Dossier until the Spec Gate and with the Spec after it: write-dossier keeps it title for title, and records every change as a `spine-change` note on its Job.
 _Avoid_: Outline, pitch, plan
+
+**Research plan**: retrieval's decision per research question, `research-plan.md` in the Episode folder: the questions that need a research job (new or refresh) and the ones whose llm-wiki research is reused. `customize-pipeline` writes one `write-research` job per listed item.
+_Avoid_: Run log, retrieval log
 
 **Dossier**: the draft the Spec is written from: its h1 is the Title slide, its h2s the Sections and its h3s the Slides, and each Slide carries its Visual idea, Speaker notes with citations and Voice script. Everything in it moves into the Spec, and it is deleted when Han approves the Spec.
 _Avoid_: Manuscript, script, Episode file, companion, notes

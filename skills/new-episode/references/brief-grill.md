@@ -13,13 +13,13 @@ Han either brings a Brief or brings an idea. Accept the Brief when he has one; g
 
 ## Episode Design Reference
 
-When the prompt or Brief names a file (pdf, word) brought in as a model for the Episode (a deck, a sketch, a Miro slides export), copy it to `.scratch/<slug>/<file-slug>.<file-extension>`, the `<file-slug>` its subject in kebab case. Then add the Brief's optional `## Episode Design Reference` with one item per file, `[<title>](reference/<file-slug>/design-reference.md)`: a shape-only fix the run-log entry's Notes name with the file's original path. The `convert-references` job writes that path after the pipeline gate; until then the link has no target.
+When the prompt or Brief names a file (pdf, word) brought in as a model for the Episode (a deck, a sketch, a Miro slides export), copy it to `.scratch/<slug>/<file-slug>.<file-extension>`, the `<file-slug>` its subject in kebab case. Then add the Brief's optional `## Episode Design Reference` with one item per file, `[<title>](reference/<file-slug>/design-reference.md)`: a shape-only fix the Job's summary names with the file's original path. The `convert-references` job writes that path after the pipeline gate; until then the link has no target.
 
 ## Fixing a failed check
 
 The Brief is Han's wording, so a fix changes shape, never words:
 
-- **Shape only**: frontmatter, heading order, a list written as prose or the reverse, where every word stays. Fix it yourself and name each fix in the run-log entry's Notes.
+- **Shape only**: frontmatter, heading order, a list written as prose or the reverse, where every word stays. Fix it yourself and name each fix in the Job's summary.
 - **Anything that changes a word**, and every `Not settled.` heading: put it to Han as a question, heading by heading as in the skill's Settle phase, and write his answer verbatim. Leave every heading he settled as he wrote it.
 
 ## Waiting on Han
@@ -37,7 +37,7 @@ The job's `checks:` in `assets/pipeline.yml` run by the check table in [SKILL.md
 1. Every heading holds Han's choice. A heading still reading `Not settled.` goes back to Han by name: the orchestrator refuses to start on it.
 2. The Brief carries `status: draft`, a `generated: { by, at }` and a `process:markdown-harness` entry in `verified` (written after the checks and the reviewer pass), and is committed through the `commit` skill with `Gate: draft brief` before Han edits it.
 
-Then append the run-log entry (creating `run-log.md` with its `# Run log` h1 if it is new), log the Gate's `start` for `draft brief`, and open the Spec for Han:
+Then close the Job with its summary, log the Gate's `start` for `draft brief`, and open the Spec for Han:
 
 1. Run `npm run episode:spec-assemble -- <slug>`: the Spec holds the Brief as Slide cards and a Brief card (Learning goal, Actionables, Research questions, Style, Constraints), each heading with a note field keyed `brief--<heading-slug>`.
 2. Open `http://localhost:<spec_port>` in Han's browser (`open <url>`) and print the URL; `spec_port` is in `pipeline.yml`.
@@ -46,6 +46,6 @@ Then append the run-log entry (creating `run-log.md` with its `# Run log` h1 if 
 
 ## Rubric
 
-1. The text under every heading except Episode Design Reference is Han's wording: `.scratch/<slug>/handoff.md` when it exists, his answers in this session, or a shape-only fix the run-log entry names.
+1. The text under every heading except Episode Design Reference is Han's wording: `.scratch/<slug>/handoff.md` when it exists, his answers in this session, or a shape-only fix the Job's summary names.
 2. No two sections of the Brief contradict each other, and no section contradicts itself.
 3. Every sentence is one a downstream job acts on: a sentence that changes no job's output is noise.
