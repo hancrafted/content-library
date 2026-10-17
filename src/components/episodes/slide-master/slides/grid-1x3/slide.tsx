@@ -1,5 +1,5 @@
 import { slide } from '@/components/slide-master/slide';
-import { SlideCaption, SlideFrame } from '@/components/slide-master/slide-master';
+import { SlideFrame } from '@/components/slide-master/slide-master';
 import { useId } from 'react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
@@ -43,7 +43,7 @@ export const grid1x3 = slide({
   messages: { en, de },
   notes: [{ slug: 'layout', target: 'grid' }],
   segments: [{ slug: 'walkthrough' }],
-  content: ({ t, target, Title }) => {
+  content: ({ t, target }) => {
     const cells = [
       { id: 'c1', index: '01', accent: 'bg-primary', title: t('cells.c1.title'), caption: t('cells.c1.caption') },
       { id: 'c2', index: '02', accent: 'bg-foreground', title: t('cells.c2.title'), caption: t('cells.c2.caption') },
@@ -51,8 +51,6 @@ export const grid1x3 = slide({
     ];
     return (
       <SlideFrame>
-        <Title>{t('title')}</Title>
-        <SlideCaption>{t('caption')}</SlideCaption>
         <div
           {...target('grid')}
           className="mt-10 grid grid-cols-1 gap-y-12 md:grid-cols-3 md:gap-x-10 md:gap-y-0 lg:gap-x-14"

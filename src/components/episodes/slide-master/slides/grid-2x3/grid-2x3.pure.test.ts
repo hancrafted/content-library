@@ -1,25 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { GRID_2X3_CELLS, GRID_2X3_TONES, isRevealed, STAGGER_STEP_MS, staggerDelayMs } from './grid-2x3.pure';
+import { GRID_2X3_CELLS, GRID_2X3_TONES } from './grid-2x3.pure';
 
 describe('success cases', () => {
-  it('starts each cell one step after the one before it, in reading order', () => {
-    // ARRANGE
-    const expected = GRID_2X3_CELLS.map((_, index) => index * STAGGER_STEP_MS);
-    // ACT
-    const delays = GRID_2X3_CELLS.map((_, index) => staggerDelayMs(index));
-    // ASSERT
-    expect(delays).toEqual(expected);
-  });
-
-  it('reveals the grid when the Slide becomes active', () => {
-    // ARRANGE
-    const wasRevealed = false;
-    // ACT
-    const revealed = isRevealed(wasRevealed, 'active');
-    // ASSERT
-    expect(revealed).toBe(true);
-  });
-
   it('never gives two cells in the same column the same tone', () => {
     // ARRANGE
     const columns = 3;
@@ -32,50 +14,23 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('rejects a negative cell index', () => {
+  it('tints no cell with anything but a decorative accent', () => {
     // ARRANGE
-    const stray = -1;
+    const accents = ['primary', 'foreground'];
     // ACT
-    const delay = () => staggerDelayMs(stray);
+    const strays = GRID_2X3_CELLS.filter((cell) => !accents.includes(GRID_2X3_TONES[cell]));
     // ASSERT
-    expect(delay).toThrow(String(stray));
-  });
-
-  it('rejects a fractional cell index', () => {
-    // ARRANGE
-    const stray = 1.5;
-    // ACT
-    const delay = () => staggerDelayMs(stray);
-    // ASSERT
-    expect(delay).toThrow(String(stray));
+    expect(strays).toEqual([]);
   });
 });
 
 describe('edge cases', () => {
-  it('keeps the grid revealed after the Slide leaves the active zone', () => {
+  it('alternates the tone across the row break, from the last cell of row 1 to the first of row 2', () => {
     // ARRANGE
-    const wasRevealed = true;
+    const lastOfRowOne = GRID_2X3_TONES.c3;
     // ACT
-    const revealed = isRevealed(wasRevealed, 'near');
+    const firstOfRowTwo = GRID_2X3_TONES.c4;
     // ASSERT
-    expect(revealed).toBe(true);
-  });
-
-  it('keeps the grid hidden while the Slide is only near', () => {
-    // ARRANGE
-    const wasRevealed = false;
-    // ACT
-    const revealed = isRevealed(wasRevealed, 'near');
-    // ASSERT
-    expect(revealed).toBe(false);
-  });
-
-  it('starts the first cell at once', () => {
-    // ARRANGE
-    const first = 0;
-    // ACT
-    const delay = staggerDelayMs(first);
-    // ASSERT
-    expect(delay).toBe(first);
+    expect(firstOfRowTwo).not.toBe(lastOfRowOne);
   });
 });

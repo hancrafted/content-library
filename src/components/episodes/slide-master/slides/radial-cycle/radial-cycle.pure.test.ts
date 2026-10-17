@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ARC_DRAW_MS, drawDelayMs, phaseArc, polarPoint, popOffset, RING, tickMarks } from './radial-cycle.pure';
+import { phaseArc, polarPoint, popOffset, RING, tickMarks } from './radial-cycle.pure';
 
 const SIX = 6;
 
@@ -55,16 +55,6 @@ describe('success cases', () => {
     expect(offset).toEqual(expected);
   });
 
-  it('draws the arcs one after another, so the ring closes in one sweep', () => {
-    // ARRANGE
-    const share = ARC_DRAW_MS / SIX;
-    const expected = [0, share, 2 * share];
-    // ACT
-    const delays = [0, 1, 2].map((index) => drawDelayMs(index, SIX));
-    // ASSERT
-    expect(delays).toEqual(expected);
-  });
-
   it('marks the twelve months with ticks just outside the ring, the first at 12 o’clock', () => {
     // ARRANGE
     const months = 12;
@@ -92,9 +82,9 @@ describe('failure cases', () => {
     // ARRANGE
     const empty = 0;
     // ACT
-    const delay = () => drawDelayMs(0, empty);
+    const arc = () => phaseArc(0, empty);
     // ASSERT
-    expect(delay).toThrow(String(empty));
+    expect(arc).toThrow(String(empty));
   });
 
   it('refuses a fractional phase', () => {

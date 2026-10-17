@@ -1,7 +1,7 @@
 import { ArrowRight } from 'lucide-react';
 
 import { slide } from '@/components/slide-master/slide';
-import { SlideCaption, SlideFrame } from '@/components/slide-master/slide-master';
+import { SlideFrame } from '@/components/slide-master/slide-master';
 import { useId } from 'react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
@@ -50,10 +50,8 @@ export const grid2x1 = slide({
   messages: { en, de },
   notes: [{ slug: 'layout', target: 'grid' }],
   segments: [{ slug: 'walkthrough' }],
-  content: ({ t, target, Title }) => (
+  content: ({ t, target }) => (
     <SlideFrame>
-      <Title>{t('title')}</Title>
-      <SlideCaption>{t('caption')}</SlideCaption>
       <div {...target('grid')} className="mt-10 flex flex-col gap-4">
         <Banner index="01" title={t('cells.c1.title')} caption={t('cells.c1.caption')} />
         <Banner index="02" title={t('cells.c2.title')} caption={t('cells.c2.caption')} />

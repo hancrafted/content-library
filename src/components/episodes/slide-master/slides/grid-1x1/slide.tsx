@@ -1,5 +1,5 @@
 import { slide } from '@/components/slide-master/slide';
-import { SlideCaption, SlideFrame } from '@/components/slide-master/slide-master';
+import { SlideFrame } from '@/components/slide-master/slide-master';
 import { useId } from 'react';
 import styles from './grid-1x1.module.css';
 import de from './i18n/de.json';
@@ -37,10 +37,8 @@ export const grid1x1 = slide({
   messages: { en, de },
   notes: [{ slug: 'layout', target: 'grid' }],
   segments: [{ slug: 'walkthrough' }],
-  content: ({ t, target, Title }) => (
+  content: ({ t, target }) => (
     <SlideFrame>
-      <Title>{t('title')}</Title>
-      <SlideCaption>{t('caption')}</SlideCaption>
       <div {...target('grid')} className="mt-10">
         <Poster title={t('cells.c1.title')} caption={t('cells.c1.caption')} />
       </div>

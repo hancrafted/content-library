@@ -1,5 +1,5 @@
 import { slide } from '@/components/slide-master/slide';
-import { SlideCaption, SlideFrame, SlideProse } from '@/components/slide-master/slide-master';
+import { SlideFrame, SlideProse } from '@/components/slide-master/slide-master';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { SpineStepper } from './spine-stepper.client';
@@ -18,10 +18,8 @@ export const whyATemplate = slide({
     { slug: 'spine', target: 'spine' },
   ],
   segments: [{ slug: 'one-breath' }, { slug: 'the-spine', bridge: true }],
-  content: ({ t, ref, target, Title }) => (
+  content: ({ t, ref, target }) => (
     <SlideFrame>
-      <Title>{t('title')}</Title>
-      <SlideCaption>{t('caption')}</SlideCaption>
       <div {...target('spine')} className="mt-10">
         <SpineStepper
           labels={{ episode: t('spine.episode'), section: t('spine.section'), slide: t('spine.slide') }}

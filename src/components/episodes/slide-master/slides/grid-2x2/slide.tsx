@@ -1,5 +1,5 @@
 import { slide } from '@/components/slide-master/slide';
-import { SlideCaption, SlideFrame } from '@/components/slide-master/slide-master';
+import { SlideFrame } from '@/components/slide-master/slide-master';
 import { useId } from 'react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
@@ -50,7 +50,7 @@ export const grid2x2 = slide({
   messages: { en, de },
   notes: [{ slug: 'layout', target: 'grid' }],
   segments: [{ slug: 'walkthrough' }],
-  content: ({ t, target, Title }) => {
+  content: ({ t, target }) => {
     const quadrants = [
       {
         id: 'c1',
@@ -98,8 +98,6 @@ export const grid2x2 = slide({
       'pointer-events-none absolute hidden bg-foreground/15 transition-colors duration-300 motion-reduce:transition-none sm:block';
     return (
       <SlideFrame>
-        <Title>{t('title')}</Title>
-        <SlideCaption>{t('caption')}</SlideCaption>
         <div
           {...target('grid')}
           className="group/matrix relative mt-10 grid grid-cols-1 gap-3 rounded-2xl border border-border bg-background p-3 sm:auto-rows-fr sm:grid-cols-2 sm:gap-8 sm:p-4"

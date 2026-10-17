@@ -5,10 +5,11 @@
 
 import type { CheerioAPI } from 'cheerio';
 
-/** The least of a parsed node the walk reads: text nodes carry `data`, elements `children`. */
+/** The least of a parsed node the walk reads: text nodes carry `data`, elements `children` and `attribs`. */
 interface DomNode {
   readonly type: string;
   readonly data?: string;
+  readonly attribs?: Readonly<Record<string, string>>;
   readonly children?: readonly DomNode[];
 }
 
@@ -32,7 +33,8 @@ function textOf(element: unknown): string {
   const parts: string[] = [];
   const walk = (node: DomNode): void => {
     if (node.type === 'text') parts.push(node.data ?? '');
-    if (node.type === 'tag') node.children?.forEach(walk);
+    // A typed Slide header repeats its visually hidden text character by character: the hidden copy counts once.
+    if (node.type === 'tag' && node.attribs?.['data-typed'] === undefined) node.children?.forEach(walk);
   };
   walk(element as DomNode);
   return parts.join(' ').replace(/\s+/g, ' ').trim();

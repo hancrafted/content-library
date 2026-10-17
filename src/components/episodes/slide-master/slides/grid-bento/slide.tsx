@@ -1,5 +1,5 @@
 import { slide } from '@/components/slide-master/slide';
-import { SlideCaption, SlideFrame } from '@/components/slide-master/slide-master';
+import { SlideFrame } from '@/components/slide-master/slide-master';
 import { cn } from '@/lib/utils';
 import { useId } from 'react';
 import { GridBentoLoop } from './grid-bento-loop.client';
@@ -40,7 +40,7 @@ export const gridBento = slide({
   messages: { en, de },
   notes: [{ slug: 'layout', target: 'grid' }],
   segments: [{ slug: 'walkthrough' }],
-  content: ({ t, target, Title }) => {
+  content: ({ t, target }) => {
     const copy: Record<GridBentoCell, { title: string; caption: string }> = {
       c1: { title: t('cells.c1.title'), caption: t('cells.c1.caption') },
       c2: { title: t('cells.c2.title'), caption: t('cells.c2.caption') },
@@ -51,8 +51,6 @@ export const gridBento = slide({
     };
     return (
       <SlideFrame>
-        <Title>{t('title')}</Title>
-        <SlideCaption>{t('caption')}</SlideCaption>
         <ul
           {...target('grid')}
           className="group/bento mt-10 grid auto-rows-[minmax(10rem,auto)] grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 md:grid-cols-4"

@@ -1,5 +1,5 @@
 import { slide } from '@/components/slide-master/slide';
-import { SlideCaption, SlideFrame } from '@/components/slide-master/slide-master';
+import { SlideFrame } from '@/components/slide-master/slide-master';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { MetroMap } from './metro-map.client';
@@ -9,10 +9,8 @@ export const metroMap = slide({
   messages: { en, de },
   notes: [{ slug: 'layout', target: 'timeline' }],
   segments: [{ slug: 'walkthrough' }],
-  content: ({ t, target, Title }) => (
+  content: ({ t, target }) => (
     <SlideFrame>
-      <Title>{t('title')}</Title>
-      <SlideCaption>{t('caption')}</SlideCaption>
       <div {...target('timeline')} className="mt-10 md:my-auto md:py-8">
         <MetroMap
           label={t('title')}
