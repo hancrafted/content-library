@@ -33,8 +33,8 @@ Every session ends here, feedback or not. Read each lesson in [`LEARNINGS.md`](.
 - **discarded**: Han decided against it, or a later decision replaced it;
 - **stale**: the file, step or behaviour it describes is gone.
 
-Keep a lesson that is open. Renumber nothing: a lesson's number is how earlier commits cite it.
+Keep a lesson that is open. Renumber the rest consecutively (the formatter requires it); the commit body names each deleted lesson by number and title.
 
-Commit the deletions with the `commit` skill. The commit body lists each deleted lesson as `<number>: <implemented|discarded|stale>, <reason>`. Cherry-pick this commit to `main` as in step 2 (the same PR, when step 2 ran in this session).
+Commit the deletions with the `commit` skill. The commit body lists each deleted lesson as `<number> <title>: <implemented|discarded|stale>, <reason>`. Cherry-pick this commit to `main` as in step 2 (the same PR, when step 2 ran in this session).
 
 _Done when_ every lesson left in `LEARNINGS.md` is open, and every deleted one appears in the commit body with its reason.
