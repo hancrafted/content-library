@@ -1,7 +1,7 @@
 import { ContextDrawerSlot } from '@/components/context-drawer/context-drawer-slot';
 import { DevSlideReporter } from '@/components/design-system-token-editor/dev-slide-reporter';
 import type { LocalizedSlide } from '@/components/slide-master/localized-slide';
-import type { EpisodeRecord, SlideEntrance } from '@/components/slide-master/slide';
+import type { EpisodeRecord, HeaderMode, SlideEntrance } from '@/components/slide-master/slide';
 import type { RuntimeTranslator } from '@/components/slide-master/slide-base';
 import type { EyebrowText } from '@/components/slide-master/slide-eyebrow';
 import type { SlideHeaderProps } from '@/components/slide-master/slide-header';
@@ -36,17 +36,21 @@ function bySection(slides: readonly LocalizedSlide[]): (readonly LocalizedSlide[
   return groups;
 }
 
-/** How the page renders each Slide's header: by the wrapper with this entrance, or by each Scene (`null`). */
-type HeaderMode = { readonly entrance: SlideEntrance; readonly eyebrows: ReadonlyMap<string, EyebrowText> } | null;
-
-/** The Slide header the wrapper renders for one Slide, when the Episode is on the shared header and the Slide is titled. */
-function headerOf(slide: LocalizedSlide, mode: HeaderMode): SlideHeaderProps | undefined {
-  if (mode === null || slide.header === undefined) return undefined;
-  const eyebrow = mode.eyebrows.get(slide.id);
-  return { seed: slide.id, level: slide.level, ...slide.header, ...(eyebrow && { eyebrow }), entrance: mode.entrance };
+/** How every Slide's header renders: who renders it, how it enters, and each page Slide's Eyebrow. */
+interface PageHeader {
+  readonly mode: HeaderMode;
+  readonly entrance: SlideEntrance;
+  readonly eyebrows: ReadonlyMap<string, EyebrowText>;
 }
 
-function SectionSlides({ slides, mode }: { slides: readonly LocalizedSlide[]; mode: HeaderMode }) {
+/** The Slide header the wrapper renders for one Slide, when the Episode is on the shared header and the Slide is titled. */
+function headerOf(slide: LocalizedSlide, page: PageHeader): SlideHeaderProps | undefined {
+  if (page.mode === 'authored' || slide.header === undefined) return undefined;
+  const eyebrow = page.eyebrows.get(slide.id);
+  return { seed: slide.id, level: slide.level, ...slide.header, ...(eyebrow && { eyebrow }), entrance: page.entrance };
+}
+
+function SectionSlides({ slides, page }: { slides: readonly LocalizedSlide[]; page: PageHeader }) {
   return (
     <section data-section={slides[0].section} className="contents">
       {slides.map((slide) => (
@@ -54,8 +58,8 @@ function SectionSlides({ slides, mode }: { slides: readonly LocalizedSlide[]; mo
           key={slide.slug}
           id={slide.id}
           size={slide.level === 'h2' ? 'section' : 'page'}
-          header={headerOf(slide, mode)}
-          entrance={mode !== null}
+          mode={page.mode}
+          header={headerOf(slide, page)}
         >
           {slide.content}
         </SlideWrapper>
@@ -64,7 +68,7 @@ function SectionSlides({ slides, mode }: { slides: readonly LocalizedSlide[]; mo
   );
 }
 
-function SlideColumn(props: { titleSlide: TitleSlideProps; slides: readonly LocalizedSlide[]; mode: HeaderMode }) {
+function SlideColumn(props: { titleSlide: TitleSlideProps; slides: readonly LocalizedSlide[]; page: PageHeader }) {
   const ids = [TITLE_ANCHOR, ...props.slides.map(({ id }) => id)];
   return (
     <SlideZones>
@@ -73,7 +77,7 @@ function SlideColumn(props: { titleSlide: TitleSlideProps; slides: readonly Loca
       <ContentArea>
         <TitleSlide {...props.titleSlide} />
         {bySection(props.slides).map((section) => (
-          <SectionSlides key={section[0].id} slides={section} mode={props.mode} />
+          <SectionSlides key={section[0].id} slides={section} page={props.page} />
         ))}
       </ContentArea>
     </SlideZones>
@@ -83,13 +87,14 @@ function SlideColumn(props: { titleSlide: TitleSlideProps; slides: readonly Loca
 /** The Title slide's props: the Episode's text, its hero Scene and entrance, its recording, and what its notes target. */
 function titleSlideOf(
   content: EpisodeContent,
-  mode: HeaderMode,
+  page: PageHeader,
   talk: Pick<TitleSlideProps, 'youtubeId' | 'talkLabels'>,
 ): TitleSlideProps {
   return {
     title: content.title,
     caption: content.caption,
-    entrance: mode?.entrance,
+    mode: page.mode,
+    entrance: page.entrance,
     hero: content.hero,
     ...talk,
     targets: content.titleContext.notes.map(({ target }) => target).filter(isTitleTarget),
@@ -146,8 +151,11 @@ export async function EpisodePageContainer({ locale, episode }: { locale: Locale
   const content = await recordContent(episode, locale, translatorOf(locale));
   const { minutes, slides, titleContext } = content;
   const sections = tocSectionsOf(slides);
-  const mode: HeaderMode =
-    content.header === 'shared' ? { entrance: content.entrance, eyebrows: eyebrowsOf(sections) } : null;
+  const page: PageHeader = {
+    mode: content.header,
+    entrance: content.entrance,
+    eyebrows: content.header === 'shared' ? eyebrowsOf(sections) : new Map(),
+  };
   const youtubeId = episode.youtube?.[locale];
   const talkLabels = youtubeId ? await readTranslationStrings(locale, 'talkPlayer') : undefined;
   const tocLabels = await tocLabelsOf(locale);
@@ -160,7 +168,7 @@ export async function EpisodePageContainer({ locale, episode }: { locale: Locale
         className={cn('mt-6', INSET_CLASSES, TOC_RESERVE_CLASS)}
       >
         <EpisodeToc locale={locale} slug={episode.slug} sections={sections} minutes={minutes} labels={tocLabels} />
-        <SlideColumn titleSlide={titleSlideOf(content, mode, { youtubeId, talkLabels })} slides={slides} mode={mode} />
+        <SlideColumn titleSlide={titleSlideOf(content, page, { youtubeId, talkLabels })} slides={slides} page={page} />
         <ContextDrawerSlot input={drawer} />
         {youtubeId && talkLabels && <TalkPlayer youtubeId={youtubeId} labels={talkLabels} />}
       </div>

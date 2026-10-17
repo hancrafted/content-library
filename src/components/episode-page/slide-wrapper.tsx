@@ -1,3 +1,4 @@
+import type { HeaderMode } from '@/components/slide-master/slide';
 import { SlideHeader, type SlideHeaderProps } from '@/components/slide-master/slide-header';
 import { cn } from '@/lib/utils';
 import type { ComponentPropsWithoutRef } from 'react';
@@ -8,10 +9,10 @@ const MIN_HEIGHT = { page: 'min-h-svh', section: 'min-h-[40svh]' } as const;
 
 export interface SlideWrapperProps extends ComponentPropsWithoutRef<'div'> {
   readonly size?: keyof typeof MIN_HEIGHT;
-  /** The Slide header the wrapper renders above the Scene; absent when the Scene authors its own or has no title. */
+  /** Who renders the Slide's header; on `shared` the wrapper renders it and plays the entrance once (FE-012). */
+  readonly mode?: HeaderMode;
+  /** The Slide header the wrapper renders above the Scene on `shared`; absent for an untitled Slide. */
   readonly header?: SlideHeaderProps;
-  /** Plays the Slide's entrance once (FE-012): set on every Slide of an Episode on the shared header. */
-  readonly entrance?: boolean;
 }
 
 /**
@@ -33,12 +34,12 @@ export function SlideWrapper({
   id,
   className,
   size = 'page',
+  mode = 'authored',
   header,
-  entrance = false,
   children,
   ...props
 }: SlideWrapperProps) {
-  const shared = entrance || header !== undefined;
+  const shared = mode === 'shared';
   return (
     <div
       id={id}
@@ -46,8 +47,8 @@ export function SlideWrapper({
       className={cn('relative isolate flex w-full scroll-mt-24 flex-col', MIN_HEIGHT[size], className)}
       {...props}
     >
-      <SlideMount id={id} entrance={entrance}>
-        {header && <SlideHeader {...header} />}
+      <SlideMount id={id} mode={mode}>
+        {shared && header && <SlideHeader {...header} />}
         {shared ? (
           <div data-slot="slide-scene" data-headed={header ? '' : undefined} className="contents">
             {children}

@@ -5,7 +5,7 @@ import type { EpisodeSlug } from '@/lib/routes';
 import { segmentSpans, type SpokenSegment } from '@/lib/speaking-time.pure';
 import { createTranslator } from 'next-intl';
 import type { ReactNode } from 'react';
-import type { EpisodeRecord, Slide, SlideMessages } from './slide';
+import type { EpisodeRecord, HeaderMode, Slide, SlideMessages } from './slide';
 import type { NoteSpec, RuntimeTranslator, SegmentSpec, SourceSpec } from './slide-base';
 import { headerTextOf, titleTakenBy, type SlideHeaderText } from './slide-header-text';
 import { slideKit } from './slide-kit';
@@ -66,7 +66,7 @@ export interface EpisodeContext {
   /** Said after a Context reference's phrase, e.g. `opens speaker note`. */
   readonly refLabel: string;
   /** Whether the Slide wrapper renders each Slide's header or its Scene does (the record's `header`). */
-  readonly header: 'shared' | 'authored';
+  readonly header: HeaderMode;
 }
 
 /**

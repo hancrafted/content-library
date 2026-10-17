@@ -1,4 +1,4 @@
-import type { SlideEntrance } from '@/components/slide-master/slide';
+import type { HeaderMode, SlideEntrance } from '@/components/slide-master/slide';
 import { HeroTitle, SlideBackdrop, SlideCaption, SlideFrame } from '@/components/slide-master/slide-master';
 import { TITLE_ANCHOR } from '@/lib/episode.pure';
 import type { ReactNode } from 'react';
@@ -25,8 +25,9 @@ function HeroGlow() {
 export interface TitleSlideProps {
   title: string;
   caption?: string;
-  /** The Slide header's entrance on an Episode on the shared header; absent when its Scenes author their own. */
-  entrance?: SlideEntrance;
+  /** Who renders the header: on `shared` the Title slide types its `h1` and caption in with `entrance`. */
+  mode: HeaderMode;
+  entrance: SlideEntrance;
   /** The record's authored hero Scene (`title`); absent, the shared glow. */
   hero?: ReactNode;
   youtubeId?: string;
@@ -62,7 +63,7 @@ function AuthoredTitleSlide({ title, caption, hero, launcher, targets }: TitleSl
 export function TitleSlide(props: TitleSlideProps) {
   const { youtubeId, talkLabels, entrance, hero } = props;
   const launcher = youtubeId && talkLabels && <TalkLauncher youtubeId={youtubeId} labels={talkLabels} />;
-  if (entrance === undefined) return <AuthoredTitleSlide {...props} launcher={launcher} />;
+  if (props.mode === 'authored') return <AuthoredTitleSlide {...props} launcher={launcher} />;
   const header = {
     seed: TITLE_ANCHOR,
     level: 'h1' as const,
@@ -74,7 +75,7 @@ export function TitleSlide(props: TitleSlideProps) {
     children: launcher,
   };
   return (
-    <SlideWrapper id={TITLE_ANCHOR} data-slot="title-slide" header={header} entrance>
+    <SlideWrapper id={TITLE_ANCHOR} data-slot="title-slide" mode="shared" header={header}>
       {hero ?? <HeroGlow />}
     </SlideWrapper>
   );

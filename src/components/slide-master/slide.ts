@@ -115,6 +115,9 @@ export interface EpisodeMessages {
 /** How a Slide header enters the first time its Slide is active (FE-012). */
 export type SlideEntrance = 'typewriter' | 'fade' | 'none';
 
+/** Who renders each Slide's header (FE-012): the Slide wrapper (`shared`) or each Scene (`authored`). */
+export type HeaderMode = 'shared' | 'authored';
+
 /**
  * An Episode record of Slides: static data. It carries its own
  * text, so the site-wide Translation files hold nothing of it.
@@ -143,6 +146,11 @@ export interface EpisodeRecord<Ep extends EpisodeSlug = EpisodeSlug> {
   /** The Slide header's entrance, once per Episode; `'typewriter'` when absent. */
   readonly entrance?: SlideEntrance;
   readonly sections: readonly Section[];
+}
+
+/** An Episode's header mode, read once from its record: the shared header unless the record sets `header: 'authored'`. */
+export function headerModeOf(record: Pick<EpisodeRecord, 'header'>): HeaderMode {
+  return record.header ?? 'shared';
 }
 
 /** An Episode record from its own text and its Sections; each Section's first Slide names it. */

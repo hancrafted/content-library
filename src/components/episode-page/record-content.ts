@@ -7,7 +7,13 @@ import {
   type LocalizedSlide,
   type SlideContext,
 } from '@/components/slide-master/localized-slide';
-import type { EpisodeRecord, Slide, SlideEntrance } from '@/components/slide-master/slide';
+import {
+  headerModeOf,
+  type EpisodeRecord,
+  type HeaderMode,
+  type Slide,
+  type SlideEntrance,
+} from '@/components/slide-master/slide';
 import type { RuntimeTranslator } from '@/components/slide-master/slide-base';
 import { placeSections } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
@@ -35,7 +41,7 @@ export interface EpisodeContent {
   /** The record's authored Title slide Scene, rendered; absent for the shared glow. */
   readonly hero?: ReactNode;
   /** Whether the Slide wrapper renders each Slide's header (`shared`) or each Scene does (`authored`). */
-  readonly header: 'shared' | 'authored';
+  readonly header: HeaderMode;
   readonly entrance: SlideEntrance;
 }
 
@@ -55,7 +61,7 @@ export async function recordContent(
     locale,
     placed: placeSections<Slide>(record.sections).flat(),
     refLabel: (await translatorOf('contextDrawer'))('refNote'),
-    header: record.header === 'authored' ? 'authored' : 'shared',
+    header: headerModeOf(record),
   };
   const { title, caption } = record.messages[locale];
   return {

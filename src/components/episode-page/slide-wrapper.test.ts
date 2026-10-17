@@ -38,7 +38,11 @@ describe('success cases', () => {
   it('renders the Slide header above the Scene, which holds the visual only', () => {
     // ARRANGE
     const header = { seed: 'a--b', level: 'h3' as const, title: 'Why a template', entrance: 'none' as const };
-    const wrapper = createElement(SlideWrapper, { id: 'a--b', header }, createElement('figure', null, 'visual'));
+    const wrapper = createElement(
+      SlideWrapper,
+      { id: 'a--b', mode: 'shared', header },
+      createElement('figure', null, 'visual'),
+    );
     const expected =
       /data-slot="slide-header".*<h3[^>]*>Why a template<\/h3>.*data-slot="slide-scene".*<figure>visual<\/figure>/;
     // ACT
@@ -60,6 +64,17 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('leaves the header and the entrance to the Scene on an Episode with authored headers', () => {
+    // ARRANGE
+    const header = { seed: 'a--b', level: 'h3' as const, title: 'Why a template', entrance: 'none' as const };
+    const wrapper = createElement(SlideWrapper, { id: 'a--b', mode: 'authored', header }, 'content');
+    // ACT
+    const html = renderToStaticMarkup(wrapper);
+    // ASSERT
+    expect(html).not.toContain('slide-header');
+    expect(html).not.toContain('data-entry');
+  });
+
   it('isolates its stacking context, so a Backdrop at a negative z-index stays inside its own Slide', () => {
     // ARRANGE
     const wrapper = createElement(SlideWrapper, { id: 'test-slide' }, 'content');

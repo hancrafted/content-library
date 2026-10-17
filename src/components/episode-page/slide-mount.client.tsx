@@ -1,5 +1,6 @@
 'use client';
 
+import type { HeaderMode } from '@/components/slide-master/slide';
 import { SlideIdContext, useEntryOf, useZoneOf } from '@/hooks/use-slide-zone';
 import { isMounted, keptHeight, type SlideEntry, type SlideZone } from '@/lib/slide-zone.pure';
 import { useEffect, useRef, type ReactNode, type Ref } from 'react';
@@ -58,10 +59,10 @@ export function SlideMountView({
  * Renders its children outside `far` only, and holds the last measured height
  * while they are gone, so unmounting never moves the scroll height. Provides
  * the Slide id (the Title slide has none and is never far), so
- * `useSlideZone()` below it reads this Slide's zone. With `entrance`, it also
- * carries the Slide's entrance state for the play-once CSS (FE-012).
+ * `useSlideZone()` below it reads this Slide's zone. On the shared header it
+ * also carries the Slide's entrance state for the play-once CSS (FE-012).
  */
-export function SlideMount({ id, entrance, children }: { id?: string; entrance?: boolean; children: ReactNode }) {
+export function SlideMount({ id, mode, children }: { id?: string; mode: HeaderMode; children: ReactNode }) {
   const zone = useZoneOf(id ?? null);
   const entry = useEntryOf(id ?? null);
   const { box, height } = useMeasuredHeight(isMounted(zone));
@@ -71,7 +72,7 @@ export function SlideMount({ id, entrance, children }: { id?: string; entrance?:
       zone={zone}
       heldHeight={height.current}
       boxRef={box}
-      entry={entrance ? entry : undefined}
+      entry={mode === 'shared' ? entry : undefined}
     >
       {children}
     </SlideMountView>
