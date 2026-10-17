@@ -1,6 +1,6 @@
 /*
  * The cycle's clock-face geometry: where each phase's arc runs, which way its
- * label reads, how far a phase pops outward, and when its arc draws in.
+ * label reads, and how far a phase pops outward.
  * Angles are degrees clockwise from 12 o'clock; y grows downward as in SVG.
  * No DOM, no React.
  */
@@ -23,9 +23,6 @@ export const RING = {
 /** How far a hovered or focused phase moves out from the centre. */
 export const POP_DISTANCE = 10;
 
-/** How long the whole ring takes to draw in, phase after phase. */
-export const ARC_DRAW_MS = 1500;
-
 /** How long the "now" hand takes for one turn of the face. */
 export const HAND_TURN_S = 60;
 
@@ -44,8 +41,6 @@ export interface PhaseArc {
   readonly labelAt: Point;
   /** How far its label turns to follow the ring: the tangent on the top half, half a turn more on the bottom half so it never reads upside down. */
   readonly labelTurnDeg: number;
-  /** The arc's length, for the stroke-dashoffset draw-in. */
-  readonly length: number;
 }
 
 export interface Tick {
@@ -99,7 +94,6 @@ export function phaseArc(index: number, count: number): PhaseArc {
     path: arcPath(startDeg, endDeg),
     labelAt: polarPoint(midDeg, RING.radius),
     labelTurnDeg: bottomHalf ? midDeg - 180 : midDeg,
-    length: round((Math.PI * RING.radius * (endDeg - startDeg)) / 180),
   };
 }
 
@@ -108,12 +102,6 @@ export function popOffset(index: number, count: number, distance: number): Point
   const { midDeg } = phaseArc(index, count);
   const tip = polarPoint(midDeg, distance);
   return { x: round(tip.x - RING.centre), y: round(tip.y - RING.centre) };
-}
-
-/** Phase `index` starts drawing when the one before it finishes. */
-export function drawDelayMs(index: number, count: number): number {
-  assertInCycle(index, count);
-  return (ARC_DRAW_MS / count) * index;
 }
 
 /** `count` evenly spaced ticks just outside the ring, the first at 12 o'clock. */

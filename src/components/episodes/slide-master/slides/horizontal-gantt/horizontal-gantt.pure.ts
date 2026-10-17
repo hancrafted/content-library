@@ -1,16 +1,13 @@
 /*
  * The phase bars' data and geometry: which lane each bar sits in, the months
  * it spans, where it lands on the track, how far "today" has eaten into it,
- * when it grows in, and how wide its tooltip grows. No DOM, no React.
+ * and how wide its tooltip grows. No DOM, no React.
  */
 
 import type { PopoverRules } from '@/lib/popover-placement.pure';
 
 /** The axis runs one year, in months; a quarter is three of them. */
 export const AXIS_MONTHS = 12;
-
-/** How long the entrance sweep takes to cross the whole year. */
-export const SWEEP_MS = 1440;
 
 /** The lanes, top to bottom; each names its Translation key under `lanes.<key>`. */
 export const GANTT_LANES = ['a', 'b', 'c'] as const;
@@ -63,13 +60,6 @@ export function barBox(bar: Bar): BarBox {
 export function elapsedShare(bar: Bar, today: number): number {
   assertRange(bar);
   return Math.min(Math.max((today - bar.start) / (bar.end - bar.start), 0), 1);
-}
-
-/** The entrance sweeps the year left to right: a bar starts growing when the sweep reaches its start and keeps its pace. */
-export function growTiming(bar: Bar): { delayMs: number; durationMs: number } {
-  assertRange(bar);
-  const msPerMonth = SWEEP_MS / AXIS_MONTHS;
-  return { delayMs: bar.start * msPerMonth, durationMs: (bar.end - bar.start) * msPerMonth };
 }
 
 /** Every pair of bars that share a lane and overlap; touching end to start is not an overlap. */

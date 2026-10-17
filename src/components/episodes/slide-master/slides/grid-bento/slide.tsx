@@ -1,5 +1,5 @@
 import { slide } from '@/components/slide-master/slide';
-import { SlideCaption, SlideFrame } from '@/components/slide-master/slide-master';
+import { SlideFrame } from '@/components/slide-master/slide-master';
 import { cn } from '@/lib/utils';
 import { useId } from 'react';
 import { GridBentoLoop } from './grid-bento-loop.client';
@@ -28,9 +28,9 @@ const MARK: Record<GridBentoCell, string> = {
   c6: 'bg-primary',
 };
 
-// Hovering a tile lifts it and dims its siblings; the motion is CSS only. Reduced motion keeps the dim, drops the lift.
+// Pointing at a tile lifts it (`card-hover--raise`) and dims its siblings (`focus-group--dim-others`); CSS only.
 const TILE =
-  'relative isolate flex flex-col overflow-hidden rounded-2xl border border-border p-5 transition-[translate,box-shadow,opacity] duration-300 ease-out hover:-translate-y-1 hover:shadow-lg motion-reduce:transition-none motion-reduce:hover:translate-y-0 group-has-[[data-bento-tile]:hover]/bento:[&:not(:hover)]:opacity-60 md:p-6';
+  'card-hover card-hover--raise relative isolate flex flex-col overflow-hidden rounded-2xl border border-border p-5 md:p-6';
 
 // A bento grid on four columns (two from `sm`, one on phones): a 2×2 lead tile with a slowly turning gradient, then
 // five supporting tiles of varied spans that pack the grid with no hole (`packTiles` proves it). The lead's gradient
@@ -40,7 +40,7 @@ export const gridBento = slide({
   messages: { en, de },
   notes: [{ slug: 'layout', target: 'grid' }],
   segments: [{ slug: 'walkthrough' }],
-  content: ({ t, target, Title }) => {
+  content: ({ t, target }) => {
     const copy: Record<GridBentoCell, { title: string; caption: string }> = {
       c1: { title: t('cells.c1.title'), caption: t('cells.c1.caption') },
       c2: { title: t('cells.c2.title'), caption: t('cells.c2.caption') },
@@ -51,14 +51,12 @@ export const gridBento = slide({
     };
     return (
       <SlideFrame>
-        <Title>{t('title')}</Title>
-        <SlideCaption>{t('caption')}</SlideCaption>
         <ul
           {...target('grid')}
-          className="group/bento mt-10 grid auto-rows-[minmax(10rem,auto)] grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 md:grid-cols-4"
+          className="focus-group focus-group--dim-others mt-10 grid auto-rows-[minmax(10rem,auto)] grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 md:grid-cols-4"
         >
           {BENTO_TILES.map(({ cell }, index) => (
-            <li key={cell} className={`grid ${SPAN[cell]}`}>
+            <li key={cell} className={`focus-group__item grid ${SPAN[cell]}`}>
               {cell === 'c1' ? <LeadTile {...copy[cell]} /> : <SupportTile cell={cell} index={index} {...copy[cell]} />}
             </li>
           ))}
@@ -72,11 +70,7 @@ export const gridBento = slide({
 function LeadTile({ title, caption }: { title: string; caption: string }) {
   const id = `grid-bento-${useId()}`;
   return (
-    <article
-      data-bento-tile
-      aria-labelledby={id}
-      className={cn(TILE, 'min-h-72 justify-end bg-muted md:min-h-0 md:p-8')}
-    >
+    <article aria-labelledby={id} className={cn(TILE, 'min-h-72 justify-end bg-muted md:min-h-0 md:p-8')}>
       <GridBentoLoop className={styles.bloom} />
       <h4
         id={id}
@@ -94,7 +88,7 @@ function SupportTile(props: { cell: GridBentoCell; index: number; title: string;
   const { cell, index, title, caption } = props;
   const id = `grid-bento-${useId()}`;
   return (
-    <article data-bento-tile aria-labelledby={id} className={cn(TILE, 'gap-6 bg-background')}>
+    <article aria-labelledby={id} className={cn(TILE, 'gap-6 bg-background')}>
       <div aria-hidden className="flex items-center justify-between">
         <span className={`h-1.5 w-8 rounded-full ${MARK[cell]}`} />
         <span className="font-mono text-body tracking-widest text-muted-foreground tabular-nums">

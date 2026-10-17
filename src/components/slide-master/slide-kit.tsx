@@ -9,7 +9,7 @@ import type { RuntimeKit, RuntimeTranslator } from './slide-base';
 import { SlideTitle } from './slide-master';
 
 /** The optional message key a Slide sets when its on-screen title differs from its table-of-contents `title`. */
-const ON_SCREEN_TITLE_KEY = 'heading';
+export const ON_SCREEN_TITLE_KEY = 'heading';
 
 /** What assistive tech hears for a Context reference, in the page's locale. */
 export interface ReferenceLabels {
@@ -37,6 +37,8 @@ export interface SlideKitInput {
   readonly notes: readonly string[];
   /** The Slide's id, named in the error a bad `ref`, `slideHref` or `template` throws. */
   readonly slideId: string;
+  /** Set when something else renders this Slide's heading: `Title` then throws this, failing the build. */
+  readonly titleTaken?: string;
 }
 
 /**
@@ -106,6 +108,24 @@ function contextRefsOf(episode: EpisodeKitInput, slide: SlideKitInput): Pick<Run
 }
 
 /**
+ * The kit's `Title`: the Slide's heading at its level, marked as the `title`
+ * target. An optional `heading` key in the Slide's messages is the on-screen
+ * title; the table of contents keeps `title`. Throws `titleTaken` when the
+ * Slide header renders the heading instead.
+ */
+function titleOf({ t, level, titleTaken }: SlideKitInput): RuntimeKit['Title'] {
+  const heading = t.has(ON_SCREEN_TITLE_KEY) ? t(ON_SCREEN_TITLE_KEY) : undefined;
+  return function Title({ children }: { children: ReactNode }) {
+    if (titleTaken !== undefined) throw new Error(titleTaken);
+    return (
+      <SlideTitle as={level} data-target="title">
+        {heading ?? children}
+      </SlideTitle>
+    );
+  };
+}
+
+/**
  * The kit a Slide's `content` receives (FE-002 §3). `Title` is the Slide's
  * heading at the level its position gives it, marked as the `title` target,
  * showing the optional `heading` message when the Slide has one;
@@ -118,14 +138,8 @@ function contextRefsOf(episode: EpisodeKitInput, slide: SlideKitInput): Pick<Run
  * render, so a cast in a Slide still fails the build.
  */
 export function slideKit(episode: EpisodeKitInput, slide: SlideKitInput): RuntimeKit {
-  const { level, slideId } = slide;
-  // An optional `heading` key in the Slide's messages is the on-screen title; the table of contents keeps `title`.
-  const heading = slide.t.has(ON_SCREEN_TITLE_KEY) ? slide.t(ON_SCREEN_TITLE_KEY) : undefined;
-  const Title = ({ children }: { children: ReactNode }) => (
-    <SlideTitle as={level} data-target="title">
-      {heading ?? children}
-    </SlideTitle>
-  );
+  const { slideId } = slide;
+  const Title = titleOf(slide);
   const t = withDefaultTags(slide.t);
   return {
     t,

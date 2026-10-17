@@ -1,5 +1,5 @@
 import { slide } from '@/components/slide-master/slide';
-import { SlideCaption, SlideFrame } from '@/components/slide-master/slide-master';
+import { SlideFrame } from '@/components/slide-master/slide-master';
 import { HorizontalScrollSnap } from './horizontal-scroll-snap.client';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
@@ -11,10 +11,8 @@ export const horizontalScrollSnap = slide({
   messages: { en, de },
   notes: [{ slug: 'layout', target: 'timeline' }],
   segments: [{ slug: 'walkthrough' }],
-  content: ({ t, target, Title }) => (
+  content: ({ t, target }) => (
     <SlideFrame>
-      <Title>{t('title')}</Title>
-      <SlideCaption>{t('caption')}</SlideCaption>
       <div {...target('timeline')} className="mt-10">
         <HorizontalScrollSnap
           label={t('title')}

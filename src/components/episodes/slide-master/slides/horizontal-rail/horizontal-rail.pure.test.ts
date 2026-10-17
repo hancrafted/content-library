@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { dotDelayMs, LINE_DRAW_MS, RAIL_ITEMS, railSide, segmentTiming } from './horizontal-rail.pure';
+import { RAIL_ITEMS, railSide } from './horizontal-rail.pure';
 
 describe('success cases', () => {
   it('alternates labels above and below the line, starting above', () => {
@@ -9,27 +9,6 @@ describe('success cases', () => {
     const sides = RAIL_ITEMS.map((_, index) => railSide(index));
     // ASSERT
     expect(sides).toEqual(expected);
-  });
-
-  it('pops each dot in as the drawing line reaches its centre', () => {
-    // ARRANGE
-    const count = 4;
-    const expected = [LINE_DRAW_MS / 8, (LINE_DRAW_MS * 3) / 8, (LINE_DRAW_MS * 5) / 8, (LINE_DRAW_MS * 7) / 8];
-    // ACT
-    const delays = [0, 1, 2, 3].map((index) => dotDelayMs(index, count));
-    // ASSERT
-    expect(delays).toEqual(expected);
-  });
-
-  it('draws the line as one stroke: each column’s segment starts where the previous one ends', () => {
-    // ARRANGE
-    const count = 4;
-    const share = LINE_DRAW_MS / count;
-    const expected = [0, 1, 2, 3].map((index) => ({ delayMs: share * index, durationMs: share }));
-    // ACT
-    const timings = [0, 1, 2, 3].map((index) => segmentTiming(index, count));
-    // ASSERT
-    expect(timings).toEqual(expected);
   });
 });
 
@@ -43,34 +22,24 @@ describe('failure cases', () => {
     expect(side).toThrow(String(stray));
   });
 
-  it('refuses a dot past the end of the rail instead of delaying it past the line', () => {
+  it('refuses a position between two stops', () => {
     // ARRANGE
-    const count = 6;
-    const past = count;
+    const between = 1.5;
     // ACT
-    const delay = () => dotDelayMs(past, count);
+    const side = () => railSide(between);
     // ASSERT
-    expect(delay).toThrow(String(past));
-  });
-
-  it('refuses a segment on an empty rail', () => {
-    // ARRANGE
-    const count = 0;
-    // ACT
-    const timing = () => segmentTiming(0, count);
-    // ASSERT
-    expect(timing).toThrow(String(count));
+    expect(side).toThrow(String(between));
   });
 });
 
 describe('edge cases', () => {
-  it('pops the only dot of a one-stop rail in halfway through the line', () => {
+  it('keeps alternating on a rail far longer than six stops', () => {
     // ARRANGE
-    const count = 1;
-    const expected = LINE_DRAW_MS / 2;
+    const farStop = 101;
+    const expected = 'below';
     // ACT
-    const delay = dotDelayMs(0, count);
+    const side = railSide(farStop);
     // ASSERT
-    expect(delay).toBe(expected);
+    expect(side).toBe(expected);
   });
 });

@@ -1,5 +1,5 @@
 import { localizeSlide } from '@/components/slide-master/localized-slide';
-import { type Slide } from '@/components/slide-master/slide';
+import { headerModeOf, type Slide } from '@/components/slide-master/slide';
 import { placeSections } from '@/lib/episode.pure';
 import { EPISODE_SLUGS, type EpisodeSlug } from '@/lib/routes';
 import { createElement, Fragment } from 'react';
@@ -33,11 +33,13 @@ function scene({ episode, slide }: PlacedSlide) {
   const placed = placeSections<Slide>(findEpisode(episode).sections).flat();
   const own = placed.find((entry) => entry.slide === slide);
   if (own === undefined) throw new Error(`No Slide "${slide.slug}" in "${episode}".`);
+  const header = headerModeOf(findEpisode(episode));
   return localizeSlide(own, {
     episode,
     locale: 'en',
     placed,
     referenceLabels: { ref: 'opens speaker note', marker: (title) => `Speaker note: ${title}` },
+    header,
   }).content;
 }
 

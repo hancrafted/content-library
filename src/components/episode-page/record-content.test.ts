@@ -2,7 +2,8 @@ import { episode, slide } from '@/components/slide-master/slide';
 import type { RuntimeKit, RuntimeTranslator } from '@/components/slide-master/slide-base';
 import { TRANSLATIONS } from '@/i18n/translations';
 import type { Locale } from '@/lib/locale.pure';
-import { isValidElement } from 'react';
+import { createElement, isValidElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { recordContent, type TranslatorOf } from './record-content';
 
@@ -85,6 +86,43 @@ describe('success cases', () => {
     // ASSERT
     expect(slides.map(({ id, section, level, title }) => ({ id, section, level, title }))).toEqual(expected);
   });
+  it('gives each titled Slide a Slide header by default: its on-screen title and its caption', async () => {
+    // ARRANGE
+    const captioned = slide({
+      slug: 'why-a-template',
+      messages: {
+        en: { title: 'Why a template', heading: 'Why start from a template?', caption: 'One spine.' },
+        de: { title: 'Warum eine Vorlage', heading: 'Warum mit einer Vorlage?', caption: 'Ein Rückgrat.' },
+      },
+      content: () => null,
+    });
+    const record = episode({ slug: 'page-template', messages: EPISODE, sections: [[foundations, captioned, visual]] });
+    const expected = [
+      { title: 'Foundations' },
+      { title: 'Why start from a template?', caption: 'One spine.' },
+      undefined,
+    ];
+    // ACT
+    const { slides, header } = await recordContent(record, 'en', translatorOf('en'));
+    // ASSERT
+    expect(header).toBe('shared');
+    expect(slides.map((placed) => placed.header)).toEqual(expected);
+  });
+
+  it("renders the record's title Slide as the Title slide's Scene", async () => {
+    // ARRANGE
+    const hero = slide({
+      slug: 'hero',
+      messages: { en: { motif: 'Rocket' }, de: { motif: 'Rakete' } },
+      content: ({ t }) => createElement('p', null, t('motif')),
+    });
+    const record = episode({ slug: 'page-template', messages: EPISODE, title: hero, sections: [[foundations]] });
+    const expected = '<p>Rakete</p>';
+    // ACT
+    const { hero: scene } = await recordContent(record, 'de', translatorOf('de'));
+    // ASSERT
+    expect(renderToStaticMarkup(scene)).toBe(expected);
+  });
 });
 
 describe('failure cases', () => {
@@ -96,6 +134,38 @@ describe('failure cases', () => {
       sections: [[foundations], [foundations]],
     });
     const expected = 'foundations';
+    // ACT
+    const build = recordContent(record, 'en', translatorOf('en'));
+    // ASSERT
+    await expect(build).rejects.toThrow(expected);
+  });
+  it('refuses a Scene that renders its own Title while the Slide header renders it', async () => {
+    // ARRANGE
+    const titled = slide({
+      slug: 'why-a-template',
+      messages: WHY,
+      content: ({ t, Title }) => createElement(Title, null, t('title')),
+    });
+    const record = episode({ slug: 'page-template', messages: EPISODE, sections: [[foundations, titled]] });
+    const expected = /header: 'authored'/;
+    // ACT
+    const { slides } = await recordContent(record, 'en', translatorOf('en'));
+    const render = () => renderToStaticMarkup(slides[1].content);
+    // ASSERT
+    expect(render).toThrow(expected);
+  });
+
+  it('refuses a title Slide that declares notes or a Voice script: the Title slide keeps them on the record', async () => {
+    // ARRANGE
+    const messages = { notes: { n: { header: 'h', description: 'd' } } };
+    const hero = slide({
+      slug: 'hero',
+      messages: { en: messages, de: messages },
+      notes: [{ slug: 'n', target: 'title' }],
+      content: () => null,
+    });
+    const record = episode({ slug: 'page-template', messages: EPISODE, title: hero, sections: [[foundations]] });
+    const expected = 'hero';
     // ACT
     const build = recordContent(record, 'en', translatorOf('en'));
     // ASSERT
@@ -121,5 +191,37 @@ describe('edge cases', () => {
     const label = isValidElement<{ label: string }>(content) ? content.props.label : undefined;
     // ASSERT
     expect(label).toBe(expected);
+  });
+  it("gives no Slide header on an Episode whose Scenes author their own, and lets them render the kit's Title", async () => {
+    // ARRANGE
+    const titled = slide({
+      slug: 'why-a-template',
+      messages: WHY,
+      content: ({ t, Title }) => createElement(Title, null, t('title')),
+    });
+    const record = episode({
+      slug: 'page-template',
+      messages: EPISODE,
+      header: 'authored',
+      sections: [[foundations, titled]],
+    });
+    const expected = '<h3 data-target="title" class="font-semibold text-balance text-subheading">Why a template</h3>';
+    // ACT
+    const { slides, header } = await recordContent(record, 'en', translatorOf('en'));
+    // ASSERT
+    expect(header).toBe('authored');
+    expect(slides.map((placed) => placed.header)).toEqual([undefined, undefined]);
+    expect(renderToStaticMarkup(slides[1].content)).toBe(expected);
+  });
+
+  it('types the header in by default, and takes the entrance the record names', async () => {
+    // ARRANGE
+    const record = episode({ slug: 'page-template', messages: EPISODE, entrance: 'fade', sections: [[foundations]] });
+    const expected = { byDefault: 'typewriter', named: 'fade' };
+    // ACT
+    const byDefault = (await recordContent(RECORD, 'en', translatorOf('en'))).entrance;
+    const named = (await recordContent(record, 'en', translatorOf('en'))).entrance;
+    // ASSERT
+    expect({ byDefault, named }).toEqual(expected);
   });
 });

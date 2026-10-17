@@ -1,20 +1,18 @@
 import { slide } from '@/components/slide-master/slide';
-import { SlideCaption, SlideFrame } from '@/components/slide-master/slide-master';
+import { SlideFrame } from '@/components/slide-master/slide-master';
 import { HorizontalGantt } from './horizontal-gantt.client';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-// Timeline as a roadmap: three lanes of phase bars on a quarter axis, a "today" line through them. The bars
-// grow in left to right when the Slide reaches the reading line; hover or focus opens a bar's caption.
+// Timeline as a roadmap: three lanes of phase bars on a quarter axis, a "today" line through them. Hover or
+// focus opens a bar's caption.
 export const horizontalGantt = slide({
   slug: 'horizontal-gantt',
   messages: { en, de },
   notes: [{ slug: 'layout', target: 'timeline' }],
   segments: [{ slug: 'walkthrough' }],
-  content: ({ t, target, Title }) => (
+  content: ({ t, target }) => (
     <SlideFrame>
-      <Title>{t('title')}</Title>
-      <SlideCaption>{t('caption')}</SlideCaption>
       <div {...target('timeline')} className="mt-12 md:my-auto md:py-12">
         <HorizontalGantt
           label={t('title')}

@@ -1,5 +1,5 @@
 import { slide } from '@/components/slide-master/slide';
-import { SlideCaption, SlideFrame } from '@/components/slide-master/slide-master';
+import { SlideFrame } from '@/components/slide-master/slide-master';
 import { useId } from 'react';
 import styles from './grid-3x3.module.css';
 import de from './i18n/de.json';
@@ -17,7 +17,7 @@ interface TileProps {
 }
 
 // One 4:3 dashboard tile: a mono row·column coordinate top-left, a small title and a two-line caption at the bottom.
-// Tiles alternate background and muted like a checkerboard; hover scales the tile a hair above its neighbours.
+// Tiles alternate background and muted like a checkerboard; `card-hover--raise` lifts the tile above its neighbours.
 function Tile({ row, col, title, caption }: TileProps) {
   const id = `grid-3x3-${useId()}`;
   const tone = (row + col) % 2 === 0 ? 'bg-background' : 'bg-muted dark:bg-muted/50';
@@ -26,7 +26,7 @@ function Tile({ row, col, title, caption }: TileProps) {
       data-row={row}
       data-col={col}
       aria-labelledby={id}
-      className={`${tone} relative flex aspect-[4/3] flex-col justify-between p-4 transition-[scale,background-color,box-shadow] duration-200 ease-out hover:z-10 hover:scale-[1.03] hover:bg-background hover:shadow-lg hover:ring-1 hover:ring-primary/50 motion-reduce:transition-none motion-reduce:hover:scale-100 md:p-5`}
+      className={`${tone} card-hover card-hover--raise relative flex aspect-[4/3] flex-col justify-between p-4 hover:z-10 focus-within:z-10 md:p-5`}
     >
       <span aria-hidden className="font-mono text-body tracking-[0.2em] text-muted-foreground tabular-nums">
         <span className={`${columnTick[col - 1]} mr-2 inline-block h-2.5 w-0.5 align-[-1px]`} />
@@ -49,10 +49,8 @@ export const grid3x3 = slide({
   messages: { en, de },
   notes: [{ slug: 'layout', target: 'grid' }],
   segments: [{ slug: 'walkthrough' }],
-  content: ({ t, target, Title }) => (
+  content: ({ t, target }) => (
     <SlideFrame>
-      <Title>{t('title')}</Title>
-      <SlideCaption>{t('caption')}</SlideCaption>
       <div
         {...target('grid')}
         className={`${styles.wall} mt-10 grid grid-cols-1 gap-px overflow-clip rounded-xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-3`}

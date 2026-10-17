@@ -103,6 +103,7 @@ function episodeOf(locale: Locale, sections: readonly (readonly [Slide, ...Slide
       ref: 'opens speaker note',
       marker: (title) => (locale === 'de' ? `Sprechernotiz: ${title}` : `Speaker note: ${title}`),
     },
+    header: 'authored',
   };
 }
 

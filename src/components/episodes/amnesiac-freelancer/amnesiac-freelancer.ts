@@ -25,6 +25,7 @@ import { whereKnowledgeLives } from './slides/where-knowledge-lives/slide';
 export const amnesiacFreelancer = episode({
   slug: 'amnesiac-freelancer',
   messages: { en, de },
+  header: 'authored',
   sections: [
     [blankSlate, blankEveryTime, whereKnowledgeLives],
     [onboarding, briefAndRules, keepItShort, decisionsInWriting],

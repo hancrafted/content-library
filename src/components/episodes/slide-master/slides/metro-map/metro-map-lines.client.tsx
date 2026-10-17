@@ -2,7 +2,7 @@
 
 import { cn } from '@/lib/utils';
 import styles from './metro-map.module.css';
-import { CANVAS, DRAW_MS, LANE_ROUTES, LANES, metroPath, type Lane } from './metro-map.pure';
+import { CANVAS, LANE_ROUTES, LANES, metroPath, type Lane } from './metro-map.pure';
 
 /** Lanes are thick, bends round over this many canvas units. */
 const BEND_RADIUS = 18;
@@ -14,8 +14,8 @@ export function laneClass(lane: Lane): string {
   return LANE_CLASS[lane];
 }
 
-/** One lane: drawn on with `stroke-dashoffset` the first time the Slide is active, dimmed when another lane is lit. */
-function LaneLine({ lane, lit, drawn }: { lane: Lane; lit: boolean; drawn: boolean }) {
+/** One lane, dimmed when another lane is lit. */
+function LaneLine({ lane, lit }: { lane: Lane; lit: boolean }) {
   return (
     <g
       data-lane={lane}
@@ -24,20 +24,14 @@ function LaneLine({ lane, lit, drawn }: { lane: Lane; lit: boolean; drawn: boole
     >
       <path
         d={metroPath(LANE_ROUTES[lane], BEND_RADIUS)}
-        pathLength={1}
-        style={{ transitionDuration: `${DRAW_MS}ms` }}
-        className={cn(
-          'fill-none stroke-(--lane) [stroke-dasharray:1] [stroke-linecap:round] [stroke-linejoin:round] [stroke-width:10] transition-[stroke-dashoffset] ease-[cubic-bezier(0.65,0,0.35,1)]',
-          drawn ? '[stroke-dashoffset:0]' : '[stroke-dashoffset:1]',
-          'motion-reduce:[stroke-dashoffset:0]! print:[stroke-dashoffset:0]!',
-        )}
+        className="fill-none stroke-(--lane) [stroke-linecap:round] [stroke-linejoin:round] [stroke-width:10]"
       />
     </g>
   );
 }
 
 /** The three lanes on the canvas; the SVG is decoration, the legend and station buttons carry the meaning. */
-export function MetroLines({ lit, drawn }: { lit: readonly Lane[]; drawn: boolean }) {
+export function MetroLines({ lit }: { lit: readonly Lane[] }) {
   return (
     <svg
       aria-hidden="true"
@@ -45,7 +39,7 @@ export function MetroLines({ lit, drawn }: { lit: readonly Lane[]; drawn: boolea
       className="absolute inset-0 size-full overflow-visible"
     >
       {LANES.map((lane) => (
-        <LaneLine key={lane} lane={lane} lit={lit.includes(lane)} drawn={drawn} />
+        <LaneLine key={lane} lane={lane} lit={lit.includes(lane)} />
       ))}
     </svg>
   );

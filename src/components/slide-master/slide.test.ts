@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { episode, slide, type OwnSlideKit, type Section } from './slide';
+import { episode, headerModeOf, slide, type OwnSlideKit, type Section } from './slide';
 import type { RuntimeKit } from './slide-base';
 
 /*
@@ -104,6 +104,16 @@ describe('success cases', () => {
     expect(record.sections).toBe(sections);
     expect(record.messages).toBe(messages);
   });
+
+  it('puts an Episode on the shared Slide header unless its record says otherwise', () => {
+    // ARRANGE
+    const record = {};
+    const expected = 'shared';
+    // ACT
+    const mode = headerModeOf(record);
+    // ASSERT
+    expect(mode).toBe(expected);
+  });
 });
 
 describe('failure cases', () => {
@@ -167,6 +177,16 @@ describe('failure cases', () => {
     const opener = sections[0][0].slug;
     // ASSERT
     expect(opener).toBe(untitled.slug);
+  });
+
+  it("leaves the header to each Scene when the record sets header: 'authored'", () => {
+    // ARRANGE
+    const record = { header: 'authored' } as const;
+    const expected = 'authored';
+    // ACT
+    const mode = headerModeOf(record);
+    // ASSERT
+    expect(mode).toBe(expected);
   });
 });
 

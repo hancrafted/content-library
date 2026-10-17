@@ -9,13 +9,6 @@ import { CYCLE_ITEMS, RING, type CycleItem } from './radial-cycle.pure';
 /** The centre disc's width as a share of the face: it fills the ring's hole. */
 const DISC_SHARE = `${((2 * (RING.radius - RING.stroke / 2) - 16) / RING.size) * 100}%`;
 
-/** Plays once: the first time the Slide reaches the reading line, the ring draws in. */
-function useDrawn(zone: ReturnType<typeof useSlideZone>): boolean {
-  const [drawn, setDrawn] = useState(false);
-  if (!drawn && zone === 'active') setDrawn(true);
-  return drawn;
-}
-
 /** A click or focus selects a phase; a hover previews another without losing the selection. */
 function useShownPhase(): { shown: CycleItem; handlers: PhaseHandlers } {
   const [selected, setSelected] = useState<CycleItem>(CYCLE_ITEMS[0]);
@@ -62,11 +55,10 @@ function PhaseList({ label, items }: { label: string; items: Record<CycleItem, P
 /** Six phases of a repeating cycle around a clock face; the shown phase pops out and fills the centre. */
 export function RadialCycle({ label, items }: { label: string; items: Record<CycleItem, PhaseCopy> }) {
   const zone = useSlideZone();
-  const drawn = useDrawn(zone);
   const { shown, handlers } = useShownPhase();
   const index = CYCLE_ITEMS.indexOf(shown);
   return (
-    <div data-slot="radial-cycle" data-drawn={drawn} className="mx-auto w-full max-w-[34rem]">
+    <div data-slot="radial-cycle" className="mx-auto w-full max-w-[34rem]">
       <div className="relative">
         <svg
           viewBox={`0 0 ${RING.size} ${RING.size}`}
@@ -74,7 +66,7 @@ export function RadialCycle({ label, items }: { label: string; items: Record<Cyc
           aria-label={label}
           className="block h-auto w-full overflow-visible"
         >
-          <PhaseRing items={items} shown={shown} drawn={drawn} handlers={handlers} />
+          <PhaseRing items={items} shown={shown} handlers={handlers} />
           <NowHand zone={zone} />
         </svg>
         <CentreDisc index={index} copy={items[shown]} />

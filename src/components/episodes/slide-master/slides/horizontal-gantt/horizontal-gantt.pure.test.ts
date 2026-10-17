@@ -1,15 +1,6 @@
 import { placePopover, type Box, type Viewport } from '@/lib/popover-placement.pure';
 import { describe, expect, it } from 'vitest';
-import {
-  barBox,
-  elapsedShare,
-  GANTT_BARS,
-  GANTT_LANES,
-  growTiming,
-  laneClashes,
-  SWEEP_MS,
-  TOOLTIP_RULES,
-} from './horizontal-gantt.pure';
+import { barBox, elapsedShare, GANTT_BARS, GANTT_LANES, laneClashes, TOOLTIP_RULES } from './horizontal-gantt.pure';
 
 const DESKTOP = { width: 1440, height: 900 };
 
@@ -38,16 +29,6 @@ describe('success cases', () => {
     const share = elapsedShare(bar, today);
     // ASSERT
     expect(share).toBe(expected);
-  });
-
-  it('grows a bar when the sweep reaches its start, at the sweep’s pace', () => {
-    // ARRANGE
-    const bar = { lane: 'b', start: 3, end: 9 } as const;
-    const expected = { delayMs: SWEEP_MS / 4, durationMs: SWEEP_MS / 2 };
-    // ACT
-    const timing = growTiming(bar);
-    // ASSERT
-    expect(timing).toEqual(expected);
   });
 
   it('keeps every lane in use and no two bars in one lane overlapping', () => {

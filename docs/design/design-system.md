@@ -78,12 +78,26 @@ Heading level and visual size are separate. The h1/h2/h3 elements follow the Epi
 - **Four sizes, plus hero as the one exception.** `caption` is allowed everywhere, Scenes included. A Scene has no fifth size. Hierarchy inside a Scene comes from weight first, then colour.
 - **One value per role.** Each size scales fluidly with `clamp()`, so no breakpoint prefix (`md:text-…`) ever appears on a size.
 - **Weights:** 400, 500, 600 (normal, medium, semibold). A card title inside a Scene is `text-body font-semibold`.
-- **Text strengths:** full (`text-foreground`) and muted (`text-muted-foreground`). A Slide caption (`SlideCaption`) is `caption` + muted.
+- **Text strengths:** full (`text-foreground`) and muted (`text-muted-foreground`). A Slide caption (`SlideCaption`, in a Scene that authors its own header) is `caption` + muted.
 - **Fonts:** `--font-sans` (the system sans) and `--font-mono`, declared once in `globals.css`. Both stacks are Tailwind's defaults. Changing the typeface is a one-line edit.
 - **Heading tracking:** `--tracking-heading` is `-0.02em`, applied to hero, heading and subheading.
 - **Two relative sizes are allowed, one file each:** the citation marker `<sup>` at `0.7em` and inline `code` at `0.9em`. They scale with the text around them.
 
 The kit's `Title` maps a title's position to its role: Title slide → `hero`, section slide → `heading`, page slide → `subheading`, h4 and below → `body` semibold.
+
+### Slide header
+
+The Slide header ([`slide-header.tsx`](../../src/components/slide-master/slide-header.tsx)) sets three lines above a titled Slide's Scene, in tokens only:
+
+| Part    | Type                                                  | Space                                                     |
+| ------- | ----------------------------------------------------- | --------------------------------------------------------- |
+| Eyebrow | `caption`, uppercase, normal weight, sans, muted      | `mb-4` under it: further from the title than the caption  |
+| Title   | its level's role: `heading` (h2) or `subheading` (h3) | none                                                      |
+| Caption | `body`, muted                                         | `mt-2` over it; `max-w-[70%]` from `md`, full width below |
+
+The Eyebrow is computed: the Section title the table of contents shows on the left, `n / N` on the right. Proximity groups the title with its caption; the Eyebrow reads as the label above both. The Title slide's header is the `hero` `h1` and the caption, with no Eyebrow.
+
+A section slide on the shared header sits on a full-bleed band, `bg-section-band` (`--section-band`: one step darker than the page in light, one step off it in dark), so the start of a Section reads at a glance even at `40svh`. On a Title slide with an authored hero Scene the header and the hero sit together, centred in the slide: the hero's frame hugs its content instead of filling the rest of the slide.
 
 ## How tokens reach Tailwind
 
@@ -118,13 +132,18 @@ The landing page, `ai-token-economy` and `maintaining-markdown-for-ai` predate t
 
 ## Motion
 
-A Slide's motion is **CSS only**, in the Slide's own CSS module: transitions, keyframes and scroll-driven `animation-timeline`. JavaScript motion (GSAP in a `*.client.tsx`) waits for an Episode that proves it needs it.
+A Slide's motion is **CSS only**: the shared entrance and hover vocabulary in `globals.css`, a Slide's own motion in its CSS module (transitions, keyframes and scroll-driven `animation-timeline`). JavaScript motion (GSAP in a `*.client.tsx`) waits for an Episode that proves it needs it.
 
 What starts a motion:
 
-- **By default, one entrance when the Slide becomes active,** keyed on `[data-zone='active']`. `SlideMount` sets `data-zone` ([`slide-mount.client.tsx`](../../src/components/episode-page/slide-mount.client.tsx)), and [FE-009](../../.archgate/adrs/FE-009-slide-wrapper-and-scene.md) §6 names it a stable CSS hook, so renaming it is a breaking change. The entrance replays when the reader returns, which FE-009 accepts.
+- **The entrance is shared and plays once.** The first time a Slide is active, its Slide header types in (Eyebrow, then title, then caption, settled within 1.5s) and its Scene fades up: the Foreground rises `1.5rem` as it fades in, the Backdrop fades in place, in about 400ms. `SlideMount` carries `data-entry` (`pending`, `entering`, `done`) in the page's zone store, so a Slide that unmounts while far comes back settled. Only under the `js` class, set in `<head>` before first paint, does a pending Slide start hidden: without JavaScript, in print and under reduced motion everything shows at once. A Scene on the shared header staggers, draws on or fades in none of its elements on entry; its one emphasis motion aside (below). The typing pace comes from a seeded jitter ([`typewriter.pure.ts`](../../src/lib/typewriter.pure.ts)): uneven, and the same on every load. The record's `entrance` picks `typewriter` (default), `fade` or `none`.
+- **An Episode whose record sets `header: 'authored'`** keeps per-Slide entrances keyed on `[data-zone='active']`. `SlideMount` sets `data-zone` ([`slide-mount.client.tsx`](../../src/components/episode-page/slide-mount.client.tsx)), and [FE-009](../../.archgate/adrs/FE-009-slide-wrapper-and-scene.md) §6 names it a stable CSS hook, so renaming it is a breaking change. Such an entrance replays when the reader returns.
 - **Scroll-driven (`animation-timeline`) only when the motion _is_ progress:** a timeline, growth, a sequence. `vertical-sticky-years` is the worked example.
+- **One emphasis motion per Scene** carries the Slide's message (see [Emphasis motion](#emphasis-motion)).
+- **Looping motion with a purpose** stays free in a Scene, and pauses outside `active` (FE-009 §6).
 - **Under reduced motion, every motion rests in its final state.** Wrap the motion in `@media (prefers-reduced-motion: no-preference)`, so the base rule is the finished picture.
+
+A per-Slide entrance on an Episode with authored headers:
 
 ```css
 /* slides/<slide>/<slide>.module.css */
@@ -144,6 +163,31 @@ What starts a motion:
 ```
 
 A Slide stands on its own at rest, so the final state of a motion must carry the claim; motion adds emphasis, never content.
+
+### Hover vocabulary
+
+A Scene draws the audience's focus while the presenter points with the mouse, and discloses detail progressively, through shared BEM classes in `globals.css` `@layer components` ([FE-012](../../.archgate/adrs/FE-012-slide-header-and-motion.md) §3). Each state also applies on `:focus-visible` and `:focus-within`, so a keyboard reader gets the same emphasis; under reduced motion it applies at once. A pattern the catalogue lacks is added here and in `globals.css` first, then used.
+
+| Class                                                       | Effect                                                            | Use when                                                                        |
+| ----------------------------------------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `card-hover card-hover--raise`                              | lifts the card a step and adds a shadow                           | a card or tile the presenter points at, one at a time                           |
+| `card-hover card-hover--outline`                            | turns the card's border the accent colour (the card has a border) | flat or dense cards, where a lift would crowd neighbours                        |
+| `focus-group focus-group--dim-others` + `focus-group__item` | pointing at one item dims its siblings to 40%                     | comparing items in a row or grid: the one under discussion stands out           |
+| `hover-reveal` + `hover-reveal__detail`                     | hides the detail until the pointer enters the block               | secondary figures (a percentage, a count) the talk reaches after the main point |
+
+Details stay in the DOM and in print, and show on devices without hover.
+
+### Emphasis motion
+
+**Emphasis motion: replay on `mouseenter`/`focus`.** A Scene may carry one motion that carries the Slide's message rather than decorating it: a funnel whose dots arrive while everything else is already at rest. It is the one exception to "no entrance in a Scene" ([FE-012](../../.archgate/adrs/FE-012-slide-header-and-motion.md) §4).
+
+| When it plays                | How                                                                                                        |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| The Slide's first entry      | a `*.client.tsx` widget starts it while `useSlideEntry()` reads `entering`; a return reads `done`          |
+| On demand, as often as asked | `onMouseEnter` and `onFocus` on its trigger, which is focusable (a `button`, or `tabIndex={0}` and a name) |
+| Under reduced motion         | never: the end state shows at once                                                                         |
+
+Name it in the Spec Option's build notes (`motion:`). A motion that only staggers or fades content in is not an emphasis motion.
 
 ### Library motions
 

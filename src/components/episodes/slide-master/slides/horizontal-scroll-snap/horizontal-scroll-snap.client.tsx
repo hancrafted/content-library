@@ -22,8 +22,8 @@ const TRACK = cn(
 const CARD = cn(
   'relative flex h-[24rem] w-[78vw] max-w-[22rem] shrink-0 origin-left snap-start flex-col overflow-hidden rounded-xl border p-6',
   'md:h-[28rem] md:w-[24rem] md:max-w-none',
-  'bg-background shadow-sm motion-safe:transition-[scale,translate,box-shadow,border-color] motion-safe:duration-500 motion-safe:ease-out',
-  'hover:shadow-xl motion-safe:hover:-translate-y-2',
+  // The active card scales up; the transition list keeps `card-hover--raise`'s lift and shadow animated alongside it.
+  'card-hover card-hover--raise bg-background shadow-sm motion-safe:transition-[scale,translate,box-shadow,border-color] motion-safe:duration-500 motion-safe:ease-out',
 );
 
 const NUMERAL = cn(

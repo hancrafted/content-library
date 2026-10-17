@@ -49,6 +49,16 @@ describe('success cases', () => {
     expect(groups.map((g) => g.tokens.map((t) => t.name))).toEqual([expected]);
   });
 
+  it('files the section band under Surface & text, beside the muted surface', () => {
+    // ARRANGE
+    const tokens = [token('--section-band'), token('--muted-foreground'), token('--muted')];
+    const expected = [['Surface & text', ['--muted', '--muted-foreground', '--section-band']]];
+    // ACT
+    const groups = groupGlobalTokens(tokens);
+    // ASSERT
+    expect(groups.map((g) => [g.label, g.tokens.map((t) => t.name)])).toEqual(expected);
+  });
+
   it('describes a global token in one line', () => {
     // ARRANGE
     const expected = 'Corner rounding of cards, buttons and inputs.';
