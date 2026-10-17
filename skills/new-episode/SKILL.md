@@ -24,9 +24,9 @@ Pick the entry by what Han gave you:
 
 Settle the `<slug>` (the working title in kebab case) with Han, then run `npm run wt:new -- episode/<slug>` and work in that worktree. This branch is the Episode's **integration branch** for the whole run and carries its one draft PR until Promotion.
 
-Then open the Run in the [event log](references/event-log.md): `npm run episode:run -- <slug> begin-run --model <the model you run on>`. It creates the staging folder `docs/episodes/<slug>/` when absent, writes the Run's `start-run` line (harness, run id, branch and template commit included) and the active-run marker.
+Then open the Run in the [event log](references/event-log.md): `npm run episode:run -- <slug> begin-run --model <the model you run on>`. It creates the staging folder `docs/episodes/<slug>/` when absent, writes the Run's `start-run` line (harness, run id, branch and template commit included) and the active-run marker. It also writes the draft `pipeline.yml` (template commit, slug, `dev_port` the first free port from 4000, `spec_port` the next, `foreach` jobs unexpanded) and starts the dashboard dev server on `dev_port` and the Spec server on `spec_port`, detached; their pids sit in `.scratch/<slug>/servers/`. `end-run` and `wt:done` stop both, and `npm run dev-stop -- <port>` stops one.
 
-_Done when_ the worktree exists, `git branch --show-current` prints `episode/<slug>`, and `docs/episodes/<slug>/events.jsonl` holds the Run's `start-run` line.
+_Done when_ the worktree exists, `git branch --show-current` prints `episode/<slug>`, and `docs/episodes/<slug>/events.jsonl` holds the Run's `start-run` line and a draft `pipeline.yml` naming both ports.
 
 ### 2. Brief
 
@@ -38,10 +38,9 @@ _Done when_ `node skills/new-episode/scripts/approve.ts docs/episodes/<slug>/bri
 
 Setup turns the approved Brief into the approved pipeline. Every job of `pipeline.yml` names its `stage`, one of the ordered `stages` ([design-ADR-0008](../../docs/adr/0008-pipeline-jobs-belong-to-stages.md)); Setup's jobs run by [the job loop](#the-job-loop), each when `npm run episode:status -- <slug>` prints it `ready`:
 
-1. `scaffold-pipeline` by [`references/scaffold-pipeline.md`](references/scaffold-pipeline.md): copies the template to `docs/episodes/<slug>/pipeline.yml` as a draft, its `foreach` jobs unexpanded, so every job shows on the dashboard from here on.
-2. `categorize-research`, whose `intent` is the implementor's prompt: one research folder name per research question, and any new category added to `GLOSSARY.md`. Keep the names for retrieval; save them to `.scratch/<slug>/research-folders.md` when the session may end before it.
-3. `retrieval` by [`references/retrieval.md`](references/retrieval.md), beside `convert-references` by [`references/convert-references.md`](references/convert-references.md): retrieval decides reuse, refresh or new per question and lists the questions needing a job under `### Research jobs` in its run-log entry.
-4. `customize-pipeline` by [`references/customize-pipeline.md`](references/customize-pipeline.md): expands `write-research` into one job per listed question and `implement-section` into one job per Section of the Brief's `## Slides`, and gives each `build` job its own free dev-server `port`. It is a human gate: stop after the `Gate: draft pipeline` commit.
+1. `categorize-research`, whose `intent` is the implementor's prompt: one research folder name per research question, and any new category added to `GLOSSARY.md`. Keep the names for retrieval; save them to `.scratch/<slug>/research-folders.md` when the session may end before it.
+2. `retrieval` by [`references/retrieval.md`](references/retrieval.md), beside `convert-references` by [`references/convert-references.md`](references/convert-references.md): retrieval decides reuse, refresh or new per question and lists the questions needing a job under `### Research jobs` in its run-log entry.
+3. `customize-pipeline` by [`references/customize-pipeline.md`](references/customize-pipeline.md): expands `write-research` into one job per listed question and `implement-section` into one job per Section of the Brief's `## Slides`, and gives each `implement-section` job its own free dev-server `port`. It is a human gate: stop after the `Gate: draft pipeline` commit.
 
 _Done when_ `docs/episodes/<slug>/pipeline.yml` has `status: approved`, committed by Han with `Gate: approved pipeline`.
 

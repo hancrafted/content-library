@@ -106,7 +106,7 @@ describe('failure cases', () => {
       .replace('    retries: 2', '    retry: 2')
       .replace('skills: [grilling],', 'skill: [grilling],');
     const expected = [
-      'The pipeline has an unknown key "owner"; the keys are status, stages, jobs, template.',
+      'The pipeline has an unknown key "owner"; the keys are status, stages, jobs, template, dev_port, spec_port.',
       'Job "brief-grill", agent 1 lacks the key "skills".',
       'Job "brief-grill", agent 1 has an unknown key "skill"; the keys are type, skills, references, rubric, agent, model, session.',
       'Job "research" lacks the key "retries".',

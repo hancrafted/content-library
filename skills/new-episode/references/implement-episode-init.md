@@ -10,7 +10,7 @@ The implementor (`archgate:developer`) builds the Spec's `Episode page` section,
 - Build the picked Title-slide Option as a set: its Title slide mock is the record's `title` Slide, a Slide folder whose Scene carries the Hero motif and the one h1; each `li[data-spec="echo"]` is its Section's section slide Scene, by its `data-section`. Its build notes give the parts, tokens and i18n keys, and each Context marker a mock shows is a `ContextMarker` opening the Speaker note they name.
 - Write one placement marker per Section, by the [naming below](#placement-markers), in Spec order. Each holds that Section's section slide and no page Slide.
 - Capture the post-build text: `npm run build`, then `npm run test:build`, and commit the written `tests/post-build/episode-text/<ep>.{en,de}.json`. The slug joins `PUBLISHED_SLUGS` only at publication.
-- Serve the Episode for Han: in the Episode's worktree, start `npx next dev -p <port>`, `<port>` the job's `port` in `pipeline.yml`, detached, so it outlives the agent's session: the harness's detached background mode, or `nohup npx next dev -p <port> > .scratch/dev-<port>.log 2>&1 & echo $! > .scratch/dev-<port>.pid`. Leave it running when the job ends: the dashboard links it, and it shows each Section as it merges into `episode/<slug>`.
+- Serve the Episode for Han: in the Episode's worktree, reuse the dev server `begin-run` started on `dev_port` in `pipeline.yml` (`lsof -nP -iTCP:<dev_port> -sTCP:LISTEN` prints a line); start none of your own, and leave it running when the job ends: the dashboard links it, and it shows each Section as it merges into `episode/<slug>`. When none answers there, start `npx next dev -p <dev_port>` detached in the Episode's worktree.
 
 ### Placement markers
 
