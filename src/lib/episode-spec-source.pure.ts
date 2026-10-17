@@ -41,7 +41,7 @@ const HEADING = /^(#{1,4}) (.*?)(?: \{#([a-z0-9-]+)\})?$/;
 const BRIEF_ITEM = /^(?:\d+\. )?(?:\([AB]\) )?\*\*([^*]+)\*\* — (.*?)(?: _Visual:_ (.*?))?(?: _Research:_ [\d, ]+)?$/;
 
 /** A title as the Dossier's anchors slug it: lowercase words joined by single hyphens. */
-export function slugOf(title: string): string {
+export function dossierSlug(title: string): string {
   return title
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
@@ -90,7 +90,7 @@ function briefSlide(line: string): SourceSlide | undefined {
   const visual = match[3];
   return {
     title: text,
-    slug: slugOf(text),
+    slug: dossierSlug(text),
     purpose: strip(group(match, 2)),
     visual: visual === undefined ? [] : [strip(visual)],
   };
@@ -103,7 +103,7 @@ function briefSections(lines: readonly string[]): SourceSection[] {
   const end = rest.findIndex((line) => line.startsWith('## '));
   const sections: SourceSection[] = [];
   for (const line of end === -1 ? rest : rest.slice(0, end)) {
-    if (line.startsWith('### ')) sections.push({ title: line.slice(4), slug: slugOf(line.slice(4)), slides: [] });
+    if (line.startsWith('### ')) sections.push({ title: line.slice(4), slug: dossierSlug(line.slice(4)), slides: [] });
     else {
       const slide = briefSlide(line);
       if (slide !== undefined) sections.at(-1)?.slides.push(slide);
@@ -166,7 +166,7 @@ function openSection(source: Source, cursor: Cursor, { text, slug }: Named): voi
 }
 
 function openSlide(cursor: Cursor, { text, slug }: Named): void {
-  cursor.slide = { title: text, slug: slug ?? slugOf(text), visual: [] };
+  cursor.slide = { title: text, slug: slug ?? dossierSlug(text), visual: [] };
   cursor.section?.slides.push(cursor.slide);
 }
 

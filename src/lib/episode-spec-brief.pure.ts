@@ -11,10 +11,11 @@ export const BRIEF_HEADINGS = ['Learning goal', 'Actionables', 'Research questio
 
 export const BRIEF_KEY_PREFIX = 'brief--';
 
-const slugOf = (heading: string): string => heading.toLowerCase().replace(/\s+/g, '-');
+/** The key slug of a card heading (a fixed, plain-word list). Not the Dossier anchor slug of episode-spec-source.pure.ts. */
+const cardHeadingSlug = (heading: string): string => heading.toLowerCase().replace(/\s+/g, '-');
 
 /** The feedback key of a card heading's note: `brief--learning-goal`. */
-export const briefKey = (heading: string): string => `${BRIEF_KEY_PREFIX}${slugOf(heading)}`;
+export const briefKey = (heading: string): string => `${BRIEF_KEY_PREFIX}${cardHeadingSlug(heading)}`;
 
 /** Every key a Brief note may carry. */
 export const BRIEF_KEYS: readonly string[] = BRIEF_HEADINGS.map(briefKey);
