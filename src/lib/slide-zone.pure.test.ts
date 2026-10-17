@@ -1,5 +1,13 @@
 import { describe, expect, it, vi } from 'vitest';
-import { APPROACH_ROOT_MARGIN, createZoneStore, isMounted, isPlaying, keptHeight, zoneOf } from './slide-zone.pure';
+import {
+  APPROACH_ROOT_MARGIN,
+  createZoneStore,
+  entryIn,
+  isMounted,
+  isPlaying,
+  keptHeight,
+  zoneOf,
+} from './slide-zone.pure';
 
 describe('success cases', () => {
   describe('zone derivation', () => {
@@ -86,6 +94,19 @@ describe('success cases', () => {
     });
   });
 
+  describe('entry in a Slide', () => {
+    it('reads the entrance of the Slide a component sits in, so its emphasis motion can play on the first entry', () => {
+      // ARRANGE
+      const store = createZoneStore();
+      store.setActive('a');
+      const expected = 'entering';
+      // ACT
+      const entry = entryIn(store, 'a');
+      // ASSERT
+      expect(entry).toBe(expected);
+    });
+  });
+
   describe('zone store', () => {
     it('turns far when the approach observer says the Slide left, near when it returns', () => {
       // ARRANGE
@@ -147,6 +168,15 @@ describe('failure cases', () => {
     // ASSERT
     expect(store.getEntry('a')).toBe('pending');
   });
+  it('reads a Slide never active as pending, so nothing plays before the reader arrives', () => {
+    // ARRANGE
+    const store = createZoneStore();
+    const expected = 'pending';
+    // ACT
+    const entry = entryIn(store, 'a');
+    // ASSERT
+    expect(entry).toBe(expected);
+  });
 });
 
 describe('edge cases', () => {
@@ -180,5 +210,14 @@ describe('edge cases', () => {
     store.finishEntry('a');
     // ASSERT
     expect(listener).toHaveBeenCalledTimes(changes);
+  });
+  it('reads outside any Slide as done, so a component there never waits for an entrance', () => {
+    // ARRANGE
+    const store = createZoneStore();
+    const expected = 'done';
+    // ACT
+    const entry = entryIn(store, null);
+    // ASSERT
+    expect(entry).toBe(expected);
   });
 });

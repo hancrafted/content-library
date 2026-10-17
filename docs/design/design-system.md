@@ -134,10 +134,11 @@ A Slide's motion is **CSS only**: the shared entrance and hover vocabulary in `g
 
 What starts a motion:
 
-- **The entrance is shared and plays once.** The first time a Slide is active, its Slide header types in (Eyebrow, then title, then caption, settled within 1.5s) and its Scene fades up: the Foreground rises `1.5rem` as it fades in, the Backdrop fades in place, in about 400ms. `SlideMount` carries `data-entry` (`pending`, `entering`, `done`) in the page's zone store, so a Slide that unmounts while far comes back settled. Only under the `js` class, set in `<head>` before first paint, does a pending Slide start hidden: without JavaScript, in print and under reduced motion everything shows at once. A Scene on the shared header adds no entrance of its own, per element or whole. The typing pace comes from a seeded jitter ([`typewriter.pure.ts`](../../src/lib/typewriter.pure.ts)): uneven, and the same on every load. The record's `entrance` picks `typewriter` (default), `fade` or `none`.
+- **The entrance is shared and plays once.** The first time a Slide is active, its Slide header types in (Eyebrow, then title, then caption, settled within 1.5s) and its Scene fades up: the Foreground rises `1.5rem` as it fades in, the Backdrop fades in place, in about 400ms. `SlideMount` carries `data-entry` (`pending`, `entering`, `done`) in the page's zone store, so a Slide that unmounts while far comes back settled. Only under the `js` class, set in `<head>` before first paint, does a pending Slide start hidden: without JavaScript, in print and under reduced motion everything shows at once. A Scene on the shared header staggers, draws on or fades in none of its elements on entry; its one emphasis motion aside (below). The typing pace comes from a seeded jitter ([`typewriter.pure.ts`](../../src/lib/typewriter.pure.ts)): uneven, and the same on every load. The record's `entrance` picks `typewriter` (default), `fade` or `none`.
 - **An Episode whose record sets `header: 'authored'`** keeps per-Slide entrances keyed on `[data-zone='active']`. `SlideMount` sets `data-zone` ([`slide-mount.client.tsx`](../../src/components/episode-page/slide-mount.client.tsx)), and [FE-009](../../.archgate/adrs/FE-009-slide-wrapper-and-scene.md) §6 names it a stable CSS hook, so renaming it is a breaking change. Such an entrance replays when the reader returns.
 - **Scroll-driven (`animation-timeline`) only when the motion _is_ progress:** a timeline, growth, a sequence. `vertical-sticky-years` is the worked example.
-- **Looping or emphasis motion with a purpose** stays free in a Scene, and pauses outside `active` (FE-009 §6).
+- **One emphasis motion per Scene** carries the Slide's message (see [Emphasis motion](#emphasis-motion)).
+- **Looping motion with a purpose** stays free in a Scene, and pauses outside `active` (FE-009 §6).
 - **Under reduced motion, every motion rests in its final state.** Wrap the motion in `@media (prefers-reduced-motion: no-preference)`, so the base rule is the finished picture.
 
 A per-Slide entrance on an Episode with authored headers:
@@ -172,7 +173,19 @@ A Scene draws the audience's focus while the presenter points with the mouse, an
 | `focus-group focus-group--dim-others` + `focus-group__item` | pointing at one item dims its siblings to 40%                     | comparing items in a row or grid: the one under discussion stands out           |
 | `hover-reveal` + `hover-reveal__detail`                     | hides the detail until the pointer enters the block               | secondary figures (a percentage, a count) the talk reaches after the main point |
 
-Details stay in the DOM and in print, and show on devices without hover. A one-off emphasis with a purpose (a funnel replaying on mouse enter) stays free in its Scene.
+Details stay in the DOM and in print, and show on devices without hover.
+
+### Emphasis motion
+
+**Emphasis motion: replay on `mouseenter`/`focus`.** A Scene may carry one motion that carries the Slide's message rather than decorating it: a funnel whose dots arrive while everything else is already at rest. It is the one exception to "no entrance in a Scene" ([FE-012](../../.archgate/adrs/FE-012-slide-header-and-motion.md) §4).
+
+| When it plays                | How                                                                                                        |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| The Slide's first entry      | a `*.client.tsx` widget starts it while `useSlideEntry()` reads `entering`; a return reads `done`          |
+| On demand, as often as asked | `onMouseEnter` and `onFocus` on its trigger, which is focusable (a `button`, or `tabIndex={0}` and a name) |
+| Under reduced motion         | never: the end state shows at once                                                                         |
+
+Name it in the Spec Option's build notes (`motion:`). A motion that only staggers or fades content in is not an emphasis motion.
 
 ### Library motions
 
