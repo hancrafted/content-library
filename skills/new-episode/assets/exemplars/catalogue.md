@@ -1,8 +1,8 @@
 # Exemplar catalogue
 
-The 29 sections of Han's two richest hand-built talk pages, `maintaining-markdown-for-ai` (13) and `ai-token-economy` (16; its Section 8 is commented out in the source), each pictured at rest and filed by the **claim type** it makes visible. A `write-spec` designer looks up the claim type of the Slide in front of it, studies the device that carried that claim before, and rebuilds it in this repo's tokens. The images set the bar for density and craft. Their markup is not a source: the pages are daisyUI on their own CSS and runtime, which the Spec contract refuses.
+The 29 sections of the user's two richest hand-built talk pages, `maintaining-markdown-for-ai` (13) and `ai-token-economy` (16; its Section 8 is commented out in the source), each pictured at rest and filed by the **claim type** it makes visible. A `write-spec` designer looks up the claim type of the Slide in front of it, studies the device that carried that claim before, and rebuilds it in this repo's tokens. The images set the bar for density and craft. Their markup is not a source: the pages are daisyUI on their own CSS and runtime, which the Spec contract refuses.
 
-Every line marked _Draft — Han:_ is a judgement of taste awaiting Han's prune. Everything else describes what the image shows.
+Every line marked _Draft — the user:_ is a judgement of taste awaiting the user's prune. Everything else describes what the image shows.
 
 ## How to read an entry
 
@@ -16,7 +16,7 @@ Two habits run through nearly every entry, so they are stated once here rather t
 - The title states the claim, not the topic, with its key phrase in the accent colour ("One small bug fix compounds to **~73,000 tokens** of context"). A mono kicker above it names the section (`S5.1 · COST OF AGENTIC AI`).
 - Real numbers in mono, tabular figures, with citations inline as `[n]`; a one-line takeaway or source caption closes the section under its diagram.
 
-_Draft — Han:_ in this repo `primary` is near-black, so the accent-phrase habit needs a decision: emphasise by weight alone, or name a token for it. The meaning colours (`machine`, `human`, `ai`) are not available for it.
+_Draft — the user:_ in this repo `primary` is near-black, so the accent-phrase habit needs a decision: emphasise by weight alone, or name a token for it. The meaning colours (`machine`, `human`, `ai`) are not available for it.
 
 ## Compounding: a cost that grows step by step
 
@@ -27,7 +27,7 @@ _Draft — Han:_ in this repo `primary` is near-black, so the accent-phrase habi
 - Device: a ledger of step rows, each with its own `+n` amount, beside a running-total column that restates the sum after each group; a total bar closes it.
 - Composition: focal point the running totals on the right, read top to bottom; dense (13 rows) yet calm, because each group repeats one row shape.
 - Motion ends on: every row in, every running total counted up to its final value, the total bar at 73,450.
-- _Draft — Han:_ the strongest exemplar of the set. A running-total column is the device behind Han's round-2 "Cash left in each column" note on the cashflow board.
+- _Draft — the user:_ the strongest exemplar of the set. A running-total column is the device behind the user's round-2 "Cash left in each column" note on the cashflow board.
 
 ### For a real freelancer you need a business case. AI just bills you.
 
@@ -54,7 +54,7 @@ _Draft — Han:_ in this repo `primary` is near-black, so the accent-phrase habi
 - Device: two curves on one axis crossing at a marked point ("where the work moved"), a shaded "before it ships" band and a "Day zero" pill; paired with the corpus chart above as a two-panel figure.
 - Composition: focal point the crossing; end-of-line labels; light, mostly whitespace.
 - Motion ends on: the document chart built and its crossing landed, then the corpus chart.
-- _Draft — Han:_ the cleanest model for a "too late" Slide: the zero-cash month is the same kind of crossing.
+- _Draft — the user:_ the cleanest model for a "too late" Slide: the zero-cash month is the same kind of crossing.
 
 ### How key instructions get lost in the middle
 
@@ -81,7 +81,7 @@ _Draft — Han:_ in this repo `primary` is near-black, so the accent-phrase habi
 - Device: a faithful recreation of a real tool readout (Claude Code `/context`) in a dark terminal: an icon grid of used and free cells beside a category table with amounts and percentages.
 - Composition: the terminal fills the stage; focal point the `79.5k/200k (40%)` line; a caption says it is recreated from a real readout.
 - Motion ends on: the grid filled to 40% and every row listed.
-- _Draft — Han:_ "recreate the real tool screen" is the device for Slide 4-type Slides (pipeline tools in practice): draw the CRM or spreadsheet the founder would actually open, with real rows.
+- _Draft — the user:_ "recreate the real tool screen" is the device for Slide 4-type Slides (pipeline tools in practice): draw the CRM or spreadsheet the founder would actually open, with real rows.
 
 ### Tokens are the basic unit of data for LLMs
 
@@ -108,7 +108,7 @@ _Draft — Han:_ in this repo `primary` is near-black, so the accent-phrase habi
 - Device: two stat tiles (billed input, billed output), then one horizontal bar per model scaled to cost, the most expensive row tinted, then a takeaway band with the spread and a per-day projection.
 - Composition: focal point the tinted most-expensive row and its price; stats, bars, takeaway top to bottom.
 - Motion ends on: rows revealed and bars filled to their widths.
-- _Draft — Han:_ the model for any "by the numbers" Slide: stat tiles first, bars at true proportion, one row tinted.
+- _Draft — the user:_ the model for any "by the numbers" Slide: stat tiles first, bars at true proportion, one row tinted.
 
 ### You're now accountable for a budget you never signed up to manage
 
@@ -143,7 +143,7 @@ _Draft — Han:_ in this repo `primary` is near-black, so the accent-phrase habi
 - Device: the same Venn a third time, the human circle now emphasised and the machine faded, the "still unsettled" line repeated.
 - Composition: same geometry, emphasis on the human.
 - Motion ends on: the emphasis drifted to the human region and held.
-- _Draft — Han:_ these three are the precedent for a recurring motif drawn once and re-emphasised per Slide, like this run's `CashflowBoard`: one geometry, only the emphasis and overlays change.
+- _Draft — the user:_ these three are the precedent for a recurring motif drawn once and re-emphasised per Slide, like this run's `CashflowBoard`: one geometry, only the emphasis and overlays change.
 
 ## The same artefact, pass after pass
 
@@ -170,7 +170,7 @@ _Draft — Han:_ in this repo `primary` is near-black, so the accent-phrase habi
 - Device: the same file; two recaps stacked; a human card left visibly "Open · Unresolved" with its questions listed.
 - Composition: focal point the open card, which is the largest.
 - Motion ends on: both earlier passes settled as recaps, the human pass open.
-- _Draft — Han:_ this three-beat sequence is the best model for a pipeline Slide run (leads, opportunities, deals): keep the artefact fixed and stack each stage's state beside it.
+- _Draft — the user:_ this three-beat sequence is the best model for a pipeline Slide run (leads, opportunities, deals): keep the artefact fixed and stack each stage's state beside it.
 
 ## Anatomy: an annotated artefact
 
@@ -199,7 +199,7 @@ _Draft — Han:_ in this repo `primary` is near-black, so the accent-phrase habi
 - Device: three green strength cards and three red flaw cards flanking a central split-head illustration.
 - Composition: symmetric; the illustration is the focal point.
 - Motion ends on: strengths and flaws revealed in sequence.
-- _Draft — Han:_ the illustration is not reproducible in tokens; the two-column strengths-versus-flaws frame is.
+- _Draft — the user:_ the illustration is not reproducible in tokens; the two-column strengths-versus-flaws frame is.
 
 ### It's an LLM — but if it were a human, how would you manage it?
 
@@ -246,7 +246,7 @@ _Draft — Han:_ in this repo `primary` is near-black, so the accent-phrase habi
 - Device: three columns on a board surface (Automated, Agent Steering, Team Practices), each an icon header over stacked cards with a coloured left rule.
 - Composition: even weight, no single focal point; the densest section of either page.
 - Motion ends on: columns and cards placed.
-- _Draft — Han:_ the model for an actionables close like "Start before you need the money": one column per Actionable, each card one first step.
+- _Draft — the user:_ the model for an actionables close like "Start before you need the money": one column per Actionable, each card one first step.
 
 ### Feature roadmap
 
@@ -281,7 +281,7 @@ _Draft — Han:_ in this repo `primary` is near-black, so the accent-phrase habi
 - Device: a "hypothesis, not an accusation" tag, a two-panel comic, two numbered cards (initiation, hook), a closing band tying back to the earlier meter.
 - Composition: the comic dominates.
 - Motion ends on: the default reveal.
-- _Draft — Han:_ the comic is an image asset, outside what a Spec mock can draw; the hedge tag and the two-card initiation-then-hook frame are reusable.
+- _Draft — the user:_ the comic is an image asset, outside what a Spec mock can draw; the hedge tag and the two-card initiation-then-hook frame are reusable.
 
 ### Live demo
 
@@ -290,7 +290,7 @@ _Draft — Han:_ in this repo `primary` is near-black, so the accent-phrase habi
 - Device: a mono file path and a quoted prompt with a left rule.
 - Composition: sparse on purpose; the demo itself happens off the page.
 - Motion ends on: the default reveal.
-- _Draft — Han:_ the one sparse section; a demo hand-off, not a model for a Slide that must stand on its own.
+- _Draft — the user:_ the one sparse section; a demo hand-off, not a model for a Slide that must stand on its own.
 
 ## How these were made
 
@@ -298,7 +298,7 @@ Each image is one `section.beat` of `coaching-content/src/<page>/index.html`, se
 
 ## Proposed changes
 
-Drafts for Han, not applied. Each names its file, under `skills/new-episode/` unless the path says otherwise, and its one-line change.
+Drafts for the user, not applied. Each names its file, under `skills/new-episode/` unless the path says otherwise, and its one-line change.
 
 1. `assets/spec-patterns.html` (new): token-only rebuilds of the seven devices most Slides need, each a `figure` that passes the staging test, tagged with its claim type:
    - the running-total ledger (ate 13);
@@ -311,18 +311,18 @@ Drafts for Han, not applied. Each names its file, under `skills/new-episode/` un
 2. `references/write-dossier.md`, the Visual bullet: each Slide's Visual names one claim type from `assets/exemplars/catalogue.md` and lists the concrete content the Slide shows (every note, amount, name and label), so designers start from material, not a sentence.
 3. `references/spec-designer.md`, "What you read": add the catalogue and `assets/spec-patterns.html`; per Slide, find its claim type, study the exemplar image, and build at least one Option from that device in tokens.
 4. `references/spec-designer.md`, "The mock is the Slide": a mock matches the density of the exemplar for its claim type; claim-stating titles, real numbers in mono and a closing takeaway line are the default.
-5. `references/spec-designer.md`, a new rule: before returning, measure every text box in the real Spec frame, never only the preview, which renders about 40 px wider (lesson 15's `episode:spec-preview` script, once built).
+5. `references/spec-designer.md`, a new rule: before returning, measure every text box in the real Spec frame, never only the preview, which renders about 40 px wider (`npm run episode:spec-preview` renders the real frame).
 6. `references/spec-designer.md`, figcaption rule: every figcaption gives its reason as why this Option over the Slide's others; the recommended one says why it wins.
 7. `references/write-spec.md`, Prompt step 1: when Slides share a part, the Visual language names one Option as its reference drawing, and every mock of that part copies it (this run's `CashflowBoard`, the Venn of mm 04, 09 and 13).
 8. `references/write-spec.md`, rubric line 10: append "and at least the density of the catalogue exemplar for its claim type; text that runs past its box at 1440 px in the Spec frame fails."
-9. `assets/spec-frame.html`: show the claim type and its exemplar thumbnail in each `spec-slide-head`, so Han sees the bar each Option was held to.
-10. `scripts/` (new, by `/tdd` after Han agrees the seams): promote this harvest's capture (reduced motion, unrolled tower, one image per `section.beat`) into a script, so a new hand-built page joins the catalogue with one command.
+9. `assets/spec-frame.html`: show the claim type and its exemplar thumbnail in each `spec-slide-head`, so the user sees the bar each Option was held to.
+10. `scripts/` (new, by `/tdd` after the user agrees the seams): promote this harvest's capture (reduced motion, unrolled tower, one image per `section.beat`) into a script, so a new hand-built page joins the catalogue with one command.
 
-### Spec page UX, from Han's round-2 review
+### Spec page UX, from the user's round-2 review
 
-Han's words, 2026-10-16: the note sits below the Slide where he can no longer see it; the intro is three text-heavy columns he does not read; save should be a full button that confirms and keeps his input. These change `assets/spec-frame.html`, `assets/spec-review.html` and the Spec contract in `src/lib/episode-spec*.pure.ts` with its staging test, so they are built by `/tdd`.
+The user's words, 2026-10-16: the note sits below the Slide where they can no longer see it; the intro is three text-heavy columns they do not read; save should be a full button that confirms and keeps their input. These change `assets/spec-frame.html`, `assets/spec-review.html` and the Spec contract in `src/lib/episode-spec*.pure.ts` with its staging test, so they are built by `/tdd`.
 
 11. Pick by tab: the pick checkbox goes; the active tab is the Slide's pick, so every Slide always has exactly one, defaulting to the recommended Option. The contract and `feedback.md` read the pick from the active tab.
-12. Note as a speech bubble: a Note button to the right of the tabs opens a bubble over the stage, typed or dictated, so the Slide stays in view. It stays open with its text while Han switches tabs, has no save of its own, and closes with an × at its top right. The page's Submit saves every bubble's text.
+12. Note as a speech bubble: a Note button to the right of the tabs opens a bubble over the stage, typed or dictated, so the Slide stays in view. It stays open with its text while the user switches tabs, has no save of its own, and closes with an × at its top right. The page's Submit saves every bubble's text.
 13. Submit as a full-width primary button; on save, a confirmation alert; inputs and picks are kept after saving, never cleared.
 14. Intro as visuals, not columns: Style, Visual language and Episode page render as visual cards, for example a swatch strip of the tints and tokens, the recurring motif drawn small (the board, the pills), and the Episode page as a mini outline of title slide, Sections and markers, with prose behind a closed `details`.

@@ -64,8 +64,30 @@ type: dossier
 ### Start fresh {#fresh}
 `;
 
-function runLog(notes: string): string {
-  return ['# Run log', '', '## write-dossier · 2026-10-12T11:00:00Z', '', '### Notes', '', notes, ''].join('\n');
+const TRACE = 'a1b2';
+
+/** An events.jsonl whose write-dossier Job carries one typed note per `[type, text]` pair. */
+function eventLog(...notes: [string, string][]): string {
+  const base = { trace_id: TRACE, t: '2026-10-12T11:00:00Z' };
+  const job = {
+    ...base,
+    kind: 'start',
+    seq: 1,
+    span_id: 'job1',
+    type: 'job',
+    name: 'write-dossier',
+    job: 'write-dossier',
+  };
+  const events = notes.map(([type, text], index) => ({
+    ...base,
+    kind: 'event',
+    seq: index + 2,
+    span_id: 'job1',
+    name: 'note',
+    source: 'typed',
+    attributes: { 'note.type': type, 'note.text': text },
+  }));
+  return [job, ...events].map((line) => JSON.stringify(line)).join('\n') + '\n';
 }
 
 const UNSETTLED_BRIEF = `---
@@ -197,10 +219,10 @@ describe('failure cases', () => {
     expect(findings[0].message).toContain(missing);
   });
 
-  it('names a Brief Slide the Dossier dropped without a Spine change line', () => {
+  it('names a Brief Slide the Dossier dropped without a spine-change note', () => {
     // ARRANGE
     const dropped = DOSSIER.replace('### The afternoon drifts {#afternoon}\n', '');
-    const files = { 'brief.md': brief(), 'dossier.md': dropped, 'run-log.md': runLog('Done.') };
+    const files = { 'brief.md': brief(), 'dossier.md': dropped, 'events.jsonl': eventLog() };
     const expected = ['brief-spine'];
     const title = '"The afternoon drifts"';
     // ACT
@@ -209,13 +231,13 @@ describe('failure cases', () => {
     expect(kinds(findings)).toEqual(expected);
     expect(findings[0].message).toContain(title);
   });
-  it('names a Dossier page Slide the Brief never listed, without a Spine change line', () => {
+  it('names a Dossier page Slide the Brief never listed, without a spine-change note', () => {
     // ARRANGE
     const added = DOSSIER.replace(
       '### Start fresh {#fresh}',
       '### Start fresh {#fresh}\n\n### Cut what you paste {#cut}',
     );
-    const files = { 'brief.md': brief(), 'dossier.md': added, 'run-log.md': runLog('Done.') };
+    const files = { 'brief.md': brief(), 'dossier.md': added, 'events.jsonl': eventLog() };
     const expected = ['brief-spine'];
     const title = '"Cut what you paste"';
     // ACT
@@ -224,13 +246,13 @@ describe('failure cases', () => {
     expect(kinds(findings)).toEqual(expected);
     expect(findings[0].message).toContain(title);
   });
-  it('names a Brief Slide the Dossier moved out of order, without a Spine change line', () => {
+  it('names a Brief Slide the Dossier moved out of order, without a spine-change note', () => {
     // ARRANGE
     const moved = DOSSIER.replace('### Every token is spent attention {#spent}\n\n', '').replace(
       '### Start fresh {#fresh}',
       '### Start fresh {#fresh}\n\n### Every token is spent attention {#spent}',
     );
-    const files = { 'brief.md': brief(), 'dossier.md': moved, 'run-log.md': runLog('Done.') };
+    const files = { 'brief.md': brief(), 'dossier.md': moved, 'events.jsonl': eventLog() };
     const expected = ['brief-spine'];
     const title = '"Every token is spent attention"';
     // ACT
@@ -251,11 +273,11 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('accepts a dropped Brief Slide that the write-dossier entry names in a Spine change line', () => {
+  it('accepts a dropped Brief Slide that the write-dossier Job notes name in a spine-change note', () => {
     // ARRANGE
     const dropped = DOSSIER.replace('### The afternoon drifts {#afternoon}\n', '');
-    const notes = 'Spine change: The afternoon drifts — the B thread folds into the first Slide.';
-    const files = { 'brief.md': brief(), 'dossier.md': dropped, 'run-log.md': runLog(notes) };
+    const notes = 'The afternoon drifts — the B thread folds into the first Slide.';
+    const files = { 'brief.md': brief(), 'dossier.md': dropped, 'events.jsonl': eventLog(['spine-change', notes]) };
     // ACT
     const findings = checkBrief(files);
     // ASSERT

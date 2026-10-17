@@ -220,6 +220,7 @@
     "wants": "Wants · nicht blockierend",
     "none": "Keine",
     "gateConfig": "Menschliches Gate",
+    "needsHan": "Braucht Han",
     "noGate": "Kein menschliches Gate",
     "retryLimit": "Retry-Limit",
     "config": "Agent-Konfiguration",
@@ -328,7 +329,9 @@
       "notWritten": "noch nicht geschrieben",
       "openOutput": "öffnet als Klartext in einem neuen Tab",
       "preview": "Vorschau :{port}",
-      "previewHelp": "Dev-Server dieses Jobs, öffnet in einem neuen Tab"
+      "previewHelp": "Dev-Server dieses Jobs, öffnet in einem neuen Tab",
+      "spec": "Spec :{port}",
+      "specHelp": "Spec-Server dieses Runs, öffnet in einem neuen Tab"
     }
   },
   "meta": {

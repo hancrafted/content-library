@@ -1,11 +1,15 @@
-# The new-episode pipeline template. After Han approves the Brief,
-# scaffold-pipeline copies this file to docs/episodes/<slug>/pipeline.yml as a
-# draft, customize-pipeline tailors it for that Episode once the Setup jobs
-# have collected what it needs, and Han approves it by setting
+# The new-episode pipeline template. `begin-run` copies this file to
+# docs/episodes/<slug>/pipeline.yml as a draft the moment the Run begins,
+# customize-pipeline tailors it for that Episode once the Setup jobs
+# have collected what it needs, and the user approves it by setting
 # `status: approved` (design-ADR-0008).
 #
 # Schema (checked by src/lib/episode-pipeline.pure.ts in `npm run verify`):
 #   status    draft | approved
+#   dev_port  per-run only, written by begin-run: the dashboard dev server's port, the
+#             first free one from 4000; implement-episode-init serves the Episode there
+#   spec_port per-run only, written by begin-run: the Spec server's port, dev_port + 1;
+#             the dashboard links it
 #   template  per-run only: the main commit the pipeline was tailored
 #             from; the template is not merged into the Episode branch again until
 #             open-pr is done
@@ -21,7 +25,7 @@
 #               worktree on episode/<slug>--<job id>, merged back only on a pass.
 #               Required on a job that may run beside another or has foreach,
 #               unless all its agents run in the orchestrator session
-#     foreach   template and draft scaffold only; `<file>#<heading>`: customize-pipeline
+#     foreach   template and draft only; `<file>#<heading>`: customize-pipeline
 #               writes one job per list item under the heading, or per h3 when it holds h3s.
 #               An approved per-run pipeline has none, and no glob output
 #     before    what runs before the implementor writes: `mh-query`, required when a job
@@ -31,11 +35,12 @@
 #               one must need or want its writer; a rule must govern every .md one
 #     checks    cheapest first; names and commands in SKILL.md's job-loop check table
 #     retries   reviewer failures sent back before this branch of the pipeline stops
-#     gate      optional; `human` stops the run until Han approves the output
+#     gate      optional; `human` stops the run until the user approves the output
 #     port      per-run build jobs only, 1024–65535: the port the job's agent serves its
 #               worktree on with `npx next dev -p <port>`, linked by the dashboard.
 #               customize-pipeline assigns each build job its own; never 4382, the
-#               dashboard's port. An approved per-run pipeline gives every build job one
+#               dashboard's port. An approved per-run pipeline gives every build job one, except
+#               implement-episode-init, which serves on dev_port
 #     agents    run in order; a reviewer is fresh: it did not write the output
 #       type        implementor | reviewer
 #       skills      skill names under .agents/skills/, or plugin:skill; refused when the
@@ -70,22 +75,6 @@ jobs:
         rubric: references/brief-grill.md#rubric
         model: opus
 
-  # Copies this template to the Episode as a draft, so every job shows from the
-  # start, naming the Brief's design references; customize-pipeline expands its
-  # foreach jobs at the end of Setup.
-  - id: scaffold-pipeline
-    stage: setup
-    needs: [brief-grill]
-    outputs: [docs/episodes/<slug>/pipeline.yml]
-    checks: [vitest]
-    retries: 0
-    agents:
-      - type: implementor
-        skills: []
-        references: [references/scaffold-pipeline.md, assets/pipeline.yml, docs/episodes/<slug>/brief.md]
-        model: inherit
-        session: orchestrator
-
   # An information architect's call, before the pipeline names any research file.
   - id: categorize-research
     stage: setup
@@ -100,7 +89,7 @@ jobs:
       question's subject, not the Episode, in 20-40 characters of kebab case.
       Return the names, each beside its question, and any category you added
       with why no existing one fits.
-    needs: [scaffold-pipeline]
+    needs: [brief-grill]
     isolation: worktree
     outputs: []
     checks: [mh]
@@ -112,14 +101,14 @@ jobs:
         model: opus
 
   # Decides per research question: reuse, refresh or new. Lists the questions
-  # needing a job under the run-log entry's `### Research jobs`, which the
+  # needing a job under `## Research jobs` in its research plan, which the
   # write-research foreach reads.
   - id: retrieval
     stage: setup
     needs: [categorize-research]
     isolation: worktree
     before: [mh-query]
-    outputs: [docs/episodes/<slug>/run-log.md]
+    outputs: [docs/episodes/<slug>/research-plan.md]
     checks: [mh]
     retries: 0
     agents:
@@ -132,7 +121,7 @@ jobs:
   # References: a script, so no reviewer. A run with no References drops it.
   - id: convert-references
     stage: setup
-    needs: [scaffold-pipeline]
+    needs: [brief-grill]
     before: [mh-query]
     outputs: [docs/episodes/<slug>/reference/*/design-reference.md]
     checks: [mh, vitest]
@@ -161,7 +150,7 @@ jobs:
           - references/customize-pipeline.md
           - assets/pipeline.yml
           - docs/episodes/<slug>/brief.md
-          - docs/episodes/<slug>/run-log.md
+          - docs/episodes/<slug>/research-plan.md
         model: inherit
         session: orchestrator
 
@@ -171,7 +160,7 @@ jobs:
     stage: research
     needs: [customize-pipeline]
     isolation: worktree
-    foreach: docs/episodes/<slug>/run-log.md#research-jobs
+    foreach: docs/episodes/<slug>/research-plan.md#research-jobs
     before: [mh-query]
     outputs: [docs/episodes/<slug>/research/*/research.md]
     checks: [mh, vitest, sources]
@@ -179,7 +168,7 @@ jobs:
     agents:
       - type: implementor
         skills: [research, writing-for-agents]
-        references: [references/write-research.md, docs/episodes/<slug>/brief.md, docs/episodes/<slug>/run-log.md]
+        references: [references/write-research.md, docs/episodes/<slug>/brief.md, docs/episodes/<slug>/research-plan.md]
         model: sonnet
       - type: reviewer
         skills: []
@@ -203,7 +192,7 @@ jobs:
         references:
           - references/write-dossier.md
           - docs/episodes/<slug>/brief.md
-          - docs/episodes/<slug>/run-log.md
+          - docs/episodes/<slug>/research-plan.md
           - docs/episodes/<slug>/research/*/research.md
           - docs/episodes/<slug>/reference/*/design-reference.md
           - docs/profile/storytelling-guide.md
@@ -218,7 +207,7 @@ jobs:
 
   # Rewrites the Voice script lines of dossier.md and nothing else; the staging
   # test checks that against write-dossier's commit, so no schema key says it.
-  # No gate: the designers read the spoken argument, and Han reviews the Voice
+  # No gate: the designers read the spoken argument, and the user reviews the Voice
   # script with the Spec and reworks it against the built Slides.
   - id: write-voice-script
     stage: dossier
@@ -251,8 +240,8 @@ jobs:
   # The Spec: one static HTML page with two or three Options per Slide beside
   # its words (design-ADR-0011). The implementor runs in the orchestrator's
   # session, because it spawns one designer per Section and writes the page
-  # alone. Han picks an Option per Slide through `npm run episode:spec`; every
-  # review round is a new Attempt, and he approves the Spec at the gate.
+  # alone. The user picks an Option per Slide through `npm run episode:spec`; every
+  # review round is a new Attempt, and the user approves the Spec at the gate.
   - id: write-spec
     stage: specification
     needs: [write-voice-script]
@@ -370,5 +359,5 @@ jobs:
     agents:
       - type: implementor
         skills: [pr]
-        references: [references/open-pr.md, docs/episodes/<slug>/run-log.md]
+        references: [references/open-pr.md]
         model: sonnet

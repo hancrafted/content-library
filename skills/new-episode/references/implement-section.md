@@ -8,7 +8,7 @@ The implementor (`archgate:developer`) builds its Section of the approved Spec, 
 
 - Build each page Slide of the Section in its own Slide folder and add it to the Section's placement marker ([`implement-episode-init.md`](implement-episode-init.md#placement-markers)) in Spec order. Touch no other Section's marker or Slides: a sibling job builds them in parallel.
 - On a retry, the failed lines go to a new implementor, quoted verbatim, as fix work in the job's worktree.
-- Serve the Section for Han while the job runs: in the job's worktree, start `npx next dev -p <port>`, `<port>` the job's `port` in `pipeline.yml`, detached, so it outlives the agent's session: the harness's detached background mode, or `nohup npx next dev -p <port> > .scratch/dev-<port>.log 2>&1 & echo $! > .scratch/dev-<port>.pid`. A retry reuses the server already listening there. The orchestrator stops it before it removes the worktree; after the merge, `implement-episode-init`'s server shows the Section.
+- Serve the Section for the user while the job runs: in the job's worktree, start `npx next dev -p <port>`, `<port>` the job's `port` in `pipeline.yml`, detached, so it outlives the agent's session: the harness's detached background mode, or `nohup npx next dev -p <port> > .scratch/dev-<port>.log 2>&1 & echo $! > .scratch/dev-<port>.pid`. A retry reuses the server already listening there. The orchestrator stops it before it removes the worktree; after the merge, `implement-episode-init`'s server shows the Section.
 
 ## The Spec is the source
 
@@ -21,7 +21,7 @@ The approved Spec is the Section's only source; the Spec Gate deleted the Dossie
 
 ## Picked Options
 
-Han picked one Option per Slide at the Spec Gate: build each Slide to its `data-picked` Option, its mock and its build notes' parts, tokens, props and i18n keys, and the `master:` and `motion:` those notes keep or overrule. Build no layout the Option does not give, and ask no design question: a gap in it is a `Needs human:` line. The wrapper renders the Slide header (Eyebrow, title, caption) and the play-once entrance, so the Scene holds the visual alone and adds no entrance motion; the hover classes the mock uses come along as they are. Each Context marker in the mock is a `ContextMarker` at the same place, opening the Speaker note its build notes name. An Option naming a `Design reference:` page image is built against it: keep what its `Build against this page` line keeps, by [`skill-overrides.md`](skill-overrides.md#visual-check).
+The user picked one Option per Slide at the Spec Gate: build each Slide to its `data-picked` Option, its mock and its build notes' parts, tokens, props and i18n keys, and the `master:` and `motion:` those notes keep or overrule. Build no layout the Option does not give, and ask no design question: a gap in it is a `Needs human:` line. The wrapper renders the Slide header (Eyebrow, title, caption) and the play-once entrance, so the Scene holds the visual alone and adds no entrance motion; the hover classes the mock uses come along as they are. Each Context marker in the mock is a `ContextMarker` at the same place, opening the Speaker note its build notes name. An Option naming a `Design reference:` page image is built against it: keep what its `Build against this page` line keeps, by [`skill-overrides.md`](skill-overrides.md#visual-check).
 
 ## Review
 
@@ -40,7 +40,7 @@ npm run inspect-page -- --url http://localhost:4300/<episode path>#<section>--<s
   --probe '[id="<section>--<slide>"]' …
 ```
 
-Every Slide must have a `count` of 1, a wrapper box at least the viewport tall (the wrapper's "at least viewport height" is FE-009's only height rule, so a taller Slide is fine), no horizontal overflow, and a Foreground clear of the chrome; also probe its mounted descendants (`[id="<section>--<slide>"] *`) and require a `count` above 0. Record the numbers per Slide, width, drawer state and theme in the run-log entry's Checks, and log the `visual-check` result as a `check` Score with the failing numbers as `body`.
+Every Slide must have a `count` of 1, a wrapper box at least the viewport tall (the wrapper's "at least viewport height" is FE-009's only height rule, so a taller Slide is fine), no horizontal overflow, and a Foreground clear of the chrome; also probe its mounted descendants (`[id="<section>--<slide>"] *`) and require a `count` above 0. Record the numbers per Slide, width, drawer state and theme in the Job's summary, and log the `visual-check` result as a `check` Score with the failing numbers as `body`.
 
 ## Rubric
 

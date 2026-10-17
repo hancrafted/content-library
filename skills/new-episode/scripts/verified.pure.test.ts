@@ -18,7 +18,7 @@ function list(...entries: { by: string; at: string }[]): string {
 }
 
 describe('approveText', () => {
-  it("appends the machine entry beside Han's without overwriting", () => {
+  it("appends the machine entry beside the user's without overwriting", () => {
     // ARRANGE
     const text = file(list(HAN));
     // ACT
@@ -51,7 +51,7 @@ function metaOf(html: string): unknown {
 }
 
 describe('approveText on an HTML Spec', () => {
-  it("appends Han's entry at the given time to the meta block's verified list", () => {
+  it("appends the user's entry at the given time to the meta block's verified list", () => {
     // ARRANGE
     const text = spec();
     const now = '2026-10-13T12:00:00Z';
@@ -108,5 +108,71 @@ describe('parseApproveArgs', () => {
     const parsed = args.map(parseApproveArgs);
     // ASSERT
     expect(parsed.every((result) => typeof result === 'string')).toBe(true);
+  });
+});
+
+describe('--stamp', () => {
+  const now = '2026-10-13T12:00:00Z';
+  const stamp = { by: 'claude-code/opus-5.5', at: now };
+
+  it('parses --stamp beside --by in any position', () => {
+    // ARRANGE
+    const args = ['--stamp', 'gemini/pro-3', 'a.md', '--by', 'process:markdown-harness'];
+    // ACT
+    const parsed = parseApproveArgs(args);
+    // ASSERT
+    expect(parsed).toEqual({ file: 'a.md', by: 'process:markdown-harness', stamp: 'gemini/pro-3' });
+  });
+
+  it('refuses a --stamp that is not <producer>/<model>', () => {
+    // ARRANGE
+    const args = [
+      ['a.md', '--stamp'],
+      ['a.md', '--stamp', 'opus'],
+    ];
+    // ACT
+    const parsed = args.map(parseApproveArgs);
+    // ASSERT
+    expect(parsed.every((result) => typeof result === 'string')).toBe(true);
+  });
+
+  it('writes generated.at and generated.by into the frontmatter beside the verified entry', () => {
+    // ARRANGE
+    const text = file('', '2020-01-01T00:00:00Z');
+    const entry = { by: 'process:markdown-harness', at: now };
+    // ACT
+    const result = approveText('brief.md', text, { ...entry, stamp: stamp.by });
+    // ASSERT
+    expect(frontmatterValue(result, 'generated')).toEqual(stamp);
+    expect(frontmatterValue(result, 'verified')).toEqual([entry]);
+  });
+
+  it('stamps a file that has no generated key yet', () => {
+    // ARRANGE
+    const text = '---\ntype: brief\n---\n\n# T\n';
+    // ACT
+    const result = approveText('brief.md', text, { by: 'process:markdown-harness', at: now, stamp: stamp.by });
+    // ASSERT
+    expect(frontmatterValue(result, 'generated')).toEqual(stamp);
+  });
+
+  it("writes generated into an HTML Spec's meta block", () => {
+    // ARRANGE
+    const text = spec();
+    // ACT
+    const meta = metaOf(
+      approveText('spec/spec.html', text, { by: 'process:markdown-harness', at: now, stamp: stamp.by }),
+    );
+    // ASSERT
+    expect(meta).toMatchObject({ generated: stamp, verified: [{ by: 'process:markdown-harness', at: now }] });
+  });
+
+  it('leaves generated as written without a stamp', () => {
+    // ARRANGE
+    const text = file('');
+    // ACT
+    const result = approveText('brief.md', text, { by: 'human:han', at: now });
+    // ASSERT
+    expect(frontmatterValue(result, 'generated')).toEqual({ by: 'claude-code/opus-5.5', at: GENERATED });
   });
 });

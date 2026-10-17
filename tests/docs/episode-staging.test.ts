@@ -1,3 +1,4 @@
+import { readPipeline } from '@/lib/episode-pipeline-definition.pure';
 import { checkPipeline, type PipelineContext } from '@/lib/episode-pipeline.pure';
 import { checkReferenceJobs } from '@/lib/episode-reference-jobs.pure';
 import { checkResearchJobs } from '@/lib/episode-research-jobs.pure';
@@ -40,6 +41,8 @@ const REVIEW_ASSET = path.join(ROOT, SKILL_FOLDER, 'assets/spec-review.html');
  * lands: a test fails until you do.
  */
 const PENDING: readonly string[] = [];
+/** Files of retired jobs, which a frozen per-run pipeline may still name (scaffold-pipeline, retired by #229). */
+const RETIRED: readonly string[] = [`${SKILL_FOLDER}/references/scaffold-pipeline.md`];
 
 /** Every file under `folder`, keyed by its path relative to it with `/` separators. */
 function readFolder(folder: string): Record<string, string> {
@@ -166,8 +169,10 @@ function pipelineContext(pending: readonly string[], staging: string): PipelineC
     exists,
     staging,
     perRun: staging !== TEMPLATE_STAGING,
-    governs: governed,
+    // A branch in flight keeps writing its run-log.md, which no rule governs any more.
+    governs: (file) => (file.endsWith('/run-log.md') && exists(file)) || governed(file),
     pending,
+    retired: RETIRED,
   };
 }
 
@@ -281,7 +286,21 @@ describe('success cases', () => {
     expect(findings).toEqual([]);
   });
 
-  it('finds the template well formed as the draft scaffold-pipeline copies, foreach jobs unexpanded', () => {
+  it('makes the research plan retrieval writes the foreach source of write-research, and no template job reads a run log', () => {
+    // ARRANGE
+    const yaml = readFileSync(TEMPLATE, 'utf8');
+    const jobs = readPipeline(yaml)?.jobs ?? [];
+    const plan = `${TEMPLATE_STAGING}/research-plan.md`;
+    // ACT
+    const retrievalOutputs = jobs.find(({ id }) => id === 'retrieval')?.outputs;
+    const foreach = jobs.find(({ id }) => id === 'write-research')?.foreach;
+    // ASSERT
+    expect(retrievalOutputs).toEqual([plan]);
+    expect(foreach).toBe(`${plan}#research-jobs`);
+    expect(yaml).not.toContain('run-log.md');
+  });
+
+  it('finds the template well formed as the draft begin-run copies, foreach jobs unexpanded', () => {
     // ARRANGE
     const staging = 'docs/episodes/scaffold-demo';
     const yaml = readFileSync(TEMPLATE, 'utf8')
@@ -304,14 +323,17 @@ describe('success cases', () => {
     expect(findings).toEqual([]);
   });
 
-  it('finds one write-research job per research job retrieval lists in the run log, in every per-run pipeline', () => {
+  it('finds one write-research job per research job the research plan lists, in every per-run pipeline', () => {
     // ARRANGE
     const pairs = Object.entries(perRunPipelines()).map(([file, yaml]) => {
-      const runLog = path.join(ROOT, path.dirname(file), 'run-log.md');
-      return [file, yaml, existsSync(runLog) ? readFileSync(runLog, 'utf8') : undefined] as const;
+      // A branch in flight keeps its run-log.md, whose Research jobs list stands in for the plan.
+      const source = ['research-plan.md', 'run-log.md']
+        .map((name) => path.join(ROOT, path.dirname(file), name))
+        .find((candidate) => existsSync(candidate));
+      return [file, yaml, source === undefined ? undefined : readFileSync(source, 'utf8')] as const;
     });
     // ACT
-    const findings = pairs.flatMap(([file, yaml, runLog]) => checkResearchJobs(file, yaml, runLog));
+    const findings = pairs.flatMap(([file, yaml, plan]) => checkResearchJobs(file, yaml, plan));
     // ASSERT
     expect(findings).toEqual([]);
   });

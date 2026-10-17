@@ -1,11 +1,13 @@
-// `node skills/new-episode/scripts/approve.ts <file> [--by <actor>]`: appends `{ by, at: <now UTC> }`
+// `node skills/new-episode/scripts/approve.ts <file> [--by <actor>] [--stamp <producer/model>]`: appends `{ by, at: <now UTC> }`
 // to a staging file's `verified` list, an HTML Spec's in its meta block; never typed by hand. `by` defaults to
-// `human:han` (Han's approval at a gate); the orchestrator passes `--by process:markdown-harness` for a machine-confirmed pass.
+// `human:han` (the user's approval at a gate); the orchestrator passes `--by process:markdown-harness` for a machine-confirmed pass.
+// `--stamp` also writes `generated: { by, at }` with the same clock time, so no agent types a timestamp.
 import { readFileSync, writeFileSync } from 'node:fs';
 import { utcSeconds } from '../../../src/lib/staging-file.pure.ts';
 import { approveText, parseApproveArgs } from './verified.pure.ts';
 
-const USAGE = '✖ usage: node skills/new-episode/scripts/approve.ts <file> [--by <human:id|process:id>]';
+const USAGE =
+  '✖ usage: node skills/new-episode/scripts/approve.ts <file> [--by <human:id|process:id>] [--stamp <producer/model>]';
 const args = parseApproveArgs(process.argv.slice(2));
 if (typeof args === 'string') {
   console.error(`${args}\n${USAGE}`);
@@ -13,7 +15,10 @@ if (typeof args === 'string') {
 }
 const at = utcSeconds(new Date());
 try {
-  writeFileSync(args.file, approveText(args.file, readFileSync(args.file, 'utf8'), { by: args.by, at }));
+  writeFileSync(
+    args.file,
+    approveText(args.file, readFileSync(args.file, 'utf8'), { by: args.by, at, stamp: args.stamp }),
+  );
 } catch (error) {
   console.error(`✖ ${args.file}: ${error instanceof Error ? error.message : String(error)}`);
   process.exit(1);

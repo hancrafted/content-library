@@ -106,7 +106,7 @@ describe('failure cases', () => {
       .replace('    retries: 2', '    retry: 2')
       .replace('skills: [grilling],', 'skill: [grilling],');
     const expected = [
-      'The pipeline has an unknown key "owner"; the keys are status, stages, jobs, template.',
+      'The pipeline has an unknown key "owner"; the keys are status, stages, jobs, template, dev_port, spec_port.',
       'Job "brief-grill", agent 1 lacks the key "skills".',
       'Job "brief-grill", agent 1 has an unknown key "skill"; the keys are type, skills, references, rubric, agent, model, session.',
       'Job "research" lacks the key "retries".',
@@ -569,6 +569,21 @@ describe('edge cases', () => {
     const findings = checkPipeline(FILE, yaml, { ...CONTEXT, pending });
     // ASSERT
     expect(findings).toEqual([]);
+  });
+
+  it("tolerates a retired job's reference in a per-run pipeline, and not in the template", () => {
+    // ARRANGE
+    const retired = [`${SKILL_FOLDER}/references/scaffold-pipeline.md`];
+    const yaml = PIPELINE.replace('status: draft', `status: draft\ntemplate: ${SHA}`).replace(
+      'references: [references/research.md, docs/episodes/demo/brief.md]',
+      'references: [references/scaffold-pipeline.md, docs/episodes/demo/brief.md]',
+    );
+    // ACT
+    const perRun = checkPipeline(FILE, yaml, { ...CONTEXT, perRun: true, retired });
+    const template = check(yaml, { ...CONTEXT, retired });
+    // ASSERT
+    expect(perRun).toEqual([]);
+    expect(template.some((message) => message.includes('scaffold-pipeline.md'))).toBe(true);
   });
 
   it('accepts a stage that no job belongs to', () => {

@@ -5,6 +5,7 @@
  * the file's frontmatter and h1; the items sit inside a list, where it cannot see.
  */
 
+import { BRIEF_KEYS } from './episode-spec-brief.pure';
 import { TITLE_ANCHOR } from './episode.pure';
 import { unless, type Finding } from './finding.pure';
 import { frontmatterField } from './staging-file.pure';
@@ -16,11 +17,12 @@ const FEEDBACK_ITEM = /^- `([a-z0-9-]+(?:--[a-z0-9-]+)?)` · (content|implementa
 /*
  * A Spec review (`via: spec`) has its own item form: per page Slide, and for the Title slide whose Options carry
  * the section slides, its picks, a pick of none needing a note, and one optional `visual-language` item carrying
- * the Visual language note alone.
+ * the Visual language note alone, and `brief--<heading-slug>` items, one note each on a Brief card heading.
  */
 const SPEC_SLIDE_ITEM = new RegExp(
   `^- \`(${TITLE_ANCHOR}|[a-z0-9-]+--[a-z0-9-]+)\` · design — picked: (?:none — \\S.*|\\d+[a-z](?:, \\d+[a-z])*(?: — \\S.*)?)$`,
 );
+const SPEC_BRIEF_ITEM = new RegExp(`^- \`(${BRIEF_KEYS.join('|')})\` · design — \\S.*$`);
 const SPEC_VISUAL_LANGUAGE_ITEM = /^- `visual-language` · design — (?!picked:)\S.*$/;
 
 /**
@@ -42,11 +44,11 @@ function unknownAnchor(anchor: string, { anchors, sections, source }: FeedbackAn
 }
 
 function checkSpecFeedbackLine(line: string, anchors: FeedbackAnchors): string[] {
-  if (SPEC_VISUAL_LANGUAGE_ITEM.test(line)) return [];
+  if (SPEC_VISUAL_LANGUAGE_ITEM.test(line) || SPEC_BRIEF_ITEM.test(line)) return [];
   const item = SPEC_SLIDE_ITEM.exec(line);
   if (item === null)
     return [
-      `Spec review line not of the form "- \`<section>--<slide>\` · design — picked: <option ids>|none — note" (the note required with none, \`top\` for the Title slide) or "- \`visual-language\` · design — note": "${line}".`,
+      `Spec review line not of the form "- \`<section>--<slide>\` · design — picked: <option ids>|none — note" (the note required with none, \`top\` for the Title slide) or "- \`visual-language\` · design — note" or "- \`brief--<heading-slug>\` · design — note": "${line}".`,
     ];
   return unknownAnchor(item[1], anchors);
 }

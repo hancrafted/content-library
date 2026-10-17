@@ -5,6 +5,7 @@
 import path from 'node:path';
 import { parseDescription, type ParsedDescription } from '../../../src/lib/episode-spawn-description.pure.ts';
 import { verdictFirst } from './agent-summary.pure.ts';
+import { openedByCommand, unclaimedAgents } from './claude-adapter-spans.pure.ts';
 import { isRecord, parseJson, parseMarker, sessionsOf, type Marker } from './marker.pure.ts';
 import type { IdentityFacts, LogEvent, MeasuredFacts, RunLogLine } from './run-log.pure.ts';
 import { SUMMARY_MAX } from './run-log.pure.ts';
@@ -110,8 +111,15 @@ function parentOf(
 /** The model asked for: meta.json's, else the agent type's frontmatter. */
 const requestedModel = (input: AdapterInput): string | undefined => metaOf(input.meta).model ?? input.agentModel;
 
+/** A start adds no span when `begin-agent` opened one for it, or may have (no meta.json yet: SubagentStop claims it). */
+function claimsOpenSpan(input: AdapterInput, trace: string, description: string): boolean {
+  if (input.meta === null) return unclaimedAgents(input.log, trace).length > 0;
+  return openedByCommand(input.log, trace, description) !== undefined;
+}
+
 function startEvent(input: AdapterInput, marker: Marker, files: { transcript: string }): LogEvent | null {
   const { description, requestShape } = metaOf(input.meta);
+  if (claimsOpenSpan(input, marker.trace_id, description)) return null;
   const model = requestedModel(input);
   const all = entries(input.transcript);
   const jobs = openJobs(input.log, marker.trace_id);
@@ -165,10 +173,13 @@ const lateModel = (input: AdapterInput, started: RunLogLine): IdentityFacts => (
 const lateSkills = (transcript: string | null, all: readonly Entry[]): MeasuredFacts =>
   transcript === null ? {} : { skills_invoked: skillsInvoked(all) };
 
+/** The agent span a stop ends: the one that carries this transcript, else the one `begin-agent` opened by description. */
+const startOf = (input: AdapterInput, marker: Marker, files: { transcript: string }): RunLogLine | undefined =>
+  input.log.find((l) => l.kind === 'start' && l.type === 'agent' && l.transcript_path === files.transcript) ??
+  openedByCommand(input.log, marker.trace_id, metaOf(input.meta).description);
+
 function stopEvent(input: AdapterInput, marker: Marker, files: { transcript: string }): LogEvent | null {
-  const started = input.log.find(
-    (l) => l.kind === 'start' && l.type === 'agent' && l.transcript_path === files.transcript,
-  );
+  const started = startOf(input, marker, files);
   if (started?.span_id === undefined) return null;
   // A repeated delivery of the same stop must not append a second completion.
   if (input.log.some((l) => l.kind === 'end' && l.span_id === started.span_id)) return null;

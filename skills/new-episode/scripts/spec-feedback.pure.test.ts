@@ -32,6 +32,49 @@ function header(round: number): string[] {
   ];
 }
 
+describe('brief notes', () => {
+  it('writes a brief-- note as a design item keyed by its heading slug', () => {
+    // ARRANGE
+    const fields: [string, string][] = [
+      ['pick:spent', '1a'],
+      ['pick:quiet', '2b'],
+      ['note:brief--learning-goal', 'Sharper\nplease'],
+      ['note:brief--style', ''],
+    ];
+    // ACT
+    const result = reviewToFeedback({
+      fields,
+      slides: SLIDES,
+      brief: ['brief--learning-goal', 'brief--style'],
+      round: 1,
+      now: NOW,
+    });
+    // ASSERT
+    expect(result).toMatchObject({ kind: 'saved' });
+    expect(result.kind === 'saved' ? result.text : '').toContain(
+      '- `brief--learning-goal` · design — Sharper please\n',
+    );
+    expect(result.kind === 'saved' ? result.text : '').not.toContain('brief--style');
+  });
+
+  it('refuses a note for a brief heading the Spec does not carry', () => {
+    // ACT
+    const result = reviewToFeedback({
+      fields: [
+        ['pick:spent', '1a'],
+        ['pick:quiet', '2a'],
+        ['note:brief--nope', 'x'],
+      ],
+      slides: SLIDES,
+      brief: [],
+      round: 1,
+      now: NOW,
+    });
+    // ASSERT
+    expect(result.kind).toBe('rejected');
+  });
+});
+
 describe('success cases', () => {
   it('writes one item per Slide naming its single pick', () => {
     // ARRANGE

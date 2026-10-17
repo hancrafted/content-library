@@ -6,8 +6,8 @@
  */
 
 import { type Cheerio, type CheerioAPI } from 'cheerio';
-import { OPTION } from './episode-spec-page.pure';
-import { unless } from './finding.pure';
+import { OPTION } from './episode-spec-page.pure.ts';
+import { unless } from './finding.pure.ts';
 
 /** One element of a parsed page, read off cheerio's own types, and a selection of them. */
 type PageDocument = ReturnType<CheerioAPI['root']>[number];
@@ -26,8 +26,12 @@ export interface SpecPage {
 
 const HEX = /#[0-9a-fA-F]{3,8}\b/g;
 const ARBITRARY = /\[[^\]]*\]/;
+/** Tailwind's own text sizes, which FE-011 replaces with the type roles. */
+const RAW_SIZE = /(^|:)text-(xs|sm|base|lg|xl|[2-9]xl)$/;
+/** A type role behind a variant prefix (`md:text-heading`), which FE-011 §3 forbids. */
+const PREFIXED_ROLE = /:text-(body|caption|subheading|heading|hero)$/;
 
-/** Hex colours and arbitrary Tailwind values in an Option's attributes and style elements. */
+/** Hex colours, arbitrary Tailwind values and raw type sizes in an Option's attributes and style elements. */
 function checkTokens($: CheerioAPI, figure: Selection, where: string): string[] {
   const elements = figure
     .find('*')
@@ -41,13 +45,20 @@ function checkTokens($: CheerioAPI, figure: Selection, where: string): string[] 
     .find('style')
     .toArray()
     .map((element) => $(element).text());
+  const classes = elements.flatMap((element) => (element.attribs.class ?? '').split(/\s+/));
   const hexes = [...values, ...styles].flatMap((value) => value.match(HEX) ?? []);
-  const arbitrary = elements
-    .flatMap((element) => (element.attribs.class ?? '').split(/\s+/))
-    .filter((name) => ARBITRARY.test(name));
+  const only = (pattern: RegExp): string[] => classes.filter((name) => pattern.test(name));
   return [
     ...hexes.map((hex) => `${where} uses the hex colour "${hex}": use a token class.`),
-    ...arbitrary.map((name) => `${where} uses the arbitrary Tailwind value "${name}": use a token class.`),
+    ...only(ARBITRARY).map((name) => `${where} uses the arbitrary Tailwind value "${name}": use a token class.`),
+    ...only(RAW_SIZE).map(
+      (name) =>
+        `${where} uses the type size "${name}" outside the FE-011 type roles: use a type role (text-body, text-caption, text-subheading, text-heading).`,
+    ),
+    ...only(PREFIXED_ROLE).map(
+      (name) =>
+        `${where} puts the type role "${name}" behind a prefix, which FE-011 forbids: use "${name.split(':').at(-1)}" alone.`,
+    ),
   ];
 }
 

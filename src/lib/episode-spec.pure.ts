@@ -19,19 +19,19 @@
  *   each with a figcaption and build notes, exactly one `data-recommended`, at
  *   most one `data-picked` and exactly one once approved, whose checkbox alone
  *   carries `checked` so a locked Slide needs nothing in the next round,
- *   token classes only (no hex colour, no arbitrary Tailwind value), and each
+ *   token classes only (no hex colour, no arbitrary Tailwind value, no type size outside the FE-011 roles), and each
  *   `data-spec="context-marker"` naming a Speaker note of its Slide in `data-note`;
  * - every Voice script item a `<strong>` title then its text, every Speaker
  *   note citation `[n]` resolved by a nested `data-source="n"`.
  */
 import { load, type CheerioAPI } from 'cheerio';
-import { SECTION, SLIDE, SPEC_FILE } from './episode-spec-page.pure';
-import { checkSlide, FORM, type SpecPage } from './episode-spec-slide.pure';
-import { checkTitleSlide } from './episode-spec-title.pure';
-import { checkCitations, checkVoiceScripts } from './episode-spec-words.pure';
-import { unless, type Finding } from './finding.pure';
-import { metaBlockText, metaGateTier } from './staging-file.pure';
-import { blocksOf, bodyLines } from './staging-markdown.pure';
+import { SECTION, SLIDE, SPEC_FILE } from './episode-spec-page.pure.ts';
+import { checkSlide, FORM, type SpecPage } from './episode-spec-slide.pure.ts';
+import { checkTitleSlide } from './episode-spec-title.pure.ts';
+import { checkCitations, checkVoiceScripts } from './episode-spec-words.pure.ts';
+import { unless, type Finding } from './finding.pure.ts';
+import { metaBlockText, metaGateTier } from './staging-file.pure.ts';
+import { blocksOf, bodyLines } from './staging-markdown.pure.ts';
 
 const DOSSIER_FILE = 'dossier.md';
 /** Where the review asset lives, as a finding names it. */
@@ -124,13 +124,20 @@ function checkSlides(page: SpecPage): string[] {
   ];
 }
 
+/** `early`: a Brief- or Dossier-stage Spec, before the designers' Options exist, so only what that stage holds is checked. */
+export type SpecStage = 'early' | 'options';
+
 /**
  * Checks a staging folder's Spec page against the Spec contract, and against
  * the Dossier while one exists; nothing until `spec/spec.html` exists. `files`
  * maps a path relative to the folder to its text; `reviewAsset` is the text of
  * the shared review asset the page must inline.
  */
-export function checkSpec(files: Readonly<Record<string, string>>, reviewAsset: string): Finding[] {
+export function checkSpec(
+  files: Readonly<Record<string, string>>,
+  reviewAsset: string,
+  stage: SpecStage = 'options',
+): Finding[] {
   const html = files[SPEC_FILE];
   if (html === undefined) return [];
   const $ = load(html);
@@ -141,7 +148,7 @@ export function checkSpec(files: Readonly<Record<string, string>>, reviewAsset: 
     ...checkMeta(meta),
     ...checkAsset(html, reviewAsset),
     ...(dossier === undefined || isApproved ? [] : checkAgainstDossier($, dossier)),
-    ...checkSlides({ $, approved: isApproved }),
+    ...(stage === 'early' ? [] : checkSlides({ $, approved: isApproved })),
   ];
   const stale = unless(
     !isApproved || dossier === undefined,

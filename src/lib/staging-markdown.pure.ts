@@ -6,7 +6,7 @@
  * staging-file.pure.ts's to read.
  */
 
-import { bodyOf } from './staging-file.pure';
+import { bodyOf } from './staging-file.pure.ts';
 
 export interface Heading {
   level: number;

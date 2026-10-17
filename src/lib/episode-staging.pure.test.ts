@@ -69,12 +69,6 @@ const RECALL = 'research/recall/research.md';
 
 const RECALL_ENTRY = '- [Why recall drops](research/recall/research.md) — Recall is U-shaped.';
 
-function runLog(entries: readonly string[]): string {
-  return ['# Run log', '', ...entries.flatMap((entry) => [`## ${entry}`, '', '### Notes', '', 'Done.', '']), ''].join(
-    '\n',
-  );
-}
-
 function folder(files: Record<string, string>): Record<string, string> {
   return { 'dossier.md': DOSSIER, ...files };
 }
@@ -134,12 +128,25 @@ describe('success cases', () => {
         '- `why--spent` · design — picked: none — Try a heat strip.',
         '- `top` · design — picked: 0b — Fuel the rocket in fewer steps.',
         '- `visual-language` · design — More accent.',
+        '- `brief--learning-goal` · design — Sharper goal.',
+        '- `brief--research-questions` · design — Add one on cost.',
       ]),
     });
     // ACT
     const findings = checkStagingFolder(files, KNOWN_VISUALS, REVIEW_ASSET);
     // ASSERT
     expect(findings).toEqual([]);
+  });
+
+  it('reports a brief-- item for a heading the Brief card lacks, or without a note', () => {
+    // ARRANGE
+    const files = folder({
+      [FEEDBACK_PATH]: feedback('spec', ['- `brief--hook` · design — Louder.', '- `brief--style` · design —']),
+    });
+    // ACT
+    const findings = checkStagingFolder(files, KNOWN_VISUALS, REVIEW_ASSET);
+    // ASSERT
+    expect(kinds(findings)).toEqual(['feedback', 'feedback']);
   });
 
   it('finds nothing when the llm-wiki index lists each research file once with its description', () => {
@@ -692,12 +699,10 @@ describe('edge cases', () => {
     expect(kinds(findings)).toEqual(expectedKinds);
   });
 
-  it('checks the run log of a folder that has no Dossier yet', () => {
+  it('checks the feedback rounds of a folder that has no Dossier yet', () => {
     // ARRANGE
-    const files = {
-      'run-log.md': runLog(['research · 2026-10-12T10:15:00Z', 'brief-grill · 2026-10-12T09:00:00Z']),
-    };
-    const expectedKinds = ['run-log-order'];
+    const files = { 'feedback/02/feedback.md': feedback('chat', []) };
+    const expectedKinds = ['feedback-round'];
     // ACT
     const findings = checkStagingFolder(files, KNOWN_VISUALS, REVIEW_ASSET);
     // ASSERT

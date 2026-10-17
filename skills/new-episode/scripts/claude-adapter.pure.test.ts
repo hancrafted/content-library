@@ -688,3 +688,83 @@ describe('sessions (S2)', () => {
     expect(adaptSubagent(input)).toMatchObject({ kind: 'start' });
   });
 });
+
+describe('enriching a span begin-agent opened', () => {
+  const TYPED_SPAN = 'ffffffffffffffff';
+  const typed = {
+    kind: 'start',
+    t: '2026-10-09T09:55:00Z',
+    seq: 5,
+    trace_id: TRACE,
+    span_id: TYPED_SPAN,
+    type: 'agent',
+    name: 'write-dossier#2/reviewer',
+    job: 'write-dossier',
+    attempt: 2,
+    role: 'reviewer',
+    parent_span_id: ATTEMPT_SPAN,
+    source: 'typed',
+  } as RunLogLine;
+  const open = [jobLine, attemptLine(ATTEMPT_SPAN, 2, 2), typed];
+
+  it('adds no second span at SubagentStart when the description matches an open span', () => {
+    // ARRANGE
+    const input = base({ log: open });
+    // ACT
+    const event = adaptSubagent(input);
+    // ASSERT
+    expect(event).toBeNull();
+  });
+
+  it('ends the same span with tokens, model and transcript at SubagentStop', () => {
+    // ARRANGE
+    const input = base({ event: 'stop', log: open });
+    // ACT
+    const event = adaptSubagent(input);
+    // ASSERT
+    expect(event).toMatchObject({
+      kind: 'end',
+      span_id: TYPED_SPAN,
+      status: 'ok',
+      transcript_path: TRANSCRIPT,
+      'gen_ai.response.model': 'claude-sonnet-5-5',
+      'gen_ai.usage.input_tokens': expect.any(Number),
+    });
+  });
+
+  it('leaves a span of another description alone', () => {
+    // ARRANGE
+    const input = base({ description: 'write-dossier#2/implementor', log: open });
+    // ACT
+    const event = adaptSubagent(input);
+    // ASSERT
+    expect(event).toMatchObject({ kind: 'start', type: 'agent' });
+  });
+
+  it('files nothing at SubagentStart while meta.json is unreadable and a begin-agent span waits to be claimed', () => {
+    // ARRANGE
+    const input = base({ meta: null, log: open });
+    // ACT
+    const event = adaptSubagent(input);
+    // ASSERT
+    expect(event).toBeNull();
+  });
+
+  it('ends the begin-agent span at SubagentStop once meta.json names it, so one agent is one span', () => {
+    // ARRANGE
+    const input = base({ event: 'stop', log: open });
+    // ACT
+    const event = adaptSubagent(input);
+    // ASSERT
+    expect(event).toMatchObject({ kind: 'end', span_id: TYPED_SPAN });
+  });
+
+  it('still files a provisional span when meta.json is unreadable and no begin-agent span is open', () => {
+    // ARRANGE
+    const input = base({ meta: null, log: [jobLine] });
+    // ACT
+    const event = adaptSubagent(input);
+    // ASSERT
+    expect(event).toMatchObject({ kind: 'start', type: 'agent', role: 'skill-spawned' });
+  });
+});
