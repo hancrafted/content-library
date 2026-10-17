@@ -74,7 +74,7 @@ export async function EpisodesSection({ locale }: { locale: Locale }) {
   const cards = await episodeCards(locale);
   return (
     <section id="episodes" className="relative">
-      <div className="mx-auto max-w-6xl space-y-16 px-6 py-24 sm:py-32">
+      <div className="mx-auto max-w-6xl space-y-16 px-6 pt-24 pb-96 sm:pt-32 sm:pb-112">
         <EpisodesHeader title={t('episodesSectionTitle')} subtitle={t('episodesSectionSubtitle')} />
         <div>
           <PartHeading>{t('episodeOverview.spotlightTitle')}</PartHeading>
