@@ -43,6 +43,24 @@ export function PreviewButton({
   );
 }
 
+/** The Run's Spec server on its pipeline `spec_port`; a button for the same reason as the Preview. */
+export function SpecButton({ port, copy }: { port: number; copy: DashboardCopy }) {
+  const url = previewHref(port);
+  return (
+    <button
+      type="button"
+      data-spec={url}
+      title={url}
+      onClick={() => window.open(url, '_blank', 'noopener')}
+      className={`${LINK} min-h-11 shrink-0 cursor-pointer`}
+    >
+      <ExternalLink aria-hidden="true" className="size-4 shrink-0" />
+      {fillTemplate(copy.graph.spec, { port })}
+      <span className="sr-only">{copy.graph.specHelp}</span>
+    </button>
+  );
+}
+
 function OutputItem({ output, outputs, copy }: { output: string; outputs: EpisodeOutputs; copy: DashboardCopy }) {
   const label = outputLabel(output);
   if (isGlob(output)) return <li className="font-mono text-caption text-muted-foreground wrap-anywhere">{label}</li>;

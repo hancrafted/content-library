@@ -16,6 +16,7 @@ import { type LogEvent, type Status } from './run-log.pure.ts';
 import { endMarker, liveMarker, recordJobUsage } from './run-marker.ts';
 import { hasEnded, isOpen, latest, openAgentsOf, openSpan, openUnderRun, scoreTarget } from './run-spans.pure.ts';
 import { openView, pointAt, sessionOf, viewOf, write, type RunContext } from './run-view.ts';
+import { serversNote } from './servers.ts';
 
 export type { RunContext } from './run-view.ts';
 export type CommandResult = { ok: true; output: string } | { ok: false; error: string };
@@ -32,7 +33,8 @@ function beginRun(ctx: RunContext, opts: Opts): string {
   mkdirSync(path.join(ctx.root, path.dirname(episodeLogPath(ctx.slug))), { recursive: true });
   const line = write(ctx, { kind: 'start-run', harness: opts.harness ?? 'claude-code', 'gen_ai.request.model': model });
   pointAt(ctx, line, { jobSpanId: line.span_id, sessionId });
-  return `Run begun (${line.run_id})`;
+  const note = serversNote(ctx.servers, { root: ctx.root, slug: ctx.slug, sha: line.template_sha ?? '' });
+  return `Run begun (${line.run_id})${note}`;
 }
 
 /** Statuses a Run may end with while spans under it are still open: those spans then read crashed. */
@@ -47,6 +49,7 @@ function endRun(ctx: RunContext, p: Params<'status' | 'summary'>): string {
       `Run ${run.run_id} still has open spans: ${open.join(', ')}. End them, or run end-run error|crashed to leave them crashed`,
     );
   write(ctx, endEvent('end-run', run.span_id, p));
+  ctx.servers?.stop(ctx.root);
   const warning = endMarker(ctx, run, readEpisodeLog(ctx.slug, ctx.root).lines);
   return warning === '' ? 'Run ended' : `Run ended (${warning})`;
 }

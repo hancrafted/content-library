@@ -113,6 +113,20 @@ describe('success cases', () => {
     expect(cached.view).toEqual(first.view);
     expect(reread.errors.join('\n')).toContain(expectedFile);
   });
+
+  it('reads the Spec port the pipeline names once the folder is selected', async () => {
+    // ARRANGE
+    const expectedSpecPort = 4003;
+    const pipeline = fixture('pipeline.yml').replace(
+      /^status: .*$/m,
+      (line) => `${line}\ndev_port: 4002\nspec_port: 4003`,
+    );
+    const folder = createMemoryFolder('example', { 'pipeline.yml': pipeline, 'events.jsonl': fixture('events.jsonl') });
+    // ACT
+    const { initial } = await openEpisode(folder, clockFrom(START));
+    // ASSERT
+    expect(initial.read.pipeline?.specPort).toBe(expectedSpecPort);
+  });
 });
 
 describe('failure cases', () => {

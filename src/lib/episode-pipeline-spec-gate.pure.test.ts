@@ -154,7 +154,7 @@ describe('failure cases', () => {
     expect(messages).toEqual(expected);
   });
 
-  it('applies the Spec Gate to a draft per-run pipeline, the copy scaffold-pipeline makes of the template', () => {
+  it('applies the Spec Gate to a draft per-run pipeline, the copy begin-run makes of the template', () => {
     // ARRANGE
     const yaml = PIPELINE.replace('status: draft', `status: draft\ntemplate: ${SHA}`).replace(
       '    retries: 2\n    gate: human\n',
