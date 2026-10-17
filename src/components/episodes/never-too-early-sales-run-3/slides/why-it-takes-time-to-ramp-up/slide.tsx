@@ -52,7 +52,7 @@ export const whyItTakesTimeToRampUp = slide({
     { slug: 'so-start-now' },
   ],
   content: ({ t, target }) => (
-    <SlideFrame>
+    <SlideFrame className="mt-10">
       <DayOneBoard
         stamp={t('stamp')}
         columns={{

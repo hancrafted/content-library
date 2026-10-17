@@ -40,7 +40,7 @@ export const whatIsASalesPipeline = slide({
   ],
   segments: [{ slug: 'funnel-is-volume' }, { slug: 'conversion-is-the-offer' }, { slug: 'cycle-is-efficiency' }],
   content: ({ t, locale, target }) => (
-    <SlideFrame className={styles.scene}>
+    <SlideFrame className={`${styles.scene} mt-10`}>
       <PipelineBoard
         stages={[
           {

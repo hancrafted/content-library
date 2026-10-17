@@ -46,14 +46,15 @@ const PILL = 'rounded-full bg-foreground px-4 py-1 text-caption font-semibold te
 
 /**
  * One pipeline board read three ways: the lanes are the funnel, the primary bracket over Lead and Opportunity is the
- * conversion rate, and the arrow under the board is the sales cycle. A server part with plain props.
+ * conversion rate, and the arrow under the board is the sales cycle; pointing at a lane dims the others. A server part
+ * with plain props.
  */
 export function PipelineBoard({ stages, conversion, funnel, cycle }: PipelineBoardProps) {
   return (
-    <div className="@container mt-8 flex flex-col gap-2">
+    <div className="@container flex flex-col gap-2">
       <Terms conversion={conversion} funnel={funnel} />
       <BoardSurface>
-        <div className="relative grid grid-cols-1 gap-4 @2xl:grid-cols-12 @2xl:gap-6">
+        <div className="focus-group focus-group--dim-others relative grid grid-cols-1 gap-4 @2xl:grid-cols-12 @2xl:gap-6">
           {stages.map((stage) => (
             <Lane key={stage.id} stage={stage} />
           ))}
@@ -114,7 +115,9 @@ function BoardSurface({ children }: { children: ReactNode }) {
 /** One lane: its pill and count, then its notes. */
 function Lane({ stage }: { stage: Stage }) {
   return (
-    <div className={cn('flex min-w-0 flex-col gap-4 rounded-lg bg-foreground/5 p-4', SPAN[stage.span])}>
+    <div
+      className={cn('focus-group__item flex min-w-0 flex-col gap-4 rounded-lg bg-foreground/5 p-4', SPAN[stage.span])}
+    >
       <div className="flex items-center justify-between">
         <span className={PILL}>{stage.label}</span>
         <span className="font-mono text-caption text-muted-foreground">{stage.notes.length}</span>

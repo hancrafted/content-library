@@ -49,7 +49,7 @@ function StageLane({ lane, last, nextFaint }: { lane: Lane; last: boolean; nextF
   return (
     <li
       data-target={lane.target}
-      className={`relative flex flex-col gap-4 rounded-xl px-5 pt-12 pb-6 ${LANE_SHAPE[lane.emphasis ?? 'none']}`}
+      className={`focus-group__item relative flex flex-col gap-4 rounded-xl px-5 pt-12 pb-6 ${LANE_SHAPE[lane.emphasis ?? 'none']}`}
     >
       <h4
         className={`absolute -top-4 left-1/2 -translate-x-1/2 rounded-full px-8 py-1.5 text-caption font-medium whitespace-nowrap ${pill}`}
@@ -143,15 +143,15 @@ function Axis({ axis }: { axis: Props['axis'] }) {
 
 /**
  * The stages of a sale as board lanes, left to right: Leads ringed in `primary` under its "in your hands" bracket,
- * Opportunities and Closing under the calendar-time bracket, and the dashed After-sale lane ending in the cash note;
- * a time axis under them all. The lanes stand in a row when the Scene is wide enough; narrower, they stack, the
- * arrows turn down and the brackets drop.
+ * Opportunities and Closing under the calendar-time bracket, and the dashed After-sale lane ending in the cash note; a
+ * time axis under them all. Pointing at a lane dims the others. The lanes stand in a row when the Scene is wide enough;
+ * narrower, they stack, the arrows turn down and the brackets drop.
  */
 export function StageLanes({ lanes, brackets, axis }: Props) {
   return (
     <div className={`${styles.stages} flex flex-col gap-3`}>
       <Brackets brackets={brackets} />
-      <ol role="list" className={styles.lanes}>
+      <ol role="list" className={`${styles.lanes} focus-group focus-group--dim-others`}>
         {lanes.map((lane, index) => (
           <StageLane
             key={lane.slug}

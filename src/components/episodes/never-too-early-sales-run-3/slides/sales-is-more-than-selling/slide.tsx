@@ -20,9 +20,9 @@ const INTERNAL = 'internal';
 const TRUST = 'trust';
 
 /**
- * Sales is more than selling: a sum on a planning board. Market insight plus
- * internal insight equals trust, three taped notes read left to right in the
- * order the voice speaks, with trust in `primary` (Spec Option 2c).
+ * Sales is more than selling: a sum on a planning board. Market insight plus internal insight equals trust, three taped
+ * notes read left to right in the order the voice speaks, with trust in `primary` (Spec Option 2c). Pointing at a note
+ * dims the other two; the VC shares show when the bars are pointed at.
  */
 export const salesIsMoreThanSelling = slide({
   slug: 'sales-is-more-than-selling',
@@ -94,10 +94,10 @@ export const salesIsMoreThanSelling = slide({
     const trustChips = [t('board.trust.points.investment'), t('board.trust.points.customers')];
     const barRows = VC_FACTORS.map(({ slug, percent }) => ({ label: t(`board.trust.bars.rows.${slug}`), percent }));
     return (
-      <SlideFrame className="gap-10">
+      <SlideFrame className="mt-10 gap-10">
         <div className="@container relative flex flex-col gap-6 rounded-xl bg-muted p-6 shadow-inner md:p-10">
           <p className="sr-only">{t('equationLabel')}</p>
-          <div className="grid grid-cols-1 items-center gap-4 @4xl:grid-cols-12">
+          <div className="focus-group focus-group--dim-others grid grid-cols-1 items-center gap-4 @4xl:grid-cols-12">
             <Note
               {...target(MARKET)}
               index="01"

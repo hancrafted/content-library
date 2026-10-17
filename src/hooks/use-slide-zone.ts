@@ -27,6 +27,11 @@ export function useSlideZone(): SlideZone {
   return useZoneOf(useContext(SlideIdContext));
 }
 
+/** A Slide's entrance as the store holds it; outside any Slide `done`, in the static HTML `pending`. */
+function useStoredEntry(store: ZoneStore, id: string | null): SlideEntry {
+  return useSyncExternalStore(store.subscribe, () => (id === null ? 'done' : store.getEntry(id)), SERVER_ENTRY);
+}
+
 /**
  * A Slide's entrance (FE-012), in the page's zone store: `pending` in the
  * static HTML, `entering` from its first `active`, `done` once the entrance has
@@ -35,11 +40,21 @@ export function useSlideZone(): SlideZone {
  */
 export function useEntryOf(id: string | null): SlideEntry {
   const store = useContext(ZoneStoreContext) ?? OUTSIDE_PAGE;
-  const entry = useSyncExternalStore(store.subscribe, () => (id === null ? 'done' : store.getEntry(id)), SERVER_ENTRY);
+  const entry = useStoredEntry(store, id);
   useEffect(() => {
     if (entry !== 'entering' || id === null) return;
     const timer = window.setTimeout(() => store.finishEntry(id), ENTRANCE_MS);
     return () => window.clearTimeout(timer);
   }, [entry, id, store]);
   return entry;
+}
+
+/**
+ * The entrance of the Slide this component sits in (FE-012), read only: the
+ * Slide's mount ends it. A Scene's emphasis motion with a purpose keys on it,
+ * so it plays from the Slide's first `active`, once.
+ */
+export function useSlideEntry(): SlideEntry {
+  const store = useContext(ZoneStoreContext) ?? OUTSIDE_PAGE;
+  return useStoredEntry(store, useContext(SlideIdContext));
 }

@@ -30,7 +30,10 @@ interface NoteProps {
 export function Note({ index, title, body, tilt, emphasis = false, className, children, ...target }: NoteProps) {
   const fill = emphasis ? 'bg-primary p-8 text-primary-foreground shadow-xl' : 'bg-card p-6 shadow-md';
   return (
-    <article {...target} className={cn('relative rounded-md break-words', TILT[tilt], fill, className)}>
+    <article
+      {...target}
+      className={cn('focus-group__item relative rounded-md break-words', TILT[tilt], fill, className)}
+    >
       <Fastener pinned={emphasis} />
       <p
         aria-hidden="true"

@@ -27,12 +27,13 @@ const QUESTION_TILT = ['rotate-1', '-rotate-2', 'rotate-1'];
 const METRIC_TILT = ['-rotate-1', 'rotate-2'];
 
 /**
- * The founder's board on day one: dashed notes for material not written yet, question notes for the unknown market
- * and two dark "?" notes for the metrics, stamped "Day one" over its corner. A server part with plain props.
+ * The founder's board on day one: dashed notes for material not written yet, question notes for the unknown market and
+ * two dark "?" notes for the metrics, stamped "Day one" over its corner; pointing at a lane dims the others. A server
+ * part with plain props.
  */
 export function DayOneBoard({ stamp, close, ...lanes }: DayOneBoardProps) {
   return (
-    <div className="@container mt-10 flex flex-col gap-10">
+    <div className="@container flex flex-col gap-10">
       <BoardSurface stamp={stamp}>
         <Lanes {...lanes} />
       </BoardSurface>
@@ -56,7 +57,7 @@ function Lanes({
   targets,
 }: Omit<DayOneBoardProps, 'stamp' | 'close'>) {
   return (
-    <div className="relative grid grid-cols-1 gap-6 @3xl:grid-cols-3">
+    <div className="focus-group focus-group--dim-others relative grid grid-cols-1 gap-6 @3xl:grid-cols-3">
       <Lane label={columns.preparation} hint={hints.preparation} target={targets.preparation}>
         {preparation.map((note, index) => (
           <BlankNote key={note.id} note={note} tilt={BLANK_TILT[index % BLANK_TILT.length]} />
@@ -111,7 +112,7 @@ interface LaneProps {
 
 function Lane({ label, hint, target, children }: LaneProps) {
   return (
-    <div {...target} className="flex min-w-0 flex-col gap-4 rounded-lg bg-foreground/5 p-5">
+    <div {...target} className="focus-group__item flex min-w-0 flex-col gap-4 rounded-lg bg-foreground/5 p-5">
       <span className="self-start rounded-full bg-foreground px-4 py-1 text-caption font-semibold text-background">
         {label}
       </span>

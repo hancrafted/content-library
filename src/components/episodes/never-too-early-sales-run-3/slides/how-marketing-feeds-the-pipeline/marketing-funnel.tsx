@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import { FunnelMotion } from './funnel-motion.client';
 import styles from './how-marketing-feeds-the-pipeline.module.css';
 
 /** The funnel's words: the mouth's label, its volume line, and the three sources marketing speaks through. */
@@ -111,13 +112,14 @@ function Shape() {
 
 /**
  * Marketing as a funnel in the board idiom: a mouth of three source notes with line doodles over "massive volume",
- * then a funnel of dots narrowing to a `primary` spout that points into the pipeline's first stage.
+ * then a funnel of dots narrowing to a `primary` spout that points into the pipeline's first stage. The dots travel
+ * in once on the Slide's first `active` and again on every mouse enter.
  */
 export function MarketingFunnel({ funnel }: { funnel: Funnel }) {
   return (
-    <div className={styles.funnel}>
+    <FunnelMotion className={styles.funnel}>
       <Mouth funnel={funnel} />
       <Shape />
-    </div>
+    </FunnelMotion>
   );
 }

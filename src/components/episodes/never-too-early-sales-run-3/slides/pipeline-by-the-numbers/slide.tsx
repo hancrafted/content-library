@@ -105,7 +105,7 @@ export const pipelineByTheNumbers = slide({
     const total = totalConversion(PIPELINE);
     const bar = cycleBar(PIPELINE);
     return (
-      <SlideFrame className={styles.scene}>
+      <SlideFrame className={`${styles.scene} mt-10`}>
         <div className="flex flex-col gap-6">
           <CountBoard
             stages={[

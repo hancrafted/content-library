@@ -15,7 +15,7 @@ export type { CashflowBoardProps, CashflowColumn } from './cashflow-board.types'
  * The cashflow board (Slides 1, 6 and 10 of "Why it's never too early to start with sales"): month lanes under dark
  * pills on a dotted card, three square paper notes per lane tinted as cash, cost or revenue, with an optional stamp,
  * arrow, ringed column and a row of call-outs and brackets, all placed on the lanes' grid by column and slot. All
- * lanes stand side by side when the board is wide enough, two by two when it is not.
+ * lanes stand side by side when the board is wide enough, two by two when it is not; pointing at one dims the others.
  */
 export function CashflowBoard(props: CashflowBoardProps) {
   const { columns, labels, locale, stamp, arrow, highlight, annotations = [] } = props;
@@ -24,7 +24,7 @@ export function CashflowBoard(props: CashflowBoardProps) {
   return (
     <div data-slot="cashflow-board" className={cn(styles.board, 'rounded-xl border bg-card shadow-md')}>
       <div className={styles.grid} style={gridStyle}>
-        <ol role="list" aria-label={labels.board} className={styles.lanes}>
+        <ol role="list" aria-label={labels.board} className={cn(styles.lanes, 'focus-group focus-group--dim-others')}>
           {columns.map((column, index) => (
             <Lane
               key={column.label}

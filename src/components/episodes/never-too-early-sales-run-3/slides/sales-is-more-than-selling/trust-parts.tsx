@@ -7,13 +7,13 @@ interface BarRow {
   percent: number;
 }
 
-/** One factor as one `dt` + `dd` group: its label and share on a line, its bar below. */
+/** One factor as one `dt` + `dd` group: its label and share on a line, the share shown on hover, its bar below. */
 function Bar({ row, lead, format }: { row: BarRow; lead: boolean; format: Intl.NumberFormat }) {
   return (
     <div className={cn('grid grid-cols-[1fr_auto] gap-x-2', lead ? 'font-semibold' : 'text-primary-foreground/70')}>
       <dt>{row.label}</dt>
       <dd className="contents">
-        <span>{format.format(row.percent / 100)}</span>
+        <span className="hover-reveal__detail">{format.format(row.percent / 100)}</span>
         <span aria-hidden="true" className="col-span-2 mt-1 h-2 rounded-full bg-primary-foreground/10">
           <span
             style={{ '--bar': `${row.percent}%` } as CSSProperties}
@@ -33,7 +33,7 @@ function Bar({ row, lead, format }: { row: BarRow; lead: boolean; format: Intl.N
 export function SignalBars({ heading, rows, locale }: { heading: string; rows: BarRow[]; locale: string }) {
   const format = new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 0 });
   return (
-    <div className="mt-6 rounded-md bg-primary-foreground/10 p-4">
+    <div className="hover-reveal mt-6 rounded-md bg-primary-foreground/10 p-4">
       <p className="font-mono text-caption tracking-widest text-primary-foreground/70 uppercase">{heading}</p>
       <dl className="mt-3 flex flex-col gap-2 text-caption">
         {rows.map((row, index) => (

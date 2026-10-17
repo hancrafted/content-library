@@ -37,6 +37,7 @@ export function Lane(props: LaneProps) {
       style={placeOn(number)}
       className={cn(
         styles.lane,
+        'focus-group__item',
         'relative rounded-xl border bg-muted px-2 pt-12 pb-5',
         highlighted && 'ring-4 ring-primary ring-offset-4 ring-offset-card',
       )}

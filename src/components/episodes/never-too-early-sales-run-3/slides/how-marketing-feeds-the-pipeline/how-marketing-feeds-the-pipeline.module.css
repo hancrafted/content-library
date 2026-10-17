@@ -1,8 +1,8 @@
 /*
  * The funnel beside the compact deal board once the Scene is wide enough, the spout pointing into Lead in; narrower,
- * the funnel stands over the board. While the Slide is active the crowd travels in from the funnel's mouth one dot at
- * a time, never looping, then the two spout dots and the spout. The base rules are
- * the finished picture, which is also what reduced motion shows.
+ * the funnel stands over the board. While the funnel plays (`data-play`, once on the Slide's first `active` and on
+ * every mouse enter) the crowd travels in from the funnel's mouth one dot at a time, never looping, then the two
+ * spout dots and the spout. The base rules are the finished picture, which is also what reduced motion shows.
  */
 
 .scene {
@@ -54,16 +54,16 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .scene :global([data-funnel='dot']) {
+  .funnel :global([data-funnel='dot']) {
     transform-box: view-box;
   }
 
-  :global([data-zone='active']) .scene :global([data-funnel='dot']) {
+  .funnel[data-play] :global([data-funnel='dot']) {
     animation: travel 520ms ease-out backwards;
     animation-delay: calc(var(--i) * 110ms);
   }
 
-  :global([data-zone='active']) .scene :global([data-funnel='spout']) {
+  .funnel[data-play] :global([data-funnel='spout']) {
     animation: fade-in 240ms ease-out 2100ms backwards;
   }
 }

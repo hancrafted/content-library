@@ -79,6 +79,7 @@ export interface LaneProps {
 function laneClass(compact: boolean, emphasised: boolean): string {
   return cn(
     styles.lane,
+    'focus-group__item',
     'relative flex flex-col rounded-xl bg-muted',
     compact ? 'gap-3 px-2 pt-10 pb-4' : 'gap-4 px-3 pt-12 pb-5',
     emphasised && 'ring-2 ring-primary ring-offset-4 ring-offset-background',

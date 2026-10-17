@@ -57,7 +57,7 @@ export const watchYourCashflowRevenuePulledIn = slide({
       footer: <CashLeft label={t('board.cashLeft')} amount={balances[index]} locale={locale} />,
     }));
     return (
-      <SlideFrame className="gap-10">
+      <SlideFrame className="mt-10 gap-10">
         <CashflowBoard
           columns={columns}
           labels={{
