@@ -40,6 +40,8 @@ const REVIEW_ASSET = path.join(ROOT, SKILL_FOLDER, 'assets/spec-review.html');
  * lands: a test fails until you do.
  */
 const PENDING: readonly string[] = [];
+/** Files of retired jobs, which a frozen per-run pipeline may still name (scaffold-pipeline, retired by #229). */
+const RETIRED: readonly string[] = [`${SKILL_FOLDER}/references/scaffold-pipeline.md`];
 
 /** Every file under `folder`, keyed by its path relative to it with `/` separators. */
 function readFolder(folder: string): Record<string, string> {
@@ -168,6 +170,7 @@ function pipelineContext(pending: readonly string[], staging: string): PipelineC
     perRun: staging !== TEMPLATE_STAGING,
     governs: governed,
     pending,
+    retired: RETIRED,
   };
 }
 

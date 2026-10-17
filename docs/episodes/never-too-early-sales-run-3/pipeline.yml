@@ -83,7 +83,8 @@ jobs:
     agents:
       - type: implementor
         skills: []
-        references: [assets/pipeline.yml, docs/episodes/never-too-early-sales-run-3/brief.md]
+        references:
+          [references/scaffold-pipeline.md, assets/pipeline.yml, docs/episodes/never-too-early-sales-run-3/brief.md]
         model: inherit
         session: orchestrator
 
