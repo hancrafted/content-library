@@ -11,6 +11,10 @@ export const USAGE = `usage: npm run episode:run -- <slug> <command> ...
                                                    linked to it (idempotent; refused with no earlier ok span)
   begin-attempt <job>                              open the next Attempt; prints its spawn description
   end-attempt <job> [status] [summary]             close the open Attempt
+  begin-agent <job>#<n>/<role>[/#<ticket>]         open a typed agent span under that Attempt (any harness; repeat is a no-op);
+                                                   the Claude Code adapter enriches the same span by name
+  end-agent <job>#<n>/<role>[/#<ticket>] [status] [summary]
+                                                   close it; a refused spawn is end-agent <desc> refused
   open-gate <job> <name>                           open a Gate under the Run
   close-gate <name> [status] [summary]             close the open Gate
   score <target> <name> <value> --source s [--rubric r] [--body b] [--via chat|commit] [--comment c] [--ticket n]
