@@ -123,6 +123,39 @@ describe('success cases', () => {
     // ASSERT
     expect(renderToStaticMarkup(scene)).toBe(expected);
   });
+
+  it("takes the Title slide's caption from the record's title Slide when it gives one", async () => {
+    // ARRANGE
+    const hero = slide({
+      slug: 'hero',
+      messages: { en: { caption: 'An empty <b>pipeline</b>.' }, de: { caption: 'Eine leere <b>Pipeline</b>.' } },
+      content: () => null,
+    });
+    const record = episode({ slug: 'page-template', messages: EPISODE, title: hero, sections: [[foundations]] });
+    const expected = 'Eine leere Pipeline.';
+    // ACT
+    const { caption } = await recordContent(record, 'de', translatorOf('de'));
+    // ASSERT
+    expect(caption).toBe(expected);
+  });
+
+  it("marks where a Slide header's caption sets off its <b> runs", async () => {
+    // ARRANGE
+    const bold = slide({
+      slug: 'foundations',
+      messages: {
+        en: { title: 'Foundations', caption: 'Revenue <b>lands</b> here.' },
+        de: { title: 'Grundlagen', caption: 'Der Umsatz <b>landet</b> hier.' },
+      },
+      content: () => null,
+    });
+    const record = episode({ slug: 'page-template', messages: EPISODE, sections: [[bold]] });
+    const expected = { title: 'Foundations', caption: 'Revenue lands here.', captionEmphasis: [{ start: 8, end: 13 }] };
+    // ACT
+    const { slides } = await recordContent(record, 'en', translatorOf('en'));
+    // ASSERT
+    expect(slides[0].header).toEqual(expected);
+  });
 });
 
 describe('failure cases', () => {

@@ -1,4 +1,8 @@
+import { isEmphasised, runsOf, type TextRange } from '@/lib/caption-emphasis.pure';
 import type { CSSProperties } from 'react';
+
+/** How an emphasised run of header text is set off: semibold, in `primary`. */
+const EMPHASIS_CLASS = 'font-semibold text-primary';
 
 /** Characters typed one by one: whitespace takes no turn. */
 export function typedLength(text: string): number {
@@ -16,6 +20,8 @@ interface TypedProps {
   readonly delays: readonly number[];
   /** When the character after this text's last one appears, so the caret moves on then. */
   readonly next: number;
+  /** The runs of `text` to set off. */
+  readonly emphasis?: readonly TextRange[];
 }
 
 /**
@@ -23,26 +29,59 @@ interface TypedProps {
  * wraps only between words. CSS (`globals.css`, the typewriter) reveals each
  * at its `--d` and shows the caret on it for `--h`.
  */
-function TypedCharacters({ text, delays, next }: TypedProps) {
+/** The text's words and the whitespace between them, each with the index of its first character in the text. */
+function partsOf(text: string): { part: string; offset: number }[] {
+  let offset = 0;
+  return text
+    .split(/(\s+)/)
+    .filter((part) => part !== '')
+    .map((part) => {
+      const at = offset;
+      offset += part.length;
+      return { part, offset: at };
+    });
+}
+
+/** One typed character's span, set off when it lies in an emphasised run. */
+function TypedCharacter({
+  character,
+  style,
+  emphasised,
+}: {
+  character: string;
+  style: CSSProperties;
+  emphasised: boolean;
+}) {
+  return (
+    <span
+      data-char=""
+      data-emphasis={emphasised ? '' : undefined}
+      className={emphasised ? EMPHASIS_CLASS : undefined}
+      style={style}
+    >
+      {character}
+    </span>
+  );
+}
+
+function TypedCharacters({ text, delays, next, emphasis = [] }: TypedProps) {
   let index = 0;
-  const spanOf = (character: string, key: number) => {
+  const spanOf = (character: string, offset: number, key: number) => {
     const at = index++;
     const hold = (delays[at + 1] ?? next) - delays[at];
-    return (
-      <span key={key} data-char="" style={charStyle(delays[at], hold)}>
-        {character}
-      </span>
-    );
+    const set = isEmphasised(offset, emphasis);
+    return <TypedCharacter key={key} character={character} style={charStyle(delays[at], hold)} emphasised={set} />;
   };
-  const words = text.split(/(\s+)/).filter((part) => part !== '');
   return (
     <span aria-hidden="true" data-typed="">
-      {words.map((word, key) =>
-        /^\s+$/.test(word) ? (
+      {partsOf(text).map(({ part, offset }, key) =>
+        /^\s+$/.test(part) ? (
           ' '
         ) : (
           <span key={key} className="whitespace-nowrap">
-            {Array.from(word).map(spanOf)}
+            {Array.from(part).map((character, i, all) =>
+              spanOf(character, offset + all.slice(0, i).join('').length, i),
+            )}
           </span>
         ),
       )}
@@ -50,20 +89,35 @@ function TypedCharacters({ text, delays, next }: TypedProps) {
   );
 }
 
+/** Untyped text, its emphasised runs set off. */
+function PlainText({ text, emphasis = [] }: { text: string; emphasis?: readonly TextRange[] }) {
+  return runsOf(text, emphasis).map((run, key) =>
+    run.emphasis ? (
+      <b key={key} data-emphasis="" className={EMPHASIS_CLASS}>
+        {run.text}
+      </b>
+    ) : (
+      run.text
+    ),
+  );
+}
+
 /**
  * Header text as the reader sees it: whole without `delays`; with them, one
  * visually hidden copy for assistive tech and the typed characters beside it.
+ * Either way its `emphasis` runs are set off in `primary` semibold.
  */
 export function TypedText({
   text,
   delays,
   next,
+  emphasis,
 }: Omit<TypedProps, 'delays'> & { readonly delays?: readonly number[] }) {
-  if (delays === undefined) return <>{text}</>;
+  if (delays === undefined) return <PlainText text={text} emphasis={emphasis} />;
   return (
     <>
       <span className="sr-only">{text}</span>
-      <TypedCharacters text={text} delays={delays} next={next} />
+      <TypedCharacters text={text} delays={delays} next={next} emphasis={emphasis} />
     </>
   );
 }

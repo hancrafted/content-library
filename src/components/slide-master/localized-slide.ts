@@ -7,7 +7,7 @@ import { createTranslator } from 'next-intl';
 import type { ReactNode } from 'react';
 import type { EpisodeRecord, HeaderMode, Slide, SlideMessages } from './slide';
 import type { NoteSpec, RuntimeTranslator, SegmentSpec, SourceSpec } from './slide-base';
-import { headerTextOf, titleTakenBy, type SlideHeaderText } from './slide-header-text';
+import { captionTextOf, headerTextOf, titleTakenBy, type SlideHeaderText } from './slide-header-text';
 import { slideKit } from './slide-kit';
 
 /*
@@ -177,6 +177,11 @@ export function episodeMinutes(record: EpisodeRecord, locale: Locale): number {
       (sum, slide) => sum + textOf(slide, ownTranslator(slide.messages[locale], locale), locale).minutes,
       titleContext(record, locale).minutes,
     );
+}
+
+/** The caption the record's Title slide Scene (`title`) gives in its own messages, which the Title slide shows. */
+export function titleCaptionOf(slide: Slide, locale: Locale): string | undefined {
+  return captionTextOf(ownTranslator(slide.messages[locale], locale));
 }
 
 /**
