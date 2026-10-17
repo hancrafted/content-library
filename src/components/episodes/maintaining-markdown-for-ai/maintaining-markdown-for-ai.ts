@@ -19,6 +19,7 @@ export const maintainingMarkdownForAi = episode({
   slug: 'maintaining-markdown-for-ai',
   youtube: { en: 'YxCVw4bUbW0', de: 'YxCVw4bUbW0' },
   messages: { en, de },
+  header: 'authored',
   sections: [
     [markdownInAiWorkflows],
     [volumeOutrunsReview],

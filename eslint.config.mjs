@@ -19,6 +19,10 @@ const CSS_HOOK_CLASSES = [
   '^s2-flow-dash$',
   '^is-active$',
   '^dark$',
+  // FE-012 §3: the hover vocabulary, BEM classes in globals.css `@layer components`.
+  '^card-hover(--raise|--outline)?$',
+  '^focus-group(--dim-others|__item)?$',
+  '^hover-reveal(__detail)?$',
 ];
 const HERO_TITLE_FILE = 'src/components/slide-master/slide-master.tsx';
 const TAILWIND_ENTRY = 'src/app/globals.css';
@@ -281,6 +285,12 @@ export default tseslint.config(
   {
     files: ['**/*.test.ts'],
     rules: { 'max-lines-per-function': 'off', 'max-lines': 'off' },
+  },
+  {
+    // The rule guards the Pages Router; an App Router root layout renders its own <head>,
+    // which carries the pre-paint `js` class script (FE-012 §2).
+    files: ['src/components/site-shell.tsx'],
+    rules: { '@next/next/no-head-element': 'off' },
   },
   {
     // FE-002: a Slide's Scene is free-form markup, so its server entry `slide.tsx`

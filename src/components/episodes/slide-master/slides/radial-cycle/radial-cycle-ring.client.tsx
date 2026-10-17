@@ -5,9 +5,7 @@ import type { SlideZone } from '@/lib/slide-zone.pure';
 import { cn } from '@/lib/utils';
 import { useEffect, useRef, type KeyboardEvent } from 'react';
 import {
-  ARC_DRAW_MS,
   CYCLE_ITEMS,
-  drawDelayMs,
   HAND_TURN_S,
   phaseArc,
   polarPoint,
@@ -60,7 +58,6 @@ interface PhaseProps {
   index: number;
   copy: PhaseCopy;
   shown: boolean;
-  drawn: boolean;
   handlers: PhaseHandlers;
 }
 
@@ -80,7 +77,7 @@ function phaseEvents(item: CycleItem, { onSelect, onPreview }: PhaseHandlers) {
 }
 
 /** One phase: a focusable arc that pops outward while shown, its date laid along it. */
-function Phase({ item, index, copy, shown, drawn, handlers }: PhaseProps) {
+function Phase({ item, index, copy, shown, handlers }: PhaseProps) {
   const arc = phaseArc(index, CYCLE_ITEMS.length);
   const pop = popOffset(index, CYCLE_ITEMS.length, POP_DISTANCE);
   return (
@@ -94,8 +91,8 @@ function Phase({ item, index, copy, shown, drawn, handlers }: PhaseProps) {
       style={{ transform: shown ? `translate(${pop.x}px, ${pop.y}px)` : undefined }}
       className="group cursor-pointer outline-none transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] motion-reduce:transition-none"
     >
-      <PhaseArc path={arc.path} length={arc.length} index={index} shown={shown} drawn={drawn} />
-      <PhaseLabel at={arc.labelAt} turnDeg={arc.labelTurnDeg} index={index} shown={shown} drawn={drawn}>
+      <PhaseArc path={arc.path} shown={shown} />
+      <PhaseLabel at={arc.labelAt} turnDeg={arc.labelTurnDeg} shown={shown}>
         {copy.date}
       </PhaseLabel>
     </g>
@@ -105,14 +102,12 @@ function Phase({ item, index, copy, shown, drawn, handlers }: PhaseProps) {
 interface PhaseLabelProps {
   at: { x: number; y: number };
   turnDeg: number;
-  index: number;
   shown: boolean;
-  drawn: boolean;
   children: string;
 }
 
-/** The phase's date, turned to follow the ring; it fades in once its arc has drawn. */
-function PhaseLabel({ at, turnDeg, index, shown, drawn, children }: PhaseLabelProps) {
+/** The phase's date, turned to follow the ring. */
+function PhaseLabel({ at, turnDeg, shown, children }: PhaseLabelProps) {
   return (
     <text
       x={at.x}
@@ -120,12 +115,9 @@ function PhaseLabel({ at, turnDeg, index, shown, drawn, children }: PhaseLabelPr
       dy="0.35em"
       textAnchor="middle"
       transform={`rotate(${turnDeg} ${at.x} ${at.y})`}
-      style={{ transitionDelay: drawn ? `${drawDelayMs(index, CYCLE_ITEMS.length) + 200}ms` : undefined }}
       className={cn(
-        'pointer-events-none font-mono text-body font-semibold tracking-[0.12em] uppercase transition-[fill,opacity] duration-500',
+        'pointer-events-none font-mono text-body font-semibold tracking-[0.12em] uppercase transition-[fill] duration-500',
         shown ? 'fill-foreground dark:fill-background' : 'fill-foreground',
-        !drawn && 'opacity-0',
-        'motion-reduce:opacity-100! print:opacity-100!',
       )}
     >
       {children}
@@ -133,22 +125,8 @@ function PhaseLabel({ at, turnDeg, index, shown, drawn, children }: PhaseLabelPr
   );
 }
 
-interface PhaseArcProps {
-  path: string;
-  length: number;
-  index: number;
-  shown: boolean;
-  drawn: boolean;
-}
-
-/** The arc's stroke, drawn in by its dash offset once the Slide is first read. */
-function PhaseArc({ path, length, index, shown, drawn }: PhaseArcProps) {
-  const timing = drawn
-    ? {
-        transitionDelay: `${drawDelayMs(index, CYCLE_ITEMS.length)}ms`,
-        transitionDuration: `${ARC_DRAW_MS / CYCLE_ITEMS.length}ms`,
-      }
-    : {};
+/** The arc's stroke: the accent while shown, a faint track otherwise. */
+function PhaseArc({ path, shown }: { path: string; shown: boolean }) {
   return (
     <>
       <FocusHalo path={path} />
@@ -156,13 +134,7 @@ function PhaseArc({ path, length, index, shown, drawn }: PhaseArcProps) {
         d={path}
         fill="none"
         strokeWidth={RING.stroke}
-        strokeDasharray={length}
-        style={{ strokeDashoffset: drawn ? 0 : length, ...timing }}
-        className={cn(
-          'transition-[stroke-dashoffset] ease-out',
-          shown ? 'stroke-brand-accent' : 'stroke-foreground/15 group-hover:stroke-foreground/30',
-          'motion-reduce:[stroke-dashoffset:0]! print:[stroke-dashoffset:0]!',
-        )}
+        className={shown ? 'stroke-brand-accent' : 'stroke-foreground/15 group-hover:stroke-foreground/30'}
       />
     </>
   );
@@ -185,27 +157,17 @@ function FocusHalo({ path }: { path: string }) {
 export function PhaseRing({
   items,
   shown,
-  drawn,
   handlers,
 }: {
   items: Record<CycleItem, PhaseCopy>;
   shown: CycleItem;
-  drawn: boolean;
   handlers: PhaseHandlers;
 }) {
   return (
     <>
       <Dial />
       {CYCLE_ITEMS.map((item, index) => (
-        <Phase
-          key={item}
-          item={item}
-          index={index}
-          copy={items[item]}
-          shown={shown === item}
-          drawn={drawn}
-          handlers={handlers}
-        />
+        <Phase key={item} item={item} index={index} copy={items[item]} shown={shown === item} handlers={handlers} />
       ))}
     </>
   );

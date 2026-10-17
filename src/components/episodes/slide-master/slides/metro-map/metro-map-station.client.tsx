@@ -3,15 +3,7 @@
 import { cn } from '@/lib/utils';
 import type { CSSProperties, FocusEvent, MouseEvent } from 'react';
 import { laneClass } from './metro-map-lines.client';
-import {
-  canvasShare,
-  isInterchange,
-  LABEL_SIDE,
-  STATION_AT,
-  stationDelayMs,
-  stationLanes,
-  type Station,
-} from './metro-map.pure';
+import { canvasShare, isInterchange, LABEL_SIDE, STATION_AT, stationLanes, type Station } from './metro-map.pure';
 
 export interface StationCopy {
   date: string;
@@ -32,14 +24,13 @@ interface StationProps {
   copy: StationCopy;
   /** Whether a lane this station serves is lit. */
   lit: boolean;
-  drawn: boolean;
   expanded: boolean;
   popoverId: string;
   handlers: StationHandlers;
 }
 
 /** A station: a ring on the map that opens its popover, with its date and title beside it. */
-export function MetroStation({ station, copy, lit, drawn, expanded, popoverId, handlers }: StationProps) {
+export function MetroStation({ station, copy, lit, expanded, popoverId, handlers }: StationProps) {
   return (
     <li
       data-station={station}
@@ -54,7 +45,7 @@ export function MetroStation({ station, copy, lit, drawn, expanded, popoverId, h
         {...handlers}
         className="group absolute grid size-12 -translate-1/2 cursor-pointer place-items-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
-        <StationRing station={station} drawn={drawn} expanded={expanded} />
+        <StationRing station={station} expanded={expanded} />
       </button>
       <StationLabel station={station} copy={copy} expanded={expanded} />
     </li>
@@ -62,32 +53,28 @@ export function MetroStation({ station, copy, lit, drawn, expanded, popoverId, h
 }
 
 /** A single stop is a ring in its lane's colour; an interchange is a larger white capsule with a dark outline spanning its lanes. */
-function StationRing({ station, drawn, expanded }: { station: Station; drawn: boolean; expanded: boolean }) {
+function StationRing({ station, expanded }: { station: Station; expanded: boolean }) {
   const interchange = isInterchange(station);
   return (
     <span
       aria-hidden="true"
       data-interchange={interchange}
-      style={ringStyle(station, drawn)}
+      style={ringStyle(station)}
       className={cn(
         !interchange && laneClass(stationLanes(station)[0]),
-        'block rounded-full transition-[scale,opacity] duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-115',
+        'block rounded-full transition-[scale] duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-115',
         interchange
           ? 'w-6 border-[3px] border-foreground bg-background dark:border-background dark:bg-foreground'
           : 'size-6 border-[5px] border-(--lane) bg-background',
         expanded && 'scale-125 ring-4 ring-brand-accent/40',
-        !drawn && 'scale-0 opacity-0',
-        'motion-reduce:scale-100! motion-reduce:opacity-100! print:scale-100! print:opacity-100!',
       )}
     />
   );
 }
 
 /** A single stop takes its lane's colours; an interchange grows to span every lane it joins. */
-function ringStyle(station: Station, drawn: boolean): CSSProperties {
-  const lanes = stationLanes(station);
-  const delay = { transitionDelay: drawn ? `${stationDelayMs(station)}ms` : undefined };
-  return isInterchange(station) ? { ...delay, height: `${0.5 + lanes.length * 0.75}rem` } : delay;
+function ringStyle(station: Station): CSSProperties | undefined {
+  return isInterchange(station) ? { height: `${0.5 + stationLanes(station).length * 0.75}rem` } : undefined;
 }
 
 function StationLabel({ station, copy, expanded }: { station: Station; copy: StationCopy; expanded: boolean }) {

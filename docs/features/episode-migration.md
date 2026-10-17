@@ -54,8 +54,8 @@ One folder per Slide, `slides/<slide>/`, named after its slug. Write its text an
 - `slide.tsx`, the server entry:
 
 ```tsx
-import { BasicPageSlide } from '@/components/slide-master/basic-page-slide';
 import { slide } from '@/components/slide-master/slide';
+import { SlideFrame, SlideProse } from '@/components/slide-master/slide-master';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
@@ -64,24 +64,26 @@ export const theLostMiddle = slide({
   messages: { en, de },
   notes: [{ slug: 'attention-valley', target: 'prose' }],
   segments: [{ slug: 'blank-slate' }],
-  content: ({ t, ref, target, Title }) => (
-    <BasicPageSlide
-      title={<Title>{t('title')}</Title>}
-      caption={t('caption')}
-      prose={t.rich('prose', { ref: ref('attention-valley') })}
-    />
+  content: ({ t, ref, target }) => (
+    <SlideFrame>
+      <div className="mt-10">
+        <SlideProse {...target('prose')}>{t.rich('prose', { ref: ref('attention-valley') })}</SlideProse>
+      </div>
+    </SlideFrame>
   ),
 });
 ```
 
-- Pick the layout from `slide-layouts/`: section slide, basic page, three-column. A Scene that fits none is free JSX in a `SlideFrame` with the kit's `<Title>` ([FE-002 §3](../../.archgate/adrs/FE-002-episode-page.md#3-scene-is-free)).
+- The Slide wrapper renders the Slide header from the Slide's own text: the Eyebrow (computed), the `title` (or `heading`) and the `caption`, typed in once ([FE-012](../../.archgate/adrs/FE-012-slide-header-and-motion.md)). The Scene is free JSX in a `SlideFrame` holding the visual only; a `<Title>` in it fails the build. The layouts in `slide-layouts/` author their own header, for an Episode whose record sets `header: 'authored'`.
+- A section slide's Scene echoes the Hero motif; the Title slide's hero visual is a Slide folder set as the record's `title` (see `page-template/slides/hero/` and `foundations/`).
+- No entrance motion in a Scene: the wrapper fades it up once. Hover emphasis reuses the shared classes in [the design system](../design/design-system.md#hover-vocabulary).
 - A type error from a kit field or from `messages` means the Slide's own files or its declaration are wrong: German must have every English key. Fix them; never cast.
 - The kit is everything a Scene needs:
   - `t('caption')`, `t('count', { n })`; `t.rich('prose', { ref: ref('<note>') })` already knows `<em>`, `<b>`, `<code>` — pass a tag only to restyle it.
   - `template('showAll')`: the raw string, `{count}` unfilled, for a client widget to fill with `fillTemplate` from `@/lib/template.pure`.
   - `slideHref('the-lost-middle')`: the localized link to another Slide of this Episode; a slug not in the Episode fails the build.
   - `locale`: for `Intl` number or date formatting.
-  - `ref`, `target`, `Title`: notes and heading, below.
+  - `ref`, `target`: notes, below; `Title` only on an Episode with `header: 'authored'`.
 - A Slide folder imports only its own files and the global shared locations: `src/components/slide-master/`, `src/components/slide-shared/`, `src/components/ui/`, `src/hooks/`, `src/lib/`; its `*.client.tsx` widgets reach only their own folder, `src/hooks/` and `src/lib/` (step 6). A server part only this Slide uses sits in its folder (see `page-template/slides/what-comes-next/statement.tsx`); a part two Slides share goes in `src/components/slide-shared/`, plain props, no kit.
 - Colour, size and weight come from tokens only ([FE-011](../../.archgate/adrs/FE-011-design-tokens.md#dos-and-donts), reference in [the design system](../design/design-system.md)): `text-foreground`, `text-machine`, `var(--…)`; text sizes `text-body`, `text-caption`, `text-subheading`, `text-heading`. Never `bg-amber-500`, `text-xs`, `text-[13px]`, `font-bold` or a hex value; a Slide's own colour is a token in its CSS module with a `:global(.dark)` value. Lint and `archgate check` refuse the rest.
 - A Slide's own CSS is a CSS module in its folder, combined with Tailwind via `cn()` (see `ai-token-economy/slides/motivation/freelancer-cards.module.css`). Only a token remap that the chrome reads too (the Title slide glow, `<em>`, the talk player) goes in one Episode stylesheet beside the Episode file, every selector under `[data-episode='<ep>']` (see `maintaining-markdown-for-ai/palette.css`). Never style one Slide from it.

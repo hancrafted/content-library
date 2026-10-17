@@ -98,6 +98,7 @@ function episodeOf(locale: Locale, sections: readonly (readonly [Slide, ...Slide
     locale,
     placed: placeSections<Slide>(sections).flat(),
     refLabel: 'opens speaker note',
+    header: 'authored',
   };
 }
 

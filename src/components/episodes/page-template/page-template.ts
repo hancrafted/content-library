@@ -2,6 +2,7 @@ import { episode } from '@/components/slide-master/slide';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { foundations } from './slides/foundations/slide';
+import { hero } from './slides/hero/slide';
 import { nextSteps } from './slides/next-steps/slide';
 import { whatComesNext } from './slides/what-comes-next/slide';
 import { whyATemplate } from './slides/why-a-template/slide';
@@ -13,10 +14,16 @@ import { whyATemplate } from './slides/why-a-template/slide';
  * title, caption and description sit in `i18n/`. Copying a Slide in from
  * another Episode is one import and one list entry. Every Slide layout is
  * shown in the `slide-layouts` Episode.
+ *
+ * The Slide wrapper renders every Slide's header (Eyebrow, title, caption)
+ * from the Slide's own `title` and `caption`, and types it in once, so a Scene
+ * holds its visual only. `title` is the Title slide's hero Scene, which sets
+ * the Hero motif each section slide's Scene echoes.
  */
 export const pageTemplate = episode({
   slug: 'page-template',
   messages: { en, de },
+  title: hero,
   sections: [
     [foundations, whyATemplate],
     [nextSteps, whatComesNext],

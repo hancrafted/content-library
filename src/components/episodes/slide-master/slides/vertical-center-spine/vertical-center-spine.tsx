@@ -96,9 +96,7 @@ function SpineNode({ side }: { side: Side }) {
 function SpineCard({ entry, index, count, side }: { entry: SpineEntry; index: number; count: number; side: Side }) {
   return (
     <div
-      data-side={side}
       className={cn(
-        styles.card,
         'col-start-2 row-start-2 rounded-xl border border-border bg-background p-6 shadow-sm',
         'group-hover:border-brand-accent/60 group-hover:shadow-md',
         'motion-safe:transition-[border-color,box-shadow] motion-safe:duration-300',

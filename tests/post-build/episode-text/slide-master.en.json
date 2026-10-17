@@ -13,35 +13,35 @@
     },
     {
       "id": "timelines--horizontal-rail",
-      "text": "Horizontal rail Six milestones on one axis, labels alternating above and below. 01 2019 Kickoff 02 2020 Research 03 2021 Prototype 04 2022 Pilot 05 2023 Launch 06 2024 Review"
+      "text": "Timelines 1 / 8 Horizontal rail Six milestones on one axis, labels alternating above and below. 01 2019 Kickoff 02 2020 Research 03 2021 Prototype 04 2022 Pilot 05 2023 Launch 06 2024 Review"
     },
     {
       "id": "timelines--horizontal-scroll-snap",
-      "text": "Scrolling track A row of cards wider than the Slide: scroll or swipe, each card snaps into place. 01 06 Jan Kickoff Name the goal and the people. 02 06 Mar Research Collect what is already known. 03 06 May Prototype Build the smallest thing that answers a question. 04 06 Jul Pilot Try it with a few real users. 05 06 Sep Launch Open it to everyone. 06 06 Nov Review Measure, learn and decide what is next. 01 / 06"
+      "text": "Timelines 2 / 8 Scrolling track A row of cards wider than the Slide: scroll or swipe, each card snaps into place. 01 06 Jan Kickoff Name the goal and the people. 02 06 Mar Research Collect what is already known. 03 06 May Prototype Build the smallest thing that answers a question. 04 06 Jul Pilot Try it with a few real users. 05 06 Sep Launch Open it to everyone. 06 06 Nov Review Measure, learn and decide what is next. 01 / 06"
     },
     {
       "id": "timelines--horizontal-gantt",
-      "text": "Phase bars Phases as bars on a shared time axis, so overlaps show at a glance. 1 2 3 4 Product Kickoff Prototype Research Research Review Operations Pilot Launch"
+      "text": "Timelines 3 / 8 Phase bars Phases as bars on a shared time axis, so overlaps show at a glance. 1 2 3 4 Product Kickoff Prototype Research Research Review Operations Pilot Launch"
     },
     {
       "id": "timelines--vertical-center-spine",
-      "text": "Centre spine One spine down the middle, entries alternating left and right. 2019 01 / 06 Kickoff Name the goal and the people. 2020 02 / 06 Research Collect what is already known. 2021 03 / 06 Prototype Build the smallest thing that answers a question. 2022 04 / 06 Pilot Try it with a few real users. 2023 05 / 06 Launch Open it to everyone. 2024 06 / 06 Review Measure, learn and decide what is next."
+      "text": "Timelines 4 / 8 Centre spine One spine down the middle, entries alternating left and right. 2019 01 / 06 Kickoff Name the goal and the people. 2020 02 / 06 Research Collect what is already known. 2021 03 / 06 Prototype Build the smallest thing that answers a question. 2022 04 / 06 Pilot Try it with a few real users. 2023 05 / 06 Launch Open it to everyone. 2024 06 / 06 Review Measure, learn and decide what is next."
     },
     {
       "id": "timelines--vertical-sticky-years",
-      "text": "Sticky years The year stays pinned on the left while its entries scroll past. 2022 ◆ 01 Kickoff Name the goal and the people. → ● 02 Research Collect what is already known. → 2023 ▲ 03 Prototype Build the smallest thing that answers a question. → ■ 04 Pilot Try it with a few real users. → 2024 ✦ 05 Launch Open it to everyone. → ◐ 06 Review Measure, learn and decide what is next. →"
+      "text": "Timelines 5 / 8 Sticky years The year stays pinned on the left while its entries scroll past. 2022 ◆ 01 Kickoff Name the goal and the people. → ● 02 Research Collect what is already known. → 2023 ▲ 03 Prototype Build the smallest thing that answers a question. → ■ 04 Pilot Try it with a few real users. → 2024 ✦ 05 Launch Open it to everyone. → ◐ 06 Review Measure, learn and decide what is next. →"
     },
     {
       "id": "timelines--vertical-stepper",
-      "text": "Stepper A numbered process: open a step to read its detail. Step 1 Kickoff , done Name the goal and the people. Step 2 Research , done Collect what is already known. 3 Step 3 Prototype , current Build the smallest thing that answers a question. 4 Step 4 Pilot , upcoming Try it with a few real users. 5 Step 5 Launch , upcoming Open it to everyone. 6 Step 6 Review , upcoming Measure, learn and decide what is next."
+      "text": "Timelines 6 / 8 Stepper A numbered process: open a step to read its detail. Step 1 Kickoff , done Name the goal and the people. Step 2 Research , done Collect what is already known. 3 Step 3 Prototype , current Build the smallest thing that answers a question. 4 Step 4 Pilot , upcoming Try it with a few real users. 5 Step 5 Launch , upcoming Open it to everyone. 6 Step 6 Review , upcoming Measure, learn and decide what is next."
     },
     {
       "id": "timelines--radial-cycle",
-      "text": "Cycle A timeline that returns to its start: six phases around a clock face. Jan–Feb Mar–Apr May–Jun Jul–Aug Sep–Oct Nov–Dec 01 / 06 Jan–Feb Kickoff Name the goal and the people. Name the goal and the people. Jan–Feb : Kickoff . Name the goal and the people. Mar–Apr : Research . Collect what is already known. May–Jun : Prototype . Build the smallest thing that answers a question. Jul–Aug : Pilot . Try it with a few real users. Sep–Oct : Launch . Open it to everyone. Nov–Dec : Review . Measure, learn and decide what is next."
+      "text": "Timelines 7 / 8 Cycle A timeline that returns to its start: six phases around a clock face. Jan–Feb Mar–Apr May–Jun Jul–Aug Sep–Oct Nov–Dec 01 / 06 Jan–Feb Kickoff Name the goal and the people. Name the goal and the people. Jan–Feb : Kickoff . Name the goal and the people. Mar–Apr : Research . Collect what is already known. May–Jun : Prototype . Build the smallest thing that answers a question. Jul–Aug : Pilot . Try it with a few real users. Sep–Oct : Launch . Open it to everyone. Nov–Dec : Review . Measure, learn and decide what is next."
     },
     {
       "id": "timelines--metro-map",
-      "text": "Metro map Parallel lanes that branch and merge, read like a subway map. Product Research Operations 2019 Kickoff 2020 Research 2021 Prototype 2022 Pilot 2023 Launch 2024 Review"
+      "text": "Timelines 8 / 8 Metro map Parallel lanes that branch and merge, read like a subway map. Product Research Operations 2019 Kickoff 2020 Research 2021 Prototype 2022 Pilot 2023 Launch 2024 Review"
     },
     {
       "id": "grids",
@@ -49,43 +49,43 @@
     },
     {
       "id": "grids--grid-1x1",
-      "text": "Grid 1 × 1 1 row by 1 column. 01 / 01 Cell one Row 1, column 1: a short caption under the title."
+      "text": "Grids 1 / 10 Grid 1 × 1 1 row by 1 column. 01 / 01 Cell one Row 1, column 1: a short caption under the title."
     },
     {
       "id": "grids--grid-1x2",
-      "text": "Grid 1 × 2 1 row by 2 columns. 01 Cell one Row 1, column 1: a short caption under the title. 02 Cell two Row 1, column 2: a short caption under the title."
+      "text": "Grids 2 / 10 Grid 1 × 2 1 row by 2 columns. 01 Cell one Row 1, column 1: a short caption under the title. 02 Cell two Row 1, column 2: a short caption under the title."
     },
     {
       "id": "grids--grid-1x3",
-      "text": "Grid 1 × 3 1 row by 3 columns. 01 Cell one Row 1, column 1: a short caption under the title. 02 Cell two Row 1, column 2: a short caption under the title. 03 Cell three Row 1, column 3: a short caption under the title."
+      "text": "Grids 3 / 10 Grid 1 × 3 1 row by 3 columns. 01 Cell one Row 1, column 1: a short caption under the title. 02 Cell two Row 1, column 2: a short caption under the title. 03 Cell three Row 1, column 3: a short caption under the title."
     },
     {
       "id": "grids--grid-2x1",
-      "text": "Grid 2 × 1 2 rows by 1 column. 01 Cell one Row 1, column 1: a short caption under the title. 02 Cell two Row 2, column 1: a short caption under the title."
+      "text": "Grids 4 / 10 Grid 2 × 1 2 rows by 1 column. 01 Cell one Row 1, column 1: a short caption under the title. 02 Cell two Row 2, column 1: a short caption under the title."
     },
     {
       "id": "grids--grid-2x2",
-      "text": "Grid 2 × 2 2 rows by 2 columns. 01 Cell one Row 1, column 1: a short caption under the title. 02 Cell two Row 1, column 2: a short caption under the title. 03 Cell three Row 2, column 1: a short caption under the title. 04 Cell four Row 2, column 2: a short caption under the title."
+      "text": "Grids 5 / 10 Grid 2 × 2 2 rows by 2 columns. 01 Cell one Row 1, column 1: a short caption under the title. 02 Cell two Row 1, column 2: a short caption under the title. 03 Cell three Row 2, column 1: a short caption under the title. 04 Cell four Row 2, column 2: a short caption under the title."
     },
     {
       "id": "grids--grid-2x3",
-      "text": "Grid 2 × 3 2 rows by 3 columns. Cell one Row 1, column 1: a short caption under the title. Cell two Row 1, column 2: a short caption under the title. Cell three Row 1, column 3: a short caption under the title. Cell four Row 2, column 1: a short caption under the title. Cell five Row 2, column 2: a short caption under the title. Cell six Row 2, column 3: a short caption under the title."
+      "text": "Grids 6 / 10 Grid 2 × 3 2 rows by 3 columns. Cell one Row 1, column 1: a short caption under the title. Cell two Row 1, column 2: a short caption under the title. Cell three Row 1, column 3: a short caption under the title. Cell four Row 2, column 1: a short caption under the title. Cell five Row 2, column 2: a short caption under the title. Cell six Row 2, column 3: a short caption under the title."
     },
     {
       "id": "grids--grid-3x1",
-      "text": "Grid 3 × 1 3 rows by 1 column. 01 Cell one Row 1, column 1: a short caption under the title. 02 Cell two Row 2, column 1: a short caption under the title. 03 Cell three Row 3, column 1: a short caption under the title."
+      "text": "Grids 7 / 10 Grid 3 × 1 3 rows by 1 column. 01 Cell one Row 1, column 1: a short caption under the title. 02 Cell two Row 2, column 1: a short caption under the title. 03 Cell three Row 3, column 1: a short caption under the title."
     },
     {
       "id": "grids--grid-3x2",
-      "text": "Grid 3 × 2 3 rows by 2 columns. 01 Cell one Row 1, column 1: a short caption under the title. 02 Cell two Row 1, column 2: a short caption under the title. 03 Cell three Row 2, column 1: a short caption under the title. 04 Cell four Row 2, column 2: a short caption under the title. 05 Cell five Row 3, column 1: a short caption under the title. 06 Cell six Row 3, column 2: a short caption under the title."
+      "text": "Grids 8 / 10 Grid 3 × 2 3 rows by 2 columns. 01 Cell one Row 1, column 1: a short caption under the title. 02 Cell two Row 1, column 2: a short caption under the title. 03 Cell three Row 2, column 1: a short caption under the title. 04 Cell four Row 2, column 2: a short caption under the title. 05 Cell five Row 3, column 1: a short caption under the title. 06 Cell six Row 3, column 2: a short caption under the title."
     },
     {
       "id": "grids--grid-3x3",
-      "text": "Grid 3 × 3 3 rows by 3 columns. R1·C1 Cell one Row 1, column 1: a short caption under the title. R1·C2 Cell two Row 1, column 2: a short caption under the title. R1·C3 Cell three Row 1, column 3: a short caption under the title. R2·C1 Cell four Row 2, column 1: a short caption under the title. R2·C2 Cell five Row 2, column 2: a short caption under the title. R2·C3 Cell six Row 2, column 3: a short caption under the title. R3·C1 Cell seven Row 3, column 1: a short caption under the title. R3·C2 Cell eight Row 3, column 2: a short caption under the title. R3·C3 Cell nine Row 3, column 3: a short caption under the title."
+      "text": "Grids 9 / 10 Grid 3 × 3 3 rows by 3 columns. R1·C1 Cell one Row 1, column 1: a short caption under the title. R1·C2 Cell two Row 1, column 2: a short caption under the title. R1·C3 Cell three Row 1, column 3: a short caption under the title. R2·C1 Cell four Row 2, column 1: a short caption under the title. R2·C2 Cell five Row 2, column 2: a short caption under the title. R2·C3 Cell six Row 2, column 3: a short caption under the title. R3·C1 Cell seven Row 3, column 1: a short caption under the title. R3·C2 Cell eight Row 3, column 2: a short caption under the title. R3·C3 Cell nine Row 3, column 3: a short caption under the title."
     },
     {
       "id": "grids--grid-bento",
-      "text": "Bento grid Tiles of different sizes on one grid: one lead, five supporting. The lead cell The largest tile carries the main idea; the others support it. 02 Cell two A supporting tile with a short caption. 03 Cell three A supporting tile with a short caption. 04 Cell four A supporting tile with a short caption. 05 Cell five A supporting tile with a short caption. 06 Cell six A supporting tile with a short caption."
+      "text": "Grids 10 / 10 Bento grid Tiles of different sizes on one grid: one lead, five supporting. The lead cell The largest tile carries the main idea; the others support it. 02 Cell two A supporting tile with a short caption. 03 Cell three A supporting tile with a short caption. 04 Cell four A supporting tile with a short caption. 05 Cell five A supporting tile with a short caption. 06 Cell six A supporting tile with a short caption."
     }
   ],
   "notes": [

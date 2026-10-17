@@ -59,6 +59,33 @@ describe('success cases', () => {
     });
   });
 
+  describe('entrance', () => {
+    it('enters a Slide the first time it is active', () => {
+      // ARRANGE
+      const store = createZoneStore();
+      const before = store.getEntry('a');
+      // ACT
+      store.setActive('a');
+      // ASSERT
+      expect(before).toBe('pending');
+      expect(store.getEntry('a')).toBe('entering');
+    });
+
+    it('keeps an entered Slide done after it goes far and returns, so the entrance never replays', () => {
+      // ARRANGE
+      const store = createZoneStore();
+      store.setActive('a');
+      store.finishEntry('a');
+      // ACT
+      store.setActive('b');
+      store.setNear('a', false);
+      store.setNear('a', true);
+      store.setActive('a');
+      // ASSERT
+      expect(store.getEntry('a')).toBe('done');
+    });
+  });
+
   describe('zone store', () => {
     it('turns far when the approach observer says the Slide left, near when it returns', () => {
       // ARRANGE
@@ -112,6 +139,14 @@ describe('failure cases', () => {
     // ASSERT
     expect(listener).toHaveBeenCalledTimes(changes);
   });
+  it('does not finish an entrance that has not started', () => {
+    // ARRANGE
+    const store = createZoneStore();
+    // ACT
+    store.finishEntry('a');
+    // ASSERT
+    expect(store.getEntry('a')).toBe('pending');
+  });
 });
 
 describe('edge cases', () => {
@@ -132,5 +167,18 @@ describe('edge cases', () => {
     const second = createZoneStore();
     // ASSERT
     expect(second.getZone('a')).toBe('near');
+  });
+  it('notifies when a Slide starts and finishes its entrance', () => {
+    // ARRANGE
+    const store = createZoneStore();
+    const listener = vi.fn();
+    store.subscribe(listener);
+    const changes = 2;
+    // ACT
+    store.setActive('a');
+    store.finishEntry('a');
+    store.finishEntry('a');
+    // ASSERT
+    expect(listener).toHaveBeenCalledTimes(changes);
   });
 });

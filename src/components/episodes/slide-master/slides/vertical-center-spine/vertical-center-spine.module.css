@@ -1,27 +1,11 @@
 /*
- * Centre spine: the scroll-driven motion only. Layout and hover live in the Slide's Tailwind classes.
- * Without scroll-driven animation support, or under reduced motion, none of this applies and the Scene rests in its
- * final state: spine filled, every node lit, every card in place.
+ * Centre spine: the scroll-linked progress only, the spine filling and each node and date lighting as the reader
+ * scrolls. Layout and hover live in the Slide's Tailwind classes. Without scroll-driven animation support, or under
+ * reduced motion, none of this applies and the Scene rests in its final state: spine filled, every node lit.
  */
 
 .track {
   view-timeline: --centre-spine block;
-}
-
-/* How far a card travels in from its own side. Below `md` it stays within the 1rem right inset, so an entering card
-   never widens the page; from `md` the 3rem inset leaves room. */
-.card {
-  --enter-from: 1rem;
-}
-
-@media (min-width: 48rem) {
-  .card {
-    --enter-from: 2.5rem;
-  }
-
-  .card[data-side='left'] {
-    --enter-from: -2.5rem;
-  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -45,13 +29,6 @@
       animation: date-light linear both;
       animation-timeline: view();
       animation-range: cover 40% cover 50%;
-    }
-
-    /* A card slides in from its own side of the spine. */
-    .card {
-      animation: card-enter ease-out both;
-      animation-timeline: view();
-      animation-range: entry 10% cover 40%;
     }
   }
 }
@@ -82,16 +59,5 @@
   }
   to {
     color: var(--foreground);
-  }
-}
-
-@keyframes card-enter {
-  from {
-    opacity: 0;
-    translate: var(--enter-from) 0;
-  }
-  to {
-    opacity: 1;
-    translate: 0 0;
   }
 }

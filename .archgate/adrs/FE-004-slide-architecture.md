@@ -54,11 +54,12 @@ flowchart LR
   C --> CH["chrome: contents, drawer, player"]
 ```
 
-**Inside one Slide.** The wrapper owns the mechanics and holds the Scene, which owns the creative content in two layers; the Slide wrapper rules, governing `episode-page/` and `slide-master/`, hold the detail.
+**Inside one Slide.** The wrapper owns the mechanics and renders the Slide header above the Scene, which owns the creative content in two layers; the Slide wrapper rules, governing `episode-page/` and `slide-master/`, hold the detail.
 
 ```mermaid
 flowchart LR
-  W["Slide wrapper — mechanics: zone, mount, observer, stacking"] --> S["Scene — creative content"]
+  W["Slide wrapper — mechanics: zone, mount, observer, stacking, entrance"] --> H["Slide header — Eyebrow, title, caption"]
+  W --> S["Scene — creative content"]
   S --> B["Backdrop — full-bleed decoration"]
   S --> F["Foreground — inset primary layer"]
 ```

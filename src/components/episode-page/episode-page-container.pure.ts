@@ -1,5 +1,6 @@
 import type { TocItem, TocSection } from '../../lib/table-of-contents.pure';
 import type { LocalizedSlide } from '../slide-master/localized-slide';
+import type { EyebrowText } from '../slide-master/slide-eyebrow';
 
 /** One table-of-contents entry while the fold builds it: its items still open to more. */
 type OpenSection = TocSection & { items: TocItem[] };
@@ -30,6 +31,20 @@ export function tocSectionsOf(slides: readonly LocalizedSlide[]): TocSection[] {
     }
   }
   return sections;
+}
+
+/**
+ * Every titled page Slide's Eyebrow, by Slide id: read from the table of
+ * contents' entries, so the Section title is the one the contents show. A
+ * section slide and an untitled Slide get none, and the count skips the
+ * untitled ones, so the numbers a reader sees run without gaps.
+ */
+export function eyebrowsOf(sections: readonly TocSection[]): ReadonlyMap<string, EyebrowText> {
+  return new Map(
+    sections.flatMap(({ title, items }) =>
+      items.map(({ id }, index) => [id, { section: title, position: index + 1, count: items.length }] as const),
+    ),
+  );
 }
 
 /*

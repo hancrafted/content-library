@@ -45,13 +45,19 @@ _Avoid_: Sitenav, sidebar
 **Section**: an Episode's second level: an ordered group of Slides whose first is its section slide, which names the Section. A Slide's heading level comes from its place in the Section, not from the Slide.
 _Avoid_: Chapter, part
 
-**Slide**: one full-height frame in an Episode, stacked under the one before it; one folder named after its slug, carrying its own Scene, Speaker notes, Voice script and text, so an Episode is a composition of Slides and a Slide copies into another Episode with one import and one list entry. A Section's own slide is a **section slide**; the slides it holds are **page slides**.
+**Slide**: one frame in an Episode, stacked under the one before it: a page slide at least the viewport's height, a section slide at least 40% of it; one folder named after its slug, carrying its own Scene, Speaker notes, Voice script and text, so an Episode is a composition of Slides and a Slide copies into another Episode with one import and one list entry. A Section's own slide is a **section slide**; the slides it holds are **page slides**.
 _Avoid_: Card, panel; page, which means the Next.js route the whole Episode renders as; "self-contained Slide", since every Slide is one
 
 **Title slide**: an Episode's opening Slide: its title, caption, optional Voice script and Speaker notes and, once recorded, its video. Not listed in the table of contents.
 _Avoid_: Hero, cover
 
-**Scene**: the free interior of a Slide, where its visualisation and layout live, ungoverned by the mechanics of the box around it. It has two layers: a **Backdrop** and a **Foreground**.
+**Slide header**: the Eyebrow, title and caption above a titled Slide's Scene. The Slide wrapper renders it for every Episode whose record does not set `header: 'authored'`, and types it in the first time the Slide is active, once.
+_Avoid_: Title block, heading area
+
+**Eyebrow**: the small uppercase line above a page slide's title in its Slide header: its Section's title on the left, its place among the Section's page slides (`n / N`) on the right. Computed from the table of contents, never authored; section slides and the Title slide have none.
+_Avoid_: Kicker, overline, label
+
+**Scene**: the free interior of a Slide, below its Slide header, where its visualisation and layout live, ungoverned by the mechanics of the box around it. It has two layers: a **Backdrop** and a **Foreground**.
 _Avoid_: Canvas (confuses with the HTML `<canvas>` element), inner slide, slide body
 
 **Backdrop**: the full-bleed, decorative layer of a Scene, behind the Foreground. Clipped to its own Slide, hidden below `md` unless it opts in, hidden from assistive technology and pointer events, and left out of print.
