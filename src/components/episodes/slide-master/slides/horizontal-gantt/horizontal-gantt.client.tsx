@@ -1,6 +1,5 @@
 'use client';
 
-import { useSlideZone } from '@/hooks/use-slide-zone';
 import { cn } from '@/lib/utils';
 import { useCallback, useId, useState, type ReactNode } from 'react';
 import { GanttBar, LANE_CLASS, type BarHandlers } from './horizontal-gantt-bar.client';
@@ -56,14 +55,6 @@ function useTooltip() {
   return { open, close, handlersFor };
 }
 
-/** Plays once: the first time the Slide reaches the reading line, the bars grow in. */
-function useGrown(): boolean {
-  const zone = useSlideZone();
-  const [grown, setGrown] = useState(false);
-  if (!grown && zone === 'active') setGrown(true);
-  return grown;
-}
-
 interface GanttProps {
   label: string;
   lanes: Record<GanttLane, string>;
@@ -73,14 +64,13 @@ interface GanttProps {
 /** A year of phases in three lanes: bars on a quarter axis, a "today" line through them, each bar's caption a tooltip. */
 export function HorizontalGantt({ label, lanes, items }: GanttProps) {
   const baseId = useId();
-  const grown = useGrown();
   const { open, close, handlersFor } = useTooltip();
   return (
-    <div role="group" aria-label={label} data-slot="horizontal-gantt" data-grown={grown} className="overflow-x-auto">
+    <div role="group" aria-label={label} data-slot="horizontal-gantt" className="overflow-x-auto">
       <div className="relative grid min-w-[38rem] grid-cols-[6.5rem_1fr] md:grid-cols-[8.5rem_1fr]">
         <QuarterBands />
         <QuarterAxis />
-        <GanttLanes lanes={lanes} items={items} grown={grown} open={open} baseId={baseId} handlersFor={handlersFor} />
+        <GanttLanes lanes={lanes} items={items} open={open} baseId={baseId} handlersFor={handlersFor} />
         <TodayLine />
         {open && <OpenTooltip id={`${baseId}-${open.item}`} open={open} items={items} lanes={lanes} onClose={close} />}
       </div>
@@ -89,14 +79,13 @@ export function HorizontalGantt({ label, lanes, items }: GanttProps) {
 }
 
 interface LanesProps extends Omit<GanttProps, 'label'> {
-  grown: boolean;
   open: Open | null;
   baseId: string;
   handlersFor: (item: GanttItem) => BarHandlers;
 }
 
 /** The three lanes, each holding its bars; every bar but the open one dims while a tooltip shows. */
-function GanttLanes({ lanes, items, grown, open, baseId, handlersFor }: LanesProps) {
+function GanttLanes({ lanes, items, open, baseId, handlersFor }: LanesProps) {
   return GANTT_LANES.map((lane) => (
     <GanttLaneRow key={lane} lane={lane} name={lanes[lane]} laneId={`${baseId}-${lane}`}>
       {GANTT_ITEMS.filter((item) => GANTT_BARS[item].lane === lane).map((item) => (
@@ -104,7 +93,7 @@ function GanttLanes({ lanes, items, grown, open, baseId, handlersFor }: LanesPro
           key={item}
           item={item}
           copy={items[item]}
-          grown={grown}
+
           expanded={open?.item === item}
           dimmed={open !== null && open.item !== item}
           tipId={`${baseId}-${item}`}

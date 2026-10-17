@@ -3,15 +3,7 @@
 import { cn } from '@/lib/utils';
 import type { FocusEvent, MouseEvent } from 'react';
 import type { BarCopy } from './horizontal-gantt-tooltip.client';
-import {
-  barBox,
-  elapsedShare,
-  GANTT_BARS,
-  growTiming,
-  TODAY,
-  type GanttItem,
-  type GanttLane,
-} from './horizontal-gantt.pure';
+import { barBox, elapsedShare, GANTT_BARS, TODAY, type GanttItem, type GanttLane } from './horizontal-gantt.pure';
 
 /** Each lane's colour, set as `--lane` so the bar, its swatch and its tooltip share it; the tokens carry dark values. */
 export const LANE_CLASS: Record<GanttLane, string> = {
@@ -35,7 +27,6 @@ export interface BarHandlers {
 interface BarProps {
   item: GanttItem;
   copy: BarCopy;
-  grown: boolean;
   /** Set while this bar's tooltip is open. */
   expanded: boolean;
   dimmed: boolean;
@@ -43,8 +34,8 @@ interface BarProps {
   handlers: BarHandlers;
 }
 
-/** One phase: a pill from its start to its end, filled up to today and hatched beyond, growing from its start. */
-export function GanttBar({ item, copy, grown, expanded, dimmed, tipId, handlers }: BarProps) {
+/** One phase: a pill from its start to its end, filled up to today and hatched beyond. */
+export function GanttBar({ item, copy, expanded, dimmed, tipId, handlers }: BarProps) {
   const bar = GANTT_BARS[item];
   const { leftPct, widthPct } = barBox(bar);
   return (
@@ -60,25 +51,18 @@ export function GanttBar({ item, copy, grown, expanded, dimmed, tipId, handlers 
           LANE_CLASS[bar.lane],
         )}
       >
-        <BarFace item={item} title={copy.title} grown={grown} />
+        <BarFace item={item} title={copy.title} />
       </button>
     </li>
   );
 }
 
-/** The pill itself, clipped open from its left edge as the entrance sweep passes its start. */
-function BarFace({ item, title, grown }: { item: GanttItem; title: string; grown: boolean }) {
+/** The pill itself: the lane's hatch, the share of the phase already passed, the lane dot and the title. */
+function BarFace({ item, title }: { item: GanttItem; title: string }) {
   const bar = GANTT_BARS[item];
-  const { delayMs, durationMs } = growTiming(bar);
   return (
     <span
-      style={{ transitionDelay: `${delayMs}ms`, transitionDuration: `${durationMs}ms` }}
-      className={cn(
-        'relative flex h-full items-center overflow-hidden rounded-full border border-(--lane) transition-[clip-path] ease-out',
-        HATCH,
-        grown ? '[clip-path:inset(0_0_0_0_round_9999px)]' : '[clip-path:inset(0_100%_0_0_round_9999px)]',
-        'motion-reduce:[clip-path:none]! print:[clip-path:none]!',
-      )}
+      className={cn('relative flex h-full items-center overflow-hidden rounded-full border border-(--lane)', HATCH)}
     >
       <span
         aria-hidden="true"

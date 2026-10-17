@@ -4,8 +4,8 @@ import { HorizontalGantt } from './horizontal-gantt.client';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-// Timeline as a roadmap: three lanes of phase bars on a quarter axis, a "today" line through them. The bars
-// grow in left to right when the Slide reaches the reading line; hover or focus opens a bar's caption.
+// Timeline as a roadmap: three lanes of phase bars on a quarter axis, a "today" line through them. Hover or
+// focus opens a bar's caption.
 export const horizontalGantt = slide({
   slug: 'horizontal-gantt',
   messages: { en, de },

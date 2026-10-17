@@ -21,7 +21,7 @@ const TONE_CLASSES: Record<Grid2x3Tone, { card: string; chip: string }> = {
 
 type Grid2x3Copy = Record<Grid2x3Cell, { title: string; caption: string }>;
 
-/** One filled tonal card: icon chip, then title and caption. Hover lifts it; it is not a control. */
+/** One filled tonal card: icon chip, then title and caption. `card-hover--raise` lifts it on hover; it is not a control. */
 function Card({ cell, title, caption }: { cell: Grid2x3Cell; title: string; caption: string }) {
   const id = `grid-2x3-${useId()}`;
   const Icon = ICONS[cell];
@@ -30,7 +30,7 @@ function Card({ cell, title, caption }: { cell: Grid2x3Cell; title: string; capt
     <article
       aria-labelledby={id}
       className={cn(
-        'flex h-full flex-col gap-(--grid-2x3-gap) rounded-3xl p-(--grid-2x3-gap) transition-[translate,box-shadow,background-color] duration-300 ease-out hover:-translate-y-1 hover:shadow-lg motion-reduce:transition-none motion-reduce:hover:translate-y-0',
+        'card-hover card-hover--raise flex h-full flex-col gap-(--grid-2x3-gap) rounded-3xl p-(--grid-2x3-gap) transition-[translate,box-shadow,background-color] duration-300 ease-out motion-reduce:transition-none',
         tone.card,
       )}
     >
