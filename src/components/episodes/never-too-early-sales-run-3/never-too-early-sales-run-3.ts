@@ -6,6 +6,7 @@ import { startBeforeYouNeedTheMoneySection } from './sections/start-before-you-n
 import { whyBuildingAnEffectiveSalesPipelineTakesTimeSection } from './sections/why-building-an-effective-sales-pipeline-takes-time';
 import { whySalesIsMoreThanJustSellingSection } from './sections/why-sales-is-more-than-just-selling';
 import { whyWatchingCashflowIsMissionCriticalSection } from './sections/why-watching-cashflow-is-mission-critical';
+import { hero } from './slides/hero/slide';
 
 /*
  * "Why it's never too early to start with sales": revenue arrives months after the costs that create it, so start the
@@ -18,6 +19,7 @@ import { whyWatchingCashflowIsMissionCriticalSection } from './sections/why-watc
 export const neverTooEarlySalesRun3 = episode({
   slug: 'never-too-early-sales-run-3',
   messages: { en, de },
+  title: hero,
   sections: [
     whyWatchingCashflowIsMissionCriticalSection,
     whySalesIsMoreThanJustSellingSection,
