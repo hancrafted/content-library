@@ -54,6 +54,11 @@ export interface ZoneStore {
   finishEntry(id: string): void;
 }
 
+/** The entrance of the Slide `id` names; outside any Slide (`null`) it reads `done`, so nothing there waits. */
+export function entryIn(store: Pick<ZoneStore, 'getEntry'>, id: string | null): SlideEntry {
+  return id === null ? 'done' : store.getEntry(id);
+}
+
 /** The page's entrances: a Slide starts entering on its first `active` and is then done for good. */
 function createEntries(notify: () => void) {
   const entries = new Map<string, SlideEntry>();

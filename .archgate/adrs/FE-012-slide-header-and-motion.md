@@ -21,6 +21,8 @@ A Slide wrapper and its Scene split mechanics from creativity (FE-009). Scenes t
 
 **Why a typewriter in CSS.** The characters are split on the server and timed by a seeded jitter, so the pace is irregular like a person typing yet stable across loads, and no client component runs for the header. Another entrance is another keyframe set over the same spans.
 
+**Why one emphasis motion.** Motion that carries the Slide's message (a funnel whose dots arrive while everything else is already at rest) is the point of the Slide, not decoration. It plays on the first entry and replays when the presenter points at it, so the claim can be shown again on demand; one per Scene keeps it legible.
+
 **Why a hover vocabulary.** The presenter points with the mouse; a few shared emphasis patterns, each mirrored on keyboard focus, teach the audience what a hover means across Episodes.
 
 Rejected: a per-Slide header prop (no Slide has needed a different one yet); a GSAP or client-side typewriter (a client leaf per Slide for text that is static); replaying the entrance on return (waiting on re-read).
@@ -31,22 +33,26 @@ Rejected: a per-Slide header prop (no Slide has needed a different one yet); a G
 
 1. The Slide wrapper MUST render `SlideHeader` (composing `SlideEyebrow`) above the Scene for every titled Slide; the container supplies its data.
 2. The Eyebrow MUST be computed from the table of contents' Sections: the Section title and the Slide's place among its titled page Slides. Section slides and the Title slide have none.
-3. Type comes from tokens: Eyebrow `caption`, uppercase, muted; title its level's role; caption `body`, muted, `mt-2`, `max-w-[70%]` from `md`.
+3. Type MUST come from tokens, per the design-system Slide header table.
 4. On the shared header a Scene MUST NOT render the title or caption; the kit's `Title` throws there.
 5. An Episode record MAY set `header: 'authored'`: its Scenes render their own header, and its Slides keep their `[data-zone]` entrances.
-6. An Episode record MAY set `entrance` (`typewriter` default, `fade`, `none`) and `title`, a Slide whose Scene is the Title slide's hero visual and which declares no notes or Voice script.
+6. An Episode record MAY set `entrance` (default `typewriter`) and `title`, the Title slide's hero Slide, with no notes or Voice script.
 
 ### 2. Entrance, once
 
 1. The entrance MUST play once per Slide per page: `pending` until first `active`, then `entering`, then `done`, held in the zone store.
 2. It MUST hide nothing without the `js` class, in print or under reduced motion.
 3. The typewriter MUST be CSS over server-split spans timed by `typewriter.pure.ts`, keep the full text for assistive tech, and settle within 1.5s.
-4. On the shared header a Scene MUST NOT carry an entrance of its own, per element or whole; looping or emphasis motion with a purpose stays (FE-009 §6).
+4. On the shared header a Scene MUST NOT stagger, draw on or fade its elements in on entry; §4 and looping motion with a purpose (FE-009 §6) aside.
 
 ### 3. Hover vocabulary
 
-1. Scene hover and focus emphasis MUST reuse the `globals.css` classes `card-hover`, `focus-group` and `hover-reveal` with their elements and modifiers; a new pattern is added there and to the design-system catalogue first.
+1. Scene hover and focus emphasis MUST reuse the `globals.css` classes `card-hover`, `focus-group` and `hover-reveal`; a new pattern is added there and to the design-system catalogue first.
 2. Every pattern MUST also apply on `:focus-visible` or `:focus-within` and drop its transition under reduced motion.
+
+### 4. Emphasis motion
+
+1. A Scene MAY carry one emphasis motion, carrying the Slide's message: it plays on first entry (`useSlideEntry()` reads `entering`), replays on mouse enter and keyboard focus of a focusable trigger, shows its end state under reduced motion, and is named in the Spec Option's build notes.
 
 ## Do's and Don'ts
 
@@ -56,13 +62,14 @@ Rejected: a per-Slide header prop (no Slide has needed a different one yet); a G
 2. **DO** keep a Scene to its visual: `SlideFrame` with the picture, no heading. (Decision 1)
 3. **DO** pick `entrance: 'fade'` or `'none'` on the record when typing does not suit the Episode. (Decision 2)
 4. **DO** reach for `card-hover--raise`, `focus-group--dim-others` or `hover-reveal__detail` for hover emphasis. (Decision 3)
-5. **DO** author the Title slide's visual as a Slide folder set as the record's `title`; the container keeps its `h1`. (Decision 1)
+5. **DO** give a Slide's message its one emphasis motion, replayed on `mouseenter` and `focus`. (Decision 4)
+6. **DO** author the Title slide's visual as a Slide folder set as the record's `title`; the container keeps its `h1`. (Decision 1)
 
 ### Don'ts
 
 1. **DON'T** write `<Title>`, an Eyebrow-like label or a caption in a Scene on the shared header. (Decision 1)
 2. **DON'T** author an Eyebrow; it is computed. (Decision 1)
-3. **DON'T** stagger, draw on or fade in a Scene's elements on entry on the shared header. (Decision 2)
+3. **DON'T** stagger, draw on or fade in a Scene's elements on entry on the shared header, or add a second emphasis motion. (Decision 2, Decision 4)
 4. **DON'T** hide content outside `.js` or in print. (Decision 2)
 5. **DON'T** invent a one-Scene hover pattern a second Scene could use. (Decision 3)
 
@@ -88,11 +95,11 @@ Rejected: a per-Slide header prop (no Slide has needed a different one yet); a G
 ## Compliance and Enforcement
 
 1. **Types:** the record's `header`, `entrance` and `title` fields.
-2. **Unit tests:** the entrance's states in the zone store; the seeded jitter (deterministic, uneven, normalised, within budget); the Eyebrow's count; the header text by default and none on `header: 'authored'`; the kit's `Title` refused on the shared header; wrapper and mount contracts.
+2. **Unit tests:** the entrance's states in the zone store and `useSlideEntry()`; the seeded jitter (deterministic, uneven, normalised, within budget); the Eyebrow's count; the header text by default and none on `header: 'authored'`; the kit's `Title` refused on the shared header; wrapper and mount contracts.
 3. **Post-build test:** reader text per Episode counts the typed header once.
 4. **Browser check:** `visual-check` after load: the Title slide `data-entry="done"`, Slides below the fold `pending`, the caption 70% of the Foreground from `md`, a section slide at least `40svh`.
 
-**Manual review duties:** no entrance in a Scene on the shared header (§2.4); hover emphasis uses the shared classes (§3).
+**Manual review duties:** no entrance in a Scene on the shared header (§2.4); at most one emphasis motion, carrying the message, with a focusable trigger and named in the build notes (§4); hover emphasis uses the shared classes (§3).
 
 **Exceptions:** raise a separate ADR; human approval required.
 
