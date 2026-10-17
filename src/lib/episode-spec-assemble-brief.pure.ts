@@ -6,15 +6,19 @@
 import { escape, inline } from './episode-spec-assemble-words.pure.ts';
 import { briefCard, type BriefCardEntry } from './episode-spec-brief.pure.ts';
 import { FORM } from './episode-spec-slide.pure.ts';
+import { ORDERED_MARKER } from './episode-spec-source.pure.ts';
+
+/** A bullet or ordered-list marker at the start of a line. */
+const LIST_MARKER = new RegExp(`^(?:- |${ORDERED_MARKER.source.slice(1)})`);
 
 /** A card entry's lines as paragraphs, with list lines (`- `, `1. `) grouped into one list. */
 function briefLines(lines: readonly string[]): string {
-  const item = (line: string) => /^(?:- |\d+\. )/.test(line);
+  const item = (line: string) => LIST_MARKER.test(line);
   const out: string[] = [];
   let list: string[] = [];
   const close = () => {
     if (list.length > 0)
-      out.push(`<ul>${list.map((line) => `<li>${inline(line.replace(/^(?:- |\d+\. )/, ''))}</li>`).join('')}</ul>`);
+      out.push(`<ul>${list.map((line) => `<li>${inline(line.replace(LIST_MARKER, ''))}</li>`).join('')}</ul>`);
     list = [];
   };
   for (const line of lines) {

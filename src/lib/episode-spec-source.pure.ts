@@ -37,6 +37,8 @@ export interface Source {
   sections: SourceSection[];
 }
 
+/** An ordered-list marker, `1. `: the one definition the Brief card's list detection builds on. */
+export const ORDERED_MARKER = /^\d+\. /;
 const HEADING = /^(#{1,4}) (.*?)(?: \{#([a-z0-9-]+)\})?$/;
 const BRIEF_ITEM = /^(?:\d+\. )?(?:\([AB]\) )?\*\*([^*]+)\*\* — (.*?)(?: _Visual:_ (.*?))?(?: _Research:_ [\d, ]+)?$/;
 
@@ -57,9 +59,9 @@ function continueItem(item: Item, text: string): void {
 }
 
 function addLine(items: Item[], line: string): void {
-  const item = /^\d+\. (.*)$/.exec(line);
+  const item = ORDERED_MARKER.exec(line);
   const last = items.at(-1);
-  if (item !== null) items.push({ text: group(item, 1), subs: [] });
+  if (item !== null) items.push({ text: line.slice(item[0].length), subs: [] });
   else if (last === undefined || line.trim() === '') return;
   else if (/^\s+- /.test(line)) last.subs.push(line.replace(/^\s+- /, ''));
   else continueItem(last, line.trim());
