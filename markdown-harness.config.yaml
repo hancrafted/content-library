@@ -180,7 +180,7 @@ frontmatter:
             - { value: practice, intent: 'When via is practice: changes Han found while rehearsing the recording.' }
             - {
                 value: spec,
-                intent: 'When via is spec: saved from the served Spec by `npm run episode:spec`, one item per Slide naming its picks (`picked: 3b`, `picked: 4a, 4c` or `picked: none`) and the note, then the Visual language note.',
+                intent: 'When via is spec: saved from the served Spec by `npm run episode:spec`, one item for the Title slide (`top`, whose Options carry the section slides) and one per page Slide, each naming its picks (`picked: 3b`, `picked: 4a, 4c` or `picked: none`) and the note, then the Visual language note.',
               }
 
     - ruleId: episode-design-reference
@@ -543,7 +543,7 @@ body-structure:
             pattern: '^Feedback round \d+$',
             intent: "Names the round, `Feedback round <n>`, the number the file's `round` holds.",
           }
-      intent: 'One list of items, each a single change keyed to its Slide and tagged with where it lands: `content`, any change to what a Slide says or cites, its title, Voice script or Speaker notes, routes to the Spec first and then the implementation; `implementation` to the code alone; `practice` to the recording; a Spec review tags each item `design` and names its picks, so it routes to the Spec. Fail if an item holds more than one change, its tag sends it to the wrong place (a Voice script change tagged anything but `content`), or it cannot be acted on without asking Han.'
+      intent: 'One list of items, each a single change keyed to its Slide (`top` the Title slide, a Section slug its section slide, `<section>--<slide>` a page Slide) and tagged with where it lands: `content`, any change to what a Slide says or cites, its title, Voice script or Speaker notes, routes to the Spec first and then the implementation; `implementation` to the code alone; `design`, a change to how a Slide looks that its picked Option does not give, routes to the Spec first and then the implementation; `practice` to the recording; a Spec review tags each item `design` and names its picks, so it routes to the Spec. Fail if an item holds more than one change, its tag sends it to the wrong place (a Voice script change tagged anything but `content`), or it cannot be acted on without asking Han.'
       undefinedHeadings: forbid
     - ruleId: episode-design-reference-body
       fileNames: [design-reference.md]

@@ -40,3 +40,11 @@ export function specSlides(html: string): SpecSlide[] {
 export function specSlideAnchors(html: string): string[] {
   return specSlides(html).map(({ section, slug }) => `${section}--${slug}`);
 }
+
+/** The Section slugs of a Spec in page order, each the anchor feedback items key its section slide by. */
+export function specSectionSlugs(html: string): string[] {
+  const $ = load(html);
+  return $(SECTION)
+    .toArray()
+    .map((section) => $(section).attr('id') ?? '');
+}

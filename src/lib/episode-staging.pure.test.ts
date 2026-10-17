@@ -107,6 +107,24 @@ describe('success cases', () => {
     expect(findings).toEqual([]);
   });
 
+  it.each(['app', 'voice'])(
+    'finds nothing in %s feedback keyed to the Title slide, a section slide or a page Slide, design tag included',
+    (via) => {
+      // ARRANGE
+      const files = folder({
+        [FEEDBACK_PATH]: feedback(via, [
+          '- `top` · content — Shorter caption.',
+          '- `why` · implementation — The motif overflows on mobile.',
+          '- `why--spent` · design — Try the bar as a heat strip.',
+        ]),
+      });
+      // ACT
+      const findings = checkStagingFolder(files, KNOWN_VISUALS, REVIEW_ASSET);
+      // ASSERT
+      expect(findings).toEqual([]);
+    },
+  );
+
   it('finds nothing in a Spec review whose items name the picks of each Slide, and the Visual language note', () => {
     // ARRANGE
     const files = folder({
@@ -114,6 +132,7 @@ describe('success cases', () => {
         '- `why--spent` · design — picked: 1a',
         '- `why--spent` · design — picked: 1a, 1b — Combine them.',
         '- `why--spent` · design — picked: none — Try a heat strip.',
+        '- `top` · design — picked: 0b — Fuel the rocket in fewer steps.',
         '- `visual-language` · design — More accent.',
       ]),
     });
@@ -409,7 +428,7 @@ describe('failure cases', () => {
     // ARRANGE
     const files = folder({ [FEEDBACK_PATH]: feedback('app', ['- why--spent: open with the budget.']) });
     const expected = [{ kind: 'feedback', file: FEEDBACK_PATH }];
-    const expectedForm = '`<section>--<slide>` · content|implementation — text';
+    const expectedForm = '`top`|`<section>`|`<section>--<slide>` · content|implementation|design — text';
     // ACT
     const findings = checkStagingFolder(files, KNOWN_VISUALS, REVIEW_ASSET);
     // ASSERT
@@ -462,9 +481,21 @@ describe('failure cases', () => {
     expect(findings[0].message).toContain(expectedTag);
   });
 
-  it('reports a design tag in feedback that did not come from a Spec review', () => {
+  it('names a bare feedback anchor that is no section slide in the Dossier', () => {
     // ARRANGE
-    const files = folder({ [FEEDBACK_PATH]: feedback('app', ['- `why--spent` · design — picked: 1a']) });
+    const files = folder({ [FEEDBACK_PATH]: feedback('app', ['- `gone` · content — Cut it.']) });
+    const expected = [
+      { kind: 'feedback', file: FEEDBACK_PATH, message: 'Feedback anchor "gone" is no section slide in the Dossier.' },
+    ];
+    // ACT
+    const findings = checkStagingFolder(files, KNOWN_VISUALS, REVIEW_ASSET);
+    // ASSERT
+    expect(findings).toEqual(expected);
+  });
+
+  it('reports a design tag in feedback from practice, which reviews the recording', () => {
+    // ARRANGE
+    const files = folder({ [FEEDBACK_PATH]: feedback('practice', ['- `why--spent` · design — Swap the bar.']) });
     const expectedKinds = ['feedback'];
     const expectedTag = 'design';
     // ACT
@@ -621,6 +652,34 @@ describe('edge cases', () => {
     const findings = checkStagingFolder(files, KNOWN_VISUALS, REVIEW_ASSET).filter(({ kind }) => kind === 'feedback');
     // ASSERT
     expect(findings.map(({ file }) => file)).toEqual(expectedFiles);
+  });
+
+  it('keys a Spec review by the Title slide and page Slides alone, never a section slide', () => {
+    // ARRANGE
+    const files = folder({ [FEEDBACK_PATH]: feedback('spec', ['- `why` · design — picked: 1a']) });
+    const expectedKinds = ['feedback'];
+    // ACT
+    const findings = checkStagingFolder(files, KNOWN_VISUALS, REVIEW_ASSET);
+    // ASSERT
+    expect(kinds(findings)).toEqual(expectedKinds);
+  });
+
+  it("keys bare feedback anchors by the Spec's Sections once the Gate deleted the Dossier", () => {
+    // ARRANGE
+    const page = `<!doctype html><html><body>
+<section data-spec="section" id="why"><article data-spec="slide" id="spent" data-number="1"></article></section>
+</body></html>`;
+    const files = {
+      'spec/spec.html': page,
+      [FEEDBACK_PATH]: feedback('app', ['- `why` · content — Name the budget.', '- `how` · content — Cut it.']),
+    };
+    const expected = [
+      { kind: 'feedback', file: FEEDBACK_PATH, message: 'Feedback anchor "how" is no section slide in the Spec.' },
+    ];
+    // ACT
+    const findings = checkStagingFolder(files, KNOWN_VISUALS, REVIEW_ASSET).filter(({ kind }) => kind === 'feedback');
+    // ASSERT
+    expect(findings).toEqual(expected);
   });
 
   it('checks the Spec page of a folder against the Spec contract', () => {
