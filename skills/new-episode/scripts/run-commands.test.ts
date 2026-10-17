@@ -707,3 +707,79 @@ describe('orchestrator Job usage', () => {
     expect(spans(ctx).find((s) => s.type === 'job')?.['gen_ai.usage.output_tokens']).toBeUndefined();
   });
 });
+
+describe('agent spans', () => {
+  const attempted = (): RunContext => {
+    const ctx = begun();
+    run(ctx, 'begin-job', 'a');
+    run(ctx, 'begin-attempt', 'a');
+    return ctx;
+  };
+  const agents = (ctx: RunContext) => spans(ctx).filter((s) => s.type === 'agent');
+
+  it('begins a typed agent span under the open Attempt, named by its description', () => {
+    // ARRANGE
+    const ctx = attempted();
+    // ACT
+    const result = run(ctx, 'begin-agent', 'a#1/implementor/#7', '--harness', 'copilot');
+    // ASSERT
+    expect(result).toEqual({ ok: true, output: expect.any(String) });
+    const attempt = spans(ctx).find((s) => s.type === 'attempt');
+    expect(agents(ctx)).toEqual([
+      expect.objectContaining({
+        name: 'a#1/implementor/#7',
+        job: 'a',
+        attempt: 1,
+        role: 'implementor',
+        ticket: 7,
+        status: 'running',
+        parent_span_id: attempt?.span_id,
+        source: 'typed',
+      }),
+    ]);
+  });
+
+  it('ends the agent span with the status given', () => {
+    // ARRANGE
+    const ctx = attempted();
+    run(ctx, 'begin-agent', 'a#1/implementor');
+    // ACT
+    const result = run(ctx, 'end-agent', 'a#1/implementor');
+    // ASSERT
+    expect(result.ok).toBe(true);
+    expect(agents(ctx).map((s) => s.status)).toEqual(['ok']);
+  });
+
+  it('records a refused spawn as end-agent refused', () => {
+    // ARRANGE
+    const ctx = attempted();
+    run(ctx, 'begin-agent', 'a#1/reviewer');
+    // ACT
+    run(ctx, 'end-agent', 'a#1/reviewer', 'refused');
+    // ASSERT
+    expect(agents(ctx).map((s) => s.status)).toEqual(['refused']);
+  });
+
+  it('does not open a second span for a description already open', () => {
+    // ARRANGE
+    const ctx = attempted();
+    run(ctx, 'begin-agent', 'a#1/implementor');
+    // ACT
+    run(ctx, 'begin-agent', 'a#1/implementor');
+    // ASSERT
+    expect(agents(ctx)).toHaveLength(1);
+  });
+
+  it('refuses a description that does not parse, and an Attempt that is not open', () => {
+    // ARRANGE
+    const ctx = attempted();
+    // ACT
+    const bad = run(ctx, 'begin-agent', 'implementor');
+    const none = run(ctx, 'begin-agent', 'a#2/implementor');
+    const unknown = run(ctx, 'end-agent', 'a#1/ghost');
+    // ASSERT
+    expect(bad).toEqual({ ok: false, error: expect.stringContaining('<job>#<n>/<role>') });
+    expect(none).toEqual({ ok: false, error: expect.stringContaining('no open Attempt a#2') });
+    expect(unknown).toEqual({ ok: false, error: expect.stringContaining('no agent span "a#1/ghost"') });
+  });
+});
