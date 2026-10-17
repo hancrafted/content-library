@@ -51,6 +51,9 @@ _Avoid_: Card, panel; page, which means the Next.js route the whole Episode rend
 **Title slide**: an Episode's opening Slide: its title, caption, optional Voice script and Speaker notes and, once recorded, its video. Not listed in the table of contents.
 _Avoid_: Hero, cover
 
+**Hero motif**: an Episode's recurring visual idea, drawn from its Red thread. The Title slide sets it; each section slide echoes it and brings in elements of its own Section, foreshadowing what comes (a rocket on the Title slide, fuelled step by step across the section slides).
+_Avoid_: Theme, key visual
+
 **Scene**: the free interior of a Slide, where its visualisation and layout live, ungoverned by the mechanics of the box around it. It has two layers: a **Backdrop** and a **Foreground**.
 _Avoid_: Canvas (confuses with the HTML `<canvas>` element), inner slide, slide body
 
@@ -118,7 +121,7 @@ _Avoid_: Phase, step
 **Spec**: the one page the Specification Stage writes in Staging, read in a browser: per Slide its Options and what Build needs to build the chosen one. Han picks an Option per Slide at its Gate, and Build builds from the Spec alone.
 _Avoid_: Ticket, spec issue, build spec, design spec
 
-**Option**: one of two or three ways a Slide could look, shown side by side in the Spec at low to medium fidelity, each with its reason. Han picks one per Slide.
+**Option**: one of two or three ways a Slide could look, shown side by side in the Spec at low to medium fidelity, each with its reason. Han picks one per Slide. The Title slide has three, each a set: the Title slide and, under it, every section slide, so picking one picks the Hero motif.
 _Avoid_: Variant, alternative, mock
 
 **Attempt**: one try at a Job, numbered from 1. A retry is a new Attempt that names the Attempt it retries.
