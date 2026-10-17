@@ -7,7 +7,7 @@ import { createTranslator } from 'next-intl';
 import type { ReactNode } from 'react';
 import type { EpisodeRecord, Slide, SlideMessages } from './slide';
 import type { NoteSpec, RuntimeTranslator, SegmentSpec, SourceSpec } from './slide-base';
-import { slideKit } from './slide-kit';
+import { slideKit, type ReferenceLabels } from './slide-kit';
 
 /*
  * The Localized Slide: one Slide in one locale, as the page renders it
@@ -58,10 +58,8 @@ export interface EpisodeContext {
   readonly locale: Locale;
   /** Every Slide of the Episode as the walk (`placeSections`) placed it: what `slideHref` links to. */
   readonly placed: readonly PlacedListSlide<Slide>[];
-  /** Said after a Context reference's phrase, e.g. `opens speaker note`. */
-  readonly refLabel: string;
-  /** A Context marker's accessible name from its note's header, e.g. `Speaker note: Stateless by design`. */
-  readonly markerLabel: (title: string) => string;
+  /** What assistive tech hears for a Context reference: the underline's suffix and a marker's name. */
+  readonly referenceLabels: ReferenceLabels;
 }
 
 /**

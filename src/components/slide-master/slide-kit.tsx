@@ -11,16 +11,21 @@ import { SlideTitle } from './slide-master';
 /** The optional message key a Slide sets when its on-screen title differs from its table-of-contents `title`. */
 const ON_SCREEN_TITLE_KEY = 'heading';
 
+/** What assistive tech hears for a Context reference, in the page's locale. */
+export interface ReferenceLabels {
+  /** Said after an underlined phrase, e.g. `opens speaker note`. */
+  readonly ref: string;
+  /** A Context marker's accessible name from its note's header, e.g. `Speaker note: Stateless by design`. */
+  readonly marker: (title: string) => string;
+}
+
 /** What the container knows about the whole Episode when it builds a kit: the same for every Slide. */
 export interface EpisodeKitInput {
   readonly episode: EpisodeSlug;
   readonly locale: Locale;
   /** Each Slide slug's placed id, from the walk (`placeSections`): what `slideHref` links to. */
   readonly anchors: ReadonlyMap<string, string>;
-  /** Said after a Context reference's phrase, e.g. `opens speaker note`. */
-  readonly refLabel: string;
-  /** A Context marker's accessible name from its note's header, e.g. `Speaker note: Stateless by design`. */
-  readonly markerLabel: (title: string) => string;
+  readonly referenceLabels: ReferenceLabels;
 }
 
 /** What the container knows about one placed Slide when it builds its kit. */
@@ -75,12 +80,12 @@ function contextRefsOf(episode: EpisodeKitInput, slide: SlideKitInput): Pick<Run
       throw new Error(`No note "${note}" on "${slide.slideId}": a context reference must name one of its notes.`);
     }
   };
-  const labelOf = (note: string) => (declared(note), episode.markerLabel(slide.t(`notes.${note}.header`)));
+  const labelOf = (note: string) => (declared(note), episode.referenceLabels.marker(slide.t(`notes.${note}.header`)));
   return {
     ref: (note) => {
       declared(note);
       return (chunks) => (
-        <ContextRef note={note} label={episode.refLabel}>
+        <ContextRef note={note} label={episode.referenceLabels.ref}>
           {chunks}
         </ContextRef>
       );

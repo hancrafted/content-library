@@ -37,8 +37,7 @@ function scene({ episode, slide }: PlacedSlide) {
     episode,
     locale: 'en',
     placed,
-    refLabel: 'opens speaker note',
-    markerLabel: (title) => `Speaker note: ${title}`,
+    referenceLabels: { ref: 'opens speaker note', marker: (title) => `Speaker note: ${title}` },
   }).content;
 }
 

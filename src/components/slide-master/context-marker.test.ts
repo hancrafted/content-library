@@ -42,16 +42,19 @@ describe('success cases', () => {
 describe('failure cases', () => {
   it('carries no id, target or number, so it never stands in for the element its note explains', () => {
     // ARRANGE
-    const expected = { id: undefined, targets: 0, digits: false };
+    const expected = { id: undefined, target: undefined, nestedTargets: 0 };
+    const number = /\d/;
     // ACT
     const button = render({ note: 'spine', label: 'Speaker note: Spine' });
     const seen = {
       id: button.attr('id'),
-      targets: button.find('[data-target]').length,
-      digits: /\d/.test(button.text()),
+      target: button.attr('data-target'),
+      nestedTargets: button.find('[data-target]').length,
     };
+    const text = button.text();
     // ASSERT
     expect(seen).toEqual(expected);
+    expect(text).not.toMatch(number);
   });
 });
 

@@ -99,8 +99,10 @@ function episodeOf(locale: Locale, sections: readonly (readonly [Slide, ...Slide
     episode: 'page-template',
     locale,
     placed: placeSections<Slide>(sections).flat(),
-    refLabel: 'opens speaker note',
-    markerLabel: (title) => (locale === 'de' ? `Sprechernotiz: ${title}` : `Speaker note: ${title}`),
+    referenceLabels: {
+      ref: 'opens speaker note',
+      marker: (title) => (locale === 'de' ? `Sprechernotiz: ${title}` : `Speaker note: ${title}`),
+    },
   };
 }
 

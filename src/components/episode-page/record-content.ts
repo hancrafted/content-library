@@ -48,8 +48,7 @@ export async function recordContent(
     episode: record.slug,
     locale,
     placed: placeSections<Slide>(record.sections).flat(),
-    refLabel: drawer('refNote'),
-    markerLabel: (title) => drawer('markerNote', { title }),
+    referenceLabels: { ref: drawer('refNote'), marker: (title) => drawer('markerNote', { title }) },
   };
   const { title, caption } = record.messages[locale];
   return {
