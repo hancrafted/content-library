@@ -11,6 +11,8 @@ import { repeated } from './finding.pure';
 const BUILD_STAGE = 'build';
 /** The dashboard's own dev port (`npx next dev -p 4382`); no job is assigned it. */
 export const DASHBOARD_PORT = 4382;
+/** The build Job that serves the Episode on the pipeline's `dev_port` and so carries no `port` of its own. */
+const DEV_PORT_JOB = 'implement-episode-init';
 
 /** A per-run pipeline or the template, and whether it is approved with every `foreach` expanded. */
 export interface PortScope {
@@ -41,7 +43,7 @@ export function checkPorts(jobs: readonly Job[], { perRun, expanded }: PortScope
       (port) => `The port ${port} appears on more than one job; each build job serves on its own port.`,
     ),
     ...jobs
-      .filter(({ stage, port }) => expanded && stage === BUILD_STAGE && port === undefined)
+      .filter(({ id, stage, port }) => expanded && stage === BUILD_STAGE && port === undefined && id !== DEV_PORT_JOB)
       .map(
         ({ id }) =>
           `Job "${id}" of stage "${BUILD_STAGE}" lacks port; customize-pipeline gives every build job of an approved pipeline its own dev-server port.`,

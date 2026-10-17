@@ -1,11 +1,12 @@
 // `npm run episode:spec -- <slug | Episode folder>`: compiles the site's globals.css into the Spec's design.css,
-// scanning only the Spec for classes, then serves the Spec for review on the first free port from 4000, never 4382
+// scanning only the Spec for classes, then serves the Spec for review on `--port`, else the first free port from 4000, never 4382
 // (the dashboard's). Saving the review writes the next feedback round (spec-server.ts).
 
 import tailwind from '@tailwindcss/postcss';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { parseArgs } from 'node:util';
 import postcss from 'postcss';
 import { SPEC_FILE } from '../../../src/lib/episode-spec-page.pure.ts';
 import { startSpecServer, type SpecServer } from './spec-server.ts';
@@ -32,7 +33,8 @@ async function buildDesignCss(specDir: string): Promise<string> {
   return out;
 }
 
-async function listen(folder: string): Promise<SpecServer> {
+async function listen(folder: string, fixed: number | undefined): Promise<SpecServer> {
+  if (fixed !== undefined) return startSpecServer({ folder, port: fixed, now: () => new Date() });
   for (let port = FIRST_PORT; port <= LAST_PORT; port++) {
     if (port === DASHBOARD_PORT) continue;
     try {
@@ -44,19 +46,27 @@ async function listen(folder: string): Promise<SpecServer> {
   throw new Error(`no free port from ${FIRST_PORT} to ${LAST_PORT}`);
 }
 
-const [arg, ...extra] = process.argv.slice(2);
-if (arg === undefined || extra.length > 0) {
-  console.error('✖ usage: npm run episode:spec -- <slug | Episode folder>');
+const { values, positionals } = parseArgs({
+  args: process.argv.slice(2),
+  allowPositionals: true,
+  options: { port: { type: 'string' }, watch: { type: 'boolean' } },
+});
+const [arg, ...extra] = positionals;
+const port = values.port === undefined ? undefined : Number(values.port);
+if (arg === undefined || extra.length > 0 || (port !== undefined && !Number.isInteger(port))) {
+  console.error('✖ usage: npm run episode:spec -- <slug | Episode folder> [--port <n>] [--watch]');
   process.exit(1);
 }
 const folder = episodeFolder(arg);
 const spec = path.join(folder, SPEC_FILE);
+// --watch: begin-run starts this server before the Spec exists, so wait for spec.html instead of refusing.
+while (values.watch && !existsSync(spec)) await new Promise((resolve) => setTimeout(resolve, 1000));
 if (!existsSync(spec)) {
   console.error(`✖ ${path.relative(ROOT, spec)} does not exist`);
   process.exit(1);
 }
 const css = await buildDesignCss(path.dirname(spec));
-const server = await listen(folder);
+const server = await listen(folder, port);
 console.log(`✔ ${path.relative(ROOT, css)} compiled from src/app/globals.css`);
 console.log(
   `✔ Spec review on http://127.0.0.1:${server.port}/ — Save writes ${path.relative(ROOT, folder)}/feedback/<NN>/feedback.md; Ctrl-C stops`,

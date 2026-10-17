@@ -45,7 +45,7 @@ export interface PipelineContext {
   /**
    * A per-run pipeline, not the template. Once approved, customize-pipeline
    * has expanded every `foreach` into one job per item, so each output names
-   * one file; the draft scaffold-pipeline copies still keeps them.
+   * one file; the draft begin-run writes still keeps them.
    */
   perRun: boolean;
   /**

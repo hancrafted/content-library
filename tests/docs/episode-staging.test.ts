@@ -281,7 +281,7 @@ describe('success cases', () => {
     expect(findings).toEqual([]);
   });
 
-  it('finds the template well formed as the draft scaffold-pipeline copies, foreach jobs unexpanded', () => {
+  it('finds the template well formed as the draft begin-run copies, foreach jobs unexpanded', () => {
     // ARRANGE
     const staging = 'docs/episodes/scaffold-demo';
     const yaml = readFileSync(TEMPLATE, 'utf8')

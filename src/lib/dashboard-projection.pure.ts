@@ -54,7 +54,14 @@ export function parseDashboardPipeline(text: string): DashboardPipeline {
   const jobs = document.jobs as unknown[];
   const errors = [...checkMapping('The pipeline', document, LEGACY_FIELDS.top), ...jobs.flatMap(jobErrors)];
   if (errors.length > 0) throw new Error(errors.join('\n'));
-  return { status: String(document.status), stages: pipeline.stages, jobs: orderedJobs(pipeline.jobs) };
+  const { devPort, specPort } = pipeline;
+  return {
+    status: String(document.status),
+    stages: pipeline.stages,
+    jobs: orderedJobs(pipeline.jobs),
+    ...(devPort !== undefined && { devPort }),
+    ...(specPort !== undefined && { specPort }),
+  };
 }
 
 export interface DashboardJob extends Omit<Job, 'agents'> {

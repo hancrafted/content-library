@@ -53,6 +53,10 @@ export interface Pipeline {
   /** The pipeline's ordered stage ids; empty when it lists none. */
   stages: string[];
   jobs: Job[];
+  /** The Run's dashboard dev-server port (`dev_port`), written by begin-run; absent before it. */
+  devPort?: number;
+  /** The Run's Spec-server port (`spec_port`); the dashboard links it. */
+  specPort?: number;
 }
 
 function isMapping(value: unknown): value is Record<string, unknown> {
@@ -129,6 +133,8 @@ export function parsePipeline(yaml: string): PipelineText {
       status: typeof document.status === 'string' ? document.status : null,
       stages: strings(document.stages),
       jobs: sources.map(({ job }) => job),
+      ...(Number.isInteger(document.dev_port) && { devPort: document.dev_port as number }),
+      ...(Number.isInteger(document.spec_port) && { specPort: document.spec_port as number }),
     },
     sources,
   };

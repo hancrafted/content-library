@@ -353,7 +353,9 @@
       "notWritten": "not written yet",
       "openOutput": "opens as plain text in a new tab",
       "preview": "Preview :{port}",
-      "previewHelp": "this Job's dev server, opens in a new tab"
+      "previewHelp": "this Job's dev server, opens in a new tab",
+      "spec": "Spec :{port}",
+      "specHelp": "the Run's Spec server, opens in a new tab"
     }
   },
   "meta": {

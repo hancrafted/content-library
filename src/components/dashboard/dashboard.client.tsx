@@ -7,6 +7,7 @@ import type { Polled } from '@/lib/dashboard-reader.pure';
 import { BrowserHelp, ChooseFolder, DashboardEntry, PrivacyNote } from './dashboard-entry';
 import type { DashboardCopy } from './dashboard-evidence';
 import { DashboardGraph } from './dashboard-graph.client';
+import { SpecButton } from './dashboard-job-links';
 import { OpenGates, ReaderFooter, SourceErrors } from './dashboard-source';
 
 interface LiveProps {
@@ -43,6 +44,10 @@ function LiveDashboard({ polled, outputs, name, copy }: LiveProps) {
   );
 }
 
+function SpecLink({ specPort, copy }: { specPort?: number; copy: DashboardCopy }) {
+  return specPort === undefined ? null : <SpecButton port={specPort} copy={copy} />;
+}
+
 export function Dashboard({ copy }: { copy: DashboardCopy }) {
   const source = useEpisodeDashboard();
   const { polled } = source;
@@ -57,6 +62,7 @@ export function Dashboard({ copy }: { copy: DashboardCopy }) {
           <span className="truncate font-mono text-caption text-muted-foreground" title={source.name}>
             {source.name}
           </span>
+          <SpecLink specPort={polled?.read.pipeline?.specPort} copy={copy} />
           {chooser}
         </div>
       </header>

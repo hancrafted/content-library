@@ -4,6 +4,7 @@
 import { execFileSync, spawnSync } from 'node:child_process';
 import { rmSync } from 'node:fs';
 import path from 'node:path';
+import { stopServers } from '../../new-episode/scripts/servers.ts';
 import { parseArgs } from './worktree-args.pure.ts';
 import { mergeIntoBase } from './worktree-merge.ts';
 
@@ -107,6 +108,8 @@ function mergeBeforeRemoval(branch: string, base: string): void {
 
 function finish(branch: string, base: string | null): void {
   const target = worktreePath(branch);
+  // The Run's own dev and Spec servers (pid files in the worktree); no other process is touched.
+  for (const port of stopServers(target)) console.log(`✔ stopped the Run's server on :${port}`);
   refuseWhileBusy(target);
   if (base === null) refuseUnpushedMain();
   // Merged before anything is removed, so a failure leaves the worktree and branch intact.

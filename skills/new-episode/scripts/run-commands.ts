@@ -1,21 +1,21 @@
 // The run-scoped commands: how the orchestrator drives an Episode's Run by names (a job id, an attempt number, a gate
 // name) and never by span id. Each command writes its line through the run-log writer, resolves parents and targets
 // from the log itself, and keeps the active-run marker (`.scratch/active-run`) in step, so the marker is an internal
-// detail of this module. begin-run opens the Run and the marker; begin-job and begin-attempt nest under it (an
-// Attempt's number and `retry_of` are derived, and the spawn description is printed); end-run records the
-// orchestrator's usage and clears the marker in one step. A command refuses a step the log cannot support: an
-// undeclared Job, a second Run while one is open, a new span on an ended Run, a Job or Run ended over open spans.
-// Real disk; clock, ids, git and the transcript lookup are injectable. Shapes: run-log.pure.ts; `run.ts` wraps argv.
+// detail of this module. begin-run opens the Run and the marker; begin-job and begin-attempt nest under it; end-run
+// records the orchestrator's usage and clears the marker in one step. A command refuses a step the log cannot
+// support. Real disk; clock, ids, git and the transcript lookup are injectable.
 import { existsSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 import { archiveEpisodeLog, episodeLogPath, readEpisodeLog, readMarker } from './episode-run-log.ts';
 import { declaredJobs } from './episode-status.ts';
+import { beginAgent, endAgent } from './run-agent-commands.ts';
 import { endEvent, need, parseRunArgs, refuse, viaOf, type Opts, type Params } from './run-args.pure.ts';
 import { USAGE } from './run-help.pure.ts';
 import { type LogEvent, type Status } from './run-log.pure.ts';
 import { endMarker, liveMarker, recordJobUsage } from './run-marker.ts';
 import { hasEnded, isOpen, latest, openAgentsOf, openSpan, openUnderRun, scoreTarget } from './run-spans.pure.ts';
 import { openView, pointAt, sessionOf, viewOf, write, type RunContext } from './run-view.ts';
+import { serversNote } from './servers.ts';
 
 export type { RunContext } from './run-view.ts';
 export type CommandResult = { ok: true; output: string } | { ok: false; error: string };
@@ -32,7 +32,8 @@ function beginRun(ctx: RunContext, opts: Opts): string {
   mkdirSync(path.join(ctx.root, path.dirname(episodeLogPath(ctx.slug))), { recursive: true });
   const line = write(ctx, { kind: 'start-run', harness: opts.harness ?? 'claude-code', 'gen_ai.request.model': model });
   pointAt(ctx, line, { jobSpanId: line.span_id, sessionId });
-  return `Run begun (${line.run_id})`;
+  const note = serversNote(ctx.servers, { root: ctx.root, slug: ctx.slug, sha: line.template_sha ?? '' });
+  return `Run begun (${line.run_id})${note}`;
 }
 
 /** Statuses a Run may end with while spans under it are still open: those spans then read crashed. */
@@ -47,6 +48,7 @@ function endRun(ctx: RunContext, p: Params<'status' | 'summary'>): string {
       `Run ${run.run_id} still has open spans: ${open.join(', ')}. End them, or run end-run error|crashed to leave them crashed`,
     );
   write(ctx, endEvent('end-run', run.span_id, p));
+  ctx.servers?.stop(ctx.root);
   const warning = endMarker(ctx, run, readEpisodeLog(ctx.slug, ctx.root).lines);
   return warning === '' ? 'Run ended' : `Run ended (${warning})`;
 }
@@ -186,8 +188,8 @@ function resume(ctx: RunContext): string {
 
 /** Runs `step` for a session the live marker does not list yet: resumes first, and prints that it did. */
 const resuming =
-  <K extends string>(step: (ctx: RunContext, p: Params<K>) => string) =>
-  (ctx: RunContext, p: Params<K>): string => {
+  <K extends string>(step: (ctx: RunContext, p: Params<K>, opts: Opts) => string) =>
+  (ctx: RunContext, p: Params<K>, opts: Opts): string => {
     const marker = readMarker(ctx.root);
     const current = readEpisodeLog(ctx.slug, ctx.root).current;
     const unlisted =
@@ -195,7 +197,7 @@ const resuming =
       current !== null &&
       marker.trace_id === current.trace_id &&
       !(marker.session_ids ?? [marker.session_id]).includes(sessionOf(ctx));
-    return unlisted ? `${resume(ctx)} (this session was not on the Run)\n${step(ctx, p)}` : step(ctx, p);
+    return unlisted ? `${resume(ctx)} (this session was not on the Run)\n${step(ctx, p, opts)}` : step(ctx, p, opts);
   };
 
 /** A command: the names of its positional parameters, and what it does with them. */
@@ -220,6 +222,8 @@ const COMMANDS: Record<string, Command> = {
   'end-job': command(['job', 'status', 'summary'], endJob),
   'begin-attempt': command(['job'], resuming(beginAttempt)),
   'end-attempt': command(['job', 'status', 'summary'], endAttempt),
+  'begin-agent': command(['agent'], resuming(beginAgent)),
+  'end-agent': command(['agent', 'status', 'summary'], endAgent),
   'open-gate': command(['job', 'name'], openGate),
   'close-gate': command(['name', 'status', 'summary'], closeGate),
   reuse: command(['job'], reuse),

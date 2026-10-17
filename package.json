@@ -33,6 +33,7 @@
     "episode:query": "node skills/new-episode/scripts/query.ts",
     "episode:run": "node skills/new-episode/scripts/run.ts",
     "episode:runs-csv": "node skills/new-episode/scripts/runs-csv.ts",
+    "dev-stop": "node skills/new-episode/scripts/dev-stop.ts",
     "episode:spec": "node skills/new-episode/scripts/spec.ts",
     "episode:spec-assemble": "node skills/new-episode/scripts/spec-assemble.ts",
     "episode:spec-preview": "node skills/new-episode/scripts/spec-preview.ts",
