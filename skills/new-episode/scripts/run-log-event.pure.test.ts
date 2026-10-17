@@ -138,7 +138,7 @@ describe('failure cases', () => {
       event('instructions.load', { 'file.path': 'CLAUDE.md', load_reason: 'x', adr: 'state-management' }),
     ];
     const expected = [
-      ['name must be one of skill.invoke, file.read, instructions.load'],
+      ['name must be one of skill.invoke, file.read, instructions.load, note'],
       ['attributes.skill.name is required on a skill.invoke event'],
       ['attributes.file.size is not an attribute of a file.read event'],
       ['attributes.file.path must be a repo-relative path'],

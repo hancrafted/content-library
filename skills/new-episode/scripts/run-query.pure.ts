@@ -70,6 +70,9 @@ const SCORE_COLUMNS = [
   'ticket',
 ] as const;
 
+/** `notes` columns: one row per typed note event, with the Job it was recorded on, plus `episode`. */
+const NOTE_COLUMNS = ['episode', 'trace_id', 'span_id', 'job', 'type', 'text', 't', 'seq'] as const;
+
 const sqlName = (column: string): string => column.replaceAll('.', '_');
 
 function createTable(db: DatabaseSync, table: string, columns: readonly string[]): void {
@@ -86,10 +89,32 @@ function insertAll(
   for (const row of rows) insert.run(...columns.map((column) => (row[column] ?? null) as SQLInputValue));
 }
 
+function noteRows(episode: string, folded: Folded): Record<string, unknown>[] {
+  return folded.spans.flatMap((span) =>
+    (span.events ?? []).flatMap((event) =>
+      event.name === 'note'
+        ? [
+            {
+              episode,
+              trace_id: span.trace_id,
+              span_id: span.span_id,
+              job: span.job ?? span.name,
+              type: event.attributes['note.type'],
+              text: event.attributes['note.text'],
+              t: event.t,
+              seq: event.seq,
+            },
+          ]
+        : [],
+    ),
+  );
+}
+
 function load(sources: readonly RunSource[]): DatabaseSync {
   const db = new DatabaseSync(':memory:');
   createTable(db, 'spans', SPAN_COLUMNS);
   createTable(db, 'scores', SCORE_COLUMNS);
+  createTable(db, 'notes', NOTE_COLUMNS);
   for (const { episode, folded } of sources) {
     insertAll(
       db,
@@ -101,6 +126,7 @@ function load(sources: readonly RunSource[]): DatabaseSync {
       { name: 'scores', columns: SCORE_COLUMNS },
       folded.scores.map((score) => ({ ...score, episode })),
     );
+    insertAll(db, { name: 'notes', columns: NOTE_COLUMNS }, noteRows(episode, folded));
   }
   return db;
 }

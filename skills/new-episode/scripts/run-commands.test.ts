@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { episodeLogPath, readEpisodeLog, readMarker } from './episode-run-log.ts';
 import { runCommand, type RunContext } from './run-commands.ts';
 import { appendEvent } from './run-log-writer.ts';
+import { queryRuns } from './run-query.pure.ts';
 
 /*
  * The run-scoped commands against a real temp worktree: names in, lines and marker out. Clock, ids, git,
@@ -53,6 +54,42 @@ afterEach(() => {
 });
 
 describe('success cases', () => {
+  it('records typed notes on the open Job and a Job summary, and the query returns both', () => {
+    // ARRANGE
+    const ctx = begun();
+    run(ctx, 'begin-job', 'write-dossier');
+    // ACT
+    const noted = run(ctx, 'note', 'write-dossier', 'research-gap', 'no source for the churn claim');
+    run(ctx, 'note', 'write-dossier', 'needs-human', 'pick a client industry');
+    run(ctx, 'end-job', 'write-dossier', 'ok', '--summary', 'dossier written, one gap');
+    // ASSERT
+    expect(noted).toEqual({ ok: true, output: expect.stringContaining('research-gap') });
+    const { folded } = readEpisodeLog(SLUG, ctx.root);
+    const result = queryRuns([{ episode: SLUG, folded }], 'SELECT job, type, text FROM notes ORDER BY seq');
+    expect(result).toEqual({
+      ok: true,
+      columns: ['job', 'type', 'text'],
+      rows: [
+        { job: 'write-dossier', type: 'research-gap', text: 'no source for the churn claim' },
+        { job: 'write-dossier', type: 'needs-human', text: 'pick a client industry' },
+      ],
+    });
+    const summaries = queryRuns([{ episode: SLUG, folded }], "SELECT summary FROM spans WHERE type = 'job'");
+    expect(summaries).toEqual(expect.objectContaining({ rows: [{ summary: 'dossier written, one gap' }] }));
+  });
+
+  it('refuses a note of an unknown type, and a note on a Job that is not open', () => {
+    // ARRANGE
+    const ctx = begun();
+    run(ctx, 'begin-job', 'write-dossier');
+    // ACT
+    const unknown = run(ctx, 'note', 'write-dossier', 'whim', 'x');
+    const closed = run(ctx, 'note', 'open-pr', 'blocked', 'x');
+    // ASSERT
+    expect(unknown).toEqual({ ok: false, error: expect.stringContaining('needs-human') });
+    expect(closed).toEqual({ ok: false, error: expect.stringContaining('open-pr') });
+  });
+
   it('begins the Run and points the marker at it', () => {
     // ARRANGE
     const ctx = context();

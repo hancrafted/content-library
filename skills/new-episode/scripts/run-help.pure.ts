@@ -19,6 +19,8 @@ export const USAGE = `usage: npm run episode:run -- <slug> <command> ...
   close-gate <name> [status] [summary]             close the open Gate
   score <target> <name> <value> --source s [--rubric r] [--body b] [--via chat|commit] [--comment c] [--ticket n]
                                                    target: <job> (Job), <job>#<n> (Attempt) or gate:<name>
+  note <job> <type> "<text>"                       record a typed note on the open Job; type is needs-human, blocked,
+                                                   research-gap, spine-change or no-library-match
   resume                                           re-open the marker for the current Run in a new session
   archive                                          copy the log to .logs/new-episode/<slug>/<run id>.jsonl
 status is ok (default), error, refused, crashed or reused.`;

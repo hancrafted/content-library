@@ -29,6 +29,38 @@ function refusing(folder: EpisodeFolder, refused: { path?: string }): EpisodeFol
 const START = Date.parse('2026-10-14T16:30:00Z');
 
 describe('success cases', () => {
+  it('counts the notes that need Han per Job from the event log', async () => {
+    // ARRANGE
+    const note = (seq: number, type: string, text: string) =>
+      JSON.stringify({
+        kind: 'event',
+        t: `2026-10-14T16:26:0${seq}Z`,
+        seq: 100 + seq,
+        trace_id: '5aa1693bef52315f23a9ae8c9aa031b2',
+        span_id: '056c166635f8ab1d',
+        name: 'note',
+        source: 'typed',
+        attributes: { 'note.type': type, 'note.text': text },
+      });
+    const events = [
+      fixture('events.jsonl').trimEnd(),
+      note(1, 'needs-human', 'pick'),
+      note(2, 'blocked', 'stuck'),
+      note(3, 'research-gap', 'gap'),
+    ].join('\n');
+    const folder = createMemoryFolder('example', {
+      'pipeline.yml': fixture('pipeline.yml'),
+      'events.jsonl': `${events}\n`,
+    });
+    const expectedBadge = 2;
+    // ACT
+    const { initial } = await openEpisode(folder, clockFrom(START));
+    // ASSERT
+    const jobs = initial.read.view?.jobs ?? [];
+    expect(jobs.find((job) => job.id === 'brief-grill')?.needsHan).toBe(expectedBadge);
+    expect(jobs.find((job) => job.id === 'customize-pipeline')?.needsHan).toBe(0);
+  });
+
   it('opens a folder with its first reading, stamped by the clock, and stamps each later poll', async () => {
     // ARRANGE
     const folder = createMemoryFolder('example', {

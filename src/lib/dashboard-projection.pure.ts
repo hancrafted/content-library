@@ -72,6 +72,8 @@ export interface DashboardJob extends Omit<Job, 'agents'> {
   agents: Span[];
   gates: Span[];
   scores: Score[];
+  /** The Job's notes in the current Run that block on Han: `needs-human` and `blocked`. Drives the "needs Han" badge. */
+  needsHan: number;
   /** Every skill and check the Job's pipeline entry names, with what the current Run's latest Attempt shows of each. */
   chips: JobChips;
 }
@@ -95,6 +97,8 @@ interface ProjectionContext {
   openGates: readonly Span[];
 }
 
+const NEEDS_HAN: readonly string[] = ['needs-human', 'blocked'];
+
 /** One configured Job with its latest span, its children, the Scores worth Han's eye and its chips. */
 function jobView({ agents: config, ...job }: Job, context: ProjectionContext): DashboardJob {
   const { folded, owners, latest, openGates } = context;
@@ -113,6 +117,9 @@ function jobView({ agents: config, ...job }: Job, context: ProjectionContext): D
     attempts,
     agents,
     gates: children.filter((child) => child.type === 'gate'),
+    needsHan: (span?.events ?? []).filter(
+      (event) => event.name === 'note' && NEEDS_HAN.includes(event.attributes['note.type']),
+    ).length,
     scores: owned.filter(
       (score) => score.name === 'rubric' && (score.value === 'fail' || score.value === 'needs-human'),
     ),
