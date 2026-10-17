@@ -20,6 +20,9 @@ describe('success cases', () => {
     // ARRANGE
     const expected = '27 3 1 27:1 over ≈ 9.5 months';
     const laneCount = 4;
+    const lane = /data-echo="lane"/g;
+    const slot = /data-echo="slot"/g;
+    const cycleMark = 'data-echo="cycle"';
     // ACT
     const html = echo({
       lanes: [
@@ -32,14 +35,15 @@ describe('success cases', () => {
     });
     // ASSERT
     expect(textOf(html)).toBe(expected);
-    expect(html.match(/data-echo="lane"/g)).toHaveLength(laneCount);
-    expect(html.match(/data-echo="slot"/g)).toHaveLength(1);
-    expect(html).toContain('data-echo="cycle"');
+    expect(html.match(lane)).toHaveLength(laneCount);
+    expect(html.match(slot)).toHaveLength(1);
+    expect(html).toContain(cycleMark);
   });
 
   it('rings the lane that changed and tints a note by its tone', () => {
     // ARRANGE
     const expected = ['data-ringed="true"', 'data-tone="warning"', '€0'];
+    const ringed = /data-ringed="true"/g;
     // ACT
     const html = echo({
       lanes: [
@@ -51,7 +55,7 @@ describe('success cases', () => {
     });
     // ASSERT
     expect(expected.filter((part) => !html.includes(part))).toEqual([]);
-    expect(html.match(/data-ringed="true"/g)).toHaveLength(1);
+    expect(html.match(ringed)).toHaveLength(1);
   });
 });
 
@@ -76,12 +80,16 @@ describe('edge cases', () => {
   it('stays decoration: hidden from assistive tech, with no cycle unless given', () => {
     // ARRANGE
     const expected = 'aria-hidden="true"';
+    const root = /^<div/;
+    const cycleMark = 'data-echo="cycle"';
+    const note = /data-echo="note"/g;
     const noteCount = 2;
     // ACT
     const html = echo({ lanes: [{ slug: 'leads', notes: [{ slug: 'a' }, { slug: 'b' }] }] });
     // ASSERT
-    expect(html.startsWith('<div') && html.includes(expected)).toBe(true);
-    expect(html).not.toContain('data-echo="cycle"');
-    expect(html.match(/data-echo="note"/g)).toHaveLength(noteCount);
+    expect(html).toMatch(root);
+    expect(html).toContain(expected);
+    expect(html).not.toContain(cycleMark);
+    expect(html.match(note)).toHaveLength(noteCount);
   });
 });

@@ -99,6 +99,7 @@ describe('success cases', () => {
   it('closes a lane with its dashed slot, its text read after the notes, and wraps the lanes when asked', () => {
     // ARRANGE
     const expected = ['data-deal="slot"', 'data-tone="success"', 'too late?', 'data-wrap="true"'];
+    const expectedText = 'Leads Payment too late?';
     // ACT
     const html = board({
       countLabel: undefined,
@@ -110,7 +111,7 @@ describe('success cases', () => {
     });
     // ASSERT
     expect(expected.filter((part) => !html.includes(part))).toEqual([]);
-    expect(textOf(html)).toBe('Leads Payment too late?');
+    expect(textOf(html)).toBe(expectedText);
   });
 });
 
