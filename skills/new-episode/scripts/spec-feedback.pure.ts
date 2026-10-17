@@ -2,6 +2,7 @@
 // Spec's Title slide and Slides, the round number and the clock in, the `feedback.md` text out, or the Slides that
 // break the rule that a Slide with no pick carries a note. The server reads and writes; nothing here touches the disk.
 
+import { BRIEF_KEYS } from '../../../src/lib/episode-spec-brief.pure.ts';
 import type { SpecSlide } from '../../../src/lib/episode-spec-page.pure.ts';
 import { TITLE_ANCHOR } from '../../../src/lib/episode.pure.ts';
 import { HAN_ACTOR, utcSeconds } from '../../../src/lib/staging-file.pure.ts';
@@ -10,6 +11,8 @@ export interface Review {
   /** The posted form fields in order, as `URLSearchParams` yields them. */
   fields: readonly (readonly [string, string])[];
   slides: readonly SpecSlide[];
+  /** The Brief card's note keys the Spec carries, `brief--<heading-slug>`; none once the Brief is approved. */
+  brief?: readonly string[];
   /** The Title slide's Option ids, whose sets carry the section slides; absent when the Spec has no Title slide. */
   titleSlide?: readonly string[];
   round: number;
@@ -71,7 +74,7 @@ function reviewedSlides({ slides, titleSlide }: Review): Reviewed[] {
 /** The faults that refuse the round: picks and notes for Slides the Spec lacks, unknown Options, a Slide left blank. */
 function faultsOf(review: Review, picks: (slug: string) => string[], note: (slug: string) => string): Fault[] {
   const reviewed = reviewedSlides(review);
-  const known = new Set([VISUAL_LANGUAGE, ...reviewed.map(({ slug }) => slug)]);
+  const known = new Set([VISUAL_LANGUAGE, ...(review.brief ?? []), ...reviewed.map(({ slug }) => slug)]);
   const strays = [
     ...new Set(review.fields.flatMap(([name]) => FIELD.exec(name)?.[2] ?? []).filter((slug) => !known.has(slug))),
   ];
@@ -128,6 +131,8 @@ export function reviewToFeedback(review: Review): ReviewResult {
       note(slug),
     );
   });
+  for (const key of BRIEF_KEYS.filter((key) => review.brief?.includes(key) && note(key) !== ''))
+    items.push(`- \`${key}\` · design — ${note(key)}`);
   const visualLanguage = note(VISUAL_LANGUAGE);
   if (visualLanguage !== '') items.push(`- \`${VISUAL_LANGUAGE}\` · design — ${visualLanguage}`);
   const text = feedbackText(round, now, items);

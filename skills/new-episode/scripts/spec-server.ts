@@ -5,7 +5,12 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
 import path from 'node:path';
-import { SPEC_FILE, specSlides, specTitleSlideOptions } from '../../../src/lib/episode-spec-page.pure.ts';
+import {
+  SPEC_FILE,
+  specBriefKeys,
+  specSlides,
+  specTitleSlideOptions,
+} from '../../../src/lib/episode-spec-page.pure.ts';
 import { nextRound, reviewToFeedback, type Fault } from './spec-feedback.pure.ts';
 
 export interface SpecServer {
@@ -82,6 +87,7 @@ async function save(response: ServerResponse, request: IncomingMessage, options:
   const result = reviewToFeedback({
     fields,
     slides: specSlides(html),
+    brief: specBriefKeys(html),
     titleSlide: specTitleSlideOptions(html),
     round,
     now: options.now(),

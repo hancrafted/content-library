@@ -30,9 +30,9 @@ _Done when_ the worktree exists, `git branch --show-current` prints `episode/<sl
 
 ### 2. Brief
 
-Run the `brief-grill` job by [`references/brief-grill.md`](references/brief-grill.md). When Han brings a Brief, accept it: validate it with the job's checks and its reviewer, and grill him only on their failed lines and on what reads `Not settled.`. Otherwise invoke the `brief-grill` skill. It is a human gate: stop the session after the `Gate: draft brief` commit and tell Han the Brief is his to edit and approve.
+Run the `brief-grill` job by [`references/brief-grill.md`](references/brief-grill.md). When Han brings a Brief, accept it: validate it with the job's checks and its reviewer, and grill him only on their failed lines and on what reads `Not settled.`. Otherwise invoke the `brief-grill` skill. It is a human gate: after the `Gate: draft brief` commit, run `npm run episode:spec-assemble -- <slug>` and open `http://localhost:<spec_port>` (the `spec_port` of `pipeline.yml`) in Han's browser, printing the URL too. He reviews the Brief as the skeleton Spec: its Brief card carries a note field per heading. Stop the session; Han's Brief notes come back as `brief--<heading-slug>` feedback items, and you write each note into `brief.md` verbatim, under its heading.
 
-_Done when_ `node skills/new-episode/scripts/approve.ts docs/episodes/<slug>/brief.md` has appended Han's `verified` entry (`human:han`, at or after `generated.at`), committed by Han with `Gate: approved brief`.
+_Done when_ `node skills/new-episode/scripts/approve.ts docs/episodes/<slug>/brief.md` has appended Han's `verified` entry (`human:han`, at or after `generated.at`), committed with `Gate: approved brief`: Han approves in chat, then you run `approve.ts` and commit it with an `Agent:` trailer, `verified` staying `human:han`. The Brief card is read-only from then on.
 
 ### 3. Setup
 

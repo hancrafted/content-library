@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { specSlideAnchors, specSlides, specTitleSlideOptions } from './episode-spec-page.pure';
+import { specBriefKeys, specSlideAnchors, specSlides, specTitleSlideOptions } from './episode-spec-page.pure';
 
 /* A Spec page's Slides read off its markup alone: Section, slug and Option ids in page order. */
 
@@ -24,6 +24,16 @@ const PAGE = `<!doctype html><html><body>
 </body></html>`;
 
 describe('success cases', () => {
+  it('reads the Brief card note keys in page order, none when the card is read-only', () => {
+    // ARRANGE
+    const open = `<section data-spec="brief-card"><textarea name="note:brief--style"></textarea><textarea name="note:brief--constraints"></textarea></section>`;
+    const locked = `<section data-spec="brief-card" data-locked><p>Text</p></section>`;
+    // ACT
+    const keys = [specBriefKeys(open), specBriefKeys(locked)];
+    // ASSERT
+    expect(keys).toEqual([['brief--style', 'brief--constraints'], []]);
+  });
+
   it('reads each Slide with its Section and its Option ids, in page order', () => {
     // ARRANGE
     const expected = [
