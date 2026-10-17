@@ -15,7 +15,7 @@ description: 'Wrapper owns mechanics, Scene owns creativity in two layers (Backd
 
 An Episode stacks many Slides, some heavy (charts, looping demos). Navigation needs every Slide to be a stable, measurable box; a visualisation needs total freedom inside it. The two conflict only if one element serves both.
 
-**The split:** the Slide wrapper owns mechanics — anchor, height, width, mount boundary, stacking context. The Scene inside is ungoverned, in two layers: a full-bleed **Backdrop** and an inset **Foreground**. A heading may sit centred, top or lower right, so it is never an anchor: placement would move the observer's target.
+**The split:** the Slide wrapper owns mechanics — anchor, height, width, mount boundary, stacking context — and renders the Slide header and the entrance, which FE-012 governs. The Scene inside is ungoverned, in two layers: a full-bleed **Backdrop** and an inset **Foreground**. A heading may sit centred, top or lower right, so it is never an anchor: placement would move the observer's target.
 
 **Why two layers:** the chrome (table of contents, Context drawer, talk player) floats over the Slides and takes no columns, so every Slide gets the full viewport width. The Foreground, inset by the Content area, never sits under the chrome; the Backdrop keeps the whole width, so a glow or image never ends at a column edge. Widening the right inset when the drawer sits beside the Slides moves only the Foreground.
 
@@ -25,7 +25,7 @@ An Episode stacks many Slides, some heavy (charts, looping demos). Navigation ne
 
 **Why three zones, two thresholds:** `far` (unmounted, height kept), `near` (mounted, paused), `active` (mounted, playing, highlighted). The reading line decides `active`; a wider margin decides `near`, so content is ready before it arrives. One threshold gives either pop-in or a premature highlight. One observer runs both, so the reading-line rule runs once.
 
-**Unmount discards state, by choice:** a played animation replays on return; persisting it is a Scene concern.
+**Unmount discards Scene state, by choice;** persisting it is a Scene concern. The shared entrance lives in the page's zone store, so it plays once.
 
 **Insets.** The container sets `--inset-l` and `--inset-r`. Below `md`: `1rem` and `1rem`. From `md`, left is the table of contents' width plus its gap (`21rem`); right is `3rem`, or `--drawer-width` plus `4rem` when the drawer is beside and open (beside applies from `xl`; below it the drawer overlays). Insets never transition.
 
@@ -53,7 +53,7 @@ A new layer picks a rung here. The `isolate` wrapper would trap a popover under 
 ### 1. The split
 
 1. The Slide wrapper MUST own a Slide's mechanics: anchor, width, min-height, mount boundary, stacking, zone.
-2. The Scene's shape MUST stay ungoverned; only token values and §6–§8 apply.
+2. The Scene's shape MUST stay ungoverned; only token values, §6–§8 and FE-012 apply.
 
 ### 2. Content area
 
@@ -65,7 +65,7 @@ A new layer picks a rung here. The `isolate` wrapper would trap a popover under 
 ### 3. Slide wrapper
 
 1. `SlideWrapper` MUST be a server component, so anchors reach static HTML.
-2. It MUST be full width, at least viewport height, grow with its content, never clip, and be `isolate`.
+2. It MUST be full width, grow with its content, never clip, and be `isolate`: a page Slide at least viewport height, a section slide at least `40svh`.
 
 ### 4. SlideMount
 
@@ -81,7 +81,7 @@ A new layer picks a rung here. The `isolate` wrapper would trap a popover under 
 ### 6. Good citizen
 
 1. A looping island MUST pause outside `active`, and in a Backdrop also while hidden or under reduced motion. One-shot entrances are exempt.
-2. `SlideMount`'s `data-zone` and its values MUST stay a stable CSS hook for entrance motion.
+2. `SlideMount`'s `data-zone` and its values MUST stay a stable CSS hook for entrance motion on an Episode with `header: 'authored'`.
 
 ### 7. Backdrop
 
@@ -102,7 +102,7 @@ A new layer picks a rung here. The `isolate` wrapper would trap a popover under 
 5. **DO** put full-bleed decoration in `SlideBackdrop`, and opt a cheap one into phones with `mobile`. (Decision 7)
 6. **DO** take z-index values from the ladder. (Decision 8)
 7. **DO** put zone and threshold maths beside the reading-line rule in a `.pure.ts`. (Decision 5)
-8. **DO** key a Slide's CSS entrance motion on `[data-zone='active']`. (Decision 6)
+8. **DO** key a Slide's CSS entrance motion on `[data-zone='active']`, only with `header: 'authored'`. (Decision 6)
 
 ### Don'ts
 
@@ -111,7 +111,7 @@ A new layer picks a rung here. The `isolate` wrapper would trap a popover under 
 3. **DON'T** create another `IntersectionObserver`, or use the reveal hook inside an Episode. (Decision 5)
 4. **DON'T** flatten the Content area to flow layout. (Decision 2)
 5. **DON'T** let a looping animation run in `near` or `far`. (Decision 6)
-6. **DON'T** add a rule that shapes a Scene's markup, props or layout; only token values and §6–§8 reach in. (Decision 1)
+6. **DON'T** add a rule that shapes a Scene's markup, props or layout; only token values, §6–§8 and FE-012 reach in. (Decision 1)
 7. **DON'T** pad, transition or margin a wrapper for the insets; set `--inset-l` and `--inset-r` and let the Content area apply them. (Decision 2)
 8. **DON'T** put reader-needed content, links or text in a Backdrop. (Decision 7)
 9. **DON'T** render a popover inside a Scene's own subtree. (Decision 8)
@@ -150,17 +150,18 @@ A new layer picks a rung here. The `isolate` wrapper would trap a popover under 
 
 **Exception (§5.1):** the reveal hook observes once to stagger in the landing page's About cards, then disconnects. It reports to no page service and writes no zone, so it can't compete for `active`.
 
-**Manual review duties:** looping islands pause outside `active` (§6); the reveal hook isn't imported under an Episode (§5.1); no `overflow` on wrappers; `SlideMount` and the observer are reached only from the container (§4, §5); the Scene stays ungoverned apart from token values and §6–§8; z-index values match §8; looping Backdrop content pauses while hidden (§6). **Browser check:** far content absent with no scroll-height jump; a looping demo pauses and resumes.
+**Manual review duties:** looping islands pause outside `active` (§6); the reveal hook isn't imported under an Episode (§5.1); no `overflow` on wrappers; `SlideMount` and the observer are reached only from the container (§4, §5); the Scene stays ungoverned apart from token values, §6–§8 and FE-012; z-index values match §8; looping Backdrop content pauses while hidden (§6). **Browser check:** far content absent with no scroll-height jump; a looping demo pauses and resumes.
 
 **Exceptions:** raise a separate ADR; human approval required.
 
 ## References
 
 - [`GLOSSARY.md`](../../GLOSSARY.md) — Scene, Backdrop, Foreground, Chrome.
+- [FE-012](FE-012-slide-header-and-motion.md) — the Slide header, the play-once entrance, the hover vocabulary.
 - [MDN IntersectionObserver `rootMargin`](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/rootMargin), [MDN `display: contents`](https://developer.mozilla.org/en-US/docs/Web/CSS/display#contents).
 
 ### Terms
 
 **Content area**: the single-column grid that holds an Episode's Slide wrappers, spans the viewport, owns the spacing between Slides and the inline insets of every wrapper, and hosts the Episode's portal root.
 
-**Slide wrapper**: the server-rendered box around one Slide that holds its mechanics: anchor, full viewport width, at least viewport height, never clipping, its own stacking context, and the mount that drops far content.
+**Slide wrapper**: the server-rendered box around one Slide that holds its mechanics: anchor, full viewport width, at least viewport height (a section slide `40svh`), never clipping, its own stacking context, and the mount that drops far content.

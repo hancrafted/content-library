@@ -61,7 +61,8 @@ flowchart LR
 
 ### 1. One container renders every Episode
 
-1. Only `EpisodePageContainer` MAY emit an Episode's slots: Title slide, Sections, anchors, contents, drawer.
+1. Only `EpisodePageContainer` MAY emit an Episode's slots: Title slide, Sections, anchors, contents, drawer, Slide header data.
+2. The record MAY set `title` (a Slide: the Title slide's hero Scene, no notes or Voice script), `header: 'authored'` and `entrance` (FE-012).
 
 ### 2. The Slide is the unit
 
@@ -77,7 +78,7 @@ flowchart LR
 
 ### 4. Headings mirror the Dossier
 
-1. One `h1`: the Episode title. Position sets `h2`/`h3` via the kit's `Title`; no Episode file MAY write `h1`–`h3`.
+1. One `h1`: the Episode title, rendered by the container. Position sets `h2`/`h3` via the Slide header, or the kit's `Title` with `header: 'authored'`; no Episode file MAY write `h1`–`h3`.
 
 ### 5. Strings and anchors keyed by Slide slug
 
@@ -102,11 +103,12 @@ flowchart LR
 1. **DO** start an Episode by copying `page-template/`: rename the slug; register slug, record and metadata together; write its `i18n/`; then each Slide as a whole folder, the Episode file adding only its import and list entry; at publication, `published-anchors.json`. (Decision 2, Decision 5)
 2. **DO** write a Voice script for every Slide the speaker talks over; its words are the reading time. (Decision 2)
 3. **DO** leave `title` off a purely visual Slide. (Decision 2)
-4. **DO** build a one-off Scene from `SlideFrame` and the kit's `<Title>`. (Decision 3, Decision 4)
+4. **DO** build a one-off Scene from `SlideFrame`, adding the kit's `<Title>` only with `header: 'authored'`. (Decision 3, Decision 4)
 5. **DO** mark the element a note explains with `{...target('chart')}`. (Decision 3)
 6. **DO** link with `slideHref('the-lost-middle')`; pass a part its strings — `<Statement>{t('statement')}</Statement>`. (Decision 3)
 7. **DO** colour _only_ a machine/human/AI meaning with `text-machine`, `text-human`, `text-ai`; check every Slide in both themes. (Decision 7)
 8. **DO** copy a Slide with `cp -r` of its folder, one import, one list entry. (Decision 2)
+9. **DO** author the Title slide's visual as a Slide folder set as the record's `title`. (Decision 1)
 
 ### Don'ts
 
@@ -146,7 +148,7 @@ flowchart LR
 ## Compliance and Enforcement
 
 1. **Types:** record, registry, kit and Translation files typed; a missing locale, a German Slide file missing an English key, unregistered slug, foreign key, undeclared note or untitled Section opener fails `tsc`.
-2. **Unit tests:** anchor derivation — `top` reserved, duplicate slugs rejected, untitled Slides counted but unlisted; `slideHref` to a slug outside the Episode rejected; every Slide folder named after its slug; reading time from words, 0 hidden; published anchors still produced, and a missing snapshot prints the file to paste.
+2. **Unit tests:** a hero Scene declaring notes refused; anchor derivation — `top` reserved, duplicate slugs rejected, untitled Slides counted but unlisted; `slideHref` to a slug outside the Episode rejected; every Slide folder named after its slug; reading time from words, 0 hidden; published anchors still produced, and a missing snapshot prints the file to paste.
 3. **Lint and dependency rules:** Episode files can't write `h1`–`h3`, carry `'use client'` outside a Slide's `*.client.tsx`, render the table of contents or import the container; a Slide folder reaches only its own files and shared locations; no Episode keeps a `parts/` or `client/` folder; the per-function line cap is off only for Slide server files (complexity and file caps hold; `*.client.tsx` and `*.pure.ts` keep every cap).
 4. **Post-build test:** every Episode in every locale — slot order, one `h1`, heading level by position, note targets resolve, no duplicate ids, anchors equal the snapshot, no raw key, reader text equals its capture.
 
