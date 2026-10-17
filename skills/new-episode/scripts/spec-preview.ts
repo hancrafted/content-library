@@ -32,6 +32,11 @@ function readShot(json: string): { path: string; overflow: number } {
   return { path: entry.image.path, overflow: entry.probes.reduce((sum, probe) => sum + probe.count, 0) };
 }
 
+/** Ends this worktree's inspect-page browser and watchdog, so no process outlives the command. */
+function stopBrowser(): void {
+  spawnSync('node', [path.join(ROOT, 'skills/visual-check/scripts/inspect-page.ts'), '--stop'], { cwd: ROOT });
+}
+
 /** One Option through inspect-page: its screenshot path and how many elements overflow it. */
 function inspect(url: string, id: string, out: string): { path: string; overflow: number } {
   const run = spawnSync(
@@ -76,14 +81,19 @@ writeFileSync(path.join(dir, 'design.css'), css.css);
 const violations = checkFragment(fragment);
 const url = `file://${path.join(dir, 'index.html')}`;
 const shots: string[] = [];
-for (const id of optionIds(fragment)) {
-  try {
-    const result = inspect(url, id, path.join(dir, `${id}.png`));
-    shots.push(`screenshot ${id} ${result.path}`);
-    violations.push(...overflowLine(fragment, id, result.overflow));
-  } catch (error) {
-    violations.push(`Option ${id} could not be rendered: ${(error as Error).message}`);
+try {
+  for (const id of optionIds(fragment)) {
+    try {
+      const result = inspect(url, id, path.join(dir, `${id}.png`));
+      shots.push(`screenshot ${id} ${result.path}`);
+      violations.push(...overflowLine(fragment, id, result.overflow));
+    } catch (error) {
+      violations.push(`Option ${id} could not be rendered: ${(error as Error).message}`);
+    }
   }
+} finally {
+  // inspect-page leaves its shared browser and watchdog running for ten idle minutes; this command ends them.
+  stopBrowser();
 }
 for (const line of violations) console.log(`✖ ${line}`);
 for (const line of shots) console.log(line);

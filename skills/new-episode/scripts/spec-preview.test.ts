@@ -58,6 +58,21 @@ describe('success cases', () => {
   );
 });
 
+describe('teardown', () => {
+  it(
+    'leaves no inspect-page browser recorded or running after the command',
+    () => {
+      // ARRANGE
+      const endpoint = path.join(ROOT, '.cache', 'inspect-page', 'endpoint');
+      // ACT
+      preview(`<!-- slide: spent -->${option('1a')}${option('1b')}`);
+      // ASSERT
+      expect(existsSync(endpoint)).toBe(false);
+    },
+    TIMEOUT,
+  );
+});
+
 describe('failure cases', () => {
   it(
     'exits 1 with one line per contract violation and still renders',
