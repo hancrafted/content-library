@@ -124,13 +124,20 @@ function checkSlides(page: SpecPage): string[] {
   ];
 }
 
+/** `early`: a Brief- or Dossier-stage Spec, before the designers' Options exist, so only what that stage holds is checked. */
+export type SpecStage = 'early' | 'options';
+
 /**
  * Checks a staging folder's Spec page against the Spec contract, and against
  * the Dossier while one exists; nothing until `spec/spec.html` exists. `files`
  * maps a path relative to the folder to its text; `reviewAsset` is the text of
  * the shared review asset the page must inline.
  */
-export function checkSpec(files: Readonly<Record<string, string>>, reviewAsset: string): Finding[] {
+export function checkSpec(
+  files: Readonly<Record<string, string>>,
+  reviewAsset: string,
+  stage: SpecStage = 'options',
+): Finding[] {
   const html = files[SPEC_FILE];
   if (html === undefined) return [];
   const $ = load(html);
@@ -141,7 +148,7 @@ export function checkSpec(files: Readonly<Record<string, string>>, reviewAsset: 
     ...checkMeta(meta),
     ...checkAsset(html, reviewAsset),
     ...(dossier === undefined || isApproved ? [] : checkAgainstDossier($, dossier)),
-    ...checkSlides({ $, approved: isApproved }),
+    ...(stage === 'early' ? [] : checkSlides({ $, approved: isApproved })),
   ];
   const stale = unless(
     !isApproved || dossier === undefined,

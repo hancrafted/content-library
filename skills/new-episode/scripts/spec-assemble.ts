@@ -1,7 +1,7 @@
 // `npm run episode:spec-assemble -- <slug | Episode folder>`: builds `spec/spec.html` from what exists (design-ADR 0011).
 // Agents supply content only: the Brief, the Dossier, the designers' fragments `.scratch/<slug>/spec/*.html` and the
 // Visual language and Episode page markup `visual-language.html` and `episode-page.html` beside them. Han's feedback
-// rounds lock his picks. Refuses an approved Spec; with Options present, runs the Spec contract and exits 1 on findings.
+// rounds lock his picks. Refuses an approved Spec; runs the Spec contract that applies to the stage (all of it once Options are present) and exits 1 on findings.
 
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
@@ -71,11 +71,10 @@ mkdirSync(path.dirname(specPath), { recursive: true });
 writeFileSync(specPath, html);
 const stage = fragments.length > 0 ? 'Options' : dossier === undefined ? 'Brief' : 'Dossier';
 console.log(`✔ ${path.relative(ROOT, specPath)} assembled to the ${stage} stage`);
-if (fragments.length > 0) {
-  const findings = checkSpec(
-    { [SPEC_FILE]: html, ...(dossier === undefined ? {} : { 'dossier.md': dossier }) },
-    reviewAsset,
-  );
-  for (const { message } of findings) console.log(`✖ ${message}`);
-  process.exit(findings.length > 0 ? 1 : 0);
-}
+const findings = checkSpec(
+  { [SPEC_FILE]: html, ...(dossier === undefined ? {} : { 'dossier.md': dossier }) },
+  reviewAsset,
+  fragments.length > 0 ? 'options' : 'early',
+);
+for (const { message } of findings) console.log(`✖ ${message}`);
+process.exit(findings.length > 0 ? 1 : 0);
