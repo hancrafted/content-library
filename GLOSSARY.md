@@ -49,7 +49,7 @@ _Avoid_: Chapter, part
 _Avoid_: Card, panel; page, which means the Next.js route the whole Episode renders as; "self-contained Slide", since every Slide is one
 
 **Title slide**: an Episode's opening Slide: its title, caption, optional Voice script and Speaker notes and, once recorded, its video. Not listed in the table of contents.
-_Avoid_: Hero, cover
+_Avoid_: Hero or cover for the Slide itself; **Hero motif** names the Episode's recurring visual idea the Title slide sets, never the Slide
 
 **Hero motif**: an Episode's recurring visual idea, drawn from its Red thread. The Title slide sets it; each section slide echoes it and brings in elements of its own Section, foreshadowing what comes (a rocket on the Title slide, fuelled step by step across the section slides).
 _Avoid_: Theme, key visual
