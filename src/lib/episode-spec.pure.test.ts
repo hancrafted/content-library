@@ -502,6 +502,11 @@ describe('failure cases', () => {
       'The Title slide {#top} has no <textarea form="spec-review" name="note:top">.',
     ],
     [
+      'a Title slide after the first Section',
+      { title: '', asset: `${titleSlide()}\n${REVIEW_ASSET}` },
+      'The Title slide {#top} comes after the Section {#why}: put it before the first Section.',
+    ],
+    [
       'a Title slide ided other than top',
       { title: titleSlide(TITLE_OPTIONS, 'hero') },
       'The Title slide is id "hero": id it "top", the anchor feedback keys it by.',
