@@ -32,7 +32,7 @@ const SOURCES = ['content', 'ads', 'web'] as const;
  * How marketing feeds the pipeline (Spec Option 5a): a funnel of our own drawing narrows from three marketing notes
  * into the ringed Lead in lane of the compact deal board, where the inbound examples sit; a bracket under the other
  * lanes says sales works what lands there. The dots travel the funnel one at a time on the Slide's first `active` and
- * on every mouse enter.
+ * on every mouse enter and keyboard focus.
  */
 export const howMarketingFeedsThePipeline = slide({
   slug: 'how-marketing-feeds-the-pipeline',
@@ -55,6 +55,7 @@ export const howMarketingFeedsThePipeline = slide({
             funnel={{
               label: t('marketing'),
               volume: t('volume'),
+              name: t('funnelName'),
               sources: SOURCES.map((slug) => ({ slug, label: t(`sources.${slug}`) })),
             }}
           />

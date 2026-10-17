@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import type { CSSProperties } from 'react';
+import { useId, type CSSProperties } from 'react';
 import styles from './slide.module.css';
 
 interface BarRow {
@@ -29,12 +29,21 @@ function Bar({ row, lead, format }: { row: BarRow; lead: boolean; format: Intl.N
   );
 }
 
-/** What investors weigh, as bars; the first row leads, the rest recede. */
+/** What investors weigh, as bars; the first row leads, the rest recede. The shares show on hover or keyboard focus. */
 export function SignalBars({ heading, rows, locale }: { heading: string; rows: BarRow[]; locale: string }) {
   const format = new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 0 });
+  const headingId = useId();
+  // Focusable and named by its heading, so keyboard focus reveals the shares as hover does.
   return (
-    <div className="hover-reveal mt-6 rounded-md bg-primary-foreground/10 p-4">
-      <p className="font-mono text-caption tracking-widest text-primary-foreground/70 uppercase">{heading}</p>
+    <div
+      role="group"
+      aria-labelledby={headingId}
+      tabIndex={0}
+      className="hover-reveal mt-6 rounded-md bg-primary-foreground/10 p-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-foreground"
+    >
+      <p id={headingId} className="font-mono text-caption tracking-widest text-primary-foreground/70 uppercase">
+        {heading}
+      </p>
       <dl className="mt-3 flex flex-col gap-2 text-caption">
         {rows.map((row, index) => (
           <Bar key={row.label} row={row} lead={index === 0} format={format} />
