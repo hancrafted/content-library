@@ -13,7 +13,7 @@ export function eyebrowLength(eyebrow: EyebrowText): number {
 }
 
 /**
- * The Eyebrow (FE-012): the line above a page Slide's title, its Section on
+ * The Eyebrow (design-ADR-0012): the line above a page Slide's title, its Section on
  * the left and its place among that Section's page Slides, `n / N`, on the
  * right. Small, uppercase, muted, in the body font. `delays` types it in.
  */

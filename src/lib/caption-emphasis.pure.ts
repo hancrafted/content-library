@@ -1,5 +1,5 @@
 /*
- * Emphasis in a Slide header's caption (FE-012): the `<b>` runs a caption's message marks, as plain text plus the
+ * Emphasis in a Slide header's caption (design-ADR-0012): the `<b>` runs a caption's message marks, as plain text plus the
  * ranges they cover, so the header can type the caption character by character and still set those characters off.
  * `t.markup` wraps each `<b>` chunk in the two marks below; they never occur in written text.
  */

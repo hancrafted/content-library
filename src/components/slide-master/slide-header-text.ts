@@ -3,7 +3,7 @@ import type { RuntimeTranslator } from './slide-base';
 import { ON_SCREEN_TITLE_KEY } from './slide-kit';
 
 /*
- * The text the shared Slide header shows for a Slide (FE-012), read from
+ * The text the shared Slide header shows for a Slide (design-ADR-0012), read from
  * the Slide's own messages: the same keys a Scene authoring its own header reads.
  */
 

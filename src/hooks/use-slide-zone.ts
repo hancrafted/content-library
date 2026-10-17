@@ -35,7 +35,7 @@ function useEntryState(id: string | null): { entry: SlideEntry; store: ZoneStore
 }
 
 /**
- * A Slide's entrance (FE-012), in the page's zone store: `pending` in the
+ * A Slide's entrance (design-ADR-0012), in the page's zone store: `pending` in the
  * static HTML, `entering` from its first `active`, `done` once the entrance has
  * had its time. The state lives in memory for the page's life, so a Slide that
  * unmounts while far and returns stays `done` and never replays. `SlideMount`
@@ -52,7 +52,7 @@ export function useEntryOf(id: string | null): SlideEntry {
 }
 
 /**
- * The entrance of the Slide this component sits in, read only (FE-012 §4): an
+ * The entrance of the Slide this component sits in, read only (design-ADR-0012 §9): an
  * emphasis motion plays while it is `entering`, the Slide's first time active,
  * and never on a return, when it reads `done`. Outside any Slide it reads `done`.
  */

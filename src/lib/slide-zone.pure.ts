@@ -38,7 +38,7 @@ export function keptHeight(zone: SlideZone, measured: number): number {
 }
 
 /**
- * A Slide's entrance (FE-012): `pending` until it is first `active`, then
+ * A Slide's entrance (design-ADR-0012): `pending` until it is first `active`, then
  * `entering` while its header types in and its Scene fades up, then `done`
  * for the rest of the page's life, so a remount after `far` never replays it.
  */
