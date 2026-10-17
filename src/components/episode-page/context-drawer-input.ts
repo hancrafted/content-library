@@ -13,10 +13,11 @@ import { contextItemsOf } from './context-drawer-input.pure';
  */
 
 /*
- * The ICU leaves (formatted here, with their arguments) and `refNote` (read by
- * Slide text, not the drawer) stay out of the strings the drawer receives.
+ * The ICU leaves (formatted here, with their arguments) and `refNote` and
+ * `markerNote` (read by Slide text, not the drawer) stay out of the strings the
+ * drawer receives.
  */
-const NOT_DRAWER_STRINGS = ['explainer', 'sourcesCount', 'citation', 'refNote'] as const;
+export const NOT_DRAWER_STRINGS = ['explainer', 'sourcesCount', 'citation', 'refNote', 'markerNote'] as const;
 
 export async function contextDrawerInput(
   locale: Locale,
