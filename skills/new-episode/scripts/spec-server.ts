@@ -119,11 +119,27 @@ const VERSION_PATH = '/__spec-version';
 const RELOAD_SCRIPT = `<script>
 (function () {
   var seen = null;
+  var edited = false;
+  var noticed = false;
+  // A reload would drop unsaved picks and notes: hold it and say so instead.
+  document.addEventListener('input', function () { edited = true; });
+  document.addEventListener('change', function () { edited = true; });
+  function notice() {
+    if (noticed) return;
+    noticed = true;
+    var bar = document.createElement('p');
+    bar.textContent = 'The Spec changed. Save your feedback, then reload to see it.';
+    bar.style = 'position:fixed;inset:auto 0 0 0;margin:0;padding:12px;text-align:center;background:canvas;border-top:1px solid;z-index:9999';
+    document.body.append(bar);
+  }
   function poll() {
     fetch('${VERSION_PATH}', { cache: 'no-store' })
       .then(function (r) { return r.text(); })
       .then(function (version) {
-        if (seen !== null && version !== seen) return location.reload();
+        if (seen !== null && version !== seen) {
+          if (!edited) return location.reload();
+          notice();
+        }
         seen = version;
       })
       .catch(function () {})

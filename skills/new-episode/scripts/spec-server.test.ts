@@ -101,6 +101,47 @@ describe('success cases', () => {
     expect(body.indexOf('/__spec-version')).toBeLessThan(body.indexOf('</body>'));
   });
 
+  it('holds the reload and shows a notice while Han has unsaved picks or notes', async () => {
+    // ARRANGE
+    const { base } = await serve();
+    const body = await (await fetch(`${base}/`)).text();
+    const script = /<script>([\s\S]*?__spec-version[\s\S]*?)<\/script>/.exec(body)?.[1] ?? '';
+    const versions = ['a', 'b', 'b'];
+    let reloads = 0;
+    const notices: string[] = [];
+    let onEdit: (() => void) | undefined;
+    const pending: (() => void)[] = [];
+    const asksToSave = /save/i;
+    const page = {
+      fetch: () => Promise.resolve({ text: () => Promise.resolve(versions.shift() ?? 'b') }),
+      location: { reload: () => (reloads += 1) },
+      setTimeout: (next: () => void) => pending.push(next),
+      document: {
+        addEventListener: (type: string, handler: () => void) => {
+          if (type === 'input') onEdit = handler;
+        },
+        createElement: () => ({
+          set textContent(text: string) {
+            notices.push(text);
+          },
+        }),
+        body: { append: (bar: unknown) => bar },
+      },
+    };
+    const tick = async (): Promise<void> => {
+      await new Promise((resolve) => setImmediate(resolve));
+      pending.shift()?.();
+    };
+    // ACT
+    new Function(...Object.keys(page), script)(...Object.values(page));
+    await tick(); // sees version a
+    onEdit?.(); // Han ticks a pick
+    await tick(); // version b arrives
+    // ASSERT
+    expect(reloads).toBe(0);
+    expect(notices.join(' ')).toMatch(asksToSave);
+  });
+
   it('reports a new version after the Spec is re-assembled', async () => {
     // ARRANGE
     const { folder, base } = await serve();
