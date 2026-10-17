@@ -1,6 +1,6 @@
 import type { TargetProps } from '@/lib/context-link.pure';
 import { cn } from '@/lib/utils';
-import { useId, type CSSProperties, type ReactNode } from 'react';
+import { useId, type ReactNode } from 'react';
 import styles from './pipeline-by-the-numbers.module.css';
 
 interface CountNote {
@@ -42,15 +42,15 @@ const PILL = 'rounded-full bg-foreground px-4 py-1 text-caption font-semibold te
 
 /**
  * The count board: 27 named notes in Lead, nine in Opportunity and one revenue note in Deal, under the primary 27:1
- * pill and its bracket. Lanes sit side by side once the board is wide enough and stack below that. A server part with
- * plain props.
+ * pill and its bracket. Lanes sit side by side once the board is wide enough and stack below that; pointing at a lane
+ * dims the others. A server part with plain props.
  */
 export function CountBoard({ stages, total, others, targets }: CountBoardProps) {
   return (
     <div className="@container flex flex-col gap-6">
       <TotalBracket ratio={total.ratio} caption={total.caption} />
       <BoardSurface>
-        <div className="relative flex flex-col items-stretch gap-3 @4xl:flex-row">
+        <div className="focus-group focus-group--dim-others relative flex flex-col items-stretch gap-3 @4xl:flex-row">
           {stages.map((stage) => (
             <div key={stage.id} className="contents">
               <Lane stage={stage} target={stage.id === 'opportunity' ? targets.opportunity : undefined}>
@@ -78,7 +78,7 @@ function TotalBracket({ ratio, caption }: CountBoardProps['total']) {
         {ratio}
       </p>
       <p className="text-center text-caption text-muted-foreground">{caption}</p>
-      <div className={cn('w-full', styles.bracket)}>
+      <div className="w-full">
         <svg viewBox="0 0 1200 24" preserveAspectRatio="none" className="h-6 w-full" aria-hidden="true">
           <path
             d="M2 22 V4 H1198 V22"
@@ -128,7 +128,10 @@ function RatioBadge({ ratio, target }: { ratio: string; target?: TargetProps }) 
 function Lane({ stage, target, children }: { stage: CountStage; target?: TargetProps; children: ReactNode }) {
   const duration = <span className="font-mono text-caption text-muted-foreground">{stage.duration}</span>;
   return (
-    <div {...target} className={cn('flex min-w-0 flex-col gap-3 rounded-lg bg-foreground/5 p-4', BASIS[stage.id])}>
+    <div
+      {...target}
+      className={cn('focus-group__item flex min-w-0 flex-col gap-3 rounded-lg bg-foreground/5 p-4', BASIS[stage.id])}
+    >
       <div
         className={cn(
           'flex gap-2',
@@ -149,7 +152,7 @@ function LaneNotes({ stage, others }: { stage: CountStage; others: string }) {
   return <DealNotes notes={stage.notes} others={others} />;
 }
 
-/** The 27 names, placed one after another. */
+/** The 27 names. */
 function LeadNotes({ notes }: { notes: readonly CountNote[] }) {
   return (
     <div className="grid grid-cols-[repeat(auto-fill,minmax(4.5rem,1fr))] gap-2 text-caption font-medium text-foreground @4xl:grid-cols-5">
@@ -159,9 +162,7 @@ function LeadNotes({ notes }: { notes: readonly CountNote[] }) {
           className={cn(
             'min-w-0 rounded-sm bg-card px-2 py-3 text-center break-words shadow-md',
             TILT[index % TILT.length],
-            styles.place,
           )}
-          style={{ '--i': index } as CSSProperties}
         >
           {note.name}
         </p>
@@ -170,19 +171,14 @@ function LeadNotes({ notes }: { notes: readonly CountNote[] }) {
   );
 }
 
-/** The nine that became opportunities; they slide in from Lead. */
+/** The nine that became opportunities. */
 function OpportunityNotes({ notes }: { notes: readonly CountNote[] }) {
   return (
     <div className="grid grid-cols-[repeat(auto-fill,minmax(5rem,1fr))] gap-2 text-caption text-foreground @4xl:grid-cols-3">
       {notes.map((note, index) => (
         <p
           key={note.name}
-          className={cn(
-            'min-w-0 rounded-sm bg-card px-2 py-3 break-words shadow-md',
-            TILT[(index + 1) % TILT.length],
-            styles.advance,
-          )}
-          style={{ '--i': index } as CSSProperties}
+          className={cn('min-w-0 rounded-sm bg-card px-2 py-3 break-words shadow-md', TILT[(index + 1) % TILT.length])}
         >
           <b className="font-semibold">{note.name}</b>
           <br />
@@ -203,7 +199,6 @@ function DealNotes({ notes, others }: { notes: readonly CountNote[]; others: str
           className={cn(
             'max-w-48 min-w-0 -rotate-3 scale-110 self-center rounded-sm p-4 text-foreground shadow-xl @4xl:max-w-none @4xl:self-stretch',
             styles.revenue,
-            styles.close,
           )}
         >
           <p className="text-caption font-semibold">{note.name}</p>

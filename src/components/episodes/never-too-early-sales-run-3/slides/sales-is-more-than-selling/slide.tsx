@@ -1,6 +1,5 @@
 import { slide } from '@/components/slide-master/slide';
-import { SlideCaption, SlideFrame } from '@/components/slide-master/slide-master';
-import type { ReactNode } from 'react';
+import { SlideFrame } from '@/components/slide-master/slide-master';
 import { Brace, MarginNote, Operator } from './equation-parts';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
@@ -21,9 +20,9 @@ const INTERNAL = 'internal';
 const TRUST = 'trust';
 
 /**
- * Sales is more than selling: a sum on a planning board. Market insight plus
- * internal insight equals trust, three taped notes read left to right in the
- * order the voice speaks, with trust in `primary` (Spec Option 2c).
+ * Sales is more than selling: a sum on a planning board. Market insight plus internal insight equals trust, three taped
+ * notes read left to right in the order the voice speaks, with trust in `primary` (Spec Option 2c). Pointing at a note
+ * dims the other two; the VC shares show when the bars are pointed at.
  */
 export const salesIsMoreThanSelling = slide({
   slug: 'sales-is-more-than-selling',
@@ -86,7 +85,7 @@ export const salesIsMoreThanSelling = slide({
     { slug: 'trust-is-the-sum' },
     { slug: 'verdict' },
   ],
-  content: ({ t, locale, target, Title }) => {
+  content: ({ t, locale, target }) => {
     const marketChips = [
       { label: t('board.market.points.time') },
       { label: t('board.market.dropped'), dropped: true },
@@ -95,45 +94,28 @@ export const salesIsMoreThanSelling = slide({
     const trustChips = [t('board.trust.points.investment'), t('board.trust.points.customers')];
     const barRows = VC_FACTORS.map(({ slug, percent }) => ({ label: t(`board.trust.bars.rows.${slug}`), percent }));
     return (
-      <SlideFrame className="gap-10">
-        <div>
-          <p className="flex items-center gap-3 font-mono text-caption font-semibold tracking-widest text-primary uppercase">
-            <span aria-hidden="true" className="size-2 rounded-full bg-primary" />
-            {t('kicker')}
-          </p>
-          <div className="mt-4">
-            <Title>{t('title')}</Title>
-          </div>
-          <p className="mt-4 max-w-2xl text-body text-muted-foreground">
-            {t.rich('lead', {
-              em: (chunks: ReactNode) => <em className="font-semibold text-foreground not-italic">{chunks}</em>,
-            })}
-          </p>
-        </div>
-
+      <SlideFrame className="mt-10 gap-10">
         <div className="@container relative flex flex-col gap-6 rounded-xl bg-muted p-6 shadow-inner md:p-10">
           <p className="sr-only">{t('equationLabel')}</p>
-          <div className="grid grid-cols-1 items-center gap-4 @4xl:grid-cols-12">
+          <div className="focus-group focus-group--dim-others grid grid-cols-1 items-center gap-4 @4xl:grid-cols-12">
             <Note
               {...target(MARKET)}
               index="01"
               title={t('board.market.title')}
               body={t('board.market.body')}
               tilt="left"
-              step={0}
               className="@4xl:col-span-3"
             >
               <Exchange ask={t('board.market.ask')} answer={t('board.market.answer')} />
               <Chips items={marketChips} />
             </Note>
-            <Operator symbol="plus" step={1} className="mx-auto w-12 @4xl:col-span-1 @4xl:w-full" />
+            <Operator symbol="plus" className="mx-auto w-12 @4xl:col-span-1 @4xl:w-full" />
             <Note
               {...target(INTERNAL)}
               index="02"
               title={t('board.internal.title')}
               body={t('board.internal.body')}
               tilt="right"
-              step={2}
               className="@4xl:col-span-3"
             >
               <RepeatPath
@@ -143,7 +125,7 @@ export const salesIsMoreThanSelling = slide({
                 team={t('board.internal.path.team')}
               />
             </Note>
-            <Operator symbol="equals" step={3} className="mx-auto w-12 @4xl:col-span-1 @4xl:w-full" />
+            <Operator symbol="equals" className="mx-auto w-12 @4xl:col-span-1 @4xl:w-full" />
             <Note
               {...target(TRUST)}
               index="03"
@@ -151,21 +133,20 @@ export const salesIsMoreThanSelling = slide({
               body={t('board.trust.body')}
               tilt="none"
               emphasis
-              step={4}
               className="@4xl:col-span-4"
             >
-              <Stamp label={t('stamp')} step={6.5} />
-              <SignalBars heading={t('board.trust.bars.heading')} rows={barRows} locale={locale} step={5} />
+              <Stamp label={t('stamp')} />
+              <SignalBars heading={t('board.trust.bars.heading')} rows={barRows} locale={locale} />
               <CheckedChips items={trustChips} />
             </Note>
           </div>
 
           <div className="grid grid-cols-1 gap-4 @4xl:grid-cols-12">
-            <Brace label={t('brace')} step={7.5} className="hidden @4xl:col-span-7 @4xl:flex" />
-            <MarginNote text={t('marginNote')} step={7.5} className="@4xl:col-span-5" />
+            <Brace label={t('brace')} className="hidden @4xl:col-span-7 @4xl:flex" />
+            <MarginNote text={t('marginNote')} className="@4xl:col-span-5" />
           </div>
         </div>
-        <SlideCaption>{t('caption')}</SlideCaption>
+        <p className="text-caption text-muted-foreground">{t('source')}</p>
       </SlideFrame>
     );
   },

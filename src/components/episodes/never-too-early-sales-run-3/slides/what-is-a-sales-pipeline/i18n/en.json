@@ -1,7 +1,6 @@
 {
-  "kicker": "One board, three readings",
   "title": "What is a sales pipeline",
-  "lead": "The columns are your funnel, the drop between them is your conversion rate, and the way across is your sales cycle.",
+  "caption": "The columns are your funnel, the drop between them is your conversion rate, and the way across is your sales cycle.",
   "stages": {
     "lead": "Lead",
     "opportunity": "Opportunity",

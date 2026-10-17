@@ -1,7 +1,6 @@
 import type { TargetProps } from '@/lib/context-link.pure';
 import { cn } from '@/lib/utils';
-import { useId, type CSSProperties, type ReactNode } from 'react';
-import styles from './why-it-takes-time-to-ramp-up.module.css';
+import { useId, type ReactNode } from 'react';
 
 type Column = 'preparation' | 'market' | 'metrics';
 
@@ -28,16 +27,17 @@ const QUESTION_TILT = ['rotate-1', '-rotate-2', 'rotate-1'];
 const METRIC_TILT = ['-rotate-1', 'rotate-2'];
 
 /**
- * The founder's board on day one: dashed notes for material not written yet, question notes for the unknown market
- * and two dark "?" notes for the metrics, stamped "Day one" over its corner. A server part with plain props.
+ * The founder's board on day one: dashed notes for material not written yet, question notes for the unknown market and
+ * two dark "?" notes for the metrics, stamped "Day one" over its corner; pointing at a lane dims the others. A server
+ * part with plain props.
  */
 export function DayOneBoard({ stamp, close, ...lanes }: DayOneBoardProps) {
   return (
-    <div className="@container mt-10 flex flex-col gap-10">
+    <div className="@container flex flex-col gap-10">
       <BoardSurface stamp={stamp}>
         <Lanes {...lanes} />
       </BoardSurface>
-      <div className={cn('flex items-center gap-4', styles.close)}>
+      <div className="flex items-center gap-4">
         <svg viewBox="0 0 120 24" className="w-16 shrink-0 @3xl:w-28" aria-hidden="true">
           <path d="M2 12 H108 M98 4 L112 12 L98 20" className="fill-none stroke-foreground" strokeWidth="3" />
         </svg>
@@ -47,7 +47,7 @@ export function DayOneBoard({ stamp, close, ...lanes }: DayOneBoardProps) {
   );
 }
 
-/** The three lanes, placed one per voice beat. */
+/** The three lanes, in the order the voice reads them. */
 function Lanes({
   columns,
   preparation,
@@ -57,18 +57,18 @@ function Lanes({
   targets,
 }: Omit<DayOneBoardProps, 'stamp' | 'close'>) {
   return (
-    <div className="relative grid grid-cols-1 gap-6 @3xl:grid-cols-3">
-      <Lane beat={0} label={columns.preparation} hint={hints.preparation} target={targets.preparation}>
+    <div className="focus-group focus-group--dim-others relative grid grid-cols-1 gap-6 @3xl:grid-cols-3">
+      <Lane label={columns.preparation} hint={hints.preparation} target={targets.preparation}>
         {preparation.map((note, index) => (
           <BlankNote key={note.id} note={note} tilt={BLANK_TILT[index % BLANK_TILT.length]} />
         ))}
       </Lane>
-      <Lane beat={1} label={columns.market} hint={hints.market} target={targets.market}>
+      <Lane label={columns.market} hint={hints.market} target={targets.market}>
         {questions.map((question, index) => (
           <QuestionNote key={question} question={question} tilt={QUESTION_TILT[index % QUESTION_TILT.length]} />
         ))}
       </Lane>
-      <Lane beat={2} label={columns.metrics} hint={hints.metrics} target={targets.metrics}>
+      <Lane label={columns.metrics} hint={hints.metrics} target={targets.metrics}>
         {metrics.map((metric, index) => (
           <MetricNote key={metric.label} metric={metric} index={index} />
         ))}
@@ -95,7 +95,6 @@ function BoardSurface({ stamp, children }: { stamp: string; children: ReactNode 
       <p
         className={cn(
           'absolute -top-6 right-2 rotate-6 rounded-md border-4 border-foreground bg-background px-5 py-2 font-mono text-body font-semibold tracking-widest text-foreground uppercase shadow-lg @3xl:-right-4',
-          styles.stamp,
         )}
       >
         {stamp}
@@ -105,21 +104,15 @@ function BoardSurface({ stamp, children }: { stamp: string; children: ReactNode 
 }
 
 interface LaneProps {
-  /** The voice beat that places the lane. */
-  beat: number;
   label: string;
   hint: string;
   target: TargetProps;
   children: ReactNode;
 }
 
-function Lane({ beat, label, hint, target, children }: LaneProps) {
+function Lane({ label, hint, target, children }: LaneProps) {
   return (
-    <div
-      {...target}
-      className={cn('flex min-w-0 flex-col gap-4 rounded-lg bg-foreground/5 p-5', styles.lane)}
-      style={{ '--beat': beat } as CSSProperties}
-    >
+    <div {...target} className="focus-group__item flex min-w-0 flex-col gap-4 rounded-lg bg-foreground/5 p-5">
       <span className="self-start rounded-full bg-foreground px-4 py-1 text-caption font-semibold text-background">
         {label}
       </span>
@@ -159,9 +152,7 @@ function MetricNote({ metric, index }: { metric: { label: string; unknown: strin
       className={cn(
         'rounded-sm bg-primary p-5 text-primary-foreground shadow-xl',
         METRIC_TILT[index % METRIC_TILT.length],
-        styles.metric,
       )}
-      style={{ '--i': index } as CSSProperties}
     >
       <p className="text-caption">{metric.label}</p>
       <p className="text-heading leading-none font-semibold tabular-nums">{metric.unknown}</p>

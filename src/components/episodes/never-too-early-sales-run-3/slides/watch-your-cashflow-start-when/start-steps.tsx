@@ -1,6 +1,4 @@
 import { cn } from '@/lib/utils';
-import type { CSSProperties } from 'react';
-import styles from './slide.module.css';
 import { StepIcon, type StepSlug } from './step-icon';
 
 /** The four steps, in the order the voice names them. */
@@ -15,7 +13,7 @@ interface Step {
 /**
  * The lane of this week's four steps: one wide lane under a dark pill, four neutral paper notes at alternating
  * tilts, each a number, a small drawing, a title and a detail line. Four in a row when the lane is wide, two by two
- * when it is not.
+ * when it is not. A step lifts when pointed at.
  */
 export function StartSteps({ label, steps }: { label: string; steps: readonly Step[] }) {
   return (
@@ -28,10 +26,8 @@ export function StartSteps({ label, steps }: { label: string; steps: readonly St
           <li
             key={slug}
             data-step={slug}
-            style={{ '--i': index } as CSSProperties}
             className={cn(
-              styles.step,
-              'flex min-w-0 flex-col gap-3 border border-border bg-card p-4 shadow-md @min-[38rem]:p-5',
+              'card-hover card-hover--raise flex min-w-0 flex-col gap-3 border border-border bg-card p-4 shadow-md @min-[38rem]:p-5',
               index % 2 === 0 ? '-rotate-1' : 'rotate-1',
             )}
           >

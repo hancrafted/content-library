@@ -1,5 +1,5 @@
 import { slide } from '@/components/slide-master/slide';
-import { SlideCaption, SlideFrame } from '@/components/slide-master/slide-master';
+import { SlideFrame } from '@/components/slide-master/slide-master';
 import {
   CashflowBoard,
   cashLeft,
@@ -37,7 +37,7 @@ function Drop({ text }: { text: string }) {
 /**
  * The cashflow board a third time, by quarter: cash hits zero in Q2 and revenue only lands in Q3, so a `primary`
  * arrow drags it back to the ringed Q1 lane, "Start early!". Under the board, a dashed drop from Q1 leads to a lane of
- * this week's four steps. The arrow sweeps in, the ring fades in, then the steps are placed one at a time.
+ * this week's four steps.
  */
 export const watchYourCashflowStartWhen = slide({
   slug: 'watch-your-cashflow-start-when',
@@ -50,7 +50,7 @@ export const watchYourCashflowStartWhen = slide({
     { slug: 'honest-caveat' },
     { slug: 'hand-over-the-verdict' },
   ],
-  content: ({ t, Title, target, locale }) => {
+  content: ({ t, target, locale }) => {
     const spent = { kind: 'cost', amount: 50000 } as const;
     const earned = { kind: 'revenue', amount: 50000 } as const;
     const quarters: CashflowColumn[] = [
@@ -80,15 +80,8 @@ export const watchYourCashflowStartWhen = slide({
       detail: t(`steps.${slug}.detail`),
     }));
     return (
-      <SlideFrame className={styles.scene}>
-        <header>
-          <p className="font-mono text-caption tracking-widest text-muted-foreground uppercase">{t('kicker')}</p>
-          <div className="mt-3">
-            <Title>{t('title')}</Title>
-          </div>
-          <SlideCaption>{t('caption')}</SlideCaption>
-        </header>
-        <div className="mt-12 flex flex-col gap-4 @container">
+      <SlideFrame className={`${styles.scene} mt-10`}>
+        <div className="flex flex-col gap-4 @container">
           <CashflowBoard
             columns={columns}
             labels={{ board: t('board'), cash: t('note.cash'), cost: t('note.cost'), revenue: t('note.revenue') }}

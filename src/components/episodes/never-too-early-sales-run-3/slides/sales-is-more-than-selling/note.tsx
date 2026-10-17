@@ -1,11 +1,5 @@
 import { cn } from '@/lib/utils';
-import type { CSSProperties, ReactNode } from 'react';
-import styles from './slide.module.css';
-
-/** A part's place in the board's one entrance: `slide.module.css` delays it by `step` beats. */
-export function stepStyle(step: number): CSSProperties {
-  return { '--step': step } as CSSProperties;
-}
+import type { ReactNode } from 'react';
 
 const TILT = { left: '-rotate-2', right: 'rotate-1', none: '' } as const;
 
@@ -27,20 +21,18 @@ interface NoteProps {
   body: string;
   tilt: keyof typeof TILT;
   emphasis?: boolean;
-  step: number;
   className?: string;
   children?: ReactNode;
   'data-target'?: string;
 }
 
 /** A note on the board: taped down, or with `emphasis` filled in `primary`, pinned and titled larger. */
-export function Note({ index, title, body, tilt, emphasis = false, step, className, children, ...target }: NoteProps) {
+export function Note({ index, title, body, tilt, emphasis = false, className, children, ...target }: NoteProps) {
   const fill = emphasis ? 'bg-primary p-8 text-primary-foreground shadow-xl' : 'bg-card p-6 shadow-md';
   return (
     <article
       {...target}
-      style={stepStyle(step)}
-      className={cn(styles.place, 'relative rounded-md break-words', TILT[tilt], fill, className)}
+      className={cn('focus-group__item relative rounded-md break-words', TILT[tilt], fill, className)}
     >
       <Fastener pinned={emphasis} />
       <p

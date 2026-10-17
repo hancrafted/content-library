@@ -10,15 +10,13 @@ interface StickyNoteProps {
   note: Note;
   column: number;
   slot: number;
-  /** The note's place in reading order, `--i`, which a Slide's entrance motion staggers by. */
-  order: number;
   labels: BoardLabels;
   locale: string;
 }
 
-/** The note's list item attributes: its kind, its target and the custom properties its tilt and motion read. */
-function placement({ note, column, slot, order }: StickyNoteProps) {
-  const style = { '--i': order, '--tilt': `${tiltOf(column, slot)}deg` } as CSSProperties;
+/** The note's list item attributes: its kind, its target and the custom property its tilt reads. */
+function placement({ note, column, slot }: StickyNoteProps) {
+  const style = { '--tilt': `${tiltOf(column, slot)}deg` } as CSSProperties;
   const ring = note.ring ? 'true' : undefined;
   return { 'data-cashflow': 'note', 'data-kind': note.kind, 'data-target': note.target, 'data-ring': ring, style };
 }

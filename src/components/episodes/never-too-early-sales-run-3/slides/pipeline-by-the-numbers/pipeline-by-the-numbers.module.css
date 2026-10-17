@@ -1,8 +1,6 @@
 /*
- * Pipeline by the numbers: the revenue note's tint and the counting motion. Colour only through tokens (FE-011); the
- * tint mixes global tokens, which already switch in dark mode. Once, when the Slide becomes active (FE-009 §6.2): the
- * 27 lead notes are placed, then nine slide into Opportunity, then one slides into Deal, then the 27:1 bracket and the
- * cycle bar draw in. At rest and under reduced motion the board is finished.
+ * Pipeline by the numbers: the revenue note's tint and the Deal segment's fill. Colour only through tokens (FE-011);
+ * the tint mixes global tokens, which already switch in dark mode.
  */
 
 .scene {
@@ -16,63 +14,4 @@
 /* The cycle bar's Deal segment: the stage that ends in revenue. */
 .dealSegment {
   fill: var(--success);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  :global([data-zone='active']) .place {
-    animation: place 360ms cubic-bezier(0.2, 0, 0, 1) both;
-    animation-delay: calc(200ms + var(--i, 0) * 45ms);
-  }
-
-  :global([data-zone='active']) .advance {
-    animation: advance 520ms cubic-bezier(0.2, 0, 0, 1) both;
-    animation-delay: calc(1700ms + var(--i, 0) * 90ms);
-  }
-
-  :global([data-zone='active']) .close {
-    animation: advance 620ms cubic-bezier(0.2, 0, 0, 1) both;
-    animation-delay: 2800ms;
-  }
-
-  .bar {
-    transform-origin: left center;
-  }
-
-  :global([data-zone='active']) .bracket {
-    animation: open 640ms cubic-bezier(0.2, 0, 0, 1) both;
-    animation-delay: 3500ms;
-  }
-
-  :global([data-zone='active']) .bar {
-    animation: draw 1100ms cubic-bezier(0.4, 0, 0.2, 1) both;
-    animation-delay: 3700ms;
-  }
-}
-
-@keyframes place {
-  from {
-    opacity: 0;
-    transform: translateY(-0.5rem) scale(1.04);
-  }
-}
-
-@keyframes advance {
-  from {
-    opacity: 0;
-    transform: translateX(-2.5rem);
-  }
-}
-
-/* Drawn by scaling, a compositor-only property: the bracket opens from its centre, a line grows from its left end. */
-@keyframes open {
-  from {
-    opacity: 0;
-    transform: scaleX(0);
-  }
-}
-
-@keyframes draw {
-  from {
-    transform: scaleX(0);
-  }
 }

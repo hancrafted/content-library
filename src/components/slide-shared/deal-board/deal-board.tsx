@@ -1,7 +1,7 @@
 import { formatEuro } from '@/components/slide-shared/cashflow-board/cashflow-board.pure';
 import type { CSSProperties } from 'react';
 import styles from './deal-board.module.css';
-import { checkDealBoard, type DealLane } from './deal-board.pure';
+import { checkDealBoard } from './deal-board.pure';
 import type { DealBoardProps } from './deal-board.types';
 import { Lane } from './deal-lane';
 import { Annotation, Bracket, Ends } from './deal-marks';
@@ -9,18 +9,9 @@ import { Annotation, Bracket, Ends } from './deal-marks';
 export type { DealLane } from './deal-board.pure';
 export type { DealBoardProps } from './deal-board.types';
 
-/** Each lane's first note in reading order: the deals before it, and the incoming notes when it follows the emphasis. */
-function firstOrders(lanes: readonly DealLane[], emphasis: number, incoming: number): number[] {
-  return lanes.map((_, index) => {
-    const before = lanes.slice(0, index).reduce((sum, lane) => sum + lane.deals.length, 0);
-    return emphasis > 0 && index + 1 > emphasis ? before + incoming : before;
-  });
-}
-
 /** The lanes, and the bracket row on their grid, in a row that scrolls sideways when the board is narrow. */
 function LaneRow({ board, emphasis }: { board: DealBoardProps; emphasis: number }) {
-  const { label, lanes, incoming = [], bracket } = board;
-  const orders = firstOrders(lanes, emphasis, incoming.length);
+  const { label, lanes, bracket } = board;
   return (
     <div
       role="region"
@@ -30,16 +21,9 @@ function LaneRow({ board, emphasis }: { board: DealBoardProps; emphasis: number 
       className={`${styles.scroller} rounded-xl focus-visible:outline-2 focus-visible:outline-ring`}
     >
       <div className={styles.grid}>
-        <ol role="list" className={styles.lanes}>
+        <ol role="list" className={`${styles.lanes} focus-group focus-group--dim-others`}>
           {lanes.map((lane, index) => (
-            <Lane
-              key={lane.slug}
-              lane={lane}
-              number={index + 1}
-              firstOrder={orders[index]}
-              emphasised={index + 1 === emphasis}
-              board={board}
-            />
+            <Lane key={lane.slug} lane={lane} number={index + 1} emphasised={index + 1 === emphasis} board={board} />
           ))}
         </ol>
         {bracket ? <Bracket bracket={bracket} emphasis={Math.max(emphasis, 1)} /> : null}
@@ -53,7 +37,7 @@ function LaneRow({ board, emphasis }: { board: DealBoardProps; emphasis: number 
  * under dark pills, each deal a tilted paper note. The full board heads each lane with its computed total and count
  * and writes contact and value on each note; the compact board names the company only. One lane may be ringed in
  * `primary`, with incoming notes, an annotation over it and a bracket under the others. All lanes stand side by side
- * when the board is wide enough; narrower, the lanes scroll sideways in their own row and nothing is cut.
+ * when the board is wide enough; narrower, the lanes scroll sideways in their own row and nothing is cut. Pointing at a lane dims the others.
  */
 export function DealBoard(props: DealBoardProps) {
   const { lanes, compact = false, emphasis, annotation, ends, bracket } = props;

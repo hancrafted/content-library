@@ -7,31 +7,30 @@ import type { DealBoardProps, IncomingNote } from './deal-board.types';
 
 const TILT = ['-rotate-1', 'rotate-1', '-rotate-2', 'rotate-2'] as const;
 
-/** A note's tilt, cycled by its place in the lane, and its place in reading order, `--i`, for a Slide's entrance. */
-function notePlace(index: number, order: number) {
-  return { tilt: TILT[index % TILT.length], style: { '--i': order } as CSSProperties };
+/** A note's tilt, cycled by its place in the lane. */
+function tiltOf(index: number) {
+  return TILT[index % TILT.length];
 }
 
 interface DealNoteProps {
   deal: Deal;
   index: number;
-  order: number;
   compact: boolean;
   locale: string;
 }
 
 /** One deal as a paper note: company and contact over its value, or on the compact board the company alone. */
-function DealNote({ deal, index, order, compact, locale }: DealNoteProps) {
-  const { tilt, style } = notePlace(index, order);
+function DealNote({ deal, index, compact, locale }: DealNoteProps) {
+  const tilt = tiltOf(index);
   if (compact) {
     return (
-      <li data-deal="note" style={style} className={`${tilt} bg-card p-2 text-caption text-muted-foreground shadow-sm`}>
+      <li data-deal="note" className={`${tilt} bg-card p-2 text-caption text-muted-foreground shadow-sm`}>
         {deal.company}
       </li>
     );
   }
   return (
-    <li data-deal="note" style={style} className={`${tilt} bg-card p-3 shadow-md`}>
+    <li data-deal="note" className={`${tilt} bg-card p-3 shadow-md`}>
       <p className="text-caption font-semibold text-foreground">{deal.company}</p>
       {deal.contact ? <p className="text-caption text-muted-foreground">{deal.contact}</p> : null}
       {deal.value === undefined ? null : (
@@ -42,10 +41,9 @@ function DealNote({ deal, index, order, compact, locale }: DealNoteProps) {
 }
 
 /** A note a customer put in: its tag in `primary` mono over its line. */
-function Incoming({ note, index, order }: { note: IncomingNote; index: number; order: number }) {
-  const { tilt, style } = notePlace(index, order);
+function Incoming({ note, index }: { note: IncomingNote; index: number }) {
   return (
-    <li data-deal="note" style={style} className={`${tilt} bg-card p-2 shadow-md`}>
+    <li data-deal="note" className={`${tiltOf(index)} bg-card p-2 shadow-md`}>
       <p className="font-mono text-caption text-primary">{note.tag}</p>
       <p className="text-caption text-foreground">{note.text}</p>
     </li>
@@ -73,8 +71,6 @@ function LaneHead({ lane, emphasised, locale, countLabel }: LaneHeadProps) {
 export interface LaneProps {
   lane: DealLane;
   number: number;
-  /** The reading-order index of the lane's first note. */
-  firstOrder: number;
   emphasised: boolean;
   board: DealBoardProps;
 }
@@ -83,6 +79,7 @@ export interface LaneProps {
 function laneClass(compact: boolean, emphasised: boolean): string {
   return cn(
     styles.lane,
+    'focus-group__item',
     'relative flex flex-col rounded-xl bg-muted',
     compact ? 'gap-3 px-2 pt-10 pb-4' : 'gap-4 px-3 pt-12 pb-5',
     emphasised && 'ring-2 ring-primary ring-offset-4 ring-offset-background',
@@ -90,23 +87,16 @@ function laneClass(compact: boolean, emphasised: boolean): string {
 }
 
 /** The lane's notes: the incoming notes first when it is the emphasised lane, then its deals. */
-function LaneNotes({ lane, firstOrder, emphasised, board }: LaneProps) {
+function LaneNotes({ lane, emphasised, board }: LaneProps) {
   const { compact = false, locale } = board;
   const incoming = emphasised ? (board.incoming ?? []) : [];
   return (
     <ul role="list" className={compact ? 'flex flex-col gap-3' : 'flex flex-col gap-4'}>
       {incoming.map((note, index) => (
-        <Incoming key={note.slug} note={note} index={index} order={firstOrder + index} />
+        <Incoming key={note.slug} note={note} index={index} />
       ))}
       {lane.deals.map((deal, index) => (
-        <DealNote
-          key={deal.slug}
-          deal={deal}
-          index={incoming.length + index}
-          order={firstOrder + incoming.length + index}
-          compact={compact}
-          locale={locale}
-        />
+        <DealNote key={deal.slug} deal={deal} index={incoming.length + index} compact={compact} locale={locale} />
       ))}
     </ul>
   );

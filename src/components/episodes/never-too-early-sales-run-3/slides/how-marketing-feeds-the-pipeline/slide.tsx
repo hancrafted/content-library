@@ -1,5 +1,5 @@
 import { slide } from '@/components/slide-master/slide';
-import { SlideCaption, SlideFrame } from '@/components/slide-master/slide-master';
+import { SlideFrame } from '@/components/slide-master/slide-master';
 import { DealBoard, type DealLane } from '@/components/slide-shared/deal-board/deal-board';
 import styles from './how-marketing-feeds-the-pipeline.module.css';
 import de from './i18n/de.json';
@@ -31,8 +31,8 @@ const SOURCES = ['content', 'ads', 'web'] as const;
 /**
  * How marketing feeds the pipeline (Spec Option 5a): a funnel of our own drawing narrows from three marketing notes
  * into the ringed Lead in lane of the compact deal board, where the inbound examples sit; a bracket under the other
- * lanes says sales works what lands there. While the Slide is active the dots travel the funnel one at a time, then
- * the Lead in notes are placed.
+ * lanes says sales works what lands there. The dots travel the funnel one at a time on the Slide's first `active` and
+ * on every mouse enter and keyboard focus.
  */
 export const howMarketingFeedsThePipeline = slide({
   slug: 'how-marketing-feeds-the-pipeline',
@@ -42,28 +42,20 @@ export const howMarketingFeedsThePipeline = slide({
     { slug: 'the-marketing-hand-off-has-its-own-rate', target: LEAD_IN, sources: [GTM_BENCHMARKS] },
   ],
   segments: [{ slug: 'two-ways-in' }, { slug: 'volume-into-a-defined-stage' }, { slug: 'hand-to-sales' }],
-  content: ({ t, Title, target, locale }) => {
+  content: ({ t, target, locale }) => {
     const lanes: DealLane[] = PIPELINE.map((lane) => ({
       slug: lane.slug,
       label: t(`lanes.${lane.slug}.short`),
       deals: lane.deals.map((slug) => ({ slug, company: t(`deals.${slug}`) })),
     }));
     return (
-      <SlideFrame className={`${styles.scene} gap-10`}>
-        <div>
-          <p className="font-mono text-caption font-semibold tracking-widest text-muted-foreground uppercase">
-            {t('kicker')}
-          </p>
-          <div className="mt-3">
-            <Title>{t('title')}</Title>
-          </div>
-          <SlideCaption data-target="caption">{t('caption')}</SlideCaption>
-        </div>
+      <SlideFrame className={`${styles.scene} mt-10 gap-10`}>
         <div className={styles.layout}>
           <MarketingFunnel
             funnel={{
               label: t('marketing'),
               volume: t('volume'),
+              name: t('funnelName'),
               sources: SOURCES.map((slug) => ({ slug, label: t(`sources.${slug}`) })),
             }}
           />

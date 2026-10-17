@@ -1,5 +1,5 @@
 import { slide } from '@/components/slide-master/slide';
-import { SlideCaption, SlideFrame } from '@/components/slide-master/slide-master';
+import { SlideFrame } from '@/components/slide-master/slide-master';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { StageLanes } from './stage-lanes';
@@ -41,7 +41,7 @@ export const stagesOfSale = slide({
     { slug: 'opportunities-are-the-work' },
     { slug: 'closing-is-not-cash' },
   ],
-  content: ({ t, Title, target }) => {
+  content: ({ t, target }) => {
     const lanes: Lane[] = [
       {
         slug: 'leads',
@@ -115,16 +115,7 @@ export const stagesOfSale = slide({
       },
     ];
     return (
-      <SlideFrame className="gap-10">
-        <div>
-          <p className="font-mono text-caption font-semibold tracking-widest text-muted-foreground uppercase">
-            {t('kicker')}
-          </p>
-          <div className="mt-3">
-            <Title>{t('title')}</Title>
-          </div>
-          <SlideCaption data-target="caption">{t('caption')}</SlideCaption>
-        </div>
+      <SlideFrame className="mt-10 gap-10">
         <StageLanes
           lanes={lanes}
           brackets={[

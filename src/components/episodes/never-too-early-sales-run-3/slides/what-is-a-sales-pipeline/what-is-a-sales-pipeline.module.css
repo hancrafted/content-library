@@ -1,8 +1,6 @@
 /*
- * What is a sales pipeline: the revenue note's tint and the three beats of motion. Colour only through tokens
- * (FE-011); the tint mixes global tokens, which already switch in dark mode. The motion runs once when the Slide
- * becomes active (FE-009 §6.2): the lanes and their notes are placed (funnel), the bracket draws in from its stem
- * (conversion), then the arrow draws left to right (cycle). At rest and under reduced motion the board is finished.
+ * What is a sales pipeline: the revenue note's tint. Colour only through tokens (FE-011); the tint mixes global
+ * tokens, which already switch in dark mode.
  */
 
 .scene {
@@ -11,46 +9,4 @@
 
 .revenue {
   background-color: var(--note-revenue);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  :global([data-zone='active']) .place {
-    animation: place 420ms cubic-bezier(0.2, 0, 0, 1) both;
-    animation-delay: calc(200ms + var(--i, 0) * 120ms);
-  }
-
-  .arrow {
-    transform-origin: left center;
-  }
-
-  :global([data-zone='active']) .bracket {
-    animation: open 600ms cubic-bezier(0.2, 0, 0, 1) both;
-    animation-delay: 1900ms;
-  }
-
-  :global([data-zone='active']) .arrow {
-    animation: draw 900ms cubic-bezier(0.4, 0, 0.2, 1) both;
-    animation-delay: 2700ms;
-  }
-}
-
-@keyframes place {
-  from {
-    opacity: 0;
-    transform: translateY(-0.5rem) scale(1.04);
-  }
-}
-
-/* Drawn by scaling, a compositor-only property: the bracket opens from its centre, a line grows from its left end. */
-@keyframes open {
-  from {
-    opacity: 0;
-    transform: scaleX(0);
-  }
-}
-
-@keyframes draw {
-  from {
-    transform: scaleX(0);
-  }
 }

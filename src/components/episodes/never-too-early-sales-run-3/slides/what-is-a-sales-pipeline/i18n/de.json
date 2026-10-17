@@ -1,7 +1,6 @@
 {
-  "kicker": "Ein Board, drei Lesarten",
   "title": "Was ist eine Sales-Pipeline",
-  "lead": "Die Spalten sind Dein Funnel, der Schwund zwischen ihnen ist Deine Conversion-Rate, und der Weg hinüber ist Dein Verkaufszyklus.",
+  "caption": "Die Spalten sind Dein Funnel, der Schwund zwischen ihnen ist Deine Conversion-Rate, und der Weg hinüber ist Dein Verkaufszyklus.",
   "stages": {
     "lead": "Lead",
     "opportunity": "Opportunity",

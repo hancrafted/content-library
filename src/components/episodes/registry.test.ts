@@ -1,3 +1,4 @@
+import { headerModeOf } from '@/components/slide-master/slide';
 import { pageMetadata } from '@/lib/page-metadata.pure';
 import { EPISODE_SLUGS, isEpisodeSlug } from '@/lib/routes';
 import { describe, expect, it } from 'vitest';
@@ -35,7 +36,6 @@ const COMPOSITION = [
     ],
   },
   {
-    // Section openers only until each Section job adds its page Slides at its placement marker.
     slug: 'never-too-early-sales-run-3',
     sections: [
       { opener: 'why-watching-cashflow-is-mission-critical', pageSlides: 1 },
@@ -45,6 +45,13 @@ const COMPOSITION = [
       { opener: 'start-before-you-need-the-money', pageSlides: 1 },
     ],
   },
+] as const;
+
+/** Who renders each Slide header (FE-012): the Slide wrapper (`shared`) or each Scene (`authored`). */
+const HEADER_MODES = [
+  { slug: 'ai-token-economy', header: 'authored' },
+  { slug: 'page-template', header: 'shared' },
+  { slug: 'never-too-early-sales-run-3', header: 'shared' },
 ] as const;
 
 /** The recorded YouTube video of the Episodes that have one asserted here. */
@@ -117,6 +124,15 @@ describe('success cases', () => {
     }));
     // ASSERT
     expect(composed).toEqual(expectedSections);
+  });
+
+  it.each(HEADER_MODES)('renders the Slide headers of $slug in the $header mode', ({ slug, header }) => {
+    // ARRANGE
+    const expected = header;
+    // ACT
+    const mode = headerModeOf(findEpisode(slug));
+    // ASSERT
+    expect(mode).toBe(expected);
   });
 
   it.each(RECORDINGS)('keeps the recorded YouTube video of $slug', ({ slug, en, de }) => {

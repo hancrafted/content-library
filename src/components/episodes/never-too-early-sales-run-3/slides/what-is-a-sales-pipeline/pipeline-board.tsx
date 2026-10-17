@@ -1,6 +1,6 @@
 import type { TargetProps } from '@/lib/context-link.pure';
 import { cn } from '@/lib/utils';
-import { useId, type CSSProperties, type ReactNode } from 'react';
+import { useId, type ReactNode } from 'react';
 import styles from './what-is-a-sales-pipeline.module.css';
 
 interface BoardNote {
@@ -46,20 +46,17 @@ const PILL = 'rounded-full bg-foreground px-4 py-1 text-caption font-semibold te
 
 /**
  * One pipeline board read three ways: the lanes are the funnel, the primary bracket over Lead and Opportunity is the
- * conversion rate, and the arrow under the board is the sales cycle. A server part with plain props.
+ * conversion rate, and the arrow under the board is the sales cycle; pointing at a lane dims the others. A server part
+ * with plain props.
  */
 export function PipelineBoard({ stages, conversion, funnel, cycle }: PipelineBoardProps) {
-  // Placement order across the board: each lane's pill, then its notes, lane by lane.
-  const firstOf = stages.map((_, index) =>
-    stages.slice(0, index).reduce((count, stage) => count + 1 + stage.notes.length, 0),
-  );
   return (
-    <div className="@container mt-8 flex flex-col gap-2">
+    <div className="@container flex flex-col gap-2">
       <Terms conversion={conversion} funnel={funnel} />
       <BoardSurface>
-        <div className="relative grid grid-cols-1 gap-4 @2xl:grid-cols-12 @2xl:gap-6">
-          {stages.map((stage, lane) => (
-            <Lane key={stage.id} stage={stage} first={firstOf[lane] ?? 0} />
+        <div className="focus-group focus-group--dim-others relative grid grid-cols-1 gap-4 @2xl:grid-cols-12 @2xl:gap-6">
+          {stages.map((stage) => (
+            <Lane key={stage.id} stage={stage} />
           ))}
         </div>
       </BoardSurface>
@@ -77,7 +74,7 @@ function Terms({ conversion, funnel }: Pick<PipelineBoardProps, 'conversion' | '
           {conversion.label} <span className="tabular-nums">{conversion.ratio}</span>
         </p>
         <p className="mt-1 text-caption text-muted-foreground">{conversion.caption}</p>
-        <div className={cn('mt-2 hidden w-full @2xl:block', styles.bracket)}>
+        <div className="mt-2 hidden w-full @2xl:block">
           <svg viewBox="0 0 900 40" preserveAspectRatio="none" className="h-10 w-full" aria-hidden="true">
             <path
               d="M200 38 V12 H700 V38"
@@ -115,17 +112,19 @@ function BoardSurface({ children }: { children: ReactNode }) {
   );
 }
 
-/** One lane: its pill and count, then its notes; `first` is the lane's place in the placement order. */
-function Lane({ stage, first }: { stage: Stage; first: number }) {
+/** One lane: its pill and count, then its notes. */
+function Lane({ stage }: { stage: Stage }) {
   return (
-    <div className={cn('flex min-w-0 flex-col gap-4 rounded-lg bg-foreground/5 p-4', SPAN[stage.span])}>
-      <div className={cn('flex items-center justify-between', styles.place)} style={{ '--i': first } as CSSProperties}>
+    <div
+      className={cn('focus-group__item flex min-w-0 flex-col gap-4 rounded-lg bg-foreground/5 p-4', SPAN[stage.span])}
+    >
+      <div className="flex items-center justify-between">
         <span className={PILL}>{stage.label}</span>
         <span className="font-mono text-caption text-muted-foreground">{stage.notes.length}</span>
       </div>
       <div className={cn('grid gap-3', stage.id === 'lead' ? 'grid-cols-2' : 'grid-cols-1')}>
         {stage.notes.map((note, index) => (
-          <Note key={note.name} note={note} tilt={TILT[index % TILT.length]} order={first + 1 + index} />
+          <Note key={note.name} note={note} tilt={TILT[index % TILT.length]} />
         ))}
       </div>
     </div>
@@ -133,16 +132,14 @@ function Lane({ stage, first }: { stage: Stage; first: number }) {
 }
 
 /** A note on the board: neutral paper, or the revenue tint for the signed deal. */
-function Note({ note, tilt, order }: { note: BoardNote; tilt?: string; order: number }) {
+function Note({ note, tilt }: { note: BoardNote; tilt?: string }) {
   const revenue = note.amount !== undefined;
   return (
     <div
       className={cn(
         'min-w-0 rounded-sm p-3 text-caption break-words text-foreground',
         revenue ? cn('-rotate-2 shadow-lg', styles.revenue) : cn('bg-card shadow-md', tilt),
-        styles.place,
       )}
-      style={{ '--i': order } as CSSProperties}
     >
       {revenue ? <DealNote note={note} /> : <PlainNote note={note} />}
     </div>
@@ -174,7 +171,7 @@ function DealNote({ note }: { note: BoardNote }) {
 function CycleArrow({ caption, target }: { caption: ReactNode; target: TargetProps }) {
   return (
     <div {...target} className="flex flex-col gap-2">
-      <div className={styles.arrow}>
+      <div>
         <svg viewBox="0 0 1200 28" preserveAspectRatio="none" className="h-7 w-full" aria-hidden="true">
           <path
             d="M4 4 V24 M4 14 H1190"

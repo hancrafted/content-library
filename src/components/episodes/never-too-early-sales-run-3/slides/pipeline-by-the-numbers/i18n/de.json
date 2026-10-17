@@ -1,7 +1,6 @@
 {
-  "kicker": "Zähl die Zettel",
   "title": "Die Pipeline in Zahlen",
-  "lead": "Hast Du 27 Namen? So viele braucht ein Deal in diesem Beispiel, 9,5 Monate bevor das Geld kommt.",
+  "caption": "Hast Du 27 Namen? So viele braucht ein Deal in diesem Beispiel, 9,5 Monate bevor das Geld kommt.",
   "stages": {
     "lead": "Lead · {count}",
     "opportunity": "Opportunity · {count}",

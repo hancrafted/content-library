@@ -11,7 +11,7 @@ const DEAL_AMOUNT = 12_000;
 /*
  * Funnel, conversion rate and sales cycle as three readings of one drawn pipeline board (Option 7b): the lanes are the
  * funnel, the primary bracket over Lead and Opportunity is the conversion rate, and the arrow under the board is the
- * cycle. A Scene from `SlideFrame` and the kit's `Title`.
+ * cycle. A Scene from `SlideFrame` under the Slide header.
  */
 export const whatIsASalesPipeline = slide({
   slug: 'what-is-a-sales-pipeline',
@@ -39,15 +39,8 @@ export const whatIsASalesPipeline = slide({
     },
   ],
   segments: [{ slug: 'funnel-is-volume' }, { slug: 'conversion-is-the-offer' }, { slug: 'cycle-is-efficiency' }],
-  content: ({ t, locale, target, Title }) => (
-    <SlideFrame className={styles.scene}>
-      <p className="font-mono text-caption font-semibold tracking-widest text-muted-foreground uppercase">
-        {t('kicker')}
-      </p>
-      <div className="mt-3">
-        <Title>{t('title')}</Title>
-      </div>
-      <p className="mt-4 max-w-3xl text-body text-muted-foreground">{t('lead')}</p>
+  content: ({ t, locale, target }) => (
+    <SlideFrame className={`${styles.scene} mt-10`}>
       <PipelineBoard
         stages={[
           {
