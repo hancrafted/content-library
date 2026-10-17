@@ -1,12 +1,8 @@
 import { cn } from '@/lib/utils';
 
 /**
- * page-template's Hero motif: the Episode's Sections as stops on one track.
- * The Title slide shows every stop open, foreshadowing the way ahead; each
- * section slide echoes it with the stops up to its own filled, so the reader
- * sees how far the Episode has come. Decorative: the Slide header says the
- * words. A Slide folder imports only its own files, so each Slide drawing the
- * motif carries this part; another Episode authors its own motif.
+ * page-template's Hero motif (a Hero motif is authored per Episode): its Sections as stops on one track. The Title
+ * slide shows every stop open; each section slide fills the stops up to its own. Decorative: the header says the words.
  */
 export function SectionTrack({
   sections,
