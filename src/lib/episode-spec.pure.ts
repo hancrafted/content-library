@@ -19,7 +19,7 @@
  *   each with a figcaption and build notes, exactly one `data-recommended`, at
  *   most one `data-picked` and exactly one once approved, whose checkbox alone
  *   carries `checked` so a locked Slide needs nothing in the next round,
- *   token classes only (no hex colour, no arbitrary Tailwind value), and each
+ *   token classes only (no hex colour, no arbitrary Tailwind value, no type size outside the FE-011 roles), and each
  *   `data-spec="context-marker"` naming a Speaker note of its Slide in `data-note`;
  * - every Voice script item a `<strong>` title then its text, every Speaker
  *   note citation `[n]` resolved by a nested `data-source="n"`.
