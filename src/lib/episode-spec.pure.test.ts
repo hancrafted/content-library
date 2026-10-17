@@ -354,6 +354,18 @@ describe('failure cases', () => {
       'Option 1a of {#spent} uses the arbitrary Tailwind value "w-[37px]": use a token class.',
     ],
     [
+      'a raw type size in an Option',
+      {
+        slides: [
+          slide('spent', 1, {
+            options: [option('spent', '1a', { recommended: true, mock: 'bg-card md:text-sm' }), option('spent', '1b')],
+          }),
+          slide('middle', 2),
+        ],
+      },
+      'Option 1a of {#spent} uses the type size "md:text-sm" outside the FE-011 type roles: use a type role (text-body, text-caption, text-subheading, text-heading).',
+    ],
+    [
       'a missing meta block',
       { meta: '' },
       'The Spec has no meta block: a <script type="application/json" id="spec-meta"> in its head.',
