@@ -1,5 +1,11 @@
 {
   "title": "Warum Vertrieb mehr ist als Verkaufen",
+  "caption": "Jede Stufe zahlt sich aus, bevor es die Zahlungsspalte tut.",
+  "payouts": {
+    "insight": "Erkenntnis",
+    "trust": "Vertrauen",
+    "process": "Prozess"
+  },
   "voiceScript": {
     "segments": {
       "pain-first": {

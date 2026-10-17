@@ -95,6 +95,23 @@ describe('success cases', () => {
     // ASSERT
     expect(text).toBe(expected);
   });
+
+  it('closes a lane with its dashed slot, its text read after the notes, and wraps the lanes when asked', () => {
+    // ARRANGE
+    const expected = ['data-deal="slot"', 'data-tone="success"', 'too late?', 'data-wrap="true"'];
+    // ACT
+    const html = board({
+      countLabel: undefined,
+      wrap: true,
+      lanes: [
+        { slug: 'leads', label: 'Leads', deals: [] },
+        { slug: 'payment', label: 'Payment', deals: [], slot: { text: 'too late?', tone: 'success' } },
+      ],
+    });
+    // ASSERT
+    expect(expected.filter((part) => !html.includes(part))).toEqual([]);
+    expect(textOf(html)).toBe('Leads Payment too late?');
+  });
 });
 
 describe('failure cases', () => {
@@ -112,7 +129,14 @@ describe('edge cases', () => {
   it('names the board for a screen reader and draws nothing it was not given', () => {
     // ARRANGE
     const expected = 'aria-label="Deal board"';
-    const absent = ['data-emphasis', 'data-deal="annotation"', 'data-deal="ends"', 'data-deal="bracket"'];
+    const absent = [
+      'data-emphasis',
+      'data-deal="annotation"',
+      'data-deal="ends"',
+      'data-deal="bracket"',
+      'data-deal="slot"',
+      'data-wrap',
+    ];
     // ACT
     const html = board();
     // ASSERT

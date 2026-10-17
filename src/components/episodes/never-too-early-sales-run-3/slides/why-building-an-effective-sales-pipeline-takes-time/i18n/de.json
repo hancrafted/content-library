@@ -1,5 +1,12 @@
 {
   "title": "Warum eine wirksame Sales-Pipeline Zeit braucht",
+  "caption": "Die Spalten dünnen aus, und zwar langsam.",
+  "counts": {
+    "leads": "27",
+    "opportunities": "3",
+    "closing": "1"
+  },
+  "cycle": "27:1 in ≈ 9,5 Monaten",
   "voiceScript": {
     "segments": {
       "the-obvious-objection": {

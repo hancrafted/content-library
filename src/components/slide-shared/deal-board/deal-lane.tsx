@@ -2,7 +2,7 @@ import { formatEuro } from '@/components/slide-shared/cashflow-board/cashflow-bo
 import { cn } from '@/lib/utils';
 import type { CSSProperties } from 'react';
 import styles from './deal-board.module.css';
-import { laneTotal, type Deal, type DealLane } from './deal-board.pure';
+import { laneTotal, type Deal, type DealLane, type DealSlot } from './deal-board.pure';
 import type { DealBoardProps, IncomingNote } from './deal-board.types';
 
 const TILT = ['-rotate-1', 'rotate-1', '-rotate-2', 'rotate-2'] as const;
@@ -86,7 +86,24 @@ function laneClass(compact: boolean, emphasised: boolean): string {
   );
 }
 
-/** The lane's notes: the incoming notes first when it is the emphasised lane, then its deals. */
+/** The dashed slot closing a lane: an empty place, or in `success` the money still to come, its text centred. */
+function Slot({ slot, compact }: { slot: DealSlot; compact: boolean }) {
+  return (
+    <li
+      data-deal="slot"
+      data-tone={slot.tone}
+      className={cn(
+        'flex items-center justify-center border-2 border-dashed p-3 text-center font-semibold text-muted-foreground',
+        compact ? 'min-h-12 text-caption' : 'min-h-24 text-body',
+        slot.tone === 'success' ? cn('rotate-1', styles.successSlot) : 'border-foreground/20',
+      )}
+    >
+      {slot.text}
+    </li>
+  );
+}
+
+/** The lane's notes: the incoming notes first when it is the emphasised lane, then its deals, then its slot. */
 function LaneNotes({ lane, emphasised, board }: LaneProps) {
   const { compact = false, locale } = board;
   const incoming = emphasised ? (board.incoming ?? []) : [];
@@ -98,6 +115,7 @@ function LaneNotes({ lane, emphasised, board }: LaneProps) {
       {lane.deals.map((deal, index) => (
         <DealNote key={deal.slug} deal={deal} index={incoming.length + index} compact={compact} locale={locale} />
       ))}
+      {lane.slot ? <Slot slot={lane.slot} compact={compact} /> : null}
     </ul>
   );
 }

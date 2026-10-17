@@ -1,5 +1,12 @@
 {
   "title": "Why building an effective sales pipeline takes time",
+  "caption": "The lanes thin out, and slowly.",
+  "counts": {
+    "leads": "27",
+    "opportunities": "3",
+    "closing": "1"
+  },
+  "cycle": "27:1 over ≈ 9.5 months",
   "voiceScript": {
     "segments": {
       "the-obvious-objection": {

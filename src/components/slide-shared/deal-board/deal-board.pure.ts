@@ -7,11 +7,18 @@ export interface Deal {
   readonly value?: number;
 }
 
-/** One stage of the pipeline: a lane under a dark pill, its deals top to bottom. */
+/** A dashed slot closing a lane: a place a note has not reached yet, `success` for the money still to come. */
+export interface DealSlot {
+  readonly text?: string;
+  readonly tone?: 'success';
+}
+
+/** One stage of the pipeline: a lane under a dark pill, its deals top to bottom, then its slot if it has one. */
 export interface DealLane {
   readonly slug: string;
   readonly label: string;
   readonly deals: readonly Deal[];
+  readonly slot?: DealSlot;
 }
 
 /** What a lane's deals are worth together. */

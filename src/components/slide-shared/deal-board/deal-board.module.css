@@ -53,6 +53,19 @@
   grid-column: var(--from) / var(--to);
 }
 
+/* Wrapping lanes: two to a row while the board is narrow, all in one row from 36rem, each as tall as its row. */
+.wrap .grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  row-gap: 2rem;
+  width: auto;
+}
+
+.wrap .lane {
+  grid-row: auto;
+  grid-column: auto;
+  align-self: stretch;
+}
+
 .annotationRow {
   padding-inline: 0.5rem;
 }
@@ -87,4 +100,34 @@
     grid-template-columns: repeat(var(--lanes), minmax(0, 1fr));
     width: auto;
   }
+}
+
+@container (min-width: 36rem) {
+  .wrap .grid {
+    grid-template-columns: repeat(var(--lanes), minmax(0, 1fr));
+  }
+}
+
+/*
+ * The money on the board: the success colour on a dashed slot still to be paid, and the cash and revenue tints of the
+ * cashflow board's notes, mixed into the card colour so they follow the theme.
+ */
+.successSlot {
+  border-color: var(--success);
+}
+
+.warningNote {
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in oklch, var(--warning) 40%, var(--card)),
+    color-mix(in oklch, var(--warning) 25%, var(--card))
+  );
+}
+
+.successNote {
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in oklch, var(--success) 40%, var(--card)),
+    color-mix(in oklch, var(--success) 25%, var(--card))
+  );
 }

@@ -1,5 +1,11 @@
 {
   "title": "Why sales is more than just selling",
+  "caption": "Each stage pays out before the payment lane does.",
+  "payouts": {
+    "insight": "Insight",
+    "trust": "Trust",
+    "process": "Process"
+  },
   "voiceScript": {
     "segments": {
       "pain-first": {

@@ -1,4 +1,5 @@
 import { formatEuro } from '@/components/slide-shared/cashflow-board/cashflow-board.pure';
+import { cn } from '@/lib/utils';
 import type { CSSProperties } from 'react';
 import styles from './deal-board.module.css';
 import { checkDealBoard } from './deal-board.pure';
@@ -33,22 +34,25 @@ function LaneRow({ board, emphasis }: { board: DealBoardProps; emphasis: number 
 }
 
 /**
- * The deal board (Slides 4 and 5 of "Why it's never too early to start with sales"): pipeline stages as pale lanes
- * under dark pills, each deal a tilted paper note. The full board heads each lane with its computed total and count
- * and writes contact and value on each note; the compact board names the company only. One lane may be ringed in
- * `primary`, with incoming notes, an annotation over it and a bracket under the others. All lanes stand side by side
- * when the board is wide enough; narrower, the lanes scroll sideways in their own row and nothing is cut. Pointing at a lane dims the others.
+ * The deal board (the Title slide and Slides 4 and 5 of "Why it's never too early to start with sales"): pipeline
+ * stages as pale lanes under dark pills, each deal a tilted paper note. The full board heads each lane with its
+ * computed total and count when given a `countLabel`, and writes contact and value on each note; the compact board
+ * names the company only. One lane may be ringed in `primary`, with incoming notes, an annotation over it and a
+ * bracket under the others; a lane may close on a dashed slot. All lanes stand side by side when the board is wide
+ * enough; narrower, the lanes scroll sideways in their own row, or with `wrap` stand two to a row, and nothing is cut.
+ * Pointing at a lane dims the others.
  */
 export function DealBoard(props: DealBoardProps) {
-  const { lanes, compact = false, emphasis, annotation, ends, bracket } = props;
+  const { lanes, compact, wrap, emphasis, annotation, ends, bracket } = props;
   checkDealBoard({ lanes, emphasis, bracket });
   const emphasisNumber = lanes.findIndex((lane) => lane.slug === emphasis) + 1;
   const style = { '--lanes': lanes.length, '--emphasis': Math.max(emphasisNumber, 1) } as CSSProperties;
   return (
     <div
       data-slot="deal-board"
+      data-wrap={wrap ? 'true' : undefined}
       style={style}
-      className={`${styles.board} ${compact ? styles.compact : ''} flex flex-col`}
+      className={cn(styles.board, compact && styles.compact, wrap && styles.wrap, 'flex flex-col')}
     >
       {annotation ? <Annotation text={annotation} /> : null}
       <LaneRow board={props} emphasis={emphasisNumber} />

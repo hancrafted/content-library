@@ -27,6 +27,8 @@ export interface DealBoardProps {
   readonly emphasis?: string;
   /** Short labels, company-only notes, no totals or values. */
   readonly compact?: boolean;
+  /** Lanes of one height that wrap two to a row where the board is narrow, instead of scrolling sideways. */
+  readonly wrap?: boolean;
   /** Notes standing first in the emphasised lane. */
   readonly incoming?: readonly IncomingNote[];
   /** A `primary` label with a drawn arrow, over the emphasised lane. */
