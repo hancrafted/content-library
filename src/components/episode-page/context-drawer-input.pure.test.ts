@@ -1,8 +1,9 @@
 import { episode, slide, type Section } from '@/components/slide-master/slide';
 import type { RuntimeTranslator } from '@/components/slide-master/slide-base';
+import { TRANSLATIONS } from '@/i18n/translations';
 import type { SpeakerNoteItem, VoiceScriptSegment } from '@/lib/context-drawer.pure';
 import { describe, expect, it } from 'vitest';
-import { checkContext, contextItemsOf } from './context-drawer-input.pure';
+import { checkContext, checkDrawerStrings, contextItemsOf } from './context-drawer-input.pure';
 import { recordContent } from './record-content';
 
 const EPISODE = {
@@ -160,6 +161,15 @@ describe('success cases', () => {
     // ASSERT
     expect(result).toBeUndefined();
   });
+
+  it("accepts the site's contextDrawer strings: every one that takes an argument stays out of the drawer's", () => {
+    // ARRANGE
+    const namespaces = [TRANSLATIONS.en.contextDrawer, TRANSLATIONS.de.contextDrawer];
+    // ACT
+    const check = () => namespaces.forEach((namespace) => checkDrawerStrings(namespace));
+    // ASSERT
+    expect(check).not.toThrow();
+  });
 });
 
 describe('failure cases', () => {
@@ -230,6 +240,16 @@ describe('failure cases', () => {
     // ASSERT
     expect(run).toThrow(dup);
   });
+
+  it('rejects a drawer string that takes an argument, which the drawer would read unformatted', () => {
+    // ARRANGE
+    const namespace = { close: 'Close', greeting: 'Speaker note: {title}' };
+    const expected = /greeting take an argument/;
+    // ACT
+    const check = () => checkDrawerStrings(namespace);
+    // ASSERT
+    expect(check).toThrow(expected);
+  });
 });
 
 describe('edge cases', () => {
@@ -258,5 +278,14 @@ describe('edge cases', () => {
     const result = check();
     // ASSERT
     expect(result).toBeUndefined();
+  });
+
+  it('lets a string with an argument through when the drawer leaves it to its caller, as the marker label', () => {
+    // ARRANGE
+    const namespace = { markerNote: 'Speaker note: {title}', refNote: 'Open the speaker note' };
+    // ACT
+    const check = () => checkDrawerStrings(namespace);
+    // ASSERT
+    expect(check).not.toThrow();
   });
 });

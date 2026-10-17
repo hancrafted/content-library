@@ -18,17 +18,18 @@ export interface NoteSlots {
   readonly notes: readonly (Note | null)[];
 }
 
-/** Where a lane sits: two lanes per row when the board is narrow, all in one row when it is wide. */
+/**
+ * Where a lane sits: two lanes per row when the board is narrow, all in one row when it is wide. `narrowBand` is the
+ * row of lanes, from 0, it stands in while narrow; the grid row itself follows from the board's `--lane-rows` in CSS.
+ */
 export interface LanePlacement {
   readonly narrowColumn: number;
-  readonly narrowRow: number;
+  readonly narrowBand: number;
   readonly wideColumn: number;
 }
 
 /** Note slots a lane has at most. */
-export const SLOTS = 3;
-/** Grid rows one lane spans at most: its three slots and its footer. */
-export const LANE_ROWS = SLOTS + 1;
+const SLOTS = 3;
 /** Lanes per row while the board is narrow. */
 export const NARROW_LANES = 2;
 
@@ -76,32 +77,39 @@ export function tiltOf(column: number, slot: number): number {
   return TILTS[(column - 1) % TILTS.length][(slot - 1) % 3];
 }
 
-/** Which row of lanes, from 0, a column's lane stands in while the board is narrow. */
-export function narrowBand(column: number): number {
-  return Math.floor((column - 1) / NARROW_LANES);
-}
-
 /** Where the lane of a column, counted from 1, sits on the board's grid in its narrow and wide layouts. */
 export function lanePlacement(column: number): LanePlacement {
   const index = column - 1;
   return {
     narrowColumn: (index % NARROW_LANES) + 1,
-    narrowRow: narrowBand(column) * LANE_ROWS + 1,
+    narrowBand: Math.floor(index / NARROW_LANES),
     wideColumn: column,
   };
+}
+
+/**
+ * Where an arrow stands on the board: its two cells, its label and its kind. A `shaft` (the default) runs straight
+ * along the slot row, its label on the shaft; a `curve` is a stroked arc across the gap beside the `from` cell, toward
+ * `to`, its label on a pill in the slot under `from`. `BoardArrow` extends it.
+ */
+export interface ArrowCells {
+  readonly from: BoardCell;
+  readonly to: BoardCell;
+  readonly label?: string;
+  readonly variant?: 'shaft' | 'curve';
+  /**
+   * A shaft's label stands on the shaft in the gap between this column's lane and the next, clear of the notes on
+   * either side, where the board is wide enough to hold it there; narrower, it stands in the slot under `from`. With
+   * no `labelGap`, the label is a pill under the middle of the shaft.
+   */
+  readonly labelGap?: number;
 }
 
 /** What `slotRows` reads: the notes, and the overlays that stand in a slot row. */
 export interface SlotReach {
   readonly columns: readonly NoteSlots[];
   readonly stamp?: { readonly column: number };
-  readonly arrow?: {
-    readonly from: readonly [number, number];
-    readonly to: readonly [number, number];
-    readonly label?: string;
-    readonly variant?: 'shaft' | 'curve';
-    readonly labelGap?: number;
-  };
+  readonly arrow?: ArrowCells;
 }
 
 /** The slot an arrow reaches: its ends, and the slot under its start when its label stands there. */
@@ -127,7 +135,7 @@ export type BoardCell = readonly [column: number, slot: number];
 export interface BoardPlacements {
   readonly count: number;
   readonly stamp?: { readonly column: number };
-  readonly arrow?: { readonly from: BoardCell; readonly to: BoardCell; readonly labelGap?: number };
+  readonly arrow?: Pick<ArrowCells, 'from' | 'to' | 'labelGap'>;
   readonly highlight?: number;
   readonly annotations?: readonly { readonly column: number; readonly span?: number }[];
 }

@@ -16,16 +16,17 @@ export interface DealBracket {
   readonly to: number;
 }
 
-export interface DealBoardProps {
+/** The board's props, `Slug` the lanes' slugs, which `emphasis` and `markers` name. */
+export interface DealBoardProps<Slug extends string = string> {
   /** The board's accessible name. */
   readonly label: string;
-  readonly lanes: readonly DealLane[];
+  readonly lanes: readonly DealLane<Slug>[];
   /** The locale euros are written in. */
   readonly locale: string;
   /** A lane's deal count as the Slide words it, `3 deals`; unused on the compact board. */
   readonly countLabel?: (count: number) => string;
   /** The slug of the lane ringed in `primary`. */
-  readonly emphasis?: string;
+  readonly emphasis?: Slug;
   /** Short labels, company-only notes, no totals or values. */
   readonly compact?: boolean;
   /** Lanes of one height that wrap two to a row where the board is narrow, instead of scrolling sideways. */
@@ -42,5 +43,5 @@ export interface DealBoardProps {
   /** The Context drawer's target on the emphasised lane. */
   readonly emphasisTarget?: string;
   /** Context markers by lane slug, each in its lane's top-right corner. */
-  readonly markers?: Readonly<Record<string, ReactNode>>;
+  readonly markers?: Readonly<Partial<Record<Slug, ReactNode>>>;
 }

@@ -7,7 +7,6 @@ import type { DealBoardProps } from './deal-board.types';
 import { Lane } from './deal-lane';
 import { Annotation, Bracket, Ends } from './deal-marks';
 
-export type { DealLane } from './deal-board.pure';
 export type { DealBoardProps } from './deal-board.types';
 
 /** The lanes, and the bracket row on their grid, in a row that scrolls sideways when the board is narrow. */
@@ -42,7 +41,7 @@ function LaneRow({ board, emphasis }: { board: DealBoardProps; emphasis: number 
  * enough; narrower, the lanes scroll sideways in their own row, or with `wrap` stand two to a row, and nothing is cut.
  * Pointing at a lane dims the others.
  */
-export function DealBoard(props: DealBoardProps) {
+export function DealBoard<Slug extends string>(props: DealBoardProps<Slug>) {
   const { lanes, compact, wrap, emphasis, annotation, ends, bracket } = props;
   checkDealBoard({ lanes, emphasis, bracket });
   const emphasisNumber = lanes.findIndex((lane) => lane.slug === emphasis) + 1;

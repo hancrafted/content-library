@@ -15,6 +15,9 @@ const VC_FACTORS = [
   { slug: 'market', percent: 68 },
 ] as const;
 
+/** A Context marker on the `primary` trust note takes the note's own foreground. */
+const ON_PRIMARY = 'text-primary-foreground/70 hover:text-foreground focus-visible:text-foreground';
+
 const MARKET = 'market';
 const INTERNAL = 'internal';
 const TRUST = 'trust';
@@ -136,7 +139,7 @@ export const salesIsMoreThanSelling = slide({
               {...target(TRUST)}
               index="03"
               title={t('board.trust.title')}
-              body={t.rich('board.trust.body', { marker: marker('a-signal-must-be-costly-to-fake') })}
+              body={t.rich('board.trust.body', { marker: marker('a-signal-must-be-costly-to-fake', ON_PRIMARY) })}
               tilt="none"
               emphasis
               className="@4xl:col-span-4"
@@ -146,12 +149,7 @@ export const salesIsMoreThanSelling = slide({
                 heading={t('board.trust.bars.heading')}
                 rows={barRows}
                 locale={locale}
-                marker={
-                  <Marker
-                    note="investors-read-the-team"
-                    className="text-primary-foreground/70 hover:text-foreground focus-visible:text-foreground"
-                  />
-                }
+                marker={<Marker note="investors-read-the-team" className={ON_PRIMARY} />}
               />
               <CheckedChips items={trustChips} />
             </Note>

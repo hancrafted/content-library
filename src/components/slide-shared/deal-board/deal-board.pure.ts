@@ -18,8 +18,8 @@ export interface Deal {
 export type DealSlot = { readonly kind: 'open' } | { readonly kind: 'payment'; readonly text?: string };
 
 /** One stage of the pipeline: a lane under a dark pill, its deals top to bottom, then its slot if it has one. */
-export interface DealLane {
-  readonly slug: string;
+export interface DealLane<Slug extends string = string> {
+  readonly slug: Slug;
   readonly label: string;
   readonly deals: readonly Deal[];
   readonly slot?: DealSlot;

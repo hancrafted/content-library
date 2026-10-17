@@ -69,10 +69,10 @@ describe('success cases', () => {
   it('places four lanes two by two when narrow and side by side when wide', () => {
     // ARRANGE
     const expected = [
-      { narrowColumn: 1, narrowRow: 1, wideColumn: 1 },
-      { narrowColumn: 2, narrowRow: 1, wideColumn: 2 },
-      { narrowColumn: 1, narrowRow: 5, wideColumn: 3 },
-      { narrowColumn: 2, narrowRow: 5, wideColumn: 4 },
+      { narrowColumn: 1, narrowBand: 0, wideColumn: 1 },
+      { narrowColumn: 2, narrowBand: 0, wideColumn: 2 },
+      { narrowColumn: 1, narrowBand: 1, wideColumn: 3 },
+      { narrowColumn: 2, narrowBand: 1, wideColumn: 4 },
     ];
     // ACT
     const placements = [1, 2, 3, 4].map((column) => lanePlacement(column));

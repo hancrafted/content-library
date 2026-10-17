@@ -1,6 +1,6 @@
 import { slide } from '@/components/slide-master/slide';
 import { SlideFrame } from '@/components/slide-master/slide-master';
-import { DealBoard, OpenPipeline, type DealLane } from '@/components/slide-shared/deal-board/deal-board';
+import { DealBoard, OpenPipeline } from '@/components/slide-shared/deal-board/deal-board';
 import { dealCount, pipelineTotal } from '@/components/slide-shared/deal-board/deal-board.pure';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
@@ -63,7 +63,7 @@ export const pipelineToolsInPractice = slide({
   notes: [{ slug: 'late-deals-convert-worse', target: LANES, sources: [GTM_BENCHMARKS] }],
   segments: [{ slug: 'one-place-for-every-deal' }, { slug: 'read-it-at-a-glance' }, { slug: 'start-small' }],
   content: ({ t, target, locale, Marker }) => {
-    const lanes: DealLane[] = BOARD.map((lane) => ({
+    const lanes = BOARD.map((lane) => ({
       slug: lane.slug,
       label: t(`lanes.${lane.slug}.label`),
       deals: lane.deals.map((deal) => ({

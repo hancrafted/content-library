@@ -1,6 +1,6 @@
 import { slide } from '@/components/slide-master/slide';
 import { SlideFrame } from '@/components/slide-master/slide-master';
-import { DealBoard, type DealLane } from '@/components/slide-shared/deal-board/deal-board';
+import { DealBoard } from '@/components/slide-shared/deal-board/deal-board';
 import styles from './how-marketing-feeds-the-pipeline.module.css';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
@@ -43,7 +43,7 @@ export const howMarketingFeedsThePipeline = slide({
   ],
   segments: [{ slug: 'two-ways-in' }, { slug: 'volume-into-a-defined-stage' }, { slug: 'hand-to-sales' }],
   content: ({ t, target, locale, marker, Marker }) => {
-    const lanes: DealLane[] = PIPELINE.map((lane) => ({
+    const lanes = PIPELINE.map((lane) => ({
       slug: lane.slug,
       label: t(`lanes.${lane.slug}.short`),
       deals: lane.deals.map((slug) => ({ slug, company: t(`deals.${slug}`) })),

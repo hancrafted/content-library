@@ -50,13 +50,13 @@ function arrowPlacement([fromColumn, slot]: BoardArrow['from'], [toColumn]: Boar
     '--narrow-span': Math.abs(a.narrowColumn - b.narrowColumn) + 1,
     '--slot': slot - 1,
   });
-  return { style, 'data-narrow': a.narrowRow === b.narrowRow ? 'true' : 'false' };
+  return { style, 'data-narrow': a.narrowBand === b.narrowBand ? 'true' : 'false' };
 }
 
 /** Which way a narrow board's rows of lanes lie from the arrow's start to its end, when they differ. */
 function rowsBetween(from: BoardArrow['from'], to: BoardArrow['to']) {
-  const start = lanePlacement(from[0]).narrowRow;
-  const end = lanePlacement(to[0]).narrowRow;
+  const start = lanePlacement(from[0]).narrowBand;
+  const end = lanePlacement(to[0]).narrowBand;
   if (start === end) return undefined;
   return end < start ? 'up' : 'down';
 }

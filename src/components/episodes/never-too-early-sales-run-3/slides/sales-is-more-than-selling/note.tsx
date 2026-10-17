@@ -26,9 +26,6 @@ interface NoteProps {
   'data-target'?: string;
 }
 
-/** The `primary` note's body; a Context marker in it takes the note's own foreground. */
-const EMPHASIS_BODY = 'mt-4 text-body text-primary-foreground/80 [&_button]:text-primary-foreground/70';
-
 /** A note on the board: taped down, or with `emphasis` filled in `primary`, pinned and titled larger. */
 export function Note({ index, title, body, tilt, emphasis = false, className, children, ...target }: NoteProps) {
   const fill = emphasis ? 'bg-primary p-8 text-primary-foreground shadow-xl' : 'bg-card p-6 shadow-md';
@@ -48,7 +45,9 @@ export function Note({ index, title, body, tilt, emphasis = false, className, ch
         {index}
       </p>
       <h4 className={cn('mt-3 font-semibold', emphasis ? 'text-heading leading-none' : 'text-body')}>{title}</h4>
-      <p className={emphasis ? EMPHASIS_BODY : 'mt-2 text-caption text-muted-foreground'}>{body}</p>
+      <p className={emphasis ? 'mt-4 text-body text-primary-foreground/80' : 'mt-2 text-caption text-muted-foreground'}>
+        {body}
+      </p>
       {children}
     </article>
   );

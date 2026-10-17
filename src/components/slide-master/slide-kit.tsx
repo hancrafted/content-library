@@ -92,14 +92,14 @@ function contextRefsOf(episode: EpisodeKitInput, slide: SlideKitInput): Pick<Run
         </ContextRef>
       );
     },
-    marker: (note) => {
+    marker: (note, className) => {
       const label = labelOf(note);
       // A no-break space keeps the marker on the line of the phrase it follows.
       return (chunks) => (
         <>
           {chunks}
           {'\u00a0'}
-          <ContextMarker note={note} label={label} placement="inline" />
+          <ContextMarker note={note} label={label} placement="inline" className={className} />
         </>
       );
     },
