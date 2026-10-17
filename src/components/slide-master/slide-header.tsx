@@ -1,3 +1,4 @@
+import type { TextRange } from '@/lib/caption-emphasis.pure';
 import { ENTRANCE_MS, typewriterSchedule } from '@/lib/typewriter.pure';
 import { cn } from '@/lib/utils';
 import type { ReactNode } from 'react';
@@ -21,6 +22,8 @@ export interface SlideHeaderProps {
   readonly level: 'h1' | 'h2' | 'h3';
   readonly title: string;
   readonly caption?: string;
+  /** The caption's `<b>` runs, set off in `primary` semibold. */
+  readonly captionEmphasis?: readonly TextRange[];
   /** Page Slides only; a section slide and the Title slide have none. */
   readonly eyebrow?: EyebrowText;
   readonly entrance?: SlideEntrance;
@@ -50,6 +53,7 @@ export function SlideHeader({
   level,
   title,
   caption,
+  captionEmphasis,
   eyebrow,
   entrance = 'typewriter',
   ...rest
@@ -64,7 +68,7 @@ export function SlideHeader({
       </Heading>
       {caption && (
         <p data-target="caption" className="mt-2 text-body text-balance text-muted-foreground md:max-w-[70%]">
-          <TypedText text={caption} delays={delays[2]} next={ends[2]} />
+          <TypedText text={caption} delays={delays[2]} next={ends[2]} emphasis={captionEmphasis} />
         </p>
       )}
       {rest.children}
