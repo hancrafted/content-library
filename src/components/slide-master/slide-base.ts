@@ -40,6 +40,9 @@ export interface SegmentSpec<G extends string = string> {
 /** The Slide's heading at the level its position gives it (FE-002 §4), marked as the `title` target. */
 export type TitleComponent = (props: { children: ReactNode }) => ReactElement;
 
+/** A Context marker on an element, naming one of the Slide's notes; `className` places it (default: the top-right corner). */
+export type MarkerComponent<N extends string = string> = (props: { note: N; className?: string }) => ReactElement;
+
 /** What a `<tag>` in `t.rich` calls: wraps the tagged chunks. */
 export type RichTag = (chunks: ReactNode) => ReactNode;
 
@@ -62,6 +65,8 @@ export interface RuntimeKit {
   readonly slideHref: (slug: string) => string;
   readonly template: (key: string) => string;
   readonly ref: (note: string) => RichTag;
+  readonly marker: (note: string) => RichTag;
+  readonly Marker: MarkerComponent;
   readonly target: (name: string) => TargetProps;
   readonly Title: TitleComponent;
 }

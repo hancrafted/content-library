@@ -7,6 +7,7 @@ import {
   drawerKeyAction,
   formatMark,
   matchesShortcut,
+  revealScrollTop,
   sitsBeside,
   sourceDomain,
   splitCitations,
@@ -120,6 +121,16 @@ describe('success cases', () => {
     expect(parts).toEqual(expected);
   });
 
+  it('scrolls a revealed note to the top of the drawer, clear of its padding', () => {
+    // ARRANGE
+    const layout = { offset: 640, inset: 16, scrollHeight: 2000, clientHeight: 500 };
+    const expected = 624;
+    // ACT
+    const top = revealScrollTop(layout);
+    // ASSERT
+    expect(top).toBe(expected);
+  });
+
   it('names a source by its host, without a leading www', () => {
     // ARRANGE
     const urls = ['https://www.anthropic.com/engineering/x', 'https://code.claude.com/docs/en/memory'];
@@ -132,6 +143,15 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('never scrolls above the top for a note inside the top padding', () => {
+    // ARRANGE
+    const layout = { offset: 4, inset: 16, scrollHeight: 2000, clientHeight: 500 };
+    // ACT
+    const top = revealScrollTop(layout);
+    // ASSERT
+    expect(top).toBe(0);
+  });
+
   it.each([
     ['Ctrl+Alt+N', key({ ctrlKey: true })],
     ['Meta+Alt+N', key({ metaKey: true })],
@@ -159,6 +179,25 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('stops a note near the end at the bottom of the content, as near the top as it can get', () => {
+    // ARRANGE
+    const layout = { offset: 1800, inset: 16, scrollHeight: 2000, clientHeight: 500 };
+    const expected = 1500;
+    // ACT
+    const top = revealScrollTop(layout);
+    // ASSERT
+    expect(top).toBe(expected);
+  });
+
+  it('leaves a drawer that does not scroll at the top', () => {
+    // ARRANGE
+    const layout = { offset: 300, inset: 16, scrollHeight: 400, clientHeight: 500 };
+    // ACT
+    const top = revealScrollTop(layout);
+    // ASSERT
+    expect(top).toBe(0);
+  });
+
   it('ignores a held-down shortcut', () => {
     // ARRANGE
     const event = key({ repeat: true });

@@ -69,8 +69,11 @@ _Avoid_: Notes, comments
 **Speaker note item**: one talking point: a header, a description, optional titled sources and image, and the element of its Slide it explains.
 _Avoid_: Note, bullet, comment
 
-**Context reference**: an underlined phrase in a Slide's text that opens one Speaker note item in the Context drawer.
+**Context reference**: an underlined phrase or a Context marker on a Slide that opens one Speaker note item in the Context drawer.
 _Avoid_: Footnote, tooltip, annotation
+
+**Context marker**: the Context drawer's speech-bubble icon as a small button beside a fact on a Slide, `(icon)` after a phrase or in an element's corner; the Context reference a new Episode puts on every fact whose Speaker note carries a source.
+_Avoid_: Note icon, info button, badge
 
 **Citation marker**: the `[n]` in a Speaker note item's description, the only superscript in the Context drawer, a number that points at source n of that note.
 _Avoid_: Footnote, reference

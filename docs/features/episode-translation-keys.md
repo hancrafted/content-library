@@ -40,7 +40,7 @@ A Section's own slide is a Slide like any other: its `title` names the Section a
 
 `<note>`, `<seg>`, `<column>` and `<source>` are kebab-case slugs. A Slide may add a leaf no role describes (the untitled Slide in page-template keeps its sentence under `statement`); add a role to the table in the same change when a new Slide layout needs one.
 
-The record, not the Translation file, holds what is not a string: a note's `slug` and `target`, a source's `slug` and `url`, an image's `src`, a segment's `slug` and `bridge` flag. Neither holds a time: a Slide's minutes and each segment's span are counted from the `script` and `bridge` words. Slide text wraps one phrase in `<ref>…</ref>`, read with `t.rich('prose', { ref: ref('<note>') })`, to make a Context reference to a note of the same Slide. Chrome shared by every Episode (for example `tableOfContents.title`) sits in the site-wide files and is not bound by this table.
+The record, not the Translation file, holds what is not a string: a note's `slug` and `target`, a source's `slug` and `url`, an image's `src`, a segment's `slug` and `bridge` flag. Neither holds a time: a Slide's minutes and each segment's span are counted from the `script` and `bridge` words. Slide text wraps a phrase in `<marker>…</marker>`, read with `t.rich('prose', { marker: marker('<note>') })`, to follow it with a Context marker to a note of the same Slide, or in `<ref>…</ref>`, read with `ref('<note>')`, to underline it. A marker's accessible name is the note's `header` in the site-wide `contextDrawer.markerNote`. Chrome shared by every Episode (for example `tableOfContents.title`) sits in the site-wide files and is not bound by this table.
 
 ## Worked example: page-template
 
@@ -49,7 +49,7 @@ The record, not the Translation file, holds what is not a string: a note's `slug
 ```text
 title
 caption
-prose                                   holds <ref>reference Episode</ref>
+prose                                   holds <marker>keeps every Episode the same shape</marker>
 spine.episode                           spine.* are leaves of the Slide's own visualisation
 spine.section
 spine.slide

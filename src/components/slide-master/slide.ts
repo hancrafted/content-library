@@ -4,7 +4,15 @@ import type { Locale } from '@/lib/locale.pure';
 import type { EpisodeSlug } from '@/lib/routes';
 import type { createTranslator, MessageKeys, NestedKeyOf } from 'next-intl';
 import type { ReactNode } from 'react';
-import type { NoteSpec, PerLocale, RichTag, RuntimeKit, SegmentSpec, TitleComponent } from './slide-base';
+import type {
+  MarkerComponent,
+  NoteSpec,
+  PerLocale,
+  RichTag,
+  RuntimeKit,
+  SegmentSpec,
+  TitleComponent,
+} from './slide-base';
 
 /*
  * The Slide (FE-002, `docs/adr/0001-the-slide-is-a-self-contained-folder.md`): one folder
@@ -35,7 +43,8 @@ export type OwnTranslator<M extends SlideMessages> = ReturnType<typeof createTra
 
 /**
  * The kit a Slide's `content` receives: `t` and `template` read
- * only its own file; `ref` and `target` take only the notes it declares.
+ * only its own file; `ref`, `marker`, `Marker` and `target` take only the
+ * notes it declares.
  * `slideHref` takes any slug: the container fails the build for one that is not
  * a Slide of the same Episode, since the Slide cannot know which Episode it is in.
  */
@@ -49,6 +58,10 @@ export interface OwnSlideKit<M extends SlideMessages, N extends NoteSpec> {
   readonly template: (key: OwnTemplateKey<M>) => string;
   /** The `t.rich` tag for a Context reference to one of this Slide's notes. */
   readonly ref: (note: N['slug']) => RichTag;
+  /** The `t.rich` tag that follows a phrase with a Context marker to one of this Slide's notes: `phrase (icon)`. */
+  readonly marker: (note: N['slug']) => RichTag;
+  /** A Context marker on an element, to one of this Slide's notes; the element must be `relative` unless `className` places it. */
+  readonly Marker: MarkerComponent<N['slug']>;
   /** Marks the element one of this Slide's notes explains. */
   readonly target: (name: N['target']) => TargetProps;
   readonly Title: TitleComponent;

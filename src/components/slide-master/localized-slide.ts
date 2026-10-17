@@ -60,6 +60,8 @@ export interface EpisodeContext {
   readonly placed: readonly PlacedListSlide<Slide>[];
   /** Said after a Context reference's phrase, e.g. `opens speaker note`. */
   readonly refLabel: string;
+  /** A Context marker's accessible name from its note's header, e.g. `Speaker note: Stateless by design`. */
+  readonly markerLabel: (title: string) => string;
 }
 
 /**
