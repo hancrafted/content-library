@@ -112,10 +112,10 @@ export interface EpisodeMessages {
   readonly voiceScript?: Readonly<Record<string, unknown>>;
 }
 
-/** How a Slide header enters the first time its Slide is active (FE-012). */
+/** How a Slide header enters the first time its Slide is active (design-ADR-0012). */
 export type SlideEntrance = 'typewriter' | 'fade' | 'none';
 
-/** Who renders each Slide's header (FE-012): the Slide wrapper (`shared`) or each Scene (`authored`). */
+/** Who renders each Slide's header (design-ADR-0012): the Slide wrapper (`shared`) or each Scene (`authored`). */
 export type HeaderMode = 'shared' | 'authored';
 
 /**

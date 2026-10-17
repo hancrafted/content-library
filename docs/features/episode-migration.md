@@ -74,7 +74,7 @@ export const theLostMiddle = slide({
 });
 ```
 
-- The Slide wrapper renders the Slide header from the Slide's own text: the Eyebrow (computed), the `title` (or `heading`) and the `caption`, typed in once ([FE-012](../../.archgate/adrs/FE-012-slide-header-and-motion.md)). The Scene is free JSX in a `SlideFrame` holding the visual only; a `<Title>` in it fails the build. The layouts in `slide-layouts/` author their own header, for an Episode whose record sets `header: 'authored'`.
+- The Slide wrapper renders the Slide header from the Slide's own text: the Eyebrow (computed), the `title` (or `heading`) and the `caption`, typed in once ([design-ADR-0012](../adr/0012-slide-header-and-play-once-motion.md)). The Scene is free JSX in a `SlideFrame` holding the visual only; a `<Title>` in it fails the build. The layouts in `slide-layouts/` author their own header, for an Episode whose record sets `header: 'authored'`.
 - A section slide's Scene echoes the Hero motif; the Title slide's hero visual is a Slide folder set as the record's `title` (see `page-template/slides/hero/` and `foundations/`).
 - No entrance motion in a Scene: the wrapper fades it up once. Hover emphasis reuses the shared classes in [the design system](../design/design-system.md#hover-vocabulary).
 - A type error from a kit field or from `messages` means the Slide's own files or its declaration are wrong: German must have every English key. Fix them; never cast.

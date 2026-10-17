@@ -224,7 +224,7 @@
 }
 
 /*
- * Hover vocabulary (FE-012 §3): the shared ways a Scene draws the audience's
+ * Hover vocabulary (design-ADR-0012 §8): the shared ways a Scene draws the audience's
  * focus while the presenter points with the mouse, and discloses detail
  * progressively. Each state also applies on keyboard focus; under reduced
  * motion it applies at once, without a transition. A Scene reuses these; a new
@@ -278,7 +278,7 @@
 }
 
 /*
- * Slide entrance (FE-012): the first time a Slide is active its header
+ * Slide entrance (design-ADR-0012): the first time a Slide is active its header
  * types in and its Scene fades up, once. `SlideMount` carries `data-entry`
  * (`pending`, `entering`, `done`) on Episodes on the shared header. Only with
  * JavaScript (the `js` class, set in <head> before first paint) does a pending

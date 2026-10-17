@@ -9,7 +9,7 @@ const MIN_HEIGHT = { page: 'min-h-svh', section: 'min-h-[40svh]' } as const;
 
 export interface SlideWrapperProps extends ComponentPropsWithoutRef<'div'> {
   readonly size?: keyof typeof MIN_HEIGHT;
-  /** Who renders the Slide's header; on `shared` the wrapper renders it and plays the entrance once (FE-012). */
+  /** Who renders the Slide's header; on `shared` the wrapper renders it and plays the entrance once (design-ADR-0012). */
   readonly mode?: HeaderMode;
   /** The Slide header the wrapper renders above the Scene on `shared`; absent for an untitled Slide. */
   readonly header?: SlideHeaderProps;
