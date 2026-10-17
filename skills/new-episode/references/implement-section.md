@@ -21,7 +21,7 @@ The approved Spec is the Section's only source; the Spec Gate deleted the Dossie
 
 ## Picked Options
 
-Han picked one Option per Slide at the Spec Gate: build each Slide to its `data-picked` Option, its mock and its build notes' parts, tokens, props and i18n keys, and the `master:` and `motion:` those notes keep or overrule. Build no layout the Option does not give, and ask no design question: a gap in it is a `Needs human:` line. An Option naming a `Design reference:` page image is built against it: keep what its `Build against this page` line keeps, by [`skill-overrides.md`](skill-overrides.md#visual-check).
+Han picked one Option per Slide at the Spec Gate: build each Slide to its `data-picked` Option, its mock and its build notes' parts, tokens, props and i18n keys, and the `master:` and `motion:` those notes keep or overrule. Build no layout the Option does not give, and ask no design question: a gap in it is a `Needs human:` line. The wrapper renders the Slide header (Eyebrow, title, caption) and the play-once entrance, so the Scene holds the visual alone and adds no entrance motion; the hover classes the mock uses come along as they are. An Option naming a `Design reference:` page image is built against it: keep what its `Build against this page` line keeps, by [`skill-overrides.md`](skill-overrides.md#visual-check).
 
 ## Review
 

@@ -59,6 +59,8 @@ interface OptionShape {
   mock?: string;
   caption?: string | null;
   notes?: string | null;
+  /** Markup after the mock, where a Title-slide Option shows its section slides. */
+  after?: string;
 }
 
 const OPTION_DEFAULTS = {
@@ -67,10 +69,11 @@ const OPTION_DEFAULTS = {
   mock: 'bg-card text-foreground',
   caption: 'The bar carries the point. Scene.',
   notes: 'Keeps basic-page, motion none.',
+  after: '',
 };
 
 function option(slug: string, id: string, shape: OptionShape = {}): string {
-  const { recommended, picked, checked, mock, caption, notes } = {
+  const { recommended, picked, checked, mock, caption, notes, after } = {
     ...OPTION_DEFAULTS,
     checked: shape.picked,
     ...shape,
@@ -81,6 +84,7 @@ function option(slug: string, id: string, shape: OptionShape = {}): string {
   const buildNotes = notes === null ? '' : `<div data-spec="build-notes">${notes}</div>`;
   return `<figure data-spec="option" data-option="${id}"${flags}>
   <div data-spec="mock" class="${mock}"><div class="h-4 w-1/2 bg-accent"></div></div>
+  ${after}
   ${figcaption}
   ${buildNotes}
   <label><input type="checkbox" form="spec-review" name="pick:${slug}" value="${id}"${tick}> ${id}</label>
@@ -115,9 +119,32 @@ function slide(slug: string, number: number, shape: SlideShape = {}): string {
 </article>`;
 }
 
+/** A Title-slide Option's section slides: one per Section slug, in order. */
+function echoes(sections: readonly string[], mock = 'bg-muted'): string {
+  const items = sections.map(
+    (section) => `<li data-spec="echo" data-section="${section}"><div data-spec="mock" class="${mock}"></div></li>`,
+  );
+  return `<ol data-spec="echoes">${items.join('')}</ol>`;
+}
+
+function titleOption(id: string, shape: OptionShape = {}): string {
+  return option('top', id, { after: echoes(['why']), ...shape });
+}
+
+const TITLE_OPTIONS = [titleOption('0a', { recommended: true }), titleOption('0b'), titleOption('0c')];
+
+function titleSlide(options: readonly string[] = TITLE_OPTIONS, id = 'top'): string {
+  return `<article data-spec="title-slide" id="${id}">
+  <h3>Title slide</h3>
+  <div data-spec="options">${options.join('\n')}</div>
+  <textarea form="spec-review" name="note:${id}"></textarea>
+</article>`;
+}
+
 interface SpecShape {
   meta?: string;
   slides?: string[];
+  title?: string;
   asset?: string;
 }
 
@@ -138,6 +165,7 @@ ${shape.meta ?? meta()}
   <textarea form="spec-review" name="note:visual-language"></textarea>
 </section>
 <section id="episode-page"><h2>Episode page</h2>${VOICE}</section>
+${shape.title ?? titleSlide()}
 <section data-spec="section" id="why"><h2>Why it forgets</h2>
 ${slides.join('\n')}
 </section>
@@ -169,6 +197,16 @@ describe('success cases', () => {
 const SPENT_3 = [option('spent', '1a', { recommended: true }), option('spent', '1b'), option('spent', '1c')];
 
 const APPROVED = meta({ verified: [{ by: 'human:han', at: HAN_AT }] });
+
+const NO_TITLE_SLIDE =
+  'The Spec has no Title slide: an <article data-spec="title-slide" id="top"> before the first Section, its three Options each the Title slide and a section slide per Section.';
+
+/** The default Title slide with its recommended Option picked and ticked, as a locked Title slide. */
+const PICKED_TITLE = titleSlide([
+  titleOption('0a', { recommended: true, picked: true }),
+  titleOption('0b'),
+  titleOption('0c'),
+]);
 
 const picked = (slug: string, number: number): string =>
   slide(slug, number, {
@@ -419,9 +457,84 @@ describe('failure cases', () => {
     expect(found).toEqual(expected);
   });
 
+  it.each([
+    ['a Spec with no Title slide', { title: '' }, NO_TITLE_SLIDE],
+    [
+      'a Title slide with two Options',
+      { title: titleSlide(TITLE_OPTIONS.slice(0, 2)) },
+      'The Title slide {#top} has 2 Options: it needs three.',
+    ],
+    [
+      'Title-slide Options not ided 0a, 0b, 0c',
+      { title: titleSlide([titleOption('1a', { recommended: true }), titleOption('1b'), titleOption('1c')]) },
+      'The Title slide {#top} has the Options [1a, 1b, 1c]: id them 0a, 0b, 0c in order, the Slide number and a letter.',
+    ],
+    [
+      'a Title-slide Option whose section slides skip a Section',
+      { title: titleSlide([TITLE_OPTIONS[0], titleOption('0b', { after: echoes([]) }), TITLE_OPTIONS[2]]) },
+      'Option 0b of {#top} shows the section slides [], not one per Section in page order: [why].',
+    ],
+    [
+      'a Title-slide Option with no Title-slide mock',
+      {
+        title: titleSlide([
+          TITLE_OPTIONS[0],
+          TITLE_OPTIONS[1],
+          TITLE_OPTIONS[2].replace(/<div data-spec="mock"[^>]*><div[^>]*><\/div><\/div>/, ''),
+        ]),
+      },
+      'Option 0c of {#top} has no mock of the Title slide: a <div data-spec="mock"> directly in its figure.',
+    ],
+    [
+      'a hex colour in a section slide of a Title-slide Option',
+      {
+        title: titleSlide([
+          TITLE_OPTIONS[0],
+          titleOption('0b', { after: echoes(['why'], 'fill-[#ff0000]') }),
+          TITLE_OPTIONS[2],
+        ]),
+      },
+      'Option 0b of {#top} uses the hex colour "#ff0000": use a token class.',
+    ],
+    [
+      'a Title slide with no note field',
+      { title: titleSlide().replace('<textarea form="spec-review" name="note:top"></textarea>', '') },
+      'The Title slide {#top} has no <textarea form="spec-review" name="note:top">.',
+    ],
+    [
+      'a Title slide after the first Section',
+      { title: '', asset: `${titleSlide()}\n${REVIEW_ASSET}` },
+      'The Title slide {#top} comes after the Section {#why}: put it before the first Section.',
+    ],
+    [
+      'a Title slide ided other than top',
+      { title: titleSlide(TITLE_OPTIONS, 'hero') },
+      'The Title slide is id "hero": id it "top", the anchor feedback keys it by.',
+    ],
+  ])('reports %s', (_, shape, expected) => {
+    // ARRANGE
+    const files = folder({ 'spec/spec.html': spec(shape) });
+    // ACT
+    const found = messages(checkSpec(files, REVIEW_ASSET));
+    // ASSERT
+    expect(found).toContain(expected);
+  });
+
+  it('requires a picked Title-slide Option once Han approved the Spec', () => {
+    // ARRANGE
+    const files = { 'spec/spec.html': spec({ meta: APPROVED, slides: [picked('spent', 1), picked('middle', 2)] }) };
+    const expected = ['The Title slide {#top} has no picked Option: an approved Spec picks exactly one per Slide.'];
+    // ACT
+    const found = messages(checkSpec(files, REVIEW_ASSET));
+    // ASSERT
+    expect(found).toEqual(expected);
+  });
+
   it('requires one picked Option per Slide once Han approved the Spec', () => {
     // ARRANGE
-    const files = { 'spec/spec.html': spec({ meta: APPROVED, slides: [picked('spent', 1), slide('middle', 2)] }) };
+    const files = {
+      'spec/spec.html': spec({ meta: APPROVED, title: PICKED_TITLE, slides: [picked('spent', 1), slide('middle', 2)] }),
+    };
     const expected = ['The Slide {#middle} has no picked Option: an approved Spec picks exactly one per Slide.'];
     // ACT
     const found = messages(checkSpec(files, REVIEW_ASSET));
@@ -431,7 +544,7 @@ describe('failure cases', () => {
 
   it("demands the picks once approve.ts has appended Han's entry to the meta block", () => {
     // ARRANGE
-    const unapproved = spec({ slides: [picked('spent', 1), slide('middle', 2)] });
+    const unapproved = spec({ title: PICKED_TITLE, slides: [picked('spent', 1), slide('middle', 2)] });
     const approved = appendMetaVerified(unapproved, { by: 'human:han', at: HAN_AT });
     const expected = {
       before: [],
@@ -449,7 +562,11 @@ describe('failure cases', () => {
   it('reports a Dossier left beside an approved Spec', () => {
     // ARRANGE
     const files = folder({
-      'spec/spec.html': spec({ meta: APPROVED, slides: [picked('spent', 1), picked('middle', 2)] }),
+      'spec/spec.html': spec({
+        meta: APPROVED,
+        title: PICKED_TITLE,
+        slides: [picked('spent', 1), picked('middle', 2)],
+      }),
     });
     const expected = [
       'dossier.md still sits beside the approved Spec: the Spec is the only source now, so delete it in the approval commit.',
@@ -494,7 +611,13 @@ describe('edge cases', () => {
 
   it("checks an approved Spec without its Dossier against the Spec's own Slides", () => {
     // ARRANGE
-    const files = { 'spec/spec.html': spec({ meta: APPROVED, slides: [picked('spent', 1), picked('middle', 2)] }) };
+    const files = {
+      'spec/spec.html': spec({
+        meta: APPROVED,
+        title: PICKED_TITLE,
+        slides: [picked('spent', 1), picked('middle', 2)],
+      }),
+    };
     // ACT
     const findings = checkSpec(files, REVIEW_ASSET);
     // ASSERT
@@ -550,7 +673,9 @@ describe('edge cases', () => {
 
   it('names a Dossier Section with no Section in the Spec', () => {
     // ARRANGE
-    const html = spec().replace('data-spec="section" id="why"', 'data-spec="section" id="forgets"');
+    const html = spec()
+      .replace('data-spec="section" id="why"', 'data-spec="section" id="forgets"')
+      .replaceAll('data-section="why"', 'data-section="forgets"');
     const files = folder({ 'spec/spec.html': html });
     const expected = [
       'The Dossier Section {#why} has no Section in the Spec: give it a <section data-spec="section" id="why">.',

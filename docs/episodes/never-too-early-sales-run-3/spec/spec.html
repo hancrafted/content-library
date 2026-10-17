@@ -183,7 +183,7 @@
         opacity: 0.85;
       }
 
-      /* A Slide: header, the Option stage, then its words. */
+      /* A Slide: header, its words as tabs, the Option stage, then its note. */
       [data-spec='slide'] {
         margin-top: 4rem;
         scroll-margin-top: 1rem;
@@ -270,6 +270,27 @@
         background: var(--background, Canvas);
         overflow: visible;
       }
+      /*
+       * A Title-slide Option is a set: the Title slide's mock, then a strip of the section slides that echo its
+       * Hero motif, one per Section, so the motif reads across the Episode at a glance.
+       */
+      .spec-echoes {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+        gap: 1rem;
+        list-style: none;
+        margin: 1rem 0 0;
+        padding: 0;
+      }
+      .spec-echoes > li > p {
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: var(--muted-foreground, GrayText);
+        margin: 0 0 0.4rem;
+      }
+      .spec-echoes [data-spec='mock'] {
+        min-height: 14rem;
+      }
       [data-spec='option'] figcaption {
         font-size: 1rem;
         max-width: 60rem;
@@ -307,11 +328,52 @@
         color: var(--primary-foreground, HighlightText);
       }
 
+      /*
+       * A Slide's words as tabs: Visual idea, Voice script, Speaker notes, one panel open. Radio inputs in no form
+       * switch them without script; print shows every panel.
+       */
       .spec-words {
-        display: grid;
-        grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-        gap: 1.25rem;
-        margin-top: 1.5rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+      }
+      .spec-words > input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+      }
+      .spec-words > label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        padding: 0.45rem 0.9rem;
+        border-radius: 999px;
+        border: 1px solid var(--border, GrayText);
+        background: var(--card, Canvas);
+        cursor: pointer;
+      }
+      .spec-words > input:checked + label {
+        background: var(--foreground, CanvasText);
+        color: var(--background, Canvas);
+        border-color: transparent;
+      }
+      .spec-words > input:focus-visible + label {
+        outline: 2px solid var(--ring, Highlight);
+        outline-offset: 2px;
+      }
+      .spec-panel {
+        display: none;
+        flex-basis: 100%;
+        max-width: 60rem;
+        box-sizing: border-box;
+      }
+      .spec-words:has(> input[value='visual-idea']:checked) > [data-panel='visual-idea'],
+      .spec-words:has(> input[value='voice-script']:checked) > [data-panel='voice-script'],
+      .spec-words:has(> input[value='speaker-notes']:checked) > [data-panel='speaker-notes'] {
+        display: block;
+      }
+      .spec-panel > h4 {
+        display: none;
       }
       .spec-words ol {
         margin: 0;
@@ -336,14 +398,6 @@
       [data-spec='speaker-notes'] a {
         color: inherit;
         word-break: break-all;
-      }
-      .spec-visual-idea {
-        margin-top: 1.25rem;
-      }
-      .spec-visual-idea > summary {
-        cursor: pointer;
-        font-weight: 600;
-        font-size: 0.875rem;
       }
       .spec-note {
         display: block;
@@ -378,8 +432,18 @@
         .spec-outline {
           display: none;
         }
-        .spec-words {
-          grid-template-columns: minmax(0, 1fr);
+      }
+
+      @media print {
+        .spec-words > input,
+        .spec-words > label,
+        .spec-tabs {
+          display: none;
+        }
+        .spec-panel,
+        .spec-panel > h4,
+        .spec-options.is-tabbed > [data-spec='option'] {
+          display: block;
         }
       }
 
@@ -396,7 +460,7 @@
       addEventListener('DOMContentLoaded', () => {
         const outline = document.querySelector('.spec-outline');
         const refresh = () => {
-          for (const slide of document.querySelectorAll('[data-spec="slide"]')) {
+          for (const slide of document.querySelectorAll('[data-spec="slide"], [data-spec="title-slide"]')) {
             const picks = slide.querySelectorAll('.spec-pick input:checked').length;
             const link = outline?.querySelector(`a[href="#${slide.id}"]`);
             if (link) link.dataset.state = picks === 1 ? 'picked' : 'open';
@@ -450,7 +514,7 @@
         "status": "draft",
         "generated": {
           "by": "claude-code/opus-5.5",
-          "at": "2026-10-16T14:05:46Z"
+          "at": "2026-10-17T08:55:56Z"
         },
         "locale": "en",
         "brief": "../brief.md",
@@ -462,6 +526,10 @@
           {
             "by": "human:han",
             "at": "2026-10-16T14:28:57Z"
+          },
+          {
+            "by": "process:markdown-harness",
+            "at": "2026-10-17T08:58:46Z"
           }
         ]
       }
@@ -471,6 +539,12 @@
     <div class="spec-shell">
       <nav class="spec-outline" aria-label="Slides">
         <ol>
+          <li>
+            <span class="spec-outline-section">Episode</span>
+            <ol>
+              <li><a href="#top">0 · Title slide and section slides</a></li>
+            </ol>
+          </li>
           <li>
             <span class="spec-outline-section">Why watching cashflow is mission critical</span>
             <ol>
@@ -624,9 +698,10 @@
                 registered in <code>episode-repository.ts</code>.
               </li>
               <li>
-                Title slide: the kit's title layout, motion none, on-screen title "Why it's never too early to start
-                with sales". The Dossier's h1 holds no paragraphs, so the Title slide has no Voice script; the Episode's
-                spoken opening is the first Section slide's Voice script.
+                Title slide: the picked Title-slide Option, built as the record's <code>title</code> Slide, on-screen
+                title "Why it's never too early to start with sales"; each section slide is its echo in that Option. The
+                Dossier's h1 holds no paragraphs, so the Title slide has no Voice script; the Episode's spoken opening
+                is the first Section slide's Voice script.
               </li>
               <li>
                 One placement marker per Section, in Spec order, each a module
@@ -646,9 +721,711 @@
           </section>
         </div>
 
+        <article data-spec="title-slide" id="top">
+          <header class="spec-slide-head">
+            <span class="spec-number">0</span>
+            <h3>Title slide and section slides</h3>
+          </header>
+          <p>
+            Each Option is a set: the Title slide, which sets the Hero motif, and under it the section slide of every
+            Section, which echoes the motif and brings in its own Section. Picking an Option picks the set.
+          </p>
+          <div class="spec-options">
+            <figure data-spec="option" data-option="0a" data-recommended>
+              <div data-spec="mock" class="grid grid-cols-12 items-center gap-12 bg-background px-12 py-12">
+                <div class="col-span-5 flex flex-col gap-6">
+                  <p class="font-mono text-caption tracking-widest text-muted-foreground uppercase">
+                    Foundations · Sales
+                  </p>
+                  <p class="text-hero font-semibold">Why it's never too early to start with sales</p>
+                  <p class="text-body text-muted-foreground">
+                    Revenue lands months after the costs that create it. One board, four months, and the note that
+                    arrives a column too late.
+                  </p>
+                </div>
+                <div class="relative col-span-7 rounded-xl border bg-card px-6 pt-10 pb-6 shadow-md">
+                  <svg class="pointer-events-none absolute inset-0 size-full" aria-hidden="true">
+                    <defs>
+                      <pattern id="dots-0a" width="24" height="24" patternUnits="userSpaceOnUse">
+                        <circle cx="2" cy="2" r="1.2" class="fill-border" />
+                      </pattern>
+                    </defs>
+                    <rect width="100%" height="100%" fill="url(#dots-0a)" />
+                  </svg>
+                  <ol class="relative grid grid-cols-4 gap-4" aria-label="Cashflow board, January to April">
+                    <li class="relative flex flex-col items-center gap-4 rounded-xl border bg-muted px-2 pt-8 pb-4">
+                      <span
+                        class="absolute -top-3 rounded-full bg-foreground px-5 py-1 text-caption font-medium text-background shadow-md"
+                        >Jan</span
+                      >
+                      <span class="w-20 -rotate-2 bg-card shadow-md"
+                        ><span
+                          class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-2"
+                          ><span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
+                          ><span class="text-caption font-semibold whitespace-nowrap">€100,000</span></span
+                        ></span
+                      >
+                      <span class="w-20 rotate-1 bg-card shadow-md"
+                        ><span
+                          class="flex aspect-square flex-col justify-between bg-linear-to-b from-destructive/35 to-destructive/20 p-2"
+                          ><span class="font-mono text-caption text-foreground/70 uppercase">Cost</span
+                          ><span class="text-caption font-semibold whitespace-nowrap">−€50,000</span></span
+                        ></span
+                      >
+                    </li>
+                    <li class="relative flex flex-col items-center gap-4 rounded-xl border bg-muted px-2 pt-8 pb-4">
+                      <span
+                        class="absolute -top-3 rounded-full bg-foreground px-5 py-1 text-caption font-medium text-background shadow-md"
+                        >Feb</span
+                      >
+                      <span class="w-20 rotate-1 bg-card shadow-md"
+                        ><span
+                          class="flex aspect-square flex-col justify-between bg-linear-to-b from-destructive/35 to-destructive/20 p-2"
+                          ><span class="font-mono text-caption text-foreground/70 uppercase">Cost</span
+                          ><span class="text-caption font-semibold whitespace-nowrap">−€50,000</span></span
+                        ></span
+                      >
+                      <span class="w-20 -rotate-1 bg-card shadow-md ring-2 ring-primary ring-offset-2 ring-offset-muted"
+                        ><span
+                          class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-2"
+                          ><span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
+                          ><span class="text-body font-semibold whitespace-nowrap">€0</span></span
+                        ></span
+                      >
+                    </li>
+                    <li class="relative flex flex-col items-center gap-4 rounded-xl border bg-muted px-2 pt-8 pb-4">
+                      <span
+                        class="absolute -top-3 rounded-full bg-foreground px-5 py-1 text-caption font-medium text-background shadow-md"
+                        >Mar</span
+                      >
+                      <span class="w-20 -rotate-2 bg-card shadow-md"
+                        ><span
+                          class="flex aspect-square flex-col justify-between bg-linear-to-b from-destructive/35 to-destructive/20 p-2"
+                          ><span class="font-mono text-caption text-foreground/70 uppercase">Cost</span
+                          ><span class="text-caption font-semibold whitespace-nowrap">−€50,000</span></span
+                        ></span
+                      >
+                      <span class="w-20 border-2 border-dashed border-foreground/25" aria-hidden="true"
+                        ><span class="block aspect-square"></span
+                      ></span>
+                    </li>
+                    <li class="relative flex flex-col items-center gap-4 rounded-xl border bg-muted px-2 pt-8 pb-4">
+                      <span
+                        class="absolute -top-3 rounded-full bg-foreground px-5 py-1 text-caption font-medium text-background shadow-md"
+                        >Apr</span
+                      >
+                      <span class="card-hover card-hover--raise w-28 rotate-2 bg-card shadow-xl" tabindex="0"
+                        ><span
+                          class="flex aspect-square flex-col justify-between bg-linear-to-b from-success/40 to-success/25 p-2"
+                          ><span class="font-mono text-caption text-foreground/70 uppercase">Revenue</span
+                          ><span class="text-body font-semibold whitespace-nowrap">+€1,000,000</span></span
+                        ></span
+                      >
+                    </li>
+                  </ol>
+                  <p class="relative mt-4 flex items-baseline justify-between text-caption text-muted-foreground">
+                    <span class="font-mono uppercase">Cash left</span>
+                    <span>€50,000 · <b class="text-primary">€0</b> · −€50,000 · too late</span>
+                  </p>
+                </div>
+              </div>
+              <ol data-spec="echoes" class="spec-echoes">
+                <li data-spec="echo" data-section="why-watching-cashflow-is-mission-critical">
+                  <p>Section 1 · Why watching cashflow is mission critical</p>
+                  <div data-spec="mock" class="flex flex-col justify-between gap-4 bg-background p-5">
+                    <p class="text-body font-semibold">Why watching cashflow is mission critical</p>
+                    <div class="rounded-lg border bg-card p-2 shadow-sm">
+                      <ol class="grid grid-cols-4 gap-1.5" aria-label="The board, the zero-cash month ringed">
+                        <li class="flex flex-col items-center gap-1.5 rounded-md bg-muted py-2">
+                          <span class="size-6 -rotate-2 bg-linear-to-b from-warning/40 to-warning/25 shadow-sm"></span
+                          ><span
+                            class="size-6 rotate-1 bg-linear-to-b from-destructive/35 to-destructive/20 shadow-sm"
+                          ></span>
+                        </li>
+                        <li class="flex flex-col items-center gap-1.5 rounded-md bg-muted py-2 ring-2 ring-primary">
+                          <span
+                            class="size-6 rotate-1 bg-linear-to-b from-destructive/35 to-destructive/20 shadow-sm"
+                          ></span
+                          ><span
+                            class="flex size-6 -rotate-1 items-center justify-center bg-linear-to-b from-warning/40 to-warning/25 text-caption font-semibold shadow-sm"
+                            >0</span
+                          >
+                        </li>
+                        <li class="flex flex-col items-center gap-1.5 rounded-md bg-muted py-2">
+                          <span
+                            class="size-6 -rotate-2 bg-linear-to-b from-destructive/35 to-destructive/20 shadow-sm"
+                          ></span>
+                        </li>
+                        <li class="flex flex-col items-center gap-1.5 rounded-md bg-muted py-2">
+                          <span class="size-7 rotate-2 bg-linear-to-b from-success/40 to-success/25 shadow-sm"></span>
+                        </li>
+                      </ol>
+                    </div>
+                    <p class="text-caption text-muted-foreground">
+                      The board fills; Feb hits <b class="text-primary">€0</b>.
+                    </p>
+                  </div>
+                </li>
+                <li data-spec="echo" data-section="why-sales-is-more-than-just-selling">
+                  <p>Section 2 · Why sales is more than just selling</p>
+                  <div data-spec="mock" class="flex flex-col justify-between gap-4 bg-background p-5">
+                    <p class="text-body font-semibold">Why sales is more than just selling</p>
+                    <div class="rounded-lg border bg-card p-2 shadow-sm">
+                      <ul
+                        class="mb-2 grid grid-cols-4 gap-1.5 text-center text-caption"
+                        aria-label="Payouts before revenue"
+                      >
+                        <li class="-rotate-2 border bg-card px-1 py-1 shadow-sm">Insight</li>
+                        <li class="rotate-1 border bg-card px-1 py-1 shadow-sm">Trust</li>
+                        <li class="-rotate-1 border bg-card px-1 py-1 shadow-sm">Process</li>
+                        <li></li>
+                      </ul>
+                      <ol class="grid grid-cols-4 gap-1.5" aria-hidden="true">
+                        <li class="h-10 rounded-md bg-muted"></li>
+                        <li class="h-10 rounded-md bg-muted"></li>
+                        <li class="h-10 rounded-md bg-muted"></li>
+                        <li class="flex h-10 items-center justify-center rounded-md bg-muted">
+                          <span class="size-7 rotate-2 bg-linear-to-b from-success/40 to-success/25 shadow-sm"></span>
+                        </li>
+                      </ol>
+                    </div>
+                    <p class="text-caption text-muted-foreground">Three payouts land before the revenue does.</p>
+                  </div>
+                </li>
+                <li data-spec="echo" data-section="how-to-start-doing-sales">
+                  <p>Section 3 · How to start doing sales</p>
+                  <div data-spec="mock" class="flex flex-col justify-between gap-4 bg-background p-5">
+                    <p class="text-body font-semibold">How to start doing sales</p>
+                    <div class="rounded-lg border bg-card p-2 shadow-sm">
+                      <ol
+                        class="mb-2 grid grid-cols-3 items-center gap-1.5 text-center text-caption"
+                        aria-label="Three stages"
+                      >
+                        <li class="-rotate-1 border bg-card px-1 py-1 shadow-sm ring-2 ring-primary">Leads</li>
+                        <li class="rotate-1 border bg-card px-1 py-1 shadow-sm">Opportunities</li>
+                        <li class="-rotate-2 border bg-card px-1 py-1 shadow-sm">Closing</li>
+                      </ol>
+                      <svg viewBox="0 0 240 12" class="mb-1 h-3 w-full" aria-hidden="true">
+                        <path d="M10 6 H226" class="fill-none stroke-primary" stroke-width="2" />
+                        <path d="M220 1 L230 6 L220 11" class="fill-none stroke-primary" stroke-width="2" />
+                      </svg>
+                      <ol class="grid grid-cols-4 gap-1.5" aria-hidden="true">
+                        <li class="h-8 rounded-md bg-muted"></li>
+                        <li class="h-8 rounded-md bg-muted"></li>
+                        <li class="h-8 rounded-md bg-muted"></li>
+                        <li class="flex h-8 items-center justify-center rounded-md bg-muted">
+                          <span class="size-6 rotate-2 bg-linear-to-b from-success/40 to-success/25 shadow-sm"></span>
+                        </li>
+                      </ol>
+                    </div>
+                    <p class="text-caption text-muted-foreground">The stages pinned to the board, leads first.</p>
+                  </div>
+                </li>
+                <li data-spec="echo" data-section="why-building-an-effective-sales-pipeline-takes-time">
+                  <p>Section 4 · Why building an effective sales pipeline takes time</p>
+                  <div data-spec="mock" class="flex flex-col justify-between gap-4 bg-background p-5">
+                    <p class="text-body font-semibold">Why building an effective sales pipeline takes time</p>
+                    <div class="rounded-lg border bg-card p-2 shadow-sm">
+                      <ol class="grid grid-cols-4 gap-1.5" aria-hidden="true">
+                        <li class="flex h-10 items-center justify-center rounded-md bg-muted">
+                          <span class="border bg-card px-1 text-caption shadow-sm">Lead</span>
+                        </li>
+                        <li class="h-10 rounded-md bg-muted"></li>
+                        <li class="h-10 rounded-md bg-muted"></li>
+                        <li class="flex h-10 items-center justify-end rounded-md bg-muted pr-1">
+                          <span class="size-6 translate-x-4 rotate-2 border-2 border-dashed border-success"></span>
+                        </li>
+                      </ol>
+                      <svg viewBox="0 0 240 16" class="mt-1 h-4 w-full" aria-hidden="true">
+                        <path d="M4 2 V10 H236 V2" class="fill-none stroke-primary" stroke-width="2" />
+                      </svg>
+                      <p class="text-center text-caption font-semibold text-primary">Sales cycle ≈ 9.5 months</p>
+                    </div>
+                    <p class="text-caption text-muted-foreground">A January lead lands past the board's edge.</p>
+                  </div>
+                </li>
+                <li data-spec="echo" data-section="start-before-you-need-the-money">
+                  <p>Section 5 · Start before you need the money</p>
+                  <div data-spec="mock" class="flex flex-col justify-between gap-4 bg-background p-5">
+                    <p class="text-body font-semibold">Start before you need the money</p>
+                    <div class="relative rounded-lg border bg-card p-2 pt-6 shadow-sm">
+                      <svg viewBox="0 0 240 20" class="absolute inset-x-2 top-1 h-5" aria-hidden="true">
+                        <path d="M210 16 C 170 2, 70 2, 30 14" class="fill-none stroke-primary" stroke-width="2" />
+                        <path d="M38 8 L28 15 L40 18" class="fill-none stroke-primary" stroke-width="2" />
+                      </svg>
+                      <ol class="grid grid-cols-4 gap-1.5" aria-hidden="true">
+                        <li class="flex h-10 items-center justify-center rounded-md bg-muted">
+                          <span class="size-7 -rotate-2 bg-linear-to-b from-success/40 to-success/25 shadow-sm"></span>
+                        </li>
+                        <li class="h-10 rounded-md bg-muted"></li>
+                        <li class="h-10 rounded-md bg-muted"></li>
+                        <li class="flex h-10 items-center justify-center rounded-md bg-muted">
+                          <span class="size-6 border-2 border-dashed border-foreground/25"></span>
+                        </li>
+                      </ol>
+                    </div>
+                    <p class="text-caption text-muted-foreground">
+                      <b class="text-primary">Start now</b>: the revenue note dragged back to January.
+                    </p>
+                  </div>
+                </li>
+              </ol>
+              <figcaption>
+                <b>0a</b> The cashflow board itself is the Hero motif: the Title slide shows the whole wall with the
+                million arriving a column late, and each section slide pins one new thing to that same board (the
+                zero-cash month, three payouts, the stages, the sales-cycle bracket, the revenue dragged back), so the
+                Red thread is drawn on one surface from first to last. Recommended over 0b and 0c: it is the Brief's
+                Analogy, the board Han picked in 1c, and the cheapest set, since every slide draws the existing
+                <code>CashflowBoard</code>. Build cost: Scene for the Title slide, a Scene per section slide.
+              </figcaption>
+              <details class="spec-build">
+                <summary>Build notes</summary>
+                <div data-spec="build-notes">
+                  The record's <code>title</code> Slide: a Scene from <code>SlideFrame</code>,
+                  <code>HeroTitle</code> and a caption in the left five columns, and <code>CashflowBoard</code> in the
+                  right seven with Slide 1's notes for Jan to Feb, March's cost over a <code>ghost</code>, April's
+                  revenue <code>big</code> and <code>highlight</code> off; the Feb €0 note ringed in
+                  <code>primary</code> through its <code>target</code>. Hover: the revenue note is a
+                  <code>card-hover card-hover--raise</code>, so Han can point at the note that comes too late. Each
+                  section slide is a Scene over the kit's section layout, its h2 the Section title, and a compact
+                  <code>CashflowBoard</code> (notes only, no amounts) carrying that Section's element: Section 1
+                  <code>highlight: 2</code>; Section 2 three neutral notes Insight, Trust, Process pinned above lanes 1
+                  to 3; Section 3 the three stage notes Leads, Opportunities, Closing above the lanes, an inline-SVG
+                  <code>stroke-primary</code> arrow under them, Leads ringed; Section 4
+                  <code>annotations: [{ column: 1, span: 4, kind: 'bracket', text }]</code> and a
+                  <code>ghost</code> revenue note past April; Section 5
+                  <code>arrow: { from: [4, 1], to: [1, 1], label }</code>. The neutral notes above the board are one
+                  Scene-local part, <code>pinned-notes.tsx</code> in the Title slide's folder, moved to
+                  <code>slide-shared/</code> when the section slides import it (FE-007). Tokens: the Visual language's
+                  note tints, <code>bg-muted</code> lanes, <code>bg-foreground</code> pills, <code>primary</code> for
+                  the one element each slide adds. Motion none beyond the shared entrance. i18n keys <code>title</code>,
+                  <code>caption</code>, <code>board.months.*</code>, <code>sections.&lt;slug&gt;.label</code>,
+                  <code>payouts.insight|trust|process</code>, <code>stages.leads|opportunities|closing</code>,
+                  <code>cycle</code>, <code>startNow</code>.
+                </div>
+              </details>
+              <label class="spec-pick"
+                ><input type="checkbox" form="spec-review" name="pick:top" value="0a" /> Pick 0a</label
+              >
+            </figure>
+            <figure data-spec="option" data-option="0b">
+              <div data-spec="mock" class="flex flex-col justify-between gap-8 bg-background px-12 py-12">
+                <div class="grid grid-cols-12 items-end gap-8">
+                  <div class="col-span-7">
+                    <p class="font-mono text-caption tracking-widest text-muted-foreground uppercase">
+                      Foundations · Sales
+                    </p>
+                    <p class="mt-4 text-hero font-semibold">Why it's never too early to start with sales</p>
+                  </div>
+                  <p class="col-span-5 text-body text-muted-foreground">
+                    Your cash runs down a runway one month at a time. The revenue that would save you lands after the
+                    runway ends.
+                  </p>
+                </div>
+                <div class="relative rounded-xl border bg-card p-6 shadow-md">
+                  <svg
+                    viewBox="0 0 1200 300"
+                    class="h-72 w-full"
+                    role="img"
+                    aria-label="Cash runway, January to December"
+                  >
+                    <rect x="300" y="20" width="200" height="230" class="fill-destructive/10" />
+                    <path
+                      d="M60 250 H1180"
+                      class="fill-none stroke-destructive"
+                      stroke-width="2"
+                      stroke-dasharray="8 8"
+                    />
+                    <path
+                      d="M60 40 L200 145 L300 250 L500 250"
+                      class="fill-none stroke-foreground"
+                      stroke-width="5"
+                      stroke-linejoin="round"
+                    />
+                    <path d="M60 40 L200 145 L300 250 L60 250 Z" class="fill-warning/25" />
+                    <path
+                      d="M500 250 L500 60 L1180 60"
+                      class="fill-none stroke-success"
+                      stroke-width="5"
+                      stroke-dasharray="2 12"
+                      stroke-linecap="round"
+                    />
+                    <circle cx="300" cy="250" r="12" class="fill-primary" />
+                    <circle cx="500" cy="60" r="12" class="fill-success" />
+                    <text x="60" y="290" class="fill-muted-foreground text-caption">Jan</text>
+                    <text x="200" y="290" text-anchor="middle" class="fill-muted-foreground text-caption">Feb</text>
+                    <text x="300" y="290" text-anchor="middle" class="fill-primary text-caption font-semibold">€0</text>
+                    <text x="400" y="290" text-anchor="middle" class="fill-muted-foreground text-caption">Mar</text>
+                    <text x="500" y="290" text-anchor="middle" class="fill-muted-foreground text-caption">Apr</text>
+                    <text x="1180" y="290" text-anchor="end" class="fill-muted-foreground text-caption">Dec</text>
+                    <text x="80" y="30" class="fill-foreground text-caption font-semibold">Cash €100,000</text>
+                    <text x="520" y="45" class="fill-foreground text-caption font-semibold">Revenue +€1,000,000</text>
+                  </svg>
+                  <p
+                    class="hover-reveal absolute top-1/3 left-1/4 max-w-48 border bg-card p-3 text-caption shadow-md"
+                    tabindex="0"
+                  >
+                    <b class="text-destructive">No cash</b>
+                    <span class="hover-reveal__detail block text-muted-foreground"
+                      >two months of costs with nothing to pay them</span
+                    >
+                  </p>
+                </div>
+              </div>
+              <ol data-spec="echoes" class="spec-echoes">
+                <li data-spec="echo" data-section="why-watching-cashflow-is-mission-critical">
+                  <p>Section 1 · Why watching cashflow is mission critical</p>
+                  <div data-spec="mock" class="flex flex-col justify-between gap-4 bg-background p-5">
+                    <p class="text-body font-semibold">Why watching cashflow is mission critical</p>
+                    <svg viewBox="0 0 240 100" class="h-24 w-full" aria-hidden="true">
+                      <path
+                        d="M8 88 H232"
+                        class="fill-none stroke-destructive"
+                        stroke-width="1.5"
+                        stroke-dasharray="4 4"
+                      />
+                      <path d="M8 12 L40 50 L64 88 L8 88 Z" class="fill-warning/25" />
+                      <path d="M8 12 L40 50 L64 88" class="fill-none stroke-foreground" stroke-width="3" />
+                      <circle cx="64" cy="88" r="6" class="fill-primary" />
+                      <text x="76" y="80" class="fill-primary text-caption font-semibold">€0 in Feb</text>
+                    </svg>
+                    <p class="text-caption text-muted-foreground">The runway ends in February.</p>
+                  </div>
+                </li>
+                <li data-spec="echo" data-section="why-sales-is-more-than-just-selling">
+                  <p>Section 2 · Why sales is more than just selling</p>
+                  <div data-spec="mock" class="flex flex-col justify-between gap-4 bg-background p-5">
+                    <p class="text-body font-semibold">Why sales is more than just selling</p>
+                    <svg viewBox="0 0 240 100" class="h-24 w-full" aria-hidden="true">
+                      <path d="M8 88 H232" class="fill-none stroke-border" stroke-width="1.5" />
+                      <path
+                        d="M170 20 L232 20"
+                        class="fill-none stroke-success"
+                        stroke-width="3"
+                        stroke-dasharray="2 8"
+                        stroke-linecap="round"
+                      />
+                      <circle cx="30" cy="60" r="6" class="fill-primary" />
+                      <circle cx="85" cy="60" r="6" class="fill-primary" />
+                      <circle cx="140" cy="60" r="6" class="fill-primary" />
+                      <text x="30" y="82" text-anchor="middle" class="fill-foreground text-caption">Insight</text>
+                      <text x="85" y="82" text-anchor="middle" class="fill-foreground text-caption">Trust</text>
+                      <text x="140" y="82" text-anchor="middle" class="fill-foreground text-caption">Process</text>
+                      <text x="232" y="12" text-anchor="end" class="fill-success text-caption">revenue</text>
+                    </svg>
+                    <p class="text-caption text-muted-foreground">Three payouts on the runway before revenue.</p>
+                  </div>
+                </li>
+                <li data-spec="echo" data-section="how-to-start-doing-sales">
+                  <p>Section 3 · How to start doing sales</p>
+                  <div data-spec="mock" class="flex flex-col justify-between gap-4 bg-background p-5">
+                    <p class="text-body font-semibold">How to start doing sales</p>
+                    <svg viewBox="0 0 240 100" class="h-24 w-full" aria-hidden="true">
+                      <path d="M8 70 H232" class="fill-none stroke-border" stroke-width="2" />
+                      <path d="M24 70 H210" class="fill-none stroke-primary" stroke-width="3" />
+                      <path d="M204 64 L214 70 L204 76" class="fill-none stroke-primary" stroke-width="3" />
+                      <circle cx="24" cy="70" r="7" class="fill-primary" />
+                      <circle cx="116" cy="70" r="7" class="fill-card stroke-primary" stroke-width="3" />
+                      <circle cx="200" cy="70" r="7" class="fill-card stroke-primary" stroke-width="3" />
+                      <text x="24" y="50" text-anchor="middle" class="fill-foreground text-caption">Leads</text>
+                      <text x="116" y="50" text-anchor="middle" class="fill-foreground text-caption">
+                        Opportunities
+                      </text>
+                      <text x="204" y="50" text-anchor="middle" class="fill-foreground text-caption">Closing</text>
+                    </svg>
+                    <p class="text-caption text-muted-foreground">Three stages marked on the runway, leads first.</p>
+                  </div>
+                </li>
+                <li data-spec="echo" data-section="why-building-an-effective-sales-pipeline-takes-time">
+                  <p>Section 4 · Why building an effective sales pipeline takes time</p>
+                  <div data-spec="mock" class="flex flex-col justify-between gap-4 bg-background p-5">
+                    <p class="text-body font-semibold">Why building an effective sales pipeline takes time</p>
+                    <svg viewBox="0 0 240 100" class="h-24 w-full" aria-hidden="true">
+                      <path d="M8 70 H232" class="fill-none stroke-border" stroke-width="2" />
+                      <path d="M12 52 V60 H196 V52" class="fill-none stroke-primary" stroke-width="2" />
+                      <circle cx="12" cy="70" r="5" class="fill-primary" />
+                      <circle cx="196" cy="70" r="6" class="fill-success" />
+                      <text x="104" y="44" text-anchor="middle" class="fill-primary text-caption font-semibold">
+                        ≈ 9.5 months
+                      </text>
+                      <text x="12" y="92" class="fill-muted-foreground text-caption">Jan</text>
+                      <text x="196" y="92" text-anchor="middle" class="fill-muted-foreground text-caption">Oct</text>
+                    </svg>
+                    <p class="text-caption text-muted-foreground">A lead in January closes in October.</p>
+                  </div>
+                </li>
+                <li data-spec="echo" data-section="start-before-you-need-the-money">
+                  <p>Section 5 · Start before you need the money</p>
+                  <div data-spec="mock" class="flex flex-col justify-between gap-4 bg-background p-5">
+                    <p class="text-body font-semibold">Start before you need the money</p>
+                    <svg viewBox="0 0 240 100" class="h-24 w-full" aria-hidden="true">
+                      <path
+                        d="M8 88 H232"
+                        class="fill-none stroke-destructive"
+                        stroke-width="1.5"
+                        stroke-dasharray="4 4"
+                      />
+                      <path d="M8 12 L40 44 L40 16 L232 16" class="fill-none stroke-foreground" stroke-width="3" />
+                      <circle cx="40" cy="44" r="6" class="fill-success" />
+                      <text x="52" y="40" class="fill-primary text-caption font-semibold">Start now: it holds</text>
+                    </svg>
+                    <p class="text-caption text-muted-foreground">Revenue lands before the line touches zero.</p>
+                  </div>
+                </li>
+              </ol>
+              <figcaption>
+                <b>0b</b> The cash runway as a line: cash falls to zero in February while the revenue line only starts
+                in April, and each section slide redraws the same runway with its Section on it (the zero point, three
+                early payouts, the stages, the 9.5-month bracket, the line that holds). It states the Red thread most
+                precisely, but as a chart it leans furthest from the Board Style. Build cost: a new shared chart part, a
+                Scene for the Title slide and one per section slide.
+              </figcaption>
+              <details class="spec-build">
+                <summary>Build notes</summary>
+                <div data-spec="build-notes">
+                  The record's <code>title</code> Slide: a Scene from <code>SlideFrame</code>,
+                  <code>HeroTitle</code> over a caption, and a new server part <code>cash-runway.tsx</code>: an inline
+                  SVG chart,
+                  <code
+                    >props: { months: string[]; cash: number[]; revenueFrom?: number; marks?: { month: number; label:
+                    string }[]; bracket?: { from: number; to: number; label: string } }</code
+                  >, the cash line <code>stroke-foreground</code> over a <code>fill-warning/25</code> area, the zero
+                  line <code>stroke-destructive</code> dashed, the no-cash months <code>fill-destructive/10</code>, the
+                  revenue <code>stroke-success</code>, the zero point <code>fill-primary</code>. It lives in
+                  <code>slide-shared/cash-runway/</code> from the start, since the Title slide and five section slides
+                  draw it (FE-007). Hover: the "No cash" call-out is a <code>hover-reveal</code> whose
+                  <code>hover-reveal__detail</code> names the two months. Section slides: Scenes over the kit's section
+                  layout, each a compact runway with its <code>marks</code> or <code>bracket</code>. Motion none beyond
+                  the shared entrance. i18n keys <code>title</code>, <code>caption</code>, <code>months.*</code>,
+                  <code>noCash.label|detail</code>, <code>payouts.*</code>, <code>stages.*</code>, <code>cycle</code>,
+                  <code>startNow</code>.
+                </div>
+              </details>
+              <label class="spec-pick"
+                ><input type="checkbox" form="spec-review" name="pick:top" value="0b" /> Pick 0b</label
+              >
+            </figure>
+            <figure data-spec="option" data-option="0c">
+              <div data-spec="mock" class="flex flex-col justify-between gap-8 bg-background px-12 py-12">
+                <div class="max-w-4xl">
+                  <p class="font-mono text-caption tracking-widest text-muted-foreground uppercase">
+                    Foundations · Sales
+                  </p>
+                  <p class="mt-4 text-hero font-semibold">Why it's never too early to start with sales</p>
+                  <p class="mt-4 text-body text-muted-foreground">
+                    An empty pipeline, one note in it, and a cash lane waiting for a note that takes months to arrive.
+                  </p>
+                </div>
+                <ol
+                  class="focus-group focus-group--dim-others grid grid-cols-4 gap-5 rounded-xl border bg-card px-6 pt-10 pb-6 shadow-md"
+                  aria-label="The pipeline, nearly empty"
+                >
+                  <li
+                    class="focus-group__item relative flex min-h-48 flex-col items-center gap-3 rounded-xl border bg-muted px-3 pt-8 pb-4"
+                    tabindex="0"
+                  >
+                    <span
+                      class="absolute -top-3 rounded-full bg-foreground px-5 py-1 text-caption font-medium text-background shadow-md"
+                      >Leads</span
+                    >
+                    <span
+                      class="w-32 -rotate-2 border bg-card p-3 shadow-md ring-2 ring-primary ring-offset-2 ring-offset-muted"
+                    >
+                      <span class="block font-mono text-caption text-muted-foreground uppercase">Lead</span>
+                      <span class="block text-body font-semibold">Your first lead</span>
+                    </span>
+                  </li>
+                  <li
+                    class="focus-group__item relative flex min-h-48 flex-col items-center gap-3 rounded-xl border bg-muted px-3 pt-8 pb-4"
+                    tabindex="0"
+                  >
+                    <span
+                      class="absolute -top-3 rounded-full bg-foreground px-5 py-1 text-caption font-medium text-background shadow-md"
+                      >Opportunities</span
+                    >
+                    <span class="h-20 w-32 border-2 border-dashed border-foreground/20"></span>
+                  </li>
+                  <li
+                    class="focus-group__item relative flex min-h-48 flex-col items-center gap-3 rounded-xl border bg-muted px-3 pt-8 pb-4"
+                    tabindex="0"
+                  >
+                    <span
+                      class="absolute -top-3 rounded-full bg-foreground px-5 py-1 text-caption font-medium text-background shadow-md"
+                      >Closing</span
+                    >
+                    <span class="h-20 w-32 border-2 border-dashed border-foreground/20"></span>
+                  </li>
+                  <li
+                    class="focus-group__item relative flex min-h-48 flex-col items-center gap-3 rounded-xl border bg-muted px-3 pt-8 pb-4"
+                    tabindex="0"
+                  >
+                    <span
+                      class="absolute -top-3 rounded-full bg-foreground px-5 py-1 text-caption font-medium text-background shadow-md"
+                      >Cash in</span
+                    >
+                    <span
+                      class="flex aspect-square w-28 rotate-1 flex-col justify-between border-2 border-dashed border-success p-3"
+                    >
+                      <span class="font-mono text-caption text-muted-foreground uppercase">Revenue</span>
+                      <span class="text-body font-semibold text-muted-foreground">April?</span>
+                    </span>
+                  </li>
+                </ol>
+              </div>
+              <ol data-spec="echoes" class="spec-echoes">
+                <li data-spec="echo" data-section="why-watching-cashflow-is-mission-critical">
+                  <p>Section 1 · Why watching cashflow is mission critical</p>
+                  <div data-spec="mock" class="flex flex-col justify-between gap-4 bg-background p-5">
+                    <p class="text-body font-semibold">Why watching cashflow is mission critical</p>
+                    <ol class="grid grid-cols-4 gap-1.5 rounded-lg border bg-card p-2 shadow-sm" aria-hidden="true">
+                      <li class="h-14 rounded-md bg-muted"></li>
+                      <li class="h-14 rounded-md bg-muted"></li>
+                      <li class="h-14 rounded-md bg-muted"></li>
+                      <li class="flex h-14 items-center justify-center rounded-md bg-muted ring-2 ring-primary">
+                        <span
+                          class="flex size-9 -rotate-2 items-center justify-center bg-linear-to-b from-warning/40 to-warning/25 text-caption font-semibold shadow-sm"
+                          >€0</span
+                        >
+                      </li>
+                    </ol>
+                    <p class="text-caption text-muted-foreground">An empty pipeline; the cash lane reads €0.</p>
+                  </div>
+                </li>
+                <li data-spec="echo" data-section="why-sales-is-more-than-just-selling">
+                  <p>Section 2 · Why sales is more than just selling</p>
+                  <div data-spec="mock" class="flex flex-col justify-between gap-4 bg-background p-5">
+                    <p class="text-body font-semibold">Why sales is more than just selling</p>
+                    <ol
+                      class="grid grid-cols-4 gap-1.5 rounded-lg border bg-card p-2 text-center text-caption shadow-sm"
+                      aria-hidden="true"
+                    >
+                      <li class="flex h-14 items-center justify-center rounded-md bg-muted">
+                        <span class="-rotate-2 border bg-card px-1 shadow-sm">Insight</span>
+                      </li>
+                      <li class="flex h-14 items-center justify-center rounded-md bg-muted">
+                        <span class="rotate-1 border bg-card px-1 shadow-sm">Trust</span>
+                      </li>
+                      <li class="flex h-14 items-center justify-center rounded-md bg-muted">
+                        <span class="-rotate-1 border bg-card px-1 shadow-sm">Process</span>
+                      </li>
+                      <li class="flex h-14 items-center justify-center rounded-md bg-muted">
+                        <span class="size-7 border-2 border-dashed border-success"></span>
+                      </li>
+                    </ol>
+                    <p class="text-caption text-muted-foreground">Each stage pays out before the cash lane does.</p>
+                  </div>
+                </li>
+                <li data-spec="echo" data-section="how-to-start-doing-sales">
+                  <p>Section 3 · How to start doing sales</p>
+                  <div data-spec="mock" class="flex flex-col justify-between gap-4 bg-background p-5">
+                    <p class="text-body font-semibold">How to start doing sales</p>
+                    <ol class="grid grid-cols-4 gap-1.5 rounded-lg border bg-card p-2 shadow-sm" aria-hidden="true">
+                      <li
+                        class="grid h-14 grid-cols-2 place-items-center gap-0.5 rounded-md bg-muted p-1 ring-2 ring-primary"
+                      >
+                        <span class="h-3 w-5 -rotate-2 border bg-card shadow-sm"></span
+                        ><span class="h-3 w-5 rotate-1 border bg-card shadow-sm"></span
+                        ><span class="h-3 w-5 rotate-2 border bg-card shadow-sm"></span
+                        ><span class="h-3 w-5 -rotate-1 border bg-card shadow-sm"></span>
+                      </li>
+                      <li class="flex h-14 flex-col items-center justify-center gap-1 rounded-md bg-muted">
+                        <span class="h-3 w-5 rotate-1 border bg-card shadow-sm"></span
+                        ><span class="h-3 w-5 -rotate-2 border bg-card shadow-sm"></span>
+                      </li>
+                      <li class="h-14 rounded-md bg-muted"></li>
+                      <li class="flex h-14 items-center justify-center rounded-md bg-muted">
+                        <span class="size-7 border-2 border-dashed border-success"></span>
+                      </li>
+                    </ol>
+                    <p class="text-caption text-muted-foreground">Leads fill the first lane; two move on.</p>
+                  </div>
+                </li>
+                <li data-spec="echo" data-section="why-building-an-effective-sales-pipeline-takes-time">
+                  <p>Section 4 · Why building an effective sales pipeline takes time</p>
+                  <div data-spec="mock" class="flex flex-col justify-between gap-4 bg-background p-5">
+                    <p class="text-body font-semibold">Why building an effective sales pipeline takes time</p>
+                    <div class="rounded-lg border bg-card p-2 shadow-sm">
+                      <ol class="grid grid-cols-4 gap-1.5 text-center text-caption font-semibold" aria-hidden="true">
+                        <li class="rounded-md bg-muted py-2">27</li>
+                        <li class="rounded-md bg-muted py-2">3</li>
+                        <li class="rounded-md bg-muted py-2 text-primary">1</li>
+                        <li class="flex items-center justify-center rounded-md bg-muted">
+                          <span class="size-6 border-2 border-dashed border-success"></span>
+                        </li>
+                      </ol>
+                      <svg viewBox="0 0 240 14" class="mt-1 h-3.5 w-full" aria-hidden="true">
+                        <path d="M4 2 V10 H236 V2" class="fill-none stroke-primary" stroke-width="2" />
+                      </svg>
+                      <p class="text-center text-caption font-semibold text-primary">27:1 over ≈ 9.5 months</p>
+                    </div>
+                    <p class="text-caption text-muted-foreground">The lanes thin out, and slowly.</p>
+                  </div>
+                </li>
+                <li data-spec="echo" data-section="start-before-you-need-the-money">
+                  <p>Section 5 · Start before you need the money</p>
+                  <div data-spec="mock" class="flex flex-col justify-between gap-4 bg-background p-5">
+                    <p class="text-body font-semibold">Start before you need the money</p>
+                    <ol class="grid grid-cols-4 gap-1.5 rounded-lg border bg-card p-2 shadow-sm" aria-hidden="true">
+                      <li class="flex h-14 items-center justify-center gap-0.5 rounded-md bg-muted">
+                        <span class="h-3 w-5 -rotate-2 border bg-card shadow-sm"></span
+                        ><span class="h-3 w-5 rotate-1 border bg-card shadow-sm"></span>
+                      </li>
+                      <li class="flex h-14 items-center justify-center rounded-md bg-muted">
+                        <span class="h-3 w-5 rotate-2 border bg-card shadow-sm"></span>
+                      </li>
+                      <li class="flex h-14 items-center justify-center rounded-md bg-muted">
+                        <span class="h-3 w-5 -rotate-1 border bg-card shadow-sm"></span>
+                      </li>
+                      <li class="flex h-14 items-center justify-center rounded-md bg-muted ring-2 ring-primary">
+                        <span class="size-9 rotate-2 bg-linear-to-b from-success/40 to-success/25 shadow-sm"></span>
+                      </li>
+                    </ol>
+                    <p class="text-caption text-muted-foreground">
+                      A full pipeline: <b class="text-primary">revenue lands</b> in the cash lane.
+                    </p>
+                  </div>
+                </li>
+              </ol>
+              <figcaption>
+                <b>0c</b> The pipeline filled step by step: the Title slide is an empty deal board with one lead and a
+                dashed revenue note waiting in the cash lane, and each section slide fuels it a little more until the
+                revenue note lands in Section 5. It foreshadows the method most strongly, but leaves the cashflow board,
+                the Brief's Analogy, to the page Slides. Build cost: Slide 4's deal board moved to
+                <code>slide-shared/</code>, a Scene for the Title slide and one per section slide.
+              </figcaption>
+              <details class="spec-build">
+                <summary>Build notes</summary>
+                <div data-spec="build-notes">
+                  The record's <code>title</code> Slide: a Scene from <code>SlideFrame</code>,
+                  <code>HeroTitle</code> and caption above four lanes drawn with Slide 4's <code>deal-board.tsx</code>,
+                  which moves to <code>slide-shared/deal-board/</code> once the Title slide imports it (FE-007), given
+                  four lanes Leads, Opportunities, Closing, Cash in; the first lead ringed in <code>primary</code>, the
+                  cash lane a dashed <code>border-success</code> ghost note. Hover: the lanes are
+                  <code>focus-group__item</code>s of a <code>focus-group--dim-others</code>, so pointing at one lane
+                  dims the rest. Section slides: Scenes over the kit's section layout, each a compact board in that
+                  Section's state (cash lane €0; Insight, Trust, Process per lane; leads filling; counts 27, 3, 1 with a
+                  <code>stroke-primary</code> bracket; a revenue note in the cash lane), the one change ringed in
+                  <code>primary</code>. Motion none beyond the shared entrance. i18n keys <code>title</code>,
+                  <code>caption</code>, <code>lanes.leads|opportunities|closing|cashIn</code>, <code>firstLead</code>,
+                  <code>payouts.*</code>, <code>cycle</code>.
+                </div>
+              </details>
+              <label class="spec-pick"
+                ><input type="checkbox" form="spec-review" name="pick:top" value="0c" /> Pick 0c</label
+              >
+            </figure>
+          </div>
+          <textarea
+            class="spec-note"
+            form="spec-review"
+            name="note:top"
+            placeholder="Note on the Title slide and section slides"
+          ></textarea>
+        </article>
+
         <section data-spec="section" id="why-watching-cashflow-is-mission-critical">
           <div class="spec-section-band">
-            <p class="spec-kicker">Section 1 · section slide, the kit's section layout, motion none</p>
+            <p class="spec-kicker">Section 1 · section slide, drawn in the Title-slide Options</p>
             <h2>Why watching cashflow is mission critical</h2>
             <ol data-spec="voice-script">
               <li>
@@ -675,6 +1452,108 @@
               <span class="spec-number">1</span>
               <h3>Watch your cashflow</h3>
             </header>
+            <div class="spec-words">
+              <input
+                type="radio"
+                name="words:watch-your-cashflow"
+                id="watch-your-cashflow--visual-idea"
+                value="visual-idea"
+                checked
+              />
+              <label for="watch-your-cashflow--visual-idea">Visual idea</label>
+              <input
+                type="radio"
+                name="words:watch-your-cashflow"
+                id="watch-your-cashflow--voice-script"
+                value="voice-script"
+              />
+              <label for="watch-your-cashflow--voice-script">Voice script</label>
+              <input
+                type="radio"
+                name="words:watch-your-cashflow"
+                id="watch-your-cashflow--speaker-notes"
+                value="speaker-notes"
+              />
+              <label for="watch-your-cashflow--speaker-notes">Speaker notes</label>
+              <div class="spec-card spec-panel" data-panel="visual-idea">
+                <h4>Visual idea</h4>
+                <p class="text-caption"><code>master: basic-page · motion: local</code></p>
+                <p data-spec="visual-idea">
+                  A planning board of four month columns, Jan to April, each a pale lane under a dark month label,
+                  filled with sticky notes: yellow cash, red cost, green revenue. The notes arrive month by month: Jan
+                  holds cash €100.000, cost €50.000 and cash €50.000; Feb holds cash €50.000, cost €50.000 and a larger
+                  cash €0; March holds a cost of €50.000 with nothing to pay it; April holds revenue +€1.000.000. After
+                  the March note lands, a red "Bankrupt" stamp falls across the board. The viewer sees the million-euro
+                  note arrive one column too late.
+                </p>
+                <p class="text-caption">
+                  <code>Design reference: reference/source-deck/design-reference.md#page-3</code>
+                </p>
+              </div>
+              <div class="spec-card spec-panel" data-panel="voice-script">
+                <h4>Voice script</h4>
+                <ol data-spec="voice-script">
+                  <li>
+                    <strong>Walk the months</strong> — Read it with me. January, you start with 100 thousand in cash and
+                    50 thousand goes out. February, another 50 thousand goes out, and at the end of February your cash
+                    is zero.
+                  </li>
+                  <li>
+                    <strong>March has no money</strong> — March arrives and the cost lands on an empty account, with
+                    nothing to pay it. The big number sits in April, one month late.
+                  </li>
+                  <li>
+                    <strong>Antithesis</strong> — A million euros is coming, and the company is gone. Right on paper,
+                    dead on the calendar.
+                  </li>
+                  <li>
+                    <strong>Hand over the verdict</strong> — So find your own February: the month your cash hits zero.
+                    And if that is the month you run out, when would you have needed to start selling?
+                  </li>
+                </ol>
+              </div>
+              <div class="spec-card spec-panel" data-panel="speaker-notes">
+                <h4>Speaker notes</h4>
+                <ol data-spec="speaker-notes">
+                  <li>
+                    <strong>Costs begin before customers</strong> — company setup and the founders' living costs arise
+                    before a startup has users or income [1].
+                    <ul>
+                      <li data-source="1">
+                        [1] Paul Graham, A Student's Guide to Startups: Startup Funding —
+                        <a href="https://www.paulgraham.com/startupfunding.html"
+                          >https://www.paulgraham.com/startupfunding.html</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>A high burn rate is a clock</strong> — it puts a startup under constant time pressure, and
+                    the stated remedy is to spend little while working fast [1].
+                    <ul>
+                      <li data-source="1">
+                        [1] Paul Graham, A Student's Guide to Startups: Startup Funding —
+                        <a href="https://www.paulgraham.com/startupfunding.html"
+                          >https://www.paulgraham.com/startupfunding.html</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>The default-alive test</strong> — ask whether the company reaches profitability on its
+                    remaining money at current expenses and growth; worrying too early is cheap, worrying too late is
+                    dangerous [2].
+                    <ul>
+                      <li data-source="2">
+                        [2] Paul Graham, Default Alive or Default Dead? —
+                        <a href="https://paulgraham.com/aord.html">https://paulgraham.com/aord.html</a>
+                      </li>
+                      <li>target: the Cash €0 note in Feb</li>
+                    </ul>
+                  </li>
+                </ol>
+              </div>
+            </div>
             <div class="spec-options">
               <figure data-spec="option" data-option="1a" data-recommended>
                 <div data-spec="mock" class="flex flex-col gap-10 bg-background px-12 py-12">
@@ -1433,86 +2312,6 @@
                 >
               </figure>
             </div>
-            <div class="spec-words">
-              <div class="spec-card">
-                <h4>Voice script</h4>
-                <ol data-spec="voice-script">
-                  <li>
-                    <strong>Walk the months</strong> — Read it with me. January, you start with 100 thousand in cash and
-                    50 thousand goes out. February, another 50 thousand goes out, and at the end of February your cash
-                    is zero.
-                  </li>
-                  <li>
-                    <strong>March has no money</strong> — March arrives and the cost lands on an empty account, with
-                    nothing to pay it. The big number sits in April, one month late.
-                  </li>
-                  <li>
-                    <strong>Antithesis</strong> — A million euros is coming, and the company is gone. Right on paper,
-                    dead on the calendar.
-                  </li>
-                  <li>
-                    <strong>Hand over the verdict</strong> — So find your own February: the month your cash hits zero.
-                    And if that is the month you run out, when would you have needed to start selling?
-                  </li>
-                </ol>
-                <details class="spec-visual-idea">
-                  <summary>Visual idea from the Dossier</summary>
-                  <p class="text-caption"><code>master: basic-page · motion: local</code></p>
-                  <p data-spec="visual-idea">
-                    A planning board of four month columns, Jan to April, each a pale lane under a dark month label,
-                    filled with sticky notes: yellow cash, red cost, green revenue. The notes arrive month by month: Jan
-                    holds cash €100.000, cost €50.000 and cash €50.000; Feb holds cash €50.000, cost €50.000 and a
-                    larger cash €0; March holds a cost of €50.000 with nothing to pay it; April holds revenue
-                    +€1.000.000. After the March note lands, a red "Bankrupt" stamp falls across the board. The viewer
-                    sees the million-euro note arrive one column too late.
-                  </p>
-                  <p class="text-caption">
-                    <code>Design reference: reference/source-deck/design-reference.md#page-3</code>
-                  </p>
-                </details>
-              </div>
-              <div class="spec-card">
-                <h4>Speaker notes</h4>
-                <ol data-spec="speaker-notes">
-                  <li>
-                    <strong>Costs begin before customers</strong> — company setup and the founders' living costs arise
-                    before a startup has users or income [1].
-                    <ul>
-                      <li data-source="1">
-                        [1] Paul Graham, A Student's Guide to Startups: Startup Funding —
-                        <a href="https://www.paulgraham.com/startupfunding.html"
-                          >https://www.paulgraham.com/startupfunding.html</a
-                        >
-                      </li>
-                    </ul>
-                  </li>
-                  <li>
-                    <strong>A high burn rate is a clock</strong> — it puts a startup under constant time pressure, and
-                    the stated remedy is to spend little while working fast [1].
-                    <ul>
-                      <li data-source="1">
-                        [1] Paul Graham, A Student's Guide to Startups: Startup Funding —
-                        <a href="https://www.paulgraham.com/startupfunding.html"
-                          >https://www.paulgraham.com/startupfunding.html</a
-                        >
-                      </li>
-                    </ul>
-                  </li>
-                  <li>
-                    <strong>The default-alive test</strong> — ask whether the company reaches profitability on its
-                    remaining money at current expenses and growth; worrying too early is cheap, worrying too late is
-                    dangerous [2].
-                    <ul>
-                      <li data-source="2">
-                        [2] Paul Graham, Default Alive or Default Dead? —
-                        <a href="https://paulgraham.com/aord.html">https://paulgraham.com/aord.html</a>
-                      </li>
-                      <li>target: the Cash €0 note in Feb</li>
-                    </ul>
-                  </li>
-                </ol>
-              </div>
-            </div>
             <textarea
               class="spec-note"
               form="spec-review"
@@ -1524,7 +2323,7 @@
 
         <section data-spec="section" id="why-sales-is-more-than-just-selling">
           <div class="spec-section-band">
-            <p class="spec-kicker">Section 2 · section slide, the kit's section layout, motion none</p>
+            <p class="spec-kicker">Section 2 · section slide, drawn in the Title-slide Options</p>
             <h2>Why sales is more than just selling</h2>
             <ol data-spec="voice-script">
               <li>
@@ -1543,6 +2342,164 @@
               <span class="spec-number">2</span>
               <h3>Sales is more than selling</h3>
             </header>
+            <div class="spec-words">
+              <input
+                type="radio"
+                name="words:sales-is-more-than-selling"
+                id="sales-is-more-than-selling--visual-idea"
+                value="visual-idea"
+                checked
+              />
+              <label for="sales-is-more-than-selling--visual-idea">Visual idea</label>
+              <input
+                type="radio"
+                name="words:sales-is-more-than-selling"
+                id="sales-is-more-than-selling--voice-script"
+                value="voice-script"
+              />
+              <label for="sales-is-more-than-selling--voice-script">Voice script</label>
+              <input
+                type="radio"
+                name="words:sales-is-more-than-selling"
+                id="sales-is-more-than-selling--speaker-notes"
+                value="speaker-notes"
+              />
+              <label for="sales-is-more-than-selling--speaker-notes">Speaker notes</label>
+              <div class="spec-card spec-panel" data-panel="visual-idea">
+                <h4>Visual idea</h4>
+                <p class="text-caption"><code>master: grid-1x3 · motion: local</code></p>
+                <p data-spec="visual-idea">
+                  Three boxes side by side with oversized numerals: "Gain market insight" (every customer talk yields
+                  research data: where to spend time, validated hypotheses, network), "Gain internal insights" (how
+                  effective are you, can you build a repeatable and scalable sales process: first sales hire, growing
+                  the org) and "Increase trust" (investors and customers: attracting investment, convincing reluctant
+                  customers). Arrows run from the insight boxes into "Increase trust", which is drawn heaviest, so the
+                  boxes read as converging on it. Hovering a box grows an accent line above it.
+                </p>
+                <p class="text-caption">
+                  <code>Design reference: reference/source-deck/design-reference.md#page-4</code>
+                </p>
+              </div>
+              <div class="spec-card spec-panel" data-panel="voice-script">
+                <h4>Voice script</h4>
+                <ol data-spec="voice-script">
+                  <li>
+                    <strong>Every talk is research</strong> — Every customer conversation is market research you did not
+                    have to pay for. It tells you where to spend your time and which hypothesis to drop. This is my
+                    reading of selling as a conversation, not a measured result.
+                  </li>
+                  <li>
+                    <strong>Know how well you sell</strong> — The second payout stays inside your company. You learn how
+                    well you sell, and whether anyone besides you could repeat it, because a repeatable process is what
+                    lets you hire the first salesperson.
+                  </li>
+                  <li>
+                    <strong>Trust is the sum</strong> — The third is trust. Investors and reluctant customers trust what
+                    someone else has already bought. To be straight about it, that is a claim and not a proof: a first
+                    result shows that your team can sell, and that is why it counts.
+                  </li>
+                  <li>
+                    <strong>Verdict</strong> — Insight and process both end in trust, so look at the three boxes and ask
+                    yourself which one your next investor would ask about first.
+                  </li>
+                </ol>
+              </div>
+              <div class="spec-card spec-panel" data-panel="speaker-notes">
+                <h4>Speaker notes</h4>
+                <ol data-spec="speaker-notes">
+                  <li>
+                    <strong>Your starting model is wrong</strong> — a founder's initial model of users is always
+                    inaccurate, even when the founder is one of them, and direct contact with the earliest users gives
+                    the best feedback the company will get [1].
+                    <ul>
+                      <li data-source="1">
+                        [1] Graham, Do Things that Don't Scale —
+                        <a href="https://paulgraham.com/ds.html">https://paulgraham.com/ds.html</a>
+                      </li>
+                      <li>target: the "Gain market insight" box</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>Ask about the last time</strong> — what yields insight is specifics: ask about problems the
+                    user already faced, not hypotheticals, and treat talking to customers as part of the CEO's job [2].
+                    The sources are interviews and users, not sales calls; that a sales conversation yields the same
+                    facts is an inference.
+                    <ul>
+                      <li data-source="2">
+                        [2] Y Combinator (Migicovsky), Startup School Week 1 Recap: How to Talk to Users —
+                        <a
+                          href="https://www.ycombinator.com/blog/startup-school-week-1-recap-kevin-hale-and-eric-migicovsky/"
+                          >https://www.ycombinator.com/blog/startup-school-week-1-recap-kevin-hale-and-eric-migicovsky/</a
+                        >
+                      </li>
+                      <li>target: the "Gain market insight" box</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>A signal must be costly to fake</strong> — when one side knows more than the other, an
+                    action that is cheaper for a strong type than a weak one carries information, because the cost
+                    carries it, not the content [3].
+                    <ul>
+                      <li data-source="3">
+                        [3] Spence, Job Market Signaling —
+                        <a href="https://doi.org/10.2307/1882010">https://doi.org/10.2307/1882010</a>
+                      </li>
+                      <li>target: the "Increase trust" box</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>Investors read the team</strong> — in a survey of 885 institutional venture capitalists the
+                    management team was the most-cited factor (95%), ahead of business model (83%), product (74%) and
+                    market (68%) [4].
+                    <ul>
+                      <li data-source="4">
+                        [4] Gompers, Gornall, Kaplan and Strebulaev, How Do Venture Capitalists Make Decisions? —
+                        <a href="https://www.nber.org/papers/w22587">https://www.nber.org/papers/w22587</a>
+                      </li>
+                      <li>target: the "Increase trust" box</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>No study measures LOIs or pipelines</strong> — carrying signaling theory over to early sales
+                    results is an inference, and a non-binding letter of intent is cheap to give, so it separates strong
+                    from weak firms poorly; the more binding the commitment, the more trust it plausibly earns [3].
+                    <ul>
+                      <li data-source="3">
+                        [3] Spence, Job Market Signaling —
+                        <a href="https://doi.org/10.2307/1882010">https://doi.org/10.2307/1882010</a>
+                      </li>
+                      <li>target: the "Increase trust" box</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>Premature scaling burns cash</strong> — Blank calls premature scaling of sales and marketing
+                    the leading cause of cash loss in a startup [5].
+                    <ul>
+                      <li data-source="5">
+                        [5] Blank, It Must Be A Marketing Problem —
+                        <a href="https://steveblank.com/2010/02/11/it-must-be-a-marketing-problem/"
+                          >https://steveblank.com/2010/02/11/it-must-be-a-marketing-problem/</a
+                        >
+                      </li>
+                      <li>target: the "Gain internal insights" box</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>Friends' orders can mislead</strong> — early orders from board members or friends are good
+                    for morale and cash but may not show what the business model is [5].
+                    <ul>
+                      <li data-source="5">
+                        [5] Blank, It Must Be A Marketing Problem —
+                        <a href="https://steveblank.com/2010/02/11/it-must-be-a-marketing-problem/"
+                          >https://steveblank.com/2010/02/11/it-must-be-a-marketing-problem/</a
+                        >
+                      </li>
+                      <li>target: the "Gain internal insights" box</li>
+                    </ul>
+                  </li>
+                </ol>
+              </div>
+            </div>
             <div class="spec-options">
               <figure data-spec="option" data-option="2a" data-recommended>
                 <div data-spec="mock" class="flex flex-col gap-10 bg-background p-12">
@@ -2411,142 +3368,6 @@
                 >
               </figure>
             </div>
-            <div class="spec-words">
-              <div class="spec-card">
-                <h4>Voice script</h4>
-                <ol data-spec="voice-script">
-                  <li>
-                    <strong>Every talk is research</strong> — Every customer conversation is market research you did not
-                    have to pay for. It tells you where to spend your time and which hypothesis to drop. This is my
-                    reading of selling as a conversation, not a measured result.
-                  </li>
-                  <li>
-                    <strong>Know how well you sell</strong> — The second payout stays inside your company. You learn how
-                    well you sell, and whether anyone besides you could repeat it, because a repeatable process is what
-                    lets you hire the first salesperson.
-                  </li>
-                  <li>
-                    <strong>Trust is the sum</strong> — The third is trust. Investors and reluctant customers trust what
-                    someone else has already bought. To be straight about it, that is a claim and not a proof: a first
-                    result shows that your team can sell, and that is why it counts.
-                  </li>
-                  <li>
-                    <strong>Verdict</strong> — Insight and process both end in trust, so look at the three boxes and ask
-                    yourself which one your next investor would ask about first.
-                  </li>
-                </ol>
-                <details class="spec-visual-idea">
-                  <summary>Visual idea from the Dossier</summary>
-                  <p class="text-caption"><code>master: grid-1x3 · motion: local</code></p>
-                  <p data-spec="visual-idea">
-                    Three boxes side by side with oversized numerals: "Gain market insight" (every customer talk yields
-                    research data: where to spend time, validated hypotheses, network), "Gain internal insights" (how
-                    effective are you, can you build a repeatable and scalable sales process: first sales hire, growing
-                    the org) and "Increase trust" (investors and customers: attracting investment, convincing reluctant
-                    customers). Arrows run from the insight boxes into "Increase trust", which is drawn heaviest, so the
-                    boxes read as converging on it. Hovering a box grows an accent line above it.
-                  </p>
-                  <p class="text-caption">
-                    <code>Design reference: reference/source-deck/design-reference.md#page-4</code>
-                  </p>
-                </details>
-              </div>
-              <div class="spec-card">
-                <h4>Speaker notes</h4>
-                <ol data-spec="speaker-notes">
-                  <li>
-                    <strong>Your starting model is wrong</strong> — a founder's initial model of users is always
-                    inaccurate, even when the founder is one of them, and direct contact with the earliest users gives
-                    the best feedback the company will get [1].
-                    <ul>
-                      <li data-source="1">
-                        [1] Graham, Do Things that Don't Scale —
-                        <a href="https://paulgraham.com/ds.html">https://paulgraham.com/ds.html</a>
-                      </li>
-                      <li>target: the "Gain market insight" box</li>
-                    </ul>
-                  </li>
-                  <li>
-                    <strong>Ask about the last time</strong> — what yields insight is specifics: ask about problems the
-                    user already faced, not hypotheticals, and treat talking to customers as part of the CEO's job [2].
-                    The sources are interviews and users, not sales calls; that a sales conversation yields the same
-                    facts is an inference.
-                    <ul>
-                      <li data-source="2">
-                        [2] Y Combinator (Migicovsky), Startup School Week 1 Recap: How to Talk to Users —
-                        <a
-                          href="https://www.ycombinator.com/blog/startup-school-week-1-recap-kevin-hale-and-eric-migicovsky/"
-                          >https://www.ycombinator.com/blog/startup-school-week-1-recap-kevin-hale-and-eric-migicovsky/</a
-                        >
-                      </li>
-                      <li>target: the "Gain market insight" box</li>
-                    </ul>
-                  </li>
-                  <li>
-                    <strong>A signal must be costly to fake</strong> — when one side knows more than the other, an
-                    action that is cheaper for a strong type than a weak one carries information, because the cost
-                    carries it, not the content [3].
-                    <ul>
-                      <li data-source="3">
-                        [3] Spence, Job Market Signaling —
-                        <a href="https://doi.org/10.2307/1882010">https://doi.org/10.2307/1882010</a>
-                      </li>
-                      <li>target: the "Increase trust" box</li>
-                    </ul>
-                  </li>
-                  <li>
-                    <strong>Investors read the team</strong> — in a survey of 885 institutional venture capitalists the
-                    management team was the most-cited factor (95%), ahead of business model (83%), product (74%) and
-                    market (68%) [4].
-                    <ul>
-                      <li data-source="4">
-                        [4] Gompers, Gornall, Kaplan and Strebulaev, How Do Venture Capitalists Make Decisions? —
-                        <a href="https://www.nber.org/papers/w22587">https://www.nber.org/papers/w22587</a>
-                      </li>
-                      <li>target: the "Increase trust" box</li>
-                    </ul>
-                  </li>
-                  <li>
-                    <strong>No study measures LOIs or pipelines</strong> — carrying signaling theory over to early sales
-                    results is an inference, and a non-binding letter of intent is cheap to give, so it separates strong
-                    from weak firms poorly; the more binding the commitment, the more trust it plausibly earns [3].
-                    <ul>
-                      <li data-source="3">
-                        [3] Spence, Job Market Signaling —
-                        <a href="https://doi.org/10.2307/1882010">https://doi.org/10.2307/1882010</a>
-                      </li>
-                      <li>target: the "Increase trust" box</li>
-                    </ul>
-                  </li>
-                  <li>
-                    <strong>Premature scaling burns cash</strong> — Blank calls premature scaling of sales and marketing
-                    the leading cause of cash loss in a startup [5].
-                    <ul>
-                      <li data-source="5">
-                        [5] Blank, It Must Be A Marketing Problem —
-                        <a href="https://steveblank.com/2010/02/11/it-must-be-a-marketing-problem/"
-                          >https://steveblank.com/2010/02/11/it-must-be-a-marketing-problem/</a
-                        >
-                      </li>
-                      <li>target: the "Gain internal insights" box</li>
-                    </ul>
-                  </li>
-                  <li>
-                    <strong>Friends' orders can mislead</strong> — early orders from board members or friends are good
-                    for morale and cash but may not show what the business model is [5].
-                    <ul>
-                      <li data-source="5">
-                        [5] Blank, It Must Be A Marketing Problem —
-                        <a href="https://steveblank.com/2010/02/11/it-must-be-a-marketing-problem/"
-                          >https://steveblank.com/2010/02/11/it-must-be-a-marketing-problem/</a
-                        >
-                      </li>
-                      <li>target: the "Gain internal insights" box</li>
-                    </ul>
-                  </li>
-                </ol>
-              </div>
-            </div>
             <textarea
               class="spec-note"
               form="spec-review"
@@ -2558,7 +3379,7 @@
 
         <section data-spec="section" id="how-to-start-doing-sales">
           <div class="spec-section-band">
-            <p class="spec-kicker">Section 3 · section slide, the kit's section layout, motion none</p>
+            <p class="spec-kicker">Section 3 · section slide, drawn in the Title-slide Options</p>
             <h2>How to start doing sales</h2>
             <ol data-spec="voice-script">
               <li>
@@ -2582,6 +3403,103 @@
               <span class="spec-number">3</span>
               <h3>Stages of sale</h3>
             </header>
+            <div class="spec-words">
+              <input
+                type="radio"
+                name="words:stages-of-sale"
+                id="stages-of-sale--visual-idea"
+                value="visual-idea"
+                checked
+              />
+              <label for="stages-of-sale--visual-idea">Visual idea</label>
+              <input type="radio" name="words:stages-of-sale" id="stages-of-sale--voice-script" value="voice-script" />
+              <label for="stages-of-sale--voice-script">Voice script</label>
+              <input
+                type="radio"
+                name="words:stages-of-sale"
+                id="stages-of-sale--speaker-notes"
+                value="speaker-notes"
+              />
+              <label for="stages-of-sale--speaker-notes">Speaker notes</label>
+              <div class="spec-card spec-panel" data-panel="visual-idea">
+                <h4>Visual idea</h4>
+                <p class="text-caption"><code>master: three-column · motion: none</code></p>
+                <p data-spec="visual-idea">
+                  Three boxes left to right, joined by arrows: "Leads" (lead generation: research and maintain a list of
+                  potential customers; initial contact: cold call, calling inbound leads, leverage your network),
+                  "Opportunities" (the potential customer shows interest; this is the actual hard work: follow-up, sales
+                  material, meetings, negotiations) and "Closing / Deal" (the customer agrees to a contractual and
+                  transactional relationship). A fainter fourth segment trails off the right edge, "After-sale:
+                  production, delivery, customer success", marked as more waiting before cash arrives.
+                </p>
+                <p class="text-caption">
+                  <code
+                    >Design reference: reference/source-deck/design-reference.md#page-6 Design reference:
+                    reference/source-deck/design-reference.md#page-7</code
+                  >
+                </p>
+              </div>
+              <div class="spec-card spec-panel" data-panel="voice-script">
+                <h4>Voice script</h4>
+                <ol data-spec="voice-script">
+                  <li>
+                    <strong>Leads, step one</strong> — The first step is lead generation. Research and keep a list of
+                    potential customers, with names, not a feeling. Start the list this week, and maintain it every week
+                    after that.
+                  </li>
+                  <li>
+                    <strong>First contact, step two</strong> — The second step is first contact. Cold call, call back an
+                    inbound lead, or ask your network, and pick one of them. Make that first call, because that is what
+                    opens opportunities.
+                  </li>
+                  <li>
+                    <strong>Opportunities are the work</strong> — An opportunity means interest, and interest is not a
+                    deal. Follow-up, material, meetings and negotiation are the hard part of sales, and they take
+                    calendar time that you cannot compress with willpower.
+                  </li>
+                  <li>
+                    <strong>Closing is not cash</strong> — Even a signed contract is not cash. After it come production,
+                    delivery and customer success, and only then the invoice, so every stage pushes the money further to
+                    the right.
+                  </li>
+                </ol>
+              </div>
+              <div class="spec-card spec-panel" data-panel="speaker-notes">
+                <h4>Speaker notes</h4>
+                <ol data-spec="speaker-notes">
+                  <li>
+                    <strong>Cash waits on paperwork</strong> — with no contract term, interest on a late B2B payment
+                    starts only 30 days after the invoice is received, contract terms may run up to 60 days, and an
+                    acceptance step can add up to 30 more days before the clock starts. This is an EU directive; other
+                    jurisdictions differ [1].
+                    <ul>
+                      <li data-source="1">
+                        [1] European Parliament and Council, Directive 2011/7/EU on combating late payment in commercial
+                        transactions —
+                        <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32011L0007"
+                          >https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32011L0007</a
+                        >
+                      </li>
+                      <li>target: the After-sale segment</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>The lags add up</strong> — the sources show each delay separately: finding customers,
+                    closing, invoicing, payment terms. That they add into one lag, which is why the chain must start
+                    early, is an inference [1].
+                    <ul>
+                      <li data-source="1">
+                        [1] European Parliament and Council, Directive 2011/7/EU on combating late payment in commercial
+                        transactions —
+                        <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32011L0007"
+                          >https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32011L0007</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                </ol>
+              </div>
+            </div>
             <div class="spec-options">
               <figure data-picked data-spec="option" data-option="3a" data-recommended>
                 <div data-spec="mock" class="flex flex-col gap-10 bg-background p-12">
@@ -3227,86 +4145,6 @@
                 >
               </figure>
             </div>
-            <div class="spec-words">
-              <div class="spec-card">
-                <h4>Voice script</h4>
-                <ol data-spec="voice-script">
-                  <li>
-                    <strong>Leads, step one</strong> — The first step is lead generation. Research and keep a list of
-                    potential customers, with names, not a feeling. Start the list this week, and maintain it every week
-                    after that.
-                  </li>
-                  <li>
-                    <strong>First contact, step two</strong> — The second step is first contact. Cold call, call back an
-                    inbound lead, or ask your network, and pick one of them. Make that first call, because that is what
-                    opens opportunities.
-                  </li>
-                  <li>
-                    <strong>Opportunities are the work</strong> — An opportunity means interest, and interest is not a
-                    deal. Follow-up, material, meetings and negotiation are the hard part of sales, and they take
-                    calendar time that you cannot compress with willpower.
-                  </li>
-                  <li>
-                    <strong>Closing is not cash</strong> — Even a signed contract is not cash. After it come production,
-                    delivery and customer success, and only then the invoice, so every stage pushes the money further to
-                    the right.
-                  </li>
-                </ol>
-                <details class="spec-visual-idea">
-                  <summary>Visual idea from the Dossier</summary>
-                  <p class="text-caption"><code>master: three-column · motion: none</code></p>
-                  <p data-spec="visual-idea">
-                    Three boxes left to right, joined by arrows: "Leads" (lead generation: research and maintain a list
-                    of potential customers; initial contact: cold call, calling inbound leads, leverage your network),
-                    "Opportunities" (the potential customer shows interest; this is the actual hard work: follow-up,
-                    sales material, meetings, negotiations) and "Closing / Deal" (the customer agrees to a contractual
-                    and transactional relationship). A fainter fourth segment trails off the right edge, "After-sale:
-                    production, delivery, customer success", marked as more waiting before cash arrives.
-                  </p>
-                  <p class="text-caption">
-                    <code
-                      >Design reference: reference/source-deck/design-reference.md#page-6 Design reference:
-                      reference/source-deck/design-reference.md#page-7</code
-                    >
-                  </p>
-                </details>
-              </div>
-              <div class="spec-card">
-                <h4>Speaker notes</h4>
-                <ol data-spec="speaker-notes">
-                  <li>
-                    <strong>Cash waits on paperwork</strong> — with no contract term, interest on a late B2B payment
-                    starts only 30 days after the invoice is received, contract terms may run up to 60 days, and an
-                    acceptance step can add up to 30 more days before the clock starts. This is an EU directive; other
-                    jurisdictions differ [1].
-                    <ul>
-                      <li data-source="1">
-                        [1] European Parliament and Council, Directive 2011/7/EU on combating late payment in commercial
-                        transactions —
-                        <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32011L0007"
-                          >https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32011L0007</a
-                        >
-                      </li>
-                      <li>target: the After-sale segment</li>
-                    </ul>
-                  </li>
-                  <li>
-                    <strong>The lags add up</strong> — the sources show each delay separately: finding customers,
-                    closing, invoicing, payment terms. That they add into one lag, which is why the chain must start
-                    early, is an inference [1].
-                    <ul>
-                      <li data-source="1">
-                        [1] European Parliament and Council, Directive 2011/7/EU on combating late payment in commercial
-                        transactions —
-                        <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32011L0007"
-                          >https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32011L0007</a
-                        >
-                      </li>
-                    </ul>
-                  </li>
-                </ol>
-              </div>
-            </div>
             <textarea
               class="spec-note"
               form="spec-review"
@@ -3320,6 +4158,81 @@
               <span class="spec-number">4</span>
               <h3>Pipeline tools in practice</h3>
             </header>
+            <div class="spec-words">
+              <input
+                type="radio"
+                name="words:pipeline-tools-in-practice"
+                id="pipeline-tools-in-practice--visual-idea"
+                value="visual-idea"
+                checked
+              />
+              <label for="pipeline-tools-in-practice--visual-idea">Visual idea</label>
+              <input
+                type="radio"
+                name="words:pipeline-tools-in-practice"
+                id="pipeline-tools-in-practice--voice-script"
+                value="voice-script"
+              />
+              <label for="pipeline-tools-in-practice--voice-script">Voice script</label>
+              <input
+                type="radio"
+                name="words:pipeline-tools-in-practice"
+                id="pipeline-tools-in-practice--speaker-notes"
+                value="speaker-notes"
+              />
+              <label for="pipeline-tools-in-practice--speaker-notes">Speaker notes</label>
+              <div class="spec-card spec-panel" data-panel="visual-idea">
+                <h4>Visual idea</h4>
+                <p class="text-caption"><code>master: basic-page · motion: local</code></p>
+                <p data-spec="visual-idea">
+                  An illustrated deal board of our own drawing: five columns named Lead in, Contact made, Needs defined,
+                  Proposal made and Negotiation, each with a total at its head and two or three deal cards below showing
+                  company, contact person and value. The cards slide into their columns one after another when the Slide
+                  appears, so the viewer sees the board fill. Placeholder names are invented.
+                </p>
+                <p class="text-caption">
+                  <code>Design reference: reference/source-deck/design-reference.md#page-12</code>
+                </p>
+              </div>
+              <div class="spec-card spec-panel" data-panel="voice-script">
+                <h4>Voice script</h4>
+                <ol data-spec="voice-script">
+                  <li>
+                    <strong>One place for every deal</strong> — A deal board is the cashflow board for sales. Every
+                    prospect is a card, every stage is a column, so the whole pipeline sits in one place.
+                  </li>
+                  <li>
+                    <strong>Read it at a glance</strong> — You read it at a glance: what sits in each stage, what it is
+                    worth per column, and the next step per deal. On a Monday morning, it tells you where to spend your
+                    week.
+                  </li>
+                  <li>
+                    <strong>Start small</strong> — So start small. Track your deals in a simple pipeline, and know that
+                    a spreadsheet is enough. The tool is not the point, the habit is.
+                  </li>
+                </ol>
+              </div>
+              <div class="spec-card spec-panel" data-panel="speaker-notes">
+                <h4>Speaker notes</h4>
+                <ol data-spec="speaker-notes">
+                  <li>
+                    <strong>Late deals convert worse</strong> — in a dataset of 655 thousand opportunities, deals that
+                    slip late in the cycle convert worse, and winning deals involved decision makers early; the report's
+                    percentage changes are relative, not percentage points [1].
+                    <ul>
+                      <li data-source="1">
+                        [1] Ebsta and Pavilion, GTM Benchmarks Report —
+                        <a
+                          href="https://benchmarks.ebsta.com/hubfs/V3%202025%20Benchmark%20Report/gtm_benchmarks_digital_report.pdf"
+                          >https://benchmarks.ebsta.com/hubfs/V3%202025%20Benchmark%20Report/gtm_benchmarks_digital_report.pdf</a
+                        >
+                      </li>
+                      <li>target: the columns of the board</li>
+                    </ul>
+                  </li>
+                </ol>
+              </div>
+            </div>
             <div class="spec-options">
               <figure data-picked data-spec="option" data-option="4a" data-recommended>
                 <div data-spec="mock" class="flex flex-col gap-8 bg-background p-12">
@@ -3886,59 +4799,6 @@
                 >
               </figure>
             </div>
-            <div class="spec-words">
-              <div class="spec-card">
-                <h4>Voice script</h4>
-                <ol data-spec="voice-script">
-                  <li>
-                    <strong>One place for every deal</strong> — A deal board is the cashflow board for sales. Every
-                    prospect is a card, every stage is a column, so the whole pipeline sits in one place.
-                  </li>
-                  <li>
-                    <strong>Read it at a glance</strong> — You read it at a glance: what sits in each stage, what it is
-                    worth per column, and the next step per deal. On a Monday morning, it tells you where to spend your
-                    week.
-                  </li>
-                  <li>
-                    <strong>Start small</strong> — So start small. Track your deals in a simple pipeline, and know that
-                    a spreadsheet is enough. The tool is not the point, the habit is.
-                  </li>
-                </ol>
-                <details class="spec-visual-idea">
-                  <summary>Visual idea from the Dossier</summary>
-                  <p class="text-caption"><code>master: basic-page · motion: local</code></p>
-                  <p data-spec="visual-idea">
-                    An illustrated deal board of our own drawing: five columns named Lead in, Contact made, Needs
-                    defined, Proposal made and Negotiation, each with a total at its head and two or three deal cards
-                    below showing company, contact person and value. The cards slide into their columns one after
-                    another when the Slide appears, so the viewer sees the board fill. Placeholder names are invented.
-                  </p>
-                  <p class="text-caption">
-                    <code>Design reference: reference/source-deck/design-reference.md#page-12</code>
-                  </p>
-                </details>
-              </div>
-              <div class="spec-card">
-                <h4>Speaker notes</h4>
-                <ol data-spec="speaker-notes">
-                  <li>
-                    <strong>Late deals convert worse</strong> — in a dataset of 655 thousand opportunities, deals that
-                    slip late in the cycle convert worse, and winning deals involved decision makers early; the report's
-                    percentage changes are relative, not percentage points [1].
-                    <ul>
-                      <li data-source="1">
-                        [1] Ebsta and Pavilion, GTM Benchmarks Report —
-                        <a
-                          href="https://benchmarks.ebsta.com/hubfs/V3%202025%20Benchmark%20Report/gtm_benchmarks_digital_report.pdf"
-                          >https://benchmarks.ebsta.com/hubfs/V3%202025%20Benchmark%20Report/gtm_benchmarks_digital_report.pdf</a
-                        >
-                      </li>
-                      <li>target: the columns of the board</li>
-                    </ul>
-                  </li>
-                </ol>
-              </div>
-            </div>
             <textarea
               class="spec-note"
               form="spec-review"
@@ -3952,6 +4812,92 @@
               <span class="spec-number">5</span>
               <h3>How marketing feeds the pipeline</h3>
             </header>
+            <div class="spec-words">
+              <input
+                type="radio"
+                name="words:how-marketing-feeds-the-pipeline"
+                id="how-marketing-feeds-the-pipeline--visual-idea"
+                value="visual-idea"
+                checked
+              />
+              <label for="how-marketing-feeds-the-pipeline--visual-idea">Visual idea</label>
+              <input
+                type="radio"
+                name="words:how-marketing-feeds-the-pipeline"
+                id="how-marketing-feeds-the-pipeline--voice-script"
+                value="voice-script"
+              />
+              <label for="how-marketing-feeds-the-pipeline--voice-script">Voice script</label>
+              <input
+                type="radio"
+                name="words:how-marketing-feeds-the-pipeline"
+                id="how-marketing-feeds-the-pipeline--speaker-notes"
+                value="speaker-notes"
+              />
+              <label for="how-marketing-feeds-the-pipeline--speaker-notes">Speaker notes</label>
+              <div class="spec-card spec-panel" data-panel="visual-idea">
+                <h4>Visual idea</h4>
+                <p class="text-caption"><code>master: basic-page · motion: local</code></p>
+                <p data-spec="visual-idea">
+                  A funnel of our own drawing: a wide mouth on the left labelled "Marketing: massive volume" with small
+                  icons for content, ads and a web page, narrowing into one named pipeline stage, "Lead in". Dots flow
+                  from the mouth into the stage when the Slide appears. Two labelled examples sit beside the stage:
+                  "Inbound lead, so sales can contact" and "E-commerce checkout".
+                </p>
+                <p class="text-caption">
+                  <code>Design reference: reference/source-deck/design-reference.md#page-14</code>
+                </p>
+              </div>
+              <div class="spec-card spec-panel" data-panel="voice-script">
+                <h4>Voice script</h4>
+                <ol data-spec="voice-script">
+                  <li>
+                    <strong>Two ways in</strong> — There are two ways to get a lead. You go and get it, or it walks in
+                    on its own, and marketing is the second way.
+                  </li>
+                  <li>
+                    <strong>Volume into a defined stage</strong> — Marketing speaks to many people at once, so that a
+                    customer enters themselves into a defined stage. An inbound lead is one example, an e-commerce
+                    checkout is another.
+                  </li>
+                  <li>
+                    <strong>Hand to sales</strong> — Marketing fills the stage and sales works what lands in it. Which
+                    means marketing does not replace the first call, it gives that call someone to be made to.
+                  </li>
+                </ol>
+              </div>
+              <div class="spec-card spec-panel" data-panel="speaker-notes">
+                <h4>Speaker notes</h4>
+                <ol data-spec="speaker-notes">
+                  <li>
+                    <strong>Customers do not arrive alone</strong> — "You can't wait for users to come to you. You have
+                    to go out and get them": getting users is a gradual process, and early numbers look too small only
+                    to those who underestimate compound growth [1].
+                    <ul>
+                      <li data-source="1">
+                        [1] Paul Graham, Do Things that Don't Scale —
+                        <a href="https://paulgraham.com/ds.html">https://paulgraham.com/ds.html</a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>The marketing hand-off has its own rate</strong> — in one vendor dataset the rate from
+                    marketing-qualified to sales-qualified lead was 68 percent, against a 19 percent win rate further
+                    down; stage rates are measured on one company's own stage definitions [2].
+                    <ul>
+                      <li data-source="2">
+                        [2] Ebsta and Pavilion, GTM Benchmarks Report —
+                        <a
+                          href="https://benchmarks.ebsta.com/hubfs/V3%202025%20Benchmark%20Report/gtm_benchmarks_digital_report.pdf"
+                          >https://benchmarks.ebsta.com/hubfs/V3%202025%20Benchmark%20Report/gtm_benchmarks_digital_report.pdf</a
+                        >
+                      </li>
+                      <li>target: the "Lead in" stage</li>
+                    </ul>
+                  </li>
+                </ol>
+              </div>
+            </div>
             <div class="spec-options">
               <figure data-picked data-spec="option" data-option="5a" data-recommended>
                 <div data-spec="mock" class="flex flex-col gap-10 bg-background p-12">
@@ -4496,70 +5442,6 @@
                 >
               </figure>
             </div>
-            <div class="spec-words">
-              <div class="spec-card">
-                <h4>Voice script</h4>
-                <ol data-spec="voice-script">
-                  <li>
-                    <strong>Two ways in</strong> — There are two ways to get a lead. You go and get it, or it walks in
-                    on its own, and marketing is the second way.
-                  </li>
-                  <li>
-                    <strong>Volume into a defined stage</strong> — Marketing speaks to many people at once, so that a
-                    customer enters themselves into a defined stage. An inbound lead is one example, an e-commerce
-                    checkout is another.
-                  </li>
-                  <li>
-                    <strong>Hand to sales</strong> — Marketing fills the stage and sales works what lands in it. Which
-                    means marketing does not replace the first call, it gives that call someone to be made to.
-                  </li>
-                </ol>
-                <details class="spec-visual-idea">
-                  <summary>Visual idea from the Dossier</summary>
-                  <p class="text-caption"><code>master: basic-page · motion: local</code></p>
-                  <p data-spec="visual-idea">
-                    A funnel of our own drawing: a wide mouth on the left labelled "Marketing: massive volume" with
-                    small icons for content, ads and a web page, narrowing into one named pipeline stage, "Lead in".
-                    Dots flow from the mouth into the stage when the Slide appears. Two labelled examples sit beside the
-                    stage: "Inbound lead, so sales can contact" and "E-commerce checkout".
-                  </p>
-                  <p class="text-caption">
-                    <code>Design reference: reference/source-deck/design-reference.md#page-14</code>
-                  </p>
-                </details>
-              </div>
-              <div class="spec-card">
-                <h4>Speaker notes</h4>
-                <ol data-spec="speaker-notes">
-                  <li>
-                    <strong>Customers do not arrive alone</strong> — "You can't wait for users to come to you. You have
-                    to go out and get them": getting users is a gradual process, and early numbers look too small only
-                    to those who underestimate compound growth [1].
-                    <ul>
-                      <li data-source="1">
-                        [1] Paul Graham, Do Things that Don't Scale —
-                        <a href="https://paulgraham.com/ds.html">https://paulgraham.com/ds.html</a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li>
-                    <strong>The marketing hand-off has its own rate</strong> — in one vendor dataset the rate from
-                    marketing-qualified to sales-qualified lead was 68 percent, against a 19 percent win rate further
-                    down; stage rates are measured on one company's own stage definitions [2].
-                    <ul>
-                      <li data-source="2">
-                        [2] Ebsta and Pavilion, GTM Benchmarks Report —
-                        <a
-                          href="https://benchmarks.ebsta.com/hubfs/V3%202025%20Benchmark%20Report/gtm_benchmarks_digital_report.pdf"
-                          >https://benchmarks.ebsta.com/hubfs/V3%202025%20Benchmark%20Report/gtm_benchmarks_digital_report.pdf</a
-                        >
-                      </li>
-                      <li>target: the "Lead in" stage</li>
-                    </ul>
-                  </li>
-                </ol>
-              </div>
-            </div>
             <textarea
               class="spec-note"
               form="spec-review"
@@ -4573,6 +5455,78 @@
               <span class="spec-number">6</span>
               <h3>Watch your cashflow, revenue pulled in</h3>
             </header>
+            <div class="spec-words">
+              <input
+                type="radio"
+                name="words:watch-your-cashflow-revenue-pulled-in"
+                id="watch-your-cashflow-revenue-pulled-in--visual-idea"
+                value="visual-idea"
+                checked
+              />
+              <label for="watch-your-cashflow-revenue-pulled-in--visual-idea">Visual idea</label>
+              <input
+                type="radio"
+                name="words:watch-your-cashflow-revenue-pulled-in"
+                id="watch-your-cashflow-revenue-pulled-in--voice-script"
+                value="voice-script"
+              />
+              <label for="watch-your-cashflow-revenue-pulled-in--voice-script">Voice script</label>
+              <input
+                type="radio"
+                name="words:watch-your-cashflow-revenue-pulled-in"
+                id="watch-your-cashflow-revenue-pulled-in--speaker-notes"
+                value="speaker-notes"
+              />
+              <label for="watch-your-cashflow-revenue-pulled-in--speaker-notes">Speaker notes</label>
+              <div class="spec-card spec-panel" data-panel="visual-idea">
+                <h4>Visual idea</h4>
+                <p class="text-caption"><code>master: basic-page · motion: local</code></p>
+                <p data-spec="visual-idea">
+                  The same Jan to April board as the first time, now with the arrow drawn: the green April revenue note
+                  slides left, dragged by a thick dark arrow, and settles in the March column, next to the March cost
+                  note. The red "Bankrupt" stamp does not appear this time. The viewer sees the same notes with one note
+                  moved, and nothing else changed.
+                </p>
+                <p class="text-caption">
+                  <code>Design reference: reference/source-deck/design-reference.md#page-8</code>
+                </p>
+              </div>
+              <div class="spec-card spec-panel" data-panel="voice-script">
+                <h4>Voice script</h4>
+                <ol data-spec="voice-script">
+                  <li>
+                    <strong>Callback</strong> — Second time on this board. Same notes, same costs, and one thing has
+                    moved.
+                  </li>
+                  <li>
+                    <strong>Timing, not amount</strong> — The amount did not change, one month did. The company lives.
+                    The same million, a month earlier, and that is the whole difference between a company and a story.
+                  </li>
+                  <li>
+                    <strong>How it moves</strong> — Now, how does a note move? A deal lands earlier only if the first
+                    call came earlier. So build your own month-by-month board, find your zero-cash month, and count back
+                    from it.
+                  </li>
+                </ol>
+              </div>
+              <div class="spec-card spec-panel" data-panel="speaker-notes">
+                <h4>Speaker notes</h4>
+                <ol data-spec="speaker-notes">
+                  <li>
+                    <strong>Predicted revenue is discounted</strong> — investors discount revenue that is only
+                    predicted, and founders who count on raising more money often find that assumption false, so
+                    projected revenue does not cover present costs [1].
+                    <ul>
+                      <li data-source="1">
+                        [1] Paul Graham, Default Alive or Default Dead? —
+                        <a href="https://paulgraham.com/aord.html">https://paulgraham.com/aord.html</a>
+                      </li>
+                      <li>target: the March column</li>
+                    </ul>
+                  </li>
+                </ol>
+              </div>
+            </div>
             <div class="spec-options">
               <figure data-picked data-spec="option" data-option="6a" data-recommended>
                 <div data-spec="mock" class="flex flex-col gap-10 bg-background px-12 py-12">
@@ -5044,56 +5998,6 @@
                 >
               </figure>
             </div>
-            <div class="spec-words">
-              <div class="spec-card">
-                <h4>Voice script</h4>
-                <ol data-spec="voice-script">
-                  <li>
-                    <strong>Callback</strong> — Second time on this board. Same notes, same costs, and one thing has
-                    moved.
-                  </li>
-                  <li>
-                    <strong>Timing, not amount</strong> — The amount did not change, one month did. The company lives.
-                    The same million, a month earlier, and that is the whole difference between a company and a story.
-                  </li>
-                  <li>
-                    <strong>How it moves</strong> — Now, how does a note move? A deal lands earlier only if the first
-                    call came earlier. So build your own month-by-month board, find your zero-cash month, and count back
-                    from it.
-                  </li>
-                </ol>
-                <details class="spec-visual-idea">
-                  <summary>Visual idea from the Dossier</summary>
-                  <p class="text-caption"><code>master: basic-page · motion: local</code></p>
-                  <p data-spec="visual-idea">
-                    The same Jan to April board as the first time, now with the arrow drawn: the green April revenue
-                    note slides left, dragged by a thick dark arrow, and settles in the March column, next to the March
-                    cost note. The red "Bankrupt" stamp does not appear this time. The viewer sees the same notes with
-                    one note moved, and nothing else changed.
-                  </p>
-                  <p class="text-caption">
-                    <code>Design reference: reference/source-deck/design-reference.md#page-8</code>
-                  </p>
-                </details>
-              </div>
-              <div class="spec-card">
-                <h4>Speaker notes</h4>
-                <ol data-spec="speaker-notes">
-                  <li>
-                    <strong>Predicted revenue is discounted</strong> — investors discount revenue that is only
-                    predicted, and founders who count on raising more money often find that assumption false, so
-                    projected revenue does not cover present costs [1].
-                    <ul>
-                      <li data-source="1">
-                        [1] Paul Graham, Default Alive or Default Dead? —
-                        <a href="https://paulgraham.com/aord.html">https://paulgraham.com/aord.html</a>
-                      </li>
-                      <li>target: the March column</li>
-                    </ul>
-                  </li>
-                </ol>
-              </div>
-            </div>
             <textarea
               class="spec-note"
               form="spec-review"
@@ -5105,7 +6009,7 @@
 
         <section data-spec="section" id="why-building-an-effective-sales-pipeline-takes-time">
           <div class="spec-section-band">
-            <p class="spec-kicker">Section 4 · section slide, the kit's section layout, motion none</p>
+            <p class="spec-kicker">Section 4 · section slide, drawn in the Title-slide Options</p>
             <h2>Why building an effective sales pipeline takes time</h2>
             <ol data-spec="voice-script">
               <li>
@@ -5124,6 +6028,98 @@
               <span class="spec-number">7</span>
               <h3>What is a sales pipeline</h3>
             </header>
+            <div class="spec-words">
+              <input
+                type="radio"
+                name="words:what-is-a-sales-pipeline"
+                id="what-is-a-sales-pipeline--visual-idea"
+                value="visual-idea"
+                checked
+              />
+              <label for="what-is-a-sales-pipeline--visual-idea">Visual idea</label>
+              <input
+                type="radio"
+                name="words:what-is-a-sales-pipeline"
+                id="what-is-a-sales-pipeline--voice-script"
+                value="voice-script"
+              />
+              <label for="what-is-a-sales-pipeline--voice-script">Voice script</label>
+              <input
+                type="radio"
+                name="words:what-is-a-sales-pipeline"
+                id="what-is-a-sales-pipeline--speaker-notes"
+                value="speaker-notes"
+              />
+              <label for="what-is-a-sales-pipeline--speaker-notes">Speaker notes</label>
+              <div class="spec-card spec-panel" data-panel="visual-idea">
+                <h4>Visual idea</h4>
+                <p class="text-caption"><code>master: grid-1x3 · motion: local</code></p>
+                <p data-spec="visual-idea">
+                  Three boxes side by side with oversized numerals: "Sales funnel" (defines each stage of a sales
+                  process; your org's value through volume per stage), "Conversion rate" (how many actions in one stage
+                  convert to one success in the next; your org's value through the attractiveness of your offering) and
+                  "Sales cycle" (how long from start to finish until you closed a deal or receive the money; your org's
+                  value through your efficiency). The words volume, offering and efficiency are set in the accent
+                  colour. Hovering a box grows an accent line above it.
+                </p>
+                <p class="text-caption">
+                  <code>Design reference: reference/source-deck/design-reference.md#page-10</code>
+                </p>
+              </div>
+              <div class="spec-card spec-panel" data-panel="voice-script">
+                <h4>Voice script</h4>
+                <ol data-spec="voice-script">
+                  <li>
+                    <strong>Funnel is volume</strong> — The funnel names each stage of your sales process. How many
+                    enter each stage tells you how much volume you can put through.
+                  </li>
+                  <li>
+                    <strong>Conversion is the offer</strong> — The conversion rate says how many actions in a stage
+                    become one success in the next. A low rate may be telling you that your offering is not yet
+                    attractive, and that is useful to know early.
+                  </li>
+                  <li>
+                    <strong>Cycle is efficiency</strong> — The cycle is the time from start to finish, until the deal or
+                    the money. It is your efficiency, and with conversion that gives you two numbers you should measure
+                    from your first deal.
+                  </li>
+                </ol>
+              </div>
+              <div class="spec-card spec-panel" data-panel="speaker-notes">
+                <h4>Speaker notes</h4>
+                <ol data-spec="speaker-notes">
+                  <li>
+                    <strong>Stage rates are not portable</strong> — a stage's rate depends on where a vendor draws its
+                    start and end, so rates from different companies are likely not comparable stage by stage; in one
+                    dataset two stages already differ, 68 and 19 percent. This is an inference [1].
+                    <ul>
+                      <li data-source="1">
+                        [1] Ebsta and Pavilion, GTM Benchmarks Report —
+                        <a
+                          href="https://benchmarks.ebsta.com/hubfs/V3%202025%20Benchmark%20Report/gtm_benchmarks_digital_report.pdf"
+                          >https://benchmarks.ebsta.com/hubfs/V3%202025%20Benchmark%20Report/gtm_benchmarks_digital_report.pdf</a
+                        >
+                      </li>
+                      <li>target: the "Conversion rate" box</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>Cycle length hits cash</strong> — a unit-economics model leaves out the sales cycle and the
+                    ramp time of a salesperson; their effect on cash flow has to be modelled separately [2].
+                    <ul>
+                      <li data-source="2">
+                        [2] Mark Roberge, The Science of Scaling —
+                        <a
+                          href="https://f.hubspotusercontent10.net/hubfs/6575667/Stage%202s%20Science%20of%20Scaling.pdf"
+                          >https://f.hubspotusercontent10.net/hubfs/6575667/Stage%202s%20Science%20of%20Scaling.pdf</a
+                        >
+                      </li>
+                      <li>target: the "Sales cycle" box</li>
+                    </ul>
+                  </li>
+                </ol>
+              </div>
+            </div>
             <div class="spec-options">
               <figure data-spec="option" data-option="7a">
                 <div data-spec="mock" class="flex flex-col gap-10 bg-background p-12">
@@ -5626,76 +6622,6 @@
                 >
               </figure>
             </div>
-            <div class="spec-words">
-              <div class="spec-card">
-                <h4>Voice script</h4>
-                <ol data-spec="voice-script">
-                  <li>
-                    <strong>Funnel is volume</strong> — The funnel names each stage of your sales process. How many
-                    enter each stage tells you how much volume you can put through.
-                  </li>
-                  <li>
-                    <strong>Conversion is the offer</strong> — The conversion rate says how many actions in a stage
-                    become one success in the next. A low rate may be telling you that your offering is not yet
-                    attractive, and that is useful to know early.
-                  </li>
-                  <li>
-                    <strong>Cycle is efficiency</strong> — The cycle is the time from start to finish, until the deal or
-                    the money. It is your efficiency, and with conversion that gives you two numbers you should measure
-                    from your first deal.
-                  </li>
-                </ol>
-                <details class="spec-visual-idea">
-                  <summary>Visual idea from the Dossier</summary>
-                  <p class="text-caption"><code>master: grid-1x3 · motion: local</code></p>
-                  <p data-spec="visual-idea">
-                    Three boxes side by side with oversized numerals: "Sales funnel" (defines each stage of a sales
-                    process; your org's value through volume per stage), "Conversion rate" (how many actions in one
-                    stage convert to one success in the next; your org's value through the attractiveness of your
-                    offering) and "Sales cycle" (how long from start to finish until you closed a deal or receive the
-                    money; your org's value through your efficiency). The words volume, offering and efficiency are set
-                    in the accent colour. Hovering a box grows an accent line above it.
-                  </p>
-                  <p class="text-caption">
-                    <code>Design reference: reference/source-deck/design-reference.md#page-10</code>
-                  </p>
-                </details>
-              </div>
-              <div class="spec-card">
-                <h4>Speaker notes</h4>
-                <ol data-spec="speaker-notes">
-                  <li>
-                    <strong>Stage rates are not portable</strong> — a stage's rate depends on where a vendor draws its
-                    start and end, so rates from different companies are likely not comparable stage by stage; in one
-                    dataset two stages already differ, 68 and 19 percent. This is an inference [1].
-                    <ul>
-                      <li data-source="1">
-                        [1] Ebsta and Pavilion, GTM Benchmarks Report —
-                        <a
-                          href="https://benchmarks.ebsta.com/hubfs/V3%202025%20Benchmark%20Report/gtm_benchmarks_digital_report.pdf"
-                          >https://benchmarks.ebsta.com/hubfs/V3%202025%20Benchmark%20Report/gtm_benchmarks_digital_report.pdf</a
-                        >
-                      </li>
-                      <li>target: the "Conversion rate" box</li>
-                    </ul>
-                  </li>
-                  <li>
-                    <strong>Cycle length hits cash</strong> — a unit-economics model leaves out the sales cycle and the
-                    ramp time of a salesperson; their effect on cash flow has to be modelled separately [2].
-                    <ul>
-                      <li data-source="2">
-                        [2] Mark Roberge, The Science of Scaling —
-                        <a
-                          href="https://f.hubspotusercontent10.net/hubfs/6575667/Stage%202s%20Science%20of%20Scaling.pdf"
-                          >https://f.hubspotusercontent10.net/hubfs/6575667/Stage%202s%20Science%20of%20Scaling.pdf</a
-                        >
-                      </li>
-                      <li>target: the "Sales cycle" box</li>
-                    </ul>
-                  </li>
-                </ol>
-              </div>
-            </div>
             <textarea
               class="spec-note"
               form="spec-review"
@@ -5709,6 +6635,129 @@
               <span class="spec-number">8</span>
               <h3>Pipeline by the numbers</h3>
             </header>
+            <div class="spec-words">
+              <input
+                type="radio"
+                name="words:pipeline-by-the-numbers"
+                id="pipeline-by-the-numbers--visual-idea"
+                value="visual-idea"
+                checked
+              />
+              <label for="pipeline-by-the-numbers--visual-idea">Visual idea</label>
+              <input
+                type="radio"
+                name="words:pipeline-by-the-numbers"
+                id="pipeline-by-the-numbers--voice-script"
+                value="voice-script"
+              />
+              <label for="pipeline-by-the-numbers--voice-script">Voice script</label>
+              <input
+                type="radio"
+                name="words:pipeline-by-the-numbers"
+                id="pipeline-by-the-numbers--speaker-notes"
+                value="speaker-notes"
+              />
+              <label for="pipeline-by-the-numbers--speaker-notes">Speaker notes</label>
+              <div class="spec-card spec-panel" data-panel="visual-idea">
+                <h4>Visual idea</h4>
+                <p class="text-caption"><code>master: basic-page · motion: local</code></p>
+                <p data-spec="visual-idea">
+                  A horizontal funnel of our own drawing in three segments: Lead (2 weeks), Opportunity (6 months), Deal
+                  (3 months). Above it, brackets show 3:1 from lead to opportunity, 9:1 from opportunity to deal and
+                  "Total conversion rate 27:1"; below it a timeline bar splits into 2 weeks, 6 months and 3 months under
+                  "Sales cycle: 9.5 months total". The segments draw in from the left, then the ratios and durations
+                  appear.
+                </p>
+                <p class="text-caption">
+                  <code>Design reference: reference/source-deck/design-reference.md#page-11</code>
+                </p>
+              </div>
+              <div class="spec-card spec-panel" data-panel="voice-script">
+                <h4>Voice script</h4>
+                <ol data-spec="voice-script">
+                  <li>
+                    <strong>Read the picture</strong> — Read the picture. Lead to opportunity is three to one,
+                    opportunity to deal is nine to one, so together it takes 27 leads for one deal.
+                  </li>
+                  <li>
+                    <strong>Read the clock</strong> — Now read the clock. Two weeks, six months, three months, which
+                    makes 9.5 months from first lead to money. Think one step further and ten deals need 270 leads.
+                  </li>
+                  <li>
+                    <strong>Backward chain</strong> — So chain it backwards. If you want a deal in month X, count back
+                    9.5 months, and by then you need 27 names in the funnel. Do you have 27 names?
+                  </li>
+                  <li>
+                    <strong>Your numbers, not mine</strong> — One thing I want to be straight about: this is my worked
+                    example, not a law. Yours will be shorter or longer, which is exactly why you measure your own.
+                  </li>
+                </ol>
+              </div>
+              <div class="spec-card spec-panel" data-panel="speaker-notes">
+                <h4>Speaker notes</h4>
+                <ol data-spec="speaker-notes">
+                  <li>
+                    <strong>A reference win rate</strong> — in a dataset of 655 thousand opportunities across 387
+                    companies, the new-customer win rate was 19 percent (about 5.3 opportunities per win), the sales
+                    cycle 91 days and 8 stakeholders per deal; expansion sales to existing customers ran 45 percent, 52
+                    days and 5 stakeholders. It is a vendor study of its own customers' CRM data [1].
+                    <ul>
+                      <li data-source="1">
+                        [1] Ebsta and Pavilion, GTM Benchmarks Report —
+                        <a
+                          href="https://benchmarks.ebsta.com/hubfs/V3%202025%20Benchmark%20Report/gtm_benchmarks_digital_report.pdf"
+                          >https://benchmarks.ebsta.com/hubfs/V3%202025%20Benchmark%20Report/gtm_benchmarks_digital_report.pdf</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>The biggest loss is no decision</strong> — an analysis of more than 2.5 million recorded
+                    sales conversations found 40 to 60 percent of deals are lost to buyers who intend to buy but never
+                    act [2].
+                    <ul>
+                      <li data-source="2">
+                        [2] Dixon and McKenna, Stop Losing Sales to Customer Indecision (Harvard Business Review) —
+                        <a href="https://hbr.org/2022/06/stop-losing-sales-to-customer-indecision"
+                          >https://hbr.org/2022/06/stop-losing-sales-to-customer-indecision</a
+                        >
+                      </li>
+                      <li>target: the 9:1 bracket</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>Everyone holds a veto</strong> — sellers rarely find one person who can approve a deal
+                    alone; decision authority rests with a group whose members have different roles and all have veto
+                    power [3].
+                    <ul>
+                      <li data-source="3">
+                        [3] Schmidt, Adamson and Bird, Making the Consensus Sale (Harvard Business Review) —
+                        <a href="https://hbr.org/2015/03/making-the-consensus-sale"
+                          >https://hbr.org/2015/03/making-the-consensus-sale</a
+                        >
+                      </li>
+                      <li>target: the Opportunity segment</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>Buying groups disagree</strong> — a Gartner survey of 632 B2B buyers describes buying groups
+                    of five to 16 people; 74 percent of teams showed unhealthy conflict, and groups that reached
+                    consensus were 2.5 times more likely to report a high-quality deal [4].
+                    <ul>
+                      <li data-source="4">
+                        [4] Gartner, Gartner Sales Survey Finds 74% of B2B Buyer Teams Demonstrate "Unhealthy Conflict"
+                        During The Decision Process —
+                        <a
+                          href="https://www.gartner.com/en/newsroom/press-releases/2025-05-07-gartner-sales-survey-finds-74-percent-of-b2b-buyer-teams-demonstrate-unhealthy-conflict-during-the-decision-process"
+                          >https://www.gartner.com/en/newsroom/press-releases/2025-05-07-gartner-sales-survey-finds-74-percent-of-b2b-buyer-teams-demonstrate-unhealthy-conflict-during-the-decision-process</a
+                        >
+                      </li>
+                      <li>target: the Opportunity segment</li>
+                    </ul>
+                  </li>
+                </ol>
+              </div>
+            </div>
             <div class="spec-options">
               <figure data-spec="option" data-option="8a">
                 <div data-spec="mock" class="flex flex-col gap-8 bg-background p-12">
@@ -6226,107 +7275,6 @@
                 >
               </figure>
             </div>
-            <div class="spec-words">
-              <div class="spec-card">
-                <h4>Voice script</h4>
-                <ol data-spec="voice-script">
-                  <li>
-                    <strong>Read the picture</strong> — Read the picture. Lead to opportunity is three to one,
-                    opportunity to deal is nine to one, so together it takes 27 leads for one deal.
-                  </li>
-                  <li>
-                    <strong>Read the clock</strong> — Now read the clock. Two weeks, six months, three months, which
-                    makes 9.5 months from first lead to money. Think one step further and ten deals need 270 leads.
-                  </li>
-                  <li>
-                    <strong>Backward chain</strong> — So chain it backwards. If you want a deal in month X, count back
-                    9.5 months, and by then you need 27 names in the funnel. Do you have 27 names?
-                  </li>
-                  <li>
-                    <strong>Your numbers, not mine</strong> — One thing I want to be straight about: this is my worked
-                    example, not a law. Yours will be shorter or longer, which is exactly why you measure your own.
-                  </li>
-                </ol>
-                <details class="spec-visual-idea">
-                  <summary>Visual idea from the Dossier</summary>
-                  <p class="text-caption"><code>master: basic-page · motion: local</code></p>
-                  <p data-spec="visual-idea">
-                    A horizontal funnel of our own drawing in three segments: Lead (2 weeks), Opportunity (6 months),
-                    Deal (3 months). Above it, brackets show 3:1 from lead to opportunity, 9:1 from opportunity to deal
-                    and "Total conversion rate 27:1"; below it a timeline bar splits into 2 weeks, 6 months and 3 months
-                    under "Sales cycle: 9.5 months total". The segments draw in from the left, then the ratios and
-                    durations appear.
-                  </p>
-                  <p class="text-caption">
-                    <code>Design reference: reference/source-deck/design-reference.md#page-11</code>
-                  </p>
-                </details>
-              </div>
-              <div class="spec-card">
-                <h4>Speaker notes</h4>
-                <ol data-spec="speaker-notes">
-                  <li>
-                    <strong>A reference win rate</strong> — in a dataset of 655 thousand opportunities across 387
-                    companies, the new-customer win rate was 19 percent (about 5.3 opportunities per win), the sales
-                    cycle 91 days and 8 stakeholders per deal; expansion sales to existing customers ran 45 percent, 52
-                    days and 5 stakeholders. It is a vendor study of its own customers' CRM data [1].
-                    <ul>
-                      <li data-source="1">
-                        [1] Ebsta and Pavilion, GTM Benchmarks Report —
-                        <a
-                          href="https://benchmarks.ebsta.com/hubfs/V3%202025%20Benchmark%20Report/gtm_benchmarks_digital_report.pdf"
-                          >https://benchmarks.ebsta.com/hubfs/V3%202025%20Benchmark%20Report/gtm_benchmarks_digital_report.pdf</a
-                        >
-                      </li>
-                    </ul>
-                  </li>
-                  <li>
-                    <strong>The biggest loss is no decision</strong> — an analysis of more than 2.5 million recorded
-                    sales conversations found 40 to 60 percent of deals are lost to buyers who intend to buy but never
-                    act [2].
-                    <ul>
-                      <li data-source="2">
-                        [2] Dixon and McKenna, Stop Losing Sales to Customer Indecision (Harvard Business Review) —
-                        <a href="https://hbr.org/2022/06/stop-losing-sales-to-customer-indecision"
-                          >https://hbr.org/2022/06/stop-losing-sales-to-customer-indecision</a
-                        >
-                      </li>
-                      <li>target: the 9:1 bracket</li>
-                    </ul>
-                  </li>
-                  <li>
-                    <strong>Everyone holds a veto</strong> — sellers rarely find one person who can approve a deal
-                    alone; decision authority rests with a group whose members have different roles and all have veto
-                    power [3].
-                    <ul>
-                      <li data-source="3">
-                        [3] Schmidt, Adamson and Bird, Making the Consensus Sale (Harvard Business Review) —
-                        <a href="https://hbr.org/2015/03/making-the-consensus-sale"
-                          >https://hbr.org/2015/03/making-the-consensus-sale</a
-                        >
-                      </li>
-                      <li>target: the Opportunity segment</li>
-                    </ul>
-                  </li>
-                  <li>
-                    <strong>Buying groups disagree</strong> — a Gartner survey of 632 B2B buyers describes buying groups
-                    of five to 16 people; 74 percent of teams showed unhealthy conflict, and groups that reached
-                    consensus were 2.5 times more likely to report a high-quality deal [4].
-                    <ul>
-                      <li data-source="4">
-                        [4] Gartner, Gartner Sales Survey Finds 74% of B2B Buyer Teams Demonstrate "Unhealthy Conflict"
-                        During The Decision Process —
-                        <a
-                          href="https://www.gartner.com/en/newsroom/press-releases/2025-05-07-gartner-sales-survey-finds-74-percent-of-b2b-buyer-teams-demonstrate-unhealthy-conflict-during-the-decision-process"
-                          >https://www.gartner.com/en/newsroom/press-releases/2025-05-07-gartner-sales-survey-finds-74-percent-of-b2b-buyer-teams-demonstrate-unhealthy-conflict-during-the-decision-process</a
-                        >
-                      </li>
-                      <li>target: the Opportunity segment</li>
-                    </ul>
-                  </li>
-                </ol>
-              </div>
-            </div>
             <textarea
               class="spec-note"
               form="spec-review"
@@ -6340,6 +7288,133 @@
               <span class="spec-number">9</span>
               <h3>Why it takes time to ramp up</h3>
             </header>
+            <div class="spec-words">
+              <input
+                type="radio"
+                name="words:why-it-takes-time-to-ramp-up"
+                id="why-it-takes-time-to-ramp-up--visual-idea"
+                value="visual-idea"
+                checked
+              />
+              <label for="why-it-takes-time-to-ramp-up--visual-idea">Visual idea</label>
+              <input
+                type="radio"
+                name="words:why-it-takes-time-to-ramp-up"
+                id="why-it-takes-time-to-ramp-up--voice-script"
+                value="voice-script"
+              />
+              <label for="why-it-takes-time-to-ramp-up--voice-script">Voice script</label>
+              <input
+                type="radio"
+                name="words:why-it-takes-time-to-ramp-up"
+                id="why-it-takes-time-to-ramp-up--speaker-notes"
+                value="speaker-notes"
+              />
+              <label for="why-it-takes-time-to-ramp-up--speaker-notes">Speaker notes</label>
+              <div class="spec-card spec-panel" data-panel="visual-idea">
+                <h4>Visual idea</h4>
+                <p class="text-caption"><code>master: grid-1x3 · motion: local</code></p>
+                <p data-spec="visual-idea">
+                  Three boxes side by side with oversized numerals: "Preparation" (before: sales deck, pricing,
+                  offering, business model; during: demo, meeting slides, proposal; deal: contract, compliance, legal),
+                  "Unknown market" (who is really your customer, what are they willing to pay, what problem do they
+                  really need solved) and "Unknown metrics" (you don't know conversion rate and sales cycle at the
+                  beginning, and you need them for financial backwards planning). Hovering a box grows an accent line
+                  above it.
+                </p>
+                <p class="text-caption">
+                  <code>Design reference: reference/source-deck/design-reference.md#page-15</code>
+                </p>
+              </div>
+              <div class="spec-card spec-panel" data-panel="voice-script">
+                <h4>Voice script</h4>
+                <ol data-spec="voice-script">
+                  <li>
+                    <strong>Preparation</strong> — The first box is preparation. Before, during and at the deal you need
+                    a deck and pricing, a demo and a proposal, a contract and the legal side. None of that exists on day
+                    one.
+                  </li>
+                  <li>
+                    <strong>Unknown market</strong> — The second is an unknown market. Who is your customer, what do
+                    they pay, which problem really hurts. Only real conversations answer that, and desk research will
+                    not.
+                  </li>
+                  <li>
+                    <strong>Unknown metrics</strong> — The third is unknown metrics. You have no conversion rate and no
+                    cycle length yet, and you need both to plan backwards from your cash. How many months this takes, I
+                    will not invent for you.
+                  </li>
+                  <li>
+                    <strong>So start now</strong> — So start now, because each box shrinks only by doing. How many
+                    months do you have left, and how many of these three boxes have you started?
+                  </li>
+                </ol>
+              </div>
+              <div class="spec-card spec-panel" data-panel="speaker-notes">
+                <h4>Speaker notes</h4>
+                <ol data-spec="speaker-notes">
+                  <li>
+                    <strong>Startups search, they do not execute</strong> — established companies execute a business
+                    model, a startup is a temporary organization designed to search for a repeatable and scalable one
+                    [1].
+                    <ul>
+                      <li data-source="1">
+                        [1] Steve Blank, The Customer Development Manifesto —
+                        <a href="https://steveblank.com/category/customer-development-manifesto/"
+                          >https://steveblank.com/category/customer-development-manifesto/</a
+                        >
+                      </li>
+                      <li>target: the "Unknown market" box</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>Selling blind</strong> — in one case, early orders from industry friends and board
+                    connections covered the first months of the revenue plan but did not show why customers would buy,
+                    because nobody had run customer discovery [2].
+                    <ul>
+                      <li data-source="2">
+                        [2] Steve Blank, It Must Be A Marketing Problem —
+                        <a href="https://steveblank.com/2010/02/11/it-must-be-a-marketing-problem/"
+                          >https://steveblank.com/2010/02/11/it-must-be-a-marketing-problem/</a
+                        >
+                      </li>
+                      <li>target: the "Unknown market" box</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>Learn first, codify later</strong> — before product-market fit, rely on personal networks
+                    and customer referrals: they do not scale but yield the best opportunities to learn from. Codify the
+                    playbook after that learning and prove the unit economics before hiring salespeople aggressively
+                    [3].
+                    <ul>
+                      <li data-source="3">
+                        [3] Mark Roberge, The Science of Scaling —
+                        <a
+                          href="https://f.hubspotusercontent10.net/hubfs/6575667/Stage%202s%20Science%20of%20Scaling.pdf"
+                          >https://f.hubspotusercontent10.net/hubfs/6575667/Stage%202s%20Science%20of%20Scaling.pdf</a
+                        >
+                      </li>
+                      <li>target: the "Preparation" box</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>Metrics lag by one cycle</strong> — a conversion figure for recent leads looks worse than
+                    its long-run value because those leads have not yet gone through a full cycle; older results are the
+                    better estimate [3].
+                    <ul>
+                      <li data-source="3">
+                        [3] Mark Roberge, The Science of Scaling —
+                        <a
+                          href="https://f.hubspotusercontent10.net/hubfs/6575667/Stage%202s%20Science%20of%20Scaling.pdf"
+                          >https://f.hubspotusercontent10.net/hubfs/6575667/Stage%202s%20Science%20of%20Scaling.pdf</a
+                        >
+                      </li>
+                      <li>target: the "Unknown metrics" box</li>
+                    </ul>
+                  </li>
+                </ol>
+              </div>
+            </div>
             <div class="spec-options">
               <figure data-spec="option" data-option="9a">
                 <div data-spec="mock" class="flex flex-col gap-10 bg-background p-12">
@@ -6766,111 +7841,6 @@
                 >
               </figure>
             </div>
-            <div class="spec-words">
-              <div class="spec-card">
-                <h4>Voice script</h4>
-                <ol data-spec="voice-script">
-                  <li>
-                    <strong>Preparation</strong> — The first box is preparation. Before, during and at the deal you need
-                    a deck and pricing, a demo and a proposal, a contract and the legal side. None of that exists on day
-                    one.
-                  </li>
-                  <li>
-                    <strong>Unknown market</strong> — The second is an unknown market. Who is your customer, what do
-                    they pay, which problem really hurts. Only real conversations answer that, and desk research will
-                    not.
-                  </li>
-                  <li>
-                    <strong>Unknown metrics</strong> — The third is unknown metrics. You have no conversion rate and no
-                    cycle length yet, and you need both to plan backwards from your cash. How many months this takes, I
-                    will not invent for you.
-                  </li>
-                  <li>
-                    <strong>So start now</strong> — So start now, because each box shrinks only by doing. How many
-                    months do you have left, and how many of these three boxes have you started?
-                  </li>
-                </ol>
-                <details class="spec-visual-idea">
-                  <summary>Visual idea from the Dossier</summary>
-                  <p class="text-caption"><code>master: grid-1x3 · motion: local</code></p>
-                  <p data-spec="visual-idea">
-                    Three boxes side by side with oversized numerals: "Preparation" (before: sales deck, pricing,
-                    offering, business model; during: demo, meeting slides, proposal; deal: contract, compliance,
-                    legal), "Unknown market" (who is really your customer, what are they willing to pay, what problem do
-                    they really need solved) and "Unknown metrics" (you don't know conversion rate and sales cycle at
-                    the beginning, and you need them for financial backwards planning). Hovering a box grows an accent
-                    line above it.
-                  </p>
-                  <p class="text-caption">
-                    <code>Design reference: reference/source-deck/design-reference.md#page-15</code>
-                  </p>
-                </details>
-              </div>
-              <div class="spec-card">
-                <h4>Speaker notes</h4>
-                <ol data-spec="speaker-notes">
-                  <li>
-                    <strong>Startups search, they do not execute</strong> — established companies execute a business
-                    model, a startup is a temporary organization designed to search for a repeatable and scalable one
-                    [1].
-                    <ul>
-                      <li data-source="1">
-                        [1] Steve Blank, The Customer Development Manifesto —
-                        <a href="https://steveblank.com/category/customer-development-manifesto/"
-                          >https://steveblank.com/category/customer-development-manifesto/</a
-                        >
-                      </li>
-                      <li>target: the "Unknown market" box</li>
-                    </ul>
-                  </li>
-                  <li>
-                    <strong>Selling blind</strong> — in one case, early orders from industry friends and board
-                    connections covered the first months of the revenue plan but did not show why customers would buy,
-                    because nobody had run customer discovery [2].
-                    <ul>
-                      <li data-source="2">
-                        [2] Steve Blank, It Must Be A Marketing Problem —
-                        <a href="https://steveblank.com/2010/02/11/it-must-be-a-marketing-problem/"
-                          >https://steveblank.com/2010/02/11/it-must-be-a-marketing-problem/</a
-                        >
-                      </li>
-                      <li>target: the "Unknown market" box</li>
-                    </ul>
-                  </li>
-                  <li>
-                    <strong>Learn first, codify later</strong> — before product-market fit, rely on personal networks
-                    and customer referrals: they do not scale but yield the best opportunities to learn from. Codify the
-                    playbook after that learning and prove the unit economics before hiring salespeople aggressively
-                    [3].
-                    <ul>
-                      <li data-source="3">
-                        [3] Mark Roberge, The Science of Scaling —
-                        <a
-                          href="https://f.hubspotusercontent10.net/hubfs/6575667/Stage%202s%20Science%20of%20Scaling.pdf"
-                          >https://f.hubspotusercontent10.net/hubfs/6575667/Stage%202s%20Science%20of%20Scaling.pdf</a
-                        >
-                      </li>
-                      <li>target: the "Preparation" box</li>
-                    </ul>
-                  </li>
-                  <li>
-                    <strong>Metrics lag by one cycle</strong> — a conversion figure for recent leads looks worse than
-                    its long-run value because those leads have not yet gone through a full cycle; older results are the
-                    better estimate [3].
-                    <ul>
-                      <li data-source="3">
-                        [3] Mark Roberge, The Science of Scaling —
-                        <a
-                          href="https://f.hubspotusercontent10.net/hubfs/6575667/Stage%202s%20Science%20of%20Scaling.pdf"
-                          >https://f.hubspotusercontent10.net/hubfs/6575667/Stage%202s%20Science%20of%20Scaling.pdf</a
-                        >
-                      </li>
-                      <li>target: the "Unknown metrics" box</li>
-                    </ul>
-                  </li>
-                </ol>
-              </div>
-            </div>
             <textarea
               class="spec-note"
               form="spec-review"
@@ -6882,7 +7852,7 @@
 
         <section data-spec="section" id="start-before-you-need-the-money">
           <div class="spec-section-band">
-            <p class="spec-kicker">Section 5 · section slide, the kit's section layout, motion none</p>
+            <p class="spec-kicker">Section 5 · section slide, drawn in the Title-slide Options</p>
             <h2>Start before you need the money</h2>
             <ol data-spec="voice-script">
               <li>
@@ -6901,6 +7871,87 @@
               <span class="spec-number">10</span>
               <h3>Watch your cashflow, &quot;Start when?&quot;</h3>
             </header>
+            <div class="spec-words">
+              <input
+                type="radio"
+                name="words:watch-your-cashflow-start-when"
+                id="watch-your-cashflow-start-when--visual-idea"
+                value="visual-idea"
+                checked
+              />
+              <label for="watch-your-cashflow-start-when--visual-idea">Visual idea</label>
+              <input
+                type="radio"
+                name="words:watch-your-cashflow-start-when"
+                id="watch-your-cashflow-start-when--voice-script"
+                value="voice-script"
+              />
+              <label for="watch-your-cashflow-start-when--voice-script">Voice script</label>
+              <input
+                type="radio"
+                name="words:watch-your-cashflow-start-when"
+                id="watch-your-cashflow-start-when--speaker-notes"
+                value="speaker-notes"
+              />
+              <label for="watch-your-cashflow-start-when--speaker-notes">Speaker notes</label>
+              <div class="spec-card spec-panel" data-panel="visual-idea">
+                <h4>Visual idea</h4>
+                <p class="text-caption"><code>master: basic-page · motion: local</code></p>
+                <p data-spec="visual-idea">
+                  The board a third time, now by quarter: Q1 holds cash €100.000, cost €50.000, cash €50.000; Q2 holds
+                  cash €50.000, cost €50.000, cash €0; Q3 holds cost €50.000 and revenue €50.000; Q4 holds cost €50.000
+                  and revenue €50.000. A thick dark arrow labelled "Start when?" sweeps from the Q3 revenue note back
+                  across Q2 into Q1 and points at the Q1 column, which is highlighted.
+                </p>
+                <p class="text-caption">
+                  <code>Design reference: reference/source-deck/design-reference.md#page-16</code>
+                </p>
+              </div>
+              <div class="spec-card spec-panel" data-panel="voice-script">
+                <h4>Voice script</h4>
+                <ol data-spec="voice-script">
+                  <li>
+                    <strong>Third time, new question</strong> — Third time on this board, and this time the quarters
+                    replace the months. The question is not what happens any more, it is when you start.
+                  </li>
+                  <li>
+                    <strong>The arrow points at Q1</strong> — The arrow points at Q1. If you want revenue in Q3, the
+                    first call happens in Q1, while there is still cash on the board.
+                  </li>
+                  <li>
+                    <strong>Four steps</strong> — Four steps. Build your month-by-month cashflow view and find your
+                    zero-cash month. Start the lead list. Make the first contact. Track your deals, and measure
+                    conversion and cycle.
+                  </li>
+                  <li>
+                    <strong>Honest caveat</strong> — The honest caveat: I cannot tell you your cycle length. It may be
+                    shorter, it may be longer, and that is why you measure it.
+                  </li>
+                  <li>
+                    <strong>Hand over the verdict</strong> — So, when does your cash run out, and what did you do this
+                    week to move the money earlier? If the board helps, copy it, it is yours. Thank you.
+                  </li>
+                </ol>
+              </div>
+              <div class="spec-card spec-panel" data-panel="speaker-notes">
+                <h4>Speaker notes</h4>
+                <ol data-spec="speaker-notes">
+                  <li>
+                    <strong>Even a yes arrives late</strong> — finding investors takes time, closing takes longer than
+                    expected even after a yes, and one angel took months to pay [1].
+                    <ul>
+                      <li data-source="1">
+                        [1] Paul Graham, A Student's Guide to Startups: Startup Funding —
+                        <a href="https://www.paulgraham.com/startupfunding.html"
+                          >https://www.paulgraham.com/startupfunding.html</a
+                        >
+                      </li>
+                      <li>target: the Q2 cash €0 note</li>
+                    </ul>
+                  </li>
+                </ol>
+              </div>
+            </div>
             <div class="spec-options">
               <figure data-picked data-spec="option" data-option="10a" data-recommended>
                 <div data-spec="mock" class="flex flex-col gap-10 bg-background px-12 py-12">
@@ -7985,65 +9036,6 @@
                   Pick 10c</label
                 >
               </figure>
-            </div>
-            <div class="spec-words">
-              <div class="spec-card">
-                <h4>Voice script</h4>
-                <ol data-spec="voice-script">
-                  <li>
-                    <strong>Third time, new question</strong> — Third time on this board, and this time the quarters
-                    replace the months. The question is not what happens any more, it is when you start.
-                  </li>
-                  <li>
-                    <strong>The arrow points at Q1</strong> — The arrow points at Q1. If you want revenue in Q3, the
-                    first call happens in Q1, while there is still cash on the board.
-                  </li>
-                  <li>
-                    <strong>Four steps</strong> — Four steps. Build your month-by-month cashflow view and find your
-                    zero-cash month. Start the lead list. Make the first contact. Track your deals, and measure
-                    conversion and cycle.
-                  </li>
-                  <li>
-                    <strong>Honest caveat</strong> — The honest caveat: I cannot tell you your cycle length. It may be
-                    shorter, it may be longer, and that is why you measure it.
-                  </li>
-                  <li>
-                    <strong>Hand over the verdict</strong> — So, when does your cash run out, and what did you do this
-                    week to move the money earlier? If the board helps, copy it, it is yours. Thank you.
-                  </li>
-                </ol>
-                <details class="spec-visual-idea">
-                  <summary>Visual idea from the Dossier</summary>
-                  <p class="text-caption"><code>master: basic-page · motion: local</code></p>
-                  <p data-spec="visual-idea">
-                    The board a third time, now by quarter: Q1 holds cash €100.000, cost €50.000, cash €50.000; Q2 holds
-                    cash €50.000, cost €50.000, cash €0; Q3 holds cost €50.000 and revenue €50.000; Q4 holds cost
-                    €50.000 and revenue €50.000. A thick dark arrow labelled "Start when?" sweeps from the Q3 revenue
-                    note back across Q2 into Q1 and points at the Q1 column, which is highlighted.
-                  </p>
-                  <p class="text-caption">
-                    <code>Design reference: reference/source-deck/design-reference.md#page-16</code>
-                  </p>
-                </details>
-              </div>
-              <div class="spec-card">
-                <h4>Speaker notes</h4>
-                <ol data-spec="speaker-notes">
-                  <li>
-                    <strong>Even a yes arrives late</strong> — finding investors takes time, closing takes longer than
-                    expected even after a yes, and one angel took months to pay [1].
-                    <ul>
-                      <li data-source="1">
-                        [1] Paul Graham, A Student's Guide to Startups: Startup Funding —
-                        <a href="https://www.paulgraham.com/startupfunding.html"
-                          >https://www.paulgraham.com/startupfunding.html</a
-                        >
-                      </li>
-                      <li>target: the Q2 cash €0 note</li>
-                    </ul>
-                  </li>
-                </ol>
-              </div>
             </div>
             <textarea
               class="spec-note"

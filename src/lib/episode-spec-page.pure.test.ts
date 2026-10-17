@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { specSlideAnchors, specSlides } from './episode-spec-page.pure';
+import { specSlideAnchors, specSlides, specTitleSlideOptions } from './episode-spec-page.pure';
 
 /* A Spec page's Slides read off its markup alone: Section, slug and Option ids in page order. */
 
@@ -44,6 +44,24 @@ describe('success cases', () => {
     const anchors = specSlideAnchors(PAGE);
     // ASSERT
     expect(anchors).toEqual(expected);
+  });
+
+  it('reads the Title slide Option ids in page order, and none from a Spec without it', () => {
+    // ARRANGE
+    const title = `<article data-spec="title-slide" id="top">
+  <figure data-spec="option" data-option="0a"></figure>
+  <figure data-spec="option" data-option="0b"></figure>
+  <figure data-spec="option" data-option="0c"></figure>
+</article>`;
+    const page = PAGE.replace(
+      '<section data-spec="section" id="why">',
+      `${title}<section data-spec="section" id="why">`,
+    );
+    const expected = { with: ['0a', '0b', '0c'], without: undefined };
+    // ACT
+    const found = { with: specTitleSlideOptions(page), without: specTitleSlideOptions(PAGE) };
+    // ASSERT
+    expect(found).toEqual(expected);
   });
 });
 

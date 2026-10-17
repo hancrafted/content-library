@@ -1,6 +1,6 @@
 # Spec designer
 
-A designer of the `write-spec` job designs two or three **Options** per page Slide of one Section, as markup fragments the orchestrator writes into the Spec. The orchestrator's prompt names the Section, its Slides with their numbers, the fragment file to write and the Spec's Visual language; this file is everything else.
+A designer of the `write-spec` job designs two or three **Options** per page Slide of one Section, or the Title slide's three, as markup fragments the orchestrator writes into the Spec. The orchestrator's prompt names the Section, its Slides with their numbers, the fragment file to write and the Spec's Visual language; this file is everything else.
 
 ## What you read
 
@@ -21,11 +21,11 @@ Point, never paste: read each file yourself.
 
 Han judges each Option from its mock alone, on a stage the full width of the page (about 1200px) at the site's type scale. Draw the finished Slide, as a frame of the published Episode would look at rest:
 
-- **Real content.** The on-screen title at `text-heading` or `text-hero`, every note, label, number, axis and arrow the Slide shows, in final English. A mock of a board shows every note with its words and amount; a chart shows its bars or curve at their real proportions.
+- **Real content.** A page Slide's shared Slide header (the Eyebrow with its Section title and `n / N` in `text-caption` uppercase, the title at `text-subheading`, the caption at `text-body` close under it), then every note, label, number, axis and arrow the Slide shows, in final English. A mock of a board shows every note with its words and amount; a chart shows its bars or curve at their real proportions.
 - **Composition.** One focal point carried by `primary` and by size; a clear reading order; generous spacing. The Slide fills the stage the way a slide fills a screen, never a small diagram in a corner.
 - **Depth and material.** The Style's material made visible: a board surface (`bg-muted`, `rounded-xl`), notes that read as paper (`shadow-md`, a slight `rotate-1` or `-rotate-1`, tinted fills), dark pill labels, a stamp that sits over the board.
 - **Drawing.** Arrows, brackets, curves and funnels are inline `<svg>` with `viewBox`, coloured by classes (`stroke-primary`, `fill-primary`, `stroke-foreground`, `fill-muted`), never by attributes holding colours. Use SVG wherever boxes would only approximate the shape.
-- **Motion** shows as its end state; the build notes describe it.
+- **Hover and motion.** Hover that helps Han point while presenting is live, by the shared hover classes; emphasis motion shows as its end state. Entrance is the wrapper's, never the Option's ([`write-spec.md`](write-spec.md#what-an-option-settles)).
 
 A mock that shows a title over grey boxes, empty squares or a paragraph is a wireframe, not an Option: it fails the rubric's fidelity line. Before you return, look at each mock rendered at 1440px with the preview command the orchestrator gives you, then `npm run inspect-page -- --url <its url> --width 1440 --clip '[data-option="<id>"]' --out <png>`, and fix what reads as a wireframe.
 
@@ -33,12 +33,28 @@ A mock that shows a title over grey boxes, empty squares or a paragraph is a wir
 
 - Options of one Slide are true alternatives: they differ in layout, visual metaphor or chart type.
 - Classes only from the tokens in `src/app/globals.css` and standard Tailwind utilities: `bg-card`, `bg-muted`, `bg-primary`, `bg-warning/25`, `text-heading`, `text-muted-foreground`, `grid-cols-12`, `col-span-5`, `w-1/4`, `rotate-1`, `shadow-md`. No arbitrary values (`grid-cols-[…]`, `w-[16%]`, `left-[67%]`): the staging test refuses them. No inline `style`, no hex.
+- The Spec frame paints each `data-spec="mock"` element's own background, so a coloured ground (`bg-foreground`, `bg-primary`) goes on an element inside the mock.
 - The figcaption: `<b><id></b>`, the Option's reason in one line, and its build cost: Slide library entry as is, Master slide copy, or Scene.
 - The build notes: whether the Dossier's `master:` and `motion:` are kept or overruled, an overruled one with its reason; and the parts, tokens, props (a TypeScript shape per part) and i18n keys, so the mock maps onto the code. A part the Visual language already specifies is named and pointed to, never restated.
 - FE-009: no fixed height, no clipping, Foreground clear of the chrome. FE-007 §5: imports it allows only.
 - An Option that redraws a design reference page names it: `Design reference: docs/episodes/<slug>/reference/<file-slug>/pages/page-<NN>.jpg`, then `Build against this page: keep <what>; change <what>`.
 - Settle every design question as Options with reasons. Never ask Han a design question.
 - Exactly one Option per Slide is recommended (`data-recommended`): the one you would build, its reason saying why over the others.
+
+## The Title-slide designer
+
+When the orchestrator names you the Title-slide designer, you design the Title slide's three Options, each a **Hero motif** drawn from the Brief's Red thread. Each Option is a set: the Title slide's mock, which sets the motif with the Episode title and caption, and under it one section slide mock per Section, which echoes the motif and brings in that Section's own element, so the sets foreshadow the Episode (a rocket on the Title slide, fuelled step by step across the section slides). The three motifs are true alternatives. Every rule above holds for every mock of the set, and the build notes name the record's `title` Slide and each section slide's Scene. Ids are `0a` to `0c`, and the set's markup is:
+
+```html
+<figure data-spec="option" data-option="0a" data-recommended>
+  <div data-spec="mock" class="…">…the Title slide…</div>
+  <ol data-spec="echoes" class="spec-echoes">
+    <li data-spec="echo" data-section="<section-slug>"><p>Section 1 · <title></p><div data-spec="mock" class="…">…</div></li>
+  </ol>
+  <figcaption><b>0a</b> … Build cost: ….</figcaption>
+  <div data-spec="build-notes">…</div>
+</figure>
+```
 
 ## What you return
 

@@ -183,7 +183,7 @@
         opacity: 0.85;
       }
 
-      /* A Slide: header, the Option stage, then its words. */
+      /* A Slide: header, its words as tabs, the Option stage, then its note. */
       [data-spec='slide'] {
         margin-top: 4rem;
         scroll-margin-top: 1rem;
@@ -270,6 +270,27 @@
         background: var(--background, Canvas);
         overflow: visible;
       }
+      /*
+       * A Title-slide Option is a set: the Title slide's mock, then a strip of the section slides that echo its
+       * Hero motif, one per Section, so the motif reads across the Episode at a glance.
+       */
+      .spec-echoes {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+        gap: 1rem;
+        list-style: none;
+        margin: 1rem 0 0;
+        padding: 0;
+      }
+      .spec-echoes > li > p {
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: var(--muted-foreground, GrayText);
+        margin: 0 0 0.4rem;
+      }
+      .spec-echoes [data-spec='mock'] {
+        min-height: 14rem;
+      }
       [data-spec='option'] figcaption {
         font-size: 1rem;
         max-width: 60rem;
@@ -307,11 +328,52 @@
         color: var(--primary-foreground, HighlightText);
       }
 
+      /*
+       * A Slide's words as tabs: Visual idea, Voice script, Speaker notes, one panel open. Radio inputs in no form
+       * switch them without script; print shows every panel.
+       */
       .spec-words {
-        display: grid;
-        grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-        gap: 1.25rem;
-        margin-top: 1.5rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+      }
+      .spec-words > input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+      }
+      .spec-words > label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        padding: 0.45rem 0.9rem;
+        border-radius: 999px;
+        border: 1px solid var(--border, GrayText);
+        background: var(--card, Canvas);
+        cursor: pointer;
+      }
+      .spec-words > input:checked + label {
+        background: var(--foreground, CanvasText);
+        color: var(--background, Canvas);
+        border-color: transparent;
+      }
+      .spec-words > input:focus-visible + label {
+        outline: 2px solid var(--ring, Highlight);
+        outline-offset: 2px;
+      }
+      .spec-panel {
+        display: none;
+        flex-basis: 100%;
+        max-width: 60rem;
+        box-sizing: border-box;
+      }
+      .spec-words:has(> input[value='visual-idea']:checked) > [data-panel='visual-idea'],
+      .spec-words:has(> input[value='voice-script']:checked) > [data-panel='voice-script'],
+      .spec-words:has(> input[value='speaker-notes']:checked) > [data-panel='speaker-notes'] {
+        display: block;
+      }
+      .spec-panel > h4 {
+        display: none;
       }
       .spec-words ol {
         margin: 0;
@@ -336,14 +398,6 @@
       [data-spec='speaker-notes'] a {
         color: inherit;
         word-break: break-all;
-      }
-      .spec-visual-idea {
-        margin-top: 1.25rem;
-      }
-      .spec-visual-idea > summary {
-        cursor: pointer;
-        font-weight: 600;
-        font-size: 0.875rem;
       }
       .spec-note {
         display: block;
@@ -378,8 +432,18 @@
         .spec-outline {
           display: none;
         }
-        .spec-words {
-          grid-template-columns: minmax(0, 1fr);
+      }
+
+      @media print {
+        .spec-words > input,
+        .spec-words > label,
+        .spec-tabs {
+          display: none;
+        }
+        .spec-panel,
+        .spec-panel > h4,
+        .spec-options.is-tabbed > [data-spec='option'] {
+          display: block;
         }
       }
 
@@ -396,7 +460,7 @@
       addEventListener('DOMContentLoaded', () => {
         const outline = document.querySelector('.spec-outline');
         const refresh = () => {
-          for (const slide of document.querySelectorAll('[data-spec="slide"]')) {
+          for (const slide of document.querySelectorAll('[data-spec="slide"], [data-spec="title-slide"]')) {
             const picks = slide.querySelectorAll('.spec-pick input:checked').length;
             const link = outline?.querySelector(`a[href="#${slide.id}"]`);
             if (link) link.dataset.state = picks === 1 ? 'picked' : 'open';
@@ -457,6 +521,9 @@
   <body>
     <div class="spec-shell">
       <nav class="spec-outline" aria-label="Slides"><ol>
+        <li><span class="spec-outline-section">Episode</span><ol>
+          <li><a href="#top">0 · Title slide and section slides</a></li>
+        </ol></li>
         <li><span class="spec-outline-section">Why the agent forgets</span><ol>
           <li><a href="#every-token-is-spent-attention">1 · Every token is spent attention</a></li>
           <li><a href="#the-middle-goes-quiet-first">2 · The middle goes quiet first</a></li>
@@ -470,7 +537,7 @@
       <header class="spec-masthead">
         <p class="spec-kicker">Spec · 4 Slides</p>
         <h1 id="context-window-budget">The context window is a budget</h1>
-        <p>Each Slide shows its Options as tabs: open each, pick one, and dictate a note where it should change. The Recommended tab is the designer's choice. Save at the bottom when done.</p>
+        <p>Each Slide shows its words as tabs above its Options, which are tabs too: open each, pick one, and dictate a note where it should change. The Recommended tab is the designer's choice; the Title slide's Options each carry the section slides. Save at the bottom when done.</p>
       </header>
 
       <div class="spec-intro">
@@ -496,8 +563,9 @@
             <code>status: 'upcoming'</code>, registered in <code>episode-repository.ts</code>.
           </li>
           <li>
-            Title slide: the kit's title layout, motion none, on-screen title "The context window is a budget". No
-            Voice script yet; a feedback round adds one.
+            Title slide: the picked Title-slide Option, built as the record's <code>title</code> Slide, on-screen
+            title "The context window is a budget"; each section slide its echo in that Option. No Voice script yet;
+            a feedback round adds one.
           </li>
           <li>
             One placement marker per Section, in Spec order: <code>{/* section:why-the-agent-forgets */}</code> and
@@ -511,9 +579,174 @@
       </section>
       </div>
 
+      <article data-spec="title-slide" id="top">
+        <header class="spec-slide-head">
+          <span class="spec-number">0</span>
+          <h3>Title slide and section slides</h3>
+        </header>
+        <p>
+          Each Option is a set: the Title slide, which sets the Hero motif, and under it the section slide of every
+          Section, which echoes the motif and brings in its own Section. Picking an Option picks the set.
+        </p>
+        <div class="spec-options">
+<figure data-spec="option" data-option="0a" data-recommended>
+            <div data-spec="mock" class="flex flex-col justify-between gap-12 bg-background p-12">
+              <div>
+                <p class="text-hero font-semibold">The context window is a budget</p>
+                <p class="mt-4 max-w-2xl text-body text-muted-foreground">
+                  Why your agent forgets the instruction you gave it, and three cheap habits that keep it in view.
+                </p>
+              </div>
+              <div class="flex flex-col gap-3">
+                <div class="flex justify-between text-caption text-muted-foreground">
+                  <span>Context window</span>
+                  <span class="font-semibold text-foreground">200k tokens, nearly all of it still free</span>
+                </div>
+                <ol class="flex h-24 gap-1 rounded-xl border border-border bg-muted p-2" aria-label="An empty window">
+                  <li class="card-hover card-hover--raise flex w-1/12 items-end rounded-md bg-primary p-2 text-caption font-semibold text-primary-foreground">Your instruction</li>
+                  <li class="flex-1 rounded-md border-2 border-dashed border-border"></li>
+                </ol>
+              </div>
+            </div>
+            <ol data-spec="echoes" class="spec-echoes">
+              <li data-spec="echo" data-section="why-the-agent-forgets">
+                <p>Section 1 · Why the agent forgets</p>
+                <div data-spec="mock" class="flex flex-col justify-between gap-6 p-6">
+                  <h2 class="text-subheading font-semibold">Why the agent forgets</h2>
+                  <ol class="flex h-12 gap-1 rounded-lg bg-muted p-1" aria-label="A window filling up">
+                    <li class="w-1/12 rounded-sm bg-primary"></li>
+                    <li class="w-1/6 rounded-sm bg-card"></li>
+                    <li class="w-1/4 rounded-sm bg-card"></li>
+                    <li class="w-1/6 rounded-sm bg-card"></li>
+                    <li class="w-1/4 rounded-sm bg-card"></li>
+                  </ol>
+                </div>
+              </li>
+              <li data-spec="echo" data-section="spend-the-budget-on-purpose">
+                <p>Section 2 · Spend the budget on purpose</p>
+                <div data-spec="mock" class="flex flex-col justify-between gap-6 p-6">
+                  <h2 class="text-subheading font-semibold">Spend the budget on purpose</h2>
+                  <ol class="flex h-12 gap-1 rounded-lg bg-muted p-1" aria-label="A window kept lean">
+                    <li class="w-1/12 rounded-sm bg-primary"></li>
+                    <li class="w-1/6 rounded-sm bg-card"></li>
+                    <li class="flex-1 rounded-sm border-2 border-dashed border-border"></li>
+                  </ol>
+                </div>
+              </li>
+            </ol>
+            <figcaption>
+              <b>0a</b> The window as a budget bar: empty on the Title slide, filling up in Section 1, kept lean in
+              Section 2. The bar every page Slide uses is the motif. Build cost: Scene.
+            </figcaption>
+            <details class="spec-build"><summary>Build notes</summary><div data-spec="build-notes">
+              The record's <code>title</code> Slide: a Scene from <code>SlideFrame</code> holding the h1, the caption
+              and the bar; the instruction block a <code>card-hover--raise</code> so Han can point at it. Each section
+              slide a Scene over the section layout: its h2 and the bar at that Section's fill, blocks in
+              <code>bg-card</code> on <code>bg-muted</code>, the instruction in <code>bg-primary</code>. Motion none.
+              i18n keys <code>title</code>, <code>caption</code>, <code>windowLabel</code>.
+            </div>
+          </details>
+<label class="spec-pick"><input type="checkbox" form="spec-review" name="pick:top" value="0a" /> Pick 0a</label>
+</figure>
+<figure data-spec="option" data-option="0b">
+            <div data-spec="mock" class="grid grid-cols-2 items-center gap-12 bg-background p-12">
+              <div>
+                <p class="text-hero font-semibold">The context window is a budget</p>
+                <p class="mt-4 text-body text-muted-foreground">Every message you send is paid for in attention.</p>
+              </div>
+              <svg viewBox="0 0 320 320" class="h-72 w-full" aria-hidden="true">
+                <rect x="80" y="250" width="160" height="28" rx="14" class="fill-primary" />
+                <rect x="80" y="214" width="160" height="28" rx="14" class="fill-muted stroke-border" stroke-width="2" />
+                <rect x="80" y="178" width="160" height="28" rx="14" class="fill-muted stroke-border" stroke-width="2" />
+                <rect x="80" y="142" width="160" height="28" rx="14" class="fill-muted stroke-border" stroke-width="2" />
+                <rect x="80" y="106" width="160" height="28" rx="14" class="fill-muted stroke-border" stroke-width="2" />
+                <text x="160" y="80" text-anchor="middle" class="fill-foreground text-caption">200k tokens to spend</text>
+              </svg>
+            </div>
+            <ol data-spec="echoes" class="spec-echoes">
+              <li data-spec="echo" data-section="why-the-agent-forgets">
+                <p>Section 1 · Why the agent forgets</p>
+                <div data-spec="mock" class="flex items-end justify-between gap-6 p-6">
+                  <h2 class="text-subheading font-semibold">Why the agent forgets</h2>
+                  <svg viewBox="0 0 120 120" class="h-24 w-24" aria-hidden="true">
+                    <rect x="20" y="96" width="80" height="14" rx="7" class="fill-primary" />
+                    <rect x="20" y="78" width="80" height="14" rx="7" class="fill-muted" opacity="0.4" />
+                  </svg>
+                </div>
+              </li>
+              <li data-spec="echo" data-section="spend-the-budget-on-purpose">
+                <p>Section 2 · Spend the budget on purpose</p>
+                <div data-spec="mock" class="flex items-end justify-between gap-6 p-6">
+                  <h2 class="text-subheading font-semibold">Spend the budget on purpose</h2>
+                  <svg viewBox="0 0 120 120" class="h-24 w-24" aria-hidden="true">
+                    <rect x="10" y="96" width="44" height="14" rx="7" class="fill-primary" />
+                    <rect x="66" y="96" width="44" height="14" rx="7" class="fill-muted" />
+                    <rect x="66" y="78" width="44" height="14" rx="7" class="fill-muted" />
+                  </svg>
+                </div>
+              </li>
+            </ol>
+            <figcaption>
+              <b>0b</b> A stack of token chips: a full stack on the Title slide, nearly spent in Section 1, sorted into
+              deliberate piles in Section 2. Build cost: Scene.
+            </figcaption>
+            <details class="spec-build"><summary>Build notes</summary><div data-spec="build-notes">
+              The record's <code>title</code> Slide: a Scene, the chip stack an inline SVG with <code>fill-muted</code>
+              chips and the instruction chip <code>fill-primary</code>. Section slides draw the same chips at their
+              Section's state. Motion none. i18n keys <code>title</code>, <code>caption</code>, <code>budget</code>.
+            </div>
+          </details>
+<label class="spec-pick"><input type="checkbox" form="spec-review" name="pick:top" value="0b" /> Pick 0b</label>
+</figure>
+<figure data-spec="option" data-option="0c">
+            <div data-spec="mock" class="flex"><div class="relative flex flex-1 flex-col justify-end gap-6 overflow-hidden rounded-2xl bg-foreground p-12 text-background">
+              <svg viewBox="0 0 1200 400" class="absolute inset-0 h-full w-full" aria-hidden="true">
+                <polygon points="600,0 380,400 820,400" class="fill-primary" opacity="0.25" />
+                <rect x="520" y="330" width="160" height="40" rx="8" class="fill-primary" />
+              </svg>
+              <p class="relative text-hero font-semibold">The context window is a budget</p>
+              <p class="relative max-w-2xl text-body">Attention is a spotlight: it covers so much, and no more.</p>
+            </div></div>
+            <ol data-spec="echoes" class="spec-echoes">
+              <li data-spec="echo" data-section="why-the-agent-forgets">
+                <p>Section 1 · Why the agent forgets</p>
+                <div data-spec="mock" class="flex"><div class="relative flex flex-1 flex-col justify-end overflow-hidden rounded-2xl bg-foreground p-6 text-background">
+                  <svg viewBox="0 0 400 200" class="absolute inset-0 h-full w-full" aria-hidden="true">
+                    <polygon points="200,0 0,200 400,200" class="fill-primary" opacity="0.1" />
+                  </svg>
+                  <h2 class="relative text-subheading font-semibold">Why the agent forgets</h2>
+                </div></div>
+              </li>
+              <li data-spec="echo" data-section="spend-the-budget-on-purpose">
+                <p>Section 2 · Spend the budget on purpose</p>
+                <div data-spec="mock" class="flex"><div class="relative flex flex-1 flex-col justify-end overflow-hidden rounded-2xl bg-foreground p-6 text-background">
+                  <svg viewBox="0 0 400 200" class="absolute inset-0 h-full w-full" aria-hidden="true">
+                    <polygon points="200,0 150,200 250,200" class="fill-primary" opacity="0.4" />
+                  </svg>
+                  <h2 class="relative text-subheading font-semibold">Spend the budget on purpose</h2>
+                </div></div>
+              </li>
+            </ol>
+            <figcaption>
+              <b>0c</b> A spotlight on the instruction: wide and faint once the window fills in Section 1, narrow and
+              bright in Section 2. Build cost: Scene.
+            </figcaption>
+            <details class="spec-build"><summary>Build notes</summary><div data-spec="build-notes">
+              The record's <code>title</code> Slide: a Scene on <code>bg-foreground</code>, the beam an inline SVG in
+              <code>fill-primary</code> at an opacity per Section. Its dark ground departs from the Editorial Style's
+              light pages, so the page Slides would need a matching band. Motion none. i18n keys <code>title</code>,
+              <code>caption</code>.
+            </div>
+          </details>
+<label class="spec-pick"><input type="checkbox" form="spec-review" name="pick:top" value="0c" /> Pick 0c</label>
+</figure>
+        </div>
+        <textarea class="spec-note" form="spec-review" name="note:top" placeholder="Note on the Title slide and section slides"></textarea>
+      </article>
+
       <section data-spec="section" id="why-the-agent-forgets">
         <div class="spec-section-band">
-        <p class="spec-kicker">Section 1 · section slide, the kit's section layout, motion none</p>
+        <p class="spec-kicker">Section 1 · section slide, drawn in the Title-slide Options</p>
         <h2>Why the agent forgets</h2>
         <ol data-spec="voice-script">
           <li><strong>Not a bug</strong> — Forgetting is not a bug in one agent. It is what a fixed budget does when you keep spending.</li>
@@ -525,13 +758,51 @@
             <span class="spec-number">1</span>
             <h3>Every token is spent attention</h3>
           </header>
+          <div class="spec-words">
+            <input type="radio" name="words:every-token-is-spent-attention" id="every-token-is-spent-attention--visual-idea" value="visual-idea" checked />
+            <label for="every-token-is-spent-attention--visual-idea">Visual idea</label>
+            <input type="radio" name="words:every-token-is-spent-attention" id="every-token-is-spent-attention--voice-script" value="voice-script" />
+            <label for="every-token-is-spent-attention--voice-script">Voice script</label>
+            <input type="radio" name="words:every-token-is-spent-attention" id="every-token-is-spent-attention--speaker-notes" value="speaker-notes" />
+            <label for="every-token-is-spent-attention--speaker-notes">Speaker notes</label>
+            <div class="spec-card spec-panel" data-panel="visual-idea">
+              <h4>Visual idea</h4>
+              <p class="text-caption"><code>master: basic-page · motion: none</code></p>
+              <p data-spec="visual-idea">A window drawn as a bar that fills with blocks, one per message, while the share left for the newest answer shrinks.</p>
+            </div>
+            <div class="spec-card spec-panel" data-panel="voice-script">
+              <h4>Voice script</h4>
+              <ol data-spec="voice-script">
+                <li><strong>Whole window, every turn</strong> — A model reads its whole window on every turn. Each line you add takes a share of the attention the next answer gets.</li>
+                <li><strong>Not seen, but how much</strong> — So the question is never whether the agent saw your instruction. It is how much attention was left for it.</li>
+              </ol>
+            </div>
+            <div class="spec-card spec-panel" data-panel="speaker-notes">
+              <h4>Speaker notes</h4>
+              <ol data-spec="speaker-notes">
+                <li>
+                  <strong>Attention sums to one</strong> — a softmax normalises each token's attention weights over the window, so every token added dilutes the share of the rest [1].
+                  <ul>
+                    <li data-source="1">[1] Attention Is All You Need — <a href="https://arxiv.org/abs/1706.03762">https://arxiv.org/abs/1706.03762</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <strong>The window has a size</strong> — a model's context window is a fixed maximum number of tokens it can reference at once [2].
+                  <ul>
+                    <li data-source="2">[2] Context windows — <a href="https://docs.claude.com/en/docs/build-with-claude/context-windows">https://docs.claude.com/en/docs/build-with-claude/context-windows</a></li>
+                    <li>target: the bar in the visual</li>
+                  </ul>
+                </li>
+              </ol>
+            </div>
+          </div>
           <div class="spec-options">
 <figure data-spec="option" data-option="1a" data-recommended>
               <div data-spec="mock" class="flex flex-col justify-between gap-10 bg-background p-12">
                 <div>
-                  <p class="text-caption font-semibold uppercase tracking-widest text-primary">Why the agent forgets</p>
-                  <h3 class="mt-3 text-heading font-semibold">Every token is spent attention</h3>
-                  <p class="mt-4 max-w-2xl text-body text-muted-foreground">
+                  <p class="flex justify-between text-caption uppercase text-muted-foreground"><span>Why the agent forgets</span><span>1 / 2</span></p>
+                  <h3 class="mt-6 text-subheading font-semibold">Every token is spent attention</h3>
+                  <p class="mt-2 max-w-2xl text-body">
                     The model reads the whole window on every turn. Each message takes a share; the newest answer gets
                     what is left.
                   </p>
@@ -542,14 +813,14 @@
                     <span class="font-semibold text-foreground">Context window · 200k tokens</span>
                     <span>Turn 40</span>
                   </div>
-                  <ol class="flex h-28 gap-1 rounded-xl border border-border bg-muted p-2" aria-label="Messages in the window">
-                    <li class="flex w-1/12 items-end rounded-md bg-primary p-2 text-caption font-semibold text-primary-foreground">Your instruction</li>
-                    <li class="w-1/12 rounded-md bg-card shadow-sm"></li>
-                    <li class="w-1/6 rounded-md bg-card shadow-sm"></li>
-                    <li class="w-1/12 rounded-md bg-card shadow-sm"></li>
-                    <li class="w-1/4 rounded-md bg-card shadow-sm"></li>
-                    <li class="w-1/12 rounded-md bg-card shadow-sm"></li>
-                    <li class="w-1/6 rounded-md bg-card shadow-sm"></li>
+                  <ol class="focus-group focus-group--dim-others flex h-28 gap-1 rounded-xl border border-border bg-muted p-2" aria-label="Messages in the window">
+                    <li class="focus-group__item flex w-1/12 items-end rounded-md bg-primary p-2 text-caption font-semibold text-primary-foreground">Your instruction</li>
+                    <li class="focus-group__item w-1/12 rounded-md bg-card shadow-sm"></li>
+                    <li class="focus-group__item w-1/6 rounded-md bg-card shadow-sm"></li>
+                    <li class="focus-group__item w-1/12 rounded-md bg-card shadow-sm"></li>
+                    <li class="focus-group__item w-1/4 rounded-md bg-card shadow-sm"></li>
+                    <li class="focus-group__item w-1/12 rounded-md bg-card shadow-sm"></li>
+                    <li class="focus-group__item w-1/6 rounded-md bg-card shadow-sm"></li>
                     <li class="flex w-1/12 items-end rounded-md border-2 border-dashed border-primary p-2 text-caption text-primary">Next answer</li>
                   </ol>
                   <svg viewBox="0 0 1200 120" class="h-24 w-full" aria-hidden="true">
@@ -557,9 +828,9 @@
                     <circle cx="60" cy="22" r="8" class="fill-primary" />
                     <circle cx="1140" cy="105" r="8" class="fill-background stroke-primary" stroke-width="4" />
                   </svg>
-                  <div class="flex justify-between text-caption text-muted-foreground">
+                  <div class="hover-reveal flex justify-between text-caption text-muted-foreground">
                     <span>Share of attention left for the instruction</span>
-                    <span class="font-semibold text-primary">a sliver by turn 40</span>
+                    <span class="font-semibold text-primary">a sliver by turn 40 <span class="hover-reveal__detail">(1 message of 40)</span></span>
                   </div>
                 </div>
               </div>
@@ -568,10 +839,12 @@
                 cost: Scene.
               </figcaption>
               <details class="spec-build"><summary>Build notes</summary><div data-spec="build-notes">
-                Keeps <code>basic-page</code>, motion none. A Scene from <code>SlideFrame</code> and the kit's
-                <code>&lt;Title&gt;</code>; blocks in <code>bg-muted</code>, the newest in <code>bg-accent</code>, the
-                free share as a bordered block. i18n keys <code>title</code>, <code>messages</code>,
-                <code>newest</code>.
+                Keeps <code>basic-page</code>, motion none. The Slide header (Eyebrow, title, caption) is the
+                wrapper's; the Scene from <code>SlideFrame</code> draws the bar alone. Blocks in <code>bg-muted</code>,
+                the newest in <code>bg-accent</code>, the free share as a bordered block. Hover: the blocks are
+                <code>focus-group__item</code>s of a <code>focus-group--dim-others</code>, the percentage a
+                <code>hover-reveal__detail</code>. i18n keys <code>title</code>, <code>caption</code>,
+                <code>messages</code>, <code>newest</code>.
               </div>
             </details>
 <label class="spec-pick"><input type="checkbox" form="spec-review" name="pick:every-token-is-spent-attention" value="1a" /> Pick 1a</label>
@@ -601,38 +874,6 @@
 <label class="spec-pick"><input type="checkbox" form="spec-review" name="pick:every-token-is-spent-attention" value="1b" /> Pick 1b</label>
 </figure>
           </div>
-          <div class="spec-words">
-            <div class="spec-card">
-              <h4>Voice script</h4>
-              <ol data-spec="voice-script">
-                <li><strong>Whole window, every turn</strong> — A model reads its whole window on every turn. Each line you add takes a share of the attention the next answer gets.</li>
-                <li><strong>Not seen, but how much</strong> — So the question is never whether the agent saw your instruction. It is how much attention was left for it.</li>
-              </ol>
-              <details class="spec-visual-idea">
-                <summary>Visual idea from the Dossier</summary>
-              <p class="text-caption"><code>master: basic-page · motion: none</code></p>
-              <p data-spec="visual-idea">A window drawn as a bar that fills with blocks, one per message, while the share left for the newest answer shrinks.</p>
-              </details>
-            </div>
-            <div class="spec-card">
-              <h4>Speaker notes</h4>
-              <ol data-spec="speaker-notes">
-                <li>
-                  <strong>Attention sums to one</strong> — a softmax normalises each token's attention weights over the window, so every token added dilutes the share of the rest [1].
-                  <ul>
-                    <li data-source="1">[1] Attention Is All You Need — <a href="https://arxiv.org/abs/1706.03762">https://arxiv.org/abs/1706.03762</a></li>
-                  </ul>
-                </li>
-                <li>
-                  <strong>The window has a size</strong> — a model's context window is a fixed maximum number of tokens it can reference at once [2].
-                  <ul>
-                    <li data-source="2">[2] Context windows — <a href="https://docs.claude.com/en/docs/build-with-claude/context-windows">https://docs.claude.com/en/docs/build-with-claude/context-windows</a></li>
-                    <li>target: the bar in the visual</li>
-                  </ul>
-                </li>
-              </ol>
-            </div>
-          </div>
           <textarea class="spec-note" form="spec-review" name="note:every-token-is-spent-attention" placeholder="Note on Slide 1"></textarea>
         </article>
 
@@ -641,6 +882,35 @@
             <span class="spec-number">2</span>
             <h3>The middle goes quiet first</h3>
           </header>
+          <div class="spec-words">
+            <input type="radio" name="words:the-middle-goes-quiet-first" id="the-middle-goes-quiet-first--visual-idea" value="visual-idea" checked />
+            <label for="the-middle-goes-quiet-first--visual-idea">Visual idea</label>
+            <input type="radio" name="words:the-middle-goes-quiet-first" id="the-middle-goes-quiet-first--voice-script" value="voice-script" />
+            <label for="the-middle-goes-quiet-first--voice-script">Voice script</label>
+            <input type="radio" name="words:the-middle-goes-quiet-first" id="the-middle-goes-quiet-first--speaker-notes" value="speaker-notes" />
+            <label for="the-middle-goes-quiet-first--speaker-notes">Speaker notes</label>
+            <div class="spec-card spec-panel" data-panel="visual-idea">
+              <h4>Visual idea</h4>
+              <p class="text-caption"><code>master: three-column · motion: none</code></p>
+            </div>
+            <div class="spec-card spec-panel" data-panel="voice-script">
+              <h4>Voice script</h4>
+              <ol data-spec="voice-script">
+                <li><strong>Start and end, not the middle</strong> — Models recall the start and the end of a long window better than the middle. Your instruction from an hour ago now sits in the middle.</li>
+              </ol>
+            </div>
+            <div class="spec-card spec-panel" data-panel="speaker-notes">
+              <h4>Speaker notes</h4>
+              <ol data-spec="speaker-notes">
+                <li>
+                  <strong>A longer window does not help</strong> — extended-context models show the same drop in the middle; size alone does not make it reliable [1].
+                  <ul>
+                    <li data-source="1">[1] Lost in the Middle — <a href="https://arxiv.org/abs/2307.03172">https://arxiv.org/abs/2307.03172</a></li>
+                  </ul>
+                </li>
+              </ol>
+            </div>
+          </div>
           <div class="spec-options">
 <figure data-spec="option" data-option="2a" data-recommended>
               <div data-spec="mock" class="grid grid-cols-3 gap-4 bg-card p-4">
@@ -694,36 +964,13 @@
 <label class="spec-pick"><input type="checkbox" form="spec-review" name="pick:the-middle-goes-quiet-first" value="2b" /> Pick 2b</label>
 </figure>
           </div>
-          <div class="spec-words">
-            <div class="spec-card">
-              <h4>Voice script</h4>
-              <ol data-spec="voice-script">
-                <li><strong>Start and end, not the middle</strong> — Models recall the start and the end of a long window better than the middle. Your instruction from an hour ago now sits in the middle.</li>
-              </ol>
-              <details class="spec-visual-idea">
-                <summary>Visual idea from the Dossier</summary>
-              <p class="text-caption"><code>master: three-column · motion: none</code></p>
-              </details>
-            </div>
-            <div class="spec-card">
-              <h4>Speaker notes</h4>
-              <ol data-spec="speaker-notes">
-                <li>
-                  <strong>A longer window does not help</strong> — extended-context models show the same drop in the middle; size alone does not make it reliable [1].
-                  <ul>
-                    <li data-source="1">[1] Lost in the Middle — <a href="https://arxiv.org/abs/2307.03172">https://arxiv.org/abs/2307.03172</a></li>
-                  </ul>
-                </li>
-              </ol>
-            </div>
-          </div>
           <textarea class="spec-note" form="spec-review" name="note:the-middle-goes-quiet-first" placeholder="Note on Slide 2"></textarea>
         </article>
       </section>
 
       <section data-spec="section" id="spend-the-budget-on-purpose">
         <div class="spec-section-band">
-        <p class="spec-kicker">Section 2 · section slide, the kit's section layout, motion none</p>
+        <p class="spec-kicker">Section 2 · section slide, drawn in the Title-slide Options</p>
         <h2>Spend the budget on purpose</h2>
         <ol data-spec="voice-script">
           <li><strong>Three cheap habits</strong> — Once the window is a budget, three habits follow, and each one is cheap.</li>
@@ -735,6 +982,35 @@
             <span class="spec-number">3</span>
             <h3>Start fresh when the task changes</h3>
           </header>
+          <div class="spec-words">
+            <input type="radio" name="words:start-fresh-when-the-task-changes" id="start-fresh-when-the-task-changes--visual-idea" value="visual-idea" checked />
+            <label for="start-fresh-when-the-task-changes--visual-idea">Visual idea</label>
+            <input type="radio" name="words:start-fresh-when-the-task-changes" id="start-fresh-when-the-task-changes--voice-script" value="voice-script" />
+            <label for="start-fresh-when-the-task-changes--voice-script">Voice script</label>
+            <input type="radio" name="words:start-fresh-when-the-task-changes" id="start-fresh-when-the-task-changes--speaker-notes" value="speaker-notes" />
+            <label for="start-fresh-when-the-task-changes--speaker-notes">Speaker notes</label>
+            <div class="spec-card spec-panel" data-panel="visual-idea">
+              <h4>Visual idea</h4>
+              <p class="text-caption"><code>master: basic-page · motion: none</code></p>
+            </div>
+            <div class="spec-card spec-panel" data-panel="voice-script">
+              <h4>Voice script</h4>
+              <ol data-spec="voice-script">
+                <li><strong>Rent on the past</strong> — A new task in an old session pays rent on everything that came before. A fresh session spends the whole budget on the work in front of you.</li>
+              </ol>
+            </div>
+            <div class="spec-card spec-panel" data-panel="speaker-notes">
+              <h4>Speaker notes</h4>
+              <ol data-spec="speaker-notes">
+                <li>
+                  <strong>The start is weighted most</strong> — attention carries a built-in bias toward the start of the input, so a fresh session puts the new task where it counts most [1].
+                  <ul>
+                    <li data-source="1">[1] Found in the Middle — <a href="https://arxiv.org/abs/2406.16008">https://arxiv.org/abs/2406.16008</a></li>
+                  </ul>
+                </li>
+              </ol>
+            </div>
+          </div>
           <div class="spec-options">
 <figure data-spec="option" data-option="3a" data-recommended>
               <div data-spec="mock" class="grid grid-cols-2 gap-4 items-center bg-card p-4">
@@ -808,29 +1084,6 @@
 <label class="spec-pick"><input type="checkbox" form="spec-review" name="pick:start-fresh-when-the-task-changes" value="3c" /> Pick 3c</label>
 </figure>
           </div>
-          <div class="spec-words">
-            <div class="spec-card">
-              <h4>Voice script</h4>
-              <ol data-spec="voice-script">
-                <li><strong>Rent on the past</strong> — A new task in an old session pays rent on everything that came before. A fresh session spends the whole budget on the work in front of you.</li>
-              </ol>
-              <details class="spec-visual-idea">
-                <summary>Visual idea from the Dossier</summary>
-              <p class="text-caption"><code>master: basic-page · motion: none</code></p>
-              </details>
-            </div>
-            <div class="spec-card">
-              <h4>Speaker notes</h4>
-              <ol data-spec="speaker-notes">
-                <li>
-                  <strong>The start is weighted most</strong> — attention carries a built-in bias toward the start of the input, so a fresh session puts the new task where it counts most [1].
-                  <ul>
-                    <li data-source="1">[1] Found in the Middle — <a href="https://arxiv.org/abs/2406.16008">https://arxiv.org/abs/2406.16008</a></li>
-                  </ul>
-                </li>
-              </ol>
-            </div>
-          </div>
           <textarea class="spec-note" form="spec-review" name="note:start-fresh-when-the-task-changes" placeholder="Note on Slide 3"></textarea>
         </article>
 
@@ -839,6 +1092,35 @@
             <span class="spec-number">4</span>
             <h3>Cut what you paste</h3>
           </header>
+          <div class="spec-words">
+            <input type="radio" name="words:cut-what-you-paste" id="cut-what-you-paste--visual-idea" value="visual-idea" checked />
+            <label for="cut-what-you-paste--visual-idea">Visual idea</label>
+            <input type="radio" name="words:cut-what-you-paste" id="cut-what-you-paste--voice-script" value="voice-script" />
+            <label for="cut-what-you-paste--voice-script">Voice script</label>
+            <input type="radio" name="words:cut-what-you-paste" id="cut-what-you-paste--speaker-notes" value="speaker-notes" />
+            <label for="cut-what-you-paste--speaker-notes">Speaker notes</label>
+            <div class="spec-card spec-panel" data-panel="visual-idea">
+              <h4>Visual idea</h4>
+              <p class="text-caption"><code>master: basic-page · motion: none</code></p>
+            </div>
+            <div class="spec-card spec-panel" data-panel="voice-script">
+              <h4>Voice script</h4>
+              <ol data-spec="voice-script">
+                <li><strong>Impulse buy</strong> — A full log is an impulse buy. Paste the ten lines that matter, and keep standing instructions in a file the agent reads at start.</li>
+              </ol>
+            </div>
+            <div class="spec-card spec-panel" data-panel="speaker-notes">
+              <h4>Speaker notes</h4>
+              <ol data-spec="speaker-notes">
+                <li>
+                  <strong>Why the file works</strong> — text read at the start of a session sits where recall is strongest, so standing instructions there survive a long session [1].
+                  <ul>
+                    <li data-source="1">[1] Lost in the Middle — <a href="https://arxiv.org/abs/2307.03172">https://arxiv.org/abs/2307.03172</a></li>
+                  </ul>
+                </li>
+              </ol>
+            </div>
+          </div>
           <div class="spec-options">
 <figure data-spec="option" data-option="4a" data-recommended>
               <div data-spec="mock" class="grid grid-cols-2 gap-4 items-center bg-card p-4">
@@ -888,29 +1170,6 @@
             </details>
 <label class="spec-pick"><input type="checkbox" form="spec-review" name="pick:cut-what-you-paste" value="4b" /> Pick 4b</label>
 </figure>
-          </div>
-          <div class="spec-words">
-            <div class="spec-card">
-              <h4>Voice script</h4>
-              <ol data-spec="voice-script">
-                <li><strong>Impulse buy</strong> — A full log is an impulse buy. Paste the ten lines that matter, and keep standing instructions in a file the agent reads at start.</li>
-              </ol>
-              <details class="spec-visual-idea">
-                <summary>Visual idea from the Dossier</summary>
-              <p class="text-caption"><code>master: basic-page · motion: none</code></p>
-              </details>
-            </div>
-            <div class="spec-card">
-              <h4>Speaker notes</h4>
-              <ol data-spec="speaker-notes">
-                <li>
-                  <strong>Why the file works</strong> — text read at the start of a session sits where recall is strongest, so standing instructions there survive a long session [1].
-                  <ul>
-                    <li data-source="1">[1] Lost in the Middle — <a href="https://arxiv.org/abs/2307.03172">https://arxiv.org/abs/2307.03172</a></li>
-                  </ul>
-                </li>
-              </ol>
-            </div>
           </div>
           <textarea class="spec-note" form="spec-review" name="note:cut-what-you-paste" placeholder="Note on Slide 4"></textarea>
         </article>
