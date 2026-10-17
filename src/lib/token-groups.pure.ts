@@ -85,7 +85,16 @@ const GROUPS: readonly { label: string; names?: readonly string[]; prefixes?: re
   },
   {
     label: 'Surface & text',
-    names: ['--background', '--foreground', '--card', '--card-foreground', '--muted', '--muted-foreground', '--header'],
+    names: [
+      '--background',
+      '--foreground',
+      '--card',
+      '--card-foreground',
+      '--muted',
+      '--muted-foreground',
+      '--section-band',
+      '--header',
+    ],
   },
   {
     label: 'Feedback',
