@@ -15,7 +15,7 @@ const DEFAULT_ALIVE = { slug: 'default-alive', url: 'https://paulgraham.com/aord
 /**
  * The cashflow board, January to April: two months of cash run out in February, March's cost lands on an empty
  * account under a Bankrupt stamp, and the million arrives in April, one month late. The March lane is ringed, two
- * brackets read the timing, and the closing question is pinned under the board, lifting when pointed at.
+ * brackets read the timing, and the closing question is pinned over the board, lifting when pointed at.
  */
 export const watchYourCashflow = slide({
   slug: 'watch-your-cashflow',
@@ -59,6 +59,12 @@ export const watchYourCashflow = slide({
     }));
     return (
       <SlideFrame className="mt-10 gap-10">
+        <aside className="card-hover card-hover--raise rotate-1 self-end border bg-card p-6 shadow-md lg:w-5/12">
+          <p className="font-mono text-caption tracking-widest text-muted-foreground uppercase">
+            {t('question.label')}
+          </p>
+          <p className="mt-2 text-body font-semibold">{t('question.text')}</p>
+        </aside>
         <CashflowBoard
           columns={columns}
           labels={{ board: t('board'), cash: t('note.cash'), cost: t('note.cost'), revenue: t('note.revenue') }}
@@ -70,12 +76,6 @@ export const watchYourCashflow = slide({
             { column: 3, span: 2, kind: 'bracket', text: t('late') },
           ]}
         />
-        <aside className="card-hover card-hover--raise rotate-1 self-end border bg-card p-6 shadow-md lg:w-5/12">
-          <p className="font-mono text-caption tracking-widest text-muted-foreground uppercase">
-            {t('question.label')}
-          </p>
-          <p className="mt-2 text-body font-semibold">{t('question.text')}</p>
-        </aside>
       </SlideFrame>
     );
   },
