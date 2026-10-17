@@ -74,3 +74,6 @@ The job's `checks:` in `assets/pipeline.yml` run by the check table in [SKILL.md
 11. Every Title-slide Option is a Hero motif drawn from the Red thread: its Title slide sets it, and each section slide echoes it and brings in its own Section, so the set foreshadows the Episode.
 12. Every mock that has a point to show on hover uses the shared hover classes, and no Option or build note specifies entrance motion.
 13. Every fact a Slide shows whose Speaker note carries a source has a Context marker beside it in every Option's mock, and the build notes name the note each marker opens.
+14. Every Slide draws one client industry, so its examples, labels and figures belong to the same industry.
+15. No Slide, Option or Speaker note addresses the viewer with "your turn" or an equivalent hand-over.
+16. Note tints carry meaning: cash, cost and revenue each keep one tint, used for that meaning in every Option and Slide.
