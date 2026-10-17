@@ -11,7 +11,7 @@ function Poster({ title, caption }: { title: string; caption: string }) {
   return (
     <article
       aria-labelledby={id}
-      className={`${styles.surface} group relative isolate flex min-h-[26rem] flex-col justify-between overflow-hidden rounded-xl border border-border p-4 shadow-sm transition-[translate,box-shadow] duration-300 ease-out hover:-translate-y-0.5 hover:shadow-lg motion-reduce:transition-none sm:p-6 md:min-h-[32rem] md:p-10`}
+      className={`${styles.surface} card-hover card-hover--raise group relative isolate flex min-h-[26rem] flex-col justify-between overflow-hidden rounded-xl border border-border p-4 shadow-sm sm:p-6 md:min-h-[32rem] md:p-10`}
     >
       <span
         aria-hidden
@@ -31,7 +31,7 @@ function Poster({ title, caption }: { title: string; caption: string }) {
 }
 
 // One feature cell across the whole Foreground: a tall poster tile, title and caption set bottom-left over a drifting
-// gradient. Hover lifts it one elevation step; the motion is CSS only, so no client widget.
+// gradient. `card-hover--raise` lifts it on hover or focus; the motion is CSS only, so no client widget.
 export const grid1x1 = slide({
   slug: 'grid-1x1',
   messages: { en, de },

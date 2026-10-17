@@ -30,7 +30,7 @@ function Card({ cell, title, caption }: { cell: Grid2x3Cell; title: string; capt
     <article
       aria-labelledby={id}
       className={cn(
-        'card-hover card-hover--raise flex h-full flex-col gap-(--grid-2x3-gap) rounded-3xl p-(--grid-2x3-gap) transition-[translate,box-shadow,background-color] duration-300 ease-out motion-reduce:transition-none',
+        'card-hover card-hover--raise flex h-full flex-col gap-(--grid-2x3-gap) rounded-3xl p-(--grid-2x3-gap)',
         tone.card,
       )}
     >
