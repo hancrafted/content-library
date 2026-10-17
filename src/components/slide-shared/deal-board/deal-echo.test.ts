@@ -26,10 +26,10 @@ describe('success cases', () => {
     // ACT
     const html = echo({
       lanes: [
-        { slug: 'leads', count: '27' },
-        { slug: 'opportunities', count: '3' },
-        { slug: 'closing', count: '1', ringed: true },
-        { slug: 'payment', slot: true },
+        { slug: 'leads', count: { value: '27' } },
+        { slug: 'opportunities', count: { value: '3' } },
+        { slug: 'closing', count: { value: '1', primary: true } },
+        { slug: 'payment', slot: { kind: 'payment' } },
       ],
       cycle: '27:1 over ≈ 9.5 months',
     });
@@ -40,9 +40,9 @@ describe('success cases', () => {
     expect(html).toContain(cycleMark);
   });
 
-  it('rings the lane that changed and tints a note by its tone', () => {
+  it('rings the lane that changed and tints a note as cash', () => {
     // ARRANGE
-    const expected = ['data-ringed="true"', 'data-tone="warning"', '€0'];
+    const expected = ['data-ringed="true"', 'data-tint="cash"', '€0'];
     const ringed = /data-ringed="true"/g;
     // ACT
     const html = echo({
@@ -50,7 +50,7 @@ describe('success cases', () => {
         { slug: 'leads' },
         { slug: 'opportunities' },
         { slug: 'closing' },
-        { slug: 'payment', ringed: true, notes: [{ slug: 'cash', text: '€0', tone: 'warning' }] },
+        { slug: 'payment', ringed: true, notes: [{ slug: 'cash', text: '€0', tint: 'cash' }] },
       ],
     });
     // ASSERT

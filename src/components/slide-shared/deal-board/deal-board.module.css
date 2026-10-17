@@ -108,26 +108,7 @@
   }
 }
 
-/*
- * The money on the board: the success colour on a dashed slot still to be paid, and the cash and revenue tints of the
- * cashflow board's notes, mixed into the card colour so they follow the theme.
- */
-.successSlot {
+/* A payment slot's outline: the success colour, for the money still to come. */
+.paymentSlot {
   border-color: var(--success);
-}
-
-.warningNote {
-  background-image: linear-gradient(
-    to bottom,
-    color-mix(in oklch, var(--warning) 40%, var(--card)),
-    color-mix(in oklch, var(--warning) 25%, var(--card))
-  );
-}
-
-.successNote {
-  background-image: linear-gradient(
-    to bottom,
-    color-mix(in oklch, var(--success) 40%, var(--card)),
-    color-mix(in oklch, var(--success) 25%, var(--card))
-  );
 }

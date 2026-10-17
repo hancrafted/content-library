@@ -5,13 +5,17 @@ export interface Deal {
   readonly contact?: string;
   /** In euros. */
   readonly value?: number;
+  /** A mono label over the company, for a note that stands for any deal, such as "Lead" over "Your first lead". */
+  readonly tag?: string;
+  /** Ringed in `primary`: the one note the board points at. */
+  readonly ringed?: boolean;
 }
 
-/** A dashed slot closing a lane: a place a note has not reached yet, `success` for the money still to come. */
-export interface DealSlot {
-  readonly text?: string;
-  readonly tone?: 'success';
-}
+/**
+ * A dashed slot: a place no note has reached yet. An `open` slot waits for a deal; a `payment` slot, outlined in the
+ * success colour, waits for the money, its text the question it asks.
+ */
+export type DealSlot = { readonly kind: 'open' } | { readonly kind: 'payment'; readonly text?: string };
 
 /** One stage of the pipeline: a lane under a dark pill, its deals top to bottom, then its slot if it has one. */
 export interface DealLane {

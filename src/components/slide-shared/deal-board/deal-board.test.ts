@@ -98,20 +98,40 @@ describe('success cases', () => {
 
   it('closes a lane with its dashed slot, its text read after the notes, and wraps the lanes when asked', () => {
     // ARRANGE
-    const expected = ['data-deal="slot"', 'data-tone="success"', 'too late?', 'data-wrap="true"'];
+    const expected = ['data-deal="slot"', 'data-kind="payment"', 'data-kind="open"', 'too late?', 'data-wrap="true"'];
     const expectedText = 'Leads Payment too late?';
     // ACT
     const html = board({
       countLabel: undefined,
       wrap: true,
       lanes: [
-        { slug: 'leads', label: 'Leads', deals: [] },
-        { slug: 'payment', label: 'Payment', deals: [], slot: { text: 'too late?', tone: 'success' } },
+        { slug: 'leads', label: 'Leads', deals: [], slot: { kind: 'open' } },
+        { slug: 'payment', label: 'Payment', deals: [], slot: { kind: 'payment', text: 'too late?' } },
       ],
     });
     // ASSERT
     expect(expected.filter((part) => !html.includes(part))).toEqual([]);
     expect(textOf(html)).toBe(expectedText);
+  });
+
+  it('draws a tagged deal as its tag over its company, ringed when the board points at it', () => {
+    // ARRANGE
+    const expected = 'Leads Lead Your first lead';
+    const ring = 'data-ringed="true"';
+    // ACT
+    const html = board({
+      countLabel: undefined,
+      lanes: [
+        {
+          slug: 'leads',
+          label: 'Leads',
+          deals: [{ slug: 'first-lead', tag: 'Lead', company: 'Your first lead', ringed: true }],
+        },
+      ],
+    });
+    // ASSERT
+    expect(textOf(html)).toBe(expected);
+    expect(html).toContain(ring);
   });
 });
 

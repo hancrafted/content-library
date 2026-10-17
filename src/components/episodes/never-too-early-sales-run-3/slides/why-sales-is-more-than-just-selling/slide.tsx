@@ -11,13 +11,13 @@ export const whySalesIsMoreThanJustSelling = slide({
   messages: { en, de },
   segments: [{ slug: 'pain-first' }, { slug: 'the-claim' }],
   content: ({ t }) => (
-    <SlideFrame className="mt-6 pb-12! md:pb-16!">
+    <SlideFrame>
       <DealEcho
         lanes={[
           { slug: 'leads', notes: [{ slug: 'insight', text: t('payouts.insight') }] },
           { slug: 'opportunities', notes: [{ slug: 'trust', text: t('payouts.trust') }] },
           { slug: 'closing', notes: [{ slug: 'process', text: t('payouts.process') }] },
-          { slug: 'payment', slot: true },
+          { slug: 'payment', slot: { kind: 'payment' } },
         ]}
       />
     </SlideFrame>

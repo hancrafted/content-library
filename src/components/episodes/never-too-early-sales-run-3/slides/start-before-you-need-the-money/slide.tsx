@@ -11,13 +11,13 @@ export const startBeforeYouNeedTheMoney = slide({
   messages: { en, de },
   segments: [{ slug: 'back-to-the-wall' }, { slug: 'peak-end-close' }],
   content: () => (
-    <SlideFrame className="mt-6 pb-12! md:pb-16!">
+    <SlideFrame>
       <DealEcho
         lanes={[
           { slug: 'leads', notes: [{ slug: 'lead-1' }, { slug: 'lead-2' }] },
           { slug: 'opportunities', notes: [{ slug: 'opportunity-1' }] },
           { slug: 'closing', notes: [{ slug: 'deal-1' }] },
-          { slug: 'payment', ringed: true, notes: [{ slug: 'revenue', tone: 'success' }] },
+          { slug: 'payment', ringed: true, notes: [{ slug: 'revenue', tint: 'revenue' }] },
         ]}
       />
     </SlideFrame>

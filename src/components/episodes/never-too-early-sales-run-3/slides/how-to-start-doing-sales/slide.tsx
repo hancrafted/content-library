@@ -11,7 +11,7 @@ export const howToStartDoingSales = slide({
   messages: { en, de },
   segments: [{ slug: 'backward-chaining' }, { slug: 'the-claim' }, { slug: 'signposting' }],
   content: () => (
-    <SlideFrame className="mt-6 pb-12! md:pb-16!">
+    <SlideFrame>
       <DealEcho
         lanes={[
           {
@@ -21,7 +21,7 @@ export const howToStartDoingSales = slide({
           },
           { slug: 'opportunities', notes: [{ slug: 'opportunity-1' }, { slug: 'opportunity-2' }] },
           { slug: 'closing' },
-          { slug: 'payment', slot: true },
+          { slug: 'payment', slot: { kind: 'payment' } },
         ]}
       />
     </SlideFrame>

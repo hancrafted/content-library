@@ -2,18 +2,10 @@
  * The cashflow board's geometry and paper. One grid holds the lanes and every overlay: each lane is a subgrid over
  * four rows (three note slots and its footer), so a stamp, an arrow or an annotation lands on a lane's column and slot
  * by grid lines, never by pixels. Narrow boards stand their lanes two by two; from 38rem of board width all lanes
- * stand in one row. Note tints mix the global status colours into the card colour, so they follow the theme with no
- * dark values of their own.
+ * stand in one row. Note tints come from `note-tints/`, which the deal board shares.
  */
 
 .board {
-  --note-cash: color-mix(in oklch, var(--warning) 25%, var(--card));
-  --note-cash-top: color-mix(in oklch, var(--warning) 40%, var(--card));
-  --note-cost: color-mix(in oklch, var(--destructive) 25%, var(--card));
-  --note-cost-top: color-mix(in oklch, var(--destructive) 40%, var(--card));
-  --note-revenue: color-mix(in oklch, var(--success) 25%, var(--card));
-  --note-revenue-top: color-mix(in oklch, var(--success) 40%, var(--card));
-
   container-type: inline-size;
   isolation: isolate;
   background-image: radial-gradient(circle, var(--border) 1.2px, transparent 1.4px);
@@ -65,18 +57,6 @@
 
 .note.big {
   width: min(10rem, 100%);
-}
-
-.cash {
-  background-image: linear-gradient(to bottom, var(--note-cash-top), var(--note-cash));
-}
-
-.cost {
-  background-image: linear-gradient(to bottom, var(--note-cost-top), var(--note-cost));
-}
-
-.revenue {
-  background-image: linear-gradient(to bottom, var(--note-revenue-top), var(--note-revenue));
 }
 
 .footer {

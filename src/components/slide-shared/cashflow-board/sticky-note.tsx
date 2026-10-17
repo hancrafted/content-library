@@ -1,10 +1,11 @@
+import tints from '@/components/slide-shared/note-tints/note-tints.module.css';
 import { cn } from '@/lib/utils';
 import type { CSSProperties } from 'react';
 import styles from './cashflow-board.module.css';
 import { formatEuro, signedAmount, tiltOf, type Note } from './cashflow-board.pure';
 import type { BoardLabels } from './cashflow-board.types';
 
-const TINT = { cash: styles.cash, cost: styles.cost, revenue: styles.revenue } as const;
+const TINT = { cash: tints.cash, cost: tints.cost, revenue: tints.revenue } as const;
 
 interface StickyNoteProps {
   note: Note;

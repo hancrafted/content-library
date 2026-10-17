@@ -6,19 +6,19 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 
 // The section slide of "Why watching cashflow is mission critical": the Hero motif's board, still empty, its payment
-// lane ringed on a warning note reading €0.
+// lane ringed on a cash note reading €0.
 export const whyWatchingCashflowIsMissionCritical = slide({
   slug: 'why-watching-cashflow-is-mission-critical',
   messages: { en, de },
   segments: [{ slug: 'imagine-the-wall' }, { slug: 'cash-decides-how-long-you-have' }, { slug: 'the-route' }],
   content: ({ locale }) => (
-    <SlideFrame className="mt-6 pb-12! md:pb-16!">
+    <SlideFrame>
       <DealEcho
         lanes={[
           { slug: 'leads' },
           { slug: 'opportunities' },
           { slug: 'closing' },
-          { slug: 'payment', ringed: true, notes: [{ slug: 'cash', text: formatEuro(0, locale), tone: 'warning' }] },
+          { slug: 'payment', ringed: true, notes: [{ slug: 'cash', text: formatEuro(0, locale), tint: 'cash' }] },
         ]}
       />
     </SlideFrame>

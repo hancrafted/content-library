@@ -4,6 +4,7 @@ import type { CSSProperties } from 'react';
 import styles from './deal-board.module.css';
 import { laneTotal, type Deal, type DealLane, type DealSlot } from './deal-board.pure';
 import type { DealBoardProps, IncomingNote } from './deal-board.types';
+import { slotOutline } from './deal-slot';
 
 const TILT = ['-rotate-1', 'rotate-1', '-rotate-2', 'rotate-2'] as const;
 
@@ -19,9 +20,31 @@ interface DealNoteProps {
   locale: string;
 }
 
-/** One deal as a paper note: company and contact over its value, or on the compact board the company alone. */
+/** A note that stands for any deal: its mono tag over the company, ringed in `primary` when the board points at it. */
+function TaggedNote({ deal, tilt }: { deal: Deal & { tag: string }; tilt: string }) {
+  return (
+    <li
+      data-deal="note"
+      data-ringed={deal.ringed ? 'true' : undefined}
+      className={cn(
+        tilt,
+        'border bg-card p-3 shadow-md',
+        deal.ringed && 'ring-2 ring-primary ring-offset-2 ring-offset-muted',
+      )}
+    >
+      <p className="font-mono text-caption text-muted-foreground uppercase">{deal.tag}</p>
+      <p className="text-body font-semibold text-foreground">{deal.company}</p>
+    </li>
+  );
+}
+
+/**
+ * One deal as a paper note: company and contact over its value, or on the compact board the company alone; a tagged
+ * deal is a `TaggedNote`.
+ */
 function DealNote({ deal, index, compact, locale }: DealNoteProps) {
   const tilt = tiltOf(index);
+  if (deal.tag !== undefined) return <TaggedNote deal={{ ...deal, tag: deal.tag }} tilt={tilt} />;
   if (compact) {
     return (
       <li data-deal="note" className={`${tilt} bg-card p-2 text-caption text-muted-foreground shadow-sm`}>
@@ -86,19 +109,19 @@ function laneClass(compact: boolean, emphasised: boolean): string {
   );
 }
 
-/** The dashed slot closing a lane: an empty place, or in `success` the money still to come, its text centred. */
+/** The dashed slot closing a lane, a payment slot's text centred in it. */
 function Slot({ slot, compact }: { slot: DealSlot; compact: boolean }) {
   return (
     <li
       data-deal="slot"
-      data-tone={slot.tone}
+      data-kind={slot.kind}
       className={cn(
-        'flex items-center justify-center border-2 border-dashed p-3 text-center font-semibold text-muted-foreground',
+        'flex items-center justify-center p-3 text-center font-semibold text-muted-foreground',
         compact ? 'min-h-12 text-caption' : 'min-h-24 text-body',
-        slot.tone === 'success' ? cn('rotate-1', styles.successSlot) : 'border-foreground/20',
+        slotOutline(slot),
       )}
     >
-      {slot.text}
+      {slot.kind === 'payment' ? slot.text : null}
     </li>
   );
 }

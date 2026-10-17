@@ -6,9 +6,9 @@ import en from './i18n/en.json';
 
 /**
  * The Title slide's hero Scene (the record's `title`), the Hero motif: an empty deal board under the Episode's `h1`
- * and caption. One lead stands ringed in the first lane, the middle lanes hold empty dashed slots, and the payment
- * lane waits on a dashed "too late?" note. Each section slide echoes this board, filled a step further. The empty
- * Backdrop is the Title slide's one Backdrop, holding no glow.
+ * and this Slide's caption, which the Title slide shows. The first lead's note stands ringed in the Leads lane, the
+ * middle lanes hold open dashed slots, and the payment lane waits on a dashed "too late?" slot. Each section slide
+ * echoes this board, filled a step further. The empty Backdrop is the Title slide's one Backdrop, holding no glow.
  */
 export const hero = slide({
   slug: 'hero',
@@ -22,18 +22,15 @@ export const hero = slide({
             label={t('board')}
             locale={locale}
             wrap
-            emphasis="leads"
-            incoming={[{ slug: 'first-lead', tag: t('firstLead.tag'), text: t('firstLead.text') }]}
             lanes={[
-              { slug: 'leads', label: t('lanes.leads'), deals: [] },
-              { slug: 'opportunities', label: t('lanes.opportunities'), deals: [], slot: {} },
-              { slug: 'closing', label: t('lanes.closing'), deals: [], slot: {} },
               {
-                slug: 'payment',
-                label: t('lanes.payment'),
-                deals: [],
-                slot: { text: t('tooLate'), tone: 'success' },
+                slug: 'leads',
+                label: t('lanes.leads'),
+                deals: [{ slug: 'first-lead', tag: t('firstLead.tag'), company: t('firstLead.text'), ringed: true }],
               },
+              { slug: 'opportunities', label: t('lanes.opportunities'), deals: [], slot: { kind: 'open' } },
+              { slug: 'closing', label: t('lanes.closing'), deals: [], slot: { kind: 'open' } },
+              { slug: 'payment', label: t('lanes.payment'), deals: [], slot: { kind: 'payment', text: t('tooLate') } },
             ]}
           />
         </div>
