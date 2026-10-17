@@ -514,7 +514,7 @@
         "status": "draft",
         "generated": {
           "by": "copilot-cli/claude-opus-5.5",
-          "at": "2026-10-17T14:26:03Z"
+          "at": "2026-10-17T18:54:38Z"
         },
         "locale": "en",
         "brief": "../brief.md",
@@ -534,6 +534,10 @@
           {
             "by": "process:markdown-harness",
             "at": "2026-10-17T14:26:07Z"
+          },
+          {
+            "by": "process:markdown-harness",
+            "at": "2026-10-17T18:54:42Z"
           }
         ]
       }
@@ -2063,12 +2067,6 @@
                         A million euros is coming, and the company is gone.
                       </p>
                     </div>
-                    <aside class="col-span-5 rotate-1 border bg-card p-6 shadow-md">
-                      <p class="font-mono text-caption tracking-widest text-muted-foreground uppercase">Your turn</p>
-                      <p class="mt-2 text-body font-semibold">
-                        If February is the month you run out, when would you have needed to start selling?
-                      </p>
-                    </aside>
                   </header>
 
                   <div class="relative rounded-xl border bg-card px-8 pt-12 pb-8 shadow-md">
@@ -2088,7 +2086,7 @@
                           >
                             Jan
                           </h4>
-                          <ul class="grid grid-rows-3 items-start justify-items-center gap-8">
+                          <ul class="grid grid-rows-2 items-start justify-items-center gap-8">
                             <li class="w-32 -rotate-2 bg-card shadow-md">
                               <div
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-3"
@@ -2105,14 +2103,6 @@
                                 ><span class="text-body font-semibold">−€50,000</span>
                               </div>
                             </li>
-                            <li class="w-32 -rotate-1 bg-card shadow-md">
-                              <div
-                                class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-3"
-                              >
-                                <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-body font-semibold">€50,000</span>
-                              </div>
-                            </li>
                           </ul>
                           <p
                             class="mt-auto flex items-baseline justify-between gap-2 border-t border-foreground/15 pt-3"
@@ -2127,7 +2117,7 @@
                           >
                             Feb
                           </h4>
-                          <ul class="grid grid-rows-3 items-start justify-items-center gap-8">
+                          <ul class="grid grid-rows-2 items-start justify-items-center gap-8">
                             <li class="w-32 rotate-2 bg-card shadow-md">
                               <div
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-3"
@@ -2144,19 +2134,26 @@
                                 ><span class="text-body font-semibold">−€50,000</span>
                               </div>
                             </li>
-                            <li data-target="zero-cash" class="w-40 rotate-1 bg-card shadow-xl">
-                              <div
-                                class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-4"
-                              >
-                                <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-heading font-semibold">€0</span>
-                              </div>
-                            </li>
                           </ul>
                           <p
+                            data-target="zero-cash"
                             class="mt-auto flex items-baseline justify-between gap-2 border-t border-foreground/15 pt-3"
                           >
-                            <span class="font-mono text-caption text-muted-foreground uppercase">Cash left</span
+                            <span class="font-mono text-caption text-muted-foreground uppercase"
+                              >Cash left
+                              <span
+                                data-spec="context-marker"
+                                data-note="The default-alive test"
+                                role="img"
+                                aria-label="Speaker note: The default-alive test"
+                                class="inline-flex align-middle text-muted-foreground"
+                                ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
+                                  <path
+                                    d="M2.5 2.5h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3.5 3v-3h-1a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z"
+                                    class="fill-none stroke-current"
+                                    stroke-width="1.5"
+                                    stroke-linejoin="round"
+                                  /></svg></span></span
                             ><span class="text-body font-semibold text-foreground">€0</span>
                           </p>
                         </li>
@@ -2168,7 +2165,21 @@
                           >
                             March
                           </h4>
-                          <ul class="grid grid-rows-3 items-start justify-items-center gap-8">
+                          <span
+                            data-spec="context-marker"
+                            data-note="Costs begin before customers"
+                            role="img"
+                            aria-label="Speaker note: Costs begin before customers"
+                            class="absolute top-2 right-2 inline-flex text-muted-foreground"
+                            ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
+                              <path
+                                d="M2.5 2.5h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3.5 3v-3h-1a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z"
+                                class="fill-none stroke-current"
+                                stroke-width="1.5"
+                                stroke-linejoin="round"
+                              /></svg
+                          ></span>
+                          <ul class="grid grid-rows-2 items-start justify-items-center gap-8">
                             <li class="w-32 -rotate-2 bg-card shadow-md">
                               <div
                                 class="flex aspect-square flex-col justify-between bg-linear-to-b from-destructive/35 to-destructive/20 p-3"
@@ -2177,7 +2188,6 @@
                                 ><span class="text-body font-semibold">−€50,000</span>
                               </div>
                             </li>
-                            <li class="w-32" aria-hidden="true"></li>
                             <li class="w-32" aria-hidden="true"></li>
                           </ul>
                           <p
@@ -2193,7 +2203,7 @@
                           >
                             April
                           </h4>
-                          <ul class="grid grid-rows-3 items-start justify-items-center gap-8">
+                          <ul class="grid grid-rows-2 items-start justify-items-center gap-8">
                             <li class="w-32" aria-hidden="true"></li>
                             <li class="w-40 rotate-2 bg-card shadow-xl">
                               <div
@@ -2203,7 +2213,6 @@
                                 ><span class="text-body font-semibold">€1,000,000</span>
                               </div>
                             </li>
-                            <li class="w-32" aria-hidden="true"></li>
                           </ul>
                           <p
                             class="mt-auto flex items-baseline justify-between gap-2 border-t border-foreground/15 pt-3"
@@ -2214,7 +2223,7 @@
                         </li>
                       </ol>
                       <div class="pointer-events-none absolute inset-0 grid grid-cols-4 gap-6" aria-hidden="true">
-                        <div class="col-start-3 flex items-start justify-center pt-72">
+                        <div class="col-start-3 flex items-start justify-center pt-48">
                           <span
                             class="-rotate-45 rounded-lg border-4 border-destructive bg-card/70 px-6 py-1 text-subheading font-semibold tracking-widest text-destructive uppercase shadow-md"
                             >Bankrupt</span
@@ -2233,7 +2242,22 @@
                             vector-effect="non-scaling-stroke"
                           />
                         </svg>
-                        <p class="mt-2 text-center text-body font-semibold text-foreground">Two months of cash</p>
+                        <p class="mt-2 text-center text-body font-semibold text-foreground">
+                          Two months of cash (<span
+                            data-spec="context-marker"
+                            data-note="A high burn rate is a clock"
+                            role="img"
+                            aria-label="Speaker note: A high burn rate is a clock"
+                            class="inline-flex align-middle text-muted-foreground"
+                            ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
+                              <path
+                                d="M2.5 2.5h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3.5 3v-3h-1a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z"
+                                class="fill-none stroke-current"
+                                stroke-width="1.5"
+                                stroke-linejoin="round"
+                              /></svg></span
+                          >)
+                        </p>
                       </div>
                       <div class="col-span-2 flex flex-col">
                         <svg viewBox="0 0 400 40" class="h-10 w-full" preserveAspectRatio="none" aria-hidden="true">
@@ -2255,9 +2279,8 @@
                 <figcaption>
                   <b>1c</b> The same board aimed at March: the lane where a cost lands on an empty account is ringed in
                   <code>primary</code> under the stamp, two brackets read the timing (two months of cash, the million
-                  one month late), and the Voice script's closing question is pinned as a neutral note beside the title.
-                  Picked by Han in round 2 for its simple visual language, with enough guides to read at rest; it now
-                  carries a Cash left footer per column and signed costs. Build cost: Scene.
+                  one month late). Picked by Han in round 2 for its simple visual language, with enough guides to read
+                  at rest; it now carries a Cash left footer per column and signed costs. Build cost: Scene.
                 </figcaption>
                 <details class="spec-build">
                   <summary>Build notes</summary>
@@ -2274,8 +2297,7 @@
                       <b>Master and motion.</b> Scene from <code>SlideFrame</code> + <code>&lt;Title&gt;</code> +
                       <code>SlideCaption</code>, as 1a. Keeps <code>motion: local</code>, as 1a's note placement; when
                       March's cost note lands the March ring fades in and the stamp falls, then April's revenue note
-                      lands and the two brackets fade in left to right. The question note is placed last (Voice item 4).
-                      Reduced motion rests finished.
+                      lands and the two brackets fade in left to right. Reduced motion rests finished.
                     </p>
                     <p>
                       <b>Part and props.</b> The shared <code>CashflowBoard</code>, its interface, geometry, surface,
@@ -2290,23 +2312,26 @@
                       balance, computed from its own notes, in <code>text-body font-semibold</code> on the right: Jan
                       <code>€50,000</code>, Feb <code>€0</code>, March <code>−€50,000</code> in
                       <code>text-destructive</code> (the cost lands on an empty account, under the stamp), April
-                      <code>€950,000</code> (the million minus March's hole, one month too late). The question note
-                      beside the title is Slide-local markup, a neutral note (<code
-                        >bg-card border shadow-md rotate-1</code
-                      >) as the Visual language's second bullet says.
+                      <code>€950,000</code> (the million minus March's hole, one month too late).
                     </p>
                     <p>
                       <b>Tokens and i18n.</b> Board as the part's; the one focal point is the <code>primary</code> ring
-                      of <code>highlight</code>. <code>target('zero-cash')</code> on Feb's <code>Cash €0</code> note.
-                      Keys <code>kicker</code>, <code>title</code>, <code>caption</code>, <code>board</code>,
-                      <code>months.*</code>, <code>note.*</code>, <code>stamp</code>, <code>runway</code> ("Two months
-                      of cash"), <code>late</code> ("The million lands one month late"),
-                      <code>question.label</code> ("Your turn"), <code>question.text</code>,
-                      <code>cashLeft</code> ("Cash left" / "Kassenstand"). Amounts in euros as the last bullet of the
-                      Visual language says: numbers formatted by <code>Intl.NumberFormat</code> with
+                      of <code>highlight</code>. <code>target('zero-cash')</code> on Feb's
+                      <code>Cash left</code> footer. Keys <code>kicker</code>, <code>title</code>, <code>caption</code>,
+                      <code>board</code>, <code>months.*</code>, <code>note.*</code>, <code>stamp</code>,
+                      <code>runway</code> ("Two months of cash"), <code>late</code> ("The million lands one month
+                      late"), <code>cashLeft</code> ("Cash left" / "Kassenstand"). Amounts in euros as the last bullet
+                      of the Visual language says: numbers formatted by <code>Intl.NumberFormat</code> with
                       <code>currency: 'EUR'</code>; a cost passes a positive amount and the part prints its sign,
                       <code>Cost</code> over <code>−€50,000</code> (Han, round 2); footer balances are computed, not
                       translated.
+                    </p>
+                    <p>
+                      Context markers: <code>Marker</code> in the March lane's corner opens "Costs begin before
+                      customers"; <code>marker</code> after "Two months of cash" opens "A high burn rate is a clock";
+                      <code>Marker</code> beside February's "Cash left", which carries the
+                      <code>zero-cash</code> target, opens "The default-alive test". Each column's balance is its "Cash
+                      left" footer, so no cash note repeats it: the board has two note rows.
                     </p>
                   </div>
                 </details>
@@ -3042,11 +3067,37 @@
                         <p class="text-subheading font-semibold leading-none text-muted-foreground/40">01</p>
                         <p class="mt-3 text-body font-semibold">Gain market insight</p>
                         <p class="mt-2 text-caption text-muted-foreground">
-                          Every customer talk is research you did not pay for.
+                          Every customer talk is research you did not pay for. (<span
+                            data-spec="context-marker"
+                            data-note="Your starting model is wrong"
+                            role="img"
+                            aria-label="Speaker note: Your starting model is wrong"
+                            class="inline-flex align-middle text-muted-foreground"
+                            ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
+                              <path
+                                d="M2.5 2.5h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3.5 3v-3h-1a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z"
+                                class="fill-none stroke-current"
+                                stroke-width="1.5"
+                                stroke-linejoin="round"
+                              /></svg></span
+                          >)
                         </p>
                         <div class="mt-4 flex flex-col gap-2">
                           <p class="self-start rounded-2xl rounded-bl-sm bg-muted px-3 py-2 text-caption">
-                            When did this last happen to you?
+                            When did this last happen to you? (<span
+                              data-spec="context-marker"
+                              data-note="Ask about the last time"
+                              role="img"
+                              aria-label="Speaker note: Ask about the last time"
+                              class="inline-flex align-middle text-muted-foreground"
+                              ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
+                                <path
+                                  d="M2.5 2.5h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3.5 3v-3h-1a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z"
+                                  class="fill-none stroke-current"
+                                  stroke-width="1.5"
+                                  stroke-linejoin="round"
+                                /></svg></span
+                            >)
                           </p>
                           <p class="self-end rounded-2xl rounded-br-sm border bg-card px-3 py-2 text-caption shadow-sm">
                             Last month. We lost two days on it.
@@ -3075,9 +3126,38 @@
                         <p class="text-subheading font-semibold leading-none text-muted-foreground/40">02</p>
                         <p class="mt-3 text-body font-semibold">Gain internal insights</p>
                         <p class="mt-2 text-caption text-muted-foreground">
-                          How well do you sell, and could anyone besides you repeat it?
+                          How well do you sell, and could anyone besides you repeat it? (<span
+                            data-spec="context-marker"
+                            data-note="Friends' orders can mislead"
+                            role="img"
+                            aria-label="Speaker note: Friends' orders can mislead"
+                            class="inline-flex align-middle text-muted-foreground"
+                            ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
+                              <path
+                                d="M2.5 2.5h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3.5 3v-3h-1a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z"
+                                class="fill-none stroke-current"
+                                stroke-width="1.5"
+                                stroke-linejoin="round"
+                              /></svg></span
+                          >)
                         </p>
-                        <svg viewBox="0 0 200 190" class="mt-4 w-full" aria-hidden="true">
+                        <p class="mt-4 flex justify-end">
+                          <span
+                            data-spec="context-marker"
+                            data-note="Premature scaling burns cash"
+                            role="img"
+                            aria-label="Speaker note: Premature scaling burns cash"
+                            class="inline-flex text-muted-foreground"
+                            ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
+                              <path
+                                d="M2.5 2.5h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3.5 3v-3h-1a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z"
+                                class="fill-none stroke-current"
+                                stroke-width="1.5"
+                                stroke-linejoin="round"
+                              /></svg
+                          ></span>
+                        </p>
+                        <svg viewBox="0 0 200 190" class="w-full" aria-hidden="true">
                           <circle cx="30" cy="40" r="22" class="fill-foreground" />
                           <text x="30" y="45" text-anchor="middle" class="fill-background text-caption font-semibold">
                             You
@@ -3144,9 +3224,36 @@
                         <p class="text-subheading font-semibold leading-none text-primary-foreground/40">03</p>
                         <p class="mt-3 text-heading font-semibold leading-none">Increase trust</p>
                         <p class="mt-4 text-body text-primary-foreground/80">
-                          Investors and reluctant customers trust what someone else has already bought.
+                          Investors and reluctant customers trust what someone else has already bought. (<span
+                            data-spec="context-marker"
+                            data-note="A signal must be costly to fake"
+                            role="img"
+                            aria-label="Speaker note: A signal must be costly to fake"
+                            class="inline-flex align-middle text-primary-foreground/70"
+                            ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
+                              <path
+                                d="M2.5 2.5h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3.5 3v-3h-1a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z"
+                                class="fill-none stroke-current"
+                                stroke-width="1.5"
+                                stroke-linejoin="round"
+                              /></svg></span
+                          >)
                         </p>
-                        <div class="mt-6 rounded-md bg-primary-foreground/10 p-4">
+                        <div class="relative mt-6 rounded-md bg-primary-foreground/10 p-4">
+                          <span
+                            data-spec="context-marker"
+                            data-note="Investors read the team"
+                            role="img"
+                            aria-label="Speaker note: Investors read the team"
+                            class="absolute top-2 right-2 inline-flex text-primary-foreground/70"
+                            ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
+                              <path
+                                d="M2.5 2.5h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3.5 3v-3h-1a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z"
+                                class="fill-none stroke-current"
+                                stroke-width="1.5"
+                                stroke-linejoin="round"
+                              /></svg
+                          ></span>
                           <p class="font-mono text-caption uppercase tracking-widest text-primary-foreground/70">
                             What 885 VCs weigh most
                           </p>
@@ -3254,7 +3361,20 @@
                           />
                         </svg>
                         <p class="pt-6 text-caption italic text-muted-foreground">
-                          The "=" is a claim, not a proof: a first result shows your team can sell.
+                          The "=" is a claim, not a proof: a first result shows your team can sell. (<span
+                            data-spec="context-marker"
+                            data-note="No study measures LOIs or pipelines"
+                            role="img"
+                            aria-label="Speaker note: No study measures LOIs or pipelines"
+                            class="inline-flex align-middle text-muted-foreground"
+                            ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
+                              <path
+                                d="M2.5 2.5h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3.5 3v-3h-1a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z"
+                                class="fill-none stroke-current"
+                                stroke-width="1.5"
+                                stroke-linejoin="round"
+                              /></svg></span
+                          >)
                         </p>
                       </div>
                     </div>
@@ -3357,6 +3477,15 @@
                       that the two insights feed trust; change the arrows into plus and equals, the boxes into taped
                       notes on a board, the "Relevant:" lists into chips, and add the exchange, the repeat path, the VC
                       bars, the stamp, the brace and the margin note.
+                    </p>
+                    <p>
+                      Context markers: <code>marker</code> after the market note's line opens "Your starting model is
+                      wrong", after "When did this last happen to you?" opens "Ask about the last time", after the
+                      internal note's line opens "Friends' orders can mislead", after the trust note's line opens "A
+                      signal must be costly to fake" and after the margin note opens "No study measures LOIs or
+                      pipelines"; <code>Marker</code> beside the repeat path opens "Premature scaling burns cash", and
+                      in the corner of the "What 885 VCs weigh most" card opens "Investors read the team". On the
+                      <code>primary</code> note a marker is <code>text-primary-foreground/70</code>.
                     </p>
                   </div>
                 </details>
@@ -3538,7 +3667,20 @@
                       <div class="col-span-9 flex flex-col gap-1">
                         <span
                           class="font-mono text-caption font-semibold uppercase tracking-widest text-muted-foreground"
-                          >Calendar time you cannot compress</span
+                          >Calendar time you cannot compress (<span
+                            data-spec="context-marker"
+                            data-note="The lags add up"
+                            role="img"
+                            aria-label="Speaker note: The lags add up"
+                            class="inline-flex align-middle text-muted-foreground"
+                            ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
+                              <path
+                                d="M2.5 2.5h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3.5 3v-3h-1a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z"
+                                class="fill-none stroke-current"
+                                stroke-width="1.5"
+                                stroke-linejoin="round"
+                              /></svg></span
+                          >)</span
                         >
                         <svg viewBox="0 0 900 20" preserveAspectRatio="none" class="h-4 w-full" aria-hidden="true">
                           <path
@@ -3752,7 +3894,22 @@
                         <div class="mt-auto -rotate-2 bg-warning/25 p-4 shadow-md">
                           <p class="text-caption text-foreground">Cash</p>
                           <p class="text-body font-semibold text-foreground">Invoice paid</p>
-                          <p class="text-caption text-muted-foreground">30 to 60 days after it is sent</p>
+                          <p class="text-caption text-muted-foreground">
+                            30 to 60 days after it is sent (<span
+                              data-spec="context-marker"
+                              data-note="Cash waits on paperwork"
+                              role="img"
+                              aria-label="Speaker note: Cash waits on paperwork"
+                              class="inline-flex align-middle text-muted-foreground"
+                              ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
+                                <path
+                                  d="M2.5 2.5h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3.5 3v-3h-1a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z"
+                                  class="fill-none stroke-current"
+                                  stroke-width="1.5"
+                                  stroke-linejoin="round"
+                                /></svg></span
+                            >)
+                          </p>
                         </div>
                       </li>
                     </ol>
@@ -3840,7 +3997,9 @@
                     <code>docs/episodes/never-too-early-sales-run-3/reference/source-deck/pages/page-07.jpg</code>.
                     Build against this page: keep its three stage names; change its three full boxes into one faint
                     dashed lane with one note each, ending in the Cash note. The lead list names logistics companies
-                    only, one client industry for the Slide.
+                    only, one client industry for the Slide. Context markers: <code>marker</code> after "30 to 60 days
+                    after it is sent" opens "Cash waits on paperwork"; after "Calendar time you cannot compress" opens
+                    "The lags add up".
                   </div>
                 </details>
                 <label class="spec-pick"
@@ -4377,6 +4536,20 @@
                         class="absolute -top-4 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-foreground px-5 py-1.5 text-caption font-medium text-background"
                         >Negotiation</span
                       >
+                      <span
+                        data-spec="context-marker"
+                        data-note="Late deals convert worse"
+                        role="img"
+                        aria-label="Speaker note: Late deals convert worse"
+                        class="absolute top-2 right-2 inline-flex text-muted-foreground"
+                        ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
+                          <path
+                            d="M2.5 2.5h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3.5 3v-3h-1a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z"
+                            class="fill-none stroke-current"
+                            stroke-width="1.5"
+                            stroke-linejoin="round"
+                          /></svg
+                      ></span>
                       <div class="flex items-baseline justify-between px-1">
                         <span class="text-body font-semibold text-foreground">€48,000</span
                         ><span class="font-mono text-caption text-muted-foreground">2 deals</span>
@@ -4466,7 +4639,8 @@
                     stacked deal cards with company and value; change the coloured chevrons into dark pills and the
                     cards into tilted paper notes, drop avatars, priority tags, comment counts and the tool chrome, use
                     the Dossier's five stages, and invent every name, each a logistics company: one client industry for
-                    the Slide. Page 13 (Pipedrive) is not used.
+                    the Slide. Page 13 (Pipedrive) is not used. Context markers: <code>Marker</code> in the Negotiation
+                    lane's corner (<code>DealLane.marker</code>) opens "Late deals convert worse".
                   </div>
                 </details>
                 <label class="spec-pick"
@@ -4954,7 +5128,22 @@
                         </svg>
                         <p class="text-caption font-semibold text-foreground">Web page</p>
                       </div>
-                      <span class="font-mono text-caption text-muted-foreground">massive volume</span>
+                      <span class="font-mono text-caption text-muted-foreground"
+                        >massive volume (<span
+                          data-spec="context-marker"
+                          data-note="Customers do not arrive alone"
+                          role="img"
+                          aria-label="Speaker note: Customers do not arrive alone"
+                          class="inline-flex align-middle text-muted-foreground"
+                          ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
+                            <path
+                              d="M2.5 2.5h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3.5 3v-3h-1a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z"
+                              class="fill-none stroke-current"
+                              stroke-width="1.5"
+                              stroke-linejoin="round"
+                            /></svg></span
+                        >)</span
+                      >
                     </div>
 
                     <!-- the funnel -->
@@ -5005,6 +5194,20 @@
                             class="absolute -top-4 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-foreground px-4 py-1.5 text-caption font-medium text-background"
                             >Lead in</span
                           >
+                          <span
+                            data-spec="context-marker"
+                            data-note="The marketing hand-off has its own rate"
+                            role="img"
+                            aria-label="Speaker note: The marketing hand-off has its own rate"
+                            class="absolute top-2 right-2 inline-flex text-muted-foreground"
+                            ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
+                              <path
+                                d="M2.5 2.5h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3.5 3v-3h-1a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z"
+                                class="fill-none stroke-current"
+                                stroke-width="1.5"
+                                stroke-linejoin="round"
+                              /></svg
+                          ></span>
                           <div class="-rotate-2 bg-card p-2 shadow-md">
                             <p class="font-mono text-caption text-primary">inbound</p>
                             <p class="text-caption text-foreground">A form sent: sales can call</p>
@@ -5116,7 +5319,10 @@
                     <code>docs/episodes/never-too-early-sales-run-3/reference/source-deck/pages/page-14.jpg</code>.
                     Build against this page: keep the definition (massive volume into a defined stage) and its two
                     examples, inbound lead and e-commerce checkout; change the third-party five-colour funnel and brand
-                    logos into our own neutral funnel that narrows into the pipeline's Lead in lane.
+                    logos into our own neutral funnel that narrows into the pipeline's Lead in lane. Context markers:
+                    <code>marker</code> after "massive volume" opens "Customers do not arrive alone";
+                    <code>Marker</code> in the Lead in lane's corner (<code>DealLane.marker</code>) opens "The marketing
+                    hand-off has its own rate".
                   </div>
                 </details>
                 <label class="spec-pick"
@@ -5581,14 +5787,7 @@
                                 ><span class="text-body font-semibold">−€50,000</span>
                               </div>
                             </li>
-                            <li class="w-32 -rotate-1 bg-card shadow-md">
-                              <div
-                                class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-3"
-                              >
-                                <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-body font-semibold">€50,000</span>
-                              </div>
-                            </li>
+                            <li class="w-32" aria-hidden="true"></li>
                           </ul>
                           <p
                             class="mt-auto flex items-baseline justify-between gap-2 border-t border-foreground/15 pt-3"
@@ -5620,14 +5819,7 @@
                                 ><span class="text-body font-semibold">−€50,000</span>
                               </div>
                             </li>
-                            <li class="w-40 rotate-1 bg-card shadow-xl">
-                              <div
-                                class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-4"
-                              >
-                                <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-heading font-semibold">€0</span>
-                              </div>
-                            </li>
+                            <li class="w-32" aria-hidden="true"></li>
                           </ul>
                           <p
                             class="mt-auto flex items-baseline justify-between gap-2 border-t border-foreground/15 pt-3"
@@ -5642,6 +5834,20 @@
                           >
                             March
                           </h4>
+                          <span
+                            data-spec="context-marker"
+                            data-note="Predicted revenue is discounted"
+                            role="img"
+                            aria-label="Speaker note: Predicted revenue is discounted"
+                            class="absolute top-2 right-2 inline-flex text-muted-foreground"
+                            ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
+                              <path
+                                d="M2.5 2.5h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3.5 3v-3h-1a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z"
+                                class="fill-none stroke-current"
+                                stroke-width="1.5"
+                                stroke-linejoin="round"
+                              /></svg
+                          ></span>
                           <ul class="grid grid-rows-3 items-start justify-items-center gap-8">
                             <li class="w-32 -rotate-2 bg-card shadow-md">
                               <div
@@ -5786,7 +5992,8 @@
                     and the thick arrow from April's revenue into March; change the revenue note's resting place from
                     April into March, leave a dashed outline in April, draw the arrow in <code>primary</code> with its
                     label, and write amounts in euros with signed costs and a <code>Cash left</code> footer under each
-                    lane.
+                    lane. Context markers: <code>Marker</code> in the March lane's corner opens "Predicted revenue is
+                    discounted". Each column's balance is its "Cash left" footer, so no cash note repeats it.
                   </div>
                 </details>
                 <label class="spec-pick"
@@ -6302,7 +6509,20 @@
                     <div class="grid grid-cols-12 items-end gap-6">
                       <div class="col-span-9 flex flex-col items-center">
                         <p class="text-subheading font-semibold leading-none text-primary">
-                          Conversion rate <span class="tabular-nums">3 : 1</span>
+                          Conversion rate <span class="tabular-nums">3 : 1</span> (<span
+                            data-spec="context-marker"
+                            data-note="Stage rates are not portable"
+                            role="img"
+                            aria-label="Speaker note: Stage rates are not portable"
+                            class="inline-flex align-middle text-muted-foreground"
+                            ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
+                              <path
+                                d="M2.5 2.5h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3.5 3v-3h-1a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z"
+                                class="fill-none stroke-current"
+                                stroke-width="1.5"
+                                stroke-linejoin="round"
+                              /></svg></span
+                          >)
                         </p>
                         <p class="mt-1 text-caption text-muted-foreground">
                           How many leads become one opportunity: tells you your <b class="text-foreground">offering</b>
@@ -6430,7 +6650,20 @@
                       />
                     </svg>
                     <p class="text-center text-body text-foreground">
-                      <b>Sales cycle</b> · first contact to the money: tells you your <b>efficiency</b>
+                      <b>Sales cycle</b> · first contact to the money: tells you your <b>efficiency</b> (<span
+                        data-spec="context-marker"
+                        data-note="Cycle length hits cash"
+                        role="img"
+                        aria-label="Speaker note: Cycle length hits cash"
+                        class="inline-flex align-middle text-muted-foreground"
+                        ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
+                          <path
+                            d="M2.5 2.5h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3.5 3v-3h-1a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z"
+                            class="fill-none stroke-current"
+                            stroke-width="1.5"
+                            stroke-linejoin="round"
+                          /></svg></span
+                      >)
                     </p>
                   </div>
                 </div>
@@ -6474,7 +6707,9 @@
                     <code>docs/episodes/never-too-early-sales-run-3/reference/source-deck/pages/page-10.jpg</code>.
                     Build against this page: keep the three terms, definitions and the volume/offering/efficiency
                     payoff; change the three boxes into annotations on one drawn pipeline board. Every card names a
-                    dental practice, one client industry for the Slide.
+                    dental practice, one client industry for the Slide. Context markers: <code>marker</code> after
+                    "Conversion rate 3 : 1" opens "Stage rates are not portable"; after the sales-cycle line opens
+                    "Cycle length hits cash".
                   </div>
                 </details>
                 <label class="spec-pick"
@@ -6927,7 +7162,22 @@
                     >
                       27 : 1
                     </p>
-                    <p class="text-caption text-muted-foreground">total conversion: 27 leads for 1 deal</p>
+                    <p class="text-caption text-muted-foreground">
+                      total conversion: 27 leads for 1 deal (<span
+                        data-spec="context-marker"
+                        data-note="A reference win rate"
+                        role="img"
+                        aria-label="Speaker note: A reference win rate"
+                        class="inline-flex align-middle text-muted-foreground"
+                        ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
+                          <path
+                            d="M2.5 2.5h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3.5 3v-3h-1a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z"
+                            class="fill-none stroke-current"
+                            stroke-width="1.5"
+                            stroke-linejoin="round"
+                          /></svg></span
+                      >)
+                    </p>
                     <svg viewBox="0 0 1200 24" preserveAspectRatio="none" class="h-6 w-full" aria-hidden="true">
                       <path
                         d="M2 22 V4 H1198 V22"
@@ -6988,6 +7238,20 @@
                           class="flex size-14 items-center justify-center rounded-full bg-foreground text-body font-semibold text-background shadow-md"
                           >3:1</span
                         >
+                        <span
+                          data-spec="context-marker"
+                          data-note="The biggest loss is no decision"
+                          role="img"
+                          aria-label="Speaker note: The biggest loss is no decision"
+                          class="inline-flex text-muted-foreground"
+                          ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
+                            <path
+                              d="M2.5 2.5h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3.5 3v-3h-1a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z"
+                              class="fill-none stroke-current"
+                              stroke-width="1.5"
+                              stroke-linejoin="round"
+                            /></svg
+                        ></span>
                         <svg viewBox="0 0 40 20" class="w-10" aria-hidden="true">
                           <path
                             d="M2 10 H34 M26 3 L36 10 L26 17"
@@ -7000,6 +7264,33 @@
                         <div class="flex items-center justify-between">
                           <span class="rounded-full bg-foreground px-4 py-1 text-caption font-semibold text-background"
                             >Opportunity · 9</span
+                          ><span class="inline-flex gap-1"
+                            ><span
+                              data-spec="context-marker"
+                              data-note="Everyone holds a veto"
+                              role="img"
+                              aria-label="Speaker note: Everyone holds a veto"
+                              class="inline-flex text-muted-foreground"
+                              ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
+                                <path
+                                  d="M2.5 2.5h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3.5 3v-3h-1a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z"
+                                  class="fill-none stroke-current"
+                                  stroke-width="1.5"
+                                  stroke-linejoin="round"
+                                /></svg></span
+                            ><span
+                              data-spec="context-marker"
+                              data-note="Buying groups disagree"
+                              role="img"
+                              aria-label="Speaker note: Buying groups disagree"
+                              class="inline-flex text-muted-foreground"
+                              ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
+                                <path
+                                  d="M2.5 2.5h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3.5 3v-3h-1a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z"
+                                  class="fill-none stroke-current"
+                                  stroke-width="1.5"
+                                  stroke-linejoin="round"
+                                /></svg></span></span
                           ><span class="font-mono text-caption text-muted-foreground">6 months</span>
                         </div>
                         <div class="grid grid-cols-3 gap-2 text-caption text-foreground">
@@ -7113,7 +7404,11 @@
                     <code>docs/episodes/never-too-early-sales-run-3/reference/source-deck/pages/page-11.jpg</code>.
                     Build against this page: keep the three stages, durations, ratios, the 27:1 total and the cycle bar;
                     change the tapered segments into board lanes holding counted, named notes, paper rather than navy
-                    and amber, only the deal in a revenue tint, the bar drawn to scale.
+                    and amber, only the deal in a revenue tint, the bar drawn to scale. Context markers:
+                    <code>marker</code> after "total conversion: 27 leads for 1 deal" opens "A reference win rate";
+                    <code>Marker</code> under the opportunity-to-deal "3:1" opens "The biggest loss is no decision"; two
+                    <code>Marker</code>s beside the Opportunity label open "Everyone holds a veto" and "Buying groups
+                    disagree".
                   </div>
                 </details>
                 <label class="spec-pick"
@@ -7611,10 +7906,25 @@
                     </p>
                     <div class="relative grid grid-cols-3 gap-6">
                       <div class="flex flex-col gap-4 rounded-lg bg-foreground/5 p-5">
-                        <span
-                          class="self-start rounded-full bg-foreground px-4 py-1 text-caption font-semibold text-background"
-                          >1 · Preparation</span
-                        >
+                        <div class="flex items-center gap-2">
+                          <span
+                            class="self-start rounded-full bg-foreground px-4 py-1 text-caption font-semibold text-background"
+                            >1 · Preparation</span
+                          ><span
+                            data-spec="context-marker"
+                            data-note="Learn first, codify later"
+                            role="img"
+                            aria-label="Speaker note: Learn first, codify later"
+                            class="inline-flex text-muted-foreground"
+                            ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
+                              <path
+                                d="M2.5 2.5h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3.5 3v-3h-1a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z"
+                                class="fill-none stroke-current"
+                                stroke-width="1.5"
+                                stroke-linejoin="round"
+                              /></svg
+                          ></span>
+                        </div>
                         <div
                           class="-rotate-1 rounded-sm border-2 border-dashed border-muted-foreground p-4 text-caption text-muted-foreground"
                         >
@@ -7633,10 +7943,38 @@
                         <p class="text-caption text-muted-foreground">dashed: not written yet</p>
                       </div>
                       <div class="flex flex-col gap-4 rounded-lg bg-foreground/5 p-5">
-                        <span
-                          class="self-start rounded-full bg-foreground px-4 py-1 text-caption font-semibold text-background"
-                          >2 · Unknown market</span
-                        >
+                        <div class="flex items-center gap-2">
+                          <span
+                            class="self-start rounded-full bg-foreground px-4 py-1 text-caption font-semibold text-background"
+                            >2 · Unknown market</span
+                          ><span
+                            data-spec="context-marker"
+                            data-note="Startups search, they do not execute"
+                            role="img"
+                            aria-label="Speaker note: Startups search, they do not execute"
+                            class="inline-flex text-muted-foreground"
+                            ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
+                              <path
+                                d="M2.5 2.5h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3.5 3v-3h-1a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z"
+                                class="fill-none stroke-current"
+                                stroke-width="1.5"
+                                stroke-linejoin="round"
+                              /></svg></span
+                          ><span
+                            data-spec="context-marker"
+                            data-note="Selling blind"
+                            role="img"
+                            aria-label="Speaker note: Selling blind"
+                            class="inline-flex text-muted-foreground"
+                            ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
+                              <path
+                                d="M2.5 2.5h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3.5 3v-3h-1a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z"
+                                class="fill-none stroke-current"
+                                stroke-width="1.5"
+                                stroke-linejoin="round"
+                              /></svg
+                          ></span>
+                        </div>
                         <p class="rotate-1 rounded-sm bg-card p-4 text-body font-medium text-foreground shadow-md">
                           Who is really your customer?
                         </p>
@@ -7649,10 +7987,25 @@
                         <p class="text-caption text-muted-foreground">answered only by real conversations</p>
                       </div>
                       <div class="flex flex-col gap-4 rounded-lg bg-foreground/5 p-5">
-                        <span
-                          class="self-start rounded-full bg-foreground px-4 py-1 text-caption font-semibold text-background"
-                          >3 · Unknown metrics</span
-                        >
+                        <div class="flex items-center gap-2">
+                          <span
+                            class="self-start rounded-full bg-foreground px-4 py-1 text-caption font-semibold text-background"
+                            >3 · Unknown metrics</span
+                          ><span
+                            data-spec="context-marker"
+                            data-note="Metrics lag by one cycle"
+                            role="img"
+                            aria-label="Speaker note: Metrics lag by one cycle"
+                            class="inline-flex text-muted-foreground"
+                            ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
+                              <path
+                                d="M2.5 2.5h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3.5 3v-3h-1a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z"
+                                class="fill-none stroke-current"
+                                stroke-width="1.5"
+                                stroke-linejoin="round"
+                              /></svg
+                          ></span>
+                        </div>
                         <div class="-rotate-1 rounded-sm bg-primary p-5 text-primary-foreground shadow-xl">
                           <p class="text-caption">Conversion rate</p>
                           <p class="text-heading font-semibold leading-none tabular-nums">? : 1</p>
@@ -7717,6 +8070,9 @@
                     <code>docs/episodes/never-too-early-sales-run-3/reference/source-deck/pages/page-15.jpg</code>.
                     Build against this page: keep the three headings and every line; change the boxes into board lanes
                     with dashed blank notes, question notes and dark "?" metric notes, and add the day-one stamp.
+                    Context markers: <code>Marker</code> beside "1 · Preparation" opens "Learn first, codify later"; two
+                    beside "2 · Unknown market" open "Startups search, they do not execute" and "Selling blind"; one
+                    beside "3 · Unknown metrics" opens "Metrics lag by one cycle".
                   </div>
                 </details>
                 <label class="spec-pick"
@@ -8008,14 +8364,7 @@
                                 ><span class="text-body font-semibold">−€50,000</span>
                               </div>
                             </li>
-                            <li class="w-32 -rotate-1 bg-card shadow-md">
-                              <div
-                                class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-3"
-                              >
-                                <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-body font-semibold">€50,000</span>
-                              </div>
-                            </li>
+                            <li class="w-32" aria-hidden="true"></li>
                           </ul>
                           <p
                             class="mt-auto flex items-baseline justify-between gap-2 border-t border-foreground/15 pt-3"
@@ -8047,19 +8396,27 @@
                                 ><span class="text-body font-semibold">−€50,000</span>
                               </div>
                             </li>
-                            <li data-target="q2-cash-zero" class="w-40 rotate-1 bg-card shadow-xl">
-                              <div
-                                class="flex aspect-square flex-col justify-between bg-linear-to-b from-warning/40 to-warning/25 p-4"
-                              >
-                                <span class="font-mono text-caption text-foreground/70 uppercase">Cash</span
-                                ><span class="text-heading font-semibold">€0</span>
-                              </div>
-                            </li>
+                            <li class="w-32" aria-hidden="true"></li>
                           </ul>
                           <p
+                            data-target="q2-cash-zero"
                             class="mt-auto flex items-baseline justify-between gap-2 border-t border-foreground/15 pt-3"
                           >
-                            <span class="font-mono text-caption text-muted-foreground uppercase">Cash left</span
+                            <span class="font-mono text-caption text-muted-foreground uppercase"
+                              >Cash left
+                              <span
+                                data-spec="context-marker"
+                                data-note="Even a yes arrives late"
+                                role="img"
+                                aria-label="Speaker note: Even a yes arrives late"
+                                class="inline-flex align-middle text-muted-foreground"
+                                ><svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
+                                  <path
+                                    d="M2.5 2.5h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3.5 3v-3h-1a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1z"
+                                    class="fill-none stroke-current"
+                                    stroke-width="1.5"
+                                    stroke-linejoin="round"
+                                  /></svg></span></span
                             ><span class="text-body font-semibold text-foreground">€0</span>
                           </p>
                         </li>
@@ -8454,6 +8811,11 @@
                       paper notes with tint gradients, kind labels in mono, euro amounts with signed costs
                       (<code>−€50,000</code>), and a <code>Cash left</code> footer under each lane. Add the step lane
                       and the dashed drop below the board.
+                    </p>
+                    <p>
+                      Context markers: <code>Marker</code> beside Q2's "Cash left", which carries the
+                      <code>q2-cash-zero</code> target, opens "Even a yes arrives late". Each column's balance is its
+                      "Cash left" footer, so no cash note repeats it.
                     </p>
                   </div>
                 </details>
