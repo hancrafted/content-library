@@ -23,7 +23,7 @@ npm run episode:run -- <slug> <command> ...
 | `resume`                                                                                                | in a new session or after a crash, points the marker at the current Run and its open Job; `begin-job` and `begin-attempt` run it themselves, and print it, when the calling session is not in the marker's `session_ids`; by hand only after a crash, when no live marker exists                                                                              |
 | `archive`                                                                                               | copies the log to `.logs/new-episode/<slug>/<run id>.jsonl`                                                                                                                                                                                                                                                                                                   |
 
-**Waiting on Han.** Inside a Job, each wait on his reply (a brief-grill question, any question in chat) is a Gate span: `open-gate <job> han-reply` when you ask, `close-gate han-reply` when he answers, so waiting time stays apart from working time.
+**Waiting on the user.** Inside a Job, each wait on their reply (a brief-grill question, any question in chat) is a Gate span: `open-gate <job> han-reply` when you ask, `close-gate han-reply` when they answer, so waiting time stays apart from working time.
 
 `status` is `ok` (default), `error`, `refused`, `crashed` or `reused`. A command refuses what the log cannot support (no open Job, a second open Attempt) and says which; the writer refuses a malformed field and says which. Fix the call, never the log: a line is never edited, a correction is a new line.
 
@@ -37,11 +37,11 @@ npm run episode:run -- <slug> <command> ...
 
 **Read it, never the raw file.**
 
-| need                                              | command                                                     |
-| ------------------------------------------------- | ----------------------------------------------------------- |
-| what is running, crashed, refused, waiting on Han | `npm run episode:status -- <slug>`                          |
-| the Run's span tree, or the subtree under a span  | `npm run episode:trace -- <slug> [span-id]`                 |
-| anything else                                     | `npm run episode:query -- "<sql>"` ([columns](#query-runs)) |
+| need                                                   | command                                                     |
+| ------------------------------------------------------ | ----------------------------------------------------------- |
+| what is running, crashed, refused, waiting on the user | `npm run episode:status -- <slug>`                          |
+| the Run's span tree, or the subtree under a span       | `npm run episode:trace -- <slug> [span-id]`                 |
+| anything else                                          | `npm run episode:query -- "<sql>"` ([columns](#query-runs)) |
 
 ## Runs CSV
 
@@ -60,7 +60,7 @@ run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,cache_read_
 `npm run episode:query -- "<sql>" [log.jsonl|glob ...]` runs one SELECT or WITH over two in-memory tables across one or many logs (default: the live and archived logs above), printing one JSON object per row. Select only the columns you need: `gen_ai_input_messages` and score `body` hold whole prompts and reports.
 
 - `spans`: `episode`, `trace_id` (one per Run), `span_id`, `parent_span_id`, `type` (`run`, `job`, `attempt`, `agent`, `gate`), `name`, `status` (`ok`, `error`, `refused`, `crashed`, `reused`, `running`), `start_t`, `end_t`, `duration_ms`, `summary`, `seq`, `job`, `attempt`, `role`, `ticket`, `retry_of`, `link_trace_id`, `link_span_id`, `harness`, `source`, `description`, `transcript_path`, `request_shape`, `run_id` and `template_sha` and `branch` (on the Run's row), and the `gen_ai.*` attributes with dots written as underscores: `gen_ai_operation_name`, `gen_ai_agent_name`, `gen_ai_request_model`, `gen_ai_response_model`, `gen_ai_input_messages`, `gen_ai_usage_input_tokens`, `gen_ai_usage_output_tokens`, `gen_ai_usage_cache_read_input_tokens`, `skills_invoked` (comma-separated: the skills the agent invoked, from its transcript; empty when none, null when unknown).
-- `notes`: `episode`, `trace_id`, `span_id`, `job`, `type` (the five note types), `text`, `t`, `seq`. The dashboard badges a Job "needs Han" for each `needs-human` or `blocked` note in the current Run.
+- `notes`: `episode`, `trace_id`, `span_id`, `job`, `type` (the five note types), `text`, `t`, `seq`. The dashboard badges a Job "needs the user" for each `needs-human` or `blocked` note in the current Run.
 - `scores`: `episode`, `trace_id`, `span_id`, `t`, `seq`, `name` (`rubric`, `check`, `gate`), `value`, `source`, `rubric`, `body`, `via`, `comment`, `ticket`.
 
 Tag any row with its Run by joining the Run's span on `trace_id`: `SELECT r.run_id, count(*) AS retries FROM spans a JOIN spans r ON r.trace_id = a.trace_id AND r.type = 'run' WHERE a.type = 'attempt' AND a.attempt > 1 GROUP BY r.run_id`.

@@ -7,10 +7,10 @@ A designer of the `write-spec` job designs two or three **Options** per page Sli
 Point, never paste: read each file yourself.
 
 - The Brief, `docs/episodes/<slug>/brief.md`, including its `## Style`.
-- Each design reference the Brief lists, `docs/episodes/<slug>/reference/<file-slug>/design-reference.md` and its page images in `pages/`: the model Han brought.
+- Each design reference the Brief lists, `docs/episodes/<slug>/reference/<file-slug>/design-reference.md` and its page images in `pages/`: the model the user brought.
 - The Dossier, `docs/episodes/<slug>/dossier.md`: each of your Slides' Visual, title, Voice script and Speaker notes.
 - The Visual language the orchestrator gives you. Every Option follows it.
-- `GLOSSARY.md`, and `docs/design/`: `slide-library.md`, `design-guide.md` (Han's taste, its named styles, and run 1 as "not this"), `design-system.md` (tokens and motion rules).
+- `GLOSSARY.md`, and `docs/design/`: `slide-library.md`, `design-guide.md` (the user's taste, its named styles, and run 1 as "not this"), `design-system.md` (tokens and motion rules).
 - The ADRs `.archgate/adrs/FE-002-episode-page.md`, `FE-007-module-layering.md`, `FE-009-slide-wrapper-and-scene.md`, `FE-011-design-tokens.md`.
 - The Master slides in `src/components/episodes/slide-master/slides/` and the frame components in `src/components/slide-master/`.
 - [`write-spec.md`](write-spec.md): "What an Option settles", "Settle it as a Scene" and `## Rubric`. Your Options are judged by that rubric.
@@ -19,14 +19,14 @@ Point, never paste: read each file yourself.
 
 ## The mock is the Slide
 
-Han judges each Option from its mock alone, on a stage the full width of the page (about 1200px) at the site's type scale. Draw the finished Slide, as a frame of the published Episode would look at rest:
+The user judges each Option from its mock alone, on a stage the full width of the page (about 1200px) at the site's type scale. Draw the finished Slide, as a frame of the published Episode would look at rest:
 
 - **Real content.** A page Slide's shared Slide header (the Eyebrow with its Section title and `n / N` in `text-caption` uppercase, the title at `text-subheading`, the caption at `text-body` close under it), then every note, label, number, axis and arrow the Slide shows, in final English. A mock of a board shows every note with its words and amount; a chart shows its bars or curve at their real proportions.
 - **Composition.** One focal point carried by `primary` and by size; a clear reading order; generous spacing. The Slide fills the stage the way a slide fills a screen, never a small diagram in a corner.
 - **Depth and material.** The Style's material made visible: a board surface (`bg-muted`, `rounded-xl`), notes that read as paper (`shadow-md`, a slight `rotate-1` or `-rotate-1`, tinted fills), dark pill labels, a stamp that sits over the board.
 - **Drawing.** Arrows, brackets, curves and funnels are inline `<svg>` with `viewBox`, coloured by classes (`stroke-primary`, `fill-primary`, `stroke-foreground`, `fill-muted`), never by attributes holding colours. Use SVG wherever boxes would only approximate the shape.
 - **Context markers.** Every fact whose Speaker note carries a source shows a Context marker beside it: `(💬)` after the phrase in text, or in the corner or beside the label of a card, column or chart ([`write-spec.md`](write-spec.md#what-an-option-settles) gives the markup; the sample's `1a` shows one of each).
-- **Hover and motion.** Hover that helps Han point while presenting is live, by the shared hover classes; emphasis motion shows as its end state. Entrance is the wrapper's, never the Option's ([`write-spec.md`](write-spec.md#what-an-option-settles)).
+- **Hover and motion.** Hover that helps the user point while presenting is live, by the shared hover classes; emphasis motion shows as its end state. Entrance is the wrapper's, never the Option's ([`write-spec.md`](write-spec.md#what-an-option-settles)).
 
 A mock that shows a title over grey boxes, empty squares or a paragraph is a wireframe, not an Option: it fails the rubric's fidelity line. Before you return, run `npm run episode:spec-preview -- <your fragment file>`: it renders every Option in the Spec frame at the Spec's exact width (1440px), runs the Spec contract and measures text overflow. It prints one `✖` line per violation and one `screenshot` line per Option, and exits 1 on any violation. Fix every line and rerun; you return only on exit 0. Then read the screenshot of each mock and fix what reads as a wireframe.
 
@@ -39,7 +39,7 @@ A mock that shows a title over grey boxes, empty squares or a paragraph is a wir
 - The build notes: whether the Dossier's `master:` and `motion:` are kept or overruled, an overruled one with its reason; the parts, tokens, props (a TypeScript shape per part) and i18n keys, so the mock maps onto the code; and per Context marker the Speaker note it opens. A part the Visual language already specifies is named and pointed to, never restated.
 - FE-009: no fixed height, no clipping, Foreground clear of the chrome. FE-007 §5: imports it allows only.
 - An Option that redraws a design reference page names it: `Design reference: docs/episodes/<slug>/reference/<file-slug>/pages/page-<NN>.jpg`, then `Build against this page: keep <what>; change <what>`.
-- Settle every design question as Options with reasons. Never ask Han a design question.
+- Settle every design question as Options with reasons. Never ask the user a design question.
 - Exactly one Option per Slide is recommended (`data-recommended`): the one you would build, its reason saying why over the others.
 
 ## The Title-slide designer

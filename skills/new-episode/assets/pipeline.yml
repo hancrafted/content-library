@@ -1,7 +1,7 @@
 # The new-episode pipeline template. `begin-run` copies this file to
 # docs/episodes/<slug>/pipeline.yml as a draft the moment the Run begins,
 # customize-pipeline tailors it for that Episode once the Setup jobs
-# have collected what it needs, and Han approves it by setting
+# have collected what it needs, and the user approves it by setting
 # `status: approved` (design-ADR-0008).
 #
 # Schema (checked by src/lib/episode-pipeline.pure.ts in `npm run verify`):
@@ -35,7 +35,7 @@
 #               one must need or want its writer; a rule must govern every .md one
 #     checks    cheapest first; names and commands in SKILL.md's job-loop check table
 #     retries   reviewer failures sent back before this branch of the pipeline stops
-#     gate      optional; `human` stops the run until Han approves the output
+#     gate      optional; `human` stops the run until the user approves the output
 #     port      per-run build jobs only, 1024–65535: the port the job's agent serves its
 #               worktree on with `npx next dev -p <port>`, linked by the dashboard.
 #               customize-pipeline assigns each build job its own; never 4382, the
@@ -207,7 +207,7 @@ jobs:
 
   # Rewrites the Voice script lines of dossier.md and nothing else; the staging
   # test checks that against write-dossier's commit, so no schema key says it.
-  # No gate: the designers read the spoken argument, and Han reviews the Voice
+  # No gate: the designers read the spoken argument, and the user reviews the Voice
   # script with the Spec and reworks it against the built Slides.
   - id: write-voice-script
     stage: dossier
@@ -240,8 +240,8 @@ jobs:
   # The Spec: one static HTML page with two or three Options per Slide beside
   # its words (design-ADR-0011). The implementor runs in the orchestrator's
   # session, because it spawns one designer per Section and writes the page
-  # alone. Han picks an Option per Slide through `npm run episode:spec`; every
-  # review round is a new Attempt, and he approves the Spec at the gate.
+  # alone. The user picks an Option per Slide through `npm run episode:spec`; every
+  # review round is a new Attempt, and the user approves the Spec at the gate.
   - id: write-spec
     stage: specification
     needs: [write-voice-script]

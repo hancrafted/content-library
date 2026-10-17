@@ -18,7 +18,7 @@ function list(...entries: { by: string; at: string }[]): string {
 }
 
 describe('approveText', () => {
-  it("appends the machine entry beside Han's without overwriting", () => {
+  it("appends the machine entry beside the user's without overwriting", () => {
     // ARRANGE
     const text = file(list(HAN));
     // ACT
@@ -51,7 +51,7 @@ function metaOf(html: string): unknown {
 }
 
 describe('approveText on an HTML Spec', () => {
-  it("appends Han's entry at the given time to the meta block's verified list", () => {
+  it("appends the user's entry at the given time to the meta block's verified list", () => {
     // ARRANGE
     const text = spec();
     const now = '2026-10-13T12:00:00Z';

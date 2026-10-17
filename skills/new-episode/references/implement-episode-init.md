@@ -10,7 +10,7 @@ The implementor (`archgate:developer`) builds the Spec's `Episode page` section,
 - Build the picked Title-slide Option as a set: its Title slide mock is the record's `title` Slide, a Slide folder whose Scene carries the Hero motif and the one h1; each `li[data-spec="echo"]` is its Section's section slide Scene, by its `data-section`. Its build notes give the parts, tokens and i18n keys, and each Context marker a mock shows is a `ContextMarker` opening the Speaker note they name.
 - Write one placement marker per Section, by the [naming below](#placement-markers), in Spec order. Each holds that Section's section slide and no page Slide.
 - Capture the post-build text: `npm run build`, then `npm run test:build`, and commit the written `tests/post-build/episode-text/<ep>.{en,de}.json`. The slug joins `PUBLISHED_SLUGS` only at publication.
-- Serve the Episode for Han: in the Episode's worktree, reuse the dev server `begin-run` started on `dev_port` in `pipeline.yml` (`lsof -nP -iTCP:<dev_port> -sTCP:LISTEN` prints a line); start none of your own, and leave it running when the job ends: the dashboard links it, and it shows each Section as it merges into `episode/<slug>`. When none answers there, start `npx next dev -p <dev_port>` detached in the Episode's worktree.
+- Serve the Episode for the user: in the Episode's worktree, reuse the dev server `begin-run` started on `dev_port` in `pipeline.yml` (`lsof -nP -iTCP:<dev_port> -sTCP:LISTEN` prints a line); start none of your own, and leave it running when the job ends: the dashboard links it, and it shows each Section as it merges into `episode/<slug>`. When none answers there, start `npx next dev -p <dev_port>` detached in the Episode's worktree.
 
 ### Placement markers
 
@@ -20,7 +20,7 @@ One module per Section ([design-ADR-0008](../../../docs/adr/0008-pipeline-jobs-b
 
 The Episode is a draft: it has no video and no Promotion. This overrides the metadata line in step 3 of [episode-migration](../../../docs/features/episode-migration.md).
 
-- Write `episode-metadata.ts` with `status: 'upcoming'` (the existing non-published value, `UpcomingEpisodeMetadata`) and no `publishedOn`; the type refuses one. Publishing flips both and is Han's separate step ([episode-publishing](../../../docs/features/episode-publishing.md)), never this job's or Promotion's.
+- Write `episode-metadata.ts` with `status: 'upcoming'` (the existing non-published value, `UpcomingEpisodeMetadata`) and no `publishedOn`; the type refuses one. Publishing flips both and is the user's separate step ([episode-publishing](../../../docs/features/episode-publishing.md)), never this job's or Promotion's.
 - Topic, extra Topics and Tags come from the Brief. `topic`, `format` and `tags` are required in `SharedMetadata` (`src/lib/episode-metadata.pure.ts`), so a required field the Brief does not name gets a `needs-human` note plus the closest honest value (the nearest existing Topic or Format, an empty `tags` list), never an invented one. `extraTopics` is optional: when the Brief names none, leave it out.
 - Register the metadata in the `REGISTERED` map in `episode-repository.ts`: it holds every registered slug whatever its `status`, so an upcoming Episode with a page type-checks. The page is built `noindex` and its card stays unlinked until publishing; write no `published-anchors.json` here.
 

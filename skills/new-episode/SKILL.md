@@ -1,6 +1,6 @@
 ---
 name: new-episode
-description: Run an Episode pipeline from an approved Brief to a served Episode and a draft PR. Use to start a Run, resume or continue one, when Han approves a gate, or when he says he saved Spec feedback.
+description: Run an Episode pipeline from an approved Brief to a served Episode and a draft PR. Use to start a Run, resume or continue one, when the user approves a gate, or when they say they saved Spec feedback.
 ---
 
 # New Episode
@@ -11,10 +11,10 @@ Paths below are relative to the repo root, except `references/` and `assets/`, w
 
 ## Start here
 
-Pick the entry by what Han gave you:
+Pick the entry by what the user gave you:
 
 - **No slug:** start a new Run at [step 1](#1-open-the-episode-branch).
-- **A slug with `docs/episodes/<slug>/events.jsonl`:** continue it. From that Episode's worktree run `npm run episode:status -- <slug>`, then `reuse <job>` for each Job an earlier Run finished that you keep. Rebuild the todo list from the status output; [Resuming a run](#resuming-a-run) has the cases (crash, ended Run, orphaned job worktree). Han's "continue", "approve" or "I saved feedback" is this entry.
+- **A slug with `docs/episodes/<slug>/events.jsonl`:** continue it. From that Episode's worktree run `npm run episode:status -- <slug>`, then `reuse <job>` for each Job an earlier Run finished that you keep. Rebuild the todo list from the status output; [Resuming a run](#resuming-a-run) has the cases (crash, ended Run, orphaned job worktree). The user's "continue", "approve" or "I saved feedback" is this entry.
 
 [`references/event-log.md`](references/event-log.md) holds the run command table, the active-run marker and the query schema; the steps below name the commands.
 
@@ -22,7 +22,7 @@ Pick the entry by what Han gave you:
 
 ### 1. Open the Episode branch
 
-Settle the `<slug>` (the working title in kebab case) with Han, then run `npm run wt:new -- episode/<slug>` and work in that worktree. This branch is the Episode's **integration branch** for the whole run and carries its one draft PR until Promotion.
+Settle the `<slug>` (the working title in kebab case) with the user, then run `npm run wt:new -- episode/<slug>` and work in that worktree. This branch is the Episode's **integration branch** for the whole run and carries its one draft PR until Promotion.
 
 Then open the Run in the [event log](references/event-log.md): `npm run episode:run -- <slug> begin-run --model <the model you run on>`. It creates the staging folder `docs/episodes/<slug>/` when absent, writes the Run's `start-run` line (harness, run id, branch and template commit included) and the active-run marker. It also writes the draft `pipeline.yml` (template commit, slug, `dev_port` the first free port from 4000, `spec_port` the next, `foreach` jobs unexpanded) and starts the dashboard dev server on `dev_port` and the Spec server on `spec_port`, detached; their pids sit in `.scratch/<slug>/servers/`. `end-run` and `wt:done` stop both, and `npm run dev-stop -- <port>` stops one.
 
@@ -30,9 +30,9 @@ _Done when_ the worktree exists, `git branch --show-current` prints `episode/<sl
 
 ### 2. Brief
 
-Run the `brief-grill` job by [`references/brief-grill.md`](references/brief-grill.md). When Han brings a Brief, accept it: validate it with the job's checks and its reviewer, and grill him only on their failed lines and on what reads `Not settled.`. Otherwise invoke the `brief-grill` skill. It is a human gate: after the `Gate: draft brief` commit, run `npm run episode:spec-assemble -- <slug>` and open `http://localhost:<spec_port>` (the `spec_port` of `pipeline.yml`) in Han's browser, printing the URL too. He reviews the Brief as the skeleton Spec: its Brief card carries a note field per heading. Stop the session; Han's Brief notes come back as `brief--<heading-slug>` feedback items, and you write each note into `brief.md` verbatim, under its heading.
+Run the `brief-grill` job by [`references/brief-grill.md`](references/brief-grill.md). When the user brings a Brief, accept it: validate it with the job's checks and its reviewer, and grill them only on their failed lines and on what reads `Not settled.`. Otherwise invoke the `brief-grill` skill. It is a human gate: after the `Gate: draft brief` commit, run `npm run episode:spec-assemble -- <slug>` and open `http://localhost:<spec_port>` (the `spec_port` of `pipeline.yml`) in the user's browser, printing the URL too. They review the Brief as the skeleton Spec: its Brief card carries a note field per heading. Stop the session; the user's Brief notes come back as `brief--<heading-slug>` feedback items, and you write each note into `brief.md` verbatim, under its heading.
 
-_Done when_ `node skills/new-episode/scripts/approve.ts docs/episodes/<slug>/brief.md` has appended Han's `verified` entry (`human:han`, at or after `generated.at`), committed with `Gate: approved brief`: Han approves in chat, then you run `approve.ts` and commit it with an `Agent:` trailer, `verified` staying `human:han`. The Brief card is read-only from then on.
+_Done when_ `node skills/new-episode/scripts/approve.ts docs/episodes/<slug>/brief.md` has appended the user's `verified` entry (`human:han`, at or after `generated.at`), committed with `Gate: approved brief`: The user approves in chat, then you run `approve.ts` and commit it with an `Agent:` trailer, `verified` staying `human:han`. The Brief card is read-only from then on.
 
 ### 3. Setup
 
@@ -42,11 +42,11 @@ Setup turns the approved Brief into the approved pipeline. Every job of `pipelin
 2. `retrieval` by [`references/retrieval.md`](references/retrieval.md), beside `convert-references` by [`references/convert-references.md`](references/convert-references.md): retrieval decides reuse, refresh or new per question and writes `research-plan.md` listing the questions needing a job under `## Research jobs`.
 3. `customize-pipeline` by [`references/customize-pipeline.md`](references/customize-pipeline.md): expands `write-research` into one job per listed question and `implement-section` into one job per Section of the Brief's `## Slides`, and gives each `implement-section` job its own free dev-server `port`. It is a human gate: stop after the `Gate: draft pipeline` commit.
 
-_Done when_ `docs/episodes/<slug>/pipeline.yml` has `status: approved`, committed by Han with `Gate: approved pipeline`.
+_Done when_ `docs/episodes/<slug>/pipeline.yml` has `status: approved`, committed by the user with `Gate: approved pipeline`.
 
 ### 4. Refuse or start
 
-Start only when all of these hold; otherwise name each one that fails to Han and stop:
+Start only when all of these hold; otherwise name each one that fails to the user and stop:
 
 1. `brief.md` is approved: its `verified` list holds a `human:han` entry at or after `generated.at` (`npm run episode:status` reads the same rule; an edit after approval re-opens it).
 2. `pipeline.yml` has the top-level `status: approved`.
@@ -61,17 +61,17 @@ _Done when_ the todo list holds every job the script does not print as `done`.
 
 Run every job the status script prints as `ready` by [the job loop](#the-job-loop); jobs that are ready together run in parallel as background subagents, each job with `isolation: worktree` in its own worktree. Run at most 5 subagents at a time: spawn ready jobs in batches of 5, the next batch as slots free. A job without a gate runs straight through, with no confirmation asked. A gate job prints `gate` once its draft is logged, until its output is approved; step 4's checks cover the Brief and pipeline gates. After each job's closing `end-job` line, run the script again for the next ready jobs. A blocked job blocks every job that `needs` it, directly or through another job. A job that `wants` it waits for it, then runs anyway: tell its implementor which wanted jobs blocked.
 
-`write-voice-script` has no Gate: `write-spec` follows it and writes the Spec, `spec/spec.html`, the one page Han reviews the design and the words on. It ends at the Spec Gate, run by [`references/write-spec.md`](references/write-spec.md#the-spec-gate): per review round, stop after the `Gate: draft spec-<n>` commit and tell Han to open the Spec with `npm run episode:spec -- <slug>`, tick the Options he wants and save; lock every Slide with one pick and redesign the rest in a new Attempt, until every Slide has one pick and Han approves with `approve.ts` in the `Gate: approved spec` commit, which also deletes `dossier.md`. From then on the Spec is the Episode's only source. The Build stage then runs `implement-episode-init`, which writes one placement marker per Section, and the `implement-section-<section-slug>` jobs in parallel, each building its Section at its marker. Each Build job's agent starts `next dev` detached on the job's `port`, which the dashboard links for Han: a Section job's server lives while the job runs and stops before its worktree goes, and `implement-episode-init`'s runs on in the Episode's worktree, showing each Section once merged.
+`write-voice-script` has no Gate: `write-spec` follows it and writes the Spec, `spec/spec.html`, the one page the user reviews the design and the words on. It ends at the Spec Gate, run by [`references/write-spec.md`](references/write-spec.md#the-spec-gate): per review round, stop after the `Gate: draft spec-<n>` commit and tell the user to open the Spec with `npm run episode:spec -- <slug>`, tick the Options they want and save; lock every Slide with one pick and redesign the rest in a new Attempt, until every Slide has one pick and the user approves with `approve.ts` in the `Gate: approved spec` commit, which also deletes `dossier.md`. From then on the Spec is the Episode's only source. The Build stage then runs `implement-episode-init`, which writes one placement marker per Section, and the `implement-section-<section-slug>` jobs in parallel, each building its Section at its marker. Each Build job's agent starts `next dev` detached on the job's `port`, which the dashboard links for the user: a Section job's server lives while the job runs and stops before its worktree goes, and `implement-episode-init`'s runs on in the Episode's worktree, showing each Section once merged.
 
 _Done when_ every todo is done or blocked, and each one has a closed Job span with its summary.
 
 ### 6. Serve and open the PR
 
-Run the `open-pr` job by [`references/open-pr.md`](references/open-pr.md), even when a branch blocked: the PR checklist is where Han learns about it.
+Run the `open-pr` job by [`references/open-pr.md`](references/open-pr.md), even when a branch blocked: the PR checklist is where the user learns about it.
 
-Then end the Run: `npm run episode:run -- <slug> end-run ok --summary "<one line>"`. Han's feedback and Promotion follow; [Promotion archives the log](#promotion).
+Then end the Run: `npm run episode:run -- <slug> end-run ok --summary "<one line>"`. The user's feedback and Promotion follow; [Promotion archives the log](#promotion).
 
-_Done when_ Han has the Episode's local link and the draft PR's URL, and the Run has its `end-run` line.
+_Done when_ the user has the Episode's local link and the draft PR's URL, and the Run has its `end-run` line.
 
 ## The job loop
 
@@ -82,13 +82,13 @@ A job with `isolation: worktree` works in a worktree of its own, so jobs running
 1. Before its implementor, run `npm run wt:new -- episode/<slug>--<job id> --base episode/<slug>` from the Episode's worktree. The `--` in the branch name is needed: git cannot create `episode/<slug>/<job id>` beside the branch `episode/<slug>`. Each worktree runs its own `npm ci`.
 2. Its implementor and reviewer work only in that worktree, its checks run there, and its pass commit is made there.
 3. On a pass, merge the job branch into `episode/<slug>` and run `mh` and `vitest` again there: a file can pass alone and fail beside its siblings, through a duplicate research ID or a cross-file check. A failure after the merge counts as a failed attempt of that job.
-4. After the merge, or when the job is blocked, stop a Section job's dev server first, since `wt:done` deletes the worktree it serves: `kill $(cat <job worktree>/.scratch/dev-<port>.pid)`, or `kill $(lsof -ti tcp:<port>)` when the file is missing. Then run `npm run wt:done -- episode/<slug>--<job id> --base episode/<slug>` from the Episode's worktree. It deletes a merged branch and keeps a blocked job's branch; the `Blocked:` note names that branch for Han.
+4. After the merge, or when the job is blocked, stop a Section job's dev server first, since `wt:done` deletes the worktree it serves: `kill $(cat <job worktree>/.scratch/dev-<port>.pid)`, or `kill $(lsof -ti tcp:<port>)` when the file is missing. Then run `npm run wt:done -- episode/<slug>--<job id> --base episode/<slug>` from the Episode's worktree. It deletes a merged branch and keeps a blocked job's branch; the `Blocked:` note names that branch for the user.
 
 A subagent writes no narrative file: it returns its notes and a summary, and you record them with [`note` and `end-job --summary`](#job-narrative) after the merge. A subagent never writes a start, end or gate line either. A reviewer writes its Score lines (step 3), by the absolute path of the Episode's worktree you give it. Nobody writes `docs/episodes/runs.csv`: [`npm run episode:runs-csv`](references/event-log.md#runs-csv) generates it.
 
 Before the first agent of a job: `begin-job <job>` (a Job already `done` from an earlier Run is not begun again), then `begin-attempt <job>`, which prints the stem of the [spawn description](references/event-log.md#spawn-description) to name every spawn by.
 
-Every agent runs where its `session` says. `subagent`, the default, is spawned with the Agent tool, its `description` the [spawn description](references/event-log.md#spawn-description), its `subagent_type` the agent's `agent` (general-purpose when omitted) and its `model` the agent's `model`, left out for `inherit`. A spawn the harness refuses (the concurrency limit) is `begin-agent <description>` then `end-agent <description> refused`; spawn it again when a slot frees. On a harness with no hook adapter, wrap every spawn in `begin-agent` and `end-agent <description> [status]` the same way. `orchestrator` runs in this session, because a subagent has no Agent tool: a skill that spawns subagents needs it, and so does a job that talks to Han. Its `model` goes to the subagents the skill spawns.
+Every agent runs where its `session` says. `subagent`, the default, is spawned with the Agent tool, its `description` the [spawn description](references/event-log.md#spawn-description), its `subagent_type` the agent's `agent` (general-purpose when omitted) and its `model` the agent's `model`, left out for `inherit`. A spawn the harness refuses (the concurrency limit) is `begin-agent <description>` then `end-agent <description> refused`; spawn it again when a slot frees. On a harness with no hook adapter, wrap every spawn in `begin-agent` and `end-agent <description> [status]` the same way. `orchestrator` runs in this session, because a subagent has no Agent tool: a skill that spawns subagents needs it, and so does a job that talks to the user. Its `model` goes to the subagents the skill spawns.
 
 1. **Implementor.** Its prompt opens with the Brief's `Learning goal` and `Actionables`, quoted, because every artifact is written backwards from them. Then tell it to invoke every skill in its `skills` with the Skill tool, never to read the `SKILL.md`: invoking loads the skill's own references and rules. Then point it at the job's reference or `intent`, every path in `references`, the staging folder, its worktree when the job has one, its `port` when it has one, each job it `wants` that blocked, and on a retry the failed lines, quoted verbatim. Point, never paste: the agent reads the files.
 
@@ -109,7 +109,7 @@ Every agent runs where its `session` says. `subagent`, the default, is spawned w
 
    A failure counts as a failed attempt; its output lines are the failed lines. Log each check's result as a Score on the Attempt: `score <job>#<n> check pass|fail --source check:<name> --body "<the failing output>"`.
 
-3. **Reviewer.** A **fresh** agent, never one that wrote the output, told to invoke every skill in its `skills` with the Skill tool. A reviewer with `session: orchestrator` runs in the session that implemented, so its skill supplies the fresh eyes: `code-review` judges through subagents that saw none of the writing. Its baseline is the markdown-harness intent of every rule, field and heading that governs the output: it runs `npx mh query <path>` on each markdown output itself. On top of that baseline come the lines under the job's `rubric`. It judges one line per intent and per rubric line, `pass` or `fail — <the line, verbatim> — <evidence>`, and marks anything only Han can judge `needs human — <what>`. On attempt 2 and later, only the previous Attempt's failed lines can fail, beside the checks; the reviewer re-logs every other line as `pass`, so the latest Attempt's Scores state the full verdict. A new concern goes into Notes as `Needs human: <what>`, so a retry is never judged against moved goalposts. An objective defect (the output contradicts the Brief or the Sections, a wrong heading) is a `fail`, never `needs-human`; `needs-human` is for what only Han's taste can judge.
+3. **Reviewer.** A **fresh** agent, never one that wrote the output, told to invoke every skill in its `skills` with the Skill tool. A reviewer with `session: orchestrator` runs in the session that implemented, so its skill supplies the fresh eyes: `code-review` judges through subagents that saw none of the writing. Its baseline is the markdown-harness intent of every rule, field and heading that governs the output: it runs `npx mh query <path>` on each markdown output itself. On top of that baseline come the lines under the job's `rubric`. It judges one line per intent and per rubric line, `pass` or `fail — <the line, verbatim> — <evidence>`, and marks anything only the user can judge `needs human — <what>`. On attempt 2 and later, only the previous Attempt's failed lines can fail, beside the checks; the reviewer re-logs every other line as `pass`, so the latest Attempt's Scores state the full verdict. A new concern goes into Notes as `Needs human: <what>`, so a retry is never judged against moved goalposts. An objective defect (the output contradicts the Brief or the Sections, a wrong heading) is a `fail`, never `needs-human`; `needs-human` is for what only the user's taste can judge.
 
    **The reviewer's report is Score lines**, never a file. Give each reviewer subagent the Attempt's name (`<job>#<n>`) and the Episode worktree's absolute path. For every line it judges it runs, from that worktree, `npm run episode:run -- <slug> score <job>#<n> rubric pass|fail|needs-human --source agent:<job id>/reviewer --rubric "<the line, verbatim>" --body "<the evidence>"`. Its `body` holds the full report for that line; a `fail` always quotes the failed line in `rubric`. It then returns only `pass` or `fail`; read the Scores with `episode:query` only on `fail`. Re-judging after a retry appends new Scores, never edits. A reviewer with `session: orchestrator` logs its own Scores the same way.
 
@@ -124,9 +124,9 @@ _Done when_ the job passed or is blocked, its outputs are committed, its Job spa
 
 ## Agent marks
 
-Every agent write is marked, so gate diffs teach Han's style and nothing else. An unmarked commit is Han's; `agentOf` in `scripts/marks.pure.ts` reads the marks.
+Every agent write is marked, so gate diffs teach the user's style and nothing else. An unmarked commit is the user's; `agentOf` in `scripts/marks.pure.ts` reads the marks.
 
-- **Commits:** an `Agent: <job id>` trailer on every commit an agent makes in the run, beside `Source:` (and `Gate:` on a gate commit). Han's own commits carry none.
+- **Commits:** an `Agent: <job id>` trailer on every commit an agent makes in the run, beside `Source:` (and `Gate:` on a gate commit). The user's own commits carry none.
 - **Issue edits:** a job that edits a GitHub issue (none in the template) ends the body with one `Edited-by: <job id>` line, replaced when another job edits, and names it in the Job's `end-job --summary` as `Edited #<issue>`.
 
 ## Job narrative
@@ -142,28 +142,28 @@ In a new session, or after a compaction, never trust memory of the run: run `npm
 Every commit goes through the `commit` skill. A gate is also a span, logged with these commands:
 
 - `open-gate <job> "draft <name>"` when the `Gate: draft <name>` commit lands.
-- `score "gate:draft <name>" gate approved --source human:han --via chat|commit --comment "<his words>"` when Han approves, in chat or by committing the approval.
+- `score "gate:draft <name>" gate approved --source human:han --via chat|commit --comment "<their words>"` when the user approves, in chat or by committing the approval.
 - `close-gate "draft <name>"` after the approval Score.
-- `score "gate:draft <name>" gate changes --source human:han --comment "<his words>"` for a change he asks for; the Gate stays open.
+- `score "gate:draft <name>" gate changes --source human:han --comment "<their words>"` for a change they ask for; the Gate stays open.
 
-Log only a gate Score Han gave.
+Log only a gate Score the user gave.
 
-A gate commit adds a `Gate:` trailer beside `Source:` (`Gate: draft brief`, `Gate: approved pipeline`, `Gate: draft spec-1`, `Gate: draft feedback-01`). The agent's draft is committed before Han edits it, so the pair of gate commits shows his edit as a diff: that diff is what later teaches agents his style. Only Han approves, with `approve.ts`, which appends his `verified` entry.
+A gate commit adds a `Gate:` trailer beside `Source:` (`Gate: draft brief`, `Gate: approved pipeline`, `Gate: draft spec-1`, `Gate: draft feedback-01`). The agent's draft is committed before the user edits it, so the pair of gate commits shows their edit as a diff: that diff is what later teaches agents their style. Only the user approves, with `approve.ts`, which appends their `verified` entry.
 
 Who commits sets the mark:
 
 - The orchestrator's `Gate: draft <name>` commit carries `Agent: <job id>` beside `Gate:` and `Source:`, like every agent commit (see [agent marks](#agent-marks)).
-- Han's approval commit carries no `Agent:` trailer, which is how a gate diff is told to be his.
-- An approval commit the orchestrator makes at Han's word is still an agent commit and carries `Agent: <job id>`, while the approval entry in `verified` stays his.
+- The user's approval commit carries no `Agent:` trailer, which is how a gate diff is told to be theirs.
+- An approval commit the orchestrator makes at the user's word is still an agent commit and carries `Agent: <job id>`, while the approval entry in `verified` stays theirs.
 
 After `Gate: approved pipeline`, the template is frozen for the run: `main` is not merged into the Episode branch again until `open-pr` is done. The pipeline's `template` field names the commit it was tailored from. A template change found during the run goes into `LEARNINGS.md` Lessons and is applied after the run.
 
 ## Promotion
 
-When Han starts Promotion, and before the staging folder is deleted, run `npm run episode:run -- <slug> archive`. It copies the log to `.logs/new-episode/<slug>/<run id>.jsonl`, one file per Run, and prints the path. Commit it through the `commit` skill, then run `npm run episode:runs-csv` and commit `docs/episodes/runs.csv`: the CSV and `episode:query` read the archive after the staging folder is gone.
+When the user starts Promotion, and before the staging folder is deleted, run `npm run episode:run -- <slug> archive`. It copies the log to `.logs/new-episode/<slug>/<run id>.jsonl`, one file per Run, and prints the path. Commit it through the `commit` skill, then run `npm run episode:runs-csv` and commit `docs/episodes/runs.csv`: the CSV and `episode:query` read the archive after the staging folder is gone.
 
 ## After the run
 
-Han's feedback, typed or dictated, arrives as `feedback/<NN>/feedback.md` (with a `generated: { by, at }` naming who wrote it); `npx mh query` on it prints the `feedback-body` intent its tags route by. An item keys its Slide by anchor: `top` the Title slide, a Section slug its section slide, `<section>--<slide>` a page Slide. Work each item by its tag: a `content` item, a Voice script change included, lands in the Slide's words in `spec/spec.html` first, in one commit, and then in the implementation; a `design` item lands in the picked Option first, its mock and build notes (for `top` or a section slide, the picked Title-slide Option's Title slide or that Section's section slide), in one commit, and then in the implementation; an `implementation` item goes to the code alone; a `practice` item to the recording. The Spec stays the source until Promotion, so the implementation never says what the Spec does not. The loop ends when Han starts Promotion. Distil what this run taught into [`LEARNINGS.md`](LEARNINGS.md). Diff each pair of gate commits, the draft against Han's approval: every correction Han made twice becomes a proposed rubric line under `LEARNINGS.md` Lessons. Count failing rubric lines across Runs with `npm run episode:query -- "SELECT rubric, count(*) AS n FROM scores WHERE name = 'rubric' AND value = 'fail' GROUP BY rubric ORDER BY n DESC"`; a line failing in several Runs is a reference or rubric change.
+The user's feedback, typed or dictated, arrives as `feedback/<NN>/feedback.md` (with a `generated: { by, at }` naming who wrote it); `npx mh query` on it prints the `feedback-body` intent its tags route by. An item keys its Slide by anchor: `top` the Title slide, a Section slug its section slide, `<section>--<slide>` a page Slide. Work each item by its tag: a `content` item, a Voice script change included, lands in the Slide's words in `spec/spec.html` first, in one commit, and then in the implementation; a `design` item lands in the picked Option first, its mock and build notes (for `top` or a section slide, the picked Title-slide Option's Title slide or that Section's section slide), in one commit, and then in the implementation; an `implementation` item goes to the code alone; a `practice` item to the recording. The Spec stays the source until Promotion, so the implementation never says what the Spec does not. The loop ends when the user starts Promotion. Distil what this run taught into [`LEARNINGS.md`](LEARNINGS.md). Diff each pair of gate commits, the draft against the user's approval: every correction the user made twice becomes a proposed rubric line under `LEARNINGS.md` Lessons. Count failing rubric lines across Runs with `npm run episode:query -- "SELECT rubric, count(*) AS n FROM scores WHERE name = 'rubric' AND value = 'fail' GROUP BY rubric ORDER BY n DESC"`; a line failing in several Runs is a reference or rubric change.
 
-When Han gives feedback on the skill, the pipeline or the Spec frame "for future runs", invoke the [`pipeline-feedback`](../pipeline-feedback/SKILL.md) skill.
+When the user gives feedback on the skill, the pipeline or the Spec frame "for future runs", invoke the [`pipeline-feedback`](../pipeline-feedback/SKILL.md) skill.

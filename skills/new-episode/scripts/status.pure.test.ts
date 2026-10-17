@@ -109,7 +109,7 @@ describe('success cases', () => {
     expect(status.jobs[1]).toEqual({ id: 'retrieval', state: 'running' });
   });
 
-  it('lists a gate span with no end as waiting on Han, with how long since it opened', () => {
+  it('lists a gate span with no end as waiting on the user, with how long since it opened', () => {
     // ARRANGE
     const folded = live(log(...job('brief-grill', 0, 'ok'), start('gate-1', 'gate', [40, { job: 'brief-grill' }])));
     const expected = [{ name: 'gate-1', job: 'brief-grill', waiting_ms: 1_200_000 }];
@@ -139,7 +139,7 @@ describe('success cases', () => {
       'waiting open-pr',
       'running ag1 · retrieval#1/implementor · 5m00s',
       'refused ag2 · retrieval#1/reviewer',
-      'gate    brief-grill · waiting on Han 10m00s',
+      'gate    brief-grill · waiting on the user 10m00s',
     ].join('\n');
     // ACT
     const text = renderStatus(runStatus(PIPELINE, folded, { now: NOW }));
@@ -272,7 +272,7 @@ describe('outputApproved', () => {
     expect(gates).toEqual(expected);
   });
 
-  it("reads an HTML Spec by its meta block's trust tier, so write-spec's gate opens on Han's approval", () => {
+  it("reads an HTML Spec by its meta block's trust tier, so write-spec's gate opens on the user's approval", () => {
     // ARRANGE
     const spec = (verified: string): string =>
       `<html><head><script type="application/json" id="spec-meta">{"type":"spec","generated":{"by":"claude-code/opus-5.5","at":"2026-10-12T09:00:00Z"}${verified}}</script></head><body></body></html>`;
@@ -294,7 +294,7 @@ describe('outputApproved', () => {
     const texts = [
       'status: "approved"\njobs: []\n',
       "status: 'approved' \njobs: []\n",
-      'status: approved # by Han\njobs: []\n',
+      'status: approved # by the user\njobs: []\n',
     ];
     const expected = [true, true, true];
     // ACT
@@ -303,7 +303,7 @@ describe('outputApproved', () => {
     expect(gates).toEqual(expected);
   });
 
-  it("opens the gate on Han's entry and closes it again when the file is edited after approval", () => {
+  it("opens the gate on the user's entry and closes it again when the file is edited after approval", () => {
     // ARRANGE
     const fresh = () => outputApproved('brief.md', brief('2026-10-12T09:00:00Z'));
     const edited = () => outputApproved('brief.md', brief('2026-10-12T10:00:00Z'));

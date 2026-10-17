@@ -42,7 +42,7 @@ function takeFlag(rest: string[], flag: string): string | undefined {
   return value;
 }
 
-/** The command line of approve.ts: `<file> [--by <actor>] [--stamp <producer/model>]`, `by` defaulting to Han; a string is the usage error. */
+/** The command line of approve.ts: `<file> [--by <actor>] [--stamp <producer/model>]`, `by` defaulting to the user; a string is the usage error. */
 export function parseApproveArgs(argv: readonly string[]): { file: string; by: string; stamp?: string } | string {
   const rest = [...argv];
   let by: string;

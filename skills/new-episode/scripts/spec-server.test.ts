@@ -101,7 +101,7 @@ describe('success cases', () => {
     expect(body.indexOf('/__spec-version')).toBeLessThan(body.indexOf('</body>'));
   });
 
-  it('holds the reload and shows a notice while Han has unsaved picks or notes', async () => {
+  it('holds the reload and shows a notice while the user has unsaved picks or notes', async () => {
     // ARRANGE
     const { base } = await serve();
     const body = await (await fetch(`${base}/`)).text();
@@ -135,7 +135,7 @@ describe('success cases', () => {
     // ACT
     new Function(...Object.keys(page), script)(...Object.values(page));
     await tick(); // sees version a
-    onEdit?.(); // Han ticks a pick
+    onEdit?.(); // the user ticks a pick
     await tick(); // version b arrives
     // ASSERT
     expect(reloads).toBe(0);

@@ -1,6 +1,6 @@
 /*
  * The page `npm run episode:spec-preview` renders: a designer's fragment inside the Spec's own frame, so what a
- * designer measures is what Han sees. The shell is the Spec's (`spec-shell` with its outline column, `spec-page`),
+ * designer measures is what the user sees. The shell is the Spec's (`spec-shell` with its outline column, `spec-page`),
  * so the Option stage has the Spec's exact width at every viewport; only the tab script is left out, which lets
  * every Option show, stacked, each its own screenshot target.
  */

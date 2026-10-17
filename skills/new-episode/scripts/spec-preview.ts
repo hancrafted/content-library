@@ -1,4 +1,4 @@
-// `npm run episode:spec-preview -- <fragment.html>`: a designer sees and checks its own mock as Han will. It wraps the
+// `npm run episode:spec-preview -- <fragment.html>`: a designer sees and checks its own mock as the user will. It wraps the
 // fragment in the Spec frame at the Spec's exact width, compiles design.css for it, runs the Spec contract rules the
 // staging test runs, renders every Option at 1440px through `npm run inspect-page` and measures text overflow.
 // Always renders; prints one `✖` line per violation and one `screenshot` line per Option; exits 1 on any violation.

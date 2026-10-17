@@ -72,7 +72,7 @@ export interface ProblemSpan {
   status: 'crashed' | 'refused';
 }
 
-/** A Gate span with no end: waiting on Han since it opened. */
+/** A Gate span with no end: waiting on the user since it opened. */
 export interface WaitingGate {
   name: string;
   job?: string;
@@ -98,7 +98,7 @@ const problemsOf = (spans: readonly Span[]): RunStatus['problems'] =>
 
 /**
  * A run's status: each job's state in pipeline order, the agents running now with their elapsed time, the
- * crashed and refused spans, and the gates waiting on Han with their wait. Only the spans of `trace` (the current
+ * crashed and refused spans, and the gates waiting on the user with their wait. Only the spans of `trace` (the current
  * Run) count when it is given: an earlier Run's ok span makes nothing done, `reuse` links it instead. `folded` is the log folded with
  * `fold` (live Runs named in `live`); `now` (beside the gate readers) is the clock, an ISO time, so nothing here reads it.
  * A job with no finished span is blocked when a job it needs is blocked, ready when every job it needs is
@@ -159,7 +159,7 @@ export function renderStatus({ jobs, running, problems, waiting, skillWarnings }
     ...running.map((agent) => `${'running'.padEnd(8)}${spawnName(agent)} · ${formatDuration(agent.elapsed_ms)}`),
     ...problems.map((span) => `${span.status.padEnd(8)}${spawnName(span)}`),
     ...waiting.map(
-      (gate) => `${'gate'.padEnd(8)}${gate.job ?? gate.name} · waiting on Han ${formatDuration(gate.waiting_ms)}`,
+      (gate) => `${'gate'.padEnd(8)}${gate.job ?? gate.name} · waiting on the user ${formatDuration(gate.waiting_ms)}`,
     ),
     ...skillWarnings.map(
       (span) => `${'warn'.padEnd(8)}${spawnName(span)} · skill not invoked: ${span.missing.join(', ')}`,

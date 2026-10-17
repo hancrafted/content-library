@@ -21,7 +21,7 @@ export type Via = (typeof VIAS)[number];
 /** A span that has started and not ended, as `fold` reports it when asked to treat open spans as live. */
 export type SpanStatus = Status | 'running';
 
-/** Below the Run: a Job, one Attempt of a Job, an agent inside an Attempt, or a Gate waiting on Han. */
+/** Below the Run: a Job, one Attempt of a Job, an agent inside an Attempt, or a Gate waiting on the user. */
 export const SPAN_TYPES = ['job', 'attempt', 'agent', 'gate'] as const;
 export type SpanType = 'run' | (typeof SPAN_TYPES)[number];
 

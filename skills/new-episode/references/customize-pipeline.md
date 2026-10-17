@@ -1,6 +1,6 @@
 # customize-pipeline
 
-Output: `docs/episodes/<slug>/pipeline.yml`, the draft `begin-run` wrote, finalized for this Episode and ending at a human gate. No reviewer: Han approves what will run before it runs.
+Output: `docs/episodes/<slug>/pipeline.yml`, the draft `begin-run` wrote, finalized for this Episode and ending at a human gate. No reviewer: The user approves what will run before it runs.
 
 ## Prompt
 
@@ -13,7 +13,7 @@ Edit the draft in place; its `template:`, `dev_port`, `spec_port` and `<slug>` a
 - **Episode Design Reference.** `convert-references` runs before this job, so name its outputs: one per item under the Brief's `## Episode Design Reference`, `docs/episodes/<slug>/reference/<file-slug>/design-reference.md`, in its order, and replace the `reference/*/design-reference.md` glob in every agent's `references` with those paths. With no Episode Design Reference, drop the job, its `wants` edge from this job and every glob. The staging test checks the outputs against the Brief.
 - **Missing files.** Remove each reference to a file that does not exist yet (a human-profile guide, the llm-wiki index): an approved pipeline tolerates no missing file. Name each one in the Job's summary.
 - **Retries.** Raise a job's `retries` where the Brief makes it hard (a Teardown of a disputed claim), lower it where it is routine.
-- **Gates.** `gate: human` on a job stops the run at its output for Han. The template holds one on `customize-pipeline` and one on `write-spec`, the Spec Gate, where Han picks an Option per Slide and approves the Spec; keep both.
+- **Gates.** `gate: human` on a job stops the run at its output for the user. The template holds one on `customize-pipeline` and one on `write-spec`, the Spec Gate, where the user picks an Option per Slide and approves the Spec; keep both.
 - **References and skills.** Add a file an agent should read for this Episode (an earlier Episode it builds on, an ADR it touches). Copy every agent's `skills` from the template unchanged unless the Brief gives a reason; a job listing a vendored skill from [`skill-overrides.md`](skill-overrides.md) keeps that reference.
 - **Models.** Each agent's `model` defaults to the template's; change it where the Episode gives a reason, and name the reason.
 - **One-off jobs.** A task only this Episode needs becomes its own job with an `intent`, the task as a prompt, instead of a note.
@@ -21,14 +21,14 @@ Edit the draft in place; its `template:`, `dev_port`, `spec_port` and `<slug>` a
 
 ### Why the draft keeps `foreach` and the approved pipeline does not
 
-`begin-run` copies the template before the Setup jobs know which research needs a job, so `foreach` stands for "one job per item" in the draft. The approved pipeline names every file it writes, so Han approves each path at the gate and the event log and runs CSV name each job. A job whose output is one named file (`pipeline.yml`) needs no expansion; a fan-out like research or the Sections does. The pipeline check refuses `foreach` and glob outputs once `status: approved`, and the staging test checks one `write-research-*` job per item under the research plan's `## Research jobs` and one `convert-references` output per reference.
+`begin-run` copies the template before the Setup jobs know which research needs a job, so `foreach` stands for "one job per item" in the draft. The approved pipeline names every file it writes, so the user approves each path at the gate and the event log and runs CSV name each job. A job whose output is one named file (`pipeline.yml`) needs no expansion; a fan-out like research or the Sections does. The pipeline check refuses `foreach` and glob outputs once `status: approved`, and the staging test checks one `write-research-*` job per item under the research plan's `## Research jobs` and one `convert-references` output per reference.
 
 ## Done when
 
 The job's `checks:` in `assets/pipeline.yml` run by the check table in [SKILL.md](../SKILL.md#the-job-loop). Its `vitest` check holds the pipeline's keys, stages, `needs` graph, skills, paths and rubric headings, and its research jobs against the research plan. Beyond them:
 
-1. No `foreach` and no glob output is left: the check refuses them only once Han approves.
-2. Every `build` job has its own free `port`: the check refuses a missing one only once Han approves.
+1. No `foreach` and no glob output is left: the check refuses them only once the user approves.
+2. Every `build` job has its own free `port`: the check refuses a missing one only once the user approves.
 3. The draft is committed through the `commit` skill with `Gate: draft pipeline`.
 
-Then close the Job with a summary listing every change from the template with its reason, and log the Gate's `start` for `draft pipeline`, then stop: the gate opens when Han commits `status: approved` with `Gate: approved pipeline`.
+Then close the Job with a summary listing every change from the template with its reason, and log the Gate's `start` for `draft pipeline`, then stop: the gate opens when the user commits `status: approved` with `Gate: approved pipeline`.

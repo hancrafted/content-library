@@ -19,7 +19,7 @@ export interface Review {
   now: Date;
 }
 
-/** A Slide or field the round is refused for, named so Han finds it on the page. */
+/** A Slide or field the round is refused for, named so the user finds it on the page. */
 export interface Fault {
   slide: string;
   message: string;

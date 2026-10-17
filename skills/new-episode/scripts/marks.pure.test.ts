@@ -3,7 +3,7 @@ import { agentOf } from './marks.pure.ts';
 
 /*
  * The agent marks: an `Agent: <job id>` trailer on a commit message, an
- * `Edited-by: <job id>` last line on an issue body. Unmarked is Han's.
+ * `Edited-by: <job id>` last line on an issue body. Unmarked is the user's.
  */
 describe('agentOf', () => {
   it('reads the Agent trailer of a commit message', () => {
@@ -17,7 +17,7 @@ describe('agentOf', () => {
     expect(agentOf(body)).toBe('write-design-spec');
   });
 
-  it("treats an unmarked text as Han's", () => {
+  it("treats an unmarked text as the user's", () => {
     expect(agentOf('## Spec\n\nText.\n')).toBeNull();
   });
 
