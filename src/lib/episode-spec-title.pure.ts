@@ -8,7 +8,7 @@
  */
 
 import { type CheerioAPI } from 'cheerio';
-import { OPTION, SECTION, TITLE_SLIDE } from './episode-spec-page.pure';
+import { OPTION, SECTION, TITLE_SLIDE } from './episode-spec-page.pure.ts';
 import {
   checkOption,
   checkOptionMarks,
@@ -16,9 +16,9 @@ import {
   type OptionCount,
   type Selection,
   type SpecPage,
-} from './episode-spec-slide.pure';
-import { TITLE_ANCHOR } from './episode.pure';
-import { unless } from './finding.pure';
+} from './episode-spec-slide.pure.ts';
+import { TITLE_ANCHOR } from './episode.pure.ts';
+import { unless } from './finding.pure.ts';
 
 const TITLE_SLIDE_OPTIONS: OptionCount = { min: 3, max: 3, words: 'three' };
 const WHERE = `The Title slide {#${TITLE_ANCHOR}}`;

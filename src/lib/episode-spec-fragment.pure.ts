@@ -29,8 +29,8 @@ export function fragmentSlides(fragment: string): FragmentSlide[] {
 }
 
 /** The pick checkbox assembly adds to an Option. */
-export const pickBox = (slug: string, id: string): string =>
-  `<label class="spec-pick"><input type="checkbox" form="${FORM}" name="pick:${slug}" value="${id}" /> Pick ${id}</label>`;
+export const pickBox = (slug: string, id: string, checked = false): string =>
+  `<label class="spec-pick"><input type="checkbox" form="${FORM}" name="pick:${slug}" value="${id}"${checked ? ' checked' : ''} /> Pick ${id}</label>`;
 
 /** The leading digits of an Option id: its Slide's number. */
 const slideNumber = (id: string): number => Number(/^\d+/.exec(id)?.[0] ?? '0');
