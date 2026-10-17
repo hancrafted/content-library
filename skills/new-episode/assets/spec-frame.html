@@ -183,7 +183,7 @@
         opacity: 0.85;
       }
 
-      /* A Slide: header, the Option stage, then its words. */
+      /* A Slide: header, its words as tabs, the Option stage, then its note. */
       [data-spec='slide'] {
         margin-top: 4rem;
         scroll-margin-top: 1rem;
@@ -307,11 +307,52 @@
         color: var(--primary-foreground, HighlightText);
       }
 
+      /*
+       * A Slide's words as tabs: Visual idea, Voice script, Speaker notes, one panel open. Radio inputs in no form
+       * switch them without script; print shows every panel.
+       */
       .spec-words {
-        display: grid;
-        grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-        gap: 1.25rem;
-        margin-top: 1.5rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+      }
+      .spec-words > input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+      }
+      .spec-words > label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        padding: 0.45rem 0.9rem;
+        border-radius: 999px;
+        border: 1px solid var(--border, GrayText);
+        background: var(--card, Canvas);
+        cursor: pointer;
+      }
+      .spec-words > input:checked + label {
+        background: var(--foreground, CanvasText);
+        color: var(--background, Canvas);
+        border-color: transparent;
+      }
+      .spec-words > input:focus-visible + label {
+        outline: 2px solid var(--ring, Highlight);
+        outline-offset: 2px;
+      }
+      .spec-panel {
+        display: none;
+        flex-basis: 100%;
+        max-width: 60rem;
+        box-sizing: border-box;
+      }
+      .spec-words:has(> input[value='visual-idea']:checked) > [data-panel='visual-idea'],
+      .spec-words:has(> input[value='voice-script']:checked) > [data-panel='voice-script'],
+      .spec-words:has(> input[value='speaker-notes']:checked) > [data-panel='speaker-notes'] {
+        display: block;
+      }
+      .spec-panel > h4 {
+        display: none;
       }
       .spec-words ol {
         margin: 0;
@@ -336,14 +377,6 @@
       [data-spec='speaker-notes'] a {
         color: inherit;
         word-break: break-all;
-      }
-      .spec-visual-idea {
-        margin-top: 1.25rem;
-      }
-      .spec-visual-idea > summary {
-        cursor: pointer;
-        font-weight: 600;
-        font-size: 0.875rem;
       }
       .spec-note {
         display: block;
@@ -378,8 +411,18 @@
         .spec-outline {
           display: none;
         }
-        .spec-words {
-          grid-template-columns: minmax(0, 1fr);
+      }
+
+      @media print {
+        .spec-words > input,
+        .spec-words > label,
+        .spec-tabs {
+          display: none;
+        }
+        .spec-panel,
+        .spec-panel > h4,
+        .spec-options.is-tabbed > [data-spec='option'] {
+          display: block;
         }
       }
 
