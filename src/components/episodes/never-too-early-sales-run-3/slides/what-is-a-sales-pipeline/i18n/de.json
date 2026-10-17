@@ -26,9 +26,9 @@
       "label": "Conversion-Rate",
       "caption": "Wie viele Leads zu einer Opportunity werden: zeigt Dir Dein <b>Angebot</b>"
     },
-    "cycle": "<b>Verkaufszyklus</b> · vom ersten Kontakt bis zum Geld: zeigt Dir Deine <b>Effizienz</b>"
+    "cycle": "<marker><b>Verkaufszyklus</b> · vom ersten Kontakt bis zum Geld: zeigt Dir Deine <b>Effizienz</b></marker>"
   },
-  "ratio": "3 : 1",
+  "ratio": "<marker>3 : 1</marker>",
   "notes": {
     "stage-rates-are-not-portable": {
       "header": "Stufenraten lassen sich nicht übertragen",

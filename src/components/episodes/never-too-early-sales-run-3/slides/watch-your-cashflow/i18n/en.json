@@ -14,13 +14,9 @@
     "revenue": "Revenue"
   },
   "stamp": "Bankrupt",
-  "runway": "Two months of cash",
+  "runway": "<marker>Two months of cash</marker>",
   "late": "The million lands one month late",
   "cashLeft": "Cash left",
-  "question": {
-    "label": "Your turn",
-    "text": "If February is the month you run out, when would you have needed to start selling?"
-  },
   "notes": {
     "costs-begin-before-customers": {
       "header": "Costs begin before customers",

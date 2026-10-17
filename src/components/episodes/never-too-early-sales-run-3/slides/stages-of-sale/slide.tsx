@@ -41,7 +41,7 @@ export const stagesOfSale = slide({
     { slug: 'opportunities-are-the-work' },
     { slug: 'closing-is-not-cash' },
   ],
-  content: ({ t, target }) => {
+  content: ({ t, target, marker }) => {
     const lanes: Lane[] = [
       {
         slug: 'leads',
@@ -109,7 +109,7 @@ export const stagesOfSale = slide({
             kind: 'cash',
             kindLabel: t('lanes.afterSale.notes.cash.kind'),
             title: t('lanes.afterSale.notes.cash.title'),
-            text: t('lanes.afterSale.notes.cash.text'),
+            text: t.rich('lanes.afterSale.notes.cash.text', { marker: marker('cash-waits-on-paperwork') }),
           },
         ],
       },
@@ -120,7 +120,13 @@ export const stagesOfSale = slide({
           lanes={lanes}
           brackets={[
             { slug: 'yours', label: t('brackets.yours'), from: 1, to: 1, emphasis: 'primary' },
-            { slug: 'calendar', label: t('brackets.calendar'), from: 2, to: 4, emphasis: 'muted' },
+            {
+              slug: 'calendar',
+              label: t.rich('brackets.calendar', { marker: marker('the-lags-add-up') }),
+              from: 2,
+              to: 4,
+              emphasis: 'muted',
+            },
           ]}
           axis={[
             { slug: 'week', label: t('axis.week'), emphasis: true },

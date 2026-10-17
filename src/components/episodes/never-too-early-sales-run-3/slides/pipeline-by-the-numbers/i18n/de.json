@@ -52,7 +52,7 @@
     "oppDeal": "{ratio}:1"
   },
   "total": "{total} : 1",
-  "totalCaption": "Gesamt-Conversion: {total} Leads für 1 Deal",
+  "totalCaption": "<marker>Gesamt-Conversion: {total} Leads für 1 Deal</marker>",
   "others": "{count} weitere reden noch oder sind verloren",
   "cycle": {
     "total": "Verkaufszyklus: {months, number} Monate vom ersten Lead bis zum Geld",

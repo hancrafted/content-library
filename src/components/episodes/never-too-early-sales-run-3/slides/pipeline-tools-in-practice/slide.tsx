@@ -62,7 +62,7 @@ export const pipelineToolsInPractice = slide({
   messages: { en, de },
   notes: [{ slug: 'late-deals-convert-worse', target: LANES, sources: [GTM_BENCHMARKS] }],
   segments: [{ slug: 'one-place-for-every-deal' }, { slug: 'read-it-at-a-glance' }, { slug: 'start-small' }],
-  content: ({ t, target, locale }) => {
+  content: ({ t, target, locale, Marker }) => {
     const lanes: DealLane[] = BOARD.map((lane) => ({
       slug: lane.slug,
       label: t(`lanes.${lane.slug}.label`),
@@ -92,6 +92,7 @@ export const pipelineToolsInPractice = slide({
           emphasis="proposalMade"
           annotation={t('annotation')}
           ends={[t('ends.start'), t('ends.end')]}
+          markers={{ negotiation: <Marker note="late-deals-convert-worse" /> }}
         />
       </SlideFrame>
     );

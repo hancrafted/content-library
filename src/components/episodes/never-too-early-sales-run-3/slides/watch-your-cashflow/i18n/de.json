@@ -14,13 +14,9 @@
     "revenue": "Umsatz"
   },
   "stamp": "Pleite",
-  "runway": "Zwei Monate Cash",
+  "runway": "<marker>Zwei Monate Cash</marker>",
   "late": "Die Million kommt einen Monat zu spät",
   "cashLeft": "Kassenstand",
-  "question": {
-    "label": "Du bist dran",
-    "text": "Wenn der Februar der Monat ist, in dem Dir das Geld ausgeht: Wann hättest Du mit dem Verkaufen anfangen müssen?"
-  },
   "notes": {
     "costs-begin-before-customers": {
       "header": "Kosten kommen vor den Kunden",

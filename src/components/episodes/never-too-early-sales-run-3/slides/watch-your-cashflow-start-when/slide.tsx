@@ -36,8 +36,9 @@ function Drop({ text }: { text: string }) {
 
 /**
  * The cashflow board a third time, by quarter: cash hits zero in Q2 and revenue only lands in Q3, so a `primary`
- * arrow drags it back to the ringed Q1 lane, "Start early!". Under the board, a dashed drop from Q1 leads to a lane of
- * this week's four steps.
+ * arrow drags it back to the ringed Q1 lane, "Start early!". Each column's Cash left footer states its balance, so no
+ * cash note repeats it; Q2's carries the Context marker of its Speaker note. Under the board, a dashed drop from Q1
+ * leads to a lane of this week's four steps.
  */
 export const watchYourCashflowStartWhen = slide({
   slug: 'watch-your-cashflow-start-when',
@@ -50,29 +51,30 @@ export const watchYourCashflowStartWhen = slide({
     { slug: 'honest-caveat' },
     { slug: 'hand-over-the-verdict' },
   ],
-  content: ({ t, target, locale }) => {
+  content: ({ t, target, locale, Marker }) => {
     const spent = { kind: 'cost', amount: 50000 } as const;
     const earned = { kind: 'revenue', amount: 50000 } as const;
     const quarters: CashflowColumn[] = [
       {
         label: t('quarters.q1'),
-        notes: [{ kind: 'cash', amount: 100000 }, spent, { kind: 'cash', amount: 50000 }],
+        notes: [{ kind: 'cash', amount: 100000 }, spent, null],
       },
       {
         label: t('quarters.q2'),
-        notes: [
-          { kind: 'cash', amount: 50000 },
-          spent,
-          { kind: 'cash', amount: 0, big: true, target: target('q2-cash-zero')['data-target'] },
-        ],
+        notes: [{ kind: 'cash', amount: 50000 }, spent, null],
       },
       { label: t('quarters.q3'), notes: [spent, earned, null] },
       { label: t('quarters.q4'), notes: [spent, earned, null] },
     ];
     const balances = cashLeft(quarters);
+    // Q2's footer states the €0 the arrow answers, so it carries the q2-cash-zero target and its marker.
+    const zero = {
+      target: target('q2-cash-zero')['data-target'],
+      marker: <Marker note="even-a-yes-arrives-late" className="static" />,
+    };
     const columns = quarters.map((quarter, index) => ({
       ...quarter,
-      footer: <CashLeft label={t('cashLeft')} amount={balances[index]} locale={locale} />,
+      footer: <CashLeft label={t('cashLeft')} amount={balances[index]} locale={locale} {...(index === 1 && zero)} />,
     }));
     const steps = STEP_SLUGS.map((slug) => ({
       slug,

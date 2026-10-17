@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import styles from './stages-of-sale.module.css';
 
 /** A paper note in a lane: a step and title with a line of text, a list, chips or a signature; a title alone is a strip. */
@@ -5,7 +6,7 @@ export interface StageNote {
   slug: string;
   step?: string;
   title: string;
-  text?: string;
+  text?: ReactNode;
   kind?: 'neutral' | 'cash';
   /** The small mono word over a cash note's title. */
   kindLabel?: string;

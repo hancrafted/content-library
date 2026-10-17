@@ -85,7 +85,7 @@ export const salesIsMoreThanSelling = slide({
     { slug: 'trust-is-the-sum' },
     { slug: 'verdict' },
   ],
-  content: ({ t, locale, target }) => {
+  content: ({ t, locale, target, marker, Marker }) => {
     const marketChips = [
       { label: t('board.market.points.time') },
       { label: t('board.market.dropped'), dropped: true },
@@ -102,11 +102,14 @@ export const salesIsMoreThanSelling = slide({
               {...target(MARKET)}
               index="01"
               title={t('board.market.title')}
-              body={t('board.market.body')}
+              body={t.rich('board.market.body', { marker: marker('your-starting-model-is-wrong') })}
               tilt="left"
               className="@4xl:col-span-3"
             >
-              <Exchange ask={t('board.market.ask')} answer={t('board.market.answer')} />
+              <Exchange
+                ask={t.rich('board.market.ask', { marker: marker('ask-about-the-last-time') })}
+                answer={t('board.market.answer')}
+              />
               <Chips items={marketChips} />
             </Note>
             <Operator symbol="plus" className="mx-auto w-12 @4xl:col-span-1 @4xl:w-full" />
@@ -114,36 +117,52 @@ export const salesIsMoreThanSelling = slide({
               {...target(INTERNAL)}
               index="02"
               title={t('board.internal.title')}
-              body={t('board.internal.body')}
+              body={t.rich('board.internal.body', { marker: marker('friends-orders-can-mislead') })}
               tilt="right"
               className="@4xl:col-span-3"
             >
-              <RepeatPath
-                you={t('board.internal.path.you')}
-                repeat={t('board.internal.path.repeat')}
-                hire={t('board.internal.path.hire')}
-                team={t('board.internal.path.team')}
-              />
+              <div className="relative max-w-56">
+                <Marker note="premature-scaling-burns-cash" className="top-4 right-0" />
+                <RepeatPath
+                  you={t('board.internal.path.you')}
+                  repeat={t('board.internal.path.repeat')}
+                  hire={t('board.internal.path.hire')}
+                  team={t('board.internal.path.team')}
+                />
+              </div>
             </Note>
             <Operator symbol="equals" className="mx-auto w-12 @4xl:col-span-1 @4xl:w-full" />
             <Note
               {...target(TRUST)}
               index="03"
               title={t('board.trust.title')}
-              body={t('board.trust.body')}
+              body={t.rich('board.trust.body', { marker: marker('a-signal-must-be-costly-to-fake') })}
               tilt="none"
               emphasis
               className="@4xl:col-span-4"
             >
               <Stamp label={t('stamp')} />
-              <SignalBars heading={t('board.trust.bars.heading')} rows={barRows} locale={locale} />
+              <SignalBars
+                heading={t('board.trust.bars.heading')}
+                rows={barRows}
+                locale={locale}
+                marker={
+                  <Marker
+                    note="investors-read-the-team"
+                    className="text-primary-foreground/70 hover:text-foreground focus-visible:text-foreground"
+                  />
+                }
+              />
               <CheckedChips items={trustChips} />
             </Note>
           </div>
 
           <div className="grid grid-cols-1 gap-4 @4xl:grid-cols-12">
             <Brace label={t('brace')} className="hidden @4xl:col-span-7 @4xl:flex" />
-            <MarginNote text={t('marginNote')} className="@4xl:col-span-5" />
+            <MarginNote
+              text={t.rich('marginNote', { marker: marker('no-study-measures-lois-or-pipelines') })}
+              className="@4xl:col-span-5"
+            />
           </div>
         </div>
         <p className="text-caption text-muted-foreground">{t('source')}</p>

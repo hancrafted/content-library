@@ -16,30 +16,23 @@ const MARCH = 'march';
 /**
  * The cashflow board once more (Spec Option 6a): the same notes as the first board, with the million moved from April
  * into March beside the cost, ringed, a dashed outline left where it was and a `primary` arrow labelled "one month
- * earlier".
+ * earlier". Each column's Cash left footer states its balance, so no cash note repeats it; the March lane carries
+ * the Context marker of its Speaker note.
  */
 export const watchYourCashflowRevenuePulledIn = slide({
   slug: 'watch-your-cashflow-revenue-pulled-in',
   messages: { en, de },
   notes: [{ slug: 'predicted-revenue-is-discounted', target: MARCH, sources: [DEFAULT_ALIVE] }],
   segments: [{ slug: 'callback' }, { slug: 'timing-not-amount' }, { slug: 'how-it-moves' }],
-  content: ({ t, target, locale }) => {
+  content: ({ t, target, locale, Marker }) => {
     const months: CashflowColumn[] = [
       {
         label: t('board.months.jan'),
-        notes: [
-          { kind: 'cash', amount: 100000 },
-          { kind: 'cost', amount: 50000 },
-          { kind: 'cash', amount: 50000 },
-        ],
+        notes: [{ kind: 'cash', amount: 100000 }, { kind: 'cost', amount: 50000 }, null],
       },
       {
         label: t('board.months.feb'),
-        notes: [
-          { kind: 'cash', amount: 50000 },
-          { kind: 'cost', amount: 50000 },
-          { kind: 'cash', amount: 0, big: true },
-        ],
+        notes: [{ kind: 'cash', amount: 50000 }, { kind: 'cost', amount: 50000 }, null],
       },
       {
         label: t('board.months.march'),
@@ -48,6 +41,7 @@ export const watchYourCashflowRevenuePulledIn = slide({
           { kind: 'revenue', amount: 1000000, big: true, ring: true, target: target(MARCH)['data-target'] },
           null,
         ],
+        marker: <Marker note="predicted-revenue-is-discounted" />,
       },
       { label: t('board.months.april'), notes: [null, { kind: 'ghost', big: true }, null] },
     ];

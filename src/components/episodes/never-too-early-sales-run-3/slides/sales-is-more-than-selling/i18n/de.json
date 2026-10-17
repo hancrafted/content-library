@@ -4,13 +4,13 @@
   "source": "Befragung von 885 institutionellen Risikokapitalgebern: Gompers, Gornall, Kaplan und Strebulaev, How Do Venture Capitalists Make Decisions?",
   "equationLabel": "Markterkenntnisse gewinnen plus interne Erkenntnisse gewinnen ergibt Vertrauen stärken.",
   "brace": "Was Du lernst",
-  "marginNote": "Das „=“ ist eine These, kein Beweis: Ein erstes Ergebnis zeigt, dass Dein Team verkaufen kann.",
+  "marginNote": "<marker>Das „=“ ist eine These, kein Beweis: Ein erstes Ergebnis zeigt, dass Dein Team verkaufen kann.</marker>",
   "stamp": "Vor dem Umsatz",
   "board": {
     "market": {
       "title": "Markterkenntnisse gewinnen",
-      "body": "Jedes Kundengespräch ist Marktforschung, die Du nicht bezahlen musstest.",
-      "ask": "Wann ist Dir das zuletzt passiert?",
+      "body": "<marker>Jedes Kundengespräch ist Marktforschung, die Du nicht bezahlen musstest.</marker>",
+      "ask": "<marker>Wann ist Dir das zuletzt passiert?</marker>",
       "answer": "Letzten Monat. Wir haben zwei Tage dadurch verloren.",
       "points": {
         "time": "Wofür Du Deine Zeit einsetzt",
@@ -20,7 +20,7 @@
     },
     "internal": {
       "title": "Interne Erkenntnisse gewinnen",
-      "body": "Wie gut verkaufst Du, und könnte es außer Dir jemand wiederholen?",
+      "body": "<marker>Wie gut verkaufst Du, und könnte es außer Dir jemand wiederholen?</marker>",
       "path": {
         "you": "Du",
         "repeat": "wiederholen",
@@ -30,7 +30,7 @@
     },
     "trust": {
       "title": "Vertrauen stärken",
-      "body": "Investoren und zögerliche Kunden vertrauen dem, was schon jemand anderes gekauft hat.",
+      "body": "<marker>Investoren und zögerliche Kunden vertrauen dem, was schon jemand anderes gekauft hat.</marker>",
       "points": {
         "investment": "Investitionen gewinnen",
         "customers": "Zögerliche Kunden überzeugen"

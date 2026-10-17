@@ -2,7 +2,7 @@
   "title": "How marketing feeds the pipeline",
   "caption": "Massive volume, into one defined stage. Sales works what lands there.",
   "marketing": "Marketing",
-  "volume": "massive volume",
+  "volume": "<marker>massive volume</marker>",
   "funnelName": "Marketing funnel",
   "sources": {
     "content": "Content",

@@ -3,7 +3,7 @@
   "caption": "Die ersten zwei Schritte liegen in Deiner Hand. Danach schiebt jede Phase das Geld weiter nach rechts.",
   "brackets": {
     "yours": "In Deiner Hand",
-    "calendar": "Kalenderzeit, die Du nicht verkürzen kannst"
+    "calendar": "<marker>Kalenderzeit, die Du nicht verkürzen kannst</marker>"
   },
   "lanes": {
     "leads": {
@@ -73,7 +73,7 @@
         "cash": {
           "kind": "Kasse",
           "title": "Rechnung bezahlt",
-          "text": "30 bis 60 Tage nach dem Versand"
+          "text": "<marker>30 bis 60 Tage nach dem Versand</marker>"
         }
       }
     }

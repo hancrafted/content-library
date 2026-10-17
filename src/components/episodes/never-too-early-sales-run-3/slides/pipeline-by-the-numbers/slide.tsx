@@ -100,7 +100,7 @@ export const pipelineByTheNumbers = slide({
     { slug: 'backward-chain' },
     { slug: 'your-numbers-not-mine' },
   ],
-  content: ({ t, locale, target }) => {
+  content: ({ t, locale, target, marker, Marker }) => {
     const [lead, opportunity, deal] = PIPELINE;
     const total = totalConversion(PIPELINE);
     const bar = cycleBar(PIPELINE);
@@ -121,6 +121,13 @@ export const pipelineByTheNumbers = slide({
                 label: t('stages.opportunity', { count: opportunity.notes }),
                 duration: t('durations.opportunity'),
                 ratioToNext: t('ratios.oppDeal', { ratio: opportunity.ratioToNext }),
+                ratioMarker: <Marker note="the-biggest-loss-is-no-decision" className="static" />,
+                markers: (
+                  <>
+                    <Marker note="everyone-holds-a-veto" className="static" />
+                    <Marker note="buying-groups-disagree" className="static" />
+                  </>
+                ),
                 notes: OPPORTUNITIES.map(([name, state]) => ({
                   name: t(`names.${name}`),
                   state: t(`states.${state}`),
@@ -133,7 +140,10 @@ export const pipelineByTheNumbers = slide({
                 notes: [{ name: t('names.novak'), state: t('states.signed'), amount: formatEuro(DEAL_AMOUNT, locale) }],
               },
             ]}
-            total={{ ratio: t('total', { total }), caption: t('totalCaption', { total }) }}
+            total={{
+              ratio: t('total', { total }),
+              caption: t.rich('totalCaption', { total, marker: marker('a-reference-win-rate') }),
+            }}
             others={t('others', { count: opportunity.notes - deal.notes })}
             targets={{ opportunity: target('opportunity'), ratioOppDeal: target('ratio-opp-deal') }}
           />

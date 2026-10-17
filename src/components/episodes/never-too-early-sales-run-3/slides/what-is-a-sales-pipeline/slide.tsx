@@ -39,7 +39,7 @@ export const whatIsASalesPipeline = slide({
     },
   ],
   segments: [{ slug: 'funnel-is-volume' }, { slug: 'conversion-is-the-offer' }, { slug: 'cycle-is-efficiency' }],
-  content: ({ t, locale, target }) => (
+  content: ({ t, locale, target, marker }) => (
     <SlideFrame className={`${styles.scene} mt-10`}>
       <PipelineBoard
         stages={[
@@ -84,7 +84,7 @@ export const whatIsASalesPipeline = slide({
         ]}
         conversion={{
           label: t('terms.conversion.label'),
-          ratio: t('ratio'),
+          ratio: t.rich('ratio', { marker: marker('stage-rates-are-not-portable') }),
           caption: t.rich('terms.conversion.caption'),
           target: target('conversion'),
         }}
@@ -92,7 +92,10 @@ export const whatIsASalesPipeline = slide({
           label: t('terms.funnel.label'),
           caption: t.rich('terms.funnel.caption'),
         }}
-        cycle={{ caption: t.rich('terms.cycle'), target: target('cycle') }}
+        cycle={{
+          caption: t.rich('terms.cycle', { marker: marker('cycle-length-hits-cash') }),
+          target: target('cycle'),
+        }}
       />
     </SlideFrame>
   ),

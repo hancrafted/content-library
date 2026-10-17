@@ -19,6 +19,8 @@ interface DayOneBoardProps {
   hints: Record<Column, string>;
   close: ReactNode;
   targets: Record<Column, TargetProps>;
+  /** Context markers beside each lane's pill. */
+  markers: Record<Column, ReactNode>;
 }
 
 /** Paper tilt per note, so the board reads as hand-pinned. */
@@ -48,27 +50,26 @@ export function DayOneBoard({ stamp, close, ...lanes }: DayOneBoardProps) {
 }
 
 /** The three lanes, in the order the voice reads them. */
-function Lanes({
-  columns,
-  preparation,
-  questions,
-  metrics,
-  hints,
-  targets,
-}: Omit<DayOneBoardProps, 'stamp' | 'close'>) {
+function Lanes({ preparation, questions, metrics, ...lane }: Omit<DayOneBoardProps, 'stamp' | 'close'>) {
+  const laneOf = (column: Column) => ({
+    label: lane.columns[column],
+    hint: lane.hints[column],
+    target: lane.targets[column],
+    marker: lane.markers[column],
+  });
   return (
     <div className="focus-group focus-group--dim-others relative grid grid-cols-1 gap-6 @3xl:grid-cols-3">
-      <Lane label={columns.preparation} hint={hints.preparation} target={targets.preparation}>
+      <Lane {...laneOf('preparation')}>
         {preparation.map((note, index) => (
           <BlankNote key={note.id} note={note} tilt={BLANK_TILT[index % BLANK_TILT.length]} />
         ))}
       </Lane>
-      <Lane label={columns.market} hint={hints.market} target={targets.market}>
+      <Lane {...laneOf('market')}>
         {questions.map((question, index) => (
           <QuestionNote key={question} question={question} tilt={QUESTION_TILT[index % QUESTION_TILT.length]} />
         ))}
       </Lane>
-      <Lane label={columns.metrics} hint={hints.metrics} target={targets.metrics}>
+      <Lane {...laneOf('metrics')}>
         {metrics.map((metric, index) => (
           <MetricNote key={metric.label} metric={metric} index={index} />
         ))}
@@ -107,14 +108,16 @@ interface LaneProps {
   label: string;
   hint: string;
   target: TargetProps;
+  marker: ReactNode;
   children: ReactNode;
 }
 
-function Lane({ label, hint, target, children }: LaneProps) {
+function Lane({ label, hint, target, marker, children }: LaneProps) {
   return (
     <div {...target} className="focus-group__item flex min-w-0 flex-col gap-4 rounded-lg bg-foreground/5 p-5">
-      <span className="self-start rounded-full bg-foreground px-4 py-1 text-caption font-semibold text-background">
-        {label}
+      <span className="flex items-center gap-1 self-start">
+        <span className="rounded-full bg-foreground px-4 py-1 text-caption font-semibold text-background">{label}</span>
+        {marker}
       </span>
       {children}
       <p className="text-caption text-muted-foreground">{hint}</p>

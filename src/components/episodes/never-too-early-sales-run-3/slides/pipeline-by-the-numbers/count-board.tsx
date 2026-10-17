@@ -17,11 +17,15 @@ interface CountStage {
   notes: readonly CountNote[];
   /** The badge between this lane and the next, e.g. `3:1`. */
   ratioToNext?: string;
+  /** Context markers beside the lane's pill. */
+  markers?: ReactNode;
+  /** A Context marker under the badge to the next lane. */
+  ratioMarker?: ReactNode;
 }
 
 interface CountBoardProps {
   stages: readonly CountStage[];
-  total: { ratio: string; caption: string };
+  total: { ratio: string; caption: ReactNode };
   /** Under the one deal: the opportunities that did not close. */
   others: string;
   targets: { opportunity: TargetProps; ratioOppDeal: TargetProps };
@@ -58,6 +62,7 @@ export function CountBoard({ stages, total, others, targets }: CountBoardProps) 
               </Lane>
               {stage.ratioToNext === undefined ? null : (
                 <RatioBadge
+                  marker={stage.ratioMarker}
                   ratio={stage.ratioToNext}
                   target={stage.id === 'opportunity' ? targets.ratioOppDeal : undefined}
                 />
@@ -111,7 +116,7 @@ function BoardSurface({ children }: { children: ReactNode }) {
 }
 
 /** The ratio badge and arrow between two lanes; the arrow turns down when the lanes stack. */
-function RatioBadge({ ratio, target }: { ratio: string; target?: TargetProps }) {
+function RatioBadge({ ratio, target, marker }: { ratio: string; target?: TargetProps; marker?: ReactNode }) {
   return (
     <div {...target} className="flex shrink-0 items-center justify-center gap-1 @4xl:flex-col">
       <span className="flex size-14 items-center justify-center rounded-full bg-foreground text-body font-semibold text-background tabular-nums shadow-md">
@@ -120,6 +125,7 @@ function RatioBadge({ ratio, target }: { ratio: string; target?: TargetProps }) 
       <svg viewBox="0 0 40 20" className="w-10 rotate-90 @4xl:rotate-0" aria-hidden="true">
         <path d="M2 10 H34 M26 3 L36 10 L26 17" className="fill-none stroke-foreground" strokeWidth="3" />
       </svg>
+      {marker}
     </div>
   );
 }
@@ -138,7 +144,10 @@ function Lane({ stage, target, children }: { stage: CountStage; target?: TargetP
           stage.id === 'deal' ? 'flex-col items-start' : 'flex-wrap items-center justify-between',
         )}
       >
-        <span className={PILL}>{stage.label}</span>
+        <span className="inline-flex items-center gap-1">
+          <span className={PILL}>{stage.label}</span>
+          {stage.markers}
+        </span>
         {duration}
       </div>
       {children}

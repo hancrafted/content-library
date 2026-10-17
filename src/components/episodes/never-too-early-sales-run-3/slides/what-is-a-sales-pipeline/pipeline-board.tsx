@@ -20,7 +20,7 @@ interface Stage {
 
 interface Conversion {
   label: string;
-  ratio: string;
+  ratio: ReactNode;
   caption: ReactNode;
   target: TargetProps;
 }

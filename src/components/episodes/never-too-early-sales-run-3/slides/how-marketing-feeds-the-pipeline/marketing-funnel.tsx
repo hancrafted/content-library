@@ -1,11 +1,11 @@
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { FunnelMotion } from './funnel-motion.client';
 import styles from './how-marketing-feeds-the-pipeline.module.css';
 
 /** The funnel's words: the mouth's label, its volume line, the three sources marketing speaks through, its name. */
 export interface Funnel {
   label: string;
-  volume: string;
+  volume: ReactNode;
   name: string;
   sources: { slug: 'content' | 'ads' | 'web'; label: string }[];
 }

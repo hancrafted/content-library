@@ -1,11 +1,11 @@
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { Note, type Lane } from './stage-notes';
 import styles from './stages-of-sale.module.css';
 
 /** A bracket over the lanes `from` to `to`, counted from 1. */
 export interface Bracket {
   slug: string;
-  label: string;
+  label: ReactNode;
   from: number;
   to: number;
   emphasis: 'primary' | 'muted';

@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils';
+import type { ReactNode } from 'react';
 
 const STROKES = {
   plus: { d: 'M40 14 C 41 30, 39 50, 40 66 M14 41 C 30 39, 50 41, 66 40', stroke: 'stroke-foreground' },
@@ -34,7 +35,7 @@ export function Brace({ label, className }: { label: string; className?: string 
 }
 
 /** The caveat on the equals: a curved arrow up at it and the note beside. */
-export function MarginNote({ text, className }: { text: string; className?: string }) {
+export function MarginNote({ text, className }: { text: ReactNode; className?: string }) {
   return (
     <div className={cn('flex items-start justify-center gap-3 pt-2', className)}>
       <svg

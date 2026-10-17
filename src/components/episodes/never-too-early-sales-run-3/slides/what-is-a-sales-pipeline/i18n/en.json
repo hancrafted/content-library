@@ -26,9 +26,9 @@
       "label": "Conversion rate",
       "caption": "How many leads become one opportunity: tells you your <b>offering</b>"
     },
-    "cycle": "<b>Sales cycle</b> · first contact to the money: tells you your <b>efficiency</b>"
+    "cycle": "<marker><b>Sales cycle</b> · first contact to the money: tells you your <b>efficiency</b></marker>"
   },
-  "ratio": "3 : 1",
+  "ratio": "<marker>3 : 1</marker>",
   "notes": {
     "stage-rates-are-not-portable": {
       "header": "Stage rates are not portable",

@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { useId, type CSSProperties } from 'react';
+import { useId, type CSSProperties, type ReactNode } from 'react';
 import styles from './slide.module.css';
 
 interface BarRow {
@@ -29,8 +29,16 @@ function Bar({ row, lead, format }: { row: BarRow; lead: boolean; format: Intl.N
   );
 }
 
+interface SignalBarsProps {
+  heading: string;
+  rows: BarRow[];
+  locale: string;
+  /** A Context marker in the card's top-right corner. */
+  marker?: ReactNode;
+}
+
 /** What investors weigh, as bars; the first row leads, the rest recede. The shares show on hover or keyboard focus. */
-export function SignalBars({ heading, rows, locale }: { heading: string; rows: BarRow[]; locale: string }) {
+export function SignalBars({ heading, rows, locale, marker }: SignalBarsProps) {
   const format = new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 0 });
   const headingId = useId();
   // Focusable and named by its heading, so keyboard focus reveals the shares as hover does.
@@ -39,8 +47,9 @@ export function SignalBars({ heading, rows, locale }: { heading: string; rows: B
       role="group"
       aria-labelledby={headingId}
       tabIndex={0}
-      className="hover-reveal mt-6 rounded-md bg-primary-foreground/10 p-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-foreground"
+      className="hover-reveal relative mt-6 rounded-md bg-primary-foreground/10 p-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-foreground"
     >
+      {marker}
       <p id={headingId} className="font-mono text-caption tracking-widest text-primary-foreground/70 uppercase">
         {heading}
       </p>

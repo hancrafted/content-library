@@ -3,7 +3,7 @@
   "caption": "The first two steps are in your hands. After them, every stage pushes the money further to the right.",
   "brackets": {
     "yours": "In your hands",
-    "calendar": "Calendar time you cannot compress"
+    "calendar": "<marker>Calendar time you cannot compress</marker>"
   },
   "lanes": {
     "leads": {
@@ -73,7 +73,7 @@
         "cash": {
           "kind": "Cash",
           "title": "Invoice paid",
-          "text": "30 to 60 days after it is sent"
+          "text": "<marker>30 to 60 days after it is sent</marker>"
         }
       }
     }

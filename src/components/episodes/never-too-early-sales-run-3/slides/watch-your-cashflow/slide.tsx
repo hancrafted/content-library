@@ -14,8 +14,9 @@ const DEFAULT_ALIVE = { slug: 'default-alive', url: 'https://paulgraham.com/aord
 
 /**
  * The cashflow board, January to April: two months of cash run out in February, March's cost lands on an empty
- * account under a Bankrupt stamp, and the million arrives in April, one month late. The March lane is ringed, two
- * brackets read the timing, and the closing question is pinned over the board, lifting when pointed at.
+ * account under a Bankrupt stamp, and the million arrives in April, one month late. Each column's Cash left footer
+ * states its balance, so no cash note repeats it. The March lane is ringed and two brackets read the timing; Context
+ * markers sit in the March lane, after "Two months of cash" and beside February's Cash left.
  */
 export const watchYourCashflow = slide({
   slug: 'watch-your-cashflow',
@@ -31,40 +32,35 @@ export const watchYourCashflow = slide({
     { slug: 'antithesis' },
     { slug: 'hand-over-the-verdict' },
   ],
-  content: ({ t, target, locale }) => {
+  content: ({ t, target, locale, marker, Marker }) => {
     const months: CashflowColumn[] = [
       {
         label: t('months.jan'),
-        notes: [
-          { kind: 'cash', amount: 100000 },
-          { kind: 'cost', amount: 50000 },
-          { kind: 'cash', amount: 50000 },
-        ],
+        notes: [{ kind: 'cash', amount: 100000 }, { kind: 'cost', amount: 50000 }, null],
       },
       {
         label: t('months.feb'),
-        notes: [
-          { kind: 'cash', amount: 50000 },
-          { kind: 'cost', amount: 50000 },
-          { kind: 'cash', amount: 0, big: true, target: target('zero-cash')['data-target'] },
-        ],
+        notes: [{ kind: 'cash', amount: 50000 }, { kind: 'cost', amount: 50000 }, null],
       },
-      { label: t('months.mar'), notes: [{ kind: 'cost', amount: 50000 }, null, null] },
+      {
+        label: t('months.mar'),
+        notes: [{ kind: 'cost', amount: 50000 }, null, null],
+        marker: <Marker note="costs-begin-before-customers" />,
+      },
       { label: t('months.apr'), notes: [null, { kind: 'revenue', amount: 1000000, big: true }, null] },
     ];
     const balances = cashLeft(months);
+    // February's footer states the €0 the board turns on, so it carries the zero-cash target and its marker.
+    const zero = {
+      target: target('zero-cash')['data-target'],
+      marker: <Marker note="default-alive-test" className="static" />,
+    };
     const columns = months.map((month, index) => ({
       ...month,
-      footer: <CashLeft label={t('cashLeft')} amount={balances[index]} locale={locale} />,
+      footer: <CashLeft label={t('cashLeft')} amount={balances[index]} locale={locale} {...(index === 1 && zero)} />,
     }));
     return (
       <SlideFrame className="mt-10 gap-10">
-        <aside className="card-hover card-hover--raise rotate-1 self-end border bg-card p-6 shadow-md lg:w-5/12">
-          <p className="font-mono text-caption tracking-widest text-muted-foreground uppercase">
-            {t('question.label')}
-          </p>
-          <p className="mt-2 text-body font-semibold">{t('question.text')}</p>
-        </aside>
         <CashflowBoard
           columns={columns}
           labels={{ board: t('board'), cash: t('note.cash'), cost: t('note.cost'), revenue: t('note.revenue') }}
@@ -72,7 +68,12 @@ export const watchYourCashflow = slide({
           stamp={{ label: t('stamp'), column: 3 }}
           highlight={3}
           annotations={[
-            { column: 1, span: 2, kind: 'bracket', text: t('runway') },
+            {
+              column: 1,
+              span: 2,
+              kind: 'bracket',
+              text: t.rich('runway', { marker: marker('high-burn-rate-is-a-clock') }),
+            },
             { column: 3, span: 2, kind: 'bracket', text: t('late') },
           ]}
         />

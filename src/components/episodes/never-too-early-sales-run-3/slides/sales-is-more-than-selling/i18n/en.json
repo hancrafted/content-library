@@ -4,13 +4,13 @@
   "source": "Survey of 885 institutional venture capitalists: Gompers, Gornall, Kaplan and Strebulaev, How Do Venture Capitalists Make Decisions?",
   "equationLabel": "Gain market insight plus gain internal insights equals increase trust.",
   "brace": "What you learn",
-  "marginNote": "The \"=\" is a claim, not a proof: a first result shows your team can sell.",
+  "marginNote": "<marker>The \"=\" is a claim, not a proof: a first result shows your team can sell.</marker>",
   "stamp": "Before revenue",
   "board": {
     "market": {
       "title": "Gain market insight",
-      "body": "Every customer talk is research you did not pay for.",
-      "ask": "When did this last happen to you?",
+      "body": "<marker>Every customer talk is research you did not pay for.</marker>",
+      "ask": "<marker>When did this last happen to you?</marker>",
       "answer": "Last month. We lost two days on it.",
       "points": {
         "time": "Where to spend your time",
@@ -20,7 +20,7 @@
     },
     "internal": {
       "title": "Gain internal insights",
-      "body": "How well do you sell, and could anyone besides you repeat it?",
+      "body": "<marker>How well do you sell, and could anyone besides you repeat it?</marker>",
       "path": {
         "you": "You",
         "repeat": "repeat it",
@@ -30,7 +30,7 @@
     },
     "trust": {
       "title": "Increase trust",
-      "body": "Investors and reluctant customers trust what someone else has already bought.",
+      "body": "<marker>Investors and reluctant customers trust what someone else has already bought.</marker>",
       "points": {
         "investment": "Attracting investment",
         "customers": "Convincing reluctant customers"

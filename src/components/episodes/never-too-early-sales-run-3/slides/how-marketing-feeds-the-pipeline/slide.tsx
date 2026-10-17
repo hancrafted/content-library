@@ -42,7 +42,7 @@ export const howMarketingFeedsThePipeline = slide({
     { slug: 'the-marketing-hand-off-has-its-own-rate', target: LEAD_IN, sources: [GTM_BENCHMARKS] },
   ],
   segments: [{ slug: 'two-ways-in' }, { slug: 'volume-into-a-defined-stage' }, { slug: 'hand-to-sales' }],
-  content: ({ t, target, locale }) => {
+  content: ({ t, target, locale, marker, Marker }) => {
     const lanes: DealLane[] = PIPELINE.map((lane) => ({
       slug: lane.slug,
       label: t(`lanes.${lane.slug}.short`),
@@ -54,7 +54,7 @@ export const howMarketingFeedsThePipeline = slide({
           <MarketingFunnel
             funnel={{
               label: t('marketing'),
-              volume: t('volume'),
+              volume: t.rich('volume', { marker: marker('customers-do-not-arrive-alone') }),
               name: t('funnelName'),
               sources: SOURCES.map((slug) => ({ slug, label: t(`sources.${slug}`) })),
             }}
@@ -72,6 +72,7 @@ export const howMarketingFeedsThePipeline = slide({
               text: t(`incoming.${slug}.text`),
             }))}
             bracket={{ stage: t('stage'), label: t('handOff'), from: 2, to: PIPELINE.length }}
+            markers={{ leadIn: <Marker note="the-marketing-hand-off-has-its-own-rate" /> }}
           />
         </div>
       </SlideFrame>

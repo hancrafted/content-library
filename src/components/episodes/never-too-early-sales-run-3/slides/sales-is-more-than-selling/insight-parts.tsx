@@ -1,5 +1,7 @@
+import type { ReactNode } from 'react';
+
 /** The "ask about the last time" exchange: the question asked, the answer given. */
-export function Exchange({ ask, answer }: { ask: string; answer: string }) {
+export function Exchange({ ask, answer }: { ask: ReactNode; answer: string }) {
   return (
     <div className="mt-4 flex flex-col gap-2">
       <p className="self-start rounded-2xl rounded-bl-sm bg-muted px-3 py-2 text-caption">{ask}</p>

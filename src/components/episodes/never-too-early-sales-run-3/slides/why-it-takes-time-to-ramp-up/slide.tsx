@@ -51,7 +51,7 @@ export const whyItTakesTimeToRampUp = slide({
     { slug: 'unknown-metrics' },
     { slug: 'so-start-now' },
   ],
-  content: ({ t, target }) => (
+  content: ({ t, target, Marker }) => (
     <SlideFrame className="mt-10">
       <DayOneBoard
         stamp={t('stamp')}
@@ -73,6 +73,16 @@ export const whyItTakesTimeToRampUp = slide({
         hints={{ preparation: t('preparation.hint'), market: t('market.hint'), metrics: t('metrics.why') }}
         close={t.rich('close')}
         targets={{ preparation: target('preparation'), market: target('market'), metrics: target('metrics') }}
+        markers={{
+          preparation: <Marker note="learn-first-codify-later" className="static" />,
+          market: (
+            <>
+              <Marker note="startups-search-they-do-not-execute" className="static" />
+              <Marker note="selling-blind" className="static" />
+            </>
+          ),
+          metrics: <Marker note="metrics-lag-by-one-cycle" className="static" />,
+        }}
       />
     </SlideFrame>
   ),
