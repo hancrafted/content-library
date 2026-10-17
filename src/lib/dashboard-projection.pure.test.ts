@@ -43,6 +43,62 @@ describe('success cases', () => {
     expect(pipeline.jobs[1].gate).toBe(true);
   });
 
+  it('counts needs-Han notes only from the current Run, not from a Job span left by an earlier one', () => {
+    // ARRANGE
+    const agent = {
+      type: 'implementor',
+      agent: 'a',
+      skills: [],
+      references: [],
+      model: 'opus',
+      session: 'orchestrator',
+    };
+    const pipeline = parseDashboardPipeline(
+      JSON.stringify({
+        status: 'approved',
+        jobs: [
+          { id: 'old-job', needs: [], outputs: [], checks: [], retries: 1, agents: [agent] },
+          { id: 'new-job', needs: [], outputs: [], checks: [], retries: 1, agents: [agent] },
+        ],
+      }),
+    );
+    const at = (hour: number) => `2026-10-14T${String(hour).padStart(2, '0')}:00:00Z`;
+    const start = (trace: string, seq: number) => ({ trace_id: trace, seq, t: at(seq) });
+    const job = (trace: string, seq: number, id: string) => ({
+      ...start(trace, seq),
+      kind: 'start',
+      span_id: `${id}-${trace}`,
+      type: 'job',
+      name: id,
+      job: id,
+      parent_span_id: `run-${trace}`,
+    });
+    const note = (trace: string, seq: number, id: string) => ({
+      ...start(trace, seq),
+      kind: 'event',
+      span_id: `${id}-${trace}`,
+      name: 'note',
+      source: 'typed',
+      attributes: { 'note.type': 'needs-human', 'note.text': 'pick' },
+    });
+    const run = (trace: string, seq: number) => ({ ...start(trace, seq), kind: 'start-run', span_id: `run-${trace}` });
+    const lines = [
+      run('a', 1),
+      job('a', 2, 'old-job'),
+      note('a', 3, 'old-job'),
+      run('b', 4),
+      job('b', 5, 'new-job'),
+      note('b', 6, 'new-job'),
+    ] as unknown as RunLogLine[];
+    const expectedBadges = { 'old-job': 0, 'new-job': 1 };
+    // ACT
+    const log = createLogFold({ live: 'unfinished' });
+    log.append(lines);
+    const view = projectDashboard(pipeline, log.snapshot());
+    // ASSERT
+    expect(Object.fromEntries(view.jobs.map((entry) => [entry.id, entry.needsHan]))).toEqual(expectedBadges);
+  });
+
   it('projects the frozen Run with retries, raw states, rubric evidence and Job-parented agents', () => {
     // ARRANGE
     const pipeline = parseDashboardPipeline(fixture('pipeline.yml'));

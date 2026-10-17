@@ -92,6 +92,8 @@ function ownerOf(span: Span, byId: ReadonlyMap<string, Span>): string | undefine
 
 interface ProjectionContext {
   folded: Folded;
+  /** The trace of the latest Run: only its notes can still need Han. */
+  currentTrace: string | undefined;
   owners: ReadonlyMap<string, string | undefined>;
   latest: ReadonlyMap<string, Span>;
   openGates: readonly Span[];
@@ -99,9 +101,17 @@ interface ProjectionContext {
 
 const NEEDS_HAN: readonly string[] = ['needs-human', 'blocked'];
 
+/** The Job's `needs-human` and `blocked` notes, counted only while its latest span belongs to the latest Run. */
+function needsHanCount(span: Span | undefined, currentTrace: string | undefined): number {
+  if (span === undefined || span.trace_id !== currentTrace) return 0;
+  return (span.events ?? []).filter(
+    (event) => event.name === 'note' && NEEDS_HAN.includes(event.attributes['note.type']),
+  ).length;
+}
+
 /** One configured Job with its latest span, its children, the Scores worth Han's eye and its chips. */
 function jobView({ agents: config, ...job }: Job, context: ProjectionContext): DashboardJob {
-  const { folded, owners, latest, openGates } = context;
+  const { folded, owners, latest, openGates, currentTrace } = context;
   const children = folded.spans.filter((span) => owners.get(span.span_id) === job.id);
   const span = latest.get(job.id);
   const owned = folded.scores.filter((score) => owners.get(score.span_id) === job.id);
@@ -117,9 +127,7 @@ function jobView({ agents: config, ...job }: Job, context: ProjectionContext): D
     attempts,
     agents,
     gates: children.filter((child) => child.type === 'gate'),
-    needsHan: (span?.events ?? []).filter(
-      (event) => event.name === 'note' && NEEDS_HAN.includes(event.attributes['note.type']),
-    ).length,
+    needsHan: needsHanCount(span, currentTrace),
     scores: owned.filter(
       (score) => score.name === 'rubric' && (score.value === 'fail' || score.value === 'needs-human'),
     ),
@@ -136,8 +144,13 @@ export function projectDashboard(pipeline: DashboardPipeline, folded: Folded) {
   const latest = latestJobSpans(folded.spans);
   const owners = new Map(folded.spans.map((span) => [span.span_id, ownerOf(span, byId)]));
   const openGates = folded.spans.filter((span) => span.type === 'gate' && span.status === 'running');
-  const jobs = pipeline.jobs.map((job) => jobView(job, { folded, owners, latest, openGates }));
-  return { stages: pipeline.stages, jobs, openGates, runs: folded.spans.filter((span) => span.type === 'run') };
+  const runs = folded.spans.filter((span) => span.type === 'run');
+  const currentTrace = runs.reduce<Span | undefined>(
+    (known, run) => (known === undefined || run.start_t >= known.start_t ? run : known),
+    undefined,
+  )?.trace_id;
+  const jobs = pipeline.jobs.map((job) => jobView(job, { folded, currentTrace, owners, latest, openGates }));
+  return { stages: pipeline.stages, jobs, openGates, runs };
 }
 
 export type DashboardView = ReturnType<typeof projectDashboard>;
