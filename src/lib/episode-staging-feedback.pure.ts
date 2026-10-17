@@ -5,22 +5,22 @@
  * the file's frontmatter and h1; the items sit inside a list, where it cannot see.
  */
 
+import { TITLE_ANCHOR } from './episode.pure';
 import { unless, type Finding } from './finding.pure';
 import { frontmatterField } from './staging-file.pure';
 import { bodyLines, headingsOf } from './staging-markdown.pure';
 
 const FEEDBACK_FILE = /^feedback\/[^/]+\/feedback\.md$/;
 const FEEDBACK_ITEM = /^- `([a-z0-9-]+(?:--[a-z0-9-]+)?)` · (content|implementation|practice|design) — \S.*$/;
-/** The Title slide's anchor: every Episode has one, so it is always a known anchor. */
-const TITLE_SLIDE_ANCHOR = 'top';
 
 /*
  * A Spec review (`via: spec`) has its own item form: per page Slide, and for the Title slide whose Options carry
  * the section slides, its picks, a pick of none needing a note, and one optional `visual-language` item carrying
  * the Visual language note alone.
  */
-const SPEC_SLIDE_ITEM =
-  /^- `(top|[a-z0-9-]+--[a-z0-9-]+)` · design — picked: (?:none — \S.*|\d+[a-z](?:, \d+[a-z])*(?: — \S.*)?)$/;
+const SPEC_SLIDE_ITEM = new RegExp(
+  `^- \`(${TITLE_ANCHOR}|[a-z0-9-]+--[a-z0-9-]+)\` · design — picked: (?:none — \\S.*|\\d+[a-z](?:, \\d+[a-z])*(?: — \\S.*)?)$`,
+);
 const SPEC_VISUAL_LANGUAGE_ITEM = /^- `visual-language` · design — (?!picked:)\S.*$/;
 
 /**
@@ -34,7 +34,8 @@ export interface FeedbackAnchors {
 }
 
 function unknownAnchor(anchor: string, { anchors, sections, source }: FeedbackAnchors): string[] {
-  if (anchor === TITLE_SLIDE_ANCHOR) return [];
+  // Every Episode has a Title slide, so its anchor is always known.
+  if (anchor === TITLE_ANCHOR) return [];
   if (!anchor.includes('--'))
     return unless(sections.includes(anchor), `Feedback anchor "${anchor}" is no section slide in the ${source}.`);
   return unless(anchors.includes(anchor), `Feedback anchor "${anchor}" is no page slide in the ${source}.`);

@@ -2,7 +2,8 @@
 // Spec's Title slide and Slides, the round number and the clock in, the `feedback.md` text out, or the Slides that
 // break the rule that a Slide with no pick carries a note. The server reads and writes; nothing here touches the disk.
 
-import { TITLE_SLIDE_SLUG, type SpecSlide } from '../../../src/lib/episode-spec-page.pure.ts';
+import type { SpecSlide } from '../../../src/lib/episode-spec-page.pure.ts';
+import { TITLE_ANCHOR } from '../../../src/lib/episode.pure.ts';
 import { HAN_ACTOR, utcSeconds } from '../../../src/lib/staging-file.pure.ts';
 
 export interface Review {
@@ -55,7 +56,7 @@ function reviewedSlides({ slides, titleSlide }: Review): Reviewed[] {
   const title: Reviewed[] =
     titleSlide === undefined
       ? []
-      : [{ slug: TITLE_SLIDE_SLUG, anchor: TITLE_SLIDE_SLUG, options: titleSlide, where: 'The Title slide' }];
+      : [{ slug: TITLE_ANCHOR, anchor: TITLE_ANCHOR, options: titleSlide, where: 'The Title slide' }];
   return [
     ...title,
     ...slides.map(({ section, slug, options }, index) => ({
