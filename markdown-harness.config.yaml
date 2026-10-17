@@ -23,6 +23,18 @@ frontmatter:
           allowed:
             - { value: agent-guide, intent: Method and procedure that does not depend on the product. }
         title: *title
+    - ruleId: writing-guide
+      folders: [docs/profile/]
+      intent: "docs/profile/ holds Han's voice and mental models that steer episode writing, so every guide declares itself a writing guide and carries a review date"
+      assess:
+        stale: 'Check this against recent episode voice scripts and feedback before relying on it, then move stale_after.'
+      fields:
+        type:
+          presence: required
+          allowed:
+            - { value: writing-guide, intent: "Reference describing Han's teaching style, mental models, or tone." }
+        title: *title
+        stale_after: { presence: required, format: datetime }
     - ruleId: glossary
       fileNames: [GLOSSARY.md]
       intent: 'The glossary holds the words spoken in voice sessions, so it carries a review date and an agent past it re-checks the terms'

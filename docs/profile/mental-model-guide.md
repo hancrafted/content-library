@@ -1,3 +1,9 @@
+---
+type: writing-guide
+title: Han's mental model
+stale_after: 2026-11-17T00:00:00Z
+---
+
 # Han's mental model
 
 How Han reasons. Build an Episode's argument from these models, so every claim follows a line he would draw. Examples show the move. Write fresh lines from the Episode's own material.
