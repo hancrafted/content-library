@@ -1,5 +1,5 @@
 import { slide } from '@/components/slide-master/slide';
-import { SlideCaption, SlideFrame } from '@/components/slide-master/slide-master';
+import { SlideFrame } from '@/components/slide-master/slide-master';
 import { DealBoard, OpenPipeline, type DealLane } from '@/components/slide-shared/deal-board/deal-board';
 import { dealCount, pipelineTotal } from '@/components/slide-shared/deal-board/deal-board.pure';
 import de from './i18n/de.json';
@@ -55,7 +55,7 @@ const BOARD = [
 
 /**
  * Our own deal board (Spec Option 4a): five stages as lanes, each with its total and count, the deals as paper notes,
- * the open pipeline pinned beside the title, and the Proposal made lane ringed as where the week goes. The notes are
+ * the open pipeline pinned over the board, and the Proposal made lane ringed as where the week goes. The notes are
  * placed lane by lane while the Slide is active, then the ring and the annotation are drawn.
  */
 export const pipelineToolsInPractice = slide({
@@ -63,7 +63,7 @@ export const pipelineToolsInPractice = slide({
   messages: { en, de },
   notes: [{ slug: 'late-deals-convert-worse', target: LANES, sources: [GTM_BENCHMARKS] }],
   segments: [{ slug: 'one-place-for-every-deal' }, { slug: 'read-it-at-a-glance' }, { slug: 'start-small' }],
-  content: ({ t, Title, target, locale }) => {
+  content: ({ t, target, locale }) => {
     const lanes: DealLane[] = BOARD.map((lane) => ({
       slug: lane.slug,
       label: t(`lanes.${lane.slug}.label`),
@@ -76,25 +76,14 @@ export const pipelineToolsInPractice = slide({
     }));
     return (
       <SlideFrame className={`${styles.scene} gap-8`}>
-        <header className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="font-mono text-caption font-semibold tracking-widest text-muted-foreground uppercase">
-              {t('kicker')}
-            </p>
-            <div className="mt-3">
-              <Title>{t('title')}</Title>
-            </div>
-            <SlideCaption data-target="caption">{t('caption')}</SlideCaption>
-          </div>
-          <div className="self-end md:shrink-0">
-            <OpenPipeline
-              label={t('summary.label')}
-              total={pipelineTotal(lanes)}
-              deals={t('summary.deals', { count: dealCount(lanes), stages: lanes.length })}
-              locale={locale}
-            />
-          </div>
-        </header>
+        <div className="self-end">
+          <OpenPipeline
+            label={t('summary.label')}
+            total={pipelineTotal(lanes)}
+            deals={t('summary.deals', { count: dealCount(lanes), stages: lanes.length })}
+            locale={locale}
+          />
+        </div>
         <DealBoard
           {...target(LANES)}
           label={t('board')}

@@ -1,5 +1,5 @@
 import { slide } from '@/components/slide-master/slide';
-import { SlideCaption, SlideFrame } from '@/components/slide-master/slide-master';
+import { SlideFrame } from '@/components/slide-master/slide-master';
 import {
   CashflowBoard,
   cashLeft,
@@ -25,7 +25,7 @@ export const watchYourCashflowRevenuePulledIn = slide({
   messages: { en, de },
   notes: [{ slug: 'predicted-revenue-is-discounted', target: MARCH, sources: [DEFAULT_ALIVE] }],
   segments: [{ slug: 'callback' }, { slug: 'timing-not-amount' }, { slug: 'how-it-moves' }],
-  content: ({ t, Title, target, locale }) => {
+  content: ({ t, target, locale }) => {
     const months: CashflowColumn[] = [
       {
         label: t('board.months.jan'),
@@ -60,13 +60,6 @@ export const watchYourCashflowRevenuePulledIn = slide({
     }));
     return (
       <SlideFrame className={`${styles.scene} gap-10`}>
-        <header>
-          <p className="font-mono text-caption tracking-widest text-muted-foreground uppercase">{t('kicker')}</p>
-          <div className="mt-3">
-            <Title>{t('title')}</Title>
-          </div>
-          <SlideCaption data-target="caption">{t('caption')}</SlideCaption>
-        </header>
         <CashflowBoard
           columns={columns}
           labels={{

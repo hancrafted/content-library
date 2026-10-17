@@ -1,7 +1,6 @@
 {
-  "kicker": "Count the notes",
   "title": "Pipeline by the numbers",
-  "lead": "Do you have 27 names? That is what one deal takes in this example, 9.5 months before the money.",
+  "caption": "Do you have 27 names? That is what one deal takes in this example, 9.5 months before the money.",
   "stages": {
     "lead": "Lead · {count}",
     "opportunity": "Opportunity · {count}",

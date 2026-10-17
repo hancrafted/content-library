@@ -1,6 +1,5 @@
 {
   "title": "Stages of sale",
-  "kicker": "How to start doing sales · the stages",
   "caption": "The first two steps are in your hands. After them, every stage pushes the money further to the right.",
   "brackets": {
     "yours": "In your hands",
@@ -15,9 +14,18 @@
           "title": "Lead generation",
           "text": "Research and keep a list of potential customers",
           "list": {
-            "brightfield": { "company": "Brightfield", "contact": "Jonas Weber" },
-            "kestrel": { "company": "Kestrel Labs", "contact": "Mia Novak" },
-            "orbit": { "company": "Orbit Logistics", "contact": "Sara Kim" }
+            "brightfield": {
+              "company": "Brightfield",
+              "contact": "Jonas Weber"
+            },
+            "kestrel": {
+              "company": "Kestrel Labs",
+              "contact": "Mia Novak"
+            },
+            "orbit": {
+              "company": "Orbit Logistics",
+              "contact": "Sara Kim"
+            }
           }
         },
         "contact": {

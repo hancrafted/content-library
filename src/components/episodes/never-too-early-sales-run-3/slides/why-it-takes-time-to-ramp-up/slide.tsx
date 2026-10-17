@@ -6,7 +6,7 @@ import en from './i18n/en.json';
 
 /*
  * The founder's board on day one (Option 9b): preparation not written yet, an unknown market, and the two metrics
- * still "?", stamped "Day one". A Scene from `SlideFrame` and the kit's `Title`.
+ * still "?", stamped "Day one". A Scene from `SlideFrame` under the Slide header.
  */
 export const whyItTakesTimeToRampUp = slide({
   slug: 'why-it-takes-time-to-ramp-up',
@@ -51,15 +51,8 @@ export const whyItTakesTimeToRampUp = slide({
     { slug: 'unknown-metrics' },
     { slug: 'so-start-now' },
   ],
-  content: ({ t, target, Title }) => (
+  content: ({ t, target }) => (
     <SlideFrame>
-      <p className="font-mono text-caption font-semibold tracking-widest text-muted-foreground uppercase">
-        {t('kicker')}
-      </p>
-      <div className="mt-3">
-        <Title>{t('title')}</Title>
-      </div>
-      <p className="mt-4 max-w-3xl text-body text-muted-foreground">{t('lead')}</p>
       <DayOneBoard
         stamp={t('stamp')}
         columns={{

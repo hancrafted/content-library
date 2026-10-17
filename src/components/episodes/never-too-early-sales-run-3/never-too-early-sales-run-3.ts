@@ -17,7 +17,6 @@ import { whyWatchingCashflowIsMissionCriticalSection } from './sections/why-watc
  */
 export const neverTooEarlySalesRun3 = episode({
   slug: 'never-too-early-sales-run-3',
-  header: 'authored',
   messages: { en, de },
   sections: [
     whyWatchingCashflowIsMissionCriticalSection,

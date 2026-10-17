@@ -1,6 +1,5 @@
 {
   "title": "How marketing feeds the pipeline",
-  "kicker": "How to start doing sales · marketing",
   "caption": "Massive volume, into one defined stage. Sales works what lands there.",
   "marketing": "Marketing",
   "volume": "massive volume",
@@ -11,11 +10,21 @@
   },
   "board": "Pipeline, five stages; marketing feeds the first",
   "lanes": {
-    "leadIn": { "short": "Lead in" },
-    "contact": { "short": "Contact" },
-    "needs": { "short": "Needs" },
-    "proposal": { "short": "Proposal" },
-    "negotiation": { "short": "Negotiation" }
+    "leadIn": {
+      "short": "Lead in"
+    },
+    "contact": {
+      "short": "Contact"
+    },
+    "needs": {
+      "short": "Needs"
+    },
+    "proposal": {
+      "short": "Proposal"
+    },
+    "negotiation": {
+      "short": "Negotiation"
+    }
   },
   "deals": {
     "orbit": "Orbit",
@@ -26,9 +35,18 @@
     "vela": "Vela"
   },
   "incoming": {
-    "form": { "tag": "inbound", "text": "A form sent: sales can call" },
-    "checkout": { "tag": "checkout", "text": "An order placed online" },
-    "demo": { "tag": "inbound", "text": "A demo booked" }
+    "form": {
+      "tag": "inbound",
+      "text": "A form sent: sales can call"
+    },
+    "checkout": {
+      "tag": "checkout",
+      "text": "An order placed online"
+    },
+    "demo": {
+      "tag": "inbound",
+      "text": "A demo booked"
+    }
   },
   "stage": "A defined stage",
   "handOff": "Sales works what lands here",

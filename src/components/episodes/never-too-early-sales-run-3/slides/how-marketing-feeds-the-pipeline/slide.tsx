@@ -1,5 +1,5 @@
 import { slide } from '@/components/slide-master/slide';
-import { SlideCaption, SlideFrame } from '@/components/slide-master/slide-master';
+import { SlideFrame } from '@/components/slide-master/slide-master';
 import { DealBoard, type DealLane } from '@/components/slide-shared/deal-board/deal-board';
 import styles from './how-marketing-feeds-the-pipeline.module.css';
 import de from './i18n/de.json';
@@ -42,7 +42,7 @@ export const howMarketingFeedsThePipeline = slide({
     { slug: 'the-marketing-hand-off-has-its-own-rate', target: LEAD_IN, sources: [GTM_BENCHMARKS] },
   ],
   segments: [{ slug: 'two-ways-in' }, { slug: 'volume-into-a-defined-stage' }, { slug: 'hand-to-sales' }],
-  content: ({ t, Title, target, locale }) => {
+  content: ({ t, target, locale }) => {
     const lanes: DealLane[] = PIPELINE.map((lane) => ({
       slug: lane.slug,
       label: t(`lanes.${lane.slug}.short`),
@@ -50,15 +50,6 @@ export const howMarketingFeedsThePipeline = slide({
     }));
     return (
       <SlideFrame className={`${styles.scene} gap-10`}>
-        <div>
-          <p className="font-mono text-caption font-semibold tracking-widest text-muted-foreground uppercase">
-            {t('kicker')}
-          </p>
-          <div className="mt-3">
-            <Title>{t('title')}</Title>
-          </div>
-          <SlideCaption data-target="caption">{t('caption')}</SlideCaption>
-        </div>
         <div className={styles.layout}>
           <MarketingFunnel
             funnel={{

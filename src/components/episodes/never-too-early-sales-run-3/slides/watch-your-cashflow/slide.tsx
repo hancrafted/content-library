@@ -1,5 +1,5 @@
 import { slide } from '@/components/slide-master/slide';
-import { SlideCaption, SlideFrame } from '@/components/slide-master/slide-master';
+import { SlideFrame } from '@/components/slide-master/slide-master';
 import {
   CashflowBoard,
   cashLeft,
@@ -17,7 +17,7 @@ const DEFAULT_ALIVE = { slug: 'default-alive', url: 'https://paulgraham.com/aord
 /**
  * The cashflow board, January to April: two months of cash run out in February, March's cost lands on an empty
  * account under a Bankrupt stamp, and the million arrives in April, one month late. The March lane is ringed, two
- * brackets read the timing, and the closing question is pinned beside the title. Notes are placed one at a time in
+ * brackets read the timing, and the closing question is pinned under the board. Notes are placed one at a time in
  * reading order while the Slide is active.
  */
 export const watchYourCashflow = slide({
@@ -34,7 +34,7 @@ export const watchYourCashflow = slide({
     { slug: 'antithesis' },
     { slug: 'hand-over-the-verdict' },
   ],
-  content: ({ t, Title, target, locale }) => {
+  content: ({ t, target, locale }) => {
     const months: CashflowColumn[] = [
       {
         label: t('months.jan'),
@@ -61,35 +61,24 @@ export const watchYourCashflow = slide({
       footer: <CashLeft label={t('cashLeft')} amount={balances[index]} locale={locale} />,
     }));
     return (
-      <SlideFrame className={styles.scene}>
-        <header className="grid items-end gap-8 lg:grid-cols-12">
-          <div className="lg:col-span-7">
-            <p className="font-mono text-caption tracking-widest text-muted-foreground uppercase">{t('kicker')}</p>
-            <div className="mt-3">
-              <Title>{t('title')}</Title>
-            </div>
-            <SlideCaption>{t('caption')}</SlideCaption>
-          </div>
-          <aside className={cn(styles.question, 'rotate-1 border bg-card p-6 shadow-md lg:col-span-5')}>
-            <p className="font-mono text-caption tracking-widest text-muted-foreground uppercase">
-              {t('question.label')}
-            </p>
-            <p className="mt-2 text-body font-semibold">{t('question.text')}</p>
-          </aside>
-        </header>
-        <div className="mt-12">
-          <CashflowBoard
-            columns={columns}
-            labels={{ board: t('board'), cash: t('note.cash'), cost: t('note.cost'), revenue: t('note.revenue') }}
-            locale={locale}
-            stamp={{ label: t('stamp'), column: 3 }}
-            highlight={3}
-            annotations={[
-              { column: 1, span: 2, kind: 'bracket', text: t('runway') },
-              { column: 3, span: 2, kind: 'bracket', text: t('late') },
-            ]}
-          />
-        </div>
+      <SlideFrame className={cn(styles.scene, 'gap-10')}>
+        <CashflowBoard
+          columns={columns}
+          labels={{ board: t('board'), cash: t('note.cash'), cost: t('note.cost'), revenue: t('note.revenue') }}
+          locale={locale}
+          stamp={{ label: t('stamp'), column: 3 }}
+          highlight={3}
+          annotations={[
+            { column: 1, span: 2, kind: 'bracket', text: t('runway') },
+            { column: 3, span: 2, kind: 'bracket', text: t('late') },
+          ]}
+        />
+        <aside className={cn(styles.question, 'rotate-1 self-end border bg-card p-6 shadow-md lg:w-5/12')}>
+          <p className="font-mono text-caption tracking-widest text-muted-foreground uppercase">
+            {t('question.label')}
+          </p>
+          <p className="mt-2 text-body font-semibold">{t('question.text')}</p>
+        </aside>
       </SlideFrame>
     );
   },

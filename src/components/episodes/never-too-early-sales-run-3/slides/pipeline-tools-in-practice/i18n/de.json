@@ -1,6 +1,5 @@
 {
   "title": "Pipeline-Tools in der Praxis",
-  "kicker": "Wie Du mit dem Vertrieb anfängst · das Deal-Board",
   "caption": "Jeder Interessent eine Karte, jede Phase eine Spalte. Eine Tabelle reicht.",
   "board": "Deal-Board, fünf Phasen vom Lead-Eingang bis zur Verhandlung",
   "summary": {
@@ -14,24 +13,67 @@
   },
   "lanes": {
     "count": "{count, plural, one {# Deal} other {# Deals}}",
-    "leadIn": { "label": "Lead-Eingang" },
-    "contactMade": { "label": "Kontakt hergestellt" },
-    "needsDefined": { "label": "Bedarf geklärt" },
-    "proposalMade": { "label": "Angebot gemacht" },
-    "negotiation": { "label": "Verhandlung" }
+    "leadIn": {
+      "label": "Lead-Eingang"
+    },
+    "contactMade": {
+      "label": "Kontakt hergestellt"
+    },
+    "needsDefined": {
+      "label": "Bedarf geklärt"
+    },
+    "proposalMade": {
+      "label": "Angebot gemacht"
+    },
+    "negotiation": {
+      "label": "Verhandlung"
+    }
   },
   "deals": {
-    "brightfield": { "company": "Brightfield", "contact": "Jonas Weber" },
-    "kestrel": { "company": "Kestrel Labs", "contact": "Mia Novak" },
-    "larchwood": { "company": "Larchwood Foods", "contact": "Tom Reyes" },
-    "orbit": { "company": "Orbit Logistics", "contact": "Sara Kim" },
-    "pinecrest": { "company": "Pinecrest Clinic", "contact": "Ali Demir" },
-    "quarry": { "company": "Quarry Systems", "contact": "Eva Lind" },
-    "redwood": { "company": "Redwood Print", "contact": "Ben Ortiz" },
-    "saltmarsh": { "company": "Saltmarsh Energy", "contact": "Nora Fischer" },
-    "tidewater": { "company": "Tidewater Hotels", "contact": "Raj Patel" },
-    "vela": { "company": "Vela Insurance", "contact": "Lisa Moreau" },
-    "umbra": { "company": "Umbra Studio", "contact": "Kai Berg" }
+    "brightfield": {
+      "company": "Brightfield",
+      "contact": "Jonas Weber"
+    },
+    "kestrel": {
+      "company": "Kestrel Labs",
+      "contact": "Mia Novak"
+    },
+    "larchwood": {
+      "company": "Larchwood Foods",
+      "contact": "Tom Reyes"
+    },
+    "orbit": {
+      "company": "Orbit Logistics",
+      "contact": "Sara Kim"
+    },
+    "pinecrest": {
+      "company": "Pinecrest Clinic",
+      "contact": "Ali Demir"
+    },
+    "quarry": {
+      "company": "Quarry Systems",
+      "contact": "Eva Lind"
+    },
+    "redwood": {
+      "company": "Redwood Print",
+      "contact": "Ben Ortiz"
+    },
+    "saltmarsh": {
+      "company": "Saltmarsh Energy",
+      "contact": "Nora Fischer"
+    },
+    "tidewater": {
+      "company": "Tidewater Hotels",
+      "contact": "Raj Patel"
+    },
+    "vela": {
+      "company": "Vela Insurance",
+      "contact": "Lisa Moreau"
+    },
+    "umbra": {
+      "company": "Umbra Studio",
+      "contact": "Kai Berg"
+    }
   },
   "notes": {
     "late-deals-convert-worse": {

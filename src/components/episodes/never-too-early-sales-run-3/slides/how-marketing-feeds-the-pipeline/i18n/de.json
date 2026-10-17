@@ -1,6 +1,5 @@
 {
   "title": "Wie Marketing die Pipeline füllt",
-  "kicker": "Wie Du mit dem Vertrieb anfängst · Marketing",
   "caption": "Riesige Reichweite, in eine definierte Phase. Der Vertrieb bearbeitet, was dort landet.",
   "marketing": "Marketing",
   "volume": "riesige Reichweite",
@@ -11,11 +10,21 @@
   },
   "board": "Pipeline, fünf Phasen; Marketing füllt die erste",
   "lanes": {
-    "leadIn": { "short": "Lead-Eingang" },
-    "contact": { "short": "Kontakt" },
-    "needs": { "short": "Bedarf" },
-    "proposal": { "short": "Angebot" },
-    "negotiation": { "short": "Verhandlung" }
+    "leadIn": {
+      "short": "Lead-Eingang"
+    },
+    "contact": {
+      "short": "Kontakt"
+    },
+    "needs": {
+      "short": "Bedarf"
+    },
+    "proposal": {
+      "short": "Angebot"
+    },
+    "negotiation": {
+      "short": "Verhandlung"
+    }
   },
   "deals": {
     "orbit": "Orbit",
@@ -26,9 +35,18 @@
     "vela": "Vela"
   },
   "incoming": {
-    "form": { "tag": "inbound", "text": "Formular gesendet: der Vertrieb kann anrufen" },
-    "checkout": { "tag": "checkout", "text": "Eine Bestellung online" },
-    "demo": { "tag": "inbound", "text": "Eine Demo gebucht" }
+    "form": {
+      "tag": "inbound",
+      "text": "Formular gesendet: der Vertrieb kann anrufen"
+    },
+    "checkout": {
+      "tag": "checkout",
+      "text": "Eine Bestellung online"
+    },
+    "demo": {
+      "tag": "inbound",
+      "text": "Eine Demo gebucht"
+    }
   },
   "stage": "Eine definierte Phase",
   "handOff": "Der Vertrieb bearbeitet, was hier landet",

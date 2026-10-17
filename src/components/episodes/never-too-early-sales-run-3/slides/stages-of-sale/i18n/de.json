@@ -1,6 +1,5 @@
 {
   "title": "Phasen des Verkaufs",
-  "kicker": "Wie Du mit dem Vertrieb anfängst · die Phasen",
   "caption": "Die ersten zwei Schritte liegen in Deiner Hand. Danach schiebt jede Phase das Geld weiter nach rechts.",
   "brackets": {
     "yours": "In Deiner Hand",
@@ -15,9 +14,18 @@
           "title": "Leadgenerierung",
           "text": "Recherchiere potenzielle Kunden und führe eine Liste",
           "list": {
-            "brightfield": { "company": "Brightfield", "contact": "Jonas Weber" },
-            "kestrel": { "company": "Kestrel Labs", "contact": "Mia Novak" },
-            "orbit": { "company": "Orbit Logistics", "contact": "Sara Kim" }
+            "brightfield": {
+              "company": "Brightfield",
+              "contact": "Jonas Weber"
+            },
+            "kestrel": {
+              "company": "Kestrel Labs",
+              "contact": "Mia Novak"
+            },
+            "orbit": {
+              "company": "Orbit Logistics",
+              "contact": "Sara Kim"
+            }
           }
         },
         "contact": {

@@ -1,6 +1,5 @@
 import { slide } from '@/components/slide-master/slide';
-import { SlideCaption, SlideFrame } from '@/components/slide-master/slide-master';
-import type { ReactNode } from 'react';
+import { SlideFrame } from '@/components/slide-master/slide-master';
 import { Brace, MarginNote, Operator } from './equation-parts';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
@@ -86,7 +85,7 @@ export const salesIsMoreThanSelling = slide({
     { slug: 'trust-is-the-sum' },
     { slug: 'verdict' },
   ],
-  content: ({ t, locale, target, Title }) => {
+  content: ({ t, locale, target }) => {
     const marketChips = [
       { label: t('board.market.points.time') },
       { label: t('board.market.dropped'), dropped: true },
@@ -96,21 +95,6 @@ export const salesIsMoreThanSelling = slide({
     const barRows = VC_FACTORS.map(({ slug, percent }) => ({ label: t(`board.trust.bars.rows.${slug}`), percent }));
     return (
       <SlideFrame className="gap-10">
-        <div>
-          <p className="flex items-center gap-3 font-mono text-caption font-semibold tracking-widest text-primary uppercase">
-            <span aria-hidden="true" className="size-2 rounded-full bg-primary" />
-            {t('kicker')}
-          </p>
-          <div className="mt-4">
-            <Title>{t('title')}</Title>
-          </div>
-          <p className="mt-4 max-w-2xl text-body text-muted-foreground">
-            {t.rich('lead', {
-              em: (chunks: ReactNode) => <em className="font-semibold text-foreground not-italic">{chunks}</em>,
-            })}
-          </p>
-        </div>
-
         <div className="@container relative flex flex-col gap-6 rounded-xl bg-muted p-6 shadow-inner md:p-10">
           <p className="sr-only">{t('equationLabel')}</p>
           <div className="grid grid-cols-1 items-center gap-4 @4xl:grid-cols-12">
@@ -165,7 +149,7 @@ export const salesIsMoreThanSelling = slide({
             <MarginNote text={t('marginNote')} step={7.5} className="@4xl:col-span-5" />
           </div>
         </div>
-        <SlideCaption>{t('caption')}</SlideCaption>
+        <p className="text-caption text-muted-foreground">{t('source')}</p>
       </SlideFrame>
     );
   },

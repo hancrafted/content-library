@@ -56,7 +56,7 @@ const DEAL_AMOUNT = 12_000;
 
 /*
  * The worked example counted on the board (Option 8b): 27 named lead notes, nine in Opportunity and one revenue note
- * in Deal, under the primary 27:1 bracket, with the cycle bar drawn to scale beneath. The basic page's header, the
+ * in Deal, under the primary 27:1 bracket, with the cycle bar drawn to scale beneath. The Slide header above, the
  * body a Scene in `SlideFrame`; every number comes from the `PIPELINE` table.
  */
 export const pipelineByTheNumbers = slide({
@@ -100,20 +100,13 @@ export const pipelineByTheNumbers = slide({
     { slug: 'backward-chain' },
     { slug: 'your-numbers-not-mine' },
   ],
-  content: ({ t, locale, target, Title }) => {
+  content: ({ t, locale, target }) => {
     const [lead, opportunity, deal] = PIPELINE;
     const total = totalConversion(PIPELINE);
     const bar = cycleBar(PIPELINE);
     return (
       <SlideFrame className={styles.scene}>
-        <p className="font-mono text-caption font-semibold tracking-widest text-muted-foreground uppercase">
-          {t('kicker')}
-        </p>
-        <div className="mt-3">
-          <Title>{t('title')}</Title>
-        </div>
-        <p className="mt-4 max-w-3xl text-body text-muted-foreground">{t('lead')}</p>
-        <div className="mt-6 flex flex-col gap-6">
+        <div className="flex flex-col gap-6">
           <CountBoard
             stages={[
               {
