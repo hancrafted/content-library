@@ -65,7 +65,7 @@ export interface RuntimeKit {
   readonly slideHref: (slug: string) => string;
   readonly template: (key: string) => string;
   readonly ref: (note: string) => RichTag;
-  readonly marker: (note: string) => RichTag;
+  readonly marker: (note: string, className?: string) => RichTag;
   readonly Marker: MarkerComponent;
   readonly target: (name: string) => TargetProps;
   readonly Title: TitleComponent;

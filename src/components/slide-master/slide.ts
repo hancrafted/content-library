@@ -58,8 +58,11 @@ export interface OwnSlideKit<M extends SlideMessages, N extends NoteSpec> {
   readonly template: (key: OwnTemplateKey<M>) => string;
   /** The `t.rich` tag for a Context reference to one of this Slide's notes. */
   readonly ref: (note: N['slug']) => RichTag;
-  /** The `t.rich` tag that follows a phrase with a Context marker to one of this Slide's notes: `phrase (icon)`. */
-  readonly marker: (note: N['slug']) => RichTag;
+  /**
+   * The `t.rich` tag that follows a phrase with a Context marker to one of this Slide's notes: `phrase (icon)`;
+   * `className` recolours it on a surface the muted default does not suit.
+   */
+  readonly marker: (note: N['slug'], className?: string) => RichTag;
   /** A Context marker on an element, to one of this Slide's notes; the element must be `relative` unless `className` places it. */
   readonly Marker: MarkerComponent<N['slug']>;
   /** Marks the element one of this Slide's notes explains. */

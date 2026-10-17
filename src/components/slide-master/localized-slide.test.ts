@@ -234,6 +234,18 @@ describe('success cases', () => {
     expect(seen).toEqual(expected);
   });
 
+  it('colours an inline Context marker as its surface needs, by the class it is given', () => {
+    // ARRANGE
+    const kit = kitOf(localized('en')[1]);
+    const expected = 'text-primary-foreground/70';
+    // ACT
+    const html = renderToStaticMarkup(
+      createElement(Fragment, null, kit.marker('reference-episode', expected)('keeps the shape')),
+    );
+    // ASSERT
+    expect(load(html)('button').attr('class')?.split(/\s+/)).toContain(expected);
+  });
+
   it("resolves the Slide's notes and Voice script from its own file, with short targets and titled sources", () => {
     // ARRANGE
     const expectedNote = {
