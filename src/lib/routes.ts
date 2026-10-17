@@ -4,13 +4,14 @@ import { LOCALES, type Locale } from './locale.pure';
 export const ROUTES = {
   home: '/',
   dashboard: '/dashboard',
-  /** Prefix every Episode route sits under; there is no page at this path. */
-  episodes: '/episode',
+  /** Prefix every Episode route sits under; there is an index page at this path. */
+  episodes: '/episodes',
 } as const;
+
+export const LEGACY_EPISODE_PREFIX = '/episode';
 
 export const EPISODE_SLUGS = [
   'page-template',
-  'amnesiac-freelancer',
   'maintaining-markdown-for-ai',
   'ai-token-economy',
   'never-too-early-sales-run-3',
@@ -31,13 +32,18 @@ export function episodeRoute(slug: EpisodeSlug): string {
   return `${ROUTES.episodes}/${slug}`;
 }
 
+/** The logical path of a legacy Episode stub. */
+export function legacyEpisodeRoute(slug: EpisodeSlug): string {
+  return `${LEGACY_EPISODE_PREFIX}/${slug}`;
+}
+
 /** One static param per Episode; both Episode routes export exactly these (FE-002, FE-005). */
 export function episodeParams(): { episode: EpisodeSlug }[] {
   return EPISODE_SLUGS.map((episode) => ({ episode }));
 }
 
 /** A page with its own metadata and a closed set of exported locales. */
-export type PageRef = 'home' | 'dashboard' | { readonly episode: EpisodeSlug };
+export type PageRef = 'home' | 'dashboard' | 'episodes' | { readonly episode: EpisodeSlug };
 
 /** English-only operations pages have no German counterpart. */
 export function pageLocales(page: PageRef): readonly Locale[] {

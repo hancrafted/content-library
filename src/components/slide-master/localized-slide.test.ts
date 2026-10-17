@@ -182,7 +182,10 @@ describe('success cases', () => {
 
   it('links each Slide slug to the localized anchor the walk placed it at', () => {
     // ARRANGE
-    const expected = ['/de/episode/page-template#foundations--why-a-template', '/de/episode/page-template#foundations'];
+    const expected = [
+      '/de/episodes/page-template#foundations--why-a-template',
+      '/de/episodes/page-template#foundations',
+    ];
     // ACT
     const kit = kitOf(localized('de')[2]);
     const hrefs = [kit.slideHref('why-a-template'), kit.slideHref('foundations')];

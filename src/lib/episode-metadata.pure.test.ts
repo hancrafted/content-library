@@ -4,7 +4,7 @@ import { overviewOrder, topicsOf, type EpisodeMetadata } from './episode-metadat
 /** Five hand-placed Episodes: three published, two upcoming, one with extra Topics. */
 const EPISODES: readonly EpisodeMetadata[] = [
   {
-    slug: 'amnesiac-freelancer',
+    slug: 'never-too-early-sales-run-3',
     status: 'published',
     topic: 'ai-collaboration',
     format: 'foundations',
@@ -37,10 +37,10 @@ const slugs = (entries: readonly EpisodeMetadata[]) => entries.map(({ slug }) =>
 describe('success cases', () => {
   it('orders the Featured Episodes first, as listed, then other published ones newest first, then upcoming as given', () => {
     // ARRANGE
-    const featured = ['ai-token-economy', 'amnesiac-freelancer'];
+    const featured = ['ai-token-economy', 'never-too-early-sales-run-3'];
     const expected = [
       'ai-token-economy',
-      'amnesiac-freelancer',
+      'never-too-early-sales-run-3',
       'maintaining-markdown-for-ai',
       'rolling-out-ai',
       'ai-in-code-review',
@@ -68,7 +68,7 @@ describe('failure cases', () => {
     const expected = [
       'ai-token-economy',
       'maintaining-markdown-for-ai',
-      'amnesiac-freelancer',
+      'never-too-early-sales-run-3',
       'rolling-out-ai',
       'ai-in-code-review',
     ];
@@ -80,8 +80,8 @@ describe('failure cases', () => {
 
   it('ignores a Featured slug no Episode holds', () => {
     // ARRANGE
-    const featured = ['no-such-episode', 'amnesiac-freelancer'];
-    const expectedFirst = 'amnesiac-freelancer';
+    const featured = ['no-such-episode', 'never-too-early-sales-run-3'];
+    const expectedFirst = 'never-too-early-sales-run-3';
     const expectedCount = 5;
     // ACT
     const ordered = overviewOrder(EPISODES, featured);
@@ -105,7 +105,7 @@ describe('edge cases', () => {
   it('breaks a tie between published Episodes of one date by slug, and leaves the given list in its order', () => {
     // ARRANGE
     const before = slugs(EPISODES);
-    const expected = ['ai-token-economy', 'maintaining-markdown-for-ai', 'amnesiac-freelancer'];
+    const expected = ['ai-token-economy', 'maintaining-markdown-for-ai', 'never-too-early-sales-run-3'];
     // ACT
     const ordered = overviewOrder(EPISODES, []).slice(0, 3);
     // ASSERT

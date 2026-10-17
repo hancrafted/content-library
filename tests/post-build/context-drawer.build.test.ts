@@ -15,18 +15,6 @@ const PAGES = EPISODE_SLUGS.flatMap((slug) =>
   LOCALES.map((locale) => ({ slug, locale, url: localizePath(episodeRoute(slug), locale) })),
 );
 
-// Counted once from docs/research/amnesiac-freelancer-script.md: notes and
-// segments per page Slide of the dogfood Episode, in page order.
-const DOGFOOD_COUNTS = [
-  { slide: 'blank-slate--blank-every-time', notes: 4, segments: 3 },
-  { slide: 'blank-slate--where-knowledge-lives', notes: 4, segments: 3 },
-  { slide: 'onboarding--brief-and-rules', notes: 4, segments: 3 },
-  { slide: 'onboarding--keep-it-short', notes: 3, segments: 3 },
-  { slide: 'onboarding--decisions-in-writing', notes: 4, segments: 3 },
-  { slide: 'where-it-breaks--metaphor-breaks', notes: 4, segments: 3 },
-  { slide: 'where-it-breaks--enforce-and-verify', notes: 4, segments: 3 },
-];
-
 function page(url: string): CheerioAPI {
   return load(readFileSync(join(OUT_DIR, exportedFile(url)), 'utf8'));
 }
@@ -138,7 +126,7 @@ describe.each(PAGES)('$url', ({ slug, url }) => {
     // ACT
     const links = $('[data-slot="context"] a[href]').toArray();
     // ASSERT
-    if (slug === 'amnesiac-freelancer') expect(links.length).toBeGreaterThan(0);
+    if (slug === 'never-too-early-sales-run-3') expect(links.length).toBeGreaterThan(0);
     for (const link of links) {
       expect($(link).attr('href')).toMatch(/^https:\/\//);
       expect($(link).attr('target')).toBe('_blank');
@@ -194,10 +182,10 @@ describe.each(PAGES)('$url card', ({ url }) => {
   });
 });
 
-describe('amnesiac-freelancer', () => {
+describe('never-too-early-sales-run-3', () => {
   it.each(LOCALES)('keeps sources closed behind a counted toggle, with their text in the HTML, in %s', (locale) => {
     // ARRANGE
-    const $ = page(localizePath(episodeRoute('amnesiac-freelancer'), locale));
+    const $ = page(localizePath(episodeRoute('never-too-early-sales-run-3'), locale));
     const counted = /\(\d+\)/;
     // ACT
     const disclosures = $('[data-slot="context"] [data-note-target] details').toArray();
@@ -209,44 +197,9 @@ describe('amnesiac-freelancer', () => {
     labels.forEach((label) => expect(label).toMatch(counted));
   });
 
-  it.each(LOCALES)('carries the scripted notes and segments on every page Slide in %s', (locale) => {
-    // ARRANGE
-    const $ = page(localizePath(episodeRoute('amnesiac-freelancer'), locale));
-    // ACT
-    const counts = DOGFOOD_COUNTS.map(({ slide }) => ({
-      slide,
-      notes: entry($, 'notes', slide).find('[data-note-target]').length,
-      segments: entry($, 'script', slide).find('[data-segment]').length,
-    }));
-    // ASSERT
-    expect(counts).toEqual(DOGFOOD_COUNTS);
-  });
-
-  it.each(LOCALES)('wraps three phrases in context references that each resolve to their own note, in %s', (locale) => {
-    // ARRANGE
-    const $ = page(localizePath(episodeRoute('amnesiac-freelancer'), locale));
-    const refs = $('[data-slot="slides"] button[data-context-ref]').toArray();
-    // ACT
-    const resolved = refs.map((ref) => {
-      const slug = $(ref).attr('data-context-ref') ?? '';
-      const owner = $(ref).closest('[data-slide]').attr('data-slide') ?? '';
-      const notes = entry($, 'notes', owner).find(`[data-note="${slug}"]`);
-      return {
-        native: ref.tagName === 'button' && $(ref).attr('type') === 'button' && $(ref).attr('href') === undefined,
-        // A reference is never a target: it and its phrase carry no `data-target`.
-        marksTarget: $(ref).attr('data-target') !== undefined || $(ref).find('[data-target]').length > 0,
-        notes: notes.length,
-        numbered: $(ref).find('sup').length > 0 || /\d/.test($(ref).text()),
-      };
-    });
-    // ASSERT
-    expect(refs).toHaveLength(3);
-    resolved.forEach((r) => expect(r).toEqual({ native: true, marksTarget: false, notes: 1, numbered: false }));
-  });
-
   it.each(LOCALES)('numbers sources in a list and points every citation marker into it, in %s', (locale) => {
     // ARRANGE
-    const $ = page(localizePath(episodeRoute('amnesiac-freelancer'), locale));
+    const $ = page(localizePath(episodeRoute('never-too-early-sales-run-3'), locale));
     const notes = $('[data-slot="context"] [data-note-target]').toArray();
     // ACT
     const broken = notes.flatMap((note) => {
@@ -268,7 +221,7 @@ describe('amnesiac-freelancer', () => {
 
   it('gives each note the same slug and ids in both locales, with German words differing from English', () => {
     // ARRANGE
-    const [en, de] = LOCALES.map((locale) => page(localizePath(episodeRoute('amnesiac-freelancer'), locale)));
+    const [en, de] = LOCALES.map((locale) => page(localizePath(episodeRoute('never-too-early-sales-run-3'), locale)));
     const targetsOf = ($: CheerioAPI) =>
       $('[data-note-target]')
         .toArray()
@@ -293,6 +246,27 @@ describe('page-template', () => {
       .map((e) => $(e).attr('data-context-for'));
     // ASSERT
     expect(withNotes).toEqual(['foundations--why-a-template']);
+  });
+
+  it.each(LOCALES)('wraps phrases in context references that resolve to their own note, in %s', (locale) => {
+    // ARRANGE
+    const $ = page(localizePath(episodeRoute('page-template'), locale));
+    const refs = $('[data-slot="slides"] button[data-context-ref]').toArray();
+    // ACT
+    const resolved = refs.map((ref) => {
+      const slug = $(ref).attr('data-context-ref') ?? '';
+      const owner = $(ref).closest('[data-slide]').attr('data-slide') ?? '';
+      const notes = entry($, 'notes', owner).find(`[data-note="${slug}"]`);
+      return {
+        native: ref.tagName === 'button' && $(ref).attr('type') === 'button' && $(ref).attr('href') === undefined,
+        marksTarget: $(ref).attr('data-target') !== undefined || $(ref).find('[data-target]').length > 0,
+        notes: notes.length,
+        numbered: $(ref).find('sup').length > 0 || /\d/.test($(ref).text()),
+      };
+    });
+    // ASSERT
+    expect(refs.length).toBeGreaterThan(0);
+    resolved.forEach((r) => expect(r).toEqual({ native: true, marksTarget: false, notes: 1, numbered: false }));
   });
 });
 

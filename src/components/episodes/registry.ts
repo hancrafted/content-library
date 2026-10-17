@@ -3,7 +3,6 @@ import type { Locale } from '@/lib/locale.pure';
 import { isEpisodeSlug, type EpisodeSlug } from '@/lib/routes';
 import { notFound } from 'next/navigation';
 import { aiTokenEconomy } from './ai-token-economy/ai-token-economy';
-import { amnesiacFreelancer } from './amnesiac-freelancer/amnesiac-freelancer';
 import { maintainingMarkdownForAi } from './maintaining-markdown-for-ai/maintaining-markdown-for-ai';
 import { neverTooEarlySalesRun3 } from './never-too-early-sales-run-3/never-too-early-sales-run-3';
 import { pageTemplate } from './page-template/page-template';
@@ -17,7 +16,6 @@ import { slideMaster } from './slide-master/slide-master';
  */
 const EPISODES: { readonly [S in EpisodeSlug]: EpisodeRecord & { readonly slug: S } } = {
   'page-template': pageTemplate,
-  'amnesiac-freelancer': amnesiacFreelancer,
   'maintaining-markdown-for-ai': maintainingMarkdownForAi,
   'ai-token-economy': aiTokenEconomy,
   'never-too-early-sales-run-3': neverTooEarlySalesRun3,

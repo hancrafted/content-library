@@ -22,7 +22,7 @@ describe('success cases', () => {
 
   it('points the canonical at the page in its own locale', () => {
     // ARRANGE
-    const expected = '/de/episode/page-template';
+    const expected = '/de/episodes/page-template';
     // ACT
     const metadata = pageMetadata({ episode: 'page-template' }, 'de', COPY);
     // ASSERT
@@ -32,9 +32,9 @@ describe('success cases', () => {
   it('lists every locale and x-default as alternates, identical from either locale', () => {
     // ARRANGE
     const expected = {
-      en: '/episode/page-template',
-      de: '/de/episode/page-template',
-      'x-default': '/episode/page-template',
+      en: '/episodes/page-template',
+      de: '/de/episodes/page-template',
+      'x-default': '/episodes/page-template',
     };
     // ACT
     const fromEnglish = pageMetadata({ episode: 'page-template' }, 'en', COPY).alternates?.languages;

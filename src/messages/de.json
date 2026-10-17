@@ -85,32 +85,7 @@
         "teardown": "Teardown",
         "short": "Kurz"
       },
-      "upcoming": {
-        "specs-an-agent-can-follow": {
-          "title": "Specs schreiben, denen ein Agent folgen kann",
-          "caption": "Was in eine Spezifikation gehört, damit ein KI-Coding-Agent das Richtige baut, ohne dass du jeden Schritt beobachtest."
-        },
-        "ai-code-review-in-ci": {
-          "title": "KI-Code-Review in der CI",
-          "caption": "Ein Teardown eines Review-Bots, der einer einzelnen Person die Pull-Request-Schlange abgenommen hat."
-        },
-        "verifying-ai-written-docs": {
-          "title": "KI-geschriebene Doku prüfen",
-          "caption": "Ein schneller Check, ob generierte Dokumentation noch zum beschriebenen Code passt."
-        },
-        "choosing-the-right-model": {
-          "title": "Das richtige Modell wählen",
-          "caption": "Wann ein günstigeres Modell reicht und wann die Aufgabe das teure verdient."
-        },
-        "rolling-out-ai-in-a-team": {
-          "title": "KI im Team einführen",
-          "caption": "Wie sich die Einführung verbreitet, wenn niemand das Werkzeug vorschreibt, und was sie bremst."
-        },
-        "the-bottleneck-builds-the-fix": {
-          "title": "Der Engpass baut die Lösung",
-          "caption": "Ein Teardown einer Veränderung, die hielt, weil die am stärksten betroffene Person sie besaß."
-        }
-      }
+      "upcoming": {}
     },
     "templateTitle": "Episoden-Seitenvorlage",
     "about": {
@@ -361,10 +336,18 @@
       "title": "Pipeline-Dashboard",
       "description": "Eine private, schreibgeschützte Ansicht der lokalen Pipeline, Runs und Reviews einer Episode."
     },
+    "episodes": {
+      "title": "Episoden",
+      "description": "Durchsuchen Sie alle visualisierten Theorie-Episoden der hancrafted-Trainingsvideos."
+    },
     "home": {
       "title": "Visualisierte Theorie · hancrafted",
       "description": "Theorie aus den hancrafted-Schulungsvideos, Seite für Seite visualisiert."
     }
+  },
+  "episodesPage": {
+    "title": "Episoden",
+    "subtitle": "Durchsuchen Sie die interaktiven Slide-Decks und visualisierten Essays."
   },
   "tableOfContents": {
     "title": "Inhalt",

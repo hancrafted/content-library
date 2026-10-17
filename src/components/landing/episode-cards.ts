@@ -27,20 +27,26 @@ function featuredRankOf(slug: string): { featuredRank?: number } {
   return slot === -1 ? {} : { featuredRank: slot + 1 };
 }
 
+export interface EpisodeCardsOptions {
+  readonly includeDrafts?: boolean;
+  readonly linkDrafts?: boolean;
+}
+
 /**
  * Every Episode the read API lists, as a localized card (FE-006 §4: plain
  * data, safe to hand to a client leaf), in overview order: Featured first,
  * then the other published ones newest first, then the upcoming ones.
  */
-export async function episodeCards(locale: Locale): Promise<EpisodeCard[]> {
+export async function episodeCards(locale: Locale, options?: EpisodeCardsOptions): Promise<EpisodeCard[]> {
   const t = await getTranslations({ locale });
   const read = t as unknown as ReadKey;
-  return overviewOrder(listEpisodes(), featuredSlugs()).map((entry) =>
+  return overviewOrder(listEpisodes({ includeDrafts: options?.includeDrafts }), featuredSlugs()).map((entry) =>
     episodeCard(withCopy(entry, locale), {
       locale,
       read,
       minutes: minutesOf(entry, locale),
       ...featuredRankOf(entry.slug),
+      linkDrafts: options?.linkDrafts,
     }),
   );
 }

@@ -1,11 +1,11 @@
 import { LiquidInkTransition } from '@/components/animations/liquid-ink-transition.client';
-import { EpisodeBrowse, type BrowseLabels } from '@/components/landing/episode-browse.client';
 import { episodeCards } from '@/components/landing/episode-cards';
 import type { CardLabels } from '@/components/landing/episode-grid-card';
 import { EpisodeSpotlight } from '@/components/landing/episode-spotlight';
+import { Button } from '@/components/ui/button';
 import { localizePath, type Locale } from '@/lib/locale.pure';
-import { episodeRoute } from '@/lib/routes';
-import { Layers, LayoutTemplate } from 'lucide-react';
+import { episodeRoute, ROUTES } from '@/lib/routes';
+import { ArrowRight, Layers, LayoutTemplate } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 
@@ -16,25 +16,6 @@ function cardLabels(t: LandingT): CardLabels {
     open: t('episodeOverview.open'),
     comingSoon: t('episodeOverview.comingSoon'),
     minutesUnit: t('episodeOverview.minutesUnit'),
-  };
-}
-
-/** `{count}` stays in the raw message: the leaf fills it as the match count changes. */
-function browseLabels(t: LandingT): BrowseLabels {
-  return {
-    ...cardLabels(t),
-    topicFilter: t('episodeOverview.topicFilter'),
-    formatFilter: t('episodeOverview.formatFilter'),
-    all: t('episodeOverview.all'),
-    showAll: t.raw('episodeOverview.showAll') as string,
-    showFewer: t('episodeOverview.showFewer'),
-    results: {
-      none: t('episodeOverview.results.none'),
-      one: t('episodeOverview.results.one'),
-      other: t.raw('episodeOverview.results.other') as string,
-    },
-    empty: t('episodeOverview.empty'),
-    reset: t('episodeOverview.reset'),
   };
 }
 
@@ -85,26 +66,33 @@ function ReferenceLinks({ locale, t }: { locale: Locale; t: LandingT }) {
 }
 
 /**
- * The landing's Episodes section in two parts: a Spotlight of the hottest
- * published Episodes to click straight into, then Browse, every Episode behind
- * Topic and Format filters.
+ * The landing's Episodes section: a Spotlight of the hottest
+ * published Episodes to click straight into, plus reference links and a link to browse all Episodes.
  */
 export async function EpisodesSection({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'landing' });
   const cards = await episodeCards(locale);
   return (
     <section id="episodes" className="relative">
-      <div className="mx-auto max-w-6xl space-y-16 px-6 py-24 sm:py-32">
+      <div className="mx-auto max-w-6xl space-y-16 px-6 pt-24 pb-96 sm:pt-32 sm:pb-112">
         <EpisodesHeader title={t('episodesSectionTitle')} subtitle={t('episodesSectionSubtitle')} />
         <div>
           <PartHeading>{t('episodeOverview.spotlightTitle')}</PartHeading>
           <EpisodeSpotlight cards={cards} locale={locale} labels={cardLabels(t)} />
         </div>
-        <div>
-          <PartHeading>{t('episodeOverview.browseTitle')}</PartHeading>
-          <EpisodeBrowse cards={cards} locale={locale} labels={browseLabels(t)} />
+        <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-border/40">
+          <ReferenceLinks locale={locale} t={t} />
+          <Button asChild variant="outline" className="rounded-full">
+            <Link
+              href={localizePath(ROUTES.episodes, locale)}
+              data-testid="landing-browse-episodes-link"
+              className="inline-flex items-center gap-2"
+            >
+              <span>{t('episodeOverview.browseTitle')}</span>
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </Button>
         </div>
-        <ReferenceLinks locale={locale} t={t} />
       </div>
       <LiquidInkTransition targetId="services" />
     </section>

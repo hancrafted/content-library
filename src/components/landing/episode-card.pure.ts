@@ -6,7 +6,7 @@ import {
 } from '@/lib/episode-metadata.pure';
 import { TOPICS, type Accent, type FormatId, type TopicIcon, type TopicId } from '@/lib/episode-overview';
 import { localizePath, type Locale } from '@/lib/locale.pure';
-import { episodeRoute } from '@/lib/routes';
+import { episodeRoute, isEpisodeSlug } from '@/lib/routes';
 
 /** One id with its label in the reader's locale. */
 export interface Labelled<Id extends string> {
@@ -69,6 +69,8 @@ export interface CardContext {
   readonly minutes?: number;
   /** The Episode's Featured slot, 1 first; left off when it is not Featured. */
   readonly featuredRank?: number;
+  /** When true, upcoming Episodes with a page get a link (e.g. in dev mode GUI). */
+  readonly linkDrafts?: boolean;
 }
 
 const OVERVIEW_KEYS = 'landing.episodeOverview';
@@ -79,16 +81,20 @@ function copyOf(entry: CardEntry, ctx: CardContext): EpisodeCopy {
   return { title: ctx.read(`${base}.title`), caption: ctx.read(`${base}.caption`) };
 }
 
+function isDraftLinked(entry: CardEntry, linkDrafts?: boolean): boolean {
+  return Boolean(linkDrafts && 'copy' in entry && entry.copy !== undefined);
+}
+
 function publishedFields(entry: CardEntry, ctx: CardContext): Partial<EpisodeCard> {
-  if (entry.status !== 'published') return {};
-  const minutes = ctx.minutes === undefined ? {} : { minutes: ctx.minutes };
+  const isLinked = entry.status === 'published' || isDraftLinked(entry, ctx.linkDrafts);
+  if (!isLinked || !isEpisodeSlug(entry.slug)) return {};
   const route = episodeRoute(entry.slug);
   return {
     route,
     href: localizePath(route, ctx.locale),
-    publishedOn: entry.publishedOn,
+    publishedOn: entry.status === 'published' ? entry.publishedOn : undefined,
     featuredRank: ctx.featuredRank ?? null,
-    ...minutes,
+    ...(ctx.minutes !== undefined ? { minutes: ctx.minutes } : {}),
   };
 }
 
