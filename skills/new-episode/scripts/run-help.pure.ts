@@ -1,7 +1,8 @@
 // The help text of `npm run episode:run`: printed by run.ts and on any command run-commands.ts cannot read.
 export const USAGE = `usage: npm run episode:run -- <slug> <command> ...
-  begin-run --model <model> [--harness <h>]        open the Run and the marker (refused while a Run is open)
-  end-run [status] [summary]                       close the Run, record orchestrator usage, clear the marker
+  begin-run --model <model> [--harness <h>]        open the Run and the marker (refused while a Run is open);
+                                                   writes the draft pipeline.yml and starts the dashboard and Spec servers
+  end-run [status] [summary]                       close the Run, record orchestrator usage, clear the marker, stop both servers
                                                    (ok refused while a span is open; error|crashed leaves it crashed)
   begin-job <job>                                  open a Job pipeline.yml declares (reused when already open)
   end-job <job> [status] [summary]                 close the Job (refused while its Attempt is open); an orchestrator-session

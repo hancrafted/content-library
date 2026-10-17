@@ -6,11 +6,14 @@ import { appendEvent } from './run-log-writer.ts';
 import { type LogEvent, type RunLogLine, type Span } from './run-log.pure.ts';
 import { pointMarker, type MarkerHome } from './run-marker.ts';
 import { hasEnded } from './run-spans.pure.ts';
+import type { ServerHost } from './servers.ts';
 
 /** What a command reads from outside; each defaults to the real thing. */
 export interface RunContext extends MarkerHome {
   /** The orchestrator's session id (CLAUDE_CODE_SESSION_ID, else SESSION_ID); begin-run and resume need it. */
   sessionId?: string;
+  /** The machine's ports and processes for the Run's two servers; absent, begin-run and end-run start and stop none. */
+  servers?: ServerHost;
 }
 
 /** A line as written: its span id is known. */

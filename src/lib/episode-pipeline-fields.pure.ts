@@ -30,6 +30,12 @@ function oneOf(values: readonly string[]): string {
   return `${values.slice(0, -1).join(', ')} or ${values.at(-1)}`;
 }
 
+const PORT = field(
+  'dev_port',
+  (value) => Number.isInteger(value) && Number(value) >= 1024 && Number(value) <= 65535,
+  'it must be a whole number from 1024 to 65535',
+);
+
 export const TOP_FIELDS = [
   field('status', (value) => value === 'draft' || value === 'approved', 'it must be draft or approved'),
   field('stages', isStringList, 'it must be a list of stage ids'),
@@ -41,6 +47,8 @@ export const TOP_FIELDS = [
       'it must be a commit sha',
     ),
   ),
+  optional(PORT),
+  optional({ ...PORT, key: 'spec_port' }),
 ];
 
 export const JOB_FIELDS = [

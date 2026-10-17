@@ -783,3 +783,75 @@ describe('agent spans', () => {
     expect(unknown).toEqual({ ok: false, error: expect.stringContaining('no agent span "a#1/ghost"') });
   });
 });
+
+describe('run servers', () => {
+  const TEMPLATE =
+    'status: draft\nstages: [brief]\njobs:\n  - id: brief-grill\n    stage: brief\n    outputs: [docs/episodes/<slug>/brief.md]\n';
+
+  /** A worktree with the template and no pipeline yet; ports 4000 and 4001 are taken. */
+  function served(taken: readonly number[] = [4000, 4001]) {
+    const ctx = context();
+    rmSync(path.join(ctx.root, 'docs/episodes', SLUG, 'pipeline.yml'));
+    mkdirSync(path.join(ctx.root, 'skills/new-episode/assets'), { recursive: true });
+    writeFileSync(path.join(ctx.root, 'skills/new-episode/assets/pipeline.yml'), TEMPLATE);
+    const started: { dev: number; spec: number }[] = [];
+    const stopped: string[] = [];
+    const withHost: RunContext = {
+      ...ctx,
+      servers: {
+        isFree: (port) => !taken.includes(port),
+        start: (_root, _slug, ports) => void started.push(ports),
+        stop: (root) => void stopped.push(root),
+      },
+    };
+    return { ctx: withHost, started, stopped };
+  }
+  const pipelineOf = (ctx: RunContext) =>
+    readFileSync(path.join(ctx.root, 'docs/episodes', SLUG, 'pipeline.yml'), 'utf8');
+
+  it('writes the draft pipeline with the template sha, the slug and both ports, then starts both servers', () => {
+    // ARRANGE
+    const { ctx, started } = served();
+    // ACT
+    const result = run(ctx, 'begin-run', '--model', 'opus');
+    // ASSERT
+    expect(result.ok).toBe(true);
+    expect(pipelineOf(ctx)).toContain('status: draft\ntemplate: abc1234\ndev_port: 4002\nspec_port: 4003\n');
+    expect(pipelineOf(ctx)).toContain('docs/episodes/demo/brief.md');
+    expect(started).toEqual([{ dev: 4002, spec: 4003 }]);
+  });
+
+  it('skips the dashboard port when it picks the pair', () => {
+    // ARRANGE
+    const taken = Array.from({ length: 381 }, (_, i) => 4000 + i);
+    const { ctx } = served(taken);
+    // ACT
+    run(ctx, 'begin-run', '--model', 'opus');
+    // ASSERT
+    expect(pipelineOf(ctx)).toContain('dev_port: 4383\nspec_port: 4384\n');
+  });
+
+  it('keeps a pipeline that exists and starts the servers on its ports', () => {
+    // ARRANGE
+    const { ctx, started } = served();
+    writeFileSync(
+      path.join(ctx.root, 'docs/episodes', SLUG, 'pipeline.yml'),
+      'status: draft\ndev_port: 4010\nspec_port: 4011\njobs: []\n',
+    );
+    // ACT
+    run(ctx, 'begin-run', '--model', 'opus');
+    // ASSERT
+    expect(pipelineOf(ctx)).toBe('status: draft\ndev_port: 4010\nspec_port: 4011\njobs: []\n');
+    expect(started).toEqual([{ dev: 4010, spec: 4011 }]);
+  });
+
+  it('stops both servers when the Run ends', () => {
+    // ARRANGE
+    const { ctx, stopped } = served();
+    run(ctx, 'begin-run', '--model', 'opus');
+    // ACT
+    run(ctx, 'end-run');
+    // ASSERT
+    expect(stopped).toEqual([ctx.root]);
+  });
+});
