@@ -118,8 +118,7 @@ function Shape() {
  */
 export function MarketingFunnel({ funnel }: { funnel: Funnel }) {
   return (
-    <FunnelMotion label={funnel.name} className={styles.funnel}>
-      <Mouth funnel={funnel} />
+    <FunnelMotion label={funnel.name} className={styles.funnel} still={<Mouth funnel={funnel} />}>
       <Shape />
     </FunnelMotion>
   );
