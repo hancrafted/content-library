@@ -97,6 +97,8 @@ The Slide header ([`slide-header.tsx`](../../src/components/slide-master/slide-h
 
 The Eyebrow is computed: the Section title the table of contents shows on the left, `n / N` on the right. Proximity groups the title with its caption; the Eyebrow reads as the label above both. The Title slide's header is the `hero` `h1` and the caption, with no Eyebrow.
 
+A section slide on the shared header sits on a full-bleed band, `bg-section-band` (`--section-band`: one step darker than the page in light, one step off it in dark), so the start of a Section reads at a glance even at `40svh`. On a Title slide with an authored hero Scene the header and the hero sit together, centred in the slide: the hero's frame hugs its content instead of filling the rest of the slide.
+
 ## How tokens reach Tailwind
 
 Raw values sit on `:root` and `.dark`; `@theme inline` maps each utility to the variable. Every token therefore stays a runtime variable, which is what lets the token editor change it live.

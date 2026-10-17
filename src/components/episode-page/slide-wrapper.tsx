@@ -13,6 +13,8 @@ export interface SlideWrapperProps extends ComponentPropsWithoutRef<'div'> {
   readonly mode?: HeaderMode;
   /** The Slide header the wrapper renders above the Scene on `shared`; absent for an untitled Slide. */
   readonly header?: SlideHeaderProps;
+  /** Under a header, the Scene's frame fills the rest of the Slide (`fill`) or hugs its content (`hug`, the Title slide's hero). */
+  readonly scene?: 'fill' | 'hug';
 }
 
 /**
@@ -30,33 +32,38 @@ export interface SlideWrapperProps extends ComponentPropsWithoutRef<'div'> {
  * `SlideMount`, which drops it while the Slide is far: the Slide header first,
  * then the Scene in a `display: contents` box the entrance CSS reaches.
  */
-export function SlideWrapper({
-  id,
-  className,
-  size = 'page',
-  mode = 'authored',
-  header,
-  children,
-  ...props
-}: SlideWrapperProps) {
-  const shared = mode === 'shared';
+export function SlideWrapper({ id, className, size = 'page', mode = 'authored', ...rest }: SlideWrapperProps) {
+  const { header, scene, children, ...props } = rest;
+  // A section slide on the shared header is a full-bleed band, so a new Section reads at a glance.
+  const band = mode === 'shared' && size === 'section' && 'bg-section-band';
   return (
     <div
       id={id}
       data-slide={id}
-      className={cn('relative isolate flex w-full scroll-mt-24 flex-col', MIN_HEIGHT[size], className)}
+      className={cn('relative isolate flex w-full scroll-mt-24 flex-col', MIN_HEIGHT[size], band, className)}
       {...props}
     >
       <SlideMount id={id} mode={mode}>
-        {shared && header && <SlideHeader {...header} />}
-        {shared ? (
-          <div data-slot="slide-scene" data-headed={header ? '' : undefined} className="contents">
+        {mode === 'shared' ? (
+          <SharedContent header={header} scene={scene}>
             {children}
-          </div>
+          </SharedContent>
         ) : (
           children
         )}
       </SlideMount>
     </div>
+  );
+}
+
+/** On the shared header: the Slide header, then the Scene in a `display: contents` box the entrance CSS reaches. */
+function SharedContent({ header, scene = 'fill', children }: Pick<SlideWrapperProps, 'header' | 'scene' | 'children'>) {
+  return (
+    <>
+      {header && <SlideHeader {...header} />}
+      <div data-slot="slide-scene" data-headed={header ? scene : undefined} className="contents">
+        {children}
+      </div>
+    </>
   );
 }

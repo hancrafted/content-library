@@ -17,6 +17,7 @@ const DESCRIPTIONS: Record<string, string> = {
   '--card-foreground': 'Text on a card.',
   '--muted': 'Quiet surface for toggles, chips and disabled areas.',
   '--muted-foreground': 'Secondary text: captions, hints and labels.',
+  '--section-band': 'Full-bleed band behind a section slide, one step off the page background.',
   '--header': 'Translucent bar behind the site header.',
   '--destructive': 'Danger: errors and destructive actions.',
   '--destructive-foreground': 'Text and icons on a destructive fill.',
