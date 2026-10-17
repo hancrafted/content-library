@@ -1,6 +1,6 @@
 ---
 name: brief-grill
-description: Grill Han through a new Episode idea until it is a Brief, the goals the Episode is written towards. Use when Han starts a new Episode, says "Brief grill", or wants an Episode idea grilled.
+description: Grill Han through a raw Episode idea until it is a Brief, the goals the Episode is written towards. Use for the grill itself, when he says "Brief grill" or wants an Episode idea grilled. A Run in progress belongs to `new-episode`.
 ---
 
 # Brief grill
