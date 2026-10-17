@@ -220,7 +220,76 @@
   }
 }
 
+/*
+ * Slide entrance (FE-012): the first time a Slide is active its header
+ * types in and its Scene fades up, once. `SlideMount` carries `data-entry`
+ * (`pending`, `entering`, `done`) on Episodes on the shared header. Only with
+ * JavaScript (the `js` class, set in <head> before first paint) does a pending
+ * Slide start hidden, so without it nothing is; print and reduced motion show
+ * everything at once, with no caret. A `done` Slide carries no animation, so a
+ * remount after `far` shows it settled.
+ */
+@media screen and (prefers-reduced-motion: no-preference) {
+  .js [data-entry='pending'] > [data-slot='slide-header'],
+  .js [data-entry='pending'] > [data-slot='slide-scene'] > * {
+    opacity: 0;
+  }
+  /* The Foreground rises 1.5rem as it fades in; the Backdrop fades in place. */
+  [data-entry='entering'] > [data-slot='slide-scene'] > * {
+    animation: slide-rise 400ms ease-out backwards;
+  }
+  [data-entry='entering'] > [data-slot='slide-scene'] > [data-slot='slide-backdrop'],
+  [data-entry='entering'] > [data-entrance='fade'] {
+    animation: slide-fade 400ms ease-out backwards;
+  }
+  /* Typewriter: each character appears at its own `--d`; the caret sits on it for `--h`, blinking. */
+  [data-entry='entering'] > [data-entrance='typewriter'] [data-char] {
+    position: relative;
+    animation: slide-fade 1ms step-end var(--d) backwards;
+  }
+  [data-entry='entering'] > [data-entrance='typewriter'] [data-char]::after {
+    content: '';
+    position: absolute;
+    top: 0.1em;
+    bottom: 0.1em;
+    left: 100%;
+    width: 0.08em;
+    min-width: 2px;
+    background: currentColor;
+    visibility: hidden;
+    animation:
+      slide-caret-on var(--h) step-end var(--d),
+      slide-caret-blink 530ms step-end infinite;
+  }
+}
+
 /* Keyframes */
+@keyframes slide-rise {
+  from {
+    opacity: 0;
+    translate: 0 1.5rem;
+  }
+}
+
+@keyframes slide-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes slide-caret-on {
+  from,
+  to {
+    visibility: visible;
+  }
+}
+
+@keyframes slide-caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
 @keyframes hero-drift {
   0%,
   100% {
