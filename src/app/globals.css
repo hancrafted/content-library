@@ -221,6 +221,60 @@
 }
 
 /*
+ * Hover vocabulary (FE-012 §3): the shared ways a Scene draws the audience's
+ * focus while the presenter points with the mouse, and discloses detail
+ * progressively. Each state also applies on keyboard focus; under reduced
+ * motion it applies at once, without a transition. A Scene reuses these; a new
+ * pattern is added here first. Catalogue: docs/design/design-system.md.
+ */
+@layer components {
+  /* A card that answers the pointer: `--raise` lifts it a step with a shadow, `--outline` rings it in the accent. */
+  .card-hover {
+    transition:
+      translate 200ms ease-out,
+      box-shadow 200ms ease-out,
+      border-color 200ms ease-out;
+  }
+  .card-hover--raise:is(:hover, :focus-visible, :focus-within) {
+    @apply -translate-y-1 shadow-lg;
+  }
+  .card-hover--outline:is(:hover, :focus-visible, :focus-within) {
+    border-color: var(--brand-accent);
+  }
+
+  /* Items of one group: with `--dim-others`, pointing at one dims its siblings so the audience follows it. */
+  .focus-group__item {
+    transition: opacity 200ms ease-out;
+  }
+  .focus-group--dim-others:has(.focus-group__item:is(:hover, :focus-visible, :focus-within))
+    .focus-group__item:not(:hover, :focus-visible, :focus-within) {
+    opacity: 0.4;
+  }
+
+  /* Secondary figures (a percentage, a count) hidden until the pointer enters: still in the DOM, and printed. */
+  .hover-reveal__detail {
+    opacity: 0;
+    transition: opacity 200ms ease-out;
+  }
+  .hover-reveal:is(:hover, :focus-visible, :focus-within) .hover-reveal__detail {
+    opacity: 1;
+  }
+  @media (hover: none), print {
+    .hover-reveal__detail {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card-hover,
+    .focus-group__item,
+    .hover-reveal__detail {
+      transition: none;
+    }
+  }
+}
+
+/*
  * Slide entrance (FE-012): the first time a Slide is active its header
  * types in and its Scene fades up, once. `SlideMount` carries `data-entry`
  * (`pending`, `entering`, `done`) on Episodes on the shared header. Only with
