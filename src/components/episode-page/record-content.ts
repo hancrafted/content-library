@@ -2,6 +2,7 @@ import {
   episodeMinutes,
   localizeSlide,
   localizeTitleScene,
+  titleCaptionOf,
   titleContext,
   type EpisodeContext,
   type LocalizedSlide,
@@ -67,7 +68,8 @@ export async function recordContent(
   const { title, caption } = record.messages[locale];
   return {
     title,
-    caption,
+    // A title Slide's own caption belongs to its Hero motif, so it takes the Title slide's caption line.
+    caption: (record.title && titleCaptionOf(record.title, locale)) ?? caption,
     minutes: episodeMinutes(record, locale),
     titleContext: titleContext(record, locale),
     ...(record.title && { hero: localizeTitleScene(record.title, episode) }),
