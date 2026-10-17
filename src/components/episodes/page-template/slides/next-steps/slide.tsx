@@ -1,8 +1,8 @@
 import { slide } from '@/components/slide-master/slide';
 import { SlideFrame } from '@/components/slide-master/slide-master';
-import { SectionTrack } from '@/components/slide-shared/section-track';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
+import { SectionTrack } from './section-track';
 
 export const nextSteps = slide({
   slug: 'next-steps',

@@ -1,8 +1,8 @@
 import { slide } from '@/components/slide-master/slide';
 import { SlideBackdrop, SlideFrame } from '@/components/slide-master/slide-master';
-import { SectionTrack } from '@/components/slide-shared/section-track';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
+import { SectionTrack } from './section-track';
 
 // The Title slide's hero Scene (the record's `title`): the visual only, since the container renders the Episode's
 // `h1` and caption above it. It sets the Hero motif, every Section a stop on one track, and each section slide echoes
