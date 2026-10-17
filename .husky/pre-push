@@ -4,6 +4,17 @@ refs=$(cat)
 
 npm run verify </dev/null || exit 1
 
+# The browser lane never runs in CI: run it here when the push changes what it covers.
+zero=0000000000000000000000000000000000000000
+changed=$(printf '%s\n' "$refs" | while read -r _ local _ remote; do
+  [ -z "$local" ] || [ "$local" = "$zero" ] && continue
+  if [ "$remote" = "$zero" ]; then git diff --name-only "origin/main...$local"; else git diff --name-only "$remote" "$local"; fi
+done)
+if printf '%s\n' "$changed" | grep -qE '^(skills/visual-check/|skills/new-episode/scripts/spec-preview|vitest\.browser\.config\.ts)'; then
+  echo "push touches the browser lane: running test:browser"
+  npm run test:browser </dev/null || exit 1
+fi
+
 # A push to main triggers the Pages deploy, so it also runs the build lanes
 # verify skips. Branch pushes stay fast; CI builds them on the PR.
 if printf '%s\n' "$refs" | grep -q ' refs/heads/main '; then
