@@ -131,12 +131,12 @@ describe('edge cases', () => {
   it('skips an upcoming Episode with a page and binds a published one', () => {
     // ARRANGE
     const episodes: { slug: string; status: EpisodeStatus }[] = [
-      { slug: 'amnesiac-freelancer', status: 'published' },
+      { slug: 'maintaining-markdown-for-ai', status: 'published' },
       { slug: 'ai-token-economy', status: 'upcoming' },
     ];
-    const expected = ['page-template', 'amnesiac-freelancer'];
+    const expected = ['page-template', 'maintaining-markdown-for-ai'];
     // ACT
-    const bound = boundSlugs(['page-template', 'amnesiac-freelancer', 'ai-token-economy'], episodes);
+    const bound = boundSlugs(['page-template', 'maintaining-markdown-for-ai', 'ai-token-economy'], episodes);
     // ASSERT
     expect(bound).toEqual(expected);
   });

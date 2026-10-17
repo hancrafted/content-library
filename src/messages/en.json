@@ -85,32 +85,7 @@
         "teardown": "Teardown",
         "short": "Short"
       },
-      "upcoming": {
-        "specs-an-agent-can-follow": {
-          "title": "Write specs an agent can follow",
-          "caption": "What to put in a spec so an AI coding agent builds the right thing without you watching every step."
-        },
-        "ai-code-review-in-ci": {
-          "title": "AI code review in CI",
-          "caption": "A teardown of a review bot that took the pull-request queue off one person's desk."
-        },
-        "verifying-ai-written-docs": {
-          "title": "Verifying AI-written docs",
-          "caption": "A quick check for whether generated documentation still matches the code it describes."
-        },
-        "choosing-the-right-model": {
-          "title": "Choosing the right model",
-          "caption": "When a cheaper model is enough, and when the task deserves the expensive one."
-        },
-        "rolling-out-ai-in-a-team": {
-          "title": "Rolling out AI in a team",
-          "caption": "How adoption spreads when nobody is told to use the tool, and what slows it down."
-        },
-        "the-bottleneck-builds-the-fix": {
-          "title": "The bottleneck builds the fix",
-          "caption": "A teardown of a change that stuck because the person it affected most owned it."
-        }
-      }
+      "upcoming": {}
     },
     "templateTitle": "Episode Page Template",
     "about": {
@@ -361,10 +336,18 @@
       "title": "Pipeline dashboard",
       "description": "A private, read-only view of an Episode's local pipeline, Runs and review evidence."
     },
+    "episodes": {
+      "title": "Episodes",
+      "description": "Browse all visualised theory episodes from the hancrafted training videos."
+    },
     "home": {
       "title": "Visualised theory · hancrafted",
       "description": "Theory from the hancrafted training videos, visualised page by page."
     }
+  },
+  "episodesPage": {
+    "title": "Episodes",
+    "subtitle": "Browse the interactive slide decks and visualised essays."
   },
   "tableOfContents": {
     "title": "Contents",

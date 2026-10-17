@@ -14,7 +14,7 @@ export interface ExportedPage {
   url: string;
 }
 
-const PAGES: readonly PageRef[] = ['home', 'dashboard', ...EPISODE_SLUGS.map((episode) => ({ episode }))];
+const PAGES: readonly PageRef[] = ['home', 'dashboard', 'episodes', ...EPISODE_SLUGS.map((episode) => ({ episode }))];
 
 export const EXPORTED_PAGES: readonly ExportedPage[] = PAGES.flatMap((page) =>
   pageLocales(page).map((locale) => ({ locale, url: localizePath(routeOf(page), locale) })),

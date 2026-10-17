@@ -1,16 +1,9 @@
 import type { EpisodeMetadata, EpisodeStatus, UpcomingEpisodeMetadata } from '@/lib/episode-metadata.pure';
 import { FEATURED, LAYOUT_REFERENCES, type ListedEpisodeSlug } from '@/lib/episode-overview';
 import { isEpisodeSlug, type EpisodeSlug } from '@/lib/routes';
-import { episodeMetadata as aiCodeReviewInCi } from './ai-code-review-in-ci/episode-metadata';
 import { episodeMetadata as aiTokenEconomy } from './ai-token-economy/episode-metadata';
-import { episodeMetadata as amnesiacFreelancer } from './amnesiac-freelancer/episode-metadata';
-import { episodeMetadata as choosingTheRightModel } from './choosing-the-right-model/episode-metadata';
 import { episodeMetadata as maintainingMarkdownForAi } from './maintaining-markdown-for-ai/episode-metadata';
 import { episodeMetadata as neverTooEarlySalesRun3 } from './never-too-early-sales-run-3/episode-metadata';
-import { episodeMetadata as rollingOutAiInATeam } from './rolling-out-ai-in-a-team/episode-metadata';
-import { episodeMetadata as specsAnAgentCanFollow } from './specs-an-agent-can-follow/episode-metadata';
-import { episodeMetadata as theBottleneckBuildsTheFix } from './the-bottleneck-builds-the-fix/episode-metadata';
-import { episodeMetadata as verifyingAiWrittenDocs } from './verifying-ai-written-docs/episode-metadata';
 
 /*
  * The Episode overview's read API (#40): every Episode's own metadata,
@@ -25,7 +18,6 @@ import { episodeMetadata as verifyingAiWrittenDocs } from './verifying-ai-writte
  * metadata, fails `tsc`.
  */
 const REGISTERED = {
-  'amnesiac-freelancer': amnesiacFreelancer,
   'maintaining-markdown-for-ai': maintainingMarkdownForAi,
   'ai-token-economy': aiTokenEconomy,
   'never-too-early-sales-run-3': neverTooEarlySalesRun3,
@@ -42,18 +34,13 @@ export function featuredSlugs(): readonly PublishedSlug[] {
 }
 
 /** Upcoming Episodes in the order the overview lists them. */
-const UPCOMING: readonly UpcomingEpisodeMetadata[] = [
-  specsAnAgentCanFollow,
-  aiCodeReviewInCi,
-  verifyingAiWrittenDocs,
-  choosingTheRightModel,
-  rollingOutAiInATeam,
-  theBottleneckBuildsTheFix,
-];
+const UPCOMING: readonly UpcomingEpisodeMetadata[] = [];
 
 /** Every Episode's metadata: the published ones, then the upcoming ones in overview order. */
-export function listEpisodes(): readonly EpisodeMetadata[] {
-  return [...Object.values(REGISTERED), ...UPCOMING];
+export function listEpisodes(options?: { includeDrafts?: boolean }): readonly EpisodeMetadata[] {
+  const all = [...Object.values(REGISTERED), ...UPCOMING];
+  if (options?.includeDrafts ?? true) return all;
+  return all.filter((entry) => entry.status === 'published');
 }
 
 /** Whether the slug has an Episode page: every registered slug, layout references included, whatever the status. */

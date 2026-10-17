@@ -43,13 +43,19 @@ export interface PageCopy {
  * reach, so the route hands it in, with its status: an upcoming Episode's page
  * is `noindex`, so the publish flip removes it from search.
  */
-export function pageMetadata(page: 'home', locale: Locale): Metadata;
+export function pageMetadata(page: 'home' | 'episodes', locale: Locale): Metadata;
 export function pageMetadata(page: 'dashboard', locale: 'en'): Metadata;
 export function pageMetadata(page: Exclude<PageRef, string>, locale: Locale, copy: PageCopy): Metadata;
 export function pageMetadata(page: PageRef, locale: Locale, copy?: PageCopy): Metadata {
   const route = routeOf(page);
   const languages = Object.fromEntries(pageLocales(page).map((each) => [each, localizePath(route, each)]));
-  const { title, description } = copy ?? TRANSLATIONS[locale].meta[page === 'dashboard' ? 'dashboard' : 'home'];
+  const { title, description } =
+    copy ??
+    (page === 'dashboard'
+      ? TRANSLATIONS[locale].meta.dashboard
+      : page === 'episodes'
+        ? TRANSLATIONS[locale].meta.episodes
+        : TRANSLATIONS[locale].meta.home);
   return {
     title,
     description,

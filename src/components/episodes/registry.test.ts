@@ -84,7 +84,7 @@ describe('success cases', () => {
 
   it.each(EPISODE_SLUGS)('produces page metadata for %s in en and de, canonical per locale', (slug) => {
     // ARRANGE
-    const expectedCanonical = { en: `/episode/${slug}`, de: `/de/episode/${slug}` };
+    const expectedCanonical = { en: `/episodes/${slug}`, de: `/de/episodes/${slug}` };
     // ACT
     const meta = (['en', 'de'] as const).map((locale) =>
       pageMetadata({ episode: slug }, locale, findEpisode(slug).messages[locale]),

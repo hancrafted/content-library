@@ -23,7 +23,7 @@ describe('success cases', () => {
     const published = listEpisodes()
       .filter(({ status }) => status === 'published')
       .map(({ slug }) => slug);
-    const expectedSlots = 3;
+    const expectedSlots = 2;
     // ACT
     const distinct = new Set(FEATURED);
     // ASSERT

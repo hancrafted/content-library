@@ -6,7 +6,7 @@ import { SocialLinks } from '@/components/social-links';
 import { ThemeToggle } from '@/components/theme-toggle.client';
 import { Button } from '@/components/ui/button';
 import { localizePath, type Locale } from '@/lib/locale.pure';
-import { episodeRoute, ROUTES } from '@/lib/routes';
+import { ROUTES } from '@/lib/routes';
 import { ArrowUpRight } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
@@ -59,11 +59,7 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
     >
       <SiteBrand locale={locale} />
       <nav aria-label={t('nav.label')} data-testid="site-nav" className="flex gap-1 max-sm:order-1">
-        <NavLink
-          section={ROUTES.episodes}
-          href={localizePath(episodeRoute('page-template'), locale)}
-          data-testid="nav-episodes"
-        >
+        <NavLink section={ROUTES.episodes} href={localizePath(ROUTES.episodes, locale)} data-testid="nav-episodes">
           {t('nav.episodes')}
         </NavLink>
         <DashboardNav locale={locale} label={t('nav.dashboard')} />

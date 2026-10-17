@@ -34,8 +34,8 @@ describe('success cases', () => {
     // ARRANGE
     const expected = {
       slug: 'ai-token-economy',
-      route: '/episode/ai-token-economy',
-      href: '/episode/ai-token-economy',
+      route: '/episodes/ai-token-economy',
+      href: '/episodes/ai-token-economy',
       status: 'published',
       title: 'Your AI token economy',
       caption: 'Hidden managing responsibilities.',
@@ -56,7 +56,7 @@ describe('success cases', () => {
 
   it('prefixes the link with the locale but leaves the route neutral, so a German card opens the German Episode', () => {
     // ARRANGE
-    const expected = { route: '/episode/ai-token-economy', href: '/de/episode/ai-token-economy' };
+    const expected = { route: '/episodes/ai-token-economy', href: '/de/episodes/ai-token-economy' };
     // ACT
     const { route, href } = episodeCard(PUBLISHED, { locale: 'de', read, minutes: 42 });
     // ASSERT
