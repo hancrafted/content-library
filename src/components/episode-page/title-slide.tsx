@@ -31,16 +31,16 @@ export interface TitleSlideProps {
   hero?: ReactNode;
   youtubeId?: string;
   talkLabels?: TalkPlayerLabels;
-  /** The short names the Title slide's Speaker notes target (`title`, `caption`); only these elements carry a `data-target`. */
+  /** On an Episode with authored headers, the short names the Title slide's notes target; only these carry a `data-target`. The Slide header marks both. */
   targets?: readonly TitleTarget[];
 }
 
-/** The Title slide as an Episode with authored Scene headers renders it: the `h1` and caption over the glow. */
-function AuthoredTitleSlide({ title, caption, launcher, targets }: TitleSlideProps & { launcher: ReactNode }) {
+/** The Title slide as an Episode with authored Scene headers renders it: the `h1` and caption over the hero Scene or the glow. */
+function AuthoredTitleSlide({ title, caption, hero, launcher, targets }: TitleSlideProps & { launcher: ReactNode }) {
   const targetOf = (name: TitleTarget) => (targets?.includes(name) ? { 'data-target': name } : {});
   return (
     <SlideWrapper id={TITLE_ANCHOR} data-slot="title-slide">
-      <HeroGlow />
+      {hero ?? <HeroGlow />}
       <SlideFrame className="justify-center">
         <HeroTitle {...targetOf('title')}>{title}</HeroTitle>
         {caption && <SlideCaption {...targetOf('caption')}>{caption}</SlideCaption>}

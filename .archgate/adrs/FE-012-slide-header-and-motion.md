@@ -15,7 +15,7 @@ description: 'Every titled Slide opens with a shared Slide header — a computed
 
 ## Context
 
-A Slide wrapper and its Scene split mechanics from creativity (FE-009). Scenes that each author their own kicker, title and caption drift in size, spacing and wording, and an audience reads a talk faster when every Slide opens the same way. So the header is shared: the **Eyebrow** (the Section's title and `n / N`), the title at its position's level, and the caption close under it. The Eyebrow is computed from the Section titles the table of contents shows, so it can't drift from them.
+A Slide wrapper and its Scene split mechanics from creativity (FE-009). Scenes that each author their own label line, title and caption drift in size, spacing and wording, and an audience reads a talk faster when every Slide opens the same way. So the header is shared: the **Eyebrow** (the Section's title and `n / N`), the title at its position's level, and the caption close under it. The Eyebrow is computed from the Section titles the table of contents shows, so it can't drift from them.
 
 **Why the entrance plays once.** A replay on every return turns scrolling back to re-read into waiting, and a server-rendered Scene that zone keyframes hide and play in again flashes on load. The entrance — the header typing in, the Scene fading up — runs the first time a Slide is active, then stays done for the page's life in the zone store (FE-001: transient, in memory). It hides a Slide only under the `js` class, set in `<head>` before first paint, so without JavaScript, in print and under reduced motion every Slide shows at once. A per-element entrance inside a Scene would play under the shared one.
 
@@ -34,6 +34,7 @@ Rejected: a per-Slide header prop (no Slide has needed a different one yet); a G
 3. Type comes from tokens: Eyebrow `caption`, uppercase, muted; title its level's role; caption `body`, muted, `mt-2`, `max-w-[70%]` from `md`.
 4. On the shared header a Scene MUST NOT render the title or caption; the kit's `Title` throws there.
 5. An Episode record MAY set `header: 'authored'`: its Scenes render their own header, and its Slides keep their `[data-zone]` entrances.
+6. An Episode record MAY set `entrance` (`typewriter` default, `fade`, `none`) and `title`, a Slide whose Scene is the Title slide's hero visual and which declares no notes or Voice script.
 
 ### 2. Entrance, once
 
@@ -55,10 +56,11 @@ Rejected: a per-Slide header prop (no Slide has needed a different one yet); a G
 2. **DO** keep a Scene to its visual: `SlideFrame` with the picture, no heading. (Decision 1)
 3. **DO** pick `entrance: 'fade'` or `'none'` on the record when typing does not suit the Episode. (Decision 2)
 4. **DO** reach for `card-hover--raise`, `focus-group--dim-others` or `hover-reveal__detail` for hover emphasis. (Decision 3)
+5. **DO** author the Title slide's visual as a Slide folder set as the record's `title`; the container keeps its `h1`. (Decision 1)
 
 ### Don'ts
 
-1. **DON'T** write `<Title>`, a kicker or a caption in a Scene on the shared header. (Decision 1)
+1. **DON'T** write `<Title>`, an Eyebrow-like label or a caption in a Scene on the shared header. (Decision 1)
 2. **DON'T** author an Eyebrow; it is computed. (Decision 1)
 3. **DON'T** stagger, draw on or fade in a Scene's elements on entry on the shared header. (Decision 2)
 4. **DON'T** hide content outside `.js` or in print. (Decision 2)
