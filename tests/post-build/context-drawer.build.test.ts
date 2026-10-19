@@ -2,22 +2,18 @@
 // Voice script in the static HTML, drawer closed, and the stylesheet prints
 // them. Reads the files exactly as a visitor, a crawler or a print job gets them.
 
-import { load, type CheerioAPI } from 'cheerio';
+import { type CheerioAPI } from 'cheerio';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { LOCALES, localizePath } from '../../src/lib/locale.pure';
 import { EPISODE_SLUGS, episodeRoute } from '../../src/lib/routes';
-import { exportedFile, OUT_DIR } from './exported-pages';
+import { exportedPage, OUT_DIR } from './exported-pages';
 import { cssFiles, printBlocks } from './stylesheets';
 
 const PAGES = EPISODE_SLUGS.flatMap((slug) =>
   LOCALES.map((locale) => ({ slug, locale, url: localizePath(episodeRoute(slug), locale) })),
 );
-
-function page(url: string): CheerioAPI {
-  return load(readFileSync(join(OUT_DIR, exportedFile(url)), 'utf8'));
-}
 
 /**
  * Whether the page holds a page Slide: one whose anchor is `<section>--<slide>`. A page of the Title slide and
@@ -39,7 +35,7 @@ function targetsOf($: CheerioAPI, owner: string, target: string) {
 describe.each(PAGES)('$url', ({ slug, url }) => {
   it('holds one context slot, after the slides, with an entry per Slide in page order', () => {
     // ARRANGE
-    const $ = page(url);
+    const $ = exportedPage(url);
     const expected = $('[data-slide]')
       .toArray()
       .map((slide) => $(slide).attr('id'));
@@ -56,7 +52,7 @@ describe.each(PAGES)('$url', ({ slug, url }) => {
 
   it('keeps the closed drawer in the DOM with no hidden attribute, inline display or inert', () => {
     // ARRANGE
-    const $ = page(url);
+    const $ = exportedPage(url);
     // ACT
     const slot = $('[data-slot="context"]');
     const offenders = slot.find('[hidden], [inert], [style*="display"]').length;
@@ -67,7 +63,7 @@ describe.each(PAGES)('$url', ({ slug, url }) => {
 
   it('resolves every note target to exactly one element inside the note’s own Slide', () => {
     // ARRANGE
-    const $ = page(url);
+    const $ = exportedPage(url);
     const notes = $('#context-panel-notes [data-note-target]').toArray();
     const fewestNotes = holdsPageSlide($) ? 1 : 0;
     // ACT
@@ -85,7 +81,7 @@ describe.each(PAGES)('$url', ({ slug, url }) => {
 
   it('gives every note a short target, never a full element id', () => {
     // ARRANGE
-    const $ = page(url);
+    const $ = exportedPage(url);
     // ACT
     const full = $('[data-note-target]')
       .toArray()
@@ -97,7 +93,7 @@ describe.each(PAGES)('$url', ({ slug, url }) => {
 
   it('resolves every context reference to exactly one note of its own Slide, by slug', () => {
     // ARRANGE
-    const $ = page(url);
+    const $ = exportedPage(url);
     const refs = $('[data-slot="slides"] button[data-context-ref]').toArray();
     // ACT
     const unresolved = refs
@@ -113,7 +109,7 @@ describe.each(PAGES)('$url', ({ slug, url }) => {
 
   it('shows no raw Translation key as text', () => {
     // ARRANGE
-    const $ = page(url);
+    const $ = exportedPage(url);
     // ACT
     const text = $('[data-slot="context"]').text();
     // ASSERT
@@ -122,7 +118,7 @@ describe.each(PAGES)('$url', ({ slug, url }) => {
 
   it('renders sources as https links that open a new tab safely, with that said in their name', () => {
     // ARRANGE
-    const $ = page(url);
+    const $ = exportedPage(url);
     // ACT
     const links = $('[data-slot="context"] a[href]').toArray();
     // ASSERT
@@ -139,7 +135,7 @@ describe.each(PAGES)('$url', ({ slug, url }) => {
 describe.each(PAGES)('$url card', ({ url }) => {
   it('keeps one trigger pill with the shortcut announced and a scrim, and no layout spacer', () => {
     // ARRANGE
-    const $ = page(url);
+    const $ = exportedPage(url);
     const shortcut = 'Alt+N';
     // ACT
     const slot = $('[data-slot="context"]');
@@ -151,7 +147,7 @@ describe.each(PAGES)('$url card', ({ url }) => {
 
   it('closes the card with a transform and never lets the Slides animate their insets', () => {
     // ARRANGE
-    const $ = page(url);
+    const $ = exportedPage(url);
     // ACT
     const card = $('#context-panel').attr('class') ?? '';
     const grid = $('[data-slot="episode-page"]').attr('class') ?? '';
@@ -162,7 +158,7 @@ describe.each(PAGES)('$url card', ({ url }) => {
 
   it('keeps the tabs off transition-all, which would hold them hidden when focus enters on open', () => {
     // ARRANGE
-    const $ = page(url);
+    const $ = exportedPage(url);
     // ACT
     const classes = $('[data-slot="context"] [role="tab"]')
       .toArray()
@@ -174,7 +170,7 @@ describe.each(PAGES)('$url card', ({ url }) => {
 
   it('holds the layout menu only on a client render, never as static HTML', () => {
     // ARRANGE
-    const $ = page(url);
+    const $ = exportedPage(url);
     // ACT
     const popups = $('[data-slot="context"] [role="menu"], [data-slot="context"] [role="menuitemradio"]').length;
     // ASSERT
@@ -185,7 +181,7 @@ describe.each(PAGES)('$url card', ({ url }) => {
 describe('never-too-early-sales-run-3', () => {
   it.each(LOCALES)('keeps sources closed behind a counted toggle, with their text in the HTML, in %s', (locale) => {
     // ARRANGE
-    const $ = page(localizePath(episodeRoute('never-too-early-sales-run-3'), locale));
+    const $ = exportedPage(localizePath(episodeRoute('never-too-early-sales-run-3'), locale));
     const counted = /\(\d+\)/;
     // ACT
     const disclosures = $('[data-slot="context"] [data-note-target] details').toArray();
@@ -199,7 +195,7 @@ describe('never-too-early-sales-run-3', () => {
 
   it.each(LOCALES)('numbers sources in a list and points every citation marker into it, in %s', (locale) => {
     // ARRANGE
-    const $ = page(localizePath(episodeRoute('never-too-early-sales-run-3'), locale));
+    const $ = exportedPage(localizePath(episodeRoute('never-too-early-sales-run-3'), locale));
     const notes = $('[data-slot="context"] [data-note-target]').toArray();
     // ACT
     const broken = notes.flatMap((note) => {
@@ -221,7 +217,9 @@ describe('never-too-early-sales-run-3', () => {
 
   it('gives each note the same slug and ids in both locales, with German words differing from English', () => {
     // ARRANGE
-    const [en, de] = LOCALES.map((locale) => page(localizePath(episodeRoute('never-too-early-sales-run-3'), locale)));
+    const [en, de] = LOCALES.map((locale) =>
+      exportedPage(localizePath(episodeRoute('never-too-early-sales-run-3'), locale)),
+    );
     const targetsOf = ($: CheerioAPI) =>
       $('[data-note-target]')
         .toArray()
@@ -238,7 +236,7 @@ describe('never-too-early-sales-run-3', () => {
 describe('page-template', () => {
   it.each(LOCALES)('has notes on why-a-template alone and the empty state elsewhere in %s', (locale) => {
     // ARRANGE
-    const $ = page(localizePath(episodeRoute('page-template'), locale));
+    const $ = exportedPage(localizePath(episodeRoute('page-template'), locale));
     // ACT
     const withNotes = $('#context-panel-notes [data-context-for]')
       .toArray()
@@ -250,7 +248,7 @@ describe('page-template', () => {
 
   it.each(LOCALES)('wraps phrases in context references that resolve to their own note, in %s', (locale) => {
     // ARRANGE
-    const $ = page(localizePath(episodeRoute('page-template'), locale));
+    const $ = exportedPage(localizePath(episodeRoute('page-template'), locale));
     const refs = $('[data-slot="slides"] button[data-context-ref]').toArray();
     // ACT
     const resolved = refs.map((ref) => {

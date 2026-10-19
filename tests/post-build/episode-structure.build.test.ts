@@ -3,14 +3,14 @@
 // typed record, the derivation test and the heading lint, and reads the HTML
 // exactly as a visitor or crawler receives it.
 
-import { load, type CheerioAPI } from 'cheerio';
+import { type CheerioAPI } from 'cheerio';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { TITLE_ANCHOR } from '../../src/lib/episode.pure';
 import { DEFAULT_LOCALE, LOCALES, localizePath } from '../../src/lib/locale.pure';
 import { EPISODE_SLUGS, episodeRoute } from '../../src/lib/routes';
-import { exportedFile, OUT_DIR } from './exported-pages';
+import { exportedPage, OUT_DIR } from './exported-pages';
 import { cssFiles, printBlocks } from './stylesheets';
 
 const PAGES = EPISODE_SLUGS.flatMap((slug) =>
@@ -21,14 +21,6 @@ const PAGES = EPISODE_SLUGS.flatMap((slug) =>
 const UNTITLED: Readonly<Record<string, readonly string[]>> = {
   'page-template': ['next-steps--what-comes-next'],
 };
-
-function html(url: string): string {
-  return readFileSync(join(OUT_DIR, exportedFile(url)), 'utf8');
-}
-
-function page(url: string): CheerioAPI {
-  return load(html(url));
-}
 
 function slotsOf($: CheerioAPI, selector: string): (string | undefined)[] {
   return $(selector)
@@ -88,14 +80,14 @@ describe('episode structure', () => {
       // ARRANGE
       const expected = ['toc', 'slides', 'context'];
       // ACT
-      const slots = slotsOf(page(url), '[data-slot="episode-page"]');
+      const slots = slotsOf(exportedPage(url), '[data-slot="episode-page"]');
       // ASSERT
       expect(slots).toEqual(expected);
     });
 
     it("opens the slides with the Title slide, which holds the page's only h1", () => {
       // ARRANGE
-      const $ = page(url);
+      const $ = exportedPage(url);
       const titleSlide = 'title-slide';
       // ACT
       const first = slotsOf($, '[data-slot="slides"]')[0];
@@ -109,7 +101,7 @@ describe('episode structure', () => {
 
     it('gives the Title slide wrapper the reserved id top, and links the table of contents heading to it', () => {
       // ARRANGE
-      const $ = page(url);
+      const $ = exportedPage(url);
       // ACT
       const wrapper = $('[data-slot="title-slide"]');
       const heading = $('[data-slot="toc"] [data-testid="toc"] [data-testid="toc-top"]');
@@ -121,7 +113,7 @@ describe('episode structure', () => {
 
     it("explains the Context drawer on both tabs of the Title slide's item, in the page's locale", () => {
       // ARRANGE
-      const $ = page(url);
+      const $ = exportedPage(url);
       const translation = JSON.parse(
         readFileSync(join(import.meta.dirname, '..', '..', 'src', 'messages', `${locale}.json`), 'utf8'),
       );
@@ -139,7 +131,7 @@ describe('episode structure', () => {
 
     it('gives each section slide one h2, each titled page slide one h3, an untitled one none, and h2/h3 nowhere else', () => {
       // ARRANGE
-      const $ = page(url);
+      const $ = exportedPage(url);
       const untitled = UNTITLED[slug] ?? [];
       const sectionSlide = { h2: 1, h3: 0 };
       const titledSlide = { h2: 0, h3: 1 };
@@ -163,7 +155,7 @@ describe('episode structure', () => {
 
     it('heads each Slide written as a Slide file at the level its position gives it: h2 first in its Section, else h3', () => {
       // ARRANGE
-      const $ = page(url);
+      const $ = exportedPage(url);
       // ACT
       const levels = $('[data-slot="slides"] > section[data-section]')
         .toArray()
@@ -183,7 +175,7 @@ describe('episode structure', () => {
 
     it('links the table of contents to every titled slide anchor, in page order', () => {
       // ARRANGE
-      const $ = page(url);
+      const $ = exportedPage(url);
       const untitled = UNTITLED[slug] ?? [];
       // ACT
       const fragments = tocFragments($);
@@ -195,7 +187,7 @@ describe('episode structure', () => {
 
     it('renders an untitled Slide with its content, and lists it nowhere in the table of contents', () => {
       // ARRANGE
-      const $ = page(url);
+      const $ = exportedPage(url);
       const untitled = UNTITLED[slug] ?? [];
       // ACT
       const wrappers = untitled.map((id) => $(`[data-slot="slides"] [data-slide="${id}"]`));
@@ -211,7 +203,7 @@ describe('episode structure', () => {
 
     it('lays the slides out in a single-column grid that hosts the portal root', () => {
       // ARRANGE
-      const $ = page(url);
+      const $ = exportedPage(url);
       // ACT
       const area = $('[data-slot="slides"]');
       const portalRoots = area.children('[data-slot="portal-root"]').length;
@@ -223,7 +215,7 @@ describe('episode structure', () => {
 
     it('lays out the page as overlays over a full-width Content area, with no three-column grid', () => {
       // ARRANGE
-      const $ = page(url);
+      const $ = exportedPage(url);
       // ACT
       const container = ($('[data-slot="episode-page"]').attr('class') ?? '').split(/\s+/);
       const toc = ($('[data-slot="toc"]').attr('class') ?? '').split(/\s+/);
@@ -240,7 +232,7 @@ describe('episode structure', () => {
 
     it('isolates every Slide wrapper, so a Backdrop stays inside its own Slide', () => {
       // ARRANGE
-      const $ = page(url);
+      const $ = exportedPage(url);
       // ACT
       const wrappers = $('[data-slot="slides"] [data-slide]').toArray();
       const missing = wrappers.filter((wrapper) => !($(wrapper).attr('class') ?? '').split(/\s+/).includes('isolate'));
@@ -251,7 +243,7 @@ describe('episode structure', () => {
 
     it('hides every Backdrop from assistive technology inside its own Slide wrapper, and the Title slide has one', () => {
       // ARRANGE
-      const $ = page(url);
+      const $ = exportedPage(url);
       // ACT
       const backdrops = $('[data-slot="slide-backdrop"]').toArray();
       const outside = backdrops.filter((backdrop) => $(backdrop).closest('[data-slide]').length === 0);
@@ -266,7 +258,7 @@ describe('episode structure', () => {
 
     it('holds one talk slot in the Title slide, beside the launcher, when the Episode has a recording, and no iframe', () => {
       // ARRANGE
-      const $ = page(url);
+      const $ = exportedPage(url);
       const launchers = $('[data-slot="title-slide"] #talk-launcher').length;
       // ACT
       const slots = $('[data-slot="title-slide"] [data-slot="talk-slot"]');
@@ -280,7 +272,7 @@ describe('episode structure', () => {
 
     it('keeps every Section a display:contents group, so each wrapper is a grid cell', () => {
       // ARRANGE
-      const $ = page(url);
+      const $ = exportedPage(url);
       // ACT
       const groups = $('[data-slot="slides"] > section[data-section]').toArray();
       const classes = groups.map((group) => ($(group).attr('class') ?? '').split(/\s+/));
@@ -291,7 +283,7 @@ describe('episode structure', () => {
 
     it('gives the section slide its Section as id and each page Slide `<section>--<slide>`, and no wrapper clips', () => {
       // ARRANGE
-      const $ = page(url);
+      const $ = exportedPage(url);
       // ACT
       const sections = wrapperIdsBySection($);
       const misplaced = sections.flatMap(({ section, ids }) =>
@@ -308,7 +300,7 @@ describe('episode structure', () => {
 
     it('prerenders every Slide with its content mounted, inside one mount per wrapper', () => {
       // ARRANGE
-      const $ = page(url);
+      const $ = exportedPage(url);
       // ACT
       const wrappers = $('[data-slide]').toArray();
       const mounts = wrappers.map((wrapper) => $(wrapper).children('[data-slot="slide-mount"]'));
@@ -323,7 +315,7 @@ describe('episode structure', () => {
 
     it('carries no id twice', () => {
       // ARRANGE
-      const $ = page(url);
+      const $ = exportedPage(url);
       // ACT
       const ids = $('[id]')
         .toArray()
@@ -337,7 +329,7 @@ describe('episode structure', () => {
       // ARRANGE
       const youtube = /youtube(-nocookie)?\.com|youtu\.be/;
       // ACT: a plain link (the header's channel link) requests nothing; embeds, sources and stylesheets do
-      const $page = load(html(url));
+      const $page = exportedPage(url);
       const iframes = $page('iframe').length;
       const requested = $page('[src], link[href]')
         .toArray()
@@ -349,9 +341,9 @@ describe('episode structure', () => {
 
     it('carries the same slide anchors as the default locale', () => {
       // ARRANGE
-      const reference = slideAnchors(page(localizePath(episodeRoute(slug), DEFAULT_LOCALE)));
+      const reference = slideAnchors(exportedPage(localizePath(episodeRoute(slug), DEFAULT_LOCALE)));
       // ACT
-      const anchors = slideAnchors(page(url));
+      const anchors = slideAnchors(exportedPage(url));
       // ASSERT
       expect(anchors).toEqual(reference);
     });

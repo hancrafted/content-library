@@ -2,6 +2,8 @@
 // `next build` writes for each. Derived from the modules the site renders from,
 // so no page list is hand-kept.
 
+import { load, type CheerioAPI } from 'cheerio';
+import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import nextConfig from '../../next.config';
 import { localizePath, type Locale } from '../../src/lib/locale.pure';
@@ -25,4 +27,20 @@ export function exportedFile(url: string): string {
   if (url === '/') return 'index.html';
   const path = url.slice(1);
   return nextConfig.trailingSlash ? join(path, 'index.html') : `${path}.html`;
+}
+
+const parsedPages = new Map<string, CheerioAPI>();
+
+/**
+ * The exported page for a URL, parsed once per test file and shared by every test in it: a page is
+ * read dozens of times, and re-parsing it per test dominated the post-build lane. Read only — a test
+ * that mutates the document would leak into the next one.
+ */
+export function exportedPage(url: string): CheerioAPI {
+  let page = parsedPages.get(url);
+  if (page === undefined) {
+    page = load(readFileSync(join(OUT_DIR, exportedFile(url)), 'utf8'));
+    parsedPages.set(url, page);
+  }
+  return page;
 }

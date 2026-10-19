@@ -2,7 +2,7 @@ import { load } from 'cheerio';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { exportedFile, OUT_DIR } from './exported-pages';
+import { exportedFile, exportedPage, OUT_DIR } from './exported-pages';
 
 const HERO_COPY = [
   {
@@ -36,7 +36,7 @@ describe('exported landing hero', () => {
     'links Explore why to the local Episodes section and the header to the booking page at $url',
     ({ url }) => {
       // ARRANGE
-      const $ = load(readFileSync(join(OUT_DIR, exportedFile(url)), 'utf8'));
+      const $ = exportedPage(url);
       const booking = 'https://calendly.com/hanche2001/30min';
       const target = '_blank';
       const relation = 'noopener noreferrer';
