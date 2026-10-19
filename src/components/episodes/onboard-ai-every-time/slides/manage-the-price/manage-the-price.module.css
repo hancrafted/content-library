@@ -1,7 +1,7 @@
 /*
- * How to manage the PRICE: the board is a size container, so each move's pill sits beside its sentence once the board
- * is wide enough and above it below that. The one emphasis motion, CSS only: the highlight moves to the move being
- * spoken, as the presenter points at its row (or a keyboard reader focuses its Context marker); that row stays at full
+ * How to manage the PRICE: the board is a size container, so the move and trait names wrap with its width. The one
+ * emphasis motion, CSS only: the highlight moves to the move being spoken, as the presenter points at its row (or a
+ * keyboard reader focuses its Context marker); that row stays at full
  * strength while the shared `focus-group` dims the others, and its ticks take a `primary` outline. Nothing enters,
  * nothing loops; the base rule is the at-rest frame with every tick shown, and reduced motion swaps the outline at once.
  */

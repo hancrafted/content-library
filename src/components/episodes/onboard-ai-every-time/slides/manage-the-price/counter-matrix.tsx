@@ -10,7 +10,7 @@ interface MatrixMove {
   rest: string;
   line: string;
   counters: readonly TraitSlug[];
-  /** The Context marker inside the move's pill. */
+  /** The Context marker beside the move's title. */
   marker: ReactNode;
   /** Marks the row as the element the move's Speaker notes explain. */
   target: TargetProps;
@@ -40,10 +40,10 @@ interface CounterMatrixProps {
 }
 
 /** A word with its first letter set off, so the five spell an acronym. */
-function Initialled({ initial, rest }: { initial: string; rest: string }) {
+function Initialled({ initial, rest, className }: { initial: string; rest: string; className?: string }) {
   return (
     <span>
-      <span className="font-semibold">{initial}</span>
+      <span className={className ?? 'font-semibold'}>{initial}</span>
       {rest}
     </span>
   );
@@ -75,8 +75,9 @@ function Empty() {
 }
 
 /**
- * The corner header, then one ink-outlined pill per trait. On a wide board the move column takes half, as the mock
- * does; narrower, where each move stacks its pill over its sentence, it takes a third, so a trait name keeps its line.
+ * The corner header, then one column header per trait, plain text like the move titles, since nothing in the head is a
+ * control. Each takes two lines' height, so a name that wraps by word still lines up with the rest; the move column
+ * takes a third, so on a wide board every name keeps one line.
  */
 function MatrixHead({ traits, corner }: { traits: readonly MatrixTrait[]; corner: ReactNode }) {
   return (
@@ -84,13 +85,13 @@ function MatrixHead({ traits, corner }: { traits: readonly MatrixTrait[]; corner
       <tr>
         <th
           scope="col"
-          className="w-1/3 pb-4 text-left align-bottom @4xl:w-1/2 text-caption font-normal text-muted-foreground uppercase"
+          className="w-1/3 pb-3 text-left align-bottom text-caption font-normal text-muted-foreground uppercase"
         >
           {corner}
         </th>
         {traits.map((trait) => (
-          <th key={trait.slug} scope="col" className="px-1 pb-4 align-bottom font-normal @4xl:w-1/10">
-            <span className="flex items-center justify-center rounded-full border-2 border-foreground bg-card px-1 py-1.5 text-center text-caption break-words hyphens-auto">
+          <th key={trait.slug} scope="col" className="pb-3 align-bottom font-normal">
+            <span className="flex min-h-10 items-end justify-center text-center text-caption leading-tight">
               <Initialled initial={trait.initial} rest={trait.rest} />
             </span>
           </th>
@@ -100,20 +101,16 @@ function MatrixHead({ traits, corner }: { traits: readonly MatrixTrait[]; corner
   );
 }
 
-/** One move: its filled pill and sentence as the row header, then a tick or an empty ring per trait. */
+/** One move: its bold title, the first letter in `primary`, over its sentence as the row header; then a tick or an empty ring per trait. */
 function MatrixRow({ move, traits, tick }: { move: MatrixMove; traits: readonly MatrixTrait[]; tick: string }) {
   return (
     <tr {...move.target} className={cn('focus-group__item border-t border-border', styles.row)}>
       <th scope="row" className="py-3 pr-4 text-left align-middle font-normal @4xl:pr-8">
-        <div className="flex flex-col items-start gap-2 @4xl:flex-row @4xl:items-center @4xl:gap-4">
-          <span className="flex w-full shrink-0 items-center justify-center gap-2 rounded-full bg-primary px-4 py-3 @4xl:w-64 text-primary-foreground shadow-sm">
-            <span className="text-center text-body @4xl:whitespace-nowrap">
-              <Initialled initial={move.initial} rest={move.rest} />
-            </span>
-            {move.marker}
-          </span>
-          <span className="text-caption text-muted-foreground">{move.line}</span>
-        </div>
+        <span className="flex items-center gap-1 text-body font-semibold">
+          <Initialled initial={move.initial} rest={move.rest} className="text-primary" />
+          {move.marker}
+        </span>
+        <span className="mt-0.5 block text-caption text-muted-foreground">{move.line}</span>
       </th>
       {traits.map((trait) => (
         <td key={trait.slug} className="px-1 py-3 text-center align-middle">
@@ -144,8 +141,8 @@ function MatrixFoot({ moves, traits, labels }: CounterMatrixProps) {
 }
 
 /**
- * The checklist board (Option 3c): the five BRIEF moves as rows, each pill beside its sentence, the five PRICE traits
- * as ink-outlined column pills, a tick wherever a move counters a trait, and a footer counting the moves per trait.
+ * The checklist board (Option 3c): the five BRIEF moves as rows, each title over its sentence, the five PRICE traits
+ * as column headers, a tick wherever a move counters a trait, and a footer counting the moves per trait.
  * A real table with row and column headers, so it reads the same in print and to a screen reader. Pointing at a row
  * dims the others and outlines its ticks. Below `md` the board scrolls inside itself. A server part with plain props.
  */

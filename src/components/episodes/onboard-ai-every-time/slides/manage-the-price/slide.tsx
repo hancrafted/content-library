@@ -6,14 +6,13 @@ import { BRIEF, TRAITS } from './counter-matrix.pure';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** The Context marker inside a filled primary move pill: in flow and `relative`, so its hit area stays on the pill; in the pill's own ink. */
-const ON_PILL =
-  'relative top-0 right-0 text-primary-foreground hover:bg-primary-foreground/15 hover:text-primary-foreground';
+/** The Context marker beside a move's title, in the title's line rather than an element's corner. */
+const BESIDE = 'static';
 
 /*
  * The second cornerstone (Spec Option 3c): the five BRIEF moves answer the five PRICE traits on one checklist board,
  * a tick wherever a move counters a trait, many to many, with the totals in the footer. The Slide header above shows
- * the heading and caption; the body is a Scene in `SlideFrame`. Each move's pill carries the Context marker to its
+ * the heading and caption; the body is a Scene in `SlideFrame`. Each move's title carries the Context marker to its
  * Speaker note, and its row is that note's target.
  */
 export const manageThePrice = slide({
@@ -84,7 +83,7 @@ export const manageThePrice = slide({
           initial: t(`moves.${slug}.initial`),
           rest: t(`moves.${slug}.rest`),
           line: t(`moves.${slug}.line`),
-          marker: <Marker note={slug} className={ON_PILL} />,
+          marker: <Marker note={slug} className={BESIDE} />,
           target: target(slug),
         }))}
         labels={{
