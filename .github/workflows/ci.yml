@@ -1,7 +1,8 @@
 name: CI
 
-# Lint, typecheck, a full static build and the post-build export test on every pull request, so a change
-# that would break the Pages deploy fails before it merges.
+# Lint, typecheck, the fast suite, a full static build and the post-build export test on every pull request, so a
+# change that would break the Pages deploy fails before it merges. Three independent jobs run in parallel: each pays
+# for its own `npm ci`, and the run takes as long as the slowest lane instead of the sum of all steps.
 on:
   pull_request:
 
@@ -13,8 +14,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  check:
-    name: lint, typecheck, build
+  static:
+    name: preflight, archgate, lint, typecheck
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -26,22 +27,50 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      # The `archgate` npm package is a launcher: its first call downloads a ~67 MB binary into ~/.archgate/bin.
+      # Keyed on the launcher's version, so a bump fetches the matching binary once.
+      - uses: actions/cache@v6
+        with:
+          path: ~/.archgate/bin
+          key: archgate-${{ runner.os }}-${{ hashFiles('node_modules/archgate/package.json') }}
       - run: npm run preflight
       - run: npm run archgate:full
       - run: npm run lint
       - run: npm run format:check
       - run: npm run typecheck
-      - run: npm test
       - run: npm run knip
       # The new-episode sample sits under a dot-folder, which the default corpus never walks.
       - run: npm run check:docs
+
+  unit:
+    name: unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # Full history: tests/docs/episode-staging.test.ts reads this repo's own `git log`.
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm test
+
+  export:
+    name: build, post-build tests
+    runs-on: ubuntu-latest
+    env:
       # Build as the Pages deploy does, under its project-site base path, so a base-path bug fails here, not at deploy.
+      NEXT_PUBLIC_BASE_PATH: /content-library
+      SITE_URL: https://hancrafted.github.io/content-library
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
       - run: npm run build
-        env:
-          NEXT_PUBLIC_BASE_PATH: /content-library
-          SITE_URL: https://hancrafted.github.io/content-library
       # FE-005: every page URL the app derives landed in out/. Needs the build above.
       - run: npm run test:build
-        env:
-          NEXT_PUBLIC_BASE_PATH: /content-library
-          SITE_URL: https://hancrafted.github.io/content-library
