@@ -1,10 +1,13 @@
 ---
 type: research
-title: 'Why did workers who took up managing new machines, like the steam engine, become managers while others stayed workers?'
-description: 'Early industrial managers came from several routes, and the evidence found does not show machine-operating workers as the main one, so the premise is overstated.'
+title: 'Why did workers who took up managing new machines, like the steam
+  engine, become managers while others stayed workers?'
+description: 'Early industrial managers came from several routes, and the
+  evidence found does not show machine-operating workers as the main one, so the
+  premise is overstated.'
 generated:
-  by: claude-code/sonnet-5.5
-  at: 2026-10-19T00:00:00Z
+  by: claude-code/sonnet-4.6
+  at: 2026-10-19T18:32:24Z
 stale_after: 2027-10-19T00:00:00Z
 sources:
   - id: 1
@@ -12,13 +15,15 @@ sources:
     title: 'Ure, The Philosophy of Manufactures (1835)'
   - id: 2
     resource: https://www.nber.org/system/files/working_papers/w16993/w16993.pdf
-    title: 'Meisenzahl and Mokyr, The Rate and Direction of Invention in the British Industrial Revolution: Incentives and Institutions'
+    title: 'Meisenzahl and Mokyr, The Rate and Direction of Invention in the British
+      Industrial Revolution: Incentives and Institutions'
   - id: 3
     resource: http://bankinghistory.org/wp-content/uploads/Murphy_1602.pdf
     title: 'Murphy, The Bank of England and the Genesis of Modern Management'
   - id: 4
     resource: https://www.cambridge.org/core/journals/business-history-review/article/merchant-the-manufacturer-and-the-factory-manager-the-case-of-samuel-slater/C7F3593ECE0D7AB0E12189A207DDB605
-    title: 'Tucker, The Merchant, the Manufacturer, and the Factory Manager: The Case of Samuel Slater'
+    title: 'Tucker, The Merchant, the Manufacturer, and the Factory Manager: The
+      Case of Samuel Slater'
   - id: 5
     resource: http://www.researchoninnovation.org/skills.pdf
     title: 'Bessen, The Skills of the Unskilled in the American Industrial Revolution'
