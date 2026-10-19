@@ -4,12 +4,14 @@ title: Treat AI like a brilliant freelancer with amnesia
 status: draft
 generated:
   by: claude-code/opus-5.5
-  at: 2026-10-19T14:20:48Z
+  at: 2026-10-19T14:26:52Z
 locale: en
 brief: ./brief.md
 verified:
   - by: process:markdown-harness
     at: 2026-10-19T14:20:48Z
+  - by: process:markdown-harness
+    at: 2026-10-19T14:26:52Z
 ---
 
 # Treat AI like a brilliant freelancer with amnesia {#freelancer-with-amnesia}
@@ -18,9 +20,9 @@ verified:
 
 #### Voice script
 
-1. **Hook, new job** — Imagine a new job: new environment, culture, tools. First task: next year's summer party, 200 employees, across Europe. Picture every question you would need answered.
-2. **What this is, and is not** — Episode one of three on agentic workflows; reference the later videos point back to. Plain words, no jargon. Preamble: ChatGPT's context and memory features are left out on purpose, they belong to the attention span Episode.
-3. **Where it goes** — Everything you just pictured is what AI needs too; what is good for a human is good for AI. Two cornerstones follow.
+1. **Hook, new job** — Imagine you start a new job. New environment, new culture, new tools, and on your first week someone hands you a task: organise next year's summer party for 200 employees, spread across Europe. (pause) Before you book anything, picture every question you would need answered to do that well, because you are about to hear how many there are.
+2. **What this is, and is not** — This is episode one of three on working with AI in an agentic way, and it is built as the reference the later videos point back to. I will use plain words and no jargon, because you do not need to know how AI works inside to get reliable results from it. One thing I leave out on purpose: the context and memory features of ChatGPT and similar tools. They deserve their own episode, the one on attention span, so we keep them out of this one.
+3. **Where it goes** — Here is the point of the next ten minutes: everything you just pictured, the questions, the history, the unwritten rules, is what AI needs from you too, because what is good for a human is also good for AI. So we take it in two steps, two cornerstones. First, who you are really handing the work to, and then what you give them so the work comes back right.
 
 ### You're the new hire {#you-are-the-new-hire}
 
@@ -51,9 +53,9 @@ The break is the one place where the stack changes direction: above it you ask, 
 
 #### Voice script
 
-1. **Obvious questions** — Budget, where everyone stays, who signs off; dietary and accessibility ride along. Easy to list, easy to get answered.
-2. **The ones you forget** — What went wrong last time, the unwritten rules, which suppliers and tools you may use. Lives in feedback, culture, habit. People forget to hand it over, because nobody wrote it down.
-3. **Switch of roles** — Now you hand the party over; plan due to your boss on Friday. Question flips: what does the newcomer need from you. Works with any newcomer. Leads into who we hand work to.
+1. **Obvious questions** — Start with the questions that come to mind at once. What is the budget, where does everyone stay, who signs off on the plan? Dietary and accessibility needs ride along with those. These are easy to list and easy to get answered, which is exactly why they are not where a plan goes wrong.
+2. **The ones you forget** — The trouble sits in the second group. What went wrong at last year's party, which unwritten rules apply, which suppliers and tools you are allowed to use? That context lives in feedback, in the culture and in habit, not in any document, so people forget to hand it over, because nobody ever wrote it down. (pause) And you cannot ask for what you do not know exists.
+3. **Switch of roles** — Now flip it. You are the one handing the party over, and your boss expects the plan by Friday. The question is no longer what you need to ask, but what the newcomer needs from you, and how much of that you would think to say. That works for any newcomer, which brings us to the one you are about to hire.
 
 ### Five traits, or you pay the PRICE {#pay-the-price}
 
@@ -123,19 +125,19 @@ Design reference: reference/price-cornerstone/design-reference.md#page-1. Take i
 
 #### Voice script
 
-1. **Who gets the job** — Not a chatbot, a hire: a brilliant freelancer with amnesia, every time. Five traits, spelling PRICE. Freelancer side only, for now.
-2. **Prolific, Random** — Pages day and night, right or not. Same brief to a new freelancer, a different plan.
-3. **Inflating** — Billed for every word read and written; one more question, the whole file again, their own pages included.
-4. **Confident, Expert** — Vague request, no questions, assumptions sold as right. Knows every trade, blind to your company and culture.
-5. **Amnesia** — Every time they forget everything; every job starts from day one. Closing line, and the AI column appears.
-6. **AI lands last** — Now the AI side, row by row: pages in seconds, a new chat gives a new answer, the whole chat paid for again, the most common answer with full confidence, the likeliest answer blind to your company. Say it plainly: this is AI.
-7. **The pun** — Forget the price, and you will pay it every time.
+1. **Who gets the job** — So who are you handing the work to? Not a chatbot and not an oracle, but a hire: a brilliant freelancer with amnesia, every time. They come with five traits, and the first letters spell PRICE, because if you do not manage them, you pay. For now I only describe the freelancer, a person, so you can picture them.
+2. **Prolific, Random** — The first trait is Prolific. You hand over the job and they work day and night, producing stacks of polished pages, whether the pages are right or not, so there is a lot to read and all of it needs checking. The second is Random. Give the same brief to a new freelancer and you get a different plan, which means one good result is not a promise.
+3. **Inflating** — Third, Inflating. This freelancer bills for every word they read and write, so one more question from you means paying for them to reread the whole file, their own pages included. The longer the job runs, the bigger the bill, and the bill grows faster than the work does.
+4. **Confident, Expert** — Fourth, Confident. You give a vague request, they start without asking, fill the gaps with their own assumptions and sell the result to you as right. A guess sounds exactly as sure as a fact. And fifth, Expert: they know every trade and give expert answers, yet they are blind to your company and your culture, because none of that ever reached them.
+5. **Amnesia** — And here is what sits under all five. Every time you come back, they forget everything, so every job starts from day one. (pause) Hold that picture of the freelancer, because the next thing I show is who this really is.
+6. **AI lands last** — This freelancer is AI. Row by row, it is the same sentence with different nouns. Send the prompt and it produces pages in seconds, as many as you ask for, right or not. Give the same prompt in a new chat and you get a different answer. It charges for every word it reads and writes, so one more message pays for the whole chat again, its own answers included. Give it a vague prompt and it fills the gaps with the most common answers and replies with full confidence. And trained on more text than anyone could read, it gives you the likeliest answer, blind to your company and culture. (pause) Would you hand a job to a freelancer like that without a plan?
+7. **The pun** — So here is the whole slide in one line. Forget the price, and you'll pay it every time.
 
 ## Five moves to brief a freelancer {#five-moves-to-brief-a-freelancer}
 
 #### Voice script
 
-1. **Answer to the traits** — Five traits cost you. Five moves answer them, and they spell BRIEF.
+1. **Answer to the traits** — Five traits cost you. The good news is that you can answer each of them, with five moves, and the first letters spell BRIEF. That is the second cornerstone.
 
 ### How to manage the PRICE {#manage-the-price}
 
@@ -194,17 +196,17 @@ Design reference: reference/price-cornerstone/design-reference.md#page-1. The sa
 
 #### Voice script
 
-1. **One prompt is not enough** — A good prompt is not a brief. A brief is a set of moves, each answering a cost.
-2. **Break it down, Requirements first** — Smaller pieces against pages and the bloated bill. Written requirements against random and confident.
-3. **Interview, Evaluate** — Let AI ask you, so the confident guess becomes a question, and the expert learns your company. Check each step against the requirements, so wrong pages are caught early.
-4. **Fresh start** — One piece, one clean start, so the bill stays small and nothing old leaks in. Many-to-many: one move helps several traits.
-5. **Refrain** — Same move that works for a human works for AI; what is good for a human is good for AI.
+1. **One prompt is not enough** — Many people hope for one good prompt. But a good prompt is not a brief. A brief is a set of moves, and each move answers a cost you have just seen, so one prompt cannot do the work of five.
+2. **Break it down, Requirements first** — The first move is Break it down: hand over one piece at a time, because small pieces leave less to get wrong and less to pay for. That answers Prolific and Inflating, the pages and the bloated bill. The second is Requirements first: write down what good looks like before the work starts. Then the same brief brings results that agree, so it answers Random and Confident.
+3. **Interview, Evaluate** — Third, Interview yourself with AI. Let it ask you its questions first, so the confident guess becomes a question, and the expert learns the company it was blind to. Fourth, Evaluate each step, and here evaluating means checking the step against your requirements. A wrong turn is then caught early, not after the last page, which tames the flood of pages and the randomness.
+4. **Fresh start** — Fifth, Fresh start for each piece. One piece gets one clean chat, so the bill stays small and nothing old leaks in from earlier work. Notice that the map is many to many: one move helps several traits, and one trait is met by several moves. That overlap is why the five work as a set.
+5. **Refrain** — Look at what these moves are: a brief you would give any good freelancer. Smaller pieces, written requirements, questions up front, checks along the way, a clean desk for each job. What is good for a human is also good for AI.
 
 ## BRIEF in action {#brief-in-action}
 
 #### Voice script
 
-1. **One task, five moves** — Time to watch BRIEF on a real task. In workflow order, not in the order of the letters.
+1. **One task, five moves** — Time to watch BRIEF work on a real task. We walk it in workflow order, which is not the order of the letters, because the order you do things in is not the order they are named in.
 
 ### Brief the venue {#brief-the-venue}
 
@@ -267,10 +269,10 @@ The graph's markup reads as a plain ordered list of stages with their jobs neste
 
 #### Voice script
 
-1. **Restate** — Plan the summer party for 200 people across Europe. One prompt will not do it.
-2. **Break it down** — Five pieces: venue, travel, catering, invitations, budget. Take only the venue now; the rest wait.
-3. **Interview** — The AI asks you before it starts, like an agency contact. Three questions, one you forgot: last year's feedback.
-4. **Requirements** — Sign off the card before any research. Everything after reads from it.
-5. **Research, fresh each time** — Three venues, three fresh chats, each against the card. One sentence: many freelancers is the promotion Episode.
-6. **Compare and check** — Three come back together, checked against the card. Two gates: the card and the comparison.
-7. **Recommendation, and on** — The venue plan for your boss. Same BRIEF, any task. Next: the live demo.
+1. **Restate** — The task: plan the summer party for 200 people across Europe. If you asked AI for all of that in one prompt, you would get pages of polished and confident answers, and you could trust almost none of them.
+2. **Break it down** — So first, break it down. The party falls into five pieces: venue, travel, catering, invitations and budget. We take only the venue now, and the other four wait for their turn, because one piece is small enough to get right.
+3. **Interview** — Next, the interview. Before it starts, the AI asks you questions, the way a contact at an agency would. Three questions come up, and one of them is something you had forgotten: whether last year's party left feedback worth keeping. That is the unwritten context coming out before the AI guesses.
+4. **Requirements** — Then requirements, and this is a stage you sign off before any research starts. Everything gets written onto one card, short and made of essentials, and every later job reads from it. If the card is wrong, you want to find out here, while it is cheap.
+5. **Research, fresh each time** — Now the research. Three venues get three fresh chats, and each one is checked against the card. Handing work to several of them at once is its own topic, and it is the promotion Episode.
+6. **Compare and check** — The three results come back together and are compared, again against the card, not against a feeling. That makes two gates in the whole flow: the card, and the comparison. A mistake has to get past both.
+7. **Recommendation, and on** — What comes out is the venue plan for your boss, and the whole thing ran on the same BRIEF you would use for any task. (pause) Now let's do it live: I will show you how that interview feels when you run it yourself.
