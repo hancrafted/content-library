@@ -13,7 +13,7 @@ The user either brings a Brief or brings an idea. Accept the Brief when they hav
 
 ## Episode Design Reference
 
-When the prompt or Brief names a file (pdf, word) brought in as a model for the Episode (a deck, a sketch, a Miro slides export), copy it to `.scratch/<slug>/<file-slug>.<file-extension>`, the `<file-slug>` its subject in kebab case. Then add the Brief's optional `## Episode Design Reference` with one item per file, `[<title>](reference/<file-slug>/design-reference.md)`: a shape-only fix the Job's summary names with the file's original path. The `convert-references` job writes that path after the pipeline gate; until then the link has no target.
+When the prompt or Brief names a file (pdf, word) brought in as a model for the Episode (a deck, a sketch, a Miro slides export), copy it to `.scratch/<slug>/<file-slug>.<file-extension>`, the `<file-slug>` its subject in kebab case. Then add the Brief's optional `## Episode Design Reference` with one item per file, `[<title>](reference/<file-slug>/design-reference.md)`: a shape-only fix the Job's summary names with the file's original path. The `convert-references` job writes that path during Setup; until then the link has no target.
 
 ## Fixing a failed check
 

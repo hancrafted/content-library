@@ -40,9 +40,9 @@ Setup turns the approved Brief into the approved pipeline. Every job of `pipelin
 
 1. `categorize-research`, whose `intent` is the implementor's prompt: one research folder name per research question, and any new category added to `GLOSSARY.md`. Keep the names for retrieval; save them to `.scratch/<slug>/research-folders.md` when the session may end before it.
 2. `retrieval` by [`references/retrieval.md`](references/retrieval.md), beside `convert-references` by [`references/convert-references.md`](references/convert-references.md): retrieval decides reuse, refresh or new per question and writes `research-plan.md` listing the questions needing a job under `## Research jobs`.
-3. `customize-pipeline` by [`references/customize-pipeline.md`](references/customize-pipeline.md): expands `write-research` into one job per listed question and `implement-section` into one job per Section of the Brief's `## Slides`, and gives each `implement-section` job its own free dev-server `port`. It is a human gate: stop after the `Gate: draft pipeline` commit.
+3. `customize-pipeline` by [`references/customize-pipeline.md`](references/customize-pipeline.md): expands `write-research` into one job per listed question and `implement-section` into one job per Section of the Brief's `## Slides`, and gives each `implement-section` job its own free dev-server `port`, then sets `status: approved`. No gate: the run continues straight into Research.
 
-_Done when_ `docs/episodes/<slug>/pipeline.yml` has `status: approved`, committed by the user with `Gate: approved pipeline`.
+_Done when_ `docs/episodes/<slug>/pipeline.yml` has `status: approved`, committed by `customize-pipeline`.
 
 ### 4. Refuse or start
 
@@ -59,7 +59,7 @@ _Done when_ the todo list holds every job the script does not print as `done`.
 
 ### 5. Run the jobs
 
-Run every job the status script prints as `ready` by [the job loop](#the-job-loop); jobs that are ready together run in parallel as background subagents, each job with `isolation: worktree` in its own worktree. Run at most 5 subagents at a time: spawn ready jobs in batches of 5, the next batch as slots free. A job without a gate runs straight through, with no confirmation asked. A gate job prints `gate` once its draft is logged, until its output is approved; step 4's checks cover the Brief and pipeline gates. After each job's closing `end-job` line, run the script again for the next ready jobs. A blocked job blocks every job that `needs` it, directly or through another job. A job that `wants` it waits for it, then runs anyway: tell its implementor which wanted jobs blocked.
+Run every job the status script prints as `ready` by [the job loop](#the-job-loop); jobs that are ready together run in parallel as background subagents, each job with `isolation: worktree` in its own worktree. Run at most 5 subagents at a time: spawn ready jobs in batches of 5, the next batch as slots free. A job without a gate runs straight through, with no confirmation asked. A gate job prints `gate` once its draft is logged, until its output is approved; step 4's checks cover the Brief gate and the finalized pipeline. After each job's closing `end-job` line, run the script again for the next ready jobs. A blocked job blocks every job that `needs` it, directly or through another job. A job that `wants` it waits for it, then runs anyway: tell its implementor which wanted jobs blocked.
 
 `write-voice-script` has no Gate: `write-spec` follows it and writes the Spec, `spec/spec.html`, the one page the user reviews the design and the words on. It ends at the Spec Gate, run by [`references/write-spec.md`](references/write-spec.md#the-spec-gate): per review round, stop after the `Gate: draft spec-<n>` commit and tell the user to open the Spec with `npm run episode:spec -- <slug>`, tick the Options they want and save; lock every Slide with one pick and redesign the rest in a new Attempt, until every Slide has one pick and the user approves with `approve.ts` in the `Gate: approved spec` commit, which also deletes `dossier.md`. From then on the Spec is the Episode's only source. The Build stage then runs `implement-episode-init`, which writes one placement marker per Section, and the `implement-section-<section-slug>` jobs in parallel, each building its Section at its marker. Each Build job's agent starts `next dev` detached on the job's `port`, which the dashboard links for the user: a Section job's server lives while the job runs and stops before its worktree goes, and `implement-episode-init`'s runs on in the Episode's worktree, showing each Section once merged.
 
@@ -148,7 +148,7 @@ Every commit goes through the `commit` skill. A gate is also a span, logged with
 
 Log only a gate Score the user gave.
 
-A gate commit adds a `Gate:` trailer beside `Source:` (`Gate: draft brief`, `Gate: approved pipeline`, `Gate: draft spec-1`, `Gate: draft feedback-01`). The agent's draft is committed before the user edits it, so the pair of gate commits shows their edit as a diff: that diff is what later teaches agents their style. Only the user approves, with `approve.ts`, which appends their `verified` entry.
+A gate commit adds a `Gate:` trailer beside `Source:` (`Gate: draft brief`, `Gate: draft spec-1`, `Gate: draft feedback-01`). The agent's draft is committed before the user edits it, so the pair of gate commits shows their edit as a diff: that diff is what later teaches agents their style. Only the user approves, with `approve.ts`, which appends their `verified` entry.
 
 Who commits sets the mark:
 
@@ -156,7 +156,7 @@ Who commits sets the mark:
 - The user's approval commit carries no `Agent:` trailer, which is how a gate diff is told to be theirs.
 - An approval commit the orchestrator makes at the user's word is still an agent commit and carries `Agent: <job id>`, while the approval entry in `verified` stays theirs.
 
-After `Gate: approved pipeline`, the template is frozen for the run: `main` is not merged into the Episode branch again until `open-pr` is done. The pipeline's `template` field names the commit it was tailored from. A template change found during the run goes into `LEARNINGS.md` Lessons and is applied after the run.
+Once `customize-pipeline` commits `status: approved`, the template is frozen for the run: `main` is not merged into the Episode branch again until `open-pr` is done. The pipeline's `template` field names the commit it was tailored from. A template change found during the run goes into `LEARNINGS.md` Lessons and is applied after the run.
 
 ## Promotion
 
