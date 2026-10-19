@@ -111,13 +111,41 @@
     "forgotten": "The one you forgot",
     "ai": "AI",
     "you": "You",
-    "turns": {
-      "q1": "How many people are coming, and what is the budget per person?",
-      "a1": "200 people, about 150 euros each.",
-      "q2": "Where do they travel from, and do any have dietary or accessibility needs?",
-      "a2": "Five offices across Europe. Some vegetarians, two wheelchair users.",
-      "q3": "Did last year’s party get feedback worth keeping?",
-      "a3": "Good question, I had forgotten. It was too loud to talk, and people left early."
+    "recommended": "Recommended:",
+    "newTab": "(opens in a new tab)",
+    "replies": {
+      "start": "Plan our summer party: 200 people from five offices across Europe, about €150 each, two wheelchair users, some vegetarians.",
+      "a1": "A.",
+      "reframe": "I don’t understand this. Can you explain it with an analogy?",
+      "a2": "A, one long table.",
+      "a3": "A. Good question, I had forgotten. It was too loud to talk, and people left early.",
+      "spec": "Turn my answers into a specification."
+    },
+    "questions": {
+      "q1": {
+        "text": "Q1 · Format: one party in one place, or one in each office?",
+        "a": "A) One venue, everyone travels",
+        "b": "B) Five local parties",
+        "recommended": "A, the point is that the offices meet."
+      },
+      "q2": {
+        "text": "Q2 · Capacity: do you size the venue for peak concurrent occupancy or for average dwell time?",
+        "a": "A) Peak: 200 at once",
+        "b": "B) Average: about 140, with staggered arrivals",
+        "recommended": "A, the speeches bring everyone together."
+      },
+      "q2Analogy": {
+        "text": "Q2 · Think of booking a restaurant: one long table for everyone at eight, or tables that turn over through the evening?",
+        "a": "A) One long table: room for 200 at once",
+        "b": "B) Tables that turn over: room for about 140",
+        "recommended": "A, everyone sits down for the speeches."
+      },
+      "q3": {
+        "text": "Q3 · Like a restaurant review: did last year’s party leave feedback worth reading first?",
+        "a": "A) Yes, read it first",
+        "b": "B) No, start fresh",
+        "recommended": "A, it shows what to avoid."
+      }
     }
   },
   "notes": {

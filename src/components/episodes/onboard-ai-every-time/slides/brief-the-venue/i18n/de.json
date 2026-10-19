@@ -111,13 +111,41 @@
     "forgotten": "Die, die Du vergessen hast",
     "ai": "KI",
     "you": "Du",
-    "turns": {
-      "q1": "Wie viele Leute kommen, und wie hoch ist das Budget pro Person?",
-      "a1": "200 Leute, etwa 150 Euro pro Kopf.",
-      "q2": "Von wo reisen sie an, und hat jemand Ernährungs- oder Barrierefreiheitsbedarf?",
-      "a2": "Fünf Büros in ganz Europa. Ein paar Vegetarier, zwei Rollstuhlfahrer.",
-      "q3": "Gab es zur Feier im letzten Jahr Feedback, das sich zu behalten lohnt?",
-      "a3": "Gute Frage, das hatte ich vergessen. Es war zu laut zum Reden, und viele sind früh gegangen."
+    "recommended": "Empfehlung:",
+    "newTab": "(öffnet in neuem Tab)",
+    "replies": {
+      "start": "Plane unsere Sommerfeier: 200 Leute aus fünf Büros in ganz Europa, etwa 150 Euro pro Kopf, zwei Rollstuhlfahrer, ein paar Vegetarier.",
+      "a1": "A.",
+      "reframe": "Das verstehe ich nicht. Kannst Du es mit einem Vergleich erklären?",
+      "a2": "A, eine lange Tafel.",
+      "a3": "A. Gute Frage, das hatte ich vergessen. Es war zu laut zum Reden, und viele sind früh gegangen.",
+      "spec": "Mach aus meinen Antworten eine Spezifikation."
+    },
+    "questions": {
+      "q1": {
+        "text": "F1 · Format: eine Feier an einem Ort, oder eine pro Büro?",
+        "a": "A) Ein Ort, alle reisen an",
+        "b": "B) Fünf lokale Feiern",
+        "recommended": "A, es geht darum, dass sich die Büros treffen."
+      },
+      "q2": {
+        "text": "F2 · Kapazität: Planst Du den Ort für die Spitzenbelegung oder für die durchschnittliche Verweildauer?",
+        "a": "A) Spitze: 200 gleichzeitig",
+        "b": "B) Durchschnitt: etwa 140, mit gestaffelter Ankunft",
+        "recommended": "A, zu den Reden sind alle da."
+      },
+      "q2Analogy": {
+        "text": "F2 · Stell Dir vor, Du reservierst im Restaurant: eine lange Tafel für alle um acht, oder Tische, die über den Abend wechseln?",
+        "a": "A) Eine lange Tafel: Platz für 200 gleichzeitig",
+        "b": "B) Wechselnde Tische: Platz für etwa 140",
+        "recommended": "A, zu den Reden sitzen alle."
+      },
+      "q3": {
+        "text": "F3 · Wie eine Restaurantkritik: Hat die Feier im letzten Jahr Feedback hinterlassen, das Du zuerst lesen solltest?",
+        "a": "A) Ja, zuerst lesen",
+        "b": "B) Nein, neu anfangen",
+        "recommended": "A, es zeigt, was zu vermeiden ist."
+      }
     }
   },
   "notes": {

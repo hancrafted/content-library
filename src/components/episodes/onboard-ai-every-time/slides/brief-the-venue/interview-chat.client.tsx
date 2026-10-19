@@ -1,8 +1,27 @@
 'use client';
 
+import { externalHref } from '@/lib/external-link.pure';
 import { cn } from '@/lib/utils';
 import { useRef } from 'react';
 import { Sparkle } from './glyphs';
+
+/** A skill the turn invokes: its slash command, linked to where the skill is published. */
+export interface ChatSkill {
+  command: string;
+  url: string;
+}
+
+/** One turn of the worked chat: a question from the AI (its two options and a recommendation), or your reply. */
+export interface ChatTurnCopy {
+  slug: string;
+  speaker: 'ai' | 'you';
+  text: string;
+  skill?: ChatSkill;
+  options?: readonly string[];
+  recommended?: string;
+  /** The question you had not thought of. */
+  forgotten?: boolean;
+}
 
 export interface InterviewChatCopy {
   open: string;
@@ -11,17 +30,17 @@ export interface InterviewChatCopy {
   forgotten: string;
   ai: string;
   you: string;
-  /** The worked chat, AI first, then turn about: three questions and your three answers. */
-  turns: readonly string[];
+  recommended: string;
+  newTab: string;
+  /** The worked chat: you start a grilling, the AI asks one numbered question at a time, you end with a spec. */
+  turns: readonly ChatTurnCopy[];
 }
-
-/** The last question is the one you had not thought of. */
-const FORGOTTEN_TURN = 4;
 
 /**
  * "See the chat" opens the Interview's worked chat in a native `<dialog>` via `showModal()`: the top layer, so no
  * z-index and no Slide wrapper's `isolate` traps it under the chrome (FE-009 §8). The browser gives Escape, the focus
- * trap and the inert page; a press on the backdrop closes it. Bubbles are tool-neutral: the AI left, you right.
+ * trap and the inert page; a press on the backdrop closes it. Bubbles are tool-neutral: the AI left, you right. The
+ * chat scrolls inside the card, so a long chat never runs past the viewport.
  */
 export function InterviewChat({ copy }: { copy: InterviewChatCopy }) {
   const dialog = useRef<HTMLDialogElement>(null);
@@ -35,11 +54,11 @@ export function InterviewChat({ copy }: { copy: InterviewChatCopy }) {
         onClick={(event) => event.target === event.currentTarget && close()}
         className="m-0 h-dvh max-h-none w-full max-w-none items-center overscroll-contain justify-center bg-transparent p-4 text-inherit backdrop:bg-overlay/60 backdrop:backdrop-blur-xs open:flex sm:p-6"
       >
-        <div className="w-full max-w-2xl rounded-2xl border border-border bg-card p-5 text-foreground shadow-lg">
+        <div className="flex max-h-full w-full max-w-2xl flex-col rounded-2xl border border-border bg-card p-5 text-foreground shadow-lg">
           <ChatHeader title={copy.title} closeLabel={copy.close} onClose={close} />
-          <ol className="mt-4 flex flex-col gap-2 text-caption">
-            {copy.turns.map((turn, index) => (
-              <ChatTurn key={turn} turn={turn} index={index} copy={copy} />
+          <ol className="mt-4 flex min-h-0 flex-col gap-2 overflow-y-auto overscroll-contain pr-2 text-caption">
+            {copy.turns.map((turn) => (
+              <ChatTurn key={turn.slug} turn={turn} copy={copy} />
             ))}
           </ol>
         </div>
@@ -91,22 +110,78 @@ function ChatHeader({ title, closeLabel, onClose }: { title: string; closeLabel:
   );
 }
 
-function ChatTurn({ turn, index, copy }: { turn: string; index: number; copy: InterviewChatCopy }) {
-  const ai = index % 2 === 0;
-  const forgotten = index === FORGOTTEN_TURN;
+/** A slash command as a link to the skill's source, opening a new tab. */
+function SkillLink({ skill, newTab }: { skill: ChatSkill; newTab: string }) {
+  return (
+    <a
+      href={externalHref(skill.url)}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="rounded-sm font-semibold text-primary underline underline-offset-2 outline-none hover:no-underline focus-visible:ring-2 focus-visible:ring-ring"
+    >
+      {skill.command}
+      <span className="sr-only"> {newTab}</span>
+    </a>
+  );
+}
+
+/** A question's two options and the AI's recommendation, under its text. */
+function Question({
+  options,
+  recommended,
+  label,
+}: {
+  options: readonly string[];
+  recommended?: string;
+  label: string;
+}) {
+  return (
+    <>
+      <ul className="flex flex-col gap-0.5 pl-2">
+        {options.map((option) => (
+          <li key={option}>{option}</li>
+        ))}
+      </ul>
+      {recommended && (
+        <p>
+          <span className="font-semibold">{label}</span> {recommended}
+        </p>
+      )}
+    </>
+  );
+}
+
+function ChatTurn({ turn, copy }: { turn: ChatTurnCopy; copy: InterviewChatCopy }) {
+  const ai = turn.speaker === 'ai';
   return (
     <li
-      data-speaker={ai ? 'ai' : 'you'}
-      data-forgotten={forgotten}
+      data-speaker={turn.speaker}
+      data-forgotten={turn.forgotten === true}
       className={cn(
-        'flex max-w-md flex-col gap-1 rounded-2xl px-3 py-2',
+        'flex max-w-md shrink-0 flex-col gap-1 rounded-2xl px-3 py-2',
         ai ? 'rounded-tl-sm border' : 'self-end rounded-tr-sm bg-muted',
-        ai && (forgotten ? 'border-ai bg-ai/10' : 'border-ai/40 bg-ai/5'),
+        ai && (turn.forgotten ? 'border-ai bg-ai/10' : 'border-ai/40 bg-ai/5'),
       )}
     >
-      {forgotten && <span className="font-semibold text-muted-foreground uppercase">{copy.forgotten}</span>}
+      {turn.forgotten && <span className="font-semibold text-muted-foreground uppercase">{copy.forgotten}</span>}
       <span className="sr-only">{ai ? copy.ai : copy.you}: </span>
-      {turn}
+      <TurnBody turn={turn} copy={copy} />
     </li>
+  );
+}
+
+/** What a turn says: its text, after the skill command it invokes, then a question's options. */
+function TurnBody({ turn, copy }: { turn: ChatTurnCopy; copy: InterviewChatCopy }) {
+  return (
+    <>
+      {turn.skill ? (
+        <span>
+          <SkillLink skill={turn.skill} newTab={copy.newTab} /> {turn.text}
+        </span>
+      ) : (
+        turn.text
+      )}
+      {turn.options && <Question options={turn.options} recommended={turn.recommended} label={copy.recommended} />}
+    </>
   );
 }

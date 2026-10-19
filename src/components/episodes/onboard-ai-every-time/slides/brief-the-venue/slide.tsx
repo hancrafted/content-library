@@ -3,7 +3,7 @@ import { SlideFrame } from '@/components/slide-master/slide-master';
 import type { ReactNode } from 'react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
-import { InterviewChat } from './interview-chat.client';
+import { InterviewChat, type ChatTurnCopy } from './interview-chat.client';
 import type { NodeCopy } from './node-popover.client';
 import {
   CompareJob,
@@ -24,7 +24,41 @@ const COMPARE = 'compare';
 const LEGEND = 'legend';
 
 const CRITERIA = ['guests', 'budget', 'stepFree', 'vegetarian', 'quiet'] as const;
-const TURNS = ['q1', 'a1', 'q2', 'a2', 'q3', 'a3'] as const;
+/** Matt Pocock's skills the worked chat invokes: a grilling to interview you, then a spec from the answers. */
+const GRILLING = {
+  command: '/grilling',
+  url: 'https://github.com/mattpocock/skills/tree/main/skills/productivity/grilling',
+};
+const TO_SPEC = {
+  command: '/to-spec',
+  url: 'https://github.com/mattpocock/skills/tree/main/skills/engineering/to-spec',
+};
+
+type Reply = 'start' | 'a1' | 'reframe' | 'a2' | 'a3' | 'spec';
+type Asked = 'q1' | 'q2' | 'q2Analogy' | 'q3';
+
+/** The replies that invoke a skill; the questions sit apart, since each has two options and a recommendation. */
+const SKILLS: Partial<Record<Reply, typeof GRILLING>> = { start: GRILLING, spec: TO_SPEC };
+
+/** The question you had not thought of. */
+const FORGOTTEN: Asked = 'q3';
+
+/**
+ * The worked chat in order: you start a grilling, the AI asks one numbered question at a time, you ask for an analogy
+ * when a question is jargon (meta-prompting), the last question is the one you forgot, and you end with a spec.
+ */
+const TURNS: readonly (['reply', Reply] | ['question', Asked])[] = [
+  ['reply', 'start'],
+  ['question', 'q1'],
+  ['reply', 'a1'],
+  ['question', 'q2'],
+  ['reply', 'reframe'],
+  ['question', 'q2Analogy'],
+  ['reply', 'a2'],
+  ['question', 'q3'],
+  ['reply', 'a3'],
+  ['reply', 'spec'],
+];
 
 /** A Context marker beside a label, in the label's line rather than an element's corner. */
 const BESIDE = 'static';
@@ -105,7 +139,21 @@ export const briefTheVenue = slide({
           forgotten: t('chat.forgotten'),
           ai: t('chat.ai'),
           you: t('chat.you'),
-          turns: TURNS.map((turn) => t(`chat.turns.${turn}`)),
+          recommended: t('chat.recommended'),
+          newTab: t('chat.newTab'),
+          turns: TURNS.map(([kind, slug]): ChatTurnCopy => {
+            if (kind === 'reply') {
+              return { slug, speaker: 'you', text: t(`chat.replies.${slug}`), skill: SKILLS[slug] };
+            }
+            return {
+              slug,
+              speaker: 'ai',
+              text: t(`chat.questions.${slug}.text`),
+              options: [t(`chat.questions.${slug}.a`), t(`chat.questions.${slug}.b`)],
+              recommended: t(`chat.questions.${slug}.recommended`),
+              forgotten: slug === FORGOTTEN,
+            };
+          }),
         }}
       />
     );

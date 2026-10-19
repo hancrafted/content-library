@@ -58,7 +58,10 @@ function StageColumn({ view, first }: { view: StageView; first: boolean }) {
 const NAME_BUTTON =
   'cursor-pointer rounded-sm text-left outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring';
 
-/** The stage's name, opening its popover, over the move pill: the move's first letter semibold. */
+/**
+ * The stage's name, opening its popover, over the move pill: the move's first letter semibold. Across a wide row every
+ * pill keeps two lines' height, so a move that wraps lines up with the rest.
+ */
 function StageHeader({ view }: { view: StageView }) {
   const { stage, name, move, popover, aside } = view;
   return (
@@ -72,10 +75,11 @@ function StageHeader({ view }: { view: StageView }) {
       <span
         className={cn(
           'text-caption text-muted-foreground',
-          stage.move && 'rounded-2xl border border-border bg-card px-2.5 py-0.5',
+          stage.move &&
+            'rounded-2xl border border-border bg-card px-2.5 py-0.5 @4xl:flex @4xl:min-h-14 @4xl:items-center',
         )}
       >
-        {move}
+        <span>{move}</span>
       </span>
     </div>
   );
