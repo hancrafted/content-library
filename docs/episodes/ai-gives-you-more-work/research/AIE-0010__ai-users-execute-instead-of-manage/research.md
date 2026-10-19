@@ -1,10 +1,13 @@
 ---
 type: research
-title: 'Why do people working with AI keep executing the work themselves instead of managing it?'
-description: 'No study measures executing versus managing; usage data show many users skip briefing and checking, and users six months in iterate more and delegate less, so "most" is unsupported, "many" is.'
+title: 'Why do people working with AI keep executing the work themselves instead
+  of managing it?'
+description: 'No study measures executing versus managing; usage data show many
+  users skip briefing and checking, and users six months in iterate more and
+  delegate less, so "most" is unsupported, "many" is.'
 generated:
-  by: claude-code/opus-5.5
-  at: 2026-10-19T00:00:00Z
+  by: claude-code/sonnet-4.6
+  at: 2026-10-19T18:27:08Z
 stale_after: 2027-04-19T00:00:00Z
 sources:
   - id: 1
@@ -12,7 +15,8 @@ sources:
     title: 'Anthropic, The AI Fluency Index (February 2026)'
   - id: 2
     resource: https://www.anthropic.com/research/anthropic-economic-index-september-2025-report
-    title: 'Anthropic, Anthropic Economic Index report: Uneven geographic and enterprise AI adoption (September 2025)'
+    title: 'Anthropic, Anthropic Economic Index report: Uneven geographic and
+      enterprise AI adoption (September 2025)'
   - id: 3
     resource: https://anthropic.com/research/anthropic-economic-index-january-2026-report
     title: 'Anthropic, Anthropic Economic Index report (January 2026)'
@@ -21,7 +25,9 @@ sources:
     title: 'Anthropic, Anthropic Economic Index report: Learning Curves (March 2026)'
   - id: 5
     resource: https://www.microsoft.com/en-us/research/uploads/prod/2025/01/lee_2025_ai_critical_thinking_survey.pdf
-    title: 'Lee et al., The Impact of Generative AI on Critical Thinking: Self-Reported Reductions in Cognitive Effort and Confidence Effects From a Survey of Knowledge Workers (CHI 2025)'
+    title: 'Lee et al., The Impact of Generative AI on Critical Thinking:
+      Self-Reported Reductions in Cognitive Effort and Confidence Effects From a
+      Survey of Knowledge Workers (CHI 2025)'
 ---
 
 # Why do people working with AI keep executing the work themselves instead of managing it?
