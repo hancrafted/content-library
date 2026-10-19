@@ -1,9 +1,10 @@
+import { BrandSymbol } from '@/components/brand-symbol';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { ROUTES } from '@/lib/routes';
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 
-/** Placeholder logo plus site name; both lead to the landing page. */
+/** Brand symbol plus site name; both lead to the landing page. */
 export async function SiteBrand({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'brand' });
   return (
@@ -13,13 +14,13 @@ export async function SiteBrand({ locale }: { locale: Locale }) {
       data-testid="brand"
       className="flex items-center gap-2.5 rounded-md outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
     >
-      <span
-        aria-hidden
-        className="grid size-8 place-items-center rounded-full bg-primary font-mono text-body font-semibold text-primary-foreground"
-      >
-        H
+      <BrandSymbol className="size-8 shrink-0" />
+      <span className="text-body font-semibold tracking-tight">
+        {t('name')}
+        <span aria-hidden className="inline-block origin-[0_72%] scale-150 text-brand-accent">
+          .
+        </span>
       </span>
-      <span className="text-body font-semibold tracking-tight">{t('name')}</span>
     </Link>
   );
 }

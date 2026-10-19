@@ -63,6 +63,30 @@ There is deliberately no global chart palette and no colour scales (`--teal-500`
 
 After the three workshop Episodes, review every Slide token file. A colour that repeats across Slides gets promoted to a global token, and the Slides switch to referencing it. Spacing follows the same path, should a Scene spacing scale ever earn its place.
 
+## Brand symbol
+
+The brand symbol is an ink coin with a hand cut out of it, four finger strokes and one thumb curve, and an accent dot in the palm. One geometry, `viewBox="0 0 100 100"`, serves every use:
+
+| Use              | File                              | Colours                                                                                  |
+| ---------------- | --------------------------------- | ---------------------------------------------------------------------------------------- |
+| Header           | `src/components/brand-symbol.tsx` | coin `var(--foreground)`, cuts `var(--background)`, dot `var(--brand-accent)`            |
+| Favicon          | `src/app/icon.svg`                | the same three as hex, light and dark through its own `prefers-color-scheme` query       |
+| Apple touch icon | `src/app/apple-icon.png`          | 180×180, rendered once from the light colours on a paper square, because iOS ignores SVG |
+
+`src/app/icon.svg` is the geometry's source of truth. The header copies its shapes, and `tests/post-build/brand-symbol.build.test.ts` fails when the two differ.
+
+A browser tab has no site theme, so the favicon follows the operating system and carries raw hex. `.svg` sits outside the FE-011 globs. When `--foreground`, `--background` or `--brand-accent` changes, update the hex in `icon.svg` and re-render `apple-icon.png` from its light colours:
+
+```sh
+sed 's/@media.*}}//' src/app/icon.svg | node -e "require('sharp')(require('fs').readFileSync(0),{density:576}).resize(180,180).flatten({background:'#fafafa'}).png().toFile('src/app/apple-icon.png')"
+```
+
+- **Minimum size:** 16 px.
+- **Clear space:** the dot's diameter on every side.
+- **Never recolour the cuts:** they are always the page colour, so the hand reads as cut out of the coin.
+- **The dot is the only accent.** The coin stays ink.
+- **Decorative in the header:** `aria-hidden`, because the site name beside it carries the accessible name.
+
 ## Type
 
 Heading level and visual size are separate. The h1/h2/h3 elements follow the Episode's spine (Episode, Section, Slide). Size comes from a **role**.
