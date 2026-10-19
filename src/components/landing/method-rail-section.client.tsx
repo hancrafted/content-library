@@ -1,10 +1,8 @@
 'use client';
 
 import { MethodProgressStepper } from '@/components/landing/method-progress-stepper.client';
-import { MethodSlideItem } from '@/components/landing/method-slide-item';
+import { MethodSlideItem, type MethodCard } from '@/components/landing/method-slide-item';
 import { useResolvedTheme } from '@/hooks/use-resolved-theme';
-import { FRAMEWORK_SLIDES } from '@/lib/framework-slides.pure';
-import type { Locale } from '@/lib/locale.pure';
 import { computeActiveStep, computeThemeColors } from '@/lib/theme-transition.pure';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
@@ -49,7 +47,15 @@ function buildRailTimeline(container: HTMLElement, track: HTMLElement, options: 
   const { startX, endX } = getRailBounds(track);
   applyThemeToContainer(container, options.progressRef.current);
 
-  const tl = gsap.timeline({
+  // The stepper and the colours follow the timeline's own progress, not the scroll position: `scrub` eases the
+  // track behind the scrollbar, and reading the scroll would run the stepper ahead of the slide on screen.
+  const tl: gsap.core.Timeline = gsap.timeline({
+    onUpdate: () => {
+      const p = tl.progress();
+      options.progressRef.current = p;
+      applyThemeToContainer(container, p);
+      options.onProgress(p);
+    },
     scrollTrigger: {
       trigger: container,
       start: 'top top',
@@ -58,11 +64,6 @@ function buildRailTimeline(container: HTMLElement, track: HTMLElement, options: 
       anticipatePin: 1,
       scrub: 0.3,
       invalidateOnRefresh: true,
-      onUpdate: (self) => {
-        options.progressRef.current = self.progress;
-        applyThemeToContainer(container, self.progress);
-        options.onProgress(self.progress);
-      },
     },
   });
   tl.fromTo(track, { x: () => startX() }, { x: () => endX(), duration: 1, ease: 'none' }, 0);
@@ -86,29 +87,32 @@ function useRailScrub(options: ScrubOptions) {
   );
 }
 
-function RailHeader({ locale }: { locale: Locale }) {
-  const title = locale === 'de' ? 'DIE METHODE' : 'THE METHOD';
-  const hint = locale === 'de' ? 'HORIZONTAL SCROLLEN →' : 'SCROLL TO PROGRESS →';
-
+function RailHeader({ title, hint }: { title: string; hint: string }) {
   return (
     <div className="absolute top-20 sm:top-24 left-0 right-0 z-20 px-8 sm:px-16 flex items-center justify-between pointer-events-none text-[var(--method-fg)]">
       <div className="font-mono text-xs font-bold tracking-widest uppercase text-primary">{title}</div>
-      <div className="font-mono text-xs opacity-60">{hint}</div>
+      <div className="font-mono text-xs uppercase opacity-60">{hint}</div>
     </div>
   );
 }
 
-function RailTrack({ locale, trackRef }: { locale: Locale; trackRef: React.RefObject<HTMLDivElement | null> }) {
+function RailTrack({
+  cards,
+  trackRef,
+}: {
+  cards: readonly MethodCard[];
+  trackRef: React.RefObject<HTMLDivElement | null>;
+}) {
   return (
     <div ref={trackRef} className="flex h-screen items-stretch w-max will-change-transform">
-      {FRAMEWORK_SLIDES.map((slide) => (
-        <MethodSlideItem key={slide.id} slide={slide} locale={locale} />
+      {cards.map((card) => (
+        <MethodSlideItem key={card.id} card={card} />
       ))}
     </div>
   );
 }
 
-function useRailState() {
+function useRailState(count: number) {
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef(0);
@@ -120,7 +124,7 @@ function useRailState() {
     trackRef,
     onProgress: (p) => {
       setProgressPercent(p * 100);
-      setStep(computeActiveStep(p));
+      setStep(computeActiveStep(p, count));
     },
     progressRef,
   });
@@ -128,8 +132,14 @@ function useRailState() {
   return { containerRef, trackRef, step, progressPercent };
 }
 
-function DesktopRail({ locale }: { locale: Locale }) {
-  const { containerRef, trackRef, step, progressPercent } = useRailState();
+interface MethodRailProps {
+  cards: readonly MethodCard[];
+  title: string;
+  hint: string;
+}
+
+function DesktopRail({ cards, title, hint }: MethodRailProps) {
+  const { containerRef, trackRef, step, progressPercent } = useRailState(cards.length);
 
   return (
     <div
@@ -138,42 +148,40 @@ function DesktopRail({ locale }: { locale: Locale }) {
       className="hidden md:block relative h-screen w-full overflow-hidden select-none"
       style={{ transition: 'none' }}
     >
-      <RailHeader locale={locale} />
-      <RailTrack locale={locale} trackRef={trackRef} />
-      <MethodProgressStepper currentStep={step} progressPercent={progressPercent} locale={locale} />
+      <RailHeader title={title} hint={hint} />
+      <RailTrack cards={cards} trackRef={trackRef} />
+      <MethodProgressStepper cards={cards} currentStep={step} progressPercent={progressPercent} />
     </div>
   );
 }
 
-function MobileStack({ locale, isDark }: { locale: Locale; isDark: boolean }) {
+function MobileStack({ cards, title, isDark }: Omit<MethodRailProps, 'hint'> & { isDark: boolean }) {
   const fg = isDark ? 'var(--foreground)' : '#F8FAFC';
   const bg = isDark ? 'var(--background)' : '#0A0E1A';
 
   return (
     <div
-      className={`md:hidden py-16 px-4 space-y-12 transition-colors ${!isDark ? 'bg-[#0A0E1A] text-[#F8FAFC]' : ''}`}
+      className={`md:hidden overflow-x-clip py-16 px-4 space-y-12 transition-colors ${!isDark ? 'bg-[#0A0E1A] text-[#F8FAFC]' : ''}`}
       style={{ '--method-fg': fg, '--method-bg': bg } as React.CSSProperties}
     >
-      <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
-        {locale === 'de' ? 'Die Methode' : 'The Method'}
-      </h2>
+      <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">{title}</h2>
       <div className="space-y-16">
-        {FRAMEWORK_SLIDES.map((slide) => (
-          <MethodSlideItem key={slide.id} slide={slide} locale={locale} />
+        {cards.map((card) => (
+          <MethodSlideItem key={card.id} card={card} />
         ))}
       </div>
     </div>
   );
 }
 
-export function MethodRailSection({ locale }: { locale: Locale }) {
+export function MethodRailSection({ cards, title, hint }: MethodRailProps) {
   const resolvedTheme = useResolvedTheme();
   const isDark = resolvedTheme === 'dark';
 
   return (
     <section className="relative" id="services">
-      <DesktopRail locale={locale} />
-      <MobileStack locale={locale} isDark={isDark} />
+      <DesktopRail cards={cards} title={title} hint={hint} />
+      <MobileStack cards={cards} title={title} isDark={isDark} />
     </section>
   );
 }

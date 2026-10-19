@@ -1,9 +1,7 @@
 'use client';
 
-import { FRAMEWORK_SLIDES, type FrameworkSlideData } from '@/lib/framework-slides.pure';
-import type { Locale } from '@/lib/locale.pure';
-
-const STEP_THRESHOLDS = [0, 26, 51, 76, 97];
+import type { MethodCard } from '@/components/landing/method-slide-item';
+import { isStepReached, stepPosition } from '@/lib/theme-transition.pure';
 
 interface NodeSymbolProps {
   isPassed: boolean;
@@ -43,25 +41,25 @@ function NodeWord({ isCurrent, word }: { isCurrent: boolean; word: string }) {
 }
 
 interface TrackNodeProps {
-  slide: FrameworkSlideData;
+  card: MethodCard;
   idx: number;
+  count: number;
   currentStep: number;
   progressPercent: number;
-  locale: Locale;
 }
 
-function TrackNode({ slide, idx, currentStep, progressPercent, locale }: TrackNodeProps) {
-  const isPassed = progressPercent >= (STEP_THRESHOLDS[idx] ?? 0);
+function TrackNode({ card, idx, count, currentStep, progressPercent }: TrackNodeProps) {
+  const isPassed = isStepReached(progressPercent / 100, idx, count);
   const isCurrent = currentStep === idx + 1;
-  const leftPercent = (idx / (FRAMEWORK_SLIDES.length - 1)) * 100;
+  const leftPercent = stepPosition(idx, count) * 100;
 
   return (
     <div
       className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col items-center z-10"
       style={{ left: `${leftPercent}%` }}
     >
-      <NodeSymbol isPassed={isPassed} isCurrent={isCurrent} letter={slide.letter[locale]} />
-      <NodeWord isCurrent={isCurrent} word={slide.phase[locale]} />
+      <NodeSymbol isPassed={isPassed} isCurrent={isCurrent} letter={card.letter} />
+      <NodeWord isCurrent={isCurrent} word={card.title} />
     </div>
   );
 }
@@ -81,12 +79,12 @@ function TrackBackground({ progressPercent }: { progressPercent: number }) {
 }
 
 interface MethodProgressStepperProps {
+  cards: readonly MethodCard[];
   currentStep: number;
   progressPercent: number;
-  locale: Locale;
 }
 
-export function MethodProgressStepper({ currentStep, progressPercent, locale }: MethodProgressStepperProps) {
+export function MethodProgressStepper({ cards, currentStep, progressPercent }: MethodProgressStepperProps) {
   const formattedPercent = String(Math.round(progressPercent)).padStart(3, '0');
 
   return (
@@ -96,14 +94,14 @@ export function MethodProgressStepper({ currentStep, progressPercent, locale }: 
     >
       <div className="relative w-[240px] sm:w-[340px] md:w-[420px] max-w-[85vw] h-14 sm:h-16 flex items-center pointer-events-auto">
         <TrackBackground progressPercent={progressPercent} />
-        {FRAMEWORK_SLIDES.map((slide, idx) => (
+        {cards.map((card, idx) => (
           <TrackNode
-            key={slide.id}
-            slide={slide}
+            key={card.id}
+            card={card}
             idx={idx}
+            count={cards.length}
             currentStep={currentStep}
             progressPercent={progressPercent}
-            locale={locale}
           />
         ))}
       </div>
