@@ -23,9 +23,6 @@ sources:
     resource: https://arxiv.org/abs/2410.13788
     title: 'Zhang et al., Modeling Future Conversation Turns to Teach LLMs to Ask
       Clarifying Questions'
-verified:
-  - by: process:markdown-harness
-    at: 2026-10-19T13:57:45Z
 ---
 
 # Why do LLMs answer confidently instead of asking when a prompt is vague?
