@@ -49,7 +49,7 @@ const COMPOSITION = [
     // Section openers only until each Section job adds its page Slides at its placement marker.
     slug: 'onboard-ai-every-time',
     sections: [
-      { opener: 'the-thought-experiment', pageSlides: 0 },
+      { opener: 'the-thought-experiment', pageSlides: 2 },
       { opener: 'five-moves-to-brief-a-freelancer', pageSlides: 0 },
       { opener: 'brief-in-action', pageSlides: 0 },
     ],

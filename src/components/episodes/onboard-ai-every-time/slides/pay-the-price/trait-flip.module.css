@@ -1,0 +1,506 @@
+/*
+ * The trait flip, ported from the prototype (.scratch/freelancer-trait-flip/style2.css and build2.py's scan schedule).
+ * The static rules are each back's last frame, so rest, print and reduced motion show the end state; the beat plays
+ * only under `.isPlaying`, which the client sets while a row is open (the rules live in trait-flip.pure.ts).
+ */
+.card {
+  perspective: 1400px;
+  display: flex;
+  min-width: 0;
+}
+.flip {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  flex: 1;
+  min-width: 0;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+.front,
+.back {
+  grid-area: 1 / 1;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.back {
+  position: relative;
+  overflow-x: clip;
+  transform: rotateY(180deg);
+}
+.back::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--card);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.6s ease-in-out;
+}
+.isOpen .flip,
+.isWiping .flip {
+  transform: rotateY(180deg);
+}
+.isBlank .back::after {
+  transform: scaleX(1);
+}
+.anim {
+  flex: 0 1 12.5rem;
+  min-width: 0;
+  height: auto;
+  aspect-ratio: 200 / 72;
+  overflow: visible;
+}
+.anim * {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.chip {
+  cursor: pointer;
+  transition: box-shadow 0.3s;
+}
+.isOpen .chip {
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--ai) 35%, transparent);
+}
+.footer {
+  cursor: pointer;
+}
+.footer:hover,
+.footer:focus-visible {
+  background: var(--muted);
+}
+.arrow {
+  transition: transform 0.5s ease-in-out;
+}
+.arrowLeft {
+  transform-origin: right;
+}
+.arrowRight {
+  transform-origin: left;
+}
+.isBlank .arrow {
+  transform: scaleX(0);
+}
+
+/* end states */
+.out,
+.fly,
+.scan,
+.v0,
+.v1,
+.v2,
+.v3,
+.v4,
+.v5,
+.v6,
+.v7,
+.v8,
+.v9,
+.v10 {
+  opacity: 0;
+}
+.vLast {
+  opacity: 1;
+}
+.misfit {
+  transform: rotate(12deg);
+}
+.redact {
+  transform-origin: left;
+}
+.spin {
+  transform-box: view-box;
+  transform-origin: 0 0;
+}
+
+/* the played beat; the clock is the one loop, running only while its row is open (FE-009 §6) */
+.isOpen .spin {
+  animation: spin 2s linear infinite;
+}
+.isPlaying .arrow path {
+  animation: draw 0.5s ease-out both;
+}
+.isPlaying .drop {
+  animation: drop 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: var(--d);
+}
+.isPlaying .out {
+  animation: out 0.3s ease-in both;
+  animation-delay: var(--d);
+}
+.isPlaying .fly {
+  animation: fly 0.8s ease-in both;
+  animation-delay: var(--d);
+}
+.isPlaying .pop {
+  animation: pop 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: var(--d);
+}
+.isPlaying .enter {
+  animation: enter 0.45s ease-out both;
+  animation-delay: var(--d);
+}
+.isPlaying .glow {
+  animation: enter 0.45s ease-out 1.2s both;
+}
+.isPlaying .ban {
+  animation: ban 0.35s ease-out both;
+  animation-delay: var(--d);
+}
+.isPlaying .redact {
+  animation: redact 0.35s ease-out both;
+  animation-delay: var(--d);
+}
+.isPlaying .misfit {
+  animation: misfit 0.7s ease-out both;
+  animation-delay: var(--d);
+}
+.isPlaying .draw {
+  animation: draw var(--t) ease-in-out both;
+  animation-delay: var(--d);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes drop {
+  from {
+    opacity: 0;
+    transform: translateY(-14px);
+  }
+}
+@keyframes out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes fly {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  85% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translate(var(--tx), var(--ty)) scale(var(--s, 0.2));
+  }
+}
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translateX(var(--fx)) scale(0);
+  }
+}
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.92);
+  }
+}
+@keyframes ban {
+  from {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+@keyframes redact {
+  from {
+    transform: scaleX(0);
+  }
+}
+@keyframes misfit {
+  0% {
+    opacity: 0;
+    transform: translateY(-26px) rotate(0deg);
+  }
+  65% {
+    opacity: 1;
+    transform: translateY(2px) rotate(16deg);
+  }
+  100% {
+    transform: rotate(12deg);
+  }
+}
+
+/* Every word billed: the scan line's schedule, 7.2 s, and the bill or token count stepping per item it crosses */
+@keyframes scan {
+  0% {
+    opacity: 0;
+    transform: translateY(54.5px);
+  }
+  7.5% {
+    opacity: 0;
+    transform: translateY(54.5px);
+  }
+  7.64% {
+    opacity: 1;
+    transform: translateY(54.5px);
+  }
+  13.47% {
+    opacity: 1;
+    transform: translateY(66.5px);
+  }
+  13.61% {
+    opacity: 0;
+    transform: translateY(66.5px);
+  }
+  22.36% {
+    opacity: 0;
+    transform: translateY(66.5px);
+  }
+  22.5% {
+    opacity: 1;
+    transform: translateY(66.5px);
+  }
+  34.17% {
+    opacity: 1;
+    transform: translateY(41.5px);
+  }
+  34.31% {
+    opacity: 0;
+    transform: translateY(41.5px);
+  }
+  43.06% {
+    opacity: 0;
+    transform: translateY(28.5px);
+  }
+  43.19% {
+    opacity: 1;
+    transform: translateY(28.5px);
+  }
+  60.69% {
+    opacity: 1;
+    transform: translateY(66.5px);
+  }
+  60.83% {
+    opacity: 0;
+    transform: translateY(66.5px);
+  }
+  69.58% {
+    opacity: 0;
+    transform: translateY(66.5px);
+  }
+  69.72% {
+    opacity: 1;
+    transform: translateY(66.5px);
+  }
+  93.06% {
+    opacity: 1;
+    transform: translateY(15.5px);
+  }
+  93.19% {
+    opacity: 0;
+    transform: translateY(15.5px);
+  }
+}
+.isPlaying .scan {
+  animation: scan 7.2s linear both;
+}
+@keyframes v0 {
+  0% {
+    opacity: 1;
+  }
+  10.56% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes v1 {
+  0% {
+    opacity: 0;
+  }
+  10.56% {
+    opacity: 1;
+  }
+  25.42% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes v2 {
+  0% {
+    opacity: 0;
+  }
+  25.42% {
+    opacity: 1;
+  }
+  31.25% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes v3 {
+  0% {
+    opacity: 0;
+  }
+  31.25% {
+    opacity: 1;
+  }
+  46.11% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes v4 {
+  0% {
+    opacity: 0;
+  }
+  46.11% {
+    opacity: 1;
+  }
+  51.94% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes v5 {
+  0% {
+    opacity: 0;
+  }
+  51.94% {
+    opacity: 1;
+  }
+  57.78% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes v6 {
+  0% {
+    opacity: 0;
+  }
+  57.78% {
+    opacity: 1;
+  }
+  72.64% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes v7 {
+  0% {
+    opacity: 0;
+  }
+  72.64% {
+    opacity: 1;
+  }
+  78.47% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes v8 {
+  0% {
+    opacity: 0;
+  }
+  78.47% {
+    opacity: 1;
+  }
+  84.31% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes v9 {
+  0% {
+    opacity: 0;
+  }
+  84.31% {
+    opacity: 1;
+  }
+  90.14% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes v10 {
+  0% {
+    opacity: 0;
+  }
+  90.14% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.isPlaying .v0 {
+  animation: v0 7.2s step-end both;
+}
+.isPlaying .v1 {
+  animation: v1 7.2s step-end both;
+}
+.isPlaying .v2 {
+  animation: v2 7.2s step-end both;
+}
+.isPlaying .v3 {
+  animation: v3 7.2s step-end both;
+}
+.isPlaying .v4 {
+  animation: v4 7.2s step-end both;
+}
+.isPlaying .v5 {
+  animation: v5 7.2s step-end both;
+}
+.isPlaying .v6 {
+  animation: v6 7.2s step-end both;
+}
+.isPlaying .v7 {
+  animation: v7 7.2s step-end both;
+}
+.isPlaying .v8 {
+  animation: v8 7.2s step-end both;
+}
+.isPlaying .v9 {
+  animation: v9 7.2s step-end both;
+}
+.isPlaying .v10 {
+  animation: v10 7.2s step-end both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flip,
+  .arrow,
+  .back::after,
+  .chip {
+    transition: none;
+  }
+  .root * {
+    animation: none !important;
+  }
+}
