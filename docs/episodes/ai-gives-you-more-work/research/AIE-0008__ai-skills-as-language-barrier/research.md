@@ -1,21 +1,26 @@
 ---
 type: research
-title: 'Why does Matt Pocock describe the skills for working with AI as a language barrier?'
-description: 'Pocock names a communication barrier between a person and an AI agent, caused by differing vocabulary, and answers it with shared-language and questioning skills.'
+title: 'Why does Matt Pocock describe the skills for working with AI as a
+  language barrier?'
+description: 'Pocock names a communication barrier between a person and an AI
+  agent, caused by differing vocabulary, and answers it with shared-language and
+  questioning skills.'
 generated:
-  by: claude-code/sonnet-5.5
-  at: 2026-10-19T00:00:00Z
+  by: claude-code/sonnet-4.6
+  at: 2026-10-19T18:27:29Z
 stale_after: 2027-04-19T00:00:00Z
 sources:
   - id: 1
     resource: https://ai.engineer/talks/v4F1gFy-hqg-software-fundamentals-for-ai-coding
-    title: 'Matt Pocock, Software Fundamentals Matter More Than Ever (AI Engineer Europe 2026)'
+    title: 'Matt Pocock, Software Fundamentals Matter More Than Ever (AI Engineer
+      Europe 2026)'
   - id: 2
     resource: https://github.com/mattpocock/skills
     title: 'Matt Pocock, Skills for Real Engineers (mattpocock/skills README)'
   - id: 3
     resource: https://podscripts.co/podcasts/the-pragmatic-engineer/ai-skills-with-matt-pocock
-    title: 'Gergely Orosz and Matt Pocock, AI Skills with Matt Pocock (The Pragmatic Engineer, transcript)'
+    title: 'Gergely Orosz and Matt Pocock, AI Skills with Matt Pocock (The Pragmatic
+      Engineer, transcript)'
 ---
 
 # Why does Matt Pocock describe the skills for working with AI as a language barrier?
