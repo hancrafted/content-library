@@ -42,7 +42,7 @@ function SlideHeader({ card }: { card: MethodCard }) {
 
       <h2 className="font-extrabold leading-[0.95] tracking-tight text-balance text-3xl sm:text-5xl md:text-6xl lg:text-7xl text-[var(--method-fg)]">
         <span>{card.title}</span>
-        <span className="text-primary">.</span>
+        <span className="text-brand-accent">.</span>
       </h2>
     </div>
   );
