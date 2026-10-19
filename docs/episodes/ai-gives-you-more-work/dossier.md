@@ -4,12 +4,14 @@ title: 'Will AI reduce your work? It adds work: managing it.'
 status: draft
 generated:
   by: claude-code/opus-5.5
-  at: 2026-10-19T18:44:20Z
+  at: 2026-10-19T18:50:18Z
 locale: en
 brief: ./brief.md
 verified:
   - by: process:markdown-harness
     at: 2026-10-19T18:44:20Z
+  - by: process:markdown-harness
+    at: 2026-10-19T18:50:18Z
 ---
 
 # Will AI reduce your work? It adds work: managing it. {#will-ai-reduce-your-work}
