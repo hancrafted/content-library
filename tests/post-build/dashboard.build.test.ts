@@ -2,7 +2,7 @@ import { load } from 'cheerio';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { exportedFile, OUT_DIR } from './exported-pages';
+import { exportedFile, exportedPage, OUT_DIR } from './exported-pages';
 
 describe('dashboard static contract', () => {
   it('exports an English-only read-only picker page with honest navigation and metadata', () => {
@@ -47,10 +47,9 @@ describe('dashboard static contract', () => {
 
   it('keeps the dashboard out of the German header', () => {
     // ARRANGE
-    const file = join(OUT_DIR, exportedFile('/de'));
     const expectedNavCount = 0;
     // ACT
-    const $ = load(readFileSync(file, 'utf8'));
+    const $ = exportedPage('/de');
     // ASSERT
     expect($('[data-testid="nav-dashboard"]').length).toBe(expectedNavCount);
     expect($('a[href*="/de/dashboard"]').length).toBe(expectedNavCount);

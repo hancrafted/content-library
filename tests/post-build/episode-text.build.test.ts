@@ -6,7 +6,6 @@
 // once from the build before anything moved; a page without one gets it written
 // and fails, so the capture is reviewed and committed, never silently accepted.
 
-import { load } from 'cheerio';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { format, resolveConfig } from 'prettier';
@@ -14,7 +13,7 @@ import { describe, expect, it } from 'vitest';
 import { LOCALES, localizePath } from '../../src/lib/locale.pure';
 import { EPISODE_SLUGS, episodeRoute } from '../../src/lib/routes';
 import { episodeText, type EpisodeText } from './episode-text';
-import { exportedFile, OUT_DIR } from './exported-pages';
+import { exportedPage } from './exported-pages';
 
 const PAGES = EPISODE_SLUGS.flatMap((slug) =>
   LOCALES.map((locale) => ({ slug, locale, url: localizePath(episodeRoute(slug), locale) })),
@@ -27,12 +26,12 @@ const EPISODES_DIR = join(import.meta.dirname, '..', '..', 'src', 'components', 
 const RAW_KEY = /\b(?:episodes|landing|contextDrawer|tableOfContents|talkPlayer)\.[a-z0-9-]+\.[A-Za-z0-9.-]+/;
 
 function builtText(url: string): EpisodeText {
-  return episodeText(load(readFileSync(join(OUT_DIR, exportedFile(url)), 'utf8')));
+  return episodeText(exportedPage(url));
 }
 
 /** Whether the exported page asks search engines not to index it: an upcoming Episode's page does. */
 function isNoindex(url: string): boolean {
-  const page = load(readFileSync(join(OUT_DIR, exportedFile(url)), 'utf8'));
+  const page = exportedPage(url);
   return (page('meta[name="robots"]').attr('content') ?? '').includes('noindex');
 }
 

@@ -3,14 +3,13 @@
 // role, a page slide's title in the subheading role; and no stylesheet styles
 // by Episode (`[data-episode=…]`), since roles are the only way a size differs.
 
-import { load, type CheerioAPI } from 'cheerio';
+import { type CheerioAPI } from 'cheerio';
 import { existsSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
 import legacy from '../../src/design-system/legacy.json';
 import { LOCALES, localizePath } from '../../src/lib/locale.pure';
 import { EPISODE_SLUGS, episodeRoute } from '../../src/lib/routes';
-import { exportedFile, OUT_DIR } from './exported-pages';
+import { exportedPage, OUT_DIR } from './exported-pages';
 import { cssFiles } from './stylesheets';
 
 /** Episodes whose files predate the token rules (FE-011 §6): their own `[data-episode=…]` palette is exempt until migrated. */
@@ -24,10 +23,6 @@ function episodeSelectors(css: string): string[] {
 const EPISODE_PAGES = EPISODE_SLUGS.flatMap((slug) =>
   LOCALES.map((locale) => ({ url: localizePath(episodeRoute(slug), locale) })),
 );
-
-function page(url: string): CheerioAPI {
-  return load(readFileSync(join(OUT_DIR, exportedFile(url)), 'utf8'));
-}
 
 function classesOf($: CheerioAPI, elements: readonly unknown[]): string[][] {
   return elements.map((element) => ($(element as never).attr('class') ?? '').split(/\s+/));
@@ -58,7 +53,7 @@ describe('type roles in the export', () => {
     it.each(EPISODE_PAGES)('puts the h1 of $url in the hero role', ({ url }) => {
       // ARRANGE
       const hero = 'text-hero';
-      const $ = page(url);
+      const $ = exportedPage(url);
       // ACT
       const titles = classesOf($, $('h1').toArray());
       // ASSERT
@@ -70,7 +65,7 @@ describe('type roles in the export', () => {
       // ARRANGE
       const heading = 'text-heading';
       // ACT
-      const titles = titleClasses(page(url), 'section', 'h2');
+      const titles = titleClasses(exportedPage(url), 'section', 'h2');
       // ASSERT
       expect(titles.length).toBeGreaterThan(0);
       for (const own of titles) expect(own).toContain(heading);
@@ -80,7 +75,7 @@ describe('type roles in the export', () => {
       // ARRANGE
       const subheading = 'text-subheading';
       // ACT
-      const titles = titleClasses(page(url), 'page', 'h3');
+      const titles = titleClasses(exportedPage(url), 'page', 'h3');
       // ASSERT
       for (const own of titles) expect(own).toContain(subheading);
     });
