@@ -59,12 +59,12 @@ describe('brand symbol', () => {
   it.each(EXPORTED_PAGES)('$url renders the brand symbol beside the name in the header brand', ({ url }) => {
     // ARRANGE
     const $ = exportedPage(url);
-    const siteName = 'hancrafted';
+    const wordmark = 'hancrafted.';
     // ACT
     const brand = $('[data-testid="brand"]');
     const symbols = brand.find('svg[data-testid="brand-symbol"][aria-hidden="true"]');
     // ASSERT
     expect(symbols).toHaveLength(1);
-    expect(brand.text().trim()).toBe(siteName);
+    expect(brand.text().trim()).toBe(wordmark);
   });
 });

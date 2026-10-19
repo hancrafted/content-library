@@ -6,7 +6,7 @@
 export function BrandSymbol({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false" data-testid="brand-symbol" className={className}>
-      <circle cx="50" cy="50" r="45" fill="var(--foreground)" />
+      <circle cx="50" cy="50" r="50" fill="var(--foreground)" />
       <g fill="none" stroke="var(--background)" strokeWidth="10" strokeLinecap="round" strokeLinejoin="round">
         <path d="M36 64V32" />
         <path d="M50 64V22" />
