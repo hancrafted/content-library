@@ -1,6 +1,6 @@
 ---
 type: dossier
-title: Will AI reduce your work? It promotes you.
+title: 'Will AI reduce your work? It adds work: managing it.'
 status: draft
 generated:
   by: claude-code/sonnet-5.5
@@ -9,7 +9,7 @@ locale: en
 brief: ./brief.md
 ---
 
-# Will AI reduce your work? It promotes you. {#will-ai-reduce-your-work}
+# Will AI reduce your work? It adds work: managing it. {#will-ai-reduce-your-work}
 
 ## From execution to management {#from-execution-to-management}
 
@@ -29,7 +29,7 @@ A row of cards for farming, the steam engine and the computer, followed by a muc
 
 #### Speaker notes
 
-1. **A cheaper unit does not mean less total work** — when Watt's engine used less coal per ton of iron, total coal use in Scotland still rose about tenfold [1].
+1. **A cheaper unit does not mean less total work** — Jevons argued Watt's inventions economised heat and that further improvement would accelerate coal use; separately, in Scotland coal per ton of iron fell to under a third while total consumption rose about tenfold [1].
    - sources: [1] Jevons, The Coal Question (1865) — https://www.econlib.org/library/YPDBooks/Jevons/jvnCQ.html
 2. **The tool lifts the tasks left to people** — when ATMs quadrupled, tellers per branch fell by more than a third, yet branches rose by more than 40 percent and tellers moved towards relationship banking [2].
    - sources: [2] Autor, Why Are There Still So Many Jobs? The History and Future of Workplace Automation — https://www.aeaweb.org/articles?id=10.1257/jep.29.3.3
@@ -102,7 +102,7 @@ Three rows, each pairing a moment at work with its AI equivalent. At rest only t
 
 #### Speaker notes
 
-1. **Briefing, context and checking are the discipline** — effective delegation to AI rests on briefing, supplying context and verifying the result; the novice-boost studies measure bounded tasks inside the model's competence, not that discipline [3].
+1. **Briefing, context and checking are the discipline** — Dell'Acqua [3] finds AI helps less experienced people on bounded tasks inside the model's competence; that effective delegation rests on briefing, supplying context and verifying is this project's inference from the research file, not a finding of the study.
    - sources: [3] Dell'Acqua et al., Navigating the Jagged Technological Frontier, HBS Working Paper 24-013, September 2023 (SSRN 4573321) — https://mitsloan.mit.edu/sites/default/files/2023-10/SSRN-id4573321.pdf
    - target: all three rows
 2. **A new AI session is a new contributor** — experienced developers described AI as a new contributor lacking tacit knowledge of the repository, which is hard to hand over as context, and spent about 9 percent of their time reviewing and cleaning its output [7].
