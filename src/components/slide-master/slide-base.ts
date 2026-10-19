@@ -40,8 +40,15 @@ export interface SegmentSpec<G extends string = string> {
 /** The Slide's heading at the level its position gives it (FE-002 §4), marked as the `title` target. */
 export type TitleComponent = (props: { children: ReactNode }) => ReactElement;
 
-/** A Context marker on an element, naming one of the Slide's notes; `className` places it (default: the top-right corner). */
-export type MarkerComponent<N extends string = string> = (props: { note: N; className?: string }) => ReactElement;
+/**
+ * A Context marker on an element, naming one of the Slide's notes: in the element's top-right corner (the default,
+ * `className` may move it), or `beside` a label, in its flow.
+ */
+export type MarkerComponent<N extends string = string> = (props: {
+  note: N;
+  placement?: 'element' | 'beside';
+  className?: string;
+}) => ReactElement;
 
 /** What a `<tag>` in `t.rich` calls: wraps the tagged chunks. */
 export type RichTag = (chunks: ReactNode) => ReactNode;

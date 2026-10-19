@@ -59,17 +59,35 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('sits in its element’s top-right corner by default, and takes the caller’s position instead', () => {
+  it('sits in its element’s top-right corner by default, and in the flow of a label when placed beside it', () => {
     // ARRANGE
     const corner = ['absolute', 'top-2', 'right-2'];
-    const beside = 'ml-1';
-    const fixed = 'absolute';
+    const inFlow = 'relative';
     // ACT
     const fallback = classesOf(render({ note: 'n', label: 'l' }));
-    const placed = classesOf(render({ note: 'n', label: 'l', className: `static ${beside}` }));
+    const beside = classesOf(render({ note: 'n', label: 'l', placement: 'beside' }));
     // ASSERT
     expect(fallback).toEqual(expect.arrayContaining(corner));
-    expect(placed).toContain(beside);
-    expect(placed).not.toContain(fixed);
+    expect(beside).toContain(inFlow);
+    expect(beside).not.toEqual(expect.arrayContaining(corner));
+  });
+
+  it('keeps its hit area on itself when a caller sets it static, so it never covers the Slide around it', () => {
+    // ARRANGE: the hit area is an absolute pseudo-element, so a static button would let it span the nearest positioned ancestor.
+    const positioned = 'relative';
+    const spacing = 'ml-1';
+    const unpositioned = 'static';
+    // ACT
+    const placed = [
+      { className: `static ${spacing}` },
+      { className: `md:static ${spacing}` },
+      { className: `static ${spacing}`, placement: 'beside' as const },
+      { className: `!static ${spacing}`, placement: 'inline' as const },
+    ].map((props) => classesOf(render({ note: 'n', label: 'l', ...props })));
+    // ASSERT
+    for (const classes of placed) {
+      expect(classes).toEqual(expect.arrayContaining([positioned, spacing]));
+      expect(classes.filter((name) => name.endsWith(unpositioned))).toEqual([]);
+    }
   });
 });
