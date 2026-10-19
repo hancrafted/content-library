@@ -8,6 +8,8 @@ generated:
 verified:
   - by: process:markdown-harness
     at: 2026-10-19T13:41:23Z
+  - by: human:han
+    at: 2026-10-19T13:43:36Z
 ---
 
 # Treat AI like a brilliant freelancer with amnesia
