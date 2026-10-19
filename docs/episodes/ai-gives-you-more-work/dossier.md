@@ -18,9 +18,9 @@ verified:
 
 #### Voice script
 
-1. **The question** — people ask: will AI reduce my work, speed it up; picture a colleague asking you this over coffee
-2. **The reframe** — faulty premise; AI adds work, because you can now do far more complex tasks; managing them is the work it adds
-3. **The payoff** — you accomplish much more, if you upskill and learn to manage AI like a team; today is the chance
+1. **The question** — Imagine a colleague asks you over coffee: will AI reduce my work? Will it speed things up, so that by next year I do less? It is a fair question, and almost everybody starting out with AI asks it.
+2. **The reframe** — But the question rests on a faulty premise, because it assumes the tasks stay the same size. They don't. With AI you can now take on far more complex tasks than you could alone, and managing those tasks is the work AI adds.
+3. **The payoff** — So the better question is what you can now do. You accomplish much more, if you are willing to upskill and learn to manage AI like a team, and today is the chance to start moving in that direction.
 
 ### Every revolution, one card {#every-revolution-one-card}
 
@@ -60,11 +60,11 @@ A row of cards for farming, the steam engine and the computer, followed by a muc
 
 #### Voice script
 
-1. **Every revolution, one card** — plough, steam engine, computer; machine takes the predictable work, people move to judging, deciding, coordinating
-2. **The climb** — lower layer card by card; farmer plans the harvest, worker plans the line; each time you move up
-3. **The fork, no judgment** — some who took up managing the machines moved up, others stayed on the line, nothing wrong with that; seismic shifts open the door
-4. **Now it thinks** — first tool that does part of the unpredictable work itself: language, reasoning, creativity, brainstorming; you manage something that thinks
-5. **Biggest step** — one person does tasks that needed a whole team; AI card biggest; fork left open, my hypothesis it opens again
+1. **Every revolution, one card** — To see why, look at the three machines you already know: the plough, the steam engine and the computer. Each one took over the predictable work, the lifting, the digging, the calculating, and people moved to the part a machine could not do, which is judging, deciding and coordinating.
+2. **The climb** — Now watch what happens under each card. The plough digs, so the farmer plans the harvest. The engine does the lifting, so the worker plans the line. Every time, the machine did more, and you moved up a level, which means the work did not disappear, it changed.
+3. **The fork, no judgment** — Here is where it forks, and I want to say it without judgment. Some of the people who took up managing the new machines moved up, and others stayed on the line, and there is nothing wrong with either. What matters is that a seismic shift opens that door.
+4. **Now it thinks** — What is different now is that AI is the first tool that does part of the unpredictable work itself. It works in natural language, it reasons, it is creative, it brainstorms, so for the first time you are managing something that thinks.
+5. **Biggest step** — That is the biggest step on the wall, because one person can now do tasks that used to need a whole team. The fork under the AI card is still open, and this next part is my hypothesis: it opens again, for anyone who wants to step through it.
 
 ### You were promoted {#you-were-promoted}
 
@@ -90,10 +90,10 @@ A person standing in an "execution" box on the left and a "management" box on th
 
 #### Voice script
 
-1. **You were promoted** — AI moves you from doing to managing; the work does not shrink, it changes
-2. **The misalignment** — biggest one today; many of us still act as if we do the work, not manage it
-3. **Four stepping stones** — break it down, clear goals, review, delegate; you already know them from people
-4. **The barrier** — you and the AI do not share a vocabulary; naming the gap is the first step across it
+1. **You were promoted** — So here is the way to read it. AI promotes you. You move from doing the work to managing the work, and the work doesn't shrink, it changes, so that you can do things that were out of reach before.
+2. **The misalignment** — That move has a gap, and it is the biggest misalignment people face today. Many of us still sit in the execution box, acting as if we do the work ourselves, when the new job is to manage it.
+3. **Four stepping stones** — The way across is four stepping stones: break it down, write clear goals, review, and delegate. Notice that none of these is a technical skill, you already know them from working with people, and each one makes you more confident with what comes back.
+4. **The barrier** — And there is a reason the gap is real. You and the AI do not share a vocabulary, so what is obvious to you is invisible to it. Naming that gap is the first step across it, because a shared language is something you can build.
 
 ### Practise it today, at work {#practise-it-today-at-work}
 
@@ -120,11 +120,11 @@ Three rows, each pairing a moment at work with its AI equivalent. At rest only t
 
 #### Voice script
 
-1. **Practise on people** — these skills work on colleagues today, so people skills become AI skills
-2. **The handoff** — before a vacation, or any handoff: proper handoff with enough context; same as a new chat with context
-3. **The new teammate** — onboarding a new team member is opening a new AI session; nothing carries over unless you say it
-4. **Chunks and seams** — big project: smaller chunks, define the seams between them so each task feeds the overall goal
-5. **An invitation** — more complex projects now within reach; not a burden, a chance to grow; which row will you start with
+1. **Practise on people** — The good news is that you don't have to wait for a new tool to practise this. You can practise on people, today, at work, so the people skills you already have become your AI skills.
+2. **The handoff** — Take the handoff. Next time you hand work to a colleague, before a vacation or any other time, give them a proper handoff with enough context to carry on without you. That is the same move as starting a new chat with the context in it.
+3. **The new teammate** — Or take the new teammate. When you onboard someone, treat it like opening a new AI session: nothing carries over unless you say it, so tell them what you would tell the AI.
+4. **Chunks and seams** — Then the big project. When you get a complex one, break it into smaller chunks and define the seams between them, so that each task contributes to the overall goal. Do that, and you can hand the chunks to people or to AI, and stay prolific without losing the thread.
+5. **An invitation** — Which brings it back to our coffee question. More complex projects are now within reach, which is not a burden, it is an invitation to grow, so which of these three rows will you start with this week?
 
 ## Material left out
 
