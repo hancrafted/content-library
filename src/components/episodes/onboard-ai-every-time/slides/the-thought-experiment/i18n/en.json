@@ -1,0 +1,32 @@
+{
+  "title": "The thought experiment",
+  "newHire": {
+    "job": "New hire · You",
+    "day": "Day 1"
+  },
+  "questionsLabel": "The questions a new hire needs answered",
+  "questions": {
+    "budget": "Budget?",
+    "signOff": "Who signs off?",
+    "lastTime": "What went wrong last time?"
+  },
+  "voiceScript": {
+    "segments": {
+      "hook-new-job": {
+        "title": "Hook, new job",
+        "keywords": "",
+        "script": "Imagine you start a new job. New environment, new culture, new tools, and on your first week someone hands you a task: organise next year's summer party for 200 employees, spread across Europe. (pause) Before you book anything, picture every question you would need answered to do that well, because you are about to hear how many there are."
+      },
+      "what-this-is-and-is-not": {
+        "title": "What this is, and is not",
+        "keywords": "",
+        "script": "This is episode one of three on working with AI in an agentic way, and it is built as the reference the later videos point back to. I will use plain words and no jargon, because you do not need to know how AI works inside to get reliable results from it. One thing I leave out on purpose: the context and memory features of ChatGPT and similar tools. They deserve their own episode, the one on attention span, so we keep them out of this one."
+      },
+      "where-it-goes": {
+        "title": "Where it goes",
+        "keywords": "",
+        "script": "Here is the point of the next ten minutes: everything you just pictured, the questions, the history, the unwritten rules, is what AI needs from you too, because what is good for a human is also good for AI. So we take it in two steps, two cornerstones. First, who you are really handing the work to, and then what you give them so the work comes back right."
+      }
+    }
+  }
+}

@@ -4,6 +4,7 @@ import { isEpisodeSlug, type EpisodeSlug } from '@/lib/routes';
 import { episodeMetadata as aiTokenEconomy } from './ai-token-economy/episode-metadata';
 import { episodeMetadata as maintainingMarkdownForAi } from './maintaining-markdown-for-ai/episode-metadata';
 import { episodeMetadata as neverTooEarlySales } from './never-too-early-sales/episode-metadata';
+import { episodeMetadata as onboardAiEveryTime } from './onboard-ai-every-time/episode-metadata';
 
 /*
  * The Episode overview's read API (#40): every Episode's own metadata,
@@ -21,6 +22,7 @@ const REGISTERED = {
   'maintaining-markdown-for-ai': maintainingMarkdownForAi,
   'ai-token-economy': aiTokenEconomy,
   'never-too-early-sales': neverTooEarlySales,
+  'onboard-ai-every-time': onboardAiEveryTime,
 } as const satisfies { readonly [S in ListedEpisodeSlug]: EpisodeMetadata & { readonly slug: S } };
 
 /** The slugs whose metadata says `published`. */

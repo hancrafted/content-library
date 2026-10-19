@@ -1,0 +1,24 @@
+{
+  "title": "Five moves to brief a freelancer",
+  "aiBadge": {
+    "job": "AI",
+    "day": "Day 1"
+  },
+  "movesLabel": "The brief clipped to the badge",
+  "moves": {
+    "break": "<initial>B</initial>reak it down",
+    "requirements": "<initial>R</initial>equirements first",
+    "interview": "<initial>I</initial>nterview yourself",
+    "evaluate": "<initial>E</initial>valuate each step",
+    "fresh": "<initial>F</initial>resh start"
+  },
+  "voiceScript": {
+    "segments": {
+      "answer-to-the-traits": {
+        "title": "Answer to the traits",
+        "keywords": "",
+        "script": "Five traits cost you. The good news is that you can answer each of them, with five moves, and the first letters spell BRIEF. That is the second cornerstone."
+      }
+    }
+  }
+}

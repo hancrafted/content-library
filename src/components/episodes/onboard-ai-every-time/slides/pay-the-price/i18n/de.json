@@ -1,0 +1,188 @@
+{
+  "title": "Fünf Eigenschaften, oder du zahlst den PRICE",
+  "heading": "Ein brillanter Freelancer mit Amnesie, jedes Mal",
+  "caption": "Fünf Eigenschaften, die du steuern musst, sonst zahlst du den PRICE.",
+  "columns": {
+    "freelancer": "Der Freelancer",
+    "traits": "Fünf Eigenschaften",
+    "ai": "KI"
+  },
+  "traits": {
+    "probabilistic": {
+      "name": "Probabilistic",
+      "back": "Jedes Mal ein anderes Ergebnis",
+      "freelancer": "Gib einem neuen Freelancer dasselbe Briefing, und du bekommst einen anderen Plan.",
+      "ai": "<marker>Gib denselben Prompt in einem neuen Chat ein, und du bekommst eine andere Antwort.</marker>",
+      "popover": "Dasselbe Briefing kann jedes Mal anders zurückkommen. Gewählt wird eine wahrscheinliche Antwort, keine feste, also ist ein gutes Ergebnis kein Versprechen."
+    },
+    "relentless": {
+      "name": "Relentless",
+      "back": "Viel Output, unklare Qualität",
+      "freelancer": "Gib den Auftrag ab, und er arbeitet Tag und Nacht und liefert Stapel polierter Seiten, ob sie stimmen oder nicht.",
+      "ai": "<marker>Schick den Prompt ab, und sie liefert Seiten in Sekunden, so viele du willst, ob sie stimmen oder nicht.</marker>",
+      "popover": "Seiten kommen schnell und poliert, ob sie stimmen oder nicht. Es gibt viel zu lesen, und alles muss geprüft werden."
+    },
+    "informed": {
+      "name": "Informed",
+      "back": "Weiß viel, nur nicht über dich",
+      "freelancer": "Frag einen Freelancer, der jedes Fach kennt, und du bekommst Expertenantworten, blind für dein Unternehmen und eure Kultur.",
+      "ai": "<marker>Frag die KI, trainiert auf mehr Text, als je ein Mensch lesen könnte, und du bekommst die wahrscheinlichste Antwort, blind für dein Unternehmen und eure Kultur.</marker>",
+      "popover": "Viel Wissen über die Welt, nichts über dein Unternehmen. Eure Kultur und eure ungeschriebenen Regeln sind nie angekommen."
+    },
+    "confident": {
+      "name": "Confident",
+      "back": "Füllt die Lücke, ohne zu fragen",
+      "freelancer": "Gib eine vage Anfrage, und er legt los, ohne zu fragen, füllt die Lücken mit eigenen Annahmen und verkauft es dir als richtig.",
+      "ai": "<marker>Gib einen vagen Prompt, und sie legt los, ohne zu fragen, füllt die Lücken mit den häufigsten Antworten und antwortet voller Überzeugung.</marker>",
+      "popover": "Es geht los, statt nachzufragen, und die Lücken füllen Vermutungen. Eine Vermutung klingt so sicher wie eine Tatsache."
+    },
+    "every-word-billed": {
+      "name": "Every word billed",
+      "back": "Die Rechnung wächst mit jeder Runde",
+      "freelancer": "Er rechnet jedes Wort ab, das er liest und schreibt, also heißt eine Frage mehr, das ganze Dossier neu lesen zu lassen, seine eigenen Seiten inklusive.",
+      "ai": "<marker>Sie berechnet jedes Wort, das sie liest und schreibt, also heißt eine Nachricht mehr, den ganzen Chat noch einmal zu bezahlen, ihre eigenen Antworten inklusive.</marker>",
+      "popover": "Jede neue Frage bezahlt alle bisherigen Wörter noch einmal. Je länger es läuft, desto höher die Rechnung."
+    }
+  },
+  "backs": {
+    "prompt": "Prompt",
+    "handbook": "Wie wir arbeiten",
+    "bill": "Rechnung",
+    "tokens": "Tokens"
+  },
+  "closing": "Und jedes Mal vergessen sie alles, also beginnt jeder Auftrag bei Tag eins.",
+  "notes": {
+    "right-or-not-the-output-looks-finished": {
+      "header": "Richtig oder nicht, das Ergebnis sieht fertig aus",
+      "description": "Selbst die besten Modelle machen laut der Studie „still regularly produce logical mistakes“, darum ist Tempo ohne Prüfung eine Falle [1].",
+      "sources": {
+        "lightman-verify-step-by-step": {
+          "title": "Lightman et al., Let's Verify Step by Step"
+        }
+      }
+    },
+    "probable-not-random": {
+      "header": "Wahrscheinlich, nicht zufällig",
+      "description": "Textgenerierung zieht aus einer Wahrscheinlichkeitsverteilung, statt immer das wahrscheinlichste Wort zu nehmen, denn der immer wahrscheinlichste Text ist fade und wiederholt sich [1]. Selbst mit Zufall auf null dokumentiert der Anbieter, dass „the results will not be fully deterministic“ [2].",
+      "sources": {
+        "holtzman-text-degeneration": {
+          "title": "Holtzman et al., The Curious Case of Neural Text Degeneration"
+        },
+        "anthropic-messages-api": {
+          "title": "Anthropic, Messages API reference (temperature parameter)"
+        }
+      }
+    },
+    "how-much-varies": {
+      "header": "Wie stark es schwankt",
+      "description": "In einem Test ergaben 1.000 Antworten auf einen Prompt ohne Zufall 80 verschiedene Antworten [1]. Über fünf auf Determinismus eingestellte Modelle schwankte die Genauigkeit zwischen Läufen derselben Aufgabe um bis zu 15 % [2].",
+      "sources": {
+        "he-defeating-nondeterminism": {
+          "title": "He et al., Defeating Nondeterminism in LLM Inference"
+        },
+        "atil-deterministic-settings": {
+          "title": "Atil et al., Non-Determinism of \"Deterministic\" LLM Settings"
+        }
+      }
+    },
+    "the-bill-covers-the-whole-chat": {
+      "header": "Die Rechnung umfasst den ganzen Chat",
+      "description": "Die Schnittstelle ist zustandslos: Die früheren Runden gehen mit jeder Anfrage mit, und die eigenen Antworten des Modells werden Teil der nächsten Eingabe [1]. Jedes erneut gesendete Wort wird als Eingabe berechnet [2].",
+      "sources": {
+        "anthropic-context-windows": {
+          "title": "Anthropic, Context windows"
+        },
+        "anthropic-pricing": {
+          "title": "Anthropic, Pricing"
+        }
+      }
+    },
+    "a-discount-not-an-exemption": {
+      "header": "Ein Rabatt, keine Befreiung",
+      "description": "Gecachte Lesezugriffe kosten etwa ein Zehntel der normalen Eingabe, der Cache hält standardmäßig 5 Minuten, und Caching ändert, was bezahlt wird, nicht ob die Wörter ins Kontextfenster zählen [1].",
+      "sources": {
+        "anthropic-prompt-caching": {
+          "title": "Anthropic, Prompt caching"
+        }
+      }
+    },
+    "why-it-guesses-instead-of-asking": {
+      "header": "Warum sie rät, statt zu fragen",
+      "description": "Die meisten Benchmarks bewerten eine Vermutung höher als eine Enthaltung, also belohnt das Training das Raten [1]. Aktuelle Modelle fragen selten nach und antworten stattdessen falsch [2].",
+      "sources": {
+        "kalai-why-models-hallucinate": {
+          "title": "Kalai et al., Why Language Models Hallucinate"
+        },
+        "kuhn-clam": {
+          "title": "Kuhn et al., CLAM: Selective Clarification for Ambiguous Questions with Generative Language Models"
+        }
+      }
+    },
+    "why-it-is-blind-to-your-company": {
+      "header": "Warum sie dein Unternehmen nicht kennt",
+      "description": "Wie genau ein Modell eine Tatsache kennt, hängt davon ab, wie viele Dokumente dazu es im Training gesehen hat [1], und eine führende Modellfamilie wurde nur mit öffentlich verfügbaren Daten trainiert [2]. Der Anbieter gibt an, standardmäßig nicht mit kommerziellen Ein- und Ausgaben zu trainieren [3].",
+      "sources": {
+        "kandpal-long-tail-knowledge": {
+          "title": "Kandpal et al., Large Language Models Struggle to Learn Long-Tail Knowledge"
+        },
+        "touvron-llama": {
+          "title": "Touvron et al., LLaMA: Open and Efficient Foundation Language Models"
+        },
+        "anthropic-training-data": {
+          "title": "Anthropic, Is my data used for model training? (commercial products)"
+        }
+      }
+    },
+    "the-forgetting-is-in-the-design": {
+      "header": "Das Vergessen ist eingebaut",
+      "description": "Das Kontextfenster gilt als „working memory“ des Modells, getrennt vom Korpus, auf dem es trainiert wurde [1]. Ein Gedächtnis über Chats hinweg gibt es nur, wo eine Anwendung Notizen speichert und wieder einspielt, denn das Memory-Tool läuft auf der Client-Seite [2].",
+      "sources": {
+        "anthropic-context-windows": {
+          "title": "Anthropic, Context windows"
+        },
+        "anthropic-memory-tool": {
+          "title": "Anthropic, Memory tool"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "who-gets-the-job": {
+        "title": "Wer den Auftrag bekommt",
+        "keywords": "",
+        "script": "Also, wem gibst du die Arbeit eigentlich? Keinem Chatbot und keinem Orakel, sondern einer neuen Kraft: einem brillanten Freelancer mit Amnesie, jedes Mal. Er bringt fünf Eigenschaften mit, und die Anfangsbuchstaben ergeben PRICE, denn wenn du sie nicht steuerst, zahlst du. Fürs Erste beschreibe ich nur den Freelancer, einen Menschen, damit du ihn dir vorstellen kannst."
+      },
+      "probabilistic-relentless": {
+        "title": "Probabilistic, Relentless",
+        "keywords": "",
+        "script": "Die erste Eigenschaft ist Probabilistic. Gib einem neuen Freelancer dasselbe Briefing, und du bekommst einen anderen Plan: Jeder wählt einen wahrscheinlichen Plan, keinen festen, und damit ist ein gutes Ergebnis kein Versprechen. Die zweite ist Relentless. Du gibst den Auftrag ab, und er arbeitet Tag und Nacht und liefert Stapel polierter Seiten, ob die Seiten stimmen oder nicht, also gibt es viel zu lesen, und alles muss geprüft werden."
+      },
+      "informed": {
+        "title": "Informed",
+        "keywords": "",
+        "script": "Drittens, Informed. Er kennt jedes Fach und gibt Expertenantworten, und doch ist er blind für dein Unternehmen und eure Kultur. Das Handbuch, das er bekommt, ist geschwärzt, manchmal mit Absicht, und manchmal, weil niemand, nicht einmal die Person, die ihn einarbeitet, weiß, was fehlt."
+      },
+      "confident-every-word-billed": {
+        "title": "Confident, Every word billed",
+        "keywords": "",
+        "script": "Viertens, Confident. Du gibst eine vage Anfrage, er legt los, ohne zu fragen, füllt die Lücken mit eigenen Annahmen und verkauft dir das Ergebnis als richtig. Eine Vermutung klingt genauso sicher wie eine Tatsache. Und fünftens, Every word billed: Dieser Freelancer rechnet jedes Wort ab, das er liest und schreibt, also heißt eine Frage mehr von dir, dass du ihn das ganze Dossier noch einmal lesen lässt, seine eigenen Seiten inklusive. Je länger der Auftrag läuft, desto höher die Rechnung, und die Rechnung wächst schneller als die Arbeit."
+      },
+      "amnesia": {
+        "title": "Amnesie",
+        "keywords": "",
+        "script": "Und das liegt unter allen fünf. Jedes Mal, wenn du wiederkommst, hat er alles vergessen, also beginnt jeder Auftrag bei Tag eins. (Pause) Behalte dieses Bild des Freelancers, denn als Nächstes zeige ich, wer er wirklich ist."
+      },
+      "ai-lands-last": {
+        "title": "Die KI kommt zuletzt",
+        "keywords": "",
+        "script": "Dieser Freelancer ist die KI. Zeile für Zeile ist es derselbe Satz mit anderen Wörtern. Gib denselben Prompt in einem neuen Chat ein, und du bekommst eine andere Antwort. Schick den Prompt ab, und sie liefert Seiten in Sekunden, so viele du willst, richtig oder nicht. Trainiert auf mehr Text, als je ein Mensch lesen könnte, gibt sie dir die wahrscheinlichste Antwort, blind für dein Unternehmen und eure Kultur. Gib ihr einen vagen Prompt, und sie füllt die Lücken mit den häufigsten Antworten und antwortet voller Überzeugung. Und sie berechnet jedes Wort, das sie liest und schreibt, also bezahlt eine Nachricht mehr den ganzen Chat noch einmal, ihre eigenen Antworten inklusive. (Pause) Würdest du einem solchen Freelancer einen Auftrag ohne Plan geben?"
+      },
+      "the-pun": {
+        "title": "Die Pointe",
+        "keywords": "",
+        "script": "Hier ist die ganze Folie in einem Satz. Vergiss den PRICE, und du zahlst ihn jedes Mal."
+      }
+    }
+  }
+}

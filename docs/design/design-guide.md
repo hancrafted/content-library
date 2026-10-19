@@ -51,6 +51,16 @@ Suits founders and coaching cohorts, who plan on whiteboards and sticky notes: a
 - `primary` marks the one thing to look at.
 - The meaning colours (`machine`, `human`, `ai`) appear only for their meanings.
 
+### Studio
+
+Suits a general audience meeting AI for the first time: sleek, calm Slides that feel current without looking like a product demo, so the ideas read as modern and the viewer stays on the claim.
+
+- Quiet neutral surfaces with hairline borders and generous space; rounded pills and cards, no heavy shadows.
+- `primary` marks the one thing to look at.
+- The AI vibe lives only on what is AI: a soft `ai` glow or gradient edge on AI elements, never as decoration.
+- Motion is a gentle fade-and-rise, like an answer arriving; nothing loops at rest.
+- The meaning colours (`machine`, `human`, `ai`) appear only for their meanings.
+
 ## Like this
 
 `markdown-in-ai-workflows` (Episode `maintaining-markdown-for-ai`). It stands on its own at rest, with depth behind a modal and the Context drawer. Its meaning colours (Knowledge `ai`, Instructions `human`, Memory `machine`) colour things that are not those meanings, so do not copy them. The Episode is legacy and keeps them until it is next touched.

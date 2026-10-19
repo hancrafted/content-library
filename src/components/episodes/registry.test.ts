@@ -45,6 +45,15 @@ const COMPOSITION = [
       { opener: 'start-before-you-need-the-money', pageSlides: 1 },
     ],
   },
+  {
+    // Section openers only until each Section job adds its page Slides at its placement marker.
+    slug: 'onboard-ai-every-time',
+    sections: [
+      { opener: 'the-thought-experiment', pageSlides: 2 },
+      { opener: 'five-moves-to-brief-a-freelancer', pageSlides: 1 },
+      { opener: 'brief-in-action', pageSlides: 1 },
+    ],
+  },
 ] as const;
 
 /** Who renders each Slide header (design-ADR-0012): the Slide wrapper (`shared`) or each Scene (`authored`). */
@@ -52,6 +61,7 @@ const HEADER_MODES = [
   { slug: 'ai-token-economy', header: 'authored' },
   { slug: 'page-template', header: 'shared' },
   { slug: 'never-too-early-sales', header: 'shared' },
+  { slug: 'onboard-ai-every-time', header: 'shared' },
 ] as const;
 
 /** The recorded YouTube video of the Episodes that have one asserted here. */

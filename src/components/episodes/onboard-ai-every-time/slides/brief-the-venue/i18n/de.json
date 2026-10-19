@@ -1,0 +1,237 @@
+{
+  "title": "Die Location briefen",
+  "caption": "Plane die Sommerfeier für 200 Leute aus ganz Europa: <b>ein frischer Chat pro Aufgabe</b>, und zwei Prüfpunkte, bevor Deine Chefin einen Plan sieht.",
+  "pipelineLabel": "Die Pipeline zur Location, Stufe für Stufe",
+  "jobsLabel": "{stage}: Aufgaben",
+  "popover": {
+    "in": "Rein:",
+    "out": "Raus:"
+  },
+  "stages": {
+    "party": {
+      "name": "Sommerfeier",
+      "move": "<initial>B</initial>reak it down",
+      "popover": {
+        "in": "die ganze Feier.",
+        "out": "fünf Teile, nur die Location geht weiter."
+      }
+    },
+    "interview": {
+      "name": "Interview",
+      "move": "<initial>I</initial>nterview yourself with AI",
+      "popover": {
+        "in": "Deine grobe Idee.",
+        "out": "die Fragen, an die Du nicht gedacht hast, beantwortet."
+      }
+    },
+    "requirements": {
+      "name": "Anforderungen",
+      "move": "<initial>R</initial>equirements first",
+      "popover": {
+        "in": "Deine Antworten.",
+        "out": "eine Anforderungskarte, die Du freigibst."
+      }
+    },
+    "research": {
+      "name": "Recherche",
+      "move": "<initial>F</initial>resh start for each piece",
+      "popover": {
+        "in": "die Anforderungskarte.",
+        "out": "eine Location, gegen jedes Kriterium geprüft."
+      }
+    },
+    "compare": {
+      "name": "Vergleich",
+      "move": "<initial>E</initial>valuate each step",
+      "popover": {
+        "in": "drei geprüfte Locations.",
+        "out": "eine Rangfolge, gemessen an der Karte."
+      }
+    },
+    "recommendation": {
+      "name": "Empfehlung",
+      "move": "für Deine Chefin",
+      "popover": {
+        "in": "der Vergleich.",
+        "out": "der Location-Plan für Deine Chefin."
+      }
+    }
+  },
+  "jobs": {
+    "party": {
+      "venue": "Location",
+      "travel": "Anreise",
+      "catering": "Catering",
+      "invitations": "Einladungen",
+      "budget": "Budget"
+    },
+    "interview": {
+      "label": "KI fragt Dich",
+      "detail": "3 Fragen,",
+      "forgot": "<marker>1 vergessen</marker>"
+    },
+    "research": {
+      "venue1": "Location 1",
+      "venue2": "Location 2",
+      "venue3": "Location 3",
+      "checked": "Gegen die Karte geprüft"
+    },
+    "compare": {
+      "label": "3 Locations ranken",
+      "detail": "gemessen an der Karte",
+      "gate": "Prüfpunkt 2"
+    },
+    "recommendation": {
+      "label": "Location-Plan",
+      "detail": "bis Freitag"
+    }
+  },
+  "card": {
+    "gate": "Prüfpunkt 1",
+    "title": "Anforderungskarte",
+    "criteria": {
+      "guests": "200 Gäste",
+      "budget": "150 € pro Person",
+      "stepFree": "Stufenlos",
+      "vegetarian": "Vegetarisches Menü",
+      "quiet": "Ruhig genug zum Reden"
+    },
+    "signOff": "Freigegeben"
+  },
+  "legend": {
+    "label": "Legende",
+    "freshChat": "<marker>Ein frischer Chat pro Aufgabe</marker>",
+    "checked": "Gegen die Anforderungskarte geprüft",
+    "parked": "Wartet, bis es dran ist"
+  },
+  "chat": {
+    "title": "Interview · der Chat im Beispiel",
+    "open": "Chat ansehen",
+    "close": "Chat schließen",
+    "forgotten": "Die, die Du vergessen hast",
+    "ai": "KI",
+    "you": "Du",
+    "recommended": "Empfehlung:",
+    "newTab": "(öffnet in neuem Tab)",
+    "replies": {
+      "start": "Plane unsere Sommerfeier: 200 Leute aus fünf Büros in ganz Europa, etwa 150 Euro pro Kopf, zwei Rollstuhlfahrer, ein paar Vegetarier.",
+      "a1": "A.",
+      "reframe": "Das verstehe ich nicht. Kannst Du es mit einem Vergleich erklären?",
+      "a2": "A, eine lange Tafel.",
+      "a3": "A. Gute Frage, das hatte ich vergessen. Es war zu laut zum Reden, und viele sind früh gegangen.",
+      "spec": "Mach aus meinen Antworten eine Spezifikation."
+    },
+    "questions": {
+      "q1": {
+        "text": "F1 · Format: eine Feier an einem Ort, oder eine pro Büro?",
+        "a": "A) Ein Ort, alle reisen an",
+        "b": "B) Fünf lokale Feiern",
+        "recommended": "A, es geht darum, dass sich die Büros treffen."
+      },
+      "q2": {
+        "text": "F2 · Kapazität: Planst Du den Ort für die Spitzenbelegung oder für die durchschnittliche Verweildauer?",
+        "a": "A) Spitze: 200 gleichzeitig",
+        "b": "B) Durchschnitt: etwa 140, mit gestaffelter Ankunft",
+        "recommended": "A, zu den Reden sind alle da."
+      },
+      "q2Analogy": {
+        "text": "F2 · Stell Dir vor, Du reservierst im Restaurant: eine lange Tafel für alle um acht, oder Tische, die über den Abend wechseln?",
+        "a": "A) Eine lange Tafel: Platz für 200 gleichzeitig",
+        "b": "B) Wechselnde Tische: Platz für etwa 140",
+        "recommended": "A, zu den Reden sitzen alle."
+      },
+      "q3": {
+        "text": "F3 · Wie eine Restaurantkritik: Hat die Feier im letzten Jahr Feedback hinterlassen, das Du zuerst lesen solltest?",
+        "a": "A) Ja, zuerst lesen",
+        "b": "B) Nein, neu anfangen",
+        "recommended": "A, es zeigt, was zu vermeiden ist."
+      }
+    }
+  },
+  "notes": {
+    "why-the-sign-off-is-a-gate": {
+      "header": "Warum die Freigabe ein Prüfpunkt ist",
+      "description": "Alle Anforderungen auf einmal zu nennen, kostet etwas: Eine einzeln genannte Anforderung wurde in 98,7 % der Fälle befolgt, bei 19 gleichzeitig fiel gpt-4o auf 85,0 %, zum Teil wegen Konflikten zwischen den Anforderungen [1]. Deshalb eine kurze Karte mit dem Wesentlichen.",
+      "sources": {
+        "yang-what-prompts-dont-say": {
+          "title": "Yang, Shi, Ma, Liu, Kästner, Wu, What Prompts Don't Say: Understanding and Managing Underspecification in LLM Prompts (v3)"
+        }
+      }
+    },
+    "a-wrong-early-guess-sticks": {
+      "header": "Eine falsche frühe Annahme bleibt hängen",
+      "description": "Bekamen Modelle ihre Anweisungen Stück für Stück, schnitten sie im Schnitt um 39 % schlechter ab, vor allem weil sie unzuverlässiger wurden; sie treffen früh Annahmen und finden nach einer falschen Wendung nicht mehr zurück [1].",
+      "sources": {
+        "laban-llms-get-lost-in-multi-turn": {
+          "title": "Laban, Hayashi, Zhou, Neville, LLMs Get Lost In Multi-Turn Conversation"
+        }
+      }
+    },
+    "focus-beats-volume": {
+      "header": "Fokus schlägt Menge",
+      "description": "In einem Benchmark für langes Gedächtnis schnitten Prompts mit nur dem relevanten Material, wenigen hundert Wörtern, deutlich besser ab als volle Prompts mit Zehntausenden Wörtern, und schon eine einzige Ablenkung senkte die Ergebnisse [1].",
+      "sources": {
+        "hong-context-rot": {
+          "title": "Hong, Troynikov, Huber, Context Rot: How Increasing Input Tokens Impacts LLM Performance"
+        }
+      }
+    },
+    "plan-then-fresh-session": {
+      "header": "Erst planen, dann frische Sitzung",
+      "description": "Nach dem Interview für eine Spezifikation rät der Hersteller selbst, für die Umsetzung eine frische Sitzung zu starten, weil sie einen sauberen Kontext hat, der ganz auf die Umsetzung gerichtet ist [1].",
+      "sources": {
+        "anthropic-claude-code-best-practices": {
+          "title": "Anthropic, Best practices for Claude Code"
+        }
+      }
+    },
+    "the-answer-can-be-right-and-the-work-wrong": {
+      "header": "Die Antwort kann stimmen und der Weg falsch sein",
+      "description": "Unter Lösungen mit richtigem Endergebnis senkte das beste System die Fehler im Lösungsweg von 14,0 % auf 3,4 %; wer nur das Ergebnis prüft, nimmt also fehlerhafte Begründungen hin [1].",
+      "sources": {
+        "uesato-process-and-outcome-feedback": {
+          "title": "Uesato et al., Solving math word problems with process- and outcome-based feedback"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "restate": {
+        "title": "Die Aufgabe",
+        "keywords": "",
+        "script": "Die Aufgabe: Plane die Sommerfeier für 200 Leute aus ganz Europa. Würdest Du die KI um all das in einem einzigen Prompt bitten, bekämst Du seitenweise geschliffene, selbstsichere Antworten, und Du könntest fast keiner davon trauen."
+      },
+      "break-it-down": {
+        "title": "Zerlegen",
+        "keywords": "",
+        "script": "Also zuerst: zerlegen. Die Feier zerfällt in fünf Teile: Location, Anreise, Catering, Einladungen und Budget. Wir nehmen jetzt nur die Location, die anderen vier warten, bis sie dran sind, denn ein Teil ist klein genug, um ihn richtig hinzubekommen."
+      },
+      "interview": {
+        "title": "Interview",
+        "keywords": "",
+        "script": "Als Nächstes das Interview. Bevor sie loslegt, stellt Dir die KI Fragen, so wie es eine Ansprechpartnerin bei einer Agentur tun würde. Drei Fragen kommen, und eine davon betrifft etwas, das Du vergessen hattest: ob es zur Feier im letzten Jahr Feedback gab, das sich zu behalten lohnt. Das ist der ungeschriebene Kontext, der herauskommt, bevor die KI rät."
+      },
+      "requirements": {
+        "title": "Anforderungen",
+        "keywords": "",
+        "script": "Dann die Anforderungen, und diese Stufe gibst Du frei, bevor irgendeine Recherche beginnt. Alles kommt auf eine Karte, kurz und nur das Wesentliche, und jede spätere Aufgabe liest daraus. Ist die Karte falsch, willst Du es hier merken, solange es billig ist."
+      },
+      "research-fresh-each-time": {
+        "title": "Recherche, jedes Mal frisch",
+        "keywords": "",
+        "script": "Jetzt die Recherche. Drei Locations bekommen drei frische Chats, und jeder wird gegen die Karte geprüft. Arbeit an mehrere gleichzeitig abzugeben, ist ein eigenes Thema, und das ist die Episode über die Beförderung."
+      },
+      "compare-and-check": {
+        "title": "Vergleichen und prüfen",
+        "keywords": "",
+        "script": "Die drei Ergebnisse kommen zusammen und werden verglichen, wieder gegen die Karte, nicht nach Gefühl. Damit hat der ganze Ablauf zwei Prüfpunkte: die Karte und den Vergleich. Ein Fehler muss an beiden vorbei."
+      },
+      "recommendation-and-on": {
+        "title": "Empfehlung, und weiter",
+        "keywords": "",
+        "script": "Heraus kommt der Location-Plan für Deine Chefin, und das Ganze lief mit demselben BRIEF, das Du für jede Aufgabe nutzen würdest. (Pause) Jetzt machen wir es live: Ich zeige Dir, wie sich dieses Interview anfühlt, wenn Du es selbst führst."
+      }
+    }
+  }
+}
