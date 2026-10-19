@@ -14,8 +14,11 @@ export async function SiteBrand({ locale }: { locale: Locale }) {
       data-testid="brand"
       className="flex items-center gap-2.5 rounded-md outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
     >
-      <BrandSymbol className="size-8 shrink-0" />
-      <span className="text-body font-semibold tracking-tight">{t('name')}</span>
+      <BrandSymbol className="size-9.25 shrink-0" />
+      <span className="text-body font-semibold tracking-tight">
+        {t('name')}
+        <span aria-hidden className="ml-0.5 inline-block size-1.5 rounded-full bg-brand-accent" />
+      </span>
     </Link>
   );
 }
