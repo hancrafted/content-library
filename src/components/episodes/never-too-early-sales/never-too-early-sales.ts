@@ -11,13 +11,12 @@ import { hero } from './slides/hero/slide';
 /*
  * "Why it's never too early to start with sales": revenue arrives months after the costs that create it, so start the
  * pipeline before you need the money. Built from the approved Spec under docs/episodes/never-too-early-sales-run-3/.
- * Upcoming until its video is live.
  *
  * Each Section is one placement marker under `sections/`, named after the Section's slug and listed here in Spec
  * order: a Section job adds its page Slides to its own marker, so parallel Section branches never edit one line.
  */
-export const neverTooEarlySalesRun3 = episode({
-  slug: 'never-too-early-sales-run-3',
+export const neverTooEarlySales = episode({
+  slug: 'never-too-early-sales',
   messages: { en, de },
   title: hero,
   sections: [

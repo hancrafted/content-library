@@ -4,7 +4,14 @@ import {
   type PublishedEpisodeMetadata,
   type UpcomingEpisodeMetadata,
 } from '@/lib/episode-metadata.pure';
-import { TOPICS, type Accent, type FormatId, type TopicIcon, type TopicId } from '@/lib/episode-overview';
+import {
+  HIGHLIGHTED_TOPIC,
+  TOPICS,
+  type Accent,
+  type FormatId,
+  type TopicIcon,
+  type TopicId,
+} from '@/lib/episode-overview';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { episodeRoute, isEpisodeSlug } from '@/lib/routes';
 
@@ -12,6 +19,11 @@ import { episodeRoute, isEpisodeSlug } from '@/lib/routes';
 export interface Labelled<Id extends string> {
   readonly id: Id;
   readonly label: string;
+}
+
+/** One Tag as a card draws it: its name and the tooltip that explains it, both in the reader's locale. */
+export interface TagLabel extends Labelled<string> {
+  readonly tooltip: string;
 }
 
 /**
@@ -38,6 +50,12 @@ export interface EpisodeCard {
   /** Every Topic the Episode appears under, primary first: what a Topic filter matches. */
   readonly topics: readonly Labelled<TopicId>[];
   readonly format: Labelled<FormatId>;
+  /** True when the Episode is under the highlighted Topic, primary or extra, so the card marks it. */
+  readonly highlighted: boolean;
+  /** The Episode's Tags in its own order; a flat list, none ranks above another. */
+  readonly tags: readonly TagLabel[];
+  /** The Episode's video in this locale; left off when it has none or is not published. */
+  readonly youtubeUrl?: string;
   /** Reading time in this locale; left off when the Episode's record was not read. */
   readonly minutes?: number;
   readonly publishedOn?: string;
@@ -67,6 +85,8 @@ export interface CardContext {
   readonly locale: Locale;
   readonly read: ReadKey;
   readonly minutes?: number;
+  /** The Episode's YouTube video id in this locale; left off when it has none. */
+  readonly youtubeId?: string;
   /** The Episode's Featured slot, 1 first; left off when it is not Featured. */
   readonly featuredRank?: number;
   /** When true, upcoming Episodes with a page get a link (e.g. in dev mode GUI). */
@@ -85,6 +105,12 @@ function isDraftLinked(entry: CardEntry, linkDrafts?: boolean): boolean {
   return Boolean(linkDrafts && 'copy' in entry && entry.copy !== undefined);
 }
 
+/** A published Episode's video link; an upcoming one has no public video yet. */
+function videoOf(entry: CardEntry, youtubeId?: string): Pick<EpisodeCard, 'youtubeUrl'> {
+  if (entry.status !== 'published' || youtubeId === undefined) return {};
+  return { youtubeUrl: `https://www.youtube.com/watch?v=${youtubeId}` };
+}
+
 function publishedFields(entry: CardEntry, ctx: CardContext): Partial<EpisodeCard> {
   const isLinked = entry.status === 'published' || isDraftLinked(entry, ctx.linkDrafts);
   if (!isLinked || !isEpisodeSlug(entry.slug)) return {};
@@ -95,6 +121,7 @@ function publishedFields(entry: CardEntry, ctx: CardContext): Partial<EpisodeCar
     publishedOn: entry.status === 'published' ? entry.publishedOn : undefined,
     featuredRank: ctx.featuredRank ?? null,
     ...(ctx.minutes !== undefined ? { minutes: ctx.minutes } : {}),
+    ...videoOf(entry, ctx.youtubeId),
   };
 }
 
@@ -112,6 +139,12 @@ export function episodeCard(entry: CardEntry, ctx: CardContext): EpisodeCard {
     topic: topics[0],
     topics,
     format: { id: entry.format, label: read(`${OVERVIEW_KEYS}.formats.${entry.format}`) },
+    highlighted: topics.some(({ id }) => id === HIGHLIGHTED_TOPIC),
+    tags: entry.tags.map((id) => ({
+      id,
+      label: read(`${OVERVIEW_KEYS}.tags.${id}.name`),
+      tooltip: read(`${OVERVIEW_KEYS}.tags.${id}.tooltip`),
+    })),
     featuredRank: null,
     ...TOPICS[entry.topic],
     ...publishedFields(entry, ctx),

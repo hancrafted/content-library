@@ -3,7 +3,7 @@ import { FEATURED, LAYOUT_REFERENCES, type ListedEpisodeSlug } from '@/lib/episo
 import { isEpisodeSlug, type EpisodeSlug } from '@/lib/routes';
 import { episodeMetadata as aiTokenEconomy } from './ai-token-economy/episode-metadata';
 import { episodeMetadata as maintainingMarkdownForAi } from './maintaining-markdown-for-ai/episode-metadata';
-import { episodeMetadata as neverTooEarlySalesRun3 } from './never-too-early-sales-run-3/episode-metadata';
+import { episodeMetadata as neverTooEarlySales } from './never-too-early-sales/episode-metadata';
 
 /*
  * The Episode overview's read API (#40): every Episode's own metadata,
@@ -20,7 +20,7 @@ import { episodeMetadata as neverTooEarlySalesRun3 } from './never-too-early-sal
 const REGISTERED = {
   'maintaining-markdown-for-ai': maintainingMarkdownForAi,
   'ai-token-economy': aiTokenEconomy,
-  'never-too-early-sales-run-3': neverTooEarlySalesRun3,
+  'never-too-early-sales': neverTooEarlySales,
 } as const satisfies { readonly [S in ListedEpisodeSlug]: EpisodeMetadata & { readonly slug: S } };
 
 /** The slugs whose metadata says `published`. */

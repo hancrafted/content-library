@@ -4,8 +4,8 @@ import type { EpisodeCard, Labelled } from './episode-card.pure';
 
 /*
  * What the Episodes section decides before it draws anything: which published
- * Episodes spotlight, which cards the Browse grid shows for a selection, and
- * what each filter chip counts. No React (FE-007 §3), so the leaf only wires
+ * Episodes spotlight, which cards the Browse grid shows for a selection and a
+ * search query, and what each filter chip counts. No React (FE-007 §3), so the leaf only wires
  * state to these answers.
  */
 
@@ -23,11 +23,13 @@ export const SPOTLIGHT_SIZE = 3;
 export interface BrowseSelection {
   readonly topic: Facet<TopicId>;
   readonly format: Facet<FormatId>;
+  /** The text the visitor typed into search; blank lifts the search. */
+  readonly query: string;
   /** True once the visitor asked for every match instead of the first {@link BROWSE_CAP}. */
   readonly expanded: boolean;
 }
 
-export const INITIAL_SELECTION: BrowseSelection = { topic: ALL, format: ALL, expanded: false };
+export const INITIAL_SELECTION: BrowseSelection = { topic: ALL, format: ALL, query: '', expanded: false };
 
 export interface Spotlight {
   readonly lead: EpisodeCard | null;
@@ -43,10 +45,26 @@ export function spotlightOf(cards: readonly EpisodeCard[], size: number = SPOTLI
   return { lead, side };
 }
 
-function matches(card: EpisodeCard, selection: Pick<BrowseSelection, 'topic' | 'format'>): boolean {
+/** Folds case and accents away, so "befahigung" finds "Befähigung". */
+function fold(text: string): string {
+  return text.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().trim();
+}
+
+/** The text a query searches: only what the card shows in the reader's locale, so a Tag's tooltip is left out. */
+function searchText(card: EpisodeCard): string {
+  const labels = [...card.topics, card.format, ...card.tags].map((value) => value.label);
+  return fold([card.title, card.caption, ...labels].join('\n'));
+}
+
+/** What narrows the grid: every choice but the fold. */
+type Narrowing = Omit<BrowseSelection, 'expanded'>;
+
+function matches(card: EpisodeCard, selection: Narrowing): boolean {
+  const query = fold(selection.query);
   return (
     (selection.topic === ALL || card.topics.some((topic) => topic.id === selection.topic)) &&
-    (selection.format === ALL || card.format.id === selection.format)
+    (selection.format === ALL || card.format.id === selection.format) &&
+    (query === '' || searchText(card).includes(query))
   );
 }
 
@@ -110,7 +128,7 @@ function choicesOf<Id extends string>({ cards, vocabulary, read, counted }: Choi
 
 /**
  * One chip per Topic any card appears under, in vocabulary order, counting what
- * each would show under the chosen Format; an Episode in two Topics counts in both. A chip the Format empties stays, at zero,
+ * each would show under the chosen Format and query; an Episode in two Topics counts in both. A chip the Format empties stays, at zero,
  * so the row does not jump while the visitor narrows.
  */
 export function topicChoices(cards: readonly EpisodeCard[], selection: BrowseSelection): FacetChoices<TopicId> {
@@ -118,7 +136,7 @@ export function topicChoices(cards: readonly EpisodeCard[], selection: BrowseSel
     cards,
     vocabulary: TOPIC_IDS,
     read: (card) => card.topics,
-    counted: (card) => matches(card, { topic: ALL, format: selection.format }),
+    counted: (card) => matches(card, { ...selection, topic: ALL }),
   });
 }
 
@@ -128,8 +146,13 @@ export function formatChoices(cards: readonly EpisodeCard[], selection: BrowseSe
     cards,
     vocabulary: FORMATS,
     read: (card) => [card.format],
-    counted: (card) => matches(card, { topic: selection.topic, format: ALL }),
+    counted: (card) => matches(card, { ...selection, format: ALL }),
   });
+}
+
+/** Whether a card names its Format: only once the cards span two Formats, since one Format tells the visitor nothing. */
+export function showsFormat(cards: readonly EpisodeCard[]): boolean {
+  return new Set(cards.map((card) => card.format.id)).size >= 2;
 }
 
 /** A filter with fewer than two values has nothing to choose between, so it earns no control. */

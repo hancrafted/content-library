@@ -9,7 +9,10 @@ function browseLabels(t: LandingT): BrowseLabels {
   return {
     open: t('episodeOverview.open'),
     comingSoon: t('episodeOverview.comingSoon'),
-    minutesUnit: t('episodeOverview.minutesUnit'),
+    watchVideo: t('episodeOverview.watchVideo'),
+    newTab: t('episodeOverview.newTab'),
+    search: t('episodeOverview.search'),
+    searchPlaceholder: t('episodeOverview.searchPlaceholder'),
     topicFilter: t('episodeOverview.topicFilter'),
     formatFilter: t('episodeOverview.formatFilter'),
     all: t('episodeOverview.all'),
@@ -39,14 +42,9 @@ export async function EpisodesIndexPage({ locale }: { locale: Locale }) {
   });
 
   return (
-    <main data-testid="episodes-index-page" className="mx-auto max-w-6xl space-y-12 px-6 py-16 sm:py-24">
-      <div className="max-w-2xl space-y-4">
-        <h1 className="text-heading font-semibold tracking-tight text-foreground">{tPage('title')}</h1>
-        <p className="text-subheading text-muted-foreground">{tPage('subtitle')}</p>
-      </div>
-      <div>
-        <EpisodeBrowse cards={cards} locale={locale} labels={browseLabels(tLanding)} />
-      </div>
+    <main data-testid="episodes-index-page" className="mx-auto max-w-6xl px-6 py-12 sm:py-16">
+      <h1 className="sr-only">{tPage('title')}</h1>
+      <EpisodeBrowse cards={cards} locale={locale} labels={browseLabels(tLanding)} />
     </main>
   );
 }

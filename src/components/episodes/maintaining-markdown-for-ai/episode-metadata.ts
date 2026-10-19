@@ -4,7 +4,8 @@ import type { PublishedEpisodeMetadata } from '@/lib/episode-metadata.pure';
 export const episodeMetadata = {
   slug: 'maintaining-markdown-for-ai',
   status: 'published',
-  topic: 'documentation',
+  topic: 'knowledge-base',
+  extraTopics: ['ai-enablement'],
   format: 'foundations',
   tags: ['markdown', 'verification', 'review', 'google-okf'],
   publishedOn: '2026-10-09',

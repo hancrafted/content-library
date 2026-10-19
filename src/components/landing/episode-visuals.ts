@@ -1,12 +1,12 @@
 import type { Accent, TopicIcon } from '@/lib/episode-overview';
-import { BookOpen, Coins, FileText, Users, type LucideIcon } from 'lucide-react';
+import { BrainCircuit, Coins, FileText, Handshake, type LucideIcon } from 'lucide-react';
 
 /** A Topic names its icon as data; this is the one place the landing turns the name into a drawing. */
 export const TOPIC_ICONS: Record<TopicIcon, LucideIcon> = {
-  'book-open': BookOpen,
+  'brain-circuit': BrainCircuit,
+  handshake: Handshake,
   'file-text': FileText,
   coins: Coins,
-  users: Users,
 };
 
 /** One colour family drawn as the classes a card needs; whole strings, so Tailwind can see each one. */

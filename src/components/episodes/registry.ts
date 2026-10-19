@@ -4,7 +4,7 @@ import { isEpisodeSlug, type EpisodeSlug } from '@/lib/routes';
 import { notFound } from 'next/navigation';
 import { aiTokenEconomy } from './ai-token-economy/ai-token-economy';
 import { maintainingMarkdownForAi } from './maintaining-markdown-for-ai/maintaining-markdown-for-ai';
-import { neverTooEarlySalesRun3 } from './never-too-early-sales-run-3/never-too-early-sales-run-3';
+import { neverTooEarlySales } from './never-too-early-sales/never-too-early-sales';
 import { pageTemplate } from './page-template/page-template';
 import { slideLayouts } from './slide-layouts/slide-layouts';
 import { slideMaster } from './slide-master/slide-master';
@@ -18,7 +18,7 @@ const EPISODES: { readonly [S in EpisodeSlug]: EpisodeRecord & { readonly slug: 
   'page-template': pageTemplate,
   'maintaining-markdown-for-ai': maintainingMarkdownForAi,
   'ai-token-economy': aiTokenEconomy,
-  'never-too-early-sales-run-3': neverTooEarlySalesRun3,
+  'never-too-early-sales': neverTooEarlySales,
   'slide-layouts': slideLayouts,
   'slide-master': slideMaster,
 };

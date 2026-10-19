@@ -184,7 +184,7 @@ describe('landing page post-build structure', () => {
   }
 
   function hrefsIn($: CheerioAPI, selector: string): (string | undefined)[] {
-    return $(`${selector} a`)
+    return $(`${selector} a:not([data-episode-video])`)
       .map((_, el) => $(el).attr('href'))
       .get();
   }

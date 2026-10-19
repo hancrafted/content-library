@@ -36,7 +36,7 @@ const COMPOSITION = [
     ],
   },
   {
-    slug: 'never-too-early-sales-run-3',
+    slug: 'never-too-early-sales',
     sections: [
       { opener: 'why-watching-cashflow-is-mission-critical', pageSlides: 1 },
       { opener: 'why-sales-is-more-than-just-selling', pageSlides: 1 },
@@ -51,7 +51,7 @@ const COMPOSITION = [
 const HEADER_MODES = [
   { slug: 'ai-token-economy', header: 'authored' },
   { slug: 'page-template', header: 'shared' },
-  { slug: 'never-too-early-sales-run-3', header: 'shared' },
+  { slug: 'never-too-early-sales', header: 'shared' },
 ] as const;
 
 /** The recorded YouTube video of the Episodes that have one asserted here. */

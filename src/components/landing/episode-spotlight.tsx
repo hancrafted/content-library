@@ -1,6 +1,8 @@
-import { spotlightOf } from '@/components/landing/episode-browse.pure';
+import { showsFormat, spotlightOf } from '@/components/landing/episode-browse.pure';
 import type { EpisodeCard } from '@/components/landing/episode-card.pure';
 import type { CardLabels } from '@/components/landing/episode-grid-card';
+import { HighlightLabel } from '@/components/landing/episode-highlight-label';
+import { EpisodeLinks } from '@/components/landing/episode-links';
 import { TOPIC_ACCENTS, TOPIC_ICONS, type AccentClasses } from '@/components/landing/episode-visuals';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { ArrowRight } from 'lucide-react';
@@ -57,21 +59,36 @@ function Art({ card, size, accent }: { card: EpisodeCard; size: Size; accent: Ac
   );
 }
 
-function Kicker({ card, size, accent }: { card: EpisodeCard; size: Size; accent: AccentClasses }) {
+interface KickerProps {
+  card: EpisodeCard;
+  size: Size;
+  accent: AccentClasses;
+  showFormat: boolean;
+}
+
+/** The card's first row: the Topic's icon and name (and Format, once there are two) on the left, the highlighted Topic on the right. */
+function Kicker({ card, size, accent, showFormat }: KickerProps) {
   const Icon = TOPIC_ICONS[card.icon];
   const { tile, glyph } = SIZES[size];
   return (
-    <div className="flex items-center gap-3">
-      <span className={`flex items-center justify-center rounded-2xl ${accent.tile} ${tile}`}>
-        <Icon aria-hidden className={glyph} />
-      </span>
-      <p className={META}>
-        {card.topic.label}
-        <span aria-hidden className="px-2 opacity-50">
-          /
+    <div className="flex items-center justify-between gap-3">
+      <div className="flex items-center gap-3">
+        <span className={`flex items-center justify-center rounded-2xl ${accent.tile} ${tile}`}>
+          <Icon aria-hidden className={glyph} />
         </span>
-        {card.format.label}
-      </p>
+        <p className={META}>
+          {card.topic.label}
+          {showFormat && (
+            <>
+              <span aria-hidden className="px-2 opacity-50">
+                /
+              </span>
+              {card.format.label}
+            </>
+          )}
+        </p>
+      </div>
+      <HighlightLabel card={card} className={META} />
     </div>
   );
 }
@@ -81,20 +98,16 @@ const LEAD_CTA =
 const SIDE_CTA =
   'inline-flex items-center gap-1.5 font-mono text-xs font-semibold uppercase tracking-wider text-foreground';
 
-/** The visible call to action; the title's stretched link is the real target, so this is for the eye only. */
+/** The visible call to action, for the eye only as the title's stretched link is the real target, and where else the Episode is published. */
 function Footer({ card, size, labels }: { card: EpisodeCard; size: Size; labels: CardLabels }) {
   return (
-    <p className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-2 pt-4">
+    <div className="mt-auto flex flex-wrap items-center justify-between gap-x-4 gap-y-2 pt-4">
       <span aria-hidden className={size === 'lead' ? LEAD_CTA : SIDE_CTA}>
         {labels.open}
         <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0" />
       </span>
-      {card.minutes !== undefined && (
-        <span className={META}>
-          {card.minutes} {labels.minutesUnit}
-        </span>
-      )}
-    </p>
+      <EpisodeLinks card={card} labels={labels} />
+    </div>
   );
 }
 
@@ -104,9 +117,10 @@ interface CardProps {
   sideCount: number;
   locale: Locale;
   labels: CardLabels;
+  showFormat: boolean;
 }
 
-function SpotlightCard({ card, size, sideCount, locale, labels }: CardProps) {
+function SpotlightCard({ card, size, sideCount, locale, labels, showFormat }: CardProps) {
   if (card.route === null) return null;
   const accent = TOPIC_ACCENTS[card.accent];
   const { pad, title, caption } = SIZES[size];
@@ -119,7 +133,7 @@ function SpotlightCard({ card, size, sideCount, locale, labels }: CardProps) {
       className={`${FRAME} ${accent.edge} ${pad} ${placement(size, sideCount)}`}
     >
       <Art card={card} size={size} accent={accent} />
-      <Kicker card={card} size={size} accent={accent} />
+      <Kicker card={card} size={size} accent={accent} showFormat={showFormat} />
       <h4 className={`font-bold tracking-tight text-foreground ${title}`}>
         <Link
           href={localizePath(card.route, locale)}
@@ -148,7 +162,7 @@ interface SpotlightProps {
 export function EpisodeSpotlight({ cards, locale, labels }: SpotlightProps) {
   const { lead, side } = spotlightOf(cards);
   if (lead === null) return null;
-  const shared = { sideCount: side.length, locale, labels };
+  const shared = { sideCount: side.length, locale, labels, showFormat: showsFormat(cards) };
   return (
     <div data-episode-spotlight className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       <SpotlightCard card={lead} size="lead" {...shared} />

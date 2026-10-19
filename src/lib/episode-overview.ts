@@ -13,7 +13,7 @@ export const ACCENTS = ['primary', 'amber', 'emerald', 'sky', 'rose', 'violet'] 
 export type Accent = (typeof ACCENTS)[number];
 
 /** An icon by name, so this stays data; the landing turns the name into a drawing. */
-export const ICONS = ['book-open', 'file-text', 'coins', 'users'] as const;
+export const ICONS = ['brain-circuit', 'handshake', 'file-text', 'coins'] as const;
 export type TopicIcon = (typeof ICONS)[number];
 
 export interface TopicLook {
@@ -26,13 +26,16 @@ export interface TopicLook {
  * them. A Topic's look is every Episode's look whose primary Topic it is.
  */
 export const TOPICS = {
-  'ai-collaboration': { icon: 'book-open', accent: 'violet' },
-  documentation: { icon: 'file-text', accent: 'sky' },
-  economics: { icon: 'coins', accent: 'amber' },
-  adoption: { icon: 'users', accent: 'rose' },
+  'ai-enablement': { icon: 'brain-circuit', accent: 'violet' },
+  sales: { icon: 'handshake', accent: 'emerald' },
+  'knowledge-base': { icon: 'file-text', accent: 'sky' },
+  cost: { icon: 'coins', accent: 'amber' },
 } as const satisfies Record<string, TopicLook>;
 export type TopicId = keyof typeof TOPICS;
 export const TOPIC_IDS = Object.keys(TOPICS) as readonly TopicId[];
+
+/** The channel's main subject: the overview lists it first, and a card filed under it as an extra Topic names it too. */
+export const HIGHLIGHTED_TOPIC = 'ai-enablement' as const satisfies TopicId;
 
 export const FORMATS = ['foundations', 'teardown', 'short'] as const;
 export type FormatId = (typeof FORMATS)[number];
@@ -48,7 +51,8 @@ export const LAYOUT_REFERENCES = [
 export type ListedEpisodeSlug = Exclude<EpisodeSlug, (typeof LAYOUT_REFERENCES)[number]>;
 
 /** The Featured slots: published Episodes, lead first. Re-ranking is this one edit. */
-export const FEATURED = ['maintaining-markdown-for-ai', 'ai-token-economy'] as const satisfies readonly [
-  ListedEpisodeSlug,
-  ListedEpisodeSlug,
-];
+export const FEATURED = [
+  'never-too-early-sales',
+  'maintaining-markdown-for-ai',
+  'ai-token-economy',
+] as const satisfies readonly [ListedEpisodeSlug, ListedEpisodeSlug, ListedEpisodeSlug];

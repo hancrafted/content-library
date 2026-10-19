@@ -22,7 +22,7 @@ _Avoid_: Draft, coming-soon episode, stub
 **Topic**: a curated playlist of Episodes, mirrored as a YouTube playlist. Each Episode has one primary Topic, which gives it its icon and colour, and may also appear in other Topics.
 _Avoid_: Category, theme
 
-**Tag**: a free, atomic keyword on an Episode, used for search; an Episode carries many.
+**Tag**: an atomic keyword on an Episode, an id whose name and tooltip are translated per locale; an Episode carries many, flat and unranked. A card shows its Tags, and search matches their names.
 _Avoid_: Label, keyword
 
 **Format**: the shape an Episode is written in, one per Episode: Foundations, Teardown or Short.

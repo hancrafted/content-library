@@ -16,7 +16,7 @@ interface SharedMetadata {
   /** Further Topics (playlists) the Episode also appears in. */
   readonly extraTopics?: readonly TopicId[];
   readonly format: FormatId;
-  /** Free, atomic keywords for search, kebab-case. */
+  /** Tag ids, kebab-case, flat and unranked; each is named and explained by id in the landing Translation keys. */
   readonly tags: readonly string[];
 }
 

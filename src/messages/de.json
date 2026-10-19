@@ -60,8 +60,12 @@
       "open": "Episode öffnen",
       "comingSoon": "Demnächst",
       "minutesUnit": "Min. Lesezeit",
+      "watchVideo": "Auf YouTube ansehen",
+      "newTab": "öffnet in neuem Tab",
       "spotlightTitle": "Im Fokus",
       "browseTitle": "Alle Episoden durchstöbern",
+      "search": "Episoden durchsuchen",
+      "searchPlaceholder": "Nach Titel, Thema oder Tag suchen",
       "topicFilter": "Nach Thema filtern",
       "formatFilter": "Nach Format filtern",
       "all": "Alle",
@@ -75,10 +79,60 @@
       "empty": "Zu diesen Filtern gibt es noch keine Episode.",
       "reset": "Filter zurücksetzen",
       "topics": {
-        "ai-collaboration": "Arbeiten mit KI",
-        "documentation": "Dokumentation",
-        "economics": "Kosten und Ökonomie",
-        "adoption": "Einführung und Wandel"
+        "sales": "Vertrieb",
+        "knowledge-base": "Wissensbasis",
+        "cost": "Kosten",
+        "ai-enablement": "KI-Befähigung"
+      },
+      "tags": {
+        "tokens": {
+          "name": "Tokens",
+          "tooltip": "Die Einheiten, die ein Sprachmodell liest und abrechnet"
+        },
+        "context-window": {
+          "name": "Kontextfenster",
+          "tooltip": "Wie viel Text ein Modell auf einmal im Blick behält"
+        },
+        "agentic-ai": {
+          "name": "Agentische KI",
+          "tooltip": "KI, die in Schritten plant und handelt, statt nur zu antworten"
+        },
+        "model-tiers": {
+          "name": "Modellklassen",
+          "tooltip": "Die Wahl zwischen kleinen, schnellen und großen, fähigen Modellen"
+        },
+        "markdown": {
+          "name": "Markdown",
+          "tooltip": "Textdokumente, die Menschen und KI gleich gut lesen"
+        },
+        "verification": {
+          "name": "Verifikation",
+          "tooltip": "Prüfen, ob ein Dokument noch stimmt"
+        },
+        "review": {
+          "name": "Review",
+          "tooltip": "Ein Mensch bestätigt, was eine KI oder ein Kollege geschrieben hat"
+        },
+        "google-okf": {
+          "name": "Google OKF",
+          "tooltip": "Googles Open Knowledge Format für Dokumente, die Agenten lesen"
+        },
+        "startups": {
+          "name": "Startups",
+          "tooltip": "Junge Unternehmen auf der Suche nach ihren ersten Kunden"
+        },
+        "cashflow": {
+          "name": "Liquidität",
+          "tooltip": "Geld, das tatsächlich auf dem Konto ist, Monat für Monat"
+        },
+        "lead-generation": {
+          "name": "Leadgenerierung",
+          "tooltip": "Mögliche Käufer finden und auflisten"
+        },
+        "sales-pipeline": {
+          "name": "Vertriebspipeline",
+          "tooltip": "Jeder offene Deal, vom ersten Kontakt bis zur Unterschrift"
+        }
       },
       "formats": {
         "foundations": "Grundlagen",
@@ -349,8 +403,7 @@
     }
   },
   "episodesPage": {
-    "title": "Episoden",
-    "subtitle": "Durchsuchen Sie die interaktiven Slide-Decks und visualisierten Essays."
+    "title": "Episoden"
   },
   "tableOfContents": {
     "title": "Inhalt",

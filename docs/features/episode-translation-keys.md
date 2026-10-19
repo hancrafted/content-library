@@ -97,7 +97,8 @@ An entry reads its text from:
 - An Episode with a page, published or still upcoming: its title and caption from its own `i18n/`, read through the registry (`findEpisode(slug).messages[locale]`).
 - An Upcoming Episode with no page: `landing.episodeOverview.upcoming.<slug>.title` and `.caption`. It has no record, so this is landing text and stays site-wide; move it into the Episode folder's `i18n/` when its page is written.
 - Every Episode: `landing.episodeOverview.topics.<topic>` and `landing.episodeOverview.formats.<format>`, one per id in `TOPICS` and `FORMATS`.
-- Entry chrome: `landing.episodeOverview.open` and `landing.episodeOverview.comingSoon`.
+- Every Tag an Episode lists: `landing.episodeOverview.tags.<tag>.name` and `.tooltip`. A Tag is only an id in the metadata; a test fails when an id in use lacks either key in en or de.
+- Entry chrome: `landing.episodeOverview.open` and `landing.episodeOverview.comingSoon`; the overview's search box: `landing.episodeOverview.search` (its accessible name) and `.searchPlaceholder`.
 
 To announce an Upcoming Episode, create `episodes/<slug>/` holding only `episode-metadata.ts` with `status: 'upcoming'`, add it to `UPCOMING` in the repository, and write its two `upcoming` keys in en and de.
 

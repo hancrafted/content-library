@@ -1,14 +1,16 @@
 import type { EpisodeCard } from '@/components/landing/episode-card.pure';
+import { HighlightLabel } from '@/components/landing/episode-highlight-label';
+import { EpisodeLinks } from '@/components/landing/episode-links';
 import { TOPIC_ACCENTS, TOPIC_ICONS } from '@/components/landing/episode-visuals';
+import type { VideoLabels } from '@/components/landing/episode-youtube-link';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
 
 /** The strings a card draws that are not on the card itself. */
-export interface CardLabels {
+export interface CardLabels extends VideoLabels {
   readonly open: string;
   readonly comingSoon: string;
-  readonly minutesUnit: string;
 }
 
 const CARD =
@@ -32,38 +34,79 @@ function CardTitle({ card, locale }: { card: EpisodeCard; locale: Locale }) {
   );
 }
 
+/** The card's last row: where else the Episode is published on the left, the open cue (or "coming soon") on the right. */
 function CardFooter({ card, labels }: { card: EpisodeCard; labels: CardLabels }) {
-  if (card.route === null) {
-    return (
-      <p className="mt-auto flex items-center justify-between gap-3 pt-3">
-        <span className={META}>{card.topic.label}</span>
-        <span className="rounded-full border border-border px-2.5 py-0.5 font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
+  return (
+    <div className="mt-auto flex min-h-11 items-center justify-between gap-3 pt-3">
+      <EpisodeLinks card={card} labels={labels} />
+      {card.route === null ? (
+        <span className="ml-auto rounded-full border border-border px-2.5 py-0.5 font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
           {labels.comingSoon}
         </span>
-      </p>
-    );
-  }
-  return (
-    <p className="mt-auto flex items-center justify-between gap-3 pt-3">
-      <span className={META}>{card.topic.label}</span>
-      <span className="inline-flex items-center gap-1.5 font-mono text-[0.65rem] uppercase tracking-widest text-foreground">
-        {card.minutes !== undefined && (
-          <span className="text-muted-foreground">
-            {card.minutes} {labels.minutesUnit}
-          </span>
-        )}
+      ) : (
         <ArrowUpRight
           aria-hidden
-          className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0 motion-reduce:group-hover:translate-y-0"
+          className="ml-auto h-3.5 w-3.5 text-foreground transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0 motion-reduce:group-hover:translate-y-0"
         />
+      )}
+    </div>
+  );
+}
+
+interface HeadProps {
+  card: EpisodeCard;
+  tile: string;
+  showFormat: boolean;
+}
+
+/** The card's first row: the Topic's icon and name on the left; the highlighted Topic and the Format (once there are two) on the right. */
+function CardHead({ card, tile, showFormat }: HeadProps) {
+  const Icon = TOPIC_ICONS[card.icon];
+  return (
+    <div className="flex min-h-9 items-center justify-between gap-3">
+      <span className="inline-flex items-center gap-2.5">
+        <span className={`flex h-9 w-9 items-center justify-center rounded-xl ${tile}`}>
+          <Icon aria-hidden className="h-[1.1rem] w-[1.1rem]" />
+        </span>
+        <span className={META}>{card.topic.label}</span>
       </span>
-    </p>
+      <span className="inline-flex items-center gap-3">
+        <HighlightLabel card={card} className={META} />
+        {showFormat && <span className={META}>{card.format.label}</span>}
+      </span>
+    </div>
+  );
+}
+
+/** The Episode's Tags as plain labels: no filter acts on them, and each explains itself on hover. */
+function CardTags({ card }: { card: EpisodeCard }) {
+  if (card.tags.length === 0) return null;
+  return (
+    <ul data-episode-tags className="relative z-20 flex flex-wrap gap-1.5">
+      {card.tags.map((tag) => (
+        <li
+          key={tag.id}
+          data-tag={tag.id}
+          title={tag.tooltip}
+          className="rounded-full bg-muted px-2 py-0.5 text-[0.7rem] leading-snug text-muted-foreground"
+        >
+          {tag.label}
+        </li>
+      ))}
+    </ul>
   );
 }
 
 /** A compact Episode card for the Browse grid: a published one is a link, an upcoming one a muted card with a "coming soon" tag and no link. */
-export function EpisodeGridCard({ card, locale, labels }: { card: EpisodeCard; locale: Locale; labels: CardLabels }) {
-  const Icon = TOPIC_ICONS[card.icon];
+export interface GridCardProps {
+  card: EpisodeCard;
+  locale: Locale;
+  labels: CardLabels;
+  /** Whether the card names its Format; see `showsFormat`. */
+  showFormat: boolean;
+}
+
+export function EpisodeGridCard({ card, locale, labels, showFormat }: GridCardProps) {
   const upcoming = card.route === null;
   const accent = TOPIC_ACCENTS[card.accent];
   const tone = upcoming
@@ -78,16 +121,10 @@ export function EpisodeGridCard({ card, locale, labels }: { card: EpisodeCard; l
       data-format={card.format.id}
       className={`${CARD} ${tone}`}
     >
-      <div className="flex items-center justify-between gap-3">
-        <span
-          className={`flex h-9 w-9 items-center justify-center rounded-xl ${upcoming ? 'bg-muted text-muted-foreground' : accent.tile}`}
-        >
-          <Icon aria-hidden className="h-[1.1rem] w-[1.1rem]" />
-        </span>
-        <span className={META}>{card.format.label}</span>
-      </div>
+      <CardHead card={card} tile={upcoming ? 'bg-muted text-muted-foreground' : accent.tile} showFormat={showFormat} />
       <CardTitle card={card} locale={locale} />
       <p className="line-clamp-3 text-sm leading-relaxed text-muted-foreground">{card.caption}</p>
+      <CardTags card={card} />
       <CardFooter card={card} labels={labels} />
     </article>
   );
