@@ -1,0 +1,188 @@
+{
+  "title": "Five traits, or you pay the PRICE",
+  "heading": "A brilliant freelancer with amnesia, every time",
+  "caption": "Five traits to manage, or you pay the PRICE.",
+  "columns": {
+    "freelancer": "The freelancer",
+    "traits": "Five traits",
+    "ai": "AI"
+  },
+  "traits": {
+    "probabilistic": {
+      "name": "Probabilistic",
+      "back": "Varies",
+      "freelancer": "Give the same brief to a new freelancer, and get a different plan.",
+      "ai": "<marker>Give the same prompt in a new chat, and get a different answer.</marker>",
+      "popover": "The same brief can come back different every time. It picks a likely answer, not a fixed one, so one good result is not a promise."
+    },
+    "relentless": {
+      "name": "Relentless",
+      "back": "Nonstop",
+      "freelancer": "Hand over the job, and they work day and night, producing stacks of polished pages, whether they’re right or not.",
+      "ai": "<marker>Send the prompt, and it produces pages in seconds, as many as you ask for, whether they’re right or not.</marker>",
+      "popover": "Pages pour out fast and polished, whether they are right or not. There is a lot to read, and all of it needs checking."
+    },
+    "informed": {
+      "name": "Informed",
+      "back": "Redacted",
+      "freelancer": "Ask a freelancer who knows every trade, and get expert answers, blind to your company and culture.",
+      "ai": "<marker>Ask AI, trained on more text than anyone could read, and get the likeliest answer, blind to your company and culture.</marker>",
+      "popover": "It knows a great deal about the world and nothing about your company. Your culture and unwritten rules never reached it."
+    },
+    "confident": {
+      "name": "Confident",
+      "back": "Guesses",
+      "freelancer": "Give a vague request, and they start without asking, fill the gaps with their own assumptions, and sell it to you as right.",
+      "ai": "<marker>Give a vague prompt, and it starts without asking, fills the gaps with the most common answers, and replies with full confidence.</marker>",
+      "popover": "It starts instead of asking, and fills the gaps with guesses. A guess sounds as sure as a fact."
+    },
+    "every-word-billed": {
+      "name": "Every word billed",
+      "back": "Grows",
+      "freelancer": "They bill every word they read and write, so one more question means paying to reread the whole file, their own pages included.",
+      "ai": "<marker>It charges for every word it reads and writes, so one more message means paying for the whole chat again, its own answers included.</marker>",
+      "popover": "Every new question pays again for all the words so far. The longer it runs, the bigger the bill."
+    }
+  },
+  "backs": {
+    "prompt": "prompt",
+    "handbook": "How we work here",
+    "bill": "bill",
+    "tokens": "tokens"
+  },
+  "closing": "And every time, they forget everything, so every job starts from day one.",
+  "notes": {
+    "right-or-not-the-output-looks-finished": {
+      "header": "Right or not, the output looks finished",
+      "description": "even state-of-the-art models \"still regularly produce logical mistakes\", which is why speed without checking is a trap [1].",
+      "sources": {
+        "lightman-verify-step-by-step": {
+          "title": "Lightman et al., Let's Verify Step by Step"
+        }
+      }
+    },
+    "probable-not-random": {
+      "header": "Probable, not random",
+      "description": "text generation samples from a probability distribution rather than always picking the single likeliest word, because the always-likeliest text is bland and repetitive [1]. Even with randomness set to zero the provider documents that \"the results will not be fully deterministic\" [2].",
+      "sources": {
+        "holtzman-text-degeneration": {
+          "title": "Holtzman et al., The Curious Case of Neural Text Degeneration"
+        },
+        "anthropic-messages-api": {
+          "title": "Anthropic, Messages API reference (temperature parameter)"
+        }
+      }
+    },
+    "how-much-varies": {
+      "header": "How much varies",
+      "description": "in one test 1,000 completions of one prompt at zero randomness gave 80 unique answers [1]. Across five models set up for determinism, accuracy moved by up to 15% between runs of the same task [2].",
+      "sources": {
+        "he-defeating-nondeterminism": {
+          "title": "He et al., Defeating Nondeterminism in LLM Inference"
+        },
+        "atil-deterministic-settings": {
+          "title": "Atil et al., Non-Determinism of \"Deterministic\" LLM Settings"
+        }
+      }
+    },
+    "the-bill-covers-the-whole-chat": {
+      "header": "The bill covers the whole chat",
+      "description": "the interface is stateless: the earlier turns go in with every request, and the model's own answers become part of the next input [1]. Each resent word is billed as input [2].",
+      "sources": {
+        "anthropic-context-windows": {
+          "title": "Anthropic, Context windows"
+        },
+        "anthropic-pricing": {
+          "title": "Anthropic, Pricing"
+        }
+      }
+    },
+    "a-discount-not-an-exemption": {
+      "header": "A discount, not an exemption",
+      "description": "cached reads cost about a tenth of base input, the default cache lasts 5 minutes, and caching changes what is paid, not whether the words count toward the window [1].",
+      "sources": {
+        "anthropic-prompt-caching": {
+          "title": "Anthropic, Prompt caching"
+        }
+      }
+    },
+    "why-it-guesses-instead-of-asking": {
+      "header": "Why it guesses instead of asking",
+      "description": "most benchmarks score a guess above an abstention, so training rewards guessing [1]. Current models rarely ask for clarification and answer wrongly instead [2].",
+      "sources": {
+        "kalai-why-models-hallucinate": {
+          "title": "Kalai et al., Why Language Models Hallucinate"
+        },
+        "kuhn-clam": {
+          "title": "Kuhn et al., CLAM: Selective Clarification for Ambiguous Questions with Generative Language Models"
+        }
+      }
+    },
+    "why-it-is-blind-to-your-company": {
+      "header": "Why it is blind to your company",
+      "description": "a model's accuracy on a fact relates to how many documents about it it saw in training [1], and a leading model family was trained on publicly available data alone [2]. The provider states it does not train on commercial inputs and outputs by default [3].",
+      "sources": {
+        "kandpal-long-tail-knowledge": {
+          "title": "Kandpal et al., Large Language Models Struggle to Learn Long-Tail Knowledge"
+        },
+        "touvron-llama": {
+          "title": "Touvron et al., LLaMA: Open and Efficient Foundation Language Models"
+        },
+        "anthropic-training-data": {
+          "title": "Anthropic, Is my data used for model training? (commercial products)"
+        }
+      }
+    },
+    "the-forgetting-is-in-the-design": {
+      "header": "The forgetting is in the design",
+      "description": "the context window is described as the model's \"working memory\", distinct from the corpus it was trained on [1]. Memory across chats exists only where an application stores notes and puts them back, since the memory tool runs client-side [2].",
+      "sources": {
+        "anthropic-context-windows": {
+          "title": "Anthropic, Context windows"
+        },
+        "anthropic-memory-tool": {
+          "title": "Anthropic, Memory tool"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "who-gets-the-job": {
+        "title": "Who gets the job",
+        "keywords": "",
+        "script": "So who are you handing the work to? Not a chatbot and not an oracle, but a hire: a brilliant freelancer with amnesia, every time. They come with five traits, and the first letters spell PRICE, because if you do not manage them, you pay. For now I only describe the freelancer, a person, so you can picture them."
+      },
+      "probabilistic-relentless": {
+        "title": "Probabilistic, Relentless",
+        "keywords": "",
+        "script": "The first trait is Probabilistic. Give the same brief to a new freelancer and you get a different plan: each one picks a likely plan, not a fixed one, which means one good result is not a promise. The second is Relentless. You hand over the job and they work day and night, producing stacks of polished pages, whether the pages are right or not, so there is a lot to read and all of it needs checking."
+      },
+      "informed": {
+        "title": "Informed",
+        "keywords": "",
+        "script": "Third, Informed. They know every trade and give expert answers, yet they are blind to your company and your culture. The handbook they get is redacted, sometimes on purpose, and sometimes because nobody, not even the person onboarding them, knows what is missing."
+      },
+      "confident-every-word-billed": {
+        "title": "Confident, Every word billed",
+        "keywords": "",
+        "script": "Fourth, Confident. You give a vague request, they start without asking, fill the gaps with their own assumptions and sell the result to you as right. A guess sounds exactly as sure as a fact. And fifth, Every word billed: this freelancer bills for every word they read and write, so one more question from you means paying for them to reread the whole file, their own pages included. The longer the job runs, the bigger the bill, and the bill grows faster than the work does."
+      },
+      "amnesia": {
+        "title": "Amnesia",
+        "keywords": "",
+        "script": "And here is what sits under all five. Every time you come back, they forget everything, so every job starts from day one. (pause) Hold that picture of the freelancer, because the next thing I show is who this really is."
+      },
+      "ai-lands-last": {
+        "title": "AI lands last",
+        "keywords": "",
+        "script": "This freelancer is AI. Row by row, it is the same sentence with different nouns. Give the same prompt in a new chat and you get a different answer. Send the prompt and it produces pages in seconds, as many as you ask for, right or not. Trained on more text than anyone could read, it gives you the likeliest answer, blind to your company and culture. Give it a vague prompt and it fills the gaps with the most common answers and replies with full confidence. And it charges for every word it reads and writes, so one more message pays for the whole chat again, its own answers included. (pause) Would you hand a job to a freelancer like that without a plan?"
+      },
+      "the-pun": {
+        "title": "The pun",
+        "keywords": "",
+        "script": "So here is the whole slide in one line. Forget the price, and you'll pay it every time."
+      }
+    }
+  }
+}

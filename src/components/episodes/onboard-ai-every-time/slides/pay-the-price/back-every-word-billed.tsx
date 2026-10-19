@@ -1,0 +1,92 @@
+import { cn } from '@/lib/utils';
+import { BackSvg, beat, Label, type BackProps } from './back-parts';
+import styles from './trait-flip.module.css';
+
+/** When each of the four items lands, in seconds: one per pass of the scan line (`build2.py`'s schedule). */
+const ARRIVALS = [0.2, 1.27, 2.76, 4.67];
+
+/** The count after each item the line crosses: 0, then one more for each of its ten crossings. */
+const CROSSINGS = 10;
+
+/** The count's step classes, one per value; the last is the end state. */
+const STEPS = [
+  styles.v0,
+  styles.v1,
+  styles.v2,
+  styles.v3,
+  styles.v4,
+  styles.v5,
+  styles.v6,
+  styles.v7,
+  styles.v8,
+  styles.v9,
+  styles.v10,
+];
+
+/** An item's box, bottom first: the freelancer's own pages, or the chat's prompts (left) and its answers (indented right). */
+function itemBox(ai: boolean, index: number): { x: number; y: number; width: number } {
+  if (ai) return { x: index % 2 === 0 ? 12 : 36, y: 56 - 13 * index, width: 46 };
+  return { x: 10, y: 56 - 13 * index, width: 70 };
+}
+
+/** The stack: four items landing one per pass, and the scan line sweeping over them. */
+function Stack({ ai }: BackProps) {
+  const item = ai ? 'fill-ai/20 stroke-ai' : 'fill-card stroke-foreground';
+  return (
+    <>
+      {ai && <rect x="6" y="2" width="88" height="68" rx="6" className="fill-card stroke-ai" strokeWidth="1.5" />}
+      {ARRIVALS.map((arrives, index) => (
+        <rect
+          key={arrives}
+          className={`${styles.drop} ${item}`}
+          {...itemBox(ai, index)}
+          height="9"
+          rx={ai ? 3 : 1}
+          strokeWidth="1.1"
+          style={beat({ d: arrives })}
+        />
+      ))}
+      <rect
+        className={`${styles.scan} ${ai ? 'fill-ai' : 'fill-primary'}`}
+        x="6"
+        y="0"
+        width={ai ? 86 : 78}
+        height="2"
+        rx="1"
+      />
+    </>
+  );
+}
+
+/** The bill (€) or the token count, one value per crossing; only the last shows at rest. */
+function Count({ ai, unit }: BackProps & { unit: string }) {
+  const ink = ai ? 'fill-ai' : 'fill-foreground';
+  return (
+    <>
+      {STEPS.map((step, count) => (
+        <g key={step} className={cn(step, count === CROSSINGS && styles.vLast)}>
+          <Label x={148} y={40} size={22} className={cn(ink, 'font-semibold')}>
+            {count === 0 ? '0' : ai ? `${count}k` : `€${count}`}
+          </Label>
+        </g>
+      ))}
+      <Label x={148} y={56} size={9} className="fill-muted-foreground">
+        {unit}
+      </Label>
+    </>
+  );
+}
+
+/**
+ * Every word billed, "Grows": a line sweeps up and down a stack that gains an item each pass; every item it passes
+ * raises the bill (€) or the token count. The freelancer's stack is their own pages; the AI's is the chat, prompts
+ * left, its own answers indented right.
+ */
+export function EveryWordBilledBack({ ai, unit }: BackProps & { unit: string }) {
+  return (
+    <BackSvg>
+      <Stack ai={ai} />
+      <Count ai={ai} unit={unit} />
+    </BackSvg>
+  );
+}
