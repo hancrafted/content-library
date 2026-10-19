@@ -44,3 +44,17 @@ export function exportedPage(url: string): CheerioAPI {
   }
   return page;
 }
+
+/** The base path the export was built under: the env override, else `SITE_URL`'s path, else `next.config`. */
+export function resolveBasePath(): string {
+  if (process.env.NEXT_PUBLIC_BASE_PATH) return process.env.NEXT_PUBLIC_BASE_PATH;
+  if (process.env.SITE_URL) {
+    try {
+      const pathname = new URL(process.env.SITE_URL).pathname.replace(/\/+$/, '');
+      if (pathname) return pathname;
+    } catch {
+      // ignore
+    }
+  }
+  return nextConfig.basePath ?? '';
+}
