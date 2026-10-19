@@ -1,10 +1,12 @@
 ---
 type: research
 title: 'Why does AI let individuals take on more complex tasks than before?'
-description: 'AI completes longer tasks on its own and speeds up professional work inside its capability frontier, but only where the task fits the model and the person splits and checks the work.'
+description: 'AI completes longer tasks on its own and speeds up professional
+  work inside its capability frontier, but only where the task fits the model
+  and the person splits and checks the work.'
 generated:
-  by: claude-code/opus-5.5
-  at: 2026-10-19T00:00:00Z
+  by: claude-code/sonnet-4.6
+  at: 2026-10-19T18:26:40Z
 stale_after: 2027-04-19T00:00:00Z
 sources:
   - id: 1
@@ -15,13 +17,16 @@ sources:
     title: 'Anthropic, Economic Index: New building blocks for AI use (January 2026)'
   - id: 3
     resource: https://mitsloan.mit.edu/sites/default/files/2023-10/SSRN-id4573321.pdf
-    title: "Dell'Acqua et al., Navigating the Jagged Technological Frontier, HBS Working Paper 24-013 (SSRN 4573321)"
+    title: "Dell'Acqua et al., Navigating the Jagged Technological Frontier, HBS
+      Working Paper 24-013 (SSRN 4573321)"
   - id: 4
     resource: https://economics.mit.edu/sites/default/files/inline-files/Noy_Zhang_1.pdf
-    title: 'Noy, Zhang, Experimental Evidence on the Productivity Effects of Generative Artificial Intelligence'
+    title: 'Noy, Zhang, Experimental Evidence on the Productivity Effects of
+      Generative Artificial Intelligence'
   - id: 5
     resource: https://arxiv.org/abs/2507.09089
-    title: 'Becker, Rush, Barnes, Rein, Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity'
+    title: 'Becker, Rush, Barnes, Rein, Measuring the Impact of Early-2025 AI on
+      Experienced Open-Source Developer Productivity'
 ---
 
 # Why does AI let individuals take on more complex tasks than before?
