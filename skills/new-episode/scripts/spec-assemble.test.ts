@@ -34,6 +34,14 @@ afterEach(() => {
   for (const folder of folders.splice(0)) rmSync(folder, { recursive: true, force: true });
 });
 
+/** A designer's fragment, written where the assembler reads it: `.scratch/<slug>/spec/`. */
+function fragment(folder: string, html: string): void {
+  const scratch = path.join(ROOT, '.scratch', path.basename(folder));
+  folders.push(scratch);
+  mkdirSync(path.join(scratch, 'spec'), { recursive: true });
+  writeFileSync(path.join(scratch, 'spec/spent-attention.html'), html);
+}
+
 function episode(files: Record<string, string>): string {
   const folder = mkdtempSync(path.join(os.tmpdir(), 'spec-assemble-'));
   folders.push(folder);
@@ -56,6 +64,28 @@ describe('success cases', () => {
     expect(run.status).toBe(0);
     const html = readFileSync(path.join(folder, 'spec/spec.html'), 'utf8');
     expect(html).toContain('data-spec="slide" id="spent-attention"');
+  });
+
+  it('compiles design.css with the classes the assembled Options use, even when the Spec contract fails', () => {
+    // ARRANGE: a design.css compiled before any Option existed, as a Spec server started at the Brief stage leaves it,
+    // and one lone Option, which the contract refuses
+    const folder = episode({ 'brief.md': BRIEF, 'spec/design.css': '/* Brief stage */' });
+    fragment(
+      folder,
+      `<!-- slide: spent-attention -->
+<figure data-spec="option" data-option="1a" data-recommended>
+  <div data-spec="mock" class="border-ai rounded-full">A bar</div>
+  <figcaption><b>1a</b> A bar. Build cost: Scene.</figcaption>
+  <div data-spec="build-notes">Keeps master.</div>
+</figure>`,
+    );
+    // ACT
+    const run = assemble(folder);
+    // ASSERT
+    expect(run.status).toBe(1);
+    const css = readFileSync(path.join(folder, 'spec/design.css'), 'utf8');
+    expect(css).toContain('.border-ai');
+    expect(css).toContain('.rounded-full');
   });
 });
 
