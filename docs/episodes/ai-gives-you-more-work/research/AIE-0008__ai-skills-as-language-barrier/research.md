@@ -36,7 +36,6 @@ Pocock does not use the exact phrase "language barrier" in the sources found. He
 4. In interview he says "there is a communication gap between you and the agent, right? There is a barrier there", and that you have to communicate your values to it [3].
 5. In the same interview he asks how to "start talking a common language between me and the agents, this communication barrier again", credits Eric Evans on ubiquitous language, and says that once the agent uses the domain language "the difference is night and day" because "suddenly you're speaking the same language" [3].
 6. His skills repository states the same diagnosis in writing: "There is a communication gap between you and the agent", fixed by a grilling session in which the agent asks detailed questions; and "The Fix for this is a shared language", because developers and domain experts "are usually speaking different languages" and agents must "figure out the jargon as they go" [2].
-7. He says precise language is the learnable skill: "just having the language to explain that ... is the whole game" [3].
 
 ## Caveats
 
