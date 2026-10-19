@@ -159,24 +159,278 @@ jobs:
 
   # One job per question retrieval lists under Research jobs, new or refresh;
   # a reused question has none.
-  - id: write-research
+  - id: write-research-tacit-knowledge-onboarding-transfer
     stage: research
     needs: [customize-pipeline]
     isolation: worktree
-    foreach: docs/episodes/onboard-ai-every-time/research-plan.md#research-jobs
+    intent: >-
+      Answer research question 1 of the Brief, "Why does tacit organisational knowledge fail to transfer during employee onboarding?", new, in research/ORG-0001__tacit-knowledge-onboarding-transfer/research.md, by
+      references/write-research.md. Cite docs/llm-wiki/research/AIE/AIE-0001__ai-as-onboarding-a-colleague/research.md as a Source: it answers a neighbouring question, not this one.
     before: [mh-query]
-    outputs: [docs/episodes/onboard-ai-every-time/research/*/research.md]
+    outputs: [docs/episodes/onboard-ai-every-time/research/ORG-0001__tacit-knowledge-onboarding-transfer/research.md]
     checks: [mh, vitest, sources]
     retries: 2
     agents:
       - type: implementor
         skills: [research, writing-for-agents]
         references:
-          [
-            references/write-research.md,
-            docs/episodes/onboard-ai-every-time/brief.md,
-            docs/episodes/onboard-ai-every-time/research-plan.md,
-          ]
+          - references/write-research.md
+          - docs/episodes/onboard-ai-every-time/brief.md
+          - docs/episodes/onboard-ai-every-time/research-plan.md
+          - docs/llm-wiki/research/AIE/AIE-0001__ai-as-onboarding-a-colleague/research.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-llm-output-nondeterminism
+    stage: research
+    needs: [customize-pipeline]
+    isolation: worktree
+    intent: >-
+      Answer research question 2 of the Brief, "Why do LLMs give different answers to the same prompt?", new, in research/LLM-0001__llm-output-nondeterminism/research.md, by
+      references/write-research.md.
+    before: [mh-query]
+    outputs: [docs/episodes/onboard-ai-every-time/research/LLM-0001__llm-output-nondeterminism/research.md]
+    checks: [mh, vitest, sources]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research, writing-for-agents]
+        references:
+          - references/write-research.md
+          - docs/episodes/onboard-ai-every-time/brief.md
+          - docs/episodes/onboard-ai-every-time/research-plan.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-llm-resends-whole-chat
+    stage: research
+    needs: [customize-pipeline]
+    isolation: worktree
+    intent: >-
+      Answer research question 3 of the Brief, "Why does an LLM resend the whole chat on every message?", new, in research/LLM-0002__llm-resends-whole-chat/research.md, by
+      references/write-research.md.
+    before: [mh-query]
+    outputs: [docs/episodes/onboard-ai-every-time/research/LLM-0002__llm-resends-whole-chat/research.md]
+    checks: [mh, vitest, sources]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research, writing-for-agents]
+        references:
+          - references/write-research.md
+          - docs/episodes/onboard-ai-every-time/brief.md
+          - docs/episodes/onboard-ai-every-time/research-plan.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-llm-memory-between-chats
+    stage: research
+    needs: [customize-pipeline]
+    isolation: worktree
+    intent: >-
+      Answer research question 4 of the Brief, "Why does an LLM forget everything between chats?", new, in research/LLM-0003__llm-memory-between-chats/research.md, by
+      references/write-research.md.
+    before: [mh-query]
+    outputs: [docs/episodes/onboard-ai-every-time/research/LLM-0003__llm-memory-between-chats/research.md]
+    checks: [mh, vitest, sources]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research, writing-for-agents]
+        references:
+          - references/write-research.md
+          - docs/episodes/onboard-ai-every-time/brief.md
+          - docs/episodes/onboard-ai-every-time/research-plan.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-llm-confidence-on-vague-prompts
+    stage: research
+    needs: [customize-pipeline]
+    isolation: worktree
+    intent: >-
+      Answer research question 5 of the Brief, "Why do LLMs answer confidently instead of asking when a prompt is vague?", new, in research/LLM-0004__llm-confidence-on-vague-prompts/research.md, by
+      references/write-research.md.
+    before: [mh-query]
+    outputs: [docs/episodes/onboard-ai-every-time/research/LLM-0004__llm-confidence-on-vague-prompts/research.md]
+    checks: [mh, vitest, sources]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research, writing-for-agents]
+        references:
+          - references/write-research.md
+          - docs/episodes/onboard-ai-every-time/brief.md
+          - docs/episodes/onboard-ai-every-time/research-plan.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-llm-lacks-organization-knowledge
+    stage: research
+    needs: [customize-pipeline]
+    isolation: worktree
+    intent: >-
+      Answer research question 6 of the Brief, "Why does an LLM trained on public text lack knowledge of a specific organisation?", new, in research/LLM-0005__llm-lacks-organization-knowledge/research.md, by
+      references/write-research.md. Cite docs/llm-wiki/research/AIE/AIE-0001__ai-as-onboarding-a-colleague/research.md as a Source: it answers a neighbouring question, not this one.
+    before: [mh-query]
+    outputs: [docs/episodes/onboard-ai-every-time/research/LLM-0005__llm-lacks-organization-knowledge/research.md]
+    checks: [mh, vitest, sources]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research, writing-for-agents]
+        references:
+          - references/write-research.md
+          - docs/episodes/onboard-ai-every-time/brief.md
+          - docs/episodes/onboard-ai-every-time/research-plan.md
+          - docs/llm-wiki/research/AIE/AIE-0001__ai-as-onboarding-a-colleague/research.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-task-decomposition-improves-llm
+    stage: research
+    needs: [customize-pipeline]
+    isolation: worktree
+    intent: >-
+      Answer research question 7 of the Brief, "Why does decomposing a complex task into smaller subtasks improve LLM results?", new, in research/AIE-0007__task-decomposition-improves-llm/research.md, by
+      references/write-research.md.
+    before: [mh-query]
+    outputs: [docs/episodes/onboard-ai-every-time/research/AIE-0007__task-decomposition-improves-llm/research.md]
+    checks: [mh, vitest, sources]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research, writing-for-agents]
+        references:
+          - references/write-research.md
+          - docs/episodes/onboard-ai-every-time/brief.md
+          - docs/episodes/onboard-ai-every-time/research-plan.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-written-requirements-reduce-variance
+    stage: research
+    needs: [customize-pipeline]
+    isolation: worktree
+    intent: >-
+      Answer research question 8 of the Brief, "Why do explicit written requirements reduce the variation in LLM output?", new, in research/AIE-0008__written-requirements-reduce-variance/research.md, by
+      references/write-research.md. Cite docs/llm-wiki/research/AIE/AIE-0004__context-and-brief-improve-ai-output/research.md as a Source: it answers a neighbouring question, not this one.
+    before: [mh-query]
+    outputs: [docs/episodes/onboard-ai-every-time/research/AIE-0008__written-requirements-reduce-variance/research.md]
+    checks: [mh, vitest, sources]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research, writing-for-agents]
+        references:
+          - references/write-research.md
+          - docs/episodes/onboard-ai-every-time/brief.md
+          - docs/episodes/onboard-ai-every-time/research-plan.md
+          - docs/llm-wiki/research/AIE/AIE-0004__context-and-brief-improve-ai-output/research.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-clarifying-questions-before-task
+    stage: research
+    needs: [customize-pipeline]
+    isolation: worktree
+    intent: >-
+      Answer research question 9 of the Brief, "Why does letting an LLM ask clarifying questions before a task improve the result?", new, in research/AIE-0009__clarifying-questions-before-task/research.md, by
+      references/write-research.md.
+    before: [mh-query]
+    outputs: [docs/episodes/onboard-ai-every-time/research/AIE-0009__clarifying-questions-before-task/research.md]
+    checks: [mh, vitest, sources]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research, writing-for-agents]
+        references:
+          - references/write-research.md
+          - docs/episodes/onboard-ai-every-time/brief.md
+          - docs/episodes/onboard-ai-every-time/research-plan.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-checking-intermediate-steps
+    stage: research
+    needs: [customize-pipeline]
+    isolation: worktree
+    intent: >-
+      Answer research question 10 of the Brief, "Why does checking intermediate steps catch errors that a review of only the final result misses?", new, in research/AIE-0010__checking-intermediate-steps/research.md, by
+      references/write-research.md. Cite docs/llm-wiki/research/AIE/AIE-0005__risks-of-unchecked-ai-output/research.md as a Source: it answers a neighbouring question, not this one.
+    before: [mh-query]
+    outputs: [docs/episodes/onboard-ai-every-time/research/AIE-0010__checking-intermediate-steps/research.md]
+    checks: [mh, vitest, sources]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research, writing-for-agents]
+        references:
+          - references/write-research.md
+          - docs/episodes/onboard-ai-every-time/brief.md
+          - docs/episodes/onboard-ai-every-time/research-plan.md
+          - docs/llm-wiki/research/AIE/AIE-0005__risks-of-unchecked-ai-output/research.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-fresh-context-beats-long-chat
+    stage: research
+    needs: [customize-pipeline]
+    isolation: worktree
+    intent: >-
+      Answer research question 11 of the Brief, "Why does a fresh, focused context outperform a long, accumulated chat?", new, in research/AIE-0011__fresh-context-beats-long-chat/research.md, by
+      references/write-research.md.
+    before: [mh-query]
+    outputs: [docs/episodes/onboard-ai-every-time/research/AIE-0011__fresh-context-beats-long-chat/research.md]
+    checks: [mh, vitest, sources]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research, writing-for-agents]
+        references:
+          - references/write-research.md
+          - docs/episodes/onboard-ai-every-time/brief.md
+          - docs/episodes/onboard-ai-every-time/research-plan.md
         model: sonnet
       - type: reviewer
         skills: []
@@ -189,7 +443,18 @@ jobs:
   - id: write-dossier
     stage: dossier
     needs: [customize-pipeline]
-    wants: [write-research]
+    wants:
+      - write-research-tacit-knowledge-onboarding-transfer
+      - write-research-llm-output-nondeterminism
+      - write-research-llm-resends-whole-chat
+      - write-research-llm-memory-between-chats
+      - write-research-llm-confidence-on-vague-prompts
+      - write-research-llm-lacks-organization-knowledge
+      - write-research-task-decomposition-improves-llm
+      - write-research-written-requirements-reduce-variance
+      - write-research-clarifying-questions-before-task
+      - write-research-checking-intermediate-steps
+      - write-research-fresh-context-beats-long-chat
     before: [mh-query]
     outputs: [docs/episodes/onboard-ai-every-time/dossier.md]
     checks: [mh, vitest]
@@ -201,7 +466,17 @@ jobs:
           - references/write-dossier.md
           - docs/episodes/onboard-ai-every-time/brief.md
           - docs/episodes/onboard-ai-every-time/research-plan.md
-          - docs/episodes/onboard-ai-every-time/research/*/research.md
+          - docs/episodes/onboard-ai-every-time/research/ORG-0001__tacit-knowledge-onboarding-transfer/research.md
+          - docs/episodes/onboard-ai-every-time/research/LLM-0001__llm-output-nondeterminism/research.md
+          - docs/episodes/onboard-ai-every-time/research/LLM-0002__llm-resends-whole-chat/research.md
+          - docs/episodes/onboard-ai-every-time/research/LLM-0003__llm-memory-between-chats/research.md
+          - docs/episodes/onboard-ai-every-time/research/LLM-0004__llm-confidence-on-vague-prompts/research.md
+          - docs/episodes/onboard-ai-every-time/research/LLM-0005__llm-lacks-organization-knowledge/research.md
+          - docs/episodes/onboard-ai-every-time/research/AIE-0007__task-decomposition-improves-llm/research.md
+          - docs/episodes/onboard-ai-every-time/research/AIE-0008__written-requirements-reduce-variance/research.md
+          - docs/episodes/onboard-ai-every-time/research/AIE-0009__clarifying-questions-before-task/research.md
+          - docs/episodes/onboard-ai-every-time/research/AIE-0010__checking-intermediate-steps/research.md
+          - docs/episodes/onboard-ai-every-time/research/AIE-0011__fresh-context-beats-long-chat/research.md
           - docs/episodes/onboard-ai-every-time/reference/price-cornerstone/design-reference.md
           - docs/profile/storytelling-guide.md
           - docs/profile/tone-guide.md
@@ -321,12 +596,95 @@ jobs:
 
   # One job per Section, the h3s under the Brief's Slides, in parallel: each
   # builds its Slides at its own placement marker.
-  - id: implement-section
+  - id: implement-section-the-thought-experiment
     stage: build
     needs: [implement-episode-init]
     isolation: worktree
-    foreach: docs/episodes/onboard-ai-every-time/brief.md#slides
+    intent: >-
+      Build Section 1 of 3, "The thought experiment", from the Brief's Slides: its Slides at its placement marker, by
+      references/implement-section.md.
     outputs: []
+    port: 4005
+    checks: [verify, build, test:build, impeccable, visual-check]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [tdd, visual-check, vercel-react-best-practices, web-design-guidelines, commit]
+        agent: archgate:developer
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/onboard-ai-every-time/spec/spec.html
+          - docs/episodes/onboard-ai-every-time/reference/price-cornerstone/design-reference.md
+        model: opus
+      # code-review spawns its own subagents, so the reviewer runs in the
+      # orchestrator's session; its subagents give the fresh eyes.
+      - type: reviewer
+        skills:
+          - code-review
+          - visual-check
+          - ui-ux-pro-max:ui-ux-pro-max
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - performance-optimization
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/onboard-ai-every-time/spec/spec.html
+          - docs/episodes/onboard-ai-every-time/reference/price-cornerstone/design-reference.md
+        rubric: references/implement-section.md#rubric
+        model: opus
+        session: orchestrator
+
+  - id: implement-section-five-moves-to-brief-a-freelancer
+    stage: build
+    needs: [implement-episode-init]
+    isolation: worktree
+    intent: >-
+      Build Section 2 of 3, "Five moves to brief a freelancer", from the Brief's Slides: its Slides at its placement marker, by
+      references/implement-section.md.
+    outputs: []
+    port: 4006
+    checks: [verify, build, test:build, impeccable, visual-check]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [tdd, visual-check, vercel-react-best-practices, web-design-guidelines, commit]
+        agent: archgate:developer
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/onboard-ai-every-time/spec/spec.html
+          - docs/episodes/onboard-ai-every-time/reference/price-cornerstone/design-reference.md
+        model: opus
+      # code-review spawns its own subagents, so the reviewer runs in the
+      # orchestrator's session; its subagents give the fresh eyes.
+      - type: reviewer
+        skills:
+          - code-review
+          - visual-check
+          - ui-ux-pro-max:ui-ux-pro-max
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - performance-optimization
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/onboard-ai-every-time/spec/spec.html
+          - docs/episodes/onboard-ai-every-time/reference/price-cornerstone/design-reference.md
+        rubric: references/implement-section.md#rubric
+        model: opus
+        session: orchestrator
+
+  - id: implement-section-brief-in-action
+    stage: build
+    needs: [implement-episode-init]
+    isolation: worktree
+    intent: >-
+      Build Section 3 of 3, "BRIEF in action", from the Brief's Slides: its Slides at its placement marker, by
+      references/implement-section.md.
+    outputs: []
+    port: 4007
     checks: [verify, build, test:build, impeccable, visual-check]
     retries: 2
     agents:
@@ -360,7 +718,10 @@ jobs:
 
   - id: open-pr
     stage: pr
-    needs: [implement-section]
+    needs:
+      - implement-section-the-thought-experiment
+      - implement-section-five-moves-to-brief-a-freelancer
+      - implement-section-brief-in-action
     outputs: []
     checks: []
     retries: 0
