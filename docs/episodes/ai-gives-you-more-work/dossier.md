@@ -62,7 +62,7 @@ A row of cards for farming, the steam engine and the computer, followed by a muc
 
 1. **Every revolution, one card** — To see why, look at the three machines you already know: the plough, the steam engine and the computer. Each one took over the predictable work, the lifting, the digging, the calculating, and people moved to the part a machine could not do, which is judging, deciding and coordinating.
 2. **The climb** — Now watch what happens under each card. The plough digs, so the farmer plans the harvest. The engine does the lifting, so the worker plans the line. Every time, the machine did more, and you moved up a level, which means the work did not disappear, it changed.
-3. **The fork, no judgment** — Here is where it forks, and I want to say it without judgment. Some of the people who took up managing the new machines moved up, and others stayed on the line, and there is nothing wrong with either. What matters is that a seismic shift opens that door.
+3. **The fork, no judgment** — Here is where it forks, and I want to say it without judgment. Picture two people in the same plant on the same Monday, one still on the line and one at the control desk, and both are doing honest work. What matters for you is that a seismic shift opens that door, and whether you step through it is your call.
 4. **Now it thinks** — What is different now is that AI is the first tool that does part of the unpredictable work itself. It works in natural language, it reasons, it is creative, it brainstorms, so for the first time you are managing something that thinks.
 5. **Biggest step** — That is the biggest step on the wall, because one person can now do tasks that used to need a whole team. The fork under the AI card is still open, and this next part is my hypothesis: it opens again, for anyone who wants to step through it.
 
@@ -93,7 +93,7 @@ A person standing in an "execution" box on the left and a "management" box on th
 1. **You were promoted** — So here is the way to read it. AI promotes you. You move from doing the work to managing the work, and the work doesn't shrink, it changes, so that you can do things that were out of reach before.
 2. **The misalignment** — That move has a gap, and it is the biggest misalignment people face today. Many of us still sit in the execution box, acting as if we do the work ourselves, when the new job is to manage it.
 3. **Four stepping stones** — The way across is four stepping stones: break it down, write clear goals, review, and delegate. Notice that none of these is a technical skill, you already know them from working with people, and each one makes you more confident with what comes back.
-4. **The barrier** — And there is a reason the gap is real. You and the AI do not share a vocabulary, so what is obvious to you is invisible to it. Naming that gap is the first step across it, because a shared language is something you can build.
+4. **The barrier** — And there is a reason the gap is real. Picture asking the AI for "the usual report" and getting back something polished that answers a question you never asked. Nothing broke, it just had none of the words in your head. So before your next handoff, spend one minute writing down the terms you take for granted, and use them every time.
 
 ### Practise it today, at work {#practise-it-today-at-work}
 
