@@ -1,7 +1,7 @@
 // `npm run episode:spec-assemble -- <slug | Episode folder>`: builds `spec/spec.html` from what exists (design-ADR 0011).
 // Agents supply content only: the Brief, the Dossier, the designers' fragments `.scratch/<slug>/spec/*.html` and the
 // Visual language and Episode page markup `visual-language.html` and `episode-page.html` beside them. The user's feedback
-// rounds lock the user's picks. Refuses an approved Spec; runs the Spec contract that applies to the stage (all of it once Options are present) and exits 1 on findings.
+// rounds lock the user's picks. Compiles `spec/design.css` beside the page. Refuses an approved Spec; runs the Spec contract that applies to the stage (all of it once Options are present) and exits 1 on findings.
 
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
@@ -10,6 +10,7 @@ import { assembleSpec } from '../../../src/lib/episode-spec-assemble.pure.ts';
 import { SPEC_FILE } from '../../../src/lib/episode-spec-page.pure.ts';
 import { checkSpec } from '../../../src/lib/episode-spec.pure.ts';
 import { utcSeconds } from '../../../src/lib/staging-file.pure.ts';
+import { buildDesignCss } from './spec-css.ts';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 const PROSE_FILES = ['visual-language.html', 'episode-page.html'];
@@ -69,6 +70,8 @@ try {
 }
 mkdirSync(path.dirname(specPath), { recursive: true });
 writeFileSync(specPath, html);
+// The served design.css holds only the classes it was compiled from, so it follows every write of the page.
+await buildDesignCss(path.dirname(specPath));
 const stage = fragments.length > 0 ? 'Options' : dossier === undefined ? 'Brief' : 'Dossier';
 console.log(`✔ ${path.relative(ROOT, specPath)} assembled to the ${stage} stage`);
 const findings = checkSpec(
