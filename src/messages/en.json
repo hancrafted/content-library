@@ -142,6 +142,35 @@
       "upcoming": {}
     },
     "templateTitle": "Episode Page Template",
+    "method": {
+      "title": "How I work",
+      "hint": "Scroll to progress →",
+      "cards": {
+        "people-first": {
+          "title": "People first",
+          "claim": "AI is an accelerator, not a solution. Plug it into a culture that isn't ready, and you'll get the good and the bad parts faster.",
+          "note": "Worth reading: <link>Conway's law</link>. If your systems already mirror your org chart, AI will copy the cracks even faster."
+        },
+        "reason-backwards": {
+          "title": "Reason backwards",
+          "claim": "Plan backwards from an outcome you can measure, and every step has to justify itself. Blockers surface early, not in week six. It works for projects and for AI: give it a destination, not a to-do list.",
+          "note": "Heard of graph engineering? Does it feel like project management for AI to you too?"
+        },
+        "outcomes-over-methods": {
+          "title": "Outcomes over methods",
+          "claim": "On a highway we agree on the destination, and nobody drives the wrong way. Which car you take is up to you."
+        },
+        "obsolete-by-design": {
+          "title": "Obsolete by design",
+          "claim": "I measure my work by how little you need me afterwards. Ownership stays with the people, not with me.",
+          "note": "My favourite quote, Lao Tzu: “When the best leader's work is done, the people say, ‘We did it ourselves.’”"
+        },
+        "fast-feedback": {
+          "title": "Fast feedback",
+          "claim": "Short feedback loops let people and AI correct course before the iceberg. Transparency means knowing what's wrong while it's still cheap to fix."
+        }
+      }
+    },
     "about": {
       "eyebrow": "About / Proof in practice",
       "edition": "People × process × technology",

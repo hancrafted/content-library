@@ -2,24 +2,10 @@ import { load, type CheerioAPI } from 'cheerio';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
-import nextConfig from '../../next.config';
 import { FEATURED } from '../../src/lib/episode-overview';
 import { LOCALES, localizePath } from '../../src/lib/locale.pure';
 import { ROUTES } from '../../src/lib/routes';
-import { exportedFile, OUT_DIR } from './exported-pages';
-
-function resolveBasePath(): string {
-  if (process.env.NEXT_PUBLIC_BASE_PATH) return process.env.NEXT_PUBLIC_BASE_PATH;
-  if (process.env.SITE_URL) {
-    try {
-      const pathname = new URL(process.env.SITE_URL).pathname.replace(/\/+$/, '');
-      if (pathname) return pathname;
-    } catch {
-      // ignore
-    }
-  }
-  return nextConfig.basePath ?? '';
-}
+import { exportedFile, OUT_DIR, resolveBasePath } from './exported-pages';
 
 const basePath = resolveBasePath();
 

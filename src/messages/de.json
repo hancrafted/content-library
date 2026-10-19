@@ -142,6 +142,35 @@
       "upcoming": {}
     },
     "templateTitle": "Episoden-Seitenvorlage",
+    "method": {
+      "title": "So arbeite ich",
+      "hint": "Horizontal scrollen →",
+      "cards": {
+        "people-first": {
+          "title": "People first",
+          "claim": "KI beschleunigt, sie löst nichts. Trifft sie auf eine Kultur, die nicht bereit ist, bekommst du das Gute und das Schlechte schneller.",
+          "note": "Lesetipp: <link>Conways Gesetz</link>. Wenn deine Systeme schon dein Organigramm spiegeln, kopiert KI die Risse noch schneller."
+        },
+        "reason-backwards": {
+          "title": "Reason backwards",
+          "claim": "Plane rückwärts von einem messbaren Ergebnis, und jeder Schritt muss sich rechtfertigen. Blocker zeigen sich früh, nicht erst in Woche sechs. Das gilt für Projekte und für KI: Gib ihr ein Ziel, keine To-do-Liste.",
+          "note": "Schon mal von Graph Engineering gehört? Fühlt es sich für dich auch wie Projektmanagement für KI an?"
+        },
+        "outcomes-over-methods": {
+          "title": "Outcomes over methods",
+          "claim": "Auf der Autobahn einigen wir uns auf das Ziel, und niemand fährt als Geisterfahrer. Welches Auto du nimmst, entscheidest du."
+        },
+        "obsolete-by-design": {
+          "title": "Obsolete by design",
+          "claim": "Ich messe meine Arbeit daran, wie wenig du mich danach noch brauchst. Die Verantwortung bleibt bei den Menschen, nicht bei mir.",
+          "note": "Mein Lieblingszitat, Laotse: „Wenn die Arbeit des besten Anführers getan ist, sagen die Leute: ‚Das haben wir selbst gemacht.‘“"
+        },
+        "fast-feedback": {
+          "title": "Fast feedback",
+          "claim": "Kurze Feedbackschleifen lassen Menschen und KI den Kurs korrigieren, bevor der Eisberg kommt. Transparenz heißt: wissen, was schiefläuft, solange es noch günstig zu beheben ist."
+        }
+      }
+    },
     "about": {
       "eyebrow": "Über mich / Wirkung in der Praxis",
       "edition": "Menschen × Prozesse × Technologie",

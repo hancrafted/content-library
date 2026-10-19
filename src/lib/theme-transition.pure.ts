@@ -30,10 +30,21 @@ export function computeThemeColors(p: number): ThemeColors {
   };
 }
 
-export function computeActiveStep(p: number): number {
-  if (p < 0.26) return 1;
-  if (p < 0.51) return 2;
-  if (p < 0.76) return 3;
-  if (p < 0.97) return 4;
-  return 5;
+/** Where slide `idx` sits on the rail, 0 to 1: the progress at which it is centred in the viewport. */
+export function stepPosition(idx: number, count: number): number {
+  return count > 1 ? idx / (count - 1) : 0;
+}
+
+/** The 1-based step of the slide nearest the viewport centre at rail progress `p`. */
+export function computeActiveStep(p: number, count: number): number {
+  const clamped = Math.min(1, Math.max(0, p));
+  return Math.round(clamped * (count - 1)) + 1;
+}
+
+/** Float slack, so the bar sitting exactly on a node (progress 0.75 against 3/4) counts as reaching it. */
+const REACH_TOLERANCE = 1e-6;
+
+/** Whether the progress bar has reached stepper node `idx`, which sits where its slide is centred. */
+export function isStepReached(p: number, idx: number, count: number): boolean {
+  return p >= stepPosition(idx, count) - REACH_TOLERANCE;
 }

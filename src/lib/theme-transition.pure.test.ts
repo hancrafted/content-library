@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { computeActiveStep, computeThemeColors } from './theme-transition.pure';
+import { computeActiveStep, computeThemeColors, isStepReached } from './theme-transition.pure';
+
+const SLIDE_COUNT = 5;
 
 describe('success cases', () => {
   it('opens in the inverse of the site theme: the foreground token as background', () => {
@@ -38,13 +40,38 @@ describe('success cases', () => {
     expect(colors.bg).toBe(expectedBg);
   });
 
-  it('maps progress to active step numbers across the rail', () => {
+  it('makes the slide centred in the viewport the active step', () => {
     // ARRANGE
+    const slideCentres = [0, 0.25, 0.5, 0.75, 1];
     const expected = [1, 2, 3, 4, 5];
     // ACT
-    const steps = [0.1, 0.3, 0.6, 0.8, 0.98].map(computeActiveStep);
+    const steps = slideCentres.map((p) => computeActiveStep(p, SLIDE_COUNT));
     // ASSERT
     expect(steps).toEqual(expected);
+  });
+
+  it('hands the active step over halfway between two slide centres', () => {
+    // ARRANGE
+    const justBefore = [0.12, 0.37, 0.62, 0.87];
+    const justAfter = [0.13, 0.38, 0.63, 0.88];
+    const expectedBefore = [1, 2, 3, 4];
+    const expectedAfter = [2, 3, 4, 5];
+    // ACT
+    const before = justBefore.map((p) => computeActiveStep(p, SLIDE_COUNT));
+    const after = justAfter.map((p) => computeActiveStep(p, SLIDE_COUNT));
+    // ASSERT
+    expect(before).toEqual(expectedBefore);
+    expect(after).toEqual(expectedAfter);
+  });
+
+  it('reaches a stepper node when the progress bar reaches its position', () => {
+    // ARRANGE
+    const progress = 0.5;
+    const expected = [true, true, true, false, false];
+    // ACT
+    const reached = [0, 1, 2, 3, 4].map((idx) => isStepReached(progress, idx, SLIDE_COUNT));
+    // ASSERT
+    expect(reached).toEqual(expected);
   });
 
   it('uses only theme tokens, no raw colour', () => {
@@ -64,7 +91,7 @@ describe('failure cases', () => {
     const expectedStep = 1;
     // ACT
     const colors = computeThemeColors(-0.5);
-    const step = computeActiveStep(-0.5);
+    const step = computeActiveStep(-0.5, SLIDE_COUNT);
     // ASSERT
     expect(colors.bg).toBe(computeThemeColors(0).bg);
     expect(step).toBe(expectedStep);
@@ -77,7 +104,7 @@ describe('edge cases', () => {
     const expectedStep = 5;
     // ACT
     const colors = computeThemeColors(1.5);
-    const step = computeActiveStep(1.5);
+    const step = computeActiveStep(1.5, SLIDE_COUNT);
     // ASSERT
     expect(colors.bg).toBe(computeThemeColors(1).bg);
     expect(step).toBe(expectedStep);
