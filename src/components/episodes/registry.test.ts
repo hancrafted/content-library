@@ -50,7 +50,7 @@ const COMPOSITION = [
     slug: 'onboard-ai-every-time',
     sections: [
       { opener: 'the-thought-experiment', pageSlides: 0 },
-      { opener: 'five-moves-to-brief-a-freelancer', pageSlides: 0 },
+      { opener: 'five-moves-to-brief-a-freelancer', pageSlides: 1 },
       { opener: 'brief-in-action', pageSlides: 0 },
     ],
   },

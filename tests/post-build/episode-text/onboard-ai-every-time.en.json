@@ -1,7 +1,7 @@
 {
   "title": "Treat AI like a brilliant freelancer with amnesia · hancrafted",
   "description": "Name the five traits that make AI costly (PRICE), and manage them with five moves (BRIEF): break it down, requirements first, interview yourself with AI, evaluate each step, and a fresh start for each piece.",
-  "toc": "Contents Loading 3 min left 1 The thought experiment 2 Five moves to brief a freelancer 3 BRIEF in action Open contents : Contents · Loading Contents 3 min left 1 The thought experiment 2 Five moves to brief a freelancer 3 BRIEF in action",
+  "toc": "Contents Loading 4 min left 1 The thought experiment 2 Five moves to brief a freelancer How to manage the PRICE 3 BRIEF in action Open contents : Contents · Loading Contents 4 min left 1 The thought experiment 2 Five moves to brief a freelancer How to manage the PRICE 3 BRIEF in action",
   "slides": [
     {
       "id": "top",
@@ -14,6 +14,10 @@
     {
       "id": "five-moves-to-brief-a-freelancer",
       "text": "Five moves to brief a freelancer AI Day 1 B reak it down R equirements first I nterview yourself E valuate each step F resh start"
+    },
+    {
+      "id": "five-moves-to-brief-a-freelancer--manage-the-price",
+      "text": "Five moves to brief a freelancer 1 / 1 Five moves to brief a freelancer with amnesia Five traits cost you the PRICE. Five moves make it a BRIEF. BRIEF counters PRICE P robabilistic R elentless I nformed C onfident E very word billed B reak it down Hand over one piece at a time. Small pieces leave less to get wrong and less to pay for. R equirements first Write down what good looks like before work starts. The same brief then brings results that agree. I nterview yourself with AI Let the AI ask you its questions first. Your unwritten context comes out before it guesses. E valuate each step Check every step against the requirements. A wrong turn is caught early, not after the last page. F resh start for each piece Open a new chat for each piece. Old words stop piling up in the bill and in the way. Moves that counter each trait 3 moves 3 moves 1 move 2 moves 2 moves"
     },
     {
       "id": "brief-in-action",
@@ -30,6 +34,10 @@
       "id": "five-moves-to-brief-a-freelancer",
       "text": "Five moves to brief a freelancer No speaker notes for this Slide."
     },
+    {
+      "id": "five-moves-to-brief-a-freelancer--manage-the-price",
+      "text": "How to manage the PRICE Break it down Least-to-most prompting, solving simpler subproblems in sequence, scored 99% or better on a compositional benchmark against 16% for chain-of-thought prompting with an older model 1 . Models can answer every sub-question and still fail the whole one, and that gap does not shrink as models grow 2 . Sources (2) Zhou et al., Least-to-Most Prompting Enables Complex Reasoning in Large Language Models ( opens in a new tab ) arxiv.org Press et al., Measuring and Narrowing the Compositionality Gap in Language Models ( opens in a new tab ) arxiv.org Requirements first Across prompts that each stated a different subset of 20 requirements, results varied more than twice as much for a requirement left unstated as for one stated: standard deviation 8.9% against under half that 1 . Sources (1) Yang, Shi, Ma, Liu, Kästner, Wu, What Prompts Don't Say: Understanding and Managing Underspecification in LLM Prompts (v3) ( opens in a new tab ) arxiv.org Interview yourself with AI Agents that interacted with the user to fill missing information improved performance by up to 74% on an underspecified coding benchmark 1 . When a model elicits preferences with open-ended questions, users' answers were often more informative than prompts they wrote unaided 2 . Sources (2) Vijayvargiya et al., Ambig-SWE: Interactive Agents to Overcome Underspecificity in Software Engineering ( opens in a new tab ) arxiv.org Li et al., Eliciting Human Preferences with Language Models ( opens in a new tab ) arxiv.org Evaluate each step On a maths benchmark, feedback on each reasoning step \"significantly outperforms\" feedback on the final result alone 1 . Models also \"struggle to self-correct their responses without external feedback\", so the check needs something outside the model, here the requirements 2 . Sources (2) Lightman et al., Let's Verify Step by Step ( opens in a new tab ) arxiv.org Huang et al., Large Language Models Cannot Self-Correct Reasoning Yet ( opens in a new tab ) arxiv.org Fresh start for each piece Across six generation tasks, top models scored on average 39% lower in multi-turn conversation than with the full instruction at once; the authors advise starting a new conversation that repeats the information 1 . Performance also degrades with input length across all 18 models tested 2 . Sources (2) Laban, Hayashi, Zhou, Neville, LLMs Get Lost In Multi-Turn Conversation ( opens in a new tab ) arxiv.org Hong, Troynikov, Huber, Context Rot: How Increasing Input Tokens Impacts LLM Performance ( opens in a new tab ) trychroma.com A limit on Break it down Decomposition does not make a model reliable at composing the pieces; errors in early steps still carry into later ones, which is why the next move is checking 1 . Sources (1) Dziri et al., Faith and Fate: Limits of Transformers on Compositionality ( opens in a new tab ) arxiv.org"
+    },
     { "id": "brief-in-action", "text": "BRIEF in action No speaker notes for this Slide." }
   ],
   "script": [
@@ -44,6 +52,10 @@
     {
       "id": "five-moves-to-brief-a-freelancer",
       "text": "Five moves to brief a freelancer 0:00 – 0:12 Answer to the traits Five traits cost you. The good news is that you can answer each of them, with five moves, and the first letters spell BRIEF. That is the second cornerstone."
+    },
+    {
+      "id": "five-moves-to-brief-a-freelancer--manage-the-price",
+      "text": "How to manage the PRICE 0:00 – 0:18 One prompt is not enough Many people hope for one good prompt. But a good prompt is not a brief. A brief is a set of moves, and each move answers a cost you have just seen, so one prompt cannot do the work of five. 0:18 – 0:47 Break it down, Requirements first The first move is Break it down: hand over one piece at a time, because small pieces leave less to get wrong and less to pay for. That answers Relentless and Every word billed, the pages and the bloated bill. The second is Requirements first: write down what good looks like before the work starts. Then the same brief brings results that agree, so it answers Probabilistic and Confident. 0:47 – 1:15 Interview, Evaluate Third, Interview yourself with AI. Let it ask you its questions first, so the confident guess becomes a question, and the informed outsider learns the company it was blind to. Fourth, Evaluate each step, and here evaluating means checking the step against your requirements. A wrong turn is then caught early, not after the last page, which tames the flood of pages and the varying answers. 1:15 – 1:39 Fresh start Fifth, Fresh start for each piece. One piece gets one clean chat, so the bill stays small and nothing old leaks in from earlier work. Notice that the map is many to many: one move helps several traits, and one trait is met by several moves. That overlap is why the five work as a set. 1:39 – 1:57 Refrain Look at what these moves are: a brief you would give any good freelancer. Smaller pieces, written requirements, questions up front, checks along the way, a clean desk for each job. What is good for a human is also good for AI."
     },
     {
       "id": "brief-in-action",

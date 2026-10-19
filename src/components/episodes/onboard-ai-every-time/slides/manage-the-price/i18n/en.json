@@ -1,0 +1,137 @@
+{
+  "title": "How to manage the PRICE",
+  "heading": "Five moves to brief a freelancer with amnesia",
+  "caption": "Five traits cost you the PRICE. Five moves make it a BRIEF.",
+  "tableLabel": "Which move counters which trait",
+  "corner": "<acronym>BRIEF</acronym> counters <acronym>PRICE</acronym>",
+  "tick": "counters",
+  "footLabel": "Moves that counter each trait",
+  "movesCount": "<figure>{count}</figure> {count, plural, one {move} other {moves}}",
+  "traits": {
+    "probabilistic": { "initial": "P", "rest": "robabilistic" },
+    "relentless": { "initial": "R", "rest": "elentless" },
+    "informed": { "initial": "I", "rest": "nformed" },
+    "confident": { "initial": "C", "rest": "onfident" },
+    "every-word-billed": { "initial": "E", "rest": "very word billed" }
+  },
+  "moves": {
+    "break-it-down": {
+      "initial": "B",
+      "rest": "reak it down",
+      "line": "Hand over one piece at a time. Small pieces leave less to get wrong and less to pay for."
+    },
+    "requirements-first": {
+      "initial": "R",
+      "rest": "equirements first",
+      "line": "Write down what good looks like before work starts. The same brief then brings results that agree."
+    },
+    "interview-yourself-with-ai": {
+      "initial": "I",
+      "rest": "nterview yourself with AI",
+      "line": "Let the AI ask you its questions first. Your unwritten context comes out before it guesses."
+    },
+    "evaluate-each-step": {
+      "initial": "E",
+      "rest": "valuate each step",
+      "line": "Check every step against the requirements. A wrong turn is caught early, not after the last page."
+    },
+    "fresh-start-for-each-piece": {
+      "initial": "F",
+      "rest": "resh start for each piece",
+      "line": "Open a new chat for each piece. Old words stop piling up in the bill and in the way."
+    }
+  },
+  "notes": {
+    "break-it-down": {
+      "header": "Break it down",
+      "description": "Least-to-most prompting, solving simpler subproblems in sequence, scored 99% or better on a compositional benchmark against 16% for chain-of-thought prompting with an older model [1]. Models can answer every sub-question and still fail the whole one, and that gap does not shrink as models grow [2].",
+      "sources": {
+        "zhou-least-to-most": {
+          "title": "Zhou et al., Least-to-Most Prompting Enables Complex Reasoning in Large Language Models"
+        },
+        "press-compositionality-gap": {
+          "title": "Press et al., Measuring and Narrowing the Compositionality Gap in Language Models"
+        }
+      }
+    },
+    "requirements-first": {
+      "header": "Requirements first",
+      "description": "Across prompts that each stated a different subset of 20 requirements, results varied more than twice as much for a requirement left unstated as for one stated: standard deviation 8.9% against under half that [1].",
+      "sources": {
+        "yang-underspecification": {
+          "title": "Yang, Shi, Ma, Liu, Kästner, Wu, What Prompts Don't Say: Understanding and Managing Underspecification in LLM Prompts (v3)"
+        }
+      }
+    },
+    "interview-yourself-with-ai": {
+      "header": "Interview yourself with AI",
+      "description": "Agents that interacted with the user to fill missing information improved performance by up to 74% on an underspecified coding benchmark [1]. When a model elicits preferences with open-ended questions, users' answers were often more informative than prompts they wrote unaided [2].",
+      "sources": {
+        "vijayvargiya-ambig-swe": {
+          "title": "Vijayvargiya et al., Ambig-SWE: Interactive Agents to Overcome Underspecificity in Software Engineering"
+        },
+        "li-eliciting-preferences": {
+          "title": "Li et al., Eliciting Human Preferences with Language Models"
+        }
+      }
+    },
+    "evaluate-each-step": {
+      "header": "Evaluate each step",
+      "description": "On a maths benchmark, feedback on each reasoning step \"significantly outperforms\" feedback on the final result alone [1]. Models also \"struggle to self-correct their responses without external feedback\", so the check needs something outside the model, here the requirements [2].",
+      "sources": {
+        "lightman-verify-step-by-step": { "title": "Lightman et al., Let's Verify Step by Step" },
+        "huang-cannot-self-correct": {
+          "title": "Huang et al., Large Language Models Cannot Self-Correct Reasoning Yet"
+        }
+      }
+    },
+    "fresh-start-for-each-piece": {
+      "header": "Fresh start for each piece",
+      "description": "Across six generation tasks, top models scored on average 39% lower in multi-turn conversation than with the full instruction at once; the authors advise starting a new conversation that repeats the information [1]. Performance also degrades with input length across all 18 models tested [2].",
+      "sources": {
+        "laban-lost-in-multi-turn": {
+          "title": "Laban, Hayashi, Zhou, Neville, LLMs Get Lost In Multi-Turn Conversation"
+        },
+        "hong-context-rot": {
+          "title": "Hong, Troynikov, Huber, Context Rot: How Increasing Input Tokens Impacts LLM Performance"
+        }
+      }
+    },
+    "a-limit-on-break-it-down": {
+      "header": "A limit on Break it down",
+      "description": "Decomposition does not make a model reliable at composing the pieces; errors in early steps still carry into later ones, which is why the next move is checking [1].",
+      "sources": {
+        "dziri-faith-and-fate": { "title": "Dziri et al., Faith and Fate: Limits of Transformers on Compositionality" }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "one-prompt-is-not-enough": {
+        "title": "One prompt is not enough",
+        "keywords": "",
+        "script": "Many people hope for one good prompt. But a good prompt is not a brief. A brief is a set of moves, and each move answers a cost you have just seen, so one prompt cannot do the work of five."
+      },
+      "break-it-down-requirements-first": {
+        "title": "Break it down, Requirements first",
+        "keywords": "",
+        "script": "The first move is Break it down: hand over one piece at a time, because small pieces leave less to get wrong and less to pay for. That answers Relentless and Every word billed, the pages and the bloated bill. The second is Requirements first: write down what good looks like before the work starts. Then the same brief brings results that agree, so it answers Probabilistic and Confident."
+      },
+      "interview-evaluate": {
+        "title": "Interview, Evaluate",
+        "keywords": "",
+        "script": "Third, Interview yourself with AI. Let it ask you its questions first, so the confident guess becomes a question, and the informed outsider learns the company it was blind to. Fourth, Evaluate each step, and here evaluating means checking the step against your requirements. A wrong turn is then caught early, not after the last page, which tames the flood of pages and the varying answers."
+      },
+      "fresh-start": {
+        "title": "Fresh start",
+        "keywords": "",
+        "script": "Fifth, Fresh start for each piece. One piece gets one clean chat, so the bill stays small and nothing old leaks in from earlier work. Notice that the map is many to many: one move helps several traits, and one trait is met by several moves. That overlap is why the five work as a set."
+      },
+      "refrain": {
+        "title": "Refrain",
+        "keywords": "",
+        "script": "Look at what these moves are: a brief you would give any good freelancer. Smaller pieces, written requirements, questions up front, checks along the way, a clean desk for each job. What is good for a human is also good for AI."
+      }
+    }
+  }
+}
