@@ -11,7 +11,7 @@ const COPY = { title: 'Your AI token economy', caption: 'Hidden managing respons
 const PUBLISHED_METADATA: PublishedEpisodeMetadata = {
   slug: 'ai-token-economy',
   status: 'published',
-  topic: 'economics',
+  topic: 'cost',
   format: 'foundations',
   tags: ['tokens'],
   publishedOn: '2026-10-09',
@@ -23,8 +23,8 @@ const PUBLISHED = { ...PUBLISHED_METADATA, copy: COPY };
 const UPCOMING: UpcomingEpisodeMetadata = {
   slug: 'choosing-the-right-model',
   status: 'upcoming',
-  topic: 'economics',
-  extraTopics: ['ai-collaboration'],
+  topic: 'cost',
+  extraTopics: ['sales'],
   format: 'short',
   tags: [],
 };
@@ -39,9 +39,16 @@ describe('success cases', () => {
       status: 'published',
       title: 'Your AI token economy',
       caption: 'Hidden managing responsibilities.',
-      topic: { id: 'economics', label: '[landing.episodeOverview.topics.economics]' },
-      topics: [{ id: 'economics', label: '[landing.episodeOverview.topics.economics]' }],
+      topic: { id: 'cost', label: '[landing.episodeOverview.topics.cost]' },
+      topics: [{ id: 'cost', label: '[landing.episodeOverview.topics.cost]' }],
       format: { id: 'foundations', label: '[landing.episodeOverview.formats.foundations]' },
+      tags: [
+        {
+          id: 'tokens',
+          label: '[landing.episodeOverview.tags.tokens.name]',
+          tooltip: '[landing.episodeOverview.tags.tokens.tooltip]',
+        },
+      ],
       minutes: 42,
       publishedOn: '2026-10-09',
       featuredRank: 3,
@@ -72,12 +79,13 @@ describe('success cases', () => {
       status: 'upcoming',
       title: '[landing.episodeOverview.upcoming.choosing-the-right-model.title]',
       caption: '[landing.episodeOverview.upcoming.choosing-the-right-model.caption]',
-      topic: { id: 'economics', label: '[landing.episodeOverview.topics.economics]' },
+      topic: { id: 'cost', label: '[landing.episodeOverview.topics.cost]' },
       topics: [
-        { id: 'economics', label: '[landing.episodeOverview.topics.economics]' },
-        { id: 'ai-collaboration', label: '[landing.episodeOverview.topics.ai-collaboration]' },
+        { id: 'cost', label: '[landing.episodeOverview.topics.cost]' },
+        { id: 'sales', label: '[landing.episodeOverview.topics.sales]' },
       ],
       format: { id: 'short', label: '[landing.episodeOverview.formats.short]' },
+      tags: [],
       featuredRank: null,
       accent: 'amber',
       icon: 'coins',
@@ -86,6 +94,27 @@ describe('success cases', () => {
     const card = episodeCard(UPCOMING, { locale: 'en', read });
     // ASSERT
     expect(card).toEqual(expected);
+  });
+
+  it("labels each Tag with its name and tooltip in the reader's locale, in the order the Episode lists them", () => {
+    // ARRANGE
+    const entry = { ...PUBLISHED, tags: ['tokens', 'context-window'] };
+    const expected = [
+      {
+        id: 'tokens',
+        label: '[landing.episodeOverview.tags.tokens.name]',
+        tooltip: '[landing.episodeOverview.tags.tokens.tooltip]',
+      },
+      {
+        id: 'context-window',
+        label: '[landing.episodeOverview.tags.context-window.name]',
+        tooltip: '[landing.episodeOverview.tags.context-window.tooltip]',
+      },
+    ];
+    // ACT
+    const { tags } = episodeCard(entry, { locale: 'en', read });
+    // ASSERT
+    expect(tags).toEqual(expected);
   });
 
   it("draws an unlinked upcoming card from the Episode's own copy, not the landing Translation keys", () => {
@@ -144,6 +173,15 @@ describe('edge cases', () => {
     expect(keys).toEqual(expect.arrayContaining(expectedKeys));
     expect(keys).not.toContain(absent);
     expect(card.featuredRank).toBeNull();
+  });
+
+  it('gives a card whose Episode has no Tags an empty Tag list', () => {
+    // ARRANGE
+    const expected: readonly unknown[] = [];
+    // ACT
+    const { tags } = episodeCard(UPCOMING, { locale: 'en', read });
+    // ASSERT
+    expect(tags).toEqual(expected);
   });
 
   it('holds only values React can pass to a client component', () => {

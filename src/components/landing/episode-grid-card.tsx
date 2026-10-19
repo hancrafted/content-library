@@ -61,9 +61,40 @@ function CardFooter({ card, labels }: { card: EpisodeCard; labels: CardLabels })
   );
 }
 
+/** The Topic's icon tile and the Format, the card's first row. */
+function CardHead({ card, tile }: { card: EpisodeCard; tile: string }) {
+  const Icon = TOPIC_ICONS[card.icon];
+  return (
+    <div className="flex items-center justify-between gap-3">
+      <span className={`flex h-9 w-9 items-center justify-center rounded-xl ${tile}`}>
+        <Icon aria-hidden className="h-[1.1rem] w-[1.1rem]" />
+      </span>
+      <span className={META}>{card.format.label}</span>
+    </div>
+  );
+}
+
+/** The Episode's Tags as plain labels: no filter acts on them, and each explains itself on hover. */
+function CardTags({ card }: { card: EpisodeCard }) {
+  if (card.tags.length === 0) return null;
+  return (
+    <ul data-episode-tags className="relative z-20 flex flex-wrap gap-1.5">
+      {card.tags.map((tag) => (
+        <li
+          key={tag.id}
+          data-tag={tag.id}
+          title={tag.tooltip}
+          className="rounded-full bg-muted px-2 py-0.5 text-[0.7rem] leading-snug text-muted-foreground"
+        >
+          {tag.label}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 /** A compact Episode card for the Browse grid: a published one is a link, an upcoming one a muted card with a "coming soon" tag and no link. */
 export function EpisodeGridCard({ card, locale, labels }: { card: EpisodeCard; locale: Locale; labels: CardLabels }) {
-  const Icon = TOPIC_ICONS[card.icon];
   const upcoming = card.route === null;
   const accent = TOPIC_ACCENTS[card.accent];
   const tone = upcoming
@@ -78,16 +109,10 @@ export function EpisodeGridCard({ card, locale, labels }: { card: EpisodeCard; l
       data-format={card.format.id}
       className={`${CARD} ${tone}`}
     >
-      <div className="flex items-center justify-between gap-3">
-        <span
-          className={`flex h-9 w-9 items-center justify-center rounded-xl ${upcoming ? 'bg-muted text-muted-foreground' : accent.tile}`}
-        >
-          <Icon aria-hidden className="h-[1.1rem] w-[1.1rem]" />
-        </span>
-        <span className={META}>{card.format.label}</span>
-      </div>
+      <CardHead card={card} tile={upcoming ? 'bg-muted text-muted-foreground' : accent.tile} />
       <CardTitle card={card} locale={locale} />
       <p className="line-clamp-3 text-sm leading-relaxed text-muted-foreground">{card.caption}</p>
+      <CardTags card={card} />
       <CardFooter card={card} labels={labels} />
     </article>
   );

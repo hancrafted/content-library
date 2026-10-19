@@ -11,7 +11,7 @@ import {
   type ResultsLabels,
 } from '@/components/landing/episode-browse.pure';
 import type { EpisodeCard } from '@/components/landing/episode-card.pure';
-import { FormatSegments, TopicChips, type FilterLabels } from '@/components/landing/episode-filters';
+import { FormatSegments, SearchBox, TopicChips, type FilterLabels } from '@/components/landing/episode-filters';
 import { EpisodeGridCard, type CardLabels } from '@/components/landing/episode-grid-card';
 import { Button } from '@/components/ui/button';
 import type { Locale } from '@/lib/locale.pure';
@@ -85,6 +85,7 @@ function useBrowse(cards: readonly EpisodeCard[]) {
     formats: formatChoices(cards, selection),
     setTopic: (topic: BrowseSelection['topic']) => setSelection((prev) => ({ ...prev, topic })),
     setFormat: (format: BrowseSelection['format']) => setSelection((prev) => ({ ...prev, format })),
+    setQuery: (query: string) => setSelection((prev) => ({ ...prev, query })),
     toggleExpanded: () => setSelection((prev) => ({ ...prev, expanded: !prev.expanded })),
     reset: () => {
       setSelection(INITIAL_SELECTION);
@@ -98,19 +99,22 @@ type Browse = ReturnType<typeof useBrowse>;
 function BrowseControls({ browse, labels }: { browse: Browse; labels: BrowseLabels }) {
   const { selection, topics, formats } = browse;
   return (
-    <div data-browse-controls className="flex flex-wrap items-center justify-between gap-x-6 gap-y-4">
-      {hasChoice(topics) && (
-        <TopicChips
-          choices={topics}
-          selected={selection.topic}
-          labels={labels}
-          allRef={browse.allTopics}
-          onSelect={browse.setTopic}
-        />
-      )}
-      {hasChoice(formats) && (
-        <FormatSegments choices={formats} selected={selection.format} labels={labels} onSelect={browse.setFormat} />
-      )}
+    <div data-browse-controls className="space-y-4">
+      <SearchBox query={selection.query} labels={labels} onChange={browse.setQuery} />
+      <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-4">
+        {hasChoice(topics) && (
+          <TopicChips
+            choices={topics}
+            selected={selection.topic}
+            labels={labels}
+            allRef={browse.allTopics}
+            onSelect={browse.setTopic}
+          />
+        )}
+        {hasChoice(formats) && (
+          <FormatSegments choices={formats} selected={selection.format} labels={labels} onSelect={browse.setFormat} />
+        )}
+      </div>
     </div>
   );
 }
@@ -141,7 +145,7 @@ interface BrowseProps {
 }
 
 /**
- * The Browse block: Topic chips, a Format control when there is more than one
+ * The Browse block: a search box, Topic chips, a Format control when there is more than one
  * Format, and a grid of every Episode card. The grid is in the server HTML in
  * full; filtering and the cap only toggle `hidden`, so find-in-page and a
  * script-less visit still see all of it. Leaving the page and coming back

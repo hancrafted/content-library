@@ -130,7 +130,7 @@ npm run build && npm run test:build
 
 - **Captured text:** the first run writes `tests/post-build/episode-text/<ep>.{en,de}.json` and fails on purpose. Review both files, commit them, run again. A later wording change fails against the capture: delete the two files, rerun, review the new capture.
 - **Untitled Slides:** each Slide left without a `title` gets its anchor in `UNTITLED` in `tests/post-build/episode-structure.build.test.ts`.
-- **Published list:** an upcoming Episode stays out of `PUBLISHED_SLUGS` in `tests/post-build/landing-page.build.test.ts`; it joins at publication ([Episode publishing](episode-publishing.md)).
+- **Published list:** an upcoming Episode sits in `DRAFT_SLUGS`, not `PUBLISHED_SLUGS`, in `tests/post-build/episodes-index.build.test.ts`; it moves at publication ([Episode publishing](episode-publishing.md)).
 
 Done when: both pass, the build lists `/episode/<ep>` and `/de/episode/<ep>`, and the post-build tests cover it.
 

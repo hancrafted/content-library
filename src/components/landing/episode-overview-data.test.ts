@@ -10,7 +10,7 @@ import { TOPIC_ACCENTS, TOPIC_ICONS } from './episode-visuals';
 /*
  * The Episode overview's central lists against the Episodes that exist (#40):
  * Featured names published Episodes, each Topic in use has a look of its own,
- * and every string a card reads is translated.
+ * and every string a card reads is translated, each Tag's name and tooltip included.
  */
 
 const TRANSLATIONS = { en, de } as const;
@@ -23,7 +23,7 @@ describe('success cases', () => {
     const published = listEpisodes()
       .filter(({ status }) => status === 'published')
       .map(({ slug }) => slug);
-    const expectedSlots = 2;
+    const expectedSlots = 3;
     // ACT
     const distinct = new Set(FEATURED);
     // ASSERT
@@ -51,12 +51,16 @@ describe('failure cases', () => {
   it.each(['en', 'de'] as const)('leaves no string a card reads untranslated in %s', (locale) => {
     // ARRANGE
     const { episodeOverview } = TRANSLATIONS[locale].landing;
+    const tags = episodeOverview.tags as Record<string, { name?: string; tooltip?: string } | undefined>;
     const upcomingCopy = episodeOverview.upcoming as Record<string, { title?: string; caption?: string } | undefined>;
     const expected: string[] = [];
     // ACT
     const missing = [
       ...TOPIC_IDS.filter((id) => !episodeOverview.topics[id]).map((id) => `topics.${id}`),
       ...FORMATS.filter((id) => !episodeOverview.formats[id]).map((id) => `formats.${id}`),
+      ...[...new Set(listEpisodes().flatMap(({ tags: ids }) => ids))]
+        .filter((id) => !(tags[id]?.name && tags[id]?.tooltip))
+        .map((id) => `tags.${id}`),
       ...listEpisodes().flatMap(({ slug, status }) => {
         const copy = hasPage(slug) ? findEpisode(slug).messages[locale] : upcomingCopy[slug];
         return copy?.title && copy.caption ? [] : [`${status}.${slug}`];

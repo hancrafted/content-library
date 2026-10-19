@@ -4,9 +4,9 @@ import { overviewOrder, topicsOf, type EpisodeMetadata } from './episode-metadat
 /** Five hand-placed Episodes: three published, two upcoming, one with extra Topics. */
 const EPISODES: readonly EpisodeMetadata[] = [
   {
-    slug: 'never-too-early-sales-run-3',
+    slug: 'never-too-early-sales',
     status: 'published',
-    topic: 'ai-collaboration',
+    topic: 'sales',
     format: 'foundations',
     tags: [],
     publishedOn: '2026-10-08',
@@ -14,8 +14,8 @@ const EPISODES: readonly EpisodeMetadata[] = [
   {
     slug: 'maintaining-markdown-for-ai',
     status: 'published',
-    topic: 'documentation',
-    extraTopics: ['ai-collaboration'],
+    topic: 'knowledge-base',
+    extraTopics: ['sales'],
     format: 'teardown',
     tags: [],
     publishedOn: '2026-10-09',
@@ -23,13 +23,13 @@ const EPISODES: readonly EpisodeMetadata[] = [
   {
     slug: 'ai-token-economy',
     status: 'published',
-    topic: 'economics',
+    topic: 'cost',
     format: 'foundations',
     tags: [],
     publishedOn: '2026-10-09',
   },
-  { slug: 'rolling-out-ai', status: 'upcoming', topic: 'adoption', format: 'foundations', tags: [] },
-  { slug: 'ai-in-code-review', status: 'upcoming', topic: 'ai-collaboration', format: 'short', tags: [] },
+  { slug: 'rolling-out-ai', status: 'upcoming', topic: 'ai-enablement', format: 'foundations', tags: [] },
+  { slug: 'ai-in-code-review', status: 'upcoming', topic: 'sales', format: 'short', tags: [] },
 ];
 
 const slugs = (entries: readonly EpisodeMetadata[]) => entries.map(({ slug }) => slug);
@@ -37,10 +37,10 @@ const slugs = (entries: readonly EpisodeMetadata[]) => entries.map(({ slug }) =>
 describe('success cases', () => {
   it('orders the Featured Episodes first, as listed, then other published ones newest first, then upcoming as given', () => {
     // ARRANGE
-    const featured = ['ai-token-economy', 'never-too-early-sales-run-3'];
+    const featured = ['ai-token-economy', 'never-too-early-sales'];
     const expected = [
       'ai-token-economy',
-      'never-too-early-sales-run-3',
+      'never-too-early-sales',
       'maintaining-markdown-for-ai',
       'rolling-out-ai',
       'ai-in-code-review',
@@ -53,7 +53,7 @@ describe('success cases', () => {
 
   it('lists an Episode under its primary Topic first, then its extra Topics', () => {
     // ARRANGE
-    const expected = ['documentation', 'ai-collaboration'];
+    const expected = ['knowledge-base', 'sales'];
     // ACT
     const topics = topicsOf(EPISODES[1]);
     // ASSERT
@@ -68,7 +68,7 @@ describe('failure cases', () => {
     const expected = [
       'ai-token-economy',
       'maintaining-markdown-for-ai',
-      'never-too-early-sales-run-3',
+      'never-too-early-sales',
       'rolling-out-ai',
       'ai-in-code-review',
     ];
@@ -80,8 +80,8 @@ describe('failure cases', () => {
 
   it('ignores a Featured slug no Episode holds', () => {
     // ARRANGE
-    const featured = ['no-such-episode', 'never-too-early-sales-run-3'];
-    const expectedFirst = 'never-too-early-sales-run-3';
+    const featured = ['no-such-episode', 'never-too-early-sales'];
+    const expectedFirst = 'never-too-early-sales';
     const expectedCount = 5;
     // ACT
     const ordered = overviewOrder(EPISODES, featured);
@@ -94,8 +94,8 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('names a Topic once when an Episode repeats its primary Topic among its extra ones', () => {
     // ARRANGE
-    const episode: EpisodeMetadata = { ...EPISODES[0], extraTopics: ['ai-collaboration', 'economics', 'economics'] };
-    const expected = ['ai-collaboration', 'economics'];
+    const episode: EpisodeMetadata = { ...EPISODES[0], extraTopics: ['sales', 'cost', 'cost'] };
+    const expected = ['sales', 'cost'];
     // ACT
     const topics = topicsOf(episode);
     // ASSERT
@@ -105,7 +105,7 @@ describe('edge cases', () => {
   it('breaks a tie between published Episodes of one date by slug, and leaves the given list in its order', () => {
     // ARRANGE
     const before = slugs(EPISODES);
-    const expected = ['ai-token-economy', 'maintaining-markdown-for-ai', 'never-too-early-sales-run-3'];
+    const expected = ['ai-token-economy', 'maintaining-markdown-for-ai', 'never-too-early-sales'];
     // ACT
     const ordered = overviewOrder(EPISODES, []).slice(0, 3);
     // ASSERT

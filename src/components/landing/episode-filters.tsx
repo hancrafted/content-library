@@ -2,13 +2,45 @@ import { ALL, type Facet, type FacetChoices } from '@/components/landing/episode
 import { SEGMENTED_GROUP, segmentedItem } from '@/components/segmented';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { Search } from 'lucide-react';
 import type { Ref } from 'react';
 
-/** The strings the two filters draw. */
+/** The strings the search box and the two filters draw. */
 export interface FilterLabels {
+  readonly search: string;
+  readonly searchPlaceholder: string;
   readonly topicFilter: string;
   readonly formatFilter: string;
   readonly all: string;
+}
+
+/** The search box: a labelled field whose every keystroke narrows the grid below it. */
+export function SearchBox({
+  query,
+  labels,
+  onChange,
+}: {
+  query: string;
+  labels: FilterLabels;
+  onChange: (query: string) => void;
+}) {
+  return (
+    <label className="relative block w-full sm:max-w-sm">
+      <span className="sr-only">{labels.search}</span>
+      <Search
+        aria-hidden
+        className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+      />
+      <input
+        type="search"
+        data-episode-search
+        value={query}
+        placeholder={labels.searchPlaceholder}
+        onChange={(event) => onChange(event.target.value)}
+        className="h-10 w-full rounded-full border border-border bg-background pl-10 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50"
+      />
+    </label>
+  );
 }
 
 interface FilterProps<Id extends string> {

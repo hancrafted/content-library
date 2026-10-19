@@ -62,10 +62,17 @@ describe('success cases', () => {
     expect(files).toContain(METADATA_FILE);
   });
 
-  it('registers never-too-early-sales-run-3 as an upcoming Episode with a page, a draft with no publishedOn', () => {
+  it('registers never-too-early-sales as a published Episode under Sales, with its page and Tags', () => {
     // ARRANGE
-    const slug = 'never-too-early-sales-run-3';
-    const expected = { slug, status: 'upcoming', topic: 'economics', format: 'foundations', tags: [] };
+    const slug = 'never-too-early-sales';
+    const expected = {
+      slug,
+      status: 'published',
+      topic: 'sales',
+      format: 'foundations',
+      tags: ['startups', 'cashflow', 'lead-generation', 'sales-pipeline'],
+      publishedOn: '2026-10-19',
+    };
     // ACT
     const metadata = listEpisodes().find((episode) => episode.slug === slug);
     const page = hasPage(slug);

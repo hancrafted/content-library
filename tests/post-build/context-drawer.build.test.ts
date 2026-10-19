@@ -122,7 +122,7 @@ describe.each(PAGES)('$url', ({ slug, url }) => {
     // ACT
     const links = $('[data-slot="context"] a[href]').toArray();
     // ASSERT
-    if (slug === 'never-too-early-sales-run-3') expect(links.length).toBeGreaterThan(0);
+    if (slug === 'never-too-early-sales') expect(links.length).toBeGreaterThan(0);
     for (const link of links) {
       expect($(link).attr('href')).toMatch(/^https:\/\//);
       expect($(link).attr('target')).toBe('_blank');
@@ -178,10 +178,10 @@ describe.each(PAGES)('$url card', ({ url }) => {
   });
 });
 
-describe('never-too-early-sales-run-3', () => {
+describe('never-too-early-sales', () => {
   it.each(LOCALES)('keeps sources closed behind a counted toggle, with their text in the HTML, in %s', (locale) => {
     // ARRANGE
-    const $ = exportedPage(localizePath(episodeRoute('never-too-early-sales-run-3'), locale));
+    const $ = exportedPage(localizePath(episodeRoute('never-too-early-sales'), locale));
     const counted = /\(\d+\)/;
     // ACT
     const disclosures = $('[data-slot="context"] [data-note-target] details').toArray();
@@ -195,7 +195,7 @@ describe('never-too-early-sales-run-3', () => {
 
   it.each(LOCALES)('numbers sources in a list and points every citation marker into it, in %s', (locale) => {
     // ARRANGE
-    const $ = exportedPage(localizePath(episodeRoute('never-too-early-sales-run-3'), locale));
+    const $ = exportedPage(localizePath(episodeRoute('never-too-early-sales'), locale));
     const notes = $('[data-slot="context"] [data-note-target]').toArray();
     // ACT
     const broken = notes.flatMap((note) => {
@@ -217,9 +217,7 @@ describe('never-too-early-sales-run-3', () => {
 
   it('gives each note the same slug and ids in both locales, with German words differing from English', () => {
     // ARRANGE
-    const [en, de] = LOCALES.map((locale) =>
-      exportedPage(localizePath(episodeRoute('never-too-early-sales-run-3'), locale)),
-    );
+    const [en, de] = LOCALES.map((locale) => exportedPage(localizePath(episodeRoute('never-too-early-sales'), locale)));
     const targetsOf = ($: CheerioAPI) =>
       $('[data-note-target]')
         .toArray()

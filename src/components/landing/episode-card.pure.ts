@@ -14,6 +14,11 @@ export interface Labelled<Id extends string> {
   readonly label: string;
 }
 
+/** One Tag as a card draws it: its name and the tooltip that explains it, both in the reader's locale. */
+export interface TagLabel extends Labelled<string> {
+  readonly tooltip: string;
+}
+
 /**
  * One Episode as a landing design draws it: the Episode's metadata with its
  * strings read in one locale and its look taken from its primary Topic. Plain
@@ -38,6 +43,8 @@ export interface EpisodeCard {
   /** Every Topic the Episode appears under, primary first: what a Topic filter matches. */
   readonly topics: readonly Labelled<TopicId>[];
   readonly format: Labelled<FormatId>;
+  /** The Episode's Tags in its own order; a flat list, none ranks above another. */
+  readonly tags: readonly TagLabel[];
   /** Reading time in this locale; left off when the Episode's record was not read. */
   readonly minutes?: number;
   readonly publishedOn?: string;
@@ -112,6 +119,11 @@ export function episodeCard(entry: CardEntry, ctx: CardContext): EpisodeCard {
     topic: topics[0],
     topics,
     format: { id: entry.format, label: read(`${OVERVIEW_KEYS}.formats.${entry.format}`) },
+    tags: entry.tags.map((id) => ({
+      id,
+      label: read(`${OVERVIEW_KEYS}.tags.${id}.name`),
+      tooltip: read(`${OVERVIEW_KEYS}.tags.${id}.tooltip`),
+    })),
     featuredRank: null,
     ...TOPICS[entry.topic],
     ...publishedFields(entry, ctx),

@@ -11,8 +11,9 @@ import { EPISODE_SLUGS, episodeRoute, legacyEpisodeRoute, ROUTES } from '../../s
 import { exportedFile, exportedPage, OUT_DIR } from './exported-pages';
 
 const SITE_URL = resolveSiteUrl(process.env);
-const PUBLISHED_SLUGS = ['maintaining-markdown-for-ai', 'ai-token-economy'];
-const DRAFT_SLUGS = ['never-too-early-sales-run-3'];
+const PUBLISHED_SLUGS = ['maintaining-markdown-for-ai', 'ai-token-economy', 'never-too-early-sales'];
+const DRAFT_SLUGS: readonly string[] = [];
+const TAGGED = { slug: 'never-too-early-sales', tags: ['startups', 'cashflow', 'lead-generation', 'sales-pipeline'] };
 
 describe('/episodes index page', () => {
   it.each(LOCALES)('renders the browse grid on the /episodes page for %s', (locale) => {
@@ -49,6 +50,34 @@ describe('/episodes index page', () => {
     expect(chips.length).toBeGreaterThan(pressed.length);
     expect(pressed.length).toBe(1);
     expect(chips.first().attr('aria-pressed')).toBe('true');
+  });
+
+  it.each(LOCALES)('puts one search box above the filters on the /episodes page for %s', (locale) => {
+    // ARRANGE
+    const url = localizePath(ROUTES.episodes, locale);
+    const $ = exportedPage(url);
+    const expected = 1;
+
+    // ACT
+    const search = $('[data-browse-controls] input[type="search"][data-episode-search]');
+
+    // ASSERT
+    expect(search.length).toBe(expected);
+  });
+
+  it.each(LOCALES)('shows each Tag on its card with a tooltip on the /episodes page for %s', (locale) => {
+    // ARRANGE
+    const url = localizePath(ROUTES.episodes, locale);
+    const $ = exportedPage(url);
+
+    // ACT
+    const tags = $(`[data-episode-card][data-episode-slug="${TAGGED.slug}"] [data-tag]`);
+    const ids = tags.toArray().map((tag) => $(tag).attr('data-tag'));
+    const untitled = tags.toArray().filter((tag) => !$(tag).attr('title'));
+
+    // ASSERT
+    expect(ids).toEqual(TAGGED.tags);
+    expect(untitled).toEqual([]);
   });
 });
 

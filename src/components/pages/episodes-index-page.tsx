@@ -10,6 +10,8 @@ function browseLabels(t: LandingT): BrowseLabels {
     open: t('episodeOverview.open'),
     comingSoon: t('episodeOverview.comingSoon'),
     minutesUnit: t('episodeOverview.minutesUnit'),
+    search: t('episodeOverview.search'),
+    searchPlaceholder: t('episodeOverview.searchPlaceholder'),
     topicFilter: t('episodeOverview.topicFilter'),
     formatFilter: t('episodeOverview.formatFilter'),
     all: t('episodeOverview.all'),

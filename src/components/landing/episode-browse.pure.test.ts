@@ -14,7 +14,7 @@ import type { EpisodeCard } from './episode-card.pure';
 
 function card(slug: string, over: Partial<EpisodeCard> = {}): EpisodeCard {
   const published = over.status !== 'upcoming';
-  const topic = over.topic ?? { id: 'economics', label: 'Cost' };
+  const topic = over.topic ?? { id: 'cost', label: 'Cost' };
   return {
     slug,
     route: published ? `/episode/${slug}` : null,
@@ -25,6 +25,7 @@ function card(slug: string, over: Partial<EpisodeCard> = {}): EpisodeCard {
     topic,
     topics: [topic],
     format: { id: 'foundations', label: 'Foundations' },
+    tags: [],
     featuredRank: null,
     accent: 'amber',
     icon: 'coins',
@@ -33,15 +34,25 @@ function card(slug: string, over: Partial<EpisodeCard> = {}): EpisodeCard {
 }
 
 const MIXED: EpisodeCard[] = [
-  card('p1', { topic: { id: 'ai-collaboration', label: 'AI' }, featuredRank: 1 }),
-  card('p2', { topic: { id: 'documentation', label: 'Docs' }, featuredRank: 2 }),
+  card('p1', { topic: { id: 'sales', label: 'Sales' }, featuredRank: 1 }),
+  card('p2', { topic: { id: 'knowledge-base', label: 'Knowledge' }, featuredRank: 2 }),
   card('p3', { featuredRank: 3 }),
   card('u1', {
     status: 'upcoming',
-    topic: { id: 'ai-collaboration', label: 'AI' },
+    topic: { id: 'sales', label: 'Sales' },
     format: { id: 'teardown', label: 'Teardown' },
   }),
   card('u2', { status: 'upcoming', format: { id: 'short', label: 'Short' } }),
+];
+
+/** Cards that differ in one searchable field each, so a query names the field it reaches. */
+const SEARCHABLE: EpisodeCard[] = [
+  card('by-title', { title: 'Why sales never waits' }),
+  card('by-caption', { caption: 'Revenue arrives months after the costs' }),
+  card('by-topic', { topic: { id: 'ai-enablement', label: 'KI-Befähigung' } }),
+  card('by-tag', {
+    tags: [{ id: 'cashflow', label: 'Liquidität', tooltip: 'Geld, das tatsächlich auf dem Konto ist' }],
+  }),
 ];
 
 const slugs = (cards: readonly EpisodeCard[]) => cards.map((entry) => entry.slug);
@@ -68,7 +79,7 @@ describe('success cases', () => {
 
   it('narrows the grid to one topic and counts only its cards', () => {
     // ARRANGE
-    const selection: BrowseSelection = { ...INITIAL_SELECTION, topic: 'ai-collaboration' };
+    const selection: BrowseSelection = { ...INITIAL_SELECTION, topic: 'sales' };
     const expected = ['p1', 'u1'];
     // ACT
     const view = browseView(MIXED, selection, 9);
@@ -78,7 +89,7 @@ describe('success cases', () => {
 
   it('narrows by topic and format together', () => {
     // ARRANGE
-    const selection: BrowseSelection = { topic: 'ai-collaboration', format: 'teardown', expanded: false };
+    const selection: BrowseSelection = { topic: 'sales', format: 'teardown', expanded: false, query: '' };
     const expected = ['u1'];
     // ACT
     const view = browseView(MIXED, selection, 9);
@@ -92,9 +103,9 @@ describe('success cases', () => {
     const expected = {
       all: 3,
       options: [
-        { id: 'ai-collaboration', label: 'AI', count: 1 },
-        { id: 'documentation', label: 'Docs', count: 1 },
-        { id: 'economics', label: 'Cost', count: 1 },
+        { id: 'sales', label: 'Sales', count: 1 },
+        { id: 'knowledge-base', label: 'Knowledge', count: 1 },
+        { id: 'cost', label: 'Cost', count: 1 },
       ],
     };
     // ACT
@@ -105,7 +116,7 @@ describe('success cases', () => {
 
   it('counts each format against the chosen topic', () => {
     // ARRANGE
-    const selection: BrowseSelection = { ...INITIAL_SELECTION, topic: 'ai-collaboration' };
+    const selection: BrowseSelection = { ...INITIAL_SELECTION, topic: 'sales' };
     const expected = {
       all: 2,
       options: [
@@ -132,16 +143,16 @@ describe('success cases', () => {
 
   it('finds an Episode under each Topic it appears in, and counts it under each', () => {
     // ARRANGE
-    const docs = { id: 'documentation', label: 'Docs' } as const;
-    const adoption = { id: 'adoption', label: 'Change' } as const;
+    const docs = { id: 'knowledge-base', label: 'Knowledge' } as const;
+    const adoption = { id: 'ai-enablement', label: 'Change' } as const;
     const overlapping = [...MIXED, card('x', { topic: docs, topics: [docs, adoption] })];
-    const selection: BrowseSelection = { ...INITIAL_SELECTION, topic: 'adoption' };
+    const selection: BrowseSelection = { ...INITIAL_SELECTION, topic: 'ai-enablement' };
     const expectedVisible = ['x'];
     const expectedCounts = [
-      { id: 'ai-collaboration', label: 'AI', count: 2 },
-      { id: 'documentation', label: 'Docs', count: 2 },
-      { id: 'economics', label: 'Cost', count: 2 },
-      { id: 'adoption', label: 'Change', count: 1 },
+      { id: 'sales', label: 'Sales', count: 2 },
+      { id: 'knowledge-base', label: 'Knowledge', count: 2 },
+      { id: 'cost', label: 'Cost', count: 2 },
+      { id: 'ai-enablement', label: 'Change', count: 1 },
     ];
     // ACT
     const view = browseView(overlapping, selection, 9);
@@ -149,6 +160,29 @@ describe('success cases', () => {
     // ASSERT
     expect([...view.visible]).toEqual(expectedVisible);
     expect(options).toEqual(expectedCounts);
+  });
+
+  it('finds a card by a word in its title, caption, Topic or Tag name, ignoring case', () => {
+    // ARRANGE
+    const queries = ['SALES', 'revenue', 'befähigung', 'liquidität'];
+    const expected = [['by-title'], ['by-caption'], ['by-topic'], ['by-tag']];
+    // ACT
+    const found = queries.map((query) => [...browseView(SEARCHABLE, { ...INITIAL_SELECTION, query }, 9).visible]);
+    // ASSERT
+    expect(found).toEqual(expected);
+  });
+
+  it('narrows by topic and query together, and counts each topic chip against the query', () => {
+    // ARRANGE
+    const selection: BrowseSelection = { ...INITIAL_SELECTION, topic: 'sales', query: 'Title p' };
+    const expectedVisible = ['p1'];
+    const expectedSales = { id: 'sales', label: 'Sales', count: 1 };
+    // ACT
+    const view = browseView(MIXED, selection, 9);
+    const sales = topicChoices(MIXED, selection).options.find((option) => option.id === 'sales');
+    // ASSERT
+    expect([...view.visible]).toEqual(expectedVisible);
+    expect(sales).toEqual(expectedSales);
   });
 
   it('words the result count for none, one and many', () => {
@@ -184,17 +218,27 @@ describe('failure cases', () => {
 
   it('shows nothing and reports no match when the selection fits no card', () => {
     // ARRANGE
-    const selection: BrowseSelection = { topic: 'adoption', format: ALL, expanded: false };
+    const selection: BrowseSelection = { topic: 'ai-enablement', format: ALL, expanded: false, query: '' };
     // ACT
     const view = browseView(MIXED, selection, 9);
     // ASSERT
     expect({ matching: view.matching, size: view.visible.size }).toEqual({ matching: 0, size: 0 });
   });
 
+  it('never matches a Tag by its tooltip, which the card does not show', () => {
+    // ARRANGE
+    const selection: BrowseSelection = { ...INITIAL_SELECTION, query: 'Konto' };
+    const expected = 0;
+    // ACT
+    const view = browseView(SEARCHABLE, selection, 9);
+    // ASSERT
+    expect(view.matching).toBe(expected);
+  });
+
   it('leaves a chip in place with a zero count when the other filter empties it', () => {
     // ARRANGE
     const selection: BrowseSelection = { ...INITIAL_SELECTION, format: 'short' };
-    const expected = { id: 'documentation', label: 'Docs', count: 0 };
+    const expected = { id: 'knowledge-base', label: 'Knowledge', count: 0 };
     // ACT
     const { options } = topicChoices(MIXED, selection);
     // ASSERT
@@ -262,6 +306,26 @@ describe('edge cases', () => {
     const view = browseView(many, selection, 9);
     // ASSERT
     expect({ overflow: view.overflow, foldable: view.foldable }).toEqual({ overflow: 0, foldable: true });
+  });
+
+  it('ignores accents and surrounding space, so "  befahigung " finds "KI-Befähigung"', () => {
+    // ARRANGE
+    const selection: BrowseSelection = { ...INITIAL_SELECTION, query: '  befahigung ' };
+    const expected = ['by-topic'];
+    // ACT
+    const view = browseView(SEARCHABLE, selection, 9);
+    // ASSERT
+    expect([...view.visible]).toEqual(expected);
+  });
+
+  it('lifts the search for a query of only spaces', () => {
+    // ARRANGE
+    const selection: BrowseSelection = { ...INITIAL_SELECTION, query: '   ' };
+    const expected = SEARCHABLE.length;
+    // ACT
+    const view = browseView(SEARCHABLE, selection, 9);
+    // ASSERT
+    expect(view.matching).toBe(expected);
   });
 
   it('only offers a filter that has at least two values to choose between', () => {
