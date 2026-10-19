@@ -48,7 +48,7 @@ Working with AI is like onboarding a brilliant freelancer with amnesia, every ti
 
 ## Analogy
 
-A brilliant freelancer with amnesia, every time, described by five traits that spell PRICE: Prolific, Random, Inflating, Confident, Expert. Managed by five moves that spell BRIEF: Break it down, Requirements first, Interview yourself with AI, Evaluate each step, Fresh start for each piece.
+A brilliant freelancer with amnesia, every time, described by five traits that spell PRICE: Probabilistic, Relentless, Informed, Confident, Every word billed. Managed by five moves that spell BRIEF: Break it down, Requirements first, Interview yourself with AI, Evaluate each step, Fresh start for each piece.
 
 ## Constraints
 
@@ -68,21 +68,21 @@ A brilliant freelancer with amnesia, every time, described by five traits that s
 
 1. **You're the new hire** — one tall Slide that grounds the viewer in what onboarding really needs. Top: the summer party for 200 employees across Europe and the obvious questions (budget, where everyone stays, who signs off; dietary and accessibility needs ride along). Middle: the second-order questions (what went wrong last time, the unwritten rules, which tools and suppliers you may use): "Context that even people forget to hand over, because it lives in feedback, in the culture or in habit rather than in any document." Bottom, after a clear visual break: the role switch, you now hand the party over and owe your boss the plan by Friday. Works without AI, so it is reusable. _Visual:_ a tall stack, with the role switch set apart as the hand-off into the cornerstone. _Research:_ 1
 2. **Five traits, or you pay the PRICE** — the cornerstone: who you are handing the work to. Title "A brilliant freelancer with amnesia, every time"; caption "Five traits to manage, or you pay the PRICE." Reusable in any talk, and the one Slide every module may refer to. If time is short, the Episode can start here. _Visual:_ mirror rows, freelancer column left, AI column right, the five traits as pills down the centre with the first letter emphasised. Progressive disclosure: only the traits first, then the freelancer column trait by trait; the AI column stays hidden until the closing line, so "AI" lands last. The AI column takes the `ai` colour, not the lavender of the design reference. Rows are linked one to one. On the cornerstone, the perspective is always "you", the person handing over the work, and both columns share one sentence frame, changing only the nouns. _Research:_ 2, 3, 4, 5, 6
-   - **Prolific** — "Hand over the job, and they work day and night, producing stacks of polished pages, whether they're right or not." / "Send the prompt, and it produces pages in seconds, as many as you ask for, whether they're right or not."
-   - **Random** — "Give the same brief to a new freelancer, and get a different plan." / "Give the same prompt in a new chat, and get a different answer."
-   - **Inflating** — "They bill every word they read and write, so one more question means paying to reread the whole file, their own pages included." / "It charges for every word it reads and writes, so one more message means paying for the whole chat again, its own answers included."
+   - **Probabilistic** — "Give the same brief to a new freelancer, and get a different plan." / "Give the same prompt in a new chat, and get a different answer."
+   - **Relentless** — "Hand over the job, and they work day and night, producing stacks of polished pages, whether they're right or not." / "Send the prompt, and it produces pages in seconds, as many as you ask for, whether they're right or not."
+   - **Informed** — "Ask a freelancer who knows every trade, and get expert answers, blind to your company and culture." / "Ask AI, trained on more text than anyone could read, and get the likeliest answer, blind to your company and culture."
    - **Confident** — "Give a vague request, and they start without asking, fill the gaps with their own assumptions, and sell it to you as right." / "Give a vague prompt, and it starts without asking, fills the gaps with the most common answers, and replies with full confidence."
-   - **Expert** — "Ask a freelancer who knows every trade, and get expert answers, blind to your company and culture." / "Ask AI, trained on more text than anyone could read, and get the likeliest answer, blind to your company and culture."
+   - **Every word billed** — "They bill every word they read and write, so one more question means paying to reread the whole file, their own pages included." / "It charges for every word it reads and writes, so one more message means paying for the whole chat again, its own answers included."
    - Closing line: "And every time, they forget everything, so every job starts from day one."
 
 ### Five moves to brief a freelancer
 
 3. **How to manage the PRICE** — the second cornerstone, a standalone module that answers PRICE with five moves spelling BRIEF, what you give a freelancer. Names only the moves and the traits they counter: no summer party, no venue. Title "Five moves to brief a freelancer with amnesia"; caption "Five traits cost you the PRICE. Five moves make it a BRIEF." "One good prompt isn't enough" lives in the voice-over. _Visual:_ the five moves as pills, first letter emphasised, each lighting up the PRICE traits it counters (many to many). _Research:_ 7, 8, 9, 10, 11
-   - **Break it down** — Prolific, Inflating.
-   - **Requirements first** — Random, Confident.
-   - **Interview yourself with AI** — Confident, Expert.
-   - **Evaluate each step** — Prolific, Random.
-   - **Fresh start for each piece** — Inflating, Prolific, Random.
+   - **Break it down** — Relentless, Every word billed.
+   - **Requirements first** — Probabilistic, Confident.
+   - **Interview yourself with AI** — Confident, Informed.
+   - **Evaluate each step** — Relentless, Probabilistic.
+   - **Fresh start for each piece** — Every word billed, Relentless, Probabilistic.
 
 ### BRIEF in action
 
@@ -123,8 +123,8 @@ A brilliant freelancer with amnesia, every time, described by five traits that s
   - Why AI is an accelerator, not a solution: misconception "AI solves your problems", clarification "AI amplifies what you give it, the good and the bad"; the over-eager colleague who took the wrong exit; 24/7 and ten times faster, execution is not value; steer, don't blame, encourage questions early; one sentence on a whole team of such freelancers.
   - Why working with AI takes more effort, just like with people: misconception "AI will reduce your work", clarification "AI lets you take on more complex work"; the plough, steam engine and computer each raised what one person could achieve; AI is the first tool for meaning, culture and language, so people skills become AI skills; a project that used to need an agency is now within reach; an invitation to grow, not a burden.
 - Cornerstone: popovers carry the lesson; hover needs a click or step-through for video and mobile, one clean recordable state per trait.
-- Cornerstone: many-to-many trait mapping (cap 2–3 moments per trait) and outer-column moments swappable per Episode. Observed but not drawn: Expert↔Confident, Prolific↔Inflating.
-- The Inflating popover says "inflated cost".
+- Cornerstone: many-to-many trait mapping (cap 2–3 moments per trait) and outer-column moments swappable per Episode. Observed but not drawn: Informed↔Confident, Relentless↔Every word billed.
+- The Every word billed popover opens with "Every word billed:", where it once said "inflated cost".
 - PRICE pun for the voice-over: "Forget the price, and you'll pay it every time."
 - Whether the Token Economy block stays in the workshop.
 - Second use case for the solution: the invitation to 200 employees, or the budget proposal for the boss.

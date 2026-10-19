@@ -67,33 +67,33 @@ title: A brilliant freelancer with amnesia, every time
 
 Caption: "Five traits to manage, or you pay the PRICE."
 
-Three columns of five linked rows. The centre column holds the five traits as pills, the first letter of each emphasised so they spell PRICE: **P**rolific, **R**andom, **I**nflating, **C**onfident, **E**xpert. The left column is the freelancer, the right column is AI, and each row is linked to its trait by a hairline. Surfaces are quiet and neutral with hairline borders; the right column alone carries the `ai` colour, as a soft glow along its edge. At rest every row is filled in, and a closing line sits under the grid: "And every time, they forget everything, so every job starts from day one."
+Three columns of five linked rows. The centre column holds the five traits as pills, the first letter of each emphasised so they spell PRICE: **P**robabilistic, **R**elentless, **I**nformed, **C**onfident, **E**very word billed. While presenting, pointing at a pill flips its row to a short animation of the trait on both sides. The left column is the freelancer, the right column is AI, and each row is linked to its trait by a hairline. Surfaces are quiet and neutral with hairline borders; the right column alone carries the `ai` colour, as a soft glow along its edge. At rest every row is filled in, and a closing line sits under the grid: "And every time, they forget everything, so every job starts from day one."
 
 In the talk the Slide stages itself with a gentle fade-and-rise: first only the five pills, then the freelancer column trait by trait, the AI column hidden until the closing line, which brings the AI column in, so "AI" lands last. Each row is one recordable state. A reader sees the whole grid at once.
 
 Both columns share one sentence frame, always in the second person ("you" hand over the work), and change only the nouns:
 
-Prolific. Freelancer: "Hand over the job, and they work day and night, producing stacks of polished pages, whether they're right or not." AI: "Send the prompt, and it produces pages in seconds, as many as you ask for, whether they're right or not."
+Probabilistic. Freelancer: "Give the same brief to a new freelancer, and get a different plan." AI: "Give the same prompt in a new chat, and get a different answer."
 
-Random. Freelancer: "Give the same brief to a new freelancer, and get a different plan." AI: "Give the same prompt in a new chat, and get a different answer."
+Relentless. Freelancer: "Hand over the job, and they work day and night, producing stacks of polished pages, whether they're right or not." AI: "Send the prompt, and it produces pages in seconds, as many as you ask for, whether they're right or not."
 
-Inflating. Freelancer: "They bill every word they read and write, so one more question means paying to reread the whole file, their own pages included." AI: "It charges for every word it reads and writes, so one more message means paying for the whole chat again, its own answers included."
+Informed. Freelancer: "Ask a freelancer who knows every trade, and get expert answers, blind to your company and culture." AI: "Ask AI, trained on more text than anyone could read, and get the likeliest answer, blind to your company and culture."
 
 Confident. Freelancer: "Give a vague request, and they start without asking, fill the gaps with their own assumptions, and sell it to you as right." AI: "Give a vague prompt, and it starts without asking, fills the gaps with the most common answers, and replies with full confidence."
 
-Expert. Freelancer: "Ask a freelancer who knows every trade, and get expert answers, blind to your company and culture." AI: "Ask AI, trained on more text than anyone could read, and get the likeliest answer, blind to your company and culture."
+Every word billed. Freelancer: "They bill every word they read and write, so one more question means paying to reread the whole file, their own pages included." AI: "It charges for every word it reads and writes, so one more message means paying for the whole chat again, its own answers included."
 
 Popovers, two lines, one per trait pill, in plain words:
 
-Prolific: "Pages pour out fast and polished, whether they are right or not. There is a lot to read, and all of it needs checking."
+Probabilistic: "The same brief can come back different every time. It picks a likely answer, not a fixed one, so one good result is not a promise."
 
-Random: "The same brief can come back different every time. Chance is built in, so one good result is not a promise."
+Relentless: "Pages pour out fast and polished, whether they are right or not. There is a lot to read, and all of it needs checking."
 
-Inflating: "Inflated cost: every new question pays again for all the words so far. The longer it runs, the bigger the bill."
+Informed: "It knows a great deal about the world and nothing about your company. Your culture and unwritten rules never reached it."
 
 Confident: "It starts instead of asking, and fills the gaps with guesses. A guess sounds as sure as a fact."
 
-Expert: "It knows a great deal about the world and nothing about your company. Your culture and unwritten rules never reached it."
+Every word billed: "Every new question pays again for all the words so far. The longer it runs, the bigger the bill."
 
 Design reference: reference/price-cornerstone/design-reference.md#page-1. Take its mirror structure and the title and caption; the AI column takes the `ai` colour, not the lavender of the reference.
 
@@ -101,7 +101,7 @@ Design reference: reference/price-cornerstone/design-reference.md#page-1. Take i
 
 1. **Right or not, the output looks finished** — even state-of-the-art models "still regularly produce logical mistakes", which is why speed without checking is a trap [1].
    - sources: [1] Lightman et al., Let's Verify Step by Step — https://arxiv.org/abs/2305.20050
-2. **Random is built in** — text generation samples from a probability distribution rather than always picking the single likeliest word, because the always-likeliest text is bland and repetitive [2]. Even with randomness set to zero the provider documents that "the results will not be fully deterministic" [3].
+2. **Probable, not random** — text generation samples from a probability distribution rather than always picking the single likeliest word, because the always-likeliest text is bland and repetitive [2]. Even with randomness set to zero the provider documents that "the results will not be fully deterministic" [3].
    - sources: [2] Holtzman et al., The Curious Case of Neural Text Degeneration — https://arxiv.org/abs/1904.09751
    - sources: [3] Anthropic, Messages API reference (temperature parameter) — https://platform.claude.com/docs/en/api/messages
 3. **How much varies** — in one test 1,000 completions of one prompt at zero randomness gave 80 unique answers [4]. Across five models set up for determinism, accuracy moved by up to 15% between runs of the same task [5].
@@ -126,11 +126,11 @@ Design reference: reference/price-cornerstone/design-reference.md#page-1. Take i
 #### Voice script
 
 1. **Who gets the job** — So who are you handing the work to? Not a chatbot and not an oracle, but a hire: a brilliant freelancer with amnesia, every time. They come with five traits, and the first letters spell PRICE, because if you do not manage them, you pay. For now I only describe the freelancer, a person, so you can picture them.
-2. **Prolific, Random** — The first trait is Prolific. You hand over the job and they work day and night, producing stacks of polished pages, whether the pages are right or not, so there is a lot to read and all of it needs checking. The second is Random. Give the same brief to a new freelancer and you get a different plan, which means one good result is not a promise.
-3. **Inflating** — Third, Inflating. This freelancer bills for every word they read and write, so one more question from you means paying for them to reread the whole file, their own pages included. The longer the job runs, the bigger the bill, and the bill grows faster than the work does.
-4. **Confident, Expert** — Fourth, Confident. You give a vague request, they start without asking, fill the gaps with their own assumptions and sell the result to you as right. A guess sounds exactly as sure as a fact. And fifth, Expert: they know every trade and give expert answers, yet they are blind to your company and your culture, because none of that ever reached them.
+2. **Probabilistic, Relentless** — The first trait is Probabilistic. Give the same brief to a new freelancer and you get a different plan: each one picks a likely plan, not a fixed one, which means one good result is not a promise. The second is Relentless. You hand over the job and they work day and night, producing stacks of polished pages, whether the pages are right or not, so there is a lot to read and all of it needs checking.
+3. **Informed** — Third, Informed. They know every trade and give expert answers, yet they are blind to your company and your culture. The handbook they get is redacted, sometimes on purpose, and sometimes because nobody, not even the person onboarding them, knows what is missing.
+4. **Confident, Every word billed** — Fourth, Confident. You give a vague request, they start without asking, fill the gaps with their own assumptions and sell the result to you as right. A guess sounds exactly as sure as a fact. And fifth, Every word billed: this freelancer bills for every word they read and write, so one more question from you means paying for them to reread the whole file, their own pages included. The longer the job runs, the bigger the bill, and the bill grows faster than the work does.
 5. **Amnesia** — And here is what sits under all five. Every time you come back, they forget everything, so every job starts from day one. (pause) Hold that picture of the freelancer, because the next thing I show is who this really is.
-6. **AI lands last** — This freelancer is AI. Row by row, it is the same sentence with different nouns. Send the prompt and it produces pages in seconds, as many as you ask for, right or not. Give the same prompt in a new chat and you get a different answer. It charges for every word it reads and writes, so one more message pays for the whole chat again, its own answers included. Give it a vague prompt and it fills the gaps with the most common answers and replies with full confidence. And trained on more text than anyone could read, it gives you the likeliest answer, blind to your company and culture. (pause) Would you hand a job to a freelancer like that without a plan?
+6. **AI lands last** — This freelancer is AI. Row by row, it is the same sentence with different nouns. Give the same prompt in a new chat and you get a different answer. Send the prompt and it produces pages in seconds, as many as you ask for, right or not. Trained on more text than anyone could read, it gives you the likeliest answer, blind to your company and culture. Give it a vague prompt and it fills the gaps with the most common answers and replies with full confidence. And it charges for every word it reads and writes, so one more message pays for the whole chat again, its own answers included. (pause) Would you hand a job to a freelancer like that without a plan?
 7. **The pun** — So here is the whole slide in one line. Forget the price, and you'll pay it every time.
 
 ## Five moves to brief a freelancer {#five-moves-to-brief-a-freelancer}
@@ -151,15 +151,15 @@ Caption: "Five traits cost you the PRICE. Five moves make it a BRIEF."
 
 Two rows. The top row holds the five moves as pills with the first letter emphasised so they spell BRIEF: **B**reak it down, **R**equirements first, **I**nterview yourself with AI, **E**valuate each step, **F**resh start for each piece. The bottom row holds the five PRICE traits as smaller pills. Each move is joined to the traits it counters by hairlines, many to many, with the join lines drawn at rest in the `primary` colour so every mapping shows in a still frame:
 
-Break it down: Prolific, Inflating.
+Break it down: Relentless, Every word billed.
 
-Requirements first: Random, Confident.
+Requirements first: Probabilistic, Confident.
 
-Interview yourself with AI: Confident, Expert.
+Interview yourself with AI: Confident, Informed.
 
-Evaluate each step: Prolific, Random.
+Evaluate each step: Relentless, Probabilistic.
 
-Fresh start for each piece: Inflating, Prolific, Random.
+Fresh start for each piece: Every word billed, Relentless, Probabilistic.
 
 No summer party and no venue appear. In the talk the moves light up one by one with a gentle fade-and-rise, each lighting its traits; hover only adds a popover on a move, two lines, in plain words:
 
@@ -197,8 +197,8 @@ Design reference: reference/price-cornerstone/design-reference.md#page-1. The sa
 #### Voice script
 
 1. **One prompt is not enough** — Many people hope for one good prompt. But a good prompt is not a brief. A brief is a set of moves, and each move answers a cost you have just seen, so one prompt cannot do the work of five.
-2. **Break it down, Requirements first** — The first move is Break it down: hand over one piece at a time, because small pieces leave less to get wrong and less to pay for. That answers Prolific and Inflating, the pages and the bloated bill. The second is Requirements first: write down what good looks like before the work starts. Then the same brief brings results that agree, so it answers Random and Confident.
-3. **Interview, Evaluate** — Third, Interview yourself with AI. Let it ask you its questions first, so the confident guess becomes a question, and the expert learns the company it was blind to. Fourth, Evaluate each step, and here evaluating means checking the step against your requirements. A wrong turn is then caught early, not after the last page, which tames the flood of pages and the randomness.
+2. **Break it down, Requirements first** — The first move is Break it down: hand over one piece at a time, because small pieces leave less to get wrong and less to pay for. That answers Relentless and Every word billed, the pages and the bloated bill. The second is Requirements first: write down what good looks like before the work starts. Then the same brief brings results that agree, so it answers Probabilistic and Confident.
+3. **Interview, Evaluate** — Third, Interview yourself with AI. Let it ask you its questions first, so the confident guess becomes a question, and the informed outsider learns the company it was blind to. Fourth, Evaluate each step, and here evaluating means checking the step against your requirements. A wrong turn is then caught early, not after the last page, which tames the flood of pages and the varying answers.
 4. **Fresh start** — Fifth, Fresh start for each piece. One piece gets one clean chat, so the bill stays small and nothing old leaks in from earlier work. Notice that the map is many to many: one move helps several traits, and one trait is met by several moves. That overlap is why the five work as a set.
 5. **Refrain** — Look at what these moves are: a brief you would give any good freelancer. Smaller pieces, written requirements, questions up front, checks along the way, a clean desk for each job. What is good for a human is also good for AI.
 
