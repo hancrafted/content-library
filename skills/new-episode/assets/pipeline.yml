@@ -1,7 +1,7 @@
 # The new-episode pipeline template. `begin-run` copies this file to
 # docs/episodes/<slug>/pipeline.yml as a draft the moment the Run begins,
 # customize-pipeline tailors it for that Episode once the Setup jobs
-# have collected what it needs, and the user approves it by setting
+# have collected what it needs, and finalizes it by setting
 # `status: approved` (design-ADR-0008).
 #
 # Schema (checked by src/lib/episode-pipeline.pure.ts in `npm run verify`):
@@ -142,7 +142,6 @@ jobs:
     outputs: [docs/episodes/<slug>/pipeline.yml]
     checks: [vitest]
     retries: 0
-    gate: human
     agents:
       - type: implementor
         skills: [writing-for-agents]
