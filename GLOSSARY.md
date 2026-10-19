@@ -173,6 +173,8 @@ A research folder is named `<category>-<####>__<question-slug>`: the category be
 
 **START**: Startups: how an early-stage company builds and funds itself, and how its cash, costs and revenue move over time.
 
+**WORK**: Technology and work: how tools and machines, from the plough to the computer, have changed how much people work, what work they do and who rises with them.
+
 ## Localization
 
 **Translation file**: one locale's strings for one owner: the site's chrome and landing (`src/messages/`), one Episode, or one Slide (its folder's `i18n/`); English is the source every other locale is checked against. Localization libraries call it a catalog; that jargon stays out of this project.
