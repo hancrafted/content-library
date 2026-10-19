@@ -1,36 +1,47 @@
 ---
 type: research
-title: 'Why did new technologies like the steam engine change social mobility for the workers who adopted them?'
-description: 'Studies show steam-using English counties had more skilled workers, but no study found shows adopting workers rising, and mobility, wage and schooling evidence for industrialisation is mixed.'
+title: 'Why did new technologies like the steam engine change social mobility
+  for the workers who adopted them?'
+description: 'Studies show steam-using English counties had more skilled
+  workers, but no study found shows adopting workers rising, and mobility, wage
+  and schooling evidence for industrialisation is mixed.'
 generated:
-  by: claude-code/sonnet-5.5
-  at: 2026-10-19T00:00:00Z
+  by: claude-code/sonnet-4.6
+  at: 2026-10-19T18:34:30Z
 stale_after: 2027-10-19T00:00:00Z
 sources:
   - id: 1
     resource: https://doi.org/10.1093/jeea/jvz006
-    title: 'de Pleijt, Nuvolari and Weisdorf, Human Capital Formation During the First Industrial Revolution: Evidence from the use of Steam Engines'
+    title: 'de Pleijt, Nuvolari and Weisdorf, Human Capital Formation During the
+      First Industrial Revolution: Evidence from the use of Steam Engines'
   - id: 2
     resource: https://doi.org/10.1017/s0022050703001724
-    title: 'Bessen, Technology and Learning by Factory Workers: The Stretch-Out at Lowell, 1842'
+    title: 'Bessen, Technology and Learning by Factory Workers: The Stretch-Out at
+      Lowell, 1842'
   - id: 3
     resource: https://doi.org/10.1111/j.1468-0289.2012.00651.x
-    title: 'Humphries, Childhood and child labour in the British industrial revolution'
+    title: 'Humphries, Childhood and child labour in the British industrial
+      revolution'
   - id: 4
     resource: https://doi.org/10.1017/s0022050700021100
-    title: 'Feinstein, Pessimism Perpetuated: Real Wages and the Standard of Living in Britain during and after the Industrial Revolution'
+    title: 'Feinstein, Pessimism Perpetuated: Real Wages and the Standard of Living
+      in Britain during and after the Industrial Revolution'
   - id: 5
     resource: https://www.nber.org/papers/w11253
-    title: 'Long and Ferrie, A Tale of Two Labor Markets: Intergenerational Occupational Mobility in Britain and the U.S. Since 1850'
+    title: 'Long and Ferrie, A Tale of Two Labor Markets: Intergenerational
+      Occupational Mobility in Britain and the U.S. Since 1850'
   - id: 6
     resource: https://doi.org/10.1257/aer.103.5.2003
-    title: 'Xie and Killewald, Intergenerational Occupational Mobility in Great Britain and the United States since 1850: Comment'
+    title: 'Xie and Killewald, Intergenerational Occupational Mobility in Great
+      Britain and the United States since 1850: Comment'
   - id: 7
     resource: https://doi.org/10.1257/aer.103.5.2021
-    title: 'Hout and Guest, Intergenerational Occupational Mobility in Great Britain and the United States since 1850: Comment'
+    title: 'Hout and Guest, Intergenerational Occupational Mobility in Great Britain
+      and the United States since 1850: Comment'
   - id: 8
     resource: https://doi.org/10.1257/aer.103.5.2041
-    title: 'Long and Ferrie, Intergenerational Occupational Mobility in Great Britain and the United States since 1850: Reply'
+    title: 'Long and Ferrie, Intergenerational Occupational Mobility in Great
+      Britain and the United States since 1850: Reply'
 ---
 
 # Why did new technologies like the steam engine change social mobility for the workers who adopted them?
