@@ -83,6 +83,15 @@ Suits a general audience meeting AI for the first time: sleek, calm Slides that 
 - Motion is a gentle fade-and-rise, like an answer arriving; nothing loops at rest.
 - The meaning colours (`machine`, `human`, `ai`) appear only for their meanings.
 
+### Exhibition
+
+Suits Episodes that ground an idea in history the viewer knows: a museum wall reads as a walk through time.
+
+- A wall surface carries the Slide; framed exhibits carry the content, each with a museum label.
+- Labels reveal by progressive disclosure; the exhibit's meaning shows at rest.
+- `primary` marks the one thing to look at.
+- The meaning colours (`machine`, `human`, `ai`) appear only for their meanings.
+
 ## Like this
 
 `markdown-in-ai-workflows` (Episode `maintaining-markdown-for-ai`). It stands on its own at rest, with depth behind a modal and the Context drawer. Its meaning colours (Knowledge `ai`, Instructions `human`, Memory `machine`) colour things that are not those meanings, so do not copy them. The Episode is legacy and keeps them until it is next touched.
