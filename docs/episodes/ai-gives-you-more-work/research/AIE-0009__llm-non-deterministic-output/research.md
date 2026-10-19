@@ -23,9 +23,6 @@ sources:
     resource: https://developers.openai.com/cookbook/examples/reproducible_outputs_with_the_seed_parameter
     title: 'OpenAI, How to make your completions outputs consistent with the new
       seed parameter'
-verified:
-  - by: process:markdown-harness
-    at: 2026-10-19T18:22:08Z
 ---
 
 # Why do language models, unlike earlier machines and tools, produce non-deterministic results?
