@@ -17,6 +17,7 @@ export const EPISODE_SLUGS = [
   'never-too-early-sales',
   'onboard-ai-every-time',
   'ai-attention-span',
+  'ai-gives-you-more-work',
   // Unlisted: built and exported, linked from neither the landing page nor the header.
   'slide-layouts',
   // A catalog of reusable Slide layouts, linked from the landing page beside the page template.
