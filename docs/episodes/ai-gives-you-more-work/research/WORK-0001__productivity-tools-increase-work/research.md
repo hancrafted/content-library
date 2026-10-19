@@ -1,10 +1,13 @@
 ---
 type: research
-title: 'Why do productivity tools like the plough, the steam engine and the computer increase total work instead of reducing it?'
-description: 'Cheaper output raises demand faster than labour per unit falls, and tools lift the value of the tasks left to people, but only while demand stays elastic.'
+title: 'Why do productivity tools like the plough, the steam engine and the
+  computer increase total work instead of reducing it?'
+description: 'Cheaper output raises demand faster than labour per unit falls,
+  and tools lift the value of the tasks left to people, but only while demand
+  stays elastic.'
 generated:
-  by: claude-code/opus-5.5
-  at: 2026-10-19T00:00:00Z
+  by: claude-code/sonnet-4.6
+  at: 2026-10-19T18:30:07Z
 stale_after: 2027-10-19T00:00:00Z
 sources:
   - id: 1
@@ -12,7 +15,8 @@ sources:
     title: 'Jevons, The Coal Question (1865)'
   - id: 2
     resource: https://www.aeaweb.org/articles?id=10.1257/jep.29.3.3
-    title: 'Autor, Why Are There Still So Many Jobs? The History and Future of Workplace Automation'
+    title: 'Autor, Why Are There Still So Many Jobs? The History and Future of
+      Workplace Automation'
   - id: 3
     resource: https://www.economic-policy.org/wp-content/uploads/2019/03/997_Automation-and-Jobs.pdf
     title: 'Bessen, Automation and Jobs: When Technology Boosts Employment'
@@ -21,7 +25,8 @@ sources:
     title: 'Boserup, The Conditions of Agricultural Growth'
   - id: 5
     resource: https://econweb.ucsd.edu/~vramey/research/Home_Production_published.pdf
-    title: 'Ramey, Time Spent in Home Production in the Twentieth-Century United States: New Estimates from Old Data'
+    title: 'Ramey, Time Spent in Home Production in the Twentieth-Century United
+      States: New Estimates from Old Data'
 ---
 
 # Why do productivity tools like the plough, the steam engine and the computer increase total work instead of reducing it?
