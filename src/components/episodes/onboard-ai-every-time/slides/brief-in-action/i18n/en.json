@@ -1,0 +1,23 @@
+{
+  "title": "BRIEF in action",
+  "requirementsCard": {
+    "title": "Requirements card",
+    "status": "signed off"
+  },
+  "venuesLabel": "Three fresh chats, one per venue",
+  "day": "Day 1",
+  "venues": {
+    "a": "Venue A",
+    "b": "Venue B",
+    "c": "Venue C"
+  },
+  "voiceScript": {
+    "segments": {
+      "one-task-five-moves": {
+        "title": "One task, five moves",
+        "keywords": "",
+        "script": "Time to watch BRIEF work on a real task. We walk it in workflow order, which is not the order of the letters, because the order you do things in is not the order they are named in."
+      }
+    }
+  }
+}

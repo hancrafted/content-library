@@ -1,0 +1,23 @@
+{
+  "title": "BRIEF in der Praxis",
+  "requirementsCard": {
+    "title": "Anforderungskarte",
+    "status": "freigegeben"
+  },
+  "venuesLabel": "Drei frische Chats, einer pro Location",
+  "day": "Tag 1",
+  "venues": {
+    "a": "Location A",
+    "b": "Location B",
+    "c": "Location C"
+  },
+  "voiceScript": {
+    "segments": {
+      "one-task-five-moves": {
+        "title": "Eine Aufgabe, fünf Schritte",
+        "keywords": "",
+        "script": "Zeit, BRIEF bei einer echten Aufgabe arbeiten zu sehen. Wir gehen sie in der Reihenfolge des Ablaufs durch, nicht in der Reihenfolge der Buchstaben, denn die Reihenfolge, in der Du etwas tust, ist nicht die, in der es benannt ist."
+      }
+    }
+  }
+}

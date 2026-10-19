@@ -1,0 +1,53 @@
+{
+  "title": "Treat AI like a brilliant freelancer with amnesia · hancrafted",
+  "description": "Name the five traits that make AI costly (PRICE), and manage them with five moves (BRIEF): break it down, requirements first, interview yourself with AI, evaluate each step, and a fresh start for each piece.",
+  "toc": "Contents Loading 3 min left 1 The thought experiment 2 Five moves to brief a freelancer 3 BRIEF in action Open contents : Contents · Loading Contents 3 min left 1 The thought experiment 2 Five moves to brief a freelancer 3 BRIEF in action",
+  "slides": [
+    {
+      "id": "top",
+      "text": "Treat AI like a brilliant freelancer with amnesia It knows every trade and forgets you every time, so every job starts from day one. Job 1 Mon Day 1 Invitations for 200 Job 2 Tue Day 1 An email to suppliers Freelancer · AI Wed Day 1 Knows every trade Knows your company nothing Remembers Tuesday nothing Three jobs, three badges, and every badge says Day 1 . Nothing from Monday reaches Wednesday."
+    },
+    {
+      "id": "the-thought-experiment",
+      "text": "The thought experiment New hire · You Day 1 Budget? Who signs off? What went wrong last time?"
+    },
+    {
+      "id": "five-moves-to-brief-a-freelancer",
+      "text": "Five moves to brief a freelancer AI Day 1 B reak it down R equirements first I nterview yourself E valuate each step F resh start"
+    },
+    {
+      "id": "brief-in-action",
+      "text": "BRIEF in action Requirements card signed off Venue A Day 1 Venue B Day 1 Venue C Day 1"
+    }
+  ],
+  "notes": [
+    {
+      "id": "top",
+      "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
+    },
+    { "id": "the-thought-experiment", "text": "The thought experiment No speaker notes for this Slide." },
+    {
+      "id": "five-moves-to-brief-a-freelancer",
+      "text": "Five moves to brief a freelancer No speaker notes for this Slide."
+    },
+    { "id": "brief-in-action", "text": "BRIEF in action No speaker notes for this Slide." }
+  ],
+  "script": [
+    {
+      "id": "top",
+      "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
+    },
+    {
+      "id": "the-thought-experiment",
+      "text": "The thought experiment 0:00 – 0:25 Hook, new job Imagine you start a new job. New environment, new culture, new tools, and on your first week someone hands you a task: organise next year's summer party for 200 employees, spread across Europe. (pause) Before you book anything, picture every question you would need answered to do that well, because you are about to hear how many there are. 0:25 – 1:03 What this is, and is not This is episode one of three on working with AI in an agentic way, and it is built as the reference the later videos point back to. I will use plain words and no jargon, because you do not need to know how AI works inside to get reliable results from it. One thing I leave out on purpose: the context and memory features of ChatGPT and similar tools. They deserve their own episode, the one on attention span, so we keep them out of this one. 1:03 – 1:32 Where it goes Here is the point of the next ten minutes: everything you just pictured, the questions, the history, the unwritten rules, is what AI needs from you too, because what is good for a human is also good for AI. So we take it in two steps, two cornerstones. First, who you are really handing the work to, and then what you give them so the work comes back right."
+    },
+    {
+      "id": "five-moves-to-brief-a-freelancer",
+      "text": "Five moves to brief a freelancer 0:00 – 0:12 Answer to the traits Five traits cost you. The good news is that you can answer each of them, with five moves, and the first letters spell BRIEF. That is the second cornerstone."
+    },
+    {
+      "id": "brief-in-action",
+      "text": "BRIEF in action 0:00 – 0:16 One task, five moves Time to watch BRIEF work on a real task. We walk it in workflow order, which is not the order of the letters, because the order you do things in is not the order they are named in."
+    }
+  ]
+}

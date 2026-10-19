@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { aiTokenEconomy } from './ai-token-economy/ai-token-economy';
 import { maintainingMarkdownForAi } from './maintaining-markdown-for-ai/maintaining-markdown-for-ai';
 import { neverTooEarlySales } from './never-too-early-sales/never-too-early-sales';
+import { onboardAiEveryTime } from './onboard-ai-every-time/onboard-ai-every-time';
 import { pageTemplate } from './page-template/page-template';
 import { slideLayouts } from './slide-layouts/slide-layouts';
 import { slideMaster } from './slide-master/slide-master';
@@ -19,6 +20,7 @@ const EPISODES: { readonly [S in EpisodeSlug]: EpisodeRecord & { readonly slug: 
   'maintaining-markdown-for-ai': maintainingMarkdownForAi,
   'ai-token-economy': aiTokenEconomy,
   'never-too-early-sales': neverTooEarlySales,
+  'onboard-ai-every-time': onboardAiEveryTime,
   'slide-layouts': slideLayouts,
   'slide-master': slideMaster,
 };
