@@ -508,17 +508,23 @@
       });
     </script>
 <script type="application/json" id="spec-meta">
-{
-  "type": "spec",
-  "title": "Treat AI like a brilliant freelancer with amnesia",
-  "status": "draft",
-  "generated": {
-    "by": "process:spec-assemble",
-    "at": "2026-10-19T19:17:45Z"
-  },
-  "locale": "en",
-  "brief": "../brief.md"
-}
+  {
+    "type": "spec",
+    "title": "Treat AI like a brilliant freelancer with amnesia",
+    "status": "draft",
+    "generated": {
+      "by": "process:spec-assemble",
+      "at": "2026-10-19T19:30:02Z"
+    },
+    "locale": "en",
+    "brief": "../brief.md",
+    "verified": [
+      {
+        "by": "human:han",
+        "at": "2026-10-19T19:30:07Z"
+      }
+    ]
+  }
 </script>
 </head>
 <body>
@@ -1252,6 +1258,7 @@
 <p>Parts and props: <code>NewHireStack({ task, obvious, riders, hidden, hiddenNote, handover })</code> with <code>type Zone = { label: string; questions: { slug: string; text: string }[] }</code>, <code>riders: string[]</code>, <code>handover: { title: string; body: ReactNode; due: string; echoes: { slug: string; text: string; unwritten: boolean }[] }</code>. The rail labels "You ask" and "You are asked" are hairline SVG arrows (<code>stroke-border</code> down, <code>stroke-primary</code> up). The break is a hairline with the label "Switch roles".</p>
 <p>Tokens: <code>bg-card</code> and <code>border-border</code> for the obvious zone, <code>bg-muted</code> with <code>border-dashed</code> for the unwritten zone and its pills, <code>bg-primary</code> for the hand-off card, the one focal point. Hover: each question list is a <code>focus-group focus-group--dim-others</code> of <code>focus-group__item</code>s.</p>
 <p>The Dossier puts "Context that lives in feedback, culture and habit" in a popover on the zone title; overruled: it is the zone's claim, so it shows at rest as the zone's line, in the Brief's wording.</p>
+<p>Han's round-1 note: the switch of roles must stand out, so the audience feels they now hand the task to somebody else. The break is no hairline with a caption: it becomes a full-width band between the two halves, the label "Switch roles" at <code>text-subheading</code> in <code>text-primary</code> on <code>bg-primary/10</code>, with a hairline SVG turn arrow (<code>stroke-primary</code>) that carries the rail from "You ask" round to "You are asked", so the arrow's turn is the Slide's pivot. The hand-off card's title "Now you hand it over." stays its lead line. Tokens only; no new motion.</p>
 <p>Context markers (<code>ContextMarker</code>): after the unwritten-zone line opens "Why the middle zone stays unwritten"; after "knows none of what you just learned" opens "The newcomer has the least to absorb with".</p>
 <p>i18n keys: <code>title</code>, <code>caption</code>, <code>task</code>, <code>obvious.label</code>, <code>obvious.questions.budget|stay|signoff</code>, <code>riders.dietary|accessibility</code>, <code>hidden.label</code>, <code>hidden.note</code>, <code>hidden.questions.lastTime|unwrittenRules|suppliers</code>, <code>rail.ask</code>, <code>rail.asked</code>, <code>switch</code>, <code>handover.title</code>, <code>handover.body</code>, <code>handover.due</code>, <code>handover.dueDay</code>, <code>handover.echoes.*</code>.</p>
 </div></details>
@@ -1622,6 +1629,7 @@
 <p>Keeps <code>motion: local</code> as one presenter-driven stage in <code>price-stage.client.tsx</code>: step 0 shows the five pills, steps 1 to 5 bring in the freelancer cell of each row with a fade-and-rise and move the <code>primary</code> highlight to that pill, step 6 brings in the closing line and the whole AI column together, so "AI" lands last. Each step is one recordable state. At rest, without JavaScript, in print and under reduced motion the last step shows: every column, mapping and the closing line. No entrance of its own: the wrapper's shared entrance fades the Scene up. While staging, only the current pill is <code>bg-primary</code> and the rest <code>bg-card</code>; at rest all five are <code>bg-primary</code>, as the mock shows.</p>
 <p>Hover (superseded for the chips by the trait flip below): the rows are <code>focus-group__item</code>s of a <code>focus-group--dim-others</code>, so pointing at one row dims the other four. Popovers (two lines each, the Dossier's wording) open on each trait pill, copied from the <code>metro-map</code> popover and portalled into the Episode portal root (FE-009 §8); they hold the aside, never the row text.</p>
 <p>Trait flip, settled in <code>.scratch/freelancer-trait-flip/handoff.md</code>: the chips read Probabilistic, Relentless, Informed, Confident, Every word billed, in that order; each row keeps its meaning's texts and context marker. While a chip is pointed at or focused, its row flips and both backs play the same beat, then hold the last frame 1.5 s and replay; leaving resets it. Backs: Probabilistic "Varies" (one document splits into two freelancers, or the prompt into two AI chats, and a circle and a triangle come out), Relentless "Nonstop" (a looping clock, food, drink, sleep and toilet banned, a pile growing; the AI side clock and pile), Informed "Redacted" (diplomas light up, or a globe feeds documents into the AI, then the "How we work here" handbook arrives redacted), Confident "Guesses" (three pieces fit, a triangle lodges crooked in the square slot, then a bubble with a checkmark), Every word billed "Grows" (a line sweeps up and down the growing stack, the bill or token count rising per item it passes; the AI stack is the chat, prompts left, its answers indented right). The "day one" closing line flips every row, blanks the backs, retracts the arrows and returns the fronts. Parts: a Slide-local client part <code>trait-flip.client.tsx</code> (chips and the closing line are <code>button</code>s with <code>aria-expanded</code>; focus opens, blur closes, a tap opens and a tap elsewhere closes), the open-row and replay rule in <code>trait-flip.pure.ts</code> with unit tests, one SVG part per back. The front is the print and static-HTML state; every back's markup is its last frame, so reduced motion shows the end state; the clock is the one loop and pauses outside <code>active</code> (FE-009 §6). Translation keys <code>traits.&lt;slug&gt;.name|back</code>, <code>backs.prompt</code>, <code>backs.handbook</code>, en and de; the de chips keep the English names. Tokens only: freelancer <code>foreground</code> and <code>primary</code>, AI <code>ai</code>, bans <code>destructive</code>, redaction <code>foreground</code>.</p>
+<p>Chip, from Han's round-1 note (2b's letter): the tall Slide has room, so each chip sets its first letter large, <code>text-heading font-semibold leading-none</code>, with the full name under it in <code>text-caption</code> (<code>text-primary-foreground/80</code>), as 2b's spine does; the chip stays <code>bg-primary</code> and the one control, and P R I C E reads down the centre track. The <code>w-6</code> arrows keep "Every word billed" on one line in the <code>w-60</code> track.</p>
 <p>Context markers (<code>ContextMarker</code>), one per AI cell: Probabilistic opens "Probable, not random", Relentless "Right or not, the output looks finished", Informed "Why it is blind to your company", Confident "Why it guesses instead of asking", Every word billed "The bill covers the whole chat"; the closing line opens "The forgetting is in the design".</p>
 <p>i18n keys: <code>title</code>, <code>caption</code>, <code>columns.freelancer</code>, <code>columns.ai</code>, <code>traits.probabilistic|relentless|informed|confident|every-word-billed.name</code>, <code>.freelancer</code>, <code>.ai</code>, <code>.popover</code>, <code>closing</code>.</p>
 </div></details>
