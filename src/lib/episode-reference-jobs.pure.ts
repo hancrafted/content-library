@@ -1,8 +1,8 @@
 /*
  * A per-run pipeline converts each file the Brief lists under `## Episode Design Reference`
  * with its convert-references job: customize-pipeline names one design-reference.md
- * output per item, so each is named at the pipeline gate. The Brief and the
- * pipeline are approved separately; this keeps the two lists equal.
+ * output per item, so each is named in the finalized pipeline. The Brief and the
+ * pipeline are finalized separately; this keeps the two lists equal.
  */
 
 import { readPipeline } from './episode-pipeline-definition.pure';
