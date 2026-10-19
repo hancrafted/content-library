@@ -2,17 +2,15 @@
 // scanning only the Spec for classes, then serves the Spec for review on `--port`, else the first free port from 4000, never 4382
 // (the dashboard's). Saving the review writes the next feedback round (spec-server.ts).
 
-import tailwind from '@tailwindcss/postcss';
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
-import postcss from 'postcss';
 import { SPEC_FILE } from '../../../src/lib/episode-spec-page.pure.ts';
+import { buildDesignCss } from './spec-css.ts';
 import { startSpecServer, type SpecServer } from './spec-server.ts';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
-const GLOBALS = path.join(ROOT, 'src/app/globals.css');
 const FIRST_PORT = 4000;
 const LAST_PORT = 4100;
 const DASHBOARD_PORT = 4382;
@@ -20,17 +18,6 @@ const DASHBOARD_PORT = 4382;
 /** A bare slug names `docs/episodes/<slug>`; anything with a slash is an Episode folder path. */
 function episodeFolder(arg: string): string {
   return arg.includes('/') ? path.resolve(arg) : path.join(ROOT, 'docs/episodes', arg);
-}
-
-/** globals.css through Tailwind with the Spec's folder as the only source, so design.css holds the real tokens. */
-async function buildDesignCss(specDir: string): Promise<string> {
-  const out = path.join(specDir, 'design.css');
-  const result = await postcss([tailwind({ base: specDir })]).process(readFileSync(GLOBALS, 'utf8'), {
-    from: GLOBALS,
-    to: out,
-  });
-  writeFileSync(out, result.css);
-  return out;
 }
 
 async function listen(folder: string, fixed: number | undefined): Promise<SpecServer> {

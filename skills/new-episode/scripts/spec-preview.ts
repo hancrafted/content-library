@@ -3,12 +3,11 @@
 // staging test runs, renders every Option at 1440px through `npm run inspect-page` and measures text overflow.
 // Always renders; prints one `✖` line per violation and one `screenshot` line per Option; exits 1 on any violation.
 
-import tailwind from '@tailwindcss/postcss';
 import { spawnSync } from 'node:child_process';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import postcss from 'postcss';
+import { buildDesignCss } from './spec-css.ts';
 import { previewPage, previewReport, WIDTH, type Rendered } from './spec-preview.pure.ts';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
@@ -51,9 +50,7 @@ mkdirSync(dir, { recursive: true });
 
 const frame = readFileSync(path.join(ROOT, 'skills/new-episode/assets/spec-frame.html'), 'utf8');
 writeFileSync(path.join(dir, 'index.html'), previewPage(frame, fragment));
-const globals = path.join(ROOT, 'src/app/globals.css');
-const css = await postcss([tailwind({ base: dir })]).process(readFileSync(globals, 'utf8'), { from: globals });
-writeFileSync(path.join(dir, 'design.css'), css.css);
+await buildDesignCss(dir);
 
 const url = `file://${path.join(dir, 'index.html')}`;
 const report = previewReport(fragment, (id) => inspect(url, id, path.join(dir, `${id}.png`)));
