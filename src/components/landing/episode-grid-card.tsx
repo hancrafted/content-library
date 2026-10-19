@@ -1,7 +1,8 @@
-import { AiMarker } from '@/components/landing/episode-ai-marker';
 import type { EpisodeCard } from '@/components/landing/episode-card.pure';
+import { HighlightLabel } from '@/components/landing/episode-highlight-label';
+import { EpisodeLinks } from '@/components/landing/episode-links';
 import { TOPIC_ACCENTS, TOPIC_ICONS } from '@/components/landing/episode-visuals';
-import { YoutubeLink, type VideoLabels } from '@/components/landing/episode-youtube-link';
+import type { VideoLabels } from '@/components/landing/episode-youtube-link';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
@@ -33,20 +34,22 @@ function CardTitle({ card, locale }: { card: EpisodeCard; locale: Locale }) {
   );
 }
 
+/** The card's last row: where else the Episode is published on the left, the open cue (or "coming soon") on the right. */
 function CardFooter({ card, labels }: { card: EpisodeCard; labels: CardLabels }) {
   return (
-    <p className="mt-auto flex min-h-6 items-center justify-end pt-3">
+    <div className="mt-auto flex min-h-11 items-center justify-between gap-3 pt-3">
+      <EpisodeLinks card={card} labels={labels} />
       {card.route === null ? (
-        <span className="rounded-full border border-border px-2.5 py-0.5 font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
+        <span className="ml-auto rounded-full border border-border px-2.5 py-0.5 font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
           {labels.comingSoon}
         </span>
       ) : (
         <ArrowUpRight
           aria-hidden
-          className="h-3.5 w-3.5 text-foreground transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0 motion-reduce:group-hover:translate-y-0"
+          className="ml-auto h-3.5 w-3.5 text-foreground transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0 motion-reduce:group-hover:translate-y-0"
         />
       )}
-    </p>
+    </div>
   );
 }
 
@@ -54,11 +57,10 @@ interface HeadProps {
   card: EpisodeCard;
   tile: string;
   showFormat: boolean;
-  labels: CardLabels;
 }
 
-/** The card's first row: the Topic's icon and name on the left, the Format (once there are two) and the video on the right. */
-function CardHead({ card, tile, showFormat, labels }: HeadProps) {
+/** The card's first row: the Topic's icon and name on the left; the highlighted Topic and the Format (once there are two) on the right. */
+function CardHead({ card, tile, showFormat }: HeadProps) {
   const Icon = TOPIC_ICONS[card.icon];
   return (
     <div className="flex min-h-9 items-center justify-between gap-3">
@@ -67,11 +69,10 @@ function CardHead({ card, tile, showFormat, labels }: HeadProps) {
           <Icon aria-hidden className="h-[1.1rem] w-[1.1rem]" />
         </span>
         <span className={META}>{card.topic.label}</span>
-        <AiMarker card={card} />
       </span>
       <span className="inline-flex items-center gap-3">
+        <HighlightLabel card={card} className={META} />
         {showFormat && <span className={META}>{card.format.label}</span>}
-        <YoutubeLink card={card} labels={labels} />
       </span>
     </div>
   );
@@ -120,12 +121,7 @@ export function EpisodeGridCard({ card, locale, labels, showFormat }: GridCardPr
       data-format={card.format.id}
       className={`${CARD} ${tone}`}
     >
-      <CardHead
-        card={card}
-        tile={upcoming ? 'bg-muted text-muted-foreground' : accent.tile}
-        showFormat={showFormat}
-        labels={labels}
-      />
+      <CardHead card={card} tile={upcoming ? 'bg-muted text-muted-foreground' : accent.tile} showFormat={showFormat} />
       <CardTitle card={card} locale={locale} />
       <p className="line-clamp-3 text-sm leading-relaxed text-muted-foreground">{card.caption}</p>
       <CardTags card={card} />

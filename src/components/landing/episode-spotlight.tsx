@@ -1,9 +1,9 @@
-import { AiMarker } from '@/components/landing/episode-ai-marker';
 import { showsFormat, spotlightOf } from '@/components/landing/episode-browse.pure';
 import type { EpisodeCard } from '@/components/landing/episode-card.pure';
 import type { CardLabels } from '@/components/landing/episode-grid-card';
+import { HighlightLabel } from '@/components/landing/episode-highlight-label';
+import { EpisodeLinks } from '@/components/landing/episode-links';
 import { TOPIC_ACCENTS, TOPIC_ICONS, type AccentClasses } from '@/components/landing/episode-visuals';
-import { YoutubeLink } from '@/components/landing/episode-youtube-link';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
@@ -64,11 +64,10 @@ interface KickerProps {
   size: Size;
   accent: AccentClasses;
   showFormat: boolean;
-  labels: CardLabels;
 }
 
-/** The card's first row: the Topic's icon and name (and Format, once there are two) on the left, the video on the right. */
-function Kicker({ card, size, accent, showFormat, labels }: KickerProps) {
+/** The card's first row: the Topic's icon and name (and Format, once there are two) on the left, the highlighted Topic on the right. */
+function Kicker({ card, size, accent, showFormat }: KickerProps) {
   const Icon = TOPIC_ICONS[card.icon];
   const { tile, glyph } = SIZES[size];
   return (
@@ -88,9 +87,8 @@ function Kicker({ card, size, accent, showFormat, labels }: KickerProps) {
             </>
           )}
         </p>
-        <AiMarker card={card} />
       </div>
-      <YoutubeLink card={card} labels={labels} />
+      <HighlightLabel card={card} className={META} />
     </div>
   );
 }
@@ -100,15 +98,16 @@ const LEAD_CTA =
 const SIDE_CTA =
   'inline-flex items-center gap-1.5 font-mono text-xs font-semibold uppercase tracking-wider text-foreground';
 
-/** The visible call to action; the title's stretched link is the real target, so this is for the eye only. */
-function Footer({ size, labels }: { size: Size; labels: CardLabels }) {
+/** The visible call to action, for the eye only as the title's stretched link is the real target, and where else the Episode is published. */
+function Footer({ card, size, labels }: { card: EpisodeCard; size: Size; labels: CardLabels }) {
   return (
-    <p className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-2 pt-4">
+    <div className="mt-auto flex flex-wrap items-center justify-between gap-x-4 gap-y-2 pt-4">
       <span aria-hidden className={size === 'lead' ? LEAD_CTA : SIDE_CTA}>
         {labels.open}
         <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0" />
       </span>
-    </p>
+      <EpisodeLinks card={card} labels={labels} />
+    </div>
   );
 }
 
@@ -134,7 +133,7 @@ function SpotlightCard({ card, size, sideCount, locale, labels, showFormat }: Ca
       className={`${FRAME} ${accent.edge} ${pad} ${placement(size, sideCount)}`}
     >
       <Art card={card} size={size} accent={accent} />
-      <Kicker card={card} size={size} accent={accent} showFormat={showFormat} labels={labels} />
+      <Kicker card={card} size={size} accent={accent} showFormat={showFormat} />
       <h4 className={`font-bold tracking-tight text-foreground ${title}`}>
         <Link
           href={localizePath(card.route, locale)}
@@ -144,7 +143,7 @@ function SpotlightCard({ card, size, sideCount, locale, labels, showFormat }: Ca
         </Link>
       </h4>
       <p className={`leading-relaxed text-muted-foreground ${caption}`}>{card.caption}</p>
-      <Footer size={size} labels={labels} />
+      <Footer card={card} size={size} labels={labels} />
     </article>
   );
 }

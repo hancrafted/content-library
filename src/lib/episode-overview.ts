@@ -13,7 +13,7 @@ export const ACCENTS = ['primary', 'amber', 'emerald', 'sky', 'rose', 'violet'] 
 export type Accent = (typeof ACCENTS)[number];
 
 /** An icon by name, so this stays data; the landing turns the name into a drawing. */
-export const ICONS = ['sparkles', 'handshake', 'file-text', 'coins'] as const;
+export const ICONS = ['brain-circuit', 'handshake', 'file-text', 'coins'] as const;
 export type TopicIcon = (typeof ICONS)[number];
 
 export interface TopicLook {
@@ -26,7 +26,7 @@ export interface TopicLook {
  * them. A Topic's look is every Episode's look whose primary Topic it is.
  */
 export const TOPICS = {
-  'ai-enablement': { icon: 'sparkles', accent: 'violet' },
+  'ai-enablement': { icon: 'brain-circuit', accent: 'violet' },
   sales: { icon: 'handshake', accent: 'emerald' },
   'knowledge-base': { icon: 'file-text', accent: 'sky' },
   cost: { icon: 'coins', accent: 'amber' },
@@ -34,7 +34,7 @@ export const TOPICS = {
 export type TopicId = keyof typeof TOPICS;
 export const TOPIC_IDS = Object.keys(TOPICS) as readonly TopicId[];
 
-/** The Topic the overview leads with and marks on every card it holds: the channel's main subject. */
+/** The channel's main subject: the overview lists it first, and a card filed under it as an extra Topic names it too. */
 export const HIGHLIGHTED_TOPIC = 'ai-enablement' as const satisfies TopicId;
 
 export const FORMATS = ['foundations', 'teardown', 'short'] as const;
