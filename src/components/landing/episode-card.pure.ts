@@ -4,7 +4,14 @@ import {
   type PublishedEpisodeMetadata,
   type UpcomingEpisodeMetadata,
 } from '@/lib/episode-metadata.pure';
-import { TOPICS, type Accent, type FormatId, type TopicIcon, type TopicId } from '@/lib/episode-overview';
+import {
+  HIGHLIGHTED_TOPIC,
+  TOPICS,
+  type Accent,
+  type FormatId,
+  type TopicIcon,
+  type TopicId,
+} from '@/lib/episode-overview';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { episodeRoute, isEpisodeSlug } from '@/lib/routes';
 
@@ -43,6 +50,8 @@ export interface EpisodeCard {
   /** Every Topic the Episode appears under, primary first: what a Topic filter matches. */
   readonly topics: readonly Labelled<TopicId>[];
   readonly format: Labelled<FormatId>;
+  /** True when the Episode is under the highlighted Topic, primary or extra, so the card marks it. */
+  readonly highlighted: boolean;
   /** The Episode's Tags in its own order; a flat list, none ranks above another. */
   readonly tags: readonly TagLabel[];
   /** The Episode's video in this locale; left off when it has none or is not published. */
@@ -130,6 +139,7 @@ export function episodeCard(entry: CardEntry, ctx: CardContext): EpisodeCard {
     topic: topics[0],
     topics,
     format: { id: entry.format, label: read(`${OVERVIEW_KEYS}.formats.${entry.format}`) },
+    highlighted: topics.some(({ id }) => id === HIGHLIGHTED_TOPIC),
     tags: entry.tags.map((id) => ({
       id,
       label: read(`${OVERVIEW_KEYS}.tags.${id}.name`),

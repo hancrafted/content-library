@@ -1,8 +1,10 @@
 import { ALL, type Facet, type FacetChoices } from '@/components/landing/episode-browse.pure';
+import { TOPIC_ACCENTS } from '@/components/landing/episode-visuals';
 import { SEGMENTED_GROUP, segmentedItem } from '@/components/segmented';
 import { Button } from '@/components/ui/button';
+import { HIGHLIGHTED_TOPIC, TOPICS } from '@/lib/episode-overview';
 import { cn } from '@/lib/utils';
-import { Search } from 'lucide-react';
+import { Search, Sparkles } from 'lucide-react';
 import type { Ref } from 'react';
 
 /** The strings the search box and the two filters draw. */
@@ -52,6 +54,8 @@ interface FilterProps<Id extends string> {
 
 interface ChipProps {
   label: string;
+  /** The highlighted Topic's chip carries its icon in its colour. */
+  highlighted?: boolean;
   count: number;
   pressed: boolean;
   onPress: () => void;
@@ -60,10 +64,11 @@ interface ChipProps {
 
 const PRESSED_CHIP =
   'border-selected bg-selected text-selected-foreground hover:bg-selected hover:text-selected-foreground dark:border-selected dark:bg-selected dark:hover:bg-selected';
+const HIGHLIGHT_INK = TOPIC_ACCENTS[TOPICS[HIGHLIGHTED_TOPIC].accent].ink;
 const IDLE_CHIP = 'text-muted-foreground hover:border-foreground/40 hover:bg-background hover:text-foreground';
 
 /** A single-select Topic chip: a toggle button, so its name stays put and `aria-pressed` carries the state. */
-function TopicChip({ label, count, pressed, onPress, buttonRef }: ChipProps) {
+function TopicChip({ label, count, pressed, onPress, buttonRef, highlighted }: ChipProps) {
   return (
     <Button
       ref={buttonRef}
@@ -77,6 +82,7 @@ function TopicChip({ label, count, pressed, onPress, buttonRef }: ChipProps) {
         count === 0 && !pressed && 'opacity-50',
       )}
     >
+      {highlighted && <Sparkles aria-hidden className={cn('h-3.5 w-3.5', !pressed && HIGHLIGHT_INK)} />}
       {label}
       <span className={cn('text-xs tabular-nums', pressed ? 'opacity-70' : 'opacity-60')}>{count}</span>
     </Button>
@@ -104,6 +110,7 @@ export function TopicChips<Id extends string>({
         <TopicChip
           key={option.id}
           label={option.label}
+          highlighted={option.id === HIGHLIGHTED_TOPIC}
           count={option.count}
           pressed={selected === option.id}
           onPress={() => onSelect(option.id)}

@@ -1,3 +1,4 @@
+import { AiMarker } from '@/components/landing/episode-ai-marker';
 import type { EpisodeCard } from '@/components/landing/episode-card.pure';
 import { TOPIC_ACCENTS, TOPIC_ICONS } from '@/components/landing/episode-visuals';
 import { YoutubeLink, type VideoLabels } from '@/components/landing/episode-youtube-link';
@@ -9,7 +10,6 @@ import Link from 'next/link';
 export interface CardLabels extends VideoLabels {
   readonly open: string;
   readonly comingSoon: string;
-  readonly minutesUnit: string;
 }
 
 const CARD =
@@ -34,44 +34,45 @@ function CardTitle({ card, locale }: { card: EpisodeCard; locale: Locale }) {
 }
 
 function CardFooter({ card, labels }: { card: EpisodeCard; labels: CardLabels }) {
-  if (card.route === null) {
-    return (
-      <p className="mt-auto flex min-h-9 items-center justify-between gap-3 pt-3">
-        <span className={META}>{card.topic.label}</span>
+  return (
+    <p className="mt-auto flex min-h-6 items-center justify-end pt-3">
+      {card.route === null ? (
         <span className="rounded-full border border-border px-2.5 py-0.5 font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
           {labels.comingSoon}
         </span>
-      </p>
-    );
-  }
-  return (
-    <p className="mt-auto flex min-h-9 items-center justify-between gap-3 pt-3">
-      <span className={META}>{card.topic.label}</span>
-      <span className="inline-flex items-center gap-3 font-mono text-[0.65rem] uppercase tracking-widest text-foreground">
-        <YoutubeLink card={card} labels={labels} />
-        {card.minutes !== undefined && (
-          <span className="text-muted-foreground">
-            {card.minutes} {labels.minutesUnit}
-          </span>
-        )}
+      ) : (
         <ArrowUpRight
           aria-hidden
-          className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0 motion-reduce:group-hover:translate-y-0"
+          className="h-3.5 w-3.5 text-foreground transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0 motion-reduce:group-hover:translate-y-0"
         />
-      </span>
+      )}
     </p>
   );
 }
 
-/** The Topic's icon tile and the Format, the card's first row. */
-function CardHead({ card, tile }: { card: EpisodeCard; tile: string }) {
+interface HeadProps {
+  card: EpisodeCard;
+  tile: string;
+  showFormat: boolean;
+  labels: CardLabels;
+}
+
+/** The card's first row: the Topic's icon and name on the left, the Format (once there are two) and the video on the right. */
+function CardHead({ card, tile, showFormat, labels }: HeadProps) {
   const Icon = TOPIC_ICONS[card.icon];
   return (
-    <div className="flex items-center justify-between gap-3">
-      <span className={`flex h-9 w-9 items-center justify-center rounded-xl ${tile}`}>
-        <Icon aria-hidden className="h-[1.1rem] w-[1.1rem]" />
+    <div className="flex min-h-9 items-center justify-between gap-3">
+      <span className="inline-flex items-center gap-2.5">
+        <span className={`flex h-9 w-9 items-center justify-center rounded-xl ${tile}`}>
+          <Icon aria-hidden className="h-[1.1rem] w-[1.1rem]" />
+        </span>
+        <span className={META}>{card.topic.label}</span>
+        <AiMarker card={card} />
       </span>
-      <span className={META}>{card.format.label}</span>
+      <span className="inline-flex items-center gap-3">
+        {showFormat && <span className={META}>{card.format.label}</span>}
+        <YoutubeLink card={card} labels={labels} />
+      </span>
     </div>
   );
 }
@@ -96,7 +97,15 @@ function CardTags({ card }: { card: EpisodeCard }) {
 }
 
 /** A compact Episode card for the Browse grid: a published one is a link, an upcoming one a muted card with a "coming soon" tag and no link. */
-export function EpisodeGridCard({ card, locale, labels }: { card: EpisodeCard; locale: Locale; labels: CardLabels }) {
+export interface GridCardProps {
+  card: EpisodeCard;
+  locale: Locale;
+  labels: CardLabels;
+  /** Whether the card names its Format; see `showsFormat`. */
+  showFormat: boolean;
+}
+
+export function EpisodeGridCard({ card, locale, labels, showFormat }: GridCardProps) {
   const upcoming = card.route === null;
   const accent = TOPIC_ACCENTS[card.accent];
   const tone = upcoming
@@ -111,7 +120,12 @@ export function EpisodeGridCard({ card, locale, labels }: { card: EpisodeCard; l
       data-format={card.format.id}
       className={`${CARD} ${tone}`}
     >
-      <CardHead card={card} tile={upcoming ? 'bg-muted text-muted-foreground' : accent.tile} />
+      <CardHead
+        card={card}
+        tile={upcoming ? 'bg-muted text-muted-foreground' : accent.tile}
+        showFormat={showFormat}
+        labels={labels}
+      />
       <CardTitle card={card} locale={locale} />
       <p className="line-clamp-3 text-sm leading-relaxed text-muted-foreground">{card.caption}</p>
       <CardTags card={card} />

@@ -42,6 +42,7 @@ describe('success cases', () => {
       topic: { id: 'cost', label: '[landing.episodeOverview.topics.cost]' },
       topics: [{ id: 'cost', label: '[landing.episodeOverview.topics.cost]' }],
       format: { id: 'foundations', label: '[landing.episodeOverview.formats.foundations]' },
+      highlighted: false,
       tags: [
         {
           id: 'tokens',
@@ -86,6 +87,7 @@ describe('success cases', () => {
       ],
       format: { id: 'short', label: '[landing.episodeOverview.formats.short]' },
       tags: [],
+      highlighted: false,
       featuredRank: null,
       accent: 'amber',
       icon: 'coins',
@@ -124,6 +126,26 @@ describe('success cases', () => {
     const { youtubeUrl } = episodeCard(PUBLISHED, { locale: 'de', read, youtubeId: 'S0Nx4faEebY' });
     // ASSERT
     expect(youtubeUrl).toBe(expected);
+  });
+
+  it('highlights a card listed under AI enablement as an extra Topic', () => {
+    // ARRANGE
+    const entry = { ...PUBLISHED, extraTopics: ['ai-enablement'] as const };
+    const expected = true;
+    // ACT
+    const { highlighted } = episodeCard(entry, { locale: 'en', read });
+    // ASSERT
+    expect(highlighted).toBe(expected);
+  });
+
+  it('highlights a card whose primary Topic is AI enablement', () => {
+    // ARRANGE
+    const entry = { ...PUBLISHED, topic: 'ai-enablement' as const };
+    const expected = true;
+    // ACT
+    const { highlighted } = episodeCard(entry, { locale: 'en', read });
+    // ASSERT
+    expect(highlighted).toBe(expected);
   });
 
   it("draws an unlinked upcoming card from the Episode's own copy, not the landing Translation keys", () => {

@@ -6,6 +6,7 @@ import {
   hasChoice,
   INITIAL_SELECTION,
   resultsText,
+  showsFormat,
   topicChoices,
   type BrowseSelection,
   type ResultsLabels,
@@ -125,11 +126,12 @@ interface GridProps {
 }
 
 function BrowseGrid({ cards, visible, locale, labels }: GridProps) {
+  const showFormat = showsFormat(cards);
   return (
     <ul data-episode-browse className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {cards.map((card) => (
         <li key={card.slug} data-browse-item hidden={!visible.has(card.slug)} className="flex">
-          <EpisodeGridCard card={card} locale={locale} labels={labels} />
+          <EpisodeGridCard card={card} locale={locale} labels={labels} showFormat={showFormat} />
         </li>
       ))}
     </ul>

@@ -6,6 +6,7 @@ import {
   hasChoice,
   INITIAL_SELECTION,
   resultsText,
+  showsFormat,
   spotlightOf,
   topicChoices,
   type BrowseSelection,
@@ -26,6 +27,7 @@ function card(slug: string, over: Partial<EpisodeCard> = {}): EpisodeCard {
     topics: [topic],
     format: { id: 'foundations', label: 'Foundations' },
     tags: [],
+    highlighted: false,
     featuredRank: null,
     accent: 'amber',
     icon: 'coins',
@@ -149,10 +151,10 @@ describe('success cases', () => {
     const selection: BrowseSelection = { ...INITIAL_SELECTION, topic: 'ai-enablement' };
     const expectedVisible = ['x'];
     const expectedCounts = [
+      { id: 'ai-enablement', label: 'Change', count: 1 },
       { id: 'sales', label: 'Sales', count: 2 },
       { id: 'knowledge-base', label: 'Knowledge', count: 2 },
       { id: 'cost', label: 'Cost', count: 2 },
-      { id: 'ai-enablement', label: 'Change', count: 1 },
     ];
     // ACT
     const view = browseView(overlapping, selection, 9);
@@ -183,6 +185,15 @@ describe('success cases', () => {
     // ASSERT
     expect([...view.visible]).toEqual(expectedVisible);
     expect(sales).toEqual(expectedSales);
+  });
+
+  it('names the Format on cards once the Episodes span two Formats', () => {
+    // ARRANGE
+    const expected = true;
+    // ACT
+    const shown = showsFormat(MIXED);
+    // ASSERT
+    expect(shown).toBe(expected);
   });
 
   it('words the result count for none, one and many', () => {
@@ -233,6 +244,15 @@ describe('failure cases', () => {
     const view = browseView(SEARCHABLE, selection, 9);
     // ASSERT
     expect(view.matching).toBe(expected);
+  });
+
+  it('leaves the Format off cards while every Episode shares one Format, as it tells the visitor nothing', () => {
+    // ARRANGE
+    const expected = false;
+    // ACT
+    const shown = showsFormat([card('a'), card('b')]);
+    // ASSERT
+    expect(shown).toBe(expected);
   });
 
   it('leaves a chip in place with a zero count when the other filter empties it', () => {
@@ -326,6 +346,15 @@ describe('edge cases', () => {
     const view = browseView(SEARCHABLE, selection, 9);
     // ASSERT
     expect(view.matching).toBe(expected);
+  });
+
+  it('leaves the Format off when there are no cards at all', () => {
+    // ARRANGE
+    const expected = false;
+    // ACT
+    const shown = showsFormat([]);
+    // ASSERT
+    expect(shown).toBe(expected);
   });
 
   it('only offers a filter that has at least two values to choose between', () => {

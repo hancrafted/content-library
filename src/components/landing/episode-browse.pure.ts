@@ -150,6 +150,11 @@ export function formatChoices(cards: readonly EpisodeCard[], selection: BrowseSe
   });
 }
 
+/** Whether a card names its Format: only once the cards span two Formats, since one Format tells the visitor nothing. */
+export function showsFormat(cards: readonly EpisodeCard[]): boolean {
+  return new Set(cards.map((card) => card.format.id)).size >= 2;
+}
+
 /** A filter with fewer than two values has nothing to choose between, so it earns no control. */
 export function hasChoice(choices: FacetChoices<string>): boolean {
   return choices.options.length >= 2;

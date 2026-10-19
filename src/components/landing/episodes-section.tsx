@@ -15,7 +15,6 @@ function cardLabels(t: LandingT): CardLabels {
   return {
     open: t('episodeOverview.open'),
     comingSoon: t('episodeOverview.comingSoon'),
-    minutesUnit: t('episodeOverview.minutesUnit'),
     watchVideo: t('episodeOverview.watchVideo'),
     newTab: t('episodeOverview.newTab'),
   };
