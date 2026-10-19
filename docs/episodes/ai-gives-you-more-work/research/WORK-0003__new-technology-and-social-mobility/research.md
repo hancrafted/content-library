@@ -1,7 +1,7 @@
 ---
 type: research
 title: 'Why did new technologies like the steam engine change social mobility for the workers who adopted them?'
-description: 'Studies show steam-using English counties had more skilled workers, but no study shows adopting workers rising, and mobility, wage and schooling evidence for industrialisation is mixed.'
+description: 'Studies show steam-using English counties had more skilled workers, but no study found shows adopting workers rising, and mobility, wage and schooling evidence for industrialisation is mixed.'
 generated:
   by: claude-code/sonnet-5.5
   at: 2026-10-19T00:00:00Z
