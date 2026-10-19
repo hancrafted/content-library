@@ -70,7 +70,7 @@ function SureBubble({ ai }: BackProps) {
 }
 
 /**
- * Confident, "Guesses": three puzzle pieces fit, a triangle wider than the square slot lodges crooked in it, then a
+ * Confident: three puzzle pieces fit, a triangle wider than the square slot lodges crooked in it, then a
  * speech bubble with a checkmark lands, sure of itself.
  */
 export function ConfidentBack({ ai }: BackProps) {

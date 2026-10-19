@@ -16,7 +16,7 @@ import { rowAt, type FlipEvent, type FlipTarget, type Trait } from './trait-flip
 export interface FlipRow {
   slug: Trait;
   name: string;
-  /** The flip word both backs show. */
+  /** The short line both backs show beside their beat. */
   back: string;
   /** The trait's aside in plain words, the chip's accessible description. */
   aside: string;
@@ -88,7 +88,7 @@ function Card({
         <p className={cn(styles.front, FRONT, surface)}>{ai ? <span>{row.ai}</span> : row.freelancer}</p>
         <div key={pass} className={cn(styles.back, BACK, surface)} aria-hidden="true">
           <Back slug={row.slug} ai={ai} labels={labels} />
-          <span className={cn('text-body font-semibold', ai && 'text-ai')}>{row.back}</span>
+          <span className={cn('min-w-0 text-body font-semibold text-balance', ai && 'text-ai')}>{row.back}</span>
         </div>
       </div>
     </div>

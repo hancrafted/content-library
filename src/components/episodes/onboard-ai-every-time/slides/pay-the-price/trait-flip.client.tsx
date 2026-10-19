@@ -27,6 +27,7 @@ function useFlip() {
     const open = state.open;
     if (open === null) return;
     const wait = nextChangeIn(open, elapsed);
+    if (wait === null) return;
     const timer = window.setTimeout(() => setClock({ target: open, elapsed: elapsed + wait }), wait);
     return () => window.clearTimeout(timer);
   }, [state.open, elapsed]);
@@ -53,7 +54,8 @@ function useDismiss(open: FlipTarget | null, dismiss: () => void) {
 
 /**
  * The trait flip (.scratch/freelancer-trait-flip/handoff.md): pointing at or focusing a chip flips its row, and both
- * backs play the same beat, hold the last frame and replay; the closing line wipes every row back to day one. The
+ * backs play the same beat, hold the last frame and replay; the closing line flips and blanks every
+ * row, back to day one, and holds that until it is left. The
  * fronts are the print and static-HTML state; the rules live in `trait-flip.pure.ts`.
  */
 export function TraitFlip({ rows, closing, closingMarker, labels }: TraitFlipProps) {

@@ -72,7 +72,7 @@ function Pile({ ai }: BackProps) {
 }
 
 /**
- * Relentless, "Nonstop": a clock turns without end, food, drink, sleep and toilet are banned one after another, and a
+ * Relentless: a clock turns without end, food, drink, sleep and toilet are banned one after another, and a
  * pile of pages grows throughout. The AI side has the clock and the pile only.
  */
 export function RelentlessBack({ ai }: BackProps) {

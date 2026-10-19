@@ -10,35 +10,35 @@
   "traits": {
     "probabilistic": {
       "name": "Probabilistic",
-      "back": "Varies",
+      "back": "Outcome changes every time",
       "freelancer": "Give the same brief to a new freelancer, and get a different plan.",
       "ai": "<marker>Give the same prompt in a new chat, and get a different answer.</marker>",
       "popover": "The same brief can come back different every time. It picks a likely answer, not a fixed one, so one good result is not a promise."
     },
     "relentless": {
       "name": "Relentless",
-      "back": "Nonstop",
+      "back": "High output, unknown quality",
       "freelancer": "Hand over the job, and they work day and night, producing stacks of polished pages, whether they’re right or not.",
       "ai": "<marker>Send the prompt, and it produces pages in seconds, as many as you ask for, whether they’re right or not.</marker>",
       "popover": "Pages pour out fast and polished, whether they are right or not. There is a lot to read, and all of it needs checking."
     },
     "informed": {
       "name": "Informed",
-      "back": "Redacted",
+      "back": "Knowledgeable, but not about you",
       "freelancer": "Ask a freelancer who knows every trade, and get expert answers, blind to your company and culture.",
       "ai": "<marker>Ask AI, trained on more text than anyone could read, and get the likeliest answer, blind to your company and culture.</marker>",
       "popover": "It knows a great deal about the world and nothing about your company. Your culture and unwritten rules never reached it."
     },
     "confident": {
       "name": "Confident",
-      "back": "Guesses",
+      "back": "Fills the gap without question",
       "freelancer": "Give a vague request, and they start without asking, fill the gaps with their own assumptions, and sell it to you as right.",
       "ai": "<marker>Give a vague prompt, and it starts without asking, fills the gaps with the most common answers, and replies with full confidence.</marker>",
       "popover": "It starts instead of asking, and fills the gaps with guesses. A guess sounds as sure as a fact."
     },
     "every-word-billed": {
       "name": "Every word billed",
-      "back": "Grows",
+      "back": "The bill grows every turn",
       "freelancer": "They bill every word they read and write, so one more question means paying to reread the whole file, their own pages included.",
       "ai": "<marker>It charges for every word it reads and writes, so one more message means paying for the whole chat again, its own answers included.</marker>",
       "popover": "Every new question pays again for all the words so far. The longer it runs, the bigger the bill."

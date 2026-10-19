@@ -43,13 +43,13 @@ export const HOLD_MS = 1500;
 /** How long the card turns before its back starts to play. */
 export const TURN_MS = 350;
 
-/** Each back's beat, from the prototype (`build2.py`); Every word billed is its scan schedule's length. */
+/** Each back's beat, from the prototype (`build2.py`); Every word billed is its five-item scan schedule's length. */
 export const BEAT_MS: Readonly<Record<Trait, number>> = {
   probabilistic: 2600,
   relentless: 3600,
   informed: 3600,
   confident: 2900,
-  'every-word-billed': 7200,
+  'every-word-billed': 9900,
 };
 
 /** An open row at `elapsed` ms since it opened: whether its back plays, and which pass, so a new pass restarts it. */
@@ -58,31 +58,17 @@ export function rowAt(trait: Trait, elapsed: number): { playing: boolean; pass: 
   return { playing: true, pass: Math.floor((elapsed - TURN_MS) / (BEAT_MS[trait] + HOLD_MS)) };
 }
 
-/** The wipe's steps: every row flips, the backs blank and the arrows retract, the fronts return, the backs unblank. */
-const WIPE_STEPS = [
-  { at: 0, flipped: true, blank: false },
-  { at: 900, flipped: true, blank: true },
-  { at: 1900, flipped: false, blank: true },
-  { at: 2600, flipped: false, blank: false },
-] as const;
+/** When the wipe blanks the backs and retracts the arrows, after every row has flipped. */
+const BLANK_MS = 900;
 
-/** One wipe and its hold: the wipe repeats this often while the closing line stays open. */
-export const WIPE_CYCLE_MS = 2600 + HOLD_MS;
-
-/** The wipe at `elapsed` ms since the closing line opened. */
+/** The wipe at `elapsed` ms since the closing line opened: it plays once, then holds until the line is left. */
 export function wipeAt(elapsed: number): { flipped: boolean; blank: boolean } {
-  const inCycle = elapsed % WIPE_CYCLE_MS;
-  const { flipped, blank } = [...WIPE_STEPS].reverse().find(({ at }) => at <= inCycle) ?? WIPE_STEPS[0];
-  return { flipped, blank };
+  return { flipped: true, blank: elapsed >= BLANK_MS };
 }
 
-/** How many ms after `elapsed` the open target next changes: the turn, the next replay, or the next wipe step. */
-export function nextChangeIn(target: FlipTarget, elapsed: number): number {
-  if (target === 'closing') {
-    const inCycle = elapsed % WIPE_CYCLE_MS;
-    const next = WIPE_STEPS.find(({ at }) => at > inCycle)?.at ?? WIPE_CYCLE_MS;
-    return next - inCycle;
-  }
+/** How many ms after `elapsed` the open target next changes: the turn, the next replay or the blank; `null` once the wipe holds. */
+export function nextChangeIn(target: FlipTarget, elapsed: number): number | null {
+  if (target === 'closing') return elapsed < BLANK_MS ? BLANK_MS - elapsed : null;
   if (elapsed < TURN_MS) return TURN_MS - elapsed;
   const period = BEAT_MS[target] + HOLD_MS;
   return period - ((elapsed - TURN_MS) % period);

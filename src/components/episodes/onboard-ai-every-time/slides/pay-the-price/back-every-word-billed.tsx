@@ -2,11 +2,11 @@ import { cn } from '@/lib/utils';
 import { BackSvg, beat, Label, type BackProps } from './back-parts';
 import styles from './trait-flip.module.css';
 
-/** When each of the four items lands, in seconds: one per pass of the scan line (`build2.py`'s schedule). */
-const ARRIVALS = [0.2, 1.27, 2.76, 4.67];
+/** When each of the five items lands, in seconds: one per pass of the scan line (its schedule in the CSS module). */
+const ARRIVALS = [0.2, 1.24, 2.71, 4.62, 6.96];
 
-/** The count after each item the line crosses: 0, then one more for each of its ten crossings. */
-const CROSSINGS = 10;
+/** The count after each item the line crosses: 0, then one more for each of its fifteen crossings (1 + 2 + 3 + 4 + 5). */
+const CROSSINGS = 15;
 
 /** The count's step classes, one per value; the last is the end state. */
 const STEPS = [
@@ -21,6 +21,11 @@ const STEPS = [
   styles.v8,
   styles.v9,
   styles.v10,
+  styles.v11,
+  styles.v12,
+  styles.v13,
+  styles.v14,
+  styles.v15,
 ];
 
 /** An item's box, bottom first: the freelancer's own pages, or the chat's prompts (left) and its answers (indented right). */
@@ -29,7 +34,7 @@ function itemBox(ai: boolean, index: number): { x: number; y: number; width: num
   return { x: 10, y: 56 - 13 * index, width: 70 };
 }
 
-/** The stack: four items landing one per pass, and the scan line sweeping over them. */
+/** The stack: five items landing one per pass, and the scan line sweeping over them. */
 function Stack({ ai }: BackProps) {
   const item = ai ? 'fill-ai/20 stroke-ai' : 'fill-card stroke-foreground';
   return (
@@ -78,7 +83,7 @@ function Count({ ai, unit }: BackProps & { unit: string }) {
 }
 
 /**
- * Every word billed, "Grows": a line sweeps up and down a stack that gains an item each pass; every item it passes
+ * Every word billed: a line sweeps up and down a stack that gains an item each pass; every item it passes
  * raises the bill (€) or the token count. The freelancer's stack is their own pages; the AI's is the chat, prompts
  * left, its own answers indented right.
  */

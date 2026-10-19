@@ -42,9 +42,31 @@ function Results({ ai }: BackProps) {
   );
 }
 
+/** An arrow from each receiver to what it produced, drawn just before the shapes land. */
+function Arrows({ ai }: BackProps) {
+  const ink = ai ? 'stroke-ai' : 'stroke-foreground';
+  return (
+    <>
+      {[18, 56].map((y) => (
+        <path
+          key={y}
+          pathLength={1}
+          strokeDasharray="1"
+          d={`M115 ${y}h29m-4 -4 4 4-4 4`}
+          className={`${styles.draw} fill-none ${ink}`}
+          strokeWidth="1.4"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          style={beat({ d: 1.15, t: 0.35 })}
+        />
+      ))}
+    </>
+  );
+}
+
 /**
- * Probabilistic, "Varies": one document (or the prompt) splits into two copies that shrink into two freelancers (or
- * two AI chats), stacked in two rows; at the same moment one produces a circle, the other a triangle.
+ * Probabilistic: one document (or the prompt) splits into two copies that shrink into two freelancers (or
+ * two AI chats), stacked in two rows; at the same moment one points to a circle, the other to a triangle.
  */
 export function ProbabilisticBack({ ai, prompt }: BackProps & { prompt: string }) {
   return (
@@ -59,6 +81,7 @@ export function ProbabilisticBack({ ai, prompt }: BackProps & { prompt: string }
       ))}
       <Who ai={ai} x={100} y={18} />
       <Who ai={ai} x={100} y={56} />
+      <Arrows ai={ai} />
       <Results ai={ai} />
     </BackSvg>
   );

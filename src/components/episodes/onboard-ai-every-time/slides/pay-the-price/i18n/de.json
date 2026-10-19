@@ -10,35 +10,35 @@
   "traits": {
     "probabilistic": {
       "name": "Probabilistic",
-      "back": "Variiert",
+      "back": "Jedes Mal ein anderes Ergebnis",
       "freelancer": "Gib einem neuen Freelancer dasselbe Briefing, und du bekommst einen anderen Plan.",
       "ai": "<marker>Gib denselben Prompt in einem neuen Chat ein, und du bekommst eine andere Antwort.</marker>",
       "popover": "Dasselbe Briefing kann jedes Mal anders zurückkommen. Gewählt wird eine wahrscheinliche Antwort, keine feste, also ist ein gutes Ergebnis kein Versprechen."
     },
     "relentless": {
       "name": "Relentless",
-      "back": "Nonstop",
+      "back": "Viel Output, unklare Qualität",
       "freelancer": "Gib den Auftrag ab, und er arbeitet Tag und Nacht und liefert Stapel polierter Seiten, ob sie stimmen oder nicht.",
       "ai": "<marker>Schick den Prompt ab, und sie liefert Seiten in Sekunden, so viele du willst, ob sie stimmen oder nicht.</marker>",
       "popover": "Seiten kommen schnell und poliert, ob sie stimmen oder nicht. Es gibt viel zu lesen, und alles muss geprüft werden."
     },
     "informed": {
       "name": "Informed",
-      "back": "Geschwärzt",
+      "back": "Weiß viel, nur nicht über dich",
       "freelancer": "Frag einen Freelancer, der jedes Fach kennt, und du bekommst Expertenantworten, blind für dein Unternehmen und eure Kultur.",
       "ai": "<marker>Frag die KI, trainiert auf mehr Text, als je ein Mensch lesen könnte, und du bekommst die wahrscheinlichste Antwort, blind für dein Unternehmen und eure Kultur.</marker>",
       "popover": "Viel Wissen über die Welt, nichts über dein Unternehmen. Eure Kultur und eure ungeschriebenen Regeln sind nie angekommen."
     },
     "confident": {
       "name": "Confident",
-      "back": "Rät",
+      "back": "Füllt die Lücke, ohne zu fragen",
       "freelancer": "Gib eine vage Anfrage, und er legt los, ohne zu fragen, füllt die Lücken mit eigenen Annahmen und verkauft es dir als richtig.",
       "ai": "<marker>Gib einen vagen Prompt, und sie legt los, ohne zu fragen, füllt die Lücken mit den häufigsten Antworten und antwortet voller Überzeugung.</marker>",
       "popover": "Es geht los, statt nachzufragen, und die Lücken füllen Vermutungen. Eine Vermutung klingt so sicher wie eine Tatsache."
     },
     "every-word-billed": {
       "name": "Every word billed",
-      "back": "Wächst",
+      "back": "Die Rechnung wächst mit jeder Runde",
       "freelancer": "Er rechnet jedes Wort ab, das er liest und schreibt, also heißt eine Frage mehr, das ganze Dossier neu lesen zu lassen, seine eigenen Seiten inklusive.",
       "ai": "<marker>Sie berechnet jedes Wort, das sie liest und schreibt, also heißt eine Nachricht mehr, den ganzen Chat noch einmal zu bezahlen, ihre eigenen Antworten inklusive.</marker>",
       "popover": "Jede neue Frage bezahlt alle bisherigen Wörter noch einmal. Je länger es läuft, desto höher die Rechnung."

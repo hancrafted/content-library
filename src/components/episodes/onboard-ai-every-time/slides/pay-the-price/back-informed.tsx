@@ -68,7 +68,7 @@ function Diplomas() {
   );
 }
 
-/** Beat 1, the AI: a globe feeds documents into it. */
+/** Beat 1, the AI: a globe feeds documents into it, both there from the start. */
 function Globe() {
   return (
     <>
@@ -87,13 +87,13 @@ function Globe() {
           </g>
         </g>
       ))}
-      <AiIcon x={78} y={36} className={styles.glow} />
+      <AiIcon x={78} y={36} />
     </>
   );
 }
 
 /**
- * Informed, "Redacted": diplomas light up around the freelancer, or a globe feeds documents into the AI; then the
+ * Informed: diplomas light up around the freelancer, or a globe feeds documents into the AI; then the
  * "How we work here" handbook arrives with every line blacked out.
  */
 export function InformedBack({ ai, handbook }: BackProps & { handbook: string }) {

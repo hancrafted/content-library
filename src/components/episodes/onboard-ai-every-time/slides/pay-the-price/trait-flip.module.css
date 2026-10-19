@@ -1,7 +1,9 @@
 /*
- * The trait flip, ported from the prototype (.scratch/freelancer-trait-flip/style2.css and build2.py's scan schedule).
- * The static rules are each back's last frame, so rest, print and reduced motion show the end state; the beat plays
- * only under `.isPlaying`, which the client sets while a row is open (the rules live in trait-flip.pure.ts).
+ * The trait flip, ported from the prototype (.scratch/freelancer-trait-flip/style2.css); the
+ * scan schedule is regrown for five items.
+ * The static rules are each back's last frame, so rest, print and reduced motion show the end state; the beat is set
+ * on under `.isOpen`, held on its first frame through the turn, and runs under `.isPlaying` (the rules live in
+ * trait-flip.pure.ts).
  */
 .card {
   perspective: 1400px;
@@ -35,7 +37,8 @@
   background: var(--card);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 0.6s ease-in-out;
+  /* Unblanks only after the card has turned back, so a back's end state never shows through on the way. */
+  transition: transform 0.6s ease-in-out 0.6s;
 }
 .isOpen .flip,
 .isWiping .flip {
@@ -43,6 +46,7 @@
 }
 .isBlank .back::after {
   transform: scaleX(1);
+  transition-delay: 0s;
 }
 .anim {
   flex: 0 1 12.5rem;
@@ -70,7 +74,7 @@
   background: var(--muted);
 }
 .arrow {
-  transition: transform 0.5s ease-in-out;
+  transition: transform 0.5s ease-in-out 0.6s;
 }
 .arrowLeft {
   transform-origin: right;
@@ -80,6 +84,7 @@
 }
 .isBlank .arrow {
   transform: scaleX(0);
+  transition-delay: 0s;
 }
 
 /* end states */
@@ -96,7 +101,12 @@
 .v7,
 .v8,
 .v9,
-.v10 {
+.v10,
+.v11,
+.v12,
+.v13,
+.v14,
+.v15 {
   opacity: 0;
 }
 .vLast {
@@ -113,49 +123,54 @@
   transform-origin: 0 0;
 }
 
-/* the played beat; the clock is the one loop, running only while its row is open (FE-009 §6) */
+/*
+ * The played beat. It is set on as the row opens, paused on its first frame while the card turns, so the back shows
+ * where the beat starts rather than its end state; it runs once `.isPlaying` follows. The clock is the one loop,
+ * running only while its row is open (FE-009 §6).
+ */
+.isOpen:not(.isPlaying) .anim *,
+.isOpen:not(.isPlaying) .arrow path {
+  animation-play-state: paused;
+}
 .isOpen .spin {
   animation: spin 2s linear infinite;
 }
-.isPlaying .arrow path {
+.isOpen .arrow path {
   animation: draw 0.5s ease-out both;
 }
-.isPlaying .drop {
+.isOpen .drop {
   animation: drop 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) both;
   animation-delay: var(--d);
 }
-.isPlaying .out {
+.isOpen .out {
   animation: out 0.3s ease-in both;
   animation-delay: var(--d);
 }
-.isPlaying .fly {
+.isOpen .fly {
   animation: fly 0.8s ease-in both;
   animation-delay: var(--d);
 }
-.isPlaying .pop {
+.isOpen .pop {
   animation: pop 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
   animation-delay: var(--d);
 }
-.isPlaying .enter {
+.isOpen .enter {
   animation: enter 0.45s ease-out both;
   animation-delay: var(--d);
 }
-.isPlaying .glow {
-  animation: enter 0.45s ease-out 1.2s both;
-}
-.isPlaying .ban {
+.isOpen .ban {
   animation: ban 0.35s ease-out both;
   animation-delay: var(--d);
 }
-.isPlaying .redact {
+.isOpen .redact {
   animation: redact 0.35s ease-out both;
   animation-delay: var(--d);
 }
-.isPlaying .misfit {
+.isOpen .misfit {
   animation: misfit 0.7s ease-out both;
   animation-delay: var(--d);
 }
-.isPlaying .draw {
+.isOpen .draw {
   animation: draw var(--t) ease-in-out both;
   animation-delay: var(--d);
 }
@@ -237,85 +252,102 @@
   }
 }
 
-/* Every word billed: the scan line's schedule, 7.2 s, and the bill or token count stepping per item it crosses */
+/* Every word billed: the scan line's schedule, 9.9 s for 5 items, and the bill or token count stepping per item it crosses */
+/* One pass per item at 30 px/s, each 0.35 s after its item lands, 0.64 s apart; a value per item centre crossed. */
 @keyframes scan {
   0% {
     opacity: 0;
     transform: translateY(54.5px);
   }
-  7.5% {
+  5.56% {
     opacity: 0;
     transform: translateY(54.5px);
   }
-  7.64% {
+  5.66% {
     opacity: 1;
     transform: translateY(54.5px);
   }
-  13.47% {
+  9.6% {
     opacity: 1;
     transform: translateY(66.5px);
   }
-  13.61% {
+  9.7% {
     opacity: 0;
     transform: translateY(66.5px);
   }
-  22.36% {
+  16.06% {
     opacity: 0;
     transform: translateY(66.5px);
   }
-  22.5% {
+  16.16% {
     opacity: 1;
     transform: translateY(66.5px);
   }
-  34.17% {
+  24.48% {
     opacity: 1;
     transform: translateY(41.5px);
   }
-  34.31% {
+  24.58% {
     opacity: 0;
     transform: translateY(41.5px);
   }
-  43.06% {
+  30.94% {
     opacity: 0;
     transform: translateY(28.5px);
   }
-  43.19% {
+  31.04% {
     opacity: 1;
     transform: translateY(28.5px);
   }
-  60.69% {
+  43.74% {
     opacity: 1;
     transform: translateY(66.5px);
   }
-  60.83% {
+  43.84% {
     opacity: 0;
     transform: translateY(66.5px);
   }
-  69.58% {
+  50.2% {
     opacity: 0;
     transform: translateY(66.5px);
   }
-  69.72% {
+  50.3% {
     opacity: 1;
     transform: translateY(66.5px);
   }
-  93.06% {
+  67.37% {
     opacity: 1;
     transform: translateY(15.5px);
   }
-  93.19% {
+  67.47% {
     opacity: 0;
     transform: translateY(15.5px);
+  }
+  73.84% {
+    opacity: 0;
+    transform: translateY(2.5px);
+  }
+  73.94% {
+    opacity: 1;
+    transform: translateY(2.5px);
+  }
+  95.39% {
+    opacity: 1;
+    transform: translateY(66.5px);
+  }
+  95.49% {
+    opacity: 0;
+    transform: translateY(66.5px);
   }
 }
-.isPlaying .scan {
-  animation: scan 7.2s linear both;
+.isOpen .scan {
+  animation: scan 9.9s linear both;
 }
 @keyframes v0 {
   0% {
     opacity: 1;
   }
-  10.56% {
+  7.58% {
     opacity: 0;
   }
   100% {
@@ -326,10 +358,10 @@
   0% {
     opacity: 0;
   }
-  10.56% {
+  7.58% {
     opacity: 1;
   }
-  25.42% {
+  18.08% {
     opacity: 0;
   }
   100% {
@@ -340,10 +372,10 @@
   0% {
     opacity: 0;
   }
-  25.42% {
+  18.08% {
     opacity: 1;
   }
-  31.25% {
+  22.46% {
     opacity: 0;
   }
   100% {
@@ -354,10 +386,10 @@
   0% {
     opacity: 0;
   }
-  31.25% {
+  22.46% {
     opacity: 1;
   }
-  46.11% {
+  32.96% {
     opacity: 0;
   }
   100% {
@@ -368,10 +400,10 @@
   0% {
     opacity: 0;
   }
-  46.11% {
+  32.96% {
     opacity: 1;
   }
-  51.94% {
+  37.34% {
     opacity: 0;
   }
   100% {
@@ -382,10 +414,10 @@
   0% {
     opacity: 0;
   }
-  51.94% {
+  37.34% {
     opacity: 1;
   }
-  57.78% {
+  41.72% {
     opacity: 0;
   }
   100% {
@@ -396,10 +428,10 @@
   0% {
     opacity: 0;
   }
-  57.78% {
+  41.72% {
     opacity: 1;
   }
-  72.64% {
+  52.22% {
     opacity: 0;
   }
   100% {
@@ -410,10 +442,10 @@
   0% {
     opacity: 0;
   }
-  72.64% {
+  52.22% {
     opacity: 1;
   }
-  78.47% {
+  56.6% {
     opacity: 0;
   }
   100% {
@@ -424,10 +456,10 @@
   0% {
     opacity: 0;
   }
-  78.47% {
+  56.6% {
     opacity: 1;
   }
-  84.31% {
+  60.98% {
     opacity: 0;
   }
   100% {
@@ -438,10 +470,10 @@
   0% {
     opacity: 0;
   }
-  84.31% {
+  60.98% {
     opacity: 1;
   }
-  90.14% {
+  65.35% {
     opacity: 0;
   }
   100% {
@@ -452,45 +484,130 @@
   0% {
     opacity: 0;
   }
-  90.14% {
+  65.35% {
+    opacity: 1;
+  }
+  75.86% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes v11 {
+  0% {
+    opacity: 0;
+  }
+  75.86% {
+    opacity: 1;
+  }
+  80.24% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes v12 {
+  0% {
+    opacity: 0;
+  }
+  80.24% {
+    opacity: 1;
+  }
+  84.61% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes v13 {
+  0% {
+    opacity: 0;
+  }
+  84.61% {
+    opacity: 1;
+  }
+  88.99% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes v14 {
+  0% {
+    opacity: 0;
+  }
+  88.99% {
+    opacity: 1;
+  }
+  93.37% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes v15 {
+  0% {
+    opacity: 0;
+  }
+  93.37% {
     opacity: 1;
   }
   100% {
     opacity: 1;
   }
 }
-.isPlaying .v0 {
-  animation: v0 7.2s step-end both;
+.isOpen .v0 {
+  animation: v0 9.9s step-end both;
 }
-.isPlaying .v1 {
-  animation: v1 7.2s step-end both;
+.isOpen .v1 {
+  animation: v1 9.9s step-end both;
 }
-.isPlaying .v2 {
-  animation: v2 7.2s step-end both;
+.isOpen .v2 {
+  animation: v2 9.9s step-end both;
 }
-.isPlaying .v3 {
-  animation: v3 7.2s step-end both;
+.isOpen .v3 {
+  animation: v3 9.9s step-end both;
 }
-.isPlaying .v4 {
-  animation: v4 7.2s step-end both;
+.isOpen .v4 {
+  animation: v4 9.9s step-end both;
 }
-.isPlaying .v5 {
-  animation: v5 7.2s step-end both;
+.isOpen .v5 {
+  animation: v5 9.9s step-end both;
 }
-.isPlaying .v6 {
-  animation: v6 7.2s step-end both;
+.isOpen .v6 {
+  animation: v6 9.9s step-end both;
 }
-.isPlaying .v7 {
-  animation: v7 7.2s step-end both;
+.isOpen .v7 {
+  animation: v7 9.9s step-end both;
 }
-.isPlaying .v8 {
-  animation: v8 7.2s step-end both;
+.isOpen .v8 {
+  animation: v8 9.9s step-end both;
 }
-.isPlaying .v9 {
-  animation: v9 7.2s step-end both;
+.isOpen .v9 {
+  animation: v9 9.9s step-end both;
 }
-.isPlaying .v10 {
-  animation: v10 7.2s step-end both;
+.isOpen .v10 {
+  animation: v10 9.9s step-end both;
+}
+.isOpen .v11 {
+  animation: v11 9.9s step-end both;
+}
+.isOpen .v12 {
+  animation: v12 9.9s step-end both;
+}
+.isOpen .v13 {
+  animation: v13 9.9s step-end both;
+}
+.isOpen .v14 {
+  animation: v14 9.9s step-end both;
+}
+.isOpen .v15 {
+  animation: v15 9.9s step-end both;
 }
 
 @media (prefers-reduced-motion: reduce) {

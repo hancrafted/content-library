@@ -37,16 +37,14 @@ describe('success cases', () => {
     expect(seen).toEqual(expected);
   });
 
-  it('wipes every row: flip, blank the backs and retract the arrows, flip back, then hold and repeat', () => {
-    // ARRANGE: the prototype's steps at 0, 900, 1900 and 2600 ms, then a 1.5 s hold before the next wipe at 4100 ms.
-    const times = [0, 900, 1900, 2600, 4099, 4100, 5000];
+  it('wipes every row once: flip, then blank the backs and retract the arrows, and holds while the line stays open', () => {
+    // ARRANGE: the flip at 0 ms, the blank from 900 ms; nothing returns until the line is left.
+    const times = [0, 899, 900, 4100, 60000];
     const expected = [
       { flipped: true, blank: false },
-      { flipped: true, blank: true },
-      { flipped: false, blank: true },
-      { flipped: false, blank: false },
-      { flipped: false, blank: false },
       { flipped: true, blank: false },
+      { flipped: true, blank: true },
+      { flipped: true, blank: true },
       { flipped: true, blank: true },
     ];
     // ACT
@@ -55,17 +53,16 @@ describe('success cases', () => {
     expect(seen).toEqual(expected);
   });
 
-  it('wakes the clock at the next change only: the turn, each replay, each wipe step', () => {
-    // ARRANGE: a Confident pass is 2.9 + 1.5 = 4.4 s after the 350 ms turn; the wipe steps sit at 900, 1900, 2600, 4100.
+  it('wakes the clock at the next change only: the turn, each replay, the wipe blanking', () => {
+    // ARRANGE: a Confident pass is 2.9 + 1.5 = 4.4 s after the 350 ms turn; the wipe blanks at 900 ms, then holds with no timer.
     const asked = [
       ['confident', 0],
       ['confident', 350],
       ['confident', 5000],
       ['closing', 0],
       ['closing', 2000],
-      ['closing', 3000],
     ] as const;
-    const expected = [350, 4400, 4150, 900, 600, 1100];
+    const expected = [350, 4400, 4150, 900, null];
     // ACT
     const seen = asked.map(([target, ms]) => nextChangeIn(target, ms));
     // ASSERT
