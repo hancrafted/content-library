@@ -1,7 +1,7 @@
 ---
 type: research
 title: 'Why does AI let individuals take on more complex tasks than before?'
-description: 'AI takes over execution and drafting inside its capability frontier, so one person can handle longer, harder tasks, but only where the task fits the model and the person splits and checks the work.'
+description: 'AI completes longer tasks on its own and speeds up professional work inside its capability frontier, but only where the task fits the model and the person splits and checks the work.'
 generated:
   by: claude-code/opus-5.5
   at: 2026-10-19T00:00:00Z
@@ -32,7 +32,7 @@ Asked to support the claim that AI widens the range of tasks one person can take
 
 ## Answer
 
-AI now performs, on its own, tasks that take a human expert tens of minutes to hours, and that length has been growing quickly. It also handles knowledge work that earlier automation left to people, such as drafting, ideation and analysis, so one person covers ground that used to need several specialists or a longer effort. The gain is conditional: it holds for tasks inside the model's capability frontier, and users get more from it by breaking tasks into steps and checking the output. The evidence that this makes people faster on every kind of work is disputed.
+AI now performs, on its own, tasks that take a human expert tens of minutes to hours, and that length has been growing quickly. On realistic professional tasks inside the model's capability frontier, people using AI finished more tasks, faster and at higher quality, and in writing tasks the work moved from rough drafting towards idea generation and editing. The gain is conditional: it holds for tasks inside the model's capability frontier, and users get more from it by breaking tasks into steps and checking the output. The evidence that this makes people faster on every kind of work is disputed.
 
 ## Findings
 
@@ -47,7 +47,7 @@ AI now performs, on its own, tasks that take a human expert tens of minutes to h
 
 ## Caveats
 
-The counter-evidence is a randomized trial of 16 experienced developers on their own mature repositories, where allowing AI increased completion time by 19% although the developers believed it had saved them about 20% [5]. It used early-2025 tools and a small sample, so it limits the claim rather than refuting it. The BCG and writing studies use bounded tasks of at most a few hours, and the BCG outside-the-frontier result rests on one task, so none of the Findings shows that a person can run a month-long project with AI. Anthropic's speedup and success figures are model-estimated and observational. The Answer's link between longer tasks and a shift from execution to management is an inference from Findings 4, 7 and 8; no cited study measures that shift directly. The studies name products (GPT-4, ChatGPT, Claude) that age quickly.
+The counter-evidence is a randomized trial of 16 experienced developers on their own mature repositories, where allowing AI increased completion time by 19% although the developers believed it had saved them about 20% [5]. It used early-2025 tools and a small sample, so it limits the claim rather than refuting it. The BCG and writing studies use bounded tasks of at most a few hours, and the BCG outside-the-frontier result rests on one task, so none of the Findings shows that a person can run a month-long project with AI. Anthropic's speedup and success figures are model-estimated and observational. Reading the longer tasks of Finding 1 together with the shift towards idea generation and editing in Finding 8 as one person directing a capable system is an inference; no cited study measures that shift directly, and none compares one person with AI to a team of specialists. The studies name products (GPT-4, ChatGPT, Claude) that age quickly.
 
 [1]: <https://arxiv.org/abs/2503.14499> "Kwa et al., Measuring AI Ability to Complete Long Tasks (METR)"
 [2]: <https://www.anthropic.com/research/economic-index-primitives> "Anthropic, Economic Index: New building blocks for AI use (January 2026)"
