@@ -36,9 +36,8 @@ const COMPOSITION = [
     ],
   },
   {
-    // The section slide only until its Section job adds the page Slides at its placement marker.
     slug: 'ai-gives-you-more-work',
-    sections: [{ opener: 'from-execution-to-management', pageSlides: 0 }],
+    sections: [{ opener: 'from-execution-to-management', pageSlides: 3 }],
   },
   {
     slug: 'never-too-early-sales',

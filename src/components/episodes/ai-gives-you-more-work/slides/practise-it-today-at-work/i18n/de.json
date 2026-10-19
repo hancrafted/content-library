@@ -1,0 +1,107 @@
+{
+  "title": "Üb es heute, bei der Arbeit",
+  "caption": "Die Fähigkeiten, die Du mit Kolleginnen und Kollegen nutzt, sind die Fähigkeiten, die Du mit KI nutzt, also <b>kannst Du sie heute bei der Arbeit üben</b>.",
+  "sides": {
+    "work": "Bei der Arbeit",
+    "ai": "Mit KI"
+  },
+  "sameMove": "derselbe Zug",
+  "rows": {
+    "handoff": {
+      "title": "01 · Die Übergabe",
+      "era": "Übergeben · vor dem Urlaub",
+      "line": "Erst der Kontext, dann die Aufgabe.",
+      "work": "Arbeit an eine Kollegin übergeben, oder vor dem Urlaub",
+      "workDetail": "eine richtige Übergabe, mit genug Kontext, um ohne Dich weiterzumachen",
+      "ai": "Einen neuen Chat mit diesem Kontext starten",
+      "aiDetail": "dieselbe Übergabe, als Erstes eingefügt"
+    },
+    "onboard": {
+      "title": "02 · Das neue Teammitglied",
+      "era": "Erster Tag · eine neue Kollegin",
+      "line": "Jede neue Sitzung beginnt am ersten Tag.",
+      "work": "Ein neues Teammitglied einarbeiten",
+      "workDetail": "nichts kommt mit, wenn Du es nicht sagst",
+      "ai": "Eine neue KI-Sitzung öffnen",
+      "aiDetail": "sag ihr, was Du einer neuen Kollegin sagen würdest"
+    },
+    "chunks": {
+      "title": "03 · Teile und Nahtstellen",
+      "era": "Kick-off · ein komplexes Projekt",
+      "line": "Die Nahtstellen tragen das Gesamtziel.",
+      "work": "Ein großes Projekt in Teile zerlegen",
+      "workDetail": "die Nahtstellen festlegen, damit jedes Teil dem Gesamtziel dient",
+      "ai": "Die Arbeit in KI-Aufgaben aufteilen",
+      "aiDetail": "eine Aufgabe pro Teil, die Nahtstellen als Übergabe"
+    }
+  },
+  "discipline": "Briefen, Kontext geben und prüfen: dieselbe Fähigkeit auf beiden Seiten",
+  "closing": "Komplexere Projekte sind jetzt in Reichweite",
+  "notes": {
+    "briefing-context-checking": {
+      "header": "Briefen, Kontext und Prüfen sind die Disziplin",
+      "description": "Dell'Acqua [1] zeigt, dass KI weniger erfahrenen Menschen bei begrenzten Aufgaben innerhalb der Fähigkeiten des Modells hilft; dass gutes Delegieren auf Briefen, Kontext geben und Prüfen beruht, ist eine Schlussfolgerung dieses Projekts aus der Recherche, kein Ergebnis der Studie.",
+      "sources": {
+        "dellacqua-jagged-frontier": {
+          "title": "Dell'Acqua et al., Navigating the Jagged Technological Frontier, HBS Working Paper 24-013, September 2023 (SSRN 4573321)"
+        }
+      }
+    },
+    "new-session-new-contributor": {
+      "header": "Eine neue KI-Sitzung ist ein neues Teammitglied",
+      "description": "Erfahrene Entwicklerinnen und Entwickler beschrieben KI als neues Teammitglied ohne das stille Wissen über das Repository, das sich schwer als Kontext übergeben lässt, und verbrachten rund 9 Prozent ihrer Zeit damit, ihre Ergebnisse zu prüfen und zu bereinigen [1].",
+      "sources": {
+        "becker-early-2025-ai": {
+          "title": "Becker, Rush, Barnes, Rein, Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity"
+        }
+      }
+    },
+    "experience-predicts-results": {
+      "header": "Erfahrung mit dem Werkzeug sagt Ergebnisse voraus",
+      "description": "Wer das Werkzeug sechs Monate oder länger nutzt, hat innerhalb desselben Aufgabenbereichs eine um etwa 3 bis 5 Punkte höhere Erfolgsquote und delegiert seltener per Anweisung; Anthropic merkt an, dass Lernen durch Tun zu den Daten passt, aber nicht belegt ist [1].",
+      "sources": {
+        "anthropic-learning-curves": {
+          "title": "Anthropic, Anthropic Economic Index report: Learning Curves (March 2026)"
+        }
+      }
+    },
+    "splitting-tasks-lengthens-them": {
+      "header": "Aufteilen verlängert, was Du schaffst",
+      "description": "Nutzerinnen und Nutzer zerlegen Aufgaben in Schritte und wählen Aufgaben, von denen sie erwarten, dass sie klappen; das erklärt einen Teil der langen Aufgabenlängen in der Praxis [1].",
+      "sources": {
+        "anthropic-economic-index-primitives": {
+          "title": "Anthropic, Economic Index: New building blocks for AI use (January 2026)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "practise-on-people": {
+        "title": "An Menschen üben",
+        "keywords": "",
+        "script": "Die gute Nachricht: Du musst nicht auf ein neues Werkzeug warten, um das zu üben. Du kannst an Menschen üben, heute, bei der Arbeit, und so werden die Fähigkeiten, die Du mit Menschen schon hast, zu Deinen KI-Fähigkeiten."
+      },
+      "the-handoff": {
+        "title": "Die Übergabe",
+        "keywords": "",
+        "script": "Nimm die Übergabe. Wenn Du das nächste Mal Arbeit an eine Kollegin übergibst, vor dem Urlaub oder zu jeder anderen Zeit, gib ihr eine richtige Übergabe mit genug Kontext, damit sie ohne Dich weitermachen kann. Das ist derselbe Zug, wie einen neuen Chat mit diesem Kontext zu starten."
+      },
+      "the-new-teammate": {
+        "title": "Das neue Teammitglied",
+        "keywords": "",
+        "script": "Oder nimm das neue Teammitglied. Wenn Du jemanden einarbeitest, behandle es wie das Öffnen einer neuen KI-Sitzung: Nichts kommt mit, wenn Du es nicht sagst. Sag also, was Du auch der KI sagen würdest."
+      },
+      "chunks-and-seams": {
+        "title": "Teile und Nahtstellen",
+        "keywords": "",
+        "script": "Dann das große Projekt. Wenn Du ein komplexes bekommst, zerleg es in kleinere Teile und leg die Nahtstellen dazwischen fest, damit jede Aufgabe zum Gesamtziel beiträgt. Dann kannst Du die Teile an Menschen oder an KI geben und viel schaffen, ohne den Faden zu verlieren."
+      },
+      "an-invitation": {
+        "title": "Eine Einladung",
+        "keywords": "",
+        "script": "Damit sind wir wieder bei der Frage beim Kaffee. Komplexere Projekte sind jetzt in Reichweite, und das ist keine Last, sondern eine Einladung zu wachsen. Mit welcher dieser drei Reihen fängst Du diese Woche an?"
+      }
+    }
+  }
+}
