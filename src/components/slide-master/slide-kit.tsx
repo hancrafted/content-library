@@ -103,7 +103,7 @@ function contextRefsOf(episode: EpisodeKitInput, slide: SlideKitInput): Pick<Run
         </>
       );
     },
-    Marker: ({ note, className }) => <ContextMarker note={note} label={labelOf(note)} className={className} />,
+    Marker: (props) => <ContextMarker {...props} label={labelOf(props.note)} />,
   };
 }
 

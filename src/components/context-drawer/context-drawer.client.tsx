@@ -2,19 +2,22 @@
 
 import { useContextDrawer } from '@/hooks/use-context-drawer';
 import { revealCitation } from '@/hooks/use-context-links';
+import { useActiveSlide } from '@/hooks/use-url-state';
 import {
   DRAWER_BESIDE_ATTR,
   DRAWER_PANEL_ID,
   DRAWER_TABS,
   drawerIds,
+  keepReadingScroll,
   sitsBeside,
   titleOfItem,
   type DrawerTab,
 } from '@/lib/context-drawer.pure';
 import { CONTEXT_ITEM_ATTR, CONTEXT_SCROLL_ATTR } from '@/lib/context-link.pure';
+import { READING_LINE } from '@/lib/reading-line.pure';
 import { cn } from '@/lib/utils';
 import { X } from 'lucide-react';
-import { useEffect, useMemo, useRef, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, type ReactNode } from 'react';
 import type { DrawerStrings } from './context-drawer-input';
 import type { ContextEntry } from './context-entries';
 import { ModeMenu } from './drawer-mode-menu';
@@ -147,17 +150,31 @@ function Card(props: { labels: DrawerStrings; drawer: Drawer; entries: readonly 
   );
 }
 
+/** The active Slide's box in the viewport, or `null` when it is not on the page. */
+function slideBox(id: string | null): { top: number; height: number } | null {
+  const rect = id === null ? undefined : document.getElementById(id)?.getBoundingClientRect();
+  return rect ? { top: rect.top, height: rect.height } : null;
+}
+
 /**
  * Tells the page the card sits beside the Slides: it flags the Episode page, whose
  * right inset then widens in one step (FE-009 §2). The card itself is fixed and
- * takes no layout space, so this is the only thing the Slides see of it.
+ * takes no layout space, so this is the only thing the Slides see of it. The step
+ * reflows every Slide, so before paint it scrolls the reading line back to where
+ * it was in the active Slide; the browser's own scroll anchoring does not hold it.
  */
 function BesideFlag({ beside }: { beside: boolean }) {
-  useEffect(() => {
+  const slide = useActiveSlide();
+  useLayoutEffect(() => {
     const page = document.querySelector('[data-slot="episode-page"]');
-    page?.setAttribute(DRAWER_BESIDE_ATTR, String(beside));
-    return () => page?.removeAttribute(DRAWER_BESIDE_ATTR);
-  }, [beside]);
+    if (!page || page.getAttribute(DRAWER_BESIDE_ATTR) === String(beside)) return;
+    const before = slideBox(slide);
+    page.setAttribute(DRAWER_BESIDE_ATTR, String(beside));
+    const after = slideBox(slide);
+    const line = window.innerHeight * READING_LINE;
+    if (before && after) window.scrollBy({ top: keepReadingScroll(before, after, line), behavior: 'instant' });
+  }, [beside, slide]);
+  useEffect(() => () => document.querySelector('[data-slot="episode-page"]')?.removeAttribute(DRAWER_BESIDE_ATTR), []);
   return null;
 }
 
