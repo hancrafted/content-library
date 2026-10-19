@@ -4,7 +4,9 @@ import type { UpcomingEpisodeMetadata } from '@/lib/episode-metadata.pure';
 export const episodeMetadata = {
   slug: 'onboard-ai-every-time',
   status: 'upcoming',
+  // Needs human: the Brief names no Topic; ai-collaboration is the closest existing Topic.
   topic: 'ai-collaboration',
   format: 'foundations',
+  // Needs human: the Brief names no Tags; an empty list until Han picks them.
   tags: [],
 } as const satisfies UpcomingEpisodeMetadata;

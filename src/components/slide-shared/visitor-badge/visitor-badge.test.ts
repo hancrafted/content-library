@@ -28,6 +28,8 @@ describe('success cases', () => {
   it('lists the facts of the front badge as terms and values', () => {
     // ARRANGE
     const expected = 'Freelancer · AI Wed Day 1 Knows every trade Knows your company nothing';
+    const factTerm = '<dt';
+    const focusable = 'tabindex="0"';
     // ACT
     const html = badge({
       job: 'Freelancer · AI',
@@ -42,8 +44,8 @@ describe('success cases', () => {
     });
     // ASSERT
     expect(textOf(html)).toBe(expected);
-    expect(html).toContain('<dt');
-    expect(html).toContain('tabindex="0"');
+    expect(html).toContain(factTerm);
+    expect(html).toContain(focusable);
   });
 });
 
