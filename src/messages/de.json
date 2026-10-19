@@ -60,6 +60,8 @@
       "open": "Episode öffnen",
       "comingSoon": "Demnächst",
       "minutesUnit": "Min. Lesezeit",
+      "watchVideo": "Auf YouTube ansehen",
+      "newTab": "öffnet in neuem Tab",
       "spotlightTitle": "Im Fokus",
       "browseTitle": "Alle Episoden durchstöbern",
       "search": "Episoden durchsuchen",
@@ -401,8 +403,7 @@
     }
   },
   "episodesPage": {
-    "title": "Episoden",
-    "subtitle": "Durchsuchen Sie die interaktiven Slide-Decks und visualisierten Essays."
+    "title": "Episoden"
   },
   "tableOfContents": {
     "title": "Inhalt",

@@ -60,6 +60,8 @@
       "open": "Open Episode",
       "comingSoon": "Coming soon",
       "minutesUnit": "min read",
+      "watchVideo": "Watch on YouTube",
+      "newTab": "opens in a new tab",
       "spotlightTitle": "Featured",
       "browseTitle": "Browse all Episodes",
       "search": "Search Episodes",
@@ -401,8 +403,7 @@
     }
   },
   "episodesPage": {
-    "title": "Episodes",
-    "subtitle": "Browse the interactive slide decks and visualised essays."
+    "title": "Episodes"
   },
   "tableOfContents": {
     "title": "Contents",

@@ -1,11 +1,12 @@
 import type { EpisodeCard } from '@/components/landing/episode-card.pure';
 import { TOPIC_ACCENTS, TOPIC_ICONS } from '@/components/landing/episode-visuals';
+import { YoutubeLink, type VideoLabels } from '@/components/landing/episode-youtube-link';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
 
 /** The strings a card draws that are not on the card itself. */
-export interface CardLabels {
+export interface CardLabels extends VideoLabels {
   readonly open: string;
   readonly comingSoon: string;
   readonly minutesUnit: string;
@@ -35,7 +36,7 @@ function CardTitle({ card, locale }: { card: EpisodeCard; locale: Locale }) {
 function CardFooter({ card, labels }: { card: EpisodeCard; labels: CardLabels }) {
   if (card.route === null) {
     return (
-      <p className="mt-auto flex items-center justify-between gap-3 pt-3">
+      <p className="mt-auto flex min-h-9 items-center justify-between gap-3 pt-3">
         <span className={META}>{card.topic.label}</span>
         <span className="rounded-full border border-border px-2.5 py-0.5 font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
           {labels.comingSoon}
@@ -44,9 +45,10 @@ function CardFooter({ card, labels }: { card: EpisodeCard; labels: CardLabels })
     );
   }
   return (
-    <p className="mt-auto flex items-center justify-between gap-3 pt-3">
+    <p className="mt-auto flex min-h-9 items-center justify-between gap-3 pt-3">
       <span className={META}>{card.topic.label}</span>
-      <span className="inline-flex items-center gap-1.5 font-mono text-[0.65rem] uppercase tracking-widest text-foreground">
+      <span className="inline-flex items-center gap-3 font-mono text-[0.65rem] uppercase tracking-widest text-foreground">
+        <YoutubeLink card={card} labels={labels} />
         {card.minutes !== undefined && (
           <span className="text-muted-foreground">
             {card.minutes} {labels.minutesUnit}

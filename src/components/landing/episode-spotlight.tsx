@@ -2,6 +2,7 @@ import { spotlightOf } from '@/components/landing/episode-browse.pure';
 import type { EpisodeCard } from '@/components/landing/episode-card.pure';
 import type { CardLabels } from '@/components/landing/episode-grid-card';
 import { TOPIC_ACCENTS, TOPIC_ICONS, type AccentClasses } from '@/components/landing/episode-visuals';
+import { YoutubeLink } from '@/components/landing/episode-youtube-link';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
@@ -94,6 +95,7 @@ function Footer({ card, size, labels }: { card: EpisodeCard; size: Size; labels:
           {card.minutes} {labels.minutesUnit}
         </span>
       )}
+      <YoutubeLink card={card} labels={labels} />
     </p>
   );
 }

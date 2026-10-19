@@ -14,6 +14,13 @@ function minutesOf(entry: EpisodeMetadata, locale: Locale): number | undefined {
   return hasReadingTime(total) ? wholeMinutes(total) : undefined;
 }
 
+/** The Episode's video id in this locale; none without a page or a video. */
+function youtubeOf(entry: EpisodeMetadata, locale: Locale): { youtubeId?: string } {
+  if (!hasPage(entry.slug)) return {};
+  const id = findEpisode(entry.slug).youtube?.[locale];
+  return id === undefined ? {} : { youtubeId: id };
+}
+
 /** An Episode with a page (published, or upcoming with its slug registered) with its title and caption from the registry; a page-less upcoming one has no record. */
 function withCopy(entry: EpisodeMetadata, locale: Locale): CardEntry {
   if (entry.status !== 'published' && !hasPage(entry.slug)) return entry;
@@ -45,6 +52,7 @@ export async function episodeCards(locale: Locale, options?: EpisodeCardsOptions
       locale,
       read,
       minutes: minutesOf(entry, locale),
+      ...youtubeOf(entry, locale),
       ...featuredRankOf(entry.slug),
       linkDrafts: options?.linkDrafts,
     }),

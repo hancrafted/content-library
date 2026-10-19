@@ -99,22 +99,20 @@ type Browse = ReturnType<typeof useBrowse>;
 function BrowseControls({ browse, labels }: { browse: Browse; labels: BrowseLabels }) {
   const { selection, topics, formats } = browse;
   return (
-    <div data-browse-controls className="space-y-4">
+    <div data-browse-controls className="flex flex-wrap items-center gap-x-6 gap-y-4">
       <SearchBox query={selection.query} labels={labels} onChange={browse.setQuery} />
-      <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-4">
-        {hasChoice(topics) && (
-          <TopicChips
-            choices={topics}
-            selected={selection.topic}
-            labels={labels}
-            allRef={browse.allTopics}
-            onSelect={browse.setTopic}
-          />
-        )}
-        {hasChoice(formats) && (
-          <FormatSegments choices={formats} selected={selection.format} labels={labels} onSelect={browse.setFormat} />
-        )}
-      </div>
+      {hasChoice(topics) && (
+        <TopicChips
+          choices={topics}
+          selected={selection.topic}
+          labels={labels}
+          allRef={browse.allTopics}
+          onSelect={browse.setTopic}
+        />
+      )}
+      {hasChoice(formats) && (
+        <FormatSegments choices={formats} selected={selection.format} labels={labels} onSelect={browse.setFormat} />
+      )}
     </div>
   );
 }

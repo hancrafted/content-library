@@ -65,6 +65,23 @@ describe('/episodes index page', () => {
     expect(search.length).toBe(expected);
   });
 
+  it.each(LOCALES)('links each card with a video to it in a new tab on the /episodes page for %s', (locale) => {
+    // ARRANGE
+    const url = localizePath(ROUTES.episodes, locale);
+    const $ = exportedPage(url);
+    const withVideo = ['maintaining-markdown-for-ai', 'ai-token-economy'];
+
+    // ACT
+    const linked = $('[data-episode-card]:has([data-episode-video])')
+      .toArray()
+      .map((card) => $(card).attr('data-episode-slug'));
+    const unsafe = $('[data-episode-video]:not([target="_blank"][rel="noopener noreferrer"])');
+
+    // ASSERT
+    expect(linked.sort()).toEqual([...withVideo].sort());
+    expect(unsafe.length).toBe(0);
+  });
+
   it.each(LOCALES)('shows each Tag on its card with a tooltip on the /episodes page for %s', (locale) => {
     // ARRANGE
     const url = localizePath(ROUTES.episodes, locale);

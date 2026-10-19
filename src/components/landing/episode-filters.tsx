@@ -25,7 +25,7 @@ export function SearchBox({
   onChange: (query: string) => void;
 }) {
   return (
-    <label className="relative block w-full sm:max-w-sm">
+    <label className="relative block w-full sm:w-72 sm:shrink-0">
       <span className="sr-only">{labels.search}</span>
       <Search
         aria-hidden

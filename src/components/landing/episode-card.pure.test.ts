@@ -117,6 +117,15 @@ describe('success cases', () => {
     expect(tags).toEqual(expected);
   });
 
+  it("links a published card to its video in the reader's locale when the Episode has one", () => {
+    // ARRANGE
+    const expected = 'https://www.youtube.com/watch?v=S0Nx4faEebY';
+    // ACT
+    const { youtubeUrl } = episodeCard(PUBLISHED, { locale: 'de', read, youtubeId: 'S0Nx4faEebY' });
+    // ASSERT
+    expect(youtubeUrl).toBe(expected);
+  });
+
   it("draws an unlinked upcoming card from the Episode's own copy, not the landing Translation keys", () => {
     // ARRANGE
     const entry = { ...UPCOMING, copy: COPY };
@@ -151,6 +160,15 @@ describe('failure cases', () => {
     expect(built).toBe('function');
   });
 
+  it('never links an upcoming card to a video, as it has no public page yet', () => {
+    // ARRANGE
+    const absent = 'youtubeUrl';
+    // ACT
+    const keys = Object.keys(episodeCard(UPCOMING, { locale: 'en', read, youtubeId: 'S0Nx4faEebY' }));
+    // ASSERT
+    expect(keys).not.toContain(absent);
+  });
+
   it('never ranks an upcoming card as Featured', () => {
     // ARRANGE
     const expected = null;
@@ -182,6 +200,15 @@ describe('edge cases', () => {
     const { tags } = episodeCard(UPCOMING, { locale: 'en', read });
     // ASSERT
     expect(tags).toEqual(expected);
+  });
+
+  it('leaves the video link off a card whose Episode has no video', () => {
+    // ARRANGE
+    const absent = 'youtubeUrl';
+    // ACT
+    const keys = Object.keys(episodeCard(PUBLISHED, { locale: 'en', read }));
+    // ASSERT
+    expect(keys).not.toContain(absent);
   });
 
   it('holds only values React can pass to a client component', () => {
