@@ -151,6 +151,10 @@ A research folder is named `<category>-<####>__<question-slug>`: the category be
 
 **AIE**: AI Enablement: how people and organizations learn to work with AI, and what it changes in their work.
 
+**LLM**: Large language models: how a model works, from its training data to its context window and sampling, and why that makes it behave as it does.
+
+**ORG**: Organizations: how a company passes knowledge between its people, from onboarding a new hire to the know-how that never gets written down.
+
 **SALES**: Sales: how a company finds, wins and closes its customers, from first lead to signed deal, and how a buyer finds, trusts and chooses a coach or consultant.
 
 **START**: Startups: how an early-stage company builds and funds itself, and how its cash, costs and revenue move over time.
