@@ -8,6 +8,8 @@ generated:
 verified:
   - by: process:markdown-harness
     at: 2026-10-19T15:43:52Z
+  - by: human:han
+    at: 2026-10-19T16:37:29Z
 ---
 
 # Why AI gives you more work, and why you'll want it
