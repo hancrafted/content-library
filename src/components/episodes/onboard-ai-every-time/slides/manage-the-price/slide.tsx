@@ -6,9 +6,6 @@ import { BRIEF, TRAITS } from './counter-matrix.pure';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** The Context marker beside a move's title, in the title's line rather than an element's corner. */
-const BESIDE = 'static';
-
 /*
  * The second cornerstone (Spec Option 3c): the five BRIEF moves answer the five PRICE traits on one checklist board,
  * a tick wherever a move counters a trait, many to many, with the totals in the footer. The Slide header above shows
@@ -83,7 +80,7 @@ export const manageThePrice = slide({
           initial: t(`moves.${slug}.initial`),
           rest: t(`moves.${slug}.rest`),
           line: t(`moves.${slug}.line`),
-          marker: <Marker note={slug} className={BESIDE} />,
+          marker: <Marker note={slug} placement="beside" />,
           target: target(slug),
         }))}
         labels={{

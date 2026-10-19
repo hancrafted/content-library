@@ -60,9 +60,6 @@ const TURNS: readonly (['reply', Reply] | ['question', Asked])[] = [
   ['reply', 'spec'],
 ];
 
-/** A Context marker beside a label, in the label's line rather than an element's corner. */
-const BESIDE = 'static';
-
 const jobsOf = (id: StageId) => STAGES.find((stage) => stage.id === id)?.jobs ?? [];
 
 /**
@@ -189,7 +186,7 @@ export const briefTheVenue = slide({
           title={t('card.title')}
           criteria={CRITERIA.map((criterion) => t(`card.criteria.${criterion}`))}
           signOff={t('card.signOff')}
-          marker={<Marker note="why-the-sign-off-is-a-gate" className={BESIDE} />}
+          marker={<Marker note="why-the-sign-off-is-a-gate" placement="beside" />}
         />,
         { target: target(REQUIREMENTS) },
       ),
@@ -205,7 +202,7 @@ export const briefTheVenue = slide({
           checked={t('jobs.research.checked')}
           popover={popover(RESEARCH)}
         />,
-        { target: target(RESEARCH), aside: <Marker note="focus-beats-volume" className={BESIDE} /> },
+        { target: target(RESEARCH), aside: <Marker note="focus-beats-volume" placement="beside" /> },
       ),
       view(
         COMPARE,
@@ -213,7 +210,7 @@ export const briefTheVenue = slide({
           label={t('jobs.compare.label')}
           detail={t('jobs.compare.detail')}
           gate={t('jobs.compare.gate')}
-          marker={<Marker note="the-answer-can-be-right-and-the-work-wrong" className={BESIDE} />}
+          marker={<Marker note="the-answer-can-be-right-and-the-work-wrong" placement="beside" />}
         />,
         { target: target(COMPARE) },
       ),
