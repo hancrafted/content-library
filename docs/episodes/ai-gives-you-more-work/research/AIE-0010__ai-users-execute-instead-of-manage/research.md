@@ -1,7 +1,7 @@
 ---
 type: research
 title: 'Why do people working with AI keep executing the work themselves instead of managing it?'
-description: 'No study measures executing versus managing, but usage data show many users skip management behaviours (briefing, checking) while heavy users iterate, so "most" is unsupported and "many" is.'
+description: 'No study measures executing versus managing; usage data show many users skip briefing and checking, and users six months in iterate more and delegate less, so "most" is unsupported, "many" is.'
 generated:
   by: claude-code/opus-5.5
   at: 2026-10-19T00:00:00Z
@@ -32,7 +32,7 @@ Asked to support the claim that most people working with AI still behave as if t
 
 ## Answer
 
-No source measures "executing versus managing" directly, so "most" is not supported. The evidence shows a large share of users skipping management behaviours: in one Claude.ai sample only about half state their goal, 30% tell the AI how to work with them, and under 16% question its reasoning or check its facts. Workers also describe their effort shifting from execution to supervising, yet confidence in the AI is associated with less checking. Supportable wording is "many people skip the management steps" or "most conversations lack some of them", not "most act as if they do the work". Heavy users do more iteration, not less, which fits hands-on working rather than hands-off management, so the direction of travel is unclear.
+No source measures "executing versus managing" directly, so "most" is not supported. The evidence shows a large share of users skipping management behaviours: in one Claude.ai sample only about half state their goal, 30% tell the AI how to work with them, and under 16% question its reasoning or check its facts. Workers also describe their effort shifting from execution to supervising, yet confidence in the AI is associated with less checking. Supportable wording is "many people skip the management steps" or "most conversations lack some of them", not "most act as if they do the work". Users who signed up at least six months earlier iterate more and delegate less, which fits hands-on working rather than hands-off management, so the direction of travel is unclear.
 
 ## Findings
 
