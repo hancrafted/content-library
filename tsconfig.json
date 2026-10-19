@@ -27,6 +27,7 @@
     "skills/new-episode/scripts",
     "skills/worktree",
     "skills/visual-check",
+    "scripts",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],
