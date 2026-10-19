@@ -6,6 +6,7 @@ import {
   drawerIds,
   drawerKeyAction,
   formatMark,
+  keepReadingScroll,
   matchesShortcut,
   revealScrollTop,
   sitsBeside,
@@ -20,6 +21,28 @@ function key(overrides: Partial<KeyEventLike>): KeyEventLike {
 }
 
 describe('success cases', () => {
+  it('scrolls so the reading line stays as far into the active Slide when the drawer narrows the Slides and they grow', () => {
+    // ARRANGE: the reading line 350 px down sits 850 px into a 2000 px Slide; the content above grows and the Slide to 3000 px.
+    const before = { top: -500, height: 2000 };
+    const after = { top: 738, height: 3000 };
+    const expected = 1663;
+    // ACT
+    const delta = keepReadingScroll(before, after, 350);
+    // ASSERT
+    expect(delta).toBe(expected);
+  });
+
+  it('keeps the reading line inside the active Slide near its end when the drawer closes and the Slide shrinks', () => {
+    // ARRANGE: the line sits 1950 px into a 2000 px Slide, which shrinks to 1500 px; it must land 1462.5 px in, not past its end.
+    const before = { top: -1600, height: 2000 };
+    const after = { top: -1600, height: 1500 };
+    const expected = -487.5;
+    // ACT
+    const delta = keepReadingScroll(before, after, 350);
+    // ASSERT
+    expect(delta).toBe(expected);
+  });
+
   it('matches Alt+N on the physical key, whatever letter the layout prints', () => {
     // ARRANGE
     const event = key({ code: 'KeyN' });
@@ -179,6 +202,26 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('keeps the Slide top in place when the Slide starts below the reading line', () => {
+    // ARRANGE: the Slide starts 500 px down, below the line at 350 px, so the reader is at its start, not inside it.
+    const before = { top: 500, height: 900 };
+    const after = { top: 780, height: 1400 };
+    const expected = 280;
+    // ACT
+    const delta = keepReadingScroll(before, after, 350);
+    // ASSERT
+    expect(delta).toBe(expected);
+  });
+
+  it('scrolls nothing when the layout change leaves the Slide where it was', () => {
+    // ARRANGE
+    const box = { top: -300, height: 1200 };
+    // ACT
+    const delta = keepReadingScroll(box, box, 350);
+    // ASSERT
+    expect(delta).toBe(0);
+  });
+
   it('stops a note near the end at the bottom of the content, as near the top as it can get', () => {
     // ARRANGE
     const layout = { offset: 1800, inset: 16, scrollHeight: 2000, clientHeight: 500 };
