@@ -1,10 +1,13 @@
 ---
 type: research
-title: 'Why do language models, unlike earlier machines and tools, produce non-deterministic results?'
-description: 'Language models sample each next word from a probability distribution, and even with sampling off, serving infrastructure varies the arithmetic, so the same prompt can give different results.'
+title: 'Why do language models, unlike earlier machines and tools, produce
+  non-deterministic results?'
+description: 'Language models sample each next word from a probability
+  distribution, and even with sampling off, serving infrastructure varies the
+  arithmetic, so the same prompt can give different results.'
 generated:
-  by: claude-code/sonnet-5.5
-  at: 1970-01-01T00:00:00Z
+  by: claude-code/sonnet-4.6
+  at: 2026-10-19T18:22:08Z
 stale_after: 2027-04-19T00:00:00Z
 sources:
   - id: 1
@@ -18,7 +21,11 @@ sources:
     title: 'Atil et al., LLM Stability: A detailed analysis with some surprises'
   - id: 4
     resource: https://developers.openai.com/cookbook/examples/reproducible_outputs_with_the_seed_parameter
-    title: 'OpenAI, How to make your completions outputs consistent with the new seed parameter'
+    title: 'OpenAI, How to make your completions outputs consistent with the new
+      seed parameter'
+verified:
+  - by: process:markdown-harness
+    at: 2026-10-19T18:22:08Z
 ---
 
 # Why do language models, unlike earlier machines and tools, produce non-deterministic results?
