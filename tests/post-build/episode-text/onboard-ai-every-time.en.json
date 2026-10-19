@@ -1,7 +1,7 @@
 {
   "title": "Treat AI like a brilliant freelancer with amnesia · hancrafted",
   "description": "Name the five traits that make AI costly (PRICE), and manage them with five moves (BRIEF): break it down, requirements first, interview yourself with AI, evaluate each step, and a fresh start for each piece.",
-  "toc": "Contents Loading 3 min left 1 The thought experiment 2 Five moves to brief a freelancer 3 BRIEF in action Open contents : Contents · Loading Contents 3 min left 1 The thought experiment 2 Five moves to brief a freelancer 3 BRIEF in action",
+  "toc": "Contents Loading 5 min left 1 The thought experiment 2 Five moves to brief a freelancer 3 BRIEF in action Brief the venue Open contents : Contents · Loading Contents 5 min left 1 The thought experiment 2 Five moves to brief a freelancer 3 BRIEF in action Brief the venue",
   "slides": [
     {
       "id": "top",
@@ -18,6 +18,10 @@
     {
       "id": "brief-in-action",
       "text": "BRIEF in action Requirements card signed off Venue A Day 1 Venue B Day 1 Venue C Day 1"
+    },
+    {
+      "id": "brief-in-action--brief-the-venue",
+      "text": "BRIEF in action 1 / 1 Brief the venue Plan the summer party for 200 people across Europe: one fresh chat per job, and two gates before your boss sees a plan. Summer party B reak it down Travel Catering Venue Invitations Budget Interview I nterview yourself with AI AI asks you 3 questions, 1 you forgot ( ) See the chat Interview · the worked chat AI : How many people are coming, and what is the budget per person? You : 200 people, about 150 euros each. AI : Where do they travel from, and do any have dietary or accessibility needs? You : Five offices across Europe. Some vegetarians, two wheelchair users. The one you forgot AI : Did last year’s party get feedback worth keeping? You : Good question, I had forgotten. It was too loud to talk, and people left early. Requirements R equirements first Gate 1 Requirements card 200 guests €150 per person Step-free Vegetarian menu Quiet to talk Signed off Research F resh start for each piece Venue 1 Checked against the card Venue 2 Checked against the card Venue 3 Checked against the card Compare E valuate each step Rank 3 venues against the card Gate 2 Recommendation for your boss Venue plan by Friday A fresh chat per job ( ) Checked against the requirements card Waits for its turn"
     }
   ],
   "notes": [
@@ -30,7 +34,11 @@
       "id": "five-moves-to-brief-a-freelancer",
       "text": "Five moves to brief a freelancer No speaker notes for this Slide."
     },
-    { "id": "brief-in-action", "text": "BRIEF in action No speaker notes for this Slide." }
+    { "id": "brief-in-action", "text": "BRIEF in action No speaker notes for this Slide." },
+    {
+      "id": "brief-in-action--brief-the-venue",
+      "text": "Brief the venue Why the sign-off is a gate Stating every requirement at once is not free: one requirement stated alone was followed 98.7% of the time, but with 19 stated gpt-4o fell to 85.0%, part of it from conflicts between requirements 1 . A short card of essentials is the reason. Sources (1) Yang, Shi, Ma, Liu, Kästner, Wu, What Prompts Don't Say: Understanding and Managing Underspecification in LLM Prompts (v3) ( opens in a new tab ) arxiv.org A wrong early guess sticks When instructions were revealed piece by piece, models scored 39% lower on average, mostly as unreliability; they “make assumptions in early turns” and do not recover from a wrong turn 1 . Sources (1) Laban, Hayashi, Zhou, Neville, LLMs Get Lost In Multi-Turn Conversation ( opens in a new tab ) arxiv.org Focus beats volume On a long-memory benchmark, prompts holding only the relevant material, only a few hundred words of relevant material scored significantly higher than full prompts of tens of thousands of words, and even a single distractor lowered results 1 . Sources (1) Hong, Troynikov, Huber, Context Rot: How Increasing Input Tokens Impacts LLM Performance ( opens in a new tab ) trychroma.com Plan, then fresh session After interviewing for a spec, the vendor's own guidance is to “start a fresh session to execute it”, since the new session “has clean context focused entirely on implementation” 1 . Sources (1) Anthropic, Best practices for Claude Code ( opens in a new tab ) code.claude.com The answer can be right and the work wrong Among solutions with a correct final answer, the best system cut reasoning errors from 14.0% to 3.4%, so a check on the result alone accepts flawed reasoning 1 . Sources (1) Uesato et al., Solving math word problems with process- and outcome-based feedback ( opens in a new tab ) arxiv.org"
+    }
   ],
   "script": [
     {
@@ -48,6 +56,10 @@
     {
       "id": "brief-in-action",
       "text": "BRIEF in action 0:00 – 0:16 One task, five moves Time to watch BRIEF work on a real task. We walk it in workflow order, which is not the order of the letters, because the order you do things in is not the order they are named in."
+    },
+    {
+      "id": "brief-in-action--brief-the-venue",
+      "text": "Brief the venue 0:00 – 0:17 Restate The task: plan the summer party for 200 people across Europe. If you asked AI for all of that in one prompt, you would get pages of polished and confident answers, and you could trust almost none of them. 0:17 – 0:34 Break it down So first, break it down. The party falls into five pieces: venue, travel, catering, invitations and budget. We take only the venue now, and the other four wait for their turn, because one piece is small enough to get right. 0:34 – 0:56 Interview Next, the interview. Before it starts, the AI asks you questions, the way a contact at an agency would. Three questions come up, and one of them is something you had forgotten: whether last year's party left feedback worth keeping. That is the unwritten context coming out before the AI guesses. 0:56 – 1:16 Requirements Then requirements, and this is a stage you sign off before any research starts. Everything gets written onto one card, short and made of essentials, and every later job reads from it. If the card is wrong, you want to find out here, while it is cheap. 1:16 – 1:31 Research, fresh each time Now the research. Three venues get three fresh chats, and each one is checked against the card. Handing work to several of them at once is its own topic, and it is the promotion Episode. 1:31 – 1:47 Compare and check The three results come back together and are compared, again against the card, not against a feeling. That makes two gates in the whole flow: the card, and the comparison. A mistake has to get past both. 1:47 – 2:06 Recommendation, and on What comes out is the venue plan for your boss, and the whole thing ran on the same BRIEF you would use for any task. (pause) Now let's do it live: I will show you how that interview feels when you run it yourself."
     }
   ]
 }

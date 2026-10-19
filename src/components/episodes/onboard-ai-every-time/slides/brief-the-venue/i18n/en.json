@@ -1,0 +1,209 @@
+{
+  "title": "Brief the venue",
+  "caption": "Plan the summer party for 200 people across Europe: <b>one fresh chat per job</b>, and two gates before your boss sees a plan.",
+  "pipelineLabel": "The venue pipeline, stage by stage",
+  "jobsLabel": "{stage}: jobs",
+  "popover": {
+    "in": "In:",
+    "out": "Out:"
+  },
+  "stages": {
+    "party": {
+      "name": "Summer party",
+      "move": "<initial>B</initial>reak it down",
+      "popover": {
+        "in": "the whole party.",
+        "out": "five pieces, only the venue taken forward."
+      }
+    },
+    "interview": {
+      "name": "Interview",
+      "move": "<initial>I</initial>nterview yourself with AI",
+      "popover": {
+        "in": "your rough idea.",
+        "out": "the questions you had not thought of, answered."
+      }
+    },
+    "requirements": {
+      "name": "Requirements",
+      "move": "<initial>R</initial>equirements first",
+      "popover": {
+        "in": "your answers.",
+        "out": "a requirements card you sign off."
+      }
+    },
+    "research": {
+      "name": "Research",
+      "move": "<initial>F</initial>resh start for each piece",
+      "popover": {
+        "in": "the requirements card.",
+        "out": "one venue checked against every criterion."
+      }
+    },
+    "compare": {
+      "name": "Compare",
+      "move": "<initial>E</initial>valuate each step",
+      "popover": {
+        "in": "three checked venues.",
+        "out": "a ranking against the card."
+      }
+    },
+    "recommendation": {
+      "name": "Recommendation",
+      "move": "for your boss",
+      "popover": {
+        "in": "the comparison.",
+        "out": "the venue plan for your boss."
+      }
+    }
+  },
+  "jobs": {
+    "party": {
+      "venue": "Venue",
+      "travel": "Travel",
+      "catering": "Catering",
+      "invitations": "Invitations",
+      "budget": "Budget"
+    },
+    "interview": {
+      "label": "AI asks you",
+      "detail": "3 questions,",
+      "forgot": "<marker>1 you forgot</marker>"
+    },
+    "research": {
+      "venue1": "Venue 1",
+      "venue2": "Venue 2",
+      "venue3": "Venue 3",
+      "checked": "Checked against the card"
+    },
+    "compare": {
+      "label": "Rank 3 venues",
+      "detail": "against the card",
+      "gate": "Gate 2"
+    },
+    "recommendation": {
+      "label": "Venue plan",
+      "detail": "by Friday"
+    }
+  },
+  "card": {
+    "gate": "Gate 1",
+    "title": "Requirements card",
+    "criteria": {
+      "guests": "200 guests",
+      "budget": "€150 per person",
+      "stepFree": "Step-free",
+      "vegetarian": "Vegetarian menu",
+      "quiet": "Quiet to talk"
+    },
+    "signOff": "Signed off"
+  },
+  "legend": {
+    "label": "Legend",
+    "freshChat": "<marker>A fresh chat per job</marker>",
+    "checked": "Checked against the requirements card",
+    "parked": "Waits for its turn"
+  },
+  "chat": {
+    "title": "Interview · the worked chat",
+    "open": "See the chat",
+    "close": "Close the chat",
+    "forgotten": "The one you forgot",
+    "ai": "AI",
+    "you": "You",
+    "turns": {
+      "q1": "How many people are coming, and what is the budget per person?",
+      "a1": "200 people, about 150 euros each.",
+      "q2": "Where do they travel from, and do any have dietary or accessibility needs?",
+      "a2": "Five offices across Europe. Some vegetarians, two wheelchair users.",
+      "q3": "Did last year’s party get feedback worth keeping?",
+      "a3": "Good question, I had forgotten. It was too loud to talk, and people left early."
+    }
+  },
+  "notes": {
+    "why-the-sign-off-is-a-gate": {
+      "header": "Why the sign-off is a gate",
+      "description": "Stating every requirement at once is not free: one requirement stated alone was followed 98.7% of the time, but with 19 stated gpt-4o fell to 85.0%, part of it from conflicts between requirements [1]. A short card of essentials is the reason.",
+      "sources": {
+        "yang-what-prompts-dont-say": {
+          "title": "Yang, Shi, Ma, Liu, Kästner, Wu, What Prompts Don't Say: Understanding and Managing Underspecification in LLM Prompts (v3)"
+        }
+      }
+    },
+    "a-wrong-early-guess-sticks": {
+      "header": "A wrong early guess sticks",
+      "description": "When instructions were revealed piece by piece, models scored 39% lower on average, mostly as unreliability; they “make assumptions in early turns” and do not recover from a wrong turn [1].",
+      "sources": {
+        "laban-llms-get-lost-in-multi-turn": {
+          "title": "Laban, Hayashi, Zhou, Neville, LLMs Get Lost In Multi-Turn Conversation"
+        }
+      }
+    },
+    "focus-beats-volume": {
+      "header": "Focus beats volume",
+      "description": "On a long-memory benchmark, prompts holding only the relevant material, only a few hundred words of relevant material scored significantly higher than full prompts of tens of thousands of words, and even a single distractor lowered results [1].",
+      "sources": {
+        "hong-context-rot": {
+          "title": "Hong, Troynikov, Huber, Context Rot: How Increasing Input Tokens Impacts LLM Performance"
+        }
+      }
+    },
+    "plan-then-fresh-session": {
+      "header": "Plan, then fresh session",
+      "description": "After interviewing for a spec, the vendor's own guidance is to “start a fresh session to execute it”, since the new session “has clean context focused entirely on implementation” [1].",
+      "sources": {
+        "anthropic-claude-code-best-practices": {
+          "title": "Anthropic, Best practices for Claude Code"
+        }
+      }
+    },
+    "the-answer-can-be-right-and-the-work-wrong": {
+      "header": "The answer can be right and the work wrong",
+      "description": "Among solutions with a correct final answer, the best system cut reasoning errors from 14.0% to 3.4%, so a check on the result alone accepts flawed reasoning [1].",
+      "sources": {
+        "uesato-process-and-outcome-feedback": {
+          "title": "Uesato et al., Solving math word problems with process- and outcome-based feedback"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "restate": {
+        "title": "Restate",
+        "keywords": "",
+        "script": "The task: plan the summer party for 200 people across Europe. If you asked AI for all of that in one prompt, you would get pages of polished and confident answers, and you could trust almost none of them."
+      },
+      "break-it-down": {
+        "title": "Break it down",
+        "keywords": "",
+        "script": "So first, break it down. The party falls into five pieces: venue, travel, catering, invitations and budget. We take only the venue now, and the other four wait for their turn, because one piece is small enough to get right."
+      },
+      "interview": {
+        "title": "Interview",
+        "keywords": "",
+        "script": "Next, the interview. Before it starts, the AI asks you questions, the way a contact at an agency would. Three questions come up, and one of them is something you had forgotten: whether last year's party left feedback worth keeping. That is the unwritten context coming out before the AI guesses."
+      },
+      "requirements": {
+        "title": "Requirements",
+        "keywords": "",
+        "script": "Then requirements, and this is a stage you sign off before any research starts. Everything gets written onto one card, short and made of essentials, and every later job reads from it. If the card is wrong, you want to find out here, while it is cheap."
+      },
+      "research-fresh-each-time": {
+        "title": "Research, fresh each time",
+        "keywords": "",
+        "script": "Now the research. Three venues get three fresh chats, and each one is checked against the card. Handing work to several of them at once is its own topic, and it is the promotion Episode."
+      },
+      "compare-and-check": {
+        "title": "Compare and check",
+        "keywords": "",
+        "script": "The three results come back together and are compared, again against the card, not against a feeling. That makes two gates in the whole flow: the card, and the comparison. A mistake has to get past both."
+      },
+      "recommendation-and-on": {
+        "title": "Recommendation, and on",
+        "keywords": "",
+        "script": "What comes out is the venue plan for your boss, and the whole thing ran on the same BRIEF you would use for any task. (pause) Now let's do it live: I will show you how that interview feels when you run it yourself."
+      }
+    }
+  }
+}

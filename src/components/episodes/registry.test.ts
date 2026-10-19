@@ -51,7 +51,7 @@ const COMPOSITION = [
     sections: [
       { opener: 'the-thought-experiment', pageSlides: 0 },
       { opener: 'five-moves-to-brief-a-freelancer', pageSlides: 0 },
-      { opener: 'brief-in-action', pageSlides: 0 },
+      { opener: 'brief-in-action', pageSlides: 1 },
     ],
   },
 ] as const;
