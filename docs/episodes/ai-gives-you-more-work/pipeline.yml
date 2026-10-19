@@ -171,11 +171,11 @@ jobs:
     stage: research
     intent: >-
       Research question 2 of the Brief: "Why does AI let individuals take on more complex tasks than before?" Write
-      docs/episodes/ai-gives-you-more-work/research/AIE-0007__ai-enables-more-complex-tasks/research.md.
+      docs/episodes/ai-gives-you-more-work/research/AIE-0012__ai-enables-more-complex-tasks/research.md.
     needs: [customize-pipeline]
     isolation: worktree
     before: [mh-query]
-    outputs: [docs/episodes/ai-gives-you-more-work/research/AIE-0007__ai-enables-more-complex-tasks/research.md]
+    outputs: [docs/episodes/ai-gives-you-more-work/research/AIE-0012__ai-enables-more-complex-tasks/research.md]
     checks: [mh, vitest, sources]
     retries: 2
     agents:
@@ -198,11 +198,11 @@ jobs:
     stage: research
     intent: >-
       Research question 4 of the Brief: "Why does Matt Pocock describe the skills for working with AI as a language barrier?" Write
-      docs/episodes/ai-gives-you-more-work/research/AIE-0008__ai-skills-as-language-barrier/research.md.
+      docs/episodes/ai-gives-you-more-work/research/AIE-0013__ai-skills-as-language-barrier/research.md.
     needs: [customize-pipeline]
     isolation: worktree
     before: [mh-query]
-    outputs: [docs/episodes/ai-gives-you-more-work/research/AIE-0008__ai-skills-as-language-barrier/research.md]
+    outputs: [docs/episodes/ai-gives-you-more-work/research/AIE-0013__ai-skills-as-language-barrier/research.md]
     checks: [mh, vitest, sources]
     retries: 2
     agents:
@@ -225,11 +225,11 @@ jobs:
     stage: research
     intent: >-
       Research question 5 of the Brief: "Why do language models, unlike earlier machines and tools, produce non-deterministic results?" Write
-      docs/episodes/ai-gives-you-more-work/research/AIE-0009__llm-non-deterministic-output/research.md.
+      docs/episodes/ai-gives-you-more-work/research/AIE-0014__llm-non-deterministic-output/research.md.
     needs: [customize-pipeline]
     isolation: worktree
     before: [mh-query]
-    outputs: [docs/episodes/ai-gives-you-more-work/research/AIE-0009__llm-non-deterministic-output/research.md]
+    outputs: [docs/episodes/ai-gives-you-more-work/research/AIE-0014__llm-non-deterministic-output/research.md]
     checks: [mh, vitest, sources]
     retries: 2
     agents:
@@ -252,11 +252,11 @@ jobs:
     stage: research
     intent: >-
       Research question 6 of the Brief: "Why do people working with AI keep executing the work themselves instead of managing it?" Write
-      docs/episodes/ai-gives-you-more-work/research/AIE-0010__ai-users-execute-instead-of-manage/research.md.
+      docs/episodes/ai-gives-you-more-work/research/AIE-0015__ai-users-execute-instead-of-manage/research.md.
     needs: [customize-pipeline]
     isolation: worktree
     before: [mh-query]
-    outputs: [docs/episodes/ai-gives-you-more-work/research/AIE-0010__ai-users-execute-instead-of-manage/research.md]
+    outputs: [docs/episodes/ai-gives-you-more-work/research/AIE-0015__ai-users-execute-instead-of-manage/research.md]
     checks: [mh, vitest, sources]
     retries: 2
     agents:
@@ -356,10 +356,10 @@ jobs:
           - docs/episodes/ai-gives-you-more-work/brief.md
           - docs/episodes/ai-gives-you-more-work/research-plan.md
           - docs/episodes/ai-gives-you-more-work/research/WORK-0001__productivity-tools-increase-work/research.md
-          - docs/episodes/ai-gives-you-more-work/research/AIE-0007__ai-enables-more-complex-tasks/research.md
-          - docs/episodes/ai-gives-you-more-work/research/AIE-0008__ai-skills-as-language-barrier/research.md
-          - docs/episodes/ai-gives-you-more-work/research/AIE-0009__llm-non-deterministic-output/research.md
-          - docs/episodes/ai-gives-you-more-work/research/AIE-0010__ai-users-execute-instead-of-manage/research.md
+          - docs/episodes/ai-gives-you-more-work/research/AIE-0012__ai-enables-more-complex-tasks/research.md
+          - docs/episodes/ai-gives-you-more-work/research/AIE-0013__ai-skills-as-language-barrier/research.md
+          - docs/episodes/ai-gives-you-more-work/research/AIE-0014__llm-non-deterministic-output/research.md
+          - docs/episodes/ai-gives-you-more-work/research/AIE-0015__ai-users-execute-instead-of-manage/research.md
           - docs/episodes/ai-gives-you-more-work/research/WORK-0002__machine-workers-became-managers/research.md
           - docs/episodes/ai-gives-you-more-work/research/WORK-0003__new-technology-and-social-mobility/research.md
           - docs/llm-wiki/research/AIE/AIE-0006__ai-delegation-as-management-skill/research.md

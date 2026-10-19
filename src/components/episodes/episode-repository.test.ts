@@ -121,7 +121,7 @@ describe('success cases', () => {
   it('registers ai-gives-you-more-work as an upcoming Episode with a page, a draft with no publishedOn', () => {
     // ARRANGE
     const slug = 'ai-gives-you-more-work';
-    const expected = { slug, status: 'upcoming', topic: 'ai-collaboration', format: 'foundations', tags: [] };
+    const expected = { slug, status: 'upcoming', topic: 'ai-enablement', format: 'foundations', tags: [] };
     // ACT
     const metadata = listEpisodes().find((episode) => episode.slug === slug);
     const page = hasPage(slug);

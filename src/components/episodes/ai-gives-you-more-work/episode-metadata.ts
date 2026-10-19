@@ -4,7 +4,7 @@ import type { UpcomingEpisodeMetadata } from '@/lib/episode-metadata.pure';
 export const episodeMetadata = {
   slug: 'ai-gives-you-more-work',
   status: 'upcoming',
-  topic: 'ai-collaboration',
+  topic: 'ai-enablement',
   format: 'foundations',
   tags: [],
 } as const satisfies UpcomingEpisodeMetadata;
