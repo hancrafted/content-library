@@ -48,6 +48,7 @@ Decide every `neither` question yourself and list it at the end of the round und
 
 Keep the grilling skill's markers (`❓ **Qn**`, `➡️`) and fill each question out in this order:
 
+0. **Numbering runs through the whole session.** Round 2 continues where round 1 stopped (Q9, Q10, …); it never restarts at Q1, so a number names one question for the whole session. A new issue's opening restarts it.
 1. **The bucket and a full wh-question** as the headline: `❓ **Q1** · contract — **Which …?**`. The bucket lets the user contest the classification. The wh-question ends in a question mark and names its own subject, so it reads on its own with nothing above it. "Which directory should own the Episode files?" — not "Where Episode files live". A noun phrase makes the user reconstruct the question before they can start answering it.
 2. **Options** as a numbered list, one sentence each, with at most one `because` reason.
 3. **A recommendation** under the options, naming the option it picks and why it wins.
