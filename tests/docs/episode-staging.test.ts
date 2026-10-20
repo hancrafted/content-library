@@ -218,26 +218,6 @@ function rubricsWithoutHeading(yaml: string): string[] {
   );
 }
 
-/**
- * A staging folder's Dossier as write-dossier and then write-voice-script
- * committed it, found by the `Agent: <job>` trailer of their commits. The
- * trailer exists since #107. A folder whose Run has not committed both
- * `Agent: write-dossier` and `Agent: write-voice-script` yet has nothing to
- * compare (undefined); `commitsWithTrailer` guards the history itself.
- */
-function dossierBeforeAndAfterVoice(folder: string): { draft: string; voiced: string } | undefined {
-  const file = `${folder}/dossier.md`;
-  const at = (job: string): string | undefined => {
-    const hash = execFileSync('git', ['log', '-1', '--format=%H', '-E', `--grep=^Agent: ${job}$`, '--', file], {
-      cwd: ROOT,
-      encoding: 'utf8',
-    }).trim();
-    return hash === '' ? undefined : execFileSync('git', ['show', `${hash}:${file}`], { cwd: ROOT, encoding: 'utf8' });
-  };
-  const [draft, voiced] = [at('write-dossier'), at('write-voice-script')];
-  return draft === undefined || voiced === undefined ? undefined : { draft, voiced };
-}
-
 /** How many commits in the checked-out history carry the `Agent: <job>` trailer; 0 when the clone is too shallow to see them. */
 function commitsWithTrailer(job: string): number {
   const hashes = execFileSync('git', ['log', '--format=%H', '-E', `--grep=^Agent: ${job}$`], {
@@ -247,18 +227,38 @@ function commitsWithTrailer(job: string): number {
   return hashes.split('\n').filter((hash) => hash !== '').length;
 }
 
-it.each(['write-dossier', 'write-voice-script'])(
-  'finds the %s commits in the checked-out history, so the Voice script check never passes on a shallow clone',
-  (job) => {
-    // ARRANGE
-    const shallow = execFileSync('git', ['rev-parse', '--is-shallow-repository'], { cwd: ROOT, encoding: 'utf8' });
-    // ACT
-    const found = commitsWithTrailer(job);
-    // ASSERT
-    expect(shallow.trim(), 'the checkout is shallow: fetch with depth 0').toBe('false');
-    expect(found, `no commit carries "Agent: ${job}"`).toBeGreaterThan(0);
-  },
-);
+/**
+ * A staging folder's Dossier as write-dossier and then write-voice-script
+ * committed it, found by the `Agent: <job>` trailer of their commits. The
+ * trailer exists since #107. A folder whose Run has not committed both yet has
+ * nothing to compare (undefined). But when no commit in the whole history
+ * carries a trailer, the history is unreadable (a shallow clone), so this
+ * throws rather than let the Voice script check pass on nothing.
+ */
+function dossierBeforeAndAfterVoice(folder: string): { draft: string; voiced: string } | undefined {
+  const file = `${folder}/dossier.md`;
+  const at = (job: string): string | undefined => {
+    const hash = execFileSync('git', ['log', '-1', '--format=%H', '-E', `--grep=^Agent: ${job}$`, '--', file], {
+      cwd: ROOT,
+      encoding: 'utf8',
+    }).trim();
+    if (hash !== '') return execFileSync('git', ['show', `${hash}:${file}`], { cwd: ROOT, encoding: 'utf8' });
+    if (commitsWithTrailer(job) === 0)
+      throw new Error(`no commit in the history carries "Agent: ${job}": shallow clone?`);
+    return undefined;
+  };
+  const [draft, voiced] = [at('write-dossier'), at('write-voice-script')];
+  return draft === undefined || voiced === undefined ? undefined : { draft, voiced };
+}
+
+it('reads the history in full, so the Voice script check never passes on a shallow clone', () => {
+  // ARRANGE
+  const expected = 'false';
+  // ACT
+  const shallow = execFileSync('git', ['rev-parse', '--is-shallow-repository'], { cwd: ROOT, encoding: 'utf8' });
+  // ASSERT
+  expect(shallow.trim(), 'the checkout is shallow: fetch with depth 0').toBe(expected);
+});
 
 describe('success cases', () => {
   it('finds that write-voice-script changed only Voice script lines of what write-dossier committed', () => {

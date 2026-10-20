@@ -90,4 +90,14 @@ describe('edge cases', () => {
       expect(classes.filter((name) => name.endsWith(unpositioned))).toEqual([]);
     }
   });
+
+  it('renders a call site placed beside exactly what the old static class gave it', () => {
+    // ARRANGE
+    const props = { note: 'n', label: 'l' };
+    // ACT
+    const old = renderToStaticMarkup(createElement(ContextMarker, { ...props, className: 'static' }));
+    const placed = renderToStaticMarkup(createElement(ContextMarker, { ...props, placement: 'beside' }));
+    // ASSERT
+    expect(placed).toBe(old);
+  });
 });

@@ -57,6 +57,7 @@ function processesIn(target: string): Proc[] {
 function protectedPids(): Set<number> {
   const parentOf = new Map<number, number>();
   for (const line of capture('ps', ['-axo', 'pid=,ppid=']).split('\n')) {
+    if (line.trim() === '') continue;
     const [pid, ppid] = line.trim().split(/\s+/).map(Number);
     parentOf.set(pid, ppid);
   }
@@ -88,9 +89,13 @@ function killProcesses(procs: Proc[]): void {
   for (const proc of procs) console.log(`✔ stopped ${describeProc(proc)}`);
 }
 
-function refuseWhileBusy(target: string, kill: boolean): void {
+function refuseInsideWorktree(target: string): void {
   if ((process.cwd() + '/').startsWith(target + '/'))
     fail(`run this from the main checkout, not from inside ${target}`);
+}
+
+/** Refuses while something still runs in the worktree; with `kill`, stops it first. Run last, once every other guard passed. */
+function refuseWhileBusy(target: string, kill: boolean): void {
   let busy = processesIn(target);
   if (kill && busy.length > 0) {
     killProcesses(killable(busy, protectedPids()));
@@ -144,12 +149,14 @@ function mergeBeforeRemoval(branch: string, base: string): void {
 
 function finish(branch: string, base: string | null, kill: boolean): void {
   const target = worktreePath(branch);
-  // The Run's own dev and Spec servers (pid files in the worktree); no other process is touched.
-  for (const port of stopServers(target)) console.log(`✔ stopped the Run's server on :${port}`);
-  refuseWhileBusy(target, kill);
+  refuseInsideWorktree(target);
   if (base === null) refuseUnpushedMain();
   // Merged before anything is removed, so a failure leaves the worktree and branch intact.
   else mergeBeforeRemoval(branch, base);
+  // Every refusing guard has passed; stopping processes comes last, just before removal.
+  // The Run's own dev and Spec servers (pid files in the worktree); no other process is touched.
+  for (const port of stopServers(target)) console.log(`✔ stopped the Run's server on :${port}`);
+  refuseWhileBusy(target, kill);
   stream('git', ['worktree', 'remove', target]);
   removeContextFolder(branch);
   console.log(`✔ removed ${target} and its Claude Desktop folder`);

@@ -7,7 +7,7 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { findForbidden, parseForbidden } from '../../../src/lib/episode-forbid.pure.ts';
+import { findForbidden, parseSpecAssembleArgs } from '../../../src/lib/episode-forbid.pure.ts';
 import { assembleSpec } from '../../../src/lib/episode-spec-assemble.pure.ts';
 import { SPEC_FILE } from '../../../src/lib/episode-spec-page.pure.ts';
 import { checkSpec } from '../../../src/lib/episode-spec.pure.ts';
@@ -43,15 +43,12 @@ function stagingTexts(dir: string, base = dir): Record<string, string> {
   );
 }
 
-const args = process.argv.slice(2);
-const forbidAt = args.indexOf('--forbid');
-const forbidValue = forbidAt === -1 ? undefined : args[forbidAt + 1];
-if (forbidAt !== -1) args.splice(forbidAt, 2);
-const [arg, ...extra] = args;
-if (arg === undefined || extra.length > 0 || (forbidAt !== -1 && forbidValue === undefined)) {
-  console.error('✖ usage: npm run episode:spec-assemble -- <slug | Episode folder> [--forbid <word,word…>]');
+const parsed = parseSpecAssembleArgs(process.argv.slice(2));
+if ('error' in parsed) {
+  console.error(`✖ ${parsed.error}`);
   process.exit(1);
 }
+const arg = parsed.episode;
 const folder = arg.includes('/') ? path.resolve(arg) : path.join(ROOT, 'docs/episodes', arg);
 const slug = path.basename(folder);
 const brief = read(path.join(folder, 'brief.md'));
@@ -59,8 +56,8 @@ if (brief === undefined) {
   console.error(`✖ ${path.relative(ROOT, folder)}/brief.md does not exist: the Spec starts from the Brief`);
   process.exit(1);
 }
-if (forbidValue !== undefined) {
-  const hits = findForbidden(stagingTexts(folder), parseForbidden(forbidValue));
+if (parsed.forbid !== undefined) {
+  const hits = findForbidden(stagingTexts(folder), parsed.forbid);
   for (const { file, line, term } of hits) console.error(`✖ ${file}:${line} holds the forbidden term "${term}"`);
   if (hits.length > 0) process.exit(1);
 }

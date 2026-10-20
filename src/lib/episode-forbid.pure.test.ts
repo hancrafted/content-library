@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { findForbidden, parseForbidden } from './episode-forbid.pure';
+import { findForbidden, parseForbidden, parseSpecAssembleArgs } from './episode-forbid.pure';
 
 describe('success cases', () => {
   it('reports file, line and term, ignoring case', () => {
@@ -23,6 +23,22 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it.each([
+    ['an empty list', ['ep', '--forbid', '']],
+    ['a list of only commas', ['ep', '--forbid', ',']],
+    ['another flag as the value', ['ep', '--forbid', '--x']],
+    ['no value', ['ep', '--forbid']],
+    ['a second positional', ['ep', 'more']],
+    ['no Episode', []],
+  ])('refuses %s as a usage error', (_name, argv) => {
+    // ARRANGE
+    const expected = 'error';
+    // ACT
+    const parsed = parseSpecAssembleArgs(argv);
+    // ASSERT
+    expect(Object.keys(parsed)).toEqual([expected]);
+  });
+
   it('reports nothing when no term occurs', () => {
     // ARRANGE
     const files = { 'brief.md': 'clean' };
@@ -34,6 +50,26 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('reads the Episode and the terms of the command line, in either order', () => {
+    // ARRANGE
+    const expected = { episode: 'ep', forbid: ['a', 'b'] };
+    // ACT
+    const after = parseSpecAssembleArgs(['ep', '--forbid', 'a, b']);
+    const before = parseSpecAssembleArgs(['--forbid', 'a,b', 'ep']);
+    // ASSERT
+    expect(after).toEqual(expected);
+    expect(before).toEqual(expected);
+  });
+
+  it('leaves forbid undefined when the flag is absent', () => {
+    // ARRANGE
+    const expected = { episode: 'ep', forbid: undefined };
+    // ACT
+    const parsed = parseSpecAssembleArgs(['ep']);
+    // ASSERT
+    expect(parsed).toEqual(expected);
+  });
+
   it('reports every term on a line', () => {
     // ARRANGE
     const files = { 'a.md': 'old and older' };
