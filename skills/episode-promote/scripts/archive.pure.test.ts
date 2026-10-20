@@ -124,25 +124,87 @@ describe('designArchive', () => {
       // ASSERT
       expect($('h1').text()).toBe(title);
       expect(
-        $('li a')
+        $('main li a')
           .map((_, a) => `${$(a).attr('href')} ${$(a).text()}`)
           .get(),
       ).toEqual(links);
     });
 
-    it("carries the Spec's own styles, not its review scripts, and links each Slide page back to its Episode", () => {
+    it("lays each Slide page out in the Spec's frame: an outline of every Slide page beside the Slide's head and Options", () => {
       // ARRANGE
       const specStyle = '.spec-card{padding:1rem}';
-      const [stylesheet, back] = ['design.css', 'index.html'];
+      const stylesheet = 'design.css';
+      const outline = [
+        'index.html Cash first',
+        'top.html 0 · Title slide and section slides',
+        'watch-cash.html 1 · Watch cash',
+        'cash-left.html 2 · Cash left',
+      ];
+      const current = 'watch-cash.html';
+      const picked = ['top.html', 'watch-cash.html', 'cash-left.html'];
+      const head = '1Watch cash';
+      const options = ['1a', '1b'];
 
       // ACT
       const $ = page(designArchive(INPUT).pages, 'cash-first/watch-cash.html');
+      const links = $('.spec-shell > nav.spec-outline a')
+        .map((_, a) => `${$(a).attr('href')} ${$(a).text().trim()}`)
+        .get();
+      const marked = $('.spec-outline a[data-state="picked"]')
+        .map((_, a) => $(a).attr('href'))
+        .get();
+      const slide = $('.spec-shell > main.spec-page article#watch-cash');
+      const tabbed = slide
+        .find('.spec-options > figure[data-spec="option"]')
+        .map((_, f) => $(f).attr('data-option'))
+        .get();
 
       // ASSERT
       expect($('style').text()).toContain(specStyle);
-      expect($('script')).toHaveLength(0);
       expect($('link[rel="stylesheet"]').attr('href')).toBe(stylesheet);
-      expect($('nav a').attr('href')).toBe(back);
+      expect(links).toEqual(outline);
+      expect($('.spec-outline a[aria-current="page"]').attr('href')).toBe(current);
+      expect(marked).toEqual(picked);
+      expect(slide.find('.spec-slide-head').text().replace(/\s+/g, '')).toBe(head.replace(/\s+/g, ''));
+      expect(tabbed).toEqual(options);
+    });
+
+    it('shows the Visual idea untabbed and drops the review form, the picks, the notes and the words', () => {
+      // ARRANGE
+      const dropped = [
+        'form',
+        '.spec-pick',
+        '.spec-note',
+        '[data-panel="voice-script"]',
+        '[data-panel="speaker-notes"]',
+        '.spec-words > input',
+        '.spec-words > label',
+        '#spec-meta',
+      ];
+
+      // ACT
+      const $ = page(designArchive(INPUT).pages, 'cash-first/watch-cash.html');
+      const found = dropped.filter((selector) => $(selector).length > 0);
+
+      // ASSERT
+      expect($('.spec-words > [data-panel="visual-idea"] [data-spec="visual-idea"]')).toHaveLength(1);
+      expect(found).toEqual([]);
+    });
+
+    it("tabs the Options with one script of the archive's own, none of the Spec's", () => {
+      // ARRANGE
+      const specScripts = ['/* option tabs */', '/* review form */'];
+
+      // ACT
+      const $ = page(designArchive(INPUT).pages, 'cash-first/watch-cash.html');
+      const scripts = $('script')
+        .map((_, script) => $(script).html() ?? '')
+        .get();
+      const carried = specScripts.filter((text) => scripts.some((script) => script.includes(text)));
+
+      // ASSERT
+      expect(scripts).toHaveLength(1);
+      expect(carried).toEqual([]);
     });
   });
 

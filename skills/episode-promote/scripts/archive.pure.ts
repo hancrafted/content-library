@@ -41,7 +41,7 @@ function escape(text: string): string {
 /** One archive section, `data-archive="<name>"`, holding `items`; nothing when there are none. */
 function archiveSection(name: string, heading: string, items: readonly string[]): string {
   if (items.length === 0) return '';
-  return `<section data-archive="${name}"><h2>${heading}</h2>${items.join('\n')}</section>`;
+  return `<section class="spec-card" data-archive="${name}"><h4>${heading}</h4>${items.join('\n')}</section>`;
 }
 
 function feedbackList(items: readonly FeedbackItem[]): string {
@@ -64,15 +64,64 @@ function referenceList(images: readonly string[]): string {
   return archiveSection('references', 'Design references', figures);
 }
 
-/** The archive's own layout and marks; the Options' look comes from the Spec's styles and `design.css`. */
+/** The archive's own layout; a Slide page wears the Spec's frame, its look from the Spec's styles and `design.css`. */
 const ARCHIVE_STYLE = `
-body { max-width: 1520px; margin: 0 auto; padding: 2rem; display: grid; gap: 2rem; }
-figure[data-spec="option"] { position: relative; margin: 0; }
-figure[data-picked]::before, figure[data-recommended]::after { position: absolute; top: -1.6rem; font: 600 0.8rem sans-serif; }
-figure[data-picked]::before { content: "picked"; left: 0; color: #15803d; }
-figure[data-recommended]::after { content: "recommended"; right: 0; color: #6b7280; }
-[data-archive="references"] img { max-width: 480px; border: 1px solid #ddd; }
+body:not(:has(.spec-shell)) { max-width: 1520px; margin: 0 auto; padding: 2rem; }
+.spec-outline .spec-outline-episode { display: block; margin-bottom: 1rem; font-weight: 600; }
+.spec-outline a[aria-current="page"] { font-weight: 600; }
+[data-archive] { margin-top: 2rem; }
+ol.spec-card { list-style: decimal inside; line-height: 2; }
+.spec-kicker a, ol.spec-card a { color: inherit; }
+.spec-words > [data-panel="visual-idea"] { display: block; }
+[data-archive="references"] img { max-width: 480px; border: 1px solid var(--border, #ddd); }
 [data-archive="prompt"] pre { white-space: pre-wrap; }
+`;
+
+/**
+ * The Spec's Option tabs, rebuilt for a page with no review form: an Option's ✓ comes from \`data-picked\`, and a
+ * Slide opens on its picked Option, else its recommended one, else its first. Without the script every Option shows,
+ * stacked.
+ */
+const ARCHIVE_SCRIPT = `
+addEventListener('DOMContentLoaded', () => {
+  for (const options of document.querySelectorAll('.spec-options')) {
+    const figures = [...options.querySelectorAll(':scope > [data-spec="option"]')];
+    const tabs = document.createElement('div');
+    tabs.className = 'spec-tabs';
+    tabs.setAttribute('role', 'tablist');
+    const show = (figure) => {
+      for (const other of figures) other.toggleAttribute('data-active', other === figure);
+      for (const button of tabs.children)
+        button.setAttribute('aria-selected', String(button.dataset.option === figure.dataset.option));
+    };
+    for (const figure of figures) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.setAttribute('role', 'tab');
+      button.dataset.option = figure.dataset.option;
+      button.textContent = 'Option ' + figure.dataset.option;
+      const mark = document.createElement('span');
+      mark.className = 'spec-picked';
+      mark.textContent = figure.hasAttribute('data-picked') ? '✓' : '';
+      button.append(mark);
+      if (figure.hasAttribute('data-recommended')) {
+        const badge = document.createElement('span');
+        badge.className = 'spec-badge';
+        badge.textContent = 'Recommended';
+        button.append(badge);
+      }
+      button.addEventListener('click', () => show(figure));
+      tabs.append(button);
+    }
+    options.before(tabs);
+    options.classList.add('is-tabbed');
+    show(
+      figures.find((f) => f.hasAttribute('data-picked')) ??
+        figures.find((f) => f.hasAttribute('data-recommended')) ??
+        figures[0],
+    );
+  }
+});
 `;
 
 interface Head {
@@ -81,10 +130,13 @@ interface Head {
   styles?: string;
   /** Whether the Episode's compiled `design.css` sits beside the page. */
   designCss?: boolean;
+  /** Whether the page carries the archive's Option tabs script. */
+  tabs?: boolean;
 }
 
-function htmlPage({ title, styles = '', designCss = false }: Head, body: string): string {
+function htmlPage({ title, styles = '', designCss = false, tabs = false }: Head, body: string): string {
   const link = designCss ? '<link rel="stylesheet" href="design.css" />\n' : '';
+  const script = tabs ? `<script>${ARCHIVE_SCRIPT}</script>\n` : '';
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -92,7 +144,7 @@ function htmlPage({ title, styles = '', designCss = false }: Head, body: string)
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>${escape(title)}</title>
 ${styles}<style>${ARCHIVE_STYLE}</style>
-${link}</head>
+${link}${script}</head>
 <body>
 ${body}
 </body>
@@ -123,21 +175,32 @@ interface EpisodeContext {
 }
 
 /** One Slide's archive page, and the reference images it cites. */
-function slideArchivePage(slide: SlidePage, context: EpisodeContext): { html: string; images: string[] } {
-  const spec = [slide.visualIdea, ...slide.options]
-    .join('\n')
-    .replaceAll(`${context.staging}/reference/`, 'reference/');
-  const images = citedImages(spec);
+/** The Spec's outline as the archive's: every Slide links its own page, picked ones and the current one marked. */
+function outline(slides: readonly SlidePage[], current: SlidePage | undefined, title: string): string {
+  const items = slides.map((slide) => {
+    const state = slide.picked ? ' data-state="picked"' : '';
+    const here = slide === current ? ' aria-current="page"' : '';
+    return `<li><a href="${slide.slug}.html"${state}${here}>${escape(slide.label)}</a></li>`;
+  });
+  return `<nav class="spec-outline" aria-label="Slides"><a class="spec-outline-episode" href="index.html">${escape(title)}</a><ol>${items.join('\n')}</ol></nav>`;
+}
+
+function slideArchivePage(
+  slide: SlidePage,
+  slides: readonly SlidePage[],
+  context: EpisodeContext,
+): { html: string; images: string[] } {
+  const article = slide.article.replaceAll(`${context.staging}/reference/`, 'reference/');
+  const images = citedImages(article);
   const anchor = slide.section === undefined ? slide.slug : `${slide.section}--${slide.slug}`;
-  const body = [
-    `<nav><a href="index.html">${escape(context.title)}</a></nav>`,
-    `<h1>${escape(slide.title)}</h1>`,
-    spec,
+  const main = [
+    article,
     referenceList(images),
     feedbackList(context.feedback.filter((item) => item.anchor === anchor)),
     promptList(context.prompts.filter(({ text }) => namesSlide(text, slide))),
   ].filter((part) => part !== '');
-  return { html: htmlPage({ title: slide.title, styles: context.styles, designCss: true }, body.join('\n')), images };
+  const body = `<div class="spec-shell">${outline(slides, slide, context.title)}<main class="spec-page">${main.join('\n')}</main></div>`;
+  return { html: htmlPage({ title: slide.title, styles: context.styles, designCss: true, tabs: true }, body), images };
 }
 
 /** The Episode's own index: its Slides in Spec order, each with its picked Option. */
@@ -146,7 +209,9 @@ function episodeIndex(slides: readonly SlidePage[], { title, styles }: EpisodeCo
     (slide) =>
       `<li><a href="${slide.slug}.html">${escape(slide.title)}${slide.picked ? ` · picked ${slide.picked}` : ''}</a></li>`,
   );
-  const body = `<nav><a href="../index.html">Design archive</a></nav>\n<h1>${escape(title)}</h1>\n<ol>${items.join('\n')}</ol>`;
+  const masthead = `<header class="spec-masthead"><p class="spec-kicker"><a href="../index.html">Design archive</a> · ${slides.length} Slides</p><h1>${escape(title)}</h1></header>`;
+  const main = `${masthead}\n<ol class="spec-card">${items.join('\n')}</ol>`;
+  const body = `<div class="spec-shell">${outline(slides, undefined, title)}<main class="spec-page">${main}</main></div>`;
   return htmlPage({ title, styles, designCss: true }, body);
 }
 
@@ -170,7 +235,7 @@ export function designArchive(input: ArchiveInput): Archive {
   const pages: Record<string, string> = { [`${episode}/index.html`]: episodeIndex(slides, context) };
   const references = new Set<string>();
   for (const slide of slides) {
-    const { html, images } = slideArchivePage(slide, context);
+    const { html, images } = slideArchivePage(slide, slides, context);
     pages[`${episode}/${slide.slug}.html`] = html;
     for (const image of images) references.add(image);
   }

@@ -1,6 +1,6 @@
 // `npm run episode:archive -- docs/episodes/<staging-folder>`: files the Staging's Spec Options into the Design
 // archive (GLOSSARY.md): `design-archive/<slug>/` gets one page per Slide, the design reference images the pages
-// cite and a `design.css` compiled from their markup; `design-archive/index.html` is regenerated from every
+// cite and the Spec's compiled `design.css`; `design-archive/index.html` is regenerated from every
 // archived Episode. Run from the repo root, before Staging is deleted. Rerunning overwrites the Episode's pages.
 
 import { load } from 'cheerio';
@@ -47,7 +47,9 @@ for (const reference of references) {
   mkdirSync(path.dirname(to), { recursive: true });
   copyFileSync(from, to);
 }
-await buildDesignCss(path.join(ARCHIVE, slug));
+// The Spec's markup holds every class the archive pages use, and `globals.css` keeps `design-archive/` out of
+// Tailwind's scan, so the archive's design.css is the Spec's, compiled where Tailwind still sees it.
+copyFileSync(await buildDesignCss(path.join(staging, 'spec')), path.join(ARCHIVE, slug, 'design.css'));
 
 const episodes = readdirSync(ARCHIVE, { withFileTypes: true })
   .filter((entry) => entry.isDirectory() && existsSync(path.join(ARCHIVE, entry.name, 'index.html')))
