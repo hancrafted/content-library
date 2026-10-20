@@ -13,6 +13,8 @@ The user's feedback on the machinery (the `new-episode` skill, its references, t
 
 Write the change in `skills/new-episode/`, `docs/` or `GLOSSARY.md`: a markdown edit with `/writing-for-agents`; a code change (a script, a check) with `/tdd`, then `/code-review` against the run branch's last commit before it. Commit with `/commit`, in a commit of its own that holds no other change.
 
+A lesson whose fix is mechanical (a check, a script, a template change) is that code change, or a ticket on the issue tracker, never a `LEARNINGS.md` entry: the next Run hits the same bug while it sits in a list. Only a change to the frozen template is a lesson, below.
+
 A change to the frozen template, `skills/new-episode/assets/pipeline.yml`, does not ship: a Run's template must not shift under it. Write it as a numbered lesson in [`LEARNINGS.md`](../new-episode/LEARNINGS.md) (what happened, its evidence, the proposed fix) and commit that.
 
 _Done when_ `node skills/pipeline-feedback/scripts/scope.ts` prints `✔`. It exits 1 and names each Episode file, and each file outside the three places, of the commit: reset the commit, drop those files and commit again.
