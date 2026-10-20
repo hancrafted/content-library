@@ -31,9 +31,9 @@ _Done when_ `.logs/new-episode/<staging>/` holds `events.jsonl` and `pipeline.ym
 
 ### 4. File the Design archive
 
-`npm run episode:archive -- docs/episodes/<staging>`. It writes `design-archive/<slug>/`: one page per Slide with every Option (picked and recommended marked), the Visual idea, the user's feedback, every designer prompt and the cited design references, plus the index. Open it with `npm run design-archive` and have the user click through it. Commit `design-archive/`. A Run older than `events.jsonl` archives without designer prompts.
+`npm run episode:archive -- docs/episodes/<staging>`. It writes `design-archive/<slug>/index.html`: one page in the Spec's frame holding every Slide with every Option as tabs (picked and recommended marked), the Visual idea, the user's feedback, every designer prompt and the cited design references; and it regenerates the dashboard, `design-archive/index.html`. Open it with `npm run design-archive` and have the user click through it. Commit `design-archive/`. A Run older than `events.jsonl` archives without designer prompts.
 
-_Done when_ every Slide of the Spec has a page, the user has seen the archive, and it is committed.
+_Done when_ every Slide of the Spec is on the Episode's page, the user has seen the archive, and it is committed.
 
 ### 5. Harvest
 
@@ -67,4 +67,4 @@ _Done when_ all four are green and the PR is open.
 ## Reading an Episode afterwards
 
 - Words: `npm run episode:text -- <slug> [--locale de]` prints the Episode as markdown from its Slides. Never commit its output.
-- Design: a new Episode reuses an archived Option by naming `<slug>/<slide>#<option>` in its Brief or feedback; the designer reads `design-archive/<slug>/<slide>.html`.
+- Design: a new Episode reuses an archived Option by naming `<slug>/<slide>#<option>` in its Brief or feedback; the designer reads the Slide at `design-archive/<slug>/index.html#<slide>`.

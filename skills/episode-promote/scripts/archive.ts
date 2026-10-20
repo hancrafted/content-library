@@ -1,13 +1,14 @@
 // `npm run episode:archive -- docs/episodes/<staging-folder>`: files the Staging's Spec Options into the Design
-// archive (GLOSSARY.md): `design-archive/<slug>/` gets one page per Slide, the design reference images the pages
-// cite and the Spec's compiled `design.css`; `design-archive/index.html` is regenerated from every
-// archived Episode. Run from the repo root, before Staging is deleted. Rerunning overwrites the Episode's pages.
+// archive (GLOSSARY.md): `design-archive/<slug>/` gets one page, `index.html`, holding every Slide, the design
+// reference images it cites and the Spec's compiled `design.css`; `design-archive/index.html`, the dashboard, is
+// regenerated from every archived Episode. Run from the repo root, before Staging is deleted. Rerunning replaces the
+// Episode's folder.
 
-import { load } from 'cheerio';
-import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { buildDesignCss } from '../../new-episode/scripts/spec-css.ts';
-import { archiveIndex, designArchive } from './archive.pure.ts';
+import { archivedEpisode, archiveIndex } from './archive-dashboard.pure.ts';
+import { designArchive } from './archive.pure.ts';
 
 const ARCHIVE = 'design-archive';
 const staging = process.argv[2]?.replace(/\/$/, '');
@@ -33,6 +34,7 @@ const { slug, pages, references } = designArchive({
   events: existsSync(eventsFile) ? readFileSync(eventsFile, 'utf8') : '',
 });
 
+rmSync(path.join(ARCHIVE, slug), { recursive: true, force: true });
 for (const [file, html] of Object.entries(pages)) {
   mkdirSync(path.dirname(path.join(ARCHIVE, file)), { recursive: true });
   writeFileSync(path.join(ARCHIVE, file), html);
@@ -53,13 +55,9 @@ copyFileSync(await buildDesignCss(path.join(staging, 'spec')), path.join(ARCHIVE
 
 const episodes = readdirSync(ARCHIVE, { withFileTypes: true })
   .filter((entry) => entry.isDirectory() && existsSync(path.join(ARCHIVE, entry.name, 'index.html')))
-  .map(({ name }) => ({
-    slug: name,
-    title: load(readFileSync(path.join(ARCHIVE, name, 'index.html'), 'utf8'))('h1')
-      .first()
-      .text(),
-  }));
+  .map(({ name }) => archivedEpisode(name, readFileSync(path.join(ARCHIVE, name, 'index.html'), 'utf8')));
 writeFileSync(path.join(ARCHIVE, 'index.html'), archiveIndex(episodes));
+const archived = episodes.find((episode) => episode.slug === slug);
 console.log(
-  `archived ${Object.keys(pages).length - 1} Slide page(s) and ${references.length} reference(s) to ${ARCHIVE}/${slug}/`,
+  `archived ${archived?.slides ?? 0} Slide(s) and ${references.length} reference(s) to ${ARCHIVE}/${slug}/index.html`,
 );
