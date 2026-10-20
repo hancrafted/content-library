@@ -99,6 +99,58 @@ describe('success cases', () => {
     expect(Object.fromEntries(view.jobs.map((entry) => [entry.id, entry.needsHan]))).toEqual(expectedBadges);
   });
 
+  it('explains an errored Job by its summary and notes, and names the Jobs that went on without it', () => {
+    // ARRANGE
+    const agent = {
+      type: 'implementor',
+      agent: 'a',
+      skills: [],
+      references: [],
+      model: 'opus',
+      session: 'orchestrator',
+    };
+    const base = { outputs: [], checks: [], retries: 0, agents: [agent] };
+    const pipeline = parseDashboardPipeline(
+      JSON.stringify({
+        status: 'approved',
+        jobs: [
+          { ...base, id: 'convert', needs: [] },
+          { ...base, id: 'write', needs: [], wants: ['convert'] },
+          { ...base, id: 'bystander', needs: [] },
+          { ...base, id: 'blocked-on', needs: ['convert'] },
+        ],
+      }),
+    );
+    const at = (second: number) => `2026-10-14T10:00:${String(second).padStart(2, '0')}Z`;
+    const line = (seq: number, fields: object) => ({ trace_id: 'a', seq, t: at(seq), ...fields });
+    const job = (seq: number, id: string) =>
+      line(seq, { kind: 'start', span_id: id, type: 'job', name: id, job: id, parent_span_id: 'run' });
+    const lines = [
+      line(1, { kind: 'start-run', span_id: 'run' }),
+      job(2, 'convert'),
+      line(3, {
+        kind: 'event',
+        span_id: 'convert',
+        name: 'note',
+        source: 'typed',
+        attributes: { 'note.type': 'blocked', 'note.text': 'No PDF' },
+      }),
+      line(4, { kind: 'end', span_id: 'convert', status: 'error', summary: 'PNG, not PDF' }),
+      job(5, 'write'),
+      job(6, 'bystander'),
+      job(7, 'blocked-on'),
+    ] as unknown as RunLogLine[];
+    const expected = { summary: 'PNG, not PDF', notes: ['No PDF'], continuedWith: ['write'] };
+    // ACT
+    const log = createLogFold({ live: 'unfinished' });
+    log.append(lines);
+    const view = projectDashboard(pipeline, log.snapshot());
+    const failures = Object.fromEntries(view.jobs.map((entry) => [entry.id, entry.failure]));
+    // ASSERT
+    expect(failures.convert).toEqual(expected);
+    expect(failures.write).toBeNull();
+  });
+
   it('projects the frozen Run with retries, raw states, rubric evidence and Job-parented agents', () => {
     // ARRANGE
     const pipeline = parseDashboardPipeline(fixture('pipeline.yml'));

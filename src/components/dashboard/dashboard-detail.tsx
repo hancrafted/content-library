@@ -6,7 +6,7 @@ import type { EpisodeOutputs } from '@/lib/dashboard-outputs.pure';
 import { fillTemplate } from '@/lib/template.pure';
 import { useContext } from 'react';
 import { JobChipDetail } from './dashboard-chips';
-import { ElapsedTime, StateBadge, type DashboardCopy } from './dashboard-evidence';
+import { ElapsedTime, JobFailureNote, StateBadge, type DashboardCopy } from './dashboard-evidence';
 import { JobLinks } from './dashboard-job-links';
 import { JobEvidence } from './dashboard-jobs';
 import { DashboardMoment } from './dashboard-moment';
@@ -40,6 +40,7 @@ export function JobDetail({ node, copy, outputs, openLog }: DetailProps & { node
         {job.span ? <ElapsedTime elapsed={spanElapsed(job.span, now)} copy={copy} /> : null}
         <AttentionMarker attention={node.attention} label={copy.graph.jobAttention} />
       </div>
+      <JobFailureNote job={job} copy={copy} />
       <JobLinks job={job} outputs={outputs} copy={copy} />
       <JobChipDetail job={job} copy={copy} />
       <div className="flex flex-wrap gap-2">

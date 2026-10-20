@@ -74,8 +74,18 @@ export interface DashboardJob extends Omit<Job, 'agents'> {
   scores: Score[];
   /** The Job's notes in the current Run that block on Han: `needs-human` and `blocked`. Drives the "needs Han" badge. */
   needsHan: number;
+  /** Why the Job's latest span errored, and which Jobs went on without it; null unless it errored. */
+  failure: JobFailure | null;
   /** Every skill and check the Job's pipeline entry names, with what the current Run's latest Attempt shows of each. */
   chips: JobChips;
+}
+
+export interface JobFailure {
+  summary: string | null;
+  /** The text of the Job's `blocked` and `needs-human` notes. */
+  notes: string[];
+  /** Jobs that only want this one and started after it errored: wants never block, so the Run went on. */
+  continuedWith: string[];
 }
 
 function ownerOf(span: Span, byId: ReadonlyMap<string, Span>): string | undefined {
@@ -101,16 +111,41 @@ interface ProjectionContext {
 
 const NEEDS_HAN: readonly string[] = ['needs-human', 'blocked'];
 
+/** The text of a span's `needs-human` and `blocked` notes. */
+function needsHanNotes(span: Span): string[] {
+  return (span.events ?? []).flatMap((event) =>
+    event.name === 'note' && NEEDS_HAN.includes(event.attributes['note.type']) ? [event.attributes['note.text']] : [],
+  );
+}
+
 /** The Job's `needs-human` and `blocked` notes, counted only while its latest span belongs to the latest Run. */
 function needsHanCount(span: Span | undefined, currentTrace: string | undefined): number {
   if (span === undefined || span.trace_id !== currentTrace) return 0;
-  return (span.events ?? []).filter(
-    (event) => event.name === 'note' && NEEDS_HAN.includes(event.attributes['note.type']),
-  ).length;
+  return needsHanNotes(span).length;
+}
+
+/** What an errored Job said about itself, and the Jobs that started after it ended anyway; null for any other state. */
+function jobFailure(
+  job: Omit<DashboardJob, 'failure'>,
+  jobs: readonly Omit<DashboardJob, 'failure'>[],
+): JobFailure | null {
+  const { span } = job;
+  if (span === undefined || span.status !== 'error') return null;
+  const ended = span.end_t ?? span.start_t;
+  return {
+    summary: span.summary,
+    notes: needsHanNotes(span),
+    continuedWith: jobs
+      .filter(
+        (other) =>
+          other.wants.includes(job.id) && other.span?.trace_id === span.trace_id && other.span.start_t >= ended,
+      )
+      .map((other) => other.id),
+  };
 }
 
 /** One configured Job with its latest span, its children, the Scores worth Han's eye and its chips. */
-function jobView({ agents: config, ...job }: Job, context: ProjectionContext): DashboardJob {
+function jobView({ agents: config, ...job }: Job, context: ProjectionContext): Omit<DashboardJob, 'failure'> {
   const { folded, owners, latest, openGates, currentTrace } = context;
   const children = folded.spans.filter((span) => owners.get(span.span_id) === job.id);
   const span = latest.get(job.id);
@@ -149,7 +184,8 @@ export function projectDashboard(pipeline: DashboardPipeline, folded: Folded) {
     (known, run) => (known === undefined || run.start_t >= known.start_t ? run : known),
     undefined,
   )?.trace_id;
-  const jobs = pipeline.jobs.map((job) => jobView(job, { folded, currentTrace, owners, latest, openGates }));
+  const views = pipeline.jobs.map((job) => jobView(job, { folded, currentTrace, owners, latest, openGates }));
+  const jobs = views.map((job) => ({ ...job, failure: jobFailure(job, views) }));
   return { stages: pipeline.stages, jobs, openGates, runs };
 }
 

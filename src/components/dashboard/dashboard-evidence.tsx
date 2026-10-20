@@ -22,6 +22,38 @@ const STATUS_COLOR: Record<DashboardState, string> = {
   unclosed: 'bg-muted text-muted-foreground',
 };
 
+/** Why a Job errored and whether the Run went on without it, so a red node is never unexplained. */
+export function JobFailureNote({
+  job,
+  copy,
+  compact = false,
+}: {
+  job: DashboardJob;
+  copy: DashboardCopy;
+  compact?: boolean;
+}) {
+  const { failure } = job;
+  if (failure === null) return null;
+  const { failure: text } = copy.graph;
+  return (
+    <span className="block space-y-1 text-caption wrap-anywhere" data-job-failure={job.id}>
+      <span className="block font-medium text-destructive">{failure.summary ?? text.noReason}</span>
+      {compact
+        ? null
+        : failure.notes.map((note) => (
+            <span key={note} className="block whitespace-pre-wrap text-muted-foreground">
+              {note}
+            </span>
+          ))}
+      <span className="block text-muted-foreground">
+        {failure.continuedWith.length > 0
+          ? fillTemplate(text.continued, { jobs: failure.continuedWith.join(', ') })
+          : text.notContinued}
+      </span>
+    </span>
+  );
+}
+
 export function StateBadge({ state }: { state: DashboardState }) {
   return <span className={`rounded-md px-2 py-1 text-caption font-medium ${STATUS_COLOR[state]}`}>{state}</span>;
 }
