@@ -23,11 +23,17 @@ A reader who never hears the voice still gets the Slide's claim **at rest**: a s
 | Context drawer | Evidence and sources, as Speaker notes | None                                  |
 | Modal          | One worked example, opened by a button | A native `<dialog>`, as FE-009 allows |
 
+Prefer a simple look with just enough guides to read the Slide without the speaker: Han picked the plain cashflow board over the redrawn wall, “simple visual language, enough guides to understand what it means. definitely more like this” (`never-too-early-sales`, Slide 1).
+
 A Slide's popover is copied from a Master slide that has one (`metro-map`, `horizontal-rail`, `horizontal-gantt`) in [the Slide library](slide-library.md).
 
 ## Title and caption
 
-A Slide's title names its **topic**; its caption states the **claim**. The title is also the Dossier's table-of-contents entry, so it stays short.
+A Slide's title names its **topic**; its caption states the **claim**. The title is also the Dossier's table-of-contents entry, so it stays short. Every page Slide wears the shared Slide header, its Eyebrow the Section's title and the Slide's place in it.
+
+## One example world per Slide
+
+A Slide's examples come from one client industry: three logistics companies on a lead list, not a bakery beside a dental practice. Han asked for it on three Slides of `never-too-early-sales`.
 
 ## Named styles
 
@@ -48,6 +54,8 @@ Suits a mixed audience and consulting prospects: sober, self-explanatory Slides 
 Suits founders and coaching cohorts, who plan on whiteboards and sticky notes: a planning board reads as their own tool, one they can copy straight away.
 
 - A board surface carries the Slide; sticky notes carry the content.
+- One board, redrawn on every Slide of the Episode that it fits, rather than a new chart per Slide. In `never-too-early-sales` the cashflow board became the deal, pipeline and ramp-up boards (weak evidence: Han picked most of them without comment).
+- A note or card carries the strongest fact, a number or a short exchange, not only a label: Han kept one layout but “the content of the cards” of another (`never-too-early-sales`, Slide 2).
 - `primary` marks the one thing to look at.
 - The meaning colours (`machine`, `human`, `ai`) appear only for their meanings.
 
