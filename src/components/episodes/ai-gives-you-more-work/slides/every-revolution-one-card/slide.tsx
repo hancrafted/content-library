@@ -31,6 +31,8 @@ const SOURCES = {
 /** The disclosure, one step per click (Option 1a): the upper layers at rest, then each step the Voice script names. */
 const STEP = { farmingPeople: 2, steamPeople: 3, computerPeople: 4, steamFork: 5, aiMachine: 6, aiPeople: 7 } as const;
 const STEPS = 7;
+/** A fork hangs on a card plaque: on the muted wall its muted lines fall under 4.5:1, on the card they meet it. */
+const FORK_PLAQUE = 'flex flex-col gap-2 bg-card p-3';
 
 /**
  * Every revolution, one card (Option 1a, the hairline frame): a gallery wall of exhibits read left to right in time,
@@ -98,7 +100,7 @@ export const everyRevolutionOneCard = slide({
                     marker: <Marker note="tool-lifts-the-tasks" className="relative top-0 right-0" />,
                   }}
                 >
-                  <div data-reveal={STEP.steamFork} data-target="steam-fork" className="flex flex-col gap-2">
+                  <div data-reveal={STEP.steamFork} data-target="steam-fork" className={FORK_PLAQUE}>
                     <Fork
                       open={false}
                       rose={
@@ -175,7 +177,7 @@ export const everyRevolutionOneCard = slide({
                     ),
                   }}
                 >
-                  <div data-reveal={STEP.aiPeople} className="flex flex-col gap-2">
+                  <div data-reveal={STEP.aiPeople} className={FORK_PLAQUE}>
                     <Fork
                       open
                       title={t('forkOpen.title')}

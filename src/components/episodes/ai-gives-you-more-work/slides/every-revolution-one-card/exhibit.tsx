@@ -37,7 +37,12 @@ function MachineLayer({ slug, lead, layer }: { slug: ExhibitSlug; lead: boolean;
     <div
       data-reveal={layer.reveal}
       data-target={layer.target}
-      className={cn('flex flex-col', lead ? 'gap-3 bg-ai/15 p-5' : 'gap-2 bg-machine/10 p-3')}
+      className={cn(
+        'flex flex-col',
+        lead
+          ? 'gap-3 bg-ai/[calc(15%*var(--reveal-dim,1))] p-5'
+          : 'gap-2 bg-machine/[calc(10%*var(--reveal-dim,1))] p-3',
+      )}
     >
       <ExhibitIcon slug={slug} />
       <p className={cn(LABEL, 'text-foreground')}>
@@ -55,7 +60,10 @@ function PeopleLayer({ lead, layer }: { lead: boolean; layer: Layer }) {
     <div
       data-reveal={layer.reveal}
       data-target={layer.target}
-      className={cn('flex flex-col gap-1 border-t border-dashed border-human/50 bg-human/10', lead ? 'p-5' : 'p-3')}
+      className={cn(
+        'flex flex-col gap-1 border-t border-dashed border-human/[calc(50%*var(--reveal-dim,1))] bg-human/[calc(10%*var(--reveal-dim,1))]',
+        lead ? 'p-5' : 'p-3',
+      )}
     >
       <p className={cn(LABEL, 'text-human')}>
         {layer.label}

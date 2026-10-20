@@ -1,22 +1,78 @@
 /*
- * Progressive disclosure: once the client has set a step, a layer marked `data-reveal="n"` rests dimmed to a quarter
- * until the wall's `data-revealed` list holds n, then comes up to full strength. Dimmed, not hidden: its text stays on
- * the page and in its place, so nothing below moves as the presenter clicks. Without script, in print and under
- * reduced motion every layer shows at full strength.
+ * Progressive disclosure: once the client has set a step, a layer marked `data-reveal="n"` rests dimmed until the
+ * wall's `data-revealed` list holds n, then comes up to full strength. Dimmed, not hidden: its text stays on the page
+ * and in its place, so nothing below moves as the presenter clicks. The dim is one the contrast check measures: text
+ * turns `--muted-foreground`, which meets 4.5:1 on the card and the muted wall; figures drop to a quarter by
+ * `opacity`; a tint's strength scales by `--reveal-dim`, which its class reads, and a raised card loses its shadow.
+ * A claim (`primary`) never rests dimmed: on its step, `data-reveal-emphasis="n"` only rings it. Without script, in print
+ * and under reduced motion every layer shows at full strength.
  */
 
-.wall[data-step] [data-reveal] {
-  filter: opacity(0.25);
-  transition: filter 300ms ease-out;
+@media screen {
+  .wall[data-step]
+    [data-reveal]:not(
+      .wall[data-revealed~='2'] [data-reveal='2'],
+      .wall[data-revealed~='3'] [data-reveal='3'],
+      .wall[data-revealed~='4'] [data-reveal='4'],
+      .wall[data-revealed~='5'] [data-reveal='5'],
+      .wall[data-revealed~='6'] [data-reveal='6'],
+      .wall[data-revealed~='7'] [data-reveal='7']
+    ) {
+    --reveal-dim: 0.25;
+    box-shadow: none;
+  }
+
+  .wall[data-step]
+    [data-reveal]:not(
+      .wall[data-revealed~='2'] [data-reveal='2'],
+      .wall[data-revealed~='3'] [data-reveal='3'],
+      .wall[data-revealed~='4'] [data-reveal='4'],
+      .wall[data-revealed~='5'] [data-reveal='5'],
+      .wall[data-revealed~='6'] [data-reveal='6'],
+      .wall[data-revealed~='7'] [data-reveal='7']
+    ),
+  .wall[data-step]
+    [data-reveal]:not(
+      .wall[data-revealed~='2'] [data-reveal='2'],
+      .wall[data-revealed~='3'] [data-reveal='3'],
+      .wall[data-revealed~='4'] [data-reveal='4'],
+      .wall[data-revealed~='5'] [data-reveal='5'],
+      .wall[data-revealed~='6'] [data-reveal='6'],
+      .wall[data-revealed~='7'] [data-reveal='7']
+    )
+    * {
+    color: var(--muted-foreground);
+  }
+
+  .wall[data-step]
+    [data-reveal]:not(
+      .wall[data-revealed~='2'] [data-reveal='2'],
+      .wall[data-revealed~='3'] [data-reveal='3'],
+      .wall[data-revealed~='4'] [data-reveal='4'],
+      .wall[data-revealed~='5'] [data-reveal='5'],
+      .wall[data-revealed~='6'] [data-reveal='6'],
+      .wall[data-revealed~='7'] [data-reveal='7']
+    )
+    svg {
+    opacity: 0.25;
+  }
 }
 
-.wall[data-revealed~='2'] [data-reveal='2'],
-.wall[data-revealed~='3'] [data-reveal='3'],
-.wall[data-revealed~='4'] [data-reveal='4'],
-.wall[data-revealed~='5'] [data-reveal='5'],
-.wall[data-revealed~='6'] [data-reveal='6'],
-.wall[data-revealed~='7'] [data-reveal='7'] {
-  filter: none;
+.wall[data-step] [data-reveal] :is(p, span, li),
+.wall[data-step] [data-reveal] svg {
+  transition:
+    color 300ms ease-out,
+    opacity 300ms ease-out;
+}
+
+.wall[data-step='2'] [data-reveal-emphasis='2'],
+.wall[data-step='3'] [data-reveal-emphasis='3'],
+.wall[data-step='4'] [data-reveal-emphasis='4'],
+.wall[data-step='5'] [data-reveal-emphasis='5'],
+.wall[data-step='6'] [data-reveal-emphasis='6'],
+.wall[data-step='7'] [data-reveal-emphasis='7'] {
+  outline: 2px solid var(--primary);
+  outline-offset: 4px;
 }
 
 .wall[data-step]:not([data-done]) {
@@ -24,13 +80,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .wall[data-step] [data-reveal] {
+  .wall[data-step] [data-reveal] :is(p, span, li),
+  .wall[data-step] [data-reveal] svg {
     transition: none;
-  }
-}
-
-@media print {
-  .wall[data-step] [data-reveal] {
-    filter: none;
   }
 }

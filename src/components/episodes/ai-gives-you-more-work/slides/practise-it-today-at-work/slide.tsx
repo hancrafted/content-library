@@ -29,7 +29,10 @@ const AI_NOTES = {
   onboard: 'new-session-new-contributor',
   chunks: 'splitting-tasks-lengthens-them',
 } as const;
-/** The disclosure (Option 3b): the three upper halves at rest, then each lower half, then the closing line. */
+/**
+ * The disclosure (Option 3b): the three upper halves at rest, then each lower half, then the closing line. The closing
+ * line states the Slide's claim, so it shows at full strength from rest and its step only gives it emphasis.
+ */
 const FIRST_AI_HALF = 2;
 const CLOSING = 5;
 
@@ -92,9 +95,10 @@ export const practiseItTodayAtWork = slide({
               {t('discipline')}
               <Marker note="briefing-context-checking" className="relative top-0 right-0 shrink-0" />
             </p>
-            <div data-reveal={CLOSING} className="flex justify-center">
+            <div className="flex justify-center">
               <p
                 data-target="closing"
+                data-reveal-emphasis={CLOSING}
                 className="flex items-center gap-2 rounded-md bg-primary px-8 py-3 text-center text-body font-semibold text-primary-foreground shadow-lg"
               >
                 {t('closing')}

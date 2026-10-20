@@ -46,7 +46,7 @@ export function MirroredExhibit({ slug, label, work, ai, words, reveal, target }
           <span className="text-caption text-muted-foreground">{words.sameMove}</span>
           <span className="h-px flex-1 bg-foreground/40" />
         </div>
-        <div data-reveal={reveal} className="flex flex-1 flex-col gap-2 bg-ai/15 p-4">
+        <div data-reveal={reveal} className="flex flex-1 flex-col gap-2 bg-ai/[calc(15%*var(--reveal-dim,1))] p-4">
           <p className={`${SIDE_LABEL} text-foreground`}>{words.ai}</p>
           <PairArt slug={slug} side="ai" />
           <p className="flex items-center gap-1 text-body font-semibold">

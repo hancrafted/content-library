@@ -2,6 +2,7 @@ import { localizeSlide } from '@/components/slide-master/localized-slide';
 import type { Slide } from '@/components/slide-master/slide';
 import { placeSections } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
+import { load } from 'cheerio';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -30,11 +31,15 @@ function sceneOf(slug: string, locale: Locale = 'en'): string {
   return renderToStaticMarkup(localized.content);
 }
 
-/** The disclosure stylesheet of a page Slide: the rules for a step not yet revealed. */
-function restingRuleOf(slug: string): string {
-  const css = readFileSync(join(__dirname, '../slides', slug, 'reveal-steps.module.css'), 'utf8');
-  const start = css.indexOf('.wall[data-step] [data-reveal] {');
-  return css.slice(start, css.indexOf('}', start));
+/** The disclosure stylesheet of a page Slide, as its rules: each selector with its declarations. */
+function rulesOf(slug: string): { selector: string; body: string }[] {
+  const css = readFileSync(join(__dirname, '../slides', slug, 'reveal-steps.module.css'), 'utf8')
+    .replaceAll(/\/\*[\s\S]*?\*\//g, '')
+    .replaceAll(/@media[^{]*\{/g, '');
+  return [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map(([, selector = '', body = '']) => ({
+    selector: selector.replaceAll(/\s+/g, ' ').trim(),
+    body,
+  }));
 }
 
 /** How many Context markers open each note, by note slug. */
@@ -113,21 +118,40 @@ describe('failure cases', () => {
   });
 });
 
-it('never hides a step not yet revealed: it rests dimmed to a quarter, so the text stays on the page', () => {
+it('dims a step not yet revealed in a form the contrast check measures: text by colour, the rest by opacity', () => {
   // ARRANGE
   const slugs = ['every-revolution-one-card', 'you-were-promoted', 'practise-it-today-at-work'];
-  const expected = slugs.map((slug) => ({ slug, hidden: false, opacity: '0.25' }));
+  const expected = slugs.map((slug) => ({ slug, filter: false, hidden: false, text: true, figures: true }));
   // ACT
   const resting = slugs.map((slug) => {
-    const rule = restingRuleOf(slug);
+    const rules = rulesOf(slug).filter((rule) => rule.selector.startsWith('.wall[data-step] [data-reveal]'));
     return {
       slug,
-      hidden: /visibility:\s*hidden|opacity:\s*0(?![.\d])/.test(rule),
-      opacity: /opacity\(([\d.]+)\)/.exec(rule)?.[1],
+      filter: rulesOf(slug).some((rule) => /filter\s*:/.test(rule.body)),
+      hidden: rules.some((rule) => /visibility:\s*hidden|display:\s*none|opacity:\s*0(?![.\d])/.test(rule.body)),
+      text: rules.some((rule) => /\*$/.test(rule.selector) && /color:\s*var\(--muted-foreground\)/.test(rule.body)),
+      figures: rules.some((rule) => /svg$/.test(rule.selector) && /opacity:\s*0\.25/.test(rule.body)),
     };
   });
   // ASSERT
   expect(resting).toEqual(expected);
+});
+
+it('never dims a claim: an element carrying `primary` sits under no step not yet revealed', () => {
+  // ARRANGE
+  const slugs = ['every-revolution-one-card', 'you-were-promoted', 'practise-it-today-at-work'];
+  const expected = slugs.map((slug) => ({ slug, dimmed: [] }));
+  // ACT
+  const claims = slugs.map((slug) => {
+    const $ = load(sceneOf(slug));
+    const dimmed = $('[class*="bg-primary"], [class*="border-primary"]')
+      .filter((_, element) => $(element).closest('[data-reveal]').length > 0)
+      .map((_, element) => $(element).text())
+      .get();
+    return { slug, dimmed };
+  });
+  // ASSERT
+  expect(claims).toEqual(expected);
 });
 
 describe('edge cases', () => {

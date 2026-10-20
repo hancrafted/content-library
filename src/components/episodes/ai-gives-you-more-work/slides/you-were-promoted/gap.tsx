@@ -51,9 +51,33 @@ function StoneCard({ stone, index, reveal }: { stone: Stone; index: number; reve
 }
 
 /**
+ * The gap's `primary` label, at full strength from rest and ringed on its step, over the line its step brings up. The
+ * line sits on a card plaque, since on the muted wall its muted grey falls under 4.5:1.
+ */
+function GapHead({ label, many, step }: { label: string; many: ReactNode; step: number }) {
+  return (
+    <div className="flex flex-col items-center gap-2 text-center">
+      <p
+        data-reveal-emphasis={step}
+        className="rounded-full bg-primary px-6 py-1.5 text-body font-semibold text-primary-foreground shadow-md"
+      >
+        {label}
+      </p>
+      <p
+        data-reveal={step}
+        className="flex items-center gap-1 rounded-md bg-card px-3 py-1 text-caption text-muted-foreground"
+      >
+        {many}
+      </p>
+    </div>
+  );
+}
+
+/**
  * The gap between the rooms: its `primary` label, the one thing to look at, the line on who still sits in execution,
- * and the four stepping stones across a dashed gulf. The presenter reveals the gap, then the stones one by one, from
- * `reveal` on.
+ * and the four stepping stones across a dashed gulf. The label states the Slide's claim, so it shows at full strength
+ * from rest and only gains emphasis on its step; the presenter brings up the line and the gulf, then the stones one by
+ * one, from `reveal` on.
  */
 export function Gap(props: {
   label: string;
@@ -63,14 +87,12 @@ export function Gap(props: {
   className?: string;
 }) {
   return (
-    <div data-reveal={props.reveal.gap} data-target="gap" className={cn('flex flex-col gap-5', props.className)}>
-      <div className="flex flex-col items-center gap-2 text-center">
-        <p className="rounded-full bg-primary px-6 py-1.5 text-body font-semibold text-primary-foreground shadow-md">
-          {props.label}
-        </p>
-        <p className="flex items-center gap-1 text-caption text-muted-foreground">{props.many}</p>
-      </div>
-      <div className="relative rounded-xl border-2 border-dashed border-foreground/30 bg-background px-4 pt-10 pb-6">
+    <div data-target="gap" className={cn('flex flex-col gap-5', props.className)}>
+      <GapHead label={props.label} many={props.many} step={props.reveal.gap} />
+      <div
+        data-reveal={props.reveal.gap}
+        className="relative rounded-xl border-2 border-dashed border-foreground/[calc(30%*var(--reveal-dim,1))] bg-background px-4 pt-10 pb-6"
+      >
         <Arc />
         <ol
           data-target="stones"
