@@ -81,10 +81,17 @@ describe('success cases', () => {
     expect(page).toBe(true);
   });
 
-  it('registers onboard-ai-every-time as an upcoming Episode with a page, a draft with no publishedOn', () => {
+  it('registers onboard-ai-every-time as a published Episode under AI enablement, with its page', () => {
     // ARRANGE
     const slug = 'onboard-ai-every-time';
-    const expected = { slug, status: 'upcoming', topic: 'ai-enablement', format: 'foundations', tags: [] };
+    const expected = {
+      slug,
+      status: 'published',
+      topic: 'ai-enablement',
+      format: 'foundations',
+      tags: [],
+      publishedOn: '2026-10-20',
+    };
     // ACT
     const metadata = listEpisodes().find((episode) => episode.slug === slug);
     const page = hasPage(slug);
