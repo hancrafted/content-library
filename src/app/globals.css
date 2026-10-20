@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 /* Tracked skill symlinks under .agents point into ~/.claude; Turbopack refuses to scan outside the repo. */
 @source not '../../.agents';
+/* The Design archive holds rejected Options' markup; its classes must not reach the site's CSS. */
+@source not '../../design-archive';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
