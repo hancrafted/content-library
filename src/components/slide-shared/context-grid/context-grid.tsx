@@ -1,11 +1,9 @@
 import { cn } from '@/lib/utils';
 
 /*
- * The /context grid drawn static: a window as a hundred boxes, ten to a row, each box a share of it, coloured by what
- * fills it. The Title slide sets it as the Hero motif and every section slide of ai-attention-span echoes it. Plain
- * props, no words of its own: a Slide hands it its runs of boxes and its label. The cornerstone's Technical view is
- * the live grid; this one is a static server-only motif, no model, chat data or Preset, and draws only the runs it
- * is given.
+ * The /context grid drawn static: a window as at most a hundred boxes, ten to a row, each box a share of it, coloured
+ * by what fills it. A static server-only motif, no model, chat data or Preset: a Slide hands it its runs of boxes and
+ * its label, and it owns no words of its own.
  */
 
 /** What a box holds: a category of the window, or a lit or dimmed minute of the call. */
@@ -31,6 +29,9 @@ export interface ContextGridProps {
   readonly className?: string;
 }
 
+/** The most boxes a window holds: one per 1% of it. */
+const WINDOW_BOXES = 100;
+
 const TONE: Record<GridTone, string> = {
   instructions: 'bg-machine',
   memory: 'bg-machine/45',
@@ -53,30 +54,38 @@ function ringOf(ring: GridRing | undefined, size: GridSize): string | undefined 
   return undefined;
 }
 
-/** The cross on a box kept free for summaries. */
-function Cross() {
+/** One box in its tone, as a grid item or a legend swatch; a box kept free for summaries is crossed. */
+function GridBox({ as: Element, tone, className }: { as: 'li' | 'span'; tone: GridTone; className?: string }) {
   return (
-    <svg viewBox="0 0 10 10" className="size-full" aria-hidden="true">
-      <path d="M2 2l6 6M8 2l-6 6" className="fill-none stroke-muted-foreground/60" strokeWidth="1.2" />
-    </svg>
+    <Element className={cn('rounded-sm', TONE[tone], className)}>
+      {tone === 'buffer' && (
+        <svg viewBox="0 0 10 10" className="size-full" aria-hidden="true">
+          <path d="M2 2l6 6M8 2l-6 6" className="fill-none stroke-muted-foreground/60" strokeWidth="1.2" />
+        </svg>
+      )}
+    </Element>
   );
 }
 
 /** A legend row's swatch in the tone of its boxes. */
 export function GridSwatch({ tone }: { tone: GridTone }) {
-  return <span className={cn('block size-3 shrink-0 rounded-sm', TONE[tone])}>{tone === 'buffer' && <Cross />}</span>;
+  return <GridBox as="span" tone={tone} className="block size-3 shrink-0" />;
 }
 
+/** The grid; runs that add up to more boxes than a window holds are refused, so a miscount fails the build. */
 export function ContextGrid({ runs, size, label, className }: ContextGridProps) {
   const boxes = runs.flatMap((run, index) =>
     Array.from({ length: run.count }, (_, unit) => ({ key: `${index}-${unit}`, run })),
   );
+  if (boxes.length > WINDOW_BOXES) {
+    throw new Error(
+      `ContextGrid "${label}" draws ${boxes.length} boxes, more than ${WINDOW_BOXES} boxes a window holds`,
+    );
+  }
   return (
     <ol className={cn('grid w-fit shrink-0 grid-cols-10', GAP[size], className)} aria-label={label}>
       {boxes.map(({ key, run }) => (
-        <li key={key} className={cn('rounded-sm', BOX[size], TONE[run.tone], ringOf(run.ring, size))}>
-          {run.tone === 'buffer' && <Cross />}
-        </li>
+        <GridBox key={key} as="li" tone={run.tone} className={cn(BOX[size], ringOf(run.ring, size))} />
       ))}
     </ol>
   );

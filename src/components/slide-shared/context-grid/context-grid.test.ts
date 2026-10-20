@@ -14,10 +14,17 @@ function boxes(html: string, classNames?: string): number {
   return all.filter((classes) => wanted.every((name) => classes.includes(name))).length;
 }
 
+/** How many crosses the markup draws. */
+function crosses(html: string): number {
+  return html.match(/<svg/g)?.length ?? 0;
+}
+
 describe('success cases', () => {
   it('draws one box per unit of its runs, in order, labelled as a list', () => {
     // ARRANGE
     const expected = { total: 100, instructions: 17, faded: 43 };
+    const instructionsTone = 'bg-machine';
+    const fadedTone = 'bg-muted-foreground/25';
     const label = 'aria-label="The window, 100 boxes"';
     // ACT
     const html = grid({
@@ -35,8 +42,8 @@ describe('success cases', () => {
     });
     // ASSERT
     expect(boxes(html)).toBe(expected.total);
-    expect(boxes(html, 'bg-machine')).toBe(expected.instructions);
-    expect(boxes(html, 'bg-muted-foreground/25')).toBe(expected.faded);
+    expect(boxes(html, instructionsTone)).toBe(expected.instructions);
+    expect(boxes(html, fadedTone)).toBe(expected.faded);
     expect(html).toContain(label);
   });
 
@@ -53,20 +60,9 @@ describe('success cases', () => {
       ],
     });
     // ASSERT
-    expect(html.match(/<svg/g)?.length).toBe(expected);
+    expect(crosses(html)).toBe(expected);
   });
 
-  it('draws a legend swatch in the tone of its boxes', () => {
-    // ARRANGE
-    const expected = 'bg-human';
-    // ACT
-    const html = renderToStaticMarkup(createElement(GridSwatch, { tone: 'messages' }));
-    // ASSERT
-    expect(html).toContain(expected);
-  });
-});
-
-describe('failure cases', () => {
   it('rings only the boxes of a ringed run', () => {
     // ARRANGE
     const expected = 27;
@@ -84,6 +80,32 @@ describe('failure cases', () => {
     // ASSERT
     expect(boxes(html, ring)).toBe(expected);
   });
+
+  it('draws a legend swatch in the tone of its boxes, crossed for the summary buffer', () => {
+    // ARRANGE
+    const expected = { tone: 'bg-human', crosses: 1 };
+    // ACT
+    const messages = renderToStaticMarkup(createElement(GridSwatch, { tone: 'messages' }));
+    const buffer = renderToStaticMarkup(createElement(GridSwatch, { tone: 'buffer' }));
+    // ASSERT
+    expect(messages).toContain(expected.tone);
+    expect(crosses(buffer)).toBe(expected.crosses);
+  });
+});
+
+describe('failure cases', () => {
+  it('refuses runs that add up to more boxes than the hundred a window holds', () => {
+    // ARRANGE
+    const expected = /more than 100 boxes/;
+    const runs: ContextGridProps['runs'] = [
+      { tone: 'instructions', count: 60 },
+      { tone: 'free', count: 41 },
+    ];
+    // ACT
+    const draw = () => grid({ label: 'x', size: 'lg', runs });
+    // ASSERT
+    expect(draw).toThrow(expected);
+  });
 });
 
 describe('edge cases', () => {
@@ -99,6 +121,15 @@ describe('edge cases', () => {
         { tone: 'lit', count: 1, ring: 'point' },
       ],
     });
+    // ASSERT
+    expect(boxes(html)).toBe(expected);
+  });
+
+  it('draws exactly a full window of a hundred boxes', () => {
+    // ARRANGE
+    const expected = 100;
+    // ACT
+    const html = grid({ label: 'x', size: 'sm', runs: [{ tone: 'free', count: 100 }] });
     // ASSERT
     expect(boxes(html)).toBe(expected);
   });
