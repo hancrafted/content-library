@@ -1,7 +1,7 @@
 /*
  * Progressive disclosure on a Slide (a Spec Option's `motion: local`): the presenter reveals a Scene layer by layer,
- * one step per click or right arrow. Step 1 is the resting frame; the last step is the finished frame, which is also
- * what shows without script, in print and under reduced motion.
+ * one step per click or right arrow. Step 1 is the resting frame, its later layers dimmed; the last step is the
+ * finished frame, which is also what shows without script, in print and under reduced motion.
  */
 
 /** The keys a presenter's press is read from: the key and its modifiers. */

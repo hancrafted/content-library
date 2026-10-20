@@ -40,7 +40,7 @@ function MachineLayer({ slug, lead, layer }: { slug: ExhibitSlug; lead: boolean;
       className={cn('flex flex-col', lead ? 'gap-3 bg-ai/15 p-5' : 'gap-2 bg-machine/10 p-3')}
     >
       <ExhibitIcon slug={slug} />
-      <p className={cn(LABEL, lead ? 'text-ai' : 'text-machine')}>
+      <p className={cn(LABEL, 'text-foreground')}>
         {layer.label}
         {layer.marker}
       </p>

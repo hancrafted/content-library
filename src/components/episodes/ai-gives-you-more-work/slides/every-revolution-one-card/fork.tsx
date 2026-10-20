@@ -47,7 +47,7 @@ function SteamFork({ stayed, rose }: { stayed: ReactNode; rose: ReactNode }) {
 function OpenFork({ title, beside, manage }: { title: string; beside: string; manage: string }) {
   return (
     <>
-      <p className="text-caption font-semibold tracking-widest text-ai uppercase">{title}</p>
+      <p className="text-caption font-semibold tracking-widest text-foreground uppercase">{title}</p>
       <svg viewBox="0 0 220 120" className="mx-auto w-2/3" aria-hidden="true">
         <path d="M110 0 V20" className="fill-none stroke-ai" strokeWidth="2" />
         <g className="fill-foreground/70">

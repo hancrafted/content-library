@@ -61,7 +61,8 @@ export const everyRevolutionOneCard = slide({
   ],
   content: ({ t, Marker }) => {
     const layers = { machine: t('layers.machine'), people: t('layers.people') };
-    const aside = 'flex items-center gap-1 text-caption text-muted-foreground';
+    // On the lead exhibit's tinted layers muted grey falls under 4.5:1, so its asides read in the text colour.
+    const aside = 'flex items-center gap-1 text-caption text-foreground';
     return (
       <SlideFrame className="mt-10">
         <RevealSteps steps={STEPS} className="@container">

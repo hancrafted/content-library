@@ -7,9 +7,10 @@ import type { MouseEvent, ReactNode } from 'react';
 import styles from './reveal-steps.module.css';
 
 /**
- * The wall the presenter reveals step by step: a click on it, or → while the Slide is active, shows the next layer.
- * A click on a Context marker or a link inside opens that instead. It writes the step as `data-step` and the steps
- * shown as `data-revealed`, which the CSS module reads; without script it writes neither, and every layer shows.
+ * The wall the presenter reveals step by step: a click on it, or → while the Slide is active, brings the next layer
+ * from dimmed to full strength. A click on a Context marker or a link inside opens that instead. It writes the step as
+ * `data-step` and the steps shown as `data-revealed`, which the CSS module reads; without script it writes neither, and
+ * every layer shows at full strength.
  */
 export function RevealSteps({
   steps,

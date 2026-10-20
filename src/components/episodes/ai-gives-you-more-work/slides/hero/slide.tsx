@@ -32,7 +32,7 @@ export const hero = slide({
           />
           <div className="flex flex-col justify-between gap-1 text-caption text-muted-foreground sm:flex-row sm:gap-4">
             <span>{t('legend')}</span>
-            <span className="font-semibold text-ai">{t('legendAi')}</span>
+            <span className="font-semibold text-foreground">{t('legendAi')}</span>
           </div>
         </div>
       </SlideFrame>

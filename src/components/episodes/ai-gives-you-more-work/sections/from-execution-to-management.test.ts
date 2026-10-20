@@ -2,6 +2,8 @@ import { localizeSlide } from '@/components/slide-master/localized-slide';
 import type { Slide } from '@/components/slide-master/slide';
 import { placeSections } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { fromExecutionToManagementSection } from './from-execution-to-management';
@@ -26,6 +28,13 @@ function sceneOf(slug: string, locale: Locale = 'en'): string {
     header: 'shared',
   });
   return renderToStaticMarkup(localized.content);
+}
+
+/** The disclosure stylesheet of a page Slide: the rules for a step not yet revealed. */
+function restingRuleOf(slug: string): string {
+  const css = readFileSync(join(__dirname, '../slides', slug, 'reveal-steps.module.css'), 'utf8');
+  const start = css.indexOf('.wall[data-step] [data-reveal] {');
+  return css.slice(start, css.indexOf('}', start));
 }
 
 /** How many Context markers open each note, by note slug. */
@@ -102,6 +111,23 @@ describe('failure cases', () => {
     // ASSERT
     expect(scenes.filter((html) => headings.test(html))).toEqual([]);
   });
+});
+
+it('never hides a step not yet revealed: it rests dimmed to a quarter, so the text stays on the page', () => {
+  // ARRANGE
+  const slugs = ['every-revolution-one-card', 'you-were-promoted', 'practise-it-today-at-work'];
+  const expected = slugs.map((slug) => ({ slug, hidden: false, opacity: '0.25' }));
+  // ACT
+  const resting = slugs.map((slug) => {
+    const rule = restingRuleOf(slug);
+    return {
+      slug,
+      hidden: /visibility:\s*hidden|opacity:\s*0(?![.\d])/.test(rule),
+      opacity: /opacity\(([\d.]+)\)/.exec(rule)?.[1],
+    };
+  });
+  // ASSERT
+  expect(resting).toEqual(expected);
 });
 
 describe('edge cases', () => {

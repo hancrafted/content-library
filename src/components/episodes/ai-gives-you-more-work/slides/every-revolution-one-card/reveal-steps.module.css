@@ -1,15 +1,13 @@
 /*
- * Progressive disclosure: once the client has set a step, a layer marked `data-reveal="n"` hides until the wall's
- * `data-revealed` list holds n. It keeps its place while hidden, so nothing below moves as the presenter clicks.
- * Without script, in print and under reduced motion every layer shows.
+ * Progressive disclosure: once the client has set a step, a layer marked `data-reveal="n"` rests dimmed to a quarter
+ * until the wall's `data-revealed` list holds n, then comes up to full strength. Dimmed, not hidden: its text stays on
+ * the page and in its place, so nothing below moves as the presenter clicks. Without script, in print and under
+ * reduced motion every layer shows at full strength.
  */
 
 .wall[data-step] [data-reveal] {
-  visibility: hidden;
-  opacity: 0;
-  transition:
-    opacity 300ms ease-out,
-    visibility 300ms;
+  filter: opacity(0.25);
+  transition: filter 300ms ease-out;
 }
 
 .wall[data-revealed~='2'] [data-reveal='2'],
@@ -18,8 +16,7 @@
 .wall[data-revealed~='5'] [data-reveal='5'],
 .wall[data-revealed~='6'] [data-reveal='6'],
 .wall[data-revealed~='7'] [data-reveal='7'] {
-  visibility: visible;
-  opacity: 1;
+  filter: none;
 }
 
 .wall[data-step]:not([data-done]) {
@@ -34,7 +31,6 @@
 
 @media print {
   .wall[data-step] [data-reveal] {
-    visibility: visible;
-    opacity: 1;
+    filter: none;
   }
 }
