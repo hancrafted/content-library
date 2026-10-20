@@ -1,7 +1,6 @@
 ---
 type: brief
 title: Why it's never too early to start with sales
-status: draft
 generated:
   by: claude-code/opus-5.5
   at: 2026-10-15T11:42:19Z
