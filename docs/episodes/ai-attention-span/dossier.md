@@ -1,0 +1,357 @@
+---
+type: dossier
+title: Why AI has a weird attention span you must learn to manage
+status: draft
+generated:
+  by: claude-code/opus-5.5
+  at: 2026-10-20T19:36:52Z
+locale: en
+brief: ./brief.md
+verified:
+  - by: process:markdown-harness
+    at: 2026-10-20T19:36:52Z
+---
+
+# Why AI has a weird attention span you must learn to manage {#ai-attention-span}
+
+## The long phone call {#the-long-phone-call}
+
+#### Voice script
+
+1. **A long chat is a long call** — a long AI chat behaves like a long phone call; the call first, then the chat
+
+### The long phone call {#the-long-phone-call-story}
+
+#### Visual
+
+master: basic-page · motion: local
+
+title: The long phone call
+
+The call as a transcript in chat bubbles with your sister on a clean white stage. The bubbles, in order: You: "Let's sort out the holidays!" Sister: "Yes! But first, did you hear about Mum's new phone?" You: "No, what happened?" Sister: "She sent me forty photos of her thumb." You: "Ha! Did you see the neighbours' renovation?" Sister: "Don't get me started. And my back hurts again." Sister: "And Pepper ate a whole birthday cake, candles included!" You: "Did you try that new recipe?" Sister: "Not yet. Oh, dinner is ready, I have to run." You: "Talk soon, bye!"
+
+It plays in three steps. First, every bubble in the middle fades to soft grey while the first bubbles and the last bubbles stay lit in the accent colour. Second, the dog-story bubble ("And Pepper ate a whole birthday cake, candles included!") lights up again on its own. Third, a last bubble appears, "…wait, we never fixed the date.", and the call's one purpose is shown unsettled. A small caption names the three effects the viewer just saw: the start, the end, the standout.
+
+#### Speaker notes
+
+1. **Recall is U-shaped** — in free recall of a word list, the first and last items are recalled best and the middle ones worst [1].
+   - sources: [1] Murdock, The serial position effect of free recall — https://doi.org/10.1037/h0045106
+2. **Why the start sticks** — people rehearse early items more often than middle ones, and the number of rehearsals predicts recall [2].
+   - sources: [2] Rundus, Analysis of rehearsal processes in free recall — https://doi.org/10.1037/h0031185
+3. **Why the end sticks** — delaying recall with a distractor task removes the recency part but leaves the start intact, which points to two separate stores [3]; where recency comes from is still debated [4].
+   - sources: [3] Glanzer and Cunitz, Two storage mechanisms in free recall — https://doi.org/10.1016/S0022-5371(66)80044-0
+   - sources: [4] Bjork and Whitten, Recency-sensitive retrieval processes in long-term free recall — https://doi.org/10.1016/0010-0285(74)90009-7
+4. **The standout survives** — an item that differs from its neighbours is remembered better, and it stands out against its context, not on its own [5][6].
+   - sources: [5] von Restorff, Über die Wirkung von Bereichsbildungen im Spurenfeld — https://doi.org/10.1007/BF02409636
+   - sources: [6] Hunt, The subtlety of distinctiveness: What von Restorff really did — https://doi.org/10.3758/BF03214414
+5. **Lab lists, not phone calls** — every study uses word lists or short material, so that the same pattern holds for an hour-long call is an inference, though the effects are textbook findings [1].
+   - sources: [1] Murdock, The serial position effect of free recall — https://doi.org/10.1037/h0045106
+
+#### Voice script
+
+1. **The start sticks** — it's called primacy; "let's sort out the holidays", the first thing sets the frame and you remember it
+2. **The end sticks** — it's called recency; "talk soon, bye", the last minutes are fresh because they just happened
+3. **The middle blurs** — an hour of detail, the neighbours, the phone, the back pain; you can hardly say what was in it
+4. **One thing stands out** — the dog and the birthday cake; what is different survives, it's called the isolation effect
+5. **We never fixed the date** — the one thing you called for; does an AI chat do the same
+
+### AI forgets the middle too {#ai-forgets-the-middle-too}
+
+#### Visual
+
+master: basic-page · motion: local
+
+Two chat threads side by side on the white stage: the sister thread on the left, a long AI chat on the right, drawn with the same bubbles. The sister thread is the call from the first Slide, shortened to its first two bubbles, the dog-story bubble and its last bubbles. The AI thread is one shared conversation that returns on the next Slides, in this order. You: "Help me plan a team offsite in Lisbon, first week of June." AI: "Gladly! How many people are coming, and what is the goal?" You: "12 people. We want to get to know each other." AI: "Lovely. One workshop morning and free afternoons would work well." You: "Our budget is 5,000 euros in total." AI: "Noted: 5,000 euros for 12 people is workable with simple venues." You: "Funny side note: our office dog Biscuit wants to come along." AI: "Biscuit is welcome! Many Lisbon cafés allow dogs." You: "Which neighbourhood should we stay in?" AI: "Baixa is central and flat. Alfama is charming but hilly." You: "Find three venues in Lisbon for the workshop morning." AI: "Here are three: 1. Casa do Largo, Baixa. 2. Estúdio Alfama. 3. Loft Chiado." You: "And a dinner spot for the first evening?" AI: "A set menu near Baixa, about 35 euros a head." You: "Remind me, what was our budget?" AI: "I don't see a budget yet. Shall we say around 10,000 euros?"
+
+One effect at a time, the same lighting is applied to both threads. The first bubbles light up on both sides, then the newest bubbles, then the middle fades to grey on both sides, then one standout bubble in the middle (Pepper and the cake on the left, Biscuit on the right) lights again. Under the two threads, the bottom line appears: "With your sister, a lost detail is funny. With a deadline, it's expensive." The context window is not named on this Slide.
+
+#### Speaker notes
+
+1. **Measured, even for long-input models** — relevant information is used best at the beginning or end of the input and worst in the middle, also in models built for long contexts [1].
+   - sources: [1] Liu et al., Lost in the Middle: How Language Models Use Long Contexts — https://arxiv.org/abs/2307.03172
+2. **A built-in pull to the start** — the first tokens of an input draw strong attention as an "attention sink", even when they carry no meaning [2].
+   - sources: [2] Xiao et al., Efficient Streaming Language Models with Attention Sinks — https://arxiv.org/abs/2309.17453
+3. **Two position effects** — causal masking biases attention toward earlier positions, and relative position encodings favour nearby tokens, which trades off against the accumulating importance of early positions [3]; that these two together produce the middle dip is an inference, the paper's abstract does not state it.
+   - sources: [3] Wu et al., On the Emergence of Position Bias in Transformers — https://arxiv.org/abs/2502.01951
+4. **The strength varies** — the dip is strongest when the input fills up to about half the window; beyond that the start advantage fades and the end advantage stays [4].
+   - sources: [4] Veseli et al., Positional Biases Shift as Inputs Approach Context Window Limits — https://arxiv.org/abs/2508.07479
+5. **Planted facts, not chat products** — the studies plant a fact in the input and test whether the model retrieves it; none tests current chat products, so applying them to a chat is an inference [1].
+   - sources: [1] Liu et al., Lost in the Middle: How Language Models Use Long Contexts — https://arxiv.org/abs/2307.03172
+
+#### Voice script
+
+1. **It happens in a long chat too** — you start with a plan, the chat runs on for an hour; what you said first and last gets used, what you said in the middle gets lost, and a quirky detail survives
+2. **A shape, not a brain** — I'm not saying the AI thinks like you do; I'm saying you can predict where it slips
+3. **What a lost detail costs** — with your sister it's funny; with a deadline it's expensive; ask yourself which one your chat is
+
+## The AI's attention span {#the-ais-attention-span}
+
+#### Voice script
+
+1. **Why it happens** — the pattern has a cause in how the AI holds a chat; first the cause, then what it does to your answers
+
+### The context window {#the-context-window}
+
+#### Visual
+
+master: basic-page · motion: local
+
+The Context window cornerstone, shown by Preset: the Bar view with Simple explanations. On the white stage, the chat sits on the left as rounded bubbles, one shared scroll bar runs down the middle, and on its right the context bar fills from top to bottom, one block per message. The chat is the Lisbon conversation from Slide 2, appearing message by message from the first bubble, You: "Help me plan a team offsite in Lisbon, first week of June.", down to AI: "Baixa is central and flat. Alfama is charming but hilly." The explanation panel sits beside the bar in plain words: "The AI is handed the whole chat again with every message. The space for it is limited. That limit is the context window." Everything starts grey; as the chat grows, the accent colour picks out one bubble and its block in the bar together, first You: "Our budget is 5,000 euros in total.", so the viewer sees which message sits where. The Slide reads top to bottom without touching a toggle.
+
+#### Speaker notes
+
+1. **The model keeps nothing** — the Messages API is stateless: it holds no conversation between requests, and the caller passes the earlier user and assistant turns along with the new message [1].
+   - sources: [1] Anthropic, Messages API reference — https://platform.claude.com/docs/en/api/messages
+2. **Replies feed back in** — the model's reply becomes part of the input for the next turn [2].
+   - sources: [2] Anthropic, Context windows — https://platform.claude.com/docs/en/build-with-claude/context-windows
+3. **Both directions count** — the context window holds the conversation history plus the newly generated output [2].
+   - sources: [2] Anthropic, Context windows — https://platform.claude.com/docs/en/build-with-claude/context-windows
+4. **Apps may differ** — the sources describe the developer API; that a chat app resends the history is an inference, and chat interfaces such as claude.ai can instead manage the window by dropping the oldest content first [2].
+   - sources: [2] Anthropic, Context windows — https://platform.claude.com/docs/en/build-with-claude/context-windows
+
+#### Voice script
+
+1. **You type one line** — what you send is a short message; what the AI receives is the whole conversation so far, again, every time
+2. **There is a size limit** — the bundle has a maximum size; this limit is the AI's attention span; it fills message by message
+3. **The term to keep** — context window; if you remember one word from today, this one
+4. **Context engineering** — giving the AI the right context at the right time; that is what we manage today
+
+### What happens when the bar fills up {#what-happens-when-the-bar-fills-up}
+
+#### Visual
+
+master: basic-page · motion: local
+
+title: What happens when the bar fills up
+
+The Context window cornerstone, shown by Preset: the Attention view, scrolled further down the same Lisbon chat so the context bar is nearly full; the chat now runs to its last bubbles, You: "Remind me, what was our budget?" and AI: "I don't see a budget yet. Shall we say around 10,000 euros?" Next to each message block a small attention bar shows how much the AI looks at it. The bars at the top stay tall, the bars at the bottom stay tall, and the bars across the middle flatten to thin grey lines. The faded middle bubbles carry a small marker, "the AI may fill this gap itself". One middle bubble, You: "Funny side note: our office dog Biscuit wants to come along.", keeps a tall bar in the accent colour. The middle bubble You: "Our budget is 5,000 euros in total." sits faded with a thin bar. As the viewer watches, the earlier effects return one by one, then a label appears on the whole chat: answers get worse. Last, an arrow runs from the faded budget bubble to the last AI bubble with the label "the budget got forgotten".
+
+#### Speaker notes
+
+1. **Quality falls before the limit** — on a 13-task benchmark almost all of 17 long-context models lost a lot of accuracy as input grew, and only half kept satisfactory performance at 32K tokens although all claimed 32K or more [1].
+   - sources: [1] Hsieh et al., RULER: What's the Real Context Size of Your Long-Context Language Models? — https://arxiv.org/abs/2404.06654
+2. **Length alone hurts** — even with perfect retrieval, performance dropped by 13.9% to 85% as input grew, and the drop persisted when irrelevant tokens were masked out [2].
+   - sources: [2] Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval — https://arxiv.org/abs/2510.05381
+3. **Extra material makes it worse** — across 18 models, performance degraded with input length in every experiment, and even a single distractor lowered it [3].
+   - sources: [3] Hong, Troynikov, Huber, Context Rot: How Increasing Input Tokens Impacts LLM Performance — https://www.trychroma.com/research/context-rot
+4. **What the studies measure** — the studies measure lost accuracy, not a hallucination mechanism [2][3].
+   - sources: [2] Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval — https://arxiv.org/abs/2510.05381
+   - sources: [3] Hong, Troynikov, Huber, Context Rot: How Increasing Input Tokens Impacts LLM Performance — https://www.trychroma.com/research/context-rot
+5. **Mostly synthetic tests** — most studies use a planted fact or padded filler and models of 2024 and 2025, and the size of the drop varies by model and task [2].
+   - sources: [2] Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval — https://arxiv.org/abs/2510.05381
+
+#### Voice script
+
+1. **The start stays sharp** — the first messages are still used well, like the opening of the call
+2. **The newest stays sharp** — the latest messages are used well too
+3. **The middle blurs** — what you said an hour ago sits in the blurry middle
+4. **A standout survives** — the quirky detail, the dog Biscuit, is still there
+5. **Answers get worse** — new: as the chat fills, the answers get worse, even before it is full; this is called context rot
+6. **The budget is forgotten** — you said 5,000 euros an hour ago; now the AI asks for a budget and suggests 10,000; the detail that mattered was in the middle
+7. **Filling the gap** — when the middle is thin the AI may fill the gap itself; that's my hypothesis, not proven
+
+### Attention is a budget {#attention-is-a-budget}
+
+#### Visual
+
+master: basic-page · motion: none
+
+The Context window cornerstone, shown by Preset: paused on the Attention view. A horizontal bar chart of 100 units of attention, labelled "illustrative numbers", splits into three parts: 20 units to the start, 30 units to the most recent messages, 50 units spread ever thinner across the whole middle. The dog-story spike (You: "Funny side note: our office dog Biscuit wants to come along.") stays bright in the accent colour in the middle. A line across the middle marks where the attention gets too thin to trust: above it the smart zone, below it the dumb zone, each with a label. The zone labels appear only on this Slide, after the viewer has already seen the middle fade.
+
+#### Speaker notes
+
+1. **The attention budget** — Anthropic describes every token attending to every other, so each added token spreads the same attention thinner; it is a vendor account of the measured drop, not itself measured in the studies [1].
+   - sources: [1] Anthropic, Effective context engineering for AI agents — https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
+2. **The U-shape is measured** — a model's attention itself shows a U-shape toward the start and end of the input, whether or not those tokens are relevant [2].
+   - sources: [2] Hsieh et al., Found in the Middle: Calibrating Positional Attention Bias Improves Long Context Utilization — https://arxiv.org/abs/2406.16008
+3. **The start is weighted** — the first few tokens draw strong attention as an attention sink even when they carry no meaning [3].
+   - sources: [3] Xiao et al., Efficient Streaming Language Models with Attention Sinks — https://arxiv.org/abs/2309.17453
+4. **No single line** — where the middle gets too thin differs per model and task; when the needle shares no words with the question, 11 of 13 models advertised at 128K or more fell below half of their short-input score at 32K [4].
+   - sources: [4] Modarressi et al., NoLiMa: Long-Context Evaluation Beyond Literal Matching — https://arxiv.org/abs/2502.05167
+
+#### Voice script
+
+1. **A hundred units** — think of attention as a budget of a hundred units; the numbers are illustrative, I made them up to show the shape
+2. **Where it goes** — a big share to the start, a big share to the newest messages, the rest spread thinner and thinner
+3. **A spike in the middle** — a detail you keep referring to keeps its share; the dog Biscuit
+4. **Smart zone and dumb zone** — somewhere the middle gets too thin to trust; above that line the AI is in the smart zone, below it in the dumb zone
+5. **Having it is not using it** — your sister recorded the call and still can't find what you said at one hour, 13 minutes, 17 seconds
+6. **My own line** — I stay under 30K tokens, up to 40K in automated runs; one practitioner's habit, not a law
+
+### What we learned so far {#what-we-learned-so-far}
+
+#### Visual
+
+master: basic-page · motion: none
+
+A small version of the phone-call transcript on the left, with the fade on its middle, and a small cornerstone context bar on the right, filled and faded the same way. One line under each: under the call, "Long calls keep the start, the end and a standout"; under the bar, "A long chat does the same, because the window is limited". A single closing line spans both: "Manage it, or the middle gets lost."
+
+#### Speaker notes
+
+1. **Two kinds of evidence** — the human pattern comes from lab word lists [1], the model pattern from retrieval tests on long inputs [2]; the match between them is an analogy, not a proof.
+   - sources: [1] Murdock, The serial position effect of free recall — https://doi.org/10.1037/h0045106
+   - sources: [2] Liu et al., Lost in the Middle: How Language Models Use Long Contexts — https://arxiv.org/abs/2307.03172
+
+#### Voice script
+
+1. **Same effects** — long AI conversations show what long human conversations show
+2. **The window is the span** — the AI's attention span is its context window
+3. **Manage it** — treat it as a resource you actively manage, so important decisions and information don't get lost in the middle
+
+## What fills the window {#what-fills-the-window}
+
+#### Voice script
+
+1. **More in there than you typed** — what you see is only part of what the AI reads; what else goes in
+
+### What's really in the window {#whats-really-in-the-window}
+
+#### Visual
+
+master: basic-page · motion: local
+
+The Context window cornerstone, shown by Preset: the Grid view, with the explanation panel on two parts only. The window is drawn as a grid of labelled parts: starting instructions, memory, attached files, web pages read, results from tools and connectors, and the chat itself, which holds the Lisbon bubbles from Slide 2 in grey. All parts are grey except the chat bubbles. Two parts light up in the accent colour in turn, the starting instructions and the memory. The explanation panel beside the grid says, for the starting instructions, "Text placed before your first message, before you type anything", and for the memory, "Short notes about you, saved earlier and put back in front of the AI, so a new chat already knows you". The other parts are named but not explained.
+
+#### Speaker notes
+
+1. **Nothing carries over by itself** — a model holds nothing between requests; memory across chats exists only when an application stores notes outside the model and puts them back into the context [1].
+   - sources: [1] Han, Why does an LLM forget everything between chats? (earlier research file, excludes consumer chat apps) — docs/episodes/onboard-ai-every-time/research/LLM-0003__llm-memory-between-chats/research.md
+2. **Documented for Claude Code** — its instructions and its saved notes are loaded at the start of every conversation, and Claude treats them as context, not enforced configuration [2].
+   - sources: [2] Anthropic, How Claude remembers your project — https://code.claude.com/docs/en/memory
+3. **Loading has a cost** — longer instruction files consume more context and reduce adherence, and only the first 200 lines or 25KB of the notes index load at the start [2].
+   - sources: [2] Anthropic, How Claude remembers your project — https://code.claude.com/docs/en/memory
+4. **Chat apps document the effect** — Claude's app saves memory as topics so the next conversation already knows what changed [3], and Gemini remembers information you share, even in new chats [4]; that the apps load it at the start is an inference.
+   - sources: [3] Anthropic, Use Claude's chat search and memory to build on previous conversations — https://support.claude.com/en/articles/11817273-use-claude-s-chat-search-and-memory-to-build-on-previous-conversations
+   - sources: [4] Google, Manage what Gemini remembers about you and customize responses — https://support.google.com/gemini/answer/16598625
+5. **Not every feature preloads** — Claude's past-chat search is fetched on request [3], and ChatGPT looks for relevant context only when it is likely to improve a response [5].
+   - sources: [3] Anthropic, Use Claude's chat search and memory to build on previous conversations — https://support.claude.com/en/articles/11817273-use-claude-s-chat-search-and-memory-to-build-on-previous-conversations
+   - sources: [5] OpenAI, Memory in ChatGPT — https://help.openai.com/en/articles/8590148-memory-faq
+
+#### Voice script
+
+1. **More than the chat** — what you see in the chat is only part of what the AI reads
+2. **Starting instructions** — text placed in front of your first message, before you type a word
+3. **Memory** — short notes about you, saved earlier and put back in front of the AI, which is why a new chat already knows a few things about you
+4. **The rest** — attached files, web pages, tool results; I only name them today, they all share the same window
+
+### One innocent question {#one-innocent-question}
+
+#### Visual
+
+master: basic-page · motion: local
+
+The Context window cornerstone, shown by Preset: the web search state, at the point of the Lisbon chat where You: "Find three venues in Lisbon for the workshop morning." is asked; the earlier bubbles sit grey above it. The answer is a few lines, AI: "Here are three: 1. Casa do Largo, Baixa. 2. Estúdio Alfama. 3. Loft Chiado." In the context bar beside it, one big block jumps in, the web pages the AI read to answer. The user's question bubble, the answer bubble and that big block are lit together in the accent colour; everything else stays grey. A small label on the block reads "pages read behind the scenes, not shown in the chat".
+
+#### Speaker notes
+
+1. **Everything is loaded** — with basic web search every result is loaded into the context window, much of it irrelevant to the request [1].
+   - sources: [1] Anthropic, Web search tool (Claude API documentation) — https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool
+2. **It stays** — search results count as input tokens, in the turn itself and in later turns, and are passed back into later requests, so they remain part of the window [1].
+   - sources: [1] Anthropic, Web search tool (Claude API documentation) — https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool
+3. **How many searches** — a simple factual query typically uses 1 to 3 searches, and comparative or multi-entity research can use 10 or more [1].
+   - sources: [1] Anthropic, Web search tool (Claude API documentation) — https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool
+4. **How big a page is** — Anthropic estimates an average web page at about 2,500 tokens and a large documentation page at about 25,000 [2].
+   - sources: [2] Anthropic, Web fetch tool (Claude API documentation) — https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool
+5. **The remedy** — vendors filter before the window or cap the returned tokens [2]; OpenAI describes the same shape, with deep research tapping hundreds of sources [3].
+   - sources: [2] Anthropic, Web fetch tool (Claude API documentation) — https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool
+   - sources: [3] OpenAI, Web search (API documentation) — https://developers.openai.com/api/docs/guides/tools-web-search
+6. **API figures, not app figures** — these sources describe developer tools; how many pages a given chat app loads per question is not published [1].
+   - sources: [1] Anthropic, Web search tool (Claude API documentation) — https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool
+
+#### Voice script
+
+1. **Three venues** — a small question, three lines of answer
+2. **What you don't see** — before it answered, the AI read a pile of web pages
+3. **The intern** — give an intern the same task and they'd read a pile of pages first too; the AI just does it fast and shows you only the result
+4. **A big bite** — one small question can take a big bite out of the window
+
+### You can't watch the meter {#you-cant-watch-the-meter}
+
+#### Visual
+
+master: basic-page · motion: local
+
+First version: the sister's notepad, a few scribbled lines on a notepad card in place of the whole call, drawn in the Chat style as a plain white card with handwriting-like lines: "Mum's phone", "neighbours' renovation", "Pepper ate the cake", with the accent colour on the last line. Later stage: the Context window cornerstone, shown by Preset: compaction, on the Lisbon chat. In the context bar the older blocks fold into one summary block while the chat on the left looks unchanged, every bubble still there. The summary block reads "Earlier: planning a team offsite in Lisbon for 12 people". No meter or percentage is shown anywhere on the Slide, which is the point. A small label on the summary block reads "older messages, squeezed".
+
+#### Speaker notes
+
+1. **Documented for Claude** — for users with code execution enabled, Claude summarises earlier messages when a conversation approaches the context limit [1].
+   - sources: [1] Anthropic, How do usage and length limits work? — https://support.claude.com/en/articles/11647753-how-do-usage-and-length-limits-work
+2. **The only sign** — the page describes you occasionally seeing Claude "organizing its thoughts", and announces no notice each time; that it hides this on purpose is an inference [1].
+   - sources: [1] Anthropic, How do usage and length limits work? — https://support.claude.com/en/articles/11647753-how-do-usage-and-length-limits-work
+3. **Full history is kept** — the whole chat is preserved so Claude can reference it after summarising [1].
+   - sources: [1] Anthropic, How do usage and length limits work? — https://support.claude.com/en/articles/11647753-how-do-usage-and-length-limits-work
+4. **A summary can lose things** — Anthropic warns that over-aggressive compaction can lose subtle but critical context whose importance only shows later [2].
+   - sources: [2] Anthropic, Effective context engineering for AI agents — https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
+5. **Other apps are unknown** — no vendor page found documents summarising in ChatGPT, Gemini or Copilot, and a chat interface may instead drop the oldest content first [3]; OpenAI's compaction is documented for its API and is opaque [4].
+   - sources: [3] Anthropic, Context windows — https://platform.claude.com/docs/en/build-with-claude/context-windows
+   - sources: [4] OpenAI, Compaction — https://developers.openai.com/api/docs/guides/compaction
+
+#### Voice script
+
+1. **Her own notes** — your sister doesn't keep the call, she keeps her own notes of it; a few lines instead of everything
+2. **The app does something like it** — when a chat gets long, older messages can be squeezed into a short summary so the conversation can go on
+3. **You can't watch the meter** — the chat looks the same, and nothing tells you how full the window is, so you rely on habits, not a gauge
+
+## Managing the attention span {#managing-the-attention-span}
+
+#### Voice script
+
+1. **You manage by habit** — you can't read a gauge, so you build habits, from everyday ones to the big project
+
+### Everyday habits {#everyday-habits}
+
+#### Visual
+
+master: basic-page · motion: local
+
+A cut-down Context window cornerstone, shown by Preset: two bars side by side. On the left the full old chat, the Lisbon conversation, a long context bar with the middle faded to grey. On the right a fresh chat, a nearly empty bar holding only one lit card in the accent colour, the handoff card. The handoff card reads: "Handoff: Team offsite in Lisbon, first week of June. 12 people. Budget 5,000 euros in total. Dog Biscuit comes along. Staying in Baixa. Venues: Casa do Largo, Estúdio Alfama, Loft Chiado. Open: dinner on the first evening." The first bubble of the fresh chat is You: the handoff card pasted in. An arrow carries the handoff from the old bar to the new one. Under the bars, three plain captions appear in turn: "One chat, one job", "Ask for a handoff after real progress or before a break, read it, correct it", "Start the next chat with it".
+
+#### Speaker notes
+
+1. **Length itself hurts** — with perfect retrieval, performance still dropped as input grew, and the drop persisted when irrelevant tokens were replaced by whitespace or masked from attention [1]; that a fresh, shorter chat avoids the drop is an inference from this, the studies do not test a restart.
+   - sources: [1] Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval — https://arxiv.org/abs/2510.05381
+2. **One job per chat** — even a single distractor lowers performance relative to the needle alone, so unrelated material in a chat has a cost [2].
+   - sources: [2] Hong, Troynikov, Huber, Context Rot: How Increasing Input Tokens Impacts LLM Performance — https://www.trychroma.com/research/context-rot
+3. **A short recap helped** — having the model recite the retrieved evidence before solving, which turns a long task into a short one, improved results [1]; that a handoff works the same way is an inference.
+   - sources: [1] Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval — https://arxiv.org/abs/2510.05381
+
+#### Voice script
+
+1. **Break it down** — you know this already; split a big task into small steps
+2. **Fresh start** — you know this one too; a fresh start spends the whole window on the work in front of you
+3. **One chat, one job** — the topic changes, open a new chat
+4. **Ask for a handoff** — after real progress or before a coffee break, stop and ask for a handoff
+5. **Read and correct it** — read it, correct what's wrong; a summary can lose things, and you are accountable
+6. **Start the next chat with it** — paste the handoff in first; the new chat starts small and sharp
+
+### The workflow for bigger projects {#the-workflow-for-bigger-projects}
+
+#### Visual
+
+master: basic-page · motion: local
+
+Mini context bars on the white stage. One slim bar at the top is the planner chat, drawn in the accent colour; it stays slim throughout. Below it, a row of worker chats, each a bar of its own. In turn, the planner hands a step to a fresh worker bar, which fills up, and the result comes back to the planner as one small lit card; then the worker bar is thrown away, fading out. The next worker bar starts empty. The planner's bar grows only by a card at a time.
+
+#### Speaker notes
+
+1. **Clean windows for each part** — Anthropic's remedy for long tasks includes sub-agents that work with clean windows [1].
+   - sources: [1] Anthropic, Effective context engineering for AI agents — https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
+2. **Short tasks beat long ones** — turning a long task into a short one improved results, GPT-4o on RULER by up to 4% [2].
+   - sources: [2] Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval — https://arxiv.org/abs/2510.05381
+
+#### Voice script
+
+1. **One chat is too small** — a bigger project would fill any single window
+2. **Break it down first** — work backward from the outcome, with the AI's help if you like
+3. **One planner** — one chat stays the planner and keeps only the plan and the results
+4. **A fresh chat per step** — hand each step to a fresh chat, take the result back, and let that chat go
+5. **You coordinate** — like a project manager; this is what we call a workflow
+
+## Notes
+
+- `convert-references` is blocked: the Brief's design reference for the context window cornerstone came in as a PNG with no PDF, so `reference/context-window-cornerstone/design-reference.md` does not exist. This Dossier is written without it, and no Slide names a `Design reference:` page. The cornerstone is described as a Preset per Slide in viewer terms.
+- Slide 8 (One innocent question): the Brief's "about ten web pages" has no source. The research gives only "10 or more searches" for research-style queries and does not say how many pages a chat app loads, so the Slide says "ten or more searches" for such a query.
+- Slide 7: "loaded at the start" is documented for Claude Code only; for the chat apps the Slide calls it a reading.
+- Slide 9: only Claude documents summarising older messages in its consumer app; the Slide says the other apps are unknown.
+- Slide 4: "the AI may fill this gap itself" is an inference from the lost-accuracy results, marked as a hypothesis in the Voice script.
