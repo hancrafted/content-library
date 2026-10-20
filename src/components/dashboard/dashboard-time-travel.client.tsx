@@ -37,12 +37,12 @@ interface ScrubProps {
   replay: ReplayControls;
   range: NonNullable<ReplayControls['range']>;
   copy: DashboardCopy;
-  geometry: Pick<GraphGeometry, 'stops'>;
+  geometry: Pick<GraphGeometry, 'rail'>;
 }
 
 function scrubState({ replay, range, copy, geometry }: ScrubProps) {
   const at = replay.at ?? range.end;
-  const fraction = replay.position(geometry.stops);
+  const fraction = geometry.rail.screenOf(replay.railPlace);
   const text = fillTemplate(copy.timeTravel.position, {
     minutes: Math.floor((at - range.start) / 60_000),
     time: clock.format(at),
@@ -53,7 +53,7 @@ function scrubState({ replay, range, copy, geometry }: ScrubProps) {
     event.preventDefault();
     replay.seek(event.key === 'Home' ? range.start : event.key === 'End' ? range.end : at + step);
   };
-  const seek = (position: number) => replay.seekPosition(position, geometry.stops);
+  const seek = (position: number) => replay.seekRail(geometry.rail.placeOf(position));
   const minute = fillTemplate(copy.timeTravel.minute, { minutes: Math.floor((at - range.start) / 60_000) });
   return { fraction, text, minute, onKeyDown, seek };
 }

@@ -1,5 +1,5 @@
 import { dashboardLayout, edgePath, GRAPH_LAYOUT } from './dashboard-layout.pure';
-import type { RailStop } from './dashboard-scrub.pure';
+import { scrubPosition, scrubTime, type RailStop } from './dashboard-scrub.pure';
 import type { DashboardStage } from './dashboard-stages.pure';
 
 type Layout = ReturnType<typeof dashboardLayout>;
@@ -24,6 +24,15 @@ function railStops(fractions: readonly number[]): RailStop[] {
     at: index / Math.max(1, fractions.length - 1),
     position: (fraction - left) / width,
   }));
+}
+
+/** The Stage rail on screen: a place, 0 to 1 by Stage index, to where it is drawn between the first Stage and the Run end, and back. */
+function railOnScreen(fractions: readonly number[]) {
+  const stops = railStops(fractions);
+  return {
+    screenOf: (place: number) => scrubPosition(stops, place),
+    placeOf: (screen: number) => scrubTime(stops, screen),
+  };
 }
 
 function cssVars(fractions: readonly number[], total: number, height: number) {
@@ -62,8 +71,8 @@ function stageBranches(stage: Layout['stages'][number]) {
 }
 
 /**
- * The one owner of graph geometry: Stage and Job node positions, edge paths, the replay rail
- * ends and stops, and the CSS variables the stylesheet consumes without re-deriving them.
+ * The one owner of graph geometry: Stage and Job node positions, edge paths, where the Stage rail
+ * is drawn, and the CSS variables the stylesheet consumes without re-deriving them.
  * Positions are ready to apply as styles; `showJobs` switches between the Stage view and the Job network.
  */
 export function graphGeometry(stages: readonly DashboardStage[], showJobs: boolean) {
@@ -80,7 +89,7 @@ export function graphGeometry(stages: readonly DashboardStage[], showJobs: boole
     })),
     end: fractions.at(-1)!,
     width: total,
-    stops: railStops(fractions),
+    rail: railOnScreen(fractions),
     cssVars: cssVars(fractions, total, layout.height),
     maxHeight: GRAPH_LAYOUT.maximumHeight,
   };
