@@ -68,6 +68,7 @@ const HEADER_MODES = [
 const RECORDINGS = [
   { slug: 'ai-token-economy', en: 'S0Nx4faEebY', de: 'S0Nx4faEebY' },
   { slug: 'maintaining-markdown-for-ai', en: 'YxCVw4bUbW0', de: 'YxCVw4bUbW0' },
+  { slug: 'never-too-early-sales', en: 'lnr7T-IBHTw', de: 'lnr7T-IBHTw' },
 ] as const;
 
 describe('success cases', () => {
