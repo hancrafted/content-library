@@ -8,7 +8,7 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { resolveSiteUrl } from '../../src/lib/page-metadata.pure';
 import { EXPORTED_PAGES, exportedFile, OUT_DIR } from './exported-pages';
 
-// The deploy passes the configure-pages URL here too, so a build that lost its
+// The deploy passes its SITE_URL here too, so a build that lost its
 // SITE_URL — and emitted localhost canonicals — fails against the workflow's value.
 const SITE_URL = resolveSiteUrl(process.env);
 
@@ -59,7 +59,7 @@ function oneWayAlternates(page: PageLinks, byFile: ReadonlyMap<string, PageLinks
     .map(([lang, href]) => `${page.file} → ${lang} ${href}`);
 }
 
-/** The absolute URL a crawler should see for a page: trailing slash, as GitHub Pages serves it unredirected. */
+/** The absolute URL a crawler should see for a page: trailing slash, as Cloudflare Pages serves it unredirected. */
 function servedUrl(url: string): string {
   return url === '/' ? `${SITE_URL}/` : `${SITE_URL}${url}/`;
 }

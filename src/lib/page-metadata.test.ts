@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { pageMetadata, resolveSiteUrl, siteMetadata } from './page-metadata.pure';
+import { isNoindex, pageMetadata, resolveSiteUrl, siteMetadata } from './page-metadata.pure';
 
 /** An Episode's copy as its record hands it to the route. */
 const COPY = { title: 'Seitenvorlage', description: 'Diese Episode kopieren.' };
@@ -146,5 +146,20 @@ describe('edge cases', () => {
     const metadata = pageMetadata('home', 'en');
     // ASSERT
     expect(metadata.alternates?.canonical).toBe(expected);
+  });
+
+  it('keeps the dashboard and an upcoming Episode out of search, and every other page in', () => {
+    // ARRANGE
+    const episode = { episode: 'page-template' } as const;
+    // ACT
+    const results = [
+      isNoindex('dashboard'),
+      isNoindex(episode, 'upcoming'),
+      isNoindex(episode, 'published'),
+      isNoindex('home'),
+      isNoindex('episodes'),
+    ];
+    // ASSERT
+    expect(results).toEqual([true, true, false, false, false]);
   });
 });

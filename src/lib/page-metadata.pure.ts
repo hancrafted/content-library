@@ -9,8 +9,8 @@ const LOCAL_ORIGIN = 'http://localhost:3000';
 
 /**
  * The absolute URL the site is served from — origin plus base path, no trailing
- * slash. The Pages deploy sets `SITE_URL` from `actions/configure-pages`'
- * `base_url`, which follows a custom domain without a code change (FE-008).
+ * slash. The Cloudflare Pages deploy sets `SITE_URL` to https://hancrafted.net;
+ * unset, local and pull-request builds fall back to localhost (FE-008).
  */
 export function resolveSiteUrl(env: Readonly<Record<string, string | undefined>>): string {
   const configured = env.SITE_URL?.replace(/\/+$/, '');
@@ -34,6 +34,11 @@ export interface PageCopy {
   readonly description: string;
   /** An Episode page's status: an upcoming one is `noindex`. Left off for the landing page. */
   readonly status?: EpisodeStatus;
+}
+
+/** Whether a page is kept out of search: the dashboard, and an Episode still upcoming. Metadata and sitemap both ask. */
+export function isNoindex(page: PageRef, status?: EpisodeStatus): boolean {
+  return page === 'dashboard' || status === 'upcoming';
 }
 
 /**
@@ -63,6 +68,6 @@ export function pageMetadata(page: PageRef, locale: Locale, copy?: PageCopy): Me
       canonical: localizePath(route, locale),
       languages: { ...languages, 'x-default': localizePath(route, DEFAULT_LOCALE) },
     },
-    ...(page === 'dashboard' || copy?.status === 'upcoming' ? { robots: { index: false } } : {}),
+    ...(isNoindex(page, copy?.status) ? { robots: { index: false } } : {}),
   };
 }

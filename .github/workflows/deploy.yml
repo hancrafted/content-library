@@ -1,5 +1,9 @@
-name: Deploy to GitHub Pages
+name: Deploy redirect stubs to GitHub Pages
 
+# TEMPORARY. The site now lives on Cloudflare Pages (deploy-cloudflare.yml). GitHub Pages cannot send a 301, so the
+# old https://hancrafted.github.io/content-library/ URLs publish only redirect stubs: one HTML per exported page with
+# a meta refresh and a canonical to the same path on https://hancrafted.net. Remove this workflow, and switch Pages
+# off in the repository settings, after a few months. See docs/features/hosting.md.
 on:
   push:
     branches: [main]
@@ -9,6 +13,10 @@ permissions:
   contents: read
   pages: write
   id-token: write
+
+env:
+  # Where the stubs point. A place to change on a domain move: docs/features/hosting.md.
+  SITE_URL: https://hancrafted.net
 
 # One deploy at a time; never cancel one mid-flight, or Pages can be left half-published.
 concurrency:
@@ -27,21 +35,16 @@ jobs:
       - id: pages
         uses: actions/configure-pages@v6
       - run: npm ci
+      # Built only for its page list: the stubs mirror the exported paths, under the old project-site base path.
       - run: npm run build
         env:
-          # `/content-library` on a project site; empty on a user/org site or custom domain.
           NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
-          # FE-008: absolute origin + base path for canonicals and hreflang; follows a custom domain.
-          SITE_URL: ${{ steps.pages.outputs.base_url }}
-      # FE-005: refuse to publish an export missing a page the app derives.
-      # FE-008: refuse one whose canonicals miss this URL or whose alternates are one-way.
-      - run: npm run test:build
-        env:
-          NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
-          SITE_URL: ${{ steps.pages.outputs.base_url }}
+      - run: node scripts/redirect-stubs.ts out stubs "$SITE_URL"
+      # The Pages artifact is served under the project-site base path, so the stubs sit at its root.
+      - run: touch stubs/.nojekyll
       - uses: actions/upload-pages-artifact@v5
         with:
-          path: ./out
+          path: ./stubs
 
   deploy:
     needs: build

@@ -28,7 +28,7 @@ const transitionStyle = getTransitionStyle();
 
 const nextConfig: NextConfig = {
   output: 'export',
-  // `/de/` → `de/index.html`, which GitHub Pages serves without extension guessing.
+  // `/de/` → `de/index.html`, which static hosts (Cloudflare Pages, GitHub Pages) serve without extension guessing.
   trailingSlash: true,
   images: { unoptimized: true },
   // `next dev` would otherwise rewrite AGENTS.md (a symlink target) when it detects an agent.

@@ -1,0 +1,60 @@
+name: Deploy to Cloudflare Pages
+
+# Production: every push to main publishes out/ to https://hancrafted.net. Preview: every same-repo pull request
+# gets its own *.hancrafted.pages.dev URL. The build runs here, not in Cloudflare's Git build, so Cloudflare's build
+# limits never apply. One-time setup (project, domain, www redirect): docs/features/hosting.md.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  # FE-008: the production origin, for canonicals, hreflang and the sitemap. A place to change on a domain move:
+  # docs/features/hosting.md.
+  SITE_URL: https://hancrafted.net
+
+# A newer push to a pull request supersedes its preview; a production deploy is never cancelled mid-flight.
+concurrency:
+  group: cloudflare-pages-${{ github.event_name == 'pull_request' && github.ref || 'production' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  deploy:
+    name: build, post-build tests, deploy
+    runs-on: ubuntu-latest
+    # A fork's or Dependabot's pull request has no access to the Cloudflare secrets, so it gets CI but no preview.
+    if: github.event_name != 'pull_request' || (github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]')
+    env:
+      # Served from the domain root: no base path.
+      NEXT_PUBLIC_BASE_PATH: ''
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      # FE-005: refuse to publish an export missing a page the app derives.
+      # FE-008: refuse one whose canonicals miss this URL or whose alternates are one-way.
+      - run: npm run test:build
+      # Pull requests deploy to a preview branch named after the head ref; main is the production branch.
+      - id: branch
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "name=$(printf '%s' "$HEAD_REF" | tr -c 'A-Za-z0-9-' '-')" >> "$GITHUB_OUTPUT"
+          else
+            echo "name=main" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: cloudflare/wrangler-action@v4.1.3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: '4.151.3'
+          command: pages deploy out --project-name=hancrafted --branch=${{ steps.branch.outputs.name }}
