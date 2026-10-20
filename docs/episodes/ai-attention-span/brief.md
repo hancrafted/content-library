@@ -14,6 +14,8 @@ verified:
     at: 2026-10-20T19:01:53Z
   - by: process:markdown-harness
     at: 2026-10-20T20:56:53Z
+  - by: human:han
+    at: 2026-10-20T21:10:33Z
 ---
 
 # Why AI has a weird attention span you must learn to manage
