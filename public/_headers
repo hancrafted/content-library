@@ -6,7 +6,7 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY
-  Permissions-Policy: camera=(), microphone=(), geolocation=(), interrupt-cohort=()
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
 
 # Content-hashed build output never changes under the same URL.
 /_next/static/*
@@ -15,5 +15,5 @@
 # Keep the pages.dev production alias and every preview deploy out of search; hancrafted.net is the canonical origin.
 https://:project.pages.dev/*
   X-Robots-Tag: noindex
-https://:branch.:project.pages.dev/*
+https://:version.:project.pages.dev/*
   X-Robots-Tag: noindex

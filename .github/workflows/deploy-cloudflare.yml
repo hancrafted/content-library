@@ -12,6 +12,11 @@ on:
 permissions:
   contents: read
 
+env:
+  # FE-008: the production origin, for canonicals, hreflang and the sitemap. A place to change on a domain move:
+  # docs/features/hosting.md.
+  SITE_URL: https://hancrafted.net
+
 # A newer push to a pull request supersedes its preview; a production deploy is never cancelled mid-flight.
 concurrency:
   group: cloudflare-pages-${{ github.event_name == 'pull_request' && github.ref || 'production' }}
@@ -21,12 +26,11 @@ jobs:
   deploy:
     name: build, post-build tests, deploy
     runs-on: ubuntu-latest
-    # A fork's pull request has no access to the Cloudflare secrets, so it gets CI but no preview.
-    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    # A fork's or Dependabot's pull request has no access to the Cloudflare secrets, so it gets CI but no preview.
+    if: github.event_name != 'pull_request' || (github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]')
     env:
-      # Served from the domain root: no base path. FE-008: absolute origin for canonicals, hreflang and the sitemap.
+      # Served from the domain root: no base path.
       NEXT_PUBLIC_BASE_PATH: ''
-      SITE_URL: https://hancrafted.net
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
