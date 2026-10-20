@@ -1,6 +1,6 @@
 # content-library
 
-A statically exported Next.js site (App Router, TypeScript, Tailwind CSS, shadcn/ui), deployed to GitHub Pages.
+A statically exported Next.js site (App Router, TypeScript, Tailwind CSS, shadcn/ui), deployed to Cloudflare Pages (`docs/features/hosting.md`).
 
 ## Develop
 
@@ -101,13 +101,11 @@ Every interactive element carries a stable `data-testid`. Select by it, never by
 
 ## Deploy
 
-`.github/workflows/deploy.yml` builds and publishes `out/` to GitHub Pages on every push to `main` and on manual dispatch. `.github/workflows/ci.yml` runs lint, typecheck, tests and a build on pull requests.
-
-One-time setup: **Settings → Pages → Source: GitHub Actions**.
+`.github/workflows/deploy-cloudflare.yml` builds `out/` and deploys it to Cloudflare Pages: production on every push to `main`, a preview on every same-repo pull request. `.github/workflows/deploy.yml` publishes only redirect stubs for the old GitHub Pages URLs (temporary). `.github/workflows/ci.yml` runs lint, typecheck, tests and a build on pull requests. One-time setup and operations: `docs/features/hosting.md`.
 
 ### `NEXT_PUBLIC_BASE_PATH`
 
-The sub-path the site is served from. A project site at `<user>.github.io/<repo>` needs it set to `/<repo>`, or every asset 404s. The deploy workflow fills it in from `actions/configure-pages`. It defaults to empty, which suits local dev and sites served from a domain root.
+The sub-path the site is served from. Empty on Cloudflare Pages, which serves from the domain root, and by default, which suits local dev. A project site at `<user>.github.io/<repo>` would need `/<repo>`.
 
 ```sh
 NEXT_PUBLIC_BASE_PATH=/content-library npm run build

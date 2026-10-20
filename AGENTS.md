@@ -1,6 +1,6 @@
 # Content library
 
-This project is a localized Next.js application which serves to visualize theory and content I use for training materials which are captured as YouTube videos for an English and German audience. The current deploy target are static pages on github pages.
+This project is a localized Next.js application which serves to visualize theory and content I use for training materials which are captured as YouTube videos for an English and German audience. The deploy target is static pages on Cloudflare Pages at hancrafted.net (`docs/features/hosting.md`).
 
 ## Rules
 

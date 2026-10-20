@@ -1,7 +1,7 @@
 name: CI
 
 # Lint, typecheck, the fast suite, a full static build and the post-build export test on every pull request, so a
-# change that would break the Pages deploy fails before it merges. Three independent jobs run in parallel: each pays
+# change that would break the Cloudflare Pages deploy fails before it merges. Three independent jobs run in parallel: each pays
 # for its own `npm ci`, and the run takes as long as the slowest lane instead of the sum of all steps.
 on:
   pull_request:
@@ -61,9 +61,9 @@ jobs:
     name: build, post-build tests
     runs-on: ubuntu-latest
     env:
-      # Build as the Pages deploy does, under its project-site base path, so a base-path bug fails here, not at deploy.
-      NEXT_PUBLIC_BASE_PATH: /content-library
-      SITE_URL: https://hancrafted.github.io/content-library
+      # Build as the Cloudflare Pages deploy does, from the domain root, so a base-path or origin bug fails here, not at deploy.
+      NEXT_PUBLIC_BASE_PATH: ''
+      SITE_URL: https://hancrafted.net
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7

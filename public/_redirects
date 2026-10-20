@@ -1,0 +1,7 @@
+# Cloudflare Pages redirects (docs/features/hosting.md): same-host rules only, 2,000 static and 100 dynamic at most.
+# www.hancrafted.net -> hancrafted.net is NOT done here: Pages does not support domain-level redirects. It is a
+# Cloudflare Redirect Rule / Bulk Redirect, set once in the dashboard.
+#
+# Home for slug-rename redirects, so an old Episode URL keeps working. One rule per line, source then target, then 301:
+#   /episodes/old-slug/    /episodes/new-slug/    301
+#   /de/episodes/old-slug/ /de/episodes/new-slug/ 301

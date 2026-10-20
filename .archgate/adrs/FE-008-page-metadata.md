@@ -39,7 +39,7 @@ Why layouts stay site-wide: Next.js inherits a layout's field into every page th
 
 ### 3. `SITE_URL` is the absolute base
 
-1. `metadataBase` MUST come from `SITE_URL` (origin plus base path), read only in `src/lib/site-url.ts`. The deploy sets it from `configure-pages`' `base_url`, so a custom domain needs no code change.
+1. `metadataBase` MUST come from `SITE_URL` (origin plus base path), read only in `src/lib/site-url.ts`. The deploy sets it to the production origin (https://hancrafted.net), so a domain change needs no code change.
 2. Unset, it falls back to localhost plus the base path; malformed, the build throws.
 3. It MUST NOT carry the `NEXT_PUBLIC_` prefix; only build-time metadata reads it.
 
