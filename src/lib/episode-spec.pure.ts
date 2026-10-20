@@ -25,7 +25,7 @@
  *   note citation `[n]` resolved by a nested `data-source="n"`.
  */
 import { load, type CheerioAPI } from 'cheerio';
-import { SECTION, SLIDE, SPEC_FILE } from './episode-spec-page.pure.ts';
+import { OPTION, SECTION, SLIDE, SPEC_FILE, TITLE_SLIDE } from './episode-spec-page.pure.ts';
 import { checkSlide, FORM, type SpecPage } from './episode-spec-slide.pure.ts';
 import { checkTitleSlide } from './episode-spec-title.pure.ts';
 import { checkCitations, checkVoiceScripts } from './episode-spec-words.pure.ts';
@@ -126,6 +126,17 @@ function checkSlides(page: SpecPage): string[] {
 
 /** `early`: a Brief- or Dossier-stage Spec, before the designers' Options exist, so only what that stage holds is checked. */
 export type SpecStage = 'early' | 'options';
+
+/**
+ * The stage a Spec page is at, read from the page: `early` when it holds Slides but no Option and no Title slide,
+ * which is how a Brief- or Dossier-stage assembly looks; `options` otherwise, so a page with a Title slide, an Option
+ * or no Slide at all gets the whole contract.
+ */
+export function specStage(html: string): SpecStage {
+  const $ = load(html);
+  const hasSlides = $(SLIDE).length > 0;
+  return hasSlides && $(OPTION).length === 0 && $(TITLE_SLIDE).length === 0 ? 'early' : 'options';
+}
 
 /**
  * Checks a staging folder's Spec page against the Spec contract, and against
