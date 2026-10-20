@@ -30,11 +30,15 @@ export interface StubEntry {
   readonly target: string;
 }
 
-/** One stub per exported page (`.html` file); `404.html` goes to the home page, any other file is skipped. */
+/**
+ * Which files of `out/` are pages, and where each stub points: the whole rule lives here. A page is an `.html` file
+ * outside `_next/`; any other file is skipped. `404.html` is kept on purpose and sent to the home page, because GitHub
+ * Pages serves it for every unknown old URL, and the home page is the best place to land those visitors.
+ */
 export function redirectStubPlan(files: readonly string[], origin: string): StubEntry[] {
   const base = origin.replace(/\/+$/, '');
   return files
-    .filter((file) => file.endsWith('.html'))
+    .filter((file) => file.endsWith('.html') && !file.startsWith('_next/'))
     .map((file) => {
       const path = file === '404.html' ? '' : file.replace(/(^|\/)index\.html$/, '').replace(/\.html$/, '');
       return { file, target: path === '' ? `${base}/` : `${base}/${path}/` };

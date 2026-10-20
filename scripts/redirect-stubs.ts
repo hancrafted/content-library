@@ -11,9 +11,7 @@ if (!outDir || !stubDir || !origin) {
   process.exit(1);
 }
 
-const files = (readdirSync(outDir, { recursive: true, encoding: 'utf8' }) as string[]).filter(
-  (file) => !file.startsWith('_next'),
-);
+const files = readdirSync(outDir, { recursive: true, encoding: 'utf8' });
 const plan = redirectStubPlan(files, origin);
 if (plan.length === 0) {
   console.error(`no pages found in ${outDir}; run the build first`);

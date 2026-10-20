@@ -51,7 +51,7 @@ describe('redirectStubPlan', () => {
 
   it('skips files that are not pages', () => {
     // ARRANGE
-    const files = ['_next/static/x.js', 'favicon.ico', 'index.html'];
+    const files = ['_next/static/x.js', '_next/static/chunks/frame.html', 'favicon.ico', 'index.html'];
     // ACT
     const plan = redirectStubPlan(files, ORIGIN);
     // ASSERT
