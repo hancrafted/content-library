@@ -4,17 +4,21 @@ title: Why AI has a weird attention span you must learn to manage
 status: draft
 generated:
   by: claude-code/opus-5.5
-  at: 2026-10-20T15:27:48Z
+  at: 2026-10-20T19:01:52Z
 verified:
   - by: process:markdown-harness
     at: 2026-10-20T15:27:48Z
+  - by: process:markdown-harness
+    at: 2026-10-20T19:01:52Z
+  - by: human:han
+    at: 2026-10-20T19:01:53Z
 ---
 
 # Why AI has a weird attention span you must learn to manage
 
 ## Format
 
-Foundations. Aim for about 20 minutes, stay under 25, 30 as the hard cap. In the workshop it follows the hands-on of about 20 minutes, where everyone runs the prepared interview prompt on the summer party until they reach a plan, and explains what they just did. Slide 11 is the advanced option and can be dropped from the YouTube cut.
+Foundations. Aim for about 20 minutes, stay under 25, 30 as the hard cap. In the workshop it follows the hands-on of about 20 minutes, where everyone runs the prepared interview prompt on the summer party until they reach a plan, and explains what they just did. Slide 11 is the advanced option and stays in the YouTube cut, as the only Slide carrying Actionable 4.
 
 ## Audience
 
