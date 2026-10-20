@@ -17,9 +17,13 @@ A real `node_modules` is the point: a symlinked one breaks Turbopack, `mh check`
 
 ## Finish
 
-Run `npm run wt:done -- <branch>` from the main checkout once the PR merged. It refuses while any process (a dev server) has its cwd inside the worktree and names it; stop that process and rerun. It then removes the worktree and its Claude Desktop folder (`docs/claude-project-context/<branch-slug>/`), deletes the branch when git sees it merged, and fast-forwards local `main`. When local `main` holds unpushed commits it stops and lists them: push them through a PR or move them to a branch, then rerun.
+Run `npm run wt:done -- <branch>` from the main checkout once the PR merged. It refuses while any process (a dev server) has its cwd inside the worktree and names it; stop that process and rerun, or add `--kill`: it sends SIGTERM to the listed processes, SIGKILL after 3 seconds, never to itself or its ancestors (your shell), then continues. Never hand-run `pkill` for this; it can kill your own shell. It then removes the worktree and its Claude Desktop folder (`docs/claude-project-context/<branch-slug>/`), deletes the branch when git sees it merged, and fast-forwards local `main`. When local `main` holds unpushed commits it stops and lists them: push them through a PR or move them to a branch, then rerun.
 
 With `--base <branch>`, run from anywhere but the worktree itself, it leaves `main` alone and first merges the branch into the base (`git merge --no-ff`, inside the worktree that has the base checked out). When the base is checked out nowhere, or the merge conflicts or hits a dirty base, it aborts the merge, removes nothing and says so; fix that and rerun. Once merged it removes the worktree and deletes the branch.
+
+## Sync
+
+`npm run wt:sync`, run inside a worktree, fetches `origin` and merges `origin/main` into that worktree's branch; `npm run wt:sync -- --base <branch>` merges the local base branch instead. It refuses a dirty tree, a detached HEAD and `main`. Never `git pull` in the main checkout to catch a branch up: it advances whatever branch that checkout holds.
 
 ## Preflight
 
