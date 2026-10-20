@@ -221,9 +221,9 @@ function rubricsWithoutHeading(yaml: string): string[] {
 /**
  * A staging folder's Dossier as write-dossier and then write-voice-script
  * committed it, found by the `Agent: <job>` trailer of their commits. The
- * trailer exists since #107, but this test stays inert (undefined, nothing to
- * compare) until a run commits both `Agent: write-dossier` and
- * `Agent: write-voice-script` for one Dossier.
+ * trailer exists since #107. A folder whose Run has not committed both
+ * `Agent: write-dossier` and `Agent: write-voice-script` yet has nothing to
+ * compare (undefined); `commitsWithTrailer` guards the history itself.
  */
 function dossierBeforeAndAfterVoice(folder: string): { draft: string; voiced: string } | undefined {
   const file = `${folder}/dossier.md`;
@@ -237,6 +237,28 @@ function dossierBeforeAndAfterVoice(folder: string): { draft: string; voiced: st
   const [draft, voiced] = [at('write-dossier'), at('write-voice-script')];
   return draft === undefined || voiced === undefined ? undefined : { draft, voiced };
 }
+
+/** How many commits in the checked-out history carry the `Agent: <job>` trailer; 0 when the clone is too shallow to see them. */
+function commitsWithTrailer(job: string): number {
+  const hashes = execFileSync('git', ['log', '--format=%H', '-E', `--grep=^Agent: ${job}$`], {
+    cwd: ROOT,
+    encoding: 'utf8',
+  });
+  return hashes.split('\n').filter((hash) => hash !== '').length;
+}
+
+it.each(['write-dossier', 'write-voice-script'])(
+  'finds the %s commits in the checked-out history, so the Voice script check never passes on a shallow clone',
+  (job) => {
+    // ARRANGE
+    const shallow = execFileSync('git', ['rev-parse', '--is-shallow-repository'], { cwd: ROOT, encoding: 'utf8' });
+    // ACT
+    const found = commitsWithTrailer(job);
+    // ASSERT
+    expect(shallow.trim(), 'the checkout is shallow: fetch with depth 0').toBe('false');
+    expect(found, `no commit carries "Agent: ${job}"`).toBeGreaterThan(0);
+  },
+);
 
 describe('success cases', () => {
   it('finds that write-voice-script changed only Voice script lines of what write-dossier committed', () => {

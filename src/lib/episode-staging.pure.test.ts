@@ -699,6 +699,32 @@ describe('edge cases', () => {
     expect(kinds(findings)).toEqual(expectedKinds);
   });
 
+  it('judges a Brief-stage Spec page by its stage: no Options is not a finding', () => {
+    // ARRANGE
+    const page = `<!doctype html><html><body>
+<section data-spec="section" id="why"><article data-spec="slide" id="brief-why" data-number="1"></article></section>
+</body></html>`;
+    const files = { 'spec/spec.html': page };
+    // ACT
+    const findings = checkStagingFolder(files, KNOWN_VISUALS, REVIEW_ASSET);
+    // ASSERT
+    expect(findings.map(({ message }) => message).filter((message) => message.includes('Options'))).toEqual([]);
+  });
+
+  it('still names a Slide with no Options once the page holds a Title slide', () => {
+    // ARRANGE
+    const page = `<!doctype html><html><body>
+<article data-spec="title-slide" id="top"></article>
+<section data-spec="section" id="why"><article data-spec="slide" id="spent" data-number="1"></article></section>
+</body></html>`;
+    const files = { 'spec/spec.html': page };
+    const expected = 'The Slide {#spent} has 0 Options: it needs two or three.';
+    // ACT
+    const findings = checkStagingFolder(files, KNOWN_VISUALS, REVIEW_ASSET);
+    // ASSERT
+    expect(findings.map(({ message }) => message)).toContain(expected);
+  });
+
   it('checks the feedback rounds of a folder that has no Dossier yet', () => {
     // ARRANGE
     const files = { 'feedback/02/feedback.md': feedback('chat', []) };

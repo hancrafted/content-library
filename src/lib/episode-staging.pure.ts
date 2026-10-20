@@ -6,7 +6,7 @@
  */
 
 import { SPEC_FILE, specSectionSlugs, specSlideAnchors } from './episode-spec-page.pure';
-import { checkSpec } from './episode-spec.pure';
+import { checkSpec, specStage } from './episode-spec.pure';
 import { checkBrief } from './episode-staging-brief.pure';
 import { checkFeedback } from './episode-staging-feedback.pure';
 import { checkStagingOrder } from './episode-staging-order.pure';
@@ -157,7 +157,7 @@ export function checkStagingFolder(
     ...checkTexts(files),
     ...checkBrief(files),
     ...checkDossier(files, known),
-    ...checkSpec(files, reviewAsset),
+    ...checkSpec(files, reviewAsset, specStage(files[SPEC_FILE] ?? '')),
     ...checkFeedbackRounds(files),
   ];
 }
