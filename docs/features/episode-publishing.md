@@ -6,7 +6,7 @@ stale_after: 2027-01-13T00:00:00Z
 
 # Episode publishing
 
-Read before publishing an Episode: the step that turns an Upcoming Episode with a page into a Published Episode. Han triggers it when the video is live, or asks an agent to run it. Promotion does not do it: Promotion precedes the German video and the release.
+Read before publishing an Episode: the step that turns an Upcoming Episode with a page into a Published Episode. Han triggers it when the video is live, or asks an agent to run it. Promotion does not do it, and the two happen in either order.
 
 Until then the Episode is Upcoming: its page is built and served at `/episodes/<slug>` and `/de/episodes/<slug>`, reachable by URL alone, `noindex`, and its overview card is unlinked and reads its copy from its own `i18n/`. No shared link to one of its Slides exists, so its anchors are not yet bound.
 
