@@ -96,7 +96,13 @@ describe('success cases', () => {
   it('registers ai-attention-span as an upcoming Episode with a page, a draft with no publishedOn', () => {
     // ARRANGE
     const slug = 'ai-attention-span';
-    const expected = { slug, status: 'upcoming', topic: 'ai-enablement', format: 'foundations', tags: [] };
+    const expected = {
+      slug,
+      status: 'upcoming',
+      topic: 'ai-enablement',
+      format: 'foundations',
+      tags: ['context-engineering', 'workflow', 'context-window'],
+    };
     // ACT
     const metadata = listEpisodes().find((episode) => episode.slug === slug);
     const page = hasPage(slug);

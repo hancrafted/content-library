@@ -4,9 +4,8 @@ import type { UpcomingEpisodeMetadata } from '@/lib/episode-metadata.pure';
 export const episodeMetadata = {
   slug: 'ai-attention-span',
   status: 'upcoming',
-  // Needs human: the Brief names no Topic; ai-enablement is the closest existing Topic.
+  // Han: context engineering, part of AI enablement; Topics have no sub-Topics, so it is a Tag.
   topic: 'ai-enablement',
   format: 'foundations',
-  // Needs human: the Brief names no Tags; an empty list until Han picks them.
-  tags: [],
+  tags: ['context-engineering', 'workflow', 'context-window'],
 } as const satisfies UpcomingEpisodeMetadata;
