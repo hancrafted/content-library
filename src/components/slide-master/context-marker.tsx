@@ -30,9 +30,10 @@ const FORMS: Record<Placement, string> = { inline: INLINE, element: ELEMENT, bes
 const STATIC = /^(?:[\w@-]+:)*!?static$/;
 
 /**
- * The placement a marker takes. A caller's `static`, at any breakpoint, is dropped: a static button would let its
- * absolute hit area span the nearest positioned ancestor, the whole Slide, and swallow every click there. An element
- * marker asked to be static means in flow, which is `beside`.
+ * The placement a marker takes. The marker owns its hit area: a `static` class from a caller, at any breakpoint, is
+ * dropped, because a static button would let its absolute hit area span the nearest positioned ancestor, the whole
+ * Slide, and swallow every click there. An element marker asked to be static means in flow, which is `beside`. A call
+ * site never needs to ask: `eslint.config.mjs` refuses `static` on a marker (design-ADR-0013).
  */
 function placementOf(placement: Placement, className = ''): { placement: Placement; className: string } {
   const classes = className.split(/\s+/).filter(Boolean);
