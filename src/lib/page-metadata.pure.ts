@@ -36,6 +36,11 @@ export interface PageCopy {
   readonly status?: EpisodeStatus;
 }
 
+/** Whether a page is kept out of search: the dashboard, and an Episode still upcoming. Metadata and sitemap both ask. */
+export function isNoindex(page: PageRef, status?: EpisodeStatus): boolean {
+  return page === 'dashboard' || status === 'upcoming';
+}
+
 /**
  * A page's metadata: its copy, its canonical, and reciprocal hreflang
  * alternates. The landing page's copy is `meta.home` of the site-wide
@@ -63,6 +68,6 @@ export function pageMetadata(page: PageRef, locale: Locale, copy?: PageCopy): Me
       canonical: localizePath(route, locale),
       languages: { ...languages, 'x-default': localizePath(route, DEFAULT_LOCALE) },
     },
-    ...(page === 'dashboard' || copy?.status === 'upcoming' ? { robots: { index: false } } : {}),
+    ...(isNoindex(page, copy?.status) ? { robots: { index: false } } : {}),
   };
 }
