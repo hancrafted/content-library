@@ -4,7 +4,7 @@ title: Why AI has a weird attention span you must learn to manage
 status: draft
 generated:
   by: claude-code/opus-5.5
-  at: 2026-10-20T20:25:27Z
+  at: 2026-10-20T20:35:57Z
 locale: en
 brief: ./brief.md
 verified:
@@ -12,6 +12,8 @@ verified:
     at: 2026-10-20T19:36:52Z
   - by: process:markdown-harness
     at: 2026-10-20T20:25:27Z
+  - by: process:markdown-harness
+    at: 2026-10-20T20:35:57Z
 ---
 
 # Why AI has a weird attention span you must learn to manage {#ai-attention-span}
@@ -20,7 +22,7 @@ verified:
 
 #### Voice script
 
-1. **A long chat is a long call** — a long AI chat behaves like a long phone call; the call first, then the chat
+1. **A long chat is a long call** — Imagine the last long phone call you had with someone close, a sister, a friend, your mum. You called to settle one thing, and an hour later you hung up. Before I say a word about AI, I want you to feel what that call left you with, because the question I want to ask you is whether a long AI chat does the same thing to you, so the call comes first and the chat second.
 
 ### The long phone call {#the-long-phone-call-story}
 
@@ -51,11 +53,11 @@ It plays in three steps. First, every bubble in the middle fades to soft grey wh
 
 #### Voice script
 
-1. **The start sticks** — it's called primacy; "let's sort out the holidays", the first thing sets the frame and you remember it
-2. **The end sticks** — it's called recency; "talk soon, bye", the last minutes are fresh because they just happened
-3. **The middle blurs** — an hour of detail, the neighbours, the phone, the back pain; you can hardly say what was in it
-4. **One thing stands out** — the dog and the birthday cake; what is different survives, it's called the isolation effect
-5. **We never fixed the date** — the one thing you called for; does an AI chat do the same
+1. **The start sticks** — Say you call your sister to sort out the holidays. "Let's sort out the holidays!" is how it starts, and that first line sets the frame for everything after it, so you still remember it at the end. That is called primacy.
+2. **The end sticks** — You also remember how it ended. "Talk soon, bye", and the last few minutes before it, because they just happened and are still fresh. That is called recency.
+3. **The middle blurs** — Now the middle. An hour of detail went by, the neighbours' renovation, Mum's new phone, your sister's back pain, and if someone asked you what was in it, you could hardly say. All of it was said, and very little of it stayed.
+4. **One thing stands out** — Except one thing. Pepper ate a whole birthday cake, candles included. Nobody asked you to keep that, and you can still tell it, because what is different from everything around it survives. That is called the isolation effect.
+5. **We never fixed the date** — And then the punchline. Dinner is ready, she has to run, and you realise: we never fixed the date. The one thing you called for never got settled. (pause) Hold on to that, because the question is whether an AI chat does the same.
 
 ### AI forgets the middle too {#ai-forgets-the-middle-too}
 
@@ -82,16 +84,16 @@ One effect at a time, the same lighting is applied to both threads. The first bu
 
 #### Voice script
 
-1. **Meet the summer-party chat** — the workshop's hands-on: you plan the company summer party with the AI; 40 people, end of June, a budget of 40,000 euro, a catering PDF, a guest list; we come back to this chat all episode
-2. **It happens in a long chat too** — you start with the plan and the budget, the chat runs on for an hour; the first and last messages tend to get used, the middle gets lost, and a repeated detail like the vegetarians survives; the budget slips later, and why comes on a later Slide
-3. **A shape, not a brain** — I'm not saying the AI thinks like you do; I'm saying you can predict where it slips
-4. **What a lost detail costs** — with your sister it's funny; with a deadline it's expensive; ask yourself which one your chat is
+1. **Meet the summer-party chat** — So let me introduce a chat that stays with us for the rest of the episode. You plan a company summer party with an AI: 40 people, end of June, a budget of 40,000 euro, and you give it a catering PDF and a guest list. Remember this chat, because we come back to it on every slide that follows.
+2. **It happens in a long chat too** — Now let it run for an hour. You started with the plan and the budget, and the first messages tend to get used, the latest messages tend to get used, and the middle gets lost. A detail you keep repeating, like the 12 vegetarian guests, survives. Later the budget slips, which is odd for a number from your very first message, and why that happens comes on a later slide.
+3. **A shape, not a brain** — I'm not saying the AI thinks the way you do. It has no sister and no Mum with a new phone. What I'm saying is that the shape is the same, and a shape is something you can predict, so you know where to expect the slip.
+4. **What a lost detail costs** — With your sister, a lost detail is funny. With a deadline, it's expensive. So ask yourself which one your chat is: the one with the dog and the cake, or the one with your budget in it.
 
 ## The AI's attention span {#the-ais-attention-span}
 
 #### Voice script
 
-1. **Why it happens** — the pattern has a cause in how the AI holds a chat; first the cause, then what it does to your answers
+1. **Why it happens** — So far you have seen what happens. Now the cause, because once you know how the AI holds a chat, the pattern stops being a surprise, and only after that do we look at what it does to your answers.
 
 ### The context window {#the-context-window}
 
@@ -114,10 +116,10 @@ The Context window cornerstone, shown by Preset: the Bar view with Simple explan
 
 #### Voice script
 
-1. **You type one line** — what you send is a short message; what the AI receives is the whole conversation so far, again, every time
-2. **There is a size limit** — the bundle has a maximum size; this limit is the AI's attention span; it fills message by message
-3. **The term to keep** — context window; if you remember one word from today, this one
-4. **Context engineering** — giving the AI the right context at the right time; that is what we manage today
+1. **You type one line** — You type one short line, say, find three venues in Lisbon. But what the AI receives is the whole conversation so far, from your first message to your last, and it receives all of it with every single message you send.
+2. **There is a size limit** — That bundle has a maximum size. Picture it as a bar that fills up block by block, one block for every question and every answer, until there is no room left. That bar is the context window. That limit is the AI's attention span: how much it can hold in view at once.
+3. **The term to keep** — The term to keep is context window. If you remember one word from today, take this one, context window.
+4. **Context engineering** — There is a name for working with it: context engineering. It means giving the AI the right context at the right time, not the most context, the right one. That is what we manage today.
 
 ### What happens when the bar fills up {#what-happens-when-the-bar-fills-up}
 
@@ -145,13 +147,13 @@ The Context window cornerstone, shown by Preset: the Attention view on the defau
 
 #### Voice script
 
-1. **The start helps, but is no guarantee** — the first and last messages tend to be used best, like the opening and the end of the call; the numbers on this Slide are illustrative
-2. **The newest stays sharp** — the latest messages are used well too
-3. **The middle blurs** — what you said an hour ago sits in the blurry middle
-4. **A standout survives** — the repeated detail, the 12 vegetarian guests, is still there; the plan has a vegetarian menu
-5. **Answers get worse** — new: as the chat fills, the answers get worse, even before it is full; this is called context rot
-6. **The budget is forgotten** — your very first message said 40,000 euro; now the plan comes back at 52,300; it was not lost by its position, it got little attention among many similar numbers
-7. **Filling the gap** — one small number among many similar ones from the offers and searches, so the AI fills the gap itself; that's my hypothesis, not proven
+1. **The start helps, but is no guarantee** — Now watch what happens as this chat grows. The start still helps, because the first messages tend to be used well, like the opening of the call, but that is no guarantee, and you will see why in a moment. One thing before we go on: the numbers on this slide are illustrative, I picked a 200K window and the little bars that show how much the AI looks at each message, to show the shape, not to measure anything.
+2. **The newest stays sharp** — The newest stays sharp too. The latest messages are used well, like the last minutes of the call, because they sit right at the end of what the AI is reading.
+3. **The middle blurs** — The middle blurs. What you said an hour ago sits in the blurry part, and the AI treats it the way you treat the neighbours' renovation: it was there, but it is thin.
+4. **A standout survives** — And one standout survives. The 12 vegetarian guests, a detail the chat keeps repeating, are still there, and the plan comes back with a vegetarian menu.
+5. **Answers get worse** — Now something new, and this is where it gets uncomfortable. As the chat fills, the answers get worse. This is called context rot.
+6. **The budget is forgotten** — Look at the budget. Your very first message said 40,000 euro, and now the plan comes back at 52,300. The start of a chat is attended to well, so it was not lost by its position. It got little attention because it is one short number among many similar ones.
+7. **Filling the gap** — So here is a small number sitting among all the similar numbers from the offers and the searches, and when the AI can't find it, I think it fills the gap itself with something that sounds plausible. I want to be straight about this: that is my hypothesis, not proven.
 
 ### Attention is a budget {#attention-is-a-budget}
 
@@ -174,12 +176,12 @@ The Context window cornerstone, shown by Preset: paused on the Attention view, a
 
 #### Voice script
 
-1. **A hundred units** — think of attention as a budget of a hundred units; the numbers, the token counts and the window sizes too, are illustrative; I made them up to show the shape
-2. **Where it goes** — a big share to the start, a big share to the newest messages, the rest spread thinner and thinner
-3. **A spike in the middle** — a detail you keep repeating keeps its share; the 12 vegetarian guests
-4. **Smart zone and dumb zone** — somewhere the middle gets too thin to trust; before the line the AI is in the smart zone, beyond it in the dumb zone; Matt Pocock puts the line at 80K on a 200K window and 150K on a 1M window; his number, a rule of thumb
-5. **Having it is not using it** — your sister recorded the call and still can't find what you said at one hour, 13 minutes, 17 seconds
-6. **My own line** — 300K tokens, and only on the 1M window; one practitioner's habit, not a law
+1. **A hundred units** — Think of attention as a budget of a hundred units. And I say it plainly: these numbers, the token counts and the window sizes on this slide are illustrative. I made them up to show the shape, so please don't take them as measurements.
+2. **Where it goes** — Where does the budget go? A big share to the start, a big share to the newest messages, and what is left is shared out across the middle, thinner and thinner with every message you add. That is why the middle fades.
+3. **A spike in the middle** — But a detail you keep repeating keeps its share, and it shows as a spike in the middle. The 12 vegetarian guests came up again and again, so they stay bright, while the budget, said once, fades.
+4. **Smart zone and dumb zone** — Somewhere, the middle gets too thin to trust. Before that line the AI is in the smart zone, beyond it in the dumb zone. Matt Pocock puts the line at 80K tokens on a 200K window and at 150K on a 1M window. That is his number, a rule of thumb, and you only get the zone names now because you have already seen the middle fade.
+5. **Having it is not using it** — Having it is not the same as using it. Your sister secretly recorded the call, and she still can't find what you said at one hour, 13 minutes and 17 seconds. The recording is complete, and finding one sentence in it is the hard part. A full window works the same way.
+6. **My own line** — My own line sits at 300K tokens, and only on the 1M window. That is one practitioner's habit, not a law. Yours may differ, and that is fine, as long as it is a line you chose on purpose.
 
 ### What we learned so far {#what-we-learned-so-far}
 
@@ -197,15 +199,15 @@ A small version of the phone-call transcript on the left, with the fade on its m
 
 #### Voice script
 
-1. **Same effects** — long AI conversations show what long human conversations show
-2. **The window is the span** — the AI's attention span is its context window
-3. **Manage it** — treat it as a resource you actively manage, so important decisions and information don't get lost in the middle
+1. **Same effects** — Let's put it together. Long AI conversations show the same effects as long human ones: the start, the end and a standout survive, and the middle blurs.
+2. **The window is the span** — The reason is that the AI's attention span is its context window, a limited space that fills with every message.
+3. **Manage it** — So treat it as a resource you manage actively, so that important decisions and information don't get lost in the middle. The rest of the episode is about what goes into that window, and what you do about it.
 
 ## What fills the window {#what-fills-the-window}
 
 #### Voice script
 
-1. **More in there than you typed** — what you see is only part of what the AI reads; what else goes in
+1. **More in there than you typed** — You have seen the window fill with your messages. But your messages are only a part of it, so the next question is what else goes in without you noticing.
 
 ### What's really in the window {#whats-really-in-the-window}
 
@@ -232,10 +234,10 @@ The Context window cornerstone, shown by Preset: the Grid view, with the explana
 
 #### Voice script
 
-1. **More than the chat** — what you see in the chat is only part of what the AI reads
-2. **Starting instructions** — text placed in front of your first message, before you type a word
-3. **Memory** — short notes about you, saved earlier and put back in front of the AI, which is why a new chat already knows a few things about you
-4. **The rest** — attached files, web pages, tool results; I only name them today, they all share the same window
+1. **More than the chat** — What you see in the chat is only part of what the AI reads. The chat is the visible slice, and around it sit other parts that you never typed.
+2. **Starting instructions** — First, the starting instructions: text placed in front of your first message, before you type a single word. That way the AI is already briefed before you say anything.
+3. **Memory** — Second, memory: short notes about you, saved earlier and put back in front of the AI, which is why a new chat already knows a few things about you. It is useful, and it is one more thing in the window.
+4. **The rest** — The rest are attached files, web pages the AI read, and results from tools and connectors. I only name them today. What matters is that they all share the same window as your chat.
 
 ### One innocent question {#one-innocent-question}
 
@@ -261,11 +263,11 @@ The Context window cornerstone, shown by Preset: the Technical view with the gri
 
 #### Voice script
 
-1. **Three venues** — a small question, three options in the answer, and two searches behind it
-2. **What you don't see** — the searches add some extracts you never see, a modest bite each
-3. **The catering PDF** — then you point at the catering offers; the AI reads all twenty pages, the big jump
-4. **The intern** — give an intern the same task and they'd read the whole file first too; the AI just does it fast and shows you only the result
-5. **A big bite** — one short question can take a big bite out of the window
+1. **Three venues** — Say you ask: find three venues in Lisbon. It is a small question. The answer is three options in a few lines, and behind it the AI ran two searches.
+2. **What you don't see** — Those searches bring back extracts of web pages that you never see. Each one is a modest bite, and the window takes it and moves on.
+3. **The catering PDF** — Then you point at the catering offers in the project folder and ask which one fits. The answer is one line, Sabor Verde. To give it, the AI read the whole catering PDF, all twenty pages, and that one question filled the window far more than anything before it.
+4. **The intern** — Give an intern the same task and they would read the whole file first too, before telling you one line. The AI does exactly that, only fast, and it shows you just the result. There is nothing wrong with it, you only need to know it happened.
+5. **A big bite** — So one short question can take a big bite out of the window while the chat looks as small as before. Keep that in mind when a chat feels full sooner than you expected.
 
 ### You can't watch the meter {#you-cant-watch-the-meter}
 
@@ -291,16 +293,16 @@ First version: the sister's notepad, a few scribbled lines on a notepad card in 
 
 #### Voice script
 
-1. **Her own notes** — your sister doesn't keep the call, she keeps her own notes of it; a few lines instead of everything
-2. **The app does something like it** — when a chat gets long, older messages can be squeezed into a short summary so the conversation can go on
-3. **You can't watch the meter** — the chat looks the same, and nothing tells you how full the window is, so you rely on habits, not a gauge
-4. **Why the budget survived** — you flagged the 12,300 over budget just before, so it made it into the summary and the plan fits 40,000 euro again; not every detail makes it
+1. **Her own notes** — Your sister doesn't keep the call. She keeps her own notes of it, a few scribbled lines: Mum's phone, the renovation, Pepper and the cake. A few lines instead of everything.
+2. **The app does something like it** — The app does something like it. When a chat gets long, older messages can be squeezed into a short summary, so the conversation can go on instead of hitting the wall.
+3. **You can't watch the meter** — And here is the catch: the chat looks the same. Every bubble is still there, so you can't rely on a gauge, you rely on habits.
+4. **Why the budget survived** — Why did the budget survive here? Because you flagged the 12,300 over budget just before, so it was fresh when the summary was written, and the plan fits 40,000 euro again. That was timing.
 
 ## Managing the attention span {#managing-the-attention-span}
 
 #### Voice script
 
-1. **You manage by habit** — you can't read a gauge, so you build habits, from everyday ones to the big project
+1. **You manage by habit** — You can't read a gauge, so you build habits. First the everyday ones, and then the one for a big project.
 
 ### Everyday habits {#everyday-habits}
 
@@ -321,12 +323,12 @@ A cut-down Context window cornerstone, shown by Preset: two bars side by side. O
 
 #### Voice script
 
-1. **Break it down** — you know this already; split a big task into small steps
-2. **Fresh start** — you know this one too; a fresh start spends the whole window on the work in front of you
-3. **One chat, one job** — the topic changes, open a new chat
-4. **Ask for a handoff** — after real progress or before a coffee break, stop and ask for a handoff
-5. **Read and correct it** — read it, correct what's wrong; a summary can lose things, and you are accountable
-6. **Start the next chat with it** — paste the handoff in first; the new chat starts small and sharp
+1. **Break it down** — Break it down. You know this one already: you split a big task into small steps, and each step is small enough to hold in view.
+2. **Fresh start** — Fresh start. You know this one too: a fresh start spends the whole window on the work in front of you, and none of it on what happened an hour ago.
+3. **One chat, one job** — One chat, one job. When the topic changes, open a new chat, so that the hotel question doesn't have to carry the catering PDF along.
+4. **Ask for a handoff** — Ask for a handoff. After real progress, or before a coffee break, stop and ask the AI for a handoff: a short card with the goal, what is decided and what comes next.
+5. **Read and correct it** — Then read it and correct what is wrong. A summary can leave things out or get one wrong, and you are the one accountable for what the next chat believes.
+6. **Start the next chat with it** — And start the next chat with it. Paste the handoff in as the first message, and the new chat starts small and sharp, with the venue, the caterer, the budget and the next step, and nothing else.
 
 ### The workflow for bigger projects {#the-workflow-for-bigger-projects}
 
@@ -345,11 +347,11 @@ Mini context bars on the white stage. One slim bar at the top is the planner cha
 
 #### Voice script
 
-1. **One chat is too small** — a bigger project would fill any single window
-2. **Break it down first** — work backward from the outcome, with the AI's help if you like
-3. **One planner** — one chat stays the planner and keeps only the plan and the results
-4. **A fresh chat per step** — hand each step to a fresh chat, take the result back, and let that chat go
-5. **You coordinate** — like a project manager; this is what we call a workflow
+1. **One chat is too small** — Sometimes the project is bigger than one chat can hold: the whole summer party, with venues, catering, hotels and invitations. One chat would fill up, whatever window size you give it.
+2. **Break it down first** — So you break it down first. Work backward from the outcome, what do I need to run this party, and then what do I need for that, until the next step is clear. You can ask the AI to help you with that.
+3. **One planner** — Then one chat stays the planner. It keeps only the plan and the results, so it stays small and has room to spare.
+4. **A fresh chat per step** — Each step goes to a fresh chat: venues, catering, invitations. That chat reads its files and fills up as much as it needs, hands the result back to the planner as one small card, and then you let it go. Next step, next fresh chat.
+5. **You coordinate** — And you coordinate, like a project manager. This is what we call a workflow. Every chat has one job, so none of them runs long enough to blur its middle. That is the whole idea: the window is the AI's attention span, and managing it is your job. One honest caveat: the zones and numbers I gave you are rules of thumb and illustrations, and I have not tested every chat app, so watch your own chats and adjust. If you want a low-key place to start, take the next chat that drifts, ask it for a handoff, and open a new one with it. Thank you.
 
 ## Notes
 
