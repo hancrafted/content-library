@@ -52,6 +52,7 @@ describe('success cases', () => {
       ],
       minutes: 42,
       publishedOn: '2026-10-09',
+      releaseDate: 'Oct 9, 2026',
       featuredRank: 3,
       accent: 'amber',
       icon: 'coins',
@@ -117,6 +118,15 @@ describe('success cases', () => {
     const { tags } = episodeCard(entry, { locale: 'en', read });
     // ASSERT
     expect(tags).toEqual(expected);
+  });
+
+  it("names a published card's release date in the reader's locale", () => {
+    // ARRANGE
+    const expected = '9. Okt. 2026';
+    // ACT
+    const { releaseDate } = episodeCard(PUBLISHED, { locale: 'de', read });
+    // ASSERT
+    expect(releaseDate).toBe(expected);
   });
 
   it("links a published card to its video in the reader's locale when the Episode has one", () => {
@@ -222,6 +232,25 @@ describe('edge cases', () => {
     const { tags } = episodeCard(UPCOMING, { locale: 'en', read });
     // ASSERT
     expect(tags).toEqual(expected);
+  });
+
+  it('names the calendar day as written on New Year, never shifted a day by the time zone', () => {
+    // ARRANGE
+    const entry = { ...PUBLISHED, publishedOn: '2027-01-01' as const };
+    const expected = 'Jan 1, 2027';
+    // ACT
+    const { releaseDate } = episodeCard(entry, { locale: 'en', read });
+    // ASSERT
+    expect(releaseDate).toBe(expected);
+  });
+
+  it('gives an upcoming card no release date', () => {
+    // ARRANGE
+    const absent = 'releaseDate';
+    // ACT
+    const keys = Object.keys(episodeCard(UPCOMING, { locale: 'en', read }));
+    // ASSERT
+    expect(keys).not.toContain(absent);
   });
 
   it('leaves the video link off a card whose Episode has no video', () => {

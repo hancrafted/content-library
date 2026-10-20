@@ -1,6 +1,7 @@
 import type { EpisodeCard } from '@/components/landing/episode-card.pure';
 import { HighlightLabel } from '@/components/landing/episode-highlight-label';
 import { EpisodeLinks } from '@/components/landing/episode-links';
+import { ReleaseDate } from '@/components/landing/episode-release-date';
 import { TOPIC_ACCENTS, TOPIC_ICONS } from '@/components/landing/episode-visuals';
 import type { VideoLabels } from '@/components/landing/episode-youtube-link';
 import { localizePath, type Locale } from '@/lib/locale.pure';
@@ -34,11 +35,14 @@ function CardTitle({ card, locale }: { card: EpisodeCard; locale: Locale }) {
   );
 }
 
-/** The card's last row: where else the Episode is published on the left, the open cue (or "coming soon") on the right. */
+/** The card's last row: the release date and where else the Episode is published on the left, the open cue (or "coming soon") on the right. */
 function CardFooter({ card, labels }: { card: EpisodeCard; labels: CardLabels }) {
   return (
     <div className="mt-auto flex min-h-11 items-center justify-between gap-3 pt-3">
-      <EpisodeLinks card={card} labels={labels} />
+      <span className="inline-flex items-center gap-3">
+        <ReleaseDate card={card} className={META} />
+        <EpisodeLinks card={card} labels={labels} />
+      </span>
       {card.route === null ? (
         <span className="ml-auto rounded-full border border-border px-2.5 py-0.5 font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">
           {labels.comingSoon}
