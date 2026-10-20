@@ -26,9 +26,6 @@ sources:
   - id: 5
     resource: https://help.openai.com/en/articles/8590148-memory-faq
     title: 'OpenAI, Memory in ChatGPT'
-verified:
-  - by: process:markdown-harness
-    at: 2026-10-20T19:15:08Z
 ---
 
 # Why do chat assistants load saved memory at the start of a chat?
