@@ -51,6 +51,16 @@ Suits founders and coaching cohorts, who plan on whiteboards and sticky notes: a
 - `primary` marks the one thing to look at.
 - The meaning colours (`machine`, `human`, `ai`) appear only for their meanings.
 
+### Chat
+
+Suits a mixed audience, tech or not: everyone already reads a messenger, so the Slide looks like a tool they use every day, and the fade makes attention visible.
+
+- A modern messenger on a clean white stage; rounded chat bubbles and simple cards carry the content.
+- `primary` is the stage light on the one thing to look at; everything else fades to soft grey.
+- The fade carries meaning, what is out of focus, never decoration.
+- Motion moves things into and out of the light; nothing loops at rest.
+- The meaning colours (`machine`, `human`, `ai`) appear only for their meanings.
+
 ### Studio
 
 Suits a general audience meeting AI for the first time: sleek, calm Slides that feel current without looking like a product demo, so the ideas read as modern and the viewer stays on the claim.

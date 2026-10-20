@@ -48,6 +48,12 @@ _Avoid_: Chapter, part
 **Slide**: one frame in an Episode, stacked under the one before it: a page slide at least the viewport's height, a section slide at least 40% of it and, on the shared Slide header, on a band one step off the page; one folder named after its slug, carrying its own Scene, Speaker notes, Voice script and text, so an Episode is a composition of Slides and a Slide copies into another Episode with one import and one list entry. A Section's own slide is a **section slide**; the slides it holds are **page slides**.
 _Avoid_: Card, panel; page, which means the Next.js route the whole Episode renders as; "self-contained Slide", since every Slide is one
 
+**Cornerstone Slide**: a Slide whose content, knowledge and definitions make it a building block other Slides and Episodes cite; it is often, not always, reused. Every Episode stands on its own, so a citing Slide quotes the cornerstone's words that carry meaning on their own and never its acronyms.
+_Avoid_: Key slide, anchor slide
+
+**Preset**: one Slide's settings of a visual several Slides show: the view it opens in and what it lights, so the Slide tells its own story at rest.
+_Avoid_: State, configuration, variant
+
 **Title slide**: an Episode's opening Slide: its title, caption, optional Voice script and Speaker notes and, once recorded, its video. Not listed in the table of contents.
 _Avoid_: Hero or cover for the Slide itself; **Hero motif** names the Episode's recurring visual idea the Title slide sets, never the Slide
 
