@@ -24,6 +24,7 @@
     "test:browser": "vitest run --config vitest.browser.config.ts",
     "wt:new": "node skills/worktree/scripts/worktree.ts new",
     "wt:done": "node skills/worktree/scripts/worktree.ts done",
+    "wt:sync": "node skills/worktree/scripts/worktree.ts sync",
     "check:events": "node skills/new-episode/scripts/check-events-append-only.ts",
     "check:sources": "node skills/new-episode/scripts/check-sources.ts",
     "convert-reference": "node skills/new-episode/scripts/convert-reference.ts",
