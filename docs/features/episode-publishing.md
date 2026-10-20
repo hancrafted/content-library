@@ -12,7 +12,7 @@ Until then the Episode is Upcoming: its page is built and served at `/episodes/<
 
 ## Steps
 
-1. In `episodes/<slug>/episode-metadata.ts`: set `status: 'published'` and `publishedOn` to the date the video went live (`YYYY-MM-DD`), and change its `satisfies` to `PublishedEpisodeMetadata`. The `noindex` robots tag is derived from `status`, so it drops with the flip.
+1. In `episodes/<slug>/episode-metadata.ts`: set `status: 'published'` and `publishedOn` to the date the video went live (`YYYY-MM-DD`), which every card of it shows as its release date, and change its `satisfies` to `PublishedEpisodeMetadata`. The `noindex` robots tag is derived from `status`, so it drops with the flip.
 2. Run `npx vitest run src/components/episodes/published-anchors.test.ts`. It fails for the Episode and prints the file path and its JSON; create `episodes/<slug>/published-anchors.json` with exactly that content.
 3. Move the slug from `DRAFT_SLUGS` to `PUBLISHED_SLUGS` in `tests/post-build/episodes-index.build.test.ts`.
 4. To feature it, edit `FEATURED` in `src/lib/episode-overview.ts`; `tsc` refuses an Episode that is not published.

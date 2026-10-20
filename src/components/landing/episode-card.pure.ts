@@ -1,6 +1,7 @@
 import {
   topicsOf,
   type EpisodeStatus,
+  type IsoDate,
   type PublishedEpisodeMetadata,
   type UpcomingEpisodeMetadata,
 } from '@/lib/episode-metadata.pure';
@@ -59,6 +60,8 @@ export interface EpisodeCard {
   /** Reading time in this locale; left off when the Episode's record was not read. */
   readonly minutes?: number;
   readonly publishedOn?: string;
+  /** `publishedOn` as the reader's locale writes it ("Oct 20, 2026", "20. Okt. 2026"); left off when it is not published. */
+  readonly releaseDate?: string;
   /** Position in the Featured slots, 1 first; `null` for every other card. */
   readonly featuredRank: number | null;
   readonly accent: Accent;
@@ -111,6 +114,17 @@ function videoOf(entry: CardEntry, youtubeId?: string): Pick<EpisodeCard, 'youtu
   return { youtubeUrl: `https://www.youtube.com/watch?v=${youtubeId}` };
 }
 
+/** The release day as the locale writes it, read in UTC so the calendar day never shifts with the build machine's time zone. */
+function releaseDateOf(publishedOn: IsoDate, locale: Locale): string {
+  const format = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+  return format.format(new Date(`${publishedOn}T00:00:00Z`));
+}
+
+function releaseFields(entry: CardEntry, locale: Locale): Pick<EpisodeCard, 'publishedOn' | 'releaseDate'> {
+  if (entry.status !== 'published') return {};
+  return { publishedOn: entry.publishedOn, releaseDate: releaseDateOf(entry.publishedOn, locale) };
+}
+
 function publishedFields(entry: CardEntry, ctx: CardContext): Partial<EpisodeCard> {
   const isLinked = entry.status === 'published' || isDraftLinked(entry, ctx.linkDrafts);
   if (!isLinked || !isEpisodeSlug(entry.slug)) return {};
@@ -118,7 +132,7 @@ function publishedFields(entry: CardEntry, ctx: CardContext): Partial<EpisodeCar
   return {
     route,
     href: localizePath(route, ctx.locale),
-    publishedOn: entry.status === 'published' ? entry.publishedOn : undefined,
+    ...releaseFields(entry, ctx.locale),
     featuredRank: ctx.featuredRank ?? null,
     ...(ctx.minutes !== undefined ? { minutes: ctx.minutes } : {}),
     ...videoOf(entry, ctx.youtubeId),

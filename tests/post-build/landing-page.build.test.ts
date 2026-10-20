@@ -187,6 +187,18 @@ describe('landing page post-build structure', () => {
     },
   );
 
+  it.each([
+    { locale: 'en', url: localizePath(ROUTES.home, 'en'), expected: { dateTime: '2026-10-20', text: 'Oct 20, 2026' } },
+    { locale: 'de', url: localizePath(ROUTES.home, 'de'), expected: { dateTime: '2026-10-20', text: '20. Okt. 2026' } },
+  ] as const)('dates the lead Episode with its release day for locale $locale', ({ url, expected }) => {
+    // ARRANGE
+    const $ = getPage(url);
+    // ACT
+    const date = $('#episodes [data-spotlight="lead"] time[data-episode-date]');
+    // ASSERT
+    expect({ dateTime: date.attr('datetime'), text: date.text() }).toEqual(expected);
+  });
+
   it.each(LANDING_PAGES)(
     'links to the /episodes index page and references, and holds no browse grid, for locale $locale',
     ({ url, locale }) => {

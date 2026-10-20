@@ -3,6 +3,7 @@ import type { EpisodeCard } from '@/components/landing/episode-card.pure';
 import type { CardLabels } from '@/components/landing/episode-grid-card';
 import { HighlightLabel } from '@/components/landing/episode-highlight-label';
 import { EpisodeLinks } from '@/components/landing/episode-links';
+import { ReleaseDate } from '@/components/landing/episode-release-date';
 import { TOPIC_ACCENTS, TOPIC_ICONS, type AccentClasses } from '@/components/landing/episode-visuals';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { ArrowRight } from 'lucide-react';
@@ -98,7 +99,7 @@ const LEAD_CTA =
 const SIDE_CTA =
   'inline-flex items-center gap-1.5 font-mono text-xs font-semibold uppercase tracking-wider text-foreground';
 
-/** The visible call to action, for the eye only as the title's stretched link is the real target, and where else the Episode is published. */
+/** The visible call to action, for the eye only as the title's stretched link is the real target, then the release date and where else the Episode is published. */
 function Footer({ card, size, labels }: { card: EpisodeCard; size: Size; labels: CardLabels }) {
   return (
     <div className="mt-auto flex flex-wrap items-center justify-between gap-x-4 gap-y-2 pt-4">
@@ -106,7 +107,10 @@ function Footer({ card, size, labels }: { card: EpisodeCard; size: Size; labels:
         {labels.open}
         <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0" />
       </span>
-      <EpisodeLinks card={card} labels={labels} />
+      <span className="inline-flex items-center gap-3">
+        <ReleaseDate card={card} className={META} />
+        <EpisodeLinks card={card} labels={labels} />
+      </span>
     </div>
   );
 }
