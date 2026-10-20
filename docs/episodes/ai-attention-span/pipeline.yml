@@ -52,7 +52,7 @@
 #       agent       optional; the Claude Code agent type to spawn, general-purpose when omitted
 #       model       the model it runs on, or inherit; SKILL.md's job loop says where it applies
 #       session     optional; subagent (default) or orchestrator, by SKILL.md's job loop
-status: draft
+status: approved
 template: 81c34d4
 dev_port: 4001
 spec_port: 4002
@@ -157,25 +157,152 @@ jobs:
         session: orchestrator
 
   # One job per question retrieval lists under Research jobs, new or refresh;
-  # a reused question has none.
-  - id: write-research
+  # a reused question (4, LLM-0002) has none.
+  - id: write-research-memory-of-start-end-and-standouts
     stage: research
+    intent: >-
+      Answer the research question "Why do people remember the start, the end and the standout moments of a long conversation?" into docs/episodes/ai-attention-span/research/COG-0001__memory-of-start-end-and-standouts/research.md
+      by references/write-research.md.
     needs: [customize-pipeline]
     isolation: worktree
-    foreach: docs/episodes/ai-attention-span/research-plan.md#research-jobs
     before: [mh-query]
-    outputs: [docs/episodes/ai-attention-span/research/*/research.md]
+    outputs: [docs/episodes/ai-attention-span/research/COG-0001__memory-of-start-end-and-standouts/research.md]
     checks: [mh, vitest, sources]
     retries: 2
     agents:
       - type: implementor
         skills: [research, writing-for-agents]
         references:
-          [
-            references/write-research.md,
-            docs/episodes/ai-attention-span/brief.md,
-            docs/episodes/ai-attention-span/research-plan.md,
-          ]
+          - references/write-research.md
+          - docs/episodes/ai-attention-span/brief.md
+          - docs/episodes/ai-attention-span/research-plan.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-llm-lost-in-the-middle
+    stage: research
+    intent: >-
+      Answer the research question "Why do language models attend most to the start and end of a long context?" into docs/episodes/ai-attention-span/research/LLM-0006__llm-lost-in-the-middle/research.md
+      by references/write-research.md.
+    needs: [customize-pipeline]
+    isolation: worktree
+    before: [mh-query]
+    outputs: [docs/episodes/ai-attention-span/research/LLM-0006__llm-lost-in-the-middle/research.md]
+    checks: [mh, vitest, sources]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research, writing-for-agents]
+        references:
+          - references/write-research.md
+          - docs/episodes/ai-attention-span/brief.md
+          - docs/episodes/ai-attention-span/research-plan.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-context-rot-as-window-fills
+    stage: research
+    intent: >-
+      Answer the research question "Why does a model's output quality drop as its context window fills?" into docs/episodes/ai-attention-span/research/LLM-0007__context-rot-as-window-fills/research.md
+      by references/write-research.md. Cite docs/episodes/onboard-ai-every-time/research/AIE-0011__fresh-context-beats-long-chat/research.md as a partial Source; it answers only part of the question.
+    needs: [customize-pipeline]
+    isolation: worktree
+    before: [mh-query]
+    outputs: [docs/episodes/ai-attention-span/research/LLM-0007__context-rot-as-window-fills/research.md]
+    checks: [mh, vitest, sources]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research, writing-for-agents]
+        references:
+          - references/write-research.md
+          - docs/episodes/ai-attention-span/brief.md
+          - docs/episodes/ai-attention-span/research-plan.md
+          - docs/episodes/onboard-ai-every-time/research/AIE-0011__fresh-context-beats-long-chat/research.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-saved-memory-loaded-at-chat-start
+    stage: research
+    intent: >-
+      Answer the research question "Why do chat assistants load saved memory at the start of a chat?" into docs/episodes/ai-attention-span/research/LLM-0008__saved-memory-loaded-at-chat-start/research.md
+      by references/write-research.md. Cite docs/episodes/onboard-ai-every-time/research/LLM-0003__llm-memory-between-chats/research.md as a partial Source; it answers only part of the question.
+    needs: [customize-pipeline]
+    isolation: worktree
+    before: [mh-query]
+    outputs: [docs/episodes/ai-attention-span/research/LLM-0008__saved-memory-loaded-at-chat-start/research.md]
+    checks: [mh, vitest, sources]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research, writing-for-agents]
+        references:
+          - references/write-research.md
+          - docs/episodes/ai-attention-span/brief.md
+          - docs/episodes/ai-attention-span/research-plan.md
+          - docs/episodes/onboard-ai-every-time/research/LLM-0003__llm-memory-between-chats/research.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-web-search-fills-context-window
+    stage: research
+    intent: >-
+      Answer the research question "Why does a web search fill the context window with whole pages rather than just the answer?" into docs/episodes/ai-attention-span/research/LLM-0009__web-search-fills-context-window/research.md
+      by references/write-research.md.
+    needs: [customize-pipeline]
+    isolation: worktree
+    before: [mh-query]
+    outputs: [docs/episodes/ai-attention-span/research/LLM-0009__web-search-fills-context-window/research.md]
+    checks: [mh, vitest, sources]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research, writing-for-agents]
+        references:
+          - references/write-research.md
+          - docs/episodes/ai-attention-span/brief.md
+          - docs/episodes/ai-attention-span/research-plan.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-hidden-summary-of-older-messages
+    stage: research
+    intent: >-
+      Answer the research question "Why do consumer chat apps summarise older messages without showing it?" into docs/episodes/ai-attention-span/research/LLM-0010__hidden-summary-of-older-messages/research.md
+      by references/write-research.md.
+    needs: [customize-pipeline]
+    isolation: worktree
+    before: [mh-query]
+    outputs: [docs/episodes/ai-attention-span/research/LLM-0010__hidden-summary-of-older-messages/research.md]
+    checks: [mh, vitest, sources]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research, writing-for-agents]
+        references:
+          - references/write-research.md
+          - docs/episodes/ai-attention-span/brief.md
+          - docs/episodes/ai-attention-span/research-plan.md
         model: sonnet
       - type: reviewer
         skills: []
@@ -188,7 +315,16 @@ jobs:
   - id: write-dossier
     stage: dossier
     needs: [customize-pipeline]
-    wants: [write-research]
+    wants:
+      [
+        write-research-memory-of-start-end-and-standouts,
+        write-research-llm-lost-in-the-middle,
+        write-research-context-rot-as-window-fills,
+        write-research-saved-memory-loaded-at-chat-start,
+        write-research-web-search-fills-context-window,
+        write-research-hidden-summary-of-older-messages,
+        convert-references,
+      ]
     before: [mh-query]
     outputs: [docs/episodes/ai-attention-span/dossier.md]
     checks: [mh, vitest]
@@ -200,7 +336,13 @@ jobs:
           - references/write-dossier.md
           - docs/episodes/ai-attention-span/brief.md
           - docs/episodes/ai-attention-span/research-plan.md
-          - docs/episodes/ai-attention-span/research/*/research.md
+          - docs/episodes/ai-attention-span/research/COG-0001__memory-of-start-end-and-standouts/research.md
+          - docs/episodes/ai-attention-span/research/LLM-0006__llm-lost-in-the-middle/research.md
+          - docs/episodes/ai-attention-span/research/LLM-0007__context-rot-as-window-fills/research.md
+          - docs/episodes/ai-attention-span/research/LLM-0008__saved-memory-loaded-at-chat-start/research.md
+          - docs/episodes/ai-attention-span/research/LLM-0009__web-search-fills-context-window/research.md
+          - docs/episodes/ai-attention-span/research/LLM-0010__hidden-summary-of-older-messages/research.md
+          - docs/episodes/onboard-ai-every-time/research/LLM-0002__llm-resends-whole-chat/research.md
           - docs/episodes/ai-attention-span/reference/context-window-cornerstone/design-reference.md
           - docs/profile/storytelling-guide.md
           - docs/profile/tone-guide.md
@@ -320,11 +462,134 @@ jobs:
 
   # One job per Section, the h3s under the Brief's Slides, in parallel: each
   # builds its Slides at its own placement marker.
-  - id: implement-section
+  - id: implement-section-the-long-phone-call
     stage: build
+    intent: >-
+      Build Section 1 of 4, "The long phone call", at its placement marker by
+      references/implement-section.md.
     needs: [implement-episode-init]
     isolation: worktree
-    foreach: docs/episodes/ai-attention-span/brief.md#slides
+    port: 4007
+    outputs: []
+    checks: [verify, build, test:build, impeccable, visual-check]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [tdd, visual-check, vercel-react-best-practices, web-design-guidelines, commit]
+        agent: archgate:developer
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/ai-attention-span/spec/spec.html
+          - docs/episodes/ai-attention-span/reference/context-window-cornerstone/design-reference.md
+        model: opus
+      # code-review spawns its own subagents, so the reviewer runs in the
+      # orchestrator's session; its subagents give the fresh eyes.
+      - type: reviewer
+        skills:
+          - code-review
+          - visual-check
+          - ui-ux-pro-max:ui-ux-pro-max
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - performance-optimization
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/ai-attention-span/spec/spec.html
+          - docs/episodes/ai-attention-span/reference/context-window-cornerstone/design-reference.md
+        rubric: references/implement-section.md#rubric
+        model: opus
+        session: orchestrator
+
+  - id: implement-section-the-ais-attention-span
+    stage: build
+    intent: >-
+      Build Section 2 of 4, "The AI's attention span", at its placement marker by
+      references/implement-section.md.
+    needs: [implement-episode-init]
+    isolation: worktree
+    port: 4008
+    outputs: []
+    checks: [verify, build, test:build, impeccable, visual-check]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [tdd, visual-check, vercel-react-best-practices, web-design-guidelines, commit]
+        agent: archgate:developer
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/ai-attention-span/spec/spec.html
+          - docs/episodes/ai-attention-span/reference/context-window-cornerstone/design-reference.md
+        model: opus
+      # code-review spawns its own subagents, so the reviewer runs in the
+      # orchestrator's session; its subagents give the fresh eyes.
+      - type: reviewer
+        skills:
+          - code-review
+          - visual-check
+          - ui-ux-pro-max:ui-ux-pro-max
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - performance-optimization
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/ai-attention-span/spec/spec.html
+          - docs/episodes/ai-attention-span/reference/context-window-cornerstone/design-reference.md
+        rubric: references/implement-section.md#rubric
+        model: opus
+        session: orchestrator
+
+  - id: implement-section-what-fills-the-window
+    stage: build
+    intent: >-
+      Build Section 3 of 4, "What fills the window", at its placement marker by
+      references/implement-section.md.
+    needs: [implement-episode-init]
+    isolation: worktree
+    port: 4009
+    outputs: []
+    checks: [verify, build, test:build, impeccable, visual-check]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [tdd, visual-check, vercel-react-best-practices, web-design-guidelines, commit]
+        agent: archgate:developer
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/ai-attention-span/spec/spec.html
+          - docs/episodes/ai-attention-span/reference/context-window-cornerstone/design-reference.md
+        model: opus
+      # code-review spawns its own subagents, so the reviewer runs in the
+      # orchestrator's session; its subagents give the fresh eyes.
+      - type: reviewer
+        skills:
+          - code-review
+          - visual-check
+          - ui-ux-pro-max:ui-ux-pro-max
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - performance-optimization
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/ai-attention-span/spec/spec.html
+          - docs/episodes/ai-attention-span/reference/context-window-cornerstone/design-reference.md
+        rubric: references/implement-section.md#rubric
+        model: opus
+        session: orchestrator
+
+  - id: implement-section-managing-the-attention-span
+    stage: build
+    intent: >-
+      Build Section 4 of 4, "Managing the attention span", at its placement marker by
+      references/implement-section.md.
+    needs: [implement-episode-init]
+    isolation: worktree
+    port: 4010
     outputs: []
     checks: [verify, build, test:build, impeccable, visual-check]
     retries: 2
@@ -359,7 +624,13 @@ jobs:
 
   - id: open-pr
     stage: pr
-    needs: [implement-section]
+    needs:
+      [
+        implement-section-the-long-phone-call,
+        implement-section-the-ais-attention-span,
+        implement-section-what-fills-the-window,
+        implement-section-managing-the-attention-span,
+      ]
     outputs: []
     checks: []
     retries: 0
