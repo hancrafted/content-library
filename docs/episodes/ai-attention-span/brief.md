@@ -4,7 +4,7 @@ title: Why AI has a weird attention span you must learn to manage
 status: draft
 generated:
   by: claude-code/opus-5.5
-  at: 2026-10-20T19:01:52Z
+  at: 2026-10-20T20:56:53Z
 verified:
   - by: process:markdown-harness
     at: 2026-10-20T15:27:48Z
@@ -12,6 +12,8 @@ verified:
     at: 2026-10-20T19:01:52Z
   - by: human:han
     at: 2026-10-20T19:01:53Z
+  - by: process:markdown-harness
+    at: 2026-10-20T20:56:53Z
 ---
 
 # Why AI has a weird attention span you must learn to manage
@@ -59,7 +61,7 @@ The long phone call: primacy, recency, a blurry middle and standout highlights, 
 - The bridge to the promotion Episode is spoken in the workshop only, never on a Slide.
 - Attention values (for example 20 units to the start, 30 to the end, 50 spread across the middle) and token counts are illustrative, and every Slide showing them says so.
 - A grounding comes before every mechanism: the viewer feels the problem before a term names it, so the smart and dumb zone appear only after the viewer has seen the middle fade.
-- Slides 3, 4, 5, 7, 8, 10 and 11 are states of one shared visual, the context window cornerstone; each still tells its own story and reads top to bottom without touching a toggle.
+- Slides 3, 4, 5, 7, 8, 9, 10 and 11 are states of one shared visual, the context window cornerstone; each still tells its own story and reads top to bottom without touching a toggle.
 - Questions to the room (who plans their own attention, their calendar) are spoken in the workshop only, so the YouTube cut works without an audience.
 
 ## Slides
@@ -71,16 +73,16 @@ The long phone call: primacy, recency, a blurry middle and standout highlights, 
 
 ### The AI's attention span
 
-3. **The context window** — the reveal: the mechanism behind the effects is the context window, a limit on the bundle the app resends every turn, filling message by message. Context engineering is giving the AI the right context at the right time. _Visual:_ the cornerstone, Bar view and Simple explanations: chat on the left, one shared scroll bar in the middle, the context bar filling top to bottom on its right, the explanation panel beside it; bubbles and context parts light each other up. _Research:_ 4
+3. **The context window** — the reveal: the mechanism behind the effects is the context window, a limit on the bundle the app resends every turn, filling message by message. Context engineering is giving the AI the right context at the right time. _Visual:_ the cornerstone in the Simple view on the default 200K window: chat on the left, one shared scroll bar in the middle, the context bar filling top to bottom on its right, the explanation panel beside it; bubbles and context parts light each other up. _Research:_ 4
 4. **What happens when the bar fills up** — grounds the viewer again in the problem before any fix: as the chat grows, Slide 2's effects return one by one (the start stays sharp, the newest stays sharp, the middle blurs, one standout survives), then one new consequence: answers get worse and the budget gets forgotten. _Visual:_ the cornerstone with the Attention view, scrolled further; the attention bars flatten in the middle and the faded bubbles are marked "the AI may fill this gap itself". _Research:_ 2, 3
-5. **Attention is a budget** — why the middle fades: a hundred units of attention, a big share to the start, a big share to the most recent messages, the rest spread ever thinner, with spikes where a detail keeps being referred to. Ends on the smart zone and the dumb zone. _Visual:_ the cornerstone paused on the Attention view: a horizontal bar chart of 100 units, labelled illustrative; the dog-story spike stays bright in the middle; a line marks where the middle gets too thin to trust, smart zone above, dumb zone below. _Research:_ 2, 3
+5. **Attention is a budget** — why the middle fades: a hundred units of attention, a big share to the start, a big share to the most recent messages, the rest spread ever thinner, with spikes where a detail keeps being referred to. Ends on the smart zone and the dumb zone. _Visual:_ the cornerstone paused on the Attention view: a horizontal bar chart of 100 units, labelled illustrative; the dog-story spike stays bright in the middle; a line marks where the middle gets too thin to trust, smart zone above, dumb zone below. Then the same chat side by side on the 200K and the 1M window: "Smart zone by Matt Pocock" at 80K on 200K and 150K on 1M, Han's own line at 300K on 1M only. _Research:_ 2, 3
 6. **What we learned so far** — the recap: long AI conversations show the same effects as long human ones; the AI's attention span is its context window; treat it as a resource you actively manage, so important decisions and information don't get lost in the middle. _Visual:_ a small version of the phone-call transcript beside a small cornerstone bar, with one line under each, tying Slide 1 to Slides 3–5.
 
 ### What fills the window
 
-7. **What's really in the window** — what you see in the chat is only part of it: starting instructions, memory, attached files, web pages read, results from tools and connectors; only the starting instructions and memory are explained. _Visual:_ the cornerstone in Grid view, the explanation panel on the starting instructions and the memory. _Research:_ 5
-8. **One innocent question** — "find three venues in Lisbon" returns a few lines, but about ten web pages now sit in the window. Voice: an intern given the same task would also read ten pages first; AI does it fast and you only see the result. _Visual:_ the cornerstone on the web search: the big jump in the bar, its bubble and its part lit together. _Research:_ 6
-9. **You can't watch the meter** — consumer tools quietly squeeze older messages into summaries, so you rarely see how full the window is. Voice: your sister keeps only her notes of the call. _Visual:_ first version: the sister's notepad, a few scribbled lines in place of the whole call. Later stage: the cornerstone shows compaction, older blocks folding into one summary block while the chat looks unchanged. _Research:_ 7
+7. **What's really in the window** — what you see in the chat is only part of it: starting instructions, memory, attached files, web pages read, results from tools and connectors, and system reminders, the app's hidden notes the chat never shows; only the starting instructions and memory are explained. _Visual:_ the cornerstone in the Technical view, the /context grid, the explanation panel on the starting instructions and the memory. _Research:_ 5
+8. **One innocent question** — "which catering offer fits?" gets a one-line answer, but the whole 20-page catering PDF (about 55K) now sits in the window, far more than the two web searches before it. Voice: an intern given the same task would also read the whole file first; AI does it fast and you only see the result. _Visual:_ the cornerstone on the catering PDF read: the big jump, its bubble and its part lit together. _Research:_ 6
+9. **You can't watch the meter** — consumer tools quietly squeeze older messages into summaries, so you rarely see how full the window is. Voice: your sister keeps only her notes of the call. _Visual:_ first version: the sister's notepad, a few scribbled lines in place of the whole call. Later stage: the cornerstone shows compaction: the fill enters the space kept free for summaries (16.5K, 8.3% of the 200K window), older blocks fold into one summary block, and the chat looks unchanged. _Research:_ 7
 
 ### Managing the attention span
 
@@ -104,7 +106,7 @@ The long phone call: primacy, recency, a blurry middle and standout highlights, 
 ## Open ideas
 
 - Research candidates no Slide claims yet: when do chat assistants fetch past chats dynamically? Why does the total cost of a chat grow faster than its length?
-- Smart zone numbers for the voice track: Matt Pocock recommends staying around 150K tokens; Han stays under 30K, up to 40K in automated runs.
+- Smart zone numbers, on Slide 5 and in the voice track: Matt Pocock's smart zone is 80K on a 200K window and 150K on 1M; Han's own line is 300K, on the 1M window only.
 - The attention halo, a toggleable glowing dot that follows the mouse while presenting, is its own Chrome feature and its own issue, outside this Episode.
 - Slides 1 and 2 may reuse the cornerstone's chat bubbles.
 - Rejected: the desk and the meeting-room whiteboard as analogies; click-reveals on the cornerstone ("this is not PowerPoint").
