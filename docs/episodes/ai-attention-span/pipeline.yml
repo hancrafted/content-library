@@ -460,6 +460,68 @@ jobs:
         model: opus
         session: orchestrator
 
+  # The Shared visuals several Sections place, built once after the Episode's
+  # wiring and before the Sections, so the parallel Section jobs only place them.
+  - id: implement-shared-visuals
+    stage: build
+    intent: >-
+      Build the Shared visuals the Spec's Slides share, before any Section job:
+      src/components/slide-shared/context-window/ (the context window cornerstone)
+      and src/components/slide-shared/call-transcript/ (Slides 1, 2 and 6), by
+      the Spec's Visual language and Episode page cards and the build notes of
+      every picked Option that names them. The cornerstone is a server entry
+      taking a Slide's Preset and words plus one client leaf; its model and log
+      converter are *.pure.ts lifted from the prototype's cornerstone-model and
+      cornerstone-log blocks (.scratch/ai-attention-span/prototype/cornerstone.html,
+      on branch prototype/ai-attention-span-cornerstone), its CSS from the
+      cornerstone block as tokens; the chat is summer-party.jsonl and
+      summer-party.de.jsonl, a documented subset of Claude Code's session log,
+      with context-preset.config.yml and .de.yml, the pair picked from the URL
+      locale at build time. Add the open model work: a cleared step, the System
+      reminders category, a per-step layout computed once, a toClaudeLog writer
+      (round trip fromClaudeLog(toClaudeLog(chat)) deep-equals chat), the Brief's
+      20/50/30 attention override, the upload (off) and download (on) Preset
+      flags, the 200K | 1M window switch, and meterHidden. Settle one interface
+      for call-transcript. Add axe-core to the local browser lane
+      (*.browser.test.ts, never CI), screened against ARCH-001 in the commit
+      body, and a docs/features/ entry with the manual testing criteria, the
+      prototype's walkthroughs and the under-16ms-per-step timing check. Build no
+      Slide: show each Preset of the picked Options on a dev-only test page or
+      in tests, so each Section job only places the parts.
+    needs: [implement-episode-init]
+    isolation: worktree
+    port: 4011
+    outputs: []
+    checks: [verify, build, test:build]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [tdd, codebase-design, vercel-react-best-practices, web-design-guidelines, commit]
+        agent: archgate:developer
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/ai-attention-span/spec/spec.html
+          - .scratch/ai-attention-span/cornerstone-grill.md
+          - .scratch/ai-attention-span/cornerstone-factcheck.md
+        model: opus
+      # code-review spawns its own subagents, so the reviewer runs in the
+      # orchestrator's session; its subagents give the fresh eyes.
+      - type: reviewer
+        skills:
+          - code-review
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - performance-optimization
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/ai-attention-span/spec/spec.html
+          - .scratch/ai-attention-span/cornerstone-grill.md
+        rubric: references/implement-section.md#rubric
+        model: opus
+        session: orchestrator
+
   # One job per Section, the h3s under the Brief's Slides, in parallel: each
   # builds its Slides at its own placement marker.
   - id: implement-section-the-long-phone-call
@@ -467,7 +529,7 @@ jobs:
     intent: >-
       Build Section 1 of 4, "The long phone call", at its placement marker by
       references/implement-section.md.
-    needs: [implement-episode-init]
+    needs: [implement-shared-visuals]
     isolation: worktree
     port: 4007
     outputs: []
@@ -507,7 +569,7 @@ jobs:
     intent: >-
       Build Section 2 of 4, "The AI's attention span", at its placement marker by
       references/implement-section.md.
-    needs: [implement-episode-init]
+    needs: [implement-shared-visuals]
     isolation: worktree
     port: 4008
     outputs: []
@@ -547,7 +609,7 @@ jobs:
     intent: >-
       Build Section 3 of 4, "What fills the window", at its placement marker by
       references/implement-section.md.
-    needs: [implement-episode-init]
+    needs: [implement-shared-visuals]
     isolation: worktree
     port: 4009
     outputs: []
@@ -587,7 +649,7 @@ jobs:
     intent: >-
       Build Section 4 of 4, "Managing the attention span", at its placement marker by
       references/implement-section.md.
-    needs: [implement-episode-init]
+    needs: [implement-shared-visuals]
     isolation: worktree
     port: 4010
     outputs: []
