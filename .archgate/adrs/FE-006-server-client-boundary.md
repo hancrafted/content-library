@@ -48,10 +48,11 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 
 1. Every prop a Server Component passes to a `*.client.tsx` component MUST be serializable by React: primitives, plain objects and arrays of them, `Date`, `Map`, `Set`, promises, JSX — never a function, class instance or unregistered symbol. Pass a Translation file slice (as `ThemeToggle` takes `labels`), not a callback.
 
-### 5. Episode client files
+### 5. Episode and `slide-shared` client files
 
 1. An Episode's `*.client.tsx` files MUST live in a Slide folder `episodes/<ep>/slides/<slide>/`, nowhere else; the Slide's entry stays server.
 2. A Slide's client widget MUST reach only its own folder, hooks and lib.
+3. A `slide-shared` part's client leaf MUST sit in that part's folder and reach only it, hooks and lib; the part's entry stays server.
 
 ## Do's and Don'ts
 
@@ -65,6 +66,7 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 6. **DO** reach `readPrefs` / `writePrefs` through a hook or a `*.client.tsx` leaf, as `use-theme.ts` and `locale-toggle.client.tsx` do. (Decision 3)
 7. **DO** pass serializable data from server to client: strings, numbers, plain objects, Translation file slices. (Decision 4)
 8. **DO** put an Episode's interactive visualisation in its Slide folder as `<name>.client.tsx`, its logic in a `.pure.ts` beside it. (Decision 5)
+9. **DO** put a Shared visual's client leaf in its `slide-shared/<part>/` folder; its server entry takes the Slide's Preset and words. (Decision 5)
 
 ### Don'ts
 
@@ -103,7 +105,7 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 - §2.1: ESLint core `no-restricted-syntax`, selector `Program > ExpressionStatement[directive='use client']`, over `src/**/*.{ts,tsx}` ignoring `src/**/*.client.tsx`.
 - §2.2: ESLint core `no-restricted-syntax`, selector `Program:not(:has(> ExpressionStatement[directive='use client']))`, over `src/**/*.client.tsx`.
 - §2.3, §2.4 and so §1.3: `check-file/filename-naming-convention` in `eslint.config.mjs` — `src/app/**/*.{ts,tsx}` is `KEBAB_CASE`, `src/{components,hooks}/**/*.tsx` is `+([a-z0-9-])?(.client)`, `src/**/*.ts` is `!(*.client)`. §1.3 needs no own check: an app file cannot carry the suffix (§2.4), and an unsuffixed file cannot carry the directive (§2.1).
-- §5: ESLint forbids the directive in Episode files except a Slide folder's `*.client.tsx`; the dependency rule `slide-client-reaches-only-hooks-and-lib` limits a widget's reach.
+- §5: ESLint forbids the directive in Episode files except a Slide folder's `*.client.tsx`; dependency rules limit a Slide widget's and a `slide-shared` client leaf's reach.
 - §3: `.dependency-cruiser.cjs` rules `hooks-reached-only-from-client`, `client-never-imports-app` and `prefs-storage-reached-only-from-client`, `error` severity, run by `npm run lint:boundaries` (`depcruise src`) inside `npm run lint`, which `npm run verify` and CI run.
 
 **Measured on introduction** (probe files under `src/`, removed after): a directive in `probe-a.tsx`, a directiveless `probe-b.client.tsx`, a `src/app/probe/probe-c.client.tsx` and a `src/hooks/probe-d.client.ts` gave 5 errors, one per breach plus §2.1 on `probe-d`; a correct `probe-e.client.tsx` gave 0. Repo: 0 errors. dependency-cruiser with `tsPreCompilationDeps: true`: **77 dependencies cruised, 54 local, 12 type-only**; with `false`: 80 cruised, 49 local, 0 type-only, 15 injected `react/jsx-runtime`. A falling local count with a rising total is the failure signature.

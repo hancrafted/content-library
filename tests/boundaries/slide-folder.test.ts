@@ -1,4 +1,4 @@
-// Probe tests for the Slide-folder import boundary (#51, FE-007 §5, FE-006 §5):
+// Probe tests for the Slide-folder and slide-shared import boundaries (#51, FE-007 §5, FE-006 §5):
 // the dependency-cruiser rules run, as `npm run lint:boundaries` runs them, over a
 // throwaway tree of probe files written to a temporary directory, so a rule that
 // stopped firing — or started firing on a legal import — fails here, not in review.
@@ -13,10 +13,16 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 const config = createRequire(import.meta.url)('../../.dependency-cruiser.cjs') as {
   forbidden: (IForbiddenRuleType & { name: string; comment: string })[];
 };
-const RULES = ['slide-folder-reaches-only-own-and-shared', 'slide-client-reaches-only-hooks-and-lib'];
+const RULES = [
+  'slide-folder-reaches-only-own-and-shared',
+  'slide-client-reaches-only-hooks-and-lib',
+  'slide-shared-reaches-only-ui-and-lib',
+  'slide-shared-client-reaches-only-own-part-hooks-and-lib',
+];
 const RULE_SET = { forbidden: config.forbidden.filter(({ name }) => RULES.includes(name)) };
 
 const SLIDE = 'src/components/episodes/probe/slides/probe-slide';
+const PART = 'src/components/slide-shared/probe-visual';
 
 /** Each probe file and what it imports, relative to the probe tree's root. */
 const PROBES: Readonly<Record<string, string>> = {
@@ -47,6 +53,19 @@ const PROBES: Readonly<Record<string, string>> = {
   [`${SLIDE}/reaches-toc.tsx`]: "import { Toc } from '../../../../table-of-contents/toc';\nexport const x = Toc;",
   [`${SLIDE}/reaches-master.client.tsx`]:
     "import { slide } from '../../../../slide-master/slide';\nexport const x = slide;",
+  [`${PART}/probe-visual.pure.ts`]: 'export const view = 1;',
+  [`${PART}/probe-visual.client.tsx`]:
+    "import { view } from './probe-visual.pure';\nimport { useProbe } from '../../../hooks/use-probe';\nimport { probe } from '../../../lib/probe.pure';\nexport const v = [view, useProbe, probe];",
+  [`${PART}/probe-visual.tsx`]: [
+    "import { v } from './probe-visual.client';",
+    "import { view } from './probe-visual.pure';",
+    "import { Statement } from '../statement';",
+    "import { Button } from '../../ui/button';",
+    'export const visual = [v, view, Statement, Button];',
+  ].join('\n'),
+  [`${PART}/reaches-other-part.client.tsx`]: "import { Statement } from '../statement';\nexport const x = Statement;",
+  [`${PART}/reaches-ui.client.tsx`]: "import { Button } from '../../ui/button';\nexport const x = Button;",
+  [`${PART}/reaches-hook.tsx`]: "import { useProbe } from '../../../hooks/use-probe';\nexport const x = useProbe;",
 };
 
 let root = '';
@@ -56,7 +75,7 @@ let output: IReporterOutput;
 function violations(): string[] {
   if (typeof output.output === 'string') throw new Error('dependency-cruiser returned a report, not a result.');
   return output.output.summary.violations
-    .map(({ rule, from, to }) => `${rule.name}: ${from.replace(`${SLIDE}/`, '')} -> ${to}`)
+    .map(({ rule, from, to }) => `${rule.name}: ${from.replace(`${SLIDE}/`, '').replace(`${PART}/`, '')} -> ${to}`)
     .sort();
 }
 
@@ -97,16 +116,28 @@ describe('success cases', () => {
     // ASSERT
     expect(fromWidget).toEqual([]);
   });
+
+  it('lets a slide-shared part render its own client leaf, and the leaf import its own pure logic, hooks and lib', () => {
+    // ARRANGE
+    const files = ['probe-visual.tsx', 'probe-visual.client.tsx'];
+    // ACT
+    const fromPart = violations().filter((line) => files.some((file) => line.includes(`: ${file} ->`)));
+    // ASSERT
+    expect(fromPart).toEqual([]);
+  });
 });
 
 describe('failure cases', () => {
-  it('rejects a Slide importing another Slide, the Episode file or a non-shared component, and a client widget reaching the Slide master', () => {
+  it('rejects a Slide importing another Slide, the Episode file or a non-shared component, a client widget reaching the Slide master, a slide-shared client leaf leaving its part, and a slide-shared server part reaching a hook', () => {
     // ARRANGE
     const expected = [
       'slide-client-reaches-only-hooks-and-lib: reaches-master.client.tsx -> src/components/slide-master/slide.ts',
       'slide-folder-reaches-only-own-and-shared: reaches-episode.tsx -> src/components/episodes/probe/probe.ts',
       'slide-folder-reaches-only-own-and-shared: reaches-other-slide.tsx -> src/components/episodes/probe/slides/other-slide/slide.tsx',
       'slide-folder-reaches-only-own-and-shared: reaches-toc.tsx -> src/components/table-of-contents/toc.tsx',
+      'slide-shared-client-reaches-only-own-part-hooks-and-lib: reaches-other-part.client.tsx -> src/components/slide-shared/statement.tsx',
+      'slide-shared-client-reaches-only-own-part-hooks-and-lib: reaches-ui.client.tsx -> src/components/ui/button.tsx',
+      'slide-shared-reaches-only-ui-and-lib: reaches-hook.tsx -> src/hooks/use-probe.ts',
     ];
     // ACT
     const found = violations();

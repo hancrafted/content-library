@@ -44,14 +44,14 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 
 ### 4. The ungoverned zone: Slide internals
 
-1. What renders inside one Slide — markup, props, layout — is explicitly **not** governed: no mandated component shape, prop interface or layout rule. Values, not shape: design tokens govern colour, size and weight inside a Scene; the Slide wrapper rules add only Backdrop, looping and stacking.
-2. Why: a prototype's per-slide type interface degraded every visualisation. Governance binds boundaries, never a Slide's inside; written down because silence gets filled with structure.
+1. What renders inside one Slide — markup, props, layout — is explicitly **not** governed: no mandated component shape, prop interface or layout rule. Values, not shape: tokens govern colour, size and weight inside a Scene; the Slide wrapper rules add only Backdrop, looping and stacking.
+2. Why: a prototype's per-slide type interface degraded every visualisation. Governance binds boundaries, never a Slide's inside; silence gets filled with structure.
 
 ### 5. A Slide folder imports only global shared code
 
-1. A Slide folder, `episodes/<ep>/slides/<slide>/`, MUST import only its own files and `slide-master/`, `slide-shared/`, `ui/`, `src/hooks/`, `src/lib/` — never another Slide or its Episode file; its `*.client.tsx` only own files, hooks, lib.
-2. A `slide-shared` part MUST import only `slide-shared/`, `ui/` and `src/lib/` — never a Slide, an Episode or the Slide master.
-3. Why: a Slide copied with `cp -r`, one import and one list entry needs nothing it left behind. §4 holds inside.
+1. A Slide folder, `episodes/<ep>/slides/<slide>/`, MUST import only its own files and `slide-master/`, `slide-shared/`, `ui/`, `src/hooks/`, `src/lib/` — never another Slide or its Episode; its `*.client.tsx` only own files, hooks, lib.
+2. A `slide-shared` part MUST import only `slide-shared/`, `ui/` and `src/lib/` — never a Slide, Episode or the Slide master; its `*.client.tsx` only own folder, hooks, lib.
+3. Why: a Slide copied with `cp -r`, one import and one list entry needs nothing else. §4 holds inside.
 
 ## Do's and Don'ts
 
@@ -105,7 +105,7 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 
 **Known gap:** `routes.ts`, `prefs-storage.ts` and `utils.ts` in `src/lib/` carry no classifier; left for a future lib-tree record.
 
-**Manual review duties:** routes hold no markup, data shaping or logic (§1.3); no nested layout renders `<html>` (§1.2); no shared Slide shape (§4); `slide-shared` parts take plain props (§5).
+**Manual review duties:** routes hold no markup, data shaping or logic (§1.3); no nested layout renders `<html>` (§1.2); no shared Slide shape (§4); `slide-shared` parts take serializable props and own no words (§5).
 
 **Exceptions:** raise a separate ADR; human approval required.
 
