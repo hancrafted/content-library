@@ -1,8 +1,9 @@
 // The Design archive (GLOSSARY.md) of one Episode, from its Staging: one page holding every Slide of the approved
-// Spec with every Option, the picked one marked, in the Spec's own frame. The dashboard is archive-dashboard.pure.ts. Pure: Staging's text in, `{ path: html }` out; the CLI (`archive.ts`) reads and writes the disk.
+// Spec with every Option, the picked one marked, in the Spec's own frame. The dashboard is archive-dashboard.pure.ts.
+// Pure: Staging's text in, `{ path: html }` out; the CLI (`archive.ts`) reads and writes the disk.
 
 import { load, type CheerioAPI } from 'cheerio';
-import { escape, htmlPage } from './archive-html.pure.ts';
+import { escapeHtml, htmlPage } from './archive-html.pure.ts';
 import {
   citedImages,
   designerPrompts,
@@ -41,14 +42,14 @@ function archiveSection(name: string, heading: string, items: readonly string[])
 }
 
 function feedbackList(items: readonly FeedbackItem[]): string {
-  const lines = items.map(({ round, text }) => `<li>Round ${round} · ${escape(text)}</li>`);
+  const lines = items.map(({ round, text }) => `<li>Round ${round} · ${escapeHtml(text)}</li>`);
   return archiveSection('feedback', 'Feedback', lines.length === 0 ? [] : ['<ol>', ...lines, '</ol>']);
 }
 
 function promptList(prompts: readonly Prompt[]): string {
   const items = prompts.map(
     ({ attempt, text }) =>
-      `<details data-archive="prompt"><summary>Designer prompt · attempt ${attempt}</summary><pre>${escape(text)}</pre></details>`,
+      `<details data-archive="prompt"><summary>Designer prompt · attempt ${attempt}</summary><pre>${escapeHtml(text)}</pre></details>`,
   );
   return archiveSection('prompts', 'Design prompts', items);
 }
@@ -168,9 +169,9 @@ function outline(grouped: readonly Group[]): string {
   const sections = grouped.map(({ title, slides }) => {
     const links = slides.map((slide) => {
       const state = slide.picked ? ' data-state="picked"' : '';
-      return `<li><a href="#${slide.slug}"${state}>${escape(slide.label)}</a></li>`;
+      return `<li><a href="#${slide.slug}"${state}>${escapeHtml(slide.label)}</a></li>`;
     });
-    return `<li><span class="spec-outline-section">${escape(title)}</span><ol>${links.join('')}</ol></li>`;
+    return `<li><span class="spec-outline-section">${escapeHtml(title)}</span><ol>${links.join('')}</ol></li>`;
   });
   return `<nav class="spec-outline" aria-label="Slides"><ol>${sections.join('\n')}</ol></nav>`;
 }
@@ -191,9 +192,9 @@ function episodePage($: CheerioAPI, slides: readonly SlidePage[], context: Episo
       return html;
     });
     if (group.section === undefined) return blocks.join('\n');
-    return `<section data-spec="section" id="${group.section}"><h2 class="archive-section-title">${escape(group.title)}</h2>\n${blocks.join('\n')}</section>`;
+    return `<section data-spec="section" id="${group.section}"><h2 class="archive-section-title">${escapeHtml(group.title)}</h2>\n${blocks.join('\n')}</section>`;
   });
-  const masthead = `<header class="spec-masthead"><p class="spec-kicker"><a href="../index.html">Design archive</a> · ${slides.length} Slides</p><h1>${escape(context.title)}</h1></header>`;
+  const masthead = `<header class="spec-masthead"><p class="spec-kicker"><a href="../index.html">Design archive</a> · ${slides.length} Slides</p><h1>${escapeHtml(context.title)}</h1></header>`;
   const body = `<div class="spec-shell">${outline(grouped)}<main class="spec-page">${masthead}\n${sections.join('\n')}</main></div>`;
   const specStyles = $('head style')
     .toArray()

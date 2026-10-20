@@ -1,6 +1,6 @@
 // The Design archive's page shell, shared by the Episode page and the dashboard.
 
-export function escape(text: string): string {
+export function escapeHtml(text: string): string {
   return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
@@ -16,7 +16,7 @@ export function htmlPage({ title, head }: Head, body: string): string {
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>${escape(title)}</title>
+<title>${escapeHtml(title)}</title>
 ${head}
 </head>
 <body>

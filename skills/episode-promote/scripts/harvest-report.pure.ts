@@ -102,7 +102,8 @@ export function harvestReport(template: string, harvest: Harvest): string {
   const found = problems(harvest);
   if (found.length > 0) throw new Error(`the harvest has ${found.length} problem(s):\n- ${found.join('\n- ')}`);
   if (!DATA_BLOCK.test(template)) throw new Error('the template has no <script type="application/json" id="harvest">');
-  // `<` written as a JSON unicode escape keeps a "</script>" inside the data from closing the block early; JSON.parse reads it back.
+  // `<` written as a JSON unicode escape keeps a "</script>" inside the data from closing the block early;
+  // JSON.parse reads it back.
   const json = JSON.stringify(harvest, null, 2).replace(/</g, '\\u003c');
   return template.replace(DATA_BLOCK, (_match, open: string, close: string) => `${open}\n${json}\n${close}`);
 }

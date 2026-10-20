@@ -2,7 +2,7 @@
 // read back from its own page so the dashboard needs nothing but the pages on disk.
 
 import { load } from 'cheerio';
-import { escape, htmlPage } from './archive-html.pure.ts';
+import { escapeHtml, htmlPage } from './archive-html.pure.ts';
 
 export interface ArchivedEpisode {
   slug: string;
@@ -66,10 +66,10 @@ h1 { margin: 0.75rem 0 0.5rem; font-size: clamp(2rem, 5vw, 3rem); font-weight: 7
 </style>`;
 
 function episodeCard({ slug, title, slides, options, picked }: ArchivedEpisode): string {
-  const chips = picked.map((id) => `<li>${escape(id)}</li>`).join('');
+  const chips = picked.map((id) => `<li>${escapeHtml(id)}</li>`).join('');
   return `<li class="episode"><a href="${slug}/index.html">
-<h2>${escape(title)}</h2>
-<span class="slug">${escape(slug)}</span>
+<h2>${escapeHtml(title)}</h2>
+<span class="slug">${escapeHtml(slug)}</span>
 <p class="counts">${slides} Slides · ${options} Options</p>
 <ul class="picked" aria-label="Picked Options">${chips}</ul>
 </a></li>`;

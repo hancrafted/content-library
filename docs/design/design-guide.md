@@ -33,7 +33,7 @@ A Slide's title names its **topic**; its caption states the **claim**. The title
 
 ## One example world per Slide
 
-A Slide's examples come from one client industry: three logistics companies on a lead list, not a bakery beside a dental practice. Han asked for it on three Slides of `never-too-early-sales`.
+A Slide's examples come from one client industry: three logistics companies on a lead list, not a bakery beside a dental practice. Han asked for “one client industry for the Slide” on three Slides of `never-too-early-sales`: Stages of sale, Pipeline tools in practice, and What is a sales pipeline.
 
 ## Named styles
 

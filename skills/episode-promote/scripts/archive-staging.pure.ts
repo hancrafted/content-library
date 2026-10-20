@@ -22,7 +22,8 @@ export interface SlidePage {
 
 /**
  * What the archive drops from a Spec article: the review controls, which wrote feedback that already landed, and the
- * Voice script and Speaker notes, whose words the Slide's `i18n/` owns after Promotion (design-ADR 0004). The Visual idea stays, alone, so its tab goes too.
+ * Voice script and Speaker notes, whose words the Slide's `i18n/` owns after Promotion (design-ADR 0004). The Visual
+ * idea stays, alone, so its tab goes too.
  */
 const REVIEW_ONLY = [
   '.spec-pick',
