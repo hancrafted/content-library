@@ -52,7 +52,8 @@ function episode(files: Record<string, string>): string {
   return folder;
 }
 
-const assemble = (folder: string) => spawnSync('node', [SCRIPT, folder], { cwd: ROOT, encoding: 'utf8' });
+const assemble = (folder: string, ...flags: string[]) =>
+  spawnSync('node', [SCRIPT, folder, ...flags], { cwd: ROOT, encoding: 'utf8' });
 
 describe('success cases', () => {
   it('writes the Spec from the Brief alone', () => {
@@ -109,5 +110,32 @@ describe('failure cases', () => {
     const run = assemble(folder);
     // ASSERT
     expect(run.status).toBe(1);
+  });
+});
+
+describe('--forbid', () => {
+  it('names file and line of a forbidden term in the staging folder and writes no Spec', () => {
+    // ARRANGE
+    const folder = episode({
+      'brief.md': BRIEF,
+      'dossier.md': 'one\nthe R I E frame\n',
+      'title.html': '<h1>Old Name</h1>',
+    });
+    // ACT
+    const run = assemble(folder, '--forbid', 'R I E,old name');
+    // ASSERT
+    expect(run.status).toBe(1);
+    expect(run.stderr).toContain('dossier.md:2');
+    expect(run.stderr).toContain('title.html:1');
+    expect(() => readFileSync(path.join(folder, 'spec/spec.html'), 'utf8')).toThrow();
+  });
+
+  it('assembles when no forbidden term is present', () => {
+    // ARRANGE
+    const folder = episode({ 'brief.md': BRIEF });
+    // ACT
+    const run = assemble(folder, '--forbid', 'R I E');
+    // ASSERT
+    expect(run.status).toBe(0);
   });
 });

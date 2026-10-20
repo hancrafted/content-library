@@ -25,7 +25,7 @@ npm run episode:run -- <slug> <command> ...
 
 **Waiting on the user.** Inside a Job, each wait on their reply (a brief-grill question, any question in chat) is a Gate span: `open-gate <job> han-reply` when you ask, `close-gate han-reply` when they answer, so waiting time stays apart from working time.
 
-`status` is `ok` (default), `error`, `refused`, `crashed` or `reused`. A command refuses what the log cannot support (no open Job, a second open Attempt) and says which; the writer refuses a malformed field and says which. Fix the call, never the log: a line is never edited, a correction is a new line.
+`status` is `ok` (default), `error`, `refused`, `crashed` or `reused`. A command refuses what the log cannot support (no open Job, a second open Attempt) and says which; the writer refuses a malformed field and says which. Fix the call, never the log: a line is never edited, a correction is a new line. A summary (`--summary`, `end-agent`'s `summary`) is at most 500 characters (`SUMMARY_MAX`): the command exits 1 on a longer one, so write the short form first and put the rest in a `note`.
 
 `npm run episode:log -- <slug> '<event json>'` (or the JSON on stdin) appends one raw event, for what the commands do not cover: a skill that ran in this session. Agent spans have their own commands: `begin-agent <job>#<n>/<role>[/#<ticket>]` opens a typed agent span under that open Attempt (a repeat changes nothing) and `end-agent <description> [status] [summary]` closes it; a refused spawn is `end-agent <description> refused`. They work on any harness. Typed spans never mix with measured numbers in a report.
 
