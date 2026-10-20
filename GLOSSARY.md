@@ -118,8 +118,11 @@ _Avoid_: Plot, subplot, storyline
 **Staging**: where an Episode's text lives while it is being made, before it is final: its Brief, research, Dossier and Spec, outside the code.
 _Avoid_: Drafts, workspace
 
-**Promotion**: the step that moves a final Episode's words out of its Spec and into its code folder, one text file per Slide, after which Staging is deleted.
+**Promotion**: the step that closes a final Episode's making: it harvests Staging into lessons, cleanups and tickets, files the Spec's Options into the Design archive, keeps the Brief beside the Episode, and deletes Staging. No words move; the Slides already own them.
 _Avoid_: Publish, migration, release
+
+**Design archive**: every promoted Episode's design Options, one page per Slide with the picked one marked and the feedback that chose it, kept to browse and reuse in later Episodes.
+_Avoid_: Spec archive, gallery
 
 **Run**: one execution of an Episode's per-run pipeline, from its start to the moment it is finished or abandoned. An Episode can have many Runs, each one comparable with the others.
 _Avoid_: Session, execution, pipeline run

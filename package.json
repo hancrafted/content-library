@@ -40,6 +40,9 @@
     "episode:spec": "node skills/new-episode/scripts/spec.ts",
     "episode:spec-assemble": "node skills/new-episode/scripts/spec-assemble.ts",
     "episode:spec-preview": "node skills/new-episode/scripts/spec-preview.ts",
+    "episode:archive": "node skills/episode-promote/scripts/archive.ts",
+    "episode:text": "node skills/episode-promote/scripts/episode-text.ts",
+    "design-archive": "node skills/episode-promote/scripts/serve.ts",
     "episode:backfill-identity": "node skills/new-episode/scripts/backfill-identity.ts",
     "check:skills": "mh check --root skills --config skills/markdown-harness.config.yaml && for c in skills/*/markdown-harness.config.yaml; do test ! -e \"$c\" || mh check --root \"$(dirname \"$c\")\" --config \"$c\" || exit 1; done"
   },
