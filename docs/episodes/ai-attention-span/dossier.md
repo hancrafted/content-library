@@ -4,12 +4,14 @@ title: Why AI has a weird attention span you must learn to manage
 status: draft
 generated:
   by: claude-code/opus-5.5
-  at: 2026-10-20T19:36:52Z
+  at: 2026-10-20T20:25:27Z
 locale: en
 brief: ./brief.md
 verified:
   - by: process:markdown-harness
     at: 2026-10-20T19:36:52Z
+  - by: process:markdown-harness
+    at: 2026-10-20T20:25:27Z
 ---
 
 # Why AI has a weird attention span you must learn to manage {#ai-attention-span}
@@ -61,9 +63,9 @@ It plays in three steps. First, every bubble in the middle fades to soft grey wh
 
 master: basic-page · motion: local
 
-Two chat threads side by side on the white stage: the sister thread on the left, a long AI chat on the right, drawn with the same bubbles. The sister thread is the call from the first Slide, shortened to its first two bubbles, the dog-story bubble and its last bubbles. The AI thread is one shared conversation that returns on the next Slides, in this order. You: "Help me plan a team offsite in Lisbon, first week of June." AI: "Gladly! How many people are coming, and what is the goal?" You: "12 people. We want to get to know each other." AI: "Lovely. One workshop morning and free afternoons would work well." You: "Our budget is 5,000 euros in total." AI: "Noted: 5,000 euros for 12 people is workable with simple venues." You: "Funny side note: our office dog Biscuit wants to come along." AI: "Biscuit is welcome! Many Lisbon cafés allow dogs." You: "Which neighbourhood should we stay in?" AI: "Baixa is central and flat. Alfama is charming but hilly." You: "Find three venues in Lisbon for the workshop morning." AI: "Here are three: 1. Casa do Largo, Baixa. 2. Estúdio Alfama. 3. Loft Chiado." You: "And a dinner spot for the first evening?" AI: "A set menu near Baixa, about 35 euros a head." You: "Remind me, what was our budget?" AI: "I don't see a budget yet. Shall we say around 10,000 euros?"
+Two chat threads side by side on the white stage: the sister thread on the left, a long AI chat on the right, drawn with the same bubbles. The sister thread is the call from the first Slide, shortened to its first two bubbles, the dog-story bubble and its last bubbles. The AI thread is the summer-party chat, one shared conversation that returns on the next Slides: the company summer party the AI helps plan in the workshop hands-on. In this order. You: "Plan a summer party for our team: 40 people, end of June, budget 40,000 euro." AI: "Happy to help! Indoor or outdoor? Any dietary needs I should know about?" You: "Outdoor if we can. 12 guests are vegetarian, please keep that in mind." AI: "Noted: 12 vegetarian guests. Shall I look for venues?" You: "Find three venues in Lisbon." AI: "Three options: Quinta terrace, LX Factory rooftop, Estrela garden pavilion." You: "The catering offers are in the project folder. Which one fits?" AI: "Sabor Verde fits best: it includes a vegetarian menu for 12." You: "Check hotels near the venue for 15 guests from abroad." AI: "Hotel Lumen and Casa do Rio both have 15 rooms free on 27 June." You: "The guest list is in there too." AI: "Got it: 40 guests, 15 travelling, 12 vegetarian." You: "Great, put the full plan together." AI: "Full plan: venue 14,800, catering with the vegetarian menu 21,600, hotels 9,400, music 6,500. Total 52,300 euro."
 
-One effect at a time, the same lighting is applied to both threads. The first bubbles light up on both sides, then the newest bubbles, then the middle fades to grey on both sides, then one standout bubble in the middle (Pepper and the cake on the left, Biscuit on the right) lights again. Under the two threads, the bottom line appears: "With your sister, a lost detail is funny. With a deadline, it's expensive." The context window is not named on this Slide.
+One effect at a time, the same lighting is applied to both threads. The first bubbles light up on both sides, then the newest bubbles, then the middle fades to grey on both sides, then one standout bubble in the middle (Pepper and the cake on the left, the 12 vegetarian guests on the right) lights again. Under the two threads, the bottom line appears: "With your sister, a lost detail is funny. With a deadline, it's expensive." The context window is not named on this Slide.
 
 #### Speaker notes
 
@@ -80,9 +82,10 @@ One effect at a time, the same lighting is applied to both threads. The first bu
 
 #### Voice script
 
-1. **It happens in a long chat too** — you start with a plan, the chat runs on for an hour; what you said first and last gets used, what you said in the middle gets lost, and a quirky detail survives
-2. **A shape, not a brain** — I'm not saying the AI thinks like you do; I'm saying you can predict where it slips
-3. **What a lost detail costs** — with your sister it's funny; with a deadline it's expensive; ask yourself which one your chat is
+1. **Meet the summer-party chat** — the workshop's hands-on: you plan the company summer party with the AI; 40 people, end of June, a budget of 40,000 euro, a catering PDF, a guest list; we come back to this chat all episode
+2. **It happens in a long chat too** — you start with the plan and the budget, the chat runs on for an hour; the first and last messages tend to get used, the middle gets lost, and a repeated detail like the vegetarians survives; the budget slips later, and why comes on a later Slide
+3. **A shape, not a brain** — I'm not saying the AI thinks like you do; I'm saying you can predict where it slips
+4. **What a lost detail costs** — with your sister it's funny; with a deadline it's expensive; ask yourself which one your chat is
 
 ## The AI's attention span {#the-ais-attention-span}
 
@@ -96,7 +99,7 @@ One effect at a time, the same lighting is applied to both threads. The first bu
 
 master: basic-page · motion: local
 
-The Context window cornerstone, shown by Preset: the Bar view with Simple explanations. On the white stage, the chat sits on the left as rounded bubbles, one shared scroll bar runs down the middle, and on its right the context bar fills from top to bottom, one block per message. The chat is the Lisbon conversation from Slide 2, appearing message by message from the first bubble, You: "Help me plan a team offsite in Lisbon, first week of June.", down to AI: "Baixa is central and flat. Alfama is charming but hilly." The explanation panel sits beside the bar in plain words: "The AI is handed the whole chat again with every message. The space for it is limited. That limit is the context window." Everything starts grey; as the chat grows, the accent colour picks out one bubble and its block in the bar together, first You: "Our budget is 5,000 euros in total.", so the viewer sees which message sits where. The Slide reads top to bottom without touching a toggle.
+The Context window cornerstone, shown by Preset: the Bar view with Simple explanations. On the white stage, the chat sits on the left as rounded bubbles, one shared scroll bar runs down the middle, and on its right the context bar fills from top to bottom, one block per message. The chat is the summer-party conversation from Slide 2, appearing message by message from the first bubble, You: "Plan a summer party for our team: 40 people, end of June, budget 40,000 euro.", down to AI: "Three options: Quinta terrace, LX Factory rooftop, Estrela garden pavilion." The explanation panel sits beside the bar in plain words: "The AI is handed the whole chat again with every message. The space for it is limited. That limit is the context window." Everything starts grey; as the chat grows, the accent colour picks out one bubble and its block in the bar together, first the budget message, so the viewer sees which message sits where. The Slide reads top to bottom without touching a toggle.
 
 #### Speaker notes
 
@@ -124,7 +127,7 @@ master: basic-page · motion: local
 
 title: What happens when the bar fills up
 
-The Context window cornerstone, shown by Preset: the Attention view, scrolled further down the same Lisbon chat so the context bar is nearly full; the chat now runs to its last bubbles, You: "Remind me, what was our budget?" and AI: "I don't see a budget yet. Shall we say around 10,000 euros?" Next to each message block a small attention bar shows how much the AI looks at it. The bars at the top stay tall, the bars at the bottom stay tall, and the bars across the middle flatten to thin grey lines. The faded middle bubbles carry a small marker, "the AI may fill this gap itself". One middle bubble, You: "Funny side note: our office dog Biscuit wants to come along.", keeps a tall bar in the accent colour. The middle bubble You: "Our budget is 5,000 euros in total." sits faded with a thin bar. As the viewer watches, the earlier effects return one by one, then a label appears on the whole chat: answers get worse. Last, an arrow runs from the faded budget bubble to the last AI bubble with the label "the budget got forgotten".
+The Context window cornerstone, shown by Preset: the Attention view on the default 200K window, scrolled to the end of the same summer-party chat so the context bar is well filled; the chat runs to its last bubbles, You: "Great, put the full plan together." and AI: "Full plan: venue 14,800, catering with the vegetarian menu 21,600, hotels 9,400, music 6,500. Total 52,300 euro." No compaction happens on this Slide. Next to each message block a small attention bar shows how much the AI looks at it. The bars of the newest messages stay tall, and the bars across the middle flatten to thin grey lines. The budget bubble is the first bubble of the chat, You: "Plan a summer party for our team: 40 people, end of June, budget 40,000 euro."; the start of a chat is attended well, yet its bar is thin and the bubble is faded, with a dashed outline and a small note beside it, "the AI may fill this gap itself". The reason is shown beside it, not its position: the budget is one short number, and the searches and the offers around it carry many similar numbers that compete for the attention. A small label on the window and the bars reads "illustrative numbers", since the 200K window and the attention shown are illustrative. One middle bubble, You: "Outdoor if we can. 12 guests are vegetarian, please keep that in mind.", keeps a tall bar in the accent colour, because the chat repeats it. As the viewer watches, the earlier effects return one by one, then a label appears on the whole chat: answers get worse. Last, an arrow runs from the faded budget bubble to the last AI bubble with the label "the budget got forgotten".
 
 #### Speaker notes
 
@@ -142,13 +145,13 @@ The Context window cornerstone, shown by Preset: the Attention view, scrolled fu
 
 #### Voice script
 
-1. **The start stays sharp** — the first messages are still used well, like the opening of the call
+1. **The start helps, but is no guarantee** — the first and last messages tend to be used best, like the opening and the end of the call; the numbers on this Slide are illustrative
 2. **The newest stays sharp** — the latest messages are used well too
 3. **The middle blurs** — what you said an hour ago sits in the blurry middle
-4. **A standout survives** — the quirky detail, the dog Biscuit, is still there
+4. **A standout survives** — the repeated detail, the 12 vegetarian guests, is still there; the plan has a vegetarian menu
 5. **Answers get worse** — new: as the chat fills, the answers get worse, even before it is full; this is called context rot
-6. **The budget is forgotten** — you said 5,000 euros an hour ago; now the AI asks for a budget and suggests 10,000; the detail that mattered was in the middle
-7. **Filling the gap** — when the middle is thin the AI may fill the gap itself; that's my hypothesis, not proven
+6. **The budget is forgotten** — your very first message said 40,000 euro; now the plan comes back at 52,300; it was not lost by its position, it got little attention among many similar numbers
+7. **Filling the gap** — one small number among many similar ones from the offers and searches, so the AI fills the gap itself; that's my hypothesis, not proven
 
 ### Attention is a budget {#attention-is-a-budget}
 
@@ -156,7 +159,7 @@ The Context window cornerstone, shown by Preset: the Attention view, scrolled fu
 
 master: basic-page · motion: none
 
-The Context window cornerstone, shown by Preset: paused on the Attention view. A horizontal bar chart of 100 units of attention, labelled "illustrative numbers", splits into three parts: 20 units to the start, 30 units to the most recent messages, 50 units spread ever thinner across the whole middle. The dog-story spike (You: "Funny side note: our office dog Biscuit wants to come along.") stays bright in the accent colour in the middle. A line across the middle marks where the attention gets too thin to trust: above it the smart zone, below it the dumb zone, each with a label. The zone labels appear only on this Slide, after the viewer has already seen the middle fade.
+The Context window cornerstone, shown by Preset: paused on the Attention view, at rest. A horizontal bar chart of 100 units of attention, labelled "illustrative numbers", splits into three parts: 20 units to the start, 30 units to the most recent messages, 50 units spread ever thinner across the whole middle. The repeated vegetarian detail (You: "Outdoor if we can. 12 guests are vegetarian, please keep that in mind.") stays bright in the accent colour in the middle. Beside it, two context bars of the same summer-party chat stand side by side, both labelled "illustrative numbers", so the claim shows without a click. Left, the default 200K window: one dashed line at 80K tokens labelled "Smart zone by Matt Pocock", the chat's fill crossing it. Right, the 1M window: the same chat fills only a small part of it, Matt Pocock's line sits at 150K, still labelled "Smart zone by Matt Pocock", and a second dashed line at 300K is labelled "Smart zone by Han", shown only on the 1M window; the chat crosses neither. Before a line is the smart zone and beyond it the dumb zone, each with a label. The zone labels appear only on this Slide, after the viewer has already seen the middle fade.
 
 #### Speaker notes
 
@@ -171,12 +174,12 @@ The Context window cornerstone, shown by Preset: paused on the Attention view. A
 
 #### Voice script
 
-1. **A hundred units** — think of attention as a budget of a hundred units; the numbers are illustrative, I made them up to show the shape
+1. **A hundred units** — think of attention as a budget of a hundred units; the numbers, the token counts and the window sizes too, are illustrative; I made them up to show the shape
 2. **Where it goes** — a big share to the start, a big share to the newest messages, the rest spread thinner and thinner
-3. **A spike in the middle** — a detail you keep referring to keeps its share; the dog Biscuit
-4. **Smart zone and dumb zone** — somewhere the middle gets too thin to trust; above that line the AI is in the smart zone, below it in the dumb zone
+3. **A spike in the middle** — a detail you keep repeating keeps its share; the 12 vegetarian guests
+4. **Smart zone and dumb zone** — somewhere the middle gets too thin to trust; before the line the AI is in the smart zone, beyond it in the dumb zone; Matt Pocock puts the line at 80K on a 200K window and 150K on a 1M window; his number, a rule of thumb
 5. **Having it is not using it** — your sister recorded the call and still can't find what you said at one hour, 13 minutes, 17 seconds
-6. **My own line** — I stay under 30K tokens, up to 40K in automated runs; one practitioner's habit, not a law
+6. **My own line** — 300K tokens, and only on the 1M window; one practitioner's habit, not a law
 
 ### What we learned so far {#what-we-learned-so-far}
 
@@ -210,7 +213,7 @@ A small version of the phone-call transcript on the left, with the fade on its m
 
 master: basic-page · motion: local
 
-The Context window cornerstone, shown by Preset: the Grid view, with the explanation panel on two parts only. The window is drawn as a grid of labelled parts: starting instructions, memory, attached files, web pages read, results from tools and connectors, and the chat itself, which holds the Lisbon bubbles from Slide 2 in grey. All parts are grey except the chat bubbles. Two parts light up in the accent colour in turn, the starting instructions and the memory. The explanation panel beside the grid says, for the starting instructions, "Text placed before your first message, before you type anything", and for the memory, "Short notes about you, saved earlier and put back in front of the AI, so a new chat already knows you". The other parts are named but not explained.
+The Context window cornerstone, shown by Preset: the Grid view, with the explanation panel on two parts only. The window is drawn as a grid of labelled parts: starting instructions, memory, files and web pages the AI read (the catering PDF, guests.xlsx, the searches), and the chat itself, which holds the summer-party bubbles from Slide 2 in grey. All parts are grey except the chat bubbles. Two parts light up in the accent colour in turn, the starting instructions and the memory. The explanation panel beside the grid says, for the starting instructions, "Text placed before your first message, before you type anything", and for the memory, "Short notes about you, saved earlier and put back in front of the AI, so a new chat already knows you". The other parts are named but not explained.
 
 #### Speaker notes
 
@@ -240,7 +243,7 @@ The Context window cornerstone, shown by Preset: the Grid view, with the explana
 
 master: basic-page · motion: local
 
-The Context window cornerstone, shown by Preset: the web search state, at the point of the Lisbon chat where You: "Find three venues in Lisbon for the workshop morning." is asked; the earlier bubbles sit grey above it. The answer is a few lines, AI: "Here are three: 1. Casa do Largo, Baixa. 2. Estúdio Alfama. 3. Loft Chiado." In the context bar beside it, one big block jumps in, the web pages the AI read to answer. The user's question bubble, the answer bubble and that big block are lit together in the accent colour; everything else stays grey. A small label on the block reads "pages read behind the scenes, not shown in the chat".
+The Context window cornerstone, shown by Preset: the Technical view with the grid, at the point of the summer-party chat where You: "The catering offers are in the project folder. Which one fits?" is asked; the earlier bubbles sit grey above it, among them the two web searches, which show as modest blocks. The answer is one line, AI: "Sabor Verde fits best: it includes a vegetarian menu for 12." In the grid beside it, one big block jumps in, the catering PDF the AI read to answer, far larger than anything before it. The question bubble, the answer bubble and that big block are lit together in the accent colour; everything else stays grey. A small label on the block reads "20 pages read behind the scenes, not shown in the chat".
 
 #### Speaker notes
 
@@ -248,22 +251,21 @@ The Context window cornerstone, shown by Preset: the web search state, at the po
    - sources: [1] Anthropic, Web search tool (Claude API documentation) — https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool
 2. **It stays** — search results count as input tokens, in the turn itself and in later turns, and are passed back into later requests, so they remain part of the window [1].
    - sources: [1] Anthropic, Web search tool (Claude API documentation) — https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool
-3. **How many searches** — a simple factual query typically uses 1 to 3 searches, and comparative or multi-entity research can use 10 or more [1].
-   - sources: [1] Anthropic, Web search tool (Claude API documentation) — https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool
-4. **How big a page is** — Anthropic estimates an average web page at about 2,500 tokens and a large documentation page at about 25,000 [2].
+3. **A PDF is the big bite** — Anthropic estimates an average web page at about 2,500 tokens and a research-paper PDF at about 125,000 [2].
    - sources: [2] Anthropic, Web fetch tool (Claude API documentation) — https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool
-5. **The remedy** — vendors filter before the window or cap the returned tokens [2]; OpenAI describes the same shape, with deep research tapping hundreds of sources [3].
+4. **The remedy** — vendors filter before the window or cap the returned tokens [2]; OpenAI describes the same shape, with deep research tapping hundreds of sources [3].
    - sources: [2] Anthropic, Web fetch tool (Claude API documentation) — https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool
    - sources: [3] OpenAI, Web search (API documentation) — https://developers.openai.com/api/docs/guides/tools-web-search
-6. **API figures, not app figures** — these sources describe developer tools; how many pages a given chat app loads per question is not published [1].
+5. **API figures, not app figures** — these sources describe developer tools; how many pages a given chat app loads per question is not published [1].
    - sources: [1] Anthropic, Web search tool (Claude API documentation) — https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool
 
 #### Voice script
 
-1. **Three venues** — a small question, three lines of answer
-2. **What you don't see** — before it answered, the AI read a pile of web pages
-3. **The intern** — give an intern the same task and they'd read a pile of pages first too; the AI just does it fast and shows you only the result
-4. **A big bite** — one small question can take a big bite out of the window
+1. **Three venues** — a small question, three options in the answer, and two searches behind it
+2. **What you don't see** — the searches add some extracts you never see, a modest bite each
+3. **The catering PDF** — then you point at the catering offers; the AI reads all twenty pages, the big jump
+4. **The intern** — give an intern the same task and they'd read the whole file first too; the AI just does it fast and shows you only the result
+5. **A big bite** — one short question can take a big bite out of the window
 
 ### You can't watch the meter {#you-cant-watch-the-meter}
 
@@ -271,7 +273,7 @@ The Context window cornerstone, shown by Preset: the web search state, at the po
 
 master: basic-page · motion: local
 
-First version: the sister's notepad, a few scribbled lines on a notepad card in place of the whole call, drawn in the Chat style as a plain white card with handwriting-like lines: "Mum's phone", "neighbours' renovation", "Pepper ate the cake", with the accent colour on the last line. Later stage: the Context window cornerstone, shown by Preset: compaction, on the Lisbon chat. In the context bar the older blocks fold into one summary block while the chat on the left looks unchanged, every bubble still there. The summary block reads "Earlier: planning a team offsite in Lisbon for 12 people". No meter or percentage is shown anywhere on the Slide, which is the point. A small label on the summary block reads "older messages, squeezed".
+First version: the sister's notepad, a few scribbled lines on a notepad card in place of the whole call, drawn in the Chat style as a plain white card with handwriting-like lines: "Mum's phone", "neighbours' renovation", "Pepper ate the cake", with the accent colour on the last line. Later stage: the Context window cornerstone, shown by Preset: compaction, on the summer-party chat, which has run on until the fill enters the hatched space kept free for summaries. Compaction runs, and every message block in the context bar collapses into one summary block, placed after the starting instructions and the memory; free space returns. The chat on the left looks unchanged, every bubble still there. Before it, the chat runs on and fills the buffer: You: "That's 12,300 over our budget. Also check the venue contract.", the AI reads the 18-page venue contract (a big block), and the chat keeps going until the fill enters the hatched space. Those run-on bubbles are why the budget survives: the user flagged it again, so it is fresh when the summary is written. The summary block lists what it kept: "The goal: a summer party for 40, end of June, in Lisbon", "The budget: 40,000 euro, and that the last plan was 12,300 over", "12 vegetarian guests, 15 travelling", "Venue Estrela pavilion, caterer Sabor Verde, hotels Lumen and Casa do Rio", "Contract: music until 23:00, 30% deposit". After it AI: "The contract allows music until 23:00 and asks for a 30% deposit." is answered from the summary alone. Then the chat goes on: You: "Put the plan together again." AI: "Plan: venue 14,800, catering with the vegetarian menu 15,600, hotels 6,600, music 3,000. Total 40,000 euro, on budget." No meter or percentage is shown anywhere on the Slide, which is the point. A small label on the summary block reads "older messages, squeezed".
 
 #### Speaker notes
 
@@ -292,6 +294,7 @@ First version: the sister's notepad, a few scribbled lines on a notepad card in 
 1. **Her own notes** — your sister doesn't keep the call, she keeps her own notes of it; a few lines instead of everything
 2. **The app does something like it** — when a chat gets long, older messages can be squeezed into a short summary so the conversation can go on
 3. **You can't watch the meter** — the chat looks the same, and nothing tells you how full the window is, so you rely on habits, not a gauge
+4. **Why the budget survived** — you flagged the 12,300 over budget just before, so it made it into the summary and the plan fits 40,000 euro again; not every detail makes it
 
 ## Managing the attention span {#managing-the-attention-span}
 
@@ -305,7 +308,7 @@ First version: the sister's notepad, a few scribbled lines on a notepad card in 
 
 master: basic-page · motion: local
 
-A cut-down Context window cornerstone, shown by Preset: two bars side by side. On the left the full old chat, the Lisbon conversation, a long context bar with the middle faded to grey. On the right a fresh chat, a nearly empty bar holding only one lit card in the accent colour, the handoff card. The handoff card reads: "Handoff: Team offsite in Lisbon, first week of June. 12 people. Budget 5,000 euros in total. Dog Biscuit comes along. Staying in Baixa. Venues: Casa do Largo, Estúdio Alfama, Loft Chiado. Open: dinner on the first evening." The first bubble of the fresh chat is You: the handoff card pasted in. An arrow carries the handoff from the old bar to the new one. Under the bars, three plain captions appear in turn: "One chat, one job", "Ask for a handoff after real progress or before a break, read it, correct it", "Start the next chat with it".
+A cut-down Context window cornerstone, shown by Preset: two bars side by side. On the left the full old chat, the summer-party conversation, a long context bar with the middle faded to grey. On the right a fresh chat, a nearly empty bar holding only one lit card in the accent colour, the handoff card. The handoff card reads: "Handoff card: Party for 40, 27 June, budget 40,000 €. Venue: Estrela pavilion. Caterer: Sabor Verde (12 vegetarian). Next: invitations." It is the same venue and caterer as the summary on Slide 9. The first bubble of the fresh chat is You: the handoff card pasted in. An arrow carries the handoff from the old bar to the new one. Under the bars, three plain captions appear in turn: "One chat, one job", "Ask for a handoff after real progress or before a break, read it, correct it", "Start the next chat with it".
 
 #### Speaker notes
 
@@ -331,7 +334,7 @@ A cut-down Context window cornerstone, shown by Preset: two bars side by side. O
 
 master: basic-page · motion: local
 
-Mini context bars on the white stage. One slim bar at the top is the planner chat, drawn in the accent colour; it stays slim throughout. Below it, a row of worker chats, each a bar of its own. In turn, the planner hands a step to a fresh worker bar, which fills up, and the result comes back to the planner as one small lit card; then the worker bar is thrown away, fading out. The next worker bar starts empty. The planner's bar grows only by a card at a time.
+Mini context bars on the white stage. One slim bar at the top is the planner chat of the summer party, drawn in the accent colour; it stays slim throughout. Below it, a row of worker chats, each a bar of its own: venues, catering and invites. The catering worker's bar jumps with the PDF read, the one a planner chat would not carry. In turn, the planner hands a step to a fresh worker bar, which fills up, and the result comes back to the planner as one small lit card; then the worker bar is thrown away, fading out. The next worker bar starts empty. The planner's bar grows only by a card at a time.
 
 #### Speaker notes
 
@@ -351,7 +354,9 @@ Mini context bars on the white stage. One slim bar at the top is the planner cha
 ## Notes
 
 - `convert-references` is blocked: the Brief's design reference for the context window cornerstone came in as a PNG with no PDF, so `reference/context-window-cornerstone/design-reference.md` does not exist. This Dossier is written without it, and no Slide names a `Design reference:` page. The cornerstone is described as a Preset per Slide in viewer terms.
-- Slide 8 (One innocent question): the Brief's "about ten web pages" has no source. The research gives only "10 or more searches" for research-style queries and does not say how many pages a chat app loads, so the Slide says "ten or more searches" for such a query.
+- Slide 8 (One innocent question): the jump is the catering PDF read (about 55K for 20 pages), not a web search. WebFetch returns extracts, about 16 to 17.5K per search; the Brief's "about ten web pages" and the earlier "ten or more searches" are gone. Speaker note 3 rests on `research/LLM-0009__web-search-fills-context-window` Finding 5 (Anthropic's per-size estimates, API figures). Sourced only from the fork's fact-check, not a research Finding, and a source the Spec must cite: Claude Code tools reference (https://code.claude.com/docs/en/tools-reference) for WebFetch returning an extract and not the page, for Read taking PDFs over 10 pages in ranges of up to 20 pages, and for Read refusing .xlsx (guests.xlsx is opened with Bash and pandas, about 2K); the roughly 2,700 tokens a page is the grill's estimate (`.scratch/ai-attention-span/cornerstone-factcheck.md`, W1, W2, W3).
+- The summer-party chat replaces the Lisbon chat on every Slide; its source is `.scratch/ai-attention-span/cornerstone-grill.md` (Rounds 9 to 11) and the prototype's chat data. The token counts are set at the Spec in the Preset data, not in this Dossier.
+- Slide 4: "the AI may fill this gap itself" is an inference from the lost-accuracy results and the distractor finding, marked as a hypothesis in the Voice script. Slide 4 has no compaction. The grill put compaction on Slide 4; Han moved it to Slide 9.
+- Slide 5: the smart-zone lines (Matt Pocock 80K on 200K and 150K on 1M, "Smart zone by Matt Pocock"; Han 300K on 1M only, "Smart zone by Han") come from the grill (Round 9, Han's words), not from a research Finding. They are one practitioner's habits.
+- Slide 9: compaction is its own Preset (the fill enters the buffer, one summary block, free space returns, the chat app looks unchanged, the summary keeps the budget). The buffer (about 33K; compaction at about 967K on 1M) is from the fact-check (Claude Code model-config), not a research Finding, and a source the Spec must cite; the buffer on a 200K window is unverified. Only Claude documents summarising in its consumer app; the Slide says the other apps are unknown.
 - Slide 7: "loaded at the start" is documented for Claude Code only; for the chat apps the Slide calls it a reading.
-- Slide 9: only Claude documents summarising older messages in its consumer app; the Slide says the other apps are unknown.
-- Slide 4: "the AI may fill this gap itself" is an inference from the lost-accuracy results, marked as a hypothesis in the Voice script.
