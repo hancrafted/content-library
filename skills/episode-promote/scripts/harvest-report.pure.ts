@@ -16,16 +16,25 @@ export type Visual =
   | { kind: 'quote'; text: string }
   | { kind: 'count'; value: number | string; unit: string };
 
+/**
+ * One proposal. The user decides it days after the Run, from the words alone: `title`, `happened`, `change` and `gain`
+ * are plain language (references/harvest.md#plain-language); ids, rule numbers and line refs go in `evidence`.
+ */
 export interface Card {
   /** Section letter and number, `L1`, unique across the harvest; the user's decisions name it. */
   id: string;
+  /** The decision, as one plain sentence. */
   title: string;
   /** How sure the harvester is: `weak` for a pick with no comment. */
   weight?: 'strong' | 'worth' | 'weak';
   /** The file the proposal changes. */
   changes?: string;
-  problem: string;
+  /** What happened in the Run, so the user remembers it. */
+  happened: string;
+  /** What changes, and where. */
   change: string;
+  /** What the user gets by keeping the card. */
+  gain: string;
   before: Visual;
   after: Visual;
   evidence?: string;
@@ -50,6 +59,10 @@ export interface Harvest {
 }
 
 const KINDS = new Set(['flow', 'stack', 'quote', 'count']);
+/** The fields the user decides on, which must read without the repo open. */
+const PLAIN = ['title', 'happened', 'change', 'gain'] as const;
+/** A rule id (`FE-010`, `ARCH-003`) or a section sign (`§3.2`): jargon the user cannot decide on days later. */
+const JARGON = /\b[A-Z]{2,5}-\d{3}\b|§\d+(?:\.\d+)*/g;
 const DATA_BLOCK = /(<script type="application\/json" id="harvest">)[\s\S]*?(<\/script>)/;
 
 function duplicateIds(cards: readonly Card[]): string[] {
@@ -69,7 +82,12 @@ function cardProblems(card: Card, ids: ReadonlySet<string>): string[] {
     const kind = String((card[side] as { kind?: unknown } | undefined)?.kind);
     return KINDS.has(kind) ? [] : [`${card.id} ${side}: no visual kind "${kind}"`];
   });
-  return [...dangling, ...unknown];
+  const jargon = PLAIN.flatMap((field) =>
+    [...(card[field] ?? '').matchAll(JARGON)].map(
+      ([word]) => `${card.id} ${field}: "${word}" is jargon; say it plainly`,
+    ),
+  );
+  return [...dangling, ...unknown, ...jargon];
 }
 
 /** Every reason the page would draw `harvest` wrong: a duplicate id, a dangling overlap, an unknown visual. */

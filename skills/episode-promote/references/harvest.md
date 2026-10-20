@@ -31,20 +31,29 @@ The user decides each proposal on one card of the Harvest report, so a proposal 
 ```json
 {
   "id": "L1",
-  "title": "Scene text keys never use notes.*",
+  "title": "Tell designers to name text keys after what they show",
   "weight": "strong",
   "changes": "skills/new-episode/references/write-spec.md",
-  "problem": "Build notes keyed Scene text under `notes.*`; three implementors renamed it.",
-  "change": "The build-notes line keys Scene text `board.*`; the rubric checks it.",
-  "before": { "kind": "flow", "nodes": [{ "label": "Spec: notes.*" }, { "label": "renamed", "tone": "bad" }] },
-  "after": { "kind": "flow", "nodes": [{ "label": "Spec: board.*" }, { "label": "built as drawn", "tone": "good" }] },
-  "evidence": "run log ~425, 489; Score fail FE-010 §3.1",
+  "happened": "On three Slides, the builder had to rename the text keys the designer chose, because those names are kept for Speaker notes.",
+  "change": "The Spec tells designers to name a Slide's text keys after what they show: the board, the cards, the lanes.",
+  "gain": "Slides build as drawn, the first time.",
+  "before": {
+    "kind": "flow",
+    "nodes": [{ "label": "designer names it notes" }, { "label": "builder renames", "tone": "bad" }]
+  },
+  "after": {
+    "kind": "flow",
+    "nodes": [{ "label": "designer names it board" }, { "label": "built as drawn", "tone": "good" }]
+  },
+  "evidence": "run log ~425, 489, 523; Score fail FE-010 §3.1",
   "overlaps": ["T3"]
 }
 ```
 
 - **id**: the section's letter and a number: `L` Lessons, `S` Style, `B` Slide library, `C` Cleanups, `T` Refactor tickets.
-- **problem** and **change**: one sentence each; `code` in backticks.
+- **title**: the decision, as one plain sentence the user can say yes or no to.
+- **happened**, **change**, **gain**: one or two short sentences each, in [plain language](#plain-language).
+- **evidence**: the only field for ids, rule numbers, job names, line numbers and commit hashes. It stays folded on the card.
 - **weight**: `strong`, `worth`, or `weak`, the last for evidence like an uncommented pick.
 - **before** and **after**: the picture carries the card. Pick the kind that shows the change at a glance:
   - `flow` for a process: the steps a Run took against the steps it would take.
@@ -52,3 +61,14 @@ The user decides each proposal on one card of the Harvest report, so a proposal 
   - `quote` for a rule: the guide's line today against the proposed line.
   - `count` for a number: 46 Needs human items against 5.
 - **overlaps**: the ids of cards proposing the same change from another side, with `overlapNote` saying how they differ; the user keeps one.
+
+## Plain language
+
+The user decides the harvest hours or days after the Run, without the run log, the Spec or the code open, and quickly. So the words on a card carry their own context:
+
+- Write in ASD-STE100 Simplified Technical English: short sentences, active voice, common words, one idea per sentence.
+- Use the words of `GLOSSARY.md` (Slide, Section, Spec, Run, Speaker note, Context marker), and name a Slide by its title, not its slug.
+- Say what happened in the Run in a way the user recognises: "On the cashflow Slide, you asked for…", "Three Slides…".
+- Name a rule by what it says, not by its number: "the rule that keeps `notes` for Speaker notes", not "FE-010". `episode:harvest` refuses rule ids and `§` in `title`, `happened`, `change` and `gain`.
+- Name an Option by what it shows and keep its id in brackets: "the simple board (1c)".
+- Picture labels are words too: a few plain words per node, no file paths unless the card moves files.

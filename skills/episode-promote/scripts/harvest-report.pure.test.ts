@@ -19,8 +19,9 @@ function harvest(): Harvest {
           {
             id: 'L1',
             title: 'Key Scene text off notes.*',
-            problem: 'Implementors renamed it.',
-            change: 'Key it board.*.',
+            happened: 'Builders renamed the text keys on three Slides.',
+            change: 'Designers name text keys after what they show.',
+            gain: 'Slides build as drawn.',
             before: { kind: 'flow', nodes: [{ label: 'notes.*', tone: 'bad' }] },
             after: { kind: 'quote', text: 'board.*' },
             overlaps: ['T1'],
@@ -35,8 +36,9 @@ function harvest(): Harvest {
           {
             id: 'T1',
             title: 'Build shared parts first',
-            problem: 'Sections waited.',
-            change: 'A Job before the sections.',
+            happened: 'Three Sections waited on one shared drawing.',
+            change: 'One Job builds shared drawings first.',
+            gain: 'Sections build in parallel.',
             before: { kind: 'count', value: 3, unit: 'parallel authors' },
             after: { kind: 'stack', items: [{ label: 'slide-shared/x', tone: 'good' }] },
           },
@@ -78,6 +80,28 @@ describe('harvestReport', () => {
 
       // ASSERT
       for (const problem of problems) expect(report).toThrow(problem);
+    });
+
+    it('refuses rule ids and section signs in the words the user decides on, and allows them in the evidence', () => {
+      // ARRANGE
+      const input = harvest();
+      const card = input.sections[0]?.cards[0];
+      if (!card) throw new Error('fixture');
+      card.title = 'Fix the FE-010 keys';
+      card.change = 'Follow ARCH-003 §3.2.';
+      card.evidence = 'Score fail FE-010 §3.1';
+      const problems = [
+        /L1 title: "FE-010" is jargon/,
+        /L1 change: "ARCH-003" is jargon/,
+        /L1 change: "§3.2" is jargon/,
+      ];
+
+      // ACT
+      const report = () => harvestReport(TEMPLATE, input);
+
+      // ASSERT
+      for (const problem of problems) expect(report).toThrow(problem);
+      expect(report).not.toThrow(/L1 evidence/);
     });
   });
 

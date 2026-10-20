@@ -283,8 +283,6 @@
         list-style: none;
       }
       .stack .node {
-        font-family: ui-monospace, monospace;
-        font-size: 0.75rem;
         overflow-wrap: anywhere;
       }
       .quote {
@@ -319,6 +317,9 @@
       }
       .why b {
         font-weight: 600;
+      }
+      .why + .why {
+        margin-top: 0.35rem;
       }
       .overlap {
         margin: 0.75rem 0 0;
@@ -456,8 +457,9 @@
                 "title": "Scene text keys never use notes.*",
                 "weight": "strong",
                 "changes": "skills/new-episode/references/write-spec.md",
-                "problem": "Build notes keyed Scene text under `notes.*`, which FE-010 reserves for Speaker notes; three implementors renamed it.",
-                "change": "The build-notes line keys Scene text `board.*` or `cards.*`; the figcaption rubric checks it.",
+                "happened": "On three Slides, the builder had to rename the text keys the designer chose.",
+                "change": "The Spec tells designers to name text keys after what they show.",
+                "gain": "Slides build as drawn, the first time.",
                 "before": {
                   "kind": "flow",
                   "nodes": [
@@ -595,8 +597,9 @@
               el('span', { class: 'arrow', 'aria-hidden': 'true' }, '→'),
               pane('after', c.after),
             ),
-            el('p', { class: 'why' }, el('b', {}, 'Problem. '), rich(c.problem)),
-            el('p', { class: 'why' }, el('b', {}, 'Change. '), rich(c.change)),
+            el('p', { class: 'why' }, el('b', {}, 'What happened. '), rich(c.happened)),
+            el('p', { class: 'why' }, el('b', {}, 'The change. '), rich(c.change)),
+            el('p', { class: 'why' }, el('b', {}, 'You get. '), rich(c.gain)),
             c.overlaps?.length
               ? el(
                   'p',
