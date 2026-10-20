@@ -229,7 +229,7 @@ const COMMANDS: Record<string, Command> = {
   note: command(['job', 'type', 'text'], note),
   score: command(['target', 'name', 'value'], score),
   resume: command([], (ctx) => resume(ctx)),
-  archive: command([], (ctx) => archiveEpisodeLog(ctx.slug, ctx.root, viewOf(ctx).run)),
+  archive: command([], (ctx) => archiveEpisodeLog(ctx.slug, ctx.root)),
 };
 
 /** Runs one command (`argv` after the slug) and returns what to print, or why it was refused. */

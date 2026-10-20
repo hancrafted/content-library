@@ -25,9 +25,9 @@ _Done when_ the session works in the new worktree.
 
 ### 3. Archive the run logs
 
-`npm run episode:run -- <staging> archive` copies Staging's `events.jsonl` to `.logs/new-episode/<staging>/<run id>.jsonl`. Then `npm run episode:runs-csv`. Commit both.
+`npm run episode:run -- <staging> archive` copies Staging's `events.jsonl` and `pipeline.yml` to `.logs/new-episode/<staging>/`, so the dashboard still opens the Run once Staging is gone. Then `npm run episode:runs-csv`. Commit both.
 
-_Done when_ the log sits under `.logs/new-episode/<staging>/` and `docs/episodes/runs.csv` is regenerated.
+_Done when_ `.logs/new-episode/<staging>/` holds `events.jsonl` and `pipeline.yml` and `docs/episodes/runs.csv` is regenerated.
 
 ### 4. File the Design archive
 

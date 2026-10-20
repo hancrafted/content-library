@@ -1,5 +1,5 @@
 // The Episode run-log module: the one place that knows where a Run's events live (`docs/episodes/<slug>/events.jsonl`
-// live, `.logs/new-episode/<slug>/<run id>.jsonl` archived), reads and folds them, applies liveness, and says which
+// live, `.logs/new-episode/<slug>/events.jsonl` archived beside its `pipeline.yml`), reads and folds them, applies liveness, and says which
 // Run is current. Every reader and writer of the log goes through it. Real disk only; the shapes live in run-log.pure.ts.
 // Liveness: a span with no end line is `running` only when the worktree's active-run marker names its Run, else `crashed`.
 import { copyFileSync, existsSync, globSync, mkdirSync, readFileSync } from 'node:fs';
@@ -9,7 +9,7 @@ import { currentRun, fold, parseLog, type Folded, type RunLogLine } from './run-
 import type { RunSource } from './run-query.pure.ts';
 
 /** Where read-all looks by default: every live log and every archived one. */
-export const DEFAULT_PATTERNS = ['docs/episodes/*/events.jsonl', '.logs/new-episode/*/*.jsonl'];
+export const DEFAULT_PATTERNS = ['docs/episodes/*/events.jsonl', '.logs/new-episode/*/events.jsonl'];
 
 /** One log file, read: its lines, the parse errors (already prefixed with the file), the folded Runs and the current Run. */
 export interface EpisodeLog {
@@ -95,10 +95,14 @@ function keepLargest(
   if (size > (best.get(trace)?.size ?? 0)) best.set(trace, { size, source });
 }
 
-/** Copies the Episode's log to `.logs/new-episode/<slug>/<run id>.jsonl` and returns that path. */
-export function archiveEpisodeLog(slug: string, root: string, run: RunLogLine): string {
-  const target = `.logs/new-episode/${slug}/${run.run_id}.jsonl`;
-  mkdirSync(path.dirname(path.join(root, target)), { recursive: true });
-  copyFileSync(path.join(root, episodeLogPath(slug)), path.join(root, target));
+/** The files a Run's dashboard opens; archiving copies exactly these, so the archived folder opens the same way. */
+const DASHBOARD_FILES = ['events.jsonl', 'pipeline.yml'];
+
+/** Copies the Episode's log and pipeline to `.logs/new-episode/<slug>/` and returns that folder. */
+export function archiveEpisodeLog(slug: string, root: string): string {
+  const target = `.logs/new-episode/${slug}/`;
+  mkdirSync(path.join(root, target), { recursive: true });
+  const staging = path.dirname(episodeLogPath(slug));
+  for (const file of DASHBOARD_FILES) copyFileSync(path.join(root, staging, file), path.join(root, target, file));
   return target;
 }

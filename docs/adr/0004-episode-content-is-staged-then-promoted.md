@@ -23,7 +23,7 @@ The Spec holds every Option the designers drew, most of them rejected, and Han's
 
 1. **Staging holds the work in progress.** `docs/episodes/<slug>/` holds `brief.md`, `research/*.md`, `reference/*/design-reference.md` with its page images, `dossier.md` until the Spec Gate, `spec/spec.html` (the Spec, design-ADR-0011, which replaces design-ADR-0008's `spec/spec.md` and `spec/design-spec.md`), `research-plan.md` and `feedback/NN/feedback.md` (an Episode branch begun earlier keeps its `run-log.md`). Content changes from the feedback loop land in the Spec first, then in the implementation: from the Spec Gate on, the Spec is the only source and the Dossier is deleted (amended by design-ADR-0011; before, they landed in the Dossier). A `verified` entry `{ by: human:han, at }` at or after `generated.at` means Han accepted the file at its gate (see design-ADR-0005); every staging file carries `status: draft`, and Promotion is marked by the file's location.
 2. **Promotion happens when the Episode is final**, in any order with German translation and publishing. The `episode-promote` skill runs it, and no words move:
-   - The run log is archived to `.logs/new-episode/<slug>/`.
+   - The run log and its `pipeline.yml` are archived to `.logs/new-episode/<slug>/`, a folder the dashboard opens.
    - The Spec's Options, with each Slide's Visual idea, feedback, designer prompts and cited design references, are filed into `design-archive/<slug>/`.
    - Staging is harvested: lessons, style, Slide library candidates and cleanups are proposed, Han approves them at one gate, and larger refactors are filed as tickets.
    - `brief.md` moves to `src/components/episodes/<ep>/`, its `status: draft` removed.

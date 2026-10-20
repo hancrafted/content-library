@@ -326,16 +326,18 @@ describe('success cases', () => {
     expect(readMarker(ctx.root)?.trace_id).toBe(lines(ctx).at(-1)?.trace_id);
   });
 
-  it('archives the log under the Run id', () => {
+  it('archives the log and the pipeline as a folder the dashboard opens', () => {
     // ARRANGE
     const ctx = begun();
+    const staging = path.join(ctx.root, 'docs/episodes', SLUG);
+    const archive = '.logs/new-episode/demo/';
+    const files = ['events.jsonl', 'pipeline.yml'];
     // ACT
     const result = run(ctx, 'archive');
+    const copied = files.map((file) => readFileSync(path.join(ctx.root, archive, file), 'utf8'));
     // ASSERT
-    expect(result).toEqual({ ok: true, output: '.logs/new-episode/demo/2026-10-14T09-00-00Z.jsonl' });
-    expect(readFileSync(path.join(ctx.root, '.logs/new-episode/demo/2026-10-14T09-00-00Z.jsonl'), 'utf8')).toBe(
-      readFileSync(path.join(ctx.root, episodeLogPath(SLUG)), 'utf8'),
-    );
+    expect(result).toEqual({ ok: true, output: archive });
+    expect(copied).toEqual(files.map((file) => readFileSync(path.join(staging, file), 'utf8')));
   });
 });
 
