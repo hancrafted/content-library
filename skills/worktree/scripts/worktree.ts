@@ -1,5 +1,5 @@
 // The worktree lifecycle: `new <branch>` makes a checkout that passes preflight,
-// `done <branch>` removes it and fast-forwards local main. With `--base <branch>`
+// `done <branch> [--kill]` removes it and fast-forwards local main, `sync` merges origin/main into the current branch. With `--base <branch>`
 // both work against that branch instead of main, and `done` merges into it first. See ../SKILL.md.
 import { execFileSync, spawnSync } from 'node:child_process';
 import { rmSync } from 'node:fs';
@@ -7,6 +7,7 @@ import path from 'node:path';
 import { stopServers } from '../../new-episode/scripts/servers.ts';
 import { parseArgs } from './worktree-args.pure.ts';
 import { mergeIntoBase } from './worktree-merge.ts';
+import { describeProc, killable, lineage, parseLsof, planSync, type Proc } from './worktree-process.pure.ts';
 
 /** Runs a command and returns its output. */
 const capture = (cmd: string, args: string[], cwd?: string): string =>
@@ -45,25 +46,60 @@ function create(branch: string, base: string | null): void {
   console.log(`✔ worktree ready: ${target}\n  next: cd ${target}`);
 }
 
-/** Processes whose cwd sits inside the worktree, from `lsof -Fpcn` output. */
-function processesIn(target: string): string[] {
-  const found: string[] = [];
-  let current = '';
+/** Processes whose cwd sits inside the worktree. */
+function processesIn(target: string): Proc[] {
   // lsof exits 1 on harmless warnings, so read its output whatever the exit code.
   const { stdout } = spawnSync('lsof', ['-d', 'cwd', '-Fpcn'], { encoding: 'utf8' });
-  for (const line of stdout.split('\n')) {
-    if (line.startsWith('p')) current = `pid ${line.slice(1)}`;
-    else if (line.startsWith('c')) current += ` (${line.slice(1)})`;
-    else if (line.startsWith('n') && (line.slice(1) + '/').startsWith(target + '/')) found.push(current);
-  }
-  return found;
+  return parseLsof(stdout, target);
 }
 
-function refuseWhileBusy(target: string): void {
+/** This process and its ancestors (the agent's shell among them), which --kill never touches. */
+function protectedPids(): Set<number> {
+  const parentOf = new Map<number, number>();
+  for (const line of capture('ps', ['-axo', 'pid=,ppid=']).split('\n')) {
+    const [pid, ppid] = line.trim().split(/\s+/).map(Number);
+    parentOf.set(pid, ppid);
+  }
+  return lineage(process.pid, parentOf);
+}
+
+const isAlive = (pid: number): boolean => {
+  try {
+    process.kill(pid, 0);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+/** SIGTERM, a short wait, then SIGKILL for whatever is left. */
+function killProcesses(procs: Proc[]): void {
+  const signal = (proc: Proc, sig: NodeJS.Signals) => {
+    try {
+      process.kill(proc.pid, sig);
+    } catch {
+      // already gone
+    }
+  };
+  for (const proc of procs) signal(proc, 'SIGTERM');
+  const deadline = Date.now() + 3000;
+  while (Date.now() < deadline && procs.some((p) => isAlive(p.pid))) spawnSync('sleep', ['0.1']);
+  for (const proc of procs.filter((p) => isAlive(p.pid))) signal(proc, 'SIGKILL');
+  for (const proc of procs) console.log(`✔ stopped ${describeProc(proc)}`);
+}
+
+function refuseWhileBusy(target: string, kill: boolean): void {
   if ((process.cwd() + '/').startsWith(target + '/'))
     fail(`run this from the main checkout, not from inside ${target}`);
-  const busy = processesIn(target);
-  if (busy.length > 0) fail(`still in use, stop these first (a dev server?):\n  ${busy.join('\n  ')}`);
+  let busy = processesIn(target);
+  if (kill && busy.length > 0) {
+    killProcesses(killable(busy, protectedPids()));
+    busy = processesIn(target);
+  }
+  if (busy.length > 0)
+    fail(
+      `still in use, stop these first (a dev server?) or rerun with --kill:\n  ${busy.map(describeProc).join('\n  ')}`,
+    );
 }
 
 function deleteBranch(branch: string): void {
@@ -106,11 +142,11 @@ function mergeBeforeRemoval(branch: string, base: string): void {
   }
 }
 
-function finish(branch: string, base: string | null): void {
+function finish(branch: string, base: string | null, kill: boolean): void {
   const target = worktreePath(branch);
   // The Run's own dev and Spec servers (pid files in the worktree); no other process is touched.
   for (const port of stopServers(target)) console.log(`✔ stopped the Run's server on :${port}`);
-  refuseWhileBusy(target);
+  refuseWhileBusy(target, kill);
   if (base === null) refuseUnpushedMain();
   // Merged before anything is removed, so a failure leaves the worktree and branch intact.
   else mergeBeforeRemoval(branch, base);
@@ -125,7 +161,23 @@ function finish(branch: string, base: string | null): void {
   syncMain(mainRoot());
 }
 
+/** Fetches origin, then merges origin/main (or the base) into the current worktree's branch. */
+function sync(base: string | null): void {
+  const branch = capture('git', ['branch', '--show-current']);
+  const dirty = capture('git', ['status', '--porcelain']) !== '';
+  const plan = planSync({ branch, base, dirty });
+  if ('error' in plan) fail(plan.error);
+  stream('git', ['fetch', 'origin']);
+  try {
+    stream('git', ['merge', plan.target]);
+  } catch {
+    fail(`merge of ${plan.target} into ${branch} stopped; resolve it or run \`git merge --abort\``);
+  }
+  console.log(`✔ ${branch} merged with ${plan.target}`);
+}
+
 const args = parseArgs(process.argv.slice(2));
 if ('error' in args) fail(args.error);
 else if (args.command === 'new') create(args.branch, args.base);
-else finish(args.branch, args.base);
+else if (args.command === 'sync') sync(args.base);
+else finish(args.branch, args.base, args.kill);
