@@ -1,0 +1,20 @@
+{
+  "title": "Was das Fenster füllt",
+  "caption": "Deine Nachrichten sind nur ein Teil davon.",
+  "gridLabel": "Ein Raster aus 100 Kästchen, eines pro 1 % des Fensters",
+  "legend": {
+    "instructions": "Startanweisungen 34,1K",
+    "typed": "Von Dir getippt unter 1K",
+    "pdf": "Catering-PDF 55K",
+    "illustrative": "nur zur Veranschaulichung"
+  },
+  "voiceScript": {
+    "segments": {
+      "more-in-there-than-you-typed": {
+        "title": "Mehr drin, als Du getippt hast",
+        "keywords": "",
+        "script": "Du hast gesehen, wie sich das Fenster mit Deinen Nachrichten füllt. Aber Deine Nachrichten sind nur ein Teil davon. Die nächste Frage ist also, was sonst noch hineinkommt, ohne dass Du es merkst."
+      }
+    }
+  }
+}

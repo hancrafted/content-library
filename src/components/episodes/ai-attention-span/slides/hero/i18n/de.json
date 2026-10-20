@@ -1,0 +1,10 @@
+{
+  "caption": "Ein langer Chat verhält sich wie ein langes Telefonat: Seine Aufmerksamkeit ist ein <b>begrenztes Fenster</b>, also steuerst Du, was hineinkommt.",
+  "gridTitle": "Der Sommerfest-Chat",
+  "usedLabel": "128K von 200K · 64 %",
+  "gridLabel": "Das Fenster, 100 Kästchen: Anfang und Neuestes in Farbe, die Mitte verblasst",
+  "litLabel": "Anfang und Neuestes bleiben im Licht",
+  "fadedLabel": "Die Mitte rutscht aus der Aufmerksamkeit",
+  "bufferLabel": "Freigehalten für Zusammenfassungen · 16,5K",
+  "boxScale": "Ein Kästchen = 2K · Tokenzahlen nur zur Veranschaulichung"
+}

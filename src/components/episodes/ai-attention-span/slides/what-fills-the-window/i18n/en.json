@@ -1,0 +1,20 @@
+{
+  "title": "What fills the window",
+  "caption": "Your messages are only a part of it.",
+  "gridLabel": "A grid of 100 boxes, one per 1% of the window",
+  "legend": {
+    "instructions": "Starting instructions 34.1K",
+    "typed": "You typed under 1K",
+    "pdf": "catering PDF 55K",
+    "illustrative": "illustrative"
+  },
+  "voiceScript": {
+    "segments": {
+      "more-in-there-than-you-typed": {
+        "title": "More in there than you typed",
+        "keywords": "",
+        "script": "You have seen the window fill with your messages. But your messages are only a part of it, so the next question is what else goes in without you noticing."
+      }
+    }
+  }
+}

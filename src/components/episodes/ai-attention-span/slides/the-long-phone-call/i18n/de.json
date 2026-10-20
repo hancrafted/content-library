@@ -1,0 +1,16 @@
+{
+  "title": "Das lange Telefonat",
+  "caption": "Du hast angerufen, um eine Sache zu klären, und eine Stunde später aufgelegt.",
+  "gridLabel": "Das Telefonat, ein Kästchen pro Minute: Anfang und Ende hell, die Mitte verblasst, ein Ausreißer",
+  "callLength": "<b>1 Std. 22 Min.</b>, ein Kästchen pro Minute: Anfang, Ende und Peppers Kuchen bleiben hell.",
+  "punchline": "…Moment, das Datum haben wir gar nicht festgelegt.",
+  "voiceScript": {
+    "segments": {
+      "a-long-chat-is-a-long-call": {
+        "title": "Ein langer Chat ist ein langes Telefonat",
+        "keywords": "",
+        "script": "Denk an Dein letztes langes Telefonat mit jemandem, der Dir nahesteht: Deiner Schwester, einem Freund, Deiner Mutter. Du hast angerufen, um eine Sache zu klären, und eine Stunde später hast Du aufgelegt. Bevor ich ein Wort über KI sage, sollst Du spüren, was Dir von diesem Gespräch geblieben ist. Denn ich will Dich fragen, ob ein langer Chat mit einer KI dasselbe mit Dir macht. Deshalb kommt zuerst das Telefonat und dann der Chat."
+      }
+    }
+  }
+}

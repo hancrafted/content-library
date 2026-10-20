@@ -1,0 +1,17 @@
+{
+  "title": "Die Aufmerksamkeitsspanne managen",
+  "caption": "Eine Anzeige kannst Du nicht ablesen, also baust Du Gewohnheiten auf.",
+  "gridLabel": "Ein Raster aus 100 Kästchen, eines pro 1 % des Fensters",
+  "oldChat": "Alter Chat · 64 %",
+  "freshChat": "Frischer Chat · 19 %",
+  "handoff": "Übergabe: Feier für 40, 27. Juni, <budget>Budget 40.000 €</budget>. Weiter: Einladungen.",
+  "voiceScript": {
+    "segments": {
+      "you-manage-by-habit": {
+        "title": "Du steuerst mit Gewohnheiten",
+        "keywords": "",
+        "script": "Eine Anzeige kannst Du nicht ablesen, also baust Du Dir Gewohnheiten auf. Zuerst die für jeden Tag und dann die eine für ein großes Projekt."
+      }
+    }
+  }
+}

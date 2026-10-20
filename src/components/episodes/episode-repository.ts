@@ -1,6 +1,7 @@
 import type { EpisodeMetadata, EpisodeStatus, UpcomingEpisodeMetadata } from '@/lib/episode-metadata.pure';
 import { FEATURED, LAYOUT_REFERENCES, type ListedEpisodeSlug } from '@/lib/episode-overview';
 import { isEpisodeSlug, type EpisodeSlug } from '@/lib/routes';
+import { episodeMetadata as aiAttentionSpan } from './ai-attention-span/episode-metadata';
 import { episodeMetadata as aiTokenEconomy } from './ai-token-economy/episode-metadata';
 import { episodeMetadata as maintainingMarkdownForAi } from './maintaining-markdown-for-ai/episode-metadata';
 import { episodeMetadata as neverTooEarlySales } from './never-too-early-sales/episode-metadata';
@@ -23,6 +24,7 @@ const REGISTERED = {
   'ai-token-economy': aiTokenEconomy,
   'never-too-early-sales': neverTooEarlySales,
   'onboard-ai-every-time': onboardAiEveryTime,
+  'ai-attention-span': aiAttentionSpan,
 } as const satisfies { readonly [S in ListedEpisodeSlug]: EpisodeMetadata & { readonly slug: S } };
 
 /** The slugs whose metadata says `published`. */

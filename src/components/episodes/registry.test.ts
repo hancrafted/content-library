@@ -54,6 +54,16 @@ const COMPOSITION = [
       { opener: 'brief-in-action', pageSlides: 1 },
     ],
   },
+  {
+    // Section openers only until each Section job adds its page Slides at its placement marker.
+    slug: 'ai-attention-span',
+    sections: [
+      { opener: 'the-long-phone-call', pageSlides: 0 },
+      { opener: 'the-ais-attention-span', pageSlides: 0 },
+      { opener: 'what-fills-the-window', pageSlides: 0 },
+      { opener: 'managing-the-attention-span', pageSlides: 0 },
+    ],
+  },
 ] as const;
 
 /** Who renders each Slide header (design-ADR-0012): the Slide wrapper (`shared`) or each Scene (`authored`). */
@@ -62,6 +72,7 @@ const HEADER_MODES = [
   { slug: 'page-template', header: 'shared' },
   { slug: 'never-too-early-sales', header: 'shared' },
   { slug: 'onboard-ai-every-time', header: 'shared' },
+  { slug: 'ai-attention-span', header: 'shared' },
 ] as const;
 
 /** The recorded YouTube video of the Episodes that have one asserted here. */

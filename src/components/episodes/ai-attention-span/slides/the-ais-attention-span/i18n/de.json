@@ -1,0 +1,15 @@
+{
+  "title": "Die Aufmerksamkeitsspanne der KI",
+  "caption": "Jetzt die Ursache: wie die KI einen Chat im Blick behält.",
+  "gridLabel": "Ein Raster aus 100 Kästchen, eines pro 1 % des Fensters",
+  "windowNote": "<b>Dasselbe Licht auf dem Fenster:</b> 128K von 200K, die Mitte verblasst. Ein Kästchen = 2K, nur zur Veranschaulichung.",
+  "voiceScript": {
+    "segments": {
+      "why-it-happens": {
+        "title": "Warum das passiert",
+        "keywords": "",
+        "script": "Bisher hast Du gesehen, was passiert. Jetzt kommt die Ursache. Denn sobald Du weißt, wie die KI einen Chat im Blick behält, überrascht Dich das Muster nicht mehr, und erst danach schauen wir, was es mit Deinen Antworten macht."
+      }
+    }
+  }
+}

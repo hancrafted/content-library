@@ -1,0 +1,59 @@
+{
+  "title": "Why AI has a weird attention span you must learn to manage · hancrafted",
+  "description": "AI's attention span, its context window, is a limited resource you have to actively manage: one chat per job, a handoff after real progress or before a break, and for bigger projects one planner chat that hands each step to a fresh chat.",
+  "toc": "Contents Loading 2 min left 1 The long phone call 2 The AI's attention span 3 What fills the window 4 Managing the attention span Open contents : Contents · Loading Contents 2 min left 1 The long phone call 2 The AI's attention span 3 What fills the window 4 Managing the attention span",
+  "slides": [
+    {
+      "id": "top",
+      "text": "Why AI has a weird attention span you must learn to manage A long chat behaves like a long call: its attention is a limited window, so you manage what goes into it. The summer-party chat 128K of 200K · 64% The start and the newest stay in the light The middle fades out of attention Kept free for summaries · 16.5K One box = 2K · token counts illustrative"
+    },
+    {
+      "id": "the-long-phone-call",
+      "text": "The long phone call You called to settle one thing, and an hour later you hung up. 1 h 22 min , one box a minute: the start, the end and Pepper's cake stay lit. …wait, we never fixed the date."
+    },
+    {
+      "id": "the-ais-attention-span",
+      "text": "The AI's attention span Now the cause: how the AI holds a chat. The same light on the window: 128K of 200K, the middle faded. One box = 2K, illustrative."
+    },
+    {
+      "id": "what-fills-the-window",
+      "text": "What fills the window Your messages are only a part of it. Starting instructions 34.1K You typed under 1K catering PDF 55K illustrative"
+    },
+    {
+      "id": "managing-the-attention-span",
+      "text": "Managing the attention span You can't read a gauge, so you build habits. Old chat · 64% Fresh chat · 19% Handoff: party for 40, 27 June, budget 40,000 € . Next: invitations."
+    }
+  ],
+  "notes": [
+    {
+      "id": "top",
+      "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
+    },
+    { "id": "the-long-phone-call", "text": "The long phone call No speaker notes for this Slide." },
+    { "id": "the-ais-attention-span", "text": "The AI's attention span No speaker notes for this Slide." },
+    { "id": "what-fills-the-window", "text": "What fills the window No speaker notes for this Slide." },
+    { "id": "managing-the-attention-span", "text": "Managing the attention span No speaker notes for this Slide." }
+  ],
+  "script": [
+    {
+      "id": "top",
+      "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
+    },
+    {
+      "id": "the-long-phone-call",
+      "text": "The long phone call 0:00 – 0:33 A long chat is a long call Imagine the last long phone call you had with someone close, a sister, a friend, your mum. You called to settle one thing, and an hour later you hung up. Before I say a word about AI, I want you to feel what that call left you with, because the question I want to ask you is whether a long AI chat does the same thing to you, so the call comes first and the chat second."
+    },
+    {
+      "id": "the-ais-attention-span",
+      "text": "The AI's attention span 0:00 – 0:17 Why it happens So far you have seen what happens. Now the cause, because once you know how the AI holds a chat, the pattern stops being a surprise, and only after that do we look at what it does to your answers."
+    },
+    {
+      "id": "what-fills-the-window",
+      "text": "What fills the window 0:00 – 0:13 More in there than you typed You have seen the window fill with your messages. But your messages are only a part of it, so the next question is what else goes in without you noticing."
+    },
+    {
+      "id": "managing-the-attention-span",
+      "text": "Managing the attention span 0:00 – 0:09 You manage by habit You can't read a gauge, so you build habits. First the everyday ones, and then the one for a big project."
+    }
+  ]
+}

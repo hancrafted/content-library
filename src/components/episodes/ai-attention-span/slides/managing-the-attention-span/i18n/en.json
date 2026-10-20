@@ -1,0 +1,17 @@
+{
+  "title": "Managing the attention span",
+  "caption": "You can't read a gauge, so you build habits.",
+  "gridLabel": "A grid of 100 boxes, one per 1% of the window",
+  "oldChat": "Old chat · 64%",
+  "freshChat": "Fresh chat · 19%",
+  "handoff": "Handoff: party for 40, 27 June, <budget>budget 40,000 €</budget>. Next: invitations.",
+  "voiceScript": {
+    "segments": {
+      "you-manage-by-habit": {
+        "title": "You manage by habit",
+        "keywords": "",
+        "script": "You can't read a gauge, so you build habits. First the everyday ones, and then the one for a big project."
+      }
+    }
+  }
+}

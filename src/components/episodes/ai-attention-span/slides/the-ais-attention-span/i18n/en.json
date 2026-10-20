@@ -1,0 +1,15 @@
+{
+  "title": "The AI's attention span",
+  "caption": "Now the cause: how the AI holds a chat.",
+  "gridLabel": "A grid of 100 boxes, one per 1% of the window",
+  "windowNote": "<b>The same light on the window:</b> 128K of 200K, the middle faded. One box = 2K, illustrative.",
+  "voiceScript": {
+    "segments": {
+      "why-it-happens": {
+        "title": "Why it happens",
+        "keywords": "",
+        "script": "So far you have seen what happens. Now the cause, because once you know how the AI holds a chat, the pattern stops being a surprise, and only after that do we look at what it does to your answers."
+      }
+    }
+  }
+}

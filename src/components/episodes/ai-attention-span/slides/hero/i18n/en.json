@@ -1,0 +1,10 @@
+{
+  "caption": "A long chat behaves like a long call: its attention is a <b>limited window</b>, so you manage what goes into it.",
+  "gridTitle": "The summer-party chat",
+  "usedLabel": "128K of 200K · 64%",
+  "gridLabel": "The window, 100 boxes: the start and the newest in colour, the middle faded",
+  "litLabel": "The start and the newest stay in the light",
+  "fadedLabel": "The middle fades out of attention",
+  "bufferLabel": "Kept free for summaries · 16.5K",
+  "boxScale": "One box = 2K · token counts illustrative"
+}

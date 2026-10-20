@@ -1,0 +1,65 @@
+{
+  "title": "Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst · hancrafted",
+  "description": "Die Aufmerksamkeitsspanne der KI, ihr Kontextfenster, ist eine begrenzte Ressource, die Du aktiv managen musst: ein Chat pro Aufgabe, eine Übergabe nach echtem Fortschritt oder vor der Pause und bei größeren Projekten ein Planer-Chat, der jeden Schritt an einen frischen Chat weitergibt.",
+  "toc": "Inhalt Wird geladen noch 2 Min. 1 Das lange Telefonat 2 Die Aufmerksamkeitsspanne der KI 3 Was das Fenster füllt 4 Die Aufmerksamkeitsspanne managen Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 2 Min. 1 Das lange Telefonat 2 Die Aufmerksamkeitsspanne der KI 3 Was das Fenster füllt 4 Die Aufmerksamkeitsspanne managen",
+  "slides": [
+    {
+      "id": "top",
+      "text": "Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst Ein langer Chat verhält sich wie ein langes Telefonat: Seine Aufmerksamkeit ist ein begrenztes Fenster, also steuerst Du, was hineinkommt. Der Sommerfest-Chat 128K von 200K · 64 % Anfang und Neuestes bleiben im Licht Die Mitte rutscht aus der Aufmerksamkeit Freigehalten für Zusammenfassungen · 16,5K Ein Kästchen = 2K · Tokenzahlen nur zur Veranschaulichung"
+    },
+    {
+      "id": "the-long-phone-call",
+      "text": "Das lange Telefonat Du hast angerufen, um eine Sache zu klären, und eine Stunde später aufgelegt. 1 Std. 22 Min. , ein Kästchen pro Minute: Anfang, Ende und Peppers Kuchen bleiben hell. …Moment, das Datum haben wir gar nicht festgelegt."
+    },
+    {
+      "id": "the-ais-attention-span",
+      "text": "Die Aufmerksamkeitsspanne der KI Jetzt die Ursache: wie die KI einen Chat im Blick behält. Dasselbe Licht auf dem Fenster: 128K von 200K, die Mitte verblasst. Ein Kästchen = 2K, nur zur Veranschaulichung."
+    },
+    {
+      "id": "what-fills-the-window",
+      "text": "Was das Fenster füllt Deine Nachrichten sind nur ein Teil davon. Startanweisungen 34,1K Von Dir getippt unter 1K Catering-PDF 55K nur zur Veranschaulichung"
+    },
+    {
+      "id": "managing-the-attention-span",
+      "text": "Die Aufmerksamkeitsspanne managen Eine Anzeige kannst Du nicht ablesen, also baust Du Gewohnheiten auf. Alter Chat · 64 % Frischer Chat · 19 % Übergabe: Feier für 40, 27. Juni, Budget 40.000 € . Weiter: Einladungen."
+    }
+  ],
+  "notes": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    { "id": "the-long-phone-call", "text": "Das lange Telefonat Keine Sprechernotizen für diese Folie." },
+    {
+      "id": "the-ais-attention-span",
+      "text": "Die Aufmerksamkeitsspanne der KI Keine Sprechernotizen für diese Folie."
+    },
+    { "id": "what-fills-the-window", "text": "Was das Fenster füllt Keine Sprechernotizen für diese Folie." },
+    {
+      "id": "managing-the-attention-span",
+      "text": "Die Aufmerksamkeitsspanne managen Keine Sprechernotizen für diese Folie."
+    }
+  ],
+  "script": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    {
+      "id": "the-long-phone-call",
+      "text": "Das lange Telefonat 0:00 – 0:37 Ein langer Chat ist ein langes Telefonat Denk an Dein letztes langes Telefonat mit jemandem, der Dir nahesteht: Deiner Schwester, einem Freund, Deiner Mutter. Du hast angerufen, um eine Sache zu klären, und eine Stunde später hast Du aufgelegt. Bevor ich ein Wort über KI sage, sollst Du spüren, was Dir von diesem Gespräch geblieben ist. Denn ich will Dich fragen, ob ein langer Chat mit einer KI dasselbe mit Dir macht. Deshalb kommt zuerst das Telefonat und dann der Chat."
+    },
+    {
+      "id": "the-ais-attention-span",
+      "text": "Die Aufmerksamkeitsspanne der KI 0:00 – 0:20 Warum das passiert Bisher hast Du gesehen, was passiert. Jetzt kommt die Ursache. Denn sobald Du weißt, wie die KI einen Chat im Blick behält, überrascht Dich das Muster nicht mehr, und erst danach schauen wir, was es mit Deinen Antworten macht."
+    },
+    {
+      "id": "what-fills-the-window",
+      "text": "Was das Fenster füllt 0:00 – 0:17 Mehr drin, als Du getippt hast Du hast gesehen, wie sich das Fenster mit Deinen Nachrichten füllt. Aber Deine Nachrichten sind nur ein Teil davon. Die nächste Frage ist also, was sonst noch hineinkommt, ohne dass Du es merkst."
+    },
+    {
+      "id": "managing-the-attention-span",
+      "text": "Die Aufmerksamkeitsspanne managen 0:00 – 0:13 Du steuerst mit Gewohnheiten Eine Anzeige kannst Du nicht ablesen, also baust Du Dir Gewohnheiten auf. Zuerst die für jeden Tag und dann die eine für ein großes Projekt."
+    }
+  ]
+}
