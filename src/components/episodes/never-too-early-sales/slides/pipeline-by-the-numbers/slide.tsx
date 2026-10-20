@@ -121,11 +121,11 @@ export const pipelineByTheNumbers = slide({
                 label: t('stages.opportunity', { count: opportunity.notes }),
                 duration: t('durations.opportunity'),
                 ratioToNext: t('ratios.oppDeal', { ratio: opportunity.ratioToNext }),
-                ratioMarker: <Marker note="the-biggest-loss-is-no-decision" className="static" />,
+                ratioMarker: <Marker note="the-biggest-loss-is-no-decision" placement="beside" />,
                 markers: (
                   <>
-                    <Marker note="everyone-holds-a-veto" className="static" />
-                    <Marker note="buying-groups-disagree" className="static" />
+                    <Marker note="everyone-holds-a-veto" placement="beside" />
+                    <Marker note="buying-groups-disagree" placement="beside" />
                   </>
                 ),
                 notes: OPPORTUNITIES.map(([name, state]) => ({

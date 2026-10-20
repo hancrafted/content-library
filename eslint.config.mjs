@@ -82,6 +82,15 @@ const NEW_OBSERVER = {
   selector: "NewExpression[callee.name='IntersectionObserver']",
   message: 'The Slide observer is the only IntersectionObserver; read the active Slide with useActiveSlide() (FE-009).',
 };
+// design-ADR-0013: a Context marker owns its hit area. A `static` class from a call site would unposition the
+// button and stretch the invisible hit area over the nearest positioned ancestor, the whole Slide; use
+// `placement="beside"` for a marker in the flow of a label.
+const NO_STATIC_MARKER = {
+  selector:
+    "JSXOpeningElement[name.name=/^(Marker|ContextMarker)$/] > JSXAttribute[name.name='className'] :matches(Literal[value=/(^|\\s|:|!)static(\\s|$)/], TemplateElement[value.raw=/(^|\\s|:|!)static(\\s|$)/])",
+  message:
+    'A Context marker keeps its own hit area: a `static` class would stretch it over the whole Slide. Use placement="beside" for a marker in the flow of a label (design-ADR-0013).',
+};
 const CLIENT_DIRECTIVE_MISSING = {
   selector: `Program:not(:has(> ExpressionStatement[directive='use client']))`,
   message: "A *.client.tsx file MUST open with 'use client'; add it, or drop the suffix (FE-006).",
@@ -240,19 +249,29 @@ export default tseslint.config(
     // FE-006: the directive appears only in a `.client.tsx` file.
     files: ['src/**/*.{ts,tsx}'],
     ignores: [CLIENT_FILES],
-    rules: { 'no-restricted-syntax': ['error', NO_USE_CLIENT, HISTORY_WRITE, NEW_OBSERVER] },
+    rules: { 'no-restricted-syntax': ['error', NO_STATIC_MARKER, NO_USE_CLIENT, HISTORY_WRITE, NEW_OBSERVER] },
   },
   {
     // FE-006: a `.client.tsx` file carries the directive.
     files: [CLIENT_FILES],
-    rules: { 'no-restricted-syntax': ['error', CLIENT_DIRECTIVE_MISSING, HISTORY_WRITE, NEW_OBSERVER] },
+    rules: {
+      'no-restricted-syntax': ['error', NO_STATIC_MARKER, CLIENT_DIRECTIVE_MISSING, HISTORY_WRITE, NEW_OBSERVER],
+    },
   },
   {
     // FE-002 headings and FE-003 raw reads, for Episode files; the directive stays out of them.
     files: [EPISODE_FILES],
     ignores: EPISODE_CLIENT_FILES,
     rules: {
-      'no-restricted-syntax': ['error', NO_USE_CLIENT, HISTORY_WRITE, NEW_OBSERVER, ...SPINE_HEADINGS, NO_RAW_READ],
+      'no-restricted-syntax': [
+        'error',
+        NO_STATIC_MARKER,
+        NO_USE_CLIENT,
+        HISTORY_WRITE,
+        NEW_OBSERVER,
+        ...SPINE_HEADINGS,
+        NO_RAW_READ,
+      ],
     },
   },
   {
@@ -261,6 +280,7 @@ export default tseslint.config(
     rules: {
       'no-restricted-syntax': [
         'error',
+        NO_STATIC_MARKER,
         CLIENT_DIRECTIVE_MISSING,
         HISTORY_WRITE,
         NEW_OBSERVER,
@@ -272,15 +292,15 @@ export default tseslint.config(
   {
     // The owners: each is exempt from its own selector only.
     files: [URL_STATE_FILE],
-    rules: { 'no-restricted-syntax': ['error', NO_USE_CLIENT, NEW_OBSERVER] },
+    rules: { 'no-restricted-syntax': ['error', NO_STATIC_MARKER, NO_USE_CLIENT, NEW_OBSERVER] },
   },
   {
     files: [SLIDE_OBSERVER_FILE],
-    rules: { 'no-restricted-syntax': ['error', CLIENT_DIRECTIVE_MISSING, HISTORY_WRITE] },
+    rules: { 'no-restricted-syntax': ['error', NO_STATIC_MARKER, CLIENT_DIRECTIVE_MISSING, HISTORY_WRITE] },
   },
   {
     files: [REVEAL_OBSERVER_FILE],
-    rules: { 'no-restricted-syntax': ['error', NO_USE_CLIENT, HISTORY_WRITE] },
+    rules: { 'no-restricted-syntax': ['error', NO_STATIC_MARKER, NO_USE_CLIENT, HISTORY_WRITE] },
   },
   {
     files: ['**/*.test.ts'],

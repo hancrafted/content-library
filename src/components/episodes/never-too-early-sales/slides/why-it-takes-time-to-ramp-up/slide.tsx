@@ -74,14 +74,14 @@ export const whyItTakesTimeToRampUp = slide({
         close={t.rich('close')}
         targets={{ preparation: target('preparation'), market: target('market'), metrics: target('metrics') }}
         markers={{
-          preparation: <Marker note="learn-first-codify-later" className="static" />,
+          preparation: <Marker note="learn-first-codify-later" placement="beside" />,
           market: (
             <>
-              <Marker note="startups-search-they-do-not-execute" className="static" />
-              <Marker note="selling-blind" className="static" />
+              <Marker note="startups-search-they-do-not-execute" placement="beside" />
+              <Marker note="selling-blind" placement="beside" />
             </>
           ),
-          metrics: <Marker note="metrics-lag-by-one-cycle" className="static" />,
+          metrics: <Marker note="metrics-lag-by-one-cycle" placement="beside" />,
         }}
       />
     </SlideFrame>

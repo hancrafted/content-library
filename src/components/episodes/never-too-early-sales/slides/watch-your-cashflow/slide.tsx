@@ -53,7 +53,7 @@ export const watchYourCashflow = slide({
     // February's footer states the €0 the board turns on, so it carries the zero-cash target and its marker.
     const zero = {
       target: target('zero-cash')['data-target'],
-      marker: <Marker note="default-alive-test" className="static" />,
+      marker: <Marker note="default-alive-test" placement="beside" />,
     };
     const columns = months.map((month, index) => ({
       ...month,
