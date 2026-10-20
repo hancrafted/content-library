@@ -1,4 +1,5 @@
 // `npm run episode:spec-assemble -- <slug | Episode folder>`: builds `spec/spec.html` from what exists (design-ADR 0011).
+// `--forbid <word,word…>` first fails, naming file and line, when a term survives in the staging folder (after a rename).
 // Agents supply content only: the Brief, the Dossier, the designers' fragments `.scratch/<slug>/spec/*.html` and the
 // Visual language and Episode page markup `visual-language.html` and `episode-page.html` beside them. The user's feedback
 // rounds lock the user's picks. Compiles `spec/design.css` beside the page. Refuses an approved Spec; runs the Spec contract that applies to the stage (all of it once Options are present) and exits 1 on findings.
@@ -6,6 +7,7 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { findForbidden, parseForbidden } from '../../../src/lib/episode-forbid.pure.ts';
 import { assembleSpec } from '../../../src/lib/episode-spec-assemble.pure.ts';
 import { SPEC_FILE } from '../../../src/lib/episode-spec-page.pure.ts';
 import { checkSpec } from '../../../src/lib/episode-spec.pure.ts';
@@ -27,9 +29,27 @@ function feedbackRounds(folder: string): string[] {
     .flatMap((name) => read(path.join(dir, name, 'feedback.md')) ?? []);
 }
 
-const [arg, ...extra] = process.argv.slice(2);
-if (arg === undefined || extra.length > 0) {
-  console.error('✖ usage: npm run episode:spec-assemble -- <slug | Episode folder>');
+/** The staging folder's prose and markup, by path relative to it. Feedback, the log and the generated Spec hold old terms by design. */
+function stagingTexts(dir: string, base = dir): Record<string, string> {
+  return Object.fromEntries(
+    readdirSync(dir, { withFileTypes: true }).flatMap((entry): [string, string][] => {
+      const full = path.join(dir, entry.name);
+      const rel = path.relative(base, full);
+      if (entry.isDirectory()) {
+        return ['feedback', 'spec', 'reference'].includes(rel) ? [] : Object.entries(stagingTexts(full, base));
+      }
+      return /\.(md|html)$/.test(entry.name) && entry.name !== 'run-log.md' ? [[rel, readFileSync(full, 'utf8')]] : [];
+    }),
+  );
+}
+
+const args = process.argv.slice(2);
+const forbidAt = args.indexOf('--forbid');
+const forbidValue = forbidAt === -1 ? undefined : args[forbidAt + 1];
+if (forbidAt !== -1) args.splice(forbidAt, 2);
+const [arg, ...extra] = args;
+if (arg === undefined || extra.length > 0 || (forbidAt !== -1 && forbidValue === undefined)) {
+  console.error('✖ usage: npm run episode:spec-assemble -- <slug | Episode folder> [--forbid <word,word…>]');
   process.exit(1);
 }
 const folder = arg.includes('/') ? path.resolve(arg) : path.join(ROOT, 'docs/episodes', arg);
@@ -38,6 +58,11 @@ const brief = read(path.join(folder, 'brief.md'));
 if (brief === undefined) {
   console.error(`✖ ${path.relative(ROOT, folder)}/brief.md does not exist: the Spec starts from the Brief`);
   process.exit(1);
+}
+if (forbidValue !== undefined) {
+  const hits = findForbidden(stagingTexts(folder), parseForbidden(forbidValue));
+  for (const { file, line, term } of hits) console.error(`✖ ${file}:${line} holds the forbidden term "${term}"`);
+  if (hits.length > 0) process.exit(1);
 }
 const scratch = path.join(ROOT, '.scratch', slug, 'spec');
 const fragmentFiles = existsSync(scratch)
