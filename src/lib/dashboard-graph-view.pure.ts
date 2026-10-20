@@ -1,10 +1,12 @@
 /*
  * The Graph view model: every node the pipeline dashboard draws, resolved once. A Stage node carries its label,
  * worded state, counts, activity and selection; a Job node its agents, attention, fan-out label and ticket lanes.
- * The graph, its popovers and the drawer read these nodes instead of re-deriving them from the projection.
+ * The graph, its popovers and the drawer read these nodes instead of re-deriving them from the projection, and the
+ * geometry that places them comes from the same call, so a drawn node always has its place.
  */
 
 import type { Span } from '../../skills/new-episode/scripts/run-log.schema.pure';
+import { graphGeometry } from './dashboard-graph-geometry.pure';
 import type { DashboardJob, DashboardView } from './dashboard-projection.pure';
 import {
   agentState,
@@ -27,6 +29,12 @@ export interface GraphLabels {
 export interface GraphSelection {
   stage: string;
   job?: string;
+}
+
+/** What the drawer shows, and whether the Job network is drawn instead of the Stage view. */
+export interface GraphOptions {
+  selection: GraphSelection | null;
+  showJobs: boolean;
 }
 
 /** One node on a Job's branch: a configured agent, or the Job itself when it configures none. */
@@ -158,8 +166,9 @@ function stateLabel(stage: DashboardStage, labels: GraphLabels): string {
 export function graphView(
   view: { jobs: readonly DashboardJob[]; stages?: DashboardView['stages'] },
   labels: GraphLabels,
-  selection: GraphSelection | null,
+  options: Partial<GraphOptions> = {},
 ) {
+  const { selection, showJobs } = { selection: null, showJobs: false, ...options };
   const projected = projectStages(view.jobs, view.stages);
   const stages: StageNode[] = projected.stages.map((stage) => ({
     ...stage,
@@ -180,6 +189,7 @@ export function graphView(
     attention: projected.attention,
     next: stages.find((candidate) => candidate.state === 'waiting'),
     selection: stage && { stage, job, title: job?.id ?? stage.label },
+    geometry: graphGeometry(stages, showJobs),
   };
 }
 

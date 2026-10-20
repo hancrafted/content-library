@@ -6,12 +6,16 @@ import { parseDashboardPipeline, projectDashboard, type DashboardJob } from './d
 
 const labels = { stageNames: { pr: 'Pull request' }, gate: 'Waiting on Han', complete: 'Complete' };
 
-function fixtureJob(): DashboardJob {
+function fixtureView() {
   const fixture = (name: string) =>
     readFileSync(new URL(`../../tests/fixtures/pipeline-dashboard/${name}`, import.meta.url), 'utf8');
   const log = createLogFold({ live: 'unfinished' });
   log.append(parseLog(fixture('events.jsonl')).lines);
-  return projectDashboard(parseDashboardPipeline(fixture('pipeline.yml')), log.snapshot()).jobs[0];
+  return projectDashboard(parseDashboardPipeline(fixture('pipeline.yml')), log.snapshot());
+}
+
+function fixtureJob(): DashboardJob {
+  return fixtureView().jobs[0];
 }
 
 /** A Job of the given stage and state with no observed spans or configured agents. */
@@ -42,7 +46,7 @@ describe('success cases', () => {
     const expectedNext = 'Pull request';
     const expectedTotal = 4;
     // ACT
-    const graph = graphView({ jobs, stages }, labels, null);
+    const graph = graphView({ jobs, stages }, labels);
     // ASSERT
     expect(graph.stages.map((stage) => stage.label)).toEqual(expectedLabels);
     expect(graph.stages.map((stage) => stage.stateLabel)).toEqual(expectedStates);
@@ -61,8 +65,10 @@ describe('success cases', () => {
     const expectedJobTitle = 'write-design-spec';
     const expectedStageTitle = 'Specification';
     // ACT
-    const onJob = graphView({ jobs, stages }, labels, { stage: 'specification', job: 'write-design-spec' });
-    const onStage = graphView({ jobs, stages }, labels, { stage: 'specification' });
+    const onJob = graphView({ jobs, stages }, labels, {
+      selection: { stage: 'specification', job: 'write-design-spec' },
+    });
+    const onStage = graphView({ jobs, stages }, labels, { selection: { stage: 'specification' } });
     // ASSERT
     expect(onJob.stages.map((stage) => stage.selected)).toEqual(expectedStages);
     expect(onJob.stages[1].nodes.map((node) => node.selected)).toEqual(expectedJobs);
@@ -97,7 +103,7 @@ describe('success cases', () => {
     const expectedActive = ['categorize-research', 'retrieval'];
     const expectedSessions = 2;
     // ACT
-    const stage = graphView({ jobs, stages: ['setup'] }, labels, null).stages[0];
+    const stage = graphView({ jobs, stages: ['setup'] }, labels).stages[0];
     // ASSERT
     expect(stage.active).toEqual(expectedActive);
     expect(stage.sessions).toBe(expectedSessions);
@@ -127,11 +133,32 @@ describe('success cases', () => {
     const expectedFanOut = ['Research questions', undefined];
     const expectedTickets = [[], [174, 175]];
     // ACT
-    const nodes = graphView({ jobs, stages: ['research'] }, labels, null).stages[0].nodes;
+    const nodes = graphView({ jobs, stages: ['research'] }, labels).stages[0].nodes;
     // ASSERT
     expect(nodes.map((node) => node.attention)).toEqual(expectedAttention);
     expect(nodes.map((node) => node.fanOut)).toEqual(expectedFanOut);
     expect(nodes.map((node) => node.tickets)).toEqual(expectedTickets);
+  });
+
+  it('places every Stage, Job and agent node it draws in the Job network', () => {
+    // ARRANGE
+    const view = fixtureView();
+    const expectedUnplaced: string[] = [];
+    // ACT
+    const graph = graphView(view, labels, { showJobs: true });
+    const unplaced = graph.stages.flatMap((stage, index) => {
+      const placed = graph.geometry.stages[index];
+      if (placed?.id !== stage.id) return [stage.id];
+      return stage.nodes.flatMap((node) => {
+        const branch = placed.branches.find((candidate) => candidate.job === node.id);
+        if (!branch) return [node.id];
+        const ids = new Set(branch.nodes.map((point) => point.id));
+        return node.agents.filter((agent) => !ids.has(agent.id)).map((agent) => agent.id);
+      });
+    });
+    // ASSERT
+    expect(graph.stages.length).toBeGreaterThan(1);
+    expect(unplaced).toEqual(expectedUnplaced);
   });
 });
 
@@ -142,8 +169,8 @@ describe('failure cases', () => {
     const stages = ['specification'];
     const expectedTitle = 'Specification';
     // ACT
-    const missingStage = graphView({ jobs, stages }, labels, { stage: 'publish' });
-    const missingJob = graphView({ jobs, stages }, labels, { stage: 'specification', job: 'gone' });
+    const missingStage = graphView({ jobs, stages }, labels, { selection: { stage: 'publish' } });
+    const missingJob = graphView({ jobs, stages }, labels, { selection: { stage: 'specification', job: 'gone' } });
     // ASSERT
     expect(missingStage.selection).toBeUndefined();
     expect(missingStage.stages[0].selected).toBe(false);
@@ -171,7 +198,7 @@ describe('failure cases', () => {
     ];
     const expectedActive = ['write-design-spec'];
     // ACT
-    const stage = graphView({ jobs, stages: ['specification'] }, labels, null).stages[0];
+    const stage = graphView({ jobs, stages: ['specification'] }, labels).stages[0];
     // ASSERT
     expect(stage.active).toEqual(expectedActive);
     expect(stage.sessions).toBe(1);
@@ -206,7 +233,7 @@ describe('edge cases', () => {
       { id: 'write-spec:2', role: 'grill', label: 'write-spec · grill', state: 'running', span: span.span_id },
     ];
     // ACT
-    const nodes = graphView({ jobs, stages: ['specification'] }, labels, null).stages[0].nodes[0].agents;
+    const nodes = graphView({ jobs, stages: ['specification'] }, labels).stages[0].nodes[0].agents;
     // ASSERT
     expect(nodes.map(({ span: drawn, ...node }) => ({ ...node, span: drawn?.span_id }))).toEqual(expected);
   });
@@ -216,7 +243,7 @@ describe('edge cases', () => {
     const jobs = [job('open-pr', 'pr', 'gate')];
     const expected = [{ id: 'open-pr:0', role: 'open-pr', label: 'open-pr · open-pr', state: 'gate', span: undefined }];
     // ACT
-    const nodes = graphView({ jobs, stages: ['pr'] }, labels, null).stages[0].nodes[0].agents;
+    const nodes = graphView({ jobs, stages: ['pr'] }, labels).stages[0].nodes[0].agents;
     // ASSERT
     expect(nodes).toEqual(expected);
   });

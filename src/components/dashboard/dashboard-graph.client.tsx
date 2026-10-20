@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { useDashboardDetail } from '@/hooks/use-dashboard-detail';
 import type { ReplayControls } from '@/hooks/use-dashboard-replay';
 import type { DashboardEvent, EventScope } from '@/lib/dashboard-events.pure';
-import { graphGeometry } from '@/lib/dashboard-graph-geometry.pure';
 import { graphView, type GraphView } from '@/lib/dashboard-graph-view.pure';
 import type { EpisodeOutputs } from '@/lib/dashboard-outputs.pure';
 import type { DashboardJob, DashboardView } from '@/lib/dashboard-projection.pure';
@@ -112,7 +111,7 @@ function GraphToolbar({ controls, copy, replay, graph }: Omit<OverviewProps, 'st
 
 function GraphOverview({ controls, graph, stale, copy, replay }: OverviewProps) {
   const { detail, showJobs } = controls;
-  const geometry = graphGeometry(graph.stages, showJobs);
+  const { geometry } = graph;
   return (
     <div className="space-y-6 rounded-2xl border border-border bg-card p-4 sm:p-6">
       <GraphToolbar controls={controls} copy={copy} replay={replay} graph={graph} />
@@ -136,7 +135,7 @@ function GraphOverview({ controls, graph, stale, copy, replay }: OverviewProps) 
 export function DashboardGraph({ view, events, stale, moment, outputs, copy, replay, observedJobs }: GraphProps) {
   const controls = useGraphControls();
   const labels = { stageNames: copy.graph.stageNames, gate: copy.waitingOnHan, complete: copy.graph.complete };
-  const graph = graphView(view, labels, controls.detail.selection);
+  const graph = graphView(view, labels, { selection: controls.detail.selection, showJobs: controls.showJobs });
   const { log, openLog, dismissLog } = controls;
   return (
     <DashboardMoment value={moment}>

@@ -255,24 +255,18 @@ describe('success cases', () => {
     expect(ranges).toEqual([expectedFinished, expectedOpen]);
   });
 
-  it('maps a cutoff to a slider position and the position back to the cutoff', async () => {
+  it('maps a cutoff to its place on the Stage rail and the place back to the cutoff', async () => {
     // ARRANGE
     const timeline = dashboardTimeline(await polled(RUN, at(40)));
-    const stops = [
-      { at: 0, position: 0 },
-      { at: 1 / 3, position: 1 / 3 },
-      { at: 2 / 3, position: 2 / 3 },
-      { at: 1, position: 1 },
-    ];
     // Four of draft's nine minutes into the first of three stages.
-    const expectedPosition = 4 / 27;
+    const expectedRail = 4 / 27;
     const expectedCutoff = at(5);
-    const digits = { position: 10, milliseconds: 0 };
+    const digits = { rail: 10, milliseconds: 0 };
     // ACT
-    const position = timeline.position(expectedCutoff, stops);
-    const cutoff = timeline.seekPosition(position, stops);
+    const rail = timeline.railAt(expectedCutoff);
+    const cutoff = timeline.seekRail(rail);
     // ASSERT
-    expect(position).toBeCloseTo(expectedPosition, digits.position);
+    expect(rail).toBeCloseTo(expectedRail, digits.rail);
     expect(cutoff).toBeCloseTo(expectedCutoff, digits.milliseconds);
   });
 
@@ -284,10 +278,7 @@ describe('success cases', () => {
     // ACT
     const held = timeline.toggle(false);
     const resumed = [timeline.toggle(true), timeline.seek(at(31)), timeline.seek(at(50))];
-    const end = timeline.seekPosition(1, [
-      { at: 0, position: 0 },
-      { at: 1, position: 1 },
-    ]);
+    const end = timeline.seekRail(1);
     // ASSERT
     expect(held).toBe(expectedHeld);
     expect(timeline.moment(held)).toBe(expectedHeld);
@@ -318,7 +309,7 @@ describe('failure cases', () => {
     const timeline = dashboardTimeline(reading);
     const expectedLive = 'live';
     // ACT
-    const cutoffs = [timeline.toggle(false), timeline.seek(at(5)), timeline.seekPosition(0, [])];
+    const cutoffs = [timeline.toggle(false), timeline.seek(at(5)), timeline.seekRail(0)];
     const moment = timeline.moment(at(5));
     const shown = timeline.at(at(5));
     // ASSERT
@@ -356,7 +347,19 @@ describe('edge cases', () => {
     expect(states(view)).toEqual(expected);
   });
 
-  it('starts at the current Run, the latest started by time, not the last in the log', async () => {
+  it('snaps a place just past a Stage onto it, the latest moment the rail rests there', async () => {
+    // ARRANGE
+    const timeline = dashboardTimeline(await polled(RUN, at(40)));
+    // Draft, the whole first of three stages, ends at minute 10; the rail rests at 1/3 until research starts at 11.
+    const nearSecondStage = 1 / 3 + 0.002;
+    const expected = at(11);
+    // ACT
+    const cutoff = timeline.seekRail(nearSecondStage);
+    // ASSERT
+    expect(cutoff).toBe(expected);
+  });
+
+  it('starts at the latest Run by start time, not the last in the log', async () => {
     // ARRANGE
     const earlier: [number, Fields][] = [
       [-100, startRun('old')],

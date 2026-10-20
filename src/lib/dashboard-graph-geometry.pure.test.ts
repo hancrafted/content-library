@@ -3,7 +3,6 @@ import { describe, expect, it } from 'vitest';
 import { createLogFold } from '../../skills/new-episode/scripts/run-log.pure';
 import { graphGeometry } from './dashboard-graph-geometry.pure';
 import { parseDashboardPipeline, projectDashboard } from './dashboard-projection.pure';
-import { scrubPosition, scrubTime } from './dashboard-scrub.pure';
 import { projectStages } from './dashboard-stages.pure';
 
 /**
@@ -41,15 +40,16 @@ describe('success cases', () => {
     const expected = {
       start: (30 / EMPTY_WIDTH) * 100,
       end: ((EMPTY_WIDTH - 298) / EMPTY_WIDTH) * 100,
-      stops: [0, 96 / 268, 192 / 268, 1],
+      screens: [0, 96 / 268, 192 / 268, 1],
     };
+    const places = [0, 1 / 3, 2 / 3, 1];
     // ACT
     const geometry = graphGeometry(EMPTY_STAGES, true);
-    const stops = geometry.stops.map((stop) => stop.position);
+    const screens = places.map((place) => geometry.rail.screenOf(place));
     // ASSERT
     expect(percentOf(geometry.cssVars['--start-inset'])).toBeCloseTo(expected.start);
     expect(percentOf(geometry.cssVars['--end-inset'])).toBeCloseTo(expected.end);
-    expect(stops).toEqual(expected.stops.map((position) => expect.closeTo(position)));
+    expect(screens).toEqual(expected.screens.map((screen) => expect.closeTo(screen)));
   });
   it('draws every edge from one node centre to another', () => {
     // ARRANGE
@@ -102,14 +102,17 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('still places the Run end on a one-stop rail when no Stage is planned', () => {
+  it('still places the Run end, and holds the whole rail at its start, when no Stage is planned', () => {
     // ARRANGE
-    const expected = { end: 0.5, stops: [{ at: 0, position: 0 }] };
+    const expected = { end: 0.5, screen: 0, place: 0 };
     // ACT
     const geometry = graphGeometry([], false);
+    const screen = geometry.rail.screenOf(1);
+    const place = geometry.rail.placeOf(1);
     // ASSERT
     expect(geometry.end).toBe(expected.end);
-    expect(geometry.stops).toEqual(expected.stops);
+    expect(screen).toBe(expected.screen);
+    expect(place).toBe(expected.place);
   });
 });
 
@@ -128,12 +131,12 @@ describe('edge cases', () => {
   it('puts the scrubber on a Stage centre when replay reaches that Stage, and back', () => {
     // ARRANGE
     const geometry = graphGeometry(EMPTY_STAGES, true);
-    // The third of four rail stops; its centre 222 is 192 along the 268 from the first centre to the Run end.
+    // The third of four Stage rail places; its centre 222 is 192 along the 268 from the first centre to the Run end.
     const stage = 2 / 3;
     const expected = 192 / 268;
     // ACT
-    const visual = scrubPosition(geometry.stops, stage);
-    const structural = scrubTime(geometry.stops, expected);
+    const visual = geometry.rail.screenOf(stage);
+    const structural = geometry.rail.placeOf(expected);
     // ASSERT
     expect(visual).toBeCloseTo(expected);
     expect(structural).toBeCloseTo(stage);

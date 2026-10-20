@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createLogFold, type RunLogLine } from './run-log.pure.ts';
+import { createLogFold, latestRun, type RunLogLine } from './run-log.pure.ts';
 
 const run = {
   kind: 'start-run',
@@ -184,5 +184,33 @@ describe('edge cases', () => {
     // ASSERT
     expect(found).toMatchObject(expected);
     expect(result.orphans).toEqual([]);
+  });
+
+  it('names the Run started latest by time as the latest Run, not the one appended last', () => {
+    // ARRANGE
+    const log = createLogFold({ live: 'unfinished' });
+    const older = {
+      ...run,
+      t: '2026-10-14T09:00:00Z',
+      seq: 9,
+      trace_id: 'trace-old',
+      span_id: 'run-old',
+    } as RunLogLine;
+    const expected = 'run-a';
+    // ACT
+    log.append([run, older]);
+    const found = latestRun(log.snapshot())?.span_id;
+    // ASSERT
+    expect(found).toBe(expected);
+  });
+
+  it('names no latest Run before a Run starts', () => {
+    // ARRANGE
+    const log = createLogFold();
+    // ACT
+    log.append([job]);
+    const found = latestRun(log.snapshot());
+    // ASSERT
+    expect(found).toBeUndefined();
   });
 });
