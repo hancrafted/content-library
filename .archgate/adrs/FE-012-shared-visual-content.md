@@ -43,6 +43,14 @@ For this project the chat and its labels are one artifact, authored together fro
 1. This admits a text home for a Shared visual only: a part with Presets, used by two or more Slides. Any other `slide-shared` part owns no words and takes them as props.
 2. A Shared visual's data is content: it owns no route, no anchor and no Episode metadata.
 
+### 4. Parts of an interactive Shared visual
+
+1. A visual with several panels MUST be built from controlled parts: the parent owns all state and the Preset; each part gets its own slice as props and sends events up by callbacks. No part sees the whole state.
+2. Hover and pin MUST be brushing and linking: the parent holds the lit key, each part turns it into one `on` boolean per item and passes that to a memoised item, so a hover redraws only items whose `on` flipped.
+3. `renderMode` (Simple or Technical) MUST be one global value plus a per-part override in the parent's state; the latest action wins. `orientation` is a prop.
+4. Controls MUST come from a typed registry in code; a Preset's `controls` map overrides it key by key. One definition says what a control flips.
+5. A part a Server Component can show alone MUST be a pure `*-view.tsx` (props only, no hooks, no handlers).
+
 ## Do's and Don'ts
 
 ### Do's
@@ -52,6 +60,11 @@ For this project the chat and its labels are one artifact, authored together fro
 3. **DO** give the server entry a `words` prop that overrides any default word. (Decision 2)
 4. **DO** put a Slide's own title, caption and callouts in its own `i18n/`. (Decision 2)
 5. **DO** test that both files of a pair hold the same keys and steps. (Decision 1)
+6. **DO** hand each part a slice plus callbacks, `onLight`/`onPin`, never the state. (Decision 4)
+7. **DO** compute `on` per item in the part and pass the boolean to a memoised item. (Decision 4)
+8. **DO** read a part's mode as `renderModes[part] ?? global`. (Decision 4)
+9. **DO** add a control to the registry, not as a loose Preset flag. (Decision 4)
+10. **DO** name a statically rendered part `*-view.tsx`. (Decision 4)
 
 ### Don'ts
 
@@ -59,6 +72,8 @@ For this project the chat and its labels are one artifact, authored together fro
 2. **DON'T** read the pair at runtime or by `Accept-Language`. (Decision 1)
 3. **DON'T** put a Slide's argument in the visual's config — `story:` holds the visual's data, not a Slide's caption. (Decision 2)
 4. **DON'T** give words to a `slide-shared` part that has no Presets or one user. (Decision 3)
+5. **DON'T** pass a shared `View` object or `dispatch` into a part. (Decision 4)
+6. **DON'T** hook or attach handlers in a `*-view.tsx`. (Decision 4)
 
 ## Consequences
 
