@@ -1,3 +1,4 @@
+import { curveProblems } from './attention-curve.pure';
 import { controlProblems } from './context-controls.pure';
 import { ATTENTION_LAYOUTS, PARTS } from './context-state.pure';
 import { framesOf, type Frame } from './context.pure';
@@ -13,7 +14,10 @@ function pinnedProblems(preset: Preset, chat: Chat): string[] {
 
 function layoutProblems(preset: Preset): string[] {
   const { layout } = preset.attention;
-  return ATTENTION_LAYOUTS.includes(layout) ? [] : [`unknown attention layout "${String(layout)}"`];
+  return [
+    ...(ATTENTION_LAYOUTS.includes(layout) ? [] : [`unknown attention layout "${String(layout)}"`]),
+    ...curveProblems(preset.attention.curve),
+  ];
 }
 
 function orderProblems(preset: Preset): string[] {

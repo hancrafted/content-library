@@ -1,3 +1,4 @@
+import type { Curve, CurveKey } from './attention-curve.pure';
 import type { ControlId } from './context-controls.pure';
 import type { Attention } from './context-usage.pure';
 import type { ContextWords } from './context-words.types';
@@ -113,6 +114,8 @@ export interface AttentionProps extends Lighting, LightingEvents, Speech, Progre
   readonly window: WindowSize;
   readonly stepOf: ReadonlyMap<string, number>;
   readonly layout: AttentionLayout;
+  /** The ⋯ menu's sliders: absent when the Preset hides the control or an explicit split is in force. */
+  readonly menu?: { readonly curve: Curve; readonly onCurve: (key: CurveKey, value: number) => void };
   /** A row is hovered or clicked: the parent scrolls that step's chat message into view. */
   readonly onReveal: (key: string) => void;
 }

@@ -27,6 +27,10 @@ export interface ContextWords {
   readonly categoryTechnical: string;
   readonly categoryTechnicalTip: string;
   readonly windowGroup: string;
+  readonly attentionMenu: string;
+  readonly attentionMenuTip: string;
+  /** The four sliders of the Attention distribution, by bucket. */
+  readonly attentionCurve: Readonly<Record<'start' | 'recent' | 'middle' | 'newest', string>>;
   readonly download: string;
   readonly upload: string;
   readonly uploadFailed: string;

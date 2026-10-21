@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import type { Curve } from './attention-curve.pure';
 import { fromClaudeLog } from './claude-log.pure';
 import { deltaText, percentText } from './context-format.pure';
 import { Parts, ToolbarPart, type Model } from './context-slices';
@@ -16,8 +17,8 @@ import {
 import { attentionAt, readoutAt } from './context-usage.pure';
 import { fill, storyOf, type ContextViewData } from './context-view';
 import styles from './context.module.css';
-import { categoriesOf, framesOf } from './context.pure';
-import type { Chat, Part } from './context.types';
+import { categoriesOf, framesOf, type Frame } from './context.pure';
+import type { Chat, Part, WindowSize } from './context.types';
 import { useWindowEvents } from './use-window-events';
 import { useReorderRepair } from './window-reorder';
 
@@ -61,6 +62,24 @@ function windowOf(data: ContextViewData, state: ViewState) {
   return size;
 }
 
+interface AttentionSource {
+  readonly chat: Chat;
+  readonly frames: readonly Frame[];
+  readonly vis: number;
+  readonly window: WindowSize;
+  readonly data: ContextViewData;
+  readonly override: Readonly<Record<string, number>> | undefined;
+  readonly curve: Curve;
+}
+
+/** The units of attention at the step on screen: the Preset's explicit split where it has one, else the curve. */
+function useAttention({ chat, frames, vis, window, data, override, curve }: AttentionSource) {
+  return useMemo(
+    () => attentionAt(chat, frames, { step: vis, windowTokens: window.tokens, notes: data.notes, override, curve }),
+    [chat, frames, vis, window.tokens, data.notes, override, curve],
+  );
+}
+
 function useModel(data: ContextViewData, chat: Chat): Model {
   const steps = chat.steps.length;
   const reducer = (s: ViewState, e: ViewEvent) => reduce(s, e, { preset: data.preset, steps });
@@ -69,13 +88,23 @@ function useModel(data: ContextViewData, chat: Chat): Model {
   const vis = Math.min(visibleStep(state), steps);
   const window = windowOf(data, state);
   const override = chat === data.chat ? data.overrides[String(vis)] : undefined;
-  const attention = useMemo(
-    () => attentionAt(chat, model.frames, { step: vis, windowTokens: window.tokens, notes: data.notes, override }),
-    [chat, model.frames, vis, window.tokens, data.notes, override],
-  );
+  const attention = useAttention({ chat, frames: model.frames, vis, window, data, override, curve: state.curve });
   const frame = model.frames[vis - 1] ?? { blocks: [], used: 0, byCategory: {}, inWindow: [] };
   const lit = litKey(state);
-  return { ...model, data, chat, state, dispatch, vis, frame, window, attention, lit, ghost: ghostOf(chat, state) };
+  return {
+    ...model,
+    data,
+    chat,
+    state,
+    dispatch,
+    vis,
+    frame,
+    window,
+    attention,
+    overridden: override !== undefined,
+    lit,
+    ghost: ghostOf(chat, state),
+  };
 }
 
 /** The root's data attributes, which the stylesheet reads for every part. */

@@ -1,5 +1,7 @@
 import { memo, useMemo, useRef, type FocusEvent, type PointerEvent } from 'react';
+import { bucketOf, EDGE } from './attention-curve.pure';
 import { useDock } from './attention-dock';
+import { AttentionMenu } from './attention-menu.client';
 import type { AttentionProps } from './context-parts.types';
 import { matcher } from './context-state.pure';
 import { readoutAt } from './context-usage.pure';
@@ -31,15 +33,24 @@ interface RowProps {
   readonly units: number;
   readonly on: boolean;
   readonly pin: Pin | null;
+  /** The curve bucket the row falls in, a stable hook for a Slide that marks the middle (`data-attention-bucket`). */
+  readonly bucket: string;
 }
 
 const pinAttrs = (pin: Pin | null) => (pin ? { 'data-pin': pin.side, style: vars({ '--slot': pin.slot }) } : {});
 
-const AttentionRow = memo(function AttentionRow({ say, step, units, on, pin }: RowProps) {
+const AttentionRow = memo(function AttentionRow({ say, step, units, on, pin, bucket }: RowProps) {
   const name = nameOf(say, step);
   const colour = colourOf(stepCat(step), say.tech ? 'technical' : 'simple');
   return (
-    <div className={styles.attRow} data-row="" data-part={step.id} data-on={on ? '' : undefined} {...pinAttrs(pin)}>
+    <div
+      className={styles.attRow}
+      data-row=""
+      data-part={step.id}
+      data-on={on ? '' : undefined}
+      data-attention-bucket={bucket}
+      {...pinAttrs(pin)}
+    >
       <button type="button" className={on ? `${styles.attName} font-semibold` : styles.attName} title={name}>
         {name}
       </button>
@@ -87,14 +98,15 @@ function Rows({ p, say }: { readonly p: AttentionProps; readonly say: Say }) {
     if (!step) return null;
     const on = step.blocks.some((b) => match(step.id, b.cat));
     const pin = pinOf(p.layout, i, p.attention.length);
-    return <AttentionRow key={a.id} say={say} step={step} units={a.units} on={on} pin={pin} />;
+    const bucket = bucketOf(i, p.attention.length);
+    return <AttentionRow key={a.id} say={say} step={step} units={a.units} on={on} pin={pin} bucket={bucket} />;
   });
 }
 
 export function Attention(p: AttentionProps) {
   const say = useSay(p);
   const list = useRef<HTMLDivElement>(null);
-  const dock = useDock(list, p.layout === 'compressed', p.attention);
+  const dock = useDock(list, p.attention, p.layout === 'compressed' ? EDGE : null);
   const handlers = useReveal(p);
   const r = readoutAt(p.frames, p.vis, p.window);
   const head = fill(say.words.readoutHead, { step: r.step, steps: r.steps });
@@ -102,7 +114,10 @@ export function Attention(p: AttentionProps) {
     <section className={`${styles.panel} ${styles.attentionPart}`} aria-label={say.words.modes.attention} {...handlers}>
       <div className={styles.head}>
         <b className="font-semibold">{say.words.modes.attention}</b>
-        <span className={styles.caption}>{say.words.illustrative}</span>
+        <div className={styles.headEnd}>
+          <span className={styles.caption}>{say.words.illustrative}</span>
+          {p.menu && <AttentionMenu words={say.words} curve={p.menu.curve} onCurve={p.menu.onCurve} />}
+        </div>
       </div>
       <div className={`${styles.card} ${styles.surface} ${styles.attCard}`}>
         <div className={styles.kicker}>{fill(say.words.attentionKicker, { head })}</div>

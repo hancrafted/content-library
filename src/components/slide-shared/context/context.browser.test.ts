@@ -465,8 +465,14 @@ describe('success cases', () => {
       const list = `${SLIDE_4} [data-layout="compressed"]`;
       const rowHeight = (i: number) =>
         evaluate<number>(send, `document.querySelectorAll('${list} [data-row]')[${i}].getBoundingClientRect().height`);
-      const index = 8;
-      const thin = 6;
+      const all = await evaluate<number[]>(
+        send,
+        `[...document.querySelectorAll('${list} [data-row]')].map((r) => r.getBoundingClientRect().height)`,
+      );
+      // The thinnest middle row, whatever height the card gives the list.
+      const middle = all.slice(3, -3);
+      const index = 3 + middle.indexOf(Math.min(...middle));
+      const thin = (all[index] ?? 0) + 2;
       const resting = await rowHeight(index);
       // ACT
       await evaluate(send, `document.querySelectorAll('${list} [data-row] button')[${index}].focus()`);
@@ -668,7 +674,10 @@ describe('edge cases', () => {
           await viewport(width);
           await open('light', page);
           const { sideways, poking } = await overflowOf();
-          found.push(...(sideways ? [`${width} ${page} scrolls ${sideways}px sideways`] : []), ...poking);
+          found.push(
+            ...(sideways ? [`${width} ${page} scrolls ${sideways}px sideways`] : []),
+            ...poking.map((p) => `${width} ${page} ${p}`),
+          );
         }
       await viewport(widths[widths.length - 1]);
       // ASSERT
@@ -766,21 +775,180 @@ describe('edge cases', () => {
     );
 
     it(
-      'keeps the compressed Attention list within its maximum height',
+      'fills the compressed Attention list to the last row with no overlapping rows, keeping the first and last three whole',
       async () => {
         // ARRANGE
         await open('light');
+        const edge = 3;
         const list = `${SLIDE_4} [data-layout="compressed"]`;
+        const tolerance = 1.5;
         // ACT
-        const found = await evaluate<{ height: number; max: number }>(
+        const found = await evaluate<{
+          list: { top: number; bottom: number };
+          rows: { top: number; bottom: number }[];
+        }>(
           send,
-          `(() => { const el = document.querySelector('${list}'); return { height: el.getBoundingClientRect().height, max: parseFloat(getComputedStyle(el).maxHeight) }; })()`,
+          `(() => {
+            const el = document.querySelector('${list}');
+            const box = (n) => { const r = n.getBoundingClientRect(); return { top: r.top, bottom: r.bottom }; };
+            return { list: box(el), rows: [...el.querySelectorAll('[data-row]')].map(box) };
+          })()`,
         );
+        const heights = found.rows.map((r) => r.bottom - r.top);
+        const gaps = found.rows.slice(1).map((r, i) => r.top - (found.rows[i]?.bottom ?? 0));
         // ASSERT
-        expect(found.height).toBeLessThanOrEqual(found.max + 1);
+        expect(Math.abs((found.rows.at(-1)?.bottom ?? 0) - found.list.bottom)).toBeLessThan(tolerance);
+        expect(gaps.every((gap) => Math.abs(gap) < tolerance)).toBe(true);
+        expect(new Set(heights.slice(0, edge).map(Math.round)).size).toBe(1);
+        expect(new Set(heights.slice(-edge).map(Math.round)).size).toBe(1);
+        expect(Math.min(...heights.slice(edge, -edge))).toBeLessThan(heights[0] ?? 0);
       },
       TIMEOUT,
     );
+
+    it(
+      'hides the name of a row too thin to read it whole, so no row shows a cut-through sliver of text',
+      async () => {
+        // ARRANGE
+        await open('light');
+        const row = `${SLIDE_4} [data-layout="compressed"] [data-row]`;
+        const readable = 0.85;
+        // ACT
+        const rows = await evaluate<{ tight: boolean; opacity: string; height: number; full: number }[]>(
+          send,
+          `[...document.querySelectorAll('${row}')].map((r) => ({
+            tight: r.hasAttribute('data-tight'),
+            opacity: getComputedStyle(r.querySelector('button')).opacity,
+            height: r.getBoundingClientRect().height,
+            full: parseFloat(getComputedStyle(r).fontSize) * 1.7,
+          }))`,
+        );
+        // ASSERT
+        expect(rows.some((r) => r.tight)).toBe(true);
+        expect(rows.filter((r) => r.tight).every((r) => r.opacity === '0')).toBe(true);
+        expect(rows.filter((r) => !r.tight).every((r) => r.height >= r.full * readable)).toBe(true);
+      },
+      TIMEOUT,
+    );
+
+    describe('the Attention distribution menu', () => {
+      const MENU = `${SLIDE_4} button[data-control="attentionMenu"]`;
+      const POPOVER = '#episode-portal-root [data-slot="attention-menu"]';
+      const sliders = () =>
+        evaluate<Record<string, number>>(
+          send,
+          `Object.fromEntries([...document.querySelectorAll('${POPOVER} input[type=range]')].map((i) => [i.dataset.curve, Number(i.value)]))`,
+        );
+      const setSlider = (name: string, value: number) =>
+        evaluate(
+          send,
+          `(() => {
+            const input = document.querySelector('${POPOVER} input[data-curve="${name}"]');
+            Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(input, '${value}');
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+            return document.body.offsetHeight;
+          })()`,
+        );
+      const share = (bucket: string) =>
+        evaluate<number>(
+          send,
+          `[...document.querySelectorAll('${SLIDE_4} [data-attention-bucket="${bucket}"] [class*="attBar"] i')].reduce((s, i) => s + parseFloat(i.style.getPropertyValue('--w')), 0)`,
+        );
+      const sum = (values: Record<string, number>) => Object.values(values).reduce((a, b) => a + b, 0);
+
+      it(
+        'opens from the ⋯ button in the Episode portal root with four labelled sliders summing to 100',
+        async () => {
+          // ARRANGE
+          await open('light');
+          const expected = { start: 20, recent: 20, middle: 30, newest: 30 };
+          const four = 4;
+          // ACT
+          await evaluate(send, `document.querySelector('${MENU}').click()`);
+          await delay(200);
+          const values = await sliders();
+          const labels = await evaluate<number>(send, `document.querySelectorAll('${POPOVER} label').length`);
+          const expanded = await attr('slide-4', 'button[data-control="attentionMenu"]', 'aria-expanded');
+          // ASSERT
+          expect(values).toEqual(expected);
+          expect(labels).toBe(four);
+          expect(expanded).toBe('true');
+        },
+        TIMEOUT,
+      );
+
+      it(
+        'spreads a slider move over the others so all four still sum to 100, and reshapes the rows to it',
+        async () => {
+          // ARRANGE
+          await open('light');
+          await evaluate(send, `document.querySelector('${MENU}').click()`);
+          await delay(200);
+          const moved = 60;
+          const whole = 100;
+          const tolerance = 0.03;
+          // ACT
+          await setSlider('newest', moved);
+          await delay(100);
+          const values = await sliders();
+          const newest = await share('newest');
+          // ASSERT
+          expect(values.newest).toBe(moved);
+          expect(sum(values)).toBe(whole);
+          expect(values.start).toBe(values.recent);
+          expect(Math.abs(newest - moved / whole)).toBeLessThan(tolerance);
+        },
+        TIMEOUT,
+      );
+
+      it(
+        'closes on Escape and gives the focus back to the button',
+        async () => {
+          // ARRANGE
+          await open('light');
+          await evaluate(send, `document.querySelector('${MENU}').click()`);
+          await delay(200);
+          // ACT
+          await send('Input.dispatchKeyEvent', {
+            type: 'keyDown',
+            key: 'Escape',
+            code: 'Escape',
+            windowsVirtualKeyCode: 27,
+          });
+          await send('Input.dispatchKeyEvent', {
+            type: 'keyUp',
+            key: 'Escape',
+            code: 'Escape',
+            windowsVirtualKeyCode: 27,
+          });
+          await delay(200);
+          const open1 = await evaluate<number>(send, `document.querySelectorAll('${POPOVER}').length`);
+          // ASSERT
+          expect(open1).toBe(0);
+        },
+        TIMEOUT,
+      );
+
+      it(
+        'marks the middle rows with a stable data-attention-bucket hook',
+        async () => {
+          // ARRANGE
+          await open('light');
+          const edge = 3;
+          const hook = (name: string) => Array.from({ length: edge }, () => name);
+          // ACT
+          const buckets = await evaluate<string[]>(
+            send,
+            `[...document.querySelectorAll('${SLIDE_4} [data-row]')].map((r) => r.getAttribute('data-attention-bucket'))`,
+          );
+          // ASSERT
+          expect(buckets.slice(0, edge)).toEqual(hook('start'));
+          expect(buckets.slice(-edge)).toEqual(hook('newest'));
+          expect(buckets.filter((b) => b === 'middle').length).toBeGreaterThan(0);
+        },
+        TIMEOUT,
+      );
+    });
 
     it(
       'hides the smart-zone column and limit label with the side-column button, and the bar widens',

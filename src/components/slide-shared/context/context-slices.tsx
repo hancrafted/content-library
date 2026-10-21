@@ -5,7 +5,7 @@ import { columns } from './context-columns.pure';
 import { CONTROLS, offers, type Flips, type ModePart } from './context-controls.pure';
 import type { Flip, HeadToggle } from './context-parts.types';
 import type { ViewEvent, ViewState } from './context-state.pure';
-import { renderModeOf } from './context-state.pure';
+import { curveMenu, renderModeOf } from './context-state.pure';
 import type { Attention } from './context-usage.pure';
 import type { ContextViewData } from './context-view';
 import { ContextWindow } from './context-window';
@@ -35,6 +35,7 @@ export interface Model {
   readonly frame: Frame;
   readonly window: WindowSize;
   readonly attention: readonly Attention[];
+  readonly overridden: boolean; // an explicit split is in force: the curve's sliders would change nothing
   readonly lit: string | null;
   readonly ghost: string | null;
 }
@@ -198,6 +199,7 @@ function AttentionPart({ m, events }: PartProps) {
       window={m.window}
       stepOf={m.stepOf}
       layout={data.preset.attention.layout}
+      menu={curveMenu(state.curve, m.dispatch, offers(data.preset, 'attentionMenu') && !m.overridden)}
       onLight={events.onLight}
       onPin={events.onPin}
       onReveal={events.onReveal}

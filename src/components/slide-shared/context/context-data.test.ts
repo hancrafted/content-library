@@ -191,7 +191,7 @@ describe('failure cases', () => {
     const data = contextData('en');
     const slide3 = data.presets['slide-3'];
     const expected = 'slide-3: unknown attention layout "tiled"';
-    const attention = { layout: 'tiled' } as never;
+    const attention = { ...slide3?.attention, layout: 'tiled' } as never;
     // ACT
     const problems = slide3 ? presetProblems({ ...slide3, attention }, data.chats['summer-party']) : [];
     // ASSERT
