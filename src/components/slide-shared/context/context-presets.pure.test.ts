@@ -58,7 +58,7 @@ describe('failure cases', () => {
     const expected = {
       layout: 'compressed',
       curve: { start: 20, recent: 20, middle: 25, newest: 35 },
-      falloff: [50, 30, 20],
+      falloff: { start: [50, 25, 25], newest: [50, 30, 20] },
     };
     // ACT
     const actual = slide4.attention;

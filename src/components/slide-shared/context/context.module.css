@@ -1399,6 +1399,32 @@ summary.row:hover {
   color: var(--cs-sub);
   text-align: end;
 }
+/* The hover/focus readout at the right of the bar: out of flow, so showing it moves nothing, and on a compressed
+ * row it may spill past the row's clipping so even a thin row shows it. */
+.attPct {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  padding: 0 0.15rem;
+  line-height: 1.2;
+  color: var(--foreground);
+  background: var(--card);
+  opacity: 0;
+  pointer-events: none;
+}
+.attRow {
+  position: relative;
+}
+.attRow:hover .attPct,
+.attRow:focus-within .attPct {
+  opacity: 1;
+}
+.att[data-layout='compressed'] .attRow:hover,
+.att[data-layout='compressed'] .attRow:focus-within {
+  overflow: visible;
+}
 .caption {
   color: var(--cs-sub);
   border: 1px solid var(--cs-border);

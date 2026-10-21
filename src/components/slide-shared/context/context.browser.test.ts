@@ -370,6 +370,73 @@ describe('success cases', () => {
   );
 
   it(
+    'shows the percentage at the right of a hovered or focused Attention row in every layout, moving nothing',
+    async () => {
+      // ARRANGE
+      await open('light');
+      const MENU_BUTTON = `${SLIDE_4} button[data-control="attentionMenu"]`;
+      const POP = '#episode-portal-root [data-slot="attention-menu"]';
+      const probe = (index: number) =>
+        evaluate<{ text: string; opacity: number; box: string }>(
+          send,
+          `(() => {
+            const row = document.querySelectorAll('${SLIDE_4} [data-row]')[${index}];
+            const pct = row.querySelector('[data-pct]');
+            const bar = row.querySelector('[class*="attBar"]').getBoundingClientRect();
+            const card = document.querySelector('${SLIDE_4} [class*="attCard"]').getBoundingClientRect();
+            return {
+              text: pct.textContent,
+              opacity: Number(getComputedStyle(pct).opacity),
+              box: [bar.left, bar.width, card.height].map(Math.round).join(','),
+            };
+          })()`,
+        );
+      const rowCount = await evaluate<number>(send, `document.querySelectorAll('${SLIDE_4} [data-row]').length`);
+      const index = Math.floor(rowCount / 2);
+      const seen: Record<string, { rest: number; hover: number; focus: number; shifted: boolean; text: string }> = {};
+      const measure = async (layout: string) => {
+        await evaluate(send, `document.activeElement && document.activeElement.blur()`);
+        await mouseTo(5, 5);
+        await delay(450);
+        const rest = await probe(index);
+        const at = await centreOf(`${SLIDE_4} [data-row]`, index);
+        await mouseTo(at.x, at.y);
+        await delay(450);
+        const hover = await probe(index);
+        await mouseTo(5, 5);
+        await delay(450);
+        await evaluate(send, `document.querySelectorAll('${SLIDE_4} [data-row] button')[${index}].focus()`);
+        await delay(450);
+        const focus = await probe(index);
+        seen[layout] = {
+          rest: rest.opacity,
+          hover: hover.opacity,
+          focus: focus.opacity,
+          shifted: rest.box !== hover.box || rest.box !== focus.box,
+          text: hover.text,
+        };
+      };
+      // ACT
+      await measure('compressed');
+      for (const layout of ['pinned', 'list']) {
+        await evaluate(send, `document.querySelector('${MENU_BUTTON}').click()`);
+        await delay(200);
+        await evaluate(send, `document.querySelector('${POP} button[data-layout-option="${layout}"]').click()`);
+        await delay(150);
+        await send('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Escape', code: 'Escape' });
+        await delay(300);
+        await measure(layout);
+      }
+      // ASSERT
+      for (const layout of ['compressed', 'pinned', 'list']) {
+        expect(seen[layout], layout).toMatchObject({ rest: 0, hover: 1, focus: 1, shifted: false });
+        expect(seen[layout]?.text, layout).toMatch(/^\d+%$/);
+      }
+    },
+    TIMEOUT,
+  );
+
+  it(
     'scrolls the chat to the bubble of a clicked Attention row',
     async () => {
       // ARRANGE

@@ -1,4 +1,5 @@
 import { parse } from 'yaml';
+import type { Falloff } from './attention-curve.pure';
 import { fromClaudeLog } from './claude-log.pure';
 import { mergeControls, type ControlMap } from './context-controls.pure';
 import configDe from './context-preset.config.de.yml';
@@ -88,7 +89,7 @@ interface Config {
       Partial<Omit<Config['defaults'], 'show' | 'attention'>> & {
         readonly chat: string;
         readonly show?: Partial<Preset['show']>;
-        readonly attention?: Partial<Preset['attention']>;
+        readonly attention?: Partial<Omit<Preset['attention'], 'falloff'>> & { readonly falloff?: Partial<Falloff> };
       }
     >
   >;
@@ -174,7 +175,8 @@ function chatsOf(en: Config, log: string): Record<string, Chat> {
 function presetsOf(en: Config, words: ContextWords): Record<string, Preset> {
   return Object.fromEntries(
     Object.entries(en.presets).map(([id, raw]) => {
-      const merged = { ...en.defaults, ...raw, attention: { ...en.defaults.attention, ...raw.attention } };
+      const falloff = { ...en.defaults.attention.falloff, ...raw.attention?.falloff };
+      const merged = { ...en.defaults, ...raw, attention: { ...en.defaults.attention, ...raw.attention, falloff } };
       const controls: ControlMap = mergeControls(en.defaults.controls, raw.controls ?? {});
       const show = { ...en.defaults.show, ...raw.show };
       return [id, { ...merged, show, controls, id, windows: merged.windows.map((ref) => windowOf(en, words, ref)) }];

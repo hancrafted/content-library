@@ -90,8 +90,12 @@ defaults:
   # The parts in chip and grid order, every part once; the reader may drag the chips (controls.parts.reorder).
   order: [chat, timeline, context, category, panel, attention]
   fade: false
-  # `falloff`: the newest bucket's split over its three rows, newest first (50/30/20 of the bucket).
-  attention: { layout: list, curve: { start: 20, recent: 20, middle: 25, newest: 35 }, falloff: [50, 30, 20] }
+  # `falloff`: how a bucket splits over its three edge rows. `start`, oldest first: the very first row (the attention
+  # sink) clearly above two flat ones, with a little seeded jitter. `newest`, newest first: 50/30/20 of the bucket.
+  attention:
+    layout: list
+    curve: { start: 20, recent: 20, middle: 25, newest: 35 }
+    falloff: { start: [50, 25, 25], newest: [50, 30, 20] }
   # Every control by id; a Preset overrides key by key, and '*' sets show for all (code: context-controls.pure.ts).
   controls:
     parts: { show: true, reorder: true }

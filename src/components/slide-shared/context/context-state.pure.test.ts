@@ -28,7 +28,11 @@ const PRESET: Preset = {
   show: { chat: true, timeline: true, context: true, category: true, panel: false, attention: false },
   order: ['chat', 'timeline', 'context', 'category', 'panel', 'attention'],
   fade: false,
-  attention: { layout: 'list', curve: { start: 20, recent: 20, middle: 30, newest: 30 }, falloff: [50, 30, 20] },
+  attention: {
+    layout: 'list',
+    curve: { start: 20, recent: 20, middle: 30, newest: 30 },
+    falloff: { start: [50, 25, 25], newest: [50, 30, 20] },
+  },
   controls: { '*': { show: false }, window: { show: true } },
   timelineLocked: false,
   windows: [WINDOW, { tokens: 1000000, bufferTokens: 33000, lines: [] }],

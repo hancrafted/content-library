@@ -4,7 +4,7 @@
  * context-preset.config.yml. A Preset is one Slide's state of the cornerstone.
  */
 
-import type { Curve } from './attention-curve.pure';
+import type { Curve, Falloff } from './attention-curve.pure';
 import type { ControlMap } from './context-controls.pure';
 
 /** A part of the context window, named as Claude Code's `/context` names it. */
@@ -154,8 +154,8 @@ export interface Preset {
   readonly attention: {
     readonly layout: AttentionLayout;
     readonly curve: Curve;
-    /** How the newest bucket splits over its rows, newest first, relative weights. */
-    readonly falloff: readonly number[];
+    /** How the start (oldest first) and newest (newest first) buckets split over their rows, relative weights. */
+    readonly falloff: Falloff;
   };
   readonly timelineLocked: boolean;
   /** The window sizes, the first one shown at rest. */
