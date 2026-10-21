@@ -21,24 +21,28 @@
   "punchline": "…Moment, das Datum haben wir gar nicht festgelegt.",
   "effects": {
     "start": {
-      "kicker": "Der Anfang",
-      "name": "Bleibt scharf",
-      "term": "Primacy-Effekt: Der erste Satz setzt den Rahmen."
+      "title": "Der Anfang bleibt scharf",
+      "term": "Primacy-Effekt",
+      "termHref": "https://de.wikipedia.org/wiki/Primacy-Effekt",
+      "explanation": "der erste Satz setzt den Rahmen."
     },
     "middle": {
-      "kicker": "Die Mitte",
-      "name": "Verschwimmt",
-      "term": "Mamas Handy, der Umbau, der Rücken: gesagt, nicht behalten."
+      "title": "Die Mitte verschwimmt",
+      "term": "Serieller Positionseffekt",
+      "termHref": "https://de.wikipedia.org/wiki/Primacy-Recency-Effekt",
+      "explanation": "Mamas Handy, der Umbau, der Rücken: gesagt, nicht behalten."
     },
     "standout": {
-      "kicker": "Der Ausreißer",
-      "name": "Bleibt hängen",
-      "term": "Isolationseffekt: Die Torte ist anders als alles um sie herum."
+      "title": "Der Ausreißer bleibt hängen",
+      "term": "Von-Restorff-Effekt",
+      "termHref": "https://de.wikipedia.org/wiki/Restorff-Effekt",
+      "explanation": "die Torte ist anders als alles um sie herum."
     },
     "end": {
-      "kicker": "Das Ende",
-      "name": "Bleibt scharf",
-      "term": "Recency-Effekt: Die letzten Minuten sind noch frisch."
+      "title": "Das Ende bleibt scharf",
+      "term": "Recency-Effekt",
+      "termHref": "https://de.wikipedia.org/wiki/Rezenzeffekt",
+      "explanation": "die letzten Minuten sind noch frisch."
     }
   },
   "labNote": "<marker>Gemessen wurde das Muster an Wortlisten im Labor; dass es für ein einstündiges Telefonat gilt, ist eine Schlussfolgerung</marker>",
@@ -115,7 +119,7 @@
       "one-thing-stands-out": {
         "title": "Eine Sache sticht heraus",
         "keywords": "",
-        "script": "Bis auf eine Sache. Pepper hat eine ganze Geburtstagstorte gefressen, samt Kerzen. Niemand hat Dich gebeten, Dir das zu merken, und trotzdem kannst Du es noch erzählen, weil das, was sich von allem um sich herum unterscheidet, hängen bleibt. Das nennt man den Isolationseffekt."
+        "script": "Bis auf eine Sache. Pepper hat eine ganze Geburtstagstorte gefressen, samt Kerzen. Niemand hat Dich gebeten, Dir das zu merken, und trotzdem kannst Du es noch erzählen, weil das, was sich von allem um sich herum unterscheidet, hängen bleibt. Das nennt man den Von-Restorff-Effekt oder Isolationseffekt."
       },
       "we-never-fixed-the-date": {
         "title": "Das Datum haben wir nie festgelegt",
@@ -123,5 +127,6 @@
         "script": "Und dann die Pointe. Das Essen ist fertig, sie muss los, und Dir fällt auf: Das Datum haben wir gar nicht festgelegt. Die eine Sache, für die Du angerufen hast, ist nie geklärt worden. (Pause) Behalte das im Kopf, denn die Frage ist, ob ein Chat mit einer KI dasselbe tut."
       }
     }
-  }
+  },
+  "newTabHint": "öffnet in einem neuen Tab"
 }

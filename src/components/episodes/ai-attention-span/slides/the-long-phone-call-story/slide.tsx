@@ -59,9 +59,11 @@ export const theLongPhoneCallStory = slide({
   ],
   content: ({ t, marker, Marker, target }) => {
     const effect = (name: CallEffect): EffectCopy => ({
-      kicker: t(`effects.${name}.kicker`),
-      name: t(`effects.${name}.name`),
+      title: t(`effects.${name}.title`),
       term: t(`effects.${name}.term`),
+      termHref: t(`effects.${name}.termHref`),
+      explanation: t(`effects.${name}.explanation`),
+      newTabHint: t('newTabHint'),
       marker: <Marker note={EFFECT_NOTES[name]} placement="beside" />,
       target: target(name),
     });
