@@ -98,18 +98,27 @@ interface PenProps {
 function Pen({ words, editing, onClick }: PenProps) {
   const label = editing ? words.attentionSave : words.attentionEdit;
   const tip = editing ? words.attentionSaveTip : words.attentionEdit;
+  const tipId = useId();
+  // One tooltip: the CSS one from data-tip, opening leftwards so the popover's edge never clips it. No native title.
   return (
-    <button
-      type="button"
-      className={styles.icon}
-      data-control={editing ? 'attentionSave' : 'attentionEdit'}
-      aria-label={label}
-      title={tip}
-      data-tip={tip}
-      onClick={onClick}
-    >
-      {editing ? <Check aria-hidden="true" /> : <Pencil aria-hidden="true" />}
-    </button>
+    <>
+      <button
+        type="button"
+        className={`${styles.icon} ${styles.tipStart}`}
+        data-control={editing ? 'attentionSave' : 'attentionEdit'}
+        aria-label={label}
+        aria-describedby={editing ? tipId : undefined}
+        data-tip={tip}
+        onClick={onClick}
+      >
+        {editing ? <Check aria-hidden="true" /> : <Pencil aria-hidden="true" />}
+      </button>
+      {editing && (
+        <span id={tipId} className="sr-only">
+          {tip}
+        </span>
+      )}
+    </>
   );
 }
 
