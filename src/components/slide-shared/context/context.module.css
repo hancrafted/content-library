@@ -958,18 +958,18 @@ button.row:hover {
   align-content: start;
   width: 13rem;
 }
-.root[data-view='grid'] .grid {
+.ctx[data-view='grid'] .grid {
   display: grid;
 }
-.root[data-view='grid'] :is(.bar, .labels) {
+.ctx[data-view='grid'] :is(.bar, .labels) {
   display: none;
 }
-.root[data-view='grid'] .ctxbody {
+.ctx[data-view='grid'] .ctxbody {
   grid-template-columns: 1fr;
   grid-template-rows: auto minmax(0, 1fr);
   gap: 0.75rem;
 }
-.root[data-view='grid'] .row {
+.usage[data-depth='technical'] .row {
   min-height: 1.5rem;
   padding-block: 0.18rem;
 }
@@ -1333,7 +1333,7 @@ button.row:hover {
     translate: -50% 0;
   }
   .ctxbody,
-  .root[data-view='grid'] .ctxbody {
+  .ctx[data-view='grid'] .ctxbody {
     grid-template-columns: 1fr;
     grid-template-rows: auto;
   }

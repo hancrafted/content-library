@@ -3,6 +3,7 @@
 import { useEffect, useId, useMemo, useReducer, useRef, useState } from 'react';
 import { fromClaudeLog } from './claude-log.pure';
 import { deltaText, percentText } from './context-format.pure';
+import { ContextPreview } from './context-preview';
 import {
   createState,
   ghostOf,
@@ -16,15 +17,14 @@ import {
 } from './context-state.pure';
 import { attentionAt, readoutAt } from './context-usage.pure';
 import { fill, storyOf, type ContextViewData, type View } from './context-view';
+import { ContextWindow } from './context-window';
 import styles from './context.module.css';
 import { categoriesOf, framesOf } from './context.pure';
 import type { Chat, Part } from './context.types';
 import { Conversation } from './conversation';
 import { Timeline } from './timeline';
 import { useWindowEvents } from './use-window-events';
-import { ContextColumn } from './window-context';
 import { Panel } from './window-panel';
-import { rove } from './window-rove';
 import { Toolbar } from './window-toolbar';
 
 /* The cornerstone's one client leaf: it holds the view state and renders every part from it. */
@@ -114,7 +114,6 @@ function rootAttrs(v: View) {
   return {
     'data-cornerstone': v.preset.id,
     'data-motion': v.preset.motion,
-    'data-view': v.tech ? 'grid' : 'bar',
     'data-mode': v.state.mode,
     'data-chat': v.state.chatCollapsed ? 'collapsed' : 'open',
     'data-meter': v.state.meterHidden ? 'hidden' : 'shown',
@@ -166,13 +165,43 @@ function TimelinePart({ v, valueText }: { readonly v: View; readonly valueText: 
   );
 }
 
+function ContextPart({ v }: { readonly v: View }) {
+  const { dispatch } = v;
+  const lighting = { lit: v.lit, ghost: v.ghost, pinned: v.state.pinned };
+  const speech = { words: v.words, locale: v.locale, story: v.story };
+  return (
+    <ContextWindow
+      {...lighting}
+      {...speech}
+      renderMode={renderModeOf(v.state, 'context-window')}
+      frames={v.frames}
+      frame={v.frame}
+      window={v.window}
+      sizes={v.preset.windows}
+      sizeIndex={v.state.window}
+      switchable={v.preset.windowSwitch}
+      stepOf={v.stepOf}
+      onSize={(value) => dispatch({ type: 'SET_WINDOW', value })}
+    >
+      <ContextPreview
+        {...lighting}
+        {...speech}
+        renderMode={renderModeOf(v.state, 'context-preview')}
+        frame={v.frame}
+        window={v.window}
+        present={v.present}
+      />
+    </ContextWindow>
+  );
+}
+
 function Parts({ v, sentence }: { readonly v: View; readonly sentence: string }) {
   const P = v.state.parts;
   return (
     <div className={styles.main} style={columns(P, v.state, v.preset.height) as never}>
       <ChatPart v={v} />
       {P.timeline ? <TimelinePart v={v} valueText={sentence} /> : null}
-      {P.context ? <ContextColumn v={v} onRove={rove} /> : null}
+      {P.context ? <ContextPart v={v} /> : null}
       {P.panel ? <Panel v={v} /> : null}
     </div>
   );

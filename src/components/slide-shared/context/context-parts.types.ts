@@ -1,7 +1,8 @@
+import type { ReactNode } from 'react';
 import type { Attention } from './context-usage.pure';
 import type { ContextWords } from './context-words.types';
 import type { Frame } from './context.pure';
-import type { Chat, RenderMode, StepNotes, StepStory } from './context.types';
+import type { Category, Chat, RenderMode, StepNotes, StepStory, WindowSize } from './context.types';
 
 /* What the parent hands each part: a slice of its state, never the whole of it. Parts are controlled: they hold no
  * state of the Context, and tell the parent what happened through callbacks. */
@@ -51,4 +52,27 @@ export interface TimelineProps extends Speech {
   readonly onPreview: (step: number) => void;
   readonly onPreviewEnd: () => void;
   readonly onCommit: (step: number) => void;
+}
+
+export interface ContextWindowProps extends Lighting, Speech {
+  readonly frames: readonly Frame[];
+  /** What the window holds at the step on screen. */
+  readonly frame: Frame;
+  readonly window: WindowSize;
+  /** The sizes the switch offers, and which one is shown. */
+  readonly sizes: readonly WindowSize[];
+  readonly sizeIndex: number;
+  readonly switchable: boolean;
+  /** Each step's number in the chat, by step id. */
+  readonly stepOf: ReadonlyMap<string, number>;
+  readonly onSize: (index: number) => void;
+  /** Where the parent places another part beside the bar or grid, as the usage rows sit today. */
+  readonly children?: ReactNode;
+}
+
+export interface ContextPreviewProps extends Lighting, Speech {
+  readonly frame: Frame;
+  readonly window: WindowSize;
+  /** The categories the chat ever holds, so a row for one that never lands is left out. */
+  readonly present: ReadonlySet<Category>;
 }
