@@ -1,7 +1,6 @@
 ---
 type: brief
 title: Treat AI like a brilliant freelancer with amnesia
-status: draft
 generated:
   by: claude-code/opus-5.5
   at: 2026-10-19T13:41:23Z
