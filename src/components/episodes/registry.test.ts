@@ -59,7 +59,7 @@ const COMPOSITION = [
     slug: 'ai-attention-span',
     sections: [
       { opener: 'the-long-phone-call', pageSlides: 0 },
-      { opener: 'the-ais-attention-span', pageSlides: 0 },
+      { opener: 'the-ais-attention-span', pageSlides: 4 },
       { opener: 'what-fills-the-window', pageSlides: 0 },
       { opener: 'managing-the-attention-span', pageSlides: 0 },
     ],
