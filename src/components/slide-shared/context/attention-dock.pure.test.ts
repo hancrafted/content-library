@@ -15,7 +15,7 @@ describe('success cases', () => {
     const total = 400;
     const expected = [200, 120, 80];
     // ACT
-    const rest = restHeights([50, 30, 20], total, 1000);
+    const rest = restHeights([50, 30, 20], { max: total, natural: 1000 });
     // ASSERT
     expect(rest.map((h, i) => near(h, expected[i] ?? NaN))).toEqual([true, true, true]);
   });
@@ -25,7 +25,7 @@ describe('success cases', () => {
     const fits = UNITS.slice(0, 5);
     const expected = fits.map(() => FULL);
     // ACT
-    const rest = restHeights(fits, TOTAL, FULL);
+    const rest = restHeights(fits, { max: TOTAL, natural: FULL });
     // ASSERT
     expect(rest).toEqual(expected);
   });
@@ -35,16 +35,40 @@ describe('success cases', () => {
     const units = [15, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 40];
     const total = 12 * FULL;
     // ACT
-    const rest = restHeights(units, total, FULL);
+    const rest = restHeights(units, { max: total, natural: FULL });
     // ASSERT
     expect([rest[0], rest.at(-1)]).toEqual([FULL, FULL]);
     expect(Math.max(...rest.slice(1, -1))).toBeLessThan(FULL);
     expect(near(sum(rest), total)).toBe(true);
   });
 
+  it('never compresses the first three and the last three rows, fills the height to the last row, and shrinks the rest', () => {
+    // ARRANGE
+    const units = [15, 4, 1, 2, 10, 3, 2, 4, 2, 2, 6, 4, 2, 4, 2, 1, 3, 3, 6, 9, 15];
+    const total = 12 * FULL;
+    const edge = 3;
+    // ACT
+    const rest = restHeights(units, { max: total, natural: FULL, edge });
+    const edges = [...rest.slice(0, edge), ...rest.slice(-edge)];
+    // ASSERT
+    expect(edges).toEqual(edges.map(() => FULL));
+    expect(Math.max(...rest.slice(edge, -edge))).toBeLessThanOrEqual(FULL);
+    expect(Math.min(...rest.slice(edge, -edge))).toBeGreaterThanOrEqual(MIN_ROW);
+    expect(near(sum(rest), total)).toBe(true);
+  });
+
+  it('compresses every row of a list too short to have a middle', () => {
+    // ARRANGE
+    const total = 100;
+    // ACT
+    const rest = restHeights([50, 30, 20], { max: total, natural: 1000, edge: 3 });
+    // ASSERT
+    expect(near(sum(rest), total)).toBe(true);
+  });
+
   it('keeps the total height constant while the pointer moves over any row', () => {
     // ARRANGE
-    const rest = restHeights(UNITS, TOTAL, FULL);
+    const rest = restHeights(UNITS, { max: TOTAL, natural: FULL });
     // ACT
     const totals = rest.map((_, i) => sum(dockHeights(rest, i, FULL)));
     // ASSERT
@@ -53,7 +77,7 @@ describe('success cases', () => {
 
   it('grows the row under the pointer towards the full row height', () => {
     // ARRANGE
-    const rest = restHeights(UNITS, TOTAL, FULL);
+    const rest = restHeights(UNITS, { max: TOTAL, natural: FULL });
     const under = 2;
     // ACT
     const docked = dockHeights(rest, under, FULL);
@@ -87,7 +111,7 @@ describe('success cases', () => {
 
   it('puts the magnified row under the pointer, so the row it lights is the row that grew', () => {
     // ARRANGE
-    const rest = restHeights(UNITS, TOTAL, FULL);
+    const rest = restHeights(UNITS, { max: TOTAL, natural: FULL });
     const pointers = [40, 120, 200, 300];
     // ACT
     const found = pointers.map((y) => {
@@ -105,7 +129,7 @@ describe('failure cases', () => {
     const units = [40, ...Array.from({ length: 30 }, () => 1)];
     const total = 200;
     // ACT
-    const rest = restHeights(units, total, FULL);
+    const rest = restHeights(units, { max: total, natural: FULL });
     const docked = dockHeights(rest, 0, FULL);
     // ASSERT
     expect(Math.min(...rest)).toBeGreaterThanOrEqual(MIN_ROW);
@@ -117,7 +141,7 @@ describe('failure cases', () => {
     // ARRANGE
     const expected: number[] = [];
     // ACT
-    const actual = [restHeights([], TOTAL, FULL), dockHeights([], 0, FULL)];
+    const actual = [restHeights([], { max: TOTAL, natural: FULL }), dockHeights([], 0, FULL)];
     // ASSERT
     expect(actual).toEqual([expected, expected]);
   });
@@ -126,7 +150,7 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('leaves rows beyond three away from the pointer at their resting height or smaller', () => {
     // ARRANGE
-    const rest = restHeights(UNITS, TOTAL, FULL);
+    const rest = restHeights(UNITS, { max: TOTAL, natural: FULL });
     // ACT
     const docked = dockHeights(rest, 0, FULL);
     // ASSERT
@@ -135,7 +159,7 @@ describe('edge cases', () => {
 
   it('is the resting layout when the pointer is away', () => {
     // ARRANGE
-    const rest = restHeights(UNITS, TOTAL, FULL);
+    const rest = restHeights(UNITS, { max: TOTAL, natural: FULL });
     // ACT
     const docked = dockHeights(rest, null, FULL);
     // ASSERT

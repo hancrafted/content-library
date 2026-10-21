@@ -4,6 +4,7 @@
  * context-preset.config.yml. A Preset is one Slide's state of the cornerstone.
  */
 
+import type { Curve } from './attention-curve.pure';
 import type { ControlMap } from './context-controls.pure';
 
 /** A part of the context window, named as Claude Code's `/context` names it. */
@@ -150,7 +151,7 @@ export interface Preset {
   /** The chat dims each message by its attention, as the Attention part does; on whenever that part is shown. */
   readonly fade: boolean;
   /** The Attention part's own settings, separate from renderMode so the toolbar's Technical never undoes them. */
-  readonly attention: { readonly layout: AttentionLayout };
+  readonly attention: { readonly layout: AttentionLayout; readonly curve: Curve };
   readonly timelineLocked: boolean;
   /** The window sizes, the first one shown at rest. */
   readonly windows: readonly WindowSize[];

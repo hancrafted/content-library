@@ -1,4 +1,5 @@
-import { CATEGORIES, SIMPLE_CATEGORIES, simpleOf, stepTokens, type Frame } from './context.pure';
+import { curveWeights, DEFAULT_CURVE, type Curve } from './attention-curve.pure';
+import { CATEGORIES, SIMPLE_CATEGORIES, simpleOf, type Frame } from './context.pure';
 import type { Category, Chat, Depth, Line, SimpleCategory, StepNotes, WindowSize } from './context.types';
 
 /* What the window holds at a step, as the cornerstone reports it: usage rows, /context boxes, attention, readout. */
@@ -131,27 +132,26 @@ export interface AttentionInput {
   readonly notes: Readonly<Record<string, StepNotes>>;
   /** Units per step id, the Brief's split; wins when it names this step. */
   readonly override?: Readonly<Record<string, number>>;
+  /** The curve's shares per bucket; the default curve when absent. */
+  readonly curve?: Curve;
 }
 
 /**
- * 100 illustrative units of attention over the steps in the window. The start and the newest stay strong, the middle
- * flattens as the window fills, and a step the chat keeps repeating keeps a spike.
+ * 100 illustrative units of attention over the steps in the window, split by the curve: the start and the newest stay
+ * strong, the recent get a lesser share, and the middle is thin with a few seeded peaks (attention-curve.pure.ts).
  */
 export function attentionAt(chat: Chat, frames: readonly Frame[], input: AttentionInput): readonly Attention[] {
   const frame = frames[input.step - 1];
   const steps = chat.steps.slice(0, input.step).filter((s) => frame?.inWindow.includes(s.id));
   const { override } = input;
   if (override) return steps.map((s) => ({ id: s.id, units: override[s.id] ?? 0 }));
-  const n = steps.length;
-  const fill = (frame?.used ?? 0) / input.windowTokens;
-  const middle = 0.9 * (1 - Math.min(0.85, fill * 2.2));
-  const weights = steps.map((s, i) => {
-    const x = n === 1 ? 0 : i / (n - 1);
-    const size = Math.pow(Math.max(stepTokens(s), 20) / 1000, 0.12);
-    const refs = steps.filter((later) => input.notes[later.id]?.refs?.includes(s.id)).length;
-    return size * (middle + 3.2 * Math.exp(-x / 0.06) + 5 * Math.exp(-(1 - x) / 0.08)) + 0.8 * refs;
-  });
-  const units = largestRemainder(weights, 100);
+  const units = largestRemainder(
+    curveWeights(
+      steps.map((s) => s.id),
+      input.curve ?? DEFAULT_CURVE,
+    ),
+    100,
+  );
   return steps.map((s, i) => ({ id: s.id, units: units[i] ?? 0 }));
 }
 

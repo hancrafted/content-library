@@ -1,4 +1,4 @@
-import { Code, Download, PanelLeftClose, PanelRight, Upload } from 'lucide-react';
+import { Code, Download, Ellipsis, PanelLeftClose, PanelRight, Upload } from 'lucide-react';
 import type { ReactNode } from 'react';
 import type { IconName } from './context-controls.pure';
 import styles from './context.module.css';
@@ -11,6 +11,7 @@ const ICONS: Readonly<Record<IconName, typeof Code>> = {
   download: Download,
   upload: Upload,
   'panel-right': PanelRight,
+  ellipsis: Ellipsis,
 };
 
 export function ControlIcon({ name }: { readonly name: IconName }) {

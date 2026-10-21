@@ -14,9 +14,10 @@ export type ControlId =
   | 'windowTechnical'
   | 'categoryTechnical'
   | 'meter'
-  | 'window';
+  | 'window'
+  | 'attentionMenu';
 
-export type IconName = 'code' | 'panel-left-close' | 'download' | 'upload' | 'panel-right';
+export type IconName = 'code' | 'panel-left-close' | 'download' | 'upload' | 'panel-right' | 'ellipsis';
 /** The words a control reads from ContextWords; the UI indexes the words with them, so the compiler checks each. */
 export type WordKey =
   | 'showParts'
@@ -32,7 +33,9 @@ export type WordKey =
   | 'windowTechnicalTip'
   | 'categoryTechnical'
   | 'categoryTechnicalTip'
-  | 'windowGroup';
+  | 'windowGroup'
+  | 'attentionMenu'
+  | 'attentionMenuTip';
 
 /** The state a toggle flips: a shown-state key of the parent. */
 export type Flips = 'technical' | 'zone' | 'conversationTechnical' | 'windowTechnical' | 'categoryTechnical';
@@ -44,7 +47,7 @@ interface Base {
   readonly id: ControlId;
   readonly placement: 'toolbar' | 'head';
   /** The part whose head draws a head control. */
-  readonly owner?: ModePart;
+  readonly owner?: ModePart | 'attention';
   /** The fields a Preset may override on this control, besides `show`. */
   readonly fields: readonly ('on' | 'reorder')[];
   /** Shown unless the Preset says otherwise. */
@@ -60,6 +63,8 @@ export type ControlDef =
   | (Base & { readonly type: 'segmented'; readonly label: WordKey })
   | (Described & { readonly type: 'action'; readonly run: 'download' | 'upload' })
   | (Base & { readonly type: 'chips'; readonly label: WordKey })
+  /** A button in the Attention head that opens its distribution sliders. */
+  | (Described & { readonly type: 'menu' })
   /** Not a button: the head's usage figures (the percent and "used of window"), which a Preset may hide. */
   | (Base & { readonly type: 'readout' });
 
@@ -139,6 +144,17 @@ export const CONTROLS: readonly ControlDef[] = [
   ...MODE_CONTROLS,
   { id: 'meter', type: 'readout', placement: 'head', fields: [], show: true },
   { id: 'window', type: 'segmented', placement: 'head', fields: [], show: false, label: 'windowGroup' },
+  {
+    id: 'attentionMenu',
+    type: 'menu',
+    placement: 'head',
+    owner: 'attention',
+    fields: [],
+    show: true,
+    icon: 'ellipsis',
+    label: 'attentionMenu',
+    tip: 'attentionMenuTip',
+  },
 ];
 
 export const CONTROL_IDS: readonly ControlId[] = CONTROLS.map((def) => def.id);

@@ -18,40 +18,47 @@ import type { Attention } from './context-usage.pure';
 
 const rows = (list: HTMLElement) => Array.from(list.querySelectorAll<HTMLElement>('[data-row]'));
 
+/** A row under this share of a full row cannot show its name without being cut through: the name hides. */
+const TIGHT = 0.9;
+
 function apply(list: HTMLElement, heights: readonly number[]) {
+  const full = fullRow(list);
   rows(list).forEach((row, i) => {
     const h = heights[i];
-    if (h !== undefined) row.style.height = `${h}px`;
+    if (h === undefined) return;
+    row.style.height = `${h}px`;
+    if (h < full * TIGHT) row.setAttribute('data-tight', '');
+    else row.removeAttribute('data-tight');
   });
 }
 
 const clear = (list: HTMLElement | null) => {
   if (!list) return;
-  list.style.removeProperty('height');
-  rows(list).forEach((row) => row.style.removeProperty('height'));
+  rows(list).forEach((row) => {
+    row.style.removeProperty('height');
+    row.removeAttribute('data-tight');
+  });
 };
 
 /** The height a row has at full size: one line of the list's own text. */
 const fullRow = (list: HTMLElement) => parseFloat(getComputedStyle(list).fontSize) * 1.7;
 
-/** The tallest the list may grow, from its stylesheet's `max-height`; its own height when that is not a length. */
-const maxHeight = (list: HTMLElement) => parseFloat(getComputedStyle(list).maxHeight) || list.clientHeight;
+/** The height the list fills: what the card leaves it (the list is a flex child that takes the rest of the card). */
+const maxHeight = (list: HTMLElement) => list.clientHeight;
 
 /** The resting heights, fitted to the list's maximum height and refitted when it resizes or the shares change. */
-function useRest(list: RefObject<HTMLElement | null>, enabled: boolean, shares: readonly Attention[]) {
+function useRest(list: RefObject<HTMLElement | null>, shares: readonly Attention[], edge: number | null) {
+  const enabled = edge !== null;
   const rest = useRef<number[]>([]);
   const layout = useCallback(() => {
     const el = list.current;
     if (!el || !enabled) return;
     rest.current = restHeights(
       shares.map((share) => share.units),
-      maxHeight(el),
-      fullRow(el),
+      { max: maxHeight(el), natural: fullRow(el), edge: edge ?? 0 },
     );
-    // The list's own height is fixed to the rows' sum, so a row's height transition never resizes it mid-dock.
-    el.style.height = `${rest.current.reduce((a, b) => a + b, 0)}px`;
     apply(el, rest.current);
-  }, [list, enabled, shares]);
+  }, [list, enabled, shares, edge]);
   useLayoutEffect(() => {
     if (!enabled) clear(list.current);
     layout();
@@ -83,8 +90,9 @@ function useFocusDock(list: RefObject<HTMLElement | null>, enabled: boolean, res
 }
 
 /** The pointer handlers of the list; `shares` are its rows' shares of the attention, and a new array refits the heights. */
-export function useDock(list: RefObject<HTMLElement | null>, enabled: boolean, shares: readonly Attention[]) {
-  const rest = useRest(list, enabled, shares);
+export function useDock(list: RefObject<HTMLElement | null>, shares: readonly Attention[], edge: number | null) {
+  const enabled = edge !== null;
+  const rest = useRest(list, shares, edge);
   const frame = useRef(0);
   const y = useRef(0);
   useEffect(() => () => cancelAnimationFrame(frame.current), []);

@@ -28,7 +28,7 @@ const PRESET: Preset = {
   show: { chat: true, timeline: true, context: true, category: true, panel: false, attention: false },
   order: ['chat', 'timeline', 'context', 'category', 'panel', 'attention'],
   fade: false,
-  attention: { layout: 'list' },
+  attention: { layout: 'list', curve: { start: 20, recent: 20, middle: 30, newest: 30 } },
   controls: { '*': { show: false }, window: { show: true } },
   timelineLocked: false,
   windows: [WINDOW, { tokens: 1000000, bufferTokens: 33000, lines: [] }],
@@ -114,6 +114,30 @@ describe('success cases', () => {
     const same = moveTo(order, 'chat', 'chat');
     // ASSERT
     expect(same).toBe(order);
+  });
+
+  it('starts at the Preset’s curve and spreads a slider move over the others, summing to 100', () => {
+    // ARRANGE
+    const menu = { ...PRESET, controls: { attentionMenu: { show: true } } } as Preset;
+    const start = createState(menu);
+    const expected = { start: 18, recent: 18, middle: 28, newest: 36 };
+    // ACT
+    const moved = reduce(start, { type: 'SET_CURVE', key: 'newest', value: 36 }, { ...CONTEXT, preset: menu });
+    // ASSERT
+    expect(start.curve).toEqual(PRESET.attention.curve);
+    expect(moved.curve).toEqual(expected);
+  });
+
+  it('ignores a slider move when the Preset hides the menu', () => {
+    // ARRANGE
+    const hidden = { ...PRESET, controls: { '*': { show: false } } } as Preset;
+    const event = { type: 'SET_CURVE', key: 'start', value: 5 } as const;
+    // ACT
+    const reason = blockedBy(hidden, event);
+    const open = blockedBy({ ...PRESET, controls: { attentionMenu: { show: true } } }, event);
+    // ASSERT
+    expect(reason).toContain('attentionMenu');
+    expect(open).toBeNull();
   });
 });
 

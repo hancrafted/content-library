@@ -13,20 +13,34 @@ const sum = (values: readonly number[]) => values.reduce((a, b) => a + b, 0);
 
 const BISECTIONS = 40;
 
+/** What the list fits: its height to fill, a row's natural height, and the rows at each end that never compress. */
+export interface Fit {
+  readonly max: number;
+  readonly natural: number;
+  readonly edge?: number;
+}
+
 /**
- * The resting heights: every row has its natural height while they all fit in `max`. Once they do not, the rows
- * with the least attention compress first (the middle ones), each in proportion to its units, never under `MIN_ROW`;
- * the rows with the most keep their natural height. The sum is `max` as soon as it is reached.
+ * The resting heights: every row has its natural height while they all fit in `max`. Once they do not, the first and
+ * last `edge` rows keep their natural height and the rows between compress in proportion to their units, never under
+ * `MIN_ROW` or over `natural`, so the sum is `max` (the list fills its height to the last row). A list too short to
+ * have a middle compresses all its rows.
  */
-export function restHeights(units: readonly number[], max: number, natural: number): number[] {
+export function restHeights(units: readonly number[], { max, natural, edge = 0 }: Fit): number[] {
   if (units.length * natural <= max) return units.map(() => natural);
-  const smallest = Math.min(...units.filter((u) => u > 0), Infinity);
-  const at = (scale: number) => units.map((u) => Math.min(natural, Math.max(MIN_ROW, u * scale)));
+  const kept = units.length > 2 * edge ? edge : 0;
+  const fixed = (i: number) => i < kept || i >= units.length - kept;
+  const free = units.filter((_, i) => !fixed(i));
+  const room = max - (units.length - free.length) * natural;
+  const smallest = Math.min(...free.filter((u) => u > 0), Infinity);
+  const at = (scale: number) =>
+    units.map((u, i) => (fixed(i) ? natural : Math.min(natural, Math.max(MIN_ROW, u * scale))));
+  const sumFree = (scale: number) => sum(at(scale)) - (units.length - free.length) * natural;
   let low = 0;
   let high = Number.isFinite(smallest) ? natural / smallest : 1;
   for (let step = 0; step < BISECTIONS; step++) {
     const mid = (low + high) / 2;
-    if (sum(at(mid)) < max) low = mid;
+    if (sumFree(mid) < room) low = mid;
     else high = mid;
   }
   return at(low);

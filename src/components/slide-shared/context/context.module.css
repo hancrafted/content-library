@@ -1258,9 +1258,8 @@ summary.row:hover {
 }
 .att[data-layout='compressed'] {
   gap: 0;
-  flex: none;
+  flex: 1 1 0;
   min-height: 0;
-  max-height: 24rem;
   overflow: hidden;
 }
 .attRow {
@@ -1291,6 +1290,11 @@ summary.row:hover {
 .att[data-layout='compressed'] .attName {
   line-height: 1.2;
   padding: 0;
+  transition: opacity var(--hov, 140ms) var(--ease-out);
+}
+/* A row too thin to show its name whole hides it, so no row shows a sliver of text cut through. */
+.att[data-layout='compressed'] .attRow[data-tight] .attName {
+  opacity: 0;
 }
 .att[data-layout='compressed'] .attBar {
   height: calc(100% - 1px);
@@ -1300,7 +1304,8 @@ summary.row:hover {
   border-radius: 2px;
 }
 @media (prefers-reduced-motion: reduce) {
-  .att[data-layout='compressed'] .attRow {
+  .att[data-layout='compressed'] .attRow,
+  .att[data-layout='compressed'] .attName {
     transition: none;
   }
 }
@@ -1638,4 +1643,15 @@ summary.row:hover {
 }
 .here[data-side='end'] .hereText {
   right: calc((1 - var(--f)) * 100%);
+}
+
+/* The Attention menu's slider: the native range, so the keyboard and the screen reader work as for any slider. */
+.curveSlider {
+  width: 100%;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+.curveSlider:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
 }

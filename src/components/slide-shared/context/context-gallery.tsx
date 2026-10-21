@@ -1,3 +1,4 @@
+import { EPISODE_PORTAL_ROOT_ID } from '@/lib/episode-portal.pure';
 import { CallTranscript } from '../call-transcript/call-transcript';
 import { Context, ContextBarsPreset } from './context';
 import { CONTEXT_PRESETS, MINI_PRESETS } from './context-data';
@@ -36,6 +37,8 @@ export function ContextGallery({ locale }: { readonly locale: string }) {
         <h3 className="text-subheading font-semibold">call-transcript</h3>
         <CallTranscript label="Sample call" lines={SAMPLE_CALL} />
       </article>
+      {/* An Episode page hosts this root; the gallery stands in for one so the popovers (the Attention menu) open. */}
+      <div id={EPISODE_PORTAL_ROOT_ID} data-slot="portal-root" className="pointer-events-none fixed inset-0 z-50" />
     </section>
   );
 }

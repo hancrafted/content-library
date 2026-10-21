@@ -1,3 +1,4 @@
+import { setShare, type Curve, type CurveKey } from './attention-curve.pure';
 import { controlOf, modeControlOf, offers, type ControlId, type ModePart } from './context-controls.pure';
 import { isMessage, simpleOf } from './context.pure';
 import type { AttentionLayout, Category, Chat, Depth, Part, PartId, Preset, RenderMode } from './context.types';
@@ -25,6 +26,8 @@ export interface ViewState {
   /** The window size shown, an index into the Preset's windows. */
   readonly window: number;
   readonly hintSeen: boolean;
+  /** The Attention part's distribution, as the reader's sliders set it; the Preset's until moved, never stored. */
+  readonly curve: Curve;
 }
 
 export type ViewEvent =
@@ -41,7 +44,8 @@ export type ViewEvent =
   | { readonly type: 'SET_WINDOW'; readonly value: number }
   | { readonly type: 'TOGGLE_PART'; readonly part: Part }
   | { readonly type: 'REORDER'; readonly part: Part; readonly before: Part }
-  | { readonly type: 'TOGGLE_ZONE' };
+  | { readonly type: 'TOGGLE_ZONE' }
+  | { readonly type: 'SET_CURVE'; readonly key: CurveKey; readonly value: number };
 
 export function createState(preset: Preset): ViewState {
   return {
@@ -56,6 +60,7 @@ export function createState(preset: Preset): ViewState {
     zone: controlOf(preset, 'zone').on ?? true,
     window: 0,
     hintSeen: false,
+    curve: preset.attention.curve,
   };
 }
 
@@ -77,6 +82,7 @@ const CONTROL_FOR: Partial<Record<ViewEvent['type'], readonly ControlId[]>> = {
   SET_DEPTH: ['technical'],
   TOGGLE_ZONE: ['zone'],
   TOGGLE_PART: ['parts'],
+  SET_CURVE: ['attentionMenu'],
 };
 
 /** The controls that may send an event: any one of them is enough. */
@@ -129,6 +135,7 @@ const HANDLERS: Handlers = {
     const order = moveTo(s.order, e.part, e.before);
     return order === s.order ? s : { ...s, hintSeen: true, order };
   },
+  SET_CURVE: (s, e) => ({ ...s, hintSeen: true, curve: setShare(s.curve, e.key, e.value) }),
   TOGGLE_ZONE: (s) => ({ ...s, hintSeen: true, zone: !s.zone }),
 };
 
@@ -177,3 +184,8 @@ export const panelKey = (view: {
   readonly lit: string | null;
   readonly ghost: string | null;
 }): string => [view.depth, view.lit, view.ghost].join('|');
+
+/** What the Attention head's menu needs: the curve and a slider move sent up as an event, or nothing when it is off. */
+export function curveMenu(curve: Curve, send: (event: ViewEvent) => void, on: boolean) {
+  return on ? { curve, onCurve: (key: CurveKey, value: number) => send({ type: 'SET_CURVE', key, value }) } : undefined;
+}

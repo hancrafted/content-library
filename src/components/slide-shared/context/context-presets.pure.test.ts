@@ -38,6 +38,29 @@ describe('failure cases', () => {
     // ASSERT
     expect(problems.some((problem) => problem.includes('enters the buffer'))).toBe(true);
   });
+
+  it('refuses a Preset curve that does not sum to 100', () => {
+    // ARRANGE
+    const bad = {
+      ...slide3,
+      attention: { ...slide3.attention, curve: { start: 20, recent: 20, middle: 20, newest: 20 } },
+    };
+    const expected = 'slide-3: attention curve must sum to 100, got 80';
+    // ACT
+    const problems = presetProblems(bad, chat);
+    // ASSERT
+    expect(problems).toContain(expected);
+  });
+
+  it('keeps the default curve on a Preset that only names its layout', () => {
+    // ARRANGE
+    const slide4 = data.presets['slide-4']!;
+    const expected = { layout: 'compressed', curve: { start: 20, recent: 20, middle: 30, newest: 30 } };
+    // ACT
+    const actual = slide4.attention;
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
 });
 
 describe('edge cases', () => {

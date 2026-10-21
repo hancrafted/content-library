@@ -25,6 +25,13 @@ words:
   categoryTechnical: Technische Kontextkategorien
   categoryTechnicalTip: 'Technisch: die echten Kategorienamen, die Nachrichten ausklappbar. Die Schaltfläche der Werkzeugleiste setzt alle Teile.'
   windowGroup: Fenstergröße
+  attentionMenu: Verteilung der Aufmerksamkeit
+  attentionMenuTip: Einstellen, wie die Aufmerksamkeit auf die ersten, die jüngsten, die mittleren und die neuesten Nachrichten verteilt wird
+  attentionCurve:
+    start: Die ersten 3 Nachrichten
+    recent: Zuletzt (4. bis 10. neueste)
+    middle: Mitte
+    newest: Die neuesten 3 Nachrichten
   download: Den Chat als Claude-Code-Log herunterladen
   upload: Ein Claude-Code-Log öffnen
   uploadFailed: Diese Datei enthält keinen Chat, wie ihn ein Claude-Code-Log enthält.

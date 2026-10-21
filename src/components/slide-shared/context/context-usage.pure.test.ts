@@ -60,6 +60,20 @@ describe('success cases', () => {
     expect(forced.map((a) => a.units)).toEqual(expected.overridden);
   });
 
+  it('follows the curve it is given: a bigger newest share gives the newest rows more units', () => {
+    // ARRANGE
+    const frames = framesOf(CHAT);
+    const base = { step: 4, windowTokens: WINDOW.tokens, notes: {} };
+    const heavy = { start: 10, recent: 10, middle: 10, newest: 70 };
+    const total = 100;
+    // ACT
+    const even = attentionAt(CHAT, frames, base);
+    const lopsided = attentionAt(CHAT, frames, { ...base, curve: heavy });
+    // ASSERT
+    expect(lopsided.at(-1)?.units).toBeGreaterThan(even.at(-1)?.units ?? 0);
+    expect(lopsided.reduce((sum, a) => sum + a.units, 0)).toBe(total);
+  });
+
   it('reads the step’s growth and the highest smart-zone line the fill has crossed', () => {
     // ARRANGE
     const frames = framesOf(CHAT);

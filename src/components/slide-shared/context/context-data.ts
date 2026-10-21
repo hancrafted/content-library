@@ -78,7 +78,11 @@ interface Config {
   readonly presets: Readonly<
     Record<
       string,
-      Partial<Omit<Config['defaults'], 'show'>> & { readonly chat: string; readonly show?: Partial<Preset['show']> }
+      Partial<Omit<Config['defaults'], 'show' | 'attention'>> & {
+        readonly chat: string;
+        readonly show?: Partial<Preset['show']>;
+        readonly attention?: Partial<Preset['attention']>;
+      }
     >
   >;
   readonly minis: Readonly<
@@ -164,7 +168,7 @@ function chatsOf(en: Config, log: string): Record<string, Chat> {
 function presetsOf(en: Config, words: ContextWords): Record<string, Preset> {
   return Object.fromEntries(
     Object.entries(en.presets).map(([id, raw]) => {
-      const merged = { ...en.defaults, ...raw };
+      const merged = { ...en.defaults, ...raw, attention: { ...en.defaults.attention, ...raw.attention } };
       const controls: ControlMap = mergeControls(en.defaults.controls, raw.controls ?? {});
       const show = { ...en.defaults.show, ...raw.show };
       return [id, { ...merged, show, controls, id, windows: merged.windows.map((ref) => windowOf(en, words, ref)) }];
