@@ -1,6 +1,6 @@
 import { slide } from '@/components/slide-master/slide';
 import { SlideFrame } from '@/components/slide-master/slide-master';
-import { SessionBarPreset } from '@/components/slide-shared/context/context';
+import { AttentionBubblePreset } from '@/components/slide-shared/context/context';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
@@ -12,12 +12,7 @@ export const thoughtExperiment = slide({
   segments: [{ slug: 'a-long-chat-is-a-long-call' }],
   content: ({ t, locale }) => (
     <SlideFrame>
-      <div className="flex w-full max-w-md flex-col gap-3 rounded-xl border border-border bg-card p-3 shadow-sm">
-        <SessionBarPreset locale={locale} at="thought-experiment" />
-        <p data-below="" className="text-caption font-medium">
-          {t('punchline')}
-        </p>
-      </div>
+      <AttentionBubblePreset locale={locale} at="thought-experiment" punchline={t('punchline')} poll={t('poll')} />
     </SlideFrame>
   ),
 });

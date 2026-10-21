@@ -1,4 +1,7 @@
+import type { ReactNode } from 'react';
+import { SpeechBubble } from '../speech-bubble/speech-bubble';
 import { ContextBars } from './context-bars-view';
+import { SESSION_END } from './context-bars.pure';
 import { contextData, type ContextLocale, type ContextPresetId, type MiniPresetId } from './context-data';
 import type { ContextViewData } from './context-view';
 import type { ContextWords } from './context-words.types';
@@ -55,4 +58,40 @@ export function ContextBarsPreset({ preset: id, locale, words }: Props<MiniPrese
 export function SessionBarPreset({ at, locale, words }: Omit<Props<never>, 'preset'> & { readonly at: string | null }) {
   const data = contextData(localeOf(locale));
   return <SessionBarView plan={data.session} words={{ ...data.words, ...words }} at={at} />;
+}
+
+/** The digits poured into the bar: a few on a fresh one, three more for every Section filled. */
+const digitsAt = (sections: readonly { readonly id: string }[], at: string | null): number =>
+  3 + 3 * (at === null ? 0 : at === SESSION_END ? sections.length : sections.findIndex((s) => s.id === at) + 1);
+
+/**
+ * The "Your attention" card as the AI's speech bubble: its punchline, on an opener a poll line with the three faces, and
+ * the session bar filled up to the Section `at` (null: fresh). `children` sit under the bar.
+ */
+export function AttentionBubblePreset({
+  at,
+  locale,
+  words,
+  punchline,
+  poll,
+  children,
+}: Omit<Props<never>, 'preset'> & {
+  readonly at: string | null;
+  readonly punchline: string;
+  /** The Section's poll line; none on the Title slide. */
+  readonly poll?: string;
+  readonly children?: ReactNode;
+}) {
+  const data = contextData(localeOf(locale));
+  const merged = { ...data.words, ...words };
+  return (
+    <SpeechBubble
+      punchline={punchline}
+      poll={poll === undefined ? undefined : { line: poll, labels: merged.session.faces }}
+      digits={digitsAt(data.session.sections, at)}
+    >
+      <SessionBarView plan={data.session} words={merged} at={at} />
+      {children}
+    </SpeechBubble>
+  );
 }

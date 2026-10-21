@@ -354,10 +354,11 @@ words:
     full: Full to the brim. Well done.
     progress: '{title}, {n} of {count}'
     sections:
-      thought-experiment: Ready?
-      the-ais-attention-span: Let's dial it up a notch.
-      what-fills-the-window: So, how's your brain doing? Anything fried yet?
-      managing-the-attention-span: You made it, almost. Just one more thing.
+      thought-experiment: Warm-up
+      the-ais-attention-span: Dialling up
+      what-fills-the-window: Filling up
+      managing-the-attention-span: Nearly full
+    faces: { fine: Fine, sweating: Sweating, fried: Fried }
   mini:
     usedOf: '{used} of {window} · {percent}%'
     discarded: thrown away

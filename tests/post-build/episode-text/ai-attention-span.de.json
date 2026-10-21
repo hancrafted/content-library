@@ -5,11 +5,11 @@
   "slides": [
     {
       "id": "top",
-      "text": "Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst Ein langer Chat verhält sich wie ein langes Telefonat: Seine Aufmerksamkeit ist ein begrenztes Fenster, also steuerst Du, was hineinkommt. Deine Aufmerksamkeit Frisch und bereit zum Empfangen."
+      "text": "Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst Ein langer Chat verhält sich wie ein langes Telefonat: Seine Aufmerksamkeit ist ein begrenztes Fenster, also steuerst Du, was hineinkommt. Hi. Die nächsten 30 Minuten bist Du die KI. Mund auf. 0 1 0 Deine Aufmerksamkeit Frisch und bereit zum Empfangen."
     },
     {
       "id": "thought-experiment",
-      "text": "Gedankenexperiment Wie Aufmerksamkeit funktioniert: Du gegen eine KI. Deine Aufmerksamkeit Bereit? Wir fangen leicht an, denn Du bist ein Mensch."
+      "text": "Gedankenexperiment Wie Aufmerksamkeit funktioniert: Du gegen eine KI. Wir fangen leicht an. Du bist ja nur ein Mensch. Na, wie ist Deine Aufmerksamkeit? 1 Geht 2 Schwitze 3 Durchgebrannt 0 1 0 1 0 1 Deine Aufmerksamkeit Aufwärmen"
     },
     {
       "id": "thought-experiment--the-long-phone-call-story",
@@ -21,7 +21,7 @@
     },
     {
       "id": "the-ais-attention-span",
-      "text": "Die Aufmerksamkeitsspanne der KI Jetzt die Ursache: wie die KI einen Chat im Blick behält. Deine Aufmerksamkeit Dann drehen wir mal auf. Schau, ob Du mithalten kannst."
+      "text": "Die Aufmerksamkeitsspanne der KI Jetzt die Ursache: wie die KI einen Chat im Blick behält. Jetzt drehe ich auf. Ich frühstücke 200K. Noch dabei? Wie steht's um Deine Aufmerksamkeit? 1 Geht 2 Schwitze 3 Durchgebrannt 0 1 0 1 0 1 0 1 0 Deine Aufmerksamkeit Hochdrehen"
     },
     {
       "id": "the-ais-attention-span--the-context-window",
@@ -41,7 +41,7 @@
     },
     {
       "id": "what-fills-the-window",
-      "text": "Was das Fenster füllt Deine Nachrichten sind nur ein Teil davon. Deine Aufmerksamkeit Na, wie geht's Deinem Kopf? Schon durchgebrannt? Ich bin noch nicht fertig. Versuch mitzuhalten."
+      "text": "Was das Fenster füllt Deine Nachrichten sind nur ein Teil davon. Wie geht's dem Kopf? Schon was durchgebrannt? Ich bin noch nicht fertig. Kurzer Check: Wie voll bist Du? 1 Geht 2 Schwitze 3 Durchgebrannt 0 1 0 1 0 1 0 1 0 1 0 1 Deine Aufmerksamkeit Füllt sich"
     },
     {
       "id": "what-fills-the-window--whats-really-in-the-window",
@@ -57,7 +57,7 @@
     },
     {
       "id": "managing-the-attention-span",
-      "text": "Die Aufmerksamkeitsspanne managen Eine Anzeige kannst Du nicht ablesen, also baust Du Gewohnheiten auf. Deine Aufmerksamkeit Du hast es fast geschafft. Nur noch eine Sache. Übergabe: Feier für 40, 27. Juni, Budget 40.000 € . Weiter: Einladungen."
+      "text": "Die Aufmerksamkeitsspanne managen Eine Anzeige kannst Du nicht ablesen, also baust Du Gewohnheiten auf. Fast geschafft. Noch eine Sache, dann verdichte ich Dich. Letzter Check: Wie steht's um Deine Aufmerksamkeit? 1 Geht 2 Schwitze 3 Durchgebrannt 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 Deine Aufmerksamkeit Fast voll Übergabe: Feier für 40, 27. Juni, Budget 40.000 € . Weiter: Einladungen."
     },
     {
       "id": "managing-the-attention-span--everyday-habits",
@@ -73,7 +73,7 @@
     },
     {
       "id": "managing-the-attention-span--now-you-know-how-it-feels",
-      "text": "Die Aufmerksamkeitsspanne managen (4/4) Seite 4 von 4 Glückwunsch Jetzt weißt Du, wie es sich anfühlt, eine KI zu sein. Deine Aufmerksamkeit Bis zum Rand voll. Gut gemacht."
+      "text": "Die Aufmerksamkeitsspanne managen (4/4) Seite 4 von 4 Glückwunsch Jetzt weißt Du, wie es sich anfühlt. Noch einmal? Oder gleich in einer Minute? Deine Aufmerksamkeit Bis zum Rand voll. Gut gemacht."
     }
   ],
   "notes": [
@@ -151,7 +151,7 @@
     },
     {
       "id": "thought-experiment",
-      "text": "Gedankenexperiment 0:00 – 0:48 Ein langer Chat ist ein langes Telefonat Bereit? Wir fangen leicht an, denn Du bist ein Mensch. Zuerst geht es darum, wie Aufmerksamkeit funktioniert, Deine gegen die einer KI. Denk an Dein letztes langes Telefonat mit jemandem, der Dir nahesteht: Deiner Schwester, einem Freund, Deiner Mutter. Du hast angerufen, um eine Sache zu klären, und eine Stunde später hast Du aufgelegt. Bevor ich ein Wort über KI sage, sollst Du spüren, was Dir von diesem Gespräch geblieben ist. Denn ich will Dich fragen, ob ein langer Chat mit einer KI dasselbe mit Dir macht. Deshalb kommt zuerst das Telefonat und dann der Chat."
+      "text": "Gedankenexperiment 0:00 – 0:49 Ein langer Chat ist ein langes Telefonat Bereit? Wir fangen leicht an. Du bist ja nur ein Mensch. Zuerst geht es darum, wie Aufmerksamkeit funktioniert, Deine gegen die einer KI. Denk an Dein letztes langes Telefonat mit jemandem, der Dir nahesteht: Deiner Schwester, einem Freund, Deiner Mutter. Du hast angerufen, um eine Sache zu klären, und eine Stunde später hast Du aufgelegt. Bevor ich ein Wort über KI sage, sollst Du spüren, was Dir von diesem Gespräch geblieben ist. Denn ich will Dich fragen, ob ein langer Chat mit einer KI dasselbe mit Dir macht. Deshalb kommt zuerst das Telefonat und dann der Chat."
     },
     {
       "id": "thought-experiment--the-long-phone-call-story",
@@ -163,7 +163,7 @@
     },
     {
       "id": "the-ais-attention-span",
-      "text": "Die Aufmerksamkeitsspanne der KI 0:00 – 0:25 Warum das passiert Dann drehen wir mal auf. Schau, ob Du mithalten kannst. Bisher hast Du gesehen, was passiert. Jetzt kommt die Ursache. Denn sobald Du weißt, wie die KI einen Chat im Blick behält, überrascht Dich das Muster nicht mehr, und erst danach schauen wir, was es mit Deinen Antworten macht."
+      "text": "Die Aufmerksamkeitsspanne der KI 0:00 – 0:23 Warum das passiert Jetzt drehe ich auf. Ich frühstücke 200K. Bisher hast Du gesehen, was passiert. Jetzt kommt die Ursache. Denn sobald Du weißt, wie die KI einen Chat im Blick behält, überrascht Dich das Muster nicht mehr, und erst danach schauen wir, was es mit Deinen Antworten macht."
     },
     {
       "id": "the-ais-attention-span--the-context-window",
@@ -183,7 +183,7 @@
     },
     {
       "id": "what-fills-the-window",
-      "text": "Was das Fenster füllt 0:00 – 0:24 Mehr drin, als Du getippt hast Na, wie geht's Deinem Kopf? Schon durchgebrannt? Ich bin noch nicht fertig, versuch also mitzuhalten. Du hast gesehen, wie sich das Fenster mit Deinen Nachrichten füllt. Aber Deine Nachrichten sind nur ein Teil davon. Die nächste Frage ist also, was sonst noch hineinkommt, ohne dass Du es merkst."
+      "text": "Was das Fenster füllt 0:00 – 0:23 Mehr drin, als Du getippt hast Wie geht's dem Kopf? Schon was durchgebrannt? Ich bin noch nicht fertig. Du hast gesehen, wie sich das Fenster mit Deinen Nachrichten füllt. Aber Deine Nachrichten sind nur ein Teil davon. Die nächste Frage ist also, was sonst noch hineinkommt, ohne dass Du es merkst."
     },
     {
       "id": "what-fills-the-window--whats-really-in-the-window",
@@ -199,7 +199,7 @@
     },
     {
       "id": "managing-the-attention-span",
-      "text": "Die Aufmerksamkeitsspanne managen 0:00 – 0:25 Du steuerst mit Gewohnheiten Du hast es fast geschafft. Nur noch eine Sache, und ja, der faule Apfel, der Dich angrinst, ist ein Augenzwinkern in Richtung Context Rot. Eine Anzeige kannst Du nicht ablesen, also baust Du Dir Gewohnheiten auf. Zuerst die für jeden Tag und dann die eine für ein großes Projekt."
+      "text": "Die Aufmerksamkeitsspanne managen 0:00 – 0:25 Du steuerst mit Gewohnheiten Fast geschafft. Noch eine Sache, dann verdichte ich Dich. Und ja, der faule Apfel, der Dich angrinst, ist ein Augenzwinkern in Richtung Context Rot. Eine Anzeige kannst Du nicht ablesen, also baust Du Dir Gewohnheiten auf. Zuerst die für jeden Tag und dann die eine für ein großes Projekt."
     },
     {
       "id": "managing-the-attention-span--everyday-habits",
@@ -215,7 +215,7 @@
     },
     {
       "id": "managing-the-attention-span--now-you-know-how-it-feels",
-      "text": "Glückwunsch 0:00 – 0:28 Du hast alles gehalten Glückwunsch, Du hast es bis zum Ende geschafft. Jetzt weißt Du, wie es sich anfühlt, eine KI zu sein: Du hast alles aufgenommen, was ich gesagt habe, der Anfang blieb scharf, das Ende blieb scharf, und irgendwo in der Mitte wurde es etwas verschwommen. Mehr ist das Fenster nie, also geh jetzt los und steuere Deines."
+      "text": "Glückwunsch 0:00 – 0:32 Du hast alles gehalten Glückwunsch, Du hast es bis zum Ende geschafft. Jetzt weißt Du, wie es sich anfühlt, eine KI zu sein. Du hast alles aufgenommen, was ich gesagt habe: der Anfang blieb scharf, das Ende blieb scharf, und irgendwo in der Mitte wurde es etwas verschwommen. Mehr ist das Fenster nie, also geh jetzt los und steuere Deines. Noch einmal? Oder gleich in einer Minute?"
     }
   ]
 }

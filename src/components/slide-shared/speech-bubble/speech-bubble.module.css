@@ -1,0 +1,95 @@
+/*
+ * The AI's speech bubble: a card, a bubble with a tail toward the avatar, and a lane of 0/1 digits that falls from the
+ * tail into the bar below. The bubble pops in and the digits fall once, when the Slide mounts; reduced motion shows the
+ * bubble at rest and no digits. Tokens only.
+ */
+
+.card {
+  display: flex;
+  width: 100%;
+  max-width: 28rem;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--card);
+  box-shadow: 0 1px 2px color-mix(in oklch, var(--foreground) 12%, transparent);
+}
+
+.bubble {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: var(--muted);
+  color: var(--foreground);
+  transform-origin: 0 0;
+}
+
+/* A rotated square on the bubble's left edge, pointing at the avatar. */
+.tail {
+  position: absolute;
+  top: 0.9rem;
+  left: -0.45rem;
+  width: 0.8rem;
+  height: 0.8rem;
+  border-bottom: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+  background: var(--muted);
+  transform: rotate(45deg);
+}
+
+/* The lane under the bubble: digits start at the avatar's side and fall into the bar. */
+.lane {
+  position: relative;
+  height: 1.75rem;
+  overflow: visible;
+  pointer-events: none;
+  color: var(--foreground);
+}
+
+.digit {
+  position: absolute;
+  top: 0;
+  left: var(--x);
+  opacity: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(0.4rem);
+  }
+}
+
+@keyframes pour {
+  0% {
+    opacity: 0;
+    transform: translate(0, -0.25rem);
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--drift), 1.9rem);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .bubble {
+    animation: pop 450ms ease-out backwards;
+  }
+  .digit {
+    animation: pour 900ms ease-in var(--delay) both;
+  }
+}

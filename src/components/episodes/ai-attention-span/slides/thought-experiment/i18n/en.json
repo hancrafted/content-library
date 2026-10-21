@@ -1,13 +1,14 @@
 {
   "title": "Thought experiment",
   "caption": "How attention works: you versus an AI.",
-  "punchline": "Let's start light, because you're human.",
+  "punchline": "Let's start light. You're only human.",
+  "poll": "So, how's your attention?",
   "voiceScript": {
     "segments": {
       "a-long-chat-is-a-long-call": {
         "title": "A long chat is a long call",
         "keywords": "",
-        "script": "Ready? Let's start light, because you're human. First, how attention works, yours against an AI's. Imagine the last long phone call you had with someone close, a sister, a friend, your mum. You called to settle one thing, and an hour later you hung up. Before I say a word about AI, I want you to feel what that call left you with, because the question I want to ask you is whether a long AI chat does the same thing to you, so the call comes first and the chat second."
+        "script": "Ready? Let's start light. You're only human. First, how attention works, yours against an AI's. Imagine the last long phone call you had with someone close, a sister, a friend, your mum. You called to settle one thing, and an hour later you hung up. Before I say a word about AI, I want you to feel what that call left you with, because the question I want to ask you is whether a long AI chat does the same thing to you, so the call comes first and the chat second."
       }
     }
   }
