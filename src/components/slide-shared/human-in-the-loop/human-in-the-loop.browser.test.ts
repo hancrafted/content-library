@@ -263,6 +263,7 @@ describe('success cases', () => {
       // ARRANGE
       const mine = 'mine';
       await open('light');
+      await tryIt();
       // ACT
       await upload(OWN);
       await settle();
@@ -300,6 +301,7 @@ describe('failure cases', () => {
       // ARRANGE
       const authored = 'summer-party';
       await open('light');
+      await tryIt();
       // ACT
       await upload('stages: [');
       await settle();
