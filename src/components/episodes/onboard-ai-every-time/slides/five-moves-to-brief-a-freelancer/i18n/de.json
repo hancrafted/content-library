@@ -6,11 +6,11 @@
   },
   "movesLabel": "Das Briefing, an den Ausweis geklemmt",
   "moves": {
-    "break": "<initial>B</initial>reak it down",
-    "requirements": "<initial>R</initial>equirements first",
-    "interview": "<initial>I</initial>nterview yourself",
-    "evaluate": "<initial>E</initial>valuate each step",
-    "fresh": "<initial>F</initial>resh start"
+    "break": "Zerlege es",
+    "requirements": "Erst die Anforderungen",
+    "interview": "Interviewe Dich mit KI",
+    "evaluate": "Prüfe jeden Schritt",
+    "fresh": "Frischer Start"
   },
   "voiceScript": {
     "segments": {

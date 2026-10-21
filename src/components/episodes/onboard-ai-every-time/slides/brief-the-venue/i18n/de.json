@@ -10,7 +10,7 @@
   "stages": {
     "party": {
       "name": "Sommerfest",
-      "move": "Break it down",
+      "move": "Zerlege es",
       "popover": {
         "in": "die ganze Feier.",
         "out": "fünf Teile, nur die Location geht weiter."
@@ -18,7 +18,7 @@
     },
     "interview": {
       "name": "Interview",
-      "move": "Interview yourself with AI",
+      "move": "Interviewe Dich mit KI",
       "popover": {
         "in": "Deine grobe Idee.",
         "out": "die Fragen, an die Du nicht gedacht hast, beantwortet."
@@ -26,7 +26,7 @@
     },
     "requirements": {
       "name": "Anforderungen",
-      "move": "Requirements first",
+      "move": "Erst die Anforderungen",
       "popover": {
         "in": "Deine Antworten.",
         "out": "eine Anforderungskarte, die Du freigibst."
@@ -34,7 +34,7 @@
     },
     "research": {
       "name": "Recherche",
-      "move": "Fresh start for each piece",
+      "move": "Frischer Start für jedes Teil",
       "popover": {
         "in": "die Anforderungskarte.",
         "out": "eine Location, gegen jedes Kriterium geprüft."
@@ -42,7 +42,7 @@
     },
     "compare": {
       "name": "Vergleich",
-      "move": "Evaluate each step",
+      "move": "Prüfe jeden Schritt",
       "popover": {
         "in": "drei geprüfte Locations.",
         "out": "eine Rangfolge, gemessen an der Karte."

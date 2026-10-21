@@ -3,32 +3,32 @@
   "heading": "Ein Prompt, ein polierter Plan",
   "caption": "Er sieht fertig aus. Schau genauer hin.",
   "promptLabel": "Der eine Prompt",
-  "prompt": "Plane das nächste Sommerfest Deiner Firma: 200 Mitarbeitende an fünf Standorten in Europa.",
+  "prompt": "Plane das nächste Sommerfest deiner Firma: 200 Mitarbeitende an fünf Standorten in Europa.",
   "stackLabel": "12 Dokumente zurück, poliert",
   "traitsLabel": "Was jede Eigenschaft im Plan hinterlassen hat",
   "cracks": {
     "probabilistic": {
-      "trait": "Probabilistic",
+      "trait": "Probabilistisch",
       "why": "Frag noch einmal, und du bekommst einen ganz neuen Plan.",
       "produced": "Plan v1: Lissabon, 14. Juni. Plan v2: Berlin, 5. Juli."
     },
     "relentless": {
-      "trait": "Relentless",
+      "trait": "Unermüdlich",
       "why": "Nie gefragt, woher deine Leute anreisen, und dich unter Dokumenten begraben.",
       "produced": "Die Top 10 Hotels auf Tripadvisor gewählt, egal wo sie liegen"
     },
     "informed": {
-      "trait": "Informed",
+      "trait": "Informiert",
       "why": "Kennt tausend Aktivitäten, aber nicht deine Kultur.",
       "produced": "Teamaktivität: Paintball, 3 Stunden, alle 200"
     },
     "confident": {
-      "trait": "Confident",
+      "trait": "Selbstsicher",
       "why": "Preise, die wie Fakten aussehen und erfunden sind.",
       "produced": "Location: 48 € pro Kopf, Catering inklusive, Verfügbarkeit bestätigt"
     },
     "every-word-billed": {
-      "trait": "Every word billed",
+      "trait": "Jedes Wort berechnet",
       "why": "Du hast jede Seite davon bezahlt.",
       "produced": "Rechnung: 6.400 Wörter gelesen und geschrieben × 0,08 €"
     }
@@ -39,30 +39,30 @@
       "one-prompt-in": {
         "title": "Ein Prompt rein",
         "keywords": "",
-        "script": "Was passiert also, wenn du ihnen nur einen Prompt gibst: Plane das nächste Sommerfest Deiner Firma: 200 Mitarbeitende an fünf Standorten in Europa? Du bekommst einen Plan. Einen polierten. Schau genauer hin."
+        "script": "Was passiert also, wenn du ihnen nur einen Prompt gibst: Plane das nächste Sommerfest deiner Firma: 200 Mitarbeitende an fünf Standorten in Europa? Du bekommst einen Plan. Einen polierten. Schau genauer hin."
       },
       "probabilistic": {
-        "title": "Probabilistic",
+        "title": "Probabilistisch",
         "keywords": "",
-        "script": "Sie sind probabilistic: Frag noch einmal, und du bekommst einen ganz neuen Plan, in Lissabon statt Berlin."
+        "script": "Sie sind probabilistisch: Frag noch einmal, und du bekommst einen ganz neuen Plan, in Lissabon statt Berlin."
       },
       "relentless": {
-        "title": "Relentless",
+        "title": "Unermüdlich",
         "keywords": "",
-        "script": "Sie sind relentless: Sie haben Hotels in zwölf Städten nach Bewertung verglichen, nie gefragt, woher deine Leute anreisen, und dich unter Dokumenten begraben."
+        "script": "Sie sind unermüdlich: Sie haben Hotels in zwölf Städten nach Bewertung verglichen, nie gefragt, woher deine Leute anreisen, und dich unter Dokumenten begraben."
       },
       "informed": {
-        "title": "Informed",
+        "title": "Informiert",
         "keywords": "",
-        "script": "Sie sind informed: Sie kennen tausend Teambuilding-Aktivitäten, und sie haben Paintball gewählt, weil sie deine Kultur nicht kennen."
+        "script": "Sie sind informiert: Sie kennen tausend Teambuilding-Aktivitäten, und sie haben Paintball gewählt, weil sie deine Kultur nicht kennen."
       },
       "confident": {
-        "title": "Confident",
+        "title": "Selbstsicher",
         "keywords": "",
-        "script": "Sie sind confident: Die Preise der Locations sehen aus wie Fakten, und sie sind erfunden."
+        "script": "Sie sind selbstsicher: Die Preise der Locations sehen aus wie Fakten, und sie sind erfunden."
       },
       "every-word-billed": {
-        "title": "Every word billed",
+        "title": "Jedes Wort berechnet",
         "keywords": "",
         "script": "Und sie rechnen pro Wort ab: Du hast jede Seite davon bezahlt."
       },

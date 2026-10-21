@@ -110,7 +110,7 @@ export const briefTheVenue = slide({
     { slug: 'compare-and-check' },
     { slug: 'recommendation-and-on' },
   ],
-  content: ({ t, target, marker, Marker }) => {
+  content: ({ t, locale, target, marker, Marker }) => {
     const popover = (id: StageId): NodeCopy => ({
       title: t(`stages.${id}.name`),
       in: t(`stages.${id}.popover.in`),
@@ -223,7 +223,7 @@ export const briefTheVenue = slide({
     return (
       <SlideFrame className="mt-10 gap-10">
         <div className="@container">
-          <VenuePipeline label={t('pipelineLabel')} stages={stages} acronym />
+          <VenuePipeline label={t('pipelineLabel')} stages={stages} acronym={locale === 'en'} />
         </div>
         <div {...target(LEGEND)}>
           <Legend

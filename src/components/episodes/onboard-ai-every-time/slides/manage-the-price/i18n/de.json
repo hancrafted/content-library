@@ -8,42 +8,42 @@
   "footLabel": "Schritte, die jeder Eigenschaft entgegenwirken",
   "movesCount": "<figure>{count}</figure> {count, plural, one {Schritt} other {Schritte}}",
   "traits": {
-    "probabilistic": { "initial": "P", "rest": "robabilistic" },
-    "relentless": { "initial": "R", "rest": "elentless" },
-    "informed": { "initial": "I", "rest": "nformed" },
-    "confident": { "initial": "C", "rest": "onfident" },
-    "every-word-billed": { "initial": "E", "rest": "very word billed" }
+    "probabilistic": { "initial": "", "rest": "Probabilistisch" },
+    "relentless": { "initial": "", "rest": "Unermüdlich" },
+    "informed": { "initial": "", "rest": "Informiert" },
+    "confident": { "initial": "", "rest": "Selbstsicher" },
+    "every-word-billed": { "initial": "", "rest": "Jedes Wort berechnet" }
   },
   "moves": {
     "break-it-down": {
-      "initial": "B",
-      "rest": "reak it down",
+      "initial": "",
+      "rest": "Zerlege es",
       "line": "Gib ein Stück nach dem anderen ab. Kleine Stücke lassen weniger Raum für Fehler und kosten weniger."
     },
     "requirements-first": {
-      "initial": "R",
-      "rest": "equirements first",
+      "initial": "",
+      "rest": "Erst die Anforderungen",
       "line": "Schreib auf, wie gut aussieht, bevor die Arbeit beginnt. Dann bringt dasselbe Briefing Ergebnisse, die übereinstimmen."
     },
     "interview-yourself-with-ai": {
-      "initial": "I",
-      "rest": "nterview yourself with AI",
+      "initial": "",
+      "rest": "Interviewe Dich mit KI",
       "line": "Lass Dir zuerst die Fragen der KI stellen. Dein ungeschriebener Kontext kommt heraus, bevor sie rät."
     },
     "evaluate-each-step": {
-      "initial": "E",
-      "rest": "valuate each step",
+      "initial": "",
+      "rest": "Prüfe jeden Schritt",
       "line": "Prüfe jeden Schritt gegen die Anforderungen. Ein Irrweg fällt früh auf, nicht erst nach der letzten Seite."
     },
     "fresh-start-for-each-piece": {
-      "initial": "F",
-      "rest": "resh start for each piece",
+      "initial": "",
+      "rest": "Frischer Start für jedes Teil",
       "line": "Öffne für jedes Stück einen neuen Chat. Alte Worte türmen sich nicht mehr auf der Rechnung und im Weg."
     }
   },
   "notes": {
     "break-it-down": {
-      "header": "Break it down",
+      "header": "Zerlege es",
       "description": "Least-to-most Prompting löst einfachere Teilprobleme nacheinander und erreichte auf einem kompositionellen Benchmark 99 % oder mehr, gegenüber 16 % für Chain-of-Thought-Prompting mit einem älteren Modell [1]. Modelle können jede Teilfrage beantworten und trotzdem an der ganzen Frage scheitern, und diese Lücke schrumpft nicht, wenn die Modelle größer werden [2].",
       "sources": {
         "zhou-least-to-most": {
@@ -55,7 +55,7 @@
       }
     },
     "requirements-first": {
-      "header": "Requirements first",
+      "header": "Erst die Anforderungen",
       "description": "Über Prompts hinweg, die jeweils eine andere Auswahl aus 20 Anforderungen nannten, schwankten die Ergebnisse für eine nicht genannte Anforderung mehr als doppelt so stark wie für eine genannte: Standardabweichung 8,9 % gegenüber weniger als der Hälfte davon [1].",
       "sources": {
         "yang-underspecification": {
@@ -64,7 +64,7 @@
       }
     },
     "interview-yourself-with-ai": {
-      "header": "Interview yourself with AI",
+      "header": "Interviewe Dich mit KI",
       "description": "Agenten, die mit der Person interagierten, um fehlende Informationen zu ergänzen, verbesserten ihre Leistung auf einem unterspezifizierten Coding-Benchmark um bis zu 74 % [1]. Wenn ein Modell Präferenzen mit offenen Fragen erfragt, waren die Antworten der Nutzer oft aufschlussreicher als Prompts, die sie ohne Hilfe schrieben [2].",
       "sources": {
         "vijayvargiya-ambig-swe": {
@@ -76,7 +76,7 @@
       }
     },
     "evaluate-each-step": {
-      "header": "Evaluate each step",
+      "header": "Prüfe jeden Schritt",
       "description": "Auf einem Mathe-Benchmark schneidet Feedback zu jedem Denkschritt deutlich besser ab als Feedback nur zum Endergebnis [1]. Modelle tun sich außerdem schwer, ihre Antworten ohne Feedback von außen zu korrigieren, also braucht die Prüfung etwas außerhalb des Modells, hier die Anforderungen [2].",
       "sources": {
         "lightman-verify-step-by-step": { "title": "Lightman et al., Let's Verify Step by Step" },
@@ -86,7 +86,7 @@
       }
     },
     "fresh-start-for-each-piece": {
-      "header": "Fresh start for each piece",
+      "header": "Frischer Start für jedes Teil",
       "description": "Über sechs Generierungsaufgaben hinweg schnitten Spitzenmodelle im Gespräch über mehrere Runden im Schnitt 39 % schlechter ab als mit der vollständigen Anweisung auf einmal; die Autoren raten, ein neues Gespräch zu beginnen, das die Informationen wiederholt [1]. Die Leistung sinkt außerdem mit der Länge der Eingabe, bei allen 18 getesteten Modellen [2].",
       "sources": {
         "laban-lost-in-multi-turn": {
@@ -98,7 +98,7 @@
       }
     },
     "a-limit-on-break-it-down": {
-      "header": "Eine Grenze von Break it down",
+      "header": "Eine Grenze des Zerlegens",
       "description": "Zerlegen macht ein Modell nicht verlässlich darin, die Stücke wieder zusammenzusetzen; Fehler in frühen Schritten wandern weiter in spätere, und deshalb ist der nächste Schritt das Prüfen [1].",
       "sources": {
         "dziri-faith-and-fate": { "title": "Dziri et al., Faith and Fate: Limits of Transformers on Compositionality" }
@@ -113,19 +113,19 @@
         "script": "Viele hoffen auf den einen guten Prompt. Aber ein guter Prompt ist kein Briefing. Ein Briefing ist eine Reihe von Schritten, und jeder Schritt beantwortet einen Preis, den Du gerade gesehen hast, also kann ein Prompt nicht die Arbeit von fünf leisten."
       },
       "break-it-down-requirements-first": {
-        "title": "Break it down, Requirements first",
+        "title": "Zerlegen, Anforderungen zuerst",
         "keywords": "",
-        "script": "Der erste Schritt ist Break it down: Gib ein Stück nach dem anderen ab, denn kleine Stücke lassen weniger Raum für Fehler und kosten weniger. Das beantwortet Relentless und Every word billed, die Seitenflut und die aufgeblähte Rechnung. Der zweite ist Requirements first: Schreib auf, wie gut aussieht, bevor die Arbeit beginnt. Dann bringt dasselbe Briefing Ergebnisse, die übereinstimmen, und das beantwortet Probabilistic und Confident."
+        "script": "Der erste Schritt heißt Zerlege es: Gib ein Stück nach dem anderen ab, denn kleine Stücke lassen weniger Raum für Fehler und kosten weniger. Das beantwortet die Unermüdlichkeit und die Abrechnung pro Wort, die Seitenflut und die aufgeblähte Rechnung. Der zweite heißt Erst die Anforderungen: Schreib auf, wie gut aussieht, bevor die Arbeit beginnt. Dann bringt dasselbe Briefing Ergebnisse, die übereinstimmen, und das beantwortet die Wahrscheinlichkeit und die Selbstsicherheit."
       },
       "interview-evaluate": {
-        "title": "Interview, Evaluate",
+        "title": "Interview, Prüfen",
         "keywords": "",
-        "script": "Drittens: Interview yourself with AI. Lass Dir zuerst ihre Fragen stellen, so wird aus der selbstsicheren Vermutung eine Frage, und der informierte Außenstehende lernt die Firma kennen, für die er blind war. Viertens: Evaluate each step, und prüfen heißt hier, den Schritt gegen Deine Anforderungen zu halten. Ein Irrweg fällt dann früh auf, nicht erst nach der letzten Seite, und das bändigt die Seitenflut und die schwankenden Antworten."
+        "script": "Drittens: Interviewe Dich mit KI. Lass Dir zuerst ihre Fragen stellen, so wird aus der selbstsicheren Vermutung eine Frage, und der informierte Außenstehende lernt die Firma kennen, für die er blind war. Viertens: Prüfe jeden Schritt, und prüfen heißt hier, den Schritt gegen Deine Anforderungen zu halten. Ein Irrweg fällt dann früh auf, nicht erst nach der letzten Seite, und das bändigt die Seitenflut und die schwankenden Antworten."
       },
       "fresh-start": {
-        "title": "Fresh start",
+        "title": "Frischer Start",
         "keywords": "",
-        "script": "Fünftens: Fresh start for each piece. Ein Stück bekommt einen sauberen Chat, so bleibt die Rechnung klein, und nichts Altes sickert aus früherer Arbeit ein. Achte darauf, dass die Zuordnung viele zu viele ist: Ein Schritt hilft gegen mehrere Eigenschaften, und einer Eigenschaft begegnen mehrere Schritte. Diese Überlappung ist der Grund, warum die fünf als Set funktionieren."
+        "script": "Fünftens: Frischer Start für jedes Teil. Ein Stück bekommt einen sauberen Chat, so bleibt die Rechnung klein, und nichts Altes sickert aus früherer Arbeit ein. Achte darauf, dass die Zuordnung viele zu viele ist: Ein Schritt hilft gegen mehrere Eigenschaften, und einer Eigenschaft begegnen mehrere Schritte. Diese Überlappung ist der Grund, warum die fünf als Set funktionieren."
       },
       "refrain": {
         "title": "Refrain",
