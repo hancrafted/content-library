@@ -13,10 +13,10 @@ const CALL: readonly GridRun[] = [
   { tone: 'lit', count: 4 },
 ];
 
-// The section slide of "The long phone call": the Hero motif's grid as the call, one box a minute. No meaning colours,
+// The section slide of the Section "Thought experiment": the Hero motif's grid as the call, one box a minute. No meaning colours,
 // since no AI is in the call; only the primary light picks out what stays.
-export const theLongPhoneCall = slide({
-  slug: 'the-long-phone-call',
+export const thoughtExperiment = slide({
+  slug: 'thought-experiment',
   messages: { en, de },
   segments: [{ slug: 'a-long-chat-is-a-long-call' }],
   content: ({ t }) => (
