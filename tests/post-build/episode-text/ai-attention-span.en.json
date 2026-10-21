@@ -1,15 +1,15 @@
 {
   "title": "Why AI has a weird attention span you must learn to manage · hancrafted",
   "description": "AI's attention span, its context window, is a limited resource you have to actively manage: one chat per job, a handoff after real progress or before a break, and for bigger projects one planner chat that hands each step to a fresh chat.",
-  "toc": "Contents Loading 18 min left 1 Thought experiment The long phone call AI forgets the middle too 2 The AI's attention span The context window What happens when the context fills up Attention is a budget What we learned so far 3 What fills the window What's really in the context window One innocent question The chat looks the same. The window doesn't. 4 Managing the attention span Everyday habits Human in the loop workflow Open contents : Contents · Loading Contents 18 min left 1 Thought experiment The long phone call AI forgets the middle too 2 The AI's attention span The context window What happens when the context fills up Attention is a budget What we learned so far 3 What fills the window What's really in the context window One innocent question The chat looks the same. The window doesn't. 4 Managing the attention span Everyday habits Human in the loop workflow",
+  "toc": "Contents Loading 19 min left 1 Thought experiment The long phone call AI forgets the middle too 2 The AI's attention span The context window What happens when the context fills up Attention is a budget What we learned so far 3 What fills the window What's really in the context window One innocent question The chat looks the same. The window doesn't. 4 Managing the attention span Everyday habits Human in the loop workflow Congratulations Open contents : Contents · Loading Contents 19 min left 1 Thought experiment The long phone call AI forgets the middle too 2 The AI's attention span The context window What happens when the context fills up Attention is a budget What we learned so far 3 What fills the window What's really in the context window One innocent question The chat looks the same. The window doesn't. 4 Managing the attention span Everyday habits Human in the loop workflow Congratulations",
   "slides": [
     {
       "id": "top",
-      "text": "Why AI has a weird attention span you must learn to manage A long chat behaves like a long call: its attention is a limited window, so you manage what goes into it. This session 30 min nothing used yet"
+      "text": "Why AI has a weird attention span you must learn to manage A long chat behaves like a long call: its attention is a limited window, so you manage what goes into it. Your attention Fresh and ready to receive."
     },
     {
       "id": "thought-experiment",
-      "text": "Thought experiment How your attention holds up over a 90-minute call This session 30 min Thought experiment …wait, we never fixed the date."
+      "text": "Thought experiment How attention works: you versus an AI. Your attention Ready? Let's start light, because you're human."
     },
     {
       "id": "thought-experiment--the-long-phone-call-story",
@@ -21,7 +21,7 @@
     },
     {
       "id": "the-ais-attention-span",
-      "text": "The AI's attention span Now the cause: how the AI holds a chat. This session 30 min The AI's attention span The AI's window keeps the same light: its start and its newest stay sharp, the middle fades."
+      "text": "The AI's attention span Now the cause: how the AI holds a chat. Your attention Let's dial it up a notch. See if you can keep up."
     },
     {
       "id": "the-ais-attention-span--the-context-window",
@@ -29,11 +29,11 @@
     },
     {
       "id": "the-ais-attention-span--what-happens-when-the-bar-fills-up",
-      "text": "The AI's attention span (2/4) Page 2 of 4 What happens when the context fills up As the chat fills the window, the start and the newest stay sharp, the middle blurs, one repeated detail survives, and answers get worse: context rot. Conversation Timeline Context window Context category Details Attention Conversation Hover or drag the timeline to replay Summer party Starting instructions, hidden System prompt · tools · MCP · skills Recalled memory CLAUDE.md Memory files · CLAUDE.md Plan a summer party for our team: 40 people, end of June, budget 40,000 euro. Faded: the AI may fill this gap itself Happy to help! Indoor or outdoor? Any dietary needs I should know about? Outdoor if we can. 12 guests are vegetarian, please keep that in mind. Noted: 12 vegetarian guests. Shall I look for venues? Find three venues in Lisbon. Searched the web Searched the web · 10 pages · 1 retry WebSearch(\"outdoor event venue Lisbon 40 guests\") WebSearch(\"Lisbon garden venue summer party\") WebFetch × 10 ⎿ Fetched 10 pages · 15k of extracts Three options: Quinta terrace, LX Factory rooftop, Estrela garden pavilion. The catering offers are in the project folder. Which one fits? Read a file Read catering-offers.pdf · 20 pages Glob(\"**/*catering*.pdf\") Read(\"offers/catering-offers.pdf\", pages: \"1-20\") ⎿ Read 20 pages · 55k Sabor Verde fits best: it includes a vegetarian menu for 12. Check hotels near the venue for 15 guests from abroad. Searched the web Searched the web · 12 pages WebSearch(\"hotels near Estrela Lisbon 27 June\") WebFetch × 12 ⎿ Fetched 12 pages · 14.5k of extracts Hotel Lumen and Casa do Rio both have 15 rooms free on 27 June. The guest list is in there too. Ran a command Opened guests.xlsx · 40 rows Bash(python3 -c \"import pandas as pd; print(pd.read_excel('guests.xlsx').t…) ⎿ 40 rows · 1.8k Got it: 40 guests, 15 travelling, 12 vegetarian. Great, put the full plan together. Ran a command Added up the costs Bash(python3 budget.py) ⎿ Total 52,300 · 350 tokens Full plan: venue 14,800, catering with the vegetarian menu 21,600, hotels 9,400, music 6,500. Total 52,300 euro. That's 12,300 over our budget. Also check the venue contract. Read a file Read venue-contract.pdf · 21 pages Read(\"venue-contract.pdf\", pages: \"1-21\") ⎿ Read 21 pages · 57k Conversation compacted The contract allows music until 23:00 and asks for a 30% deposit. Put the plan together again. Ran a command Added up the costs Bash(python3 budget.py --limit 40000) ⎿ Total 40,000 · 350 tokens Plan: venue 14,800, catering with the vegetarian menu 15,600, hotels 6,600, music 3,000. Total 40,000 euro, on budget. 24 28 steps Context window ( 22 %) 44.1K of 200K Limit 200k Attention illustrative Step 24 of 28 · 100 units of attention The start and the newest messages stay sharp. The middle spreads thin as the window fills. 100% Starting instructions, hidden Memory loaded Summary: Conversation compacted Step 24 of 28: Conversation compacted, −141,045 tokens, 22% used. Your first message … budget 40,000 euro . the AI may fill this gap itself ( ) The AI's plan … Total 52,300 euro . the budget got forgotten One short number among the many similar numbers in the offers and searches ( ) Studies use planted facts, not chat apps ( )"
+      "text": "The AI's attention span (2/4) Page 2 of 4 What happens when the context fills up As the chat fills the window, the start and the newest stay sharp, the middle blurs, one repeated detail survives, and answers get worse: context rot. Conversation Timeline Context window Context category Details Attention Conversation Hover or drag the timeline to replay Summer party Starting instructions, hidden System prompt · tools · MCP · skills Recalled memory CLAUDE.md Memory files · CLAUDE.md Plan a summer party for our team: 40 people, end of June, budget 40,000 euro. Faded: the AI may fill this gap itself Happy to help! Indoor or outdoor? Any dietary needs I should know about? Outdoor if we can. 12 guests are vegetarian, please keep that in mind. Noted: 12 vegetarian guests. Shall I look for venues? Find three venues in Lisbon. Searched the web Searched the web · 10 pages · 1 retry WebSearch(\"outdoor event venue Lisbon 40 guests\") WebSearch(\"Lisbon garden venue summer party\") WebFetch × 10 ⎿ Fetched 10 pages · 15k of extracts Three options: Quinta terrace, LX Factory rooftop, Estrela garden pavilion. The catering offers are in the project folder. Which one fits? Read a file Read catering-offers.pdf · 20 pages Glob(\"**/*catering*.pdf\") Read(\"offers/catering-offers.pdf\", pages: \"1-20\") ⎿ Read 20 pages · 55k Sabor Verde fits best: it includes a vegetarian menu for 12. Check hotels near the venue for 15 guests from abroad. Searched the web Searched the web · 12 pages WebSearch(\"hotels near Estrela Lisbon 27 June\") WebFetch × 12 ⎿ Fetched 12 pages · 14.5k of extracts Hotel Lumen and Casa do Rio both have 15 rooms free on 27 June. The guest list is in there too. Ran a command Opened guests.xlsx · 40 rows Bash(python3 -c \"import pandas as pd; print(pd.read_excel('guests.xlsx').t…) ⎿ 40 rows · 1.8k Got it: 40 guests, 15 travelling, 12 vegetarian. Great, put the full plan together. Ran a command Added up the costs Bash(python3 budget.py) ⎿ Total 52,300 · 350 tokens Full plan: venue 14,800, catering with the vegetarian menu 21,600, hotels 9,400, music 6,500. Total 52,300 euro. That's 12,300 over our budget. Also check the venue contract. Read a file Read venue-contract.pdf · 21 pages Read(\"venue-contract.pdf\", pages: \"1-21\") ⎿ Read 21 pages · 57k Conversation compacted The contract allows music until 23:00 and asks for a 30% deposit. Put the plan together again. Ran a command Added up the costs Bash(python3 budget.py --limit 40000) ⎿ Total 40,000 · 350 tokens Plan: venue 14,800, catering with the vegetarian menu 15,600, hotels 6,600, music 3,000. Total 40,000 euro, on budget. 24 28 steps Context window ( 22 %) 44.1K of 200K Limit 200k Attention illustrative Step 24 of 28 · 100 units of attention The start and the newest messages stay sharp. The middle spreads thin as the window fills. 100% Starting instructions, hidden 15% Memory loaded 0% Summary: Conversation compacted 85% Step 24 of 28: Conversation compacted, −141,045 tokens, 22% used. Your first message … budget 40,000 euro . the AI may fill this gap itself ( ) The AI's plan … Total 52,300 euro . the budget got forgotten One short number among the many similar numbers in the offers and searches ( ) Studies use planted facts, not chat apps ( )"
     },
     {
       "id": "the-ais-attention-span--attention-is-a-budget",
-      "text": "The AI's attention span (3/4) Page 3 of 4 Attention is a budget A hundred units of attention go mostly to the start and the newest messages; the middle gets what is left, until it is too thin to trust. 21 21 steps Context window ( 64 %) 128K of 200K 1M Smart zone by Matt Pocock 80K Limit 200k Attention illustrative Step 21 of 21 · 100 units of attention The start and the newest messages stay sharp. The middle spreads thin as the window fills. 20% Starting instructions, hidden Memory loaded You: Plan a summer party for our team: 40 people, end of June, budget 40,000 euro. AI replies: Happy to help! Indoor or outdoor? Any dietary needs I should know about? You: Outdoor if we can. 12 guests are vegetarian, please keep that in mind. AI replies: Noted: 12 vegetarian guests. Shall I look for venues? You: Find three venues in Lisbon. Searched the web AI replies: Three options: Quinta terrace, LX Factory rooftop, Estrela garden pavilion. Hidden notes from the app: The catering offers are in the project folder. Which one fits? Read catering-offers.pdf AI replies: Sabor Verde fits best: it includes a vegetarian menu for 12. You: Check hotels near the venue for 15 guests from abroad. Searched the web AI replies: Hotel Lumen and Casa do Rio both have 15 rooms free on 27 June. You: The guest list is in there too. Opened guests.xlsx AI replies: Got it: 40 guests, 15 travelling, 12 vegetarian. You: Great, put the full plan together. Added up the costs AI replies: Full plan: venue 14,800, catering with the vegetarian menu 21,600, hotels 9,400, music 6,500. Total 52,300 euro. Past Matt Pocock's smart zone Step 21 of 21: The AI's plan: 52,300 euro, +30 tokens, 64% used, past Matt Pocock's smart zone. Known as “Lost in the middle” ( ) The start and the newest messages get the attention ( ) ; what sits in the middle fades ( ) . Where the middle gets too thin differs per model and task. ( ) illustrative numbers"
+      "text": "The AI's attention span (3/4) Page 3 of 4 Attention is a budget A hundred units of attention go mostly to the start and the newest messages; the middle gets what is left, until it is too thin to trust. 21 21 steps Context window ( 64 %) 128K of 200K 1M Smart zone by Matt Pocock 80K Limit 200k Attention illustrative Step 21 of 21 · 100 units of attention The start and the newest messages stay sharp. The middle spreads thin as the window fills. 20% Starting instructions, hidden 15% Memory loaded 4% You: Plan a summer party for our team: 40 people, end of June, budget 40,000 euro. 1% AI replies: Happy to help! Indoor or outdoor? Any dietary needs I should know about? 2% You: Outdoor if we can. 12 guests are vegetarian, please keep that in mind. 10% AI replies: Noted: 12 vegetarian guests. Shall I look for venues? 3% You: Find three venues in Lisbon. 2% Searched the web 4% AI replies: Three options: Quinta terrace, LX Factory rooftop, Estrela garden pavilion. 2% Hidden notes from the app: The catering offers are in the project folder. Which one fits? 2% Read catering-offers.pdf 6% AI replies: Sabor Verde fits best: it includes a vegetarian menu for 12. 4% You: Check hotels near the venue for 15 guests from abroad. 2% Searched the web 4% AI replies: Hotel Lumen and Casa do Rio both have 15 rooms free on 27 June. 2% You: The guest list is in there too. 1% Opened guests.xlsx 3% AI replies: Got it: 40 guests, 15 travelling, 12 vegetarian. 3% You: Great, put the full plan together. 6% Added up the costs 9% AI replies: Full plan: venue 14,800, catering with the vegetarian menu 21,600, hotels 9,400, music 6,500. Total 52,300 euro. 15% Past Matt Pocock's smart zone Step 21 of 21: The AI's plan: 52,300 euro, +30 tokens, 64% used, past Matt Pocock's smart zone. Known as “Lost in the middle” ( ) The start and the newest messages get the attention ( ) ; what sits in the middle fades ( ) . Where the middle gets too thin differs per model and task. ( ) illustrative numbers"
     },
     {
       "id": "the-ais-attention-span--what-we-learned-so-far",
@@ -41,7 +41,7 @@
     },
     {
       "id": "what-fills-the-window",
-      "text": "What fills the window Your messages are only a part of it. This session 30 min What fills the window"
+      "text": "What fills the window Your messages are only a part of it. Your attention So, how's your brain doing? Anything fried yet? I'm not done yet. Try to keep up."
     },
     {
       "id": "what-fills-the-window--whats-really-in-the-window",
@@ -57,15 +57,19 @@
     },
     {
       "id": "managing-the-attention-span",
-      "text": "Managing the attention span You can't read a gauge, so you build habits. This session 30 min Managing the attention span Handoff: party for 40, 27 June, budget 40,000 € . Next: invitations."
+      "text": "Managing the attention span You can't read a gauge, so you build habits. Your attention You made it, almost. Just one more thing. Handoff: party for 40, 27 June, budget 40,000 € . Next: invitations."
     },
     {
       "id": "managing-the-attention-span--everyday-habits",
-      "text": "Managing the attention span (1/2) Page 1 of 2 Everyday habits Split the project into jobs, keep each chat to one job, and carry only a short handoff into the next one, so the new chat starts small and sharp. Old chat: summer party Old chat 128K of 200K · 64% Handoff card Party for 40, 27 June, budget 40,000 € . Venue: Estrela pavilion. Caterer: Sabor Verde (12 vegetarian). Next: invitations. first message of the new chat Fresh chat: invitations Fresh chat 38K of 200K · 19% 1 Break it down Split the project into jobs before the first chat. 2 New job, fresh chat When the topic changes, open a new chat. 3 Ask for a handoff After real progress or before a break: the goal, the decisions, the next step. 4 Read it, correct it Fix what is wrong before you carry it on. 5 Start the next chat with it Paste it in as the first message. 6 Check the context if you can In agentic tools, run /context regularly. Token counts are illustrative · 200K window"
+      "text": "Managing the attention span (1/3) Page 1 of 3 Everyday habits Split the project into jobs, keep each chat to one job, and carry only a short handoff into the next one, so the new chat starts small and sharp. Old chat: summer party Old chat 128K of 200K · 64% Handoff card Party for 40, 27 June, budget 40,000 € . Venue: Estrela pavilion. Caterer: Sabor Verde (12 vegetarian). Next: invitations. first message of the new chat Fresh chat: invitations Fresh chat 38K of 200K · 19% 1 Break it down Split the project into jobs before the first chat. 2 New job, fresh chat When the topic changes, open a new chat. 3 Ask for a handoff After real progress or before a break: the goal, the decisions, the next step. 4 Read it, correct it Fix what is wrong before you carry it on. 5 Start the next chat with it Paste it in as the first message. 6 Check the context if you can In agentic tools, run /context regularly. Token counts are illustrative · 200K window"
     },
     {
       "id": "managing-the-attention-span--the-workflow-for-bigger-projects",
-      "text": "Managing the attention span (2/2) Page 2 of 2 Human in the loop workflow You are the captain: a planner chat prepares each handoff, worker chats do the jobs, and you check every artifact in between. Summer party Break it down Travel Catering Venue Invitations Budget Interview Interview yourself with AI AI asks you 3 questions, 1 you forgot Requirements Requirements first Gate 1 Requirements card 200 guests €150 per person Step-free Vegetarian menu Quiet to talk Signed off Research Fresh start for each piece Venue 1 Checked against the card Venue 2 Checked against the card Venue 3 Checked against the card Compare Evaluate each step Rank 3 venues against the card Gate 2 Recommendation for your boss Venue plan by Friday A fresh chat for each job ( ) keeps every window small; you coordinate, like a project manager."
+      "text": "Managing the attention span (2/3) Page 2 of 3 Human in the loop workflow You are the captain: a planner chat prepares each handoff, worker chats do the jobs, and you check every artifact in between. Summer party Break it down Travel Catering Venue Invitations Budget Interview Interview yourself with AI AI asks you 3 questions, 1 you forgot Requirements Requirements first Gate 1 Requirements card 200 guests €150 per person Step-free Vegetarian menu Quiet to talk Signed off Research Fresh start for each piece Venue 1 Checked against the card Venue 2 Checked against the card Venue 3 Checked against the card Compare Evaluate each step Rank 3 venues against the card Gate 2 Recommendation for your boss Venue plan by Friday A fresh chat for each job ( ) keeps every window small; you coordinate, like a project manager."
+    },
+    {
+      "id": "managing-the-attention-span--now-you-know-how-it-feels",
+      "text": "Managing the attention span (3/3) Page 3 of 3 Congratulations Now you know how it feels to be an AI. Your attention Full to the brim. Well done."
     }
   ],
   "notes": [
@@ -120,6 +124,10 @@
     {
       "id": "managing-the-attention-span--the-workflow-for-bigger-projects",
       "text": "Human in the loop workflow Clean windows for each part Anthropic's remedy for long tasks includes sub-agents that work with clean windows 1 . Sources (1) Anthropic, Effective context engineering for AI agents ( opens in a new tab ) anthropic.com Short tasks beat long ones Turning a long task into a short one improved results, GPT-4o on RULER by up to 4% 1 . Sources (1) Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval ( opens in a new tab ) arxiv.org"
+    },
+    {
+      "id": "managing-the-attention-span--now-you-know-how-it-feels",
+      "text": "Congratulations No speaker notes for this Slide."
     }
   ],
   "script": [
@@ -129,7 +137,7 @@
     },
     {
       "id": "thought-experiment",
-      "text": "Thought experiment 0:00 – 0:33 A long chat is a long call Imagine the last long phone call you had with someone close, a sister, a friend, your mum. You called to settle one thing, and an hour later you hung up. Before I say a word about AI, I want you to feel what that call left you with, because the question I want to ask you is whether a long AI chat does the same thing to you, so the call comes first and the chat second."
+      "text": "Thought experiment 0:00 – 0:39 A long chat is a long call Ready? Let's start light, because you're human. First, how attention works, yours against an AI's. Imagine the last long phone call you had with someone close, a sister, a friend, your mum. You called to settle one thing, and an hour later you hung up. Before I say a word about AI, I want you to feel what that call left you with, because the question I want to ask you is whether a long AI chat does the same thing to you, so the call comes first and the chat second."
     },
     {
       "id": "thought-experiment--the-long-phone-call-story",
@@ -141,7 +149,7 @@
     },
     {
       "id": "the-ais-attention-span",
-      "text": "The AI's attention span 0:00 – 0:17 Why it happens So far you have seen what happens. Now the cause, because once you know how the AI holds a chat, the pattern stops being a surprise, and only after that do we look at what it does to your answers."
+      "text": "The AI's attention span 0:00 – 0:22 Why it happens Let's dial it up a notch. See if you can keep up. So far you have seen what happens. Now the cause, because once you know how the AI holds a chat, the pattern stops being a surprise, and only after that do we look at what it does to your answers."
     },
     {
       "id": "the-ais-attention-span--the-context-window",
@@ -161,7 +169,7 @@
     },
     {
       "id": "what-fills-the-window",
-      "text": "What fills the window 0:00 – 0:13 More in there than you typed You have seen the window fill with your messages. But your messages are only a part of it, so the next question is what else goes in without you noticing."
+      "text": "What fills the window 0:00 – 0:20 More in there than you typed So, how's your brain doing? Anything fried yet? I'm not done yet, so try to keep up. You have seen the window fill with your messages. But your messages are only a part of it, so the next question is what else goes in without you noticing."
     },
     {
       "id": "what-fills-the-window--whats-really-in-the-window",
@@ -177,7 +185,7 @@
     },
     {
       "id": "managing-the-attention-span",
-      "text": "Managing the attention span 0:00 – 0:09 You manage by habit You can't read a gauge, so you build habits. First the everyday ones, and then the one for a big project."
+      "text": "Managing the attention span 0:00 – 0:18 You manage by habit You made it, almost. Just one more thing, and yes, that rotten apple grinning at you is a wink at context rot. You can't read a gauge, so you build habits. First the everyday ones, and then the one for a big project."
     },
     {
       "id": "managing-the-attention-span--everyday-habits",
@@ -186,6 +194,10 @@
     {
       "id": "managing-the-attention-span--the-workflow-for-bigger-projects",
       "text": "Human in the loop workflow 0:00 – 0:21 Recall the brief Remember the brief for the venue: break the party down, interview yourself with AI, write the requirements first, give each piece a fresh chat, and evaluate each step. That was one task, done well. A bigger project needs the same moves, plus a way of working that holds them together. 0:21 – 0:36 Human in the loop This way of working is what we call a human in the loop workflow. You are the orchestrator, the captain at the helm, and you use AI the way a captain uses a crew. 0:36 – 0:50 Planner and handoff One chat stays the planner. It helps you prepare the task and writes a handoff. It keeps only the plan and the results, so it stays small and has room to spare. 0:50 – 1:05 Worker chats The handoff goes to worker chats, a fresh one per job: venues, catering, invitations. Each worker reads its files, fills up as much as it needs, saves its result, and then you let it go. 1:05 – 1:54 You check You carry the results back to the planner, and every artifact in between, the handoff and each result, is something you check. Every chat has one job, so none of them runs long enough to blur its middle. That is the whole idea: the window is the AI's attention span, and managing it is your job. One honest caveat: the zones and numbers I gave you are rules of thumb and illustrations, and I have not tested every chat app, so watch your own chats and adjust. If you want a low-key place to start, take the next chat that drifts, ask it for a handoff, and open a new one with it. Thank you."
+    },
+    {
+      "id": "managing-the-attention-span--now-you-know-how-it-feels",
+      "text": "Congratulations 0:00 – 0:23 You held it all Congratulations, you made it to the end. Now you know how it feels to be an AI: you took in everything I said, the start stayed sharp, the end stayed sharp, and somewhere in the middle it got a little blurry. That is all the window ever is, so now go and manage yours."
     }
   ]
 }

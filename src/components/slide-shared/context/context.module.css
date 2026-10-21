@@ -1706,6 +1706,7 @@ summary.row:hover {
   height: var(--bar-h, 2.25rem);
 }
 .sessionPart {
+  --tone: var(--primary);
   position: relative;
   flex: calc(var(--z) * 1) 0 0;
   min-width: 0;
@@ -1713,14 +1714,28 @@ summary.row:hover {
   background: var(--cs-free);
   box-shadow: inset 0 0 0 1px var(--cs-border);
 }
+/* Each segment takes a soft tint from calm to hot, the joke being a human's attention running hot: success, info,
+ * warning, destructive. Filled segments are pale, the current one stronger. */
+.sessionPart[data-tone='0'] {
+  --tone: var(--success);
+}
+.sessionPart[data-tone='1'] {
+  --tone: var(--info);
+}
+.sessionPart[data-tone='2'] {
+  --tone: var(--warning);
+}
+.sessionPart[data-tone='3'] {
+  --tone: var(--destructive);
+}
 .sessionPart[data-state='done'] {
-  background: color-mix(in oklch, var(--primary) 42%, var(--card));
+  background: color-mix(in oklch, var(--tone) 38%, var(--card));
   box-shadow: none;
 }
 .sessionPart[data-state='current'] {
-  background: var(--primary);
+  background: color-mix(in oklch, var(--tone) 72%, var(--card));
   box-shadow: none;
-  outline: 2px solid var(--primary);
+  outline: 2px solid color-mix(in oklch, var(--tone) 72%, var(--card));
   outline-offset: 2px;
 }
 .sessionPart:first-child {

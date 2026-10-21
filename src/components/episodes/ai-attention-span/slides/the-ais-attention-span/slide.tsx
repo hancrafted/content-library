@@ -14,7 +14,9 @@ export const theAisAttentionSpan = slide({
     <SlideFrame>
       <div className="flex w-full max-w-md flex-col gap-3 rounded-xl border border-border bg-card p-3 shadow-sm">
         <SessionBarPreset locale={locale} at="the-ais-attention-span" />
-        <p className="text-caption">{t.rich('windowNote')}</p>
+        <p data-below="" className="text-caption">
+          {t('challenge')}
+        </p>
       </div>
     </SlideFrame>
   ),

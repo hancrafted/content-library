@@ -140,9 +140,9 @@ describe('edge cases', () => {
     const expected = {
       shares: [20, 40, 20, 20],
       states: ['done', 'done', 'current', 'upcoming'],
-      label: 'This session',
-      total: '30 min',
-      now: 'What fills the window',
+      label: 'Your attention',
+      total: 0,
+      now: "So, how's your brain doing? Anything fried yet?",
     };
     // ACT
     const $ = renderSession('what-fills-the-window');
@@ -155,7 +155,7 @@ describe('edge cases', () => {
         .map((_, el) => $(el).attr('data-state'))
         .get(),
       label: $('[data-session-label]').text().trim(),
-      total: $('[data-session-total]').text().trim(),
+      total: $('[data-session-total]').length,
       now: $('[data-state="current"]').text().trim(),
     }).toEqual(expected);
   });
@@ -172,17 +172,33 @@ describe('edge cases', () => {
         .get(),
       current: $('[data-state="current"]').length,
     }).toEqual(expected);
-    expect($('[role="img"]').attr('aria-label')).toBe('This session, 30 min: nothing used yet');
+    expect($('[role="img"]').attr('aria-label')).toBe('Your attention: Fresh and ready to receive.');
+    expect($('[data-session-note]').text().trim()).toBe('Fresh and ready to receive.');
   });
 
   it('says the session in German', () => {
     // ARRANGE
-    const expected = { label: 'Diese Sitzung', total: '30 Min.' };
+    const expected = { label: 'Deine Aufmerksamkeit', now: 'Bereit?' };
     // ACT
     const $ = renderSession('thought-experiment', 'de');
     // ASSERT
-    expect({ label: $('[data-session-label]').text().trim(), total: $('[data-session-total]').text().trim() }).toEqual(
+    expect({ label: $('[data-session-label]').text().trim(), now: $('[data-state="current"]').text().trim() }).toEqual(
       expected,
     );
+  });
+
+  it('fills the whole session at its end and says so', () => {
+    // ARRANGE
+    const expected = { states: ['done', 'done', 'done', 'done'], current: 0, note: 'Full to the brim. Well done.' };
+    // ACT
+    const $ = renderSession('end');
+    // ASSERT
+    expect({
+      states: $('[data-state]')
+        .map((_, el) => $(el).attr('data-state'))
+        .get(),
+      current: $('[data-state="current"]').length,
+      note: $('[data-session-note]').text().trim(),
+    }).toEqual(expected);
   });
 });

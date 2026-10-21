@@ -100,10 +100,11 @@ export interface ContextWords {
   readonly free: string;
   readonly buffer: Readonly<Record<Depth, string>>;
   readonly lines: Readonly<Record<string, LineWords>>;
-  /** The session bar: its caption, the words for an empty one, `{title}, {n} of {count}`, each Section's title. */
+  /** The session bar: its caption, the words for an empty and a full one, `{title}, {n} of {count}`, each Section's current-segment label. */
   readonly session: {
     readonly label: string;
     readonly empty: string;
+    readonly full: string;
     readonly progress: string;
     readonly sections: Readonly<Record<string, string>>;
   };
@@ -111,9 +112,6 @@ export interface ContextWords {
     /** A bar's figure: `{used} of {window} · {percent}%`. */
     readonly usedOf: string;
     readonly discarded: string;
-    /** Duration units, for `1 h 22 min`. */
-    readonly hours: string;
-    readonly minutes: string;
     readonly labels: Readonly<Record<string, string>>;
   };
 }
