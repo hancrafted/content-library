@@ -59,7 +59,8 @@ const AttentionRow = memo(function AttentionRow({ say, step, units, max, on, pin
       <div className={styles.attBar}>
         <i style={tint(colour, { '--w': Math.min(1, units / max) })} />
       </div>
-      <span className={say.tech ? `${styles.attNum} font-mono` : styles.attNum}>{say.tech ? units : ''}</span>
+      <span className={styles.attNum} />
+      {/* The percentage shows on hover or focus only, in both render modes: a resting number clips on thin rows. */}
       <span className={`${styles.attPct} text-caption font-mono`} data-pct="" aria-hidden="true">{`${units}%`}</span>
     </div>
   );

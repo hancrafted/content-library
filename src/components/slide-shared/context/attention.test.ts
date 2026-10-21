@@ -11,7 +11,7 @@ import type { AttentionLayout } from './context.types';
 const noop = () => undefined;
 
 /** The Attention part for the summer party's chat (Slide 7's Preset; Slide 4 has too few rows left to pin) at one layout, as server markup, parsed. */
-const render = (layout: AttentionLayout) => {
+const render = (layout: AttentionLayout, renderMode: 'simple' | 'technical' = 'simple') => {
   const data = contextViewData({ preset: 'slide-7', locale: 'en' });
   const { chat, preset } = data;
   const frames = framesOf(chat);
@@ -22,7 +22,7 @@ const render = (layout: AttentionLayout) => {
       words: data.words,
       locale: data.locale,
       story: data.story,
-      renderMode: 'simple',
+      renderMode,
       lit: null,
       ghost: null,
       pinned: null,
@@ -70,6 +70,22 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('shows no row percentage at rest in Technical mode, as in Simple: only the hover readout carries it', () => {
+    // ARRANGE
+    const layouts: AttentionLayout[] = ['list', 'pinned', 'compressed'];
+    // ACT
+    const resting = layouts.map((layout) => {
+      const $ = render(layout, 'technical');
+      return $('[data-row] > span:not([data-pct])')
+        .map((_, el) => $(el).text())
+        .get()
+        .join('');
+    });
+    // ASSERT
+    expect(resting).toEqual(['', '', '']);
+    expect(render('list', 'technical')('[data-pct]').first().text()).toMatch(/^\d+%$/);
+  });
+
   it('is its own section, not a view of Details: it holds no Explain head', () => {
     // ARRANGE
     const $ = render('list');
