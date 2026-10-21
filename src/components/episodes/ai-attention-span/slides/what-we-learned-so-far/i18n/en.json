@@ -2,7 +2,7 @@
   "title": "What we learned so far",
   "caption": "Long AI chats show the same effects as long calls, because the AI's attention span is its context window: a limited resource you manage actively.",
   "call": {
-    "kicker": "The long phone call",
+    "kicker": "Human attention",
     "label": "The phone call with your sister, the middle faded",
     "lines": {
       "holidays": "Let's sort out the holidays!",
@@ -16,28 +16,29 @@
       "dinner": "Not yet. Oh, dinner is ready, I have to run.",
       "bye": "Talk soon, bye!"
     },
-    "line": "Long calls keep the start, the end and a standout"
+    "line": "Our memory follows the primacy and recency effects: we recall the start, the end and the standout."
   },
   "same": "the same shape",
   "analogy": "<marker>an analogy, not a proof</marker>",
   "chat": {
-    "kicker": "The summer-party chat",
-    "labels": {
-      "start": { "head": "Start", "line": "instructions and memory" },
-      "standout": { "head": "Standout", "line": "12 vegetarian guests" },
-      "middle": { "head": "Middle, faded", "line": "searches, offers, hotels" },
-      "newest": { "head": "Newest", "line": "the request and the plan" }
-    },
-    "line": "A long chat does the same, because the window is limited"
+    "kicker": "AI attention (context window)",
+    "learnings": {
+      "middle": "Important information and decisions get lost in the middle.",
+      "compaction": "When the window is full, auto-compaction can drop details without telling you."
+    }
   },
-  "closing": "Manage it, or the middle gets lost.",
+  "closing": "Learn to manage attention: optional for you, mandatory for AI.",
   "notes": {
     "two-kinds-of-evidence": {
       "header": "Two kinds of evidence",
       "description": "the human pattern comes from lab word lists [1], the model pattern from retrieval tests on long inputs [2]; the match between them is an analogy, not a proof.",
       "sources": {
-        "murdock-serial-position": { "title": "Murdock, The serial position effect of free recall" },
-        "liu-lost-in-the-middle": { "title": "Liu et al., Lost in the Middle: How Language Models Use Long Contexts" }
+        "murdock-serial-position": {
+          "title": "Murdock, The serial position effect of free recall"
+        },
+        "liu-lost-in-the-middle": {
+          "title": "Liu et al., Lost in the Middle: How Language Models Use Long Contexts"
+        }
       }
     }
   },
@@ -46,17 +47,17 @@
       "same-effects": {
         "title": "Same effects",
         "keywords": "",
-        "script": "Let's put it together. Long AI conversations show the same effects as long human ones: the start, the end and a standout survive, and the middle blurs."
+        "script": "Let's put it together. On the left, human attention: our memory follows the primacy and recency effects, so we recall the start, the end and the standout, and the middle blurs. On the right, AI attention shows the same shape in the context window."
       },
       "the-window-is-the-span": {
         "title": "The window is the span",
         "keywords": "",
-        "script": "The reason is that the AI's attention span is its context window, a limited space that fills with every message."
+        "script": "The reason is that the AI's attention span is its context window, a limited space that fills with every message. That gives two lessons: important information and decisions get lost in the middle, and when the window is full, auto-compaction can drop details without telling you. Use the toggle on the window to switch between the plain view and the technical one."
       },
       "manage-it": {
         "title": "Manage it",
         "keywords": "",
-        "script": "So treat it as a resource you manage actively, so that important decisions and information don't get lost in the middle. The rest of the episode is about what goes into that window, and what you do about it."
+        "script": "So learn to manage attention. For you it is optional, you will get by with a bad memory; for the AI it is mandatory. The rest of the episode is about what goes into that window, and what you do about it."
       }
     }
   }

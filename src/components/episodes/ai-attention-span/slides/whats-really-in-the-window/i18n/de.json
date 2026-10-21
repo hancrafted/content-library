@@ -1,6 +1,6 @@
 {
-  "title": "Was wirklich im Fenster steckt",
-  "caption": "Der Chat ist nur der Teil, den Du siehst. Noch vor Deinem ersten Wort hält das Fenster schon Anweisungen und Notizen über Dich.",
+  "title": "Was wirklich im Kontextfenster steckt",
+  "caption": "Der Chat ist nur der Teil, den Du siehst. Noch vor Deinem ersten Wort hält das Kontextfenster schon Anweisungen und Notizen über Dich.",
   "illustrative": "Token-Zahlen nur zur Veranschaulichung",
   "cards": {
     "start": {
@@ -38,14 +38,18 @@
       "header": "Für Claude Code dokumentiert",
       "description": "Seine Anweisungen und gespeicherten Notizen werden zu Beginn jedes Gesprächs geladen, und Claude behandelt sie als Kontext, nicht als verbindliche Konfiguration [1].",
       "sources": {
-        "anthropic-claude-code-memory": { "title": "Anthropic, How Claude remembers your project" }
+        "anthropic-claude-code-memory": {
+          "title": "Anthropic, How Claude remembers your project"
+        }
       }
     },
     "loading-has-a-cost": {
       "header": "Laden hat seinen Preis",
       "description": "Längere Anweisungsdateien verbrauchen mehr Kontext und werden weniger genau befolgt, und vom Index der Notizen laden zu Beginn nur die ersten 200 Zeilen oder 25 KB [1].",
       "sources": {
-        "anthropic-claude-code-memory": { "title": "Anthropic, How Claude remembers your project" }
+        "anthropic-claude-code-memory": {
+          "title": "Anthropic, How Claude remembers your project"
+        }
       }
     },
     "chat-apps-document-the-effect": {
@@ -67,7 +71,9 @@
         "anthropic-chat-search-and-memory": {
           "title": "Anthropic, Use Claude's chat search and memory to build on previous conversations"
         },
-        "openai-chatgpt-memory": { "title": "OpenAI, Memory in ChatGPT" }
+        "openai-chatgpt-memory": {
+          "title": "OpenAI, Memory in ChatGPT"
+        }
       }
     }
   },
@@ -76,7 +82,7 @@
       "more-than-the-chat": {
         "title": "Mehr als der Chat",
         "keywords": "",
-        "script": "Was Du im Chat siehst, ist nur ein Teil von dem, was die KI liest. Der Chat ist der sichtbare Ausschnitt, und um ihn herum liegen andere Teile, die Du nie getippt hast."
+        "script": "Was Du im Chat siehst, ist nur ein Teil von dem, was die KI liest. Hier ist das Kontextfenster selbst, ohne den Chat: Der Balken ist das Fenster, die Liste nennt, was es füllt, und die Karte erklärt den Teil, auf den Du zeigst. Mit den Schaltern stellst Du das Fenster und die Liste zwischen einfach und technisch um."
       },
       "starting-instructions": {
         "title": "Startanweisungen",

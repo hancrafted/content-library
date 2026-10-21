@@ -50,6 +50,30 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('lays six habits out as two rows of three', () => {
+    // ARRANGE
+    const six = [...HABITS, ...HABITS.map((habit) => ({ ...habit, title: `${habit.title} again` }))];
+    const expected = { items: 6, columns: 'md:grid-cols-3' };
+    // ACT
+    const $ = render(six);
+    // ASSERT
+    expect({
+      items: $('ol > li').length,
+      columns: $('ol')
+        .attr('class')
+        ?.match(/md:grid-cols-3/)?.[0],
+    }).toEqual(expected);
+  });
+
+  it('draws a habit without a Speaker note target', () => {
+    // ARRANGE
+    const expected = 1;
+    // ACT
+    const $ = render([{ title: 'Break it down', body: 'Split it.' }]);
+    // ASSERT
+    expect($('ol > li')).toHaveLength(expected);
+  });
+
   it('marks each habit as the target its Speaker note lights', () => {
     // ARRANGE
     const expected = ['habit-one', 'habit-two', 'habit-three'];

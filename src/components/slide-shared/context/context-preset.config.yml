@@ -134,11 +134,12 @@ presets:
     controls: { '*': { show: false }, window: { show: true } }
     windows: [{ size: 200k, lines: [matt] }, { size: 1m, lines: [matt-1m] }]
     motion: off
+  # The window alone, Technical at rest, with its own local </> to flip to Simple.
   slide-6:
     chat: summer-party
     depth: technical
     show: { chat: false, timeline: false, context: true, panel: false }
-    controls: { '*': { show: false } }
+    controls: { '*': { show: false }, windowTechnical: { show: true } }
     timelineLocked: true
     motion: off
   slide-7:
@@ -146,6 +147,14 @@ presets:
     depth: technical
     pinned: 'scat:start'
     show: { chat: true, timeline: true, context: true, panel: true }
+  # The context window, the context category and the details, Simple at rest, starting instructions pinned; the window
+  # and the category each have their own local </> (the details need none).
+  slide-7-parts:
+    chat: summer-party
+    pinned: 'scat:start'
+    show: { chat: false, timeline: false, context: true, category: true, panel: true, attention: false }
+    controls: { '*': { show: false }, windowTechnical: { show: true }, categoryTechnical: { show: true } }
+    timelineLocked: true
   slide-8:
     chat: summer-party
     step: 12
@@ -166,7 +175,7 @@ presets:
     step: 24
     controls: { '*': { show: false }, zone: { on: false }, meter: { show: false } }
     timelineLocked: true
-    show: { chat: true, timeline: false, context: false, panel: false }
+    show: { chat: true, timeline: false, context: false, category: false, panel: false }
     motion: off
     windows: [{ size: 200k, lines: [] }]
   slide-9-after:

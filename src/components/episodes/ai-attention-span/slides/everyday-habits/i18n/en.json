@@ -1,11 +1,6 @@
 {
   "title": "Everyday habits",
-  "caption": "Keep each chat to one job, and carry only a short handoff into the next one, so the new chat starts small and sharp.",
-  "known": {
-    "label": "You know these already:",
-    "breakItDown": "Break it down",
-    "freshStart": "Fresh start"
-  },
+  "caption": "Split the project into jobs, keep each chat to one job, and carry only a short handoff into the next one, so the new chat starts small and sharp.",
   "barsLabel": "The old chat hands one short handoff card to a fresh chat",
   "oldChat": "Old chat: summer party",
   "freshChat": "Fresh chat: invitations",
@@ -14,19 +9,31 @@
     "text": "Party for 40, 27 June, <budget>budget 40,000 €</budget>. Venue: Estrela pavilion. Caterer: Sabor Verde (12 vegetarian). Next: invitations.",
     "arrow": "first message of the new chat"
   },
-  "habitsLabel": "Three everyday habits",
+  "habitsLabel": "Six everyday habits",
   "habits": {
     "1": {
-      "title": "One chat, one job",
-      "body": "When the topic changes, open a new chat: the hotel question does not carry the catering PDF along."
+      "title": "Break it down",
+      "body": "Split the project into jobs before the first chat."
     },
     "2": {
-      "title": "Ask for a handoff, read it, correct it",
-      "body": "After real progress or before a break: the goal, what is decided, what comes next. You fix what is wrong."
+      "title": "New job, fresh chat",
+      "body": "When the topic changes, open a new chat."
     },
     "3": {
+      "title": "Ask for a handoff",
+      "body": "After real progress or before a break: the goal, the decisions, the next step."
+    },
+    "4": {
+      "title": "Read it, correct it",
+      "body": "Fix what is wrong before you carry it on."
+    },
+    "5": {
       "title": "Start the next chat with it",
-      "body": "Paste it in as the first message. The new chat holds the venue, caterer, budget and next step, and nothing else."
+      "body": "Paste it in as the first message."
+    },
+    "6": {
+      "title": "Check the context if you can",
+      "body": "In agentic tools, run <code>/context</code> regularly."
     }
   },
   "illustrative": "Token counts are illustrative · 200K window",
@@ -64,17 +71,12 @@
       "break-it-down": {
         "title": "Break it down",
         "keywords": "",
-        "script": "Break it down. You know this one already: you split a big task into small steps, and each step is small enough to hold in view."
-      },
-      "fresh-start": {
-        "title": "Fresh start",
-        "keywords": "",
-        "script": "Fresh start. You know this one too: a fresh start spends the whole window on the work in front of you, and none of it on what happened an hour ago."
+        "script": "Break it down. Split the project into jobs before the first chat: you split a big task into small steps, and each step is small enough to hold in view."
       },
       "one-chat-one-job": {
-        "title": "One chat, one job",
+        "title": "New job, fresh chat",
         "keywords": "",
-        "script": "One chat, one job. When the topic changes, open a new chat, so that the hotel question doesn't have to carry the catering PDF along."
+        "script": "New job, fresh chat. When the topic changes, open a new chat, so that the hotel question doesn't have to carry the catering PDF along. A fresh start spends the whole window on the work in front of you, and none of it on what happened an hour ago."
       },
       "ask-for-a-handoff": {
         "title": "Ask for a handoff",
@@ -90,6 +92,11 @@
         "title": "Start the next chat with it",
         "keywords": "",
         "script": "And start the next chat with it. Paste the handoff in as the first message, and the new chat starts small and sharp, with the venue, the caterer, the budget and the next step, and nothing else."
+      },
+      "check-the-context": {
+        "title": "Check the context",
+        "keywords": "",
+        "script": "And check the context if you can. In agentic tools, run the slash context command regularly, and you see how full the window is before it becomes a problem."
       }
     }
   }

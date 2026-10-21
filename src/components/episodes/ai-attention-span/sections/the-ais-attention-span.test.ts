@@ -69,6 +69,34 @@ function specSlides(): SpecSlide[] {
 const RETITLED = { 'what-happens-when-the-bar-fills-up': 'What happens when the context fills up' } as const;
 const ADDED_NOTES = ['Context rot'];
 
+/**
+ * Voice script items Han's batch-2 decisions re-wrote to match the new screen (items 6 and the Slide 5 fix), by Slide
+ * and Spec title; each is the new words, the Spec's segment order and the rest of the Spec's script kept.
+ */
+const REWRITTEN_SCRIPT: Readonly<Record<string, Readonly<Record<string, { title?: string; script: string }>>>> = {
+  'attention-is-a-budget': {
+    'A hundred units': {
+      title: 'Attention as a budget',
+      script:
+        "Think of attention as a budget. On the left is the timeline, in the middle the window as a bar, and on the right the attention each message gets. And I say it plainly: these numbers, the token counts and the window sizes on this slide are illustrative. I made them up to show the shape, so please don't take them as measurements.",
+    },
+  },
+  'what-we-learned-so-far': {
+    'Same effects': {
+      script:
+        "Let's put it together. On the left, human attention: our memory follows the primacy and recency effects, so we recall the start, the end and the standout, and the middle blurs. On the right, AI attention shows the same shape in the context window.",
+    },
+    'The window is the span': {
+      script:
+        "The reason is that the AI's attention span is its context window, a limited space that fills with every message. That gives two lessons: important information and decisions get lost in the middle, and when the window is full, auto-compaction can drop details without telling you. Use the toggle on the window to switch between the plain view and the technical one.",
+    },
+    'Manage it': {
+      script:
+        'So learn to manage attention. For you it is optional, you will get by with a bad memory; for the AI it is mandatory. The rest of the episode is about what goes into that window, and what you do about it.',
+    },
+  },
+};
+
 const placed = placeSections<Slide>(aiAttentionSpan.sections).flat();
 
 function localized(slide: Slide, locale: 'en' | 'de' = 'en') {
@@ -116,7 +144,7 @@ describe('success cases', () => {
     const expected = specSlides().map(({ slug, title, script }) => ({
       slug,
       title: RETITLED[slug as keyof typeof RETITLED] ?? title,
-      script,
+      script: script.map((item) => ({ ...item, ...REWRITTEN_SCRIPT[slug]?.[item.title] })),
     }));
     // ACT
     const actual = pageSlides.map((slide) => {

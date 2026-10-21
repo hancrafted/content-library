@@ -1,6 +1,6 @@
 {
-  "title": "What's really in the window",
-  "caption": "The chat is only the part you see. Before your first word, the window already holds instructions and notes about you.",
+  "title": "What's really in the context window",
+  "caption": "The chat is only the part you see. Before your first word, the context window already holds instructions and notes about you.",
   "illustrative": "Token counts illustrative",
   "cards": {
     "start": {
@@ -38,14 +38,18 @@
       "header": "Documented for Claude Code",
       "description": "its instructions and its saved notes are loaded at the start of every conversation, and Claude treats them as context, not enforced configuration [1].",
       "sources": {
-        "anthropic-claude-code-memory": { "title": "Anthropic, How Claude remembers your project" }
+        "anthropic-claude-code-memory": {
+          "title": "Anthropic, How Claude remembers your project"
+        }
       }
     },
     "loading-has-a-cost": {
       "header": "Loading has a cost",
       "description": "longer instruction files consume more context and reduce adherence, and only the first 200 lines or 25KB of the notes index load at the start [1].",
       "sources": {
-        "anthropic-claude-code-memory": { "title": "Anthropic, How Claude remembers your project" }
+        "anthropic-claude-code-memory": {
+          "title": "Anthropic, How Claude remembers your project"
+        }
       }
     },
     "chat-apps-document-the-effect": {
@@ -67,7 +71,9 @@
         "anthropic-chat-search-and-memory": {
           "title": "Anthropic, Use Claude's chat search and memory to build on previous conversations"
         },
-        "openai-chatgpt-memory": { "title": "OpenAI, Memory in ChatGPT" }
+        "openai-chatgpt-memory": {
+          "title": "OpenAI, Memory in ChatGPT"
+        }
       }
     }
   },
@@ -76,7 +82,7 @@
       "more-than-the-chat": {
         "title": "More than the chat",
         "keywords": "",
-        "script": "What you see in the chat is only part of what the AI reads. The chat is the visible slice, and around it sit other parts that you never typed."
+        "script": "What you see in the chat is only part of what the AI reads. Here is the context window itself, without the chat: the bar is the window, the list names what fills it, and the card explains the part you point at. Use the toggles to switch the window and the list between plain and technical."
       },
       "starting-instructions": {
         "title": "Starting instructions",
