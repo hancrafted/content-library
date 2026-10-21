@@ -2,8 +2,10 @@ import { cn } from '@/lib/utils';
 import { AiJob, ChatJobs, DeliverableJob, FocalJob, PieceJobs, type JobViewProps } from './diagram-jobs';
 import { connectorInto, fanGeometry, type Connector as ConnectorKind } from './diagram-layout.pure';
 import { jobRole } from './diagram-model.pure';
+import { cardOf, TryStep, type OpenJob } from './diagram-try';
 import type { DiagramSlots, StageSlot, UiWords } from './human-in-the-loop.types';
 import { NodePopover } from './node-popover.client';
+import type { WorkflowView } from './workflow-view.pure';
 import type { Stage, Workflow } from './workflow.types';
 
 /**
@@ -11,16 +13,15 @@ import type { Stage, Workflow } from './workflow.types';
  * bottom where it is narrow; each connector turns with it. The focal job is the one focal point. Pointing at a stage
  * dims the others.
  */
-export function DiagramStages({
-  workflow,
-  slots = {},
-  words,
-}: {
+export function DiagramStages(props: {
   workflow: Workflow;
   slots?: DiagramSlots;
   words: Pick<UiWords, 'signedOff'>;
+  view?: WorkflowView;
+  open?: OpenJob;
 }) {
-  const shared = { workflow, slots, words: { signedOff: words.signedOff, checked: slots.checked ?? '' } };
+  const { workflow, slots = {}, words } = props;
+  const ctx: Context = { ...props, slots, words: { signedOff: words.signedOff, checked: slots.checked ?? '' } };
   return (
     <div className="@container">
       <ol
@@ -29,35 +30,29 @@ export function DiagramStages({
         className="focus-group focus-group--dim-others flex flex-col gap-6 @4xl:flex-row @4xl:items-stretch @4xl:gap-5"
       >
         {workflow.stages.map((stage, index) => (
-          <StageColumn
-            key={stage.id}
-            {...shared}
-            stage={stage}
-            previous={workflow.stages[index - 1]}
-            initials={slots.initials === true}
-          />
+          <StageColumn key={stage.id} ctx={ctx} stage={stage} previous={workflow.stages[index - 1]} />
         ))}
       </ol>
     </div>
   );
 }
 
-interface StageColumnProps {
+/** What every stage column reads: the Workflow, the Slide's slots, the words and, in Try mode, the cards. */
+interface Context {
   workflow: Workflow;
-  stage: Stage;
-  previous: Stage | undefined;
   slots: DiagramSlots;
   words: JobViewProps['words'];
-  initials: boolean;
+  view?: WorkflowView;
+  open?: OpenJob;
 }
 
-function StageColumn({ workflow, stage, previous, slots, words, initials }: StageColumnProps) {
-  const slot = slots.stages?.[stage.id] ?? {};
-  const focal = stage.jobs.some((job) => job.id === workflow.focalJobId);
+function StageColumn({ ctx, stage, previous }: { ctx: Context; stage: Stage; previous: Stage | undefined }) {
+  const slot = ctx.slots.stages?.[stage.id] ?? {};
+  const focal = stage.jobs.some((job) => job.id === ctx.workflow.focalJobId);
   return (
     <li {...slot.target} className="focus-group__item relative flex min-w-0 flex-col gap-2 @4xl:grow @4xl:basis-0">
       {previous && <Connector kind={connectorInto(previous, stage)} />}
-      <StageHeader stage={stage} slot={slot} initials={initials} />
+      <StageHeader stage={stage} slot={slot} initials={ctx.slots.initials === true} />
       <ol
         aria-label={slot.jobsLabel ?? stage.name}
         className={cn(
@@ -65,17 +60,33 @@ function StageColumn({ workflow, stage, previous, slots, words, initials }: Stag
           focal ? 'border-2 border-primary' : 'card-hover card-hover--outline border border-border',
         )}
       >
-        {stage.jobs.map((job) => {
-          const props = {
-            job,
-            slot: slots.jobs?.[job.id] ?? {},
-            gate: stage.gate === undefined ? undefined : (slot.gate ?? String(stage.gate)),
-            words,
-          };
-          return <Job key={job.id} role={jobRole(workflow, job)} {...props} />;
-        })}
+        {stage.jobs.map((job) => (
+          <StageJob key={job.id} ctx={ctx} job={job} gate={gateOf(stage, slot)} />
+        ))}
       </ol>
     </li>
+  );
+}
+
+const gateOf = (stage: Stage, slot: StageSlot): string | undefined =>
+  stage.gate === undefined ? undefined : (slot.gate ?? String(stage.gate));
+
+function StageJob({
+  ctx,
+  job,
+  gate,
+}: {
+  ctx: Context;
+  job: Workflow['stages'][number]['jobs'][number];
+  gate?: string;
+}) {
+  const card = ctx.view?.clickable ? cardOf(ctx.view, job.id) : undefined;
+  const slot = ctx.slots.jobs?.[job.id] ?? {};
+  return (
+    <>
+      <Job role={jobRole(ctx.workflow, job)} job={job} slot={slot} gate={gate} words={ctx.words} />
+      {card && ctx.open && <TryStep card={card} open={ctx.open} />}
+    </>
   );
 }
 

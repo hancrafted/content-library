@@ -1,0 +1,396 @@
+# The vacation Workflow: data (stages, jobs, edges, outputs) and the English words. The German twin holds `words:`
+# only, under the same keys. A prompt's {{id}} marks where the handoff of the output `id` is pasted.
+id: vacation
+focalJob: spec
+stages:
+  - id: trip
+    move: B
+    jobs:
+      - id: pieces
+        chat: new
+        dependsOn: []
+        inputs: []
+        outputs: [{ id: piece, kind: text }]
+        skills: []
+  - id: interview
+    move: I
+    jobs:
+      - id: interview
+        chat: new
+        dependsOn: [pieces]
+        inputs: [piece]
+        outputs: [{ id: answers, kind: text }]
+        skills: [productivity/grilling]
+  - id: requirements
+    move: R
+    gate: 1
+    jobs:
+      - id: spec
+        chat: new
+        dependsOn: [interview]
+        inputs: [answers]
+        outputs: [{ id: spec, kind: spec }, { id: tickets, kind: tickets }]
+        skills: [engineering/to-spec, engineering/to-tickets]
+  - id: research
+    move: F
+    jobs:
+      - id: stay
+        chat: new
+        dependsOn: [spec]
+        inputs: [spec]
+        outputs: [{ id: research, kind: research }]
+        fanOut: 3
+        skills: [engineering/research]
+  - id: compare
+    move: E
+    gate: 2
+    jobs:
+      - id: compare
+        chat: new
+        dependsOn: [spec, stay]
+        inputs: [spec, research]
+        outputs: [{ id: comparison, kind: comparison }]
+        skills: []
+  - id: recommendation
+    jobs:
+      - id: plan
+        chat: new
+        dependsOn: [compare]
+        inputs: [comparison]
+        outputs: [{ id: plan, kind: text }]
+        skills: []
+
+words:
+  title: Vacation
+  scenario: 'Plan a vacation for two: one week away, and a recommendation for your partner.'
+  setup: |-
+    claude plugin install mattpocock-skills@claude-plugins-official
+    Then open a folder for this task and start Claude Code in it.
+  stages:
+    trip: { name: Vacation, move: Break it down }
+    interview: { name: Interview, move: Interview yourself with AI }
+    requirements: { name: Requirements, move: Requirements first }
+    research: { name: Research, move: Fresh start for each piece }
+    compare: { name: Compare, move: Evaluate each step }
+    recommendation: { name: Recommendation, move: for your partner }
+  jobs:
+    pieces:
+      title: Stay
+      description: Split the trip into its four pieces and take only one forward, the stay. The other three wait for their turn.
+      parked: [Flights, Activities, Budget]
+      prompt: |-
+        I want to plan a vacation for two people: one week away.
+        Break it down into four independent pieces I can plan one after the other. Then recommend which single piece to take first and say why in one sentence.
+        End your answer with the chosen piece in one fenced block, exactly like this:
+        ```handoff
+        kind: text
+        text: <the chosen piece and the one-sentence reason>
+        ```
+      exampleOutput: |-
+        ```handoff
+        kind: text
+        text: Stay. It fixes the place and the dates, and flights, activities and budget all follow from it.
+        ```
+      check:
+        criteria:
+          - There are four pieces and each can be planned on its own.
+          - Exactly one piece is chosen, with a one-sentence reason.
+        prompt: |-
+          You are a strict reviewer. Check the answer below against these criteria and grade each one pass or fail with one sentence of evidence. Then name the one fix that matters most.
+          Criteria: there are four pieces and each can be planned on its own; exactly one piece is chosen, with a one-sentence reason.
+
+          {{piece}}
+    interview:
+      title: AI asks you
+      detail: 3 questions, 1 you forgot
+      description: The AI interviews you before it guesses, one question at a time, and brings up what you had not thought of.
+      prompt: |-
+        Interview me relentlessly about this piece of our trip until we share the same understanding. The piece we take forward:
+
+        {{piece}}
+
+        Work through the decisions one question at a time. For each question give two options (A and B) and your recommended answer, worded so that me saying "yes" accepts it. Wait for my answer before you ask the next one. If I say I do not understand, explain it with an everyday analogy and ask again.
+        Include at least one question I probably have not thought about, such as what my partner would hate. Never ask me for a fact you could know yourself. Stop when nothing is left silently assumed.
+        When I say "done", end with my answers in one fenced block, exactly like this:
+        ```handoff
+        kind: text
+        text: <every question with my answer, one per line>
+        ```
+      command: /grilling {{piece}}
+      exampleInput: |-
+        ```handoff
+        kind: text
+        text: Stay. It fixes the place and the dates, and flights, activities and budget all follow from it.
+        ```
+      exampleOutput: |-
+        ```handoff
+        kind: text
+        text: |-
+          Start: two people, one week in September, about 1500 euros for the stay.
+          Q1 Style: one base for the week (A) or a new place every two days (B). Recommended A, a week is short for packing. My answer: A.
+          Q2 Setting: by the sea (A) or in the mountains (B). Recommended A, it is warm enough in September. My answer: A.
+          Q3 The one I forgot, my partner's dealbreaker: ask before searching (A) or find out later (B). Recommended A, it removes options early. My answer: A. No long drives and no shared bathroom.
+        ```
+      check:
+        criteria:
+          - Every question came with two options and a recommendation.
+          - At least one question surfaced something you had not thought of.
+          - The answers are written down, not only remembered.
+        prompt: |-
+          You are a strict reviewer. Check the interview below against these criteria and grade each one pass or fail with one sentence of evidence. Then name the one fix that matters most.
+          Criteria: every question had two options and a recommendation; at least one question was new to me; my answers are written down.
+
+          {{answers}}
+    spec:
+      title: Requirements card
+      description: The answers become a spec with a short list of requirements you both sign off, and the work is cut into slices that can be done on their own.
+      prompt: |-
+        Turn my interview answers into a specification. Do not interview me again; use what is written here.
+
+        {{answers}}
+
+        Write the goal in one sentence, the requirements as short checkable essentials, what is out of scope, and the work as thin vertical slices. Then turn each slice into a ticket: a narrow but complete piece that can be done and checked on its own, with acceptance criteria and the tickets that must be done before it.
+        End with two fenced blocks, exactly like this:
+        ```handoff
+        kind: spec
+        goal: <one sentence>
+        requirements: [<short essential>, ...]
+        outOfScope: [<what we will not do>, ...]
+        slices: [<one slice>, ...]
+        ```
+        ```handoff
+        kind: tickets
+        tickets:
+          - { id: t1, title: <title>, acceptance: [<criterion>], blockedBy: [] }
+        ```
+      command: |-
+        /to-spec {{answers}}
+        Then run /to-tickets on the spec.
+      exampleInput: |-
+        ```handoff
+        kind: text
+        text: |-
+          Start: two people, one week in September, about 1500 euros for the stay.
+          Q1 Style: one base for the week (A) or a new place every two days (B). Recommended A, a week is short for packing. My answer: A.
+          Q2 Setting: by the sea (A) or in the mountains (B). Recommended A, it is warm enough in September. My answer: A.
+          Q3 The one I forgot, my partner's dealbreaker: ask before searching (A) or find out later (B). Recommended A, it removes options early. My answer: A. No long drives and no shared bathroom.
+        ```
+      exampleOutput: |-
+        ```handoff
+        kind: spec
+        goal: Choose one place by the sea where two people can stay for a week in September.
+        requirements:
+          - Sleeps 2
+          - 1500 euros or less for the week
+          - Walk to the sea
+          - Private bathroom
+          - No long drives
+        outOfScope:
+          - Flights
+          - Activities
+        slices:
+          - Shortlist three stays
+          - Check each against the requirements
+          - Rank them
+        ```
+        ```handoff
+        kind: tickets
+        tickets:
+          - { id: shortlist, title: Shortlist three stays, acceptance: [Each stay sleeps 2], blockedBy: [] }
+          - { id: sea, title: Check the walk to the sea, acceptance: [Walking time per stay], blockedBy: [shortlist] }
+          - { id: price, title: Check the price for the week, acceptance: [At most 1500 euros], blockedBy: [shortlist] }
+          - { id: bath, title: Check the private bathroom, acceptance: [Confirmed per stay], blockedBy: [shortlist] }
+          - { id: rank, title: Rank the three stays, acceptance: [A ranking with reasons], blockedBy: [sea, price, bath] }
+        ```
+      check:
+        criteria:
+          - The goal is one sentence.
+          - Every requirement is short and checkable.
+          - Every slice can be done and checked on its own.
+        prompt: |-
+          You are a strict reviewer. Check the spec below against these criteria and grade each one pass or fail with one sentence of evidence. Then name the one fix that matters most.
+          Criteria: the goal is one sentence; every requirement is short and checkable; every slice can be done and checked on its own.
+
+          {{spec}}
+      page: |-
+        Turn this spec into one good-looking page: goal first, then the requirements, what is out of scope and the slices.
+        If you can run code, write it to a temporary .html file, serve it on localhost and open it in my browser. Otherwise give me one complete, self-contained HTML file in a single code block that I can save and open.
+
+        {{spec}}
+    stay:
+      title: Stay
+      description: One fresh chat per stay. Each chat gets only the requirements, and checks one stay against every criterion.
+      prompt: |-
+        Research one place to stay for our vacation. The requirements:
+
+        {{spec}}
+
+        The stay to check: [type the name of the stay here]
+
+        Check it against every requirement, name where you got each fact, and say where you are unsure. Prefer the host's own pages over reviews. Do not compare it with other stays.
+        End with one fenced block, exactly like this:
+        ```handoff
+        kind: research
+        subject: <the stay>
+        summary: <two sentences>
+        facts: [<one checked fact per requirement>, ...]
+        ```
+      command: |-
+        /research Check [name of the stay] against these requirements: {{spec}}
+      exampleInput: |-
+        ```handoff
+        kind: spec
+        goal: Choose one place by the sea where two people can stay for a week in September.
+        requirements:
+          - Sleeps 2
+          - 1500 euros or less for the week
+          - Walk to the sea
+          - Private bathroom
+          - No long drives
+        outOfScope:
+          - Flights
+        slices:
+          - Check one stay against the requirements
+        ```
+      exampleOutput: |-
+        ```handoff
+        kind: research
+        subject: Casa Blu
+        summary: A small apartment above the bay with a private bathroom. Five minutes to the beach on foot.
+        facts:
+          - Sleeps 2 in one bedroom
+          - About 1400 euros for the week in September
+          - Five minutes on foot to the sea
+          - Private bathroom
+          - Airport transfer is 40 minutes
+        ```
+      check:
+        criteria:
+          - Every requirement has a checked fact.
+          - Where the AI is unsure, it says so.
+        prompt: |-
+          You are a strict reviewer. Check the research below against the requirements and grade each requirement pass or fail with one sentence of evidence. Then name the one fix that matters most.
+
+          Requirements:
+          {{spec}}
+
+          Research:
+          {{research}}
+      page: |-
+        Turn this research into one good-looking page: the stay, the summary and one card per fact.
+        If you can run code, write it to a temporary .html file, serve it on localhost and open it in my browser. Otherwise give me one complete, self-contained HTML file in a single code block that I can save and open.
+
+        {{research}}
+    compare:
+      title: Rank 3 stays
+      detail: against the card
+      description: One chat gets the requirements and all three research results, and ranks the stays against your criteria.
+      prompt: |-
+        Rank these stays against our requirements.
+
+        Requirements:
+        {{spec}}
+
+        Research, one block per stay:
+        {{research}}
+
+        Rank them best to worst, say why in one sentence each, and flag every requirement a stay misses.
+        End with one fenced block, exactly like this:
+        ```handoff
+        kind: comparison
+        criteria: [<requirement>, ...]
+        ranking:
+          - { name: <stay>, why: <one sentence> }
+        ```
+      exampleInput: |-
+        ```handoff
+        kind: spec
+        goal: Choose one place by the sea where two people can stay for a week in September.
+        requirements: [Sleeps 2, 1500 euros or less for the week, Walk to the sea, Private bathroom, No long drives]
+        outOfScope: [Flights]
+        slices: [Rank the stays]
+        ```
+        ```handoff
+        kind: research
+        subject: Casa Blu
+        summary: Apartment above the bay, five minutes to the beach.
+        facts: [Sleeps 2, About 1400 euros for the week]
+        ```
+        ```handoff
+        kind: research
+        subject: Villa Mare
+        summary: Roomy and right on the beach, but over budget.
+        facts: [Sleeps 4, About 1900 euros for the week]
+        ```
+        ```handoff
+        kind: research
+        subject: Hotel Collina
+        summary: Quiet hillside hotel, a 25 minute walk to the sea.
+        facts: [Sleeps 2, About 1300 euros for the week, Walk to the sea takes 25 minutes]
+        ```
+      exampleOutput: |-
+        ```handoff
+        kind: comparison
+        criteria: [Sleeps 2, 1500 euros or less for the week, Walk to the sea, Private bathroom, No long drives]
+        ranking:
+          - { name: Casa Blu, why: Meets every requirement and the sea is five minutes away. }
+          - { name: Hotel Collina, why: Cheapest, but the sea is a 25 minute walk. }
+          - { name: Villa Mare, why: On the beach, but about 400 euros over budget. }
+        ```
+      check:
+        criteria:
+          - Every stay is ranked with a reason.
+          - Every missed requirement is flagged.
+        prompt: |-
+          You are a strict reviewer. Check the ranking below against the requirements and grade each criterion pass or fail with one sentence of evidence. Then name the one fix that matters most.
+          Criteria: every stay is ranked with a reason; every missed requirement is flagged.
+
+          Requirements:
+          {{spec}}
+
+          Ranking:
+          {{comparison}}
+      page: |-
+        Turn this comparison into one good-looking page with a ranked table I can show my partner.
+        If you can run code, write it to a temporary .html file, serve it on localhost and open it in my browser. Otherwise give me one complete, self-contained HTML file in a single code block that I can save and open.
+
+        {{comparison}}
+    plan:
+      title: Trip plan
+      detail: by Sunday
+      description: The comparison becomes a one-page recommendation for your partner.
+      prompt: |-
+        Write a one-page recommendation for my partner from this comparison.
+
+        {{comparison}}
+
+        Recommend one stay, give the three reasons that matter, and name the one risk to settle first.
+        End with one fenced block, exactly like this:
+        ```handoff
+        kind: text
+        text: <the recommendation>
+        ```
+      exampleInput: |-
+        ```handoff
+        kind: comparison
+        criteria: [Sleeps 2, 1500 euros or less for the week, Walk to the sea, Private bathroom, No long drives]
+        ranking:
+          - { name: Casa Blu, why: Meets every requirement and the sea is five minutes away. }
+          - { name: Hotel Collina, why: Cheapest, but the sea is a 25 minute walk. }
+        ```
+      exampleOutput: |-
+        ```handoff
+        kind: text
+        text: |-
+          Book Casa Blu. It sleeps two, has a private bathroom, is five minutes from the sea and costs about 1400 euros.
+          Settle first: the airport transfer is 40 minutes, so check that it suits you.
+        ```
+      check:
+        criteria:
+          - One stay is recommended.
+          - There are three reasons and one risk to settle first.
+        prompt: |-
+          You are a strict reviewer. Check the recommendation below against these criteria and grade each one pass or fail with one sentence of evidence. Then name the one fix that matters most.
+          Criteria: one stay is recommended; there are three reasons and one risk to settle first.
+
+          {{plan}}

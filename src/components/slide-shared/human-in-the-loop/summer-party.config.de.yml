@@ -1,11 +1,11 @@
 # German words of the summer-party Workflow: `words:` only, under exactly the keys of summer-party.config.yml.
-# Prompts stay English until the content ticket translates them; the AI is told to answer in German there.
+# Prompts are German and tell the AI to answer in German; the handoff keys (kind, text, ...) stay English.
 words:
   title: Sommerfest
-  scenario: "Plan your company's next summer party: 200 employees across five offices in Europe."
+  scenario: 'Plane das nächste Sommerfest Deiner Firma: 200 Mitarbeitende an fünf Standorten in Europa.'
   setup: |-
     claude plugin install mattpocock-skills@claude-plugins-official
-    Then open a folder for this task and start Claude Code in it.
+    Öffne danach einen Ordner für diese Aufgabe und starte Claude Code darin.
   stages:
     party:
       name: Sommerfest
@@ -28,279 +28,326 @@ words:
   jobs:
     pieces:
       title: Location
-      description: Split the party into its five pieces and take only one forward, the venue. The other four wait for their turn.
+      description: Teile das Fest in seine fünf Teile und nimm nur eines mit, die Location. Die anderen vier warten.
       parked:
         - Anreise
         - Catering
         - Einladungen
         - Budget
       prompt: |-
-        I have to plan my company's next summer party: 200 employees across five offices in Europe.
-        Break it down into five independent pieces I can plan one after the other. Then recommend which single piece to take first and say why in one sentence.
-        End your answer with the chosen piece in one fenced block, exactly like this:
+        Antworte auf Deutsch. Ich muss das nächste Sommerfest meiner Firma planen: 200 Mitarbeitende an fünf Standorten in Europa.
+        Zerlege es in fünf unabhängige Teile, die ich nacheinander planen kann. Empfiehl dann das eine Teil, mit dem ich beginne, und begründe es in einem Satz.
+        Beende Deine Antwort mit dem gewählten Teil in genau einem Codeblock, genau so:
         ```handoff
         kind: text
-        text: <the chosen piece and the one-sentence reason>
+        text: <das gewählte Teil und die Begründung in einem Satz>
         ```
       exampleOutput: |-
         ```handoff
         kind: text
-        text: Venue. It fixes the date and the city, and travel, catering and invitations all follow from it.
+        text: Location. Sie legt Datum und Stadt fest, und Anreise, Catering und Einladungen folgen daraus.
         ```
+      check:
+        criteria:
+          - Es gibt fünf Teile, und jedes lässt sich für sich planen.
+          - Genau ein Teil ist gewählt, mit Begründung in einem Satz.
+        prompt: |-
+          Antworte auf Deutsch. Du bist ein strenger Prüfer. Prüfe die Antwort unten gegen diese Kriterien und bewerte jedes mit bestanden oder nicht bestanden (pass oder fail) und einem Satz als Beleg. Nenne dann die eine Korrektur, die am meisten zählt.
+          Kriterien: Es gibt fünf Teile, und jedes lässt sich für sich planen; genau ein Teil ist gewählt, mit Begründung in einem Satz.
+
+          {{piece}}
     interview:
       title: KI fragt Dich
-      detail: 3 questions, 1 you forgot
-      description: The AI interviews you before it guesses, one question at a time, and brings up what you had not thought of.
+      detail: 3 Fragen, 1 vergessen
+      description: Die KI interviewt Dich, bevor sie rät, eine Frage nach der anderen, und bringt auf, woran Du nicht gedacht hast. Das ist der Chat aus dem Vortrag.
       prompt: |-
-        Interview me before we plan anything. The piece we take forward:
+        Antworte auf Deutsch. Interviewe mich unerbittlich zu diesem Teil meiner Planung, bis wir dasselbe Verständnis haben. Das Teil, das wir mitnehmen:
 
         {{piece}}
 
-        Ask me one question at a time. Give two options (A and B) and say which you recommend and why. Wait for my answer before the next question. Include at least one question I probably have not thought about, such as feedback from last year. Stop after about five questions.
-        When I say "done", end with my answers in one fenced block, exactly like this:
+        Geh die Entscheidungen Frage für Frage durch. Gib zu jeder Frage zwei Optionen (A und B) und Deine empfohlene Antwort, so formuliert, dass mein "Ja" sie annimmt. Warte auf meine Antwort, bevor Du die nächste Frage stellst. Wenn ich sage, dass ich etwas nicht verstehe, erkläre es mit einem Alltagsvergleich und frag noch einmal.
+        Stelle mindestens eine Frage, an die ich vermutlich nicht gedacht habe, zum Beispiel das Feedback vom letzten Jahr. Frag mich nie nach einem Fakt, den Du selbst wissen könntest. Höre auf, wenn nichts mehr stillschweigend angenommen wird.
+        Wenn ich "fertig" sage, beende mit meinen Antworten in genau einem Codeblock, genau so:
         ```handoff
         kind: text
-        text: <every question with my answer, one per line>
+        text: <jede Frage mit meiner Antwort, eine pro Zeile>
         ```
       command: /grilling {{piece}}
       exampleInput: |-
         ```handoff
         kind: text
-        text: Venue. It fixes the date and the city, and travel, catering and invitations all follow from it.
+        text: Location. Sie legt Datum und Stadt fest, und Anreise, Catering und Einladungen folgen daraus.
         ```
       exampleOutput: |-
         ```handoff
         kind: text
         text: |-
-          Q1 Format: one party in one place. A, the point is that the offices meet.
-          Q2 Capacity: room for 200 at once. A, the speeches bring everyone together.
-          Q3 Last year's feedback: read it first. It was too loud to talk and people left early.
+          Start: etwa 150 Euro pro Kopf, zwei Rollstuhlfahrer, ein paar Vegetarier.
+          F1 Format: ein Ort, an den alle reisen (A), oder fünf lokale Feiern (B). Empfohlen A, es geht darum, dass sich die Büros treffen. Meine Antwort: A.
+          F2 Kapazität: eine lange Tafel für 200 gleichzeitig (A) oder wechselnde Tische mit Platz für etwa 140 (B). Empfohlen A, zu den Reden sitzen alle. Meine Antwort: A, eine lange Tafel. Den Restaurantvergleich habe ich vorher erbeten.
+          F3 Die, die ich vergessen hatte, das Feedback vom letzten Jahr: zuerst lesen (A) oder neu anfangen (B). Empfohlen A, es zeigt, was zu vermeiden ist. Meine Antwort: A. Es war zu laut zum Reden, und viele sind früh gegangen.
         ```
       check:
         criteria:
-          - Every question came with two options and a recommendation.
-          - At least one question surfaced something you had not thought of.
-          - The answers are written down, not only remembered.
+          - Jede Frage kam mit zwei Optionen und einer Empfehlung.
+          - Mindestens eine Frage brachte etwas auf, woran Du nicht gedacht hattest.
+          - Die Antworten sind aufgeschrieben, nicht nur im Kopf.
         prompt: |-
-          Check this interview against the criteria below. Give pass or fail for each, and name the one fix that matters most.
-          Criteria: every question had two options and a recommendation; at least one question was new to me; my answers are written down.
+          Antworte auf Deutsch. Du bist ein strenger Prüfer. Prüfe das Interview unten gegen diese Kriterien und bewerte jedes mit bestanden oder nicht bestanden (pass oder fail) und einem Satz als Beleg. Nenne dann die eine Korrektur, die am meisten zählt.
+          Kriterien: Jede Frage hatte zwei Optionen und eine Empfehlung; mindestens eine Frage war neu für mich; meine Antworten sind aufgeschrieben.
 
           {{answers}}
     spec:
-      title: Requirements card
-      description: The answers become a spec with a short list of requirements you sign off, and the work is cut into vertical slices that can be done on their own.
+      title: Anforderungskarte
+      description: Aus den Antworten wird eine Spezifikation mit einer kurzen Liste von Anforderungen, die Du abzeichnest, und die Arbeit wird in senkrechte Scheiben geschnitten, die für sich erledigt werden können.
       prompt: |-
-        Turn my interview answers into a specification.
+        Antworte auf Deutsch. Mach aus meinen Interview-Antworten eine Spezifikation. Interviewe mich nicht noch einmal; nutze, was hier steht.
 
         {{answers}}
 
-        Write the goal in one sentence, the requirements as short essentials, what is out of scope, and the work as thin vertical slices. Then turn each slice into a ticket with acceptance criteria and list which tickets block it.
-        End with two fenced blocks, exactly like this:
+        Schreibe das Ziel in einem Satz, die Anforderungen als kurze, prüfbare Kernpunkte, was nicht dazugehört, und die Arbeit als dünne senkrechte Scheiben. Mach dann aus jeder Scheibe ein Ticket: ein schmales, aber vollständiges Stück, das für sich erledigt und geprüft werden kann, mit Akzeptanzkriterien und den Tickets, die vorher fertig sein müssen.
+        Beende mit zwei Codeblöcken, genau so:
         ```handoff
         kind: spec
-        goal: <one sentence>
-        requirements: [<short essential>, ...]
-        outOfScope: [<what we will not do>, ...]
-        slices: [<one slice>, ...]
+        goal: <ein Satz>
+        requirements: [<kurzer Kernpunkt>, ...]
+        outOfScope: [<was wir nicht tun>, ...]
+        slices: [<eine Scheibe>, ...]
         ```
         ```handoff
         kind: tickets
         tickets:
-          - { id: t1, title: <title>, acceptance: [<criterion>], blockedBy: [] }
+          - { id: t1, title: <Titel>, acceptance: [<Kriterium>], blockedBy: [] }
         ```
-      command: /to-spec {{answers}}
+      command: |-
+        /to-spec {{answers}}
+        Führe danach /to-tickets auf der Spezifikation aus. Antworte auf Deutsch.
       exampleInput: |-
         ```handoff
         kind: text
         text: |-
-          Q1 Format: one party in one place. A, the point is that the offices meet.
-          Q2 Capacity: room for 200 at once. A, the speeches bring everyone together.
-          Q3 Last year's feedback: read it first. It was too loud to talk and people left early.
+          Start: etwa 150 Euro pro Kopf, zwei Rollstuhlfahrer, ein paar Vegetarier.
+          F1 Format: ein Ort, an den alle reisen (A), oder fünf lokale Feiern (B). Empfohlen A, es geht darum, dass sich die Büros treffen. Meine Antwort: A.
+          F2 Kapazität: eine lange Tafel für 200 gleichzeitig (A) oder wechselnde Tische mit Platz für etwa 140 (B). Empfohlen A, zu den Reden sitzen alle. Meine Antwort: A, eine lange Tafel. Den Restaurantvergleich habe ich vorher erbeten.
+          F3 Die, die ich vergessen hatte, das Feedback vom letzten Jahr: zuerst lesen (A) oder neu anfangen (B). Empfohlen A, es zeigt, was zu vermeiden ist. Meine Antwort: A. Es war zu laut zum Reden, und viele sind früh gegangen.
         ```
       exampleOutput: |-
         ```handoff
         kind: spec
-        goal: Choose one venue where all 200 employees can meet for an evening in the summer.
+        goal: Wähle einen Ort, an dem sich alle 200 Mitarbeitenden an einem Sommerabend treffen können.
         requirements:
-          - 200 guests
-          - 150 euros per person
-          - Step-free
-          - Vegetarian menu
-          - Quiet to talk
+          - 200 Gäste
+          - 150 Euro pro Person
+          - Stufenlos
+          - Vegetarisches Menü
+          - Ruhig genug zum Reden
         outOfScope:
-          - Travel to the venue
-          - Invitations
+          - Anreise zur Location
+          - Einladungen
         slices:
-          - Shortlist three venues
-          - Check each against the requirements
-          - Rank them
+          - Drei Locations in die engere Wahl nehmen
+          - Jede gegen die Anforderungen prüfen
+          - Sie in eine Rangfolge bringen
         ```
         ```handoff
         kind: tickets
         tickets:
-          - { id: shortlist, title: Shortlist three venues, acceptance: [Each venue fits 200 guests], blockedBy: [] }
-          - { id: access, title: Check step-free access, acceptance: [Written confirmation per venue], blockedBy: [shortlist] }
-          - { id: menu, title: Check the vegetarian menu, acceptance: [A sample menu per venue], blockedBy: [shortlist] }
-          - { id: price, title: Check the price per person, acceptance: [At most 150 euros per person], blockedBy: [shortlist] }
-          - { id: rank, title: Rank the three venues, acceptance: [A ranking with reasons], blockedBy: [access, menu, price] }
+          - { id: shortlist, title: Drei Locations in die engere Wahl nehmen, acceptance: [Jede Location fasst 200 Gäste], blockedBy: [] }
+          - { id: access, title: Stufenlosen Zugang prüfen, acceptance: [Schriftliche Bestätigung pro Location], blockedBy: [shortlist] }
+          - { id: menu, title: Vegetarisches Menü prüfen, acceptance: [Eine Beispielkarte pro Location], blockedBy: [shortlist] }
+          - { id: price, title: Preis pro Person prüfen, acceptance: [Höchstens 150 Euro pro Person], blockedBy: [shortlist] }
+          - { id: rank, title: Die drei Locations ranken, acceptance: [Eine Rangfolge mit Begründung], blockedBy: [access, menu, price] }
         ```
       check:
         criteria:
-          - The goal is one sentence.
-          - Every requirement is short and checkable.
-          - Every slice can be done and checked on its own.
+          - Das Ziel ist ein Satz.
+          - Jede Anforderung ist kurz und prüfbar.
+          - Jede Scheibe lässt sich für sich erledigen und prüfen.
         prompt: |-
-          Check this spec against the criteria below. Give pass or fail for each, and name the one fix that matters most.
-          Criteria: the goal is one sentence; every requirement is short and checkable; every slice can be done on its own.
+          Antworte auf Deutsch. Du bist ein strenger Prüfer. Prüfe die Spezifikation unten gegen diese Kriterien und bewerte jedes mit bestanden oder nicht bestanden (pass oder fail) und einem Satz als Beleg. Nenne dann die eine Korrektur, die am meisten zählt.
+          Kriterien: Das Ziel ist ein Satz; jede Anforderung ist kurz und prüfbar; jede Scheibe lässt sich für sich erledigen und prüfen.
 
           {{spec}}
-      page: Turn this spec into one good-looking HTML page I can download. Goal first, then the requirements, what is out of scope and the slices.
+      page: |-
+        Antworte auf Deutsch. Mach aus dieser Spezifikation eine schöne Seite: zuerst das Ziel, dann die Anforderungen, was nicht dazugehört und die Scheiben.
+        Wenn Du Code ausführen kannst, schreibe sie in eine temporäre .html-Datei, stelle sie auf localhost bereit und öffne sie in meinem Browser. Sonst gib mir eine vollständige, eigenständige HTML-Datei in einem einzigen Codeblock, die ich speichern und öffnen kann.
+
+        {{spec}}
     venue:
-      title: Venue
-      description: One fresh chat per venue. Each chat gets only the requirements, and checks one venue against every criterion.
+      title: Location
+      description: Ein frischer Chat pro Location. Jeder Chat bekommt nur die Anforderungen und prüft eine Location gegen jedes Kriterium.
       prompt: |-
-        Research one venue for our summer party. The requirements:
+        Antworte auf Deutsch. Recherchiere eine Location für unser Sommerfest. Die Anforderungen:
 
         {{spec}}
 
-        The venue to check: [type the venue name here]
+        Die zu prüfende Location: [Name der Location hier eintragen]
 
-        Check it against every requirement and say where you are unsure. Do not compare it with other venues.
-        End with one fenced block, exactly like this:
+        Prüfe sie gegen jede Anforderung, nenne zu jedem Fakt die Quelle und sag, wo Du unsicher bist. Bevorzuge die eigenen Seiten der Location vor Bewertungen. Vergleiche sie nicht mit anderen Locations.
+        Beende mit genau einem Codeblock, genau so:
         ```handoff
         kind: research
-        subject: <the venue>
-        summary: <two sentences>
-        facts: [<one checked fact per requirement>, ...]
+        subject: <die Location>
+        summary: <zwei Sätze>
+        facts: [<ein geprüfter Fakt pro Anforderung>, ...]
         ```
-      command: /research {{spec}}
+      command: |-
+        /research Prüfe [Name der Location] gegen diese Anforderungen: {{spec}}
+        Antworte auf Deutsch.
       exampleInput: |-
         ```handoff
         kind: spec
-        goal: Choose one venue where all 200 employees can meet for an evening in the summer.
+        goal: Wähle einen Ort, an dem sich alle 200 Mitarbeitenden an einem Sommerabend treffen können.
         requirements:
-          - 200 guests
-          - 150 euros per person
-          - Step-free
-          - Vegetarian menu
-          - Quiet to talk
+          - 200 Gäste
+          - 150 Euro pro Person
+          - Stufenlos
+          - Vegetarisches Menü
+          - Ruhig genug zum Reden
         outOfScope:
-          - Travel to the venue
+          - Anreise zur Location
         slices:
-          - Check one venue against the requirements
+          - Eine Location gegen die Anforderungen prüfen
         ```
       exampleOutput: |-
         ```handoff
         kind: research
-        subject: Harbour Hall
-        summary: A converted warehouse with room for 220 and a step-free entrance. Quiet to talk only in the side hall.
+        subject: Hafenhalle
+        summary: Ein umgebautes Lagerhaus mit Platz für 220 und stufenlosem Eingang. Ruhig zum Reden nur im Nebensaal.
         facts:
-          - Fits 220 guests
-          - About 140 euros per person with the standard menu
-          - Step-free through the main entrance
-          - Vegetarian menu on request
-          - The main hall echoes; the side hall is quiet
+          - Fasst 220 Gäste
+          - Etwa 140 Euro pro Person mit dem Standardmenü
+          - Stufenlos über den Haupteingang
+          - Vegetarisches Menü auf Anfrage
+          - Der große Saal hallt; der Nebensaal ist ruhig
         ```
       check:
         criteria:
-          - Every requirement has a checked fact.
-          - Where the AI is unsure, it says so.
+          - Jede Anforderung hat einen geprüften Fakt.
+          - Wo die KI unsicher ist, sagt sie es.
         prompt: |-
-          Check this research against the requirements. Give pass or fail per requirement, and name the one fix that matters most.
+          Antworte auf Deutsch. Du bist ein strenger Prüfer. Prüfe die Recherche unten gegen die Anforderungen und bewerte jede Anforderung mit bestanden oder nicht bestanden (pass oder fail) und einem Satz als Beleg. Nenne dann die eine Korrektur, die am meisten zählt.
 
+          Anforderungen:
           {{spec}}
+
+          Recherche:
+          {{research}}
+      page: |-
+        Antworte auf Deutsch. Mach aus dieser Recherche eine schöne Seite: die Location, die Zusammenfassung und eine Karte pro Fakt.
+        Wenn Du Code ausführen kannst, schreibe sie in eine temporäre .html-Datei, stelle sie auf localhost bereit und öffne sie in meinem Browser. Sonst gib mir eine vollständige, eigenständige HTML-Datei in einem einzigen Codeblock, die ich speichern und öffnen kann.
+
+        {{research}}
     compare:
       title: 3 Locations ranken
       detail: gemessen an der Karte
-      description: One chat gets the requirements and all three research results, and ranks the venues against your criteria.
+      description: Ein Chat bekommt die Anforderungen und alle drei Rechercheergebnisse und rankt die Locations nach Deinen Kriterien.
       prompt: |-
-        Rank these venues against my requirements.
+        Antworte auf Deutsch. Ranke diese Locations nach meinen Anforderungen.
 
-        Requirements:
+        Anforderungen:
         {{spec}}
 
-        Research, one block per venue:
+        Recherche, ein Block pro Location:
         {{research}}
 
-        Rank them best to worst, say why in one sentence each, and flag every requirement a venue misses.
-        End with one fenced block, exactly like this:
+        Ranke sie von der besten zur schlechtesten, begründe jede in einem Satz und markiere jede Anforderung, die eine Location verfehlt.
+        Beende mit genau einem Codeblock, genau so:
         ```handoff
         kind: comparison
-        criteria: [<requirement>, ...]
+        criteria: [<Anforderung>, ...]
         ranking:
-          - { name: <venue>, why: <one sentence> }
+          - { name: <Location>, why: <ein Satz> }
         ```
       exampleInput: |-
         ```handoff
         kind: spec
-        goal: Choose one venue where all 200 employees can meet for an evening in the summer.
-        requirements: [200 guests, 150 euros per person, Step-free, Vegetarian menu, Quiet to talk]
-        outOfScope: [Travel to the venue]
-        slices: [Rank the venues]
+        goal: Wähle einen Ort, an dem sich alle 200 Mitarbeitenden an einem Sommerabend treffen können.
+        requirements: [200 Gäste, 150 Euro pro Person, Stufenlos, Vegetarisches Menü, Ruhig genug zum Reden]
+        outOfScope: [Anreise zur Location]
+        slices: [Die Locations ranken]
         ```
         ```handoff
         kind: research
-        subject: Harbour Hall
-        summary: Room for 220 and step-free. Quiet only in the side hall.
-        facts: [Fits 220 guests, About 140 euros per person]
+        subject: Hafenhalle
+        summary: Platz für 220 und stufenlos. Ruhig nur im Nebensaal.
+        facts: [Fasst 220 Gäste, Etwa 140 Euro pro Person]
         ```
         ```handoff
         kind: research
-        subject: Garden Pavilion
-        summary: Room for 200 on one floor, quiet, a little over budget.
-        facts: [Fits 200 guests, About 160 euros per person]
+        subject: Gartenpavillon
+        summary: Platz für 200 auf einer Ebene, ruhig, etwas über dem Budget.
+        facts: [Fasst 200 Gäste, Etwa 160 Euro pro Person]
         ```
         ```handoff
         kind: research
-        subject: Old Mill
-        summary: Charming but two flights of stairs and no lift.
-        facts: [Fits 180 guests, Not step-free]
+        subject: Alte Mühle
+        summary: Charmant, aber zwei Treppen und kein Aufzug.
+        facts: [Fasst 180 Gäste, Nicht stufenlos]
         ```
       exampleOutput: |-
         ```handoff
         kind: comparison
-        criteria: [200 guests, 150 euros per person, Step-free, Vegetarian menu, Quiet to talk]
+        criteria: [200 Gäste, 150 Euro pro Person, Stufenlos, Vegetarisches Menü, Ruhig genug zum Reden]
         ranking:
-          - { name: Harbour Hall, why: Meets every requirement if the speeches use the side hall. }
-          - { name: Garden Pavilion, why: Quiet and step-free but 10 euros per person over budget. }
-          - { name: Old Mill, why: Not step-free and too small. }
+          - { name: Hafenhalle, why: Erfüllt jede Anforderung, wenn die Reden im Nebensaal stattfinden. }
+          - { name: Gartenpavillon, why: Ruhig und stufenlos, aber 10 Euro pro Person über dem Budget. }
+          - { name: Alte Mühle, why: Nicht stufenlos und zu klein. }
         ```
       check:
         criteria:
-          - Every venue is ranked with a reason.
-          - Every missed requirement is flagged.
+          - Jede Location ist mit Begründung gerankt.
+          - Jede verfehlte Anforderung ist markiert.
         prompt: |-
-          Check this ranking against the requirements. Give pass or fail per criterion, and name the one fix that matters most.
+          Antworte auf Deutsch. Du bist ein strenger Prüfer. Prüfe das Ranking unten gegen die Anforderungen und bewerte jedes Kriterium mit bestanden oder nicht bestanden (pass oder fail) und einem Satz als Beleg. Nenne dann die eine Korrektur, die am meisten zählt.
+          Kriterien: Jede Location ist mit Begründung gerankt; jede verfehlte Anforderung ist markiert.
 
+          Anforderungen:
           {{spec}}
-      page: Turn this comparison into one good-looking HTML page with a ranked table I can show my boss.
+
+          Ranking:
+          {{comparison}}
+      page: |-
+        Antworte auf Deutsch. Mach aus diesem Vergleich eine schöne Seite mit einer Rangtabelle, die ich meiner Chefin zeigen kann.
+        Wenn Du Code ausführen kannst, schreibe sie in eine temporäre .html-Datei, stelle sie auf localhost bereit und öffne sie in meinem Browser. Sonst gib mir eine vollständige, eigenständige HTML-Datei in einem einzigen Codeblock, die ich speichern und öffnen kann.
+
+        {{comparison}}
     plan:
       title: Location-Plan
       detail: bis Freitag
-      description: The comparison becomes a one-page recommendation for your boss.
+      description: Aus dem Vergleich wird eine einseitige Empfehlung für Deine Chefin.
       prompt: |-
-        Write a one-page recommendation for my boss from this comparison.
+        Antworte auf Deutsch. Schreibe aus diesem Vergleich eine einseitige Empfehlung für meine Chefin.
 
         {{comparison}}
 
-        Recommend one venue, give the three reasons that matter, and name the one risk to settle first.
-        End with one fenced block, exactly like this:
+        Empfiehl eine Location, nenne die drei Gründe, die zählen, und das eine Risiko, das zuerst geklärt werden muss.
+        Beende mit genau einem Codeblock, genau so:
         ```handoff
         kind: text
-        text: <the recommendation>
+        text: <die Empfehlung>
         ```
       exampleInput: |-
         ```handoff
         kind: comparison
-        criteria: [200 guests, 150 euros per person, Step-free, Vegetarian menu, Quiet to talk]
+        criteria: [200 Gäste, 150 Euro pro Person, Stufenlos, Vegetarisches Menü, Ruhig genug zum Reden]
         ranking:
-          - { name: Harbour Hall, why: Meets every requirement if the speeches use the side hall. }
-          - { name: Garden Pavilion, why: Quiet and step-free but 10 euros per person over budget. }
+          - { name: Hafenhalle, why: Erfüllt jede Anforderung, wenn die Reden im Nebensaal stattfinden. }
+          - { name: Gartenpavillon, why: Ruhig und stufenlos, aber 10 Euro pro Person über dem Budget. }
         ```
       exampleOutput: |-
         ```handoff
         kind: text
         text: |-
-          Book Harbour Hall. It fits all 200 guests, is step-free and stays within 150 euros per person.
-          Settle first: hold the speeches in the side hall so everyone can hear.
+          Buche die Hafenhalle. Sie fasst alle 200 Gäste, ist stufenlos und bleibt unter 150 Euro pro Person.
+          Zuerst klären: die Reden im Nebensaal halten, damit alle sie hören.
         ```
+      check:
+        criteria:
+          - Genau eine Location wird empfohlen.
+          - Es gibt drei Gründe und ein Risiko, das zuerst geklärt wird.
+        prompt: |-
+          Antworte auf Deutsch. Du bist ein strenger Prüfer. Prüfe die Empfehlung unten gegen diese Kriterien und bewerte jedes mit bestanden oder nicht bestanden (pass oder fail) und einem Satz als Beleg. Nenne dann die eine Korrektur, die am meisten zählt.
+          Kriterien: Genau eine Location wird empfohlen; es gibt drei Gründe und ein Risiko, das zuerst geklärt wird.
+
+          {{plan}}

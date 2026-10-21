@@ -1,0 +1,352 @@
+# German words of the vacation Workflow: `words:` only, under exactly the keys of vacation.config.yml.
+# Prompts are German and tell the AI to answer in German; the handoff keys (kind, text, ...) stay English.
+words:
+  title: Urlaub
+  scenario: 'Plane einen Urlaub für zwei: eine Woche weg, und eine Empfehlung für Deinen Partner.'
+  setup: |-
+    claude plugin install mattpocock-skills@claude-plugins-official
+    Öffne danach einen Ordner für diese Aufgabe und starte Claude Code darin.
+  stages:
+    trip:
+      name: Urlaub
+      move: Zerlege es
+    interview:
+      name: Interview
+      move: Interviewe Dich mit KI
+    requirements:
+      name: Anforderungen
+      move: Erst die Anforderungen
+    research:
+      name: Recherche
+      move: Frischer Start für jedes Teil
+    compare:
+      name: Vergleich
+      move: Prüfe jeden Schritt
+    recommendation:
+      name: Empfehlung
+      move: für Deinen Partner
+  jobs:
+    pieces:
+      title: Unterkunft
+      description: Teile die Reise in ihre vier Teile und nimm nur eines mit, die Unterkunft. Die anderen drei warten.
+      parked:
+        - Flüge
+        - Aktivitäten
+        - Budget
+      prompt: |-
+        Antworte auf Deutsch. Ich möchte einen Urlaub für zwei Personen planen: eine Woche weg.
+        Zerlege ihn in vier unabhängige Teile, die ich nacheinander planen kann. Empfiehl dann das eine Teil, mit dem ich beginne, und begründe es in einem Satz.
+        Beende Deine Antwort mit dem gewählten Teil in genau einem Codeblock, genau so:
+        ```handoff
+        kind: text
+        text: <das gewählte Teil und die Begründung in einem Satz>
+        ```
+      exampleOutput: |-
+        ```handoff
+        kind: text
+        text: Unterkunft. Sie legt Ort und Termin fest, und Flüge, Aktivitäten und Budget folgen daraus.
+        ```
+      check:
+        criteria:
+          - Es gibt vier Teile, und jedes lässt sich für sich planen.
+          - Genau ein Teil ist gewählt, mit Begründung in einem Satz.
+        prompt: |-
+          Antworte auf Deutsch. Du bist ein strenger Prüfer. Prüfe die Antwort unten gegen diese Kriterien und bewerte jedes mit bestanden oder nicht bestanden (pass oder fail) und einem Satz als Beleg. Nenne dann die eine Korrektur, die am meisten zählt.
+          Kriterien: Es gibt vier Teile, und jedes lässt sich für sich planen; genau ein Teil ist gewählt, mit Begründung in einem Satz.
+
+          {{piece}}
+    interview:
+      title: KI fragt Dich
+      detail: 3 Fragen, 1 vergessen
+      description: Die KI interviewt Dich, bevor sie rät, eine Frage nach der anderen, und bringt auf, woran Du nicht gedacht hast.
+      prompt: |-
+        Antworte auf Deutsch. Interviewe mich unerbittlich zu diesem Teil unserer Reise, bis wir dasselbe Verständnis haben. Das Teil, das wir mitnehmen:
+
+        {{piece}}
+
+        Geh die Entscheidungen Frage für Frage durch. Gib zu jeder Frage zwei Optionen (A und B) und Deine empfohlene Antwort, so formuliert, dass mein "Ja" sie annimmt. Warte auf meine Antwort, bevor Du die nächste Frage stellst. Wenn ich sage, dass ich etwas nicht verstehe, erkläre es mit einem Alltagsvergleich und frag noch einmal.
+        Stelle mindestens eine Frage, an die ich vermutlich nicht gedacht habe, zum Beispiel was mein Partner auf keinen Fall mag. Frag mich nie nach einem Fakt, den Du selbst wissen könntest. Höre auf, wenn nichts mehr stillschweigend angenommen wird.
+        Wenn ich "fertig" sage, beende mit meinen Antworten in genau einem Codeblock, genau so:
+        ```handoff
+        kind: text
+        text: <jede Frage mit meiner Antwort, eine pro Zeile>
+        ```
+      command: /grilling {{piece}}
+      exampleInput: |-
+        ```handoff
+        kind: text
+        text: Unterkunft. Sie legt Ort und Termin fest, und Flüge, Aktivitäten und Budget folgen daraus.
+        ```
+      exampleOutput: |-
+        ```handoff
+        kind: text
+        text: |-
+          Start: zwei Personen, eine Woche im September, etwa 1500 Euro für die Unterkunft.
+          F1 Stil: eine Basis für die ganze Woche (A) oder alle zwei Tage ein neuer Ort (B). Empfohlen A, eine Woche ist kurz zum Packen. Meine Antwort: A.
+          F2 Umgebung: am Meer (A) oder in den Bergen (B). Empfohlen A, im September ist es warm genug. Meine Antwort: A.
+          F3 Die, die ich vergessen hatte, das No-Go meines Partners: vor der Suche fragen (A) oder später herausfinden (B). Empfohlen A, es schließt früh Optionen aus. Meine Antwort: A. Keine langen Autofahrten und kein geteiltes Bad.
+        ```
+      check:
+        criteria:
+          - Jede Frage kam mit zwei Optionen und einer Empfehlung.
+          - Mindestens eine Frage brachte etwas auf, woran Du nicht gedacht hattest.
+          - Die Antworten sind aufgeschrieben, nicht nur im Kopf.
+        prompt: |-
+          Antworte auf Deutsch. Du bist ein strenger Prüfer. Prüfe das Interview unten gegen diese Kriterien und bewerte jedes mit bestanden oder nicht bestanden (pass oder fail) und einem Satz als Beleg. Nenne dann die eine Korrektur, die am meisten zählt.
+          Kriterien: Jede Frage hatte zwei Optionen und eine Empfehlung; mindestens eine Frage war neu für mich; meine Antworten sind aufgeschrieben.
+
+          {{answers}}
+    spec:
+      title: Anforderungskarte
+      description: Aus den Antworten wird eine Spezifikation mit einer kurzen Liste von Anforderungen, die ihr beide abzeichnet, und die Arbeit wird in Scheiben geschnitten, die für sich erledigt werden können.
+      prompt: |-
+        Antworte auf Deutsch. Mach aus meinen Interview-Antworten eine Spezifikation. Interviewe mich nicht noch einmal; nutze, was hier steht.
+
+        {{answers}}
+
+        Schreibe das Ziel in einem Satz, die Anforderungen als kurze, prüfbare Kernpunkte, was nicht dazugehört, und die Arbeit als dünne senkrechte Scheiben. Mach dann aus jeder Scheibe ein Ticket: ein schmales, aber vollständiges Stück, das für sich erledigt und geprüft werden kann, mit Akzeptanzkriterien und den Tickets, die vorher fertig sein müssen.
+        Beende mit zwei Codeblöcken, genau so:
+        ```handoff
+        kind: spec
+        goal: <ein Satz>
+        requirements: [<kurzer Kernpunkt>, ...]
+        outOfScope: [<was wir nicht tun>, ...]
+        slices: [<eine Scheibe>, ...]
+        ```
+        ```handoff
+        kind: tickets
+        tickets:
+          - { id: t1, title: <Titel>, acceptance: [<Kriterium>], blockedBy: [] }
+        ```
+      command: |-
+        /to-spec {{answers}}
+        Führe danach /to-tickets auf der Spezifikation aus. Antworte auf Deutsch.
+      exampleInput: |-
+        ```handoff
+        kind: text
+        text: |-
+          Start: zwei Personen, eine Woche im September, etwa 1500 Euro für die Unterkunft.
+          F1 Stil: eine Basis für die ganze Woche (A) oder alle zwei Tage ein neuer Ort (B). Empfohlen A, eine Woche ist kurz zum Packen. Meine Antwort: A.
+          F2 Umgebung: am Meer (A) oder in den Bergen (B). Empfohlen A, im September ist es warm genug. Meine Antwort: A.
+          F3 Die, die ich vergessen hatte, das No-Go meines Partners: vor der Suche fragen (A) oder später herausfinden (B). Empfohlen A, es schließt früh Optionen aus. Meine Antwort: A. Keine langen Autofahrten und kein geteiltes Bad.
+        ```
+      exampleOutput: |-
+        ```handoff
+        kind: spec
+        goal: Wähle eine Unterkunft am Meer, in der zwei Personen im September eine Woche wohnen können.
+        requirements:
+          - Schläft 2
+          - Höchstens 1500 Euro für die Woche
+          - Zu Fuß zum Meer
+          - Eigenes Bad
+          - Keine langen Fahrten
+        outOfScope:
+          - Flüge
+          - Aktivitäten
+        slices:
+          - Drei Unterkünfte in die engere Wahl nehmen
+          - Jede gegen die Anforderungen prüfen
+          - Sie in eine Rangfolge bringen
+        ```
+        ```handoff
+        kind: tickets
+        tickets:
+          - { id: shortlist, title: Drei Unterkünfte in die engere Wahl nehmen, acceptance: [Jede Unterkunft schläft 2], blockedBy: [] }
+          - { id: sea, title: Den Weg zum Meer prüfen, acceptance: [Gehzeit pro Unterkunft], blockedBy: [shortlist] }
+          - { id: price, title: Den Preis für die Woche prüfen, acceptance: [Höchstens 1500 Euro], blockedBy: [shortlist] }
+          - { id: bath, title: Das eigene Bad prüfen, acceptance: [Pro Unterkunft bestätigt], blockedBy: [shortlist] }
+          - { id: rank, title: Die drei Unterkünfte ranken, acceptance: [Eine Rangfolge mit Begründung], blockedBy: [sea, price, bath] }
+        ```
+      check:
+        criteria:
+          - Das Ziel ist ein Satz.
+          - Jede Anforderung ist kurz und prüfbar.
+          - Jede Scheibe lässt sich für sich erledigen und prüfen.
+        prompt: |-
+          Antworte auf Deutsch. Du bist ein strenger Prüfer. Prüfe die Spezifikation unten gegen diese Kriterien und bewerte jedes mit bestanden oder nicht bestanden (pass oder fail) und einem Satz als Beleg. Nenne dann die eine Korrektur, die am meisten zählt.
+          Kriterien: Das Ziel ist ein Satz; jede Anforderung ist kurz und prüfbar; jede Scheibe lässt sich für sich erledigen und prüfen.
+
+          {{spec}}
+      page: |-
+        Antworte auf Deutsch. Mach aus dieser Spezifikation eine schöne Seite: zuerst das Ziel, dann die Anforderungen, was nicht dazugehört und die Scheiben.
+        Wenn Du Code ausführen kannst, schreibe sie in eine temporäre .html-Datei, stelle sie auf localhost bereit und öffne sie in meinem Browser. Sonst gib mir eine vollständige, eigenständige HTML-Datei in einem einzigen Codeblock, die ich speichern und öffnen kann.
+
+        {{spec}}
+    stay:
+      title: Unterkunft
+      description: Ein frischer Chat pro Unterkunft. Jeder Chat bekommt nur die Anforderungen und prüft eine Unterkunft gegen jedes Kriterium.
+      prompt: |-
+        Antworte auf Deutsch. Recherchiere eine Unterkunft für unseren Urlaub. Die Anforderungen:
+
+        {{spec}}
+
+        Die zu prüfende Unterkunft: [Name der Unterkunft hier eintragen]
+
+        Prüfe sie gegen jede Anforderung, nenne zu jedem Fakt die Quelle und sag, wo Du unsicher bist. Bevorzuge die eigenen Seiten der Gastgeber vor Bewertungen. Vergleiche sie nicht mit anderen Unterkünften.
+        Beende mit genau einem Codeblock, genau so:
+        ```handoff
+        kind: research
+        subject: <die Unterkunft>
+        summary: <zwei Sätze>
+        facts: [<ein geprüfter Fakt pro Anforderung>, ...]
+        ```
+      command: |-
+        /research Prüfe [Name der Unterkunft] gegen diese Anforderungen: {{spec}}
+        Antworte auf Deutsch.
+      exampleInput: |-
+        ```handoff
+        kind: spec
+        goal: Wähle eine Unterkunft am Meer, in der zwei Personen im September eine Woche wohnen können.
+        requirements:
+          - Schläft 2
+          - Höchstens 1500 Euro für die Woche
+          - Zu Fuß zum Meer
+          - Eigenes Bad
+          - Keine langen Fahrten
+        outOfScope:
+          - Flüge
+        slices:
+          - Eine Unterkunft gegen die Anforderungen prüfen
+        ```
+      exampleOutput: |-
+        ```handoff
+        kind: research
+        subject: Casa Blu
+        summary: Eine kleine Wohnung über der Bucht mit eigenem Bad. Fünf Minuten zu Fuß zum Strand.
+        facts:
+          - Schläft 2 in einem Schlafzimmer
+          - Etwa 1400 Euro für die Woche im September
+          - Fünf Minuten zu Fuß zum Meer
+          - Eigenes Bad
+          - Der Transfer vom Flughafen dauert 40 Minuten
+        ```
+      check:
+        criteria:
+          - Jede Anforderung hat einen geprüften Fakt.
+          - Wo die KI unsicher ist, sagt sie es.
+        prompt: |-
+          Antworte auf Deutsch. Du bist ein strenger Prüfer. Prüfe die Recherche unten gegen die Anforderungen und bewerte jede Anforderung mit bestanden oder nicht bestanden (pass oder fail) und einem Satz als Beleg. Nenne dann die eine Korrektur, die am meisten zählt.
+
+          Anforderungen:
+          {{spec}}
+
+          Recherche:
+          {{research}}
+      page: |-
+        Antworte auf Deutsch. Mach aus dieser Recherche eine schöne Seite: die Unterkunft, die Zusammenfassung und eine Karte pro Fakt.
+        Wenn Du Code ausführen kannst, schreibe sie in eine temporäre .html-Datei, stelle sie auf localhost bereit und öffne sie in meinem Browser. Sonst gib mir eine vollständige, eigenständige HTML-Datei in einem einzigen Codeblock, die ich speichern und öffnen kann.
+
+        {{research}}
+    compare:
+      title: 3 Unterkünfte ranken
+      detail: gemessen an der Karte
+      description: Ein Chat bekommt die Anforderungen und alle drei Rechercheergebnisse und rankt die Unterkünfte nach Euren Kriterien.
+      prompt: |-
+        Antworte auf Deutsch. Ranke diese Unterkünfte nach unseren Anforderungen.
+
+        Anforderungen:
+        {{spec}}
+
+        Recherche, ein Block pro Unterkunft:
+        {{research}}
+
+        Ranke sie von der besten zur schlechtesten, begründe jede in einem Satz und markiere jede Anforderung, die eine Unterkunft verfehlt.
+        Beende mit genau einem Codeblock, genau so:
+        ```handoff
+        kind: comparison
+        criteria: [<Anforderung>, ...]
+        ranking:
+          - { name: <Unterkunft>, why: <ein Satz> }
+        ```
+      exampleInput: |-
+        ```handoff
+        kind: spec
+        goal: Wähle eine Unterkunft am Meer, in der zwei Personen im September eine Woche wohnen können.
+        requirements: [Schläft 2, Höchstens 1500 Euro für die Woche, Zu Fuß zum Meer, Eigenes Bad, Keine langen Fahrten]
+        outOfScope: [Flüge]
+        slices: [Die Unterkünfte ranken]
+        ```
+        ```handoff
+        kind: research
+        subject: Casa Blu
+        summary: Wohnung über der Bucht, fünf Minuten zum Strand.
+        facts: [Schläft 2, Etwa 1400 Euro für die Woche]
+        ```
+        ```handoff
+        kind: research
+        subject: Villa Mare
+        summary: Geräumig und direkt am Strand, aber über dem Budget.
+        facts: [Schläft 4, Etwa 1900 Euro für die Woche]
+        ```
+        ```handoff
+        kind: research
+        subject: Hotel Collina
+        summary: Ruhiges Hotel am Hang, 25 Minuten zu Fuß zum Meer.
+        facts: [Schläft 2, Etwa 1300 Euro für die Woche, Der Weg zum Meer dauert 25 Minuten]
+        ```
+      exampleOutput: |-
+        ```handoff
+        kind: comparison
+        criteria: [Schläft 2, Höchstens 1500 Euro für die Woche, Zu Fuß zum Meer, Eigenes Bad, Keine langen Fahrten]
+        ranking:
+          - { name: Casa Blu, why: Erfüllt jede Anforderung, und das Meer ist fünf Minuten entfernt. }
+          - { name: Hotel Collina, why: Am günstigsten, aber das Meer ist 25 Minuten zu Fuß entfernt. }
+          - { name: Villa Mare, why: Am Strand, aber etwa 400 Euro über dem Budget. }
+        ```
+      check:
+        criteria:
+          - Jede Unterkunft ist mit Begründung gerankt.
+          - Jede verfehlte Anforderung ist markiert.
+        prompt: |-
+          Antworte auf Deutsch. Du bist ein strenger Prüfer. Prüfe das Ranking unten gegen die Anforderungen und bewerte jedes Kriterium mit bestanden oder nicht bestanden (pass oder fail) und einem Satz als Beleg. Nenne dann die eine Korrektur, die am meisten zählt.
+          Kriterien: Jede Unterkunft ist mit Begründung gerankt; jede verfehlte Anforderung ist markiert.
+
+          Anforderungen:
+          {{spec}}
+
+          Ranking:
+          {{comparison}}
+      page: |-
+        Antworte auf Deutsch. Mach aus diesem Vergleich eine schöne Seite mit einer Rangtabelle, die ich meinem Partner zeigen kann.
+        Wenn Du Code ausführen kannst, schreibe sie in eine temporäre .html-Datei, stelle sie auf localhost bereit und öffne sie in meinem Browser. Sonst gib mir eine vollständige, eigenständige HTML-Datei in einem einzigen Codeblock, die ich speichern und öffnen kann.
+
+        {{comparison}}
+    plan:
+      title: Reiseplan
+      detail: bis Sonntag
+      description: Aus dem Vergleich wird eine einseitige Empfehlung für Deinen Partner.
+      prompt: |-
+        Antworte auf Deutsch. Schreibe aus diesem Vergleich eine einseitige Empfehlung für meinen Partner.
+
+        {{comparison}}
+
+        Empfiehl eine Unterkunft, nenne die drei Gründe, die zählen, und das eine Risiko, das zuerst geklärt werden muss.
+        Beende mit genau einem Codeblock, genau so:
+        ```handoff
+        kind: text
+        text: <die Empfehlung>
+        ```
+      exampleInput: |-
+        ```handoff
+        kind: comparison
+        criteria: [Schläft 2, Höchstens 1500 Euro für die Woche, Zu Fuß zum Meer, Eigenes Bad, Keine langen Fahrten]
+        ranking:
+          - { name: Casa Blu, why: Erfüllt jede Anforderung, und das Meer ist fünf Minuten entfernt. }
+          - { name: Hotel Collina, why: Am günstigsten, aber das Meer ist 25 Minuten zu Fuß entfernt. }
+        ```
+      exampleOutput: |-
+        ```handoff
+        kind: text
+        text: |-
+          Buche die Casa Blu. Sie schläft zwei, hat ein eigenes Bad, liegt fünf Minuten vom Meer und kostet etwa 1400 Euro.
+          Zuerst klären: Der Transfer vom Flughafen dauert 40 Minuten, prüfe, ob das für Dich passt.
+        ```
+      check:
+        criteria:
+          - Genau eine Unterkunft wird empfohlen.
+          - Es gibt drei Gründe und ein Risiko, das zuerst geklärt wird.
+        prompt: |-
+          Antworte auf Deutsch. Du bist ein strenger Prüfer. Prüfe die Empfehlung unten gegen diese Kriterien und bewerte jedes mit bestanden oder nicht bestanden (pass oder fail) und einem Satz als Beleg. Nenne dann die eine Korrektur, die am meisten zählt.
+          Kriterien: Genau eine Unterkunft wird empfohlen; es gibt drei Gründe und ein Risiko, das zuerst geklärt wird.
+
+          {{plan}}

@@ -4,6 +4,8 @@ import uiEn from './human-in-the-loop.config.yml';
 import type { UiWords } from './human-in-the-loop.types';
 import summerPartyDe from './summer-party.config.de.yml';
 import summerPartyEn from './summer-party.config.yml';
+import vacationDe from './vacation.config.de.yml';
+import vacationEn from './vacation.config.yml';
 import { loadWorkflow } from './workflow.pure';
 import type { Workflow } from './workflow.types';
 
@@ -15,12 +17,13 @@ import type { Workflow } from './workflow.types';
 export type WorkflowLocale = 'en' | 'de';
 
 /** The authored Workflow ids, in picker order. A test holds this to the files. */
-export const WORKFLOW_IDS = ['summer-party'] as const;
+export const WORKFLOW_IDS = ['summer-party', 'vacation'] as const;
 export type WorkflowId = (typeof WORKFLOW_IDS)[number];
 
 /** Each Workflow's config (data and English words) and its German words. */
 export const PAIRS: Readonly<Record<WorkflowId, { readonly config: string; readonly de: string }>> = {
   'summer-party': { config: summerPartyEn, de: summerPartyDe },
+  vacation: { config: vacationEn, de: vacationDe },
 };
 
 export const UI_FILES = { en: uiEn, de: uiDe } as const;
