@@ -1,5 +1,14 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, type PointerEvent, type RefObject } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  type FocusEvent,
+  type PointerEvent,
+  type RefObject,
+} from 'react';
 import { anchorIndex, dockHeights, restHeights } from './attention-dock.pure';
+import type { Attention } from './context-usage.pure';
 
 /*
  * The compressed Attention list's pointer magnification. Row heights are written to the DOM straight from one
@@ -24,14 +33,17 @@ const clear = (list: HTMLElement | null) => {
 const fullRow = (list: HTMLElement) => parseFloat(getComputedStyle(list).fontSize) * 1.7;
 
 /** The resting heights, fitted to the list's height and refitted when it resizes or the shares change. */
-function useRest(list: RefObject<HTMLElement | null>, enabled: boolean, key: string) {
+function useRest(list: RefObject<HTMLElement | null>, enabled: boolean, shares: readonly Attention[]) {
   const rest = useRef<number[]>([]);
   const layout = useCallback(() => {
     const el = list.current;
     if (!el || !enabled) return;
-    rest.current = restHeights(key ? key.split(',').map(Number) : [], el.clientHeight);
+    rest.current = restHeights(
+      shares.map((share) => share.units),
+      el.clientHeight,
+    );
     apply(el, rest.current);
-  }, [list, enabled, key]);
+  }, [list, enabled, shares]);
   useLayoutEffect(() => {
     if (!enabled) clear(list.current);
     layout();
@@ -46,10 +58,25 @@ function useRest(list: RefObject<HTMLElement | null>, enabled: boolean, key: str
   return rest;
 }
 
-/** The pointer handlers of the list; `units` are the rows' shares of the attention. */
-export function useDock(list: RefObject<HTMLElement | null>, enabled: boolean, units: readonly number[]) {
-  // The units as a string, so a redraw with the same shares leaves the heights the pointer set alone.
-  const rest = useRest(list, enabled, units.join(','));
+/** Keyboard focus on a row expands it as hovering does, so a focused 4px row is visible: the dock sits on that row. */
+function useFocusDock(list: RefObject<HTMLElement | null>, enabled: boolean, rest: RefObject<number[]>) {
+  const onFocus = (event: FocusEvent<HTMLElement>) => {
+    const el = list.current;
+    const row = event.target.closest<HTMLElement>('[data-row]');
+    if (!enabled || !el || !row) return;
+    const at = rows(el).indexOf(row);
+    if (at >= 0) apply(el, dockHeights(rest.current, at, fullRow(el)));
+  };
+  const onBlur = (event: FocusEvent<HTMLElement>) => {
+    const el = list.current;
+    if (el && enabled && !el.contains(event.relatedTarget)) apply(el, rest.current);
+  };
+  return { onFocus, onBlur };
+}
+
+/** The pointer handlers of the list; `shares` are its rows' shares of the attention, and a new array refits the heights. */
+export function useDock(list: RefObject<HTMLElement | null>, enabled: boolean, shares: readonly Attention[]) {
+  const rest = useRest(list, enabled, shares);
   const frame = useRef(0);
   const y = useRef(0);
   useEffect(() => () => cancelAnimationFrame(frame.current), []);
@@ -69,5 +96,5 @@ export function useDock(list: RefObject<HTMLElement | null>, enabled: boolean, u
     frame.current = 0;
     if (list.current && enabled) apply(list.current, rest.current);
   };
-  return { onPointerMove, onPointerLeave };
+  return { onPointerMove, onPointerLeave, ...useFocusDock(list, enabled, rest) };
 }

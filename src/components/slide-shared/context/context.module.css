@@ -772,7 +772,7 @@
 .windows button {
   border: 0;
   background: none;
-  min-height: 1.75rem;
+  min-height: 2.25rem;
   padding: 0 0.7rem;
   border-radius: 999px;
   cursor: pointer;

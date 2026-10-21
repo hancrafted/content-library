@@ -439,13 +439,46 @@ describe('success cases', () => {
         send,
         `document.querySelector('${list} [data-on]')?.getAttribute('data-part') ?? ''`,
       );
+      // The magnified rows push each other down, so the peak sits under the pointer, which is the lit row.
+      const litIndex = await evaluate<number>(
+        send,
+        `[...document.querySelectorAll('${list} [data-row]')].findIndex((r) => r.hasAttribute('data-on'))`,
+      );
       const grown = docked.map((h, i) => h - (resting[i] ?? 0));
       const peak = grown.indexOf(Math.max(...grown));
+      console.log('DBG', JSON.stringify({ resting, docked, rowIndex, target }));
       // ASSERT
       expect(Math.abs(sum(docked) - sum(resting))).toBeLessThan(tolerance);
       expect(Math.min(...docked)).toBeGreaterThanOrEqual(minRow);
-      expect(Math.abs(peak - rowIndex)).toBeLessThanOrEqual(1);
+      expect(Math.abs(peak - litIndex)).toBeLessThanOrEqual(1);
       expect(grown.slice(peak + reach + 1).every((g) => g <= slack)).toBe(true);
+      expect(lit).not.toBe('');
+    },
+    TIMEOUT,
+  );
+
+  it(
+    'expands a compressed Attention row that takes keyboard focus, as hovering does, and lights it',
+    async () => {
+      // ARRANGE
+      await open('light');
+      const list = `${SLIDE_4} [data-layout="compressed"]`;
+      const rowHeight = (i: number) =>
+        evaluate<number>(send, `document.querySelectorAll('${list} [data-row]')[${i}].getBoundingClientRect().height`);
+      const index = 8;
+      const thin = 6;
+      const resting = await rowHeight(index);
+      // ACT
+      await evaluate(send, `document.querySelectorAll('${list} [data-row] button')[${index}].focus()`);
+      await delay(400);
+      const focused = await rowHeight(index);
+      const lit = await evaluate<string>(
+        send,
+        `document.querySelector('${list} [data-on]')?.getAttribute('data-part') ?? ''`,
+      );
+      // ASSERT
+      expect(resting).toBeLessThan(thin);
+      expect(focused).toBeGreaterThan(thin);
       expect(lit).not.toBe('');
     },
     TIMEOUT,
@@ -805,7 +838,9 @@ async function dragChip(from: string, onto: string) {
     send,
     `(() => {
       const r = document.querySelector('${CHIPS}[data-chip="${onto}"]').getBoundingClientRect();
-      return { x: r.right - 4, y: r.top + r.height / 2 };
+      const from = document.querySelector('${CHIPS}[data-chip="${from}"]').getBoundingClientRect();
+      // On the near-side edge when dragging backwards, the far one when dragging forwards: past the chip's middle.
+      return { x: r.left < from.left ? r.left + 4 : r.right - 4, y: r.top + r.height / 2 };
     })()`,
   );
   await mouseTo(start.x, start.y);

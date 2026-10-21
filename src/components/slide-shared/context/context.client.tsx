@@ -69,12 +69,10 @@ function useModel(data: ContextViewData, chat: Chat): Model {
   const vis = Math.min(visibleStep(state), steps);
   const window = windowOf(data, state);
   const override = chat === data.chat ? data.overrides[String(vis)] : undefined;
-  const attention = attentionAt(chat, model.frames, {
-    step: vis,
-    windowTokens: window.tokens,
-    notes: data.notes,
-    override,
-  });
+  const attention = useMemo(
+    () => attentionAt(chat, model.frames, { step: vis, windowTokens: window.tokens, notes: data.notes, override }),
+    [chat, model.frames, vis, window.tokens, data.notes, override],
+  );
   const frame = model.frames[vis - 1] ?? { blocks: [], used: 0, byCategory: {}, inWindow: [] };
   const lit = litKey(state);
   return { ...model, data, chat, state, dispatch, vis, frame, window, attention, lit, ghost: ghostOf(chat, state) };

@@ -140,10 +140,16 @@ export type ResolvedControl = ControlDef & {
   readonly reorder?: boolean;
 };
 
-/** A control as the Preset sets it: the registry's default, then `'*'`, then the control's own overrides. */
-export function controlOf(preset: HasControls, id: ControlId): ResolvedControl {
+/** The registry's definition of a control, whatever a Preset says about it. */
+export function defOf(id: ControlId): ControlDef {
   const def = BY_ID.get(id);
   if (!def) throw new Error(`context window: unknown control "${id}"`);
+  return def;
+}
+
+/** A control as the Preset sets it: the registry's default, then `'*'`, then the control's own overrides. */
+export function controlOf(preset: HasControls, id: ControlId): ResolvedControl {
+  const def = defOf(id);
   const star = def.type === 'readout' ? undefined : preset.controls['*']?.show;
   return { ...def, ...(star === undefined ? {} : { show: star }), ...preset.controls[id] };
 }
