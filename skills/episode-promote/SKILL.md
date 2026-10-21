@@ -52,7 +52,7 @@ _Done when_ every kept card is applied or filed, and `npm run verify` is green.
 One commit, because `tests/docs/episode-staging.test.ts` fails on a half-moved Staging folder:
 
 - `brief.md` moves to `src/components/episodes/<slug>/brief.md`, its `status: draft` line removed.
-- `npm run episode:promote-research -- docs/episodes/<staging>` moves every research folder into `docs/llm-wiki/research/<category>/` and lists it in `docs/llm-wiki/index.md`, cited by a Slide or not. It refuses a folder the wiki already holds or a category `GLOSSARY.md` does not name; fix that and rerun.
+- `npm run episode:promote-research -- docs/episodes/<staging>` moves every research folder into `docs/llm-wiki/research/<category>/` and lists it in `docs/llm-wiki/index.md`, cited by a Slide or not. It refuses, before moving anything, a folder with no `research.md`, a research ID the wiki already holds, or a category `GLOSSARY.md` does not name; fix that and rerun.
 - `git rm -r docs/episodes/<staging>`; git history keeps it.
 - Every comment or doc still naming `docs/episodes/<staging>/` (the Episode file's header comment among them) is rewritten to name the commit before this one.
 
