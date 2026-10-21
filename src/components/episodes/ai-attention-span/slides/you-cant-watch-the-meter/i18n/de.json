@@ -1,6 +1,6 @@
 {
-  "title": "Eine Anzeige kannst Du nicht ablesen",
-  "caption": "Zwischen zwei Nachrichten faltet die App den ganzen Chat zu einer Zusammenfassung. Auf dem Bildschirm bewegt sich nichts.",
+  "title": "Der Chat sieht gleich aus. Das Fenster nicht.",
+  "caption": "Links das volle Fenster, rechts derselbe Chat nach der automatischen Verdichtung. Auf dem Bildschirm ist es weiter ein laufender Chat.",
   "before": "Einen Moment davor · Schritt 23",
   "after": "Direkt danach · Schritt 24",
   "bufferNote": "Die Füllung erreicht den Platz, der für Zusammenfassungen frei gehalten wird.",
@@ -19,36 +19,48 @@
       "header": "Für Claude dokumentiert",
       "description": "Bei Nutzern mit aktivierter Codeausführung fasst Claude frühere Nachrichten zusammen, wenn sich ein Gespräch der Grenze des Kontexts nähert [1].",
       "sources": {
-        "anthropic-usage-and-length-limits": { "title": "Anthropic, How do usage and length limits work?" }
+        "anthropic-usage-and-length-limits": {
+          "title": "Anthropic, How do usage and length limits work?"
+        }
       }
     },
     "the-only-sign": {
       "header": "Das einzige Zeichen",
       "description": "Die Seite beschreibt, dass Du gelegentlich siehst, wie Claude „seine Gedanken ordnet“, und kündigt keinen Hinweis bei jedem Mal an; dass es das absichtlich verbirgt, ist eine Schlussfolgerung [1].",
       "sources": {
-        "anthropic-usage-and-length-limits": { "title": "Anthropic, How do usage and length limits work?" }
+        "anthropic-usage-and-length-limits": {
+          "title": "Anthropic, How do usage and length limits work?"
+        }
       }
     },
     "full-history-is-kept": {
       "header": "Der ganze Verlauf bleibt erhalten",
       "description": "Der ganze Chat wird aufbewahrt, damit Claude nach dem Zusammenfassen darauf zurückgreifen kann [1].",
       "sources": {
-        "anthropic-usage-and-length-limits": { "title": "Anthropic, How do usage and length limits work?" }
+        "anthropic-usage-and-length-limits": {
+          "title": "Anthropic, How do usage and length limits work?"
+        }
       }
     },
     "a-summary-can-lose-things": {
       "header": "Eine Zusammenfassung kann Dinge verlieren",
       "description": "Anthropic warnt, dass zu aggressives Verdichten feinen, aber entscheidenden Kontext verlieren kann, dessen Bedeutung sich erst später zeigt [1].",
       "sources": {
-        "anthropic-context-engineering": { "title": "Anthropic, Effective context engineering for AI agents" }
+        "anthropic-context-engineering": {
+          "title": "Anthropic, Effective context engineering for AI agents"
+        }
       }
     },
     "other-apps-are-unknown": {
       "header": "Andere Apps sind unbekannt",
       "description": "Keine gefundene Herstellerseite dokumentiert das Zusammenfassen in ChatGPT, Gemini oder Copilot, und eine Chat-Oberfläche kann stattdessen die ältesten Inhalte zuerst verwerfen [1]; die Verdichtung von OpenAI ist für seine API dokumentiert und undurchsichtig [2].",
       "sources": {
-        "anthropic-context-windows": { "title": "Anthropic, Context windows" },
-        "openai-compaction": { "title": "OpenAI, Compaction" }
+        "anthropic-context-windows": {
+          "title": "Anthropic, Context windows"
+        },
+        "openai-compaction": {
+          "title": "OpenAI, Compaction"
+        }
       }
     }
   },

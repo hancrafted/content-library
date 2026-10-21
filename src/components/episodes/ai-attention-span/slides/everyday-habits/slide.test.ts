@@ -34,44 +34,63 @@ function localized(locale: Locale): LocalizedSlide {
 const scene = (locale: Locale) => load(renderToStaticMarkup(createElement(Fragment, null, localized(locale).content)));
 
 describe('success cases', () => {
-  it('speaks the Spec Voice script verbatim, segment by segment', () => {
+  it('speaks one voice segment per card, in card order, the new sixth one about /context', () => {
     // ARRANGE
     const expected = [
-      {
-        title: 'Break it down',
-        script:
-          'Break it down. You know this one already: you split a big task into small steps, and each step is small enough to hold in view.',
-      },
-      {
-        title: 'Fresh start',
-        script:
-          'Fresh start. You know this one too: a fresh start spends the whole window on the work in front of you, and none of it on what happened an hour ago.',
-      },
-      {
-        title: 'One chat, one job',
-        script:
-          "One chat, one job. When the topic changes, open a new chat, so that the hotel question doesn't have to carry the catering PDF along.",
-      },
-      {
-        title: 'Ask for a handoff',
-        script:
-          'Ask for a handoff. After real progress, or before a coffee break, stop and ask the AI for a handoff: a short card with the goal, what is decided and what comes next.',
-      },
-      {
-        title: 'Read and correct it',
-        script:
-          'Then read it and correct what is wrong. A summary can leave things out or get one wrong, and you are the one accountable for what the next chat believes.',
-      },
-      {
-        title: 'Start the next chat with it',
-        script:
-          'And start the next chat with it. Paste the handoff in as the first message, and the new chat starts small and sharp, with the venue, the caterer, the budget and the next step, and nothing else.',
-      },
+      'break-it-down',
+      'one-chat-one-job',
+      'ask-for-a-handoff',
+      'read-and-correct-it',
+      'start-the-next-chat-with-it',
+      'check-the-context',
     ];
     // ACT
-    const segments = localized('en').voiceScript.map(({ title, script }) => ({ title, script }));
+    const segments = localized('en').voiceScript.map(({ slug }) => slug);
     // ASSERT
     expect(segments).toEqual(expected);
+  });
+
+  it('shows six numbered cards in Han\'s order and no "You know these already" chips', () => {
+    // ARRANGE
+    const expected = {
+      en: [
+        'Break it down',
+        'New job, fresh chat',
+        'Ask for a handoff',
+        'Read it, correct it',
+        'Start the next chat with it',
+        'Check the context if you can',
+      ],
+      de: [
+        'Zerleg es',
+        'Neuer Job, neuer Chat',
+        'Bitte um eine Übergabe',
+        'Lies sie, korrigiere sie',
+        'Beginne den nächsten Chat damit',
+        'Prüfe den Kontext, wenn Du kannst',
+      ],
+      chips: 0,
+    };
+    // ACT
+    const titles = (locale: Locale) =>
+      scene(locale)('ol > li > p:first-of-type')
+        .map((_, el) => scene(locale)(el).text())
+        .get();
+    // ASSERT
+    expect({
+      en: titles('en'),
+      de: titles('de'),
+      chips: scene('en').text().includes('You know these already') ? 1 : 0,
+    }).toEqual(expected);
+  });
+
+  it('writes the sixth card with /context as code', () => {
+    // ARRANGE
+    const expected = '/context';
+    // ACT
+    const code = scene('en')('ol > li:nth-child(6) code').text();
+    // ASSERT
+    expect(code).toBe(expected);
   });
 
   it('carries the three Spec Speaker notes, each with its source', () => {
@@ -146,11 +165,11 @@ describe('edge cases', () => {
       headers: ['Die Länge allein schadet', 'Ein Job pro Chat', 'Eine kurze Zusammenfassung half'],
       segments: [
         'break-it-down',
-        'fresh-start',
         'one-chat-one-job',
         'ask-for-a-handoff',
         'read-and-correct-it',
         'start-the-next-chat-with-it',
+        'check-the-context',
       ],
     };
     // ACT

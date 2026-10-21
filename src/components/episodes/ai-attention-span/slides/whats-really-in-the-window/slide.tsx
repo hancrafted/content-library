@@ -22,8 +22,9 @@ const CHATGPT_MEMORY = source('openai-chatgpt-memory', 'https://help.openai.com/
 const NAMED = ['files', 'web', 'tools', 'reminders'] as const;
 
 /**
- * "What's really in the window" (Spec Option 7a): the cornerstone on its Slide 7 Preset, Technical, the starting
- * instructions pinned and the details panel open; under it two plain-word cards for the only parts explained,
+ * "What's really in the context window" (Spec Option 7a, Han's batch-2 item 8): the cornerstone on its Slide 7 parts
+ * Preset, Simple at rest, without chat or timeline: the context window, the context category and the details, the
+ * starting instructions pinned, the window and the category each with their own local </>; under it two plain-word cards for the only parts explained,
  * starting instructions and memory, and a dashed box naming the rest. Keeps `basic-page` and `motion: local`: the
  * component lights its own parts, the cards only raise on hover.
  */
@@ -50,7 +51,7 @@ export const whatsReallyInTheWindow = slide({
           {t('illustrative')}
         </span>
       </div>
-      <Context preset="slide-7" locale={locale} />
+      <Context preset="slide-7-parts" locale={locale} />
       <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-3">
         <ExplainCard
           swatch="start"

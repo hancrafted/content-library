@@ -3,15 +3,16 @@ import type { ReactNode } from 'react';
 
 const HABIT = 'focus-group__item card-hover card-hover--raise flex flex-col gap-2 rounded-xl bg-card p-5 shadow-md';
 
-/** One habit: its title and body, the Context marker after its title, and the target its Speaker note lights. */
+/** One habit: its title and body, the Context marker after its title, and the target its Speaker note lights, if any. */
 export interface Habit {
   readonly title: string;
-  readonly body: string;
+  readonly body: ReactNode;
   readonly marker?: ReactNode;
-  readonly target: TargetProps;
+  /** Set when a Speaker note lights this habit. */
+  readonly target?: TargetProps;
 }
 
-/** The three everyday habits as numbered cards; pointing at one dims the others. */
+/** The everyday habits as numbered cards, three to a row; pointing at one dims the others. */
 export function HabitList({ label, habits }: { label: string; habits: readonly Habit[] }) {
   return (
     <ol aria-label={label} className="focus-group focus-group--dim-others grid gap-5 md:grid-cols-3">
