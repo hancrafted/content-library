@@ -5,9 +5,18 @@
  */
 
 export type ControlId =
-  'parts' | 'technical' | 'download' | 'upload' | 'preview' | 'zone' | 'windowTechnical' | 'meter' | 'window';
+  | 'parts'
+  | 'technical'
+  | 'download'
+  | 'upload'
+  | 'zone'
+  | 'conversationTechnical'
+  | 'windowTechnical'
+  | 'categoryTechnical'
+  | 'meter'
+  | 'window';
 
-export type IconName = 'code' | 'panel-left-close' | 'download' | 'upload' | 'eye' | 'panel-right';
+export type IconName = 'code' | 'panel-left-close' | 'download' | 'upload' | 'panel-right';
 /** The words a control reads from ContextWords; the UI indexes the words with them, so the compiler checks each. */
 export type WordKey =
   | 'showParts'
@@ -15,20 +24,27 @@ export type WordKey =
   | 'technicalTip'
   | 'download'
   | 'upload'
-  | 'previewToggle'
-  | 'previewTip'
   | 'zoneToggle'
   | 'zoneTip'
+  | 'conversationTechnical'
+  | 'conversationTechnicalTip'
   | 'windowTechnical'
   | 'windowTechnicalTip'
+  | 'categoryTechnical'
+  | 'categoryTechnicalTip'
   | 'windowGroup';
 
 /** The state a toggle flips: a shown-state key of the parent. */
-export type Flips = 'technical' | 'preview' | 'zone' | 'windowTechnical';
+export type Flips = 'technical' | 'zone' | 'conversationTechnical' | 'windowTechnical' | 'categoryTechnical';
+
+/** The parts that have a Simple and a Technical view of their own, so a Technical toggle in their head. */
+export type ModePart = 'conversation' | 'context-window' | 'category';
 
 interface Base {
   readonly id: ControlId;
   readonly placement: 'toolbar' | 'head';
+  /** The part whose head draws a head control. */
+  readonly owner?: ModePart;
   /** The fields a Preset may override on this control, besides `show`. */
   readonly fields: readonly ('on' | 'reorder')[];
   /** Shown unless the Preset says otherwise. */
@@ -46,6 +62,32 @@ export type ControlDef =
   | (Base & { readonly type: 'chips'; readonly label: WordKey })
   /** Not a button: the head's usage figures (the percent and "used of window"), which a Preset may hide. */
   | (Base & { readonly type: 'readout' });
+
+/** One local Technical toggle per part that has both views; the toolbar's Technical sets every part. */
+const modeControl = (owner: ModePart, id: ModeId): ControlDef => ({
+  id,
+  type: 'toggle',
+  flips: id,
+  placement: 'head',
+  owner,
+  fields: [],
+  show: true,
+  icon: 'code',
+  label: id,
+  tip: `${id}Tip`,
+});
+
+type ModeId = 'conversationTechnical' | 'windowTechnical' | 'categoryTechnical';
+
+const MODE_CONTROLS: readonly ControlDef[] = [
+  modeControl('conversation', 'conversationTechnical'),
+  modeControl('context-window', 'windowTechnical'),
+  modeControl('category', 'categoryTechnical'),
+];
+
+/** The control that sets one part's own renderMode. */
+export const modeControlOf = (part: ModePart): ControlId =>
+  MODE_CONTROLS.find((def) => def.owner === part)?.id ?? 'technical';
 
 export const CONTROLS: readonly ControlDef[] = [
   { id: 'parts', type: 'chips', placement: 'toolbar', fields: ['reorder'], show: true, label: 'showParts' },
@@ -83,38 +125,18 @@ export const CONTROLS: readonly ControlDef[] = [
     tip: 'upload',
   },
   {
-    id: 'preview',
-    type: 'toggle',
-    flips: 'preview',
-    placement: 'head',
-    fields: [],
-    show: true,
-    icon: 'eye',
-    label: 'previewToggle',
-    tip: 'previewTip',
-  },
-  {
     id: 'zone',
     type: 'toggle',
     flips: 'zone',
     placement: 'head',
+    owner: 'context-window',
     fields: ['on'],
     show: true,
     icon: 'panel-right',
     label: 'zoneToggle',
     tip: 'zoneTip',
   },
-  {
-    id: 'windowTechnical',
-    type: 'toggle',
-    flips: 'windowTechnical',
-    placement: 'head',
-    fields: [],
-    show: true,
-    icon: 'code',
-    label: 'windowTechnical',
-    tip: 'windowTechnicalTip',
-  },
+  ...MODE_CONTROLS,
   { id: 'meter', type: 'readout', placement: 'head', fields: [], show: true },
   { id: 'window', type: 'segmented', placement: 'head', fields: [], show: false, label: 'windowGroup' },
 ];

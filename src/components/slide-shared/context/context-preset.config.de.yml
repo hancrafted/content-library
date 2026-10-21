@@ -8,20 +8,22 @@ words:
     {
       chat: Unterhaltung,
       timeline: Zeitleiste,
-      context: Kontext,
-      preview: Vorschau,
+      context: Kontextfenster,
+      category: Kontextkategorien,
       panel: Details,
       attention: Aufmerksamkeit,
     }
   technical: Technisch
   technicalTip: 'Technisch: der Chat als Claude-Code-Terminal, das Fenster als /context-Kästchen mit den echten Kategorienamen.'
   modes: { explain: Erklären, attention: Aufmerksamkeit }
-  previewToggle: Kontextvorschau
-  previewTip: Zeigen oder ausblenden, was das Fenster füllt
   zoneToggle: Smart Zone
   zoneTip: Die Smart-Zone-Beschriftung neben dem Balken zeigen oder ausblenden
+  conversationTechnical: Technische Unterhaltung
+  conversationTechnicalTip: 'Technisch: der Chat als Claude-Code-Terminal. Die Schaltfläche der Werkzeugleiste setzt alle Teile.'
   windowTechnical: Technisches Fenster
   windowTechnicalTip: 'Technisch: das Fenster als /context-Kästchen. Die Schaltfläche der Werkzeugleiste setzt alle Teile.'
+  categoryTechnical: Technische Kontextkategorien
+  categoryTechnicalTip: 'Technisch: die echten Kategorienamen, die Nachrichten ausklappbar. Die Schaltfläche der Werkzeugleiste setzt alle Teile.'
   windowGroup: Fenstergröße
   download: Den Chat als Claude-Code-Log herunterladen
   upload: Ein Claude-Code-Log öffnen

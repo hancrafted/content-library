@@ -58,8 +58,8 @@ describe('success cases', () => {
           toolbar: [
             'Conversation:true',
             'Timeline:true',
-            'Context:true',
-            'Preview:false',
+            'Context window:true',
+            'Context category:false',
             'Details:false',
             'Attention:true',
             ':false',
@@ -75,8 +75,8 @@ describe('success cases', () => {
           toolbar: [
             'Conversation:true',
             'Timeline:true',
-            'Context:true',
-            'Preview:true',
+            'Context window:true',
+            'Context category:true',
             'Details:true',
             'Attention:false',
             ':true',
@@ -90,8 +90,8 @@ describe('success cases', () => {
           toolbar: [
             'Conversation:false',
             'Timeline:true',
-            'Context:true',
-            'Preview:true',
+            'Context window:true',
+            'Context category:true',
             'Details:true',
             'Attention:false',
             ':true',
@@ -168,7 +168,7 @@ describe('success cases', () => {
     });
   });
 
-  describe('the context preview', () => {
+  describe('the context category', () => {
     it('is a part of its own, a sibling of the context window and not inside it', () => {
       // ARRANGE
       const group = '[aria-label="Usage by category"]';

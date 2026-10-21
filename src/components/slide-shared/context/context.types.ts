@@ -108,8 +108,8 @@ export type Depth = 'simple' | 'technical';
 /** How a part draws itself: Simple for the room, Technical for the people who know the tool. */
 export type RenderMode = Depth;
 /** A part of the Context, as renderMode names it. */
-export type PartId = 'conversation' | 'timeline' | 'context-window' | 'context-preview' | 'details' | 'attention';
-export type Part = 'chat' | 'timeline' | 'context' | 'preview' | 'panel' | 'attention';
+export type PartId = 'conversation' | 'timeline' | 'context-window' | 'category' | 'details' | 'attention';
+export type Part = 'chat' | 'timeline' | 'context' | 'category' | 'panel' | 'attention';
 /** How the Attention part lays out its rows: a scrolling list, the first and last three pinned, or one bar per share. */
 export type AttentionLayout = 'list' | 'pinned' | 'compressed';
 export type Motion = 'off' | 'crisp' | 'rise' | 'spring';

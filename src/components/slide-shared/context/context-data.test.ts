@@ -213,8 +213,8 @@ describe('failure cases', () => {
     // ARRANGE
     const data = contextData('en');
     const slide3 = data.presets['slide-3'];
-    const expected = 'slide-3: order must list every part once, got chat, chat, timeline, context, preview, panel';
-    const order = ['chat', 'chat', 'timeline', 'context', 'preview', 'panel'] as const;
+    const expected = 'slide-3: order must list every part once, got chat, chat, timeline, context, category, panel';
+    const order = ['chat', 'chat', 'timeline', 'context', 'category', 'panel'] as const;
     // ACT
     const problems = slide3 ? presetProblems({ ...slide3, order }, data.chats['summer-party']) : [];
     // ASSERT
@@ -250,13 +250,13 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('runs Slide 4 to the compaction of summer-compact, with the preview hidden and the split keyed on that chat', () => {
+  it('runs Slide 4 to the compaction of summer-compact, with the category hidden and the split keyed on that chat', () => {
     // ARRANGE
     const data = contextData('en');
     const expected = {
       chat: 'summer-compact',
       step: 24,
-      preview: false,
+      category: false,
       windows: [200000],
       after: { m1: 15, m27: 45, m28: 40 },
     };
@@ -265,7 +265,7 @@ describe('edge cases', () => {
     const actual = {
       chat: preset?.chat,
       step: preset?.step,
-      preview: preset?.show.preview,
+      category: preset?.show.category,
       windows: preset?.windows.map((w) => w.tokens),
       after: data.attention['summer-compact']?.['25'],
     };

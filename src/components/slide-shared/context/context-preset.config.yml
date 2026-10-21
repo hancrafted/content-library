@@ -86,9 +86,9 @@ defaults:
   step: 21
   depth: simple
   pinned: null
-  show: { chat: true, timeline: true, context: true, preview: true, panel: false, attention: false }
+  show: { chat: true, timeline: true, context: true, category: true, panel: false, attention: false }
   # The parts in chip and grid order, every part once; the reader may drag the chips (controls.parts.reorder).
-  order: [chat, timeline, context, preview, panel, attention]
+  order: [chat, timeline, context, category, panel, attention]
   fade: false
   attention: { layout: list }
   # Every control by id; a Preset overrides key by key, and '*' sets show for all (code: context-controls.pure.ts).
@@ -97,10 +97,11 @@ defaults:
     technical: { show: true }
     download: { show: true }
     upload: { show: false }
-    preview: { show: true }
+    conversationTechnical: { show: true }
     zone: { show: true }
     meter: { show: true }
     windowTechnical: { show: true }
+    categoryTechnical: { show: true }
     window: { show: false }
   timelineLocked: false
   windows: [{ size: 200k, lines: [matt] }]
@@ -121,7 +122,7 @@ presets:
   slide-4:
     chat: summer-compact
     step: 24
-    show: { chat: true, timeline: true, context: true, preview: false, panel: false, attention: true }
+    show: { chat: true, timeline: true, context: true, category: false, panel: false, attention: true }
     attention: { layout: compressed }
     windows: [{ size: 200k, lines: [] }]
   # Timeline left, the window as a Simple bar with its 200K | 1M switch and smart zone, the attention on the right.
@@ -218,16 +219,25 @@ words:
   controls: Context window controls
   showParts: Show parts
   parts:
-    { chat: Conversation, timeline: Timeline, context: Context, preview: Preview, panel: Details, attention: Attention }
+    {
+      chat: Conversation,
+      timeline: Timeline,
+      context: Context window,
+      category: Context category,
+      panel: Details,
+      attention: Attention,
+    }
   technical: Technical
   technicalTip: 'Technical: the chat as a Claude Code terminal, the window as /context boxes with the real category names.'
   modes: { explain: Explain, attention: Attention }
-  previewToggle: Context preview
-  previewTip: Show or hide what fills the window
   zoneToggle: Smart zone
   zoneTip: Show or hide the smart-zone labels beside the bar
+  conversationTechnical: Technical conversation
+  conversationTechnicalTip: 'Technical: the chat as a Claude Code terminal. The toolbar button sets every part.'
   windowTechnical: Technical window
   windowTechnicalTip: 'Technical: the window as /context boxes. The toolbar button sets every part.'
+  categoryTechnical: Technical context category
+  categoryTechnicalTip: 'Technical: the real category names, with the messages in a collapsible. The toolbar button sets every part.'
   windowGroup: Window size
   download: Download the chat as a Claude Code log
   upload: Open a Claude Code log

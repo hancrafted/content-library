@@ -15,14 +15,36 @@ describe('success cases', () => {
     const total = 400;
     const expected = [200, 120, 80];
     // ACT
-    const rest = restHeights([50, 30, 20], total);
+    const rest = restHeights([50, 30, 20], total, 1000);
+    // ASSERT
+    expect(rest.map((h, i) => near(h, expected[i] ?? NaN))).toEqual([true, true, true]);
+  });
+
+  it('gives every row its natural height while they all fit, so rows simply add as the timeline advances', () => {
+    // ARRANGE
+    const fits = UNITS.slice(0, 5);
+    const expected = fits.map(() => FULL);
+    // ACT
+    const rest = restHeights(fits, TOTAL, FULL);
     // ASSERT
     expect(rest).toEqual(expected);
   });
 
+  it('compresses the middle rows first once the list is full, and keeps the start and the newest natural', () => {
+    // ARRANGE
+    const units = [15, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 40];
+    const total = 12 * FULL;
+    // ACT
+    const rest = restHeights(units, total, FULL);
+    // ASSERT
+    expect([rest[0], rest.at(-1)]).toEqual([FULL, FULL]);
+    expect(Math.max(...rest.slice(1, -1))).toBeLessThan(FULL);
+    expect(near(sum(rest), total)).toBe(true);
+  });
+
   it('keeps the total height constant while the pointer moves over any row', () => {
     // ARRANGE
-    const rest = restHeights(UNITS, TOTAL);
+    const rest = restHeights(UNITS, TOTAL, FULL);
     // ACT
     const totals = rest.map((_, i) => sum(dockHeights(rest, i, FULL)));
     // ASSERT
@@ -31,7 +53,7 @@ describe('success cases', () => {
 
   it('grows the row under the pointer towards the full row height', () => {
     // ARRANGE
-    const rest = restHeights(UNITS, TOTAL);
+    const rest = restHeights(UNITS, TOTAL, FULL);
     const under = 2;
     // ACT
     const docked = dockHeights(rest, under, FULL);
@@ -65,7 +87,7 @@ describe('success cases', () => {
 
   it('puts the magnified row under the pointer, so the row it lights is the row that grew', () => {
     // ARRANGE
-    const rest = restHeights(UNITS, TOTAL);
+    const rest = restHeights(UNITS, TOTAL, FULL);
     const pointers = [40, 120, 200, 300];
     // ACT
     const found = pointers.map((y) => {
@@ -83,7 +105,7 @@ describe('failure cases', () => {
     const units = [40, ...Array.from({ length: 30 }, () => 1)];
     const total = 200;
     // ACT
-    const rest = restHeights(units, total);
+    const rest = restHeights(units, total, FULL);
     const docked = dockHeights(rest, 0, FULL);
     // ASSERT
     expect(Math.min(...rest)).toBeGreaterThanOrEqual(MIN_ROW);
@@ -95,7 +117,7 @@ describe('failure cases', () => {
     // ARRANGE
     const expected: number[] = [];
     // ACT
-    const actual = [restHeights([], TOTAL), dockHeights([], 0, FULL)];
+    const actual = [restHeights([], TOTAL, FULL), dockHeights([], 0, FULL)];
     // ASSERT
     expect(actual).toEqual([expected, expected]);
   });
@@ -104,7 +126,7 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('leaves rows beyond three away from the pointer at their resting height or smaller', () => {
     // ARRANGE
-    const rest = restHeights(UNITS, TOTAL);
+    const rest = restHeights(UNITS, TOTAL, FULL);
     // ACT
     const docked = dockHeights(rest, 0, FULL);
     // ASSERT
@@ -113,7 +135,7 @@ describe('edge cases', () => {
 
   it('is the resting layout when the pointer is away', () => {
     // ARRANGE
-    const rest = restHeights(UNITS, TOTAL);
+    const rest = restHeights(UNITS, TOTAL, FULL);
     // ACT
     const docked = dockHeights(rest, null, FULL);
     // ASSERT

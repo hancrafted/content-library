@@ -1,11 +1,11 @@
-import { controlOf, offers, type ControlId } from './context-controls.pure';
+import { controlOf, modeControlOf, offers, type ControlId, type ModePart } from './context-controls.pure';
 import { isMessage, simpleOf } from './context.pure';
 import type { AttentionLayout, Category, Chat, Depth, Part, PartId, Preset, RenderMode } from './context.types';
 
 /* The cornerstone's view state: what is shown, lit and pinned. Transient (FE-001): it lives in memory and a reload
  * returns to the Preset, which is the Slide's own state. */
 
-export const PARTS: readonly Part[] = ['chat', 'timeline', 'context', 'preview', 'panel', 'attention'];
+export const PARTS: readonly Part[] = ['chat', 'timeline', 'context', 'category', 'panel', 'attention'];
 export const ATTENTION_LAYOUTS: readonly AttentionLayout[] = ['list', 'pinned', 'compressed'];
 
 export interface ViewState {
@@ -69,6 +69,9 @@ export function blockedBy(preset: Preset, event: ViewEvent): string | null {
   return id && !id.some((control) => offers(preset, control)) ? `control "${id[0]}" hidden` : null;
 }
 
+const isModePart = (part: PartId): part is ModePart =>
+  part === 'conversation' || part === 'context-window' || part === 'category';
+
 const CONTROL_FOR: Partial<Record<ViewEvent['type'], readonly ControlId[]>> = {
   SET_WINDOW: ['window'],
   SET_DEPTH: ['technical'],
@@ -78,9 +81,7 @@ const CONTROL_FOR: Partial<Record<ViewEvent['type'], readonly ControlId[]>> = {
 
 /** The controls that may send an event: any one of them is enough. */
 function controlFor(event: ViewEvent): readonly ControlId[] | null {
-  if (event.type === 'SET_PART_MODE') return [event.part === 'context-window' ? 'windowTechnical' : 'technical'];
-  // The head's eye also toggles the preview part.
-  if (event.type === 'TOGGLE_PART' && event.part === 'preview') return ['parts', 'preview'];
+  if (event.type === 'SET_PART_MODE') return [isModePart(event.part) ? modeControlOf(event.part) : 'technical'];
   if (event.type === 'REORDER') return ['parts'];
   return CONTROL_FOR[event.type] ?? null;
 }
