@@ -92,13 +92,16 @@ defaults:
   windowSwitch: false
   windows: [{ size: 200k, lines: [matt] }]
   motion: rise
+  height: 38
 
 presets:
   slide-3:
     chat: summer-party
     step: 9
     pinned: m3
-    controls: [show]
+    controls: []
+    controlsHidden: true
+    height: 26.6
     windows: [{ size: 200k, lines: [] }]
   slide-4:
     chat: summer-party

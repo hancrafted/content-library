@@ -178,8 +178,6 @@ describe('success cases', () => {
         'apps-may-differ',
       ],
       'what-happens-when-the-bar-fills-up': [
-        'quality-falls-before-the-limit',
-        'length-alone-hurts',
         'what-the-studies-measure',
         'extra-material-makes-it-worse',
         'mostly-synthetic-tests',

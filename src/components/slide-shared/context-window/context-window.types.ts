@@ -151,6 +151,8 @@ export interface Preset {
   /** The 200K | 1M switch between the window sizes, in the context's head. Off by default; it needs two sizes. */
   readonly windowSwitch: boolean;
   readonly motion: Motion;
+  /** The height of the main row in rem on a wide container. 38 by default; a Slide short of room sets less. */
+  readonly height: number;
 }
 
 /** One static mini bar: a chat at a step. */

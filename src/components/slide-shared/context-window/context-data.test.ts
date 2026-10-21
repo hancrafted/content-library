@@ -86,6 +86,30 @@ describe('success cases', () => {
     expect(motions).toEqual(expected);
   });
 
+  it('hides the toolbar on Slide 3 and draws its context component 30% lower than the default', () => {
+    // ARRANGE
+    const expected = { controls: [], controlsHidden: true, height: 26.6 };
+    // ACT
+    const slide3 = contextData('en').presets['slide-3'];
+    // ASSERT
+    expect({ controls: slide3?.controls, controlsHidden: slide3?.controlsHidden, height: slide3?.height }).toEqual(
+      expected,
+    );
+  });
+
+  it('keeps the default 38rem height on every other Preset', () => {
+    // ARRANGE
+    const expected = { 'slide-3': 26.6 };
+    // ACT
+    const heights = Object.fromEntries(
+      Object.values(contextData('en').presets)
+        .filter((preset) => preset.height !== 38)
+        .map((preset) => [preset.id, preset.height]),
+    );
+    // ASSERT
+    expect(heights).toEqual(expected);
+  });
+
   it('names every Preset of the config, and builds each in both locales', () => {
     // ARRANGE
     const expected = { presets: [...CONTEXT_PRESETS].sort(), minis: [...MINI_PRESETS].sort() };
@@ -132,6 +156,17 @@ describe('failure cases', () => {
     const expected = 'slide-3: the window switch needs two window sizes';
     // ACT
     const problems = slide3 ? presetProblems({ ...slide3, windowSwitch: true }, data.chats['summer-party']) : [];
+    // ASSERT
+    expect(problems).toContain(expected);
+  });
+
+  it('refuses a height that is not a positive number of rem', () => {
+    // ARRANGE
+    const data = contextData('en');
+    const slide3 = data.presets['slide-3'];
+    const expected = 'slide-3: the height must be a positive number of rem';
+    // ACT
+    const problems = slide3 ? presetProblems({ ...slide3, height: 0 }, data.chats['summer-party']) : [];
     // ASSERT
     expect(problems).toContain(expected);
   });

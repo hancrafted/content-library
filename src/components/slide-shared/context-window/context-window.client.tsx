@@ -43,7 +43,7 @@ function chatWidth(parts: ViewState['parts'], collapsed: boolean): string {
 }
 
 /** The grid's columns, one per part shown: the layout follows the parts, not the other way round. */
-function columns(parts: ViewState['parts'], state: ViewState) {
+function columns(parts: ViewState['parts'], state: ViewState, height: number) {
   const all: [Part, string, string][] = [
     ['chat', chatWidth(parts, state.chatCollapsed), 'chat'],
     ['timeline', '3.5rem', 'timeline'],
@@ -52,7 +52,11 @@ function columns(parts: ViewState['parts'], state: ViewState) {
   ];
   const shown = all.filter(([part]) => parts[part]);
   const areas = shown.map(([, , area]) => area).join(' ');
-  return { '--cols': shown.map(([, col]) => col).join(' ') || '1fr', '--areas': areas ? `'${areas}'` : 'none' };
+  return {
+    '--cols': shown.map(([, col]) => col).join(' ') || '1fr',
+    '--areas': areas ? `'${areas}'` : 'none',
+    '--main-h': `${height}rem`,
+  };
 }
 
 function sentenceOf(v: View): string {
@@ -126,7 +130,7 @@ function ChatPart({ v }: { readonly v: View }) {
 function Parts({ v, sentence }: { readonly v: View; readonly sentence: string }) {
   const P = v.state.parts;
   return (
-    <div className={styles.main} style={columns(P, v.state) as never}>
+    <div className={styles.main} style={columns(P, v.state, v.preset.height) as never}>
       <ChatPart v={v} />
       {P.timeline ? <Timeline v={v} valueText={sentence} /> : null}
       {P.context ? <ContextColumn v={v} onRove={rove} /> : null}

@@ -36,6 +36,7 @@ const PRESET: Preset = {
   windowSwitch: true,
   windows: [WINDOW, { tokens: 1000000, bufferTokens: 33000, lines: [] }],
   motion: 'rise',
+  height: 38,
 };
 const CONTEXT = { preset: PRESET, steps: CHAT.steps.length };
 

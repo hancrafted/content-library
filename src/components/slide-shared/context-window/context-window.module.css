@@ -269,7 +269,7 @@
   grid-template-columns: var(--cols, minmax(16rem, 1.15fr) 3.5rem 26rem minmax(15rem, 1fr));
   grid-template-areas: var(--areas, 'chat timeline ctx panel');
   gap: 1rem;
-  height: 38rem;
+  height: var(--main-h, 38rem);
 }
 .ready .main > * {
   animation: cs-in var(--in) var(--ease-out);
