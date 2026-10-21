@@ -4,10 +4,9 @@
 words:
   controls: Steuerung des Kontextfensters
   showParts: Teile zeigen
-  parts: { chat: Unterhaltung, timeline: Zeitleiste, context: Kontext, panel: Details }
+  parts: { chat: Unterhaltung, timeline: Zeitleiste, context: Kontext, panel: Details, attention: Aufmerksamkeit }
   technical: Technisch
   technicalTip: 'Technisch: der Chat als Claude-Code-Terminal, das Fenster als /context-Kästchen mit den echten Kategorienamen.'
-  modeGroup: Ansicht
   modes: { explain: Erklären, attention: Aufmerksamkeit }
   collapse: Unterhaltung einklappen
   collapseTip: Die Unterhaltung zu einem Streifen falten

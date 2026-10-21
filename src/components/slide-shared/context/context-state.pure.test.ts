@@ -23,10 +23,11 @@ const PRESET: Preset = {
   id: 'test',
   chat: 'party',
   step: 3,
-  mode: 'explain',
   depth: 'simple',
   pinned: null,
-  show: { chat: true, timeline: true, context: true, panel: false },
+  show: { chat: true, timeline: true, context: true, panel: false, attention: false },
+  fade: false,
+  attention: { layout: 'list' },
   controls: ['show'],
   controlsHidden: false,
   timelineLocked: false,
@@ -43,8 +44,7 @@ const CONTEXT = { preset: PRESET, steps: CHAT.steps.length };
 const WITH_MODES = { ...PRESET, controls: ['show', 'depth'] as const };
 const MODES = { preset: WITH_MODES, steps: CHAT.steps.length };
 
-const view = (mode: 'explain' | 'attention', lit: string | null) => ({
-  mode,
+const view = (lit: string | null) => ({
   depth: 'simple' as const,
   lit,
   ghost: null,
@@ -70,11 +70,11 @@ describe('success cases', () => {
     expect([once.pinned, twice.pinned]).toEqual(expected);
   });
 
-  it('changes the panel key with what Explain explains and with the mode', () => {
+  it('changes the panel key with what Details explains and with the renderMode', () => {
     // ARRANGE
-    const resting = panelKey(view('explain', null));
+    const resting = panelKey(view(null));
     // ACT
-    const keys = [panelKey(view('explain', 'm3')), panelKey(view('attention', null))];
+    const keys = [panelKey(view('m3')), panelKey({ ...view(null), depth: 'technical' })];
     // ASSERT
     expect(keys.map((key) => key === resting)).toEqual([false, false]);
   });
@@ -180,14 +180,5 @@ describe('edge cases', () => {
     const next = reduce(createState(PRESET), { type: 'COMMIT', step: 40 }, CONTEXT);
     // ASSERT
     expect(next.step).toBe(expected);
-  });
-
-  it('keeps the same panel key while Attention is lit, so hovering a row never remounts the card', () => {
-    // ARRANGE
-    const resting = panelKey(view('attention', null));
-    // ACT
-    const lit = panelKey(view('attention', 'm3'));
-    // ASSERT
-    expect(lit).toBe(resting);
   });
 });

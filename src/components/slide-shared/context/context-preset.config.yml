@@ -79,11 +79,12 @@ attention:
 # One Preset per Slide state of the Spec's picked Options. Omitted fields take the defaults below.
 defaults:
   step: 21
-  mode: explain
   depth: simple
   pinned: null
-  show: { chat: true, timeline: true, context: true, panel: false }
-  controls: [show, depth, mode, collapse, meter]
+  show: { chat: true, timeline: true, context: true, panel: false, attention: false }
+  fade: false
+  attention: { layout: list }
+  controls: [show, depth, collapse, meter]
   controlsHidden: false
   timelineLocked: false
   meterHidden: false
@@ -105,13 +106,13 @@ presets:
     windows: [{ size: 200k, lines: [] }]
   slide-4:
     chat: summer-party
-    mode: attention
-    show: { chat: true, timeline: true, context: true, panel: true }
-    controls: [show, depth, mode]
+    show: { chat: true, timeline: true, context: true, panel: false, attention: true }
+    attention: { layout: compressed }
+    controls: [show, depth]
     windows: [{ size: 200k, lines: [] }]
   slide-5:
     chat: summer-party
-    mode: attention
+    fade: true
     controls: []
     controlsHidden: true
     windowSwitch: true
@@ -208,10 +209,9 @@ minis:
 words:
   controls: Context window controls
   showParts: Show parts
-  parts: { chat: Conversation, timeline: Timeline, context: Context, panel: Details }
+  parts: { chat: Conversation, timeline: Timeline, context: Context, panel: Details, attention: Attention }
   technical: Technical
   technicalTip: 'Technical: the chat as a Claude Code terminal, the window as /context boxes with the real category names.'
-  modeGroup: View
   modes: { explain: Explain, attention: Attention }
   collapse: Collapse conversation
   collapseTip: Fold the conversation into a strip

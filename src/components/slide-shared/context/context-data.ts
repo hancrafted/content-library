@@ -167,7 +167,15 @@ function presetsOf(en: Config, words: ContextWords): Record<string, Preset> {
   return Object.fromEntries(
     Object.entries(en.presets).map(([id, raw]) => {
       const merged = { ...en.defaults, ...raw };
-      return [id, { ...merged, id, windows: merged.windows.map((ref) => windowOf(en, words, ref)) }];
+      return [
+        id,
+        {
+          ...merged,
+          show: { ...en.defaults.show, ...raw.show },
+          id,
+          windows: merged.windows.map((ref) => windowOf(en, words, ref)),
+        },
+      ];
     }),
   );
 }

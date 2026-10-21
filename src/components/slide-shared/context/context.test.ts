@@ -36,6 +36,17 @@ describe('success cases', () => {
     expect(shown).toEqual(expected);
   });
 
+  it('draws Attention as a part of its own on Slide 4, in the layout its Preset names', () => {
+    // ARRANGE
+    const expected = { section: 'Attention', layout: 'compressed' };
+    // ACT
+    const $ = render('slide-4');
+    // ASSERT
+    expect(sections($)).toContain(expected.section);
+    expect($('[data-layout]').attr('data-layout')).toBe(expected.layout);
+    expect($('[data-row]').length).toBeGreaterThan(0);
+  });
+
   it('draws Technical as /context: 100 boxes, and the German words in German', () => {
     // ARRANGE
     const expected = { boxes: 100, label: 'Kontextfenster' };
