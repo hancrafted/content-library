@@ -371,6 +371,33 @@ describe('success cases', () => {
   );
 
   it(
+    'shows no Attention percentage at rest in Technical mode, only on hover as in Simple',
+    async () => {
+      // ARRANGE
+      await open('light');
+      await evaluate(
+        send,
+        `document.querySelector('${SLIDE_4} [role="toolbar"] button[data-control="technical"]').click()`,
+      );
+      await mouseTo(5, 5);
+      await delay(450);
+      // ACT
+      const rest = await evaluate<{ numbers: string; visible: number }>(
+        send,
+        `(() => {
+          const rows = [...document.querySelectorAll('${SLIDE_4} [data-row]')];
+          const numbers = rows.flatMap((r) => [...r.children].filter((c) => c.tagName === 'SPAN' && !c.hasAttribute('data-pct')).map((c) => c.textContent)).join('');
+          const visible = rows.filter((r) => Number(getComputedStyle(r.querySelector('[data-pct]')).opacity) > 0).length;
+          return { numbers, visible };
+        })()`,
+      );
+      // ASSERT
+      expect(rest).toEqual({ numbers: '', visible: 0 });
+    },
+    TIMEOUT,
+  );
+
+  it(
     'shows the percentage at the right of a hovered or focused Attention row in every layout, moving nothing',
     async () => {
       // ARRANGE
