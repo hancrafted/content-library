@@ -321,7 +321,8 @@ describe('success cases', () => {
     );
     // ASSERT
     expect(findings).toEqual([]);
-  });
+    // Walks every reference of every per-run pipeline on disk: over 3 s alone, past the 5 s default under a full run.
+  }, 20_000);
 
   it('finds one write-research job per research job the research plan lists, in every per-run pipeline', () => {
     // ARRANGE
