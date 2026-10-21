@@ -1,9 +1,9 @@
 import { slide } from '@/components/slide-master/slide';
 import { SlideFrame } from '@/components/slide-master/slide-master';
 import { Context } from '@/components/slide-shared/context/context';
-import { ArrowUp } from 'lucide-react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
+import { LostBracket } from './lost-bracket.client';
 
 const ANTHROPIC_CONTEXT_ENGINEERING = {
   slug: 'anthropic-effective-context-engineering',
@@ -20,7 +20,7 @@ const ON_PRIMARY = 'text-primary-foreground hover:text-primary-foreground focus-
 /**
  * "Attention is a budget" (Spec Option 5a, simplified by Han's batch-2 feedback): the live cornerstone in its Slide 5
  * Preset, with the timeline left, the window as a Simple bar with its 200K | 1M switch and smart zone, and the
- * attention on the right. The "Lost in the middle" label sits under the attention card, in its column, with an arrow pointing up at it; below, the caveat that the line differs per model. Keeps `basic-page`,
+ * attention on the right. The "Lost in the middle" card sits right of the attention card, level with its middle rows and marked by a curly bracket (no arrow); below, the caveat that the line differs per model. Keeps `basic-page`,
  * `motion: none`.
  */
 export const attentionIsABudget = slide({
@@ -42,29 +42,26 @@ export const attentionIsABudget = slide({
   ],
   content: ({ t, locale, marker, target }) => (
     <SlideFrame className="mt-8 gap-6">
-      <div {...target('attention')} className="@container flex flex-col gap-3">
-        <Context preset="slide-5" locale={locale} />
-        {/* Under the Context's attention column (Preset slide-5: timeline 3.5rem, window 16rem, attention the rest). */}
-        <div
-          {...target('lost')}
-          data-lost-label=""
-          className="flex flex-col items-center gap-2 @3xl:grid @3xl:grid-cols-[3.5rem_16rem_minmax(15rem,1fr)] @3xl:items-start @3xl:gap-x-4"
-        >
-          <div className="flex w-full flex-col items-center gap-2 @3xl:col-start-3">
-            <ArrowUp aria-hidden="true" className="size-8 shrink-0 text-primary" />
-            <div className="w-full rounded-xl bg-primary p-5 text-primary-foreground shadow-md">
+      <div {...target('attention')} data-lost-host="" className="@container relative flex flex-col gap-3">
+        <div className="@3xl:pr-[17rem]">
+          <Context preset="slide-5" locale={locale} />
+        </div>
+        {/* Right of the attention card, level with its middle rows; below the card on a narrow slide. */}
+        <div {...target('lost')} data-lost-label="" className="@3xl:absolute @3xl:inset-y-0 @3xl:right-0 @3xl:w-64">
+          <LostBracket>
+            <div className="w-full rounded-xl bg-primary p-4 text-primary-foreground shadow-md">
               <p className="text-caption tracking-wide uppercase">{t('lost.kicker')}</p>
-              <p className="text-subheading font-semibold">
+              <p className="text-body font-semibold">
                 {t.rich('lost.name', { marker: marker('the-u-shape-is-measured', ON_PRIMARY) })}
               </p>
-              <p className="text-body">
+              <p className="text-caption">
                 {t.rich('lost.body', {
                   budget: marker('the-attention-budget', ON_PRIMARY),
                   start: marker('the-start-is-weighted', ON_PRIMARY),
                 })}
               </p>
             </div>
-          </div>
+          </LostBracket>
         </div>
       </div>
       <p {...target('zones')} className="flex flex-wrap items-center gap-3 text-body text-muted-foreground">
