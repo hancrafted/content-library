@@ -102,14 +102,15 @@ export interface StepNotes {
   readonly big?: boolean;
 }
 
-export type Mode = 'explain' | 'attention';
 export type Depth = 'simple' | 'technical';
 /** How a part draws itself: Simple for the room, Technical for the people who know the tool. */
 export type RenderMode = Depth;
-/** A part of the Context, as renderMode names it. Attention still draws inside Details until it splits out. */
+/** A part of the Context, as renderMode names it. */
 export type PartId = 'conversation' | 'timeline' | 'context-window' | 'context-preview' | 'details' | 'attention';
-export type Part = 'chat' | 'timeline' | 'context' | 'panel';
-export type Control = 'show' | 'depth' | 'mode' | 'collapse' | 'meter';
+export type Part = 'chat' | 'timeline' | 'context' | 'panel' | 'attention';
+export type Control = 'show' | 'depth' | 'collapse' | 'meter';
+/** How the Attention part lays out its rows: a scrolling list, the first and last three pinned, or one bar per share. */
+export type AttentionLayout = 'list' | 'pinned' | 'compressed';
 export type Motion = 'off' | 'crisp' | 'rise' | 'spring';
 
 /** A smart-zone line drawn across the bar at a token count. */
@@ -137,11 +138,14 @@ export interface Preset {
   readonly chat: string;
   /** The first step, 1-based, on the timeline. */
   readonly step: number;
-  readonly mode: Mode;
   readonly depth: Depth;
   /** The part lit at rest: a step id, a block (`m8@tool_result`), a category (`cat:`, `scat:`) or `group:messages`. */
   readonly pinned: string | null;
   readonly show: Readonly<Record<Part, boolean>>;
+  /** The chat dims each message by its attention, as the Attention part does; on whenever that part is shown. */
+  readonly fade: boolean;
+  /** The Attention part's own settings, separate from renderMode so the toolbar's Technical never undoes them. */
+  readonly attention: { readonly layout: AttentionLayout };
   readonly controls: readonly Control[];
   readonly controlsHidden: boolean;
   readonly timelineLocked: boolean;

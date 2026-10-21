@@ -40,16 +40,15 @@ describe('success cases', () => {
         'slide-3': { lit: 3, sections: ['Chat', 'Context window'], sliders: 1, toolbar: [] },
         'slide-4': {
           lit: 0,
-          sections: ['Chat', 'Context window', 'Details'],
+          sections: ['Chat', 'Context window', 'Attention'],
           sliders: 1,
           toolbar: [
             'Conversation:true',
             'Timeline:true',
             'Context:true',
-            'Details:true',
-            ':false',
-            'Explain:false',
+            'Details:false',
             'Attention:true',
+            ':false',
             ':-',
           ],
         },
@@ -64,9 +63,8 @@ describe('success cases', () => {
             'Timeline:true',
             'Context:true',
             'Details:true',
-            ':true',
-            'Explain:true',
             'Attention:false',
+            ':true',
             ':false',
             ':false',
             ':-',
@@ -81,9 +79,8 @@ describe('success cases', () => {
             'Timeline:true',
             'Context:true',
             'Details:true',
-            ':true',
-            'Explain:true',
             'Attention:false',
+            ':true',
             ':false',
             ':-',
           ],
@@ -156,18 +153,16 @@ describe('success cases', () => {
   });
 
   describe('toolbar toggles', () => {
-    it('flips a part, the mode, the depth and the chat collapse where the Preset offers them', () => {
+    it('flips a part, the depth and the chat collapse where the Preset offers them', () => {
       // ARRANGE
       const { preset, context } = setup('slide-7');
       const state = createState(preset);
       // ACT
       const part = reduce(state, { type: 'TOGGLE_PART', part: 'panel' }, context);
-      const mode = reduce(state, { type: 'SET_MODE', value: 'attention' }, context);
       const depth = reduce(state, { type: 'SET_DEPTH', value: 'technical' }, context);
       const collapsed = reduce(state, { type: 'TOGGLE_CHAT' }, context);
       // ASSERT
       expect(part.parts.panel).toBe(!state.parts.panel);
-      expect(mode.mode).toBe('attention');
       expect(depth.depth).toBe('technical');
       expect(collapsed.chatCollapsed).toBe(true);
     });
@@ -189,7 +184,7 @@ describe('failure cases', () => {
     const { preset, context } = setup('slide-5');
     const state = createState(preset);
     // ACT
-    const next = reduce(state, { type: 'SET_MODE', value: 'attention' }, context);
+    const next = reduce(state, { type: 'SET_DEPTH', value: 'technical' }, context);
     // ASSERT
     expect(next).toBe(state);
   });

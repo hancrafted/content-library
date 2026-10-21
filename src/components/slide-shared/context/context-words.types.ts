@@ -1,4 +1,4 @@
-import type { Category, Depth, Mode, Part, SimpleCategory } from './context.types';
+import type { Category, Depth, Part, SimpleCategory } from './context.types';
 
 /** A smart-zone line's words. */
 export interface LineWords {
@@ -16,8 +16,8 @@ export interface ContextWords {
   readonly parts: Readonly<Record<Part, string>>;
   readonly technical: string;
   readonly technicalTip: string;
-  readonly modeGroup: string;
-  readonly modes: Readonly<Record<Mode, string>>;
+  /** The heads of the Details and Attention parts. */
+  readonly modes: Readonly<Record<'explain' | 'attention', string>>;
   readonly collapse: string;
   readonly collapseTip: string;
   readonly meter: string;

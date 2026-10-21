@@ -52,8 +52,9 @@ export function useWindowEvents(host: Host) {
     },
     [dispatch, root],
   );
+  const onReveal = useCallback((part: string) => revealBubble(root.current, part, null), [root]);
   const onKeyDown = (event: KeyboardEvent<HTMLElement>) => {
     if (event.key === 'Escape') dispatch({ type: 'ESC' });
   };
-  return { onLight, onPin, onKeyDown };
+  return { onLight, onPin, onReveal, onKeyDown };
 }

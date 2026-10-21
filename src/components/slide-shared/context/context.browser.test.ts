@@ -38,7 +38,7 @@ const sessionOf = (s: Send) => sessions.get(s) ?? '';
  * Dimmed on purpose, and so left out of the contrast rule only: an empty category row, a bubble a compaction removed,
  * and the Attention view's bubbles, whose fade is the picture (Spec, Visual language). Every other rule checks them.
  */
-const DIMMED = ['[data-zero]', '[data-gone]', '[data-mode="attention"] [data-role]'];
+const DIMMED = ['[data-zero]', '[data-gone]', '[data-fade] [data-role]'];
 
 async function run(expression: string): Promise<string[]> {
   const { result, exceptionDetails } = (await send('Runtime.evaluate', {
@@ -55,7 +55,7 @@ function axeOf(preset: string): Promise<string[]> {
   const root = `[data-cornerstone="${preset}"]`;
   const lines = `.then((r) => r.violations.flatMap((v) => v.nodes.map((n) => v.id + ': ' + n.target.join(' '))))`;
   const tags = `runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa'] }`;
-  const exclude = JSON.stringify(DIMMED.map((dim) => [`${root}${dim.startsWith('[data-mode') ? '' : ' '}${dim}`]));
+  const exclude = JSON.stringify(DIMMED.map((dim) => [`${root}${dim.startsWith('[data-fade') ? '' : ' '}${dim}`]));
   // axe runs one audit at a time: the contrast pass waits for the rest.
   return run(`(async () => [
     ...(await axe.run({ include: [['${root}']] }, { ${tags}, rules: { 'color-contrast': { enabled: false } } })${lines}),
@@ -337,9 +337,9 @@ describe('success cases', () => {
       await open('light');
       await evaluate(
         send,
-        `(() => { document.querySelector('${SLIDE_4} [class*="attRow"] button').closest('[class*="card"]').firstElementChild.__mark = 'kept'; })()`,
+        `(() => { document.querySelector('${SLIDE_4} [class*="attRow"]').closest('[class*="card"]').firstElementChild.__mark = 'kept'; })()`,
       );
-      const rows = '[class*="attRow"] button';
+      const rows = '[class*="attRow"]';
       // ACT
       const first = await centreOf(`${SLIDE_4} ${rows}`, 2);
       await mouseTo(first.x, first.y);
@@ -350,7 +350,7 @@ describe('success cases', () => {
       const found = await evaluate<{ kept: string | null; bubble: boolean }>(
         send,
         `(() => {
-          const btn = document.querySelectorAll('${SLIDE_4} ${rows}')[4];
+          const btn = document.elementFromPoint(${second.x}, ${second.y}).closest('[data-row]');
           const bubble = document.querySelector('${SLIDE_4} [data-role][data-part="' + btn.dataset.part + '"]');
           return {
             kept: btn.closest('[class*="card"]').firstElementChild.__mark ?? null,
@@ -371,7 +371,7 @@ describe('success cases', () => {
       await open('light');
       const away = await scrollChatAway();
       // ACT
-      const row = await centreOf(`${SLIDE_4} [class*="attRow"] button[data-part="${away}"]`);
+      const row = await centreOf(`${SLIDE_4} [class*="attRow"][data-part="${away}"]`);
       await click(row.x, row.y);
       await delay(900);
       const bubble = await bubbleState(away);
@@ -387,14 +387,14 @@ describe('success cases', () => {
     async () => {
       // ARRANGE
       await open('light');
-      const row = await centreOf(`${SLIDE_4} [class*="attRow"] button`, 2);
+      const row = await centreOf(`${SLIDE_4} [class*="attRow"]`, 2);
       const measure = () =>
         evaluate<string>(
           send,
           `(() => {
             const root = document.querySelector('${SLIDE_4}');
             const phone = root.querySelector('[class*="phone"]').getBoundingClientRect().height;
-            return [[...root.querySelectorAll('[data-role]:not([hidden])')].map((e) => e.dataset.part + '=' + Math.round(e.getBoundingClientRect().height)).join(), Math.round(phone), Math.round(scrollY), root.querySelector('[class*="attRow"] button').getBoundingClientRect().top | 0].join();
+            return [[...root.querySelectorAll('[data-role]:not([hidden])')].map((e) => e.dataset.part + '=' + Math.round(e.getBoundingClientRect().height)).join(), Math.round(phone), Math.round(scrollY), root.querySelector('[data-layout]').getBoundingClientRect().top | 0].join();
           })()`,
         );
       const before = await measure();
@@ -403,6 +403,88 @@ describe('success cases', () => {
       await delay(300);
       // ASSERT
       expect(await measure()).toBe(before);
+    },
+    TIMEOUT,
+  );
+
+  it(
+    'magnifies the Attention rows under the pointer like a dock, with the total height unchanged',
+    async () => {
+      // ARRANGE
+      await open('light');
+      const list = `${SLIDE_4} [data-layout="compressed"]`;
+      const heights = () =>
+        evaluate<number[]>(
+          send,
+          `[...document.querySelectorAll('${list} [data-row]')].map((r) => r.getBoundingClientRect().height)`,
+        );
+      const sum = (values: number[]) => values.reduce((a, b) => a + b, 0);
+      const minRow = 3.5;
+      const reach = 3;
+      const tolerance = 1.5;
+      const slack = 0.5;
+      const rowIndex = 8;
+      const target = await centreOf(`${list} [data-row]`, rowIndex);
+      const resting = await heights();
+      // ACT
+      await mouseTo(target.x, target.y);
+      await delay(400);
+      const docked = await heights();
+      const lit = await evaluate<string>(
+        send,
+        `document.querySelector('${list} [data-on]')?.getAttribute('data-part') ?? ''`,
+      );
+      const grown = docked.map((h, i) => h - (resting[i] ?? 0));
+      const peak = grown.indexOf(Math.max(...grown));
+      // ASSERT
+      expect(Math.abs(sum(docked) - sum(resting))).toBeLessThan(tolerance);
+      expect(Math.min(...docked)).toBeGreaterThanOrEqual(minRow);
+      expect(Math.abs(peak - rowIndex)).toBeLessThanOrEqual(1);
+      expect(grown.slice(peak + reach + 1).every((g) => g <= slack)).toBe(true);
+      expect(lit).not.toBe('');
+    },
+    TIMEOUT,
+  );
+
+  it(
+    'brings the chat message of a hovered compressed Attention row into view and lights it',
+    async () => {
+      // ARRANGE
+      await open('light');
+      const away = await scrollChatAway();
+      const row = await centreOf(`${SLIDE_4} [class*="attRow"][data-part="${away}"]`);
+      // ACT
+      await mouseTo(row.x, row.y);
+      await delay(900);
+      const bubble = await bubbleState(away);
+      // ASSERT
+      expect(away).not.toBe('');
+      expect(bubble.inView).toBe(true);
+    },
+    TIMEOUT,
+  );
+
+  it(
+    'snaps the Attention rows under reduced motion, with no height transition',
+    async () => {
+      // ARRANGE
+      const row = `${SLIDE_4} [data-layout="compressed"] [data-row]`;
+      const duration = () =>
+        evaluate<string>(send, `getComputedStyle(document.querySelector('${row}')).transitionDuration`);
+      await open('light');
+      const animated = await duration();
+      // ACT
+      await send('Emulation.setEmulatedMedia', {
+        features: [{ name: 'prefers-reduced-motion', value: 'reduce' }],
+      });
+      await delay(100);
+      const snapped = await duration();
+      await send('Emulation.setEmulatedMedia', {
+        features: [{ name: 'prefers-reduced-motion', value: 'no-preference' }],
+      });
+      // ASSERT
+      expect(animated).not.toBe('0s');
+      expect(snapped).toBe('0s');
     },
     TIMEOUT,
   );

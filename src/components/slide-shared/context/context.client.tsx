@@ -84,7 +84,7 @@ function rootAttrs(m: Model) {
   return {
     'data-cornerstone': m.data.preset.id,
     'data-motion': m.data.preset.motion,
-    'data-mode': m.state.mode,
+    'data-fade': m.data.preset.fade || m.state.parts.attention ? '' : undefined,
     'data-chat': m.state.chatCollapsed ? 'collapsed' : 'open',
     'data-meter': m.state.meterHidden ? 'hidden' : 'shown',
     'data-lit': m.lit || m.ghost ? '' : undefined,

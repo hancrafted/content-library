@@ -1,4 +1,4 @@
-import { CONTROLS, PARTS } from './context-state.pure';
+import { ATTENTION_LAYOUTS, CONTROLS, PARTS } from './context-state.pure';
 import { framesOf, type Frame } from './context.pure';
 import type { Chat, Preset, WindowSize } from './context.types';
 
@@ -10,6 +10,11 @@ function pinnedProblems(preset: Preset, chat: Chat): string[] {
   return chat.steps.some((step) => step.id === id) ? [] : [`pinned part "${preset.pinned}" is not in the chat`];
 }
 
+function layoutProblems(preset: Preset): string[] {
+  const { layout } = preset.attention;
+  return ATTENTION_LAYOUTS.includes(layout) ? [] : [`unknown attention layout "${String(layout)}"`];
+}
+
 function shapeProblems(preset: Preset, chat: Chat): string[] {
   const steps = chat.steps.length;
   return [
@@ -19,6 +24,7 @@ function shapeProblems(preset: Preset, chat: Chat): string[] {
       .filter((part) => !PARTS.some((p) => p === part))
       .map((part) => `unknown part "${part}"`),
     ...pinnedProblems(preset, chat),
+    ...layoutProblems(preset),
     ...(preset.height > 0 && Number.isFinite(preset.height) ? [] : ['the height must be a positive number of rem']),
     ...(preset.windowSwitch && preset.windows.length < 2 ? ['the window switch needs two window sizes'] : []),
   ];

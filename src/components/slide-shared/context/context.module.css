@@ -461,17 +461,17 @@
   outline-color: var(--primary);
 }
 /* Attention: bubbles fade with their share; a gap the AI may fill gets a dashed note. */
-.root[data-mode='attention']:not([data-lit]) .msg {
+.root[data-fade]:not([data-lit]) .msg {
   opacity: var(--att-o, 1);
 }
-.root[data-mode='attention']:not([data-lit]) .msg[data-faded][data-may-fill] {
+.root[data-fade]:not([data-lit]) .msg[data-faded][data-may-fill] {
   opacity: 0.6;
   outline: 1.5px dashed var(--cs-sub);
   background: var(--muted);
   color: var(--foreground);
 }
 /* The note stays while something is lit: it leaving would shrink the chat and jump the page under the pointer. */
-.root[data-mode='attention'] .msg[data-faded][data-may-fill] .note {
+.root[data-fade] .msg[data-faded][data-may-fill] .note {
   display: block;
 }
 /* After a compaction, earlier bubbles stay readable but are no longer in the context. */
@@ -557,7 +557,7 @@
   background: none;
   color: var(--cs-term-dim);
 }
-.root[data-mode='attention']:not([data-lit]) [data-depth='technical'] .msg[data-faded][data-may-fill] {
+.root[data-fade]:not([data-lit]) [data-depth='technical'] .msg[data-faded][data-may-fill] {
   background: var(--cs-term-hi);
   color: var(--cs-term-fg);
   outline-color: var(--cs-term-dim);
@@ -1199,15 +1199,70 @@ button.row:hover {
   white-space: pre-wrap;
   margin: 0.5rem 0 0;
 }
+.attentionPart {
+  grid-area: att;
+}
+.attCard {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+/* The rows: a list that scrolls, the first and last three pinned, or compressed to bars that fill the height. */
 .att {
-  display: grid;
-  grid-template-columns: minmax(6rem, 2fr) 1fr 1.75rem;
-  gap: 3px 0.6rem;
-  align-items: center;
+  --row: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-height: 8rem;
   margin-top: 0.6rem;
+  overflow-y: auto;
+}
+.att[data-layout='compressed'] {
+  gap: 0;
+  min-height: 16rem;
+  overflow: hidden;
 }
 .attRow {
-  display: contents;
+  display: grid;
+  grid-template-columns: minmax(6rem, 2fr) 1fr 1.75rem;
+  gap: 0 0.6rem;
+  align-items: center;
+  flex: none;
+  height: var(--row);
+  background: var(--card);
+}
+/* Pinned: the first and last three rows stay in view while the middle scrolls between them. */
+.attRow[data-pin='top'] {
+  position: sticky;
+  top: calc(var(--slot) * (var(--row) + 3px));
+  z-index: 1;
+}
+.attRow[data-pin='bottom'] {
+  position: sticky;
+  bottom: calc(var(--slot) * (var(--row) + 3px));
+  z-index: 1;
+}
+/* Compressed: the row is the bar, as tall as its share; the dock script sets the heights. */
+.att[data-layout='compressed'] .attRow {
+  overflow: hidden;
+  transition: height var(--hov, 140ms) var(--ease-out);
+}
+.att[data-layout='compressed'] .attName {
+  line-height: 1.2;
+  padding: 0;
+}
+.att[data-layout='compressed'] .attBar {
+  height: calc(100% - 1px);
+  border-radius: 2px;
+}
+.att[data-layout='compressed'] .attBar i {
+  border-radius: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .att[data-layout='compressed'] .attRow {
+    transition: none;
+  }
 }
 .attName {
   white-space: nowrap;

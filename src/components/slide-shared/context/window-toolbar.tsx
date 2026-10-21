@@ -4,11 +4,9 @@ import { toClaudeLog } from './claude-log-writer.pure';
 import { offers, PARTS } from './context-state.pure';
 import type { ContextWords } from './context-words.types';
 import styles from './context.module.css';
-import type { Chat, Control, Mode, Part, Preset } from './context.types';
+import type { Chat, Control, Part, Preset } from './context.types';
 
-/* The one toolbar: parts · Technical · Explain/Attention · collapse · meter · the chat as a log. */
-
-const MODES: readonly Mode[] = ['explain', 'attention'];
+/* The one toolbar: parts · Technical · collapse · meter · the chat as a log. */
 
 /** What the toolbar shows and the events it sends up: the parent owns the state. */
 export interface ToolbarProps {
@@ -16,13 +14,11 @@ export interface ToolbarProps {
   readonly preset: Preset;
   readonly chat: Chat;
   readonly parts: Readonly<Record<Part, boolean>>;
-  readonly mode: Mode;
   /** The global renderMode is Technical: what the toolbar's Technical last set for every part. */
   readonly technical: boolean;
   readonly chatCollapsed: boolean;
   readonly meterHidden: boolean;
   readonly onPart: (part: Part) => void;
-  readonly onMode: (mode: Mode) => void;
   readonly onTechnical: (on: boolean) => void;
   readonly onCollapse: () => void;
   readonly onMeter: () => void;
@@ -41,25 +37,6 @@ function ShowGroup({ v }: { readonly v: ToolbarProps }) {
           onClick={() => v.onPart(part)}
         >
           {v.words.parts[part]}
-        </button>
-      ))}
-    </div>
-  );
-}
-
-function ModeSwitch({ v }: { readonly v: ToolbarProps }) {
-  const index = MODES.indexOf(v.mode);
-  return (
-    <div className={styles.seg} role="group" aria-label={v.words.modeGroup} style={{ '--i': index } as never}>
-      {MODES.map((mode) => (
-        <button
-          key={mode}
-          type="button"
-          aria-pressed={v.mode === mode}
-          className={v.mode === mode ? 'font-semibold' : undefined}
-          onClick={() => v.onMode(mode)}
-        >
-          {v.words.modes[mode]}
         </button>
       ))}
     </div>
@@ -174,7 +151,7 @@ function ToggleButton({ v, toggle }: { readonly v: ToolbarProps; readonly toggle
   );
 }
 
-const CONTROLS_AFTER_SHOW: readonly Control[] = ['depth', 'mode', 'collapse', 'meter'];
+const CONTROLS_AFTER_SHOW: readonly Control[] = ['depth', 'collapse', 'meter'];
 
 /** Whether anything sits after the parts group: a control or a log button. */
 const hasRest = (v: ToolbarProps) =>
@@ -185,7 +162,6 @@ function Controls({ v }: { readonly v: ToolbarProps }) {
   return (
     <>
       {depth ? <ToggleButton v={v} toggle={depth} /> : null}
-      {offers(v.preset, 'mode') ? <ModeSwitch v={v} /> : null}
       {folds.map((toggle) => (
         <ToggleButton key={toggle.control} v={v} toggle={toggle} />
       ))}

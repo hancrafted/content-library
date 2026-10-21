@@ -1,18 +1,28 @@
 import { isMessage, simpleOf } from './context.pure';
-import type { Category, Chat, Control, Depth, Mode, Part, PartId, Preset, RenderMode } from './context.types';
+import type {
+  AttentionLayout,
+  Category,
+  Chat,
+  Control,
+  Depth,
+  Part,
+  PartId,
+  Preset,
+  RenderMode,
+} from './context.types';
 
 /* The cornerstone's view state: what is shown, lit and pinned. Transient (FE-001): it lives in memory and a reload
  * returns to the Preset, which is the Slide's own state. */
 
-export const CONTROLS: readonly Control[] = ['show', 'depth', 'mode', 'collapse', 'meter'];
-export const PARTS: readonly Part[] = ['chat', 'timeline', 'context', 'panel'];
+export const CONTROLS: readonly Control[] = ['show', 'depth', 'collapse', 'meter'];
+export const PARTS: readonly Part[] = ['chat', 'timeline', 'context', 'panel', 'attention'];
+export const ATTENTION_LAYOUTS: readonly AttentionLayout[] = ['list', 'pinned', 'compressed'];
 
 export interface ViewState {
   readonly step: number;
   readonly previewStep: number | null;
   readonly hover: string | null;
   readonly pinned: string | null;
-  readonly mode: Mode;
   /** The global renderMode: what the toolbar's Technical sets for every part. */
   readonly depth: Depth;
   /** A part's own renderMode, set after the global one; the latest action wins. */
@@ -34,7 +44,6 @@ export type ViewEvent =
   | { readonly type: 'PIN'; readonly part: string }
   | { readonly type: 'UNPIN' }
   | { readonly type: 'ESC' }
-  | { readonly type: 'SET_MODE'; readonly value: Mode }
   | { readonly type: 'SET_DEPTH'; readonly value: Depth }
   | { readonly type: 'SET_PART_MODE'; readonly part: PartId; readonly value: RenderMode }
   | { readonly type: 'SET_WINDOW'; readonly value: number }
@@ -48,7 +57,6 @@ export function createState(preset: Preset): ViewState {
     previewStep: null,
     hover: null,
     pinned: preset.pinned,
-    mode: preset.mode,
     depth: preset.depth,
     renderModes: {},
     parts: { ...preset.show },
@@ -60,7 +68,6 @@ export function createState(preset: Preset): ViewState {
 }
 
 const CONTROL_OF: Partial<Record<ViewEvent['type'], Control>> = {
-  SET_MODE: 'mode',
   SET_DEPTH: 'depth',
   SET_PART_MODE: 'depth',
   TOGGLE_CHAT: 'collapse',
@@ -107,7 +114,6 @@ const HANDLERS: Handlers = {
   PIN: (s, e) => ({ ...s, hintSeen: true, pinned: s.pinned === e.part ? null : e.part }),
   UNPIN: (s) => ({ ...s, pinned: null }),
   ESC: (s) => ({ ...s, pinned: null, hover: null, previewStep: null }),
-  SET_MODE: (s, e) => ({ ...s, hintSeen: true, mode: e.value }),
   SET_DEPTH: (s, e) => ({ ...s, hintSeen: true, depth: e.value, renderModes: {} }),
   SET_PART_MODE: (s, e) => ({ ...s, hintSeen: true, renderModes: { ...s.renderModes, [e.part]: e.value } }),
   SET_WINDOW: (s, e, c) => ({ ...s, window: clamp(e.value, 0, c.preset.windows.length - 1) }),
@@ -153,13 +159,11 @@ export function ghostOf(chat: Chat, state: ViewState): string | null {
 }
 
 /**
- * A new key replays the detail card's entrance. Explain replays when what it explains changes; Attention only when
- * the mode or depth does, so hovering a row restyles it and never remounts the list.
+ * A new key replays the detail card's entrance when what it explains changes: the lit key, the ghost or the
+ * renderMode. The Attention part keeps its own key, so hovering a row restyles it and never remounts the list.
  */
 export const panelKey = (view: {
-  readonly mode: Mode;
   readonly depth: Depth;
   readonly lit: string | null;
   readonly ghost: string | null;
-}): string =>
-  (view.mode === 'attention' ? [view.mode, view.depth] : [view.mode, view.depth, view.lit, view.ghost]).join('|');
+}): string => [view.depth, view.lit, view.ghost].join('|');
