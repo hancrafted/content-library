@@ -7,6 +7,7 @@ const GRILLING = 'https://github.com/mattpocock/skills/tree/main/skills/producti
 const TO_SPEC = 'https://github.com/mattpocock/skills/tree/main/skills/engineering/to-spec';
 
 const COPY: InterviewChatCopy = {
+  sparkle: null,
   open: 'See the chat',
   title: 'Interview · the worked chat',
   close: 'Close the chat',

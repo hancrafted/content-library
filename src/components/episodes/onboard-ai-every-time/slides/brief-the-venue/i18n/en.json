@@ -10,7 +10,7 @@
   "stages": {
     "party": {
       "name": "Summer party",
-      "move": "<initial>B</initial>reak it down",
+      "move": "Break it down",
       "popover": {
         "in": "the whole party.",
         "out": "five pieces, only the venue taken forward."
@@ -18,7 +18,7 @@
     },
     "interview": {
       "name": "Interview",
-      "move": "<initial>I</initial>nterview yourself with AI",
+      "move": "Interview yourself with AI",
       "popover": {
         "in": "your rough idea.",
         "out": "the questions you had not thought of, answered."
@@ -26,7 +26,7 @@
     },
     "requirements": {
       "name": "Requirements",
-      "move": "<initial>R</initial>equirements first",
+      "move": "Requirements first",
       "popover": {
         "in": "your answers.",
         "out": "a requirements card you sign off."
@@ -34,7 +34,7 @@
     },
     "research": {
       "name": "Research",
-      "move": "<initial>F</initial>resh start for each piece",
+      "move": "Fresh start for each piece",
       "popover": {
         "in": "the requirements card.",
         "out": "one venue checked against every criterion."
@@ -42,7 +42,7 @@
     },
     "compare": {
       "name": "Compare",
-      "move": "<initial>E</initial>valuate each step",
+      "move": "Evaluate each step",
       "popover": {
         "in": "three checked venues.",
         "out": "a ranking against the card."

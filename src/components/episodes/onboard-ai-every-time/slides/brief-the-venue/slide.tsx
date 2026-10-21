@@ -1,10 +1,7 @@
 import { slide } from '@/components/slide-master/slide';
 import { SlideFrame } from '@/components/slide-master/slide-master';
-import type { ReactNode } from 'react';
-import de from './i18n/de.json';
-import en from './i18n/en.json';
-import { InterviewChat, type ChatTurnCopy } from './interview-chat.client';
-import type { NodeCopy } from './node-popover.client';
+import { Sparkle } from '@/components/slide-shared/venue-pipeline/glyphs';
+import type { NodeCopy } from '@/components/slide-shared/venue-pipeline/node-popover.client';
 import {
   CompareJob,
   InterviewJob,
@@ -13,9 +10,13 @@ import {
   RequirementsCard,
   ResearchChats,
   VenuePlan,
-} from './stage-jobs';
-import { VenuePipeline, type StageView } from './venue-pipeline';
-import { STAGES, type StageId } from './venue-pipeline.pure';
+} from '@/components/slide-shared/venue-pipeline/stage-jobs';
+import { VenuePipeline, type StageView } from '@/components/slide-shared/venue-pipeline/venue-pipeline';
+import { STAGES, type StageId } from '@/components/slide-shared/venue-pipeline/venue-pipeline.pure';
+import type { ReactNode } from 'react';
+import de from './i18n/de.json';
+import en from './i18n/en.json';
+import { InterviewChat, type ChatTurnCopy } from './interview-chat.client';
 
 const INTERVIEW = 'interview';
 const REQUIREMENTS = 'requirements';
@@ -110,7 +111,6 @@ export const briefTheVenue = slide({
     { slug: 'recommendation-and-on' },
   ],
   content: ({ t, target, marker, Marker }) => {
-    const initial = (chunks: ReactNode) => <b className="font-semibold text-foreground">{chunks}</b>;
     const popover = (id: StageId): NodeCopy => ({
       title: t(`stages.${id}.name`),
       in: t(`stages.${id}.popover.in`),
@@ -121,7 +121,7 @@ export const briefTheVenue = slide({
     const view = (id: StageId, body: ReactNode, extra: Partial<StageView> = {}): StageView => ({
       stage: STAGES.find((stage) => stage.id === id) ?? STAGES[0],
       name: t(`stages.${id}.name`),
-      move: t.rich(`stages.${id}.move`, { initial }),
+      move: t(`stages.${id}.move`),
       popover: popover(id),
       jobsLabel: t('jobsLabel', { stage: t(`stages.${id}.name`) }),
       body,
@@ -130,6 +130,7 @@ export const briefTheVenue = slide({
     const chat = (
       <InterviewChat
         copy={{
+          sparkle: <Sparkle className="size-4" />,
           open: t('chat.open'),
           title: t('chat.title'),
           close: t('chat.close'),
@@ -222,7 +223,7 @@ export const briefTheVenue = slide({
     return (
       <SlideFrame className="mt-10 gap-10">
         <div className="@container">
-          <VenuePipeline label={t('pipelineLabel')} stages={stages} />
+          <VenuePipeline label={t('pipelineLabel')} stages={stages} acronym />
         </div>
         <div {...target(LEGEND)}>
           <Legend
