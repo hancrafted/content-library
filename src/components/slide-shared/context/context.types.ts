@@ -104,13 +104,14 @@ export interface StepNotes {
   readonly big?: boolean;
 }
 
-export type Mode = 'explain' | 'attention';
 export type Depth = 'simple' | 'technical';
 /** How a part draws itself: Simple for the room, Technical for the people who know the tool. */
 export type RenderMode = Depth;
-/** A part of the Context, as renderMode names it. Attention still draws inside Details until it splits out. */
+/** A part of the Context, as renderMode names it. */
 export type PartId = 'conversation' | 'timeline' | 'context-window' | 'context-preview' | 'details' | 'attention';
-export type Part = 'chat' | 'timeline' | 'context' | 'preview' | 'panel';
+export type Part = 'chat' | 'timeline' | 'context' | 'preview' | 'panel' | 'attention';
+/** How the Attention part lays out its rows: a scrolling list, the first and last three pinned, or one bar per share. */
+export type AttentionLayout = 'list' | 'pinned' | 'compressed';
 export type Motion = 'off' | 'crisp' | 'rise' | 'spring';
 
 /** A smart-zone line drawn across the bar at a token count. */
@@ -138,13 +139,16 @@ export interface Preset {
   readonly chat: string;
   /** The first step, 1-based, on the timeline. */
   readonly step: number;
-  readonly mode: Mode;
   readonly depth: Depth;
   /** The part lit at rest: a step id, a block (`m8@tool_result`), a category (`cat:`, `scat:`) or `group:messages`. */
   readonly pinned: string | null;
   readonly show: Readonly<Record<Part, boolean>>;
   /** What the controls do: id -> overrides over the registry's defaults (context-controls.pure.ts). */
   readonly controls: ControlMap;
+  /** The chat dims each message by its attention, as the Attention part does; on whenever that part is shown. */
+  readonly fade: boolean;
+  /** The Attention part's own settings, separate from renderMode so the toolbar's Technical never undoes them. */
+  readonly attention: { readonly layout: AttentionLayout };
   readonly timelineLocked: boolean;
   /** The window sizes, the first one shown at rest. */
   readonly windows: readonly WindowSize[];
@@ -153,13 +157,25 @@ export interface Preset {
   readonly height: number;
 }
 
-/** One static mini bar: a chat at a step. */
+/** How a minute of a non-chat bar reads: in the light, faded, or the one thing that stands out. */
+export type SegmentState = 'lit' | 'faded' | 'standout';
+
+/** One static bar: a chat at a step, or generic segments for data that is not a chat (a phone call). */
 export interface MiniBar {
   readonly label: string;
-  readonly chat: string;
+  /** The chat the bar draws; null for a bar of segments. */
+  readonly chat: string | null;
   readonly step: number;
   /** A worker chat that is thrown away once it hands its result back. */
   readonly discarded: boolean;
+  /** Segments `[minutes, state]` in order; set instead of `chat`. */
+  readonly segments: readonly (readonly [number, SegmentState])[] | null;
+  /** Chat bars only: the Simple categories that stay in colour; the rest fade. Unset keeps every block coloured. */
+  readonly lit: readonly SimpleCategory[] | null;
+  /** Chat bars only: the steps from this id on stay in colour. */
+  readonly litFrom: string | null;
+  /** Chat bars only: steps picked out with a ring (and kept in colour). */
+  readonly ring: readonly string[];
 }
 
 /** A row of static mini bars on one window size. */

@@ -3,7 +3,7 @@ import type { ControlId } from './context-controls.pure';
 import type { Attention } from './context-usage.pure';
 import type { ContextWords } from './context-words.types';
 import type { Frame } from './context.pure';
-import type { Category, Chat, Mode, RenderMode, StepNotes, StepStory, WindowSize } from './context.types';
+import type { AttentionLayout, Category, Chat, RenderMode, StepNotes, StepStory, WindowSize } from './context.types';
 
 /* What the parent hands each part: a slice of its state, never the whole of it. Parts are controlled: they hold no
  * state of the Context, and tell the parent what happened through callbacks. */
@@ -97,14 +97,18 @@ export interface ContextPreviewProps extends Lighting, LightingEvents, Speech {
   readonly present: ReadonlySet<Category>;
 }
 
-export interface DetailsProps extends Lighting, LightingEvents, Speech, Progress {
+export interface DetailsProps extends Lighting, LightingEvents, Speech, Omit<Progress, 'attention'> {
   readonly frame: Frame;
   readonly window: WindowSize;
   readonly stepOf: ReadonlyMap<string, number>;
-  /** What the card shows: Explain tells what is lit, Attention shows the units over the steps in the window. */
-  readonly mode: Mode;
-  /** The renderMode of the Attention card, which still draws inside Details until it splits out. */
-  readonly attentionRenderMode: RenderMode;
+}
+
+export interface AttentionProps extends Lighting, LightingEvents, Speech, Progress {
+  readonly window: WindowSize;
+  readonly stepOf: ReadonlyMap<string, number>;
+  readonly layout: AttentionLayout;
+  /** A row is hovered or clicked: the parent scrolls that step's chat message into view. */
+  readonly onReveal: (key: string) => void;
 }
 
 /** What the Details cards read: the props, whether they are Technical, and the match of the lit key. */

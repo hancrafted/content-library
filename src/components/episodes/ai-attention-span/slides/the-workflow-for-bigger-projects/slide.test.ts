@@ -104,8 +104,8 @@ describe('success cases', () => {
     const expected = ['slide-11-before', 'slide-11-after'];
     // ACT
     const $ = scene('en');
-    const minis = $('[data-mini]')
-      .map((_, el) => $(el).attr('data-mini'))
+    const minis = $('[data-bars]')
+      .map((_, el) => $(el).attr('data-bars'))
       .get();
     // ASSERT
     expect(minis).toEqual(expected);

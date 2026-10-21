@@ -2,14 +2,14 @@ import { load } from 'cheerio';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import { Context, ContextMiniBars, contextViewData } from './context';
+import { Context, ContextBarsPreset, contextViewData } from './context';
 import { CONTEXT_PRESETS, type ContextPresetId, type MiniPresetId } from './context-data';
 
 /** The server markup a Slide ships for a Preset, parsed. */
 const render = (preset: ContextPresetId, locale = 'en') =>
   load(renderToStaticMarkup(createElement(Context, { preset, locale })));
 const renderMini = (preset: MiniPresetId) =>
-  load(renderToStaticMarkup(createElement(ContextMiniBars, { preset, locale: 'en' })));
+  load(renderToStaticMarkup(createElement(ContextBarsPreset, { preset, locale: 'en' })));
 const sections = ($: ReturnType<typeof render>) =>
   $('section')
     .map((_, el) => $(el).attr('aria-label'))
@@ -34,6 +34,17 @@ describe('success cases', () => {
     const shown = { 'slide-8': sections(render('slide-8')), 'slide-9-after': sections(render('slide-9-after')) };
     // ASSERT
     expect(shown).toEqual(expected);
+  });
+
+  it('draws Attention as a part of its own on Slide 4, in the layout its Preset names', () => {
+    // ARRANGE
+    const expected = { section: 'Attention', layout: 'compressed' };
+    // ACT
+    const $ = render('slide-4');
+    // ASSERT
+    expect(sections($)).toContain(expected.section);
+    expect($('[data-layout]').attr('data-layout')).toBe(expected.layout);
+    expect($('[data-row]').length).toBeGreaterThan(0);
   });
 
   it('draws Technical as /context: 100 boxes, and the German words in German', () => {

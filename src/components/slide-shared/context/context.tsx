@@ -1,13 +1,14 @@
+import { ContextBars } from './context-bars';
+import { barModel } from './context-bars.pure';
 import { contextData, type ContextLocale, type ContextPresetId, type MiniPresetId } from './context-data';
 import type { ContextViewData } from './context-view';
 import type { ContextWords } from './context-words.types';
 import { ContextClient } from './context.client';
-import { MiniBars } from './window-mini';
 
 /*
  * The context window cornerstone, a Shared visual. A Slide places it by Preset id and locale; the Preset, the chat and
  * the words come from context-preset.config.yml (or its German twin, picked by the locale) at build time, and a Slide
- * may override any word. The interactive part is the one client leaf; the mini bars are static.
+ * may override any word. The interactive part is the one client leaf; the bars are static.
  */
 
 const localeOf = (locale: string): ContextLocale => (locale === 'de' ? 'de' : 'en');
@@ -42,10 +43,26 @@ export function Context(props: Props<ContextPresetId>) {
   return <ContextClient {...contextViewData(props)} />;
 }
 
-/** A row of static mini bars: chats side by side on one window size. */
-export function ContextMiniBars({ preset: id, locale, words }: Props<MiniPresetId>) {
+/** The window's size and buffer a bars Preset is drawn on, and what its first bar's blocks hold, for a Slide's legend. */
+export function contextBarFigures({ preset: id, locale }: Props<MiniPresetId>) {
   const data = contextData(localeOf(locale));
   const mini = data.minis[id];
-  if (!mini) throw new Error(`context window: unknown mini Preset "${id}"`);
-  return <MiniBars mini={mini} chats={data.chats} words={{ ...data.words, ...words }} locale={localeOf(locale)} />;
+  const bar = mini?.mini[0];
+  if (!mini || !bar) throw new Error(`context bars: unknown Preset "${id}"`);
+  const model = barModel(bar, bar.chat ? data.chats[bar.chat] : undefined, mini.window);
+  return {
+    windowTokens: mini.window.tokens,
+    bufferTokens: mini.window.bufferTokens,
+    usedTokens: model.used,
+    byKey: model.byKey,
+    bySimple: model.bySimple,
+  };
+}
+
+/** Static bars drawn horizontally: chats or generic segments one under the other on one window size. */
+export function ContextBarsPreset({ preset: id, locale, words }: Props<MiniPresetId>) {
+  const data = contextData(localeOf(locale));
+  const mini = data.minis[id];
+  if (!mini) throw new Error(`context bars: unknown Preset "${id}"`);
+  return <ContextBars mini={mini} chats={data.chats} words={{ ...data.words, ...words }} locale={localeOf(locale)} />;
 }

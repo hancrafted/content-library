@@ -1,4 +1,5 @@
 import type { Dispatch } from 'react';
+import { Attention as AttentionList } from './attention';
 import { controlOf, offers } from './context-controls.pure';
 import type { HeadToggle } from './context-parts.types';
 import { ContextPreview } from './context-preview';
@@ -57,6 +58,7 @@ function columns(parts: ViewState['parts'], state: ViewState, height: number) {
     ['timeline', '3.5rem', 'timeline'],
     ['context', renderModeOf(state, 'context-window') === 'technical' ? '18rem' : '26rem', 'ctx'],
     ['panel', parts.chat ? 'minmax(15rem, 1fr)' : 'minmax(15rem, 1.6fr)', 'panel'],
+    ['attention', parts.chat ? 'minmax(15rem, 1fr)' : 'minmax(15rem, 1.6fr)', 'att'],
   ];
   const shown = all.filter(([part]) => parts[part]);
   const areas = shown.map(([, , area]) => area).join(' ');
@@ -179,17 +181,35 @@ function DetailsPart({ m, events }: PartProps) {
       {...lightingOf(m)}
       {...speechOf(m)}
       renderMode={renderModeOf(state, 'details')}
-      attentionRenderMode={renderModeOf(state, 'attention')}
-      mode={state.mode}
       chat={m.chat}
       frames={m.frames}
       vis={m.vis}
-      attention={m.attention}
       frame={m.frame}
       window={m.window}
       stepOf={m.stepOf}
       onLight={events.onLight}
       onPin={events.onPin}
+    />
+  );
+}
+
+function AttentionPart({ m, events }: PartProps) {
+  const { state, data } = m;
+  return (
+    <AttentionList
+      {...lightingOf(m)}
+      {...speechOf(m)}
+      renderMode={renderModeOf(state, 'attention')}
+      chat={m.chat}
+      frames={m.frames}
+      vis={m.vis}
+      attention={m.attention}
+      window={m.window}
+      stepOf={m.stepOf}
+      layout={data.preset.attention.layout}
+      onLight={events.onLight}
+      onPin={events.onPin}
+      onReveal={events.onReveal}
     />
   );
 }
@@ -202,6 +222,7 @@ export function Parts({ m, events, sentence }: PartProps & { readonly sentence: 
       {P.timeline ? <TimelinePart m={m} valueText={sentence} /> : null}
       {P.context ? <ContextWindowPart m={m} events={events} /> : null}
       {P.panel ? <DetailsPart m={m} events={events} /> : null}
+      {P.attention ? <AttentionPart m={m} events={events} /> : null}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { slide } from '@/components/slide-master/slide';
 import { SlideFrame } from '@/components/slide-master/slide-master';
-import { ContextMiniBars } from '@/components/slide-shared/context/context';
+import { ContextBarsPreset } from '@/components/slide-shared/context/context';
 import type { ReactNode } from 'react';
 import styles from './everyday-habits.module.css';
 import { HabitList } from './habit-list';
@@ -22,7 +22,7 @@ const HABITS = [
 /** One chat's bar under its name: the cornerstone's static mini bar, its numbers from the shared Preset. */
 function ChatBar({ name, children }: { name: string; children: ReactNode }) {
   return (
-    <div className="flex w-56 max-w-full flex-col items-center gap-3 md:items-start">
+    <div className="flex w-72 max-w-full flex-col items-center gap-3 md:items-start">
       <p className="text-body font-semibold">{name}</p>
       {children}
     </div>
@@ -82,7 +82,7 @@ export const everydayHabits = slide({
         className={`${styles.bars} flex flex-col items-center justify-around gap-6 rounded-xl bg-card p-6 shadow-md md:flex-row md:p-8`}
         before={
           <ChatBar name={t('oldChat')}>
-            <ContextMiniBars preset="slide-10-old" locale={locale} />
+            <ContextBarsPreset preset="slide-10-old" locale={locale} />
           </ChatBar>
         }
         card={
@@ -102,7 +102,7 @@ export const everydayHabits = slide({
         }
         after={
           <ChatBar name={t('freshChat')}>
-            <ContextMiniBars preset="slide-10-fresh" locale={locale} />
+            <ContextBarsPreset preset="slide-10-fresh" locale={locale} />
           </ChatBar>
         }
       />

@@ -2,6 +2,7 @@ import { load } from 'cheerio';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
+import { Attention } from './attention';
 import { contextViewData } from './context';
 import { ContextPreview } from './context-preview';
 import { attentionAt } from './context-usage.pure';
@@ -9,7 +10,6 @@ import { ContextWindow } from './context-window';
 import { categoriesOf, framesOf } from './context.pure';
 import type { RenderMode } from './context.types';
 import { Conversation } from './conversation';
-import { Details } from './details';
 
 /*
  * The hover budget: moving the pointer from one step to the next may change only the items that light or unlight, in
@@ -69,16 +69,15 @@ const harness = (renderMode: RenderMode) => {
         present: categoriesOf(chat),
       }),
     attention: (lit: string | null) =>
-      createElement(Details, {
+      createElement(Attention, {
         ...speech,
         ...light(lit),
         ...events,
         ...progress,
-        frame,
         window,
         stepOf,
-        mode: 'attention',
-        attentionRenderMode: renderMode,
+        layout: 'list',
+        onReveal: noop,
       }),
   };
   return { chat, markup };

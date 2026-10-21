@@ -13,6 +13,8 @@ import type {
   MiniBar,
   MiniPreset,
   Preset,
+  SegmentState,
+  SimpleCategory,
   Step,
   StepNotes,
   StepStory,
@@ -38,8 +40,17 @@ export const CONTEXT_PRESETS = [
   'slide-9-chat',
   'slide-9-after',
 ] as const;
-/** Every static mini-bar Preset id. */
-export const MINI_PRESETS = ['slide-10-old', 'slide-10-fresh', 'slide-11-before', 'slide-11-after'] as const;
+/** Every static bar Preset id. */
+export const MINI_PRESETS = [
+  'slide-10-old',
+  'slide-10-fresh',
+  'slide-11-before',
+  'slide-11-after',
+  'faded-middle',
+  'typed-and-read',
+  'managing',
+  'call',
+] as const;
 
 export type ContextPresetId = (typeof CONTEXT_PRESETS)[number];
 export type MiniPresetId = (typeof MINI_PRESETS)[number];
@@ -83,7 +94,16 @@ interface Config {
       string,
       {
         readonly window: WindowRef;
-        readonly bars: readonly { label: string; chat: string; step?: number; discarded?: boolean }[];
+        readonly bars: readonly {
+          label: string;
+          chat?: string;
+          step?: number;
+          discarded?: boolean;
+          segments?: readonly (readonly [number, SegmentState])[];
+          lit?: readonly SimpleCategory[];
+          litFrom?: string;
+          ring?: readonly string[];
+        }[];
       }
     >
   >;
@@ -160,17 +180,29 @@ function presetsOf(en: Config, words: ContextWords): Record<string, Preset> {
   );
 }
 
+type MiniConfig = Config['minis'][string]['bars'][number];
+
+/** What a bar leaves out of the config falls back: no light picked, no ring, not discarded. */
+const LIGHT_DEFAULTS = { segments: null, lit: null, litFrom: null, ring: [] as readonly string[], discarded: false };
+
+function miniBarOf(bar: MiniConfig, words: ContextWords, chats: Record<string, Chat>): MiniBar {
+  const steps = bar.chat ? chats[bar.chat]?.steps.length : undefined;
+  const { label, chat, step, ...rest } = bar;
+  return {
+    ...LIGHT_DEFAULTS,
+    ...Object.fromEntries(Object.entries(rest).filter(([, value]) => value !== undefined)),
+    label: words.mini.labels[label] ?? label,
+    chat: chat ?? null,
+    step: step ?? steps ?? 1,
+  };
+}
+
 function minisOf(en: Config, words: ContextWords, chats: Record<string, Chat>): Record<string, MiniPreset> {
   return Object.fromEntries(
-    Object.entries(en.minis).map(([id, raw]) => {
-      const mini = raw.bars.map((bar): MiniBar => ({
-        label: words.mini.labels[bar.label] ?? bar.label,
-        chat: bar.chat,
-        step: bar.step ?? chats[bar.chat]?.steps.length ?? 1,
-        discarded: bar.discarded === true,
-      }));
-      return [id, { id, mini, window: windowOf(en, words, raw.window) }];
-    }),
+    Object.entries(en.minis).map(([id, raw]) => [
+      id,
+      { id, mini: raw.bars.map((bar) => miniBarOf(bar, words, chats)), window: windowOf(en, words, raw.window) },
+    ]),
   );
 }
 

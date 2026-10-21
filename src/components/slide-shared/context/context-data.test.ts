@@ -162,6 +162,18 @@ describe('failure cases', () => {
     expect(problems).toContain(expected);
   });
 
+  it('refuses an Attention layout that is not list, pinned or compressed', () => {
+    // ARRANGE
+    const data = contextData('en');
+    const slide3 = data.presets['slide-3'];
+    const expected = 'slide-3: unknown attention layout "tiled"';
+    const attention = { layout: 'tiled' } as never;
+    // ACT
+    const problems = slide3 ? presetProblems({ ...slide3, attention }, data.chats['summer-party']) : [];
+    // ASSERT
+    expect(problems).toContain(expected);
+  });
+
   it('refuses a height that is not a positive number of rem', () => {
     // ARRANGE
     const data = contextData('en');
@@ -202,6 +214,22 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('lays Attention out as a list by default and compressed on Slide 4, with the chat fading on Slide 5', () => {
+    // ARRANGE
+    const data = contextData('en');
+    const expected = { slide3: 'list', slide4: 'compressed', fade5: true, attention4: true, panel4: false };
+    // ACT
+    const actual = {
+      slide3: data.presets['slide-3']?.attention.layout,
+      slide4: data.presets['slide-4']?.attention.layout,
+      fade5: data.presets['slide-5']?.fade,
+      attention4: data.presets['slide-4']?.show.attention,
+      panel4: data.presets['slide-4']?.show.panel,
+    };
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
   it('ends the summer party at 64% of 200K, and fills the buffer right before the compaction', () => {
     // ARRANGE
     const data = contextData('en');

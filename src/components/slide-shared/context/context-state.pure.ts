@@ -1,18 +1,18 @@
 import { controlOf, offers, type ControlId } from './context-controls.pure';
 import { isMessage, simpleOf } from './context.pure';
-import type { Category, Chat, Depth, Mode, Part, PartId, Preset, RenderMode } from './context.types';
+import type { AttentionLayout, Category, Chat, Depth, Part, PartId, Preset, RenderMode } from './context.types';
 
 /* The cornerstone's view state: what is shown, lit and pinned. Transient (FE-001): it lives in memory and a reload
  * returns to the Preset, which is the Slide's own state. */
 
-export const PARTS: readonly Part[] = ['chat', 'timeline', 'context', 'preview', 'panel'];
+export const PARTS: readonly Part[] = ['chat', 'timeline', 'context', 'preview', 'panel', 'attention'];
+export const ATTENTION_LAYOUTS: readonly AttentionLayout[] = ['list', 'pinned', 'compressed'];
 
 export interface ViewState {
   readonly step: number;
   readonly previewStep: number | null;
   readonly hover: string | null;
   readonly pinned: string | null;
-  readonly mode: Mode;
   /** The global renderMode: what the toolbar's Technical sets for every part. */
   readonly depth: Depth;
   /** A part's own renderMode, set after the global one; the latest action wins. */
@@ -48,7 +48,6 @@ export function createState(preset: Preset): ViewState {
     previewStep: null,
     hover: null,
     pinned: preset.pinned,
-    mode: preset.mode,
     depth: preset.depth,
     renderModes: {},
     parts: { ...preset.show },
@@ -154,13 +153,11 @@ export function ghostOf(chat: Chat, state: ViewState): string | null {
 }
 
 /**
- * A new key replays the detail card's entrance. Explain replays when what it explains changes; Attention only when
- * the mode or depth does, so hovering a row restyles it and never remounts the list.
+ * A new key replays the detail card's entrance when what it explains changes: the lit key, the ghost or the
+ * renderMode. The Attention part keeps its own key, so hovering a row restyles it and never remounts the list.
  */
 export const panelKey = (view: {
-  readonly mode: Mode;
   readonly depth: Depth;
   readonly lit: string | null;
   readonly ghost: string | null;
-}): string =>
-  (view.mode === 'attention' ? [view.mode, view.depth] : [view.mode, view.depth, view.lit, view.ghost]).join('|');
+}): string => [view.depth, view.lit, view.ghost].join('|');

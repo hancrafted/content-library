@@ -1,4 +1,4 @@
-import type { Category, Depth, Mode, Part, SimpleCategory } from './context.types';
+import type { Category, Depth, Part, SimpleCategory } from './context.types';
 
 /** A smart-zone line's words. */
 export interface LineWords {
@@ -16,7 +16,8 @@ export interface ContextWords {
   readonly parts: Readonly<Record<Part, string>>;
   readonly technical: string;
   readonly technicalTip: string;
-  readonly modes: Readonly<Record<Mode, string>>;
+  /** The heads of the Details and Attention parts. */
+  readonly modes: Readonly<Record<'explain' | 'attention', string>>;
   readonly collapse: string;
   readonly collapseTip: string;
   readonly previewToggle: string;
@@ -90,8 +91,12 @@ export interface ContextWords {
   readonly buffer: Readonly<Record<Depth, string>>;
   readonly lines: Readonly<Record<string, LineWords>>;
   readonly mini: {
-    readonly used: string;
+    /** A bar's figure: `{used} of {window} · {percent}%`. */
+    readonly usedOf: string;
     readonly discarded: string;
+    /** A call's duration units, for `1 h 22 min`. */
+    readonly hours: string;
+    readonly minutes: string;
     readonly labels: Readonly<Record<string, string>>;
   };
 }
