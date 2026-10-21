@@ -1,7 +1,7 @@
 {
   "title": "Why AI has a weird attention span you must learn to manage · hancrafted",
   "description": "AI's attention span, its context window, is a limited resource you have to actively manage: one chat per job, a handoff after real progress or before a break, and for bigger projects one planner chat that hands each step to a fresh chat.",
-  "toc": "Contents Loading 2 min left 1 The long phone call 2 The AI's attention span 3 What fills the window 4 Managing the attention span Open contents : Contents · Loading Contents 2 min left 1 The long phone call 2 The AI's attention span 3 What fills the window 4 Managing the attention span",
+  "toc": "Contents Loading 5 min left 1 The long phone call 2 The AI's attention span 3 What fills the window 4 Managing the attention span Everyday habits The workflow for bigger projects Open contents : Contents · Loading Contents 5 min left 1 The long phone call 2 The AI's attention span 3 What fills the window 4 Managing the attention span Everyday habits The workflow for bigger projects",
   "slides": [
     {
       "id": "top",
@@ -22,6 +22,14 @@
     {
       "id": "managing-the-attention-span",
       "text": "Managing the attention span You can't read a gauge, so you build habits. Old chat · 64% Fresh chat · 19% Handoff: party for 40, 27 June, budget 40,000 € . Next: invitations."
+    },
+    {
+      "id": "managing-the-attention-span--everyday-habits",
+      "text": "Managing the attention span 1 / 2 Everyday habits Keep each chat to one job, and carry only a short handoff into the next one, so the new chat starts small and sharp. You know these already: Break it down Fresh start Old chat: summer party Old chat 64% used Handoff card Party for 40, 27 June, budget 40,000 € . Venue: Estrela pavilion. Caterer: Sabor Verde (12 vegetarian). Next: invitations. first message of the new chat Fresh chat: invitations Fresh chat 19% used 1 One chat, one job When the topic changes, open a new chat: the hotel question does not carry the catering PDF along. 2 Ask for a handoff, read it, correct it After real progress or before a break: the goal, what is decided, what comes next. You fix what is wrong. 3 Start the next chat with it Paste it in as the first message. The new chat holds the venue, caterer, budget and next step, and nothing else. Token counts are illustrative · 200K window"
+    },
+    {
+      "id": "managing-the-attention-span--the-workflow-for-bigger-projects",
+      "text": "Managing the attention span 2 / 2 The workflow for bigger projects Break the project down first, keep one chat as the planner, and give each step a fresh chat that hands back one small result. One chat for everything Summer party 64% used Past the smart zone; every step carries every other step's reading. A workflow: one planner, a fresh chat per step Planner 23% used Worker: venues 26% used · thrown away Worker: catering 45% used Worker: invites 18% used ↑ Result · Estrela pavilion, 14,800 € ↑ Result · Sabor Verde, 12 vegetarian ↑ Result · Invitations sent to 40 One small card back per step. Short tasks beat one long one ( ) ; you coordinate, like a project manager. Token counts are illustrative · 200K window"
     }
   ],
   "notes": [
@@ -32,7 +40,15 @@
     { "id": "the-long-phone-call", "text": "The long phone call No speaker notes for this Slide." },
     { "id": "the-ais-attention-span", "text": "The AI's attention span No speaker notes for this Slide." },
     { "id": "what-fills-the-window", "text": "What fills the window No speaker notes for this Slide." },
-    { "id": "managing-the-attention-span", "text": "Managing the attention span No speaker notes for this Slide." }
+    { "id": "managing-the-attention-span", "text": "Managing the attention span No speaker notes for this Slide." },
+    {
+      "id": "managing-the-attention-span--everyday-habits",
+      "text": "Everyday habits Length itself hurts With perfect retrieval, performance still dropped as input grew, and the drop persisted when irrelevant tokens were replaced by whitespace or masked from attention 1 ; that a fresh, shorter chat avoids the drop is an inference from this, the studies do not test a restart. Sources (1) Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval ( opens in a new tab ) arxiv.org One job per chat Even a single distractor lowers performance relative to the needle alone, so unrelated material in a chat has a cost 1 . Sources (1) Hong, Troynikov, Huber, Context Rot: How Increasing Input Tokens Impacts LLM Performance ( opens in a new tab ) trychroma.com A short recap helped Having the model recite the retrieved evidence before solving, which turns a long task into a short one, improved results 1 ; that a handoff works the same way is an inference. Sources (1) Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval ( opens in a new tab ) arxiv.org"
+    },
+    {
+      "id": "managing-the-attention-span--the-workflow-for-bigger-projects",
+      "text": "The workflow for bigger projects Clean windows for each part Anthropic's remedy for long tasks includes sub-agents that work with clean windows 1 . Sources (1) Anthropic, Effective context engineering for AI agents ( opens in a new tab ) anthropic.com Short tasks beat long ones Turning a long task into a short one improved results, GPT-4o on RULER by up to 4% 1 . Sources (1) Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval ( opens in a new tab ) arxiv.org"
+    }
   ],
   "script": [
     {
@@ -54,6 +70,14 @@
     {
       "id": "managing-the-attention-span",
       "text": "Managing the attention span 0:00 – 0:09 You manage by habit You can't read a gauge, so you build habits. First the everyday ones, and then the one for a big project."
+    },
+    {
+      "id": "managing-the-attention-span--everyday-habits",
+      "text": "Everyday habits 0:00 – 0:11 Break it down Break it down. You know this one already: you split a big task into small steps, and each step is small enough to hold in view. 0:11 – 0:24 Fresh start Fresh start. You know this one too: a fresh start spends the whole window on the work in front of you, and none of it on what happened an hour ago. 0:24 – 0:35 One chat, one job One chat, one job. When the topic changes, open a new chat, so that the hotel question doesn't have to carry the catering PDF along. 0:35 – 0:49 Ask for a handoff Ask for a handoff. After real progress, or before a coffee break, stop and ask the AI for a handoff: a short card with the goal, what is decided and what comes next. 0:49 – 1:02 Read and correct it Then read it and correct what is wrong. A summary can leave things out or get one wrong, and you are the one accountable for what the next chat believes. 1:02 – 1:18 Start the next chat with it And start the next chat with it. Paste the handoff in as the first message, and the new chat starts small and sharp, with the venue, the caterer, the budget and the next step, and nothing else."
+    },
+    {
+      "id": "managing-the-attention-span--the-workflow-for-bigger-projects",
+      "text": "The workflow for bigger projects 0:00 – 0:13 One chat is too small Sometimes the project is bigger than one chat can hold: the whole summer party, with venues, catering, hotels and invitations. One chat would fill up, whatever window size you give it. 0:13 – 0:32 Break it down first So you break it down first. Work backward from the outcome, what do I need to run this party, and then what do I need for that, until the next step is clear. You can ask the AI to help you with that. 0:32 – 0:42 One planner Then one chat stays the planner. It keeps only the plan and the results, so it stays small and has room to spare. 0:42 – 1:01 A fresh chat per step Each step goes to a fresh chat: venues, catering, invitations. That chat reads its files and fills up as much as it needs, hands the result back to the planner as one small card, and then you let it go. Next step, next fresh chat. 1:01 – 1:47 You coordinate And you coordinate, like a project manager. This is what we call a workflow. Every chat has one job, so none of them runs long enough to blur its middle. That is the whole idea: the window is the AI's attention span, and managing it is your job. One honest caveat: the zones and numbers I gave you are rules of thumb and illustrations, and I have not tested every chat app, so watch your own chats and adjust. If you want a low-key place to start, take the next chat that drifts, ask it for a handoff, and open a new one with it. Thank you."
     }
   ]
 }

@@ -61,7 +61,7 @@ const COMPOSITION = [
       { opener: 'the-long-phone-call', pageSlides: 0 },
       { opener: 'the-ais-attention-span', pageSlides: 0 },
       { opener: 'what-fills-the-window', pageSlides: 0 },
-      { opener: 'managing-the-attention-span', pageSlides: 0 },
+      { opener: 'managing-the-attention-span', pageSlides: 2 },
     ],
   },
 ] as const;

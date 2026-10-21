@@ -1,7 +1,7 @@
 {
   "title": "Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst · hancrafted",
   "description": "Die Aufmerksamkeitsspanne der KI, ihr Kontextfenster, ist eine begrenzte Ressource, die Du aktiv managen musst: ein Chat pro Aufgabe, eine Übergabe nach echtem Fortschritt oder vor der Pause und bei größeren Projekten ein Planer-Chat, der jeden Schritt an einen frischen Chat weitergibt.",
-  "toc": "Inhalt Wird geladen noch 2 Min. 1 Das lange Telefonat 2 Die Aufmerksamkeitsspanne der KI 3 Was das Fenster füllt 4 Die Aufmerksamkeitsspanne managen Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 2 Min. 1 Das lange Telefonat 2 Die Aufmerksamkeitsspanne der KI 3 Was das Fenster füllt 4 Die Aufmerksamkeitsspanne managen",
+  "toc": "Inhalt Wird geladen noch 5 Min. 1 Das lange Telefonat 2 Die Aufmerksamkeitsspanne der KI 3 Was das Fenster füllt 4 Die Aufmerksamkeitsspanne managen Gewohnheiten für jeden Tag Der Workflow für größere Projekte Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 5 Min. 1 Das lange Telefonat 2 Die Aufmerksamkeitsspanne der KI 3 Was das Fenster füllt 4 Die Aufmerksamkeitsspanne managen Gewohnheiten für jeden Tag Der Workflow für größere Projekte",
   "slides": [
     {
       "id": "top",
@@ -22,6 +22,14 @@
     {
       "id": "managing-the-attention-span",
       "text": "Die Aufmerksamkeitsspanne managen Eine Anzeige kannst Du nicht ablesen, also baust Du Gewohnheiten auf. Alter Chat · 64 % Frischer Chat · 19 % Übergabe: Feier für 40, 27. Juni, Budget 40.000 € . Weiter: Einladungen."
+    },
+    {
+      "id": "managing-the-attention-span--everyday-habits",
+      "text": "Die Aufmerksamkeitsspanne managen 1 / 2 Gewohnheiten für jeden Tag Halte jeden Chat bei einem Job und nimm nur eine kurze Übergabe in den nächsten mit, damit der neue Chat klein und klar startet. Die kennst Du schon: Zerleg es Neustart Alter Chat: Sommerfest Alter Chat 64 % belegt Übergabekarte Feier für 40, 27. Juni, Budget 40.000 € . Ort: Estrela-Pavillon. Caterer: Sabor Verde (12 vegetarisch). Weiter: Einladungen. erste Nachricht des neuen Chats Neuer Chat: Einladungen Neuer Chat 19 % belegt 1 Ein Chat, ein Job Wechselt das Thema, öffne einen neuen Chat: Die Hotelfrage schleppt das Catering-PDF nicht mit. 2 Übergabe holen, lesen, korrigieren Nach echtem Fortschritt oder vor einer Pause: das Ziel, was entschieden ist, was als Nächstes kommt. Du korrigierst, was falsch ist. 3 Den nächsten Chat damit beginnen Füge sie als erste Nachricht ein. Der neue Chat hält Ort, Caterer, Budget und den nächsten Schritt, sonst nichts. Token-Zahlen zur Veranschaulichung · 200K-Fenster"
+    },
+    {
+      "id": "managing-the-attention-span--the-workflow-for-bigger-projects",
+      "text": "Die Aufmerksamkeitsspanne managen 2 / 2 Der Workflow für größere Projekte Zerleg das Projekt zuerst, behalte einen Chat als Planer und gib jedem Schritt einen frischen Chat, der ein kleines Ergebnis zurückgibt. Ein Chat für alles Sommerfest 64 % belegt Jenseits der Smart Zone; jeder Schritt schleppt das Gelesene aller anderen Schritte mit. Ein Workflow: ein Planer, ein frischer Chat pro Schritt Planer 23 % belegt Helfer: Orte 26 % belegt · verworfen Helfer: Catering 45 % belegt Helfer: Einladungen 18 % belegt ↑ Ergebnis · Estrela-Pavillon, 14.800 € ↑ Ergebnis · Sabor Verde, 12 vegetarisch ↑ Ergebnis · Einladungen an 40 verschickt Pro Schritt kommt eine kleine Karte zurück. Kurze Aufgaben schlagen eine lange ( ) ; Du koordinierst wie ein Projektmanager. Token-Zahlen zur Veranschaulichung · 200K-Fenster"
     }
   ],
   "notes": [
@@ -38,6 +46,14 @@
     {
       "id": "managing-the-attention-span",
       "text": "Die Aufmerksamkeitsspanne managen Keine Sprechernotizen für diese Folie."
+    },
+    {
+      "id": "managing-the-attention-span--everyday-habits",
+      "text": "Gewohnheiten für jeden Tag Die Länge allein schadet Selbst bei perfektem Abruf sank die Leistung, je länger die Eingabe wurde, und der Abfall blieb, als irrelevante Tokens durch Leerzeichen ersetzt oder für die Attention ausgeblendet wurden 1 . Dass ein frischer, kürzerer Chat den Abfall vermeidet, ist eine Schlussfolgerung daraus; einen Neustart testen die Studien nicht. Quellen (1) Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval ( öffnet in neuem Tab ) arxiv.org Ein Job pro Chat Schon ein einziger Ablenker senkt die Leistung gegenüber der Nadel allein; fremdes Material in einem Chat hat also seinen Preis 1 . Quellen (1) Hong, Troynikov, Huber, Context Rot: How Increasing Input Tokens Impacts LLM Performance ( öffnet in neuem Tab ) trychroma.com Eine kurze Zusammenfassung half Ließ man das Modell die gefundenen Belege vor dem Lösen wiederholen, wurde aus einer langen Aufgabe eine kurze, und die Ergebnisse wurden besser 1 . Dass eine Übergabe genauso wirkt, ist eine Schlussfolgerung. Quellen (1) Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval ( öffnet in neuem Tab ) arxiv.org"
+    },
+    {
+      "id": "managing-the-attention-span--the-workflow-for-bigger-projects",
+      "text": "Der Workflow für größere Projekte Saubere Fenster für jeden Teil Anthropics Mittel für lange Aufgaben umfasst Sub-Agents, die mit sauberen Fenstern arbeiten 1 . Quellen (1) Anthropic, Effective context engineering for AI agents ( öffnet in neuem Tab ) anthropic.com Kurze Aufgaben schlagen lange Aus einer langen Aufgabe eine kurze zu machen, verbesserte die Ergebnisse, bei GPT-4o auf RULER um bis zu 4 % 1 . Quellen (1) Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval ( öffnet in neuem Tab ) arxiv.org"
     }
   ],
   "script": [
@@ -60,6 +76,14 @@
     {
       "id": "managing-the-attention-span",
       "text": "Die Aufmerksamkeitsspanne managen 0:00 – 0:13 Du steuerst mit Gewohnheiten Eine Anzeige kannst Du nicht ablesen, also baust Du Dir Gewohnheiten auf. Zuerst die für jeden Tag und dann die eine für ein großes Projekt."
+    },
+    {
+      "id": "managing-the-attention-span--everyday-habits",
+      "text": "Gewohnheiten für jeden Tag 0:00 – 0:13 Zerleg es Zerleg es. Das kennst Du schon: Du teilst eine große Aufgabe in kleine Schritte, und jeder Schritt ist klein genug, um ihn im Blick zu behalten. 0:13 – 0:26 Neustart Neustart. Das kennst Du auch: Ein Neustart gibt das ganze Fenster der Arbeit vor Dir und nichts davon dem, was vor einer Stunde passiert ist. 0:26 – 0:36 Ein Chat, ein Job Ein Chat, ein Job. Wenn das Thema wechselt, öffne einen neuen Chat, damit die Hotelfrage nicht das Catering-PDF mitschleppen muss. 0:36 – 0:55 Bitte um eine Übergabe Bitte um eine Übergabe. Nach echtem Fortschritt oder vor einer Kaffeepause hältst Du an und bittest die KI um eine Übergabe: eine kurze Karte mit dem Ziel, mit dem, was entschieden ist, und mit dem, was als Nächstes kommt. 0:55 – 1:09 Lies und korrigiere sie Dann lies sie und korrigiere, was falsch ist. Eine Zusammenfassung kann Dinge weglassen oder etwas falsch wiedergeben, und Du bist verantwortlich dafür, was der nächste Chat glaubt. 1:09 – 1:26 Beginne den nächsten Chat damit Und beginne den nächsten Chat damit. Füge die Übergabe als erste Nachricht ein, und der neue Chat startet klein und klar, mit dem Ort, dem Caterer, dem Budget und dem nächsten Schritt, und sonst nichts."
+    },
+    {
+      "id": "managing-the-attention-span--the-workflow-for-bigger-projects",
+      "text": "Der Workflow für größere Projekte 0:00 – 0:15 Ein Chat ist zu klein Manchmal ist das Projekt größer, als ein Chat fassen kann: das ganze Sommerfest, mit Orten, Catering, Hotels und Einladungen. Ein Chat würde volllaufen, egal welche Fenstergröße Du ihm gibst. 0:15 – 0:31 Zuerst zerlegen Also zerlegst Du es zuerst. Arbeite vom Ergebnis rückwärts: Was brauche ich, um dieses Fest auszurichten, und was brauche ich dafür, bis der nächste Schritt klar ist. Dabei kann Dir die KI helfen. 0:31 – 0:42 Ein Planer Dann bleibt ein Chat der Planer. Er behält nur den Plan und die Ergebnisse, also bleibt er klein und hat Platz übrig. 0:42 – 1:05 Ein frischer Chat pro Schritt Jeder Schritt geht an einen frischen Chat: Orte, Catering, Einladungen. Dieser Chat liest seine Dateien und füllt sich so weit, wie er muss, gibt das Ergebnis als eine kleine Karte an den Planer zurück, und dann lässt Du ihn gehen. Nächster Schritt, nächster frischer Chat. 1:05 – 1:54 Du koordinierst Und Du koordinierst, wie ein Projektmanager. Das nennen wir einen Workflow. Jeder Chat hat einen Job, also läuft keiner lange genug, um seine Mitte zu verwischen. Das ist die ganze Idee: Das Fenster ist die Aufmerksamkeitsspanne der KI, und sie zu managen ist Dein Job. Ein ehrlicher Hinweis: Die Zonen und Zahlen, die ich Dir genannt habe, sind Faustregeln und Veranschaulichungen, und ich habe nicht jede Chat-App getestet, also beobachte Deine eigenen Chats und pass an. Wenn Du entspannt anfangen willst, nimm den nächsten Chat, der abdriftet, bitte ihn um eine Übergabe und öffne damit einen neuen. Danke."
     }
   ]
 }
