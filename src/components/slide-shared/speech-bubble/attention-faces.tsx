@@ -4,6 +4,8 @@
  * technology. Server-rendered, no hooks (FE-006).
  */
 
+import styles from './speech-bubble.module.css';
+
 export type FaceLevel = 'fine' | 'sweating' | 'fried';
 
 export const FACE_LEVELS: readonly FaceLevel[] = ['fine', 'sweating', 'fried'];
@@ -21,7 +23,7 @@ export function AttentionFaces({ labels }: FacesProps) {
     <ol className="m-0 flex list-none items-start justify-between gap-2 p-0" data-faces="">
       {FACE_LEVELS.map((level, i) => (
         <li key={level} className="flex flex-1 flex-col items-center gap-1" data-face={level}>
-          <span className="text-heading leading-none" data-face-emoji="" aria-hidden="true">
+          <span className={`${styles.emoji} text-heading leading-none`} data-face-emoji="" aria-hidden="true">
             {EMOJI[level]}
           </span>
           <span className="text-caption font-semibold" data-face-number="">

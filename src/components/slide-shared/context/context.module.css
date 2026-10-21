@@ -1746,6 +1746,18 @@ summary.row:hover {
   /* Above its later siblings, whose backgrounds would otherwise paint over the ring's far edge. */
   z-index: 1;
 }
+/* In progress: the current segment breathes; the settled ones before it stay solid. Reduced motion keeps the ring. */
+@keyframes sessionPulse {
+  50% {
+    background: color-mix(in oklch, var(--tone) 40%, var(--card));
+    outline-color: color-mix(in oklch, var(--tone) 35%, transparent);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .sessionPart[data-state='current'] {
+    animation: sessionPulse 1.6s ease-in-out infinite;
+  }
+}
 .sessionPart:first-child {
   border-top-left-radius: 0.5rem;
   border-bottom-left-radius: 0.5rem;

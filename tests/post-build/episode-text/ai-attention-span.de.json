@@ -5,11 +5,11 @@
   "slides": [
     {
       "id": "top",
-      "text": "Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst Ein langer Chat verhält sich wie ein langes Telefonat: Seine Aufmerksamkeit ist ein begrenztes Fenster, also steuerst Du, was hineinkommt. Hi. Die nächsten 30 Minuten bist Du die KI. Mund auf. 0 1 0 Deine Aufmerksamkeitsspanne Frisch und bereit zum Empfangen."
+      "text": "Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst Ein langer Chat verhält sich wie ein langes Telefonat: Seine Aufmerksamkeit ist ein begrenztes Fenster, also steuerst Du, was hineinkommt. Hi. Die nächsten 30 Minuten bist Du die KI. Pass auf! Deine Aufmerksamkeitsspanne Frisch und bereit zum Empfangen."
     },
     {
       "id": "thought-experiment",
-      "text": "Gedankenexperiment Wie Aufmerksamkeit funktioniert: Du gegen eine KI. Wir fangen leicht an. Du bist ja nur ein Mensch. Na, wie ist Deine Aufmerksamkeit? 🙂 1 Geht 😅 2 Schwitze 🤯 3 Durchgebrannt 0 1 0 1 0 1 Deine Aufmerksamkeitsspanne Aufwärmen"
+      "text": "Gedankenexperiment Wie Aufmerksamkeit funktioniert: Du gegen eine KI. Wir fangen leicht an. Du bist ja nur ein Mensch. Na, wie ist Deine Aufmerksamkeit? 🙂 1 Geht 😅 2 Schwitze 🤯 3 Durchgebrannt Deine Aufmerksamkeitsspanne Aufwärmen"
     },
     {
       "id": "thought-experiment--the-long-phone-call-story",
@@ -21,7 +21,7 @@
     },
     {
       "id": "the-ais-attention-span",
-      "text": "Die Aufmerksamkeitsspanne der KI Jetzt die Ursache: wie die KI einen Chat im Blick behält. Jetzt drehe ich auf. Ich frühstücke 200K. Noch dabei? Wie steht's um Deine Aufmerksamkeit? 🙂 1 Geht 😅 2 Schwitze 🤯 3 Durchgebrannt 0 1 0 1 0 1 0 1 0 Deine Aufmerksamkeitsspanne Hochdrehen"
+      "text": "Die Aufmerksamkeitsspanne der KI Jetzt die Ursache: wie die KI einen Chat im Blick behält. Jetzt drehe ich auf. Hoffentlich bist Du bereit? Noch dabei? Wie steht's um Deine Aufmerksamkeit? 🙂 1 Geht 😅 2 Schwitze 🤯 3 Durchgebrannt Deine Aufmerksamkeitsspanne Hochdrehen"
     },
     {
       "id": "the-ais-attention-span--the-context-window",
@@ -41,7 +41,7 @@
     },
     {
       "id": "what-fills-the-window",
-      "text": "Was das Fenster füllt Deine Nachrichten sind nur ein Teil davon. Wie geht's dem Kopf? Schon was durchgebrannt? Ich bin noch nicht fertig. Kurzer Check: Wie voll bist Du? 🙂 1 Geht 😅 2 Schwitze 🤯 3 Durchgebrannt 0 1 0 1 0 1 0 1 0 1 0 1 Deine Aufmerksamkeitsspanne Füllt sich"
+      "text": "Was das Fenster füllt Deine Nachrichten sind nur ein Teil davon. Wie geht's dem Kopf? Schon was durchgebrannt? Ich frühstücke 200K. Kurzer Check: Wie voll bist Du? 🙂 1 Geht 😅 2 Schwitze 🤯 3 Durchgebrannt Deine Aufmerksamkeitsspanne Füllt sich"
     },
     {
       "id": "what-fills-the-window--whats-really-in-the-window",
@@ -57,7 +57,7 @@
     },
     {
       "id": "managing-the-attention-span",
-      "text": "Die Aufmerksamkeitsspanne managen Eine Anzeige kannst Du nicht ablesen, also baust Du Gewohnheiten auf. Fast geschafft. Noch eine Sache, dann verdichte ich Dich. Letzter Check: Wie steht's um Deine Aufmerksamkeit? 🙂 1 Geht 😅 2 Schwitze 🤯 3 Durchgebrannt 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 Deine Aufmerksamkeitsspanne Fast voll"
+      "text": "Die Aufmerksamkeitsspanne managen Eine Anzeige kannst Du nicht ablesen, also baust Du Gewohnheiten auf. Fast geschafft. Noch eine Sache, dann verdichte ich Dich. Letzter Check: Wie steht's um Deine Aufmerksamkeit? 🙂 1 Geht 😅 2 Schwitze 🤯 3 Durchgebrannt Deine Aufmerksamkeitsspanne Fast voll"
     },
     {
       "id": "managing-the-attention-span--everyday-habits",
@@ -73,7 +73,7 @@
     },
     {
       "id": "managing-the-attention-span--now-you-know-how-it-feels",
-      "text": "Die Aufmerksamkeitsspanne managen (4/4) Seite 4 von 4 Glückwunsch Jetzt weißt Du, wie es sich anfühlt. Noch einmal? Oder gleich in einer Minute? 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 Deine Aufmerksamkeitsspanne Bis zum Rand voll. Gut gemacht."
+      "text": "Die Aufmerksamkeitsspanne managen (4/4) Seite 4 von 4 Glückwunsch Jetzt weißt Du, wie es sich anfühlt. Noch einmal? Oder gleich in einer Minute? Deine Aufmerksamkeitsspanne Bis zum Rand voll. Gut gemacht."
     }
   ],
   "notes": [
@@ -163,7 +163,7 @@
     },
     {
       "id": "the-ais-attention-span",
-      "text": "Die Aufmerksamkeitsspanne der KI 0:00 – 0:23 Warum das passiert Jetzt drehe ich auf. Ich frühstücke 200K. Bisher hast Du gesehen, was passiert. Jetzt kommt die Ursache. Denn sobald Du weißt, wie die KI einen Chat im Blick behält, überrascht Dich das Muster nicht mehr, und erst danach schauen wir, was es mit Deinen Antworten macht."
+      "text": "Die Aufmerksamkeitsspanne der KI 0:00 – 0:24 Warum das passiert Jetzt drehe ich auf. Hoffentlich bist Du bereit? Bisher hast Du gesehen, was passiert. Jetzt kommt die Ursache. Denn sobald Du weißt, wie die KI einen Chat im Blick behält, überrascht Dich das Muster nicht mehr, und erst danach schauen wir, was es mit Deinen Antworten macht."
     },
     {
       "id": "the-ais-attention-span--the-context-window",
@@ -183,7 +183,7 @@
     },
     {
       "id": "what-fills-the-window",
-      "text": "Was das Fenster füllt 0:00 – 0:23 Mehr drin, als Du getippt hast Wie geht's dem Kopf? Schon was durchgebrannt? Ich bin noch nicht fertig. Du hast gesehen, wie sich das Fenster mit Deinen Nachrichten füllt. Aber Deine Nachrichten sind nur ein Teil davon. Die nächste Frage ist also, was sonst noch hineinkommt, ohne dass Du es merkst."
+      "text": "Was das Fenster füllt 0:00 – 0:22 Mehr drin, als Du getippt hast Wie geht's dem Kopf? Schon was durchgebrannt? Ich frühstücke 200K. Du hast gesehen, wie sich das Fenster mit Deinen Nachrichten füllt. Aber Deine Nachrichten sind nur ein Teil davon. Die nächste Frage ist also, was sonst noch hineinkommt, ohne dass Du es merkst."
     },
     {
       "id": "what-fills-the-window--whats-really-in-the-window",
