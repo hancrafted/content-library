@@ -11,7 +11,7 @@ import { nameOf } from './conversation-body';
 import { Crossed, crossedText } from './details-cards';
 import { useLighting } from './use-lighting';
 import { useSay } from './use-say';
-import { tint } from './window-bits';
+import { tint, vars } from './window-bits';
 
 /* The attention part: the 100 units of attention over the steps in the window, as a list, with the first and last
  * three pinned, or compressed to one bar per share that the pointer magnifies like the Mac dock. */
@@ -33,7 +33,7 @@ interface RowProps {
   readonly pin: Pin | null;
 }
 
-const pinAttrs = (pin: Pin | null) => (pin ? { 'data-pin': pin.side, style: { '--slot': pin.slot } as never } : {});
+const pinAttrs = (pin: Pin | null) => (pin ? { 'data-pin': pin.side, style: vars({ '--slot': pin.slot }) } : {});
 
 const AttentionRow = memo(function AttentionRow({ say, step, units, on, pin }: RowProps) {
   const name = nameOf(say, step);

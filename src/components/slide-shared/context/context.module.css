@@ -105,7 +105,7 @@
   transition: background-color var(--hov) var(--ease-out);
 }
 
-/* ── One toolbar: parts · Technical · Explain/Attention · collapse · meter · log ── */
+/* ── One toolbar: parts · Technical · Explain/Attention · meter · log ── */
 .top {
   display: flex;
   align-items: center;
@@ -589,37 +589,6 @@
   }
 }
 
-/* Collapsed chat: a rail of ticks, a minimap. */
-.rail {
-  display: flex;
-  grid-area: chat;
-  flex-direction: column;
-  gap: 4px;
-  padding: 0.6rem 0;
-  align-items: center;
-  overflow: hidden;
-}
-.tick {
-  width: 1.4rem;
-  height: 0.45rem;
-  border: 0;
-  border-radius: 999px;
-  background: var(--k);
-  cursor: pointer;
-  flex: none;
-  outline: 2px solid transparent;
-  outline-offset: 1px;
-  transition:
-    background-color var(--hov) var(--ease-out),
-    outline-color var(--hov) var(--ease-out);
-}
-.root[data-lit] .tick:not([data-on]) {
-  background: var(--cs-dim);
-}
-.tick[data-on] {
-  outline-color: var(--primary);
-}
-
 /* ── Timeline: a drawn scrubber over a transparent native range (keyboard and screen reader) ── */
 .tl {
   grid-area: timeline;
@@ -752,8 +721,8 @@
 
 /* ── Context view: a fixed-height bar beside the usage list ── */
 .ctx {
-  /* The bar, then the smart-zone labels when shown, then the preview when shown. */
-  --ctx-cols: 3rem 5.5rem 1fr;
+  /* The bar, then the smart-zone labels when shown. */
+  --ctx-cols: 3rem 5.5rem;
   grid-area: ctx;
   display: flex;
   flex-direction: column;
@@ -815,12 +784,6 @@
   box-shadow: 0 1px 3px color-mix(in oklch, var(--foreground) 14%, transparent);
 }
 .ctx[data-zone='off'] {
-  --ctx-cols: 6rem 1fr;
-}
-.ctx[data-preview='off'] {
-  --ctx-cols: 3rem 5.5rem;
-}
-.ctx[data-zone='off'][data-preview='off'] {
   --ctx-cols: 6rem;
 }
 .ctxbody {
@@ -944,6 +907,8 @@
   bottom: 0;
 }
 .usage {
+  grid-area: prev;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   gap: 1px;
@@ -1386,15 +1351,6 @@ button.row:hover {
   .phone {
     max-height: 40svh;
     min-height: 16rem;
-  }
-  .rail {
-    flex-direction: row;
-    padding: 0.5rem;
-    min-height: 2.75rem;
-  }
-  .tick {
-    width: 0.45rem;
-    height: 1.4rem;
   }
   .tl {
     flex-direction: row;

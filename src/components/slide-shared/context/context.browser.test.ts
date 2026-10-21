@@ -537,11 +537,28 @@ describe('success cases', () => {
     );
 
     it(
+      'moves the context preview on screen when its chip is dragged, as any other part',
+      async () => {
+        // ARRANGE
+        await open('light');
+        const before = await orderOf();
+        const first = (order: { cells: string[] }) => order.cells[0]?.includes('usage');
+        // ACT
+        await dragChip('preview', 'chat');
+        const after = await orderOf();
+        // ASSERT
+        expect(first(before)).toBe(false);
+        expect(first(after)).toBe(true);
+      },
+      TIMEOUT,
+    );
+
+    it(
       'moves the part nodes without remounting them, and keeps the chat scrolled where it was',
       async () => {
         // ARRANGE
         await open('light');
-        const cells = ['cell-0', 'cell-1', 'cell-2', 'cell-3'];
+        const cells = ['cell-0', 'cell-1', 'cell-2', 'cell-3', 'cell-4'];
         const scrolled = await evaluate<number>(
           send,
           `(() => {
@@ -671,17 +688,17 @@ describe('edge cases', () => {
         const chipPressed = () =>
           evaluate<string | null>(send, `document.querySelector('${chip}').getAttribute('aria-pressed')`);
         // ACT
-        const before = [await count(`${HEAD} [aria-label="Usage by category"]`), await pressed('preview')];
+        const before = [await count(`${SLIDE_4} [aria-label="Usage by category"]`), await pressed('preview')];
         await press('preview');
         await delay(100);
         const shown = [
-          await count(`${HEAD} [aria-label="Usage by category"]`),
+          await count(`${SLIDE_4} [aria-label="Usage by category"]`),
           await pressed('preview'),
           await chipPressed(),
         ];
         await press('preview');
         await delay(100);
-        const hidden = [await count(`${HEAD} [aria-label="Usage by category"]`), await pressed('preview')];
+        const hidden = [await count(`${SLIDE_4} [aria-label="Usage by category"]`), await pressed('preview')];
         // ASSERT
         expect({ before, hidden, shown }).toEqual(expected);
       },
@@ -743,7 +760,7 @@ describe('edge cases', () => {
         await open('light');
         await press('preview');
         await delay(100);
-        const row = `${HEAD} [aria-label="Usage by category"] button[data-part]`;
+        const row = `${SLIDE_4} [aria-label="Usage by category"] button[data-part]`;
         // ACT
         const at = await centreOf(row, 1);
         await click(at.x, at.y);

@@ -20,7 +20,6 @@ export interface ViewState {
   readonly parts: Readonly<Record<Part, boolean>>;
   /** The parts in the order the toolbar's chips and the grid list them; the reader reorders it, a reload resets it. */
   readonly order: readonly Part[];
-  readonly chatCollapsed: boolean;
   /** The smart-zone side column and the limit label are shown; the dashed lines stay either way. */
   readonly zone: boolean;
   /** The window size shown, an index into the Preset's windows. */
@@ -40,7 +39,6 @@ export type ViewEvent =
   | { readonly type: 'SET_DEPTH'; readonly value: Depth }
   | { readonly type: 'SET_PART_MODE'; readonly part: PartId; readonly value: RenderMode }
   | { readonly type: 'SET_WINDOW'; readonly value: number }
-  | { readonly type: 'TOGGLE_CHAT' }
   | { readonly type: 'TOGGLE_PART'; readonly part: Part }
   | { readonly type: 'REORDER'; readonly part: Part; readonly before: Part }
   | { readonly type: 'TOGGLE_ZONE' };
@@ -55,7 +53,6 @@ export function createState(preset: Preset): ViewState {
     renderModes: {},
     parts: { ...preset.show },
     order: [...preset.order],
-    chatCollapsed: false,
     zone: controlOf(preset, 'zone').on ?? true,
     window: 0,
     hintSeen: false,
@@ -75,7 +72,6 @@ export function blockedBy(preset: Preset, event: ViewEvent): string | null {
 const CONTROL_FOR: Partial<Record<ViewEvent['type'], readonly ControlId[]>> = {
   SET_WINDOW: ['window'],
   SET_DEPTH: ['technical'],
-  TOGGLE_CHAT: ['collapse'],
   TOGGLE_ZONE: ['zone'],
   TOGGLE_PART: ['parts'],
 };
@@ -127,7 +123,6 @@ const HANDLERS: Handlers = {
   SET_DEPTH: (s, e) => ({ ...s, hintSeen: true, depth: e.value, renderModes: {} }),
   SET_PART_MODE: (s, e) => ({ ...s, hintSeen: true, renderModes: { ...s.renderModes, [e.part]: e.value } }),
   SET_WINDOW: (s, e, c) => ({ ...s, window: clamp(e.value, 0, c.preset.windows.length - 1) }),
-  TOGGLE_CHAT: (s) => ({ ...s, hintSeen: true, chatCollapsed: !s.chatCollapsed }),
   TOGGLE_PART: (s, e) => ({ ...s, hintSeen: true, parts: { ...s.parts, [e.part]: !s.parts[e.part] } }),
   REORDER: (s, e) => {
     const order = moveTo(s.order, e.part, e.before);

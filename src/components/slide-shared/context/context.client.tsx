@@ -86,7 +86,6 @@ function rootAttrs(m: Model) {
     'data-cornerstone': m.data.preset.id,
     'data-motion': m.data.preset.motion,
     'data-fade': m.data.preset.fade || m.state.parts.attention ? '' : undefined,
-    'data-chat': m.state.chatCollapsed ? 'collapsed' : 'open',
     'data-lit': m.lit || m.ghost ? '' : undefined,
   };
 }

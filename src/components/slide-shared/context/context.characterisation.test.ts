@@ -67,7 +67,6 @@ describe('success cases', () => {
             'Details:true',
             'Attention:false',
             ':true',
-            ':false',
             ':-',
           ],
         },
@@ -153,19 +152,29 @@ describe('success cases', () => {
     });
   });
 
+  describe('the context preview', () => {
+    it('is a part of its own, a sibling of the context window and not inside it', () => {
+      // ARRANGE
+      const group = '[aria-label="Usage by category"]';
+      // ACT
+      const $ = render('slide-8');
+      // ASSERT
+      expect($(`section[aria-label="Context window"] ${group}`)).toHaveLength(0);
+      expect($(`section[aria-label="Context window"]`).next(group)).toHaveLength(1);
+    });
+  });
+
   describe('toolbar toggles', () => {
-    it('flips a part, the depth and the chat collapse where the Preset offers them', () => {
+    it('flips a part, and the depth where the Preset offers them', () => {
       // ARRANGE
       const { preset, context } = setup('slide-7');
       const state = createState(preset);
       // ACT
       const part = reduce(state, { type: 'TOGGLE_PART', part: 'panel' }, context);
       const depth = reduce(state, { type: 'SET_DEPTH', value: 'technical' }, context);
-      const collapsed = reduce(state, { type: 'TOGGLE_CHAT' }, context);
       // ASSERT
       expect(part.parts.panel).toBe(!state.parts.panel);
       expect(depth.depth).toBe('technical');
-      expect(collapsed.chatCollapsed).toBe(true);
     });
   });
 });

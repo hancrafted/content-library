@@ -16,8 +16,6 @@ words:
   technical: Technisch
   technicalTip: 'Technisch: der Chat als Claude-Code-Terminal, das Fenster als /context-Kästchen mit den echten Kategorienamen.'
   modes: { explain: Erklären, attention: Aufmerksamkeit }
-  collapse: Unterhaltung einklappen
-  collapseTip: Die Unterhaltung zu einem Streifen falten
   previewToggle: Kontextvorschau
   previewTip: Zeigen oder ausblenden, was das Fenster füllt
   zoneToggle: Smart Zone

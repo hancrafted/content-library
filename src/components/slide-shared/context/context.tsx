@@ -1,4 +1,4 @@
-import { ContextBars } from './context-bars';
+import { ContextBars } from './context-bars-view';
 import { barModel } from './context-bars.pure';
 import { contextData, type ContextLocale, type ContextPresetId, type MiniPresetId } from './context-data';
 import type { ContextViewData } from './context-view';

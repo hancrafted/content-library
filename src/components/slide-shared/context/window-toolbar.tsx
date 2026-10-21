@@ -1,13 +1,14 @@
 import type { ChangeEvent } from 'react';
 import { toClaudeLog } from './claude-log-writer.pure';
-import { CONTROLS, controlOf, type ControlDef } from './context-controls.pure';
+import { CONTROLS, controlOf, type ControlDef, type Flips } from './context-controls.pure';
+import type { Flip } from './context-parts.types';
 import type { ContextWords } from './context-words.types';
 import styles from './context.module.css';
 import type { Chat, Part, Preset } from './context.types';
 import { ControlIcon, IconButton } from './control-icons';
 import { useChipDrag } from './window-chip-drag';
 
-/* The one toolbar: the controls the registry places there, in registry order: parts, Technical, collapse, the log. */
+/* The one toolbar: the controls the registry places there, in registry order: parts, Technical, the log. */
 
 /** What the toolbar shows and the events it sends up: the parent owns the state. */
 export interface ToolbarProps {
@@ -17,14 +18,11 @@ export interface ToolbarProps {
   readonly parts: Readonly<Record<Part, boolean>>;
   /** The parts in the order the chips list them. */
   readonly order: readonly Part[];
-  /** The global renderMode is Technical: what the toolbar's Technical last set for every part. */
-  readonly technical: boolean;
-  readonly chatCollapsed: boolean;
+  /** What a toggle shows and flips, by the registry's `flips`. */
+  readonly flip: (flips: Flips) => Flip;
   readonly onPart: (part: Part) => void;
   /** A chip was dragged past another: the part takes that one's place. */
   readonly onReorder: (part: Part, before: Part) => void;
-  readonly onTechnical: (on: boolean) => void;
-  readonly onCollapse: () => void;
   readonly onOpen: (text: string) => void;
 }
 
@@ -80,16 +78,6 @@ function UploadButton({ v }: { readonly v: ToolbarProps }) {
   );
 }
 
-/** Whether a control belongs on screen now: collapse needs the chat on it. */
-function usable(v: ToolbarProps, def: ControlDef): boolean {
-  return def.type === 'toggle' && def.flips === 'collapse' ? v.parts.chat : true;
-}
-
-function toggled(v: ToolbarProps, flips: string): { pressed: boolean; run: () => void } {
-  if (flips === 'technical') return { pressed: v.technical, run: () => v.onTechnical(!v.technical) };
-  return { pressed: v.chatCollapsed, run: v.onCollapse };
-}
-
 function Control({ v, def }: { readonly v: ToolbarProps; readonly def: ControlDef }) {
   if (def.type === 'chips') return <ShowGroup v={v} />;
   if (def.type === 'segmented' || def.type === 'readout') return null;
@@ -101,9 +89,9 @@ function Control({ v, def }: { readonly v: ToolbarProps; readonly def: ControlDe
         <ControlIcon name={def.icon} />
       </IconButton>
     );
-  const { pressed, run } = toggled(v, def.flips);
+  const { pressed, onToggle } = v.flip(def.flips);
   return (
-    <IconButton label={v.words[def.label]} tip={v.words[def.tip]} pressed={pressed} control={def.id} onClick={run}>
+    <IconButton label={v.words[def.label]} tip={v.words[def.tip]} pressed={pressed} control={def.id} onClick={onToggle}>
       <ControlIcon name={def.icon} />
     </IconButton>
   );
@@ -113,7 +101,7 @@ function Control({ v, def }: { readonly v: ToolbarProps; readonly def: ControlDe
 export function Toolbar(v: ToolbarProps) {
   const shown = CONTROLS.filter((def) => def.placement === 'toolbar')
     .map((def) => controlOf(v.preset, def.id))
-    .filter((def) => def.show && usable(v, def));
+    .filter((def) => def.show);
   if (shown.length === 0) return null;
   const [first, ...rest] = shown;
   return (

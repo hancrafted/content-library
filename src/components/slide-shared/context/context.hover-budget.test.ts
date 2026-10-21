@@ -39,7 +39,6 @@ const harness = (renderMode: RenderMode) => {
         ...events,
         ...progress,
         notes: data.notes,
-        collapsed: false,
         hint: false,
         hintSeen: true,
       }),
