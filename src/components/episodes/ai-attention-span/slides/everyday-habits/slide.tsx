@@ -1,6 +1,6 @@
 import { slide } from '@/components/slide-master/slide';
 import { SlideFrame } from '@/components/slide-master/slide-master';
-import { ContextMiniBars } from '@/components/slide-shared/context-window/context-window';
+import { ContextMiniBars } from '@/components/slide-shared/context/context';
 import type { ReactNode } from 'react';
 import styles from './everyday-habits.module.css';
 import { HabitList } from './habit-list';

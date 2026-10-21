@@ -1,6 +1,6 @@
 import { slide } from '@/components/slide-master/slide';
 import { SlideFrame } from '@/components/slide-master/slide-master';
-import { ContextMiniBars } from '@/components/slide-shared/context-window/context-window';
+import { ContextMiniBars } from '@/components/slide-shared/context/context';
 import type { ReactNode } from 'react';
 import { CompareMotion } from './compare-motion.client';
 import { ComparePanel } from './compare-panel';

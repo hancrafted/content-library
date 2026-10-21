@@ -1,7 +1,7 @@
 import { slide } from '@/components/slide-master/slide';
 import { SlideFrame } from '@/components/slide-master/slide-master';
-import { contextData } from '@/components/slide-shared/context-window/context-data';
-import { ContextWindow } from '@/components/slide-shared/context-window/context-window';
+import { Context } from '@/components/slide-shared/context/context';
+import { contextData } from '@/components/slide-shared/context/context-data';
 import { AttentionStrip } from './attention-strip';
 import { stripSegments } from './attention-strip.pure';
 import de from './i18n/de.json';
@@ -92,7 +92,7 @@ export const attentionIsABudget = slide({
           </div>
         </div>
         <div className="min-w-0 lg:col-span-8">
-          <ContextWindow preset="slide-5" locale={locale} />
+          <Context preset="slide-5" locale={locale} />
         </div>
       </div>
       <div

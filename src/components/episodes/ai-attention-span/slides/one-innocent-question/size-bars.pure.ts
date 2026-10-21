@@ -1,4 +1,4 @@
-import type { Category, Chat } from '@/components/slide-shared/context-window/context-window.types';
+import type { Category, Chat } from '@/components/slide-shared/context/context.types';
 
 /** One size bar: a key for its label, and the block of one chat step it measures. */
 export interface SizeRow<K extends string = string> {

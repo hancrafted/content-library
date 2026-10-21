@@ -1,6 +1,6 @@
 import { slide } from '@/components/slide-master/slide';
 import { SlideFrame } from '@/components/slide-master/slide-master';
-import { ContextWindow } from '@/components/slide-shared/context-window/context-window';
+import { Context } from '@/components/slide-shared/context/context';
 import { ExplainCard, NamedList } from './explain-cards';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
@@ -50,7 +50,7 @@ export const whatsReallyInTheWindow = slide({
           {t('illustrative')}
         </span>
       </div>
-      <ContextWindow preset="slide-7" locale={locale} />
+      <Context preset="slide-7" locale={locale} />
       <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-3">
         <ExplainCard
           swatch="start"

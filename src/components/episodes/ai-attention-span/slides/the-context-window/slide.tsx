@@ -1,6 +1,6 @@
 import { slide } from '@/components/slide-master/slide';
 import { SlideFrame } from '@/components/slide-master/slide-master';
-import { ContextWindow } from '@/components/slide-shared/context-window/context-window';
+import { Context } from '@/components/slide-shared/context/context';
 import { DefinitionCards } from './definition-cards';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
@@ -33,7 +33,7 @@ export const theContextWindow = slide({
   ],
   content: ({ t, locale, marker, Marker }) => (
     <SlideFrame className="mt-8 gap-10">
-      <ContextWindow preset="slide-3" locale={locale} />
+      <Context preset="slide-3" locale={locale} />
       <DefinitionCards
         items={[
           {
