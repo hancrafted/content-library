@@ -1,4 +1,5 @@
 import { stringify } from 'yaml';
+import { jobsOf } from './workflow-jobs.pure';
 import type { Job, Workflow } from './workflow.types';
 
 /*
@@ -33,7 +34,7 @@ const jobWords = (job: Job) => ({
 });
 
 export function workflowToYaml(workflow: Workflow): string {
-  const jobs = workflow.stages.flatMap((stage) => stage.jobs);
+  const jobs = jobsOf(workflow.stages);
   return stringify({
     id: workflow.id,
     ...opt('focalJob', workflow.focalJobId),

@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import type { Handoff } from '../handoff.pure';
 import { ComparisonView } from './comparison-view';
-import { DEFAULT_OUTPUT_WORDS, type OutputWords } from './output-words';
+import type { OutputWords } from './output-words';
 import { ResearchView } from './research-view';
 import { SpecView } from './spec-view';
 import { RequirementsView, TextView } from './text-view';
@@ -13,8 +13,8 @@ export interface OutputViewProps {
   /** Ids of the ticked tickets (tickets kind only); the parent owns them. */
   readonly ticked?: readonly string[];
   readonly onTick?: (id: string) => void;
-  /** Labels over the English defaults. */
-  readonly words?: Partial<OutputWords>;
+  /** The labels of the locale (`outputWords(locale)`). */
+  readonly words: OutputWords;
 }
 
 const NO_TICKS: readonly string[] = [];
@@ -43,6 +43,6 @@ const RENDERERS: Renderers = {
 
 /** The one entry the renderers share: a parsed handoff in, the view of its kind out. */
 export function OutputView({ handoff, ticked = NO_TICKS, onTick = NO_OP, words }: OutputViewProps) {
-  const ctx = { ticked, onTick, words: { ...DEFAULT_OUTPUT_WORDS, ...words } };
+  const ctx = { ticked, onTick, words };
   return (RENDERERS[handoff.kind] as (h: Handoff, c: Context) => ReactNode)(handoff, ctx);
 }

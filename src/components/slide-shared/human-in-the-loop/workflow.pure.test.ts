@@ -192,6 +192,18 @@ describe('failure cases', () => {
     expect(problems.some((problem) => problem.includes('exampleInput'))).toBe(true);
   });
 
+  it('reports a page that lacks its Simple or its Technical prompt', () => {
+    // ARRANGE
+    const { config, words } = base();
+    Object.assign(words.jobs.write, { page: { simple: 'One HTML file.' } });
+    // ACT
+    const problems = problemsOf(load(config, words));
+    // ASSERT
+    expect(problems.some((problem) => problem.includes('"write"') && problem.includes('words.page.technical'))).toBe(
+      true,
+    );
+  });
+
   it('reports a key the locale words lack, and one the config lacks', () => {
     // ARRANGE
     const { config, words } = base();

@@ -7,6 +7,7 @@ import type { HumanInTheLoopData } from './human-in-the-loop.types';
 import { ModalPart } from './modal-part.client';
 import { ToolbarPart } from './toolbar-part.client';
 import { createState, reduce } from './workflow-state.pure';
+import { workflowView } from './workflow-view.pure';
 
 /*
  * The visual's one client parent: it owns the state and hands each part its slice and callbacks (FE-012 §4). A part
@@ -18,8 +19,10 @@ export function HumanInTheLoopClient(data: HumanInTheLoopData) {
   const [state, dispatch] = useReducer(reduce, start, createState);
   const on = useMemo(() => callbacksFor(dispatch), []);
   const workflow = shownWorkflow(data, state);
-  if (!workflow) return null;
-  const slices = slicesOf({ data, state, workflow }, on);
+  const { mode, level } = state;
+  const view = useMemo(() => workflow && workflowView(workflow, { mode, level }), [workflow, mode, level]);
+  if (!workflow || !view) return null;
+  const slices = slicesOf({ data, state, workflow, view }, on);
   return (
     <div data-human-in-the-loop={workflow.id} data-mode={state.mode} data-level={state.level}>
       <ToolbarPart {...slices.toolbar} />

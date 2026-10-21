@@ -1,5 +1,6 @@
 import { parse } from 'yaml';
 import { exampleProblems, graphProblems, inputProblems } from './workflow-checks.pure';
+import { jobById } from './workflow-jobs.pure';
 import { stageOf, text, trees } from './workflow-read.pure';
 import { isTree, mergeWords, parityProblems, type Tree } from './workflow-words.pure';
 import type { LoadResult, Stage } from './workflow.types';
@@ -29,8 +30,7 @@ function headProblems(id: string | undefined, words: Tree): string[] {
 }
 
 function focalProblems(focal: string | undefined, stages: readonly Stage[]): string[] {
-  const known = stages.some((stage) => stage.jobs.some((job) => job.id === focal));
-  return focal && !known ? [`The focal job "${focal}" is not a job.`] : [];
+  return focal && !jobById(stages, focal) ? [`The focal job "${focal}" is not a job.`] : [];
 }
 
 /**

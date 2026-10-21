@@ -1,4 +1,4 @@
-import { Check, ParkedStub, Sparkle } from '@/components/slide-shared/human-in-the-loop/glyphs';
+import { Check, ParkedStub, Sparkle } from '@/components/slide-shared/glyphs/glyphs';
 import type { ReactNode } from 'react';
 
 interface LegendProps {

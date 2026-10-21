@@ -1,12 +1,13 @@
 import { cn } from '@/lib/utils';
-import { AiJob, ChatJobs, DeliverableJob, FocalJob, PieceJobs, type JobViewProps } from './diagram-jobs';
+import { AiJob, ChatJobs, DeliverableJob, FocalJob, PieceJobs, popoverOf, type JobViewProps } from './diagram-jobs';
 import { connectorInto, fanGeometry, type Connector as ConnectorKind } from './diagram-layout.pure';
 import { jobRole } from './diagram-model.pure';
-import { cardOf, TryStep, type OpenJob } from './diagram-try';
+import { TryStep, type JobOpener } from './diagram-try.client';
 import type { DiagramSlots, StageSlot, UiWords } from './human-in-the-loop.types';
 import { NodePopover } from './node-popover.client';
+import { jobById } from './workflow-jobs.pure';
 import type { WorkflowView } from './workflow-view.pure';
-import type { Stage, Workflow } from './workflow.types';
+import type { Job, Stage, Workflow } from './workflow.types';
 
 /**
  * The Workflow as one ordered list of stages, each a column of jobs, left to right where the Scene is wide and top to
@@ -15,10 +16,10 @@ import type { Stage, Workflow } from './workflow.types';
  */
 export function DiagramStages(props: {
   workflow: Workflow;
+  view: WorkflowView;
   slots?: DiagramSlots;
   words: Pick<UiWords, 'signedOff'>;
-  view?: WorkflowView;
-  open?: OpenJob;
+  opener?: JobOpener;
 }) {
   const { workflow, slots = {}, words } = props;
   const ctx: Context = { ...props, slots, words: { signedOff: words.signedOff, checked: slots.checked ?? '' } };
@@ -42,8 +43,8 @@ interface Context {
   workflow: Workflow;
   slots: DiagramSlots;
   words: JobViewProps['words'];
-  view?: WorkflowView;
-  open?: OpenJob;
+  view: WorkflowView;
+  opener?: JobOpener;
 }
 
 function StageColumn({ ctx, stage, previous }: { ctx: Context; stage: Stage; previous: Stage | undefined }) {
@@ -54,43 +55,48 @@ function StageColumn({ ctx, stage, previous }: { ctx: Context; stage: Stage; pre
       {previous && <Connector kind={connectorInto(previous, stage)} />}
       <StageHeader stage={stage} slot={slot} initials={ctx.slots.initials === true} />
       <ol
-        aria-label={slot.jobsLabel ?? stage.name}
+        aria-label={jobsLabelOf(stage, slot, ctx.slots)}
         className={cn(
           'flex flex-1 flex-col justify-center gap-2 rounded-2xl bg-card p-3',
           focal ? 'border-2 border-primary' : 'card-hover card-hover--outline border border-border',
         )}
       >
         {stage.jobs.map((job) => (
-          <StageJob key={job.id} ctx={ctx} job={job} gate={gateOf(stage, slot)} />
+          <StageJob key={job.id} ctx={ctx} stage={stage} job={job} gateLabel={gateLabelOf(stage, slot)} />
         ))}
       </ol>
     </li>
   );
 }
 
-const gateOf = (stage: Stage, slot: StageSlot): string | undefined =>
-  stage.gate === undefined ? undefined : (slot.gate ?? String(stage.gate));
+/** The label of a stage's gate on a card: the Slide's word, else the bare number. */
+const gateLabelOf = (stage: Stage, slot: StageSlot): string | undefined =>
+  stage.gate === undefined ? undefined : (slot.gateLabel ?? String(stage.gate));
 
-function StageJob({
-  ctx,
-  job,
-  gate,
-}: {
+/** The accessible name of a stage's list of jobs: the stage's own, else the Slide's template, else the stage name. */
+const jobsLabelOf = (stage: Stage, slot: StageSlot, slots: DiagramSlots): string =>
+  slot.jobsLabel ?? slots.jobsLabel?.replace('{stage}', stage.name) ?? stage.name;
+
+interface StageJobProps {
   ctx: Context;
-  job: Workflow['stages'][number]['jobs'][number];
-  gate?: string;
-}) {
-  const card = ctx.view?.clickable ? cardOf(ctx.view, job.id) : undefined;
+  stage: Stage;
+  job: Job;
+  gateLabel?: string;
+}
+
+function StageJob({ ctx, stage, job, gateLabel }: StageJobProps) {
+  const card = ctx.view.clickable ? jobById(ctx.view.stages, job.id) : undefined;
   const slot = ctx.slots.jobs?.[job.id] ?? {};
+  const props = { job, slot, stageName: stage.name, gateLabel, words: ctx.words };
   return (
     <>
-      <Job role={jobRole(ctx.workflow, job)} job={job} slot={slot} gate={gate} words={ctx.words} />
-      {card && ctx.open && <TryStep card={card} open={ctx.open} />}
+      <JobCard role={jobRole(ctx.workflow, job)} {...props} />
+      {card && ctx.opener && <TryStep card={card} opener={ctx.opener} />}
     </>
   );
 }
 
-function Job({ role, ...props }: JobViewProps & { role: ReturnType<typeof jobRole> }) {
+function JobCard({ role, ...props }: JobViewProps & { role: ReturnType<typeof jobRole> }) {
   if (role === 'pieces') return <PieceJobs {...props} />;
   if (role === 'chats') return <ChatJobs {...props} />;
   if (role === 'focal') return <FocalJob {...props} />;
@@ -107,11 +113,12 @@ const NAME_BUTTON =
  * up with the rest.
  */
 function StageHeader({ stage, slot, initials }: { stage: Stage; slot: StageSlot; initials: boolean }) {
+  const popover = popoverOf(slot.popover, stage.name);
   return (
     <div className="flex flex-col items-start gap-1 @4xl:h-24">
       <p className="flex items-center gap-1 text-body font-semibold">
-        {slot.popover ? (
-          <NodePopover copy={slot.popover} className={NAME_BUTTON}>
+        {popover ? (
+          <NodePopover copy={popover} className={NAME_BUTTON}>
             {stage.name}
           </NodePopover>
         ) : (

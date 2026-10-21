@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Sparkle } from '../human-in-the-loop/glyphs';
+import { Sparkle } from '../glyphs/glyphs';
 import { AttentionFaces, type FaceLevel } from './attention-faces';
 import styles from './speech-bubble.module.css';
 

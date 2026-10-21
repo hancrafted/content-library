@@ -1,4 +1,5 @@
 import { handoffBlocks, parseHandoff, type Handoff } from './handoff.pure';
+import { jobsOf } from './workflow-jobs.pure';
 import type { Level, Mode } from './workflow-state.pure';
 import type { Job, Workflow } from './workflow.types';
 
@@ -72,6 +73,7 @@ const firstSentence = (text: string): string => /^.*?[.!?](?=\s|$)/s.exec(text.t
 const prefill = (base: string, prompt: string): string => `${base}?q=${encodeURIComponent(prompt)}`;
 
 function actionsOf(job: Job, level: Level): ModalAction[] {
+  const page = job.page?.[level];
   const useCommand = level === 'technical' && job.command !== undefined;
   const copy: ModalAction = useCommand
     ? { id: 'copy-command', text: job.command as string }
@@ -84,7 +86,7 @@ function actionsOf(job: Job, level: Level): ModalAction[] {
     { id: 'open-claude', href: prefill('https://claude.ai/new', copy.text) },
     ...optional('copy-example', job.exampleInput),
     ...optional('copy-check', job.check?.prompt),
-    ...optional('copy-page', job.page),
+    ...optional('copy-page', page),
   ];
 }
 
@@ -119,7 +121,7 @@ function sectionsOf(job: Job, level: Level, { producers, examples }: BodyContext
 
 /** The titles of the jobs that produce the job's inputs, falling back to the output id. */
 function producersOf(job: Job, workflow: Workflow): string[] {
-  const jobs = workflow.stages.flatMap((stage) => stage.jobs);
+  const jobs = jobsOf(workflow.stages);
   return job.inputs.map((input) => jobs.find((j) => j.outputs.some((o) => o.id === input))?.title ?? input);
 }
 
@@ -154,7 +156,7 @@ function cardOf(job: Job, workflow: Workflow, options: ViewOptions & { readonly 
 
 /** The view model of a Workflow for a mode and level. */
 export function workflowView(workflow: Workflow, options: ViewOptions): WorkflowView {
-  const order = workflow.stages.flatMap((stage) => stage.jobs.map((job) => job.id));
+  const order = jobsOf(workflow.stages).map((job) => job.id);
   const stages = workflow.stages.map((stage): StageView => ({
     ...stage,
     jobs: stage.jobs.map((job) => cardOf(job, workflow, { ...options, step: order.indexOf(job.id) + 1 })),

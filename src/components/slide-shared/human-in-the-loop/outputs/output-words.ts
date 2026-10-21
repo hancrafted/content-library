@@ -1,4 +1,4 @@
-/** The labels the output renderers draw. English defaults; a Workflow or Slide passes its locale's words over them. */
+/** The labels the output renderers draw: the `output:` tree of the visual's YAML pair, one set per locale. */
 export interface OutputWords {
   readonly goal: string;
   readonly requirements: string;
@@ -19,24 +19,3 @@ export interface OutputWords {
   readonly option: string;
   readonly why: string;
 }
-
-export const DEFAULT_OUTPUT_WORDS: OutputWords = {
-  goal: 'Goal',
-  requirements: 'Requirements',
-  outOfScope: 'Out of scope',
-  slices: 'Slices',
-  tickets: 'Tickets',
-  acceptance: 'Done when',
-  blockedBy: 'After',
-  ready: 'Ready',
-  done: 'Done',
-  blocked: 'Waiting',
-  progress: '{done} of {total} done',
-  graphHint: 'Click a ready ticket to tick it off and unlock what it blocks.',
-  facts: 'Facts',
-  criteria: 'Criteria',
-  ranking: 'Ranking',
-  rank: '#',
-  option: 'Option',
-  why: 'Why',
-};

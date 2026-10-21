@@ -128,6 +128,35 @@ afterAll(async () => {
 
 describe('success cases', () => {
   it(
+    'keeps Watch clean: only the Watch / Try switch, the rest appears in Try, and the diagram stays put',
+    async () => {
+      // ARRANGE
+      const tryGroupCount = 2;
+      const minTryControls = 3;
+      const maxShift = 2;
+      await open('light');
+      const parts = `${ROOT} [data-part="toolbar"] [data-control], ${ROOT} [data-part="toolbar"] [role="group"]`;
+      const top = () =>
+        js<number>(`document.querySelector('${ROOT} [data-part="diagram"]').getBoundingClientRect().top`);
+      // ACT
+      const watchGroups = await count(`${ROOT} [data-part="toolbar"] [role="group"]`);
+      const watchControls = await count(`${ROOT} [data-part="toolbar"] [data-control]`);
+      const watchTop = await top();
+      await tryIt();
+      const tryGroups = await count(`${ROOT} [data-part="toolbar"] [role="group"]`);
+      const tryControls = (await count(parts)) - tryGroups;
+      const tryTop = await top();
+      // ASSERT
+      expect(watchGroups).toBe(1);
+      expect(watchControls).toBe(0);
+      expect(tryGroups).toBe(tryGroupCount);
+      expect(tryControls).toBeGreaterThanOrEqual(minTryControls);
+      expect(Math.abs(tryTop - watchTop)).toBeLessThanOrEqual(maxShift);
+    },
+    TIMEOUT,
+  );
+
+  it(
     'walks Watch, Try it, a job modal and its quick actions, then closes by backdrop and Escape',
     async () => {
       // ARRANGE

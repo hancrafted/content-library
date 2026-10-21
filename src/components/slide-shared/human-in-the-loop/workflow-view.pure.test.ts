@@ -4,7 +4,7 @@ import type { Job, Workflow } from './workflow.types';
 
 const TEXT = '```handoff\nkind: text\ntext: hi\n```';
 
-function job(id: string, rest: Partial<Job> = {}): Job {
+function job(id: string, extra: Partial<Job> = {}): Job {
   return {
     id,
     title: `Job ${id}`,
@@ -15,7 +15,7 @@ function job(id: string, rest: Partial<Job> = {}): Job {
     outputs: [{ id: `${id}-out`, kind: 'text' }],
     skills: [],
     prompt: `Prompt of ${id} & more`,
-    ...rest,
+    ...extra,
   };
 }
 
@@ -41,7 +41,7 @@ const WORKFLOW: Workflow = {
           exampleInput: TEXT,
           exampleOutput: TEXT,
           check: { criteria: ['It is short.'], prompt: 'Check it' },
-          page: 'Make a page',
+          page: { simple: 'Make a page', technical: 'Serve a page' },
         }),
         job('c', { dependsOn: ['a'] }),
       ],
@@ -141,6 +141,16 @@ describe('success cases', () => {
     );
     // ASSERT
     expect(texts).toEqual([TEXT, 'Check it', 'Make a page']);
+  });
+
+  it('copies the Simple page prompt in Simple and the Technical one in Technical', () => {
+    // ARRANGE
+    const pageIn = (options: typeof SIMPLE | typeof TECHNICAL) =>
+      (textOf(workflowView(WORKFLOW, options), 'b', 'copy-page') as { text: string }).text;
+    // ACT
+    const pages = [pageIn(SIMPLE), pageIn(TECHNICAL)];
+    // ASSERT
+    expect(pages).toEqual(['Make a page', 'Serve a page']);
   });
 
   it('orders the body as inverted pyramid: does, in, out, criteria, then the example result', () => {

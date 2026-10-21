@@ -3,7 +3,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { handoffBlocks, parseHandoff, type Handoff } from '../handoff.pure';
-import { workflowFor } from '../workflow-data';
+import { outputWords, workflowFor } from '../workflow-data';
 import { OutputView, type OutputViewProps } from './output-dispatch';
 
 /** The summer party's example outputs, parsed, by kind. */
@@ -17,7 +17,7 @@ const EXAMPLES = new Map<string, Handoff>(
 );
 
 const view = (handoff: Handoff, props: Partial<OutputViewProps> = {}) =>
-  load(renderToStaticMarkup(createElement(OutputView, { handoff, ...props })));
+  load(renderToStaticMarkup(createElement(OutputView, { handoff, words: outputWords('en'), ...props })));
 const example = (kind: string, props: Partial<OutputViewProps> = {}) => {
   const handoff = EXAMPLES.get(kind);
   if (!handoff) throw new Error(`no ${kind} example`);
@@ -113,14 +113,14 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('shows given words over the defaults and keeps the rest', () => {
+  it('draws the labels of the words it is given, here the German ones', () => {
     // ARRANGE
-    const words = { goal: 'Ziel' };
+    const words = outputWords('de');
     // ACT
     const $ = example('spec', { words });
     // ASSERT
-    expect($('[data-output=spec]').text()).toContain('Ziel');
-    expect($('[data-output=spec]').text()).toContain('Requirements');
+    expect($('[data-output=spec]').text()).toContain(words.goal);
+    expect($('[data-output=spec]').text()).not.toContain(outputWords('en').requirements);
   });
 
   it('draws an empty ticket list without a node', () => {

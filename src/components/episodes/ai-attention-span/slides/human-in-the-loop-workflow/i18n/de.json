@@ -1,27 +1,7 @@
 {
   "title": "Human-in-the-Loop-Workflow",
   "caption": "Plane das nächste Sommerfest Deiner Firma: 200 Mitarbeitende an fünf Standorten in Europa. Du bist der Kapitän: Ein Planer-Chat bereitet jede Übergabe vor, Helfer-Chats erledigen die Aufgaben, und Du prüfst jedes Artefakt dazwischen.",
-  "pipelineLabel": "Die Schritte eines Briefings, Stufe für Stufe",
-  "stages": {
-    "party": {
-      "name": "Sommerfest"
-    },
-    "interview": {
-      "name": "Interview"
-    },
-    "requirements": {
-      "name": "Anforderungen"
-    },
-    "research": {
-      "name": "Recherche"
-    },
-    "compare": {
-      "name": "Vergleich"
-    },
-    "recommendation": {
-      "name": "Empfehlung"
-    }
-  },
+  "workflowLabel": "Die Schritte eines Briefings, Stufe für Stufe",
   "loop": {
     "note": "<marker>Ein frischer Chat pro Aufgabe</marker> hält jedes Fenster klein; Du koordinierst wie ein Projektmanager."
   },

@@ -11,13 +11,12 @@ const CLEAN_WINDOWS = {
 const CONTEXT_LENGTH = { slug: 'du-context-length-alone-hurts', url: 'https://arxiv.org/abs/2510.05381' };
 
 const CRITERIA = ['guests', 'budget', 'stepFree', 'vegetarian', 'quiet'] as const;
-const STAGE_IDS = ['party', 'interview', 'requirements', 'research', 'compare', 'recommendation'] as const;
 
 const WORKERS = 'workers';
 const LOOP_NOTE = 'loop-note';
 
 /**
- * The human in the loop workflow: the brief-the-venue pipeline whole (its columns, connectors and the fan-out to the
+ * The human in the loop workflow: the brief-the-venue Workflow whole (its columns, connectors and the fan-out to the
  * worker chats and back in), only without bold first letters and the acronym unnamed. The loop strip did not fit
  * beside it at 1280x800, so its message (planner chat, worker chats, you checking) lives in the caption.
  */
@@ -35,27 +34,24 @@ export const humanInTheLoopWorkflow = slide({
     { slug: 'worker-chats' },
     { slug: 'you-check' },
   ],
-  content: ({ t, locale, target, marker, Marker }) => {
-    const jobsLabel = (id: (typeof STAGE_IDS)[number]) => t('jobsLabel', { stage: t(`stages.${id}.name`) });
-    const gates = { requirements: t('card.gate'), compare: t('jobs.compare.gate') };
+  content: ({ t, template, locale, target, marker, Marker }) => {
     return (
       <SlideFrame className="mt-10 gap-10">
         <HumanInTheLoop
           workflow="summer-party"
           locale={locale}
           diagram={{
-            label: t('pipelineLabel'),
+            label: t('workflowLabel'),
+            jobsLabel: template('jobsLabel'),
             checked: t('jobs.research.checked'),
             initials: false,
             stages: {
-              ...Object.fromEntries(STAGE_IDS.map((id) => [id, { jobsLabel: jobsLabel(id) }])),
-              requirements: { jobsLabel: jobsLabel('requirements'), gate: gates.requirements },
+              requirements: { gateLabel: t('card.gate') },
               research: {
-                jobsLabel: jobsLabel('research'),
                 target: target(WORKERS),
                 aside: <Marker note="clean-windows-for-each-part" placement="beside" />,
               },
-              compare: { jobsLabel: jobsLabel('compare'), gate: gates.compare },
+              compare: { gateLabel: t('jobs.compare.gate') },
             },
             jobs: {
               interview: {

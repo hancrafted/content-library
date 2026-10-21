@@ -1,8 +1,8 @@
 import { cn } from '@/lib/utils';
 import type { ReactNode } from 'react';
+import { Check, FlowStub, ParkedStub, Sparkle } from '../glyphs/glyphs';
 import { chatNames, focalCriteria, splitParked } from './diagram-model.pure';
-import { Check, FlowStub, ParkedStub, Sparkle } from './glyphs';
-import type { JobSlot } from './human-in-the-loop.types';
+import type { JobSlot, PopoverCopy } from './human-in-the-loop.types';
 import { NodePopover, type NodeCopy } from './node-popover.client';
 import type { Job } from './workflow.types';
 
@@ -27,18 +27,24 @@ function Node({ copy, className, children }: { copy?: NodeCopy; className: strin
   );
 }
 
+/** A popover's copy with the name of the stage it explains as its title. */
+export const popoverOf = (copy: PopoverCopy | undefined, stageName: string): NodeCopy | undefined =>
+  copy && { title: stageName, ...copy };
+
 export interface JobViewProps {
   readonly job: Job;
   readonly slot: JobSlot;
+  /** The name of the stage the job sits in: the title of its popover. */
+  readonly stageName: string;
   /** The word for this job's stage gate; absent when the stage has none. */
-  readonly gate?: string;
+  readonly gateLabel?: string;
   readonly words: { readonly signedOff: string; readonly checked: string };
 }
 
 const PIECE = 'flex h-full min-w-0 flex-1 items-center rounded-full px-3 text-left text-caption';
 
 /** The task's pieces: the one taken forward in the middle, the parked ones grey, each ending in a stub. */
-export function PieceJobs({ job, slot }: JobViewProps) {
+export function PieceJobs({ job, slot, stageName }: JobViewProps) {
   const { before, after } = splitParked(job.parked ?? []);
   const piece = (label: string, parked: boolean) => {
     const tone = parked
@@ -46,7 +52,7 @@ export function PieceJobs({ job, slot }: JobViewProps) {
       : 'border border-foreground bg-card font-semibold text-foreground';
     return (
       <li key={`${parked}-${label}`} className="flex h-9 items-center gap-1.5">
-        <Node copy={slot.popover} className={cn(PIECE, tone)}>
+        <Node copy={popoverOf(slot.popover, stageName)} className={cn(PIECE, tone)}>
           {label}
         </Node>
         {parked ? <ParkedStub /> : <FlowStub />}
@@ -57,7 +63,7 @@ export function PieceJobs({ job, slot }: JobViewProps) {
 }
 
 /** A job the AI does, as a card: the sparkle and its title, then its detail and, where it is gated, the gate. */
-export function AiJob({ job, slot, gate }: JobViewProps) {
+export function AiJob({ job, slot, gateLabel }: JobViewProps) {
   const detail = slot.detail ?? job.detail;
   return (
     <>
@@ -67,9 +73,9 @@ export function AiJob({ job, slot, gate }: JobViewProps) {
           {job.title}
         </span>
         {detail && <span className="text-caption text-muted-foreground">{detail}</span>}
-        {gate && (
+        {gateLabel && (
           <span className="mt-1 inline-flex items-center gap-1 text-caption font-medium">
-            {gate}
+            {gateLabel}
             {slot.marker}
           </span>
         )}
@@ -80,11 +86,11 @@ export function AiJob({ job, slot, gate }: JobViewProps) {
 }
 
 /** The focal job as a card, the one focal point: its gate, its criteria, signed off. */
-export function FocalJob({ job, slot, gate, words }: JobViewProps) {
+export function FocalJob({ job, slot, gateLabel, words }: JobViewProps) {
   const criteria = slot.criteria ?? focalCriteria(job);
   return (
     <li className="-rotate-1 rounded-xl border border-border bg-background p-2.5 shadow-md">
-      {gate && <p className="text-caption font-medium text-muted-foreground uppercase">{gate}</p>}
+      {gateLabel && <p className="text-caption font-medium text-muted-foreground uppercase">{gateLabel}</p>}
       <p className="text-caption font-semibold">{job.title}</p>
       {criteria.length > 0 && (
         <ul className="mt-2 flex flex-col gap-1 border-t border-border pt-2 text-caption text-muted-foreground">
@@ -107,10 +113,10 @@ export function FocalJob({ job, slot, gate, words }: JobViewProps) {
 const CHAT_PILL = 'flex h-12 w-full items-center justify-between gap-2 rounded-full px-3 text-caption font-semibold';
 
 /** The parallel chats of a fanned-out job, each ticked where the job is checked against its criteria. */
-export function ChatJobs({ job, slot, words }: JobViewProps) {
+export function ChatJobs({ job, slot, stageName, words }: JobViewProps) {
   return chatNames(job).map((name) => (
     <li key={name}>
-      <Node copy={slot.popover} className={cn(CHAT_PILL, AI_EDGE)}>
+      <Node copy={popoverOf(slot.popover, stageName)} className={cn(CHAT_PILL, AI_EDGE)}>
         <span className="flex min-w-0 items-center gap-1.5">
           <Sparkle className="size-3.5" />
           <span className="truncate">{name}</span>

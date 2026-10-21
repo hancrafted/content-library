@@ -43,14 +43,19 @@ export function workflowFor(id: WorkflowId, locale: WorkflowLocale, override?: u
   return result.workflow;
 }
 
-/** The chrome words of one locale. */
-export function uiWords(locale: WorkflowLocale): UiWords {
-  const doc = parse(UI_FILES[locale]) as { ui: UiWords };
-  return doc.ui;
+const chrome = new Map<WorkflowLocale, { readonly ui: UiWords; readonly output: OutputWords }>();
+
+/** The visual's own file of one locale, parsed once. */
+function chromeOf(locale: WorkflowLocale) {
+  const hit = chrome.get(locale);
+  if (hit) return hit;
+  const doc = parse(UI_FILES[locale]) as { ui: UiWords; output: OutputWords };
+  chrome.set(locale, doc);
+  return doc;
 }
 
+/** The chrome words of one locale. */
+export const uiWords = (locale: WorkflowLocale): UiWords => chromeOf(locale).ui;
+
 /** The words of the output renderers in one locale. */
-export function outputWords(locale: WorkflowLocale): OutputWords {
-  const doc = parse(UI_FILES[locale]) as { output: OutputWords };
-  return doc.output;
-}
+export const outputWords = (locale: WorkflowLocale): OutputWords => chromeOf(locale).output;

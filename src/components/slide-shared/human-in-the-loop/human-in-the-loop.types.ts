@@ -2,9 +2,11 @@ import type { TargetProps } from '@/lib/context-link.pure';
 import type { ReactNode } from 'react';
 import type { NodeCopy } from './node-popover.client';
 import type { OutputWords } from './outputs/output-words';
+import type { ControlMap } from './toolbar-controls.pure';
 import type { Level, Mode } from './workflow-state.pure';
+import type { JobCardView, WorkflowView } from './workflow-view.pure';
 import type { DeepPartial } from './workflow-words.pure';
-import type { Job, Workflow } from './workflow.types';
+import type { Workflow } from './workflow.types';
 
 /*
  * The part-slot contract (FE-012 §4): the parent owns all state; each part gets its own slice as plain props and
@@ -49,31 +51,27 @@ export interface WorkflowSlideWords {
   readonly workflow?: DeepPartial<Record<string, unknown>>;
 }
 
-/** Which toolbar controls a Slide's Preset shows; each is on unless the Preset says `false`. */
-export interface ToolbarControls {
-  readonly picker: boolean;
-  readonly download: boolean;
-  readonly upload: boolean;
-}
+/** What a popover says: the title is the name of the stage it explains, which the diagram fills in. */
+export type PopoverCopy = Omit<NodeCopy, 'title'>;
 
 /** What a Slide adds to one stage of the diagram, keyed by the stage id. */
 export interface StageSlot {
   /** Opens from the stage name; without it the name is plain text. */
-  readonly popover?: NodeCopy;
+  readonly popover?: PopoverCopy;
   /** Beside the stage name, e.g. a Context marker. */
   readonly aside?: ReactNode;
   /** The Slide's `target(name)` for a Speaker note aimed at the stage. */
   readonly target?: TargetProps;
-  /** The accessible name of the stage's list of jobs. */
+  /** The accessible name of the stage's list of jobs, where it differs from `DiagramSlots.jobsLabel`. */
   readonly jobsLabel?: string;
   /** The word for the stage's gate on a card, e.g. "Gate 2"; the bare number where absent. */
-  readonly gate?: string;
+  readonly gateLabel?: string;
 }
 
 /** What a Slide adds to one job of the diagram, keyed by the job id. */
 export interface JobSlot {
-  /** Makes the job's node a button opening this popover. */
-  readonly popover?: NodeCopy;
+  /** Makes the job's node a button opening this popover, titled with the name of the job's stage. */
+  readonly popover?: PopoverCopy;
   /** Replaces the line under the job's title, e.g. to carry a Context marker. */
   readonly detail?: ReactNode;
   /** After the job's gate or sign-off, e.g. a Context marker. */
@@ -88,21 +86,23 @@ export interface JobSlot {
 export interface DiagramSlots {
   /** The accessible name of the whole diagram; the Workflow's title where absent. */
   readonly label?: string;
+  /** The accessible name of each stage's list of jobs, with `{stage}` for the stage's name. */
+  readonly jobsLabel?: string;
   /** The hidden text on a job checked against its criteria. */
   readonly checked?: string;
-  /** Bold the first letter of each move, so the moves read as an acronym. The server entry drops it for German. */
+  /** Bold the first letter of each move, so the moves read as an acronym. The server entry alone drops it for German. */
   readonly initials?: boolean;
   readonly stages?: Readonly<Record<string, StageSlot>>;
   readonly jobs?: Readonly<Record<string, JobSlot>>;
 }
 
-/** What the diagram part draws: the shown Workflow and which job is open. It reports a press on a job card. */
+/** What the diagram part draws: the shown Workflow's view and which job is open. It reports a press on a job card. */
 export interface DiagramProps {
   readonly workflow: Workflow;
+  /** The Workflow's view for the mode and level, computed once by the parent. */
+  readonly view: WorkflowView;
   readonly slots?: DiagramSlots;
   readonly words: UiWords;
-  readonly mode: Mode;
-  readonly level: Level;
   readonly openJobId: string | null;
   readonly onOpenJob: (jobId: string) => void;
 }
@@ -114,7 +114,10 @@ export interface ToolbarProps {
   readonly choices: readonly { readonly id: string; readonly title: string }[];
   readonly mode: Mode;
   readonly level: Level;
-  readonly controls: ToolbarControls;
+  /** The Preset's overrides of the control registry. */
+  readonly controls: ControlMap;
+  /** The one-time setup block, Technical only; from the parent's view. */
+  readonly setup?: string;
   readonly uploadProblems: readonly string[];
   readonly words: UiWords;
   readonly onMode: (mode: Mode) => void;
@@ -124,12 +127,9 @@ export interface ToolbarProps {
   readonly onUpload: (yaml: string) => void;
 }
 
-/** What the modal part draws: the open job (null: closed) with the ticked ticket ids. It reports a close and a tick. */
+/** What the modal part draws: the open job's card (null: closed) with the ticked ticket ids. It reports a close and a tick. */
 export interface ModalProps {
-  readonly workflow: Workflow;
-  readonly job: Job | null;
-  readonly mode: Mode;
-  readonly level: Level;
+  readonly card: JobCardView | null;
   readonly ticked: readonly string[];
   readonly words: UiWords;
   /** The labels of the example result's views. */
@@ -146,7 +146,7 @@ export interface HumanInTheLoopData {
   readonly locale: 'en' | 'de';
   readonly words: UiWords;
   readonly outputWords: OutputWords;
-  readonly controls: ToolbarControls;
+  readonly controls: ControlMap;
   readonly mode: Mode;
   readonly level: Level;
   /** The Slide's additions to the diagram. */

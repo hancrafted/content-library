@@ -4,7 +4,8 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 import { DiagramPart } from './diagram-part.client';
 import { DiagramStages } from './diagram-stages';
-import type { UiWords } from './human-in-the-loop.types';
+import type { DiagramSlots, UiWords } from './human-in-the-loop.types';
+import { workflowView } from './workflow-view.pure';
 import type { Job, Workflow } from './workflow.types';
 
 const base: Job = {
@@ -28,8 +29,17 @@ const flow = (fanOut: number): Workflow => ({
     { id: 'c', name: 'C', jobs: [{ ...base, id: 'c' }] },
   ],
 });
-const scene = (workflow: Workflow) =>
-  load(renderToStaticMarkup(createElement(DiagramStages, { workflow, words: { signedOff: 'Signed off' } })));
+const scene = (workflow: Workflow, slots?: DiagramSlots) =>
+  load(
+    renderToStaticMarkup(
+      createElement(DiagramStages, {
+        workflow,
+        view: workflowView(workflow, { mode: 'watch', level: 'simple' }),
+        slots,
+        words: { signedOff: 'Signed off' },
+      }),
+    ),
+  );
 
 describe('success cases', () => {
   it('numbers every job in drawing order as a button that opens it', () => {
@@ -38,9 +48,8 @@ describe('success cases', () => {
     const html = renderToStaticMarkup(
       createElement(DiagramPart, {
         workflow: flow(2),
+        view: workflowView(flow(2), { mode: 'try', level: 'simple' }),
         words,
-        mode: 'try',
-        level: 'simple',
         openJobId: 'b',
         onOpenJob: vi.fn(),
       }),
@@ -60,9 +69,8 @@ describe('success cases', () => {
     const html = renderToStaticMarkup(
       createElement(DiagramPart, {
         workflow: flow(2),
+        view: workflowView(flow(2), { mode: 'watch', level: 'simple' }),
         words,
-        mode: 'watch',
-        level: 'simple',
         openJobId: null,
         onOpenJob: vi.fn(),
       }),
@@ -93,6 +101,17 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('opens a stage popover titled with the stage name, not a title the Slide wrote again', () => {
+    // ARRANGE
+    const popover = { in: 'in.', out: 'out.', inLabel: 'In:', outLabel: 'Out:' };
+    const $ = scene(flow(2), { stages: { b: { popover } } });
+    // ACT
+    const opener = $('button[aria-haspopup="dialog"]');
+    // ASSERT
+    expect(opener).toHaveLength(1);
+    expect(opener.text()).toBe('B');
+  });
+
   it('draws no fan where no job runs parallel chats', () => {
     // ARRANGE
     const $ = scene(flow(1));
@@ -104,6 +123,31 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('names each stage list from the Slide template and the stage name, a stage slot winning', () => {
+    // ARRANGE
+    const slots = { jobsLabel: '{stage}: jobs', stages: { c: { jobsLabel: 'Last one' } } };
+    // ACT
+    const $ = scene(flow(2), slots);
+    const labels = $('li[class*="focus-group__item"] > ol')
+      .map((_, el) => $(el).attr('aria-label'))
+      .get();
+    // ASSERT
+    expect(labels).toEqual(['A: jobs', 'B: jobs', 'Last one']);
+  });
+
+  it('labels a stage gate with the Slide word, else the bare number', () => {
+    // ARRANGE
+    const gated: Workflow = { ...flow(2), stages: flow(2).stages.map((stage) => ({ ...stage, gate: 1 })) };
+    // ACT
+    const stageA = (slots?: DiagramSlots) => {
+      const $ = scene(gated, slots);
+      return $('li[class*="focus-group__item"]').first().find('ol').text();
+    };
+    // ASSERT
+    expect(stageA({ stages: { a: { gateLabel: 'Gate one' } } })).toContain('Gate one');
+    expect(stageA()).toMatch(/J1$/);
+  });
+
   it('names the whole diagram after the Workflow when the Slide gives no label', () => {
     // ARRANGE
     const $ = scene(flow(2));

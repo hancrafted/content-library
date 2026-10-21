@@ -3,7 +3,7 @@ import {
   type CallLight,
   type CallWho,
 } from '@/components/slide-shared/call-transcript/call-transcript';
-import { Sparkle } from '@/components/slide-shared/human-in-the-loop/glyphs';
+import { Sparkle } from '@/components/slide-shared/glyphs/glyphs';
 import type { TargetProps } from '@/lib/context-link.pure';
 import type { ReactNode } from 'react';
 

@@ -1,8 +1,8 @@
 import { slide } from '@/components/slide-master/slide';
 import { SlideFrame } from '@/components/slide-master/slide-master';
-import { Sparkle } from '@/components/slide-shared/human-in-the-loop/glyphs';
+import { Sparkle } from '@/components/slide-shared/glyphs/glyphs';
 import { HumanInTheLoop } from '@/components/slide-shared/human-in-the-loop/human-in-the-loop';
-import type { NodeCopy } from '@/components/slide-shared/human-in-the-loop/node-popover.client';
+import type { PopoverCopy } from '@/components/slide-shared/human-in-the-loop/human-in-the-loop.types';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { InterviewChat, type ChatTurnCopy } from './interview-chat.client';
@@ -51,10 +51,11 @@ const TURNS: readonly (['reply', Reply] | ['question', Asked])[] = [
   ['reply', 'spec'],
 ];
 
-type StageId = 'party' | 'interview' | 'requirements' | 'research' | 'compare' | 'recommendation';
+/** The stages the Slide words a popover for: the keys of its own `stages` messages. */
+type StageId = keyof typeof en.stages;
 
 /**
- * Brief the venue (Spec Option 4a): one task walked through BRIEF as a CI-style pipeline. Six stage columns hold their
+ * Brief the venue (Spec Option 4a): one task walked through BRIEF as a Workflow drawn in stages. Six stage columns hold their
  * jobs, every job a fresh chat; hairlines fan out to three venue chats and back in, and the signed-off requirements
  * card is the one focal point. Static at rest, hover only: pointing at a stage dims the others, every node opens a
  * two-line popover, and the Interview opens its worked chat. The markup reads as an ordered list of stages.
@@ -100,9 +101,8 @@ export const briefTheVenue = slide({
     { slug: 'compare-and-check' },
     { slug: 'recommendation-and-on' },
   ],
-  content: ({ t, locale, target, marker, Marker }) => {
-    const popover = (id: StageId): NodeCopy => ({
-      title: t(`stages.${id}.name`),
+  content: ({ t, template, locale, target, marker, Marker }) => {
+    const popover = (id: StageId): PopoverCopy => ({
       in: t(`stages.${id}.popover.in`),
       out: t(`stages.${id}.popover.out`),
       inLabel: t('popover.in'),
@@ -136,29 +136,27 @@ export const briefTheVenue = slide({
         }}
       />
     );
-    const stageSlot = (id: StageId) => ({
-      popover: popover(id),
-      jobsLabel: t('jobsLabel', { stage: t(`stages.${id}.name`) }),
-    });
+    const stageSlot = (id: StageId) => ({ popover: popover(id) });
     return (
       <SlideFrame className="mt-10 gap-10">
         <HumanInTheLoop
           workflow="summer-party"
           locale={locale}
           diagram={{
-            label: t('pipelineLabel'),
+            label: t('workflowLabel'),
+            jobsLabel: template('jobsLabel'),
             checked: t('jobs.research.checked'),
-            initials: locale === 'en',
+            initials: true,
             stages: {
               party: stageSlot('party'),
               interview: { ...stageSlot('interview'), target: target(INTERVIEW) },
-              requirements: { ...stageSlot('requirements'), target: target(REQUIREMENTS), gate: t('card.gate') },
+              requirements: { ...stageSlot('requirements'), target: target(REQUIREMENTS), gateLabel: t('card.gate') },
               research: {
                 ...stageSlot('research'),
                 target: target(RESEARCH),
                 aside: <Marker note="focus-beats-volume" placement="beside" />,
               },
-              compare: { ...stageSlot('compare'), target: target(COMPARE), gate: t('jobs.compare.gate') },
+              compare: { ...stageSlot('compare'), target: target(COMPARE), gateLabel: t('jobs.compare.gate') },
               recommendation: stageSlot('recommendation'),
             },
             jobs: {

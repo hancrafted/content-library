@@ -3,7 +3,8 @@ import type { HandoffKind } from './handoff.pure';
 /*
  * The Workflow model: what a Workflow YAML pair loads into (design: issue #266, "Workflow model"). Every word is
  * already resolved for one locale, so a part renders it as it stands. Nothing here executes: no retries, timeouts
- * or conditions.
+ * or conditions. The types `Stage` and `Job` are the glossary's Workflow stage and Workflow job, never a Run's
+ * Stage or Job.
  */
 
 /** The BRIEF move a Workflow stage makes, by its first letter; the initials are highlighted from it. */
@@ -19,6 +20,12 @@ export interface SkillRef {
 export interface JobOutput {
   readonly id: string;
   readonly kind: HandoffKind;
+}
+
+/** The "Make it a page" prompt: Simple asks for one self-contained HTML file; Technical serves a temp file on localhost. */
+export interface JobPage {
+  readonly simple: string;
+  readonly technical: string;
 }
 
 /** The criteria written down before the step, and the prompt that checks a result against them in a fresh chat. */
@@ -49,15 +56,15 @@ export interface Job {
   readonly skills: readonly SkillRef[];
   /** Simple: the long copy-ready prompt. */
   readonly prompt: string;
-  /** Technical: the `/skill ...` one-liner; absent when no skill covers the job. */
+  /** Technical: the `/skill ...` one-liner; absent when no skill covers the job. Pasted as written: a slot it has to fill is a bracketed placeholder, never a raw `{{id}}`. */
   readonly command?: string;
   /** Handoff blocks to start from, one per input in input order; absent for a first job. */
   readonly exampleInput?: string;
   /** Handoff blocks the job returns, one per output in output order. */
   readonly exampleOutput?: string;
   readonly check?: JobCheck;
-  /** The "Make it a page" prompt, if the result is worth a page. */
-  readonly page?: string;
+  /** The "Make it a page" prompts, one per level, if the result is worth a page. */
+  readonly page?: JobPage;
   /** Labels of the other parts of the task, drawn dimmed beside this job (the party's parked pieces). */
   readonly parked?: readonly string[];
 }

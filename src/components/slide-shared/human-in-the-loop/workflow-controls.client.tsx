@@ -3,6 +3,7 @@
 import { Download, Upload } from 'lucide-react';
 import { useId, type ChangeEvent } from 'react';
 import type { ToolbarProps } from './human-in-the-loop.types';
+import { offers } from './toolbar-controls.pure';
 import { workflowFile } from './workflow-file.pure';
 
 /*
@@ -12,7 +13,7 @@ import { workflowFile } from './workflow-file.pure';
 
 export type WorkflowControlsProps = Pick<
   ToolbarProps,
-  'workflow' | 'choices' | 'controls' | 'uploadProblems' | 'words' | 'onWorkflow' | 'onUpload'
+  'workflow' | 'choices' | 'controls' | 'mode' | 'uploadProblems' | 'words' | 'onWorkflow' | 'onUpload'
 >;
 
 const button =
@@ -63,7 +64,7 @@ function DownloadButton({ v }: { readonly v: WorkflowControlsProps }) {
 }
 
 function UploadButton({ v, describedBy }: { readonly v: WorkflowControlsProps; readonly describedBy?: string }) {
-  const open = async (event: ChangeEvent<HTMLInputElement>) => {
+  const readChosenFile = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) v.onUpload(await file.text());
     event.target.value = '';
@@ -77,7 +78,7 @@ function UploadButton({ v, describedBy }: { readonly v: WorkflowControlsProps; r
         accept=".yml,.yaml,application/x-yaml,text/yaml"
         className="sr-only"
         aria-describedby={describedBy}
-        onChange={open}
+        onChange={readChosenFile}
       />
     </label>
   );
@@ -104,13 +105,23 @@ function UploadSection({ v }: { readonly v: WorkflowControlsProps }) {
   );
 }
 
+/** Which of the three controls the toolbar draws for the mode and the Preset. */
+function shownIn({ controls, mode, choices }: WorkflowControlsProps) {
+  return {
+    picker: offers(controls, 'picker', mode) && choices.length > 1,
+    download: offers(controls, 'download', mode),
+    upload: offers(controls, 'upload', mode),
+  };
+}
+
 export function WorkflowControls(v: WorkflowControlsProps) {
-  const { picker, download: canDownload, upload } = v.controls;
+  const shown = shownIn(v);
+  if (!Object.values(shown).includes(true)) return null;
   return (
     <div className="flex flex-wrap items-center gap-1 sm:ml-auto" data-workflow-controls="">
-      {picker && v.choices.length > 1 ? <Picker v={v} /> : null}
-      {canDownload ? <DownloadButton v={v} /> : null}
-      {upload ? <UploadSection v={v} /> : null}
+      {shown.picker ? <Picker v={v} /> : null}
+      {shown.download ? <DownloadButton v={v} /> : null}
+      {shown.upload ? <UploadSection v={v} /> : null}
     </div>
   );
 }

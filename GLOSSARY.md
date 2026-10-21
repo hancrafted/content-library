@@ -57,7 +57,7 @@ _Avoid_: State, configuration, variant
 **Shared visual**: one interactive visual several Slides show, each by its own Preset, so a new Slide that shows it is new data, not a new drawing.
 _Avoid_: Cornerstone component, shared component, widget
 
-**Workflow**: a way of working with AI that a viewer can watch and then try: ordered steps, each a fresh chat with its prompt and an example result, written as a YAML pair in the human-in-the-loop Shared visual. It belongs to the visual, not to an Episode's pipeline: its steps are chats the viewer runs, never a Run's Jobs, Stages or Gates.
+**Workflow**: a way of working with AI that a viewer can watch and then try: ordered **Workflow stages**, each holding **Workflow jobs**, every job a fresh chat with its prompt and an example result. It belongs to the human-in-the-loop Shared visual, not to an Episode's per-run pipeline, so a Workflow stage or Workflow job is never a Run's **Stage** or **Job**.
 _Avoid_: Pipeline, flow, process
 
 **Title slide**: an Episode's opening Slide: its title, caption, optional Voice script and Speaker notes and, once recorded, its video. Not listed in the table of contents.

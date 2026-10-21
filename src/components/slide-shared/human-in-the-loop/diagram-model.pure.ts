@@ -1,4 +1,5 @@
 import { handoffBlocks, parseHandoff } from './handoff.pure';
+import { jobsOf } from './workflow-jobs.pure';
 import type { Job, Workflow } from './workflow.types';
 
 /*
@@ -8,12 +9,12 @@ import type { Job, Workflow } from './workflow.types';
 
 export type JobRole = 'pieces' | 'chats' | 'focal' | 'deliverable' | 'ai';
 
-const jobsOf = (workflow: Workflow): readonly Job[] => workflow.stages.flatMap((stage) => stage.jobs);
-
 /** A job whose outputs no other job takes in, in the last stage: the thing handed to the boss. */
 function isDeliverable(workflow: Workflow, job: Job): boolean {
   const last = workflow.stages.at(-1);
-  const taken = jobsOf(workflow).some((other) => other.inputs.some((input) => job.outputs.some((o) => o.id === input)));
+  const taken = jobsOf(workflow.stages).some((other) =>
+    other.inputs.some((input) => job.outputs.some((o) => o.id === input)),
+  );
   return !!last && last.jobs.includes(job) && !taken;
 }
 

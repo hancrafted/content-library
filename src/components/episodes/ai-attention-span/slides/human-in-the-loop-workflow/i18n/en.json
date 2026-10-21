@@ -1,27 +1,7 @@
 {
   "title": "Human in the loop workflow",
   "caption": "Plan your company's next summer party: 200 employees across five offices in Europe. You are the captain: a planner chat prepares each handoff, worker chats do the jobs, and you check every artifact in between.",
-  "pipelineLabel": "The steps of a brief, stage by stage",
-  "stages": {
-    "party": {
-      "name": "Summer party"
-    },
-    "interview": {
-      "name": "Interview"
-    },
-    "requirements": {
-      "name": "Requirements"
-    },
-    "research": {
-      "name": "Research"
-    },
-    "compare": {
-      "name": "Compare"
-    },
-    "recommendation": {
-      "name": "Recommendation"
-    }
-  },
+  "workflowLabel": "The steps of a brief, stage by stage",
   "loop": {
     "note": "<marker>A fresh chat for each job</marker> keeps every window small; you coordinate, like a project manager."
   },

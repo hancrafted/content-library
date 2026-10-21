@@ -1,7 +1,7 @@
 {
   "title": "Brief the venue",
   "caption": "Plan your company's next summer party: 200 employees across five offices in Europe. <b>One fresh chat per job</b>, and two gates before your boss sees a plan.",
-  "pipelineLabel": "The venue pipeline, stage by stage",
+  "workflowLabel": "The venue steps, stage by stage",
   "jobsLabel": "{stage}: jobs",
   "popover": {
     "in": "In:",
@@ -9,42 +9,36 @@
   },
   "stages": {
     "party": {
-      "name": "Summer party",
       "popover": {
         "in": "the whole party.",
         "out": "five pieces, only the venue taken forward."
       }
     },
     "interview": {
-      "name": "Interview",
       "popover": {
         "in": "your rough idea.",
         "out": "the questions you had not thought of, answered."
       }
     },
     "requirements": {
-      "name": "Requirements",
       "popover": {
         "in": "your answers.",
         "out": "a requirements card you sign off."
       }
     },
     "research": {
-      "name": "Research",
       "popover": {
         "in": "the requirements card.",
         "out": "one venue checked against every criterion."
       }
     },
     "compare": {
-      "name": "Compare",
       "popover": {
         "in": "three checked venues.",
         "out": "a ranking against the card."
       }
     },
     "recommendation": {
-      "name": "Recommendation",
       "popover": {
         "in": "the comparison.",
         "out": "the venue plan for your boss."

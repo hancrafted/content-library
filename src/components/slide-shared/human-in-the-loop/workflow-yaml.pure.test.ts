@@ -33,7 +33,7 @@ const workflow: Workflow = {
           command: '/grilling',
           exampleOutput: BLOCK,
           check: { criteria: ['one'], prompt: 'Check.' },
-          page: 'Page.',
+          page: { simple: 'Page.', technical: 'Page, served.' },
           parked: ['Other'],
         },
       ],

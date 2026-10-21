@@ -1,6 +1,6 @@
 import { HANDOFF_KINDS } from './handoff.pure';
 import { isTree, type Tree } from './workflow-words.pure';
-import type { Job, JobCheck, Move, SkillRef, Stage } from './workflow.types';
+import type { Job, JobCheck, JobPage, Move, SkillRef, Stage } from './workflow.types';
 
 /*
  * Reading one stage or job out of the config data and the merged words. Each reader returns what it could read and
@@ -55,6 +55,17 @@ function checkOf(words: Tree): JobCheck | undefined {
   return { criteria: strings(words.check.criteria), prompt: text(words.check.prompt) ?? '' };
 }
 
+/** The two page prompts of a job, or a problem for a `page` that lacks one of them. */
+function pageOf(words: Tree, id: string, problems: string[]): JobPage | undefined {
+  if (words.page === undefined) return undefined;
+  const page = isTree(words.page) ? words.page : {};
+  const simple = text(page.simple);
+  const technical = text(page.technical);
+  if (simple && technical) return { simple, technical };
+  problems.push(`Job "${id}" has a page without both words.page.simple and words.page.technical.`);
+  return undefined;
+}
+
 /** A job's required word, or a problem. */
 function requiredIn(words: Tree, id: string, problems: string[]) {
   return (key: 'title' | 'description' | 'prompt'): string => {
@@ -88,7 +99,7 @@ function jobOf(data: Tree, words: Tree, problems: string[]): Job | null {
     exampleInput: text(words.exampleInput),
     exampleOutput: text(words.exampleOutput),
     check: checkOf(words),
-    page: text(words.page),
+    page: pageOf(words, id, problems),
     parked: Array.isArray(words.parked) ? strings(words.parked) : undefined,
   };
 }

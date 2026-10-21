@@ -2,6 +2,7 @@ import { jobGraph, type Job as PipelineJob } from '@/lib/episode-pipeline-defini
 import { ancestors } from '@/lib/episode-pipeline-graph.pure';
 import { checkStages } from '@/lib/episode-pipeline-stages.pure';
 import { handoffProblems, type HandoffKind } from './handoff.pure';
+import { jobsOf } from './workflow-jobs.pure';
 import type { Job, Stage } from './workflow.types';
 
 /*
@@ -10,8 +11,6 @@ import type { Job, Stage } from './workflow.types';
  */
 
 const SLOT = /\{\{([a-z0-9-]+)\}\}/g;
-
-const jobsOf = (stages: readonly Stage[]): Job[] => stages.flatMap((stage) => stage.jobs);
 
 /** The pipeline graph checks read a job as a pipeline job: `dependsOn` is its `needs`. */
 function asPipelineJobs(stages: readonly Stage[]): PipelineJob[] {

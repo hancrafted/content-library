@@ -1,5 +1,6 @@
 import { HumanInTheLoopClient } from './human-in-the-loop.client';
-import type { DiagramSlots, HumanInTheLoopData, ToolbarControls, WorkflowSlideWords } from './human-in-the-loop.types';
+import type { DiagramSlots, HumanInTheLoopData, WorkflowSlideWords } from './human-in-the-loop.types';
+import type { ControlMap } from './toolbar-controls.pure';
 import { WORKFLOW_IDS, outputWords, uiWords, workflowFor, type WorkflowId, type WorkflowLocale } from './workflow-data';
 import type { Level, Mode } from './workflow-state.pure';
 
@@ -18,8 +19,9 @@ export interface HumanInTheLoopProps {
   readonly words?: WorkflowSlideWords;
   readonly mode?: Mode;
   readonly level?: Level;
-  readonly controls?: Partial<ToolbarControls>;
-  /** The Slide's own markers, notes, popovers and words on the diagram; its initials show for English only. */
+  /** The Preset's overrides of the toolbar's control registry, e.g. `{ picker: { show: false } }`. */
+  readonly controls?: ControlMap;
+  /** The Slide's own markers, notes, popovers and words on the diagram; this entry alone drops its initials for German. */
   readonly diagram?: DiagramSlots;
 }
 
@@ -42,7 +44,7 @@ export function humanInTheLoopData({
     locale: lang,
     words: { ...uiWords(lang), ...words?.ui },
     outputWords: outputWords(lang),
-    controls: { picker: true, download: true, upload: true, ...controls },
+    controls: controls ?? {},
     mode,
     level,
     diagram: diagram && { ...diagram, initials: diagram.initials === true && lang === 'en' },

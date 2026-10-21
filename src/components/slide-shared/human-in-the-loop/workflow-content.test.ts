@@ -57,14 +57,53 @@ describe('success cases', () => {
     expect(bad).toEqual([]);
   });
 
-  it.each(EACH)('offers a page for a result of %s in %s, as a localhost page or a single HTML file', (id, locale) => {
+  it.each(EACH)(
+    'offers a page for a result of %s in %s: Simple one HTML file, Technical a localhost page',
+    (id, locale) => {
+      // ARRANGE
+      const pages = jobsOf(id, locale).flatMap((job) => (job.page ? [job.page] : []));
+      // ACT
+      const bad = pages.filter(
+        ({ simple, technical }) =>
+          !/HTML/.test(simple) ||
+          /localhost/.test(simple) ||
+          !/localhost/.test(technical) ||
+          /Codeblock|code block/.test(technical),
+      );
+      // ASSERT
+      expect(pages.length).toBeGreaterThan(0);
+      expect(bad).toEqual([]);
+    },
+  );
+
+  it.each(EACH)('gives every job of %s in %s after the first an example input to start from', (id, locale) => {
     // ARRANGE
-    const pages = jobsOf(id, locale).flatMap((job) => (job.page ? [job.page] : []));
+    const later = jobsOf(id, locale).slice(1);
     // ACT
-    const bad = pages.filter((page) => !/localhost/.test(page) || !/HTML/.test(page));
+    const missing = later.filter((job) => !job.exampleInput);
     // ASSERT
-    expect(pages.length).toBeGreaterThan(0);
-    expect(bad).toEqual([]);
+    expect(later.length).toBeGreaterThan(0);
+    expect(missing.map((job) => job.id)).toEqual([]);
+  });
+
+  it.each(EACH)('writes every %s Technical command in %s without a raw paste slot', (id, locale) => {
+    // ARRANGE
+    const commands = jobsOf(id, locale).flatMap((job) => (job.command ? [job.command] : []));
+    // ACT
+    const raw = commands.filter((command) => command.includes('{{'));
+    // ASSERT
+    expect(commands.length).toBeGreaterThan(0);
+    expect(raw).toEqual([]);
+  });
+
+  it.each(EACH)('marks where to paste in every %s Technical command in %s that takes an input', (id, locale) => {
+    // ARRANGE
+    const asking = jobsOf(id, locale).filter((job) => job.command && job.inputs.length > 0);
+    // ACT
+    const unmarked = asking.filter((job) => !/\[[^\]]+\]/.test(job.command ?? ''));
+    // ASSERT
+    expect(asking.length).toBeGreaterThan(0);
+    expect(unmarked.map((job) => job.id)).toEqual([]);
   });
 });
 
@@ -78,13 +117,25 @@ describe('failure cases', () => {
     expect(found).toBeNull();
   });
 
-  it.each(WORKFLOW_IDS)('tells the AI to answer in German in every German prompt of %s', (id) => {
+  it.each(WORKFLOW_IDS)('tells the AI to answer in German in every German prompt, check and page of %s', (id) => {
     // ARRANGE
     const jobs = jobsOf(id, 'de');
+    const german = (text: string | undefined) => !text || /auf Deutsch/.test(text);
     // ACT
-    const silent = jobs.filter((job) => !/auf Deutsch/.test(job.prompt));
+    const silent = jobs.filter(
+      (job) => ![job.prompt, job.check?.prompt, job.page?.simple, job.page?.technical].every(german),
+    );
     // ASSERT
     expect(silent.map((job) => job.id)).toEqual([]);
+  });
+
+  it.each(WORKFLOW_IDS)('tells the AI to answer in German in every German Technical command of %s', (id) => {
+    // ARRANGE
+    const commands = jobsOf(id, 'de').flatMap((job) => (job.command ? [job.command] : []));
+    // ACT
+    const silent = commands.filter((command) => !/auf Deutsch/.test(command));
+    // ASSERT
+    expect(silent).toEqual([]);
   });
 
   it.each(WORKFLOW_IDS)('writes the German words of %s with a capital Du', (id) => {

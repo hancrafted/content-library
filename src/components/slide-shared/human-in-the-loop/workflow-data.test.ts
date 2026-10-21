@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
-import { DEFAULT_OUTPUT_WORDS } from './outputs/output-words';
 import { PAIRS, UI_FILES, WORKFLOW_IDS, outputWords, uiWords, workflowFor } from './workflow-data';
 import { keyPaths } from './workflow-words.pure';
 
@@ -43,15 +42,16 @@ describe('success cases', () => {
     );
   });
 
-  it('has every label of the renderers in English, matching their defaults, and in German', () => {
+  it('has every label of the renderers in English from the YAML alone, and the same keys in German', () => {
     // ARRANGE
-    const keys = Object.keys(DEFAULT_OUTPUT_WORDS).sort();
+    const keys = Object.keys(parse(UI_FILES.en).output).sort();
     // ACT
     const en = outputWords('en');
     const de = outputWords('de');
     // ASSERT
-    expect(en).toEqual(DEFAULT_OUTPUT_WORDS);
+    expect(Object.keys(en).sort()).toEqual(keys);
     expect(Object.keys(de).sort()).toEqual(keys);
+    expect(en.done).toBe('Done');
     expect(de.done).not.toBe(en.done);
   });
 });
@@ -69,7 +69,7 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('reads the chrome words of both locales and hands back the same Workflow object twice', () => {
+  it('reads the chrome words of both locales and hands back the same objects twice', () => {
     // ARRANGE
     const id = WORKFLOW_IDS[0];
     // ACT
@@ -78,5 +78,7 @@ describe('edge cases', () => {
     // ASSERT
     expect(en.modeTry).not.toBe(de.modeTry);
     expect(workflowFor(id, 'en')).toBe(workflowFor(id, 'en'));
+    expect(uiWords('en')).toBe(uiWords('en'));
+    expect(outputWords('de')).toBe(outputWords('de'));
   });
 });

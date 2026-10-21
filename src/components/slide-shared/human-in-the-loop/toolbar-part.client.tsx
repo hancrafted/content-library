@@ -2,8 +2,8 @@
 
 import { cn } from '@/lib/utils';
 import type { ToolbarProps, UiWords } from './human-in-the-loop.types';
+import { offers, type ControlId } from './toolbar-controls.pure';
 import { WorkflowControls } from './workflow-controls.client';
-import { workflowView } from './workflow-view.pure';
 
 interface SwitchProps<T extends string> {
   readonly label: string;
@@ -62,30 +62,36 @@ function Setup({ setup, label }: { setup: string; label: string }) {
 }
 
 /**
- * The toolbar part: the Watch / Try it yourself and Simple / Technical switches, and the one-time setup block in
- * Technical. The picker, upload and download are `WorkflowControls`.
+ * The toolbar part. In Watch it is only the Watch / Try it yourself switch, so the talk looks as it does today; in Try
+ * it adds the Simple / Technical switch, the one-time setup block in Technical, and the picker, download and upload
+ * (`WorkflowControls`). The control registry says what shows in which mode and the Slide's Preset can hide any of it.
+ * The row keeps its height from Watch to Try, so the diagram stays put.
  */
 export function ToolbarPart(props: ToolbarProps) {
-  const { workflow, mode, level, words, onMode, onLevel } = props;
-  const { setup } = workflowView(workflow, { mode, level });
+  const { mode, level, words, controls, setup, onMode, onLevel } = props;
+  const shows = (id: ControlId) => offers(controls, id, mode);
   return (
     <div data-part="toolbar" data-mode={mode} className="mb-3 flex flex-col gap-2">
-      <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-        <Switch
-          label={`${words.modeWatch} / ${words.modeTry}`}
-          value={mode}
-          options={modeOptions(words)}
-          onChange={onMode}
-        />
-        <Switch
-          label={`${words.levelSimple} / ${words.levelTechnical}`}
-          value={level}
-          options={levelOptions(words)}
-          onChange={onLevel}
-        />
+      <div className="flex min-h-9 flex-wrap items-center gap-x-2 gap-y-1">
+        {shows('mode') ? (
+          <Switch
+            label={`${words.modeWatch} / ${words.modeTry}`}
+            value={mode}
+            options={modeOptions(words)}
+            onChange={onMode}
+          />
+        ) : null}
+        {shows('level') ? (
+          <Switch
+            label={`${words.levelSimple} / ${words.levelTechnical}`}
+            value={level}
+            options={levelOptions(words)}
+            onChange={onLevel}
+          />
+        ) : null}
         <WorkflowControls {...props} />
       </div>
-      {setup && mode === 'try' ? <Setup setup={setup} label={words.setup} /> : null}
+      {setup && shows('setup') ? <Setup setup={setup} label={words.setup} /> : null}
     </div>
   );
 }

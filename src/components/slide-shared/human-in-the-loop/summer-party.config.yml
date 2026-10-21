@@ -116,7 +116,7 @@ words:
         kind: text
         text: <every question with my answer, one per line>
         ```
-      command: /grilling {{piece}}
+      command: /grilling [paste the chosen piece here]
       exampleInput: |-
         ```handoff
         kind: text
@@ -164,7 +164,7 @@ words:
           - { id: t1, title: <title>, acceptance: [<criterion>], blockedBy: [] }
         ```
       command: |-
-        /to-spec {{answers}}
+        /to-spec [paste your answers here]
         Then run /to-tickets on the spec.
       exampleInput: |-
         ```handoff
@@ -212,11 +212,17 @@ words:
           Criteria: the goal is one sentence; every requirement is short and checkable; every slice can be done and checked on its own.
 
           {{spec}}
-      page: |-
-        Turn this spec into one good-looking page: goal first, then the requirements, what is out of scope and the slices.
-        If you can run code, write it to a temporary .html file, serve it on localhost and open it in my browser. Otherwise give me one complete, self-contained HTML file in a single code block that I can save and open.
+      page:
+        simple: |-
+          Turn this spec into one good-looking page: goal first, then the requirements, what is out of scope and the slices.
+          Give me one complete, self-contained HTML file in a single code block that I can save and open.
 
-        {{spec}}
+          {{spec}}
+        technical: |-
+          Turn this spec into one good-looking page: goal first, then the requirements, what is out of scope and the slices.
+          Write it to a temporary .html file, serve it on localhost and open it in my browser.
+
+          {{spec}}
     venue:
       title: Venue
       description: One fresh chat per venue. Each chat gets only the requirements, and checks one venue against every criterion.
@@ -236,7 +242,7 @@ words:
         facts: [<one checked fact per requirement>, ...]
         ```
       command: |-
-        /research Check [venue name] against these requirements: {{spec}}
+        /research Check [venue name] against these requirements: [paste the spec here]
       exampleInput: |-
         ```handoff
         kind: spec
@@ -276,11 +282,17 @@ words:
 
           Research:
           {{research}}
-      page: |-
-        Turn this research into one good-looking page: the venue, the summary and one card per fact.
-        If you can run code, write it to a temporary .html file, serve it on localhost and open it in my browser. Otherwise give me one complete, self-contained HTML file in a single code block that I can save and open.
+      page:
+        simple: |-
+          Turn this research into one good-looking page: the venue, the summary and one card per fact.
+          Give me one complete, self-contained HTML file in a single code block that I can save and open.
 
-        {{research}}
+          {{research}}
+        technical: |-
+          Turn this research into one good-looking page: the venue, the summary and one card per fact.
+          Write it to a temporary .html file, serve it on localhost and open it in my browser.
+
+          {{research}}
     compare:
       title: Rank 3 venues
       detail: against the card
@@ -350,11 +362,17 @@ words:
 
           Ranking:
           {{comparison}}
-      page: |-
-        Turn this comparison into one good-looking page with a ranked table I can show my boss.
-        If you can run code, write it to a temporary .html file, serve it on localhost and open it in my browser. Otherwise give me one complete, self-contained HTML file in a single code block that I can save and open.
+      page:
+        simple: |-
+          Turn this comparison into one good-looking page with a ranked table I can show my boss.
+          Give me one complete, self-contained HTML file in a single code block that I can save and open.
 
-        {{comparison}}
+          {{comparison}}
+        technical: |-
+          Turn this comparison into one good-looking page with a ranked table I can show my boss.
+          Write it to a temporary .html file, serve it on localhost and open it in my browser.
+
+          {{comparison}}
     plan:
       title: Venue plan
       detail: by Friday

@@ -71,7 +71,9 @@ words:
         kind: text
         text: <jede Frage mit meiner Antwort, eine pro Zeile>
         ```
-      command: /grilling {{piece}}
+      command: |-
+        /grilling [füge das gewählte Teil hier ein]
+        Antworte auf Deutsch.
       exampleInput: |-
         ```handoff
         kind: text
@@ -119,7 +121,7 @@ words:
           - { id: t1, title: <Titel>, acceptance: [<Kriterium>], blockedBy: [] }
         ```
       command: |-
-        /to-spec {{answers}}
+        /to-spec [füge Deine Antworten hier ein]
         Führe danach /to-tickets auf der Spezifikation aus. Antworte auf Deutsch.
       exampleInput: |-
         ```handoff
@@ -167,11 +169,17 @@ words:
           Kriterien: Das Ziel ist ein Satz; jede Anforderung ist kurz und prüfbar; jede Scheibe lässt sich für sich erledigen und prüfen.
 
           {{spec}}
-      page: |-
-        Antworte auf Deutsch. Mach aus dieser Spezifikation eine schöne Seite: zuerst das Ziel, dann die Anforderungen, was nicht dazugehört und die Scheiben.
-        Wenn Du Code ausführen kannst, schreibe sie in eine temporäre .html-Datei, stelle sie auf localhost bereit und öffne sie in meinem Browser. Sonst gib mir eine vollständige, eigenständige HTML-Datei in einem einzigen Codeblock, die ich speichern und öffnen kann.
+      page:
+        simple: |-
+          Antworte auf Deutsch. Mach aus dieser Spezifikation eine schöne Seite: zuerst das Ziel, dann die Anforderungen, was nicht dazugehört und die Scheiben.
+          Gib mir eine vollständige, eigenständige HTML-Datei in einem einzigen Codeblock, die ich speichern und öffnen kann.
 
-        {{spec}}
+          {{spec}}
+        technical: |-
+          Antworte auf Deutsch. Mach aus dieser Spezifikation eine schöne Seite: zuerst das Ziel, dann die Anforderungen, was nicht dazugehört und die Scheiben.
+          Schreibe sie in eine temporäre .html-Datei, stelle sie auf localhost bereit und öffne sie in meinem Browser.
+
+          {{spec}}
     stay:
       title: Unterkunft
       description: Ein frischer Chat pro Unterkunft. Jeder Chat bekommt nur die Anforderungen und prüft eine Unterkunft gegen jedes Kriterium.
@@ -191,7 +199,7 @@ words:
         facts: [<ein geprüfter Fakt pro Anforderung>, ...]
         ```
       command: |-
-        /research Prüfe [Name der Unterkunft] gegen diese Anforderungen: {{spec}}
+        /research Prüfe [Name der Unterkunft] gegen diese Anforderungen: [füge die Spezifikation hier ein]
         Antworte auf Deutsch.
       exampleInput: |-
         ```handoff
@@ -232,11 +240,17 @@ words:
 
           Recherche:
           {{research}}
-      page: |-
-        Antworte auf Deutsch. Mach aus dieser Recherche eine schöne Seite: die Unterkunft, die Zusammenfassung und eine Karte pro Fakt.
-        Wenn Du Code ausführen kannst, schreibe sie in eine temporäre .html-Datei, stelle sie auf localhost bereit und öffne sie in meinem Browser. Sonst gib mir eine vollständige, eigenständige HTML-Datei in einem einzigen Codeblock, die ich speichern und öffnen kann.
+      page:
+        simple: |-
+          Antworte auf Deutsch. Mach aus dieser Recherche eine schöne Seite: die Unterkunft, die Zusammenfassung und eine Karte pro Fakt.
+          Gib mir eine vollständige, eigenständige HTML-Datei in einem einzigen Codeblock, die ich speichern und öffnen kann.
 
-        {{research}}
+          {{research}}
+        technical: |-
+          Antworte auf Deutsch. Mach aus dieser Recherche eine schöne Seite: die Unterkunft, die Zusammenfassung und eine Karte pro Fakt.
+          Schreibe sie in eine temporäre .html-Datei, stelle sie auf localhost bereit und öffne sie in meinem Browser.
+
+          {{research}}
     compare:
       title: 3 Unterkünfte ranken
       detail: gemessen an der Karte
@@ -306,11 +320,17 @@ words:
 
           Ranking:
           {{comparison}}
-      page: |-
-        Antworte auf Deutsch. Mach aus diesem Vergleich eine schöne Seite mit einer Rangtabelle, die ich meinem Partner zeigen kann.
-        Wenn Du Code ausführen kannst, schreibe sie in eine temporäre .html-Datei, stelle sie auf localhost bereit und öffne sie in meinem Browser. Sonst gib mir eine vollständige, eigenständige HTML-Datei in einem einzigen Codeblock, die ich speichern und öffnen kann.
+      page:
+        simple: |-
+          Antworte auf Deutsch. Mach aus diesem Vergleich eine schöne Seite mit einer Rangtabelle, die ich meinem Partner zeigen kann.
+          Gib mir eine vollständige, eigenständige HTML-Datei in einem einzigen Codeblock, die ich speichern und öffnen kann.
 
-        {{comparison}}
+          {{comparison}}
+        technical: |-
+          Antworte auf Deutsch. Mach aus diesem Vergleich eine schöne Seite mit einer Rangtabelle, die ich meinem Partner zeigen kann.
+          Schreibe sie in eine temporäre .html-Datei, stelle sie auf localhost bereit und öffne sie in meinem Browser.
+
+          {{comparison}}
     plan:
       title: Reiseplan
       detail: bis Sonntag
