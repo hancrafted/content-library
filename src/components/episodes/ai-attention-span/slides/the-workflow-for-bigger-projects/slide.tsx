@@ -3,6 +3,7 @@ import { SlideFrame } from '@/components/slide-master/slide-master';
 import { ContextMiniBars } from '@/components/slide-shared/context-window/context-window';
 import type { ReactNode } from 'react';
 import { CompareMotion } from './compare-motion.client';
+import { ComparePanel } from './compare-panel';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import styles from './the-workflow-for-bigger-projects.module.css';
@@ -58,19 +59,16 @@ export const theWorkflowForBiggerProjects = slide({
     return (
       <SlideFrame className="mt-10 gap-8">
         <CompareMotion label={t('compareLabel')} className={`${styles.compare} grid gap-8 lg:grid-cols-12`}>
-          <div className={`${styles.before} flex flex-col items-center gap-4 rounded-xl bg-muted p-6 lg:col-span-4`}>
-            <p className="text-center text-body font-semibold text-muted-foreground">{t('before.title')}</p>
+          <ComparePanel title={t('before.title')} tone="before">
             <ContextMiniBars preset="slide-11-before" locale={locale} />
             <p className="text-center text-caption text-muted-foreground">{t('before.note')}</p>
-          </div>
-          <div
-            {...target(AFTER)}
-            className={`${styles.after} flex min-w-0 flex-col gap-4 rounded-xl border-2 border-primary bg-card p-6 shadow-md lg:col-span-8`}
+          </ComparePanel>
+          <ComparePanel
+            title={t('after.title')}
+            tone="after"
+            marker={<Marker note="clean-windows-for-each-part" placement="beside" />}
+            target={target(AFTER)}
           >
-            <p className="flex items-start gap-1 text-body font-semibold">
-              <span>{t('after.title')}</span>
-              <Marker note="clean-windows-for-each-part" placement="beside" />
-            </p>
             <ContextMiniBars preset="slide-11-after" locale={locale} />
             <ul aria-label={t('resultsLabel')} {...target(RESULTS)} className="flex flex-wrap gap-3">
               {RESULT_KEYS.map((key) => (
@@ -82,7 +80,7 @@ export const theWorkflowForBiggerProjects = slide({
             <p className="text-caption text-muted-foreground">
               {t.rich('after.note', { marker: marker('short-tasks-beat-long-ones') })}
             </p>
-          </div>
+          </ComparePanel>
         </CompareMotion>
         <p className="text-caption text-pretty text-muted-foreground">{t('illustrative')}</p>
       </SlideFrame>

@@ -3,6 +3,8 @@ import { SlideFrame } from '@/components/slide-master/slide-master';
 import { ContextMiniBars } from '@/components/slide-shared/context-window/context-window';
 import type { ReactNode } from 'react';
 import styles from './everyday-habits.module.css';
+import { HabitList } from './habit-list';
+import { HandoffCard } from './handoff-card';
 import { HandoffMotion } from './handoff-motion.client';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
@@ -16,10 +18,6 @@ const HABITS = [
   { key: '2', target: 'habit-handoff', note: 'a-short-recap-helped' },
   { key: '3', target: 'habit-next-chat', note: 'length-itself-hurts' },
 ] as const;
-
-const CARD =
-  'card-hover card-hover--raise flex flex-col gap-2 rounded-2xl border-2 border-primary bg-card p-5 shadow-md';
-const HABIT = 'focus-group__item card-hover card-hover--raise flex flex-col gap-2 rounded-xl bg-card p-5 shadow-md';
 
 /** One chat's bar under its name: the cornerstone's static mini bar, its numbers from the shared Preset. */
 function ChatBar({ name, children }: { name: string; children: ReactNode }) {
@@ -89,18 +87,16 @@ export const everydayHabits = slide({
         }
         card={
           <div className="flex flex-col items-center gap-4">
-            <div data-handoff className={`${styles.card} ${CARD} max-w-xs`}>
-              <p className="text-caption font-semibold text-primary uppercase">{t('handoff.title')}</p>
-              <p className="text-caption">
-                {t.rich('handoff.text', {
-                  budget: (chunks: ReactNode) => (
-                    <span data-budget className="rounded bg-(--warning)/25 px-1 whitespace-nowrap">
-                      {chunks}
-                    </span>
-                  ),
-                })}
-              </p>
-            </div>
+            <HandoffCard
+              title={t('handoff.title')}
+              text={t.rich('handoff.text', {
+                budget: (chunks: ReactNode) => (
+                  <span data-budget className="rounded bg-(--warning)/25 px-1 whitespace-nowrap">
+                    {chunks}
+                  </span>
+                ),
+              })}
+            />
             <Arrow label={t('handoff.arrow')} />
           </div>
         }
@@ -110,23 +106,15 @@ export const everydayHabits = slide({
           </ChatBar>
         }
       />
-      <ol aria-label={t('habitsLabel')} className="focus-group focus-group--dim-others grid gap-5 md:grid-cols-3">
-        {HABITS.map(({ key, target: name, note }) => (
-          <li key={key} {...target(name)} className={HABIT}>
-            <span
-              aria-hidden
-              className="flex size-8 items-center justify-center rounded-full bg-primary text-caption font-semibold text-primary-foreground"
-            >
-              {key}
-            </span>
-            <p className="flex items-start gap-1 text-body font-semibold">
-              <span>{t(`habits.${key}.title`)}</span>
-              <Marker note={note} placement="beside" />
-            </p>
-            <p className="text-caption text-muted-foreground">{t(`habits.${key}.body`)}</p>
-          </li>
-        ))}
-      </ol>
+      <HabitList
+        label={t('habitsLabel')}
+        habits={HABITS.map(({ key, target: name, note }) => ({
+          title: t(`habits.${key}.title`),
+          body: t(`habits.${key}.body`),
+          marker: <Marker note={note} placement="beside" />,
+          target: target(name),
+        }))}
+      />
       <p className="text-caption text-pretty text-muted-foreground">{t('illustrative')}</p>
     </SlideFrame>
   ),
