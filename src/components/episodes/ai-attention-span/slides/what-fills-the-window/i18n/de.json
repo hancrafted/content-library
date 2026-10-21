@@ -1,14 +1,14 @@
 {
   "title": "Was das Fenster füllt",
   "caption": "Deine Nachrichten sind nur ein Teil davon.",
-  "punchline": "Wie geht's dem Kopf? Schon was durchgebrannt? Ich bin noch nicht fertig.",
+  "punchline": "Wie geht's dem Kopf? Schon was durchgebrannt? Ich frühstücke 200K.",
   "poll": "Kurzer Check: Wie voll bist Du?",
   "voiceScript": {
     "segments": {
       "more-in-there-than-you-typed": {
         "title": "Mehr drin, als Du getippt hast",
         "keywords": "",
-        "script": "Wie geht's dem Kopf? Schon was durchgebrannt? Ich bin noch nicht fertig. Du hast gesehen, wie sich das Fenster mit Deinen Nachrichten füllt. Aber Deine Nachrichten sind nur ein Teil davon. Die nächste Frage ist also, was sonst noch hineinkommt, ohne dass Du es merkst."
+        "script": "Wie geht's dem Kopf? Schon was durchgebrannt? Ich frühstücke 200K. Du hast gesehen, wie sich das Fenster mit Deinen Nachrichten füllt. Aber Deine Nachrichten sind nur ein Teil davon. Die nächste Frage ist also, was sonst noch hineinkommt, ohne dass Du es merkst."
       }
     }
   }

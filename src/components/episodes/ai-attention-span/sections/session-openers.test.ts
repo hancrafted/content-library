@@ -4,6 +4,7 @@ import { SessionBarPreset } from '@/components/slide-shared/context/context';
 import { placeSections } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { load } from 'cheerio';
+import { readFileSync } from 'node:fs';
 import { createElement, Fragment } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
@@ -81,12 +82,7 @@ const bubble = (slug: string, locale: Locale) => {
     numbers: $('[data-face-number]')
       .map((_, el) => $(el).text().trim())
       .get(),
-    digits: $('[data-digit]').length,
-    digitsHidden: $('[data-trickle]').attr('aria-hidden'),
-    digitText: $('[data-digit]')
-      .map((_, el) => $(el).text())
-      .get()
-      .join(''),
+    digits: $('[data-digit], [data-trickle]').length,
   };
 };
 
@@ -100,7 +96,7 @@ describe('success cases', () => {
       {
         note: 'Fresh and ready to receive.',
         filled: STEPS.start,
-        punchline: "Hi. For the next 30 minutes, you're the AI. Open wide.",
+        punchline: "Hi. For the next 30 minutes, you're the AI. Pay attention!",
         poll: '',
       },
     ],
@@ -109,7 +105,7 @@ describe('success cases', () => {
       {
         note: 'Frisch und bereit zum Empfangen.',
         filled: STEPS.start,
-        punchline: 'Hi. Die nächsten 30 Minuten bist Du die KI. Mund auf.',
+        punchline: 'Hi. Die nächsten 30 Minuten bist Du die KI. Pass auf!',
         poll: '',
       },
     ],
@@ -148,7 +144,7 @@ describe('success cases', () => {
       'en',
       {
         now: 'Dialling up',
-        punchline: 'Dialling it up. I eat 200K for breakfast.',
+        punchline: 'Dialling it up. I hope you are ready?',
         poll: "Still with me? How's your attention?",
         filled: STEPS.ais,
       },
@@ -158,7 +154,7 @@ describe('success cases', () => {
       'de',
       {
         now: 'Hochdrehen',
-        punchline: 'Jetzt drehe ich auf. Ich frühstücke 200K.',
+        punchline: 'Jetzt drehe ich auf. Hoffentlich bist Du bereit?',
         poll: "Noch dabei? Wie steht's um Deine Aufmerksamkeit?",
         filled: STEPS.ais,
       },
@@ -168,7 +164,7 @@ describe('success cases', () => {
       'en',
       {
         now: 'Filling up',
-        punchline: "How's the brain? Anything fried yet? I'm not done.",
+        punchline: "How's the brain? Anything fried yet? I eat 200K for breakfast.",
         poll: 'Quick check: how full are you?',
         filled: STEPS.fills,
       },
@@ -178,7 +174,7 @@ describe('success cases', () => {
       'de',
       {
         now: 'Füllt sich',
-        punchline: "Wie geht's dem Kopf? Schon was durchgebrannt? Ich bin noch nicht fertig.",
+        punchline: "Wie geht's dem Kopf? Schon was durchgebrannt? Ich frühstücke 200K.",
         poll: 'Kurzer Check: Wie voll bist Du?',
         filled: STEPS.fills,
       },
@@ -213,7 +209,7 @@ describe('success cases', () => {
   });
 
   it.each(['en', 'de'] as const)(
-    'draws the card as a bubble from the AI: avatar, tail and a hidden 0/1 trickle (%s)',
+    'draws the card as a bubble from the AI: avatar and tail, with no 0/1 trickle (%s)',
     (locale) => {
       // ARRANGE
       const slugs = [
@@ -227,8 +223,7 @@ describe('success cases', () => {
       const seen = slugs.map((slug) => bubble(slug, locale));
       // ASSERT
       seen.forEach((one) => {
-        expect(one).toMatchObject({ avatars: 1, tails: 1, digitsHidden: 'true' });
-        expect(one.digitText).toMatch(/^[01]+$/);
+        expect(one).toMatchObject({ avatars: 1, tails: 1, digits: 0 });
       });
     },
   );
@@ -254,22 +249,6 @@ describe('success cases', () => {
     // ASSERT
     seen.forEach((one) => expect(one).toMatchObject(expected));
     expect(title.faces).toEqual([]);
-  });
-
-  it('pours in more digits the fuller the bar is', () => {
-    // ARRANGE
-    const order = [
-      'hero',
-      'thought-experiment',
-      'the-ais-attention-span',
-      'what-fills-the-window',
-      'managing-the-attention-span',
-    ];
-    // ACT
-    const counts = order.map((slug) => bubble(slug, 'en').digits);
-    // ASSERT
-    expect([...counts].sort((x, y) => x - y)).toEqual(counts);
-    expect(new Set(counts).size).toBe(counts.length);
   });
 
   it('leaves the last opener with the bubble and bar alone: no apple, no handoff note', () => {
@@ -332,8 +311,8 @@ describe('success cases', () => {
     // ARRANGE
     const expected = [
       ['thought-experiment', "Let's start light. You're only human."],
-      ['the-ais-attention-span', 'Dialling it up. I eat 200K for breakfast.'],
-      ['what-fills-the-window', "How's the brain? Anything fried yet? I'm not done."],
+      ['the-ais-attention-span', 'Dialling it up. I hope you are ready?'],
+      ['what-fills-the-window', "How's the brain? Anything fried yet? I eat 200K for breakfast."],
       ['managing-the-attention-span', 'Almost there. One more thing, then I compact you.'],
       ['now-you-know-how-it-feels', 'Now you know how it feels'],
     ] as const;
@@ -345,6 +324,18 @@ describe('success cases', () => {
     );
     // ASSERT
     expected.forEach(([, line], i) => expect(spoken[i]).toContain(line));
+  });
+
+  it('pulses only the in-progress segment, and only when motion is welcome', () => {
+    // ARRANGE
+    const css = readFileSync('src/components/slide-shared/context/context.module.css', 'utf8');
+    // ACT
+    const block = css.match(
+      /@media \(prefers-reduced-motion: no-preference\) \{\s*\.sessionPart\[data-state='current'\][^}]*animation:[^}]*\}/,
+    );
+    // ASSERT
+    expect(block).not.toBeNull();
+    expect(css).not.toMatch(/\.sessionPart\[data-state='done'\][^{]*\{[^}]*animation/);
   });
 });
 

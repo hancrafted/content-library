@@ -5,11 +5,11 @@
   "slides": [
     {
       "id": "top",
-      "text": "Why AI has a weird attention span you must learn to manage A long chat behaves like a long call: its attention is a limited window, so you manage what goes into it. Hi. For the next 30 minutes, you're the AI. Open wide. 0 1 0 Your attention span Fresh and ready to receive."
+      "text": "Why AI has a weird attention span you must learn to manage A long chat behaves like a long call: its attention is a limited window, so you manage what goes into it. Hi. For the next 30 minutes, you're the AI. Pay attention! Your attention span Fresh and ready to receive."
     },
     {
       "id": "thought-experiment",
-      "text": "Thought experiment How attention works: you versus an AI. Let's start light. You're only human. So, how's your attention? 🙂 1 Fine 😅 2 Sweating 🤯 3 Fried 0 1 0 1 0 1 Your attention span Warm-up"
+      "text": "Thought experiment How attention works: you versus an AI. Let's start light. You're only human. So, how's your attention? 🙂 1 Fine 😅 2 Sweating 🤯 3 Fried Your attention span Warm-up"
     },
     {
       "id": "thought-experiment--the-long-phone-call-story",
@@ -21,7 +21,7 @@
     },
     {
       "id": "the-ais-attention-span",
-      "text": "The AI's attention span Now the cause: how the AI holds a chat. Dialling it up. I eat 200K for breakfast. Still with me? How's your attention? 🙂 1 Fine 😅 2 Sweating 🤯 3 Fried 0 1 0 1 0 1 0 1 0 Your attention span Dialling up"
+      "text": "The AI's attention span Now the cause: how the AI holds a chat. Dialling it up. I hope you are ready? Still with me? How's your attention? 🙂 1 Fine 😅 2 Sweating 🤯 3 Fried Your attention span Dialling up"
     },
     {
       "id": "the-ais-attention-span--the-context-window",
@@ -41,7 +41,7 @@
     },
     {
       "id": "what-fills-the-window",
-      "text": "What fills the window Your messages are only a part of it. How's the brain? Anything fried yet? I'm not done. Quick check: how full are you? 🙂 1 Fine 😅 2 Sweating 🤯 3 Fried 0 1 0 1 0 1 0 1 0 1 0 1 Your attention span Filling up"
+      "text": "What fills the window Your messages are only a part of it. How's the brain? Anything fried yet? I eat 200K for breakfast. Quick check: how full are you? 🙂 1 Fine 😅 2 Sweating 🤯 3 Fried Your attention span Filling up"
     },
     {
       "id": "what-fills-the-window--whats-really-in-the-window",
@@ -57,7 +57,7 @@
     },
     {
       "id": "managing-the-attention-span",
-      "text": "Managing the attention span You can't read a gauge, so you build habits. Almost there. One more thing, then I compact you. Last check: how's your attention? 🙂 1 Fine 😅 2 Sweating 🤯 3 Fried 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 Your attention span Nearly full"
+      "text": "Managing the attention span You can't read a gauge, so you build habits. Almost there. One more thing, then I compact you. Last check: how's your attention? 🙂 1 Fine 😅 2 Sweating 🤯 3 Fried Your attention span Nearly full"
     },
     {
       "id": "managing-the-attention-span--everyday-habits",
@@ -73,7 +73,7 @@
     },
     {
       "id": "managing-the-attention-span--now-you-know-how-it-feels",
-      "text": "Managing the attention span (4/4) Page 4 of 4 Congratulations Now you know how it feels. One more time? Or again in a minute? 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 Your attention span Full to the brim. Well done."
+      "text": "Managing the attention span (4/4) Page 4 of 4 Congratulations Now you know how it feels. One more time? Or again in a minute? Your attention span Full to the brim. Well done."
     }
   ],
   "notes": [
@@ -157,7 +157,7 @@
     },
     {
       "id": "the-ais-attention-span",
-      "text": "The AI's attention span 0:00 – 0:21 Why it happens Dialling it up. I eat 200K for breakfast. So far you have seen what happens. Now the cause, because once you know how the AI holds a chat, the pattern stops being a surprise, and only after that do we look at what it does to your answers."
+      "text": "The AI's attention span 0:00 – 0:21 Why it happens Dialling it up. I hope you are ready? So far you have seen what happens. Now the cause, because once you know how the AI holds a chat, the pattern stops being a surprise, and only after that do we look at what it does to your answers."
     },
     {
       "id": "the-ais-attention-span--the-context-window",
@@ -177,7 +177,7 @@
     },
     {
       "id": "what-fills-the-window",
-      "text": "What fills the window 0:00 – 0:17 More in there than you typed How's the brain? Anything fried yet? I'm not done. You have seen the window fill with your messages. But your messages are only a part of it, so the next question is what else goes in without you noticing."
+      "text": "What fills the window 0:00 – 0:18 More in there than you typed How's the brain? Anything fried yet? I eat 200K for breakfast. You have seen the window fill with your messages. But your messages are only a part of it, so the next question is what else goes in without you noticing."
     },
     {
       "id": "what-fills-the-window--whats-really-in-the-window",

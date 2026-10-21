@@ -1,14 +1,12 @@
-import type { CSSProperties, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { Sparkle } from '../venue-pipeline/glyphs';
 import { AttentionFaces, type FaceLevel } from './attention-faces';
-import { trickleDigits } from './digit-trickle.pure';
 import styles from './speech-bubble.module.css';
 
 /*
  * The "Your attention span" card as a speech bubble from the AI: its Sparkle avatar with a tail into the bubble, the
- * punchline in its voice, on a Section opener a poll line with three numbered emoji faces, and a 0/1 trickle falling from the
- * tail into whatever sits under it (the session bar, as `children`). The motion plays once when the Slide mounts and is
- * off under reduced motion; no client code (FE-006). The part owns no words: the Slide passes them.
+ * punchline in its voice, on a Section opener a poll line with three numbered emoji faces over whatever sits under it (the session bar, as
+ * `children`). The bubble pops in once when the Slide mounts, off under reduced motion; no client code (FE-006). The part owns no words: the Slide passes them.
  */
 
 interface Poll {
@@ -21,33 +19,11 @@ interface Props {
   readonly punchline: string;
   /** Absent on the Title slide, where the audience is still fresh. */
   readonly poll?: Poll;
-  /** How many 0/1 digits fall into the bar, more the fuller it is. */
-  readonly digits: number;
   /** The bar and what sits under it. */
   readonly children: ReactNode;
 }
 
-const style = (values: Record<string, string | number>): CSSProperties => values as CSSProperties;
-
-/** The lane of digits under the bubble, decoration only. */
-function Trickle({ digits }: { readonly digits: number }) {
-  return (
-    <div className={styles.lane} data-trickle="" aria-hidden="true">
-      {trickleDigits(digits).map((digit, i) => (
-        <span
-          key={i}
-          className={`${styles.digit} text-caption font-semibold`}
-          data-digit=""
-          style={style({ '--x': `${digit.x}%`, '--drift': `${digit.drift}rem`, '--delay': `${digit.delay}ms` })}
-        >
-          {digit.char}
-        </span>
-      ))}
-    </div>
-  );
-}
-
-export function SpeechBubble({ punchline, poll, digits, children }: Props) {
+export function SpeechBubble({ punchline, poll, children }: Props) {
   return (
     <div className={styles.card} data-bubble="">
       <div className="flex items-start gap-3">
@@ -72,7 +48,6 @@ export function SpeechBubble({ punchline, poll, digits, children }: Props) {
           )}
         </div>
       </div>
-      <Trickle digits={digits} />
       {children}
     </div>
   );
