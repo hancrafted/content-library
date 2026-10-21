@@ -1079,8 +1079,8 @@ summary.row:hover {
   position: absolute;
   left: 0;
   right: 0;
-  top: calc(var(--s) * 1%);
-  height: max(calc(var(--z) * 1%), 10px);
+  top: var(--top);
+  height: var(--h);
   border: 1px solid var(--foreground);
   border-radius: 4px;
   background: color-mix(in oklch, var(--card) 20%, transparent);

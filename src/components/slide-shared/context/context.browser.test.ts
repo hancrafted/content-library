@@ -302,11 +302,11 @@ describe('success cases', () => {
   );
 
   it(
-    'lists three blocks before and three after the hovered one, and the lens spans exactly those rows',
+    'lists at most two blocks before and two after the hovered one, and the lens spans exactly those rows',
     async () => {
       // ARRANGE
       await openZoom();
-      const expected = { rows: 7, cursorAt: 3 };
+      const expected = { rows: 5, cursorAt: 2 };
       const tolerance = 4;
       // ACT
       const found = await evaluate<{ rows: number; cursorAt: number; lens: number }>(
@@ -315,9 +315,11 @@ describe('success cases', () => {
           const rows = [...document.querySelectorAll('${LOUPE_ROW}')];
           const blocks = [...document.querySelectorAll('${BAR} button[data-part]')];
           const keys = rows.map((r) => r.dataset.part);
-          const spans = blocks.filter((b) => keys.includes(b.dataset.part)).map((b) => b.getBoundingClientRect());
-          const top = Math.min(...spans.map((r) => r.top));
-          const bottom = Math.max(...spans.map((r) => r.bottom));
+          // Layout boxes, so the hovered block's grow-by-transform does not count: the lens encloses what the zoom lists.
+          const mine = blocks.filter((b) => keys.includes(b.dataset.part));
+          const origin = blocks[0].offsetParent.getBoundingClientRect().top;
+          const top = origin + Math.min(...mine.map((b) => b.offsetTop));
+          const bottom = origin + Math.max(...mine.map((b) => b.offsetTop + b.offsetHeight));
           const lens = document.querySelector('${SLIDE_4} [class*="lens"]').getBoundingClientRect();
           return {
             rows: rows.length,

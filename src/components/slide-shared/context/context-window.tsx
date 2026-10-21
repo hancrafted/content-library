@@ -1,4 +1,4 @@
-import { memo, useMemo, useRef } from 'react';
+import { memo, useMemo, useRef, type RefObject } from 'react';
 import { BarBuffer, BarLines } from './context-bar-view';
 import { fullTokens } from './context-format.pure';
 import type { ContextWindowProps } from './context-parts.types';
@@ -148,15 +148,21 @@ function Labels({ p, say }: Part) {
   );
 }
 
+interface BarLayerProps {
+  readonly hot: string;
+  readonly at: number | null;
+  readonly bar: RefObject<HTMLDivElement | null>;
+}
+
 /** The bar's own layers: blocks, the buffer, the lit outline, the lens and the smart-zone lines. */
-function BarLayers({ p, say, hot, at }: Part & { readonly hot: string; readonly at: number | null }) {
+function BarLayers({ p, say, hot, at, bar }: Part & BarLayerProps) {
   const places = useMemo(() => firstPlaces(p.frames), [p.frames]);
   return (
     <>
       <Blocks p={p} say={say} places={places} hot={hot} />
       <BarBuffer size={p.window.bufferTokens} total={p.window.tokens} />
       <Outline p={p} places={places} />
-      {at === null ? null : <Lens p={p} at={at} />}
+      {at === null ? null : <Lens p={p} at={at} bar={bar} />}
       <Lines p={p} />
     </>
   );
@@ -165,7 +171,8 @@ function BarLayers({ p, say, hot, at }: Part & { readonly hot: string; readonly 
 function Bar({ p, say }: Part) {
   const bar = useRef<HTMLDivElement>(null);
   const loupe = useLoupe(bar, !say.tech);
-  const hot = loupe.at === null ? '' : loupeRows(p.frame.blocks, loupe.at, p.window.tokens).cursor;
+  const hot =
+    loupe.at === null ? '' : loupeRows(p.frame.blocks, { at: loupe.at, windowTokens: p.window.tokens }, p.zoom).cursor;
   return (
     <>
       <div
@@ -177,7 +184,7 @@ function Bar({ p, say }: Part) {
         onKeyDown={rove}
         {...loupe.handlers}
       >
-        <BarLayers p={p} say={say} hot={hot} at={loupe.at} />
+        <BarLayers p={p} say={say} hot={hot} at={loupe.at} bar={bar} />
       </div>
       {p.zone ? <Labels p={p} say={say} /> : null}
       {loupe.at === null ? null : (
