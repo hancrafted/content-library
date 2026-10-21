@@ -1,15 +1,15 @@
 {
   "title": "Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst · hancrafted",
   "description": "Die Aufmerksamkeitsspanne der KI, ihr Kontextfenster, ist eine begrenzte Ressource, die Du aktiv managen musst: ein Chat pro Aufgabe, eine Übergabe nach echtem Fortschritt oder vor der Pause und bei größeren Projekten ein Planer-Chat, der jeden Schritt an einen frischen Chat weitergibt.",
-  "toc": "Inhalt Wird geladen noch 20 Min. 1 Gedankenexperiment Das lange Telefonat Auch die KI vergisst die Mitte 2 Die Aufmerksamkeitsspanne der KI Das Kontextfenster Was passiert, wenn der Kontext voll wird Aufmerksamkeit ist ein Budget Was wir bisher gelernt haben 3 Was das Fenster füllt Was wirklich im Kontextfenster steckt Eine harmlose Frage Der Chat sieht gleich aus. Das Fenster nicht. 4 Die Aufmerksamkeitsspanne managen Gewohnheiten für jeden Tag Human-in-the-Loop-Workflow Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 20 Min. 1 Gedankenexperiment Das lange Telefonat Auch die KI vergisst die Mitte 2 Die Aufmerksamkeitsspanne der KI Das Kontextfenster Was passiert, wenn der Kontext voll wird Aufmerksamkeit ist ein Budget Was wir bisher gelernt haben 3 Was das Fenster füllt Was wirklich im Kontextfenster steckt Eine harmlose Frage Der Chat sieht gleich aus. Das Fenster nicht. 4 Die Aufmerksamkeitsspanne managen Gewohnheiten für jeden Tag Human-in-the-Loop-Workflow",
+  "toc": "Inhalt Wird geladen noch 21 Min. 1 Gedankenexperiment Das lange Telefonat Auch die KI vergisst die Mitte 2 Die Aufmerksamkeitsspanne der KI Das Kontextfenster Was passiert, wenn der Kontext voll wird Aufmerksamkeit ist ein Budget Was wir bisher gelernt haben 3 Was das Fenster füllt Was wirklich im Kontextfenster steckt Eine harmlose Frage Der Chat sieht gleich aus. Das Fenster nicht. 4 Die Aufmerksamkeitsspanne managen Gewohnheiten für jeden Tag Human-in-the-Loop-Workflow Glückwunsch Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 21 Min. 1 Gedankenexperiment Das lange Telefonat Auch die KI vergisst die Mitte 2 Die Aufmerksamkeitsspanne der KI Das Kontextfenster Was passiert, wenn der Kontext voll wird Aufmerksamkeit ist ein Budget Was wir bisher gelernt haben 3 Was das Fenster füllt Was wirklich im Kontextfenster steckt Eine harmlose Frage Der Chat sieht gleich aus. Das Fenster nicht. 4 Die Aufmerksamkeitsspanne managen Gewohnheiten für jeden Tag Human-in-the-Loop-Workflow Glückwunsch",
   "slides": [
     {
       "id": "top",
-      "text": "Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst Ein langer Chat verhält sich wie ein langes Telefonat: Seine Aufmerksamkeit ist ein begrenztes Fenster, also steuerst Du, was hineinkommt. Diese Sitzung 30 Min. noch nichts verbraucht"
+      "text": "Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst Ein langer Chat verhält sich wie ein langes Telefonat: Seine Aufmerksamkeit ist ein begrenztes Fenster, also steuerst Du, was hineinkommt. Deine Aufmerksamkeit Frisch und bereit zum Empfangen."
     },
     {
       "id": "thought-experiment",
-      "text": "Gedankenexperiment Wie Deine Aufmerksamkeit in einem 90-Minuten-Gespräch durchhält Diese Sitzung 30 Min. Gedankenexperiment …Moment, das Datum haben wir gar nicht festgelegt."
+      "text": "Gedankenexperiment Wie Aufmerksamkeit funktioniert: Du gegen eine KI. Deine Aufmerksamkeit Bereit? Wir fangen leicht an, denn Du bist ein Mensch."
     },
     {
       "id": "thought-experiment--the-long-phone-call-story",
@@ -21,7 +21,7 @@
     },
     {
       "id": "the-ais-attention-span",
-      "text": "Die Aufmerksamkeitsspanne der KI Jetzt die Ursache: wie die KI einen Chat im Blick behält. Diese Sitzung 30 Min. Die Aufmerksamkeitsspanne der KI Das Fenster der KI behält dasselbe Licht: nur die allerersten Zeilen und das Neueste bleiben scharf, der Rest verblasst, auch Deine erste Nachricht."
+      "text": "Die Aufmerksamkeitsspanne der KI Jetzt die Ursache: wie die KI einen Chat im Blick behält. Deine Aufmerksamkeit Dann drehen wir mal auf. Schau, ob Du mithalten kannst."
     },
     {
       "id": "the-ais-attention-span--the-context-window",
@@ -41,7 +41,7 @@
     },
     {
       "id": "what-fills-the-window",
-      "text": "Was das Fenster füllt Deine Nachrichten sind nur ein Teil davon. Diese Sitzung 30 Min. Was das Fenster füllt"
+      "text": "Was das Fenster füllt Deine Nachrichten sind nur ein Teil davon. Deine Aufmerksamkeit Na, wie geht's Deinem Kopf? Schon durchgebrannt? Ich bin noch nicht fertig. Versuch mitzuhalten."
     },
     {
       "id": "what-fills-the-window--whats-really-in-the-window",
@@ -57,15 +57,19 @@
     },
     {
       "id": "managing-the-attention-span",
-      "text": "Die Aufmerksamkeitsspanne managen Eine Anzeige kannst Du nicht ablesen, also baust Du Gewohnheiten auf. Diese Sitzung 30 Min. Die Aufmerksamkeitsspanne managen Übergabe: Feier für 40, 27. Juni, Budget 40.000 € . Weiter: Einladungen."
+      "text": "Die Aufmerksamkeitsspanne managen Eine Anzeige kannst Du nicht ablesen, also baust Du Gewohnheiten auf. Deine Aufmerksamkeit Du hast es fast geschafft. Nur noch eine Sache. Übergabe: Feier für 40, 27. Juni, Budget 40.000 € . Weiter: Einladungen."
     },
     {
       "id": "managing-the-attention-span--everyday-habits",
-      "text": "Die Aufmerksamkeitsspanne managen (1/2) Seite 1 von 2 Gewohnheiten für jeden Tag Teile das Projekt in Jobs, halte jeden Chat bei einem Job und nimm nur eine kurze Übergabe in den nächsten mit, damit der neue Chat klein und klar startet. Alter Chat: Sommerfest Alter Chat 128K von 200K · 64 % Übergabekarte Feier für 40, 27. Juni, Budget 40.000 € . Ort: Estrela-Pavillon. Caterer: Sabor Verde (12 vegetarisch). Weiter: Einladungen. erste Nachricht des neuen Chats Neuer Chat: Einladungen Neuer Chat 38K von 200K · 19 % 1 Zerleg es Teile das Projekt in Jobs, bevor der erste Chat beginnt. 2 Neuer Job, neuer Chat Wechselt das Thema, öffne einen neuen Chat. 3 Bitte um eine Übergabe Nach echtem Fortschritt oder vor einer Pause: das Ziel, die Entscheidungen, der nächste Schritt. 4 Lies sie, korrigiere sie Korrigiere, was falsch ist, bevor Du sie weitergibst. 5 Beginne den nächsten Chat damit Füge sie als erste Nachricht ein. 6 Prüfe den Kontext, wenn Du kannst In agentischen Tools führst Du regelmäßig /context aus. Token-Zahlen zur Veranschaulichung · 200K-Fenster"
+      "text": "Die Aufmerksamkeitsspanne managen (1/3) Seite 1 von 3 Gewohnheiten für jeden Tag Teile das Projekt in Jobs, halte jeden Chat bei einem Job und nimm nur eine kurze Übergabe in den nächsten mit, damit der neue Chat klein und klar startet. Alter Chat: Sommerfest Alter Chat 128K von 200K · 64 % Übergabekarte Feier für 40, 27. Juni, Budget 40.000 € . Ort: Estrela-Pavillon. Caterer: Sabor Verde (12 vegetarisch). Weiter: Einladungen. erste Nachricht des neuen Chats Neuer Chat: Einladungen Neuer Chat 38K von 200K · 19 % 1 Zerleg es Teile das Projekt in Jobs, bevor der erste Chat beginnt. 2 Neuer Job, neuer Chat Wechselt das Thema, öffne einen neuen Chat. 3 Bitte um eine Übergabe Nach echtem Fortschritt oder vor einer Pause: das Ziel, die Entscheidungen, der nächste Schritt. 4 Lies sie, korrigiere sie Korrigiere, was falsch ist, bevor Du sie weitergibst. 5 Beginne den nächsten Chat damit Füge sie als erste Nachricht ein. 6 Prüfe den Kontext, wenn Du kannst In agentischen Tools führst Du regelmäßig /context aus. Token-Zahlen zur Veranschaulichung · 200K-Fenster"
     },
     {
       "id": "managing-the-attention-span--the-workflow-for-bigger-projects",
-      "text": "Die Aufmerksamkeitsspanne managen (2/2) Seite 2 von 2 Human-in-the-Loop-Workflow Du bist der Kapitän: Ein Planer-Chat bereitet jede Übergabe vor, Helfer-Chats erledigen die Aufgaben, und Du prüfst jedes Artefakt dazwischen. Sommerfeier Zerlege es Anreise Catering Location Einladungen Budget Interview Interviewe Dich mit KI KI fragt Dich 3 Fragen, 1 vergessen Anforderungen Erst die Anforderungen Prüfpunkt 1 Anforderungskarte 200 Gäste 150 € pro Person Stufenlos Vegetarisches Menü Ruhig genug zum Reden Freigegeben Recherche Frischer Start für jedes Teil Location 1 Gegen die Karte geprüft Location 2 Gegen die Karte geprüft Location 3 Gegen die Karte geprüft Vergleich Prüfe jeden Schritt 3 Locations ranken gemessen an der Karte Prüfpunkt 2 Empfehlung für Deine Chefin Location-Plan bis Freitag Ein frischer Chat pro Aufgabe ( ) hält jedes Fenster klein; Du koordinierst wie ein Projektmanager."
+      "text": "Die Aufmerksamkeitsspanne managen (2/3) Seite 2 von 3 Human-in-the-Loop-Workflow Du bist der Kapitän: Ein Planer-Chat bereitet jede Übergabe vor, Helfer-Chats erledigen die Aufgaben, und Du prüfst jedes Artefakt dazwischen. Sommerfeier Zerlege es Anreise Catering Location Einladungen Budget Interview Interviewe Dich mit KI KI fragt Dich 3 Fragen, 1 vergessen Anforderungen Erst die Anforderungen Prüfpunkt 1 Anforderungskarte 200 Gäste 150 € pro Person Stufenlos Vegetarisches Menü Ruhig genug zum Reden Freigegeben Recherche Frischer Start für jedes Teil Location 1 Gegen die Karte geprüft Location 2 Gegen die Karte geprüft Location 3 Gegen die Karte geprüft Vergleich Prüfe jeden Schritt 3 Locations ranken gemessen an der Karte Prüfpunkt 2 Empfehlung für Deine Chefin Location-Plan bis Freitag Ein frischer Chat pro Aufgabe ( ) hält jedes Fenster klein; Du koordinierst wie ein Projektmanager."
+    },
+    {
+      "id": "managing-the-attention-span--now-you-know-how-it-feels",
+      "text": "Die Aufmerksamkeitsspanne managen (3/3) Seite 3 von 3 Glückwunsch Jetzt weißt Du, wie es sich anfühlt, eine KI zu sein. Deine Aufmerksamkeit Bis zum Rand voll. Gut gemacht."
     }
   ],
   "notes": [
@@ -126,6 +130,10 @@
     {
       "id": "managing-the-attention-span--the-workflow-for-bigger-projects",
       "text": "Human-in-the-Loop-Workflow Saubere Fenster für jeden Teil Anthropics Mittel für lange Aufgaben umfasst Sub-Agents, die mit sauberen Fenstern arbeiten 1 . Quellen (1) Anthropic, Effective context engineering for AI agents ( öffnet in neuem Tab ) anthropic.com Kurze Aufgaben schlagen lange Aus einer langen Aufgabe eine kurze zu machen, verbesserte die Ergebnisse, bei GPT-4o auf RULER um bis zu 4 % 1 . Quellen (1) Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval ( öffnet in neuem Tab ) arxiv.org"
+    },
+    {
+      "id": "managing-the-attention-span--now-you-know-how-it-feels",
+      "text": "Glückwunsch Keine Sprechernotizen für diese Folie."
     }
   ],
   "script": [
@@ -135,7 +143,7 @@
     },
     {
       "id": "thought-experiment",
-      "text": "Gedankenexperiment 0:00 – 0:37 Ein langer Chat ist ein langes Telefonat Denk an Dein letztes langes Telefonat mit jemandem, der Dir nahesteht: Deiner Schwester, einem Freund, Deiner Mutter. Du hast angerufen, um eine Sache zu klären, und eine Stunde später hast Du aufgelegt. Bevor ich ein Wort über KI sage, sollst Du spüren, was Dir von diesem Gespräch geblieben ist. Denn ich will Dich fragen, ob ein langer Chat mit einer KI dasselbe mit Dir macht. Deshalb kommt zuerst das Telefonat und dann der Chat."
+      "text": "Gedankenexperiment 0:00 – 0:48 Ein langer Chat ist ein langes Telefonat Bereit? Wir fangen leicht an, denn Du bist ein Mensch. Zuerst geht es darum, wie Aufmerksamkeit funktioniert, Deine gegen die einer KI. Denk an Dein letztes langes Telefonat mit jemandem, der Dir nahesteht: Deiner Schwester, einem Freund, Deiner Mutter. Du hast angerufen, um eine Sache zu klären, und eine Stunde später hast Du aufgelegt. Bevor ich ein Wort über KI sage, sollst Du spüren, was Dir von diesem Gespräch geblieben ist. Denn ich will Dich fragen, ob ein langer Chat mit einer KI dasselbe mit Dir macht. Deshalb kommt zuerst das Telefonat und dann der Chat."
     },
     {
       "id": "thought-experiment--the-long-phone-call-story",
@@ -147,7 +155,7 @@
     },
     {
       "id": "the-ais-attention-span",
-      "text": "Die Aufmerksamkeitsspanne der KI 0:00 – 0:20 Warum das passiert Bisher hast Du gesehen, was passiert. Jetzt kommt die Ursache. Denn sobald Du weißt, wie die KI einen Chat im Blick behält, überrascht Dich das Muster nicht mehr, und erst danach schauen wir, was es mit Deinen Antworten macht."
+      "text": "Die Aufmerksamkeitsspanne der KI 0:00 – 0:25 Warum das passiert Dann drehen wir mal auf. Schau, ob Du mithalten kannst. Bisher hast Du gesehen, was passiert. Jetzt kommt die Ursache. Denn sobald Du weißt, wie die KI einen Chat im Blick behält, überrascht Dich das Muster nicht mehr, und erst danach schauen wir, was es mit Deinen Antworten macht."
     },
     {
       "id": "the-ais-attention-span--the-context-window",
@@ -167,7 +175,7 @@
     },
     {
       "id": "what-fills-the-window",
-      "text": "Was das Fenster füllt 0:00 – 0:17 Mehr drin, als Du getippt hast Du hast gesehen, wie sich das Fenster mit Deinen Nachrichten füllt. Aber Deine Nachrichten sind nur ein Teil davon. Die nächste Frage ist also, was sonst noch hineinkommt, ohne dass Du es merkst."
+      "text": "Was das Fenster füllt 0:00 – 0:24 Mehr drin, als Du getippt hast Na, wie geht's Deinem Kopf? Schon durchgebrannt? Ich bin noch nicht fertig, versuch also mitzuhalten. Du hast gesehen, wie sich das Fenster mit Deinen Nachrichten füllt. Aber Deine Nachrichten sind nur ein Teil davon. Die nächste Frage ist also, was sonst noch hineinkommt, ohne dass Du es merkst."
     },
     {
       "id": "what-fills-the-window--whats-really-in-the-window",
@@ -183,7 +191,7 @@
     },
     {
       "id": "managing-the-attention-span",
-      "text": "Die Aufmerksamkeitsspanne managen 0:00 – 0:13 Du steuerst mit Gewohnheiten Eine Anzeige kannst Du nicht ablesen, also baust Du Dir Gewohnheiten auf. Zuerst die für jeden Tag und dann die eine für ein großes Projekt."
+      "text": "Die Aufmerksamkeitsspanne managen 0:00 – 0:25 Du steuerst mit Gewohnheiten Du hast es fast geschafft. Nur noch eine Sache, und ja, der faule Apfel, der Dich angrinst, ist ein Augenzwinkern in Richtung Context Rot. Eine Anzeige kannst Du nicht ablesen, also baust Du Dir Gewohnheiten auf. Zuerst die für jeden Tag und dann die eine für ein großes Projekt."
     },
     {
       "id": "managing-the-attention-span--everyday-habits",
@@ -192,6 +200,10 @@
     {
       "id": "managing-the-attention-span--the-workflow-for-bigger-projects",
       "text": "Human-in-the-Loop-Workflow 0:00 – 0:25 Das Briefing in Erinnerung Erinnere Dich an das Briefing für die Location: zerlege die Feier, interviewe Dich mit der KI, schreibe zuerst die Anforderungen, gib jedem Teil einen frischen Chat und prüfe jeden Schritt. Das war eine Aufgabe, gut gemacht. Ein größeres Projekt braucht dieselben Schritte und dazu eine Arbeitsweise, die sie zusammenhält. 0:25 – 0:38 Human in the Loop Diese Arbeitsweise nennen wir einen Human-in-the-Loop-Workflow. Du bist der Orchestrator, der Kapitän am Steuer, und Du setzt die KI ein, wie ein Kapitän seine Crew einsetzt. 0:38 – 0:53 Planer und Übergabe Ein Chat bleibt der Planer. Er hilft Dir, die Aufgabe vorzubereiten, und schreibt eine Übergabe. Er behält nur den Plan und die Ergebnisse, also bleibt er klein und hat Platz übrig. 0:53 – 1:10 Helfer-Chats Die Übergabe geht an Helfer-Chats, je ein frischer pro Aufgabe: Locations, Catering, Einladungen. Jeder Helfer liest seine Dateien, füllt sich so weit, wie er muss, speichert sein Ergebnis, und dann lässt Du ihn gehen. 1:10 – 2:02 Du prüfst Du bringst die Ergebnisse zurück zum Planer, und jedes Artefakt dazwischen, die Übergabe und jedes Ergebnis, prüfst Du. Jeder Chat hat einen Job, also läuft keiner lange genug, um seine Mitte zu verwischen. Das ist die ganze Idee: Das Fenster ist die Aufmerksamkeitsspanne der KI, und sie zu managen ist Dein Job. Ein ehrlicher Hinweis: Die Zonen und Zahlen, die ich Dir genannt habe, sind Faustregeln und Veranschaulichungen, und ich habe nicht jede Chat-App getestet, also beobachte Deine eigenen Chats und pass an. Wenn Du entspannt anfangen willst, nimm den nächsten Chat, der abdriftet, bitte ihn um eine Übergabe und öffne damit einen neuen. Danke."
+    },
+    {
+      "id": "managing-the-attention-span--now-you-know-how-it-feels",
+      "text": "Glückwunsch 0:00 – 0:28 Du hast alles gehalten Glückwunsch, Du hast es bis zum Ende geschafft. Jetzt weißt Du, wie es sich anfühlt, eine KI zu sein: Du hast alles aufgenommen, was ich gesagt habe, der Anfang blieb scharf, das Ende blieb scharf, und irgendwo in der Mitte wurde es etwas verschwommen. Mehr ist das Fenster nie, also geh jetzt los und steuere Deines."
     }
   ]
 }

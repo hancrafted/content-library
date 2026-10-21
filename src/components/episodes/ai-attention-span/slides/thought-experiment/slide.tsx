@@ -14,7 +14,9 @@ export const thoughtExperiment = slide({
     <SlideFrame>
       <div className="flex w-full max-w-md flex-col gap-3 rounded-xl border border-border bg-card p-3 shadow-sm">
         <SessionBarPreset locale={locale} at="thought-experiment" />
-        <p className="text-caption font-medium">{t('punchline')}</p>
+        <p data-below="" className="text-caption font-medium">
+          {t('punchline')}
+        </p>
       </div>
     </SlideFrame>
   ),

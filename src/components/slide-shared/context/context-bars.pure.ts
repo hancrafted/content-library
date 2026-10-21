@@ -63,34 +63,32 @@ export function barModel(bar: MiniBar, chat: Chat | undefined, window: WindowSiz
   return chatModel(bar, chat, window);
 }
 
-/** `1 h 22 min`, `82 min` under an hour: a number of minutes as a caption says it. */
-export function durationText(minutes: number, words: { readonly hours: string; readonly minutes: string }): string {
-  const hours = Math.floor(minutes / 60);
-  const rest = minutes % 60;
-  if (hours === 0) return `${rest} ${words.minutes}`;
-  return rest === 0 ? `${hours} ${words.hours}` : `${hours} ${words.hours} ${rest} ${words.minutes}`;
-}
+/** The `at` of a session bar that has run its whole course: every segment filled, none current. */
+export const SESSION_END = 'end';
 
 export interface SessionPart {
   readonly id: string;
   readonly share: number;
+  /** The segment's place in the bar, from which its tint follows: calm at the start, hot at the end. */
+  readonly tone: number;
   readonly state: 'done' | 'current' | 'upcoming';
   /** Which edge the current part's name hangs from, so it stays inside the bar. */
   readonly side: 'start' | 'end';
 }
 
-/** The session's Sections as parts: filled up to and including `at`, none for a fresh session (`at` null). */
+/** The session's Sections as parts: filled up to and including `at`, none for a fresh session (`at` null), all for `SESSION_END`. */
 export function sessionParts(
   sections: readonly { readonly id: string; readonly share: number }[],
   at: string | null,
 ): SessionPart[] {
-  const current = at === null ? -1 : sections.findIndex((section) => section.id === at);
+  const ended = at === SESSION_END;
+  const current = at === null ? -1 : ended ? sections.length : sections.findIndex((section) => section.id === at);
   if (at !== null && current < 0) throw new Error(`session bar: unknown Section "${at}"`);
   let start = 0;
   return sections.map((section, i): SessionPart => {
     const middle = start + section.share / 2;
     start += section.share;
     const state = i < current ? 'done' : i === current ? 'current' : 'upcoming';
-    return { ...section, state, side: middle > 50 ? 'end' : 'start' };
+    return { ...section, tone: i, state, side: middle > 50 ? 'end' : 'start' };
   });
 }

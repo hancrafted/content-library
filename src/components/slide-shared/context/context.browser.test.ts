@@ -91,6 +91,7 @@ const germanOf = (url: string) => {
   return german.href;
 };
 
+const DEFAULT_WIDTH = 1440;
 const viewport = (width: number) =>
   send('Emulation.setDeviceMetricsOverride', { width, height: 900, deviceScaleFactor: 1, mobile: false });
 
@@ -991,7 +992,6 @@ describe('edge cases', () => {
           await delay(200);
           const pen = `${POPOVER} button[data-control="attentionEdit"]`;
           const save = `${POPOVER} button[data-control="attentionSave"]`;
-          const tip = 'Your input will be normalized to 100.';
           const typed = ['10', '10', '10', '10'];
           const expected = { start: 25, recent: 25, middle: 25, newest: 25 };
           // ACT
@@ -1001,7 +1001,7 @@ describe('edge cases', () => {
             send,
             `document.querySelectorAll('${POPOVER} input[type=number]').length`,
           );
-          const title = await evaluate<string>(send, `document.querySelector('${save}').title`);
+          const title = await evaluate<string | null>(send, `document.querySelector('${save}').getAttribute('title')`);
           for (const [i, name] of ['start', 'recent', 'middle', 'newest'].entries())
             await typeInto(name, typed[i] ?? '');
           await click(save);
@@ -1009,8 +1009,66 @@ describe('edge cases', () => {
           const values = await sliders();
           // ASSERT
           expect(inputs).toBe(typed.length);
-          expect(title).toBe(tip);
+          expect(title).toBeNull();
           expect(values).toEqual(expected);
+        },
+        TIMEOUT,
+      );
+
+      it(
+        'shows the save tooltip once, inside the viewport and the popover, at 1280 and 1440',
+        async () => {
+          const save = `${POPOVER} button[data-control="attentionSave"]`;
+          const tip = 'Your input will be normalized to 100.';
+          for (const width of [1280, 1440]) {
+            // ARRANGE
+            await viewport(width);
+            await open('light');
+            await click(MENU);
+            await delay(200);
+            await click(`${POPOVER} button[data-control="attentionEdit"]`);
+            await delay(100);
+            // ACT
+            await mouseTo(0, 0);
+            await delay(100);
+            await centreOf(MENU);
+            await delay(200);
+            const at = await evaluate<{ x: number; y: number }>(
+              send,
+              `(() => { const r = document.querySelector('${save}').getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; })()`,
+            );
+            await mouseTo(at.x + 1, at.y);
+            await mouseTo(at.x, at.y);
+            await delay(600);
+            const state = await evaluate<{
+              left: number;
+              right: number;
+              popLeft: number;
+              popRight: number;
+              width: number;
+              titled: number;
+              text: string;
+            }>(
+              send,
+              `(() => {
+                const b = document.querySelector('${save}');
+                const r = b.getBoundingClientRect();
+                const after = getComputedStyle(b, '::after');
+                const pop = document.querySelector('${POPOVER}').getBoundingClientRect();
+                const w = parseFloat(after.width);
+                // The button is the tip's containing block: its used left/right are resolved px for an absolute box.
+                const left = r.left + parseFloat(after.left);
+                return { left, right: left + w, popLeft: pop.left, popRight: pop.right, width: innerWidth,
+                  titled: document.querySelectorAll('[title="${tip}"]').length, text: after.content };
+              })()`,
+            );
+            // ASSERT
+            expect(state.text).toContain(tip);
+            expect(state.titled).toBe(0);
+            expect(state.left).toBeGreaterThanOrEqual(Math.max(0, state.popLeft) - 1);
+            expect(state.right).toBeLessThanOrEqual(Math.min(state.width, state.popRight) + 1);
+          }
+          await viewport(DEFAULT_WIDTH);
         },
         TIMEOUT,
       );

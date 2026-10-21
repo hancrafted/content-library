@@ -217,10 +217,9 @@ minis:
       - { label: catering, chat: w-catering }
       - { label: invites, chat: w-invites }
 
-# The session bar every Episode opener shows: the audience's own attention over `minutes`, one segment per Section,
-# sized by its `share` of the whole. Ids are keys of words.session.sections.
+# The session bar every Episode opener shows: the audience's own attention, one segment per Section, sized by its
+# `share` of the whole. Ids are keys of words.session.sections.
 session:
-  minutes: 30
   sections:
     - { id: thought-experiment, share: 20 }
     - { id: the-ais-attention-span, share: 40 }
@@ -350,19 +349,18 @@ words:
     matt-1m: { label: Smart zone by Matt Pocock, who: Matt Pocock }
     han: { label: Smart zone by Han, who: Han }
   session:
-    label: This session
-    empty: nothing used yet
+    label: Your attention
+    empty: Fresh and ready to receive.
+    full: Full to the brim. Well done.
     progress: '{title}, {n} of {count}'
     sections:
-      thought-experiment: Thought experiment
-      the-ais-attention-span: The AI's attention span
-      what-fills-the-window: What fills the window
-      managing-the-attention-span: Managing the attention span
+      thought-experiment: Ready?
+      the-ais-attention-span: Let's dial it up a notch.
+      what-fills-the-window: So, how's your brain doing? Anything fried yet?
+      managing-the-attention-span: You made it, almost. Just one more thing.
   mini:
     usedOf: '{used} of {window} · {percent}%'
     discarded: thrown away
-    hours: h
-    minutes: min
     labels:
       old: Old chat
       fresh: Fresh chat
