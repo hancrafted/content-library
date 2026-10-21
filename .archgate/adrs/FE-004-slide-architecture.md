@@ -103,7 +103,7 @@ For this project the map matters because handoffs run on agents with no session 
 
 ### 5. Text, styling and client code each have fixed homes
 
-1. Text: site-wide Translation files for site chrome, landing and Upcoming Episode cards; an Episode's folder for its title, caption, description; a Slide's folder for its strings.
+1. Text: Translation files for site chrome, landing, Upcoming cards; an Episode's for title, caption, description; a Slide's for its strings; a Shared visual's: its locale pair.
 2. Styling: site tokens in `globals.css`; an Episode token remap under its own scope; a Slide's look in its own CSS module.
 3. Client code: `*.client.tsx` leaves only (in a Slide folder, the container's mechanics or the chrome); hooks hold browser state.
 

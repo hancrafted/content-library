@@ -66,7 +66,7 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 6. **DO** reach `readPrefs` / `writePrefs` through a hook or a `*.client.tsx` leaf, as `use-theme.ts` and `locale-toggle.client.tsx` do. (Decision 3)
 7. **DO** pass serializable data from server to client: strings, numbers, plain objects, Translation file slices. (Decision 4)
 8. **DO** put an Episode's interactive visualisation in its Slide folder as `<name>.client.tsx`, its logic in a `.pure.ts` beside it. (Decision 5)
-9. **DO** put a Shared visual's client leaf in its `slide-shared/<part>/` folder; its server entry takes the Slide's Preset and words. (Decision 5)
+9. **DO** put a Shared visual's client leaf in its `slide-shared/<part>/` folder; its server entry takes the Slide's Preset and words, over its defaults. (Decision 5)
 
 ### Don'ts
 
