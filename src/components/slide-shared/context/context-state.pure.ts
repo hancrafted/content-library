@@ -1,11 +1,11 @@
+import { controlOf, offers, type ControlId } from './context-controls.pure';
 import { isMessage, simpleOf } from './context.pure';
-import type { Category, Chat, Control, Depth, Mode, Part, PartId, Preset, RenderMode } from './context.types';
+import type { Category, Chat, Depth, Mode, Part, PartId, Preset, RenderMode } from './context.types';
 
 /* The cornerstone's view state: what is shown, lit and pinned. Transient (FE-001): it lives in memory and a reload
  * returns to the Preset, which is the Slide's own state. */
 
-export const CONTROLS: readonly Control[] = ['show', 'depth', 'mode', 'collapse', 'meter'];
-export const PARTS: readonly Part[] = ['chat', 'timeline', 'context', 'panel'];
+export const PARTS: readonly Part[] = ['chat', 'timeline', 'context', 'preview', 'panel'];
 
 export interface ViewState {
   readonly step: number;
@@ -19,7 +19,8 @@ export interface ViewState {
   readonly renderModes: Readonly<Partial<Record<PartId, RenderMode>>>;
   readonly parts: Readonly<Record<Part, boolean>>;
   readonly chatCollapsed: boolean;
-  readonly meterHidden: boolean;
+  /** The smart-zone side column and the limit label are shown; the dashed lines stay either way. */
+  readonly zone: boolean;
   /** The window size shown, an index into the Preset's windows. */
   readonly window: number;
   readonly hintSeen: boolean;
@@ -34,13 +35,12 @@ export type ViewEvent =
   | { readonly type: 'PIN'; readonly part: string }
   | { readonly type: 'UNPIN' }
   | { readonly type: 'ESC' }
-  | { readonly type: 'SET_MODE'; readonly value: Mode }
   | { readonly type: 'SET_DEPTH'; readonly value: Depth }
   | { readonly type: 'SET_PART_MODE'; readonly part: PartId; readonly value: RenderMode }
   | { readonly type: 'SET_WINDOW'; readonly value: number }
   | { readonly type: 'TOGGLE_CHAT' }
   | { readonly type: 'TOGGLE_PART'; readonly part: Part }
-  | { readonly type: 'TOGGLE_METER' };
+  | { readonly type: 'TOGGLE_ZONE' };
 
 export function createState(preset: Preset): ViewState {
   return {
@@ -53,34 +53,36 @@ export function createState(preset: Preset): ViewState {
     renderModes: {},
     parts: { ...preset.show },
     chatCollapsed: false,
-    meterHidden: preset.meterHidden,
+    zone: controlOf(preset, 'zone').on ?? true,
     window: 0,
     hintSeen: false,
   };
 }
-
-const CONTROL_OF: Partial<Record<ViewEvent['type'], Control>> = {
-  SET_MODE: 'mode',
-  SET_DEPTH: 'depth',
-  SET_PART_MODE: 'depth',
-  TOGGLE_CHAT: 'collapse',
-  TOGGLE_METER: 'meter',
-  TOGGLE_PART: 'show',
-};
 
 const isTimeline = (event: ViewEvent) => event.type === 'PREVIEW' || event.type === 'COMMIT';
 
 /** Why an event does nothing under a Preset, or null when it is allowed. Lighting is never locked. */
 export function blockedBy(preset: Preset, event: ViewEvent): string | null {
   if (isTimeline(event) && preset.timelineLocked) return 'timeline locked';
-  if (event.type === 'SET_WINDOW') return preset.windowSwitch ? null : 'no window switch';
-  const control = CONTROL_OF[event.type];
-  return control && !offers(preset, control) ? `control "${control}" hidden` : null;
+  const id = controlFor(event);
+  return id && !id.some((control) => offers(preset, control)) ? `control "${id[0]}" hidden` : null;
 }
 
-/** Whether a Preset's toolbar shows a control. */
-export const offers = (preset: Preset, control: Control): boolean =>
-  !preset.controlsHidden && preset.controls.includes(control);
+const CONTROL_FOR: Partial<Record<ViewEvent['type'], readonly ControlId[]>> = {
+  SET_WINDOW: ['window'],
+  SET_DEPTH: ['technical'],
+  TOGGLE_CHAT: ['collapse'],
+  TOGGLE_ZONE: ['zone'],
+  TOGGLE_PART: ['parts'],
+};
+
+/** The controls that may send an event: any one of them is enough. */
+function controlFor(event: ViewEvent): readonly ControlId[] | null {
+  if (event.type === 'SET_PART_MODE') return [event.part === 'context-window' ? 'windowTechnical' : 'technical'];
+  // The head's eye also toggles the preview part.
+  if (event.type === 'TOGGLE_PART' && event.part === 'preview') return ['parts', 'preview'];
+  return CONTROL_FOR[event.type] ?? null;
+}
 
 const clamp = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, n));
 
@@ -107,13 +109,12 @@ const HANDLERS: Handlers = {
   PIN: (s, e) => ({ ...s, hintSeen: true, pinned: s.pinned === e.part ? null : e.part }),
   UNPIN: (s) => ({ ...s, pinned: null }),
   ESC: (s) => ({ ...s, pinned: null, hover: null, previewStep: null }),
-  SET_MODE: (s, e) => ({ ...s, hintSeen: true, mode: e.value }),
   SET_DEPTH: (s, e) => ({ ...s, hintSeen: true, depth: e.value, renderModes: {} }),
   SET_PART_MODE: (s, e) => ({ ...s, hintSeen: true, renderModes: { ...s.renderModes, [e.part]: e.value } }),
   SET_WINDOW: (s, e, c) => ({ ...s, window: clamp(e.value, 0, c.preset.windows.length - 1) }),
   TOGGLE_CHAT: (s) => ({ ...s, hintSeen: true, chatCollapsed: !s.chatCollapsed }),
   TOGGLE_PART: (s, e) => ({ ...s, hintSeen: true, parts: { ...s.parts, [e.part]: !s.parts[e.part] } }),
-  TOGGLE_METER: (s) => ({ ...s, hintSeen: true, meterHidden: !s.meterHidden }),
+  TOGGLE_ZONE: (s) => ({ ...s, hintSeen: true, zone: !s.zone }),
 };
 
 /** The next state after an event; an event the Preset blocks returns the same state. */

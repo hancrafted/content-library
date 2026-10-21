@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import type { ControlId } from './context-controls.pure';
 import type { Attention } from './context-usage.pure';
 import type { ContextWords } from './context-words.types';
 import type { Frame } from './context.pure';
@@ -62,6 +63,13 @@ export interface TimelineProps extends Speech {
   readonly onCommit: (step: number) => void;
 }
 
+/** A toggle in a part's head: the parent decides which are offered, what state they show and what they flip. */
+export interface HeadToggle {
+  readonly id: ControlId;
+  readonly pressed: boolean;
+  readonly onToggle: () => void;
+}
+
 export interface ContextWindowProps extends Lighting, LightingEvents, Speech {
   readonly frames: readonly Frame[];
   /** What the window holds at the step on screen. */
@@ -74,11 +82,15 @@ export interface ContextWindowProps extends Lighting, LightingEvents, Speech {
   /** Each step's number in the chat, by step id. */
   readonly stepOf: ReadonlyMap<string, number>;
   readonly onSize: (index: number) => void;
+  /** The smart-zone side column and the limit label are shown; the dashed lines stay either way. */
+  readonly zone: boolean;
+  /** The head's icon buttons, in order: the preview eye, the smart-zone column, the local Technical. */
+  readonly toggles: readonly HeadToggle[];
   /** Where the parent places another part beside the bar or grid, as the usage rows sit today. */
   readonly children?: ReactNode;
 }
 
-export interface ContextPreviewProps extends Lighting, Speech {
+export interface ContextPreviewProps extends Lighting, LightingEvents, Speech {
   readonly frame: Frame;
   readonly window: WindowSize;
   /** The categories the chat ever holds, so a row for one that never lands is left out. */

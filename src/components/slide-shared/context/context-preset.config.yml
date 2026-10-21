@@ -82,14 +82,19 @@ defaults:
   mode: explain
   depth: simple
   pinned: null
-  show: { chat: true, timeline: true, context: true, panel: false }
-  controls: [show, depth, mode, collapse, meter]
-  controlsHidden: false
+  show: { chat: true, timeline: true, context: true, preview: true, panel: false }
+  # Every control by id; a Preset overrides key by key, and '*' sets show for all (code: context-controls.pure.ts).
+  controls:
+    parts: { show: true, reorder: true }
+    technical: { show: true }
+    collapse: { show: true }
+    download: { show: true }
+    upload: { show: false }
+    preview: { show: true }
+    zone: { show: true }
+    windowTechnical: { show: true }
+    window: { show: false }
   timelineLocked: false
-  meterHidden: false
-  download: true
-  upload: false
-  windowSwitch: false
   windows: [{ size: 200k, lines: [matt] }]
   motion: rise
   height: 38
@@ -99,30 +104,26 @@ presets:
     chat: summer-party
     step: 9
     pinned: m3
-    controls: []
-    controlsHidden: true
+    controls: { '*': { show: false } }
     height: 26.6
     windows: [{ size: 200k, lines: [] }]
   slide-4:
     chat: summer-party
     mode: attention
     show: { chat: true, timeline: true, context: true, panel: true }
-    controls: [show, depth, mode]
+    controls: { collapse: { show: false } }
     windows: [{ size: 200k, lines: [] }]
   slide-5:
     chat: summer-party
     mode: attention
-    controls: []
-    controlsHidden: true
-    windowSwitch: true
+    controls: { '*': { show: false }, window: { show: true } }
     windows: [{ size: 200k, lines: [matt] }, { size: 1m, lines: [matt-1m] }]
     motion: off
   slide-6:
     chat: summer-party
     depth: technical
     show: { chat: false, timeline: false, context: true, panel: false }
-    controls: []
-    controlsHidden: true
+    controls: { '*': { show: false } }
     timelineLocked: true
     motion: off
   slide-7:
@@ -140,9 +141,7 @@ presets:
     chat: summer-compact
     step: 23
     pinned: m26
-    meterHidden: true
-    controls: []
-    controlsHidden: true
+    controls: { '*': { show: false }, zone: { on: false } }
     timelineLocked: true
     show: { chat: false, timeline: false, context: true, panel: false }
     motion: off
@@ -150,9 +149,7 @@ presets:
   slide-9-chat:
     chat: summer-compact
     step: 24
-    meterHidden: true
-    controls: []
-    controlsHidden: true
+    controls: { '*': { show: false }, zone: { on: false } }
     timelineLocked: true
     show: { chat: true, timeline: false, context: false, panel: false }
     motion: off
@@ -161,9 +158,7 @@ presets:
     chat: summer-compact
     step: 24
     pinned: m27
-    meterHidden: true
-    controls: []
-    controlsHidden: true
+    controls: { '*': { show: false }, zone: { on: false } }
     timelineLocked: true
     show: { chat: false, timeline: false, context: true, panel: false }
     motion: off
@@ -191,15 +186,18 @@ minis:
 words:
   controls: Context window controls
   showParts: Show parts
-  parts: { chat: Conversation, timeline: Timeline, context: Context, panel: Details }
+  parts: { chat: Conversation, timeline: Timeline, context: Context, preview: Preview, panel: Details }
   technical: Technical
   technicalTip: 'Technical: the chat as a Claude Code terminal, the window as /context boxes with the real category names.'
-  modeGroup: View
   modes: { explain: Explain, attention: Attention }
   collapse: Collapse conversation
   collapseTip: Fold the conversation into a strip
-  meter: Hide meter
-  meterTip: Hide the percentage
+  previewToggle: Context preview
+  previewTip: Show or hide what fills the window
+  zoneToggle: Smart zone
+  zoneTip: Show or hide the smart-zone labels beside the bar
+  windowTechnical: Technical window
+  windowTechnicalTip: 'Technical: the window as /context boxes. The toolbar button sets every part.'
   windowGroup: Window size
   download: Download the chat as a Claude Code log
   upload: Open a Claude Code log
@@ -214,7 +212,7 @@ words:
   steps: '{count} steps'
   stepEvent: 'Step {step}: {event}'
   contextWindow: Context window
-  meterValue: '{percent}% used · {used} of {window}'
+  meterOf: '{used} of {window}'
   bar: Context bar
   limit: 'Limit {window}'
   grid: 'Context grid, each box {tokens} tokens'

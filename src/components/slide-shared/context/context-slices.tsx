@@ -1,4 +1,6 @@
 import type { Dispatch } from 'react';
+import { controlOf, offers } from './context-controls.pure';
+import type { HeadToggle } from './context-parts.types';
 import { ContextPreview } from './context-preview';
 import type { ViewEvent, ViewState } from './context-state.pure';
 import { renderModeOf } from './context-state.pure';
@@ -111,8 +113,42 @@ function TimelinePart({ m, valueText }: { readonly m: Model; readonly valueText:
   );
 }
 
+/** The head's icon buttons the Preset offers, each with the state it flips. */
+function headToggles(m: Model): HeadToggle[] {
+  const { state, dispatch, data } = m;
+  const preset = data.preset;
+  const local = renderModeOf(state, 'context-window') === 'technical';
+  const all: HeadToggle[] = [
+    { id: 'preview', pressed: state.parts.preview, onToggle: () => dispatch({ type: 'TOGGLE_PART', part: 'preview' }) },
+    { id: 'zone', pressed: state.zone, onToggle: () => dispatch({ type: 'TOGGLE_ZONE' }) },
+    {
+      id: 'windowTechnical',
+      pressed: local,
+      onToggle: () =>
+        dispatch({ type: 'SET_PART_MODE', part: 'context-window', value: local ? 'simple' : 'technical' }),
+    },
+  ];
+  return all.filter((toggle) => offers(preset, toggle.id));
+}
+
+function ContextPreviewPart({ m, events }: PartProps) {
+  return (
+    <ContextPreview
+      {...lightingOf(m)}
+      {...speechOf(m)}
+      renderMode={renderModeOf(m.state, 'context-preview')}
+      frame={m.frame}
+      window={m.window}
+      present={m.present}
+      onLight={events.onLight}
+      onPin={events.onPin}
+    />
+  );
+}
+
 function ContextWindowPart({ m, events }: PartProps) {
   const { state, dispatch } = m;
+  const sizes = m.data.preset.windows;
   return (
     <ContextWindow
       {...lightingOf(m)}
@@ -121,22 +157,17 @@ function ContextWindowPart({ m, events }: PartProps) {
       frames={m.frames}
       frame={m.frame}
       window={m.window}
-      sizes={m.data.preset.windows}
+      sizes={sizes}
       sizeIndex={state.window}
-      switchable={m.data.preset.windowSwitch}
+      switchable={sizes.length > 1 && controlOf(m.data.preset, 'window').show}
+      zone={state.zone}
+      toggles={headToggles(m)}
       stepOf={m.stepOf}
       onSize={(value) => dispatch({ type: 'SET_WINDOW', value })}
       onLight={events.onLight}
       onPin={events.onPin}
     >
-      <ContextPreview
-        {...lightingOf(m)}
-        {...speechOf(m)}
-        renderMode={renderModeOf(state, 'context-preview')}
-        frame={m.frame}
-        window={m.window}
-        present={m.present}
-      />
+      {state.parts.preview ? <ContextPreviewPart m={m} events={events} /> : null}
     </ContextWindow>
   );
 }
@@ -183,15 +214,11 @@ export function ToolbarPart({ m, onOpen }: { readonly m: Model; readonly onOpen:
       preset={m.data.preset}
       chat={m.chat}
       parts={state.parts}
-      mode={state.mode}
       technical={state.depth === 'technical'}
       chatCollapsed={state.chatCollapsed}
-      meterHidden={state.meterHidden}
       onPart={(part) => dispatch({ type: 'TOGGLE_PART', part })}
-      onMode={(value) => dispatch({ type: 'SET_MODE', value })}
       onTechnical={(on) => dispatch({ type: 'SET_DEPTH', value: on ? 'technical' : 'simple' })}
       onCollapse={() => dispatch({ type: 'TOGGLE_CHAT' })}
-      onMeter={() => dispatch({ type: 'TOGGLE_METER' })}
       onOpen={onOpen}
     />
   );

@@ -86,7 +86,6 @@ function rootAttrs(m: Model) {
     'data-motion': m.data.preset.motion,
     'data-mode': m.state.mode,
     'data-chat': m.state.chatCollapsed ? 'collapsed' : 'open',
-    'data-meter': m.state.meterHidden ? 'hidden' : 'shown',
     'data-lit': m.lit || m.ghost ? '' : undefined,
   };
 }

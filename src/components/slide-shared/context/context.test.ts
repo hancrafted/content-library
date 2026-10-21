@@ -111,13 +111,14 @@ describe('edge cases', () => {
     expect(switches).toEqual(expected);
   });
 
-  it('hides the meter on Slide 9 and greys a thrown-away worker on Slide 11', () => {
+  it('hides the smart-zone column on Slide 9 and greys a thrown-away worker on Slide 11', () => {
     // ARRANGE
-    const expected = { meter: 'hidden', discarded: 1 };
+    const expected = { zone: 'off', labels: 0, discarded: 1 };
     // ACT
-    const meter = render('slide-9-before')('[data-cornerstone]').attr('data-meter');
+    const $ = render('slide-9-before');
+    const zone = $('section[aria-label="Context window"]').attr('data-zone');
     const discarded = renderMini('slide-11-after')('figure[data-discarded]').length;
     // ASSERT
-    expect({ meter, discarded }).toEqual(expected);
+    expect({ zone, labels: $('[class*="labelLimit"]').length, discarded }).toEqual(expected);
   });
 });

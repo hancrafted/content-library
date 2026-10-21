@@ -4,15 +4,18 @@
 words:
   controls: Steuerung des Kontextfensters
   showParts: Teile zeigen
-  parts: { chat: Unterhaltung, timeline: Zeitleiste, context: Kontext, panel: Details }
+  parts: { chat: Unterhaltung, timeline: Zeitleiste, context: Kontext, preview: Vorschau, panel: Details }
   technical: Technisch
   technicalTip: 'Technisch: der Chat als Claude-Code-Terminal, das Fenster als /context-Kästchen mit den echten Kategorienamen.'
-  modeGroup: Ansicht
   modes: { explain: Erklären, attention: Aufmerksamkeit }
   collapse: Unterhaltung einklappen
   collapseTip: Die Unterhaltung zu einem Streifen falten
-  meter: Anzeige ausblenden
-  meterTip: Den Prozentwert ausblenden
+  previewToggle: Kontextvorschau
+  previewTip: Zeigen oder ausblenden, was das Fenster füllt
+  zoneToggle: Smart Zone
+  zoneTip: Die Smart-Zone-Beschriftung neben dem Balken zeigen oder ausblenden
+  windowTechnical: Technisches Fenster
+  windowTechnicalTip: 'Technisch: das Fenster als /context-Kästchen. Die Schaltfläche der Werkzeugleiste setzt alle Teile.'
   windowGroup: Fenstergröße
   download: Den Chat als Claude-Code-Log herunterladen
   upload: Ein Claude-Code-Log öffnen
@@ -27,7 +30,7 @@ words:
   steps: '{count} Schritte'
   stepEvent: 'Schritt {step}: {event}'
   contextWindow: Kontextfenster
-  meterValue: '{percent} % belegt · {used} von {window}'
+  meterOf: '{used} von {window}'
   bar: Kontextbalken
   limit: 'Grenze {window}'
   grid: 'Kontextraster, jedes Kästchen {tokens} Tokens'

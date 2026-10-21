@@ -1,5 +1,6 @@
 import { parse } from 'yaml';
 import { fromClaudeLog } from './claude-log.pure';
+import { mergeControls, type ControlMap } from './context-controls.pure';
 import configDe from './context-preset.config.de.yml';
 import configEn from './context-preset.config.yml';
 import { presetProblems } from './context-presets.pure';
@@ -71,7 +72,12 @@ interface Config {
   readonly notes: Readonly<Record<string, StepNotes>>;
   readonly attention: ContextData['attention'];
   readonly defaults: Omit<Preset, 'id' | 'chat' | 'windows'> & { readonly windows: readonly WindowRef[] };
-  readonly presets: Readonly<Record<string, Partial<Config['defaults']> & { readonly chat: string }>>;
+  readonly presets: Readonly<
+    Record<
+      string,
+      Partial<Omit<Config['defaults'], 'show'>> & { readonly chat: string; readonly show?: Partial<Preset['show']> }
+    >
+  >;
   readonly minis: Readonly<
     Record<
       string,
@@ -147,7 +153,9 @@ function presetsOf(en: Config, words: ContextWords): Record<string, Preset> {
   return Object.fromEntries(
     Object.entries(en.presets).map(([id, raw]) => {
       const merged = { ...en.defaults, ...raw };
-      return [id, { ...merged, id, windows: merged.windows.map((ref) => windowOf(en, words, ref)) }];
+      const controls: ControlMap = mergeControls(en.defaults.controls, raw.controls ?? {});
+      const show = { ...en.defaults.show, ...raw.show };
+      return [id, { ...merged, show, controls, id, windows: merged.windows.map((ref) => windowOf(en, words, ref)) }];
     }),
   );
 }

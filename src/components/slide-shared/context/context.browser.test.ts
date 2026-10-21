@@ -480,25 +480,136 @@ describe('edge cases', () => {
   );
 
   it(
-    'switches Slide 5 to the 1M window: the meter reads the same chat against 1M',
+    'switches Slide 5 to the 1M window: the head reads the same chat against 1M',
     async () => {
       // ARRANGE
       await open('light');
       const preset = 'slide-5';
-      const expected = '13% used · 128k of 1M';
+      const expected = { title: 'Context window (13%)', of: '128K of 200K1M' };
       // ACT
       await evaluate(
         send,
         `document.querySelectorAll('[data-cornerstone="${preset}"] [aria-label="Window size"] button')[1].click()`,
       );
       await delay(100);
-      const meter = await evaluate<string>(
+      const head = await evaluate<{ title: string; of: string }>(
         send,
-        `document.querySelector('[data-cornerstone="${preset}"] section[aria-label="Context window"] > div').lastElementChild.textContent`,
+        `(() => {
+          const head = document.querySelector('[data-cornerstone="${preset}"] section[aria-label="Context window"] > div');
+          return { title: head.firstElementChild.textContent, of: head.lastElementChild.firstElementChild.textContent };
+        })()`,
       );
       // ASSERT
-      expect(meter).toBe(expected);
+      expect({ title: head.title, of: head.of.replace('200K', '200K') }).toEqual(expected);
     },
     TIMEOUT,
   );
+
+  describe('context-window head', () => {
+    const HEAD = `${SLIDE_4} section[aria-label="Context window"]`;
+    const control = (id: string) => `${HEAD} button[data-control="${id}"]`;
+    const press = (id: string) => evaluate(send, `document.querySelector('${control(id)}').click()`);
+    const pressed = (id: string) =>
+      evaluate<string | null>(send, `document.querySelector('${control(id)}').getAttribute('aria-pressed')`);
+    const count = (selector: string) => evaluate<number>(send, `document.querySelectorAll('${selector}').length`);
+
+    it(
+      'hides and shows the context preview with the eye, in step with the toolbar chip',
+      async () => {
+        // ARRANGE
+        await open('light');
+        const expected = { before: [1, 'true'], hidden: [0, 'false', 'false'], shown: [1, 'true'] };
+        const chip = `${SLIDE_4} [role="toolbar"] [role="group"] button:nth-child(4)`;
+        const chipPressed = () =>
+          evaluate<string | null>(send, `document.querySelector('${chip}').getAttribute('aria-pressed')`);
+        // ACT
+        const before = [await count(`${HEAD} [aria-label="Usage by category"]`), await pressed('preview')];
+        await press('preview');
+        await delay(100);
+        const hidden = [
+          await count(`${HEAD} [aria-label="Usage by category"]`),
+          await pressed('preview'),
+          await chipPressed(),
+        ];
+        await press('preview');
+        await delay(100);
+        const shown = [await count(`${HEAD} [aria-label="Usage by category"]`), await pressed('preview')];
+        // ASSERT
+        expect({ before, hidden, shown }).toEqual(expected);
+      },
+      TIMEOUT,
+    );
+
+    it(
+      'hides the smart-zone column and limit label with the side-column button, and the bar widens',
+      async () => {
+        // ARRANGE
+        await open('light');
+        const width = () => evaluate<number>(send, `document.querySelector('${BAR}').getBoundingClientRect().width`);
+        // ACT
+        const before = { labels: await count(`${HEAD} [class*="labelLimit"]`), bar: await width() };
+        await press('zone');
+        await delay(100);
+        const after = {
+          labels: await count(`${HEAD} [class*="labelLimit"]`),
+          bar: await width(),
+          lines: await count(`${HEAD} [class*="line"][aria-hidden]`),
+          pressed: await pressed('zone'),
+        };
+        // ASSERT
+        expect(before.labels).toBe(1);
+        expect(after.labels).toBe(0);
+        expect(after.bar).toBeGreaterThan(before.bar);
+        expect(after.pressed).toBe('false');
+      },
+      TIMEOUT,
+    );
+
+    it(
+      'toggles the window to Technical locally, and the toolbar keeps the last value it set',
+      async () => {
+        // ARRANGE
+        await open('light');
+        const view = () => attr('slide-4', 'section[aria-label="Context window"]', 'data-view');
+        const toolbar = `${SLIDE_4} [role="toolbar"] button[data-control="technical"]`;
+        const toolbarPressed = () =>
+          evaluate<string | null>(send, `document.querySelector('${toolbar}').getAttribute('aria-pressed')`);
+        // ACT
+        await press('windowTechnical');
+        await delay(100);
+        const local = [await view(), await pressed('windowTechnical'), await toolbarPressed()];
+        await evaluate(send, `document.querySelector('${toolbar}').click()`);
+        await delay(100);
+        const global = [await view(), await pressed('windowTechnical'), await toolbarPressed()];
+        // ASSERT
+        expect(local).toEqual(['grid', 'true', 'false']);
+        expect(global).toEqual(['grid', 'true', 'true']);
+      },
+      TIMEOUT,
+    );
+
+    it(
+      'lights the bar from a preview row and pins it with one click',
+      async () => {
+        // ARRANGE
+        await open('light');
+        const row = `${HEAD} [aria-label="Usage by category"] button[data-part]`;
+        // ACT
+        const at = await centreOf(row, 1);
+        await click(at.x, at.y);
+        await delay(100);
+        const found = await evaluate<{ pinned: string | null; lit: number }>(
+          send,
+          `(() => ({
+          pinned: document.querySelectorAll('${row}')[1].getAttribute('aria-pressed'),
+          lit: document.querySelectorAll('${HEAD} [data-roving] [data-on]').length,
+        }))()`,
+        );
+        // ASSERT
+        expect(found.pinned).toBe('true');
+        expect(found.lit).toBeGreaterThan(0);
+      },
+      TIMEOUT,
+    );
+  });
 });

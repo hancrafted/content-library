@@ -16,12 +16,15 @@ export interface ContextWords {
   readonly parts: Readonly<Record<Part, string>>;
   readonly technical: string;
   readonly technicalTip: string;
-  readonly modeGroup: string;
   readonly modes: Readonly<Record<Mode, string>>;
   readonly collapse: string;
   readonly collapseTip: string;
-  readonly meter: string;
-  readonly meterTip: string;
+  readonly previewToggle: string;
+  readonly previewTip: string;
+  readonly zoneToggle: string;
+  readonly zoneTip: string;
+  readonly windowTechnical: string;
+  readonly windowTechnicalTip: string;
   readonly windowGroup: string;
   readonly download: string;
   readonly upload: string;
@@ -36,7 +39,8 @@ export interface ContextWords {
   readonly steps: string;
   readonly stepEvent: string;
   readonly contextWindow: string;
-  readonly meterValue: string;
+  /** The head's right side, `{used} of {window}`: the window switch takes the place of `{window}`. */
+  readonly meterOf: string;
   readonly bar: string;
   readonly limit: string;
   readonly grid: string;
