@@ -9,6 +9,7 @@ import {
   litKey,
   matcher,
   reduce,
+  renderModeOf,
   visibleStep,
   type ViewEvent,
   type ViewState,
@@ -18,12 +19,12 @@ import { fill, storyOf, type ContextViewData, type View } from './context-view';
 import styles from './context.module.css';
 import { categoriesOf, framesOf } from './context.pure';
 import type { Chat, Part } from './context.types';
+import { Conversation } from './conversation';
+import { Timeline } from './timeline';
 import { useWindowEvents } from './use-window-events';
-import { ChatColumn, ChatRail } from './window-chat';
 import { ContextColumn } from './window-context';
 import { Panel } from './window-panel';
 import { rove } from './window-rove';
-import { Timeline } from './window-timeline';
 import { Toolbar } from './window-toolbar';
 
 /* The cornerstone's one client leaf: it holds the view state and renders every part from it. */
@@ -115,7 +116,6 @@ function rootAttrs(v: View) {
     'data-motion': v.preset.motion,
     'data-view': v.tech ? 'grid' : 'bar',
     'data-mode': v.state.mode,
-    'data-depth': v.state.depth,
     'data-chat': v.state.chatCollapsed ? 'collapsed' : 'open',
     'data-meter': v.state.meterHidden ? 'hidden' : 'shown',
     'data-lit': v.lit || v.ghost ? '' : undefined,
@@ -124,7 +124,46 @@ function rootAttrs(v: View) {
 
 function ChatPart({ v }: { readonly v: View }) {
   if (!v.state.parts.chat) return null;
-  return v.state.chatCollapsed ? <ChatRail v={v} /> : <ChatColumn v={v} />;
+  return (
+    <Conversation
+      chat={v.chat}
+      frames={v.frames}
+      vis={v.vis}
+      attention={v.attention}
+      lit={v.lit}
+      ghost={v.ghost}
+      pinned={v.state.pinned}
+      words={v.words}
+      locale={v.locale}
+      story={v.story}
+      notes={v.notes}
+      renderMode={renderModeOf(v.state, 'conversation')}
+      collapsed={v.state.chatCollapsed}
+      hint={!v.preset.timelineLocked && v.state.parts.timeline}
+      hintSeen={v.state.hintSeen}
+    />
+  );
+}
+
+function TimelinePart({ v, valueText }: { readonly v: View; readonly valueText: string }) {
+  const { dispatch } = v;
+  return (
+    <Timeline
+      chat={v.chat}
+      notes={v.notes}
+      words={v.words}
+      locale={v.locale}
+      story={v.story}
+      renderMode={renderModeOf(v.state, 'timeline')}
+      step={v.state.step}
+      previewStep={v.state.previewStep}
+      locked={v.preset.timelineLocked}
+      valueText={valueText}
+      onPreview={(step) => dispatch({ type: 'PREVIEW', step })}
+      onPreviewEnd={() => dispatch({ type: 'PREVIEW_END' })}
+      onCommit={(step) => dispatch({ type: 'COMMIT', step })}
+    />
+  );
 }
 
 function Parts({ v, sentence }: { readonly v: View; readonly sentence: string }) {
@@ -132,7 +171,7 @@ function Parts({ v, sentence }: { readonly v: View; readonly sentence: string })
   return (
     <div className={styles.main} style={columns(P, v.state, v.preset.height) as never}>
       <ChatPart v={v} />
-      {P.timeline ? <Timeline v={v} valueText={sentence} /> : null}
+      {P.timeline ? <TimelinePart v={v} valueText={sentence} /> : null}
       {P.context ? <ContextColumn v={v} onRove={rove} /> : null}
       {P.panel ? <Panel v={v} /> : null}
     </div>

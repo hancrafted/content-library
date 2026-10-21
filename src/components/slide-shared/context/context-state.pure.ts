@@ -1,5 +1,5 @@
 import { isMessage, simpleOf } from './context.pure';
-import type { Category, Chat, Control, Depth, Mode, Part, Preset } from './context.types';
+import type { Category, Chat, Control, Depth, Mode, Part, PartId, Preset, RenderMode } from './context.types';
 
 /* The cornerstone's view state: what is shown, lit and pinned. Transient (FE-001): it lives in memory and a reload
  * returns to the Preset, which is the Slide's own state. */
@@ -13,7 +13,10 @@ export interface ViewState {
   readonly hover: string | null;
   readonly pinned: string | null;
   readonly mode: Mode;
+  /** The global renderMode: what the toolbar's Technical sets for every part. */
   readonly depth: Depth;
+  /** A part's own renderMode, set after the global one; the latest action wins. */
+  readonly renderModes: Readonly<Partial<Record<PartId, RenderMode>>>;
   readonly parts: Readonly<Record<Part, boolean>>;
   readonly chatCollapsed: boolean;
   readonly meterHidden: boolean;
@@ -33,6 +36,7 @@ export type ViewEvent =
   | { readonly type: 'ESC' }
   | { readonly type: 'SET_MODE'; readonly value: Mode }
   | { readonly type: 'SET_DEPTH'; readonly value: Depth }
+  | { readonly type: 'SET_PART_MODE'; readonly part: PartId; readonly value: RenderMode }
   | { readonly type: 'SET_WINDOW'; readonly value: number }
   | { readonly type: 'TOGGLE_CHAT' }
   | { readonly type: 'TOGGLE_PART'; readonly part: Part }
@@ -46,6 +50,7 @@ export function createState(preset: Preset): ViewState {
     pinned: preset.pinned,
     mode: preset.mode,
     depth: preset.depth,
+    renderModes: {},
     parts: { ...preset.show },
     chatCollapsed: false,
     meterHidden: preset.meterHidden,
@@ -57,6 +62,7 @@ export function createState(preset: Preset): ViewState {
 const CONTROL_OF: Partial<Record<ViewEvent['type'], Control>> = {
   SET_MODE: 'mode',
   SET_DEPTH: 'depth',
+  SET_PART_MODE: 'depth',
   TOGGLE_CHAT: 'collapse',
   TOGGLE_METER: 'meter',
   TOGGLE_PART: 'show',
@@ -102,7 +108,8 @@ const HANDLERS: Handlers = {
   UNPIN: (s) => ({ ...s, pinned: null }),
   ESC: (s) => ({ ...s, pinned: null, hover: null, previewStep: null }),
   SET_MODE: (s, e) => ({ ...s, hintSeen: true, mode: e.value }),
-  SET_DEPTH: (s, e) => ({ ...s, hintSeen: true, depth: e.value }),
+  SET_DEPTH: (s, e) => ({ ...s, hintSeen: true, depth: e.value, renderModes: {} }),
+  SET_PART_MODE: (s, e) => ({ ...s, hintSeen: true, renderModes: { ...s.renderModes, [e.part]: e.value } }),
   SET_WINDOW: (s, e, c) => ({ ...s, window: clamp(e.value, 0, c.preset.windows.length - 1) }),
   TOGGLE_CHAT: (s) => ({ ...s, hintSeen: true, chatCollapsed: !s.chatCollapsed }),
   TOGGLE_PART: (s, e) => ({ ...s, hintSeen: true, parts: { ...s.parts, [e.part]: !s.parts[e.part] } }),
@@ -115,6 +122,9 @@ export function reduce(state: ViewState, event: ViewEvent, context: Context): Vi
   const handler = HANDLERS[event.type] as (s: ViewState, e: ViewEvent, c: Context) => ViewState;
   return handler(state, event, context);
 }
+
+/** A part's renderMode: its own override when one was set after the global value, else the global one. */
+export const renderModeOf = (state: ViewState, part: PartId): RenderMode => state.renderModes[part] ?? state.depth;
 
 export const visibleStep = (state: ViewState): number => state.previewStep ?? state.step;
 export const litKey = (state: ViewState): string | null => state.hover ?? state.pinned;

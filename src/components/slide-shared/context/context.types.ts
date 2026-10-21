@@ -104,6 +104,10 @@ export interface StepNotes {
 
 export type Mode = 'explain' | 'attention';
 export type Depth = 'simple' | 'technical';
+/** How a part draws itself: Simple for the room, Technical for the people who know the tool. */
+export type RenderMode = Depth;
+/** A part of the Context, as renderMode names it. Attention still draws inside Details until it splits out. */
+export type PartId = 'conversation' | 'timeline' | 'context-window' | 'context-preview' | 'details' | 'attention';
 export type Part = 'chat' | 'timeline' | 'context' | 'panel';
 export type Control = 'show' | 'depth' | 'mode' | 'collapse' | 'meter';
 export type Motion = 'off' | 'crisp' | 'rise' | 'spring';

@@ -3,8 +3,8 @@ import { readoutAt } from './context-usage.pure';
 import { fill, stepCat, type View } from './context-view';
 import styles from './context.module.css';
 import { colourOf } from './context.pure';
+import { nameOf } from './conversation-body';
 import { tint } from './window-bits';
-import { nameOf } from './window-chat-body';
 import { CategoryCard, Crossed, crossedText, GhostCard, RestCard, StepCard } from './window-panel-cards';
 
 /* The detail panel: Explain tells what the lit part is, Attention shows the 100 units over the steps in the window. */

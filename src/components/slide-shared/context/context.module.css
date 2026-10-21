@@ -480,16 +480,16 @@
   outline: 1.5px dashed var(--cs-sub);
   outline-offset: 1px;
 }
-.root[data-depth='simple'] .msg:is([data-role='compact'], [data-role='cleared']) {
+.chat[data-depth='simple'] .msg:is([data-role='compact'], [data-role='cleared']) {
   display: none;
 }
 /* Technical: the chat becomes a Claude Code session in a terminal. */
-.root[data-depth='technical'] .phone {
+.chat[data-depth='technical'] .phone {
   background: var(--cs-term-bg);
   color: var(--cs-term-fg);
   border-color: var(--cs-term-line);
 }
-.root[data-depth='technical'] .appbar {
+.chat[data-depth='technical'] .appbar {
   border-color: var(--cs-term-line);
   color: var(--cs-term-dim);
 }
@@ -504,10 +504,10 @@
   border-radius: 999px;
   background: var(--cs-term-line);
 }
-.root[data-depth='technical'] .scroll {
+.chat[data-depth='technical'] .scroll {
   padding: 0.8rem 0.7rem;
 }
-.root[data-depth='technical'] .msg[data-role] {
+.chat[data-depth='technical'] .msg[data-role] {
   display: block;
   align-self: stretch;
   max-width: 100%;
@@ -518,11 +518,11 @@
   text-align: start;
   line-height: 1.5;
 }
-.root[data-depth='technical'] .msg[data-role='you'] {
+.chat[data-depth='technical'] .msg[data-role='you'] {
   background: var(--cs-term-hi);
   color: var(--cs-term-fg);
 }
-.root[data-depth='technical'] .msg code {
+.chat[data-depth='technical'] .msg code {
   background: none;
   color: inherit;
   padding: 0;
@@ -532,7 +532,7 @@
   width: 2ch;
   color: var(--cs-term-dim);
 }
-.root[data-depth='technical'] .msg[data-role='you'] .tp,
+.chat[data-depth='technical'] .msg[data-role='you'] .tp,
 .tpAi {
   color: var(--cs-term-fg);
 }
@@ -550,19 +550,19 @@
 .tout {
   padding-left: 2ch;
 }
-.root[data-depth='technical'] .msg[data-on] {
+.chat[data-depth='technical'] .msg[data-on] {
   outline-color: var(--cs-term-fg);
 }
-.root[data-depth='technical'][data-lit] .msg:not([data-on]) {
+.root[data-lit] [data-depth='technical'] .msg:not([data-on]) {
   background: none;
   color: var(--cs-term-dim);
 }
-.root[data-depth='technical'][data-mode='attention']:not([data-lit]) .msg[data-faded][data-may-fill] {
+.root[data-mode='attention']:not([data-lit]) [data-depth='technical'] .msg[data-faded][data-may-fill] {
   background: var(--cs-term-hi);
   color: var(--cs-term-fg);
   outline-color: var(--cs-term-dim);
 }
-.root[data-depth='technical'] .msg[data-gone] {
+.chat[data-depth='technical'] .msg[data-gone] {
   outline-color: var(--cs-term-dim);
 }
 .list {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { blockedBy, createState, ghostOf, matcher, panelKey, reduce } from './context-state.pure';
+import { blockedBy, createState, ghostOf, matcher, panelKey, reduce, renderModeOf } from './context-state.pure';
 import type { Chat, Preset } from './context.types';
 
 const CHAT: Chat = {
@@ -40,6 +40,9 @@ const PRESET: Preset = {
 };
 const CONTEXT = { preset: PRESET, steps: CHAT.steps.length };
 
+const WITH_MODES = { ...PRESET, controls: ['show', 'depth'] as const };
+const MODES = { preset: WITH_MODES, steps: CHAT.steps.length };
+
 const view = (mode: 'explain' | 'attention', lit: string | null) => ({
   mode,
   depth: 'simple' as const,
@@ -78,6 +81,16 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it("ignores a part's own renderMode on a Preset that hides the control", () => {
+    // ARRANGE
+    const state = createState(PRESET);
+    const event = { type: 'SET_PART_MODE', part: 'timeline', value: 'technical' } as const;
+    // ACT
+    const next = reduce(state, event, CONTEXT);
+    // ASSERT
+    expect(next).toBe(state);
+  });
+
   it('keeps the window size on a Preset without the window switch, and names why', () => {
     // ARRANGE
     const preset = { ...PRESET, windowSwitch: false };
@@ -120,6 +133,27 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it("lets the toolbar set every part, and a part's own toggle override only itself", () => {
+    // ARRANGE
+    const all = reduce(createState(WITH_MODES), { type: 'SET_DEPTH', value: 'technical' }, MODES);
+    // ACT
+    const one = reduce(all, { type: 'SET_PART_MODE', part: 'conversation', value: 'simple' }, MODES);
+    // ASSERT
+    expect(renderModeOf(all, 'timeline')).toBe('technical');
+    expect(renderModeOf(one, 'conversation')).toBe('simple');
+    expect(renderModeOf(one, 'timeline')).toBe('technical');
+  });
+
+  it('lets the latest action win: the toolbar after a part override resets that part', () => {
+    // ARRANGE
+    const part = reduce(createState(WITH_MODES), { type: 'SET_PART_MODE', part: 'details', value: 'technical' }, MODES);
+    // ACT
+    const toolbar = reduce(part, { type: 'SET_DEPTH', value: 'simple' }, MODES);
+    // ASSERT
+    expect(renderModeOf(part, 'details')).toBe('technical');
+    expect(renderModeOf(toolbar, 'details')).toBe('simple');
+  });
+
   it('draws a pinned step not yet in the window as a ghost', () => {
     // ARRANGE
     const state = { ...createState(PRESET), step: 2, pinned: 'm3' };
