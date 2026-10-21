@@ -1,0 +1,12 @@
+# Die Wörter der Oberfläche des Visuals, mit denselben Schlüsseln wie die englische Datei.
+ui:
+  modeWatch: Zuschauen
+  modeTry: Selbst ausprobieren
+  levelSimple: Einfach
+  levelTechnical: Technisch
+  workflow: Ablauf
+  close: Schließen
+  copied: Kopiert
+  signedOff: Freigegeben
+  download: Diesen Ablauf herunterladen
+  upload: Eigenen Ablauf hochladen
