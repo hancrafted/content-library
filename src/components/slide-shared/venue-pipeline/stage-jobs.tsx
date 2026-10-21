@@ -10,12 +10,22 @@ const AI_EDGE = 'border border-ai/50 bg-card shadow-md shadow-ai/15';
 const NODE_BUTTON =
   'cursor-pointer outline-none transition-colors hover:bg-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring';
 
+/** A job node: a button opening its popover where there is one, else a plain box of the same look. */
+function Node({ copy, className, children }: { copy?: NodeCopy; className: string; children: ReactNode }) {
+  if (!copy) return <span className={className}>{children}</span>;
+  return (
+    <NodePopover copy={copy} className={cn(NODE_BUTTON, className)}>
+      {children}
+    </NodePopover>
+  );
+}
+
 const PIECE = 'flex h-full min-w-0 flex-1 items-center rounded-full px-3 text-left text-caption';
 
 interface JobListProps {
   jobs: readonly Job[];
   names: Record<string, string>;
-  popover: NodeCopy;
+  popover?: NodeCopy;
 }
 
 /** The party's five pieces: the venue, taken forward, in the middle; the four parked ones grey, each ending in a stub. */
@@ -27,9 +37,9 @@ export function PartyPieces({ jobs, names, popover }: JobListProps) {
       : 'border border-foreground bg-card font-semibold text-foreground';
     return (
       <li key={job.id} className="flex h-9 items-center gap-1.5">
-        <NodePopover copy={popover} className={cn(NODE_BUTTON, PIECE, tone)}>
+        <Node copy={popover} className={cn(PIECE, tone)}>
           {names[job.id]}
-        </NodePopover>
+        </Node>
         {parked ? <ParkedStub /> : <FlowStub />}
       </li>
     );
@@ -53,7 +63,8 @@ interface InterviewJobProps {
   label: string;
   detail: string;
   forgot: ReactNode;
-  chat: ReactNode;
+  /** "See the chat", opening the worked chat; omitted where the interview shows no chat. */
+  chat?: ReactNode;
 }
 
 /** The interview job: the AI asks you three questions, one you forgot, and "See the chat" opens the worked chat. */
@@ -67,7 +78,7 @@ export function InterviewJob({ label, detail, forgot, chat }: InterviewJobProps)
           {forgot}
         </span>
       </AiCard>
-      <li className="flex justify-center">{chat}</li>
+      {chat && <li className="flex justify-center">{chat}</li>}
     </>
   );
 }
@@ -108,7 +119,7 @@ const CHAT_PILL = 'flex h-12 w-full items-center justify-between gap-2 rounded-f
 export function ResearchChats({ jobs, names, popover, checked }: JobListProps & { checked: string }) {
   return jobs.map((job) => (
     <li key={job.id}>
-      <NodePopover copy={popover} className={cn(NODE_BUTTON, CHAT_PILL, AI_EDGE)}>
+      <Node copy={popover} className={cn(CHAT_PILL, AI_EDGE)}>
         <span className="flex min-w-0 items-center gap-1.5">
           <Sparkle className="size-3.5" />
           <span className="truncate">{names[job.id]}</span>
@@ -119,7 +130,7 @@ export function ResearchChats({ jobs, names, popover, checked }: JobListProps & 
             <span className="sr-only">{checked}</span>
           </span>
         )}
-      </NodePopover>
+      </Node>
     </li>
   ));
 }
