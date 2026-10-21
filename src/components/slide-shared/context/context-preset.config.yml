@@ -90,7 +90,8 @@ defaults:
   # The parts in chip and grid order, every part once; the reader may drag the chips (controls.parts.reorder).
   order: [chat, timeline, context, category, panel, attention]
   fade: false
-  attention: { layout: list, curve: { start: 20, recent: 20, middle: 30, newest: 30 } }
+  # `falloff`: the newest bucket's split over its three rows, newest first (50/30/20 of the bucket).
+  attention: { layout: list, curve: { start: 20, recent: 20, middle: 25, newest: 35 }, falloff: [50, 30, 20] }
   # Every control by id; a Preset overrides key by key, and '*' sets show for all (code: context-controls.pure.ts).
   controls:
     parts: { show: true, reorder: true }
@@ -132,7 +133,8 @@ presets:
     fade: true
     show: { chat: false, timeline: true, context: true, category: false, panel: false, attention: true }
     order: [timeline, context, attention, chat, category, panel]
-    controls: { '*': { show: false }, window: { show: true } }
+    attention: { layout: compressed }
+    controls: { '*': { show: false }, window: { show: true }, attentionMenu: { show: true } }
     windows: [{ size: 200k, lines: [matt] }, { size: 1m, lines: [matt-1m] }]
     motion: off
   # The window alone, Technical at rest, with its own local </> to flip to Simple.
@@ -245,6 +247,14 @@ words:
     recent: Recent (4th to 10th newest)
     middle: Middle
     newest: Newest 3 messages
+  attentionEdit: Type the shares
+  attentionSave: Save the shares
+  attentionSaveTip: Your input will be normalized to 100.
+  attentionLayout: Layout
+  attentionLayouts:
+    list: List
+    pinned: Pinned
+    compressed: Compressed
   download: Download the chat as a Claude Code log
   upload: Open a Claude Code log
   uploadFailed: This file holds no chat a Claude Code log would.

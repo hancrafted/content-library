@@ -28,7 +28,7 @@ const PRESET: Preset = {
   show: { chat: true, timeline: true, context: true, category: true, panel: false, attention: false },
   order: ['chat', 'timeline', 'context', 'category', 'panel', 'attention'],
   fade: false,
-  attention: { layout: 'list', curve: { start: 20, recent: 20, middle: 30, newest: 30 } },
+  attention: { layout: 'list', curve: { start: 20, recent: 20, middle: 30, newest: 30 }, falloff: [50, 30, 20] },
   controls: { '*': { show: false }, window: { show: true } },
   timelineLocked: false,
   windows: [WINDOW, { tokens: 1000000, bufferTokens: 33000, lines: [] }],
@@ -139,6 +139,30 @@ describe('success cases', () => {
     expect(reason).toContain('attentionMenu');
     expect(open).toBeNull();
   });
+  it('normalises typed shares to 100 on SET_CURVES', () => {
+    // ARRANGE
+    const open: Preset = { ...PRESET, controls: { attentionMenu: { show: true } } };
+    const typed = { start: 10, recent: 10, middle: 10, newest: 10 };
+    const expected = { start: 25, recent: 25, middle: 25, newest: 25 };
+    // ACT
+    const next = reduce(
+      createState(open),
+      { type: 'SET_CURVES', value: typed },
+      { preset: open, steps: CHAT.steps.length },
+    );
+    // ASSERT
+    expect(next.curve).toEqual(expected);
+  });
+
+  it('switches the layout on SET_LAYOUT, starting from the Preset layout', () => {
+    // ARRANGE
+    const open: Preset = { ...PRESET, controls: { attentionMenu: { show: true } } };
+    const start = createState({ ...open, attention: { ...open.attention, layout: 'compressed' } });
+    // ACT
+    const next = reduce(start, { type: 'SET_LAYOUT', value: 'pinned' }, { preset: open, steps: CHAT.steps.length });
+    // ASSERT
+    expect([start.layout, next.layout]).toEqual(['compressed', 'pinned']);
+  });
 });
 
 describe('failure cases', () => {
@@ -213,6 +237,14 @@ describe('failure cases', () => {
     // ASSERT
     expect(committed.step).toBe(expected.step);
     expect(hovered.hover).toBe(expected.hover);
+  });
+  it('blocks SET_LAYOUT while the Preset hides the attentionMenu control', () => {
+    // ARRANGE
+    const state = createState(PRESET);
+    // ACT
+    const next = reduce(state, { type: 'SET_LAYOUT', value: 'pinned' }, CONTEXT);
+    // ASSERT
+    expect(next).toBe(state);
   });
 });
 

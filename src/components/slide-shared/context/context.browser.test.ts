@@ -854,7 +854,7 @@ describe('edge cases', () => {
       const share = (bucket: string) =>
         evaluate<number>(
           send,
-          `[...document.querySelectorAll('${SLIDE_4} [data-attention-bucket="${bucket}"] [class*="attBar"] i')].reduce((s, i) => s + parseFloat(i.style.getPropertyValue('--w')), 0)`,
+          `(() => { const max = Number(document.querySelector('${SLIDE_4} [data-axis-max]').dataset.axisMax); return [...document.querySelectorAll('${SLIDE_4} [data-attention-bucket="${bucket}"] [class*="attBar"] i')].reduce((s, i) => s + parseFloat(i.style.getPropertyValue('--w')) * max / 100, 0); })()`,
         );
       const sum = (values: Record<string, number>) => Object.values(values).reduce((a, b) => a + b, 0);
 
@@ -863,7 +863,7 @@ describe('edge cases', () => {
         async () => {
           // ARRANGE
           await open('light');
-          const expected = { start: 20, recent: 20, middle: 30, newest: 30 };
+          const expected = { start: 20, recent: 20, middle: 25, newest: 35 };
           const four = 4;
           // ACT
           await evaluate(send, `document.querySelector('${MENU}').click()`);
@@ -899,6 +899,117 @@ describe('edge cases', () => {
           expect(sum(values)).toBe(whole);
           expect(values.start).toBe(values.recent);
           expect(Math.abs(newest - moved / whole)).toBeLessThan(tolerance);
+        },
+        TIMEOUT,
+      );
+
+      const typeInto = (name: string, value: string) =>
+        evaluate(
+          send,
+          `(() => {
+            const input = document.querySelector('${POPOVER} input[data-curve-input="${name}"]');
+            Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(input, '${value}');
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+            return document.body.offsetHeight;
+          })()`,
+        );
+      const click = (selector: string) => evaluate(send, `document.querySelector('${selector}').click()`);
+
+      it(
+        'turns the percentages into number inputs with the pen and normalises them to 100 on save',
+        async () => {
+          // ARRANGE
+          await open('light');
+          await click(MENU);
+          await delay(200);
+          const pen = `${POPOVER} button[data-control="attentionEdit"]`;
+          const save = `${POPOVER} button[data-control="attentionSave"]`;
+          const tip = 'Your input will be normalized to 100.';
+          const typed = ['10', '10', '10', '10'];
+          const expected = { start: 25, recent: 25, middle: 25, newest: 25 };
+          // ACT
+          await click(pen);
+          await delay(100);
+          const inputs = await evaluate<number>(
+            send,
+            `document.querySelectorAll('${POPOVER} input[type=number]').length`,
+          );
+          const title = await evaluate<string>(send, `document.querySelector('${save}').title`);
+          for (const [i, name] of ['start', 'recent', 'middle', 'newest'].entries())
+            await typeInto(name, typed[i] ?? '');
+          await click(save);
+          await delay(200);
+          const values = await sliders();
+          // ASSERT
+          expect(inputs).toBe(typed.length);
+          expect(title).toBe(tip);
+          expect(values).toEqual(expected);
+        },
+        TIMEOUT,
+      );
+
+      it(
+        'switches the Attention layout from the menu, transient',
+        async () => {
+          // ARRANGE
+          await open('light');
+          await click(MENU);
+          await delay(200);
+          const layout = () => attr('slide-4', '[data-layout]', 'data-layout');
+          // ACT
+          await click(`${POPOVER} button[data-layout-option="pinned"]`);
+          await delay(100);
+          const pinned = await layout();
+          await click(`${POPOVER} button[data-layout-option="list"]`);
+          await delay(100);
+          const list = await layout();
+          // ASSERT
+          expect([pinned, list]).toEqual(['pinned', 'list']);
+        },
+        TIMEOUT,
+      );
+
+      it(
+        'starts Slide 5 compressed, so the first and the newest rows are always in view',
+        async () => {
+          // ARRANGE
+          await open('light');
+          const expected = 'compressed';
+          // ACT
+          const actual = await attr('slide-5', '[data-layout]', 'data-layout');
+          // ASSERT
+          expect(actual).toBe(expected);
+        },
+        TIMEOUT,
+      );
+
+      it(
+        'labels the axis with its current maximum, 20% when spread out, and steps up as one share grows',
+        async () => {
+          // ARRANGE
+          await open('light');
+          const axis = () => evaluate<string>(send, `document.querySelector('${SLIDE_4} [data-axis-max]').textContent`);
+          const longest = () =>
+            evaluate<number>(
+              send,
+              `Math.max(...[...document.querySelectorAll('${SLIDE_4} [class*="attBar"] i')].map((i) => parseFloat(i.style.getPropertyValue('--w'))))`,
+            );
+          await click(MENU);
+          await delay(200);
+          const floor = '20%';
+          const spread = 60;
+          const long = 0.5;
+          // ACT
+          const before = { label: await axis(), bar: await longest() };
+          await setSlider('newest', spread);
+          await delay(400);
+          const after = { label: await axis(), bar: await longest() };
+          // ASSERT
+          expect(before.label).toBe(floor);
+          expect(before.bar).toBeGreaterThan(long);
+          expect(after.label).not.toBe(floor);
+          expect(after.bar).toBeLessThanOrEqual(1);
+          expect(after.bar).toBeGreaterThan(long);
         },
         TIMEOUT,
       );

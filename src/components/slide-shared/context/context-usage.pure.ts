@@ -134,6 +134,8 @@ export interface AttentionInput {
   readonly override?: Readonly<Record<string, number>>;
   /** The curve's shares per bucket; the default curve when absent. */
   readonly curve?: Curve;
+  /** The newest bucket's split over its rows, newest first; the default falloff when absent. */
+  readonly falloff?: readonly number[];
 }
 
 /**
@@ -149,6 +151,7 @@ export function attentionAt(chat: Chat, frames: readonly Frame[], input: Attenti
     curveWeights(
       steps.map((s) => s.id),
       input.curve ?? DEFAULT_CURVE,
+      input.falloff,
     ),
     100,
   );

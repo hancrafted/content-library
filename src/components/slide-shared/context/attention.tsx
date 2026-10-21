@@ -1,5 +1,5 @@
 import { memo, useMemo, useRef, type FocusEvent, type PointerEvent } from 'react';
-import { bucketOf, EDGE } from './attention-curve.pure';
+import { axisMaxOf, bucketOf, EDGE } from './attention-curve.pure';
 import { useDock } from './attention-dock';
 import { AttentionMenu } from './attention-menu.client';
 import type { AttentionProps } from './context-parts.types';
@@ -31,6 +31,8 @@ interface RowProps {
   readonly say: Say;
   readonly step: Step;
   readonly units: number;
+  /** The axis maximum in percent: the bar's full track stands for this much attention. */
+  readonly max: number;
   readonly on: boolean;
   readonly pin: Pin | null;
   /** The curve bucket the row falls in, a stable hook for a Slide that marks the middle (`data-attention-bucket`). */
@@ -39,7 +41,7 @@ interface RowProps {
 
 const pinAttrs = (pin: Pin | null) => (pin ? { 'data-pin': pin.side, style: vars({ '--slot': pin.slot }) } : {});
 
-const AttentionRow = memo(function AttentionRow({ say, step, units, on, pin, bucket }: RowProps) {
+const AttentionRow = memo(function AttentionRow({ say, step, units, max, on, pin, bucket }: RowProps) {
   const name = nameOf(say, step);
   const colour = colourOf(stepCat(step), say.tech ? 'technical' : 'simple');
   return (
@@ -55,7 +57,7 @@ const AttentionRow = memo(function AttentionRow({ say, step, units, on, pin, buc
         {name}
       </button>
       <div className={styles.attBar}>
-        <i style={tint(colour, { '--w': units / 100 })} />
+        <i style={tint(colour, { '--w': Math.min(1, units / max) })} />
       </div>
       <span className={say.tech ? `${styles.attNum} font-mono` : styles.attNum}>{say.tech ? units : ''}</span>
     </div>
@@ -91,7 +93,7 @@ function useReveal({ onReveal, onLight, onPin }: AttentionProps) {
   };
 }
 
-function Rows({ p, say }: { readonly p: AttentionProps; readonly say: Say }) {
+function Rows({ p, say, max }: { readonly p: AttentionProps; readonly say: Say; readonly max: number }) {
   const match = useMemo(() => matcher(p.lit), [p.lit]);
   return p.attention.map((a, i) => {
     const step = p.chat.steps[(p.stepOf.get(a.id) ?? 1) - 1];
@@ -99,8 +101,19 @@ function Rows({ p, say }: { readonly p: AttentionProps; readonly say: Say }) {
     const on = step.blocks.some((b) => match(step.id, b.cat));
     const pin = pinOf(p.layout, i, p.attention.length);
     const bucket = bucketOf(i, p.attention.length);
-    return <AttentionRow key={a.id} say={say} step={step} units={a.units} on={on} pin={pin} bucket={bucket} />;
+    return (
+      <AttentionRow key={a.id} say={say} step={step} units={a.units} max={max} on={on} pin={pin} bucket={bucket} />
+    );
   });
+}
+
+/** The current axis maximum, standing over the line at the right end of the bar tracks. */
+function AxisLabel({ max }: { readonly max: number }) {
+  return (
+    <div className={`${styles.attAxis} text-caption font-mono`} data-axis-max={max} aria-hidden="true">
+      <span>{`${max}%`}</span>
+    </div>
+  );
 }
 
 export function Attention(p: AttentionProps) {
@@ -109,6 +122,7 @@ export function Attention(p: AttentionProps) {
   const dock = useDock(list, p.attention, p.layout === 'compressed' ? EDGE : null);
   const handlers = useReveal(p);
   const r = readoutAt(p.frames, p.vis, p.window);
+  const max = axisMaxOf(p.attention.map((a) => a.units));
   const head = fill(say.words.readoutHead, { step: r.step, steps: r.steps });
   return (
     <section className={`${styles.panel} ${styles.attentionPart}`} aria-label={say.words.modes.attention} {...handlers}>
@@ -116,14 +130,15 @@ export function Attention(p: AttentionProps) {
         <b className="font-semibold">{say.words.modes.attention}</b>
         <div className={styles.headEnd}>
           <span className={styles.caption}>{say.words.illustrative}</span>
-          {p.menu && <AttentionMenu words={say.words} curve={p.menu.curve} onCurve={p.menu.onCurve} />}
+          {p.menu && <AttentionMenu words={say.words} menu={p.menu} />}
         </div>
       </div>
       <div className={`${styles.card} ${styles.surface} ${styles.attCard}`}>
         <div className={styles.kicker}>{fill(say.words.attentionKicker, { head })}</div>
         <p>{say.words.attentionLead}</p>
+        <AxisLabel max={max} />
         <div ref={list} className={styles.att} data-layout={p.layout} {...dock}>
-          <Rows p={p} say={say} />
+          <Rows p={p} say={say} max={max} />
         </div>
         <Crossed text={crossedText({ words: say.words }, r)} />
       </div>

@@ -32,6 +32,14 @@ words:
     recent: Zuletzt (4. bis 10. neueste)
     middle: Mitte
     newest: Die neuesten 3 Nachrichten
+  attentionEdit: Anteile eintippen
+  attentionSave: Anteile speichern
+  attentionSaveTip: Deine Eingabe wird auf 100 normalisiert.
+  attentionLayout: Darstellung
+  attentionLayouts:
+    list: Liste
+    pinned: Angeheftet
+    compressed: Komprimiert
   download: Den Chat als Claude-Code-Log herunterladen
   upload: Ein Claude-Code-Log öffnen
   uploadFailed: Diese Datei enthält keinen Chat, wie ihn ein Claude-Code-Log enthält.

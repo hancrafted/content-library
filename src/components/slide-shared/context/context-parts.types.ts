@@ -117,8 +117,8 @@ export interface AttentionProps extends Lighting, LightingEvents, Speech, Progre
   readonly window: WindowSize;
   readonly stepOf: ReadonlyMap<string, number>;
   readonly layout: AttentionLayout;
-  /** The ⋯ menu's sliders: absent when the Preset hides the control or an explicit split is in force. */
-  readonly menu?: { readonly curve: Curve; readonly onCurve: (key: CurveKey, value: number) => void };
+  /** The ⋯ menu: absent when the Preset hides the control. */
+  readonly menu?: AttentionMenuModel;
   /** A row is hovered or clicked: the parent scrolls that step's chat message into view. */
   readonly onReveal: (key: string) => void;
 }
@@ -127,4 +127,15 @@ export interface AttentionProps extends Lighting, LightingEvents, Speech, Progre
 export interface Card extends DetailsProps {
   readonly tech: boolean;
   readonly match: (id: string, cat: Category) => boolean;
+}
+
+/** The Attention ⋯ menu's data and events; `curve` is absent while an explicit per-step split is in force. */
+export interface AttentionMenuModel {
+  readonly layout: AttentionLayout;
+  readonly onLayout: (value: AttentionLayout) => void;
+  readonly curve?: {
+    readonly shares: Curve;
+    readonly onShare: (key: CurveKey, value: number) => void;
+    readonly onShares: (value: Readonly<Record<CurveKey, number>>) => void;
+  };
 }
