@@ -31,8 +31,8 @@ function browseLabels(t: LandingT): BrowseLabels {
 /** Dev only: the Shared visuals' Presets, for the Section jobs that place them. `next build` drops the import. */
 async function DevSharedVisuals({ locale }: { locale: Locale }) {
   if (process.env.NODE_ENV !== 'development') return null;
-  const { ContextWindowGallery } = await import('@/components/slide-shared/context-window/context-window-gallery');
-  return <ContextWindowGallery locale={locale} />;
+  const { ContextGallery } = await import('@/components/slide-shared/context/context-gallery');
+  return <ContextGallery locale={locale} />;
 }
 
 /**

@@ -1,8 +1,8 @@
 import { slide } from '@/components/slide-master/slide';
 import { SlideFrame } from '@/components/slide-master/slide-master';
-import { contextData } from '@/components/slide-shared/context-window/context-data';
-import { shortTokens } from '@/components/slide-shared/context-window/context-format.pure';
-import { ContextWindow } from '@/components/slide-shared/context-window/context-window';
+import { Context } from '@/components/slide-shared/context/context';
+import { contextData } from '@/components/slide-shared/context/context-data';
+import { shortTokens } from '@/components/slide-shared/context/context-format.pure';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { JumpCard, SizeBars, type BarTone } from './jump-parts';
@@ -63,7 +63,7 @@ export const oneInnocentQuestion = slide({
             {t.rich('illustrative', { marker: marker('api-figures-not-app-figures') })}
           </span>
         </div>
-        <ContextWindow preset="slide-8" locale={locale} />
+        <Context preset="slide-8" locale={locale} />
         <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-12">
           <JumpCard
             title={t('card.title')}

@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { OUT_DIR } from './exported-pages';
 
-// The Shared visuals gallery is dev-only (docs/features/context-window.md): `next build` must not ship it. These
+// The Shared visuals gallery is dev-only (docs/features/context.md): `next build` must not ship it. These
 // strings occur only in the gallery's source, so any hit means it reached the export.
 const MARKERS = ['Shared visuals · context window', 'Sample call', 'id="shared-visuals"'];
 

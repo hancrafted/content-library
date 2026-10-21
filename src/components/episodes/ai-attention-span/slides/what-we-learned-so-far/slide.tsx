@@ -5,7 +5,7 @@ import {
   type CallLight,
   type CallWho,
 } from '@/components/slide-shared/call-transcript/call-transcript';
-import { ContextWindow } from '@/components/slide-shared/context-window/context-window';
+import { Context } from '@/components/slide-shared/context/context';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
@@ -71,7 +71,7 @@ export const whatWeLearnedSoFar = slide({
         <div className="flex min-w-0 flex-col gap-4 rounded-xl bg-muted p-6 lg:col-span-5">
           <span className="text-caption tracking-wide text-muted-foreground uppercase">{t('chat.kicker')}</span>
           <div className="rounded-xl border border-border bg-card p-4 shadow-md">
-            <ContextWindow preset="slide-6" locale={locale} />
+            <Context preset="slide-6" locale={locale} />
           </div>
           <ul className="grid grid-cols-2 gap-x-4 gap-y-2 text-caption">
             {CHAT_LABELS.map((label) => (

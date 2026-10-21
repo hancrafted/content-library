@@ -1,6 +1,6 @@
 import { slide } from '@/components/slide-master/slide';
 import { SlideFrame } from '@/components/slide-master/slide-master';
-import { ContextWindow } from '@/components/slide-shared/context-window/context-window';
+import { Context } from '@/components/slide-shared/context/context';
 import { BudgetFigure, BudgetStrip } from './budget-strip';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
@@ -35,7 +35,7 @@ export const whatHappensWhenTheBarFillsUp = slide({
   ],
   content: ({ t, locale, marker }) => (
     <SlideFrame className="mt-8 gap-10">
-      <ContextWindow preset="slide-4" locale={locale} />
+      <Context preset="slide-4" locale={locale} />
       <BudgetStrip
         firstKicker={t('strip.firstKicker')}
         first={t.rich('strip.first', { figure: (chunks) => <BudgetFigure>{chunks}</BudgetFigure> })}

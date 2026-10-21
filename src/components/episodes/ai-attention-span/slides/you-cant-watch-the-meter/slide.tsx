@@ -1,6 +1,6 @@
 import { slide } from '@/components/slide-master/slide';
 import { SlideFrame } from '@/components/slide-master/slide-master';
-import { ContextWindow } from '@/components/slide-shared/context-window/context-window';
+import { Context } from '@/components/slide-shared/context/context';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
@@ -49,18 +49,18 @@ export const youCantWatchTheMeter = slide({
       <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-12">
         <div className="flex min-w-0 flex-col gap-3 md:col-span-3">
           <p className="text-caption font-semibold">{t('before')}</p>
-          <ContextWindow preset="slide-9-before" locale={locale} />
+          <Context preset="slide-9-before" locale={locale} />
           <p className="text-caption text-muted-foreground">{t('bufferNote')}</p>
         </div>
         <div {...target('chat')} className="flex min-w-0 flex-col gap-3 md:col-span-6">
           <p className="text-caption text-muted-foreground">
             {t.rich('chatNote', { marker: marker('full-history-is-kept') })}
           </p>
-          <ContextWindow preset="slide-9-chat" locale={locale} />
+          <Context preset="slide-9-chat" locale={locale} />
         </div>
         <div {...target('after')} className="flex min-w-0 flex-col gap-3 md:col-span-3">
           <p className="text-caption font-semibold">{t('after')}</p>
-          <ContextWindow preset="slide-9-after" locale={locale} />
+          <Context preset="slide-9-after" locale={locale} />
           <p className="text-caption text-muted-foreground">
             {t.rich('summaryNote', {
               documented: marker('documented-for-claude'),
