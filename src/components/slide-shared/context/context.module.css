@@ -1743,6 +1743,8 @@ summary.row:hover {
   box-shadow: none;
   outline: 2px solid color-mix(in oklch, var(--tone) 72%, var(--card));
   outline-offset: 2px;
+  /* Above its later siblings, whose backgrounds would otherwise paint over the ring's far edge. */
+  z-index: 1;
 }
 .sessionPart:first-child {
   border-top-left-radius: 0.5rem;

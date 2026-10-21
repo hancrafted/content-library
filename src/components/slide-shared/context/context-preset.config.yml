@@ -349,7 +349,7 @@ words:
     matt-1m: { label: Smart zone by Matt Pocock, who: Matt Pocock }
     han: { label: Smart zone by Han, who: Han }
   session:
-    label: Your attention
+    label: Your attention span
     empty: Fresh and ready to receive.
     full: Full to the brim. Well done.
     progress: '{title}, {n} of {count}'

@@ -65,7 +65,7 @@ const digitsAt = (sections: readonly { readonly id: string }[], at: string | nul
   3 + 3 * (at === null ? 0 : at === SESSION_END ? sections.length : sections.findIndex((s) => s.id === at) + 1);
 
 /**
- * The "Your attention" card as the AI's speech bubble: its punchline, on an opener a poll line with the three faces, and
+ * The "Your attention span" card as the AI's speech bubble: its punchline, on an opener a poll line with the three faces, and
  * the session bar filled up to the Section `at` (null: fresh). `children` sit under the bar.
  */
 export function AttentionBubblePreset({
