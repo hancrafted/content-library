@@ -142,7 +142,7 @@ describe('edge cases', () => {
       states: ['done', 'done', 'current', 'upcoming'],
       label: 'Your attention',
       total: 0,
-      now: "So, how's your brain doing? Anything fried yet?",
+      now: 'Filling up',
     };
     // ACT
     const $ = renderSession('what-fills-the-window');
@@ -178,7 +178,7 @@ describe('edge cases', () => {
 
   it('says the session in German', () => {
     // ARRANGE
-    const expected = { label: 'Deine Aufmerksamkeit', now: 'Bereit?' };
+    const expected = { label: 'Deine Aufmerksamkeit', now: 'Aufwärmen' };
     // ACT
     const $ = renderSession('thought-experiment', 'de');
     // ASSERT

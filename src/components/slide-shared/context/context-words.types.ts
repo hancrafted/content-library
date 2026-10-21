@@ -100,13 +100,15 @@ export interface ContextWords {
   readonly free: string;
   readonly buffer: Readonly<Record<Depth, string>>;
   readonly lines: Readonly<Record<string, LineWords>>;
-  /** The session bar: its caption, the words for an empty and a full one, `{title}, {n} of {count}`, each Section's current-segment label. */
+  /** The session bar: its caption, the words for an empty and a full one, `{title}, {n} of {count}`, each Section's current-segment label, the poll's face names. */
   readonly session: {
     readonly label: string;
     readonly empty: string;
     readonly full: string;
     readonly progress: string;
     readonly sections: Readonly<Record<string, string>>;
+    /** What the poll's three faces are called: 1 fine, 2 sweating, 3 fried. */
+    readonly faces: Readonly<Record<'fine' | 'sweating' | 'fried', string>>;
   };
   readonly mini: {
     /** A bar's figure: `{used} of {window} · {percent}%`. */

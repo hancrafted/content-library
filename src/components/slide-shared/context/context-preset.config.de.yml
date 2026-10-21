@@ -129,10 +129,11 @@ words:
     full: Bis zum Rand voll. Gut gemacht.
     progress: '{title}, {n} von {count}'
     sections:
-      thought-experiment: Bereit?
-      the-ais-attention-span: Dann drehen wir mal auf.
-      what-fills-the-window: Na, wie geht's Deinem Kopf? Schon durchgebrannt?
-      managing-the-attention-span: Du hast es fast geschafft. Nur noch eine Sache.
+      thought-experiment: Aufwärmen
+      the-ais-attention-span: Hochdrehen
+      what-fills-the-window: Füllt sich
+      managing-the-attention-span: Fast voll
+    faces: { fine: Geht, sweating: Schwitze, fried: Durchgebrannt }
   mini:
     usedOf: '{used} von {window} · {percent} %'
     discarded: verworfen

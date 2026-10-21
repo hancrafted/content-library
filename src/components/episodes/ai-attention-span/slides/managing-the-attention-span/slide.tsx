@@ -1,6 +1,6 @@
 import { slide } from '@/components/slide-master/slide';
 import { SlideFrame } from '@/components/slide-master/slide-master';
-import { SessionBarPreset } from '@/components/slide-shared/context/context';
+import { AttentionBubblePreset } from '@/components/slide-shared/context/context';
 import type { ReactNode } from 'react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
@@ -14,8 +14,12 @@ export const managingTheAttentionSpan = slide({
   segments: [{ slug: 'you-manage-by-habit' }],
   content: ({ t, locale }) => (
     <SlideFrame>
-      <div className="flex w-full max-w-md flex-col gap-3 rounded-xl border border-border bg-card p-3 shadow-sm">
-        <SessionBarPreset locale={locale} at="managing-the-attention-span" />
+      <AttentionBubblePreset
+        locale={locale}
+        at="managing-the-attention-span"
+        punchline={t('punchline')}
+        poll={t('poll')}
+      >
         <div className="flex items-center gap-3">
           <RottenApple />
           <p className="w-full -rotate-1 rounded-lg border border-border bg-card p-2 text-caption shadow-md ring-2 ring-primary">
@@ -26,7 +30,7 @@ export const managingTheAttentionSpan = slide({
             })}
           </p>
         </div>
-      </div>
+      </AttentionBubblePreset>
     </SlideFrame>
   ),
 });

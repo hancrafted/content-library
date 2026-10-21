@@ -56,9 +56,30 @@ const bar = (slug: string, locale: Locale) => {
   return {
     label: $('[data-session-label]').text().trim(),
     now: $('[data-state="current"]').text().trim(),
-    below: $('[data-below]').text().trim(),
+    punchline: $('[data-punchline]').text().trim(),
+    poll: $('[data-poll-line]').text().trim(),
     note: $('[data-session-note]').text().trim(),
     filled: $('[data-state="done"], [data-state="current"]').length,
+  };
+};
+
+const bubble = (slug: string, locale: Locale) => {
+  const $ = scene(slug, locale);
+  return {
+    avatars: $('[data-bubble] [data-avatar] svg').length,
+    tails: $('[data-bubble-tail]').length,
+    faces: $('[data-face]')
+      .map((_, el) => $(el).attr('data-face'))
+      .get(),
+    numbers: $('[data-face-number]')
+      .map((_, el) => $(el).text().trim())
+      .get(),
+    digits: $('[data-digit]').length,
+    digitsHidden: $('[data-trickle]').attr('aria-hidden'),
+    digitText: $('[data-digit]')
+      .map((_, el) => $(el).text())
+      .get()
+      .join(''),
   };
 };
 
@@ -67,9 +88,25 @@ const YOUR = { en: 'Your attention', de: 'Deine Aufmerksamkeit' } as const;
 
 describe('success cases', () => {
   it.each([
-    ['en', { note: 'Fresh and ready to receive.', filled: STEPS.start }],
-    ['de', { note: 'Frisch und bereit zum Empfangen.', filled: STEPS.start }],
-  ] as const)('opens the Title slide with an empty bar and says it is fresh (%s)', (locale, expected) => {
+    [
+      'en',
+      {
+        note: 'Fresh and ready to receive.',
+        filled: STEPS.start,
+        punchline: "Hi. For the next 30 minutes, you're the AI. Open wide.",
+        poll: '',
+      },
+    ],
+    [
+      'de',
+      {
+        note: 'Frisch und bereit zum Empfangen.',
+        filled: STEPS.start,
+        punchline: 'Hi. Die nächsten 30 Minuten bist Du die KI. Mund auf.',
+        poll: '',
+      },
+    ],
+  ] as const)('opens the Title slide with the AI teasing over an empty, poll-free bar (%s)', (locale, expected) => {
     // ARRANGE
     const slug = 'hero';
     // ACT
@@ -82,29 +119,50 @@ describe('success cases', () => {
     [
       'thought-experiment',
       'en',
-      { now: 'Ready?', below: "Let's start light, because you're human.", filled: STEPS.thought },
+      {
+        now: 'Warm-up',
+        punchline: "Let's start light. You're only human.",
+        poll: "So, how's your attention?",
+        filled: STEPS.thought,
+      },
     ],
     [
       'thought-experiment',
       'de',
-      { now: 'Bereit?', below: 'Wir fangen leicht an, denn Du bist ein Mensch.', filled: STEPS.thought },
+      {
+        now: 'Aufwärmen',
+        punchline: 'Wir fangen leicht an. Du bist ja nur ein Mensch.',
+        poll: 'Na, wie ist Deine Aufmerksamkeit?',
+        filled: STEPS.thought,
+      },
     ],
     [
       'the-ais-attention-span',
       'en',
-      { now: "Let's dial it up a notch.", below: 'See if you can keep up.', filled: STEPS.ais },
+      {
+        now: 'Dialling up',
+        punchline: 'Dialling it up. I eat 200K for breakfast.',
+        poll: "Still with me? How's your attention?",
+        filled: STEPS.ais,
+      },
     ],
     [
       'the-ais-attention-span',
       'de',
-      { now: 'Dann drehen wir mal auf.', below: 'Schau, ob Du mithalten kannst.', filled: STEPS.ais },
+      {
+        now: 'Hochdrehen',
+        punchline: 'Jetzt drehe ich auf. Ich frühstücke 200K.',
+        poll: "Noch dabei? Wie steht's um Deine Aufmerksamkeit?",
+        filled: STEPS.ais,
+      },
     ],
     [
       'what-fills-the-window',
       'en',
       {
-        now: "So, how's your brain doing? Anything fried yet?",
-        below: "I'm not done yet. Try to keep up.",
+        now: 'Filling up',
+        punchline: "How's the brain? Anything fried yet? I'm not done.",
+        poll: 'Quick check: how full are you?',
         filled: STEPS.fills,
       },
     ],
@@ -112,20 +170,31 @@ describe('success cases', () => {
       'what-fills-the-window',
       'de',
       {
-        now: "Na, wie geht's Deinem Kopf? Schon durchgebrannt?",
-        below: 'Ich bin noch nicht fertig. Versuch mitzuhalten.',
+        now: 'Füllt sich',
+        punchline: "Wie geht's dem Kopf? Schon was durchgebrannt? Ich bin noch nicht fertig.",
+        poll: 'Kurzer Check: Wie voll bist Du?',
         filled: STEPS.fills,
       },
     ],
     [
       'managing-the-attention-span',
       'en',
-      { now: 'You made it, almost. Just one more thing.', below: '', filled: STEPS.managing },
+      {
+        now: 'Nearly full',
+        punchline: 'Almost there. One more thing, then I compact you.',
+        poll: "Last check: how's your attention?",
+        filled: STEPS.managing,
+      },
     ],
     [
       'managing-the-attention-span',
       'de',
-      { now: 'Du hast es fast geschafft. Nur noch eine Sache.', below: '', filled: STEPS.managing },
+      {
+        now: 'Fast voll',
+        punchline: 'Fast geschafft. Noch eine Sache, dann verdichte ich Dich.',
+        poll: "Letzter Check: Wie steht's um Deine Aufmerksamkeit?",
+        filled: STEPS.managing,
+      },
     ],
   ] as const)('puts the AI talking to the viewer on the %s opener (%s)', (slug, locale, expected) => {
     // ARRANGE
@@ -134,6 +203,60 @@ describe('success cases', () => {
     const seen = bar(slug, locale);
     // ASSERT
     expect(seen).toMatchObject({ label: header, ...expected });
+  });
+
+  it.each(['en', 'de'] as const)(
+    'draws the card as a bubble from the AI: avatar, tail and a hidden 0/1 trickle (%s)',
+    (locale) => {
+      // ARRANGE
+      const slugs = [
+        'hero',
+        'thought-experiment',
+        'the-ais-attention-span',
+        'what-fills-the-window',
+        'managing-the-attention-span',
+      ];
+      // ACT
+      const seen = slugs.map((slug) => bubble(slug, locale));
+      // ASSERT
+      seen.forEach((one) => {
+        expect(one).toMatchObject({ avatars: 1, tails: 1, digitsHidden: 'true' });
+        expect(one.digitText).toMatch(/^[01]+$/);
+      });
+    },
+  );
+
+  it('asks for a 1, 2 or 3 with three faces on each opener, and not on the Title slide', () => {
+    // ARRANGE
+    const openers = [
+      'thought-experiment',
+      'the-ais-attention-span',
+      'what-fills-the-window',
+      'managing-the-attention-span',
+    ];
+    const expected = { faces: ['fine', 'sweating', 'fried'], numbers: ['1', '2', '3'] };
+    // ACT
+    const seen = openers.map((slug) => bubble(slug, 'en'));
+    const title = bubble('hero', 'en');
+    // ASSERT
+    seen.forEach((one) => expect(one).toMatchObject(expected));
+    expect(title.faces).toEqual([]);
+  });
+
+  it('pours in more digits the fuller the bar is', () => {
+    // ARRANGE
+    const order = [
+      'hero',
+      'thought-experiment',
+      'the-ais-attention-span',
+      'what-fills-the-window',
+      'managing-the-attention-span',
+    ];
+    // ACT
+    const counts = order.map((slug) => bubble(slug, 'en').digits);
+    // ASSERT
+    expect([...counts].sort((x, y) => x - y)).toEqual(counts);
+    expect(new Set(counts).size).toBe(counts.length);
   });
 
   it('draws a rotten apple with an evil smile, hidden from assistive technology, on the last opener', () => {
@@ -153,7 +276,7 @@ describe('success cases', () => {
       'en',
       {
         title: 'Congratulations',
-        caption: 'Now you know how it feels to be an AI.',
+        caption: 'Now you know how it feels. One more time? Or again in a minute?',
         note: 'Full to the brim. Well done.',
       },
     ],
@@ -161,7 +284,7 @@ describe('success cases', () => {
       'de',
       {
         title: 'Glückwunsch',
-        caption: 'Jetzt weißt Du, wie es sich anfühlt, eine KI zu sein.',
+        caption: 'Jetzt weißt Du, wie es sich anfühlt. Noch einmal? Oder gleich in einer Minute?',
         note: 'Bis zum Rand voll. Gut gemacht.',
       },
     ],
@@ -194,11 +317,11 @@ describe('success cases', () => {
   it('keeps the Voice script of each changed Slide on what the screen says', () => {
     // ARRANGE
     const expected = [
-      ['thought-experiment', "Let's start light, because you're human."],
-      ['the-ais-attention-span', 'See if you can keep up.'],
-      ['what-fills-the-window', "I'm not done yet, so try to keep up."],
-      ['managing-the-attention-span', 'You made it, almost. Just one more thing'],
-      ['now-you-know-how-it-feels', 'Now you know how it feels to be an AI'],
+      ['thought-experiment', "Let's start light. You're only human."],
+      ['the-ais-attention-span', 'Dialling it up. I eat 200K for breakfast.'],
+      ['what-fills-the-window', "How's the brain? Anything fried yet? I'm not done."],
+      ['managing-the-attention-span', 'Almost there. One more thing, then I compact you.'],
+      ['now-you-know-how-it-feels', 'Now you know how it feels'],
     ] as const;
     // ACT
     const spoken = expected.map(([slug]) =>

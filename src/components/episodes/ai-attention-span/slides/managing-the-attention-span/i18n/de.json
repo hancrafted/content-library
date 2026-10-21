@@ -1,13 +1,15 @@
 {
   "title": "Die Aufmerksamkeitsspanne managen",
   "caption": "Eine Anzeige kannst Du nicht ablesen, also baust Du Gewohnheiten auf.",
+  "punchline": "Fast geschafft. Noch eine Sache, dann verdichte ich Dich.",
+  "poll": "Letzter Check: Wie steht's um Deine Aufmerksamkeit?",
   "handoff": "Übergabe: Feier für 40, 27. Juni, <budget>Budget 40.000 €</budget>. Weiter: Einladungen.",
   "voiceScript": {
     "segments": {
       "you-manage-by-habit": {
         "title": "Du steuerst mit Gewohnheiten",
         "keywords": "",
-        "script": "Du hast es fast geschafft. Nur noch eine Sache, und ja, der faule Apfel, der Dich angrinst, ist ein Augenzwinkern in Richtung Context Rot. Eine Anzeige kannst Du nicht ablesen, also baust Du Dir Gewohnheiten auf. Zuerst die für jeden Tag und dann die eine für ein großes Projekt."
+        "script": "Fast geschafft. Noch eine Sache, dann verdichte ich Dich. Und ja, der faule Apfel, der Dich angrinst, ist ein Augenzwinkern in Richtung Context Rot. Eine Anzeige kannst Du nicht ablesen, also baust Du Dir Gewohnheiten auf. Zuerst die für jeden Tag und dann die eine für ein großes Projekt."
       }
     }
   }

@@ -1,13 +1,14 @@
 {
   "title": "What fills the window",
   "caption": "Your messages are only a part of it.",
-  "challenge": "I'm not done yet. Try to keep up.",
+  "punchline": "How's the brain? Anything fried yet? I'm not done.",
+  "poll": "Quick check: how full are you?",
   "voiceScript": {
     "segments": {
       "more-in-there-than-you-typed": {
         "title": "More in there than you typed",
         "keywords": "",
-        "script": "So, how's your brain doing? Anything fried yet? I'm not done yet, so try to keep up. You have seen the window fill with your messages. But your messages are only a part of it, so the next question is what else goes in without you noticing."
+        "script": "How's the brain? Anything fried yet? I'm not done. You have seen the window fill with your messages. But your messages are only a part of it, so the next question is what else goes in without you noticing."
       }
     }
   }
