@@ -47,6 +47,14 @@ export function episodeParams(): { episode: EpisodeSlug }[] {
 /** A page with its own metadata and a closed set of exported locales. */
 export type PageRef = 'home' | 'dashboard' | 'episodes' | { readonly episode: EpisodeSlug };
 
+/** Every exported page: the one list the sitemap, the post-build tests and the redirect stubs derive from (FE-005, FE-008). */
+export const PAGES: readonly PageRef[] = [
+  'home',
+  'dashboard',
+  'episodes',
+  ...EPISODE_SLUGS.map((episode) => ({ episode })),
+];
+
 /** English-only operations pages have no German counterpart. */
 export function pageLocales(page: PageRef): readonly Locale[] {
   return page === 'dashboard' ? ['en'] : LOCALES;

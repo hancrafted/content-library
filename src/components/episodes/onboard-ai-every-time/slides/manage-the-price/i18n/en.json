@@ -79,7 +79,9 @@
       "header": "Evaluate each step",
       "description": "On a maths benchmark, feedback on each reasoning step \"significantly outperforms\" feedback on the final result alone [1]. Models also \"struggle to self-correct their responses without external feedback\", so the check needs something outside the model, here the requirements [2].",
       "sources": {
-        "lightman-verify-step-by-step": { "title": "Lightman et al., Let's Verify Step by Step" },
+        "lightman-verify-step-by-step": {
+          "title": "Lightman et al., Let's Verify Step by Step"
+        },
         "huang-cannot-self-correct": {
           "title": "Huang et al., Large Language Models Cannot Self-Correct Reasoning Yet"
         }
@@ -101,36 +103,18 @@
       "header": "A limit on Break it down",
       "description": "Decomposition does not make a model reliable at composing the pieces; errors in early steps still carry into later ones, which is why the next move is checking [1].",
       "sources": {
-        "dziri-faith-and-fate": { "title": "Dziri et al., Faith and Fate: Limits of Transformers on Compositionality" }
+        "dziri-faith-and-fate": {
+          "title": "Dziri et al., Faith and Fate: Limits of Transformers on Compositionality"
+        }
       }
     }
   },
   "voiceScript": {
     "segments": {
-      "one-prompt-is-not-enough": {
-        "title": "One prompt is not enough",
-        "keywords": "",
-        "script": "Many people hope for one good prompt. But a good prompt is not a brief. A brief is a set of moves, and each move answers a cost you have just seen, so one prompt cannot do the work of five."
-      },
-      "break-it-down-requirements-first": {
-        "title": "Break it down, Requirements first",
-        "keywords": "",
-        "script": "The first move is Break it down: hand over one piece at a time, because small pieces leave less to get wrong and less to pay for. That answers Relentless and Every word billed, the pages and the bloated bill. The second is Requirements first: write down what good looks like before the work starts. Then the same brief brings results that agree, so it answers Probabilistic and Confident."
-      },
-      "interview-evaluate": {
-        "title": "Interview, Evaluate",
-        "keywords": "",
-        "script": "Third, Interview yourself with AI. Let it ask you its questions first, so the confident guess becomes a question, and the informed outsider learns the company it was blind to. Fourth, Evaluate each step, and here evaluating means checking the step against your requirements. A wrong turn is then caught early, not after the last page, which tames the flood of pages and the varying answers."
-      },
-      "fresh-start": {
-        "title": "Fresh start",
-        "keywords": "",
-        "script": "Fifth, Fresh start for each piece. One piece gets one clean chat, so the bill stays small and nothing old leaks in from earlier work. Notice that the map is many to many: one move helps several traits, and one trait is met by several moves. That overlap is why the five work as a set."
-      },
       "refrain": {
-        "title": "Refrain",
+        "title": "Recap",
         "keywords": "",
-        "script": "Look at what these moves are: a brief you would give any good freelancer. Smaller pieces, written requirements, questions up front, checks along the way, a clean desk for each job. What is good for a human is also good for AI."
+        "script": "So, what did we just do? Five moves, in two phases. First, planning. One: let the AI interview you about what you need, your constraints and your ideas. Two: turn that into requirements before you hand over any goal. Three: break the plan down into small pieces. Then, doing. Four: hand each piece to an agent and review every result, because they will sound confident either way. Five: start each piece fresh, in a new conversation, because they bill you for every word."
       }
     }
   }

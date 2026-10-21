@@ -4,6 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterEach, describe, expect, it } from 'vitest';
+import { specStage } from '../../../src/lib/episode-spec.pure.ts';
 
 // A real subprocess (ARCH-003 §1.1): the ticket (#228) asks for the command's page, exit code and refusal end to end.
 /* `npm run episode:spec-assemble` on a temp Episode folder: reads what exists and writes `spec/spec.html`. */
@@ -52,7 +53,8 @@ function episode(files: Record<string, string>): string {
   return folder;
 }
 
-const assemble = (folder: string) => spawnSync('node', [SCRIPT, folder], { cwd: ROOT, encoding: 'utf8' });
+const assemble = (folder: string, ...flags: string[]) =>
+  spawnSync('node', [SCRIPT, folder, ...flags], { cwd: ROOT, encoding: 'utf8' });
 
 describe('success cases', () => {
   it('writes the Spec from the Brief alone', () => {
@@ -64,6 +66,18 @@ describe('success cases', () => {
     expect(run.status).toBe(0);
     const html = readFileSync(path.join(folder, 'spec/spec.html'), 'utf8');
     expect(html).toContain('data-spec="slide" id="spent-attention"');
+  });
+
+  it('writes a Brief-stage Spec that specStage classifies early', () => {
+    // ARRANGE
+    const folder = episode({ 'brief.md': BRIEF });
+    const expected = 'early';
+    // ACT
+    const run = assemble(folder);
+    const stage = specStage(readFileSync(path.join(folder, 'spec/spec.html'), 'utf8'));
+    // ASSERT
+    expect(run.status).toBe(0);
+    expect(stage).toBe(expected);
   });
 
   it('compiles design.css with the classes the assembled Options use, even when the Spec contract fails', () => {
@@ -109,5 +123,43 @@ describe('failure cases', () => {
     const run = assemble(folder);
     // ASSERT
     expect(run.status).toBe(1);
+  });
+});
+
+describe('--forbid', () => {
+  it('names file and line of a forbidden term in the staging folder and writes no Spec', () => {
+    // ARRANGE
+    const folder = episode({
+      'brief.md': BRIEF,
+      'dossier.md': 'one\nthe R I E frame\n',
+      'title.html': '<h1>Old Name</h1>',
+    });
+    // ACT
+    const run = assemble(folder, '--forbid', 'R I E,old name');
+    // ASSERT
+    expect(run.status).toBe(1);
+    expect(run.stderr).toContain('dossier.md:2');
+    expect(run.stderr).toContain('title.html:1');
+    expect(() => readFileSync(path.join(folder, 'spec/spec.html'), 'utf8')).toThrow();
+  });
+
+  it.each([[''], [','], ['--x']])('exits 1 and says why for --forbid %j', (value) => {
+    // ARRANGE
+    const folder = episode({ 'brief.md': BRIEF });
+    // ACT
+    const run = assemble(folder, '--forbid', value);
+    // ASSERT
+    expect(run.status).toBe(1);
+    expect(run.stderr).toContain('--forbid');
+    expect(() => readFileSync(path.join(folder, 'spec/spec.html'), 'utf8')).toThrow();
+  });
+
+  it('assembles when no forbidden term is present', () => {
+    // ARRANGE
+    const folder = episode({ 'brief.md': BRIEF });
+    // ACT
+    const run = assemble(folder, '--forbid', 'R I E');
+    // ASSERT
+    expect(run.status).toBe(0);
   });
 });

@@ -22,6 +22,17 @@ const UNTITLED: Readonly<Record<string, readonly string[]>> = {
   'page-template': ['next-steps--what-comes-next'],
 };
 
+/** Episodes whose Title slide carries its own Voice script: the drawer shows that script there, not its explainer. */
+const TITLE_SCRIPTED: readonly string[] = ['onboard-ai-every-time'];
+
+/** The scripts of an Episode's Title slide Voice script segments in `locale`, from its own Translation file. */
+function titleScripts(slug: string, locale: string): string[] {
+  const file = join(import.meta.dirname, '..', '..', 'src', 'components', 'episodes', slug, 'i18n', `${locale}.json`);
+  const messages = JSON.parse(readFileSync(file, 'utf8'));
+  const segments: Record<string, { script: string }> = messages.voiceScript?.segments ?? {};
+  return Object.values(segments).map(({ script }) => script);
+}
+
 function slotsOf($: CheerioAPI, selector: string): (string | undefined)[] {
   return $(selector)
     .children()
@@ -117,16 +128,29 @@ describe('episode structure', () => {
       const translation = JSON.parse(
         readFileSync(join(import.meta.dirname, '..', '..', 'src', 'messages', `${locale}.json`), 'utf8'),
       );
-      const expected = String(translation.contextDrawer.explainer).replace('{shortcut}', 'Alt+N');
+      const explainer = String(translation.contextDrawer.explainer).replace('{shortcut}', 'Alt+N');
+      // A Title slide with its own Voice script shows it instead, so neither tab explains the drawer.
+      const expected = TITLE_SCRIPTED.includes(slug) ? ['', ''] : [explainer, explainer];
       // ACT
       const item = (tab: string) => $(`#context-panel-${tab} [data-context-for="top"]`);
       const notes = item('notes').find('[role="note"]');
       const script = item('script').find('[role="note"]');
       const others = $('[data-slot="context"] [data-context-for]:not([data-context-for="top"]) [role="note"]');
       // ASSERT
-      expect([notes.text().trim(), script.text().trim()]).toEqual([expected, expected]);
+      expect([notes.text().trim(), script.text().trim()]).toEqual(expected);
       expect($('[data-slot="context"] [role="alert"]').length).toBe(0);
       expect(others.length).toBe(0);
+    });
+
+    it("shows the Title slide's own Voice script on its script tab, when it has one", () => {
+      // ARRANGE
+      const $ = exportedPage(url);
+      const scripts = titleScripts(slug, locale);
+      // ACT
+      const shown = $('#context-panel-script [data-context-for="top"]').text();
+      const missing = scripts.filter((script) => !shown.includes(script));
+      // ASSERT
+      expect(missing).toEqual([]);
     });
 
     it('gives each section slide one h2, each titled page slide one h3, an untitled one none, and h2/h3 nowhere else', () => {

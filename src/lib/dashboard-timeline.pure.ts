@@ -1,16 +1,9 @@
-import { createLogFold, fold } from '../../skills/new-episode/scripts/run-log.pure';
+import { createLogFold } from '../../skills/new-episode/scripts/run-log.pure';
 import type { RunLogLine } from '../../skills/new-episode/scripts/run-log.schema.pure';
 import type { DashboardEvent } from './dashboard-events.pure';
 import { projectDashboard, type DashboardView } from './dashboard-projection.pure';
 import type { Polled } from './dashboard-reader.pure';
-import {
-  scrubPosition,
-  scrubTime,
-  scrubTimeline,
-  snapScrubPosition,
-  type RailStop,
-  type ReplayRange,
-} from './dashboard-scrub.pure';
+import { scrubPosition, scrubTime, scrubTimeline, snapScrubPosition, type ReplayRange } from './dashboard-scrub.pure';
 import { projectStages } from './dashboard-stages.pure';
 
 /** Where the dashboard stands: following each poll, or a moment (epoch milliseconds) replayed from the events. */
@@ -33,27 +26,26 @@ const seekTo = (range: ReplayRange | null, to: number): Cutoff =>
   range === null || to >= range.end ? 'live' : clamp(to, range);
 
 /**
- * The current Run, the one started latest by time then sequence: from its start to its end once the fold has closed
- * it, else to the later of its last event and the reading. Null without a readable event; the first event starts a
- * log without a Run.
+ * The latest Run, the one the reading names as started last by time: from its start to its end once closed, else to the
+ * later of its last event and the reading. Null without a readable event; the first event starts a log without a Run.
  */
 function replayRange({ read, readAt }: Polled): ReplayRange | null {
   const lines = readable(read.events);
   if (lines.length === 0) return null;
-  // The fold orders spans by start time then sequence, so the last Run span is the current Run.
-  const run = fold(lines, { live: 'unfinished' })
-    .spans.filter((span) => span.type === 'run')
-    .at(-1);
+  const { run } = read;
   const times = lines.map((line) => Date.parse(line.t));
   const start = run ? Date.parse(run.start_t) : Math.min(...times);
   const end = run?.end_t ? Date.parse(run.end_t) : Math.max(...times, readAt);
   return { start, end };
 }
 
-/** Observed starts and ends map the structural rail; the live view supplies them, never a replayed one. */
-function railOf(view: DashboardView | undefined, range: ReplayRange) {
+/**
+ * The Stage rail: each moment's place, 0 to 1, by Stage index as the observed starts and ends map it, and the count
+ * of its Stage stops, Run end included. The live view supplies the observations, never a replayed one.
+ */
+function stageRailOf(view: DashboardView | undefined, range: ReplayRange) {
   const stages = view ? projectStages(view.jobs, view.stages).stages : [];
-  return scrubTimeline(
+  const stops = scrubTimeline(
     stages.map((stage) =>
       stage.jobs.map((job) => ({
         start: job.span ? Date.parse(job.span.start_t) : null,
@@ -62,6 +54,7 @@ function railOf(view: DashboardView | undefined, range: ReplayRange) {
     ),
     range,
   );
+  return { stops, stageStops: stages.length + 1 };
 }
 
 /** The view, the event log and the clock: live, the reading itself; replayed, the events up to `moment`. */
@@ -73,21 +66,20 @@ function shownAt({ read, readAt }: Polled, moment: number | null) {
   return { view: projectDashboard(read.pipeline, log.snapshot()), events, now: moment };
 }
 
-type Rail = ReturnType<typeof railOf>;
+type StageRail = ReturnType<typeof stageRailOf>;
 
-/** The replay slider over the rail `stops` lay out: a cutoff's position, 0 to 1, and the cutoff a position sets. */
-function slider(rail: Rail, range: ReplayRange | null) {
+/** The Stage rail read both ways: a cutoff's place on it, and the cutoff a place sets. */
+function railControls(rail: StageRail | null, range: ReplayRange | null) {
   return {
-    position(cutoff: Cutoff, stops: readonly RailStop[]): number {
-      if (range === null) return 0;
-      return scrubPosition(stops, scrubPosition(rail, momentOf(range, cutoff) ?? range.end));
+    railAt(cutoff: Cutoff): number {
+      if (rail === null || range === null) return 0;
+      return scrubPosition(rail.stops, momentOf(range, cutoff) ?? range.end);
     },
-    /** A position snaps to a nearby Stage centre; the Run's leading edge or past it resumes Live. */
-    seekPosition(position: number, stops: readonly RailStop[]): Cutoff {
-      if (range === null) return 'live';
-      const structural = scrubTime(stops, position);
-      if (structural >= scrubPosition(rail, range.end) - 0.0001) return 'live';
-      return seekTo(range, scrubTime(rail, snapScrubPosition(structural, stops.length)));
+    /** A place snaps to a nearby Stage; the Run's leading edge or past it resumes Live. */
+    seekRail(place: number): Cutoff {
+      if (rail === null || range === null) return 'live';
+      if (place >= scrubPosition(rail.stops, range.end) - 0.0001) return 'live';
+      return seekTo(range, scrubTime(rail.stops, snapScrubPosition(place, rail.stageStops)));
     },
   };
 }
@@ -95,18 +87,18 @@ function slider(rail: Rail, range: ReplayRange | null) {
 /**
  * What the dashboard shows of one reading at any cutoff. `at` gives the view, the event log and the clock: live, the
  * reading itself; at a moment, the events up to it through the shared fold, a Run ending later read as running. The
- * rest maps the Live checkbox, the replay slider and its keys to cutoffs and back.
+ * rest maps the Live checkbox, the Stage rail the replay slider moves along, and its keys to cutoffs and back.
  */
 export function dashboardTimeline(polled: Polled) {
   const range = replayRange(polled);
-  const rail = range === null ? [] : railOf(polled.read.view, range);
+  const rail = range === null ? null : stageRailOf(polled.read.view, range);
   return {
     range,
     moment: (cutoff: Cutoff) => momentOf(range, cutoff),
     seek: (to: number) => seekTo(range, to),
     /** Live on, or off holding the Run's leading edge. */
     toggle: (live: boolean): Cutoff => (live || range === null ? 'live' : range.end),
-    ...slider(rail, range),
+    ...railControls(rail, range),
     at: (cutoff: Cutoff) => shownAt(polled, momentOf(range, cutoff)),
   };
 }

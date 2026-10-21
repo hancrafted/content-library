@@ -33,3 +33,6 @@ docs/claude-project-context/
 
 # The Spec's compiled tokens, rebuilt by `npm run episode:spec`.
 **/spec/design.css
+
+# archgate regenerates its rule types on every run (npm ci, archgate check); tracking them dirtied every tree.
+.archgate/rules.d.ts

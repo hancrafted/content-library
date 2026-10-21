@@ -70,7 +70,7 @@ export const watchYourCashflowStartWhen = slide({
     // Q2's footer states the €0 the arrow answers, so it carries the q2-cash-zero target and its marker.
     const zero = {
       target: target('q2-cash-zero')['data-target'],
-      marker: <Marker note="even-a-yes-arrives-late" className="static" />,
+      marker: <Marker note="even-a-yes-arrives-late" placement="beside" />,
     };
     const columns = quarters.map((quarter, index) => ({
       ...quarter,

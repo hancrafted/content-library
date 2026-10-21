@@ -11,4 +11,4 @@
 
 ## Reuse
 
-- Question 4: reuse `docs/episodes/onboard-ai-every-time/research/LLM-0002__llm-resends-whole-chat/research.md`.
+- Question 4: reuse `docs/llm-wiki/research/LLM/LLM-0002__llm-resends-whole-chat/research.md`.

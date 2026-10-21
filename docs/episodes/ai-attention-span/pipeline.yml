@@ -212,7 +212,7 @@ jobs:
     stage: research
     intent: >-
       Answer the research question "Why does a model's output quality drop as its context window fills?" into docs/episodes/ai-attention-span/research/LLM-0007__context-rot-as-window-fills/research.md
-      by references/write-research.md. Cite docs/episodes/onboard-ai-every-time/research/AIE-0011__fresh-context-beats-long-chat/research.md as a partial Source; it answers only part of the question.
+      by references/write-research.md. Cite docs/llm-wiki/research/AIE/AIE-0011__fresh-context-beats-long-chat/research.md as a partial Source; it answers only part of the question.
     needs: [customize-pipeline]
     isolation: worktree
     before: [mh-query]
@@ -226,7 +226,7 @@ jobs:
           - references/write-research.md
           - docs/episodes/ai-attention-span/brief.md
           - docs/episodes/ai-attention-span/research-plan.md
-          - docs/episodes/onboard-ai-every-time/research/AIE-0011__fresh-context-beats-long-chat/research.md
+          - docs/llm-wiki/research/AIE/AIE-0011__fresh-context-beats-long-chat/research.md
         model: sonnet
       - type: reviewer
         skills: []
@@ -238,7 +238,7 @@ jobs:
     stage: research
     intent: >-
       Answer the research question "Why do chat assistants load saved memory at the start of a chat?" into docs/episodes/ai-attention-span/research/LLM-0008__saved-memory-loaded-at-chat-start/research.md
-      by references/write-research.md. Cite docs/episodes/onboard-ai-every-time/research/LLM-0003__llm-memory-between-chats/research.md as a partial Source; it answers only part of the question.
+      by references/write-research.md. Cite docs/llm-wiki/research/LLM/LLM-0003__llm-memory-between-chats/research.md as a partial Source; it answers only part of the question.
     needs: [customize-pipeline]
     isolation: worktree
     before: [mh-query]
@@ -252,7 +252,7 @@ jobs:
           - references/write-research.md
           - docs/episodes/ai-attention-span/brief.md
           - docs/episodes/ai-attention-span/research-plan.md
-          - docs/episodes/onboard-ai-every-time/research/LLM-0003__llm-memory-between-chats/research.md
+          - docs/llm-wiki/research/LLM/LLM-0003__llm-memory-between-chats/research.md
         model: sonnet
       - type: reviewer
         skills: []
@@ -342,7 +342,7 @@ jobs:
           - docs/episodes/ai-attention-span/research/LLM-0008__saved-memory-loaded-at-chat-start/research.md
           - docs/episodes/ai-attention-span/research/LLM-0009__web-search-fills-context-window/research.md
           - docs/episodes/ai-attention-span/research/LLM-0010__hidden-summary-of-older-messages/research.md
-          - docs/episodes/onboard-ai-every-time/research/LLM-0002__llm-resends-whole-chat/research.md
+          - docs/llm-wiki/research/LLM/LLM-0002__llm-resends-whole-chat/research.md
           - docs/episodes/ai-attention-span/reference/context-window-cornerstone/design-reference.md
           - docs/profile/storytelling-guide.md
           - docs/profile/tone-guide.md

@@ -10,7 +10,7 @@ generated:
 stale_after: 2027-04-20T00:00:00Z
 sources:
   - id: 1
-    resource: docs/episodes/onboard-ai-every-time/research/AIE-0011__fresh-context-beats-long-chat/research.md
+    resource: docs/llm-wiki/research/AIE/AIE-0011__fresh-context-beats-long-chat/research.md
     title: 'content-library research, Why does a fresh, focused context outperform a
       long, accumulated chat?'
   - id: 2
@@ -65,7 +65,7 @@ Output quality falls as the window fills, well before the advertised maximum: ac
 - The studies do not measure a hallucination mechanism directly; that a model fills gaps itself when context is thin or long is an inference from the lost-accuracy results and from the multi-turn study summarised in [1].
 - This file does not give a token count at which quality becomes unreliable; the onset differs per model and task.
 
-[1]: <docs/episodes/onboard-ai-every-time/research/AIE-0011__fresh-context-beats-long-chat/research.md> "content-library research, Why does a fresh, focused context outperform a long, accumulated chat?"
+[1]: <docs/llm-wiki/research/AIE/AIE-0011__fresh-context-beats-long-chat/research.md> "content-library research, Why does a fresh, focused context outperform a long, accumulated chat?"
 [2]: <https://arxiv.org/abs/2404.06654> "Hsieh et al., RULER: What's the Real Context Size of Your Long-Context Language Models?"
 [3]: <https://arxiv.org/abs/2402.14848> "Levy, Jacoby, Goldberg, Same Task, More Tokens: the Impact of Input Length on the Reasoning Performance of Large Language Models"
 [4]: <https://arxiv.org/abs/2502.05167> "Modarressi et al., NoLiMa: Long-Context Evaluation Beyond Literal Matching"

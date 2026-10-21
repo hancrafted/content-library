@@ -43,7 +43,7 @@ Each Build Job serves its worktree with `next dev` on its own port, and the dash
 
 ## Open
 
-- ~~Does `spec/` move to the code folder at Promotion, or get deleted with Staging?~~ Settled by design-ADR-0011: Promotion moves the Spec's words into `slide.md` and the Spec is deleted with Staging.
+- ~~Does `spec/` move to the code folder at Promotion, or get deleted with Staging?~~ Settled by design-ADR-0011 and design-ADR-0004: the Spec is deleted with Staging, its Options kept in the Design archive.
 - Whether a refresh Job overwrites the llm-wiki research file or writes a new numbered one.
 
 ## Consequences

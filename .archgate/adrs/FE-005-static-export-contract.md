@@ -13,7 +13,7 @@ description: "What output: 'export' forbids — every request-time Next.js featu
 
 ## Context
 
-The site ships to GitHub Pages as the static files `next build` writes to `out/` under `output: 'export'`. No Next.js server ever runs, so anything that needs a request — cookies, headers, Server Actions, a proxy, ISR, Draft Mode, rewrites, on-demand image optimisation — is unsupported. Some fail `next build`; others build, export and silently do nothing on Pages. Either way the failure shows at or after deploy, not where the code is written.
+The site ships to Cloudflare Pages as the static files `next build` writes to `out/` under `output: 'export'`. No Next.js server ever runs, so anything that needs a request — cookies, headers, Server Actions, a proxy, ISR, Draft Mode, rewrites, on-demand image optimisation — is unsupported. Some fail `next build`; others build, export and silently do nothing on Pages. Either way the failure shows at or after deploy, not where the code is written.
 
 Rejected: a self-hosted Node server (gives up free static hosting for features a content site doesn't need); relying on `next build` errors alone (silent for features that build but no-op).
 

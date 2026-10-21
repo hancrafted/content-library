@@ -11,7 +11,12 @@ import { EPISODE_SLUGS, episodeRoute, legacyEpisodeRoute, ROUTES } from '../../s
 import { exportedFile, exportedPage, OUT_DIR } from './exported-pages';
 
 const SITE_URL = resolveSiteUrl(process.env);
-const PUBLISHED_SLUGS = ['maintaining-markdown-for-ai', 'ai-token-economy', 'never-too-early-sales'];
+const PUBLISHED_SLUGS = [
+  'maintaining-markdown-for-ai',
+  'ai-token-economy',
+  'never-too-early-sales',
+  'onboard-ai-every-time',
+];
 const DRAFT_SLUGS: readonly string[] = [];
 const TAGGED = { slug: 'never-too-early-sales', tags: ['startups', 'cashflow', 'lead-generation', 'sales-pipeline'] };
 
@@ -35,6 +40,19 @@ describe('/episodes index page', () => {
     for (const slug of DRAFT_SLUGS) {
       expect(cardSlugs).not.toContain(slug);
     }
+  });
+
+  it('dates every published card in the /episodes browse grid with its release day', () => {
+    // ARRANGE
+    const $ = exportedPage(ROUTES.episodes);
+    const expected = { slug: 'onboard-ai-every-time', dateTime: '2026-10-20', text: 'Oct 20, 2026' };
+    // ACT
+    const cards = $('[data-episode-browse] [data-episode-card][data-episode-status="published"]');
+    const undated = cards.filter((_, card) => $(card).find('time[data-episode-date]').length === 0);
+    const date = $(`[data-episode-browse] [data-episode-slug="${expected.slug}"] time[data-episode-date]`);
+    // ASSERT
+    expect(undated.length).toBe(0);
+    expect({ slug: expected.slug, dateTime: date.attr('datetime'), text: date.text() }).toEqual(expected);
   });
 
   it.each(LOCALES)('offers topic filter chips on the /episodes page for %s', (locale) => {

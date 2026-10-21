@@ -5,7 +5,7 @@ title: 'Page Metadata'
 domain: frontend
 rules: true
 files: ['src/app/**/*.tsx']
-paths: ['src/app/**/*.tsx', 'src/lib/{page-metadata,site-url}*.ts']
+paths: ['src/app/**/*.{ts,tsx}', 'src/lib/{page-metadata,site-url,sitemap}*.ts']
 description: 'Every page exports metadata built by pageMetadata(): per-locale title and description from the next-intl Translation files, a canonical, and reciprocal en/de/x-default hreflang, resolved against a SITE_URL the deploy sets. Layouts hold site-wide metadata only.'
 ---
 
@@ -39,7 +39,7 @@ Why layouts stay site-wide: Next.js inherits a layout's field into every page th
 
 ### 3. `SITE_URL` is the absolute base
 
-1. `metadataBase` MUST come from `SITE_URL` (origin plus base path), read only in `src/lib/site-url.ts`. The deploy sets it from `configure-pages`' `base_url`, so a custom domain needs no code change.
+1. `metadataBase` MUST come from `SITE_URL` (origin plus base path), read only in `src/lib/site-url.ts`. The deploy sets it to the production origin (https://hancrafted.net), so a domain change needs no code change.
 2. Unset, it falls back to localhost plus the base path; malformed, the build throws.
 3. It MUST NOT carry the `NEXT_PUBLIC_` prefix; only build-time metadata reads it.
 
@@ -50,7 +50,7 @@ Why layouts stay site-wide: Next.js inherits a layout's field into every page th
 
 ### 5. Scope
 
-1. `sitemap.ts` and `robots.ts` wait for a custom domain — crawlers read `robots.txt` only at an origin root. `not-found.tsx` is a separate UI decision.
+1. `sitemap.ts` and `robots.ts` MUST be `force-static`, take the origin from `SITE_URL`, and list `PAGES` minus `isNoindex`, which `pageMetadata` also applies. `not-found.tsx` is a separate UI decision.
 2. An unknown locale prefix is no file in `out/`, so Pages serves its 404. `resolveLocale()`'s `notFound()` only narrows the type; nothing relies on it.
 
 ## Do's and Don'ts
@@ -69,7 +69,7 @@ Why layouts stay site-wide: Next.js inherits a layout's field into every page th
 2. **DON'T** set `alternates`, `canonical` or `description` on a layout. (Decision 4)
 3. **DON'T** hard-code the site origin, or read `SITE_URL` outside `src/lib/site-url.ts`. (Decision 3)
 4. **DON'T** rename `SITE_URL` to `NEXT_PUBLIC_SITE_URL`. (Decision 3)
-5. **DON'T** add `sitemap.ts`, `robots.ts` or `not-found.tsx` under this record. (Decision 5)
+5. **DON'T** add `not-found.tsx` under this record, nor a hand-kept page list or `noindex` exclusion to the sitemap. (Decision 5)
 
 ## Consequences
 
@@ -82,7 +82,7 @@ Why layouts stay site-wide: Next.js inherits a layout's field into every page th
 
 **Negative:**
 
-1. **Pull-request builds carry localhost canonicals:** only the deploy sets `SITE_URL`, so CI checks shape, not the real origin.
+1. **A domain move touches the workflows:** CI, the Cloudflare deploy and the stub deploy each set `SITE_URL` in their workflow `env`, so they carry the origin literal; `docs/features/hosting.md` lists the places to change. Local builds still fall back to localhost.
 2. **Two export forms:** `[locale]` needs `generateMetadata` where the unprefixed tree uses a constant.
 3. **The root title repeats the brand by hand** (§2.2).
 

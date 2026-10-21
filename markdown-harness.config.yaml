@@ -72,12 +72,13 @@ frontmatter:
           allowed:
             - { value: brief, intent: 'Goals: what the Episode must achieve, stated before it is written.' }
         title: *title
-        status: &staging-status
-          presence: required
+        # A Brief outlives Staging: Promotion moves it beside its Episode and removes the status line (design-ADR 0004).
+        status:
+          presence: optional
           allowed:
             - {
                 value: draft,
-                intent: 'OKF lifecycle: a staging file stays draft until Promotion removes the line. The gate is not read from status but from `verified` (a machine entry once the checks pass, the entry of Han once he approves).',
+                intent: 'A Brief in Staging is draft; Promotion removes the line when it moves the Brief to src/components/episodes/<slug>/.',
               }
         generated.by: &generated-by
           presence: required
@@ -103,7 +104,13 @@ frontmatter:
                 intent: 'The Episode in one file: what the viewer sees, the cited talking points, and what the speaker says, per Slide.',
               }
         title: *title
-        status: *staging-status
+        status: &staging-status
+          presence: required
+          allowed:
+            - {
+                value: draft,
+                intent: 'OKF lifecycle: a staging file stays draft until Promotion removes the line. The gate is not read from status but from `verified` (a machine entry once the checks pass, the entry of Han once he approves).',
+              }
         generated.by: *generated-by
         generated.at: *generated-at
         verified: *verified

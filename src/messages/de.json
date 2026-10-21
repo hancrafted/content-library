@@ -416,6 +416,11 @@
       "localLog": "Nur lokale events.jsonl. Rohdaten können private Prompts oder Pfade enthalten; nichts wird hochgeladen.",
       "stale": "Die Quelle ist veraltet; Aktivitätsanimation pausiert.",
       "jobAttention": "Braucht Aufmerksamkeit",
+      "failure": {
+        "noReason": "Kein Grund erfasst.",
+        "continued": "Lief ohne ihn weiter: {jobs}. Wants blockieren nicht, dieser Fehler hat sie nicht gestoppt.",
+        "notContinued": "Bisher lief nichts ohne ihn weiter."
+      },
       "outputs": "Ausgaben",
       "notWritten": "noch nicht geschrieben",
       "openOutput": "öffnet als Klartext in einem neuen Tab",

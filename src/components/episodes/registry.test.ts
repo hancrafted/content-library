@@ -46,12 +46,10 @@ const COMPOSITION = [
     ],
   },
   {
-    // Section openers only until each Section job adds its page Slides at its placement marker.
     slug: 'onboard-ai-every-time',
     sections: [
-      { opener: 'the-thought-experiment', pageSlides: 2 },
-      { opener: 'five-moves-to-brief-a-freelancer', pageSlides: 1 },
-      { opener: 'brief-in-action', pageSlides: 1 },
+      { opener: 'the-thought-experiment', pageSlides: 3 },
+      { opener: 'five-moves-to-brief-a-freelancer', pageSlides: 2 },
     ],
   },
   {
@@ -96,12 +94,17 @@ describe('success cases', () => {
 
   it.each(EPISODE_SLUGS)('gives %s its own title, caption and description in en and de', (slug) => {
     // ARRANGE
-    const expected = { title: expect.any(String), caption: expect.any(String), description: expect.any(String) };
+    // A Title slide's optional Speaker notes and Voice script may sit beside them.
+    const expected = expect.objectContaining({
+      title: expect.any(String),
+      caption: expect.any(String),
+      description: expect.any(String),
+    });
     // ACT
     const texts = (['en', 'de'] as const).map((locale) => findEpisode(slug).messages[locale]);
     // ASSERT
     expect(texts).toEqual([expected, expected]);
-    expect(texts.flatMap(Object.values)).not.toContain('');
+    expect(texts.flatMap(({ title, caption, description }) => [title, caption, description])).not.toContain('');
   });
 
   it.each(EPISODE_SLUGS)('produces page metadata for %s in en and de, canonical per locale', (slug) => {

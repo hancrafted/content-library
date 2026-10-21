@@ -5,7 +5,7 @@ import { jobProgress } from '@/lib/dashboard-scrub.pure';
 import { fillTemplate } from '@/lib/template.pure';
 import { useContext } from 'react';
 import { JobChipList } from './dashboard-chips';
-import { ElapsedTime, StateBadge, type DashboardCopy } from './dashboard-evidence';
+import { ElapsedTime, JobFailureNote, StateBadge, type DashboardCopy } from './dashboard-evidence';
 import styles from './dashboard-graph.module.css';
 import { PreviewButton } from './dashboard-job-links';
 import { DashboardMoment } from './dashboard-moment';
@@ -60,6 +60,7 @@ function JobPopover({ node, agent, onSelectJob, copy }: JobProps & { agent: Agen
           <ElapsedTime elapsed={elapsed ?? null} copy={copy} />
           <AttentionMarker attention={node.attention} label={copy.graph.jobAttention} />
         </span>
+        <JobFailureNote job={job} copy={copy} compact />
         <JobChipList job={job} copy={copy} />
         <FanOutLabel node={node} copy={copy} />
       </button>

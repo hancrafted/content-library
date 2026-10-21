@@ -169,11 +169,6 @@ export function skillUses(span: Pick<Span, 'events'>): SkillUse[] {
   );
 }
 
-/** The newest Run's `start-run` line (the last in log order), null when the log holds no Run. The one rule for "the current Run". */
-export function currentRun(lines: readonly RunLogLine[]): RunLogLine | null {
-  return [...lines].reverse().find((l) => l.kind === 'start-run') ?? null;
-}
-
 /** Folds lines into spans and scores. Input order does not matter: lines are sorted by `t`, then `seq`; every start is placed before any end or score, so an end links to its start by `span_id` even when its `t` is earlier. */
 export function fold(lines: readonly RunLogLine[], options: FoldOptions = {}): Folded {
   const log = createLogFold(options);

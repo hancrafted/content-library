@@ -12,7 +12,7 @@ const QUESTIONS = ['budget', 'signOff', 'lastTime'] as const;
 export const theThoughtExperiment = slide({
   slug: 'the-thought-experiment',
   messages: { en, de },
-  segments: [{ slug: 'hook-new-job' }, { slug: 'what-this-is-and-is-not' }, { slug: 'where-it-goes' }],
+  segments: [{ slug: 'hook-new-job' }],
   content: ({ t }) => (
     <SlideFrame>
       <div className="flex max-w-3xl flex-col items-start gap-6 sm:flex-row">

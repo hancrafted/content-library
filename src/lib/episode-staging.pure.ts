@@ -6,13 +6,14 @@
  */
 
 import { SPEC_FILE, specSectionSlugs, specSlideAnchors } from './episode-spec-page.pure';
-import { checkSpec } from './episode-spec.pure';
+import { checkSpec, specStage } from './episode-spec.pure';
 import { checkBrief } from './episode-staging-brief.pure';
 import { checkFeedback } from './episode-staging-feedback.pure';
 import { checkStagingOrder } from './episode-staging-order.pure';
 import { checkTexts } from './episode-staging-texts.pure';
 import { checkTitleSlide } from './episode-staging-title.pure';
 import { unless, type Finding } from './finding.pure';
+import { INDEX_ENTRY } from './research-folder.pure';
 import { frontmatterField } from './staging-file.pure';
 import {
   blocksOf,
@@ -157,7 +158,7 @@ export function checkStagingFolder(
     ...checkTexts(files),
     ...checkBrief(files),
     ...checkDossier(files, known),
-    ...checkSpec(files, reviewAsset),
+    ...checkSpec(files, reviewAsset, specStage(files[SPEC_FILE] ?? '')),
     ...checkFeedbackRounds(files),
   ];
 }
@@ -190,8 +191,6 @@ function checkDossier(files: Readonly<Record<string, string>>, known: KnownVisua
     ...checkSpeakerNotes(dossierBlocks),
   ];
 }
-
-const INDEX_ENTRY = /^- \[[^\]]+\]\(([^)]+)\) — (.*)$/;
 
 /**
  * Checks the llm-wiki index against its research files: one entry per file,

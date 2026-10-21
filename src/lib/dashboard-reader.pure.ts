@@ -1,5 +1,5 @@
-import { createLogFold, lineErrors, parseLog } from '../../skills/new-episode/scripts/run-log.pure';
-import type { RunLogLine } from '../../skills/new-episode/scripts/run-log.schema.pure';
+import { createLogFold, latestRun, lineErrors, parseLog } from '../../skills/new-episode/scripts/run-log.pure';
+import type { RunLogLine, Span } from '../../skills/new-episode/scripts/run-log.schema.pure';
 import type { DashboardEvent } from './dashboard-events.pure';
 import {
   parseDashboardPipeline,
@@ -18,6 +18,8 @@ export interface EpisodeRead {
   events: readonly DashboardEvent[];
   pipeline?: DashboardPipeline;
   view?: DashboardView;
+  /** The Run started latest, as the fold orders Runs; absent before any Run starts. */
+  run?: Span;
 }
 
 /** A reading and when it finished, epoch milliseconds: the dashboard's "now" without a render-time clock. */
@@ -63,6 +65,7 @@ class EpisodeReader {
       events: this.eventSnapshot,
       pipeline: this.pipeline,
       view: this.pipeline ? projectDashboard(this.pipeline, folded) : undefined,
+      run: latestRun(folded),
     };
   }
 

@@ -10,7 +10,7 @@ generated:
 stale_after: 2027-04-20T00:00:00Z
 sources:
   - id: 1
-    resource: docs/episodes/onboard-ai-every-time/research/LLM-0003__llm-memory-between-chats/research.md
+    resource: docs/llm-wiki/research/LLM/LLM-0003__llm-memory-between-chats/research.md
     title: 'Han, Why does an LLM forget everything between chats? (earlier research
       file, excludes consumer chat apps)'
   - id: 2
@@ -53,7 +53,7 @@ A new chat starts with an empty context window and the model keeps nothing betwe
 
 The consumer-app sources describe what memory does for the user, not how it reaches the model. Neither the Claude help article, the Gemini help page nor the ChatGPT FAQ says that a stored memory is placed into the context window at the start of a chat. That it is follows from Finding 1 and from Findings 2 and 3 for Claude Code, and is an inference for the consumer apps. The apps differ: Claude's app marks past-chat search as fetched on demand, and ChatGPT retrieves relevant context rather than loading everything, so "loaded at the start" fits saved memory best and does not describe every cross-chat feature. The ChatGPT FAQ could not be fetched directly, so Finding 8 rests on a search result's quotation of it. Product behaviour changes often; the pages describe versions current in October 2026.
 
-[1]: <docs/episodes/onboard-ai-every-time/research/LLM-0003__llm-memory-between-chats/research.md> "Han, Why does an LLM forget everything between chats? (earlier research file, excludes consumer chat apps)"
+[1]: <docs/llm-wiki/research/LLM/LLM-0003__llm-memory-between-chats/research.md> "Han, Why does an LLM forget everything between chats? (earlier research file, excludes consumer chat apps)"
 [2]: <https://code.claude.com/docs/en/memory> "Anthropic, How Claude remembers your project"
 [3]: <https://support.claude.com/en/articles/11817273-use-claude-s-chat-search-and-memory-to-build-on-previous-conversations> "Anthropic, Use Claude's chat search and memory to build on previous conversations"
 [4]: <https://support.google.com/gemini/answer/16598625> "Google, Manage what Gemini remembers about you and customize responses"

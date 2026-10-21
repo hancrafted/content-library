@@ -1,52 +1,81 @@
 /*
- * The trait flip, ported from the prototype (.scratch/freelancer-trait-flip/style2.css); the
- * scan schedule is regrown for five items.
- * The static rules are each back's last frame, so rest, print and reduced motion show the end state; the beat is set
- * on under `.isOpen`, held on its first frame through the turn, and runs under `.isPlaying` (the rules live in
- * trait-flip.pure.ts).
+ * The trait flip, ported from the prototype (.scratch/freelancer-trait-flip/style2.css) and made a progressive
+ * disclosure (.scratch/price-progressive-disclosure/handoff.md); the scan schedule is regrown for five items.
+ * At rest only the chips show; a row's cards come in under `.isShown`, its beat runs under `.isPlayed`, once per
+ * pass, and a pass that is left simply runs out. The static rules are each beat's last frame, so a row the wipe shows
+ * unplayed, print and reduced motion show the end state. A click turns a card (`.isTurned`) to its text.
  */
 .card {
+  position: relative;
   perspective: 1400px;
   display: flex;
   min-width: 0;
+  opacity: 0;
+  transform: translateX(var(--from));
+  transition:
+    opacity 0.35s ease-out,
+    transform 0.35s ease-out;
+}
+.fromLeft {
+  --from: -0.75rem;
+}
+.fromRight {
+  --from: 0.75rem;
+}
+.card.isShown {
+  opacity: 1;
+  transform: none;
+}
+.card.isShown:hover {
+  transform: translateY(-3px);
+}
+/* The card's whole face turns it; the drawing and text let the click through, the text's Context marker excepted. */
+.turn {
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
 }
 .flip {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   flex: 1;
   min-width: 0;
+  pointer-events: none;
   transform-style: preserve-3d;
   transition: transform 0.6s cubic-bezier(0.3, 0.7, 0.2, 1);
 }
-.front,
-.back {
+.isTurned .text :is(a, button) {
+  pointer-events: auto;
+}
+.face,
+.text {
   grid-area: 1 / 1;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
-.back {
-  position: relative;
+.face {
   overflow-x: clip;
+}
+.text {
   transform: rotateY(180deg);
 }
-.back::after {
+.isTurned .flip {
+  transform: rotateY(180deg);
+}
+/* The wipe: a blank card laid over whichever face shows, inside the border. */
+.card::after {
   content: '';
   position: absolute;
-  inset: 0;
-  border-radius: inherit;
+  inset: 1px;
+  border-radius: calc(1rem - 1px);
   background: var(--card);
+  pointer-events: none;
   transform: scaleX(0);
   transform-origin: left;
-  /* Unblanks only after the card has turned back, so a back's end state never shows through on the way. */
-  transition: transform 0.6s ease-in-out 0.6s;
+  transition: transform 0.6s ease-in-out;
 }
-.isOpen .flip,
-.isWiping .flip {
-  transform: rotateY(180deg);
-}
-.isBlank .back::after {
+.isBlank .card::after {
   transform: scaleX(1);
-  transition-delay: 0s;
 }
 .anim {
   flex: 0 1 12.5rem;
@@ -63,7 +92,7 @@
   cursor: pointer;
   transition: box-shadow 0.3s;
 }
-.isOpen .chip {
+.isLooping .chip {
   box-shadow: 0 0 0 4px color-mix(in oklab, var(--ai) 35%, transparent);
 }
 .footer {
@@ -74,7 +103,8 @@
   background: var(--muted);
 }
 .arrow {
-  transition: transform 0.5s ease-in-out 0.6s;
+  transform: scaleX(0);
+  transition: transform 0.4s ease-out;
 }
 .arrowLeft {
   transform-origin: right;
@@ -82,9 +112,11 @@
 .arrowRight {
   transform-origin: left;
 }
-.isBlank .arrow {
+.isShown .arrow {
+  transform: none;
+}
+.isShown.isBlank .arrow {
   transform: scaleX(0);
-  transition-delay: 0s;
 }
 
 /* end states */
@@ -123,54 +155,43 @@
   transform-origin: 0 0;
 }
 
-/*
- * The played beat. It is set on as the row opens, paused on its first frame while the card turns, so the back shows
- * where the beat starts rather than its end state; it runs once `.isPlaying` follows. The clock is the one loop,
- * running only while its row is open (FE-009 §6).
- */
-.isOpen:not(.isPlaying) .anim *,
-.isOpen:not(.isPlaying) .arrow path {
-  animation-play-state: paused;
+/* The played beat: set on from a row's first entry, replayed by remounting its face, running once per pass. */
+.isPlayed .spin {
+  animation: spin 2s linear 2;
 }
-.isOpen .spin {
-  animation: spin 2s linear infinite;
-}
-.isOpen .arrow path {
-  animation: draw 0.5s ease-out both;
-}
-.isOpen .drop {
+.isPlayed .drop {
   animation: drop 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) both;
   animation-delay: var(--d);
 }
-.isOpen .out {
+.isPlayed .out {
   animation: out 0.3s ease-in both;
   animation-delay: var(--d);
 }
-.isOpen .fly {
+.isPlayed .fly {
   animation: fly 0.8s ease-in both;
   animation-delay: var(--d);
 }
-.isOpen .pop {
+.isPlayed .pop {
   animation: pop 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
   animation-delay: var(--d);
 }
-.isOpen .enter {
+.isPlayed .enter {
   animation: enter 0.45s ease-out both;
   animation-delay: var(--d);
 }
-.isOpen .ban {
+.isPlayed .ban {
   animation: ban 0.35s ease-out both;
   animation-delay: var(--d);
 }
-.isOpen .redact {
+.isPlayed .redact {
   animation: redact 0.35s ease-out both;
   animation-delay: var(--d);
 }
-.isOpen .misfit {
+.isPlayed .misfit {
   animation: misfit 0.7s ease-out both;
   animation-delay: var(--d);
 }
-.isOpen .draw {
+.isPlayed .draw {
   animation: draw var(--t) ease-in-out both;
   animation-delay: var(--d);
 }
@@ -340,7 +361,7 @@
     transform: translateY(66.5px);
   }
 }
-.isOpen .scan {
+.isPlayed .scan {
   animation: scan 9.9s linear both;
 }
 @keyframes v0 {
@@ -561,63 +582,78 @@
     opacity: 1;
   }
 }
-.isOpen .v0 {
+.isPlayed .v0 {
   animation: v0 9.9s step-end both;
 }
-.isOpen .v1 {
+.isPlayed .v1 {
   animation: v1 9.9s step-end both;
 }
-.isOpen .v2 {
+.isPlayed .v2 {
   animation: v2 9.9s step-end both;
 }
-.isOpen .v3 {
+.isPlayed .v3 {
   animation: v3 9.9s step-end both;
 }
-.isOpen .v4 {
+.isPlayed .v4 {
   animation: v4 9.9s step-end both;
 }
-.isOpen .v5 {
+.isPlayed .v5 {
   animation: v5 9.9s step-end both;
 }
-.isOpen .v6 {
+.isPlayed .v6 {
   animation: v6 9.9s step-end both;
 }
-.isOpen .v7 {
+.isPlayed .v7 {
   animation: v7 9.9s step-end both;
 }
-.isOpen .v8 {
+.isPlayed .v8 {
   animation: v8 9.9s step-end both;
 }
-.isOpen .v9 {
+.isPlayed .v9 {
   animation: v9 9.9s step-end both;
 }
-.isOpen .v10 {
+.isPlayed .v10 {
   animation: v10 9.9s step-end both;
 }
-.isOpen .v11 {
+.isPlayed .v11 {
   animation: v11 9.9s step-end both;
 }
-.isOpen .v12 {
+.isPlayed .v12 {
   animation: v12 9.9s step-end both;
 }
-.isOpen .v13 {
+.isPlayed .v13 {
   animation: v13 9.9s step-end both;
 }
-.isOpen .v14 {
+.isPlayed .v14 {
   animation: v14 9.9s step-end both;
 }
-.isOpen .v15 {
+.isPlayed .v15 {
   animation: v15 9.9s step-end both;
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .card,
   .flip,
   .arrow,
-  .back::after,
+  .card::after,
   .chip {
     transition: none;
   }
   .root * {
     animation: none !important;
+  }
+}
+
+/* Print: every card with its text, and every arrow. */
+@media print {
+  .card,
+  .card .flip,
+  .card .text,
+  .arrow {
+    opacity: 1;
+    transform: none;
+  }
+  .face {
+    display: none;
   }
 }

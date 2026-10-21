@@ -1,6 +1,11 @@
 import { BackSvg, beat, Label, Who, type BackProps } from './back-parts';
 import styles from './trait-flip.module.css';
 
+/** The column the source and its two receivers share, the middle the copies split from, and the two rows. */
+const COLUMN = 14;
+const MIDDLE = 37;
+const ROWS = [14, 60] as const;
+
 /** The source the brief comes from: a document for the freelancer, a box reading "prompt" for the AI. */
 function Source({ ai }: BackProps) {
   return ai ? (
@@ -14,12 +19,12 @@ function Source({ ai }: BackProps) {
 function Original({ ai, prompt }: BackProps & { prompt: string }) {
   return (
     <g className={styles.out} style={beat({ d: 0.45 })}>
-      <g transform="translate(24 36)">
+      <g transform={`translate(${COLUMN} ${MIDDLE})`}>
         <Source ai={ai} />
         {!ai && <path d="M-5 -6h10M-5 -1h10M-5 4h7" className="stroke-muted-foreground" strokeWidth="1.2" />}
       </g>
       {ai && (
-        <Label x={24} y={39} size={8} className="fill-ai">
+        <Label x={COLUMN} y={MIDDLE + 3} size={8} className="fill-ai">
           {prompt}
         </Label>
       )}
@@ -32,11 +37,11 @@ function Results({ ai }: BackProps) {
   const ink = ai ? 'stroke-ai' : 'stroke-foreground';
   return (
     <>
-      <g className={styles.pop} style={beat({ d: 1.5, fx: -48 })}>
-        <circle cx="160" cy="18" r="10" className={`fill-none ${ink}`} strokeWidth="2.4" />
+      <g className={styles.pop} style={beat({ d: 1.5, fx: -26 })}>
+        <circle cx="72" cy={ROWS[0]} r="10" className={`fill-none ${ink}`} strokeWidth="2.4" />
       </g>
-      <g className={styles.pop} style={beat({ d: 1.5, fx: -48 })}>
-        <path d="M160 44 171 66H149Z" className={`fill-none ${ink}`} strokeWidth="2.4" strokeLinejoin="round" />
+      <g className={styles.pop} style={beat({ d: 1.5, fx: -26 })}>
+        <path d="M72 50 83 70H61Z" className={`fill-none ${ink}`} strokeWidth="2.4" strokeLinejoin="round" />
       </g>
     </>
   );
@@ -47,12 +52,12 @@ function Arrows({ ai }: BackProps) {
   const ink = ai ? 'stroke-ai' : 'stroke-foreground';
   return (
     <>
-      {[18, 56].map((y) => (
+      {ROWS.map((y) => (
         <path
           key={y}
           pathLength={1}
           strokeDasharray="1"
-          d={`M115 ${y}h29m-4 -4 4 4-4 4`}
+          d={`M30 ${y}h26m-4 -4 4 4-4 4`}
           className={`${styles.draw} fill-none ${ink}`}
           strokeWidth="1.4"
           strokeLinecap="round"
@@ -65,22 +70,23 @@ function Arrows({ ai }: BackProps) {
 }
 
 /**
- * Probabilistic: one document (or the prompt) splits into two copies that shrink into two freelancers (or
- * two AI chats), stacked in two rows; at the same moment one points to a circle, the other to a triangle.
+ * Probabilistic: one document (or the prompt) splits up and down into two copies that shrink into two freelancers
+ * (or two AI chats), stacked in two rows; at the same moment one points to a circle, the other to a triangle.
  */
 export function ProbabilisticBack({ ai, prompt }: BackProps & { prompt: string }) {
   return (
-    <BackSvg>
+    <BackSvg width={86}>
       <Original ai={ai} prompt={prompt} />
-      {[-18, 20].map((ty) => (
-        <g key={ty} transform="translate(24 36)">
-          <g className={styles.fly} style={beat({ d: 0.5, tx: 76, ty })}>
+      {ROWS.map((row) => (
+        <g key={row} transform={`translate(${COLUMN} ${MIDDLE})`}>
+          <g className={styles.fly} style={beat({ d: 0.5, tx: 0, ty: row - MIDDLE })}>
             <Source ai={ai} />
           </g>
         </g>
       ))}
-      <Who ai={ai} x={100} y={18} />
-      <Who ai={ai} x={100} y={56} />
+      {ROWS.map((row) => (
+        <Who key={row} ai={ai} x={COLUMN} y={row} />
+      ))}
       <Arrows ai={ai} />
       <Results ai={ai} />
     </BackSvg>

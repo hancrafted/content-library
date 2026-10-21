@@ -8,7 +8,7 @@ import en from './i18n/en.json';
 const source = (slug: string, url: string) => ({ slug, url });
 const MEMORY_RESEARCH = source(
   'han-llm-memory-between-chats',
-  'https://github.com/hancrafted/content-library/blob/main/docs/episodes/onboard-ai-every-time/research/LLM-0003__llm-memory-between-chats/research.md',
+  'https://github.com/hancrafted/content-library/blob/main/docs/llm-wiki/research/LLM/LLM-0003__llm-memory-between-chats/research.md',
 );
 const CLAUDE_CODE_MEMORY = source('anthropic-claude-code-memory', 'https://code.claude.com/docs/en/memory');
 const CLAUDE_CHAT_MEMORY = source(
