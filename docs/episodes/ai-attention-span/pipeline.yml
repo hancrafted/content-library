@@ -502,8 +502,8 @@ jobs:
           - references/implement-section.md
           - references/skill-overrides.md
           - docs/episodes/ai-attention-span/spec/spec.html
-          - .scratch/ai-attention-span/cornerstone-grill.md
-          - .scratch/ai-attention-span/cornerstone-factcheck.md
+          - docs/episodes/ai-attention-span/spec/cornerstone-grill.md
+          - docs/episodes/ai-attention-span/spec/cornerstone-factcheck.md
         model: opus
       # code-review spawns its own subagents, so the reviewer runs in the
       # orchestrator's session; its subagents give the fresh eyes.
@@ -517,7 +517,7 @@ jobs:
           - references/implement-section.md
           - references/skill-overrides.md
           - docs/episodes/ai-attention-span/spec/spec.html
-          - .scratch/ai-attention-span/cornerstone-grill.md
+          - docs/episodes/ai-attention-span/spec/cornerstone-grill.md
         rubric: references/implement-section.md#rubric
         model: opus
         session: orchestrator
