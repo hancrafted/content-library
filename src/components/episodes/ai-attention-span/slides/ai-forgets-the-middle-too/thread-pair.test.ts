@@ -19,21 +19,18 @@ const COPY: ThreadPairCopy = {
   ai: { name: 'Summer party', meta: 'Chat with AI · one hour' },
   bands: {
     start: band('start', 2, 2),
-    middle: band('middle', 3, 7),
-    standout: { ...band('standout', 1, 1), marker: null },
+    middle: band('middle', 3, 3),
     end: band('end', 2, 2),
   },
-  standoutNote: 'Said four times.',
-  overBudget: '12,300 over the budget',
   bottomLine: 'With a deadline, it is expensive.',
 };
 
 const render = (copy: ThreadPairCopy = COPY) => load(renderToStaticMarkup(createElement(ThreadPair, { copy })));
 
 describe('success cases', () => {
-  it('sets the four bands side by side in order, each with a pill between the sister and the AI thread', () => {
+  it('sets the three bands side by side in order, each with a pill between the sister and the AI thread', () => {
     // ARRANGE
-    const expected = ['start', 'middle', 'standout', 'end'];
+    const expected = ['start', 'middle', 'end'];
     // ACT
     const $ = render();
     const bands = $('[data-band]')
@@ -53,13 +50,8 @@ describe('success cases', () => {
       ['you', 'lit'],
       ['ai', 'lit'],
       ['you', 'faded'],
-      ['tool', 'faded'],
       ['ai', 'faded'],
-      ['you', 'faded'],
       ['tool', 'faded'],
-      ['you', 'faded'],
-      ['ai', 'faded'],
-      ['ai', 'standout'],
       ['you', 'lit'],
       ['ai', 'lit'],
     ];
@@ -72,7 +64,7 @@ describe('success cases', () => {
     expect(right).toEqual(expected);
   });
 
-  it('gives the start, middle and end pills a Context marker and the standout none', () => {
+  it('gives each of the three pills a Context marker', () => {
     // ARRANGE
     const expected = ['start', 'middle', 'end'];
     // ACT
@@ -88,7 +80,7 @@ describe('success cases', () => {
 describe('failure cases', () => {
   it('refuses a band whose lines do not match the thread it is drawn over', () => {
     // ARRANGE
-    const copy = { ...COPY, bands: { ...COPY.bands, middle: band('middle', 3, 6) } };
+    const copy = { ...COPY, bands: { ...COPY.bands, middle: band('middle', 3, 2) } };
     const expected = /middle/;
     // ACT
     const draw = () => render(copy);
@@ -98,6 +90,16 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('draws no standout line and no ring', () => {
+    // ARRANGE
+    const expected = { standouts: 0, band: 0 };
+    // ACT
+    const $ = render();
+    // ASSERT
+    expect($('[data-light="standout"]').length).toBe(expected.standouts);
+    expect($('[data-band="standout"]').length).toBe(expected.band);
+  });
+
   it('shows everything at rest, with no lighting steps', () => {
     // ARRANGE
     const expected = { steps: 0, bottomLine: COPY.bottomLine };
