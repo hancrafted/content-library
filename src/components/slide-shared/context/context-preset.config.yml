@@ -109,11 +109,14 @@ defaults:
   height: 38
 
 presets:
+  # Timeline and conversation at rest; the window and its category list start hidden, and the toolbar's part chips and
+  # Technical stay so the presenter can blend them in.
   slide-3:
     chat: summer-party
     step: 9
     pinned: m3
-    controls: { '*': { show: false } }
+    show: { chat: true, timeline: true, context: false, category: false, panel: false, attention: false }
+    controls: { '*': { show: false }, parts: { show: true }, technical: { show: true } }
     height: 26.6
     windows: [{ size: 200k, lines: [] }]
   slide-4:
@@ -122,9 +125,12 @@ presets:
     show: { chat: true, timeline: true, context: true, category: false, panel: false, attention: true }
     attention: { layout: compressed }
     windows: [{ size: 200k, lines: [] }]
+  # Timeline left, the window as a Simple bar with its 200K | 1M switch and smart zone, the attention on the right.
   slide-5:
     chat: summer-party
     fade: true
+    show: { chat: false, timeline: true, context: true, category: false, panel: false, attention: true }
+    order: [timeline, context, attention, chat, category, panel]
     controls: { '*': { show: false }, window: { show: true } }
     windows: [{ size: 200k, lines: [matt] }, { size: 1m, lines: [matt-1m] }]
     motion: off

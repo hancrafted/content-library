@@ -2,37 +2,22 @@
   "title": "Aufmerksamkeit ist ein Budget",
   "caption": "Hundert Einheiten Aufmerksamkeit gehen vor allem an den Anfang und die neuesten Nachrichten; die Mitte bekommt den Rest, bis er zu dünn ist, um ihm zu trauen.",
   "illustrative": "Zahlen zur Veranschaulichung",
-  "strip": {
-    "heading": "<marker>100 Einheiten Aufmerksamkeit</marker>",
-    "label": "100 Einheiten Aufmerksamkeit über den Sommerfest-Chat: Anfang 20, Mitte 50 über 15 Nachrichten, Neuestes 30; die 12 vegetarischen Gäste behalten 10 Einheiten in der Mitte, das Budget bekommt 1.",
-    "start": { "head": "Anfang · 20 Einheiten", "line": "<marker>ein großer Anteil</marker>" },
-    "middle": {
-      "head": "Mitte · 50 Einheiten, verteilt auf 15 Nachrichten",
-      "line": "dünner mit jeder Nachricht, die dazukommt"
-    },
-    "newest": { "head": "Neuestes · 30 Einheiten", "line": "<marker>ein großer Anteil</marker>" },
-    "spike": {
-      "head": "12 vegetarische Gäste · 10 Einheiten",
-      "line": "wiederholt, also behält es seinen Anteil; das Budget, einmal gesagt, bekommt 1"
-    }
-  },
   "zones": {
-    "pocock": "<marker>Smart Zone nach Matt Pocock: 80K bei einem 200K-Fenster, 150K bei 1M.</marker>",
-    "smart": "<b>Smart Zone</b> vor der Linie",
-    "dumb": "<b>Dumb Zone</b> dahinter: die Mitte zu dünn, um ihr zu trauen",
     "note": "<marker>Wo die Mitte zu dünn wird, hängt von Modell und Aufgabe ab.</marker>"
   },
   "lost": {
     "kicker": "Bekannt als",
     "name": "<marker>„Lost in the middle“</marker>",
-    "body": "Der Anfang und die neuesten Nachrichten bekommen die Aufmerksamkeit; was in der Mitte steht, verblasst."
+    "body": "<start>Der Anfang und die neuesten Nachrichten bekommen die Aufmerksamkeit</start>; <budget>was in der Mitte steht, verblasst</budget>."
   },
   "notes": {
     "the-attention-budget": {
       "header": "Das Aufmerksamkeitsbudget",
       "description": "Anthropic beschreibt, dass jedes Token auf jedes andere achtet, sodass jedes neue Token dieselbe Aufmerksamkeit dünner verteilt; das ist die Erklärung eines Anbieters für den gemessenen Abfall, in den Studien selbst nicht gemessen [1].",
       "sources": {
-        "anthropic-effective-context-engineering": { "title": "Anthropic, Effective context engineering for AI agents" }
+        "anthropic-effective-context-engineering": {
+          "title": "Anthropic, Effective context engineering for AI agents"
+        }
       }
     },
     "the-u-shape-is-measured": {
@@ -51,14 +36,18 @@
       "header": "Der Anfang wiegt schwerer",
       "description": "die ersten Tokens ziehen als Attention Sink viel Aufmerksamkeit auf sich, auch wenn sie nichts bedeuten [1].",
       "sources": {
-        "xiao-attention-sinks": { "title": "Xiao et al., Efficient Streaming Language Models with Attention Sinks" }
+        "xiao-attention-sinks": {
+          "title": "Xiao et al., Efficient Streaming Language Models with Attention Sinks"
+        }
       }
     },
     "no-single-line": {
       "header": "Keine feste Linie",
       "description": "wo die Mitte zu dünn wird, hängt von Modell und Aufgabe ab; wenn die gesuchte Stelle kein Wort mit der Frage teilt, fielen 11 von 13 Modellen, die mit 128K oder mehr beworben werden, bei 32K unter die Hälfte ihres Werts bei kurzer Eingabe [1].",
       "sources": {
-        "modarressi-nolima": { "title": "Modarressi et al., NoLiMa: Long-Context Evaluation Beyond Literal Matching" }
+        "modarressi-nolima": {
+          "title": "Modarressi et al., NoLiMa: Long-Context Evaluation Beyond Literal Matching"
+        }
       }
     }
   },

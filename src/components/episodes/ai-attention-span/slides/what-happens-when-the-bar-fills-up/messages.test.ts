@@ -16,6 +16,35 @@ describe('success cases', () => {
     // ASSERT
     expect(matches).toBe(true);
   });
+
+  it.each([
+    ['en', en, 'What happens when the context fills up'],
+    ['de', de, 'Was passiert, wenn der Kontext voll wird'],
+  ])('titles the %s Slide on the context filling up', (_locale, messages, expected) => {
+    // ARRANGE
+    const { title } = messages;
+    // ACT
+    const same = title === expected;
+    // ASSERT
+    expect(same).toBe(true);
+  });
+
+  it.each([
+    ['en', en],
+    ['de', de],
+  ])('explains context rot in the %s note with its four linked sources', (_locale, messages) => {
+    // ARRANGE
+    const expected = [
+      'hsieh-ruler',
+      'du-context-length-alone-hurts',
+      'hong-context-rot',
+      'anthropic-effective-context-engineering',
+    ];
+    // ACT
+    const sources = Object.keys(messages.notes['what-is-context-rot'].sources);
+    // ASSERT
+    expect(sources).toEqual(expected);
+  });
 });
 
 describe('failure cases', () => {

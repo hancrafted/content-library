@@ -19,7 +19,6 @@ const effect = (kicker: string) => ({
 const COPY: PhoneCallCopy = {
   name: 'Sister',
   duration: 'Call ended · 1:21:40',
-  stepsLabel: 'The call, step by step',
   bubbles: BUBBLES,
   punchline: '…wait, we never fixed the date.',
   effects: {
@@ -111,13 +110,14 @@ describe('success cases', () => {
     }).toEqual(expected);
   });
 
-  it('ends on the punchline, outside the call, and renders the end state in the static HTML', () => {
+  it('ends on the punchline, outside the call, at rest: no lighting steps stage the labels or the punchline', () => {
     // ARRANGE
-    const expected = { step: '3', punchline: COPY.punchline };
+    const expected = { steps: 0, replayGroups: 0, punchline: COPY.punchline };
     // ACT
     const $ = render();
     // ASSERT
-    expect($('[data-step]').attr('data-step')).toBe(expected.step);
+    expect($('[data-step]')).toHaveLength(expected.steps);
+    expect($('[role="group"][tabindex]')).toHaveLength(expected.replayGroups);
     expect($('[data-punchline]').text()).toBe(expected.punchline);
     expect($('[data-punchline]').attr('data-light')).toBeUndefined();
   });

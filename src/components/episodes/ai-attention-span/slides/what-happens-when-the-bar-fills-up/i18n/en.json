@@ -1,5 +1,5 @@
 {
-  "title": "What happens when the bar fills up",
+  "title": "What happens when the context fills up",
   "caption": "As the chat fills the window, the start and the newest stay sharp, the middle blurs, one repeated detail survives, and answers get worse: <b>context rot</b>.",
   "strip": {
     "firstKicker": "Your first message",
@@ -57,6 +57,24 @@
       "sources": {
         "du-context-length-alone-hurts": {
           "title": "Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval"
+        }
+      }
+    },
+    "what-is-context-rot": {
+      "header": "Context rot",
+      "description": "Context rot is the drop in answer quality as the input grows, well before the advertised limit: almost all of 17 long-context models lost a lot of accuracy [1], length alone hurt even with perfect retrieval [2], and across 18 models performance degraded in every experiment [3]. Anthropic explains it as an attention budget that each added token spreads thinner; that is a vendor account, not measured in the studies [4].",
+      "sources": {
+        "hsieh-ruler": {
+          "title": "Hsieh et al., RULER: What's the Real Context Size of Your Long-Context Language Models?"
+        },
+        "du-context-length-alone-hurts": {
+          "title": "Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval"
+        },
+        "hong-context-rot": {
+          "title": "Hong, Troynikov, Huber, Context Rot: How Increasing Input Tokens Impacts LLM Performance"
+        },
+        "anthropic-effective-context-engineering": {
+          "title": "Anthropic, Effective context engineering for AI agents"
         }
       }
     }

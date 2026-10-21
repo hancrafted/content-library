@@ -37,7 +37,20 @@ describe('success cases', () => {
     it('draws the fingerprint of every Preset', () => {
       // ARRANGE
       const expected = {
-        'slide-3': { lit: 3, sections: ['Chat', 'Context window'], sliders: 1, toolbar: [] },
+        'slide-3': {
+          lit: 1,
+          sections: ['Chat'],
+          sliders: 1,
+          toolbar: [
+            'Conversation:true',
+            'Timeline:true',
+            'Context window:false',
+            'Context category:false',
+            'Details:false',
+            'Attention:false',
+            ':false',
+          ],
+        },
         'slide-4': {
           lit: 0,
           sections: ['Chat', 'Context window', 'Attention'],
@@ -53,7 +66,7 @@ describe('success cases', () => {
             ':-',
           ],
         },
-        'slide-5': { lit: 0, sections: ['Chat', 'Context window'], sliders: 1, toolbar: [] },
+        'slide-5': { lit: 0, sections: ['Context window', 'Attention'], sliders: 1, toolbar: [] },
         'slide-6': { lit: 0, sections: ['Context window'], sliders: 0, toolbar: [] },
         'slide-7': {
           lit: 22,

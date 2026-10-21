@@ -1,10 +1,8 @@
-import { CallSteps } from '@/components/slide-shared/call-transcript/call-steps.client';
 import { CallBubble, type CallLight, type CallWho } from '@/components/slide-shared/call-transcript/call-transcript';
 import type { TargetProps } from '@/lib/context-link.pure';
 import { externalHref } from '@/lib/external-link.pure';
 import { cn } from '@/lib/utils';
 import type { ReactNode } from 'react';
-import styles from './phone-call.module.css';
 
 /** The four effects the call leaves: the start and end stay sharp, the middle blurs, the standout survives. */
 export type CallEffect = 'start' | 'middle' | 'standout' | 'end';
@@ -27,8 +25,6 @@ export interface EffectCopy {
 export interface PhoneCallCopy {
   readonly name: string;
   readonly duration: string;
-  /** The steps' accessible name, which says what replays. */
-  readonly stepsLabel: string;
   /** The ten lines of the call, in order. */
   readonly bubbles: readonly string[];
   readonly punchline: string;
@@ -75,9 +71,6 @@ const ROWS: readonly CallRow[] = [
 ];
 
 const LINE_COUNT = ROWS.reduce((count, row) => count + row.lines.length, 0);
-
-/** The step the last effect lights: 1 the start, middle and end, 2 the standout, 3 the punchline. */
-const LAST_STEP = 3;
 
 /** The bracket in the margin: solid primary where the call stays sharp, dashed and muted where it blurs. */
 function EffectBracket({ effect }: { effect: CallEffect }) {
@@ -163,7 +156,7 @@ function Row({ row, start, copy }: { row: CallRow; start: number; copy: PhoneCal
           </CallBubble>
         ))}
       </ol>
-      <div className={cn('col-span-12 flex items-stretch gap-3 @xl:col-span-5 @xl:gap-5', styles.margin)}>
+      <div className="col-span-12 flex items-stretch gap-3 @xl:col-span-5 @xl:gap-5">
         <EffectBracket effect={row.effect} />
         {row.labelled ? <EffectLabel copy={copy.effects[row.effect]} /> : null}
       </div>
@@ -173,35 +166,29 @@ function Row({ row, start, copy }: { row: CallRow; start: number; copy: PhoneCal
 
 /**
  * The call with your sister as one messenger thread, its effects bracketed in the margin and the punchline as the
- * brightest bubble (Spec Option 1a). Its one emphasis motion is three lighting steps on `CallSteps`: the middle fades
- * while the start and end stay lit, the cake lights again, the punchline rises in. The steps and their reduced-motion
- * end state live in `phone-call.module.css`; the static HTML is the end state. Pointing at a bubble dims the rest.
+ * brightest bubble (Spec Option 1a). Everything is shown at rest: no step, replay or entrance of its own beyond the
+ * Slide's. Pointing at a bubble dims the other bubbles; the margin and the punchline stay as they are.
  */
 export function PhoneCall({ copy }: { copy: PhoneCallCopy }) {
   if (copy.bubbles.length !== LINE_COUNT) {
     throw new Error(`The phone call needs ten lines, one per bubble; got ${copy.bubbles.length}.`);
   }
   return (
-    <CallSteps last={LAST_STEP} label={copy.stepsLabel} className={styles.steps}>
-      <div className="@container flex flex-col gap-4 rounded-3xl border border-border bg-card p-4 shadow-md @xl:p-8">
-        <CallHeader name={copy.name} duration={copy.duration} />
-        <div className="focus-group focus-group--dim-others flex flex-col gap-4">
-          {ROWS.map((row, r) => (
-            <Row key={r} row={row} start={ROW_STARTS[r]} copy={copy} />
-          ))}
-          <div className="flex justify-end pt-4">
-            <p
-              data-punchline=""
-              className={cn(
-                'rounded-2xl rounded-br-md bg-primary px-5 py-3 text-subheading font-semibold text-primary-foreground shadow-lg',
-                styles.punchline,
-              )}
-            >
-              {copy.punchline}
-            </p>
-          </div>
+    <div className="@container flex flex-col gap-4 rounded-3xl border border-border bg-card p-4 shadow-md @xl:p-8">
+      <CallHeader name={copy.name} duration={copy.duration} />
+      <div className="focus-group focus-group--dim-others flex flex-col gap-4">
+        {ROWS.map((row, r) => (
+          <Row key={r} row={row} start={ROW_STARTS[r]} copy={copy} />
+        ))}
+        <div className="flex justify-end pt-4">
+          <p
+            data-punchline=""
+            className="rounded-2xl rounded-br-md bg-primary px-5 py-3 text-subheading font-semibold text-primary-foreground shadow-lg"
+          >
+            {copy.punchline}
+          </p>
         </div>
       </div>
-    </CallSteps>
+    </div>
   );
 }

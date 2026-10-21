@@ -2,8 +2,10 @@ import type { TextRange } from '@/lib/caption-emphasis.pure';
 import { ENTRANCE_MS, typewriterSchedule } from '@/lib/typewriter.pure';
 import { cn } from '@/lib/utils';
 import type { ReactNode } from 'react';
+import { ContextMarker } from './context-marker';
 import type { SlideEntrance } from './slide';
 import { eyebrowLength, SlideEyebrow, type EyebrowText } from './slide-eyebrow';
+import type { CaptionNote } from './slide-header-text';
 import { HeroTitle, SlideTitle } from './slide-master';
 import { typedLength, TypedText } from './typed-text';
 
@@ -24,6 +26,8 @@ export interface SlideHeaderProps {
   readonly caption?: string;
   /** The caption's `<b>` runs, set off in `primary` semibold. */
   readonly captionEmphasis?: readonly TextRange[];
+  /** A Context marker after the caption, to the Speaker note that explains a term in it. */
+  readonly captionNote?: CaptionNote;
   /** Page Slides only; a section slide and the Title slide have none. */
   readonly eyebrow?: EyebrowText;
   readonly entrance?: SlideEntrance;
@@ -41,13 +45,16 @@ function Heading({ level, children }: { level: SlideHeaderProps['level']; childr
   );
 }
 
-interface TitleGroupProps extends Pick<SlideHeaderProps, 'level' | 'title' | 'caption' | 'captionEmphasis'> {
+interface TitleGroupProps extends Pick<
+  SlideHeaderProps,
+  'level' | 'title' | 'caption' | 'captionEmphasis' | 'captionNote'
+> {
   readonly delays: readonly (readonly number[] | undefined)[];
   readonly ends: readonly number[];
 }
 
 /** The title and its caption, half a gap apart so they read as one. */
-function TitleGroup({ level, title, caption, captionEmphasis, delays, ends }: TitleGroupProps) {
+function TitleGroup({ level, title, caption, captionEmphasis, captionNote, delays, ends }: TitleGroupProps) {
   return (
     <div className="flex flex-col gap-(--space-header-tight)">
       <Heading level={level}>
@@ -56,6 +63,17 @@ function TitleGroup({ level, title, caption, captionEmphasis, delays, ends }: Ti
       {caption && (
         <p data-target="caption" className="text-body text-muted-foreground">
           <TypedText text={caption} delays={delays[2]} next={ends[2]} emphasis={captionEmphasis} />
+          {captionNote && (
+            <>
+              {'\u00a0'}
+              <ContextMarker
+                note={captionNote.note}
+                label={captionNote.label}
+                placement="beside"
+                className="inline-grid align-middle"
+              />
+            </>
+          )}
         </p>
       )}
     </div>
@@ -75,6 +93,7 @@ export function SlideHeader({
   title,
   caption,
   captionEmphasis,
+  captionNote,
   eyebrow,
   entrance = 'typewriter',
   ...rest
@@ -88,7 +107,7 @@ export function SlideHeader({
       className={cn('flex flex-col gap-(--space-header) pt-16 pb-(--space-header) md:pt-24', rest.className)}
     >
       {eyebrow && <SlideEyebrow eyebrow={eyebrow} delays={delays[0]} next={ends[0]} />}
-      <TitleGroup {...{ level, title, caption, captionEmphasis, delays, ends }} />
+      <TitleGroup {...{ level, title, caption, captionEmphasis, captionNote, delays, ends }} />
       {rest.children}
     </div>
   );
