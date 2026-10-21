@@ -1,36 +1,23 @@
 {
-  "title": "Human in the loop workflow",
-  "caption": "You are the captain: a planner chat prepares each handoff, worker chats do the jobs, and you check every artifact in between.",
-  "pipelineLabel": "The steps of a brief, stage by stage",
-  "stages": {
-    "party": {
-      "name": "Summer party",
-      "move": "Break it down"
-    },
-    "interview": {
-      "name": "Interview",
-      "move": "Interview yourself with AI"
-    },
-    "requirements": {
-      "name": "Requirements",
-      "move": "Requirements first"
-    },
-    "research": {
-      "name": "Research",
-      "move": "Fresh start for each piece"
-    },
-    "compare": {
-      "name": "Compare",
-      "move": "Evaluate each step"
-    },
-    "recommendation": {
-      "name": "Recommendation",
-      "move": "for your boss"
-    }
+  "title": "The workflow for bigger projects",
+  "caption": "Break the project down first, keep one chat as the planner, and give each step a fresh chat that hands back one small result.",
+  "compareLabel": "One chat for everything, beside a workflow of one planner and a fresh chat per step",
+  "before": {
+    "title": "One chat for everything",
+    "note": "Past the smart zone; every step carries every other step's reading."
   },
-  "loop": {
-    "note": "<marker>A fresh chat for each job</marker> keeps every window small; you coordinate, like a project manager."
+  "after": {
+    "title": "A workflow: one planner, a fresh chat per step",
+    "note": "One small card back per step. <marker>Short tasks beat one long one</marker>; you coordinate, like a project manager."
   },
+  "resultsLabel": "Results the workers hand back to the planner",
+  "back": "↑ Result",
+  "results": {
+    "1": "Estrela pavilion, <budget>14,800 €</budget>",
+    "2": "Sabor Verde, 12 vegetarian",
+    "3": "Invitations sent to 40"
+  },
+  "illustrative": "Token counts are illustrative · 200K window",
   "notes": {
     "clean-windows-for-each-part": {
       "header": "Clean windows for each part",
@@ -53,73 +40,31 @@
   },
   "voiceScript": {
     "segments": {
-      "recall": {
-        "title": "Recall the brief",
+      "one-chat-is-too-small": {
+        "title": "One chat is too small",
         "keywords": "",
-        "script": "Remember the brief for the venue: break the party down, interview yourself with AI, write the requirements first, give each piece a fresh chat, and evaluate each step. That was one task, done well. A bigger project needs the same moves, plus a way of working that holds them together."
+        "script": "Sometimes the project is bigger than one chat can hold: the whole summer party, with venues, catering, hotels and invitations. One chat would fill up, whatever window size you give it."
       },
-      "human-in-the-loop": {
-        "title": "Human in the loop",
+      "break-it-down-first": {
+        "title": "Break it down first",
         "keywords": "",
-        "script": "This way of working is what we call a human in the loop workflow. You are the orchestrator, the captain at the helm, and you use AI the way a captain uses a crew."
+        "script": "So you break it down first. Work backward from the outcome, what do I need to run this party, and then what do I need for that, until the next step is clear. You can ask the AI to help you with that."
       },
-      "planner-and-handoff": {
-        "title": "Planner and handoff",
+      "one-planner": {
+        "title": "One planner",
         "keywords": "",
-        "script": "One chat stays the planner. It helps you prepare the task and writes a handoff. It keeps only the plan and the results, so it stays small and has room to spare."
+        "script": "Then one chat stays the planner. It keeps only the plan and the results, so it stays small and has room to spare."
       },
-      "worker-chats": {
-        "title": "Worker chats",
+      "a-fresh-chat-per-step": {
+        "title": "A fresh chat per step",
         "keywords": "",
-        "script": "The handoff goes to worker chats, a fresh one per job: venues, catering, invitations. Each worker reads its files, fills up as much as it needs, saves its result, and then you let it go."
+        "script": "Each step goes to a fresh chat: venues, catering, invitations. That chat reads its files and fills up as much as it needs, hands the result back to the planner as one small card, and then you let it go. Next step, next fresh chat."
       },
-      "you-check": {
-        "title": "You check",
+      "you-coordinate": {
+        "title": "You coordinate",
         "keywords": "",
-        "script": "You carry the results back to the planner, and every artifact in between, the handoff and each result, is something you check. Every chat has one job, so none of them runs long enough to blur its middle. That is the whole idea: the window is the AI's attention span, and managing it is your job. One honest caveat: the zones and numbers I gave you are rules of thumb and illustrations, and I have not tested every chat app, so watch your own chats and adjust. If you want a low-key place to start, take the next chat that drifts, ask it for a handoff, and open a new one with it. Thank you."
+        "script": "And you coordinate, like a project manager. This is what we call a workflow. Every chat has one job, so none of them runs long enough to blur its middle. That is the whole idea: the window is the AI's attention span, and managing it is your job. One honest caveat: the zones and numbers I gave you are rules of thumb and illustrations, and I have not tested every chat app, so watch your own chats and adjust. If you want a low-key place to start, take the next chat that drifts, ask it for a handoff, and open a new one with it. Thank you."
       }
     }
-  },
-  "jobsLabel": "{stage}: jobs",
-  "jobs": {
-    "party": {
-      "venue": "Venue",
-      "travel": "Travel",
-      "catering": "Catering",
-      "invitations": "Invitations",
-      "budget": "Budget"
-    },
-    "interview": {
-      "label": "AI asks you",
-      "detail": "3 questions,",
-      "forgot": "<marker>1 you forgot</marker>"
-    },
-    "research": {
-      "venue1": "Venue 1",
-      "venue2": "Venue 2",
-      "venue3": "Venue 3",
-      "checked": "Checked against the card"
-    },
-    "compare": {
-      "label": "Rank 3 venues",
-      "detail": "against the card",
-      "gate": "Gate 2"
-    },
-    "recommendation": {
-      "label": "Venue plan",
-      "detail": "by Friday"
-    }
-  },
-  "card": {
-    "gate": "Gate 1",
-    "title": "Requirements card",
-    "criteria": {
-      "guests": "200 guests",
-      "budget": "€150 per person",
-      "stepFree": "Step-free",
-      "vegetarian": "Vegetarian menu",
-      "quiet": "Quiet to talk"
-    },
-    "signOff": "Signed off"
   }
 }
