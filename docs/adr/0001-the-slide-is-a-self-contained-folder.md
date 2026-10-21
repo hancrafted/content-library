@@ -67,5 +67,5 @@ An Upcoming Episode has no record: only `episode-metadata.ts` and two landing st
 
 - `FE-002` holds the Episode rules, `FE-006` the client classifier, `FE-007` the import boundary, `FE-010` the note and target contract.
 - [0002](0002-reading-time-from-voice-script.md): reading time from words.
-- `docs/research/episode-migration-experiment.md`: run 2 measures the Slide-as-unit design against run 1.
-- Epic #51 and its sub-issues; PR #50's handoff `docs/handoff/slide-master-harness-findings.md`.
+- Run 2 measures the Slide-as-unit design against run 1.
+- Epic #51 and its sub-issues; PR #50's handoff.
