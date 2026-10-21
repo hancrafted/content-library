@@ -86,8 +86,12 @@ export interface ContextWords {
   readonly buffer: Readonly<Record<Depth, string>>;
   readonly lines: Readonly<Record<string, LineWords>>;
   readonly mini: {
-    readonly used: string;
+    /** A bar's figure: `{used} of {window} · {percent}%`. */
+    readonly usedOf: string;
     readonly discarded: string;
+    /** A call's duration units, for `1 h 22 min`. */
+    readonly hours: string;
+    readonly minutes: string;
     readonly labels: Readonly<Record<string, string>>;
   };
 }

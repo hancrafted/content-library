@@ -1,4 +1,5 @@
 import { memo, useMemo, useRef } from 'react';
+import { BarBuffer, BarLines } from './context-bar-view';
 import { fullTokens, percentText } from './context-format.pure';
 import type { ContextWindowProps } from './context-parts.types';
 import { matcher } from './context-state.pure';
@@ -148,15 +149,12 @@ function Outline({ p, places }: { readonly p: ContextWindowProps; readonly place
 }
 
 function Lines({ p }: { readonly p: ContextWindowProps }) {
-  return p.window.lines.map((line) => (
-    <div
-      key={line.id}
-      className={styles.line}
-      aria-hidden="true"
-      data-crossed={line.tokens <= p.frame.used ? '' : undefined}
-      style={vars({ '--f': line.tokens / p.window.tokens })}
-    />
-  ));
+  const lines = p.window.lines.map((line) => ({
+    id: line.id,
+    at: line.tokens / p.window.tokens,
+    crossed: line.tokens <= p.frame.used,
+  }));
+  return <BarLines lines={lines} />;
 }
 
 function Labels({ p, say }: Part) {
@@ -183,11 +181,7 @@ function BarLayers({ p, say, hot, at }: Part & { readonly hot: string; readonly 
   return (
     <>
       <Blocks p={p} say={say} places={places} hot={hot} />
-      <div
-        className={styles.buffer}
-        aria-hidden="true"
-        style={vars({ '--z': pct(p.window.bufferTokens, p.window.tokens) })}
-      />
+      <BarBuffer size={p.window.bufferTokens} total={p.window.tokens} />
       <Outline p={p} places={places} />
       {at === null ? null : <Lens p={p} at={at} />}
       <Lines p={p} />

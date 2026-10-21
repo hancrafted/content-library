@@ -96,7 +96,7 @@ const overflowOf = () =>
   evaluate<{ sideways: number; poking: string[] }>(
     send,
     `(() => {
-      const poking = [...document.querySelectorAll('[data-cornerstone], [data-mini]')].flatMap((card) => {
+      const poking = [...document.querySelectorAll('[data-cornerstone], [data-bars]')].flatMap((card) => {
         const box = card.getBoundingClientRect();
         return [...card.querySelectorAll('*')]
           .filter((el) => { const r = el.getBoundingClientRect(); return r.width && (r.right > box.right + 0.5 || r.left < box.left - 0.5); })

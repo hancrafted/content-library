@@ -2,14 +2,14 @@ import { load } from 'cheerio';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import { Context, ContextMiniBars, contextViewData } from './context';
+import { Context, ContextBarsPreset, contextViewData } from './context';
 import { CONTEXT_PRESETS, type ContextPresetId, type MiniPresetId } from './context-data';
 
 /** The server markup a Slide ships for a Preset, parsed. */
 const render = (preset: ContextPresetId, locale = 'en') =>
   load(renderToStaticMarkup(createElement(Context, { preset, locale })));
 const renderMini = (preset: MiniPresetId) =>
-  load(renderToStaticMarkup(createElement(ContextMiniBars, { preset, locale: 'en' })));
+  load(renderToStaticMarkup(createElement(ContextBarsPreset, { preset, locale: 'en' })));
 const sections = ($: ReturnType<typeof render>) =>
   $('section')
     .map((_, el) => $(el).attr('aria-label'))

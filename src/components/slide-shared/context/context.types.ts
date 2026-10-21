@@ -159,13 +159,25 @@ export interface Preset {
   readonly height: number;
 }
 
-/** One static mini bar: a chat at a step. */
+/** How a minute of a non-chat bar reads: in the light, faded, or the one thing that stands out. */
+export type SegmentState = 'lit' | 'faded' | 'standout';
+
+/** One static bar: a chat at a step, or generic segments for data that is not a chat (a phone call). */
 export interface MiniBar {
   readonly label: string;
-  readonly chat: string;
+  /** The chat the bar draws; null for a bar of segments. */
+  readonly chat: string | null;
   readonly step: number;
   /** A worker chat that is thrown away once it hands its result back. */
   readonly discarded: boolean;
+  /** Segments `[minutes, state]` in order; set instead of `chat`. */
+  readonly segments: readonly (readonly [number, SegmentState])[] | null;
+  /** Chat bars only: the Simple categories that stay in colour; the rest fade. Unset keeps every block coloured. */
+  readonly lit: readonly SimpleCategory[] | null;
+  /** Chat bars only: the steps from this id on stay in colour. */
+  readonly litFrom: string | null;
+  /** Chat bars only: steps picked out with a ring (and kept in colour). */
+  readonly ring: readonly string[];
 }
 
 /** A row of static mini bars on one window size. */
