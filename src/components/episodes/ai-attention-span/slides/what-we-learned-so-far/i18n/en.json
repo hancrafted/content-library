@@ -1,0 +1,63 @@
+{
+  "title": "What we learned so far",
+  "caption": "Long AI chats show the same effects as long calls, because the AI's attention span is its context window: a limited resource you manage actively.",
+  "call": {
+    "kicker": "The long phone call",
+    "label": "The phone call with your sister, the middle faded",
+    "lines": {
+      "holidays": "Let's sort out the holidays!",
+      "mums-phone": "Yes! But first, did you hear about Mum's new phone?",
+      "what-happened": "No, what happened?",
+      "thumb-photos": "She sent me forty photos of her thumb.",
+      "renovation": "Ha! Did you see the neighbours' renovation?",
+      "back-hurts": "Don't get me started. And my back hurts again.",
+      "pepper": "And Pepper ate a whole birthday cake, candles included!",
+      "recipe": "Did you try that new recipe?",
+      "dinner": "Not yet. Oh, dinner is ready, I have to run.",
+      "bye": "Talk soon, bye!"
+    },
+    "line": "Long calls keep the start, the end and a standout"
+  },
+  "same": "the same shape",
+  "analogy": "<marker>an analogy, not a proof</marker>",
+  "chat": {
+    "kicker": "The summer-party chat",
+    "labels": {
+      "start": { "head": "Start", "line": "instructions and memory" },
+      "standout": { "head": "Standout", "line": "12 vegetarian guests" },
+      "middle": { "head": "Middle, faded", "line": "searches, offers, hotels" },
+      "newest": { "head": "Newest", "line": "the request and the plan" }
+    },
+    "line": "A long chat does the same, because the window is limited"
+  },
+  "closing": "Manage it, or the middle gets lost.",
+  "notes": {
+    "two-kinds-of-evidence": {
+      "header": "Two kinds of evidence",
+      "description": "the human pattern comes from lab word lists [1], the model pattern from retrieval tests on long inputs [2]; the match between them is an analogy, not a proof.",
+      "sources": {
+        "murdock-serial-position": { "title": "Murdock, The serial position effect of free recall" },
+        "liu-lost-in-the-middle": { "title": "Liu et al., Lost in the Middle: How Language Models Use Long Contexts" }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "same-effects": {
+        "title": "Same effects",
+        "keywords": "",
+        "script": "Let's put it together. Long AI conversations show the same effects as long human ones: the start, the end and a standout survive, and the middle blurs."
+      },
+      "the-window-is-the-span": {
+        "title": "The window is the span",
+        "keywords": "",
+        "script": "The reason is that the AI's attention span is its context window, a limited space that fills with every message."
+      },
+      "manage-it": {
+        "title": "Manage it",
+        "keywords": "",
+        "script": "So treat it as a resource you manage actively, so that important decisions and information don't get lost in the middle. The rest of the episode is about what goes into that window, and what you do about it."
+      }
+    }
+  }
+}

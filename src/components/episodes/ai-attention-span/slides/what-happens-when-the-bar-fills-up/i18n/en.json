@@ -1,0 +1,104 @@
+{
+  "title": "What happens when the bar fills up",
+  "caption": "As the chat fills the window, the start and the newest stay sharp, the middle blurs, one repeated detail survives, and the answers get worse.",
+  "rot": "Answers get worse: <quality>context rot</quality><length></length>",
+  "strip": {
+    "firstKicker": "Your first message",
+    "first": "… budget <figure>40,000 euro</figure>.",
+    "planKicker": "The AI's plan",
+    "plan": "… Total <figure>52,300 euro</figure>.",
+    "mayFill": "<marker>the AI may fill this gap itself</marker>",
+    "forgotten": "the budget got forgotten",
+    "reason": "<marker>One short number among the many similar numbers in the offers and searches</marker>",
+    "caveat": "<marker>Studies use planted facts, not chat apps</marker>"
+  },
+  "notes": {
+    "quality-falls-before-the-limit": {
+      "header": "Quality falls before the limit",
+      "description": "on a 13-task benchmark almost all of 17 long-context models lost a lot of accuracy as input grew, and only half kept satisfactory performance at 32K tokens although all claimed 32K or more [1].",
+      "sources": {
+        "hsieh-ruler": {
+          "title": "Hsieh et al., RULER: What's the Real Context Size of Your Long-Context Language Models?"
+        }
+      }
+    },
+    "length-alone-hurts": {
+      "header": "Length alone hurts",
+      "description": "even with perfect retrieval, performance dropped by 13.9% to 85% as input grew, and the drop persisted when irrelevant tokens were masked out [1].",
+      "sources": {
+        "du-context-length-alone-hurts": {
+          "title": "Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval"
+        }
+      }
+    },
+    "extra-material-makes-it-worse": {
+      "header": "Extra material makes it worse",
+      "description": "across 18 models, performance degraded with input length in every experiment, and even a single distractor lowered it [1].",
+      "sources": {
+        "hong-context-rot": {
+          "title": "Hong, Troynikov, Huber, Context Rot: How Increasing Input Tokens Impacts LLM Performance"
+        }
+      }
+    },
+    "what-the-studies-measure": {
+      "header": "What the studies measure",
+      "description": "the studies measure lost accuracy, not a hallucination mechanism [1][2].",
+      "sources": {
+        "du-context-length-alone-hurts": {
+          "title": "Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval"
+        },
+        "hong-context-rot": {
+          "title": "Hong, Troynikov, Huber, Context Rot: How Increasing Input Tokens Impacts LLM Performance"
+        }
+      }
+    },
+    "mostly-synthetic-tests": {
+      "header": "Mostly synthetic tests",
+      "description": "most studies use a planted fact or padded filler and models of 2024 and 2025, and the size of the drop varies by model and task [1].",
+      "sources": {
+        "du-context-length-alone-hurts": {
+          "title": "Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-start-helps-but-is-no-guarantee": {
+        "title": "The start helps, but is no guarantee",
+        "keywords": "",
+        "script": "Now watch what happens as this chat grows. The start still helps, because the first messages tend to be used well, like the opening of the call, but that is no guarantee, and you will see why in a moment. One thing before we go on: the numbers on this slide are illustrative, I picked a 200K window and the little bars that show how much the AI looks at each message, to show the shape, not to measure anything."
+      },
+      "the-newest-stays-sharp": {
+        "title": "The newest stays sharp",
+        "keywords": "",
+        "script": "The newest stays sharp too. The latest messages are used well, like the last minutes of the call, because they sit right at the end of what the AI is reading."
+      },
+      "the-middle-blurs": {
+        "title": "The middle blurs",
+        "keywords": "",
+        "script": "The middle blurs. What you said an hour ago sits in the blurry part, and the AI treats it the way you treat the neighbours' renovation: it was there, but it is thin."
+      },
+      "a-standout-survives": {
+        "title": "A standout survives",
+        "keywords": "",
+        "script": "And one standout survives. The 12 vegetarian guests, a detail the chat keeps repeating, are still there, and the plan comes back with a vegetarian menu."
+      },
+      "answers-get-worse": {
+        "title": "Answers get worse",
+        "keywords": "",
+        "script": "Now something new, and this is where it gets uncomfortable. As the chat fills, the answers get worse. This is called context rot."
+      },
+      "the-budget-is-forgotten": {
+        "title": "The budget is forgotten",
+        "keywords": "",
+        "script": "Look at the budget. Your very first message said 40,000 euro, and now the plan comes back at 52,300. The start of a chat is attended to well, so it was not lost by its position. It got little attention because it is one short number among many similar ones."
+      },
+      "filling-the-gap": {
+        "title": "Filling the gap",
+        "keywords": "",
+        "script": "So here is a small number sitting among all the similar numbers from the offers and the searches, and when the AI can't find it, I think it fills the gap itself with something that sounds plausible. I want to be straight about this: that is my hypothesis, not proven."
+      }
+    }
+  }
+}
