@@ -1,8 +1,9 @@
-// The Design archive (GLOSSARY.md) of one Episode, from its Staging: one page per Slide of the approved Spec with
-// every Option, the picked one marked, plus the index. Pure: Staging's text in, `{ path: html }` out; the CLI
-// (`archive.ts`) reads and writes the disk.
+// The Design archive (GLOSSARY.md) of one Episode, from its Staging: one page holding every Slide of the approved
+// Spec with every Option, the picked one marked, in the Spec's own frame. The dashboard is archive-dashboard.pure.ts.
+// Pure: Staging's text in, `{ path: html }` out; the CLI (`archive.ts`) reads and writes the disk.
 
-import { load } from 'cheerio';
+import { load, type CheerioAPI } from 'cheerio';
+import { escapeHtml, htmlPage } from './archive-html.pure.ts';
 import {
   citedImages,
   designerPrompts,
@@ -28,31 +29,27 @@ export interface ArchiveInput {
 export interface Archive {
   /** The Episode's slug, from the Spec's `<h1 id>`: its folder under `design-archive/`. */
   slug: string;
-  /** Pages keyed by their path under `design-archive/`. */
+  /** Pages keyed by their path under `design-archive/`: the Episode's one page, `<slug>/index.html`. */
   pages: Record<string, string>;
-  /** The design reference images the pages cite, Staging-relative; the CLI copies each to `design-archive/<slug>/`. */
+  /** The design reference images the page cites, Staging-relative; the CLI copies each to `design-archive/<slug>/`. */
   references: string[];
-}
-
-function escape(text: string): string {
-  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
 /** One archive section, `data-archive="<name>"`, holding `items`; nothing when there are none. */
 function archiveSection(name: string, heading: string, items: readonly string[]): string {
   if (items.length === 0) return '';
-  return `<section data-archive="${name}"><h2>${heading}</h2>${items.join('\n')}</section>`;
+  return `<section class="spec-card" data-archive="${name}"><h4>${heading}</h4>${items.join('\n')}</section>`;
 }
 
 function feedbackList(items: readonly FeedbackItem[]): string {
-  const lines = items.map(({ round, text }) => `<li>Round ${round} · ${escape(text)}</li>`);
+  const lines = items.map(({ round, text }) => `<li>Round ${round} · ${escapeHtml(text)}</li>`);
   return archiveSection('feedback', 'Feedback', lines.length === 0 ? [] : ['<ol>', ...lines, '</ol>']);
 }
 
 function promptList(prompts: readonly Prompt[]): string {
   const items = prompts.map(
     ({ attempt, text }) =>
-      `<details data-archive="prompt"><summary>Designer prompt · attempt ${attempt}</summary><pre>${escape(text)}</pre></details>`,
+      `<details data-archive="prompt"><summary>Designer prompt · attempt ${attempt}</summary><pre>${escapeHtml(text)}</pre></details>`,
   );
   return archiveSection('prompts', 'Design prompts', items);
 }
@@ -64,90 +61,147 @@ function referenceList(images: readonly string[]): string {
   return archiveSection('references', 'Design references', figures);
 }
 
-/** The archive's own layout and marks; the Options' look comes from the Spec's styles and `design.css`. */
-const ARCHIVE_STYLE = `
-body { max-width: 1520px; margin: 0 auto; padding: 2rem; display: grid; gap: 2rem; }
-figure[data-spec="option"] { position: relative; margin: 0; }
-figure[data-picked]::before, figure[data-recommended]::after { position: absolute; top: -1.6rem; font: 600 0.8rem sans-serif; }
-figure[data-picked]::before { content: "picked"; left: 0; color: #15803d; }
-figure[data-recommended]::after { content: "recommended"; right: 0; color: #6b7280; }
-[data-archive="references"] img { max-width: 480px; border: 1px solid #ddd; }
+/** The Episode page's own additions to the Spec's styles and `design.css`. */
+const EPISODE_STYLE = `
+.spec-kicker a { color: inherit; }
+.spec-words > [data-panel="visual-idea"] { display: block; }
+[data-archive-slide] { margin-bottom: 4rem; }
+[data-archive] { margin-top: 1.5rem; }
+[data-archive="references"] img { max-width: 480px; border: 1px solid var(--border, #ddd); }
 [data-archive="prompt"] pre { white-space: pre-wrap; }
+.archive-section-title { margin: 4rem 0 2rem; font-size: 1.75rem; font-weight: 600; }
 `;
 
-interface Head {
-  title: string;
-  /** The Spec's own `<style>` blocks, which its Option markup leans on. */
-  styles?: string;
-  /** Whether the Episode's compiled `design.css` sits beside the page. */
-  designCss?: boolean;
-}
-
-function htmlPage({ title, styles = '', designCss = false }: Head, body: string): string {
-  const link = designCss ? '<link rel="stylesheet" href="design.css" />\n' : '';
-  return `<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>${escape(title)}</title>
-${styles}<style>${ARCHIVE_STYLE}</style>
-${link}</head>
-<body>
-${body}
-</body>
-</html>
+/**
+ * The Spec's Option tabs, rebuilt for a page with no review form: an Option's ✓ comes from \`data-picked\`, and a
+ * Slide opens on its picked Option, else its recommended one, else its first. Without the script every Option shows,
+ * stacked.
+ */
+const TABS_SCRIPT = `
+addEventListener('DOMContentLoaded', () => {
+  for (const options of document.querySelectorAll('.spec-options')) {
+    const figures = [...options.querySelectorAll(':scope > [data-spec="option"]')];
+    const tabs = document.createElement('div');
+    tabs.className = 'spec-tabs';
+    tabs.setAttribute('role', 'tablist');
+    const show = (figure) => {
+      for (const other of figures) other.toggleAttribute('data-active', other === figure);
+      for (const button of tabs.children)
+        button.setAttribute('aria-selected', String(button.dataset.option === figure.dataset.option));
+    };
+    for (const figure of figures) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.setAttribute('role', 'tab');
+      button.dataset.option = figure.dataset.option;
+      button.textContent = 'Option ' + figure.dataset.option;
+      const mark = document.createElement('span');
+      mark.className = 'spec-picked';
+      mark.textContent = figure.hasAttribute('data-picked') ? '✓' : '';
+      button.append(mark);
+      if (figure.hasAttribute('data-recommended')) {
+        const badge = document.createElement('span');
+        badge.className = 'spec-badge';
+        badge.textContent = 'Recommended';
+        button.append(badge);
+      }
+      button.addEventListener('click', () => show(figure));
+      tabs.append(button);
+    }
+    options.before(tabs);
+    options.classList.add('is-tabbed');
+    show(
+      figures.find((f) => f.hasAttribute('data-picked')) ??
+        figures.find((f) => f.hasAttribute('data-recommended')) ??
+        figures[0],
+    );
+  }
+});
 `;
-}
-
-export interface ArchivedEpisode {
-  slug: string;
-  title: string;
-}
-
-/** `design-archive/index.html`: every archived Episode, linked by its title. */
-export function archiveIndex(episodes: readonly ArchivedEpisode[]): string {
-  const items = [...episodes]
-    .sort((a, b) => a.slug.localeCompare(b.slug))
-    .map(({ slug, title }) => `<li><a href="${slug}/index.html">${escape(title)}</a></li>`);
-  return htmlPage({ title: 'Design archive' }, `<h1>Design archive</h1>\n<ul>${items.join('\n')}</ul>`);
-}
 
 interface EpisodeContext {
-  episode: string;
   title: string;
-  styles: string;
   staging: string;
   feedback: FeedbackItem[];
   prompts: Prompt[];
 }
 
-/** One Slide's archive page, and the reference images it cites. */
-function slideArchivePage(slide: SlidePage, context: EpisodeContext): { html: string; images: string[] } {
-  const spec = [slide.visualIdea, ...slide.options]
-    .join('\n')
-    .replaceAll(`${context.staging}/reference/`, 'reference/');
-  const images = citedImages(spec);
+/** One Slide on the Episode page: the Spec's article, then its references, feedback and prompts. */
+function slideBlock(slide: SlidePage, context: EpisodeContext): { html: string; images: string[] } {
+  const article = slide.article.replaceAll(`${context.staging}/reference/`, 'reference/');
+  const images = citedImages(article);
   const anchor = slide.section === undefined ? slide.slug : `${slide.section}--${slide.slug}`;
-  const body = [
-    `<nav><a href="index.html">${escape(context.title)}</a></nav>`,
-    `<h1>${escape(slide.title)}</h1>`,
-    spec,
+  const parts = [
+    article,
     referenceList(images),
     feedbackList(context.feedback.filter((item) => item.anchor === anchor)),
     promptList(context.prompts.filter(({ text }) => namesSlide(text, slide))),
   ].filter((part) => part !== '');
-  return { html: htmlPage({ title: slide.title, styles: context.styles, designCss: true }, body.join('\n')), images };
+  return { html: `<div data-archive-slide="${slide.slug}">${parts.join('\n')}</div>`, images };
 }
 
-/** The Episode's own index: its Slides in Spec order, each with its picked Option. */
-function episodeIndex(slides: readonly SlidePage[], { title, styles }: EpisodeContext): string {
-  const items = slides.map(
-    (slide) =>
-      `<li><a href="${slide.slug}.html">${escape(slide.title)}${slide.picked ? ` · picked ${slide.picked}` : ''}</a></li>`,
-  );
-  const body = `<nav><a href="../index.html">Design archive</a></nav>\n<h1>${escape(title)}</h1>\n<ol>${items.join('\n')}</ol>`;
-  return htmlPage({ title, styles, designCss: true }, body);
+interface Group {
+  /** The Section's slug; none for the Title slide's group. */
+  section?: string;
+  title: string;
+  slides: SlidePage[];
+}
+
+/** The Slides grouped as the Spec's outline groups them: the Title slide under Episode, then each Section. */
+function groups($: CheerioAPI, slides: readonly SlidePage[]): Group[] {
+  const result: Group[] = [];
+  for (const slide of slides) {
+    const last = result.at(-1);
+    if (last && last.section === slide.section) {
+      last.slides.push(slide);
+      continue;
+    }
+    const title =
+      slide.section === undefined
+        ? 'Episode'
+        : $(`section[data-spec="section"]#${slide.section} h2`).first().text().trim() || slide.section;
+    result.push({ section: slide.section, title, slides: [slide] });
+  }
+  return result;
+}
+
+function outline(grouped: readonly Group[]): string {
+  const sections = grouped.map(({ title, slides }) => {
+    const links = slides.map((slide) => {
+      const state = slide.picked ? ' data-state="picked"' : '';
+      return `<li><a href="#${slide.slug}"${state}>${escapeHtml(slide.label)}</a></li>`;
+    });
+    return `<li><span class="spec-outline-section">${escapeHtml(title)}</span><ol>${links.join('')}</ol></li>`;
+  });
+  return `<nav class="spec-outline" aria-label="Slides"><ol>${sections.join('\n')}</ol></nav>`;
+}
+
+interface EpisodePage {
+  html: string;
+  references: string[];
+}
+
+/** The Episode's one page: the masthead, then each group's Slides, the Spec's styles and the tabs script in the head. */
+function episodePage($: CheerioAPI, slides: readonly SlidePage[], context: EpisodeContext): EpisodePage {
+  const references = new Set<string>();
+  const grouped = groups($, slides);
+  const sections = grouped.map((group) => {
+    const blocks = group.slides.map((slide) => {
+      const { html, images } = slideBlock(slide, context);
+      for (const image of images) references.add(image);
+      return html;
+    });
+    if (group.section === undefined) return blocks.join('\n');
+    return `<section data-spec="section" id="${group.section}"><h2 class="archive-section-title">${escapeHtml(group.title)}</h2>\n${blocks.join('\n')}</section>`;
+  });
+  const masthead = `<header class="spec-masthead"><p class="spec-kicker"><a href="../index.html">Design archive</a> · ${slides.length} Slides</p><h1>${escapeHtml(context.title)}</h1></header>`;
+  const body = `<div class="spec-shell">${outline(grouped)}<main class="spec-page">${masthead}\n${sections.join('\n')}</main></div>`;
+  const specStyles = $('head style')
+    .toArray()
+    .map((style) => $.html(style))
+    .join('\n');
+  const head = `${specStyles}\n<style>${EPISODE_STYLE}</style>\n<link rel="stylesheet" href="design.css" />\n<script>${TABS_SCRIPT}</script>`;
+  return { html: htmlPage({ title: context.title, head }, body), references: [...references].sort() };
 }
 
 export function designArchive(input: ArchiveInput): Archive {
@@ -155,24 +209,11 @@ export function designArchive(input: ArchiveInput): Archive {
   const heading = $('h1[id]').first();
   const episode = heading.attr('id');
   if (!episode) throw new Error('the Spec has no <h1 id> naming its Episode slug');
-  const context: EpisodeContext = {
-    episode,
+  const { html, references } = episodePage($, slidePages($), {
     title: heading.text().trim(),
-    styles: $('head style')
-      .toArray()
-      .map((style) => $.html(style))
-      .join('\n'),
     staging: input.staging,
     feedback: feedbackItems(input.feedback),
     prompts: designerPrompts(input.events),
-  };
-  const slides = slidePages($);
-  const pages: Record<string, string> = { [`${episode}/index.html`]: episodeIndex(slides, context) };
-  const references = new Set<string>();
-  for (const slide of slides) {
-    const { html, images } = slideArchivePage(slide, context);
-    pages[`${episode}/${slide.slug}.html`] = html;
-    for (const image of images) references.add(image);
-  }
-  return { slug: episode, pages, references: [...references].sort() };
+  });
+  return { slug: episode, pages: { [`${episode}/index.html`]: html }, references };
 }

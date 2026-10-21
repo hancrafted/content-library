@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -326,16 +326,21 @@ describe('success cases', () => {
     expect(readMarker(ctx.root)?.trace_id).toBe(lines(ctx).at(-1)?.trace_id);
   });
 
-  it('archives the log under the Run id', () => {
+  it('archives the log, the pipeline, and the Brief and Spec as the Run left them', () => {
     // ARRANGE
     const ctx = begun();
+    const staging = path.join(ctx.root, 'docs/episodes', SLUG);
+    mkdirSync(path.join(staging, 'spec'), { recursive: true });
+    writeFileSync(path.join(staging, 'brief.md'), '---\ntype: brief\nstatus: draft\n---\n');
+    writeFileSync(path.join(staging, 'spec/spec.html'), '<!doctype html><h1 id="demo">Demo</h1>');
+    const archive = '.logs/new-episode/demo/';
+    const files = ['events.jsonl', 'pipeline.yml', 'brief.md', 'spec/spec.html'];
     // ACT
     const result = run(ctx, 'archive');
+    const copied = files.map((file) => readFileSync(path.join(ctx.root, archive, file), 'utf8'));
     // ASSERT
-    expect(result).toEqual({ ok: true, output: '.logs/new-episode/demo/2026-10-14T09-00-00Z.jsonl' });
-    expect(readFileSync(path.join(ctx.root, '.logs/new-episode/demo/2026-10-14T09-00-00Z.jsonl'), 'utf8')).toBe(
-      readFileSync(path.join(ctx.root, episodeLogPath(SLUG)), 'utf8'),
-    );
+    expect(result).toEqual({ ok: true, output: archive });
+    expect(copied).toEqual(files.map((file) => readFileSync(path.join(staging, file), 'utf8')));
   });
 });
 
@@ -535,6 +540,20 @@ describe('lifecycle cases', () => {
 });
 
 describe('edge cases', () => {
+  it('archives a Run with no Brief or Spec yet, copying only what exists', () => {
+    // ARRANGE
+    const ctx = begun();
+    const archive = path.join(ctx.root, '.logs/new-episode/demo');
+    const archived = ['events.jsonl', 'pipeline.yml'];
+
+    // ACT
+    run(ctx, 'archive');
+    const files = readdirSync(archive).sort();
+
+    // ASSERT
+    expect(files).toEqual(archived);
+  });
+
   it('ends a Run as crashed with spans still open, which then read crashed', () => {
     // ARRANGE
     const ctx = begun();

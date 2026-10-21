@@ -25,27 +25,27 @@ _Done when_ the session works in the new worktree.
 
 ### 3. Archive the run logs
 
-`npm run episode:run -- <staging> archive` copies Staging's `events.jsonl` to `.logs/new-episode/<staging>/<run id>.jsonl`. Then `npm run episode:runs-csv`. Commit both.
+`npm run episode:run -- <staging> archive` copies Staging's `events.jsonl` and `pipeline.yml` to `.logs/new-episode/<staging>/`, so the dashboard still opens the Run once Staging is gone, and the Run's `brief.md` and `spec/spec.html` as it left them. Then `npm run episode:runs-csv`. Commit both.
 
-_Done when_ the log sits under `.logs/new-episode/<staging>/` and `docs/episodes/runs.csv` is regenerated.
+_Done when_ `.logs/new-episode/<staging>/` holds `events.jsonl`, `pipeline.yml`, `brief.md` and `spec/spec.html` and `docs/episodes/runs.csv` is regenerated.
 
 ### 4. File the Design archive
 
-`npm run episode:archive -- docs/episodes/<staging>`. It writes `design-archive/<slug>/`: one page per Slide with every Option (picked and recommended marked), the Visual idea, the user's feedback, every designer prompt and the cited design references, plus the index. Open it with `npm run design-archive` and have the user click through it. Commit `design-archive/`. A Run older than `events.jsonl` archives without designer prompts.
+`npm run episode:archive -- docs/episodes/<staging>`. It writes `design-archive/<slug>/index.html`: one page in the Spec's frame holding every Slide with every Option as tabs (picked and recommended marked), the Visual idea, the user's feedback, every designer prompt and the cited design references; and it regenerates the dashboard, `design-archive/index.html`. Open it with `npm run design-archive` and have the user click through it. Commit `design-archive/`. A Run older than `events.jsonl` archives without designer prompts.
 
-_Done when_ every Slide of the Spec has a page, the user has seen the archive, and it is committed.
+_Done when_ every Slide of the Spec is on the Episode's page, the user has seen the archive, and it is committed.
 
 ### 5. Harvest
 
-Read [`references/harvest.md`](references/harvest.md) and run its five harvesters as parallel subagents. They write proposals into `docs/episodes/<staging>/harvest.md`; nothing is applied yet.
+Read [`references/harvest.md`](references/harvest.md) and run its five harvesters as parallel subagents. Assemble their cards into `docs/episodes/<staging>/harvest.json` and render the Harvest report with `npm run episode:harvest -- docs/episodes/<staging>`: one card per proposal, before and after drawn side by side. Nothing is applied yet.
 
-_Done when_ `harvest.md` holds all five sections, each proposal with its evidence.
+_Done when_ `harvest.html` renders all five sections, every card with its before, after and evidence.
 
 ### 6. Gate the harvest
 
-Give the user `harvest.md`. They strike or edit lines. Apply what remains, one commit per section: lessons into `skills/new-episode/LEARNINGS.md`, style into `docs/design/design-guide.md`, Slide library moves and cleanups into the code, and each refactor ticket filed with `gh issue create --label needs-triage` (see `docs/agents/issue-tracker.md`). Run `npm run verify` after each code commit.
+The user opens `harvest.html`, keeps or strikes each card, notes any edit, and pastes back the decisions the page copies (`- L1 keep — <note>`). Apply every kept card, with its note, one commit per section: lessons into `skills/new-episode/LEARNINGS.md`, style into `docs/design/design-guide.md`, Slide library moves and cleanups into the code, and each refactor ticket filed with `gh issue create --label needs-triage` (see `docs/agents/issue-tracker.md`). Run `npm run verify` after each code commit.
 
-_Done when_ every surviving line is applied or filed, and `npm run verify` is green.
+_Done when_ every kept card is applied or filed, and `npm run verify` is green.
 
 ### 7. Keep what outlives Staging, and delete Staging
 
@@ -67,4 +67,4 @@ _Done when_ all four are green and the PR is open.
 ## Reading an Episode afterwards
 
 - Words: `npm run episode:text -- <slug> [--locale de]` prints the Episode as markdown from its Slides. Never commit its output.
-- Design: a new Episode reuses an archived Option by naming `<slug>/<slide>#<option>` in its Brief or feedback; the designer reads `design-archive/<slug>/<slide>.html`.
+- Design: a new Episode reuses an archived Option by naming `<slug>/<slide>#<option>` in its Brief or feedback; the designer reads the Slide at `design-archive/<slug>/index.html#<slide>`.

@@ -91,7 +91,7 @@ describe('success cases', () => {
     const a = [startRun(TRACE_A, 1, '2026-10-14T09:00:00Z')];
     const root = worktree({
       [episodeLogPath(SLUG)]: jsonl(...a, startRun(TRACE_B, 2, '2026-10-14T10:00:00Z')),
-      [`.logs/new-episode/${SLUG}/run-a.jsonl`]: jsonl(...a),
+      [`.logs/new-episode/${SLUG}/events.jsonl`]: jsonl(...a),
     });
     // ACT
     const { sources } = readRuns([], root);
@@ -139,7 +139,7 @@ describe('edge cases', () => {
   it('reads a Run present in both the live log and an archive once', () => {
     // ARRANGE
     const a = jsonl(startRun(TRACE_A, 1, '2026-10-14T09:00:00Z'));
-    const root = worktree({ [episodeLogPath(SLUG)]: a, [`.logs/new-episode/${SLUG}/run-a.jsonl`]: a });
+    const root = worktree({ [episodeLogPath(SLUG)]: a, [`.logs/new-episode/${SLUG}/events.jsonl`]: a });
     // ACT
     const { sources, files } = readRuns([], root);
     // ASSERT
@@ -175,7 +175,7 @@ describe('edge cases', () => {
     const start = startRun(TRACE_A, 1, '2026-10-14T09:00:00Z');
     const job = startJob(TRACE_A, 2, '2026-10-14T09:01:00Z');
     const root = worktree({
-      [`.logs/new-episode/${SLUG}/run-a.jsonl`]: jsonl(start),
+      [`.logs/new-episode/${SLUG}/events.jsonl`]: jsonl(start),
       [episodeLogPath(SLUG)]: jsonl(start, job),
     });
     // ACT

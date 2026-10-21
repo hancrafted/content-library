@@ -1,7 +1,7 @@
 import { load } from 'cheerio';
 import { describe, expect, it } from 'vitest';
 import { EVENTS, FEEDBACK, SPEC } from './archive.fixture.ts';
-import { archiveIndex, designArchive } from './archive.pure.ts';
+import { designArchive } from './archive.pure.ts';
 
 const STAGING = 'docs/episodes/cash-first-run-2';
 const INPUT = { staging: STAGING, spec: SPEC, feedback: FEEDBACK, events: EVENTS };
@@ -20,31 +20,34 @@ function texts($: ReturnType<typeof load>, selector: string): string[] {
 
 describe('designArchive', () => {
   describe('success cases', () => {
-    it('writes one page per Slide, the Title slide as top, each holding only its own Options with the picked one marked', () => {
+    it('writes one page holding every Slide in Spec order, each with only its own Options and the picked one marked', () => {
       // ARRANGE
-      const files = [
-        'cash-first/cash-left.html',
-        'cash-first/index.html',
-        'cash-first/top.html',
-        'cash-first/watch-cash.html',
-      ];
+      const files = ['cash-first/index.html'];
+      const slides = ['top', 'watch-cash', 'cash-left'];
       const options = ['1a', '1b'];
       const [picked, recommended, pickedTitle] = ['1b', '1a', '0b'];
 
       // ACT
       const { pages } = designArchive(INPUT);
-      const $ = page(pages, 'cash-first/watch-cash.html');
+      const $ = page(pages, 'cash-first/index.html');
+      const watchCash = $('[data-archive-slide="watch-cash"]');
 
       // ASSERT
-      expect(Object.keys(pages).sort()).toEqual(files);
+      expect(Object.keys(pages)).toEqual(files);
       expect(
-        $('figure[data-option]')
+        $('[data-archive-slide]')
+          .map((_, slide) => $(slide).attr('data-archive-slide'))
+          .get(),
+      ).toEqual(slides);
+      expect(
+        watchCash
+          .find('figure[data-option]')
           .map((_, f) => $(f).attr('data-option'))
           .get(),
       ).toEqual(options);
-      expect($('figure[data-picked]').attr('data-option')).toBe(picked);
-      expect($('figure[data-recommended]').attr('data-option')).toBe(recommended);
-      expect(page(pages, 'cash-first/top.html')('figure[data-picked]').attr('data-option')).toBe(pickedTitle);
+      expect(watchCash.find('figure[data-picked]').attr('data-option')).toBe(picked);
+      expect(watchCash.find('figure[data-recommended]').attr('data-option')).toBe(recommended);
+      expect($('[data-archive-slide="top"] figure[data-picked]').attr('data-option')).toBe(pickedTitle);
     });
 
     it('files each feedback item under its Slide, labelled with its round, rounds in order', () => {
@@ -57,13 +60,13 @@ describe('designArchive', () => {
       const cashLeft = ['Round 1 · content — say "cash left"'];
 
       // ACT
-      const { pages } = designArchive(INPUT);
-      const feedback = (file: string) => texts(page(pages, file), '[data-archive="feedback"] li');
+      const $ = page(designArchive(INPUT).pages, 'cash-first/index.html');
+      const feedback = (slide: string) => texts($, `[data-archive-slide="${slide}"] [data-archive="feedback"] li`);
 
       // ASSERT
-      expect(feedback('cash-first/watch-cash.html')).toEqual(watchCash);
-      expect(feedback('cash-first/top.html')).toEqual(top);
-      expect(feedback('cash-first/cash-left.html')).toEqual(cashLeft);
+      expect(feedback('watch-cash')).toEqual(watchCash);
+      expect(feedback('top')).toEqual(top);
+      expect(feedback('cash-left')).toEqual(cashLeft);
     });
 
     it('shows each designer prompt that names the Slide, its Section or its Options, newest attempt first, once each', () => {
@@ -74,34 +77,33 @@ describe('designArchive', () => {
       const title = 'Designer prompt · attempt 1: Draw the Title slide Options 0a and 0b.';
 
       // ACT
-      const { pages } = designArchive(INPUT);
-      const prompts = (file: string) => {
-        const $ = page(pages, file);
-        return $('[data-archive="prompt"]')
+      const $ = page(designArchive(INPUT).pages, 'cash-first/index.html');
+      const prompts = (slide: string) =>
+        $(`[data-archive-slide="${slide}"] [data-archive="prompt"]`)
           .map((_, d) => `${$(d).find('summary').text().trim()}: ${$(d).find('pre').text()}`)
           .get();
-      };
 
       // ASSERT
-      expect(prompts('cash-first/watch-cash.html')).toEqual([retry, section]);
-      expect(prompts('cash-first/cash-left.html')).toEqual([section]);
-      expect(prompts('cash-first/top.html')).toEqual([title]);
+      expect(prompts('watch-cash')).toEqual([retry, section]);
+      expect(prompts('cash-left')).toEqual([section]);
+      expect(prompts('top')).toEqual([title]);
     });
 
-    it('shows the Visual idea, not the words, and lists the design references the Slide cites, archive-relative', () => {
+    it('shows the Visual idea untabbed and lists the design references the Slide cites, archive-relative', () => {
       // ARRANGE
       const visualIdea = 'A board of month columns.';
       const images = ['reference/deck/pages/page-03.jpg', 'reference/deck/pages/page-08.jpg'];
 
       // ACT
       const { pages, references } = designArchive(INPUT);
-      const $ = page(pages, 'cash-first/watch-cash.html');
+      const $ = page(pages, 'cash-first/index.html');
+      const slide = $('[data-archive-slide="watch-cash"]');
 
       // ASSERT
-      expect($('[data-spec="visual-idea"]').text()).toBe(visualIdea);
-      expect($('[data-spec="voice-script"]')).toHaveLength(0);
+      expect(slide.find('.spec-words > [data-panel="visual-idea"] [data-spec="visual-idea"]').text()).toBe(visualIdea);
       expect(
-        $('[data-archive="references"] img')
+        slide
+          .find('[data-archive="references"] img')
           .map((_, img) => $(img).attr('src'))
           .get(),
       ).toEqual(images);
@@ -109,40 +111,77 @@ describe('designArchive', () => {
       expect(references).toEqual(images);
     });
 
-    it("indexes the Episode's Slides in Spec order, each linked with its title and picked Option, under the Episode's title", () => {
+    it("lays the page out in the Spec's frame: a masthead, an outline of in-page links grouped by Section, Sections titled", () => {
       // ARRANGE
       const title = 'Cash first';
-      const links = [
-        'top.html Title slide and section slides · picked 0b',
-        'watch-cash.html Watch cash · picked 1b',
-        'cash-left.html Cash left · picked 2a',
+      const [stylesheet, back] = ['design.css', '../index.html'];
+      const specStyle = '.spec-card{padding:1rem}';
+      const outline = [
+        'Episode: #top 0 · Title slide and section slides',
+        'Why cash: #watch-cash 1 · Watch cash, #cash-left 2 · Cash left',
       ];
+      const picked = ['#top', '#watch-cash', '#cash-left'];
+      const section = { title: 'Why cash', slides: ['watch-cash', 'cash-left'] };
 
       // ACT
       const $ = page(designArchive(INPUT).pages, 'cash-first/index.html');
+      const groups = $('.spec-shell > nav.spec-outline > ol > li')
+        .map((_, li) => {
+          const links = $(li)
+            .find('a')
+            .map((_i, a) => `${$(a).attr('href')} ${$(a).text().trim()}`)
+            .get();
+          return `${$(li).find('.spec-outline-section').text()}: ${links.join(', ')}`;
+        })
+        .get();
+      const sectionEl = $('main.spec-page section[data-spec="section"]#why-cash');
 
       // ASSERT
-      expect($('h1').text()).toBe(title);
+      expect($('main .spec-masthead h1').text()).toBe(title);
+      expect($('.spec-masthead a').attr('href')).toBe(back);
+      expect($('style').text()).toContain(specStyle);
+      expect($('link[rel="stylesheet"]').attr('href')).toBe(stylesheet);
+      expect(groups).toEqual(outline);
       expect(
-        $('li a')
-          .map((_, a) => `${$(a).attr('href')} ${$(a).text()}`)
+        $('.spec-outline a[data-state="picked"]')
+          .map((_, a) => $(a).attr('href'))
           .get(),
-      ).toEqual(links);
+      ).toEqual(picked);
+      expect(sectionEl.find('h2').first().text()).toBe(section.title);
+      expect(
+        sectionEl
+          .find('[data-archive-slide]')
+          .map((_, s) => $(s).attr('data-archive-slide'))
+          .get(),
+      ).toEqual(section.slides);
     });
 
-    it("carries the Spec's own styles, not its review scripts, and links each Slide page back to its Episode", () => {
+    it('drops the review form, the picks, the notes and the words, and tabs the Options with one script of its own', () => {
       // ARRANGE
-      const specStyle = '.spec-card{padding:1rem}';
-      const [stylesheet, back] = ['design.css', 'index.html'];
+      const dropped = [
+        'form',
+        '.spec-pick',
+        '.spec-note',
+        '[data-panel="voice-script"]',
+        '[data-panel="speaker-notes"]',
+        '.spec-words > input',
+        '.spec-words > label',
+        '#spec-meta',
+      ];
+      const specScripts = ['/* option tabs */', '/* review form */'];
 
       // ACT
-      const $ = page(designArchive(INPUT).pages, 'cash-first/watch-cash.html');
+      const $ = page(designArchive(INPUT).pages, 'cash-first/index.html');
+      const found = dropped.filter((selector) => $(selector).length > 0);
+      const scripts = $('script')
+        .map((_, script) => $(script).html() ?? '')
+        .get();
+      const carried = specScripts.filter((text) => scripts.some((script) => script.includes(text)));
 
       // ASSERT
-      expect($('style').text()).toContain(specStyle);
-      expect($('script')).toHaveLength(0);
-      expect($('link[rel="stylesheet"]').attr('href')).toBe(stylesheet);
-      expect($('nav a').attr('href')).toBe(back);
+      expect(found).toEqual([]);
+      expect(scripts).toHaveLength(1);
+      expect(carried).toEqual([]);
     });
   });
 
@@ -168,60 +207,11 @@ describe('designArchive', () => {
       const sections = ['[data-archive="feedback"]', '[data-archive="prompts"]', '[data-archive="references"]'];
 
       // ACT
-      const $ = page(designArchive(input).pages, 'cash-first/cash-left.html');
-      const found = sections.filter((selector) => $(selector).length > 0);
+      const $ = page(designArchive(input).pages, 'cash-first/index.html');
+      const found = sections.filter((selector) => $(`[data-archive-slide="cash-left"] ${selector}`).length > 0);
 
       // ASSERT
       expect(found).toEqual([]);
-    });
-  });
-});
-
-describe('archiveIndex', () => {
-  describe('success cases', () => {
-    it('links every archived Episode by its title, sorted by slug', () => {
-      // ARRANGE
-      const episodes = [
-        { slug: 'zeta', title: 'Zeta' },
-        { slug: 'cash-first', title: 'Cash first' },
-      ];
-      const links = ['cash-first/index.html Cash first', 'zeta/index.html Zeta'];
-
-      // ACT
-      const $ = load(archiveIndex(episodes));
-
-      // ASSERT
-      expect(
-        $('li a')
-          .map((_, a) => `${$(a).attr('href')} ${$(a).text()}`)
-          .get(),
-      ).toEqual(links);
-    });
-  });
-
-  describe('failure cases', () => {
-    it('escapes an Episode title that carries markup', () => {
-      // ARRANGE
-      const title = 'Cash <b>first</b>';
-
-      // ACT
-      const $ = load(archiveIndex([{ slug: 'cash-first', title }]));
-
-      // ASSERT
-      expect($('li a').text()).toBe(title);
-    });
-  });
-
-  describe('edge cases', () => {
-    it('renders an empty list when nothing is archived yet', () => {
-      // ARRANGE
-      const none: { slug: string; title: string }[] = [];
-
-      // ACT
-      const $ = load(archiveIndex(none));
-
-      // ASSERT
-      expect($('li')).toHaveLength(0);
     });
   });
 });

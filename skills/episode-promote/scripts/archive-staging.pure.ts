@@ -11,13 +11,27 @@ export interface SlidePage {
   /** The Section's slug; none for the Title slide. */
   section?: string;
   title: string;
-  /** The Spec's Visual idea panel, empty when the Slide has none. */
-  visualIdea: string;
-  options: string[];
   optionIds: string[];
   /** The picked Option's id, if the Spec marks one. */
   picked?: string;
+  /** The Spec's `<article>` for the Slide as the archive shows it: head, Visual idea and Options, no review controls. */
+  article: string;
+  /** The Slide's label in the Spec's outline, `1 · Watch cash`; its title when the outline has none. */
+  label: string;
 }
+
+/**
+ * What the archive drops from a Spec article: the review controls, which wrote feedback that already landed, and the
+ * Voice script and Speaker notes, whose words the Slide's `i18n/` owns after Promotion (design-ADR 0004). The Visual
+ * idea stays, alone, so its tab goes too.
+ */
+const REVIEW_ONLY = [
+  '.spec-pick',
+  '.spec-note',
+  '.spec-words > [data-panel]:not([data-panel="visual-idea"])',
+  '.spec-words > input',
+  '.spec-words > label',
+].join(', ');
 
 export function slidePages($: CheerioAPI): SlidePage[] {
   const pages: SlidePage[] = [];
@@ -28,23 +42,22 @@ export function slidePages($: CheerioAPI): SlidePage[] {
       slug,
       section: slug === TITLE_ANCHOR ? undefined : article.closest('section[data-spec="section"]').attr('id'),
       title: article.find('h3').first().text().trim(),
-      visualIdea: article
-        .find('[data-panel="visual-idea"]')
-        .toArray()
-        .map((panel) => $.html(panel))
-        .join(''),
-      options: article
-        .find(OPTION)
-        .map((_i, figure) => $.html(figure))
-        .get(),
       picked: article.find(`${OPTION}[data-picked]`).first().attr('data-option'),
       optionIds: article
         .find(OPTION)
         .map((_i, figure) => $(figure).attr('data-option') ?? '')
         .get(),
+      article: archivedArticle($, element),
+      label: $(`.spec-outline a[href="#${slug}"]`).first().text().trim() || article.find('h3').first().text().trim(),
     });
   });
   return pages;
+}
+
+function archivedArticle($: CheerioAPI, element: Parameters<CheerioAPI>[0]): string {
+  const article = $(element).clone();
+  article.find(REVIEW_ONLY).remove();
+  return $.html(article);
 }
 
 export interface FeedbackItem {

@@ -1,0 +1,671 @@
+<!doctype html>
+<!--
+  The Harvest report: Promotion's gate page (skills/episode-promote/references/harvest-report.md).
+  Copy this file to docs/episodes/<staging>/harvest.html and replace only the JSON in #harvest; the page renders
+  every card from it. Self-contained on purpose: no CDN, so it opens from disk with `open`.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Harvest</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: oklch(0.975 0 0);
+        --card: oklch(1 0 0);
+        --fg: oklch(0.2 0 0);
+        --muted: oklch(0.46 0 0);
+        --border: oklch(0.9 0 0);
+        --tint: oklch(0.955 0 0);
+        --bad: oklch(0.55 0.19 27);
+        --bad-tint: oklch(0.96 0.03 27);
+        --good: oklch(0.52 0.13 150);
+        --good-tint: oklch(0.96 0.04 150);
+        --warn: oklch(0.62 0.13 75);
+        --warn-tint: oklch(0.97 0.04 85);
+        --ring: oklch(0.55 0.15 250);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: oklch(0.16 0 0);
+          --card: oklch(0.205 0 0);
+          --fg: oklch(0.96 0 0);
+          --muted: oklch(0.72 0 0);
+          --border: oklch(0.31 0 0);
+          --tint: oklch(0.25 0 0);
+          --bad: oklch(0.72 0.16 27);
+          --bad-tint: oklch(0.28 0.05 27);
+          --good: oklch(0.76 0.14 150);
+          --good-tint: oklch(0.27 0.05 150);
+          --warn: oklch(0.8 0.13 80);
+          --warn-tint: oklch(0.29 0.05 80);
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--fg);
+        font:
+          16px/1.5 system-ui,
+          -apple-system,
+          'Segoe UI',
+          sans-serif;
+      }
+      code,
+      .mono {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.85em;
+      }
+      a {
+        color: inherit;
+      }
+      :focus-visible {
+        outline: 2px solid var(--ring);
+        outline-offset: 2px;
+      }
+      .wrap {
+        max-width: 68rem;
+        margin: 0 auto;
+        padding: 3rem 1rem 8rem;
+      }
+      .kicker {
+        margin: 0;
+        font:
+          600 0.75rem/1 ui-monospace,
+          monospace;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      h1 {
+        margin: 0.6rem 0 0.4rem;
+        font-size: clamp(1.9rem, 4.5vw, 2.75rem);
+        letter-spacing: -0.02em;
+        line-height: 1.15;
+      }
+      .lede {
+        margin: 0;
+        max-width: 42rem;
+        color: var(--muted);
+      }
+      .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem 1.25rem;
+        margin: 1.5rem 0 0;
+        padding: 0;
+        list-style: none;
+        font-size: 0.8125rem;
+        color: var(--muted);
+      }
+      .legend i {
+        display: inline-block;
+        width: 0.75rem;
+        height: 0.75rem;
+        margin-right: 0.4rem;
+        border-radius: 0.2rem;
+        vertical-align: -0.1rem;
+        border: 1.5px solid;
+      }
+      .toc {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin: 2rem 0 0;
+        padding: 0;
+        list-style: none;
+      }
+      .toc a {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-height: 2.75rem;
+        padding: 0 1rem;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: var(--card);
+        text-decoration: none;
+        font-size: 0.875rem;
+      }
+      .toc b {
+        font-variant-numeric: tabular-nums;
+      }
+      section.group {
+        margin-top: 3.5rem;
+      }
+      section.group > h2 {
+        margin: 0 0 0.25rem;
+        font-size: 1.5rem;
+      }
+      section.group > p {
+        margin: 0 0 1.25rem;
+        color: var(--muted);
+        font-size: 0.9375rem;
+      }
+      .cards {
+        display: grid;
+        gap: 1rem;
+      }
+      article.card {
+        padding: 1.25rem;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 0.875rem;
+        transition:
+          opacity 200ms,
+          border-color 200ms;
+      }
+      article.card[data-decision='strike'] {
+        opacity: 0.55;
+      }
+      article.card[data-decision='strike'] h3 {
+        text-decoration: line-through;
+      }
+      article.card[data-decision='keep'] {
+        border-color: var(--good);
+      }
+      .card-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 0.5rem 0.75rem;
+      }
+      .card-id {
+        font:
+          600 0.75rem ui-monospace,
+          monospace;
+        color: var(--muted);
+      }
+      h3 {
+        flex: 1 1 20rem;
+        margin: 0;
+        font-size: 1.0625rem;
+        line-height: 1.35;
+      }
+      .badge {
+        padding: 0.1rem 0.55rem;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      .badge[data-weight='strong'] {
+        background: var(--good-tint);
+        color: var(--good);
+      }
+      .badge[data-weight='worth'] {
+        background: var(--warn-tint);
+        color: var(--warn);
+      }
+      .badge[data-weight='weak'] {
+        background: var(--tint);
+        color: var(--muted);
+      }
+      .target {
+        margin: 0.4rem 0 0;
+        color: var(--muted);
+        font-size: 0.8125rem;
+      }
+      .ba {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: stretch;
+        gap: 0.75rem;
+        margin: 1rem 0;
+      }
+      .ba > .arrow {
+        align-self: center;
+        color: var(--muted);
+        font-size: 1.25rem;
+      }
+      .pane {
+        min-width: 0;
+        padding: 0.875rem;
+        border-radius: 0.625rem;
+        border: 1.5px solid;
+      }
+      .pane[data-side='before'] {
+        border-color: var(--bad);
+        background: var(--bad-tint);
+      }
+      .pane[data-side='after'] {
+        border-color: var(--good);
+        background: var(--good-tint);
+      }
+      .pane-label {
+        margin: 0 0 0.6rem;
+        font:
+          600 0.6875rem ui-monospace,
+          monospace;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .flow {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.35rem;
+      }
+      .flow .sep {
+        color: var(--muted);
+      }
+      .node {
+        padding: 0.25rem 0.55rem;
+        border-radius: 0.4rem;
+        border: 1.5px solid var(--border);
+        background: var(--card);
+        font-size: 0.8125rem;
+        line-height: 1.3;
+      }
+      .node[data-tone='bad'] {
+        border-color: var(--bad);
+        color: var(--bad);
+      }
+      .node[data-tone='good'] {
+        border-color: var(--good);
+        color: var(--good);
+        font-weight: 600;
+      }
+      .node[data-tone='muted'] {
+        border-style: dashed;
+        color: var(--muted);
+      }
+      .stack {
+        display: grid;
+        gap: 0.3rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .stack .node {
+        overflow-wrap: anywhere;
+      }
+      .quote {
+        margin: 0;
+        padding-left: 0.75rem;
+        border-left: 3px solid currentColor;
+        font-size: 0.875rem;
+      }
+      .pane[data-side='before'] .quote {
+        color: var(--bad);
+      }
+      .pane[data-side='after'] .quote {
+        color: var(--good);
+      }
+      .count {
+        display: flex;
+        align-items: baseline;
+        gap: 0.5rem;
+      }
+      .count b {
+        font-size: 2rem;
+        font-variant-numeric: tabular-nums;
+        line-height: 1;
+      }
+      .count span {
+        font-size: 0.8125rem;
+        color: var(--muted);
+      }
+      .why {
+        margin: 0;
+        font-size: 0.9375rem;
+      }
+      .why b {
+        font-weight: 600;
+      }
+      .why + .why {
+        margin-top: 0.35rem;
+      }
+      .overlap {
+        margin: 0.75rem 0 0;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.5rem;
+        background: var(--warn-tint);
+        color: var(--fg);
+        font-size: 0.875rem;
+      }
+      details.evidence {
+        margin-top: 0.75rem;
+        font-size: 0.8125rem;
+        color: var(--muted);
+      }
+      details.evidence summary {
+        cursor: pointer;
+        min-height: 2rem;
+      }
+      .decide {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border);
+      }
+      .decide label.choice {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        min-height: 2.75rem;
+        padding: 0 1rem;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        cursor: pointer;
+        font-size: 0.875rem;
+      }
+      .decide input[type='radio'] {
+        accent-color: var(--fg);
+      }
+      .decide label.choice:has(input:checked) {
+        background: var(--fg);
+        color: var(--bg);
+        border-color: var(--fg);
+      }
+      .decide textarea {
+        flex: 1 1 18rem;
+        min-height: 2.75rem;
+        padding: 0.6rem 0.75rem;
+        border: 1px solid var(--border);
+        border-radius: 0.6rem;
+        background: var(--bg);
+        color: var(--fg);
+        font: inherit;
+        font-size: 0.875rem;
+        resize: vertical;
+      }
+      .bar {
+        position: fixed;
+        inset: auto 0 0 0;
+        display: flex;
+        justify-content: center;
+        padding: 0.75rem 1rem;
+        background: color-mix(in oklch, var(--bg) 88%, transparent);
+        backdrop-filter: blur(8px);
+        border-top: 1px solid var(--border);
+      }
+      .bar-inner {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.75rem 1rem;
+        width: 100%;
+        max-width: 68rem;
+      }
+      .progress {
+        flex: 1 1 12rem;
+        font-size: 0.875rem;
+      }
+      .progress meter {
+        display: block;
+        width: 100%;
+        height: 0.4rem;
+        margin-top: 0.3rem;
+      }
+      .bar button {
+        min-height: 2.75rem;
+        padding: 0 1.25rem;
+        border: 0;
+        border-radius: 999px;
+        background: var(--fg);
+        color: var(--bg);
+        font:
+          600 0.9375rem system-ui,
+          sans-serif;
+        cursor: pointer;
+      }
+      .bar output {
+        font-size: 0.8125rem;
+        color: var(--muted);
+      }
+      @media (max-width: 40rem) {
+        .ba {
+          grid-template-columns: 1fr;
+        }
+        .ba > .arrow {
+          justify-self: center;
+          transform: rotate(90deg);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        article.card {
+          transition: none;
+        }
+      }
+    </style>
+    <!--
+      The harvest, as data. One object per proposal; the render script below draws it.
+      visual kinds: flow {nodes:[{label, tone}]}, stack {items:[{label, tone}]}, quote {text}, count {value, unit}.
+      tones: bad, good, muted, or none. weight: strong, worth, weak.
+    -->
+    <script type="application/json" id="harvest">
+      {
+        "staging": "docs/episodes/example-run-1",
+        "episode": "Example Episode",
+        "sections": [
+          {
+            "key": "lessons",
+            "title": "Lessons",
+            "target": "skills/new-episode/LEARNINGS.md",
+            "cards": [
+              {
+                "id": "L1",
+                "title": "Scene text keys never use notes.*",
+                "weight": "strong",
+                "changes": "skills/new-episode/references/write-spec.md",
+                "happened": "On three Slides, the builder had to rename the text keys the designer chose.",
+                "change": "The Spec tells designers to name text keys after what they show.",
+                "gain": "Slides build as drawn, the first time.",
+                "before": {
+                  "kind": "flow",
+                  "nodes": [
+                    { "label": "Spec: notes.*" },
+                    { "label": "implementor renames", "tone": "bad" },
+                    { "label": "Attempt 2", "tone": "bad" }
+                  ]
+                },
+                "after": {
+                  "kind": "flow",
+                  "nodes": [{ "label": "Spec: board.*" }, { "label": "builds as drawn", "tone": "good" }]
+                },
+                "evidence": "run log ~425, 489, 523; Score fail FE-010 §3.1",
+                "overlaps": []
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <main class="wrap">
+      <p class="kicker">Promotion · Harvest</p>
+      <h1 id="title">Harvest</h1>
+      <p class="lede">
+        Each card is one proposal. Keep or strike it, and write a note to change it. Then copy your decisions and paste
+        them back to the agent.
+      </p>
+      <ul class="legend" aria-label="Legend">
+        <li><i style="border-color: var(--bad); background: var(--bad-tint)"></i>Before: what happened</li>
+        <li><i style="border-color: var(--good); background: var(--good-tint)"></i>After: what the change gives</li>
+        <li><i style="border-color: var(--warn); background: var(--warn-tint)"></i>Overlaps another card: keep one</li>
+      </ul>
+      <ul class="toc" id="toc"></ul>
+      <div id="groups"></div>
+    </main>
+    <div class="bar">
+      <div class="bar-inner">
+        <div class="progress" id="progress" aria-live="polite"></div>
+        <output id="copied"></output>
+        <button type="button" id="copy">Copy decisions</button>
+      </div>
+    </div>
+    <script>
+      (() => {
+        const data = JSON.parse(document.getElementById('harvest').textContent);
+        const key = 'harvest:' + data.staging;
+        let saved = {};
+        try {
+          saved = JSON.parse(localStorage.getItem(key) || '{}');
+        } catch {}
+        const store = () => {
+          try {
+            localStorage.setItem(key, JSON.stringify(saved));
+          } catch {}
+        };
+
+        const el = (tag, attrs = {}, ...children) => {
+          const node = document.createElement(tag);
+          for (const [name, value] of Object.entries(attrs)) {
+            if (value === undefined || value === null) continue;
+            if (name === 'class') node.className = value;
+            else node.setAttribute(name, value);
+          }
+          for (const child of children.flat()) if (child != null) node.append(child);
+          return node;
+        };
+        /** Text with `code` spans, built as nodes so no markup from the data is ever parsed. */
+        const rich = (text = '') =>
+          text.split(/(`[^`]+`)/).map((part) => (part.startsWith('`') ? el('code', {}, part.slice(1, -1)) : part));
+
+        const visuals = {
+          flow: ({ nodes = [] }) =>
+            el(
+              'div',
+              { class: 'flow' },
+              nodes.flatMap((node, i) => [
+                i > 0 ? el('span', { class: 'sep', 'aria-hidden': 'true' }, '→') : null,
+                el('span', { class: 'node', 'data-tone': node.tone }, rich(node.label)),
+              ]),
+            ),
+          stack: ({ items = [] }) =>
+            el(
+              'ul',
+              { class: 'stack' },
+              items.map((item) => el('li', { class: 'node', 'data-tone': item.tone }, rich(item.label))),
+            ),
+          quote: ({ text }) => el('blockquote', { class: 'quote' }, rich(text)),
+          count: ({ value, unit }) => el('div', { class: 'count' }, el('b', {}, String(value)), el('span', {}, unit)),
+        };
+        const pane = (side, visual) =>
+          el(
+            'div',
+            { class: 'pane', 'data-side': side },
+            el('p', { class: 'pane-label' }, side),
+            (visuals[visual?.kind] ?? visuals.quote)(visual ?? { text: '' }),
+          );
+
+        const all = data.sections.flatMap((section) => section.cards);
+        const weights = { strong: 'Strong', worth: 'Worth it', weak: 'Weak evidence' };
+
+        const card = (c) => {
+          const article = el('article', { class: 'card', id: c.id, 'data-decision': saved[c.id]?.decision });
+          const choice = (value, label) => {
+            const input = el('input', { type: 'radio', name: 'decide-' + c.id, value });
+            input.checked = saved[c.id]?.decision === value;
+            input.addEventListener('change', () => {
+              saved[c.id] = { ...saved[c.id], decision: value };
+              article.dataset.decision = value;
+              store();
+              progress();
+            });
+            return el('label', { class: 'choice' }, input, label);
+          };
+          const note = el('textarea', { 'aria-label': 'Note on ' + c.id, placeholder: 'Edit or note (optional)' });
+          note.value = saved[c.id]?.note ?? '';
+          note.addEventListener('input', () => {
+            saved[c.id] = { ...saved[c.id], note: note.value };
+            store();
+          });
+          const parts = [
+            el(
+              'div',
+              { class: 'card-head' },
+              el('span', { class: 'card-id' }, c.id),
+              el('h3', {}, rich(c.title)),
+              c.weight ? el('span', { class: 'badge', 'data-weight': c.weight }, weights[c.weight] ?? c.weight) : null,
+            ),
+            c.changes ? el('p', { class: 'target' }, 'Changes ', rich('`' + c.changes + '`')) : null,
+            el(
+              'div',
+              { class: 'ba' },
+              pane('before', c.before),
+              el('span', { class: 'arrow', 'aria-hidden': 'true' }, '→'),
+              pane('after', c.after),
+            ),
+            el('p', { class: 'why' }, el('b', {}, 'What happened. '), rich(c.happened)),
+            el('p', { class: 'why' }, el('b', {}, 'The change. '), rich(c.change)),
+            el('p', { class: 'why' }, el('b', {}, 'You get. '), rich(c.gain)),
+            c.overlaps?.length
+              ? el(
+                  'p',
+                  { class: 'overlap' },
+                  'Overlaps ',
+                  c.overlaps.flatMap((id, i) => [i ? ', ' : null, el('a', { href: '#' + id }, id)]),
+                  c.overlapNote ? ': ' + c.overlapNote : '. Keep one.',
+                )
+              : null,
+            c.evidence ? el('details', { class: 'evidence' }, el('summary', {}, 'Evidence'), rich(c.evidence)) : null,
+            el('div', { class: 'decide' }, choice('keep', 'Keep'), choice('strike', 'Strike'), note),
+          ];
+          article.append(...parts.filter((part) => part != null));
+          return article;
+        };
+
+        document.title = 'Harvest · ' + data.episode;
+        document.getElementById('title').textContent = 'Harvest of ' + data.episode;
+        const toc = document.getElementById('toc');
+        const groups = document.getElementById('groups');
+        for (const section of data.sections) {
+          toc.append(
+            el(
+              'li',
+              {},
+              el('a', { href: '#' + section.key }, section.title, el('b', {}, String(section.cards.length))),
+            ),
+          );
+          groups.append(
+            el(
+              'section',
+              { class: 'group', id: section.key, 'aria-labelledby': section.key + '-h' },
+              el('h2', { id: section.key + '-h' }, section.title),
+              el('p', {}, 'Applied to ', rich('`' + section.target + '`')),
+              el('div', { class: 'cards' }, section.cards.map(card)),
+            ),
+          );
+        }
+
+        const progressEl = document.getElementById('progress');
+        function progress() {
+          const decided = all.filter((c) => saved[c.id]?.decision).length;
+          progressEl.replaceChildren(
+            `${decided} of ${all.length} decided`,
+            el('meter', { min: '0', max: String(all.length), value: String(decided) }),
+          );
+        }
+        progress();
+
+        document.getElementById('copy').addEventListener('click', async () => {
+          const lines = [`Harvest decisions for ${data.staging}:`];
+          for (const c of all) {
+            const { decision = 'undecided', note } = saved[c.id] ?? {};
+            lines.push(`- ${c.id} ${decision}${note ? ' — ' + note.replace(/\s+/g, ' ').trim() : ''}`);
+          }
+          const text = lines.join('\n');
+          const out = document.getElementById('copied');
+          try {
+            await navigator.clipboard.writeText(text);
+            out.textContent = 'Copied. Paste it to the agent.';
+          } catch {
+            out.textContent = 'Copy failed; select the text below.';
+            groups.append(el('pre', {}, text));
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>
