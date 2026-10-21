@@ -2,6 +2,7 @@
   "$schema": "https://unpkg.com/knip@6/schema.json",
   "entry": [
     "src/components/slide-shared/human-in-the-loop/human-in-the-loop.tsx",
+    "src/components/slide-shared/human-in-the-loop/outputs/output-dispatch.tsx",
     ".archgate/adrs/*.rules.ts",
     "skills/*/scripts/*.pure.ts"
   ],
