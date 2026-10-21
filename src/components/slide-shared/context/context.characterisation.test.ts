@@ -44,8 +44,8 @@ describe('success cases', () => {
           toolbar: [
             'Conversation:true',
             'Timeline:true',
-            'Context:false',
-            'Preview:false',
+            'Context window:false',
+            'Context category:false',
             'Details:false',
             'Attention:false',
             ':false',

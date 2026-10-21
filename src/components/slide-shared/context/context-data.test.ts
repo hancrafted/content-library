@@ -90,7 +90,7 @@ describe('success cases', () => {
   it('opens Slide 3 on the timeline and the conversation, with the part chips and Technical in the toolbar to blend the rest in', () => {
     // ARRANGE
     const expected = {
-      shown: { chat: true, timeline: true, context: false, preview: false, panel: false, attention: false },
+      shown: { chat: true, timeline: true, context: false, category: false, panel: false, attention: false },
       controls: ['parts', 'technical', 'meter'],
       height: 26.6,
     };
