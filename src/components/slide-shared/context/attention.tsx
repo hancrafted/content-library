@@ -4,7 +4,6 @@ import { useDock } from './attention-dock';
 import { AttentionMenu } from './attention-menu.client';
 import type { AttentionProps } from './context-parts.types';
 import { matcher } from './context-state.pure';
-import { readoutAt } from './context-usage.pure';
 import { fill, stepCat, type Say } from './context-view';
 import styles from './context.module.css';
 import { colourOf } from './context.pure';
@@ -123,7 +122,7 @@ export function Attention(p: AttentionProps) {
   const list = useRef<HTMLDivElement>(null);
   const dock = useDock(list, p.attention, p.layout === 'compressed' ? EDGE : null);
   const handlers = useReveal(p);
-  const r = readoutAt(p.frames, p.vis, p.window);
+  const r = p.readout;
   const max = axisMaxOf(p.attention.map((a) => a.units));
   const head = fill(say.words.readoutHead, { step: r.step, steps: r.steps });
   return (

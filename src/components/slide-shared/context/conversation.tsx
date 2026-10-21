@@ -3,7 +3,6 @@ import type { ConversationProps } from './context-parts.types';
 import { matcher } from './context-state.pure';
 import { type Say } from './context-view';
 import styles from './context.module.css';
-import { goneAt } from './context.pure';
 import type { Step } from './context.types';
 import { BubbleBody, bubbleName, roleOf } from './conversation-body';
 import { HeadToggles } from './head-toggles';
@@ -109,7 +108,7 @@ function TerminalBar({ title }: { readonly title: string }) {
 
 /** The bubbles: each one's `on` is computed here, from the lit key, and is all that changes on a hover. */
 function Bubbles(props: ConversationProps & { readonly say: Say }) {
-  const { say, chat, frames, vis, attention, lit, ghost, pinned, notes } = props;
+  const { say, chat, vis, attention, gone, lit, ghost, pinned, notes } = props;
   const match = useMemo(() => matcher(lit), [lit]);
   const delayOf = useArrivals(vis);
   const max = Math.max(1, ...attention.map((a) => a.units));
@@ -123,7 +122,7 @@ function Bubbles(props: ConversationProps & { readonly say: Say }) {
       delay={delayOf(index)}
       on={step.blocks.some((b) => match(step.id, b.cat)) || ghost === step.id}
       pressed={pinned === step.id}
-      gone={goneAt(chat, frames, { index, step: vis })}
+      gone={gone.has(index)}
       units={units.get(step.id) ?? 0}
       max={max}
       mayFill={notes[step.id]?.mayFill === true}

@@ -4,8 +4,8 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { Attention } from './attention';
 import { contextViewData } from './context';
-import { attentionAt } from './context-usage.pure';
-import { framesOf } from './context.pure';
+import { createState } from './context-state.pure';
+import { stepView } from './context-step.pure';
 import type { AttentionLayout } from './context.types';
 
 const noop = () => undefined;
@@ -13,10 +13,8 @@ const noop = () => undefined;
 /** The Attention part for the summer party's chat (Slide 7's Preset; Slide 4 has too few rows left to pin) at one layout, as server markup, parsed. */
 const render = (layout: AttentionLayout, renderMode: 'simple' | 'technical' = 'simple') => {
   const data = contextViewData({ preset: 'slide-7', locale: 'en' });
-  const { chat, preset } = data;
-  const frames = framesOf(chat);
-  const window = preset.windows[0]!;
-  const attention = attentionAt(chat, frames, { step: preset.step, windowTokens: window.tokens, notes: data.notes });
+  const { chat } = data;
+  const view = stepView(data, chat, createState(data.preset));
   const html = renderToStaticMarkup(
     createElement(Attention, {
       words: data.words,
@@ -27,11 +25,11 @@ const render = (layout: AttentionLayout, renderMode: 'simple' | 'technical' = 's
       ghost: null,
       pinned: null,
       chat,
-      frames,
-      vis: preset.step,
-      attention,
-      window,
-      stepOf: new Map(chat.steps.map((s, i) => [s.id, i + 1])),
+      vis: view.vis,
+      attention: view.attention,
+      gone: view.gone,
+      readout: view.readout,
+      stepOf: view.stepOf,
       layout,
       onLight: noop,
       onPin: noop,
