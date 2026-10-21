@@ -71,9 +71,6 @@
       "forgot": "<marker>1 you forgot</marker>"
     },
     "research": {
-      "venue1": "Venue 1",
-      "venue2": "Venue 2",
-      "venue3": "Venue 3",
       "checked": "Checked against the card"
     },
     "compare": {

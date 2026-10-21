@@ -129,7 +129,7 @@ describe('success cases', () => {
         .get(),
       card: pipeline.text().includes('Requirements card'),
       connectors: pipeline.find('> li > [aria-hidden="true"]').length,
-      fans: pipeline.find('svg.h-40').length,
+      fans: pipeline.find('svg[data-fan]').length,
     };
     // ASSERT
     expect(actual).toEqual(expected);

@@ -1,22 +1,12 @@
 import { slide } from '@/components/slide-master/slide';
 import { SlideFrame } from '@/components/slide-master/slide-master';
-import { Sparkle } from '@/components/slide-shared/venue-pipeline/glyphs';
-import type { NodeCopy } from '@/components/slide-shared/venue-pipeline/node-popover.client';
-import {
-  CompareJob,
-  InterviewJob,
-  Legend,
-  PartyPieces,
-  RequirementsCard,
-  ResearchChats,
-  VenuePlan,
-} from '@/components/slide-shared/venue-pipeline/stage-jobs';
-import { VenuePipeline, type StageView } from '@/components/slide-shared/venue-pipeline/venue-pipeline';
-import { STAGES, type StageId } from '@/components/slide-shared/venue-pipeline/venue-pipeline.pure';
-import type { ReactNode } from 'react';
+import { Sparkle } from '@/components/slide-shared/human-in-the-loop/glyphs';
+import { HumanInTheLoop } from '@/components/slide-shared/human-in-the-loop/human-in-the-loop';
+import type { NodeCopy } from '@/components/slide-shared/human-in-the-loop/node-popover.client';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { InterviewChat, type ChatTurnCopy } from './interview-chat.client';
+import { Legend } from './legend';
 
 const INTERVIEW = 'interview';
 const REQUIREMENTS = 'requirements';
@@ -61,7 +51,8 @@ const TURNS: readonly (['reply', Reply] | ['question', Asked])[] = [
   ['reply', 'spec'],
 ];
 
-const jobsOf = (id: StageId) => STAGES.find((stage) => stage.id === id)?.jobs ?? [];
+const STAGE_IDS = ['party', 'interview', 'requirements', 'research', 'compare', 'recommendation'] as const;
+type StageId = (typeof STAGE_IDS)[number];
 
 /**
  * Brief the venue (Spec Option 4a): one task walked through BRIEF as a CI-style pipeline. Six stage columns hold their
@@ -118,15 +109,6 @@ export const briefTheVenue = slide({
       inLabel: t('popover.in'),
       outLabel: t('popover.out'),
     });
-    const view = (id: StageId, body: ReactNode, extra: Partial<StageView> = {}): StageView => ({
-      stage: STAGES.find((stage) => stage.id === id) ?? STAGES[0],
-      name: t(`stages.${id}.name`),
-      move: t(`stages.${id}.move`),
-      popover: popover(id),
-      jobsLabel: t('jobsLabel', { stage: t(`stages.${id}.name`) }),
-      body,
-      ...extra,
-    });
     const chat = (
       <InterviewChat
         copy={{
@@ -155,76 +137,75 @@ export const briefTheVenue = slide({
         }}
       />
     );
-    const stages: StageView[] = [
-      view(
-        'party',
-        <PartyPieces
-          jobs={jobsOf('party')}
-          names={{
-            venue: t('jobs.party.venue'),
-            travel: t('jobs.party.travel'),
-            catering: t('jobs.party.catering'),
-            invitations: t('jobs.party.invitations'),
-            budget: t('jobs.party.budget'),
-          }}
-          popover={popover('party')}
-        />,
+    const workflowWords = {
+      stages: Object.fromEntries(
+        STAGE_IDS.map((id) => [id, { name: t(`stages.${id}.name`), move: t(`stages.${id}.move`) }]),
       ),
-      view(
-        INTERVIEW,
-        <InterviewJob
-          label={t('jobs.interview.label')}
-          detail={t('jobs.interview.detail')}
-          forgot={t.rich('jobs.interview.forgot', { marker: marker('a-wrong-early-guess-sticks') })}
-          chat={chat}
-        />,
-        { target: target(INTERVIEW) },
-      ),
-      view(
-        REQUIREMENTS,
-        <RequirementsCard
-          gate={t('card.gate')}
-          title={t('card.title')}
-          criteria={CRITERIA.map((criterion) => t(`card.criteria.${criterion}`))}
-          signOff={t('card.signOff')}
-          marker={<Marker note="why-the-sign-off-is-a-gate" placement="beside" />}
-        />,
-        { target: target(REQUIREMENTS) },
-      ),
-      view(
-        RESEARCH,
-        <ResearchChats
-          jobs={jobsOf(RESEARCH)}
-          names={{
-            venue1: t('jobs.research.venue1'),
-            venue2: t('jobs.research.venue2'),
-            venue3: t('jobs.research.venue3'),
-          }}
-          checked={t('jobs.research.checked')}
-          popover={popover(RESEARCH)}
-        />,
-        { target: target(RESEARCH), aside: <Marker note="focus-beats-volume" placement="beside" /> },
-      ),
-      view(
-        COMPARE,
-        <CompareJob
-          label={t('jobs.compare.label')}
-          detail={t('jobs.compare.detail')}
-          gate={t('jobs.compare.gate')}
-          marker={<Marker note="the-answer-can-be-right-and-the-work-wrong" placement="beside" />}
-        />,
-        { target: target(COMPARE) },
-      ),
-      view(
-        'recommendation',
-        <VenuePlan label={t('jobs.recommendation.label')} detail={t('jobs.recommendation.detail')} />,
-      ),
-    ];
+      jobs: {
+        pieces: {
+          title: t('jobs.party.venue'),
+          parked: [
+            t('jobs.party.travel'),
+            t('jobs.party.catering'),
+            t('jobs.party.invitations'),
+            t('jobs.party.budget'),
+          ],
+        },
+        interview: { title: t('jobs.interview.label') },
+        spec: { title: t('card.title') },
+        compare: { title: t('jobs.compare.label'), detail: t('jobs.compare.detail') },
+        plan: { title: t('jobs.recommendation.label'), detail: t('jobs.recommendation.detail') },
+      },
+    };
+    const stageSlot = (id: StageId) => ({
+      popover: popover(id),
+      jobsLabel: t('jobsLabel', { stage: t(`stages.${id}.name`) }),
+    });
     return (
       <SlideFrame className="mt-10 gap-10">
-        <div className="@container">
-          <VenuePipeline label={t('pipelineLabel')} stages={stages} acronym={locale === 'en'} />
-        </div>
+        <HumanInTheLoop
+          workflow="summer-party"
+          locale={locale}
+          words={{ workflow: workflowWords }}
+          diagram={{
+            label: t('pipelineLabel'),
+            checked: t('jobs.research.checked'),
+            initials: locale === 'en',
+            stages: {
+              party: stageSlot('party'),
+              interview: { ...stageSlot('interview'), target: target(INTERVIEW) },
+              requirements: { ...stageSlot('requirements'), target: target(REQUIREMENTS), gate: t('card.gate') },
+              research: {
+                ...stageSlot('research'),
+                target: target(RESEARCH),
+                aside: <Marker note="focus-beats-volume" placement="beside" />,
+              },
+              compare: { ...stageSlot('compare'), target: target(COMPARE), gate: t('jobs.compare.gate') },
+              recommendation: stageSlot('recommendation'),
+            },
+            jobs: {
+              pieces: { popover: popover('party') },
+              interview: {
+                detail: (
+                  <>
+                    {t('jobs.interview.detail')}
+                    <br />
+                    {t.rich('jobs.interview.forgot', { marker: marker('a-wrong-early-guess-sticks') })}
+                  </>
+                ),
+                after: chat,
+              },
+              spec: {
+                criteria: CRITERIA.map((criterion) => t(`card.criteria.${criterion}`)),
+                marker: <Marker note="why-the-sign-off-is-a-gate" placement="beside" />,
+              },
+              venue: { popover: popover(RESEARCH) },
+              compare: {
+                marker: <Marker note="the-answer-can-be-right-and-the-work-wrong" placement="beside" />,
+              },
+            },
+          }}
+        />
         <div {...target(LEGEND)}>
           <Legend
             label={t('legend.label')}

@@ -63,7 +63,7 @@ export function slicesOf(view: View, on: Callbacks): Slices {
   const toolbar = { workflow, choices, mode, level, controls, words, uploadProblems: state.uploadProblems };
   return {
     toolbar: { ...toolbar, onMode, onLevel, onWorkflow, onUpload },
-    diagram: { workflow, mode, level, openJobId, onOpenJob },
+    diagram: { workflow, mode, level, openJobId, onOpenJob, slots: data.diagram, words },
     modal: { workflow, job, mode, level, words, ticked: state.ticked, onClose, onTick },
   };
 }

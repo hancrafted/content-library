@@ -1,5 +1,5 @@
 import { HumanInTheLoopClient } from './human-in-the-loop.client';
-import type { HumanInTheLoopData, ToolbarControls, WorkflowSlideWords } from './human-in-the-loop.types';
+import type { DiagramSlots, HumanInTheLoopData, ToolbarControls, WorkflowSlideWords } from './human-in-the-loop.types';
 import { WORKFLOW_IDS, uiWords, workflowFor, type WorkflowId, type WorkflowLocale } from './workflow-data';
 import type { Level, Mode } from './workflow-state.pure';
 
@@ -19,6 +19,8 @@ export interface HumanInTheLoopProps {
   readonly mode?: Mode;
   readonly level?: Level;
   readonly controls?: Partial<ToolbarControls>;
+  /** The Slide's own markers, notes, popovers and words on the diagram; its initials show for English only. */
+  readonly diagram?: DiagramSlots;
 }
 
 const localeOf = (locale: string): WorkflowLocale => (locale === 'de' ? 'de' : 'en');
@@ -31,6 +33,7 @@ export function humanInTheLoopData({
   mode = 'watch',
   level = 'simple',
   controls,
+  diagram,
 }: HumanInTheLoopProps): HumanInTheLoopData {
   const lang = localeOf(locale);
   return {
@@ -41,6 +44,7 @@ export function humanInTheLoopData({
     controls: { picker: true, download: true, upload: true, ...controls },
     mode,
     level,
+    diagram: diagram && { ...diagram, initials: diagram.initials === true && lang === 'en' },
   };
 }
 

@@ -1,16 +1,6 @@
 import { slide } from '@/components/slide-master/slide';
 import { SlideFrame } from '@/components/slide-master/slide-master';
-import {
-  CompareJob,
-  InterviewJob,
-  PartyPieces,
-  RequirementsCard,
-  ResearchChats,
-  VenuePlan,
-} from '@/components/slide-shared/venue-pipeline/stage-jobs';
-import { VenuePipeline, type StageView } from '@/components/slide-shared/venue-pipeline/venue-pipeline';
-import { STAGES, type StageId } from '@/components/slide-shared/venue-pipeline/venue-pipeline.pure';
-import type { ReactNode } from 'react';
+import { HumanInTheLoop } from '@/components/slide-shared/human-in-the-loop/human-in-the-loop';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
@@ -21,7 +11,7 @@ const CLEAN_WINDOWS = {
 const CONTEXT_LENGTH = { slug: 'du-context-length-alone-hurts', url: 'https://arxiv.org/abs/2510.05381' };
 
 const CRITERIA = ['guests', 'budget', 'stepFree', 'vegetarian', 'quiet'] as const;
-const jobsOf = (id: StageId) => STAGES.find((stage) => stage.id === id)?.jobs ?? [];
+const STAGE_IDS = ['party', 'interview', 'requirements', 'research', 'compare', 'recommendation'] as const;
 
 const WORKERS = 'workers';
 const LOOP_NOTE = 'loop-note';
@@ -45,79 +35,63 @@ export const humanInTheLoopWorkflow = slide({
     { slug: 'worker-chats' },
     { slug: 'you-check' },
   ],
-  content: ({ t, target, marker, Marker }) => {
-    const view = (id: StageId, body: ReactNode, extra: Partial<StageView> = {}): StageView => ({
-      stage: STAGES.find((stage) => stage.id === id) ?? STAGES[0],
-      name: t(`stages.${id}.name`),
-      move: t(`stages.${id}.move`),
-      jobsLabel: t('jobsLabel', { stage: t(`stages.${id}.name`) }),
-      body,
-      ...extra,
-    });
-    const stages: StageView[] = [
-      view(
-        'party',
-        <PartyPieces
-          jobs={jobsOf('party')}
-          names={{
-            venue: t('jobs.party.venue'),
-            travel: t('jobs.party.travel'),
-            catering: t('jobs.party.catering'),
-            invitations: t('jobs.party.invitations'),
-            budget: t('jobs.party.budget'),
-          }}
-        />,
+  content: ({ t, locale, target, marker, Marker }) => {
+    const words = {
+      stages: Object.fromEntries(
+        STAGE_IDS.map((id) => [id, { name: t(`stages.${id}.name`), move: t(`stages.${id}.move`) }]),
       ),
-      view(
-        'interview',
-        <InterviewJob
-          label={t('jobs.interview.label')}
-          detail={t('jobs.interview.detail')}
-          forgot={t.rich('jobs.interview.forgot', { marker: (chunks) => chunks })}
-        />,
-      ),
-      view(
-        'requirements',
-        <RequirementsCard
-          gate={t('card.gate')}
-          title={t('card.title')}
-          criteria={CRITERIA.map((criterion) => t(`card.criteria.${criterion}`))}
-          signOff={t('card.signOff')}
-          marker={null}
-        />,
-      ),
-      view(
-        'research',
-        <ResearchChats
-          jobs={jobsOf('research')}
-          names={{
-            venue1: t('jobs.research.venue1'),
-            venue2: t('jobs.research.venue2'),
-            venue3: t('jobs.research.venue3'),
-          }}
-          checked={t('jobs.research.checked')}
-        />,
-        { target: target(WORKERS), aside: <Marker note="clean-windows-for-each-part" placement="beside" /> },
-      ),
-      view(
-        'compare',
-        <CompareJob
-          label={t('jobs.compare.label')}
-          detail={t('jobs.compare.detail')}
-          gate={t('jobs.compare.gate')}
-          marker={null}
-        />,
-      ),
-      view(
-        'recommendation',
-        <VenuePlan label={t('jobs.recommendation.label')} detail={t('jobs.recommendation.detail')} />,
-      ),
-    ];
+      jobs: {
+        pieces: {
+          title: t('jobs.party.venue'),
+          parked: [
+            t('jobs.party.travel'),
+            t('jobs.party.catering'),
+            t('jobs.party.invitations'),
+            t('jobs.party.budget'),
+          ],
+        },
+        interview: { title: t('jobs.interview.label') },
+        spec: { title: t('card.title') },
+        compare: { title: t('jobs.compare.label'), detail: t('jobs.compare.detail') },
+        plan: { title: t('jobs.recommendation.label'), detail: t('jobs.recommendation.detail') },
+      },
+    };
+    const jobsLabel = (id: (typeof STAGE_IDS)[number]) => t('jobsLabel', { stage: t(`stages.${id}.name`) });
+    const gates = { requirements: t('card.gate'), compare: t('jobs.compare.gate') };
     return (
       <SlideFrame className="mt-10 gap-10">
-        <div className="@container">
-          <VenuePipeline label={t('pipelineLabel')} stages={stages} acronym={false} />
-        </div>
+        <HumanInTheLoop
+          workflow="summer-party"
+          locale={locale}
+          words={{ workflow: words }}
+          diagram={{
+            label: t('pipelineLabel'),
+            checked: t('jobs.research.checked'),
+            initials: false,
+            stages: {
+              ...Object.fromEntries(STAGE_IDS.map((id) => [id, { jobsLabel: jobsLabel(id) }])),
+              requirements: { jobsLabel: jobsLabel('requirements'), gate: gates.requirements },
+              research: {
+                jobsLabel: jobsLabel('research'),
+                target: target(WORKERS),
+                aside: <Marker note="clean-windows-for-each-part" placement="beside" />,
+              },
+              compare: { jobsLabel: jobsLabel('compare'), gate: gates.compare },
+            },
+            jobs: {
+              interview: {
+                detail: (
+                  <>
+                    {t('jobs.interview.detail')}
+                    <br />
+                    {t.rich('jobs.interview.forgot', { marker: (chunks) => chunks })}
+                  </>
+                ),
+              },
+              spec: { criteria: CRITERIA.map((criterion) => t(`card.criteria.${criterion}`)) },
+            },
+          }}
+        />
         <p {...target(LOOP_NOTE)} className="text-caption text-pretty text-muted-foreground">
           {t.rich('loop.note', { marker: marker('short-tasks-beat-long-ones') })}
         </p>
