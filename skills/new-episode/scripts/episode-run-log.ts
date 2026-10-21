@@ -97,12 +97,20 @@ function keepLargest(
 
 /** The files a Run's dashboard opens; archiving copies exactly these, so the archived folder opens the same way. */
 const DASHBOARD_FILES = ['events.jsonl', 'pipeline.yml'];
+/**
+ * The Run's record of what it was asked and what it drew, kept as the Run left them: Promotion moves the Brief on and
+ * deletes the Spec. Copied when present, since a Run can be archived before it has either.
+ */
+const RECORD_FILES = ['brief.md', 'spec/spec.html'];
 
-/** Copies the Episode's log and pipeline to `.logs/new-episode/<slug>/` and returns that folder. */
+/** Copies the Episode's log, pipeline, Brief and Spec to `.logs/new-episode/<slug>/` and returns that folder. */
 export function archiveEpisodeLog(slug: string, root: string): string {
   const target = `.logs/new-episode/${slug}/`;
-  mkdirSync(path.join(root, target), { recursive: true });
   const staging = path.dirname(episodeLogPath(slug));
-  for (const file of DASHBOARD_FILES) copyFileSync(path.join(root, staging, file), path.join(root, target, file));
+  const present = RECORD_FILES.filter((file) => existsSync(path.join(root, staging, file)));
+  for (const file of [...DASHBOARD_FILES, ...present]) {
+    mkdirSync(path.dirname(path.join(root, target, file)), { recursive: true });
+    copyFileSync(path.join(root, staging, file), path.join(root, target, file));
+  }
   return target;
 }

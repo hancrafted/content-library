@@ -22,5 +22,5 @@ export const USAGE = `usage: npm run episode:run -- <slug> <command> ...
   note <job> <type> "<text>"                       record a typed note on the open Job; type is needs-human, blocked,
                                                    research-gap, spine-change or no-library-match
   resume                                           re-open the marker for the current Run in a new session
-  archive                                          copy events.jsonl and pipeline.yml to .logs/new-episode/<slug>/
+  archive                                          copy events.jsonl, pipeline.yml, brief.md, spec/spec.html to .logs/new-episode/<slug>/
 status is ok (default), error, refused, crashed or reused.`;
