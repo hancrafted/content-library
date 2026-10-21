@@ -8,14 +8,7 @@
   },
   "after": {
     "title": "Ein Workflow: ein Planer, ein frischer Chat pro Schritt",
-    "note": "Pro Schritt kommt eine kleine Karte zurück. <marker>Kurze Aufgaben schlagen eine lange</marker>; Du koordinierst wie ein Projektmanager."
-  },
-  "resultsLabel": "Ergebnisse, die die Helfer an den Planer zurückgeben",
-  "back": "↑ Ergebnis",
-  "results": {
-    "1": "Estrela-Pavillon, <budget>14.800 €</budget>",
-    "2": "Sabor Verde, 12 vegetarisch",
-    "3": "Einladungen an 40 verschickt"
+    "note": "Pro Schritt kommt ein kleines Ergebnis zurück. <marker>Kurze Aufgaben schlagen eine lange</marker>; Du koordinierst wie ein Projektmanager."
   },
   "illustrative": "Token-Zahlen zur Veranschaulichung · 200K-Fenster",
   "notes": {

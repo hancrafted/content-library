@@ -4,7 +4,7 @@
   "pipelineLabel": "The steps of a brief, stage by stage",
   "stages": {
     "party": {
-      "name": "Summer party",
+      "name": "Plan a summer party",
       "move": "Break it down"
     },
     "interview": {

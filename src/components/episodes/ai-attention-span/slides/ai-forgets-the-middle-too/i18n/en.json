@@ -29,7 +29,7 @@
     "2": "Let’s keep the budget at <budget>40,000 euro</budget>.",
     "3": "Noted! Three venues in Lisbon: Quinta terrace, LX Factory rooftop, Estrela pavilion.",
     "4": "Great, put the full plan together.",
-    "5": "Sure. What’s the <budget>budget</budget>?"
+    "5": "Here is the full plan: venue 28,000 €, catering 16,000 €, band 8,000 €. Total <budget>52,000 €</budget>."
   },
   "tools": {
     "web": "Fetched 10 pages · 15k of extracts"
@@ -93,7 +93,7 @@
       "it-happens-in-a-long-chat-too": {
         "title": "It happens in a long chat too",
         "keywords": "",
-        "script": "Now let it run for an hour. Only the very first instructions tend to get used, the latest messages tend to get used, and everything between gets lost, even your own first messages. Early in the chat you settle the budget at 40,000 euro. Much later you ask for the full plan, and the AI asks what the budget is, as if you had never said it. Why that happens comes on a later slide."
+        "script": "Now let it run for an hour. Only the very first instructions tend to get used, the latest messages tend to get used, and everything between gets lost, even your own first messages. Early in the chat you settle the budget at 40,000 euro. Much later you ask for the full plan, and the AI hands back a confident plan that totals 52,000 euro, as if you had never said 40,000. Why that happens comes on a later slide."
       },
       "a-shape-not-a-brain": {
         "title": "A shape, not a brain",

@@ -8,14 +8,7 @@
   },
   "after": {
     "title": "A workflow: one planner, a fresh chat per step",
-    "note": "One small card back per step. <marker>Short tasks beat one long one</marker>; you coordinate, like a project manager."
-  },
-  "resultsLabel": "Results the workers hand back to the planner",
-  "back": "↑ Result",
-  "results": {
-    "1": "Estrela pavilion, <budget>14,800 €</budget>",
-    "2": "Sabor Verde, 12 vegetarian",
-    "3": "Invitations sent to 40"
+    "note": "One small result back per step. <marker>Short tasks beat one long one</marker>; you coordinate, like a project manager."
   },
   "illustrative": "Token counts are illustrative · 200K window",
   "notes": {
