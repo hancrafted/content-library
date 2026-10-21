@@ -30,7 +30,8 @@ export function DrawerTrigger(props: {
       ref={props.ref}
       type="button"
       data-slot="context-trigger"
-      aria-label={props.label}
+      // The name starts with the visible text, pill and shortcut, as WCAG 2.5.3 asks; the action follows.
+      aria-label={`${props.text} ${SHORTCUT_LABEL} (${props.label})`}
       aria-expanded={props.open}
       aria-controls={props.controls}
       aria-keyshortcuts={SHORTCUT_LABEL}
@@ -41,8 +42,7 @@ export function DrawerTrigger(props: {
       )}
     >
       <ContextIcon aria-hidden className="size-4 shrink-0" />
-      <span className="font-medium">{props.text}</span>
-      <Hint hint={props.hint} />
+      <span className="font-medium">{props.text}</span> <Hint hint={props.hint} />
     </button>
   );
 }

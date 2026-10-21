@@ -19,7 +19,7 @@ function sceneElements(root: HTMLElement) {
     throw new Error('Promotion animation requires an envelope, a caption and one action.');
   }
   // Each caption word flies on its own; the split is reverted once the animation is over.
-  const split = SplitText.create(caption, { type: 'words' });
+  const split = SplitText.create(caption, { type: 'words', aria: 'none' });
   const words = split.words.filter((word): word is HTMLElement => word instanceof HTMLElement);
   return { root, envelope, caption, actions, buttons, words, split, restoreFocus: false };
 }
