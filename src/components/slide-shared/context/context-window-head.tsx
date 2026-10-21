@@ -1,9 +1,8 @@
-import { defOf } from './context-controls.pure';
 import { percentText } from './context-format.pure';
 import type { ContextWindowProps } from './context-parts.types';
 import { fill, k, type Say } from './context-view';
 import styles from './context.module.css';
-import { ControlIcon, IconButton } from './control-icons';
+import { HeadToggles } from './head-toggles';
 
 /* The context-window head: `Context window (64%)   128K of [200K | 1M]` and the icon buttons the Preset offers. */
 
@@ -52,32 +51,13 @@ function Meter({ p, say }: Part) {
   );
 }
 
-function HeadToggles({ p, say }: Part) {
-  return p.toggles.map((toggle) => {
-    const def = defOf(toggle.id);
-    if (def.type !== 'toggle') return null;
-    return (
-      <IconButton
-        key={toggle.id}
-        label={say.words[def.label]}
-        tip={say.words[def.tip]}
-        pressed={toggle.pressed}
-        control={toggle.id}
-        onClick={toggle.onToggle}
-      >
-        <ControlIcon name={def.icon} />
-      </IconButton>
-    );
-  });
-}
-
 export function ContextWindowHead({ p, say }: Part) {
   return (
     <div className={styles.head}>
       <Title p={p} say={say} />
       <div className={styles.headEnd}>
         {p.meter ? <Meter p={p} say={say} /> : null}
-        <HeadToggles p={p} say={say} />
+        <HeadToggles toggles={p.toggles} say={say} />
       </div>
     </div>
   );

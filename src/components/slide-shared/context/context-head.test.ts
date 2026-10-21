@@ -53,7 +53,6 @@ describe('success cases', () => {
   it('gives each head icon button a tooltip, an aria-label and aria-pressed', () => {
     // ARRANGE
     const expected = [
-      { control: 'preview', label: 'Context preview', pressed: 'false' },
       { control: 'zone', label: 'Smart zone', pressed: 'true' },
       { control: 'windowTechnical', label: 'Technical window', pressed: 'false' },
     ];
@@ -131,15 +130,27 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('lets the head eye toggle the preview when the parts group is hidden', () => {
+  it('draws no eye button: the category is its own part, shown from the toolbar chips', () => {
     // ARRANGE
-    const { preset, context } = setup('slide-7');
-    const only = { ...preset, controls: { '*': { show: false }, preview: { show: true } } };
-    const state = createState(only);
+    const expected = false;
     // ACT
-    const next = reduce(state, { type: 'TOGGLE_PART', part: 'preview' }, { ...context, preset: only });
-    const other = reduce(state, { type: 'TOGGLE_PART', part: 'panel' }, { ...context, preset: only });
+    const found = buttons(render('slide-4')).some((b) => b.control === 'preview');
     // ASSERT
-    expect([next.parts.preview, other]).toEqual([false, state]);
+    expect(found).toBe(expected);
+  });
+
+  it('gives conversation and category their own local Technical, each leaving the toolbar value alone', () => {
+    // ARRANGE
+    const { preset, context } = setup('slide-4');
+    const state = createState(preset);
+    // ACT
+    const next = (['conversation', 'category'] as const).map((part) =>
+      reduce(state, { type: 'SET_PART_MODE', part, value: 'technical' }, context),
+    );
+    // ASSERT
+    expect(next.map((n) => [n.depth, n.renderModes.conversation, n.renderModes.category])).toEqual([
+      ['simple', 'technical', undefined],
+      ['simple', undefined, 'technical'],
+    ]);
   });
 });

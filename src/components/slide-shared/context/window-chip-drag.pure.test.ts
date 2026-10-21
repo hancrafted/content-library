@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { Part } from './context.types';
 import { crossedChip } from './window-chip-drag.pure';
 
-const ORDER: readonly Part[] = ['chat', 'timeline', 'context', 'preview'];
+const ORDER: readonly Part[] = ['chat', 'timeline', 'context', 'category'];
 const BOX = { left: 100, width: 40 };
 
 describe('success cases', () => {
@@ -19,7 +19,7 @@ describe('success cases', () => {
 
   it('takes the chip once the pointer passes its middle on the way in, backwards', () => {
     // ARRANGE
-    const dragged = 'preview';
+    const dragged = 'category';
     const target = 'timeline';
     const beforeMiddle = BOX.left + BOX.width / 2 - 1;
     // ACT

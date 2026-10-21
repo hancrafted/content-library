@@ -280,6 +280,7 @@
   display: grid;
   grid-template-columns: var(--cols, minmax(16rem, 1.15fr) 3.5rem 26rem minmax(15rem, 1fr));
   grid-template-areas: var(--areas, 'chat timeline ctx panel');
+  grid-template-rows: var(--rows, none);
   gap: 1rem;
   height: var(--main-h, 38rem);
 }
@@ -907,7 +908,7 @@
   bottom: 0;
 }
 .usage {
-  grid-area: prev;
+  grid-area: cat;
   min-height: 0;
   display: flex;
   flex-direction: column;
@@ -942,7 +943,29 @@
 span.row {
   cursor: default;
 }
-button.row:hover {
+/* The Messages group of the Technical category: a collapsible whose summary is the group's own row. */
+.messages > summary {
+  list-style: none;
+  cursor: pointer;
+}
+.messages > summary::-webkit-details-marker {
+  display: none;
+}
+.chevron {
+  width: 0.9rem;
+  height: 0.9rem;
+  transition: rotate var(--hov) var(--ease-out);
+}
+.messages[open] > summary .chevron {
+  rotate: 90deg;
+}
+@media (prefers-reduced-motion: reduce) {
+  .chevron {
+    transition: none;
+  }
+}
+button.row:hover,
+summary.row:hover {
   background: var(--muted);
 }
 .row[data-sub] {
@@ -960,7 +983,7 @@ button.row:hover {
   color: var(--cs-sub);
   white-space: nowrap;
 }
-.root[data-lit] button.row:not([data-on]) {
+.root[data-lit] :is(button.row, summary.row):not([data-on]) {
   color: var(--cs-sub);
 }
 .row[data-on] {
@@ -1222,7 +1245,7 @@ button.row:hover {
   flex-direction: column;
   overflow: hidden;
 }
-/* The rows: a list that scrolls, the first and last three pinned, or compressed to bars that fill the height. */
+/* The rows: a list that scrolls, the first and last three pinned, or compressed to bars once the list is full. */
 .att {
   --row: 1.5rem;
   display: flex;
@@ -1235,7 +1258,9 @@ button.row:hover {
 }
 .att[data-layout='compressed'] {
   gap: 0;
-  min-height: 16rem;
+  flex: none;
+  min-height: 0;
+  max-height: 24rem;
   overflow: hidden;
 }
 .attRow {
@@ -1258,7 +1283,7 @@ button.row:hover {
   bottom: calc(var(--slot) * (var(--row) + 3px));
   z-index: 1;
 }
-/* Compressed: the row is the bar, as tall as its share; the dock script sets the heights. */
+/* Compressed: the row is the bar, at its natural height until the list is full; the dock script sets the heights. */
 .att[data-layout='compressed'] .attRow {
   overflow: hidden;
   transition: height var(--hov, 140ms) var(--ease-out);
@@ -1326,6 +1351,7 @@ button.row:hover {
   .main {
     grid-template-columns: 1fr;
     grid-template-areas: none;
+    grid-template-rows: none;
     height: auto;
   }
   .main > * {

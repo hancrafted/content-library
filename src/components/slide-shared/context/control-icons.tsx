@@ -1,4 +1,4 @@
-import { Code, Download, Eye, PanelLeftClose, PanelRight, Upload } from 'lucide-react';
+import { Code, Download, PanelLeftClose, PanelRight, Upload } from 'lucide-react';
 import type { ReactNode } from 'react';
 import type { IconName } from './context-controls.pure';
 import styles from './context.module.css';
@@ -10,7 +10,6 @@ const ICONS: Readonly<Record<IconName, typeof Code>> = {
   'panel-left-close': PanelLeftClose,
   download: Download,
   upload: Upload,
-  eye: Eye,
   'panel-right': PanelRight,
 };
 

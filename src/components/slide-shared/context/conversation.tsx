@@ -6,6 +6,7 @@ import styles from './context.module.css';
 import { goneAt } from './context.pure';
 import type { Step } from './context.types';
 import { BubbleBody, bubbleName, roleOf } from './conversation-body';
+import { HeadToggles } from './head-toggles';
 import { useLighting } from './use-lighting';
 import { useSay } from './use-say';
 import { vars } from './window-bits';
@@ -131,21 +132,24 @@ function Bubbles(props: ConversationProps & { readonly say: Say }) {
 }
 
 /** The chat's head: its name, and the scrub hint until the reader has used a control. */
-function Head({ say, hint, hintSeen }: { readonly say: Say; readonly hint: boolean; readonly hintSeen: boolean }) {
+function Head({ say, p }: { readonly say: Say; readonly p: ConversationProps }) {
   return (
     <div className={styles.head}>
       <b className="font-semibold">{say.words.parts.chat}</b>
-      {hint ? (
-        <span className={styles.hint} data-seen={flag(hintSeen)} aria-hidden={hintSeen || undefined}>
-          {say.words.hint}
-        </span>
-      ) : null}
+      <div className={styles.headEnd}>
+        {p.hint ? (
+          <span className={styles.hint} data-seen={flag(p.hintSeen)} aria-hidden={p.hintSeen || undefined}>
+            {say.words.hint}
+          </span>
+        ) : null}
+        <HeadToggles toggles={p.toggles} say={say} />
+      </div>
     </div>
   );
 }
 
 function Column(props: ConversationProps & { readonly say: Say }) {
-  const { say, vis, hint, hintSeen } = props;
+  const { say, vis } = props;
   const scroll = useNewest(vis, say.tech);
   const handlers = useLighting(props);
   return (
@@ -155,7 +159,7 @@ function Column(props: ConversationProps & { readonly say: Say }) {
       data-depth={say.tech ? 'technical' : 'simple'}
       {...handlers}
     >
-      <Head say={say} hint={hint} hintSeen={hintSeen} />
+      <Head say={say} p={props} />
       <div className={`${styles.phone} ${styles.surface}${say.tech ? ' font-mono' : ''}`}>
         <div className={styles.appbar} aria-hidden="true">
           {say.tech ? (

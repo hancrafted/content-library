@@ -7,12 +7,13 @@ const { presets, chats } = contextData('en');
 const preset = presets['slide-7']!;
 const context = { preset, steps: chats[preset.chat]!.steps.length };
 const grid = (state: ReturnType<typeof createState>) => columns(state.parts, state, preset.height);
+const simple = { depth: 'simple' } as const;
 
 describe('success cases', () => {
   it('gives each part shown a column and an area, in the order of the state', () => {
     // ARRANGE
-    const state = createState({ ...preset, show: { ...preset.show, preview: true, panel: false } });
-    const expected = "'chat timeline ctx prev'";
+    const state = createState({ ...preset, ...simple, show: { ...preset.show, category: true, panel: false } });
+    const expected = "'chat timeline ctx cat'";
     // ACT
     const found = grid(state);
     // ASSERT
@@ -21,9 +22,9 @@ describe('success cases', () => {
 
   it('moves a part to the front of the areas when it is reordered there', () => {
     // ARRANGE
-    const start = createState({ ...preset, show: { ...preset.show, preview: true, panel: false } });
-    const moved = reduce(start, { type: 'REORDER', part: 'preview', before: 'chat' }, context);
-    const expected = "'prev chat timeline ctx'";
+    const start = createState({ ...preset, ...simple, show: { ...preset.show, category: true, panel: false } });
+    const moved = reduce(start, { type: 'REORDER', part: 'category', before: 'chat' }, context);
+    const expected = "'cat chat timeline ctx'";
     // ACT
     const found = grid(moved);
     // ASSERT
@@ -34,18 +35,18 @@ describe('success cases', () => {
 describe('failure cases', () => {
   it('leaves no column or area for a part that is hidden', () => {
     // ARRANGE
-    const state = createState({ ...preset, show: { ...preset.show, preview: false, panel: false } });
+    const state = createState({ ...preset, show: { ...preset.show, category: false, panel: false } });
     // ACT
     const found = grid(state);
     // ASSERT
-    expect(found['--areas']).not.toContain('prev');
+    expect(found['--areas']).not.toContain('cat');
   });
 });
 
 describe('edge cases', () => {
   it('falls back to one column and no areas when nothing is shown', () => {
     // ARRANGE
-    const none = { chat: false, timeline: false, context: false, preview: false, panel: false, attention: false };
+    const none = { chat: false, timeline: false, context: false, category: false, panel: false, attention: false };
     const state = createState({ ...preset, show: none });
     const expected = ['1fr', 'none'];
     // ACT

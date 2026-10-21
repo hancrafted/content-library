@@ -8,7 +8,8 @@ describe('success cases', () => {
     // ARRANGE
     const expected = {
       technical: true,
-      preview: true,
+      conversationTechnical: true,
+      categoryTechnical: true,
       zone: true,
       meter: true,
       window: false,

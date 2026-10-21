@@ -46,6 +46,8 @@ export interface ConversationProps extends Lighting, LightingEvents, Speech, Pro
   /** Whether the scrub hint belongs in the head: the timeline is shown and not locked. */
   readonly hint: boolean;
   readonly hintSeen: boolean;
+  /** The head's icon buttons: the local Technical. */
+  readonly toggles: readonly HeadToggle[];
 }
 
 export interface TimelineProps extends Speech {
@@ -88,15 +90,17 @@ export interface ContextWindowProps extends Lighting, LightingEvents, Speech {
   readonly onSize: (index: number) => void;
   /** The smart-zone side column and the limit label are shown; the dashed lines stay either way. */
   readonly zone: boolean;
-  /** The head's icon buttons, in order: the preview eye, the smart-zone column, the local Technical. */
+  /** The head's icon buttons, in order: the smart-zone column, the local Technical. */
   readonly toggles: readonly HeadToggle[];
 }
 
-export interface ContextPreviewProps extends Lighting, LightingEvents, Speech {
+export interface ContextCategoryProps extends Lighting, LightingEvents, Speech {
   readonly frame: Frame;
   readonly window: WindowSize;
   /** The categories the chat ever holds, so a row for one that never lands is left out. */
   readonly present: ReadonlySet<Category>;
+  /** The head's icon buttons: the local Technical. */
+  readonly toggles: readonly HeadToggle[];
 }
 
 export interface DetailsProps extends Lighting, LightingEvents, Speech, Omit<Progress, 'attention'> {

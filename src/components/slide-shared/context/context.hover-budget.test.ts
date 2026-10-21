@@ -4,7 +4,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { Attention } from './attention';
 import { contextViewData } from './context';
-import { ContextPreview } from './context-preview';
+import { ContextCategory } from './context-category';
 import { attentionAt } from './context-usage.pure';
 import { ContextWindow } from './context-window';
 import { categoriesOf, framesOf } from './context.pure';
@@ -41,6 +41,7 @@ const harness = (renderMode: RenderMode) => {
         notes: data.notes,
         hint: false,
         hintSeen: true,
+        toggles: [],
       }),
     window: (lit: string | null) =>
       createElement(ContextWindow, {
@@ -59,14 +60,15 @@ const harness = (renderMode: RenderMode) => {
         onSize: noop,
         stepOf,
       }),
-    preview: (lit: string | null) =>
-      createElement(ContextPreview, {
+    category: (lit: string | null) =>
+      createElement(ContextCategory, {
         ...speech,
         ...light(lit),
         ...events,
         frame,
         window,
         present: categoriesOf(chat),
+        toggles: [],
       }),
     attention: (lit: string | null) =>
       createElement(Attention, {
@@ -145,7 +147,7 @@ describe('failure cases', () => {
   it('redraws nothing when the pointer stays on the same step', () => {
     // ARRANGE
     const { markup } = harness('simple');
-    const parts = [markup.conversation, markup.window, markup.preview, markup.attention];
+    const parts = [markup.conversation, markup.window, markup.category, markup.attention];
     // ACT
     const actual = parts.map((part) => flipsBetween(part, 'm3', 'm3'));
     // ASSERT
@@ -157,9 +159,9 @@ describe('edge cases', () => {
   it('leaves most of the usage rows alone when one step is lit', () => {
     // ARRANGE
     const { markup } = harness('technical');
-    const rows = load(renderToStaticMarkup(markup.preview(null)))('[data-part]').length;
+    const rows = load(renderToStaticMarkup(markup.category(null)))('[data-part]').length;
     // ACT
-    const actual = flipsBetween(markup.preview, 'm3', 'm4');
+    const actual = flipsBetween(markup.category, 'm3', 'm4');
     // ASSERT
     expect(actual).toBeLessThan(rows);
   });
