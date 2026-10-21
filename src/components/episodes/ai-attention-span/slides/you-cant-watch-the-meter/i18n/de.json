@@ -1,0 +1,79 @@
+{
+  "title": "Eine Anzeige kannst Du nicht ablesen",
+  "caption": "Zwischen zwei Nachrichten faltet die App den ganzen Chat zu einer Zusammenfassung. Auf dem Bildschirm bewegt sich nichts.",
+  "before": "Einen Moment davor · Schritt 23",
+  "after": "Direkt danach · Schritt 24",
+  "bufferNote": "Die Füllung erreicht den Platz, der für Zusammenfassungen frei gehalten wird.",
+  "chatNote": "<marker>Der Chat, davor und danach: derselbe</marker>",
+  "summaryNote": "<documented>Ein Block anstelle jeder Nachricht</documented>; <lose>Details können verloren gehen</lose>",
+  "footer": {
+    "sign": "<marker>Kein Hinweis im Chat; höchstens ein kurzes „ordnet seine Gedanken“</marker>",
+    "otherApps": "<marker>Für Claude dokumentiert; ChatGPT, Gemini und Copilot sagen nichts dazu</marker>"
+  },
+  "callout": {
+    "heading": "Die meisten Chat-Apps zeigen Dir nie, wie voll das Fenster ist.",
+    "body": "<documented>Claude fasst ältere Nachrichten im Hintergrund zusammen</documented>; <unknown>die anderen dokumentieren dazu nichts</unknown>."
+  },
+  "notes": {
+    "documented-for-claude": {
+      "header": "Für Claude dokumentiert",
+      "description": "Bei Nutzern mit aktivierter Codeausführung fasst Claude frühere Nachrichten zusammen, wenn sich ein Gespräch der Grenze des Kontexts nähert [1].",
+      "sources": {
+        "anthropic-usage-and-length-limits": { "title": "Anthropic, How do usage and length limits work?" }
+      }
+    },
+    "the-only-sign": {
+      "header": "Das einzige Zeichen",
+      "description": "Die Seite beschreibt, dass Du gelegentlich siehst, wie Claude „seine Gedanken ordnet“, und kündigt keinen Hinweis bei jedem Mal an; dass es das absichtlich verbirgt, ist eine Schlussfolgerung [1].",
+      "sources": {
+        "anthropic-usage-and-length-limits": { "title": "Anthropic, How do usage and length limits work?" }
+      }
+    },
+    "full-history-is-kept": {
+      "header": "Der ganze Verlauf bleibt erhalten",
+      "description": "Der ganze Chat wird aufbewahrt, damit Claude nach dem Zusammenfassen darauf zurückgreifen kann [1].",
+      "sources": {
+        "anthropic-usage-and-length-limits": { "title": "Anthropic, How do usage and length limits work?" }
+      }
+    },
+    "a-summary-can-lose-things": {
+      "header": "Eine Zusammenfassung kann Dinge verlieren",
+      "description": "Anthropic warnt, dass zu aggressives Verdichten feinen, aber entscheidenden Kontext verlieren kann, dessen Bedeutung sich erst später zeigt [1].",
+      "sources": {
+        "anthropic-context-engineering": { "title": "Anthropic, Effective context engineering for AI agents" }
+      }
+    },
+    "other-apps-are-unknown": {
+      "header": "Andere Apps sind unbekannt",
+      "description": "Keine gefundene Herstellerseite dokumentiert das Zusammenfassen in ChatGPT, Gemini oder Copilot, und eine Chat-Oberfläche kann stattdessen die ältesten Inhalte zuerst verwerfen [1]; die Verdichtung von OpenAI ist für seine API dokumentiert und undurchsichtig [2].",
+      "sources": {
+        "anthropic-context-windows": { "title": "Anthropic, Context windows" },
+        "openai-compaction": { "title": "OpenAI, Compaction" }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "her-own-notes": {
+        "title": "Ihre eigenen Notizen",
+        "keywords": "",
+        "script": "Deine Schwester behält nicht das Telefonat. Sie behält ihre eigenen Notizen davon, ein paar hingekritzelte Zeilen: Mamas Handy, die Renovierung, Pepper und der Kuchen. Ein paar Zeilen statt allem."
+      },
+      "the-app-does-something-like-it": {
+        "title": "Die App macht etwas Ähnliches",
+        "keywords": "",
+        "script": "Die App macht etwas Ähnliches. Wenn ein Chat lang wird, können ältere Nachrichten zu einer kurzen Zusammenfassung zusammengedrückt werden, damit das Gespräch weitergehen kann, statt gegen die Wand zu laufen."
+      },
+      "you-cant-watch-the-meter": {
+        "title": "Eine Anzeige kannst Du nicht ablesen",
+        "keywords": "",
+        "script": "Und hier ist der Haken: Der Chat sieht gleich aus. Jede Sprechblase ist noch da, also kannst Du Dich nicht auf eine Anzeige verlassen, Du verlässt Dich auf Gewohnheiten."
+      },
+      "why-the-budget-survived": {
+        "title": "Warum das Budget überlebt hat",
+        "keywords": "",
+        "script": "Warum hat das Budget hier überlebt? Weil Du die 12.300 über Budget kurz vorher angesprochen hast. So war es frisch, als die Zusammenfassung geschrieben wurde, und der Plan passt wieder in 40.000 Euro. Das war Timing."
+      }
+    }
+  }
+}
