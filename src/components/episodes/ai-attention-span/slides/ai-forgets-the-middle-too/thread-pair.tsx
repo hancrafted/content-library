@@ -3,14 +3,14 @@ import {
   type CallLight,
   type CallWho,
 } from '@/components/slide-shared/call-transcript/call-transcript';
+import { Sparkle } from '@/components/slide-shared/venue-pipeline/glyphs';
 import type { TargetProps } from '@/lib/context-link.pure';
-import { cn } from '@/lib/utils';
 import type { ReactNode } from 'react';
 
-/** The four bands both threads share, in reading order. */
-export type Band = 'start' | 'middle' | 'standout' | 'end';
+/** The three bands both threads share, in reading order. */
+export type Band = 'start' | 'middle' | 'end';
 
-const BANDS: readonly Band[] = ['start', 'middle', 'standout', 'end'];
+const BANDS: readonly Band[] = ['start', 'middle', 'end'];
 
 export interface BandCopy {
   readonly pill: string;
@@ -28,10 +28,6 @@ export interface ThreadPairCopy {
   readonly sister: { readonly name: string; readonly meta: string };
   readonly ai: { readonly name: string; readonly meta: string };
   readonly bands: Readonly<Record<Band, BandCopy>>;
-  /** Under the AI's standout line: why it survives. */
-  readonly standoutNote: ReactNode;
-  /** Under the AI's full plan: what the budget slipped by. */
-  readonly overBudget: ReactNode;
   readonly bottomLine: ReactNode;
 }
 
@@ -49,18 +45,9 @@ const THREADS: Readonly<Record<Band, { readonly left: readonly Line[]; readonly 
     right: [line('you', 'lit'), line('ai', 'lit')],
   },
   middle: {
-    left: [line('sister', 'faded'), line('you', 'faded'), line('sister', 'faded')],
-    right: [
-      line('you', 'faded'),
-      line('tool', 'faded'),
-      line('ai', 'faded'),
-      line('you', 'faded'),
-      line('tool', 'faded'),
-      line('you', 'faded'),
-      line('ai', 'faded'),
-    ],
+    left: [line('you', 'faded'), line('sister', 'faded'), line('you', 'faded')],
+    right: [line('you', 'faded'), line('ai', 'faded'), line('tool', 'faded')],
   },
-  standout: { left: [line('sister', 'standout')], right: [line('ai', 'standout')] },
   end: {
     left: [line('sister', 'lit'), line('you', 'lit')],
     right: [line('you', 'lit'), line('ai', 'lit')],
@@ -81,15 +68,10 @@ function ToolIcon() {
   );
 }
 
-/** One line of a thread in the cornerstone's Simple-view look; the AI's standout sits on a card so its ring reads. */
+/** One line of a thread in the cornerstone's Simple-view look. */
 function ThreadLine({ spec, children }: { spec: Line; children: ReactNode }) {
-  const onCard = spec.who === 'ai' && spec.light === 'standout';
   return (
-    <li
-      data-who={spec.who}
-      data-light={spec.light}
-      className={cn(callBubbleClass(spec.who, spec.light), onCard && 'rounded-xl bg-card')}
-    >
+    <li data-who={spec.who} data-light={spec.light} className={callBubbleClass(spec.who, spec.light)}>
       {spec.who === 'tool' ? <ToolIcon /> : null}
       {spec.who === 'tool' ? <span>{children}</span> : children}
     </li>
@@ -100,12 +82,10 @@ function Thread({
   side,
   specs,
   texts,
-  after,
 }: {
   side: 'sister' | 'ai';
   specs: readonly Line[];
   texts: readonly ReactNode[];
-  after?: ReactNode;
 }) {
   return (
     <div data-side={side} className="col-span-6 flex flex-col gap-2 @xl:col-span-5">
@@ -116,7 +96,6 @@ function Thread({
           </ThreadLine>
         ))}
       </ol>
-      {after}
     </div>
   );
 }
@@ -159,14 +138,7 @@ function Heads({ copy }: { copy: ThreadPairCopy }) {
   );
   const ai = (
     <span aria-hidden="true" className="flex size-9 shrink-0 items-center justify-center rounded-full bg-ai/20">
-      <svg viewBox="0 0 16 16" className="size-4">
-        <path
-          d="M8 1v14M1 8h14M3 3l10 10M13 3L3 13"
-          className="fill-none stroke-ai"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-        />
-      </svg>
+      <Sparkle className="size-4" />
     </span>
   );
   return (
@@ -176,19 +148,6 @@ function Heads({ copy }: { copy: ThreadPairCopy }) {
       <ThreadHead name={copy.ai.name} meta={copy.ai.meta} icon={ai} />
     </div>
   );
-}
-
-/** What follows the AI thread in a band: the standout's note, the over-budget tag. */
-function afterRight(band: Band, copy: ThreadPairCopy): ReactNode {
-  if (band === 'standout') return <p className="px-2 text-caption text-muted-foreground">{copy.standoutNote}</p>;
-  if (band === 'end') {
-    return (
-      <p className="self-start rounded-full bg-(--warning)/25 px-3 py-1 text-caption font-semibold text-foreground">
-        {copy.overBudget}
-      </p>
-    );
-  }
-  return null;
 }
 
 function assertBands(copy: ThreadPairCopy) {
@@ -203,7 +162,7 @@ function assertBands(copy: ThreadPairCopy) {
 }
 
 /**
- * The sister thread and the summer-party chat side by side in one frame, aligned on four shared bands (Spec Option
+ * The sister thread and the summer-party chat side by side in one frame, aligned on three shared bands (Spec Option
  * 2a), so the same lighting visibly lands on both. Everything shows at rest and enters with the Slide; nothing steps in. Pointing at a line dims the others on both sides. Below a wide frame the pill sits above its two threads.
  */
 export function ThreadPair({ copy }: { copy: ThreadPairCopy }) {
@@ -217,12 +176,7 @@ export function ThreadPair({ copy }: { copy: ThreadPairCopy }) {
             <div key={band} data-band={band} className="grid grid-cols-12 gap-x-4 gap-y-2 @xl:gap-x-6">
               <Thread side="sister" specs={THREADS[band].left} texts={copy.bands[band].left} />
               <Pill copy={copy.bands[band]} />
-              <Thread
-                side="ai"
-                specs={THREADS[band].right}
-                texts={copy.bands[band].right}
-                after={afterRight(band, copy)}
-              />
+              <Thread side="ai" specs={THREADS[band].right} texts={copy.bands[band].right} />
             </div>
           ))}
         </div>

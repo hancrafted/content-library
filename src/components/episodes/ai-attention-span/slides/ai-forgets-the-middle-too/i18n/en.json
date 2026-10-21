@@ -1,6 +1,6 @@
 {
   "title": "AI forgets the middle too",
-  "caption": "A long AI chat has the same shape as the call: the first and the newest messages get used, the middle gets lost, and a detail that keeps coming back survives.",
+  "caption": "A long AI chat has the same shape as the call: the first and the newest messages get used, and what you decided in the middle gets lost.",
   "sister": {
     "name": "Sister",
     "meta": "Call · 1:21:40"
@@ -12,37 +12,28 @@
   "bands": {
     "start": "The start",
     "middle": "The middle",
-    "standout": "The standout",
     "end": "The end"
   },
   "left": {
     "0": "Let's sort out the holidays!",
     "1": "Yes! But first, did you hear about Mum’s new phone?",
-    "3": "She sent me forty photos of her thumb.",
-    "4": "Ha! Did you see the neighbours’ renovation?",
-    "5": "Don’t get me started. And my back hurts again.",
-    "6": "And Pepper ate a whole birthday cake, candles included!",
-    "8": "Not yet. Oh, dinner is ready, I have to run.",
-    "9": "Talk soon, bye!"
+    "2": "Let’s cap the holidays at <budget>2,000 euro</budget>.",
+    "3": "Deal! She sent me forty photos of her thumb.",
+    "4": "Ha! And my back hurts again.",
+    "5": "Right, the holidays! What’s our <budget>budget</budget>?",
+    "6": "We settled that an hour ago!"
   },
   "right": {
-    "m3": "Plan a summer party for our team: 40 people, end of June, budget <budget>40,000 euro</budget>.",
-    "m4": "Happy to help! Indoor or outdoor? Any dietary needs I should know about?",
-    "m7": "Find three venues in Lisbon.",
-    "m9": "Three options: Quinta terrace, LX Factory rooftop, Estrela garden pavilion.",
-    "m10": "The catering offers are in the project folder. Which one fits?",
-    "m13": "Check hotels near the venue for 15 guests from abroad.",
-    "m15": "Hotel Lumen and Casa do Rio both have 15 rooms free on 27 June.",
-    "m18": "Got it: 40 guests, 15 travelling, <b>12 vegetarian</b>.",
-    "m22": "Great, put the full plan together.",
-    "m24": "Full plan: venue <cost>14,800</cost>, catering with the vegetarian menu <cost>21,600</cost>, hotels <cost>9,400</cost>, music <cost>6,500</cost>. Total <budget>52,300 euro</budget>."
+    "0": "Plan a summer party for our team: 40 people, end of June.",
+    "1": "Happy to help! Indoor or outdoor? Any dietary needs?",
+    "2": "Let’s keep the budget at <budget>40,000 euro</budget>.",
+    "3": "Noted! Three venues in Lisbon: Quinta terrace, LX Factory rooftop, Estrela pavilion.",
+    "4": "Great, put the full plan together.",
+    "5": "Sure. What’s the <budget>budget</budget>?"
   },
   "tools": {
-    "web": "Fetched 10 pages · 15k of extracts",
-    "pdf": "Read catering-offers.pdf · 20 pages"
+    "web": "Fetched 10 pages · 15k of extracts"
   },
-  "standoutNote": "Said four times, so a fresh copy is always near the end.",
-  "overBudget": "12,300 over the budget from the first message",
   "bottomLine": "<muted>With your sister, a lost detail is funny.</muted> With a deadline, it’s expensive.",
   "studyNote": "<planted>Measured by planting a fact in a long input, not in today’s chat apps</planted> · <varies>how deep the middle dips varies</varies>",
   "notes": {
@@ -97,12 +88,12 @@
       "meet-the-summer-party-chat": {
         "title": "Meet the summer-party chat",
         "keywords": "",
-        "script": "So let me introduce a chat that stays with us for the rest of the episode. You plan a company summer party with an AI: 40 people, end of June, a budget of 40,000 euro, and you give it a catering PDF and a guest list. Remember this chat, because we come back to it on every slide that follows."
+        "script": "So let me introduce a chat that stays with us for the rest of the episode. You plan a company summer party with an AI: 40 people, end of June, and you give it a catering PDF and a guest list. Remember this chat, because we come back to it on every slide that follows."
       },
       "it-happens-in-a-long-chat-too": {
         "title": "It happens in a long chat too",
         "keywords": "",
-        "script": "Now let it run for an hour. You started with the plan and the budget, and the first messages tend to get used, the latest messages tend to get used, and the middle gets lost. A detail you keep repeating, like the 12 vegetarian guests, survives. Later the budget slips, which is odd for a number from your very first message, and why that happens comes on a later slide."
+        "script": "Now let it run for an hour. The first messages tend to get used, the latest messages tend to get used, and the middle gets lost. Early in the middle you settle the budget at 40,000 euro. Much later you ask for the full plan, and the AI asks what the budget is, as if you had never said it. Why that happens comes on a later slide."
       },
       "a-shape-not-a-brain": {
         "title": "A shape, not a brain",
@@ -112,7 +103,7 @@
       "what-a-lost-detail-costs": {
         "title": "What a lost detail costs",
         "keywords": "",
-        "script": "With your sister, a lost detail is funny. With a deadline, it's expensive. So ask yourself which one your chat is: the one with the dog and the cake, or the one with your budget in it."
+        "script": "With your sister, a lost detail is funny. With a deadline, it's expensive. So ask yourself which one your chat is: the one with the photos of Mum's thumb, or the one with your budget in it."
       }
     }
   }
