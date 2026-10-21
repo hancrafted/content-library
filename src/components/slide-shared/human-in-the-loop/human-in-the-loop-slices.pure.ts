@@ -59,11 +59,11 @@ export function slicesOf(view: View, on: Callbacks): Slices {
   const job = workflow.stages.flatMap((stage) => stage.jobs).find((j) => j.id === openJobId) ?? null;
   const { onMode, onLevel, onWorkflow, onUpload, onOpenJob, onClose, onTick } = on;
   const choices = data.workflows.map(({ id, title }) => ({ id, title }));
-  const { controls, words } = data;
+  const { controls, words, outputWords } = data;
   const toolbar = { workflow, choices, mode, level, controls, words, uploadProblems: state.uploadProblems };
   return {
     toolbar: { ...toolbar, onMode, onLevel, onWorkflow, onUpload },
     diagram: { workflow, mode, level, openJobId, onOpenJob, slots: data.diagram, words },
-    modal: { workflow, job, mode, level, words, ticked: state.ticked, onClose, onTick },
+    modal: { workflow, job, mode, level, words, ticked: state.ticked, outputWords, onClose, onTick },
   };
 }

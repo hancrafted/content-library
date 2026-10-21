@@ -48,15 +48,39 @@ function useModalDialog(open: boolean) {
   return dialog;
 }
 
+interface PanelProps extends Pick<ModalProps, 'words' | 'ticked' | 'outputWords' | 'onTick'> {
+  readonly card: JobCardView;
+  readonly onClose: () => void;
+}
+
+/** The card inside the dialog: header, quick actions, then the body. */
+function Panel({ card, words, ticked, outputWords, onClose, onTick }: PanelProps) {
+  const [announced, copy] = useCopy(words.copied);
+  const { actions, sections, examples } = card.modal;
+  return (
+    <div className="flex max-h-full w-full max-w-3xl flex-col rounded-2xl border border-border bg-card p-5 text-foreground shadow-lg">
+      <Header title={card.title} closeLabel={words.close} onClose={onClose} />
+      <ModalActions label={card.title} actions={actions} words={words} onCopy={copy} announced={announced} />
+      <ModalBody
+        sections={sections}
+        examples={examples}
+        words={words}
+        ticked={ticked}
+        onTick={onTick}
+        outputWords={outputWords}
+      />
+    </div>
+  );
+}
+
 /**
  * The job modal part: a native `<dialog>` opened with `showModal()` while a job is open, so the browser gives the top
  * layer, Escape and the focus trap, and a press on the backdrop closes it (same pattern as the interview chat). The
  * header holds the quick actions; the body follows in inverted-pyramid order. A copy announces `words.copied` in a
  * polite live region.
  */
-export function ModalPart({ workflow, job, mode, level, words, onClose }: ModalProps) {
+export function ModalPart({ workflow, job, mode, level, onClose, ...rest }: ModalProps) {
   const dialog = useModalDialog(job !== null);
-  const [announced, copy] = useCopy(words.copied);
   const card = cardFor({ workflow, mode, level }, job?.id);
   if (!job || !card) return null;
   const close = () => dialog.current?.close();
@@ -70,17 +94,14 @@ export function ModalPart({ workflow, job, mode, level, words, onClose }: ModalP
       onClick={(event) => event.target === event.currentTarget && close()}
       className="m-0 h-dvh max-h-none w-full max-w-none items-center justify-center overscroll-contain bg-transparent p-4 text-inherit backdrop:bg-overlay/60 backdrop:backdrop-blur-xs open:flex sm:p-6"
     >
-      <div className="flex max-h-full w-full max-w-3xl flex-col rounded-2xl border border-border bg-card p-5 text-foreground shadow-lg">
-        <Header title={card.title} closeLabel={words.close} onClose={close} />
-        <ModalActions
-          label={card.title}
-          actions={card.modal.actions}
-          words={words}
-          onCopy={copy}
-          announced={announced}
-        />
-        <ModalBody sections={card.modal.sections} examples={card.modal.examples} words={words} />
-      </div>
+      <Panel
+        card={card}
+        words={rest.words}
+        ticked={rest.ticked}
+        outputWords={rest.outputWords}
+        onTick={rest.onTick}
+        onClose={close}
+      />
     </dialog>
   );
 }

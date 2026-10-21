@@ -42,7 +42,7 @@ export function PieceJobs({ job, slot }: JobViewProps) {
   const { before, after } = splitParked(job.parked ?? []);
   const piece = (label: string, parked: boolean) => {
     const tone = parked
-      ? 'bg-muted text-muted-foreground'
+      ? 'bg-muted/50 text-muted-foreground'
       : 'border border-foreground bg-card font-semibold text-foreground';
     return (
       <li key={`${parked}-${label}`} className="flex h-9 items-center gap-1.5">

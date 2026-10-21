@@ -36,26 +36,6 @@ export const humanInTheLoopWorkflow = slide({
     { slug: 'you-check' },
   ],
   content: ({ t, locale, target, marker, Marker }) => {
-    const words = {
-      stages: Object.fromEntries(
-        STAGE_IDS.map((id) => [id, { name: t(`stages.${id}.name`), move: t(`stages.${id}.move`) }]),
-      ),
-      jobs: {
-        pieces: {
-          title: t('jobs.party.venue'),
-          parked: [
-            t('jobs.party.travel'),
-            t('jobs.party.catering'),
-            t('jobs.party.invitations'),
-            t('jobs.party.budget'),
-          ],
-        },
-        interview: { title: t('jobs.interview.label') },
-        spec: { title: t('card.title') },
-        compare: { title: t('jobs.compare.label'), detail: t('jobs.compare.detail') },
-        plan: { title: t('jobs.recommendation.label'), detail: t('jobs.recommendation.detail') },
-      },
-    };
     const jobsLabel = (id: (typeof STAGE_IDS)[number]) => t('jobsLabel', { stage: t(`stages.${id}.name`) });
     const gates = { requirements: t('card.gate'), compare: t('jobs.compare.gate') };
     return (
@@ -63,7 +43,6 @@ export const humanInTheLoopWorkflow = slide({
         <HumanInTheLoop
           workflow="summer-party"
           locale={locale}
-          words={{ workflow: words }}
           diagram={{
             label: t('pipelineLabel'),
             checked: t('jobs.research.checked'),

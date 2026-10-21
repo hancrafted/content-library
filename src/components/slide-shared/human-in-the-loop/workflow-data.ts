@@ -2,6 +2,7 @@ import { parse } from 'yaml';
 import uiDe from './human-in-the-loop.config.de.yml';
 import uiEn from './human-in-the-loop.config.yml';
 import type { UiWords } from './human-in-the-loop.types';
+import type { OutputWords } from './outputs/output-words';
 import summerPartyDe from './summer-party.config.de.yml';
 import summerPartyEn from './summer-party.config.yml';
 import vacationDe from './vacation.config.de.yml';
@@ -46,4 +47,10 @@ export function workflowFor(id: WorkflowId, locale: WorkflowLocale, override?: u
 export function uiWords(locale: WorkflowLocale): UiWords {
   const doc = parse(UI_FILES[locale]) as { ui: UiWords };
   return doc.ui;
+}
+
+/** The words of the output renderers in one locale. */
+export function outputWords(locale: WorkflowLocale): OutputWords {
+  const doc = parse(UI_FILES[locale]) as { output: OutputWords };
+  return doc.output;
 }

@@ -4,28 +4,22 @@
   "pipelineLabel": "The steps of a brief, stage by stage",
   "stages": {
     "party": {
-      "name": "Summer party",
-      "move": "Break it down"
+      "name": "Summer party"
     },
     "interview": {
-      "name": "Interview",
-      "move": "Interview yourself with AI"
+      "name": "Interview"
     },
     "requirements": {
-      "name": "Requirements",
-      "move": "Requirements first"
+      "name": "Requirements"
     },
     "research": {
-      "name": "Research",
-      "move": "Fresh start for each piece"
+      "name": "Research"
     },
     "compare": {
-      "name": "Compare",
-      "move": "Evaluate each step"
+      "name": "Compare"
     },
     "recommendation": {
-      "name": "Recommendation",
-      "move": "for your boss"
+      "name": "Recommendation"
     }
   },
   "loop": {
@@ -82,15 +76,7 @@
   },
   "jobsLabel": "{stage}: jobs",
   "jobs": {
-    "party": {
-      "venue": "Venue",
-      "travel": "Travel",
-      "catering": "Catering",
-      "invitations": "Invitations",
-      "budget": "Budget"
-    },
     "interview": {
-      "label": "AI asks you",
       "detail": "3 questions,",
       "forgot": "<marker>1 you forgot</marker>"
     },
@@ -98,18 +84,11 @@
       "checked": "Checked against the card"
     },
     "compare": {
-      "label": "Rank 3 venues",
-      "detail": "against the card",
       "gate": "Gate 2"
-    },
-    "recommendation": {
-      "label": "Venue plan",
-      "detail": "by Friday"
     }
   },
   "card": {
     "gate": "Gate 1",
-    "title": "Requirements card",
     "criteria": {
       "guests": "200 guests",
       "budget": "€150 per person",

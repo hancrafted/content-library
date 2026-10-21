@@ -1,10 +1,6 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
-  "entry": [
-    "src/components/slide-shared/human-in-the-loop/outputs/output-dispatch.tsx",
-    ".archgate/adrs/*.rules.ts",
-    "skills/*/scripts/*.pure.ts"
-  ],
+  "entry": [".archgate/adrs/*.rules.ts", "skills/*/scripts/*.pure.ts"],
   "project": ["src/**/*.{ts,tsx,css}", "*.ts", "*.mjs", ".archgate/**/*.ts", "scripts/**/*.ts"],
   "ignoreExportsUsedInFile": true,
   "ignoreBinaries": ["magick", "marker_single", "pdfinfo", "pdftoppm"]

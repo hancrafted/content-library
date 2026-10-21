@@ -15,7 +15,11 @@ interface SwitchProps<T extends string> {
 /** A two-way switch of buttons: `aria-pressed` marks the chosen one, and Tab reaches each. */
 function Switch<T extends string>({ label, value, options, onChange }: SwitchProps<T>) {
   return (
-    <div role="group" aria-label={label} className="inline-flex rounded-lg border border-border bg-card p-0.5">
+    <div
+      role="group"
+      aria-label={label}
+      className="inline-flex rounded-lg border border-border bg-card p-0.5 text-muted-foreground"
+    >
       {options.map((option) => (
         <button
           key={option.value}
@@ -23,7 +27,7 @@ function Switch<T extends string>({ label, value, options, onChange }: SwitchPro
           aria-pressed={option.value === value}
           onClick={() => onChange(option.value)}
           className={cn(
-            'min-h-9 rounded-md px-3 text-caption font-medium transition-colors focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none',
+            'min-h-7 rounded-md px-2.5 text-caption font-medium transition-colors focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none',
             option.value === value
               ? 'bg-primary text-primary-foreground'
               : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground',
@@ -65,8 +69,8 @@ export function ToolbarPart(props: ToolbarProps) {
   const { workflow, mode, level, words, onMode, onLevel } = props;
   const { setup } = workflowView(workflow, { mode, level });
   return (
-    <div data-part="toolbar" data-mode={mode} className="flex flex-col gap-2">
-      <div className="flex flex-wrap items-center gap-2">
+    <div data-part="toolbar" data-mode={mode} className="mb-3 flex flex-col gap-2">
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
         <Switch
           label={`${words.modeWatch} / ${words.modeTry}`}
           value={mode}

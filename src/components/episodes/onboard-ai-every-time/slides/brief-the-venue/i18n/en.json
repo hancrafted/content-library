@@ -10,7 +10,6 @@
   "stages": {
     "party": {
       "name": "Summer party",
-      "move": "Break it down",
       "popover": {
         "in": "the whole party.",
         "out": "five pieces, only the venue taken forward."
@@ -18,7 +17,6 @@
     },
     "interview": {
       "name": "Interview",
-      "move": "Interview yourself with AI",
       "popover": {
         "in": "your rough idea.",
         "out": "the questions you had not thought of, answered."
@@ -26,7 +24,6 @@
     },
     "requirements": {
       "name": "Requirements",
-      "move": "Requirements first",
       "popover": {
         "in": "your answers.",
         "out": "a requirements card you sign off."
@@ -34,7 +31,6 @@
     },
     "research": {
       "name": "Research",
-      "move": "Fresh start for each piece",
       "popover": {
         "in": "the requirements card.",
         "out": "one venue checked against every criterion."
@@ -42,7 +38,6 @@
     },
     "compare": {
       "name": "Compare",
-      "move": "Evaluate each step",
       "popover": {
         "in": "three checked venues.",
         "out": "a ranking against the card."
@@ -50,7 +45,6 @@
     },
     "recommendation": {
       "name": "Recommendation",
-      "move": "for your boss",
       "popover": {
         "in": "the comparison.",
         "out": "the venue plan for your boss."
@@ -58,15 +52,7 @@
     }
   },
   "jobs": {
-    "party": {
-      "venue": "Venue",
-      "travel": "Travel",
-      "catering": "Catering",
-      "invitations": "Invitations",
-      "budget": "Budget"
-    },
     "interview": {
-      "label": "AI asks you",
       "detail": "3 questions,",
       "forgot": "<marker>1 you forgot</marker>"
     },
@@ -74,18 +60,11 @@
       "checked": "Checked against the card"
     },
     "compare": {
-      "label": "Rank 3 venues",
-      "detail": "against the card",
       "gate": "Gate 2"
-    },
-    "recommendation": {
-      "label": "Venue plan",
-      "detail": "by Friday"
     }
   },
   "card": {
     "gate": "Gate 1",
-    "title": "Requirements card",
     "criteria": {
       "guests": "200 guests",
       "budget": "€150 per person",

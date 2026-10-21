@@ -16,7 +16,7 @@ export type WorkflowControlsProps = Pick<
 >;
 
 const button =
-  'inline-flex h-8 cursor-pointer items-center gap-1.5 rounded-md border bg-background px-3 text-body font-medium hover:bg-accent hover:text-accent-foreground focus-within:ring-[3px] focus-within:ring-ring/50';
+  'inline-flex h-7 cursor-pointer items-center gap-1.5 rounded-md border border-transparent px-2 text-caption font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground focus-within:ring-[3px] focus-within:ring-ring/50';
 
 function download(workflow: WorkflowControlsProps['workflow']) {
   const { name, text, type } = workflowFile(workflow);
@@ -38,7 +38,7 @@ function Picker({ v }: { readonly v: WorkflowControlsProps }) {
       <select
         id={id}
         data-control="picker"
-        className="h-8 rounded-md border bg-background px-2 text-body"
+        className="h-7 rounded-md border border-border bg-background px-2 text-caption"
         value={known ? v.workflow.id : ''}
         onChange={(event) => v.onWorkflow(event.target.value)}
       >
@@ -56,7 +56,7 @@ function Picker({ v }: { readonly v: WorkflowControlsProps }) {
 function DownloadButton({ v }: { readonly v: WorkflowControlsProps }) {
   return (
     <button type="button" className={button} data-control="download" onClick={() => download(v.workflow)}>
-      <Download aria-hidden="true" className="size-4" />
+      <Download aria-hidden="true" className="size-3.5" />
       {v.words.download}
     </button>
   );
@@ -70,7 +70,7 @@ function UploadButton({ v, describedBy }: { readonly v: WorkflowControlsProps; r
   };
   return (
     <label className={button} data-control="upload">
-      <Upload aria-hidden="true" className="size-4" />
+      <Upload aria-hidden="true" className="size-3.5" />
       {v.words.upload}
       <input
         type="file"
@@ -107,7 +107,7 @@ function UploadSection({ v }: { readonly v: WorkflowControlsProps }) {
 export function WorkflowControls(v: WorkflowControlsProps) {
   const { picker, download: canDownload, upload } = v.controls;
   return (
-    <div className="flex flex-wrap items-center gap-2" data-workflow-controls="">
+    <div className="flex flex-wrap items-center gap-1 sm:ml-auto" data-workflow-controls="">
       {picker && v.choices.length > 1 ? <Picker v={v} /> : null}
       {canDownload ? <DownloadButton v={v} /> : null}
       {upload ? <UploadSection v={v} /> : null}

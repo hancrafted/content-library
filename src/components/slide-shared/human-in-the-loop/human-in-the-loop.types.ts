@@ -1,6 +1,7 @@
 import type { TargetProps } from '@/lib/context-link.pure';
 import type { ReactNode } from 'react';
 import type { NodeCopy } from './node-popover.client';
+import type { OutputWords } from './outputs/output-words';
 import type { Level, Mode } from './workflow-state.pure';
 import type { DeepPartial } from './workflow-words.pure';
 import type { Job, Workflow } from './workflow.types';
@@ -131,6 +132,8 @@ export interface ModalProps {
   readonly level: Level;
   readonly ticked: readonly string[];
   readonly words: UiWords;
+  /** The labels of the example result's views. */
+  readonly outputWords: OutputWords;
   readonly onClose: () => void;
   readonly onTick: (ticketId: string) => void;
 }
@@ -142,6 +145,7 @@ export interface HumanInTheLoopData {
   readonly workflowId: string;
   readonly locale: 'en' | 'de';
   readonly words: UiWords;
+  readonly outputWords: OutputWords;
   readonly controls: ToolbarControls;
   readonly mode: Mode;
   readonly level: Level;

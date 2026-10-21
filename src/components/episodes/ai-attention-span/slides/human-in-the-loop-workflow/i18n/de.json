@@ -4,28 +4,22 @@
   "pipelineLabel": "Die Schritte eines Briefings, Stufe für Stufe",
   "stages": {
     "party": {
-      "name": "Sommerfest",
-      "move": "Zerlege es"
+      "name": "Sommerfest"
     },
     "interview": {
-      "name": "Interview",
-      "move": "Interviewe Dich mit KI"
+      "name": "Interview"
     },
     "requirements": {
-      "name": "Anforderungen",
-      "move": "Erst die Anforderungen"
+      "name": "Anforderungen"
     },
     "research": {
-      "name": "Recherche",
-      "move": "Frischer Start für jedes Teil"
+      "name": "Recherche"
     },
     "compare": {
-      "name": "Vergleich",
-      "move": "Prüfe jeden Schritt"
+      "name": "Vergleich"
     },
     "recommendation": {
-      "name": "Empfehlung",
-      "move": "für Deine Chefin"
+      "name": "Empfehlung"
     }
   },
   "loop": {
@@ -82,15 +76,7 @@
   },
   "jobsLabel": "{stage}: Aufgaben",
   "jobs": {
-    "party": {
-      "venue": "Location",
-      "travel": "Anreise",
-      "catering": "Catering",
-      "invitations": "Einladungen",
-      "budget": "Budget"
-    },
     "interview": {
-      "label": "KI fragt Dich",
       "detail": "3 Fragen,",
       "forgot": "<marker>1 vergessen</marker>"
     },
@@ -98,18 +84,11 @@
       "checked": "Gegen die Karte geprüft"
     },
     "compare": {
-      "label": "3 Locations ranken",
-      "detail": "gemessen an der Karte",
       "gate": "Prüfpunkt 2"
-    },
-    "recommendation": {
-      "label": "Location-Plan",
-      "detail": "bis Freitag"
     }
   },
   "card": {
     "gate": "Prüfpunkt 1",
-    "title": "Anforderungskarte",
     "criteria": {
       "guests": "200 Gäste",
       "budget": "150 € pro Person",

@@ -51,8 +51,7 @@ const TURNS: readonly (['reply', Reply] | ['question', Asked])[] = [
   ['reply', 'spec'],
 ];
 
-const STAGE_IDS = ['party', 'interview', 'requirements', 'research', 'compare', 'recommendation'] as const;
-type StageId = (typeof STAGE_IDS)[number];
+type StageId = 'party' | 'interview' | 'requirements' | 'research' | 'compare' | 'recommendation';
 
 /**
  * Brief the venue (Spec Option 4a): one task walked through BRIEF as a CI-style pipeline. Six stage columns hold their
@@ -137,26 +136,6 @@ export const briefTheVenue = slide({
         }}
       />
     );
-    const workflowWords = {
-      stages: Object.fromEntries(
-        STAGE_IDS.map((id) => [id, { name: t(`stages.${id}.name`), move: t(`stages.${id}.move`) }]),
-      ),
-      jobs: {
-        pieces: {
-          title: t('jobs.party.venue'),
-          parked: [
-            t('jobs.party.travel'),
-            t('jobs.party.catering'),
-            t('jobs.party.invitations'),
-            t('jobs.party.budget'),
-          ],
-        },
-        interview: { title: t('jobs.interview.label') },
-        spec: { title: t('card.title') },
-        compare: { title: t('jobs.compare.label'), detail: t('jobs.compare.detail') },
-        plan: { title: t('jobs.recommendation.label'), detail: t('jobs.recommendation.detail') },
-      },
-    };
     const stageSlot = (id: StageId) => ({
       popover: popover(id),
       jobsLabel: t('jobsLabel', { stage: t(`stages.${id}.name`) }),
@@ -166,7 +145,6 @@ export const briefTheVenue = slide({
         <HumanInTheLoop
           workflow="summer-party"
           locale={locale}
-          words={{ workflow: workflowWords }}
           diagram={{
             label: t('pipelineLabel'),
             checked: t('jobs.research.checked'),

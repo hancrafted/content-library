@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { callbacksFor, shownWorkflow, slicesOf, uploadEvent } from './human-in-the-loop-slices.pure';
 import type { HumanInTheLoopData, UiWords } from './human-in-the-loop.types';
+import { DEFAULT_OUTPUT_WORDS } from './outputs/output-words';
 import { createState, type WorkflowEvent } from './workflow-state.pure';
 import type { Workflow } from './workflow.types';
 
@@ -46,6 +47,7 @@ const data: HumanInTheLoopData = {
   workflowId: 'two',
   locale: 'en',
   words,
+  outputWords: DEFAULT_OUTPUT_WORDS,
   controls: { picker: true, download: true, upload: true },
   mode: 'watch',
   level: 'simple',
@@ -76,6 +78,7 @@ describe('success cases', () => {
     slices.modal.onClose();
     // ASSERT
     expect(slices.modal.job?.id).toBe(job.id);
+    expect(slices.modal.outputWords).toBe(DEFAULT_OUTPUT_WORDS);
     expect(sent).toEqual([{ type: 'open', jobId: job.id }, { type: 'close' }]);
   });
 });

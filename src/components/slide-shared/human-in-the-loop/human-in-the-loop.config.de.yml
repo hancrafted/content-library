@@ -26,3 +26,24 @@ ui:
   sectionExample: Beispielergebnis
   setup: Einmalige Einrichtung
   newTab: öffnet in neuem Tab
+
+# Die Wörter der Ausgabe-Ansichten (Spezifikation, Tickets, Recherche, Vergleich, Anforderungen), mit denselben Schlüsseln.
+output:
+  goal: Ziel
+  requirements: Anforderungen
+  outOfScope: Nicht dabei
+  slices: Scheiben
+  tickets: Tickets
+  acceptance: Fertig, wenn
+  blockedBy: Nach
+  ready: Bereit
+  done: Erledigt
+  blocked: Wartet
+  progress: '{done} von {total} erledigt'
+  graphHint: Klicke ein bereites Ticket an, um es abzuhaken und freizugeben, was daran hängt.
+  facts: Fakten
+  criteria: Kriterien
+  ranking: Rangfolge
+  rank: '#'
+  option: Option
+  why: Warum

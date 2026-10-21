@@ -31,7 +31,7 @@ export function SpecView({ spec, words }: { spec: Spec; words: OutputWords }) {
   return (
     <article data-output="spec" className="flex flex-col gap-5 rounded-xl border border-border bg-card p-5 shadow-md">
       <header className="flex flex-col gap-1 border-b border-border pb-4">
-        <p className="text-caption font-semibold tracking-wide text-ai uppercase">{words.goal}</p>
+        <p className="text-caption font-semibold tracking-wide text-muted-foreground uppercase">{words.goal}</p>
         <p className="text-subheading font-semibold text-card-foreground">{spec.goal}</p>
       </header>
       <div className="grid gap-5 @2xl:grid-cols-2">

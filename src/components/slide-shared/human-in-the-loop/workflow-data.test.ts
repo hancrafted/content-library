@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
-import { PAIRS, UI_FILES, WORKFLOW_IDS, uiWords, workflowFor } from './workflow-data';
+import { DEFAULT_OUTPUT_WORDS } from './outputs/output-words';
+import { PAIRS, UI_FILES, WORKFLOW_IDS, outputWords, uiWords, workflowFor } from './workflow-data';
 import { keyPaths } from './workflow-words.pure';
 
 describe('success cases', () => {
@@ -17,12 +18,13 @@ describe('success cases', () => {
     },
   );
 
-  it('keeps the German words under exactly the English keys, for every Workflow and for the chrome', () => {
+  it('keeps the German words under exactly the English keys, for every Workflow , for the chrome and for the output words', () => {
     // ARRANGE
     const pairs = WORKFLOW_IDS.map((id) => [parse(PAIRS[id].config).words, parse(PAIRS[id].de).words]);
     const chrome = [parse(UI_FILES.en).ui, parse(UI_FILES.de).ui];
+    const output = [parse(UI_FILES.en).output, parse(UI_FILES.de).output];
     // ACT
-    const drift = [...pairs, chrome].map(([en, de]) => [keyPaths(en), keyPaths(de)]);
+    const drift = [...pairs, chrome, output].map(([en, de]) => [keyPaths(en), keyPaths(de)]);
     // ASSERT
     for (const [en, de] of drift) expect(de).toEqual(en);
   });
@@ -39,6 +41,18 @@ describe('success cases', () => {
     expect(over.stages.find((stage) => stage.id === 'research')?.name).toBe(
       plain.stages.find((stage) => stage.id === 'research')?.name,
     );
+  });
+
+  it('has every label of the renderers in English, matching their defaults, and in German', () => {
+    // ARRANGE
+    const keys = Object.keys(DEFAULT_OUTPUT_WORDS).sort();
+    // ACT
+    const en = outputWords('en');
+    const de = outputWords('de');
+    // ASSERT
+    expect(en).toEqual(DEFAULT_OUTPUT_WORDS);
+    expect(Object.keys(de).sort()).toEqual(keys);
+    expect(de.done).not.toBe(en.done);
   });
 });
 
