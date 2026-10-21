@@ -1,6 +1,5 @@
 import type { Accent, TopicIcon } from '@/lib/episode-overview';
 import {
-  BrainCircuit,
   Coins,
   FileText,
   Handshake,
@@ -13,7 +12,6 @@ import {
 
 /** A Topic names its icon as data; this is the one place the landing turns the name into a drawing. */
 export const TOPIC_ICONS: Record<TopicIcon, LucideIcon> = {
-  'brain-circuit': BrainCircuit,
   sparkles: Sparkles,
   'user-round-plus': UserRoundPlus,
   hourglass: Hourglass,

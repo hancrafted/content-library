@@ -14,7 +14,6 @@ export type Accent = (typeof ACCENTS)[number];
 
 /** An icon by name, so this stays data; the landing turns the name into a drawing. */
 export const ICONS = [
-  'brain-circuit',
   'sparkles',
   'handshake',
   'file-text',
