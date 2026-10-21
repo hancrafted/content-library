@@ -34,16 +34,16 @@ function localized(locale: Locale): LocalizedSlide {
 const scene = (locale: Locale) => load(renderToStaticMarkup(createElement(Fragment, null, localized(locale).content)));
 
 describe('success cases', () => {
-  it('ends the AI thread on a confident full plan whose total is over the 40,000 budget, in the budget tint', () => {
+  it('ends the AI thread on a confident full plan whose total is over the 30,000 budget, in the budget tint', () => {
     // ARRANGE
     const expected = {
       en: {
-        reply: 'Here is the full plan: venue 28,000 €, catering 16,000 €, band 8,000 €. Total 52,000 €.',
-        tint: '52,000 €',
+        reply: 'Here is the full plan: venue 17,000 €, catering 19,300 €, band 6,000 €. Total 42,300 €.',
+        tint: '42,300 €',
       },
       de: {
-        reply: 'Hier ist der ganze Plan: Ort 28.000 €, Catering 16.000 €, Band 8.000 €. Gesamt 52.000 €.',
-        tint: '52.000 €',
+        reply: 'Hier ist der ganze Plan: Ort 17.000 €, Catering 19.300 €, Band 6.000 €. Gesamt 42.300 €.',
+        tint: '42.300 €',
       },
     };
     // ACT
@@ -72,9 +72,9 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('lets the plan parts add up to its total, which is over the 40,000 budget', () => {
+  it('lets the plan parts add up to its total, which is over the 30,000 budget', () => {
     // ARRANGE
-    const budget = 40_000;
+    const budget = 30_000;
     // ACT
     const totals = (['en', 'de'] as const).map((locale) => {
       const text = scene(locale)('[data-side="ai"] [data-who="ai"]').last().text();

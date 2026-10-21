@@ -1,10 +1,10 @@
 {
   "title": "Human-in-the-Loop-Workflow",
-  "caption": "Du bist der Kapitän: Ein Planer-Chat bereitet jede Übergabe vor, Helfer-Chats erledigen die Aufgaben, und Du prüfst jedes Artefakt dazwischen.",
+  "caption": "Plane das nächste Sommerfest Deiner Firma: 200 Mitarbeitende an fünf Standorten in Europa. Du bist der Kapitän: Ein Planer-Chat bereitet jede Übergabe vor, Helfer-Chats erledigen die Aufgaben, und Du prüfst jedes Artefakt dazwischen.",
   "pipelineLabel": "Die Schritte eines Briefings, Stufe für Stufe",
   "stages": {
     "party": {
-      "name": "Plane ein Sommerfest",
+      "name": "Sommerfest",
       "move": "Zerlege es"
     },
     "interview": {

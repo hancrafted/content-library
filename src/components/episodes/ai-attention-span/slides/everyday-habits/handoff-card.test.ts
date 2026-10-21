@@ -35,7 +35,7 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('keeps the rich text a Slide hands it, so the budget keeps its tint', () => {
     // ARRANGE
-    const expected = 'budget 40,000 €';
+    const expected = 'budget 30,000 €';
     // ACT
     const $ = render(createElement('span', { 'data-budget': '' }, expected));
     // ASSERT

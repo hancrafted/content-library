@@ -148,7 +148,7 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('shows the handoff card with the budget in its tint in both locales', () => {
     // ARRANGE
-    const expected = { en: 'budget 40,000 €', de: 'Budget 40.000 €' };
+    const expected = { en: 'budget 30,000 €', de: 'Budget 30.000 €' };
     // ACT
     const budgets = {
       en: scene('en')('[data-handoff] [data-budget]').text(),

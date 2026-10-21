@@ -80,9 +80,13 @@ const REWRITTEN_SCRIPT: Readonly<Record<string, Readonly<Record<string, { title?
       script:
         "Now watch what happens as this chat grows. Only the very beginning of the window holds the AI's attention: the starting instructions. Your own first message already comes after them, and its attention falls off right away, so being first in the chat is no protection, and you will see why in a moment. One thing before we go on: the numbers on this slide are illustrative, I picked a 200K window and the little bars that show how much the AI looks at each message, to show the shape, not to measure anything.",
     },
+    'A standout survives': {
+      script:
+        'And one standout survives. The 60 vegetarian guests, a detail the chat keeps repeating, are still there, and the plan comes back with a vegetarian menu.',
+    },
     'The budget is forgotten': {
       script:
-        'Look at the budget. Your very first message said 40,000 euro, and now the plan comes back at 52,300. It was your first message, but only the starting instructions hold the very beginning, so even your first message already falls off. It lost attention by its position, and it is also one short number among many similar ones.',
+        'Look at the budget. Your very first message said 30,000 euro, and now the plan comes back at 42,300. It was your first message, but only the starting instructions hold the very beginning, so even your first message already falls off. It lost attention by its position, and it is also one short number among many similar ones.',
     },
   },
   'attention-is-a-budget': {
@@ -90,6 +94,10 @@ const REWRITTEN_SCRIPT: Readonly<Record<string, Readonly<Record<string, { title?
       title: 'Attention as a budget',
       script:
         "Think of attention as a budget. On the left is the timeline, in the middle the window as a bar, and on the right the attention each message gets. And I say it plainly: these numbers, the token counts and the window sizes on this slide are illustrative. I made them up to show the shape, so please don't take them as measurements.",
+    },
+    'A spike in the middle': {
+      script:
+        'But a detail you keep repeating keeps its share, and it shows as a spike in the middle. The 60 vegetarian guests came up again and again, so they stay bright, while the budget, said once, fades.',
     },
     'Where it goes': {
       script:

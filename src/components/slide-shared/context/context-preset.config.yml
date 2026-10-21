@@ -391,14 +391,14 @@ story:
     technical: '`CLAUDE.md` and memory files, loaded after the system prompt. 2k tokens.'
   m3:
     event: You set the budget
-    simple: 'Your first message. It holds the one hard limit: 40,000 euro.'
+    simple: 'Your first message. It holds the one hard limit: 30,000 euro.'
     technical: User turn, 20 tokens. Never referred to again, so its share of attention shrinks as the chat grows.
   m4:
     event: The AI asks two questions
     simple: "The AI's reply joins the context too, so the next request carries it along."
     technical: "Assistant turn, 18 tokens. Every request resends the whole context: request 2's input is request 1's input plus this reply plus your next message."
   m5:
-    event: You mention 12 vegetarian guests
+    event: You mention 60 vegetarian guests
     simple: A small detail that keeps coming back. Every time the chat repeats it, it is fresh again.
     technical: User turn, 18 tokens. Repeated in steps 6, 12, 18 and 21, so a recent copy is always near the end.
   m6:
@@ -459,10 +459,10 @@ story:
     technical: User turn, 8 tokens.
   m17:
     event: The AI opened guests.xlsx
-    label: Opened guests.xlsx · 40 rows
+    label: Opened guests.xlsx · 200 rows
     labelTechnical: '`Bash` `python3 … pandas` · 2k'
-    out: 40 rows · 1.8k
-    simple: 'The guest list. Forty rows are small: a spreadsheet is cheap until it is big.'
+    out: 200 rows · 1.8k
+    simple: 'The guest list. Two hundred rows are still small: a spreadsheet is cheap until it is big.'
     technical: '`Read` refuses .xlsx, so the AI prints the sheet with a script:'
     pre: Bash("python3 -c 'import pandas as pd; print(pd.read_excel(\"guests.xlsx\").to_csv())'") → 1,800 tokens
   m18:
@@ -477,12 +477,12 @@ story:
     event: The AI added up the costs
     label: Added up the costs
     labelTechnical: '`Bash` `python3 budget.py` · 670'
-    out: Total 52,300 · 350 tokens
+    out: Total 42,300 · 350 tokens
     simple: The AI ran a small calculation. The numbers are right; the budget is not in it.
-    technical: '`Bash("python3 budget.py")`: the sum is correct, but the 40,000 limit from step 3 never made it into the script.'
+    technical: '`Bash("python3 budget.py")`: the sum is correct, but the 30,000 limit from step 3 never made it into the script.'
   m24:
-    event: "The AI's plan: 52,300 euro"
-    simple: The vegetarians made it. The 40,000 euro budget did not.
+    event: "The AI's plan: 42,300 euro"
+    simple: The vegetarians made it. The 30,000 euro budget did not.
     technical: Assistant turn, 30 tokens. The budget from step 3 is still in the context, but it got little attention among many similar numbers from the offers and searches (distractors, Chroma 2025), so the plan is 12,300 euro over it.
   m25:
     event: You flag the budget, ask for the contract
@@ -502,9 +502,9 @@ story:
     simple: The app quietly replaced the whole conversation with a summary. You did not see it happen; the chat looks the same, but the AI now only has the summary.
     technical: 'Autocompact: a model call writes a structured summary and it replaces every message, tool call and tool result. The system prompt, tools, MCP, skills and memory files are loaded again. Recently read files come back only if under 5k tokens each; both PDFs come back as paths.'
     kept:
-      - 'The goal: a summer party for 40, end of June, in Lisbon'
-      - 'The budget: 40,000 euro, and that the last plan was 12,300 over'
-      - 12 vegetarian guests, 15 travelling
+      - 'The goal: a summer party for 200 employees across five offices in Europe, end of June, in Lisbon'
+      - 'The budget: 30,000 euro, and that the last plan was 12,300 over'
+      - 60 vegetarian guests, 150 travelling
       - Venue Estrela pavilion, caterer Sabor Verde, hotels Lumen and Casa do Rio
       - 'Contract: music until 23:00, 30% deposit'
     dropped:
@@ -523,11 +523,11 @@ story:
   m30:
     event: The AI added up the costs, with the limit
     label: Added up the costs
-    labelTechnical: '`Bash` `python3 budget.py --limit 40000` · 670'
-    out: Total 40,000 · 350 tokens
+    labelTechnical: '`Bash` `python3 budget.py --limit 30000` · 670'
+    out: Total 30,000 · 350 tokens
     simple: This time the budget is in the calculation.
-    technical: '`Bash("python3 budget.py --limit 40000")`: the limit from the summary made it into the script.'
+    technical: '`Bash("python3 budget.py --limit 30000")`: the limit from the summary made it into the script.'
   m31:
-    event: 'The plan fits: 40,000 euro'
+    event: 'The plan fits: 30,000 euro'
     simple: 'Less detail, more focus: the summary put the budget back in front.'
     technical: Assistant turn, 32 tokens. After compaction the summary sits right after the starting instructions, where attention is strong, and the budget is in it.

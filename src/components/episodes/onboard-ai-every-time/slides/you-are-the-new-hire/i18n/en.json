@@ -1,7 +1,7 @@
 {
   "title": "You're the new hire",
   "caption": "Most of what you need to do the job well was never written down.",
-  "task": "Plan next year’s summer party for 200 employees across Europe",
+  "task": "Plan your company’s next summer party: 200 employees across five offices in Europe",
   "obvious": {
     "label": "The obvious questions",
     "questions": {
@@ -85,7 +85,7 @@
       "obvious-questions": {
         "title": "Obvious questions",
         "keywords": "",
-        "script": "Imagine you're a new hire. On day one, you get your first task: plan next year's summer party for all 200 employees across Europe. Your first questions are probably: what's the budget, where does everybody stay, who signs off? Maybe even dietary and accessibility needs."
+        "script": "Imagine you're a new hire. On day one, you get your first task: plan your company's next summer party: 200 employees across five offices in Europe. Your first questions are probably: what's the budget, where does everybody stay, who signs off? Maybe even dietary and accessibility needs."
       },
       "the-ones-you-forget": {
         "title": "The ones you forget",

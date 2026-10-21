@@ -1,6 +1,6 @@
 {
   "title": "Die Location briefen",
-  "caption": "Plane die Sommerfeier für 200 Leute aus ganz Europa: <b>ein frischer Chat pro Aufgabe</b>, und zwei Prüfpunkte, bevor Deine Chefin einen Plan sieht.",
+  "caption": "Plane das nächste Sommerfest Deiner Firma: 200 Mitarbeitende an fünf Standorten in Europa. <b>Ein frischer Chat pro Aufgabe</b>, und zwei Prüfpunkte, bevor Deine Chefin einen Plan sieht.",
   "pipelineLabel": "Die Pipeline zur Location, Stufe für Stufe",
   "jobsLabel": "{stage}: Aufgaben",
   "popover": {
@@ -9,8 +9,8 @@
   },
   "stages": {
     "party": {
-      "name": "Sommerfeier",
-      "move": "Break it down",
+      "name": "Sommerfest",
+      "move": "Zerlege es",
       "popover": {
         "in": "die ganze Feier.",
         "out": "fünf Teile, nur die Location geht weiter."
@@ -18,7 +18,7 @@
     },
     "interview": {
       "name": "Interview",
-      "move": "Interview yourself with AI",
+      "move": "Interviewe Dich mit KI",
       "popover": {
         "in": "Deine grobe Idee.",
         "out": "die Fragen, an die Du nicht gedacht hast, beantwortet."
@@ -26,7 +26,7 @@
     },
     "requirements": {
       "name": "Anforderungen",
-      "move": "Requirements first",
+      "move": "Erst die Anforderungen",
       "popover": {
         "in": "Deine Antworten.",
         "out": "eine Anforderungskarte, die Du freigibst."
@@ -34,7 +34,7 @@
     },
     "research": {
       "name": "Recherche",
-      "move": "Fresh start for each piece",
+      "move": "Frischer Start für jedes Teil",
       "popover": {
         "in": "die Anforderungskarte.",
         "out": "eine Location, gegen jedes Kriterium geprüft."
@@ -42,7 +42,7 @@
     },
     "compare": {
       "name": "Vergleich",
-      "move": "Evaluate each step",
+      "move": "Prüfe jeden Schritt",
       "popover": {
         "in": "drei geprüfte Locations.",
         "out": "eine Rangfolge, gemessen an der Karte."
@@ -114,7 +114,7 @@
     "recommended": "Empfehlung:",
     "newTab": "(öffnet in neuem Tab)",
     "replies": {
-      "start": "Plane unsere Sommerfeier: 200 Leute aus fünf Büros in ganz Europa, etwa 150 Euro pro Kopf, zwei Rollstuhlfahrer, ein paar Vegetarier.",
+      "start": "Plane das nächste Sommerfest unserer Firma: 200 Mitarbeitende an fünf Standorten in Europa, etwa 150 Euro pro Kopf, zwei Rollstuhlfahrer, ein paar Vegetarier.",
       "a1": "A.",
       "reframe": "Das verstehe ich nicht. Kannst Du es mit einem Vergleich erklären?",
       "a2": "A, eine lange Tafel.",
@@ -200,7 +200,7 @@
       "restate": {
         "title": "Die Aufgabe",
         "keywords": "",
-        "script": "Die Aufgabe: Plane die Sommerfeier für 200 Leute aus ganz Europa. Würdest Du die KI um all das in einem einzigen Prompt bitten, bekämst Du seitenweise geschliffene, selbstsichere Antworten, und Du könntest fast keiner davon trauen."
+        "script": "Die Aufgabe: Plane das nächste Sommerfest Deiner Firma, 200 Mitarbeitende an fünf Standorten in Europa. Würdest Du die KI um all das in einem einzigen Prompt bitten, bekämst Du seitenweise geschliffene, selbstsichere Antworten, und Du könntest fast keiner davon trauen."
       },
       "break-it-down": {
         "title": "Zerlegen",
@@ -230,7 +230,7 @@
       "recommendation-and-on": {
         "title": "Empfehlung, und weiter",
         "keywords": "",
-        "script": "Heraus kommt der Location-Plan für Deine Chefin, und das Ganze lief mit demselben BRIEF, das Du für jede Aufgabe nutzen würdest. (Pause) Jetzt machen wir es live: Ich zeige Dir, wie sich dieses Interview anfühlt, wenn Du es selbst führst."
+        "script": "Heraus kommt der Location-Plan für Deine Chefin, und das Ganze lief mit demselben Briefing, das Du für jede Aufgabe nutzen würdest. (Pause) Jetzt machen wir es live: Ich zeige Dir, wie sich dieses Interview anfühlt, wenn Du es selbst führst."
       }
     }
   }
