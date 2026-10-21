@@ -106,11 +106,12 @@ describe('success cases', () => {
         const match = matcher(key);
         return chat.steps.filter((s) => s.blocks.some((b) => match(s.id, b.cat))).map((s) => s.id);
       };
+      const hoveredStep = ['m3'];
       // ACT
       const one = lit(litKey(hovered));
       const many = lit(litKey(category));
       // ASSERT
-      expect(one).toEqual(['m3']);
+      expect(one).toEqual(hoveredStep);
       expect(many).toEqual(chat.steps.filter((s) => s.blocks.some((b) => b.cat === 'user')).map((s) => s.id));
     });
 
@@ -119,10 +120,11 @@ describe('success cases', () => {
       const { preset, context } = setup('slide-7');
       const pinned = reduce(createState(preset), { type: 'PIN', part: 'm2' }, context);
       const hovered = reduce(pinned, { type: 'HOVER', part: 'm3' }, context);
+      const expected = ['m2', 'm3', null];
       // ACT
       const escaped = reduce(hovered, { type: 'ESC' }, context);
       // ASSERT
-      expect([litKey(pinned), litKey(hovered), litKey(escaped)]).toEqual(['m2', 'm3', null]);
+      expect([litKey(pinned), litKey(hovered), litKey(escaped)]).toEqual(expected);
     });
   });
 
@@ -131,10 +133,11 @@ describe('success cases', () => {
       // ARRANGE
       const { preset, context } = setup('slide-7');
       const first = reduce(createState(preset), { type: 'PIN', part: 'm5' }, context);
+      const expected = ['m5', null];
       // ACT
       const second = reduce(first, { type: 'PIN', part: 'm5' }, context);
       // ASSERT
-      expect([first.pinned, second.pinned]).toEqual(['m5', null]);
+      expect([first.pinned, second.pinned]).toEqual(expected);
     });
 
     it('previews a step while scrubbing, commits it on release, and clamps to the chat', () => {
@@ -171,10 +174,11 @@ describe('success cases', () => {
       const state = createState(preset);
       // ACT
       const part = reduce(state, { type: 'TOGGLE_PART', part: 'panel' }, context);
-      const depth = reduce(state, { type: 'SET_DEPTH', value: 'technical' }, context);
+      const technical = 'technical';
+      const depth = reduce(state, { type: 'SET_DEPTH', value: technical }, context);
       // ASSERT
       expect(part.parts.panel).toBe(!state.parts.panel);
-      expect(depth.depth).toBe('technical');
+      expect(depth.depth).toBe(technical);
     });
   });
 });

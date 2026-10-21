@@ -41,11 +41,12 @@ describe('success cases', () => {
         window: { show: true },
       },
     );
+    // the meter is a readout, not a button: '*' leaves it alone
+    const expected = ['meter', 'window'];
     // ACT
     const shown = CONTROL_IDS.filter((id) => offers({ controls }, id));
     // ASSERT
-    // the meter is a readout, not a button: '*' leaves it alone
-    expect(shown).toEqual(['meter', 'window']);
+    expect(shown).toEqual(expected);
   });
 });
 

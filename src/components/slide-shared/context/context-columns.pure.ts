@@ -12,8 +12,8 @@ export function columns(parts: ViewState['parts'], state: ViewState, height: num
   const all: Partial<Record<Part, readonly [string, string]>> = {
     chat: [chatWidth(parts), 'chat'],
     timeline: ['3.5rem', 'timeline'],
-    context: [renderModeOf(state, 'context-window') === 'technical' ? '18rem' : '17rem', 'ctx'],
-    preview: ['minmax(12rem, 16rem)', 'prev'],
+    context: [renderModeOf(state, 'context-window') === 'technical' ? '15rem' : '16rem', 'ctx'],
+    preview: ['minmax(11rem, 16rem)', 'prev'],
     panel: [parts.chat ? 'minmax(15rem, 1fr)' : 'minmax(15rem, 1.6fr)', 'panel'],
     attention: [parts.chat ? 'minmax(15rem, 1fr)' : 'minmax(15rem, 1.6fr)', 'att'],
   };

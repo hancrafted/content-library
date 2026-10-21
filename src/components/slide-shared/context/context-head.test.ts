@@ -79,10 +79,11 @@ describe('success cases', () => {
     // ARRANGE
     const { preset, context } = setup('slide-4');
     const state = createState(preset);
+    const expected = ['simple', 'technical'];
     // ACT
     const next = reduce(state, { type: 'SET_PART_MODE', part: 'context-window', value: 'technical' }, context);
     // ASSERT
-    expect([next.depth, next.renderModes['context-window']]).toEqual(['simple', 'technical']);
+    expect([next.depth, next.renderModes['context-window']]).toEqual(expected);
   });
 });
 
@@ -90,11 +91,12 @@ describe('failure cases', () => {
   it('shows no percent and no used-of-window figure on the "You can\'t watch the meter" Presets', () => {
     // ARRANGE
     const presets: ContextPresetId[] = ['slide-9-before', 'slide-9-after'];
+    const title = 'Context window';
     // ACT
     const texts = presets.map((id) => head(render(id)).text());
     // ASSERT
     texts.forEach((text) => {
-      expect(text).toContain('Context window');
+      expect(text).toContain(title);
       expect(text).not.toMatch(/%|\d+K of/);
     });
   });
