@@ -1,4 +1,3 @@
-import type { ReactNode } from 'react';
 import type { ControlId } from './context-controls.pure';
 import type { Attention } from './context-usage.pure';
 import type { ContextWords } from './context-words.types';
@@ -44,7 +43,6 @@ export interface LightingEvents {
 
 export interface ConversationProps extends Lighting, LightingEvents, Speech, Progress {
   readonly notes: Readonly<Record<string, StepNotes>>;
-  readonly collapsed: boolean;
   /** Whether the scrub hint belongs in the head: the timeline is shown and not locked. */
   readonly hint: boolean;
   readonly hintSeen: boolean;
@@ -63,11 +61,15 @@ export interface TimelineProps extends Speech {
   readonly onCommit: (step: number) => void;
 }
 
-/** A toggle in a part's head: the parent decides which are offered, what state they show and what they flip. */
-export interface HeadToggle {
-  readonly id: ControlId;
+/** What a toggle shows and does: the parent decides, from the registry's `flips`, which state each one is. */
+export interface Flip {
   readonly pressed: boolean;
   readonly onToggle: () => void;
+}
+
+/** A toggle in a part's head: the parent decides which are offered. */
+export interface HeadToggle extends Flip {
+  readonly id: ControlId;
 }
 
 export interface ContextWindowProps extends Lighting, LightingEvents, Speech {
@@ -88,8 +90,6 @@ export interface ContextWindowProps extends Lighting, LightingEvents, Speech {
   readonly zone: boolean;
   /** The head's icon buttons, in order: the preview eye, the smart-zone column, the local Technical. */
   readonly toggles: readonly HeadToggle[];
-  /** Where the parent places another part beside the bar or grid, as the usage rows sit today. */
-  readonly children?: ReactNode;
 }
 
 export interface ContextPreviewProps extends Lighting, LightingEvents, Speech {

@@ -196,15 +196,12 @@ export function ContextWindow(p: ContextWindowProps) {
       aria-label={say.words.contextWindow}
       data-view={say.tech ? 'grid' : 'bar'}
       data-zone={p.zone ? 'on' : 'off'}
-      data-preview={p.children ? 'on' : 'off'}
     >
       <ContextWindowHead p={p} say={say} />
       <div className={styles.ctxbody}>
-        {/* Lighting covers the bar or grid only: the preview beside it is a part with its own handlers. */}
         <div className={styles.own} {...handlers}>
           {say.tech ? <Grid p={p} say={say} onKeyDown={rove} /> : <Bar p={p} say={say} />}
         </div>
-        {p.children}
       </div>
     </section>
   );

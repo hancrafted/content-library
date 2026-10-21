@@ -1,4 +1,4 @@
-import { memo, useMemo, useRef, type PointerEvent } from 'react';
+import { memo, useMemo, useRef, type FocusEvent, type PointerEvent } from 'react';
 import { useDock } from './attention-dock';
 import type { AttentionProps } from './context-parts.types';
 import { matcher } from './context-state.pure';
@@ -9,9 +9,9 @@ import { colourOf } from './context.pure';
 import type { AttentionLayout, Step } from './context.types';
 import { nameOf } from './conversation-body';
 import { Crossed, crossedText } from './details-cards';
-import { useLighting } from './use-lighting';
+import { partOf, useLighting } from './use-lighting';
 import { useSay } from './use-say';
-import { tint } from './window-bits';
+import { tint, vars } from './window-bits';
 
 /* The attention part: the 100 units of attention over the steps in the window, as a list, with the first and last
  * three pinned, or compressed to one bar per share that the pointer magnifies like the Mac dock. */
@@ -33,7 +33,7 @@ interface RowProps {
   readonly pin: Pin | null;
 }
 
-const pinAttrs = (pin: Pin | null) => (pin ? { 'data-pin': pin.side, style: { '--slot': pin.slot } as never } : {});
+const pinAttrs = (pin: Pin | null) => (pin ? { 'data-pin': pin.side, style: vars({ '--slot': pin.slot }) } : {});
 
 const AttentionRow = memo(function AttentionRow({ say, step, units, on, pin }: RowProps) {
   const name = nameOf(say, step);
@@ -57,9 +57,6 @@ function pinOf(layout: AttentionLayout, index: number, count: number): Pin | nul
   return index >= count - PINNED ? { side: 'bottom', slot: count - 1 - index } : null;
 }
 
-const partOf = (target: EventTarget | null): string | null =>
-  target instanceof Element ? (target.closest('[data-part]')?.getAttribute('data-part') ?? null) : null;
-
 /** Hovering a row also brings its chat message into view; once per row, not on every move inside it. */
 function useReveal({ onReveal, onLight, onPin }: AttentionProps) {
   const handlers = useLighting({ onLight, onPin });
@@ -77,6 +74,9 @@ function useReveal({ onReveal, onLight, onPin }: AttentionProps) {
       handlers.onPointerLeave(event);
       last.current = null;
     },
+    // Keyboard focus on a row lights its message as hovering does.
+    onFocus: (event: FocusEvent<HTMLElement>) => onLight(partOf(event.target)),
+    onBlur: () => onLight(null),
   };
 }
 
@@ -91,20 +91,15 @@ function Rows({ p, say }: { readonly p: AttentionProps; readonly say: Say }) {
   });
 }
 
-const unitsOf = (p: AttentionProps) => p.attention.map((a) => a.units);
-
 export function Attention(p: AttentionProps) {
   const say = useSay(p);
   const list = useRef<HTMLDivElement>(null);
-  const dock = useDock(list, p.layout === 'compressed', unitsOf(p));
+  const dock = useDock(list, p.layout === 'compressed', p.attention);
+  const handlers = useReveal(p);
   const r = readoutAt(p.frames, p.vis, p.window);
   const head = fill(say.words.readoutHead, { step: r.step, steps: r.steps });
   return (
-    <section
-      className={`${styles.panel} ${styles.attentionPart}`}
-      aria-label={say.words.modes.attention}
-      {...useReveal(p)}
-    >
+    <section className={`${styles.panel} ${styles.attentionPart}`} aria-label={say.words.modes.attention} {...handlers}>
       <div className={styles.head}>
         <b className="font-semibold">{say.words.modes.attention}</b>
         <span className={styles.caption}>{say.words.illustrative}</span>

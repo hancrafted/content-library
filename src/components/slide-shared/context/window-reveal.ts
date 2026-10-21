@@ -2,7 +2,7 @@ import { revealTop } from './window-reveal.pure';
 
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/** The visible chat bubble of the step a part names, or null (hidden, collapsed to ticks, or a category). */
+/** The visible chat bubble of the step a part names, or null (hidden or a category). */
 function bubbleOf(root: HTMLElement | null, part: string): HTMLElement | null {
   const bubble = root?.querySelector<HTMLElement>(`[data-role][data-part="${CSS.escape(part.split('@')[0] ?? '')}"]`);
   return bubble && bubble.offsetParent !== null ? bubble : null;

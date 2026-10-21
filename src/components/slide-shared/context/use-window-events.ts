@@ -18,7 +18,9 @@ interface Host {
 /** Unpins when a click lands outside every part, the toolbar and the timeline. */
 function useOutsideClick({ pinned, dispatch, root }: Host) {
   const current = useRef(pinned);
-  current.current = pinned;
+  useEffect(() => {
+    current.current = pinned;
+  }, [pinned]);
   useEffect(() => {
     const outside = (event: globalThis.MouseEvent) => {
       if (!current.current) return;
@@ -35,7 +37,9 @@ export function useWindowEvents(host: Host) {
   useOutsideClick(host);
   const { dispatch, root } = host;
   const hover = useRef(host.hover);
-  hover.current = host.hover;
+  useEffect(() => {
+    hover.current = host.hover;
+  }, [host.hover]);
   // Stable callbacks: a part that holds them in a memoised item does not redraw because the parent did.
   const onLight = useCallback(
     (key: string | null) => {

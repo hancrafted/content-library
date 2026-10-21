@@ -1,4 +1,4 @@
-import { controlOf } from './context-controls.pure';
+import { defOf } from './context-controls.pure';
 import { percentText } from './context-format.pure';
 import type { ContextWindowProps } from './context-parts.types';
 import { fill, k, type Say } from './context-view';
@@ -54,7 +54,7 @@ function Meter({ p, say }: Part) {
 
 function HeadToggles({ p, say }: Part) {
   return p.toggles.map((toggle) => {
-    const def = controlOf({ controls: {} }, toggle.id);
+    const def = defOf(toggle.id);
     if (def.type !== 'toggle') return null;
     return (
       <IconButton

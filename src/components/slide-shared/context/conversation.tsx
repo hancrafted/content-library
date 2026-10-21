@@ -1,16 +1,16 @@
 import { memo, useLayoutEffect, useMemo, useRef, type KeyboardEvent } from 'react';
 import type { ConversationProps } from './context-parts.types';
 import { matcher } from './context-state.pure';
-import { fill, stepCat, storyOf, type Say } from './context-view';
+import { type Say } from './context-view';
 import styles from './context.module.css';
-import { colourOf, goneAt } from './context.pure';
+import { goneAt } from './context.pure';
 import type { Step } from './context.types';
 import { BubbleBody, bubbleName, roleOf } from './conversation-body';
 import { useLighting } from './use-lighting';
 import { useSay } from './use-say';
-import { tint } from './window-bits';
+import { vars } from './window-bits';
 
-/* The conversation part: a messenger in Simple, a Claude Code terminal in Technical; a strip of ticks when collapsed. */
+/* The conversation part: a messenger in Simple, a Claude Code terminal in Technical. */
 
 /** A bubble's opacity in the Attention view: its share of attention against the strongest few. */
 const attentionOpacity = (units: number, max: number) => 0.3 + 0.7 * Math.min(1, units / Math.min(8, max));
@@ -51,7 +51,7 @@ const Message = memo(function Message(props: BubbleProps) {
       aria-expanded={chip ? open : undefined}
       aria-label={bubbleName(say, step)}
       hidden={hidden}
-      style={{ '--att-o': attentionOpacity(units, max), '--d': `${delay}ms` } as never}
+      style={vars({ '--att-o': attentionOpacity(units, max), '--d': `${delay}ms` })}
     >
       <BubbleBody say={say} step={step} />
       {mayFill ? <span className={styles.note}>{say.words.mayFill}</span> : null}
@@ -130,48 +130,6 @@ function Bubbles(props: ConversationProps & { readonly say: Say }) {
   ));
 }
 
-/** The collapsed conversation: one tick per step in the window so far. */
-const Tick = memo(function Tick(props: {
-  readonly say: Say;
-  readonly step: Step;
-  readonly number: number;
-  readonly on: boolean;
-  readonly pressed: boolean;
-}) {
-  const { say, step, number, on, pressed } = props;
-  return (
-    <button
-      type="button"
-      className={styles.tick}
-      data-part={step.id}
-      data-on={flag(on)}
-      aria-pressed={pressed}
-      aria-label={fill(say.words.stepEvent, { step: number, event: storyOf(say, step).event })}
-      style={tint(colourOf(stepCat(step), say.tech ? 'technical' : 'simple'))}
-    />
-  );
-});
-
-function Rail(props: ConversationProps & { readonly say: Say }) {
-  const { say, chat, vis, lit, pinned } = props;
-  const match = useMemo(() => matcher(lit), [lit]);
-  const handlers = useLighting(props);
-  return (
-    <div className={`${styles.rail} ${styles.surface}`} role="group" aria-label={say.words.minimap} {...handlers}>
-      {chat.steps.slice(0, vis).map((step, i) => (
-        <Tick
-          key={step.id}
-          say={say}
-          step={step}
-          number={i + 1}
-          on={step.blocks.some((b) => match(step.id, b.cat))}
-          pressed={pinned === step.id}
-        />
-      ))}
-    </div>
-  );
-}
-
 /** The chat's head: its name, and the scrub hint until the reader has used a control. */
 function Head({ say, hint, hintSeen }: { readonly say: Say; readonly hint: boolean; readonly hintSeen: boolean }) {
   return (
@@ -216,5 +174,5 @@ function Column(props: ConversationProps & { readonly say: Say }) {
 
 export function Conversation(props: ConversationProps) {
   const say = useSay(props);
-  return props.collapsed ? <Rail {...props} say={say} /> : <Column {...props} say={say} />;
+  return <Column {...props} say={say} />;
 }

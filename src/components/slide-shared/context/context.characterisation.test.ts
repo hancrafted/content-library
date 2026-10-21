@@ -67,7 +67,6 @@ describe('success cases', () => {
             'Details:true',
             'Attention:false',
             ':true',
-            ':false',
             ':-',
           ],
         },
@@ -107,11 +106,12 @@ describe('success cases', () => {
         const match = matcher(key);
         return chat.steps.filter((s) => s.blocks.some((b) => match(s.id, b.cat))).map((s) => s.id);
       };
+      const hoveredStep = ['m3'];
       // ACT
       const one = lit(litKey(hovered));
       const many = lit(litKey(category));
       // ASSERT
-      expect(one).toEqual(['m3']);
+      expect(one).toEqual(hoveredStep);
       expect(many).toEqual(chat.steps.filter((s) => s.blocks.some((b) => b.cat === 'user')).map((s) => s.id));
     });
 
@@ -120,10 +120,11 @@ describe('success cases', () => {
       const { preset, context } = setup('slide-7');
       const pinned = reduce(createState(preset), { type: 'PIN', part: 'm2' }, context);
       const hovered = reduce(pinned, { type: 'HOVER', part: 'm3' }, context);
+      const expected = ['m2', 'm3', null];
       // ACT
       const escaped = reduce(hovered, { type: 'ESC' }, context);
       // ASSERT
-      expect([litKey(pinned), litKey(hovered), litKey(escaped)]).toEqual(['m2', 'm3', null]);
+      expect([litKey(pinned), litKey(hovered), litKey(escaped)]).toEqual(expected);
     });
   });
 
@@ -132,10 +133,11 @@ describe('success cases', () => {
       // ARRANGE
       const { preset, context } = setup('slide-7');
       const first = reduce(createState(preset), { type: 'PIN', part: 'm5' }, context);
+      const expected = ['m5', null];
       // ACT
       const second = reduce(first, { type: 'PIN', part: 'm5' }, context);
       // ASSERT
-      expect([first.pinned, second.pinned]).toEqual(['m5', null]);
+      expect([first.pinned, second.pinned]).toEqual(expected);
     });
 
     it('previews a step while scrubbing, commits it on release, and clamps to the chat', () => {
@@ -153,19 +155,30 @@ describe('success cases', () => {
     });
   });
 
+  describe('the context preview', () => {
+    it('is a part of its own, a sibling of the context window and not inside it', () => {
+      // ARRANGE
+      const group = '[aria-label="Usage by category"]';
+      // ACT
+      const $ = render('slide-8');
+      // ASSERT
+      expect($(`section[aria-label="Context window"] ${group}`)).toHaveLength(0);
+      expect($(`section[aria-label="Context window"]`).next(group)).toHaveLength(1);
+    });
+  });
+
   describe('toolbar toggles', () => {
-    it('flips a part, the depth and the chat collapse where the Preset offers them', () => {
+    it('flips a part, and the depth where the Preset offers them', () => {
       // ARRANGE
       const { preset, context } = setup('slide-7');
       const state = createState(preset);
       // ACT
       const part = reduce(state, { type: 'TOGGLE_PART', part: 'panel' }, context);
-      const depth = reduce(state, { type: 'SET_DEPTH', value: 'technical' }, context);
-      const collapsed = reduce(state, { type: 'TOGGLE_CHAT' }, context);
+      const technical = 'technical';
+      const depth = reduce(state, { type: 'SET_DEPTH', value: technical }, context);
       // ASSERT
       expect(part.parts.panel).toBe(!state.parts.panel);
-      expect(depth.depth).toBe('technical');
-      expect(collapsed.chatCollapsed).toBe(true);
+      expect(depth.depth).toBe(technical);
     });
   });
 });

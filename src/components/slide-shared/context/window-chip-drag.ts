@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type MouseEvent, type PointerEvent } from 'react';
 import type { Part } from './context.types';
+import { crossedChip } from './window-chip-drag.pure';
 
 /*
  * Mouse drag and drop of the part chips, on native pointer events. A drag starts after the pointer moves a few pixels
@@ -9,6 +10,8 @@ import type { Part } from './context.types';
  */
 
 const THRESHOLD = 4;
+/** How long after a drag ends the click it produces is still swallowed. */
+const CLICK_SWALLOW_MS = 60;
 
 /** The chip under the pointer, other than the dragged one, once the pointer is past its middle on the way in. */
 export function chipUnder(
@@ -17,12 +20,9 @@ export function chipUnder(
   point: { readonly x: number; readonly y: number },
 ): Part | null {
   const el = document.elementFromPoint(point.x, point.y)?.closest<HTMLElement>('[data-chip]');
-  const target = order.find((part) => part === el?.dataset.chip);
-  if (!el || !target || target === dragged) return null;
-  const box = el.getBoundingClientRect();
-  const forwards = order.indexOf(dragged) < order.indexOf(target);
-  const middle = box.left + box.width / 2;
-  return forwards === point.x > middle ? target : null;
+  const box = el?.getBoundingClientRect();
+  const hit = el && box ? { part: el.dataset.chip, left: box.left, width: box.width, x: point.x } : null;
+  return crossedChip(order, dragged, hit);
 }
 
 interface Drag {
@@ -59,10 +59,20 @@ function follow(press: { part: Part; x: number; y: number }, live: { current: Li
   return end;
 }
 
+/** The capture handler that drops the one click a drag ends on, once. */
+const swallowClick = (swallow: { current: boolean }) => (event: MouseEvent<HTMLElement>) => {
+  if (!swallow.current) return;
+  swallow.current = false;
+  event.preventDefault();
+  event.stopPropagation();
+};
+
 export function useChipDrag({ enabled, order, onMove }: Drag) {
   const [dragging, setDragging] = useState<Part | null>(null);
   const live = useRef<Live>({ order, onMove });
-  live.current = { order, onMove };
+  useEffect(() => {
+    live.current = { order, onMove };
+  }, [order, onMove]);
   const swallow = useRef(false);
   const stop = useRef<(() => void) | null>(null);
   useEffect(() => () => stop.current?.(), []);
@@ -75,16 +85,9 @@ export function useChipDrag({ enabled, order, onMove }: Drag) {
       stop.current = null;
       // The click that ends a drag must not toggle the chip it ends on.
       swallow.current = true;
-      setTimeout(() => (swallow.current = false), 60);
+      setTimeout(() => (swallow.current = false), CLICK_SWALLOW_MS);
     });
   };
 
-  const onClickCapture = (event: MouseEvent<HTMLElement>) => {
-    if (!swallow.current) return;
-    swallow.current = false;
-    event.preventDefault();
-    event.stopPropagation();
-  };
-
-  return { dragging, onPointerDown, onClickCapture };
+  return { dragging, onPointerDown, onClickCapture: swallowClick(swallow) };
 }

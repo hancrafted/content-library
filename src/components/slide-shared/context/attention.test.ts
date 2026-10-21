@@ -62,9 +62,10 @@ describe('success cases', () => {
     // ACT
     const found = layouts.map((layout) => render(layout)('[data-layout]').attr('data-layout'));
     const $ = render('list');
+    const firstStep = 'm1';
     // ASSERT
     expect(found).toEqual(layouts);
-    expect($('[data-row]').first().attr('data-part')).toBe('m1');
+    expect($('[data-row]').first().attr('data-part')).toBe(firstStep);
   });
 });
 
@@ -72,11 +73,13 @@ describe('failure cases', () => {
   it('is its own section, not a view of Details: it holds no Explain head', () => {
     // ARRANGE
     const $ = render('list');
+    const expected = 'Attention';
+    const detailsHead = 'Explain';
     // ACT
     const label = $('section').attr('aria-label');
     // ASSERT
-    expect(label).toBe('Attention');
-    expect($.text()).not.toContain('Explain');
+    expect(label).toBe(expected);
+    expect($.text()).not.toContain(detailsHead);
   });
 });
 

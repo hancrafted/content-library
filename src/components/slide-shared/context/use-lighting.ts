@@ -8,7 +8,8 @@ import type { LightingEvents } from './context-parts.types';
  */
 
 const hoverCapable = () => window.matchMedia('(hover: hover)').matches;
-const partOf = (target: EventTarget | null): string | null =>
+/** The `data-part` key of the item an event's target sits in, or null. */
+export const partOf = (target: EventTarget | null): string | null =>
   target instanceof Element ? (target.closest('[data-part]')?.getAttribute('data-part') ?? null) : null;
 /** A block of the bar or a box of the grid: focusing one lights it, as hovering does. */
 const isFocusLight = (target: EventTarget | null) =>

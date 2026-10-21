@@ -95,7 +95,6 @@ defaults:
   controls:
     parts: { show: true, reorder: true }
     technical: { show: true }
-    collapse: { show: true }
     download: { show: true }
     upload: { show: false }
     preview: { show: true }
@@ -121,7 +120,6 @@ presets:
     step: 24
     show: { chat: true, timeline: true, context: true, preview: false, panel: false, attention: true }
     attention: { layout: compressed }
-    controls: { collapse: { show: false } }
     windows: [{ size: 200k, lines: [] }]
   slide-5:
     chat: summer-party
@@ -218,8 +216,6 @@ words:
   technical: Technical
   technicalTip: 'Technical: the chat as a Claude Code terminal, the window as /context boxes with the real category names.'
   modes: { explain: Explain, attention: Attention }
-  collapse: Collapse conversation
-  collapseTip: Fold the conversation into a strip
   previewToggle: Context preview
   previewTip: Show or hide what fills the window
   zoneToggle: Smart zone

@@ -5,16 +5,7 @@
  */
 
 export type ControlId =
-  | 'parts'
-  | 'technical'
-  | 'collapse'
-  | 'download'
-  | 'upload'
-  | 'preview'
-  | 'zone'
-  | 'windowTechnical'
-  | 'meter'
-  | 'window';
+  'parts' | 'technical' | 'download' | 'upload' | 'preview' | 'zone' | 'windowTechnical' | 'meter' | 'window';
 
 export type IconName = 'code' | 'panel-left-close' | 'download' | 'upload' | 'eye' | 'panel-right';
 /** The words a control reads from ContextWords; the UI indexes the words with them, so the compiler checks each. */
@@ -22,8 +13,6 @@ export type WordKey =
   | 'showParts'
   | 'technical'
   | 'technicalTip'
-  | 'collapse'
-  | 'collapseTip'
   | 'download'
   | 'upload'
   | 'previewToggle'
@@ -35,7 +24,7 @@ export type WordKey =
   | 'windowGroup';
 
 /** The state a toggle flips: a shown-state key of the parent. */
-export type Flips = 'technical' | 'collapse' | 'preview' | 'zone' | 'windowTechnical';
+export type Flips = 'technical' | 'preview' | 'zone' | 'windowTechnical';
 
 interface Base {
   readonly id: ControlId;
@@ -70,17 +59,6 @@ export const CONTROLS: readonly ControlDef[] = [
     icon: 'code',
     label: 'technical',
     tip: 'technicalTip',
-  },
-  {
-    id: 'collapse',
-    type: 'toggle',
-    flips: 'collapse',
-    placement: 'toolbar',
-    fields: [],
-    show: true,
-    icon: 'panel-left-close',
-    label: 'collapse',
-    tip: 'collapseTip',
   },
   {
     id: 'download',
@@ -162,10 +140,16 @@ export type ResolvedControl = ControlDef & {
   readonly reorder?: boolean;
 };
 
-/** A control as the Preset sets it: the registry's default, then `'*'`, then the control's own overrides. */
-export function controlOf(preset: HasControls, id: ControlId): ResolvedControl {
+/** The registry's definition of a control, whatever a Preset says about it. */
+export function defOf(id: ControlId): ControlDef {
   const def = BY_ID.get(id);
   if (!def) throw new Error(`context window: unknown control "${id}"`);
+  return def;
+}
+
+/** A control as the Preset sets it: the registry's default, then `'*'`, then the control's own overrides. */
+export function controlOf(preset: HasControls, id: ControlId): ResolvedControl {
+  const def = defOf(id);
   const star = def.type === 'readout' ? undefined : preset.controls['*']?.show;
   return { ...def, ...(star === undefined ? {} : { show: star }), ...preset.controls[id] };
 }
