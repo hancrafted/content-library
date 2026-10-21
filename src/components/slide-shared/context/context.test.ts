@@ -140,7 +140,7 @@ describe('edge cases', () => {
     const expected = {
       shares: [20, 40, 20, 20],
       states: ['done', 'done', 'current', 'upcoming'],
-      label: 'Your attention',
+      label: 'Your attention span',
       total: 0,
       now: 'Filling up',
     };
@@ -172,13 +172,13 @@ describe('edge cases', () => {
         .get(),
       current: $('[data-state="current"]').length,
     }).toEqual(expected);
-    expect($('[role="img"]').attr('aria-label')).toBe('Your attention: Fresh and ready to receive.');
+    expect($('[role="img"]').attr('aria-label')).toBe('Your attention span: Fresh and ready to receive.');
     expect($('[data-session-note]').text().trim()).toBe('Fresh and ready to receive.');
   });
 
   it('says the session in German', () => {
     // ARRANGE
-    const expected = { label: 'Deine Aufmerksamkeit', now: 'Aufwärmen' };
+    const expected = { label: 'Deine Aufmerksamkeitsspanne', now: 'Aufwärmen' };
     // ACT
     const $ = renderSession('thought-experiment', 'de');
     // ASSERT

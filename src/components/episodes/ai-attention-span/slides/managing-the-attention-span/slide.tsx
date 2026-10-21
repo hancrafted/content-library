@@ -1,13 +1,11 @@
 import { slide } from '@/components/slide-master/slide';
 import { SlideFrame } from '@/components/slide-master/slide-master';
 import { AttentionBubblePreset } from '@/components/slide-shared/context/context';
-import type { ReactNode } from 'react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
-import { RottenApple } from './rotten-apple';
 
-// The section slide of "Managing the attention span": the session bar from the shared `session` plan, filled up to and including this
-// Section, which it names.
+// The section slide of "Managing the attention span": the AI's speech bubble over the session bar from the shared
+// `session` plan, filled up to and including this Section, which it names.
 export const managingTheAttentionSpan = slide({
   slug: 'managing-the-attention-span',
   messages: { en, de },
@@ -19,18 +17,7 @@ export const managingTheAttentionSpan = slide({
         at="managing-the-attention-span"
         punchline={t('punchline')}
         poll={t('poll')}
-      >
-        <div className="flex items-center gap-3">
-          <RottenApple />
-          <p className="w-full -rotate-1 rounded-lg border border-border bg-card p-2 text-caption shadow-md ring-2 ring-primary">
-            {t.rich('handoff', {
-              budget: (chunks: ReactNode) => (
-                <span className="rounded bg-(--warning)/25 px-1 whitespace-nowrap">{chunks}</span>
-              ),
-            })}
-          </p>
-        </div>
-      </AttentionBubblePreset>
+      />
     </SlideFrame>
   ),
 });

@@ -5,8 +5,8 @@ import { trickleDigits } from './digit-trickle.pure';
 import styles from './speech-bubble.module.css';
 
 /*
- * The "Your attention" card as a speech bubble from the AI: its Sparkle avatar with a tail into the bubble, the
- * punchline in its voice, on a Section opener a poll line with three numbered faces, and a 0/1 trickle falling from the
+ * The "Your attention span" card as a speech bubble from the AI: its Sparkle avatar with a tail into the bubble, the
+ * punchline in its voice, on a Section opener a poll line with three numbered emoji faces, and a 0/1 trickle falling from the
  * tail into whatever sits under it (the session bar, as `children`). The motion plays once when the Slide mounts and is
  * off under reduced motion; no client code (FE-006). The part owns no words: the Slide passes them.
  */
