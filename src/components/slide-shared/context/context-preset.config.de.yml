@@ -153,7 +153,7 @@ story:
     label: Startanweisungen, verborgen
     labelTechnical: Systemprompt · Werkzeuge · MCP · Skills
     term: Startanweisungen, im Terminal nie zu sehen · 34,1k
-    simple: 'Bevor du etwas tippst, gibt die App der KI verborgene Anweisungen: wer sie ist, wie sie antwortet, welche Werkzeuge sie nutzen darf. Sie stehen ganz oben und reisen mit jeder Nachricht mit.'
+    simple: 'Bevor Du etwas tippst, gibt die App der KI verborgene Anweisungen: wer sie ist, wie sie antwortet, welche Werkzeuge sie nutzen darf. Sie stehen ganz oben und reisen mit jeder Nachricht mit.'
     technical: Systemprompt 6,5k, eingebaute Werkzeugschemata 16,5k (`Read`, `Grep`, `Bash`, `WebSearch`, `WebFetch` …), ein MCP-Server 1,4k, Skill-Beschreibungen 9,7k. Mit jeder Anfrage neu gesendet; ein gecachter Anfang ist billiger, zählt aber trotzdem und nimmt trotzdem Aufmerksamkeit.
   m2:
     event: Gedächtnis geladen
@@ -161,7 +161,7 @@ story:
     label: Gedächtnis geladen
     labelTechnical: Memory-Dateien · `CLAUDE.md`
     term: CLAUDE.md und Gedächtnis geladen · 2k
-    simple: Notizen, die die App für dieses Projekt führt, still vor deiner ersten Nachricht hinzugefügt.
+    simple: Notizen, die die App für dieses Projekt führt, still vor Deiner ersten Nachricht hinzugefügt.
     technical: '`CLAUDE.md` und Memory-Dateien, nach dem Systemprompt geladen. 2k Tokens.'
   m3:
     event: Du setzt das Budget
@@ -170,7 +170,7 @@ story:
   m4:
     event: Die KI stellt zwei Fragen
     simple: Auch die Antwort der KI kommt in den Kontext, also trägt die nächste Anfrage sie mit.
-    technical: 'Assistentenzug, 18 Tokens. Jede Anfrage sendet den ganzen Kontext neu: die Eingabe von Anfrage 2 ist die von Anfrage 1 plus diese Antwort plus deine nächste Nachricht.'
+    technical: 'Assistentenzug, 18 Tokens. Jede Anfrage sendet den ganzen Kontext neu: die Eingabe von Anfrage 2 ist die von Anfrage 1 plus diese Antwort plus Deine nächste Nachricht.'
   m5:
     event: Du erwähnst 60 vegetarische Gäste
     simple: Ein kleines Detail, das immer wiederkommt. Jedes Mal, wenn der Chat es wiederholt, ist es wieder frisch.
@@ -188,7 +188,7 @@ story:
     label: Im Web gesucht · 10 Seiten · 1 Wiederholung
     labelTechnical: '`WebSearch` ×2 → `WebFetch` ×10 · 16,3k'
     out: 10 Seiten abgerufen · 15k Auszüge
-    simple: Für eine kurze Frage hat die KI zweimal gesucht und zehn Seiten geöffnet. Jede Seite wird zu einem Auszug eingekocht, aber zehn Auszüge summieren sich, und im Chat siehst du sie nie.
+    simple: Für eine kurze Frage hat die KI zweimal gesucht und zehn Seiten geöffnet. Jede Seite wird zu einem Auszug eingekocht, aber zehn Auszüge summieren sich, und im Chat siehst Du sie nie.
     technical: '`WebSearch` liefert Titel und URLs. `WebFetch` macht aus einer Seite Markdown und lässt ein kleines Modell herausziehen, wonach der Prompt fragt; nur dieser Auszug kommt als `tool_result` zurück:'
     pre: "WebSearch × 2 → 3.000 Tokens\nWebFetch × 10 → 12.000 Tokens (Auszüge)"
   m9:
@@ -197,7 +197,7 @@ story:
     technical: Assistentenzug, 18 Tokens, aus den Werkzeugergebnissen oben geschrieben.
   m10:
     event: Du verweist auf die Catering-Angebote
-    simple: Eine kurze Nachricht. Die Datei steckt noch nicht darin, aber die App fügt eine versteckte Notiz hinzu, dass du sie geöffnet hast.
+    simple: Eine kurze Nachricht. Die Datei steckt noch nicht darin, aber die App fügt eine versteckte Notiz hinzu, dass Du sie geöffnet hast.
     technical: Nutzerzug, 15 Tokens, und ein Systemhinweis der IDE, dass die Datei offen ist, 28 Tokens.
   m11:
     event: Die KI las catering-offers.pdf

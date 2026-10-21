@@ -14,7 +14,7 @@ const CHAT: Chat = {
       ],
     },
     { id: 'm2', kind: 'memory', path: 'CLAUDE.md', blocks: [{ cat: 'memory', tokens: 2000 }] },
-    { id: 'm3', kind: 'you', text: 'Budget 40,000.', blocks: [{ cat: 'user', tokens: 20 }] },
+    { id: 'm3', kind: 'you', text: 'Budget 30,000.', blocks: [{ cat: 'user', tokens: 20 }] },
     {
       id: 'm4',
       kind: 'tool',

@@ -1,7 +1,7 @@
 {
-  "title": "Fünf Eigenschaften, oder du zahlst den Preis",
+  "title": "Fünf Eigenschaften, oder Du zahlst den Preis",
   "heading": "Ein brillanter Freelancer mit Amnesie, jedes Mal",
-  "caption": "Fünf Eigenschaften, die du steuern musst, sonst zahlst du den Preis.",
+  "caption": "Fünf Eigenschaften, die Du steuern musst, sonst zahlst Du den Preis.",
   "columns": {
     "freelancer": "Der Freelancer",
     "traits": "Fünf Eigenschaften",
@@ -11,28 +11,28 @@
     "probabilistic": {
       "name": "Probabilistisch",
       "back": "Jedes Mal ein anderes Ergebnis",
-      "freelancer": "Gib einem neuen Freelancer dasselbe Briefing, und du bekommst einen anderen Plan.",
-      "ai": "<marker>Gib denselben Prompt in einem neuen Chat ein, und du bekommst eine andere Antwort.</marker>",
+      "freelancer": "Gib einem neuen Freelancer dasselbe Briefing, und Du bekommst einen anderen Plan.",
+      "ai": "<marker>Gib denselben Prompt in einem neuen Chat ein, und Du bekommst eine andere Antwort.</marker>",
       "popover": "Dasselbe Briefing kann jedes Mal anders zurückkommen. Gewählt wird eine wahrscheinliche Antwort, keine feste, also ist ein gutes Ergebnis kein Versprechen."
     },
     "relentless": {
       "name": "Unermüdlich",
       "back": "Viel Output, unklare Qualität",
       "freelancer": "Gib den Auftrag ab, und er arbeitet Tag und Nacht und liefert Stapel polierter Seiten, ob sie stimmen oder nicht.",
-      "ai": "<marker>Schick den Prompt ab, und sie liefert Seiten in Sekunden, so viele du willst, ob sie stimmen oder nicht.</marker>",
+      "ai": "<marker>Schick den Prompt ab, und sie liefert Seiten in Sekunden, so viele Du willst, ob sie stimmen oder nicht.</marker>",
       "popover": "Seiten kommen schnell und poliert, ob sie stimmen oder nicht. Es gibt viel zu lesen, und alles muss geprüft werden."
     },
     "informed": {
       "name": "Informiert",
-      "back": "Weiß viel, nur nicht über dich",
-      "freelancer": "Frag einen Freelancer, der jedes Fach kennt, und du bekommst Expertenantworten, blind für dein Unternehmen und eure Kultur.",
-      "ai": "<marker>Frag die KI, trainiert auf mehr Text, als je ein Mensch lesen könnte, und du bekommst die wahrscheinlichste Antwort, blind für dein Unternehmen und eure Kultur.</marker>",
-      "popover": "Viel Wissen über die Welt, nichts über dein Unternehmen. Eure Kultur und eure ungeschriebenen Regeln sind nie angekommen."
+      "back": "Weiß viel, nur nicht über Dich",
+      "freelancer": "Frag einen Freelancer, der jedes Fach kennt, und Du bekommst Expertenantworten, blind für Dein Unternehmen und eure Kultur.",
+      "ai": "<marker>Frag die KI, trainiert auf mehr Text, als je ein Mensch lesen könnte, und Du bekommst die wahrscheinlichste Antwort, blind für Dein Unternehmen und eure Kultur.</marker>",
+      "popover": "Viel Wissen über die Welt, nichts über Dein Unternehmen. Eure Kultur und eure ungeschriebenen Regeln sind nie angekommen."
     },
     "confident": {
       "name": "Selbstsicher",
       "back": "Füllt die Lücke, ohne zu fragen",
-      "freelancer": "Gib eine vage Anfrage, und er legt los, ohne zu fragen, füllt die Lücken mit eigenen Annahmen und verkauft es dir als richtig.",
+      "freelancer": "Gib eine vage Anfrage, und er legt los, ohne zu fragen, füllt die Lücken mit eigenen Annahmen und verkauft es Dir als richtig.",
       "ai": "<marker>Gib einen vagen Prompt, und sie legt los, ohne zu fragen, füllt die Lücken mit den häufigsten Antworten und antwortet voller Überzeugung.</marker>",
       "popover": "Es geht los, statt nachzufragen, und die Lücken füllen Vermutungen. Eine Vermutung klingt so sicher wie eine Tatsache."
     },
@@ -56,7 +56,7 @@
       "last": "nie"
     }
   },
-  "closing": "<strong>Amnesie:</strong> Nach jedem Gespräch vergessen sie alles, also musst du sie neu einarbeiten, und jeder Auftrag beginnt bei null.",
+  "closing": "<strong>Amnesie:</strong> Nach jedem Gespräch vergessen sie alles, also musst Du sie neu einarbeiten, und jeder Auftrag beginnt bei null.",
   "notes": {
     "right-or-not-the-output-looks-finished": {
       "header": "Richtig oder nicht, das Ergebnis sieht fertig aus",
@@ -125,7 +125,7 @@
       }
     },
     "why-it-is-blind-to-your-company": {
-      "header": "Warum sie dein Unternehmen nicht kennt",
+      "header": "Warum sie Dein Unternehmen nicht kennt",
       "description": "Wie genau ein Modell eine Tatsache kennt, hängt davon ab, wie viele Dokumente dazu es im Training gesehen hat [1], und eine führende Modellfamilie wurde nur mit öffentlich verfügbaren Daten trainiert [2]. Der Anbieter gibt an, standardmäßig nicht mit kommerziellen Ein- und Ausgaben zu trainieren [3].",
       "sources": {
         "kandpal-long-tail-knowledge": {
@@ -157,37 +157,37 @@
       "who-gets-the-job": {
         "title": "Wer den Auftrag bekommt",
         "keywords": "",
-        "script": "Also, wem gibst du die Arbeit eigentlich? Keinem Chatbot und keinem Orakel, sondern einer neuen Kraft: einem brillanten Freelancer mit Amnesie, jedes Mal. Er bringt fünf Eigenschaften mit, und wenn du sie nicht steuerst, zahlst du dafür. Fürs Erste beschreibe ich nur den Freelancer, einen Menschen, damit du ihn dir vorstellen kannst."
+        "script": "Also, wem gibst Du die Arbeit eigentlich? Keinem Chatbot und keinem Orakel, sondern einer neuen Kraft: einem brillanten Freelancer mit Amnesie, jedes Mal. Er bringt fünf Eigenschaften mit, und wenn Du sie nicht steuerst, zahlst Du dafür. Fürs Erste beschreibe ich nur den Freelancer, einen Menschen, damit Du ihn Dir vorstellen kannst."
       },
       "probabilistic-relentless": {
         "title": "Probabilistisch, Unermüdlich",
         "keywords": "",
-        "script": "Die erste Eigenschaft ist Probabilistisch. Gib einem neuen Freelancer dasselbe Briefing, und du bekommst einen anderen Plan: Jeder wählt einen wahrscheinlichen Plan, keinen festen, und damit ist ein gutes Ergebnis kein Versprechen. Die zweite ist Unermüdlich. Du gibst den Auftrag ab, und er arbeitet Tag und Nacht und liefert Stapel polierter Seiten, ob die Seiten stimmen oder nicht, also gibt es viel zu lesen, und alles muss geprüft werden."
+        "script": "Die erste Eigenschaft ist Probabilistisch. Gib einem neuen Freelancer dasselbe Briefing, und Du bekommst einen anderen Plan: Jeder wählt einen wahrscheinlichen Plan, keinen festen, und damit ist ein gutes Ergebnis kein Versprechen. Die zweite ist Unermüdlich. Du gibst den Auftrag ab, und er arbeitet Tag und Nacht und liefert Stapel polierter Seiten, ob die Seiten stimmen oder nicht, also gibt es viel zu lesen, und alles muss geprüft werden."
       },
       "informed": {
         "title": "Informiert",
         "keywords": "",
-        "script": "Drittens, Informiert. Er kennt jedes Fach und gibt Expertenantworten, und doch ist er blind für dein Unternehmen und eure Kultur. Das Handbuch, das er bekommt, ist geschwärzt, manchmal mit Absicht, und manchmal, weil niemand, nicht einmal die Person, die ihn einarbeitet, weiß, was fehlt."
+        "script": "Drittens, Informiert. Er kennt jedes Fach und gibt Expertenantworten, und doch ist er blind für Dein Unternehmen und eure Kultur. Das Handbuch, das er bekommt, ist geschwärzt, manchmal mit Absicht, und manchmal, weil niemand, nicht einmal die Person, die ihn einarbeitet, weiß, was fehlt."
       },
       "confident-every-word-billed": {
         "title": "Selbstsicher, Jedes Wort berechnet",
         "keywords": "",
-        "script": "Viertens, Selbstsicher. Du gibst eine vage Anfrage, er legt los, ohne zu fragen, füllt die Lücken mit eigenen Annahmen und verkauft dir das Ergebnis als richtig. Eine Vermutung klingt genauso sicher wie eine Tatsache. Und fünftens, Jedes Wort berechnet: Dieser Freelancer rechnet jedes Wort ab, das er liest und schreibt, also heißt eine Frage mehr von dir, dass du ihn das ganze Dossier noch einmal lesen lässt, seine eigenen Seiten inklusive. Je länger der Auftrag läuft, desto höher die Rechnung, und die Rechnung wächst schneller als die Arbeit."
+        "script": "Viertens, Selbstsicher. Du gibst eine vage Anfrage, er legt los, ohne zu fragen, füllt die Lücken mit eigenen Annahmen und verkauft Dir das Ergebnis als richtig. Eine Vermutung klingt genauso sicher wie eine Tatsache. Und fünftens, Jedes Wort berechnet: Dieser Freelancer rechnet jedes Wort ab, das er liest und schreibt, also heißt eine Frage mehr von Dir, dass Du ihn das ganze Dossier noch einmal lesen lässt, seine eigenen Seiten inklusive. Je länger der Auftrag läuft, desto höher die Rechnung, und die Rechnung wächst schneller als die Arbeit."
       },
       "amnesia": {
         "title": "Amnesie",
         "keywords": "",
-        "script": "Und das liegt unter allen fünf. Jedes Mal, wenn du wiederkommst, hat er alles vergessen, also beginnt jeder Auftrag bei Tag eins. (Pause) Behalte dieses Bild des Freelancers, denn als Nächstes zeige ich, wer er wirklich ist."
+        "script": "Und das liegt unter allen fünf. Jedes Mal, wenn Du wiederkommst, hat er alles vergessen, also beginnt jeder Auftrag bei Tag eins. (Pause) Behalte dieses Bild des Freelancers, denn als Nächstes zeige ich, wer er wirklich ist."
       },
       "ai-lands-last": {
         "title": "Die KI kommt zuletzt",
         "keywords": "",
-        "script": "Dieser Freelancer ist die KI. Zeile für Zeile ist es derselbe Satz mit anderen Wörtern. Gib denselben Prompt in einem neuen Chat ein, und du bekommst eine andere Antwort. Schick den Prompt ab, und sie liefert Seiten in Sekunden, so viele du willst, richtig oder nicht. Trainiert auf mehr Text, als je ein Mensch lesen könnte, gibt sie dir die wahrscheinlichste Antwort, blind für dein Unternehmen und eure Kultur. Gib ihr einen vagen Prompt, und sie füllt die Lücken mit den häufigsten Antworten und antwortet voller Überzeugung. Und sie berechnet jedes Wort, das sie liest und schreibt, also bezahlt eine Nachricht mehr den ganzen Chat noch einmal, ihre eigenen Antworten inklusive. (Pause) Würdest du einem solchen Freelancer einen Auftrag ohne Plan geben?"
+        "script": "Dieser Freelancer ist die KI. Zeile für Zeile ist es derselbe Satz mit anderen Wörtern. Gib denselben Prompt in einem neuen Chat ein, und Du bekommst eine andere Antwort. Schick den Prompt ab, und sie liefert Seiten in Sekunden, so viele Du willst, richtig oder nicht. Trainiert auf mehr Text, als je ein Mensch lesen könnte, gibt sie Dir die wahrscheinlichste Antwort, blind für Dein Unternehmen und eure Kultur. Gib ihr einen vagen Prompt, und sie füllt die Lücken mit den häufigsten Antworten und antwortet voller Überzeugung. Und sie berechnet jedes Wort, das sie liest und schreibt, also bezahlt eine Nachricht mehr den ganzen Chat noch einmal, ihre eigenen Antworten inklusive. (Pause) Würdest Du einem solchen Freelancer einen Auftrag ohne Plan geben?"
       },
       "the-pun": {
         "title": "Die Pointe",
         "keywords": "",
-        "script": "Hier ist die ganze Folie in einem Satz. Vergiss den Preis, und du zahlst ihn jedes Mal."
+        "script": "Hier ist die ganze Folie in einem Satz. Vergiss den Preis, und Du zahlst ihn jedes Mal."
       }
     }
   }

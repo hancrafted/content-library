@@ -10,9 +10,9 @@ const render = (text: Parameters<typeof HandoffCard>[0]['text']) =>
 describe('success cases', () => {
   it('shows its title above the text it carries into the next chat', () => {
     // ARRANGE
-    const expected = ['Handoff card', 'Party for 40. Next: invitations.'];
+    const expected = ['Handoff card', 'Party for 200. Next: invitations.'];
     // ACT
-    const $ = render('Party for 40. Next: invitations.');
+    const $ = render('Party for 200. Next: invitations.');
     const lines = $('[data-handoff] p')
       .map((_, el) => $(el).text())
       .get();
@@ -26,7 +26,7 @@ describe('failure cases', () => {
     // ARRANGE
     const focusable = 'a, button, input, [tabindex]';
     // ACT
-    const $ = render('Party for 40.');
+    const $ = render('Party for 200.');
     // ASSERT
     expect($(focusable)).toHaveLength(0);
   });

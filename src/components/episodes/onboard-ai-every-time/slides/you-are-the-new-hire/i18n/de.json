@@ -1,7 +1,7 @@
 {
   "title": "Du bist die neue Kraft",
-  "caption": "Das meiste, was du für einen guten Job brauchst, hat nie jemand aufgeschrieben.",
-  "task": "Plane das nächste Sommerfest deiner Firma: 200 Mitarbeitende an fünf Standorten in Europa",
+  "caption": "Das meiste, was Du für einen guten Job brauchst, hat nie jemand aufgeschrieben.",
+  "task": "Plane das nächste Sommerfest Deiner Firma: 200 Mitarbeitende an fünf Standorten in Europa",
   "obvious": {
     "label": "Die naheliegenden Fragen",
     "questions": {
@@ -29,8 +29,8 @@
   },
   "switch": "Rollenwechsel",
   "handover": {
-    "title": "Jetzt gibst du es ab.",
-    "body": "Deine Führungskraft erwartet den Plan bis Freitag, und die Person, die übernimmt, <marker>weiß nichts von dem, was du gerade gelernt hast</marker>.",
+    "title": "Jetzt gibst Du es ab.",
+    "body": "Deine Führungskraft erwartet den Plan bis Freitag, und die Person, die übernimmt, <marker>weiß nichts von dem, was Du gerade gelernt hast</marker>.",
     "due": "Fällig",
     "dueDay": "Freitag",
     "echoes": {
@@ -85,17 +85,17 @@
       "obvious-questions": {
         "title": "Naheliegende Fragen",
         "keywords": "",
-        "script": "Fang mit den Fragen an, die dir sofort einfallen. Wie hoch ist das Budget, wo übernachten alle, wer gibt den Plan frei? Ernährungswünsche und Barrierefreiheit laufen dabei mit. Diese Fragen sind leicht aufzuschreiben und leicht beantwortet, und genau deshalb scheitert ein Plan nicht an ihnen."
+        "script": "Fang mit den Fragen an, die Dir sofort einfallen. Wie hoch ist das Budget, wo übernachten alle, wer gibt den Plan frei? Ernährungswünsche und Barrierefreiheit laufen dabei mit. Diese Fragen sind leicht aufzuschreiben und leicht beantwortet, und genau deshalb scheitert ein Plan nicht an ihnen."
       },
       "the-ones-you-forget": {
-        "title": "Die, die du vergisst",
+        "title": "Die, die Du vergisst",
         "keywords": "",
-        "script": "Der Ärger steckt in der zweiten Gruppe. Was ist beim letzten Sommerfest schiefgelaufen, welche ungeschriebenen Regeln gelten, welche Lieferanten und Tools darfst du nutzen? Dieser Kontext steckt in Feedback, in der Kultur und in Gewohnheiten, nicht in einem Dokument, also vergessen Menschen, ihn weiterzugeben, weil ihn nie jemand aufgeschrieben hat. (Pause) Und du kannst nicht nach etwas fragen, von dem du nicht weißt, dass es existiert."
+        "script": "Der Ärger steckt in der zweiten Gruppe. Was ist beim letzten Sommerfest schiefgelaufen, welche ungeschriebenen Regeln gelten, welche Lieferanten und Tools darfst Du nutzen? Dieser Kontext steckt in Feedback, in der Kultur und in Gewohnheiten, nicht in einem Dokument, also vergessen Menschen, ihn weiterzugeben, weil ihn nie jemand aufgeschrieben hat. (Pause) Und Du kannst nicht nach etwas fragen, von dem Du nicht weißt, dass es existiert."
       },
       "switch-of-roles": {
         "title": "Rollenwechsel",
         "keywords": "",
-        "script": "Jetzt dreh es um. Nun gibst du das Sommerfest ab, und deine Führungskraft erwartet den Plan bis Freitag. Die Frage ist nicht mehr, was du fragen musst, sondern was die neue Person von dir braucht, und wie viel davon du von dir aus sagen würdest. Das gilt für jede neue Kraft, und damit sind wir bei der, die du gleich einstellst."
+        "script": "Jetzt dreh es um. Nun gibst Du das Sommerfest ab, und Deine Führungskraft erwartet den Plan bis Freitag. Die Frage ist nicht mehr, was Du fragen musst, sondern was die neue Person von Dir braucht, und wie viel davon Du von Dir aus sagen würdest. Das gilt für jede neue Kraft, und damit sind wir bei der, die Du gleich einstellst."
       }
     }
   }

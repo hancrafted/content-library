@@ -48,7 +48,7 @@ const CHAT: Chat = {
       id: 'm9',
       kind: 'compact',
       trigger: 'auto',
-      summary: 'A venue for 40.',
+      summary: 'A venue for 200.',
       blocks: [{ cat: 'summary', tokens: 60 }],
     },
     { id: 'm10', kind: 'ai', text: 'Anything else?', blocks: [{ cat: 'assistant', tokens: 15 }] },
