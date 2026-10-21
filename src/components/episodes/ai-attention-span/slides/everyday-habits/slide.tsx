@@ -12,12 +12,18 @@ import en from './i18n/en.json';
 const CONTEXT_LENGTH = { slug: 'du-context-length-alone-hurts', url: 'https://arxiv.org/abs/2510.05381' };
 const CONTEXT_ROT = { slug: 'hong-context-rot', url: 'https://www.trychroma.com/research/context-rot' };
 
-/** The three habits in order, each with the target its Speaker note lights and the note its Context marker opens. */
+/**
+ * The six habits in order; the ones a Speaker note backs carry the target it lights and the note its Context marker
+ * opens, the others (break it down, read it, check the context) stand without one.
+ */
 const HABITS = [
-  { key: '1', target: 'habit-one-chat', note: 'one-job-per-chat' },
-  { key: '2', target: 'habit-handoff', note: 'a-short-recap-helped' },
-  { key: '3', target: 'habit-next-chat', note: 'length-itself-hurts' },
-] as const;
+  { key: '1' },
+  { key: '2', target: 'habit-one-chat', note: 'one-job-per-chat' },
+  { key: '3', target: 'habit-handoff', note: 'a-short-recap-helped' },
+  { key: '4' },
+  { key: '5', target: 'habit-next-chat', note: 'length-itself-hurts' },
+  { key: '6' },
+] as const satisfies readonly { key: string; target?: string; note?: string }[];
 
 /** One chat's bar under its name: the cornerstone's static mini bar, its numbers from the shared Preset. */
 function ChatBar({ name, children }: { name: string; children: ReactNode }) {
@@ -49,9 +55,9 @@ function Arrow({ label }: { label: string }) {
 }
 
 /**
- * Everyday habits (Spec Option 10a): the old summer-party chat and a fresh one as the cornerstone's mini bars side by
- * side, the handoff card crossing between them into the fresh chat's first message, the two habits the viewer knows
- * as chips above and the three new ones as cards below. The card lights between the bars on the Slide's first
+ * Everyday habits (Spec Option 10a, six cards by Han's batch-2 item 11): the old summer-party chat and a fresh one as
+ * the cornerstone's mini bars side by side, the handoff card crossing between them into the fresh chat's first
+ * message, and the six habits as cards below, two rows of three. The card lights between the bars on the Slide's first
  * `active` and on every mouse enter and keyboard focus.
  */
 export const everydayHabits = slide({
@@ -64,19 +70,14 @@ export const everydayHabits = slide({
   ],
   segments: [
     { slug: 'break-it-down' },
-    { slug: 'fresh-start' },
     { slug: 'one-chat-one-job' },
     { slug: 'ask-for-a-handoff' },
     { slug: 'read-and-correct-it' },
     { slug: 'start-the-next-chat-with-it' },
+    { slug: 'check-the-context' },
   ],
   content: ({ t, locale, target, Marker }) => (
     <SlideFrame className="mt-10 gap-8">
-      <p className="flex flex-wrap items-center gap-2 text-caption">
-        <span className="text-muted-foreground">{t('known.label')}</span>
-        <span className="rounded-full bg-muted px-3 py-1 font-medium">{t('known.breakItDown')}</span>
-        <span className="rounded-full bg-muted px-3 py-1 font-medium">{t('known.freshStart')}</span>
-      </p>
       <HandoffMotion
         label={t('barsLabel')}
         className={`${styles.bars} flex flex-col items-center justify-around gap-6 rounded-xl bg-card p-6 shadow-md md:flex-row md:p-8`}
@@ -108,11 +109,12 @@ export const everydayHabits = slide({
       />
       <HabitList
         label={t('habitsLabel')}
-        habits={HABITS.map(({ key, target: name, note }) => ({
-          title: t(`habits.${key}.title`),
-          body: t(`habits.${key}.body`),
-          marker: <Marker note={note} placement="beside" />,
-          target: target(name),
+        habits={HABITS.map((habit) => ({
+          title: t(`habits.${habit.key}.title`),
+          body: t.rich(`habits.${habit.key}.body`, { code: (chunks: ReactNode) => <code>{chunks}</code> }),
+          ...('note' in habit
+            ? { marker: <Marker note={habit.note} placement="beside" />, target: target(habit.target) }
+            : {}),
         }))}
       />
       <p className="text-caption text-pretty text-muted-foreground">{t('illustrative')}</p>

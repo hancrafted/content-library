@@ -1,7 +1,7 @@
 {
   "title": "The AI's attention span",
   "caption": "Now the cause: how the AI holds a chat.",
-  "windowNote": "<b>The same light on the window:</b> {used} of {window}, the middle faded. Token counts illustrative.",
+  "windowNote": "<b>The AI's window keeps the same light:</b> its start and its newest stay sharp, the middle fades.",
   "voiceScript": {
     "segments": {
       "why-it-happens": {

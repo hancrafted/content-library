@@ -1,7 +1,6 @@
 {
   "title": "AI forgets the middle too",
   "caption": "A long AI chat has the same shape as the call: the first and the newest messages get used, the middle gets lost, and a detail that keeps coming back survives.",
-  "stepsLabel": "The call and the AI chat side by side, lit effect by effect; point at them to replay",
   "sister": {
     "name": "Sister",
     "meta": "Call · 1:21:40"

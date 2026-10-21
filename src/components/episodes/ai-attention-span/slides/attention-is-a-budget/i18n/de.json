@@ -54,9 +54,9 @@
   "voiceScript": {
     "segments": {
       "a-hundred-units": {
-        "title": "Hundert Einheiten",
+        "title": "Aufmerksamkeit als Budget",
         "keywords": "",
-        "script": "Stell dir Aufmerksamkeit als Budget von hundert Einheiten vor. Und ich sage es klar: Diese Zahlen, die Token-Zahlen und die Fenstergrößen auf dieser Folie sind zur Veranschaulichung. Ich habe sie mir ausgedacht, um die Form zu zeigen, also nimm sie bitte nicht als Messwerte."
+        "script": "Stell Dir Aufmerksamkeit als Budget vor. Links ist die Zeitleiste, in der Mitte das Fenster als Balken und rechts die Aufmerksamkeit, die jede Nachricht bekommt. Und ich sage es klar: Diese Zahlen, die Token-Zahlen und die Fenstergrößen auf dieser Folie sind zur Veranschaulichung. Ich habe sie mir ausgedacht, um die Form zu zeigen, also nimm sie bitte nicht als Messwerte."
       },
       "where-it-goes": {
         "title": "Wohin es geht",

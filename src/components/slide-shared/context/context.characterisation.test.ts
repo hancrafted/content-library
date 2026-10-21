@@ -83,6 +83,7 @@ describe('success cases', () => {
             ':-',
           ],
         },
+        'slide-7-parts': { lit: 5, sections: ['Context window', 'Details'], sliders: 0, toolbar: [] },
         'slide-8': {
           lit: 29,
           sections: ['Context window', 'Details'],

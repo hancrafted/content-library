@@ -8,8 +8,8 @@ import { CONTEXT_PRESETS, type ContextPresetId, type MiniPresetId } from './cont
 /** The server markup a Slide ships for a Preset, parsed. */
 const render = (preset: ContextPresetId, locale = 'en') =>
   load(renderToStaticMarkup(createElement(Context, { preset, locale })));
-const renderMini = (preset: MiniPresetId) =>
-  load(renderToStaticMarkup(createElement(ContextBarsPreset, { preset, locale: 'en' })));
+const renderMini = (preset: MiniPresetId, here?: number, locale = 'en') =>
+  load(renderToStaticMarkup(createElement(ContextBarsPreset, { preset, locale, here })));
 const sections = ($: ReturnType<typeof render>) =>
   $('section')
     .map((_, el) => $(el).attr('aria-label'))
@@ -131,5 +131,37 @@ describe('edge cases', () => {
     const discarded = renderMini('slide-11-after')('figure[data-discarded]').length;
     // ASSERT
     expect({ zone, labels: $('[class*="labelLimit"]').length, discarded }).toEqual(expected);
+  });
+
+  it('marks where a Section sits on the call bar, in words for assistive technology', () => {
+    // ARRANGE
+    const expected = { at: '24.390243902439025', text: 'You are here: minute 20 of 82', bars: 1 };
+    // ACT
+    const $ = renderMini('call', 20);
+    // ASSERT
+    expect({
+      at: $('[data-here]').attr('data-here'),
+      text: $('[data-here]').text().trim(),
+      bars: $('[role="img"]').length,
+    }).toEqual(expected);
+  });
+
+  it('says the start of the call for minute 0 and the German words in German', () => {
+    // ARRANGE
+    const expected = { en: 'You are here: the start of the call', de: 'Du bist hier: Minute 46 von 82' };
+    // ACT
+    const en = renderMini('call', 0)('[data-here]').text().trim();
+    const de = renderMini('call', 46, 'de')('[data-here]').text().trim();
+    // ASSERT
+    expect({ en, de }).toEqual(expected);
+  });
+
+  it('draws no marker when a bar has none', () => {
+    // ARRANGE
+    const expected = 0;
+    // ACT
+    const markers = renderMini('call')('[data-here]').length;
+    // ASSERT
+    expect(markers).toBe(expected);
   });
 });

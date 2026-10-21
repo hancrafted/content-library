@@ -26,7 +26,8 @@ const CALL = [
   { slug: 'bye', who: 'you', light: 'lit' },
 ] as const satisfies readonly { slug: string; who: CallWho; light: CallLight }[];
 
-const CHAT_LABELS = ['start', 'standout', 'middle', 'newest'] as const;
+/** The two learnings under the AI side, as keys of `chat.learnings`. */
+const LEARNINGS = ['middle', 'compaction'] as const;
 
 /** The equals glyph between the two pictures: the same shape. */
 function Equals() {
@@ -38,9 +39,10 @@ function Equals() {
 }
 
 /**
- * "What we learned so far" (Spec Option 6a, locked with Han's note): the call transcript of Slide 1 faded in the
- * middle on the left, the summer-party chat as the cornerstone's /context grid on the right, an equals sign between,
- * and the closing line as a full-width band. Keeps `basic-page`, `motion: none`.
+ * "What we learned so far" (Spec Option 6a, reworked by Han's batch-2 item 6): human attention on the left, the call
+ * transcript of Slide 1 faded in the middle with the primacy and recency line; AI attention (context window) on the
+ * right, the cornerstone's /context grid in Technical with its own local </> to switch to Simple, and the two
+ * learnings; an equals sign between, and the closing line as a full-width band. Keeps `basic-page`, `motion: none`.
  */
 export const whatWeLearnedSoFar = slide({
   slug: 'what-we-learned-so-far',
@@ -51,7 +53,9 @@ export const whatWeLearnedSoFar = slide({
     <SlideFrame className="mt-8 gap-10">
       <div className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-12">
         <div className="flex flex-col gap-4 rounded-xl bg-muted p-6 lg:col-span-5">
-          <span className="text-caption tracking-wide text-muted-foreground uppercase">{t('call.kicker')}</span>
+          <p data-kicker="" className="text-body font-semibold">
+            {t('call.kicker')}
+          </p>
           <div className="rounded-xl border border-border bg-card p-4 shadow-md">
             <CallTranscript
               size="sm"
@@ -69,22 +73,23 @@ export const whatWeLearnedSoFar = slide({
           </span>
         </div>
         <div className="flex min-w-0 flex-col gap-4 rounded-xl bg-muted p-6 lg:col-span-5">
-          <span className="text-caption tracking-wide text-muted-foreground uppercase">{t('chat.kicker')}</span>
+          <p data-kicker="" className="text-body font-semibold">
+            {t('chat.kicker')}
+          </p>
           <div className="rounded-xl border border-border bg-card p-4 shadow-md">
             <Context preset="slide-6" locale={locale} />
           </div>
-          <ul className="grid grid-cols-2 gap-x-4 gap-y-2 text-caption">
-            {CHAT_LABELS.map((label) => (
-              <li key={label} className="flex flex-col">
-                <b className="font-semibold">{t(`chat.labels.${label}.head`)}</b>
-                <span className="text-muted-foreground">{t(`chat.labels.${label}.line`)}</span>
-              </li>
+          <ul data-learning="" className="flex list-disc flex-col gap-2 pl-5 text-body font-semibold">
+            {LEARNINGS.map((at) => (
+              <li key={at}>{t(`chat.learnings.${at}`)}</li>
             ))}
           </ul>
-          <p className="text-body font-semibold">{t('chat.line')}</p>
         </div>
       </div>
-      <p className="rounded-xl bg-primary px-8 py-5 text-center text-subheading font-semibold text-primary-foreground shadow-md">
+      <p
+        data-closing=""
+        className="rounded-xl bg-primary px-8 py-5 text-center text-subheading font-semibold text-primary-foreground shadow-md"
+      >
         {t('closing')}
       </p>
     </SlideFrame>

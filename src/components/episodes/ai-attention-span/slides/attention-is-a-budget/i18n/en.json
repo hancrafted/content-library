@@ -54,9 +54,9 @@
   "voiceScript": {
     "segments": {
       "a-hundred-units": {
-        "title": "A hundred units",
+        "title": "Attention as a budget",
         "keywords": "",
-        "script": "Think of attention as a budget of a hundred units. And I say it plainly: these numbers, the token counts and the window sizes on this slide are illustrative. I made them up to show the shape, so please don't take them as measurements."
+        "script": "Think of attention as a budget. On the left is the timeline, in the middle the window as a bar, and on the right the attention each message gets. And I say it plainly: these numbers, the token counts and the window sizes on this slide are illustrative. I made them up to show the shape, so please don't take them as measurements."
       },
       "where-it-goes": {
         "title": "Where it goes",

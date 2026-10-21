@@ -1,7 +1,7 @@
 {
   "title": "Die Aufmerksamkeitsspanne der KI",
   "caption": "Jetzt die Ursache: wie die KI einen Chat im Blick behält.",
-  "windowNote": "<b>Dasselbe Licht auf dem Fenster:</b> {used} von {window}, die Mitte verblasst. Tokenzahlen nur zur Veranschaulichung.",
+  "windowNote": "<b>Das Fenster der KI behält dasselbe Licht:</b> Anfang und Neuestes bleiben scharf, die Mitte verblasst.",
   "voiceScript": {
     "segments": {
       "why-it-happens": {
