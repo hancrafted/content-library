@@ -69,16 +69,18 @@ describe('success cases', () => {
     expect(switching).toEqual(expected);
   });
 
-  it('draws the three Slide 9 stills without motion, since the Spec overrules their motion to none', () => {
+  it('draws Slides 5, 6 and the three Slide 9 stills without motion, since the Spec gives them motion none', () => {
     // ARRANGE
     const expected = [
+      ['slide-5', 'off'],
+      ['slide-6', 'off'],
       ['slide-9-before', 'off'],
       ['slide-9-chat', 'off'],
       ['slide-9-after', 'off'],
     ];
     // ACT
     const motions = Object.values(contextData('en').presets)
-      .filter((preset) => preset.id.startsWith('slide-9-'))
+      .filter((preset) => preset.motion === 'off')
       .map((preset) => [preset.id, preset.motion]);
     // ASSERT
     expect(motions).toEqual(expected);

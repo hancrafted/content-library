@@ -238,7 +238,8 @@ describe('edge cases', () => {
       header: 'authored',
       sections: [[foundations, titled]],
     });
-    const expected = '<h3 data-target="title" class="font-semibold text-balance text-subheading">Why a template</h3>';
+    const expected =
+      '<h3 data-target="title" class="font-semibold text-balance hyphens-auto text-subheading">Why a template</h3>';
     // ACT
     const { slides, header } = await recordContent(record, 'en', translatorOf('en'));
     // ASSERT

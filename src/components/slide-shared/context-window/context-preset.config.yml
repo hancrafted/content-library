@@ -113,6 +113,7 @@ presets:
     controlsHidden: true
     windowSwitch: true
     windows: [{ size: 200k, lines: [matt] }, { size: 1m, lines: [matt-1m] }]
+    motion: off
   slide-6:
     chat: summer-party
     depth: technical
@@ -120,6 +121,7 @@ presets:
     controls: []
     controlsHidden: true
     timelineLocked: true
+    motion: off
   slide-7:
     chat: summer-party
     depth: technical
