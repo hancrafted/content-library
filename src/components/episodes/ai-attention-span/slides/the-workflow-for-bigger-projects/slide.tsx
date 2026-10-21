@@ -1,6 +1,6 @@
 import { slide } from '@/components/slide-master/slide';
 import { SlideFrame } from '@/components/slide-master/slide-master';
-import { ContextMiniBars } from '@/components/slide-shared/context/context';
+import { ContextBarsPreset } from '@/components/slide-shared/context/context';
 import type { ReactNode } from 'react';
 import { CompareMotion } from './compare-motion.client';
 import { ComparePanel } from './compare-panel';
@@ -60,7 +60,7 @@ export const theWorkflowForBiggerProjects = slide({
       <SlideFrame className="mt-10 gap-8">
         <CompareMotion label={t('compareLabel')} className={`${styles.compare} grid gap-8 lg:grid-cols-12`}>
           <ComparePanel title={t('before.title')} tone="before">
-            <ContextMiniBars preset="slide-11-before" locale={locale} />
+            <ContextBarsPreset preset="slide-11-before" locale={locale} />
             <p className="text-center text-caption text-muted-foreground">{t('before.note')}</p>
           </ComparePanel>
           <ComparePanel
@@ -69,7 +69,7 @@ export const theWorkflowForBiggerProjects = slide({
             marker={<Marker note="clean-windows-for-each-part" placement="beside" />}
             target={target(AFTER)}
           >
-            <ContextMiniBars preset="slide-11-after" locale={locale} />
+            <ContextBarsPreset preset="slide-11-after" locale={locale} />
             <ul aria-label={t('resultsLabel')} {...target(RESULTS)} className="flex flex-wrap gap-3">
               {RESULT_KEYS.map((key) => (
                 <ResultCard key={key} back={t('back')}>

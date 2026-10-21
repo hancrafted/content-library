@@ -1,8 +1,7 @@
 {
   "title": "Gedankenexperiment",
   "caption": "Wie Deine Aufmerksamkeit in einem 90-Minuten-Gespräch durchhält",
-  "gridLabel": "Das Telefonat, ein Kästchen pro Minute: Anfang und Ende hell, die Mitte verblasst, ein Ausreißer",
-  "callLength": "<b>1 Std. 22 Min.</b>, ein Kästchen pro Minute: Anfang, Ende und Peppers Kuchen bleiben hell.",
+  "callLength": "<b>Ein Block pro Minute:</b> Anfang, Ende und Peppers Kuchen bleiben hell.",
   "punchline": "…Moment, das Datum haben wir gar nicht festgelegt.",
   "voiceScript": {
     "segments": {

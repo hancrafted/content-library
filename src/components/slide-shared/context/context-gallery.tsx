@@ -1,5 +1,5 @@
 import { CallTranscript } from '../call-transcript/call-transcript';
-import { Context, ContextMiniBars } from './context';
+import { Context, ContextBarsPreset } from './context';
 import { CONTEXT_PRESETS, MINI_PRESETS } from './context-data';
 
 /*
@@ -29,7 +29,7 @@ export function ContextGallery({ locale }: { readonly locale: string }) {
       {MINI_PRESETS.map((id) => (
         <article key={id} id={`preset-${id}`} className="flex flex-col gap-3">
           <h3 className="text-subheading font-semibold">{id}</h3>
-          <ContextMiniBars preset={id} locale={locale} />
+          <ContextBarsPreset preset={id} locale={locale} />
         </article>
       ))}
       <article id="call-transcript" className="flex max-w-xl flex-col gap-3">

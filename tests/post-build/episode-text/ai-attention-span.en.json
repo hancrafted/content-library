@@ -5,11 +5,11 @@
   "slides": [
     {
       "id": "top",
-      "text": "Why AI has a weird attention span you must learn to manage A long chat behaves like a long call: its attention is a limited window, so you manage what goes into it. The summer-party chat 128K of 200K · 64% The start and the newest stay in the light The middle fades out of attention Kept free for summaries · 16.5K One box = 2K · token counts illustrative"
+      "text": "Why AI has a weird attention span you must learn to manage A long chat behaves like a long call: its attention is a limited window, so you manage what goes into it. The summer-party chat 128K of 200K · 64% The start and the newest stay in the light The middle fades out of attention Kept free for summaries · 16.5K Token counts illustrative"
     },
     {
       "id": "thought-experiment",
-      "text": "Thought experiment How your attention holds up over a 90-minute call 1 h 22 min , one box a minute: the start, the end and Pepper's cake stay lit. …wait, we never fixed the date."
+      "text": "Thought experiment How your attention holds up over a 90-minute call The call 1 h 22 min One block a minute: the start, the end and Pepper's cake stay lit. …wait, we never fixed the date."
     },
     {
       "id": "thought-experiment--the-long-phone-call-story",
@@ -21,7 +21,7 @@
     },
     {
       "id": "the-ais-attention-span",
-      "text": "The AI's attention span Now the cause: how the AI holds a chat. The same light on the window: 128K of 200K, the middle faded. One box = 2K, illustrative."
+      "text": "The AI's attention span Now the cause: how the AI holds a chat. The summer-party chat 128K of 200K · 64% The same light on the window: 128K of 200K, the middle faded. Token counts illustrative."
     },
     {
       "id": "the-ais-attention-span--the-context-window",
@@ -41,7 +41,7 @@
     },
     {
       "id": "what-fills-the-window",
-      "text": "What fills the window Your messages are only a part of it. Starting instructions 34.1K You typed under 1K catering PDF 55K illustrative"
+      "text": "What fills the window Your messages are only a part of it. The summer-party chat 128K of 200K · 64% Starting instructions 34.1K You typed under 1K catering PDF 55K illustrative"
     },
     {
       "id": "what-fills-the-window--whats-really-in-the-window",
@@ -57,15 +57,15 @@
     },
     {
       "id": "managing-the-attention-span",
-      "text": "Managing the attention span You can't read a gauge, so you build habits. Old chat · 64% Fresh chat · 19% Handoff: party for 40, 27 June, budget 40,000 € . Next: invitations."
+      "text": "Managing the attention span You can't read a gauge, so you build habits. Old chat 128K of 200K · 64% Fresh chat 38K of 200K · 19% Handoff: party for 40, 27 June, budget 40,000 € . Next: invitations."
     },
     {
       "id": "managing-the-attention-span--everyday-habits",
-      "text": "Managing the attention span (1/2) Page 1 of 2 Everyday habits Keep each chat to one job, and carry only a short handoff into the next one, so the new chat starts small and sharp. You know these already: Break it down Fresh start Old chat: summer party Old chat 64% used Handoff card Party for 40, 27 June, budget 40,000 € . Venue: Estrela pavilion. Caterer: Sabor Verde (12 vegetarian). Next: invitations. first message of the new chat Fresh chat: invitations Fresh chat 19% used 1 One chat, one job When the topic changes, open a new chat: the hotel question does not carry the catering PDF along. 2 Ask for a handoff, read it, correct it After real progress or before a break: the goal, what is decided, what comes next. You fix what is wrong. 3 Start the next chat with it Paste it in as the first message. The new chat holds the venue, caterer, budget and next step, and nothing else. Token counts are illustrative · 200K window"
+      "text": "Managing the attention span (1/2) Page 1 of 2 Everyday habits Keep each chat to one job, and carry only a short handoff into the next one, so the new chat starts small and sharp. You know these already: Break it down Fresh start Old chat: summer party Old chat 128K of 200K · 64% Handoff card Party for 40, 27 June, budget 40,000 € . Venue: Estrela pavilion. Caterer: Sabor Verde (12 vegetarian). Next: invitations. first message of the new chat Fresh chat: invitations Fresh chat 38K of 200K · 19% 1 One chat, one job When the topic changes, open a new chat: the hotel question does not carry the catering PDF along. 2 Ask for a handoff, read it, correct it After real progress or before a break: the goal, what is decided, what comes next. You fix what is wrong. 3 Start the next chat with it Paste it in as the first message. The new chat holds the venue, caterer, budget and next step, and nothing else. Token counts are illustrative · 200K window"
     },
     {
       "id": "managing-the-attention-span--the-workflow-for-bigger-projects",
-      "text": "Managing the attention span (2/2) Page 2 of 2 The workflow for bigger projects Break the project down first, keep one chat as the planner, and give each step a fresh chat that hands back one small result. One chat for everything Summer party 64% used Past the smart zone; every step carries every other step's reading. A workflow: one planner, a fresh chat per step Planner 23% used Worker: venues 26% used · thrown away Worker: catering 45% used Worker: invites 18% used ↑ Result · Estrela pavilion, 14,800 € ↑ Result · Sabor Verde, 12 vegetarian ↑ Result · Invitations sent to 40 One small card back per step. Short tasks beat one long one ( ) ; you coordinate, like a project manager. Token counts are illustrative · 200K window"
+      "text": "Managing the attention span (2/2) Page 2 of 2 The workflow for bigger projects Break the project down first, keep one chat as the planner, and give each step a fresh chat that hands back one small result. One chat for everything Summer party 128K of 200K · 64% Past the smart zone; every step carries every other step's reading. A workflow: one planner, a fresh chat per step Planner 45.3K of 200K · 23% Worker: venues 51.8K of 200K · 26% · thrown away Worker: catering 90.9K of 200K · 45% Worker: invites 36.1K of 200K · 18% ↑ Result · Estrela pavilion, 14,800 € ↑ Result · Sabor Verde, 12 vegetarian ↑ Result · Invitations sent to 40 One small card back per step. Short tasks beat one long one ( ) ; you coordinate, like a project manager. Token counts are illustrative · 200K window"
     }
   ],
   "notes": [

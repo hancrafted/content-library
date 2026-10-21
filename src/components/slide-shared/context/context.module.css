@@ -4,7 +4,8 @@
  */
 
 .root,
-.mini {
+.bars,
+.barView {
   /* "What the AI read": the one local hue, teal between the success and info tokens. */
   --cs-read: color-mix(in oklch, color-mix(in oklch, var(--success) 72%, var(--info)) 82%, var(--card));
   --cs-sub: color-mix(in oklch, var(--muted-foreground) 72%, var(--foreground));
@@ -50,7 +51,8 @@
   --ease-in: cubic-bezier(0.4, 0, 1, 1);
 }
 :global(.dark) .root,
-:global(.dark) .mini {
+:global(.dark) .bars,
+:global(.dark) .barView {
   --cs-term-ink: var(--foreground);
   --cs-term-bg: color-mix(in oklch, var(--background) 94%, var(--machine));
 }
@@ -1413,7 +1415,8 @@ button.row:hover {
 }
 @media (prefers-reduced-motion: reduce) {
   .root,
-  .mini {
+  .bars,
+  .barView {
     --in: 0ms !important;
     --out: 0ms !important;
     --hov: 0ms !important;
@@ -1428,37 +1431,90 @@ button.row:hover {
   }
 }
 
-/* ── Mini bars (static): the same blocks and colours ── */
-.mini {
+/* ── Static bars: the view drawn horizontally, a figure per bar ── */
+.bars {
   display: flex;
-  gap: 1.75rem;
-  align-items: flex-end;
+  flex-direction: column;
+  gap: 0.9rem;
+  width: 100%;
   color: var(--foreground);
-  flex-wrap: wrap;
 }
-.mini figure {
+.bars figure {
   margin: 0;
-  display: grid;
-  justify-items: center;
-  gap: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
 }
-.mini .bar {
-  width: 3rem;
-  height: 18rem;
+.bars figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.15rem 1rem;
 }
-.mini .block {
-  cursor: default;
-}
-.mini figcaption {
-  text-align: center;
-  max-width: 8rem;
-}
-.mini figcaption small {
-  display: block;
+.bars figcaption small {
   color: var(--cs-sub);
 }
-.mini figure[data-discarded] .bar {
+.bars figure[data-discarded] .bar {
   opacity: 0.4;
+}
+.bar[data-orientation='horizontal'] {
+  width: 100%;
+  height: var(--bar-h, 2.25rem);
+}
+.bar[data-orientation='horizontal'] .block {
+  top: 0;
+  bottom: 0;
+  height: auto;
+  left: calc(var(--s) * 1%);
+  width: max(calc(var(--z) * 1%), 2px);
+  right: auto;
+  cursor: default;
+  box-shadow: inset -1px 0 0 color-mix(in oklch, var(--card) 70%, transparent);
+}
+.bar[data-orientation='horizontal'] .buffer {
+  top: 0;
+  bottom: 0;
+  left: auto;
+  right: 0;
+  height: auto;
+  width: calc(var(--z) * 1%);
+  border-top: 0;
+  border-left: 1px dashed var(--cs-sub);
+}
+.bar[data-orientation='horizontal'] .line {
+  top: -2px;
+  bottom: -2px;
+  left: calc(var(--f) * 100%);
+  right: auto;
+  border-top: 0;
+  border-left: 2px dashed var(--cs-sub);
+}
+.bar[data-orientation='horizontal'] .line[data-crossed] {
+  border-left-color: var(--primary);
+}
+.block[data-faded] {
+  background: var(--cs-dim);
+}
+.block[data-ring] {
+  outline: 2px solid var(--primary);
+  outline-offset: -2px;
+  z-index: 3;
+}
+.swatch {
+  display: block;
+  flex: none;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 0.2rem;
+  background: var(--k);
+}
+.swatch[data-tone='faded'] {
+  background: var(--cs-dim);
+}
+.swatch[data-tone='buffer'] {
+  background: repeating-linear-gradient(-45deg, transparent 0 2px, var(--cs-border) 2px 3px);
+  box-shadow: inset 0 0 0 1px var(--cs-sub);
 }
 .sr {
   position: absolute;
