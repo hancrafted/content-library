@@ -16,8 +16,10 @@ const PUBLISHED_SLUGS = [
   'ai-token-economy',
   'never-too-early-sales',
   'onboard-ai-every-time',
+  'ai-attention-span',
+  'ai-gives-you-more-work',
 ];
-const DRAFT_SLUGS = ['ai-gives-you-more-work'];
+const DRAFT_SLUGS: readonly string[] = [];
 const TAGGED = { slug: 'never-too-early-sales', tags: ['startups', 'cashflow', 'lead-generation', 'sales-pipeline'] };
 
 describe('/episodes index page', () => {

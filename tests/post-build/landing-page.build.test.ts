@@ -188,8 +188,8 @@ describe('landing page post-build structure', () => {
   );
 
   it.each([
-    { locale: 'en', url: localizePath(ROUTES.home, 'en'), expected: { dateTime: '2026-10-20', text: 'Oct 20, 2026' } },
-    { locale: 'de', url: localizePath(ROUTES.home, 'de'), expected: { dateTime: '2026-10-20', text: '20. Okt. 2026' } },
+    { locale: 'en', url: localizePath(ROUTES.home, 'en'), expected: { dateTime: '2026-10-21', text: 'Oct 21, 2026' } },
+    { locale: 'de', url: localizePath(ROUTES.home, 'de'), expected: { dateTime: '2026-10-21', text: '21. Okt. 2026' } },
   ] as const)('dates the lead Episode with its release day for locale $locale', ({ url, expected }) => {
     // ARRANGE
     const $ = getPage(url);

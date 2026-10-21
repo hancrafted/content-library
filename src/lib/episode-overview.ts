@@ -52,7 +52,7 @@ export type ListedEpisodeSlug = Exclude<EpisodeSlug, (typeof LAYOUT_REFERENCES)[
 
 /** The Featured slots: published Episodes, lead first. Re-ranking is this one edit. */
 export const FEATURED = [
+  'ai-attention-span',
   'onboard-ai-every-time',
-  'never-too-early-sales',
-  'maintaining-markdown-for-ai',
+  'ai-gives-you-more-work',
 ] as const satisfies readonly [ListedEpisodeSlug, ListedEpisodeSlug, ListedEpisodeSlug];

@@ -1,10 +1,11 @@
-import type { UpcomingEpisodeMetadata } from '@/lib/episode-metadata.pure';
+import type { PublishedEpisodeMetadata } from '@/lib/episode-metadata.pure';
 
-/** What the Episode overview shows about this Episode: a draft, upcoming until its video is live; its title and caption are its own `i18n/` (#40). */
+/** What the Episode overview shows about this Episode; its title and caption are its own `i18n/` (#40). */
 export const episodeMetadata = {
   slug: 'ai-gives-you-more-work',
-  status: 'upcoming',
+  status: 'published',
   topic: 'ai-enablement',
   format: 'foundations',
   tags: [],
-} as const satisfies UpcomingEpisodeMetadata;
+  publishedOn: '2026-10-21',
+} as const satisfies PublishedEpisodeMetadata;
