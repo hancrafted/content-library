@@ -20,6 +20,22 @@ export interface UiWords {
   readonly signedOff: string;
   readonly download: string;
   readonly upload: string;
+  readonly copyPrompt: string;
+  readonly copyCommand: string;
+  readonly openChatgpt: string;
+  readonly openClaude: string;
+  readonly copyExample: string;
+  readonly copyCheck: string;
+  readonly copyPage: string;
+  readonly sectionDoes: string;
+  readonly sectionIn: string;
+  readonly sectionOut: string;
+  readonly sectionCriteria: string;
+  readonly sectionSkills: string;
+  readonly sectionFullPrompt: string;
+  readonly sectionExample: string;
+  readonly setup: string;
+  readonly newTab: string;
 }
 
 /** A Slide's words, laid over the defaults key by key: the visual's labels, and the shown Workflow's words. */

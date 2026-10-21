@@ -10,3 +10,19 @@ ui:
   signedOff: Freigegeben
   download: Diesen Ablauf herunterladen
   upload: Eigenen Ablauf hochladen
+  copyPrompt: Prompt kopieren
+  copyCommand: Befehl kopieren
+  openChatgpt: In ChatGPT öffnen
+  openClaude: In Claude öffnen
+  copyExample: Beispiel-Übergabe kopieren
+  copyCheck: Prüf-Prompt kopieren
+  copyPage: Als Seite erstellen
+  sectionDoes: Was dieser Schritt tut
+  sectionIn: Was du einfügst
+  sectionOut: Was du zurückbekommst
+  sectionCriteria: Prüfe es gegen
+  sectionSkills: Skills
+  sectionFullPrompt: Ganzen Prompt zeigen
+  sectionExample: Beispielergebnis
+  setup: Einmalige Einrichtung
+  newTab: öffnet in neuem Tab

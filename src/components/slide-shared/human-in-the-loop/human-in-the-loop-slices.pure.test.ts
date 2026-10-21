@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { callbacksFor, shownWorkflow, slicesOf, uploadEvent } from './human-in-the-loop-slices.pure';
-import type { HumanInTheLoopData } from './human-in-the-loop.types';
+import type { HumanInTheLoopData, UiWords } from './human-in-the-loop.types';
 import { createState, type WorkflowEvent } from './workflow-state.pure';
 import type { Workflow } from './workflow.types';
 
@@ -21,7 +21,7 @@ const flow = (id: string): Workflow => ({
   scenario: 'S',
   stages: [{ id: 's', name: 'S', jobs: [job] }],
 });
-const words = {
+const labels = {
   modeWatch: 'a',
   modeTry: 'b',
   levelSimple: 'c',
@@ -33,6 +33,14 @@ const words = {
   download: 'i',
   upload: 'j',
 };
+const words = {
+  ...labels,
+  ...Object.fromEntries(
+    'copyPrompt copyCommand openChatgpt openClaude copyExample copyCheck copyPage sectionDoes sectionIn sectionOut sectionCriteria sectionSkills sectionFullPrompt sectionExample setup newTab'
+      .split(' ')
+      .map((key) => [key, key]),
+  ),
+} as UiWords;
 const data: HumanInTheLoopData = {
   workflows: [flow('one'), flow('two')],
   workflowId: 'two',

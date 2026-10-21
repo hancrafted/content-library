@@ -10,3 +10,19 @@ ui:
   signedOff: Signed off
   download: Download this Workflow
   upload: Upload your own Workflow
+  copyPrompt: Copy prompt
+  copyCommand: Copy command
+  openChatgpt: Open in ChatGPT
+  openClaude: Open in Claude
+  copyExample: Copy example handoff
+  copyCheck: Copy check prompt
+  copyPage: Make it a page
+  sectionDoes: What this step does
+  sectionIn: What you paste in
+  sectionOut: What you get back
+  sectionCriteria: Check it against
+  sectionSkills: Skills
+  sectionFullPrompt: Show full prompt
+  sectionExample: Example result
+  setup: One-time setup
+  newTab: opens in a new tab
