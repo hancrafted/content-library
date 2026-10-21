@@ -13,23 +13,42 @@ const blocks: PlacedBlock[] = Array.from({ length: 12 }, (_, i) => ({
 const BAR = { barHeight: 600, height: 288 };
 
 describe('success cases', () => {
-  it('shows the hovered block with three before and three after', () => {
+  it('shows the hovered block with two before and two after', () => {
     // ARRANGE
-    const expected = { ids: ['m3', 'm4', 'm5', 'm6', 'm7', 'm8', 'm9'], cursor: 'm6@user' };
+    const expected = { ids: ['m4', 'm5', 'm6', 'm7', 'm8'], cursor: 'm6@user' };
     // ACT
-    const { rows, cursor } = loupeRows(blocks, 65 / WINDOW, WINDOW);
+    const { rows, cursor } = loupeRows(blocks, { at: 65 / WINDOW, windowTokens: WINDOW });
     // ASSERT
     expect({ ids: rows.map((b) => b.id), cursor }).toEqual(expected);
   });
 
-  it('frames exactly the blocks the zoom lists, as percents of the window', () => {
+  it('shows as many blocks before and after as asked', () => {
     // ARRANGE
-    const { rows } = loupeRows(blocks, 65 / WINDOW, WINDOW);
-    const expected = { start: (30 / WINDOW) * 100, size: (70 / WINDOW) * 100 };
+    const expected = ['m5', 'm6', 'm7', 'm8', 'm9', 'm10'];
     // ACT
-    const frame = loupeFrame(rows, WINDOW);
+    const { rows } = loupeRows(blocks, { at: 65 / WINDOW, windowTokens: WINDOW }, { before: 1, after: 4 });
+    // ASSERT
+    expect(rows.map((b) => b.id)).toEqual(expected);
+  });
+
+  it('frames exactly the blocks the zoom lists, as pixels down the bar', () => {
+    // ARRANGE
+    const { rows } = loupeRows(blocks, { at: 65 / WINDOW, windowTokens: WINDOW });
+    const expected = { top: (40 / WINDOW) * BAR.barHeight, height: (50 / WINDOW) * BAR.barHeight };
+    // ACT
+    const frame = loupeFrame(rows, WINDOW, BAR.barHeight);
     // ASSERT
     expect(frame).toEqual(expected);
+  });
+
+  it('frames the two pixels a tiny block really takes, not its share of the window', () => {
+    // ARRANGE
+    const minHeight = 2;
+    const tiny: PlacedBlock[] = [{ key: 't@user', id: 't', cat: 'user', tokens: 1, start: 0 }];
+    // ACT
+    const frame = loupeFrame(tiny, 1_000_000, BAR.barHeight);
+    // ASSERT
+    expect(frame).toEqual({ top: 0, height: minHeight });
   });
 
   it('puts the pointer-tracking tail at the hovered height inside the zoom', () => {
@@ -48,26 +67,35 @@ describe('failure cases', () => {
     // ARRANGE
     const none: PlacedBlock[] = [];
     // ACT
-    const frame = loupeFrame(none, WINDOW);
+    const frame = loupeFrame(none, WINDOW, BAR.barHeight);
     // ASSERT
     expect(frame).toBeNull();
   });
 });
 
 describe('edge cases', () => {
-  it('slides the window at the top and bottom so seven rows still show', () => {
+  it.each([
+    ['first', 0, ['m0', 'm1', 'm2']],
+    ['second', 15, ['m0', 'm1', 'm2', 'm3']],
+    ['second-to-last', 105, ['m8', 'm9', 'm10', 'm11']],
+    ['last', 115, ['m9', 'm10', 'm11']],
+  ])('clamps at the %s block instead of shifting the window', (_name, tokenAt, expected) => {
     // ARRANGE
-    const rowCount = 7;
+    const at = tokenAt / WINDOW;
     // ACT
-    const top = loupeRows(blocks, 0, WINDOW);
-    const bottom = loupeRows(blocks, 1, WINDOW);
+    const { rows } = loupeRows(blocks, { at, windowTokens: WINDOW });
     // ASSERT
-    expect([top.rows[0]?.id, top.rows.length, bottom.rows.at(-1)?.id, bottom.cursor]).toEqual([
-      'm0',
-      rowCount,
-      'm11',
-      'm11@user',
-    ]);
+    expect(rows.map((b) => b.id)).toEqual(expected);
+  });
+
+  it('clamps a custom window at both ends', () => {
+    // ARRANGE
+    const around = { before: 0, after: 1 };
+    // ACT
+    const last = loupeRows(blocks, { at: 1, windowTokens: WINDOW }, around);
+    const first = loupeRows(blocks, { at: 0, windowTokens: WINDOW }, { before: 3, after: 0 });
+    // ASSERT
+    expect([last.rows.map((b) => b.id), first.rows.map((b) => b.id)]).toEqual([['m11'], ['m0']]);
   });
 
   it('keeps the tail inside the zoom when the zoom is pushed against the top of the bar', () => {

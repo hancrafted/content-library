@@ -4,6 +4,7 @@ import type { Attention } from './context-usage.pure';
 import type { ContextWords } from './context-words.types';
 import type { Frame } from './context.pure';
 import type { AttentionLayout, Category, Chat, RenderMode, StepNotes, StepStory, WindowSize } from './context.types';
+import type { Around } from './loupe.pure';
 
 /* What the parent hands each part: a slice of its state, never the whole of it. Parts are controlled: they hold no
  * state of the Context, and tell the parent what happened through callbacks. */
@@ -91,6 +92,8 @@ export interface ContextWindowProps extends Lighting, LightingEvents, Speech {
   readonly onSize: (index: number) => void;
   /** The smart-zone side column and the limit label are shown; the dashed lines stay either way. */
   readonly zone: boolean;
+  /** How many blocks the zoom shows before and after the hovered one; at most `before + 1 + after`. Default 2 and 2. */
+  readonly zoom?: Around;
   /** The head's icon buttons, in order: the smart-zone column, the local Technical. */
   readonly toggles: readonly HeadToggle[];
 }

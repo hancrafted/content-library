@@ -5,11 +5,11 @@ import { catLabel, fill, k, type Say } from './context-view';
 import styles from './context.module.css';
 import type { PlacedBlock } from './context.pure';
 import { colourOf } from './context.pure';
-import { loupeFrame, loupePlacement, loupeRows, ROWS } from './loupe.pure';
+import { loupeFrame, loupePlacement, loupeRows } from './loupe.pure';
 import { tint, vars } from './window-bits';
 
 /*
- * The loupe: while a mouse is over the bar, the seven blocks around it as rows big enough to hover and click. The bar
+ * The loupe: while a mouse is over the bar, the blocks around it as rows big enough to hover and click. The bar
  * stays true to scale (a 28-token message is 0.003% of 1M); the loupe is the way in. A tail on its near edge, at the
  * pointer's height, bridges the gap to the bar and is part of the loupe, so the pointer never leaves it on the way.
  */
@@ -115,9 +115,9 @@ function LoupeList({ p, say, rows, cursor }: ListProps) {
 
 export function Loupe({ p, say, at, bar, onEnter, onLeave }: LoupeProps) {
   const barHeight = bar.current?.clientHeight ?? 0;
-  const { rows, cursor } = loupeRows(p.frame.blocks, at, p.window.tokens);
+  const { rows, cursor } = loupeRows(p.frame.blocks, { at, windowTokens: p.window.tokens }, p.zoom);
   if (!rows.length) return null;
-  const { y, tail } = loupePlacement({ at, barHeight, height: (ROWS + 1) * 36 });
+  const { y, tail } = loupePlacement({ at, barHeight, height: (rows.length + 1) * 36 });
   return (
     <div
       className={`${styles.loupe} ${styles.surface}`}
@@ -134,8 +134,23 @@ export function Loupe({ p, say, at, bar, onEnter, onLeave }: LoupeProps) {
 }
 
 /** The frame on the bar round exactly the blocks the loupe shows. */
-export function Lens({ p, at }: { readonly p: ContextWindowProps; readonly at: number }) {
-  const frame = loupeFrame(loupeRows(p.frame.blocks, at, p.window.tokens).rows, p.window.tokens);
+export function Lens({
+  p,
+  at,
+  bar,
+}: {
+  readonly p: ContextWindowProps;
+  readonly at: number;
+  readonly bar: RefObject<HTMLDivElement | null>;
+}) {
+  const { rows } = loupeRows(p.frame.blocks, { at, windowTokens: p.window.tokens }, p.zoom);
+  const frame = loupeFrame(rows, p.window.tokens, bar.current?.clientHeight ?? 0);
   if (!frame) return null;
-  return <div className={styles.lens} aria-hidden="true" style={vars({ '--s': frame.start, '--z': frame.size })} />;
+  return (
+    <div
+      className={styles.lens}
+      aria-hidden="true"
+      style={vars({ '--top': `${frame.top}px`, '--h': `${frame.height}px` })}
+    />
+  );
 }
