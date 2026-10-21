@@ -2,46 +2,44 @@
   "title": "What happens with one prompt",
   "heading": "One prompt, one polished plan",
   "caption": "It looks finished. Look closer.",
+  "promptLabel": "The one prompt",
   "prompt": "Plan next year's summer party for 200 employees across Europe.",
-  "cracksLabel": "One crack per trait",
+  "stackLabel": "12 documents back, polished",
+  "traitsLabel": "What each trait left in the plan",
   "cracks": {
-    "informed": {
-      "trait": "Informed",
-      "crack": "Paintball, picked from a thousand team-building activities, because they don't know your culture."
-    },
-    "confident": {
-      "trait": "Confident",
-      "crack": "Venue prices that look like facts, and are made up."
-    },
     "probabilistic": {
       "trait": "Probabilistic",
-      "crack": "Ask again, and a whole new plan: Lisbon instead of Berlin."
+      "why": "Ask again, and you get a whole new plan.",
+      "produced": "Plan v1: Lisbon, 14 June. Plan v2: Berlin, 5 July."
     },
     "relentless": {
       "trait": "Relentless",
-      "crack": "Hotels compared in twelve cities by rating, and a pile of documents."
+      "why": "Never asked where your people travel from, and buried you in documents.",
+      "produced": "Picked the top 10 hotels on Tripadvisor, regardless of location"
+    },
+    "informed": {
+      "trait": "Informed",
+      "why": "Knows a thousand activities, not your culture.",
+      "produced": "Team activity: paintball, 3 hours, all 200"
+    },
+    "confident": {
+      "trait": "Confident",
+      "why": "Prices that look like facts, and are made up.",
+      "produced": "Venue: €48 per head, catering included, availability confirmed"
     },
     "every-word-billed": {
       "trait": "Every word billed",
-      "crack": "You paid for every page of it."
+      "why": "You paid for every page of it.",
+      "produced": "Invoice: 6,400 words read and written × €0.08"
     }
   },
+  "callout": "<strong>Hard to review.</strong> You are likely to throw it away and do it yourself.",
   "voiceScript": {
     "segments": {
       "one-prompt-in": {
         "title": "One prompt in",
         "keywords": "",
         "script": "So what happens if you just hand them one prompt: plan next year's summer party for 200 employees across Europe? You get a plan. A polished one. Look closer."
-      },
-      "informed": {
-        "title": "Informed",
-        "keywords": "",
-        "script": "They're informed: they know a thousand team-building activities, and they picked paintball, because they don't know your culture."
-      },
-      "confident": {
-        "title": "Confident",
-        "keywords": "",
-        "script": "They're confident: the venue prices look like facts, and they're made up."
       },
       "probabilistic": {
         "title": "Probabilistic",
@@ -52,6 +50,16 @@
         "title": "Relentless",
         "keywords": "",
         "script": "They're relentless: they compared hotels in twelve cities by rating, never asked where your people travel from, and buried you in documents."
+      },
+      "informed": {
+        "title": "Informed",
+        "keywords": "",
+        "script": "They're informed: they know a thousand team-building activities, and they picked paintball, because they don't know your culture."
+      },
+      "confident": {
+        "title": "Confident",
+        "keywords": "",
+        "script": "They're confident: the venue prices look like facts, and they're made up."
       },
       "every-word-billed": {
         "title": "Every word billed",
