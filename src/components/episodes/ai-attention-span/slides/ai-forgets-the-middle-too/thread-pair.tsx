@@ -1,4 +1,3 @@
-import { CallSteps } from '@/components/slide-shared/call-transcript/call-steps.client';
 import {
   callBubbleClass,
   type CallLight,
@@ -7,7 +6,6 @@ import {
 import type { TargetProps } from '@/lib/context-link.pure';
 import { cn } from '@/lib/utils';
 import type { ReactNode } from 'react';
-import styles from './thread-pair.module.css';
 
 /** The four bands both threads share, in reading order. */
 export type Band = 'start' | 'middle' | 'standout' | 'end';
@@ -27,8 +25,6 @@ export interface BandCopy {
 }
 
 export interface ThreadPairCopy {
-  /** The steps' accessible name, which says what replays. */
-  readonly stepsLabel: string;
   readonly sister: { readonly name: string; readonly meta: string };
   readonly ai: { readonly name: string; readonly meta: string };
   readonly bands: Readonly<Record<Band, BandCopy>>;
@@ -70,9 +66,6 @@ const THREADS: Readonly<Record<Band, { readonly left: readonly Line[]; readonly 
     right: [line('you', 'lit'), line('ai', 'lit')],
   },
 };
-
-/** The step the last band lights: 1 the start, 2 the end, 3 the middle fades, 4 the standouts and the bottom line. */
-const LAST_STEP = 4;
 
 function ToolIcon() {
   return (
@@ -134,10 +127,7 @@ function Pill({ copy }: { copy: BandCopy }) {
       <span
         {...copy.target}
         data-pill=""
-        className={cn(
-          'inline-flex items-center gap-1 rounded-full bg-foreground px-3 py-1 text-caption font-semibold text-background',
-          styles.pill,
-        )}
+        className="inline-flex items-center gap-1 rounded-full bg-foreground px-3 py-1 text-caption font-semibold text-background"
       >
         {copy.pill}
         {copy.marker}
@@ -214,15 +204,12 @@ function assertBands(copy: ThreadPairCopy) {
 
 /**
  * The sister thread and the summer-party chat side by side in one frame, aligned on four shared bands (Spec Option
- * 2a), so the same lighting visibly lands on both. Its one emphasis motion is four lighting steps on `CallSteps`: the
- * start rows light, then the end rows, the middle rows fade, the cake and the 12 vegetarian guests light with the
- * bottom line. The steps and their reduced-motion end state live in `thread-pair.module.css`; the static HTML is the
- * end state. Pointing at a line dims the others on both sides. Below a wide frame the pill sits above its two threads.
+ * 2a), so the same lighting visibly lands on both. Everything shows at rest and enters with the Slide; nothing steps in. Pointing at a line dims the others on both sides. Below a wide frame the pill sits above its two threads.
  */
 export function ThreadPair({ copy }: { copy: ThreadPairCopy }) {
   assertBands(copy);
   return (
-    <CallSteps last={LAST_STEP} label={copy.stepsLabel} className={cn('flex flex-col gap-6', styles.steps)}>
+    <div className="flex flex-col gap-6">
       <div className="@container flex flex-col gap-6 rounded-3xl border border-border bg-card p-4 shadow-md @xl:p-6">
         <Heads copy={copy} />
         <div className="focus-group focus-group--dim-others flex flex-col gap-5">
@@ -240,9 +227,9 @@ export function ThreadPair({ copy }: { copy: ThreadPairCopy }) {
           ))}
         </div>
       </div>
-      <p data-bottom-line="" className={cn('text-subheading font-semibold', styles.bottomLine)}>
+      <p data-bottom-line="" className="text-subheading font-semibold">
         {copy.bottomLine}
       </p>
-    </CallSteps>
+    </div>
   );
 }

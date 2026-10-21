@@ -77,7 +77,6 @@ export const aiForgetsTheMiddleToo = slide({
       <SlideFrame className="gap-6">
         <ThreadPair
           copy={{
-            stepsLabel: t('stepsLabel'),
             sister: { name: t('sister.name'), meta: t('sister.meta') },
             ai: { name: t('ai.name'), meta: t('ai.meta') },
             bands: {

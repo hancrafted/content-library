@@ -15,7 +15,6 @@ const band = (name: string, left: number, right: number) => ({
 });
 
 const COPY: ThreadPairCopy = {
-  stepsLabel: 'Both threads, step by step',
   sister: { name: 'Sister', meta: 'Call · 1:21:40' },
   ai: { name: 'Summer party', meta: 'Chat with AI · one hour' },
   bands: {
@@ -99,13 +98,13 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('renders the end state in the static HTML, with the bottom line inside the steps', () => {
+  it('shows everything at rest, with no lighting steps', () => {
     // ARRANGE
-    const expected = { step: '4', bottomLine: COPY.bottomLine };
+    const expected = { steps: 0, bottomLine: COPY.bottomLine };
     // ACT
     const $ = render();
     // ASSERT
-    expect($('[data-step]').attr('data-step')).toBe(expected.step);
-    expect($('[data-step] [data-bottom-line]').text()).toBe(expected.bottomLine);
+    expect($('[data-step]').length).toBe(expected.steps);
+    expect($('[data-bottom-line]').text()).toBe(expected.bottomLine);
   });
 });
