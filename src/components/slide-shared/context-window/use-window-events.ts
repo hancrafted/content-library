@@ -8,6 +8,7 @@ import {
   type RefObject,
 } from 'react';
 import type { View } from './context-view';
+import { revealBubble } from './window-reveal';
 
 /*
  * The cornerstone's pointer, focus and key wiring on its root: hovering a part lights it, clicking pins it, a click
@@ -38,8 +39,20 @@ function useOutsideClick(v: View, root: RefObject<HTMLElement | null>) {
   }, [dispatch, root]);
 }
 
+/** A click on a part pins it, and shows the chat's bubble for it. */
+function usePin(v: View, root: RefObject<HTMLElement | null>) {
+  const { dispatch } = v;
+  return (target: EventTarget | null) => {
+    const part = partOf(target);
+    if (!part) return;
+    dispatch({ type: 'PIN', part });
+    revealBubble(root.current, part, target);
+  };
+}
+
 export function useWindowEvents(v: View, root: RefObject<HTMLElement | null>) {
   useOutsideClick(v, root);
+  const pin = usePin(v, root);
   const { dispatch } = v;
   const hover = v.state.hover;
   return {
@@ -52,10 +65,7 @@ export function useWindowEvents(v: View, root: RefObject<HTMLElement | null>) {
     onPointerLeave: (event: PointerEvent<HTMLElement>) => {
       if (event.pointerType === 'mouse' && hover) dispatch({ type: 'HOVER_END' });
     },
-    onClick: (event: MouseEvent<HTMLElement>) => {
-      const part = partOf(event.target);
-      if (part) dispatch({ type: 'PIN', part });
-    },
+    onClick: (event: MouseEvent<HTMLElement>) => pin(event.target),
     onFocus: (event: FocusEvent<HTMLElement>) => {
       const part = isFocusLight(event.target) ? partOf(event.target) : null;
       if (part && part !== hover) dispatch({ type: 'HOVER', part });

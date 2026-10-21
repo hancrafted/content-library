@@ -3,6 +3,7 @@ import { fullTokens, percentText } from './context-format.pure';
 import { catLabel, fill, k, type View } from './context-view';
 import styles from './context-window.module.css';
 import { colourOf, type Frame, type PlacedBlock } from './context-window.pure';
+import { loupeRows } from './loupe.pure';
 import { tint, vars } from './window-bits';
 import { Lens, Loupe, useLoupe } from './window-loupe';
 import { Grid, Usage } from './window-usage';
@@ -51,31 +52,57 @@ function WindowSwitch({ v }: { readonly v: View }) {
 
 const pct = (v: View, tokens: number) => (tokens / v.window.tokens) * 100;
 
-function Blocks({ v, places }: { readonly v: View; readonly places: ReadonlyMap<string, PlacedBlock> }) {
+function BlockButton(props: {
+  readonly v: View;
+  readonly block: PlacedBlock;
+  readonly at: PlacedBlock;
+  readonly first: boolean;
+  readonly inWindow: boolean;
+  readonly hot: boolean;
+}) {
+  const { v, block, at, first, inWindow, hot } = props;
+  const label = fill(v.words.blockLabel, {
+    category: catLabel(v, block.cat),
+    step: v.stepOf.get(block.id) ?? 0,
+    tokens: fullTokens(at.tokens, v.locale),
+  });
+  return (
+    <button
+      type="button"
+      className={styles.block}
+      data-part={block.key}
+      data-hot={hot ? '' : undefined}
+      data-out={inWindow ? undefined : ''}
+      data-on={inWindow && v.match(block.id, block.cat) ? '' : undefined}
+      tabIndex={first ? 0 : -1}
+      aria-pressed={v.state.pinned === block.key}
+      aria-label={label}
+      style={tint(colourOf(block.cat, v.state.depth), { '--s': pct(v, at.start), '--z': pct(v, at.tokens) })}
+    />
+  );
+}
+
+interface BlocksProps {
+  readonly v: View;
+  readonly places: ReadonlyMap<string, PlacedBlock>;
+  /** The block under the pointer while the loupe is open: it grows a little, by transform only. */
+  readonly hot: string;
+}
+
+function Blocks({ v, places, hot }: BlocksProps) {
   const now = new Map(v.frame.blocks.map((b) => [b.key, b]));
   const first = v.frame.blocks[0]?.key;
-  return [...places.values()].map((block) => {
-    const at = now.get(block.key) ?? block;
-    const label = fill(v.words.blockLabel, {
-      category: catLabel(v, block.cat),
-      step: v.stepOf.get(block.id) ?? 0,
-      tokens: fullTokens(at.tokens, v.locale),
-    });
-    return (
-      <button
-        key={block.key}
-        type="button"
-        className={styles.block}
-        data-part={block.key}
-        data-out={now.has(block.key) ? undefined : ''}
-        data-on={now.has(block.key) && v.match(block.id, block.cat) ? '' : undefined}
-        tabIndex={block.key === first ? 0 : -1}
-        aria-pressed={v.state.pinned === block.key}
-        aria-label={label}
-        style={tint(colourOf(block.cat, v.state.depth), { '--s': pct(v, at.start), '--z': pct(v, at.tokens) })}
-      />
-    );
-  });
+  return [...places.values()].map((block) => (
+    <BlockButton
+      key={block.key}
+      v={v}
+      block={block}
+      at={now.get(block.key) ?? block}
+      first={block.key === first}
+      inWindow={now.has(block.key)}
+      hot={block.key === hot}
+    />
+  ));
 }
 
 /** One outline round a lit step's blocks, or a dashed empty one where a pinned step will land. */
@@ -140,6 +167,7 @@ function Bar({ v, onRove }: Props) {
   const places = useMemo(() => firstPlaces(v.frames), [v.frames]);
   const bar = useRef<HTMLDivElement>(null);
   const loupe = useLoupe(bar, !v.tech);
+  const hot = loupe.at === null ? '' : loupeRows(v.frame.blocks, loupe.at, v.window.tokens).cursor;
   return (
     <>
       <div
@@ -151,7 +179,7 @@ function Bar({ v, onRove }: Props) {
         onKeyDown={onRove}
         {...loupe.handlers}
       >
-        <Blocks v={v} places={places} />
+        <Blocks v={v} places={places} hot={hot} />
         <div className={styles.buffer} aria-hidden="true" style={vars({ '--z': pct(v, v.window.bufferTokens) })} />
         <Outline v={v} places={places} />
         {loupe.at === null ? null : <Lens v={v} at={loupe.at} />}

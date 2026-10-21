@@ -3,24 +3,17 @@ import { catLabel, fill, k, type View } from './context-view';
 import styles from './context-window.module.css';
 import type { PlacedBlock } from './context-window.pure';
 import { colourOf } from './context-window.pure';
+import { loupeFrame, loupePlacement, loupeRows, ROWS } from './loupe.pure';
 import { tint, vars } from './window-bits';
 
 /*
  * The loupe: while a mouse is over the bar, the seven blocks around it as rows big enough to hover and click. The bar
- * stays true to scale (a 28-token message is 0.003% of 1M); the loupe is the way in.
+ * stays true to scale (a 28-token message is 0.003% of 1M); the loupe is the way in. A tail on its near edge, at the
+ * pointer's height, bridges the gap to the bar and is part of the loupe, so the pointer never leaves it on the way.
  */
 
-const ROWS = 7;
-const LEAVE_MS = 250;
-
-/** The seven blocks around a point of the bar, and the one under it. */
-export function loupeRows(blocks: readonly PlacedBlock[], at: number, windowTokens: number) {
-  const t = at * windowTokens;
-  let i = blocks.findIndex((b) => t >= b.start && t < b.start + b.tokens);
-  if (i < 0) i = t < (blocks[0]?.start ?? 0) ? 0 : blocks.length - 1;
-  const from = Math.max(0, Math.min(blocks.length - ROWS, i - 3));
-  return { rows: blocks.slice(from, from + ROWS), cursor: blocks[i]?.key ?? '' };
-}
+// Long enough to cross the tail's bridge from the bar at a slow pace.
+const LEAVE_MS = 400;
 
 const hoverCapable = () => window.matchMedia('(hover: hover)').matches;
 
@@ -90,17 +83,17 @@ export function Loupe({ v, at, bar, onEnter, onLeave }: LoupeProps) {
   const { rows, cursor } = loupeRows(v.frame.blocks, at, v.window.tokens);
   if (!rows.length) return null;
   const total = rows.reduce((sum, b) => sum + b.tokens, 0);
-  const height = (ROWS + 1) * 36;
-  const y = Math.max(0, Math.min(barHeight - height, at * barHeight - height / 2));
+  const { y, tail } = loupePlacement({ at, barHeight, height: (ROWS + 1) * 36 });
   return (
     <div
       className={`${styles.loupe} ${styles.surface}`}
       role="group"
       aria-label={v.words.zoom}
-      style={vars({ '--y': `${y}px` })}
+      style={vars({ '--y': `${y}px`, '--tail': `${tail}px` })}
       onPointerEnter={onEnter}
       onPointerLeave={onLeave}
     >
+      <div className={styles.loupeTail} data-part={cursor} aria-hidden="true" />
       <div className={styles.loupeTitle}>
         <span>{v.words.zoomTitle}</span>
         <span>{fill(v.words.zoomTokens, { tokens: k(v, total) })}</span>
@@ -112,18 +105,9 @@ export function Loupe({ v, at, bar, onEnter, onLeave }: LoupeProps) {
   );
 }
 
-/** The frame on the bar around the blocks the loupe shows. */
+/** The frame on the bar round exactly the blocks the loupe shows. */
 export function Lens({ v, at }: { readonly v: View; readonly at: number }) {
-  const { rows } = loupeRows(v.frame.blocks, at, v.window.tokens);
-  const first = rows[0];
-  const last = rows.at(-1);
-  if (!first || !last) return null;
-  const pct = (n: number) => (n / v.window.tokens) * 100;
-  return (
-    <div
-      className={styles.lens}
-      aria-hidden="true"
-      style={vars({ '--s': pct(first.start), '--z': pct(last.start + last.tokens - first.start) })}
-    />
-  );
+  const frame = loupeFrame(loupeRows(v.frame.blocks, at, v.window.tokens).rows, v.window.tokens);
+  if (!frame) return null;
+  return <div className={styles.lens} aria-hidden="true" style={vars({ '--s': frame.start, '--z': frame.size })} />;
 }

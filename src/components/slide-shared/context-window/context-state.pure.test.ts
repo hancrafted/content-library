@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { blockedBy, createState, ghostOf, matcher, reduce } from './context-state.pure';
+import { blockedBy, createState, ghostOf, matcher, panelKey, reduce } from './context-state.pure';
 import type { Chat, Preset } from './context-window.types';
 
 const CHAT: Chat = {
@@ -39,6 +39,13 @@ const PRESET: Preset = {
 };
 const CONTEXT = { preset: PRESET, steps: CHAT.steps.length };
 
+const view = (mode: 'explain' | 'attention', lit: string | null) => ({
+  mode,
+  depth: 'simple' as const,
+  lit,
+  ghost: null,
+});
+
 describe('success cases', () => {
   it('switches the window size when the Preset offers two', () => {
     // ARRANGE
@@ -57,6 +64,15 @@ describe('success cases', () => {
     const twice = reduce(once, { type: 'PIN', part: 'm2' }, CONTEXT);
     // ASSERT
     expect([once.pinned, twice.pinned]).toEqual(expected);
+  });
+
+  it('changes the panel key with what Explain explains and with the mode', () => {
+    // ARRANGE
+    const resting = panelKey(view('explain', null));
+    // ACT
+    const keys = [panelKey(view('explain', 'm3')), panelKey(view('attention', null))];
+    // ASSERT
+    expect(keys.map((key) => key === resting)).toEqual([false, false]);
   });
 });
 
@@ -129,5 +145,14 @@ describe('edge cases', () => {
     const next = reduce(createState(PRESET), { type: 'COMMIT', step: 40 }, CONTEXT);
     // ASSERT
     expect(next.step).toBe(expected);
+  });
+
+  it('keeps the same panel key while Attention is lit, so hovering a row never remounts the card', () => {
+    // ARRANGE
+    const resting = panelKey(view('attention', null));
+    // ACT
+    const lit = panelKey(view('attention', 'm3'));
+    // ASSERT
+    expect(lit).toBe(resting);
   });
 });

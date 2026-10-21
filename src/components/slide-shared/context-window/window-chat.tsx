@@ -100,12 +100,16 @@ function useArrivals(vis: number) {
 export function ChatColumn({ v }: { readonly v: View }) {
   const scroll = useNewest(v);
   const delayOf = useArrivals(v.vis);
-  const hint = !v.state.hintSeen && !v.preset.timelineLocked && v.state.parts.timeline;
+  const hint = !v.preset.timelineLocked && v.state.parts.timeline;
   return (
     <section className={styles.chat} aria-label={v.words.chat}>
       <div className={styles.head}>
         <b className="font-semibold">{v.words.parts.chat}</b>
-        {hint ? <span className={styles.hint}>{v.words.hint}</span> : null}
+        {hint ? (
+          <span className={styles.hint} data-seen={flag(v.state.hintSeen)} aria-hidden={v.state.hintSeen || undefined}>
+            {v.words.hint}
+          </span>
+        ) : null}
       </div>
       <div className={`${styles.phone} ${styles.surface}${v.tech ? ' font-mono' : ''}`}>
         <div className={styles.appbar} aria-hidden="true">
