@@ -113,4 +113,3 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 
 - [Next.js — Project Structure](https://nextjs.org/docs/app/getting-started/project-structure) — folder-as-route.
 - [dependency-cruiser — rules reference](https://github.com/sverweij/dependency-cruiser/blob/main/doc/rules-reference.md) — `forbidden`, `required`, `circular`.
-- [`docs/research/adr-candidates.md`](../../docs/research/adr-candidates.md) §2 — the survey this record came from.
