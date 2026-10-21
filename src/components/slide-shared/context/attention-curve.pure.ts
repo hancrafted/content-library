@@ -1,7 +1,8 @@
 /*
  * The Attention part's distribution curve: how the 100 units split over the rows of the window, oldest first. The
  * first three rows are the `start`, the last three the `newest`, the seven before them the `recent`, and every row
- * between is the `middle`, where a seeded random gives one or two rows a clearly larger share.
+ * between is the `middle`, where a seeded random gives one or two rows a clearly larger share. The very first row of the start bucket
+ * is the attention sink: clearly above the next two, which are flat, all with a little seeded jitter.
  */
 
 export type CurveKey = 'start' | 'recent' | 'middle' | 'newest';
@@ -15,8 +16,18 @@ export const CURVE_KEYS: readonly CurveKey[] = ['start', 'recent', 'middle', 'ne
  * middle, many rows, still gets a quarter, its seeded peaks keeping the "lost in the middle" rows visible.
  */
 export const DEFAULT_CURVE: Curve = { start: 20, recent: 20, middle: 25, newest: 35 };
-/** How the newest bucket splits over its rows, newest first, as relative weights: 50/30/20 of the bucket. */
-export const DEFAULT_FALLOFF: readonly number[] = [50, 30, 20];
+/**
+ * How two buckets split over their rows, as relative weights. `start` runs oldest first: the very first row (the
+ * system prompt, where the attention sink sits) clearly above the next two, which fall flat. `newest` runs newest
+ * first: 50/30/20 of the bucket.
+ */
+export interface Falloff {
+  readonly start: readonly number[];
+  readonly newest: readonly number[];
+}
+export const DEFAULT_FALLOFF: Falloff = { start: [50, 25, 25], newest: [50, 30, 20] };
+/** How far a start row's weight may wander, as a fraction, by the seeded random (0.15 is 85% to 115%). */
+const START_JITTER = 0.15;
 
 /** Rows at the start and at the newest end that never compress, and how many rows the recent bucket spans. */
 export const EDGE = 3;
@@ -64,6 +75,15 @@ function newestWeights(count: number, falloff: readonly number[]): number[] {
   return Array.from({ length: count }, (_, i) => falloff[count - 1 - i] ?? falloff.at(-1) ?? 1);
 }
 
+/** The start rows' weights, oldest first: the Preset's, each wandering a little by a random seeded from the ids. */
+function startWeights(count: number, falloff: readonly number[], ids: readonly string[]): number[] {
+  const next = random(seedOf(['start', ...ids]));
+  return Array.from({ length: count }, (_, i) => {
+    const base = falloff[i] ?? falloff.at(-1) ?? 1;
+    return base * (1 - START_JITTER + next() * 2 * START_JITTER);
+  });
+}
+
 /** Relative weights inside a bucket: equal, the recent rows fall off linearly, the middle is seeded. */
 function inside(key: CurveKey, count: number, ids: readonly string[]): number[] {
   if (key === 'middle') return middleWeights(count, random(seedOf(ids)));
@@ -71,15 +91,18 @@ function inside(key: CurveKey, count: number, ids: readonly string[]): number[] 
   return Array.from({ length: count }, () => 1);
 }
 
+/** The relative weights of one bucket's rows, oldest first. */
+function relativeOf(key: CurveKey, falloff: Falloff, span: readonly string[]): number[] {
+  const count = span.length;
+  if (key === 'newest') return newestWeights(count, falloff.newest);
+  return key === 'start' ? startWeights(count, falloff.start, span) : inside(key, count, span);
+}
+
 /**
  * The share of each row, oldest first, summing to 100. A bucket with no rows gives its share to the others in
  * proportion to theirs.
  */
-export function curveWeights(
-  ids: readonly string[],
-  curve: Curve,
-  falloff: readonly number[] = DEFAULT_FALLOFF,
-): number[] {
+export function curveWeights(ids: readonly string[], curve: Curve, falloff: Falloff = DEFAULT_FALLOFF): number[] {
   const count = ids.length;
   if (count === 0) return [];
   const keys = ids.map((_, i) => bucketOf(i, count));
@@ -90,7 +113,7 @@ export function curveWeights(
     const at = keys.flatMap((k, i) => (k === key ? [i] : []));
     const share = total > 0 ? (curve[key] / total) * 100 : 100 / present.length;
     const span = ids.slice(at[0], (at.at(-1) ?? 0) + 1);
-    const relative = key === 'newest' ? newestWeights(at.length, falloff) : inside(key, at.length, span);
+    const relative = relativeOf(key, falloff, span);
     const whole = relative.reduce((a, b) => a + b, 0);
     at.forEach((row, j) => (out[row] = (share * (relative[j] ?? 0)) / whole));
   }
@@ -147,10 +170,13 @@ export function curveProblems(curve: Curve): string[] {
   return total === 100 ? [] : [`attention curve must sum to 100, got ${total}`];
 }
 
-/** What is wrong with a Preset's newest-bucket falloff: one positive weight per newest row, newest first. */
-export function falloffProblems(falloff: readonly number[]): string[] {
-  const good = falloff.length === EDGE && falloff.every((w) => Number.isFinite(w) && w > 0);
-  return good ? [] : [`attention falloff must be ${EDGE} positive numbers, newest first`];
+/** What is wrong with a Preset's falloff: per bucket, one positive weight per edge row. */
+export function falloffProblems(falloff: Falloff): string[] {
+  const good = (w: readonly number[]) => w.length === EDGE && w.every((n) => Number.isFinite(n) && n > 0);
+  return [
+    ...(good(falloff.start) ? [] : [`attention falloff.start must be ${EDGE} positive numbers, oldest first`]),
+    ...(good(falloff.newest) ? [] : [`attention falloff.newest must be ${EDGE} positive numbers, newest first`]),
+  ];
 }
 
 /**

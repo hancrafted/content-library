@@ -5,6 +5,7 @@ import {
   curveProblems,
   curveWeights,
   DEFAULT_CURVE,
+  DEFAULT_FALLOFF,
   falloffProblems,
   normalizeCurve,
   setShare,
@@ -129,7 +130,7 @@ describe('success cases', () => {
 
   it('follows a Preset falloff, newest first', () => {
     // ARRANGE
-    const falloff = [1, 1, 2];
+    const falloff = { ...DEFAULT_FALLOFF, newest: [1, 1, 2] };
     const bucket = DEFAULT_CURVE.newest;
     const expected = [bucket * 0.5, bucket * 0.25, bucket * 0.25];
     // ACT
@@ -138,19 +139,43 @@ describe('success cases', () => {
     actual.forEach((w, i) => expect(w).toBeCloseTo(expected[i] ?? 0, PRECISION));
   });
 
-  it('keeps the start bucket equal', () => {
+  it('gives the very first row a clearly higher share than the next two, which stay flat-ish', () => {
     // ARRANGE
     const rows = 28;
+    const clearly = 1.3;
+    const flat = 0.35;
     // ACT
-    const [a, b, c] = curveWeights(ids(rows), DEFAULT_CURVE);
+    const [first, b, c] = curveWeights(ids(rows), DEFAULT_CURVE);
     // ASSERT
-    expect(b).toBeCloseTo(a ?? 0, PRECISION);
-    expect(c).toBeCloseTo(a ?? 0, PRECISION);
+    expect(first).toBeGreaterThan(clearly * Math.max(b ?? 0, c ?? 0));
+    expect(Math.abs((b ?? 0) - (c ?? 0))).toBeLessThan(flat * (b ?? 1));
+  });
+
+  it('keeps the start jitter deterministic per ids and different between chats', () => {
+    // ARRANGE
+    const other = ids(28).map((id) => `x${id}`);
+    // ACT
+    const again = curveWeights(ids(28), DEFAULT_CURVE).slice(0, 3);
+    const same = curveWeights(ids(28), DEFAULT_CURVE).slice(0, 3);
+    const different = curveWeights(other, DEFAULT_CURVE).slice(0, 3);
+    // ASSERT
+    expect(again).toEqual(same);
+    expect(different).not.toEqual(again);
+  });
+
+  it('follows a Preset start falloff without jitter dominating it', () => {
+    // ARRANGE
+    const falloff = { ...DEFAULT_FALLOFF, start: [1, 1, 1] };
+    const spread = 1.4;
+    // ACT
+    const [a, b, c] = curveWeights(ids(28), DEFAULT_CURVE, falloff).slice(0, 3);
+    // ASSERT
+    expect(Math.max(a ?? 0, b ?? 0, c ?? 0)).toBeLessThan(spread * Math.min(a ?? 0, b ?? 0, c ?? 0));
   });
 
   it('accepts a falloff of three positive numbers', () => {
     // ARRANGE
-    const falloff = [50, 30, 20];
+    const falloff = DEFAULT_FALLOFF;
     // ACT
     const actual = falloffProblems(falloff);
     // ASSERT
@@ -232,12 +257,13 @@ describe('failure cases', () => {
   });
   it('rejects a falloff that is not three positive numbers', () => {
     // ARRANGE
-    const short = [50, 30];
-    const zero = [50, 0, 20];
+    const short = { ...DEFAULT_FALLOFF, newest: [50, 30] };
+    const zero = { ...DEFAULT_FALLOFF, newest: [50, 0, 20] };
+    const badStart = { ...DEFAULT_FALLOFF, start: [50, -1, 20] };
     // ACT
-    const actual = [falloffProblems(short).length, falloffProblems(zero).length];
+    const actual = [short, zero, badStart].map((f) => falloffProblems(f).length);
     // ASSERT
-    expect(actual).toEqual([1, 1]);
+    expect(actual).toEqual([1, 1, 1]);
   });
 });
 

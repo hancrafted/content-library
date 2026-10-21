@@ -60,6 +60,7 @@ const AttentionRow = memo(function AttentionRow({ say, step, units, max, on, pin
         <i style={tint(colour, { '--w': Math.min(1, units / max) })} />
       </div>
       <span className={say.tech ? `${styles.attNum} font-mono` : styles.attNum}>{say.tech ? units : ''}</span>
+      <span className={`${styles.attPct} text-caption font-mono`} data-pct="" aria-hidden="true">{`${units}%`}</span>
     </div>
   );
 });
