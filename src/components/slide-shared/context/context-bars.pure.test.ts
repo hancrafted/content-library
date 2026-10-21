@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { barModel, durationText, sessionParts } from './context-bars.pure';
+import { barModel, SESSION_END, sessionParts } from './context-bars.pure';
 import type { Chat, MiniBar, WindowSize } from './context.types';
 
 const WINDOW: WindowSize = { tokens: 200000, bufferTokens: 16500, lines: [] };
@@ -67,13 +67,17 @@ describe('success cases', () => {
     ]);
   });
 
-  it('says a duration in hours and minutes', () => {
+  it('fills every segment for the end of the session and gives each its own tone', () => {
     // ARRANGE
-    const words = { hours: 'h', minutes: 'min' };
+    const expected = [
+      ['done', 0],
+      ['done', 1],
+      ['done', 2],
+    ];
     // ACT
-    const said = [durationText(82, words), durationText(40, words), durationText(120, words)];
+    const parts = sessionParts(SECTIONS, SESSION_END);
     // ASSERT
-    expect(said).toEqual(['1 h 22 min', '40 min', '2 h']);
+    expect(parts.map((p) => [p.state, p.tone])).toEqual(expected);
   });
 });
 
