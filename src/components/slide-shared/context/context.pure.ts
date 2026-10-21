@@ -1,4 +1,4 @@
-import type { Block, Category, Chat, Depth, MiniBar, SimpleCategory, Step, WindowSize } from './context.types';
+import type { Block, Category, Chat, Depth, SimpleCategory, Step } from './context.types';
 
 /*
  * The context window cornerstone's model core: categories and the window at every step. Pure, word-free and DOM-free;
@@ -131,11 +131,3 @@ export const compactStepOf = (chat: Chat): number | null => {
 /** Which categories a chat ever holds, so its rows stay fixed while it steps. */
 export const categoriesOf = (chat: Chat): ReadonlySet<Category> =>
   new Set(chat.steps.flatMap((step) => step.blocks.map((block) => block.cat)));
-
-/** A static mini bar: the window of a chat at a step, its last step when the step is past its end. */
-export function miniFigure(chat: Chat, bar: Pick<MiniBar, 'step'>, window: WindowSize) {
-  const frames = framesOf(chat);
-  const frame = frames[bar.step - 1] ?? frames.at(-1);
-  const used = frame?.used ?? 0;
-  return { blocks: frame?.blocks ?? [], used, percent: (used / window.tokens) * 100 };
-}

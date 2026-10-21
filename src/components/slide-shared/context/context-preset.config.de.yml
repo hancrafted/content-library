@@ -97,12 +97,16 @@ words:
     matt-1m: { label: Smart Zone nach Matt Pocock, who: Matt Pocock }
     han: { label: Smart Zone nach Han, who: Han }
   mini:
-    used: '{percent} % belegt'
+    usedOf: '{used} von {window} · {percent} %'
     discarded: verworfen
+    hours: Std.
+    minutes: Min.
     labels:
       old: Alter Chat
       fresh: Neuer Chat
       summer: Sommerfest
+      summer-chat: Der Sommerfest-Chat
+      call: Das Gespräch
       planner: Planer
       venues: 'Helfer: Orte'
       catering: 'Helfer: Catering'

@@ -5,11 +5,11 @@
   "slides": [
     {
       "id": "top",
-      "text": "Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst Ein langer Chat verhält sich wie ein langes Telefonat: Seine Aufmerksamkeit ist ein begrenztes Fenster, also steuerst Du, was hineinkommt. Der Sommerfest-Chat 128K von 200K · 64 % Anfang und Neuestes bleiben im Licht Die Mitte rutscht aus der Aufmerksamkeit Freigehalten für Zusammenfassungen · 16,5K Ein Kästchen = 2K · Tokenzahlen nur zur Veranschaulichung"
+      "text": "Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst Ein langer Chat verhält sich wie ein langes Telefonat: Seine Aufmerksamkeit ist ein begrenztes Fenster, also steuerst Du, was hineinkommt. Der Sommerfest-Chat 128K von 200K · 64 % Anfang und Neuestes bleiben im Licht Die Mitte rutscht aus der Aufmerksamkeit Freigehalten für Zusammenfassungen · 16,5K Tokenzahlen nur zur Veranschaulichung"
     },
     {
       "id": "thought-experiment",
-      "text": "Gedankenexperiment Wie Deine Aufmerksamkeit in einem 90-Minuten-Gespräch durchhält 1 Std. 22 Min. , ein Kästchen pro Minute: Anfang, Ende und Peppers Kuchen bleiben hell. …Moment, das Datum haben wir gar nicht festgelegt."
+      "text": "Gedankenexperiment Wie Deine Aufmerksamkeit in einem 90-Minuten-Gespräch durchhält Das Gespräch 1 Std. 22 Min. Ein Block pro Minute: Anfang, Ende und Peppers Kuchen bleiben hell. …Moment, das Datum haben wir gar nicht festgelegt."
     },
     {
       "id": "thought-experiment--the-long-phone-call-story",
@@ -21,7 +21,7 @@
     },
     {
       "id": "the-ais-attention-span",
-      "text": "Die Aufmerksamkeitsspanne der KI Jetzt die Ursache: wie die KI einen Chat im Blick behält. Dasselbe Licht auf dem Fenster: 128K von 200K, die Mitte verblasst. Ein Kästchen = 2K, nur zur Veranschaulichung."
+      "text": "Die Aufmerksamkeitsspanne der KI Jetzt die Ursache: wie die KI einen Chat im Blick behält. Der Sommerfest-Chat 128K von 200K · 64 % Dasselbe Licht auf dem Fenster: 128K von 200K, die Mitte verblasst. Tokenzahlen nur zur Veranschaulichung."
     },
     {
       "id": "the-ais-attention-span--the-context-window",
@@ -41,7 +41,7 @@
     },
     {
       "id": "what-fills-the-window",
-      "text": "Was das Fenster füllt Deine Nachrichten sind nur ein Teil davon. Startanweisungen 34,1K Von Dir getippt unter 1K Catering-PDF 55K nur zur Veranschaulichung"
+      "text": "Was das Fenster füllt Deine Nachrichten sind nur ein Teil davon. Der Sommerfest-Chat 128K von 200K · 64 % Startanweisungen 34,1K Von Dir getippt unter 1K Catering-PDF 55K nur zur Veranschaulichung"
     },
     {
       "id": "what-fills-the-window--whats-really-in-the-window",
@@ -57,15 +57,15 @@
     },
     {
       "id": "managing-the-attention-span",
-      "text": "Die Aufmerksamkeitsspanne managen Eine Anzeige kannst Du nicht ablesen, also baust Du Gewohnheiten auf. Alter Chat · 64 % Frischer Chat · 19 % Übergabe: Feier für 40, 27. Juni, Budget 40.000 € . Weiter: Einladungen."
+      "text": "Die Aufmerksamkeitsspanne managen Eine Anzeige kannst Du nicht ablesen, also baust Du Gewohnheiten auf. Alter Chat 128K von 200K · 64 % Neuer Chat 38K von 200K · 19 % Übergabe: Feier für 40, 27. Juni, Budget 40.000 € . Weiter: Einladungen."
     },
     {
       "id": "managing-the-attention-span--everyday-habits",
-      "text": "Die Aufmerksamkeitsspanne managen (1/2) Seite 1 von 2 Gewohnheiten für jeden Tag Halte jeden Chat bei einem Job und nimm nur eine kurze Übergabe in den nächsten mit, damit der neue Chat klein und klar startet. Die kennst Du schon: Zerleg es Neustart Alter Chat: Sommerfest Alter Chat 64 % belegt Übergabekarte Feier für 40, 27. Juni, Budget 40.000 € . Ort: Estrela-Pavillon. Caterer: Sabor Verde (12 vegetarisch). Weiter: Einladungen. erste Nachricht des neuen Chats Neuer Chat: Einladungen Neuer Chat 19 % belegt 1 Ein Chat, ein Job Wechselt das Thema, öffne einen neuen Chat: Die Hotelfrage schleppt das Catering-PDF nicht mit. 2 Übergabe holen, lesen, korrigieren Nach echtem Fortschritt oder vor einer Pause: das Ziel, was entschieden ist, was als Nächstes kommt. Du korrigierst, was falsch ist. 3 Den nächsten Chat damit beginnen Füge sie als erste Nachricht ein. Der neue Chat hält Ort, Caterer, Budget und den nächsten Schritt, sonst nichts. Token-Zahlen zur Veranschaulichung · 200K-Fenster"
+      "text": "Die Aufmerksamkeitsspanne managen (1/2) Seite 1 von 2 Gewohnheiten für jeden Tag Halte jeden Chat bei einem Job und nimm nur eine kurze Übergabe in den nächsten mit, damit der neue Chat klein und klar startet. Die kennst Du schon: Zerleg es Neustart Alter Chat: Sommerfest Alter Chat 128K von 200K · 64 % Übergabekarte Feier für 40, 27. Juni, Budget 40.000 € . Ort: Estrela-Pavillon. Caterer: Sabor Verde (12 vegetarisch). Weiter: Einladungen. erste Nachricht des neuen Chats Neuer Chat: Einladungen Neuer Chat 38K von 200K · 19 % 1 Ein Chat, ein Job Wechselt das Thema, öffne einen neuen Chat: Die Hotelfrage schleppt das Catering-PDF nicht mit. 2 Übergabe holen, lesen, korrigieren Nach echtem Fortschritt oder vor einer Pause: das Ziel, was entschieden ist, was als Nächstes kommt. Du korrigierst, was falsch ist. 3 Den nächsten Chat damit beginnen Füge sie als erste Nachricht ein. Der neue Chat hält Ort, Caterer, Budget und den nächsten Schritt, sonst nichts. Token-Zahlen zur Veranschaulichung · 200K-Fenster"
     },
     {
       "id": "managing-the-attention-span--the-workflow-for-bigger-projects",
-      "text": "Die Aufmerksamkeitsspanne managen (2/2) Seite 2 von 2 Der Workflow für größere Projekte Zerleg das Projekt zuerst, behalte einen Chat als Planer und gib jedem Schritt einen frischen Chat, der ein kleines Ergebnis zurückgibt. Ein Chat für alles Sommerfest 64 % belegt Jenseits der Smart Zone; jeder Schritt schleppt das Gelesene aller anderen Schritte mit. Ein Workflow: ein Planer, ein frischer Chat pro Schritt Planer 23 % belegt Helfer: Orte 26 % belegt · verworfen Helfer: Catering 45 % belegt Helfer: Einladungen 18 % belegt ↑ Ergebnis · Estrela-Pavillon, 14.800 € ↑ Ergebnis · Sabor Verde, 12 vegetarisch ↑ Ergebnis · Einladungen an 40 verschickt Pro Schritt kommt eine kleine Karte zurück. Kurze Aufgaben schlagen eine lange ( ) ; Du koordinierst wie ein Projektmanager. Token-Zahlen zur Veranschaulichung · 200K-Fenster"
+      "text": "Die Aufmerksamkeitsspanne managen (2/2) Seite 2 von 2 Der Workflow für größere Projekte Zerleg das Projekt zuerst, behalte einen Chat als Planer und gib jedem Schritt einen frischen Chat, der ein kleines Ergebnis zurückgibt. Ein Chat für alles Sommerfest 128K von 200K · 64 % Jenseits der Smart Zone; jeder Schritt schleppt das Gelesene aller anderen Schritte mit. Ein Workflow: ein Planer, ein frischer Chat pro Schritt Planer 45,3K von 200K · 23 % Helfer: Orte 51,8K von 200K · 26 % · verworfen Helfer: Catering 90,9K von 200K · 45 % Helfer: Einladungen 36,1K von 200K · 18 % ↑ Ergebnis · Estrela-Pavillon, 14.800 € ↑ Ergebnis · Sabor Verde, 12 vegetarisch ↑ Ergebnis · Einladungen an 40 verschickt Pro Schritt kommt eine kleine Karte zurück. Kurze Aufgaben schlagen eine lange ( ) ; Du koordinierst wie ein Projektmanager. Token-Zahlen zur Veranschaulichung · 200K-Fenster"
     }
   ],
   "notes": [

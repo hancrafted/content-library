@@ -1,8 +1,7 @@
 {
   "title": "The AI's attention span",
   "caption": "Now the cause: how the AI holds a chat.",
-  "gridLabel": "A grid of 100 boxes, one per 1% of the window",
-  "windowNote": "<b>The same light on the window:</b> 128K of 200K, the middle faded. One box = 2K, illustrative.",
+  "windowNote": "<b>The same light on the window:</b> {used} of {window}, the middle faded. Token counts illustrative.",
   "voiceScript": {
     "segments": {
       "why-it-happens": {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { compactStepOf, framesOf, goneAt, miniFigure } from './context.pure';
+import { compactStepOf, framesOf, goneAt } from './context.pure';
 import type { Chat } from './context.types';
 
 const CHAT: Chat = {
@@ -28,7 +28,6 @@ const CHAT: Chat = {
     { id: 'm6', kind: 'compact', trigger: 'auto', summary: 'Party.', blocks: [{ cat: 'summary', tokens: 8000 }] },
   ],
 };
-const WINDOW = { tokens: 200000, bufferTokens: 16500, lines: [] };
 
 describe('success cases', () => {
   it('stacks each step’s blocks under the ones before it', () => {
@@ -39,15 +38,6 @@ describe('success cases', () => {
     // ASSERT
     expect(frame?.used).toBe(expected.used);
     expect(frame?.blocks.find((b) => b.key === 'm4@tool_result')?.start).toBe(expected.toolResultStart);
-  });
-
-  it('draws a mini bar as the window at its step, in percent of the window', () => {
-    // ARRANGE
-    const expected = 11;
-    // ACT
-    const figure = miniFigure(CHAT, { step: 3 }, WINDOW);
-    // ASSERT
-    expect(Math.round(figure.percent)).toBe(expected);
   });
 });
 
