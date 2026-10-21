@@ -20,6 +20,12 @@ Entrances here predate the Motion rule in [the design system](design-system.md),
 
 Motion rules and the reasons behind them live in [the design system](design-system.md).
 
+## context-reference
+
+- _Shows_: The context window Shared visual in its `reference` Preset: every part (conversation, timeline, window, category, details, attention) and every toolbar and head control switched on, including upload and the 200K | 1M switch.
+- _When_: As a lookup of what the cornerstone can offer before a Slide picks a smaller Preset; not for showing to an audience. <!-- draft: Han edits -->
+- _Motion_: `motion: none`. The cornerstone's own entrance and controls run; the Slide adds none.
+
 ## grid-1x1
 
 - _Shows_: One feature cell across the whole Foreground: a tall poster tile with title and caption set bottom-left over a soft gradient in the primary and foreground colours.

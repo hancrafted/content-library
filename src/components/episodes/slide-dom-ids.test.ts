@@ -87,7 +87,7 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('walks every slide-master and slide-layouts Slide, so an empty walk cannot pass', () => {
     // ARRANGE
-    const expected = { 'slide-layouts': 3, 'slide-master': 20 };
+    const expected = { 'slide-layouts': 3, 'slide-master': 21 };
     // ACT
     const slides = allSlides();
     const count = (episode: EpisodeSlug) => slides.filter((placed) => placed.episode === episode).length;

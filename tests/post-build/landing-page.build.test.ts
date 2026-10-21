@@ -200,17 +200,14 @@ describe('landing page post-build structure', () => {
   });
 
   it.each(LANDING_PAGES)(
-    'links to the /episodes index page and references, and holds no browse grid, for locale $locale',
+    'links to the /episodes index page, and holds no browse grid or reference links, for locale $locale',
     ({ url, locale }) => {
       const $ = getPage(url);
       const expectedBrowseHref = `${basePath}${locale === 'de' ? '/de/episodes/' : '/episodes/'}`;
 
       expect($('#episodes [data-episode-browse]').length).toBe(0);
       expect($('#episodes a[data-testid="landing-browse-episodes-link"]').attr('href')).toBe(expectedBrowseHref);
-      expect($('#episodes a[data-testid="landing-page-link"]').attr('href')).toBe(episodeHref('page-template', locale));
-      expect($('#episodes a[data-testid="landing-slide-master-link"]').attr('href')).toBe(
-        episodeHref('slide-master', locale),
-      );
+      expect($('#episodes a[href*="/page-template/"], #episodes a[href*="/slide-master/"]').length).toBe(0);
     },
   );
 });

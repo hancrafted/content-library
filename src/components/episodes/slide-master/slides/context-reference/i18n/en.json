@@ -1,0 +1,19 @@
+{
+  "title": "Context window",
+  "caption": "The context window Shared visual with every part and every toolbar option switched on, as a reference.",
+  "notes": {
+    "controls": {
+      "header": "Every control at once",
+      "description": "The toolbar holds the part chips (drag to reorder), Technical, download and upload; the heads hold the 200K | 1M switch, the smart-zone toggle, the usage readout, each part's own Technical toggle and the Attention menu. A real Slide picks a Preset that shows only what it needs."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "walkthrough": {
+        "title": "Walkthrough",
+        "keywords": "context window, toolbar, controls, reference",
+        "script": "This is the context window with every control on. Point at the toolbar first, then at each part's head, and name what each control does before you pick a smaller Preset for a real Slide."
+      }
+    }
+  }
+}

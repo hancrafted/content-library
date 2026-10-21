@@ -36,6 +36,7 @@ export const CONTEXT_PRESETS = [
   'slide-6',
   'slide-7',
   'slide-7-parts',
+  'reference',
   'slide-8',
   'slide-9-before',
   'slide-9-chat',

@@ -1,0 +1,19 @@
+{
+  "title": "Kontextfenster",
+  "caption": "Das geteilte Visual Kontextfenster mit allen Teilen und allen Werkzeugleisten-Optionen eingeschaltet, als Referenz.",
+  "notes": {
+    "controls": {
+      "header": "Alle Bedienelemente auf einmal",
+      "description": "Die Werkzeugleiste enthält die Teile-Chips (zum Umsortieren ziehen), Technisch, Download und Upload; die Köpfe enthalten den Schalter 200K | 1M, den Smart-Zone-Schalter, die Auslastungsanzeige, das eigene Technisch jedes Teils und das Aufmerksamkeits-Menü. Eine echte Folie wählt ein Preset, das nur zeigt, was sie braucht."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "walkthrough": {
+        "title": "Rundgang",
+        "keywords": "Kontextfenster, Werkzeugleiste, Bedienelemente, Referenz",
+        "script": "Das ist das Kontextfenster mit allen Bedienelementen. Zeige zuerst auf die Werkzeugleiste, dann auf den Kopf jedes Teils, und nenne, was jedes Element tut, bevor du für eine echte Folie ein kleineres Preset wählst."
+      }
+    }
+  }
+}

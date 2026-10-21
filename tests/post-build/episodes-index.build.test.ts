@@ -44,6 +44,24 @@ describe('/episodes index page', () => {
     }
   });
 
+  it.each(LOCALES)('links the layout references at the foot of the /episodes page for %s', (locale) => {
+    // ARRANGE
+    const $ = exportedPage(localizePath(ROUTES.episodes, locale));
+    const expected = [
+      localizePath(episodeRoute('page-template'), locale),
+      localizePath(episodeRoute('slide-master'), locale),
+    ];
+    // ACT
+    const hrefs = [
+      $('a[data-testid="episodes-page-link"]').attr('href'),
+      $('a[data-testid="episodes-slide-master-link"]').attr('href'),
+    ];
+    // ASSERT
+    expect(hrefs.map((href) => href?.replace(/^.*?(\/(?:de\/)?episodes\/)/, '$1'))).toEqual(
+      expected.map((href) => (href.endsWith('/') ? href : `${href}/`)),
+    );
+  });
+
   it('dates every published card in the /episodes browse grid with its release day', () => {
     // ARRANGE
     const $ = exportedPage(ROUTES.episodes);

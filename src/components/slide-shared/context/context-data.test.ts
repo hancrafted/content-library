@@ -59,9 +59,9 @@ describe('success cases', () => {
     expect(split).toEqual({ start: expected.start, middle: expected.middle, end: expected.end });
   });
 
-  it('offers the 200K | 1M switch on Slide 5 only', () => {
+  it('offers the 200K | 1M switch on Slide 5 and the reference only', () => {
     // ARRANGE
-    const expected = ['slide-5'];
+    const expected = ['slide-5', 'reference'];
     // ACT
     const switching = Object.values(contextData('en').presets)
       .filter((preset) => offers(preset, 'window'))

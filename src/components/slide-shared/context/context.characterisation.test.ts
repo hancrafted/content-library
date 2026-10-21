@@ -83,6 +83,21 @@ describe('success cases', () => {
             ':-',
           ],
         },
+        reference: {
+          lit: 0,
+          sections: ['Chat', 'Context window', 'Details', 'Attention'],
+          sliders: 1,
+          toolbar: [
+            'Conversation:true',
+            'Timeline:true',
+            'Context window:true',
+            'Context category:true',
+            'Details:true',
+            'Attention:true',
+            ':false',
+            ':-',
+          ],
+        },
         'slide-7-parts': { lit: 5, sections: ['Context window', 'Details'], sliders: 0, toolbar: [] },
         'slide-8': {
           lit: 29,

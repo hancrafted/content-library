@@ -163,6 +163,13 @@ presets:
     show: { chat: false, timeline: false, context: true, category: true, panel: true, attention: false }
     controls: { '*': { show: false }, windowTechnical: { show: true }, categoryTechnical: { show: true } }
     timelineLocked: true
+  # The reference: every part and every control on, so a reader sees the whole toolbar and each head control at once.
+  reference:
+    chat: summer-party
+    show: { chat: true, timeline: true, context: true, category: true, panel: true, attention: true }
+    controls: { '*': { show: true } }
+    windows: [{ size: 200k, lines: [matt] }, { size: 1m, lines: [matt-1m] }]
+
   slide-8:
     chat: summer-party
     step: 12
