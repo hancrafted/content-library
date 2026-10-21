@@ -97,6 +97,9 @@ export interface ContextWords {
     /** A call's duration units, for `1 h 22 min`. */
     readonly hours: string;
     readonly minutes: string;
+    /** The call bar's marker: `You are here: minute {minute} of {total}`, and its form at minute 0. */
+    readonly here: string;
+    readonly hereStart: string;
     readonly labels: Readonly<Record<string, string>>;
   };
 }

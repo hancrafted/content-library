@@ -113,6 +113,8 @@ words:
     discarded: verworfen
     hours: Std.
     minutes: Min.
+    here: 'Du bist hier: Minute {minute} von {total}'
+    hereStart: 'Du bist hier: der Anfang des Gesprächs'
     labels:
       old: Alter Chat
       fresh: Neuer Chat

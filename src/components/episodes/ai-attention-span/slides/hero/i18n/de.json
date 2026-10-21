@@ -1,7 +1,5 @@
 {
   "caption": "Ein langer Chat verhält sich wie ein langes Telefonat: Seine Aufmerksamkeit ist ein <b>begrenztes Fenster</b>, also steuerst Du, was hineinkommt.",
-  "litLabel": "Anfang und Neuestes bleiben im Licht",
-  "fadedLabel": "Die Mitte rutscht aus der Aufmerksamkeit",
-  "bufferLabel": "Freigehalten für Zusammenfassungen · {tokens}",
-  "illustrative": "Tokenzahlen nur zur Veranschaulichung"
+  "litLabel": "Anfang und Ende bleiben scharf",
+  "fadedLabel": "Die Mitte rutscht aus der Aufmerksamkeit"
 }

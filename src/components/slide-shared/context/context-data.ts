@@ -42,16 +42,7 @@ export const CONTEXT_PRESETS = [
   'slide-9-after',
 ] as const;
 /** Every static bar Preset id. */
-export const MINI_PRESETS = [
-  'slide-10-old',
-  'slide-10-fresh',
-  'slide-11-before',
-  'slide-11-after',
-  'faded-middle',
-  'typed-and-read',
-  'managing',
-  'call',
-] as const;
+export const MINI_PRESETS = ['slide-10-old', 'slide-10-fresh', 'slide-11-before', 'slide-11-after', 'call'] as const;
 
 export type ContextPresetId = (typeof CONTEXT_PRESETS)[number];
 export type MiniPresetId = (typeof MINI_PRESETS)[number];

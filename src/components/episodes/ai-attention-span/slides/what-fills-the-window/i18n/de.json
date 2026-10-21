@@ -1,12 +1,6 @@
 {
   "title": "Was das Fenster füllt",
   "caption": "Deine Nachrichten sind nur ein Teil davon.",
-  "legend": {
-    "instructions": "Startanweisungen {tokens}",
-    "typed": "Von Dir getippt unter 1K",
-    "pdf": "Catering-PDF {tokens}",
-    "illustrative": "nur zur Veranschaulichung"
-  },
   "voiceScript": {
     "segments": {
       "more-in-there-than-you-typed": {
