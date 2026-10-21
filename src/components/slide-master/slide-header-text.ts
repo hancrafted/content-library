@@ -13,6 +13,14 @@ export interface SlideHeaderText {
   readonly caption?: string;
   /** The caption's `<b>` runs, which the header sets off. */
   readonly captionEmphasis?: readonly TextRange[];
+  /** The Speaker note the caption ends on with a Context marker: its slug and the marker's accessible name. */
+  readonly captionNote?: CaptionNote;
+}
+
+/** A caption's Context marker: the note it opens and the marker's accessible name. */
+export interface CaptionNote {
+  readonly note: string;
+  readonly label: string;
 }
 
 /** A rich message as plain text: the default tags keep their words and drop their markup. */
@@ -49,4 +57,24 @@ export function titleTakenBy(slideId: string): string {
 /** A caption a Slide's own messages give, as plain text; undefined when they give none. */
 export function captionTextOf(t: RuntimeTranslator): string | undefined {
   return t.has('caption') ? plain(t, 'caption') : undefined;
+}
+
+/** The marker a Slide's caption ends on: the note it names must be one the Slide declares. */
+export function captionNoteOf(input: {
+  readonly t: RuntimeTranslator;
+  readonly note: string | undefined;
+  readonly declared: readonly string[];
+  readonly markerLabel: (title: string) => string;
+}): CaptionNote | undefined {
+  const { t, note, declared, markerLabel } = input;
+  if (note === undefined) return undefined;
+  if (!declared.includes(note)) throw new Error(`The caption names note "${note}", which the Slide does not declare.`);
+  return { note, label: markerLabel(t(`notes.${note}.header`)) };
+}
+
+/** The shared Slide header's text, with the Context marker its caption ends on when the Slide names a note for it. */
+export function sharedHeaderOf(input: Parameters<typeof captionNoteOf>[0]): SlideHeaderText | undefined {
+  const text = headerTextOf(input.t);
+  const captionNote = captionNoteOf(input);
+  return text && { ...text, ...(captionNote && { captionNote }) };
 }

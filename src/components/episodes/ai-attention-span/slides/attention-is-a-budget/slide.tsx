@@ -1,9 +1,7 @@
 import { slide } from '@/components/slide-master/slide';
 import { SlideFrame } from '@/components/slide-master/slide-master';
 import { Context } from '@/components/slide-shared/context/context';
-import { contextData } from '@/components/slide-shared/context/context-data';
-import { AttentionStrip } from './attention-strip';
-import { stripSegments } from './attention-strip.pure';
+import { ArrowUp } from 'lucide-react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
@@ -16,36 +14,22 @@ const LOST_IN_THE_MIDDLE = { slug: 'liu-lost-in-the-middle', url: 'https://arxiv
 const ATTENTION_SINKS = { slug: 'xiao-attention-sinks', url: 'https://arxiv.org/abs/2309.17453' };
 const NOLIMA = { slug: 'modarressi-nolima', url: 'https://arxiv.org/abs/2502.05167' };
 
-/** The summer party at its last step, as the Brief splits its attention: the opening three and the newest three. */
-const CHAT = 'summer-party';
-const STEP = '21';
-const START = ['m1', 'm2', 'm3'];
-const NEWEST = ['m22', 'm23', 'm24'];
-
-/** The strip's segments from the cornerstone's own attention table, so Slide 4's panel and this strip agree. */
-function segmentsOf(locale: 'en' | 'de') {
-  const data = contextData(locale);
-  const units = data.attention[CHAT]?.[STEP];
-  const chat = data.chats[CHAT];
-  if (units === undefined || chat === undefined) throw new Error(`attention strip: no ${CHAT} attention at ${STEP}`);
-  return stripSegments({ steps: chat.steps, units, start: START, newest: NEWEST });
-}
-
 /** The marker colour on the primary callout, where the muted default would not read. */
 const ON_PRIMARY = 'text-primary-foreground hover:text-primary-foreground focus-visible:text-primary-foreground';
 
 /**
- * "Attention is a budget" (Spec Option 5a, locked with Han's note): the 100-unit strip on top; under it, the live
- * cornerstone in its Slide 5 Preset (the Attention view, no toolbar, its own 200K | 1M switch with Matt Pocock's
- * line) beside the "Lost in the middle" callout; the zone legend at the foot. Keeps `basic-page`, `motion: none`.
+ * "Attention is a budget" (Spec Option 5a, simplified by Han's batch-2 feedback): the live cornerstone in its Slide 5
+ * Preset, with the timeline left, the window as a Simple bar with its 200K | 1M switch and smart zone, and the
+ * attention on the right. The "Lost in the middle" label sits under the attention card, in its column, with an arrow pointing up at it; below, the caveat that the line differs per model. Keeps `basic-page`,
+ * `motion: none`.
  */
 export const attentionIsABudget = slide({
   slug: 'attention-is-a-budget',
   messages: { en, de },
   notes: [
-    { slug: 'the-attention-budget', target: 'strip', sources: [ANTHROPIC_CONTEXT_ENGINEERING] },
+    { slug: 'the-attention-budget', target: 'attention', sources: [ANTHROPIC_CONTEXT_ENGINEERING] },
     { slug: 'the-u-shape-is-measured', target: 'lost', sources: [FOUND_IN_THE_MIDDLE, LOST_IN_THE_MIDDLE] },
-    { slug: 'the-start-is-weighted', target: 'strip', sources: [ATTENTION_SINKS] },
+    { slug: 'the-start-is-weighted', target: 'attention', sources: [ATTENTION_SINKS] },
     { slug: 'no-single-line', target: 'zones', sources: [NOLIMA] },
   ],
   segments: [
@@ -57,63 +41,38 @@ export const attentionIsABudget = slide({
     { slug: 'my-own-line' },
   ],
   content: ({ t, locale, marker, target }) => (
-    <SlideFrame className="mt-8 gap-10">
-      <AttentionStrip
-        segments={segmentsOf(locale)}
-        labels={{
-          heading: t.rich('strip.heading', { marker: marker('the-attention-budget') }),
-          illustrative: t('illustrative'),
-          label: t('strip.label'),
-          groups: {
-            start: {
-              head: t('strip.start.head'),
-              line: t.rich('strip.start.line', { marker: marker('the-start-is-weighted') }),
-            },
-            middle: { head: t('strip.middle.head'), line: t('strip.middle.line') },
-            newest: {
-              head: t('strip.newest.head'),
-              line: t.rich('strip.newest.line', { marker: marker('the-u-shape-is-measured') }),
-            },
-          },
-          spike: { head: t('strip.spike.head'), line: t('strip.spike.line') },
-        }}
-      />
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
-        <div className="flex flex-col gap-6 lg:col-span-4">
-          <p className="text-body text-muted-foreground">
-            {t.rich('zones.pocock', { marker: marker('no-single-line') })}
-          </p>
-          <div {...target('lost')} className="rounded-xl bg-primary p-6 text-primary-foreground shadow-md">
-            <p className="text-caption tracking-wide uppercase">{t('lost.kicker')}</p>
-            <p className="text-subheading font-semibold">
-              {t.rich('lost.name', { marker: marker('the-u-shape-is-measured', ON_PRIMARY) })}
-            </p>
-            <p className="text-body">{t('lost.body')}</p>
+    <SlideFrame className="mt-8 gap-6">
+      <div {...target('attention')} className="@container flex flex-col gap-3">
+        <Context preset="slide-5" locale={locale} />
+        {/* Under the Context's attention column (Preset slide-5: timeline 3.5rem, window 16rem, attention the rest). */}
+        <div
+          {...target('lost')}
+          data-lost-label=""
+          className="flex flex-col items-center gap-2 @3xl:grid @3xl:grid-cols-[3.5rem_16rem_minmax(15rem,1fr)] @3xl:items-start @3xl:gap-x-4"
+        >
+          <div className="flex w-full flex-col items-center gap-2 @3xl:col-start-3">
+            <ArrowUp aria-hidden="true" className="size-8 shrink-0 text-primary" />
+            <div className="w-full rounded-xl bg-primary p-5 text-primary-foreground shadow-md">
+              <p className="text-caption tracking-wide uppercase">{t('lost.kicker')}</p>
+              <p className="text-subheading font-semibold">
+                {t.rich('lost.name', { marker: marker('the-u-shape-is-measured', ON_PRIMARY) })}
+              </p>
+              <p className="text-body">
+                {t.rich('lost.body', {
+                  budget: marker('the-attention-budget', ON_PRIMARY),
+                  start: marker('the-start-is-weighted', ON_PRIMARY),
+                })}
+              </p>
+            </div>
           </div>
         </div>
-        <div className="min-w-0 lg:col-span-8">
-          <Context preset="slide-5" locale={locale} />
-        </div>
       </div>
-      <div
-        {...target('zones')}
-        className="flex flex-col gap-4 rounded-xl bg-muted p-5 md:flex-row md:items-start md:justify-between md:gap-8"
-      >
-        <div className="flex flex-col gap-2 text-caption">
-          <span className="flex items-start gap-2">
-            <span className="mt-2 h-0 w-6 shrink-0 border-t-2 border-dashed border-primary" />
-            <span>{t.rich('zones.smart')}</span>
-          </span>
-          <span className="flex items-start gap-2">
-            <span className="mt-2 h-0 w-6 shrink-0 border-t-2 border-dashed border-muted-foreground" />
-            <span>{t.rich('zones.dumb')}</span>
-          </span>
-        </div>
-        <p className="max-w-md text-body">{t.rich('zones.note', { marker: marker('no-single-line') })}</p>
-        <span className="self-start rounded-full border border-dashed border-border px-2 py-0.5 text-caption text-muted-foreground">
+      <p {...target('zones')} className="flex flex-wrap items-center gap-3 text-body text-muted-foreground">
+        <span>{t.rich('zones.note', { marker: marker('no-single-line') })}</span>
+        <span className="rounded-full border border-dashed border-border px-2 py-0.5 text-caption">
           {t('illustrative')}
         </span>
-      </div>
+      </p>
     </SlideFrame>
   ),
 });

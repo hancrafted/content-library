@@ -2,34 +2,22 @@
   "title": "Attention is a budget",
   "caption": "A hundred units of attention go mostly to the start and the newest messages; the middle gets what is left, until it is too thin to trust.",
   "illustrative": "illustrative numbers",
-  "strip": {
-    "heading": "<marker>100 units of attention</marker>",
-    "label": "100 units of attention over the summer-party chat: start 20, middle 50 over 15 messages, newest 30; the 12 vegetarian guests keep 10 units in the middle, the budget gets 1.",
-    "start": { "head": "Start · 20 units", "line": "<marker>a big share</marker>" },
-    "middle": { "head": "Middle · 50 units, spread over 15 messages", "line": "thinner with every message you add" },
-    "newest": { "head": "Newest · 30 units", "line": "<marker>a big share</marker>" },
-    "spike": {
-      "head": "12 vegetarian guests · 10 units",
-      "line": "repeated, so it keeps its share; the budget, said once, gets 1"
-    }
-  },
   "zones": {
-    "pocock": "<marker>Smart zone by Matt Pocock: 80K on a 200K window, 150K on 1M.</marker>",
-    "smart": "<b>Smart zone</b> before the line",
-    "dumb": "<b>Dumb zone</b> beyond it: the middle too thin to trust",
     "note": "<marker>Where the middle gets too thin differs per model and task.</marker>"
   },
   "lost": {
     "kicker": "Known as",
     "name": "<marker>“Lost in the middle”</marker>",
-    "body": "The start and the newest messages get the attention; what sits in the middle fades."
+    "body": "<start>The start and the newest messages get the attention</start>; <budget>what sits in the middle fades</budget>."
   },
   "notes": {
     "the-attention-budget": {
       "header": "The attention budget",
       "description": "Anthropic describes every token attending to every other, so each added token spreads the same attention thinner; it is a vendor account of the measured drop, not itself measured in the studies [1].",
       "sources": {
-        "anthropic-effective-context-engineering": { "title": "Anthropic, Effective context engineering for AI agents" }
+        "anthropic-effective-context-engineering": {
+          "title": "Anthropic, Effective context engineering for AI agents"
+        }
       }
     },
     "the-u-shape-is-measured": {
@@ -48,14 +36,18 @@
       "header": "The start is weighted",
       "description": "the first few tokens draw strong attention as an attention sink even when they carry no meaning [1].",
       "sources": {
-        "xiao-attention-sinks": { "title": "Xiao et al., Efficient Streaming Language Models with Attention Sinks" }
+        "xiao-attention-sinks": {
+          "title": "Xiao et al., Efficient Streaming Language Models with Attention Sinks"
+        }
       }
     },
     "no-single-line": {
       "header": "No single line",
       "description": "where the middle gets too thin differs per model and task; when the needle shares no words with the question, 11 of 13 models advertised at 128K or more fell below half of their short-input score at 32K [1].",
       "sources": {
-        "modarressi-nolima": { "title": "Modarressi et al., NoLiMa: Long-Context Evaluation Beyond Literal Matching" }
+        "modarressi-nolima": {
+          "title": "Modarressi et al., NoLiMa: Long-Context Evaluation Beyond Literal Matching"
+        }
       }
     }
   },

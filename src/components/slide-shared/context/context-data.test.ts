@@ -87,14 +87,38 @@ describe('success cases', () => {
     expect(motions).toEqual(expected);
   });
 
-  it('hides the toolbar buttons on Slide 3 (the meter is a readout) and draws its context component 30% lower than the default', () => {
+  it('opens Slide 3 on the timeline and the conversation, with the part chips and Technical in the toolbar to blend the rest in', () => {
     // ARRANGE
-    const expected = { shown: ['meter'], height: 26.6 };
+    const expected = {
+      shown: { chat: true, timeline: true, context: false, preview: false, panel: false, attention: false },
+      controls: ['parts', 'technical', 'meter'],
+      height: 26.6,
+    };
     // ACT
     const slide3 = contextData('en').presets['slide-3'];
     // ASSERT
-    const shown = slide3 ? CONTROL_IDS.filter((id) => offers(slide3, id)) : ['missing'];
-    expect({ shown, height: slide3?.height }).toEqual(expected);
+    const controls = slide3 ? CONTROL_IDS.filter((id) => offers(slide3, id)) : ['missing'];
+    expect({ shown: slide3?.show, controls, height: slide3?.height }).toEqual(expected);
+  });
+
+  it('lays Slide 5 out as the timeline, the window with its switch and the attention, left to right, in a Simple window', () => {
+    // ARRANGE
+    const expected = {
+      shown: ['timeline', 'context', 'attention'],
+      switch: true,
+      depth: 'simple',
+      toolbar: false,
+    };
+    // ACT
+    const slide5 = contextData('en').presets['slide-5'];
+    // ASSERT
+    const shown = slide5?.order.filter((part) => slide5.show[part]);
+    expect({
+      shown,
+      switch: slide5 ? offers(slide5, 'window') : undefined,
+      depth: slide5?.depth,
+      toolbar: slide5 ? offers(slide5, 'parts') : undefined,
+    }).toEqual(expected);
   });
 
   it('keeps the default 38rem height on every other Preset', () => {

@@ -7,17 +7,23 @@ import en from './i18n/en.json';
 
 const RULER = { slug: 'hsieh-ruler', url: 'https://arxiv.org/abs/2404.06654' };
 const DU = { slug: 'du-context-length-alone-hurts', url: 'https://arxiv.org/abs/2510.05381' };
+const ANTHROPIC = {
+  slug: 'anthropic-effective-context-engineering',
+  url: 'https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents',
+};
 const CHROMA = { slug: 'hong-context-rot', url: 'https://www.trychroma.com/research/context-rot' };
 
 /**
  * "What happens when the bar fills up" (Spec Option 4a): the live cornerstone in its Slide 4 Preset (the Attention
- * view at step 21, the panel open), its caption naming "context rot", the budget-against-plan strip below. Keeps
+ * view at step 21, the panel open), its caption naming "context rot" with a Context marker to its explanation, the budget-against-plan strip below. Keeps
  * `basic-page` and `motion: local`: the cornerstone's attention fade, end state shown.
  */
 export const whatHappensWhenTheBarFillsUp = slide({
   slug: 'what-happens-when-the-bar-fills-up',
   messages: { en, de },
+  captionNote: 'what-is-context-rot',
   notes: [
+    { slug: 'what-is-context-rot', target: 'caption', sources: [RULER, DU, CHROMA, ANTHROPIC] },
     { slug: 'quality-falls-before-the-limit', target: 'caption', sources: [RULER] },
     { slug: 'length-alone-hurts', target: 'caption', sources: [DU] },
     { slug: 'extra-material-makes-it-worse', target: 'reason', sources: [CHROMA] },

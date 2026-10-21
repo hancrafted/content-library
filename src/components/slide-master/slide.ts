@@ -80,6 +80,8 @@ export interface Slide<S extends string = string, M extends SlideMessages = Slid
   readonly messages: PerLocale<M>;
   readonly notes: readonly NoteSpec[];
   readonly segments: readonly SegmentSpec[];
+  /** The slug of the note whose Context marker follows the caption, when a term in it needs a source. */
+  readonly captionNote?: string;
   readonly content: (kit: RuntimeKit) => ReactNode;
 }
 
@@ -96,6 +98,8 @@ export interface OwnSlideSpec<S extends string, M extends SlideMessages, N exten
   readonly messages: { readonly en: M; readonly de: NoInfer<M> };
   readonly notes?: readonly N[];
   readonly segments?: readonly SegmentSpec<OwnSegmentSlug<M>>[];
+  /** One of the Slide's notes: its Context marker follows the caption (a term in the caption that needs a source). */
+  readonly captionNote?: N['slug'];
   readonly content: (kit: OwnSlideKit<M, N>) => ReactNode;
 }
 
@@ -110,6 +114,7 @@ export function slide<
     messages: spec.messages,
     notes: spec.notes ?? [],
     segments: spec.segments ?? [],
+    ...(spec.captionNote !== undefined && { captionNote: spec.captionNote }),
     // The runtime kit is assignable to every concrete `OwnSlideKit` (proved in the test); generics hide that here.
     content: spec.content as unknown as Slide['content'],
   };

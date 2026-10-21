@@ -1,5 +1,5 @@
 {
-  "title": "Was passiert, wenn der Balken voll wird",
+  "title": "Was passiert, wenn der Kontext voll wird",
   "caption": "Wenn der Chat das Fenster füllt, bleiben der Anfang und das Neueste scharf, die Mitte verschwimmt, ein wiederholtes Detail überlebt, und die Antworten werden schlechter: <b>Context Rot</b>.",
   "strip": {
     "firstKicker": "Deine erste Nachricht",
@@ -57,6 +57,24 @@
       "sources": {
         "du-context-length-alone-hurts": {
           "title": "Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval"
+        }
+      }
+    },
+    "what-is-context-rot": {
+      "header": "Context Rot",
+      "description": "Context Rot ist der Qualitätsverlust der Antworten, wenn die Eingabe wächst, lange vor der angegebenen Grenze: fast alle von 17 Modellen für lange Kontexte verloren deutlich an Genauigkeit [1], schon die Länge allein schadete trotz perfektem Abruf [2], und bei 18 Modellen sank die Leistung in jedem Experiment [3]. Anthropic erklärt das mit einem Aufmerksamkeitsbudget, das jedes zusätzliche Token dünner verteilt; das ist eine Herstellerdarstellung und in den Studien nicht gemessen [4].",
+      "sources": {
+        "hsieh-ruler": {
+          "title": "Hsieh et al., RULER: What's the Real Context Size of Your Long-Context Language Models?"
+        },
+        "du-context-length-alone-hurts": {
+          "title": "Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval"
+        },
+        "hong-context-rot": {
+          "title": "Hong, Troynikov, Huber, Context Rot: How Increasing Input Tokens Impacts LLM Performance"
+        },
+        "anthropic-effective-context-engineering": {
+          "title": "Anthropic, Effective context engineering for AI agents"
         }
       }
     }

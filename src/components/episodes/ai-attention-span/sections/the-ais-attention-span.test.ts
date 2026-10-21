@@ -65,6 +65,10 @@ function specSlides(): SpecSlide[] {
     });
 }
 
+/** Where Han's feedback batch 2 departs from the Spec: Slide 4's retitle and its added context-rot note. */
+const RETITLED = { 'what-happens-when-the-bar-fills-up': 'What happens when the context fills up' } as const;
+const ADDED_NOTES = ['Context rot'];
+
 const placed = placeSections<Slide>(aiAttentionSpan.sections).flat();
 
 function localized(slide: Slide, locale: 'en' | 'de' = 'en') {
@@ -109,7 +113,11 @@ describe('success cases', () => {
 
   it('lists each Slide under its Spec h3, and speaks its Voice script word for word', () => {
     // ARRANGE
-    const expected = specSlides().map(({ slug, title, script }) => ({ slug, title, script }));
+    const expected = specSlides().map(({ slug, title, script }) => ({
+      slug,
+      title: RETITLED[slug as keyof typeof RETITLED] ?? title,
+      script,
+    }));
     // ACT
     const actual = pageSlides.map((slide) => {
       const text = localized(slide);
@@ -128,11 +136,13 @@ describe('success cases', () => {
     const expected = specSlides().map(({ notes }) => notes);
     // ACT
     const actual = pageSlides.map((slide) =>
-      localized(slide).notes.map((note) => ({
-        header: note.header,
-        description: squash(note.description.replace(/\[\d+\]/g, '')),
-        urls: (note.sources ?? []).map((source) => source.url),
-      })),
+      localized(slide)
+        .notes.filter((note) => !ADDED_NOTES.includes(note.header))
+        .map((note) => ({
+          header: note.header,
+          description: squash(note.description.replace(/\[\d+\]/g, '')),
+          urls: (note.sources ?? []).map((source) => source.url),
+        })),
     );
     // ASSERT
     expect(actual.map((notes) => notes.map(({ header, description }) => ({ header, description })))).toEqual(
@@ -183,11 +193,9 @@ describe('success cases', () => {
         'mostly-synthetic-tests',
       ],
       'attention-is-a-budget': [
-        'the-attention-budget',
+        'the-u-shape-is-measured',
         'the-start-is-weighted',
-        'the-u-shape-is-measured',
-        'no-single-line',
-        'the-u-shape-is-measured',
+        'the-attention-budget',
         'no-single-line',
       ],
       'what-we-learned-so-far': ['two-kinds-of-evidence'],
@@ -198,25 +206,28 @@ describe('success cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('splits Slide 5’s strip into the Brief’s 100 units: start 20, middle 50 over 15 messages, newest 30', () => {
+  it('draws Slide 5 without the strip card, with the Lost in the middle label after the cornerstone and an arrow into it', () => {
     // ARRANGE
-    const expected = { start: 20, middle: 50, newest: 30, middleCount: 15, segments: 21, spikes: 1 };
+    const expected = { strips: 0, label: 1, arrows: 1, labelAfterContext: true };
     // ACT
     const $ = scene('attention-is-a-budget');
-    const segments = $('[data-strip-group]').toArray();
-    const sum = (group: string) =>
-      segments
-        .filter((el) => $(el).attr('data-strip-group') === group)
-        .reduce((total, el) => total + Number($(el).attr('data-units')), 0);
+    const label = $('[data-lost-label]');
     // ASSERT
     expect({
-      start: sum('start'),
-      middle: sum('middle'),
-      newest: sum('newest'),
-      middleCount: segments.filter((el) => $(el).attr('data-strip-group') === 'middle').length,
-      segments: segments.length,
-      spikes: $('[data-strip-spike]').length,
+      strips: $('[data-strip-group]').length,
+      label: label.length,
+      arrows: label.children('div').children('svg').length,
+      labelAfterContext: $.html().indexOf('data-cornerstone') < $.html().indexOf('data-lost-label'),
     }).toEqual(expected);
+  });
+
+  it('titles Slide 4 on the context filling up and ends its caption on a marker to the context-rot note', () => {
+    // ARRANGE
+    const expected = { title: 'What happens when the context fills up', note: 'what-is-context-rot' };
+    // ACT
+    const text = localized(bySlug('what-happens-when-the-bar-fills-up'));
+    // ASSERT
+    expect({ title: text.title, note: text.header?.captionNote?.note }).toEqual(expected);
   });
 });
 

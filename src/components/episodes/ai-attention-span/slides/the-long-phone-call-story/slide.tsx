@@ -73,7 +73,6 @@ export const theLongPhoneCallStory = slide({
           copy={{
             name: t('call.name'),
             duration: t('call.duration'),
-            stepsLabel: t('stepsLabel'),
             bubbles: BUBBLES.map((index) => t(`bubbles.${index}`)),
             punchline: t('punchline'),
             effects: {

@@ -92,6 +92,27 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('follows the caption with a Context marker to its note, as a button named by the label', () => {
+    // ARRANGE
+    const expected = { note: 'what-is-context-rot', label: 'Speaker note: Context rot' };
+    // ACT
+    const html = header({ entrance: 'none', captionNote: { note: expected.note, label: expected.label } });
+    // ASSERT
+    expect(html).toMatch(
+      new RegExp(`data-target="caption"[^>]*>.*Revenue.*<button[^>]*data-context-ref="${expected.note}"`),
+    );
+    expect(html).toContain(`aria-label="${expected.label}"`);
+  });
+
+  it('draws no marker in a caption without a note', () => {
+    // ARRANGE
+    const expected = 'data-context-ref';
+    // ACT
+    const html = header({ entrance: 'none' });
+    // ASSERT
+    expect(html).not.toContain(expected);
+  });
+
   it('sets nothing off in a caption without emphasis', () => {
     // ARRANGE
     const expected = 'data-emphasis';
