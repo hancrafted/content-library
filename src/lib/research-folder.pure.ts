@@ -8,22 +8,33 @@
 
 import type { Finding } from './finding.pure';
 
+/** One llm-wiki index line: `- [<title>](<path>) — <description>`, capturing the path and the description. */
+export const INDEX_ENTRY = /^- \[[^\]]+\]\(([^)]+)\) — (.*)$/;
+
 const CATEGORIES_HEADING = '## Research categories';
 const LLM_WIKI_RESEARCH = 'docs/llm-wiki/research/';
 const NAME = /^([A-Z]+)-(\d{4})__([a-z0-9]+(?:-[a-z0-9]+)*)$/;
 const SLUG_LENGTH = { min: 20, max: 40 };
 const FORMAT = `<category>-<####>__<question-slug, ${SLUG_LENGTH.min}-${SLUG_LENGTH.max} chars kebab-case>`;
 
-/** The category IDs GLOSSARY.md defines, one `**<ID>**:` term each under its section. */
-export function researchCategories(glossary: string): string[] {
+/** Each category GLOSSARY.md defines, its ID to its name: `**<ID>**: <name>: <scope>` under its section. */
+export function researchCategoryNames(glossary: string): Map<string, string> {
   const lines = glossary.split('\n');
   const start = lines.findIndex((line) => line.trim() === CATEGORIES_HEADING);
-  if (start === -1) return [];
+  if (start === -1) return new Map();
   const end = lines.findIndex((line, at) => at > start && line.startsWith('## '));
-  return lines
-    .slice(start + 1, end === -1 ? undefined : end)
-    .map((line) => /^\*\*([A-Z]+)\*\*:/.exec(line)?.[1])
-    .filter((id): id is string => id !== undefined);
+  return new Map(
+    lines
+      .slice(start + 1, end === -1 ? undefined : end)
+      .map((line) => /^\*\*([A-Z]+)\*\*:\s*([^:]*)/.exec(line))
+      .filter((match): match is RegExpExecArray => match !== null)
+      .map((match) => [match[1], match[2].trim()] as const),
+  );
+}
+
+/** The category IDs GLOSSARY.md defines, one `**<ID>**:` term each under its section. */
+export function researchCategories(glossary: string): string[] {
+  return [...researchCategoryNames(glossary).keys()];
 }
 
 function finding(file: string, message: string): Finding {

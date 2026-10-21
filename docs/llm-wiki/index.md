@@ -16,6 +16,23 @@ Research any Episode can cite, one file per question. The retrieval job reads ea
 - [Why does richer context and a clearer brief measurably improve AI output?](research/AIE/AIE-0004__context-and-brief-improve-ai-output/research.md) — Relevant, specific context and a fully specified brief measurably lift LLM output, but padding, noise and boilerplate overviews do not help and can hurt.
 - [Why does unchecked AI work carry real risk?](research/AIE/AIE-0005__risks-of-unchecked-ai-output/research.md) — Unchecked AI output has caused documented harm, from sanctioned fake citations to less secure code written with more confidence, so someone must verify it.
 - [Why is effective AI delegation a management discipline rather than a skill of seniority, given that AI boosts novices more on simple tasks?](research/AIE/AIE-0006__ai-delegation-as-management-skill/research.md) — Delegating real work to AI takes management disciplines (briefing, context, verification) that experience merely correlates with, and novice-boost studies measure bounded tasks, not that discipline.
+- [Why does decomposing a complex task into smaller subtasks improve LLM results?](research/AIE/AIE-0007__task-decomposition-improves-llm/research.md) — Models often solve each sub-problem yet fail to compose them, and decomposing into simpler, separately prompted subtasks closes much of that gap.
+- [Why do explicit written requirements reduce the variation in LLM output?](research/AIE/AIE-0008__written-requirements-reduce-variance/research.md) — A stated requirement is met more steadily across prompts and model updates than a guessed one, but stating all at once can lower compliance and run noise remains.
+- [Why does letting an LLM ask clarifying questions before a task improve the result?](research/AIE/AIE-0009__clarifying-questions-before-task/research.md) — Clarifying questions improve results because they replace the model's guesses about missing requirements with the user's answers, but only for underspecified tasks.
+- [Why does checking intermediate steps catch errors that a review of only the final result misses?](research/AIE/AIE-0010__checking-intermediate-steps/research.md) — A correct-looking final answer can rest on flawed reasoning, so step-level checks find errors that final-result checks pass, though models cannot reliably find those errors in themselves.
+- [Why does a fresh, focused context outperform a long, accumulated chat?](research/AIE/AIE-0011__fresh-context-beats-long-chat/research.md) — A fresh, focused context outperforms a long chat because accuracy falls as input grows and a model that took a wrong turn leans on its own earlier attempts and does not recover.
+
+### Large language models (LLM)
+
+- [Why do large language models give different answers to the same prompt?](research/LLM/LLM-0001__llm-output-nondeterminism/research.md) — Models sample each next token from a probability distribution, and even with sampling switched off, server-side numerical effects still change the output between runs.
+- [Why does an LLM resend the whole chat on every message?](research/LLM/LLM-0002__llm-resends-whole-chat/research.md) — The model keeps no state between requests, so each message must carry the full conversation as input, and that whole input is processed and billed again unless a cache covers it.
+- [Why does an LLM forget everything between chats?](research/LLM/LLM-0003__llm-memory-between-chats/research.md) — A model keeps nothing between requests, so it only knows what the current context holds; any memory across chats is text an application stores and sends again.
+- [Why do LLMs answer confidently instead of asking when a prompt is vague?](research/LLM/LLM-0004__llm-confidence-on-vague-prompts/research.md) — Training and evaluation reward a committed answer over an abstention or a clarifying question, so language models guess one reading of a vague prompt.
+- [Why does an LLM trained on public text lack knowledge of a specific organisation?](research/LLM/LLM-0005__llm-lacks-organization-knowledge/research.md) — An LLM lacks organisational knowledge because a company's internal facts are absent from public training text, and rare facts are learned poorly even when present.
+
+### Organizations (ORG)
+
+- [Why does tacit organisational knowledge fail to transfer during employee onboarding?](research/ORG/ORG-0001__tacit-knowledge-onboarding-transfer/research.md) — Tacit knowledge resists being written down, and the receiver needs prior knowledge and close contact to absorb it, so what is not shown in practice is lost on a newcomer.
 
 ### Sales (SALES)
 

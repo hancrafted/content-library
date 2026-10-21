@@ -31,6 +31,10 @@ A Slide's popover is copied from a Master slide that has one (`metro-map`, `hori
 
 A Slide's title names its **topic**; its caption states the **claim**. The title is also the Dossier's table-of-contents entry, so it stays short. Every page Slide wears the shared Slide header, its Eyebrow the Section's title and the Slide's place in it.
 
+## A change of role is the loudest thing
+
+When a Slide turns the viewer from asking to being asked, or from one role to another, that turn gets the strongest contrast on the Slide and a plain label. Han on the new hire Slide: “The now you hand it over section, switch roles is not really clear in this design. It needs to stand out more that now imagine you are now handing this task to somebody else” (`onboard-ai-every-time`, pick 1a).
+
 ## One example world per Slide
 
 A Slide's examples come from one client industry: three logistics companies on a lead list, not a bakery beside a dental practice. Han asked for “one client industry for the Slide” on three Slides of `never-too-early-sales`: Stages of sale, Pipeline tools in practice, and What is a sales pipeline.

@@ -7,7 +7,7 @@ import { hero } from './slides/hero/slide';
 
 /*
  * "Treat AI like a brilliant freelancer with amnesia": name the five traits that make AI costly (PRICE), and manage
- * them with five moves (BRIEF). Built from the approved Spec under docs/episodes/onboard-ai-every-time/. Upcoming
+ * them with five moves (BRIEF). Built from the approved Spec, as committed in 3fa8e540. Upcoming
  * until its video is live.
  *
  * Each Section is one placement marker under `sections/`, named after the Section's slug and listed here in Spec

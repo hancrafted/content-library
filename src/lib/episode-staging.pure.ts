@@ -13,6 +13,7 @@ import { checkStagingOrder } from './episode-staging-order.pure';
 import { checkTexts } from './episode-staging-texts.pure';
 import { checkTitleSlide } from './episode-staging-title.pure';
 import { unless, type Finding } from './finding.pure';
+import { INDEX_ENTRY } from './research-folder.pure';
 import { frontmatterField } from './staging-file.pure';
 import {
   blocksOf,
@@ -190,8 +191,6 @@ function checkDossier(files: Readonly<Record<string, string>>, known: KnownVisua
     ...checkSpeakerNotes(dossierBlocks),
   ];
 }
-
-const INDEX_ENTRY = /^- \[[^\]]+\]\(([^)]+)\) — (.*)$/;
 
 /**
  * Checks the llm-wiki index against its research files: one entry per file,
