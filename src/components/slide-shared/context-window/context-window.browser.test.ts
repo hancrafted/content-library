@@ -20,12 +20,12 @@ let connection: Connection;
 let targetId = '';
 let send: Send;
 
-async function open(theme: 'light' | 'dark') {
+async function open(theme: 'light' | 'dark', url = URL_UNDER_TEST) {
   await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: theme }] });
   const loaded = new Promise((resolve) =>
     connection.events.addEventListener(eventName(sessionOf(send), 'Page.loadEventFired'), resolve, { once: true }),
   );
-  await send('Page.navigate', { url: URL_UNDER_TEST });
+  await send('Page.navigate', { url });
   await loaded;
   await delay(1500);
   await evaluate(send, AXE);
@@ -80,6 +80,31 @@ async function taskMs(): Promise<number> {
   const { metrics } = (await send('Performance.getMetrics')) as { metrics: { name: string; value: number }[] };
   return (metrics.find((m) => m.name === 'TaskDuration')?.value ?? 0) * 1000;
 }
+
+/** The German gallery: the same path under `/de`. */
+const germanOf = (url: string) => {
+  const german = new URL(url);
+  german.pathname = `/de${german.pathname}`;
+  return german.href;
+};
+
+const viewport = (width: number) =>
+  send('Emulation.setDeviceMetricsOverride', { width, height: 900, deviceScaleFactor: 1, mobile: false });
+
+/** How far the page scrolls sideways, and every element that pokes out of its cornerstone's card. */
+const overflowOf = () =>
+  evaluate<{ sideways: number; poking: string[] }>(
+    send,
+    `(() => {
+      const poking = [...document.querySelectorAll('[data-cornerstone], [data-mini]')].flatMap((card) => {
+        const box = card.getBoundingClientRect();
+        return [...card.querySelectorAll('*')]
+          .filter((el) => { const r = el.getBoundingClientRect(); return r.width && (r.right > box.right + 0.5 || r.left < box.left - 0.5); })
+          .map((el) => (card.dataset.cornerstone ?? 'mini') + ' ' + el.tagName + ' ' + el.className);
+      });
+      return { sideways: document.documentElement.scrollWidth - innerWidth, poking };
+    })()`,
+  );
 
 const attr = (preset: string, selector: string, name: string) =>
   evaluate<string | null>(
@@ -174,6 +199,28 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it(
+    'fits a phone, a laptop and a desktop in both locales: no sideways scroll, nothing out of its card',
+    async () => {
+      // ARRANGE
+      const widths = [375, 1100, 1440];
+      const pages = [URL_UNDER_TEST, germanOf(URL_UNDER_TEST)];
+      const found: string[] = [];
+      // ACT
+      for (const width of widths)
+        for (const page of pages) {
+          await viewport(width);
+          await open('light', page);
+          const { sideways, poking } = await overflowOf();
+          found.push(...(sideways ? [`${width} ${page} scrolls ${sideways}px sideways`] : []), ...poking);
+        }
+      await viewport(widths[widths.length - 1]);
+      // ASSERT
+      expect(found).toEqual([]);
+    },
+    TIMEOUT,
+  );
+
   it(
     'switches Slide 5 to the 1M window: the meter reads the same chat against 1M',
     async () => {
