@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { contextData } from './context-data';
 import { attentionAt, gridBoxes, largestRemainder, readoutAt, usageRows } from './context-usage.pure';
 import { categoriesOf, framesOf } from './context.pure';
 import type { Chat, WindowSize } from './context.types';
@@ -94,6 +95,28 @@ describe('edge cases', () => {
     expect(boxes.filter((b) => b.kind === 'buffer')).toHaveLength(expected.buffer);
     expect(boxes.filter((b) => b.cat === 'user')).toHaveLength(expected.user);
   });
+
+  it.each(['en', 'de'] as const)(
+    'lays the %s grid boxes out in the order the messages appear in the chat',
+    (locale) => {
+      // ARRANGE
+      const chats = Object.values(contextData(locale).chats);
+      const misordered: string[] = [];
+      // ACT
+      for (const chat of chats) {
+        framesOf(chat).forEach((frame, i) => {
+          const order = frame.blocks.map((block) => block.key);
+          const at = gridBoxes(frame, WINDOW).flatMap((box) =>
+            box.kind === 'used' ? [order.indexOf(`${box.id}@${box.cat}`)] : [],
+          );
+          if (at.some((position, j) => position < (at[j - 1] ?? 0))) misordered.push(`${chat.id} step ${i + 1}`);
+        });
+      }
+      // ASSERT
+      expect(chats.length).toBeGreaterThan(0);
+      expect(misordered).toEqual([]);
+    },
+  );
 
   it('lets a fill inside the buffer eat it, and keeps free space at zero', () => {
     // ARRANGE

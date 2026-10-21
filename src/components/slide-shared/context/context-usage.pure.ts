@@ -76,14 +76,15 @@ function boxCounts(sums: readonly number[], box: number, total: number): number[
 
 /**
  * Claude Code's /context grid: 100 boxes grouped by category. Each category present gets at least one box, the rest by
- * its share; inside a category each box belongs to the block at its midpoint. The buffer's boxes close the grid.
+ * its share; inside a category each box belongs to the block at its midpoint. The used boxes then follow the window's
+ * order, the order the messages appear in the chat, so a category's boxes can sit apart. The buffer's boxes close the grid.
  */
 export function gridBoxes(frame: Frame, window: WindowSize, total = 100): readonly GridBox[] {
   const box = window.tokens / total;
   const cats = CATEGORIES.map(({ cat }) => cat).filter((cat) => (frame.byCategory[cat] ?? 0) > 0);
   const sums = cats.map((cat) => frame.byCategory[cat] ?? 0);
   const counts = boxCounts(sums, box, total);
-  const out: GridBox[] = cats.flatMap((cat, ci) => {
+  const used: GridBox[] = cats.flatMap((cat, ci) => {
     const blocks = frame.blocks.filter((block) => block.cat === cat);
     const count = counts[ci] ?? 0;
     return Array.from({ length: count }, (_, j): GridBox => {
@@ -93,6 +94,11 @@ export function gridBoxes(frame: Frame, window: WindowSize, total = 100): readon
       return { kind: 'used', id: block?.id ?? '', cat };
     });
   });
+  const place = (box: GridBox) => frame.blocks.findIndex((b) => b.id === box.id && b.cat === box.cat);
+  const out = used
+    .map((box) => [box, place(box)] as const)
+    .sort((a, b) => a[1] - b[1])
+    .map(([box]) => box);
   const bufferBoxes = Math.round(window.bufferTokens / box);
   while (out.length < total - bufferBoxes) out.push({ kind: 'free', id: null, cat: null });
   while (out.length < total) out.push({ kind: 'buffer', id: null, cat: null });
