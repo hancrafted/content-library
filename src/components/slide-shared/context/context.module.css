@@ -198,6 +198,16 @@
   color: var(--foreground);
   box-shadow: 0 1px 3px color-mix(in oklch, var(--foreground) 14%, transparent);
 }
+.show[data-reorder] button {
+  cursor: grab;
+  user-select: none;
+}
+.show[data-dragging] button {
+  cursor: grabbing;
+}
+.show button[data-lifted] {
+  box-shadow: 0 2px 8px color-mix(in oklch, var(--foreground) 22%, transparent);
+}
 .show button[aria-pressed='true']::before {
   background: currentColor;
 }

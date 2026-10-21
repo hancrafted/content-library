@@ -1,5 +1,6 @@
-import type { Dispatch } from 'react';
+import type { Dispatch, ReactNode } from 'react';
 import { Attention as AttentionList } from './attention';
+import { columns } from './context-columns.pure';
 import { controlOf, offers } from './context-controls.pure';
 import type { HeadToggle } from './context-parts.types';
 import { ContextPreview } from './context-preview';
@@ -44,29 +45,6 @@ function lightingOf(m: Model) {
 
 function speechOf(m: Model) {
   return { words: m.data.words, locale: m.data.locale, story: m.data.story };
-}
-
-function chatWidth(parts: ViewState['parts'], collapsed: boolean): string {
-  if (collapsed) return '3rem';
-  return !parts.context && !parts.panel ? 'minmax(16rem, 40rem)' : 'minmax(16rem, 1.15fr)';
-}
-
-/** The grid's columns, one per part shown: the layout follows the parts, not the other way round. */
-function columns(parts: ViewState['parts'], state: ViewState, height: number) {
-  const all: [Part, string, string][] = [
-    ['chat', chatWidth(parts, state.chatCollapsed), 'chat'],
-    ['timeline', '3.5rem', 'timeline'],
-    ['context', renderModeOf(state, 'context-window') === 'technical' ? '18rem' : '26rem', 'ctx'],
-    ['panel', parts.chat ? 'minmax(15rem, 1fr)' : 'minmax(15rem, 1.6fr)', 'panel'],
-    ['attention', parts.chat ? 'minmax(15rem, 1fr)' : 'minmax(15rem, 1.6fr)', 'att'],
-  ];
-  const shown = all.filter(([part]) => parts[part]);
-  const areas = shown.map(([, , area]) => area).join(' ');
-  return {
-    '--cols': shown.map(([, col]) => col).join(' ') || '1fr',
-    '--areas': areas ? `'${areas}'` : 'none',
-    '--main-h': `${height}rem`,
-  };
 }
 
 interface PartProps {
@@ -214,20 +192,31 @@ function AttentionPart({ m, events }: PartProps) {
   );
 }
 
+/** The grid's children by part. Each carries its part id as its key, so a reorder moves the DOM nodes, never remounts. */
+const PIECES: Readonly<Partial<Record<Part, (p: PartProps & { readonly sentence: string }) => ReactNode>>> = {
+  chat: (p) => <ConversationPart key="chat" m={p.m} events={p.events} />,
+  timeline: (p) => (p.m.state.parts.timeline ? <TimelinePart key="timeline" m={p.m} valueText={p.sentence} /> : null),
+  context: (p) => (p.m.state.parts.context ? <ContextWindowPart key="context" m={p.m} events={p.events} /> : null),
+  panel: (p) => (p.m.state.parts.panel ? <DetailsPart key="panel" m={p.m} events={p.events} /> : null),
+  attention: (p) => (p.m.state.parts.attention ? <AttentionPart key="attention" m={p.m} events={p.events} /> : null),
+};
+
+/** The preview has no cell of its own: it sits inside the context window, so its chip orders the chips only. */
 export function Parts({ m, events, sentence }: PartProps & { readonly sentence: string }) {
-  const P = m.state.parts;
   return (
-    <div className={styles.main} style={columns(P, m.state, m.data.preset.height) as never}>
-      <ConversationPart m={m} events={events} />
-      {P.timeline ? <TimelinePart m={m} valueText={sentence} /> : null}
-      {P.context ? <ContextWindowPart m={m} events={events} /> : null}
-      {P.panel ? <DetailsPart m={m} events={events} /> : null}
-      {P.attention ? <AttentionPart m={m} events={events} /> : null}
+    <div className={styles.main} style={columns(m.state.parts, m.state, m.data.preset.height) as never}>
+      {m.state.order.map((part) => PIECES[part]?.({ m, events, sentence }))}
     </div>
   );
 }
 
-export function ToolbarPart({ m, onOpen }: { readonly m: Model; readonly onOpen: (text: string) => void }) {
+interface ToolbarPartProps {
+  readonly m: Model;
+  readonly onOpen: (text: string) => void;
+  readonly onReorder: (part: Part, before: Part) => void;
+}
+
+export function ToolbarPart({ m, onOpen, onReorder }: ToolbarPartProps) {
   const { state, dispatch } = m;
   return (
     <Toolbar
@@ -235,9 +224,11 @@ export function ToolbarPart({ m, onOpen }: { readonly m: Model; readonly onOpen:
       preset={m.data.preset}
       chat={m.chat}
       parts={state.parts}
+      order={state.order}
       technical={state.depth === 'technical'}
       chatCollapsed={state.chatCollapsed}
       onPart={(part) => dispatch({ type: 'TOGGLE_PART', part })}
+      onReorder={onReorder}
       onTechnical={(on) => dispatch({ type: 'SET_DEPTH', value: on ? 'technical' : 'simple' })}
       onCollapse={() => dispatch({ type: 'TOGGLE_CHAT' })}
       onOpen={onOpen}

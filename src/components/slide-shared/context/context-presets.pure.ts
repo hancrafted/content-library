@@ -16,6 +16,12 @@ function layoutProblems(preset: Preset): string[] {
   return ATTENTION_LAYOUTS.includes(layout) ? [] : [`unknown attention layout "${String(layout)}"`];
 }
 
+function orderProblems(preset: Preset): string[] {
+  const { order } = preset;
+  const whole = order.length === PARTS.length && PARTS.every((part) => order.includes(part));
+  return whole ? [] : [`order must list every part once, got ${order.join(', ')}`];
+}
+
 function shapeProblems(preset: Preset, chat: Chat): string[] {
   const steps = chat.steps.length;
   return [
@@ -24,6 +30,7 @@ function shapeProblems(preset: Preset, chat: Chat): string[] {
     ...Object.keys(preset.show)
       .filter((part) => !PARTS.some((p) => p === part))
       .map((part) => `unknown part "${part}"`),
+    ...orderProblems(preset),
     ...pinnedProblems(preset, chat),
     ...layoutProblems(preset),
     ...(preset.height > 0 && Number.isFinite(preset.height) ? [] : ['the height must be a positive number of rem']),

@@ -17,8 +17,9 @@ import { attentionAt, readoutAt } from './context-usage.pure';
 import { fill, storyOf, type ContextViewData } from './context-view';
 import styles from './context.module.css';
 import { categoriesOf, framesOf } from './context.pure';
-import type { Chat } from './context.types';
+import type { Chat, Part } from './context.types';
 import { useWindowEvents } from './use-window-events';
+import { useReorderRepair } from './window-reorder';
 
 /* The cornerstone's one client leaf: it holds the view state and renders every part from it. */
 
@@ -110,6 +111,12 @@ export function ContextClient(data: ContextViewData) {
   const [ready, setReady] = useState(false);
   useEffect(() => setReady(true), []);
   const events = useWindowEvents({ hover: m.state.hover, pinned: m.state.pinned, dispatch: m.dispatch, root });
+  const saveScroll = useReorderRepair(root, m.state.order);
+  const { dispatch } = m;
+  const onReorder = (part: Part, before: Part) => {
+    saveScroll();
+    dispatch({ type: 'REORDER', part, before });
+  };
   const sentence = sentenceOf(m);
   const status = note || (m.state.previewStep === null ? sentence : '');
   return (
@@ -119,7 +126,7 @@ export function ContextClient(data: ContextViewData) {
       {...rootAttrs(m)}
       onKeyDown={events.onKeyDown}
     >
-      <ToolbarPart m={m} onOpen={onOpen} />
+      <ToolbarPart m={m} onOpen={onOpen} onReorder={onReorder} />
       <Parts m={m} events={events} sentence={sentence} />
       <p className={styles.sr} role="status" aria-atomic="true">
         {status}
