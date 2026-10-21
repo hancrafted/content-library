@@ -777,6 +777,12 @@
   right: 0;
   translate: none;
 }
+/* A button at the right of a popover opens its tip leftwards from its edge, inside the popover. */
+.icon.tipStart[data-tip]::after {
+  left: auto;
+  right: 0;
+  translate: none;
+}
 /* The bar or grid keeps its lighting handlers on a wrapper that adds no box of its own. */
 .own {
   display: contents;
