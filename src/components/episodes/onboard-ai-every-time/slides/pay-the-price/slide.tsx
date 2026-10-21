@@ -92,6 +92,11 @@ export const payThePrice = slide({
           handbook: t('backs.handbook'),
           bill: t('backs.bill'),
           tokens: t('backs.tokens'),
+          handbookWords: {
+            first: t('backs.handbookWords.first'),
+            second: t('backs.handbookWords.second'),
+            last: t('backs.handbookWords.last'),
+          },
           turn: t('backs.turn'),
         }}
       />

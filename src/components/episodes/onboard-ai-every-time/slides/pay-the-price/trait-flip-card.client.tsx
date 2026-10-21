@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import type { Dispatch, ReactNode } from 'react';
 import { ConfidentBack } from './back-confident';
 import { EveryWordBilledBack } from './back-every-word-billed';
-import { InformedBack } from './back-informed';
+import { InformedBack, type HandbookWords } from './back-informed';
 import { ProbabilisticBack } from './back-probabilistic';
 import { RelentlessBack } from './back-relentless';
 import styles from './trait-flip.module.css';
@@ -30,6 +30,8 @@ export interface BackLabels {
   handbook: string;
   bill: string;
   tokens: string;
+  /** The words the redacted handbook still shows. */
+  handbookWords: HandbookWords;
   /** The accessible name of the button that turns a card to its text and back. */
   turn: string;
 }
@@ -42,7 +44,7 @@ function Back({ slug, ai, labels }: { slug: Trait; ai: boolean; labels: BackLabe
     case 'relentless':
       return <RelentlessBack ai={ai} />;
     case 'informed':
-      return <InformedBack ai={ai} handbook={labels.handbook} />;
+      return <InformedBack ai={ai} handbook={labels.handbook} words={labels.handbookWords} />;
     case 'confident':
       return <ConfidentBack ai={ai} />;
     case 'every-word-billed':

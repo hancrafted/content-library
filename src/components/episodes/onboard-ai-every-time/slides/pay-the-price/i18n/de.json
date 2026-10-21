@@ -49,7 +49,12 @@
     "handbook": "Wie wir arbeiten",
     "bill": "Rechnung",
     "tokens": "Tokens",
-    "turn": "Karte auf ihren Text drehen"
+    "turn": "Karte auf ihren Text drehen",
+    "handbookWords": {
+      "first": "Wir",
+      "second": "immer",
+      "last": "nie"
+    }
   },
   "closing": "<strong>Amnesie:</strong> Nach jedem Gespräch vergessen sie alles, also musst du sie neu einarbeiten, und jeder Auftrag beginnt bei null.",
   "notes": {

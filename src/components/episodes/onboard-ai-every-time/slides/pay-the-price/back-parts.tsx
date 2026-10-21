@@ -32,10 +32,18 @@ export function beat(vars: {
   } as CSSProperties;
 }
 
-/** A back's canvas: 200 × 72 user units, shrinking with its card. */
-export function BackSvg({ children }: { children: ReactNode }) {
+/**
+ * A back's canvas: as wide as its drawing at rest, `width` × 72 user units, shrinking with its card. A tight canvas
+ * sits flush against the chip side of its card, so both sides of a row rest at the same inset from their border.
+ */
+export function BackSvg({ width, children }: { width: number; children: ReactNode }) {
   return (
-    <svg className={styles.anim} viewBox="0 0 200 72" aria-hidden="true">
+    <svg
+      className={styles.anim}
+      viewBox={`0 0 ${width} 72`}
+      style={{ flexBasis: `${width / 16}rem`, aspectRatio: `${width} / 72` }}
+      aria-hidden="true"
+    >
       {children}
     </svg>
   );

@@ -49,7 +49,12 @@
     "handbook": "How we work here",
     "bill": "bill",
     "tokens": "tokens",
-    "turn": "Turn the card to its text"
+    "turn": "Turn the card to its text",
+    "handbookWords": {
+      "first": "We",
+      "second": "always",
+      "last": "never"
+    }
   },
   "closing": "<strong>Amnesia:</strong> after each conversation, they forget everything, so you have to onboard them again, and every job starts from zero.",
   "notes": {
