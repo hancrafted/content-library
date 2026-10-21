@@ -165,14 +165,14 @@ story:
     technical: '`CLAUDE.md` und Memory-Dateien, nach dem Systemprompt geladen. 2k Tokens.'
   m3:
     event: Du setzt das Budget
-    simple: 'Deine erste Nachricht. Sie enthält die eine harte Grenze: 40.000 Euro.'
+    simple: 'Deine erste Nachricht. Sie enthält die eine harte Grenze: 30.000 Euro.'
     technical: Nutzerzug, 20 Tokens. Nie wieder erwähnt, also schrumpft sein Anteil an der Aufmerksamkeit, während der Chat wächst.
   m4:
     event: Die KI stellt zwei Fragen
     simple: Auch die Antwort der KI kommt in den Kontext, also trägt die nächste Anfrage sie mit.
     technical: 'Assistentenzug, 18 Tokens. Jede Anfrage sendet den ganzen Kontext neu: die Eingabe von Anfrage 2 ist die von Anfrage 1 plus diese Antwort plus deine nächste Nachricht.'
   m5:
-    event: Du erwähnst 12 vegetarische Gäste
+    event: Du erwähnst 60 vegetarische Gäste
     simple: Ein kleines Detail, das immer wiederkommt. Jedes Mal, wenn der Chat es wiederholt, ist es wieder frisch.
     technical: Nutzerzug, 18 Tokens. Wiederholt in den Schritten 6, 12, 18 und 21, also liegt immer eine junge Kopie nahe am Ende.
   m6:
@@ -233,10 +233,10 @@ story:
     technical: Nutzerzug, 8 Tokens.
   m17:
     event: Die KI öffnete guests.xlsx
-    label: guests.xlsx geöffnet · 40 Zeilen
+    label: guests.xlsx geöffnet · 200 Zeilen
     labelTechnical: '`Bash` `python3 … pandas` · 2k'
-    out: 40 Zeilen · 1,8k
-    simple: 'Die Gästeliste. Vierzig Zeilen sind wenig: eine Tabelle ist billig, bis sie groß ist.'
+    out: 200 Zeilen · 1,8k
+    simple: 'Die Gästeliste. Zweihundert Zeilen sind noch wenig: eine Tabelle ist billig, bis sie groß ist.'
     technical: '`Read` lehnt .xlsx ab, also gibt die KI die Tabelle mit einem Skript aus:'
     pre: Bash("python3 -c 'import pandas as pd; print(pd.read_excel(\"guests.xlsx\").to_csv())'") → 1.800 Tokens
   m18:
@@ -251,12 +251,12 @@ story:
     event: Die KI rechnete die Kosten zusammen
     label: Kosten zusammengerechnet
     labelTechnical: '`Bash` `python3 budget.py` · 670'
-    out: Summe 52.300 · 350 Tokens
+    out: Summe 42.300 · 350 Tokens
     simple: Die KI hat eine kleine Rechnung laufen lassen. Die Zahlen stimmen; das Budget steckt nicht darin.
-    technical: '`Bash("python3 budget.py")`: die Summe stimmt, aber die Grenze von 40.000 aus Schritt 3 hat es nie ins Skript geschafft.'
+    technical: '`Bash("python3 budget.py")`: die Summe stimmt, aber die Grenze von 30.000 aus Schritt 3 hat es nie ins Skript geschafft.'
   m24:
-    event: 'Der Plan der KI: 52.300 Euro'
-    simple: Die Vegetarier haben es geschafft. Das Budget von 40.000 Euro nicht.
+    event: 'Der Plan der KI: 42.300 Euro'
+    simple: Die Vegetarier haben es geschafft. Das Budget von 30.000 Euro nicht.
     technical: Assistentenzug, 30 Tokens. Das Budget aus Schritt 3 steht noch im Kontext, bekam aber zwischen vielen ähnlichen Zahlen aus Angeboten und Suchen wenig Aufmerksamkeit (Distraktoren, Chroma 2025), also liegt der Plan 12.300 Euro darüber.
   m25:
     event: Du merkst das Budget an und fragst nach dem Vertrag
@@ -276,9 +276,9 @@ story:
     simple: Die App hat die ganze Unterhaltung still durch eine Zusammenfassung ersetzt. Du hast es nicht kommen sehen; der Chat sieht gleich aus, aber die KI hat jetzt nur noch die Zusammenfassung.
     technical: 'Autocompact: ein Modellaufruf schreibt eine gegliederte Zusammenfassung, und sie ersetzt jede Nachricht, jeden Werkzeugaufruf und jedes Werkzeugergebnis. Systemprompt, Werkzeuge, MCP, Skills und Memory-Dateien werden neu geladen. Kürzlich gelesene Dateien kommen nur zurück, wenn sie unter 5k Tokens liegen; beide PDFs kommen als Pfade zurück.'
     kept:
-      - 'Das Ziel: ein Sommerfest für 40, Ende Juni, in Lissabon'
-      - 'Das Budget: 40.000 Euro, und dass der letzte Plan 12.300 darüber lag'
-      - 12 vegetarische Gäste, 15 reisen an
+      - 'Das Ziel: ein Sommerfest für 200 Mitarbeitende an fünf Standorten in Europa, Ende Juni, in Lissabon'
+      - 'Das Budget: 30.000 Euro, und dass der letzte Plan 12.300 darüber lag'
+      - 60 vegetarische Gäste, 150 reisen an
       - Ort Estrela-Pavillon, Caterer Sabor Verde, Hotels Lumen und Casa do Rio
       - 'Vertrag: Musik bis 23:00, 30 % Anzahlung'
     dropped:
@@ -297,11 +297,11 @@ story:
   m30:
     event: Die KI rechnete die Kosten zusammen, mit Grenze
     label: Kosten zusammengerechnet
-    labelTechnical: '`Bash` `python3 budget.py --limit 40000` · 670'
-    out: Summe 40.000 · 350 Tokens
+    labelTechnical: '`Bash` `python3 budget.py --limit 30000` · 670'
+    out: Summe 30.000 · 350 Tokens
     simple: Diesmal steckt das Budget in der Rechnung.
-    technical: '`Bash("python3 budget.py --limit 40000")`: die Grenze aus der Zusammenfassung hat es ins Skript geschafft.'
+    technical: '`Bash("python3 budget.py --limit 30000")`: die Grenze aus der Zusammenfassung hat es ins Skript geschafft.'
   m31:
-    event: 'Der Plan passt: 40.000 Euro'
+    event: 'Der Plan passt: 30.000 Euro'
     simple: 'Weniger Detail, mehr Fokus: die Zusammenfassung hat das Budget wieder nach vorn geholt.'
     technical: Assistentenzug, 32 Tokens. Nach der Verdichtung steht die Zusammenfassung direkt hinter den Startanweisungen, wo die Aufmerksamkeit stark ist, und das Budget steckt darin.

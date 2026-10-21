@@ -24,12 +24,12 @@
     "6": "Das haben wir vor einer Stunde geklärt!"
   },
   "right": {
-    "0": "Plane ein Sommerfest für unser Team: 40 Leute, Ende Juni.",
+    "0": "Plane das nächste Sommerfest Deiner Firma: 200 Mitarbeitende an fünf Standorten in Europa, Ende Juni.",
     "1": "Gern! Drinnen oder draußen? Ernährungswünsche?",
-    "2": "Das Budget liegt bei <budget>40.000 Euro</budget>.",
+    "2": "Das Budget liegt bei <budget>30.000 Euro</budget>.",
     "3": "Notiert! Drei Orte in Lissabon: Quinta-Terrasse, LX-Factory-Dachterrasse, Estrela-Pavillon.",
     "4": "Super, stell den ganzen Plan zusammen.",
-    "5": "Hier ist der ganze Plan: Ort 28.000 €, Catering 16.000 €, Band 8.000 €. Gesamt <budget>52.000 €</budget>."
+    "5": "Hier ist der ganze Plan: Ort 17.000 €, Catering 19.300 €, Band 6.000 €. Gesamt <budget>42.300 €</budget>."
   },
   "tools": {
     "web": "10 Seiten abgerufen · 15k Auszüge"
@@ -88,12 +88,12 @@
       "meet-the-summer-party-chat": {
         "title": "Das ist der Sommerfest-Chat",
         "keywords": "",
-        "script": "Ich stelle Dir einen Chat vor, der uns durch die ganze Folge begleitet. Du planst mit einer KI ein Sommerfest für Deine Firma: 40 Leute, Ende Juni, und Du gibst ihr ein PDF mit Catering-Angeboten und eine Gästeliste. Merk Dir diesen Chat, denn wir kommen auf jeder folgenden Folie zu ihm zurück."
+        "script": "Ich stelle Dir einen Chat vor, der uns durch die ganze Folge begleitet. Du planst mit einer KI das nächste Sommerfest Deiner Firma: 200 Mitarbeitende an fünf Standorten in Europa, Ende Juni, und Du gibst ihr ein PDF mit Catering-Angeboten und eine Gästeliste. Merk Dir diesen Chat, denn wir kommen auf jeder folgenden Folie zu ihm zurück."
       },
       "it-happens-in-a-long-chat-too": {
         "title": "Im langen Chat passiert es auch",
         "keywords": "",
-        "script": "Jetzt lass ihn eine Stunde laufen. Nur die allerersten Anweisungen werden eher genutzt, die neuesten Nachrichten werden eher genutzt, und alles dazwischen geht verloren, selbst Deine eigenen ersten Nachrichten. Früh im Chat legst Du das Budget auf 40.000 Euro fest. Viel später bittest Du um den ganzen Plan, und die KI liefert einen selbstsicheren Plan über 52.000 Euro, als hättest Du nie 40.000 gesagt. Warum das passiert, kommt auf einer späteren Folie."
+        "script": "Jetzt lass ihn eine Stunde laufen. Nur die allerersten Anweisungen werden eher genutzt, die neuesten Nachrichten werden eher genutzt, und alles dazwischen geht verloren, selbst Deine eigenen ersten Nachrichten. Früh im Chat legst Du das Budget auf 30.000 Euro fest. Viel später bittest Du um den ganzen Plan, und die KI liefert einen selbstsicheren Plan über 42.300 Euro, als hättest Du nie 30.000 gesagt. Warum das passiert, kommt auf einer späteren Folie."
       },
       "a-shape-not-a-brain": {
         "title": "Eine Form, kein Gehirn",
