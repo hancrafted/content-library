@@ -1,0 +1,64 @@
+{
+  "title": "Was wir bisher gelernt haben",
+  "caption": "Lange KI-Chats zeigen dieselben Effekte wie lange Telefonate, denn die Aufmerksamkeitsspanne der KI ist ihr Kontextfenster: eine begrenzte Ressource, die du aktiv verwaltest.",
+  "call": {
+    "kicker": "Menschliche Aufmerksamkeit",
+    "label": "Das Telefonat mit Deiner Schwester, die Mitte verblasst",
+    "lines": {
+      "holidays": "Lass uns die Ferien planen!",
+      "mums-phone": "Ja! Aber erst: Hast du von Mamas neuem Handy gehört?",
+      "what-happened": "Nein, was ist passiert?",
+      "thumb-photos": "Sie hat mir vierzig Fotos von ihrem Daumen geschickt.",
+      "renovation": "Ha! Hast du die Renovierung der Nachbarn gesehen?",
+      "back-hurts": "Fang bloß nicht davon an. Und mein Rücken tut wieder weh.",
+      "pepper": "Und Pepper hat einen ganzen Geburtstagskuchen gefressen, samt Kerzen!",
+      "recipe": "Hast du das neue Rezept probiert?",
+      "dinner": "Noch nicht. Oh, das Essen ist fertig, ich muss los.",
+      "bye": "Bis bald, tschüss!"
+    },
+    "line": "Unser Gedächtnis folgt dem Primacy- und dem Recency-Effekt: Wir erinnern uns an den Anfang, das Ende und das Auffällige."
+  },
+  "same": "dieselbe Form",
+  "analogy": "<marker>eine Analogie, kein Beweis</marker>",
+  "chat": {
+    "kicker": "KI-Aufmerksamkeit (Kontextfenster)",
+    "learnings": {
+      "middle": "Wichtige Informationen und Entscheidungen gehen in der Mitte verloren.",
+      "compaction": "Ist das Fenster voll, kann die automatische Verdichtung Details verwerfen, ohne dass Du es merkst."
+    }
+  },
+  "closing": "Lerne, Aufmerksamkeit zu steuern: für Dich optional, für die KI Pflicht.",
+  "notes": {
+    "two-kinds-of-evidence": {
+      "header": "Zwei Arten von Belegen",
+      "description": "das menschliche Muster stammt aus Wortlisten im Labor [1], das Muster der Modelle aus Abruftests mit langen Eingaben [2]; die Übereinstimmung ist eine Analogie, kein Beweis.",
+      "sources": {
+        "murdock-serial-position": {
+          "title": "Murdock, The serial position effect of free recall"
+        },
+        "liu-lost-in-the-middle": {
+          "title": "Liu et al., Lost in the Middle: How Language Models Use Long Contexts"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "same-effects": {
+        "title": "Dieselben Effekte",
+        "keywords": "",
+        "script": "Fassen wir zusammen. Links die menschliche Aufmerksamkeit: Unser Gedächtnis folgt dem Primacy- und dem Recency-Effekt, wir erinnern uns also an den Anfang, das Ende und das Auffällige, und die Mitte verschwimmt. Rechts zeigt die KI-Aufmerksamkeit im Kontextfenster dieselbe Form."
+      },
+      "the-window-is-the-span": {
+        "title": "Das Fenster ist die Spanne",
+        "keywords": "",
+        "script": "Der Grund: Die Aufmerksamkeitsspanne der KI ist ihr Kontextfenster, ein begrenzter Platz, der sich mit jeder Nachricht füllt. Daraus folgen zwei Lehren: Wichtige Informationen und Entscheidungen gehen in der Mitte verloren, und ist das Fenster voll, kann die automatische Verdichtung Details verwerfen, ohne dass Du es merkst. Mit dem Schalter am Fenster wechselst Du zwischen der einfachen und der technischen Ansicht."
+      },
+      "manage-it": {
+        "title": "Verwalte es",
+        "keywords": "",
+        "script": "Lerne also, Aufmerksamkeit zu steuern. Für Dich ist das optional, Du kommst auch mit einem schlechten Gedächtnis durch; für die KI ist es Pflicht. Der Rest der Episode dreht sich darum, was in dieses Fenster kommt und was Du dagegen tust."
+      }
+    }
+  }
+}

@@ -132,6 +132,14 @@
         "sales-pipeline": {
           "name": "Sales pipeline",
           "tooltip": "Every open deal, from first contact to signature"
+        },
+        "context-engineering": {
+          "name": "Context engineering",
+          "tooltip": "Giving the AI the right context at the right time"
+        },
+        "workflow": {
+          "name": "Workflow",
+          "tooltip": "How work is split into steps and handed between chats"
         }
       },
       "formats": {
@@ -438,6 +446,9 @@
   },
   "episodesPage": {
     "title": "Episodes"
+  },
+  "slideHeader": {
+    "pageOf": "Page {position} of {count}"
   },
   "tableOfContents": {
     "title": "Contents",

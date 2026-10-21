@@ -56,6 +56,8 @@
   --size-subheading: clamp(1.875rem, 3.4vw, 3rem);
   --size-body: 1rem;
   --size-caption: 0.875rem;
+  --space-header: 1rem;
+  --space-header-tight: calc(var(--space-header) / 2);
   --leading-hero: 1.05;
   --leading-heading: 1.1;
   --leading-subheading: 1.15;

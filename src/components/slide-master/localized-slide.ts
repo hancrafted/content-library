@@ -7,7 +7,7 @@ import { createTranslator } from 'next-intl';
 import type { ReactNode } from 'react';
 import type { EpisodeRecord, HeaderMode, Slide, SlideMessages } from './slide';
 import type { NoteSpec, RuntimeTranslator, SegmentSpec, SourceSpec } from './slide-base';
-import { captionTextOf, headerTextOf, titleTakenBy, type SlideHeaderText } from './slide-header-text';
+import { captionTextOf, sharedHeaderOf, titleTakenBy, type SlideHeaderText } from './slide-header-text';
 import { slideKit, type ReferenceLabels } from './slide-kit';
 
 /*
@@ -222,17 +222,20 @@ export function localizeSlide(
   const t = ownTranslator(slide.messages[locale], locale);
   const text = textOf(slide, t, locale);
   const shared = episode.header === 'shared';
+  const notes = slide.notes.map((note) => note.slug);
   const kit = slideKit(
     { ...episode, anchors: new Map(episode.placed.map((placed) => [placed.slide.slug, placed.id])) },
     {
       t,
       level,
-      notes: slide.notes.map((note) => note.slug),
+      notes,
       slideId: id,
       ...(shared && { titleTaken: titleTakenBy(id) }),
     },
   );
-  const header = shared ? headerTextOf(t) : undefined;
+  const header = shared
+    ? sharedHeaderOf({ t, note: slide.captionNote, declared: notes, markerLabel: episode.referenceLabels.marker })
+    : undefined;
   const placed = { id, section, ...text, ...(header && { header }), content: slide.content(kit) };
   if (level === 'h3') return { ...placed, level };
   if (text.title === undefined) throw new Error(`Section "${slide.slug}" opens with a Slide that has no title.`);

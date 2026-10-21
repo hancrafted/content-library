@@ -113,13 +113,13 @@ The kit's `Title` maps a title's position to its role: Title slide → `hero`, s
 
 The Slide header ([`slide-header.tsx`](../../src/components/slide-master/slide-header.tsx)) sets three lines above a titled Slide's Scene, in tokens only:
 
-| Part    | Type                                                  | Space                                                     |
-| ------- | ----------------------------------------------------- | --------------------------------------------------------- |
-| Eyebrow | `caption`, uppercase, normal weight, sans, muted      | `mb-4` under it: further from the title than the caption  |
-| Title   | its level's role: `heading` (h2) or `subheading` (h3) | none                                                      |
-| Caption | `body`, muted; a `<b>` run semibold in `primary`      | `mt-2` over it; `max-w-[70%]` from `md`, full width below |
+| Part    | Type                                                  | Space                                                                                                                                   |
+| ------- | ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| Eyebrow | `caption`, uppercase, normal weight, sans, muted      | `--space-header` (1rem) to the title, a flex `gap`                                                                                      |
+| Title   | its level's role: `heading` (h2) or `subheading` (h3) | none                                                                                                                                    |
+| Caption | `body`, muted; a `<b>` run semibold in `primary`      | `--space-header-tight` (half the gap) over it; the header's full width, no cap; `pb-(--space-header)` closes the header above the Scene |
 
-The Eyebrow is computed: the Section title the table of contents shows on the left, `n / N` on the right. Proximity groups the title with its caption; the Eyebrow reads as the label above both. The caption keeps its `<b>` runs, typed character by character like the rest ([`caption-emphasis.pure.ts`](../../src/lib/caption-emphasis.pure.ts)); `em` and `code` read as plain text. The Title slide's header is the `hero` `h1` and the caption, with no Eyebrow: the record's `title` Slide's own `caption` when it gives one, else the Episode's.
+The Eyebrow is computed: the Section title the table of contents shows, then `(n/N)` in brackets right after it; assistive tech hears "Page n of N". Proximity groups the title with its caption; the Eyebrow reads as the label above both. The caption keeps its `<b>` runs, typed character by character like the rest ([`caption-emphasis.pure.ts`](../../src/lib/caption-emphasis.pure.ts)); `em` and `code` read as plain text. The Title slide's header is the `hero` `h1` and the caption, with no Eyebrow: the record's `title` Slide's own `caption` when it gives one, else the Episode's.
 
 A section slide on the shared header sits on a full-bleed band, `bg-section-band` (`--section-band`: one step darker than the page in light, one step off it in dark), so the start of a Section reads at a glance even at `40svh`. On a Title slide with an authored hero Scene the header and the hero sit together, centred in the slide: the hero's frame hugs its content instead of filling the rest of the slide.
 

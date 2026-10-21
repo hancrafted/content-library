@@ -1,0 +1,125 @@
+{
+  "title": "Human in the loop workflow",
+  "caption": "You are the captain: a planner chat prepares each handoff, worker chats do the jobs, and you check every artifact in between.",
+  "pipelineLabel": "The steps of a brief, stage by stage",
+  "stages": {
+    "party": {
+      "name": "Plan a summer party",
+      "move": "Break it down"
+    },
+    "interview": {
+      "name": "Interview",
+      "move": "Interview yourself with AI"
+    },
+    "requirements": {
+      "name": "Requirements",
+      "move": "Requirements first"
+    },
+    "research": {
+      "name": "Research",
+      "move": "Fresh start for each piece"
+    },
+    "compare": {
+      "name": "Compare",
+      "move": "Evaluate each step"
+    },
+    "recommendation": {
+      "name": "Recommendation",
+      "move": "for your boss"
+    }
+  },
+  "loop": {
+    "note": "<marker>A fresh chat for each job</marker> keeps every window small; you coordinate, like a project manager."
+  },
+  "notes": {
+    "clean-windows-for-each-part": {
+      "header": "Clean windows for each part",
+      "description": "Anthropic's remedy for long tasks includes sub-agents that work with clean windows [1].",
+      "sources": {
+        "anthropic-effective-context-engineering": {
+          "title": "Anthropic, Effective context engineering for AI agents"
+        }
+      }
+    },
+    "short-tasks-beat-long-ones": {
+      "header": "Short tasks beat long ones",
+      "description": "Turning a long task into a short one improved results, GPT-4o on RULER by up to 4% [1].",
+      "sources": {
+        "du-context-length-alone-hurts": {
+          "title": "Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "recall": {
+        "title": "Recall the brief",
+        "keywords": "",
+        "script": "Remember the brief for the venue: break the party down, interview yourself with AI, write the requirements first, give each piece a fresh chat, and evaluate each step. That was one task, done well. A bigger project needs the same moves, plus a way of working that holds them together."
+      },
+      "human-in-the-loop": {
+        "title": "Human in the loop",
+        "keywords": "",
+        "script": "This way of working is what we call a human in the loop workflow. You are the orchestrator, the captain at the helm, and you use AI the way a captain uses a crew."
+      },
+      "planner-and-handoff": {
+        "title": "Planner and handoff",
+        "keywords": "",
+        "script": "One chat stays the planner. It helps you prepare the task and writes a handoff. It keeps only the plan and the results, so it stays small and has room to spare."
+      },
+      "worker-chats": {
+        "title": "Worker chats",
+        "keywords": "",
+        "script": "The handoff goes to worker chats, a fresh one per job: venues, catering, invitations. Each worker reads its files, fills up as much as it needs, saves its result, and then you let it go."
+      },
+      "you-check": {
+        "title": "You check",
+        "keywords": "",
+        "script": "You carry the results back to the planner, and every artifact in between, the handoff and each result, is something you check. Every chat has one job, so none of them runs long enough to blur its middle. That is the whole idea: the window is the AI's attention span, and managing it is your job. One honest caveat: the zones and numbers I gave you are rules of thumb and illustrations, and I have not tested every chat app, so watch your own chats and adjust. If you want a low-key place to start, take the next chat that drifts, ask it for a handoff, and open a new one with it. Thank you."
+      }
+    }
+  },
+  "jobsLabel": "{stage}: jobs",
+  "jobs": {
+    "party": {
+      "venue": "Venue",
+      "travel": "Travel",
+      "catering": "Catering",
+      "invitations": "Invitations",
+      "budget": "Budget"
+    },
+    "interview": {
+      "label": "AI asks you",
+      "detail": "3 questions,",
+      "forgot": "<marker>1 you forgot</marker>"
+    },
+    "research": {
+      "venue1": "Venue 1",
+      "venue2": "Venue 2",
+      "venue3": "Venue 3",
+      "checked": "Checked against the card"
+    },
+    "compare": {
+      "label": "Rank 3 venues",
+      "detail": "against the card",
+      "gate": "Gate 2"
+    },
+    "recommendation": {
+      "label": "Venue plan",
+      "detail": "by Friday"
+    }
+  },
+  "card": {
+    "gate": "Gate 1",
+    "title": "Requirements card",
+    "criteria": {
+      "guests": "200 guests",
+      "budget": "€150 per person",
+      "stepFree": "Step-free",
+      "vegetarian": "Vegetarian menu",
+      "quiet": "Quiet to talk"
+    },
+    "signOff": "Signed off"
+  }
+}

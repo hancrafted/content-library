@@ -1,0 +1,125 @@
+{
+  "title": "Human-in-the-Loop-Workflow",
+  "caption": "Du bist der Kapitän: Ein Planer-Chat bereitet jede Übergabe vor, Helfer-Chats erledigen die Aufgaben, und Du prüfst jedes Artefakt dazwischen.",
+  "pipelineLabel": "Die Schritte eines Briefings, Stufe für Stufe",
+  "stages": {
+    "party": {
+      "name": "Plane ein Sommerfest",
+      "move": "Zerlege es"
+    },
+    "interview": {
+      "name": "Interview",
+      "move": "Interviewe Dich mit KI"
+    },
+    "requirements": {
+      "name": "Anforderungen",
+      "move": "Erst die Anforderungen"
+    },
+    "research": {
+      "name": "Recherche",
+      "move": "Frischer Start für jedes Teil"
+    },
+    "compare": {
+      "name": "Vergleich",
+      "move": "Prüfe jeden Schritt"
+    },
+    "recommendation": {
+      "name": "Empfehlung",
+      "move": "für Deine Chefin"
+    }
+  },
+  "loop": {
+    "note": "<marker>Ein frischer Chat pro Aufgabe</marker> hält jedes Fenster klein; Du koordinierst wie ein Projektmanager."
+  },
+  "notes": {
+    "clean-windows-for-each-part": {
+      "header": "Saubere Fenster für jeden Teil",
+      "description": "Anthropics Mittel für lange Aufgaben umfasst Sub-Agents, die mit sauberen Fenstern arbeiten [1].",
+      "sources": {
+        "anthropic-effective-context-engineering": {
+          "title": "Anthropic, Effective context engineering for AI agents"
+        }
+      }
+    },
+    "short-tasks-beat-long-ones": {
+      "header": "Kurze Aufgaben schlagen lange",
+      "description": "Aus einer langen Aufgabe eine kurze zu machen, verbesserte die Ergebnisse, bei GPT-4o auf RULER um bis zu 4 % [1].",
+      "sources": {
+        "du-context-length-alone-hurts": {
+          "title": "Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "recall": {
+        "title": "Das Briefing in Erinnerung",
+        "keywords": "",
+        "script": "Erinnere Dich an das Briefing für die Location: zerlege die Feier, interviewe Dich mit der KI, schreibe zuerst die Anforderungen, gib jedem Teil einen frischen Chat und prüfe jeden Schritt. Das war eine Aufgabe, gut gemacht. Ein größeres Projekt braucht dieselben Schritte und dazu eine Arbeitsweise, die sie zusammenhält."
+      },
+      "human-in-the-loop": {
+        "title": "Human in the Loop",
+        "keywords": "",
+        "script": "Diese Arbeitsweise nennen wir einen Human-in-the-Loop-Workflow. Du bist der Orchestrator, der Kapitän am Steuer, und Du setzt die KI ein, wie ein Kapitän seine Crew einsetzt."
+      },
+      "planner-and-handoff": {
+        "title": "Planer und Übergabe",
+        "keywords": "",
+        "script": "Ein Chat bleibt der Planer. Er hilft Dir, die Aufgabe vorzubereiten, und schreibt eine Übergabe. Er behält nur den Plan und die Ergebnisse, also bleibt er klein und hat Platz übrig."
+      },
+      "worker-chats": {
+        "title": "Helfer-Chats",
+        "keywords": "",
+        "script": "Die Übergabe geht an Helfer-Chats, je ein frischer pro Aufgabe: Locations, Catering, Einladungen. Jeder Helfer liest seine Dateien, füllt sich so weit, wie er muss, speichert sein Ergebnis, und dann lässt Du ihn gehen."
+      },
+      "you-check": {
+        "title": "Du prüfst",
+        "keywords": "",
+        "script": "Du bringst die Ergebnisse zurück zum Planer, und jedes Artefakt dazwischen, die Übergabe und jedes Ergebnis, prüfst Du. Jeder Chat hat einen Job, also läuft keiner lange genug, um seine Mitte zu verwischen. Das ist die ganze Idee: Das Fenster ist die Aufmerksamkeitsspanne der KI, und sie zu managen ist Dein Job. Ein ehrlicher Hinweis: Die Zonen und Zahlen, die ich Dir genannt habe, sind Faustregeln und Veranschaulichungen, und ich habe nicht jede Chat-App getestet, also beobachte Deine eigenen Chats und pass an. Wenn Du entspannt anfangen willst, nimm den nächsten Chat, der abdriftet, bitte ihn um eine Übergabe und öffne damit einen neuen. Danke."
+      }
+    }
+  },
+  "jobsLabel": "{stage}: Aufgaben",
+  "jobs": {
+    "party": {
+      "venue": "Location",
+      "travel": "Anreise",
+      "catering": "Catering",
+      "invitations": "Einladungen",
+      "budget": "Budget"
+    },
+    "interview": {
+      "label": "KI fragt Dich",
+      "detail": "3 Fragen,",
+      "forgot": "<marker>1 vergessen</marker>"
+    },
+    "research": {
+      "venue1": "Location 1",
+      "venue2": "Location 2",
+      "venue3": "Location 3",
+      "checked": "Gegen die Karte geprüft"
+    },
+    "compare": {
+      "label": "3 Locations ranken",
+      "detail": "gemessen an der Karte",
+      "gate": "Prüfpunkt 2"
+    },
+    "recommendation": {
+      "label": "Location-Plan",
+      "detail": "bis Freitag"
+    }
+  },
+  "card": {
+    "gate": "Prüfpunkt 1",
+    "title": "Anforderungskarte",
+    "criteria": {
+      "guests": "200 Gäste",
+      "budget": "150 € pro Person",
+      "stepFree": "Stufenlos",
+      "vegetarian": "Vegetarisches Menü",
+      "quiet": "Ruhig genug zum Reden"
+    },
+    "signOff": "Freigegeben"
+  }
+}

@@ -2,6 +2,7 @@ import type { EpisodeMessages, EpisodeRecord } from '@/components/slide-master/s
 import type { Locale } from '@/lib/locale.pure';
 import { isEpisodeSlug, type EpisodeSlug } from '@/lib/routes';
 import { notFound } from 'next/navigation';
+import { aiAttentionSpan } from './ai-attention-span/ai-attention-span';
 import { aiTokenEconomy } from './ai-token-economy/ai-token-economy';
 import { maintainingMarkdownForAi } from './maintaining-markdown-for-ai/maintaining-markdown-for-ai';
 import { neverTooEarlySales } from './never-too-early-sales/never-too-early-sales';
@@ -21,6 +22,7 @@ const EPISODES: { readonly [S in EpisodeSlug]: EpisodeRecord & { readonly slug: 
   'ai-token-economy': aiTokenEconomy,
   'never-too-early-sales': neverTooEarlySales,
   'onboard-ai-every-time': onboardAiEveryTime,
+  'ai-attention-span': aiAttentionSpan,
   'slide-layouts': slideLayouts,
   'slide-master': slideMaster,
 };

@@ -10,7 +10,7 @@
   "stages": {
     "party": {
       "name": "Sommerfeier",
-      "move": "<initial>B</initial>reak it down",
+      "move": "Break it down",
       "popover": {
         "in": "die ganze Feier.",
         "out": "fünf Teile, nur die Location geht weiter."
@@ -18,7 +18,7 @@
     },
     "interview": {
       "name": "Interview",
-      "move": "<initial>I</initial>nterview yourself with AI",
+      "move": "Interview yourself with AI",
       "popover": {
         "in": "Deine grobe Idee.",
         "out": "die Fragen, an die Du nicht gedacht hast, beantwortet."
@@ -26,7 +26,7 @@
     },
     "requirements": {
       "name": "Anforderungen",
-      "move": "<initial>R</initial>equirements first",
+      "move": "Requirements first",
       "popover": {
         "in": "Deine Antworten.",
         "out": "eine Anforderungskarte, die Du freigibst."
@@ -34,7 +34,7 @@
     },
     "research": {
       "name": "Recherche",
-      "move": "<initial>F</initial>resh start for each piece",
+      "move": "Fresh start for each piece",
       "popover": {
         "in": "die Anforderungskarte.",
         "out": "eine Location, gegen jedes Kriterium geprüft."
@@ -42,7 +42,7 @@
     },
     "compare": {
       "name": "Vergleich",
-      "move": "<initial>E</initial>valuate each step",
+      "move": "Evaluate each step",
       "popover": {
         "in": "drei geprüfte Locations.",
         "out": "eine Rangfolge, gemessen an der Karte."

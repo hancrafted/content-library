@@ -1,0 +1,110 @@
+{
+  "title": "AI forgets the middle too",
+  "caption": "A long AI chat has the same shape as the call: the very first instructions and the newest messages get used, and what you decided after them, your first message included, can get lost.",
+  "sister": {
+    "name": "Sister",
+    "meta": "Call · 1:21:40"
+  },
+  "ai": {
+    "name": "Summer party",
+    "meta": "Chat with AI · one hour"
+  },
+  "bands": {
+    "start": "The start",
+    "middle": "The middle",
+    "end": "The end"
+  },
+  "left": {
+    "0": "Let's sort out the holidays!",
+    "1": "Yes! But first, did you hear about Mum’s new phone?",
+    "2": "Let’s cap the holidays at <budget>2,000 euro</budget>.",
+    "3": "Deal! She sent me forty photos of her thumb.",
+    "4": "Ha! And my back hurts again.",
+    "5": "Right, the holidays! What’s our <budget>budget</budget>?",
+    "6": "We settled that an hour ago!"
+  },
+  "right": {
+    "0": "Plan a summer party for our team: 40 people, end of June.",
+    "1": "Happy to help! Indoor or outdoor? Any dietary needs?",
+    "2": "Let’s keep the budget at <budget>40,000 euro</budget>.",
+    "3": "Noted! Three venues in Lisbon: Quinta terrace, LX Factory rooftop, Estrela pavilion.",
+    "4": "Great, put the full plan together.",
+    "5": "Here is the full plan: venue 28,000 €, catering 16,000 €, band 8,000 €. Total <budget>52,000 €</budget>."
+  },
+  "tools": {
+    "web": "Fetched 10 pages · 15k of extracts"
+  },
+  "bottomLine": "<muted>With your sister, a lost detail is funny.</muted> With a deadline, it’s expensive.",
+  "studyNote": "<planted>Measured by planting a fact in a long input, not in today’s chat apps</planted> · <varies>how deep the middle dips varies</varies>",
+  "notes": {
+    "measured-even-for-long-input-models": {
+      "header": "Measured, even for long-input models",
+      "description": "Relevant information is used best at the beginning or end of the input and worst in the middle, also in models built for long contexts [1].",
+      "sources": {
+        "liu-lost-in-the-middle": {
+          "title": "Liu et al., Lost in the Middle: How Language Models Use Long Contexts"
+        }
+      }
+    },
+    "a-built-in-pull-to-the-start": {
+      "header": "A built-in pull to the start",
+      "description": "The first tokens of an input draw strong attention as an \"attention sink\", even when they carry no meaning [1].",
+      "sources": {
+        "xiao-attention-sinks": {
+          "title": "Xiao et al., Efficient Streaming Language Models with Attention Sinks"
+        }
+      }
+    },
+    "two-position-effects": {
+      "header": "Two position effects",
+      "description": "Causal masking biases attention toward earlier positions, and relative position encodings favour nearby tokens, which trades off against the accumulating importance of early positions [1]; that these two together produce the middle dip is an inference, the paper's abstract does not state it.",
+      "sources": {
+        "wu-position-bias": {
+          "title": "Wu et al., On the Emergence of Position Bias in Transformers"
+        }
+      }
+    },
+    "the-strength-varies": {
+      "header": "The strength varies",
+      "description": "The dip is strongest when the input fills up to about half the window; beyond that the start advantage fades and the end advantage stays [1].",
+      "sources": {
+        "veseli-positional-biases-shift": {
+          "title": "Veseli et al., Positional Biases Shift as Inputs Approach Context Window Limits"
+        }
+      }
+    },
+    "planted-facts-not-chat-products": {
+      "header": "Planted facts, not chat products",
+      "description": "The studies plant a fact in the input and test whether the model retrieves it; none tests current chat products, so applying them to a chat is an inference [1].",
+      "sources": {
+        "liu-lost-in-the-middle": {
+          "title": "Liu et al., Lost in the Middle: How Language Models Use Long Contexts"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "meet-the-summer-party-chat": {
+        "title": "Meet the summer-party chat",
+        "keywords": "",
+        "script": "So let me introduce a chat that stays with us for the rest of the episode. You plan a company summer party with an AI: 40 people, end of June, and you give it a catering PDF and a guest list. Remember this chat, because we come back to it on every slide that follows."
+      },
+      "it-happens-in-a-long-chat-too": {
+        "title": "It happens in a long chat too",
+        "keywords": "",
+        "script": "Now let it run for an hour. Only the very first instructions tend to get used, the latest messages tend to get used, and everything between gets lost, even your own first messages. Early in the chat you settle the budget at 40,000 euro. Much later you ask for the full plan, and the AI hands back a confident plan that totals 52,000 euro, as if you had never said 40,000. Why that happens comes on a later slide."
+      },
+      "a-shape-not-a-brain": {
+        "title": "A shape, not a brain",
+        "keywords": "",
+        "script": "I'm not saying the AI thinks the way you do. It has no sister and no Mum with a new phone. What I'm saying is that the shape is the same, and a shape is something you can predict, so you know where to expect the slip."
+      },
+      "what-a-lost-detail-costs": {
+        "title": "What a lost detail costs",
+        "keywords": "",
+        "script": "With your sister, a lost detail is funny. With a deadline, it's expensive. So ask yourself which one your chat is: the one with the photos of Mum's thumb, or the one with your budget in it."
+      }
+    }
+  }
+}

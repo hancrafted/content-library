@@ -65,7 +65,7 @@ const TITLE_ROLE = {
  */
 export function SlideTitle({ as: Heading, children, ...props }: PartProps & { as: keyof typeof TITLE_ROLE }) {
   return (
-    <Heading {...props} className={cn('font-semibold text-balance', TITLE_ROLE[Heading])}>
+    <Heading {...props} className={cn('font-semibold text-balance hyphens-auto', TITLE_ROLE[Heading])}>
       {children}
     </Heading>
   );
@@ -86,7 +86,7 @@ export function HeroTitle({ className, children, ...props }: ComponentPropsWitho
 
 export function SlideCaption({ children, ...props }: PartProps) {
   return (
-    <p {...props} className="mt-4 max-w-prose text-caption text-balance text-muted-foreground">
+    <p {...props} className="mt-4 text-caption text-muted-foreground">
       {children}
     </p>
   );

@@ -18,6 +18,16 @@ describe('success cases', () => {
     expect(eyebrow).toEqual(expected);
   });
 
+  it('gives each Eyebrow the translated reading of its counter when a label is supplied', () => {
+    // ARRANGE
+    const sections = [section('foundations', 'Foundations', ['foundations--a', 'foundations--b'])];
+    const expected = { section: 'Foundations', position: 2, count: 2, label: 'Page 2 of 2' };
+    // ACT
+    const eyebrow = eyebrowsOf(sections, (position, count) => `Page ${position} of ${count}`).get('foundations--b');
+    // ASSERT
+    expect(eyebrow).toEqual(expected);
+  });
+
   it('counts afresh in every Section', () => {
     // ARRANGE
     const sections = [section('one', 'One', ['one--a', 'one--b', 'one--c']), section('two', 'Two', ['two--a'])];

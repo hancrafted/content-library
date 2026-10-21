@@ -5,7 +5,7 @@
 // cruise a thinner graph while still reporting success.
 
 // What an Episode file may reach: the Slide master (which holds the Episode
-// record, `slide-master/slide.ts`), slide-shared (server parts several Slides
+// record, `slide-master/slide.ts`), slide-shared (parts several Slides
 // of any Episode share), the Episode folders and src/lib.
 const EPISODE_REACH = ['^src/components/(slide-master|slide-shared|episodes)/', '^src/lib/'];
 
@@ -15,6 +15,9 @@ const SLIDE_FOLDER = '^src/components/episodes/([^/]+)/slides/([^/]+)/';
 const OWN_SLIDE_FOLDER = '^src/components/episodes/$1/slides/$2/';
 // The global shared locations a Slide may import: the Slide master, slide-shared, the UI kit, hooks and lib.
 const SLIDE_SHARED_REACH = ['^src/components/(slide-master|slide-shared|ui)/', '^src/(hooks|lib)/'];
+
+// A slide-shared part's client leaf, inside its part folder; the capture group names the part (FE-007 §5.2).
+const SLIDE_SHARED_CLIENT = '^src/components/slide-shared/([^/]+)/.+\\.client\\.tsx$';
 
 /** @type {import('dependency-cruiser').IConfiguration} */
 module.exports = {
@@ -116,9 +119,17 @@ module.exports = {
       name: 'slide-shared-reaches-only-ui-and-lib',
       severity: 'error',
       comment:
-        'src/components/slide-shared/ holds server parts several Slides of any Episode share. A part takes plain props: it reaches only other slide-shared parts, the UI kit (src/components/ui/) and src/lib — never a Slide, an Episode, the Slide master or its kit, so a Slide copied into another Episode finds it unchanged (FE-002, epic #51).',
-      from: { path: '^src/components/slide-shared/', pathNot: '\\.test\\.ts$' },
+        'src/components/slide-shared/ holds parts several Slides of any Episode share. A part takes serializable props: its server files reach only other slide-shared parts, the UI kit (src/components/ui/) and src/lib — never a Slide, an Episode, the Slide master or its kit, so a Slide copied into another Episode finds it unchanged (FE-002, FE-007 §5, epic #51).',
+      from: { path: '^src/components/slide-shared/', pathNot: ['\\.test\\.ts$', SLIDE_SHARED_CLIENT] },
       to: { pathNot: ['^src/components/(slide-shared|ui)/', '^src/lib/', 'node_modules'] },
+    },
+    {
+      name: 'slide-shared-client-reaches-only-own-part-hooks-and-lib',
+      severity: 'error',
+      comment:
+        "A slide-shared part's *.client.tsx leaf runs in the browser. It sits in its part's folder (src/components/slide-shared/<part>/) and reaches only that folder, src/hooks/ and src/lib/ — never another part, the UI kit, a Slide or the Slide master (FE-006 §5, FE-007 §5).",
+      from: { path: SLIDE_SHARED_CLIENT },
+      to: { pathNot: ['^src/components/slide-shared/$1/', '^src/(hooks|lib)/', 'node_modules'] },
     },
     {
       name: 'episode-tests-reach-only-slide-parts',

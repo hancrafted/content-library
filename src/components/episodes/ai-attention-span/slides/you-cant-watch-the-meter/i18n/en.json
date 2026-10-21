@@ -1,0 +1,91 @@
+{
+  "title": "The chat looks the same. The window doesn't.",
+  "caption": "Left, the full window; right, the same chat after auto-compaction. On screen it is still one ongoing chat.",
+  "before": "A moment before · step 23",
+  "after": "Right after · step 24",
+  "bufferNote": "The fill reaches the space kept free for summaries.",
+  "chatNote": "<marker>The chat, before and after: the same</marker>",
+  "summaryNote": "<documented>One block in place of every message</documented>; <lose>details can drop out</lose>",
+  "footer": {
+    "sign": "<marker>No notice in the chat; at most a short \"organizing its thoughts\"</marker>",
+    "otherApps": "<marker>Documented for Claude; ChatGPT, Gemini and Copilot don't say</marker>"
+  },
+  "callout": {
+    "heading": "Most chat apps never show you how full the window is.",
+    "body": "<documented>Claude summarises older messages in the background</documented>; <unknown>the others document nothing about it</unknown>."
+  },
+  "notes": {
+    "documented-for-claude": {
+      "header": "Documented for Claude",
+      "description": "for users with code execution enabled, Claude summarises earlier messages when a conversation approaches the context limit [1].",
+      "sources": {
+        "anthropic-usage-and-length-limits": {
+          "title": "Anthropic, How do usage and length limits work?"
+        }
+      }
+    },
+    "the-only-sign": {
+      "header": "The only sign",
+      "description": "the page describes you occasionally seeing Claude \"organizing its thoughts\", and announces no notice each time; that it hides this on purpose is an inference [1].",
+      "sources": {
+        "anthropic-usage-and-length-limits": {
+          "title": "Anthropic, How do usage and length limits work?"
+        }
+      }
+    },
+    "full-history-is-kept": {
+      "header": "Full history is kept",
+      "description": "the whole chat is preserved so Claude can reference it after summarising [1].",
+      "sources": {
+        "anthropic-usage-and-length-limits": {
+          "title": "Anthropic, How do usage and length limits work?"
+        }
+      }
+    },
+    "a-summary-can-lose-things": {
+      "header": "A summary can lose things",
+      "description": "Anthropic warns that over-aggressive compaction can lose subtle but critical context whose importance only shows later [1].",
+      "sources": {
+        "anthropic-context-engineering": {
+          "title": "Anthropic, Effective context engineering for AI agents"
+        }
+      }
+    },
+    "other-apps-are-unknown": {
+      "header": "Other apps are unknown",
+      "description": "no vendor page found documents summarising in ChatGPT, Gemini or Copilot, and a chat interface may instead drop the oldest content first [1]; OpenAI's compaction is documented for its API and is opaque [2].",
+      "sources": {
+        "anthropic-context-windows": {
+          "title": "Anthropic, Context windows"
+        },
+        "openai-compaction": {
+          "title": "OpenAI, Compaction"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "her-own-notes": {
+        "title": "Her own notes",
+        "keywords": "",
+        "script": "Your sister doesn't keep the call. She keeps her own notes of it, a few scribbled lines: Mum's phone, the renovation, Pepper and the cake. A few lines instead of everything."
+      },
+      "the-app-does-something-like-it": {
+        "title": "The app does something like it",
+        "keywords": "",
+        "script": "The app does something like it. When a chat gets long, older messages can be squeezed into a short summary, so the conversation can go on instead of hitting the wall."
+      },
+      "you-cant-watch-the-meter": {
+        "title": "You can't watch the meter",
+        "keywords": "",
+        "script": "And here is the catch: the chat looks the same. Every bubble is still there, so you can't rely on a gauge, you rely on habits."
+      },
+      "why-the-budget-survived": {
+        "title": "Why the budget survived",
+        "keywords": "",
+        "script": "Why did the budget survive here? Because you flagged the 12,300 over budget just before, so it was fresh when the summary was written, and the plan fits 40,000 euro again. That was timing."
+      }
+    }
+  }
+}

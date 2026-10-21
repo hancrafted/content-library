@@ -2,8 +2,7 @@
 
 import { externalHref } from '@/lib/external-link.pure';
 import { cn } from '@/lib/utils';
-import { useRef } from 'react';
-import { Sparkle } from './glyphs';
+import { useRef, type ReactNode } from 'react';
 
 /** A skill the turn invokes: its slash command, linked to where the skill is published. */
 export interface ChatSkill {
@@ -24,6 +23,8 @@ export interface ChatTurnCopy {
 }
 
 export interface InterviewChatCopy {
+  /** The AI sparkle, drawn by the server entry from the shared glyphs. */
+  sparkle: ReactNode;
   open: string;
   title: string;
   close: string;
@@ -55,7 +56,7 @@ export function InterviewChat({ copy }: { copy: InterviewChatCopy }) {
         className="m-0 h-dvh max-h-none w-full max-w-none items-center overscroll-contain justify-center bg-transparent p-4 text-inherit backdrop:bg-overlay/60 backdrop:backdrop-blur-xs open:flex sm:p-6"
       >
         <div className="flex max-h-full w-full max-w-2xl flex-col rounded-2xl border border-border bg-card p-5 text-foreground shadow-lg">
-          <ChatHeader title={copy.title} closeLabel={copy.close} onClose={close} />
+          <ChatHeader title={copy.title} sparkle={copy.sparkle} closeLabel={copy.close} onClose={close} />
           <ol className="mt-4 flex min-h-0 flex-col gap-2 overflow-y-auto overscroll-contain pr-2 text-caption">
             {copy.turns.map((turn) => (
               <ChatTurn key={turn.slug} turn={turn} copy={copy} />
@@ -89,11 +90,21 @@ function OpenButton({ label, onOpen }: { label: string; onOpen: () => void }) {
   );
 }
 
-function ChatHeader({ title, closeLabel, onClose }: { title: string; closeLabel: string; onClose: () => void }) {
+function ChatHeader({
+  title,
+  sparkle,
+  closeLabel,
+  onClose,
+}: {
+  title: string;
+  sparkle: ReactNode;
+  closeLabel: string;
+  onClose: () => void;
+}) {
   return (
     <div className="flex items-center justify-between gap-4 border-b border-border pb-3">
       <p className="flex items-center gap-2 text-body font-semibold">
-        <Sparkle className="size-4" />
+        {sparkle}
         {title}
       </p>
       <button

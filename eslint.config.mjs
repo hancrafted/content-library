@@ -100,6 +100,23 @@ const NO_USE_CLIENT = {
   message: "'use client' marks a client entry point; rename the file to *.client.tsx, or drop the directive (FE-006).",
 };
 
+// FE-006: a `*-view.tsx` is a pure view, drawn from props alone, so a Server Component can render it as static HTML.
+const PURE_VIEW_FILES = ['src/**/*-view.tsx'];
+const PURE_VIEW = [
+  {
+    selector: 'CallExpression[callee.name=/^use[A-Z]/], CallExpression[callee.property.name=/^use[A-Z]/]',
+    message: 'A *-view.tsx file is a pure view: no hooks. Move state to the interactive part that uses it (FE-006).',
+  },
+  {
+    selector: 'JSXAttribute[name.name=/^on[A-Z]/]',
+    message: 'A *-view.tsx file is a pure view: no event handlers. Attach them in the interactive part (FE-006).',
+  },
+  {
+    selector: 'ImportDeclaration[source.value=/(^@\\/hooks\\/|\\.client$)/]',
+    message: 'A *-view.tsx file imports no hook and no client leaf: it must render on the server (FE-006).',
+  },
+];
+
 // FE-011 design tokens. `no-restricted-classes` matches each class WITH its variants
 // (`md:hover:text-lg`), so every pattern anchors on `(?:^|:)` and an optional `!`.
 const UTIL = '(?:^|:)!?-?';
@@ -288,6 +305,11 @@ export default tseslint.config(
         NO_RAW_READ,
       ],
     },
+  },
+  {
+    // FE-006: a pure view carries no hook, handler or directive; it keeps the selectors every block repeats.
+    files: PURE_VIEW_FILES,
+    rules: { 'no-restricted-syntax': ['error', NO_USE_CLIENT, HISTORY_WRITE, NEW_OBSERVER, ...PURE_VIEW] },
   },
   {
     // The owners: each is exempt from its own selector only.

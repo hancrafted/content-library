@@ -28,6 +28,13 @@ function browseLabels(t: LandingT): BrowseLabels {
   };
 }
 
+/** Dev only: the Shared visuals' Presets, for the Section jobs that place them. `next build` drops the import. */
+async function DevSharedVisuals({ locale }: { locale: Locale }) {
+  if (process.env.NODE_ENV !== 'development') return null;
+  const { ContextGallery } = await import('@/components/slide-shared/context/context-gallery');
+  return <ContextGallery locale={locale} />;
+}
+
 /**
  * The /episodes index page (FE-007 §1): lists every published Episode, and in dev mode
  * also lists in-progress staging Episodes as a GUI entry point (#85).
@@ -45,6 +52,7 @@ export async function EpisodesIndexPage({ locale }: { locale: Locale }) {
     <main data-testid="episodes-index-page" className="mx-auto max-w-6xl px-6 py-12 sm:py-16">
       <h1 className="sr-only">{tPage('title')}</h1>
       <EpisodeBrowse cards={cards} locale={locale} labels={browseLabels(tLanding)} />
+      <DevSharedVisuals locale={locale} />
     </main>
   );
 }

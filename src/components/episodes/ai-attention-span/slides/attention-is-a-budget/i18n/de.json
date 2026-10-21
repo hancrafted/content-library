@@ -1,0 +1,88 @@
+{
+  "title": "Aufmerksamkeit ist ein Budget",
+  "caption": "Hundert Einheiten Aufmerksamkeit gehen vor allem an die allerersten Zeilen und die neuesten Nachrichten; alles dazwischen, auch Deine erste Nachricht, bekommt den Rest, bis er zu dünn ist, um ihm zu trauen.",
+  "illustrative": "Zahlen zur Veranschaulichung",
+  "zones": {
+    "note": "<marker>Wo die Mitte zu dünn wird, hängt von Modell und Aufgabe ab.</marker>"
+  },
+  "lost": {
+    "kicker": "Bekannt als",
+    "name": "<marker>„Lost in the middle“</marker>",
+    "body": "<start>Die allerersten Zeilen und die neuesten Nachrichten bekommen die Aufmerksamkeit</start>; <budget>was dazwischen steht, auch Deine erste Nachricht, verblasst</budget>."
+  },
+  "notes": {
+    "the-attention-budget": {
+      "header": "Das Aufmerksamkeitsbudget",
+      "description": "Anthropic beschreibt, dass jedes Token auf jedes andere achtet, sodass jedes neue Token dieselbe Aufmerksamkeit dünner verteilt; das ist die Erklärung eines Anbieters für den gemessenen Abfall, in den Studien selbst nicht gemessen [1].",
+      "sources": {
+        "anthropic-effective-context-engineering": {
+          "title": "Anthropic, Effective context engineering for AI agents"
+        }
+      }
+    },
+    "the-u-shape-is-measured": {
+      "header": "Die U-Form ist gemessen",
+      "description": "die Aufmerksamkeit eines Modells selbst zeigt eine U-Form zum Anfang und zum Ende der Eingabe hin, ob diese Tokens relevant sind oder nicht [1].",
+      "sources": {
+        "hsieh-found-in-the-middle": {
+          "title": "Hsieh et al., Found in the Middle: Calibrating Positional Attention Bias Improves Long Context Utilization"
+        },
+        "liu-lost-in-the-middle": {
+          "title": "Liu et al., Lost in the Middle: How Language Models Use Long Contexts (Herkunft des Namens)"
+        }
+      }
+    },
+    "the-start-is-weighted": {
+      "header": "Der Anfang wiegt schwerer",
+      "description": "die ersten Tokens ziehen als Attention Sink viel Aufmerksamkeit auf sich, auch wenn sie nichts bedeuten [1].",
+      "sources": {
+        "xiao-attention-sinks": {
+          "title": "Xiao et al., Efficient Streaming Language Models with Attention Sinks"
+        }
+      }
+    },
+    "no-single-line": {
+      "header": "Keine feste Linie",
+      "description": "wo die Mitte zu dünn wird, hängt von Modell und Aufgabe ab; wenn die gesuchte Stelle kein Wort mit der Frage teilt, fielen 11 von 13 Modellen, die mit 128K oder mehr beworben werden, bei 32K unter die Hälfte ihres Werts bei kurzer Eingabe [1].",
+      "sources": {
+        "modarressi-nolima": {
+          "title": "Modarressi et al., NoLiMa: Long-Context Evaluation Beyond Literal Matching"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "a-hundred-units": {
+        "title": "Aufmerksamkeit als Budget",
+        "keywords": "",
+        "script": "Stell Dir Aufmerksamkeit als Budget vor. Links ist die Zeitleiste, in der Mitte das Fenster als Balken und rechts die Aufmerksamkeit, die jede Nachricht bekommt. Und ich sage es klar: Diese Zahlen, die Token-Zahlen und die Fenstergrößen auf dieser Folie sind zur Veranschaulichung. Ich habe sie mir ausgedacht, um die Form zu zeigen, also nimm sie bitte nicht als Messwerte."
+      },
+      "where-it-goes": {
+        "title": "Wohin es geht",
+        "keywords": "",
+        "script": "Wohin geht das Budget? Ein großer Teil an die allerersten Zeilen, die Startanweisungen, ein großer Teil an die neuesten Nachrichten, und was übrig bleibt, wird über alles dazwischen verteilt, auch über Deine erste Nachricht, dünner und dünner mit jeder Nachricht, die Du hinzufügst. Deshalb verblasst die Mitte."
+      },
+      "a-spike-in-the-middle": {
+        "title": "Ein Ausschlag in der Mitte",
+        "keywords": "",
+        "script": "Aber ein Detail, das du immer wieder sagst, behält seinen Anteil und zeigt sich als Ausschlag in der Mitte. Die 12 vegetarischen Gäste kamen wieder und wieder vor, also bleiben sie hell, während das Budget, einmal gesagt, verblasst."
+      },
+      "smart-zone-and-dumb-zone": {
+        "title": "Smart Zone und Dumb Zone",
+        "keywords": "",
+        "script": "Irgendwann wird die Mitte zu dünn, um ihr zu trauen. Vor dieser Linie ist die KI in der Smart Zone, dahinter in der Dumb Zone. Matt Pocock setzt die Linie bei 80K Tokens auf einem 200K-Fenster und bei 150K auf einem 1M-Fenster. Das ist seine Zahl, eine Faustregel, und die Namen der Zonen bekommst du erst jetzt, weil du schon gesehen hast, wie die Mitte verblasst."
+      },
+      "having-it-is-not-using-it": {
+        "title": "Haben ist nicht Nutzen",
+        "keywords": "",
+        "script": "Etwas zu haben ist nicht dasselbe, wie es zu nutzen. Deine Schwester hat das Telefonat heimlich aufgenommen, und sie findet trotzdem nicht, was du bei einer Stunde, 13 Minuten und 17 Sekunden gesagt hast. Die Aufnahme ist vollständig, und einen Satz darin zu finden, ist der schwere Teil. Ein volles Fenster funktioniert genauso."
+      },
+      "my-own-line": {
+        "title": "Meine eigene Linie",
+        "keywords": "",
+        "script": "Meine eigene Linie liegt bei 300K Tokens, und nur auf dem 1M-Fenster. Das ist die Gewohnheit eines Praktikers, kein Gesetz. Deine kann anders liegen, und das ist in Ordnung, solange es eine Linie ist, die du bewusst gewählt hast."
+      }
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "title": "Der Workflow für größere Projekte",
+  "caption": "Zerleg das Projekt zuerst, behalte einen Chat als Planer und gib jedem Schritt einen frischen Chat, der ein kleines Ergebnis zurückgibt.",
+  "compareLabel": "Ein Chat für alles neben einem Workflow aus einem Planer und einem frischen Chat pro Schritt",
+  "before": {
+    "title": "Ein Chat für alles",
+    "note": "Jenseits der Smart Zone; jeder Schritt schleppt das Gelesene aller anderen Schritte mit."
+  },
+  "after": {
+    "title": "Ein Workflow: ein Planer, ein frischer Chat pro Schritt",
+    "note": "Pro Schritt kommt ein kleines Ergebnis zurück. <marker>Kurze Aufgaben schlagen eine lange</marker>; Du koordinierst wie ein Projektmanager."
+  },
+  "illustrative": "Token-Zahlen zur Veranschaulichung · 200K-Fenster",
+  "notes": {
+    "clean-windows-for-each-part": {
+      "header": "Saubere Fenster für jeden Teil",
+      "description": "Anthropics Mittel für lange Aufgaben umfasst Sub-Agents, die mit sauberen Fenstern arbeiten [1].",
+      "sources": {
+        "anthropic-effective-context-engineering": {
+          "title": "Anthropic, Effective context engineering for AI agents"
+        }
+      }
+    },
+    "short-tasks-beat-long-ones": {
+      "header": "Kurze Aufgaben schlagen lange",
+      "description": "Aus einer langen Aufgabe eine kurze zu machen, verbesserte die Ergebnisse, bei GPT-4o auf RULER um bis zu 4 % [1].",
+      "sources": {
+        "du-context-length-alone-hurts": {
+          "title": "Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "one-chat-is-too-small": {
+        "title": "Ein Chat ist zu klein",
+        "keywords": "",
+        "script": "Manchmal ist das Projekt größer, als ein Chat fassen kann: das ganze Sommerfest, mit Orten, Catering, Hotels und Einladungen. Ein Chat würde volllaufen, egal welche Fenstergröße Du ihm gibst."
+      },
+      "break-it-down-first": {
+        "title": "Zuerst zerlegen",
+        "keywords": "",
+        "script": "Also zerlegst Du es zuerst. Arbeite vom Ergebnis rückwärts: Was brauche ich, um dieses Fest auszurichten, und was brauche ich dafür, bis der nächste Schritt klar ist. Dabei kann Dir die KI helfen."
+      },
+      "one-planner": {
+        "title": "Ein Planer",
+        "keywords": "",
+        "script": "Dann bleibt ein Chat der Planer. Er behält nur den Plan und die Ergebnisse, also bleibt er klein und hat Platz übrig."
+      },
+      "a-fresh-chat-per-step": {
+        "title": "Ein frischer Chat pro Schritt",
+        "keywords": "",
+        "script": "Jeder Schritt geht an einen frischen Chat: Orte, Catering, Einladungen. Dieser Chat liest seine Dateien und füllt sich so weit, wie er muss, gibt das Ergebnis als eine kleine Karte an den Planer zurück, und dann lässt Du ihn gehen. Nächster Schritt, nächster frischer Chat."
+      },
+      "you-coordinate": {
+        "title": "Du koordinierst",
+        "keywords": "",
+        "script": "Und Du koordinierst, wie ein Projektmanager. Das nennen wir einen Workflow. Jeder Chat hat einen Job, also läuft keiner lange genug, um seine Mitte zu verwischen. Das ist die ganze Idee: Das Fenster ist die Aufmerksamkeitsspanne der KI, und sie zu managen ist Dein Job. Ein ehrlicher Hinweis: Die Zonen und Zahlen, die ich Dir genannt habe, sind Faustregeln und Veranschaulichungen, und ich habe nicht jede Chat-App getestet, also beobachte Deine eigenen Chats und pass an. Wenn Du entspannt anfangen willst, nimm den nächsten Chat, der abdriftet, bitte ihn um eine Übergabe und öffne damit einen neuen. Danke."
+      }
+    }
+  }
+}

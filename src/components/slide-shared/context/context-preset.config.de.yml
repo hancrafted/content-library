@@ -1,0 +1,307 @@
+# The German words and story of the context window cornerstone, under the keys of context-preset.config.yml. Numbers
+# and Presets live only there; a test keeps the two files' keys equal.
+
+words:
+  controls: Steuerung des Kontextfensters
+  showParts: Teile zeigen
+  parts:
+    {
+      chat: Unterhaltung,
+      timeline: Zeitleiste,
+      context: Kontextfenster,
+      category: Kontextkategorien,
+      panel: Details,
+      attention: Aufmerksamkeit,
+    }
+  technical: Technisch
+  technicalTip: 'Technisch: der Chat als Claude-Code-Terminal, das Fenster als /context-Kästchen mit den echten Kategorienamen.'
+  modes: { explain: Erklären, attention: Aufmerksamkeit }
+  zoneToggle: Smart Zone
+  zoneTip: Die Smart-Zone-Beschriftung neben dem Balken zeigen oder ausblenden
+  conversationTechnical: Technische Unterhaltung
+  conversationTechnicalTip: 'Technisch: der Chat als Claude-Code-Terminal. Die Schaltfläche der Werkzeugleiste setzt alle Teile.'
+  windowTechnical: Technisches Fenster
+  windowTechnicalTip: 'Technisch: das Fenster als /context-Kästchen. Die Schaltfläche der Werkzeugleiste setzt alle Teile.'
+  categoryTechnical: Technische Kontextkategorien
+  categoryTechnicalTip: 'Technisch: die echten Kategorienamen, die Nachrichten ausklappbar. Die Schaltfläche der Werkzeugleiste setzt alle Teile.'
+  windowGroup: Fenstergröße
+  attentionMenu: Verteilung der Aufmerksamkeit
+  attentionMenuTip: Einstellen, wie die Aufmerksamkeit auf die ersten, die jüngsten, die mittleren und die neuesten Nachrichten verteilt wird
+  attentionCurve:
+    start: Die ersten 3 Nachrichten
+    recent: Zuletzt (4. bis 10. neueste)
+    middle: Mitte
+    newest: Die neuesten 3 Nachrichten
+  attentionEdit: Anteile eintippen
+  attentionSave: Anteile speichern
+  attentionSaveTip: Deine Eingabe wird auf 100 normalisiert.
+  attentionLayout: Darstellung
+  attentionLayouts:
+    list: Liste
+    pinned: Angeheftet
+    compressed: Komprimiert
+  download: Den Chat als Claude-Code-Log herunterladen
+  upload: Ein Claude-Code-Log öffnen
+  uploadFailed: Diese Datei enthält keinen Chat, wie ihn ein Claude-Code-Log enthält.
+  chat: Chat
+  hint: Zeitleiste überfahren oder ziehen, um nachzuspielen
+  appTitle: Sommerfest
+  terminalTitle: ~/sommerfest — claude
+  mayFill: 'Verblasst: die KI füllt diese Lücke vielleicht selbst'
+  minimap: Chat-Übersicht
+  timeline: Chat-Zeitleiste
+  steps: '{count} Schritte'
+  stepEvent: 'Schritt {step}: {event}'
+  contextWindow: Kontextfenster
+  meterOf: '{used} von {window}'
+  bar: Kontextbalken
+  limit: 'Grenze {window}'
+  grid: 'Kontextraster, jedes Kästchen {tokens} Tokens'
+  usage: Belegung nach Kategorie
+  usageTitle: { simple: Was das Fenster füllt, technical: Geschätzte Belegung nach Kategorie }
+  zoom: Lupe auf den Balken
+  zoomTitle: Lupe
+  zoomTokens: '{tokens} Tokens'
+  zoomStep: 'Schritt {step}'
+  blockLabel: '{category}, Schritt {step}, {tokens} Tokens'
+  boxLabel: 'Schritt {step}, {category}'
+  bubbleLabel: '{category}: {text}'
+  details: Details
+  illustrative: zur Veranschaulichung
+  simple: Einfach
+  readoutHead: 'Schritt {step} von {steps}'
+  readoutSentence: 'Schritt {step} von {steps}: {event}, {delta} Tokens, {percent} % belegt.'
+  readoutSentenceCrossed: 'Schritt {step} von {steps}: {event}, {delta} Tokens, {percent} % belegt, jenseits der Smart Zone von {who}.'
+  crossed: 'Jenseits der Smart Zone von {who}'
+  attentionKicker: '{head} · 100 Einheiten Aufmerksamkeit'
+  attentionLead: Nur die allerersten Zeilen und die neuesten Nachrichten bleiben scharf. Deine erste Nachricht und der Rest werden dünner.
+  pinned: angeheftet
+  pinnedKicker: 'Schritt {step} · angeheftet'
+  stepKicker: 'Schritt {step}'
+  notYet: In diesem Schritt noch nicht im Kontext.
+  notYetHint: Weiter vorspulen, um es ankommen zu sehen.
+  category: Kategorie
+  tokens: Tokens
+  ofWindow: des Fensters
+  stepOne: Schritt
+  stepOther: Schritte
+  nothingYet: In diesem Schritt noch nichts von dieser Art.
+  gone: Nicht mehr im Kontext.
+  goneCompacted: 'Die Verdichtung in Schritt {step} hat es durch eine Zusammenfassung ersetzt. Die KI hat nur noch, was die Zusammenfassung behielt.'
+  goneCleared: Die App hat es geleert, um Platz zu schaffen. Die KI sieht es nicht mehr.
+  kept: In der Zusammenfassung behalten
+  dropped: Weggelassen
+  used: belegt
+  restHint: Eine Blase, einen Teil des Balkens oder eine Kategorie überfahren oder antippen, um zu sehen, was es ist.
+  compacted: 'Unterhaltung verdichtet · Zusammenfassung {tokens}'
+  cleared: 'Alte Werkzeugergebnisse geleert · {tokens}'
+  acts: { web: Im Web gesucht, read: Eine Datei gelesen, run: Einen Befehl ausgeführt }
+  categories:
+    sysprompt: Systemprompt
+    systools: Systemwerkzeuge
+    mcp: MCP-Werkzeuge
+    skills: Skills
+    memory: Memory-Dateien
+    reminder: Systemhinweise
+    user: Nutzernachrichten
+    assistant: Antworten des Assistenten
+    tool_use: Werkzeugaufrufe
+    tool_result: Werkzeugergebnisse
+    summary: Zusammenfassung der Verdichtung
+  simpleCategories:
+    start: Startanweisungen
+    memory: Gedächtnis
+    you: Du
+    ai: Antworten der KI
+    read: Was die KI gelesen hat
+    reminder: Versteckte Notizen der App
+    summary: Zusammenfassung
+  messages: Nachrichten
+  free: Freier Platz
+  buffer: { simple: Frei gehalten für Zusammenfassungen, technical: Autocompact-Puffer }
+  lines:
+    matt: { label: Smart Zone nach Matt Pocock, who: Matt Pocock }
+    matt-1m: { label: Smart Zone nach Matt Pocock, who: Matt Pocock }
+    han: { label: Smart Zone nach Han, who: Han }
+  session:
+    label: Deine Aufmerksamkeitsspanne
+    empty: Frisch und bereit zum Empfangen.
+    full: Bis zum Rand voll. Gut gemacht.
+    progress: '{title}, {n} von {count}'
+    sections:
+      thought-experiment: Aufwärmen
+      the-ais-attention-span: Hochdrehen
+      what-fills-the-window: Füllt sich
+      managing-the-attention-span: Fast voll
+    faces: { fine: Geht, sweating: Schwitze, fried: Durchgebrannt }
+  mini:
+    usedOf: '{used} von {window} · {percent} %'
+    discarded: verworfen
+    labels:
+      old: Alter Chat
+      fresh: Neuer Chat
+      summer: Sommerfest
+      summer-chat: Der Sommerfest-Chat
+      planner: Planer
+      venues: 'Helfer: Orte'
+      catering: 'Helfer: Catering'
+      invites: 'Helfer: Einladungen'
+
+story:
+  m1:
+    event: Startanweisungen geladen
+    label: Startanweisungen, verborgen
+    labelTechnical: Systemprompt · Werkzeuge · MCP · Skills
+    term: Startanweisungen, im Terminal nie zu sehen · 34,1k
+    simple: 'Bevor du etwas tippst, gibt die App der KI verborgene Anweisungen: wer sie ist, wie sie antwortet, welche Werkzeuge sie nutzen darf. Sie stehen ganz oben und reisen mit jeder Nachricht mit.'
+    technical: Systemprompt 6,5k, eingebaute Werkzeugschemata 16,5k (`Read`, `Grep`, `Bash`, `WebSearch`, `WebFetch` …), ein MCP-Server 1,4k, Skill-Beschreibungen 9,7k. Mit jeder Anfrage neu gesendet; ein gecachter Anfang ist billiger, zählt aber trotzdem und nimmt trotzdem Aufmerksamkeit.
+  m2:
+    event: Gedächtnis geladen
+    act: Gedächtnis **CLAUDE.md** abgerufen
+    label: Gedächtnis geladen
+    labelTechnical: Memory-Dateien · `CLAUDE.md`
+    term: CLAUDE.md und Gedächtnis geladen · 2k
+    simple: Notizen, die die App für dieses Projekt führt, still vor deiner ersten Nachricht hinzugefügt.
+    technical: '`CLAUDE.md` und Memory-Dateien, nach dem Systemprompt geladen. 2k Tokens.'
+  m3:
+    event: Du setzt das Budget
+    simple: 'Deine erste Nachricht. Sie enthält die eine harte Grenze: 40.000 Euro.'
+    technical: Nutzerzug, 20 Tokens. Nie wieder erwähnt, also schrumpft sein Anteil an der Aufmerksamkeit, während der Chat wächst.
+  m4:
+    event: Die KI stellt zwei Fragen
+    simple: Auch die Antwort der KI kommt in den Kontext, also trägt die nächste Anfrage sie mit.
+    technical: 'Assistentenzug, 18 Tokens. Jede Anfrage sendet den ganzen Kontext neu: die Eingabe von Anfrage 2 ist die von Anfrage 1 plus diese Antwort plus deine nächste Nachricht.'
+  m5:
+    event: Du erwähnst 12 vegetarische Gäste
+    simple: Ein kleines Detail, das immer wiederkommt. Jedes Mal, wenn der Chat es wiederholt, ist es wieder frisch.
+    technical: Nutzerzug, 18 Tokens. Wiederholt in den Schritten 6, 12, 18 und 21, also liegt immer eine junge Kopie nahe am Ende.
+  m6:
+    event: Die KI notiert die Vegetarier
+    simple: Die KI wiederholt das Detail.
+    technical: Assistentenzug, 13 Tokens. Wiederholt Schritt 5.
+  m7:
+    event: Du fragst nach drei Orten
+    simple: Eine kurze, harmlose Frage.
+    technical: Nutzerzug, 7 Tokens. Sie lässt die KI Werkzeuge aufrufen.
+  m8:
+    event: Die Websuche las 10 Seiten
+    label: Im Web gesucht · 10 Seiten · 1 Wiederholung
+    labelTechnical: '`WebSearch` ×2 → `WebFetch` ×10 · 16,3k'
+    out: 10 Seiten abgerufen · 15k Auszüge
+    simple: Für eine kurze Frage hat die KI zweimal gesucht und zehn Seiten geöffnet. Jede Seite wird zu einem Auszug eingekocht, aber zehn Auszüge summieren sich, und im Chat siehst du sie nie.
+    technical: '`WebSearch` liefert Titel und URLs. `WebFetch` macht aus einer Seite Markdown und lässt ein kleines Modell herausziehen, wonach der Prompt fragt; nur dieser Auszug kommt als `tool_result` zurück:'
+    pre: "WebSearch × 2 → 3.000 Tokens\nWebFetch × 10 → 12.000 Tokens (Auszüge)"
+  m9:
+    event: Die KI antwortet in drei Zeilen
+    simple: Drei Zeilen im Chat. Sechzehntausend Tokens dahinter.
+    technical: Assistentenzug, 18 Tokens, aus den Werkzeugergebnissen oben geschrieben.
+  m10:
+    event: Du verweist auf die Catering-Angebote
+    simple: Eine kurze Nachricht. Die Datei steckt noch nicht darin, aber die App fügt eine versteckte Notiz hinzu, dass du sie geöffnet hast.
+    technical: Nutzerzug, 15 Tokens, und ein Systemhinweis der IDE, dass die Datei offen ist, 28 Tokens.
+  m11:
+    event: Die KI las catering-offers.pdf
+    label: catering-offers.pdf gelesen · 20 Seiten
+    labelTechnical: '`Glob` `**/*catering*.pdf` → `Read` Seiten 1–20 · 55k'
+    out: 20 Seiten gelesen · 55k
+    simple: Um das passende Angebot zu finden, hat die KI die ganze Datei gelesen, jede Seite, als Text und als Bild der Seite.
+    technical: '`Glob` findet die Datei; `Read` nimmt PDFs über 10 Seiten in Abschnitten von höchstens 20, als Seitentext plus Seitenbild, etwa 2.700 Tokens pro Seite:'
+    pre: Read("offers/catering-offers.pdf", pages="1-20") → 55.000 Tokens
+  m12:
+    event: Die KI wählt einen Caterer
+    simple: Das vegetarische Detail kommt wieder.
+    technical: Assistentenzug, 15 Tokens. Wiederholt Schritt 5.
+  m13:
+    event: Du fragst nach Hotels
+    simple: Noch eine kurze Frage.
+    technical: Nutzerzug, 13 Tokens.
+  m14:
+    event: Die Websuche las 12 Seiten
+    label: Im Web gesucht · 12 Seiten
+    labelTechnical: '`WebSearch` → `WebFetch` ×12 · 17,5k'
+    out: 12 Seiten abgerufen · 14,5k Auszüge
+    simple: Zwölf weitere Seiten, eingekocht und behalten.
+    technical: 'Eine `WebSearch`, dann zwölf `WebFetch`-Auszüge:'
+    pre: "WebSearch → 1.500 Tokens\nWebFetch × 12 → 14.500 Tokens"
+  m15:
+    event: Die KI findet zwei Hotels
+    simple: Wieder eine kurze Antwort.
+    technical: Assistentenzug, 16 Tokens.
+  m16:
+    event: Du erwähnst die Gästeliste
+    simple: Noch eine kurze Nachricht.
+    technical: Nutzerzug, 8 Tokens.
+  m17:
+    event: Die KI öffnete guests.xlsx
+    label: guests.xlsx geöffnet · 40 Zeilen
+    labelTechnical: '`Bash` `python3 … pandas` · 2k'
+    out: 40 Zeilen · 1,8k
+    simple: 'Die Gästeliste. Vierzig Zeilen sind wenig: eine Tabelle ist billig, bis sie groß ist.'
+    technical: '`Read` lehnt .xlsx ab, also gibt die KI die Tabelle mit einem Skript aus:'
+    pre: Bash("python3 -c 'import pandas as pd; print(pd.read_excel(\"guests.xlsx\").to_csv())'") → 1.800 Tokens
+  m18:
+    event: Die KI fasst die Gäste zusammen
+    simple: Die Vegetarier, noch einmal.
+    technical: Assistentenzug, 12 Tokens. Wiederholt Schritt 5.
+  m22:
+    event: Du bittest um den ganzen Plan
+    simple: Die Frage, die alles braucht, auch das Budget aus Schritt 3.
+    technical: Nutzerzug, 9 Tokens.
+  m23:
+    event: Die KI rechnete die Kosten zusammen
+    label: Kosten zusammengerechnet
+    labelTechnical: '`Bash` `python3 budget.py` · 670'
+    out: Summe 52.300 · 350 Tokens
+    simple: Die KI hat eine kleine Rechnung laufen lassen. Die Zahlen stimmen; das Budget steckt nicht darin.
+    technical: '`Bash("python3 budget.py")`: die Summe stimmt, aber die Grenze von 40.000 aus Schritt 3 hat es nie ins Skript geschafft.'
+  m24:
+    event: 'Der Plan der KI: 52.300 Euro'
+    simple: Die Vegetarier haben es geschafft. Das Budget von 40.000 Euro nicht.
+    technical: Assistentenzug, 30 Tokens. Das Budget aus Schritt 3 steht noch im Kontext, bekam aber zwischen vielen ähnlichen Zahlen aus Angeboten und Suchen wenig Aufmerksamkeit (Distraktoren, Chroma 2025), also liegt der Plan 12.300 Euro darüber.
+  m25:
+    event: Du merkst das Budget an und fragst nach dem Vertrag
+    simple: Du bemerkst, dass der Plan über dem Budget liegt, und bittest um eine Sache mehr.
+    technical: Nutzerzug, 14 Tokens.
+  m26:
+    event: Die KI las den Vertrag
+    label: venue-contract.pdf gelesen · 21 Seiten
+    labelTechnical: '`Read` `venue-contract.pdf` Seiten 1–21 · 57,1k'
+    out: 21 Seiten gelesen · 57k
+    simple: 'Der Vertrag, alle einundzwanzig Seiten. Das Fenster ist jetzt fast voll: die Füllung reicht in den Platz, der für Zusammenfassungen frei bleibt.'
+    technical: '`Read("venue-contract.pdf", pages="1-21")`, 57.000 Tokens. Die Füllung überschreitet die Autocompact-Schwelle (Fenster minus Puffer), also verdichtet der nächste Schritt.'
+  m27:
+    event: Unterhaltung verdichtet
+    label: Unterhaltung verdichtet
+    labelTechnical: Unterhaltung verdichtet
+    simple: Die App hat die ganze Unterhaltung still durch eine Zusammenfassung ersetzt. Du hast es nicht kommen sehen; der Chat sieht gleich aus, aber die KI hat jetzt nur noch die Zusammenfassung.
+    technical: 'Autocompact: ein Modellaufruf schreibt eine gegliederte Zusammenfassung, und sie ersetzt jede Nachricht, jeden Werkzeugaufruf und jedes Werkzeugergebnis. Systemprompt, Werkzeuge, MCP, Skills und Memory-Dateien werden neu geladen. Kürzlich gelesene Dateien kommen nur zurück, wenn sie unter 5k Tokens liegen; beide PDFs kommen als Pfade zurück.'
+    kept:
+      - 'Das Ziel: ein Sommerfest für 40, Ende Juni, in Lissabon'
+      - 'Das Budget: 40.000 Euro, und dass der letzte Plan 12.300 darüber lag'
+      - 12 vegetarische Gäste, 15 reisen an
+      - Ort Estrela-Pavillon, Caterer Sabor Verde, Hotels Lumen und Casa do Rio
+      - 'Vertrag: Musik bis 23:00, 30 % Anzahlung'
+    dropped:
+      - Jede Nachricht im Wortlaut
+      - Die 22 Auszüge der Webseiten
+      - Der Text der Catering-Angebote und des Vertrags (Pfade behalten)
+      - Die genauen Preise in den Angeboten
+  m28:
+    event: Die KI antwortet aus der Zusammenfassung
+    simple: Die Antwort kommt aus der Zusammenfassung, nicht aus dem Vertrag selbst.
+    technical: Assistentenzug, 16 Tokens. Der Vertragstext ist weg; die Zusammenfassung hält seine zwei wichtigsten Bedingungen.
+  m29:
+    event: Du bittest noch einmal um den Plan
+    simple: Du wiederholst das Budget nicht. Es hat in der Zusammenfassung überlebt.
+    technical: Nutzerzug, 8 Tokens.
+  m30:
+    event: Die KI rechnete die Kosten zusammen, mit Grenze
+    label: Kosten zusammengerechnet
+    labelTechnical: '`Bash` `python3 budget.py --limit 40000` · 670'
+    out: Summe 40.000 · 350 Tokens
+    simple: Diesmal steckt das Budget in der Rechnung.
+    technical: '`Bash("python3 budget.py --limit 40000")`: die Grenze aus der Zusammenfassung hat es ins Skript geschafft.'
+  m31:
+    event: 'Der Plan passt: 40.000 Euro'
+    simple: 'Weniger Detail, mehr Fokus: die Zusammenfassung hat das Budget wieder nach vorn geholt.'
+    technical: Assistentenzug, 32 Tokens. Nach der Verdichtung steht die Zusammenfassung direkt hinter den Startanweisungen, wo die Aufmerksamkeit stark ist, und das Budget steckt darin.

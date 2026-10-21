@@ -21,6 +21,8 @@ function emphasisedCharacters(html: string): string {
   return [...html.matchAll(/<span data-char=""[^>]*data-emphasis=""[^>]*>(.)<\/span>/g)].map(([, c]) => c).join('');
 }
 
+const EYEBROW = { section: 'The long phone call', position: 1, count: 2, label: 'Page 1 of 2' };
+
 describe('success cases', () => {
   it('types the emphasised run of the caption in `primary` semibold, character by character', () => {
     // ARRANGE
@@ -39,6 +41,43 @@ describe('success cases', () => {
     // ASSERT
     expect(html).toMatch(expected);
   });
+
+  it('puts the page counter in brackets right after the Section title, in one line', () => {
+    // ARRANGE
+    const expected = /The long phone call <span[^>]*>\(1\/2\)/;
+    // ACT
+    const html = header({ eyebrow: EYEBROW, entrance: 'none' });
+    // ASSERT
+    expect(html).toMatch(expected);
+  });
+
+  it('reads the counter to assistive tech as the translated page label, not as a bare fraction', () => {
+    // ARRANGE
+    const expected = '<span class="sr-only">Page 1 of 2</span>';
+    // ACT
+    const html = header({ eyebrow: EYEBROW, entrance: 'none' });
+    // ASSERT
+    expect(html).toContain(expected);
+  });
+
+  it('spaces the parts with token gaps and no margins: a full gap around the title group, half between title and caption', () => {
+    // ARRANGE
+    const expected = ['gap-(--space-header)', 'pb-(--space-header)', 'gap-(--space-header-tight)'];
+    // ACT
+    const html = header({ eyebrow: EYEBROW, entrance: 'none' });
+    // ASSERT
+    for (const token of expected) expect(html).toContain(token);
+    expect(html).not.toMatch(/class="[^"]*\bm[tb]-\d/);
+  });
+
+  it('lets the caption span the header full width', () => {
+    // ARRANGE
+    const forbidden = /data-target="caption" class="[^"]*max-w/;
+    // ACT
+    const html = header();
+    // ASSERT
+    expect(html).not.toMatch(forbidden);
+  });
 });
 
 describe('failure cases', () => {
@@ -53,6 +92,27 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('follows the caption with a Context marker to its note, as a button named by the label', () => {
+    // ARRANGE
+    const expected = { note: 'what-is-context-rot', label: 'Speaker note: Context rot' };
+    // ACT
+    const html = header({ entrance: 'none', captionNote: { note: expected.note, label: expected.label } });
+    // ASSERT
+    expect(html).toMatch(
+      new RegExp(`data-target="caption"[^>]*>.*Revenue.*<button[^>]*data-context-ref="${expected.note}"`),
+    );
+    expect(html).toContain(`aria-label="${expected.label}"`);
+  });
+
+  it('draws no marker in a caption without a note', () => {
+    // ARRANGE
+    const expected = 'data-context-ref';
+    // ACT
+    const html = header({ entrance: 'none' });
+    // ASSERT
+    expect(html).not.toContain(expected);
+  });
+
   it('sets nothing off in a caption without emphasis', () => {
     // ARRANGE
     const expected = 'data-emphasis';

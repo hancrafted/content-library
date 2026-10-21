@@ -48,6 +48,15 @@ _Avoid_: Chapter, part
 **Slide**: one frame in an Episode, stacked under the one before it: a page slide at least the viewport's height, a section slide at least 40% of it and, on the shared Slide header, on a band one step off the page; one folder named after its slug, carrying its own Scene, Speaker notes, Voice script and text, so an Episode is a composition of Slides and a Slide copies into another Episode with one import and one list entry. A Section's own slide is a **section slide**; the slides it holds are **page slides**.
 _Avoid_: Card, panel; page, which means the Next.js route the whole Episode renders as; "self-contained Slide", since every Slide is one
 
+**Cornerstone Slide**: a Slide whose content, knowledge and definitions make it a building block other Slides and Episodes cite; it is often, not always, reused. Every Episode stands on its own, so a citing Slide quotes the cornerstone's words that carry meaning on their own and never its acronyms.
+_Avoid_: Key slide, anchor slide
+
+**Preset**: one Slide's settings of a Shared visual: the view it opens in and what it lights, so the Slide tells its own story at rest.
+_Avoid_: State, configuration, variant
+
+**Shared visual**: one interactive visual several Slides show, each by its own Preset, so a new Slide that shows it is new data, not a new drawing.
+_Avoid_: Cornerstone component, shared component, widget
+
 **Title slide**: an Episode's opening Slide: its title, caption, optional Voice script and Speaker notes and, once recorded, its video. Not listed in the table of contents.
 _Avoid_: Hero or cover for the Slide itself; **Hero motif** names the Episode's recurring visual idea the Title slide sets, never the Slide
 
@@ -153,6 +162,8 @@ _Avoid_: Grade, rating, result
 A research folder is named `<category>-<####>__<question-slug>`: the category below, a number counted per category across the repo, and the question's subject in 20-40 characters of kebab case. In the llm-wiki it sits in its category's folder, `docs/llm-wiki/research/<category>/`. The `categorize-research` job of `/new-episode` picks the category, or adds a new one here.
 
 **AIE**: AI Enablement: how people and organizations learn to work with AI, and what it changes in their work.
+
+**COG**: Cognition: how a person's attention and memory work, what they notice, keep and forget of what they hear and live through.
 
 **LLM**: Large language models: how a model works, from its training data to its context window and sampling, and why that makes it behave as it does.
 

@@ -139,6 +139,13 @@ function translatorOf(locale: Locale): TranslatorOf {
     (await getTranslations({ locale, namespace: namespace as never })) as unknown as RuntimeTranslator;
 }
 
+/** Each page Slide's Eyebrow on the shared header, its counter read "Page n of N" in the page's language. */
+async function eyebrowsFor(locale: Locale, mode: HeaderMode, sections: readonly TocSection[]) {
+  if (mode !== 'shared') return new Map<string, EyebrowText>();
+  const t = await getTranslations({ locale, namespace: 'slideHeader' });
+  return eyebrowsOf(sections, (position, count) => t('pageOf', { position, count }));
+}
+
 /**
  * The shell every Episode page renders through (FE-002). It alone turns the
  * Episode record into the page: the named slots, the Title slide with the
@@ -154,7 +161,7 @@ export async function EpisodePageContainer({ locale, episode }: { locale: Locale
   const page: PageHeader = {
     mode: content.header,
     entrance: content.entrance,
-    eyebrows: content.header === 'shared' ? eyebrowsOf(sections) : new Map(),
+    eyebrows: await eyebrowsFor(locale, content.header, sections),
   };
   const youtubeId = episode.youtube?.[locale];
   const talkLabels = youtubeId ? await readTranslationStrings(locale, 'talkPlayer') : undefined;

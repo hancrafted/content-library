@@ -8,8 +8,10 @@ import type { Stage } from './venue-pipeline.pure';
 export interface StageView {
   stage: Stage;
   name: string;
-  move: ReactNode;
-  popover: NodeCopy;
+  /** The move's words, whole; the part bolds the first letter when the pipeline's `acronym` is on. */
+  move: string | undefined;
+  /** Opens from the stage name; without it the name is plain text. */
+  popover?: NodeCopy;
   /** Beside the stage name, e.g. its Context marker. */
   aside?: ReactNode;
   jobsLabel: string;
@@ -22,36 +24,51 @@ export interface StageView {
  * to bottom where it is narrow; each connector turns with it. The Requirements body is the one focal point. Pointing at
  * a stage dims the others.
  */
-export function VenuePipeline({ label, stages }: { label: string; stages: readonly StageView[] }) {
+export function VenuePipeline({
+  label,
+  stages,
+  acronym,
+}: {
+  label: string;
+  stages: readonly StageView[];
+  /** Bold the first letter of each move, so the moves read as the acronym. */
+  acronym: boolean;
+}) {
   return (
     <ol
       aria-label={label}
       className="focus-group focus-group--dim-others flex flex-col gap-6 @4xl:flex-row @4xl:items-stretch @4xl:gap-5"
     >
       {stages.map((view, index) => (
-        <StageColumn key={view.stage.id} view={view} first={index === 0} />
+        <StageColumn key={view.stage.id} view={view} first={index === 0} acronym={acronym} />
       ))}
     </ol>
   );
 }
 
-function StageColumn({ view, first }: { view: StageView; first: boolean }) {
-  const { stage, jobsLabel, body, target } = view;
-  const focal = stage.id === 'requirements';
+function StageColumn({ view, first, acronym }: { view: StageView; first: boolean; acronym: boolean }) {
+  const { stage, target } = view;
   return (
     <li {...target} className="focus-group__item relative flex min-w-0 flex-col gap-2 @4xl:grow @4xl:basis-0">
       {!first && <Connector fan={stage.fan} />}
-      <StageHeader view={view} />
-      <ol
-        aria-label={jobsLabel}
-        className={cn(
-          'flex flex-1 flex-col justify-center gap-2 rounded-2xl bg-card p-3',
-          focal ? 'border-2 border-primary' : 'card-hover card-hover--outline border border-border',
-        )}
-      >
-        {body}
-      </ol>
+      <StageHeader view={view} acronym={acronym} />
+      <JobsCard view={view} />
     </li>
+  );
+}
+
+function JobsCard({ view }: { view: StageView }) {
+  const focal = view.stage.id === 'requirements';
+  return (
+    <ol
+      aria-label={view.jobsLabel}
+      className={cn(
+        'flex flex-1 flex-col justify-center gap-2 rounded-2xl bg-card p-3',
+        focal ? 'border-2 border-primary' : 'card-hover card-hover--outline border border-border',
+      )}
+    >
+      {view.body}
+    </ol>
   );
 }
 
@@ -59,29 +76,57 @@ const NAME_BUTTON =
   'cursor-pointer rounded-sm text-left outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring';
 
 /**
- * The stage's name, opening its popover, over the move pill: the move's first letter semibold. Across a wide row every
- * pill keeps two lines' height, so a move that wraps lines up with the rest.
+ * The stage's name, opening its popover where it has one, over the move pill: the move's first letter semibold when
+ * the acronym is on. Across a wide row every pill keeps two lines' height, so a move that wraps lines up with the rest.
  */
-function StageHeader({ view }: { view: StageView }) {
+function StageHeader({ view, acronym }: { view: StageView; acronym: boolean }) {
   const { stage, name, move, popover, aside } = view;
   return (
-    <div className="flex flex-col items-start gap-1 @4xl:h-24">
+    <div className={'flex flex-col items-start gap-1 @4xl:h-24'}>
       <p className="flex items-center gap-1 text-body font-semibold">
-        <NodePopover copy={popover} className={NAME_BUTTON}>
-          {name}
-        </NodePopover>
+        {popover ? (
+          <NodePopover copy={popover} className={NAME_BUTTON}>
+            {name}
+          </NodePopover>
+        ) : (
+          name
+        )}
         {aside}
       </p>
-      <span
-        className={cn(
-          'text-caption text-muted-foreground',
-          stage.move &&
-            'rounded-2xl border border-border bg-card px-2.5 py-0.5 @4xl:flex @4xl:min-h-14 @4xl:items-center',
-        )}
-      >
-        <span>{move}</span>
-      </span>
+      <MovePill move={move} pill={stage.move !== undefined} acronym={acronym} />
     </div>
+  );
+}
+
+interface MovePillProps {
+  move: string | undefined;
+  /** A BRIEF move sits in a pill; the recommendation's line does not. */
+  pill: boolean;
+  acronym: boolean;
+}
+
+function MovePill({ move, pill, acronym }: MovePillProps) {
+  const words = acronym && pill && move ? <Initial move={move} /> : move;
+  return (
+    <span
+      className={cn(
+        'text-caption text-muted-foreground',
+        pill && 'rounded-2xl border border-border bg-card px-2.5 py-0.5 @4xl:flex @4xl:items-center',
+        pill && '@4xl:min-h-14',
+      )}
+    >
+      <span>{words}</span>
+    </span>
+  );
+}
+
+/** A move with its first letter semibold. */
+function Initial({ move }: { move: string }) {
+  return (
+    <>
+      <b className="font-semibold text-foreground">{move.slice(0, 1)}</b>
+      {move.slice(1)}
+    </>
   );
 }
 

@@ -13,35 +13,35 @@
     },
     {
       "id": "timelines--horizontal-rail",
-      "text": "Zeitleisten 1 / 8 Horizontale Schiene Sechs Meilensteine auf einer Achse, Beschriftungen abwechselnd oben und unten. 01 2019 Auftakt 02 2020 Recherche 03 2021 Prototyp 04 2022 Pilot 05 2023 Start 06 2024 Rückblick"
+      "text": "Zeitleisten (1/8) Seite 1 von 8 Horizontale Schiene Sechs Meilensteine auf einer Achse, Beschriftungen abwechselnd oben und unten. 01 2019 Auftakt 02 2020 Recherche 03 2021 Prototyp 04 2022 Pilot 05 2023 Start 06 2024 Rückblick"
     },
     {
       "id": "timelines--horizontal-scroll-snap",
-      "text": "Zeitleisten 2 / 8 Scroll-Leiste Eine Kartenreihe breiter als die Folie: scrollen oder wischen, jede Karte rastet ein. 01 06 Jan Auftakt Ziel und Beteiligte benennen. 02 06 Mar Recherche Sammeln, was schon bekannt ist. 03 06 May Prototyp Das Kleinste bauen, das eine Frage beantwortet. 04 06 Jul Pilot Mit wenigen echten Nutzern ausprobieren. 05 06 Sep Start Für alle öffnen. 06 06 Nov Rückblick Messen, lernen und das Nächste entscheiden. 01 / 06"
+      "text": "Zeitleisten (2/8) Seite 2 von 8 Scroll-Leiste Eine Kartenreihe breiter als die Folie: scrollen oder wischen, jede Karte rastet ein. 01 06 Jan Auftakt Ziel und Beteiligte benennen. 02 06 Mar Recherche Sammeln, was schon bekannt ist. 03 06 May Prototyp Das Kleinste bauen, das eine Frage beantwortet. 04 06 Jul Pilot Mit wenigen echten Nutzern ausprobieren. 05 06 Sep Start Für alle öffnen. 06 06 Nov Rückblick Messen, lernen und das Nächste entscheiden. 01 / 06"
     },
     {
       "id": "timelines--horizontal-gantt",
-      "text": "Zeitleisten 3 / 8 Phasenbalken Phasen als Balken auf einer gemeinsamen Zeitachse, Überlappungen sind sofort sichtbar. 1 2 3 4 Produkt Auftakt Prototyp Forschung Recherche Rückblick Betrieb Pilot Start"
+      "text": "Zeitleisten (3/8) Seite 3 von 8 Phasenbalken Phasen als Balken auf einer gemeinsamen Zeitachse, Überlappungen sind sofort sichtbar. 1 2 3 4 Produkt Auftakt Prototyp Forschung Recherche Rückblick Betrieb Pilot Start"
     },
     {
       "id": "timelines--vertical-center-spine",
-      "text": "Zeitleisten 4 / 8 Mittelachse Eine Achse in der Mitte, Einträge abwechselnd links und rechts. 2019 01 / 06 Auftakt Ziel und Beteiligte benennen. 2020 02 / 06 Recherche Sammeln, was schon bekannt ist. 2021 03 / 06 Prototyp Das Kleinste bauen, das eine Frage beantwortet. 2022 04 / 06 Pilot Mit wenigen echten Nutzern ausprobieren. 2023 05 / 06 Start Für alle öffnen. 2024 06 / 06 Rückblick Messen, lernen und das Nächste entscheiden."
+      "text": "Zeitleisten (4/8) Seite 4 von 8 Mittelachse Eine Achse in der Mitte, Einträge abwechselnd links und rechts. 2019 01 / 06 Auftakt Ziel und Beteiligte benennen. 2020 02 / 06 Recherche Sammeln, was schon bekannt ist. 2021 03 / 06 Prototyp Das Kleinste bauen, das eine Frage beantwortet. 2022 04 / 06 Pilot Mit wenigen echten Nutzern ausprobieren. 2023 05 / 06 Start Für alle öffnen. 2024 06 / 06 Rückblick Messen, lernen und das Nächste entscheiden."
     },
     {
       "id": "timelines--vertical-sticky-years",
-      "text": "Zeitleisten 5 / 8 Haftende Jahre Das Jahr bleibt links stehen, während seine Einträge vorbeiziehen. 2022 ◆ 01 Auftakt Ziel und Beteiligte benennen. → ● 02 Recherche Sammeln, was schon bekannt ist. → 2023 ▲ 03 Prototyp Das Kleinste bauen, das eine Frage beantwortet. → ■ 04 Pilot Mit wenigen echten Nutzern ausprobieren. → 2024 ✦ 05 Start Für alle öffnen. → ◐ 06 Rückblick Messen, lernen und das Nächste entscheiden. →"
+      "text": "Zeitleisten (5/8) Seite 5 von 8 Haftende Jahre Das Jahr bleibt links stehen, während seine Einträge vorbeiziehen. 2022 ◆ 01 Auftakt Ziel und Beteiligte benennen. → ● 02 Recherche Sammeln, was schon bekannt ist. → 2023 ▲ 03 Prototyp Das Kleinste bauen, das eine Frage beantwortet. → ■ 04 Pilot Mit wenigen echten Nutzern ausprobieren. → 2024 ✦ 05 Start Für alle öffnen. → ◐ 06 Rückblick Messen, lernen und das Nächste entscheiden. →"
     },
     {
       "id": "timelines--vertical-stepper",
-      "text": "Zeitleisten 6 / 8 Schrittfolge Ein nummerierter Ablauf: einen Schritt öffnen, um Details zu lesen. Schritt 1 Auftakt , erledigt Ziel und Beteiligte benennen. Schritt 2 Recherche , erledigt Sammeln, was schon bekannt ist. 3 Schritt 3 Prototyp , aktuell Das Kleinste bauen, das eine Frage beantwortet. 4 Schritt 4 Pilot , ausstehend Mit wenigen echten Nutzern ausprobieren. 5 Schritt 5 Start , ausstehend Für alle öffnen. 6 Schritt 6 Rückblick , ausstehend Messen, lernen und das Nächste entscheiden."
+      "text": "Zeitleisten (6/8) Seite 6 von 8 Schrittfolge Ein nummerierter Ablauf: einen Schritt öffnen, um Details zu lesen. Schritt 1 Auftakt , erledigt Ziel und Beteiligte benennen. Schritt 2 Recherche , erledigt Sammeln, was schon bekannt ist. 3 Schritt 3 Prototyp , aktuell Das Kleinste bauen, das eine Frage beantwortet. 4 Schritt 4 Pilot , ausstehend Mit wenigen echten Nutzern ausprobieren. 5 Schritt 5 Start , ausstehend Für alle öffnen. 6 Schritt 6 Rückblick , ausstehend Messen, lernen und das Nächste entscheiden."
     },
     {
       "id": "timelines--radial-cycle",
-      "text": "Zeitleisten 7 / 8 Zyklus Eine Zeitleiste, die zu ihrem Anfang zurückkehrt: sechs Phasen auf einem Zifferblatt. Jan–Feb Mär–Apr Mai–Jun Jul–Aug Sep–Okt Nov–Dez 01 / 06 Jan–Feb Auftakt Ziel und Beteiligte benennen. Ziel und Beteiligte benennen. Jan–Feb : Auftakt . Ziel und Beteiligte benennen. Mär–Apr : Recherche . Sammeln, was schon bekannt ist. Mai–Jun : Prototyp . Das Kleinste bauen, das eine Frage beantwortet. Jul–Aug : Pilot . Mit wenigen echten Nutzern ausprobieren. Sep–Okt : Start . Für alle öffnen. Nov–Dez : Rückblick . Messen, lernen und das Nächste entscheiden."
+      "text": "Zeitleisten (7/8) Seite 7 von 8 Zyklus Eine Zeitleiste, die zu ihrem Anfang zurückkehrt: sechs Phasen auf einem Zifferblatt. Jan–Feb Mär–Apr Mai–Jun Jul–Aug Sep–Okt Nov–Dez 01 / 06 Jan–Feb Auftakt Ziel und Beteiligte benennen. Ziel und Beteiligte benennen. Jan–Feb : Auftakt . Ziel und Beteiligte benennen. Mär–Apr : Recherche . Sammeln, was schon bekannt ist. Mai–Jun : Prototyp . Das Kleinste bauen, das eine Frage beantwortet. Jul–Aug : Pilot . Mit wenigen echten Nutzern ausprobieren. Sep–Okt : Start . Für alle öffnen. Nov–Dez : Rückblick . Messen, lernen und das Nächste entscheiden."
     },
     {
       "id": "timelines--metro-map",
-      "text": "Zeitleisten 8 / 8 Liniennetz Parallele Linien, die sich teilen und wieder treffen, gelesen wie ein U-Bahn-Plan. Produkt Forschung Betrieb 2019 Auftakt 2020 Recherche 2021 Prototyp 2022 Pilot 2023 Start 2024 Rückblick"
+      "text": "Zeitleisten (8/8) Seite 8 von 8 Liniennetz Parallele Linien, die sich teilen und wieder treffen, gelesen wie ein U-Bahn-Plan. Produkt Forschung Betrieb 2019 Auftakt 2020 Recherche 2021 Prototyp 2022 Pilot 2023 Start 2024 Rückblick"
     },
     {
       "id": "grids",
@@ -49,43 +49,43 @@
     },
     {
       "id": "grids--grid-1x1",
-      "text": "Raster 1 / 10 Raster 1 × 1 1 Zeile mal 1 Spalte. 01 / 01 Zelle eins Zeile 1, Spalte 1: eine kurze Bildunterschrift unter dem Titel."
+      "text": "Raster (1/10) Seite 1 von 10 Raster 1 × 1 1 Zeile mal 1 Spalte. 01 / 01 Zelle eins Zeile 1, Spalte 1: eine kurze Bildunterschrift unter dem Titel."
     },
     {
       "id": "grids--grid-1x2",
-      "text": "Raster 2 / 10 Raster 1 × 2 1 Zeile mal 2 Spalten. 01 Zelle eins Zeile 1, Spalte 1: eine kurze Bildunterschrift unter dem Titel. 02 Zelle zwei Zeile 1, Spalte 2: eine kurze Bildunterschrift unter dem Titel."
+      "text": "Raster (2/10) Seite 2 von 10 Raster 1 × 2 1 Zeile mal 2 Spalten. 01 Zelle eins Zeile 1, Spalte 1: eine kurze Bildunterschrift unter dem Titel. 02 Zelle zwei Zeile 1, Spalte 2: eine kurze Bildunterschrift unter dem Titel."
     },
     {
       "id": "grids--grid-1x3",
-      "text": "Raster 3 / 10 Raster 1 × 3 1 Zeile mal 3 Spalten. 01 Zelle eins Zeile 1, Spalte 1: eine kurze Bildunterschrift unter dem Titel. 02 Zelle zwei Zeile 1, Spalte 2: eine kurze Bildunterschrift unter dem Titel. 03 Zelle drei Zeile 1, Spalte 3: eine kurze Bildunterschrift unter dem Titel."
+      "text": "Raster (3/10) Seite 3 von 10 Raster 1 × 3 1 Zeile mal 3 Spalten. 01 Zelle eins Zeile 1, Spalte 1: eine kurze Bildunterschrift unter dem Titel. 02 Zelle zwei Zeile 1, Spalte 2: eine kurze Bildunterschrift unter dem Titel. 03 Zelle drei Zeile 1, Spalte 3: eine kurze Bildunterschrift unter dem Titel."
     },
     {
       "id": "grids--grid-2x1",
-      "text": "Raster 4 / 10 Raster 2 × 1 2 Zeilen mal 1 Spalte. 01 Zelle eins Zeile 1, Spalte 1: eine kurze Bildunterschrift unter dem Titel. 02 Zelle zwei Zeile 2, Spalte 1: eine kurze Bildunterschrift unter dem Titel."
+      "text": "Raster (4/10) Seite 4 von 10 Raster 2 × 1 2 Zeilen mal 1 Spalte. 01 Zelle eins Zeile 1, Spalte 1: eine kurze Bildunterschrift unter dem Titel. 02 Zelle zwei Zeile 2, Spalte 1: eine kurze Bildunterschrift unter dem Titel."
     },
     {
       "id": "grids--grid-2x2",
-      "text": "Raster 5 / 10 Raster 2 × 2 2 Zeilen mal 2 Spalten. 01 Zelle eins Zeile 1, Spalte 1: eine kurze Bildunterschrift unter dem Titel. 02 Zelle zwei Zeile 1, Spalte 2: eine kurze Bildunterschrift unter dem Titel. 03 Zelle drei Zeile 2, Spalte 1: eine kurze Bildunterschrift unter dem Titel. 04 Zelle vier Zeile 2, Spalte 2: eine kurze Bildunterschrift unter dem Titel."
+      "text": "Raster (5/10) Seite 5 von 10 Raster 2 × 2 2 Zeilen mal 2 Spalten. 01 Zelle eins Zeile 1, Spalte 1: eine kurze Bildunterschrift unter dem Titel. 02 Zelle zwei Zeile 1, Spalte 2: eine kurze Bildunterschrift unter dem Titel. 03 Zelle drei Zeile 2, Spalte 1: eine kurze Bildunterschrift unter dem Titel. 04 Zelle vier Zeile 2, Spalte 2: eine kurze Bildunterschrift unter dem Titel."
     },
     {
       "id": "grids--grid-2x3",
-      "text": "Raster 6 / 10 Raster 2 × 3 2 Zeilen mal 3 Spalten. Zelle eins Zeile 1, Spalte 1: eine kurze Bildunterschrift unter dem Titel. Zelle zwei Zeile 1, Spalte 2: eine kurze Bildunterschrift unter dem Titel. Zelle drei Zeile 1, Spalte 3: eine kurze Bildunterschrift unter dem Titel. Zelle vier Zeile 2, Spalte 1: eine kurze Bildunterschrift unter dem Titel. Zelle fünf Zeile 2, Spalte 2: eine kurze Bildunterschrift unter dem Titel. Zelle sechs Zeile 2, Spalte 3: eine kurze Bildunterschrift unter dem Titel."
+      "text": "Raster (6/10) Seite 6 von 10 Raster 2 × 3 2 Zeilen mal 3 Spalten. Zelle eins Zeile 1, Spalte 1: eine kurze Bildunterschrift unter dem Titel. Zelle zwei Zeile 1, Spalte 2: eine kurze Bildunterschrift unter dem Titel. Zelle drei Zeile 1, Spalte 3: eine kurze Bildunterschrift unter dem Titel. Zelle vier Zeile 2, Spalte 1: eine kurze Bildunterschrift unter dem Titel. Zelle fünf Zeile 2, Spalte 2: eine kurze Bildunterschrift unter dem Titel. Zelle sechs Zeile 2, Spalte 3: eine kurze Bildunterschrift unter dem Titel."
     },
     {
       "id": "grids--grid-3x1",
-      "text": "Raster 7 / 10 Raster 3 × 1 3 Zeilen mal 1 Spalte. 01 Zelle eins Zeile 1, Spalte 1: eine kurze Bildunterschrift unter dem Titel. 02 Zelle zwei Zeile 2, Spalte 1: eine kurze Bildunterschrift unter dem Titel. 03 Zelle drei Zeile 3, Spalte 1: eine kurze Bildunterschrift unter dem Titel."
+      "text": "Raster (7/10) Seite 7 von 10 Raster 3 × 1 3 Zeilen mal 1 Spalte. 01 Zelle eins Zeile 1, Spalte 1: eine kurze Bildunterschrift unter dem Titel. 02 Zelle zwei Zeile 2, Spalte 1: eine kurze Bildunterschrift unter dem Titel. 03 Zelle drei Zeile 3, Spalte 1: eine kurze Bildunterschrift unter dem Titel."
     },
     {
       "id": "grids--grid-3x2",
-      "text": "Raster 8 / 10 Raster 3 × 2 3 Zeilen mal 2 Spalten. 01 Zelle eins Zeile 1, Spalte 1: eine kurze Bildunterschrift unter dem Titel. 02 Zelle zwei Zeile 1, Spalte 2: eine kurze Bildunterschrift unter dem Titel. 03 Zelle drei Zeile 2, Spalte 1: eine kurze Bildunterschrift unter dem Titel. 04 Zelle vier Zeile 2, Spalte 2: eine kurze Bildunterschrift unter dem Titel. 05 Zelle fünf Zeile 3, Spalte 1: eine kurze Bildunterschrift unter dem Titel. 06 Zelle sechs Zeile 3, Spalte 2: eine kurze Bildunterschrift unter dem Titel."
+      "text": "Raster (8/10) Seite 8 von 10 Raster 3 × 2 3 Zeilen mal 2 Spalten. 01 Zelle eins Zeile 1, Spalte 1: eine kurze Bildunterschrift unter dem Titel. 02 Zelle zwei Zeile 1, Spalte 2: eine kurze Bildunterschrift unter dem Titel. 03 Zelle drei Zeile 2, Spalte 1: eine kurze Bildunterschrift unter dem Titel. 04 Zelle vier Zeile 2, Spalte 2: eine kurze Bildunterschrift unter dem Titel. 05 Zelle fünf Zeile 3, Spalte 1: eine kurze Bildunterschrift unter dem Titel. 06 Zelle sechs Zeile 3, Spalte 2: eine kurze Bildunterschrift unter dem Titel."
     },
     {
       "id": "grids--grid-3x3",
-      "text": "Raster 9 / 10 Raster 3 × 3 3 Zeilen mal 3 Spalten. R1·C1 Zelle eins Zeile 1, Spalte 1: eine kurze Bildunterschrift unter dem Titel. R1·C2 Zelle zwei Zeile 1, Spalte 2: eine kurze Bildunterschrift unter dem Titel. R1·C3 Zelle drei Zeile 1, Spalte 3: eine kurze Bildunterschrift unter dem Titel. R2·C1 Zelle vier Zeile 2, Spalte 1: eine kurze Bildunterschrift unter dem Titel. R2·C2 Zelle fünf Zeile 2, Spalte 2: eine kurze Bildunterschrift unter dem Titel. R2·C3 Zelle sechs Zeile 2, Spalte 3: eine kurze Bildunterschrift unter dem Titel. R3·C1 Zelle sieben Zeile 3, Spalte 1: eine kurze Bildunterschrift unter dem Titel. R3·C2 Zelle acht Zeile 3, Spalte 2: eine kurze Bildunterschrift unter dem Titel. R3·C3 Zelle neun Zeile 3, Spalte 3: eine kurze Bildunterschrift unter dem Titel."
+      "text": "Raster (9/10) Seite 9 von 10 Raster 3 × 3 3 Zeilen mal 3 Spalten. R1·C1 Zelle eins Zeile 1, Spalte 1: eine kurze Bildunterschrift unter dem Titel. R1·C2 Zelle zwei Zeile 1, Spalte 2: eine kurze Bildunterschrift unter dem Titel. R1·C3 Zelle drei Zeile 1, Spalte 3: eine kurze Bildunterschrift unter dem Titel. R2·C1 Zelle vier Zeile 2, Spalte 1: eine kurze Bildunterschrift unter dem Titel. R2·C2 Zelle fünf Zeile 2, Spalte 2: eine kurze Bildunterschrift unter dem Titel. R2·C3 Zelle sechs Zeile 2, Spalte 3: eine kurze Bildunterschrift unter dem Titel. R3·C1 Zelle sieben Zeile 3, Spalte 1: eine kurze Bildunterschrift unter dem Titel. R3·C2 Zelle acht Zeile 3, Spalte 2: eine kurze Bildunterschrift unter dem Titel. R3·C3 Zelle neun Zeile 3, Spalte 3: eine kurze Bildunterschrift unter dem Titel."
     },
     {
       "id": "grids--grid-bento",
-      "text": "Raster 10 / 10 Bento-Raster Kacheln verschiedener Größe auf einem Raster: eine Hauptkachel, fünf stützende. Die Hauptzelle Die größte Kachel trägt die Hauptidee; die anderen stützen sie. 02 Zelle zwei Eine stützende Kachel mit kurzer Bildunterschrift. 03 Zelle drei Eine stützende Kachel mit kurzer Bildunterschrift. 04 Zelle vier Eine stützende Kachel mit kurzer Bildunterschrift. 05 Zelle fünf Eine stützende Kachel mit kurzer Bildunterschrift. 06 Zelle sechs Eine stützende Kachel mit kurzer Bildunterschrift."
+      "text": "Raster (10/10) Seite 10 von 10 Bento-Raster Kacheln verschiedener Größe auf einem Raster: eine Hauptkachel, fünf stützende. Die Hauptzelle Die größte Kachel trägt die Hauptidee; die anderen stützen sie. 02 Zelle zwei Eine stützende Kachel mit kurzer Bildunterschrift. 03 Zelle drei Eine stützende Kachel mit kurzer Bildunterschrift. 04 Zelle vier Eine stützende Kachel mit kurzer Bildunterschrift. 05 Zelle fünf Eine stützende Kachel mit kurzer Bildunterschrift. 06 Zelle sechs Eine stützende Kachel mit kurzer Bildunterschrift."
     }
   ],
   "notes": [
