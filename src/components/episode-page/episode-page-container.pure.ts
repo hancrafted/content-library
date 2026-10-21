@@ -37,12 +37,20 @@ export function tocSectionsOf(slides: readonly LocalizedSlide[]): TocSection[] {
  * Every titled page Slide's Eyebrow, by Slide id: read from the table of
  * contents' entries, so the Section title is the one the contents show. A
  * section slide and an untitled Slide get none, and the count skips the
- * untitled ones, so the numbers a reader sees run without gaps.
+ * untitled ones, so the numbers a reader sees run without gaps. `labelOf`
+ * gives the counter's translated reading for assistive tech.
  */
-export function eyebrowsOf(sections: readonly TocSection[]): ReadonlyMap<string, EyebrowText> {
+export function eyebrowsOf(
+  sections: readonly TocSection[],
+  labelOf?: (position: number, count: number) => string,
+): ReadonlyMap<string, EyebrowText> {
   return new Map(
     sections.flatMap(({ title, items }) =>
-      items.map(({ id }, index) => [id, { section: title, position: index + 1, count: items.length }] as const),
+      items.map(({ id }, index) => {
+        const position = index + 1;
+        const eyebrow = { section: title, position, count: items.length };
+        return [id, labelOf ? { ...eyebrow, label: labelOf(position, items.length) } : eyebrow] as const;
+      }),
     ),
   );
 }

@@ -41,12 +41,33 @@ function Heading({ level, children }: { level: SlideHeaderProps['level']; childr
   );
 }
 
+interface TitleGroupProps extends Pick<SlideHeaderProps, 'level' | 'title' | 'caption' | 'captionEmphasis'> {
+  readonly delays: readonly (readonly number[] | undefined)[];
+  readonly ends: readonly number[];
+}
+
+/** The title and its caption, half a gap apart so they read as one. */
+function TitleGroup({ level, title, caption, captionEmphasis, delays, ends }: TitleGroupProps) {
+  return (
+    <div className="flex flex-col gap-(--space-header-tight)">
+      <Heading level={level}>
+        <TypedText text={title} delays={delays[1]} next={ends[1]} />
+      </Heading>
+      {caption && (
+        <p data-target="caption" className="text-body text-muted-foreground">
+          <TypedText text={caption} delays={delays[2]} next={ends[2]} emphasis={captionEmphasis} />
+        </p>
+      )}
+    </div>
+  );
+}
+
 /**
  * The Slide header (design-ADR-0012): Eyebrow, title and caption, rendered by the
  * Slide wrapper above the Scene. A server component: the typewriter is CSS
- * over the spans split here, so no client code runs for it. The caption sits
- * close under the title and the Eyebrow further above, so title and caption
- * read as one.
+ * over the spans split here, so no client code runs for it. A flex column on
+ * two spacing tokens: the Eyebrow, the title group and what follows sit a
+ * full gap apart, the title and its caption half that, so they read as one.
  */
 export function SlideHeader({
   seed,
@@ -61,16 +82,13 @@ export function SlideHeader({
   const lengths = [eyebrow ? eyebrowLength(eyebrow) : 0, typedLength(title), typedLength(caption ?? '')];
   const { delays, ends } = scheduleOf(entrance, seed, lengths);
   return (
-    <div data-slot="slide-header" data-entrance={entrance} className={cn('pt-16 md:pt-24', rest.className)}>
+    <div
+      data-slot="slide-header"
+      data-entrance={entrance}
+      className={cn('flex flex-col gap-(--space-header) pt-16 pb-(--space-header) md:pt-24', rest.className)}
+    >
       {eyebrow && <SlideEyebrow eyebrow={eyebrow} delays={delays[0]} next={ends[0]} />}
-      <Heading level={level}>
-        <TypedText text={title} delays={delays[1]} next={ends[1]} />
-      </Heading>
-      {caption && (
-        <p data-target="caption" className="mt-2 text-body text-balance text-muted-foreground md:max-w-[70%]">
-          <TypedText text={caption} delays={delays[2]} next={ends[2]} emphasis={captionEmphasis} />
-        </p>
-      )}
+      <TitleGroup {...{ level, title, caption, captionEmphasis, delays, ends }} />
       {rest.children}
     </div>
   );
