@@ -28,14 +28,11 @@ export function VenuePipeline({
   label,
   stages,
   acronym,
-  compact = false,
 }: {
   label: string;
   stages: readonly StageView[];
   /** Bold the first letter of each move, so the moves read as the acronym. */
   acronym: boolean;
-  /** A recall: each stage's name and move in one row, without its jobs. */
-  compact?: boolean;
 }) {
   return (
     <ol
@@ -43,29 +40,19 @@ export function VenuePipeline({
       className="focus-group focus-group--dim-others flex flex-col gap-6 @4xl:flex-row @4xl:items-stretch @4xl:gap-5"
     >
       {stages.map((view, index) => (
-        <StageColumn key={view.stage.id} view={view} first={index === 0} acronym={acronym} compact={compact} />
+        <StageColumn key={view.stage.id} view={view} first={index === 0} acronym={acronym} />
       ))}
     </ol>
   );
 }
 
-function StageColumn({
-  view,
-  first,
-  acronym,
-  compact,
-}: {
-  view: StageView;
-  first: boolean;
-  acronym: boolean;
-  compact: boolean;
-}) {
+function StageColumn({ view, first, acronym }: { view: StageView; first: boolean; acronym: boolean }) {
   const { stage, target } = view;
   return (
     <li {...target} className="focus-group__item relative flex min-w-0 flex-col gap-2 @4xl:grow @4xl:basis-0">
-      {!first && <Connector fan={compact ? undefined : stage.fan} compact={compact} />}
-      <StageHeader view={view} acronym={acronym} compact={compact} />
-      {!compact && <JobsCard view={view} />}
+      {!first && <Connector fan={stage.fan} />}
+      <StageHeader view={view} acronym={acronym} />
+      <JobsCard view={view} />
     </li>
   );
 }
@@ -92,10 +79,10 @@ const NAME_BUTTON =
  * The stage's name, opening its popover where it has one, over the move pill: the move's first letter semibold when
  * the acronym is on. Across a wide row every pill keeps two lines' height, so a move that wraps lines up with the rest.
  */
-function StageHeader({ view, acronym, compact }: { view: StageView; acronym: boolean; compact: boolean }) {
+function StageHeader({ view, acronym }: { view: StageView; acronym: boolean }) {
   const { stage, name, move, popover, aside } = view;
   return (
-    <div className={cn('flex flex-col items-start gap-1', !compact && '@4xl:h-24')}>
+    <div className={'flex flex-col items-start gap-1 @4xl:h-24'}>
       <p className="flex items-center gap-1 text-body font-semibold">
         {popover ? (
           <NodePopover copy={popover} className={NAME_BUTTON}>
@@ -106,7 +93,7 @@ function StageHeader({ view, acronym, compact }: { view: StageView; acronym: boo
         )}
         {aside}
       </p>
-      <MovePill move={move} pill={stage.move !== undefined} acronym={acronym} compact={compact} />
+      <MovePill move={move} pill={stage.move !== undefined} acronym={acronym} />
     </div>
   );
 }
@@ -116,17 +103,16 @@ interface MovePillProps {
   /** A BRIEF move sits in a pill; the recommendation's line does not. */
   pill: boolean;
   acronym: boolean;
-  compact: boolean;
 }
 
-function MovePill({ move, pill, acronym, compact }: MovePillProps) {
+function MovePill({ move, pill, acronym }: MovePillProps) {
   const words = acronym && pill && move ? <Initial move={move} /> : move;
   return (
     <span
       className={cn(
         'text-caption text-muted-foreground',
         pill && 'rounded-2xl border border-border bg-card px-2.5 py-0.5 @4xl:flex @4xl:items-center',
-        pill && !compact && '@4xl:min-h-14',
+        pill && '@4xl:min-h-14',
       )}
     >
       <span>{words}</span>
@@ -178,16 +164,12 @@ const FAN_IN = (
  * its stage, beside the body where the row runs across. Where the stages stack it sits above, a straight arrow turned a
  * quarter, since the jobs then stack too and a fan wider than the gap would leave the Foreground.
  */
-function Connector({ fan, compact }: { fan?: Stage['fan']; compact: boolean }) {
+function Connector({ fan }: { fan?: Stage['fan'] }) {
   const across = fan === 'out' ? FAN_OUT : fan === 'in' ? FAN_IN : STRAIGHT;
   return (
     <div
       aria-hidden="true"
-      className={
-        compact
-          ? 'absolute bottom-full left-8 flex h-6 w-6 items-center justify-center @4xl:top-9 @4xl:right-full @4xl:bottom-auto @4xl:left-auto @4xl:h-3 @4xl:w-5'
-          : 'absolute bottom-full left-8 flex h-6 w-6 items-center justify-center @4xl:top-24 @4xl:right-full @4xl:bottom-0 @4xl:left-auto @4xl:mt-2 @4xl:h-auto @4xl:w-5'
-      }
+      className="absolute bottom-full left-8 flex h-6 w-6 items-center justify-center @4xl:top-24 @4xl:right-full @4xl:bottom-0 @4xl:left-auto @4xl:mt-2 @4xl:h-auto @4xl:w-5"
     >
       <div className="rotate-90 @4xl:hidden">{STRAIGHT}</div>
       <div className="hidden @4xl:block">{across}</div>

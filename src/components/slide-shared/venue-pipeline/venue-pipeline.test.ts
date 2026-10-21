@@ -81,22 +81,4 @@ describe('edge cases', () => {
     // ASSERT
     expect(actual).toEqual(expected);
   });
-
-  it('shows each stage name and move without its jobs', () => {
-    // ARRANGE
-    const expected = { stages: 6, jobLists: 0, moves: 5 };
-    // ACT
-    const $ = load(
-      renderToStaticMarkup(
-        createElement(VenuePipeline, { label: 'pipeline', acronym: false, compact: true, stages: stages(false) }),
-      ),
-    );
-    const actual = {
-      stages: $('ol[aria-label="pipeline"] > li').length,
-      jobLists: $('ol[aria-label$="jobs"]').length,
-      moves: $('li > div > span.rounded-2xl').length,
-    };
-    // ASSERT
-    expect(actual).toEqual(expected);
-  });
 });

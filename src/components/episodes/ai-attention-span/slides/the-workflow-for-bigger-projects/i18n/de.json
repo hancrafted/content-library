@@ -1,7 +1,6 @@
 {
   "title": "Human-in-the-Loop-Workflow",
   "caption": "Du bist der Kapitän: Ein Planer-Chat bereitet jede Übergabe vor, Helfer-Chats erledigen die Aufgaben, und Du prüfst jedes Artefakt dazwischen.",
-  "recallLabel": "Zur Erinnerung: die Schritte eines Briefings, hier für die Location der Sommerfeier",
   "pipelineLabel": "Die Schritte eines Briefings, Stufe für Stufe",
   "stages": {
     "party": {
@@ -30,18 +29,6 @@
     }
   },
   "loop": {
-    "label": "Der Human-in-the-Loop-Workflow: Du, der Planer-Chat, die Übergabe, die Helfer-Chats, ihre Ergebnisse, der Planer und wieder Du",
-    "you": "Du",
-    "youRole": "der Kapitän am Steuer",
-    "planner": "Planer-Chat",
-    "workers": "Helfer-Chats",
-    "workerNames": ["Location", "Catering", "Einladungen"],
-    "handoff": "Übergabe",
-    "results": "Ergebnisse",
-    "plannerAgain": "Planer",
-    "youAgain": "Du",
-    "checked": "von Dir geprüft",
-    "check": "Du prüfst jedes Artefakt dazwischen",
     "note": "<marker>Ein frischer Chat pro Aufgabe</marker> hält jedes Fenster klein; Du koordinierst wie ein Projektmanager."
   },
   "notes": {
@@ -92,5 +79,47 @@
         "script": "Du bringst die Ergebnisse zurück zum Planer, und jedes Artefakt dazwischen, die Übergabe und jedes Ergebnis, prüfst Du. Jeder Chat hat einen Job, also läuft keiner lange genug, um seine Mitte zu verwischen. Das ist die ganze Idee: Das Fenster ist die Aufmerksamkeitsspanne der KI, und sie zu managen ist Dein Job. Ein ehrlicher Hinweis: Die Zonen und Zahlen, die ich Dir genannt habe, sind Faustregeln und Veranschaulichungen, und ich habe nicht jede Chat-App getestet, also beobachte Deine eigenen Chats und pass an. Wenn Du entspannt anfangen willst, nimm den nächsten Chat, der abdriftet, bitte ihn um eine Übergabe und öffne damit einen neuen. Danke."
       }
     }
+  },
+  "jobsLabel": "{stage}: Aufgaben",
+  "jobs": {
+    "party": {
+      "venue": "Location",
+      "travel": "Anreise",
+      "catering": "Catering",
+      "invitations": "Einladungen",
+      "budget": "Budget"
+    },
+    "interview": {
+      "label": "KI fragt Dich",
+      "detail": "3 Fragen,",
+      "forgot": "<marker>1 vergessen</marker>"
+    },
+    "research": {
+      "venue1": "Location 1",
+      "venue2": "Location 2",
+      "venue3": "Location 3",
+      "checked": "Gegen die Karte geprüft"
+    },
+    "compare": {
+      "label": "3 Locations ranken",
+      "detail": "gemessen an der Karte",
+      "gate": "Prüfpunkt 2"
+    },
+    "recommendation": {
+      "label": "Location-Plan",
+      "detail": "bis Freitag"
+    }
+  },
+  "card": {
+    "gate": "Prüfpunkt 1",
+    "title": "Anforderungskarte",
+    "criteria": {
+      "guests": "200 Gäste",
+      "budget": "150 € pro Person",
+      "stepFree": "Stufenlos",
+      "vegetarian": "Vegetarisches Menü",
+      "quiet": "Ruhig genug zum Reden"
+    },
+    "signOff": "Freigegeben"
   }
 }

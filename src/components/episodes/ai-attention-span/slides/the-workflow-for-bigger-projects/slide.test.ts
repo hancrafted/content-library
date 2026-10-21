@@ -99,7 +99,7 @@ describe('success cases', () => {
     expect(markers).toEqual(expected);
   });
 
-  it('recalls the six stages of the brief with no bold first letter and no acronym named', () => {
+  it('shows the six stages of the brief with no bold first letter and no acronym named', () => {
     // ARRANGE
     const expected = { stages: 6, bold: 0, acronym: false };
     // ACT
@@ -113,19 +113,23 @@ describe('success cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('walks the human in the loop strip from you to you, with every artifact in between checked by you', () => {
+  it('draws every stage with its jobs and the fan-out and fan-in of brief the venue', () => {
     // ARRANGE
-    const expected = {
-      steps: ['You', 'Planner chat', 'Handoff', 'Worker chats', 'Results', 'Planner', 'You'],
-      note: 'You check every artifact in between',
-    };
+    const expected = { jobLists: 6, workers: ['Venue 1', 'Venue 2', 'Venue 3'], card: true, connectors: 5, fans: 2 };
     // ACT
     const $ = scene('en');
+    const pipeline = $('ol[aria-label="The steps of a brief, stage by stage"]');
     const actual = {
-      steps: $('[data-step]')
-        .map((_, el) => $(el).attr('data-step'))
+      jobLists: pipeline.find('> li > ol').length,
+      workers: pipeline
+        .find('> li > ol')
+        .eq(3)
+        .find('li')
+        .map((_, el) => $(el).text().replace('Checked against the card', '').trim())
         .get(),
-      note: $('[data-check-note]').text(),
+      card: pipeline.text().includes('Requirements card'),
+      connectors: pipeline.find('> li > [aria-hidden="true"]').length,
+      fans: pipeline.find('svg.h-40').length,
     };
     // ASSERT
     expect(actual).toEqual(expected);
