@@ -65,4 +65,15 @@ describe('edge cases', () => {
     // ASSERT
     expect(found.map((cols, i) => cols.includes(widths[i]!))).toEqual([true, true]);
   });
+
+  it('keeps the category beside the window in Technical, and the chat in its column without a flexible part', () => {
+    // ARRANGE
+    const none = { ...preset.show, chat: true, context: true, category: true, panel: false, attention: false };
+    const state = createState({ ...preset, depth: 'technical', show: none });
+    const expected = ["'chat timeline ctx cat'", 'minmax(16rem, 40rem)'];
+    // ACT
+    const found = grid(state);
+    // ASSERT
+    expect([found['--areas'], found['--cols'].split(' 3.5rem')[0]]).toEqual(expected);
+  });
 });

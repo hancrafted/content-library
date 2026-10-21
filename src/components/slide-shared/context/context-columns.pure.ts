@@ -1,25 +1,19 @@
 import { renderModeOf, type ViewState } from './context-state.pure';
 import type { Part } from './context.types';
 
-/* The main CSS grid: one column per part shown, in the order the reader gave. The context category sits beside the
- * window in Simple and beneath it, in the window's column, in Technical. */
+/* The main CSS grid: one column per part shown, in the order the reader gave, one row. The context category always
+ * sits beside the window, Simple or Technical. */
 
+/** The conversation keeps its column while no flexible part (the details, the attention) takes the rest of the row. */
 function chatWidth(parts: ViewState['parts']): string {
-  return !parts.context && !parts.panel ? 'minmax(16rem, 40rem)' : 'minmax(16rem, 1.15fr)';
+  return !parts.panel && !parts.attention ? 'minmax(16rem, 40rem)' : 'minmax(16rem, 1.15fr)';
 }
 
-/** The category goes beneath the window, in its column, when the category is Technical and both are shown. */
-const isBeneath = (parts: ViewState['parts'], state: ViewState): boolean =>
-  parts.category && parts.context && renderModeOf(state, 'category') === 'technical';
-
-/** The columns and the areas, one row, or two with the category under the window's `ctx` area. */
-function grid(shown: readonly (readonly [string, string])[], beneath: boolean) {
-  const row = (below: boolean) => shown.map(([, area]) => (below && area === 'ctx' ? 'cat' : area));
-  const rows = beneath ? [row(false), row(true)] : [row(false)];
+function grid(shown: readonly (readonly [string, string])[]) {
   return {
     '--cols': shown.map(([col]) => col).join(' ') || '1fr',
-    '--areas': shown.length ? rows.map((cells) => `'${cells.join(' ')}'`).join(' ') : 'none',
-    '--rows': beneath ? 'minmax(0, 1fr) auto' : 'none',
+    '--areas': shown.length ? `'${shown.map(([, area]) => area).join(' ')}'` : 'none',
+    '--rows': 'none',
   };
 }
 
@@ -33,10 +27,9 @@ export function columns(parts: ViewState['parts'], state: ViewState, height: num
     panel: [parts.chat ? 'minmax(15rem, 1fr)' : 'minmax(15rem, 1.6fr)', 'panel'],
     attention: [parts.chat ? 'minmax(15rem, 1fr)' : 'minmax(15rem, 1.6fr)', 'att'],
   };
-  const beneath = isBeneath(parts, state);
   const shown = state.order.flatMap((part) => {
     const column = all[part];
-    return column && parts[part] && !(beneath && part === 'category') ? [column] : [];
+    return column && parts[part] ? [column] : [];
   });
-  return { ...grid(shown, beneath), '--main-h': `${height}rem` };
+  return { ...grid(shown), '--main-h': `${height}rem` };
 }

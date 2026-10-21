@@ -66,7 +66,7 @@ describe('success cases', () => {
     }).toEqual(expected);
   });
 
-  it('puts the category beneath the context window in Technical and beside it in Simple', () => {
+  it('keeps the category beside the context window in Technical as in Simple', () => {
     // ARRANGE
     const { preset } = setup();
     const simple = createState({ ...preset, depth: 'simple', show: { ...preset.show, category: true } });
@@ -76,8 +76,8 @@ describe('success cases', () => {
     const found = [grid(simple), grid(technical)];
     // ASSERT
     expect(found[0]?.['--areas']).toContain('ctx cat');
-    expect(found[1]?.['--areas']).toBe("'chat timeline ctx panel' 'chat timeline cat panel'");
-    expect(found[1]?.['--rows']).toBe('minmax(0, 1fr) auto');
+    expect(found[1]?.['--areas']).toBe(found[0]?.['--areas']);
+    expect(found[1]?.['--rows']).toBe('none');
   });
 });
 

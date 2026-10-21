@@ -737,7 +737,7 @@ describe('edge cases', () => {
     );
 
     it(
-      'gives conversation and category their own Technical toggle, and the category lies beneath the window in Technical with its Messages closed',
+      'gives conversation and category their own Technical toggle, and the category stays beside the window in Technical',
       async () => {
         // ARRANGE
         await open('light');
@@ -751,14 +751,14 @@ describe('edge cases', () => {
         // ACT
         await evaluate(send, `document.querySelector('${usage} button[data-control="categoryTechnical"]').click()`);
         await delay(150);
-        const beneath = { window: await top(HEAD), category: await top(usage) };
+        const technical = { window: await top(HEAD), category: await top(usage) };
         const details = await evaluate<boolean>(send, `document.querySelector('${usage} details').open`);
         const toggles = await count(
           `${SLIDE_4} section[aria-label="Chat"] button[data-control="conversationTechnical"]`,
         );
         // ASSERT
         expect(Math.abs(beside.category - beside.window)).toBeLessThan(SAME_TOP);
-        expect(beneath.category).toBeGreaterThan(beneath.window);
+        expect(Math.abs(technical.category - technical.window)).toBeLessThan(SAME_TOP);
         expect(details).toBe(false);
         expect(toggles).toBe(1);
       },
