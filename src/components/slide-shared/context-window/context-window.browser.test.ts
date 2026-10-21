@@ -112,6 +112,64 @@ const attr = (preset: string, selector: string, name: string) =>
     `document.querySelector('[data-cornerstone="${preset}"] ${selector}')?.getAttribute('${name}') ?? null`,
   );
 
+const SLIDE_4 = '[data-cornerstone="slide-4"]';
+const BAR = `${SLIDE_4} [data-roving]`;
+const LOUPE_ROW = `${SLIDE_4} button[class*="lrow"]`;
+
+/** Centre of an element in viewport pixels, after scrolling it into view. */
+const centreOf = (selector: string, nth = 0) =>
+  evaluate<{ x: number; y: number }>(
+    send,
+    `(() => {
+      const el = document.querySelectorAll(${JSON.stringify(selector)})[${nth}];
+      el.scrollIntoView({ block: 'center', behavior: 'instant' });
+      const r = el.getBoundingClientRect();
+      return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+    })()`,
+  );
+
+const mouseTo = (x: number, y: number) =>
+  send('Input.dispatchMouseEvent', { type: 'mouseMoved', x, y, pointerType: 'mouse' });
+const click = async (x: number, y: number) => {
+  await mouseTo(x, y);
+  await send('Input.dispatchMouseEvent', { type: 'mousePressed', x, y, button: 'left', clickCount: 1 });
+  await send('Input.dispatchMouseEvent', { type: 'mouseReleased', x, y, button: 'left', clickCount: 1 });
+};
+
+/** Rests the pointer in the middle of the bar, so the zoom opens. */
+async function openZoom() {
+  await open('light');
+  const bar = await centreOf(BAR);
+  await mouseTo(bar.x, bar.y);
+  await delay(300);
+  return bar;
+}
+
+/** Whether a bubble sits fully inside the chat's scroll box, and whether it is lit. */
+const bubbleState = (id: string) =>
+  evaluate<{ inView: boolean; lit: boolean }>(
+    send,
+    `(() => {
+      const el = document.querySelector('${SLIDE_4} [data-role][data-part="${id}"]');
+      const b = el.parentElement.getBoundingClientRect();
+      const r = el.getBoundingClientRect();
+      return { inView: r.top >= b.top - 1 && r.bottom <= b.bottom + 1, lit: el.hasAttribute('data-on') };
+    })()`,
+  );
+
+/** Scrolls the chat to the top and returns the id of the last bubble then out of view. */
+const scrollChatAway = () =>
+  evaluate<string>(
+    send,
+    `(() => {
+      const box = document.querySelector('${SLIDE_4} [data-role]').parentElement;
+      box.scrollTo({ top: 0, behavior: 'instant' });
+      const b = box.getBoundingClientRect();
+      const out = [...box.querySelectorAll('[data-role]:not([hidden])')].filter((el) => el.getBoundingClientRect().top > b.bottom);
+      return out.at(-1)?.getAttribute('data-part') ?? '';
+    })()`,
+  );
+
 beforeAll(async () => {
   const endpoint = await ensureBrowser();
   connection = await connect(endpoint.port);
@@ -167,6 +225,206 @@ describe('success cases', () => {
       const perStep = ((await taskMs()) - before - (before - idle)) / steps;
       // ASSERT
       expect(perStep).toBeLessThan(budget);
+    },
+    TIMEOUT,
+  );
+
+  it(
+    'keeps the zoom open while the pointer crosses from the bar to it at a slow pace',
+    async () => {
+      // ARRANGE
+      const bar = await openZoom();
+      const row = await centreOf(LOUPE_ROW, 3);
+      const samples: boolean[] = [];
+      const minSamples = 5;
+      // ACT
+      for (let x = bar.x; x < row.x; x += 4) {
+        await mouseTo(x, bar.y);
+        await delay(60);
+        samples.push(await evaluate<boolean>(send, `document.querySelector('${LOUPE_ROW}') !== null`));
+      }
+      // ASSERT
+      expect(samples.length).toBeGreaterThan(minSamples);
+      expect(samples.every(Boolean)).toBe(true);
+    },
+    TIMEOUT,
+  );
+
+  it(
+    'scrolls the related chat bubble into view and lights it when a zoom row is clicked',
+    async () => {
+      // ARRANGE
+      await openZoom();
+      const away = await scrollChatAway();
+      // ACT
+      const row = await centreOf(LOUPE_ROW, 3);
+      const id = await evaluate<string>(
+        send,
+        `document.querySelectorAll('${LOUPE_ROW}')[3].dataset.part.split('@')[0]`,
+      );
+      await click(row.x, row.y);
+      await delay(900);
+      const bubble = await bubbleState(id);
+      // ASSERT
+      expect(away).not.toBe('');
+      expect(bubble).toEqual({ inView: true, lit: true });
+    },
+    TIMEOUT,
+  );
+
+  it(
+    'draws the lens at half the old stroke and grows the hovered block by transform only',
+    async () => {
+      // ARRANGE
+      await openZoom();
+      // ACT
+      const found = await evaluate<{ stroke: string; hot: number; scaled: string }>(
+        send,
+        `(() => {
+          const lens = document.querySelector('${SLIDE_4} [class*="lens"]');
+          const hot = [...document.querySelectorAll('${BAR} [data-hot]')];
+          return {
+            stroke: getComputedStyle(lens).borderTopWidth,
+            hot: hot.length,
+            scaled: getComputedStyle(hot[0]).transform,
+          };
+        })()`,
+      );
+      // ASSERT
+      expect(found.stroke).toBe('1px');
+      expect(found.hot).toBe(1);
+      expect(found.scaled).not.toBe('none');
+    },
+    TIMEOUT,
+  );
+
+  it(
+    'lists three blocks before and three after the hovered one, and the lens spans exactly those rows',
+    async () => {
+      // ARRANGE
+      await openZoom();
+      const expected = { rows: 7, cursorAt: 3 };
+      const tolerance = 4;
+      // ACT
+      const found = await evaluate<{ rows: number; cursorAt: number; lens: number }>(
+        send,
+        `(() => {
+          const rows = [...document.querySelectorAll('${LOUPE_ROW}')];
+          const blocks = [...document.querySelectorAll('${BAR} button[data-part]')];
+          const keys = rows.map((r) => r.dataset.part);
+          const spans = blocks.filter((b) => keys.includes(b.dataset.part)).map((b) => b.getBoundingClientRect());
+          const top = Math.min(...spans.map((r) => r.top));
+          const bottom = Math.max(...spans.map((r) => r.bottom));
+          const lens = document.querySelector('${SLIDE_4} [class*="lens"]').getBoundingClientRect();
+          return {
+            rows: rows.length,
+            cursorAt: rows.findIndex((r) => r.hasAttribute('data-cursor')),
+            lens: Math.abs(lens.top - top) + Math.abs(lens.bottom - bottom),
+          };
+        })()`,
+      );
+      // ASSERT
+      expect({ rows: found.rows, cursorAt: found.cursorAt }).toEqual(expected);
+      expect(found.lens).toBeLessThan(tolerance);
+    },
+    TIMEOUT,
+  );
+
+  it(
+    'hovers an Attention row without remounting the list, and lights its bubble',
+    async () => {
+      // ARRANGE
+      await open('light');
+      await evaluate(
+        send,
+        `(() => { document.querySelector('${SLIDE_4} [class*="attRow"] button').closest('[class*="card"]').firstElementChild.__mark = 'kept'; })()`,
+      );
+      const rows = '[class*="attRow"] button';
+      // ACT
+      const first = await centreOf(`${SLIDE_4} ${rows}`, 2);
+      await mouseTo(first.x, first.y);
+      await delay(150);
+      const second = await centreOf(`${SLIDE_4} ${rows}`, 4);
+      await mouseTo(second.x, second.y);
+      await delay(150);
+      const found = await evaluate<{ kept: string | null; bubble: boolean }>(
+        send,
+        `(() => {
+          const btn = document.querySelectorAll('${SLIDE_4} ${rows}')[4];
+          const bubble = document.querySelector('${SLIDE_4} [data-role][data-part="' + btn.dataset.part + '"]');
+          return {
+            kept: btn.closest('[class*="card"]').firstElementChild.__mark ?? null,
+            bubble: bubble.hasAttribute('data-on'),
+          };
+        })()`,
+      );
+      // ASSERT
+      expect(found).toEqual({ kept: 'kept', bubble: true });
+    },
+    TIMEOUT,
+  );
+
+  it(
+    'scrolls the chat to the bubble of a clicked Attention row',
+    async () => {
+      // ARRANGE
+      await open('light');
+      const away = await scrollChatAway();
+      // ACT
+      const row = await centreOf(`${SLIDE_4} [class*="attRow"] button[data-part="${away}"]`);
+      await click(row.x, row.y);
+      await delay(900);
+      const bubble = await bubbleState(away);
+      // ASSERT
+      expect(away).not.toBe('');
+      expect(bubble).toEqual({ inView: true, lit: true });
+    },
+    TIMEOUT,
+  );
+
+  it(
+    'does not shift the chat or the page when an Attention row is hovered',
+    async () => {
+      // ARRANGE
+      await open('light');
+      const row = await centreOf(`${SLIDE_4} [class*="attRow"] button`, 2);
+      const measure = () =>
+        evaluate<string>(
+          send,
+          `(() => {
+            const root = document.querySelector('${SLIDE_4}');
+            const phone = root.querySelector('[class*="phone"]').getBoundingClientRect().height;
+            return [[...root.querySelectorAll('[data-role]:not([hidden])')].map((e) => e.dataset.part + '=' + Math.round(e.getBoundingClientRect().height)).join(), Math.round(phone), Math.round(scrollY), root.querySelector('[class*="attRow"] button').getBoundingClientRect().top | 0].join();
+          })()`,
+        );
+      const before = await measure();
+      // ACT
+      await mouseTo(row.x, row.y);
+      await delay(300);
+      // ASSERT
+      expect(await measure()).toBe(before);
+    },
+    TIMEOUT,
+  );
+
+  it(
+    'gives the Attention bar about a third of the row',
+    async () => {
+      // ARRANGE
+      await open('light');
+      const about = { min: 0.25, max: 0.4 };
+      // ACT
+      const share = await evaluate<number>(
+        send,
+        `(() => {
+          const bar = document.querySelector('${SLIDE_4} [class*="attBar"]').getBoundingClientRect().width;
+          const name = document.querySelector('${SLIDE_4} [class*="attName"]').getBoundingClientRect().width;
+          return bar / (bar + name);
+        })()`,
+      );
+      // ASSERT
+      expect(share).toBeGreaterThan(about.min);
+      expect(share).toBeLessThan(about.max);
     },
     TIMEOUT,
   );

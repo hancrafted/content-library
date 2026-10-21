@@ -328,6 +328,10 @@
   gap: 0.9rem;
   overscroll-behavior: contain;
 }
+/* Once seen, the hint only hides: taking its room away would resize the chat and jump the page under the pointer. */
+.hint[data-seen] {
+  visibility: hidden;
+}
 .hint {
   min-width: 0;
   color: var(--cs-sub);
@@ -466,7 +470,8 @@
   background: var(--muted);
   color: var(--foreground);
 }
-.root[data-mode='attention']:not([data-lit]) .msg[data-faded][data-may-fill] .note {
+/* The note stays while something is lit: it leaving would shrink the chat and jump the page under the pointer. */
+.root[data-mode='attention'] .msg[data-faded][data-may-fill] .note {
   display: block;
 }
 /* After a compaction, earlier bubbles stay readable but are no longer in the context. */
@@ -813,6 +818,12 @@
   transition-duration: var(--out);
   transition-timing-function: var(--ease-in);
 }
+.block[data-hot] {
+  /* Grows by transform only, so no other block moves: a tiny block a few px, a big one barely. */
+  transform: scaleY(calc(1 + 1.5 / max(var(--z), 1)));
+  transform-origin: center;
+  z-index: 2;
+}
 .root[data-lit] .block:not([data-on]) {
   background: var(--cs-dim);
 }
@@ -1032,7 +1043,7 @@ button.row:hover {
   right: 0;
   top: calc(var(--s) * 1%);
   height: max(calc(var(--z) * 1%), 10px);
-  border: 2px solid var(--foreground);
+  border: 1px solid var(--foreground);
   border-radius: 4px;
   background: color-mix(in oklch, var(--card) 20%, transparent);
   pointer-events: none;
@@ -1049,6 +1060,24 @@ button.row:hover {
   flex-direction: column;
   gap: 2px;
   animation: cs-in var(--in) var(--ease-out);
+}
+.loupeTail {
+  /* The bridge: a strip over the gap between the bar and the zoom, part of the zoom's hit area. */
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 100%;
+  width: 0.8rem;
+}
+.loupeTail::after {
+  content: '';
+  position: absolute;
+  top: calc(var(--tail, 50%) - 0.6rem);
+  right: 0;
+  width: 0.7rem;
+  height: 1.2rem;
+  background: var(--card);
+  clip-path: polygon(100% 0, 100% 100%, 0 50%);
 }
 .loupeTitle {
   display: flex;
@@ -1172,7 +1201,7 @@ button.row:hover {
 }
 .att {
   display: grid;
-  grid-template-columns: minmax(6rem, 1.1fr) 2fr 1.75rem;
+  grid-template-columns: minmax(6rem, 2fr) 1fr 1.75rem;
   gap: 3px 0.6rem;
   align-items: center;
   margin-top: 0.6rem;
@@ -1323,6 +1352,9 @@ button.row:hover {
   }
   .block[data-out] {
     transform: scaleX(0);
+  }
+  .block[data-hot] {
+    transform: scaleX(calc(1 + 1.5 / max(var(--z), 1)));
   }
   .outline {
     top: 1px;

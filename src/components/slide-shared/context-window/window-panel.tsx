@@ -1,3 +1,4 @@
+import { panelKey } from './context-state.pure';
 import { readoutAt } from './context-usage.pure';
 import { fill, stepCat, type View } from './context-view';
 import styles from './context-window.module.css';
@@ -64,8 +65,9 @@ function ExplainCard({ v }: { readonly v: View }) {
 
 export function Panel({ v }: { readonly v: View }) {
   const attention = v.state.mode === 'attention';
-  // A new key replays the card's entrance when what it explains changes; stepping alone does not.
-  const key = [v.state.mode, v.state.depth, v.lit, v.ghost].join('|');
+  // A new key replays the card's entrance when what it explains changes; stepping alone does not. Attention keeps
+  // its card while lit, so hovering a row only restyles it.
+  const key = panelKey({ mode: v.state.mode, depth: v.state.depth, lit: v.lit, ghost: v.ghost });
   return (
     <section className={styles.panel} aria-label={v.words.details}>
       <div className={styles.head}>

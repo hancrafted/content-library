@@ -141,3 +141,15 @@ export function ghostOf(chat: Chat, state: ViewState): string | null {
   const index = chat.steps.findIndex((step) => step.id === id);
   return index >= visibleStep(state) ? id : null;
 }
+
+/**
+ * A new key replays the detail card's entrance. Explain replays when what it explains changes; Attention only when
+ * the mode or depth does, so hovering a row restyles it and never remounts the list.
+ */
+export const panelKey = (view: {
+  readonly mode: Mode;
+  readonly depth: Depth;
+  readonly lit: string | null;
+  readonly ghost: string | null;
+}): string =>
+  (view.mode === 'attention' ? [view.mode, view.depth] : [view.mode, view.depth, view.lit, view.ghost]).join('|');
