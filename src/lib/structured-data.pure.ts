@@ -1,7 +1,8 @@
 import { TRANSLATIONS } from '../i18n/translations';
 import type { IsoDate } from './episode-metadata.pure';
-import { localizePath, type Locale } from './locale.pure';
-import { episodeRoute, ROUTES, type EpisodeSlug } from './routes';
+import type { Locale } from './locale.pure';
+import { OG_IMAGE } from './page-metadata.pure';
+import { episodeRoute, ROUTES, servedUrl, type EpisodeSlug } from './routes';
 import { SOCIAL_LINKS } from './social-links';
 
 /*
@@ -24,12 +25,6 @@ export interface EpisodeLdInput {
   readonly youtube?: string;
 }
 
-/** The URL a page is served at, trailing slash included (the canonical). */
-function servedUrl(siteUrl: string, route: string, locale: Locale): string {
-  const path = localizePath(route, locale);
-  return path === '/' ? `${siteUrl}/` : `${siteUrl}${path}/`;
-}
-
 function person(siteUrl: string, locale: Locale): Node {
   return {
     '@type': 'Person',
@@ -41,14 +36,15 @@ function person(siteUrl: string, locale: Locale): Node {
 }
 
 export function landingJsonLd(siteUrl: string, locale: Locale): JsonLd {
+  const url = servedUrl(siteUrl, ROUTES.home, locale);
   return {
     '@context': 'https://schema.org',
     '@graph': [
       person(siteUrl, locale),
       {
         '@type': 'WebSite',
-        '@id': `${siteUrl}/#website`,
-        url: servedUrl(siteUrl, ROUTES.home, locale),
+        '@id': url,
+        url,
         name: TRANSLATIONS[locale].brand.name,
         description: TRANSLATIONS[locale].meta.home.description,
         inLanguage: locale,
@@ -84,6 +80,7 @@ export function episodeJsonLd(siteUrl: string, locale: Locale, episode: EpisodeL
   const author = { '@type': 'Person', name: TRANSLATIONS[locale].landing.about.identity.name, url: `${siteUrl}/` };
   const article: Node = {
     '@type': 'Article',
+    '@id': url,
     headline: episode.title,
     description: episode.description,
     inLanguage: locale,
@@ -91,7 +88,7 @@ export function episodeJsonLd(siteUrl: string, locale: Locale, episode: EpisodeL
     url,
     mainEntityOfPage: url,
     author,
-    image: `${siteUrl}/og-image.png`,
+    image: `${siteUrl}${OG_IMAGE.url}`,
   };
   const video = youtube === undefined ? [] : [videoNode({ ...episode, youtube, publishedOn }, locale, author)];
   return { '@context': 'https://schema.org', '@graph': [article, ...video] };

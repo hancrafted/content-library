@@ -23,10 +23,10 @@ const BLOCKING = ['serious', 'critical'];
 const TIMEOUT = 120_000;
 
 /*
- * Dimmed on purpose, and so left out of the contrast rule only: the back badges of the onboard-ai-every-time hero,
+ * Dimmed on purpose, and so left out of the contrast rule only: the back badges of the onboard-ai-every-time hero (marked `data-a11y-decorative`),
  * faded echoes of earlier "Day 1" badges whose fade is the picture. Every other rule still checks them.
  */
-const DIMMED = ['li[class*="opacity-50"]', 'li[class*="opacity-75"]'];
+const DIMMED = ['[data-a11y-decorative]'];
 
 let connection: Connection;
 let targetId = '';

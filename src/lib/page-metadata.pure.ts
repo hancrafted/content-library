@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { TRANSLATIONS } from '../i18n/translations';
 import type { EpisodeStatus, IsoDate } from './episode-metadata.pure';
 import { DEFAULT_LOCALE, localizePath, type Locale } from './locale.pure';
-import { pageLocales, routeOf, type PageRef } from './routes';
+import { isEpisodePage, pageLocales, routeOf, type PageRef } from './routes';
 
 /** Used when the deploy sets no `SITE_URL`: local and pull-request builds. */
 const LOCAL_ORIGIN = 'http://localhost:3000';
@@ -61,7 +61,7 @@ function socialCards(
     .map((each) => OG_LOCALES[each]);
   return {
     openGraph: {
-      type: typeof page === 'string' ? 'website' : 'article',
+      type: isEpisodePage(page) ? 'article' : 'website',
       ...words,
       url: localizePath(routeOf(page), locale),
       siteName,

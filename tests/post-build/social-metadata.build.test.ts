@@ -33,6 +33,28 @@ describe('social cards', () => {
   });
 });
 
+describe('one URL per page', () => {
+  const nodes = (url: string) => jsonLd(url).flatMap((block) => block['@graph']) as Record<string, unknown>[];
+  const cases = [
+    ['/', 'WebSite'],
+    ['/de', 'WebSite'],
+    ['/episodes/ai-attention-span', 'Article'],
+    ['/de/episodes/ai-attention-span', 'Article'],
+  ] as const;
+
+  it.each(cases)('has canonical, og:url and the JSON-LD url and @id agree at %s', (path, type) => {
+    // ARRANGE
+    const canonical = exportedPage(path)('link[rel="canonical"]').attr('href');
+    // ACT
+    const node = nodes(path).find((each) => each['@type'] === type);
+    // ASSERT
+    expect(canonical).toBeDefined();
+    expect(meta(path, 'og:url').attr('content')).toBe(canonical);
+    expect(node?.url).toBe(canonical);
+    expect(node?.['@id']).toBe(canonical);
+  });
+});
+
 describe('structured data', () => {
   it('gives the landing page a Person and a WebSite', () => {
     // ARRANGE / ACT
