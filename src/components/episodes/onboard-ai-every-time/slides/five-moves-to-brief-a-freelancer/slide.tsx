@@ -7,7 +7,7 @@ import en from './i18n/en.json';
 
 const MOVES = ['break', 'requirements', 'interview', 'evaluate', 'fresh'] as const;
 
-// The section slide of "Five moves to brief a freelancer": the Hero motif's badge, worn by AI, with the five BRIEF
+// The section slide of "How do we work with this freelancer?": the Hero motif's badge, worn by AI, with the five BRIEF
 // moves clipped to it as pills, each first letter semibold.
 export const fiveMovesToBriefAFreelancer = slide({
   slug: 'five-moves-to-brief-a-freelancer',

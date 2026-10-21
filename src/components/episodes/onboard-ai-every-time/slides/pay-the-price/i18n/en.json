@@ -157,37 +157,22 @@
       "who-gets-the-job": {
         "title": "Who gets the job",
         "keywords": "",
-        "script": "So who are you handing the work to? Not a chatbot and not an oracle, but a hire: a brilliant freelancer with amnesia, every time. They come with five traits, and the first letters spell PRICE, because if you do not manage them, you pay. For now I only describe the freelancer, a person, so you can picture them."
+        "script": "Now imagine you hand this job to a freelancer: brilliant, but with amnesia. And they come with five weird traits."
       },
       "probabilistic-relentless": {
         "title": "Probabilistic, Relentless",
         "keywords": "",
-        "script": "The first trait is Probabilistic. Give the same brief to a new freelancer and you get a different plan: each one picks a likely plan, not a fixed one, which means one good result is not a promise. The second is Relentless. You hand over the job and they work day and night, producing stacks of polished pages, whether the pages are right or not, so there is a lot to read and all of it needs checking."
+        "script": "One: they're probabilistic. Ask them the same question twice, and you get a slightly different answer, sometimes a very different one. Two: they're relentless. No bathroom breaks, no sleep, fully locked on whatever task you give them."
       },
       "informed": {
         "title": "Informed",
         "keywords": "",
-        "script": "Third, Informed. They know every trade and give expert answers, yet they are blind to your company and your culture. The handbook they get is redacted, sometimes on purpose, and sometimes because nobody, not even the person onboarding them, knows what is missing."
+        "script": "Three: they're very informed. A degree in every subject you can imagine. But they know nothing about you, your company, your culture or your processes."
       },
       "confident-every-word-billed": {
         "title": "Confident, Every word billed",
         "keywords": "",
-        "script": "Fourth, Confident. You give a vague request, they start without asking, fill the gaps with their own assumptions and sell the result to you as right. A guess sounds exactly as sure as a fact. And fifth, Every word billed: this freelancer bills for every word they read and write, so one more question from you means paying for them to reread the whole file, their own pages included. The longer the job runs, the bigger the bill, and the bill grows faster than the work does."
-      },
-      "amnesia": {
-        "title": "Amnesia",
-        "keywords": "",
-        "script": "And here is what sits under all five. Every time you come back, they forget everything, so every job starts from day one. (pause) Hold that picture of the freelancer, because the next thing I show is who this really is."
-      },
-      "ai-lands-last": {
-        "title": "AI lands last",
-        "keywords": "",
-        "script": "This freelancer is AI. Row by row, it is the same sentence with different nouns. Give the same prompt in a new chat and you get a different answer. Send the prompt and it produces pages in seconds, as many as you ask for, right or not. Trained on more text than anyone could read, it gives you the likeliest answer, blind to your company and culture. Give it a vague prompt and it fills the gaps with the most common answers and replies with full confidence. And it charges for every word it reads and writes, so one more message pays for the whole chat again, its own answers included. (pause) Would you hand a job to a freelancer like that without a plan?"
-      },
-      "the-pun": {
-        "title": "The pun",
-        "keywords": "",
-        "script": "So here is the whole slide in one line. Forget the price, and you'll pay it every time."
+        "script": "Four: they're extremely confident, to the point that they'll sell you their answer as correct. Five: they bill you for every word they hear from you, and every word they say."
       }
     }
   }

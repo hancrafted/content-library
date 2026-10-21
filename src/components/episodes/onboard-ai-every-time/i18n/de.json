@@ -1,5 +1,14 @@
 {
   "title": "Behandle KI wie einen brillanten Freelancer mit Amnesie",
   "caption": "KI kennt jedes Fach und vergisst Dich jedes Mal, also fängt jeder Auftrag bei Tag 1 an.",
-  "description": "Die fünf Eigenschaften, die KI teuer machen (PRICE), und die fünf Schritte, mit denen Du sie im Griff behältst (BRIEF): Zerleg die Arbeit, Anforderungen zuerst, lass Dich von der KI interviewen, prüf jeden Schritt und starte für jedes Teil neu."
+  "description": "Die fünf Eigenschaften, die KI teuer machen (PRICE), und die fünf Schritte, mit denen Du sie im Griff behältst (BRIEF): Zerleg die Arbeit, Anforderungen zuerst, lass Dich von der KI interviewen, prüf jeden Schritt und starte für jedes Teil neu.",
+  "voiceScript": {
+    "segments": {
+      "welcome": {
+        "title": "Willkommen",
+        "keywords": "",
+        "script": "Willkommen bei hancrafted. In dieser Folge geht es darum, warum du KI wie einen brillanten Freelancer mit Amnesie behandeln solltest. Das Ziel: ein frischer Blick, damit du das nächste Mal, wenn KI dich verwirrt oder enttäuscht, ein mentales Modell hast, um das zu lösen. Los geht's."
+      }
+    }
+  }
 }

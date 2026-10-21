@@ -69,9 +69,6 @@ export const payThePrice = slide({
     { slug: 'probabilistic-relentless' },
     { slug: 'informed' },
     { slug: 'confident-every-word-billed' },
-    { slug: 'amnesia' },
-    { slug: 'ai-lands-last' },
-    { slug: 'the-pun' },
   ],
   content: ({ t, marker, Marker }) => (
     <SlideFrame className="mt-8">

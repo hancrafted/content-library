@@ -1,0 +1,73 @@
+{
+  "title": "Was ein einziger Prompt bewirkt",
+  "heading": "Ein Prompt, ein polierter Plan",
+  "caption": "Er sieht fertig aus. Schau genauer hin.",
+  "prompt": "Plane das Sommerfest im nächsten Jahr für 200 Mitarbeitende in ganz Europa.",
+  "cracksLabel": "Ein Riss pro Eigenschaft",
+  "cracks": {
+    "informed": {
+      "trait": "Informed",
+      "crack": "Paintball, aus tausend Teambuilding-Ideen gewählt, weil sie deine Kultur nicht kennen."
+    },
+    "confident": {
+      "trait": "Confident",
+      "crack": "Preise für Locations, die wie Fakten aussehen und erfunden sind."
+    },
+    "probabilistic": {
+      "trait": "Probabilistic",
+      "crack": "Frag noch einmal, und ein ganz neuer Plan: Lissabon statt Berlin."
+    },
+    "relentless": {
+      "trait": "Relentless",
+      "crack": "Hotels in zwölf Städten nach Bewertung verglichen, und ein Stapel Dokumente."
+    },
+    "every-word-billed": {
+      "trait": "Every word billed",
+      "crack": "Du hast jede Seite davon bezahlt."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "one-prompt-in": {
+        "title": "Ein Prompt rein",
+        "keywords": "",
+        "script": "Was passiert also, wenn du ihnen nur einen Prompt gibst: Plane das Sommerfest im nächsten Jahr für 200 Mitarbeitende in ganz Europa? Du bekommst einen Plan. Einen polierten. Schau genauer hin."
+      },
+      "informed": {
+        "title": "Informed",
+        "keywords": "",
+        "script": "Sie sind informed: Sie kennen tausend Teambuilding-Aktivitäten, und sie haben Paintball gewählt, weil sie deine Kultur nicht kennen."
+      },
+      "confident": {
+        "title": "Confident",
+        "keywords": "",
+        "script": "Sie sind confident: Die Preise der Locations sehen aus wie Fakten, und sie sind erfunden."
+      },
+      "probabilistic": {
+        "title": "Probabilistic",
+        "keywords": "",
+        "script": "Sie sind probabilistic: Frag noch einmal, und du bekommst einen ganz neuen Plan, in Lissabon statt Berlin."
+      },
+      "relentless": {
+        "title": "Relentless",
+        "keywords": "",
+        "script": "Sie sind relentless: Sie haben Hotels in zwölf Städten nach Bewertung verglichen, nie gefragt, woher deine Leute anreisen, und dich unter Dokumenten begraben."
+      },
+      "every-word-billed": {
+        "title": "Every word billed",
+        "keywords": "",
+        "script": "Und sie rechnen pro Wort ab: Du hast jede Seite davon bezahlt."
+      },
+      "you-saw-the-ai": {
+        "title": "Du hast die KI gesehen",
+        "keywords": "",
+        "script": "Du hast es wahrscheinlich gemerkt: Hinter jeder Eigenschaft hast du schon die KI gesehen. Aber bleiben wir im Gedankenexperiment. Wenn das ein menschlicher Freelancer mit diesen fünf Eigenschaften wäre, wie würdest du ihn für eine komplexe Aufgabe wie diese einarbeiten?"
+      },
+      "the-mental-model": {
+        "title": "Das mentale Modell",
+        "keywords": "",
+        "script": "Das ist das mentale Modell, das ich dir mitgeben will. Im weiteren Verlauf wirst du sehen, dass sich ein KI-Agent seltsamerweise in vielem wie dieser brillante Freelancer mit Amnesie verhält. Und deine Aufgabe ist, ihn einzuarbeiten und zu führen, damit er ein Ergebnis liefert, mit dem du arbeiten kannst."
+      }
+    }
+  }
+}

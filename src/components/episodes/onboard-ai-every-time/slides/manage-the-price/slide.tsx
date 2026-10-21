@@ -59,13 +59,7 @@ export const manageThePrice = slide({
       sources: [{ slug: 'dziri-faith-and-fate', url: 'https://arxiv.org/abs/2305.18654' }],
     },
   ],
-  segments: [
-    { slug: 'one-prompt-is-not-enough' },
-    { slug: 'break-it-down-requirements-first' },
-    { slug: 'interview-evaluate' },
-    { slug: 'fresh-start' },
-    { slug: 'refrain' },
-  ],
+  segments: [{ slug: 'refrain' }],
   content: ({ t, target, Marker }) => (
     <SlideFrame className="mt-10">
       <CounterMatrix
