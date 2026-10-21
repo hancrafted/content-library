@@ -71,6 +71,13 @@ const bubble = (slug: string, locale: Locale) => {
     faces: $('[data-face]')
       .map((_, el) => $(el).attr('data-face'))
       .get(),
+    emoji: $('[data-face-emoji]')
+      .map((_, el) => $(el).text().trim())
+      .get(),
+    drawn: $('[data-face] svg').length,
+    emojiHidden: $('[data-face-emoji]')
+      .map((_, el) => $(el).attr('aria-hidden'))
+      .get(),
     numbers: $('[data-face-number]')
       .map((_, el) => $(el).text().trim())
       .get(),
@@ -84,7 +91,7 @@ const bubble = (slug: string, locale: Locale) => {
 };
 
 const STEPS = { start: 0, thought: 1, ais: 2, fills: 3, managing: 4 } as const;
-const YOUR = { en: 'Your attention', de: 'Deine Aufmerksamkeit' } as const;
+const YOUR = { en: 'Your attention span', de: 'Deine Aufmerksamkeitsspanne' } as const;
 
 describe('success cases', () => {
   it.each([
@@ -234,7 +241,13 @@ describe('success cases', () => {
       'what-fills-the-window',
       'managing-the-attention-span',
     ];
-    const expected = { faces: ['fine', 'sweating', 'fried'], numbers: ['1', '2', '3'] };
+    const expected = {
+      faces: ['fine', 'sweating', 'fried'],
+      numbers: ['1', '2', '3'],
+      emoji: ['🙂', '😅', '🤯'],
+      emojiHidden: ['true', 'true', 'true'],
+      drawn: 0,
+    };
     // ACT
     const seen = openers.map((slug) => bubble(slug, 'en'));
     const title = bubble('hero', 'en');
@@ -259,16 +272,13 @@ describe('success cases', () => {
     expect(new Set(counts).size).toBe(counts.length);
   });
 
-  it('draws a rotten apple with an evil smile, hidden from assistive technology, on the last opener', () => {
+  it('leaves the last opener with the bubble and bar alone: no apple, no handoff note', () => {
     // ARRANGE
-    const expected = { apples: 1, hidden: 'true' };
+    const expected = { apples: 0, handoff: false };
     // ACT
     const $ = scene('managing-the-attention-span', 'en');
     // ASSERT
-    expect({
-      apples: $('svg[data-rotten-apple]').length,
-      hidden: $('svg[data-rotten-apple]').attr('aria-hidden'),
-    }).toEqual(expected);
+    expect({ apples: $('[data-rotten-apple]').length, handoff: /Handoff:/.test($.text()) }).toEqual(expected);
   });
 
   it.each([
@@ -276,7 +286,7 @@ describe('success cases', () => {
       'en',
       {
         title: 'Congratulations',
-        caption: 'Now you know how it feels. One more time? Or again in a minute?',
+        punchline: 'Now you know how it feels. One more time? Or again in a minute?',
         note: 'Full to the brim. Well done.',
       },
     ],
@@ -284,14 +294,15 @@ describe('success cases', () => {
       'de',
       {
         title: 'Glückwunsch',
-        caption: 'Jetzt weißt Du, wie es sich anfühlt. Noch einmal? Oder gleich in einer Minute?',
+        punchline: 'Jetzt weißt Du, wie es sich anfühlt. Noch einmal? Oder gleich in einer Minute?',
         note: 'Bis zum Rand voll. Gut gemacht.',
       },
     ],
   ] as const)('closes the Episode with a full bar and the congratulation (%s)', (locale, said) => {
     // ARRANGE
     const slug = 'now-you-know-how-it-feels';
-    const expected = { ...said, filled: STEPS.managing, current: '' };
+    const { title, ...onBar } = said;
+    const expected = { title, caption: undefined, ...onBar, filled: STEPS.managing, current: '', poll: '', faces: [] };
     // ACT
     const slide = localized(slug, locale);
     const seen = bar(slug, locale);
@@ -299,6 +310,9 @@ describe('success cases', () => {
     expect({
       title: slide.title,
       caption: slide.header?.caption,
+      punchline: seen.punchline,
+      poll: seen.poll,
+      faces: bubble(slug, locale).faces,
       filled: seen.filled,
       current: seen.now,
       note: seen.note,
