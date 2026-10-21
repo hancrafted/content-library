@@ -51,17 +51,17 @@
       "you-type-one-line": {
         "title": "Du tippst eine Zeile",
         "keywords": "",
-        "script": "Du tippst eine kurze Zeile, sagen wir: Finde drei Locations in Lissabon. Aber was die KI bekommt, ist das ganze bisherige Gespräch, von deiner ersten Nachricht bis zur letzten, und sie bekommt all das mit jeder einzelnen Nachricht, die du schickst."
+        "script": "Du tippst eine kurze Zeile, sagen wir: Finde drei Locations in Lissabon. Aber was die KI bekommt, ist das ganze bisherige Gespräch, von Deiner ersten Nachricht bis zur letzten, und sie bekommt all das mit jeder einzelnen Nachricht, die Du schickst."
       },
       "there-is-a-size-limit": {
         "title": "Es gibt eine Größengrenze",
         "keywords": "",
-        "script": "Dieses Paket hat eine Höchstgröße. Stell es dir als Balken vor, der sich Block für Block füllt, ein Block für jede Frage und jede Antwort, bis kein Platz mehr ist. Dieser Balken ist das Kontextfenster. Diese Grenze ist die Aufmerksamkeitsspanne der KI: wie viel sie auf einmal im Blick behalten kann."
+        "script": "Dieses Paket hat eine Höchstgröße. Stell es Dir als Balken vor, der sich Block für Block füllt, ein Block für jede Frage und jede Antwort, bis kein Platz mehr ist. Dieser Balken ist das Kontextfenster. Diese Grenze ist die Aufmerksamkeitsspanne der KI: wie viel sie auf einmal im Blick behalten kann."
       },
       "the-term-to-keep": {
         "title": "Der Begriff zum Merken",
         "keywords": "",
-        "script": "Der Begriff zum Merken ist Kontextfenster. Wenn du dir heute nur ein Wort merkst, dann dieses: Kontextfenster."
+        "script": "Der Begriff zum Merken ist Kontextfenster. Wenn Du Dir heute nur ein Wort merkst, dann dieses: Kontextfenster."
       },
       "context-engineering": {
         "title": "Context Engineering",
