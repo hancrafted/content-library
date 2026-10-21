@@ -1,7 +1,13 @@
 import { describe, expect, it } from 'vitest';
+import { toClaudeLog } from './claude-log-writer.pure';
+import { fromClaudeLog, type LogOptions } from './claude-log.pure';
 import { CONTEXT_PRESETS, MINI_PRESETS, contextData, rawConfigs } from './context-data';
 import { presetProblems } from './context-presets.pure';
+import { attentionAt } from './context-usage.pure';
 import { framesOf } from './context-window.pure';
+import type { Chat } from './context-window.types';
+import logDe from './summer-party.de.jsonl';
+import logEn from './summer-party.jsonl';
 
 /** Every key path of a parsed YAML tree, arrays by index. */
 function keyPaths(value: unknown, prefix = ''): string[] {
@@ -9,7 +15,60 @@ function keyPaths(value: unknown, prefix = ''): string[] {
   return Object.entries(value).flatMap(([key, child]) => keyPaths(child, prefix ? `${prefix}.${key}` : key));
 }
 
+/** The options the build reads a log with: the config's starting instructions and memory, as the chat holds them. */
+function optionsOf(chat: Chat): LogOptions {
+  const [start] = chat.steps;
+  const memory = chat.steps.find((step) => step.kind === 'memory')?.blocks[0]?.tokens;
+  return { id: 'summer-party', start: { id: start?.id ?? '', blocks: start?.blocks ?? [] }, memory };
+}
+
 describe('success cases', () => {
+  it.each([
+    ['English', logEn],
+    ['German', logDe],
+  ])('reads back the %s summer-party log it wrote, strictly equal', (_name, log) => {
+    // ARRANGE
+    const options = optionsOf(contextData('en').chats['summer-compact'] ?? { id: '', steps: [] });
+    const chat = fromClaudeLog(log, options);
+    // ACT
+    const again = fromClaudeLog(toClaudeLog(chat), options);
+    // ASSERT
+    expect(chat.steps.length).toBeGreaterThan(1);
+    expect(again).toStrictEqual(chat);
+  });
+
+  it("splits the Brief's 100 units of attention 20/50/30 over start, middle and end at step 21", () => {
+    // ARRANGE
+    const data = contextData('en');
+    const chat = data.chats['summer-party'] ?? { id: '', steps: [] };
+    const override = data.attention['summer-party']?.['21'];
+    const expected = { total: 100, start: 20, middle: 50, end: 30 };
+    // ACT
+    const units = attentionAt(chat, framesOf(chat), {
+      step: 21,
+      windowTokens: 200000,
+      notes: data.notes,
+      override,
+    }).map((a) => a.units);
+    const sum = (part: readonly number[]) => part.reduce((a, b) => a + b, 0);
+    const split = { start: sum(units.slice(0, 3)), middle: sum(units.slice(3, -3)), end: sum(units.slice(-3)) };
+    // ASSERT
+    expect(sum(Object.values(override ?? {}))).toBe(expected.total);
+    expect(sum(units)).toBe(expected.total);
+    expect(split).toEqual({ start: expected.start, middle: expected.middle, end: expected.end });
+  });
+
+  it('offers the 200K | 1M switch on Slide 5 only', () => {
+    // ARRANGE
+    const expected = ['slide-5'];
+    // ACT
+    const switching = Object.values(contextData('en').presets)
+      .filter((preset) => preset.windowSwitch)
+      .map((preset) => preset.id);
+    // ASSERT
+    expect(switching).toEqual(expected);
+  });
+
   it('names every Preset of the config, and builds each in both locales', () => {
     // ARRANGE
     const expected = { presets: [...CONTEXT_PRESETS].sort(), minis: [...MINI_PRESETS].sort() };
@@ -49,6 +108,17 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('refuses a window switch with one window size', () => {
+    // ARRANGE
+    const data = contextData('en');
+    const slide3 = data.presets['slide-3'];
+    const expected = 'slide-3: the window switch needs two window sizes';
+    // ACT
+    const problems = slide3 ? presetProblems({ ...slide3, windowSwitch: true }, data.chats['summer-party']) : [];
+    // ASSERT
+    expect(problems).toContain(expected);
+  });
+
   it('names a step outside the timeline and a pinned part not in the chat', () => {
     // ARRANGE
     const data = contextData('en');

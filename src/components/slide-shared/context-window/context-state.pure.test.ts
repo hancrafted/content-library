@@ -33,6 +33,7 @@ const PRESET: Preset = {
   meterHidden: false,
   download: true,
   upload: false,
+  windowSwitch: true,
   windows: [WINDOW, { tokens: 1000000, bufferTokens: 33000, lines: [] }],
   motion: 'rise',
 };
@@ -60,6 +61,20 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('keeps the window size on a Preset without the window switch, and names why', () => {
+    // ARRANGE
+    const preset = { ...PRESET, windowSwitch: false };
+    const state = createState(preset);
+    const event = { type: 'SET_WINDOW', value: 1 } as const;
+    const expected = 'no window switch';
+    // ACT
+    const next = reduce(state, event, { ...CONTEXT, preset });
+    const why = blockedBy(preset, event);
+    // ASSERT
+    expect(next).toBe(state);
+    expect(why).toBe(expected);
+  });
+
   it('ignores a control the Preset hides, and names why', () => {
     // ARRANGE
     const state = createState(PRESET);

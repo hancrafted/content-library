@@ -89,6 +89,7 @@ defaults:
   meterHidden: false
   download: true
   upload: false
+  windowSwitch: false
   windows: [{ size: 200k, lines: [matt] }]
   motion: rise
 
@@ -110,6 +111,7 @@ presets:
     mode: attention
     controls: []
     controlsHidden: true
+    windowSwitch: true
     windows: [{ size: 200k, lines: [matt] }, { size: 1m, lines: [matt-1m] }]
   slide-6:
     chat: summer-party

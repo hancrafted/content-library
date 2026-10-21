@@ -71,7 +71,7 @@ describe('success cases', () => {
     // ACT
     const chat = fromClaudeLog(toClaudeLog(CHAT), OPTIONS);
     // ASSERT
-    expect(chat).toEqual(expected);
+    expect(chat).toStrictEqual(expected);
   });
 
   it('sizes each message from the exact context of the next request', () => {

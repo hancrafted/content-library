@@ -32,7 +32,7 @@ function Meter({ v }: { readonly v: View }) {
 }
 
 function WindowSwitch({ v }: { readonly v: View }) {
-  if (v.preset.windows.length < 2) return null;
+  if (!v.preset.windowSwitch) return null;
   return (
     <div className={styles.windows} role="group" aria-label={v.words.windowGroup}>
       {v.preset.windows.map((size, i) => (

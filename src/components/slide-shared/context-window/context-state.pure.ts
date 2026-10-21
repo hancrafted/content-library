@@ -67,7 +67,7 @@ const isTimeline = (event: ViewEvent) => event.type === 'PREVIEW' || event.type 
 /** Why an event does nothing under a Preset, or null when it is allowed. Lighting is never locked. */
 export function blockedBy(preset: Preset, event: ViewEvent): string | null {
   if (isTimeline(event) && preset.timelineLocked) return 'timeline locked';
-  if (event.type === 'SET_WINDOW') return preset.windows.length > 1 ? null : 'one window size';
+  if (event.type === 'SET_WINDOW') return preset.windowSwitch ? null : 'no window switch';
   const control = CONTROL_OF[event.type];
   return control && !offers(preset, control) ? `control "${control}" hidden` : null;
 }

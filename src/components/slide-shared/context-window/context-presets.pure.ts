@@ -19,6 +19,7 @@ function shapeProblems(preset: Preset, chat: Chat): string[] {
       .filter((part) => !PARTS.some((p) => p === part))
       .map((part) => `unknown part "${part}"`),
     ...pinnedProblems(preset, chat),
+    ...(preset.windowSwitch && preset.windows.length < 2 ? ['the window switch needs two window sizes'] : []),
   ];
 }
 

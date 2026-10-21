@@ -79,6 +79,25 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('draws no window switch on a Preset without the flag, two window sizes or one', () => {
+    // ARRANGE
+    const $ = render('slide-4');
+    // ACT
+    const switches = $('[role="group"][aria-label="Window size"]').length;
+    // ASSERT
+    expect(switches).toBe(0);
+  });
+
+  it('lets the words prop override every word the part owns', () => {
+    // ARRANGE
+    const own = contextWindowData({ preset: 'slide-4', locale: 'en' }).words;
+    const words = Object.fromEntries(Object.keys(own).map((key) => [key, `slide:${key}`])) as never;
+    // ACT
+    const data = contextWindowData({ preset: 'slide-4', locale: 'en', words });
+    // ASSERT
+    expect(data.words).toStrictEqual(words);
+  });
+
   it('keeps the 200K | 1M switch on Slide 5, whose controls are hidden', () => {
     // ARRANGE
     const expected = ['200K', '1M'];

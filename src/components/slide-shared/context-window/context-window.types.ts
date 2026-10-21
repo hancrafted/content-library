@@ -146,8 +146,10 @@ export interface Preset {
   readonly download: boolean;
   /** A toolbar button that opens a Claude Code log in place of the chat. Off by default. */
   readonly upload: boolean;
-  /** The window sizes, the first one shown at rest; more than one adds the window switch. */
+  /** The window sizes, the first one shown at rest. */
   readonly windows: readonly WindowSize[];
+  /** The 200K | 1M switch between the window sizes, in the context's head. Off by default; it needs two sizes. */
+  readonly windowSwitch: boolean;
   readonly motion: Motion;
 }
 
