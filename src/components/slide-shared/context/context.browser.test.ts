@@ -570,14 +570,14 @@ describe('success cases', () => {
     );
 
     it(
-      'moves the context preview on screen when its chip is dragged, as any other part',
+      'moves the context category on screen when its chip is dragged, as any other part',
       async () => {
         // ARRANGE
         await open('light');
         const before = await orderOf();
         const first = (order: { cells: string[] }) => order.cells[0]?.includes('usage');
         // ACT
-        await dragChip('preview', 'chat');
+        await dragChip('category', 'chat');
         const after = await orderOf();
         // ASSERT
         expect(first(before)).toBe(false);
@@ -712,28 +712,72 @@ describe('edge cases', () => {
     const count = (selector: string) => evaluate<number>(send, `document.querySelectorAll('${selector}').length`);
 
     it(
-      'hides and shows the context preview with the eye, in step with the toolbar chip',
+      'has no eye in the head: the toolbar chip alone hides and shows the context category',
       async () => {
         // ARRANGE
         await open('light');
-        const expected = { before: [0, 'false'], shown: [1, 'true', 'true'], hidden: [0, 'false'] };
-        const chip = `${SLIDE_4} [role="toolbar"] [role="group"] button:nth-child(4)`;
+        const expected = { eye: 0, before: [0, 'false'], shown: [1, 'true'], hidden: [0, 'false'] };
+        const chip = `${SLIDE_4} [role="toolbar"] [data-chip="category"]`;
         const chipPressed = () =>
           evaluate<string | null>(send, `document.querySelector('${chip}').getAttribute('aria-pressed')`);
+        const shownCount = () => count(`${SLIDE_4} [aria-label="Usage by category"]`);
         // ACT
-        const before = [await count(`${SLIDE_4} [aria-label="Usage by category"]`), await pressed('preview')];
-        await press('preview');
+        const eye = await count(control('preview'));
+        const before = [await shownCount(), await chipPressed()];
+        await evaluate(send, `document.querySelector('${chip}').click()`);
         await delay(100);
-        const shown = [
-          await count(`${SLIDE_4} [aria-label="Usage by category"]`),
-          await pressed('preview'),
-          await chipPressed(),
-        ];
-        await press('preview');
+        const shown = [await shownCount(), await chipPressed()];
+        await evaluate(send, `document.querySelector('${chip}').click()`);
         await delay(100);
-        const hidden = [await count(`${SLIDE_4} [aria-label="Usage by category"]`), await pressed('preview')];
+        const hidden = [await shownCount(), await chipPressed()];
         // ASSERT
-        expect({ before, hidden, shown }).toEqual(expected);
+        expect({ eye, before, hidden, shown }).toEqual(expected);
+      },
+      TIMEOUT,
+    );
+
+    it(
+      'gives conversation and category their own Technical toggle, and the category lies beneath the window in Technical with its Messages closed',
+      async () => {
+        // ARRANGE
+        await open('light');
+        const chip = `${SLIDE_4} [role="toolbar"] [data-chip="category"]`;
+        await evaluate(send, `document.querySelector('${chip}').click()`);
+        await delay(100);
+        const usage = `${SLIDE_4} [aria-label="Usage by category"]`;
+        const top = (selector: string) =>
+          evaluate<number>(send, `document.querySelector('${selector}').getBoundingClientRect().top`);
+        const beside = { window: await top(HEAD), category: await top(usage) };
+        // ACT
+        await evaluate(send, `document.querySelector('${usage} button[data-control="categoryTechnical"]').click()`);
+        await delay(150);
+        const beneath = { window: await top(HEAD), category: await top(usage) };
+        const details = await evaluate<boolean>(send, `document.querySelector('${usage} details').open`);
+        const toggles = await count(
+          `${SLIDE_4} section[aria-label="Chat"] button[data-control="conversationTechnical"]`,
+        );
+        // ASSERT
+        expect(Math.abs(beside.category - beside.window)).toBeLessThan(SAME_TOP);
+        expect(beneath.category).toBeGreaterThan(beneath.window);
+        expect(details).toBe(false);
+        expect(toggles).toBe(1);
+      },
+      TIMEOUT,
+    );
+
+    it(
+      'keeps the compressed Attention list within its maximum height',
+      async () => {
+        // ARRANGE
+        await open('light');
+        const list = `${SLIDE_4} [data-layout="compressed"]`;
+        // ACT
+        const found = await evaluate<{ height: number; max: number }>(
+          send,
+          `(() => { const el = document.querySelector('${list}'); return { height: el.getBoundingClientRect().height, max: parseFloat(getComputedStyle(el).maxHeight) }; })()`,
+        );
+        // ASSERT
+        expect(found.height).toBeLessThanOrEqual(found.max + 1);
       },
       TIMEOUT,
     );
@@ -787,11 +831,11 @@ describe('edge cases', () => {
     );
 
     it(
-      'lights the bar from a preview row and pins it with one click',
+      'lights the bar from a category row and pins it with one click',
       async () => {
         // ARRANGE
         await open('light');
-        await press('preview');
+        await evaluate(send, `document.querySelector('${SLIDE_4} [role="toolbar"] [data-chip="category"]').click()`);
         await delay(100);
         const row = `${SLIDE_4} [aria-label="Usage by category"] button[data-part]`;
         // ACT
@@ -814,6 +858,8 @@ describe('edge cases', () => {
   });
 });
 
+/** Two parts on one row start within this many px of each other. */
+const SAME_TOP = 2;
 const SLIDE_7 = '[data-cornerstone="slide-7"]';
 const CHIPS = `${SLIDE_7} [data-chip]`;
 

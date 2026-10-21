@@ -25,8 +25,8 @@ const PRESET: Preset = {
   step: 3,
   depth: 'simple',
   pinned: null,
-  show: { chat: true, timeline: true, context: true, preview: true, panel: false, attention: false },
-  order: ['chat', 'timeline', 'context', 'preview', 'panel', 'attention'],
+  show: { chat: true, timeline: true, context: true, category: true, panel: false, attention: false },
+  order: ['chat', 'timeline', 'context', 'category', 'panel', 'attention'],
   fade: false,
   attention: { layout: 'list' },
   controls: { '*': { show: false }, window: { show: true } },
@@ -37,7 +37,15 @@ const PRESET: Preset = {
 };
 const CONTEXT = { preset: PRESET, steps: CHAT.steps.length };
 
-const WITH_MODES = { ...PRESET, controls: { '*': { show: false }, window: { show: true }, technical: { show: true } } };
+const WITH_MODES = {
+  ...PRESET,
+  controls: {
+    '*': { show: false },
+    window: { show: true },
+    technical: { show: true },
+    conversationTechnical: { show: true },
+  },
+};
 const MODES = { preset: WITH_MODES, steps: CHAT.steps.length };
 
 const view = (lit: string | null) => ({
@@ -78,8 +86,8 @@ describe('success cases', () => {
   });
   it('starts in the Preset order and moves a part to the slot of another', () => {
     // ARRANGE
-    const preset = { ...REORDERING, order: ['panel', 'chat', 'timeline', 'context', 'preview', 'attention'] as const };
-    const expected = ['panel', 'timeline', 'chat', 'context', 'preview', 'attention'];
+    const preset = { ...REORDERING, order: ['panel', 'chat', 'timeline', 'context', 'category', 'attention'] as const };
+    const expected = ['panel', 'timeline', 'chat', 'context', 'category', 'attention'];
     // ACT
     const start = createState(preset);
     const next = reduce(start, { type: 'REORDER', part: 'chat', before: 'timeline' }, { ...CONTEXT, preset });
@@ -95,8 +103,8 @@ describe('success cases', () => {
     const back = moveTo(order, 'attention', 'chat');
     const forward = moveTo(order, 'chat', 'attention');
     // ASSERT
-    expect(back).toEqual(['attention', 'chat', 'timeline', 'context', 'preview', 'panel']);
-    expect(forward).toEqual(['timeline', 'context', 'preview', 'panel', 'attention', 'chat']);
+    expect(back).toEqual(['attention', 'chat', 'timeline', 'context', 'category', 'panel']);
+    expect(forward).toEqual(['timeline', 'context', 'category', 'panel', 'attention', 'chat']);
   });
 
   it('keeps the same array when a part is dropped on itself', () => {

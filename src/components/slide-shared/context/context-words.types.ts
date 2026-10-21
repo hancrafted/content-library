@@ -18,12 +18,14 @@ export interface ContextWords {
   readonly technicalTip: string;
   /** The heads of the Details and Attention parts. */
   readonly modes: Readonly<Record<'explain' | 'attention', string>>;
-  readonly previewToggle: string;
-  readonly previewTip: string;
   readonly zoneToggle: string;
   readonly zoneTip: string;
+  readonly conversationTechnical: string;
+  readonly conversationTechnicalTip: string;
   readonly windowTechnical: string;
   readonly windowTechnicalTip: string;
+  readonly categoryTechnical: string;
+  readonly categoryTechnicalTip: string;
   readonly windowGroup: string;
   readonly download: string;
   readonly upload: string;

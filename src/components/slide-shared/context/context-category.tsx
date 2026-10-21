@@ -1,18 +1,21 @@
+import { ChevronRight } from 'lucide-react';
 import { memo, useMemo } from 'react';
 import { oneDecimal, percentText } from './context-format.pure';
-import type { ContextPreviewProps } from './context-parts.types';
+import type { ContextCategoryProps } from './context-parts.types';
 import { matcher } from './context-state.pure';
 import { usageRows, type UsageRow } from './context-usage.pure';
 import { k, type Say } from './context-view';
 import styles from './context.module.css';
 import { colourOf, simpleOf } from './context.pure';
 import type { Category } from './context.types';
+import { HeadToggles } from './head-toggles';
 import { useLighting } from './use-lighting';
 import { useSay } from './use-say';
 import { Glyph, tint } from './window-bits';
 
-/* The context preview ("What fills the window"): usage by category, one row per category. Its own part: it lights
- * and pins through its own callbacks, whether the parent places it beside the window or elsewhere. */
+/* The context category: usage by category, one row per category. Its own part: it lights and pins through its own
+ * callbacks, whether the parent places it beside the window (Simple) or beneath it (Technical). In Technical the
+ * Messages group is a collapsible, closed at first, to save vertical room; in Simple there is none. */
 
 function rowLabel(say: Say, row: UsageRow): string {
   if (row.kind === 'cat') return say.words.categories[row.cat];
@@ -76,7 +79,65 @@ const Row = memo(function Row({ say, row, windowTokens, on, pressed }: RowProps)
   );
 });
 
-export function ContextPreview(props: ContextPreviewProps) {
+interface RowsProps {
+  readonly say: Say;
+  readonly rows: readonly UsageRow[];
+  readonly windowTokens: number;
+  readonly lit: string | null;
+  readonly pinned: string | null;
+  readonly litCats: ReadonlySet<Category>;
+}
+
+function Rows({ say, rows, windowTokens, lit, pinned, litCats }: RowsProps) {
+  return rows.map((row, i) => (
+    <Row
+      key={row.key ?? `${row.kind}-${i}`}
+      say={say}
+      row={row}
+      windowTokens={windowTokens}
+      on={rowOn(row.key, lit, litCats)}
+      pressed={pinned === row.key}
+    />
+  ));
+}
+
+/** The Messages group and its rows as a collapsible, closed until opened: the summary is the group's own row. */
+function Messages(props: RowsProps & { readonly group: UsageRow }) {
+  const { group, ...rows } = props;
+  return (
+    <details className={styles.messages} data-on={flag(rowOn(group.key, props.lit, props.litCats))}>
+      <summary
+        className={`${styles.row} font-semibold`}
+        data-part={group.key}
+        data-on={flag(rowOn(group.key, props.lit, props.litCats))}
+      >
+        <ChevronRight aria-hidden="true" className={styles.chevron} />
+        <span className={styles.rowName}>{rowLabel(props.say, group)}</span>
+        <span className={`${styles.rowNum} font-mono`}>{rowNumber(props.say, group, props.windowTokens)}</span>
+      </summary>
+      <Rows {...rows} />
+    </details>
+  );
+}
+
+/** Technical: top rows, the Messages collapsible, the free space and buffer. Simple: every row, no collapsible. */
+function Body(props: RowsProps) {
+  const group = props.rows.find((row) => row.kind === 'group');
+  if (!props.say.tech || !group) return <Rows {...props} />;
+  const sub = (row: UsageRow) => row.kind === 'cat' && row.sub;
+  const at = props.rows.indexOf(group);
+  const inside = props.rows.filter(sub);
+  const after = props.rows.slice(at + 1).filter((row) => !sub(row));
+  return (
+    <>
+      <Rows {...props} rows={props.rows.slice(0, at)} />
+      <Messages {...props} group={group} rows={inside} />
+      <Rows {...props} rows={after} />
+    </>
+  );
+}
+
+export function ContextCategory(props: ContextCategoryProps) {
   const { frame, window, present, lit, pinned } = props;
   const say = useSay(props);
   const handlers = useLighting(props);
@@ -89,17 +150,13 @@ export function ContextPreview(props: ContextPreviewProps) {
   );
   return (
     <div className={styles.usage} role="group" aria-label={say.words.usage} data-depth={depth} {...handlers}>
-      <div className={styles.usageTitle}>{say.words.usageTitle[depth]}</div>
-      {rows.map((row, i) => (
-        <Row
-          key={row.key ?? `${row.kind}-${i}`}
-          say={say}
-          row={row}
-          windowTokens={window.tokens}
-          on={rowOn(row.key, lit, litCats)}
-          pressed={pinned === row.key}
-        />
-      ))}
+      <div className={styles.head}>
+        <b className="font-semibold">{say.words.parts.category}</b>
+        <div className={styles.headEnd}>
+          <HeadToggles toggles={props.toggles} say={say} />
+        </div>
+      </div>
+      <Body say={say} rows={rows} windowTokens={window.tokens} lit={lit} pinned={pinned} litCats={litCats} />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 /*
- * The Attention list's compressed layout: each row is as tall as its share of the attention, and the pointer
- * magnifies the rows near it like the Mac dock, while the list's total height stays fixed.
+ * The Attention list's compressed layout: rows take their natural height and simply add as the timeline advances;
+ * once the list reaches its maximum height the middle rows compress, and the pointer magnifies the rows near it like
+ * the Mac dock, while the list's total height stays fixed.
  */
 
 /** A row never gets thinner than this, in px: the bar must stay visible even when the text cannot be read. */
@@ -10,26 +11,25 @@ export const REACH = 3;
 
 const sum = (values: readonly number[]) => values.reduce((a, b) => a + b, 0);
 
-/** Row heights that follow the units and fill `total`; a row under `min` takes `min` and the others give it up. */
-export function restHeights(units: readonly number[], total: number, min = MIN_ROW): number[] {
-  const heights = units.map(() => 0);
-  let free = units.map((_, i) => i);
-  let room = total;
-  for (let pass = 0; pass <= units.length; pass++) {
-    const share = sum(free.map((i) => units[i] ?? 0));
-    const small = free.filter((i) => (share > 0 ? ((units[i] ?? 0) / share) * room : room / free.length) < min);
-    if (small.length === 0) break;
-    small.forEach((i) => {
-      heights[i] = min;
-      room -= min;
-    });
-    free = free.filter((i) => !small.includes(i));
+const BISECTIONS = 40;
+
+/**
+ * The resting heights: every row has its natural height while they all fit in `max`. Once they do not, the rows
+ * with the least attention compress first (the middle ones), each in proportion to its units, never under `MIN_ROW`;
+ * the rows with the most keep their natural height. The sum is `max` as soon as it is reached.
+ */
+export function restHeights(units: readonly number[], max: number, natural: number): number[] {
+  if (units.length * natural <= max) return units.map(() => natural);
+  const smallest = Math.min(...units.filter((u) => u > 0), Infinity);
+  const at = (scale: number) => units.map((u) => Math.min(natural, Math.max(MIN_ROW, u * scale)));
+  let low = 0;
+  let high = Number.isFinite(smallest) ? natural / smallest : 1;
+  for (let step = 0; step < BISECTIONS; step++) {
+    const mid = (low + high) / 2;
+    if (sum(at(mid)) < max) low = mid;
+    else high = mid;
   }
-  const share = sum(free.map((i) => units[i] ?? 0));
-  free.forEach((i) => {
-    heights[i] = share > 0 ? ((units[i] ?? 0) / share) * room : room / free.length;
-  });
-  return heights;
+  return at(low);
 }
 
 /** The magnification of a row at a distance in rows from the pointer: 1 under it, 0 from `REACH` away. */

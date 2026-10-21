@@ -26,13 +26,18 @@ function apply(list: HTMLElement, heights: readonly number[]) {
 }
 
 const clear = (list: HTMLElement | null) => {
-  if (list) rows(list).forEach((row) => row.style.removeProperty('height'));
+  if (!list) return;
+  list.style.removeProperty('height');
+  rows(list).forEach((row) => row.style.removeProperty('height'));
 };
 
 /** The height a row has at full size: one line of the list's own text. */
 const fullRow = (list: HTMLElement) => parseFloat(getComputedStyle(list).fontSize) * 1.7;
 
-/** The resting heights, fitted to the list's height and refitted when it resizes or the shares change. */
+/** The tallest the list may grow, from its stylesheet's `max-height`; its own height when that is not a length. */
+const maxHeight = (list: HTMLElement) => parseFloat(getComputedStyle(list).maxHeight) || list.clientHeight;
+
+/** The resting heights, fitted to the list's maximum height and refitted when it resizes or the shares change. */
 function useRest(list: RefObject<HTMLElement | null>, enabled: boolean, shares: readonly Attention[]) {
   const rest = useRef<number[]>([]);
   const layout = useCallback(() => {
@@ -40,8 +45,11 @@ function useRest(list: RefObject<HTMLElement | null>, enabled: boolean, shares: 
     if (!el || !enabled) return;
     rest.current = restHeights(
       shares.map((share) => share.units),
-      el.clientHeight,
+      maxHeight(el),
+      fullRow(el),
     );
+    // The list's own height is fixed to the rows' sum, so a row's height transition never resizes it mid-dock.
+    el.style.height = `${rest.current.reduce((a, b) => a + b, 0)}px`;
     apply(el, rest.current);
   }, [list, enabled, shares]);
   useLayoutEffect(() => {
