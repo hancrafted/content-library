@@ -1,10 +1,8 @@
 import { fillTemplate } from '@/lib/template.pure';
 import { shortTokens } from './context-format.pure';
-import type { ViewEvent, ViewState } from './context-state.pure';
-import type { Attention } from './context-usage.pure';
 import type { ContextWords } from './context-words.types';
-import { simpleOf, stepTokens, type Frame } from './context.pure';
-import type { Category, Chat, Preset, Step, StepNotes, StepStory, ToolCall, WindowSize } from './context.types';
+import { simpleOf, stepTokens } from './context.pure';
+import type { Category, Chat, Preset, Step, StepNotes, StepStory, ToolCall } from './context.types';
 
 /* What every part of the cornerstone's view reads at one render, and the words it derives from the chat. */
 
@@ -20,37 +18,29 @@ export interface ContextViewData {
   readonly locale: string;
 }
 
-export interface View extends ContextViewData {
-  readonly state: ViewState;
-  readonly dispatch: (event: ViewEvent) => void;
-  readonly frames: readonly Frame[];
-  /** The step on screen: the preview while scrubbing, else the committed one. */
-  readonly vis: number;
-  readonly frame: Frame;
-  readonly window: WindowSize;
+/**
+ * What a part needs to say things: the words, the locale, the story of each step and its own renderMode as a flag.
+ * Each part builds one with `useMemo`, so a memoised item that takes it as a prop does not redraw on a hover.
+ */
+export interface Say {
+  readonly words: ContextWords;
+  readonly locale: string;
+  readonly story: Readonly<Record<string, StepStory>>;
   readonly tech: boolean;
-  readonly lit: string | null;
-  readonly match: (id: string, cat: Category) => boolean;
-  readonly ghost: string | null;
-  readonly attention: readonly Attention[];
-  readonly stepOf: ReadonlyMap<string, number>;
-  readonly present: ReadonlySet<Category>;
-  /** A per-instance prefix for ids on the page. */
-  readonly uid: string;
 }
 
 export const fill = fillTemplate;
-export const k = (view: Pick<View, 'locale'>, n: number): string => shortTokens(n, view.locale);
+export const k = (view: Pick<Say, 'locale'>, n: number): string => shortTokens(n, view.locale);
 
 /** A category's name at the view's depth. */
-export const catLabel = (view: Pick<View, 'tech' | 'words'>, cat: Category): string =>
+export const catLabel = (view: Pick<Say, 'tech' | 'words'>, cat: Category): string =>
   view.tech ? view.words.categories[cat] : view.words.simpleCategories[simpleOf(cat)];
 
 /** A step's colour comes from its last block: the result, for a tool step. */
 export const stepCat = (step: Step): Category => step.blocks.at(-1)?.cat ?? 'sysprompt';
 
 /** The story of a step, with an event line even for a step of an opened log. */
-export function storyOf(view: Pick<View, 'story'>, step: Step): StepStory {
+export function storyOf(view: Pick<Say, 'story'>, step: Step): StepStory {
   const story = view.story[step.id];
   if (story) return story;
   const text = 'text' in step ? step.text : step.kind;
@@ -58,7 +48,7 @@ export function storyOf(view: Pick<View, 'story'>, step: Step): StepStory {
 }
 
 /** How the app shows a tool step in Simple: "Searched the web", "Read a file", "Ran a command". */
-export function actOf(view: Pick<View, 'story' | 'words'>, step: Step): string {
+export function actOf(view: Pick<Say, 'story' | 'words'>, step: Step): string {
   const story = storyOf(view, step);
   if (story.act) return story.act;
   if (step.kind !== 'tool') return story.label ?? story.event;
@@ -95,7 +85,7 @@ export function cliLines(step: Extract<Step, { kind: 'tool' }>): string[] {
 }
 
 /** A tool step's result line: the story's, or the first result and the size of all of them. */
-export function outOf(view: Pick<View, 'story' | 'locale'>, step: Extract<Step, { kind: 'tool' }>): string {
+export function outOf(view: Pick<Say, 'story' | 'locale'>, step: Extract<Step, { kind: 'tool' }>): string {
   const story = view.story[step.id];
   if (story?.out) return story.out;
   const tokens = step.blocks.find((b) => b.cat === 'tool_result')?.tokens ?? 0;
@@ -103,4 +93,4 @@ export function outOf(view: Pick<View, 'story' | 'locale'>, step: Extract<Step, 
 }
 
 /** The tokens a step added, as the timeline's tip prints them. */
-export const stepSize = (view: Pick<View, 'locale'>, step: Step): string => `+${k(view, stepTokens(step))}`;
+export const stepSize = (view: Pick<Say, 'locale'>, step: Step): string => `+${k(view, stepTokens(step))}`;

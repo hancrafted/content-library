@@ -1,5 +1,7 @@
-import { useEffect, useRef, useState, type PointerEvent, type RefObject } from 'react';
-import { catLabel, fill, k, type View } from './context-view';
+import { memo, useEffect, useMemo, useRef, useState, type PointerEvent, type RefObject } from 'react';
+import type { ContextWindowProps } from './context-parts.types';
+import { matcher } from './context-state.pure';
+import { catLabel, fill, k, type Say } from './context-view';
 import styles from './context.module.css';
 import type { PlacedBlock } from './context.pure';
 import { colourOf } from './context.pure';
@@ -42,72 +44,98 @@ export function useLoupe(bar: RefObject<HTMLDivElement | null>, enabled: boolean
 }
 
 interface LoupeProps {
-  readonly v: View;
+  readonly p: ContextWindowProps;
+  readonly say: Say;
   readonly at: number;
   readonly bar: RefObject<HTMLDivElement | null>;
   readonly onEnter: () => void;
   readonly onLeave: () => void;
 }
 
-function LoupeRow({
-  v,
-  block: b,
-  cursor,
-}: {
-  readonly v: View;
+interface RowProps {
+  readonly say: Say;
   readonly block: PlacedBlock;
+  readonly stepNo: number;
   readonly cursor: boolean;
-}) {
+  readonly on: boolean;
+  readonly pressed: boolean;
+}
+
+const LoupeRow = memo(function LoupeRow({ say, block: b, stepNo, cursor, on, pressed }: RowProps) {
   return (
     <button
       type="button"
       className={styles.lrow}
       data-part={b.key}
       data-cursor={cursor ? '' : undefined}
-      data-on={v.match(b.id, b.cat) ? '' : undefined}
-      aria-pressed={v.state.pinned === b.key}
-      style={tint(colourOf(b.cat, v.state.depth))}
+      data-on={on ? '' : undefined}
+      aria-pressed={pressed}
+      style={tint(colourOf(b.cat, say.tech ? 'technical' : 'simple'))}
     >
       <i />
       <span className={styles.lrowName}>
-        {catLabel(v, b.cat)}{' '}
-        <small className="text-caption">· {fill(v.words.zoomStep, { step: v.stepOf.get(b.id) ?? 0 })}</small>
+        {catLabel(say, b.cat)} <small className="text-caption">· {fill(say.words.zoomStep, { step: stepNo })}</small>
       </span>
-      <small className="text-caption">{k(v, b.tokens)}</small>
+      <small className="text-caption">{k(say, b.tokens)}</small>
     </button>
+  );
+});
+
+interface ListProps {
+  readonly p: ContextWindowProps;
+  readonly say: Say;
+  readonly rows: readonly PlacedBlock[];
+  readonly cursor: string;
+}
+
+/** The loupe's title and its rows: each row's `on` comes from the lit key, and is all a hover changes. */
+function LoupeList({ p, say, rows, cursor }: ListProps) {
+  const match = useMemo(() => matcher(p.lit), [p.lit]);
+  const total = rows.reduce((sum, b) => sum + b.tokens, 0);
+  return (
+    <>
+      <div className={styles.loupeTitle}>
+        <span>{say.words.zoomTitle}</span>
+        <span>{fill(say.words.zoomTokens, { tokens: k(say, total) })}</span>
+      </div>
+      {rows.map((b) => (
+        <LoupeRow
+          key={b.key}
+          say={say}
+          block={b}
+          stepNo={p.stepOf.get(b.id) ?? 0}
+          cursor={b.key === cursor}
+          on={match(b.id, b.cat)}
+          pressed={p.pinned === b.key}
+        />
+      ))}
+    </>
   );
 }
 
-export function Loupe({ v, at, bar, onEnter, onLeave }: LoupeProps) {
+export function Loupe({ p, say, at, bar, onEnter, onLeave }: LoupeProps) {
   const barHeight = bar.current?.clientHeight ?? 0;
-  const { rows, cursor } = loupeRows(v.frame.blocks, at, v.window.tokens);
+  const { rows, cursor } = loupeRows(p.frame.blocks, at, p.window.tokens);
   if (!rows.length) return null;
-  const total = rows.reduce((sum, b) => sum + b.tokens, 0);
   const { y, tail } = loupePlacement({ at, barHeight, height: (ROWS + 1) * 36 });
   return (
     <div
       className={`${styles.loupe} ${styles.surface}`}
       role="group"
-      aria-label={v.words.zoom}
+      aria-label={say.words.zoom}
       style={vars({ '--y': `${y}px`, '--tail': `${tail}px` })}
       onPointerEnter={onEnter}
       onPointerLeave={onLeave}
     >
       <div className={styles.loupeTail} data-part={cursor} aria-hidden="true" />
-      <div className={styles.loupeTitle}>
-        <span>{v.words.zoomTitle}</span>
-        <span>{fill(v.words.zoomTokens, { tokens: k(v, total) })}</span>
-      </div>
-      {rows.map((b) => (
-        <LoupeRow key={b.key} v={v} block={b} cursor={b.key === cursor} />
-      ))}
+      <LoupeList p={p} say={say} rows={rows} cursor={cursor} />
     </div>
   );
 }
 
 /** The frame on the bar round exactly the blocks the loupe shows. */
-export function Lens({ v, at }: { readonly v: View; readonly at: number }) {
-  const frame = loupeFrame(loupeRows(v.frame.blocks, at, v.window.tokens).rows, v.window.tokens);
+export function Lens({ p, at }: { readonly p: ContextWindowProps; readonly at: number }) {
+  const frame = loupeFrame(loupeRows(p.frame.blocks, at, p.window.tokens).rows, p.window.tokens);
   if (!frame) return null;
   return <div className={styles.lens} aria-hidden="true" style={vars({ '--s': frame.start, '--z': frame.size })} />;
 }
