@@ -87,6 +87,8 @@ defaults:
   depth: simple
   pinned: null
   show: { chat: true, timeline: true, context: true, preview: true, panel: false, attention: false }
+  # The parts in chip and grid order, every part once; the reader may drag the chips (controls.parts.reorder).
+  order: [chat, timeline, context, preview, panel, attention]
   fade: false
   attention: { layout: list }
   # Every control by id; a Preset overrides key by key, and '*' sets show for all (code: context-controls.pure.ts).

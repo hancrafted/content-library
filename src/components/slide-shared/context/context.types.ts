@@ -143,6 +143,8 @@ export interface Preset {
   /** The part lit at rest: a step id, a block (`m8@tool_result`), a category (`cat:`, `scat:`) or `group:messages`. */
   readonly pinned: string | null;
   readonly show: Readonly<Record<Part, boolean>>;
+  /** The parts in the order the chips and the grid list them: every part once; the reader may drag it. */
+  readonly order: readonly Part[];
   /** What the controls do: id -> overrides over the registry's defaults (context-controls.pure.ts). */
   readonly controls: ControlMap;
   /** The chat dims each message by its attention, as the Attention part does; on whenever that part is shown. */

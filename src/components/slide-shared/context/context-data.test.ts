@@ -185,6 +185,18 @@ describe('failure cases', () => {
     expect(problems).toContain(expected);
   });
 
+  it('refuses an order that lists a part twice or leaves one out', () => {
+    // ARRANGE
+    const data = contextData('en');
+    const slide3 = data.presets['slide-3'];
+    const expected = 'slide-3: order must list every part once, got chat, chat, timeline, context, preview, panel';
+    const order = ['chat', 'chat', 'timeline', 'context', 'preview', 'panel'] as const;
+    // ACT
+    const problems = slide3 ? presetProblems({ ...slide3, order }, data.chats['summer-party']) : [];
+    // ASSERT
+    expect(problems).toEqual([expected]);
+  });
+
   it('names a step outside the timeline and a pinned part not in the chat', () => {
     // ARRANGE
     const data = contextData('en');
