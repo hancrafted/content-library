@@ -54,6 +54,7 @@ const harness = (renderMode: RenderMode) => {
         sizes: preset.windows,
         sizeIndex: 0,
         switchable: false,
+        meter: true,
         zone: true,
         toggles: [],
         onSize: noop,

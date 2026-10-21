@@ -10,9 +10,9 @@ import type { AttentionLayout } from './context.types';
 
 const noop = () => undefined;
 
-/** The Attention part for Slide 4's chat at one layout, as server markup, parsed. */
+/** The Attention part for the summer party's chat (Slide 7's Preset; Slide 4 has too few rows left to pin) at one layout, as server markup, parsed. */
 const render = (layout: AttentionLayout) => {
-  const data = contextViewData({ preset: 'slide-4', locale: 'en' });
+  const data = contextViewData({ preset: 'slide-7', locale: 'en' });
   const { chat, preset } = data;
   const frames = framesOf(chat);
   const window = preset.windows[0]!;

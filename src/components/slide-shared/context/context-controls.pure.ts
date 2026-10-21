@@ -5,7 +5,16 @@
  */
 
 export type ControlId =
-  'parts' | 'technical' | 'collapse' | 'download' | 'upload' | 'preview' | 'zone' | 'windowTechnical' | 'window';
+  | 'parts'
+  | 'technical'
+  | 'collapse'
+  | 'download'
+  | 'upload'
+  | 'preview'
+  | 'zone'
+  | 'windowTechnical'
+  | 'meter'
+  | 'window';
 
 export type IconName = 'code' | 'panel-left-close' | 'download' | 'upload' | 'eye' | 'panel-right';
 /** The words a control reads from ContextWords; the UI indexes the words with them, so the compiler checks each. */
@@ -45,7 +54,9 @@ export type ControlDef =
   | (Described & { readonly type: 'toggle'; readonly flips: Flips })
   | (Base & { readonly type: 'segmented'; readonly label: WordKey })
   | (Described & { readonly type: 'action'; readonly run: 'download' | 'upload' })
-  | (Base & { readonly type: 'chips'; readonly label: WordKey });
+  | (Base & { readonly type: 'chips'; readonly label: WordKey })
+  /** Not a button: the head's usage figures (the percent and "used of window"), which a Preset may hide. */
+  | (Base & { readonly type: 'readout' });
 
 export const CONTROLS: readonly ControlDef[] = [
   { id: 'parts', type: 'chips', placement: 'toolbar', fields: ['reorder'], show: true, label: 'showParts' },
@@ -126,6 +137,7 @@ export const CONTROLS: readonly ControlDef[] = [
     label: 'windowTechnical',
     tip: 'windowTechnicalTip',
   },
+  { id: 'meter', type: 'readout', placement: 'head', fields: [], show: true },
   { id: 'window', type: 'segmented', placement: 'head', fields: [], show: false, label: 'windowGroup' },
 ];
 
@@ -154,7 +166,7 @@ export type ResolvedControl = ControlDef & {
 export function controlOf(preset: HasControls, id: ControlId): ResolvedControl {
   const def = BY_ID.get(id);
   if (!def) throw new Error(`context window: unknown control "${id}"`);
-  const star = preset.controls['*']?.show;
+  const star = def.type === 'readout' ? undefined : preset.controls['*']?.show;
   return { ...def, ...(star === undefined ? {} : { show: star }), ...preset.controls[id] };
 }
 
@@ -162,16 +174,21 @@ export const offers = (preset: HasControls, id: ControlId): boolean => controlOf
 
 /**
  * The Preset's map over the config defaults, key by key. `'*'` is folded into every control the Preset does not
- * name itself, so an explicit control beats `'*'` and `'*'` beats the defaults.
+ * name itself, so an explicit control beats `'*'` and `'*'` beats the defaults. A readout (the head's usage figures)
+ * is no button: `'*'` leaves it alone.
  */
 export function mergeControls(defaults: ControlMap, own: ControlMap): ControlMap {
   const star = own['*'];
   const merged = Object.fromEntries(
-    CONTROL_IDS.map((id) => [id, { ...defaults[id], ...(star?.show === undefined ? {} : star), ...own[id] }]),
+    CONTROL_IDS.map((id) => [
+      id,
+      { ...defaults[id], ...(star?.show === undefined || isReadout(id) ? {} : star), ...own[id] },
+    ]),
   );
   return star ? { ...merged, '*': star } : merged;
 }
 
+const isReadout = (id: string): boolean => BY_ID.get(id)?.type === 'readout';
 const isFlag = (value: unknown): boolean => typeof value === 'boolean';
 
 function settingProblems(id: string, setting: object, allowed: readonly string[]) {

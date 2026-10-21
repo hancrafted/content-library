@@ -53,7 +53,7 @@ describe('success cases', () => {
   it('gives each head icon button a tooltip, an aria-label and aria-pressed', () => {
     // ARRANGE
     const expected = [
-      { control: 'preview', label: 'Context preview', pressed: 'true' },
+      { control: 'preview', label: 'Context preview', pressed: 'false' },
       { control: 'zone', label: 'Smart zone', pressed: 'true' },
       { control: 'windowTechnical', label: 'Technical window', pressed: 'false' },
     ];
@@ -87,6 +87,27 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('shows no percent and no used-of-window figure on the "You can\'t watch the meter" Presets', () => {
+    // ARRANGE
+    const presets: ContextPresetId[] = ['slide-9-before', 'slide-9-after'];
+    // ACT
+    const texts = presets.map((id) => head(render(id)).text());
+    // ASSERT
+    texts.forEach((text) => {
+      expect(text).toContain('Context window');
+      expect(text).not.toMatch(/%|\d+K of/);
+    });
+  });
+
+  it('shows the percent and the figure again when the Preset keeps the meter control on', () => {
+    // ARRANGE
+    const expected = [false, true];
+    // ACT
+    const actual = ['slide-9-before', 'slide-4'].map((id) => /%/.test(head(render(id as ContextPresetId)).text()));
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
   it('draws no head icon buttons on a Preset that hides every control', () => {
     // ARRANGE
     const expected: unknown[] = [];
@@ -110,7 +131,7 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('lets the head eye toggle the preview when the parts group is hidden', () => {
     // ARRANGE
-    const { preset, context } = setup('slide-4');
+    const { preset, context } = setup('slide-7');
     const only = { ...preset, controls: { '*': { show: false }, preview: { show: true } } };
     const state = createState(only);
     // ACT

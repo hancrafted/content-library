@@ -29,6 +29,9 @@ async function open(theme: 'light' | 'dark', url = URL_UNDER_TEST) {
   await loaded;
   await delay(1500);
   await evaluate(send, AXE);
+  // Slide 4 opens on the compaction (step 24), too few rows for the Attention tests: they scrub back to step 21.
+  await commit('slide-4', 21);
+  await delay(300);
 }
 
 const sessions = new WeakMap<Send, string>();
@@ -423,9 +426,11 @@ describe('success cases', () => {
       const reach = 3;
       const tolerance = 1.5;
       const slack = 0.5;
-      const rowIndex = 8;
-      const target = await centreOf(`${list} [data-row]`, rowIndex);
       const resting = await heights();
+      // The thinnest row in the middle, so the growth peaks under the pointer whatever the split is.
+      const middle = resting.slice(reach, -reach);
+      const rowIndex = reach + middle.indexOf(Math.min(...middle));
+      const target = await centreOf(`${list} [data-row]`, rowIndex);
       // ACT
       await mouseTo(target.x, target.y);
       await delay(400);
@@ -600,7 +605,7 @@ describe('edge cases', () => {
       async () => {
         // ARRANGE
         await open('light');
-        const expected = { before: [1, 'true'], hidden: [0, 'false', 'false'], shown: [1, 'true'] };
+        const expected = { before: [0, 'false'], shown: [1, 'true', 'true'], hidden: [0, 'false'] };
         const chip = `${SLIDE_4} [role="toolbar"] [role="group"] button:nth-child(4)`;
         const chipPressed = () =>
           evaluate<string | null>(send, `document.querySelector('${chip}').getAttribute('aria-pressed')`);
@@ -608,14 +613,14 @@ describe('edge cases', () => {
         const before = [await count(`${HEAD} [aria-label="Usage by category"]`), await pressed('preview')];
         await press('preview');
         await delay(100);
-        const hidden = [
+        const shown = [
           await count(`${HEAD} [aria-label="Usage by category"]`),
           await pressed('preview'),
           await chipPressed(),
         ];
         await press('preview');
         await delay(100);
-        const shown = [await count(`${HEAD} [aria-label="Usage by category"]`), await pressed('preview')];
+        const hidden = [await count(`${HEAD} [aria-label="Usage by category"]`), await pressed('preview')];
         // ASSERT
         expect({ before, hidden, shown }).toEqual(expected);
       },
@@ -675,6 +680,8 @@ describe('edge cases', () => {
       async () => {
         // ARRANGE
         await open('light');
+        await press('preview');
+        await delay(100);
         const row = `${HEAD} [aria-label="Usage by category"] button[data-part]`;
         // ACT
         const at = await centreOf(row, 1);
