@@ -442,6 +442,9 @@
   "episodesPage": {
     "title": "Episodes"
   },
+  "slideHeader": {
+    "pageOf": "Page {position} of {count}"
+  },
   "tableOfContents": {
     "title": "Contents",
     "progress": "Reading time",
