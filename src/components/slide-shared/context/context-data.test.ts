@@ -87,9 +87,9 @@ describe('success cases', () => {
     expect(motions).toEqual(expected);
   });
 
-  it('hides the toolbar on Slide 3 and draws its context component 30% lower than the default', () => {
+  it('hides the toolbar buttons on Slide 3 (the meter is a readout) and draws its context component 30% lower than the default', () => {
     // ARRANGE
-    const expected = { shown: [], height: 26.6 };
+    const expected = { shown: ['meter'], height: 26.6 };
     // ACT
     const slide3 = contextData('en').presets['slide-3'];
     // ASSERT
@@ -226,6 +226,29 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('runs Slide 4 to the compaction of summer-compact, with the preview hidden and the split keyed on that chat', () => {
+    // ARRANGE
+    const data = contextData('en');
+    const expected = {
+      chat: 'summer-compact',
+      step: 24,
+      preview: false,
+      windows: [200000],
+      after: { m1: 15, m27: 45, m28: 40 },
+    };
+    const preset = data.presets['slide-4'];
+    // ACT
+    const actual = {
+      chat: preset?.chat,
+      step: preset?.step,
+      preview: preset?.show.preview,
+      windows: preset?.windows.map((w) => w.tokens),
+      after: data.attention['summer-compact']?.['25'],
+    };
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
   it('lays Attention out as a list by default and compressed on Slide 4, with the chat fading on Slide 5', () => {
     // ARRANGE
     const data = contextData('en');

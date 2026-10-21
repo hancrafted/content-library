@@ -75,6 +75,11 @@ attention:
         m23: 9,
         m24: 15,
       }
+  # Slide 4 runs on to the compaction (step 24): the starting instructions stay at 15, the summary takes 45 and the
+  # newest message after it 40. At step 24 the summary is itself the newest, so it takes 85.
+  summer-compact:
+    24: { m1: 15, m27: 85 }
+    25: { m1: 15, m27: 45, m28: 40 }
 
 # One Preset per Slide state of the Spec's picked Options. Omitted fields take the defaults below.
 defaults:
@@ -95,6 +100,7 @@ defaults:
     upload: { show: false }
     preview: { show: true }
     zone: { show: true }
+    meter: { show: true }
     windowTechnical: { show: true }
     window: { show: false }
   timelineLocked: false
@@ -111,8 +117,9 @@ presets:
     height: 26.6
     windows: [{ size: 200k, lines: [] }]
   slide-4:
-    chat: summer-party
-    show: { chat: true, timeline: true, context: true, panel: false, attention: true }
+    chat: summer-compact
+    step: 24
+    show: { chat: true, timeline: true, context: true, preview: false, panel: false, attention: true }
     attention: { layout: compressed }
     controls: { collapse: { show: false } }
     windows: [{ size: 200k, lines: [] }]
@@ -144,7 +151,7 @@ presets:
     chat: summer-compact
     step: 23
     pinned: m26
-    controls: { '*': { show: false }, zone: { on: false } }
+    controls: { '*': { show: false }, zone: { on: false }, meter: { show: false } }
     timelineLocked: true
     show: { chat: false, timeline: false, context: true, panel: false }
     motion: off
@@ -152,7 +159,7 @@ presets:
   slide-9-chat:
     chat: summer-compact
     step: 24
-    controls: { '*': { show: false }, zone: { on: false } }
+    controls: { '*': { show: false }, zone: { on: false }, meter: { show: false } }
     timelineLocked: true
     show: { chat: true, timeline: false, context: false, panel: false }
     motion: off
@@ -161,7 +168,7 @@ presets:
     chat: summer-compact
     step: 24
     pinned: m27
-    controls: { '*': { show: false }, zone: { on: false } }
+    controls: { '*': { show: false }, zone: { on: false }, meter: { show: false } }
     timelineLocked: true
     show: { chat: false, timeline: false, context: true, panel: false }
     motion: off

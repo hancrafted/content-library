@@ -17,7 +17,8 @@ function Title({ p, say }: Part) {
   const percent = percentText((p.frame.used / p.window.tokens) * 100, say.locale);
   return (
     <span className={styles.title}>
-      <b className="font-semibold">{say.words.contextWindow}</b> <span className={styles.meterValue}>({percent}%)</span>
+      <b className="font-semibold">{say.words.contextWindow}</b>
+      {p.meter ? <span className={styles.meterValue}> ({percent}%)</span> : null}
     </span>
   );
 }
@@ -75,7 +76,7 @@ export function ContextWindowHead({ p, say }: Part) {
     <div className={styles.head}>
       <Title p={p} say={say} />
       <div className={styles.headEnd}>
-        <Meter p={p} say={say} />
+        {p.meter ? <Meter p={p} say={say} /> : null}
         <HeadToggles p={p} say={say} />
       </div>
     </div>

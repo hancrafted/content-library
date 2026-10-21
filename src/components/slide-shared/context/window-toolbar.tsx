@@ -92,7 +92,7 @@ function toggled(v: ToolbarProps, flips: string): { pressed: boolean; run: () =>
 
 function Control({ v, def }: { readonly v: ToolbarProps; readonly def: ControlDef }) {
   if (def.type === 'chips') return <ShowGroup v={v} />;
-  if (def.type === 'segmented') return null;
+  if (def.type === 'segmented' || def.type === 'readout') return null;
   if (def.type === 'action')
     return def.run === 'upload' ? (
       <UploadButton v={v} />

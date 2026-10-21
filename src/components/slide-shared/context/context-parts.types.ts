@@ -79,6 +79,8 @@ export interface ContextWindowProps extends Lighting, LightingEvents, Speech {
   readonly sizes: readonly WindowSize[];
   readonly sizeIndex: number;
   readonly switchable: boolean;
+  /** The head shows its usage figures: the percent and "used of window". A Preset may hide them. */
+  readonly meter: boolean;
   /** Each step's number in the chat, by step id. */
   readonly stepOf: ReadonlyMap<string, number>;
   readonly onSize: (index: number) => void;

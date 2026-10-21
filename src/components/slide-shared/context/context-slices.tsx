@@ -140,6 +140,7 @@ function ContextWindowPart({ m, events }: PartProps) {
       sizes={sizes}
       sizeIndex={state.window}
       switchable={sizes.length > 1 && controlOf(m.data.preset, 'window').show}
+      meter={offers(m.data.preset, 'meter')}
       zone={state.zone}
       toggles={headToggles(m)}
       stepOf={m.stepOf}

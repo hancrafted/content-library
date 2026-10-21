@@ -46,7 +46,7 @@ describe('success cases', () => {
             'Conversation:true',
             'Timeline:true',
             'Context:true',
-            'Preview:true',
+            'Preview:false',
             'Details:false',
             'Attention:true',
             ':false',

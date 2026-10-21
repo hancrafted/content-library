@@ -6,7 +6,15 @@ import { CONTROL_IDS, controlOf, controlProblems, mergeControls, offers } from '
 describe('success cases', () => {
   it('gives every control its registry default when the Preset says nothing', () => {
     // ARRANGE
-    const expected = { technical: true, preview: true, zone: true, window: false, upload: false, download: true };
+    const expected = {
+      technical: true,
+      preview: true,
+      zone: true,
+      meter: true,
+      window: false,
+      upload: false,
+      download: true,
+    };
     // ACT
     const actual = Object.fromEntries(
       Object.keys(expected).map((id) => [id, controlOf({ controls: {} }, id as never).show]),
@@ -36,7 +44,8 @@ describe('success cases', () => {
     // ACT
     const shown = CONTROL_IDS.filter((id) => offers({ controls }, id));
     // ASSERT
-    expect(shown).toEqual(['window']);
+    // the meter is a readout, not a button: '*' leaves it alone
+    expect(shown).toEqual(['meter', 'window']);
   });
 });
 
