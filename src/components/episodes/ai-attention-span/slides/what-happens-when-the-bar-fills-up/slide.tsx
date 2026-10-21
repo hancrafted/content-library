@@ -31,7 +31,7 @@ export const whatHappensWhenTheBarFillsUp = slide({
     { slug: 'mostly-synthetic-tests', target: 'reason', sources: [DU] },
   ],
   segments: [
-    { slug: 'the-start-helps-but-is-no-guarantee' },
+    { slug: 'only-the-very-start-holds' },
     { slug: 'the-newest-stays-sharp' },
     { slug: 'the-middle-blurs' },
     { slug: 'a-standout-survives' },

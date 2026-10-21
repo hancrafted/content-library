@@ -2,7 +2,8 @@
  * The Attention part's distribution curve: how the 100 units split over the rows of the window, oldest first. The
  * first three rows are the `start`, the last three the `newest`, the seven before them the `recent`, and every row
  * between is the `middle`, where a seeded random gives one or two rows a clearly larger share. The very first row of the start bucket
- * is the attention sink: clearly above the next two, which are flat, all with a little seeded jitter.
+ * is the attention sink: clearly above the next two, which fall towards the middle level (the starting instructions hold, the
+ * memory and the user's first message already degrade), all with a little seeded jitter.
  */
 
 export type CurveKey = 'start' | 'recent' | 'middle' | 'newest';
@@ -18,14 +19,14 @@ export const CURVE_KEYS: readonly CurveKey[] = ['start', 'recent', 'middle', 'ne
 export const DEFAULT_CURVE: Curve = { start: 20, recent: 20, middle: 25, newest: 35 };
 /**
  * How two buckets split over their rows, as relative weights. `start` runs oldest first: the very first row (the
- * system prompt, where the attention sink sits) clearly above the next two, which fall flat. `newest` runs newest
- * first: 50/30/20 of the bucket.
+ * system prompt, where the attention sink sits) clearly above the next two, which fall off towards the middle level
+ * (memory, then the user's first message): 70/20/10 of the bucket. `newest` runs newest first: 50/30/20.
  */
 export interface Falloff {
   readonly start: readonly number[];
   readonly newest: readonly number[];
 }
-export const DEFAULT_FALLOFF: Falloff = { start: [50, 25, 25], newest: [50, 30, 20] };
+export const DEFAULT_FALLOFF: Falloff = { start: [70, 20, 10], newest: [50, 30, 20] };
 /** How far a start row's weight may wander, as a fraction, by the seeded random (0.15 is 85% to 115%). */
 const START_JITTER = 0.15;
 

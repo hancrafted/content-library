@@ -31,7 +31,7 @@ const PRESET: Preset = {
   attention: {
     layout: 'list',
     curve: { start: 20, recent: 20, middle: 30, newest: 30 },
-    falloff: { start: [50, 25, 25], newest: [50, 30, 20] },
+    falloff: { start: [70, 20, 10], newest: [50, 30, 20] },
   },
   controls: { '*': { show: false }, window: { show: true } },
   timelineLocked: false,

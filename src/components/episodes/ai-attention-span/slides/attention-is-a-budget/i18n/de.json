@@ -1,6 +1,6 @@
 {
   "title": "Aufmerksamkeit ist ein Budget",
-  "caption": "Hundert Einheiten Aufmerksamkeit gehen vor allem an den Anfang und die neuesten Nachrichten; die Mitte bekommt den Rest, bis er zu dünn ist, um ihm zu trauen.",
+  "caption": "Hundert Einheiten Aufmerksamkeit gehen vor allem an die allerersten Zeilen und die neuesten Nachrichten; alles dazwischen, auch Deine erste Nachricht, bekommt den Rest, bis er zu dünn ist, um ihm zu trauen.",
   "illustrative": "Zahlen zur Veranschaulichung",
   "zones": {
     "note": "<marker>Wo die Mitte zu dünn wird, hängt von Modell und Aufgabe ab.</marker>"
@@ -8,7 +8,7 @@
   "lost": {
     "kicker": "Bekannt als",
     "name": "<marker>„Lost in the middle“</marker>",
-    "body": "<start>Der Anfang und die neuesten Nachrichten bekommen die Aufmerksamkeit</start>; <budget>was in der Mitte steht, verblasst</budget>."
+    "body": "<start>Die allerersten Zeilen und die neuesten Nachrichten bekommen die Aufmerksamkeit</start>; <budget>was dazwischen steht, auch Deine erste Nachricht, verblasst</budget>."
   },
   "notes": {
     "the-attention-budget": {
@@ -61,7 +61,7 @@
       "where-it-goes": {
         "title": "Wohin es geht",
         "keywords": "",
-        "script": "Wohin geht das Budget? Ein großer Teil an den Anfang, ein großer Teil an die neuesten Nachrichten, und was übrig bleibt, wird über die Mitte verteilt, dünner und dünner mit jeder Nachricht, die du hinzufügst. Deshalb verblasst die Mitte."
+        "script": "Wohin geht das Budget? Ein großer Teil an die allerersten Zeilen, die Startanweisungen, ein großer Teil an die neuesten Nachrichten, und was übrig bleibt, wird über alles dazwischen verteilt, auch über Deine erste Nachricht, dünner und dünner mit jeder Nachricht, die Du hinzufügst. Deshalb verblasst die Mitte."
       },
       "a-spike-in-the-middle": {
         "title": "Ein Ausschlag in der Mitte",

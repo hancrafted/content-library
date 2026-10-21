@@ -1,6 +1,6 @@
 {
   "title": "Was passiert, wenn der Kontext voll wird",
-  "caption": "Wenn der Chat das Fenster füllt, bleiben der Anfang und das Neueste scharf, die Mitte verschwimmt, ein wiederholtes Detail überlebt, und die Antworten werden schlechter: <b>Context Rot</b>.",
+  "caption": "Wenn der Chat das Fenster füllt, bleiben nur der allererste Anfang und das Neueste scharf, der Rest verschwimmt, auch Deine erste Nachricht, ein wiederholtes Detail überlebt, und die Antworten werden schlechter: <b>Context Rot</b>.",
   "strip": {
     "firstKicker": "Deine erste Nachricht",
     "first": "… Budget <figure>40.000 Euro</figure>.",
@@ -8,7 +8,7 @@
     "plan": "… Gesamt <figure>52.300 Euro</figure>.",
     "mayFill": "<marker>die KI füllt diese Lücke vielleicht selbst</marker>",
     "forgotten": "das Budget wurde vergessen",
-    "reason": "<marker>Eine kurze Zahl zwischen vielen ähnlichen Zahlen aus Angeboten und Suchen</marker>",
+    "reason": "<marker>Deine erste Nachricht fällt schon ab, und es ist eine kurze Zahl unter vielen ähnlichen</marker>",
     "caveat": "<marker>Studien nutzen eingepflanzte Fakten, keine Chat-Apps</marker>"
   },
   "notes": {
@@ -81,10 +81,10 @@
   },
   "voiceScript": {
     "segments": {
-      "the-start-helps-but-is-no-guarantee": {
-        "title": "Der Anfang hilft, aber garantiert nichts",
+      "only-the-very-start-holds": {
+        "title": "Nur der allererste Anfang hält",
         "keywords": "",
-        "script": "Jetzt schau, was passiert, wenn dieser Chat wächst. Der Anfang hilft immer noch, denn die ersten Nachrichten werden meist gut genutzt, wie der Anfang des Telefonats, aber das ist keine Garantie, und gleich siehst du, warum. Eins vorweg: Die Zahlen auf dieser Folie sind zur Veranschaulichung. Ich habe ein 200K-Fenster gewählt und die kleinen Balken, die zeigen, wie stark die KI auf jede Nachricht schaut, um die Form zu zeigen, nicht um etwas zu messen."
+        "script": "Jetzt schau, was passiert, wenn dieser Chat wächst. Nur der allererste Anfang des Fensters hält die Aufmerksamkeit der KI: die Startanweisungen. Deine eigene erste Nachricht kommt erst danach, und ihre Aufmerksamkeit fällt sofort ab, also schützt es nicht, im Chat ganz vorn zu stehen, und gleich siehst Du, warum. Eins vorweg: Die Zahlen auf dieser Folie sind zur Veranschaulichung. Ich habe ein 200K-Fenster gewählt und die kleinen Balken, die zeigen, wie stark die KI auf jede Nachricht schaut, um die Form zu zeigen, nicht um etwas zu messen."
       },
       "the-newest-stays-sharp": {
         "title": "Das Neueste bleibt scharf",
@@ -109,7 +109,7 @@
       "the-budget-is-forgotten": {
         "title": "Das Budget ist vergessen",
         "keywords": "",
-        "script": "Schau auf das Budget. Deine allererste Nachricht sagte 40.000 Euro, und jetzt kommt der Plan mit 52.300 zurück. Der Anfang eines Chats bekommt viel Aufmerksamkeit, also ging es nicht wegen seiner Position verloren. Es bekam wenig Aufmerksamkeit, weil es eine kurze Zahl unter vielen ähnlichen ist."
+        "script": "Schau auf das Budget. Deine allererste Nachricht sagte 40.000 Euro, und jetzt kommt der Plan mit 52.300 zurück. Es war Deine erste Nachricht, aber nur die Startanweisungen halten den allerersten Anfang, also fällt schon Deine erste Nachricht ab. Es ging durch seine Position verloren, und es ist außerdem eine kurze Zahl unter vielen ähnlichen."
       },
       "filling-the-gap": {
         "title": "Die Lücke füllen",

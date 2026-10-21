@@ -1,7 +1,7 @@
 {
   "title": "The AI's attention span",
   "caption": "Now the cause: how the AI holds a chat.",
-  "windowNote": "<b>The AI's window keeps the same light:</b> its start and its newest stay sharp, the middle fades.",
+  "windowNote": "<b>The AI's window keeps the same light:</b> only its very first lines and its newest messages stay sharp, the rest fades, your first message too.",
   "voiceScript": {
     "segments": {
       "why-it-happens": {
