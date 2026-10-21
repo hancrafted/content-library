@@ -52,11 +52,11 @@ _Done when_ every kept card is applied or filed, and `npm run verify` is green.
 One commit, because `tests/docs/episode-staging.test.ts` fails on a half-moved Staging folder:
 
 - `brief.md` moves to `src/components/episodes/<slug>/brief.md`, its `status: draft` line removed.
-- Each research file the Spec or a Slide's sources still cite, and that is not already in `docs/llm-wiki/research/`, moves there with its line in `docs/llm-wiki/index.md`. The rest go with Staging.
+- `npm run episode:promote-research -- docs/episodes/<staging>` moves every research folder into `docs/llm-wiki/research/<category>/` and lists it in `docs/llm-wiki/index.md`, cited by a Slide or not. It refuses, before moving anything, a folder with no `research.md`, a research ID the wiki already holds, or a category `GLOSSARY.md` does not name; fix that and rerun.
 - `git rm -r docs/episodes/<staging>`; git history keeps it.
 - Every comment or doc still naming `docs/episodes/<staging>/` (the Episode file's header comment among them) is rewritten to name the commit before this one.
 
-_Done when_ `grep -r "docs/episodes/<staging>" src docs skills` finds nothing outside `.logs/`, and the Brief sits beside the Episode.
+_Done when_ `grep -r "docs/episodes/<staging>" src docs skills` finds nothing outside `.logs/`, the Brief sits beside the Episode, and every staged research folder is in `docs/llm-wiki/research/`.
 
 ### 8. Verify and open the PR
 
