@@ -1,12 +1,13 @@
 {
   "title": "Was das Fenster füllt",
   "caption": "Deine Nachrichten sind nur ein Teil davon.",
+  "challenge": "Ich bin noch nicht fertig. Versuch mitzuhalten.",
   "voiceScript": {
     "segments": {
       "more-in-there-than-you-typed": {
         "title": "Mehr drin, als Du getippt hast",
         "keywords": "",
-        "script": "Du hast gesehen, wie sich das Fenster mit Deinen Nachrichten füllt. Aber Deine Nachrichten sind nur ein Teil davon. Die nächste Frage ist also, was sonst noch hineinkommt, ohne dass Du es merkst."
+        "script": "Na, wie geht's Deinem Kopf? Schon durchgebrannt? Ich bin noch nicht fertig, versuch also mitzuhalten. Du hast gesehen, wie sich das Fenster mit Deinen Nachrichten füllt. Aber Deine Nachrichten sind nur ein Teil davon. Die nächste Frage ist also, was sonst noch hineinkommt, ohne dass Du es merkst."
       }
     }
   }

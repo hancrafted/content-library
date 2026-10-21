@@ -1,13 +1,13 @@
 {
   "title": "The AI's attention span",
   "caption": "Now the cause: how the AI holds a chat.",
-  "windowNote": "<b>The AI's window keeps the same light:</b> its start and its newest stay sharp, the middle fades.",
+  "challenge": "See if you can keep up.",
   "voiceScript": {
     "segments": {
       "why-it-happens": {
         "title": "Why it happens",
         "keywords": "",
-        "script": "So far you have seen what happens. Now the cause, because once you know how the AI holds a chat, the pattern stops being a surprise, and only after that do we look at what it does to your answers."
+        "script": "Let's dial it up a notch. See if you can keep up. So far you have seen what happens. Now the cause, because once you know how the AI holds a chat, the pattern stops being a surprise, and only after that do we look at what it does to your answers."
       }
     }
   }

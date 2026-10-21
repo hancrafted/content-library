@@ -60,9 +60,8 @@ export interface ContextData {
   readonly attention: Readonly<Record<string, Readonly<Record<string, Readonly<Record<string, number>>>>>>;
 }
 
-/** The session bar's plan: its length and its Sections in order, each with its share of the whole (they add up to 100). */
+/** The session bar's plan: its Sections in order, each with its share of the whole (they add up to 100). */
 export interface SessionPlan {
-  readonly minutes: number;
   readonly sections: readonly { readonly id: string; readonly share: number }[];
 }
 
