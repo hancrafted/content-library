@@ -3,7 +3,7 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { managingTheAttentionSpanSection } from './sections/managing-the-attention-span';
 import { theAisAttentionSpanSection } from './sections/the-ais-attention-span';
-import { theLongPhoneCallSection } from './sections/the-long-phone-call';
+import { thoughtExperimentSection } from './sections/thought-experiment';
 import { whatFillsTheWindowSection } from './sections/what-fills-the-window';
 import { hero } from './slides/hero/slide';
 
@@ -20,7 +20,7 @@ export const aiAttentionSpan = episode({
   messages: { en, de },
   title: hero,
   sections: [
-    theLongPhoneCallSection,
+    thoughtExperimentSection,
     theAisAttentionSpanSection,
     whatFillsTheWindowSection,
     managingTheAttentionSpanSection,
