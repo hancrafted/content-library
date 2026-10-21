@@ -1,6 +1,7 @@
 import { CallSteps } from '@/components/slide-shared/call-transcript/call-steps.client';
 import { CallBubble, type CallLight, type CallWho } from '@/components/slide-shared/call-transcript/call-transcript';
 import type { TargetProps } from '@/lib/context-link.pure';
+import { externalHref } from '@/lib/external-link.pure';
 import { cn } from '@/lib/utils';
 import type { ReactNode } from 'react';
 import styles from './phone-call.module.css';
@@ -10,9 +11,15 @@ export type CallEffect = 'start' | 'middle' | 'standout' | 'end';
 
 /** One effect's words in the margin, its Context marker and the note target it carries. */
 export interface EffectCopy {
-  readonly kicker: string;
-  readonly name: string;
+  /** The effect in plain words, e.g. "The start stays sharp". */
+  readonly title: string;
+  /** The cognitive-science term, linked to its Wikipedia article. */
   readonly term: string;
+  readonly termHref: string;
+  /** The short plain explanation after the term. */
+  readonly explanation: string;
+  /** The screen-reader hint that the link opens in a new tab. */
+  readonly newTabHint: string;
   readonly marker: ReactNode;
   readonly target: TargetProps;
 }
@@ -90,15 +97,26 @@ function EffectBracket({ effect }: { effect: CallEffect }) {
 
 function EffectLabel({ copy }: { copy: EffectCopy }) {
   return (
-    <div data-effect-label="" {...copy.target} className="flex flex-col self-center">
-      <span data-kicker="" className="text-caption text-muted-foreground uppercase">
-        {copy.kicker}
-      </span>
+    <div data-effect-label="" {...copy.target} className="flex flex-col gap-0.5 self-center">
       <span className="flex items-center gap-1 text-body font-semibold text-foreground">
-        <span data-name="">{copy.name}</span>
+        <span data-title="">{copy.title}</span>
         {copy.marker}
       </span>
-      <span className="text-caption text-muted-foreground">{copy.term}</span>
+      <p data-term-line="" className="text-caption text-muted-foreground">
+        <strong className="font-semibold text-foreground">
+          <a
+            href={externalHref(copy.termHref)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline underline-offset-2 hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          >
+            {copy.term}
+            <span className="sr-only"> ({copy.newTabHint})</span>
+          </a>
+          :
+        </strong>{' '}
+        <span data-explanation="">{copy.explanation}</span>
+      </p>
     </div>
   );
 }

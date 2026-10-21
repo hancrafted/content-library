@@ -21,24 +21,28 @@
   "punchline": "…wait, we never fixed the date.",
   "effects": {
     "start": {
-      "kicker": "The start",
-      "name": "Stays sharp",
-      "term": "Primacy: the first line sets the frame."
+      "title": "The start stays sharp",
+      "term": "Primacy effect",
+      "termHref": "https://en.wikipedia.org/wiki/Serial-position_effect#Primacy_effect",
+      "explanation": "the first line sets the frame."
     },
     "middle": {
-      "kicker": "The middle",
-      "name": "Blurs",
-      "term": "Mum’s phone, the renovation, the back: said, not kept."
+      "title": "The middle blurs",
+      "term": "Serial-position effect",
+      "termHref": "https://en.wikipedia.org/wiki/Serial-position_effect",
+      "explanation": "mum’s phone, the renovation, the back: said, not kept."
     },
     "standout": {
-      "kicker": "The standout",
-      "name": "Survives",
-      "term": "Isolation effect: the cake is unlike everything around it."
+      "title": "The standout survives",
+      "term": "Von Restorff effect",
+      "termHref": "https://en.wikipedia.org/wiki/Von_Restorff_effect",
+      "explanation": "the cake is unlike the rest of the call."
     },
     "end": {
-      "kicker": "The end",
-      "name": "Stays sharp",
-      "term": "Recency: the last minutes are still fresh."
+      "title": "The end stays sharp",
+      "term": "Recency effect",
+      "termHref": "https://en.wikipedia.org/wiki/Serial-position_effect#Recency_effect",
+      "explanation": "the last minutes are still fresh."
     }
   },
   "labNote": "<marker>The pattern is measured on word lists in the lab; that it holds for an hour-long call is an inference</marker>",
@@ -115,7 +119,7 @@
       "one-thing-stands-out": {
         "title": "One thing stands out",
         "keywords": "",
-        "script": "Except one thing. Pepper ate a whole birthday cake, candles included. Nobody asked you to keep that, and you can still tell it, because what is different from everything around it survives. That is called the isolation effect."
+        "script": "Except one thing. Pepper ate a whole birthday cake, candles included. Nobody asked you to keep that, and you can still tell it, because what is different from everything around it survives. That is called the Von Restorff effect, or the isolation effect."
       },
       "we-never-fixed-the-date": {
         "title": "We never fixed the date",
@@ -123,5 +127,6 @@
         "script": "And then the punchline. Dinner is ready, she has to run, and you realise: we never fixed the date. The one thing you called for never got settled. (pause) Hold on to that, because the question is whether an AI chat does the same."
       }
     }
-  }
+  },
+  "newTabHint": "opens in a new tab"
 }
