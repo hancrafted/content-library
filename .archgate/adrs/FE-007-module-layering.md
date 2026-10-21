@@ -105,7 +105,7 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 
 **Known gap:** `routes.ts`, `prefs-storage.ts` and `utils.ts` in `src/lib/` carry no classifier; left for a future lib-tree record.
 
-**Manual review duties:** routes hold no markup, data shaping or logic (§1.3); no nested layout renders `<html>` (§1.2); no shared Slide shape (§4); `slide-shared` parts take serializable props and own no words (§5).
+**Manual review duties:** routes hold no markup, data shaping or logic (§1.3); no nested layout renders `<html>` (§1.2); no shared Slide shape (§4); `slide-shared` parts take serializable props and own no words, except a Shared visual's locale pair of data and default words, which a Slide overrides (§5).
 
 **Exceptions:** raise a separate ADR; human approval required.
 

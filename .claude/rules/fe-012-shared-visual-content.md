@@ -1,0 +1,1 @@
+../../.archgate/adrs/FE-012-shared-visual-content.md
