@@ -5,11 +5,11 @@
   "slides": [
     {
       "id": "top",
-      "text": "Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst Ein langer Chat verhält sich wie ein langes Telefonat: Seine Aufmerksamkeit ist ein begrenztes Fenster, also steuerst Du, was hineinkommt. Das Gespräch 1 Std. 22 Min. Du bist hier: der Anfang des Gesprächs Anfang und Ende bleiben scharf Die Mitte rutscht aus der Aufmerksamkeit"
+      "text": "Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst Ein langer Chat verhält sich wie ein langes Telefonat: Seine Aufmerksamkeit ist ein begrenztes Fenster, also steuerst Du, was hineinkommt. Diese Sitzung 30 Min. noch nichts verbraucht"
     },
     {
       "id": "thought-experiment",
-      "text": "Gedankenexperiment Wie Deine Aufmerksamkeit in einem 90-Minuten-Gespräch durchhält Das Gespräch 1 Std. 22 Min. Du bist hier: Minute 5 von 82 Ein Block pro Minute: Anfang, Ende und Peppers Kuchen bleiben hell. …Moment, das Datum haben wir gar nicht festgelegt."
+      "text": "Gedankenexperiment Wie Deine Aufmerksamkeit in einem 90-Minuten-Gespräch durchhält Diese Sitzung 30 Min. Gedankenexperiment …Moment, das Datum haben wir gar nicht festgelegt."
     },
     {
       "id": "thought-experiment--the-long-phone-call-story",
@@ -21,7 +21,7 @@
     },
     {
       "id": "the-ais-attention-span",
-      "text": "Die Aufmerksamkeitsspanne der KI Jetzt die Ursache: wie die KI einen Chat im Blick behält. Das Gespräch 1 Std. 22 Min. Du bist hier: Minute 20 von 82 Das Fenster der KI behält dasselbe Licht: Anfang und Neuestes bleiben scharf, die Mitte verblasst."
+      "text": "Die Aufmerksamkeitsspanne der KI Jetzt die Ursache: wie die KI einen Chat im Blick behält. Diese Sitzung 30 Min. Die Aufmerksamkeitsspanne der KI Das Fenster der KI behält dasselbe Licht: Anfang und Neuestes bleiben scharf, die Mitte verblasst."
     },
     {
       "id": "the-ais-attention-span--the-context-window",
@@ -41,7 +41,7 @@
     },
     {
       "id": "what-fills-the-window",
-      "text": "Was das Fenster füllt Deine Nachrichten sind nur ein Teil davon. Das Gespräch 1 Std. 22 Min. Du bist hier: Minute 46 von 82"
+      "text": "Was das Fenster füllt Deine Nachrichten sind nur ein Teil davon. Diese Sitzung 30 Min. Was das Fenster füllt"
     },
     {
       "id": "what-fills-the-window--whats-really-in-the-window",
@@ -57,7 +57,7 @@
     },
     {
       "id": "managing-the-attention-span",
-      "text": "Die Aufmerksamkeitsspanne managen Eine Anzeige kannst Du nicht ablesen, also baust Du Gewohnheiten auf. Das Gespräch 1 Std. 22 Min. Du bist hier: Minute 67 von 82 Übergabe: Feier für 40, 27. Juni, Budget 40.000 € . Weiter: Einladungen."
+      "text": "Die Aufmerksamkeitsspanne managen Eine Anzeige kannst Du nicht ablesen, also baust Du Gewohnheiten auf. Diese Sitzung 30 Min. Die Aufmerksamkeitsspanne managen Übergabe: Feier für 40, 27. Juni, Budget 40.000 € . Weiter: Einladungen."
     },
     {
       "id": "managing-the-attention-span--everyday-habits",
@@ -65,7 +65,7 @@
     },
     {
       "id": "managing-the-attention-span--the-workflow-for-bigger-projects",
-      "text": "Die Aufmerksamkeitsspanne managen (2/2) Seite 2 von 2 Human-in-the-Loop-Workflow Du bist der Kapitän: Ein Planer-Chat bereitet jede Übergabe vor, Helfer-Chats erledigen die Aufgaben, und Du prüfst jedes Artefakt dazwischen. Zur Erinnerung: die Schritte eines Briefings, hier für die Location der Sommerfeier Sommerfeier Zerlege es Interview Interviewe Dich mit KI Anforderungen Erst die Anforderungen Recherche Frischer Start für jedes Teil Vergleich Prüfe jeden Schritt Empfehlung für Deine Chefin Du der Kapitän am Steuer Planer-Chat Übergabe von Dir geprüft Helfer-Chats Location Catering Einladungen Ergebnisse von Dir geprüft Planer Du Du prüfst jedes Artefakt dazwischen Ein frischer Chat pro Aufgabe ( ) hält jedes Fenster klein; Du koordinierst wie ein Projektmanager."
+      "text": "Die Aufmerksamkeitsspanne managen (2/2) Seite 2 von 2 Human-in-the-Loop-Workflow Du bist der Kapitän: Ein Planer-Chat bereitet jede Übergabe vor, Helfer-Chats erledigen die Aufgaben, und Du prüfst jedes Artefakt dazwischen. Sommerfeier Zerlege es Anreise Catering Location Einladungen Budget Interview Interviewe Dich mit KI KI fragt Dich 3 Fragen, 1 vergessen Anforderungen Erst die Anforderungen Prüfpunkt 1 Anforderungskarte 200 Gäste 150 € pro Person Stufenlos Vegetarisches Menü Ruhig genug zum Reden Freigegeben Recherche Frischer Start für jedes Teil Location 1 Gegen die Karte geprüft Location 2 Gegen die Karte geprüft Location 3 Gegen die Karte geprüft Vergleich Prüfe jeden Schritt 3 Locations ranken gemessen an der Karte Prüfpunkt 2 Empfehlung für Deine Chefin Location-Plan bis Freitag Ein frischer Chat pro Aufgabe ( ) hält jedes Fenster klein; Du koordinierst wie ein Projektmanager."
     }
   ],
   "notes": [

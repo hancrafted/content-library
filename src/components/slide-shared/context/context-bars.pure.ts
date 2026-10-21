@@ -1,9 +1,9 @@
 import { colourOf, framesOf, simpleOf } from './context.pure';
 import type { Category, Chat, MiniBar, SimpleCategory, WindowSize } from './context.types';
 
-/* The static bars' model: a bar as blocks on a scale, whether the data is a chat or generic segments. Pure. */
+/* The static bars' model: a bar as blocks on a scale, drawn from a chat. Pure. */
 
-/** One block of a static bar, on a scale of `total` units (tokens, or minutes for a call). */
+/** One block of a static bar, on a scale of `total` units (tokens). */
 export interface BarBlock {
   readonly key: string;
   readonly start: number;
@@ -16,32 +16,13 @@ export interface BarBlock {
 
 export interface BarModel {
   readonly blocks: readonly BarBlock[];
-  /** What the blocks add up to: tokens for a chat, minutes for segments. */
+  /** What the blocks add up to, in tokens. */
   readonly used: number;
-  /** The whole scale: the window's tokens for a chat, the minutes for segments. */
+  /** The whole scale: the window's tokens. */
   readonly total: number;
-  /** Tokens by block key and by Simple category, for a Slide's legend. Empty for segments. */
+  /** Tokens by block key and by Simple category, for a Slide's legend. */
   readonly byKey: Readonly<Record<string, number>>;
   readonly bySimple: Readonly<Partial<Record<SimpleCategory, number>>>;
-}
-
-const SEGMENT_COLOUR = '--primary';
-
-function segmentsModel(segments: readonly (readonly [number, string])[]): BarModel {
-  let start = 0;
-  const blocks = segments.map(([size, state], i): BarBlock => {
-    const block = {
-      key: `s${i}`,
-      start,
-      size,
-      colour: SEGMENT_COLOUR,
-      faded: state === 'faded',
-      ring: state === 'standout',
-    };
-    start += size;
-    return block;
-  });
-  return { blocks, used: start, total: start, byKey: {}, bySimple: {} };
 }
 
 /** Whether the bar keeps only some of its blocks in colour. */
@@ -76,10 +57,9 @@ function chatModel(bar: MiniBar, chat: Chat, window: WindowSize): BarModel {
   return { blocks, used: frame?.used ?? 0, total: window.tokens, byKey, bySimple };
 }
 
-/** A bar as blocks on a scale; a bar of segments ignores the chat and the window. */
+/** A bar as blocks on a scale. */
 export function barModel(bar: MiniBar, chat: Chat | undefined, window: WindowSize): BarModel {
-  if (bar.segments) return segmentsModel(bar.segments);
-  if (!chat) throw new Error(`context bars: bar "${bar.label}" names no chat or segments`);
+  if (!chat) throw new Error(`context bars: bar "${bar.label}" names no chat`);
   return chatModel(bar, chat, window);
 }
 
@@ -89,4 +69,28 @@ export function durationText(minutes: number, words: { readonly hours: string; r
   const rest = minutes % 60;
   if (hours === 0) return `${rest} ${words.minutes}`;
   return rest === 0 ? `${hours} ${words.hours}` : `${hours} ${words.hours} ${rest} ${words.minutes}`;
+}
+
+export interface SessionPart {
+  readonly id: string;
+  readonly share: number;
+  readonly state: 'done' | 'current' | 'upcoming';
+  /** Which edge the current part's name hangs from, so it stays inside the bar. */
+  readonly side: 'start' | 'end';
+}
+
+/** The session's Sections as parts: filled up to and including `at`, none for a fresh session (`at` null). */
+export function sessionParts(
+  sections: readonly { readonly id: string; readonly share: number }[],
+  at: string | null,
+): SessionPart[] {
+  const current = at === null ? -1 : sections.findIndex((section) => section.id === at);
+  if (at !== null && current < 0) throw new Error(`session bar: unknown Section "${at}"`);
+  let start = 0;
+  return sections.map((section, i): SessionPart => {
+    const middle = start + section.share / 2;
+    start += section.share;
+    const state = i < current ? 'done' : i === current ? 'current' : 'upcoming';
+    return { ...section, state, side: middle > 50 ? 'end' : 'start' };
+  });
 }

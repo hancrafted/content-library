@@ -100,16 +100,20 @@ export interface ContextWords {
   readonly free: string;
   readonly buffer: Readonly<Record<Depth, string>>;
   readonly lines: Readonly<Record<string, LineWords>>;
+  /** The session bar: its caption, the words for an empty one, `{title}, {n} of {count}`, each Section's title. */
+  readonly session: {
+    readonly label: string;
+    readonly empty: string;
+    readonly progress: string;
+    readonly sections: Readonly<Record<string, string>>;
+  };
   readonly mini: {
     /** A bar's figure: `{used} of {window} · {percent}%`. */
     readonly usedOf: string;
     readonly discarded: string;
-    /** A call's duration units, for `1 h 22 min`. */
+    /** Duration units, for `1 h 22 min`. */
     readonly hours: string;
     readonly minutes: string;
-    /** The call bar's marker: `You are here: minute {minute} of {total}`, and its form at minute 0. */
-    readonly here: string;
-    readonly hereStart: string;
     readonly labels: Readonly<Record<string, string>>;
   };
 }

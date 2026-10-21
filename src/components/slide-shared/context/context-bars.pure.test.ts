@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { barModel, durationText } from './context-bars.pure';
+import { barModel, durationText, sessionParts } from './context-bars.pure';
 import type { Chat, MiniBar, WindowSize } from './context.types';
 
 const WINDOW: WindowSize = { tokens: 200000, bufferTokens: 16500, lines: [] };
@@ -17,34 +17,29 @@ const BAR: MiniBar = {
   chat: 'c',
   step: 4,
   discarded: false,
-  segments: null,
   lit: null,
   litFrom: null,
   ring: [],
 };
 
+const SECTIONS = [
+  { id: 'a', share: 20 },
+  { id: 'b', share: 40 },
+  { id: 'c', share: 40 },
+];
+
 describe('success cases', () => {
-  it('draws a call as its minutes in order, the standout ringed and the middle faded', () => {
+  it('fills the session up to and including the current Section and hangs its name from the nearer edge', () => {
     // ARRANGE
-    const bar: MiniBar = {
-      ...BAR,
-      chat: null,
-      segments: [
-        [4, 'lit'],
-        [37, 'faded'],
-        [1, 'standout'],
-      ],
-    };
-    const expected = { total: 42, starts: [0, 4, 41] };
+    const expected = [
+      ['done', 'start'],
+      ['current', 'start'],
+      ['upcoming', 'end'],
+    ];
     // ACT
-    const model = barModel(bar, undefined, WINDOW);
+    const parts = sessionParts(SECTIONS, 'b');
     // ASSERT
-    expect({ total: model.total, starts: model.blocks.map((b) => b.start) }).toEqual(expected);
-    expect(model.blocks.map((b) => [b.faded, b.ring])).toEqual([
-      [false, false],
-      [true, false],
-      [false, true],
-    ]);
+    expect(parts.map((p) => [p.state, p.side])).toEqual(expected);
   });
 
   it('derives the used tokens of a chat bar from its data', () => {
@@ -83,6 +78,15 @@ describe('success cases', () => {
 });
 
 describe('edge cases', () => {
+  it('leaves a fresh session empty', () => {
+    // ARRANGE
+    const expected = ['upcoming', 'upcoming', 'upcoming'];
+    // ACT
+    const fresh = sessionParts(SECTIONS, null).map((p) => p.state);
+    // ASSERT
+    expect(fresh).toEqual(expected);
+  });
+
   it('fades nothing on a chat bar that names no light', () => {
     // ARRANGE
     const expected = 0;
@@ -94,12 +98,21 @@ describe('edge cases', () => {
 });
 
 describe('failure cases', () => {
-  it('refuses a bar with neither chat nor segments', () => {
+  it('refuses an unknown Section', () => {
     // ARRANGE
-    const bar: MiniBar = { ...BAR, chat: null };
+    const expected = 'unknown Section "x"';
+    // ACT
+    const draw = () => sessionParts(SECTIONS, 'x');
+    // ASSERT
+    expect(draw).toThrow(expected);
+  });
+
+  it('refuses a bar whose chat is missing', () => {
+    // ARRANGE
+    const bar: MiniBar = BAR;
     // ACT
     const draw = () => barModel(bar, undefined, WINDOW);
     // ASSERT
-    expect(draw).toThrow('names no chat or segments');
+    expect(draw).toThrow('names no chat');
   });
 });

@@ -191,14 +191,10 @@ presets:
     motion: off
     windows: [{ size: 200k, lines: [] }]
 
-# Static bars, drawn horizontally on Slides. A bar is a chat at a step (its last step when omitted) or, for data that is
-# not a chat, `segments: [[minutes, lit | faded | standout], …]`. A chat bar may keep only some of it in colour:
+# Static bars, drawn horizontally on Slides. A bar is a chat at a step (its last step when omitted). A chat bar may keep only some of it in colour:
 # `lit` (Simple categories), `litFrom` (a step id) and `ring` (step ids, also kept in colour); the rest fades.
-# Labels are keys of words.mini.labels. `call` is the one 82-minute call bar every Section opener shows.
+# Labels are keys of words.mini.labels.
 minis:
-  call:
-    window: { size: 200k, lines: [] }
-    bars: [{ label: call, segments: [[4, lit], [37, faded], [1, standout], [36, faded], [4, lit]] }]
   slide-10-old:
     window: { size: 200k, lines: [matt] }
     bars: [{ label: old, chat: summer-party, step: 21 }]
@@ -215,6 +211,16 @@ minis:
       - { label: venues, chat: w-venues, discarded: true }
       - { label: catering, chat: w-catering }
       - { label: invites, chat: w-invites }
+
+# The session bar every Episode opener shows: the audience's own attention over `minutes`, one segment per Section,
+# sized by its `share` of the whole. Ids are keys of words.session.sections.
+session:
+  minutes: 30
+  sections:
+    - { id: thought-experiment, share: 20 }
+    - { id: the-ais-attention-span, share: 40 }
+    - { id: what-fills-the-window, share: 20 }
+    - { id: managing-the-attention-span, share: 20 }
 
 words:
   controls: Context window controls
@@ -338,19 +344,25 @@ words:
     matt: { label: Smart zone by Matt Pocock, who: Matt Pocock }
     matt-1m: { label: Smart zone by Matt Pocock, who: Matt Pocock }
     han: { label: Smart zone by Han, who: Han }
+  session:
+    label: This session
+    empty: nothing used yet
+    progress: '{title}, {n} of {count}'
+    sections:
+      thought-experiment: Thought experiment
+      the-ais-attention-span: The AI's attention span
+      what-fills-the-window: What fills the window
+      managing-the-attention-span: Managing the attention span
   mini:
     usedOf: '{used} of {window} · {percent}%'
     discarded: thrown away
     hours: h
     minutes: min
-    here: 'You are here: minute {minute} of {total}'
-    hereStart: 'You are here: the start of the call'
     labels:
       old: Old chat
       fresh: Fresh chat
       summer: Summer party
       summer-chat: The summer-party chat
-      call: The call
       planner: Planner
       venues: 'Worker: venues'
       catering: 'Worker: catering'
