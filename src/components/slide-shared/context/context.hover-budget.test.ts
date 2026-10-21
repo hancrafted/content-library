@@ -5,9 +5,9 @@ import { describe, expect, it } from 'vitest';
 import { Attention } from './attention';
 import { contextViewData } from './context';
 import { ContextCategory } from './context-category';
-import { attentionAt } from './context-usage.pure';
+import { createState } from './context-state.pure';
+import { stepView } from './context-step.pure';
 import { ContextWindow } from './context-window';
-import { categoriesOf, framesOf } from './context.pure';
 import type { RenderMode } from './context.types';
 import { Conversation } from './conversation';
 
@@ -22,15 +22,12 @@ const noop = () => undefined;
 const harness = (renderMode: RenderMode) => {
   const data = contextViewData({ preset: 'slide-7', locale: 'en' });
   const { chat, preset } = data;
-  const frames = framesOf(chat);
-  const frame = frames[preset.step - 1]!;
-  const window = preset.windows[0]!;
-  const stepOf = new Map(chat.steps.map((s, i) => [s.id, i + 1]));
-  const attention = attentionAt(chat, frames, { step: preset.step, windowTokens: window.tokens, notes: data.notes });
+  const view = stepView(data, chat, createState(preset));
+  const { frames, frame, window, stepOf, present } = view;
   const speech = { words: data.words, locale: data.locale, story: data.story, renderMode };
   const light = (lit: string | null) => ({ lit, ghost: null, pinned: null });
   const events = { onLight: noop, onPin: noop };
-  const progress = { chat, frames, vis: preset.step, attention };
+  const progress = { chat, vis: view.vis, attention: view.attention, gone: view.gone };
   const markup = {
     conversation: (lit: string | null) =>
       createElement(Conversation, {
@@ -67,7 +64,7 @@ const harness = (renderMode: RenderMode) => {
         ...events,
         frame,
         window,
-        present: categoriesOf(chat),
+        present,
         toggles: [],
       }),
     attention: (lit: string | null) =>
@@ -76,7 +73,7 @@ const harness = (renderMode: RenderMode) => {
         ...light(lit),
         ...events,
         ...progress,
-        window,
+        readout: view.readout,
         stepOf,
         layout: 'list',
         onReveal: noop,

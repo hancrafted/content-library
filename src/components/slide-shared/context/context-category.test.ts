@@ -6,7 +6,7 @@ import { contextViewData } from './context';
 import { ContextCategory } from './context-category';
 import { columns } from './context-columns.pure';
 import { createState, reduce } from './context-state.pure';
-import { categoriesOf, framesOf } from './context.pure';
+import { stepView } from './context-step.pure';
 import type { RenderMode } from './context.types';
 
 /* The context category part: a bold title, the Messages group a collapsible in Technical only, and its place in the grid. */
@@ -15,7 +15,7 @@ const noop = () => undefined;
 
 const render = (renderMode: RenderMode, locale = 'en') => {
   const data = contextViewData({ preset: 'slide-7', locale });
-  const frame = framesOf(data.chat)[data.preset.step - 1]!;
+  const view = stepView(data, data.chat, createState(data.preset));
   const html = renderToStaticMarkup(
     createElement(ContextCategory, {
       words: data.words,
@@ -27,9 +27,9 @@ const render = (renderMode: RenderMode, locale = 'en') => {
       pinned: null,
       onLight: noop,
       onPin: noop,
-      frame,
-      window: data.preset.windows[0]!,
-      present: categoriesOf(data.chat),
+      frame: view.frame,
+      window: view.window,
+      present: view.present,
       toggles: [],
     }),
   );

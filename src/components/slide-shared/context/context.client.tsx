@@ -1,24 +1,15 @@
 'use client';
 
 import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import type { Curve } from './attention-curve.pure';
 import { fromClaudeLog } from './claude-log.pure';
 import { deltaText, percentText } from './context-format.pure';
 import { Parts, ToolbarPart, type Model } from './context-slices';
-import {
-  createState,
-  ghostOf,
-  litKey,
-  reduce,
-  visibleStep,
-  type ViewEvent,
-  type ViewState,
-} from './context-state.pure';
-import { attentionAt, readoutAt } from './context-usage.pure';
+import { createState, reduce, type ViewEvent, type ViewState } from './context-state.pure';
+import { stepView } from './context-step.pure';
+import { readoutAt } from './context-usage.pure';
 import { fill, storyOf, type ContextViewData } from './context-view';
 import styles from './context.module.css';
-import { categoriesOf, framesOf, type Frame } from './context.pure';
-import type { Chat, Part, WindowSize } from './context.types';
+import type { Chat, Part } from './context.types';
 import { useWindowEvents } from './use-window-events';
 import { useReorderRepair } from './window-reorder';
 
@@ -35,8 +26,9 @@ function openLog(text: string, chat: Chat): Chat | null {
 
 function sentenceOf(m: Model): string {
   const { words, locale } = m.data;
-  const r = readoutAt(m.frames, m.state.step, m.window);
-  const step = m.chat.steps[m.state.step - 1];
+  // The sentence follows the committed step, never a preview: the status line is silent while scrubbing.
+  const r = readoutAt(m.view.frames, m.view.committed, m.view.window);
+  const step = m.chat.steps[m.view.committed - 1];
   const values = {
     step: r.step,
     steps: r.steps,
@@ -48,65 +40,12 @@ function sentenceOf(m: Model): string {
   return fill(r.crossed ? words.readoutSentenceCrossed : words.readoutSentence, values);
 }
 
-/** What a chat holds at every step, computed once per chat: the per-step layout the parts read. */
-function useChatModel(chat: Chat) {
-  const frames = useMemo(() => framesOf(chat), [chat]);
-  const present = useMemo(() => categoriesOf(chat), [chat]);
-  const stepOf = useMemo(() => new Map(chat.steps.map((s, i) => [s.id, i + 1])), [chat]);
-  return { frames, present, stepOf };
-}
-
-function windowOf(data: ContextViewData, state: ViewState) {
-  const size = data.preset.windows[state.window] ?? data.preset.windows[0];
-  if (!size) throw new Error(`context window: Preset "${data.preset.id}" has no window size`);
-  return size;
-}
-
-interface AttentionSource {
-  readonly chat: Chat;
-  readonly frames: readonly Frame[];
-  readonly vis: number;
-  readonly window: WindowSize;
-  readonly data: ContextViewData;
-  readonly override: Readonly<Record<string, number>> | undefined;
-  readonly curve: Curve;
-}
-
-/** The units of attention at the step on screen: the Preset's explicit split where it has one, else the curve. */
-function useAttention({ chat, frames, vis, window, data, override, curve }: AttentionSource) {
-  const { falloff } = data.preset.attention;
-  const { notes } = data;
-  return useMemo(
-    () => attentionAt(chat, frames, { step: vis, windowTokens: window.tokens, notes, override, curve, falloff }),
-    [chat, frames, vis, window.tokens, notes, override, curve, falloff],
-  );
-}
-
 function useModel(data: ContextViewData, chat: Chat): Model {
   const steps = chat.steps.length;
   const reducer = (s: ViewState, e: ViewEvent) => reduce(s, e, { preset: data.preset, steps });
   const [state, dispatch] = useReducer(reducer, data.preset, createState);
-  const model = useChatModel(chat);
-  const vis = Math.min(visibleStep(state), steps);
-  const window = windowOf(data, state);
-  const override = chat === data.chat ? data.overrides[String(vis)] : undefined;
-  const attention = useAttention({ chat, frames: model.frames, vis, window, data, override, curve: state.curve });
-  const frame = model.frames[vis - 1] ?? { blocks: [], used: 0, byCategory: {}, inWindow: [] };
-  const lit = litKey(state);
-  return {
-    ...model,
-    data,
-    chat,
-    state,
-    dispatch,
-    vis,
-    frame,
-    window,
-    attention,
-    overridden: override !== undefined,
-    lit,
-    ghost: ghostOf(chat, state),
-  };
+  const view = useMemo(() => stepView(data, chat, state), [data, chat, state]);
+  return { data, chat, state, dispatch, view };
 }
 
 /** The root's data attributes, which the stylesheet reads for every part. */
@@ -115,7 +54,7 @@ function rootAttrs(m: Model) {
     'data-cornerstone': m.data.preset.id,
     'data-motion': m.data.preset.motion,
     'data-fade': m.data.preset.fade || m.state.parts.attention ? '' : undefined,
-    'data-lit': m.lit || m.ghost ? '' : undefined,
+    'data-lit': m.view.lit || m.view.ghost ? '' : undefined,
   };
 }
 

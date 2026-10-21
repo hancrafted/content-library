@@ -1,6 +1,6 @@
 import type { Curve, CurveKey } from './attention-curve.pure';
 import type { ControlId } from './context-controls.pure';
-import type { Attention } from './context-usage.pure';
+import type { Attention, Readout } from './context-usage.pure';
 import type { ContextWords } from './context-words.types';
 import type { Frame } from './context.pure';
 import type { AttentionLayout, Category, Chat, RenderMode, StepNotes, StepStory, WindowSize } from './context.types';
@@ -29,10 +29,11 @@ export interface Speech {
 /** The chat as every part draws it at one step. */
 export interface Progress {
   readonly chat: Chat;
-  readonly frames: readonly Frame[];
   /** The step on screen: the preview while scrubbing, else the committed one. */
   readonly vis: number;
   readonly attention: readonly Attention[];
+  /** The 0-based indices of the steps a compaction or clearing removed from the window by the step on screen. */
+  readonly gone: ReadonlySet<number>;
 }
 
 /** The events a part sends up when something is lit or pinned inside it; the parent decides what that does. */
@@ -109,12 +110,15 @@ export interface ContextCategoryProps extends Lighting, LightingEvents, Speech {
 
 export interface DetailsProps extends Lighting, LightingEvents, Speech, Omit<Progress, 'attention'> {
   readonly frame: Frame;
+  /** The readout of the step on screen. */
+  readonly readout: Readout;
   readonly window: WindowSize;
   readonly stepOf: ReadonlyMap<string, number>;
 }
 
 export interface AttentionProps extends Lighting, LightingEvents, Speech, Progress {
-  readonly window: WindowSize;
+  /** The readout of the step on screen. */
+  readonly readout: Readout;
   readonly stepOf: ReadonlyMap<string, number>;
   readonly layout: AttentionLayout;
   /** The ⋯ menu: absent when the Preset hides the control. */

@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import type { Card, DetailsProps } from './context-parts.types';
 import { matcher, panelKey } from './context-state.pure';
-import { readoutAt } from './context-usage.pure';
 import styles from './context.module.css';
 import { CategoryCard, GhostCard, RestCard, StepCard } from './details-cards';
 import { useLighting } from './use-lighting';
@@ -20,7 +19,7 @@ function ExplainCard({ card }: { readonly card: Card }) {
   const [id, cat] = (card.lit ?? '').split('@');
   const step = stepById(card, id);
   if (step) return <StepCard v={card} step={step} cat={cat} />;
-  return <RestCard v={card} r={readoutAt(card.frames, card.vis, card.window)} />;
+  return <RestCard v={card} r={card.readout} />;
 }
 
 export function Details(p: DetailsProps) {
