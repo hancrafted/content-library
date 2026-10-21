@@ -63,6 +63,30 @@ describe('success cases', () => {
     expect(card).toEqual(expected);
   });
 
+  it("lets an Episode's own look override its Topic's accent and icon, leaving the Topic chip as it is", () => {
+    // ARRANGE
+    const entry = { ...PUBLISHED, look: { accent: 'rose', icon: 'hourglass' } } as const;
+    const expected = {
+      accent: 'rose',
+      icon: 'hourglass',
+      topic: { id: 'cost', label: '[landing.episodeOverview.topics.cost]' },
+    };
+    // ACT
+    const { accent, icon, topic } = episodeCard(entry, { locale: 'en', read });
+    // ASSERT
+    expect({ accent, icon, topic }).toEqual(expected);
+  });
+
+  it("overrides only the half of the Topic's look that the Episode's look names", () => {
+    // ARRANGE
+    const entry = { ...PUBLISHED, look: { icon: 'sparkles' } } as const;
+    const expected = { accent: 'amber', icon: 'sparkles' };
+    // ACT
+    const { accent, icon } = episodeCard(entry, { locale: 'en', read });
+    // ASSERT
+    expect({ accent, icon }).toEqual(expected);
+  });
+
   it('prefixes the link with the locale but leaves the route neutral, so a German card opens the German Episode', () => {
     // ARRANGE
     const expected = { route: '/episodes/ai-token-economy', href: '/de/episodes/ai-token-economy' };

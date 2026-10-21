@@ -31,6 +31,55 @@ describe('success cases', () => {
     FEATURED.forEach((slug) => expect(published).toContain(slug));
   });
 
+  it('lists Featured in workshop order', () => {
+    // ARRANGE
+    const expected = ['onboard-ai-every-time', 'ai-attention-span', 'ai-gives-you-more-work'];
+    // ACT
+    const featured = [...FEATURED];
+    // ASSERT
+    expect(featured).toEqual(expected);
+  });
+
+  it('gives each Featured Episode a look of its own, drawable by the landing', () => {
+    // ARRANGE
+    const expected = [
+      'onboard-ai-every-time: amber/user-round-plus',
+      'ai-attention-span: sky/hourglass',
+      'ai-gives-you-more-work: rose/list-plus',
+    ];
+    // ACT
+    const looks = FEATURED.map((slug) => {
+      const look = listEpisodes().find((e) => e.slug === slug)?.look;
+      const drawable = look?.icon !== undefined && TOPIC_ICONS[look.icon] !== undefined;
+      return `${slug}: ${look?.accent}/${drawable ? look?.icon : 'undrawable'}`;
+    });
+    // ASSERT
+    expect(looks).toEqual(expected);
+  });
+
+  it('gives the ai-enablement Topic the sparkles icon', () => {
+    // ARRANGE
+    const expected = 'sparkles';
+    // ACT
+    const { icon } = TOPICS['ai-enablement'];
+    // ASSERT
+    expect(icon).toBe(expected);
+  });
+
+  it('gives the delegation Tag a name and tooltip in both locales', () => {
+    // ARRANGE
+    const expected = [true, true, true, true];
+    // ACT
+    const present = (['en', 'de'] as const).flatMap((locale) => {
+      const tag = (
+        TRANSLATIONS[locale].landing.episodeOverview.tags as Record<string, { name?: string; tooltip?: string }>
+      ).delegation;
+      return [Boolean(tag?.name), Boolean(tag?.tooltip)];
+    });
+    // ASSERT
+    expect(present).toEqual(expected);
+  });
+
   it('gives every Topic in use an icon and an accent the landing can draw', () => {
     // ARRANGE
     const expected: string[] = [];

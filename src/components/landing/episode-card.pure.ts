@@ -161,6 +161,7 @@ export function episodeCard(entry: CardEntry, ctx: CardContext): EpisodeCard {
     })),
     featuredRank: null,
     ...TOPICS[entry.topic],
+    ...entry.look,
     ...publishedFields(entry, ctx),
   };
 }

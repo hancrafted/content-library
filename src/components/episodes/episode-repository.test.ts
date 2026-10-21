@@ -88,8 +88,9 @@ describe('success cases', () => {
       slug,
       status: 'published',
       topic: 'ai-enablement',
+      look: { accent: 'amber', icon: 'user-round-plus' },
       format: 'foundations',
-      tags: [],
+      tags: ['agentic-ai', 'context-engineering', 'workflow'],
       publishedOn: '2026-10-20',
     };
     // ACT
@@ -107,6 +108,7 @@ describe('success cases', () => {
       slug,
       status: 'published',
       topic: 'ai-enablement',
+      look: { accent: 'sky', icon: 'hourglass' },
       format: 'foundations',
       tags: ['context-engineering', 'workflow', 'context-window'],
       publishedOn: '2026-10-21',
@@ -126,8 +128,9 @@ describe('success cases', () => {
       slug,
       status: 'published',
       topic: 'ai-enablement',
+      look: { accent: 'rose', icon: 'list-plus' },
       format: 'foundations',
-      tags: [],
+      tags: ['agentic-ai', 'workflow', 'delegation'],
       publishedOn: '2026-10-21',
     };
     // ACT

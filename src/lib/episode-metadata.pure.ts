@@ -1,4 +1,4 @@
-import type { FormatId, ListedEpisodeSlug, TopicId } from './episode-overview';
+import type { Accent, FormatId, ListedEpisodeSlug, TopicIcon, TopicId } from './episode-overview';
 
 /*
  * What an Episode declares about itself for the Episode overview, in its own
@@ -15,6 +15,8 @@ interface SharedMetadata {
   readonly topic: TopicId;
   /** Further Topics (playlists) the Episode also appears in. */
   readonly extraTopics?: readonly TopicId[];
+  /** Overrides the Topic's accent and icon on this Episode's card; the Topic chip and filter stay as they are. */
+  readonly look?: { readonly accent?: Accent; readonly icon?: TopicIcon };
   readonly format: FormatId;
   /** Tag ids, kebab-case, flat and unranked; each is named and explained by id in the landing Translation keys. */
   readonly tags: readonly string[];

@@ -6,6 +6,7 @@ export const episodeMetadata = {
   status: 'published',
   // Han: context engineering, part of AI enablement; Topics have no sub-Topics, so it is a Tag.
   topic: 'ai-enablement',
+  look: { accent: 'sky', icon: 'hourglass' },
   format: 'foundations',
   tags: ['context-engineering', 'workflow', 'context-window'],
   publishedOn: '2026-10-21',

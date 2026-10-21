@@ -13,7 +13,16 @@ export const ACCENTS = ['primary', 'amber', 'emerald', 'sky', 'rose', 'violet'] 
 export type Accent = (typeof ACCENTS)[number];
 
 /** An icon by name, so this stays data; the landing turns the name into a drawing. */
-export const ICONS = ['brain-circuit', 'handshake', 'file-text', 'coins'] as const;
+export const ICONS = [
+  'brain-circuit',
+  'sparkles',
+  'handshake',
+  'file-text',
+  'coins',
+  'user-round-plus',
+  'hourglass',
+  'list-plus',
+] as const;
 export type TopicIcon = (typeof ICONS)[number];
 
 export interface TopicLook {
@@ -26,7 +35,7 @@ export interface TopicLook {
  * them. A Topic's look is every Episode's look whose primary Topic it is.
  */
 export const TOPICS = {
-  'ai-enablement': { icon: 'brain-circuit', accent: 'violet' },
+  'ai-enablement': { icon: 'sparkles', accent: 'violet' },
   sales: { icon: 'handshake', accent: 'emerald' },
   'knowledge-base': { icon: 'file-text', accent: 'sky' },
   cost: { icon: 'coins', accent: 'amber' },
@@ -52,7 +61,7 @@ export type ListedEpisodeSlug = Exclude<EpisodeSlug, (typeof LAYOUT_REFERENCES)[
 
 /** The Featured slots: published Episodes, lead first. Re-ranking is this one edit. */
 export const FEATURED = [
-  'ai-attention-span',
   'onboard-ai-every-time',
+  'ai-attention-span',
   'ai-gives-you-more-work',
 ] as const satisfies readonly [ListedEpisodeSlug, ListedEpisodeSlug, ListedEpisodeSlug];
