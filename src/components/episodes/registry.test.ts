@@ -36,6 +36,10 @@ const COMPOSITION = [
     ],
   },
   {
+    slug: 'ai-gives-you-more-work',
+    sections: [{ opener: 'from-execution-to-management', pageSlides: 3 }],
+  },
+  {
     slug: 'never-too-early-sales',
     sections: [
       { opener: 'why-watching-cashflow-is-mission-critical', pageSlides: 1 },
@@ -71,6 +75,7 @@ const HEADER_MODES = [
   { slug: 'never-too-early-sales', header: 'shared' },
   { slug: 'onboard-ai-every-time', header: 'shared' },
   { slug: 'ai-attention-span', header: 'shared' },
+  { slug: 'ai-gives-you-more-work', header: 'shared' },
 ] as const;
 
 /** The recorded YouTube video of the Episodes that have one asserted here. */

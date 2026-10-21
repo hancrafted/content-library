@@ -17,7 +17,7 @@ const PUBLISHED_SLUGS = [
   'never-too-early-sales',
   'onboard-ai-every-time',
 ];
-const DRAFT_SLUGS: readonly string[] = [];
+const DRAFT_SLUGS = ['ai-gives-you-more-work'];
 const TAGGED = { slug: 'never-too-early-sales', tags: ['startups', 'cashflow', 'lead-generation', 'sales-pipeline'] };
 
 describe('/episodes index page', () => {

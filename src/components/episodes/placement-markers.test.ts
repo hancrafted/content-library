@@ -15,7 +15,12 @@ const EPISODES_DIR = __dirname;
 const MARKERS_DIR = 'sections';
 
 /** The Episodes built at placement markers. Their Section order is `registry.test.ts`'s `COMPOSITION`. */
-const MARKED = ['never-too-early-sales', 'onboard-ai-every-time', 'ai-attention-span'] as const;
+const MARKED = [
+  'ai-gives-you-more-work',
+  'never-too-early-sales',
+  'onboard-ai-every-time',
+  'ai-attention-span',
+] as const;
 
 /** The marker module names of an Episode, without the extension; none when it keeps no `sections/` folder. */
 function markerNames(episode: string): string[] {
