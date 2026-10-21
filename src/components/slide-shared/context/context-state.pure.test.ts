@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { blockedBy, createState, ghostOf, matcher, panelKey, reduce, renderModeOf } from './context-state.pure';
+import { blockedBy, createState, ghostOf, matcher, moveTo, panelKey, reduce, renderModeOf } from './context-state.pure';
 import type { Chat, Preset } from './context.types';
 
 const CHAT: Chat = {
@@ -26,6 +26,7 @@ const PRESET: Preset = {
   depth: 'simple',
   pinned: null,
   show: { chat: true, timeline: true, context: true, preview: true, panel: false, attention: false },
+  order: ['chat', 'timeline', 'context', 'preview', 'panel', 'attention'],
   fade: false,
   attention: { layout: 'list' },
   controls: { '*': { show: false }, window: { show: true } },
@@ -44,6 +45,8 @@ const view = (lit: string | null) => ({
   lit,
   ghost: null,
 });
+
+const REORDERING = { ...PRESET, controls: { '*': { show: false }, parts: { show: true, reorder: true } } };
 
 describe('success cases', () => {
   it('switches the window size when the Preset offers two', () => {
@@ -73,9 +76,63 @@ describe('success cases', () => {
     // ASSERT
     expect(keys.map((key) => key === resting)).toEqual([false, false]);
   });
+  it('starts in the Preset order and moves a part to the slot of another', () => {
+    // ARRANGE
+    const preset = { ...REORDERING, order: ['panel', 'chat', 'timeline', 'context', 'preview', 'attention'] as const };
+    const expected = ['panel', 'timeline', 'chat', 'context', 'preview', 'attention'];
+    // ACT
+    const start = createState(preset);
+    const next = reduce(start, { type: 'REORDER', part: 'chat', before: 'timeline' }, { ...CONTEXT, preset });
+    // ASSERT
+    expect(start.order).toEqual(preset.order);
+    expect(next.order).toEqual(expected);
+  });
+
+  it('moves a part forwards and backwards over the parts between', () => {
+    // ARRANGE
+    const order = PRESET.order;
+    // ACT
+    const back = moveTo(order, 'attention', 'chat');
+    const forward = moveTo(order, 'chat', 'attention');
+    // ASSERT
+    expect(back).toEqual(['attention', 'chat', 'timeline', 'context', 'preview', 'panel']);
+    expect(forward).toEqual(['timeline', 'context', 'preview', 'panel', 'attention', 'chat']);
+  });
+
+  it('keeps the same array when a part is dropped on itself', () => {
+    // ARRANGE
+    const order = PRESET.order;
+    // ACT
+    const same = moveTo(order, 'chat', 'chat');
+    // ASSERT
+    expect(same).toBe(order);
+  });
 });
 
 describe('failure cases', () => {
+  it('ignores a reorder when the Preset sets parts.reorder to false, and names why', () => {
+    // ARRANGE
+    const preset = { ...REORDERING, controls: { parts: { show: true, reorder: false } } };
+    const state = createState(preset);
+    const event = { type: 'REORDER', part: 'chat', before: 'attention' } as const;
+    // ACT
+    const next = reduce(state, event, { ...CONTEXT, preset });
+    const why = blockedBy(preset, event);
+    // ASSERT
+    expect(next).toBe(state);
+    expect(why).toBe('reorder off');
+  });
+
+  it('ignores a reorder on a Preset that hides the parts chips', () => {
+    // ARRANGE
+    const state = createState(PRESET);
+    const event = { type: 'REORDER', part: 'chat', before: 'attention' } as const;
+    // ACT
+    const next = reduce(state, event, CONTEXT);
+    // ASSERT
+    expect(next).toBe(state);
+  });
+
   it("ignores a part's own renderMode on a Preset that hides the control", () => {
     // ARRANGE
     const state = createState(PRESET);

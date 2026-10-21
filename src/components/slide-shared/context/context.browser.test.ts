@@ -510,6 +510,67 @@ describe('success cases', () => {
     },
     TIMEOUT,
   );
+  describe('reordering the parts', () => {
+    it(
+      'moves a dragged chip to the place it is dropped on, without toggling the part',
+      async () => {
+        // ARRANGE
+        await open('light');
+        const before = await orderOf();
+        const pressed = () => attr('slide-7', `[data-chip="chat"]`, 'aria-pressed');
+        // ACT
+        await dragChip('chat', 'panel');
+        const after = await orderOf();
+        // ASSERT
+        expect(before.chips.at(0)).toBe('chat');
+        expect(after.chips.indexOf('chat')).toBe(before.chips.indexOf('panel'));
+        expect(after.chips.at(0)).toBe('timeline');
+        expect(await pressed()).toBe('true');
+        expect(after.cells.at(-1)).toBe(before.cells[0]);
+      },
+      TIMEOUT,
+    );
+
+    it(
+      'moves the part nodes without remounting them, and keeps the chat scrolled where it was',
+      async () => {
+        // ARRANGE
+        await open('light');
+        const cells = ['cell-0', 'cell-1', 'cell-2', 'cell-3'];
+        const scrolled = await evaluate<number>(
+          send,
+          `(() => {
+          const box = document.querySelector('${SLIDE_7} [data-chat-scroll]');
+          box.scrollTo({ top: 0, behavior: 'instant' });
+          box.scrollTo({ top: 120, behavior: 'instant' });
+          const main = box.closest('section').parentElement;
+          [...main.children].forEach((el, i) => { el.__mark = 'cell-' + i; });
+          return box.scrollTop;
+        })()`,
+        );
+        // ACT
+        await dragChip('chat', 'panel');
+        const found = await evaluate<{ marks: string[]; scroll: number; running: number }>(
+          send,
+          `(() => {
+          const box = document.querySelector('${SLIDE_7} [data-chat-scroll]');
+          const main = box.closest('section').parentElement;
+          return {
+            marks: [...main.children].map((el) => el.__mark ?? 'new'),
+            scroll: box.scrollTop,
+            running: document.querySelector('${SLIDE_7}').getAnimations({ subtree: true }).filter((a) => a.playState === 'running').length,
+          };
+        })()`,
+        );
+        // ASSERT
+        expect(scrolled).toBeGreaterThan(0);
+        expect(found.marks.sort()).toEqual(cells);
+        expect(found.scroll).toBe(scrolled);
+        expect(found.running).toBe(0);
+      },
+      TIMEOUT,
+    );
+  });
 });
 
 describe('failure cases', () => {
@@ -695,3 +756,50 @@ describe('edge cases', () => {
     );
   });
 });
+
+const SLIDE_7 = '[data-cornerstone="slide-7"]';
+const CHIPS = `${SLIDE_7} [data-chip]`;
+
+/** The part chips' ids in toolbar order, and the grid's children in DOM order (a part's own root class names it). */
+const orderOf = () =>
+  evaluate<{ chips: string[]; cells: string[] }>(
+    send,
+    `(() => {
+      const root = document.querySelector('${SLIDE_7}');
+      const main = root.querySelector('[data-chat-scroll]').closest('section').parentElement;
+      return {
+        chips: [...root.querySelectorAll('[data-chip]')].map((el) => el.dataset.chip),
+        cells: [...main.children].map((el) => el.getAttribute('data-part-cell') ?? el.className.split(' ')[0]),
+      };
+    })()`,
+  );
+
+/** Presses a chip, drags it past the middle of another chip and releases there, as a mouse does. */
+async function dragChip(from: string, onto: string) {
+  const start = await centreOf(`${CHIPS}[data-chip="${from}"]`);
+  const end = await evaluate<{ x: number; y: number }>(
+    send,
+    `(() => {
+      const r = document.querySelector('${CHIPS}[data-chip="${onto}"]').getBoundingClientRect();
+      return { x: r.right - 4, y: r.top + r.height / 2 };
+    })()`,
+  );
+  await mouseTo(start.x, start.y);
+  await send('Input.dispatchMouseEvent', { type: 'mousePressed', ...start, button: 'left', buttons: 1, clickCount: 1 });
+  const steps = 12;
+  for (let i = 1; i <= steps; i++) {
+    const x = start.x + ((end.x - start.x) * i) / steps;
+    const y = start.y + ((end.y - start.y) * i) / steps;
+    await send('Input.dispatchMouseEvent', {
+      type: 'mouseMoved',
+      x,
+      y,
+      button: 'left',
+      buttons: 1,
+      pointerType: 'mouse',
+    });
+    await delay(20);
+  }
+  await send('Input.dispatchMouseEvent', { type: 'mouseReleased', ...end, button: 'left', clickCount: 1 });
+  await delay(200);
+}

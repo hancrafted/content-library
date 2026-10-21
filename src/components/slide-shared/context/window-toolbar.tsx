@@ -1,11 +1,11 @@
 import type { ChangeEvent } from 'react';
 import { toClaudeLog } from './claude-log-writer.pure';
 import { CONTROLS, controlOf, type ControlDef } from './context-controls.pure';
-import { PARTS } from './context-state.pure';
 import type { ContextWords } from './context-words.types';
 import styles from './context.module.css';
 import type { Chat, Part, Preset } from './context.types';
 import { ControlIcon, IconButton } from './control-icons';
+import { useChipDrag } from './window-chip-drag';
 
 /* The one toolbar: the controls the registry places there, in registry order: parts, Technical, collapse, the log. */
 
@@ -15,25 +15,41 @@ export interface ToolbarProps {
   readonly preset: Preset;
   readonly chat: Chat;
   readonly parts: Readonly<Record<Part, boolean>>;
+  /** The parts in the order the chips list them. */
+  readonly order: readonly Part[];
   /** The global renderMode is Technical: what the toolbar's Technical last set for every part. */
   readonly technical: boolean;
   readonly chatCollapsed: boolean;
   readonly onPart: (part: Part) => void;
+  /** A chip was dragged past another: the part takes that one's place. */
+  readonly onReorder: (part: Part, before: Part) => void;
   readonly onTechnical: (on: boolean) => void;
   readonly onCollapse: () => void;
   readonly onOpen: (text: string) => void;
 }
 
 function ShowGroup({ v }: { readonly v: ToolbarProps }) {
+  const reorder = controlOf(v.preset, 'parts').reorder !== false;
+  const drag = useChipDrag({ enabled: reorder, order: v.order, onMove: v.onReorder });
   return (
-    <div className={styles.show} role="group" aria-label={v.words.showParts}>
-      {PARTS.map((part) => (
+    <div
+      className={styles.show}
+      role="group"
+      aria-label={v.words.showParts}
+      data-reorder={reorder ? '' : undefined}
+      data-dragging={drag.dragging ?? undefined}
+      onClickCapture={drag.onClickCapture}
+    >
+      {v.order.map((part) => (
         <button
           key={part}
           type="button"
+          data-chip={part}
+          data-lifted={drag.dragging === part ? '' : undefined}
           aria-pressed={v.parts[part]}
           className={v.parts[part] ? 'font-semibold' : undefined}
           onClick={() => v.onPart(part)}
+          onPointerDown={drag.onPointerDown(part)}
         >
           {v.words.parts[part]}
         </button>

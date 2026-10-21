@@ -206,7 +206,7 @@ function Column(props: ConversationProps & { readonly say: Say }) {
             <b className="font-semibold">{say.words.appTitle}</b>
           )}
         </div>
-        <div ref={scroll} className={styles.scroll} onKeyDown={pressKey}>
+        <div ref={scroll} className={styles.scroll} data-chat-scroll="" onKeyDown={pressKey}>
           <Bubbles {...props} />
         </div>
       </div>

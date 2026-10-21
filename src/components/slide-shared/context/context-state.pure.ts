@@ -18,6 +18,8 @@ export interface ViewState {
   /** A part's own renderMode, set after the global one; the latest action wins. */
   readonly renderModes: Readonly<Partial<Record<PartId, RenderMode>>>;
   readonly parts: Readonly<Record<Part, boolean>>;
+  /** The parts in the order the toolbar's chips and the grid list them; the reader reorders it, a reload resets it. */
+  readonly order: readonly Part[];
   readonly chatCollapsed: boolean;
   /** The smart-zone side column and the limit label are shown; the dashed lines stay either way. */
   readonly zone: boolean;
@@ -40,6 +42,7 @@ export type ViewEvent =
   | { readonly type: 'SET_WINDOW'; readonly value: number }
   | { readonly type: 'TOGGLE_CHAT' }
   | { readonly type: 'TOGGLE_PART'; readonly part: Part }
+  | { readonly type: 'REORDER'; readonly part: Part; readonly before: Part }
   | { readonly type: 'TOGGLE_ZONE' };
 
 export function createState(preset: Preset): ViewState {
@@ -51,6 +54,7 @@ export function createState(preset: Preset): ViewState {
     depth: preset.depth,
     renderModes: {},
     parts: { ...preset.show },
+    order: [...preset.order],
     chatCollapsed: false,
     zone: controlOf(preset, 'zone').on ?? true,
     window: 0,
@@ -63,6 +67,7 @@ const isTimeline = (event: ViewEvent) => event.type === 'PREVIEW' || event.type 
 /** Why an event does nothing under a Preset, or null when it is allowed. Lighting is never locked. */
 export function blockedBy(preset: Preset, event: ViewEvent): string | null {
   if (isTimeline(event) && preset.timelineLocked) return 'timeline locked';
+  if (event.type === 'REORDER' && controlOf(preset, 'parts').reorder === false) return 'reorder off';
   const id = controlFor(event);
   return id && !id.some((control) => offers(preset, control)) ? `control "${id[0]}" hidden` : null;
 }
@@ -80,7 +85,18 @@ function controlFor(event: ViewEvent): readonly ControlId[] | null {
   if (event.type === 'SET_PART_MODE') return [event.part === 'context-window' ? 'windowTechnical' : 'technical'];
   // The head's eye also toggles the preview part.
   if (event.type === 'TOGGLE_PART' && event.part === 'preview') return ['parts', 'preview'];
+  if (event.type === 'REORDER') return ['parts'];
   return CONTROL_FOR[event.type] ?? null;
+}
+
+/** The order with one part moved to the slot of another: it takes that slot and the ones between shift by one. */
+export function moveTo(order: readonly Part[], part: Part, target: Part): readonly Part[] {
+  const from = order.indexOf(part);
+  const to = order.indexOf(target);
+  if (from < 0 || to < 0 || from === to) return order;
+  const next = order.filter((p) => p !== part);
+  next.splice(to, 0, part);
+  return next;
 }
 
 const clamp = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, n));
@@ -113,6 +129,10 @@ const HANDLERS: Handlers = {
   SET_WINDOW: (s, e, c) => ({ ...s, window: clamp(e.value, 0, c.preset.windows.length - 1) }),
   TOGGLE_CHAT: (s) => ({ ...s, hintSeen: true, chatCollapsed: !s.chatCollapsed }),
   TOGGLE_PART: (s, e) => ({ ...s, hintSeen: true, parts: { ...s.parts, [e.part]: !s.parts[e.part] } }),
+  REORDER: (s, e) => {
+    const order = moveTo(s.order, e.part, e.before);
+    return order === s.order ? s : { ...s, hintSeen: true, order };
+  },
   TOGGLE_ZONE: (s) => ({ ...s, hintSeen: true, zone: !s.zone }),
 };
 
