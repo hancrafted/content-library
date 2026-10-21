@@ -286,10 +286,6 @@
   margin-bottom: 0.4rem;
   color: var(--cs-sub);
 }
-.head > b {
-  color: var(--foreground);
-  white-space: nowrap;
-}
 
 .surface {
   border: 1px solid var(--cs-border);
@@ -746,13 +742,46 @@
 
 /* ── Context view: a fixed-height bar beside the usage list ── */
 .ctx {
+  /* The bar, then the smart-zone labels when shown, then the preview when shown. */
+  --ctx-cols: 3rem 5.5rem 1fr;
   grid-area: ctx;
   display: flex;
   flex-direction: column;
   min-height: 0;
 }
-.root[data-meter='hidden'] .meterValue {
-  visibility: hidden;
+.title {
+  color: var(--foreground);
+  white-space: nowrap;
+}
+.meterValue {
+  color: var(--cs-sub);
+}
+.headEnd {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.25rem 0.5rem;
+}
+.meterOf {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  white-space: nowrap;
+}
+.headEnd .icon {
+  width: 2rem;
+  height: 2rem;
+}
+/* The head sits at the column's right edge: its tips open leftwards from the icon's edge. */
+.headEnd .icon[data-tip]::after {
+  left: auto;
+  right: 0;
+  translate: none;
+}
+/* The bar or grid keeps its lighting handlers on a wrapper that adds no box of its own. */
+.own {
+  display: contents;
 }
 .windows {
   display: inline-flex;
@@ -775,11 +804,20 @@
   color: var(--foreground);
   box-shadow: 0 1px 3px color-mix(in oklch, var(--foreground) 14%, transparent);
 }
+.ctx[data-zone='off'] {
+  --ctx-cols: 6rem 1fr;
+}
+.ctx[data-preview='off'] {
+  --ctx-cols: 3rem 5.5rem;
+}
+.ctx[data-zone='off'][data-preview='off'] {
+  --ctx-cols: 6rem;
+}
 .ctxbody {
   flex: 1;
   min-height: 0;
   display: grid;
-  grid-template-columns: 3rem 5.5rem 1fr;
+  grid-template-columns: var(--ctx-cols);
   gap: 0.4rem;
   position: relative;
 }

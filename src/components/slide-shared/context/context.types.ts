@@ -4,6 +4,8 @@
  * context-preset.config.yml. A Preset is one Slide's state of the cornerstone.
  */
 
+import type { ControlMap } from './context-controls.pure';
+
 /** A part of the context window, named as Claude Code's `/context` names it. */
 export type Category =
   | 'sysprompt'
@@ -107,8 +109,7 @@ export type Depth = 'simple' | 'technical';
 export type RenderMode = Depth;
 /** A part of the Context, as renderMode names it. */
 export type PartId = 'conversation' | 'timeline' | 'context-window' | 'context-preview' | 'details' | 'attention';
-export type Part = 'chat' | 'timeline' | 'context' | 'panel' | 'attention';
-export type Control = 'show' | 'depth' | 'collapse' | 'meter';
+export type Part = 'chat' | 'timeline' | 'context' | 'preview' | 'panel' | 'attention';
 /** How the Attention part lays out its rows: a scrolling list, the first and last three pinned, or one bar per share. */
 export type AttentionLayout = 'list' | 'pinned' | 'compressed';
 export type Motion = 'off' | 'crisp' | 'rise' | 'spring';
@@ -142,22 +143,15 @@ export interface Preset {
   /** The part lit at rest: a step id, a block (`m8@tool_result`), a category (`cat:`, `scat:`) or `group:messages`. */
   readonly pinned: string | null;
   readonly show: Readonly<Record<Part, boolean>>;
+  /** What the controls do: id -> overrides over the registry's defaults (context-controls.pure.ts). */
+  readonly controls: ControlMap;
   /** The chat dims each message by its attention, as the Attention part does; on whenever that part is shown. */
   readonly fade: boolean;
   /** The Attention part's own settings, separate from renderMode so the toolbar's Technical never undoes them. */
   readonly attention: { readonly layout: AttentionLayout };
-  readonly controls: readonly Control[];
-  readonly controlsHidden: boolean;
   readonly timelineLocked: boolean;
-  readonly meterHidden: boolean;
-  /** A toolbar button that saves the chat as a Claude Code log. On by default. */
-  readonly download: boolean;
-  /** A toolbar button that opens a Claude Code log in place of the chat. Off by default. */
-  readonly upload: boolean;
   /** The window sizes, the first one shown at rest. */
   readonly windows: readonly WindowSize[];
-  /** The 200K | 1M switch between the window sizes, in the context's head. Off by default; it needs two sizes. */
-  readonly windowSwitch: boolean;
   readonly motion: Motion;
   /** The height of the main row in rem on a wide container. 38 by default; a Slide short of room sets less. */
   readonly height: number;

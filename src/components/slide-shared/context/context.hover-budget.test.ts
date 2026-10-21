@@ -54,11 +54,20 @@ const harness = (renderMode: RenderMode) => {
         sizes: preset.windows,
         sizeIndex: 0,
         switchable: false,
+        zone: true,
+        toggles: [],
         onSize: noop,
         stepOf,
       }),
     preview: (lit: string | null) =>
-      createElement(ContextPreview, { ...speech, ...light(lit), frame, window, present: categoriesOf(chat) }),
+      createElement(ContextPreview, {
+        ...speech,
+        ...light(lit),
+        ...events,
+        frame,
+        window,
+        present: categoriesOf(chat),
+      }),
     attention: (lit: string | null) =>
       createElement(Attention, {
         ...speech,

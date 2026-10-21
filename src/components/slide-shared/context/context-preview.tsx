@@ -7,10 +7,12 @@ import { k, type Say } from './context-view';
 import styles from './context.module.css';
 import { colourOf, simpleOf } from './context.pure';
 import type { Category } from './context.types';
+import { useLighting } from './use-lighting';
 import { useSay } from './use-say';
 import { Glyph, tint } from './window-bits';
 
-/* The context preview ("What fills the window"): usage by category, one row per category. */
+/* The context preview ("What fills the window"): usage by category, one row per category. Its own part: it lights
+ * and pins through its own callbacks, whether the parent places it beside the window or elsewhere. */
 
 function rowLabel(say: Say, row: UsageRow): string {
   if (row.kind === 'cat') return say.words.categories[row.cat];
@@ -77,6 +79,7 @@ const Row = memo(function Row({ say, row, windowTokens, on, pressed }: RowProps)
 export function ContextPreview(props: ContextPreviewProps) {
   const { frame, window, present, lit, pinned } = props;
   const say = useSay(props);
+  const handlers = useLighting(props);
   const depth = say.tech ? 'technical' : 'simple';
   const rows = useMemo(() => usageRows(frame, depth, { window, present }), [frame, depth, window, present]);
   const match = useMemo(() => matcher(lit), [lit]);
@@ -85,7 +88,7 @@ export function ContextPreview(props: ContextPreviewProps) {
     [frame, match],
   );
   return (
-    <div className={styles.usage} role="group" aria-label={say.words.usage} data-depth={depth}>
+    <div className={styles.usage} role="group" aria-label={say.words.usage} data-depth={depth} {...handlers}>
       <div className={styles.usageTitle}>{say.words.usageTitle[depth]}</div>
       {rows.map((row, i) => (
         <Row

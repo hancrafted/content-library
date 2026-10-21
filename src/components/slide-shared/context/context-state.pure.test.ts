@@ -25,23 +25,18 @@ const PRESET: Preset = {
   step: 3,
   depth: 'simple',
   pinned: null,
-  show: { chat: true, timeline: true, context: true, panel: false, attention: false },
+  show: { chat: true, timeline: true, context: true, preview: true, panel: false, attention: false },
   fade: false,
   attention: { layout: 'list' },
-  controls: ['show'],
-  controlsHidden: false,
+  controls: { '*': { show: false }, window: { show: true } },
   timelineLocked: false,
-  meterHidden: false,
-  download: true,
-  upload: false,
-  windowSwitch: true,
   windows: [WINDOW, { tokens: 1000000, bufferTokens: 33000, lines: [] }],
   motion: 'rise',
   height: 38,
 };
 const CONTEXT = { preset: PRESET, steps: CHAT.steps.length };
 
-const WITH_MODES = { ...PRESET, controls: ['show', 'depth'] as const };
+const WITH_MODES = { ...PRESET, controls: { '*': { show: false }, window: { show: true }, technical: { show: true } } };
 const MODES = { preset: WITH_MODES, steps: CHAT.steps.length };
 
 const view = (lit: string | null) => ({
@@ -93,10 +88,10 @@ describe('failure cases', () => {
 
   it('keeps the window size on a Preset without the window switch, and names why', () => {
     // ARRANGE
-    const preset = { ...PRESET, windowSwitch: false };
+    const preset = { ...PRESET, controls: { '*': { show: false } } };
     const state = createState(preset);
     const event = { type: 'SET_WINDOW', value: 1 } as const;
-    const expected = 'no window switch';
+    const expected = 'control "window" hidden';
     // ACT
     const next = reduce(state, event, { ...CONTEXT, preset });
     const why = blockedBy(preset, event);
@@ -109,7 +104,7 @@ describe('failure cases', () => {
     // ARRANGE
     const state = createState(PRESET);
     const event = { type: 'SET_DEPTH', value: 'technical' } as const;
-    const expected = 'control "depth" hidden';
+    const expected = 'control "technical" hidden';
     // ACT
     const next = reduce(state, event, CONTEXT);
     const why = blockedBy(PRESET, event);

@@ -1,10 +1,11 @@
 import { memo, useMemo, useRef } from 'react';
 import { BarBuffer, BarLines } from './context-bar-view';
-import { fullTokens, percentText } from './context-format.pure';
+import { fullTokens } from './context-format.pure';
 import type { ContextWindowProps } from './context-parts.types';
 import { matcher } from './context-state.pure';
 import { catLabel, fill, k, type Say } from './context-view';
 import { Grid } from './context-window-grid';
+import { ContextWindowHead } from './context-window-head';
 import { Lens, Loupe, useLoupe } from './context-window-loupe';
 import { rove } from './context-window-rove';
 import styles from './context.module.css';
@@ -27,34 +28,6 @@ function firstPlaces(frames: readonly Frame[]): ReadonlyMap<string, PlacedBlock>
 interface Part {
   readonly p: ContextWindowProps;
   readonly say: Say;
-}
-
-function Meter({ p, say }: Part) {
-  const percent = percentText((p.frame.used / p.window.tokens) * 100, say.locale);
-  const [before, after] = fill(say.words.meterValue, {
-    used: k(say, p.frame.used),
-    window: k(say, p.window.tokens),
-  }).split('{percent}');
-  return (
-    <span className={styles.meterValue}>
-      {before}
-      <b className="text-body font-semibold">{percent}</b>
-      {after}
-    </span>
-  );
-}
-
-function WindowSwitch({ p, say }: Part) {
-  if (!p.switchable) return null;
-  return (
-    <div className={styles.windows} role="group" aria-label={say.words.windowGroup}>
-      {p.sizes.map((size, i) => (
-        <button key={size.tokens} type="button" aria-pressed={p.sizeIndex === i} onClick={() => p.onSize(i)}>
-          {k(say, size.tokens).toUpperCase()}
-        </button>
-      ))}
-    </div>
-  );
 }
 
 const pct = (tokens: number, windowTokens: number) => (tokens / windowTokens) * 100;
@@ -206,7 +179,7 @@ function Bar({ p, say }: Part) {
       >
         <BarLayers p={p} say={say} hot={hot} at={loupe.at} />
       </div>
-      <Labels p={p} say={say} />
+      {p.zone ? <Labels p={p} say={say} /> : null}
       {loupe.at === null ? null : (
         <Loupe p={p} say={say} at={loupe.at} bar={bar} onEnter={loupe.stay} onLeave={loupe.leave} />
       )}
@@ -222,15 +195,15 @@ export function ContextWindow(p: ContextWindowProps) {
       className={styles.ctx}
       aria-label={say.words.contextWindow}
       data-view={say.tech ? 'grid' : 'bar'}
-      {...handlers}
+      data-zone={p.zone ? 'on' : 'off'}
+      data-preview={p.children ? 'on' : 'off'}
     >
-      <div className={styles.head}>
-        <b className="font-semibold">{say.words.contextWindow}</b>
-        <WindowSwitch p={p} say={say} />
-        <Meter p={p} say={say} />
-      </div>
+      <ContextWindowHead p={p} say={say} />
       <div className={styles.ctxbody}>
-        {say.tech ? <Grid p={p} say={say} onKeyDown={rove} /> : <Bar p={p} say={say} />}
+        {/* Lighting covers the bar or grid only: the preview beside it is a part with its own handlers. */}
+        <div className={styles.own} {...handlers}>
+          {say.tech ? <Grid p={p} say={say} onKeyDown={rove} /> : <Bar p={p} say={say} />}
+        </div>
         {p.children}
       </div>
     </section>
