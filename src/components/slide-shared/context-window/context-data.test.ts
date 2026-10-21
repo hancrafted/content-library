@@ -69,6 +69,21 @@ describe('success cases', () => {
     expect(switching).toEqual(expected);
   });
 
+  it('draws the three Slide 9 stills without motion, since the Spec overrules their motion to none', () => {
+    // ARRANGE
+    const expected = [
+      ['slide-9-before', 'off'],
+      ['slide-9-chat', 'off'],
+      ['slide-9-after', 'off'],
+    ];
+    // ACT
+    const motions = Object.values(contextData('en').presets)
+      .filter((preset) => preset.id.startsWith('slide-9-'))
+      .map((preset) => [preset.id, preset.motion]);
+    // ASSERT
+    expect(motions).toEqual(expected);
+  });
+
   it('names every Preset of the config, and builds each in both locales', () => {
     // ARRANGE
     const expected = { presets: [...CONTEXT_PRESETS].sort(), minis: [...MINI_PRESETS].sort() };
