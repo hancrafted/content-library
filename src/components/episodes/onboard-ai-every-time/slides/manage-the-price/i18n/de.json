@@ -1,9 +1,9 @@
 {
-  "title": "So steuerst Du den PRICE",
+  "title": "Fünf Schritte gegen fünf Eigenschaften",
   "heading": "Fünf Schritte, um einen Freelancer mit Amnesie zu briefen",
-  "caption": "Fünf Eigenschaften kosten Dich den PRICE. Fünf Schritte machen daraus ein BRIEF.",
+  "caption": "Fünf Eigenschaften kosten Dich. Fünf Schritte halten sie im Griff.",
   "tableLabel": "Welcher Schritt welcher Eigenschaft entgegenwirkt",
-  "corner": "<acronym>BRIEF</acronym> gegen <acronym>PRICE</acronym>",
+  "corner": "Schritte gegen Eigenschaften",
   "tick": "wirkt entgegen",
   "footLabel": "Schritte, die jeder Eigenschaft entgegenwirken",
   "movesCount": "<figure>{count}</figure> {count, plural, one {Schritt} other {Schritte}}",

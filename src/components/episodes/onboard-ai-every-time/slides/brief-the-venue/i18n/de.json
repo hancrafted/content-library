@@ -1,6 +1,6 @@
 {
   "title": "Die Location briefen",
-  "caption": "Plane die Sommerfeier für 200 Leute aus ganz Europa: <b>ein frischer Chat pro Aufgabe</b>, und zwei Prüfpunkte, bevor Deine Chefin einen Plan sieht.",
+  "caption": "Plane das nächste Sommerfest Deiner Firma: 200 Mitarbeitende an fünf Standorten in Europa. <b>Ein frischer Chat pro Aufgabe</b>, und zwei Prüfpunkte, bevor Deine Chefin einen Plan sieht.",
   "pipelineLabel": "Die Pipeline zur Location, Stufe für Stufe",
   "jobsLabel": "{stage}: Aufgaben",
   "popover": {
@@ -9,7 +9,7 @@
   },
   "stages": {
     "party": {
-      "name": "Sommerfeier",
+      "name": "Sommerfest",
       "move": "Break it down",
       "popover": {
         "in": "die ganze Feier.",
@@ -114,7 +114,7 @@
     "recommended": "Empfehlung:",
     "newTab": "(öffnet in neuem Tab)",
     "replies": {
-      "start": "Plane unsere Sommerfeier: 200 Leute aus fünf Büros in ganz Europa, etwa 150 Euro pro Kopf, zwei Rollstuhlfahrer, ein paar Vegetarier.",
+      "start": "Plane das nächste Sommerfest unserer Firma: 200 Mitarbeitende an fünf Standorten in Europa, etwa 150 Euro pro Kopf, zwei Rollstuhlfahrer, ein paar Vegetarier.",
       "a1": "A.",
       "reframe": "Das verstehe ich nicht. Kannst Du es mit einem Vergleich erklären?",
       "a2": "A, eine lange Tafel.",
@@ -200,7 +200,7 @@
       "restate": {
         "title": "Die Aufgabe",
         "keywords": "",
-        "script": "Die Aufgabe: Plane die Sommerfeier für 200 Leute aus ganz Europa. Würdest Du die KI um all das in einem einzigen Prompt bitten, bekämst Du seitenweise geschliffene, selbstsichere Antworten, und Du könntest fast keiner davon trauen."
+        "script": "Die Aufgabe: Plane das nächste Sommerfest Deiner Firma, 200 Mitarbeitende an fünf Standorten in Europa. Würdest Du die KI um all das in einem einzigen Prompt bitten, bekämst Du seitenweise geschliffene, selbstsichere Antworten, und Du könntest fast keiner davon trauen."
       },
       "break-it-down": {
         "title": "Zerlegen",
@@ -230,7 +230,7 @@
       "recommendation-and-on": {
         "title": "Empfehlung, und weiter",
         "keywords": "",
-        "script": "Heraus kommt der Location-Plan für Deine Chefin, und das Ganze lief mit demselben BRIEF, das Du für jede Aufgabe nutzen würdest. (Pause) Jetzt machen wir es live: Ich zeige Dir, wie sich dieses Interview anfühlt, wenn Du es selbst führst."
+        "script": "Heraus kommt der Location-Plan für Deine Chefin, und das Ganze lief mit demselben Briefing, das Du für jede Aufgabe nutzen würdest. (Pause) Jetzt machen wir es live: Ich zeige Dir, wie sich dieses Interview anfühlt, wenn Du es selbst führst."
       }
     }
   }

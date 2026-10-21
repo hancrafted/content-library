@@ -1,6 +1,6 @@
 {
   "title": "Brief the venue",
-  "caption": "Plan the summer party for 200 people across Europe: <b>one fresh chat per job</b>, and two gates before your boss sees a plan.",
+  "caption": "Plan your company's next summer party: 200 employees across five offices in Europe. <b>One fresh chat per job</b>, and two gates before your boss sees a plan.",
   "pipelineLabel": "The venue pipeline, stage by stage",
   "jobsLabel": "{stage}: jobs",
   "popover": {
@@ -114,7 +114,7 @@
     "recommended": "Recommended:",
     "newTab": "(opens in a new tab)",
     "replies": {
-      "start": "Plan our summer party: 200 people from five offices across Europe, about €150 each, two wheelchair users, some vegetarians.",
+      "start": "Plan our company's next summer party: 200 employees across five offices in Europe, about €150 each, two wheelchair users, some vegetarians.",
       "a1": "A.",
       "reframe": "I don’t understand this. Can you explain it with an analogy?",
       "a2": "A, one long table.",
@@ -200,7 +200,7 @@
       "restate": {
         "title": "Restate",
         "keywords": "",
-        "script": "The task: plan the summer party for 200 people across Europe. If you asked AI for all of that in one prompt, you would get pages of polished and confident answers, and you could trust almost none of them."
+        "script": "The task: plan your company's next summer party, 200 employees across five offices in Europe. If you asked AI for all of that in one prompt, you would get pages of polished and confident answers, and you could trust almost none of them."
       },
       "break-it-down": {
         "title": "Break it down",
@@ -230,7 +230,7 @@
       "recommendation-and-on": {
         "title": "Recommendation, and on",
         "keywords": "",
-        "script": "What comes out is the venue plan for your boss, and the whole thing ran on the same BRIEF you would use for any task. (pause) Now let's do it live: I will show you how that interview feels when you run it yourself."
+        "script": "What comes out is the venue plan for your boss, and the whole thing ran on the same brief you would use for any task. (pause) Now let's do it live: I will show you how that interview feels when you run it yourself."
       }
     }
   }

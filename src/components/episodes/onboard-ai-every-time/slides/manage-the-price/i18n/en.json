@@ -1,9 +1,9 @@
 {
-  "title": "How to manage the PRICE",
+  "title": "Five moves against five traits",
   "heading": "Five moves to brief a freelancer with amnesia",
-  "caption": "Five traits cost you the PRICE. Five moves make it a BRIEF.",
+  "caption": "Five traits cost you. Five moves keep them in check.",
   "tableLabel": "Which move counters which trait",
-  "corner": "<acronym>BRIEF</acronym> counters <acronym>PRICE</acronym>",
+  "corner": "Moves against traits",
   "tick": "counters",
   "footLabel": "Moves that counter each trait",
   "movesCount": "<figure>{count}</figure> {count, plural, one {move} other {moves}}",

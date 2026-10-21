@@ -3,7 +3,7 @@
   "heading": "Ein Prompt, ein polierter Plan",
   "caption": "Er sieht fertig aus. Schau genauer hin.",
   "promptLabel": "Der eine Prompt",
-  "prompt": "Plane das Sommerfest im nächsten Jahr für 200 Mitarbeitende in ganz Europa.",
+  "prompt": "Plane das nächste Sommerfest Deiner Firma: 200 Mitarbeitende an fünf Standorten in Europa.",
   "stackLabel": "12 Dokumente zurück, poliert",
   "traitsLabel": "Was jede Eigenschaft im Plan hinterlassen hat",
   "cracks": {
@@ -39,7 +39,7 @@
       "one-prompt-in": {
         "title": "Ein Prompt rein",
         "keywords": "",
-        "script": "Was passiert also, wenn du ihnen nur einen Prompt gibst: Plane das Sommerfest im nächsten Jahr für 200 Mitarbeitende in ganz Europa? Du bekommst einen Plan. Einen polierten. Schau genauer hin."
+        "script": "Was passiert also, wenn du ihnen nur einen Prompt gibst: Plane das nächste Sommerfest Deiner Firma: 200 Mitarbeitende an fünf Standorten in Europa? Du bekommst einen Plan. Einen polierten. Schau genauer hin."
       },
       "probabilistic": {
         "title": "Probabilistic",

@@ -157,7 +157,7 @@
       "who-gets-the-job": {
         "title": "Wer den Auftrag bekommt",
         "keywords": "",
-        "script": "Also, wem gibst du die Arbeit eigentlich? Keinem Chatbot und keinem Orakel, sondern einer neuen Kraft: einem brillanten Freelancer mit Amnesie, jedes Mal. Er bringt fünf Eigenschaften mit, und die Anfangsbuchstaben ergeben PRICE, denn wenn du sie nicht steuerst, zahlst du. Fürs Erste beschreibe ich nur den Freelancer, einen Menschen, damit du ihn dir vorstellen kannst."
+        "script": "Also, wem gibst du die Arbeit eigentlich? Keinem Chatbot und keinem Orakel, sondern einer neuen Kraft: einem brillanten Freelancer mit Amnesie, jedes Mal. Er bringt fünf Eigenschaften mit, und wenn du sie nicht steuerst, zahlst du dafür. Fürs Erste beschreibe ich nur den Freelancer, einen Menschen, damit du ihn dir vorstellen kannst."
       },
       "probabilistic-relentless": {
         "title": "Probabilistic, Relentless",
@@ -187,7 +187,7 @@
       "the-pun": {
         "title": "Die Pointe",
         "keywords": "",
-        "script": "Hier ist die ganze Folie in einem Satz. Vergiss den PRICE, und du zahlst ihn jedes Mal."
+        "script": "Hier ist die ganze Folie in einem Satz. Vergiss den Preis, und du zahlst ihn jedes Mal."
       }
     }
   }
