@@ -5,12 +5,11 @@ import { columns } from './context-columns.pure';
 import { CONTROLS, offers, type Flips, type ModePart } from './context-controls.pure';
 import type { Flip, HeadToggle } from './context-parts.types';
 import { attentionMenu, menuOffer, renderModeOf, type ViewEvent, type ViewState } from './context-state.pure';
-import type { Attention } from './context-usage.pure';
+import type { StepView } from './context-step.pure';
 import type { ContextViewData } from './context-view';
 import { ContextWindow } from './context-window';
 import styles from './context.module.css';
-import type { Frame } from './context.pure';
-import type { Category, Chat, Part, PartId, WindowSize } from './context.types';
+import type { Chat, Part, PartId } from './context.types';
 import { Conversation } from './conversation';
 import { Details } from './details';
 import { Timeline } from './timeline';
@@ -20,28 +19,18 @@ import { Toolbar } from './window-toolbar';
 
 /* The parent's side of the parts: each one is handed its own slice of the Model and the callbacks that send events up. */
 
-/** What the parent derives from its state and the chat: each part is handed its slice of this, never all of it. */
+/** The parent's inputs and the step view derived from them: each part is handed its slice, never all of it. */
 export interface Model {
   readonly data: ContextViewData;
   readonly chat: Chat;
   readonly state: ViewState;
   readonly dispatch: Dispatch<ViewEvent>;
-  readonly frames: readonly Frame[];
-  readonly present: ReadonlySet<Category>;
-  readonly stepOf: ReadonlyMap<string, number>;
-  /** The step on screen: the preview while scrubbing, else the committed one. */
-  readonly vis: number;
-  readonly frame: Frame;
-  readonly window: WindowSize;
-  readonly attention: readonly Attention[];
-  readonly overridden: boolean; // an explicit split is in force: the curve's sliders would change nothing
-  readonly lit: string | null;
-  readonly ghost: string | null;
+  readonly view: StepView;
 }
 
 /** What every part reads of the lit key, and the callbacks it reports lighting through. */
 function lightingOf(m: Model) {
-  return { lit: m.lit, ghost: m.ghost, pinned: m.state.pinned };
+  return { lit: m.view.lit, ghost: m.view.ghost, pinned: m.state.pinned };
 }
 
 function speechOf(m: Model) {
@@ -62,9 +51,9 @@ function ConversationPart({ m, events }: PartProps) {
       {...speechOf(m)}
       renderMode={renderModeOf(state, 'conversation')}
       chat={m.chat}
-      frames={m.frames}
-      vis={m.vis}
-      attention={m.attention}
+      vis={m.view.vis}
+      attention={m.view.attention}
+      gone={m.view.gone}
       notes={data.notes}
       hint={!data.preset.timelineLocked && state.parts.timeline}
       hintSeen={state.hintSeen}
@@ -130,9 +119,9 @@ function ContextCategoryPart({ m, events }: PartProps) {
       {...lightingOf(m)}
       {...speechOf(m)}
       renderMode={renderModeOf(m.state, 'category')}
-      frame={m.frame}
-      window={m.window}
-      present={m.present}
+      frame={m.view.frame}
+      window={m.view.window}
+      present={m.view.present}
       toggles={headToggles(m, 'category')}
       onLight={events.onLight}
       onPin={events.onPin}
@@ -148,16 +137,16 @@ function ContextWindowPart({ m, events }: PartProps) {
       {...lightingOf(m)}
       {...speechOf(m)}
       renderMode={renderModeOf(state, 'context-window')}
-      frames={m.frames}
-      frame={m.frame}
-      window={m.window}
+      frames={m.view.frames}
+      frame={m.view.frame}
+      window={m.view.window}
       sizes={sizes}
       sizeIndex={state.window}
       switchable={sizes.length > 1 && offers(m.data.preset, 'window')}
       meter={offers(m.data.preset, 'meter')}
       zone={state.zone}
       toggles={headToggles(m, 'context-window')}
-      stepOf={m.stepOf}
+      stepOf={m.view.stepOf}
       onSize={(value) => dispatch({ type: 'SET_WINDOW', value })}
       onLight={events.onLight}
       onPin={events.onPin}
@@ -173,11 +162,12 @@ function DetailsPart({ m, events }: PartProps) {
       {...speechOf(m)}
       renderMode={renderModeOf(state, 'details')}
       chat={m.chat}
-      frames={m.frames}
-      vis={m.vis}
-      frame={m.frame}
-      window={m.window}
-      stepOf={m.stepOf}
+      vis={m.view.vis}
+      gone={m.view.gone}
+      frame={m.view.frame}
+      window={m.view.window}
+      readout={m.view.readout}
+      stepOf={m.view.stepOf}
       onLight={events.onLight}
       onPin={events.onPin}
     />
@@ -192,13 +182,13 @@ function AttentionPart({ m, events }: PartProps) {
       {...speechOf(m)}
       renderMode={renderModeOf(state, 'attention')}
       chat={m.chat}
-      frames={m.frames}
-      vis={m.vis}
-      attention={m.attention}
-      window={m.window}
-      stepOf={m.stepOf}
+      vis={m.view.vis}
+      attention={m.view.attention}
+      gone={m.view.gone}
+      readout={m.view.readout}
+      stepOf={m.view.stepOf}
       layout={state.layout}
-      menu={attentionMenu(state, m.dispatch, menuOffer(offers(data.preset, 'attentionMenu'), m.overridden))}
+      menu={attentionMenu(state, m.dispatch, menuOffer(offers(data.preset, 'attentionMenu'), m.view.overridden))}
       onLight={events.onLight}
       onPin={events.onPin}
       onReveal={events.onReveal}

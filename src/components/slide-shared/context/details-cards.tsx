@@ -4,7 +4,7 @@ import type { Card } from './context-parts.types';
 import type { Readout } from './context-usage.pure';
 import { catLabel, fill, k, stepCat, storyOf } from './context-view';
 import styles from './context.module.css';
-import { colourOf, compactStepOf, goneAt } from './context.pure';
+import { colourOf, compactStepOf } from './context.pure';
 import type { Step } from './context.types';
 import { Rich, tint } from './window-bits';
 
@@ -130,7 +130,7 @@ export function StepCard({
   readonly cat: string | undefined;
 }) {
   const index = v.stepOf.get(step.id) ?? 0;
-  if (goneAt(v.chat, v.frames, { index: index - 1, step: v.vis })) return <GoneCard v={v} step={step} />;
+  if (v.gone.has(index - 1)) return <GoneCard v={v} step={step} />;
   const kicker = fill(v.words.stepKicker, { step: index });
   return (
     <>

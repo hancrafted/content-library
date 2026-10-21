@@ -96,5 +96,4 @@ Cause: no rule for where state lives or who writes it. Fix: class every piece of
 
 ## References
 
-- [`docs/research/url-as-application-state.md`](../../docs/research/url-as-application-state.md) — browser facts behind §2.
 - [MDN `pushState`](https://developer.mozilla.org/en-US/docs/Web/API/History/pushState), [MDN `localStorage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage).

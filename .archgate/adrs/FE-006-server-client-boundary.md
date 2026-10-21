@@ -122,4 +122,3 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 - [React — `'use client'`](https://react.dev/reference/rsc/use-client) — the serializable prop types §4 lists.
 - [eslint-plugin-check-file](https://github.com/dukeluo/eslint-plugin-check-file) and [ESLint — `no-restricted-syntax`](https://eslint.org/docs/latest/rules/no-restricted-syntax).
 - [dependency-cruiser — rules reference](https://github.com/sverweij/dependency-cruiser/blob/main/doc/rules-reference.md) and [`tsPreCompilationDeps`](https://github.com/sverweij/dependency-cruiser/blob/main/doc/options-reference.md#tspre-compilation-deps).
-- [`docs/research/adr-candidates.md`](../../docs/research/adr-candidates.md) §1 — the survey this record was chosen from.

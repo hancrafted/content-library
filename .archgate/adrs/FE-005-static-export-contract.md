@@ -88,4 +88,3 @@ Rejected: a self-hosted Node server (gives up free static hosting for features a
 
 - [Next.js — Static Exports](https://nextjs.org/docs/app/guides/static-exports) — the supported and unsupported lists this record mirrors.
 - [Next.js — `generateStaticParams`](https://nextjs.org/docs/app/api-reference/functions/generate-static-params) and [`dynamicParams`](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/dynamicParams).
-- [`docs/research/adr-candidates.md`](../../docs/research/adr-candidates.md) §1 — the survey this record came from.
