@@ -9,6 +9,7 @@ import { rove } from './context-window-rove';
 import styles from './context.module.css';
 import { colourOf, type Frame, type PlacedBlock } from './context.pure';
 import { loupeRows } from './loupe.pure';
+import { useLighting } from './use-lighting';
 import { useSay } from './use-say';
 import { tint, vars } from './window-bits';
 
@@ -221,8 +222,14 @@ function Bar({ p, say }: Part) {
 
 export function ContextWindow(p: ContextWindowProps) {
   const say = useSay(p);
+  const handlers = useLighting(p);
   return (
-    <section className={styles.ctx} aria-label={say.words.contextWindow} data-view={say.tech ? 'grid' : 'bar'}>
+    <section
+      className={styles.ctx}
+      aria-label={say.words.contextWindow}
+      data-view={say.tech ? 'grid' : 'bar'}
+      {...handlers}
+    >
       <div className={styles.head}>
         <b className="font-semibold">{say.words.contextWindow}</b>
         <WindowSwitch p={p} say={say} />

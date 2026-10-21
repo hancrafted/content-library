@@ -37,6 +37,13 @@ The cornerstone reads the lines of a Claude Code session log (`~/.claude/project
 
 Sizes: each request's context (`input_tokens + cache_read_input_tokens + cache_creation_input_tokens`) is exact; its growth since the last request is shared over the blocks that arrived, by their length, and a reply's `output_tokens` over its parts. A summary is the context after the compaction less the starting instructions and memory. A System reminder is estimated at four characters a token. A log opened in the browser is sized against the chat's own starting instructions.
 
+## Parts and state
+
+- `context.client.tsx` is the one client leaf and the parent. It owns a reducer (`context-state.pure.ts`) and hands each part only its slice and callbacks, never the whole state: `conversation.tsx`, `timeline.tsx`, `context-window.tsx` (Technical in `context-window-grid.tsx`, the zoom in `context-window-loupe.tsx`), `context-preview.tsx` ("What fills the window"), `details.tsx` (Attention still draws inside it until it splits out). `context-slices.tsx` builds each slice; the prop types are in `context-parts.types.ts`.
+- Props down, events up: a part reports a lit key with `onLight(key | null)` and a click with `onPin(key, target)`; `use-lighting.ts` is the wiring each part puts on its own root, and `use-window-events.ts` the parent's side (the callbacks, a click outside that unpins, Escape). `context-preview` has no callbacks of its own: it sits inside `context-window`, whose root reports for it.
+- Hover is brushing and linking. The parent holds the hovered and pinned key; a part turns it into one `on` boolean per item and passes it to a memoised item, so a hover redraws only the items whose `on` flipped. There is no store. `context.hover-budget.test.ts` guards this by rendering each part for two lit keys and counting the items whose markup differs.
+- renderMode (`simple` or `technical`) is one global value plus per-part overrides in the parent's state (`depth` and `renderModes`). The toolbar's Technical sets every part and drops the overrides; `SET_PART_MODE` sets one part. The latest action wins. A part's own look keys on its own `data-depth` or `data-view`, not on the root's.
+
 ## Manual testing criteria
 
 Run on the dev page, in Chrome, light and dark, with the tab in front (a background tab never fires `requestAnimationFrame`).

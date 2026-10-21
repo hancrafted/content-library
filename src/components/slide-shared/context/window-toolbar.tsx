@@ -1,26 +1,44 @@
 import { Code, Download, EyeOff, PanelLeftClose, Upload } from 'lucide-react';
 import type { ChangeEvent, ReactNode } from 'react';
 import { toClaudeLog } from './claude-log-writer.pure';
-import type { ViewEvent } from './context-state.pure';
 import { offers, PARTS } from './context-state.pure';
-import type { View } from './context-view';
+import type { ContextWords } from './context-words.types';
 import styles from './context.module.css';
-import type { Chat, Control, Mode } from './context.types';
+import type { Chat, Control, Mode, Part, Preset } from './context.types';
 
 /* The one toolbar: parts · Technical · Explain/Attention · collapse · meter · the chat as a log. */
 
 const MODES: readonly Mode[] = ['explain', 'attention'];
 
-function ShowGroup({ v }: { readonly v: View }) {
+/** What the toolbar shows and the events it sends up: the parent owns the state. */
+export interface ToolbarProps {
+  readonly words: ContextWords;
+  readonly preset: Preset;
+  readonly chat: Chat;
+  readonly parts: Readonly<Record<Part, boolean>>;
+  readonly mode: Mode;
+  /** The global renderMode is Technical: what the toolbar's Technical last set for every part. */
+  readonly technical: boolean;
+  readonly chatCollapsed: boolean;
+  readonly meterHidden: boolean;
+  readonly onPart: (part: Part) => void;
+  readonly onMode: (mode: Mode) => void;
+  readonly onTechnical: (on: boolean) => void;
+  readonly onCollapse: () => void;
+  readonly onMeter: () => void;
+  readonly onOpen: (text: string) => void;
+}
+
+function ShowGroup({ v }: { readonly v: ToolbarProps }) {
   return (
     <div className={styles.show} role="group" aria-label={v.words.showParts}>
       {PARTS.map((part) => (
         <button
           key={part}
           type="button"
-          aria-pressed={v.state.parts[part]}
-          className={v.state.parts[part] ? 'font-semibold' : undefined}
-          onClick={() => v.dispatch({ type: 'TOGGLE_PART', part })}
+          aria-pressed={v.parts[part]}
+          className={v.parts[part] ? 'font-semibold' : undefined}
+          onClick={() => v.onPart(part)}
         >
           {v.words.parts[part]}
         </button>
@@ -29,17 +47,17 @@ function ShowGroup({ v }: { readonly v: View }) {
   );
 }
 
-function ModeSwitch({ v }: { readonly v: View }) {
-  const index = MODES.indexOf(v.state.mode);
+function ModeSwitch({ v }: { readonly v: ToolbarProps }) {
+  const index = MODES.indexOf(v.mode);
   return (
     <div className={styles.seg} role="group" aria-label={v.words.modeGroup} style={{ '--i': index } as never}>
       {MODES.map((mode) => (
         <button
           key={mode}
           type="button"
-          aria-pressed={v.state.mode === mode}
-          className={v.state.mode === mode ? 'font-semibold' : undefined}
-          onClick={() => v.dispatch({ type: 'SET_MODE', value: mode })}
+          aria-pressed={v.mode === mode}
+          className={v.mode === mode ? 'font-semibold' : undefined}
+          onClick={() => v.onMode(mode)}
         >
           {v.words.modes[mode]}
         </button>
@@ -80,10 +98,10 @@ function download(chat: Chat) {
   URL.revokeObjectURL(url);
 }
 
-function LogButtons({ v, onOpen }: { readonly v: View; readonly onOpen: (text: string) => void }) {
+function LogButtons({ v }: { readonly v: ToolbarProps }) {
   const open = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) onOpen(await file.text());
+    if (file) v.onOpen(await file.text());
     event.target.value = '';
   };
   return (
@@ -112,11 +130,11 @@ function LogButtons({ v, onOpen }: { readonly v: View; readonly onOpen: (text: s
 interface Toggle {
   readonly control: Control;
   readonly Icon: typeof Code;
-  readonly words: (v: View) => { readonly label: string; readonly tip: string };
-  readonly pressed: (v: View) => boolean;
+  readonly words: (v: ToolbarProps) => { readonly label: string; readonly tip: string };
+  readonly pressed: (v: ToolbarProps) => boolean;
   /** Collapse needs the chat on screen, the meter the context. */
-  readonly shown: (v: View) => boolean;
-  readonly event: (v: View) => ViewEvent;
+  readonly shown: (v: ToolbarProps) => boolean;
+  readonly run: (v: ToolbarProps) => void;
 }
 
 const TOGGLES: readonly Toggle[] = [
@@ -124,33 +142,33 @@ const TOGGLES: readonly Toggle[] = [
     control: 'depth',
     Icon: Code,
     words: (v) => ({ label: v.words.technical, tip: v.words.technicalTip }),
-    pressed: (v) => v.tech,
+    pressed: (v) => v.technical,
     shown: () => true,
-    event: (v) => ({ type: 'SET_DEPTH', value: v.tech ? 'simple' : 'technical' }),
+    run: (v) => v.onTechnical(!v.technical),
   },
   {
     control: 'collapse',
     Icon: PanelLeftClose,
     words: (v) => ({ label: v.words.collapse, tip: v.words.collapseTip }),
-    pressed: (v) => v.state.chatCollapsed,
-    shown: (v) => v.state.parts.chat,
-    event: () => ({ type: 'TOGGLE_CHAT' }),
+    pressed: (v) => v.chatCollapsed,
+    shown: (v) => v.parts.chat,
+    run: (v) => v.onCollapse(),
   },
   {
     control: 'meter',
     Icon: EyeOff,
     words: (v) => ({ label: v.words.meter, tip: v.words.meterTip }),
-    pressed: (v) => v.state.meterHidden,
-    shown: (v) => v.state.parts.context,
-    event: () => ({ type: 'TOGGLE_METER' }),
+    pressed: (v) => v.meterHidden,
+    shown: (v) => v.parts.context,
+    run: (v) => v.onMeter(),
   },
 ];
 
-function ToggleButton({ v, toggle }: { readonly v: View; readonly toggle: Toggle }) {
+function ToggleButton({ v, toggle }: { readonly v: ToolbarProps; readonly toggle: Toggle }) {
   if (!offers(v.preset, toggle.control) || !toggle.shown(v)) return null;
   const { label, tip } = toggle.words(v);
   return (
-    <IconButton label={label} tip={tip} pressed={toggle.pressed(v)} onClick={() => v.dispatch(toggle.event(v))}>
+    <IconButton label={label} tip={tip} pressed={toggle.pressed(v)} onClick={() => toggle.run(v)}>
       <toggle.Icon aria-hidden="true" />
     </IconButton>
   );
@@ -159,10 +177,10 @@ function ToggleButton({ v, toggle }: { readonly v: View; readonly toggle: Toggle
 const CONTROLS_AFTER_SHOW: readonly Control[] = ['depth', 'mode', 'collapse', 'meter'];
 
 /** Whether anything sits after the parts group: a control or a log button. */
-const hasRest = (v: View) =>
+const hasRest = (v: ToolbarProps) =>
   CONTROLS_AFTER_SHOW.some((control) => offers(v.preset, control)) || v.preset.download || v.preset.upload;
 
-function Controls({ v, onOpen }: { readonly v: View; readonly onOpen: (text: string) => void }) {
+function Controls({ v }: { readonly v: ToolbarProps }) {
   const [depth, ...folds] = TOGGLES;
   return (
     <>
@@ -171,13 +189,13 @@ function Controls({ v, onOpen }: { readonly v: View; readonly onOpen: (text: str
       {folds.map((toggle) => (
         <ToggleButton key={toggle.control} v={v} toggle={toggle} />
       ))}
-      <LogButtons v={v} onOpen={onOpen} />
+      <LogButtons v={v} />
     </>
   );
 }
 
 /** The toolbar a Preset allows; a Preset that hides its controls shows none of it. */
-export function Toolbar({ v, onOpen }: { readonly v: View; readonly onOpen: (text: string) => void }) {
+export function Toolbar(v: ToolbarProps) {
   const show = offers(v.preset, 'show');
   const rest = hasRest(v);
   if (v.preset.controlsHidden || (!show && !rest)) return null;
@@ -185,7 +203,7 @@ export function Toolbar({ v, onOpen }: { readonly v: View; readonly onOpen: (tex
     <div className={styles.top} role="toolbar" aria-label={v.words.controls} data-toolbar="">
       {show ? <ShowGroup v={v} /> : null}
       {show && rest ? <span className={styles.sep} aria-hidden="true" /> : null}
-      <Controls v={v} onOpen={onOpen} />
+      <Controls v={v} />
     </div>
   );
 }

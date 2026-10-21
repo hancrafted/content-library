@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import type { Attention } from './context-usage.pure';
 import type { ContextWords } from './context-words.types';
 import type { Frame } from './context.pure';
-import type { Category, Chat, RenderMode, StepNotes, StepStory, WindowSize } from './context.types';
+import type { Category, Chat, Mode, RenderMode, StepNotes, StepStory, WindowSize } from './context.types';
 
 /* What the parent hands each part: a slice of its state, never the whole of it. Parts are controlled: they hold no
  * state of the Context, and tell the parent what happened through callbacks. */
@@ -33,7 +33,15 @@ export interface Progress {
   readonly attention: readonly Attention[];
 }
 
-export interface ConversationProps extends Lighting, Speech, Progress {
+/** The events a part sends up when something is lit or pinned inside it; the parent decides what that does. */
+export interface LightingEvents {
+  /** A key is lit by hover or focus, or null when the pointer or focus leaves. */
+  readonly onLight: (key: string | null) => void;
+  /** A key is clicked: the parent pins it, and may scroll the conversation to it. */
+  readonly onPin: (key: string, target: EventTarget | null) => void;
+}
+
+export interface ConversationProps extends Lighting, LightingEvents, Speech, Progress {
   readonly notes: Readonly<Record<string, StepNotes>>;
   readonly collapsed: boolean;
   /** Whether the scrub hint belongs in the head: the timeline is shown and not locked. */
@@ -54,7 +62,7 @@ export interface TimelineProps extends Speech {
   readonly onCommit: (step: number) => void;
 }
 
-export interface ContextWindowProps extends Lighting, Speech {
+export interface ContextWindowProps extends Lighting, LightingEvents, Speech {
   readonly frames: readonly Frame[];
   /** What the window holds at the step on screen. */
   readonly frame: Frame;
@@ -75,4 +83,20 @@ export interface ContextPreviewProps extends Lighting, Speech {
   readonly window: WindowSize;
   /** The categories the chat ever holds, so a row for one that never lands is left out. */
   readonly present: ReadonlySet<Category>;
+}
+
+export interface DetailsProps extends Lighting, LightingEvents, Speech, Progress {
+  readonly frame: Frame;
+  readonly window: WindowSize;
+  readonly stepOf: ReadonlyMap<string, number>;
+  /** What the card shows: Explain tells what is lit, Attention shows the units over the steps in the window. */
+  readonly mode: Mode;
+  /** The renderMode of the Attention card, which still draws inside Details until it splits out. */
+  readonly attentionRenderMode: RenderMode;
+}
+
+/** What the Details cards read: the props, whether they are Technical, and the match of the lit key. */
+export interface Card extends DetailsProps {
+  readonly tech: boolean;
+  readonly match: (id: string, cat: Category) => boolean;
 }

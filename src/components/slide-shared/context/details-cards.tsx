@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react';
 import { deltaText, oneDecimal, percentText } from './context-format.pure';
+import type { Card } from './context-parts.types';
 import type { Readout } from './context-usage.pure';
-import { catLabel, fill, k, stepCat, storyOf, type View } from './context-view';
+import { catLabel, fill, k, stepCat, storyOf } from './context-view';
 import styles from './context.module.css';
 import { colourOf, compactStepOf, goneAt } from './context.pure';
 import type { Step } from './context.types';
@@ -9,7 +10,7 @@ import { Rich, tint } from './window-bits';
 
 /* The detail panel's cards: a step, a category, a step not in the window yet, a step no longer in it. */
 
-export const crossedText = (v: View, r: Readout): string | null =>
+export const crossedText = (v: Pick<Card, 'words'>, r: Readout): string | null =>
   r.crossed ? fill(v.words.crossed, { who: r.crossed.who }) : null;
 
 export function Crossed({ text }: { readonly text: string | null }) {
@@ -25,11 +26,11 @@ function Heading({ colour, children }: { readonly colour: string | undefined | n
   );
 }
 
-function Title({ v, step }: { readonly v: View; readonly step: Step }) {
-  return <Heading colour={colourOf(stepCat(step), v.state.depth)}>{storyOf(v, step).event}</Heading>;
+function Title({ v, step }: { readonly v: Card; readonly step: Step }) {
+  return <Heading colour={colourOf(stepCat(step), v.tech ? 'technical' : 'simple')}>{storyOf(v, step).event}</Heading>;
 }
 
-function Lists({ v, step }: { readonly v: View; readonly step: Step }) {
+function Lists({ v, step }: { readonly v: Card; readonly step: Step }) {
   const story = storyOf(v, step);
   if (!story.kept) return null;
   return (
@@ -76,10 +77,10 @@ function Stat({
   );
 }
 
-const explanation = (v: View, step: Step) => (v.tech ? storyOf(v, step).technical : storyOf(v, step).simple);
+const explanation = (v: Card, step: Step) => (v.tech ? storyOf(v, step).technical : storyOf(v, step).simple);
 
 /** A step's explanation at the view's depth, its code block in Technical, and a compaction's lists. */
-function Explained({ v, step }: { readonly v: View; readonly step: Step }) {
+function Explained({ v, step }: { readonly v: Card; readonly step: Step }) {
   const pre = v.tech ? storyOf(v, step).pre : undefined;
   return (
     <>
@@ -93,7 +94,7 @@ function Explained({ v, step }: { readonly v: View; readonly step: Step }) {
 }
 
 /** A pinned step the timeline has not reached: where it will land. */
-export function GhostCard({ v, step }: { readonly v: View; readonly step: Step }) {
+export function GhostCard({ v, step }: { readonly v: Card; readonly step: Step }) {
   return (
     <>
       <div className={styles.kicker}>{fill(v.words.pinnedKicker, { step: v.stepOf.get(step.id) ?? 0 })}</div>
@@ -104,7 +105,7 @@ export function GhostCard({ v, step }: { readonly v: View; readonly step: Step }
   );
 }
 
-function GoneCard({ v, step }: { readonly v: View; readonly step: Step }) {
+function GoneCard({ v, step }: { readonly v: Card; readonly step: Step }) {
   const compact = compactStepOf(v.chat);
   const why =
     compact !== null && compact <= v.vis ? fill(v.words.goneCompacted, { step: compact }) : v.words.goneCleared;
@@ -124,7 +125,7 @@ export function StepCard({
   step,
   cat,
 }: {
-  readonly v: View;
+  readonly v: Card;
   readonly step: Step;
   readonly cat: string | undefined;
 }) {
@@ -133,7 +134,7 @@ export function StepCard({
   const kicker = fill(v.words.stepKicker, { step: index });
   return (
     <>
-      <div className={styles.kicker}>{v.state.pinned === v.lit ? `${kicker} · ${v.words.pinned}` : kicker}</div>
+      <div className={styles.kicker}>{v.pinned === v.lit ? `${kicker} · ${v.words.pinned}` : kicker}</div>
       <Title v={v} step={step} />
       <div className={styles.stat}>
         {step.blocks.map((b) => (
@@ -150,20 +151,20 @@ export function StepCard({
   );
 }
 
-function categoryOf(v: View, key: string): { label: string; colour: string | undefined } {
+function categoryOf(v: Card, key: string): { label: string; colour: string | undefined } {
   if (key.startsWith('cat:')) {
     const cat = key.slice(4) as Step['blocks'][number]['cat'];
     return { label: v.words.categories[cat], colour: colourOf(cat, 'technical') };
   }
   if (key.startsWith('scat:')) {
-    const simple = key.slice(5) as keyof View['words']['simpleCategories'];
+    const simple = key.slice(5) as keyof Card['words']['simpleCategories'];
     return { label: v.words.simpleCategories[simple], colour: `--cs-s-${simple}` };
   }
   return { label: v.words.messages, colour: undefined };
 }
 
 /** A lit category: its tokens, its share, how many steps fill it, and the newest of them explained. */
-export function CategoryCard({ v, lit }: { readonly v: View; readonly lit: string }) {
+export function CategoryCard({ v, lit }: { readonly v: Card; readonly lit: string }) {
   const { label, colour } = categoryOf(v, lit);
   const blocks = v.frame.blocks.filter((b) => v.match(b.id, b.cat));
   const tokens = blocks.reduce((sum, b) => sum + b.tokens, 0);
@@ -185,7 +186,7 @@ export function CategoryCard({ v, lit }: { readonly v: View; readonly lit: strin
 }
 
 /** Nothing lit: the step on screen, what it added, how full the window is. */
-export function RestCard({ v, r }: { readonly v: View; readonly r: Readout }) {
+export function RestCard({ v, r }: { readonly v: Card; readonly r: Readout }) {
   const step = v.chat.steps[v.vis - 1];
   if (!step) return null;
   return (

@@ -1,10 +1,8 @@
 import { fillTemplate } from '@/lib/template.pure';
 import { shortTokens } from './context-format.pure';
-import type { ViewEvent, ViewState } from './context-state.pure';
-import type { Attention } from './context-usage.pure';
 import type { ContextWords } from './context-words.types';
-import { simpleOf, stepTokens, type Frame } from './context.pure';
-import type { Category, Chat, Preset, Step, StepNotes, StepStory, ToolCall, WindowSize } from './context.types';
+import { simpleOf, stepTokens } from './context.pure';
+import type { Category, Chat, Preset, Step, StepNotes, StepStory, ToolCall } from './context.types';
 
 /* What every part of the cornerstone's view reads at one render, and the words it derives from the chat. */
 
@@ -29,25 +27,6 @@ export interface Say {
   readonly locale: string;
   readonly story: Readonly<Record<string, StepStory>>;
   readonly tech: boolean;
-}
-
-export interface View extends ContextViewData {
-  readonly state: ViewState;
-  readonly dispatch: (event: ViewEvent) => void;
-  readonly frames: readonly Frame[];
-  /** The step on screen: the preview while scrubbing, else the committed one. */
-  readonly vis: number;
-  readonly frame: Frame;
-  readonly window: WindowSize;
-  readonly tech: boolean;
-  readonly lit: string | null;
-  readonly match: (id: string, cat: Category) => boolean;
-  readonly ghost: string | null;
-  readonly attention: readonly Attention[];
-  readonly stepOf: ReadonlyMap<string, number>;
-  readonly present: ReadonlySet<Category>;
-  /** A per-instance prefix for ids on the page. */
-  readonly uid: string;
 }
 
 export const fill = fillTemplate;

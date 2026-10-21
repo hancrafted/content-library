@@ -6,6 +6,7 @@ import styles from './context.module.css';
 import { colourOf, goneAt } from './context.pure';
 import type { Step } from './context.types';
 import { BubbleBody, bubbleName, roleOf } from './conversation-body';
+import { useLighting } from './use-lighting';
 import { useSay } from './use-say';
 import { tint } from './window-bits';
 
@@ -154,8 +155,9 @@ const Tick = memo(function Tick(props: {
 function Rail(props: ConversationProps & { readonly say: Say }) {
   const { say, chat, vis, lit, pinned } = props;
   const match = useMemo(() => matcher(lit), [lit]);
+  const handlers = useLighting(props);
   return (
-    <div className={`${styles.rail} ${styles.surface}`} role="group" aria-label={say.words.minimap}>
+    <div className={`${styles.rail} ${styles.surface}`} role="group" aria-label={say.words.minimap} {...handlers}>
       {chat.steps.slice(0, vis).map((step, i) => (
         <Tick
           key={step.id}
@@ -170,19 +172,32 @@ function Rail(props: ConversationProps & { readonly say: Say }) {
   );
 }
 
+/** The chat's head: its name, and the scrub hint until the reader has used a control. */
+function Head({ say, hint, hintSeen }: { readonly say: Say; readonly hint: boolean; readonly hintSeen: boolean }) {
+  return (
+    <div className={styles.head}>
+      <b className="font-semibold">{say.words.parts.chat}</b>
+      {hint ? (
+        <span className={styles.hint} data-seen={flag(hintSeen)} aria-hidden={hintSeen || undefined}>
+          {say.words.hint}
+        </span>
+      ) : null}
+    </div>
+  );
+}
+
 function Column(props: ConversationProps & { readonly say: Say }) {
   const { say, vis, hint, hintSeen } = props;
   const scroll = useNewest(vis, say.tech);
+  const handlers = useLighting(props);
   return (
-    <section className={styles.chat} aria-label={say.words.chat} data-depth={say.tech ? 'technical' : 'simple'}>
-      <div className={styles.head}>
-        <b className="font-semibold">{say.words.parts.chat}</b>
-        {hint ? (
-          <span className={styles.hint} data-seen={flag(hintSeen)} aria-hidden={hintSeen || undefined}>
-            {say.words.hint}
-          </span>
-        ) : null}
-      </div>
+    <section
+      className={styles.chat}
+      aria-label={say.words.chat}
+      data-depth={say.tech ? 'technical' : 'simple'}
+      {...handlers}
+    >
+      <Head say={say} hint={hint} hintSeen={hintSeen} />
       <div className={`${styles.phone} ${styles.surface}${say.tech ? ' font-mono' : ''}`}>
         <div className={styles.appbar} aria-hidden="true">
           {say.tech ? (
