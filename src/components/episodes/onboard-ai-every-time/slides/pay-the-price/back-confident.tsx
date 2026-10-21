@@ -75,10 +75,12 @@ function SureBubble({ ai }: BackProps) {
  */
 export function ConfidentBack({ ai }: BackProps) {
   return (
-    <BackSvg>
-      <Puzzle fill={ai ? 'fill-ai' : 'fill-foreground'} />
-      <Who ai={ai} x={86} y={52} />
-      <SureBubble ai={ai} />
+    <BackSvg width={158}>
+      <g transform="translate(-4 0)">
+        <Puzzle fill={ai ? 'fill-ai' : 'fill-foreground'} />
+        <Who ai={ai} x={86} y={52} />
+        <SureBubble ai={ai} />
+      </g>
     </BackSvg>
   );
 }

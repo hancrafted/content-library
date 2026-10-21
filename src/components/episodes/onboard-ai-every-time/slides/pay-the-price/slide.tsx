@@ -46,9 +46,10 @@ const ROW_NOTE = {
 } as const;
 
 /**
- * "Five traits, or you pay the PRICE" (Spec Option 2a), the cornerstone: a brilliant freelancer with amnesia, every
+ * "Five traits, or you pay the price" (Spec Option 2a), the cornerstone: a brilliant freelancer with amnesia, every
  * time. Overrules `three-column` for a Scene, since its columns cannot line rows up; keeps `motion: local` as the
- * trait flip. Each row is the freelancer, the trait chip and the AI; the closing line wipes every row to day one.
+ * trait flip. At rest the chips spell PRICE; each chip brings in its row, the freelancer and the AI; the closing line
+ * shows every row and wipes it to day one.
  */
 export const payThePrice = slide({
   slug: 'pay-the-price',
@@ -68,9 +69,6 @@ export const payThePrice = slide({
     { slug: 'probabilistic-relentless' },
     { slug: 'informed' },
     { slug: 'confident-every-word-billed' },
-    { slug: 'amnesia' },
-    { slug: 'ai-lands-last' },
-    { slug: 'the-pun' },
   ],
   content: ({ t, marker, Marker }) => (
     <SlideFrame className="mt-8">
@@ -84,13 +82,19 @@ export const payThePrice = slide({
           freelancer: t(`traits.${slug}.freelancer`),
           ai: t.rich(`traits.${slug}.ai`, { marker: marker(ROW_NOTE[slug]) }),
         }))}
-        closing={t('closing')}
-        closingMarker={<Marker note="the-forgetting-is-in-the-design" className="relative inline-grid align-middle" />}
+        closing={t.rich('closing', { strong: (chunks) => <strong className="font-semibold">{chunks}</strong> })}
+        closingMarker={<Marker note="the-forgetting-is-in-the-design" className="relative inset-auto" />}
         labels={{
           prompt: t('backs.prompt'),
           handbook: t('backs.handbook'),
           bill: t('backs.bill'),
           tokens: t('backs.tokens'),
+          handbookWords: {
+            first: t('backs.handbookWords.first'),
+            second: t('backs.handbookWords.second'),
+            last: t('backs.handbookWords.last'),
+          },
+          turn: t('backs.turn'),
         }}
       />
     </SlideFrame>

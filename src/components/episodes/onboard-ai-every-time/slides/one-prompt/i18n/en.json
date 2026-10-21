@@ -1,0 +1,73 @@
+{
+  "title": "What happens with one prompt",
+  "heading": "One prompt, one polished plan",
+  "caption": "It looks finished. Look closer.",
+  "prompt": "Plan next year's summer party for 200 employees across Europe.",
+  "cracksLabel": "One crack per trait",
+  "cracks": {
+    "informed": {
+      "trait": "Informed",
+      "crack": "Paintball, picked from a thousand team-building activities, because they don't know your culture."
+    },
+    "confident": {
+      "trait": "Confident",
+      "crack": "Venue prices that look like facts, and are made up."
+    },
+    "probabilistic": {
+      "trait": "Probabilistic",
+      "crack": "Ask again, and a whole new plan: Lisbon instead of Berlin."
+    },
+    "relentless": {
+      "trait": "Relentless",
+      "crack": "Hotels compared in twelve cities by rating, and a pile of documents."
+    },
+    "every-word-billed": {
+      "trait": "Every word billed",
+      "crack": "You paid for every page of it."
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "one-prompt-in": {
+        "title": "One prompt in",
+        "keywords": "",
+        "script": "So what happens if you just hand them one prompt: plan next year's summer party for 200 employees across Europe? You get a plan. A polished one. Look closer."
+      },
+      "informed": {
+        "title": "Informed",
+        "keywords": "",
+        "script": "They're informed: they know a thousand team-building activities, and they picked paintball, because they don't know your culture."
+      },
+      "confident": {
+        "title": "Confident",
+        "keywords": "",
+        "script": "They're confident: the venue prices look like facts, and they're made up."
+      },
+      "probabilistic": {
+        "title": "Probabilistic",
+        "keywords": "",
+        "script": "They're probabilistic: ask again, and you get a whole new plan, in Lisbon instead of Berlin."
+      },
+      "relentless": {
+        "title": "Relentless",
+        "keywords": "",
+        "script": "They're relentless: they compared hotels in twelve cities by rating, never asked where your people travel from, and buried you in documents."
+      },
+      "every-word-billed": {
+        "title": "Every word billed",
+        "keywords": "",
+        "script": "And they bill per word: you paid for every page of it."
+      },
+      "you-saw-the-ai": {
+        "title": "You saw the AI",
+        "keywords": "",
+        "script": "You've probably noticed: behind every trait, you already saw the AI. But let's stay in the thought experiment. If this were a human freelancer with these five traits, how would you onboard them for a complex task like this?"
+      },
+      "the-mental-model": {
+        "title": "The mental model",
+        "keywords": "",
+        "script": "That's the mental model I want to give you. As we go on, you'll see an AI agent behaves, weirdly, in many ways like this brilliant freelancer with amnesia. And your job is to onboard and manage them, so they deliver a result you can work with."
+      }
+    }
+  }
+}
