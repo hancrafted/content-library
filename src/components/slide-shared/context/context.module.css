@@ -293,9 +293,23 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  min-height: 1.75rem;
+  min-height: 2rem;
   margin-bottom: 0.4rem;
   color: var(--cs-sub);
+}
+/* Every part's title shares one baseline and colour: pinned to the head's top at the icon buttons' height, so
+ * a head that wraps (the window's meter in a narrow column) never sinks its neighbour's title. */
+.head {
+  align-items: flex-start;
+}
+.head > b,
+.head > .title,
+.head > span {
+  line-height: 2rem;
+}
+.head > b,
+.head > .title {
+  color: var(--foreground);
 }
 
 .surface {
@@ -728,6 +742,8 @@
   display: flex;
   flex-direction: column;
   min-height: 0;
+  /* The smart-zone lines reach 2px past the bar: with no part before it (the card's edge) that must stay inside. */
+  padding-inline: 2px;
 }
 .title {
   color: var(--foreground);
