@@ -1,0 +1,95 @@
+import { describe, expect, it } from 'vitest';
+import { CONTEXT_PRESETS, MINI_PRESETS, contextData, rawConfigs } from './context-data';
+import { presetProblems } from './context-presets.pure';
+import { framesOf } from './context-window.pure';
+
+/** Every key path of a parsed YAML tree, arrays by index. */
+function keyPaths(value: unknown, prefix = ''): string[] {
+  if (typeof value !== 'object' || value === null) return [prefix];
+  return Object.entries(value).flatMap(([key, child]) => keyPaths(child, prefix ? `${prefix}.${key}` : key));
+}
+
+describe('success cases', () => {
+  it('names every Preset of the config, and builds each in both locales', () => {
+    // ARRANGE
+    const expected = { presets: [...CONTEXT_PRESETS].sort(), minis: [...MINI_PRESETS].sort() };
+    // ACT
+    const en = contextData('en');
+    const de = contextData('de');
+    // ASSERT
+    expect(Object.keys(en.presets).sort()).toEqual(expected.presets);
+    expect(Object.keys(de.presets).sort()).toEqual(expected.presets);
+    expect(Object.keys(en.minis).sort()).toEqual(expected.minis);
+  });
+
+  it('keeps the German words and story under exactly the English keys', () => {
+    // ARRANGE
+    const { en, de } = rawConfigs();
+    const pick = (config: unknown) => {
+      const { words, story } = config as { words: unknown; story: unknown };
+      return keyPaths({ words, story });
+    };
+    // ACT
+    const english = pick(en);
+    const german = pick(de);
+    // ASSERT
+    expect(german).toEqual(english);
+  });
+
+  it('reads the same steps and sizes from the English and the German log', () => {
+    // ARRANGE
+    const sizes = (locale: 'en' | 'de') =>
+      contextData(locale).chats['summer-compact']?.steps.map((step) => [step.id, step.blocks]);
+    // ACT
+    const english = sizes('en');
+    const german = sizes('de');
+    // ASSERT
+    expect(german).toEqual(english);
+  });
+});
+
+describe('failure cases', () => {
+  it('names a step outside the timeline and a pinned part not in the chat', () => {
+    // ARRANGE
+    const data = contextData('en');
+    const slide3 = data.presets['slide-3'];
+    const chat = data.chats['summer-party'];
+    const expected = [
+      'slide-3: step 40 is outside the timeline (1–21)',
+      'slide-3: pinned part "m99" is not in the chat',
+    ];
+    // ACT
+    const problems = slide3 ? presetProblems({ ...slide3, step: 40, pinned: 'm99' }, chat) : [];
+    // ASSERT
+    expect(problems).toEqual(expected);
+  });
+
+  it('refuses a chat that fills the buffer without a compaction', () => {
+    // ARRANGE
+    const data = contextData('en');
+    const slide3 = data.presets['slide-3'];
+    const chat = data.chats['summer-compact'];
+    const expected = 'slide-3: the chat enters the buffer at step 23 without a compaction';
+    // ACT
+    const problems = slide3 && chat ? presetProblems(slide3, { ...chat, steps: chat.steps.slice(0, 23) }) : [];
+    // ASSERT
+    expect(problems).toContain(expected);
+  });
+});
+
+describe('edge cases', () => {
+  it('ends the summer party at 64% of 200K, and fills the buffer right before the compaction', () => {
+    // ARRANGE
+    const data = contextData('en');
+    const expected = { percent: 64, endsOn: 'm24', limit: 183500 };
+    // ACT
+    const party = data.chats['summer-party'] ?? { id: '', steps: [] };
+    const compact = data.chats['summer-compact'] ?? { id: '', steps: [] };
+    const percent = Math.round(((framesOf(party).at(-1)?.used ?? 0) / 200000) * 100);
+    const beforeCompaction = framesOf(compact)[22]?.used;
+    // ASSERT
+    expect(percent).toBe(expected.percent);
+    expect(party.steps.at(-1)?.id).toBe(expected.endsOn);
+    expect(beforeCompaction).toBeGreaterThan(expected.limit);
+  });
+});
