@@ -182,19 +182,8 @@ presets:
 # Static bars, drawn horizontally on Slides. A bar is a chat at a step (its last step when omitted) or, for data that is
 # not a chat, `segments: [[minutes, lit | faded | standout], …]`. A chat bar may keep only some of it in colour:
 # `lit` (Simple categories), `litFrom` (a step id) and `ring` (step ids, also kept in colour); the rest fades.
-# Labels are keys of words.mini.labels.
+# Labels are keys of words.mini.labels. `call` is the one 82-minute call bar every Section opener shows.
 minis:
-  faded-middle:
-    window: { size: 200k, lines: [] }
-    bars: [{ label: summer-chat, chat: summer-party, step: 21, lit: [start, memory], litFrom: m14 }]
-  typed-and-read:
-    window: { size: 200k, lines: [] }
-    bars: [{ label: summer-chat, chat: summer-party, step: 21, lit: [start, memory, you], ring: [m11] }]
-  managing:
-    window: { size: 200k, lines: [] }
-    bars:
-      - { label: old, chat: summer-party, step: 21 }
-      - { label: fresh, chat: fresh, ring: [fresh-2] }
   call:
     window: { size: 200k, lines: [] }
     bars: [{ label: call, segments: [[4, lit], [37, faded], [1, standout], [36, faded], [4, lit]] }]
@@ -327,6 +316,8 @@ words:
     discarded: thrown away
     hours: h
     minutes: min
+    here: 'You are here: minute {minute} of {total}'
+    hereStart: 'You are here: the start of the call'
     labels:
       old: Old chat
       fresh: Fresh chat

@@ -1609,3 +1609,33 @@ summary.row:hover {
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+/* "You are here" under a call bar: a pin at the minute, its words kept inside the bar's width. */
+.here {
+  position: relative;
+  height: 2rem;
+  margin-top: -0.2rem;
+  color: var(--foreground);
+}
+.herePin {
+  position: absolute;
+  top: 0;
+  left: calc(var(--f) * 100%);
+  width: 0;
+  height: 0;
+  margin-left: -0.4rem;
+  border-right: 0.4rem solid transparent;
+  border-bottom: 0.5rem solid var(--foreground);
+  border-left: 0.4rem solid transparent;
+}
+.hereText {
+  position: absolute;
+  top: 0.6rem;
+  white-space: nowrap;
+}
+.here[data-side='start'] .hereText {
+  left: calc(var(--f) * 100%);
+}
+.here[data-side='end'] .hereText {
+  right: calc((1 - var(--f)) * 100%);
+}

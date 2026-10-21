@@ -1,12 +1,6 @@
 {
   "title": "What fills the window",
   "caption": "Your messages are only a part of it.",
-  "legend": {
-    "instructions": "Starting instructions {tokens}",
-    "typed": "You typed under 1K",
-    "pdf": "catering PDF {tokens}",
-    "illustrative": "illustrative"
-  },
   "voiceScript": {
     "segments": {
       "more-in-there-than-you-typed": {

@@ -1,5 +1,4 @@
 import { ContextBars } from './context-bars-view';
-import { barModel } from './context-bars.pure';
 import { contextData, type ContextLocale, type ContextPresetId, type MiniPresetId } from './context-data';
 import type { ContextViewData } from './context-view';
 import type { ContextWords } from './context-words.types';
@@ -43,26 +42,26 @@ export function Context(props: Props<ContextPresetId>) {
   return <ContextClient {...contextViewData(props)} />;
 }
 
-/** The window's size and buffer a bars Preset is drawn on, and what its first bar's blocks hold, for a Slide's legend. */
-export function contextBarFigures({ preset: id, locale }: Props<MiniPresetId>) {
-  const data = contextData(localeOf(locale));
-  const mini = data.minis[id];
-  const bar = mini?.mini[0];
-  if (!mini || !bar) throw new Error(`context bars: unknown Preset "${id}"`);
-  const model = barModel(bar, bar.chat ? data.chats[bar.chat] : undefined, mini.window);
-  return {
-    windowTokens: mini.window.tokens,
-    bufferTokens: mini.window.bufferTokens,
-    usedTokens: model.used,
-    byKey: model.byKey,
-    bySimple: model.bySimple,
-  };
-}
-
 /** Static bars drawn horizontally: chats or generic segments one under the other on one window size. */
-export function ContextBarsPreset({ preset: id, locale, words }: Props<MiniPresetId>) {
+export function ContextBarsPreset({
+  preset: id,
+  locale,
+  words,
+  here,
+}: Props<MiniPresetId> & {
+  /** A call bar's "you are here" marker: the minute of the call it points at. */
+  readonly here?: number;
+}) {
   const data = contextData(localeOf(locale));
   const mini = data.minis[id];
   if (!mini) throw new Error(`context bars: unknown Preset "${id}"`);
-  return <ContextBars mini={mini} chats={data.chats} words={{ ...data.words, ...words }} locale={localeOf(locale)} />;
+  return (
+    <ContextBars
+      mini={mini}
+      chats={data.chats}
+      words={{ ...data.words, ...words }}
+      locale={localeOf(locale)}
+      here={here}
+    />
+  );
 }
