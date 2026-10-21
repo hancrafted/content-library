@@ -98,7 +98,7 @@ Why layouts stay site-wide: Next.js inherits a layout's field into every page th
 3. **Unit tests:** `pageMetadata` canonical, alternates and `x-default`; `SITE_URL` fallback and throw (§1.2, §3.2).
 4. **Post-build test** (CI and deploy, before upload): one canonical per page equal to its served URL under `SITE_URL`; every alternate resolves to a file in `out/` and links back.
 
-**Known gap:** Open Graph and Twitter cards, structured data.
+**Cards and structured data (§6):** `pageMetadata` also emits Open Graph and Twitter `summary_large_image` metadata (type `website`, or `article` for an Episode; `og:locale` plus the other locale as alternate) with the static fallback image `public/og-image.png`, 1200x630. The landing page renders a Person and WebSite JSON-LD graph; a published, dated Episode renders an Article and, with a recording, a VideoObject (`src/lib/structured-data.pure.ts`). Upcoming Episodes get none. The sitemap dates Episode entries by `publishedOn`.
 
 **Manual review duties:** copy reads well to a searcher in its own language (§2); no route spells a URL or copy outside `pageMetadata` (§1); `SITE_URL` stays set on both deploy steps (Risk 1).
 

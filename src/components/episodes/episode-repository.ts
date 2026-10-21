@@ -1,4 +1,4 @@
-import type { EpisodeMetadata, EpisodeStatus, UpcomingEpisodeMetadata } from '@/lib/episode-metadata.pure';
+import type { EpisodeMetadata, EpisodeStatus, IsoDate, UpcomingEpisodeMetadata } from '@/lib/episode-metadata.pure';
 import { FEATURED, LAYOUT_REFERENCES, type ListedEpisodeSlug } from '@/lib/episode-overview';
 import { isEpisodeSlug, type EpisodeSlug } from '@/lib/routes';
 import { episodeMetadata as aiAttentionSpan } from './ai-attention-span/episode-metadata';
@@ -63,4 +63,10 @@ export function episodeStatus(slug: EpisodeSlug): EpisodeStatus {
   const episode = listEpisodes().find((entry) => entry.slug === slug);
   if (!episode) throw new Error(`No Episode metadata lists the registered slug "${slug}"`);
   return episode.status;
+}
+
+/** The release date of a published Episode; undefined for a layout reference, which has no metadata, and an upcoming one. */
+export function episodePublishedOn(slug: string): IsoDate | undefined {
+  const episode = listEpisodes().find((entry) => entry.slug === slug);
+  return episode?.status === 'published' ? episode.publishedOn : undefined;
 }

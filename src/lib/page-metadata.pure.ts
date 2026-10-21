@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { TRANSLATIONS } from '../i18n/translations';
-import type { EpisodeStatus } from './episode-metadata.pure';
+import type { EpisodeStatus, IsoDate } from './episode-metadata.pure';
 import { DEFAULT_LOCALE, localizePath, type Locale } from './locale.pure';
 import { pageLocales, routeOf, type PageRef } from './routes';
 
@@ -34,11 +34,44 @@ export interface PageCopy {
   readonly description: string;
   /** An Episode page's status: an upcoming one is `noindex`. Left off for the landing page. */
   readonly status?: EpisodeStatus;
+  /** An Episode's release date, the article's `publishedTime`. */
+  readonly publishedOn?: IsoDate;
 }
+
+/** The site-wide fallback card image: a static file in `public/`, 1200x630 (FE-008 §6). */
+export const OG_IMAGE = { url: '/og-image.png', width: 1200, height: 630 } as const;
+
+const OG_LOCALES: Record<Locale, string> = { en: 'en_US', de: 'de_DE' };
 
 /** Whether a page is kept out of search: the dashboard, and an Episode still upcoming. Metadata and sitemap both ask. */
 export function isNoindex(page: PageRef, status?: EpisodeStatus): boolean {
   return page === 'dashboard' || status === 'upcoming';
+}
+
+/** Open Graph and Twitter cards: the page's own title and description, the fallback image, its locale and the others. */
+function socialCards(
+  page: PageRef,
+  locale: Locale,
+  text: { title: string; description: string; publishedOn?: IsoDate },
+): Pick<Metadata, 'openGraph' | 'twitter'> {
+  const { publishedOn, ...words } = text;
+  const siteName = TRANSLATIONS[locale].brand.name;
+  const alternateLocale = pageLocales(page)
+    .filter((each) => each !== locale)
+    .map((each) => OG_LOCALES[each]);
+  return {
+    openGraph: {
+      type: typeof page === 'string' ? 'website' : 'article',
+      ...words,
+      url: localizePath(routeOf(page), locale),
+      siteName,
+      locale: OG_LOCALES[locale],
+      ...(alternateLocale.length > 0 ? { alternateLocale } : {}),
+      images: [{ ...OG_IMAGE, alt: siteName }],
+      ...(publishedOn ? { publishedTime: publishedOn } : {}),
+    },
+    twitter: { card: 'summary_large_image', ...words, images: [OG_IMAGE.url] },
+  };
 }
 
 /**
@@ -64,6 +97,7 @@ export function pageMetadata(page: PageRef, locale: Locale, copy?: PageCopy): Me
   return {
     title,
     description,
+    ...socialCards(page, locale, { title, description, publishedOn: copy?.publishedOn }),
     alternates: {
       canonical: localizePath(route, locale),
       languages: { ...languages, 'x-default': localizePath(route, DEFAULT_LOCALE) },

@@ -30,6 +30,16 @@ describe('success cases', () => {
     // ASSERT
     expect(urls).toEqual(expect.arrayContaining(expected));
   });
+
+  it('dates an Episode entry by its publish date and leaves undated pages without one', () => {
+    // ARRANGE
+    const publishedOn = (slug: string) => (slug === 'ai-attention-span' ? ('2026-10-21' as const) : undefined);
+    // ACT
+    const entries = sitemapEntries(SITE, allPublished, publishedOn);
+    // ASSERT
+    expect(entries.find((e) => e.url === `${SITE}/de/episodes/ai-attention-span/`)?.lastModified).toBe('2026-10-21');
+    expect(entries.find((e) => e.url === `${SITE}/`)?.lastModified).toBeUndefined();
+  });
 });
 
 describe('failure cases', () => {

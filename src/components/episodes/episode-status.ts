@@ -1,6 +1,6 @@
-import { episodeStatus } from '@/components/episodes/episode-repository';
+import { episodePublishedOn, episodeStatus } from '@/components/episodes/episode-repository';
 import { findEpisode } from '@/components/episodes/registry';
-import type { EpisodeStatus } from '@/lib/episode-metadata.pure';
+import type { EpisodeStatus, IsoDate } from '@/lib/episode-metadata.pure';
 
 /**
  * Whether an Episode's page is Published or Upcoming. It reads the Episode registry, a component-tier module, so it
@@ -8,4 +8,9 @@ import type { EpisodeStatus } from '@/lib/episode-metadata.pure';
  */
 export function episodeSlugStatus(slug: string): EpisodeStatus {
   return episodeStatus(findEpisode(slug).slug);
+}
+
+/** An Episode's release date, for the sitemap and the page metadata; undefined while upcoming or for a layout reference. */
+export function episodeSlugPublishedOn(slug: string): IsoDate | undefined {
+  return episodePublishedOn(findEpisode(slug).slug);
 }
