@@ -140,6 +140,7 @@ presets:
     controlsHidden: true
     timelineLocked: true
     show: { chat: false, timeline: false, context: true, panel: false }
+    motion: off
     windows: [{ size: 200k, lines: [] }]
   slide-9-chat:
     chat: summer-compact
@@ -149,6 +150,7 @@ presets:
     controlsHidden: true
     timelineLocked: true
     show: { chat: true, timeline: false, context: false, panel: false }
+    motion: off
     windows: [{ size: 200k, lines: [] }]
   slide-9-after:
     chat: summer-compact
@@ -159,6 +161,7 @@ presets:
     controlsHidden: true
     timelineLocked: true
     show: { chat: false, timeline: false, context: true, panel: false }
+    motion: off
     windows: [{ size: 200k, lines: [] }]
 
 # Static mini bars: a chat at a step (its last step when omitted), labelled by a key of words.mini.labels.
