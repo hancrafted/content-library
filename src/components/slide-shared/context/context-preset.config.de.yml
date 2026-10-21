@@ -115,19 +115,25 @@ words:
     matt: { label: Smart Zone nach Matt Pocock, who: Matt Pocock }
     matt-1m: { label: Smart Zone nach Matt Pocock, who: Matt Pocock }
     han: { label: Smart Zone nach Han, who: Han }
+  session:
+    label: Diese Sitzung
+    empty: noch nichts verbraucht
+    progress: '{title}, {n} von {count}'
+    sections:
+      thought-experiment: Gedankenexperiment
+      the-ais-attention-span: Die Aufmerksamkeitsspanne der KI
+      what-fills-the-window: Was das Fenster füllt
+      managing-the-attention-span: Die Aufmerksamkeitsspanne managen
   mini:
     usedOf: '{used} von {window} · {percent} %'
     discarded: verworfen
     hours: Std.
     minutes: Min.
-    here: 'Du bist hier: Minute {minute} von {total}'
-    hereStart: 'Du bist hier: der Anfang des Gesprächs'
     labels:
       old: Alter Chat
       fresh: Neuer Chat
       summer: Sommerfest
       summer-chat: Der Sommerfest-Chat
-      call: Das Gespräch
       planner: Planer
       venues: 'Helfer: Orte'
       catering: 'Helfer: Catering'

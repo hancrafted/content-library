@@ -13,7 +13,6 @@ import type {
   MiniBar,
   MiniPreset,
   Preset,
-  SegmentState,
   SimpleCategory,
   Step,
   StepNotes,
@@ -42,7 +41,7 @@ export const CONTEXT_PRESETS = [
   'slide-9-after',
 ] as const;
 /** Every static bar Preset id. */
-export const MINI_PRESETS = ['slide-10-old', 'slide-10-fresh', 'slide-11-before', 'slide-11-after', 'call'] as const;
+export const MINI_PRESETS = ['slide-10-old', 'slide-10-fresh', 'slide-11-before', 'slide-11-after'] as const;
 
 export type ContextPresetId = (typeof CONTEXT_PRESETS)[number];
 export type MiniPresetId = (typeof MINI_PRESETS)[number];
@@ -52,11 +51,18 @@ export interface ContextData {
   readonly chats: Readonly<Record<string, Chat>>;
   readonly presets: Readonly<Record<string, Preset>>;
   readonly minis: Readonly<Record<string, MiniPreset>>;
+  readonly session: SessionPlan;
   readonly words: ContextWords;
   readonly story: Readonly<Record<string, StepStory>>;
   readonly notes: Readonly<Record<string, StepNotes>>;
   /** Attention overrides per chat, then per step. */
   readonly attention: Readonly<Record<string, Readonly<Record<string, Readonly<Record<string, number>>>>>>;
+}
+
+/** The session bar's plan: its length and its Sections in order, each with its share of the whole (they add up to 100). */
+export interface SessionPlan {
+  readonly minutes: number;
+  readonly sections: readonly { readonly id: string; readonly share: number }[];
 }
 
 interface WindowRef {
@@ -73,6 +79,7 @@ interface Config {
     Record<string, { readonly log?: string; readonly steps?: number; readonly blocks?: readonly [Category, number][] }>
   >;
   readonly notes: Readonly<Record<string, StepNotes>>;
+  readonly session: SessionPlan;
   readonly attention: ContextData['attention'];
   readonly defaults: Omit<Preset, 'id' | 'chat' | 'windows'> & { readonly windows: readonly WindowRef[] };
   readonly presets: Readonly<
@@ -92,10 +99,9 @@ interface Config {
         readonly window: WindowRef;
         readonly bars: readonly {
           label: string;
-          chat?: string;
+          chat: string;
           step?: number;
           discarded?: boolean;
-          segments?: readonly (readonly [number, SegmentState])[];
           lit?: readonly SimpleCategory[];
           litFrom?: string;
           ring?: readonly string[];
@@ -179,16 +185,16 @@ function presetsOf(en: Config, words: ContextWords): Record<string, Preset> {
 type MiniConfig = Config['minis'][string]['bars'][number];
 
 /** What a bar leaves out of the config falls back: no light picked, no ring, not discarded. */
-const LIGHT_DEFAULTS = { segments: null, lit: null, litFrom: null, ring: [] as readonly string[], discarded: false };
+const LIGHT_DEFAULTS = { lit: null, litFrom: null, ring: [] as readonly string[], discarded: false };
 
 function miniBarOf(bar: MiniConfig, words: ContextWords, chats: Record<string, Chat>): MiniBar {
-  const steps = bar.chat ? chats[bar.chat]?.steps.length : undefined;
+  const steps = chats[bar.chat]?.steps.length;
   const { label, chat, step, ...rest } = bar;
   return {
     ...LIGHT_DEFAULTS,
     ...Object.fromEntries(Object.entries(rest).filter(([, value]) => value !== undefined)),
     label: words.mini.labels[label] ?? label,
-    chat: chat ?? null,
+    chat,
     step: step ?? steps ?? 1,
   };
 }
@@ -208,7 +214,16 @@ function build(en: Config, local: LocaleConfig, log: string): ContextData {
   const problems = Object.values(presets).flatMap((preset) => presetProblems(preset, chats[preset.chat]));
   if (problems.length) throw new Error(`context window Presets:\n${problems.join('\n')}`);
   const minis = minisOf(en, local.words, chats);
-  return { chats, presets, minis, words: local.words, story: local.story, notes: en.notes, attention: en.attention };
+  return {
+    chats,
+    presets,
+    minis,
+    session: en.session,
+    words: local.words,
+    story: local.story,
+    notes: en.notes,
+    attention: en.attention,
+  };
 }
 
 const cache = new Map<ContextLocale, ContextData>();

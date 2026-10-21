@@ -65,9 +65,3 @@ export function ContextBarView({ orientation, total, blocks, buffer = 0, lines =
     </div>
   );
 }
-
-/** A legend swatch in the tint of a block: a colour custom property, or the faded one. */
-export function BarSwatch({ colour }: { readonly colour: string | 'faded' | 'buffer' }) {
-  const style = colour === 'faded' || colour === 'buffer' ? undefined : tint(colour);
-  return <span className={`${styles.swatch} ${styles.barView}`} data-tone={style ? undefined : colour} style={style} />;
-}
