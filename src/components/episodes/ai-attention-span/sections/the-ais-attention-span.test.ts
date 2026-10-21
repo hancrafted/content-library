@@ -234,9 +234,9 @@ describe('success cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('draws Slide 5 without the strip card, with the Lost in the middle label after the cornerstone and an arrow into it', () => {
+  it('draws Slide 5 without the strip card, with the Lost in the middle label inside the cornerstone column, bracketed, with no arrow', () => {
     // ARRANGE
-    const expected = { strips: 0, label: 1, arrows: 1, labelAfterContext: true };
+    const expected = { strips: 0, label: 1, brackets: 1, arrows: 0, labelAfterContext: true, labelInsideTarget: true };
     // ACT
     const $ = scene('attention-is-a-budget');
     const label = $('[data-lost-label]');
@@ -244,8 +244,10 @@ describe('success cases', () => {
     expect({
       strips: $('[data-strip-group]').length,
       label: label.length,
-      arrows: label.children('div').children('svg').length,
+      brackets: label.find('svg[data-lost-bracket]').length,
+      arrows: label.find('svg.lucide-arrow-up, svg[class*="arrow"]').length,
       labelAfterContext: $.html().indexOf('data-cornerstone') < $.html().indexOf('data-lost-label'),
+      labelInsideTarget: label.closest('[data-lost-host]').find('[data-cornerstone]').length > 0,
     }).toEqual(expected);
   });
 
