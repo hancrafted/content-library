@@ -408,6 +408,11 @@
       "localLog": "Local events.jsonl only. Raw records may contain private prompts or paths; nothing is uploaded.",
       "stale": "Source is stale; activity animation is paused.",
       "jobAttention": "Needs attention",
+      "failure": {
+        "noReason": "No reason recorded.",
+        "continued": "Went on without it: {jobs}. Wants are non-blocking, so this failure did not stop them.",
+        "notContinued": "Nothing has gone on without it yet."
+      },
       "outputs": "Outputs",
       "notWritten": "not written yet",
       "openOutput": "opens as plain text in a new tab",
