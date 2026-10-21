@@ -9,7 +9,14 @@ export type CurveKey = 'start' | 'recent' | 'middle' | 'newest';
 export type Curve = Readonly<Record<CurveKey, number>>;
 
 export const CURVE_KEYS: readonly CurveKey[] = ['start', 'recent', 'middle', 'newest'];
-export const DEFAULT_CURVE: Curve = { start: 20, recent: 20, middle: 30, newest: 30 };
+/*
+ * The defaults follow the serial-position curve (docs/research/attention-position-curve.md): the start and the newest
+ * rows are strongest, the middle weakest, and the newest rows beat the start (recency over primacy). The whole
+ * middle, many rows, still gets a quarter, its seeded peaks keeping the "lost in the middle" rows visible.
+ */
+export const DEFAULT_CURVE: Curve = { start: 20, recent: 20, middle: 25, newest: 35 };
+/** How the newest bucket splits over its rows, newest first, as relative weights: 50/30/20 of the bucket. */
+export const DEFAULT_FALLOFF: readonly number[] = [50, 30, 20];
 
 /** Rows at the start and at the newest end that never compress, and how many rows the recent bucket spans. */
 export const EDGE = 3;
@@ -52,7 +59,12 @@ function middleWeights(count: number, next: () => number): number[] {
   return weights;
 }
 
-/** Relative weights inside a bucket: equal, except the recent rows fall off away from the newest. */
+/** The newest rows' weights, oldest first: the falloff is newest first, so a short bucket keeps its newest weights. */
+function newestWeights(count: number, falloff: readonly number[]): number[] {
+  return Array.from({ length: count }, (_, i) => falloff[count - 1 - i] ?? falloff.at(-1) ?? 1);
+}
+
+/** Relative weights inside a bucket: equal, the recent rows fall off linearly, the middle is seeded. */
 function inside(key: CurveKey, count: number, ids: readonly string[]): number[] {
   if (key === 'middle') return middleWeights(count, random(seedOf(ids)));
   if (key === 'recent') return Array.from({ length: count }, (_, i) => 1 + (i + 1) / count);
@@ -63,7 +75,11 @@ function inside(key: CurveKey, count: number, ids: readonly string[]): number[] 
  * The share of each row, oldest first, summing to 100. A bucket with no rows gives its share to the others in
  * proportion to theirs.
  */
-export function curveWeights(ids: readonly string[], curve: Curve): number[] {
+export function curveWeights(
+  ids: readonly string[],
+  curve: Curve,
+  falloff: readonly number[] = DEFAULT_FALLOFF,
+): number[] {
   const count = ids.length;
   if (count === 0) return [];
   const keys = ids.map((_, i) => bucketOf(i, count));
@@ -73,7 +89,8 @@ export function curveWeights(ids: readonly string[], curve: Curve): number[] {
   for (const key of present) {
     const at = keys.flatMap((k, i) => (k === key ? [i] : []));
     const share = total > 0 ? (curve[key] / total) * 100 : 100 / present.length;
-    const relative = inside(key, at.length, ids.slice(at[0], (at.at(-1) ?? 0) + 1));
+    const span = ids.slice(at[0], (at.at(-1) ?? 0) + 1);
+    const relative = key === 'newest' ? newestWeights(at.length, falloff) : inside(key, at.length, span);
     const whole = relative.reduce((a, b) => a + b, 0);
     at.forEach((row, j) => (out[row] = (share * (relative[j] ?? 0)) / whole));
   }
@@ -128,4 +145,34 @@ export function curveProblems(curve: Curve): string[] {
   if (bad.length) return bad.map((key) => `attention curve "${key}" must be a number from 0 up`);
   const total = CURVE_KEYS.reduce((sum, key) => sum + curve[key], 0);
   return total === 100 ? [] : [`attention curve must sum to 100, got ${total}`];
+}
+
+/** What is wrong with a Preset's newest-bucket falloff: one positive weight per newest row, newest first. */
+export function falloffProblems(falloff: readonly number[]): string[] {
+  const good = falloff.length === EDGE && falloff.every((w) => Number.isFinite(w) && w > 0);
+  return good ? [] : [`attention falloff must be ${EDGE} positive numbers, newest first`];
+}
+
+/**
+ * A reader's typed shares, in any state, as a curve summing to 100: anything not a number from 0 up counts as 0, the
+ * rest scale to 100; all zero gives the default curve.
+ */
+export function normalizeCurve(raw: Readonly<Record<CurveKey, number>>): Curve {
+  const clean = CURVE_KEYS.map((key) => (Number.isFinite(raw[key]) && raw[key] > 0 ? raw[key] : 0));
+  const total = clean.reduce((a, b) => a + b, 0);
+  if (total === 0) return DEFAULT_CURVE;
+  const sharesOf = wholes(
+    clean.map((v) => (v / total) * 100),
+    100,
+  );
+  return Object.fromEntries(CURVE_KEYS.map((key, i) => [key, sharesOf[i] ?? 0])) as Curve;
+}
+
+/** The axis maximums the Attention bars scale to, in percent, largest first; 20 is the floor. */
+export const AXIS_STEPS: readonly number[] = [100, 50, 40, 30, 20];
+
+/** The smallest axis step that still holds the largest share, so the longest bar fills the track as far as it can. */
+export function axisMaxOf(shares: readonly number[]): number {
+  const top = Math.max(0, ...shares);
+  return [...AXIS_STEPS].reverse().find((step) => step >= top) ?? 100;
 }

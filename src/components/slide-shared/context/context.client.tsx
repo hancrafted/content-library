@@ -74,9 +74,11 @@ interface AttentionSource {
 
 /** The units of attention at the step on screen: the Preset's explicit split where it has one, else the curve. */
 function useAttention({ chat, frames, vis, window, data, override, curve }: AttentionSource) {
+  const { falloff } = data.preset.attention;
+  const { notes } = data;
   return useMemo(
-    () => attentionAt(chat, frames, { step: vis, windowTokens: window.tokens, notes: data.notes, override, curve }),
-    [chat, frames, vis, window.tokens, data.notes, override, curve],
+    () => attentionAt(chat, frames, { step: vis, windowTokens: window.tokens, notes, override, curve, falloff }),
+    [chat, frames, vis, window.tokens, notes, override, curve, falloff],
   );
 }
 

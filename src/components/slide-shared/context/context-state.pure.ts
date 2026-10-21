@@ -1,5 +1,6 @@
-import { setShare, type Curve, type CurveKey } from './attention-curve.pure';
+import { normalizeCurve, setShare, type Curve, type CurveKey } from './attention-curve.pure';
 import { controlOf, modeControlOf, offers, type ControlId, type ModePart } from './context-controls.pure';
+import type { AttentionMenuModel } from './context-parts.types';
 import { isMessage, simpleOf } from './context.pure';
 import type { AttentionLayout, Category, Chat, Depth, Part, PartId, Preset, RenderMode } from './context.types';
 
@@ -28,6 +29,8 @@ export interface ViewState {
   readonly hintSeen: boolean;
   /** The Attention part's distribution, as the reader's sliders set it; the Preset's until moved, never stored. */
   readonly curve: Curve;
+  /** The Attention part's layout, as the reader's menu sets it; the Preset's until changed, never stored. */
+  readonly layout: AttentionLayout;
 }
 
 export type ViewEvent =
@@ -45,7 +48,10 @@ export type ViewEvent =
   | { readonly type: 'TOGGLE_PART'; readonly part: Part }
   | { readonly type: 'REORDER'; readonly part: Part; readonly before: Part }
   | { readonly type: 'TOGGLE_ZONE' }
-  | { readonly type: 'SET_CURVE'; readonly key: CurveKey; readonly value: number };
+  | { readonly type: 'SET_CURVE'; readonly key: CurveKey; readonly value: number }
+  /** The typed shares of the menu's edit mode, in any state: normalised to 100 here. */
+  | { readonly type: 'SET_CURVES'; readonly value: Readonly<Record<CurveKey, number>> }
+  | { readonly type: 'SET_LAYOUT'; readonly value: AttentionLayout };
 
 export function createState(preset: Preset): ViewState {
   return {
@@ -61,6 +67,7 @@ export function createState(preset: Preset): ViewState {
     window: 0,
     hintSeen: false,
     curve: preset.attention.curve,
+    layout: preset.attention.layout,
   };
 }
 
@@ -83,6 +90,8 @@ const CONTROL_FOR: Partial<Record<ViewEvent['type'], readonly ControlId[]>> = {
   TOGGLE_ZONE: ['zone'],
   TOGGLE_PART: ['parts'],
   SET_CURVE: ['attentionMenu'],
+  SET_CURVES: ['attentionMenu'],
+  SET_LAYOUT: ['attentionMenu'],
 };
 
 /** The controls that may send an event: any one of them is enough. */
@@ -136,6 +145,8 @@ const HANDLERS: Handlers = {
     return order === s.order ? s : { ...s, hintSeen: true, order };
   },
   SET_CURVE: (s, e) => ({ ...s, hintSeen: true, curve: setShare(s.curve, e.key, e.value) }),
+  SET_CURVES: (s, e) => ({ ...s, hintSeen: true, curve: normalizeCurve(e.value) }),
+  SET_LAYOUT: (s, e) => ({ ...s, hintSeen: true, layout: ATTENTION_LAYOUTS.includes(e.value) ? e.value : s.layout }),
   TOGGLE_ZONE: (s) => ({ ...s, hintSeen: true, zone: !s.zone }),
 };
 
@@ -185,7 +196,29 @@ export const panelKey = (view: {
   readonly ghost: string | null;
 }): string => [view.depth, view.lit, view.ghost].join('|');
 
-/** What the Attention head's menu needs: the curve and a slider move sent up as an event, or nothing when it is off. */
-export function curveMenu(curve: Curve, send: (event: ViewEvent) => void, on: boolean) {
-  return on ? { curve, onCurve: (key: CurveKey, value: number) => send({ type: 'SET_CURVE', key, value }) } : undefined;
+/** What the menu offers: nothing, only the layout (an explicit split rules the curve), or both. */
+export const menuOffer = (on: boolean, overridden: boolean) => (on ? (overridden ? 'layout' : 'full') : 'off');
+
+/**
+ * What the Attention head's menu needs: the layout always, the curve only while it rules (`full`), each change sent
+ * up as an event; nothing when the control is off.
+ */
+export function attentionMenu(
+  state: Pick<ViewState, 'curve' | 'layout'>,
+  send: (event: ViewEvent) => void,
+  offer: ReturnType<typeof menuOffer>,
+): AttentionMenuModel | undefined {
+  if (offer === 'off') return undefined;
+  return {
+    layout: state.layout,
+    onLayout: (value) => send({ type: 'SET_LAYOUT', value }),
+    curve:
+      offer === 'full'
+        ? {
+            shares: state.curve,
+            onShare: (key, value) => send({ type: 'SET_CURVE', key, value }),
+            onShares: (value) => send({ type: 'SET_CURVES', value }),
+          }
+        : undefined,
+  };
 }

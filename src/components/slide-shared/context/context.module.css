@@ -1259,6 +1259,7 @@ summary.row:hover {
   grid-area: att;
 }
 .attCard {
+  --att-scale: 220ms;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -1322,6 +1323,9 @@ summary.row:hover {
   border-radius: 2px;
 }
 @media (prefers-reduced-motion: reduce) {
+  .attCard {
+    --att-scale: 0ms;
+  }
   .att[data-layout='compressed'] .attRow,
   .att[data-layout='compressed'] .attName {
     transition: none;
@@ -1337,11 +1341,44 @@ summary.row:hover {
   text-align: start;
   cursor: pointer;
 }
+/* The bar track has a fixed width; its right end is the axis, the attention the whole track stands for. */
 .attBar {
+  position: relative;
   height: 0.55rem;
   border-radius: 999px;
   background: var(--muted);
-  overflow: hidden;
+}
+/* The vertical axis line at the track's right end, drawn row by row so it reads as one line down the list. */
+.attBar::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: -2px;
+  bottom: -2px;
+  width: 1px;
+  background: var(--cs-sub);
+  opacity: 0.6;
+}
+.att[data-layout='compressed'] .attBar::after {
+  top: 0;
+  bottom: -1px;
+}
+/* Above the list, the same columns as a row: the current axis maximum sits on the line. */
+.attAxis {
+  display: grid;
+  grid-template-columns: minmax(6rem, 2fr) 1fr 1.75rem;
+  gap: 0 0.6rem;
+  margin-top: 0.6rem;
+  line-height: 1;
+  color: var(--cs-sub);
+}
+.attAxis span {
+  grid-column: 2;
+  justify-self: end;
+  transform: translateX(50%);
+}
+.attAxis + .att {
+  margin-top: 0.15rem;
 }
 .attBar i {
   display: block;
@@ -1352,7 +1389,7 @@ summary.row:hover {
   background: var(--k);
   border-radius: 999px;
   transition:
-    transform var(--in) var(--ease-out),
+    transform var(--att-scale, var(--in)) var(--ease-out),
     background-color var(--hov) var(--ease-out);
 }
 .root[data-lit] .attRow:not([data-on]) i {
@@ -1689,6 +1726,49 @@ summary.row:hover {
   text-transform: uppercase;
 }
 
+/* The Attention menu's edit mode: a compact number field, spinner hidden, no validation until the check saves. */
+.curveInput {
+  width: 4.25rem;
+  padding: 0.2rem 0.4rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--background);
+  color: inherit;
+  text-align: end;
+  appearance: textfield;
+}
+.curveInput::-webkit-inner-spin-button,
+.curveInput::-webkit-outer-spin-button {
+  appearance: none;
+  margin: 0;
+}
+.curveInput:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 1px;
+}
+/* The Attention menu's layout choice: three buttons, one checked. */
+.layoutChoice {
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.layoutChoice button {
+  flex: 1;
+  padding: 0.3rem 0.5rem;
+  cursor: pointer;
+}
+.layoutChoice button + button {
+  border-left: 1px solid var(--border);
+}
+.layoutChoice button[aria-checked='true'] {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+.layoutChoice button:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: -2px;
+}
 /* The Attention menu's slider: the native range, so the keyboard and the screen reader work as for any slider. */
 .curveSlider {
   width: 100%;

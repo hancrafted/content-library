@@ -55,7 +55,11 @@ describe('failure cases', () => {
   it('keeps the default curve on a Preset that only names its layout', () => {
     // ARRANGE
     const slide4 = data.presets['slide-4']!;
-    const expected = { layout: 'compressed', curve: { start: 20, recent: 20, middle: 30, newest: 30 } };
+    const expected = {
+      layout: 'compressed',
+      curve: { start: 20, recent: 20, middle: 25, newest: 35 },
+      falloff: [50, 30, 20],
+    };
     // ACT
     const actual = slide4.attention;
     // ASSERT

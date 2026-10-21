@@ -4,15 +4,17 @@ import { usePopoverPlacement } from '@/hooks/use-popover-placement';
 import { popoverBox, type PopoverRules } from '@/lib/popover-placement.pure';
 import { useCallback, useId, useState, type KeyboardEvent } from 'react';
 import { createPortal } from 'react-dom';
-import { CURVE_KEYS, type Curve, type CurveKey } from './attention-curve.pure';
+import { Distribution } from './attention-distribution.client';
 import { defOf } from './context-controls.pure';
+import type { AttentionMenuModel } from './context-parts.types';
 import type { ContextWords } from './context-words.types';
 import styles from './context.module.css';
+import type { AttentionLayout } from './context.types';
 import { ControlIcon } from './control-icons';
 
 /*
  * The "⋯" button of the Attention head and its popover: four labelled sliders for the distribution, always summing
- * to 100. The popover is portaled into the Episode portal root (FE-009 §8) so no stacking context traps it. The state
+ * to 100 (a pen turns them into number inputs the check normalises to 100), and the layout of the part. The popover is portaled into the Episode portal root (FE-009 §8) so no stacking context traps it. The state
  * is the parent's and transient (FE-001).
  */
 
@@ -21,8 +23,7 @@ const RULES: PopoverRules = { maxWidth: 320, gap: 8, minRoom: 260 };
 
 export interface AttentionMenuProps {
   readonly words: ContextWords;
-  readonly curve: Curve;
-  readonly onCurve: (key: CurveKey, value: number) => void;
+  readonly menu: AttentionMenuModel;
 }
 
 interface PopoverProps extends AttentionMenuProps {
@@ -31,44 +32,36 @@ interface PopoverProps extends AttentionMenuProps {
   readonly onClose: () => void;
 }
 
-function Slider({ words, curve, onCurve, name }: AttentionMenuProps & { readonly name: CurveKey }) {
-  const id = useId();
-  const label = words.attentionCurve[name];
+const LAYOUT_NAMES: readonly AttentionLayout[] = ['list', 'pinned', 'compressed'];
+
+function Layouts({ words, menu }: AttentionMenuProps) {
   return (
-    <div className="grid gap-1">
-      <label htmlFor={id} className="flex justify-between gap-3 text-caption">
-        <span>{label}</span>
-        <output htmlFor={id} className="font-mono font-semibold">
-          {curve[name]}%
-        </output>
-      </label>
-      <input
-        id={id}
-        type="range"
-        min={0}
-        max={100}
-        step={1}
-        value={curve[name]}
-        aria-valuetext={`${curve[name]}%`}
-        data-curve={name}
-        className={styles.curveSlider}
-        onChange={(event) => onCurve(name, Number(event.currentTarget.value))}
-      />
-    </div>
+    <section className="grid gap-2" aria-label={words.attentionLayout}>
+      <p className="text-caption font-semibold">{words.attentionLayout}</p>
+      <div role="radiogroup" aria-label={words.attentionLayout} className={`${styles.layoutChoice} text-caption`}>
+        {LAYOUT_NAMES.map((name) => (
+          <button
+            key={name}
+            type="button"
+            role="radio"
+            aria-checked={menu.layout === name}
+            data-layout-option={name}
+            onClick={() => menu.onLayout(name)}
+          >
+            {words.attentionLayouts[name]}
+          </button>
+        ))}
+      </div>
+    </section>
   );
 }
 
-function Panel({ words, curve, onCurve }: AttentionMenuProps) {
-  const total = CURVE_KEYS.reduce((sum, key) => sum + curve[key], 0);
+function Panel(props: AttentionMenuProps) {
+  const { curve } = props.menu;
   return (
     <>
-      <p className="text-caption font-semibold">{words.attentionMenu}</p>
-      {CURVE_KEYS.map((name) => (
-        <Slider key={name} name={name} words={words} curve={curve} onCurve={onCurve} />
-      ))}
-      <p className="text-caption text-muted-foreground">
-        <span className="font-mono">{total}%</span>
-      </p>
+      {curve && <Distribution words={props.words} curves={curve} />}
+      <Layouts {...props} />
     </>
   );
 }

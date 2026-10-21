@@ -4,8 +4,7 @@ import { ContextCategory } from './context-category';
 import { columns } from './context-columns.pure';
 import { CONTROLS, offers, type Flips, type ModePart } from './context-controls.pure';
 import type { Flip, HeadToggle } from './context-parts.types';
-import type { ViewEvent, ViewState } from './context-state.pure';
-import { curveMenu, renderModeOf } from './context-state.pure';
+import { attentionMenu, menuOffer, renderModeOf, type ViewEvent, type ViewState } from './context-state.pure';
 import type { Attention } from './context-usage.pure';
 import type { ContextViewData } from './context-view';
 import { ContextWindow } from './context-window';
@@ -198,8 +197,8 @@ function AttentionPart({ m, events }: PartProps) {
       attention={m.attention}
       window={m.window}
       stepOf={m.stepOf}
-      layout={data.preset.attention.layout}
-      menu={curveMenu(state.curve, m.dispatch, offers(data.preset, 'attentionMenu') && !m.overridden)}
+      layout={state.layout}
+      menu={attentionMenu(state, m.dispatch, menuOffer(offers(data.preset, 'attentionMenu'), m.overridden))}
       onLight={events.onLight}
       onPin={events.onPin}
       onReveal={events.onReveal}

@@ -1,4 +1,4 @@
-import { curveProblems } from './attention-curve.pure';
+import { curveProblems, falloffProblems } from './attention-curve.pure';
 import { controlProblems } from './context-controls.pure';
 import { ATTENTION_LAYOUTS, PARTS } from './context-state.pure';
 import { framesOf, type Frame } from './context.pure';
@@ -17,6 +17,7 @@ function layoutProblems(preset: Preset): string[] {
   return [
     ...(ATTENTION_LAYOUTS.includes(layout) ? [] : [`unknown attention layout "${String(layout)}"`]),
     ...curveProblems(preset.attention.curve),
+    ...falloffProblems(preset.attention.falloff),
   ];
 }
 

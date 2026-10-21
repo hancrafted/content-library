@@ -31,6 +31,12 @@ export interface ContextWords {
   readonly attentionMenuTip: string;
   /** The four sliders of the Attention distribution, by bucket. */
   readonly attentionCurve: Readonly<Record<'start' | 'recent' | 'middle' | 'newest', string>>;
+  readonly attentionEdit: string;
+  readonly attentionSave: string;
+  readonly attentionSaveTip: string;
+  readonly attentionLayout: string;
+  /** The Attention part's layouts, by name. */
+  readonly attentionLayouts: Readonly<Record<'list' | 'pinned' | 'compressed', string>>;
   readonly download: string;
   readonly upload: string;
   readonly uploadFailed: string;

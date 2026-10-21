@@ -1,9 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import {
+  axisMaxOf,
   bucketOf,
   curveProblems,
   curveWeights,
   DEFAULT_CURVE,
+  falloffProblems,
+  normalizeCurve,
   setShare,
   type Curve,
   type CurveKey,
@@ -41,7 +44,7 @@ describe('success cases', () => {
   it('gives each bucket its configured share of the 100 units, summing to 100', () => {
     // ARRANGE
     const rows = 28;
-    const expected = { start: 20, recent: 20, middle: 30, newest: 30 };
+    const expected = { start: 20, recent: 20, middle: 25, newest: 35 };
     // ACT
     const weights = curveWeights(ids(rows), DEFAULT_CURVE);
     const actual = perBucket(rows);
@@ -81,8 +84,8 @@ describe('success cases', () => {
 
   it('moves one slider and spreads the difference evenly over the other three, always summing to 100', () => {
     // ARRANGE
-    const moved = 36;
-    const expected: Curve = { start: 18, recent: 18, middle: 28, newest: moved };
+    const moved = 38;
+    const expected: Curve = { start: 19, recent: 19, middle: 24, newest: moved };
     // ACT
     const actual = setShare(DEFAULT_CURVE, 'newest', moved);
     // ASSERT
@@ -113,6 +116,73 @@ describe('success cases', () => {
     const problems = curveProblems(DEFAULT_CURVE);
     // ASSERT
     expect(problems).toEqual(expected);
+  });
+  it('splits the newest bucket 50/30/20, the newest row most', () => {
+    // ARRANGE
+    const bucket = DEFAULT_CURVE.newest;
+    const expected = [bucket * 0.2, bucket * 0.3, bucket * 0.5];
+    // ACT
+    const actual = curveWeights(ids(28), DEFAULT_CURVE).slice(-3);
+    // ASSERT
+    actual.forEach((w, i) => expect(w).toBeCloseTo(expected[i] ?? 0, PRECISION));
+  });
+
+  it('follows a Preset falloff, newest first', () => {
+    // ARRANGE
+    const falloff = [1, 1, 2];
+    const bucket = DEFAULT_CURVE.newest;
+    const expected = [bucket * 0.5, bucket * 0.25, bucket * 0.25];
+    // ACT
+    const actual = curveWeights(ids(28), DEFAULT_CURVE, falloff).slice(-3);
+    // ASSERT
+    actual.forEach((w, i) => expect(w).toBeCloseTo(expected[i] ?? 0, PRECISION));
+  });
+
+  it('keeps the start bucket equal', () => {
+    // ARRANGE
+    const rows = 28;
+    // ACT
+    const [a, b, c] = curveWeights(ids(rows), DEFAULT_CURVE);
+    // ASSERT
+    expect(b).toBeCloseTo(a ?? 0, PRECISION);
+    expect(c).toBeCloseTo(a ?? 0, PRECISION);
+  });
+
+  it('accepts a falloff of three positive numbers', () => {
+    // ARRANGE
+    const falloff = [50, 30, 20];
+    // ACT
+    const actual = falloffProblems(falloff);
+    // ASSERT
+    expect(actual).toEqual([]);
+  });
+
+  it('scales typed shares to 100', () => {
+    // ARRANGE
+    const typed = { start: 10, recent: 10, middle: 10, newest: 10 };
+    const expected = { start: 25, recent: 25, middle: 25, newest: 25 };
+    // ACT
+    const actual = normalizeCurve(typed);
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
+  it.each([
+    { shares: [60, 20], max: 100 },
+    { shares: [50, 10], max: 50 },
+    { shares: [41, 10], max: 50 },
+    { shares: [40, 10], max: 40 },
+    { shares: [35, 10], max: 40 },
+    { shares: [30, 10], max: 30 },
+    { shares: [21, 10], max: 30 },
+    { shares: [12, 3], max: 20 },
+  ])('steps the axis for shares $shares to $max', ({ shares, max }) => {
+    // ARRANGE
+    const expected = max;
+    // ACT
+    const actual = axisMaxOf(shares);
+    // ASSERT
+    expect(actual).toBe(expected);
   });
 });
 
@@ -160,6 +230,15 @@ describe('failure cases', () => {
     expect(sum(Object.values(actual))).toBe(TOTAL);
     expect(actual.recent).toBeGreaterThanOrEqual(atLeast);
   });
+  it('rejects a falloff that is not three positive numbers', () => {
+    // ARRANGE
+    const short = [50, 30];
+    const zero = [50, 0, 20];
+    // ACT
+    const actual = [falloffProblems(short).length, falloffProblems(zero).length];
+    // ASSERT
+    expect(actual).toEqual([1, 1]);
+  });
 });
 
 describe('edge cases', () => {
@@ -198,7 +277,7 @@ describe('edge cases', () => {
   it('redistributes an empty bucket’s share proportionally over the others', () => {
     // ARRANGE
     const rows = 6; // start + newest only: no recent, no middle
-    const expected = { start: 40, newest: 60 };
+    const expected = { start: (20 / 55) * 100, newest: (35 / 55) * 100 };
     // ACT
     const got = perBucket(rows);
     // ASSERT
@@ -206,5 +285,33 @@ describe('edge cases', () => {
     expect(got.middle).toBe(0);
     expect(got.start).toBeCloseTo(expected.start, PRECISION);
     expect(got.newest).toBeCloseTo(expected.newest, PRECISION);
+  });
+
+  it('counts a bad or negative typed share as 0 and still sums to 100', () => {
+    // ARRANGE
+    const typed = { start: 30, recent: Number.NaN, middle: -5, newest: 70 };
+    const expected = { start: 30, recent: 0, middle: 0, newest: 70 };
+    // ACT
+    const actual = normalizeCurve(typed);
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
+  it('gives the default curve when nothing positive was typed', () => {
+    // ARRANGE
+    const typed = { start: 0, recent: 0, middle: 0, newest: 0 };
+    // ACT
+    const actual = normalizeCurve(typed);
+    // ASSERT
+    expect(actual).toEqual(DEFAULT_CURVE);
+  });
+
+  it('keeps the axis at its 20 percent floor for no shares', () => {
+    // ARRANGE
+    const floor = 20;
+    // ACT
+    const actual = axisMaxOf([]);
+    // ASSERT
+    expect(actual).toBe(floor);
   });
 });
