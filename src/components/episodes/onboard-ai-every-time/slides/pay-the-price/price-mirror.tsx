@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react';
-import type { BackLabels, FlipRow } from './trait-flip-row.client';
+import type { BackLabels, FlipRow } from './trait-flip-card.client';
 import { TraitFlip } from './trait-flip.client';
 
 interface PriceMirrorProps {
   columns: { freelancer: string; traits: string; ai: string };
   rows: readonly FlipRow[];
-  closing: string;
+  closing: ReactNode;
   closingMarker: ReactNode;
   labels: BackLabels;
 }
@@ -26,7 +26,7 @@ function ColumnHeads({ columns }: Pick<PriceMirrorProps, 'columns'>) {
         </svg>
         {columns.freelancer}
       </p>
-      <p className="hidden w-60 shrink-0 self-center text-center text-caption tracking-wide text-muted-foreground uppercase @3xl:block">
+      <p className="hidden w-60 shrink-0 self-center text-center text-caption font-semibold tracking-wide uppercase @3xl:block">
         {columns.traits}
       </p>
       <p className="flex flex-1 basis-0 items-center justify-center gap-2 rounded-full border border-ai/50 bg-ai/10 py-2 text-body font-semibold text-ai">
@@ -42,7 +42,7 @@ function ColumnHeads({ columns }: Pick<PriceMirrorProps, 'columns'>) {
 /**
  * The PRICE mirror (Spec Option 2a, after the design reference's page 1): the freelancer left, the five trait chips
  * down the centre spelling P R I C E, the AI right on its soft `ai` edge, one list item per row so a screen reader
- * reads trait, freelancer and AI together; the closing line under it. The trait flip makes it presentable.
+ * reads trait, freelancer and AI together; the closing line under it. The trait flip discloses it a row at a time.
  */
 export function PriceMirror({ columns, rows, closing, closingMarker, labels }: PriceMirrorProps) {
   return (

@@ -1,7 +1,7 @@
 {
-  "title": "Fünf Eigenschaften, oder du zahlst den PRICE",
+  "title": "Fünf Eigenschaften, oder du zahlst den Preis",
   "heading": "Ein brillanter Freelancer mit Amnesie, jedes Mal",
-  "caption": "Fünf Eigenschaften, die du steuern musst, sonst zahlst du den PRICE.",
+  "caption": "Fünf Eigenschaften, die du steuern musst, sonst zahlst du den Preis.",
   "columns": {
     "freelancer": "Der Freelancer",
     "traits": "Fünf Eigenschaften",
@@ -48,9 +48,10 @@
     "prompt": "Prompt",
     "handbook": "Wie wir arbeiten",
     "bill": "Rechnung",
-    "tokens": "Tokens"
+    "tokens": "Tokens",
+    "turn": "Karte auf ihren Text drehen"
   },
-  "closing": "Und jedes Mal vergessen sie alles, also beginnt jeder Auftrag bei Tag eins.",
+  "closing": "<strong>Amnesie:</strong> Nach jedem Gespräch vergessen sie alles, also musst du sie neu einarbeiten, und jeder Auftrag beginnt bei null.",
   "notes": {
     "right-or-not-the-output-looks-finished": {
       "header": "Richtig oder nicht, das Ergebnis sieht fertig aus",

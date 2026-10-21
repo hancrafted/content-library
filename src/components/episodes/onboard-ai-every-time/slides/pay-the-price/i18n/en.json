@@ -1,7 +1,7 @@
 {
-  "title": "Five traits, or you pay the PRICE",
+  "title": "Five traits, or you pay the price",
   "heading": "A brilliant freelancer with amnesia, every time",
-  "caption": "Five traits to manage, or you pay the PRICE.",
+  "caption": "Five traits to manage, or you pay the price.",
   "columns": {
     "freelancer": "The freelancer",
     "traits": "Five traits",
@@ -48,9 +48,10 @@
     "prompt": "prompt",
     "handbook": "How we work here",
     "bill": "bill",
-    "tokens": "tokens"
+    "tokens": "tokens",
+    "turn": "Turn the card to its text"
   },
-  "closing": "And every time, they forget everything, so every job starts from day one.",
+  "closing": "<strong>Amnesia:</strong> after each conversation, they forget everything, so you have to onboard them again, and every job starts from zero.",
   "notes": {
     "right-or-not-the-output-looks-finished": {
       "header": "Right or not, the output looks finished",
