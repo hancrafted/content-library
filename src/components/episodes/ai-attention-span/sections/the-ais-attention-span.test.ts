@@ -74,11 +74,26 @@ const ADDED_NOTES = ['Context rot'];
  * and Spec title; each is the new words, the Spec's segment order and the rest of the Spec's script kept.
  */
 const REWRITTEN_SCRIPT: Readonly<Record<string, Readonly<Record<string, { title?: string; script: string }>>>> = {
+  'what-happens-when-the-bar-fills-up': {
+    'The start helps, but is no guarantee': {
+      title: 'Only the very start holds',
+      script:
+        "Now watch what happens as this chat grows. Only the very beginning of the window holds the AI's attention: the starting instructions. Your own first message already comes after them, and its attention falls off right away, so being first in the chat is no protection, and you will see why in a moment. One thing before we go on: the numbers on this slide are illustrative, I picked a 200K window and the little bars that show how much the AI looks at each message, to show the shape, not to measure anything.",
+    },
+    'The budget is forgotten': {
+      script:
+        'Look at the budget. Your very first message said 40,000 euro, and now the plan comes back at 52,300. It was your first message, but only the starting instructions hold the very beginning, so even your first message already falls off. It lost attention by its position, and it is also one short number among many similar ones.',
+    },
+  },
   'attention-is-a-budget': {
     'A hundred units': {
       title: 'Attention as a budget',
       script:
         "Think of attention as a budget. On the left is the timeline, in the middle the window as a bar, and on the right the attention each message gets. And I say it plainly: these numbers, the token counts and the window sizes on this slide are illustrative. I made them up to show the shape, so please don't take them as measurements.",
+    },
+    'Where it goes': {
+      script:
+        'Where does the budget go? A big share to the very first lines, the starting instructions, a big share to the newest messages, and what is left is shared out across everything between, your own first message included, thinner and thinner with every message you add. That is why the middle fades.',
     },
   },
   'what-we-learned-so-far': {

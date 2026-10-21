@@ -139,16 +139,29 @@ describe('success cases', () => {
     actual.forEach((w, i) => expect(w).toBeCloseTo(expected[i] ?? 0, PRECISION));
   });
 
-  it('gives the very first row a clearly higher share than the next two, which stay flat-ish', () => {
+  it('gives the very first row a clearly higher share than the next two', () => {
     // ARRANGE
     const rows = 28;
-    const clearly = 1.3;
-    const flat = 0.35;
+    const clearly = 2.5;
     // ACT
     const [first, b, c] = curveWeights(ids(rows), DEFAULT_CURVE);
     // ASSERT
     expect(first).toBeGreaterThan(clearly * Math.max(b ?? 0, c ?? 0));
-    expect(Math.abs((b ?? 0) - (c ?? 0))).toBeLessThan(flat * (b ?? 1));
+  });
+
+  it('lets the memory and the first user message fall towards the middle level, the sink alone staying high', () => {
+    // ARRANGE
+    const rows = 28;
+    const middleRows = 15;
+    const middleLevel = DEFAULT_CURVE.middle / middleRows;
+    const near = 2;
+    const sinkOverMemory = 2.5;
+    // ACT
+    const [first, memory, message] = curveWeights(ids(rows), DEFAULT_CURVE);
+    // ASSERT
+    expect(first).toBeGreaterThan(sinkOverMemory * (memory ?? 0));
+    expect(memory).toBeGreaterThan(message ?? 0);
+    expect(message).toBeLessThan(near * middleLevel);
   });
 
   it('keeps the start jitter deterministic per ids and different between chats', () => {

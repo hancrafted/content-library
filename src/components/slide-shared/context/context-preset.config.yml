@@ -91,11 +91,12 @@ defaults:
   order: [chat, timeline, context, category, panel, attention]
   fade: false
   # `falloff`: how a bucket splits over its three edge rows. `start`, oldest first: the very first row (the attention
-  # sink) clearly above two flat ones, with a little seeded jitter. `newest`, newest first: 50/30/20 of the bucket.
+  # sink) stays high, the next two (memory, the user's first message) fall towards the middle level: 70/20/10, with a
+  # little seeded jitter. `newest`, newest first: 50/30/20 of the bucket.
   attention:
     layout: list
     curve: { start: 20, recent: 20, middle: 25, newest: 35 }
-    falloff: { start: [50, 25, 25], newest: [50, 30, 20] }
+    falloff: { start: [70, 20, 10], newest: [50, 30, 20] }
   # Every control by id; a Preset overrides key by key, and '*' sets show for all (code: context-controls.pure.ts).
   controls:
     parts: { show: true, reorder: true }
@@ -298,7 +299,7 @@ words:
   readoutSentenceCrossed: "Step {step} of {steps}: {event}, {delta} tokens, {percent}% used, past {who}'s smart zone."
   crossed: "Past {who}'s smart zone"
   attentionKicker: '{head} · 100 units of attention'
-  attentionLead: The start and the newest messages stay sharp. The middle spreads thin as the window fills.
+  attentionLead: Only the very first lines and the newest messages stay sharp. Your first message and the rest spread thin.
   pinned: pinned
   pinnedKicker: 'Step {step} · pinned'
   stepKicker: 'Step {step}'

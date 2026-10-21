@@ -74,7 +74,7 @@ words:
   readoutSentenceCrossed: 'Schritt {step} von {steps}: {event}, {delta} Tokens, {percent} % belegt, jenseits der Smart Zone von {who}.'
   crossed: 'Jenseits der Smart Zone von {who}'
   attentionKicker: '{head} · 100 Einheiten Aufmerksamkeit'
-  attentionLead: Der Anfang und die neuesten Nachrichten bleiben scharf. Die Mitte wird dünner, je voller das Fenster ist.
+  attentionLead: Nur die allerersten Zeilen und die neuesten Nachrichten bleiben scharf. Deine erste Nachricht und der Rest werden dünner.
   pinned: angeheftet
   pinnedKicker: 'Schritt {step} · angeheftet'
   stepKicker: 'Schritt {step}'

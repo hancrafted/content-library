@@ -1,6 +1,6 @@
 {
   "title": "Attention is a budget",
-  "caption": "A hundred units of attention go mostly to the start and the newest messages; the middle gets what is left, until it is too thin to trust.",
+  "caption": "A hundred units of attention go mostly to the very first lines and the newest messages; everything between, your own first message included, gets what is left, until it is too thin to trust.",
   "illustrative": "illustrative numbers",
   "zones": {
     "note": "<marker>Where the middle gets too thin differs per model and task.</marker>"
@@ -8,7 +8,7 @@
   "lost": {
     "kicker": "Known as",
     "name": "<marker>“Lost in the middle”</marker>",
-    "body": "<start>The start and the newest messages get the attention</start>; <budget>what sits in the middle fades</budget>."
+    "body": "<start>The very first lines and the newest messages get the attention</start>; <budget>what sits in between, your first message too, fades</budget>."
   },
   "notes": {
     "the-attention-budget": {
@@ -61,7 +61,7 @@
       "where-it-goes": {
         "title": "Where it goes",
         "keywords": "",
-        "script": "Where does the budget go? A big share to the start, a big share to the newest messages, and what is left is shared out across the middle, thinner and thinner with every message you add. That is why the middle fades."
+        "script": "Where does the budget go? A big share to the very first lines, the starting instructions, a big share to the newest messages, and what is left is shared out across everything between, your own first message included, thinner and thinner with every message you add. That is why the middle fades."
       },
       "a-spike-in-the-middle": {
         "title": "A spike in the middle",
