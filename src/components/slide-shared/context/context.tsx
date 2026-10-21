@@ -3,6 +3,7 @@ import { contextData, type ContextLocale, type ContextPresetId, type MiniPresetI
 import type { ContextViewData } from './context-view';
 import type { ContextWords } from './context-words.types';
 import { ContextClient } from './context.client';
+import { SessionBarView } from './session-bar-view';
 
 /*
  * The context window cornerstone, a Shared visual. A Slide places it by Preset id and locale; the Preset, the chat and
@@ -42,26 +43,16 @@ export function Context(props: Props<ContextPresetId>) {
   return <ContextClient {...contextViewData(props)} />;
 }
 
-/** Static bars drawn horizontally: chats or generic segments one under the other on one window size. */
-export function ContextBarsPreset({
-  preset: id,
-  locale,
-  words,
-  here,
-}: Props<MiniPresetId> & {
-  /** A call bar's "you are here" marker: the minute of the call it points at. */
-  readonly here?: number;
-}) {
+/** Static bars drawn horizontally: chats one under the other on one window size. */
+export function ContextBarsPreset({ preset: id, locale, words }: Props<MiniPresetId>) {
   const data = contextData(localeOf(locale));
   const mini = data.minis[id];
   if (!mini) throw new Error(`context bars: unknown Preset "${id}"`);
-  return (
-    <ContextBars
-      mini={mini}
-      chats={data.chats}
-      words={{ ...data.words, ...words }}
-      locale={localeOf(locale)}
-      here={here}
-    />
-  );
+  return <ContextBars mini={mini} chats={data.chats} words={{ ...data.words, ...words }} locale={localeOf(locale)} />;
+}
+
+/** The session bar: the audience's attention over the session, filled up to and including the Section `at` (null: fresh). */
+export function SessionBarPreset({ at, locale, words }: Omit<Props<never>, 'preset'> & { readonly at: string | null }) {
+  const data = contextData(localeOf(locale));
+  return <SessionBarView plan={data.session} words={{ ...data.words, ...words }} at={at} />;
 }

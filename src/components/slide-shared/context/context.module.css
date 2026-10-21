@@ -5,6 +5,7 @@
 
 .root,
 .bars,
+.session,
 .barView {
   /* "What the AI read": the one local hue, teal between the success and info tokens. */
   --cs-read: color-mix(in oklch, color-mix(in oklch, var(--success) 72%, var(--info)) 82%, var(--card));
@@ -52,6 +53,7 @@
 }
 :global(.dark) .root,
 :global(.dark) .bars,
+:global(.dark) .session,
 :global(.dark) .barView {
   --cs-term-ink: var(--foreground);
   --cs-term-bg: color-mix(in oklch, var(--background) 94%, var(--machine));
@@ -1607,21 +1609,6 @@ summary.row:hover {
   outline-offset: -2px;
   z-index: 3;
 }
-.swatch {
-  display: block;
-  flex: none;
-  width: 0.75rem;
-  height: 0.75rem;
-  border-radius: 0.2rem;
-  background: var(--k);
-}
-.swatch[data-tone='faded'] {
-  background: var(--cs-dim);
-}
-.swatch[data-tone='buffer'] {
-  background: repeating-linear-gradient(-45deg, transparent 0 2px, var(--cs-border) 2px 3px);
-  box-shadow: inset 0 0 0 1px var(--cs-sub);
-}
 .sr {
   position: absolute;
   width: 1px;
@@ -1631,34 +1618,75 @@ summary.row:hover {
   white-space: nowrap;
 }
 
-/* "You are here" under a call bar: a pin at the minute, its words kept inside the bar's width. */
-.here {
-  position: relative;
-  height: 2rem;
-  margin-top: -0.2rem;
+/* The session bar: one segment per Section sized by its share; filled up to the current one, which is named. */
+.session {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 100%;
   color: var(--foreground);
 }
-.herePin {
-  position: absolute;
-  top: 0;
-  left: calc(var(--f) * 100%);
-  width: 0;
-  height: 0;
-  margin-left: -0.4rem;
-  border-right: 0.4rem solid transparent;
-  border-bottom: 0.5rem solid var(--foreground);
-  border-left: 0.4rem solid transparent;
+.session figcaption {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
 }
-.hereText {
+.session figcaption small {
+  color: var(--cs-sub);
+}
+.sessionBar {
+  display: flex;
+  gap: 2px;
+  width: 100%;
+  height: var(--bar-h, 2.25rem);
+}
+.sessionPart {
+  position: relative;
+  flex: calc(var(--z) * 1) 0 0;
+  min-width: 0;
+  border-radius: 0.2rem;
+  background: var(--cs-free);
+  box-shadow: inset 0 0 0 1px var(--cs-border);
+}
+.sessionPart[data-state='done'] {
+  background: color-mix(in oklch, var(--primary) 42%, var(--card));
+  box-shadow: none;
+}
+.sessionPart[data-state='current'] {
+  background: var(--primary);
+  box-shadow: none;
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+.sessionPart:first-child {
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+}
+.sessionPart:last-child {
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+}
+.sessionNow {
   position: absolute;
-  top: 0.6rem;
+  top: calc(100% + 0.55rem);
   white-space: nowrap;
+  color: var(--foreground);
 }
-.here[data-side='start'] .hereText {
-  left: calc(var(--f) * 100%);
+.sessionPart[data-side='start'] .sessionNow {
+  left: 0;
 }
-.here[data-side='end'] .hereText {
-  right: calc((1 - var(--f)) * 100%);
+.sessionPart[data-side='end'] .sessionNow {
+  right: 0;
+}
+.sessionNote {
+  min-height: 1.25rem;
+  margin-top: 0.25rem;
+  color: var(--cs-sub);
+}
+.sessionNote::first-letter {
+  text-transform: uppercase;
 }
 
 /* The Attention menu's slider: the native range, so the keyboard and the screen reader work as for any slider. */

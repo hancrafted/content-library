@@ -5,11 +5,11 @@
   "slides": [
     {
       "id": "top",
-      "text": "Why AI has a weird attention span you must learn to manage A long chat behaves like a long call: its attention is a limited window, so you manage what goes into it. The call 1 h 22 min You are here: the start of the call The start and the end stay sharp The middle fades out of attention"
+      "text": "Why AI has a weird attention span you must learn to manage A long chat behaves like a long call: its attention is a limited window, so you manage what goes into it. This session 30 min nothing used yet"
     },
     {
       "id": "thought-experiment",
-      "text": "Thought experiment How your attention holds up over a 90-minute call The call 1 h 22 min You are here: minute 5 of 82 One block a minute: the start, the end and Pepper's cake stay lit. …wait, we never fixed the date."
+      "text": "Thought experiment How your attention holds up over a 90-minute call This session 30 min Thought experiment …wait, we never fixed the date."
     },
     {
       "id": "thought-experiment--the-long-phone-call-story",
@@ -21,7 +21,7 @@
     },
     {
       "id": "the-ais-attention-span",
-      "text": "The AI's attention span Now the cause: how the AI holds a chat. The call 1 h 22 min You are here: minute 20 of 82 The AI's window keeps the same light: its start and its newest stay sharp, the middle fades."
+      "text": "The AI's attention span Now the cause: how the AI holds a chat. This session 30 min The AI's attention span The AI's window keeps the same light: its start and its newest stay sharp, the middle fades."
     },
     {
       "id": "the-ais-attention-span--the-context-window",
@@ -41,7 +41,7 @@
     },
     {
       "id": "what-fills-the-window",
-      "text": "What fills the window Your messages are only a part of it. The call 1 h 22 min You are here: minute 46 of 82"
+      "text": "What fills the window Your messages are only a part of it. This session 30 min What fills the window"
     },
     {
       "id": "what-fills-the-window--whats-really-in-the-window",
@@ -57,7 +57,7 @@
     },
     {
       "id": "managing-the-attention-span",
-      "text": "Managing the attention span You can't read a gauge, so you build habits. The call 1 h 22 min You are here: minute 67 of 82 Handoff: party for 40, 27 June, budget 40,000 € . Next: invitations."
+      "text": "Managing the attention span You can't read a gauge, so you build habits. This session 30 min Managing the attention span Handoff: party for 40, 27 June, budget 40,000 € . Next: invitations."
     },
     {
       "id": "managing-the-attention-span--everyday-habits",
