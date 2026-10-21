@@ -1,6 +1,6 @@
 {
   "title": "The context window",
-  "caption": "The AI is handed the whole chat again with every message, and the space for it is limited: that limit is the context window.",
+  "caption": "The whole chat is handed over with every message, and the space is limited: the context window.",
   "cards": {
     "resend": {
       "kicker": "With every message",

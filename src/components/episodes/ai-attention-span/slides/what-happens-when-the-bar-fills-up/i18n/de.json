@@ -1,7 +1,6 @@
 {
   "title": "Was passiert, wenn der Balken voll wird",
-  "caption": "Wenn der Chat das Fenster füllt, bleiben der Anfang und das Neueste scharf, die Mitte verschwimmt, ein wiederholtes Detail überlebt, und die Antworten werden schlechter.",
-  "rot": "Antworten werden schlechter: <quality>Context Rot</quality><length></length>",
+  "caption": "Wenn der Chat das Fenster füllt, bleiben der Anfang und das Neueste scharf, die Mitte verschwimmt, ein wiederholtes Detail überlebt, und die Antworten werden schlechter: <b>Context Rot</b>.",
   "strip": {
     "firstKicker": "Deine erste Nachricht",
     "first": "… Budget <figure>40.000 Euro</figure>.",

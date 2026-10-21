@@ -1,6 +1,6 @@
 {
   "title": "Das Kontextfenster",
-  "caption": "Die KI bekommt mit jeder Nachricht den ganzen Chat noch einmal, und der Platz dafür ist begrenzt: Diese Grenze ist das Kontextfenster.",
+  "caption": "Mit jeder Nachricht geht der ganze Chat mit, und der Platz ist begrenzt: das Kontextfenster.",
   "cards": {
     "resend": {
       "kicker": "Mit jeder Nachricht",

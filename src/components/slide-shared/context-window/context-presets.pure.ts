@@ -19,6 +19,7 @@ function shapeProblems(preset: Preset, chat: Chat): string[] {
       .filter((part) => !PARTS.some((p) => p === part))
       .map((part) => `unknown part "${part}"`),
     ...pinnedProblems(preset, chat),
+    ...(preset.height > 0 && Number.isFinite(preset.height) ? [] : ['the height must be a positive number of rem']),
     ...(preset.windowSwitch && preset.windows.length < 2 ? ['the window switch needs two window sizes'] : []),
   ];
 }

@@ -1,7 +1,6 @@
 {
   "title": "What happens when the bar fills up",
-  "caption": "As the chat fills the window, the start and the newest stay sharp, the middle blurs, one repeated detail survives, and the answers get worse.",
-  "rot": "Answers get worse: <quality>context rot</quality><length></length>",
+  "caption": "As the chat fills the window, the start and the newest stay sharp, the middle blurs, one repeated detail survives, and answers get worse: <b>context rot</b>.",
   "strip": {
     "firstKicker": "Your first message",
     "first": "… budget <figure>40,000 euro</figure>.",
