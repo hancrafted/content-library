@@ -1,18 +1,12 @@
 import { slide } from '@/components/slide-master/slide';
 import { SlideFrame } from '@/components/slide-master/slide-master';
-import {
-  CompareJob,
-  InterviewJob,
-  PartyPieces,
-  RequirementsCard,
-  ResearchChats,
-  VenuePlan,
-} from '@/components/slide-shared/venue-pipeline/stage-jobs';
-import { VenuePipeline, type StageView } from '@/components/slide-shared/venue-pipeline/venue-pipeline';
-import { STAGES, type StageId } from '@/components/slide-shared/venue-pipeline/venue-pipeline.pure';
+import { ContextBarsPreset } from '@/components/slide-shared/context/context';
 import type { ReactNode } from 'react';
+import { CompareMotion } from './compare-motion.client';
+import { ComparePanel } from './compare-panel';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
+import styles from './the-workflow-for-bigger-projects.module.css';
 
 const CLEAN_WINDOWS = {
   slug: 'anthropic-effective-context-engineering',
@@ -20,107 +14,75 @@ const CLEAN_WINDOWS = {
 };
 const CONTEXT_LENGTH = { slug: 'du-context-length-alone-hurts', url: 'https://arxiv.org/abs/2510.05381' };
 
-const CRITERIA = ['guests', 'budget', 'stepFree', 'vegetarian', 'quiet'] as const;
-const jobsOf = (id: StageId) => STAGES.find((stage) => stage.id === id)?.jobs ?? [];
+const AFTER = 'after';
+const RESULTS = 'results';
 
-const WORKERS = 'workers';
-const LOOP_NOTE = 'loop-note';
+/** The results the workers hand back to the planner, in the order the steps run. */
+const RESULT_KEYS = ['1', '2', '3'] as const;
+
+/** One small card a worker chat hands back to the planner. */
+function ResultCard({ back, children }: { back: string; children: ReactNode }) {
+  return (
+    <li data-result className="rounded-xl border border-primary bg-card px-3 py-2 text-caption shadow-md">
+      <span className="font-semibold text-primary">{back}</span> · {children}
+    </li>
+  );
+}
 
 /**
- * The human in the loop workflow: the brief-the-venue pipeline whole (its columns, connectors and the fan-out to the
- * worker chats and back in), only without bold first letters and the acronym unnamed. The loop strip did not fit
- * beside it at 1280x800, so its message (planner chat, worker chats, you checking) lives in the caption.
+ * The workflow for bigger projects (Spec Option 11c): before and after. On the left the one long summer-party chat as
+ * the cornerstone's mini bar, past the smart zone, on a muted panel; on the right the workflow, the planner and its
+ * worker chats as the cornerstone's mini bars on the accent-bordered panel, with the three small results they hand
+ * back. The left panel fades as the right lights, on the Slide's first `active` and on every mouse enter and keyboard
+ * focus.
  */
 export const theWorkflowForBiggerProjects = slide({
   slug: 'the-workflow-for-bigger-projects',
   messages: { en, de },
   notes: [
-    { slug: 'clean-windows-for-each-part', target: WORKERS, sources: [CLEAN_WINDOWS] },
-    { slug: 'short-tasks-beat-long-ones', target: LOOP_NOTE, sources: [CONTEXT_LENGTH] },
+    { slug: 'clean-windows-for-each-part', target: AFTER, sources: [CLEAN_WINDOWS] },
+    { slug: 'short-tasks-beat-long-ones', target: RESULTS, sources: [CONTEXT_LENGTH] },
   ],
   segments: [
-    { slug: 'recall' },
-    { slug: 'human-in-the-loop' },
-    { slug: 'planner-and-handoff' },
-    { slug: 'worker-chats' },
-    { slug: 'you-check' },
+    { slug: 'one-chat-is-too-small' },
+    { slug: 'break-it-down-first' },
+    { slug: 'one-planner' },
+    { slug: 'a-fresh-chat-per-step' },
+    { slug: 'you-coordinate' },
   ],
-  content: ({ t, target, marker, Marker }) => {
-    const view = (id: StageId, body: ReactNode, extra: Partial<StageView> = {}): StageView => ({
-      stage: STAGES.find((stage) => stage.id === id) ?? STAGES[0],
-      name: t(`stages.${id}.name`),
-      move: t(`stages.${id}.move`),
-      jobsLabel: t('jobsLabel', { stage: t(`stages.${id}.name`) }),
-      body,
-      ...extra,
-    });
-    const stages: StageView[] = [
-      view(
-        'party',
-        <PartyPieces
-          jobs={jobsOf('party')}
-          names={{
-            venue: t('jobs.party.venue'),
-            travel: t('jobs.party.travel'),
-            catering: t('jobs.party.catering'),
-            invitations: t('jobs.party.invitations'),
-            budget: t('jobs.party.budget'),
-          }}
-        />,
-      ),
-      view(
-        'interview',
-        <InterviewJob
-          label={t('jobs.interview.label')}
-          detail={t('jobs.interview.detail')}
-          forgot={t.rich('jobs.interview.forgot', { marker: (chunks) => chunks })}
-        />,
-      ),
-      view(
-        'requirements',
-        <RequirementsCard
-          gate={t('card.gate')}
-          title={t('card.title')}
-          criteria={CRITERIA.map((criterion) => t(`card.criteria.${criterion}`))}
-          signOff={t('card.signOff')}
-          marker={null}
-        />,
-      ),
-      view(
-        'research',
-        <ResearchChats
-          jobs={jobsOf('research')}
-          names={{
-            venue1: t('jobs.research.venue1'),
-            venue2: t('jobs.research.venue2'),
-            venue3: t('jobs.research.venue3'),
-          }}
-          checked={t('jobs.research.checked')}
-        />,
-        { target: target(WORKERS), aside: <Marker note="clean-windows-for-each-part" placement="beside" /> },
-      ),
-      view(
-        'compare',
-        <CompareJob
-          label={t('jobs.compare.label')}
-          detail={t('jobs.compare.detail')}
-          gate={t('jobs.compare.gate')}
-          marker={null}
-        />,
-      ),
-      view(
-        'recommendation',
-        <VenuePlan label={t('jobs.recommendation.label')} detail={t('jobs.recommendation.detail')} />,
-      ),
-    ];
+  content: ({ t, locale, target, marker, Marker }) => {
+    const budget = (chunks: ReactNode) => (
+      <span data-budget className="rounded bg-(--warning)/25 px-1 whitespace-nowrap">
+        {chunks}
+      </span>
+    );
     return (
-      <SlideFrame className="mt-10 gap-10">
-        <div className="@container">
-          <VenuePipeline label={t('pipelineLabel')} stages={stages} acronym={false} />
-        </div>
-        <p {...target(LOOP_NOTE)} className="text-caption text-pretty text-muted-foreground">
-          {t.rich('loop.note', { marker: marker('short-tasks-beat-long-ones') })}
-        </p>
+      <SlideFrame className="mt-10 gap-8">
+        <CompareMotion label={t('compareLabel')} className={`${styles.compare} grid gap-8 lg:grid-cols-12`}>
+          <ComparePanel title={t('before.title')} tone="before">
+            <ContextBarsPreset preset="slide-11-before" locale={locale} />
+            <p className="text-center text-caption text-muted-foreground">{t('before.note')}</p>
+          </ComparePanel>
+          <ComparePanel
+            title={t('after.title')}
+            tone="after"
+            marker={<Marker note="clean-windows-for-each-part" placement="beside" />}
+            target={target(AFTER)}
+          >
+            <ContextBarsPreset preset="slide-11-after" locale={locale} />
+            <ul aria-label={t('resultsLabel')} {...target(RESULTS)} className="flex flex-wrap gap-3">
+              {RESULT_KEYS.map((key) => (
+                <ResultCard key={key} back={t('back')}>
+                  {t.rich(`results.${key}`, { budget })}
+                </ResultCard>
+              ))}
+            </ul>
+            <p className="text-caption text-muted-foreground">
+              {t.rich('after.note', { marker: marker('short-tasks-beat-long-ones') })}
+            </p>
+          </ComparePanel>
+        </CompareMotion>
+        <p className="text-caption text-pretty text-muted-foreground">{t('illustrative')}</p>
       </SlideFrame>
     );
   },

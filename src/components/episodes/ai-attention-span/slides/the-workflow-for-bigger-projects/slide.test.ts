@@ -38,29 +38,29 @@ describe('success cases', () => {
     // ARRANGE
     const expected = [
       {
-        title: 'Recall the brief',
+        title: 'One chat is too small',
         script:
-          'Remember the brief for the venue: break the party down, interview yourself with AI, write the requirements first, give each piece a fresh chat, and evaluate each step. That was one task, done well. A bigger project needs the same moves, plus a way of working that holds them together.',
+          'Sometimes the project is bigger than one chat can hold: the whole summer party, with venues, catering, hotels and invitations. One chat would fill up, whatever window size you give it.',
       },
       {
-        title: 'Human in the loop',
+        title: 'Break it down first',
         script:
-          'This way of working is what we call a human in the loop workflow. You are the orchestrator, the captain at the helm, and you use AI the way a captain uses a crew.',
+          'So you break it down first. Work backward from the outcome, what do I need to run this party, and then what do I need for that, until the next step is clear. You can ask the AI to help you with that.',
       },
       {
-        title: 'Planner and handoff',
+        title: 'One planner',
         script:
-          'One chat stays the planner. It helps you prepare the task and writes a handoff. It keeps only the plan and the results, so it stays small and has room to spare.',
+          'Then one chat stays the planner. It keeps only the plan and the results, so it stays small and has room to spare.',
       },
       {
-        title: 'Worker chats',
+        title: 'A fresh chat per step',
         script:
-          'The handoff goes to worker chats, a fresh one per job: venues, catering, invitations. Each worker reads its files, fills up as much as it needs, saves its result, and then you let it go.',
+          'Each step goes to a fresh chat: venues, catering, invitations. That chat reads its files and fills up as much as it needs, hands the result back to the planner as one small card, and then you let it go. Next step, next fresh chat.',
       },
       {
-        title: 'You check',
+        title: 'You coordinate',
         script:
-          "You carry the results back to the planner, and every artifact in between, the handoff and each result, is something you check. Every chat has one job, so none of them runs long enough to blur its middle. That is the whole idea: the window is the AI's attention span, and managing it is your job. One honest caveat: the zones and numbers I gave you are rules of thumb and illustrations, and I have not tested every chat app, so watch your own chats and adjust. If you want a low-key place to start, take the next chat that drifts, ask it for a handoff, and open a new one with it. Thank you.",
+          "And you coordinate, like a project manager. This is what we call a workflow. Every chat has one job, so none of them runs long enough to blur its middle. That is the whole idea: the window is the AI's attention span, and managing it is your job. One honest caveat: the zones and numbers I gave you are rules of thumb and illustrations, and I have not tested every chat app, so watch your own chats and adjust. If you want a low-key place to start, take the next chat that drifts, ask it for a handoff, and open a new one with it. Thank you.",
       },
     ];
     // ACT
@@ -87,7 +87,7 @@ describe('success cases', () => {
     expect(notes).toEqual(expected);
   });
 
-  it('marks the worker chats and the short-tasks phrase, each opening the note the build notes name', () => {
+  it('marks the workflow panel title and the short-tasks phrase, each opening the note the build notes name', () => {
     // ARRANGE
     const expected = ['clean-windows-for-each-part', 'short-tasks-beat-long-ones'];
     // ACT
@@ -99,40 +99,16 @@ describe('success cases', () => {
     expect(markers).toEqual(expected);
   });
 
-  it('shows the six stages of the brief with no bold first letter and no acronym named', () => {
+  it('mounts the one long chat before and the planner with its workers after, from the cornerstone', () => {
     // ARRANGE
-    const expected = { stages: 6, bold: 0, acronym: false };
+    const expected = ['slide-11-before', 'slide-11-after'];
     // ACT
     const $ = scene('en');
-    const actual = {
-      stages: $('ol[aria-label="The steps of a brief, stage by stage"] > li').length,
-      bold: $('ol[aria-label="The steps of a brief, stage by stage"] b').length,
-      acronym: $.text().includes('BRIEF'),
-    };
+    const minis = $('[data-bars]')
+      .map((_, el) => $(el).attr('data-bars'))
+      .get();
     // ASSERT
-    expect(actual).toEqual(expected);
-  });
-
-  it('draws every stage with its jobs and the fan-out and fan-in of brief the venue', () => {
-    // ARRANGE
-    const expected = { jobLists: 6, workers: ['Venue 1', 'Venue 2', 'Venue 3'], card: true, connectors: 5, fans: 2 };
-    // ACT
-    const $ = scene('en');
-    const pipeline = $('ol[aria-label="The steps of a brief, stage by stage"]');
-    const actual = {
-      jobLists: pipeline.find('> li > ol').length,
-      workers: pipeline
-        .find('> li > ol')
-        .eq(3)
-        .find('li')
-        .map((_, el) => $(el).text().replace('Checked against the card', '').trim())
-        .get(),
-      card: pipeline.text().includes('Requirements card'),
-      connectors: pipeline.find('> li > [aria-hidden="true"]').length,
-      fans: pipeline.find('svg.h-40').length,
-    };
-    // ASSERT
-    expect(actual).toEqual(expected);
+    expect(minis).toEqual(expected);
   });
 });
 
@@ -148,22 +124,17 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('drops the one-chat comparison: no context bars are mounted', () => {
+  it('hands back three result cards, the venue with its cost in the budget tint, in both locales', () => {
     // ARRANGE
-    const expected = 0;
+    const expected = { en: { results: 3, cost: '14,800 €' }, de: { results: 3, cost: '14.800 €' } };
     // ACT
-    const $ = scene('en');
+    const read = (locale: Locale) => {
+      const $ = scene(locale);
+      return { results: $('[data-result]').length, cost: $('[data-result] [data-budget]').text() };
+    };
+    const results = { en: read('en'), de: read('de') };
     // ASSERT
-    expect($('[data-bars]').length).toBe(expected);
-  });
-
-  it('names the Slide in both locales', () => {
-    // ARRANGE
-    const expected = ['Human in the loop workflow', 'Human-in-the-Loop-Workflow'];
-    // ACT
-    const titles = (['en', 'de'] as const).map((locale) => localized(locale).title);
-    // ASSERT
-    expect(titles).toEqual(expected);
+    expect(results).toEqual(expected);
   });
 
   it('keeps the same notes and segments in German, under German headers', () => {
@@ -171,7 +142,13 @@ describe('edge cases', () => {
     const expected = {
       notes: ['clean-windows-for-each-part', 'short-tasks-beat-long-ones'],
       headers: ['Saubere Fenster für jeden Teil', 'Kurze Aufgaben schlagen lange'],
-      segments: ['recall', 'human-in-the-loop', 'planner-and-handoff', 'worker-chats', 'you-check'],
+      segments: [
+        'one-chat-is-too-small',
+        'break-it-down-first',
+        'one-planner',
+        'a-fresh-chat-per-step',
+        'you-coordinate',
+      ],
     };
     // ACT
     const de = localized('de');
