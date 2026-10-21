@@ -1,0 +1,45 @@
+/*
+ * The two threads' one emphasis motion (design-ADR-0012 §9), keyed on the `data-step` that `CallSteps` sets on
+ * `.steps`, one effect at a time on both threads together. Step 0 shows every line half lit and no pill; step 1
+ * lights the start rows and their pill; step 2 the end rows; step 3 fades the middle rows to their resting grey; step
+ * 4 lights the cake and the 12 vegetarian guests with their rings, and the bottom line appears. A band waiting for
+ * its step reads half lit, without its ring or pill. The base rules are the end state, which the static HTML, print
+ * and reduced motion show at once. Nothing loops.
+ */
+
+@media (prefers-reduced-motion: no-preference) {
+  .steps [data-light],
+  .pill,
+  .bottomLine {
+    transition:
+      opacity 400ms ease-out,
+      box-shadow 400ms ease-out,
+      transform 400ms ease-out;
+  }
+
+  :is(
+      .steps[data-step='0'] [data-band='start'],
+      .steps:is([data-step='0'], [data-step='1']) [data-band='end'],
+      .steps:is([data-step='0'], [data-step='1'], [data-step='2']) [data-band='middle'],
+      .steps:not([data-step='4']) [data-band='standout']
+    )
+    [data-light] {
+    opacity: 0.6;
+    box-shadow: none;
+  }
+
+  :is(
+      .steps[data-step='0'] [data-band='start'],
+      .steps:is([data-step='0'], [data-step='1']) [data-band='end'],
+      .steps:is([data-step='0'], [data-step='1'], [data-step='2']) [data-band='middle'],
+      .steps:not([data-step='4']) [data-band='standout']
+    )
+    .pill {
+    opacity: 0;
+  }
+
+  .steps:not([data-step='4']) .bottomLine {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+}

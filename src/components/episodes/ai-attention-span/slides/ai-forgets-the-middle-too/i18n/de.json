@@ -1,0 +1,120 @@
+{
+  "title": "Auch die KI vergisst die Mitte",
+  "caption": "Ein langer Chat mit einer KI hat dieselbe Form wie das Telefonat: Die ersten und die neuesten Nachrichten werden genutzt, die Mitte geht verloren, und ein Detail, das immer wiederkommt, bleibt hängen.",
+  "stepsLabel": "Das Telefonat und der Chat mit der KI nebeneinander, Effekt für Effekt hervorgehoben; zeig darauf, um es erneut abzuspielen",
+  "sister": {
+    "name": "Schwester",
+    "meta": "Anruf · 1:21:40"
+  },
+  "ai": {
+    "name": "Sommerfest",
+    "meta": "Chat mit KI · eine Stunde"
+  },
+  "bands": {
+    "start": "Der Anfang",
+    "middle": "Die Mitte",
+    "standout": "Der Ausreißer",
+    "end": "Das Ende"
+  },
+  "left": {
+    "0": "Lass uns den Urlaub klären!",
+    "1": "Ja! Aber erst: Hast Du von Mamas neuem Handy gehört?",
+    "3": "Sie hat mir vierzig Fotos von ihrem Daumen geschickt.",
+    "4": "Ha! Hast Du den Umbau bei den Nachbarn gesehen?",
+    "5": "Fang bloß nicht davon an. Und mein Rücken tut wieder weh.",
+    "6": "Und Pepper hat eine ganze Geburtstagstorte gefressen, samt Kerzen!",
+    "8": "Noch nicht. Oh, das Essen ist fertig, ich muss los.",
+    "9": "Bis bald, tschüss!"
+  },
+  "right": {
+    "m3": "Plane ein Sommerfest für unser Team: 40 Leute, Ende Juni, Budget <budget>40.000 Euro</budget>.",
+    "m4": "Gern! Drinnen oder draußen? Gibt es Ernährungswünsche, die ich kennen sollte?",
+    "m7": "Finde drei Orte in Lissabon.",
+    "m9": "Drei Optionen: Quinta-Terrasse, LX-Factory-Dachterrasse, Estrela-Gartenpavillon.",
+    "m10": "Die Catering-Angebote liegen im Projektordner. Welches passt?",
+    "m13": "Such Hotels nahe dem Ort für 15 Gäste aus dem Ausland.",
+    "m15": "Hotel Lumen und Casa do Rio haben beide am 27. Juni 15 Zimmer frei.",
+    "m18": "Alles klar: 40 Gäste, 15 reisen an, <b>12 vegetarisch</b>.",
+    "m22": "Super, stell den ganzen Plan zusammen.",
+    "m24": "Der ganze Plan: Ort <cost>14.800</cost>, Catering mit vegetarischem Menü <cost>21.600</cost>, Hotels <cost>9.400</cost>, Musik <cost>6.500</cost>. Summe <budget>52.300 Euro</budget>."
+  },
+  "tools": {
+    "web": "10 Seiten abgerufen · 15k Auszüge",
+    "pdf": "catering-offers.pdf gelesen · 20 Seiten"
+  },
+  "standoutNote": "Viermal gesagt, also liegt immer eine frische Kopie nahe am Ende.",
+  "overBudget": "12.300 über dem Budget aus der ersten Nachricht",
+  "bottomLine": "<muted>Bei Deiner Schwester ist ein verlorenes Detail lustig.</muted> Bei einer Deadline wird es teuer.",
+  "studyNote": "<planted>Gemessen, indem man eine Tatsache in eine lange Eingabe einbaut, nicht in heutigen Chat-Apps</planted> · <varies>wie tief die Mitte absackt, schwankt</varies>",
+  "notes": {
+    "measured-even-for-long-input-models": {
+      "header": "Gemessen, auch bei Modellen für lange Eingaben",
+      "description": "Relevante Information wird am Anfang oder am Ende der Eingabe am besten genutzt und in der Mitte am schlechtesten, auch bei Modellen, die für lange Kontexte gebaut sind [1].",
+      "sources": {
+        "liu-lost-in-the-middle": {
+          "title": "Liu et al., Lost in the Middle: How Language Models Use Long Contexts"
+        }
+      }
+    },
+    "a-built-in-pull-to-the-start": {
+      "header": "Ein eingebauter Zug zum Anfang",
+      "description": "Die ersten Tokens einer Eingabe ziehen als \"Attention Sink\" viel Aufmerksamkeit auf sich, selbst wenn sie nichts bedeuten [1].",
+      "sources": {
+        "xiao-attention-sinks": {
+          "title": "Xiao et al., Efficient Streaming Language Models with Attention Sinks"
+        }
+      }
+    },
+    "two-position-effects": {
+      "header": "Zwei Positionseffekte",
+      "description": "Kausales Maskieren lenkt die Aufmerksamkeit zu früheren Positionen, und relative Positionskodierungen bevorzugen nahe Tokens; beides wird gegen das wachsende Gewicht früher Positionen abgewogen [1]. Dass die beiden zusammen den Einbruch in der Mitte erzeugen, ist eine Schlussfolgerung, die Zusammenfassung des Papers sagt es nicht.",
+      "sources": {
+        "wu-position-bias": {
+          "title": "Wu et al., On the Emergence of Position Bias in Transformers"
+        }
+      }
+    },
+    "the-strength-varies": {
+      "header": "Die Stärke schwankt",
+      "description": "Am tiefsten ist der Einbruch, wenn die Eingabe bis etwa zur Hälfte des Fensters reicht; darüber hinaus schwindet der Vorteil des Anfangs, der des Endes bleibt [1].",
+      "sources": {
+        "veseli-positional-biases-shift": {
+          "title": "Veseli et al., Positional Biases Shift as Inputs Approach Context Window Limits"
+        }
+      }
+    },
+    "planted-facts-not-chat-products": {
+      "header": "Eingebaute Fakten, keine Chat-Produkte",
+      "description": "Die Studien bauen eine Tatsache in die Eingabe ein und prüfen, ob das Modell sie wiederfindet. Keine testet heutige Chat-Produkte, die Übertragung auf einen Chat ist also eine Schlussfolgerung [1].",
+      "sources": {
+        "liu-lost-in-the-middle": {
+          "title": "Liu et al., Lost in the Middle: How Language Models Use Long Contexts"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "meet-the-summer-party-chat": {
+        "title": "Das ist der Sommerfest-Chat",
+        "keywords": "",
+        "script": "Ich stelle Dir einen Chat vor, der uns durch die ganze Folge begleitet. Du planst mit einer KI ein Sommerfest für Deine Firma: 40 Leute, Ende Juni, ein Budget von 40.000 Euro, und Du gibst ihr ein PDF mit Catering-Angeboten und eine Gästeliste. Merk Dir diesen Chat, denn wir kommen auf jeder folgenden Folie zu ihm zurück."
+      },
+      "it-happens-in-a-long-chat-too": {
+        "title": "Im langen Chat passiert es auch",
+        "keywords": "",
+        "script": "Jetzt lass ihn eine Stunde laufen. Du hast mit dem Plan und dem Budget angefangen, und die ersten Nachrichten werden eher genutzt, die neuesten Nachrichten werden eher genutzt, und die Mitte geht verloren. Ein Detail, das Du immer wieder sagst, wie die 12 vegetarischen Gäste, bleibt hängen. Später rutscht das Budget weg, was seltsam ist für eine Zahl aus Deiner allerersten Nachricht, und warum das passiert, kommt auf einer späteren Folie."
+      },
+      "a-shape-not-a-brain": {
+        "title": "Eine Form, kein Gehirn",
+        "keywords": "",
+        "script": "Ich sage nicht, dass die KI so denkt wie Du. Sie hat keine Schwester und keine Mama mit neuem Handy. Ich sage, dass die Form dieselbe ist, und eine Form kann man vorhersagen. So weißt Du, wo Du mit dem Ausrutscher rechnen musst."
+      },
+      "what-a-lost-detail-costs": {
+        "title": "Was ein verlorenes Detail kostet",
+        "keywords": "",
+        "script": "Bei Deiner Schwester ist ein verlorenes Detail lustig. Bei einer Deadline wird es teuer. Also frag Dich, welcher Chat Deiner ist: der mit dem Hund und der Torte oder der mit Deinem Budget darin."
+      }
+    }
+  }
+}
