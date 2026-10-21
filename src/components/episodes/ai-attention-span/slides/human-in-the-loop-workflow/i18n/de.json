@@ -4,7 +4,7 @@
   "pipelineLabel": "Die Schritte eines Briefings, Stufe für Stufe",
   "stages": {
     "party": {
-      "name": "Sommerfeier",
+      "name": "Plane ein Sommerfest",
       "move": "Zerlege es"
     },
     "interview": {

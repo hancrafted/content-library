@@ -19,7 +19,9 @@ const ON_PILL = 'text-background/70 hover:text-foreground focus-visible:text-for
 
 /** The budget in the Episode's one budget tint. */
 const budget = (chunks: ReactNode) => (
-  <span className="rounded-md bg-(--warning)/25 px-1 font-semibold whitespace-nowrap">{chunks}</span>
+  <span data-budget className="rounded-md bg-(--warning)/25 px-1 font-semibold whitespace-nowrap">
+    {chunks}
+  </span>
 );
 const muted = (chunks: ReactNode) => <span className="text-muted-foreground">{chunks}</span>;
 

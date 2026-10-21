@@ -157,6 +157,17 @@ describe('edge cases', () => {
     expect($('[data-bars]').length).toBe(expected);
   });
 
+  it('names the first stage as the task, in both locales', () => {
+    // ARRANGE
+    const expected = ['Plan a summer party', 'Plane ein Sommerfest'];
+    // ACT
+    const names = (['en', 'de'] as const).map((locale) =>
+      scene(locale)('ol[aria-label] > li').first().find('p.font-semibold').first().text().trim(),
+    );
+    // ASSERT
+    expect(names).toEqual(expected);
+  });
+
   it('names the Slide in both locales', () => {
     // ARRANGE
     const expected = ['Human in the loop workflow', 'Human-in-the-Loop-Workflow'];

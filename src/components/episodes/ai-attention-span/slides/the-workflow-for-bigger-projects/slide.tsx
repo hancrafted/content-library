@@ -1,7 +1,6 @@
 import { slide } from '@/components/slide-master/slide';
 import { SlideFrame } from '@/components/slide-master/slide-master';
 import { ContextBarsPreset } from '@/components/slide-shared/context/context';
-import type { ReactNode } from 'react';
 import { CompareMotion } from './compare-motion.client';
 import { ComparePanel } from './compare-panel';
 import de from './i18n/de.json';
@@ -15,19 +14,7 @@ const CLEAN_WINDOWS = {
 const CONTEXT_LENGTH = { slug: 'du-context-length-alone-hurts', url: 'https://arxiv.org/abs/2510.05381' };
 
 const AFTER = 'after';
-const RESULTS = 'results';
-
-/** The results the workers hand back to the planner, in the order the steps run. */
-const RESULT_KEYS = ['1', '2', '3'] as const;
-
-/** One small card a worker chat hands back to the planner. */
-function ResultCard({ back, children }: { back: string; children: ReactNode }) {
-  return (
-    <li data-result className="rounded-xl border border-primary bg-card px-3 py-2 text-caption shadow-md">
-      <span className="font-semibold text-primary">{back}</span> · {children}
-    </li>
-  );
-}
+const NOTE = 'after-note';
 
 /**
  * The workflow for bigger projects (Spec Option 11c): before and after. On the left the one long summer-party chat as
@@ -41,7 +28,7 @@ export const theWorkflowForBiggerProjects = slide({
   messages: { en, de },
   notes: [
     { slug: 'clean-windows-for-each-part', target: AFTER, sources: [CLEAN_WINDOWS] },
-    { slug: 'short-tasks-beat-long-ones', target: RESULTS, sources: [CONTEXT_LENGTH] },
+    { slug: 'short-tasks-beat-long-ones', target: NOTE, sources: [CONTEXT_LENGTH] },
   ],
   segments: [
     { slug: 'one-chat-is-too-small' },
@@ -51,11 +38,6 @@ export const theWorkflowForBiggerProjects = slide({
     { slug: 'you-coordinate' },
   ],
   content: ({ t, locale, target, marker, Marker }) => {
-    const budget = (chunks: ReactNode) => (
-      <span data-budget className="rounded bg-(--warning)/25 px-1 whitespace-nowrap">
-        {chunks}
-      </span>
-    );
     return (
       <SlideFrame className="mt-10 gap-8">
         <CompareMotion label={t('compareLabel')} className={`${styles.compare} grid gap-8 lg:grid-cols-12`}>
@@ -70,14 +52,7 @@ export const theWorkflowForBiggerProjects = slide({
             target={target(AFTER)}
           >
             <ContextBarsPreset preset="slide-11-after" locale={locale} />
-            <ul aria-label={t('resultsLabel')} {...target(RESULTS)} className="flex flex-wrap gap-3">
-              {RESULT_KEYS.map((key) => (
-                <ResultCard key={key} back={t('back')}>
-                  {t.rich(`results.${key}`, { budget })}
-                </ResultCard>
-              ))}
-            </ul>
-            <p className="text-caption text-muted-foreground">
+            <p {...target(NOTE)} className="text-caption text-muted-foreground">
               {t.rich('after.note', { marker: marker('short-tasks-beat-long-ones') })}
             </p>
           </ComparePanel>

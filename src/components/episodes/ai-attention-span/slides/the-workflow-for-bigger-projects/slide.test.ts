@@ -124,17 +124,13 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('hands back three result cards, the venue with its cost in the budget tint, in both locales', () => {
+  it('draws no result cards under the workflow bars', () => {
     // ARRANGE
-    const expected = { en: { results: 3, cost: '14,800 €' }, de: { results: 3, cost: '14.800 €' } };
+    const expected = { en: 0, de: 0 };
     // ACT
-    const read = (locale: Locale) => {
-      const $ = scene(locale);
-      return { results: $('[data-result]').length, cost: $('[data-result] [data-budget]').text() };
-    };
-    const results = { en: read('en'), de: read('de') };
+    const actual = { en: scene('en')('[data-result]').length, de: scene('de')('[data-result]').length };
     // ASSERT
-    expect(results).toEqual(expected);
+    expect(actual).toEqual(expected);
   });
 
   it('keeps the same notes and segments in German, under German headers', () => {
