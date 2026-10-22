@@ -18,7 +18,13 @@
 // first line at or left of the test's own indent that opens with `}`.
 // Self-contained: archgate forbids imports
 // between rules files.
-const TEST_GLOB = 'src/**/*.test.ts';
+// Unit and browser tests under src/, plus the browser tests outside it (§2, §3). Post-build tests stay free-form.
+const TEST_GLOBS = ['src/**/*.test.ts', 'tests/browser/**/*.browser.test.ts', 'skills/**/*.browser.test.ts'];
+
+async function testFiles(ctx: RuleContext): Promise<string[]> {
+  const found = await Promise.all(TEST_GLOBS.map((glob) => ctx.glob(glob)));
+  return [...new Set(found.flat())];
+}
 const BLOCKS = ['success cases', 'failure cases', 'edge cases'];
 const MARKERS = ['ARRANGE', 'ACT', 'ASSERT'];
 
@@ -170,10 +176,10 @@ export default {
   rules: {
     'suite-three-blocks': {
       description:
-        'Every src/**/*.test.ts splits at top level into exactly three describe blocks — success cases, failure cases, edge cases — once each, with no fourth name (§2.1).',
+        'Every test file under src/, and every browser test, splits at top level into exactly three describe blocks — success cases, failure cases, edge cases — once each, with no fourth name (§2.1).',
       severity: 'error',
       async check(ctx) {
-        for (const file of await ctx.glob(TEST_GLOB)) {
+        for (const file of await testFiles(ctx)) {
           const lines = (await ctx.readFile(file)).split('\n');
           const seen: string[] = [];
           lines.forEach((text, index) => {
@@ -207,10 +213,10 @@ export default {
     },
     'test-body-aaa': {
       description:
-        'Every it/test body under src/ carries // ARRANGE, // ACT and // ASSERT, uppercase, exactly once each, in that order, one marker per comment (§3.1).',
+        'Every it/test body under src/ and in every browser test carries // ARRANGE, // ACT and // ASSERT, uppercase, exactly once each, in that order, one marker per comment (§3.1).',
       severity: 'error',
       async check(ctx) {
-        for (const file of await ctx.glob(TEST_GLOB)) {
+        for (const file of await testFiles(ctx)) {
           const lines = (await ctx.readFile(file)).split('\n');
           for (const body of testBodies(lines)) {
             for (const comment of body.malformed) {
@@ -234,10 +240,10 @@ export default {
     },
     'assert-no-magic': {
       description:
-        'The // ASSERT block of every test under src/ holds no number literal other than 0, 1 and -1 — name the value in // ARRANGE (§3.2).',
+        'The // ASSERT block of every test under src/ and every browser test holds no number literal other than 0, 1 and -1 — name the value in // ARRANGE (§3.2).',
       severity: 'error',
       async check(ctx) {
-        for (const file of await ctx.glob(TEST_GLOB)) {
+        for (const file of await testFiles(ctx)) {
           const lines = (await ctx.readFile(file)).split('\n');
           for (const block of assertBlocks(lines)) {
             for (const { line, literal } of magicIn(block.text, block.start)) {

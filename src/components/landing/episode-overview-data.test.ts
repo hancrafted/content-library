@@ -1,21 +1,20 @@
 import { hasPage, listEpisodes } from '@/components/episodes/episode-repository';
 import { findEpisode } from '@/components/episodes/registry';
-import { topicsOf } from '@/lib/episode-metadata.pure';
-import { FEATURED, FORMATS, TOPIC_IDS, TOPICS } from '@/lib/episode-overview';
+import { leadTagOf, lookOf, tagProblems } from '@/lib/episode-metadata.pure';
+import { FEATURED, FILTER_TAGS, FORMATS, TAG_IDS, TAGS } from '@/lib/episode-overview';
 import de from '@/messages/de.json';
 import en from '@/messages/en.json';
 import { describe, expect, it } from 'vitest';
-import { TOPIC_ACCENTS, TOPIC_ICONS } from './episode-visuals';
+import { TAG_ACCENTS, TAG_ICONS } from './episode-visuals';
 
 /*
  * The Episode overview's central lists against the Episodes that exist (#40):
- * Featured names published Episodes, each Topic in use has a look of its own,
- * and every string a card reads is translated, each Tag's name and tooltip included.
+ * Featured names published Episodes, every Episode's Tags sit in the closed
+ * vocabulary, each Tag has a look the landing can draw, and every string a card
+ * reads is translated, each Tag's name and tooltip included.
  */
 
 const TRANSLATIONS = { en, de } as const;
-
-const topicsInUse = () => [...new Set(listEpisodes().flatMap(topicsOf))];
 
 describe('success cases', () => {
   it('fills every Featured slot with a distinct published Episode', () => {
@@ -40,59 +39,81 @@ describe('success cases', () => {
     expect(featured).toEqual(expected);
   });
 
-  it('gives each Featured Episode a look of its own, drawable by the landing', () => {
+  it('gives each Featured Episode the look of its lead Tag, with no Episode declaring one', () => {
     // ARRANGE
     const expected = [
-      'onboard-ai-every-time: amber/user-round-plus',
-      'ai-attention-span: sky/hourglass',
-      'ai-gives-you-more-work: rose/list-plus',
+      'onboard-ai-every-time: context-engineering sky/hourglass',
+      'ai-attention-span: context-engineering sky/hourglass',
+      'ai-gives-you-more-work: agentic-ai violet/sparkles',
     ];
     // ACT
     const looks = FEATURED.map((slug) => {
-      const look = listEpisodes().find((e) => e.slug === slug)?.look;
-      const drawable = look?.icon !== undefined && TOPIC_ICONS[look.icon] !== undefined;
-      return `${slug}: ${look?.accent}/${drawable ? look?.icon : 'undrawable'}`;
+      const episode = listEpisodes().find((e) => e.slug === slug);
+      const { accent, icon } = lookOf(episode!);
+      return `${slug}: ${leadTagOf(episode!)} ${accent}/${icon}`;
     });
     // ASSERT
     expect(looks).toEqual(expected);
   });
 
-  it('gives the ai-enablement Topic the sparkles icon', () => {
+  it('keeps Topic, extra Topics and the per-Episode look out of every Episode record', () => {
     // ARRANGE
-    const expected = 'sparkles';
+    const removed = ['topic', 'extraTopics', 'look'];
+    const expected: string[] = [];
     // ACT
-    const { icon } = TOPICS['ai-enablement'];
+    const declared = listEpisodes().flatMap((episode) =>
+      removed.filter((key) => key in episode).map((key) => `${episode.slug}: ${key}`),
+    );
     // ASSERT
-    expect(icon).toBe(expected);
+    expect(declared).toEqual(expected);
   });
 
-  it('gives the delegation Tag a name and tooltip in both locales', () => {
-    // ARRANGE
-    const expected = [true, true, true, true];
-    // ACT
-    const present = (['en', 'de'] as const).flatMap((locale) => {
-      const tag = (
-        TRANSLATIONS[locale].landing.episodeOverview.tags as Record<string, { name?: string; tooltip?: string }>
-      ).delegation;
-      return [Boolean(tag?.name), Boolean(tag?.tooltip)];
-    });
-    // ASSERT
-    expect(present).toEqual(expected);
-  });
-
-  it('gives every Topic in use an icon and an accent the landing can draw', () => {
+  it('gives every Tag in the vocabulary a name and tooltip in both locales', () => {
     // ARRANGE
     const expected: string[] = [];
     // ACT
-    const undrawable = topicsInUse().flatMap((topic) => {
-      const { icon, accent } = TOPICS[topic];
+    const missing = (['en', 'de'] as const).flatMap((locale) => {
+      const tags = TRANSLATIONS[locale].landing.episodeOverview.tags as Record<
+        string,
+        { name?: string; tooltip?: string } | undefined
+      >;
+      return TAG_IDS.filter((id) => !(tags[id]?.name && tags[id]?.tooltip)).map((id) => `${locale}: ${id}`);
+    });
+    // ASSERT
+    expect(missing).toEqual(expected);
+  });
+
+  it('gives every Tag an icon and an accent the landing can draw', () => {
+    // ARRANGE
+    const expected: string[] = [];
+    // ACT
+    const undrawable = TAG_IDS.flatMap((tag) => {
+      const { icon, accent } = TAGS[tag];
       return [
-        ...(TOPIC_ICONS[icon] === undefined ? [`${topic}: icon ${icon}`] : []),
-        ...(TOPIC_ACCENTS[accent] === undefined ? [`${topic}: accent ${accent}`] : []),
+        ...(TAG_ICONS[icon] === undefined ? [`${tag}: icon ${icon}`] : []),
+        ...(TAG_ACCENTS[accent] === undefined ? [`${tag}: accent ${accent}`] : []),
       ];
     });
     // ASSERT
     expect(undrawable).toEqual(expected);
+  });
+
+  it('offers only vocabulary Tags as filter chips', () => {
+    // ARRANGE
+    const expected: string[] = [];
+    // ACT
+    const stray = FILTER_TAGS.filter((id) => !TAG_IDS.includes(id));
+    // ASSERT
+    expect(stray).toEqual(expected);
+  });
+
+  it('leaves no Episode with a Tag outside the vocabulary or without a Tag', () => {
+    // ARRANGE
+    const expected: string[] = [];
+    // ACT
+    const problems = tagProblems(listEpisodes());
+    // ASSERT
+    expect(problems).toEqual(expected);
   });
 });
 
@@ -105,11 +126,8 @@ describe('failure cases', () => {
     const expected: string[] = [];
     // ACT
     const missing = [
-      ...TOPIC_IDS.filter((id) => !episodeOverview.topics[id]).map((id) => `topics.${id}`),
       ...FORMATS.filter((id) => !episodeOverview.formats[id]).map((id) => `formats.${id}`),
-      ...[...new Set(listEpisodes().flatMap(({ tags: ids }) => ids))]
-        .filter((id) => !(tags[id]?.name && tags[id]?.tooltip))
-        .map((id) => `tags.${id}`),
+      ...TAG_IDS.filter((id) => !(tags[id]?.name && tags[id]?.tooltip)).map((id) => `tags.${id}`),
       ...listEpisodes().flatMap(({ slug, status }) => {
         const copy = hasPage(slug) ? findEpisode(slug).messages[locale] : upcomingCopy[slug];
         return copy?.title && copy.caption ? [] : [`${status}.${slug}`];
@@ -121,13 +139,17 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('gives no two Topics the same look, so a Topic is recognisable at a glance', () => {
+  it('keeps no Translation key for a Tag outside the vocabulary', () => {
     // ARRANGE
-    const expected = TOPIC_IDS.length;
+    const expected: string[] = [];
     // ACT
-    const looks = new Set(TOPIC_IDS.map((id) => `${TOPICS[id].icon}/${TOPICS[id].accent}`));
+    const stray = (['en', 'de'] as const).flatMap((locale) =>
+      Object.keys(TRANSLATIONS[locale].landing.episodeOverview.tags)
+        .filter((id) => !(TAG_IDS as readonly string[]).includes(id))
+        .map((id) => `${locale}: ${id}`),
+    );
     // ASSERT
-    expect(looks.size).toBe(expected);
+    expect(stray).toEqual(expected);
   });
 
   it('keeps site-wide upcoming copy only for Episodes with no page, so one with a page reads its own i18n', () => {

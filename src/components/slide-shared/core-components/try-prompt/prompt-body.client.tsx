@@ -1,5 +1,6 @@
 'use client';
 
+import { useMotion } from '@/hooks/use-motion';
 import { cn } from '@/lib/utils';
 import { ChevronRight } from 'lucide-react';
 import { useId, useState, type ReactNode } from 'react';
@@ -124,6 +125,7 @@ interface PanelProps {
 function Panel({ name, title, initiallyOpen, children }: PanelProps) {
   const [open, setOpen] = useState(initiallyOpen);
   const panel = useId();
+  const motion = useMotion(open);
   return (
     <div className="flex min-w-0 flex-col gap-2">
       <button
@@ -134,7 +136,11 @@ function Panel({ name, title, initiallyOpen, children }: PanelProps) {
         onClick={() => setOpen((now) => !now)}
         className="inline-flex min-h-9 w-full cursor-pointer items-center gap-1.5 rounded-lg text-left text-caption font-semibold outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
-        <ChevronRight aria-hidden="true" className={cn('size-4 transition-transform', open && 'rotate-90')} />
+        <ChevronRight
+          aria-hidden="true"
+          className={cn('size-4 transition-transform', open && 'rotate-90')}
+          {...motion}
+        />
         {title}
       </button>
       <div id={panel} data-panel={name} hidden={!open} className="flex min-w-0 flex-col gap-3">

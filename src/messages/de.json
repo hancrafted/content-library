@@ -6,6 +6,7 @@
   "nav": {
     "label": "Hauptnavigation",
     "episodes": "Episoden",
+    "workshops": "Workshops",
     "dashboard": "Dashboard",
     "contact": "Mit mir arbeiten",
     "newTab": "öffnet in einem neuen Tab"
@@ -65,10 +66,8 @@
       "spotlightTitle": "Im Fokus",
       "browseTitle": "Alle Episoden durchstöbern",
       "search": "Episoden durchsuchen",
-      "searchPlaceholder": "Nach Titel, Thema oder Tag suchen",
-      "topicFilter": "Nach Thema filtern",
-      "formatFilter": "Nach Format filtern",
-      "all": "Alle",
+      "searchPlaceholder": "Nach Titel oder Tag suchen",
+      "tagFilter": "Nach Tag filtern",
       "showAll": "Alle {count} Episoden anzeigen",
       "showFewer": "Weniger anzeigen",
       "results": {
@@ -78,72 +77,30 @@
       },
       "empty": "Zu diesen Filtern gibt es noch keine Episode.",
       "reset": "Filter zurücksetzen",
-      "topics": {
-        "sales": "Vertrieb",
-        "knowledge-base": "Wissensbasis",
-        "cost": "Kosten",
-        "ai-enablement": "KI-Befähigung"
-      },
       "tags": {
-        "tokens": {
-          "name": "Tokens",
-          "tooltip": "Die Einheiten, die ein Sprachmodell liest und abrechnet"
-        },
-        "context-window": {
-          "name": "Kontextfenster",
-          "tooltip": "Wie viel Text ein Modell auf einmal im Blick behält"
+        "context-engineering": {
+          "name": "Context Engineering",
+          "tooltip": "Der KI zur richtigen Zeit den richtigen Kontext geben"
         },
         "agentic-ai": {
           "name": "Agentische KI",
           "tooltip": "KI, die in Schritten plant und handelt, statt nur zu antworten"
         },
-        "model-tiers": {
-          "name": "Modellklassen",
-          "tooltip": "Die Wahl zwischen kleinen, schnellen und großen, fähigen Modellen"
-        },
         "markdown": {
           "name": "Markdown",
           "tooltip": "Textdokumente, die Menschen und KI gleich gut lesen"
         },
-        "verification": {
-          "name": "Verifikation",
-          "tooltip": "Prüfen, ob ein Dokument noch stimmt"
+        "cost": {
+          "name": "Kosten",
+          "tooltip": "Was KI wirklich kostet und wohin das Geld fließt"
         },
-        "review": {
-          "name": "Review",
-          "tooltip": "Ein Mensch bestätigt, was eine KI oder ein Kollege geschrieben hat"
-        },
-        "google-okf": {
-          "name": "Google OKF",
-          "tooltip": "Googles Open Knowledge Format für Dokumente, die Agenten lesen"
-        },
-        "startups": {
-          "name": "Startups",
-          "tooltip": "Junge Unternehmen auf der Suche nach ihren ersten Kunden"
-        },
-        "cashflow": {
-          "name": "Liquidität",
-          "tooltip": "Geld, das tatsächlich auf dem Konto ist, Monat für Monat"
-        },
-        "lead-generation": {
-          "name": "Leadgenerierung",
-          "tooltip": "Mögliche Käufer finden und auflisten"
-        },
-        "sales-pipeline": {
-          "name": "Vertriebspipeline",
-          "tooltip": "Jeder offene Deal, vom ersten Kontakt bis zur Unterschrift"
-        },
-        "context-engineering": {
-          "name": "Context Engineering",
-          "tooltip": "Der KI zur richtigen Zeit den richtigen Kontext geben"
+        "sales": {
+          "name": "Vertrieb",
+          "tooltip": "Kunden finden, gewinnen und halten"
         },
         "workflow": {
           "name": "Workflow",
           "tooltip": "Wie Arbeit in Schritte geteilt und zwischen Chats übergeben wird"
-        },
-        "delegation": {
-          "name": "Delegation",
-          "tooltip": "Aufgaben an die KI übergeben und behalten, was in deiner Verantwortung bleibt"
         }
       },
       "formats": {
@@ -444,10 +401,15 @@
     "home": {
       "title": "Visualisierte Theorie · hancrafted",
       "description": "Theorie aus den hancrafted-Schulungsvideos, Seite für Seite visualisiert."
+    },
+    "workshops": {
+      "title": "Workshops",
+      "description": "Begleitete Workshops, die eine geplante Reihe visualisierter Theorie-Episoden der Reihe nach durchgehen."
     }
   },
   "episodesPage": {
-    "title": "Episoden",
+    "title": "Alle Episoden",
+    "intro": "Interaktive Visualisierungen, die ich gebaut habe, weil ich nie wieder eine PowerPoint-Präsentation basteln wollte.",
     "references": {
       "label": "Referenzen",
       "pageTemplate": "Episoden-Seitenvorlage",
@@ -505,5 +467,23 @@
     "heading": "DER VORTRAG",
     "backToVideo": "Zurück zum Video",
     "close": "Videoplayer schließen"
+  },
+  "workshopsPage": {
+    "title": "Workshops",
+    "back": "Alle Workshops",
+    "intro": "Begleitete Sessions, die eine geplante Reihe von Episoden der Reihe nach durchgehen.",
+    "agenda": "Ablauf",
+    "start": "Mit Episode {step} starten",
+    "readingTime": "{minutes} Min. Lesezeit insgesamt",
+    "episodeCount": {
+      "one": "1 Episode",
+      "other": "{count} Episoden"
+    },
+    "items": {
+      "ai-onboarding-2026-10-23": {
+        "title": "KI-Onboarding",
+        "description": "Bring KI in drei Episoden auf Stand: jedes Mal neu einarbeiten, ihre Aufmerksamkeitsspanne managen und verstehen, warum sie Management-Arbeit bringt."
+      }
+    }
   }
 }

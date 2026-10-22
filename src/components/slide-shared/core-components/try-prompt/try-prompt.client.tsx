@@ -1,5 +1,6 @@
 'use client';
 
+import { useMotion } from '@/hooks/use-motion';
 import { cn } from '@/lib/utils';
 import { ChevronRight } from 'lucide-react';
 import { useId, useState } from 'react';
@@ -23,6 +24,13 @@ export type { PromptKit, TryPromptWords } from './try-prompt.types';
  * the parent's when it passes `values`/`onChange`. Copy and "open in" use the joined prompt, markers filled.
  */
 
+function Chevron({ open }: { open: boolean }) {
+  const motion = useMotion(open);
+  return (
+    <ChevronRight aria-hidden="true" className={cn('size-4 transition-transform', open && 'rotate-90')} {...motion} />
+  );
+}
+
 function Toggle({
   open,
   label,
@@ -45,7 +53,7 @@ function Toggle({
         onClick={onToggle}
         className="inline-flex min-h-9 w-full cursor-pointer items-center gap-1.5 rounded-lg text-left text-caption font-medium outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
-        <ChevronRight aria-hidden="true" className={cn('size-4 transition-transform', open && 'rotate-90')} />
+        <Chevron open={open} />
         {label}
       </button>
     </Tip>

@@ -3,6 +3,7 @@ import nextPlugin from '@next/eslint-plugin-next';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import betterTailwind from 'eslint-plugin-better-tailwindcss';
 import checkFile from 'eslint-plugin-check-file';
+import playwright from 'eslint-plugin-playwright';
 import { readFileSync } from 'node:fs';
 import tseslint from 'typescript-eslint';
 
@@ -323,6 +324,12 @@ export default tseslint.config(
   {
     files: [REVEAL_OBSERVER_FILE],
     rules: { 'no-restricted-syntax': ['error', NO_STATIC_MARKER, NO_USE_CLIENT, HISTORY_WRITE] },
+  },
+  {
+    // design-ADR-0014 §5, ARCH-003 §5: a browser test waits on the page, never on time, and asserts with retrying matchers.
+    files: ['**/*.browser.test.ts'],
+    plugins: { playwright },
+    rules: { 'playwright/no-wait-for-timeout': 'error', 'playwright/prefer-web-first-assertions': 'error' },
   },
   {
     files: ['**/*.test.ts'],

@@ -6,6 +6,7 @@ import { catLabel, fill, k, stepCat, storyOf } from './context-view';
 import styles from './context.module.css';
 import { colourOf, compactStepOf } from './context.pure';
 import type { Step } from './context.types';
+import { Moves } from './moves.client';
 import { Rich, tint } from './window-bits';
 
 /* The detail panel's cards: a step, a category, a step not in the window yet, a step no longer in it. */
@@ -14,7 +15,11 @@ export const crossedText = (v: Pick<Card, 'words'>, r: Readout): string | null =
   r.crossed ? fill(v.words.crossed, { who: r.crossed.who }) : null;
 
 export function Crossed({ text }: { readonly text: string | null }) {
-  return text ? <span className={`${styles.crossed} font-semibold`}>{text}</span> : null;
+  return text ? (
+    <Moves as="span" className={`${styles.crossed} font-semibold`}>
+      {text}
+    </Moves>
+  ) : null;
 }
 
 function Heading({ colour, children }: { readonly colour: string | undefined | null; readonly children: ReactNode }) {

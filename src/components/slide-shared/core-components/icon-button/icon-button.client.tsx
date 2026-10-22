@@ -1,5 +1,6 @@
 'use client';
 
+import { useMotion } from '@/hooks/use-motion';
 import type { ButtonHTMLAttributes } from 'react';
 import { Tip } from '../tip/tip.client';
 
@@ -17,9 +18,10 @@ interface IconButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 
 
 /** An icon-only button: its name is `label`, its tooltip the shared one. */
 export function IconButton({ label, tip = label, place, align, className = OUTLINED_ICON, ...rest }: IconButtonProps) {
+  const motion = useMotion();
   return (
     <Tip text={tip} place={place} align={align}>
-      <button type="button" aria-label={label} className={className} {...rest} />
+      <button type="button" aria-label={label} className={className} {...motion} {...rest} />
     </Tip>
   );
 }

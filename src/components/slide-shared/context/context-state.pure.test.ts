@@ -70,6 +70,20 @@ describe('success cases', () => {
     expect(next.window).toBe(expected);
   });
 
+  it('unpins on Escape: a pinned part does not stay lit', () => {
+    // ARRANGE
+    const expected = { pinned: null, hover: null, previewStep: null };
+    const pinned = reduce(
+      reduce(createState(PRESET), { type: 'PIN', part: 'm2' }, CONTEXT),
+      { type: 'HOVER', part: 'm3' },
+      CONTEXT,
+    );
+    // ACT
+    const next = reduce(pinned, { type: 'ESC' }, CONTEXT);
+    // ASSERT
+    expect({ pinned: next.pinned, hover: next.hover, previewStep: next.previewStep }).toEqual(expected);
+  });
+
   it('pins a part, and unpins it on a second click', () => {
     // ARRANGE
     const expected = ['m2', null];

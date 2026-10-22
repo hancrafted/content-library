@@ -6,6 +6,7 @@
   "nav": {
     "label": "Main",
     "episodes": "Episodes",
+    "workshops": "Workshops",
     "dashboard": "Dashboard",
     "contact": "Work with me",
     "newTab": "opens in a new tab"
@@ -65,10 +66,8 @@
       "spotlightTitle": "Featured",
       "browseTitle": "Browse all Episodes",
       "search": "Search Episodes",
-      "searchPlaceholder": "Search by title, topic or tag",
-      "topicFilter": "Filter by topic",
-      "formatFilter": "Filter by format",
-      "all": "All",
+      "searchPlaceholder": "Search by title or tag",
+      "tagFilter": "Filter by tag",
       "showAll": "Show all {count} Episodes",
       "showFewer": "Show fewer",
       "results": {
@@ -78,72 +77,30 @@
       },
       "empty": "No Episodes match these filters yet.",
       "reset": "Reset filters",
-      "topics": {
-        "sales": "Sales",
-        "knowledge-base": "Knowledge base",
-        "cost": "Cost",
-        "ai-enablement": "AI enablement"
-      },
       "tags": {
-        "tokens": {
-          "name": "Tokens",
-          "tooltip": "The units a language model reads and bills by"
-        },
-        "context-window": {
-          "name": "Context window",
-          "tooltip": "How much text a model can hold in view at once"
+        "context-engineering": {
+          "name": "Context engineering",
+          "tooltip": "Giving the AI the right context at the right time"
         },
         "agentic-ai": {
           "name": "Agentic AI",
           "tooltip": "AI that plans and acts in steps, not just answers"
         },
-        "model-tiers": {
-          "name": "Model tiers",
-          "tooltip": "Choosing between small, fast models and large, capable ones"
-        },
         "markdown": {
           "name": "Markdown",
           "tooltip": "Plain-text documents that people and AI both read well"
         },
-        "verification": {
-          "name": "Verification",
-          "tooltip": "Checking that a document is still true"
+        "cost": {
+          "name": "Cost",
+          "tooltip": "What AI really costs, and where the spend goes"
         },
-        "review": {
-          "name": "Review",
-          "tooltip": "A person confirming what an AI or a colleague wrote"
-        },
-        "google-okf": {
-          "name": "Google OKF",
-          "tooltip": "Google's Open Knowledge Format for agent-readable docs"
-        },
-        "startups": {
-          "name": "Startups",
-          "tooltip": "Early-stage companies finding their first customers"
-        },
-        "cashflow": {
-          "name": "Cashflow",
-          "tooltip": "Money actually in the bank, month by month"
-        },
-        "lead-generation": {
-          "name": "Lead generation",
-          "tooltip": "Finding and listing the people who might buy"
-        },
-        "sales-pipeline": {
-          "name": "Sales pipeline",
-          "tooltip": "Every open deal, from first contact to signature"
-        },
-        "context-engineering": {
-          "name": "Context engineering",
-          "tooltip": "Giving the AI the right context at the right time"
+        "sales": {
+          "name": "Sales",
+          "tooltip": "Finding, winning and keeping customers"
         },
         "workflow": {
           "name": "Workflow",
           "tooltip": "How work is split into steps and handed between chats"
-        },
-        "delegation": {
-          "name": "Delegation",
-          "tooltip": "Handing tasks to the AI and keeping hold of what you still own"
         }
       },
       "formats": {
@@ -444,10 +401,15 @@
     "home": {
       "title": "Visualised theory · hancrafted",
       "description": "Theory from the hancrafted training videos, visualised page by page."
+    },
+    "workshops": {
+      "title": "Workshops",
+      "description": "Guided workshops that walk through a planned set of visualised theory episodes, in order."
     }
   },
   "episodesPage": {
-    "title": "Episodes",
+    "title": "All Episodes",
+    "intro": "Interactive visuals I built because I never wanted to make another PowerPoint.",
     "references": {
       "label": "References",
       "pageTemplate": "Episode Page Template",
@@ -505,5 +467,23 @@
     "heading": "THE TALK",
     "backToVideo": "Back to video",
     "close": "Close video player"
+  },
+  "workshopsPage": {
+    "title": "Workshops",
+    "back": "All workshops",
+    "intro": "Guided sessions that walk through a planned set of Episodes, in order.",
+    "agenda": "Agenda",
+    "start": "Start with Episode {step}",
+    "readingTime": "{minutes} min total reading time",
+    "episodeCount": {
+      "one": "1 Episode",
+      "other": "{count} Episodes"
+    },
+    "items": {
+      "ai-onboarding-2026-10-23": {
+        "title": "AI onboarding",
+        "description": "Get AI up to speed in three Episodes: onboard it every time, manage its attention span, and see why it adds management work."
+      }
+    }
   }
 }

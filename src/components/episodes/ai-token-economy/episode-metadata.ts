@@ -4,9 +4,7 @@ import type { PublishedEpisodeMetadata } from '@/lib/episode-metadata.pure';
 export const episodeMetadata = {
   slug: 'ai-token-economy',
   status: 'published',
-  topic: 'cost',
-  extraTopics: ['ai-enablement'],
   format: 'foundations',
-  tags: ['tokens', 'context-window', 'agentic-ai', 'model-tiers'],
+  tags: ['cost', 'agentic-ai'],
   publishedOn: '2026-10-09',
 } as const satisfies PublishedEpisodeMetadata;

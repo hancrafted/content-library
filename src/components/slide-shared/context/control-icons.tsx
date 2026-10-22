@@ -2,6 +2,7 @@ import { Code, Download, Ellipsis, PanelLeftClose, PanelRight, Upload } from 'lu
 import type { ReactNode } from 'react';
 import type { IconName } from './context-controls.pure';
 import styles from './context.module.css';
+import { Moves } from './moves.client';
 
 /* The icon button every toggle and action of the registry draws, in the toolbar and in a part's head. */
 
@@ -31,7 +32,9 @@ interface IconProps {
 
 export function IconButton({ label, tip, pressed, control, onClick, children }: IconProps) {
   return (
-    <button
+    <Moves
+      as="button"
+      trigger={pressed}
       type="button"
       className={styles.icon}
       aria-label={label}
@@ -42,6 +45,6 @@ export function IconButton({ label, tip, pressed, control, onClick, children }: 
       onClick={onClick}
     >
       {children}
-    </button>
+    </Moves>
   );
 }

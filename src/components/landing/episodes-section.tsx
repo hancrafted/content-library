@@ -1,6 +1,6 @@
 import { LiquidInkTransition } from '@/components/animations/liquid-ink-transition.client';
+import { cardLabels } from '@/components/landing/episode-card';
 import { episodeCards } from '@/components/landing/episode-cards';
-import type { CardLabels } from '@/components/landing/episode-grid-card';
 import { EpisodeSpotlight } from '@/components/landing/episode-spotlight';
 import { Button } from '@/components/ui/button';
 import { localizePath, type Locale } from '@/lib/locale.pure';
@@ -8,17 +8,6 @@ import { ROUTES } from '@/lib/routes';
 import { ArrowRight } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
-
-type LandingT = Awaited<ReturnType<typeof getTranslations<'landing'>>>;
-
-function cardLabels(t: LandingT): CardLabels {
-  return {
-    open: t('episodeOverview.open'),
-    comingSoon: t('episodeOverview.comingSoon'),
-    watchVideo: t('episodeOverview.watchVideo'),
-    newTab: t('episodeOverview.newTab'),
-  };
-}
 
 function EpisodesHeader({ title, subtitle }: { title: string; subtitle: string }) {
   return (
@@ -52,7 +41,7 @@ export async function EpisodesSection({ locale }: { locale: Locale }) {
         <EpisodesHeader title={t('episodesSectionTitle')} subtitle={t('episodesSectionSubtitle')} />
         <div>
           <PartHeading>{t('episodeOverview.spotlightTitle')}</PartHeading>
-          <EpisodeSpotlight cards={cards} locale={locale} labels={cardLabels(t)} />
+          <EpisodeSpotlight cards={cards} locale={locale} labels={cardLabels(t)} headingLevel={4} />
         </div>
         <div className="flex flex-wrap items-center justify-end gap-4 pt-4 border-t border-border/40">
           <Button asChild variant="outline" className="rounded-full">

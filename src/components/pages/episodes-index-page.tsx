@@ -1,4 +1,6 @@
 import { EpisodeBrowse, type BrowseLabels } from '@/components/landing/episode-browse.client';
+import { newestFirst } from '@/components/landing/episode-browse.pure';
+import { cardLabels } from '@/components/landing/episode-card';
 import { episodeCards } from '@/components/landing/episode-cards';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { episodeRoute } from '@/lib/routes';
@@ -10,15 +12,10 @@ type LandingT = Awaited<ReturnType<typeof getTranslations<'landing'>>>;
 
 function browseLabels(t: LandingT): BrowseLabels {
   return {
-    open: t('episodeOverview.open'),
-    comingSoon: t('episodeOverview.comingSoon'),
-    watchVideo: t('episodeOverview.watchVideo'),
-    newTab: t('episodeOverview.newTab'),
+    ...cardLabels(t),
     search: t('episodeOverview.search'),
     searchPlaceholder: t('episodeOverview.searchPlaceholder'),
-    topicFilter: t('episodeOverview.topicFilter'),
-    formatFilter: t('episodeOverview.formatFilter'),
-    all: t('episodeOverview.all'),
+    tagFilter: t('episodeOverview.tagFilter'),
     showAll: t.raw('episodeOverview.showAll') as string,
     showFewer: t('episodeOverview.showFewer'),
     results: {
@@ -74,8 +71,13 @@ export async function EpisodesIndexPage({ locale }: { locale: Locale }) {
 
   return (
     <main data-testid="episodes-index-page" className="mx-auto max-w-6xl px-6 py-12 sm:py-16">
-      <h1 className="sr-only">{tPage('title')}</h1>
-      <EpisodeBrowse cards={cards} locale={locale} labels={browseLabels(tLanding)} />
+      <header className="mb-10 max-w-3xl space-y-3">
+        <h1 className="text-heading font-semibold text-balance">{tPage('title')}</h1>
+        <p data-episodes-intro className="text-body text-muted-foreground text-pretty">
+          {tPage('intro')}
+        </p>
+      </header>
+      <EpisodeBrowse cards={newestFirst(cards)} locale={locale} labels={browseLabels(tLanding)} headingLevel={2} />
       <ReferenceLinks locale={locale} t={tPage} />
     </main>
   );

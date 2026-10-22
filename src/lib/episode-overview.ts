@@ -2,7 +2,7 @@ import type { EpisodeSlug } from './routes';
 
 /*
  * The Episode overview's central lists: the vocabularies an Episode's metadata
- * picks from, the look each Topic gives its Episodes, and the Featured slots.
+ * picks from, the look each Tag gives its Episodes, and the Featured slots.
  * Everything else about an Episode lives in its own folder
  * (`episodes/<slug>/episode-metadata.ts`). Ids only; every string a visitor
  * reads is a Translation key (FE-003).
@@ -13,37 +13,38 @@ export const ACCENTS = ['primary', 'amber', 'emerald', 'sky', 'rose', 'violet'] 
 export type Accent = (typeof ACCENTS)[number];
 
 /** An icon by name, so this stays data; the landing turns the name into a drawing. */
-export const ICONS = [
-  'sparkles',
-  'handshake',
-  'file-text',
-  'coins',
-  'user-round-plus',
-  'hourglass',
-  'list-plus',
-] as const;
-export type TopicIcon = (typeof ICONS)[number];
+export const ICONS = ['sparkles', 'handshake', 'file-text', 'coins', 'hourglass', 'list-plus'] as const;
+export type TagIcon = (typeof ICONS)[number];
 
-export interface TopicLook {
-  readonly icon: TopicIcon;
+export interface TagLook {
+  readonly icon: TagIcon;
   readonly accent: Accent;
 }
 
 /**
- * The curated Topics, each a YouTube playlist, in the order the overview lists
- * them. A Topic's look is every Episode's look whose primary Topic it is.
+ * The closed Tag vocabulary: the only Tags an Episode may carry. An Episode's
+ * first Tag is its lead Tag, and that Tag's look is its card's icon and accent.
+ * Each Tag's name and tooltip are Translation keys by id.
  */
-export const TOPICS = {
-  'ai-enablement': { icon: 'sparkles', accent: 'violet' },
-  sales: { icon: 'handshake', accent: 'emerald' },
-  'knowledge-base': { icon: 'file-text', accent: 'sky' },
+export const TAGS = {
+  'context-engineering': { icon: 'hourglass', accent: 'sky' },
+  'agentic-ai': { icon: 'sparkles', accent: 'violet' },
+  markdown: { icon: 'file-text', accent: 'rose' },
   cost: { icon: 'coins', accent: 'amber' },
-} as const satisfies Record<string, TopicLook>;
-export type TopicId = keyof typeof TOPICS;
-export const TOPIC_IDS = Object.keys(TOPICS) as readonly TopicId[];
+  sales: { icon: 'handshake', accent: 'emerald' },
+  workflow: { icon: 'list-plus', accent: 'primary' },
+} as const satisfies Record<string, TagLook>;
+export type TagId = keyof typeof TAGS;
+export const TAG_IDS = Object.keys(TAGS) as readonly TagId[];
 
-/** The channel's main subject: the overview lists it first, and a card filed under it as an extra Topic names it too. */
-export const HIGHLIGHTED_TOPIC = 'ai-enablement' as const satisfies TopicId;
+/** The Tags the overview offers as filter chips, in order; search still matches every Tag name. */
+export const FILTER_TAGS = [
+  'context-engineering',
+  'agentic-ai',
+  'markdown',
+  'cost',
+  'sales',
+] as const satisfies readonly TagId[];
 
 export const FORMATS = ['foundations', 'teardown', 'short'] as const;
 export type FormatId = (typeof FORMATS)[number];

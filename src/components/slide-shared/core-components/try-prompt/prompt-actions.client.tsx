@@ -1,5 +1,6 @@
 'use client';
 
+import { useMotion } from '@/hooks/use-motion';
 import { externalHref } from '@/lib/external-link.pure';
 import { cn } from '@/lib/utils';
 import { Copy } from 'lucide-react';
@@ -25,9 +26,11 @@ interface ChatLinkProps {
 }
 
 function ChatLink({ url, label, tip, newTab, onOpen, children }: ChatLinkProps) {
+  const motion = useMotion();
   return (
     <Tip text={tip} place="above" align="end">
       <a
+        {...motion}
         className={WRITTEN_OUT}
         href={externalHref(url)}
         target="_blank"

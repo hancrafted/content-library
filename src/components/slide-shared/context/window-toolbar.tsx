@@ -1,4 +1,4 @@
-import type { ChangeEvent } from 'react';
+import type { ChangeEvent, PointerEvent } from 'react';
 import { toClaudeLog } from './claude-log-writer.pure';
 import { CONTROLS, controlOf, type ControlDef, type Flips } from './context-controls.pure';
 import type { Flip } from './context-parts.types';
@@ -6,6 +6,7 @@ import type { ContextWords } from './context-words.types';
 import styles from './context.module.css';
 import type { Chat, Part, Preset } from './context.types';
 import { ControlIcon, IconButton } from './control-icons';
+import { Moves } from './moves.client';
 import { useChipDrag } from './window-chip-drag';
 
 /* The one toolbar: the controls the registry places there, in registry order: parts, Technical, the log. */
@@ -26,6 +27,34 @@ export interface ToolbarProps {
   readonly onOpen: (text: string) => void;
 }
 
+function Chip({
+  v,
+  part,
+  lifted,
+  onPointerDown,
+}: {
+  readonly v: ToolbarProps;
+  readonly part: Part;
+  readonly lifted: boolean;
+  readonly onPointerDown: (event: PointerEvent<HTMLElement>) => void;
+}) {
+  return (
+    <Moves
+      as="button"
+      trigger={`${v.parts[part]}|${lifted}`}
+      type="button"
+      data-chip={part}
+      data-lifted={lifted ? '' : undefined}
+      aria-pressed={v.parts[part]}
+      className={v.parts[part] ? 'font-semibold' : undefined}
+      onClick={() => v.onPart(part)}
+      onPointerDown={onPointerDown}
+    >
+      {v.words.parts[part]}
+    </Moves>
+  );
+}
+
 function ShowGroup({ v }: { readonly v: ToolbarProps }) {
   const reorder = controlOf(v.preset, 'parts').reorder !== false;
   const drag = useChipDrag({ enabled: reorder, order: v.order, onMove: v.onReorder });
@@ -39,18 +68,7 @@ function ShowGroup({ v }: { readonly v: ToolbarProps }) {
       onClickCapture={drag.onClickCapture}
     >
       {v.order.map((part) => (
-        <button
-          key={part}
-          type="button"
-          data-chip={part}
-          data-lifted={drag.dragging === part ? '' : undefined}
-          aria-pressed={v.parts[part]}
-          className={v.parts[part] ? 'font-semibold' : undefined}
-          onClick={() => v.onPart(part)}
-          onPointerDown={drag.onPointerDown(part)}
-        >
-          {v.words.parts[part]}
-        </button>
+        <Chip key={part} v={v} part={part} lifted={drag.dragging === part} onPointerDown={drag.onPointerDown(part)} />
       ))}
     </div>
   );

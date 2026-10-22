@@ -7,6 +7,7 @@ import { catLabel, fill, type Say } from './context-view';
 import styles from './context.module.css';
 import { colourOf } from './context.pure';
 import type { Category } from './context.types';
+import { Moves } from './moves.client';
 import { Glyph, tint } from './window-bits';
 
 /* The context window in Technical: Claude Code's /context grid of 100 boxes. */
@@ -77,11 +78,17 @@ function boxAttrs(props: BoxProps) {
 
 const Box = memo(function Box(props: BoxProps) {
   const glyph = <Glyph kind={props.box.kind} />;
-  if (props.role === 'button') return <button {...boxAttrs(props)}>{glyph}</button>;
+  const trigger = `${props.box.kind}|${props.morph}|${props.box.kind === 'used' ? props.pressed : ''}`;
+  if (props.role === 'button')
+    return (
+      <Moves as="button" trigger={trigger} {...boxAttrs(props)}>
+        {glyph}
+      </Moves>
+    );
   return (
-    <span {...boxAttrs(props)} aria-hidden="true">
+    <Moves as="span" trigger={trigger} {...boxAttrs(props)} aria-hidden="true">
       {glyph}
-    </span>
+    </Moves>
   );
 });
 
