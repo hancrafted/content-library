@@ -2,19 +2,20 @@
 
 import {
   browseView,
-  formatChoices,
-  hasChoice,
+  hasActiveFilters,
   INITIAL_SELECTION,
   resultsText,
   showsFormat,
   tagChoices,
+  toggleTag,
   type BrowseSelection,
   type ResultsLabels,
 } from '@/components/landing/episode-browse.pure';
 import { EpisodeCardView, type CardLabels } from '@/components/landing/episode-card';
 import type { EpisodeCard } from '@/components/landing/episode-card.pure';
-import { FormatSegments, SearchBox, TagChips, type FilterLabels } from '@/components/landing/episode-filters';
+import { SearchBox, TagChips, type FilterLabels } from '@/components/landing/episode-filters';
 import { Button } from '@/components/ui/button';
+import type { TagId } from '@/lib/episode-overview';
 import type { Locale } from '@/lib/locale.pure';
 import { fillTemplate } from '@/lib/template.pure';
 import { cn } from '@/lib/utils';
@@ -77,20 +78,19 @@ function FoldButton({ expanded, total, labels, onToggle }: FoldProps) {
 /** The visitor's selection, the grid it yields and the handlers that change it; all transient, in memory (FE-001). */
 function useBrowse(cards: readonly EpisodeCard[]) {
   const [selection, setSelection] = useState<BrowseSelection>(INITIAL_SELECTION);
-  const allTags = useRef<HTMLButtonElement>(null);
+  const search = useRef<HTMLInputElement>(null);
   return {
     selection,
-    allTags,
+    search,
+    active: hasActiveFilters(selection),
     view: browseView(cards, selection),
     tags: tagChoices(cards, selection),
-    formats: formatChoices(cards, selection),
-    setTag: (tag: BrowseSelection['tag']) => setSelection((prev) => ({ ...prev, tag })),
-    setFormat: (format: BrowseSelection['format']) => setSelection((prev) => ({ ...prev, format })),
+    toggleTag: (tag: TagId) => setSelection((prev) => toggleTag(prev, tag)),
     setQuery: (query: string) => setSelection((prev) => ({ ...prev, query })),
     toggleExpanded: () => setSelection((prev) => ({ ...prev, expanded: !prev.expanded })),
     reset: () => {
       setSelection(INITIAL_SELECTION);
-      allTags.current?.focus();
+      search.current?.focus();
     },
   };
 }
@@ -98,21 +98,34 @@ function useBrowse(cards: readonly EpisodeCard[]) {
 type Browse = ReturnType<typeof useBrowse>;
 
 function BrowseControls({ browse, labels }: { browse: Browse; labels: BrowseLabels }) {
-  const { selection, tags, formats } = browse;
+  const { selection, tags } = browse;
   return (
     <div data-browse-controls className="flex flex-wrap items-center gap-x-6 gap-y-4">
-      <SearchBox query={selection.query} labels={labels} onChange={browse.setQuery} />
-      {hasChoice(tags) && (
-        <TagChips
-          choices={tags}
-          selected={selection.tag}
-          labels={labels}
-          allRef={browse.allTags}
-          onSelect={browse.setTag}
-        />
-      )}
-      {hasChoice(formats) && (
-        <FormatSegments choices={formats} selected={selection.format} labels={labels} onSelect={browse.setFormat} />
+      <SearchBox query={selection.query} labels={labels} onChange={browse.setQuery} inputRef={browse.search} />
+      <TagChips options={tags} selected={selection.tags} labels={labels} onToggle={browse.toggleTag} />
+    </div>
+  );
+}
+
+/** The live result count, with the way back to everything while a filter is on. */
+function ResultsLine({ browse, labels }: { browse: Browse; labels: BrowseLabels }) {
+  return (
+    <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+      <p role="status" aria-live="polite" className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+        {resultsText(labels.results, browse.view.matching)}
+      </p>
+      {browse.active && (
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          data-browse-controls
+          data-reset-filters
+          onClick={browse.reset}
+          className="rounded-full text-xs text-muted-foreground"
+        >
+          {labels.reset}
+        </Button>
       )}
     </div>
   );
@@ -160,9 +173,7 @@ export function EpisodeBrowse({ cards, locale, labels }: BrowseProps) {
         <style>{NO_SCRIPT_CSS}</style>
       </noscript>
       <BrowseControls browse={browse} labels={labels} />
-      <p role="status" aria-live="polite" className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
-        {resultsText(labels.results, view.matching)}
-      </p>
+      <ResultsLine browse={browse} labels={labels} />
       <BrowseGrid cards={cards} visible={view.visible} locale={locale} labels={labels} />
       {view.matching === 0 && <EmptyState labels={labels} onReset={browse.reset} />}
       {view.foldable && (

@@ -67,8 +67,6 @@
       "search": "Episoden durchsuchen",
       "searchPlaceholder": "Nach Titel oder Tag suchen",
       "tagFilter": "Nach Tag filtern",
-      "formatFilter": "Nach Format filtern",
-      "all": "Alle",
       "showAll": "Alle {count} Episoden anzeigen",
       "showFewer": "Weniger anzeigen",
       "results": {
@@ -405,7 +403,8 @@
     }
   },
   "episodesPage": {
-    "title": "Episoden",
+    "title": "Alle Episoden",
+    "intro": "Interaktive Visualisierungen, die ich gebaut habe, weil ich nie wieder eine PowerPoint-Präsentation basteln wollte.",
     "references": {
       "label": "Referenzen",
       "pageTemplate": "Episoden-Seitenvorlage",

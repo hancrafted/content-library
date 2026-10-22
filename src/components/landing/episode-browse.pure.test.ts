@@ -1,15 +1,15 @@
 import type { TagId } from '@/lib/episode-overview';
 import { describe, expect, it } from 'vitest';
 import {
-  ALL,
   browseView,
-  formatChoices,
-  hasChoice,
+  hasActiveFilters,
   INITIAL_SELECTION,
+  newestFirst,
   resultsText,
   showsFormat,
   spotlightOf,
   tagChoices,
+  toggleTag,
   type BrowseSelection,
 } from './episode-browse.pure';
 import type { EpisodeCard, TagLabel } from './episode-card.pure';
@@ -83,7 +83,7 @@ describe('success cases', () => {
 
   it('narrows the grid to one Tag and counts only its cards', () => {
     // ARRANGE
-    const selection: BrowseSelection = { ...INITIAL_SELECTION, tag: 'sales' };
+    const selection: BrowseSelection = { ...INITIAL_SELECTION, tags: ['sales'] };
     const expected = ['p1', 'u1'];
     // ACT
     const view = browseView(MIXED, selection, 9);
@@ -91,48 +91,57 @@ describe('success cases', () => {
     expect([...view.visible]).toEqual(expected);
   });
 
-  it('narrows by Tag and format together', () => {
+  it('shows the cards with any of several chosen Tags, in card order', () => {
     // ARRANGE
-    const selection: BrowseSelection = { tag: 'sales', format: 'teardown', expanded: false, query: '' };
-    const expected = ['u1'];
+    const selection: BrowseSelection = { ...INITIAL_SELECTION, tags: ['markdown', 'sales'] };
+    const expected = { matching: 3, visible: ['p1', 'p2', 'u1'] };
     // ACT
     const view = browseView(MIXED, selection, 9);
     // ASSERT
-    expect([...view.visible]).toEqual(expected);
+    expect({ matching: view.matching, visible: [...view.visible] }).toEqual(expected);
   });
 
-  it('counts each Tag chip against the chosen format, in vocabulary order, with the all-chip first', () => {
+  it('counts each Tag chip in vocabulary order, whatever Tags are chosen', () => {
     // ARRANGE
-    const selection: BrowseSelection = { ...INITIAL_SELECTION, format: 'foundations' };
-    const expected = {
-      all: 3,
-      options: [
-        { id: 'markdown', label: 'Markdown', count: 1 },
-        { id: 'cost', label: 'Cost', count: 1 },
-        { id: 'sales', label: 'Sales', count: 1 },
-      ],
-    };
+    const selection: BrowseSelection = { ...INITIAL_SELECTION, tags: ['sales'] };
+    const expected = [
+      { id: 'markdown', label: 'Markdown', count: 1 },
+      { id: 'cost', label: 'Cost', count: 2 },
+      { id: 'sales', label: 'Sales', count: 2 },
+    ];
     // ACT
-    const choices = tagChoices(MIXED, selection);
+    const options = tagChoices(MIXED, selection);
     // ASSERT
-    expect(choices).toEqual(expected);
+    expect(options).toEqual(expected);
   });
 
-  it('counts each format against the chosen Tag', () => {
+  it('adds a Tag to the selection and takes it out again when toggled twice', () => {
     // ARRANGE
-    const selection: BrowseSelection = { ...INITIAL_SELECTION, tag: 'sales' };
-    const expected = {
-      all: 2,
-      options: [
-        { id: 'foundations', label: 'Foundations', count: 1 },
-        { id: 'teardown', label: 'Teardown', count: 1 },
-        { id: 'short', label: 'Short', count: 0 },
-      ],
-    };
+    const once = toggleTag(INITIAL_SELECTION, 'cost');
+    const twice = toggleTag(once, 'sales');
     // ACT
-    const choices = formatChoices(MIXED, selection);
+    const back = toggleTag(twice, 'cost');
     // ASSERT
-    expect(choices).toEqual(expected);
+    expect({ once: once.tags, twice: twice.tags, back: back.tags }).toEqual({
+      once: ['cost'],
+      twice: ['cost', 'sales'],
+      back: ['sales'],
+    });
+  });
+
+  it('lists published cards newest first, ties by slug, then the upcoming ones in the order given', () => {
+    // ARRANGE
+    const dated = [
+      card('old', { publishedOn: '2026-01-05' }),
+      card('u', { status: 'upcoming' }),
+      card('new-b', { publishedOn: '2026-03-01' }),
+      card('new-a', { publishedOn: '2026-03-01' }),
+    ];
+    const expected = ['new-a', 'new-b', 'old', 'u'];
+    // ACT
+    const ordered = newestFirst(dated);
+    // ASSERT
+    expect(slugs(ordered)).toEqual(expected);
   });
 
   it('follows the Featured rank, not the order of the cards it is given', () => {
@@ -148,7 +157,7 @@ describe('success cases', () => {
   it('finds an Episode under each Tag it carries, and counts it under each', () => {
     // ARRANGE
     const overlapping = [...MIXED, card('x', { tags: [tag('markdown', 'Markdown'), tag('agentic-ai', 'Agentic AI')] })];
-    const selection: BrowseSelection = { ...INITIAL_SELECTION, tag: 'agentic-ai' };
+    const selection: BrowseSelection = { ...INITIAL_SELECTION, tags: ['agentic-ai'] };
     const expectedVisible = ['x'];
     const expectedCounts = [
       { id: 'agentic-ai', label: 'Agentic AI', count: 1 },
@@ -158,7 +167,7 @@ describe('success cases', () => {
     ];
     // ACT
     const view = browseView(overlapping, selection, 9);
-    const { options } = tagChoices(overlapping, INITIAL_SELECTION);
+    const options = tagChoices(overlapping, INITIAL_SELECTION);
     // ASSERT
     expect([...view.visible]).toEqual(expectedVisible);
     expect(options).toEqual(expectedCounts);
@@ -176,12 +185,12 @@ describe('success cases', () => {
 
   it('narrows by topic and query together, and counts each Tag chip against the query', () => {
     // ARRANGE
-    const selection: BrowseSelection = { ...INITIAL_SELECTION, tag: 'sales', query: 'Title p' };
+    const selection: BrowseSelection = { ...INITIAL_SELECTION, tags: ['sales'], query: 'Title p' };
     const expectedVisible = ['p1'];
     const expectedSales = { id: 'sales', label: 'Sales', count: 1 };
     // ACT
     const view = browseView(MIXED, selection, 9);
-    const sales = tagChoices(MIXED, selection).options.find((option) => option.id === 'sales');
+    const sales = tagChoices(MIXED, selection).find((option) => option.id === 'sales');
     // ASSERT
     expect([...view.visible]).toEqual(expectedVisible);
     expect(sales).toEqual(expectedSales);
@@ -229,7 +238,7 @@ describe('failure cases', () => {
 
   it('shows nothing and reports no match when the selection fits no card', () => {
     // ARRANGE
-    const selection: BrowseSelection = { tag: 'agentic-ai', format: ALL, expanded: false, query: '' };
+    const selection: BrowseSelection = { tags: ['agentic-ai'], expanded: false, query: '' };
     // ACT
     const view = browseView(MIXED, selection, 9);
     // ASSERT
@@ -255,14 +264,24 @@ describe('failure cases', () => {
     expect(shown).toBe(expected);
   });
 
-  it('leaves a chip in place with a zero count when the other filter empties it', () => {
+  it('leaves a chip in place with a zero count when the query empties it', () => {
     // ARRANGE
-    const selection: BrowseSelection = { ...INITIAL_SELECTION, format: 'short' };
+    const selection: BrowseSelection = { ...INITIAL_SELECTION, query: 'Title p3' };
     const expected = { id: 'markdown', label: 'Markdown', count: 0 };
     // ACT
-    const { options } = tagChoices(MIXED, selection);
+    const options = tagChoices(MIXED, selection);
     // ASSERT
     expect(options).toContainEqual(expected);
+  });
+
+  it('shows everything again once the selection is reset', () => {
+    // ARRANGE
+    const chosen: BrowseSelection = { tags: ['sales'], query: 'nothing', expanded: true };
+    // ACT
+    const states = [hasActiveFilters(chosen), hasActiveFilters(INITIAL_SELECTION)];
+    const view = browseView(MIXED, INITIAL_SELECTION, 9);
+    // ASSERT
+    expect({ states, matching: view.matching }).toEqual({ states: [true, false], matching: MIXED.length });
   });
 });
 
@@ -357,12 +376,23 @@ describe('edge cases', () => {
     expect(shown).toBe(expected);
   });
 
-  it('only offers a filter that has at least two values to choose between', () => {
+  it('only offers chips for Tags a card carries', () => {
     // ARRANGE
     const oneTag = [card('a'), card('b')];
+    const expected = [{ id: 'cost', label: 'Cost', count: 2 }];
     // ACT
-    const choices = [tagChoices(oneTag, INITIAL_SELECTION), tagChoices(MIXED, INITIAL_SELECTION)];
+    const options = tagChoices(oneTag, INITIAL_SELECTION);
     // ASSERT
-    expect(choices.map(hasChoice)).toEqual([false, true]);
+    expect(options).toEqual(expected);
+  });
+
+  it('counts a chip against a query of accents and case', () => {
+    // ARRANGE
+    const selection: BrowseSelection = { ...INITIAL_SELECTION, query: 'BEFAHIGUNG' };
+    const expected = { id: 'agentic-ai', count: 1 };
+    // ACT
+    const options = tagChoices(SEARCHABLE, selection);
+    // ASSERT
+    expect(options.map(({ id, count }) => ({ id, count }))).toContainEqual(expected);
   });
 });
