@@ -11,18 +11,25 @@ changed=$(printf '%s\n' "$refs" | while read -r _ local _ remote; do
   if [ "$remote" = "$zero" ]; then git diff --name-only "origin/main...$local"; else git diff --name-only "$remote" "$local"; fi
 done)
 if printf '%s\n' "$changed" | grep -qE '^(skills/visual-check/|skills/new-episode/scripts/spec-preview|vitest\.browser\.config\.ts|src/components/|src/app/|tests/browser/)'; then
-  # The a11y test drives the served export, so the lane builds it and serves it on the preview port, then stops it.
+  # The a11y and human-in-the-loop tests drive the served export; the context test drives the Slides Episode under next dev. The
+  # lane builds and serves the export, starts `next dev`, both on free ports so another worktree's servers never
+  # answer, points every test at them, then stops both. `|| true`: under `sh -e` a kill of a stopped server fails.
   echo "push touches the browser lane: building, serving and running test:browser"
   npm run build </dev/null || exit 1
-  port=${PREVIEW_PORT:-4300}
-  node skills/visual-check/scripts/preview.ts </dev/null >/dev/null 2>&1 &
+  free_port() { node -e 'const s=require("net").createServer().listen(0,()=>{console.log(s.address().port);s.close()})'; }
+  port=$(free_port)
+  dev_port=$(free_port)
+  PREVIEW_PORT=$port node skills/visual-check/scripts/preview.ts </dev/null >/dev/null 2>&1 &
   server=$!
-  # Under `sh -e` a failing trap command fails the hook: by now the lane has stopped the server, so this kill may find
-  # no process.
-  trap 'kill "$server" 2>/dev/null || true' EXIT
+  npx next dev -p "$dev_port" </dev/null >/dev/null 2>&1 &
+  dev=$!
+  trap 'kill "$server" "$dev" 2>/dev/null || true' EXIT
   for _ in $(seq 1 50); do curl -fs -o /dev/null "http://localhost:$port/" && break; sleep 0.2; done
-  npm run test:browser </dev/null || exit 1
-  kill "$server" 2>/dev/null
+  for _ in $(seq 1 150); do curl -fs -o /dev/null "http://localhost:$dev_port/episodes/slides/" && break; sleep 0.4; done
+  A11Y_BASE_URL="http://localhost:$port" \
+    HITL_URL="http://localhost:$port/episodes/onboard-ai-every-time/" \
+    CONTEXT_WINDOW_URL="http://localhost:$dev_port/episodes/slides/" \
+    npm run test:browser </dev/null || exit 1
 fi
 
 # A push to main triggers the Pages deploy, so it also runs the build lanes
