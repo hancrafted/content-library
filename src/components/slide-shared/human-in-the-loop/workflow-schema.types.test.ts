@@ -26,7 +26,7 @@ describe('success cases', () => {
     // ASSERT
     expect(task.fanOut).toBe(chats);
     expect(task.slots.map((slot) => slot.id)).toEqual(['tickets']);
-    expect(proposal.templates[task.template]).toContain('kind: research');
+    expect(proposal.templates[task.template]).toContain('## Fit against the requirements');
     expect(task.review?.checks.length).toBeGreaterThan(0);
   });
 

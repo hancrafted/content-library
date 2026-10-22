@@ -23,18 +23,18 @@ All fields are required unless marked. Unknown fields are rejected.
 | `purposes`    | Exactly the six keys `role`, `context`, `task`, `steps`, `template`, `scope`, each one explanation, written once. A section's `purpose` tooltip shows it. |
 | `techniques`  | The catalogue of prompt techniques, at least one: `{ id, tier: basic \| advanced, title, explain }`. A new technique is a new entry.                      |
 | `reviewer`    | `sections`, at least one: the general reviewer, written once, joined with every task's checks.                                                            |
-| `templates`   | A markdown handoff per `kind`, keyed by kind.                                                                                                             |
+| `templates`   | A markdown handoff template per key; a task names its key.                                                                                                |
 | `stages`      | At least one stage, in drawing order.                                                                                                                     |
 
 Keep scenario facts out of prompt sections. They live in `scenario`, the slot samples and the examples; a section reaches them through a slot marker. A new scenario then swaps data, not prompts.
 
 ## Templates and handoffs
 
-Every handoff is markdown: front matter with `kind`, one H1, H2 sections. A template is a handoff with the sections left empty.
+Every handoff is markdown: one H1, then H2 sections, and no front matter. A chat app such as ChatGPT cannot be relied on to write front matter, and a learner who must add it by hand gets stuck, so the headings alone carry the shape. A template is a handoff with the sections left empty.
 
-- The key under `templates` equals the front matter `kind`, the template has an H1, and it holds no `{{marker}}`.
+- A template has an H1, no front matter, and holds no `{{marker}}`.
 - An H2 written `<like this>` stands for one or more sections of any title; `# <Title>` is the usual H1.
-- Every sample and every example is held to its template: it has front matter with the same `kind`, an H1, and H2 headings that follow the template's in order. Headings inside code fences do not count.
+- Every sample and every example is held to its template: it has no front matter, an H1, and H2 headings that follow the template's in order. Headings inside code fences do not count.
 
 ## Stage and task fields
 
@@ -154,9 +154,6 @@ reviewer:
       text: '{{template}}'
 templates:
   greeting: |
-    ---
-    kind: greeting
-    ---
     # <Greeting for whom>
     ## Message
     ## Tone
@@ -214,9 +211,6 @@ stages:
         details:
           why: A short piece fits one chat and one handoff.
           example: |
-            ---
-            kind: greeting
-            ---
             # Greeting for Sam
             ## Message
             Welcome, Sam. See you on Monday.
@@ -232,11 +226,11 @@ stages:
 
 - The text is not YAML: "The file is not valid YAML."
 - Shape, with a path such as `stages[0].tasks[1].do.simple`: `<path> is missing.`; `<path> is not a field of the schema.`; `<path> must be a mapping.` / `a list.`; `<path> needs at least N entries.`; `<path> must be text` (non-empty), `a whole number of at least 1`, `true or false`, or `text or a list of texts`; `<path> is "x", which is not one of ...` (a `purpose`, `tier`, `mode`, `move`); `purposes` lacking one of its six keys or holding another.
-- Templates: front matter `kind` unequal to the key; no H1; a `{{marker}}` inside.
+- Templates: front matter; no H1; a `{{marker}}` inside.
 - Ids: a stage, task or technique id used twice; an output handed on by two tasks; a slot id twice in one task; a `fanOut` below 2.
 - Slots: names no output of an earlier stage (and is not `free`); takes all chats of a fan-out but is `single`; is `multiple` but its output is no fan-out; a non-free do slot with no sample; a `multiple` slot with a lone sample or a `single` slot with a list; a list whose length differs from the markers; a review slot id that clashes with another id.
 - Techniques: a section or details naming an unknown technique id.
 - Markers: an unknown marker in a task prompt (either runtime) or in the reviewer, naming the marker.
-- Handoffs: a sample or example whose kind differs from its template, with no front matter, with no H1, or whose H2 sections differ from the template's; a task naming an unknown template; a list example on a task without fan-out; a fan-out example list whose length is not N.
+- Handoffs: a sample or example with front matter, with no H1, or whose H2 sections differ from the template's; a task naming an unknown template; a list example on a task without fan-out; a fan-out example list whose length is not N.
 
 Verify a new file by running `npm test` (`workflow-pair.test.ts`, the loader and the guide test), or load it through the toolbar upload.

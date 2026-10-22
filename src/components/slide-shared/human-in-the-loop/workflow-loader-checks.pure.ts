@@ -1,5 +1,5 @@
 import { markerCount } from '../core-components/try-prompt/prompt-sections.pure';
-import { handoffProblems, readTemplate } from './markdown-handoff.pure';
+import { handoffProblems, hasFrontMatter, readTemplate } from './markdown-handoff.pure';
 import { unknownMarkers } from './workflow-markers.pure';
 import { producersBefore, producersOf, tasksOf, type Producer } from './workflow-outputs.pure';
 import { slotSample } from './workflow-sample.pure';
@@ -16,7 +16,7 @@ export function templateProblems(file: WorkflowFile): string[] {
   return Object.entries(file.templates).flatMap(([key, source]) => {
     const read = readTemplate(source);
     return [
-      ...(read.kind === key ? [] : [`Template "${key}" must have the front matter kind "${key}".`]),
+      ...(hasFrontMatter(source) ? [`Template "${key}" has front matter; a template starts with its H1.`] : []),
       ...(read.h1 === undefined ? [`Template "${key}" has no H1.`] : []),
       ...(/\{\{/.test(source) ? [`Template "${key}" holds a {{marker}}; templates are plain markdown.`] : []),
     ];
