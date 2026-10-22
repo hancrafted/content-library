@@ -2,10 +2,10 @@ import type { EpisodeCard } from './episode-card.pure';
 
 /**
  * How big a card is drawn and what it carries. `lead` is the landing hero;
- * `compact` serves the landing side cards and the overview grid. A new variant
+ * `compact` serves the landing side cards and the overview grid; `workshop` is a Workshop's card on /workshops. A new variant
  * is one more member here and one more entry in the shell's variant table.
  */
-export type CardVariant = 'lead' | 'compact';
+export type CardVariant = 'lead' | 'compact' | 'workshop';
 
 /** The cue that says a card opens: a filled button, a hover-only arrow, or "coming soon" on a card with nowhere to go. */
 export type OpenCue = 'button' | 'arrow' | 'coming-soon';
@@ -13,6 +13,7 @@ export type OpenCue = 'button' | 'arrow' | 'coming-soon';
 const LINKED_CUES: Record<CardVariant, Exclude<OpenCue, 'coming-soon'>> = {
   lead: 'button',
   compact: 'arrow',
+  workshop: 'arrow',
 };
 
 /** A card is a link once its Episode has a page; an announced-only Episode has no route. */

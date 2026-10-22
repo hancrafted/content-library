@@ -105,7 +105,7 @@ function videoOf(entry: CardEntry, youtubeId?: string): Pick<EpisodeCard, 'youtu
 }
 
 /** The release day as the locale writes it, read in UTC so the calendar day never shifts with the build machine's time zone. */
-function releaseDateOf(publishedOn: IsoDate, locale: Locale): string {
+export function releaseDateOf(publishedOn: IsoDate, locale: Locale): string {
   const format = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
   return format.format(new Date(`${publishedOn}T00:00:00Z`));
 }

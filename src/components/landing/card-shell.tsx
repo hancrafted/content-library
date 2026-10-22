@@ -1,7 +1,7 @@
-import { TAG_ACCENTS, TAG_ICONS } from '@/components/landing/episode-visuals';
-import type { Accent, TagIcon } from '@/lib/episode-overview';
+import { TAG_ACCENTS } from '@/components/landing/episode-visuals';
+import type { Accent } from '@/lib/episode-overview';
 import { localizePath, type Locale } from '@/lib/locale.pure';
-import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, type LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import type { CardVariant, OpenCue } from './card-variant.pure';
@@ -40,6 +40,13 @@ export const VARIANTS: Record<CardVariant, VariantClasses> = {
     caption: 'line-clamp-3 text-caption',
     cue: '',
   },
+  workshop: {
+    frame: 'rounded-2xl p-6',
+    art: '-bottom-6 -right-6 size-36',
+    title: 'text-body font-semibold',
+    caption: 'line-clamp-3 text-caption',
+    cue: '',
+  },
 };
 
 const FRAME =
@@ -52,7 +59,7 @@ interface ShellProps {
   /** False for an announced-only card: muted, no wash, no icon, no hover. */
   linked: boolean;
   accent: Accent;
-  icon: TagIcon;
+  icon: LucideIcon;
   /** The card's own data attributes, so each card kind keeps its own hooks for tests and probes. */
   data: Record<`data-${string}`, string | undefined>;
   className?: string;
@@ -75,9 +82,8 @@ export function CardShell({ variant, linked, accent, icon, data, className = '',
 }
 
 /** The corner wash and the large faded icon behind the text; decorative, so they take no clicks and sit under the content. */
-function CardArt({ accent, icon, classes }: { accent: Accent; icon: TagIcon; classes: string }) {
+function CardArt({ accent, icon: Icon, classes }: { accent: Accent; icon: LucideIcon; classes: string }) {
   const look = TAG_ACCENTS[accent];
-  const Icon = TAG_ICONS[icon];
   return (
     <>
       <span
@@ -155,5 +161,10 @@ export function CardCue({ cue, variant, open, comingSoon }: CueProps) {
       </span>
     );
   }
-  return <ArrowUpRight aria-hidden data-open-cue={cue} className={`${ARROW} ${place}`} />;
+  return <CardArrow variant={variant} />;
+}
+
+/** The quiet arrow of a linked card: hover-only on a pointer, always shown on touch. */
+export function CardArrow({ variant }: { variant: CardVariant }) {
+  return <ArrowUpRight aria-hidden data-open-cue="arrow" className={`${ARROW} ${VARIANTS[variant].cue}`} />;
 }

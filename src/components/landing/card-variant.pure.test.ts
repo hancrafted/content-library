@@ -22,6 +22,14 @@ describe('success cases', () => {
     // ASSERT
     expect(cue).toBe(expected);
   });
+  it('shows a workshop card as the quiet arrow', () => {
+    // ARRANGE
+    const expected = 'arrow';
+    // ACT
+    const cue = cueOf(LINKED, 'workshop');
+    // ASSERT
+    expect(cue).toBe(expected);
+  });
 });
 
 describe('failure cases', () => {
