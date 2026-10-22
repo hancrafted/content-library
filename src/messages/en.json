@@ -6,6 +6,7 @@
   "nav": {
     "label": "Main",
     "episodes": "Episodes",
+    "workshops": "Workshops",
     "dashboard": "Dashboard",
     "contact": "Work with me",
     "newTab": "opens in a new tab"
@@ -400,6 +401,10 @@
     "home": {
       "title": "Visualised theory · hancrafted",
       "description": "Theory from the hancrafted training videos, visualised page by page."
+    },
+    "workshops": {
+      "title": "Workshops",
+      "description": "Guided workshops that walk through a planned set of visualised theory episodes, in order."
     }
   },
   "episodesPage": {
@@ -462,5 +467,20 @@
     "heading": "THE TALK",
     "backToVideo": "Back to video",
     "close": "Close video player"
+  },
+  "workshopsPage": {
+    "title": "Workshops",
+    "back": "All Workshops",
+    "intro": "Guided sessions that walk through a planned set of Episodes, in order.",
+    "episodeCount": {
+      "one": "1 Episode",
+      "other": "{count} Episodes"
+    },
+    "items": {
+      "ai-onboarding-2026-10-23": {
+        "title": "AI onboarding",
+        "description": "Get AI up to speed in three Episodes: onboard it every time, manage its attention span, and see why it adds management work."
+      }
+    }
   }
 }

@@ -3,6 +3,7 @@ import { cueOf, isLinked, type CardVariant } from '@/components/landing/card-var
 import type { EpisodeCard } from '@/components/landing/episode-card.pure';
 import { EpisodeLinks } from '@/components/landing/episode-links';
 import { ReleaseDate } from '@/components/landing/episode-release-date';
+import { TAG_ICONS } from '@/components/landing/episode-visuals';
 import type { VideoLabels } from '@/components/landing/episode-youtube-link';
 import type { Locale } from '@/lib/locale.pure';
 
@@ -76,7 +77,7 @@ export function EpisodeCardView({ card, variant, locale, labels, showFormat, cla
       variant={variant}
       linked={isLinked(card)}
       accent={card.accent}
-      icon={card.icon}
+      icon={TAG_ICONS[card.icon]}
       className={className}
       data={{
         'data-episode-card': '',

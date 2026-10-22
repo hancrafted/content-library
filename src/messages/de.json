@@ -6,6 +6,7 @@
   "nav": {
     "label": "Hauptnavigation",
     "episodes": "Episoden",
+    "workshops": "Workshops",
     "dashboard": "Dashboard",
     "contact": "Mit mir arbeiten",
     "newTab": "öffnet in einem neuen Tab"
@@ -400,6 +401,10 @@
     "home": {
       "title": "Visualisierte Theorie · hancrafted",
       "description": "Theorie aus den hancrafted-Schulungsvideos, Seite für Seite visualisiert."
+    },
+    "workshops": {
+      "title": "Workshops",
+      "description": "Begleitete Workshops, die eine geplante Reihe visualisierter Theorie-Episoden der Reihe nach durchgehen."
     }
   },
   "episodesPage": {
@@ -462,5 +467,20 @@
     "heading": "DER VORTRAG",
     "backToVideo": "Zurück zum Video",
     "close": "Videoplayer schließen"
+  },
+  "workshopsPage": {
+    "title": "Workshops",
+    "back": "Alle Workshops",
+    "intro": "Begleitete Sessions, die eine geplante Reihe von Episoden der Reihe nach durchgehen.",
+    "episodeCount": {
+      "one": "1 Episode",
+      "other": "{count} Episoden"
+    },
+    "items": {
+      "ai-onboarding-2026-10-23": {
+        "title": "KI-Onboarding",
+        "description": "Bring KI in drei Episoden auf Stand: jedes Mal neu einarbeiten, ihre Aufmerksamkeitsspanne managen und verstehen, warum sie Management-Arbeit bringt."
+      }
+    }
   }
 }
