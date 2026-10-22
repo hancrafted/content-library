@@ -1,0 +1,818 @@
+# The summer-party Workflow in the new schema, English. One language per file: what is written is what renders.
+# Types: workflow-schema.types.ts. The German file stays on the old schema (summer-party.config.yml plus its .de
+# twin) until it migrates. Scenario facts live only in `scenario`, the slot samples and the examples; the prompt
+# sections are general, and reach the scenario through the `{{slot}}` markers.
+id: summer-party
+title: Summer party
+
+scenario:
+  summary: Plan your company's next summer party.
+  facts:
+    - 200 employees across five offices in Europe
+    - An evening in late June in Frankfurt
+
+purposes:
+  role: Giving the AI a role makes it more likely to behave that way.
+  context: What the AI cannot know unless you tell it.
+  task: The one thing you want done.
+  steps: The order to work in, so the AI does not skip or reorder.
+  template: The exact shape of the answer, so the next chat can read it.
+  scope: What is in and out, so the AI does not wander.
+
+reviewer:
+  sections:
+    - heading: Your role
+      purpose: role
+      text: You are a strict reviewer in a fresh chat. You did not write the work below and you do not rewrite it. You only check it.
+    - heading: What you are given
+      purpose: context
+      text: '{{inputs}}'
+    - heading: General checks
+      purpose: steps
+      text: |
+        1. The work follows the template below exactly: same front matter and the same H2 sections.
+        2. Nothing is invented; every claim is backed by something you were given or by a named source.
+        3. The work stays inside what it was asked for.
+    - heading: Checks for this task
+      purpose: task
+      text: '{{checks}}'
+    - heading: Template
+      purpose: template
+      text: '{{template}}'
+    - heading: Report
+      purpose: scope
+      text: |
+        Grade every check PASS or FAIL with evidence. Do not fix anything. Then write a short fix handoff that I paste back into the chat that did the work. If it cannot create files, answer in raw markdown.
+
+templates:
+  plan: |
+    ---
+    kind: plan
+    ---
+    # <The task>
+    ## Pieces
+    ## First piece
+    ## Why first
+  interview: |
+    ---
+    kind: interview
+    ---
+    # <The piece>
+    ## Starting facts
+    ## Questions and answers
+  spec: |
+    ---
+    kind: spec
+    ---
+    # <Title>
+    ## Goal
+    ## Requirements
+    ## Options to explore
+    ## Out of scope
+  tickets: |
+    ---
+    kind: tickets
+    ---
+    # <Title of the set>
+    ## <Ticket title>
+  research: |
+    ---
+    kind: research
+    ---
+    # <What was researched>
+    ## Fit against the requirements
+    ## Cost
+    ## Sources
+    ## Open doubts
+  comparison: |
+    ---
+    kind: comparison
+    ---
+    # <Title>
+    ## Criteria
+    ## Ranking
+    ## Doubts
+  recommendation: |
+    ---
+    kind: recommendation
+    ---
+    # <Title>
+    ## Recommendation
+    ## Why
+    ## Next steps
+
+stages:
+  - id: party
+    title: Plan
+    learningGoal: 'Break it down: split the big task into pieces and take only one forward.'
+    move: B
+    tasks:
+      - id: pieces
+        title: Pieces
+        output: plan
+        template: plan
+        slots: []
+        details:
+          why: A big task fits no single chat. Cut into pieces, each one can be planned in a fresh chat from a short handoff, and a short grill first stops the AI from guessing what the task is.
+          example: &plan_example |
+            ---
+            kind: plan
+            ---
+            # Plan the company summer party
+            ## Pieces
+            1. Venue: fixes the date and the city
+            2. Travel: how the five offices get there
+            3. Catering: food and drink
+            4. Programme: what happens in the evening
+            5. Invitations: who is told what, and when
+            ## First piece
+            Venue
+            ## Why first
+            It fixes the date and the city, and travel, catering and invitations all follow from it.
+          goodLooksLike:
+            - Each piece is small enough to plan in its own chat from a short handoff.
+            - Exactly one piece goes first, with a one-sentence reason.
+        do:
+          simple:
+            - heading: Your role
+              purpose: role
+              text: You are a planning coach. You help me cut a big task into pieces that can be planned one after the other, and you pick the piece to start with.
+            - heading: The task
+              purpose: context
+              text: |
+                My big task is: <describe your task in one or two sentences, with the facts the AI cannot know>.
+            - heading: Steps
+              purpose: steps
+              text: |
+                1. First ask me at most three short questions about the task, all in one message, and wait for my answers. Do not plan yet.
+                2. Break the task into about five pieces. A piece is something I can plan in its own chat from a short handoff.
+                3. Name each piece in one or two words and add half a sentence on what it decides.
+                4. Recommend the single piece to take first: the one that fixes the most for the others, with the reason in one sentence.
+            - heading: Scope
+              purpose: scope
+              text: Do not plan any piece itself. Only split the task and choose the first piece.
+            - heading: Format
+              purpose: template
+              text: |
+                If you can create a file, write a markdown file. If not, answer in raw markdown in this template.
+
+                {{template}}
+          technical:
+            - heading: Task
+              purpose: task
+              text: |
+                /grilling Ask me at most three short questions about my big task first, then break it down: about five pieces, each small enough to plan in its own chat from a short handoff, and one piece recommended to go first with a one-sentence reason. Do not plan any piece. My big task is: <describe your task in one or two sentences, with the facts the AI cannot know>.
+            - heading: Format
+              purpose: template
+              text: |
+                Write the result as a markdown file, or raw markdown if you cannot create files, in this template.
+
+                {{template}}
+        review:
+          slots:
+            - id: plan_result
+              mode: single
+              label: The plan to review
+              sample: *plan_example
+          checks:
+            - The task is cut into pieces, and each could be planned in its own chat from a short handoff.
+            - Exactly one piece is chosen first, with a one-sentence reason that says what it fixes for the others.
+            - No piece is planned in detail.
+
+  - id: interview
+    title: Interview
+    learningGoal: 'Interview yourself with AI: the AI asks before it guesses, one question at a time.'
+    move: I
+    tasks:
+      - id: interview
+        title: AI asks you
+        output: interview
+        template: interview
+        slots:
+          - id: plan
+            mode: single
+            label: Your plan
+            sample: *plan_example
+        details:
+          why: The AI asks before it guesses, and it brings up what you had not thought of. That surprise is the point of the interview, because the answers you would never have written down on your own are the ones that save a wrong start.
+          example: &interview_example |
+            ---
+            kind: interview
+            ---
+            # Venue
+            ## Starting facts
+            - About 150 euros per person, two wheelchair users, some vegetarians
+            ## Questions and answers
+            1. Format: one venue where everyone travels (A) or five local parties (B). Recommended A, the point is that the offices meet. My answer: A.
+            2. Capacity: one long table for 200 at once (A) or tables that turn over, room for about 140 (B). Recommended A, everyone sits down for the speeches. My answer: A, one long table.
+            3. Where and when: Frankfurt, easy to reach from all five offices (A), or Lisbon (B). Recommended A, one hub keeps travel short. My answer: A, Frankfurt, late June.
+            4. The one I forgot, last year's feedback: read it first (A) or start fresh (B). Recommended A, it shows what to avoid. My answer: A. It was too loud to talk, and people left early.
+            5. Quiet: a separate quiet room (A) or one hall for everything (B). Recommended A, people can talk without shouting. My answer: A.
+          goodLooksLike:
+            - Every question came with two options and a recommendation.
+            - One answer is something you had not thought of before the interview.
+        do:
+          simple:
+            - heading: Your role
+              purpose: role
+              text: You are a relentless but friendly interviewer. You interview me about the plan below until we share the same understanding, before anybody guesses or writes a plan. You ask. You do not plan yet.
+            - heading: The plan so far
+              purpose: context
+              text: |
+                We take one piece forward. This is the result of the previous step. If you have your own result, replace the block below with it.
+
+                ```markdown
+                {{plan}}
+                ```
+            - heading: Steps
+              purpose: steps
+              text: |
+                Think of my plan as a tree of decisions: every decision opens the decisions that hang off it. Work the tree in rounds.
+                1. Ask every question whose prerequisites are already settled in one round, numbered Q1, Q2, Q3 and counted on across rounds.
+                2. Give every question two options and a recommendation, worded so that me saying "yes" accepts your recommended answer.
+                3. After the questions, stop and wait for my answers. Never answer for me.
+                4. Facts are your job, decisions are mine. Never ask for something you could know yourself; state it as an assumption.
+                5. Include at least one question about something I probably have not thought about, for example what went wrong last time.
+                6. If I say I do not understand, explain it with an everyday analogy and ask again.
+                7. When nothing is left to ask, say so in two lines and ask me to say "done".
+            - heading: Scope
+              purpose: scope
+              text: Only interview me. Do not plan, and do not recommend a solution to the task itself.
+            - heading: Format
+              purpose: template
+              text: |
+                When I say "done", write every question you asked and my final answer. If you can create a file, write a markdown file. If not, answer in raw markdown in this template.
+
+                {{template}}
+          technical:
+            - heading: Task
+              purpose: task
+              text: |
+                /grilling Interview me about this piece of my plan, one round of numbered questions at a time, with two options and a recommended answer each, and include one question about something I probably have not thought of. When I say "done", write the result.
+
+                ```markdown
+                {{plan}}
+                ```
+            - heading: Format
+              purpose: template
+              text: |
+                Write the result as a markdown file, or raw markdown if you cannot create files, in this template.
+
+                {{template}}
+
+  - id: requirements
+    title: Requirements
+    learningGoal: 'Requirements first: the answers become a short list you sign off before any work starts.'
+    move: R
+    gate: 1
+    card:
+      label: Requirements card
+      lines:
+        - 200 guests
+        - At most €150 per person
+        - Step-free
+        - Vegetarian menu
+        - Separate quiet room
+      status: Signed off
+    tasks:
+      - id: spec
+        title: Requirements card
+        output: spec
+        template: spec
+        slots:
+          - id: interview
+            mode: single
+            label: Your interview answers
+            sample: *interview_example
+        details:
+          why: The answers become a spec with a short list of requirements that you sign off. Every later chat works against that list instead of against a guess.
+          example: &spec_example |
+            ---
+            kind: spec
+            ---
+            # Summer party venue
+            ## Goal
+            Choose one venue in Frankfurt where all 200 employees can meet for an evening in late June.
+            ## Requirements
+            - 200 guests
+            - At most 150 euros per person
+            - Step-free
+            - Vegetarian menu
+            - Separate quiet room
+            ## Options to explore
+            - An event hall
+            - A hotel with a conference floor
+            - An outdoor or garden venue
+            ## Out of scope
+            - Travel, catering, programme and invitations
+          goodLooksLike:
+            - Every requirement is short and can be checked with yes or no.
+            - Nothing is in the spec that your answers did not say.
+        do:
+          simple:
+            - heading: Your role
+              purpose: role
+              text: 'You are a spec writer. You turn my interview answers into a clear specification. You do not interview me again: you synthesise what is written below.'
+            - heading: My interview answers
+              purpose: context
+              text: |
+                This is the result of the previous step. If you have your own result, replace the block below with it.
+
+                ```markdown
+                {{interview}}
+                ```
+            - heading: Steps
+              purpose: steps
+              text: |
+                1. State the goal in one sentence.
+                2. List the requirements: the short, checkable essentials from my answers, one line each.
+                3. List the options to explore: the different kinds of solution worth comparing.
+                4. List what is out of scope.
+            - heading: Scope
+              purpose: scope
+              text: Write the spec only. Do not cut it into tickets and do not research any option.
+            - heading: Format
+              purpose: template
+              text: |
+                If you can create a file, write a markdown file. If not, answer in raw markdown in this template.
+
+                {{template}}
+          technical:
+            - heading: Task
+              purpose: task
+              text: |
+                /to-spec Turn these interview answers into a spec. Do not interview me again, and do not cut tickets yet.
+
+                ```markdown
+                {{interview}}
+                ```
+            - heading: Format
+              purpose: template
+              text: |
+                Write the spec as a markdown file, or raw markdown if you cannot create files, in this template.
+
+                {{template}}
+        review:
+          slots:
+            - id: interview
+              mode: single
+              label: Your interview answers
+              sample: *interview_example
+            - id: spec
+              mode: single
+              label: The spec to review
+              sample: *spec_example
+          checks:
+            - Every must-have in the interview answers is a short, checkable requirement.
+            - The goal is one sentence.
+            - Nothing in the spec is missing from the answers or contradicts them.
+            - The out of scope list is not empty.
+
+  - id: tickets
+    title: Tickets
+    learningGoal: 'Break it down again: cut the spec into tickets that do not overlap, so each can get its own chat.'
+    move: B
+    tasks:
+      - id: tickets
+        title: Tickets
+        output: tickets
+        template: tickets
+        slots:
+          - id: spec
+            mode: single
+            label: Your spec
+            sample: *spec_example
+        details:
+          why: One ticket per option to explore means no two chats do the same work, and each chat gets a short brief it can finish.
+          example: &tickets_example |
+            ---
+            kind: tickets
+            ---
+            # Summer party tickets
+            ## 1. Event hall
+            Find one event hall that fits the party.
+            - Must have: 200 guests, at most 150 euros per person, step-free, vegetarian menu, separate quiet room
+            - Do not name a venue in advance
+            ## 2. Hotel with a conference floor
+            Find one hotel with a conference floor that fits the party.
+            - Must have: 200 guests, at most 150 euros per person, step-free, vegetarian menu, separate quiet room
+            - Do not name a venue in advance
+            ## 3. Outdoor or garden venue
+            Find one outdoor or garden venue that fits the party.
+            - Must have: 200 guests, at most 150 euros per person, step-free, vegetarian menu, separate quiet room
+            - Do not name a venue in advance
+          goodLooksLike:
+            - Each ticket covers a different option, so no two overlap.
+            - Each ticket carries every requirement of the spec.
+        do:
+          simple:
+            - heading: Your role
+              purpose: role
+              text: You are a project planner. You cut a spec into tickets, thin slices of work that can each be done in their own chat.
+            - heading: The spec
+              purpose: context
+              text: |
+                This is the result of the previous step. If you have your own result, replace the block below with it.
+
+                ```markdown
+                {{spec}}
+                ```
+            - heading: Steps
+              purpose: steps
+              text: |
+                1. Make one ticket for each option to explore in the spec.
+                2. Give every ticket the same must-haves: all the requirements of the spec, copied word for word.
+                3. Make sure no two tickets overlap, so no two chats do the same work.
+            - heading: Scope
+              purpose: scope
+              text: Do not name a candidate in any ticket and do not research anything. Write tickets only.
+            - heading: Format
+              purpose: template
+              text: |
+                If you can create a file, write a markdown file. If not, answer in raw markdown in this template.
+
+                {{template}}
+          technical:
+            - heading: Task
+              purpose: task
+              text: |
+                /to-tickets Cut this spec into tickets, one per option to explore, each carrying every requirement of the spec, none overlapping, none naming a candidate in advance.
+
+                ```markdown
+                {{spec}}
+                ```
+            - heading: Format
+              purpose: template
+              text: |
+                Write the tickets as one markdown file, or raw markdown if you cannot create files, in this template.
+
+                {{template}}
+        review:
+          slots:
+            - id: spec
+              mode: single
+              label: Your spec
+              sample: *spec_example
+            - id: tickets
+              mode: single
+              label: The tickets to review
+              sample: *tickets_example
+          checks:
+            - The tickets are disjoint, so no two cover the same option.
+            - Every ticket carries every requirement of the spec.
+            - No ticket names a candidate in advance.
+            - Every option to explore in the spec has a ticket.
+
+  - id: research
+    title: Research
+    learningGoal: Give each ticket its own fresh chat so every window stays small and no two chats do the same work.
+    move: F
+    tasks:
+      - id: venue
+        title: Chat
+        output: research
+        template: research
+        fanOut: 3
+        slots:
+          - id: tickets
+            mode: single
+            label: Your tickets
+            sample: *tickets_example
+        details:
+          why: One ticket per chat keeps the context small and the answer focused, and nothing from one result colours the next chat.
+          example: &research_example |
+            ---
+            kind: research
+            ---
+            # Old Mill
+            ## Fit against the requirements
+            Holds 220 standing. Step-free through the courtyard entrance. Vegetarian menu on request. Quiet room: the loft.
+            ## Cost
+            140 euros per person with catering.
+            ## Sources
+            - Venue brochure, page 4
+            ## Open doubts
+            - Loft capacity not stated
+          goodLooksLike:
+            - Each must-have has its own verdict and a named source.
+            - What could not be found is written down as an open doubt.
+        do:
+          simple:
+            - heading: Your role
+              purpose: role
+              text: You are a careful researcher. You work on exactly one ticket and report only what you can back up. You do not compare with other work and you do not recommend.
+            - heading: Your ticket
+              purpose: context
+              text: |
+                This is chat {{n}}. Take ticket number {{n}} from the tickets below and work only on it. Other chats take the other tickets.
+
+                ```markdown
+                {{tickets}}
+                ```
+            - heading: Steps
+              purpose: steps
+              text: |
+                1. Find one real candidate that fits the ticket.
+                2. Check it against every must-have in the ticket.
+                3. Name the source of every fact and say where you are unsure.
+            - heading: Scope
+              purpose: scope
+              text: Use primary sources. Do not research any other ticket.
+            - heading: Format
+              purpose: template
+              text: |
+                If you can create a file, write a markdown file. If not, answer in raw markdown in this template.
+
+                {{template}}
+          technical:
+            - heading: Task
+              purpose: task
+              text: |
+                /research the tickets below with one subagent per ticket, in parallel. Each subagent gets only its own ticket, checks one real candidate against every must-have, uses primary sources and names the source of every fact.
+
+                ```markdown
+                {{tickets}}
+                ```
+            - heading: Format
+              purpose: template
+              text: |
+                Each subagent writes its answer as a markdown file, or raw markdown if it cannot create files, in this template.
+
+                {{template}}
+        review:
+          slots:
+            - id: tickets
+              mode: single
+              label: Your tickets
+              sample: *tickets_example
+            - id: research_result
+              mode: single
+              label: One chat's research result
+              sample: *research_example
+          checks:
+            - The result covers exactly one ticket and does not drift into another.
+            - Every must-have in the ticket has a verdict with a source.
+            - A price far below what the described offer usually costs is flagged as suspicious and sourced again.
+            - Where a fact is not found, the doubt says so instead of a guess.
+
+  - id: compare
+    title: Compare
+    learningGoal: 'Evaluate each step: check each result against the card before you move on.'
+    move: E
+    gate: 2
+    tasks:
+      - id: compare
+        title: Rank results
+        output: comparison
+        template: comparison
+        slots:
+          - id: spec
+            mode: single
+            label: Your spec
+            sample: *spec_example
+          - id: research_1
+            mode: single
+            label: Research result of chat 1
+            sample: *research_example
+          - id: research_2
+            mode: single
+            label: Research result of chat 2
+            sample: &research_2_example |
+              ---
+              kind: research
+              ---
+              # Grand Hotel Mainblick
+              ## Fit against the requirements
+              Conference floor seats 210. Step-free by lift. Vegetarian menu included. Quiet room: the library.
+              ## Cost
+              165 euros per person with catering.
+              ## Sources
+              - Hotel conference brochure, page 2
+              ## Open doubts
+              - Whether the conference floor can be booked for an evening
+          - id: research_3
+            mode: single
+            label: Research result of chat 3
+            sample: &research_3_example |
+              ---
+              kind: research
+              ---
+              # Riverside Garden Pavilion
+              ## Fit against the requirements
+              Pavilion and lawn hold 200. Step-free paths. Vegetarian menu through the caterer. No separate quiet room.
+              ## Cost
+              120 euros per person with catering.
+              ## Sources
+              - Pavilion hire sheet, page 1
+              ## Open doubts
+              - Wet weather plan not stated
+        details:
+          why: One chat that sees the spec and all the results ranks them against your criteria. It needs the facts of each result, not the chats that produced them.
+          example: &comparison_example |
+            ---
+            kind: comparison
+            ---
+            # Venue comparison
+            ## Criteria
+            - 200 guests
+            - At most 150 euros per person
+            - Step-free
+            - Vegetarian menu
+            - Separate quiet room
+            ## Ranking
+            1. Old Mill: meets every criterion at 140 euros per person; the quiet room is the loft.
+            2. Riverside Garden Pavilion: 120 euros per person and step-free, but no separate quiet room.
+            3. Grand Hotel Mainblick: meets every criterion but costs 165 euros per person, over the limit.
+            ## Doubts
+            - Old Mill: the loft capacity is not stated.
+            - Riverside Garden Pavilion: no wet weather plan.
+          goodLooksLike:
+            - The criteria are the ones in the spec, no more and no fewer.
+            - Every place in the ranking has a reason taken from a result.
+        do:
+          simple:
+            - heading: Your role
+              purpose: role
+              text: You are an impartial evaluator. You rank what you are given against the criteria and you do not research anything new.
+            - heading: The spec
+              purpose: context
+              text: |
+                The criteria are the requirements of this spec. If you have your own result, replace the block below with it.
+
+                ```markdown
+                {{spec}}
+                ```
+            - heading: The results
+              purpose: context
+              text: |
+                One result from each research chat. If you have your own results, replace the blocks below with them.
+
+                ```markdown
+                {{research_1}}
+                ```
+
+                ```markdown
+                {{research_2}}
+                ```
+
+                ```markdown
+                {{research_3}}
+                ```
+            - heading: Steps
+              purpose: steps
+              text: |
+                1. Take the requirements of the spec as the criteria.
+                2. Check every result against every criterion.
+                3. Rank the results and give each place a reason taken from a result.
+                4. List the doubts the results leave open.
+            - heading: Scope
+              purpose: scope
+              text: Use only the facts in the results. Do not add a candidate and do not make a decision for me.
+            - heading: Format
+              purpose: template
+              text: |
+                If you can create a file, write a markdown file. If not, answer in raw markdown in this template.
+
+                {{template}}
+          technical:
+            - heading: Task
+              purpose: task
+              text: |
+                Rank the results against the requirements of the spec, with a reason from a result for every place, and list the open doubts. Use only the facts in the results.
+
+                ```markdown
+                {{spec}}
+                ```
+
+                ```markdown
+                {{research_1}}
+                ```
+
+                ```markdown
+                {{research_2}}
+                ```
+
+                ```markdown
+                {{research_3}}
+                ```
+            - heading: Format
+              purpose: template
+              text: |
+                Write the comparison as a markdown file, or raw markdown if you cannot create files, in this template.
+
+                {{template}}
+        review:
+          slots:
+            - id: spec
+              mode: single
+              label: Your spec
+              sample: *spec_example
+            - id: research_1
+              mode: single
+              label: Research result of chat 1
+              sample: *research_example
+            - id: research_2
+              mode: single
+              label: Research result of chat 2
+              sample: *research_2_example
+            - id: research_3
+              mode: single
+              label: Research result of chat 3
+              sample: *research_3_example
+            - id: comparison_result
+              mode: single
+              label: The comparison to review
+              sample: *comparison_example
+          checks:
+            - The criteria are exactly the requirements of the spec.
+            - Every place in the ranking has a reason that matches the research result it names.
+            - A result that fails a criterion is not ranked above one that meets all of them.
+            - The doubts of the results are carried over, not dropped.
+
+  - id: recommendation
+    title: Review
+    learningGoal: Close the loop yourself. Read the comparison and decide what goes to the people who sign it off.
+    tasks:
+      - id: recommend
+        title: Write-up
+        output: recommendation
+        template: recommendation
+        slots:
+          - id: comparison
+            mode: single
+            label: Your comparison
+            sample: *comparison_example
+        details:
+          why: The comparison becomes a one-page recommendation for the person who decides. You read it and own it before it goes on.
+          example: &recommendation_example |
+            ---
+            kind: recommendation
+            ---
+            # Venue recommendation
+            ## Recommendation
+            Book the Old Mill for the evening in late June.
+            ## Why
+            It is the only venue that meets every criterion within the budget, at 140 euros per person.
+            ## Next steps
+            - Ask the Old Mill for the loft capacity in writing.
+            - Hold the date before the end of the week.
+          goodLooksLike:
+            - One clear choice, with every reason traceable to the comparison.
+            - Next steps are concrete enough to start on today.
+        do:
+          simple:
+            - heading: Your role
+              purpose: role
+              text: You are a writer for decision makers. You turn a comparison into a one-page recommendation.
+            - heading: The comparison
+              purpose: context
+              text: |
+                This is the result of the previous step. If you have your own result, replace the block below with it.
+
+                ```markdown
+                {{comparison}}
+                ```
+            - heading: Steps
+              purpose: steps
+              text: |
+                1. Give one clear recommendation in a sentence.
+                2. Give the reasons, each taken from the comparison.
+                3. List concrete next steps, including how to settle the open doubts.
+            - heading: Scope
+              purpose: scope
+              text: Use only the comparison. Add no new facts and no new candidates.
+            - heading: Format
+              purpose: template
+              text: |
+                If you can create a file, write a markdown file. If not, answer in raw markdown in this template.
+
+                {{template}}
+          technical:
+            - heading: Task
+              purpose: task
+              text: |
+                Write a one-page recommendation from this comparison: one clear choice, reasons taken from the comparison only, and concrete next steps that settle the open doubts.
+
+                ```markdown
+                {{comparison}}
+                ```
+            - heading: Format
+              purpose: template
+              text: |
+                Write the recommendation as a markdown file, or raw markdown if you cannot create files, in this template.
+
+                {{template}}
+        review:
+          slots:
+            - id: comparison
+              mode: single
+              label: Your comparison
+              sample: *comparison_example
+            - id: recommendation
+              mode: single
+              label: The recommendation to review
+              sample: *recommendation_example
+          checks:
+            - The recommendation is one choice and agrees with the top of the ranking.
+            - Every reason can be found in the comparison.
+            - Every open doubt of the comparison has a next step.

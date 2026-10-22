@@ -48,6 +48,15 @@ export interface UiWords {
   readonly sectionCriteria: string;
   readonly sectionSkills: string;
   readonly sectionExample: string;
+  /** The two steps of a task, a fan-out chat's name (`{n}`), and the heading of why a task matters. */
+  readonly doIt: string;
+  readonly reviewIt: string;
+  readonly chatN: string;
+  readonly sectionWhy: string;
+  /** A paste-in slot's upload button and its add-entry button; `tooLong` is the "open in" tooltip for a long prompt. */
+  readonly slotUpload: string;
+  readonly slotAdd: string;
+  readonly tooLong: string;
   readonly setup: string;
   readonly newTab: string;
 }

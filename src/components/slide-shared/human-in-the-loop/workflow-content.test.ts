@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { handoffBlocks, parseHandoff } from './handoff.pure';
-import { WORKFLOW_IDS, workflowFor, type WorkflowId } from './workflow-data';
+import { NEW_FILES, WORKFLOW_IDS, workflowFor, type WorkflowId } from './workflow-data';
 import type { Job } from './workflow.types';
 
 const LOCALES = ['en', 'de'] as const;
@@ -11,7 +11,10 @@ const STALE = /Quiet to talk|Ruhig genug zum Reden|Frontier/;
 const strings = (value: unknown): string[] =>
   typeof value === 'string' ? [value] : value && typeof value === 'object' ? Object.values(value).flatMap(strings) : [];
 
-const EACH = WORKFLOW_IDS.flatMap((id) => LOCALES.map((locale) => [id, locale] as const));
+/** The pairs still on the old schema; the ones in the new schema are held by workflow-content.summer-party.test.ts. */
+const EACH = WORKFLOW_IDS.flatMap((id) => LOCALES.map((locale) => [id, locale] as const)).filter(
+  ([id, locale]) => NEW_FILES[id]?.[locale] === undefined,
+);
 const jobsOf = (id: WorkflowId, locale: 'en' | 'de'): Job[] =>
   workflowFor(id, locale).stages.flatMap((stage) => stage.jobs);
 
@@ -26,7 +29,6 @@ describe('success cases', () => {
   });
 
   it.each([
-    ['en', "Plan your company's next summer party: 200 employees across five offices in Europe."],
     ['de', 'Plane das nächste Sommerfest Deiner Firma: 200 Mitarbeitende an fünf Standorten in Europa.'],
   ] as const)('tells the summer party scenario in %s word for word', (locale, sentence) => {
     // ARRANGE

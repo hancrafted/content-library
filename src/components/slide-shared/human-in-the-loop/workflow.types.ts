@@ -1,4 +1,5 @@
 import type { HandoffKind } from './handoff.pure';
+import type { TaskDef, WorkflowFile } from './workflow-schema.types';
 
 /*
  * The Workflow model: what a Workflow YAML pair loads into (design: issue #266, "Workflow model"). Every word is
@@ -80,6 +81,8 @@ export interface Job {
   readonly page?: JobPage;
   /** Labels of the other parts of the task, drawn dimmed beside this job (the party's parked pieces). */
   readonly parked?: readonly string[];
+  /** The task of a new-schema file this job was made from; its popover renders from it, not from `run` and `check`. */
+  readonly task?: TaskDef;
 }
 
 /** One BRIEF letter a stage applies, with the stage's own reason why it applies here (the circle's tooltip). */
@@ -117,6 +120,8 @@ export interface Workflow {
   /** The job drawn as the bordered focal card. */
   readonly focalJobId?: string;
   readonly stages: readonly Stage[];
+  /** The new-schema file this Workflow was made from, when it was; absent for a Workflow of the old schema. */
+  readonly file?: WorkflowFile;
 }
 
 /** What `loadWorkflow` answers: the Workflow, or every problem found, one sentence each. */

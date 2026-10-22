@@ -3,13 +3,15 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { handoffBlocks, parseHandoff, type Handoff } from '../handoff.pure';
-import { outputWords, workflowFor } from '../workflow-data';
+import { PAIRS, outputWords } from '../workflow-data';
+import { loadWorkflow } from '../workflow.pure';
 import { OutputView, type OutputViewProps } from './output-dispatch';
 
-/** The summer party's example outputs, parsed, by kind. */
+/** The old-schema summer party's example outputs, parsed, by kind (the English now ships in the new schema). */
+const OLD = loadWorkflow(PAIRS['summer-party'].config, PAIRS['summer-party'].config);
 const EXAMPLES = new Map<string, Handoff>(
-  workflowFor('summer-party', 'en')
-    .stages.flatMap((stage) => stage.jobs)
+  ('workflow' in OLD ? OLD.workflow : { stages: [] }).stages
+    .flatMap((stage) => stage.jobs)
     .flatMap((job) => handoffBlocks(job.exampleOutput ?? ''))
     .map((block) => parseHandoff(block))
     .flatMap((read) => ('handoff' in read ? [[read.handoff.kind, read.handoff] as const] : []))

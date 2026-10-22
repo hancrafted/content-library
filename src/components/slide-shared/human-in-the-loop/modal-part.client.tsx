@@ -7,6 +7,7 @@ import type { PromptKit } from '../core-components/try-prompt/try-prompt.client'
 import type { ModalProps, UiWords } from './human-in-the-loop.types';
 import { ModalBody, type BodyChrome } from './modal-body';
 import { ModalSteps } from './modal-steps.client';
+import { TaskDetails, TaskSteps } from './task-steps.client';
 import { tryTitle } from './words.pure';
 import type { JobModalView, StageView } from './workflow-view.pure';
 
@@ -59,11 +60,16 @@ interface JobSectionProps {
 
 /** One job of the stage: its numbered steps, then, below them, its explanation. */
 function JobSection({ job, several, kit, chrome }: JobSectionProps) {
+  const { task } = job;
   return (
     <section data-job={job.id} aria-label={several ? job.title : undefined} className="flex flex-col gap-6">
       {several && <h3 className="text-body font-semibold">{job.title}</h3>}
-      <ModalSteps job={job} kit={kit} />
-      <ModalBody sections={job.sections} examples={job.examples} chrome={chrome} />
+      {task ? <TaskSteps task={task} kit={kit} /> : <ModalSteps job={job} kit={kit} />}
+      {task ? (
+        <TaskDetails task={task} words={chrome.words} />
+      ) : (
+        <ModalBody sections={job.sections} examples={job.examples} chrome={chrome} />
+      )}
     </section>
   );
 }
