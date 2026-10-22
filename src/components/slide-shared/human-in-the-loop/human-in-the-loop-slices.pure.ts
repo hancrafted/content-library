@@ -1,7 +1,8 @@
 import type { DiagramProps, HumanInTheLoopData, ModalProps, ToolbarProps } from './human-in-the-loop.types';
+import { workflowOf } from './workflow-file-adapter.pure';
+import { loadWorkflow } from './workflow-loader.pure';
 import type { WorkflowEvent, WorkflowState } from './workflow-state.pure';
 import type { WorkflowView } from './workflow-view.pure';
-import { loadWorkflow } from './workflow.pure';
 import type { Workflow } from './workflow.types';
 
 /*
@@ -16,16 +17,16 @@ export function shownWorkflow(data: HumanInTheLoopData, state: WorkflowState): W
 
 /** What an uploaded file's text becomes: the event that loads it, or the one that reports its problems. */
 export function uploadEvent(yaml: string): WorkflowEvent {
-  const result = loadWorkflow(yaml, yaml);
+  const result = loadWorkflow(yaml);
   return 'problems' in result
     ? { type: 'upload-failed', problems: result.problems }
-    : { type: 'upload', workflow: result.workflow };
+    : { type: 'upload', workflow: workflowOf(result.file) };
 }
 
 /** The callbacks the parts send events up by. */
 export type Callbacks = Pick<ToolbarProps, 'onLevel' | 'onWorkflow' | 'onUpload'> &
   Pick<DiagramProps, 'onOpenStage'> &
-  Pick<ModalProps, 'onClose' | 'onShort' | 'onTick'>;
+  Pick<ModalProps, 'onClose' | 'onSlots'>;
 
 /** The callbacks over one dispatch. */
 export function callbacksFor(dispatch: (event: WorkflowEvent) => void): Callbacks {
@@ -35,8 +36,7 @@ export function callbacksFor(dispatch: (event: WorkflowEvent) => void): Callback
     onUpload: (yaml) => dispatch(uploadEvent(yaml)),
     onOpenStage: (stageId) => dispatch({ type: 'open', stageId }),
     onClose: () => dispatch({ type: 'close' }),
-    onShort: (jobId) => dispatch({ type: 'short', jobId }),
-    onTick: (ticketId) => dispatch({ type: 'tick', ticketId }),
+    onSlots: (values) => dispatch({ type: 'slots', values }),
   };
 }
 
@@ -58,7 +58,7 @@ export interface Slices {
 /** Each part's props from what the parent shows: a part gets its own slice of the view, never the whole. */
 export function slicesOf(shown: Shown, on: Callbacks): Slices {
   const { data, state, workflow, view } = shown;
-  const { words, outputWords, readonly } = data;
+  const { words, readonly } = data;
   const toolbar = toolbarOf(shown, on);
   return {
     toolbar,
@@ -71,13 +71,12 @@ export function slicesOf(shown: Shown, on: Callbacks): Slices {
     },
     modal: {
       stage: view.stages.find((stage) => stage.id === state.openStageId) ?? null,
-      shortJobIds: state.shortJobIds,
-      ticked: state.ticked,
+      slotValues: state.slotValues,
       words,
-      outputWords,
+      level: state.level,
+      onLevel: on.onLevel,
       onClose: on.onClose,
-      onShort: on.onShort,
-      onTick: on.onTick,
+      onSlots: on.onSlots,
     },
   };
 }

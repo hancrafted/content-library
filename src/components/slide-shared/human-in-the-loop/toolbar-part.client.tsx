@@ -3,10 +3,10 @@
 import { useMotion } from '@/hooks/use-motion';
 import { Code, Download, Upload } from 'lucide-react';
 import { useId, type ButtonHTMLAttributes, type ChangeEvent } from 'react';
+import { IconButton } from '../core-components/icon-button/icon-button.client';
+import { Tip } from '../core-components/tip/tip.client';
 import styles from './human-in-the-loop.module.css';
 import type { ToolbarProps } from './human-in-the-loop.types';
-import { IconButton } from './icon-button.client';
-import { Tip } from './tip.client';
 import { offers } from './toolbar-controls.pure';
 import { workflowFile } from './workflow-file.pure';
 

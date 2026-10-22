@@ -1,19 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { connectorInto, fanGeometry } from './diagram-layout.pure';
+import { stage as baseStage, job } from './workflow-fixture.pure';
 import type { Stage } from './workflow.types';
 
-const job = {
-  id: 'j',
-  title: 'J',
-  description: 'D',
-  chat: 'new',
-  dependsOn: [],
-  inputs: [],
-  outputs: [],
-  skills: [],
-  run: { todo: 'Do.', prompt: 'P' },
-} as const;
-const stage = (id: string, fanOut?: number): Stage => ({ id, name: id, moves: [], jobs: [{ ...job, id, fanOut }] });
+const stage = (id: string, fanOut?: number): Stage => ({ ...baseStage(id, [job({ id, fanOut })]) });
 
 describe('success cases', () => {
   it('draws the fan of three exactly as the venue pipeline drew it', () => {

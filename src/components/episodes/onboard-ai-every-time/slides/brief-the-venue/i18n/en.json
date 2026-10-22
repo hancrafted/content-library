@@ -26,9 +26,15 @@
         "out": "a requirements card you sign off."
       }
     },
+    "tickets": {
+      "popover": {
+        "in": "your signed-off requirements card.",
+        "out": "one ticket per venue type, each with its must-haves."
+      }
+    },
     "research": {
       "popover": {
-        "in": "the requirements card.",
+        "in": "one ticket.",
         "out": "one venue checked against every criterion."
       }
     },

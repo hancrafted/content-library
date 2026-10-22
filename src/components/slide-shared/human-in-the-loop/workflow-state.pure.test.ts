@@ -1,18 +1,37 @@
 import { describe, expect, it } from 'vitest';
+import { flow } from './workflow-fixture.pure';
 import { createState, reduce, type WorkflowEvent, type WorkflowState } from './workflow-state.pure';
-import type { Workflow } from './workflow.types';
 
 const start = { workflowId: 'summer-party', level: 'simple' } as const;
-const uploaded: Workflow = { id: 'mine', title: 'Mine', scenario: 'S', stages: [] };
+const uploaded = { ...flow([]), id: 'mine', title: 'Mine' };
 
 describe('success cases', () => {
-  it('starts in the Preset: the chosen Workflow at the Simple level, nothing open, short or ticked', () => {
+  it('keeps what is pasted into a slot, shared whatever stage is open, and keeps it when a modal closes', () => {
+    // ARRANGE
+    const pasted = { spec: '# My spec' };
+    const initial = reduce(createState(start), { type: 'open', stageId: 'tickets' });
+    // ACT
+    const filled = reduce(initial, { type: 'slots', values: pasted });
+    const later = reduce(reduce(filled, { type: 'close' }), { type: 'open', stageId: 'compare' });
+    // ASSERT
+    expect(later.slotValues).toEqual(pasted);
+  });
+
+  it('forgets the pasted values when another Workflow is shown', () => {
+    // ARRANGE
+    const filled = reduce(createState(start), { type: 'slots', values: { spec: 'S' } });
+    // ACT
+    const state = reduce(filled, { type: 'workflow', workflowId: 'vacation' });
+    // ASSERT
+    expect(state.slotValues).toEqual({});
+  });
+
+  it('starts in the Preset: the chosen Workflow at the Simple level, nothing open', () => {
     // ARRANGE
     const expected: WorkflowState = {
       ...start,
       openStageId: null,
-      shortJobIds: [],
-      ticked: [],
+      slotValues: {},
       uploaded: null,
       uploadProblems: [],
     };
@@ -43,36 +62,11 @@ describe('success cases', () => {
     expect(closed.openStageId).toBeNull();
   });
 
-  it('turns the short grill of a job on, and off on the second press', () => {
-    // ARRANGE
-    const initial = createState(start);
-    const job = 'interview';
-    // ACT
-    const on = reduce(initial, { type: 'short', jobId: job });
-    const off = reduce(on, { type: 'short', jobId: job });
-    // ASSERT
-    expect(on.shortJobIds).toEqual([job]);
-    expect(off.shortJobIds).toEqual([]);
-  });
-
-  it('ticks a ticket and unticks it on the second press', () => {
-    // ARRANGE
-    const initial = createState(start);
-    const ticket = 't1';
-    // ACT
-    const once = reduce(initial, { type: 'tick', ticketId: ticket });
-    const twice = reduce(once, { type: 'tick', ticketId: ticket });
-    // ASSERT
-    expect(once.ticked).toEqual([ticket]);
-    expect(twice.ticked).toEqual([]);
-  });
-
-  it('switching Workflow resets the open stage, the short grills, the ticks and any upload', () => {
+  it('switching Workflow resets the open stage, the pasted values and any upload', () => {
     // ARRANGE
     const events: WorkflowEvent[] = [
       { type: 'open', stageId: 'x' },
-      { type: 'short', jobId: 'j' },
-      { type: 'tick', ticketId: 't' },
+      { type: 'slots', values: { a: 'b' } },
       { type: 'upload', workflow: uploaded },
     ];
     const busy = events.reduce(reduce, createState(start));
@@ -94,7 +88,6 @@ describe('success cases', () => {
       uploaded,
       uploadProblems: [],
       openStageId: null,
-      ticked: [],
     });
   });
 });
@@ -114,10 +107,10 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('never changes the state it is given, and the state survives a JSON round trip', () => {
     // ARRANGE
-    const initial = reduce(createState(start), { type: 'tick', ticketId: 't' });
+    const initial = reduce(createState(start), { type: 'open', stageId: 't' });
     const before = JSON.stringify(initial);
     // ACT
-    const next = reduce(initial, { type: 'tick', ticketId: 'u' });
+    const next = reduce(initial, { type: 'open', stageId: 'u' });
     // ASSERT
     expect(JSON.stringify(initial)).toBe(before);
     expect(JSON.parse(JSON.stringify(next))).toEqual(next);

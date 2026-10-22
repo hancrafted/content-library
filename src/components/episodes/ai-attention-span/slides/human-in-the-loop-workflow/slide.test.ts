@@ -99,9 +99,9 @@ describe('success cases', () => {
     expect(markers).toEqual(expected);
   });
 
-  it('shows the six stages of the brief with no bold first letter and no acronym named', () => {
+  it('shows the seven stages of the brief with no bold first letter and no acronym named', () => {
     // ARRANGE
-    const expected = { stages: 6, bold: 0, acronym: false };
+    const expected = { stages: 7, bold: 0, acronym: false };
     // ACT
     const $ = scene('en');
     const actual = {
@@ -115,7 +115,7 @@ describe('success cases', () => {
 
   it('draws every stage with its jobs and the fan-out and fan-in of brief the venue', () => {
     // ARRANGE
-    const expected = { jobLists: 6, workers: ['Venue 1', 'Venue 2', 'Venue 3'], card: true, connectors: 5, fans: 2 };
+    const expected = { jobLists: 7, workers: ['Chat 1', 'Chat 2', 'Chat 3'], card: true, connectors: 6, fans: 2 };
     // ACT
     const $ = scene('en');
     const pipeline = $('ol[aria-label="The steps of a brief, stage by stage"]');
@@ -123,7 +123,7 @@ describe('success cases', () => {
       jobLists: pipeline.find('> li > ol').length,
       workers: pipeline
         .find('> li > ol')
-        .eq(3)
+        .eq(4)
         .find('li')
         .map((_, el) => $(el).text().replace('Checked against the card', '').trim())
         .get(),

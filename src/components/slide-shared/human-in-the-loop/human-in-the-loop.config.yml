@@ -17,35 +17,25 @@ ui:
   copyPrompt: Copy prompt
   copyCommand: Copy command
   openChatgpt: Open in ChatGPT
-  openClaude: Open in Claude
-  short: Short
-  shortTip: Short version, only the 3 most load-bearing questions per round
   sectionAbout: About this step
-  sectionIn: What you paste in
-  sectionOut: What you get back
   sectionCriteria: What good looks like
-  sectionSkills: Skills
   sectionExample: Example result
-  setup: One-time setup
+  doIt: Do it
+  reviewIt: Review it
+  chatN: 'Chat {n}'
+  chatTip: 'The prompt for chat {n}: paste it into its own fresh chat'
+  toggleTip: Show or hide the text
+  sectionWhy: Why it matters
+  sectionTechniques: Techniques it teaches
+  tierBasic: Basic
+  tierAdvanced: Advanced
+  whatToDo: What to do
+  preview: Prompt preview
+  showFull: Show full text
+  collapse: Collapse
+  sampleHint: 'Sample: {title} · {lines} lines'
+  sampleHintOne: 'Sample: {title} · 1 line'
+  slotUpload: Upload a markdown file
+  slotAdd: Add another entry
+  tooLong: too long for a link, so it is copied and an empty chat opens
   newTab: opens in a new tab
-
-# The words of the output renderers (spec, tickets, research, comparison, requirements). The German twin holds the same keys.
-output:
-  goal: Goal
-  requirements: Requirements
-  outOfScope: Out of scope
-  slices: Slices
-  tickets: Tickets
-  acceptance: Done when
-  blockedBy: After
-  ready: Ready
-  done: Done
-  blocked: Waiting
-  progress: '{done} of {total} done'
-  graphHint: Click a ready ticket to tick it off and unlock what it blocks.
-  facts: Facts
-  criteria: Criteria
-  ranking: Ranking
-  rank: '#'
-  option: Option
-  why: Why

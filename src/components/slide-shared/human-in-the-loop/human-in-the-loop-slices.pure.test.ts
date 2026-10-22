@@ -1,36 +1,19 @@
 import { describe, expect, it } from 'vitest';
 import { callbacksFor, shownWorkflow, slicesOf, uploadEvent } from './human-in-the-loop-slices.pure';
 import type { HumanInTheLoopData, UiWords } from './human-in-the-loop.types';
-import type { OutputWords } from './outputs/output-words';
+import { flow as baseFlow, job as baseJob, stage } from './workflow-fixture.pure';
 import { createState, type WorkflowEvent } from './workflow-state.pure';
 import { workflowView } from './workflow-view.pure';
 import type { Workflow } from './workflow.types';
 
-const job = {
-  id: 'ask',
-  title: 'Ask',
-  description: 'D',
-  chat: 'new',
-  dependsOn: [],
-  inputs: [],
-  outputs: [],
-  skills: [],
-  run: { todo: 'Do.', prompt: 'P' },
-} as const;
-const flow = (id: string): Workflow => ({
-  id,
-  title: id,
-  scenario: 'S',
-  stages: [{ id: 's', name: 'S', moves: [], jobs: [job] }],
-});
+const job = baseJob({ id: 'ask', title: 'Ask' });
+const flow = (id: string): Workflow => ({ ...baseFlow([stage('s', [job])]), id, title: id });
 const words = {} as UiWords;
-const outputWords = {} as OutputWords;
 const data: HumanInTheLoopData = {
   workflows: [flow('one'), flow('two')],
   workflowId: 'two',
   locale: 'en',
   words,
-  outputWords,
   controls: {},
   level: 'simple',
   readonly: false,
@@ -60,17 +43,27 @@ describe('success cases', () => {
     // ARRANGE
     const sent: WorkflowEvent[] = [];
     const on = callbacksFor((event) => sent.push(event));
-    const state = { ...createState(start), openStageId: 's', shortJobIds: [job.id] };
+    const state = { ...createState(start), openStageId: 's' };
     // ACT
     const slices = slicesOf(shown(flow('two'), state), on);
     slices.diagram.onOpenStage('s');
-    slices.modal.onShort(job.id);
     slices.modal.onClose();
     // ASSERT
     expect(slices.modal.stage?.id).toBe('s');
-    expect(slices.modal.shortJobIds).toEqual([job.id]);
-    expect(slices.modal.outputWords).toBe(outputWords);
-    expect(sent).toEqual([{ type: 'open', stageId: 's' }, { type: 'short', jobId: job.id }, { type: 'close' }]);
+    expect(sent).toEqual([{ type: 'open', stageId: 's' }, { type: 'close' }]);
+  });
+
+  it('gives the modal the pasted values and sends a change up as one slots event', () => {
+    // ARRANGE
+    const sent: WorkflowEvent[] = [];
+    const on = callbacksFor((event) => sent.push(event));
+    const state = { ...createState(start), slotValues: { spec: 'S' } };
+    // ACT
+    const { modal } = slicesOf(shown(flow('two'), state), on);
+    modal.onSlots({ spec: 'S2' });
+    // ASSERT
+    expect(modal.slotValues).toEqual({ spec: 'S' });
+    expect(sent).toEqual([{ type: 'slots', values: { spec: 'S2' } }]);
   });
 });
 

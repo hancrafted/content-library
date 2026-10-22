@@ -17,35 +17,25 @@ ui:
   copyPrompt: Prompt kopieren
   copyCommand: Befehl kopieren
   openChatgpt: In ChatGPT öffnen
-  openClaude: In Claude öffnen
-  short: Kurz
-  shortTip: Kurze Fassung, nur die 3 wichtigsten Fragen pro Runde
   sectionAbout: Über diesen Schritt
-  sectionIn: Was du einfügst
-  sectionOut: Was du zurückbekommst
   sectionCriteria: So sieht gut aus
-  sectionSkills: Skills
   sectionExample: Beispielergebnis
-  setup: Einmalige Einrichtung
+  doIt: Mach es
+  reviewIt: Prüfe es
+  chatN: 'Chat {n}'
+  chatTip: 'Der Prompt für Chat {n}: in einen eigenen, frischen Chat einfügen'
+  toggleTip: Den Text ein- oder ausblenden
+  sectionWhy: Warum es zählt
+  sectionTechniques: Diese Techniken übt es
+  tierBasic: Basis
+  tierAdvanced: Fortgeschritten
+  whatToDo: Was zu tun ist
+  preview: Prompt-Vorschau
+  showFull: Ganzen Text anzeigen
+  collapse: Einklappen
+  sampleHint: 'Beispiel: {title} · {lines} Zeilen'
+  sampleHintOne: 'Beispiel: {title} · 1 Zeile'
+  slotUpload: Markdown-Datei hochladen
+  slotAdd: Weiteren Eintrag hinzufügen
+  tooLong: zu lang für einen Link, daher wird er kopiert und ein leerer Chat geöffnet
   newTab: öffnet in neuem Tab
-
-# Die Wörter der Ausgabe-Ansichten (Spezifikation, Tickets, Recherche, Vergleich, Anforderungen), mit denselben Schlüsseln.
-output:
-  goal: Ziel
-  requirements: Anforderungen
-  outOfScope: Nicht dabei
-  slices: Scheiben
-  tickets: Tickets
-  acceptance: Fertig, wenn
-  blockedBy: Nach
-  ready: Bereit
-  done: Erledigt
-  blocked: Wartet
-  progress: '{done} von {total} erledigt'
-  graphHint: Klicke ein bereites Ticket an, um es abzuhaken und freizugeben, was daran hängt.
-  facts: Fakten
-  criteria: Kriterien
-  ranking: Rangfolge
-  rank: '#'
-  option: Option
-  why: Warum

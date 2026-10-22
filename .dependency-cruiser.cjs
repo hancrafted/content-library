@@ -16,6 +16,9 @@ const OWN_SLIDE_FOLDER = '^src/components/episodes/$1/slides/$2/';
 // The global shared locations a Slide may import: the Slide master, slide-shared, the UI kit, hooks and lib.
 const SLIDE_SHARED_REACH = ['^src/components/(slide-master|slide-shared|ui)/', '^src/(hooks|lib)/'];
 
+// The primitives slide-shared parts share, one subfolder each: a leaf (FE-007 §5.2.1).
+const CORE_COMPONENTS = '^src/components/slide-shared/core-components/';
+
 // A slide-shared part's client leaf, inside its part folder; the capture group names the part (FE-007 §5.2).
 const SLIDE_SHARED_CLIENT = '^src/components/slide-shared/([^/]+)/.+\\.client\\.tsx$';
 
@@ -127,9 +130,17 @@ module.exports = {
       name: 'slide-shared-client-reaches-only-own-part-hooks-and-lib',
       severity: 'error',
       comment:
-        "A slide-shared part's *.client.tsx leaf runs in the browser. It sits in its part's folder (src/components/slide-shared/<part>/) and reaches only that folder, src/hooks/ and src/lib/ — never another part, the UI kit, a Slide or the Slide master (FE-006 §5, FE-007 §5).",
+        "A slide-shared part's *.client.tsx leaf runs in the browser. It sits in its part's folder (src/components/slide-shared/<part>/) and reaches only that folder, src/hooks/ and src/lib/ — never another part, the UI kit, a Slide or the Slide master. The one exception is core-components/, which any slide-shared part, client leaf included, may import (FE-006 §5, FE-007 §5.2).",
       from: { path: SLIDE_SHARED_CLIENT },
-      to: { pathNot: ['^src/components/slide-shared/$1/', '^src/(hooks|lib)/', 'node_modules'] },
+      to: { pathNot: ['^src/components/slide-shared/$1/', CORE_COMPONENTS, '^src/(hooks|lib)/', 'node_modules'] },
+    },
+    {
+      name: 'core-components-are-a-leaf',
+      severity: 'error',
+      comment:
+        'src/components/slide-shared/core-components/ holds the primitives every slide-shared part shares. It is a leaf: its files import only core-components/, src/hooks/ and src/lib/ — never another slide-shared part, the UI kit, a Slide or the Slide master (FE-007 §5.2).',
+      from: { path: CORE_COMPONENTS, pathNot: '\\.test\\.tsx?$' },
+      to: { pathNot: [CORE_COMPONENTS, '^src/(hooks|lib)/', 'node_modules'] },
     },
     {
       name: 'episode-tests-reach-only-slide-parts',

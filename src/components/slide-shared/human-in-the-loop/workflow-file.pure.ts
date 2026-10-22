@@ -1,4 +1,4 @@
-import { workflowToYaml } from './workflow-yaml.pure';
+import { stringify } from 'yaml';
 import type { Workflow } from './workflow.types';
 
 /* What the download control hands out: the Workflow as YAML under a name, loadable again by the upload control. */
@@ -12,5 +12,9 @@ export function workflowFile(workflow: Workflow): {
   readonly type: string;
 } {
   const slug = workflow.id.replace(/[^\w-]+/g, '-').replace(/^-+|-+$/g, '') || 'workflow';
-  return { name: `${slug}.yml`, text: workflowToYaml(workflow), type: WORKFLOW_FILE_TYPE };
+  return {
+    name: `${slug}.yml`,
+    text: stringify(workflow.file),
+    type: WORKFLOW_FILE_TYPE,
+  };
 }

@@ -117,18 +117,16 @@ export function FocalJob({ job, slot, gateLabel, card }: JobViewProps) {
   );
 }
 
-const CHAT_PILL = 'flex h-12 w-full items-center justify-between gap-2 rounded-full px-3 text-caption font-semibold';
+/** The pills of a fan-out stand in a column of about 85px at 1280px: no icon beside the name, so "Chat 1" fits whole. */
+const CHAT_PILL = 'flex h-12 w-full items-center justify-between gap-1 rounded-full px-2 text-caption font-semibold';
 
 /** The parallel chats of a fanned-out job, each ticked where the job is checked against its criteria. */
 export function ChatJobs({ job, slot, stageName, words }: JobViewProps) {
   return chatNames(job).map((name) => (
     <li key={name}>
       <Node copy={popoverOf(slot.popover, stageName)} className={cn(CHAT_PILL, AI_EDGE)}>
-        <span className="flex min-w-0 items-center gap-1.5">
-          <Sparkle className="size-3.5" />
-          <span className="truncate">{name}</span>
-        </span>
-        {job.check && (
+        <span className="min-w-0 truncate">{name}</span>
+        {job.reviewed && (
           <span className="flex items-center text-muted-foreground">
             <Check className="size-4" />
             <span className="sr-only">{words.checked}</span>
