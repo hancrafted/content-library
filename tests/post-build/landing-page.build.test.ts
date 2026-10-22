@@ -137,6 +137,34 @@ describe('landing page post-build structure', () => {
     });
   });
 
+  it.each(LANDING_PAGES)('closes on a contact footer with the booking page and email for $locale', ({ url }) => {
+    // ARRANGE
+    const booking = 'https://calendar.app.google/8KDKbsMjwtDPYTyQ7';
+    const email = 'hello@hancrafted.net';
+    const blankTarget = '_blank';
+    // ACT
+    const $ = getPage(url);
+    const footer = $('body > footer[data-testid="contact-footer"]');
+    const link = footer.find('a[data-testid="contact-booking"]');
+    // ASSERT
+    expect(footer.length).toBe(1);
+    expect(link.attr('href')).toBe(booking);
+    expect(link.attr('target')).toBe(blankTarget);
+    expect(footer.find('[data-testid="contact-email"]').text()).toBe(email);
+  });
+
+  it.each(LANDING_PAGES)('keeps every header link once, behind a menu button below lg, for $locale', ({ url }) => {
+    // ARRANGE
+    const singleCopies = ['nav-episodes', 'nav-workshops', 'header-contact', 'theme-toggle', 'locale-toggle'];
+    const collapsed = 'false';
+    // ACT
+    const $ = getPage(url);
+    const menu = $('[data-testid="site-header"] [data-testid="header-menu"]');
+    // ASSERT
+    expect(menu.attr('aria-expanded')).toBe(collapsed);
+    singleCopies.forEach((id) => expect($(`[data-testid="${id}"]`).length).toBe(1));
+  });
+
   it.each(LANDING_PAGES)('keeps the fuller case evidence in native disclosures for $locale', ({ url, locale }) => {
     // ARRANGE
     const expected =

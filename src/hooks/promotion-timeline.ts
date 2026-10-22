@@ -1,4 +1,4 @@
-import { animateEnvelope, burstEnvelope, ENVELOPE_BURST_AT, skipIndignation } from '@/hooks/promotion-envelope';
+import { animateEnvelope, burstEnvelope, ENVELOPE_BURST_AT } from '@/hooks/promotion-envelope';
 import { createPaperPile } from '@/hooks/promotion-pile';
 import { promotionArc, promotionFlight } from '@/lib/promotion-flight.pure';
 import gsap from 'gsap';
@@ -98,6 +98,8 @@ function disposer(scene: Scene, timeline: gsap.core.Timeline, pile: Pile) {
     if (scene.split.isSplit) scene.split.revert();
     scene.actions.inert = false;
     scene.root.removeAttribute('data-animated');
+    // The copy stays put from here on; without the mark the pre-hydration rule would hide it again.
+    scene.root.setAttribute('data-hero-settled', '');
   };
   return { dispose, isStopped: () => stopped };
 }
@@ -115,7 +117,6 @@ function animationControls(scene: Scene, timeline: gsap.core.Timeline, pile: Pil
     },
     burst: () => {
       if (isStopped() || timeline.time() >= ENVELOPE_BURST_AT) return;
-      skipIndignation(timeline, scene.root);
       timeline.seek('burst', false).play();
     },
     finish: () => {

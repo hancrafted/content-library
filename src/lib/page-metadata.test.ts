@@ -9,7 +9,7 @@ describe('success cases', () => {
     // ARRANGE
     const expectedCanonical = '/dashboard';
     const expectedLanguages = { en: '/dashboard', 'x-default': '/dashboard' };
-    const expectedTitle = 'Pipeline dashboard';
+    const expectedTitle = 'Content pipeline';
     const expectedRobots = { index: false };
     // ACT
     const metadata = pageMetadata('dashboard', 'en');

@@ -36,7 +36,7 @@ export async function EpisodesSection({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'landing' });
   const cards = await episodeCards(locale);
   return (
-    <section id="episodes" className="relative">
+    <section id="episodes" tabIndex={-1} className="relative outline-none">
       <div className="mx-auto max-w-6xl space-y-16 px-6 pt-24 pb-96 sm:pt-32 sm:pb-112">
         <EpisodesHeader title={t('episodesSectionTitle')} subtitle={t('episodesSectionSubtitle')} />
         <div>

@@ -9,11 +9,11 @@ describe('dashboard static contract', () => {
     // ARRANGE
     const file = join(OUT_DIR, exportedFile('/dashboard'));
     const germanFile = join(OUT_DIR, exportedFile('/de/dashboard'));
-    const expectedTitle = 'Dashboard';
-    const expectedButton = 'Choose folder';
+    const expectedTitle = 'Content pipeline';
+    const expectedButtons = ['Open the demo', 'Choose folder'];
     const expectedRobots = 'noindex';
     const expectedLangs = ['en', 'x-default'];
-    const expectedNavigation = ['Episodes', 'Workshops', 'Dashboard'];
+    const expectedNavigation = ['Episodes', 'Workshops', 'Content pipeline'];
     // ACT
     const exists = existsSync(file);
     const germanExists = existsSync(germanFile);
@@ -26,7 +26,7 @@ describe('dashboard static contract', () => {
       $('main button')
         .map((_, element) => $(element).text())
         .get(),
-    ).toEqual([expectedButton]);
+    ).toEqual(expectedButtons);
     expect($('meta[name="robots"]').attr('content')).toContain(expectedRobots);
     expect(
       $('link[rel="alternate"]')
@@ -43,6 +43,23 @@ describe('dashboard static contract', () => {
     expect($('[data-testid="site-header"] [data-testid="header-contact"]').length).toBe(1);
     expect($('[data-testid="locale-de"]').length).toBe(0);
     expect($('a[href*="/de/dashboard"]').length).toBe(0);
+  });
+
+  it('exports the demo Run without prompts, transcript paths or local ports', () => {
+    // ARRANGE
+    const folder = join(OUT_DIR, 'dashboard-demo');
+    const homeFolder = '/Users/';
+    const privateKeys = ['"transcript_path":', '"gen_ai.input.messages":'];
+    const portKey = /^\s*(?:dev_port|spec_port|port):/m;
+    // ACT
+    const events = readFileSync(join(folder, 'events.jsonl'), 'utf8');
+    const pipeline = readFileSync(join(folder, 'pipeline.yml'), 'utf8');
+    // ASSERT
+    expect(events.length).toBeGreaterThan(0);
+    expect(events).not.toContain(homeFolder);
+    expect(pipeline).not.toContain(homeFolder);
+    privateKeys.forEach((key) => expect(events).not.toContain(key));
+    expect(pipeline).not.toMatch(portKey);
   });
 
   it('keeps the dashboard out of the German header', () => {

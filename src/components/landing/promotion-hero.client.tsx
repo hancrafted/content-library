@@ -7,7 +7,7 @@ import { localizePath, type Locale } from '@/lib/locale.pure';
 import type { PaperDrain } from '@/lib/paper-pile.pure';
 import { ArrowDown } from 'lucide-react';
 import Link from 'next/link';
-import { useRef, useState, type ReactNode } from 'react';
+import { useRef, useState, type MouseEvent, type ReactNode } from 'react';
 import styles from './promotion-hero.module.css';
 
 interface PromotionHeroProps {
@@ -101,13 +101,32 @@ function InkField() {
   );
 }
 
+const EPISODES_SECTION = 'episodes';
+
+/**
+ * Glides to the Episodes section on this page instead of jumping; a modified click keeps the link's own behaviour.
+ * The URL is left alone (FE-001 §2): the section is a place on the page, not state to share.
+ */
+const isPlainClick = (event: MouseEvent) =>
+  event.button === 0 && !(event.metaKey || event.ctrlKey || event.shiftKey || event.altKey);
+
+function glideToEpisodes(event: MouseEvent<HTMLAnchorElement>) {
+  const target = document.getElementById(EPISODES_SECTION);
+  if (!target || !isPlainClick(event)) return;
+  event.preventDefault();
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  target.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+  target.focus({ preventScroll: true });
+}
+
 function PrimaryAction({ locale, label }: { locale: Locale; label: string }) {
   return (
     <Link
+      onClick={glideToEpisodes}
       data-testid="hero-episodes"
       data-hero-primary
       aria-describedby="hero-motion-hint"
-      href={localizePath('/', locale, 'episodes')}
+      href={localizePath('/', locale, EPISODES_SECTION)}
       className={styles.primary}
     >
       <InkField />

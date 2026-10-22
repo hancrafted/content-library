@@ -89,9 +89,9 @@ function useRailScrub(options: ScrubOptions) {
 
 function RailHeader({ title, hint }: { title: string; hint: string }) {
   return (
-    <div className="absolute top-20 sm:top-24 left-0 right-0 z-20 px-8 sm:px-16 flex items-center justify-between pointer-events-none text-[var(--method-fg)]">
-      <div className="font-mono text-xs font-bold tracking-widest uppercase">{title}</div>
-      <div className="font-mono text-xs uppercase opacity-60">{hint}</div>
+    <div className="absolute top-24 left-0 right-0 z-20 px-8 sm:px-16 flex items-baseline justify-between gap-6 pointer-events-none text-[var(--method-fg)]">
+      <h2 className="text-subheading font-semibold">{title}</h2>
+      <p className="font-mono text-caption uppercase opacity-60">{hint}</p>
     </div>
   );
 }
@@ -164,7 +164,7 @@ function MobileStack({ cards, title, isDark }: Omit<MethodRailProps, 'hint'> & {
       className={`md:hidden overflow-x-clip py-16 px-4 space-y-12 transition-colors ${!isDark ? 'bg-[#0A0E1A] text-[#F8FAFC]' : ''}`}
       style={{ '--method-fg': fg, '--method-bg': bg } as React.CSSProperties}
     >
-      <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">{title}</h2>
+      <h2 className="text-subheading font-semibold">{title}</h2>
       <div className="space-y-16">
         {cards.map((card) => (
           <MethodSlideItem key={card.id} card={card} />

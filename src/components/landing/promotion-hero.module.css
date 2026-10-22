@@ -31,7 +31,6 @@
   --hero-envelope-inner: #d8ccb2;
   --hero-envelope-rule: #b8aa8b;
   --hero-envelope-ink: #4c4436;
-  --hero-envelope-angry: #d95445;
   --hero-check: #218349;
   --hero-brass: #9b7950;
   --hero-line: #aaa797;
@@ -97,6 +96,11 @@
 @keyframes hero-twinkle {
   50% {
     opacity: 0.25;
+  }
+}
+@keyframes hero-copy-fallback {
+  to {
+    opacity: 1;
   }
 }
 @keyframes hero-drift {
@@ -306,6 +310,14 @@
   .hero[data-animated='arriving'] .actions,
   .hero[data-animated='waiting'] .actions {
     opacity: 0;
+  }
+  /* Before hydration the animation has not claimed the hero yet, so the copy it will fly in would show and then
+     vanish. Under the js class (set before first paint) it waits hidden; if the animation never mounts, it shows
+     after 4s anyway, so a failed script never strands the reader without the button. */
+  :global(.js) .hero:not([data-animated], [data-hero-settled]) .caption,
+  :global(.js) .hero:not([data-animated], [data-hero-settled]) .actions {
+    opacity: 0;
+    animation: hero-copy-fallback 0s 4s forwards;
   }
   .hero[data-animated] .actions[inert] {
     pointer-events: none;

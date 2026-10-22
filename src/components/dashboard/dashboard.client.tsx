@@ -4,7 +4,7 @@ import { useDashboardReplay } from '@/hooks/use-dashboard-replay';
 import { useEpisodeDashboard } from '@/hooks/use-episode-dashboard';
 import type { EpisodeOutputs } from '@/lib/dashboard-outputs.pure';
 import type { Polled } from '@/lib/dashboard-reader.pure';
-import { BrowserHelp, ChooseFolder, DashboardEntry, PrivacyNote } from './dashboard-entry';
+import { BrowserHelp, ChooseFolder, DashboardEntry, DemoNotice, OpenDemo, PrivacyNote } from './dashboard-entry';
 import type { DashboardCopy } from './dashboard-evidence';
 import { DashboardGraph } from './dashboard-graph.client';
 import { SpecButton } from './dashboard-job-links';
@@ -48,30 +48,62 @@ function SpecLink({ specPort, copy }: { specPort?: number; copy: DashboardCopy }
   return specPort === undefined ? null : <SpecButton port={specPort} copy={copy} />;
 }
 
+type Source = ReturnType<typeof useEpisodeDashboard>;
+
+function Chooser({ source, copy }: { source: Source; copy: DashboardCopy }) {
+  return (
+    <ChooseFolder
+      choose={source.choose}
+      choosing={source.choosing}
+      supported={source.supported}
+      copy={copy}
+      variant="outline"
+    />
+  );
+}
+
+/** The opened source's name and controls; a demo Run carries its notice right under it. */
+function SourceBar({ source, specPort, copy }: { source: Source; specPort?: number; copy: DashboardCopy }) {
+  return (
+    <>
+      <div className="flex min-w-0 items-center justify-between gap-3 border-b border-border pb-3">
+        <span className="truncate font-mono text-caption text-muted-foreground" title={source.name}>
+          {source.name}
+        </span>
+        <div className="flex shrink-0 items-center justify-end gap-3">
+          <SpecLink specPort={specPort} copy={copy} />
+          <Chooser source={source} copy={copy} />
+        </div>
+      </div>
+      {source.isDemo ? <DemoNotice copy={copy} /> : null}
+    </>
+  );
+}
+
+function Entry({ source, copy }: { source: Source; copy: DashboardCopy }) {
+  return (
+    <DashboardEntry copy={copy}>
+      <div className="flex flex-wrap gap-3">
+        <OpenDemo open={source.demo} choosing={source.choosing} copy={copy} />
+        <Chooser source={source} copy={copy} />
+      </div>
+      <BrowserHelp supported={source.supported} copy={copy} />
+    </DashboardEntry>
+  );
+}
+
 export function Dashboard({ copy }: { copy: DashboardCopy }) {
   const source = useEpisodeDashboard();
   const { polled } = source;
-  const chooser = (
-    <ChooseFolder choose={source.choose} choosing={source.choosing} supported={source.supported} copy={copy} />
-  );
   return (
     <div className="space-y-6">
-      <header className="flex min-w-0 items-center justify-between gap-3 border-b border-border pb-3">
-        <h1 className="shrink-0 text-body font-semibold">{copy.title}</h1>
-        <div className="flex min-w-0 items-center justify-end gap-3">
-          <span className="truncate font-mono text-caption text-muted-foreground" title={source.name}>
-            {source.name}
-          </span>
-          <SpecLink specPort={polled?.read.pipeline?.specPort} copy={copy} />
-          {chooser}
-        </div>
-      </header>
       {polled?.read.view ? (
-        <LiveDashboard polled={polled} outputs={source.outputs} name={source.name} copy={copy} />
+        <>
+          <SourceBar source={source} specPort={polled.read.pipeline?.specPort} copy={copy} />
+          <LiveDashboard polled={polled} outputs={source.outputs} name={source.name} copy={copy} />
+        </>
       ) : (
-        <DashboardEntry copy={copy}>
-          <BrowserHelp supported={source.supported} copy={copy} />
-        </DashboardEntry>
+        <Entry source={source} copy={copy} />
       )}
       {source.error ? <SourceErrors errors={[source.error]} copy={copy} /> : null}
       <PrivacyNote copy={copy} />
