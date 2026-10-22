@@ -140,6 +140,10 @@
         "workflow": {
           "name": "Workflow",
           "tooltip": "Wie Arbeit in Schritte geteilt und zwischen Chats übergeben wird"
+        },
+        "delegation": {
+          "name": "Delegation",
+          "tooltip": "Aufgaben an die KI übergeben und behalten, was in deiner Verantwortung bleibt"
         }
       },
       "formats": {

@@ -140,6 +140,10 @@
         "workflow": {
           "name": "Workflow",
           "tooltip": "How work is split into steps and handed between chats"
+        },
+        "delegation": {
+          "name": "Delegation",
+          "tooltip": "Handing tasks to the AI and keeping hold of what you still own"
         }
       },
       "formats": {

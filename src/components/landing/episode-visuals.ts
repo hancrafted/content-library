@@ -1,9 +1,21 @@
 import type { Accent, TopicIcon } from '@/lib/episode-overview';
-import { BrainCircuit, Coins, FileText, Handshake, type LucideIcon } from 'lucide-react';
+import {
+  Coins,
+  FileText,
+  Handshake,
+  Hourglass,
+  ListPlus,
+  Sparkles,
+  UserRoundPlus,
+  type LucideIcon,
+} from 'lucide-react';
 
 /** A Topic names its icon as data; this is the one place the landing turns the name into a drawing. */
 export const TOPIC_ICONS: Record<TopicIcon, LucideIcon> = {
-  'brain-circuit': BrainCircuit,
+  sparkles: Sparkles,
+  'user-round-plus': UserRoundPlus,
+  hourglass: Hourglass,
+  'list-plus': ListPlus,
   handshake: Handshake,
   'file-text': FileText,
   coins: Coins,

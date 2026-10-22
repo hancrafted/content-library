@@ -12,6 +12,7 @@ import {
   type FormatId,
   type TopicIcon,
   type TopicId,
+  type TopicLook,
 } from '@/lib/episode-overview';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { episodeRoute, isEpisodeSlug } from '@/lib/routes';
@@ -98,6 +99,11 @@ export interface CardContext {
 
 const OVERVIEW_KEYS = 'landing.episodeOverview';
 
+/** An Episode's own look wins over its primary Topic's, field by field. */
+function lookOf(entry: CardEntry): TopicLook {
+  return { ...TOPICS[entry.topic], ...entry.look };
+}
+
 function copyOf(entry: CardEntry, ctx: CardContext): EpisodeCopy {
   if (entry.copy) return { title: entry.copy.title, caption: entry.copy.caption };
   const base = `${OVERVIEW_KEYS}.upcoming.${entry.slug}`;
@@ -160,7 +166,7 @@ export function episodeCard(entry: CardEntry, ctx: CardContext): EpisodeCard {
       tooltip: read(`${OVERVIEW_KEYS}.tags.${id}.tooltip`),
     })),
     featuredRank: null,
-    ...TOPICS[entry.topic],
+    ...lookOf(entry),
     ...publishedFields(entry, ctx),
   };
 }

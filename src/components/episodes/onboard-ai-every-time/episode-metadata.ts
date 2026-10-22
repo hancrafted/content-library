@@ -6,8 +6,8 @@ export const episodeMetadata = {
   status: 'published',
   // Needs human: the Brief names no Topic; ai-enablement is the closest existing Topic.
   topic: 'ai-enablement',
+  look: { accent: 'amber', icon: 'user-round-plus' },
   format: 'foundations',
-  // Needs human: the Brief names no Tags; an empty list until Han picks them.
-  tags: [],
+  tags: ['agentic-ai', 'context-engineering', 'workflow'],
   publishedOn: '2026-10-20',
 } as const satisfies PublishedEpisodeMetadata;
