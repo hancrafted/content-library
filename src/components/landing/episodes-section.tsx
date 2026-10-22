@@ -4,8 +4,8 @@ import type { CardLabels } from '@/components/landing/episode-grid-card';
 import { EpisodeSpotlight } from '@/components/landing/episode-spotlight';
 import { Button } from '@/components/ui/button';
 import { localizePath, type Locale } from '@/lib/locale.pure';
-import { episodeRoute, ROUTES } from '@/lib/routes';
-import { ArrowRight, Layers, LayoutTemplate } from 'lucide-react';
+import { ROUTES } from '@/lib/routes';
+import { ArrowRight } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 
@@ -39,36 +39,9 @@ function PartHeading({ children }: { children: string }) {
   );
 }
 
-const REFERENCE_LINK =
-  'inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground transition-colors hover:text-primary';
-
-/** The layout references are not content, so they sit outside the Episode overview: plain links under the cards. */
-function ReferenceLinks({ locale, t }: { locale: Locale; t: LandingT }) {
-  return (
-    <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
-      <Link
-        href={localizePath(episodeRoute('page-template'), locale)}
-        data-testid="landing-page-link"
-        className={REFERENCE_LINK}
-      >
-        <Layers className="h-3.5 w-3.5" />
-        <span>{t('templateTitle')}</span>
-      </Link>
-      <Link
-        href={localizePath(episodeRoute('slide-master'), locale)}
-        data-testid="landing-slide-master-link"
-        className={REFERENCE_LINK}
-      >
-        <LayoutTemplate className="h-3.5 w-3.5" />
-        <span>{t('slideMasterTitle')}</span>
-      </Link>
-    </div>
-  );
-}
-
 /**
  * The landing's Episodes section: a Spotlight of the hottest
- * published Episodes to click straight into, plus reference links and a link to browse all Episodes.
+ * published Episodes to click straight into, plus a link to browse all Episodes; the layout references sit on /episodes.
  */
 export async function EpisodesSection({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'landing' });
@@ -81,8 +54,7 @@ export async function EpisodesSection({ locale }: { locale: Locale }) {
           <PartHeading>{t('episodeOverview.spotlightTitle')}</PartHeading>
           <EpisodeSpotlight cards={cards} locale={locale} labels={cardLabels(t)} />
         </div>
-        <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-border/40">
-          <ReferenceLinks locale={locale} t={t} />
+        <div className="flex flex-wrap items-center justify-end gap-4 pt-4 border-t border-border/40">
           <Button asChild variant="outline" className="rounded-full">
             <Link
               href={localizePath(ROUTES.episodes, locale)}

@@ -20,6 +20,17 @@ describe('success cases', () => {
     expect(found['--areas']).toBe(expected);
   });
 
+  it('lays all six parts out on two rows for a narrow container, the details and the attention on the second', () => {
+    // ARRANGE
+    const every = { chat: true, timeline: true, context: true, category: true, panel: true, attention: true };
+    const state = createState({ ...preset, ...simple, show: every });
+    const expected = "'chat timeline ctx cat' 'panel panel att att'";
+    // ACT
+    const found = grid(state);
+    // ASSERT
+    expect(found['--areas-wrap']).toBe(expected);
+  });
+
   it('moves a part to the front of the areas when it is reordered there', () => {
     // ARRANGE
     const start = createState({ ...preset, ...simple, show: { ...preset.show, category: true, panel: false } });
@@ -53,6 +64,27 @@ describe('edge cases', () => {
     const found = grid(state);
     // ASSERT
     expect([found['--cols'], found['--areas']]).toEqual(expected);
+  });
+
+  it('keeps one row when the parts fit: no wrap layout for the four-part Presets the Episodes place', () => {
+    // ARRANGE
+    const four = { chat: true, timeline: true, context: true, category: false, panel: false, attention: true };
+    const state = createState({ ...preset, ...simple, show: four });
+    // ACT
+    const found = grid(state);
+    // ASSERT
+    expect(found['--areas-wrap']).toBeUndefined();
+  });
+
+  it('spans a lone second-row part across the whole width', () => {
+    // ARRANGE
+    const five = { chat: true, timeline: true, context: true, category: true, panel: true, attention: false };
+    const state = createState({ ...preset, ...simple, show: five });
+    const expected = "'chat timeline ctx cat' 'panel panel panel panel'";
+    // ACT
+    const found = grid(state);
+    // ASSERT
+    expect(found['--areas-wrap']).toBe(expected);
   });
 
   it('widens the context column in Simple against Technical', () => {

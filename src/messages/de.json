@@ -153,7 +153,6 @@
       },
       "upcoming": {}
     },
-    "templateTitle": "Episoden-Seitenvorlage",
     "method": {
       "title": "So arbeite ich",
       "hint": "Horizontal scrollen →",
@@ -290,8 +289,7 @@
           "source": "Grundlage: Lebenslauf zu Einsatz und Pilotumfang; berufliches Profil zur Arbeit an Planung, OEE-Dashboards und Stammdaten."
         }
       }
-    },
-    "slideMasterTitle": "Slide-Master"
+    }
   },
   "dashboard": {
     "title": "Dashboard",
@@ -449,7 +447,13 @@
     }
   },
   "episodesPage": {
-    "title": "Episoden"
+    "title": "Episoden",
+    "references": {
+      "label": "Referenzen",
+      "pageTemplate": "Episoden-Seitenvorlage",
+      "slideMaster": "Slide-Master",
+      "slides": "Folien"
+    }
   },
   "slideHeader": {
     "pageOf": "Seite {position} von {count}"

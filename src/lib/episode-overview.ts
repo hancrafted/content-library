@@ -53,6 +53,7 @@ export const LAYOUT_REFERENCES = [
   'page-template',
   'slide-layouts',
   'slide-master',
+  'slides',
 ] as const satisfies readonly EpisodeSlug[];
 
 /** A registered Episode the overview lists: every one but the layout references. */

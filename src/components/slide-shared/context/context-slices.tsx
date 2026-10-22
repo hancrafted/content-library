@@ -208,8 +208,9 @@ const PIECES: Readonly<Partial<Record<Part, (p: PartProps & { readonly sentence:
 
 /** The grid: every shown part in its own slot, in the order the reader gave. */
 export function Parts({ m, events, sentence }: PartProps & { readonly sentence: string }) {
+  const grid = columns(m.state.parts, m.state, m.data.preset.height);
   return (
-    <div className={styles.main} style={vars(columns(m.state.parts, m.state, m.data.preset.height))}>
+    <div className={styles.main} data-wrap={'--areas-wrap' in grid || undefined} style={vars(grid)}>
       {m.state.order.map((part) => PIECES[part]?.({ m, events, sentence }))}
     </div>
   );
