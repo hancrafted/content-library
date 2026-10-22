@@ -6,15 +6,32 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { LOCALES, localizePath, type Locale } from '../../src/lib/locale.pure';
 import { resolveSiteUrl } from '../../src/lib/page-metadata.pure';
-import { ROUTES, workshopRoute } from '../../src/lib/routes';
+import { episodeRoute, ROUTES, workshopRoute } from '../../src/lib/routes';
 import { WORKSHOPS } from '../../src/lib/workshops.pure';
 import { exportedPage, OUT_DIR } from './exported-pages';
 
 const SITE_URL = resolveSiteUrl(process.env);
 const FIRST = WORKSHOPS[0];
-const WORDS: Record<Locale, { title: string; date: string; count: string; nav: string }> = {
-  en: { title: 'AI onboarding', date: 'Oct 23, 2026', count: '3 Episodes', nav: 'Workshops' },
-  de: { title: 'KI-Onboarding', date: '23. Okt. 2026', count: '3 Episoden', nav: 'Workshops' },
+const WORDS: Record<
+  Locale,
+  { title: string; date: string; count: string; nav: string; start: string; reading: RegExp }
+> = {
+  en: {
+    title: 'AI onboarding',
+    date: 'Oct 23, 2026',
+    count: '3 Episodes',
+    nav: 'Workshops',
+    start: 'Start with Episode 1',
+    reading: /^\d+ min total reading time$/,
+  },
+  de: {
+    title: 'KI-Onboarding',
+    date: '23. Okt. 2026',
+    count: '3 Episoden',
+    nav: 'Workshops',
+    start: 'Mit Episode 1 starten',
+    reading: /^\d+ Min\. Lesezeit insgesamt$/,
+  },
 };
 
 describe('/workshops page', () => {
@@ -86,6 +103,58 @@ describe('Workshop page', () => {
     const back = $('[data-testid="workshop-page"] a').first().attr('href');
     // ASSERT
     expect(back).toBe(expected);
+  });
+
+  it.each(LOCALES)('lists the Episodes as an ordered list in record order with text step numbers for %s', (locale) => {
+    // ARRANGE
+    const $ = exportedPage(localizePath(workshopRoute(FIRST.slug), locale));
+    const expected = {
+      slugs: [...FIRST.episodes],
+      steps: FIRST.episodes.map((_, index) => String(index + 1)),
+      hrefs: FIRST.episodes.map((slug) => `${localizePath(episodeRoute(slug), locale)}/`),
+    };
+    // ACT
+    const steps = $('ol[data-workshop-agenda] > li[data-agenda-step]');
+    const seen = {
+      slugs: steps
+        .find('[data-episode-card]')
+        .map((_, card) => $(card).attr('data-episode-slug'))
+        .get(),
+      steps: steps
+        .find('[data-step-number]')
+        .map((_, step) => $(step).text())
+        .get(),
+      hrefs: steps
+        .find('a[data-card-link]')
+        .map((_, link) => $(link).attr('href'))
+        .get(),
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it.each(LOCALES)('starts at the first linked Episode with a primary button for %s', (locale) => {
+    // ARRANGE
+    const $ = exportedPage(localizePath(workshopRoute(FIRST.slug), locale));
+    const expected = { href: `${localizePath(episodeRoute(FIRST.episodes[0]), locale)}/`, label: WORDS[locale].start };
+    // ACT
+    const start = $('a[data-workshop-start]');
+    // ASSERT
+    expect({ href: start.attr('href'), label: start.text() }).toEqual(expected);
+  });
+
+  it.each(LOCALES)('names the Episode count and a counted reading time for %s', (locale) => {
+    // ARRANGE
+    const $ = exportedPage(localizePath(workshopRoute(FIRST.slug), locale));
+    const expected = { count: WORDS[locale].count, reading: WORDS[locale].reading };
+    // ACT
+    const facts = {
+      count: $('[data-workshop-episode-count]').text(),
+      reading: $('[data-workshop-reading-time]').text(),
+    };
+    // ASSERT
+    expect(facts.count).toBe(expected.count);
+    expect(facts.reading).toMatch(expected.reading);
   });
 });
 
