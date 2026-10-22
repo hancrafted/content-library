@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, type ReactNode } from 'react';
-import styles from './human-in-the-loop.module.css';
+import styles from './tip.module.css';
 
 /*
  * The one tooltip of the visual (toolbar icons, BRIEF circles, prompt icons, the Short toggle, the modal X). It shows

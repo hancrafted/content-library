@@ -18,11 +18,13 @@ const RULES = [
   'slide-client-reaches-only-hooks-and-lib',
   'slide-shared-reaches-only-ui-and-lib',
   'slide-shared-client-reaches-only-own-part-hooks-and-lib',
+  'core-components-are-a-leaf',
 ];
 const RULE_SET = { forbidden: config.forbidden.filter(({ name }) => RULES.includes(name)) };
 
 const SLIDE = 'src/components/episodes/probe/slides/probe-slide';
 const PART = 'src/components/slide-shared/probe-visual';
+const CORE = 'src/components/slide-shared/core-components';
 
 /** Each probe file and what it imports, relative to the probe tree's root. */
 const PROBES: Readonly<Record<string, string>> = {
@@ -66,6 +68,22 @@ const PROBES: Readonly<Record<string, string>> = {
   [`${PART}/reaches-other-part.client.tsx`]: "import { Statement } from '../statement';\nexport const x = Statement;",
   [`${PART}/reaches-ui.client.tsx`]: "import { Button } from '../../ui/button';\nexport const x = Button;",
   [`${PART}/reaches-hook.tsx`]: "import { useProbe } from '../../../hooks/use-probe';\nexport const x = useProbe;",
+  [`${CORE}/probe-core/probe-core.tsx`]: [
+    "import { sibling } from '../probe-sibling/probe-sibling';",
+    "import { probe } from '../../../../lib/probe.pure';",
+    'export const core = [sibling, probe];',
+  ].join('\n'),
+  [`${CORE}/probe-core/probe-core.client.tsx`]:
+    "import { sibling } from '../probe-sibling/probe-sibling';\nimport { useProbe } from '../../../../hooks/use-probe';\nexport const c = [sibling, useProbe];",
+  [`${CORE}/probe-sibling/probe-sibling.tsx`]: 'export const sibling = 1;',
+  [`${CORE}/probe-core/reaches-part.tsx`]: "import { Statement } from '../../statement';\nexport const x = Statement;",
+  [`${CORE}/probe-core/reaches-ui.tsx`]: "import { Button } from '../../../ui/button';\nexport const x = Button;",
+  [`${PART}/uses-core.client.tsx`]:
+    "import { core } from '../core-components/probe-core/probe-core';\nexport const x = core;",
+  [`${SLIDE}/uses-core.tsx`]:
+    "import { core } from '../../../../slide-shared/core-components/probe-core/probe-core';\nexport const x = core;",
+  [`${SLIDE}/reaches-core.client.tsx`]:
+    "import { core } from '../../../../slide-shared/core-components/probe-core/probe-core';\nexport const x = core;",
 };
 
 let root = '';
@@ -75,7 +93,10 @@ let output: IReporterOutput;
 function violations(): string[] {
   if (typeof output.output === 'string') throw new Error('dependency-cruiser returned a report, not a result.');
   return output.output.summary.violations
-    .map(({ rule, from, to }) => `${rule.name}: ${from.replace(`${SLIDE}/`, '').replace(`${PART}/`, '')} -> ${to}`)
+    .map(
+      ({ rule, from, to }) =>
+        `${rule.name}: ${from.replace(`${SLIDE}/`, '').replace(`${PART}/`, '').replace(`${CORE}/probe-core/`, '')} -> ${to}`,
+    )
     .sort();
 }
 
@@ -127,10 +148,24 @@ describe('success cases', () => {
   });
 });
 
+describe('core-components', () => {
+  it('lets a slide-shared client leaf, a Slide server file and a core file reach core, hooks and lib', () => {
+    // ARRANGE
+    const files = ['uses-core.client.tsx', 'uses-core.tsx', 'probe-core.tsx', 'probe-core.client.tsx'];
+    // ACT
+    const found = violations().filter((line) => files.some((file) => line.includes(`: ${file} ->`)));
+    // ASSERT
+    expect(found).toEqual([]);
+  });
+});
+
 describe('failure cases', () => {
   it('rejects a Slide importing another Slide, the Episode file or a non-shared component, a client widget reaching the Slide master, a slide-shared client leaf leaving its part, and a slide-shared server part reaching a hook', () => {
     // ARRANGE
     const expected = [
+      'core-components-are-a-leaf: reaches-part.tsx -> src/components/slide-shared/statement.tsx',
+      'core-components-are-a-leaf: reaches-ui.tsx -> src/components/ui/button.tsx',
+      'slide-client-reaches-only-hooks-and-lib: reaches-core.client.tsx -> src/components/slide-shared/core-components/probe-core/probe-core.tsx',
       'slide-client-reaches-only-hooks-and-lib: reaches-master.client.tsx -> src/components/slide-master/slide.ts',
       'slide-folder-reaches-only-own-and-shared: reaches-episode.tsx -> src/components/episodes/probe/probe.ts',
       'slide-folder-reaches-only-own-and-shared: reaches-other-slide.tsx -> src/components/episodes/probe/slides/other-slide/slide.tsx',

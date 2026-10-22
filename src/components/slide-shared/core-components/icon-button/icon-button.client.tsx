@@ -1,7 +1,7 @@
 'use client';
 
 import type { ButtonHTMLAttributes } from 'react';
-import { Tip } from './tip.client';
+import { Tip } from '../tip/tip.client';
 
 /** The outlined round icon look shared by the prompt icons, the chat links and the modal X (size-9, a 36px target). */
 export const OUTLINED_ICON =
